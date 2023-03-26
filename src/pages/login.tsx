@@ -1,11 +1,7 @@
-import { useRouter } from 'next/router';
+import { useLogin } from '@/hooks/auth';
 
 export default function LoginPage() {
-  const router = useRouter();
-
-  const handleLogin = () => {
-    router.push('/rd/login');
-  };
+    const { handleLogin } = useLogin();
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">

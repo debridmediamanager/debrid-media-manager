@@ -1,19 +1,7 @@
-import { useRouter } from 'next/router';
-import { isAuthenticated } from '@/auth';
-import { useEffect } from 'react';
+import { useRequireAuth } from '@/hooks/auth';
 
 export default function IndexPage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const authenticated = await isAuthenticated();
-      if (!authenticated) {
-        router.push('/login');
-      }
-    };
-    checkAuth();
-  }, []);
+  useRequireAuth();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
