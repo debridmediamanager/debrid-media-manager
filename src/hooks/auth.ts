@@ -33,7 +33,7 @@ export const useLogin = () => {
 
 export const useAuthorization = () => {
   const [verificationUrl, setVerificationUrl] = useState('');
-  const [intervalId, setIntervalId] = useState<number | undefined>(undefined);
+  // const [intervalId, setIntervalId] = useState<number | undefined>(undefined);
   const [userCode, setUserCode] = useState('');
 
   useEffect(() => {
@@ -56,27 +56,28 @@ export const useAuthorization = () => {
         const checkAuthorization = async () => {
           const credentialsResponse = await getCredentials(deviceCode);
           if (credentialsResponse) {
-            clearInterval(intervalId!);
             saveClientCredentials(credentialsResponse.client_id, credentialsResponse.client_secret, deviceCode);
             // instead of router.push('/') let's do a hard route refresh
             // because of issues on:
             // 1: interval not being cancelled
             // 2: initial user fetch failing on client route change
+            // clearInterval(intervalId!);
             window.location.href = '/';
           }
         };
 
-        const id = setInterval(checkAuthorization, interval) as any as number;
-        setIntervalId(id);
+        setInterval(checkAuthorization, interval);
+        // no need because we do hard refresh after this page
+        // setIntervalId(id);
       }
     };
     fetchDeviceCode();
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
+    // no need because we do hard refresh after this page
+    // return () => {
+    //   if (intervalId) {
+    //     clearInterval(intervalId);
+    //   }
+    // };
   }, []);
 
   const handleAuthorize = () => {
