@@ -7,7 +7,7 @@ export default function RdLoginPage() {
       <div className="flex flex-col items-center justify-center h-screen">
         {userCode && (
           <p className="mb-4 text-lg font-bold">
-            Please click the button and enter this code: <strong>{userCode}</strong>
+            Please click the button and enter this code: <strong>{userCode}</strong> (copied to your clipboard)
           </p>
         )}
         <button

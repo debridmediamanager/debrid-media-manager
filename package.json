@@ -17,12 +17,15 @@
     "eslint-config-next": "13.2.4",
     "js-cookie": "^3.0.1",
     "next": "13.2.4",
+    "nookies": "^2.5.2",
+    "qs": "^6.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.2"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.3",
+    "@types/qs": "^6.9.7",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.7"
