@@ -88,6 +88,35 @@ const saveTokens = (accessToken: string, refreshToken: string, expiresIn: number
   Cookies.set('refreshToken', refreshToken);
 };
 
+export const useAccessToken = () => {
+  const [accessToken, setAccessToken] = useState<string>('');
+
+  useEffect(() => {
+    (async () => {
+      const accessToken = Cookies.get('accessToken');
+      if (accessToken) {
+        setAccessToken(accessToken);
+      }
+
+      const refreshToken = Cookies.get('refreshToken');
+      const clientId = Cookies.get('clientId');
+      const clientSecret = Cookies.get('clientSecret');
+      if (refreshToken && clientId && clientSecret) {
+        // Refresh token is available, so try to get new tokens
+        const response = await getToken(clientId, clientSecret, refreshToken);
+        if (response) {
+          // New tokens obtained, save them and return authenticated
+          const { access_token, refresh_token, expires_in } = response;
+          saveTokens(access_token, refresh_token, expires_in);
+          setAccessToken(access_token);
+        }
+      }
+    })();
+  }, []);
+
+  return accessToken;
+};
+
 export const useCurrentUser = (loginRoute: string) => {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
