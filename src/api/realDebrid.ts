@@ -36,7 +36,7 @@ interface UserResponse {
   expiration: string;
 }
 
-interface UserTorrentsListResponse {
+interface UserTorrentResponse {
   id: string;
   filename: string;
   hash: string;
@@ -155,7 +155,7 @@ export const getUserTorrentsList = async (accessToken: string, offset: number, p
       Authorization: `Bearer ${accessToken}`,
     };
 
-    const response = await axios.get<UserTorrentsListResponse>(
+    const response = await axios.get<UserTorrentResponse[]>(
       'https://api.real-debrid.com/rest/1.0/torrents',
       { headers, params: { offset, page, limit, filter } }
     );
