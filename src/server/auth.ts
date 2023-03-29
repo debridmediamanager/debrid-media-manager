@@ -19,9 +19,6 @@ export const isAuthenticated = async (ctx: GetServerSidePropsContext) => {
   const clientId = cookies['clientId'];
   const clientSecret = cookies['clientSecret'];
 
-  console.log('ok!!!');
-  console.log(refreshToken, clientId, clientSecret);
-
   if (refreshToken && clientId && clientSecret) {
     // Refresh token is available, so try to get new tokens
     const response = await getToken(clientId, clientSecret, refreshToken);
