@@ -1,7 +1,7 @@
-import { getCredentials, getCurrentUser, getDeviceCode } from '@/api/realDebrid';
+import { getCredentials, getCurrentUser, getDeviceCode, getToken } from '@/api/realDebrid';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface User {
   id: number;
@@ -33,8 +33,9 @@ export const useLogin = () => {
 
 export const useAuthorization = () => {
   const [verificationUrl, setVerificationUrl] = useState('');
-  // const [intervalId, setIntervalId] = useState<number | undefined>(undefined);
+  const intervalId = useRef<number | null>(null);
   const [userCode, setUserCode] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     const fetchDeviceCode = async () => {
@@ -57,28 +58,21 @@ export const useAuthorization = () => {
           const credentialsResponse = await getCredentials(deviceCode);
           if (credentialsResponse) {
             saveClientCredentials(credentialsResponse.client_id, credentialsResponse.client_secret, deviceCode);
-            // instead of router.push('/') let's do a hard route refresh
-            // because of issues on:
-            // 1: interval not being cancelled
-            // 2: initial user fetch failing on client route change
-            // clearInterval(intervalId!);
-            window.location.href = '/';
+            clearInterval(intervalId.current!);
+            await router.push('/')
           }
         };
 
-        setInterval(checkAuthorization, interval);
-        // no need because we do hard refresh after this page
-        // setIntervalId(id);
+        const id = setInterval(checkAuthorization, interval) as any as number;
+        intervalId.current = id;
       }
     };
     fetchDeviceCode();
-    // no need because we do hard refresh after this page
-    // return () => {
-    //   if (intervalId) {
-    //     clearInterval(intervalId);
-    //   }
-    // };
-  }, []);
+
+    return () => {
+      clearInterval(intervalId.current!);
+    };
+  }, [router]);
 
   const handleAuthorize = () => {
     if (verificationUrl) {
@@ -89,19 +83,55 @@ export const useAuthorization = () => {
   return { userCode, handleAuthorize };
 };
 
-export const useCurrentUser = () => {
+const saveTokens = (accessToken: string, refreshToken: string, expiresIn: number) => {
+  Cookies.set('accessToken', accessToken, { expires: expiresIn / (60 * 60 * 24) }); // set the expiry time in days
+  Cookies.set('refreshToken', refreshToken);
+};
+
+export const useCurrentUser = (loginRoute: string) => {
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const accessToken = Cookies.get('accessToken');
-      const currentUser = await getCurrentUser(accessToken!);
-      if (currentUser) {
-        setUser(<User>currentUser);
+    (async () => {
+      const authenticated = await isAuthenticated();
+      if (!authenticated) {
+        await router.push(loginRoute);
+      } else {
+        const accessToken = Cookies.get('accessToken');
+        const currentUser = await getCurrentUser(accessToken!);
+        if (currentUser) {
+          setUser(<User>currentUser);
+        }
       }
-    };
-    fetchUser();
-  }, []);
+    })();
+  }, [router, loginRoute]);
 
   return user;
+};
+
+const isAuthenticated = async () => {
+  const accessToken = Cookies.get('accessToken');
+  if (accessToken) {
+    // Access token is already set, so user is authenticated
+    return true;
+  }
+
+  const refreshToken = Cookies.get('refreshToken');
+  const clientId = Cookies.get('clientId');
+  const clientSecret = Cookies.get('clientSecret');
+
+  if (refreshToken && clientId && clientSecret) {
+    // Refresh token is available, so try to get new tokens
+    const response = await getToken(clientId, clientSecret, refreshToken);
+    if (response) {
+      // New tokens obtained, save them and return authenticated
+      const { access_token, refresh_token, expires_in } = response;
+      saveTokens(access_token, refresh_token, expires_in);
+      return true;
+    }
+  }
+
+  // User is not authenticated
+  return false;
 };
