@@ -49,7 +49,7 @@ export default function Search() {
     };
 
     return (
-        <div>
+        <div className="mx-4 my-8">
             <Toaster />
             <form onSubmit={handleSubmit}>
                 <label className="block text-gray-700 font-bold mb-2" htmlFor="query">
@@ -122,4 +122,5 @@ export default function Search() {
             )}
         </div>
     );
+
 }
