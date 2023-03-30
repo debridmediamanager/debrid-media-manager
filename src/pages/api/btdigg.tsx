@@ -5,7 +5,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 puppeteer.use(StealthPlugin());
 
-const IGNORED_THRESHOLD = 5;
+const IGNORED_THRESHOLD = 15;
 
 type SearchResult = {
     title: string;
@@ -94,7 +94,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                 }
 
                 // Check if every term in the query (tokenized by space) is contained in the title
-                const queryTerms = search.split(' .-()').filter(e => e !== "");
+                const queryTerms = search.split(/[\s\.\-\(\)]/).filter(e => e !== "");
                 const containsAllTerms = queryTerms.every((term) =>
                     title.toLowerCase().includes(term.toLowerCase())
                 );
