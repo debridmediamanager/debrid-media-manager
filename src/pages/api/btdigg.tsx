@@ -5,7 +5,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 puppeteer.use(StealthPlugin());
 
-const IGNORED_THRESHOLD = 15;
+const IGNORED_THRESHOLD = 21; // 2 pages worth
 
 type SearchResult = {
     title: string;
@@ -156,12 +156,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             }
         }
 
-        searchResultsArr.sort((a, b) => b.score - a.score);
+        if (searchResultsArr.length) searchResultsArr.sort((a, b) => b.score - a.score);
+
         res.status(200).json({ searchResults: searchResultsArr });
 
-        await browser.close();
     } catch (error: any) {
+
         console.error(error);
+
         res.status(500).json({ errorMessage: 'An error occurred while scraping the Btdigg (2)' });
+
+    } finally {
+        await browser.close();
     }
 }
