@@ -10,7 +10,6 @@ const puppeteer = require('puppeteer');
         const browserPromise = puppeteer.launch({
             args: [
                 `--proxy-server=socks5://127.0.0.1:9050`,
-                `--remote-debugging-max-concurrent-sessions=20`,
                 `--remote-debugging-port=${port}`,
             ],
             headless: true,
