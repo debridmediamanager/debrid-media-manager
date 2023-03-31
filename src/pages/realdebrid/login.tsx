@@ -1,7 +1,7 @@
-import { useAuthorization } from "@/hooks/auth";
+import { useRealDebridAuthorization } from "@/hooks/auth";
 
-export default function RdLoginPage() {
-    const { userCode, handleAuthorize } = useAuthorization();
+export default function RealDebridLoginPage() {
+    const { userCode, handleAuthorize } = useRealDebridAuthorization();
 
     return (
       <div className="flex flex-col items-center justify-center h-screen">

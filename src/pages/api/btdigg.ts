@@ -32,9 +32,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         return;
     }
 
-    const browser = await puppeteer.launch({
-        args: [`--proxy-server=socks5://127.0.0.1:9050`],
-        headless: true,
+    // const browser = await puppeteer.launch({
+    //     args: [`--proxy-server=socks5://127.0.0.1:9050`],
+    //     headless: true,
+    // });
+    const browser = await puppeteer.connect({
+        browserWSEndpoint: 'ws://localhost:9222/devtools/browser/1234',
     });
     const page = await browser.newPage();
 

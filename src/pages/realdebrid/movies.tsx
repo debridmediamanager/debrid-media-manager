@@ -83,7 +83,7 @@ const TorrentsPage = () => {
 
   return (
     <div className="mx-4 my-8">
-      <h1 className="text-3xl font-bold mb-4">My Torrents</h1>
+      <h1 className="text-3xl font-bold mb-4">My Movies</h1>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>

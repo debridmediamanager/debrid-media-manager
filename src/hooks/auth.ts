@@ -21,17 +21,17 @@ const saveClientCredentials = (clientId: string, clientSecret: string, deviceCod
   Cookies.set('refreshToken', deviceCode);
 };
 
-export const useLogin = () => {
+export const useRealDebridLogin = () => {
   const router = useRouter();
 
   const handleLogin = async () => {
-    await router.push('/rd/login');
+    await router.push('/realdebrid/login');
   };
 
   return { handleLogin };
 };
 
-export const useAuthorization = () => {
+export const useRealDebridAuthorization = () => {
   const [verificationUrl, setVerificationUrl] = useState('');
   const intervalId = useRef<number | null>(null);
   const [userCode, setUserCode] = useState('');
@@ -88,7 +88,7 @@ const saveTokens = (accessToken: string, refreshToken: string, expiresIn: number
   Cookies.set('refreshToken', refreshToken);
 };
 
-export const useAccessToken = () => {
+export const useRealDebridAccessToken = () => {
   const [accessToken, setAccessToken] = useState<string>('');
 
   useEffect(() => {
@@ -117,7 +117,7 @@ export const useAccessToken = () => {
   return accessToken;
 };
 
-export const useCurrentUser = (loginRoute: string) => {
+export const useRealDebridCurrentUser = (loginRoute: string) => {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 

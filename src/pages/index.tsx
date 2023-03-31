@@ -1,16 +1,16 @@
-import { useCurrentUser } from '@/hooks/auth';
+import { useRealDebridCurrentUser } from '@/hooks/auth';
 import { useRouter } from 'next/router';
 
 export default function IndexPage() {
-  const user = useCurrentUser('/login');
   const router = useRouter();
+  const rdUser = useRealDebridCurrentUser('/login');
 
   const handleMyAccountClick = () => {
     router.push('/account');
   };
 
   const handleMoviesClick = () => {
-    router.push('/rd/torrents');
+    router.push('/realdebrid/movies');
   };
 
   const handleSearchClick = () => {
@@ -19,14 +19,14 @@ export default function IndexPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      {user ? (
+      {rdUser ? (
         <>
           <h1 className="text-2xl font-bold mb-4">
             Debrid Movie Manager
           </h1>
           <div className="flex flex-col items-center">
             <p className="text-lg font-bold">
-              Welcome back, {user.username}!
+              Welcome back, {rdUser.username}!
             </p>
             <p className="text-lg">
               You are building a 2160p library.

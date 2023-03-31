@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { BtDiggApiResult } from './api/btdigg';
 import { addHashAsMagnet } from '@/api/realDebrid';
-import { useAccessToken } from '@/hooks/auth';
+import { useRealDebridAccessToken } from '@/hooks/auth';
 import toast, { Toaster } from 'react-hot-toast';
 
 type SearchResult = {
@@ -15,7 +15,7 @@ export default function Search() {
     const [query, setQuery] = useState('');
     const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
     const [errorMessage, setErrorMessage] = useState('');
-    const accessToken = useAccessToken();
+    const accessToken = useRealDebridAccessToken();
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

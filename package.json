@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "browser": "browsers install"
   },
   "dependencies": {
     "@types/node": "18.15.10",
@@ -20,6 +21,7 @@
     "next": "13.2.4",
     "nookies": "^2.5.2",
     "puppeteer": "^19.8.2",
+    "puppeteer-core": "^19.8.1",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "qs": "^6.11.1",
