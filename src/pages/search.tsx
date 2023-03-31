@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useCallback, useEffect, useState } from 'react';
+import axios, { CancelTokenSource } from 'axios';
 import { BtDiggApiResult } from './api/btdigg';
 import { addHashAsMagnet } from '@/api/realDebrid';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import toast, { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/router';
 
 type SearchResult = {
 	title: string;
@@ -11,32 +12,64 @@ type SearchResult = {
 	hash: string;
 };
 
-export default function Search() {
+function Search() {
 	const [query, setQuery] = useState('');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
 	const accessToken = useRealDebridAccessToken();
 	const [loading, setLoading] = useState(false);
+	const [cancelTokenSource, setCancelTokenSource] = useState<CancelTokenSource | null>(null);
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
+	const router = useRouter();
+
+	const fetchData = async (searchQuery: string) => {
+		setSearchResults([]);
+		setErrorMessage('');
 		setLoading(true);
+		const source = axios.CancelToken.source();
+		setCancelTokenSource(source);
 		try {
 			const response = await axios.get<BtDiggApiResult>('/api/btdigg', {
 				params: {
-					search: query,
+					search: searchQuery,
 				},
+				cancelToken: source.token,
 			});
-			setSearchResults(response.data.searchResults!);
-			setErrorMessage('');
+			setSearchResults(response.data.searchResults || []);
 		} catch (error) {
-			console.error(error);
-			setSearchResults([]);
-			setErrorMessage('There was an error searching for the query. Please try again.');
+			if (axios.isCancel(error)) {
+				console.warn('Request canceled:', error);
+			} else {
+				console.error(error);
+				setErrorMessage('There was an error searching for the query. Please try again.');
+			}
 		} finally {
 			setLoading(false);
 		}
 	};
+
+	const handleSubmit = useCallback(
+		(e?: React.FormEvent<HTMLFormElement>) => {
+			if (e) e.preventDefault();
+			if (!query) return;
+			router.push(`/search?query=${encodeURIComponent(query)}`);
+		},
+		[router, query]
+	);
+
+	useEffect(() => {
+		const { query: searchQuery } = router.query;
+		if (!searchQuery) return;
+		const decodedQuery = decodeURIComponent(searchQuery as string);
+		setQuery(decodedQuery);
+		fetchData(decodedQuery);
+	}, [router.query]);
+
+	useEffect(() => {
+		return () => {
+			if (cancelTokenSource) cancelTokenSource.cancel();
+		};
+	}, [cancelTokenSource]);
 
 	const handleAddAsMagnet = async (hash: string) => {
 		try {
@@ -129,3 +162,5 @@ export default function Search() {
 		</div>
 	);
 }
+
+export default Search;

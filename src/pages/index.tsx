@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 export default function IndexPage() {
 	const router = useRouter();
-	const rdUser = useRealDebridCurrentUser('/login');
+	const rdUser = useRealDebridCurrentUser('/start');
 
 	const handleMyAccountClick = () => {
 		router.push('/account');
@@ -51,7 +51,7 @@ export default function IndexPage() {
 					</div>
 				</>
 			) : (
-				<h1 className="text-2xl font-bold">Debrid Movie Manager - Loading...</h1>
+				<h1 className="text-2xl font-bold">Debrid Movie Manager is loading...</h1>
 			)}
 		</div>
 	);

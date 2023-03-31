@@ -1,4 +1,9 @@
-import { getCredentials, getCurrentUser, getDeviceCode, getToken } from '@/api/realDebrid';
+import {
+	getCredentials,
+	getCurrentUser as getRealDebridUser,
+	getDeviceCode,
+	getToken,
+} from '@/api/realDebrid';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -132,9 +137,9 @@ export const useRealDebridCurrentUser = (loginRoute: string) => {
 				await router.push(loginRoute);
 			} else {
 				const accessToken = Cookies.get('accessToken');
-				const currentUser = await getCurrentUser(accessToken!);
-				if (currentUser) {
-					setUser(<User>currentUser);
+				const rdUser = await getRealDebridUser(accessToken!);
+				if (rdUser) {
+					setUser(<User>rdUser);
 				}
 			}
 		})();

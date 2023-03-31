@@ -21,6 +21,7 @@ interface SortBy {
 const TorrentsPage = () => {
 	const [loading, setLoading] = useState(true);
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
+	const [sortBy, setSortBy] = useState<SortBy>({ column: 'added', direction: 'desc' });
 
 	useEffect(() => {
 		const fetchTorrents = async () => {
@@ -52,12 +53,6 @@ const TorrentsPage = () => {
 		}
 	};
 
-	const [sortBy, setSortBy] = useState<SortBy>({ column: 'added', direction: 'desc' });
-
-	if (loading) {
-		return <div>Loading...</div>;
-	}
-
 	function handleSort(column: typeof sortBy.column) {
 		setSortBy({
 			column,
@@ -79,6 +74,10 @@ const TorrentsPage = () => {
 			}
 			return isAsc ? comparison : comparison * -1;
 		});
+	}
+
+	if (loading) {
+		return <div>Loading...</div>;
 	}
 
 	return (

@@ -32,13 +32,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		return;
 	}
 
-	// const browser = await puppeteer.launch({
-	//     args: [`--proxy-server=socks5://127.0.0.1:9050`],
-	//     headless: true,
-	// });
+	const browsersQty = process.env.BROWSERS_QTY ? parseInt(process.env.BROWSERS_QTY, 10) : 1;
+	const randomNum = Math.floor(Math.random() * browsersQty);
 	const browser = await puppeteer.connect({
-		browserWSEndpoint: 'ws://localhost:9222/devtools/browser/1234',
+		browserURL: `http://127.0.0.1:${9222+randomNum}`,
 	});
+
 	const page = await browser.newPage();
 
 	page.on('error', (err: Error) => {
@@ -68,7 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		let searchResultsArr: SearchResult[] = [];
 
 		while (pageNum <= 100) {
-			console.log(`Scraping page ${pageNum}...`);
+			console.log(`Scraping page ${pageNum} (${finalQuery})...`);
 
 			// Select all the search results on the current page
 			const searchResults = await page.$$('.one_result');
@@ -78,7 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 				const title = await result.$eval('.torrent_name a', (node: any) =>
 					node.textContent.trim()
 				);
-				console.log(title);
+				// console.log(title);
 				const fileSizeStr = await result.$eval('.torrent_size', (node: any) =>
 					node.textContent.trim()
 				);
@@ -165,6 +164,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 		res.status(500).json({ errorMessage: 'An error occurred while scraping the Btdigg (2)' });
 	} finally {
-		await browser.close();
+		await page.close();
+		await browser.disconnect();
 	}
 }
