@@ -1,7 +1,7 @@
-import { useRealDebridLogin } from '@/hooks/auth';
+import { useDebridLogin } from '@/hooks/auth';
 
-export default function LoginPage() {
-	const { handleLogin } = useRealDebridLogin();
+export default function StartPage() {
+	const { loginWithRealDebrid } = useDebridLogin();
 
 	return (
 		<div className="flex flex-col items-center justify-center h-screen">
@@ -23,9 +23,9 @@ export default function LoginPage() {
 				<div className="flex flex-row">
 					<button
 						className="px-4 py-2 m-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-						onClick={handleLogin}
+						onClick={loginWithRealDebrid}
 					>
-						Login with RealDebrid
+						Login with Real Debrid
 					</button>
 					<a
 						className="px-4 py-2 m-2 text-white bg-green-500 rounded hover:bg-green-600"

@@ -26,14 +26,36 @@ const saveClientCredentials = (clientId: string, clientSecret: string, deviceCod
 	Cookies.set('refreshToken', deviceCode);
 };
 
-export const useRealDebridLogin = () => {
+export const useDebridLogin = () => {
 	const router = useRouter();
 
-	const handleLogin = async () => {
+	const loginWithRealDebrid = async () => {
 		await router.push('/realdebrid/login');
 	};
 
-	return { handleLogin };
+	const loginWithPremiumize = async () => {
+		await router.push('/premiumize/login');
+	};
+
+	const loginWithAllDebrid = async () => {
+		await router.push('/alldebrid/login');
+	};
+
+	const loginWithDebridLink = async () => {
+		await router.push('/debridlink/login');
+	};
+
+	const loginWithPutIo = async () => {
+		await router.push('/putio/login');
+	};
+
+	return {
+		loginWithRealDebrid,
+		loginWithPremiumize,
+		loginWithAllDebrid,
+		loginWithDebridLink,
+		loginWithPutIo,
+	};
 };
 
 export const useRealDebridAuthorization = () => {
