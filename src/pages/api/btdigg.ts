@@ -1,3 +1,5 @@
+import getReleaseTags from '@/utils/score';
+import getScore from '@/utils/score';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ElementHandle } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
@@ -16,6 +18,7 @@ type SearchResult = {
 	hdr10plus: boolean;
 	hdr: boolean;
 	remux: boolean;
+	proper_remux: boolean;
 	score: number;
 };
 
@@ -35,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	const browsersQty = process.env.BROWSERS_QTY ? parseInt(process.env.BROWSERS_QTY, 10) : 1;
 	const randomNum = Math.floor(Math.random() * browsersQty);
 	const browser = await puppeteer.connect({
-		browserURL: `http://127.0.0.1:${9222+randomNum}`,
+		browserURL: `http://127.0.0.1:${9222 + randomNum}`,
 	});
 
 	const page = await browser.newPage();
@@ -56,7 +59,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 	try {
 		let pageNum = 0;
-		const finalQuery = `${search.trim()} 2160p`;
+		const cleaned = search
+			.split(/[\s\.\-\(\)]/)
+			.filter((e) => e !== '')
+			.map((e) => e.toLowerCase())
+			.join(' ')
+			.replace(/[áàäâ]/g, 'a')
+			.replace(/[éèëê]/g, 'e')
+			.replace(/[íìïî]/g, 'i')
+			.replace(/[óòöô]/g, 'o')
+			.replace(/[úùüû]/g, 'u')
+			.replace(/[ç]/g, 'c')
+			.replace(/[ñ]/g, 'n')
+			.replace(/[ş]/g, 's')
+			.replace(/[ğ]/g, 'g')
+			.replace(/[^\w\s]/g, '')
+			.replace(/\s+/g, ' ')
+			.trim();
+		const finalQuery = `${cleaned} 2160p`;
 		// Navigate to the URL to be scraped
 		const searchUrl = `http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion/search?q=${encodeURIComponent(
 			finalQuery
@@ -66,7 +86,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		let ignoredResults = 0;
 		let searchResultsArr: SearchResult[] = [];
 
-		while (pageNum <= 100) {
+		while (pageNum < 100) {
 			console.log(`Scraping page ${pageNum} (${finalQuery})...`);
 
 			// Select all the search results on the current page
@@ -95,9 +115,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 				}
 
 				// Check if every term in the query (tokenized by space) is contained in the title
-				const queryTerms = search.split(/[\s\.\-\(\)]/).filter((e) => e !== '');
+				const queryTerms = cleaned.split(' ');
 				const containsAllTerms = queryTerms.every((term) =>
-					title.toLowerCase().includes(term.toLowerCase())
+					new RegExp(`\\b${term}\\b`).test(title.toLowerCase())
 				);
 				if (!containsAllTerms) {
 					continue;
@@ -109,16 +129,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 				);
 				const hash = magnetLink.match(/xt=urn:btih:(.*?)&/)[1];
 
-				let remux = /\bremux\b|\bbdrip\b/i.test(title);
-				let dolby_vision = /\bDV\b|\bDoVi\b/.test(title);
-				let hdr10plus = /\bHDR10plus\b/i.test(title);
-				let hdr =
-					remux || dolby_vision || hdr10plus || /\bhdr\b|\bVISIONPLUSHDR\b/i.test(title);
-
-				let score = fileSize;
-				if (remux) score += 30;
-				if (dolby_vision || hdr10plus) score += 20;
-				if (hdr) score += 10;
+				const { dolby_vision, hdr10plus, hdr, remux, proper_remux, score } = getReleaseTags(
+					title,
+					fileSize
+				);
 
 				let resultObj: SearchResult = {
 					title,
@@ -129,6 +143,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 					hdr10plus,
 					hdr,
 					remux,
+					proper_remux,
 					score,
 				};
 				searchResultsArr.push(resultObj);

@@ -21,7 +21,7 @@ export default function IndexPage() {
 		<div className="flex flex-col items-center justify-center min-h-screen">
 			{rdUser ? (
 				<>
-					<h1 className="text-2xl font-bold mb-4">Debrid Movie Manager</h1>
+					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager</h1>
 					<div className="flex flex-col items-center">
 						<p className="text-lg font-bold">Welcome back, {rdUser.username}!</p>
 						<p className="text-lg">
@@ -51,7 +51,7 @@ export default function IndexPage() {
 					</div>
 				</>
 			) : (
-				<h1 className="text-2xl font-bold">Debrid Movie Manager is loading...</h1>
+				<h1 className="text-2xl font-bold">Debrid Media Manager is loading...</h1>
 			)}
 		</div>
 	);

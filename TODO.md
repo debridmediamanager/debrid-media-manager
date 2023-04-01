@@ -1,0 +1,1 @@
+- console.error on catch should only be in the services, not in the components. Components should show descriptive errors in the UI.

@@ -1,6 +1,8 @@
 import { getUserTorrentsList, deleteTorrent } from '@/api/realDebrid';
+import getReleaseTags from '@/utils/score';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
+import { toast, Toaster } from 'react-hot-toast';
 import { FaTrash } from 'react-icons/fa';
 
 interface UserTorrent {
@@ -11,10 +13,11 @@ interface UserTorrent {
 	progress: number;
 	status: string;
 	added: string;
+	score: number;
 }
 
 interface SortBy {
-	column: 'id' | 'filename' | 'bytes' | 'progress' | 'status' | 'added';
+	column: 'id' | 'filename' | 'bytes' | 'progress' | 'status' | 'added' | 'score';
 	direction: 'asc' | 'desc';
 }
 
@@ -27,17 +30,18 @@ const TorrentsPage = () => {
 		const fetchTorrents = async () => {
 			try {
 				const accessToken = Cookies.get('accessToken');
-				const response = (await getUserTorrentsList(
-					accessToken!,
-					0,
-					1,
-					2500,
-					''
-				)) as UserTorrent[];
-				setUserTorrentsList(response);
-				setLoading(false);
+				const torrents = (await getUserTorrentsList(accessToken!, 0, 1, 2500, '')).map(
+					(torrent) => ({
+						score: getReleaseTags(torrent.filename, torrent.bytes / 1000000000).score,
+						...torrent,
+					})
+				) as UserTorrent[];
+				setUserTorrentsList(torrents);
 			} catch (error) {
-				console.error('Error fetching user torrents list:', error);
+				setUserTorrentsList([]);
+				toast.error('Error fetching user torrents list');
+			} finally {
+				setLoading(false);
 			}
 		};
 		fetchTorrents();
@@ -49,7 +53,7 @@ const TorrentsPage = () => {
 			await deleteTorrent(accessToken!, id);
 			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
 		} catch (error) {
-			console.error(`Error deleting torrent ${id}:`, error);
+			toast.error(`Error deleting torrent ${id}`);
 		}
 	};
 
@@ -82,6 +86,7 @@ const TorrentsPage = () => {
 
 	return (
 		<div className="mx-4 my-8">
+			<Toaster />
 			<h1 className="text-3xl font-bold mb-4">My Movies</h1>
 			<div className="overflow-x-auto">
 				<table className="w-full">
@@ -134,6 +139,14 @@ const TorrentsPage = () => {
 								{sortBy.column === 'added' &&
 									(sortBy.direction === 'asc' ? '↑' : '↓')}
 							</th>
+							<th
+								className="px-4 py-2 cursor-pointer"
+								onClick={() => handleSort('score')}
+							>
+								Score{' '}
+								{sortBy.column === 'score' &&
+									(sortBy.direction === 'asc' ? '↑' : '↓')}
+							</th>
 							<th className="px-4 py-2">Actions</th>
 						</tr>
 					</thead>
@@ -150,6 +163,7 @@ const TorrentsPage = () => {
 								<td className="border px-4 py-2">
 									{new Date(torrent.added).toLocaleString()}
 								</td>
+								<td className="border px-4 py-2">{torrent.score.toFixed(1)}</td>
 								<td className="border px-4 py-2">
 									<button
 										className="text-red-500"

@@ -86,7 +86,7 @@ export const getDeviceCode = async () => {
 		return response.data;
 	} catch (error) {
 		console.error('Error fetching device code:', (error as any).message);
-		return null;
+		throw error;
 	}
 };
 
@@ -104,7 +104,7 @@ export const getCredentials = async (deviceCode: string) => {
 		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching credentials:', error.message);
-		return null;
+		throw error;
 	}
 };
 
@@ -128,7 +128,7 @@ export const getToken = async (clientId: string, clientSecret: string, code: str
 		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching access token:', error.message);
-		return null;
+		throw error;
 	}
 };
 
@@ -145,7 +145,7 @@ export const getCurrentUser = async (accessToken: string) => {
 		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching user information:', error.message);
-		return null;
+		throw error;
 	}
 };
 
@@ -168,7 +168,7 @@ export const getUserTorrentsList = async (
 		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching user torrents list:', error.message);
-		return null;
+		throw error;
 	}
 };
 
@@ -185,7 +185,7 @@ export const getTorrentInfo = async (accessToken: string, id: string) => {
 		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching torrent information:', error.message);
-		return null;
+		throw error;
 	}
 };
 
@@ -203,7 +203,7 @@ export const addMagnet = async (accessToken: string, magnet: string) => {
 		});
 	} catch (error: any) {
 		console.error('Error adding magnet:', error.message);
-		return null;
+		throw error;
 	}
 };
 
@@ -226,7 +226,7 @@ export const selectFiles = async (accessToken: string, id: string, files: number
 		);
 	} catch (error: any) {
 		console.error('Error selecting files:', error.message);
-		return null;
+		throw error;
 	}
 };
 
@@ -241,6 +241,6 @@ export const deleteTorrent = async (accessToken: string, id: string) => {
 		});
 	} catch (error: any) {
 		console.error('Error deleting torrent:', error.message);
-		return null;
+		throw error;
 	}
 };

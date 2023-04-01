@@ -40,7 +40,6 @@ function Search() {
 			if (axios.isCancel(error)) {
 				console.warn('Request canceled:', error);
 			} else {
-				console.error(error);
 				setErrorMessage('There was an error searching for the query. Please try again.');
 			}
 		} finally {
@@ -76,7 +75,6 @@ function Search() {
 			await addHashAsMagnet(accessToken, hash);
 			toast.success('Successfully added as magnet!');
 		} catch (error) {
-			console.error(error);
 			toast.error('There was an error adding as magnet. Please try again.');
 		}
 	};
@@ -130,7 +128,13 @@ function Search() {
 							</thead>
 							<tbody>
 								{searchResults.map((result: SearchResult, index: number) => (
-									<tr key={index}>
+									<tr
+										key={index}
+										className="hover:bg-gray-100 cursor-pointer"
+										onClick={() => {
+											handleAddAsMagnet(result.hash);
+										}}
+									>
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
 											{result.title}
 										</td>
@@ -138,12 +142,7 @@ function Search() {
 											{result.fileSize} GB
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-											<button
-												className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-												onClick={() => {
-													handleAddAsMagnet(result.hash);
-												}}
-											>
+											<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
 												Add as Magnet
 											</button>
 										</td>
