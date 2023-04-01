@@ -1,1 +1,13 @@
-- console.error on catch should only be in the services, not in the components. Components should show descriptive errors in the UI.
+- [✔️] console.error on catch should only be in the services, not in the components. Components should show descriptive errors in the UI
+- [] withAuth component wrapper function
+- [] Account page that can control library functions
+- [] Movies page -> Media page, filter by movies, TV or both
+- [] Identify content already downloaded in search results
+- [] Media page, button: delete failed content
+- [] Media page, button: delete slow content
+- [] Media page, button: auto select files
+- [] Media page, button: reinsert rar archives
+- [] Media page, button: dedupe content
+- [] Identify IMDB link
+- [] Group by IMDB link
+- [] Media page, button: share to the internet
