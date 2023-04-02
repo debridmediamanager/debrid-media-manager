@@ -60,19 +60,10 @@ export const useRealDebridAuthorization = () => {
 	const [clientId, setClientId] = useLocalStorage<string>('clientId');
 	const [clientSecret, setClientSecret] = useLocalStorage<string>('clientSecret');
 	const [refreshToken, setRefreshToken] = useLocalStorage<string>('refreshToken');
-	const [accessToken, setAccessToken] = useLocalStorage<string>('accessToken');
+	const [accessToken, _] = useLocalStorage<string>('accessToken');
 
 	useEffect(() => {
 		const fetchDeviceCode = async () => {
-			// if (!accessToken && clientId && clientSecret && refreshToken) {
-			// 	const response = await getToken(clientId, clientSecret, refreshToken);
-			// 	if (response) {
-			// 		// New tokens obtained, save them and return authenticated
-			// 		const { access_token, expires_in } = response;
-			// 		setAccessToken(access_token, expires_in);
-			// 	}
-			// }
-
 			const deviceCodeResponse = await getDeviceCode();
 			if (deviceCodeResponse) {
 				setVerificationUrl(deviceCodeResponse.verification_url);
@@ -103,7 +94,7 @@ export const useRealDebridAuthorization = () => {
 				intervalId.current = id;
 			}
 		};
-		fetchDeviceCode();
+		if (!clientId || !clientSecret || !refreshToken) fetchDeviceCode();
 
 		return () => {
 			clearInterval(intervalId.current!);
@@ -113,19 +104,11 @@ export const useRealDebridAuthorization = () => {
 
 	useEffect(() => {
 		(async () => {
-			if (refreshToken && clientId && clientSecret) {
-				// Refresh token is available, so try to get new tokens
-				const response = await getToken(clientId, clientSecret, refreshToken);
-				if (response) {
-					// New tokens obtained, save them and return authenticated
-					const { access_token, expires_in } = response;
-					setAccessToken(access_token, expires_in);
-					await router.push('/');
-				}
+			if (accessToken) {
+				await router.push('/');
 			}
 		})();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [clientId, clientSecret, refreshToken]);
+	}, [accessToken, router]);
 
 	const handleAuthorize = () => {
 		if (verificationUrl) {
