@@ -5,6 +5,7 @@ import { addHashAsMagnet } from '@/api/realDebrid';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
+import { withAuth } from '@/utils/withAuth';
 
 type SearchResult = {
 	title: string;
@@ -72,7 +73,7 @@ function Search() {
 
 	const handleAddAsMagnet = async (hash: string) => {
 		try {
-			await addHashAsMagnet(accessToken, hash);
+			await addHashAsMagnet(accessToken!, hash);
 			toast.success('Successfully added as magnet!');
 		} catch (error) {
 			toast.error('There was an error adding as magnet. Please try again.');
@@ -91,7 +92,7 @@ function Search() {
 						className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
 						type="text"
 						id="query"
-						placeholder="e.g. movie title"
+						placeholder="if movie, add year e.g. greatest showman 2017; if tv series, add s01 e.g. game of thrones s01"
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}
 					/>
@@ -162,4 +163,4 @@ function Search() {
 	);
 }
 
-export default Search;
+export default withAuth(Search);

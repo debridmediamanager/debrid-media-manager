@@ -1,6 +1,7 @@
 import { getUserTorrentsList, deleteTorrent } from '@/api/realDebrid';
+import useLocalStorage from '@/hooks/localStorage';
 import getReleaseTags from '@/utils/score';
-import Cookies from 'js-cookie';
+import { withAuth } from '@/utils/withAuth';
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 import { FaTrash } from 'react-icons/fa';
@@ -21,15 +22,15 @@ interface SortBy {
 	direction: 'asc' | 'desc';
 }
 
-const TorrentsPage = () => {
+function TorrentsPage() {
 	const [loading, setLoading] = useState(true);
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'added', direction: 'desc' });
+	const [accessToken] = useLocalStorage<string>('accessToken');
 
 	useEffect(() => {
 		const fetchTorrents = async () => {
 			try {
-				const accessToken = Cookies.get('accessToken');
 				const torrents = (await getUserTorrentsList(accessToken!, 0, 1, 2500, '')).map(
 					(torrent) => ({
 						score: getReleaseTags(torrent.filename, torrent.bytes / 1000000000).score,
@@ -45,11 +46,10 @@ const TorrentsPage = () => {
 			}
 		};
 		fetchTorrents();
-	}, []);
+	}, [accessToken]);
 
 	const handleDeleteTorrent = async (id: string) => {
 		try {
-			const accessToken = Cookies.get('accessToken');
 			await deleteTorrent(accessToken!, id);
 			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
 		} catch (error) {
@@ -179,6 +179,6 @@ const TorrentsPage = () => {
 			</div>
 		</div>
 	);
-};
+}
 
-export default TorrentsPage;
+export default withAuth(TorrentsPage);

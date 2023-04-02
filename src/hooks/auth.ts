@@ -4,9 +4,9 @@ import {
 	getDeviceCode,
 	getToken,
 } from '@/api/realDebrid';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import useLocalStorage from './localStorage';
 
 interface User {
 	id: number;
@@ -19,12 +19,6 @@ interface User {
 	premium: number;
 	expiration: string;
 }
-
-const saveClientCredentials = (clientId: string, clientSecret: string, deviceCode: string) => {
-	Cookies.set('clientId', clientId);
-	Cookies.set('clientSecret', clientSecret);
-	Cookies.set('refreshToken', deviceCode);
-};
 
 export const useDebridLogin = () => {
 	const router = useRouter();
@@ -63,9 +57,22 @@ export const useRealDebridAuthorization = () => {
 	const intervalId = useRef<number | null>(null);
 	const [userCode, setUserCode] = useState('');
 	const router = useRouter();
+	const [clientId, setClientId] = useLocalStorage<string>('clientId');
+	const [clientSecret, setClientSecret] = useLocalStorage<string>('clientSecret');
+	const [refreshToken, setRefreshToken] = useLocalStorage<string>('refreshToken');
+	const [accessToken, setAccessToken] = useLocalStorage<string>('accessToken');
 
 	useEffect(() => {
 		const fetchDeviceCode = async () => {
+			// if (!accessToken && clientId && clientSecret && refreshToken) {
+			// 	const response = await getToken(clientId, clientSecret, refreshToken);
+			// 	if (response) {
+			// 		// New tokens obtained, save them and return authenticated
+			// 		const { access_token, expires_in } = response;
+			// 		setAccessToken(access_token, expires_in);
+			// 	}
+			// }
+
 			const deviceCodeResponse = await getDeviceCode();
 			if (deviceCodeResponse) {
 				setVerificationUrl(deviceCodeResponse.verification_url);
@@ -79,18 +86,16 @@ export const useRealDebridAuthorization = () => {
 				}
 
 				const interval = deviceCodeResponse.interval * 1000;
-				const deviceCode = deviceCodeResponse.device_code;
+				setRefreshToken(deviceCodeResponse.device_code);
 
 				const checkAuthorization = async () => {
-					const credentialsResponse = await getCredentials(deviceCode);
+					const credentialsResponse = await getCredentials(
+						deviceCodeResponse.device_code
+					);
 					if (credentialsResponse) {
-						saveClientCredentials(
-							credentialsResponse.client_id,
-							credentialsResponse.client_secret,
-							deviceCode
-						);
+						setClientId(credentialsResponse.client_id);
+						setClientSecret(credentialsResponse.client_secret);
 						clearInterval(intervalId.current!);
-						await router.push('/');
 					}
 				};
 
@@ -103,7 +108,24 @@ export const useRealDebridAuthorization = () => {
 		return () => {
 			clearInterval(intervalId.current!);
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router]);
+
+	useEffect(() => {
+		(async () => {
+			if (refreshToken && clientId && clientSecret) {
+				// Refresh token is available, so try to get new tokens
+				const response = await getToken(clientId, clientSecret, refreshToken);
+				if (response) {
+					// New tokens obtained, save them and return authenticated
+					const { access_token, expires_in } = response;
+					setAccessToken(access_token, expires_in);
+					await router.push('/');
+				}
+			}
+		})();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [clientId, clientSecret, refreshToken]);
 
 	const handleAuthorize = () => {
 		if (verificationUrl) {
@@ -114,84 +136,42 @@ export const useRealDebridAuthorization = () => {
 	return { userCode, handleAuthorize };
 };
 
-const saveTokens = (accessToken: string, refreshToken: string, expiresIn: number) => {
-	Cookies.set('accessToken', accessToken, { expires: expiresIn / (60 * 60 * 24) }); // set the expiry time in days
-	Cookies.set('refreshToken', refreshToken);
-};
-
 export const useRealDebridAccessToken = () => {
-	const [accessToken, setAccessToken] = useState<string>('');
+	const [clientId] = useLocalStorage<string>('clientId');
+	const [clientSecret] = useLocalStorage<string>('clientSecret');
+	const [refreshToken] = useLocalStorage<string>('refreshToken');
+	const [accessToken, setAccessToken] = useLocalStorage<string>('accessToken');
 
 	useEffect(() => {
 		(async () => {
-			const accessToken = Cookies.get('accessToken');
-			if (accessToken) {
-				setAccessToken(accessToken);
-			}
-
-			const refreshToken = Cookies.get('refreshToken');
-			const clientId = Cookies.get('clientId');
-			const clientSecret = Cookies.get('clientSecret');
-			if (refreshToken && clientId && clientSecret) {
+			if (!accessToken && refreshToken && clientId && clientSecret) {
 				// Refresh token is available, so try to get new tokens
 				const response = await getToken(clientId, clientSecret, refreshToken);
 				if (response) {
 					// New tokens obtained, save them and return authenticated
-					const { access_token, refresh_token, expires_in } = response;
-					saveTokens(access_token, refresh_token, expires_in);
-					setAccessToken(access_token);
+					const { access_token, expires_in } = response;
+					setAccessToken(access_token, expires_in);
 				}
 			}
 		})();
-	}, []);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [clientId, clientSecret, refreshToken]);
 
 	return accessToken;
 };
 
-export const useRealDebridCurrentUser = (loginRoute: string) => {
+export const useCurrentUser = () => {
 	const [user, setUser] = useState<User | null>(null);
 	const router = useRouter();
+	const [accessToken] = useLocalStorage<string>('accessToken');
 
 	useEffect(() => {
 		(async () => {
-			const authenticated = await isAuthenticated();
-			if (!authenticated) {
-				await router.push(loginRoute);
-			} else {
-				const accessToken = Cookies.get('accessToken');
-				const rdUser = await getRealDebridUser(accessToken!);
-				if (rdUser) {
-					setUser(<User>rdUser);
-				}
-			}
+			if (!accessToken) return null;
+			const rdUser = await getRealDebridUser(accessToken);
+			if (rdUser) setUser(<User>rdUser);
 		})();
-	}, [router, loginRoute]);
+	}, [accessToken, router]);
 
 	return user;
-};
-
-const isAuthenticated = async () => {
-	const accessToken = Cookies.get('accessToken');
-	if (accessToken) {
-		// Access token is already set, so user is authenticated
-		return true;
-	}
-
-	const refreshToken = Cookies.get('refreshToken');
-	const clientId = Cookies.get('clientId');
-	const clientSecret = Cookies.get('clientSecret');
-
-	if (refreshToken && clientId && clientSecret) {
-		// Refresh token is available, so try to get new tokens
-		const response = await getToken(clientId, clientSecret, refreshToken);
-		if (response) {
-			// New tokens obtained, save them and return authenticated
-			const { access_token, refresh_token, expires_in } = response;
-			saveTokens(access_token, refresh_token, expires_in);
-			return true;
-		}
-	}
-
-	// User is not authenticated
-	return false;
 };

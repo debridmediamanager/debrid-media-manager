@@ -1,9 +1,10 @@
-import { useRealDebridCurrentUser } from '@/hooks/auth';
+import { useCurrentUser } from '@/hooks/auth';
+import { withAuth } from '@/utils/withAuth';
 import { useRouter } from 'next/router';
 
-export default function IndexPage() {
+function IndexPage() {
 	const router = useRouter();
-	const rdUser = useRealDebridCurrentUser('/start');
+	const rdUser = useCurrentUser();
 
 	const handleMyAccountClick = () => {
 		router.push('/account');
@@ -56,3 +57,5 @@ export default function IndexPage() {
 		</div>
 	);
 }
+
+export default withAuth(IndexPage);
