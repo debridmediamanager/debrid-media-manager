@@ -3,6 +3,7 @@ import useMyAccount from '@/hooks/account';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import { withAuth } from '@/utils/withAuth';
 import axios, { CancelTokenSource } from 'axios';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
@@ -87,10 +88,13 @@ function Search() {
 	return (
 		<div className="mx-4 my-8">
 			<Toaster />
+			<div className="flex justify-between items-center mb-4">
+				<h1 className="text-3xl font-bold">Search</h1>
+				<Link href="/" className="text-2xl text-gray-600 hover:text-gray-800">
+					Go Home
+				</Link>
+			</div>
 			<form onSubmit={handleSubmit}>
-				<label className="block text-gray-700 font-bold mb-2" htmlFor="query">
-					Search Query
-				</label>
 				<div className="flex items-center border-b border-b-2 border-gray-500 py-2">
 					<input
 						className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"

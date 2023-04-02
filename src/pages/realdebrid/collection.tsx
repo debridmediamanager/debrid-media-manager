@@ -2,6 +2,7 @@ import { deleteTorrent, getUserTorrentsList } from '@/api/realDebrid';
 import useLocalStorage from '@/hooks/localStorage';
 import getReleaseTags from '@/utils/score';
 import { withAuth } from '@/utils/withAuth';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { FaTrash } from 'react-icons/fa';
@@ -87,7 +88,12 @@ function TorrentsPage() {
 	return (
 		<div className="mx-4 my-8">
 			<Toaster />
-			<h1 className="text-3xl font-bold mb-4">My Movies</h1>
+			<div className="flex justify-between items-center mb-4">
+				<h1 className="text-3xl font-bold">My Collection</h1>
+				<Link href="/" className="text-2xl text-gray-600 hover:text-gray-800">
+					Home
+				</Link>
+			</div>
 			<div className="overflow-x-auto">
 				<table className="w-full">
 					<thead>
