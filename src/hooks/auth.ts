@@ -1,11 +1,6 @@
-import {
-	getCredentials,
-	getCurrentUser as getRealDebridUser,
-	getDeviceCode,
-	getToken,
-} from '@/api/realDebrid';
+import { getCurrentUser as getRealDebridUser, getToken } from '@/api/realDebrid';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useLocalStorage from './localStorage';
 
 interface User {

@@ -18,6 +18,15 @@ function IndexPage() {
 		router.push('/search');
 	};
 
+	const handleLogout = () => {
+		if (typeof window === 'undefined') {
+			// Running on the server, return null
+			return null;
+		}
+		localStorage.clear();
+		router.push('/start');
+	};
+
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen">
 			{rdUser ? (
@@ -47,6 +56,14 @@ function IndexPage() {
 								onClick={handleSearchClick}
 							>
 								Search Movies
+							</button>
+						</div>
+						<div className="flex mt-4">
+							<button
+								className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+								onClick={handleLogout}
+							>
+								Logout
 							</button>
 						</div>
 					</div>

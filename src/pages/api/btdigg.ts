@@ -27,6 +27,32 @@ export type BtDiggApiResult = {
 	errorMessage?: string;
 };
 
+const stopWords = [
+	'the',
+	'and',
+	'be',
+	'to',
+	'of',
+	'a',
+	'in',
+	'i',
+	'it',
+	'on',
+	'he',
+	'as',
+	'do',
+	'at',
+	'by',
+	'we',
+	'or',
+	'an',
+	'my',
+	'so',
+	'up',
+	'if',
+	'me',
+];
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse<BtDiggApiResult>) {
 	const { search } = req.query;
 
@@ -63,6 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			.split(/[\s\.\-\(\)]/)
 			.filter((e) => e !== '')
 			.map((e) => e.toLowerCase())
+			.filter((term) => !stopWords.includes(term))
 			.join(' ')
 			.replace(/[áàäâ]/g, 'a')
 			.replace(/[éèëê]/g, 'e')
