@@ -6,7 +6,7 @@ import { toast, Toaster } from 'react-hot-toast';
 
 function IndexPage() {
 	const router = useRouter();
-	const rdUser = useCurrentUser();
+	const user = useCurrentUser();
 	const [myAccount, setMyAccount] = useMyAccount();
 
 	const handleLibraryTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -34,11 +34,11 @@ function IndexPage() {
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen">
 			<Toaster />
-			{rdUser ? (
+			{user ? (
 				<>
 					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager</h1>
 					<div className="flex flex-col items-center">
-						<p className="text-lg font-bold">Welcome back, {rdUser.username}!</p>
+						<p className="text-lg font-bold">Welcome back, {user.username}!</p>
 						<div className="mt-4">
 							<label htmlFor="libraryType" className="mr-2">
 								You are building what type of library?

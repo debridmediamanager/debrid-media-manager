@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
-import axios, { CancelTokenSource } from 'axios';
-import { BtDiggApiResult } from './api/btdigg';
 import { addHashAsMagnet } from '@/api/realDebrid';
 import { useRealDebridAccessToken } from '@/hooks/auth';
-import toast, { Toaster } from 'react-hot-toast';
-import { useRouter } from 'next/router';
 import { withAuth } from '@/utils/withAuth';
+import axios, { CancelTokenSource } from 'axios';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import { BtDiggApiResult } from './api/btdigg';
 
 type SearchResult = {
 	title: string;

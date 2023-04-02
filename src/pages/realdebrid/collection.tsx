@@ -1,9 +1,9 @@
-import { getUserTorrentsList, deleteTorrent } from '@/api/realDebrid';
+import { deleteTorrent, getUserTorrentsList } from '@/api/realDebrid';
 import useLocalStorage from '@/hooks/localStorage';
 import getReleaseTags from '@/utils/score';
 import { withAuth } from '@/utils/withAuth';
 import { useEffect, useState } from 'react';
-import { toast, Toaster } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 import { FaTrash } from 'react-icons/fa';
 
 interface UserTorrent {

@@ -1,5 +1,4 @@
 import getReleaseTags from '@/utils/score';
-import getScore from '@/utils/score';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ElementHandle } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';

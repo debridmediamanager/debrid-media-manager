@@ -1,4 +1,5 @@
 {
+  "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-sort-json"],
   "singleQuote": true,
   "tabWidth": 4,
   "useTabs": true,
