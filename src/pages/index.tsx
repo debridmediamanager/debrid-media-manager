@@ -51,6 +51,7 @@ function IndexPage() {
 							>
 								<option value="1080p">1080p</option>
 								<option value="2160p">2160p</option>
+								<option value="does not matter">does not matter</option>
 							</select>
 						</div>
 						<div className="flex mt-4">
@@ -64,7 +65,7 @@ function IndexPage() {
 								className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 								onClick={handleSearchClick}
 							>
-								Search Movies
+								Search
 							</button>
 						</div>
 						<div className="flex mt-4">

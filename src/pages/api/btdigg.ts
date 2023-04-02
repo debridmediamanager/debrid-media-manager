@@ -53,7 +53,7 @@ const stopWords = [
 ];
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<BtDiggApiResult>) {
-	const { search } = req.query;
+	const { search, libraryType } = req.query;
 
 	if (!search || search instanceof Array) {
 		res.status(400).json({ errorMessage: 'Missing "search" query parameter' });
@@ -102,7 +102,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			.replace(/[^\w\s]/g, '')
 			.replace(/\s+/g, ' ')
 			.trim();
-		const finalQuery = `${cleaned} 2160p`;
+
+		const finalQuery = `${cleaned}${
+			libraryType === 'does not matter' ? '' : ` ${libraryType}`
+		}`;
+
 		// Navigate to the URL to be scraped
 		const searchUrl = `http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion/search?q=${encodeURIComponent(
 			finalQuery
@@ -113,7 +117,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		let searchResultsArr: SearchResult[] = [];
 
 		while (pageNum < 100) {
-			console.log(`Scraping page ${pageNum} (${finalQuery})...`);
+			console.log(`Scraping page ${pageNum + 1} (${finalQuery})...`);
 
 			// Select all the search results on the current page
 			const searchResults = await page.$$('.one_result');
@@ -129,14 +133,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 				);
 
 				// Ignore results that don't have GB in fileSize
-				if (!fileSizeStr.includes('GB')) {
+				if (libraryType !== 'does not matter' && !fileSizeStr.includes('GB')) {
 					ignoredResults++;
 					continue;
 				}
 
 				// immediately check if filesize makes sense
 				const fileSize = parseFloat(fileSizeStr);
-				if (fileSize > 128) {
+				if (!/\bs[0-2]\d|season/i.test(title) && fileSize > 128) {
 					continue;
 				}
 
@@ -146,6 +150,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 					new RegExp(`\\b${term}\\b`).test(title.toLowerCase())
 				);
 				if (!containsAllTerms) {
+					continue;
+				}
+				if (libraryType === 'does not matter' && !/1080p|2160p/.test(title.toLowerCase)) {
 					continue;
 				}
 

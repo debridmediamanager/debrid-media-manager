@@ -1,7 +1,7 @@
 import useLocalStorage from './localStorage';
 
 export interface MyAccount {
-	libraryType: '1080p' | '2160p';
+	libraryType: '1080p' | '2160p' | 'does not matter';
 }
 
 function useMyAccount() {

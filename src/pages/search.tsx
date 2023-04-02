@@ -1,4 +1,5 @@
 import { addHashAsMagnet } from '@/api/realDebrid';
+import useMyAccount from '@/hooks/account';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import { withAuth } from '@/utils/withAuth';
 import axios, { CancelTokenSource } from 'axios';
@@ -20,6 +21,7 @@ function Search() {
 	const accessToken = useRealDebridAccessToken();
 	const [loading, setLoading] = useState(false);
 	const [cancelTokenSource, setCancelTokenSource] = useState<CancelTokenSource | null>(null);
+	const [myAccount, _] = useMyAccount();
 
 	const router = useRouter();
 
@@ -30,10 +32,12 @@ function Search() {
 		const source = axios.CancelToken.source();
 		setCancelTokenSource(source);
 		try {
+			const params = {
+				search: searchQuery,
+				...(myAccount?.libraryType ? { ['libraryType']: myAccount.libraryType } : {}),
+			};
 			const response = await axios.get<BtDiggApiResult>('/api/btdigg', {
-				params: {
-					search: searchQuery,
-				},
+				params,
 				cancelToken: source.token,
 			});
 			setSearchResults(response.data.searchResults || []);
