@@ -1,17 +1,21 @@
+import useMyAccount, { MyAccount } from '@/hooks/account';
 import { useCurrentUser } from '@/hooks/auth';
 import { withAuth } from '@/utils/withAuth';
 import { useRouter } from 'next/router';
+import { toast, Toaster } from 'react-hot-toast';
 
 function IndexPage() {
 	const router = useRouter();
 	const rdUser = useCurrentUser();
+	const [myAccount, setMyAccount] = useMyAccount();
 
-	const handleMyAccountClick = () => {
-		router.push('/account');
+	const handleLibraryTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		setMyAccount({ ...myAccount, libraryType: event.target.value as MyAccount['libraryType'] });
+		toast.success('Changes saved');
 	};
 
-	const handleMoviesClick = () => {
-		router.push('/realdebrid/movies');
+	const handleCollectionClick = () => {
+		router.push('/realdebrid/collection');
 	};
 
 	const handleSearchClick = () => {
@@ -29,27 +33,32 @@ function IndexPage() {
 
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen">
+			<Toaster />
 			{rdUser ? (
 				<>
 					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager</h1>
 					<div className="flex flex-col items-center">
 						<p className="text-lg font-bold">Welcome back, {rdUser.username}!</p>
-						<p className="text-lg">
-							You are building a 2160p library.
-							{/* <a href="">Click to change to 1080p.</a> */}
-						</p>
+						<div className="mt-4">
+							<label htmlFor="libraryType" className="mr-2">
+								You are building what type of library?
+							</label>
+							<select
+								id="libraryType"
+								value={myAccount!.libraryType}
+								onChange={handleLibraryTypeChange}
+								className="border rounded p-1"
+							>
+								<option value="1080p">1080p</option>
+								<option value="2160p">2160p</option>
+							</select>
+						</div>
 						<div className="flex mt-4">
 							<button
 								className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-								onClick={handleMyAccountClick}
+								onClick={handleCollectionClick}
 							>
-								My Account
-							</button>
-							<button
-								className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-								onClick={handleMoviesClick}
-							>
-								My Movies
+								My Collection
 							</button>
 							<button
 								className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
