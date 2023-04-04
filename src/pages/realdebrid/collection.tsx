@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { FaTrash } from 'react-icons/fa';
 
-const ONE_GIG = 1024 * 1024 * 1024;
+const ONE_GIGABYTE = 1024 * 1024 * 1024;
 
 interface UserTorrent {
 	id: string;
@@ -62,7 +62,7 @@ function TorrentsPage() {
 							info = filenameParse(torrent.filename, true);
 						}
 						return {
-							score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIG).score,
+							score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
 							info,
 							mediaType,
 							title: info.title,
@@ -197,7 +197,7 @@ function TorrentsPage() {
 						{tvCount}
 					</Link>{' '}
 					tv shows, {movieCount + tvCount} in total; size:{' '}
-					{(totalBytes / ONE_GIG / 1024).toFixed(1)} TB)
+					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>
 				{Object.keys(router.query).length === 0 ? (
 					<Link href="/" className="text-2xl text-gray-600 hover:text-gray-800">
@@ -299,7 +299,7 @@ function TorrentsPage() {
 										{torrent.filename}
 									</td>
 									<td className="border px-4 py-2">
-										{(torrent.bytes / ONE_GIG).toFixed(1)} GB
+										{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
 									</td>
 									<td className="border px-4 py-2">
 										{torrent.status === 'downloading'
