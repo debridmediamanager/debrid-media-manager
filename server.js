@@ -3,7 +3,6 @@ const next = require('next');
 const puppeteer = require('puppeteer');
 
 (async () => {
-    require('dotenv').config();
     const browsersQty = process.env.BROWSERS_QTY ? parseInt(process.env.BROWSERS_QTY, 10) : 1;
     const browserPromises = [];
     for (let i = 0; i < browsersQty; i++) {
