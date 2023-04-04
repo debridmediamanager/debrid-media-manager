@@ -5,7 +5,7 @@
    "scripts": {
       "dev": "ENV=development node server.js",
       "build": "next build",
-      "start": "ts-node src/index.ts",
+      "start": "ENV=production node server.js",
       "lint": "next lint",
       "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,md}'",
       "typeorm": "typeorm-ts-node-commonjs"
