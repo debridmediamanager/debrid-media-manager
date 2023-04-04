@@ -36,3 +36,9 @@ yarn-error.log*
 next-env.d.ts
 
 src/utils/parser.ts
+
+.idea/
+.vscode/
+
+tmp/
+temp/

@@ -2,11 +2,11 @@ import { deleteTorrent, getUserTorrentsList } from '@/api/realDebrid';
 import useLocalStorage from '@/hooks/localStorage';
 import getReleaseTags from '@/utils/score';
 import { withAuth } from '@/utils/withAuth';
-import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
+import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Toaster, toast } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 import { FaTrash } from 'react-icons/fa';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
@@ -62,7 +62,8 @@ function TorrentsPage() {
 							info = filenameParse(torrent.filename, true);
 						}
 						return {
-							score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
+							score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE)
+								.score,
 							info,
 							mediaType,
 							title: info.title,

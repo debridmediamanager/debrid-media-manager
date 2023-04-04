@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 
 export type apiResult = {
@@ -7,5 +7,5 @@ export type apiResult = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<apiResult>) {
-    res.status(200).json({ hashListId: uuidv4() });
-};
+	res.status(200).json({ hashListId: uuidv4() });
+}
