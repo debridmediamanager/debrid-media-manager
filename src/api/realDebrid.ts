@@ -75,7 +75,7 @@ interface TorrentInfoResponse {
 export const getDeviceCode = async () => {
 	try {
 		const response = await axios.get<DeviceCodeResponse>(
-			'https://api.real-debrid.com/oauth/v2/device/code',
+			`${process.env.RD_API_BASEURL}/oauth/v2/device/code`,
 			{
 				params: {
 					client_id: RD_OPENSOURCE_CLIENT_ID,
@@ -93,7 +93,7 @@ export const getDeviceCode = async () => {
 export const getCredentials = async (deviceCode: string) => {
 	try {
 		const response = await axios.get<CredentialsResponse>(
-			'https://api.real-debrid.com/oauth/v2/device/credentials',
+			`${process.env.RD_API_BASEURL}/oauth/v2/device/credentials`,
 			{
 				params: {
 					client_id: RD_OPENSOURCE_CLIENT_ID,
@@ -121,7 +121,7 @@ export const getToken = async (clientId: string, clientSecret: string, code: str
 		};
 
 		const response = await axios.post<AccessTokenResponse>(
-			'https://api.real-debrid.com/oauth/v2/token',
+			`${process.env.RD_API_BASEURL}/oauth/v2/token`,
 			params.toString(),
 			{ headers }
 		);
@@ -139,7 +139,7 @@ export const getCurrentUser = async (accessToken: string) => {
 		};
 
 		const response = await axios.get<UserResponse>(
-			'https://api.real-debrid.com/rest/1.0/user',
+			`${process.env.RD_API_BASEURL}/rest/1.0/user`,
 			{ headers }
 		);
 		return response.data;
@@ -162,7 +162,7 @@ export const getUserTorrentsList = async (
 		};
 
 		const response = await axios.get<UserTorrentResponse[]>(
-			'https://api.real-debrid.com/rest/1.0/torrents',
+			`${process.env.RD_API_BASEURL}/rest/1.0/torrents`,
 			{ headers, params: { offset, page, limit, filter } }
 		);
 		return response.data;
@@ -179,7 +179,7 @@ export const getTorrentInfo = async (accessToken: string, id: string) => {
 		};
 
 		const response = await axios.get<TorrentInfoResponse>(
-			`https://api.real-debrid.com/rest/1.0/torrents/info/${id}`,
+			`${process.env.RD_API_BASEURL}/rest/1.0/torrents/info/${id}`,
 			{ headers }
 		);
 		return response.data;
@@ -198,7 +198,7 @@ export const addMagnet = async (accessToken: string, magnet: string) => {
 		const data = { magnet };
 		const formData = qs.stringify(data);
 
-		await axios.post('https://api.real-debrid.com/rest/1.0/torrents/addMagnet', formData, {
+		await axios.post(`${process.env.RD_API_BASEURL}/rest/1.0/torrents/addMagnet`, formData, {
 			headers,
 		});
 	} catch (error: any) {
@@ -220,7 +220,7 @@ export const selectFiles = async (accessToken: string, id: string, files: number
 		const formData = qs.stringify({ files });
 
 		await axios.post(
-			`https://api.real-debrid.com/rest/1.0/torrents/selectFiles/${id}`,
+			`${process.env.RD_API_BASEURL}/rest/1.0/torrents/selectFiles/${id}`,
 			formData,
 			{ headers }
 		);
@@ -236,7 +236,7 @@ export const deleteTorrent = async (accessToken: string, id: string) => {
 			Authorization: `Bearer ${accessToken}`,
 		};
 
-		await axios.delete(`https://api.real-debrid.com/rest/1.0/torrents/delete/${id}`, {
+		await axios.delete(`${process.env.RD_API_BASEURL}/rest/1.0/torrents/delete/${id}`, {
 			headers,
 		});
 	} catch (error: any) {
