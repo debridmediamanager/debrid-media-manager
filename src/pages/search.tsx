@@ -1,7 +1,9 @@
 import { addHashAsMagnet } from '@/api/realDebrid';
 import useMyAccount from '@/hooks/account';
 import { useRealDebridAccessToken } from '@/hooks/auth';
+import useLocalStorage from '@/hooks/localStorage';
 import { withAuth } from '@/utils/withAuth';
+import { filenameParse } from '@ctrl/video-filename-parser';
 import axios, { CancelTokenSource } from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -13,6 +15,8 @@ type SearchResult = {
 	title: string;
 	fileSize: number;
 	hash: string;
+	duplicate: boolean;
+	alreadyDownloading: boolean;
 };
 
 function Search() {
@@ -22,7 +26,9 @@ function Search() {
 	const accessToken = useRealDebridAccessToken();
 	const [loading, setLoading] = useState(false);
 	const [cancelTokenSource, setCancelTokenSource] = useState<CancelTokenSource | null>(null);
-	const [myAccount, _] = useMyAccount();
+	const [myAccount, _1] = useMyAccount();
+	const [hashList, _2] = useLocalStorage<string[]>('hashes', []);
+	const [dlHashList, _3] = useLocalStorage<string[]>('dlHashes', []);
 
 	const router = useRouter();
 
@@ -41,7 +47,12 @@ function Search() {
 				params,
 				cancelToken: source.token,
 			});
-			setSearchResults(response.data.searchResults || []);
+			const responseResults: SearchResult[] = response.data.searchResults!.map((e) => {
+				(e as any).duplicate = hashList?.includes(e.hash);
+				(e as any).alreadyDownloading = dlHashList?.includes(e.hash);
+				return e as unknown as SearchResult;
+			});
+			setSearchResults(responseResults || []);
 		} catch (error) {
 			if (axios.isCancel(error)) {
 				console.warn('Request canceled:', error);
@@ -68,6 +79,7 @@ function Search() {
 		const decodedQuery = decodeURIComponent(searchQuery as string);
 		setQuery(decodedQuery);
 		fetchData(decodedQuery);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query]);
 
 	useEffect(() => {
@@ -139,12 +151,19 @@ function Search() {
 								{searchResults.map((result: SearchResult, index: number) => (
 									<tr
 										key={index}
-										className="hover:bg-gray-100 cursor-pointer"
+										className={`
+											hover:bg-gray-100
+											cursor-pointer
+											${result.duplicate && 'bg-green-100'}
+											${result.alreadyDownloading && 'bg-red-100'}
+										`}
 										onClick={() => {
 											handleAddAsMagnet(result.hash);
 										}}
 									>
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+											<strong>{filenameParse(result.title).title}</strong>
+											<br />
 											{result.title}
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

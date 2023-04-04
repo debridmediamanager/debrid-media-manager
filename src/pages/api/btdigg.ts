@@ -1,12 +1,11 @@
 import getReleaseTags from '@/utils/score';
+import { filenameParse } from '@ctrl/video-filename-parser';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ElementHandle } from 'puppeteer';
+import { Browser, ElementHandle } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 puppeteer.use(StealthPlugin());
-
-const IGNORED_THRESHOLD = 21; // 2 pages worth
 
 type SearchResult = {
 	title: string;
@@ -60,64 +59,79 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		return;
 	}
 
+	if (!libraryType || libraryType instanceof Array) {
+		res.status(400).json({ errorMessage: 'Missing "libraryType" query parameter' });
+		return;
+	}
+
+	const cleaned = search
+		.split(/[\s\.\-\(\)]/)
+		.filter((e) => e !== '')
+		.map((e) => e.toLowerCase())
+		.filter((term) => !stopWords.includes(term))
+		.join(' ')
+		.replace(/[áàäâ]/g, 'a')
+		.replace(/[éèëê]/g, 'e')
+		.replace(/[íìïî]/g, 'i')
+		.replace(/[óòöô]/g, 'o')
+		.replace(/[úùüû]/g, 'u')
+		.replace(/[ç]/g, 'c')
+		.replace(/[ñ]/g, 'n')
+		.replace(/[ş]/g, 's')
+		.replace(/[ğ]/g, 'g')
+		.replace(/[^\w\s]/g, '')
+		.replace(/\s+/g, ' ')
+		.trim();
+
+	const finalQuery = `${cleaned}${libraryType === 'does not matter' ? '' : ` ${libraryType}`}`;
+
 	const browsersQty = process.env.BROWSERS_QTY ? parseInt(process.env.BROWSERS_QTY, 10) : 1;
 	const randomNum = Math.floor(Math.random() * browsersQty);
 	const browser = await puppeteer.connect({
 		browserURL: `http://127.0.0.1:${9222 + randomNum}`,
 	});
 
+	try {
+		let searchResultsArr = flattenAndRemoveDuplicates(
+			await Promise.all<SearchResult[]>([
+				fetchSearchResults(browser, '&order=0', finalQuery, libraryType),
+				fetchSearchResults(browser, '&order=3', finalQuery, libraryType),
+			])
+		);
+		if (searchResultsArr.length) searchResultsArr = groupByParsedTitle(searchResultsArr);
+
+		res.status(200).json({ searchResults: searchResultsArr });
+	} catch (error: any) {
+		console.error(error);
+
+		res.status(500).json({ errorMessage: 'An error occurred while scraping the Btdigg' });
+	} finally {
+		await browser.disconnect();
+	}
+}
+
+async function fetchSearchResults(
+	browser: Browser,
+	searchType: string,
+	finalQuery: string,
+	libraryType?: string
+): Promise<SearchResult[]> {
 	const page = await browser.newPage();
-
-	page.on('error', (err: Error) => {
-		console.error(err);
-		browser.close();
-		res.status(500).json({ errorMessage: 'An error occurred while scraping the Btdigg (1)' });
-	});
-
-	// Set up the Cloudflare bypass
-	await page.evaluateOnNewDocument(() => {
-		// Set the User-Agent header to a common browser user agent
-		Object.defineProperty(navigator, 'userAgent', {
-			value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
-		});
-	});
-
 	try {
 		let pageNum = 0;
-		const cleaned = search
-			.split(/[\s\.\-\(\)]/)
-			.filter((e) => e !== '')
-			.map((e) => e.toLowerCase())
-			.filter((term) => !stopWords.includes(term))
-			.join(' ')
-			.replace(/[áàäâ]/g, 'a')
-			.replace(/[éèëê]/g, 'e')
-			.replace(/[íìïî]/g, 'i')
-			.replace(/[óòöô]/g, 'o')
-			.replace(/[úùüû]/g, 'u')
-			.replace(/[ç]/g, 'c')
-			.replace(/[ñ]/g, 'n')
-			.replace(/[ş]/g, 's')
-			.replace(/[ğ]/g, 'g')
-			.replace(/[^\w\s]/g, '')
-			.replace(/\s+/g, ' ')
-			.trim();
-
-		const finalQuery = `${cleaned}${
-			libraryType === 'does not matter' ? '' : ` ${libraryType}`
-		}`;
 
 		// Navigate to the URL to be scraped
 		const searchUrl = `http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion/search?q=${encodeURIComponent(
 			finalQuery
-		)}&p=${pageNum}&order=3`;
+		)}&p=${pageNum}${searchType}`;
 		await page.goto(searchUrl, { waitUntil: 'networkidle0' });
 
+		const IGNORED_THRESHOLD = 21; // 2 pages worth
 		let ignoredResults = 0;
 		let searchResultsArr: SearchResult[] = [];
 
 		while (pageNum < 100) {
-			console.log(`Scraping page ${pageNum + 1} (${finalQuery})...`);
+			console.log(`Scraping ${searchType} page ${pageNum + 1} (${finalQuery})...`);
 
 			// Select all the search results on the current page
 			const searchResults = await page.$$('.one_result');
@@ -140,19 +154,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 				// immediately check if filesize makes sense
 				const fileSize = parseFloat(fileSizeStr);
-				if (!/\bs[0-2]\d|season/i.test(title) && fileSize > 128) {
+				if (!/\bs\d\d|season/i.test(title) && fileSize > 128) {
 					continue;
 				}
 
 				// Check if every term in the query (tokenized by space) is contained in the title
-				const queryTerms = cleaned.split(' ');
+				const queryTerms = finalQuery.split(' ');
 				const containsAllTerms = queryTerms.every((term) =>
-					new RegExp(`\\b${term}\\b`).test(title.toLowerCase())
+					new RegExp(`\\b${term}`).test(title.toLowerCase())
 				);
 				if (!containsAllTerms) {
+					ignoredResults++;
 					continue;
 				}
 				if (libraryType === 'does not matter' && !/1080p|2160p/.test(title.toLowerCase)) {
+					ignoredResults++;
 					continue;
 				}
 
@@ -204,15 +220,43 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			}
 		}
 
-		if (searchResultsArr.length) searchResultsArr.sort((a, b) => b.score - a.score);
-
-		res.status(200).json({ searchResults: searchResultsArr });
-	} catch (error: any) {
-		console.error(error);
-
-		res.status(500).json({ errorMessage: 'An error occurred while scraping the Btdigg (2)' });
+		return searchResultsArr;
 	} finally {
 		await page.close();
-		await browser.disconnect();
 	}
+}
+
+function flattenAndRemoveDuplicates(arr: SearchResult[][]): SearchResult[] {
+	const flattened = arr.reduce((acc, val) => acc.concat(val), []);
+	const unique = new Map<string, SearchResult>();
+	flattened.forEach((item) => {
+		if (!unique.has(item.hash)) {
+			unique.set(item.hash, item);
+		}
+	});
+	return Array.from(unique.values());
+}
+
+function groupByParsedTitle(results: SearchResult[]): SearchResult[] {
+	const frequency: Record<string, number> = {};
+	for (const result of results) {
+		const properTitle = filenameParse(result.title).title.toLocaleLowerCase();
+		if (properTitle in frequency) {
+			frequency[properTitle]++;
+		} else {
+			frequency[properTitle] = 1;
+		}
+	}
+
+	results.sort((a, b) => {
+		const frequencyCompare =
+			frequency[filenameParse(b.title).title.toLocaleLowerCase()] -
+			frequency[filenameParse(a.title).title.toLocaleLowerCase()];
+		if (frequencyCompare === 0) {
+			return b.fileSize - a.fileSize;
+		}
+		return frequencyCompare;
+	});
+
+	return results;
 }
