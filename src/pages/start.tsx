@@ -37,17 +37,6 @@ export default function StartPage() {
 					</a>
 				</div>
 
-				{/* Premiumize */}
-				<div className="flex flex-row">
-					<button
-						className="px-4 py-2 m-2 text-white bg-blue-500 disabled:opacity-50 disabled:bg-gray-500 rounded hover:bg-blue-600"
-						disabled
-						title="Coming soon!"
-					>
-						Login with Premiumize
-					</button>
-				</div>
-
 				{/* AllDebrid */}
 				<div className="flex flex-row">
 					<button
@@ -59,27 +48,6 @@ export default function StartPage() {
 					</button>
 				</div>
 
-				{/* DebridLink */}
-				<div className="flex flex-row">
-					<button
-						className="px-4 py-2 m-2 text-white bg-blue-500 disabled:opacity-50 disabled:bg-gray-500 rounded hover:bg-blue-600"
-						disabled
-						title="Coming soon!"
-					>
-						Login with DebridLink
-					</button>
-				</div>
-
-				{/* PUT.io */}
-				<div className="flex flex-row">
-					<button
-						className="px-4 py-2 m-2 text-white bg-blue-500 disabled:opacity-50 disabled:bg-gray-500 rounded hover:bg-blue-600"
-						disabled
-						title="Coming soon!"
-					>
-						Login with PUT.io
-					</button>
-				</div>
 				<h2 className="text-l text-slate-500 font-bold mt-2 mb-2">Data Storage Policy</h2>
 				<p className="text-sm text-slate-500 flex-row text-center">
 					Please note that no data is stored in our servers
