@@ -51,9 +51,14 @@ function IndexPage() {
 							>
 								<option value="1080p">1080p</option>
 								<option value="2160p">2160p</option>
-								<option value="does not matter">does not matter</option>
+								<option value="1080pOr2160p">does not matter</option>
 							</select>
 						</div>
+						{myAccount!.libraryType === '1080pOr2160p' && (
+							<div className="mt-4">
+								Choosing &quot;does not matter&quot; also nets you less results
+							</div>
+						)}
 						<div className="flex mt-4">
 							<button
 								className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

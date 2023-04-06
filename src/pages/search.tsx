@@ -43,7 +43,7 @@ function Search() {
 				search: searchQuery,
 				...(myAccount?.libraryType ? { ['libraryType']: myAccount.libraryType } : {}),
 			};
-			const response = await axios.get<BtDiggApiResult>('/api/btdigg', {
+			const response = await axios.get<BtDiggApiResult>('/api/search', {
 				params,
 				cancelToken: source.token,
 			});

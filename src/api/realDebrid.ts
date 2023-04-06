@@ -1,6 +1,6 @@
 import axios from 'axios';
+import getConfig from 'next/config';
 import qs from 'qs';
-import getConfig from 'next/config'
 
 const RD_OPENSOURCE_CLIENT_ID = 'X245A4XAIBGVM';
 

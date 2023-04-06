@@ -9,7 +9,11 @@ export default function StartPage() {
 			<div className="my-8 text-center">
 				<h1 className="text-3xl font-bold mb-4">Welcome to Debrid Media Manager</h1>
 				<p className="text-lg">The media collection with truly unlimited storage size</p>
-				<a target="_blank" href="https://docs.google.com/document/d/13enrfVXcGEEd0Yqb0PBTpGYrIvQpSfeIaAMZ_LiBDzM/edit?usp=sharing" className="text-lg underline decoration-dotted">
+				<a
+					target="_blank"
+					href="https://docs.google.com/document/d/13enrfVXcGEEd0Yqb0PBTpGYrIvQpSfeIaAMZ_LiBDzM/edit?usp=sharing"
+					className="text-lg underline decoration-dotted"
+				>
 					Check the recommended setup here
 				</a>
 			</div>
