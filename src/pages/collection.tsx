@@ -1,5 +1,7 @@
 import { deleteTorrent, getUserTorrentsList } from '@/api/realDebrid';
 import useLocalStorage from '@/hooks/localStorage';
+import { runConcurrentFunctions } from '@/utils/batch';
+import { getMediaId } from '@/utils/mediaId';
 import getReleaseTags from '@/utils/score';
 import { withAuth } from '@/utils/withAuth';
 import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
@@ -33,6 +35,8 @@ interface SortBy {
 function TorrentsPage() {
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
+	const [filtering, setFiltering] = useState(false);
+	const [grouping, setGrouping] = useState(false);
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'added', direction: 'desc' });
@@ -41,12 +45,12 @@ function TorrentsPage() {
 	const [tvCount, setTvCount] = useState<number>(0);
 	const [movieFrequency, _1] = useState<Record<string, number>>({});
 	const [tvFrequency, _2] = useState<Record<string, number>>({});
+	const [hasDupes, _3] = useState<Array<string>>([]);
 	const [totalBytes, setTotalBytes] = useState<number>(0);
 	const frequencyMap = (torrent: UserTorrent) =>
 		torrent.mediaType === 'tv' ? tvFrequency : movieFrequency;
-	const titleAndYear = (torrent: UserTorrent) => `${torrent.info.title} ${torrent.info.year}`;
-	const [_3, setHashList] = useLocalStorage<string[]>('hashes', []);
-	const [_4, setDlHashList] = useLocalStorage<string[]>('dlHashes', []);
+	const [_4, setHashList] = useLocalStorage<string[]>('hashes', []);
+	const [_5, setDlHashList] = useLocalStorage<string[]>('dlHashes', []);
 
 	// fetch list from api
 	useEffect(() => {
@@ -66,19 +70,17 @@ function TorrentsPage() {
 								.score,
 							info,
 							mediaType,
-							title: info.title,
+							title: getMediaId(info, mediaType, false),
 							...torrent,
 						};
 					}
 				) as UserTorrent[];
 
 				setUserTorrentsList(torrents);
-				console.log(torrents.map((t) => ({ f: t.filename, b: t.bytes, h: t.hash })));
 				setHashList(torrents.filter((t) => t.status === 'downloaded').map((t) => t.hash));
 				setDlHashList(torrents.filter((t) => t.status !== 'downloaded').map((t) => t.hash));
 			} catch (error) {
 				setUserTorrentsList([]);
-				setFilteredList([]);
 				toast.error('Error fetching user torrents list');
 			} finally {
 				setLoading(false);
@@ -89,60 +91,83 @@ function TorrentsPage() {
 
 	// aggregate metadata
 	useEffect(() => {
-		function groupByParsedTitle(torrents: UserTorrent[]) {
-			setMovieCount(0);
-			setTvCount(0);
-			setTotalBytes(0);
+		setGrouping(true);
+		setMovieCount(0);
+		setTvCount(0);
+		setTotalBytes(0);
 
-			let tmpTotalBytes = 0;
-			clearFrequencyMap(movieFrequency);
-			clearFrequencyMap(tvFrequency);
-			for (const torrent of torrents) {
-				tmpTotalBytes += torrent.bytes;
-				if (titleAndYear(torrent) in frequencyMap(torrent)) {
-					frequencyMap(torrent)[titleAndYear(torrent)]++;
-				} else {
-					frequencyMap(torrent)[titleAndYear(torrent)] = 1;
-				}
+		let tmpTotalBytes = 0;
+		clearFrequencyMap(movieFrequency);
+		clearFrequencyMap(tvFrequency);
+		for (const torrent of userTorrentsList) {
+			tmpTotalBytes += torrent.bytes;
+			const mediaId = getMediaId(torrent.info, torrent.mediaType);
+			if (mediaId in frequencyMap(torrent)) {
+				if (frequencyMap(torrent)[mediaId] === 1) hasDupes.push(mediaId);
+				frequencyMap(torrent)[mediaId]++;
+			} else {
+				frequencyMap(torrent)[mediaId] = 1;
 			}
-
-			setMovieCount(Object.keys(movieFrequency).length);
-			setTvCount(Object.keys(tvFrequency).length);
-			setTotalBytes(tmpTotalBytes);
 		}
-		groupByParsedTitle(userTorrentsList);
+
+		setMovieCount(Object.keys(movieFrequency).length);
+		setTvCount(Object.keys(tvFrequency).length);
+		setTotalBytes(tmpTotalBytes);
+		setGrouping(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userTorrentsList]);
 
-	// autoselect files
-	// useEffect()
-
 	// set the list you see
 	useEffect(() => {
-		const { filter: titleFilter, mediaType } = router.query;
-		if (!titleFilter && !mediaType) {
+		setFiltering(true);
+		if (Object.keys(router.query).length === 0) {
 			setFilteredList(userTorrentsList);
+			setFiltering(false);
 			return;
 		}
+		const { filter: titleFilter, mediaType, status } = router.query;
 		let tmpList = userTorrentsList;
+		if (status === 'error') {
+			tmpList = tmpList.filter(
+				(t) =>
+					t.status.includes('error') ||
+					t.status.includes('dead') ||
+					t.status.includes('virus')
+			);
+			setFilteredList(tmpList);
+		}
+		if (status === 'slow') {
+			tmpList = tmpList.filter(isTorrentSlow);
+			setFilteredList(tmpList);
+		}
+		if (status === 'dupe') {
+			tmpList = tmpList.filter((t) => hasDupes.includes(getMediaId(t.info, t.mediaType)));
+			setFilteredList(tmpList);
+		}
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
-			tmpList = tmpList.filter((t) => decodedTitleFilter === titleAndYear(t));
+			tmpList = tmpList.filter((t) => decodedTitleFilter === getMediaId(t.info, t.mediaType));
 			setFilteredList(tmpList);
 		}
 		if (mediaType) {
 			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
 			setFilteredList(tmpList);
 		}
+		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query, userTorrentsList]);
+	}, [router.query, userTorrentsList, movieFrequency, tvFrequency]);
 
 	const handleDeleteTorrent = async (id: string) => {
 		try {
 			await deleteTorrent(accessToken!, id);
-			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
+			setUserTorrentsList((prevList) =>
+				prevList.filter((t) => {
+					t.id !== id;
+				})
+			);
 		} catch (error) {
 			toast.error(`Error deleting torrent ${id}`);
+			throw error;
 		}
 	};
 
@@ -176,75 +201,108 @@ function TorrentsPage() {
 		}
 	}
 
+	function wrapDeleteFn(t: UserTorrent) {
+		return async () => await handleDeleteTorrent(t.id);
+	}
+
+	async function deleteFilteredTorrents() {
+		if (!confirm('This will delete all torrents listed. Are you sure?')) return;
+		const torrentsToDelete = filteredList.map(wrapDeleteFn);
+		const [results, errors] = await runConcurrentFunctions(torrentsToDelete, 5, 500);
+		if (errors.length) {
+			toast.error(`Error deleting ${errors.length} torrents`);
+		} else if (results.length) {
+			toast.success(`Deleted ${results.length} torrents`);
+		} else {
+			toast('No torrents to delete', { icon: '👏' });
+		}
+	}
+
+	function isTorrentSlow(t: UserTorrent) {
+		const oldTorrentAge = 86400000; // One day in milliseconds
+		const addedDate = new Date(t.added);
+		const now = new Date();
+		const ageInMillis = now.getTime() - addedDate.getTime();
+		return t.status.toLowerCase() === 'downloading' && ageInMillis >= oldTorrentAge;
+	}
+
 	return (
 		<div className="mx-4 my-8">
-			<Toaster />
+			<Toaster position="top-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">
-					My Collection (
-					<Link
-						href="/realdebrid/collection?mediaType=movie"
-						className="text-red-600 hover:text-red-800"
-					>
-						{movieCount}
-					</Link>{' '}
-					movies,{' '}
-					<Link
-						href="/realdebrid/collection?mediaType=tv"
-						className="text-red-600 hover:text-red-800"
-					>
-						{tvCount}
-					</Link>{' '}
-					tv shows, {movieCount + tvCount} in total; size:{' '}
+					My Collection ({userTorrentsList.length} files in total; size:{' '}
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>
 				{Object.keys(router.query).length === 0 ? (
-					<Link href="/" className="text-2xl text-gray-600 hover:text-gray-800">
+					<Link
+						href="/"
+						className="text-2xl bg-blue-300 hover:bg-blue-400 text-white py-1 px-2 rounded"
+					>
 						Go Home
 					</Link>
 				) : (
 					<Link
-						href="/realdebrid/collection"
-						className="text-2xl text-gray-600 hover:text-gray-800"
+						href="/collection"
+						className="text-2xl bg-red-200 hover:bg-red-300 text-white py-1 px-2 rounded"
 					>
 						Clear filter
 					</Link>
 				)}
 			</div>
 			<div className="mb-4">
-				<button
+				<Link
+					href="/collection?mediaType=movie"
 					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
-					onClick={() => {}}
 				>
-					Delete failed torrents
-				</button>
-				<button
+					Show {movieCount} movies
+				</Link>
+				<Link
+					href="/collection?mediaType=tv"
 					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
-					onClick={() => {}}
 				>
-					Delete slow torrents
-				</button>
-				<button
+					Show {tvCount} TV shows
+				</Link>
+				<Link
+					href="/collection?status=error"
 					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
-					onClick={() => {}}
 				>
-					Auto select files
-				</button>
-				<button
+					Show failed torrents
+				</Link>
+				<Link
+					href="/collection?status=slow"
 					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
-					onClick={() => {}}
 				>
-					Show dupes
-				</button>
-				<button
+					Show slow torrents
+				</Link>
+				<Link
+					href="/collection?status=dupe"
 					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
-					onClick={() => {}}
 				>
-					Show unplayable
-				</button>
+					Show dupe torrents
+				</Link>
+				{Object.keys(router.query).length === 0 && (
+					<button
+						className="mr-2 bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
+						onClick={() => {}}
+					>
+						Auto select files
+					</button>
+				)}
+				{Object.keys(router.query).filter(
+					(q) => q !== 'mediaType' && router.query.status !== 'dupe'
+				).length !== 0 &&
+					filteredList.length > 0 && (
+						<button
+							className="mr-2 bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded"
+							onClick={deleteFilteredTorrents}
+						>
+							Delete torrents
+						</button>
+					)}
 			</div>
 			<div className="overflow-x-auto">
-				{loading ? (
+				{loading || grouping || filtering ? (
 					<div className="flex justify-center items-center mt-4">
 						<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
 					</div>
@@ -305,7 +363,10 @@ function TorrentsPage() {
 						</thead>
 						<tbody>
 							{sortedData().map((torrent) => {
-								const frequency = frequencyMap(torrent)[titleAndYear(torrent)];
+								const frequency =
+									frequencyMap(torrent)[
+										getMediaId(torrent.info, torrent.mediaType)
+									];
 								const filterText =
 									frequency > 1 && !router.query.filter
 										? `${frequency - 1} other file${frequency === 1 ? '' : 's'}`
@@ -319,8 +380,9 @@ function TorrentsPage() {
 											<strong>{torrent.title}</strong>{' '}
 											<Link
 												className="text-sm text-green-600 hover:text-green-800"
-												href={`/realdebrid/collection?filter=${titleAndYear(
-													torrent
+												href={`/collection?filter=${getMediaId(
+													torrent.info,
+													torrent.mediaType
 												)}`}
 											>
 												{filterText}
@@ -328,7 +390,10 @@ function TorrentsPage() {
 											<Link
 												target="_blank"
 												className="text-sm text-blue-600 hover:text-blue-800"
-												href={`/search?query=${titleAndYear(torrent)}`}
+												href={`/search?query=${getMediaId(
+													torrent.info,
+													torrent.mediaType
+												)}`}
 											>
 												Search again
 											</Link>

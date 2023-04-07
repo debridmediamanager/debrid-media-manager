@@ -15,7 +15,7 @@ function IndexPage() {
 	};
 
 	const handleCollectionClick = () => {
-		router.push('/realdebrid/collection');
+		router.push('/collection');
 	};
 
 	const handleSearchClick = () => {
@@ -33,7 +33,7 @@ function IndexPage() {
 
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen">
-			<Toaster />
+			<Toaster position="top-right" />
 			{user ? (
 				<>
 					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager</h1>

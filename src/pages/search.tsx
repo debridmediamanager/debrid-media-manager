@@ -100,10 +100,13 @@ function Search() {
 
 	return (
 		<div className="mx-4 my-8">
-			<Toaster />
+			<Toaster position="top-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">Search</h1>
-				<Link href="/" className="text-2xl text-gray-600 hover:text-gray-800">
+				<Link
+					href="/"
+					className="text-2xl bg-blue-300 hover:bg-blue-400 text-white py-1 px-2 rounded"
+				>
 					Go Home
 				</Link>
 			</div>
