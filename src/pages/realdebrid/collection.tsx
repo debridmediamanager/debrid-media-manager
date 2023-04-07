@@ -73,6 +73,7 @@ function TorrentsPage() {
 				) as UserTorrent[];
 
 				setUserTorrentsList(torrents);
+				console.log(torrents.map((t) => ({ f: t.filename, b: t.bytes, h: t.hash })));
 				setHashList(torrents.filter((t) => t.status === 'downloaded').map((t) => t.hash));
 				setDlHashList(torrents.filter((t) => t.status !== 'downloaded').map((t) => t.hash));
 			} catch (error) {
@@ -156,7 +157,7 @@ function TorrentsPage() {
 		if (!sortBy.column) {
 			return filteredList;
 		}
-		return filteredList.sort((a, b) => {
+		filteredList.sort((a, b) => {
 			const isAsc = sortBy.direction === 'asc';
 			let comparison = 0;
 			if (a[sortBy.column] > b[sortBy.column]) {
@@ -166,16 +167,13 @@ function TorrentsPage() {
 			}
 			return isAsc ? comparison : comparison * -1;
 		});
+		return filteredList;
 	}
 
 	function clearFrequencyMap(frequencyMap: { [x: string]: number }) {
 		for (let key in frequencyMap) {
 			delete frequencyMap[key];
 		}
-	}
-
-	if (loading) {
-		return <div>Loading...</div>;
 	}
 
 	return (
@@ -213,117 +211,158 @@ function TorrentsPage() {
 					</Link>
 				)}
 			</div>
+			<div className="mb-4">
+				<button
+					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					onClick={() => {}}
+				>
+					Delete failed torrents
+				</button>
+				<button
+					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					onClick={() => {}}
+				>
+					Delete slow torrents
+				</button>
+				<button
+					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					onClick={() => {}}
+				>
+					Auto select files
+				</button>
+				<button
+					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					onClick={() => {}}
+				>
+					Show dupes
+				</button>
+				<button
+					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					onClick={() => {}}
+				>
+					Show unplayable
+				</button>
+			</div>
 			<div className="overflow-x-auto">
-				<table className="w-full">
-					<thead>
-						<tr>
-							<th
-								className="px-4 py-2 cursor-pointer"
-								onClick={() => handleSort('id')}
-							>
-								ID{' '}
-								{sortBy.column === 'id' && (sortBy.direction === 'asc' ? '↑' : '↓')}
-							</th>
-							<th
-								className="px-4 py-2 cursor-pointer"
-								onClick={() => handleSort('title')}
-							>
-								Title{' '}
-								{sortBy.column === 'title' &&
-									(sortBy.direction === 'asc' ? '↑' : '↓')}
-							</th>
-							<th
-								className="px-4 py-2 cursor-pointer"
-								onClick={() => handleSort('bytes')}
-							>
-								Size{' '}
-								{sortBy.column === 'bytes' &&
-									(sortBy.direction === 'asc' ? '↑' : '↓')}
-							</th>
-							<th
-								className="px-4 py-2 cursor-pointer"
-								onClick={() => handleSort('progress')}
-							>
-								Progress{' '}
-								{sortBy.column === 'progress' &&
-									(sortBy.direction === 'asc' ? '↑' : '↓')}
-							</th>
-							<th
-								className="px-4 py-2 cursor-pointer"
-								onClick={() => handleSort('added')}
-							>
-								Added{' '}
-								{sortBy.column === 'added' &&
-									(sortBy.direction === 'asc' ? '↑' : '↓')}
-							</th>
-							<th
-								className="px-4 py-2 cursor-pointer"
-								onClick={() => handleSort('score')}
-							>
-								Score{' '}
-								{sortBy.column === 'score' &&
-									(sortBy.direction === 'asc' ? '↑' : '↓')}
-							</th>
-							<th className="px-4 py-2">Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{sortedData().map((torrent) => {
-							const frequency = frequencyMap(torrent)[titleAndYear(torrent)];
-							const filterText =
-								frequency > 1 && !router.query.filter
-									? `${frequency - 1} other file${frequency === 1 ? '' : 's'}`
-									: '';
-							return (
-								<tr key={torrent.id} className="border-t-2">
-									<td className="border px-4 py-2">
-										{torrent.id.substring(0, 3)}
-									</td>
-									<td className="border px-4 py-2">
-										<strong>{torrent.title}</strong>{' '}
-										<Link
-											className="text-sm text-green-600 hover:text-green-800"
-											href={`/realdebrid/collection?filter=${titleAndYear(
-												torrent
-											)}`}
-										>
-											{filterText}
-										</Link>{' '}
-										<Link
-											target="_blank"
-											className="text-sm text-blue-600 hover:text-blue-800"
-											href={`/search?query=${titleAndYear(torrent)}`}
-										>
-											Search again
-										</Link>
-										<br />
-										{torrent.filename}
-									</td>
-									<td className="border px-4 py-2">
-										{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
-									</td>
-									<td className="border px-4 py-2">
-										{torrent.status === 'downloading'
-											? `${torrent.progress}%`
-											: torrent.status}
-									</td>
-									<td className="border px-4 py-2">
-										{new Date(torrent.added).toLocaleString()}
-									</td>
-									<td className="border px-4 py-2">{torrent.score.toFixed(1)}</td>
-									<td className="border px-4 py-2">
-										<button
-											className="text-red-500"
-											onClick={() => handleDeleteTorrent(torrent.id)}
-										>
-											<FaTrash />
-										</button>
-									</td>
-								</tr>
-							);
-						})}
-					</tbody>
-				</table>
+				{loading ? (
+					<div className="flex justify-center items-center mt-4">
+						<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+					</div>
+				) : (
+					<table className="w-full">
+						<thead>
+							<tr>
+								<th
+									className="px-4 py-2 cursor-pointer"
+									onClick={() => handleSort('id')}
+								>
+									ID{' '}
+									{sortBy.column === 'id' &&
+										(sortBy.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th
+									className="px-4 py-2 cursor-pointer"
+									onClick={() => handleSort('title')}
+								>
+									Title{' '}
+									{sortBy.column === 'title' &&
+										(sortBy.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th
+									className="px-4 py-2 cursor-pointer"
+									onClick={() => handleSort('bytes')}
+								>
+									Size{' '}
+									{sortBy.column === 'bytes' &&
+										(sortBy.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th
+									className="px-4 py-2 cursor-pointer"
+									onClick={() => handleSort('progress')}
+								>
+									Progress{' '}
+									{sortBy.column === 'progress' &&
+										(sortBy.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th
+									className="px-4 py-2 cursor-pointer"
+									onClick={() => handleSort('added')}
+								>
+									Added{' '}
+									{sortBy.column === 'added' &&
+										(sortBy.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th
+									className="px-4 py-2 cursor-pointer"
+									onClick={() => handleSort('score')}
+								>
+									Score{' '}
+									{sortBy.column === 'score' &&
+										(sortBy.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th className="px-4 py-2">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{sortedData().map((torrent) => {
+								const frequency = frequencyMap(torrent)[titleAndYear(torrent)];
+								const filterText =
+									frequency > 1 && !router.query.filter
+										? `${frequency - 1} other file${frequency === 1 ? '' : 's'}`
+										: '';
+								return (
+									<tr key={torrent.id} className="border-t-2">
+										<td className="border px-4 py-2">
+											{torrent.id.substring(0, 3)}
+										</td>
+										<td className="border px-4 py-2">
+											<strong>{torrent.title}</strong>{' '}
+											<Link
+												className="text-sm text-green-600 hover:text-green-800"
+												href={`/realdebrid/collection?filter=${titleAndYear(
+													torrent
+												)}`}
+											>
+												{filterText}
+											</Link>{' '}
+											<Link
+												target="_blank"
+												className="text-sm text-blue-600 hover:text-blue-800"
+												href={`/search?query=${titleAndYear(torrent)}`}
+											>
+												Search again
+											</Link>
+											<br />
+											{torrent.filename}
+										</td>
+										<td className="border px-4 py-2">
+											{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
+										</td>
+										<td className="border px-4 py-2">
+											{torrent.status === 'downloading'
+												? `${torrent.progress}%`
+												: torrent.status}
+										</td>
+										<td className="border px-4 py-2">
+											{new Date(torrent.added).toLocaleString()}
+										</td>
+										<td className="border px-4 py-2">
+											{torrent.score.toFixed(1)}
+										</td>
+										<td className="border px-4 py-2">
+											<button
+												className="text-red-500"
+												onClick={() => handleDeleteTorrent(torrent.id)}
+											>
+												<FaTrash />
+											</button>
+										</td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</table>
+				)}
 			</div>
 		</div>
 	);

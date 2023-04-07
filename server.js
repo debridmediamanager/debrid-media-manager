@@ -1,3 +1,5 @@
+// NOT NEEDED ANYMORE
+
 const express = require('express');
 const next = require('next');
 const puppeteer = require('puppeteer');

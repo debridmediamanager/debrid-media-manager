@@ -28,7 +28,7 @@ function Search() {
 	const [cancelTokenSource, setCancelTokenSource] = useState<CancelTokenSource | null>(null);
 	const [myAccount, _1] = useMyAccount();
 	const [hashList, _2] = useLocalStorage<string[]>('hashes', []);
-	const [dlHashList, _3] = useLocalStorage<string[]>('dlHashes', []);
+	const [dlHashList, setDlHashList] = useLocalStorage<string[]>('dlHashes', []);
 
 	const router = useRouter();
 
@@ -91,6 +91,7 @@ function Search() {
 	const handleAddAsMagnet = async (hash: string) => {
 		try {
 			await addHashAsMagnet(accessToken!, hash);
+			setDlHashList([...dlHashList!, hash]);
 			toast.success('Successfully added as magnet!');
 		} catch (error) {
 			toast.error('There was an error adding as magnet. Please try again.');
