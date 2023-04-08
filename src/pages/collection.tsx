@@ -16,7 +16,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
-import { FaTrash } from 'react-icons/fa';
+import { FaShare, FaTrash } from 'react-icons/fa';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
 
@@ -288,9 +288,21 @@ function TorrentsPage() {
 			hash: t.hash,
 			bytes: t.bytes,
 		}));
-		console.log(lzString.compressToBase64(JSON.stringify(hashList)));
-		console.log(
-			`http://localhost:3000/xyz#${lzString.compressToBase64(JSON.stringify(hashList))}`
+		router.push(
+			`/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
+		);
+	}
+
+	async function handleShare(t: UserTorrent) {
+		const hashList = [
+			{
+				filename: t.filename,
+				hash: t.hash,
+				bytes: t.bytes,
+			},
+		];
+		router.push(
+			`/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
 		);
 	}
 
@@ -509,10 +521,16 @@ function TorrentsPage() {
 										</td>
 										<td className="border px-4 py-2">
 											<button
-												className="text-red-500"
+												className="mr-2 mb-2 text-red-500"
 												onClick={() => handleDeleteTorrent(torrent.id)}
 											>
 												<FaTrash />
+											</button>
+											<button
+												className="mr-2 mb-2 text-indigo-600"
+												onClick={() => handleShare(torrent)}
+											>
+												<FaShare />
 											</button>
 										</td>
 									</tr>

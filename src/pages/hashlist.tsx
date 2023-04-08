@@ -40,7 +40,7 @@ function TorrentsPage() {
 	const [grouping, setGrouping] = useState(false);
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
-	const [sortBy, setSortBy] = useState<SortBy>({ column: 'title', direction: 'desc' });
+	const [sortBy, setSortBy] = useState<SortBy>({ column: 'title', direction: 'asc' });
 	const [accessToken] = useLocalStorage<string>('accessToken');
 	const [movieCount, setMovieCount] = useState<number>(0);
 	const [tvCount, setTvCount] = useState<number>(0);
@@ -56,7 +56,7 @@ function TorrentsPage() {
 		const hash = window.location.hash;
 		console.log(hash);
 		if (!hash) return [];
-		const jsonString = lzString.decompressFromBase64(hash.substring(1));
+		const jsonString = lzString.decompressFromEncodedURIComponent(hash.substring(1));
 		return JSON.parse(jsonString) as TorrentHash[];
 	};
 
@@ -139,7 +139,7 @@ function TorrentsPage() {
 			setFiltering(false);
 			return;
 		}
-		const { filter: titleFilter, mediaType, status } = router.query;
+		const { filter: titleFilter, mediaType } = router.query;
 		let tmpList = userTorrentsList;
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
@@ -203,6 +203,7 @@ function TorrentsPage() {
 
 	async function downloadNonDupeTorrents() {
 		const yetToDownload = filteredList
+			.filter((t) => !hashList!.includes(t.hash))
 			.filter((t) => !dlHashList!.includes(t.hash))
 			.map(wrapSelectFilesFn);
 		const [results, errors] = await runConcurrentFunctions(yetToDownload, 2, 500);
@@ -211,7 +212,7 @@ function TorrentsPage() {
 		} else if (results.length) {
 			toast.success(`Started downloading ${results.length} torrents`);
 		} else {
-			toast('No torrents to select files for', { icon: '👏' });
+			toast('Everything has been downloaded', { icon: '👏' });
 		}
 	}
 
@@ -220,7 +221,7 @@ function TorrentsPage() {
 			<Toaster position="top-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">
-					{userTorrentsList.length} files in total; size:{' '}
+					Share this page ({userTorrentsList.length} files in total; size:{' '}
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>
 				<Link
@@ -350,10 +351,15 @@ function TorrentsPage() {
 										<td className="border px-4 py-2">{t.score.toFixed(1)}</td>
 										<td className="border px-4 py-2">
 											<button
-												className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+												className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
+													t.alreadyDownloading || t.duplicate
+														? 'opacity-60 cursor-not-allowed'
+														: ''
+												}`}
 												onClick={() => {
 													handleAddAsMagnet(t.hash);
 												}}
+												disabled={t.alreadyDownloading || t.duplicate}
 											>
 												Download
 											</button>
