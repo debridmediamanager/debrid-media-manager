@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { BtDiggApiResult } from './api/btdigg';
+import { BtDiggApiResult } from './api/search';
 
 type SearchResult = {
 	title: string;
@@ -156,14 +156,11 @@ function Search() {
 									<tr
 										key={index}
 										className={`
-											hover:bg-gray-100
+											hover:bg-yellow-100
 											cursor-pointer
 											${result.duplicate && 'bg-green-100'}
 											${result.alreadyDownloading && 'bg-red-100'}
 										`}
-										onClick={() => {
-											handleAddAsMagnet(result.hash);
-										}}
 									>
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
 											<strong>{filenameParse(result.title).title}</strong>
@@ -174,7 +171,12 @@ function Search() {
 											{result.fileSize} GB
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-											<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+											<button
+												className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+												onClick={() => {
+													handleAddAsMagnet(result.hash);
+												}}
+											>
 												Download
 											</button>
 										</td>

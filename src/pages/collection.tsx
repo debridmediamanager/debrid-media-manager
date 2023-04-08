@@ -11,6 +11,7 @@ import { getMediaId } from '@/utils/mediaId';
 import getReleaseTags from '@/utils/score';
 import { withAuth } from '@/utils/withAuth';
 import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
+import lzString from 'lz-string';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -281,6 +282,18 @@ function TorrentsPage() {
 		return t.status.toLowerCase() === 'downloading' && ageInMillis >= oldTorrentAge;
 	}
 
+	async function generateHashList() {
+		const hashList = filteredList.map((t) => ({
+			filename: t.filename,
+			hash: t.hash,
+			bytes: t.bytes,
+		}));
+		console.log(lzString.compressToBase64(JSON.stringify(hashList)));
+		console.log(
+			`http://localhost:3000/xyz#${lzString.compressToBase64(JSON.stringify(hashList))}`
+		);
+	}
+
 	return (
 		<div className="mx-4 my-8">
 			<Toaster position="top-right" />
@@ -359,6 +372,16 @@ function TorrentsPage() {
 					}
 				>
 					Delete torrents
+				</button>
+
+				<button
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded ${
+						filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
+					}`}
+					onClick={generateHashList}
+					disabled={filteredList.length === 0}
+				>
+					Share hash list
 				</button>
 
 				{Object.keys(router.query).length !== 0 && (
@@ -442,7 +465,7 @@ function TorrentsPage() {
 										  }`
 										: '';
 								return (
-									<tr key={torrent.id} className="border-t-2">
+									<tr key={torrent.id} className="border-t-2 hover:bg-yellow-100">
 										<td className="border px-4 py-2">
 											{torrent.id.substring(0, 3)}
 										</td>

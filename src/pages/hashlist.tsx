@@ -1,10 +1,11 @@
 import { addHashAsMagnet } from '@/api/realDebrid';
-import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
+import getReleaseTags from '@/utils/score';
 import { withAuth } from '@/utils/withAuth';
 import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
+import lzString from 'lz-string';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -12,14 +13,19 @@ import { toast, Toaster } from 'react-hot-toast';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
 
-interface UserTorrent {
+interface TorrentHash {
 	filename: string;
-	title: string;
 	hash: string;
 	bytes: number;
+}
+
+interface UserTorrent extends TorrentHash {
+	title: string;
 	score: number;
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
+	duplicate: boolean;
+	alreadyDownloading: boolean;
 }
 
 interface SortBy {
@@ -27,29 +33,31 @@ interface SortBy {
 	direction: 'asc' | 'desc';
 }
 
-function HashListPage() {
+function TorrentsPage() {
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
 	const [filtering, setFiltering] = useState(false);
 	const [grouping, setGrouping] = useState(false);
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
-	const [sortBy, setSortBy] = useState<SortBy>({ column: 'title', direction: 'asc' });
-	const accessToken = useRealDebridAccessToken();
-
+	const [sortBy, setSortBy] = useState<SortBy>({ column: 'title', direction: 'desc' });
+	const [accessToken] = useLocalStorage<string>('accessToken');
 	const [movieCount, setMovieCount] = useState<number>(0);
 	const [tvCount, setTvCount] = useState<number>(0);
-	const [movieFrequency, _1] = useState<Record<string, number>>({});
-	const [tvFrequency, _2] = useState<Record<string, number>>({});
-	const [hasDupes, _3] = useState<Array<string>>([]);
+	const [movieGrouping, _1] = useState<Record<string, number>>({});
+	const [tvGroupingByEpisode, _2] = useState<Record<string, number>>({});
+	const [tvGroupingByTitle, _3] = useState<Record<string, number>>({});
+	const [hasDupes, _4] = useState<Array<string>>([]);
 	const [totalBytes, setTotalBytes] = useState<number>(0);
-	const frequencyMap = (torrent: UserTorrent) =>
-		torrent.mediaType === 'tv' ? tvFrequency : movieFrequency;
-	const [hashList, _4] = useLocalStorage<string[]>('hashes', []);
+	const [hashList, _5] = useLocalStorage<string[]>('hashes', []);
 	const [dlHashList, setDlHashList] = useLocalStorage<string[]>('dlHashes', []);
 
-	const getUserTorrentsList = async (): Promise<UserTorrent[]> => {
-		return [];
+	const getUserTorrentsList = async (): Promise<TorrentHash[]> => {
+		const hash = window.location.hash;
+		console.log(hash);
+		if (!hash) return [];
+		const jsonString = lzString.decompressFromBase64(hash.substring(1));
+		return JSON.parse(jsonString) as TorrentHash[];
 	};
 
 	// fetch list from api
@@ -64,7 +72,14 @@ function HashListPage() {
 					if (mediaType === 'tv') {
 						info = filenameParse(torrent.filename, true);
 					}
+
 					return {
+						score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
+						info,
+						mediaType,
+						title: getMediaId(info, mediaType, false),
+						duplicate: hashList?.includes(torrent.hash),
+						alreadyDownloading: dlHashList?.includes(torrent.hash),
 						...torrent,
 					};
 				}) as UserTorrent[];
@@ -78,7 +93,7 @@ function HashListPage() {
 			}
 		})();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [accessToken]);
 
 	// aggregate metadata
 	useEffect(() => {
@@ -88,21 +103,29 @@ function HashListPage() {
 		setTotalBytes(0);
 
 		let tmpTotalBytes = 0;
-		clearFrequencyMap(movieFrequency);
-		clearFrequencyMap(tvFrequency);
-		for (const torrent of userTorrentsList) {
-			tmpTotalBytes += torrent.bytes;
-			const mediaId = getMediaId(torrent.info, torrent.mediaType);
-			if (mediaId in frequencyMap(torrent)) {
-				if (frequencyMap(torrent)[mediaId] === 1) hasDupes.push(mediaId);
-				frequencyMap(torrent)[mediaId]++;
+		clearGroupings(movieGrouping);
+		clearGroupings(tvGroupingByEpisode);
+		for (const t of userTorrentsList) {
+			tmpTotalBytes += t.bytes;
+			const mediaId = getMediaId(t.info, t.mediaType);
+			if (mediaId in getGroupings(t.mediaType)) {
+				if (getGroupings(t.mediaType)[mediaId] === 1) hasDupes.push(mediaId);
+				getGroupings(t.mediaType)[mediaId]++;
 			} else {
-				frequencyMap(torrent)[mediaId] = 1;
+				getGroupings(t.mediaType)[mediaId] = 1;
+			}
+			if (t.mediaType === 'tv') {
+				const title = getMediaId(t.info, t.mediaType, true, true);
+				if (title in tvGroupingByTitle) {
+					tvGroupingByTitle[title]++;
+				} else {
+					tvGroupingByTitle[title] = 1;
+				}
 			}
 		}
 
-		setMovieCount(Object.keys(movieFrequency).length);
-		setTvCount(Object.keys(tvFrequency).length);
+		setMovieCount(Object.keys(movieGrouping).length);
+		setTvCount(Object.keys(tvGroupingByTitle).length);
 		setTotalBytes(tmpTotalBytes);
 		setGrouping(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -129,7 +152,7 @@ function HashListPage() {
 		}
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query, userTorrentsList, movieFrequency, tvFrequency]);
+	}, [router.query, userTorrentsList, movieGrouping, tvGroupingByEpisode]);
 
 	function handleSort(column: typeof sortBy.column) {
 		setSortBy({
@@ -155,7 +178,10 @@ function HashListPage() {
 		return filteredList;
 	}
 
-	function clearFrequencyMap(frequencyMap: { [x: string]: number }) {
+	const getGroupings = (mediaType: UserTorrent['mediaType']) =>
+		mediaType === 'tv' ? tvGroupingByEpisode : movieGrouping;
+
+	function clearGroupings(frequencyMap: { [x: string]: number }) {
 		for (let key in frequencyMap) {
 			delete frequencyMap[key];
 		}
@@ -168,24 +194,24 @@ function HashListPage() {
 			toast.success('Successfully added as magnet!');
 		} catch (error) {
 			toast.error('There was an error adding as magnet. Please try again.');
-			throw error;
 		}
 	};
 
-	function wrapDownloadFn(t: UserTorrent) {
+	function wrapSelectFilesFn(t: UserTorrent) {
 		return async () => await handleAddAsMagnet(t.hash);
 	}
 
-	async function addFilteredTorrents() {
-		if (!confirm('This will add all torrents listed. Are you sure?')) return;
-		const torrentsToAdd = filteredList.map(wrapDownloadFn);
-		const [results, errors] = await runConcurrentFunctions(torrentsToAdd, 5, 500);
+	async function downloadNonDupeTorrents() {
+		const yetToDownload = filteredList
+			.filter((t) => !dlHashList!.includes(t.hash))
+			.map(wrapSelectFilesFn);
+		const [results, errors] = await runConcurrentFunctions(yetToDownload, 2, 500);
 		if (errors.length) {
-			toast.error(`Error adding ${errors.length} torrents`);
+			toast.error(`Error downloading files on ${errors.length} torrents`);
 		} else if (results.length) {
-			toast.success(`Deleted ${results.length} torrents`);
+			toast.success(`Started downloading ${results.length} torrents`);
 		} else {
-			toast('No torrents to add', { icon: '👏' });
+			toast('No torrents to select files for', { icon: '👏' });
 		}
 	}
 
@@ -194,44 +220,47 @@ function HashListPage() {
 			<Toaster position="top-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">
-					My Collection ({userTorrentsList.length} files in total; size:{' '}
+					{userTorrentsList.length} files in total; size:{' '}
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>
-				{Object.keys(router.query).length === 0 ? (
-					<Link
-						href="/"
-						className="text-2xl bg-blue-300 hover:bg-blue-400 text-white py-1 px-2 rounded"
-					>
-						Go Home
-					</Link>
-				) : (
-					<Link
-						href="/hashlist"
-						className="text-2xl bg-red-200 hover:bg-red-300 text-white py-1 px-2 rounded"
-					>
-						Clear filter
-					</Link>
-				)}
+				<Link
+					href="/"
+					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+				>
+					Go Home
+				</Link>
 			</div>
 			<div className="mb-4">
 				<Link
-					href="/hashlist?mediaType=movie"
-					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					href="/collection?mediaType=movie"
+					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
 				>
 					Show {movieCount} movies
 				</Link>
 				<Link
-					href="/hashlist?mediaType=tv"
-					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					href="/collection?mediaType=tv"
+					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
 				>
 					Show {tvCount} TV shows
 				</Link>
 				<button
-					className="mr-2 bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
-					onClick={addFilteredTorrents}
+					className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ${
+						filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
+					}`}
+					onClick={downloadNonDupeTorrents}
+					disabled={filteredList.length === 0}
 				>
-					Download all torrents
+					Download all (non-dupe) torrents
 				</button>
+
+				{Object.keys(router.query).length !== 0 && (
+					<Link
+						href="/collection"
+						className="mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-4 rounded"
+					>
+						Clear filter
+					</Link>
+				)}
 			</div>
 			<div className="overflow-x-auto">
 				{loading || grouping || filtering ? (
@@ -270,24 +299,34 @@ function HashListPage() {
 							</tr>
 						</thead>
 						<tbody>
-							{sortedData().map((torrent) => {
-								const frequency =
-									frequencyMap(torrent)[
-										getMediaId(torrent.info, torrent.mediaType)
-									];
+							{sortedData().map((t) => {
+								const groupCount = getGroupings(t.mediaType)[
+									getMediaId(t.info, t.mediaType)
+								];
 								const filterText =
-									frequency > 1 && !router.query.filter
-										? `${frequency - 1} other file${frequency === 1 ? '' : 's'}`
+									groupCount > 1 && !router.query.filter
+										? `${groupCount - 1} other file${
+												groupCount === 1 ? '' : 's'
+										  }`
 										: '';
 								return (
-									<tr key={torrent.hash} className="border-t-2">
+									<tr
+										key={t.hash}
+										className={`
+									hover:bg-yellow-100
+									cursor-pointer
+									border-t-2
+									${t.duplicate && 'bg-green-100'}
+									${t.alreadyDownloading && 'bg-red-100'}
+								`}
+									>
 										<td className="border px-4 py-2">
-											<strong>{torrent.title}</strong>{' '}
+											<strong>{t.title}</strong>{' '}
 											<Link
 												className="text-sm text-green-600 hover:text-green-800"
-												href={`/hashlist?filter=${getMediaId(
-													torrent.info,
-													torrent.mediaType
+												href={`/collection?filter=${getMediaId(
+													t.info,
+													t.mediaType
 												)}`}
 											>
 												{filterText}
@@ -296,23 +335,26 @@ function HashListPage() {
 												target="_blank"
 												className="text-sm text-blue-600 hover:text-blue-800"
 												href={`/search?query=${getMediaId(
-													torrent.info,
-													torrent.mediaType
+													t.info,
+													t.mediaType
 												)}`}
 											>
 												Search again
 											</Link>
 											<br />
-											{torrent.filename}
+											{t.filename}
 										</td>
 										<td className="border px-4 py-2">
-											{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
+											{(t.bytes / ONE_GIGABYTE).toFixed(1)} GB
 										</td>
+										<td className="border px-4 py-2">{t.score.toFixed(1)}</td>
 										<td className="border px-4 py-2">
-											{torrent.score.toFixed(1)}
-										</td>
-										<td className="border px-4 py-2">
-											<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+											<button
+												className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+												onClick={() => {
+													handleAddAsMagnet(t.hash);
+												}}
+											>
 												Download
 											</button>
 										</td>
@@ -327,4 +369,4 @@ function HashListPage() {
 	);
 }
 
-export default withAuth(HashListPage);
+export default withAuth(TorrentsPage);
