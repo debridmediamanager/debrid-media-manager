@@ -1,4 +1,10 @@
-import { TorrentInfoResponse, deleteTorrent, getTorrentInfo, getUserTorrentsList, selectFiles } from '@/api/realDebrid';
+import {
+	deleteTorrent,
+	getTorrentInfo,
+	getUserTorrentsList,
+	selectFiles,
+	TorrentInfoResponse,
+} from '@/api/realDebrid';
 import useLocalStorage from '@/hooks/localStorage';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
@@ -160,9 +166,7 @@ function TorrentsPage() {
 	const handleDeleteTorrent = async (id: string) => {
 		try {
 			await deleteTorrent(accessToken!, id);
-			setUserTorrentsList((prevList) =>
-				prevList.filter((t) => t.id !== id)
-			);
+			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
 		} catch (error) {
 			toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
 			throw error;
@@ -210,7 +214,7 @@ function TorrentsPage() {
 		try {
 			const response = await getTorrentInfo(accessToken!, id);
 
-			const selectedFiles = response.files.filter(isMovie).map(file => file.id);
+			const selectedFiles = response.files.filter(isMovie).map((file) => file.id);
 			if (selectedFiles.length === 0) {
 				toast.error(`No files for selection, deleting (${id.substring(0, 3)})`);
 				handleDeleteTorrent(id);
@@ -229,7 +233,9 @@ function TorrentsPage() {
 	}
 
 	async function selectPlayableFiles() {
-		const waitingForSelection = filteredList.filter(t => t.status === 'waiting_files_selection').map(wrapSelectFilesFn);
+		const waitingForSelection = filteredList
+			.filter((t) => t.status === 'waiting_files_selection')
+			.map(wrapSelectFilesFn);
 		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 2, 500);
 		if (errors.length) {
 			toast.error(`Error selecting files on ${errors.length} torrents`);
@@ -313,12 +319,16 @@ function TorrentsPage() {
 				</Link>
 				<button
 					className={`mr-2 mb-2 bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ${
-						filteredList.filter(t => t.status === 'waiting_files_selection').length === 0
+						filteredList.filter((t) => t.status === 'waiting_files_selection')
+							.length === 0
 							? 'opacity-60 cursor-not-allowed'
 							: ''
 					}`}
 					onClick={selectPlayableFiles}
-					disabled={filteredList.filter(t => t.status === 'waiting_files_selection').length === 0}
+					disabled={
+						filteredList.filter((t) => t.status === 'waiting_files_selection')
+							.length === 0
+					}
 				>
 					Select playable files
 				</button>
