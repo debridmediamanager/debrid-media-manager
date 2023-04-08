@@ -19,14 +19,18 @@ export function cacheJsonValue<T>(key: string[], value: T) {
 }
 
 // Define the function to retrieve the cached JSON value
-export function getCachedJsonValue<T>(key: string[]): T {
+export async function getCachedJsonValue<T>(key: string[]): Promise<T> {
 	// Sort the key array alphabetically
 	const sortedKey = key.sort();
 
 	// Convert the sorted key array to a single string key
 	const redisKey = sortedKey.join(':');
 
-	const jsonValue = redisClient.GET(redisKey);
+	const jsonValue = await redisClient.GET(redisKey);
 
-	return jsonValue as T;
+	if (!jsonValue) {
+		throw new Error(`No value found for key: ${redisKey}`);
+	}
+
+	return JSON.parse(jsonValue) as T;
 }
