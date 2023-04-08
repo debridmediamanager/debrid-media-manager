@@ -2,10 +2,13 @@ import { ParsedFilename, ParsedShow } from '@ctrl/video-filename-parser';
 
 const prefix = (char: string, num: number): string => `${char}${num < 10 ? '0' : ''}${num}`;
 
-export const getMediaId = (info: ParsedFilename, mediaType: 'tv' | 'movie', lowerCase = true) => {
-	const titleStr = lowerCase ? info.title.toLocaleLowerCase() : info.title;
+export const getMediaId = (info: ParsedFilename, mediaType: 'tv' | 'movie', lowerCase = true, titleOnly = false) => {
 	if (mediaType === 'tv') {
-		const { seasons, fullSeason, isMultiSeason, episodeNumbers } = info as ParsedShow;
+		const { title, seasons, fullSeason, isMultiSeason, episodeNumbers } = info as ParsedShow;
+		const titleStr = lowerCase ? title.toLocaleLowerCase() : title;
+		if (titleOnly) {
+			return titleStr;
+		}
 		if (fullSeason) {
 			return `${titleStr} ${prefix('S', seasons[0])}`;
 		} else if (isMultiSeason) {
@@ -15,5 +18,5 @@ export const getMediaId = (info: ParsedFilename, mediaType: 'tv' | 'movie', lowe
 		return `${titleStr} ${prefix('S', seasons[0])}${' '}
             ${prefix('E', episodeNumbers[0])}`;
 	}
-	return `${titleStr} (${info.year})`;
+	return `${lowerCase ? info.title.toLocaleLowerCase() : info.title} (${info.year})`;
 };

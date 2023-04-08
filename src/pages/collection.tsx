@@ -49,14 +49,13 @@ function TorrentsPage() {
 	const [accessToken] = useLocalStorage<string>('accessToken');
 	const [movieCount, setMovieCount] = useState<number>(0);
 	const [tvCount, setTvCount] = useState<number>(0);
-	const [movieFrequency, _1] = useState<Record<string, number>>({});
-	const [tvFrequency, _2] = useState<Record<string, number>>({});
-	const frequencyMap = (torrent: UserTorrent) =>
-		torrent.mediaType === 'tv' ? tvFrequency : movieFrequency;
-	const [hasDupes, _3] = useState<Array<string>>([]);
+	const [movieGrouping, _1] = useState<Record<string, number>>({});
+	const [tvGroupingByEpisode, _2] = useState<Record<string, number>>({});
+	const [tvGroupingByTitle, _3] = useState<Record<string, number>>({});
+	const [hasDupes, _4] = useState<Array<string>>([]);
 	const [totalBytes, setTotalBytes] = useState<number>(0);
-	const [_4, setHashList] = useLocalStorage<string[]>('hashes', []);
-	const [_5, setDlHashList] = useLocalStorage<string[]>('dlHashes', []);
+	const [_5, setHashList] = useLocalStorage<string[]>('hashes', []);
+	const [_6, setDlHashList] = useLocalStorage<string[]>('dlHashes', []);
 
 	// fetch list from api
 	useEffect(() => {
@@ -103,21 +102,29 @@ function TorrentsPage() {
 		setTotalBytes(0);
 
 		let tmpTotalBytes = 0;
-		clearFrequencyMap(movieFrequency);
-		clearFrequencyMap(tvFrequency);
-		for (const torrent of userTorrentsList) {
-			tmpTotalBytes += torrent.bytes;
-			const mediaId = getMediaId(torrent.info, torrent.mediaType);
-			if (mediaId in frequencyMap(torrent)) {
-				if (frequencyMap(torrent)[mediaId] === 1) hasDupes.push(mediaId);
-				frequencyMap(torrent)[mediaId]++;
+		clearGroupings(movieGrouping);
+		clearGroupings(tvGroupingByEpisode);
+		for (const t of userTorrentsList) {
+			tmpTotalBytes += t.bytes;
+			const mediaId = getMediaId(t.info, t.mediaType);
+			if (mediaId in getGroupings(t.mediaType)) {
+				if (getGroupings(t.mediaType)[mediaId] === 1) hasDupes.push(mediaId);
+				getGroupings(t.mediaType)[mediaId]++;
 			} else {
-				frequencyMap(torrent)[mediaId] = 1;
+				getGroupings(t.mediaType)[mediaId] = 1;
+			}
+			if (t.mediaType === 'tv') {
+				const title = getMediaId(t.info, t.mediaType, true, true);
+				if (title in tvGroupingByTitle) {
+					tvGroupingByTitle[title]++;
+				} else {
+					tvGroupingByTitle[title] = 1;
+				}
 			}
 		}
 
-		setMovieCount(Object.keys(movieFrequency).length);
-		setTvCount(Object.keys(tvFrequency).length);
+		setMovieCount(Object.keys(movieGrouping).length);
+		setTvCount(Object.keys(tvGroupingByTitle).length);
 		setTotalBytes(tmpTotalBytes);
 		setGrouping(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -161,7 +168,7 @@ function TorrentsPage() {
 		}
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query, userTorrentsList, movieFrequency, tvFrequency]);
+	}, [router.query, userTorrentsList, movieGrouping, tvGroupingByEpisode]);
 
 	const handleDeleteTorrent = async (id: string) => {
 		try {
@@ -197,7 +204,9 @@ function TorrentsPage() {
 		return filteredList;
 	}
 
-	function clearFrequencyMap(frequencyMap: { [x: string]: number }) {
+	const getGroupings = (mediaType: UserTorrent['mediaType']) => mediaType === 'tv' ? tvGroupingByEpisode : movieGrouping;
+
+	function clearGroupings(frequencyMap: { [x: string]: number }) {
 		for (let key in frequencyMap) {
 			delete frequencyMap[key];
 		}
@@ -422,13 +431,13 @@ function TorrentsPage() {
 						</thead>
 						<tbody>
 							{sortedData().map((torrent) => {
-								const frequency =
-									frequencyMap(torrent)[
+								const groupCount =
+									getGroupings(torrent.mediaType)[
 										getMediaId(torrent.info, torrent.mediaType)
 									];
 								const filterText =
-									frequency > 1 && !router.query.filter
-										? `${frequency - 1} other file${frequency === 1 ? '' : 's'}`
+									groupCount > 1 && !router.query.filter
+										? `${groupCount - 1} other file${groupCount === 1 ? '' : 's'}`
 										: '';
 								return (
 									<tr key={torrent.id} className="border-t-2">

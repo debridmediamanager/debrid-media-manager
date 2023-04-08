@@ -236,6 +236,8 @@ async function fetchSearchResults(
 			}
 		}
 
+		console.log(`Found ${searchResultsArr.length} results (${finalQuery})`);
+
 		return searchResultsArr;
 	} catch (error) {
 		console.error(error);
