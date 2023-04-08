@@ -131,7 +131,10 @@ async function fetchSearchResults(
 		const RETRY_DELAY = 1000; // initial delay in ms, doubles with each retry
 
 		while (pageNum <= 100) {
-			console.log(`Scraping ${searchType} page ${pageNum} (${finalQuery})...`);
+			console.log(
+				`Scraping ${searchType} page ${pageNum} (${finalQuery})...`,
+				new Date().getTime()
+			);
 			let retries = 0; // current number of retries
 			let responseData = '';
 			let numResults = 0;

@@ -25,6 +25,7 @@
       "react-dom": "18.2.0",
       "react-hot-toast": "^2.4.0",
       "react-icons": "^4.8.0",
+      "redis": "^4.6.5",
       "socks-proxy-agent": "^7.0.0",
       "typescript": "5.0.2"
    },
