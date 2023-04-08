@@ -233,13 +233,13 @@ function TorrentsPage() {
 			</div>
 			<div className="mb-4">
 				<Link
-					href="/collection?mediaType=movie"
+					href="/hashlist?mediaType=movie"
 					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
 				>
 					Show {movieCount} movies
 				</Link>
 				<Link
-					href="/collection?mediaType=tv"
+					href="/hashlist?mediaType=tv"
 					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
 				>
 					Show {tvCount} TV shows
@@ -256,7 +256,7 @@ function TorrentsPage() {
 
 				{Object.keys(router.query).length !== 0 && (
 					<Link
-						href="/collection"
+						href="/hashlist"
 						className="mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-4 rounded"
 					>
 						Clear filter
@@ -325,7 +325,7 @@ function TorrentsPage() {
 											<strong>{t.title}</strong>{' '}
 											<Link
 												className="text-sm text-green-600 hover:text-green-800"
-												href={`/collection?filter=${getMediaId(
+												href={`/hashlist?filter=${getMediaId(
 													t.info,
 													t.mediaType
 												)}`}
