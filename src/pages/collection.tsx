@@ -1,4 +1,4 @@
-import { deleteTorrent, getUserTorrentsList } from '@/api/realDebrid';
+import { TorrentInfoResponse, deleteTorrent, getTorrentInfo, getUserTorrentsList, selectFiles } from '@/api/realDebrid';
 import useLocalStorage from '@/hooks/localStorage';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
@@ -45,10 +45,10 @@ function TorrentsPage() {
 	const [tvCount, setTvCount] = useState<number>(0);
 	const [movieFrequency, _1] = useState<Record<string, number>>({});
 	const [tvFrequency, _2] = useState<Record<string, number>>({});
-	const [hasDupes, _3] = useState<Array<string>>([]);
-	const [totalBytes, setTotalBytes] = useState<number>(0);
 	const frequencyMap = (torrent: UserTorrent) =>
 		torrent.mediaType === 'tv' ? tvFrequency : movieFrequency;
+	const [hasDupes, _3] = useState<Array<string>>([]);
+	const [totalBytes, setTotalBytes] = useState<number>(0);
 	const [_4, setHashList] = useLocalStorage<string[]>('hashes', []);
 	const [_5, setDlHashList] = useLocalStorage<string[]>('dlHashes', []);
 
@@ -161,12 +161,10 @@ function TorrentsPage() {
 		try {
 			await deleteTorrent(accessToken!, id);
 			setUserTorrentsList((prevList) =>
-				prevList.filter((t) => {
-					t.id !== id;
-				})
+				prevList.filter((t) => t.id !== id)
 			);
 		} catch (error) {
-			toast.error(`Error deleting torrent ${id}`);
+			toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
 			throw error;
 		}
 	};
@@ -198,6 +196,47 @@ function TorrentsPage() {
 	function clearFrequencyMap(frequencyMap: { [x: string]: number }) {
 		for (let key in frequencyMap) {
 			delete frequencyMap[key];
+		}
+	}
+
+	function isMovie(file: TorrentInfoResponse['files'][0]) {
+		const filePath = file.path.toLowerCase();
+		const isVideo = filePath.endsWith('.mkv') || filePath.endsWith('.mp4');
+		const isBigFile = file.bytes >= ONE_GIGABYTE;
+		return isVideo && isBigFile;
+	}
+
+	const handleSelectFiles = async (id: string) => {
+		try {
+			const response = await getTorrentInfo(accessToken!, id);
+
+			const selectedFiles = response.files.filter(isMovie).map(file => file.id);
+			if (selectedFiles.length === 0) {
+				toast.error(`No files for selection, deleting (${id.substring(0, 3)})`);
+				handleDeleteTorrent(id);
+				return;
+			}
+
+			await selectFiles(accessToken!, id, selectedFiles);
+		} catch (error) {
+			toast.error(`Error selecting files (${id.substring(0, 3)})`);
+			throw error;
+		}
+	};
+
+	function wrapSelectFilesFn(t: UserTorrent) {
+		return async () => await handleSelectFiles(t.id);
+	}
+
+	async function selectPlayableFiles() {
+		const waitingForSelection = filteredList.filter(t => t.status === 'waiting_files_selection').map(wrapSelectFilesFn);
+		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 2, 500);
+		if (errors.length) {
+			toast.error(`Error selecting files on ${errors.length} torrents`);
+		} else if (results.length) {
+			toast.success(`Started downloading ${results.length} torrents`);
+		} else {
+			toast('No torrents to select files for', { icon: '👏' });
 		}
 	}
 
@@ -234,72 +273,82 @@ function TorrentsPage() {
 					My Collection ({userTorrentsList.length} files in total; size:{' '}
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>
-				{Object.keys(router.query).length === 0 ? (
-					<Link
-						href="/"
-						className="text-2xl bg-blue-300 hover:bg-blue-400 text-white py-1 px-2 rounded"
-					>
-						Go Home
-					</Link>
-				) : (
-					<Link
-						href="/collection"
-						className="text-2xl bg-red-200 hover:bg-red-300 text-white py-1 px-2 rounded"
-					>
-						Clear filter
-					</Link>
-				)}
+				<Link
+					href="/"
+					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+				>
+					Go Home
+				</Link>
 			</div>
 			<div className="mb-4">
 				<Link
 					href="/collection?mediaType=movie"
-					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
 				>
 					Show {movieCount} movies
 				</Link>
 				<Link
 					href="/collection?mediaType=tv"
-					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
 				>
 					Show {tvCount} TV shows
 				</Link>
 				<Link
 					href="/collection?status=error"
-					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
 				>
 					Show failed torrents
 				</Link>
 				<Link
 					href="/collection?status=slow"
-					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
 				>
 					Show slow torrents
 				</Link>
 				<Link
 					href="/collection?status=dupe"
-					className="mr-2 bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
 				>
 					Show dupe torrents
 				</Link>
-				{Object.keys(router.query).length === 0 && (
-					<button
-						className="mr-2 bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
-						onClick={() => {}}
+				<button
+					className={`mr-2 mb-2 bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ${
+						filteredList.filter(t => t.status === 'waiting_files_selection').length === 0
+							? 'opacity-60 cursor-not-allowed'
+							: ''
+					}`}
+					onClick={selectPlayableFiles}
+					disabled={filteredList.filter(t => t.status === 'waiting_files_selection').length === 0}
+				>
+					Select playable files
+				</button>
+
+				<button
+					className={`mr-2 mb-2 bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded ${
+						Object.keys(router.query).filter(
+							(q) => q !== 'mediaType' && router.query.status !== 'dupe'
+						).length === 0
+							? 'opacity-60 cursor-not-allowed'
+							: ''
+					}`}
+					onClick={deleteFilteredTorrents}
+					disabled={
+						Object.keys(router.query).filter(
+							(q) => q !== 'mediaType' && router.query.status !== 'dupe'
+						).length === 0
+					}
+				>
+					Delete torrents
+				</button>
+
+				{Object.keys(router.query).length !== 0 && (
+					<Link
+						href="/collection"
+						className="mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-4 rounded"
 					>
-						Auto select files
-					</button>
+						Clear filter
+					</Link>
 				)}
-				{Object.keys(router.query).filter(
-					(q) => q !== 'mediaType' && router.query.status !== 'dupe'
-				).length !== 0 &&
-					filteredList.length > 0 && (
-						<button
-							className="mr-2 bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded"
-							onClick={deleteFilteredTorrents}
-						>
-							Delete torrents
-						</button>
-					)}
 			</div>
 			<div className="overflow-x-auto">
 				{loading || grouping || filtering ? (

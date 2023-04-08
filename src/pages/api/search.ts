@@ -168,7 +168,6 @@ async function fetchSearchResults(
 
 			for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {
 				const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
-				// console.log(title);
 				const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
 
 				// Ignore results that don't have GB in fileSize

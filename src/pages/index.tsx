@@ -61,13 +61,13 @@ function IndexPage() {
 						)}
 						<div className="flex mt-4">
 							<button
-								className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
 								onClick={handleCollectionClick}
 							>
 								My Collection
 							</button>
 							<button
-								className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
 								onClick={handleSearchClick}
 							>
 								Search

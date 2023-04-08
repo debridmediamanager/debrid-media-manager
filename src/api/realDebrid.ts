@@ -51,7 +51,7 @@ interface UserTorrentResponse {
 	ended: string;
 }
 
-interface TorrentInfoResponse {
+export interface TorrentInfoResponse {
 	id: string;
 	filename: string;
 	original_filename: string;
@@ -220,7 +220,7 @@ export const selectFiles = async (accessToken: string, id: string, files: number
 			Authorization: `Bearer ${accessToken}`,
 			'Content-Type': 'application/x-www-form-urlencoded',
 		};
-		const formData = qs.stringify({ files });
+		const formData = qs.stringify({ files: files.join(',') });
 
 		await axios.post(
 			`${config.realDebirdHostname}/rest/1.0/torrents/selectFiles/${id}`,

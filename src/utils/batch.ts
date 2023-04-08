@@ -38,8 +38,5 @@ export async function runConcurrentFunctions<T>(
 		await sleep(10);
 	}
 
-	console.log(results);
-	console.log(errors);
-
 	return [results, errors];
 }

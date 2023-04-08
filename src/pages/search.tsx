@@ -105,7 +105,7 @@ function Search() {
 				<h1 className="text-3xl font-bold">Search</h1>
 				<Link
 					href="/"
-					className="text-2xl bg-blue-300 hover:bg-blue-400 text-white py-1 px-2 rounded"
+					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
 				>
 					Go Home
 				</Link>
@@ -121,7 +121,7 @@ function Search() {
 						onChange={(e) => setQuery(e.target.value)}
 					/>
 					<button
-						className="flex-shrink-0 bg-gray-700 hover:bg-gray-800 border-gray-700 hover:border-gray-800 text-sm border-4 text-white py-1 px-2 rounded"
+						className="flex-shrink-0 bg-gray-700 hover:bg-gray-600 border-gray-700 hover:border-gray-600 text-sm border-4 text-white py-1 px-2 rounded"
 						type="submit"
 					>
 						Search
