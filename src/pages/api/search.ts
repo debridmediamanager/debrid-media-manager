@@ -130,7 +130,7 @@ async function fetchSearchResults(
 		const MAX_RETRIES = 5; // maximum number of retries
 		const RETRY_DELAY = 1000; // initial delay in ms, doubles with each retry
 
-		while (pageNum <= 100) {
+		while (pageNum <= 40) {
 			console.log(
 				`Scraping ${searchType} page ${pageNum} (${finalQuery})...`,
 				new Date().getTime()
