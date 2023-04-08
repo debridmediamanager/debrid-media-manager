@@ -204,7 +204,8 @@ function TorrentsPage() {
 		return filteredList;
 	}
 
-	const getGroupings = (mediaType: UserTorrent['mediaType']) => mediaType === 'tv' ? tvGroupingByEpisode : movieGrouping;
+	const getGroupings = (mediaType: UserTorrent['mediaType']) =>
+		mediaType === 'tv' ? tvGroupingByEpisode : movieGrouping;
 
 	function clearGroupings(frequencyMap: { [x: string]: number }) {
 		for (let key in frequencyMap) {
@@ -431,13 +432,14 @@ function TorrentsPage() {
 						</thead>
 						<tbody>
 							{sortedData().map((torrent) => {
-								const groupCount =
-									getGroupings(torrent.mediaType)[
-										getMediaId(torrent.info, torrent.mediaType)
-									];
+								const groupCount = getGroupings(torrent.mediaType)[
+									getMediaId(torrent.info, torrent.mediaType)
+								];
 								const filterText =
 									groupCount > 1 && !router.query.filter
-										? `${groupCount - 1} other file${groupCount === 1 ? '' : 's'}`
+										? `${groupCount - 1} other file${
+												groupCount === 1 ? '' : 's'
+										  }`
 										: '';
 								return (
 									<tr key={torrent.id} className="border-t-2">
