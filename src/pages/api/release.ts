@@ -1,11 +1,8 @@
 import getReleaseTags from '@/utils/score';
 import { filenameParse } from '@ctrl/video-filename-parser';
+import axios, { AxiosInstance } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Browser, ElementHandle } from 'puppeteer';
-import puppeteer from 'puppeteer-extra';
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-
-puppeteer.use(StealthPlugin());
+import { SocksProxyAgent } from 'socks-proxy-agent';
 
 type SearchResult = {
 	title: string;
@@ -25,77 +22,31 @@ export type BtDiggApiResult = {
 	errorMessage?: string;
 };
 
-const stopWords = [
-	'the',
-	'and',
-	'be',
-	'to',
-	'of',
-	'a',
-	'in',
-	'i',
-	'it',
-	'on',
-	'he',
-	'as',
-	'do',
-	'at',
-	'by',
-	'we',
-	'or',
-	'an',
-	'my',
-	'so',
-	'up',
-	'if',
-	'me',
-];
+const agent = new SocksProxyAgent('socks5h://127.0.0.1:9050');
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<BtDiggApiResult>) {
-	const { search, libraryType } = req.query;
+	const { name } = req.query;
 
-	if (!search || search instanceof Array) {
-		res.status(400).json({ errorMessage: 'Missing "search" query parameter' });
+	if (!name || name instanceof Array) {
+		res.status(400).json({ errorMessage: 'Missing "name" query parameter' });
 		return;
 	}
 
-	if (!libraryType || libraryType instanceof Array) {
-		res.status(400).json({ errorMessage: 'Missing "libraryType" query parameter' });
-		return;
-	}
+	const finalQuery = `${name}`;
 
-	const cleaned = search
-		.split(/[\s\.\-\(\)]/)
-		.filter((e) => e !== '')
-		.map((e) => e.toLowerCase())
-		.filter((term) => !stopWords.includes(term))
-		.join(' ')
-		.replace(/[áàäâ]/g, 'a')
-		.replace(/[éèëê]/g, 'e')
-		.replace(/[íìïî]/g, 'i')
-		.replace(/[óòöô]/g, 'o')
-		.replace(/[úùüû]/g, 'u')
-		.replace(/[ç]/g, 'c')
-		.replace(/[ñ]/g, 'n')
-		.replace(/[ş]/g, 's')
-		.replace(/[ğ]/g, 'g')
-		.replace(/[^\w\s]/g, '')
-		.replace(/\s+/g, ' ')
-		.trim();
-
-	const finalQuery = `${cleaned}${libraryType === '1080pOr2160p' ? '' : ` ${libraryType}`}`;
-
-	const browsersQty = process.env.BROWSERS_QTY ? parseInt(process.env.BROWSERS_QTY, 10) : 1;
-	const randomNum = Math.floor(Math.random() * browsersQty);
-	const browser = await puppeteer.connect({
-		browserURL: `http://127.0.0.1:${9222 + randomNum}`,
+	const client = axios.create({
+		httpAgent: agent,
+		headers: {
+			'User-Agent':
+				'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
+		},
 	});
 
 	try {
 		let searchResultsArr = flattenAndRemoveDuplicates(
 			await Promise.all<SearchResult[]>([
-				fetchSearchResults(browser, '&order=0', finalQuery, libraryType),
-				fetchSearchResults(browser, '&order=3', finalQuery, libraryType),
+				fetchSearchResults(client, '&order=0', finalQuery),
+				fetchSearchResults(client, '&order=3', finalQuery),
 			])
 		);
 		if (searchResultsArr.length) searchResultsArr = groupByParsedTitle(searchResultsArr);
@@ -105,49 +56,71 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		console.error(error);
 
 		res.status(500).json({ errorMessage: 'An error occurred while scraping the Btdigg' });
-	} finally {
-		await browser.disconnect();
 	}
 }
 
 async function fetchSearchResults(
-	browser: Browser,
+	client: AxiosInstance,
 	searchType: string,
-	finalQuery: string,
-	libraryType?: string
+	finalQuery: string
 ): Promise<SearchResult[]> {
-	const page = await browser.newPage();
 	try {
-		let pageNum = 0;
+		let pageNum = 1;
 
-		// Navigate to the URL to be scraped
-		const searchUrl = `http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion/search?q=${encodeURIComponent(
-			finalQuery
-		)}&p=${pageNum}${searchType}`;
-		await page.goto(searchUrl, { waitUntil: 'networkidle0' });
+		let searchUrl = (pg: number) =>
+			`http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion/search?q=${encodeURIComponent(
+				finalQuery
+			)}&p=${pg - 1}${searchType}`;
 
 		const IGNORED_THRESHOLD = 21; // 2 pages worth
 		let ignoredResults = 0;
 		let searchResultsArr: SearchResult[] = [];
 
-		while (pageNum < 100) {
-			console.log(`Scraping ${searchType} page ${pageNum + 1} (${finalQuery})...`);
+		const MAX_RETRIES = 5; // maximum number of retries
+		const RETRY_DELAY = 1000; // initial delay in ms, doubles with each retry
 
-			// Select all the search results on the current page
-			const searchResults = await page.$$('.one_result');
+		while (pageNum <= 100) {
+			console.log(`Scraping ${searchType} page ${pageNum} (${finalQuery})...`);
+			let retries = 0; // current number of retries
+			let responseData = '';
+			let numResults = 0;
+			while (true) {
+				try {
+					const response = await client.get(searchUrl(pageNum), { httpAgent: agent });
+					responseData = response.data;
+					const numResultsStr = responseData.match(/(\d+) results found/) || [];
+					numResults = parseInt(numResultsStr[1], 10);
+					retries = 0;
+					break;
+				} catch (error) {
+					retries++;
+					if (retries > MAX_RETRIES) {
+						console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);
+						break;
+					}
+					const delay = RETRY_DELAY * Math.pow(2, retries - 1);
+					await new Promise((resolve) => setTimeout(resolve, delay));
+				}
+			}
+			const fileSizes = Array.from(
+				responseData.matchAll(
+					/class=\"torrent_size\"[^>]*>(\d+(?:\.\d+)?)(?:[^A-Z<]+)?([A-Z]+)?/g
+				)
+			);
+			const namesAndHashes = Array.from(
+				responseData.matchAll(/magnet:\?xt=urn:btih:([a-z\d]{40})&amp;dn=([^&]+)&/g)
+			);
 
-			// Loop through each search result and extract the desired information
-			for (const result of searchResults) {
-				const title = await result.$eval('.torrent_name a', (node: any) =>
-					node.textContent.trim()
-				);
-				// console.log(title);
-				const fileSizeStr = await result.$eval('.torrent_size', (node: any) =>
-					node.textContent.trim()
-				);
+			if (fileSizes.length !== namesAndHashes.length) {
+				throw new Error('parsing error');
+			}
+
+			for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {
+				const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
+				const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
 
 				// Ignore results that don't have GB in fileSize
-				if (libraryType !== '1080pOr2160p' && !fileSizeStr.includes('GB')) {
+				if (!fileSizeStr.includes('GB')) {
 					ignoredResults++;
 					continue;
 				}
@@ -167,16 +140,12 @@ async function fetchSearchResults(
 					ignoredResults++;
 					continue;
 				}
-				if (libraryType === '1080pOr2160p' && !/1080p|2160p/.test(title.toLowerCase)) {
+				if (!/1080p|2160p/.test(title.toLowerCase())) {
 					ignoredResults++;
 					continue;
 				}
 
-				const magnetLink = await result.$eval(
-					'.torrent_magnet a',
-					(node: any) => node.href
-				);
-				const hash = magnetLink.match(/xt=urn:btih:(.*?)&/)[1];
+				const hash = namesAndHashes[resIndex][1];
 
 				const { dolby_vision, hdr10plus, hdr, remux, proper_remux, score } = getReleaseTags(
 					title,
@@ -186,7 +155,7 @@ async function fetchSearchResults(
 				let resultObj: SearchResult = {
 					title,
 					fileSize,
-					magnetLink,
+					magnetLink: `magnet:?xt=urn:btih:${hash}`,
 					hash,
 					dolby_vision,
 					hdr10plus,
@@ -208,12 +177,8 @@ async function fetchSearchResults(
 				break;
 			}
 
-			// Try to find the "Next →" link and click it to load the next page of results
-			const nextPageLink = await page.$x("//a[contains(text(), 'Next →')]");
-			if (nextPageLink.length > 0) {
-				await (nextPageLink[0] as ElementHandle<Element>).click();
+			if (numResults > pageNum * 10) {
 				pageNum++;
-				await page.waitForNavigation({ waitUntil: 'networkidle0' });
 			} else {
 				// No more pages, exit the loop
 				break;
@@ -221,8 +186,9 @@ async function fetchSearchResults(
 		}
 
 		return searchResultsArr;
-	} finally {
-		await page.close();
+	} catch (error) {
+		console.error(error);
+		throw error;
 	}
 }
 
