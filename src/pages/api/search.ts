@@ -123,14 +123,16 @@ async function fetchSearchResults(
 				finalQuery
 			)}&p=${pg - 1}${searchType}`;
 
-		const IGNORED_THRESHOLD = 21; // 2 pages worth
-		let ignoredResults = 0;
+		const BAD_RESULT_THRESHOLD = 21; // 2 pages worth
+		let badResults = 0;
 		let searchResultsArr: SearchResult[] = [];
 
 		const MAX_RETRIES = 5; // maximum number of retries
 		const RETRY_DELAY = 1000; // initial delay in ms, doubles with each retry
 
-		while (pageNum <= 40) {
+		let skippedResults = 0;
+
+		while (pageNum <= (40 + Math.floor(skippedResults/10))) {
 			console.log(
 				`Scraping ${searchType} page ${pageNum} (${finalQuery})...`,
 				new Date().getTime()
@@ -175,13 +177,14 @@ async function fetchSearchResults(
 
 				// Ignore results that don't have GB in fileSize
 				if (libraryType !== '1080pOr2160p' && !fileSizeStr.includes('GB')) {
-					ignoredResults++;
+					badResults++;
 					continue;
 				}
 
 				// immediately check if filesize makes sense
 				const fileSize = parseFloat(fileSizeStr);
 				if (!/\bs\d\d|season/i.test(title) && fileSize > 128) {
+					skippedResults++;
 					continue;
 				}
 
@@ -191,11 +194,11 @@ async function fetchSearchResults(
 					new RegExp(`\\b${term}`).test(title.toLowerCase())
 				);
 				if (!containsAllTerms) {
-					ignoredResults++;
+					badResults++;
 					continue;
 				}
 				if (libraryType === '1080pOr2160p' && !/1080p|2160p/.test(title.toLowerCase())) {
-					ignoredResults++;
+					badResults++;
 					continue;
 				}
 
@@ -220,13 +223,13 @@ async function fetchSearchResults(
 				};
 				searchResultsArr.push(resultObj);
 				// Reset ignoredResults counter
-				ignoredResults = 0;
+				badResults = 0;
 			}
 
 			// Stop execution if the last 5 results were ignored
-			if (ignoredResults >= IGNORED_THRESHOLD) {
+			if (badResults >= BAD_RESULT_THRESHOLD) {
 				console.log(
-					`Stopped execution after ${pageNum} pages because the last ${IGNORED_THRESHOLD} results were ignored.`
+					`Stopped execution after ${pageNum} pages because the last ${BAD_RESULT_THRESHOLD} results were ignored.`
 				);
 				break;
 			}
