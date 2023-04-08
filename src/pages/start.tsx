@@ -14,7 +14,7 @@ export default function StartPage() {
 					href="https://docs.google.com/document/d/13enrfVXcGEEd0Yqb0PBTpGYrIvQpSfeIaAMZ_LiBDzM/edit?usp=sharing"
 					className="text-lg underline decoration-dotted"
 				>
-					Check the recommended setup here
+					Check our how to/recommended setup here
 				</a>
 			</div>
 
@@ -62,13 +62,13 @@ export default function StartPage() {
 
 				<h2 className="text-l text-slate-500 font-bold mt-2 mb-2">Data Storage Policy</h2>
 				<p className="text-sm text-slate-500 flex-row text-center">
-					Please note that no data is stored in our servers
+					Please note that no data or logs are stored on our servers
 					<br />
 					You can inspect every request if you want
 					<br />
 					Everything is stored on your browser&apos;s local storage
 					<br />
-					We use corsproxy.org to bypass CORS restrictions
+					We use corsproxy.org to bypass RealDebrid API&apos;s CORS restrictions
 				</p>
 			</div>
 		</div>
