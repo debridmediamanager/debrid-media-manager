@@ -521,16 +521,16 @@ function TorrentsPage() {
 										</td>
 										<td className="border px-4 py-2">
 											<button
-												className="mr-2 mb-2 text-red-500"
-												onClick={() => handleDeleteTorrent(torrent.id)}
-											>
-												<FaTrash />
-											</button>
-											<button
 												className="mr-2 mb-2 text-indigo-600"
 												onClick={() => handleShare(torrent)}
 											>
 												<FaShare />
+											</button>
+											<button
+												className="mr-2 mb-2 text-red-500"
+												onClick={() => handleDeleteTorrent(torrent.id)}
+											>
+												<FaTrash />
 											</button>
 										</td>
 									</tr>

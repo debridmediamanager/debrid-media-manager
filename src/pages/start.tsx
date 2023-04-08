@@ -50,6 +50,14 @@ export default function StartPage() {
 					>
 						Login with AllDebrid
 					</button>
+					<a
+						className="px-4 py-2 m-2 text-white bg-gray-500 opacity-50 rounded"
+						href="https://alldebrid.com/?uid=1kk5i&lang=en"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Create an account with AllDebrid
+					</a>
 				</div>
 
 				<h2 className="text-l text-slate-500 font-bold mt-2 mb-2">Data Storage Policy</h2>
@@ -59,6 +67,8 @@ export default function StartPage() {
 					You can inspect every request if you want
 					<br />
 					Everything is stored on your browser&apos;s local storage
+					<br />
+					We use corsproxy.org to bypass CORS restrictions
 				</p>
 			</div>
 		</div>
