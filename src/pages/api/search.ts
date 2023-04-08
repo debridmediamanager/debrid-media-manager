@@ -132,7 +132,7 @@ async function fetchSearchResults(
 
 		let skippedResults = 0;
 
-		while (pageNum <= (40 + Math.floor(skippedResults/10))) {
+		while (pageNum <= 40 + Math.floor(skippedResults / 10)) {
 			console.log(
 				`Scraping ${searchType} page ${pageNum} (${finalQuery})...`,
 				new Date().getTime()
