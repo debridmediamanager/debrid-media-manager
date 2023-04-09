@@ -66,7 +66,7 @@ function TorrentsPage() {
 				const torrents = (await getUserTorrentsList(accessToken!, 0, 1, 2500, '')).map(
 					(torrent) => {
 						let info = filenameParse(torrent.filename);
-						const mediaType = /\bs\d\d/.test(info.title.trim().toLowerCase())
+						const mediaType = /s\d\d|season[\.\s]?\d/i.test(torrent.filename)
 							? 'tv'
 							: 'movie';
 						if (mediaType === 'tv') {

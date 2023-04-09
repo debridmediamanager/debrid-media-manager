@@ -54,7 +54,6 @@ function TorrentsPage() {
 
 	const getUserTorrentsList = async (): Promise<TorrentHash[]> => {
 		const hash = window.location.hash;
-		console.log(hash);
 		if (!hash) return [];
 		const jsonString = lzString.decompressFromEncodedURIComponent(hash.substring(1));
 		return JSON.parse(jsonString) as TorrentHash[];
@@ -66,7 +65,7 @@ function TorrentsPage() {
 			try {
 				const torrents = (await getUserTorrentsList()).map((torrent) => {
 					let info = filenameParse(torrent.filename);
-					const mediaType = /\bs\d\d/.test(info.title.trim().toLowerCase())
+					const mediaType = /s\d\d|season[\.\s]?\d/i.test(torrent.filename)
 						? 'tv'
 						: 'movie';
 					if (mediaType === 'tv') {

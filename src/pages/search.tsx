@@ -17,6 +17,7 @@ type SearchResult = {
 	hash: string;
 	duplicate: boolean;
 	alreadyDownloading: boolean;
+	mediaType: 'movie' | 'tv';
 };
 
 function Search() {

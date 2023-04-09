@@ -15,6 +15,7 @@ type SearchResult = {
 	remux: boolean;
 	proper_remux: boolean;
 	score: number;
+	mediaType: 'tv' | 'movie';
 };
 
 export type BtDiggApiResult = {
@@ -220,6 +221,7 @@ async function fetchSearchResults(
 					remux,
 					proper_remux,
 					score,
+					mediaType: /s\d\d|season[\.\s]?\d/i.test(title) ? 'tv' : 'movie',
 				};
 				searchResultsArr.push(resultObj);
 				// Reset ignoredResults counter
