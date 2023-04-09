@@ -82,6 +82,9 @@ export default function StartPage() {
 					<br />
 					We use corsproxy.org to bypass RealDebrid API&apos;s CORS restrictions
 				</p>
+				<p className="text-sm text-red-500">
+					Because this website do lots of RegEx look behinds, it doesn&apos;t work on Safari / iOS browsers
+				</p>
 			</div>
 		</div>
 	);
