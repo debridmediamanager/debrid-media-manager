@@ -1,4 +1,4 @@
-import { addHashAsMagnet } from '@/api/realDebrid';
+import { addHashAsMagnet } from '@/services/realDebrid';
 import useLocalStorage from '@/hooks/localStorage';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';

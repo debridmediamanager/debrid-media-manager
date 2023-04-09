@@ -1,4 +1,4 @@
-import { addHashAsMagnet } from '@/api/realDebrid';
+import { addHashAsMagnet } from '@/services/realDebrid';
 import useMyAccount from '@/hooks/account';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';

@@ -1,4 +1,4 @@
-import { getCurrentUser as getRealDebridUser, getToken } from '@/api/realDebrid';
+import { getCurrentUser as getRealDebridUser, getToken } from '@/services/realDebrid';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useLocalStorage from './localStorage';

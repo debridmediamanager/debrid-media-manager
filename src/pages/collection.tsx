@@ -1,11 +1,11 @@
-import { createShortUrl } from '@/api/hashlists';
+import { createShortUrl } from '@/services/hashlists';
 import {
 	deleteTorrent,
 	getTorrentInfo,
 	getUserTorrentsList,
 	selectFiles,
 	TorrentInfoResponse,
-} from '@/api/realDebrid';
+} from '@/services/realDebrid';
 import useLocalStorage from '@/hooks/localStorage';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
@@ -294,6 +294,7 @@ function TorrentsPage() {
 				window.location.host
 			}/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
 		);
+		console.log(shortUrl);
 		window.open(shortUrl);
 	}
 
