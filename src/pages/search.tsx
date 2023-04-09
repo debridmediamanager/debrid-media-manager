@@ -1,7 +1,7 @@
-import { addHashAsMagnet } from '@/services/realDebrid';
 import useMyAccount from '@/hooks/account';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
+import { addHashAsMagnet } from '@/services/realDebrid';
 import { withAuth } from '@/utils/withAuth';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import axios, { CancelTokenSource } from 'axios';

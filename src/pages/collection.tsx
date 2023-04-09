@@ -1,3 +1,4 @@
+import useLocalStorage from '@/hooks/localStorage';
 import { createShortUrl } from '@/services/hashlists';
 import {
 	deleteTorrent,
@@ -6,7 +7,6 @@ import {
 	selectFiles,
 	TorrentInfoResponse,
 } from '@/services/realDebrid';
-import useLocalStorage from '@/hooks/localStorage';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
 import getReleaseTags from '@/utils/score';
@@ -284,18 +284,22 @@ function TorrentsPage() {
 	}
 
 	async function generateHashList() {
-		const hashList = filteredList.map((t) => ({
-			filename: t.filename,
-			hash: t.hash,
-			bytes: t.bytes,
-		}));
-		const shortUrl = await createShortUrl(
-			`${window.location.protocol}//${
-				window.location.host
-			}/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
-		);
-		console.log(shortUrl);
-		window.open(shortUrl);
+		toast('The hash list will return a 404 for the first 1-2 minutes', { icon: '🔗' });
+		try {
+			const hashList = filteredList.map((t) => ({
+				filename: t.filename,
+				hash: t.hash,
+				bytes: t.bytes,
+			}));
+			const shortUrl = await createShortUrl(
+				`${window.location.protocol}//${
+					window.location.host
+				}/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
+			);
+			window.open(shortUrl);
+		} catch (error) {
+			toast.error(`Error generating hash list, try again later`);
+		}
 	}
 
 	async function handleShare(t: UserTorrent) {

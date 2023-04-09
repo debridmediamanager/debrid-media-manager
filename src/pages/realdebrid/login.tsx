@@ -1,5 +1,5 @@
-import { getCredentials, getDeviceCode, getToken } from '@/services/realDebrid';
 import useLocalStorage from '@/hooks/localStorage';
+import { getCredentials, getDeviceCode, getToken } from '@/services/realDebrid';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 

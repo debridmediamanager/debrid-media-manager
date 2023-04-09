@@ -83,11 +83,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			sha: commitData.sha,
 		});
 
-		res.status(200).send('File added and pushed to GitHub repository');
+		res.status(200).json({ shortUrl: `https://hashlists.debridmediamanager.com/${uuid}.html` });
 	} catch (error) {
 		console.error(error);
 		res.status(500).send('Error adding file to GitHub repository');
 	}
-
-	res.status(200).json({ shortUrl: `https://hashlists.debridmediamanager.com/${uuid}.html` });
 }

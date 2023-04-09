@@ -1,5 +1,5 @@
-import { addHashAsMagnet } from '@/services/realDebrid';
 import useLocalStorage from '@/hooks/localStorage';
+import { addHashAsMagnet } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
 import getReleaseTags from '@/utils/score';
