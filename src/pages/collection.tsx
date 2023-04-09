@@ -1,3 +1,4 @@
+import { createShortUrl } from '@/api/hashlist';
 import {
 	deleteTorrent,
 	getTorrentInfo,
@@ -288,9 +289,12 @@ function TorrentsPage() {
 			hash: t.hash,
 			bytes: t.bytes,
 		}));
-		router.push(
-			`/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
+		const shortUrl = await createShortUrl(
+			`${window.location.protocol}//${
+				window.location.host
+			}/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
 		);
+		router.push(shortUrl);
 	}
 
 	async function handleShare(t: UserTorrent) {
@@ -350,7 +354,7 @@ function TorrentsPage() {
 					href="/collection?status=dupe"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
 				>
-					Show dupe torrents
+					Show duplicate torrents
 				</Link>
 				<button
 					className={`mr-2 mb-2 bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ${

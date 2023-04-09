@@ -251,7 +251,7 @@ function TorrentsPage() {
 					onClick={downloadNonDupeTorrents}
 					disabled={filteredList.length === 0}
 				>
-					Download all (non-dupe) torrents
+					Download all (non-duplicate) torrents
 				</button>
 
 				{Object.keys(router.query).length !== 0 && (
