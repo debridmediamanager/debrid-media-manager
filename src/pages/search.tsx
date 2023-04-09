@@ -1,4 +1,4 @@
-import useMyAccount from '@/hooks/account';
+import useMyAccount, { MyAccount } from '@/hooks/account';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { addHashAsMagnet } from '@/services/realDebrid';
@@ -29,7 +29,7 @@ function Search() {
 	const accessToken = useRealDebridAccessToken();
 	const [loading, setLoading] = useState(false);
 	const [cancelTokenSource, setCancelTokenSource] = useState<CancelTokenSource | null>(null);
-	const [myAccount, _1] = useMyAccount();
+	const [myAccount, setMyAccount] = useMyAccount();
 	const [hashList, _2] = useLocalStorage<string[]>('hashes', []);
 	const [dlHashList, setDlHashList] = useLocalStorage<string[]>('dlHashes', []);
 
@@ -65,6 +65,10 @@ function Search() {
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	const handleLibraryTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		setMyAccount({ ...myAccount, libraryType: event.target.value as MyAccount['libraryType'] });
 	};
 
 	const handleSubmit = useCallback(
@@ -123,6 +127,16 @@ function Search() {
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}
 					/>
+					<select
+						id="libraryType"
+						value={myAccount!.libraryType}
+						onChange={handleLibraryTypeChange}
+						className="border rounded p-1 mr-4"
+					>
+						<option value="1080p">1080p</option>
+						<option value="2160p">2160p</option>
+						<option value="1080pOr2160p">does not matter</option>
+					</select>
 					<button
 						className="flex-shrink-0 bg-gray-700 hover:bg-gray-600 border-gray-700 hover:border-gray-600 text-sm border-4 text-white py-1 px-2 rounded"
 						type="submit"
