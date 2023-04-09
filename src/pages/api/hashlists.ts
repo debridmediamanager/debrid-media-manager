@@ -37,12 +37,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const { data: blobData } = await octokit.rest.git.createBlob({
 			owner: OWNER,
 			repo: REPO,
-			content: `
-<!doctype html>
+			content: `<!doctype html>
 <html>
 <head>
 <meta charset=UTF-8>
-<title>Hash list</title>
+<title>Debrid Media Manager Hash List</title>
 <style>iframe{border:none;position:absolute;top:0;left:0;width:100%;height:100%}</style>
 </head>
 <body>
