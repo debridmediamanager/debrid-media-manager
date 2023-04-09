@@ -283,7 +283,10 @@ function TorrentsPage() {
 	}
 
 	async function generateHashList() {
-		toast('The hash list will return a 404 for the first 1-2 minutes', { icon: '🔗' });
+		toast('The hash list will return a 404 for the first 1-2 minutes', {
+			icon: '🔗',
+			duration: 30000,
+		});
 		try {
 			const hashList = filteredList.map((t) => ({
 				filename: t.filename,
