@@ -1,5 +1,7 @@
+import { getMediaId } from '@/utils/mediaId';
+import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
-import { filenameParse } from '@ctrl/video-filename-parser';
+import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
 import axios, { AxiosInstance } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { SocksProxyAgent } from 'socks-proxy-agent';
@@ -16,6 +18,7 @@ type SearchResult = {
 	proper_remux: boolean;
 	score: number;
 	mediaType: 'tv' | 'movie';
+	info: ParsedFilename;
 };
 
 export type BtDiggApiResult = {
@@ -175,6 +178,9 @@ async function fetchSearchResults(
 			for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {
 				const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
 				const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
+				const mediaType = getMediaType(title);
+				const info =
+					mediaType === 'movie' ? filenameParse(title) : filenameParse(title, true);
 
 				// Ignore results that don't have GB in fileSize
 				if (libraryType !== '1080pOr2160p' && !fileSizeStr.includes('GB')) {
@@ -184,7 +190,7 @@ async function fetchSearchResults(
 
 				// immediately check if filesize makes sense
 				const fileSize = parseFloat(fileSizeStr);
-				if (!/\bs\d\d|season/i.test(title) && fileSize > 128) {
+				if (mediaType === 'movie' && fileSize > 128) {
 					skippedResults++;
 					continue;
 				}
@@ -198,7 +204,7 @@ async function fetchSearchResults(
 					badResults++;
 					continue;
 				}
-				if (libraryType === '1080pOr2160p' && !/1080p|2160p/.test(title.toLowerCase())) {
+				if (libraryType === '1080pOr2160p' && !/1080p|2160p/i.test(title.toLowerCase())) {
 					badResults++;
 					continue;
 				}
@@ -221,7 +227,8 @@ async function fetchSearchResults(
 					remux,
 					proper_remux,
 					score,
-					mediaType: /s\d\d|season[\.\s]?\d/i.test(title) ? 'tv' : 'movie',
+					mediaType,
+					info,
 				};
 				searchResultsArr.push(resultObj);
 				// Reset ignoredResults counter
@@ -267,18 +274,17 @@ function flattenAndRemoveDuplicates(arr: SearchResult[][]): SearchResult[] {
 function groupByParsedTitle(results: SearchResult[]): SearchResult[] {
 	const frequency: Record<string, number> = {};
 	for (const result of results) {
-		const properTitle = filenameParse(result.title).title.toLocaleLowerCase();
-		if (properTitle in frequency) {
-			frequency[properTitle]++;
+		const mediaId = getMediaId(result.info, result.mediaType);
+		if (mediaId in frequency) {
+			frequency[mediaId] += result.fileSize;
 		} else {
-			frequency[properTitle] = 1;
+			frequency[mediaId] = result.fileSize;
 		}
 	}
 
 	results.sort((a, b) => {
 		const frequencyCompare =
-			frequency[filenameParse(b.title).title.toLocaleLowerCase()] -
-			frequency[filenameParse(a.title).title.toLocaleLowerCase()];
+			frequency[getMediaId(b.info, b.mediaType)] - frequency[getMediaId(a.info, a.mediaType)];
 		if (frequencyCompare === 0) {
 			return b.fileSize - a.fileSize;
 		}

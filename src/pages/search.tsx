@@ -2,8 +2,9 @@ import useMyAccount from '@/hooks/account';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { addHashAsMagnet } from '@/services/realDebrid';
+import { getMediaId } from '@/utils/mediaId';
 import { withAuth } from '@/utils/withAuth';
-import { filenameParse } from '@ctrl/video-filename-parser';
+import { ParsedFilename } from '@ctrl/video-filename-parser';
 import axios, { CancelTokenSource } from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -18,6 +19,7 @@ type SearchResult = {
 	duplicate: boolean;
 	alreadyDownloading: boolean;
 	mediaType: 'movie' | 'tv';
+	info: ParsedFilename;
 };
 
 function Search() {
@@ -164,7 +166,9 @@ function Search() {
 										`}
 									>
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-											<strong>{filenameParse(result.title).title}</strong>
+											<strong>
+												{getMediaId(result.info, result.mediaType)}
+											</strong>
 											<br />
 											{result.title}
 										</td>

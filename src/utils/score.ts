@@ -1,7 +1,7 @@
 export default function getReleaseTags(title: string, fileSize: number) {
 	let remux = /remux|bdrip/i.test(title);
 	let proper_remux = /\d\d\d\d.*\bproper\b/i.test(title);
-	let dolby_vision = /\bDV\b|\bDoVi\b/.test(title);
+	let dolby_vision = /\bDV\b|\bDoVi\b/i.test(title);
 	let hdr10plus = /\bHDR10plus\b/i.test(title);
 	let hdr = remux || dolby_vision || hdr10plus || /\bhdr\b|\bVISIONPLUSHDR\b/i.test(title);
 

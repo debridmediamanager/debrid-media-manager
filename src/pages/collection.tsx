@@ -9,6 +9,7 @@ import {
 } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
+import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
 import { withAuth } from '@/utils/withAuth';
 import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
@@ -65,13 +66,11 @@ function TorrentsPage() {
 			try {
 				const torrents = (await getUserTorrentsList(accessToken!, 0, 1, 2500, '')).map(
 					(torrent) => {
-						let info = filenameParse(torrent.filename);
-						const mediaType = /s\d\d|season[\.\s]?\d/i.test(torrent.filename)
-							? 'tv'
-							: 'movie';
-						if (mediaType === 'tv') {
-							info = filenameParse(torrent.filename, true);
-						}
+						const mediaType = getMediaType(torrent.filename);
+						const info =
+							mediaType === 'movie'
+								? filenameParse(torrent.filename)
+								: filenameParse(torrent.filename, true);
 						return {
 							score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE)
 								.score,
