@@ -1,4 +1,4 @@
-import { createShortUrl } from '@/api/hashlist';
+import { createShortUrl } from '@/api/hashlists';
 import {
 	deleteTorrent,
 	getTorrentInfo,
@@ -294,7 +294,7 @@ function TorrentsPage() {
 				window.location.host
 			}/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
 		);
-		router.push(shortUrl);
+		window.open(shortUrl);
 	}
 
 	async function handleShare(t: UserTorrent) {
