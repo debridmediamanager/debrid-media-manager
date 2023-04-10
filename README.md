@@ -1,5 +1,4 @@
-![Alt text](./dmm-logo.svg)
-<img src="./dmm-logo.svg">
+![ChatGPT made this logo](./dmm-logo.svg)
 
 # Debrid Media Manager
 
