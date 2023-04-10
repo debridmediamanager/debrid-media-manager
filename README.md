@@ -40,3 +40,7 @@ If you want some level of curation on your library. I personally prefer watching
 ### How does it monitor what's in your library?
 
 It doesn't do any sort of monitoring. It gets that information when you open the Library page and caches it in your browser's local storage.
+
+### When I share my library, is it linked to my account's identity?
+
+No. It's completely anonymous. What's only shared are 3 things: filename, magnet hash, file size. It's not even stored in any database. The way it works is that all these data are compressed and stored in the URL. A "webpage" is then created over at https://hashlists.debridmediamanager.com that loads via iframe this (usually very long) list of magnet hashes.
