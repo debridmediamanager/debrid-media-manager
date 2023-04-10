@@ -30,12 +30,13 @@ export default function StartPage() {
 				>
 					Check our how to/recommended setup here
 				</a>
+				<br />
 				<a
 					target="_blank"
 					href="https://github.com/debridmediamanager/debrid-media-manager"
 					className="text-lg underline decoration-dotted"
 				>
-					This website is open source and you can run this on your own machine
+					This website is open source and you can also run this on your own machine
 				</a>
 			</div>
 
