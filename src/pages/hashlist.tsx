@@ -204,7 +204,7 @@ function TorrentsPage() {
 			.filter((t) => !hashList!.includes(t.hash))
 			.filter((t) => !dlHashList!.includes(t.hash))
 			.map(wrapSelectFilesFn);
-		const [results, errors] = await runConcurrentFunctions(yetToDownload, 2, 500);
+		const [results, errors] = await runConcurrentFunctions(yetToDownload, 5, 500);
 		if (errors.length) {
 			toast.error(`Error downloading files on ${errors.length} torrents`);
 		} else if (results.length) {

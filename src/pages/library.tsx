@@ -247,7 +247,7 @@ function TorrentsPage() {
 		const waitingForSelection = filteredList
 			.filter((t) => t.status === 'waiting_files_selection')
 			.map(wrapSelectFilesFn);
-		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 2, 500);
+		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 5, 500);
 		if (errors.length) {
 			toast.error(`Error selecting files on ${errors.length} torrents`);
 		} else if (results.length) {
