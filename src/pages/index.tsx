@@ -14,8 +14,8 @@ function IndexPage() {
 		toast.success('Changes saved');
 	};
 
-	const handleCollectionClick = () => {
-		router.push('/collection');
+	const handleLibraryClick = () => {
+		router.push('/library');
 	};
 
 	const handleSearchClick = () => {
@@ -68,9 +68,9 @@ function IndexPage() {
 						<div className="flex mt-4">
 							<button
 								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
-								onClick={handleCollectionClick}
+								onClick={handleLibraryClick}
 							>
-								My Collection
+								My Library
 							</button>
 							<button
 								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"

@@ -1,38 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![Alt text](./dmm-logo.svg)
+<img src="./dmm-logo.svg">
 
-## Getting Started
+# Debrid Media Manager
 
-First, run the development server:
+Start building your media library with truly unlimited storage size
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This builds on top of the amazing service brought by [Real-Debrid](http://real-debrid.com/?id=440161) and [AllDebrid](https://alldebrid.com/?uid=1kk5i&lang=en).
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Library management
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+You can see all your torrents in one page, sort them by name, by size, by "quality score", etc. It groups all your torrents by title and delete duplicate files. It can show you failed or slow downloads and delete them.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Torrent search
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+You can add more content to your library by searching the DHT (powered by BtDigg). It detects what you already have downloaded and currently downloading in your library too.
 
-## Learn More
+### Share your library and mirror other libraries
 
-To learn more about Next.js, take a look at the following resources:
+You can share your whole collection or select specific items you want to share. Head over to [r/debridmediamanager](https://www.reddit.com/r/debridmediamanager/) and see other people's media collections and easily mirror their content to yours.
 
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+0. Have Tor running at `127.0.0.1:9050` (needed for DHT search; if you don't use that then it's not needed)
+1. Clone this repository
+2. Install the dependencies `npm i`
+3. This is a Next.js project so either go with `npm run dev` or `npm run build && npm run start`
+4. Head to `localhost:3000` and login
 
-## Deploy on Vercel
+## FAQ
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### I just don't know where to start or why do I need this?
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[Read the guide here](https://docs.google.com/document/d/13enrfVXcGEEd0Yqb0PBTpGYrIvQpSfeIaAMZ_LiBDzM/edit). I highlighted my tested setup in green.
+### But with Kodi and FEN and Stremio being available, why would I ever need this?
+
+If you want some level of curation on your library. I personally prefer watching only 100+ GB remux release. Don't ask me about -arr apps and/or Usenet. I also came from that setup and found it too much time consuming to maintain.
+
+### How does it monitor what's in your library?
+
+It doesn't do any sort of monitoring. It gets that information when you open the Library page and caches it in your browser's local storage.

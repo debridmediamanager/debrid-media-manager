@@ -20,13 +20,22 @@ export default function StartPage() {
 			{/* SEO Text */}
 			<div className="my-8 text-center">
 				<h1 className="text-3xl font-bold mb-4">Welcome to Debrid Media Manager</h1>
-				<p className="text-lg">The media collection with truly unlimited storage size</p>
+				<p className="text-lg">
+					Start building your media library with truly unlimited storage size
+				</p>
 				<a
 					target="_blank"
 					href="https://docs.google.com/document/d/13enrfVXcGEEd0Yqb0PBTpGYrIvQpSfeIaAMZ_LiBDzM/edit?usp=sharing"
 					className="text-lg underline decoration-dotted"
 				>
 					Check our how to/recommended setup here
+				</a>
+				<a
+					target="_blank"
+					href="https://github.com/debridmediamanager/debrid-media-manager"
+					className="text-lg underline decoration-dotted"
+				>
+					This website is open source and you can run this on your own machine
 				</a>
 			</div>
 

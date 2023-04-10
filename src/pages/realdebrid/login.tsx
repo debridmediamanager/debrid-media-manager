@@ -12,6 +12,7 @@ export default function RealDebridLoginPage() {
 	const [clientSecret, setClientSecret] = useLocalStorage<string>('clientSecret');
 	const [refreshToken, setRefreshToken] = useLocalStorage<string>('refreshToken');
 	const [accessToken, setAccessToken] = useLocalStorage<string>('accessToken');
+	const [isCopied, setIsCopied] = useState(false);
 
 	useEffect(() => {
 		const fetchDeviceCode = async () => {
@@ -24,6 +25,7 @@ export default function RealDebridLoginPage() {
 				try {
 					await navigator.clipboard.writeText(deviceCodeResponse.user_code);
 				} catch (error) {
+					setIsCopied(true);
 					console.error('Error saving user code to clipboard:', (error as any).message);
 				}
 
@@ -93,8 +95,8 @@ export default function RealDebridLoginPage() {
 		<div className="flex flex-col items-center justify-center h-screen">
 			{userCode && (
 				<p className="mb-4 text-lg font-bold">
-					Please click the button and enter this code: <strong>{userCode}</strong> (copied
-					to your clipboard)
+					Please click the button and enter this code: <strong>{userCode}</strong>{' '}
+					{isCopied && '(copied to clipboard)'}
 				</p>
 			)}
 			<button

@@ -322,7 +322,7 @@ function TorrentsPage() {
 			<Toaster position="top-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">
-					My Collection ({userTorrentsList.length} files in total; size:{' '}
+					My Library ({userTorrentsList.length} files in total; size:{' '}
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>
 				<Link
@@ -334,31 +334,31 @@ function TorrentsPage() {
 			</div>
 			<div className="mb-4">
 				<Link
-					href="/collection?mediaType=movie"
+					href="/library?mediaType=movie"
 					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
 				>
 					Show {movieCount} movies
 				</Link>
 				<Link
-					href="/collection?mediaType=tv"
+					href="/library?mediaType=tv"
 					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
 				>
 					Show {tvCount} TV shows
 				</Link>
 				<Link
-					href="/collection?status=error"
+					href="/library?status=error"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
 				>
 					Show failed torrents
 				</Link>
 				<Link
-					href="/collection?status=slow"
+					href="/library?status=slow"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
 				>
 					Show slow torrents
 				</Link>
 				<Link
-					href="/collection?status=dupe"
+					href="/library?status=dupe"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
 				>
 					Show duplicate torrents
@@ -409,7 +409,7 @@ function TorrentsPage() {
 
 				{Object.keys(router.query).length !== 0 && (
 					<Link
-						href="/collection"
+						href="/library"
 						className="mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-4 rounded"
 					>
 						Clear filter
@@ -496,7 +496,7 @@ function TorrentsPage() {
 											<strong>{torrent.title}</strong>{' '}
 											<Link
 												className="text-sm text-green-600 hover:text-green-800"
-												href={`/collection?filter=${getMediaId(
+												href={`/library?filter=${getMediaId(
 													torrent.info,
 													torrent.mediaType
 												)}`}

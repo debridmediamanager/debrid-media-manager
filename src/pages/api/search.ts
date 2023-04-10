@@ -53,6 +53,7 @@ const stopWords = [
 ];
 
 const agent = new SocksProxyAgent('socks5h://127.0.0.1:9050');
+const dhtSearchHostname = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<BtDiggApiResult>) {
 	const { search, libraryType } = req.query;
@@ -123,9 +124,9 @@ async function fetchSearchResults(
 		let pageNum = 1;
 
 		let searchUrl = (pg: number) =>
-			`http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion/search?q=${encodeURIComponent(
-				finalQuery
-			)}&p=${pg - 1}${searchType}`;
+			`${dhtSearchHostname}/search?q=${encodeURIComponent(finalQuery)}&p=${
+				pg - 1
+			}${searchType}`;
 
 		const BAD_RESULT_THRESHOLD = 21; // 2 pages worth
 		let badResults = 0;

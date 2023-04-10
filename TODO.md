@@ -2,11 +2,12 @@
 - [✔️] withAuth component wrapper function
 - [✔️] Movies page -> Media page, filter by movies, TV or both
 - [✔️] Identify content already downloaded in search results
-- [] Media page, button: delete failed content
-- [] Media page, button: delete slow content
-- [] Media page, button: auto select files
+- [✔️] Media page, button: delete failed content
+- [✔️] Media page, button: delete slow content
+- [✔️] Media page, button: auto select files
 - [] Media page, button: reinsert rar archives
-- [] Media page, button: dedupe content
+- [✔️] Media page, button: dedupe content
 - [✔️] Identify IMDB link
 - [✔️] Group by IMDB link
-- [] Media page, button: share to the internet
+- [✔️] Media page, button: share to the internet
+- [] Refactor pages into different components

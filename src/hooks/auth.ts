@@ -22,28 +22,13 @@ export const useDebridLogin = () => {
 		await router.push('/realdebrid/login');
 	};
 
-	const loginWithPremiumize = async () => {
-		await router.push('/premiumize/login');
-	};
-
 	const loginWithAllDebrid = async () => {
 		await router.push('/alldebrid/login');
 	};
 
-	const loginWithDebridLink = async () => {
-		await router.push('/debridlink/login');
-	};
-
-	const loginWithPutIo = async () => {
-		await router.push('/putio/login');
-	};
-
 	return {
 		loginWithRealDebrid,
-		loginWithPremiumize,
 		loginWithAllDebrid,
-		loginWithDebridLink,
-		loginWithPutIo,
 	};
 };
 
