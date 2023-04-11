@@ -131,6 +131,13 @@ function TorrentsPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userTorrentsList]);
 
+	useEffect(() => {
+		(async () => {
+			await selectPlayableFiles();
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [filteredList]);
+
 	// set the list you see
 	useEffect(() => {
 		setFiltering(true);
@@ -232,9 +239,15 @@ function TorrentsPage() {
 			}
 
 			await selectFiles(accessToken!, id, selectedFiles);
+			setUserTorrentsList((prevList) => {
+				const newList = [...prevList];
+				const index = newList.findIndex((t) => t.id === id);
+				newList[index].status = 'downloading';
+				return newList;
+			});
 		} catch (error) {
 			if ((error as Error).message === 'no_files_for_selection') {
-				toast.error(`No files for selection, deleting (${id.substring(0, 3)})`);
+				toast.error(`No files for selection, deleting (${id.substring(0, 3)})`, {duration: 5000});
 			} else {
 				toast.error(`Error selecting files (${id.substring(0, 3)})`);
 			}
@@ -248,7 +261,7 @@ function TorrentsPage() {
 
 	async function selectPlayableFiles() {
 		const waitingForSelection = filteredList
-			.filter((t) => t.status === 'waiting_files_selection')
+			.filter((t) => t.status === 'waiting_files_selection' || (t.status === 'magnet_conversion' && t.filename !== 'Magnet'))
 			.map(wrapSelectFilesFn);
 		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 5, 500);
 		if (errors.length) {
@@ -256,9 +269,6 @@ function TorrentsPage() {
 		}
 		if (results.length) {
 			toast.success(`Started downloading ${results.length} torrents`);
-		}
-		if (!errors.length && !results.length) {
-			toast('No torrents to select files for', { icon: '👏' });
 		}
 	}
 
@@ -370,21 +380,6 @@ function TorrentsPage() {
 				>
 					Show duplicate torrents
 				</Link>
-				<button
-					className={`mr-2 mb-2 bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ${
-						filteredList.filter((t) => t.status === 'waiting_files_selection')
-							.length === 0
-							? 'opacity-60 cursor-not-allowed'
-							: ''
-					}`}
-					onClick={selectPlayableFiles}
-					disabled={
-						filteredList.filter((t) => t.status === 'waiting_files_selection')
-							.length === 0
-					}
-				>
-					Select playable files
-				</button>
 
 				<button
 					className={`mr-2 mb-2 bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded ${
