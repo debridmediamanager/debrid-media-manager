@@ -181,7 +181,7 @@ function Search() {
 									>
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
 											<strong>
-												{getMediaId(result.info, result.mediaType)}
+												{getMediaId(result.info, result.mediaType, false)}
 											</strong>
 											<br />
 											{result.title}

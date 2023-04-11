@@ -6,14 +6,14 @@ export const getMediaId = (
 	info: ParsedMovie | ParsedShow,
 	mediaType: 'tv' | 'movie',
 	systemOnlyId = true,
-	titleOnly = false
+	tvShowTitleOnly = false
 ) => {
 	if (mediaType === 'movie')
 		return `${systemOnlyId ? info.title.toLocaleLowerCase() : info.title} (${info.year})`;
 
 	const { title, seasons, fullSeason, isMultiSeason, episodeNumbers } = info as ParsedShow;
 	const titleStr = systemOnlyId ? title.toLocaleLowerCase() : title;
-	if (titleOnly) {
+	if (tvShowTitleOnly) {
 		return titleStr;
 	}
 	if (fullSeason) {
