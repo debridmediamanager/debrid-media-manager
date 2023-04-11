@@ -28,16 +28,22 @@ function useLocalStorage<T>(key: string, defaultValue: T | null = null) {
 		return defaultValue;
 	});
 
-	function setValueWithExpiry(newValue: T, expiryTimeInSecs?: number) {
+	function setValueWithExpiry(newValue: T | ((prevState: T) => T), expiryTimeInSecs?: number) {
+		const evaluatedValue =
+			typeof newValue === 'function'
+				? (newValue as (prevState: T) => T)(value || defaultValue!)
+				: newValue;
 		if (expiryTimeInSecs) {
 			const expiryDate = new Date().getTime() + expiryTimeInSecs * 1000;
-			const expirableValue: ExpirableValue<T> = { value: newValue, expiry: expiryDate };
+			const expirableValue: ExpirableValue<T> = {
+				value: evaluatedValue,
+				expiry: expiryDate,
+			};
 			localStorage.setItem(key, JSON.stringify(expirableValue));
-			setValue(newValue);
 		} else {
-			localStorage.setItem(key, JSON.stringify(newValue));
-			setValue(newValue);
+			localStorage.setItem(key, JSON.stringify(evaluatedValue));
 		}
+		setValue(evaluatedValue);
 	}
 
 	return [value, setValueWithExpiry] as const;

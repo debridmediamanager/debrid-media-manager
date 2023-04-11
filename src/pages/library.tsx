@@ -8,6 +8,7 @@ import {
 	TorrentInfoResponse,
 } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
+import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
 import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -57,8 +58,10 @@ function TorrentsPage() {
 	const [tvGroupingByTitle, _3] = useState<Record<string, number>>({});
 	const [hasDupes, _4] = useState<Array<string>>([]);
 	const [totalBytes, setTotalBytes] = useState<number>(0);
-	const [_5, setHashList] = useLocalStorage<string[]>('hashes', []);
-	const [_6, setDlHashList] = useLocalStorage<string[]>('dlHashes', []);
+	const [_7, cacheUserTorrentsList] = useLocalStorage<Record<string, CachedTorrentInfo>>(
+		'userTorrentsList',
+		{}
+	);
 
 	// fetch list from api
 	useEffect(() => {
@@ -83,8 +86,12 @@ function TorrentsPage() {
 				) as UserTorrent[];
 
 				setUserTorrentsList(torrents);
-				setHashList(torrents.filter((t) => t.status === 'downloaded').map((t) => t.hash));
-				setDlHashList(torrents.filter((t) => t.status !== 'downloaded').map((t) => t.hash));
+				cacheUserTorrentsList(
+					torrents.reduce<Record<string, CachedTorrentInfo>>((cache, t) => {
+						cache[t.hash] = t;
+						return cache;
+					}, {})
+				);
 			} catch (error) {
 				setUserTorrentsList([]);
 				toast.error('Error fetching user torrents list');
@@ -135,7 +142,7 @@ function TorrentsPage() {
 		(async () => {
 			await selectPlayableFiles();
 		})();
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filteredList]);
 
 	// set the list you see
@@ -182,6 +189,11 @@ function TorrentsPage() {
 		try {
 			await deleteTorrent(accessToken!, id);
 			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
+			cacheUserTorrentsList((prevCache) => {
+				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id);
+				delete prevCache[hash!];
+				return prevCache;
+			});
 		} catch (error) {
 			toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
 			throw error;
@@ -245,9 +257,16 @@ function TorrentsPage() {
 				newList[index].status = 'downloading';
 				return newList;
 			});
+			cacheUserTorrentsList((prevCache) => {
+				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id);
+				prevCache[hash!].status = 'downloading';
+				return prevCache;
+			});
 		} catch (error) {
 			if ((error as Error).message === 'no_files_for_selection') {
-				toast.error(`No files for selection, deleting (${id.substring(0, 3)})`, {duration: 5000});
+				toast.error(`No files for selection, deleting (${id.substring(0, 3)})`, {
+					duration: 5000,
+				});
 			} else {
 				toast.error(`Error selecting files (${id.substring(0, 3)})`);
 			}
@@ -261,7 +280,11 @@ function TorrentsPage() {
 
 	async function selectPlayableFiles() {
 		const waitingForSelection = filteredList
-			.filter((t) => t.status === 'waiting_files_selection' || (t.status === 'magnet_conversion' && t.filename !== 'Magnet'))
+			.filter(
+				(t) =>
+					t.status === 'waiting_files_selection' ||
+					(t.status === 'magnet_conversion' && t.filename !== 'Magnet')
+			)
 			.map(wrapSelectFilesFn);
 		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 5, 500);
 		if (errors.length) {

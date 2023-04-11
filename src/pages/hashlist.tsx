@@ -1,6 +1,7 @@
 import useLocalStorage from '@/hooks/localStorage';
 import { addHashAsMagnet } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
+import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
 import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -25,8 +26,6 @@ interface UserTorrent extends TorrentHash {
 	score: number;
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
-	duplicate: boolean;
-	alreadyDownloading: boolean;
 }
 
 interface SortBy {
@@ -50,8 +49,10 @@ function TorrentsPage() {
 	const [tvGroupingByTitle, _3] = useState<Record<string, number>>({});
 	const [hasDupes, _4] = useState<Array<string>>([]);
 	const [totalBytes, setTotalBytes] = useState<number>(0);
-	const [hashList, _5] = useLocalStorage<string[]>('hashes', []);
-	const [dlHashList, setDlHashList] = useLocalStorage<string[]>('dlHashes', []);
+	const [cachedTorrentInfo, setTorrentInfo] = useLocalStorage<Record<string, CachedTorrentInfo>>(
+		'userTorrentsList',
+		{}
+	);
 
 	const getUserTorrentsList = async (): Promise<TorrentHash[]> => {
 		const hash = window.location.hash;
@@ -76,8 +77,6 @@ function TorrentsPage() {
 						info,
 						mediaType,
 						title: getMediaId(info, mediaType, false),
-						duplicate: hashList?.includes(torrent.hash),
-						alreadyDownloading: dlHashList?.includes(torrent.hash),
 						...torrent,
 					};
 				}) as UserTorrent[];
@@ -188,7 +187,13 @@ function TorrentsPage() {
 	const handleAddAsMagnet = async (hash: string) => {
 		try {
 			await addHashAsMagnet(accessToken!, hash);
-			setDlHashList([...dlHashList!, hash]);
+			setTorrentInfo(
+				(prev) =>
+					({ ...prev, [hash]: { hash, status: 'downloading' } } as Record<
+						string,
+						CachedTorrentInfo
+					>)
+			);
 			toast.success('Successfully added as magnet!');
 		} catch (error) {
 			toast.error('There was an error adding as magnet. Please try again.');
@@ -201,9 +206,9 @@ function TorrentsPage() {
 	}
 
 	async function downloadNonDupeTorrents() {
+		const libraryHashes = Object.keys(cachedTorrentInfo!);
 		const yetToDownload = filteredList
-			.filter((t) => !hashList!.includes(t.hash))
-			.filter((t) => !dlHashList!.includes(t.hash))
+			.filter((t) => !libraryHashes.includes(t.hash))
 			.map(wrapDownloadFilesFn);
 		const [results, errors] = await runConcurrentFunctions(yetToDownload, 5, 500);
 		if (errors.length) {
@@ -216,6 +221,13 @@ function TorrentsPage() {
 			toast('Everything has been downloaded', { icon: '👏' });
 		}
 	}
+
+	const inLibrary = (hash: string) => hash in cachedTorrentInfo!;
+	const notInLibrary = (hash: string) => !inLibrary(hash);
+	const isDownloaded = (hash: string) =>
+		inLibrary(hash) && cachedTorrentInfo![hash].status === 'downloaded';
+	const isDownloading = (hash: string) =>
+		inLibrary(hash) && cachedTorrentInfo![hash].status !== 'downloaded';
 
 	return (
 		<div className="mx-4 my-8">
@@ -316,10 +328,9 @@ function TorrentsPage() {
 										key={t.hash}
 										className={`
 									hover:bg-yellow-100
-									cursor-pointer
 									border-t-2
-									${t.duplicate && 'bg-green-100'}
-									${t.alreadyDownloading && 'bg-red-100'}
+									${isDownloaded(t.hash) && 'bg-green-100'}
+									${isDownloading(t.hash) && 'bg-red-100'}
 								`}
 									>
 										<td className="border px-4 py-2">
@@ -351,19 +362,18 @@ function TorrentsPage() {
 										</td>
 										<td className="border px-4 py-2">{t.score.toFixed(1)}</td>
 										<td className="border px-4 py-2">
-											<button
-												className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
-													t.alreadyDownloading || t.duplicate
-														? 'opacity-60 cursor-not-allowed'
-														: ''
-												}`}
-												onClick={() => {
-													handleAddAsMagnet(t.hash);
-												}}
-												disabled={t.alreadyDownloading || t.duplicate}
-											>
-												Download
-											</button>
+											{(isDownloaded(t.hash) || isDownloading(t.hash)) &&
+												`${cachedTorrentInfo![t.hash].status}`}
+											{notInLibrary(t.hash) && (
+												<button
+													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+													onClick={() => {
+														handleAddAsMagnet(t.hash);
+													}}
+												>
+													Download
+												</button>
+											)}
 										</td>
 									</tr>
 								);

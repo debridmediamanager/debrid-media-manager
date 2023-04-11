@@ -2,6 +2,7 @@ import useMyAccount, { MyAccount } from '@/hooks/account';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { addHashAsMagnet } from '@/services/realDebrid';
+import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
 import { getMediaId } from '@/utils/mediaId';
 import { withAuth } from '@/utils/withAuth';
 import { ParsedFilename } from '@ctrl/video-filename-parser';
@@ -16,8 +17,6 @@ type SearchResult = {
 	title: string;
 	fileSize: number;
 	hash: string;
-	duplicate: boolean;
-	alreadyDownloading: boolean;
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
 };
@@ -30,8 +29,10 @@ function Search() {
 	const [loading, setLoading] = useState(false);
 	const [cancelTokenSource, setCancelTokenSource] = useState<CancelTokenSource | null>(null);
 	const [myAccount, setMyAccount] = useMyAccount();
-	const [hashList, _2] = useLocalStorage<string[]>('hashes', []);
-	const [dlHashList, setDlHashList] = useLocalStorage<string[]>('dlHashes', []);
+	const [cachedTorrentInfo, setTorrentInfo] = useLocalStorage<Record<string, CachedTorrentInfo>>(
+		'userTorrentsList',
+		{}
+	);
 
 	const router = useRouter();
 
@@ -50,12 +51,7 @@ function Search() {
 				params,
 				cancelToken: source.token,
 			});
-			const responseResults: SearchResult[] = response.data.searchResults!.map((e) => {
-				(e as any).duplicate = hashList?.includes(e.hash);
-				(e as any).alreadyDownloading = dlHashList?.includes(e.hash);
-				return e as unknown as SearchResult;
-			});
-			setSearchResults(responseResults || []);
+			setSearchResults(response.data.searchResults || []);
 		} catch (error) {
 			if (axios.isCancel(error)) {
 				console.warn('Request canceled:', error);
@@ -98,12 +94,25 @@ function Search() {
 	const handleAddAsMagnet = async (hash: string) => {
 		try {
 			await addHashAsMagnet(accessToken!, hash);
-			setDlHashList([...dlHashList!, hash]);
+			setTorrentInfo(
+				(prev) =>
+					({ ...prev, [hash]: { hash, status: 'downloading' } } as Record<
+						string,
+						CachedTorrentInfo
+					>)
+			);
 			toast.success('Successfully added as magnet!');
 		} catch (error) {
 			toast.error('There was an error adding as magnet. Please try again.');
 		}
 	};
+
+	const inLibrary = (hash: string) => hash in cachedTorrentInfo!;
+	const notInLibrary = (hash: string) => !inLibrary(hash);
+	const isDownloaded = (hash: string) =>
+		inLibrary(hash) && cachedTorrentInfo![hash].status === 'downloaded';
+	const isDownloading = (hash: string) =>
+		inLibrary(hash) && cachedTorrentInfo![hash].status !== 'downloaded';
 
 	return (
 		<div className="mx-4 my-8">
@@ -174,9 +183,8 @@ function Search() {
 										key={index}
 										className={`
 											hover:bg-yellow-100
-											cursor-pointer
-											${result.duplicate && 'bg-green-100'}
-											${result.alreadyDownloading && 'bg-red-100'}
+											${isDownloaded(result.hash) && 'bg-green-100'}
+											${isDownloading(result.hash) && 'bg-red-100'}
 										`}
 									>
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -190,21 +198,19 @@ function Search() {
 											{result.fileSize} GB
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-											<button
-												className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
-													result.alreadyDownloading || result.duplicate
-														? 'opacity-60 cursor-not-allowed'
-														: ''
-												}`}
-												disabled={
-													result.alreadyDownloading || result.duplicate
-												}
-												onClick={() => {
-													handleAddAsMagnet(result.hash);
-												}}
-											>
-												Download
-											</button>
+											{(isDownloaded(result.hash) ||
+												isDownloading(result.hash)) &&
+												`${cachedTorrentInfo![result.hash].status}`}
+											{notInLibrary(result.hash) && (
+												<button
+													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+													onClick={() => {
+														handleAddAsMagnet(result.hash);
+													}}
+												>
+													Download
+												</button>
+											)}
 										</td>
 									</tr>
 								))}
@@ -213,7 +219,7 @@ function Search() {
 					</div>
 				</>
 			)}
-			{searchResults.length === 0 && !loading && (
+			{Object.keys(router.query).length !== 0 && searchResults.length === 0 && !loading && (
 				<>
 					<h2 className="text-2xl font-bold my-4">No results found</h2>
 				</>
