@@ -192,10 +192,11 @@ function TorrentsPage() {
 			toast.success('Successfully added as magnet!');
 		} catch (error) {
 			toast.error('There was an error adding as magnet. Please try again.');
+			throw error;
 		}
 	};
 
-	function wrapSelectFilesFn(t: UserTorrent) {
+	function wrapDownloadFilesFn(t: UserTorrent) {
 		return async () => await handleAddAsMagnet(t.hash);
 	}
 
@@ -203,7 +204,7 @@ function TorrentsPage() {
 		const yetToDownload = filteredList
 			.filter((t) => !hashList!.includes(t.hash))
 			.filter((t) => !dlHashList!.includes(t.hash))
-			.map(wrapSelectFilesFn);
+			.map(wrapDownloadFilesFn);
 		const [results, errors] = await runConcurrentFunctions(yetToDownload, 5, 500);
 		if (errors.length) {
 			toast.error(`Error downloading files on ${errors.length} torrents`);

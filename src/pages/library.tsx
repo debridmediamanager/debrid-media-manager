@@ -227,14 +227,17 @@ function TorrentsPage() {
 
 			const selectedFiles = response.files.filter(isMovie).map((file) => file.id);
 			if (selectedFiles.length === 0) {
-				toast.error(`No files for selection, deleting (${id.substring(0, 3)})`);
 				handleDeleteTorrent(id);
-				return;
+				throw new Error('no_files_for_selection');
 			}
 
 			await selectFiles(accessToken!, id, selectedFiles);
 		} catch (error) {
-			toast.error(`Error selecting files (${id.substring(0, 3)})`);
+			if ((error as Error).message === 'no_files_for_selection') {
+				toast.error(`No files for selection, deleting (${id.substring(0, 3)})`);
+			} else {
+				toast.error(`Error selecting files (${id.substring(0, 3)})`);
+			}
 			throw error;
 		}
 	};

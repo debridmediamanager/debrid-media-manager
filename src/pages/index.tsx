@@ -1,4 +1,3 @@
-import useMyAccount, { MyAccount } from '@/hooks/account';
 import { useCurrentUser } from '@/hooks/auth';
 import { withAuth } from '@/utils/withAuth';
 import { useRouter } from 'next/router';
