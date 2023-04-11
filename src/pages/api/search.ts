@@ -1,4 +1,4 @@
-import { cacheJsonValue, deleteCache, getCachedJsonValue } from '@/services/cache';
+import { cacheJsonValue, getCachedJsonValue } from '@/services/cache';
 import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';

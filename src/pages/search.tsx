@@ -1,7 +1,7 @@
 import useMyAccount, { MyAccount } from '@/hooks/account';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
-import { addHashAsMagnet } from '@/services/realDebrid';
+import { addHashAsMagnet, deleteTorrent } from '@/services/realDebrid';
 import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
 import { getMediaId } from '@/utils/mediaId';
 import { withAuth } from '@/utils/withAuth';
@@ -96,7 +96,7 @@ function Search() {
 			await addHashAsMagnet(accessToken!, hash);
 			setTorrentInfo(
 				(prev) =>
-					({ ...prev, [hash]: { hash, status: 'downloading' } } as Record<
+					({ ...prev, [hash]: { hash, status: 'downloading', progress: 0 } } as Record<
 						string,
 						CachedTorrentInfo
 					>)
@@ -113,6 +113,22 @@ function Search() {
 		inLibrary(hash) && cachedTorrentInfo![hash].status === 'downloaded';
 	const isDownloading = (hash: string) =>
 		inLibrary(hash) && cachedTorrentInfo![hash].status !== 'downloaded';
+
+	const handleDeleteTorrent = async (id: string) => {
+		try {
+			await deleteTorrent(accessToken!, id);
+			setTorrentInfo((prevCache) => {
+				const updatedCache = { ...prevCache };
+				const hash = Object.keys(updatedCache).find((key) => updatedCache[key].id === id);
+				delete updatedCache[hash!];
+				return updatedCache;
+			});
+			toast.success(`Download canceled (${id.substring(0, 3)})`);
+		} catch (error) {
+			toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
+			throw error;
+		}
+	};
 
 	return (
 		<div className="mx-4 my-8">
@@ -178,9 +194,9 @@ function Search() {
 								</tr>
 							</thead>
 							<tbody>
-								{searchResults.map((result: SearchResult, index: number) => (
+								{searchResults.map((result: SearchResult) => (
 									<tr
-										key={index}
+										key={result.hash}
 										className={`
 											hover:bg-yellow-100
 											${isDownloaded(result.hash) && 'bg-green-100'}
@@ -199,8 +215,23 @@ function Search() {
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 											{(isDownloaded(result.hash) ||
-												isDownloading(result.hash)) &&
+												(inLibrary(result.hash) &&
+													!cachedTorrentInfo![result.hash].id)) &&
 												`${cachedTorrentInfo![result.hash].status}`}
+											{isDownloading(result.hash) &&
+												cachedTorrentInfo![result.hash].id && (
+													<button
+														className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+														onClick={() => {
+															handleDeleteTorrent(
+																cachedTorrentInfo![result.hash].id
+															);
+														}}
+													>
+														Cancel download (
+														{cachedTorrentInfo![result.hash].progress}%)
+													</button>
+												)}
 											{notInLibrary(result.hash) && (
 												<button
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

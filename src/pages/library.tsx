@@ -138,32 +138,18 @@ function TorrentsPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userTorrentsList]);
 
-	useEffect(() => {
-		(async () => {
-			await selectPlayableFiles();
-		})();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [filteredList]);
-
 	// set the list you see
 	useEffect(() => {
 		setFiltering(true);
 		if (Object.keys(router.query).length === 0) {
 			setFilteredList(userTorrentsList);
+			selectPlayableFiles(userTorrentsList);
+			deleteFailedTorrents(userTorrentsList);
 			setFiltering(false);
 			return;
 		}
 		const { filter: titleFilter, mediaType, status } = router.query;
 		let tmpList = userTorrentsList;
-		if (status === 'error') {
-			tmpList = tmpList.filter(
-				(t) =>
-					t.status.includes('error') ||
-					t.status.includes('dead') ||
-					t.status.includes('virus')
-			);
-			setFilteredList(tmpList);
-		}
 		if (status === 'slow') {
 			tmpList = tmpList.filter(isTorrentSlow);
 			setFilteredList(tmpList);
@@ -181,6 +167,8 @@ function TorrentsPage() {
 			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
 			setFilteredList(tmpList);
 		}
+		selectPlayableFiles(tmpList);
+		deleteFailedTorrents(tmpList);
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query, userTorrentsList, movieGrouping, tvGroupingByEpisode]);
@@ -194,6 +182,7 @@ function TorrentsPage() {
 				delete prevCache[hash!];
 				return prevCache;
 			});
+			toast.success(`Torrent deleted (${id.substring(0, 3)})`);
 		} catch (error) {
 			toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
 			throw error;
@@ -278,8 +267,8 @@ function TorrentsPage() {
 		return async () => await handleSelectFiles(t.id);
 	}
 
-	async function selectPlayableFiles() {
-		const waitingForSelection = filteredList
+	async function selectPlayableFiles(torrents: UserTorrent[]) {
+		const waitingForSelection = torrents
 			.filter(
 				(t) =>
 					t.status === 'waiting_files_selection' ||
@@ -292,6 +281,24 @@ function TorrentsPage() {
 		}
 		if (results.length) {
 			toast.success(`Started downloading ${results.length} torrents`);
+		}
+	}
+
+	async function deleteFailedTorrents(torrents: UserTorrent[]) {
+		const failedTorrents = torrents
+			.filter(
+				(t) =>
+					t.status.includes('error') ||
+					t.status.includes('dead') ||
+					t.status.includes('virus')
+			)
+			.map(wrapDeleteFn);
+		const [results, errors] = await runConcurrentFunctions(failedTorrents, 5, 500);
+		if (errors.length) {
+			toast.error(`Error deleting ${errors.length} failed torrents`);
+		}
+		if (results.length) {
+			toast.success(`Deleted ${results.length} failed torrents`);
 		}
 	}
 
@@ -384,12 +391,6 @@ function TorrentsPage() {
 					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
 				>
 					Show {tvCount} TV shows
-				</Link>
-				<Link
-					href="/library?status=error"
-					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
-				>
-					Show failed torrents
 				</Link>
 				<Link
 					href="/library?status=slow"
