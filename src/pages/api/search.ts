@@ -100,9 +100,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 	try {
 		const cached = await getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
-		if (cached && !cached.length) {
-			await deleteCache(finalQuery.split(' '));
-		}
+		// if (cached && !cached.length) {
+		// 	await deleteCache(finalQuery.split(' '));
+		// }
 		if (cached) {
 			res.status(200).json({ searchResults: cached });
 			return;
