@@ -1,3 +1,4 @@
+import { cacheJsonValue, getCachedJsonValue } from '@/services/cache';
 import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -98,6 +99,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	});
 
 	try {
+		const cached = await getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
+		if (cached) {
+			res.status(200).json({ searchResults: cached });
+			return;
+		}
+
 		let searchResultsArr = flattenAndRemoveDuplicates(
 			await Promise.all<SearchResult[]>([
 				fetchSearchResults(client, '&order=0', finalQuery, libraryType),
@@ -105,6 +112,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			])
 		);
 		if (searchResultsArr.length) searchResultsArr = groupByParsedTitle(searchResultsArr);
+
+		// run async
+		cacheJsonValue<SearchResult[]>(finalQuery.split(' '), searchResultsArr);
 
 		res.status(200).json({ searchResults: searchResultsArr });
 	} catch (error: any) {

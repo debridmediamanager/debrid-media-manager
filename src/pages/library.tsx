@@ -253,9 +253,11 @@ function TorrentsPage() {
 		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 5, 500);
 		if (errors.length) {
 			toast.error(`Error selecting files on ${errors.length} torrents`);
-		} else if (results.length) {
+		}
+		if (results.length) {
 			toast.success(`Started downloading ${results.length} torrents`);
-		} else {
+		}
+		if (!errors.length && !results.length) {
 			toast('No torrents to select files for', { icon: '👏' });
 		}
 	}
@@ -270,9 +272,11 @@ function TorrentsPage() {
 		const [results, errors] = await runConcurrentFunctions(torrentsToDelete, 5, 500);
 		if (errors.length) {
 			toast.error(`Error deleting ${errors.length} torrents`);
-		} else if (results.length) {
+		}
+		if (results.length) {
 			toast.success(`Deleted ${results.length} torrents`);
-		} else {
+		}
+		if (!errors.length && !results.length) {
 			toast('No torrents to delete', { icon: '👏' });
 		}
 	}
@@ -496,27 +500,33 @@ function TorrentsPage() {
 											{torrent.id.substring(0, 3)}
 										</td>
 										<td className="border px-4 py-2">
-											<strong>{torrent.title}</strong>{' '}
-											<Link
-												className="text-sm text-green-600 hover:text-green-800"
-												href={`/library?filter=${getMediaId(
-													torrent.info,
-													torrent.mediaType
-												)}`}
-											>
-												{filterText}
-											</Link>{' '}
-											<Link
-												target="_blank"
-												className="text-sm text-blue-600 hover:text-blue-800"
-												href={`/search?query=${getMediaId(
-													torrent.info,
-													torrent.mediaType
-												)}`}
-											>
-												Search again
-											</Link>
-											<br />
+											{!['Invalid Magnet', 'Magnet'].includes(
+												torrent.filename
+											) && (
+												<>
+													<strong>{torrent.title}</strong>{' '}
+													<Link
+														className="text-sm text-green-600 hover:text-green-800"
+														href={`/library?filter=${getMediaId(
+															torrent.info,
+															torrent.mediaType
+														)}`}
+													>
+														{filterText}
+													</Link>{' '}
+													<Link
+														target="_blank"
+														className="text-sm text-blue-600 hover:text-blue-800"
+														href={`/search?query=${getMediaId(
+															torrent.info,
+															torrent.mediaType
+														)}`}
+													>
+														Search again
+													</Link>
+													<br />
+												</>
+											)}
 											{torrent.filename}
 										</td>
 										<td className="border px-4 py-2">

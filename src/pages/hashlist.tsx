@@ -208,9 +208,11 @@ function TorrentsPage() {
 		const [results, errors] = await runConcurrentFunctions(yetToDownload, 5, 500);
 		if (errors.length) {
 			toast.error(`Error downloading files on ${errors.length} torrents`);
-		} else if (results.length) {
+		}
+		if (results.length) {
 			toast.success(`Started downloading ${results.length} torrents`);
-		} else {
+		}
+		if (!errors.length && !results.length) {
 			toast('Everything has been downloaded', { icon: '👏' });
 		}
 	}
