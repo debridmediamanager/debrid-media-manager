@@ -1,4 +1,4 @@
-import { cacheJsonValue, getCachedJsonValue } from '@/services/cache';
+import { cacheJsonValue, deleteCache, getCachedJsonValue } from '@/services/cache';
 import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -100,6 +100,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 	try {
 		const cached = await getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
+		if (cached && !cached.length) {
+			await deleteCache(finalQuery.split(' '));
+		}
 		if (cached) {
 			res.status(200).json({ searchResults: cached });
 			return;
@@ -167,7 +170,7 @@ async function fetchSearchResults(
 					retries++;
 					if (retries > MAX_RETRIES) {
 						console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);
-						break;
+						throw error;
 					}
 					const delay = RETRY_DELAY * Math.pow(2, retries - 1);
 					await new Promise((resolve) => setTimeout(resolve, delay));

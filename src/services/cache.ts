@@ -20,3 +20,9 @@ export async function getCachedJsonValue<T>(key: string[]): Promise<T | undefine
 	}
 	return JSON.parse(jsonValue) as T;
 }
+
+export async function deleteCache(key: string[]): Promise<void> {
+	const sortedKey = key.sort();
+	const redisKey = sortedKey.join(':');
+	await redisClient.DEL(redisKey);
+}
