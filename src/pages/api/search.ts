@@ -96,6 +96,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			'User-Agent':
 				'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
 		},
+		timeout: 2000,
 	});
 
 	try {
@@ -108,12 +109,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			return;
 		}
 
-		let searchResultsArr = flattenAndRemoveDuplicates(
-			await Promise.all<SearchResult[]>([
-				fetchSearchResults(client, '&order=0', finalQuery, libraryType),
-				fetchSearchResults(client, '&order=3', finalQuery, libraryType),
-			])
-		);
+		let searchResultsArr = flattenAndRemoveDuplicates([
+			await fetchSearchResults(client, '&order=0', finalQuery, libraryType),
+		]);
 		if (searchResultsArr.length) searchResultsArr = groupByParsedTitle(searchResultsArr);
 
 		// run async
@@ -141,7 +139,7 @@ async function fetchSearchResults(
 				pg - 1
 			}${searchType}`;
 
-		const BAD_RESULT_THRESHOLD = 21; // 2 pages worth
+		const BAD_RESULT_THRESHOLD = 11;
 		let badResults = 0;
 		let searchResultsArr: SearchResult[] = [];
 

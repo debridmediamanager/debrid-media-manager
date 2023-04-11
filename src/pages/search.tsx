@@ -83,7 +83,7 @@ function Search() {
 		setQuery(decodedQuery);
 		fetchData(decodedQuery);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query]);
+	}, [router.query, myAccount]);
 
 	useEffect(() => {
 		return () => {

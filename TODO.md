@@ -12,3 +12,4 @@
 - [✔️] Media page, button: share to the internet
 - [] Refactor pages into different components
 - [✔️] When waiting_files_selection and Select button is pressed, should convert to downloading
+- [] Add title filter buttons on search page

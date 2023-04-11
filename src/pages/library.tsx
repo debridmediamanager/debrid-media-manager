@@ -158,6 +158,10 @@ function TorrentsPage() {
 			tmpList = tmpList.filter((t) => hasDupes.includes(getMediaId(t.info, t.mediaType)));
 			setFilteredList(tmpList);
 		}
+		if (status === 'non4k') {
+			tmpList = tmpList.filter((t) => !/\b2160p|\b4k|\buhd/i.test(t.filename));
+			setFilteredList(tmpList);
+		}
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
 			tmpList = tmpList.filter((t) => decodedTitleFilter === getMediaId(t.info, t.mediaType));
