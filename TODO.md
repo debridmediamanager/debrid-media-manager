@@ -18,4 +18,4 @@
 - [] Dockerize with tor
 - [] Make the architecture more scalable using docker swarm
 - [] Rescan library button in all other pages except library
-- [] Find cached and selectable download on search
+- [✔️] Find cached and selectable download on search

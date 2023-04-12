@@ -16,6 +16,7 @@ export const getMediaId = (
 	if (tvShowTitleOnly) {
 		return titleStr;
 	}
+	if (seasons.length === 0) return titleStr;
 	if (fullSeason) {
 		return `${titleStr} ${prefix('S', seasons[0])}`;
 	} else if (isMultiSeason) {
