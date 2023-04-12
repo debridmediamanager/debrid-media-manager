@@ -69,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		return;
 	}
 
-	const cleaned = search
+	const finalQuery = search
 		.split(/[\s\.\-\(\)]/)
 		.filter((e) => e !== '')
 		.map((e) => e.toLowerCase())
@@ -88,7 +88,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		.replace(/\s+/g, ' ')
 		.trim();
 
-	const finalQuery = `${cleaned}${libraryType === '1080pOr2160p' ? '' : ` ${libraryType}`}`;
 	const libraryTypes = libraryType === '1080pOr2160p' ? ['1080p', '2160p'] : [libraryType];
 
 	const client = axios.create({
