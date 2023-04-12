@@ -121,19 +121,17 @@ function Search() {
 					results.push(false);
 					continue;
 				}
-				const variant = response[masterHash]['rd'].find(
-					(selectionVariant) => Object.keys(selectionVariant).length === 1
-				);
-				if (!variant) {
-					results.push(false);
-					continue;
+				// response[masterHash]['rd'] -> [{}, {}, ...] -> {0: {filename: '', filesize: 0}}
+				for (const variant of response[masterHash]['rd']) {
+					for (const fileIndex in variant) {
+						const file = variant[fileIndex];
+						if (isMovie({ path: file.filename, bytes: file.filesize })) {
+							results.push(true);
+							continue;
+						}
+					}
 				}
-				const availableFile = variant[parseInt(Object.keys(variant)[0], 10)];
-				if (isMovie({ path: availableFile.filename, bytes: availableFile.filesize })) {
-					results.push(true);
-				} else {
-					results.push(false);
-				}
+				results.push(false);
 			}
 			return results;
 		} catch (error) {
