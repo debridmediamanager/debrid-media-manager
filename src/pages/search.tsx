@@ -59,19 +59,24 @@ function Search() {
 				params,
 				cancelToken: source.token,
 			});
-			const availability = await checkResultsAvailability(
-				(response.data.searchResults || []).map((result) => result.hash)
-			);
-			setSearchResults(
-				response.data.searchResults?.map((r, ifx) => ({
-					...r,
-					available: availability[ifx],
-				})) || []
-			);
+			if (response.data.searchResults?.length) {
+				const availability = await checkResultsAvailability(
+					response.data.searchResults.map((result) => result.hash)
+				);
+				setSearchResults(
+					response.data.searchResults.map((r, ifx) => ({
+						...r,
+						available: availability[ifx],
+					}))
+				);
+			} else {
+				setSearchResults([]);
+			}
 		} catch (error) {
 			if (axios.isCancel(error)) {
 				console.warn('Request canceled:', error);
 			} else {
+				console.log(error);
 				setErrorMessage('There was an error searching for the query. Please try again.');
 			}
 		} finally {
@@ -191,6 +196,7 @@ function Search() {
 	const handleSelectFiles = async (id: string, disableToast: boolean = false) => {
 		try {
 			const response = await getTorrentInfo(accessToken!, id);
+			if (response.filename === "Magnet") return; // no files yet
 
 			const selectedFiles = response.files.filter(isMovie).map((file) => file.id);
 			if (selectedFiles.length === 0) {
