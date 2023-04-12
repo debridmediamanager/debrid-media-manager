@@ -89,6 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		.trim();
 
 	const finalQuery = `${cleaned}${libraryType === '1080pOr2160p' ? '' : ` ${libraryType}`}`;
+	const libraryTypes = libraryType === '1080pOr2160p' ? ['1080p', '2160p'] : [libraryType];
 
 	const client = axios.create({
 		httpAgent: agent,
@@ -109,9 +110,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			return;
 		}
 
-		let searchResultsArr = flattenAndRemoveDuplicates([
-			await fetchSearchResults(client, '&order=0', finalQuery, libraryType),
-		]);
+		let searchResultsArr = flattenAndRemoveDuplicates(
+			await Promise.all<SearchResult[]>(
+				libraryTypes.map((type) =>
+					fetchSearchResults(client, type, finalQuery, libraryType)
+				)
+			)
+		);
 		if (searchResultsArr.length) searchResultsArr = groupByParsedTitle(searchResultsArr);
 
 		// run async

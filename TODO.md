@@ -13,3 +13,4 @@
 - [] Refactor pages into different components
 - [✔️] When waiting_files_selection and Select button is pressed, should convert to downloading
 - [] Add title filter buttons on search page
+- [] Downloading has race condition on status
