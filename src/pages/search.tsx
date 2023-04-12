@@ -131,14 +131,18 @@ function Search() {
 		}
 	};
 
-	const handleAddAsMagnet = async (hash: string) => {
+	const handleAddAsMagnet = async (hash: string, instantDownload: boolean = false) => {
 		try {
 			setTorrentInfo(
 				(prev) =>
-					({ ...prev, [hash]: { hash, status: 'downloading', progress: 0 } } as Record<
-						string,
-						CachedTorrentInfo
-					>)
+					({
+						...prev,
+						[hash]: {
+							hash,
+							status: instantDownload ? 'downloaded' : 'downloading',
+							progress: 0,
+						},
+					} as Record<string, CachedTorrentInfo>)
 			);
 			await addHashAsMagnet(accessToken!, hash);
 			toast.success('Successfully added as magnet!');
@@ -281,7 +285,10 @@ function Search() {
 														result.available ? 'green' : 'blue'
 													}-700 text-white font-bold py-2 px-4 rounded`}
 													onClick={() => {
-														handleAddAsMagnet(result.hash);
+														handleAddAsMagnet(
+															result.hash,
+															result.available
+														);
 													}}
 												>
 													{`${
