@@ -6,6 +6,7 @@
 - [✔️] Media page, button: delete slow content
 - [✔️] Media page, button: auto select files
 - [] Media page, button: reinsert rar archives
+- [] Media page, button: dedupe hash
 - [✔️] Media page, button: dedupe content
 - [✔️] Identify IMDB link
 - [✔️] Group by IMDB link
@@ -13,4 +14,5 @@
 - [] Refactor pages into different components
 - [✔️] When waiting_files_selection and Select button is pressed, should convert to downloading
 - [] Add title filter buttons on search page
-- [] Downloading has race condition on status
+- [✔️] Downloading has race condition on status
+- [] Make the architecture more scalable using docker swarm
