@@ -92,6 +92,11 @@ interface MasterHash {
 
 export interface InstantAvailabilityResponse extends MasterHash {}
 
+export interface AddMagnetResponse {
+	id: string;
+	uri: string;
+}
+
 const { publicRuntimeConfig: config } = getConfig();
 
 export const getDeviceCode = async () => {
@@ -230,7 +235,7 @@ export const getInstantlyAvailableFiles = async (accessToken: string, ...hashes:
 	}
 };
 
-export const addMagnet = async (accessToken: string, magnet: string) => {
+export const addMagnet = async (accessToken: string, magnet: string): Promise<string> => {
 	try {
 		const headers = {
 			Authorization: `Bearer ${accessToken}`,
@@ -239,17 +244,22 @@ export const addMagnet = async (accessToken: string, magnet: string) => {
 		const data = { magnet };
 		const formData = qs.stringify(data);
 
-		await axios.post(`${config.realDebirdHostname}/rest/1.0/torrents/addMagnet`, formData, {
-			headers,
-		});
+		const response = await axios.post<AddMagnetResponse>(
+			`${config.realDebirdHostname}/rest/1.0/torrents/addMagnet`,
+			formData,
+			{
+				headers,
+			}
+		);
+		return response.data.id;
 	} catch (error: any) {
 		console.error('Error adding magnet:', error.message);
 		throw error;
 	}
 };
 
-export const addHashAsMagnet = async (accessToken: string, hash: string) => {
-	await addMagnet(accessToken, `magnet:?xt=urn:btih:${hash}`);
+export const addHashAsMagnet = async (accessToken: string, hash: string): Promise<string> => {
+	return await addMagnet(accessToken, `magnet:?xt=urn:btih:${hash}`);
 };
 
 export const selectFiles = async (accessToken: string, id: string, files: number[]) => {
