@@ -186,7 +186,6 @@ function TorrentsPage() {
 
 	const handleAddAsMagnet = async (hash: string) => {
 		try {
-			await addHashAsMagnet(accessToken!, hash);
 			setTorrentInfo(
 				(prev) =>
 					({ ...prev, [hash]: { hash, status: 'downloading' } } as Record<
@@ -194,6 +193,7 @@ function TorrentsPage() {
 						CachedTorrentInfo
 					>)
 			);
+			await addHashAsMagnet(accessToken!, hash);
 			toast.success('Successfully added as magnet!');
 		} catch (error) {
 			toast.error('There was an error adding as magnet. Please try again.');

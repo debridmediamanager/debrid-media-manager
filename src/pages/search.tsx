@@ -93,7 +93,6 @@ function Search() {
 
 	const handleAddAsMagnet = async (hash: string) => {
 		try {
-			await addHashAsMagnet(accessToken!, hash);
 			setTorrentInfo(
 				(prev) =>
 					({ ...prev, [hash]: { hash, status: 'downloading', progress: 0 } } as Record<
@@ -101,6 +100,7 @@ function Search() {
 						CachedTorrentInfo
 					>)
 			);
+			await addHashAsMagnet(accessToken!, hash);
 			toast.success('Successfully added as magnet!');
 		} catch (error) {
 			toast.error('There was an error adding as magnet. Please try again.');
@@ -116,13 +116,13 @@ function Search() {
 
 	const handleDeleteTorrent = async (id: string) => {
 		try {
-			await deleteTorrent(accessToken!, id);
 			setTorrentInfo((prevCache) => {
 				const updatedCache = { ...prevCache };
 				const hash = Object.keys(updatedCache).find((key) => updatedCache[key].id === id);
 				delete updatedCache[hash!];
 				return updatedCache;
 			});
+			await deleteTorrent(accessToken!, id);
 			toast.success(`Download canceled (${id.substring(0, 3)})`);
 		} catch (error) {
 			toast.error(`Error deleting torrent (${id.substring(0, 3)})`);

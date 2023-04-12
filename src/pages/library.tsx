@@ -179,13 +179,13 @@ function TorrentsPage() {
 
 	const handleDeleteTorrent = async (id: string) => {
 		try {
-			await deleteTorrent(accessToken!, id);
 			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
 			cacheUserTorrentsList((prevCache) => {
 				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id);
 				delete prevCache[hash!];
 				return prevCache;
 			});
+			await deleteTorrent(accessToken!, id);
 			toast.success(`Torrent deleted (${id.substring(0, 3)})`);
 		} catch (error) {
 			toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
