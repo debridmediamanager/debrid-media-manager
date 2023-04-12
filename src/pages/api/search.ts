@@ -125,8 +125,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 		let searchResultsArr = flattenAndRemoveDuplicates(
 			await Promise.all<SearchResult[]>(
-				libraryTypes.map((type) =>
-					fetchSearchResults(client, type, `${finalQuery} ${libraryType}`, libraryType)
+				libraryTypes.map((lType) =>
+					fetchSearchResults(client, lType, `${finalQuery} ${lType}`, lType)
 				)
 			)
 		);
