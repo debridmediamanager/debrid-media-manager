@@ -88,7 +88,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		.replace(/\s+/g, ' ')
 		.trim();
 
-	const libraryTypes = libraryType === '1080pOr2160p' ? ['1080p', '2160p'] : [libraryType];
+	const libraryTypes = libraryType === '1080pOr2160p' ? ['1080p', '2160p', ''] : [libraryType];
 
 	const client = axios.create({
 		httpAgent: agent,
@@ -113,26 +113,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	});
 
 	try {
-		const cached = await getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
-		// if (cached && !cached.length) {
-		// 	await deleteCache(finalQuery.split(' '));
-		// }
-		if (cached) {
-			res.status(200).json({ searchResults: cached });
-			return;
-		}
-
 		let searchResultsArr = flattenAndRemoveDuplicates(
 			await Promise.all<SearchResult[]>(
-				libraryTypes.map((lType) =>
-					fetchSearchResults(client, lType, `${finalQuery} ${lType}`, lType)
-				)
+				libraryTypes.map((lType) => fetchSearchResults(client, finalQuery, lType))
 			)
 		);
 		if (searchResultsArr.length) searchResultsArr = groupByParsedTitle(searchResultsArr);
-
-		// run async
-		cacheJsonValue<SearchResult[]>(finalQuery.split(' '), searchResultsArr);
 
 		res.status(200).json({ searchResults: searchResultsArr });
 	} catch (error: any) {
@@ -144,17 +130,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 async function fetchSearchResults(
 	client: AxiosInstance,
-	searchType: string,
-	finalQuery: string,
-	libraryType?: string
+	searchQuery: string,
+	libraryType: string
 ): Promise<SearchResult[]> {
 	try {
+		const finalQuery = `${searchQuery}${
+			!libraryType || libraryType === '1080pOr2160p' ? '' : ` ${libraryType}`
+		}`;
+		const cached = await getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
+		// if (cached && !cached.length) {
+		// 	await deleteCache(finalQuery.split(' '));
+		// }
+		if (cached) {
+			return cached;
+		}
+
 		let pageNum = 1;
 
 		let searchUrl = (pg: number) =>
-			`${dhtSearchHostname}/search?q=${encodeURIComponent(finalQuery)}&p=${
-				pg - 1
-			}${searchType}`;
+			`${dhtSearchHostname}/search?q=${encodeURIComponent(finalQuery)}&p=${pg - 1}`;
 
 		const BAD_RESULT_THRESHOLD = 11;
 		let badResults = 0;
@@ -166,10 +160,7 @@ async function fetchSearchResults(
 		let skippedResults = 0;
 
 		while (pageNum <= 40 + Math.floor(skippedResults / 10)) {
-			console.log(
-				`Scraping ${searchType} page ${pageNum} (${finalQuery})...`,
-				new Date().getTime()
-			);
+			console.log(`Scraping page ${pageNum} (${finalQuery})...`, new Date().getTime());
 			let retries = 0; // current number of retries
 			let responseData = '';
 			let numResults = 0;
@@ -281,6 +272,9 @@ async function fetchSearchResults(
 		}
 
 		console.log(`Found ${searchResultsArr.length} results (${finalQuery})`);
+
+		// run async
+		cacheJsonValue<SearchResult[]>(finalQuery.split(' '), searchResultsArr);
 
 		return searchResultsArr;
 	} catch (error) {
