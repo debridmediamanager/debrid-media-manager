@@ -137,10 +137,14 @@ function Search() {
 		}
 	};
 
-	const handleAddAsMagnet = async (hash: string, instantDownload: boolean = false) => {
+	const handleAddAsMagnet = async (
+		hash: string,
+		instantDownload: boolean = false,
+		disableToast: boolean = false
+	) => {
 		try {
 			const id = await addHashAsMagnet(accessToken!, hash);
-			toast.success('Successfully added as magnet!');
+			if (!disableToast) toast.success('Successfully added as magnet!');
 			setTorrentInfo(
 				(prev) =>
 					({
@@ -153,9 +157,10 @@ function Search() {
 						},
 					} as Record<string, CachedTorrentInfo>)
 			);
-			handleSelectFiles(id);
+			handleSelectFiles(id, true);
 		} catch (error) {
-			toast.error('There was an error adding as magnet. Please try again.');
+			if (!disableToast)
+				toast.error('There was an error adding as magnet. Please try again.');
 			throw error;
 		}
 	};
@@ -167,10 +172,10 @@ function Search() {
 	const isDownloading = (hash: string) =>
 		inLibrary(hash) && cachedTorrentInfo![hash].status !== 'downloaded';
 
-	const handleDeleteTorrent = async (id: string) => {
+	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
 			await deleteTorrent(accessToken!, id);
-			toast.success(`Download canceled (${id.substring(0, 3)})`);
+			if (!disableToast) toast.success(`Download canceled (${id.substring(0, 3)})`);
 			setTorrentInfo((prevCache) => {
 				const updatedCache = { ...prevCache };
 				const hash = Object.keys(updatedCache).find((key) => updatedCache[key].id === id);
@@ -178,29 +183,30 @@ function Search() {
 				return updatedCache;
 			});
 		} catch (error) {
-			toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
+			if (!disableToast) toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
 			throw error;
 		}
 	};
 
-	const handleSelectFiles = async (id: string) => {
+	const handleSelectFiles = async (id: string, disableToast: boolean = false) => {
 		try {
 			const response = await getTorrentInfo(accessToken!, id);
 
 			const selectedFiles = response.files.filter(isMovie).map((file) => file.id);
 			if (selectedFiles.length === 0) {
-				handleDeleteTorrent(id);
+				handleDeleteTorrent(id, true);
 				throw new Error('no_files_for_selection');
 			}
 
 			await selectFiles(accessToken!, id, selectedFiles);
 		} catch (error) {
 			if ((error as Error).message === 'no_files_for_selection') {
-				toast.error(`No files for selection, deleting (${id.substring(0, 3)})`, {
-					duration: 5000,
-				});
+				if (!disableToast)
+					toast.error(`No files for selection, deleting (${id.substring(0, 3)})`, {
+						duration: 5000,
+					});
 			} else {
-				toast.error(`Error selecting files (${id.substring(0, 3)})`);
+				if (!disableToast) toast.error(`Error selecting files (${id.substring(0, 3)})`);
 			}
 			throw error;
 		}
