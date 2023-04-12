@@ -5,10 +5,10 @@ import {
 	getTorrentInfo,
 	getUserTorrentsList,
 	selectFiles,
-	TorrentInfoResponse,
 } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
+import { isMovie } from '@/utils/isMovie';
 import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -224,13 +224,6 @@ function TorrentsPage() {
 		for (let key in frequencyMap) {
 			delete frequencyMap[key];
 		}
-	}
-
-	function isMovie(file: TorrentInfoResponse['files'][0]) {
-		const filePath = file.path.toLowerCase();
-		const isVideo = filePath.endsWith('.mkv') || filePath.endsWith('.mp4');
-		const isBigFile = file.bytes >= ONE_GIGABYTE;
-		return isVideo && isBigFile;
 	}
 
 	const handleSelectFiles = async (id: string) => {

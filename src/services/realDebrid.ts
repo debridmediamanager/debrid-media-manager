@@ -73,6 +73,25 @@ export interface TorrentInfoResponse {
 	ended: string;
 }
 
+interface FileData {
+	filename: string;
+	filesize: number;
+}
+
+interface FileHash {
+	[fileId: number]: FileData;
+}
+
+interface HosterHash {
+	[hoster: string]: FileHash[];
+}
+
+interface MasterHash {
+	[hash: string]: HosterHash;
+}
+
+export interface InstantAvailabilityResponse extends MasterHash {}
+
 const { publicRuntimeConfig: config } = getConfig();
 
 export const getDeviceCode = async () => {
@@ -183,6 +202,25 @@ export const getTorrentInfo = async (accessToken: string, id: string) => {
 
 		const response = await axios.get<TorrentInfoResponse>(
 			`${config.realDebirdHostname}/rest/1.0/torrents/info/${id}`,
+			{ headers }
+		);
+		return response.data;
+	} catch (error: any) {
+		console.error('Error fetching torrent information:', error.message);
+		throw error;
+	}
+};
+
+export const getInstantlyAvailableFiles = async (accessToken: string, ...hashes: string[]) => {
+	try {
+		const headers = {
+			Authorization: `Bearer ${accessToken}`,
+		};
+
+		const response = await axios.get<InstantAvailabilityResponse>(
+			`${config.realDebirdHostname}/rest/1.0/torrents/instantAvailability/${hashes.join(
+				'/'
+			)}`,
 			{ headers }
 		);
 		return response.data;

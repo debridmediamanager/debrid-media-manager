@@ -15,4 +15,7 @@
 - [✔️] When waiting_files_selection and Select button is pressed, should convert to downloading
 - [] Add title filter buttons on search page
 - [✔️] Downloading has race condition on status
+- [] Dockerize with tor
 - [] Make the architecture more scalable using docker swarm
+- [] Rescan library button in all other pages except library
+- [] Find cached and selectable download on search

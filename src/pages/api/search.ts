@@ -113,14 +113,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	});
 
 	try {
-		let searchResultsArr = flattenAndRemoveDuplicates(
-			await Promise.all<SearchResult[]>(
-				libraryTypes.map((lType) => fetchSearchResults(client, finalQuery, lType))
-			)
-		);
-		if (searchResultsArr.length) searchResultsArr = groupByParsedTitle(searchResultsArr);
+		const results = [];
+		for (const lType of libraryTypes) {
+			results.push(await fetchSearchResults(client, finalQuery, lType));
+		}
+		let processedResults = flattenAndRemoveDuplicates(results);
+		if (processedResults.length) processedResults = groupByParsedTitle(processedResults);
 
-		res.status(200).json({ searchResults: searchResultsArr });
+		res.status(200).json({ searchResults: processedResults });
 	} catch (error: any) {
 		console.error(error);
 
@@ -147,7 +147,7 @@ async function fetchSearchResults(
 
 		let pageNum = 1;
 
-		let searchUrl = (pg: number) =>
+		const createSearchUrl = (pg: number) =>
 			`${dhtSearchHostname}/search?q=${encodeURIComponent(finalQuery)}&p=${pg - 1}`;
 
 		const BAD_RESULT_THRESHOLD = 11;
@@ -164,15 +164,17 @@ async function fetchSearchResults(
 			let retries = 0; // current number of retries
 			let responseData = '';
 			let numResults = 0;
+			const searchUrl = createSearchUrl(pageNum);
 			while (true) {
 				try {
-					const response = await client.get(searchUrl(pageNum), { httpAgent: agent });
+					const response = await client.get(searchUrl);
 					responseData = response.data;
 					const numResultsStr = responseData.match(/(\d+) results found/) || [];
 					numResults = parseInt(numResultsStr[1], 10);
 					retries = 0;
 					break;
 				} catch (error) {
+					console.error(`Error scraping page ${pageNum} (${finalQuery})`, error);
 					retries++;
 					if (retries > MAX_RETRIES) {
 						console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);
@@ -192,7 +194,8 @@ async function fetchSearchResults(
 			);
 
 			if (fileSizes.length !== namesAndHashes.length) {
-				throw new Error('parsing error');
+				console.warn('Mismatch in file sizes and names');
+				break;
 			}
 
 			for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {

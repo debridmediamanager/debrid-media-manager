@@ -1,8 +1,9 @@
 import useMyAccount, { MyAccount } from '@/hooks/account';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
-import { addHashAsMagnet, deleteTorrent } from '@/services/realDebrid';
+import { addHashAsMagnet, deleteTorrent, getInstantlyAvailableFiles } from '@/services/realDebrid';
 import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
+import { isMovie } from '@/utils/isMovie';
 import { getMediaId } from '@/utils/mediaId';
 import { withAuth } from '@/utils/withAuth';
 import { ParsedFilename } from '@ctrl/video-filename-parser';
@@ -19,6 +20,7 @@ type SearchResult = {
 	hash: string;
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
+	available: boolean;
 };
 
 function Search() {
@@ -51,7 +53,15 @@ function Search() {
 				params,
 				cancelToken: source.token,
 			});
-			setSearchResults(response.data.searchResults || []);
+			const availability = await checkResultsAvailability(
+				(response.data.searchResults || []).map((result) => result.hash)
+			);
+			setSearchResults(
+				response.data.searchResults?.map((r, ifx) => ({
+					...r,
+					available: availability[ifx],
+				})) || []
+			);
 		} catch (error) {
 			if (axios.isCancel(error)) {
 				console.warn('Request canceled:', error);
@@ -91,6 +101,36 @@ function Search() {
 		};
 	}, [cancelTokenSource]);
 
+	const checkResultsAvailability = async (hashes: string[]): Promise<boolean[]> => {
+		const results: boolean[] = [];
+		try {
+			const response = await getInstantlyAvailableFiles(accessToken!, ...hashes);
+			for (const masterHash in response) {
+				if ('rd' in response[masterHash] === false) {
+					results.push(false);
+					continue;
+				}
+				const variant = response[masterHash]['rd'].find(
+					(selectionVariant) => Object.keys(selectionVariant).length === 1
+				);
+				if (!variant) {
+					results.push(false);
+					continue;
+				}
+				const availableFile = variant[parseInt(Object.keys(variant)[0], 10)];
+				if (isMovie({ path: availableFile.filename, bytes: availableFile.filesize })) {
+					results.push(true);
+				} else {
+					results.push(false);
+				}
+			}
+			return results;
+		} catch (error) {
+			toast.error('There was an error checking availability. Please try again.');
+			throw error;
+		}
+	};
+
 	const handleAddAsMagnet = async (hash: string) => {
 		try {
 			setTorrentInfo(
@@ -104,6 +144,7 @@ function Search() {
 			toast.success('Successfully added as magnet!');
 		} catch (error) {
 			toast.error('There was an error adding as magnet. Please try again.');
+			throw error;
 		}
 	};
 
@@ -234,12 +275,18 @@ function Search() {
 												)}
 											{notInLibrary(result.hash) && (
 												<button
-													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+													className={`bg-${
+														result.available ? 'green' : 'blue'
+													}-500 hover:bg-${
+														result.available ? 'green' : 'blue'
+													}-700 text-white font-bold py-2 px-4 rounded`}
 													onClick={() => {
 														handleAddAsMagnet(result.hash);
 													}}
 												>
-													Download
+													{`${
+														result.available ? 'Instant ' : ''
+													}Download`}
 												</button>
 											)}
 										</td>
