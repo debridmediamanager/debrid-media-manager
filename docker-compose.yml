@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  tor:
+    image: dockage/tor-privoxy:latest
+    container_name: tor
+    restart: always
+    deploy:
+      replicas: 4
+  web:
+    build: .
+    container_name: web
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://host.docker.internal:6379
+      - GH_PAT=your_github_personal_access_token
+    restart: always
+    deploy:
+      replicas: 4
