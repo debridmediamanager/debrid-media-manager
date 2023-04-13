@@ -1,4 +1,4 @@
-name: Build and push Docker image
+name: Build and Deploy Docker image
 
 on:
   push:
@@ -29,6 +29,7 @@ jobs:
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
       - name: Build and push Docker image
+        id: build-image
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -37,10 +38,16 @@ jobs:
           tags: |
             debridmediamanager/debrid-media-manager:latest
             debridmediamanager/debrid-media-manager:${{ env.version }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Deploy to Swarm
         uses: actions-hub/docker/cli@master
         with:
-          args: service update --image debridmediamanager/debrid-media-manager:${{ env.version }} dmm_web
+          args: service update --image debridmediamanager/debrid-media-manager:${{ needs.build-image.outputs.version }} dmm_web
         env:
           DOCKER_HOST: tcp://${{ secrets.SWARM_MANAGER_URL }}
           DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
