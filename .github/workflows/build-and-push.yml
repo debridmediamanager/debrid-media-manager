@@ -38,7 +38,7 @@ jobs:
             debridmediamanager/debrid-media-manager:latest
             debridmediamanager/debrid-media-manager:${{ env.version }}
       - name: Deploy to Swarm
-        uses: docker/cli@v1
+        uses: actions-hub/docker/cli@master
         with:
           args: service update --image debridmediamanager/debrid-media-manager:${{ env.version }} dmm_web
         env:
