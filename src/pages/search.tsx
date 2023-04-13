@@ -9,8 +9,8 @@ import {
 	selectFiles,
 } from '@/services/realDebrid';
 import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
-import { isMovie } from '@/utils/isMovie';
 import { getMediaId } from '@/utils/mediaId';
+import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { withAuth } from '@/utils/withAuth';
 import { ParsedFilename } from '@ctrl/video-filename-parser';
 import axios, { CancelTokenSource } from 'axios';
@@ -121,11 +121,11 @@ function Search() {
 					results.push(false);
 					continue;
 				}
-				// response[masterHash]['rd'] -> [{}, {}, ...] -> {0: {filename: '', filesize: 0}}
+
 				for (const variant of response[masterHash]['rd']) {
 					for (const fileIndex in variant) {
 						const file = variant[fileIndex];
-						if (isMovie({ path: file.filename, bytes: file.filesize })) {
+						if (isVideo({ path: file.filename })) {
 							results.push(true);
 							continue;
 						}
@@ -196,7 +196,9 @@ function Search() {
 			const response = await getTorrentInfo(accessToken!, id);
 			if (response.filename === 'Magnet') return; // no files yet
 
-			const selectedFiles = response.files.filter(isMovie).map((file) => file.id);
+			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
+				(file) => file.id
+			);
 			if (selectedFiles.length === 0) {
 				handleDeleteTorrent(id, true);
 				throw new Error('no_files_for_selection');

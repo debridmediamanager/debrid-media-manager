@@ -2,10 +2,10 @@ import useLocalStorage from '@/hooks/localStorage';
 import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
-import { isMovie } from '@/utils/isMovie';
 import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
+import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { withAuth } from '@/utils/withAuth';
 import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
@@ -252,7 +252,9 @@ function TorrentsPage() {
 		try {
 			const response = await getTorrentInfo(accessToken!, id);
 
-			const selectedFiles = response.files.filter(isMovie).map((file) => file.id);
+			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
+				(file) => file.id
+			);
 			if (selectedFiles.length === 0) {
 				handleDeleteTorrent(id, true);
 				throw new Error('no_files_for_selection');
