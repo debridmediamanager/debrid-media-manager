@@ -11,7 +11,7 @@ services:
       - 3000:3000
     environment:
       - NODE_ENV=production
-      - REDIS_URL=redis://host.docker.internal:6379
+      - REDIS_URL=redis://172.17.0.1:6379
       - GH_PAT=your_github_personal_access_token
     restart: always
     deploy:
