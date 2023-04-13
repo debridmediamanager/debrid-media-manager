@@ -26,8 +26,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Read version from package.json
-        id: version
-        run: echo "::set-output name=version::$(node -p "require('./package.json').version")"
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
@@ -36,4 +35,4 @@ jobs:
           push: true
           tags: |
             debridmediamanager/debrid-media-manager:latest
-            debridmediamanager/debrid-media-manager:${{ steps.version.outputs.version }}
+            debridmediamanager/debrid-media-manager:${{ env.version }}
