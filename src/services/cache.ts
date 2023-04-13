@@ -8,7 +8,7 @@ export async function cacheJsonValue<T>(key: string[], value: T) {
 	const sortedKey = key.sort();
 	const redisKey = sortedKey.join(':');
 	const jsonValue = JSON.stringify(value);
-	redisClient.SET(redisKey, jsonValue, { EX: 604800 });
+	redisClient.SET(redisKey, jsonValue);
 }
 
 export async function getCachedJsonValue<T>(key: string[]): Promise<T | undefined> {

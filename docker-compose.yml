@@ -4,7 +4,7 @@ services:
     image: dockage/tor-privoxy:latest
     restart: always
     deploy:
-      replicas: 4
+      replicas: 8
   web:
     image: debridmediamanager/debrid-media-manager:latest
     ports:
@@ -15,4 +15,4 @@ services:
       - GH_PAT=your_github_personal_access_token
     restart: always
     deploy:
-      replicas: 4
+      replicas: 8
