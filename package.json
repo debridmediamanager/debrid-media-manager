@@ -1,6 +1,6 @@
 {
    "name": "debrid-media-manager",
-   "version": "1.0.2",
+   "version": "1.0.3",
    "private": false,
    "scripts": {
       "dev": "next dev",
