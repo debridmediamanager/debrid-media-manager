@@ -2,13 +2,11 @@ version: '3.9'
 services:
   tor:
     image: dockage/tor-privoxy:latest
-    container_name: tor
     restart: always
     deploy:
       replicas: 4
   web:
-    build: .
-    container_name: web
+    image: debridmediamanager/debrid-media-manager:latest
     ports:
       - 3000:3000
     environment:
