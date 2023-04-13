@@ -3,7 +3,7 @@ const nextConfig = {
 	reactStrictMode: false,
 	publicRuntimeConfig: {
 		// Will be available on both server and client
-		realDebirdHostname: 'https://api.real-debrid.com',
+		realDebirdHostname: 'https://corsproxy.org/?https://api.real-debrid.com',
 	},
 };
 
