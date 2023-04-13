@@ -194,7 +194,7 @@ function Search() {
 	const handleSelectFiles = async (id: string, disableToast: boolean = false) => {
 		try {
 			const response = await getTorrentInfo(accessToken!, id);
-			if (response.filename === "Magnet") return; // no files yet
+			if (response.filename === 'Magnet') return; // no files yet
 
 			const selectedFiles = response.files.filter(isMovie).map((file) => file.id);
 			if (selectedFiles.length === 0) {
