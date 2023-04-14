@@ -10,7 +10,7 @@ const handler: NextApiHandler = async (req, res) => {
 		const size = await redisClient.DBSIZE();
 		res.status(200).json({ size });
 	} catch (err) {
-        console.error(err);
+		console.error(err);
 		res.status(500).json({ error: err });
 	}
 };
