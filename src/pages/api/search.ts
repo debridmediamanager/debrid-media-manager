@@ -53,7 +53,7 @@ const stopWords = [
 	'me',
 ];
 
-const agent = new SocksProxyAgent(process.env.PROXY!, { timeout: 2000 });
+const agent = new SocksProxyAgent(process.env.PROXY!, { timeout: 3000 });
 const dhtSearchHostname = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
 
 const cache = new RedisCache();
@@ -111,7 +111,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			'user-agent':
 				'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
 		},
-		timeout: 2000,
+		timeout: 3000,
 	});
 
 	try {
@@ -124,9 +124,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 		res.status(200).json({ searchResults: processedResults });
 	} catch (error: any) {
-		console.error(error);
-
-		res.status(500).json({ errorMessage: 'An error occurred while scraping the Btdigg' });
+		res.status(500).json({
+			errorMessage: `An error occurred while scraping the Btdigg (${error.message})`,
+		});
 	}
 }
 
@@ -154,7 +154,7 @@ async function fetchSearchResults(
 		let searchResultsArr: SearchResult[] = [];
 
 		const MAX_RETRIES = 5; // maximum number of retries
-		const RETRY_DELAY = 1000; // initial delay in ms, doubles with each retry
+		const RETRY_DELAY = 1500; // initial delay in ms, doubles with each retry
 
 		let skippedResults = 0;
 
@@ -172,8 +172,8 @@ async function fetchSearchResults(
 					numResults = parseInt(numResultsStr[1], 10);
 					retries = 0;
 					break;
-				} catch (error) {
-					console.error(`Error scraping page ${pageNum} (${finalQuery})`, error);
+				} catch (error: any) {
+					console.error(`Error scraping page ${pageNum} (${finalQuery})`, error.message);
 					retries++;
 					if (retries > MAX_RETRIES) {
 						console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);
@@ -183,6 +183,10 @@ async function fetchSearchResults(
 					await new Promise((resolve) => setTimeout(resolve, delay));
 				}
 			}
+			console.log(
+				`Scrape successful for page ${pageNum} (${finalQuery})`,
+				new Date().getTime()
+			);
 			const fileSizes = Array.from(
 				responseData.matchAll(
 					/class=\"torrent_size\"[^>]*>(\d+(?:\.\d+)?)(?:[^A-Z<]+)?([A-Z]+)?/g
@@ -280,7 +284,7 @@ async function fetchSearchResults(
 
 		return searchResultsArr;
 	} catch (error) {
-		console.error(error);
+		console.error('fetchSearchResults page processing error', error);
 		throw error;
 	}
 }
