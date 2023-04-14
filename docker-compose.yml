@@ -3,7 +3,7 @@ services:
   tor:
     image: dockage/tor-privoxy:latest
     deploy:
-      replicas: 8
+      replicas: 48
 
   web:
     image: debridmediamanager/debrid-media-manager:latest
