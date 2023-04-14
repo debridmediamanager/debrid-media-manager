@@ -9,6 +9,10 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        platform: [linux/amd64, linux/arm64]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -41,8 +45,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platform: ${{ matrix.platform }}
           push: true
           tags: |
-            debridmediamanager/debrid-media-manager:latest
-            debridmediamanager/debrid-media-manager:${{ env.version }}
+            debridmediamanager/debrid-media-manager:latest-${{ matrix.platform }}
+            debridmediamanager/debrid-media-manager:${{ env.version }}-${{ matrix.platform }}
