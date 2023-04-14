@@ -48,5 +48,5 @@ jobs:
           platform: ${{ matrix.platform }}
           push: true
           tags: |
-            debridmediamanager/debrid-media-manager:latest-${{ matrix.platform }}
-            debridmediamanager/debrid-media-manager:${{ env.version }}-${{ matrix.platform }}
+            debridmediamanager/debrid-media-manager:latest
+            debridmediamanager/debrid-media-manager:${{ env.version }}
