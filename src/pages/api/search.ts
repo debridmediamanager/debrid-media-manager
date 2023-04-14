@@ -1,4 +1,4 @@
-import { cacheJsonValue, getCachedJsonValue } from '@/services/cache';
+import { RedisCache } from '@/services/cache';
 import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -55,6 +55,8 @@ const stopWords = [
 
 const agent = new SocksProxyAgent(process.env.PROXY!, { timeout: 2000 });
 const dhtSearchHostname = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
+
+const cache = new RedisCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<BtDiggApiResult>) {
 	const { search, libraryType } = req.query;
@@ -137,10 +139,7 @@ async function fetchSearchResults(
 		const finalQuery = `${searchQuery}${
 			!libraryType || libraryType === '1080pOr2160p' ? '' : ` ${libraryType}`
 		}`;
-		const cached = await getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
-		// if (cached && !cached.length) {
-		// 	await deleteCache(finalQuery.split(' '));
-		// }
+		const cached = await cache.getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
 		if (cached) {
 			return cached;
 		}
@@ -277,7 +276,7 @@ async function fetchSearchResults(
 		console.log(`Found ${searchResultsArr.length} results (${finalQuery})`);
 
 		// run async
-		cacheJsonValue<SearchResult[]>(finalQuery.split(' '), searchResultsArr);
+		cache.cacheJsonValue<SearchResult[]>(finalQuery.split(' '), searchResultsArr);
 
 		return searchResultsArr;
 	} catch (error) {
