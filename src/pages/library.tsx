@@ -1,6 +1,7 @@
 import useLocalStorage from '@/hooks/localStorage';
 import { createShortUrl } from '@/services/hashlists';
 import {
+	addHashAsMagnet,
 	deleteTorrent,
 	getTorrentInfo,
 	getUserTorrentsList,
@@ -15,11 +16,12 @@ import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { withAuth } from '@/utils/withAuth';
 import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
-import { FaShare, FaTrash } from 'react-icons/fa';
+import { FaArrowRight, FaShare, FaTrash } from 'react-icons/fa';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
 
@@ -177,7 +179,7 @@ function TorrentsPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query, userTorrentsList, movieGrouping, tvGroupingByEpisode]);
 
-	const handleDeleteTorrent = async (id: string) => {
+	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
 			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
 			cacheUserTorrentsList((prevCache) => {
@@ -186,9 +188,9 @@ function TorrentsPage() {
 				return prevCache;
 			});
 			await deleteTorrent(accessToken!, id);
-			toast.success(`Torrent deleted (${id.substring(0, 3)})`);
+			if (!disableToast) toast.success(`Torrent deleted (${id.substring(0, 3)})`);
 		} catch (error) {
-			toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
+			if (!disableToast) toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
 			throw error;
 		}
 	};
@@ -363,8 +365,28 @@ function TorrentsPage() {
 		);
 	}
 
+	const handleReinsertTorrent = async (oldId: string) => {
+		try {
+			const torrent = userTorrentsList.find((t) => t.id === oldId);
+			const hash = torrent!.hash;
+			const newId = await addHashAsMagnet(accessToken!, hash);
+			torrent!.id = newId;
+			await handleSelectFiles(newId);
+			await handleDeleteTorrent(oldId, true);
+			toast.success(
+				`Torrent reinserted (${oldId.substring(0, 3)}👉${newId.substring(0, 3)})`
+			);
+		} catch (error) {
+			toast.error(`Error reinserting torrent (${oldId.substring(0, 3)})`);
+			throw error;
+		}
+	};
+
 	return (
 		<div className="mx-4 my-8">
+			<Head>
+				<title>Debrid Media Manager - Library</title>
+			</Head>
 			<Toaster position="top-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">
@@ -561,18 +583,27 @@ function TorrentsPage() {
 										<td className="border px-4 py-2">
 											{torrent.score.toFixed(1)}
 										</td>
-										<td className="border px-4 py-2">
+										<td className="border px-2 py-2">
 											<button
+												title="Share"
 												className="mr-2 mb-2 text-indigo-600"
 												onClick={() => handleShare(torrent)}
 											>
 												<FaShare />
 											</button>
 											<button
+												title="Delete"
 												className="mr-2 mb-2 text-red-500"
 												onClick={() => handleDeleteTorrent(torrent.id)}
 											>
 												<FaTrash />
+											</button>
+											<button
+												title="Reinsert"
+												className="mr-2 mb-2 text-green-500"
+												onClick={() => handleReinsertTorrent(torrent.id)}
+											>
+												<FaArrowRight />
 											</button>
 										</td>
 									</tr>

@@ -9,10 +9,9 @@ services:
     image: debridmediamanager/debrid-media-manager:latest
     ports:
       - 3000:3000
-    environment:
-      - NODE_ENV=production
-      - REDIS_URL=redis://redis:6379
-      - GH_PAT=your_github_personal_access_token
+    env_file:
+      - .env
+      - .env.local
     deploy:
       replicas: 8
       restart_policy:
