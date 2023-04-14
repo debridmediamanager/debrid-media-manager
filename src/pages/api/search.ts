@@ -53,7 +53,7 @@ const stopWords = [
 	'me',
 ];
 
-const agent = new SocksProxyAgent('socks5h://tor:9050', { timeout: 2000 });
+const agent = new SocksProxyAgent(process.env.PROXY!, { timeout: 2000 });
 const dhtSearchHostname = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<BtDiggApiResult>) {
