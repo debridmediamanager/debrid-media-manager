@@ -1,5 +1,6 @@
 import { useCurrentUser } from '@/hooks/auth';
 import { withAuth } from '@/utils/withAuth';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 function IndexPage() {
@@ -25,6 +26,9 @@ function IndexPage() {
 
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen">
+			<Head>
+				<title>Debrid Media Manager - Home</title>
+			</Head>
 			<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
 				<rect x="25" y="25" width="150" height="150" fill="#2C3E50" rx="20" ry="20" />
 				<circle cx="100" cy="100" r="60" fill="#00A0B0" />
