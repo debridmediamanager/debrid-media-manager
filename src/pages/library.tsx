@@ -16,6 +16,7 @@ import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { withAuth } from '@/utils/withAuth';
 import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -383,6 +384,9 @@ function TorrentsPage() {
 
 	return (
 		<div className="mx-4 my-8">
+			<Head>
+				<title>Debrid Media Manager - Library</title>
+			</Head>
 			<Toaster position="top-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">
