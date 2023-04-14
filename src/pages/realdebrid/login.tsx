@@ -1,5 +1,6 @@
 import useLocalStorage from '@/hooks/localStorage';
 import { getCredentials, getDeviceCode, getToken } from '@/services/realDebrid';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
@@ -93,6 +94,9 @@ export default function RealDebridLoginPage() {
 
 	return (
 		<div className="flex flex-col items-center justify-center h-screen">
+			<Head>
+				<title>Debrid Media Manager - Real-Debrid Login</title>
+			</Head>
 			{userCode && (
 				<p className="mb-4 text-lg font-bold">
 					Please click the button and enter this code: <strong>{userCode}</strong>{' '}
