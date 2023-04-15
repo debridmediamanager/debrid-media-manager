@@ -72,8 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	}
 
 	const finalQuery = search
-		.replace(/[\.\=:\?]/g, ' ') // replace periods, colons, and equals signs with a space
-		.split(/[\s\.\-\(\)]/) // split the search string by whitespace, period, hyphen, or parentheses
+		.split(/[\s\=:\?\.\-\(\)]/) // split the search query into an array of elements
 		.filter((e) => e !== '') // filter out any empty elements
 		.map((e) => e.toLowerCase()) // convert each element to lowercase
 		.filter((term) => !stopWords.includes(term)) // remove any stop words from an array
