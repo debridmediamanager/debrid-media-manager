@@ -72,12 +72,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	}
 
 	const finalQuery = search
-		.split(/[\s\.\-\(\)]/)
-		.filter((e) => e !== '')
-		.map((e) => e.toLowerCase())
-		.filter((term) => !stopWords.includes(term))
-		.join(' ')
-		.replace(/[áàäâ]/g, 'a')
+		.replace(/[\.\=:\?]/g, ' ') // replace periods, colons, and equals signs with a space
+		.split(/[\s\.\-\(\)]/) // split the search string by whitespace, period, hyphen, or parentheses
+		.filter((e) => e !== '') // filter out any empty elements
+		.map((e) => e.toLowerCase()) // convert each element to lowercase
+		.filter((term) => !stopWords.includes(term)) // remove any stop words from an array
+		.join(' ') // join the remaining elements with a single space
+		.replace(/[áàäâ]/g, 'a') // replace certain characters with their equivalent
 		.replace(/[éèëê]/g, 'e')
 		.replace(/[íìïî]/g, 'i')
 		.replace(/[óòöô]/g, 'o')
@@ -86,9 +87,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		.replace(/[ñ]/g, 'n')
 		.replace(/[ş]/g, 's')
 		.replace(/[ğ]/g, 'g')
-		.replace(/[^\w\s]/g, '')
-		.replace(/\s+/g, ' ')
-		.trim();
+		.replace(/[^\w\s]/g, '') // remove any non-word or non-space characters
+		.replace(/\s+/g, ' ') // replace multiple spaces with a single space
+		.trim(); // trim any leading or trailing spaces
 
 	const libraryTypes = libraryType === '1080pOr2160p' ? ['1080p', '2160p', ''] : [libraryType];
 
