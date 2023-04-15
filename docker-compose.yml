@@ -1,14 +1,22 @@
 version: '3.9'
 services:
+  debugger:
+    image: ubuntu
+    volumes:
+      - redis_data:/userdata
+    entrypoint: ['tail', '-f', '/dev/null']
+    deploy:
+      replicas: 1
+
   tor:
     image: dockage/tor-privoxy:latest
     deploy:
-      replicas: 48
+      replicas: 64
 
   web:
     image: debridmediamanager/debrid-media-manager:latest
     ports:
-      - 3000:3000
+      - 127.0.0.1:3000:3000
     env_file:
       - .env
       - .env.local
@@ -24,6 +32,8 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     volumes:
       - redis_data:/bitnami/redis/data
+    ports:
+      - 127.0.0.1:6379:6379
     deploy:
       replicas: 1
 
@@ -38,7 +48,7 @@ services:
     volumes:
       - redis_data:/bitnami/redis/data
     deploy:
-      replicas: 3
+      replicas: 5
 
   redis-sentinel:
     image: 'bitnami/redis-sentinel:latest'
@@ -49,7 +59,7 @@ services:
       - redis
       - redis-slave
     ports:
-      - '26379-26381:26379'
+      - '127.0.0.1:26379-26381:26379'
     volumes:
       - ./redis-sentinel.conf:/usr/local/etc/redis-sentinel.conf
     deploy:
