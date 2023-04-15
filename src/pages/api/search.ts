@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	}
 
 	const finalQuery = search
-		.split(/[\s\=:\?\.\-\(\)]/) // split the search query into an array of elements
+		.split(/[\s\=:\?\.\-\(\)\/]/) // split the search query into an array of elements
 		.filter((e) => e !== '') // filter out any empty elements
 		.map((e) => e.toLowerCase()) // convert each element to lowercase
 		.filter((term) => !stopWords.includes(term)) // remove any stop words from an array
