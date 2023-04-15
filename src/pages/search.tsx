@@ -19,7 +19,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { BtDiggApiResult } from './api/search';
+import { SearchApiResponse } from './api/search';
 
 type SearchResult = {
 	title: string;
@@ -56,7 +56,7 @@ function Search() {
 				search: searchQuery,
 				...(myAccount?.libraryType ? { ['libraryType']: myAccount.libraryType } : {}),
 			};
-			const response = await axios.get<BtDiggApiResult>('/api/search', {
+			const response = await axios.get<SearchApiResponse>('/api/search', {
 				params,
 				cancelToken: source.token,
 			});
