@@ -3,7 +3,7 @@ services:
   tor:
     image: dockage/tor-privoxy:latest
     deploy:
-      replicas: 48
+      replicas: 100
 
   web:
     image: debridmediamanager/debrid-media-manager:latest
@@ -13,7 +13,7 @@ services:
       - .env
       - .env.local
     deploy:
-      replicas: 8
+      replicas: 25
       restart_policy:
         condition: on-failure
 
@@ -38,7 +38,7 @@ services:
     volumes:
       - redis_data:/bitnami/redis/data
     deploy:
-      replicas: 3
+      replicas: 5
 
   redis-sentinel:
     image: 'bitnami/redis-sentinel:latest'
