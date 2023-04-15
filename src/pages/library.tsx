@@ -390,7 +390,7 @@ function TorrentsPage() {
 			<Toaster position="top-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">
-					My Library ({userTorrentsList.length} files in total; size:{' '}
+					My Library ({userTorrentsList.length} downloads in total; size:{' '}
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>
 				<Link

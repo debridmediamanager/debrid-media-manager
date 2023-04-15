@@ -56,7 +56,7 @@ const stopWords = [
 const agent = new SocksProxyAgent(process.env.PROXY!, { timeout: 3000 });
 const dhtSearchHostname = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
 
-const cache = new RedisCache(process.env.REDIS_SLAVE_URL!);
+const cache = new RedisCache(process.env.REDIS_URL!);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<BtDiggApiResult>) {
 	const { search, libraryType } = req.query;
@@ -140,13 +140,9 @@ async function fetchSearchResults(
 			!libraryType || libraryType === '1080pOr2160p' ? '' : ` ${libraryType}`
 		}`;
 
-		try {
-			const cached = await cache.getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
-			if (cached) {
-				return cached;
-			}
-		} catch (e: any) {
-			console.warn(e);
+		const cached = await cache.getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
+		if (cached) {
+			return cached;
 		}
 
 		let pageNum = 1;
@@ -158,12 +154,10 @@ async function fetchSearchResults(
 		let badResults = 0;
 		let searchResultsArr: SearchResult[] = [];
 
-		const MAX_RETRIES = 5; // maximum number of retries
-		const RETRY_DELAY = 1500; // initial delay in ms, doubles with each retry
+		const MAX_RETRIES = 6; // maximum number of retries
+		const RETRY_DELAY = 1000; // initial delay in ms, doubles with each retry
 
-		let skippedResults = 0;
-
-		while (pageNum <= 40 + Math.floor(skippedResults / 10)) {
+		while (pageNum <= 100) {
 			console.log(`Scraping page ${pageNum} (${finalQuery})...`, new Date().getTime());
 			let retries = 0; // current number of retries
 			let responseData = '';
@@ -222,7 +216,6 @@ async function fetchSearchResults(
 				// immediately check if filesize makes sense
 				const fileSize = parseFloat(fileSizeStr);
 				if (mediaType === 'movie' && fileSize > 128) {
-					skippedResults++;
 					continue;
 				}
 
@@ -283,6 +276,9 @@ async function fetchSearchResults(
 		}
 
 		console.log(`Found ${searchResultsArr.length} results (${finalQuery})`);
+
+		// run async
+		cache.cacheJsonValue<SearchResult[]>(finalQuery.split(' '), searchResultsArr);
 
 		return searchResultsArr;
 	} catch (error) {
