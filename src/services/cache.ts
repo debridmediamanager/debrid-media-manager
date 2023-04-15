@@ -1,10 +1,12 @@
 import { createClient, RedisClientType } from 'redis';
 
 export class RedisCache {
+	private url: string;
 	private client: RedisClientType;
 
-	constructor() {
-		this.client = createClient({ url: process.env.REDIS_URL });
+	constructor(url: string) {
+		this.url = url;
+		this.client = createClient({ url: this.url });
 		this.client.on('error', this.handleRedisConnectionError.bind(this));
 		this.client.connect();
 	}
@@ -13,7 +15,7 @@ export class RedisCache {
 		console.error('Redis connection error', err);
 		if (err.code === 'ECONNREFUSED') {
 			this.client.quit();
-			this.client = createClient({ url: process.env.REDIS_URL });
+			this.client = createClient({ url: this.url });
 			this.client.on('error', this.handleRedisConnectionError.bind(this));
 			this.client.connect();
 		}
