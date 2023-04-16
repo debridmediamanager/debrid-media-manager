@@ -1,8 +1,6 @@
 import Redis from 'ioredis';
 
-const sentinels = [
-	{ host: process.env.SENTINEL_URL, port: 26379 },
-];
+const sentinels = [{ host: process.env.SENTINEL_URL, port: 26379 }];
 
 const redisOptions = {
 	sentinels: sentinels,
