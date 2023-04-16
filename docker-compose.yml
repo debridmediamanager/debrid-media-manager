@@ -11,7 +11,7 @@ services:
   tor:
     image: dockage/tor-privoxy:latest
     deploy:
-      replicas: 64
+      replicas: 1
 
   web:
     image: debridmediamanager/debrid-media-manager:latest
@@ -24,7 +24,7 @@ services:
       - tor
       - redis-sentinel
     deploy:
-      replicas: 8
+      replicas: 1
       restart_policy:
         condition: on-failure
 
@@ -36,7 +36,7 @@ services:
     volumes:
       - redis_data:/bitnami/redis/data
     ports:
-      - 6379:6379
+      - 6379
     deploy:
       replicas: 1
 
@@ -44,9 +44,9 @@ services:
     image: bitnami/redis:latest
     environment:
       - REDIS_REPLICATION_MODE=slave
+      - REDIS_PASSWORD=dmm123456
       - REDIS_MASTER_HOST=redis-master
       - REDIS_MASTER_PASSWORD=dmm123456
-      - REDIS_PASSWORD=dmm123456
     depends_on:
       - redis-master
     volumes:
@@ -54,7 +54,7 @@ services:
     ports:
       - 6379
     deploy:
-      replicas: 5
+      replicas: 1
 
   redis-sentinel:
     image: bitnami/redis-sentinel:latest
@@ -65,7 +65,7 @@ services:
       - redis-master
       - redis-slave
     ports:
-      - 26379:26379
+      - 26379
     deploy:
       replicas: 1
 
