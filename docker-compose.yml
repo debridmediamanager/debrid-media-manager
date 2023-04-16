@@ -30,7 +30,7 @@ services:
 
   redis-master:
     image: bitnami/redis:latest
-    command: redis-server --requirepass dmm123456 --master --bind redis-master
+    command: redis-server --requirepass dmm123456
     volumes:
       - redis_data:/bitnami/redis/data
     ports:
@@ -40,7 +40,7 @@ services:
 
   redis-slave:
     image: bitnami/redis:latest
-    command: redis-server --requirepass dmm123456 --slaveof redis-master 6379 --bind redis-slave
+    command: redis-server --requirepass dmm123456 --slaveof redis-master 6379
     depends_on:
       - redis-master
     volumes:
