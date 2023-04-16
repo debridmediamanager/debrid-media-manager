@@ -1,10 +1,9 @@
 import Redis from 'ioredis';
 
-const sentinels = [{ host: process.env.SENTINEL_URL, port: 26379 }];
-
 const redisOptions = {
-	sentinels: sentinels,
-	name: 'mymaster',
+	sentinels: [{ host: process.env.REDIS_SENTINEL_HOST, port: 26379 }],
+	name: 'mymaster', // default from bitnami/redis-sentinel
+	password: process.env.REDIS_PASSWORD,
 };
 
 export class RedisCache {
