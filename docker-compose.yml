@@ -14,7 +14,7 @@ services:
       replicas: 64
 
   web:
-    image: debridmediamanager/debrid-media-manager:latest
+    image: debridmediamanager/debrid-media-manager:hotfix
     ports:
       - 3000:3000
     env_file:
@@ -30,7 +30,9 @@ services:
 
   redis-master:
     image: bitnami/redis:latest
-    command: redis-server --requirepass dmm123456
+    environment:
+      - REDIS_REPLICATION_MODE=master
+      - REDIS_PASSWORD=dmm123456
     volumes:
       - redis_data:/bitnami/redis/data
     ports:
@@ -40,28 +42,32 @@ services:
 
   redis-slave:
     image: bitnami/redis:latest
-    command: redis-server --requirepass dmm123456 --slaveof redis-master 6379
+    environment:
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PASSWORD=dmm123456
+      - REDIS_PASSWORD=dmm123456
     depends_on:
       - redis-master
     volumes:
       - redis_data:/bitnami/redis/data
+    ports:
+      - 6379
     deploy:
       replicas: 5
 
   redis-sentinel:
     image: bitnami/redis-sentinel:latest
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_SENTINEL_CONF=/usr/local/etc/redis-sentinel.conf
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PASSWORD=dmm123456
     depends_on:
       - redis-master
       - redis-slave
     ports:
-      - 26379-26381:26379
-    volumes:
-      - ./redis-sentinel.conf:/usr/local/etc/redis-sentinel.conf
+      - 26379:26379
     deploy:
-      replicas: 3
+      replicas: 1
 
 volumes:
   redis_data:
