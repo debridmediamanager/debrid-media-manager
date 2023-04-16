@@ -12,6 +12,7 @@
    "dependencies": {
       "@ctrl/video-filename-parser": "^4.12.0",
       "@octokit/rest": "^19.0.7",
+      "@types/ioredis": "^5.0.0",
       "@types/node": "18.15.10",
       "@types/react": "18.0.29",
       "@types/react-dom": "18.0.11",
@@ -20,6 +21,7 @@
       "eslint": "8.36.0",
       "eslint-config-next": "13.2.4",
       "express": "^4.18.2",
+      "ioredis": "^5.3.2",
       "lz-string": "^1.5.0",
       "next": "13.2.4",
       "qs": "^6.11.1",
@@ -27,7 +29,6 @@
       "react-dom": "18.2.0",
       "react-hot-toast": "^2.4.0",
       "react-icons": "^4.8.0",
-      "redis": "^4.6.5",
       "socks-proxy-agent": "^7.0.0",
       "typescript": "5.0.2",
       "uuid": "^9.0.0"

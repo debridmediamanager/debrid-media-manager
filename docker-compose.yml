@@ -14,7 +14,7 @@ services:
       replicas: 64
 
   web:
-    image: debridmediamanager/debrid-media-manager:hotfix
+    image: debridmediamanager/debrid-media-manager:latest
     ports:
       - 3000:3000
     env_file:
