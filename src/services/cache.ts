@@ -2,14 +2,11 @@ import { createClient, RedisClientType } from 'redis';
 
 const sentinels = [
 	{ host: 'redis-sentinel', port: 26379 },
-	{ host: 'redis-sentinel', port: 26380 },
-	{ host: 'redis-sentinel', port: 26381 },
 ];
 
 const redisOptions = {
 	sentinels: sentinels,
-	name: 'dmmmaster',
-	password: 'dmm123456',
+	name: 'dmm-master',
 };
 
 export class RedisCache {
