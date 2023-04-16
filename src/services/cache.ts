@@ -9,7 +9,7 @@ const sentinels = [
 const redisOptions = {
 	sentinels: sentinels,
 	name: 'dmmmaster',
-	password: 'REDACTED_REDIS_PASSWORD'
+	password: 'REDACTED_REDIS_PASSWORD',
 };
 
 export class RedisCache {
