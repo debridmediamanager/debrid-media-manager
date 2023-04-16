@@ -1,12 +1,22 @@
 import { createClient, RedisClientType } from 'redis';
 
+const sentinels = [
+	{ host: 'redis-sentinel', port: 26379 },
+	{ host: 'redis-sentinel', port: 26380 },
+	{ host: 'redis-sentinel', port: 26381 },
+];
+
+const redisOptions = {
+	sentinels: sentinels,
+	name: 'dmmmaster',
+	password: 'dmm123456',
+};
+
 export class RedisCache {
-	private url: string;
 	private client: RedisClientType;
 
-	constructor(url: string) {
-		this.url = url;
-		this.client = createClient({ url: this.url });
+	constructor() {
+		this.client = createClient(redisOptions);
 		this.client.on('error', this.handleRedisConnectionError.bind(this));
 		this.client.connect();
 	}
@@ -15,7 +25,7 @@ export class RedisCache {
 		console.error('Redis connection error', err);
 		if (err.code === 'ECONNREFUSED') {
 			this.client.quit();
-			this.client = createClient({ url: this.url });
+			this.client = createClient(redisOptions);
 			this.client.on('error', this.handleRedisConnectionError.bind(this));
 			this.client.connect();
 		}
