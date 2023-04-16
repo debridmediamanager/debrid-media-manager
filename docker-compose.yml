@@ -16,50 +16,48 @@ services:
   web:
     image: debridmediamanager/debrid-media-manager:latest
     ports:
-      - 127.0.0.1:3000:3000
+      - 3000:3000
     env_file:
       - .env
       - .env.local
+    depends_on:
+      - tor
+      - redis-sentinel
     deploy:
       replicas: 8
       restart_policy:
         condition: on-failure
 
-  redis:
-    image: 'bitnami/redis:latest'
-    environment:
-      - REDIS_REPLICATION_MODE=master
-      - ALLOW_EMPTY_PASSWORD=yes
+  redis-master:
+    image: bitnami/redis:latest
+    command: redis-server --requirepass dmm123456
     volumes:
       - redis_data:/bitnami/redis/data
     ports:
-      - 127.0.0.1:6379:6379
+      - 6379:6379
     deploy:
       replicas: 1
 
   redis-slave:
-    image: 'bitnami/redis:latest'
-    environment:
-      - REDIS_REPLICATION_MODE=slave
-      - REDIS_MASTER_HOST=redis
-      - ALLOW_EMPTY_PASSWORD=yes
+    image: bitnami/redis:latest
+    command: redis-server --requirepass dmm123456 --slaveof redis-master 6379
     depends_on:
-      - redis
+      - redis-master
     volumes:
       - redis_data:/bitnami/redis/data
     deploy:
       replicas: 5
 
   redis-sentinel:
-    image: 'bitnami/redis-sentinel:latest'
+    image: bitnami/redis-sentinel:latest
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_SENTINEL_CONF=/usr/local/etc/redis-sentinel.conf
     depends_on:
-      - redis
+      - redis-master
       - redis-slave
     ports:
-      - '127.0.0.1:26379-26381:26379'
+      - 26379-26381:26379
     volumes:
       - ./redis-sentinel.conf:/usr/local/etc/redis-sentinel.conf
     deploy:
