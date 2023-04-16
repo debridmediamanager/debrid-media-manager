@@ -1,13 +1,11 @@
+import { RedisCache } from '@/services/cache';
 import { NextApiHandler } from 'next';
-import { createClient } from 'redis';
 
-const redisClient = createClient({ url: process.env.REDIS_URL });
-redisClient.on('error', (err) => console.error('Redis connection error', err));
-redisClient.connect();
+const cache = new RedisCache();
 
 const handler: NextApiHandler = async (req, res) => {
 	try {
-		const size = await redisClient.DBSIZE();
+		const size = await cache.getDbSize();
 		res.status(200).json({ size });
 	} catch (err) {
 		console.error(err);
