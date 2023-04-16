@@ -6,7 +6,7 @@ const sentinels = [
 
 const redisOptions = {
 	sentinels: sentinels,
-	name: 'dmm-master',
+	name: 'mymaster',
 };
 
 export class RedisCache {
