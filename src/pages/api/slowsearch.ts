@@ -16,7 +16,7 @@ export type SlowSearchApiResponse = {
 };
 
 const agent = new SocksProxyAgent(process.env.PROXY!, { timeout: 3000 });
-const cache = new RedisCache(process.env.REDIS_URL!);
+const cache = new RedisCache();
 
 export default async function handler(
 	req: NextApiRequest,
