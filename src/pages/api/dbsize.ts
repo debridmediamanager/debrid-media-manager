@@ -1,7 +1,7 @@
 import { RedisCache } from '@/services/cache';
 import { NextApiHandler } from 'next';
 
-const cache = new RedisCache();
+const cache = new RedisCache(true);
 
 const handler: NextApiHandler = async (req, res) => {
 	try {

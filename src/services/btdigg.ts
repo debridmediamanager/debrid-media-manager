@@ -236,6 +236,8 @@ export async function fetchSearchResults(
 
 		console.log(`Found ${searchResultsArr.length} results (${finalQuery})`);
 
+		if (!cache.isSlaveInstance()) cache.cacheJsonValue(finalQuery.split(' '), searchResultsArr);
+
 		return searchResultsArr;
 	} catch (error) {
 		console.error('fetchSearchResults page processing error', error);
