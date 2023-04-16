@@ -1,8 +1,6 @@
-import { createClient, RedisClientType } from 'redis';
+import Redis from 'ioredis';
 
-const sentinels = [
-	{ host: 'redis-sentinel', port: 26379 },
-];
+const sentinels = [{ host: process.env.SENTINEL_URL, port: 26379 }];
 
 const redisOptions = {
 	sentinels: sentinels,
@@ -10,53 +8,29 @@ const redisOptions = {
 };
 
 export class RedisCache {
-	private client: RedisClientType;
+	private client: Redis;
 
 	constructor() {
-		this.client = createClient(redisOptions);
-		this.client.on('error', this.handleRedisConnectionError.bind(this));
-		this.client.connect();
-	}
-
-	private handleRedisConnectionError(err: any) {
-		console.error('Redis connection error', err);
-		if (err.code === 'ECONNREFUSED') {
-			this.client.quit();
-			this.client = createClient(redisOptions);
-			this.client.on('error', this.handleRedisConnectionError.bind(this));
-			this.client.connect();
-		}
+		this.client = new Redis(redisOptions);
 	}
 
 	public async cacheJsonValue<T>(key: string[], value: T) {
 		const sortedKey = key.sort();
 		const redisKey = sortedKey.join(':');
-		try {
-			this.client.SET(redisKey, JSON.stringify(value));
-		} catch (err: any) {
-			if (err.code === 'ECONNREFUSED') {
-				const jitter = Math.floor(Math.random() * 500) + 500;
-				await new Promise((resolve) => setTimeout(resolve, jitter));
-				await this.cacheJsonValue(key, value);
-			}
-		}
+		await this.client.set(redisKey, JSON.stringify(value));
 	}
 
 	public async getCachedJsonValue<T>(key: string[]): Promise<T | undefined> {
 		const sortedKey = key.sort();
 		const redisKey = sortedKey.join(':');
-		try {
-			const jsonValue = await this.client.GET(redisKey);
-			if (!jsonValue) {
-				return undefined;
-			}
-			return JSON.parse(jsonValue) as T;
-		} catch (err: any) {
-			if (err.code === 'ECONNREFUSED') {
-				const jitter = Math.floor(Math.random() * 500) + 500;
-				await new Promise((resolve) => setTimeout(resolve, jitter));
-				return await this.getCachedJsonValue(key);
-			}
+		const jsonValue = await this.client.get(redisKey);
+		if (!jsonValue) {
+			return undefined;
 		}
+		return JSON.parse(jsonValue) as T;
+	}
+
+	public async getDbSize(): Promise<number> {
+		return await this.client.dbsize();
 	}
 }
