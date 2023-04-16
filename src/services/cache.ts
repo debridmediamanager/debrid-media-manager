@@ -8,9 +8,21 @@ const redisOptions = {
 
 export class RedisCache {
 	private client: Redis;
+	private isSlave: boolean;
 
-	constructor() {
-		this.client = new Redis(redisOptions);
+	constructor(slave = false) {
+		this.isSlave = slave;
+		this.client = new Redis({
+			role: slave ? 'slave' : 'master',
+			reconnectOnError(err) {
+				const targetError = 'READONLY';
+				if (err.message.includes(targetError)) {
+					return true;
+				}
+				return false;
+			},
+			...redisOptions,
+		});
 	}
 
 	public async cacheJsonValue<T>(key: string[], value: T) {
@@ -31,5 +43,9 @@ export class RedisCache {
 
 	public async getDbSize(): Promise<number> {
 		return await this.client.dbsize();
+	}
+
+	public isSlaveInstance(): boolean {
+		return this.isSlave;
 	}
 }
