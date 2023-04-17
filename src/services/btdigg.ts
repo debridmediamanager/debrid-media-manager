@@ -82,7 +82,7 @@ export const groupByParsedTitle = (results: SearchResult[]): SearchResult[] => {
 const dhtSearchHostname = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
 
 export async function fetchSearchResults(
-	speed: 'veryfast' | 'fast' | 'slow' | 'veryslow',
+	speed: 'veryfast' | 'fast' | 'normal' | 'slow' | 'veryslow',
 	client: AxiosInstance,
 	searchQuery: string,
 	libraryType: string,
@@ -126,8 +126,11 @@ export async function fetchSearchResults(
 			case 'fast':
 				upperThreshold = (skipped: number): number => 40 + Math.floor(skipped / 10);
 				break;
-			case 'slow':
+			case 'normal':
 				upperThreshold = (skipped: number): number => 60 + Math.floor(skipped / 10);
+				break;
+			case 'slow':
+				upperThreshold = (skipped: number): number => 80 + Math.floor(skipped / 10);
 				break;
 			case 'veryslow':
 				upperThreshold = (_: any) => 100;
