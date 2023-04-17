@@ -41,7 +41,7 @@ export default async function handler(
 	try {
 		const results = [];
 		for (const lType of libraryTypes) {
-			results.push(await fetchSearchResults(client, finalQuery, lType, cache));
+			results.push(await fetchSearchResults('fast', client, finalQuery, lType, cache));
 		}
 		let processedResults = flattenAndRemoveDuplicates(results);
 		if (processedResults.length) processedResults = groupByParsedTitle(processedResults);
