@@ -95,6 +95,9 @@ export async function fetchSearchResults(
 		try {
 			const cached = await cache.getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
 			if (cached) {
+				if (cached.length === 0) {
+					cache.deleteCachedJsonValue(finalQuery.split(' '));
+				}
 				return cached;
 			}
 		} catch (e: any) {
@@ -236,7 +239,7 @@ export async function fetchSearchResults(
 
 		console.log(`Found ${searchResultsArr.length} results (${finalQuery})`);
 
-		if (!cache.isSlaveInstance()) cache.cacheJsonValue(finalQuery.split(' '), searchResultsArr);
+		cache.cacheJsonValue(finalQuery.split(' '), searchResultsArr);
 
 		return searchResultsArr;
 	} catch (error) {

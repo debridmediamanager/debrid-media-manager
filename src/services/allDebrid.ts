@@ -1,6 +1,8 @@
 import axios from 'axios';
 import getConfig from 'next/config';
 
+const { publicRuntimeConfig: config } = getConfig();
+
 interface PinResponse {
 	status: string;
 	data: {
@@ -12,41 +14,6 @@ interface PinResponse {
 		check_url: string;
 	};
 }
-
-interface PinCheckResponse {
-	status: string;
-	data: {
-		activated: boolean;
-		expires_in: number;
-		apikey?: string;
-	};
-}
-
-interface PinInfo {
-	check_url: string;
-}
-
-interface UserResponse {
-	status: string;
-	data: {
-		user: {
-			username: string;
-			email: string;
-			isPremium: boolean;
-			isSubscribed: boolean;
-			isTrial: boolean;
-			premiumUntil: number;
-			lang: string;
-			preferedDomain: string;
-			fidelityPoints: number;
-			limitedHostersQuotas: Record<string, number>;
-			remainingTrialQuota?: number;
-			notifications: string[];
-		};
-	};
-}
-
-const { publicRuntimeConfig: config } = getConfig();
 
 export const getPin = async () => {
 	try {
@@ -61,6 +28,19 @@ export const getPin = async () => {
 		throw error;
 	}
 };
+
+interface PinCheckResponse {
+	status: string;
+	data: {
+		activated: boolean;
+		expires_in: number;
+		apikey?: string;
+	};
+}
+
+interface PinInfo {
+	check_url: string;
+}
 
 export const checkPin = async (pin: string, check: string) => {
 	const agent = config.allDebridAgent; // Your software user-agent.
@@ -81,6 +61,26 @@ export const checkPin = async (pin: string, check: string) => {
 		throw error;
 	}
 };
+
+interface UserResponse {
+	status: string;
+	data: {
+		user: {
+			username: string;
+			email: string;
+			isPremium: boolean;
+			isSubscribed: boolean;
+			isTrial: boolean;
+			premiumUntil: number;
+			lang: string;
+			preferedDomain: string;
+			fidelityPoints: number;
+			limitedHostersQuotas: Record<string, number>;
+			remainingTrialQuota?: number;
+			notifications: string[];
+		};
+	};
+}
 
 export const getUserInfo = async (apikey: string) => {
 	const agent = config.allDebridAgent; // Your software user-agent.
@@ -208,7 +208,7 @@ interface MagnetDeleteResponse {
 export const deleteMagnet = async (
 	apikey: string,
 	id: number,
-	agent: string,
+	agent: string
 ): Promise<MagnetDeleteResponse> => {
 	try {
 		const response = await axios.get<MagnetDeleteResponse>(
@@ -240,7 +240,7 @@ interface MagnetRestartResponse {
 export const restartMagnet = async (
 	apikey: string,
 	id: number | number[],
-	agent: string,
+	agent: string
 ): Promise<MagnetRestartResponse> => {
 	try {
 		const response = await axios.get<MagnetRestartResponse>(

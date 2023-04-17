@@ -7,13 +7,23 @@ const redisOptions = {
 };
 
 export class RedisCache {
-	private client: Redis;
-	private isSlave: boolean;
+	private slaveClient: Redis;
+	private masterClient: Redis;
 
-	constructor(slave = false) {
-		this.isSlave = slave;
-		this.client = new Redis({
-			role: slave ? 'slave' : 'master',
+	constructor() {
+		this.slaveClient = new Redis({
+			role: 'slave',
+			reconnectOnError(err) {
+				const targetError = 'READONLY';
+				if (err.message.includes(targetError)) {
+					return true;
+				}
+				return false;
+			},
+			...redisOptions,
+		});
+		this.masterClient = new Redis({
+			role: 'master',
 			reconnectOnError(err) {
 				const targetError = 'READONLY';
 				if (err.message.includes(targetError)) {
@@ -28,24 +38,26 @@ export class RedisCache {
 	public async cacheJsonValue<T>(key: string[], value: T) {
 		const sortedKey = key.sort();
 		const redisKey = sortedKey.join(':');
-		await this.client.set(redisKey, JSON.stringify(value));
+		await this.masterClient.set(redisKey, JSON.stringify(value));
 	}
 
 	public async getCachedJsonValue<T>(key: string[]): Promise<T | undefined> {
 		const sortedKey = key.sort();
 		const redisKey = sortedKey.join(':');
-		const jsonValue = await this.client.get(redisKey);
+		const jsonValue = await this.slaveClient.get(redisKey);
 		if (!jsonValue) {
 			return undefined;
 		}
 		return JSON.parse(jsonValue) as T;
 	}
 
-	public async getDbSize(): Promise<number> {
-		return await this.client.dbsize();
+	public async deleteCachedJsonValue(key: string[]): Promise<void> {
+		const sortedKey = key.sort();
+		const redisKey = sortedKey.join(':');
+		await this.masterClient.del(redisKey);
 	}
 
-	public isSlaveInstance(): boolean {
-		return this.isSlave;
+	public async getDbSize(): Promise<number> {
+		return await this.slaveClient.dbsize();
 	}
 }
