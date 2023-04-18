@@ -1,4 +1,5 @@
 import useLocalStorage from '@/hooks/localStorage';
+import { deleteMagnet, getMagnetStatus, restartMagnet } from '@/services/allDebrid';
 import { createShortUrl } from '@/services/hashlists';
 import {
 	addHashAsMagnet,
@@ -46,20 +47,31 @@ interface SortBy {
 
 function TorrentsPage() {
 	const router = useRouter();
-	const [loading, setLoading] = useState(true);
+
+	// loading states
+	const [rdLoading, setRdLoading] = useState(true);
+	const [adLoading, setAdLoading] = useState(true);
 	const [filtering, setFiltering] = useState(false);
 	const [grouping, setGrouping] = useState(false);
+
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'added', direction: 'desc' });
-	const [accessToken] = useLocalStorage<string>('rd:accessToken');
+
+	// keys
+	const [rdKey] = useLocalStorage<string>('rd:accessToken');
+	const [adKey] = useLocalStorage<string>('ad:apiKey');
+
 	const [movieCount, setMovieCount] = useState<number>(0);
 	const [tvCount, setTvCount] = useState<number>(0);
 	const [movieGrouping] = useState<Record<string, number>>({});
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
 	const [hasDupes] = useState<Array<string>>([]);
+
+	// stats
 	const [totalBytes, setTotalBytes] = useState<number>(0);
+
 	const [_, cacheUserTorrentsList] = useLocalStorage<Record<string, CachedTorrentInfo>>(
 		'userTorrentsList',
 		{}
@@ -67,9 +79,10 @@ function TorrentsPage() {
 
 	// fetch list from api
 	useEffect(() => {
-		(async () => {
+		const fetchRealDebrid = async () => {
 			try {
-				const torrents = (await getUserTorrentsList(accessToken!, 0, 1, 2500, '')).map(
+				if (!rdKey) throw new Error('no_rd_key');
+				const torrents = (await getUserTorrentsList(rdKey, 0, 1, 2500, '')).map(
 					(torrent) => {
 						const mediaType = getMediaType(torrent.filename);
 						const info =
@@ -83,29 +96,101 @@ function TorrentsPage() {
 							mediaType,
 							title: getMediaId(info, mediaType, false),
 							...torrent,
+							id: `rd:${torrent.id}`,
 						};
 					}
 				) as UserTorrent[];
 
-				setUserTorrentsList(torrents);
-				cacheUserTorrentsList(
-					torrents.reduce<Record<string, CachedTorrentInfo>>((cache, t) => {
+				setUserTorrentsList((prev) => [...prev, ...torrents]);
+				cacheUserTorrentsList((prev) => ({
+					...prev,
+					...torrents.reduce<Record<string, CachedTorrentInfo>>((cache, t) => {
 						cache[t.hash] = t;
 						return cache;
-					}, {})
-				);
+					}, {}),
+				}));
 			} catch (error) {
-				setUserTorrentsList([]);
+				setUserTorrentsList((prev) => [...prev]);
 				toast.error('Error fetching user torrents list');
 			} finally {
-				setLoading(false);
+				setRdLoading(false);
 			}
-		})();
+		};
+		if (rdKey) fetchRealDebrid();
+		else setRdLoading(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [accessToken]);
+	}, [rdKey]);
+
+	useEffect(() => {
+		const fetchAllDebrid = async () => {
+			try {
+				if (!adKey) throw new Error('no_ad_key');
+				const torrents = (await getMagnetStatus(adKey)).data.magnets.map((torrent) => {
+					const mediaType = getMediaType(torrent.filename);
+					const info =
+						mediaType === 'movie'
+							? filenameParse(torrent.filename)
+							: filenameParse(torrent.filename, true);
+
+					const date = new Date(torrent.uploadDate * 1000);
+					// Format date string
+					const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(
+						date.getMonth() + 1
+					)
+						.toString()
+						.padStart(2, '0')}/${date.getFullYear().toString().padStart(4, '0')}, ${date
+						.getHours()
+						.toString()
+						.padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date
+						.getSeconds()
+						.toString()
+						.padStart(2, '0')}`;
+
+					let status = 'error';
+					if (torrent.statusCode >= 0 && torrent.statusCode <= 3) {
+						status = 'downloading';
+					} else if (torrent.statusCode === 4) {
+						status = 'downloaded';
+					}
+
+					return {
+						score: getReleaseTags(torrent.filename, torrent.size / ONE_GIGABYTE).score,
+						info,
+						mediaType,
+						title: getMediaId(info, mediaType, false),
+						id: `ad:${torrent.id}`,
+						filename: torrent.filename,
+						hash: torrent.hash,
+						bytes: torrent.size,
+						progress: Math.floor((100 * torrent.downloadSpeed) / torrent.size),
+						status,
+						added: formattedDate,
+					};
+				}) as UserTorrent[];
+
+				setUserTorrentsList((prev) => [...prev, ...torrents]);
+				cacheUserTorrentsList((prev) => ({
+					...prev,
+					...torrents.reduce<Record<string, CachedTorrentInfo>>((cache, t) => {
+						cache[t.hash] = t;
+						return cache;
+					}, {}),
+				}));
+			} catch (error) {
+				setUserTorrentsList((prev) => [...prev]);
+				toast.error('Error fetching AllDebrid torrents list');
+			} finally {
+				setAdLoading(false);
+			}
+		};
+		if (adKey) fetchAllDebrid();
+		else setAdLoading(false);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [adKey]);
 
 	// aggregate metadata
 	useEffect(() => {
+		if (rdLoading || adLoading) return;
 		setGrouping(true);
 		setMovieCount(0);
 		setTvCount(0);
@@ -138,10 +223,19 @@ function TorrentsPage() {
 		setTotalBytes(tmpTotalBytes);
 		setGrouping(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [userTorrentsList]);
+	}, [
+		userTorrentsList,
+		rdLoading,
+		adLoading,
+		movieGrouping,
+		tvGroupingByEpisode,
+		tvGroupingByTitle,
+		hasDupes,
+	]);
 
 	// set the list you see
 	useEffect(() => {
+		if (rdLoading || adLoading || grouping) return;
 		setFiltering(true);
 		if (Object.keys(router.query).length === 0) {
 			setFilteredList(userTorrentsList);
@@ -177,20 +271,21 @@ function TorrentsPage() {
 		deleteFailedTorrents(tmpList);
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query, userTorrentsList, movieGrouping, tvGroupingByEpisode]);
+	}, [router.query, userTorrentsList, rdLoading, adLoading, grouping, hasDupes]);
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
 			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
 			cacheUserTorrentsList((prevCache) => {
-				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id);
-				delete prevCache[hash!];
+				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id) || '';
+				delete prevCache[hash];
 				return prevCache;
 			});
-			await deleteTorrent(accessToken!, id);
-			if (!disableToast) toast.success(`Torrent deleted (${id.substring(0, 3)})`);
+			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
+			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
+			if (!disableToast) toast.success(`Torrent deleted (${id})`);
 		} catch (error) {
-			if (!disableToast) toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
+			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
 			throw error;
 		}
 	};
@@ -230,7 +325,8 @@ function TorrentsPage() {
 
 	const handleSelectFiles = async (id: string) => {
 		try {
-			const response = await getTorrentInfo(accessToken!, id);
+			if (!rdKey) throw new Error('no_rd_key');
+			const response = await getTorrentInfo(rdKey, id);
 
 			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
 				(file) => file.id
@@ -240,7 +336,7 @@ function TorrentsPage() {
 				throw new Error('no_files_for_selection');
 			}
 
-			await selectFiles(accessToken!, id, selectedFiles);
+			await selectFiles(rdKey, id, selectedFiles);
 			setUserTorrentsList((prevList) => {
 				const newList = [...prevList];
 				const index = newList.findIndex((t) => t.id === id);
@@ -248,17 +344,17 @@ function TorrentsPage() {
 				return newList;
 			});
 			cacheUserTorrentsList((prevCache) => {
-				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id);
-				prevCache[hash!].status = 'downloading';
+				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id) || '';
+				prevCache[hash].status = 'downloading';
 				return prevCache;
 			});
 		} catch (error) {
 			if ((error as Error).message === 'no_files_for_selection') {
-				toast.error(`No files for selection, deleting (${id.substring(0, 3)})`, {
+				toast.error(`No files for selection, deleting (${id})`, {
 					duration: 5000,
 				});
 			} else {
-				toast.error(`Error selecting files (${id.substring(0, 3)})`);
+				toast.error(`Error selecting files (${id})`);
 			}
 			throw error;
 		}
@@ -367,17 +463,28 @@ function TorrentsPage() {
 
 	const handleReinsertTorrent = async (oldId: string) => {
 		try {
+			if (!rdKey) throw new Error('no_rd_key');
 			const torrent = userTorrentsList.find((t) => t.id === oldId);
-			const hash = torrent!.hash;
-			const newId = await addHashAsMagnet(accessToken!, hash);
-			torrent!.id = newId;
+			if (!torrent) throw new Error('no_torrent_found');
+			const hash = torrent.hash;
+			const newId = await addHashAsMagnet(rdKey, hash);
+			torrent.id = newId;
 			await handleSelectFiles(newId);
 			await handleDeleteTorrent(oldId, true);
-			toast.success(
-				`Torrent reinserted (${oldId.substring(0, 3)}👉${newId.substring(0, 3)})`
-			);
+			toast.success(`Torrent reinserted (${oldId}👉${newId})`);
 		} catch (error) {
-			toast.error(`Error reinserting torrent (${oldId.substring(0, 3)})`);
+			toast.error(`Error reinserting torrent (${oldId})`);
+			throw error;
+		}
+	};
+
+	const handleRestartTorrent = async (id: string) => {
+		try {
+			if (!adKey) throw new Error('no_ad_key');
+			await restartMagnet(adKey, id.substring(3));
+			toast.success(`Torrent restarted (${id})`);
+		} catch (error) {
+			toast.error(`Error restarting torrent (${id})`);
 			throw error;
 		}
 	};
@@ -464,7 +571,7 @@ function TorrentsPage() {
 				)}
 			</div>
 			<div className="overflow-x-auto">
-				{loading || grouping || filtering ? (
+				{rdLoading || adLoading || grouping || filtering ? (
 					<div className="flex justify-center items-center mt-4">
 						<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
 					</div>
@@ -536,9 +643,7 @@ function TorrentsPage() {
 										: '';
 								return (
 									<tr key={torrent.id} className="border-t-2 hover:bg-yellow-100">
-										<td className="border px-4 py-2">
-											{torrent.id.substring(0, 3)}
-										</td>
+										<td className="border px-4 py-2">{torrent.id}</td>
 										<td className="border px-4 py-2">
 											{!['Invalid Magnet', 'Magnet'].includes(
 												torrent.filename
@@ -601,7 +706,11 @@ function TorrentsPage() {
 											<button
 												title="Reinsert"
 												className="mr-2 mb-2 text-green-500"
-												onClick={() => handleReinsertTorrent(torrent.id)}
+												onClick={() =>
+													torrent.id.startsWith('rd')
+														? handleReinsertTorrent(torrent.id)
+														: handleRestartTorrent(torrent.id)
+												}
 											>
 												<FaArrowRight />
 											</button>

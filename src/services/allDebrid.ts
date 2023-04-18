@@ -220,7 +220,7 @@ interface MagnetDeleteResponse {
 	message: string;
 }
 
-export const deleteMagnet = async (apikey: string, id: number): Promise<MagnetDeleteResponse> => {
+export const deleteMagnet = async (apikey: string, id: string): Promise<MagnetDeleteResponse> => {
 	try {
 		const response = await axios.get<MagnetDeleteResponse>(
 			`${config.allDebridHostname}/v4/magnet/delete`,
@@ -250,7 +250,7 @@ interface MagnetRestartResponse {
 
 export const restartMagnet = async (
 	apikey: string,
-	id: number | number[]
+	id: string | string[]
 ): Promise<MagnetRestartResponse> => {
 	try {
 		const response = await axios.get<MagnetRestartResponse>(
