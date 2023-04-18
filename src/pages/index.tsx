@@ -48,7 +48,9 @@ function IndexPage() {
 						<p className="text-lg font-bold mb-4">
 							Welcome back,{' '}
 							{rdUser ? (
-								<>Real-Debrid: {rdUser.username}</>
+								<span className="text-green">
+									Real-Debrid: {rdUser.username} {rdUser.premium ? '✅' : '❌'}
+								</span>
 							) : (
 								<Link
 									href="/realdebrid/login"
@@ -58,7 +60,9 @@ function IndexPage() {
 								</Link>
 							)}{' '}
 							{adUser ? (
-								<>AllDebrid: {adUser.username}</>
+								<span className="text-yellow">
+									AllDebrid: {adUser.username} {adUser.isPremium ? '✅' : '❌'}
+								</span>
 							) : (
 								<Link
 									href="/alldebrid/login"
