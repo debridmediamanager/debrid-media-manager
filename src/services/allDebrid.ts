@@ -43,17 +43,28 @@ interface PinInfo {
 }
 
 export const checkPin = async (pin: string, check: string) => {
-	const agent = config.allDebridAgent; // Your software user-agent.
-	const apiEndpoint = `${config.allDebridHostname}/v4/pin/check?agent=${agent}&check=${check}&pin=${pin}`;
-
+	const checkEndpoint = `${config.allDebridHostname}/v4/pin/check`;
 	try {
-		let pinInfo = await axios.get<PinInfo>(apiEndpoint);
-		let pinCheck = await axios.get<PinCheckResponse>(pinInfo.data.check_url);
+		let pinCheck = await axios.get<PinCheckResponse>(checkEndpoint, {
+			params: {
+				agent: config.allDebridAgent,
+				check,
+				pin,
+			},
+		});
 
 		while (!pinCheck.data.data.activated) {
 			await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds before polling again.
-			return (await axios.get<PinCheckResponse>(pinInfo.data.check_url)).data;
+			pinCheck = await axios.get<PinCheckResponse>(checkEndpoint, {
+				params: {
+					agent: config.allDebridAgent,
+					check,
+					pin,
+				},
+			});
 		}
+
+		return pinCheck.data;
 	} catch (error) {
 		console.error('Error checking PIN:', (error as any).message);
 		throw error;
@@ -80,7 +91,7 @@ interface UserResponse {
 	};
 }
 
-export const getUserInfo = async (apikey: string) => {
+export const getAllDebridUser = async (apikey: string) => {
 	const agent = config.allDebridAgent; // Your software user-agent.
 	const apiEndpoint = `${config.allDebridHostname}/v4/user?agent=${agent}&apikey=${apikey}`;
 

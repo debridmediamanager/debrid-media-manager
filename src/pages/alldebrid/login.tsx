@@ -21,17 +21,17 @@ export default function AllDebridLoginPage() {
 				setPinCodeInputUrl(pinResponse.user_url);
 				setPinCode(pinResponse.pin);
 
-				// Save user code to clipboard
+				// Save pin code to clipboard
 				try {
 					await navigator.clipboard.writeText(pinResponse.pin);
 				} catch (error) {
 					setIsCopied(true);
-					console.error('Error saving user code to clipboard:', (error as any).message);
+					console.error('Error saving pin code to clipboard:', (error as any).message);
 				}
 
-				const credentialsResponse = await checkPin(pinResponse.pin, pinResponse.check);
-				if (credentialsResponse) {
-					setApiKey(credentialsResponse.data.apikey!);
+				const checkResponse = await checkPin(pinResponse.pin, pinResponse.check);
+				if (checkResponse) {
+					setApiKey(checkResponse.data.apikey!, checkResponse.data.expires_in);
 				}
 			}
 		};
