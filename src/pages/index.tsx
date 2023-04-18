@@ -1,6 +1,7 @@
 import { useCurrentUser } from '@/hooks/auth';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 function IndexPage() {
@@ -44,9 +45,30 @@ function IndexPage() {
 				<>
 					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager</h1>
 					<div className="flex flex-col items-center">
-						<p className="text-lg font-bold">
-							Welcome back, {(rdUser || adUser)!.username}!
+						<p className="text-lg font-bold mb-4">
+							Welcome back,{' '}
+							{rdUser ? (
+								<>Real-Debrid: {rdUser.username}</>
+							) : (
+								<Link
+									href="/realdebrid/login"
+									className="px-4 py-2 m-2 text-sm text-white bg-gray-500 rounded hover:bg-gray-600"
+								>
+									Login with Real-Debrid
+								</Link>
+							)}{' '}
+							{adUser ? (
+								<>AllDebrid: {adUser.username}</>
+							) : (
+								<Link
+									href="/alldebrid/login"
+									className="px-4 py-2 m-2 text-white bg-gray-500 rounded hover:bg-gray-600"
+								>
+									Login with AllDebrid
+								</Link>
+							)}
 						</p>
+						<hr className="w-full" />
 						<div className="flex mt-4">
 							<button
 								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
@@ -60,8 +82,6 @@ function IndexPage() {
 							>
 								Search
 							</button>
-						</div>
-						<div className="flex mt-4">
 							<button
 								className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
 								onClick={handleLogout}
