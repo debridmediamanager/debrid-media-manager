@@ -52,10 +52,8 @@ export const checkPin = async (pin: string, check: string) => {
 
 		while (!pinCheck.data.data.activated) {
 			await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds before polling again.
-			pinCheck = await axios.get<PinCheckResponse>(pinInfo.data.check_url);
+			return (await axios.get<PinCheckResponse>(pinInfo.data.check_url)).data;
 		}
-
-		return pinCheck.data.data.apikey;
 	} catch (error) {
 		console.error('Error checking PIN:', (error as any).message);
 		throw error;

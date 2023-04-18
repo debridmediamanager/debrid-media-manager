@@ -78,14 +78,6 @@ export default function RealDebridLoginPage() {
 		})();
 	}, [accessToken, router]);
 
-	useEffect(() => {
-		(async () => {
-			if (accessToken) {
-				await router.push('/');
-			}
-		})();
-	}, [accessToken, router]);
-
 	const handleAuthorize = () => {
 		if (verificationUrl) {
 			window.open(verificationUrl, '_blank');

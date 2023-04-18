@@ -2,7 +2,7 @@ import { useDebridLogin } from '@/hooks/auth';
 import Head from 'next/head';
 
 export default function StartPage() {
-	const { loginWithRealDebrid } = useDebridLogin();
+	const { loginWithRealDebrid, loginWithAllDebrid } = useDebridLogin();
 
 	return (
 		<div className="flex flex-col items-center justify-center h-screen">
@@ -70,9 +70,8 @@ export default function StartPage() {
 				{/* AllDebrid */}
 				<div className="flex flex-row">
 					<button
-						className="px-4 py-2 m-2 text-white bg-blue-500 disabled:opacity-50 disabled:bg-gray-500 rounded hover:bg-blue-600"
-						disabled
-						title="Coming soon!"
+						className="px-4 py-2 m-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+						onClick={loginWithAllDebrid}
 					>
 						Login with AllDebrid
 					</button>
