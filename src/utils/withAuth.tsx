@@ -1,4 +1,4 @@
-import { useRealDebridAccessToken } from '@/hooks/auth';
+import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useRouter } from 'next/router';
 import { ComponentType, useEffect, useState } from 'react';
 
@@ -10,10 +10,12 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 		const router = useRouter();
 		const [isLoading, setIsLoading] = useState(true);
 		const accessToken = useRealDebridAccessToken();
+		const apiKey = useAllDebridApiKey();
 
 		useEffect(() => {
 			if (
 				!accessToken &&
+				!apiKey &&
 				router.pathname !== START_ROUTE &&
 				!router.pathname.endsWith(LOGIN_ROUTE)
 			) {
@@ -21,7 +23,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			} else {
 				setIsLoading(false);
 			}
-		}, [accessToken, router]);
+		}, [accessToken, apiKey, router]);
 
 		if (isLoading) {
 			// Render a loading indicator or placeholder on initial load

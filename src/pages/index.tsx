@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 function IndexPage() {
 	const router = useRouter();
-	const user = useCurrentUser();
+	const { realDebrid: rdUser, allDebrid: adUser } = useCurrentUser();
 
 	const handleLibraryClick = () => {
 		router.push('/library');
@@ -40,11 +40,13 @@ function IndexPage() {
 				/>
 			</svg>
 			{/* this is made by ChatGPT */}
-			{user ? (
+			{rdUser || adUser ? (
 				<>
 					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager</h1>
 					<div className="flex flex-col items-center">
-						<p className="text-lg font-bold">Welcome back, {user.username}!</p>
+						<p className="text-lg font-bold">
+							Welcome back, {(rdUser || adUser)!.username}!
+						</p>
 						<div className="flex mt-4">
 							<button
 								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
