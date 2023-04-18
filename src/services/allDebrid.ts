@@ -124,11 +124,11 @@ interface MagnetUploadResponse {
 	};
 }
 
-export const uploadMagnet = async (apiKey: string, magnets: string[]) => {
+export const uploadMagnet = async (apikey: string, magnets: string[]) => {
 	try {
 		const queryParams = new URLSearchParams({
 			agent: config.allDebridAgent,
-			apikey: apiKey,
+			apikey,
 		});
 
 		for (const magnet of magnets) {
@@ -149,33 +149,39 @@ interface MagnetStatus {
 	id: number;
 	filename: string;
 	size: number;
+	hash: string;
 	status: string;
 	statusCode: number;
 	downloaded: number;
 	uploaded: number;
 	seeders: number;
 	downloadSpeed: number;
+	processingPerc: number;
 	uploadSpeed: number;
 	uploadDate: number;
 	completionDate: number;
 	links: LinkObject[];
+	type: string;
+	notified: boolean;
+	version: number;
 }
 
 interface LinkObject {
 	link: string;
 	filename: string;
 	size: number;
-	files: { n: string; e?: { n: string }[] }[];
+	files: { n: string; s?: number }[];
 }
 
 interface MagnetStatusResponse {
-	magnets: MagnetStatus[];
-	counter?: number;
-	fullsync?: boolean;
+	status: string;
+	data: {
+		magnets: MagnetStatus[];
+	};
 }
 
 export const getMagnetStatus = async (
-	apiKey: string,
+	apikey: string,
 	magnetId?: number,
 	statusFilter?: string,
 	session?: number,
@@ -183,7 +189,7 @@ export const getMagnetStatus = async (
 ): Promise<MagnetStatusResponse> => {
 	const params: Record<string, string | number> = {
 		agent: config.allDebridAgent,
-		apikey: apiKey,
+		apikey,
 	};
 	if (magnetId) {
 		params.id = magnetId;
@@ -214,18 +220,14 @@ interface MagnetDeleteResponse {
 	message: string;
 }
 
-export const deleteMagnet = async (
-	apikey: string,
-	id: number,
-	agent: string
-): Promise<MagnetDeleteResponse> => {
+export const deleteMagnet = async (apikey: string, id: number): Promise<MagnetDeleteResponse> => {
 	try {
 		const response = await axios.get<MagnetDeleteResponse>(
 			`${config.allDebridHostname}/v4/magnet/delete`,
 			{
 				params: {
 					id,
-					agent,
+					agent: config.allDebridAgent,
 					apikey,
 				},
 			}
@@ -248,17 +250,15 @@ interface MagnetRestartResponse {
 
 export const restartMagnet = async (
 	apikey: string,
-	id: number | number[],
-	agent: string
+	id: number | number[]
 ): Promise<MagnetRestartResponse> => {
 	try {
 		const response = await axios.get<MagnetRestartResponse>(
 			`${config.allDebridHostname}/v4/magnet/restart`,
 			{
 				params: {
-					id: id,
-					ids: Array.isArray(id) ? id : undefined,
-					agent,
+					ids: Array.isArray(id) ? id : [id],
+					agent: config.allDebridAgent,
 					apikey,
 				},
 			}
@@ -291,7 +291,7 @@ interface InstantAvailabilityResponse {
 }
 
 export const getInstantAvailability = async (
-	apiKey: string,
+	apikey: string,
 	magnets: string[]
 ): Promise<InstantAvailabilityResponse> => {
 	try {
@@ -300,8 +300,8 @@ export const getInstantAvailability = async (
 			{
 				params: {
 					agent: config.allDebridAgent,
-					apikey: apiKey,
-					magnets: magnets,
+					apikey,
+					magnets,
 				},
 			}
 		);

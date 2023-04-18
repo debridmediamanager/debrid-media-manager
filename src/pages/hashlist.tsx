@@ -43,13 +43,13 @@ function TorrentsPage() {
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'title', direction: 'asc' });
-	const [accessToken] = useLocalStorage<string>('accessToken');
+	const [accessToken] = useLocalStorage<string>('rd:accessToken');
 	const [movieCount, setMovieCount] = useState<number>(0);
 	const [tvCount, setTvCount] = useState<number>(0);
-	const [movieGrouping, _1] = useState<Record<string, number>>({});
-	const [tvGroupingByEpisode, _2] = useState<Record<string, number>>({});
-	const [tvGroupingByTitle, _3] = useState<Record<string, number>>({});
-	const [hasDupes, _4] = useState<Array<string>>([]);
+	const [movieGrouping] = useState<Record<string, number>>({});
+	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
+	const [tvGroupingByTitle] = useState<Record<string, number>>({});
+	const [hasDupes] = useState<Array<string>>([]);
 	const [totalBytes, setTotalBytes] = useState<number>(0);
 	const [cachedTorrentInfo, setTorrentInfo] = useLocalStorage<Record<string, CachedTorrentInfo>>(
 		'userTorrentsList',

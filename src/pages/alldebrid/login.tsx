@@ -11,7 +11,7 @@ export default function AllDebridLoginPage() {
 	const [pinCodeInputUrl, setPinCodeInputUrl] = useState('');
 	const [pinCode, setPinCode] = useState('');
 	const router = useRouter();
-	const [apiKey, setApiKey] = useLocalStorage<string>('apiKey');
+	const [apiKey, setApiKey] = useLocalStorage<string>('ad:apiKey');
 	const [isCopied, setIsCopied] = useState(false);
 
 	useEffect(() => {

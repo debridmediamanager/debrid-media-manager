@@ -4,7 +4,7 @@ const nextConfig = {
 	publicRuntimeConfig: {
 		// Will be available on both server and client
 		realDebridHostname: 'https://corsproxy.org/?https://api.real-debrid.com',
-		allDebridHostname: 'https://corsproxy.org/?https://api.alldebrid.com',
+		allDebridHostname: 'https://api.alldebrid.com',
 		allDebridAgent: 'debridMediaManager',
 	},
 };

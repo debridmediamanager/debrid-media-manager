@@ -46,10 +46,10 @@ export const useDebridLogin = () => {
 };
 
 export const useRealDebridAccessToken = () => {
-	const [clientId] = useLocalStorage<string>('clientId');
-	const [clientSecret] = useLocalStorage<string>('clientSecret');
-	const [refreshToken] = useLocalStorage<string>('refreshToken');
-	const [accessToken, setAccessToken] = useLocalStorage<string>('accessToken');
+	const [clientId] = useLocalStorage<string>('rd:clientId');
+	const [clientSecret] = useLocalStorage<string>('rd:clientSecret');
+	const [refreshToken] = useLocalStorage<string>('rd:refreshToken');
+	const [accessToken, setAccessToken] = useLocalStorage<string>('rd:accessToken');
 
 	useEffect(() => {
 		(async () => {
@@ -70,7 +70,7 @@ export const useRealDebridAccessToken = () => {
 };
 
 export const useAllDebridApiKey = () => {
-	const [apiKey] = useLocalStorage<string>('apiKey');
+	const [apiKey] = useLocalStorage<string>('ad:apiKey');
 	return apiKey;
 };
 
@@ -78,8 +78,8 @@ export const useCurrentUser = () => {
 	const [rdUser, setRdUser] = useState<RealDebridUser | null>(null);
 	const [adUser, setAdUser] = useState<AllDebridUser | null>(null);
 	const router = useRouter();
-	const [accessToken] = useLocalStorage<string>('accessToken');
-	const [apiKey] = useLocalStorage<string>('apiKey');
+	const [accessToken] = useLocalStorage<string>('rd:accessToken');
+	const [apiKey] = useLocalStorage<string>('ad:apiKey');
 
 	useEffect(() => {
 		(async () => {
