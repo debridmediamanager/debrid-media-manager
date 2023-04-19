@@ -1,3 +1,4 @@
+import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { deleteMagnet, getMagnetStatus, restartMagnet } from '@/services/allDebrid';
 import { createShortUrl } from '@/services/hashlists';
@@ -59,7 +60,7 @@ function TorrentsPage() {
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'added', direction: 'desc' });
 
 	// keys
-	const [rdKey] = useLocalStorage<string>('rd:accessToken');
+	const rdKey = useRealDebridAccessToken();
 	const [adKey] = useLocalStorage<string>('ad:apiKey');
 
 	const [movieCount, setMovieCount] = useState<number>(0);
@@ -72,7 +73,7 @@ function TorrentsPage() {
 	// stats
 	const [totalBytes, setTotalBytes] = useState<number>(0);
 
-	const [_, cacheUserTorrentsList] = useLocalStorage<Record<string, CachedTorrentInfo>>(
+	const [_, setTorrentCache] = useLocalStorage<Record<string, CachedTorrentInfo>>(
 		'userTorrentsList',
 		{}
 	);
@@ -102,7 +103,7 @@ function TorrentsPage() {
 				) as UserTorrent[];
 
 				setUserTorrentsList((prev) => [...prev, ...torrents]);
-				cacheUserTorrentsList((prev) => ({
+				setTorrentCache((prev) => ({
 					...prev,
 					...torrents.reduce<Record<string, CachedTorrentInfo>>((cache, t) => {
 						cache[t.hash] = t;
@@ -169,7 +170,7 @@ function TorrentsPage() {
 				}) as UserTorrent[];
 
 				setUserTorrentsList((prev) => [...prev, ...torrents]);
-				cacheUserTorrentsList((prev) => ({
+				setTorrentCache((prev) => ({
 					...prev,
 					...torrents.reduce<Record<string, CachedTorrentInfo>>((cache, t) => {
 						cache[t.hash] = t;
@@ -276,7 +277,7 @@ function TorrentsPage() {
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
 			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
-			cacheUserTorrentsList((prevCache) => {
+			setTorrentCache((prevCache) => {
 				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id) || '';
 				delete prevCache[hash];
 				return prevCache;
@@ -343,7 +344,7 @@ function TorrentsPage() {
 				newList[index].status = 'downloading';
 				return newList;
 			});
-			cacheUserTorrentsList((prevCache) => {
+			setTorrentCache((prevCache) => {
 				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id) || '';
 				prevCache[hash].status = 'downloading';
 				return prevCache;

@@ -38,7 +38,7 @@ function Search() {
 	const [loading, setLoading] = useState(false);
 	const [cancelTokenSource, setCancelTokenSource] = useState<CancelTokenSource | null>(null);
 	const [myAccount, setMyAccount] = useMyAccount();
-	const [cachedTorrentInfo, setTorrentInfo] = useLocalStorage<Record<string, CachedTorrentInfo>>(
+	const [torrentCache, setTorrentCache] = useLocalStorage<Record<string, CachedTorrentInfo>>(
 		'userTorrentsList',
 		{}
 	);
@@ -149,7 +149,7 @@ function Search() {
 		try {
 			const id = await addHashAsMagnet(accessToken!, hash);
 			if (!disableToast) toast.success('Successfully added as magnet!');
-			setTorrentInfo(
+			setTorrentCache(
 				(prev) =>
 					({
 						...prev,
@@ -169,18 +169,18 @@ function Search() {
 		}
 	};
 
-	const inLibrary = (hash: string) => hash in cachedTorrentInfo!;
+	const inLibrary = (hash: string) => hash in torrentCache!;
 	const notInLibrary = (hash: string) => !inLibrary(hash);
 	const isDownloaded = (hash: string) =>
-		inLibrary(hash) && cachedTorrentInfo![hash].status === 'downloaded';
+		inLibrary(hash) && torrentCache![hash].status === 'downloaded';
 	const isDownloading = (hash: string) =>
-		inLibrary(hash) && cachedTorrentInfo![hash].status !== 'downloaded';
+		inLibrary(hash) && torrentCache![hash].status !== 'downloaded';
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
 			await deleteTorrent(accessToken!, id);
 			if (!disableToast) toast.success(`Download canceled (${id.substring(0, 3)})`);
-			setTorrentInfo((prevCache) => {
+			setTorrentCache((prevCache) => {
 				const updatedCache = { ...prevCache };
 				const hash = Object.keys(updatedCache).find((key) => updatedCache[key].id === id);
 				delete updatedCache[hash!];
@@ -308,20 +308,20 @@ function Search() {
 										<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 											{(isDownloaded(result.hash) ||
 												(inLibrary(result.hash) &&
-													!cachedTorrentInfo![result.hash].id)) &&
-												`${cachedTorrentInfo![result.hash].status}`}
+													!torrentCache![result.hash].id)) &&
+												`${torrentCache![result.hash].status}`}
 											{isDownloading(result.hash) &&
-												cachedTorrentInfo![result.hash].id && (
+												torrentCache![result.hash].id && (
 													<button
 														className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
 														onClick={() => {
 															handleDeleteTorrent(
-																cachedTorrentInfo![result.hash].id
+																torrentCache![result.hash].id
 															);
 														}}
 													>
 														Cancel download (
-														{cachedTorrentInfo![result.hash].progress}%)
+														{torrentCache![result.hash].progress}%)
 													</button>
 												)}
 											{notInLibrary(result.hash) && (
