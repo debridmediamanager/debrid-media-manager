@@ -14,7 +14,7 @@ services:
       replicas: 1
 
   web:
-    image: debridmediamanager/debrid-media-manager:arm64-7
+    image: debridmediamanager/debrid-media-manager:latest
     ports:
       - 3000:3000
     env_file:
