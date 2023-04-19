@@ -96,9 +96,6 @@ export async function fetchSearchResults(
 		try {
 			const cached = await cache.getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
 			if (cached) {
-				if (cached.length === 0) {
-					cache.deleteCachedJsonValue(finalQuery.split(' '));
-				}
 				return cached;
 			}
 		} catch (e: any) {
