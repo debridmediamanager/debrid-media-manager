@@ -136,6 +136,7 @@ function Search() {
 				availabilityChecks.push(
 					getInstantlyAvailableFiles(rdKey, ...hashes).then((rdAvailabilityResp) => {
 						for (const masterHash in rdAvailabilityResp) {
+							if ('rd' in rdAvailabilityResp[masterHash] === false) continue;
 							const variants = rdAvailabilityResp[masterHash]['rd'];
 							if (variants.length) availability[masterHash] = 'no_videos';
 							for (const variant of variants) {
