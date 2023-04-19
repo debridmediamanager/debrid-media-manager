@@ -1,6 +1,6 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
-import { uploadMagnet } from '@/services/allDebrid';
+import { deleteMagnet, uploadMagnet } from '@/services/allDebrid';
 import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
@@ -284,9 +284,10 @@ function TorrentsPage() {
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
-			if (!rdKey) throw new Error('no_rd_key');
-			await deleteTorrent(rdKey, id);
-			if (!disableToast) toast.success(`Download canceled (${id.substring(0, 3)})`);
+			if (!rdKey && !adKey) throw new Error('no_keys');
+			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
+			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
+			if (!disableToast) toast.success(`Download canceled (${id})`);
 			setTorrentCache((prevCache) => {
 				const updatedCache = { ...prevCache };
 				const hash = Object.keys(updatedCache).find((key) => updatedCache[key].id === id);
@@ -294,7 +295,7 @@ function TorrentsPage() {
 				return updatedCache;
 			});
 		} catch (error) {
-			if (!disableToast) toast.error(`Error deleting torrent (${id.substring(0, 3)})`);
+			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
 			throw error;
 		}
 	};
@@ -302,7 +303,7 @@ function TorrentsPage() {
 	const handleSelectFiles = async (id: string, disableToast: boolean = false) => {
 		try {
 			if (!rdKey) throw new Error('no_rd_key');
-			const response = await getTorrentInfo(rdKey, id);
+			const response = await getTorrentInfo(rdKey, id.substring(3));
 
 			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
 				(file) => file.id
@@ -312,15 +313,15 @@ function TorrentsPage() {
 				throw new Error('no_files_for_selection');
 			}
 
-			await selectFiles(rdKey, id, selectedFiles);
+			await selectFiles(rdKey, id.substring(3), selectedFiles);
 		} catch (error) {
 			if ((error as Error).message === 'no_files_for_selection') {
 				if (!disableToast)
-					toast.error(`No files for selection, deleting (${id.substring(0, 3)})`, {
+					toast.error(`No files for selection, deleting (${id})`, {
 						duration: 5000,
 					});
 			} else {
-				if (!disableToast) toast.error(`Error selecting files (${id.substring(0, 3)})`);
+				if (!disableToast) toast.error(`Error selecting files (${id})`);
 			}
 			throw error;
 		}
