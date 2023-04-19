@@ -47,8 +47,8 @@ function TorrentsPage() {
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'title', direction: 'asc' });
 
-	const accessToken = useRealDebridAccessToken();
-	const apiKey = useAllDebridApiKey();
+	const rdKey = useRealDebridAccessToken();
+	const adKey = useAllDebridApiKey();
 
 	const [movieCount, setMovieCount] = useState<number>(0);
 	const [tvCount, setTvCount] = useState<number>(0);
@@ -98,7 +98,7 @@ function TorrentsPage() {
 			}
 		})();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [accessToken]);
+	}, [rdKey]);
 
 	// aggregate metadata
 	useEffect(() => {
@@ -194,7 +194,8 @@ function TorrentsPage() {
 
 	const handleAddAsMagnetInRd = async (hash: string, disableToast: boolean = false) => {
 		try {
-			const id = await addHashAsMagnet(accessToken!, hash);
+			if (!rdKey) throw new Error('no_rd_key');
+			const id = await addHashAsMagnet(rdKey, hash);
 			if (!disableToast) toast.success('Successfully added as magnet!');
 			setTorrentCache(
 				(prev) =>
@@ -215,7 +216,8 @@ function TorrentsPage() {
 
 	const handleAddAsMagnetInAd = async (hash: string, disableToast: boolean = false) => {
 		try {
-			await uploadMagnet(accessToken!, [hash]);
+			if (!rdKey) throw new Error('no_rd_key');
+			await uploadMagnet(rdKey, [hash]);
 			if (!disableToast) toast.success('Successfully added as magnet!');
 			setTorrentCache(
 				(prev) =>
@@ -282,7 +284,8 @@ function TorrentsPage() {
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
-			await deleteTorrent(accessToken!, id);
+			if (!rdKey) throw new Error('no_rd_key');
+			await deleteTorrent(rdKey, id);
 			if (!disableToast) toast.success(`Download canceled (${id.substring(0, 3)})`);
 			setTorrentCache((prevCache) => {
 				const updatedCache = { ...prevCache };
@@ -298,7 +301,8 @@ function TorrentsPage() {
 
 	const handleSelectFiles = async (id: string, disableToast: boolean = false) => {
 		try {
-			const response = await getTorrentInfo(accessToken!, id);
+			if (!rdKey) throw new Error('no_rd_key');
+			const response = await getTorrentInfo(rdKey, id);
 
 			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
 				(file) => file.id
@@ -308,7 +312,7 @@ function TorrentsPage() {
 				throw new Error('no_files_for_selection');
 			}
 
-			await selectFiles(accessToken!, id, selectedFiles);
+			await selectFiles(rdKey, id, selectedFiles);
 		} catch (error) {
 			if ((error as Error).message === 'no_files_for_selection') {
 				if (!disableToast)
@@ -356,7 +360,7 @@ function TorrentsPage() {
 				>
 					Show {tvCount} TV shows
 				</Link>
-				{accessToken && (
+				{rdKey && (
 					<button
 						className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ${
 							filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
@@ -367,7 +371,7 @@ function TorrentsPage() {
 						Download all torrents in Real-Debrid
 					</button>
 				)}
-				{apiKey && (
+				{adKey && (
 					<button
 						className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ${
 							filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
@@ -476,7 +480,7 @@ function TorrentsPage() {
 										<td className="border px-4 py-2">
 											{(isDownloaded(t.hash) || isDownloading(t.hash)) &&
 												`${torrentCache![t.hash].status}`}
-											{accessToken && notInLibrary(t.hash) && (
+											{rdKey && notInLibrary(t.hash) && (
 												<button
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 													onClick={() => {
@@ -486,7 +490,7 @@ function TorrentsPage() {
 													Download in RD
 												</button>
 											)}
-											{apiKey && notInLibrary(t.hash) && (
+											{adKey && notInLibrary(t.hash) && (
 												<button
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 													onClick={() => {

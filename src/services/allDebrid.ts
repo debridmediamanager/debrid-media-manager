@@ -270,7 +270,7 @@ export const restartMagnet = async (
 	}
 };
 
-interface MagnetFile {
+export interface MagnetFile {
 	n: string;
 	s: number;
 }
@@ -287,7 +287,8 @@ interface MagnetData {
 }
 
 interface InstantAvailabilityResponse {
-	magnets: MagnetData[];
+	status: string;
+	data: { magnets: MagnetData[] };
 }
 
 export const getInstantAvailability = async (
