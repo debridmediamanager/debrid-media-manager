@@ -1,4 +1,4 @@
-import { useRealDebridAccessToken } from '@/hooks/auth';
+import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { deleteMagnet, getMagnetStatus, restartMagnet } from '@/services/allDebrid';
 import { createShortUrl } from '@/services/hashlists';
@@ -61,7 +61,7 @@ function TorrentsPage() {
 
 	// keys
 	const rdKey = useRealDebridAccessToken();
-	const [adKey] = useLocalStorage<string>('ad:apiKey');
+	const adKey = useAllDebridApiKey();
 
 	const [movieCount, setMovieCount] = useState<number>(0);
 	const [tvCount, setTvCount] = useState<number>(0);
