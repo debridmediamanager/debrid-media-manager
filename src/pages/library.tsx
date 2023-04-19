@@ -276,15 +276,16 @@ function TorrentsPage() {
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
+			if (!rdKey && !adKey) throw new Error('no_keys');
 			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
+			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
+			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
+			if (!disableToast) toast.success(`Torrent deleted (${id})`);
 			setTorrentCache((prevCache) => {
 				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id) || '';
 				delete prevCache[hash];
 				return prevCache;
 			});
-			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
-			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
-			if (!disableToast) toast.success(`Torrent deleted (${id})`);
 		} catch (error) {
 			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
 			throw error;
@@ -327,7 +328,7 @@ function TorrentsPage() {
 	const handleSelectFiles = async (id: string) => {
 		try {
 			if (!rdKey) throw new Error('no_rd_key');
-			const response = await getTorrentInfo(rdKey, id);
+			const response = await getTorrentInfo(rdKey, id.substring(3));
 
 			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
 				(file) => file.id
@@ -337,7 +338,7 @@ function TorrentsPage() {
 				throw new Error('no_files_for_selection');
 			}
 
-			await selectFiles(rdKey, id, selectedFiles);
+			await selectFiles(rdKey, id.substring(3), selectedFiles);
 			setUserTorrentsList((prevList) => {
 				const newList = [...prevList];
 				const index = newList.findIndex((t) => t.id === id);
