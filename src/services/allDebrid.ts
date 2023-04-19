@@ -17,11 +17,11 @@ interface PinResponse {
 
 export const getPin = async () => {
 	try {
-		const response = await axios.get<PinResponse>(`${config.allDebridHostname}/v4/pin/get`, {
-			params: {
-				agent: config.allDebridAgent,
-			},
-		});
+		let endpoint = `${config.allDebridHostname}/v4/pin/get?agent=${config.allDebridAgent}`;
+		if (config.bypassHostname) {
+			endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
+		}
+		const response = await axios.get<PinResponse>(endpoint);
 		return response.data.data;
 	} catch (error) {
 		console.error('Error fetching PIN:', (error as any).message);
@@ -38,30 +38,17 @@ interface PinCheckResponse {
 	};
 }
 
-interface PinInfo {
-	check_url: string;
-}
-
 export const checkPin = async (pin: string, check: string) => {
-	const checkEndpoint = `${config.allDebridHostname}/v4/pin/check`;
+	let endpoint = `${config.allDebridHostname}/v4/pin/check?agent=${config.allDebridAgent}&check=${check}&pin=${pin}`;
+	if (config.bypassHostname) {
+		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
+	}
 	try {
-		let pinCheck = await axios.get<PinCheckResponse>(checkEndpoint, {
-			params: {
-				agent: config.allDebridAgent,
-				check,
-				pin,
-			},
-		});
+		let pinCheck = await axios.get<PinCheckResponse>(endpoint);
 
 		while (!pinCheck.data.data.activated) {
 			await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds before polling again.
-			pinCheck = await axios.get<PinCheckResponse>(checkEndpoint, {
-				params: {
-					agent: config.allDebridAgent,
-					check,
-					pin,
-				},
-			});
+			pinCheck = await axios.get<PinCheckResponse>(endpoint);
 		}
 
 		return pinCheck.data;
@@ -92,11 +79,12 @@ interface UserResponse {
 }
 
 export const getAllDebridUser = async (apikey: string) => {
-	const agent = config.allDebridAgent; // Your software user-agent.
-	const apiEndpoint = `${config.allDebridHostname}/v4/user?agent=${agent}&apikey=${apikey}`;
-
+	let endpoint = `${config.allDebridHostname}/v4/user?agent=${config.allDebridAgent}&apikey=${apikey}`;
+	if (config.bypassHostname) {
+		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
+	}
 	try {
-		const response = await axios.get<UserResponse>(apiEndpoint);
+		const response = await axios.get<UserResponse>(endpoint);
 		return response.data.data.user;
 	} catch (error) {
 		console.error('Error fetching user info:', (error as any).message);
@@ -124,20 +112,16 @@ interface MagnetUploadResponse {
 	};
 }
 
-export const uploadMagnet = async (apikey: string, magnets: string[]) => {
+export const uploadMagnet = async (apikey: string, hashes: string[]) => {
 	try {
-		const queryParams = new URLSearchParams({
-			agent: config.allDebridAgent,
-			apikey,
-		});
-
-		for (const magnet of magnets) {
-			queryParams.append('magnets[]', magnet);
+		let endpoint = `${config.allDebridHostname}/v4/magnet/upload?agent=${config.allDebridAgent}&apikey=${apikey}`;
+		for (const hash of hashes) {
+			endpoint += `&magnets[]=${hash}`;
 		}
-
-		const response = await axios.post<MagnetUploadResponse>(
-			`${config.allDebridHostname}/v4/magnet/upload?${queryParams.toString()}`
-		);
+		if (config.bypassHostname) {
+			endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
+		}
+		const response = await axios.post<MagnetUploadResponse>(endpoint);
 		return response.data;
 	} catch (error) {
 		console.error('Error uploading magnet:', (error as any).message);
@@ -187,28 +171,23 @@ export const getMagnetStatus = async (
 	session?: number,
 	counter?: number
 ): Promise<MagnetStatusResponse> => {
-	const params: Record<string, string | number> = {
-		agent: config.allDebridAgent,
-		apikey,
-	};
+	let endpoint = `${config.allDebridHostname}/v4/user?agent=${config.allDebridAgent}&apikey=${apikey}`;
 	if (magnetId) {
-		params.id = magnetId;
+		endpoint += `&id=${magnetId}`;
 	} else if (statusFilter) {
-		params.status = statusFilter;
+		endpoint += `&status=${statusFilter}`;
 	}
 	if (session) {
-		params.session = session;
+		endpoint += `&session=${session}`;
 	}
 	if (counter) {
-		params.counter = counter;
+		endpoint += `&counter=${counter}`;
+	}
+	if (config.bypassHostname) {
+		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
 	}
 	try {
-		const response = await axios.get<MagnetStatusResponse>(
-			`${config.allDebridHostname}/v4/magnet/status`,
-			{
-				params,
-			}
-		);
+		const response = await axios.get<MagnetStatusResponse>(endpoint);
 		return response.data;
 	} catch (error) {
 		console.error('Error fetching magnet status:', (error as any).message);
@@ -221,17 +200,12 @@ interface MagnetDeleteResponse {
 }
 
 export const deleteMagnet = async (apikey: string, id: string): Promise<MagnetDeleteResponse> => {
+	let endpoint = `${config.allDebridHostname}/v4/magnet/delete?agent=${config.allDebridAgent}&apikey=${apikey}&id=${id}`;
+	if (config.bypassHostname) {
+		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
+	}
 	try {
-		const response = await axios.get<MagnetDeleteResponse>(
-			`${config.allDebridHostname}/v4/magnet/delete`,
-			{
-				params: {
-					id,
-					agent: config.allDebridAgent,
-					apikey,
-				},
-			}
-		);
+		const response = await axios.get<MagnetDeleteResponse>(endpoint);
 		return response.data;
 	} catch (error) {
 		console.error('Error deleting magnet:', (error as any).message);
@@ -248,21 +222,13 @@ interface MagnetRestartResponse {
 	magnet?: number | string;
 }
 
-export const restartMagnet = async (
-	apikey: string,
-	id: string | string[]
-): Promise<MagnetRestartResponse> => {
+export const restartMagnet = async (apikey: string, id: string): Promise<MagnetRestartResponse> => {
+	let endpoint = `${config.allDebridHostname}/v4/magnet/restart?agent=${config.allDebridAgent}&apikey=${apikey}&id=${id}`;
+	if (config.bypassHostname) {
+		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
+	}
 	try {
-		const response = await axios.get<MagnetRestartResponse>(
-			`${config.allDebridHostname}/v4/magnet/restart`,
-			{
-				params: {
-					ids: Array.isArray(id) ? id : [id],
-					agent: config.allDebridAgent,
-					apikey,
-				},
-			}
-		);
+		const response = await axios.get<MagnetRestartResponse>(endpoint);
 		return response.data;
 	} catch (error) {
 		console.error('Error restarting magnet:', (error as any).message);
@@ -293,19 +259,17 @@ interface InstantAvailabilityResponse {
 
 export const getInstantAvailability = async (
 	apikey: string,
-	magnets: string[]
+	hashes: string[]
 ): Promise<InstantAvailabilityResponse> => {
+	let endpoint = `${config.allDebridHostname}/v4/magnet/instant?agent=${config.allDebridAgent}&apikey=${apikey}`;
+	for (const hash of hashes) {
+		endpoint += `&magnets[]=${hash}`;
+	}
+	if (config.bypassHostname) {
+		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
+	}
 	try {
-		const response = await axios.get<InstantAvailabilityResponse>(
-			`${config.allDebridHostname}/v4/magnet/instant`,
-			{
-				params: {
-					agent: config.allDebridAgent,
-					apikey,
-					magnets,
-				},
-			}
-		);
+		const response = await axios.get<InstantAvailabilityResponse>(endpoint);
 		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching magnet availability:', error.message);

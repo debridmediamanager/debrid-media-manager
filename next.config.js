@@ -6,6 +6,7 @@ const nextConfig = {
 		realDebridHostname: 'https://corsproxy.org/?https://api.real-debrid.com',
 		allDebridHostname: 'https://api.alldebrid.com',
 		allDebridAgent: 'debridMediaManager',
+		bypassHostname: 'https://corsproxy.org/?',
 	},
 };
 
