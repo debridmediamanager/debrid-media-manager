@@ -1,6 +1,7 @@
 import useMyAccount, { MyAccount } from '@/hooks/account';
-import { useRealDebridAccessToken } from '@/hooks/auth';
+import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
+import { getInstantAvailability, MagnetFile, uploadMagnet } from '@/services/allDebrid';
 import {
 	addHashAsMagnet,
 	deleteTorrent,
@@ -21,24 +22,27 @@ import { useCallback, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { SearchApiResponse } from './api/search';
 
+type Availability = 'all:available' | 'rd:available' | 'ad:available' | 'unavailable' | 'no_videos';
+
 type SearchResult = {
 	title: string;
 	fileSize: number;
 	hash: string;
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
-	available: boolean;
+	available: Availability;
 };
 
 function Search() {
 	const [query, setQuery] = useState('');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
-	const accessToken = useRealDebridAccessToken();
+	const rdKey = useRealDebridAccessToken();
+	const adKey = useAllDebridApiKey();
 	const [loading, setLoading] = useState(false);
 	const [cancelTokenSource, setCancelTokenSource] = useState<CancelTokenSource | null>(null);
 	const [myAccount, setMyAccount] = useMyAccount();
-	const [cachedTorrentInfo, setTorrentInfo] = useLocalStorage<Record<string, CachedTorrentInfo>>(
+	const [torrentCache, setTorrentCache] = useLocalStorage<Record<string, CachedTorrentInfo>>(
 		'userTorrentsList',
 		{}
 	);
@@ -65,9 +69,9 @@ function Search() {
 					response.data.searchResults.map((result) => result.hash)
 				);
 				setSearchResults(
-					response.data.searchResults.map((r, ifx) => ({
+					response.data.searchResults.map((r) => ({
 						...r,
-						available: availability[ifx],
+						available: availability[r.hash],
 					}))
 				);
 			} else {
@@ -113,43 +117,83 @@ function Search() {
 		};
 	}, [cancelTokenSource]);
 
-	const checkResultsAvailability = async (hashes: string[]): Promise<boolean[]> => {
-		const results: boolean[] = [];
-		try {
-			const response = await getInstantlyAvailableFiles(accessToken!, ...hashes);
-			for (const masterHash in response) {
-				if ('rd' in response[masterHash] === false) {
-					results.push(false);
-					continue;
-				}
+	type HashAvailability = Record<string, Availability>;
 
-				for (const variant of response[masterHash]['rd']) {
-					for (const fileIndex in variant) {
-						const file = variant[fileIndex];
-						if (isVideo({ path: file.filename })) {
-							results.push(true);
-							continue;
+	const checkResultsAvailability = async (hashes: string[]): Promise<HashAvailability> => {
+		const availability = hashes.reduce((acc: HashAvailability, curr: string) => {
+			acc[curr] = 'unavailable';
+			return acc;
+		}, {});
+
+		try {
+			const availabilityChecks = [];
+			if (rdKey)
+				availabilityChecks.push(
+					getInstantlyAvailableFiles(rdKey, ...hashes).then((rdAvailabilityResp) => {
+						for (const masterHash in rdAvailabilityResp) {
+							const variants = rdAvailabilityResp[masterHash]['rd'];
+							if (variants.length) availability[masterHash] = 'no_videos';
+							for (const variant of variants) {
+								for (const fileId in variant) {
+									const file = variant[fileId];
+									if (isVideo({ path: file.filename })) {
+										availability[masterHash] =
+											availability[masterHash] === 'ad:available'
+												? 'all:available'
+												: 'rd:available';
+										break;
+									}
+								}
+							}
 						}
-					}
-				}
-				results.push(false);
-			}
-			return results;
+					})
+				);
+
+			if (adKey)
+				availabilityChecks.push(
+					getInstantAvailability(adKey, hashes).then((adAvailabilityResp) => {
+						for (const magnetData of adAvailabilityResp.data.magnets) {
+							const masterHash = magnetData.hash;
+							const instant = magnetData.instant;
+
+							if (masterHash in availability && instant === true) {
+								availability[masterHash] = magnetData.files?.reduce(
+									(acc: boolean, curr: MagnetFile) => {
+										if (isVideo({ path: curr.n })) {
+											return true;
+										}
+										return acc;
+									},
+									false
+								)
+									? availability[masterHash] === 'rd:available'
+										? 'all:available'
+										: 'ad:available'
+									: 'no_videos';
+							}
+						}
+					})
+				);
+
+			await Promise.all(availabilityChecks);
+
+			return availability;
 		} catch (error) {
 			toast.error('There was an error checking availability. Please try again.');
 			throw error;
 		}
 	};
 
-	const handleAddAsMagnet = async (
+	const handleAddAsMagnetInRd = async (
 		hash: string,
 		instantDownload: boolean = false,
 		disableToast: boolean = false
 	) => {
 		try {
-			const id = await addHashAsMagnet(accessToken!, hash);
+			if (!rdKey) throw new Error('no_rd_key');
+			const id = await addHashAsMagnet(rdKey, hash);
 			if (!disableToast) toast.success('Successfully added as magnet!');
-			setTorrentInfo(
+			setTorrentCache(
 				(prev) =>
 					({
 						...prev,
@@ -169,18 +213,51 @@ function Search() {
 		}
 	};
 
-	const inLibrary = (hash: string) => hash in cachedTorrentInfo!;
+	const handleAddAsMagnetInAd = async (
+		hash: string,
+		instantDownload: boolean = false,
+		disableToast: boolean = false
+	) => {
+		try {
+			if (!adKey) throw new Error('no_ad_key');
+			const id = await uploadMagnet(adKey, [hash]);
+			if (!disableToast) toast.success('Successfully added as magnet!');
+			setTorrentCache(
+				(prev) =>
+					({
+						...prev,
+						[hash]: {
+							id,
+							hash,
+							status: instantDownload ? 'downloaded' : 'downloading',
+							progress: 0,
+						},
+					} as Record<string, CachedTorrentInfo>)
+			);
+		} catch (error) {
+			if (!disableToast)
+				toast.error('There was an error adding as magnet. Please try again.');
+			throw error;
+		}
+	};
+
+	const inLibrary = (hash: string) => hash in torrentCache!;
 	const notInLibrary = (hash: string) => !inLibrary(hash);
 	const isDownloaded = (hash: string) =>
-		inLibrary(hash) && cachedTorrentInfo![hash].status === 'downloaded';
+		inLibrary(hash) && torrentCache![hash].status === 'downloaded';
 	const isDownloading = (hash: string) =>
-		inLibrary(hash) && cachedTorrentInfo![hash].status !== 'downloaded';
+		inLibrary(hash) && torrentCache![hash].status !== 'downloaded';
+	const isAvailableInAd = (result: SearchResult) =>
+		result.available === 'ad:available' || result.available === 'all:available';
+	const isAvailableInRd = (result: SearchResult) =>
+		result.available === 'rd:available' || result.available === 'all:available';
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
-			await deleteTorrent(accessToken!, id);
+			if (!rdKey) throw new Error('no_rd_key');
+			await deleteTorrent(rdKey, id);
 			if (!disableToast) toast.success(`Download canceled (${id.substring(0, 3)})`);
-			setTorrentInfo((prevCache) => {
+			setTorrentCache((prevCache) => {
 				const updatedCache = { ...prevCache };
 				const hash = Object.keys(updatedCache).find((key) => updatedCache[key].id === id);
 				delete updatedCache[hash!];
@@ -194,7 +271,8 @@ function Search() {
 
 	const handleSelectFiles = async (id: string, disableToast: boolean = false) => {
 		try {
-			const response = await getTorrentInfo(accessToken!, id);
+			if (!rdKey) throw new Error('no_rd_key');
+			const response = await getTorrentInfo(rdKey, id);
 			if (response.filename === 'Magnet') return; // no files yet
 
 			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
@@ -205,7 +283,7 @@ function Search() {
 				throw new Error('no_files_for_selection');
 			}
 
-			await selectFiles(accessToken!, id, selectedFiles);
+			await selectFiles(rdKey, id, selectedFiles);
 		} catch (error) {
 			if ((error as Error).message === 'no_files_for_selection') {
 				if (!disableToast)
@@ -308,40 +386,75 @@ function Search() {
 										<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 											{(isDownloaded(result.hash) ||
 												(inLibrary(result.hash) &&
-													!cachedTorrentInfo![result.hash].id)) &&
-												`${cachedTorrentInfo![result.hash].status}`}
+													!torrentCache![result.hash].id)) &&
+												`${torrentCache![result.hash].status}`}
 											{isDownloading(result.hash) &&
-												cachedTorrentInfo![result.hash].id && (
+												torrentCache![result.hash].id && (
 													<button
 														className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
 														onClick={() => {
 															handleDeleteTorrent(
-																cachedTorrentInfo![result.hash].id
+																torrentCache![result.hash].id
 															);
 														}}
 													>
 														Cancel download (
-														{cachedTorrentInfo![result.hash].progress}%)
+														{torrentCache![result.hash].progress}%)
 													</button>
 												)}
 											{notInLibrary(result.hash) && (
-												<button
-													className={`bg-${
-														result.available ? 'green' : 'blue'
-													}-500 hover:bg-${
-														result.available ? 'green' : 'blue'
-													}-700 text-white font-bold py-2 px-4 rounded`}
-													onClick={() => {
-														handleAddAsMagnet(
-															result.hash,
-															result.available
-														);
-													}}
-												>
-													{`${
-														result.available ? 'Instant ' : ''
-													}Download`}
-												</button>
+												<>
+													{rdKey && (
+														<button
+															className={`bg-${
+																isAvailableInRd(result)
+																	? 'green'
+																	: 'blue'
+															}-500 hover:bg-${
+																isAvailableInRd(result)
+																	? 'green'
+																	: 'blue'
+															}-700 text-white font-bold py-2 px-4 rounded`}
+															onClick={() => {
+																handleAddAsMagnetInRd(
+																	result.hash,
+																	isAvailableInRd(result)
+																);
+															}}
+														>
+															{`${
+																isAvailableInRd(result)
+																	? 'Instant '
+																	: ''
+															}Download in RD`}
+														</button>
+													)}
+													{adKey && (
+														<button
+															className={`bg-${
+																isAvailableInAd(result)
+																	? 'green'
+																	: 'blue'
+															}-500 hover:bg-${
+																isAvailableInAd(result)
+																	? 'green'
+																	: 'blue'
+															}-700 text-white font-bold py-2 px-4 rounded`}
+															onClick={() => {
+																handleAddAsMagnetInAd(
+																	result.hash,
+																	isAvailableInAd(result)
+																);
+															}}
+														>
+															{`${
+																isAvailableInAd(result)
+																	? 'Instant '
+																	: ''
+															}Download in AD`}
+														</button>
+													)}
+												</>
 											)}
 										</td>
 									</tr>

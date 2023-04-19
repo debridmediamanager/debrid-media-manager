@@ -9,10 +9,10 @@ export default function RealDebridLoginPage() {
 	const intervalId = useRef<number | null>(null);
 	const [userCode, setUserCode] = useState('');
 	const router = useRouter();
-	const [clientId, setClientId] = useLocalStorage<string>('clientId');
-	const [clientSecret, setClientSecret] = useLocalStorage<string>('clientSecret');
-	const [refreshToken, setRefreshToken] = useLocalStorage<string>('refreshToken');
-	const [accessToken, setAccessToken] = useLocalStorage<string>('accessToken');
+	const [clientId, setClientId] = useLocalStorage<string>('rd:clientId');
+	const [clientSecret, setClientSecret] = useLocalStorage<string>('rd:clientSecret');
+	const [refreshToken, setRefreshToken] = useLocalStorage<string>('rd:refreshToken');
+	const [accessToken, setAccessToken] = useLocalStorage<string>('rd:accessToken');
 	const [isCopied, setIsCopied] = useState(false);
 
 	useEffect(() => {
@@ -69,14 +69,6 @@ export default function RealDebridLoginPage() {
 		if (!accessToken && refreshToken && clientId && clientSecret) fetchAccessToken();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [clientId, clientSecret, refreshToken]);
-
-	useEffect(() => {
-		(async () => {
-			if (accessToken) {
-				await router.push('/');
-			}
-		})();
-	}, [accessToken, router]);
 
 	useEffect(() => {
 		(async () => {
