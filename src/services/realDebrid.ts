@@ -90,7 +90,7 @@ interface MasterHash {
 	[hash: string]: HosterHash;
 }
 
-export interface InstantAvailabilityResponse extends MasterHash {}
+export interface RdInstantAvailabilityResponse extends MasterHash {}
 
 export interface AddMagnetResponse {
 	id: string;
@@ -216,13 +216,13 @@ export const getTorrentInfo = async (accessToken: string, id: string) => {
 	}
 };
 
-export const getInstantlyAvailableFiles = async (accessToken: string, ...hashes: string[]) => {
+export const rdInstantCheck = async (accessToken: string, hashes: string[]) => {
 	try {
 		const headers = {
 			Authorization: `Bearer ${accessToken}`,
 		};
 
-		const response = await axios.get<InstantAvailabilityResponse>(
+		const response = await axios.get<RdInstantAvailabilityResponse>(
 			`${config.realDebridHostname}/rest/1.0/torrents/instantAvailability/${hashes.join(
 				'/'
 			)}`,

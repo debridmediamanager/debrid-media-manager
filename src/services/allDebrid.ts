@@ -252,15 +252,15 @@ interface MagnetData {
 	};
 }
 
-interface InstantAvailabilityResponse {
+export interface AdInstantAvailabilityResponse {
 	status: string;
 	data: { magnets: MagnetData[] };
 }
 
-export const getInstantAvailability = async (
+export const adInstantCheck = async (
 	apikey: string,
 	hashes: string[]
-): Promise<InstantAvailabilityResponse> => {
+): Promise<AdInstantAvailabilityResponse> => {
 	let endpoint = `${config.allDebridHostname}/v4/magnet/instant?agent=${config.allDebridAgent}&apikey=${apikey}`;
 	for (const hash of hashes) {
 		endpoint += `&magnets[]=${hash}`;
@@ -269,7 +269,7 @@ export const getInstantAvailability = async (
 		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
 	}
 	try {
-		const response = await axios.get<InstantAvailabilityResponse>(endpoint);
+		const response = await axios.get<AdInstantAvailabilityResponse>(endpoint);
 		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching magnet availability:', error.message);
