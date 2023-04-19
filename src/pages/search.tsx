@@ -181,23 +181,10 @@ function Search() {
 			);
 
 		try {
-			const availabilityChecks = [];
-			if (rdKey)
-				availabilityChecks.push(
-					...groupBy20(hashes).map((hashGroup) =>
-						rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd)
-					)
-				);
-
-			if (adKey)
-				availabilityChecks.push(
-					...groupBy20(hashes).map((hashGroup) =>
-						adInstantCheck(adKey, hashGroup).then(setInstantFromAd)
-					)
-				);
-
-			await Promise.all(availabilityChecks);
-
+			for (const hashGroup of groupBy20(hashes)) {
+				if (rdKey) await rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd);
+				if (adKey) await adInstantCheck(adKey, hashGroup).then(setInstantFromAd);
+			}
 			return availability;
 		} catch (error) {
 			toast.error('There was an error checking availability. Please try again.');
