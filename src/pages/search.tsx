@@ -2,16 +2,18 @@ import useMyAccount, { MyAccount } from '@/hooks/account';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import {
+	AdInstantAvailabilityResponse,
+	adInstantCheck,
 	deleteMagnet,
-	getInstantAvailability,
 	MagnetFile,
 	uploadMagnet,
 } from '@/services/allDebrid';
 import {
 	addHashAsMagnet,
 	deleteTorrent,
-	getInstantlyAvailableFiles,
 	getTorrentInfo,
+	RdInstantAvailabilityResponse,
+	rdInstantCheck,
 	selectFiles,
 } from '@/services/realDebrid';
 import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
@@ -130,55 +132,68 @@ function Search() {
 			return acc;
 		}, {});
 
+		const setInstantFromRd = (rdAvailabilityResp: RdInstantAvailabilityResponse) => {
+			for (const masterHash in rdAvailabilityResp) {
+				if ('rd' in rdAvailabilityResp[masterHash] === false) continue;
+				const variants = rdAvailabilityResp[masterHash]['rd'];
+				if (variants.length) availability[masterHash] = 'no_videos';
+				for (const variant of variants) {
+					for (const fileId in variant) {
+						const file = variant[fileId];
+						if (isVideo({ path: file.filename })) {
+							availability[masterHash] =
+								availability[masterHash] === 'ad:available'
+									? 'all:available'
+									: 'rd:available';
+							break;
+						}
+					}
+				}
+			}
+		};
+
+		const setInstantFromAd = (adAvailabilityResp: AdInstantAvailabilityResponse) => {
+			for (const magnetData of adAvailabilityResp.data.magnets) {
+				const masterHash = magnetData.hash;
+				const instant = magnetData.instant;
+
+				if (masterHash in availability && instant === true) {
+					availability[masterHash] = magnetData.files?.reduce(
+						(acc: boolean, curr: MagnetFile) => {
+							if (isVideo({ path: curr.n })) {
+								return true;
+							}
+							return acc;
+						},
+						false
+					)
+						? availability[masterHash] === 'rd:available'
+							? 'all:available'
+							: 'ad:available'
+						: 'no_videos';
+				}
+			}
+		};
+
+		const groupBy20 = (hashes: string[]) =>
+			Array.from({ length: Math.ceil(hashes.length / 20) }, (_, i) =>
+				hashes.slice(i * 20, (i + 1) * 20)
+			);
+
 		try {
 			const availabilityChecks = [];
 			if (rdKey)
 				availabilityChecks.push(
-					getInstantlyAvailableFiles(rdKey, ...hashes).then((rdAvailabilityResp) => {
-						for (const masterHash in rdAvailabilityResp) {
-							if ('rd' in rdAvailabilityResp[masterHash] === false) continue;
-							const variants = rdAvailabilityResp[masterHash]['rd'];
-							if (variants.length) availability[masterHash] = 'no_videos';
-							for (const variant of variants) {
-								for (const fileId in variant) {
-									const file = variant[fileId];
-									if (isVideo({ path: file.filename })) {
-										availability[masterHash] =
-											availability[masterHash] === 'ad:available'
-												? 'all:available'
-												: 'rd:available';
-										break;
-									}
-								}
-							}
-						}
-					})
+					...groupBy20(hashes).map((hashGroup) =>
+						rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd)
+					)
 				);
 
 			if (adKey)
 				availabilityChecks.push(
-					getInstantAvailability(adKey, hashes).then((adAvailabilityResp) => {
-						for (const magnetData of adAvailabilityResp.data.magnets) {
-							const masterHash = magnetData.hash;
-							const instant = magnetData.instant;
-
-							if (masterHash in availability && instant === true) {
-								availability[masterHash] = magnetData.files?.reduce(
-									(acc: boolean, curr: MagnetFile) => {
-										if (isVideo({ path: curr.n })) {
-											return true;
-										}
-										return acc;
-									},
-									false
-								)
-									? availability[masterHash] === 'rd:available'
-										? 'all:available'
-										: 'ad:available'
-									: 'no_videos';
-							}
-						}
-					})
+					...groupBy20(hashes).map((hashGroup) =>
+						adInstantCheck(adKey, hashGroup).then(setInstantFromAd)
+					)
 				);
 
 			await Promise.all(availabilityChecks);
