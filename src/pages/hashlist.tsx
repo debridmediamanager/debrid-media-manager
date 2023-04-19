@@ -1,4 +1,6 @@
+import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
+import { uploadMagnet } from '@/services/allDebrid';
 import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
@@ -40,18 +42,22 @@ function TorrentsPage() {
 	const [loading, setLoading] = useState(true);
 	const [filtering, setFiltering] = useState(false);
 	const [grouping, setGrouping] = useState(false);
+
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'title', direction: 'asc' });
-	const [accessToken] = useLocalStorage<string>('accessToken');
+
+	const rdKey = useRealDebridAccessToken();
+	const adKey = useAllDebridApiKey();
+
 	const [movieCount, setMovieCount] = useState<number>(0);
 	const [tvCount, setTvCount] = useState<number>(0);
-	const [movieGrouping, _1] = useState<Record<string, number>>({});
-	const [tvGroupingByEpisode, _2] = useState<Record<string, number>>({});
-	const [tvGroupingByTitle, _3] = useState<Record<string, number>>({});
-	const [hasDupes, _4] = useState<Array<string>>([]);
+	const [movieGrouping] = useState<Record<string, number>>({});
+	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
+	const [tvGroupingByTitle] = useState<Record<string, number>>({});
+	const [hasDupes] = useState<Array<string>>([]);
 	const [totalBytes, setTotalBytes] = useState<number>(0);
-	const [cachedTorrentInfo, setTorrentInfo] = useLocalStorage<Record<string, CachedTorrentInfo>>(
+	const [torrentCache, setTorrentCache] = useLocalStorage<Record<string, CachedTorrentInfo>>(
 		'userTorrentsList',
 		{}
 	);
@@ -92,7 +98,7 @@ function TorrentsPage() {
 			}
 		})();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [accessToken]);
+	}, [rdKey]);
 
 	// aggregate metadata
 	useEffect(() => {
@@ -186,11 +192,12 @@ function TorrentsPage() {
 		}
 	}
 
-	const handleAddAsMagnet = async (hash: string, disableToast: boolean = false) => {
+	const handleAddAsMagnetInRd = async (hash: string, disableToast: boolean = false) => {
 		try {
-			const id = await addHashAsMagnet(accessToken!, hash);
+			if (!rdKey) throw new Error('no_rd_key');
+			const id = await addHashAsMagnet(rdKey, hash);
 			if (!disableToast) toast.success('Successfully added as magnet!');
-			setTorrentInfo(
+			setTorrentCache(
 				(prev) =>
 					({ ...prev, [hash]: { hash, status: 'downloading' } } as Record<
 						string,
@@ -200,20 +207,45 @@ function TorrentsPage() {
 			handleSelectFiles(id, true);
 		} catch (error) {
 			if (!disableToast)
-				toast.error('There was an error adding as magnet. Please try again.');
+				toast.error(
+					'There was an error adding as magnet in Real-Debrid. Please try again.'
+				);
 			throw error;
 		}
 	};
 
-	function wrapDownloadFilesFn(t: UserTorrent) {
-		return async () => await handleAddAsMagnet(t.hash, true);
+	const handleAddAsMagnetInAd = async (hash: string, disableToast: boolean = false) => {
+		try {
+			if (!rdKey) throw new Error('no_rd_key');
+			await uploadMagnet(rdKey, [hash]);
+			if (!disableToast) toast.success('Successfully added as magnet!');
+			setTorrentCache(
+				(prev) =>
+					({ ...prev, [hash]: { hash, status: 'downloading' } } as Record<
+						string,
+						CachedTorrentInfo
+					>)
+			);
+		} catch (error) {
+			if (!disableToast)
+				toast.error('There was an error adding as magnet in AllDebrid. Please try again.');
+			throw error;
+		}
+	};
+
+	function wrapDownloadFilesInRdFn(t: UserTorrent) {
+		return async () => await handleAddAsMagnetInRd(t.hash, true);
 	}
 
-	async function downloadNonDupeTorrents() {
-		const libraryHashes = Object.keys(cachedTorrentInfo!);
+	function wrapDownloadFilesInAdFn(t: UserTorrent) {
+		return async () => await handleAddAsMagnetInAd(t.hash, true);
+	}
+
+	async function downloadNonDupeTorrentsInRd() {
+		const libraryHashes = Object.keys(torrentCache!);
 		const yetToDownload = filteredList
 			.filter((t) => !libraryHashes.includes(t.hash))
-			.map(wrapDownloadFilesFn);
+			.map(wrapDownloadFilesInRdFn);
 		const [results, errors] = await runConcurrentFunctions(yetToDownload, 5, 500);
 		if (errors.length) {
 			toast.error(`Error downloading files on ${errors.length} torrents`);
@@ -226,18 +258,36 @@ function TorrentsPage() {
 		}
 	}
 
-	const inLibrary = (hash: string) => hash in cachedTorrentInfo!;
+	async function downloadNonDupeTorrentsInAd() {
+		const libraryHashes = Object.keys(torrentCache!);
+		const yetToDownload = filteredList
+			.filter((t) => !libraryHashes.includes(t.hash))
+			.map(wrapDownloadFilesInAdFn);
+		const [results, errors] = await runConcurrentFunctions(yetToDownload, 5, 500);
+		if (errors.length) {
+			toast.error(`Error downloading files on ${errors.length} torrents`);
+		}
+		if (results.length) {
+			toast.success(`Started downloading ${results.length} torrents`);
+		}
+		if (!errors.length && !results.length) {
+			toast('Everything has been downloaded', { icon: '👏' });
+		}
+	}
+
+	const inLibrary = (hash: string) => hash in torrentCache!;
 	const notInLibrary = (hash: string) => !inLibrary(hash);
 	const isDownloaded = (hash: string) =>
-		inLibrary(hash) && cachedTorrentInfo![hash].status === 'downloaded';
+		inLibrary(hash) && torrentCache![hash].status === 'downloaded';
 	const isDownloading = (hash: string) =>
-		inLibrary(hash) && cachedTorrentInfo![hash].status !== 'downloaded';
+		inLibrary(hash) && torrentCache![hash].status !== 'downloaded';
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
-			await deleteTorrent(accessToken!, id);
+			if (!rdKey) throw new Error('no_rd_key');
+			await deleteTorrent(rdKey, id);
 			if (!disableToast) toast.success(`Download canceled (${id.substring(0, 3)})`);
-			setTorrentInfo((prevCache) => {
+			setTorrentCache((prevCache) => {
 				const updatedCache = { ...prevCache };
 				const hash = Object.keys(updatedCache).find((key) => updatedCache[key].id === id);
 				delete updatedCache[hash!];
@@ -251,7 +301,8 @@ function TorrentsPage() {
 
 	const handleSelectFiles = async (id: string, disableToast: boolean = false) => {
 		try {
-			const response = await getTorrentInfo(accessToken!, id);
+			if (!rdKey) throw new Error('no_rd_key');
+			const response = await getTorrentInfo(rdKey, id);
 
 			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
 				(file) => file.id
@@ -261,7 +312,7 @@ function TorrentsPage() {
 				throw new Error('no_files_for_selection');
 			}
 
-			await selectFiles(accessToken!, id, selectedFiles);
+			await selectFiles(rdKey, id, selectedFiles);
 		} catch (error) {
 			if ((error as Error).message === 'no_files_for_selection') {
 				if (!disableToast)
@@ -309,15 +360,28 @@ function TorrentsPage() {
 				>
 					Show {tvCount} TV shows
 				</Link>
-				<button
-					className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ${
-						filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
-					}`}
-					onClick={downloadNonDupeTorrents}
-					disabled={filteredList.length === 0}
-				>
-					Download all (non-duplicate) torrents
-				</button>
+				{rdKey && (
+					<button
+						className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ${
+							filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
+						}`}
+						onClick={downloadNonDupeTorrentsInRd}
+						disabled={filteredList.length === 0}
+					>
+						Download all torrents in Real-Debrid
+					</button>
+				)}
+				{adKey && (
+					<button
+						className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ${
+							filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
+						}`}
+						onClick={downloadNonDupeTorrentsInAd}
+						disabled={filteredList.length === 0}
+					>
+						Download all torrents in AllDebrid
+					</button>
+				)}
 
 				{Object.keys(router.query).length !== 0 && (
 					<Link
@@ -415,15 +479,25 @@ function TorrentsPage() {
 										<td className="border px-4 py-2">{t.score.toFixed(1)}</td>
 										<td className="border px-4 py-2">
 											{(isDownloaded(t.hash) || isDownloading(t.hash)) &&
-												`${cachedTorrentInfo![t.hash].status}`}
-											{notInLibrary(t.hash) && (
+												`${torrentCache![t.hash].status}`}
+											{rdKey && notInLibrary(t.hash) && (
 												<button
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 													onClick={() => {
-														handleAddAsMagnet(t.hash);
+														handleAddAsMagnetInRd(t.hash);
 													}}
 												>
-													Download
+													Download in RD
+												</button>
+											)}
+											{adKey && notInLibrary(t.hash) && (
+												<button
+													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+													onClick={() => {
+														handleAddAsMagnetInAd(t.hash);
+													}}
+												>
+													Download in AD
 												</button>
 											)}
 										</td>

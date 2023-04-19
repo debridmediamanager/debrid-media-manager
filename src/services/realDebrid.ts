@@ -102,7 +102,7 @@ const { publicRuntimeConfig: config } = getConfig();
 export const getDeviceCode = async () => {
 	try {
 		const response = await axios.get<DeviceCodeResponse>(
-			`${config.realDebirdHostname}/oauth/v2/device/code`,
+			`${config.realDebridHostname}/oauth/v2/device/code`,
 			{
 				params: {
 					client_id: RD_OPENSOURCE_CLIENT_ID,
@@ -120,7 +120,7 @@ export const getDeviceCode = async () => {
 export const getCredentials = async (deviceCode: string) => {
 	try {
 		const response = await axios.get<CredentialsResponse>(
-			`${config.realDebirdHostname}/oauth/v2/device/credentials`,
+			`${config.realDebridHostname}/oauth/v2/device/credentials`,
 			{
 				params: {
 					client_id: RD_OPENSOURCE_CLIENT_ID,
@@ -148,7 +148,7 @@ export const getToken = async (clientId: string, clientSecret: string, code: str
 		};
 
 		const response = await axios.post<AccessTokenResponse>(
-			`${config.realDebirdHostname}/oauth/v2/token`,
+			`${config.realDebridHostname}/oauth/v2/token`,
 			params.toString(),
 			{ headers }
 		);
@@ -166,7 +166,7 @@ export const getCurrentUser = async (accessToken: string) => {
 		};
 
 		const response = await axios.get<UserResponse>(
-			`${config.realDebirdHostname}/rest/1.0/user`,
+			`${config.realDebridHostname}/rest/1.0/user`,
 			{ headers }
 		);
 		return response.data;
@@ -189,7 +189,7 @@ export const getUserTorrentsList = async (
 		};
 
 		const response = await axios.get<UserTorrentResponse[]>(
-			`${config.realDebirdHostname}/rest/1.0/torrents`,
+			`${config.realDebridHostname}/rest/1.0/torrents`,
 			{ headers, params: { offset, page, limit, filter } }
 		);
 		return response.data;
@@ -206,7 +206,7 @@ export const getTorrentInfo = async (accessToken: string, id: string) => {
 		};
 
 		const response = await axios.get<TorrentInfoResponse>(
-			`${config.realDebirdHostname}/rest/1.0/torrents/info/${id}`,
+			`${config.realDebridHostname}/rest/1.0/torrents/info/${id}`,
 			{ headers }
 		);
 		return response.data;
@@ -223,7 +223,7 @@ export const getInstantlyAvailableFiles = async (accessToken: string, ...hashes:
 		};
 
 		const response = await axios.get<InstantAvailabilityResponse>(
-			`${config.realDebirdHostname}/rest/1.0/torrents/instantAvailability/${hashes.join(
+			`${config.realDebridHostname}/rest/1.0/torrents/instantAvailability/${hashes.join(
 				'/'
 			)}`,
 			{ headers }
@@ -245,7 +245,7 @@ export const addMagnet = async (accessToken: string, magnet: string): Promise<st
 		const formData = qs.stringify(data);
 
 		const response = await axios.post<AddMagnetResponse>(
-			`${config.realDebirdHostname}/rest/1.0/torrents/addMagnet`,
+			`${config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
 			formData,
 			{
 				headers,
@@ -271,7 +271,7 @@ export const selectFiles = async (accessToken: string, id: string, files: number
 		const formData = qs.stringify({ files: files.join(',') });
 
 		await axios.post(
-			`${config.realDebirdHostname}/rest/1.0/torrents/selectFiles/${id}`,
+			`${config.realDebridHostname}/rest/1.0/torrents/selectFiles/${id}`,
 			formData,
 			{ headers }
 		);
@@ -287,7 +287,7 @@ export const deleteTorrent = async (accessToken: string, id: string) => {
 			Authorization: `Bearer ${accessToken}`,
 		};
 
-		await axios.delete(`${config.realDebirdHostname}/rest/1.0/torrents/delete/${id}`, {
+		await axios.delete(`${config.realDebridHostname}/rest/1.0/torrents/delete/${id}`, {
 			headers,
 		});
 	} catch (error: any) {

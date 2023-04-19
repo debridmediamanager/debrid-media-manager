@@ -1,9 +1,10 @@
+import { getAllDebridUser } from '@/services/allDebrid';
 import { getCurrentUser as getRealDebridUser, getToken } from '@/services/realDebrid';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useLocalStorage from './localStorage';
 
-interface User {
+interface RealDebridUser {
 	id: number;
 	username: string;
 	email: string;
@@ -13,6 +14,18 @@ interface User {
 	type: 'premium' | 'free';
 	premium: number;
 	expiration: string;
+}
+
+interface AllDebridUser {
+	username: string;
+	email: string;
+	isPremium: boolean;
+	isSubscribed: boolean;
+	isTrial: boolean;
+	premiumUntil: number;
+	lang: string;
+	preferedDomain: string;
+	fidelityPoints: number;
 }
 
 export const useDebridLogin = () => {
@@ -33,10 +46,10 @@ export const useDebridLogin = () => {
 };
 
 export const useRealDebridAccessToken = () => {
-	const [clientId] = useLocalStorage<string>('clientId');
-	const [clientSecret] = useLocalStorage<string>('clientSecret');
-	const [refreshToken] = useLocalStorage<string>('refreshToken');
-	const [accessToken, setAccessToken] = useLocalStorage<string>('accessToken');
+	const [clientId] = useLocalStorage<string>('rd:clientId');
+	const [clientSecret] = useLocalStorage<string>('rd:clientSecret');
+	const [refreshToken] = useLocalStorage<string>('rd:refreshToken');
+	const [accessToken, setAccessToken] = useLocalStorage<string>('rd:accessToken');
 
 	useEffect(() => {
 		(async () => {
@@ -56,18 +69,31 @@ export const useRealDebridAccessToken = () => {
 	return accessToken;
 };
 
+export const useAllDebridApiKey = () => {
+	const [apiKey] = useLocalStorage<string>('ad:apiKey');
+	return apiKey;
+};
+
 export const useCurrentUser = () => {
-	const [user, setUser] = useState<User | null>(null);
+	const [rdUser, setRdUser] = useState<RealDebridUser | null>(null);
+	const [adUser, setAdUser] = useState<AllDebridUser | null>(null);
 	const router = useRouter();
-	const [accessToken] = useLocalStorage<string>('accessToken');
+	const [accessToken] = useLocalStorage<string>('rd:accessToken');
+	const [apiKey] = useLocalStorage<string>('ad:apiKey');
 
 	useEffect(() => {
 		(async () => {
-			if (!accessToken) return null;
-			const rdUser = await getRealDebridUser(accessToken);
-			if (rdUser) setUser(<User>rdUser);
+			if (!accessToken && !apiKey) return null;
+			if (accessToken) {
+				const rdUserResponse = await getRealDebridUser(accessToken);
+				if (rdUserResponse) setRdUser(<RealDebridUser>rdUserResponse);
+			}
+			if (apiKey) {
+				const adUserResponse = await getAllDebridUser(apiKey);
+				if (adUserResponse) setAdUser(<AllDebridUser>adUserResponse);
+			}
 		})();
-	}, [accessToken, router]);
+	}, [accessToken, apiKey, router]);
 
-	return user;
+	return { realDebrid: rdUser, allDebrid: adUser };
 };

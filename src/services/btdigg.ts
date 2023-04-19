@@ -82,6 +82,7 @@ export const groupByParsedTitle = (results: SearchResult[]): SearchResult[] => {
 const dhtSearchHostname = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
 
 export async function fetchSearchResults(
+	speed: 'veryfast' | 'fast' | 'normal' | 'slow' | 'veryslow',
 	client: AxiosInstance,
 	searchQuery: string,
 	libraryType: string,
@@ -95,6 +96,9 @@ export async function fetchSearchResults(
 		try {
 			const cached = await cache.getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
 			if (cached) {
+				if (cached.length === 0) {
+					cache.deleteCachedJsonValue(finalQuery.split(' '));
+				}
 				return cached;
 			}
 		} catch (e: any) {
@@ -113,9 +117,28 @@ export async function fetchSearchResults(
 		const MAX_RETRIES = 5; // maximum number of retries
 		const RETRY_DELAY = 1500; // initial delay in ms, doubles with each retry
 
-		let skippedResults = 0;
+		let upperThreshold: (skipped: number) => number;
 
-		while (pageNum <= 40 + Math.floor(skippedResults / 10)) {
+		switch (speed) {
+			case 'veryfast':
+				upperThreshold = (skipped: number): number => 20 + Math.floor(skipped / 10);
+				break;
+			case 'fast':
+				upperThreshold = (skipped: number): number => 40 + Math.floor(skipped / 10);
+				break;
+			case 'normal':
+				upperThreshold = (skipped: number): number => 60 + Math.floor(skipped / 10);
+				break;
+			case 'slow':
+				upperThreshold = (skipped: number): number => 80 + Math.floor(skipped / 10);
+				break;
+			case 'veryslow':
+				upperThreshold = (_: any) => 100;
+				break;
+		}
+
+		let skippedResults = 0;
+		while (pageNum <= upperThreshold(skippedResults)) {
 			console.log(`Scraping page ${pageNum} (${finalQuery})...`, new Date().getTime());
 			let retries = 0; // current number of retries
 			let responseData = '';
@@ -236,7 +259,7 @@ export async function fetchSearchResults(
 
 		console.log(`Found ${searchResultsArr.length} results (${finalQuery})`);
 
-		if (!cache.isSlaveInstance()) cache.cacheJsonValue(finalQuery.split(' '), searchResultsArr);
+		cache.cacheJsonValue(finalQuery.split(' '), searchResultsArr);
 
 		return searchResultsArr;
 	} catch (error) {
