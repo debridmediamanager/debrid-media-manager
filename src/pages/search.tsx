@@ -22,7 +22,7 @@ import { useCallback, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { SearchApiResponse } from './api/search';
 
-type Availability = 'rd:available' | 'ad:available' | 'unavailable' | 'no_videos';
+type Availability = 'all:available' | 'rd:available' | 'ad:available' | 'unavailable' | 'no_videos';
 
 type SearchResult = {
 	title: string;
@@ -126,46 +126,56 @@ function Search() {
 		}, {});
 
 		try {
-			if (!rdKey) throw new Error('no_rd_key');
-			if (!adKey) throw new Error('no_ad_key');
-
-			const [adAvailabilityResp, rdAvailabilityResp] = await Promise.all([
-				getInstantAvailability(adKey, hashes),
-				getInstantlyAvailableFiles(rdKey, ...hashes),
-			]);
-
-			for (const magnetData of adAvailabilityResp.data.magnets) {
-				const masterHash = magnetData.hash;
-				const instant = magnetData.instant;
-
-				if (masterHash in availability && instant === true) {
-					availability[masterHash] = magnetData.files?.reduce(
-						(acc: boolean, curr: MagnetFile) => {
-							if (isVideo({ path: curr.n })) {
-								return true;
+			const availabilityChecks = [];
+			if (rdKey)
+				availabilityChecks.push(
+					getInstantlyAvailableFiles(rdKey, ...hashes).then((rdAvailabilityResp) => {
+						for (const masterHash in rdAvailabilityResp) {
+							const variants = rdAvailabilityResp[masterHash]['rd'];
+							if (variants.length) availability[masterHash] = 'no_videos';
+							for (const variant of variants) {
+								for (const fileId in variant) {
+									const file = variant[fileId];
+									if (isVideo({ path: file.filename })) {
+										availability[masterHash] =
+											availability[masterHash] === 'ad:available'
+												? 'all:available'
+												: 'rd:available';
+										break;
+									}
+								}
 							}
-							return acc;
-						},
-						false
-					)
-						? 'ad:available'
-						: 'no_videos';
-				}
-			}
-
-			for (const masterHash in rdAvailabilityResp) {
-				const variants = rdAvailabilityResp[masterHash]['rd'];
-				if (variants.length) availability[masterHash] = 'no_videos';
-				for (const variant of variants) {
-					for (const fileId in variant) {
-						const file = variant[fileId];
-						if (isVideo({ path: file.filename })) {
-							availability[masterHash] = 'rd:available';
-							break;
 						}
-					}
-				}
-			}
+					})
+				);
+
+			if (adKey)
+				availabilityChecks.push(
+					getInstantAvailability(adKey, hashes).then((adAvailabilityResp) => {
+						for (const magnetData of adAvailabilityResp.data.magnets) {
+							const masterHash = magnetData.hash;
+							const instant = magnetData.instant;
+
+							if (masterHash in availability && instant === true) {
+								availability[masterHash] = magnetData.files?.reduce(
+									(acc: boolean, curr: MagnetFile) => {
+										if (isVideo({ path: curr.n })) {
+											return true;
+										}
+										return acc;
+									},
+									false
+								)
+									? availability[masterHash] === 'rd:available'
+										? 'all:available'
+										: 'ad:available'
+									: 'no_videos';
+							}
+						}
+					})
+				);
+
+			await Promise.all(availabilityChecks);
 
 			return availability;
 		} catch (error) {
@@ -237,6 +247,10 @@ function Search() {
 		inLibrary(hash) && torrentCache![hash].status === 'downloaded';
 	const isDownloading = (hash: string) =>
 		inLibrary(hash) && torrentCache![hash].status !== 'downloaded';
+	const isAvailableInAd = (result: SearchResult) =>
+		result.available === 'ad:available' || result.available === 'all:available';
+	const isAvailableInRd = (result: SearchResult) =>
+		result.available === 'rd:available' || result.available === 'all:available';
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
@@ -390,48 +404,56 @@ function Search() {
 												)}
 											{notInLibrary(result.hash) && (
 												<>
-													<button
-														className={`bg-${
-															result.available === 'rd:available'
-																? 'green'
-																: 'blue'
-														}-500 hover:bg-${
-															result.available === 'rd:available'
-																? 'green'
-																: 'blue'
-														}-700 text-white font-bold py-2 px-4 rounded`}
-														onClick={() => {
-															handleAddAsMagnetInRd(
-																result.hash,
-																result.available === 'rd:available'
-															);
-														}}
-													>
-														{`${
-															result.available ? 'Instant ' : ''
-														}Download in RD`}
-													</button>
-													<button
-														className={`bg-${
-															result.available === 'ad:available'
-																? 'green'
-																: 'blue'
-														}-500 hover:bg-${
-															result.available === 'ad:available'
-																? 'green'
-																: 'blue'
-														}-700 text-white font-bold py-2 px-4 rounded`}
-														onClick={() => {
-															handleAddAsMagnetInAd(
-																result.hash,
-																result.available === 'ad:available'
-															);
-														}}
-													>
-														{`${
-															result.available ? 'Instant ' : ''
-														}Download in AD`}
-													</button>
+													{rdKey && (
+														<button
+															className={`bg-${
+																isAvailableInRd(result)
+																	? 'green'
+																	: 'blue'
+															}-500 hover:bg-${
+																isAvailableInRd(result)
+																	? 'green'
+																	: 'blue'
+															}-700 text-white font-bold py-2 px-4 rounded`}
+															onClick={() => {
+																handleAddAsMagnetInRd(
+																	result.hash,
+																	isAvailableInRd(result)
+																);
+															}}
+														>
+															{`${
+																isAvailableInRd(result)
+																	? 'Instant '
+																	: ''
+															}Download in RD`}
+														</button>
+													)}
+													{adKey && (
+														<button
+															className={`bg-${
+																isAvailableInAd(result)
+																	? 'green'
+																	: 'blue'
+															}-500 hover:bg-${
+																isAvailableInAd(result)
+																	? 'green'
+																	: 'blue'
+															}-700 text-white font-bold py-2 px-4 rounded`}
+															onClick={() => {
+																handleAddAsMagnetInAd(
+																	result.hash,
+																	isAvailableInAd(result)
+																);
+															}}
+														>
+															{`${
+																isAvailableInAd(result)
+																	? 'Instant '
+																	: ''
+															}Download in AD`}
+														</button>
+													)}
 												</>
 											)}
 										</td>
