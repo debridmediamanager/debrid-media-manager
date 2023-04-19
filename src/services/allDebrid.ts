@@ -171,7 +171,7 @@ export const getMagnetStatus = async (
 	session?: number,
 	counter?: number
 ): Promise<MagnetStatusResponse> => {
-	let endpoint = `${config.allDebridHostname}/v4/user?agent=${config.allDebridAgent}&apikey=${apikey}`;
+	let endpoint = `${config.allDebridHostname}/v4/magnet/status?agent=${config.allDebridAgent}&apikey=${apikey}`;
 	if (magnetId) {
 		endpoint += `&id=${magnetId}`;
 	} else if (statusFilter) {
