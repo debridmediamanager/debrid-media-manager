@@ -213,7 +213,7 @@ function Search() {
 						},
 					} as Record<string, CachedTorrentInfo>)
 			);
-			handleSelectFiles(id, true);
+			handleSelectFiles(`rd:${id}`, true); // add rd: to account for substr(3) in handleSelectFiles
 		} catch (error) {
 			if (!disableToast)
 				toast.error('There was an error adding as magnet. Please try again.');
