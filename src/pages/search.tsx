@@ -175,14 +175,16 @@ function Search() {
 			}
 		};
 
-		const groupBy20 = (hashes: string[]) =>
-			Array.from({ length: Math.ceil(hashes.length / 20) }, (_, i) =>
-				hashes.slice(i * 20, (i + 1) * 20)
+		const groupBy = (itemLimit: number, hashes: string[]) =>
+			Array.from({ length: Math.ceil(hashes.length / itemLimit) }, (_, i) =>
+				hashes.slice(i * itemLimit, (i + 1) * itemLimit)
 			);
 
 		try {
-			for (const hashGroup of groupBy20(hashes)) {
+			for (const hashGroup of groupBy(100, hashes)) {
 				if (rdKey) await rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd);
+			}
+			for (const hashGroup of groupBy(30, hashes)) {
 				if (adKey) await adInstantCheck(adKey, hashGroup).then(setInstantFromAd);
 			}
 			return availability;
