@@ -23,7 +23,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
-import { FaArrowRight, FaShare, FaTrash } from 'react-icons/fa';
+import { FaRecycle, FaShare, FaTrash } from 'react-icons/fa';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
 
@@ -135,17 +135,7 @@ function TorrentsPage() {
 
 					const date = new Date(torrent.uploadDate * 1000);
 					// Format date string
-					const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(
-						date.getMonth() + 1
-					)
-						.toString()
-						.padStart(2, '0')}/${date.getFullYear().toString().padStart(4, '0')}, ${date
-						.getHours()
-						.toString()
-						.padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date
-						.getSeconds()
-						.toString()
-						.padStart(2, '0')}`;
+					const formattedDate = date.toISOString();
 
 					let status = 'error';
 					if (torrent.statusCode >= 0 && torrent.statusCode <= 3) {
@@ -163,7 +153,7 @@ function TorrentsPage() {
 						filename: torrent.filename,
 						hash: torrent.hash,
 						bytes: torrent.size,
-						progress: Math.floor((100 * torrent.downloadSpeed) / torrent.size),
+						progress: torrent.processingPerc,
 						status,
 						added: formattedDate,
 					};
@@ -714,7 +704,7 @@ function TorrentsPage() {
 														: handleRestartTorrent(torrent.id)
 												}
 											>
-												<FaArrowRight />
+												<FaRecycle />
 											</button>
 										</td>
 									</tr>
