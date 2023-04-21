@@ -22,6 +22,7 @@ import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { withAuth } from '@/utils/withAuth';
 import { ParsedFilename } from '@ctrl/video-filename-parser';
 import axios, { CancelTokenSource } from 'axios';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -39,6 +40,8 @@ type SearchResult = {
 	info: ParsedFilename;
 	available: Availability;
 };
+
+const { publicRuntimeConfig: config } = getConfig();
 
 function Search() {
 	const [query, setQuery] = useState('');
@@ -63,26 +66,33 @@ function Search() {
 		const source = axios.CancelToken.source();
 		setCancelTokenSource(source);
 		try {
-			const params = {
-				search: searchQuery,
-				...(myAccount?.libraryType ? { ['libraryType']: myAccount.libraryType } : {}),
-			};
-			const response = await axios.get<SearchApiResponse>('/api/search', {
-				params,
+			let endpoint = `https://debridmediamanager.com/api/search?search=${encodeURIComponent(
+				searchQuery
+			)}&libraryType=${myAccount?.libraryType}`;
+			if (process.env.NODE_ENV === 'development' && config.bypassHostname)
+				endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
+			const response = await axios.get<SearchApiResponse>(endpoint, {
 				cancelToken: source.token,
 			});
+			setSearchResults(
+				response.data.searchResults?.map((r) => ({ ...r, available: 'unavailable' })) || []
+			);
 			if (response.data.searchResults?.length) {
+				toast(`Found ${response.data.searchResults.length} results`, { icon: '🔍' });
 				const availability = await instantCheckInRd(
 					response.data.searchResults.map((result) => result.hash)
 				);
-				setSearchResults(
-					response.data.searchResults.map((r) => ({
-						...r,
-						available:
-							r.hash in availability === false ? 'unavailable' : availability[r.hash],
-					}))
+				toast(
+					`Found ${
+						Object.values(availability).filter((a) => a.includes(':available')).length
+					} available in RD`,
+					{ icon: '🔍' }
+				);
+				setSearchResults((prev) =>
+					prev.map((r) => ({ ...r, available: availability[r.hash] }))
 				);
 			} else {
+				toast(`No results found`, { icon: '🔍' });
 				setSearchResults([]);
 			}
 		} catch (error) {
