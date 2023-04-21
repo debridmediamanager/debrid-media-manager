@@ -28,6 +28,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { FaDownload, FaFastForward } from 'react-icons/fa';
 import { SearchApiResponse } from './api/search';
 
 type Availability = 'all:available' | 'rd:available' | 'ad:available' | 'unavailable' | 'no_videos';
@@ -66,10 +67,12 @@ function Search() {
 		const source = axios.CancelToken.source();
 		setCancelTokenSource(source);
 		try {
-			let endpoint = `https://debridmediamanager.com/api/search?search=${encodeURIComponent(
-				searchQuery
-			)}&libraryType=${myAccount?.libraryType}`;
-			if (process.env.NODE_ENV === 'development' && config.bypassHostname)
+			let endpoint = `/api/search?search=${encodeURIComponent(searchQuery)}&libraryType=${
+				myAccount?.libraryType
+			}`;
+			if (config.externalSearchApiHostname)
+				endpoint = `${config.externalSearchApiHostname}${endpoint}`;
+			if (config.bypassHostname && config.externalSearchApiHostname)
 				endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
 			const response = await axios.get<SearchApiResponse>(endpoint, {
 				cancelToken: source.token,
@@ -475,11 +478,17 @@ function Search() {
 																);
 															}}
 														>
-															{`${
-																isAvailableInRd(result)
-																	? 'Instant '
-																	: ''
-															}Download in RD`}
+															{isAvailableInRd(result) ? (
+																<>
+																	<FaFastForward />
+																	RD
+																</>
+															) : (
+																<>
+																	<FaDownload />
+																	RD
+																</>
+															)}
 														</button>
 													)}
 													{adKey && (
@@ -500,11 +509,17 @@ function Search() {
 																);
 															}}
 														>
-															{`${
-																isAvailableInAd(result)
-																	? 'Instant '
-																	: ''
-															}Download in AD`}
+															{isAvailableInAd(result) ? (
+																<>
+																	<FaFastForward />
+																	AD
+																</>
+															) : (
+																<>
+																	<FaDownload />
+																	AD
+																</>
+															)}
 														</button>
 													)}
 												</>
