@@ -72,13 +72,14 @@ function Search() {
 				cancelToken: source.token,
 			});
 			if (response.data.searchResults?.length) {
-				const availability = await checkResultsAvailability(
+				const availability = await instantCheckInRd(
 					response.data.searchResults.map((result) => result.hash)
 				);
 				setSearchResults(
 					response.data.searchResults.map((r) => ({
 						...r,
-						available: availability[r.hash],
+						available:
+							r.hash in availability === false ? 'unavailable' : availability[r.hash],
 					}))
 				);
 			} else {
@@ -126,11 +127,13 @@ function Search() {
 
 	type HashAvailability = Record<string, Availability>;
 
-	const checkResultsAvailability = async (hashes: string[]): Promise<HashAvailability> => {
+	const instantCheckInRd = async (hashes: string[]): Promise<HashAvailability> => {
 		const availability = hashes.reduce((acc: HashAvailability, curr: string) => {
 			acc[curr] = 'unavailable';
 			return acc;
 		}, {});
+
+		if (!rdKey) return availability;
 
 		const setInstantFromRd = (rdAvailabilityResp: RdInstantAvailabilityResponse) => {
 			for (const masterHash in rdAvailabilityResp) {
@@ -151,6 +154,38 @@ function Search() {
 				}
 			}
 		};
+
+		const groupBy = (itemLimit: number, hashes: string[]) =>
+			Array.from({ length: Math.ceil(hashes.length / itemLimit) }, (_, i) =>
+				hashes.slice(i * itemLimit, (i + 1) * itemLimit)
+			);
+
+		try {
+			for (const hashGroup of groupBy(100, hashes)) {
+				if (rdKey) await rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd);
+			}
+			return availability;
+		} catch (error) {
+			toast.error(
+				'There was an error checking availability in Real-Debrid. Please try again.'
+			);
+			throw error;
+		}
+	};
+
+	// TODO: Add AD instant check-in support
+	const instantCheckInAd = async (
+		hashes: string[],
+		existingAvailability?: HashAvailability
+	): Promise<HashAvailability> => {
+		const availability =
+			existingAvailability ||
+			hashes.reduce((acc: HashAvailability, curr: string) => {
+				acc[curr] = 'unavailable';
+				return acc;
+			}, {});
+
+		if (!adKey) return availability;
 
 		const setInstantFromAd = (adAvailabilityResp: AdInstantAvailabilityResponse) => {
 			for (const magnetData of adAvailabilityResp.data.magnets) {
@@ -181,15 +216,12 @@ function Search() {
 			);
 
 		try {
-			for (const hashGroup of groupBy(100, hashes)) {
-				if (rdKey) await rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd);
-			}
 			for (const hashGroup of groupBy(30, hashes)) {
 				if (adKey) await adInstantCheck(adKey, hashGroup).then(setInstantFromAd);
 			}
 			return availability;
 		} catch (error) {
-			toast.error('There was an error checking availability. Please try again.');
+			toast.error('There was an error checking availability in AllDebrid. Please try again.');
 			throw error;
 		}
 	};
