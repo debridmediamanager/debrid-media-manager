@@ -22,11 +22,13 @@ import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { withAuth } from '@/utils/withAuth';
 import { ParsedFilename } from '@ctrl/video-filename-parser';
 import axios, { CancelTokenSource } from 'axios';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { FaDownload, FaFastForward } from 'react-icons/fa';
 import { SearchApiResponse } from './api/search';
 
 type Availability = 'all:available' | 'rd:available' | 'ad:available' | 'unavailable' | 'no_videos';
@@ -39,6 +41,8 @@ type SearchResult = {
 	info: ParsedFilename;
 	available: Availability;
 };
+
+const { publicRuntimeConfig: config } = getConfig();
 
 function Search() {
 	const [query, setQuery] = useState('');
@@ -63,25 +67,38 @@ function Search() {
 		const source = axios.CancelToken.source();
 		setCancelTokenSource(source);
 		try {
-			const params = {
-				search: searchQuery,
-				...(myAccount?.libraryType ? { ['libraryType']: myAccount.libraryType } : {}),
-			};
-			const response = await axios.get<SearchApiResponse>('/api/search', {
-				params,
+			let endpoint = `/api/search?search=${encodeURIComponent(searchQuery)}&libraryType=${
+				myAccount?.libraryType
+			}`;
+			if (
+				config.externalSearchApiHostname &&
+				window.location.origin !== config.externalSearchApiHostname
+			)
+				endpoint = `${config.externalSearchApiHostname}${endpoint}`;
+			if (config.bypassHostname && !endpoint.startsWith('/'))
+				endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
+			const response = await axios.get<SearchApiResponse>(endpoint, {
 				cancelToken: source.token,
 			});
+			setSearchResults(
+				response.data.searchResults?.map((r) => ({ ...r, available: 'unavailable' })) || []
+			);
 			if (response.data.searchResults?.length) {
-				const availability = await checkResultsAvailability(
+				toast(`Found ${response.data.searchResults.length} results`, { icon: '🔍' });
+				const availability = await instantCheckInRd(
 					response.data.searchResults.map((result) => result.hash)
 				);
-				setSearchResults(
-					response.data.searchResults.map((r) => ({
-						...r,
-						available: availability[r.hash],
-					}))
+				toast(
+					`Found ${
+						Object.values(availability).filter((a) => a.includes(':available')).length
+					} available in RD`,
+					{ icon: '🔍' }
+				);
+				setSearchResults((prev) =>
+					prev.map((r) => ({ ...r, available: availability[r.hash] }))
 				);
 			} else {
+				toast(`No results found`, { icon: '🔍' });
 				setSearchResults([]);
 			}
 		} catch (error) {
@@ -104,7 +121,9 @@ function Search() {
 		(e?: React.FormEvent<HTMLFormElement>) => {
 			if (e) e.preventDefault();
 			if (!query) return;
-			router.push(`/search?query=${encodeURIComponent(query)}`);
+			router.push({
+				query: { ...router.query, query: encodeURIComponent(query) },
+			});
 		},
 		[router, query]
 	);
@@ -126,11 +145,13 @@ function Search() {
 
 	type HashAvailability = Record<string, Availability>;
 
-	const checkResultsAvailability = async (hashes: string[]): Promise<HashAvailability> => {
+	const instantCheckInRd = async (hashes: string[]): Promise<HashAvailability> => {
 		const availability = hashes.reduce((acc: HashAvailability, curr: string) => {
 			acc[curr] = 'unavailable';
 			return acc;
 		}, {});
+
+		if (!rdKey) return availability;
 
 		const setInstantFromRd = (rdAvailabilityResp: RdInstantAvailabilityResponse) => {
 			for (const masterHash in rdAvailabilityResp) {
@@ -151,6 +172,38 @@ function Search() {
 				}
 			}
 		};
+
+		const groupBy = (itemLimit: number, hashes: string[]) =>
+			Array.from({ length: Math.ceil(hashes.length / itemLimit) }, (_, i) =>
+				hashes.slice(i * itemLimit, (i + 1) * itemLimit)
+			);
+
+		try {
+			for (const hashGroup of groupBy(100, hashes)) {
+				if (rdKey) await rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd);
+			}
+			return availability;
+		} catch (error) {
+			toast.error(
+				'There was an error checking availability in Real-Debrid. Please try again.'
+			);
+			throw error;
+		}
+	};
+
+	// TODO: Add AD instant check-in support
+	const instantCheckInAd = async (
+		hashes: string[],
+		existingAvailability?: HashAvailability
+	): Promise<HashAvailability> => {
+		const availability =
+			existingAvailability ||
+			hashes.reduce((acc: HashAvailability, curr: string) => {
+				acc[curr] = 'unavailable';
+				return acc;
+			}, {});
+
+		if (!adKey) return availability;
 
 		const setInstantFromAd = (adAvailabilityResp: AdInstantAvailabilityResponse) => {
 			for (const magnetData of adAvailabilityResp.data.magnets) {
@@ -181,15 +234,12 @@ function Search() {
 			);
 
 		try {
-			for (const hashGroup of groupBy(100, hashes)) {
-				if (rdKey) await rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd);
-			}
 			for (const hashGroup of groupBy(30, hashes)) {
 				if (adKey) await adInstantCheck(adKey, hashGroup).then(setInstantFromAd);
 			}
 			return availability;
 		} catch (error) {
-			toast.error('There was an error checking availability. Please try again.');
+			toast.error('There was an error checking availability in AllDebrid. Please try again.');
 			throw error;
 		}
 	};
@@ -433,11 +483,17 @@ function Search() {
 																);
 															}}
 														>
-															{`${
-																isAvailableInRd(result)
-																	? 'Instant '
-																	: ''
-															}Download in RD`}
+															{isAvailableInRd(result) ? (
+																<>
+																	<FaFastForward />
+																	RD
+																</>
+															) : (
+																<>
+																	<FaDownload />
+																	RD
+																</>
+															)}
 														</button>
 													)}
 													{adKey && (
@@ -458,11 +514,17 @@ function Search() {
 																);
 															}}
 														>
-															{`${
-																isAvailableInAd(result)
-																	? 'Instant '
-																	: ''
-															}Download in AD`}
+															{isAvailableInAd(result) ? (
+																<>
+																	<FaFastForward />
+																	AD
+																</>
+															) : (
+																<>
+																	<FaDownload />
+																	AD
+																</>
+															)}
 														</button>
 													)}
 												</>
