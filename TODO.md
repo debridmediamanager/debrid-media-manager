@@ -5,17 +5,17 @@
 - [✔️] Media page, button: delete failed content
 - [✔️] Media page, button: delete slow content
 - [✔️] Media page, button: auto select files
-- [] Media page, button: reinsert rar archives
-- [] Media page, button: dedupe hash
+- [✔️] Media page, button: reinsert rar archives
+- [✔️] Media page, button: dedupe hash
 - [✔️] Media page, button: dedupe content
 - [✔️] Identify IMDB link
 - [✔️] Group by IMDB link
 - [✔️] Media page, button: share to the internet
-- [] Refactor pages into different components
 - [✔️] When waiting_files_selection and Select button is pressed, should convert to downloading
-- [] Add title filter buttons on search page
 - [✔️] Downloading has race condition on status
-- [] Dockerize with tor
-- [] Make the architecture more scalable using docker swarm
-- [] Rescan library button in all other pages except library
+- [✔️] Dockerize with tor
+- [✔️] Make the architecture more scalable using docker swarm
 - [✔️] Find cached and selectable download on search
+- [] Rescan library button in all other pages except library
+- [] Add title filter buttons on search page
+- [] Refactor pages into different components
