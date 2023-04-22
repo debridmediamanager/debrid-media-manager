@@ -16,6 +16,8 @@
 - [✔️] Dockerize with tor
 - [✔️] Make the architecture more scalable using docker swarm
 - [✔️] Find cached and selectable download on search
-- [] Rescan library button in all other pages except library
-- [] Add title filter buttons on search page
-- [] Refactor pages into different components
+- [] 2.3.0: Show AD/RD download buttons even if status=downloaded
+- [] 2.4.0: Add instant check in AD on search page (removed due to performance impact)
+- [] 2.5.0: Rescan library button in all other pages except library
+- [] 2.6.0: Add title filter buttons on search page
+- [] 3.0.0: Refactor pages into different components
