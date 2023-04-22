@@ -66,8 +66,6 @@ function TorrentsPage() {
 	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 
-	const [movieCount, setMovieCount] = useState<number>(0);
-	const [tvCount, setTvCount] = useState<number>(0);
 	const [movieGrouping] = useState<Record<string, number>>({});
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
@@ -207,8 +205,6 @@ function TorrentsPage() {
 	useEffect(() => {
 		if (rdLoading || adLoading) return;
 		setGrouping(true);
-		setMovieCount(0);
-		setTvCount(0);
 		setTotalBytes(0);
 
 		let tmpTotalBytes = 0;
@@ -233,8 +229,6 @@ function TorrentsPage() {
 			}
 		}
 
-		setMovieCount(Object.keys(movieGrouping).length);
-		setTvCount(Object.keys(tvGroupingByTitle).length);
 		setTotalBytes(tmpTotalBytes);
 		setGrouping(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -252,8 +246,8 @@ function TorrentsPage() {
 	useEffect(() => {
 		if (rdLoading || adLoading || grouping) return;
 		setFiltering(true);
-		if (Object.keys(router.query).filter((e) => e !== 'page').length === 0) {
-			setFilteredList(userTorrentsList);
+		if (hasNoQueryParamsBut('page')) {
+			setFilteredList(applyQuickSearch(userTorrentsList));
 			selectPlayableFiles(userTorrentsList);
 			deleteFailedTorrents(userTorrentsList);
 			setFiltering(false);
@@ -263,24 +257,24 @@ function TorrentsPage() {
 		let tmpList = userTorrentsList;
 		if (status === 'slow') {
 			tmpList = tmpList.filter(isTorrentSlow);
-			setFilteredList(tmpList);
+			setFilteredList(applyQuickSearch(tmpList));
 		}
 		if (status === 'dupe') {
 			tmpList = tmpList.filter((t) => hasDupes.includes(getMediaId(t.info, t.mediaType)));
-			setFilteredList(tmpList);
+			setFilteredList(applyQuickSearch(tmpList));
 		}
 		if (status === 'non4k') {
 			tmpList = tmpList.filter((t) => !/\b2160p|\b4k|\buhd/i.test(t.filename));
-			setFilteredList(tmpList);
+			setFilteredList(applyQuickSearch(tmpList));
 		}
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
 			tmpList = tmpList.filter((t) => decodedTitleFilter === getMediaId(t.info, t.mediaType));
-			setFilteredList(tmpList);
+			setFilteredList(applyQuickSearch(tmpList));
 		}
 		if (mediaType) {
 			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
-			setFilteredList(tmpList);
+			setFilteredList(applyQuickSearch(tmpList));
 		}
 		selectPlayableFiles(tmpList);
 		deleteFailedTorrents(tmpList);
@@ -354,7 +348,7 @@ function TorrentsPage() {
 			}
 			return isAsc ? comparison : comparison * -1;
 		});
-		return applyQuickSearch(filteredList);
+		return filteredList;
 	}
 
 	const getGroupings = (mediaType: UserTorrent['mediaType']) =>
@@ -447,7 +441,8 @@ function TorrentsPage() {
 	}
 
 	async function deleteFilteredTorrents() {
-		if (!confirm('This will delete all torrents listed. Are you sure?')) return;
+		if (!confirm(`This will delete the ${filteredList.length} torrents listed. Are you sure?`))
+			return;
 		const torrentsToDelete = filteredList.map(wrapDeleteFn);
 		const [results, errors] = await runConcurrentFunctions(torrentsToDelete, 5, 500);
 		if (errors.length) {
@@ -532,6 +527,9 @@ function TorrentsPage() {
 		}
 	};
 
+	const hasNoQueryParamsBut = (...params: string[]) =>
+		Object.keys(router.query).filter((p) => !params.includes(p)).length === 0;
+
 	return (
 		<div className="mx-4 my-8">
 			<Head>
@@ -555,12 +553,12 @@ function TorrentsPage() {
 					className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
 					type="text"
 					id="query"
-					placeholder="quick search on filename, hash, or id. supports regex."
+					placeholder="quick search on filename, hash, or id; supports regex"
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 				/>
 			</div>
-			<div className="mb-4">
+			<div className="mb-4 flex">
 				<button
 					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded ${
 						currentPage <= 1 ? 'opacity-60 cursor-not-allowed' : ''
@@ -570,6 +568,7 @@ function TorrentsPage() {
 				>
 					<FaArrowLeft />
 				</button>
+				<span className="w-24 text-center">Page {currentPage}</span>
 				<button
 					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded ${
 						currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)
@@ -582,25 +581,25 @@ function TorrentsPage() {
 					<FaArrowRight />
 				</button>
 				<Link
-					href="/library?mediaType=movie"
+					href="/library?mediaType=movie&page=1"
 					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
 				>
-					Show {movieCount} movies
+					Show only movies
 				</Link>
 				<Link
-					href="/library?mediaType=tv"
+					href="/library?mediaType=tv&page=1"
 					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
 				>
-					Show {tvCount} TV shows
+					Show only TV shows
 				</Link>
 				<Link
-					href="/library?status=slow"
+					href="/library?status=slow&page=1"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
 				>
 					Show slow torrents
 				</Link>
 				<Link
-					href="/library?status=dupe"
+					href="/library?status=dupe&page=1"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
 				>
 					Show duplicate torrents
@@ -608,17 +607,15 @@ function TorrentsPage() {
 
 				<button
 					className={`mr-2 mb-2 bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded ${
-						Object.keys(router.query).filter(
-							(q) => q !== 'mediaType' && router.query.status !== 'dupe'
-						).length === 0
+						!query &&
+						(hasNoQueryParamsBut('mediaType', 'page') || router.query.status === 'dupe')
 							? 'opacity-60 cursor-not-allowed'
 							: ''
 					}`}
 					onClick={deleteFilteredTorrents}
 					disabled={
-						Object.keys(router.query).filter(
-							(q) => q !== 'mediaType' && router.query.status !== 'dupe'
-						).length === 0
+						!query &&
+						(hasNoQueryParamsBut('mediaType', 'page') || router.query.status === 'dupe')
 					}
 				>
 					Delete torrents
@@ -633,15 +630,16 @@ function TorrentsPage() {
 				>
 					Share hash list
 				</button>
-
-				{Object.keys(router.query).length !== 0 && (
-					<Link
-						href="/library"
-						className="mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-4 rounded"
-					>
-						Clear filter
-					</Link>
-				)}
+				<Link
+					href="/library?page=1"
+					className={`mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-4 rounded ${
+						hasNoQueryParamsBut('page')
+							? 'opacity-60 cursor-not-allowed pointer-events-none'
+							: ''
+					}`}
+				>
+					Clear filter
+				</Link>
 			</div>
 			<div className="overflow-x-auto">
 				{rdLoading || adLoading || grouping || filtering ? (
@@ -678,6 +676,14 @@ function TorrentsPage() {
 								</th>
 								<th
 									className="px-4 py-2 cursor-pointer"
+									onClick={() => handleSort('score')}
+								>
+									QScore{' '}
+									{sortBy.column === 'score' &&
+										(sortBy.direction === 'asc' ? '↑' : '↓')}
+								</th>
+								<th
+									className="px-4 py-2 cursor-pointer"
 									onClick={() => handleSort('progress')}
 								>
 									Progress{' '}
@@ -690,14 +696,6 @@ function TorrentsPage() {
 								>
 									Added{' '}
 									{sortBy.column === 'added' &&
-										(sortBy.direction === 'asc' ? '↑' : '↓')}
-								</th>
-								<th
-									className="px-4 py-2 cursor-pointer"
-									onClick={() => handleSort('score')}
-								>
-									Score{' '}
-									{sortBy.column === 'score' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
 								<th className="px-4 py-2">Actions</th>
@@ -759,15 +757,15 @@ function TorrentsPage() {
 												{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
 											</td>
 											<td className="border px-4 py-2">
+												{torrent.score.toFixed(1)}
+											</td>
+											<td className="border px-4 py-2">
 												{torrent.status === 'downloading'
 													? `${torrent.progress}%`
 													: torrent.status}
 											</td>
 											<td className="border px-4 py-2">
 												{new Date(torrent.added).toLocaleString()}
-											</td>
-											<td className="border px-4 py-2">
-												{torrent.score.toFixed(1)}
 											</td>
 											<td className="border px-2 py-2">
 												<button
