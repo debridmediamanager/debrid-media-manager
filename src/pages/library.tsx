@@ -323,13 +323,21 @@ function TorrentsPage() {
 	}
 
 	// given a list, filter by query and paginate
-	function applyQueryAndPagination(unpaginated: UserTorrent[]) {
-		const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-		const endIndex = startIndex + ITEMS_PER_PAGE;
-		const regexFilter = new RegExp(query.split(' ').join('|'), 'i');
-		return (
-			query ? unpaginated.filter((t) => regexFilter.test(t.filename)) : unpaginated
-		).slice(startIndex, endIndex);
+	function applyQuickSearch(unfiltered: UserTorrent[]) {
+		let regexFilter = new RegExp('', 'i');
+		try {
+			regexFilter = new RegExp(query.split(' ').join('|'), 'i');
+		} catch (error) {
+			// do nothing
+		}
+		return query
+			? unfiltered.filter(
+					(t) =>
+						regexFilter.test(t.filename) ||
+						query === t.hash ||
+						query === t.id.substring(3)
+			  )
+			: unfiltered;
 	}
 
 	function sortedData() {
@@ -346,7 +354,7 @@ function TorrentsPage() {
 			}
 			return isAsc ? comparison : comparison * -1;
 		});
-		return applyQueryAndPagination(filteredList);
+		return applyQuickSearch(filteredList);
 	}
 
 	const getGroupings = (mediaType: UserTorrent['mediaType']) =>
@@ -547,7 +555,7 @@ function TorrentsPage() {
 					className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
 					type="text"
 					id="query"
-					placeholder="if movie, add year e.g. greatest showman 2017; if tv series, add s01 e.g. game of thrones s01"
+					placeholder="quick search on filename, hash, or id. supports regex."
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 				/>
@@ -564,12 +572,12 @@ function TorrentsPage() {
 				</button>
 				<button
 					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded ${
-						currentPage >= Math.ceil(filteredList.length / ITEMS_PER_PAGE)
+						currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)
 							? 'opacity-60 cursor-not-allowed'
 							: ''
 					}`}
 					onClick={handleNextPage}
-					disabled={currentPage >= Math.ceil(filteredList.length / ITEMS_PER_PAGE)}
+					disabled={currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)}
 				>
 					<FaArrowRight />
 				</button>
@@ -648,7 +656,7 @@ function TorrentsPage() {
 									className="px-4 py-2 cursor-pointer"
 									onClick={() => handleSort('id')}
 								>
-									ID{' '}
+									ID{` (${sortedData().length}) `}
 									{sortBy.column === 'id' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
@@ -696,93 +704,101 @@ function TorrentsPage() {
 							</tr>
 						</thead>
 						<tbody>
-							{sortedData().map((torrent) => {
-								const groupCount = getGroupings(torrent.mediaType)[
-									getMediaId(torrent.info, torrent.mediaType)
-								];
-								const filterText =
-									groupCount > 1 && !router.query.filter
-										? `${groupCount - 1} other file${
-												groupCount === 1 ? '' : 's'
-										  }`
-										: '';
-								return (
-									<tr key={torrent.id} className="border-t-2 hover:bg-yellow-100">
-										<td className="border px-4 py-2">{torrent.id}</td>
-										<td className="border px-4 py-2">
-											{!['Invalid Magnet', 'Magnet'].includes(
-												torrent.filename
-											) && (
-												<>
-													<strong>{torrent.title}</strong>{' '}
-													<Link
-														className="text-sm text-green-600 hover:text-green-800"
-														href={`/library?filter=${getMediaId(
-															torrent.info,
-															torrent.mediaType
-														)}`}
-													>
-														{filterText}
-													</Link>{' '}
-													<Link
-														target="_blank"
-														className="text-sm text-blue-600 hover:text-blue-800"
-														href={`/search?query=${getMediaId(
-															torrent.info,
-															torrent.mediaType
-														)}`}
-													>
-														Search again
-													</Link>
-													<br />
-												</>
-											)}
-											{torrent.filename}
-										</td>
-										<td className="border px-4 py-2">
-											{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
-										</td>
-										<td className="border px-4 py-2">
-											{torrent.status === 'downloading'
-												? `${torrent.progress}%`
-												: torrent.status}
-										</td>
-										<td className="border px-4 py-2">
-											{new Date(torrent.added).toLocaleString()}
-										</td>
-										<td className="border px-4 py-2">
-											{torrent.score.toFixed(1)}
-										</td>
-										<td className="border px-2 py-2">
-											<button
-												title="Share"
-												className="mr-2 mb-2 text-indigo-600"
-												onClick={() => handleShare(torrent)}
-											>
-												<FaShare />
-											</button>
-											<button
-												title="Delete"
-												className="mr-2 mb-2 text-red-500"
-												onClick={() => handleDeleteTorrent(torrent.id)}
-											>
-												<FaTrash />
-											</button>
-											<button
-												title="Reinsert"
-												className="mr-2 mb-2 text-green-500"
-												onClick={() =>
-													torrent.id.startsWith('rd')
-														? handleReinsertTorrent(torrent.id)
-														: handleRestartTorrent(torrent.id)
-												}
-											>
-												<FaRecycle />
-											</button>
-										</td>
-									</tr>
-								);
-							})}
+							{sortedData()
+								.slice(
+									(currentPage - 1) * ITEMS_PER_PAGE,
+									(currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
+								)
+								.map((torrent) => {
+									const groupCount = getGroupings(torrent.mediaType)[
+										getMediaId(torrent.info, torrent.mediaType)
+									];
+									const filterText =
+										groupCount > 1 && !router.query.filter
+											? `${groupCount - 1} other file${
+													groupCount === 1 ? '' : 's'
+											  }`
+											: '';
+									return (
+										<tr
+											key={torrent.id}
+											className="border-t-2 hover:bg-yellow-100"
+										>
+											<td className="border px-4 py-2">{torrent.id}</td>
+											<td className="border px-4 py-2">
+												{!['Invalid Magnet', 'Magnet'].includes(
+													torrent.filename
+												) && (
+													<>
+														<strong>{torrent.title}</strong>{' '}
+														<Link
+															className="text-sm text-green-600 hover:text-green-800"
+															href={`/library?filter=${getMediaId(
+																torrent.info,
+																torrent.mediaType
+															)}`}
+														>
+															{filterText}
+														</Link>{' '}
+														<Link
+															target="_blank"
+															className="text-sm text-blue-600 hover:text-blue-800"
+															href={`/search?query=${getMediaId(
+																torrent.info,
+																torrent.mediaType
+															)}`}
+														>
+															Search again
+														</Link>
+														<br />
+													</>
+												)}
+												{torrent.filename}
+											</td>
+											<td className="border px-4 py-2">
+												{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
+											</td>
+											<td className="border px-4 py-2">
+												{torrent.status === 'downloading'
+													? `${torrent.progress}%`
+													: torrent.status}
+											</td>
+											<td className="border px-4 py-2">
+												{new Date(torrent.added).toLocaleString()}
+											</td>
+											<td className="border px-4 py-2">
+												{torrent.score.toFixed(1)}
+											</td>
+											<td className="border px-2 py-2">
+												<button
+													title="Share"
+													className="mr-2 mb-2 text-indigo-600"
+													onClick={() => handleShare(torrent)}
+												>
+													<FaShare />
+												</button>
+												<button
+													title="Delete"
+													className="mr-2 mb-2 text-red-500"
+													onClick={() => handleDeleteTorrent(torrent.id)}
+												>
+													<FaTrash />
+												</button>
+												<button
+													title="Reinsert"
+													className="mr-2 mb-2 text-green-500"
+													onClick={() =>
+														torrent.id.startsWith('rd')
+															? handleReinsertTorrent(torrent.id)
+															: handleRestartTorrent(torrent.id)
+													}
+												>
+													<FaRecycle />
+												</button>
+											</td>
+										</tr>
+									);
+								})}
 						</tbody>
 					</table>
 				)}
