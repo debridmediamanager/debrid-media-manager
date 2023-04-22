@@ -70,6 +70,7 @@ function TorrentsPage() {
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
 	const [hasDupes] = useState<Array<string>>([]);
+	const [dupeHashes] = useState<Array<string>>([]);
 
 	// stats
 	const [totalBytes, setTotalBytes] = useState<number>(0);
@@ -210,7 +211,10 @@ function TorrentsPage() {
 		let tmpTotalBytes = 0;
 		clearGroupings(movieGrouping);
 		clearGroupings(tvGroupingByEpisode);
+		const hashes: string[] = [];
 		for (const t of userTorrentsList) {
+			if (!hashes.includes(t.hash)) hashes.push(t.hash);
+			else dupeHashes.push(t.hash);
 			tmpTotalBytes += t.bytes;
 			const mediaId = getMediaId(t.info, t.mediaType);
 			if (mediaId in getGroupings(t.mediaType)) {
@@ -261,6 +265,10 @@ function TorrentsPage() {
 		}
 		if (status === 'dupe') {
 			tmpList = tmpList.filter((t) => hasDupes.includes(getMediaId(t.info, t.mediaType)));
+			setFilteredList(applyQuickSearch(tmpList));
+		}
+		if (status === 'dupehash') {
+			tmpList = tmpList.filter((t) => dupeHashes.includes(t.hash));
 			setFilteredList(applyQuickSearch(tmpList));
 		}
 		if (status === 'non4k') {
@@ -318,19 +326,16 @@ function TorrentsPage() {
 
 	// given a list, filter by query and paginate
 	function applyQuickSearch(unfiltered: UserTorrent[]) {
-		let regexFilter = new RegExp('', 'i');
-		try {
-			regexFilter = new RegExp(query.split(' ').join('|'), 'i');
-		} catch (error) {
-			// do nothing
+		let regexFilters: RegExp[] = [];
+		for (const q of query.split(' ')) {
+			try {
+				regexFilters.push(new RegExp(q, 'ig'));
+			} catch (error) {
+				continue;
+			}
 		}
 		return query
-			? unfiltered.filter(
-					(t) =>
-						regexFilter.test(t.filename) ||
-						query === t.hash ||
-						query === t.id.substring(3)
-			  )
+			? unfiltered.filter((t) => regexFilters.every((regex) => regex.test(t.filename)))
 			: unfiltered;
 	}
 
@@ -557,13 +562,13 @@ function TorrentsPage() {
 					value={query}
 					onChange={(e) => {
 						setCurrentPage(1);
-						setQuery(e.target.value);
+						setQuery(e.target.value.toLocaleLowerCase());
 					}}
 				/>
 			</div>
 			<div className="mb-4 flex">
 				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded ${
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
 						currentPage <= 1 ? 'opacity-60 cursor-not-allowed' : ''
 					}`}
 					onClick={handlePrevPage}
@@ -573,7 +578,7 @@ function TorrentsPage() {
 				</button>
 				<span className="w-24 text-center">Page {currentPage}</span>
 				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded ${
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
 						currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)
 							? 'opacity-60 cursor-not-allowed'
 							: ''
@@ -585,31 +590,37 @@ function TorrentsPage() {
 				</button>
 				<Link
 					href="/library?mediaType=movie&page=1"
-					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
+					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-1 px-1 rounded"
 				>
-					Show only movies
+					Only movies
 				</Link>
 				<Link
 					href="/library?mediaType=tv&page=1"
-					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
+					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-1 px-1 rounded"
 				>
-					Show only TV shows
+					Only TV
 				</Link>
 				<Link
 					href="/library?status=slow&page=1"
-					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
+					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
 				>
-					Show slow torrents
+					Slow downloads
 				</Link>
 				<Link
 					href="/library?status=dupe&page=1"
-					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded"
+					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
 				>
-					Show duplicate torrents
+					Duplicate titles
+				</Link>
+				<Link
+					href="/library?status=dupehash&page=1"
+					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
+				>
+					Duplicate hashes
 				</Link>
 
 				<button
-					className={`mr-2 mb-2 bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded ${
+					className={`mr-2 mb-2 bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-1 rounded ${
 						!query &&
 						(filteredList.length === 0 ||
 							hasNoQueryParamsBut('mediaType', 'page') ||
@@ -629,7 +640,7 @@ function TorrentsPage() {
 				</button>
 
 				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded ${
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
 						filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
 					}`}
 					onClick={generateHashList}
@@ -639,7 +650,7 @@ function TorrentsPage() {
 				</button>
 				<Link
 					href="/library?page=1"
-					className={`mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-4 rounded ${
+					className={`mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-1 rounded ${
 						hasNoQueryParamsBut('page')
 							? 'opacity-60 cursor-not-allowed pointer-events-none'
 							: ''
@@ -654,7 +665,7 @@ function TorrentsPage() {
 						<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
 					</div>
 				) : (
-					<table className="w-full">
+					<table className="w-full table-auto">
 						<thead>
 							<tr>
 								<th
