@@ -118,7 +118,9 @@ function Search() {
 		(e?: React.FormEvent<HTMLFormElement>) => {
 			if (e) e.preventDefault();
 			if (!query) return;
-			router.push(`/search?query=${encodeURIComponent(query)}`);
+			router.push({
+				query: { ...router.query, query: encodeURIComponent(query) },
+			});
 		},
 		[router, query]
 	);

@@ -21,11 +21,12 @@ import lzString from 'lz-string';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
-import { FaRecycle, FaShare, FaTrash } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight, FaRecycle, FaShare, FaTrash } from 'react-icons/fa';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
+const ITEMS_PER_PAGE = 100;
 
 interface UserTorrent {
 	id: string;
@@ -48,6 +49,8 @@ interface SortBy {
 
 function TorrentsPage() {
 	const router = useRouter();
+	const [query, setQuery] = useState('');
+	const [currentPage, setCurrentPage] = useState(1);
 
 	// loading states
 	const [rdLoading, setRdLoading] = useState(true);
@@ -77,6 +80,27 @@ function TorrentsPage() {
 		'userTorrentsList',
 		{}
 	);
+
+	const handlePrevPage = useCallback(() => {
+		if (router.query.page === '1') return;
+		router.push({
+			query: { ...router.query, page: currentPage - 1 },
+		});
+	}, [currentPage, router]);
+
+	const handleNextPage = useCallback(() => {
+		router.push({
+			query: { ...router.query, page: currentPage + 1 },
+		});
+	}, [currentPage, router]);
+
+	// pagination query params
+	useEffect(() => {
+		const { page } = router.query;
+		if (!page || Array.isArray(page)) return;
+		setCurrentPage(parseInt(page, 10));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [router]);
 
 	// fetch list from api
 	useEffect(() => {
@@ -228,7 +252,7 @@ function TorrentsPage() {
 	useEffect(() => {
 		if (rdLoading || adLoading || grouping) return;
 		setFiltering(true);
-		if (Object.keys(router.query).length === 0) {
+		if (Object.keys(router.query).filter((e) => e !== 'page').length === 0) {
 			setFilteredList(userTorrentsList);
 			selectPlayableFiles(userTorrentsList);
 			deleteFailedTorrents(userTorrentsList);
@@ -262,7 +286,16 @@ function TorrentsPage() {
 		deleteFailedTorrents(tmpList);
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query, userTorrentsList, rdLoading, adLoading, grouping, hasDupes]);
+	}, [
+		router.query,
+		userTorrentsList,
+		rdLoading,
+		adLoading,
+		grouping,
+		hasDupes,
+		query,
+		currentPage,
+	]);
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
@@ -289,6 +322,16 @@ function TorrentsPage() {
 		});
 	}
 
+	// given a list, filter by query and paginate
+	function applyQueryAndPagination(unpaginated: UserTorrent[]) {
+		const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+		const endIndex = startIndex + ITEMS_PER_PAGE;
+		const regexFilter = new RegExp(query.split(' ').join('|'), 'i');
+		return (
+			query ? unpaginated.filter((t) => regexFilter.test(t.filename)) : unpaginated
+		).slice(startIndex, endIndex);
+	}
+
 	function sortedData() {
 		if (!sortBy.column) {
 			return filteredList;
@@ -303,7 +346,7 @@ function TorrentsPage() {
 			}
 			return isAsc ? comparison : comparison * -1;
 		});
-		return filteredList;
+		return applyQueryAndPagination(filteredList);
 	}
 
 	const getGroupings = (mediaType: UserTorrent['mediaType']) =>
@@ -499,7 +542,37 @@ function TorrentsPage() {
 					Go Home
 				</Link>
 			</div>
+			<div className="flex items-center border-b border-b-2 border-gray-500 py-2 mb-4">
+				<input
+					className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+					type="text"
+					id="query"
+					placeholder="if movie, add year e.g. greatest showman 2017; if tv series, add s01 e.g. game of thrones s01"
+					value={query}
+					onChange={(e) => setQuery(e.target.value)}
+				/>
+			</div>
 			<div className="mb-4">
+				<button
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded ${
+						currentPage <= 1 ? 'opacity-60 cursor-not-allowed' : ''
+					}`}
+					onClick={handlePrevPage}
+					disabled={currentPage <= 1}
+				>
+					<FaArrowLeft />
+				</button>
+				<button
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded ${
+						currentPage >= Math.ceil(filteredList.length / ITEMS_PER_PAGE)
+							? 'opacity-60 cursor-not-allowed'
+							: ''
+					}`}
+					onClick={handleNextPage}
+					disabled={currentPage >= Math.ceil(filteredList.length / ITEMS_PER_PAGE)}
+				>
+					<FaArrowRight />
+				</button>
 				<Link
 					href="/library?mediaType=movie"
 					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
