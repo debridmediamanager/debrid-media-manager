@@ -555,7 +555,10 @@ function TorrentsPage() {
 					id="query"
 					placeholder="quick search on filename, hash, or id; supports regex"
 					value={query}
-					onChange={(e) => setQuery(e.target.value)}
+					onChange={(e) => {
+						setCurrentPage(1);
+						setQuery(e.target.value);
+					}}
 				/>
 			</div>
 			<div className="mb-4 flex">
@@ -608,14 +611,18 @@ function TorrentsPage() {
 				<button
 					className={`mr-2 mb-2 bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded ${
 						!query &&
-						(hasNoQueryParamsBut('mediaType', 'page') || router.query.status === 'dupe')
+						(filteredList.length === 0 ||
+							hasNoQueryParamsBut('mediaType', 'page') ||
+							router.query.status === 'dupe')
 							? 'opacity-60 cursor-not-allowed'
 							: ''
 					}`}
 					onClick={deleteFilteredTorrents}
 					disabled={
 						!query &&
-						(hasNoQueryParamsBut('mediaType', 'page') || router.query.status === 'dupe')
+						(filteredList.length === 0 ||
+							hasNoQueryParamsBut('mediaType', 'page') ||
+							router.query.status === 'dupe')
 					}
 				>
 					Delete torrents
