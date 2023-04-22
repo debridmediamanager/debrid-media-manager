@@ -70,9 +70,12 @@ function Search() {
 			let endpoint = `/api/search?search=${encodeURIComponent(searchQuery)}&libraryType=${
 				myAccount?.libraryType
 			}`;
-			if (config.externalSearchApiHostname)
+			if (
+				config.externalSearchApiHostname &&
+				window.location.origin !== config.externalSearchApiHostname
+			)
 				endpoint = `${config.externalSearchApiHostname}${endpoint}`;
-			if (config.bypassHostname && config.externalSearchApiHostname)
+			if (config.bypassHostname && !endpoint.startsWith('/'))
 				endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
 			const response = await axios.get<SearchApiResponse>(endpoint, {
 				cancelToken: source.token,
