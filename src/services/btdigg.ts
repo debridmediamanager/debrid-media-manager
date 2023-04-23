@@ -21,6 +21,8 @@ export type SearchResult = {
 	info: ParsedFilename;
 };
 
+const cache = new RedisCache();
+
 export const createAxiosInstance = (agent: SocksProxyAgent) => {
 	return axios.create({
 		httpAgent: agent,
@@ -81,12 +83,19 @@ export const groupByParsedTitle = (results: SearchResult[]): SearchResult[] => {
 
 const dhtSearchHostname = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
 
+export type searchSpeedType =
+	| 'veryfast'
+	| 'fast'
+	| 'normal'
+	| 'slow'
+	| 'veryslow'
+	| 'veryslowoverride';
+
 export async function fetchSearchResults(
-	speed: 'veryfast' | 'fast' | 'normal' | 'slow' | 'veryslow',
+	speed: searchSpeedType,
 	client: AxiosInstance,
 	searchQuery: string,
-	libraryType: string,
-	cache: RedisCache
+	libraryType: string
 ): Promise<SearchResult[]> {
 	try {
 		const finalQuery = `${searchQuery}${
@@ -94,9 +103,13 @@ export async function fetchSearchResults(
 		}`;
 
 		try {
-			const cached = await cache.getCachedJsonValue<SearchResult[]>(finalQuery.split(' '));
-			if (cached) {
-				return cached;
+			if (speed !== 'veryslowoverride') {
+				const cached = await cache.getCachedJsonValue<SearchResult[]>(
+					finalQuery.split(' ')
+				);
+				if (cached) {
+					return cached;
+				}
 			}
 		} catch (e: any) {
 			console.warn(e);
@@ -130,6 +143,7 @@ export async function fetchSearchResults(
 				upperThreshold = (skipped: number): number => 80 + Math.floor(skipped / 10);
 				break;
 			case 'veryslow':
+			case 'veryslowoverride':
 				upperThreshold = (_: any) => 100;
 				break;
 		}
@@ -193,7 +207,7 @@ export async function fetchSearchResults(
 
 				// immediately check if filesize makes sense
 				const fileSize = parseFloat(fileSizeStr);
-				if (mediaType === 'movie' && fileSize > 128) {
+				if (mediaType === 'movie' && fileSize > 150) {
 					skippedResults++;
 					continue;
 				}
