@@ -76,7 +76,7 @@ export default function StartPage() {
 						Login with AllDebrid
 					</button>
 					<a
-						className="px-4 py-2 m-2 text-white bg-gray-500 opacity-50 rounded"
+						className="px-4 py-2 m-2 text-white bg-green-500 rounded hover:bg-green-600"
 						href="https://alldebrid.com/?uid=1kk5i&lang=en"
 						target="_blank"
 						rel="noopener noreferrer"
