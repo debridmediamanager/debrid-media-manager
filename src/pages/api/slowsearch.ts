@@ -5,7 +5,6 @@ import {
 	groupByParsedTitle,
 	SearchResult,
 } from '@/services/btdigg';
-import { RedisCache } from '@/services/cache';
 import { cleanSearchQuery, getLibraryTypes } from '@/utils/search';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { SocksProxyAgent } from 'socks-proxy-agent';
@@ -16,7 +15,6 @@ export type SlowSearchApiResponse = {
 };
 
 const agent = new SocksProxyAgent(process.env.PROXY!, { timeout: 3000 });
-const cache = new RedisCache();
 
 export default async function handler(
 	req: NextApiRequest,
@@ -41,7 +39,7 @@ export default async function handler(
 	try {
 		const results = [];
 		for (const lType of libraryTypes) {
-			results.push(await fetchSearchResults('veryslow', client, finalQuery, lType, cache));
+			results.push(await fetchSearchResults('veryslow', client, finalQuery, lType));
 		}
 		let processedResults = flattenAndRemoveDuplicates(results);
 		if (processedResults.length) processedResults = groupByParsedTitle(processedResults);
