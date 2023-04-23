@@ -20,4 +20,5 @@
 - [] 2.4.0: Add instant check in AD on search page (removed due to performance impact)
 - [] 2.5.0: Rescan library button in all other pages except library
 - [] 2.6.0: Add title filter buttons on search page
-- [] 3.0.0: Refactor pages into different components
+- [] 3.0.0: Add tests
+- [] 4.0.0: Refactor pages into different components

@@ -1,5 +1,5 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import useLocalStorage from '@/hooks/localStorage';
+import { useDownloadsCache } from '@/hooks/cache';
 import { deleteMagnet, getMagnetStatus, restartMagnet } from '@/services/allDebrid';
 import { createShortUrl } from '@/services/hashlists';
 import {
@@ -10,7 +10,6 @@ import {
 	selectFiles,
 } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
-import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
 import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -75,10 +74,9 @@ function TorrentsPage() {
 	// stats
 	const [totalBytes, setTotalBytes] = useState<number>(0);
 
-	const [_, setTorrentCache] = useLocalStorage<Record<string, CachedTorrentInfo>>(
-		'userTorrentsList',
-		{}
-	);
+	// cache
+	const [_1, __1, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
+	const [_2, __2, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
 
 	const handlePrevPage = useCallback(() => {
 		if (router.query.page === '1') return;
@@ -126,13 +124,14 @@ function TorrentsPage() {
 				) as UserTorrent[];
 
 				setUserTorrentsList((prev) => [...prev, ...torrents]);
-				setTorrentCache((prev) => ({
-					...prev,
-					...torrents.reduce<Record<string, CachedTorrentInfo>>((cache, t) => {
-						cache[t.hash] = t;
-						return cache;
-					}, {}),
-				}));
+				rdCacheAdder.many(
+					torrents.map((t) => ({
+						id: t.id,
+						hash: t.hash,
+						status: t.status === 'downloaded' ? 'downloaded' : 'downloading',
+						progress: t.progress,
+					}))
+				);
 			} catch (error) {
 				setUserTorrentsList((prev) => [...prev]);
 				toast.error('Error fetching user torrents list');
@@ -183,13 +182,14 @@ function TorrentsPage() {
 				}) as UserTorrent[];
 
 				setUserTorrentsList((prev) => [...prev, ...torrents]);
-				setTorrentCache((prev) => ({
-					...prev,
-					...torrents.reduce<Record<string, CachedTorrentInfo>>((cache, t) => {
-						cache[t.hash] = t;
-						return cache;
-					}, {}),
-				}));
+				adCacheAdder.many(
+					torrents.map((t) => ({
+						id: t.id,
+						hash: t.hash,
+						status: t.status === 'downloaded' ? 'downloaded' : 'downloading',
+						progress: t.progress,
+					}))
+				);
 			} catch (error) {
 				setUserTorrentsList((prev) => [...prev]);
 				toast.error('Error fetching AllDebrid torrents list');
@@ -306,11 +306,8 @@ function TorrentsPage() {
 			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
 			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
 			if (!disableToast) toast.success(`Torrent deleted (${id})`);
-			setTorrentCache((prevCache) => {
-				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id) || '';
-				delete prevCache[hash];
-				return prevCache;
-			});
+			if (id.startsWith('rd:')) removeFromRdCache(id.substring(3));
+			if (id.startsWith('ad:')) removeFromAdCache(id.substring(3));
 		} catch (error) {
 			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
 			throw error;
@@ -385,11 +382,7 @@ function TorrentsPage() {
 				newList[index].status = 'downloading';
 				return newList;
 			});
-			setTorrentCache((prevCache) => {
-				const hash = Object.keys(prevCache).find((key) => prevCache[key].id === id) || '';
-				prevCache[hash].status = 'downloading';
-				return prevCache;
-			});
+			rdCacheAdder.single(id, response.hash, response.status);
 		} catch (error) {
 			if ((error as Error).message === 'no_files_for_selection') {
 				toast.error(`No files for selection, deleting (${id})`, {
@@ -510,11 +503,11 @@ function TorrentsPage() {
 			const torrent = userTorrentsList.find((t) => t.id === oldId);
 			if (!torrent) throw new Error('no_torrent_found');
 			const hash = torrent.hash;
-			const newId = await addHashAsMagnet(rdKey, hash);
-			torrent.id = newId;
-			await handleSelectFiles(newId);
+			const id = await addHashAsMagnet(rdKey, hash);
+			torrent.id = `rd:${id}`;
+			await handleSelectFiles(torrent.id);
 			await handleDeleteTorrent(oldId, true);
-			toast.success(`Torrent reinserted (${oldId}👉${newId})`);
+			toast.success(`Torrent reinserted (${oldId}👉${torrent.id})`);
 		} catch (error) {
 			toast.error(`Error reinserting torrent (${oldId})`);
 			throw error;
@@ -738,9 +731,11 @@ function TorrentsPage() {
 									return (
 										<tr
 											key={torrent.id}
-											className="border-t-2 hover:bg-yellow-100"
+											className="border-t-2 hover:bg-purple-100"
 										>
-											<td className="border px-4 py-2">{torrent.id}</td>
+											<td className="border px-4 py-2 max-w-0 overflow-hidden">
+												{torrent.id}
+											</td>
 											<td className="border px-4 py-2">
 												{!['Invalid Magnet', 'Magnet'].includes(
 													torrent.filename
