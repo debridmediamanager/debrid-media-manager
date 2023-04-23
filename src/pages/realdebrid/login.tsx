@@ -25,8 +25,8 @@ export default function RealDebridLoginPage() {
 				// Save user code to clipboard
 				try {
 					await navigator.clipboard.writeText(deviceCodeResponse.user_code);
-				} catch (error) {
 					setIsCopied(true);
+				} catch (error) {
 					console.error('Error saving user code to clipboard:', (error as any).message);
 				}
 

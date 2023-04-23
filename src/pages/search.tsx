@@ -1,6 +1,6 @@
 import useMyAccount, { MyAccount } from '@/hooks/account';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import useLocalStorage from '@/hooks/localStorage';
+import { useDownloadsCache } from '@/hooks/cache';
 import {
 	AdInstantAvailabilityResponse,
 	adInstantCheck,
@@ -16,7 +16,6 @@ import {
 	rdInstantCheck,
 	selectFiles,
 } from '@/services/realDebrid';
-import { CachedTorrentInfo } from '@/utils/cachedTorrentInfo';
 import { getMediaId } from '@/utils/mediaId';
 import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { withAuth } from '@/utils/withAuth';
@@ -28,7 +27,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { FaDownload, FaFastForward } from 'react-icons/fa';
+import { FaDownload, FaFastForward, FaTimes } from 'react-icons/fa';
 import { SearchApiResponse } from './api/search';
 
 type Availability = 'all:available' | 'rd:available' | 'ad:available' | 'unavailable' | 'no_videos';
@@ -53,10 +52,8 @@ function Search() {
 	const [loading, setLoading] = useState(false);
 	const [cancelTokenSource, setCancelTokenSource] = useState<CancelTokenSource | null>(null);
 	const [myAccount, setMyAccount] = useMyAccount();
-	const [torrentCache, setTorrentCache] = useLocalStorage<Record<string, CachedTorrentInfo>>(
-		'userTorrentsList',
-		{}
-	);
+	const [rdCache, rd, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
+	const [adCache, ad, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
 
 	const router = useRouter();
 
@@ -253,18 +250,7 @@ function Search() {
 			if (!rdKey) throw new Error('no_rd_key');
 			const id = await addHashAsMagnet(rdKey, hash);
 			if (!disableToast) toast.success('Successfully added as magnet!');
-			setTorrentCache(
-				(prev) =>
-					({
-						...prev,
-						[hash]: {
-							id,
-							hash,
-							status: instantDownload ? 'downloaded' : 'downloading',
-							progress: 0,
-						},
-					} as Record<string, CachedTorrentInfo>)
-			);
+			rdCacheAdder.single(`rd:${id}`, hash, instantDownload ? 'downloaded' : 'downloading');
 			handleSelectFiles(`rd:${id}`, true); // add rd: to account for substr(3) in handleSelectFiles
 		} catch (error) {
 			if (!disableToast)
@@ -280,19 +266,14 @@ function Search() {
 	) => {
 		try {
 			if (!adKey) throw new Error('no_ad_key');
-			const id = await uploadMagnet(adKey, [hash]);
+			const resp = await uploadMagnet(adKey, [hash]);
+			if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
+				throw new Error('no_magnets');
 			if (!disableToast) toast.success('Successfully added as magnet!');
-			setTorrentCache(
-				(prev) =>
-					({
-						...prev,
-						[hash]: {
-							id,
-							hash,
-							status: instantDownload ? 'downloaded' : 'downloading',
-							progress: 0,
-						},
-					} as Record<string, CachedTorrentInfo>)
+			adCacheAdder.single(
+				`ad:${resp.data.magnets[0].id}`,
+				hash,
+				instantDownload ? 'downloaded' : 'downloading'
 			);
 		} catch (error) {
 			if (!disableToast)
@@ -301,16 +282,10 @@ function Search() {
 		}
 	};
 
-	const inLibrary = (hash: string) => hash in torrentCache!;
-	const notInLibrary = (hash: string) => !inLibrary(hash);
-	const isDownloaded = (hash: string) =>
-		inLibrary(hash) && torrentCache![hash].status === 'downloaded';
-	const isDownloading = (hash: string) =>
-		inLibrary(hash) && torrentCache![hash].status !== 'downloaded';
-	const isAvailableInAd = (result: SearchResult) =>
-		result.available === 'ad:available' || result.available === 'all:available';
 	const isAvailableInRd = (result: SearchResult) =>
 		result.available === 'rd:available' || result.available === 'all:available';
+	const isAvailableInAd = (result: SearchResult) =>
+		result.available === 'ad:available' || result.available === 'all:available';
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
@@ -318,12 +293,8 @@ function Search() {
 			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
 			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
 			if (!disableToast) toast.success(`Download canceled (${id})`);
-			setTorrentCache((prevCache) => {
-				const updatedCache = { ...prevCache };
-				const hash = Object.keys(updatedCache).find((key) => updatedCache[key].id === id);
-				delete updatedCache[hash!];
-				return updatedCache;
-			});
+			if (id.startsWith('rd:')) removeFromRdCache(id.substring(3));
+			if (id.startsWith('ad:')) removeFromAdCache(id.substring(3));
 		} catch (error) {
 			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
 			throw error;
@@ -416,7 +387,7 @@ function Search() {
 				<>
 					<h2 className="text-2xl font-bold my-4">Search Results</h2>
 					<div className="overflow-x-auto">
-						<table className="w-full table-auto">
+						<table className="max-w-full w-full table-auto">
 							<thead>
 								<tr>
 									<th className="px-4 py-2">Title</th>
@@ -425,109 +396,107 @@ function Search() {
 								</tr>
 							</thead>
 							<tbody>
-								{searchResults.map((result: SearchResult) => (
+								{searchResults.map((r: SearchResult) => (
 									<tr
-										key={result.hash}
+										key={r.hash}
 										className={`
-											hover:bg-yellow-100
-											${isDownloaded(result.hash) && 'bg-green-100'}
-											${isDownloading(result.hash) && 'bg-red-100'}
+											hover:bg-purple-100
+											${
+												rd.isDownloaded(r.hash) || ad.isDownloaded(r.hash)
+													? 'bg-green-100'
+													: rd.isDownloading(r.hash) ||
+													  ad.isDownloading(r.hash)
+													? 'bg-red-100'
+													: ''
+											}
 										`}
 									>
-										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 max-w-2xl overflow-hidden overflow-ellipsis">
 											<strong>
-												{getMediaId(result.info, result.mediaType, false)}
+												{getMediaId(r.info, r.mediaType, false)}
 											</strong>
 											<br />
-											{result.title}
+											{r.title}
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-											{result.fileSize} GB
+											{r.fileSize} GB
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-											{(isDownloaded(result.hash) ||
-												(inLibrary(result.hash) &&
-													!torrentCache![result.hash].id)) &&
-												`${torrentCache![result.hash].status}`}
-											{isDownloading(result.hash) &&
-												torrentCache![result.hash].id && (
-													<button
-														className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-														onClick={() => {
-															handleDeleteTorrent(
-																torrentCache![result.hash].id
-															);
-														}}
-													>
-														Cancel download (
-														{torrentCache![result.hash].progress}%)
-													</button>
-												)}
-											{notInLibrary(result.hash) && (
-												<>
-													{rdKey && (
-														<button
-															className={`bg-${
-																isAvailableInRd(result)
-																	? 'green'
-																	: 'blue'
-															}-500 hover:bg-${
-																isAvailableInRd(result)
-																	? 'green'
-																	: 'blue'
-															}-700 text-white font-bold py-2 px-4 rounded`}
-															onClick={() => {
-																handleAddAsMagnetInRd(
-																	result.hash,
-																	isAvailableInRd(result)
-																);
-															}}
-														>
-															{isAvailableInRd(result) ? (
-																<>
-																	<FaFastForward />
-																	RD
-																</>
-															) : (
-																<>
-																	<FaDownload />
-																	RD
-																</>
-															)}
-														</button>
+											{rd.isDownloading(r.hash) && rdCache![r.hash].id && (
+												<button
+													className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+													onClick={() => {
+														handleDeleteTorrent(rdCache![r.hash].id);
+													}}
+												>
+													<FaTimes />
+													RD ({rdCache![r.hash].progress}%)
+												</button>
+											)}
+											{rdKey && rd.notInLibrary(r.hash) && (
+												<button
+													className={`bg-${
+														isAvailableInRd(r) ? 'green' : 'blue'
+													}-500 hover:bg-${
+														isAvailableInRd(r) ? 'green' : 'blue'
+													}-700 text-white font-bold py-2 px-4 rounded`}
+													onClick={() => {
+														handleAddAsMagnetInRd(
+															r.hash,
+															isAvailableInRd(r)
+														);
+													}}
+												>
+													{isAvailableInRd(r) ? (
+														<>
+															<FaFastForward />
+															RD
+														</>
+													) : (
+														<>
+															<FaDownload />
+															RD
+														</>
 													)}
-													{adKey && (
-														<button
-															className={`bg-${
-																isAvailableInAd(result)
-																	? 'green'
-																	: 'blue'
-															}-500 hover:bg-${
-																isAvailableInAd(result)
-																	? 'green'
-																	: 'blue'
-															}-700 text-white font-bold py-2 px-4 rounded`}
-															onClick={() => {
-																handleAddAsMagnetInAd(
-																	result.hash,
-																	isAvailableInAd(result)
-																);
-															}}
-														>
-															{isAvailableInAd(result) ? (
-																<>
-																	<FaFastForward />
-																	AD
-																</>
-															) : (
-																<>
-																	<FaDownload />
-																	AD
-																</>
-															)}
-														</button>
+												</button>
+											)}
+											{ad.isDownloading(r.hash) && adCache![r.hash].id && (
+												<button
+													className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+													onClick={() => {
+														handleDeleteTorrent(adCache![r.hash].id);
+													}}
+												>
+													<FaTimes />
+													AD ({adCache![r.hash].progress}%)
+												</button>
+											)}
+											{adKey && ad.notInLibrary(r.hash) && (
+												<button
+													className={`bg-${
+														isAvailableInAd(r) ? 'green' : 'blue'
+													}-500 hover:bg-${
+														isAvailableInAd(r) ? 'green' : 'blue'
+													}-700 text-white font-bold py-2 px-4 rounded`}
+													onClick={() => {
+														handleAddAsMagnetInAd(
+															r.hash,
+															isAvailableInAd(r)
+														);
+													}}
+												>
+													{isAvailableInAd(r) ? (
+														<>
+															<FaFastForward />
+															AD
+														</>
+													) : (
+														<>
+															<FaDownload />
+															AD
+														</>
 													)}
-												</>
+												</button>
 											)}
 										</td>
 									</tr>
