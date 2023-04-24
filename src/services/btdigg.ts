@@ -87,7 +87,9 @@ export type searchSpeedType =
 	| 'veryfast'
 	| 'fast'
 	| 'normal'
+	| 'normaloverride'
 	| 'slow'
+	| 'slowoverride'
 	| 'veryslow'
 	| 'veryslowoverride';
 
@@ -103,7 +105,7 @@ export async function fetchSearchResults(
 		}`;
 
 		try {
-			if (speed !== 'veryslowoverride') {
+			if (!speed.includes('override')) {
 				const cached = await cache.getCachedJsonValue<SearchResult[]>(
 					finalQuery.split(' ')
 				);
@@ -137,9 +139,11 @@ export async function fetchSearchResults(
 				upperThreshold = (skipped: number): number => 40 + Math.floor(skipped / 10);
 				break;
 			case 'normal':
+			case 'normaloverride':
 				upperThreshold = (skipped: number): number => 60 + Math.floor(skipped / 10);
 				break;
 			case 'slow':
+			case 'slowoverride':
 				upperThreshold = (skipped: number): number => 80 + Math.floor(skipped / 10);
 				break;
 			case 'veryslow':
