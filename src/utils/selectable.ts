@@ -1,6 +1,6 @@
 import { TorrentInfoResponse } from '@/services/realDebrid';
 
-const FILE_SIZE_PCT_THRESHOLD = 0.4;
+const FILE_SIZE_PCT_THRESHOLD = 0.25;
 
 export function isVideo(file: { path: string }) {
 	const filePath = file.path.toLowerCase();
