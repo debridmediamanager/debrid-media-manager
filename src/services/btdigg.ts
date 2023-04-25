@@ -61,7 +61,7 @@ export const flattenAndRemoveDuplicates = (arr: SearchResult[][]): SearchResult[
 export const groupByParsedTitle = (results: SearchResult[]): SearchResult[] => {
 	const frequency: Record<string, number> = {};
 	for (const result of results) {
-		const mediaId = getMediaId(result.info, result.mediaType);
+		const mediaId = getMediaId(result.info, result.mediaType, true);
 		if (mediaId in frequency) {
 			frequency[mediaId] += result.fileSize;
 		} else {
@@ -71,7 +71,8 @@ export const groupByParsedTitle = (results: SearchResult[]): SearchResult[] => {
 
 	results.sort((a, b) => {
 		const frequencyCompare =
-			frequency[getMediaId(b.info, b.mediaType)] - frequency[getMediaId(a.info, a.mediaType)];
+			frequency[getMediaId(b.info, b.mediaType, true)] -
+			frequency[getMediaId(a.info, a.mediaType, true)];
 		if (frequencyCompare === 0) {
 			return b.fileSize - a.fileSize;
 		}

@@ -100,7 +100,7 @@ function Search() {
 			);
 			setSearchFilters(
 				response.data.searchResults?.reduce((acc, r) => {
-					const mediaId = getMediaId(r.info, r.mediaType, false);
+					const mediaId = getMediaId(r.info, r.mediaType, true);
 					if (acc[mediaId]) {
 						acc[mediaId] += 1;
 					} else {
