@@ -269,8 +269,8 @@ function TorrentsPage() {
 			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
 			if (adKey && id.startsWith('ad:')) await deleteTorrent(adKey, id.substring(3));
 			if (!disableToast) toast.success(`Download canceled (${id})`);
-			if (id.startsWith('rd:')) removeFromRdCache(id.substring(3));
-			if (id.startsWith('ad:')) removeFromAdCache(id.substring(3));
+			if (id.startsWith('rd:')) removeFromRdCache(id);
+			if (id.startsWith('ad:')) removeFromAdCache(id);
 		} catch (error) {
 			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
 			throw error;
@@ -312,7 +312,7 @@ function TorrentsPage() {
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB
 				</title>
 			</Head>
-			<Toaster position="top-right" />
+			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">
 					Share this page ({userTorrentsList.length} files in total; size:{' '}

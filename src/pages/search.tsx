@@ -1,6 +1,7 @@
 import useMyAccount, { MyAccount } from '@/hooks/account';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
+import useLocalStorage from '@/hooks/localStorage';
 import {
 	AdInstantAvailabilityResponse,
 	adInstantCheck,
@@ -16,6 +17,7 @@ import {
 	rdInstantCheck,
 	selectFiles,
 } from '@/services/realDebrid';
+import { groupBy } from '@/utils/groupBy';
 import { getMediaId } from '@/utils/mediaId';
 import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { withAuth } from '@/utils/withAuth';
@@ -33,6 +35,7 @@ import { SearchApiResponse } from './api/search';
 type Availability = 'all:available' | 'rd:available' | 'ad:available' | 'unavailable' | 'no_videos';
 
 type SearchResult = {
+	mediaId: string;
 	title: string;
 	fileSize: number;
 	hash: string;
@@ -52,8 +55,18 @@ function Search() {
 	const [loading, setLoading] = useState(false);
 	const [cancelTokenSource, setCancelTokenSource] = useState<CancelTokenSource | null>(null);
 	const [myAccount, setMyAccount] = useMyAccount();
+	const [masterAvailability, setMasterAvailability] = useState<HashAvailability>({});
+	const [searchFilters, setSearchFilters] = useState<Record<string, number>>({});
 	const [rdCache, rd, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
 	const [adCache, ad, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
+	const [rdAutoInstantCheck, setRdAutoInstantCheck] = useLocalStorage<boolean>(
+		'rdAutoInstantCheck',
+		false
+	);
+	// const [adAutoInstantCheck, setAdAutoInstantCheck] = useLocalStorage<boolean>(
+	// 	'adAutoInstantCheck',
+	// 	false
+	// );
 
 	const router = useRouter();
 
@@ -77,26 +90,34 @@ function Search() {
 			const response = await axios.get<SearchApiResponse>(endpoint, {
 				cancelToken: source.token,
 			});
+
 			setSearchResults(
-				response.data.searchResults?.map((r) => ({ ...r, available: 'unavailable' })) || []
+				response.data.searchResults?.map((r) => ({
+					...r,
+					mediaId: getMediaId(r.info, r.mediaType, false),
+					available: 'unavailable',
+				})) || []
+			);
+			setSearchFilters(
+				response.data.searchResults?.reduce((acc, r) => {
+					const mediaId = getMediaId(r.info, r.mediaType, false);
+					if (acc[mediaId]) {
+						acc[mediaId] += 1;
+					} else {
+						acc[mediaId] = 1;
+					}
+					return acc;
+				}, {} as Record<string, number>)!
 			);
 			if (response.data.searchResults?.length) {
 				toast(`Found ${response.data.searchResults.length} results`, { icon: '🔍' });
-				const availability = await instantCheckInRd(
-					response.data.searchResults.map((result) => result.hash)
-				);
-				toast(
-					`Found ${
-						Object.values(availability).filter((a) => a.includes(':available')).length
-					} available in RD`,
-					{ icon: '🔍' }
-				);
-				setSearchResults((prev) =>
-					prev.map((r) => ({ ...r, available: availability[r.hash] }))
-				);
+
+				// instant checks
+				const hashArr = response.data.searchResults.map((r) => r.hash);
+				if (rdKey && rdAutoInstantCheck) await instantCheckInRd(hashArr);
+				// if (adKey && adAutoInstantCheck) await instantCheckInAd(hashArr);
 			} else {
 				toast(`No results found`, { icon: '🔍' });
-				setSearchResults([]);
 			}
 		} catch (error) {
 			if (axios.isCancel(error)) {
@@ -135,6 +156,15 @@ function Search() {
 	}, [router.query, myAccount]);
 
 	useEffect(() => {
+		setSearchResults((prev) =>
+			prev.map((r) => ({
+				...r,
+				available: masterAvailability[r.hash],
+			}))
+		);
+	}, [masterAvailability]);
+
+	useEffect(() => {
 		return () => {
 			if (cancelTokenSource) cancelTokenSource.cancel();
 		};
@@ -142,25 +172,22 @@ function Search() {
 
 	type HashAvailability = Record<string, Availability>;
 
-	const instantCheckInRd = async (hashes: string[]): Promise<HashAvailability> => {
-		const availability = hashes.reduce((acc: HashAvailability, curr: string) => {
-			acc[curr] = 'unavailable';
-			return acc;
-		}, {});
+	const instantCheckInRd = async (hashes: string[]): Promise<void> => {
+		const rdAvailability = {} as HashAvailability;
 
-		if (!rdKey) return availability;
-
-		const setInstantFromRd = (rdAvailabilityResp: RdInstantAvailabilityResponse) => {
-			for (const masterHash in rdAvailabilityResp) {
-				if ('rd' in rdAvailabilityResp[masterHash] === false) continue;
-				const variants = rdAvailabilityResp[masterHash]['rd'];
-				if (variants.length) availability[masterHash] = 'no_videos';
+		const setInstantFromRd = (resp: RdInstantAvailabilityResponse) => {
+			for (const masterHash in resp) {
+				if ('rd' in resp[masterHash] === false) continue;
+				if (masterAvailability[masterHash] === 'no_videos') continue;
+				const variants = resp[masterHash]['rd'];
+				if (!variants.length) rdAvailability[masterHash] = 'no_videos';
 				for (const variant of variants) {
 					for (const fileId in variant) {
 						const file = variant[fileId];
 						if (isVideo({ path: file.filename })) {
-							availability[masterHash] =
-								availability[masterHash] === 'ad:available'
+							rdAvailability[masterHash] =
+								masterAvailability[masterHash] === 'ad:available' ||
+								masterAvailability[masterHash] === 'all:available'
 									? 'all:available'
 									: 'rd:available';
 							break;
@@ -170,16 +197,18 @@ function Search() {
 			}
 		};
 
-		const groupBy = (itemLimit: number, hashes: string[]) =>
-			Array.from({ length: Math.ceil(hashes.length / itemLimit) }, (_, i) =>
-				hashes.slice(i * itemLimit, (i + 1) * itemLimit)
-			);
-
 		try {
 			for (const hashGroup of groupBy(100, hashes)) {
 				if (rdKey) await rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd);
 			}
-			return availability;
+			toast(
+				`Found ${
+					Object.values(rdAvailability).filter((a) => a.includes(':available')).length
+				} available in RD`,
+				{ icon: '🔍' }
+			);
+			console.log(rdAvailability['c324db88b70885aecf7095bf596d02365560c0d9'] || 'none');
+			setMasterAvailability({ ...masterAvailability, ...rdAvailability });
 		} catch (error) {
 			toast.error(
 				'There was an error checking availability in Real-Debrid. Please try again.'
@@ -188,27 +217,15 @@ function Search() {
 		}
 	};
 
-	// TODO: Add AD instant check-in support
-	const instantCheckInAd = async (
-		hashes: string[],
-		existingAvailability?: HashAvailability
-	): Promise<HashAvailability> => {
-		const availability =
-			existingAvailability ||
-			hashes.reduce((acc: HashAvailability, curr: string) => {
-				acc[curr] = 'unavailable';
-				return acc;
-			}, {});
+	const instantCheckInAd = async (hashes: string[]): Promise<void> => {
+		const adAvailability = {} as HashAvailability;
 
-		if (!adKey) return availability;
-
-		const setInstantFromAd = (adAvailabilityResp: AdInstantAvailabilityResponse) => {
-			for (const magnetData of adAvailabilityResp.data.magnets) {
+		const setInstantFromAd = (resp: AdInstantAvailabilityResponse) => {
+			for (const magnetData of resp.data.magnets) {
 				const masterHash = magnetData.hash;
-				const instant = magnetData.instant;
-
-				if (masterHash in availability && instant === true) {
-					availability[masterHash] = magnetData.files?.reduce(
+				if (masterAvailability[masterHash] === 'no_videos') continue;
+				if (magnetData.instant) {
+					adAvailability[masterHash] = magnetData.files?.reduce(
 						(acc: boolean, curr: MagnetFile) => {
 							if (isVideo({ path: curr.n })) {
 								return true;
@@ -217,7 +234,8 @@ function Search() {
 						},
 						false
 					)
-						? availability[masterHash] === 'rd:available'
+						? masterAvailability[masterHash] === 'rd:available' ||
+						  masterAvailability[masterHash] === 'all:available'
 							? 'all:available'
 							: 'ad:available'
 						: 'no_videos';
@@ -225,16 +243,17 @@ function Search() {
 			}
 		};
 
-		const groupBy = (itemLimit: number, hashes: string[]) =>
-			Array.from({ length: Math.ceil(hashes.length / itemLimit) }, (_, i) =>
-				hashes.slice(i * itemLimit, (i + 1) * itemLimit)
-			);
-
 		try {
 			for (const hashGroup of groupBy(30, hashes)) {
 				if (adKey) await adInstantCheck(adKey, hashGroup).then(setInstantFromAd);
 			}
-			return availability;
+			toast(
+				`Found ${
+					Object.values(adAvailability).filter((a) => a.includes(':available')).length
+				} available in AD`,
+				{ icon: '🔍' }
+			);
+			setMasterAvailability({ ...masterAvailability, ...adAvailability });
 		} catch (error) {
 			toast.error('There was an error checking availability in AllDebrid. Please try again.');
 			throw error;
@@ -286,6 +305,7 @@ function Search() {
 		result.available === 'rd:available' || result.available === 'all:available';
 	const isAvailableInAd = (result: SearchResult) =>
 		result.available === 'ad:available' || result.available === 'all:available';
+	const hasNoVideos = (result: SearchResult) => result.available === 'no_videos';
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
@@ -293,8 +313,8 @@ function Search() {
 			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
 			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
 			if (!disableToast) toast.success(`Download canceled (${id})`);
-			if (id.startsWith('rd:')) removeFromRdCache(id.substring(3));
-			if (id.startsWith('ad:')) removeFromAdCache(id.substring(3));
+			if (id.startsWith('rd:')) removeFromRdCache(id);
+			if (id.startsWith('ad:')) removeFromAdCache(id);
 		} catch (error) {
 			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
 			throw error;
@@ -330,11 +350,11 @@ function Search() {
 	};
 
 	return (
-		<div className="mx-4 my-8">
+		<div className="mx-4 my-8 max-w-full">
 			<Head>
 				<title>Debrid Media Manager - Search: {query}</title>
 			</Head>
-			<Toaster position="top-right" />
+			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">Search</h1>
 				<Link
@@ -345,7 +365,7 @@ function Search() {
 				</Link>
 			</div>
 			<form onSubmit={handleSubmit}>
-				<div className="flex items-center border-b border-b-2 border-gray-500 py-2">
+				<div className="flex items-center border-b border-b-2 border-gray-500 py-2 mb-4">
 					<input
 						className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
 						type="text"
@@ -371,20 +391,98 @@ function Search() {
 						Search
 					</button>
 				</div>
-				{loading && (
-					<div className="flex justify-center items-center mt-4">
-						<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
-					</div>
-				)}
-				{errorMessage && (
-					<div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-						<strong className="font-bold">Error:</strong>
-						<span className="block sm:inline"> {errorMessage}</span>
-					</div>
-				)}
 			</form>
+			{loading && (
+				<div className="flex justify-center items-center mt-4">
+					<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+				</div>
+			)}
+			{errorMessage && (
+				<div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+					<strong className="font-bold">Error:</strong>
+					<span className="block sm:inline"> {errorMessage}</span>
+				</div>
+			)}
 			{searchResults.length > 0 && (
 				<>
+					{!loading && (
+						<div
+							className="mb-4 pb-1 whitespace-nowrap overflow-x-scroll"
+							style={{ scrollbarWidth: 'thin' }}
+						>
+							<button
+								className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
+								onClick={async () => {
+									setLoading(true);
+									await instantCheckInRd(
+										searchResults.map((result) => result.hash)
+									);
+									setLoading(false);
+								}}
+							>
+								Check RD availability
+							</button>
+							<input
+								id="auto-check-rd"
+								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+								type="checkbox"
+								checked={rdAutoInstantCheck || false}
+								onChange={(event) => {
+									const isChecked = event.target.checked;
+									setRdAutoInstantCheck(isChecked);
+								}}
+							/>{' '}
+							<label
+								htmlFor="auto-check-rd"
+								className="mr-2 mb-2 text-sm font-medium"
+							>
+								Auto
+							</label>
+							<button
+								className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
+								onClick={async () => {
+									setLoading(true);
+									await instantCheckInAd(
+										searchResults.map((result) => result.hash)
+									);
+									setLoading(false);
+								}}
+							>
+								Check AD availability
+							</button>
+							{/* <input
+								id="auto-check-ad"
+								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+								type="checkbox"
+								checked={adAutoInstantCheck || false}
+								onChange={(event) => {
+									const isChecked = event.target.checked;
+									setAdAutoInstantCheck(isChecked);
+								}}
+							/>{' '}
+							<label
+								htmlFor="auto-check-ad"
+								className="ml-2 mr-2 mb-2 text-sm font-medium"
+							>
+								Auto
+							</label> */}
+							{Object.keys(searchFilters).map((title) => (
+								<button
+									key={title}
+									className={`mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded`}
+									onClick={async () => {
+										// setLoading(true);
+										// await instantCheckInAd(
+										// 	searchResults.map((result) => result.hash)
+										// );
+										// setLoading(false);
+									}}
+								>
+									{title} <sup>{searchFilters[title]}</sup>
+								</button>
+							))}
+						</div>
+					)}
 					<h2 className="text-2xl font-bold my-4">Search Results</h2>
 					<div className="overflow-x-auto">
 						<table className="max-w-full w-full table-auto">
@@ -412,9 +510,7 @@ function Search() {
 										`}
 									>
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 max-w-2xl overflow-hidden overflow-ellipsis">
-											<strong>
-												{getMediaId(r.info, r.mediaType, false)}
-											</strong>
+											<strong>{r.mediaId}</strong>
 											<br />
 											{r.title}
 										</td>
@@ -436,9 +532,17 @@ function Search() {
 											{rdKey && rd.notInLibrary(r.hash) && (
 												<button
 													className={`bg-${
-														isAvailableInRd(r) ? 'green' : 'blue'
+														isAvailableInRd(r)
+															? 'green'
+															: hasNoVideos(r)
+															? 'gray'
+															: 'blue'
 													}-500 hover:bg-${
-														isAvailableInRd(r) ? 'green' : 'blue'
+														isAvailableInRd(r)
+															? 'green'
+															: hasNoVideos(r)
+															? 'gray'
+															: 'blue'
 													}-700 text-white font-bold py-2 px-4 rounded`}
 													onClick={() => {
 														handleAddAsMagnetInRd(
@@ -474,9 +578,17 @@ function Search() {
 											{adKey && ad.notInLibrary(r.hash) && (
 												<button
 													className={`bg-${
-														isAvailableInAd(r) ? 'green' : 'blue'
+														isAvailableInAd(r)
+															? 'green'
+															: hasNoVideos(r)
+															? 'gray'
+															: 'blue'
 													}-500 hover:bg-${
-														isAvailableInAd(r) ? 'green' : 'blue'
+														isAvailableInAd(r)
+															? 'green'
+															: hasNoVideos(r)
+															? 'gray'
+															: 'blue'
 													}-700 text-white font-bold py-2 px-4 rounded`}
 													onClick={() => {
 														handleAddAsMagnetInAd(
