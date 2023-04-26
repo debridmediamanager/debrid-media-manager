@@ -166,7 +166,6 @@ function Search() {
 		const { query: searchQuery } = router.query;
 		if (!searchQuery) return;
 		const decodedQuery = decodeURIComponent(searchQuery as string);
-		if (decodedQuery === query) return;
 		setQuery(decodedQuery);
 		fetchData(decodedQuery);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
