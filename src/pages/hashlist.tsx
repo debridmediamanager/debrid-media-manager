@@ -269,8 +269,8 @@ function TorrentsPage() {
 			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
 			if (adKey && id.startsWith('ad:')) await deleteTorrent(adKey, id.substring(3));
 			if (!disableToast) toast.success(`Download canceled (${id})`);
-			if (id.startsWith('rd:')) removeFromRdCache(id.substring(3));
-			if (id.startsWith('ad:')) removeFromAdCache(id.substring(3));
+			if (id.startsWith('rd:')) removeFromRdCache(id);
+			if (id.startsWith('ad:')) removeFromAdCache(id);
 		} catch (error) {
 			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
 			throw error;
@@ -312,7 +312,7 @@ function TorrentsPage() {
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB
 				</title>
 			</Head>
-			<Toaster position="top-right" />
+			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">
 					Share this page ({userTorrentsList.length} files in total; size:{' '}
@@ -366,7 +366,7 @@ function TorrentsPage() {
 						href="/hashlist"
 						className="mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-4 rounded"
 					>
-						Clear filter
+						Reset
 					</Link>
 				)}
 			</div>
@@ -417,10 +417,6 @@ function TorrentsPage() {
 												groupCount === 1 ? '' : 's'
 										  }`
 										: '';
-								console.log(
-									rd.isDownloaded(t.hash) || ad.isDownloaded(t.hash),
-									rd.isDownloading(t.hash) || ad.isDownloading(t.hash)
-								);
 								return (
 									<tr
 										key={t.hash}
