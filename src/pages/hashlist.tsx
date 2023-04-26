@@ -366,7 +366,7 @@ function TorrentsPage() {
 						href="/hashlist"
 						className="mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-4 rounded"
 					>
-						Clear filter
+						Reset
 					</Link>
 				)}
 			</div>
@@ -417,10 +417,6 @@ function TorrentsPage() {
 												groupCount === 1 ? '' : 's'
 										  }`
 										: '';
-								console.log(
-									rd.isDownloaded(t.hash) || ad.isDownloaded(t.hash),
-									rd.isDownloading(t.hash) || ad.isDownloading(t.hash)
-								);
 								return (
 									<tr
 										key={t.hash}

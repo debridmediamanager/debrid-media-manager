@@ -56,6 +56,7 @@ const { publicRuntimeConfig: config } = getConfig();
 function Search() {
 	const [query, setQuery] = useState('');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+	const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
 	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
@@ -181,6 +182,19 @@ function Search() {
 	}, [masterAvailability]);
 
 	useEffect(() => {
+		const { filter } = router.query;
+		if (!filter) {
+			setFilteredResults(searchResults);
+		} else {
+			const decodedFilter = decodeURIComponent(filter as string);
+			setFilteredResults(
+				searchResults.filter((r) => r.mediaId.toLocaleLowerCase() === decodedFilter)
+			);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [router.query, searchResults]);
+
+	useEffect(() => {
 		return () => {
 			if (cancelTokenSource) cancelTokenSource.cancel();
 		};
@@ -221,7 +235,6 @@ function Search() {
 				} available in RD`,
 				{ icon: '🔍' }
 			);
-			console.log(rdAvailability['c324db88b70885aecf7095bf596d02365560c0d9'] || 'none');
 			setMasterAvailability({ ...masterAvailability, ...rdAvailability });
 		} catch (error) {
 			toast.error(
@@ -480,6 +493,12 @@ function Search() {
 							>
 								Auto
 							</label> */}
+							<Link
+								href={`/search?query=${query}`}
+								className={`mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-2 rounded`}
+							>
+								Reset
+							</Link>
 							{Object.keys(searchFilters).map((mediaId) => (
 								<button
 									key={mediaId}
@@ -508,7 +527,7 @@ function Search() {
 								</tr>
 							</thead>
 							<tbody>
-								{searchResults.map((r: SearchResult) => (
+								{filteredResults.map((r: SearchResult) => (
 									<tr
 										key={r.hash}
 										className={`

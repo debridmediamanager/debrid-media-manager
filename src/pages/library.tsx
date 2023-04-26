@@ -649,7 +649,7 @@ function TorrentsPage() {
 							: ''
 					}`}
 				>
-					Clear filter
+					Reset
 				</Link>
 			</div>
 			<div className="overflow-x-auto">
