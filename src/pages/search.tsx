@@ -33,6 +33,7 @@ import { FaDownload, FaFastForward, FaTimes } from 'react-icons/fa';
 import { SearchApiResponse } from './api/search';
 
 type Availability = 'all:available' | 'rd:available' | 'ad:available' | 'unavailable' | 'no_videos';
+type HashAvailability = Record<string, Availability>;
 
 type SearchResult = {
 	mediaId: string;
@@ -42,6 +43,12 @@ type SearchResult = {
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
 	available: Availability;
+};
+
+type SearchFilter = {
+	count: number;
+	title: string;
+	biggestFileSize: number;
 };
 
 const { publicRuntimeConfig: config } = getConfig();
@@ -56,7 +63,7 @@ function Search() {
 	const [cancelTokenSource, setCancelTokenSource] = useState<CancelTokenSource | null>(null);
 	const [myAccount, setMyAccount] = useMyAccount();
 	const [masterAvailability, setMasterAvailability] = useState<HashAvailability>({});
-	const [searchFilters, setSearchFilters] = useState<Record<string, number>>({});
+	const [searchFilters, setSearchFilters] = useState<Record<string, SearchFilter>>({});
 	const [rdCache, rd, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
 	const [adCache, ad, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
 	const [rdAutoInstantCheck, setRdAutoInstantCheck] = useLocalStorage<boolean>(
@@ -102,12 +109,20 @@ function Search() {
 				response.data.searchResults?.reduce((acc, r) => {
 					const mediaId = getMediaId(r.info, r.mediaType, true);
 					if (acc[mediaId]) {
-						acc[mediaId] += 1;
+						acc[mediaId].count += 1;
+						acc[mediaId].biggestFileSize = Math.max(
+							acc[mediaId].biggestFileSize,
+							r.fileSize
+						);
 					} else {
-						acc[mediaId] = 1;
+						acc[mediaId] = {
+							title: getMediaId(r.info, r.mediaType, false),
+							biggestFileSize: r.fileSize,
+							count: 1,
+						};
 					}
 					return acc;
-				}, {} as Record<string, number>)!
+				}, {} as Record<string, SearchFilter>)!
 			);
 			if (response.data.searchResults?.length) {
 				toast(`Found ${response.data.searchResults.length} results`, { icon: '🔍' });
@@ -150,6 +165,7 @@ function Search() {
 		const { query: searchQuery } = router.query;
 		if (!searchQuery) return;
 		const decodedQuery = decodeURIComponent(searchQuery as string);
+		if (decodedQuery === query) return;
 		setQuery(decodedQuery);
 		fetchData(decodedQuery);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -169,8 +185,6 @@ function Search() {
 			if (cancelTokenSource) cancelTokenSource.cancel();
 		};
 	}, [cancelTokenSource]);
-
-	type HashAvailability = Record<string, Availability>;
 
 	const instantCheckInRd = async (hashes: string[]): Promise<void> => {
 		const rdAvailability = {} as HashAvailability;
@@ -466,19 +480,19 @@ function Search() {
 							>
 								Auto
 							</label> */}
-							{Object.keys(searchFilters).map((title) => (
+							{Object.keys(searchFilters).map((mediaId) => (
 								<button
-									key={title}
+									key={mediaId}
 									className={`mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded`}
 									onClick={async () => {
-										// setLoading(true);
-										// await instantCheckInAd(
-										// 	searchResults.map((result) => result.hash)
-										// );
-										// setLoading(false);
+										router.push({
+											query: { ...router.query, filter: mediaId },
+										});
 									}}
 								>
-									{title} <sup>{searchFilters[title]}</sup>
+									{searchFilters[mediaId].title} -{' '}
+									{searchFilters[mediaId].biggestFileSize}GB{' '}
+									<sup>{searchFilters[mediaId].count}</sup>
 								</button>
 							))}
 						</div>
