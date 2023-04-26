@@ -55,6 +55,7 @@ const { publicRuntimeConfig: config } = getConfig();
 
 function Search() {
 	const [query, setQuery] = useState('');
+	const [typedQuery, setTypedQuery] = useState('');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -154,18 +155,19 @@ function Search() {
 	const handleSubmit = useCallback(
 		(e?: React.FormEvent<HTMLFormElement>) => {
 			if (e) e.preventDefault();
-			if (!query) return;
+			if (!typedQuery) return;
 			router.push({
-				query: { ...router.query, query: encodeURIComponent(query) },
+				query: { ...router.query, query: encodeURIComponent(typedQuery) },
 			});
 		},
-		[router, query]
+		[router, typedQuery]
 	);
 
 	useEffect(() => {
 		const { query: searchQuery } = router.query;
 		if (!searchQuery) return;
 		const decodedQuery = decodeURIComponent(searchQuery as string);
+		if (decodedQuery === query) return;
 		setQuery(decodedQuery);
 		fetchData(decodedQuery);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -397,8 +399,8 @@ function Search() {
 						type="text"
 						id="query"
 						placeholder="if movie, add year e.g. greatest showman 2017; if tv series, add s01 e.g. game of thrones s01"
-						value={query}
-						onChange={(e) => setQuery(e.target.value)}
+						value={typedQuery}
+						onChange={(e) => setTypedQuery(e.target.value)}
 					/>
 					<select
 						id="libraryType"
@@ -498,24 +500,32 @@ function Search() {
 							>
 								Reset
 							</Link>
-							{Object.keys(searchFilters).map((mediaId) => (
-								<button
-									key={mediaId}
-									className={`mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded`}
-									onClick={async () => {
-										router.push({
-											query: { ...router.query, filter: mediaId },
-										});
-									}}
-								>
-									{searchFilters[mediaId].title} -{' '}
-									{searchFilters[mediaId].biggestFileSize}GB{' '}
-									<sup>{searchFilters[mediaId].count}</sup>
-								</button>
-							))}
+							{Object.keys(searchFilters)
+								.sort(
+									(a, b) =>
+										searchFilters[b].biggestFileSize -
+										searchFilters[a].biggestFileSize
+								)
+								.map((mediaId) => (
+									<button
+										key={mediaId}
+										className={`mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded`}
+										onClick={async () => {
+											router.push({
+												query: { ...router.query, filter: mediaId },
+											});
+										}}
+									>
+										{searchFilters[mediaId].title} -{' '}
+										{searchFilters[mediaId].biggestFileSize}GB{' '}
+										<sup>{searchFilters[mediaId].count}</sup>
+									</button>
+								))}
 						</div>
 					)}
-					<h2 className="text-2xl font-bold my-4">Search Results</h2>
+					<h2 className="text-2xl font-bold my-4">
+						Search Results for &quot;{query}&quot;
+					</h2>
 					<div className="overflow-x-auto">
 						<table className="max-w-full w-full table-auto">
 							<thead>
