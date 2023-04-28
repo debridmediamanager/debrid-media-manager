@@ -19,12 +19,18 @@ export const getMediaId = (
 		return titleStr;
 	}
 	if (seasons.length === 0) return titleStr;
+	const season = systemOnlyId ? 's' : 'S';
+	const episode = systemOnlyId ? 'e' : 'E';
 	if (fullSeason) {
-		return `${titleStr} ${prefix('S', seasons[0])}`;
+		return `${titleStr} ${prefix(season, Math.min(...seasons))}`;
 	} else if (isMultiSeason) {
-		return `${titleStr} ${prefix('S', seasons[0])}${'-'}
-			${prefix('S', seasons[seasons.length - 1])}`;
+		return `${titleStr} ${prefix(season, Math.min(...seasons))}${'-'}${prefix(
+			season,
+			Math.max(...seasons)
+		)}`;
 	}
-	return `${titleStr} ${prefix('S', seasons[0])}${' '}
-		${prefix('E', episodeNumbers[0])}`;
+	return `${titleStr} ${prefix(season, Math.min(...seasons))}${prefix(
+		episode,
+		episodeNumbers[0]
+	)}`;
 };
