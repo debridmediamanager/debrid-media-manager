@@ -13,15 +13,10 @@ jobs:
     - name: Check for version update in package.json
       id: check-version
       run: |
-        changed_files=$(git diff --name-only HEAD~1 HEAD)
-        if echo "$changed_files" | grep --quiet 'package.json'; then
-          # Extract the version field value using jq
-          version=$(jq -r '.version' package.json)
-          if [[ "$version" != "$(git show HEAD:package.json | jq -r '.version')" ]]; then
-            echo "::set-output name=changed::true"
-          else
-            echo "::set-output name=changed::false"
-          fi
+        version_base=$(jq -r '.version' $GITHUB_WORKSPACE/${{ github.base_ref }}/package.json)
+        version_head=$(jq -r '.version' $GITHUB_WORKSPACE/${{ github.head_ref }}/package.json)
+        if [[ "$version_head" != "$version_base" ]]; then
+          echo "::set-output name=changed::true"
         else
           echo "::set-output name=changed::false"
         fi
