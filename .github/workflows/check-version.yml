@@ -1,0 +1,38 @@
+name: Check Package Version
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-package-version:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Check for version update in package.json
+      id: check-version
+      run: |
+        changed_files=$(git diff --name-only origin/main)
+        if echo "$changed_files" | grep --quiet 'package.json'; then
+          # Extract the version field value using jq
+          version=$(jq -r '.version' package.json)
+          if [[ "$version" != "$(git show origin/main:package.json | jq -r '.version')" ]]; then
+            echo "::set-output name=changed::true"
+          else
+            echo "::set-output name=changed::false"
+          fi
+        else
+          echo "::set-output name=changed::false"
+        fi
+    - name: Fail if version was not updated
+      if: steps.check-version.outputs.changed == 'false'
+      run: |
+        echo "The package.json version was not updated."
+        exit 1
+    - name: Pass if version was updated
+      if: steps.check-version.outputs.changed == 'true'
+      run: |
+        echo "The package.json version was updated."
