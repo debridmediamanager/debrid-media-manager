@@ -157,7 +157,7 @@ function Search() {
 			if (e) e.preventDefault();
 			if (!typedQuery) return;
 			router.push({
-				query: { ...router.query, query: encodeURIComponent(typedQuery) },
+				query: { ...router.query, query: typedQuery },
 			});
 		},
 		[router, typedQuery]
@@ -168,6 +168,7 @@ function Search() {
 		if (!searchQuery) return;
 		const decodedQuery = decodeURIComponent(searchQuery as string);
 		if (decodedQuery === query) return;
+		setTypedQuery(decodedQuery);
 		setQuery(decodedQuery);
 		fetchData(decodedQuery);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -662,7 +663,9 @@ function Search() {
 			)}
 			{Object.keys(router.query).length !== 0 && searchResults.length === 0 && !loading && (
 				<>
-					<h2 className="text-2xl font-bold my-4">No results found</h2>
+					<h2 className="text-2xl font-bold my-4">
+						No results found for &quot;{query}&quot;
+					</h2>
 				</>
 			)}
 		</div>
