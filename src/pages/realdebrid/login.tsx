@@ -1,5 +1,6 @@
 import useLocalStorage from '@/hooks/localStorage';
 import { getCredentials, getDeviceCode, getToken } from '@/services/realDebrid';
+import { clearRdKeys } from '@/utils/clearLocalStorage';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -58,12 +59,18 @@ export default function RealDebridLoginPage() {
 
 	useEffect(() => {
 		const fetchAccessToken = async () => {
-			// Refresh token is available, so try to get new tokens
-			const response = await getToken(clientId!, clientSecret!, refreshToken!);
-			if (response) {
-				// New tokens obtained, save them and return authenticated
-				const { access_token, expires_in } = response;
-				setAccessToken(access_token, expires_in);
+			try {
+				// Refresh token is available, so try to get new tokens
+				const response = await getToken(clientId!, clientSecret!, refreshToken!);
+				if (response) {
+					// New tokens obtained, save them and return authenticated
+					const { access_token, expires_in } = response;
+					setAccessToken(access_token, expires_in);
+				} else {
+					throw new Error('Unable to get proper response');
+				}
+			} catch (error) {
+				clearRdKeys();
 			}
 		};
 		if (!accessToken && refreshToken && clientId && clientSecret) fetchAccessToken();
