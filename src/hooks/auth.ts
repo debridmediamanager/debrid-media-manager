@@ -1,5 +1,6 @@
 import { getAllDebridUser } from '@/services/allDebrid';
 import { getCurrentUser as getRealDebridUser, getToken } from '@/services/realDebrid';
+import { clearRdKeys } from '@/utils/clearLocalStorage';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useLocalStorage from './localStorage';
@@ -54,12 +55,18 @@ export const useRealDebridAccessToken = () => {
 	useEffect(() => {
 		(async () => {
 			if (!accessToken && refreshToken && clientId && clientSecret) {
-				// Refresh token is available, so try to get new tokens
-				const response = await getToken(clientId, clientSecret, refreshToken);
-				if (response) {
-					// New tokens obtained, save them and return authenticated
-					const { access_token, expires_in } = response;
-					setAccessToken(access_token, expires_in);
+				try {
+					// Refresh token is available, so try to get new tokens
+					const response = await getToken(clientId, clientSecret, refreshToken);
+					if (response) {
+						// New tokens obtained, save them and return authenticated
+						const { access_token, expires_in } = response;
+						setAccessToken(access_token, expires_in);
+					} else {
+						throw new Error('Unable to get proper response');
+					}
+				} catch (error) {
+					clearRdKeys();
 				}
 			}
 		})();
