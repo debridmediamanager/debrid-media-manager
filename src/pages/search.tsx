@@ -9,6 +9,7 @@ import {
 	MagnetFile,
 	uploadMagnet,
 } from '@/services/allDebrid';
+import { Availability, HashAvailability } from '@/services/availability';
 import {
 	addHashAsMagnet,
 	deleteTorrent,
@@ -17,6 +18,7 @@ import {
 	rdInstantCheck,
 	selectFiles,
 } from '@/services/realDebrid';
+import { getBestDownloadOption } from '@/utils/bestDownloadOption';
 import { groupBy } from '@/utils/groupBy';
 import { getMediaId } from '@/utils/mediaId';
 import { getSelectableFiles, isVideo } from '@/utils/selectable';
@@ -32,9 +34,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import { FaDownload, FaFastForward, FaTimes } from 'react-icons/fa';
 import { SearchApiResponse } from './api/search';
 
-type Availability = 'all:available' | 'rd:available' | 'ad:available' | 'unavailable' | 'no_videos';
-type HashAvailability = Record<string, Availability>;
-
 type SearchResult = {
 	mediaId: string;
 	title: string;
@@ -43,6 +42,7 @@ type SearchResult = {
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
 	available: Availability;
+	score: number;
 };
 
 type SearchFilter = {
@@ -157,7 +157,7 @@ function Search() {
 			if (e) e.preventDefault();
 			if (!typedQuery) return;
 			router.push({
-				query: { ...router.query, query: typedQuery },
+				query: { query: typedQuery },
 			});
 		},
 		[router, typedQuery]
@@ -220,6 +220,7 @@ function Search() {
 								masterAvailability[masterHash] === 'all:available'
 									? 'all:available'
 									: 'rd:available';
+
 							break;
 						}
 					}
@@ -288,6 +289,16 @@ function Search() {
 			throw error;
 		}
 	};
+
+	// find the best download option
+	useEffect(() => {
+		const bestHash = getBestDownloadOption(searchResults, masterAvailability);
+		if (!bestHash) return;
+		// const bestResultIdx = searchResults.findIndex((r) => r.hash === bestHash);
+		// const bestResult = searchResults.splice(bestResultIdx, 1)[0];
+		// setSearchResults([bestResult, ...searchResults]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [masterAvailability, searchResults]);
 
 	const handleAddAsMagnetInRd = async (
 		hash: string,
