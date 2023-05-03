@@ -9,7 +9,7 @@ services:
       replicas: 1
 
   tor:
-    image: dockage/tor-privoxy:latest
+    image: debridmediamanager/tor:latest
     deploy:
       replicas: 1
 
