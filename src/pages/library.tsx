@@ -326,7 +326,7 @@ function TorrentsPage() {
 		let regexFilters: RegExp[] = [];
 		for (const q of query.split(' ')) {
 			try {
-				regexFilters.push(new RegExp(q, 'ig'));
+				regexFilters.push(new RegExp(q, 'i'));
 			} catch (error) {
 				continue;
 			}
