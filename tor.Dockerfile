@@ -12,5 +12,6 @@ ENTRYPOINT tor
 
 EXPOSE 9050/tcp
 
-HEALTHCHECK --interval=10s --timeout=3s \
-    CMD curl -s --socks5-hostname 127.0.0.1:9050 https://check.torproject.org/ | grep -q Congratulations || exit 1
+HEALTHCHECK --interval=120s --timeout=30s --start-period=60s --retries=5 \
+            CMD curl --silent --location --socks5-hostname 127.0.0.1:9050 https://check.torproject.org/?lang=en_US | \
+            grep -qm1 Congratulations
