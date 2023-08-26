@@ -10,9 +10,6 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform: [linux/amd64, linux/arm64]
 
     steps:
       - name: Checkout code
@@ -47,7 +44,7 @@ jobs:
         with:
           context: .
           push: true
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |

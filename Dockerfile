@@ -26,6 +26,9 @@ COPY . .
 # copy build files from build image
 COPY --from=build /app/.next ./.next
 COPY --from=build /app/public ./public
+
+RUN npm run prisma:generate
+
 # Expose the listening port
 EXPOSE 3000
 CMD ["npm", "start"]
