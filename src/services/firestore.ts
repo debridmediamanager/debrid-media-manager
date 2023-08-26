@@ -4,7 +4,7 @@ const firebaseSettings: Settings = {
 	projectId: process.env.FIREBASE_PROJECT_ID,
 	credentials: {
 		client_email: process.env.FIREBASE_CLIENT_EMAIL,
-		private_key: process.env.FIREBASE_PRIVATE_KEY,
+		private_key: process.env.FIREBASE_PRIVATE_KEY?.split(String.raw`\n`).join('\n'),
 	},
 	ssl: true,
 	maxIdleChannels: 2,
