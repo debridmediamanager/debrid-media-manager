@@ -1,10 +1,10 @@
 import { Firestore, Settings } from '@google-cloud/firestore';
 
 const firebaseSettings: Settings = {
-	projectId: process.env.FIREBASE_PROJECT_ID, // 'debrid-media-manager',
+	projectId: process.env.FIREBASE_PROJECT_ID,
 	credentials: {
-		client_email: process.env.FIREBASE_CLIENT_EMAIL, // 'client@example.com',
-		private_key: process.env.FIREBASE_PRIVATE_KEY, // '-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n'
+		client_email: process.env.FIREBASE_CLIENT_EMAIL,
+		private_key: process.env.FIREBASE_PRIVATE_KEY,
 	},
 	ssl: true,
 	maxIdleChannels: 2,

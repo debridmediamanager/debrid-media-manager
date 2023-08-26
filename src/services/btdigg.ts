@@ -4,7 +4,7 @@ import getReleaseTags from '@/utils/score';
 import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
 import axios, { AxiosInstance } from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
-import { RedisCache } from './cache';
+import { FirestoreCache } from './firestore';
 
 export type SearchResult = {
 	title: string;
@@ -21,7 +21,7 @@ export type SearchResult = {
 	info: ParsedFilename;
 };
 
-const cache = new RedisCache();
+const cache = new FirestoreCache();
 
 export const createAxiosInstance = (agent: SocksProxyAgent) => {
 	return axios.create({
