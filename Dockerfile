@@ -1,5 +1,5 @@
 # ---- Base Node ----
-FROM node:14-alpine AS base
+FROM node:alpine AS base
 WORKDIR /app
 COPY package*.json ./
 
