@@ -1,7 +1,7 @@
-import { RedisCache } from '@/services/cache';
+import { FirestoreCache } from '@/services/firestore';
 import { NextApiHandler } from 'next';
 
-const cache = new RedisCache();
+const cache = new FirestoreCache();
 
 const handler: NextApiHandler = async (req, res) => {
 	try {
