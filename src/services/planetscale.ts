@@ -11,19 +11,11 @@ export class PlanetScaleCache {
     const sortedKey = key.sort();
     const planetScaleKey = sortedKey.join(':');
 
-    const counter = await this.prisma.counter.findUnique({ where: { id: 'cache' } });
-
-    await this.prisma.$transaction([
-      this.prisma.cache.upsert({
-        where: { key: planetScaleKey },
-        update: { value },
-        create: { key: planetScaleKey, value },
-      }),
-      this.prisma.counter.update({
-        where: { id: 'cache' },
-        data: { count: (counter?.count || 0) + 1 },
-      }),
-    ]);
+    await this.prisma.cache.upsert({
+      where: { key: planetScaleKey },
+      update: { value } as any,
+      create: { key: planetScaleKey, value } as any,
+    });
   }
 
   public async getCachedJsonValue<T>(key: string[]): Promise<T | undefined> {
@@ -38,19 +30,11 @@ export class PlanetScaleCache {
     const sortedKey = key.sort();
     const planetScaleKey = sortedKey.join(':');
 
-    const counter = await this.prisma.counter.findUnique({ where: { id: 'cache' } });
-
-    await this.prisma.$transaction([
-      this.prisma.cache.delete({ where: { key: planetScaleKey } }),
-      this.prisma.counter.update({
-        where: { id: 'cache' },
-        data: { count: (counter?.count || 0) - 1 },
-      }),
-    ]);
+    await this.prisma.cache.delete({ where: { key: planetScaleKey } });
   }
 
   public async getDbSize(): Promise<number> {
-    const counter = await this.prisma.counter.findUnique({ where: { id: 'cache' } });
-    return counter?.count || 0;
+    const count = await this.prisma.cache.count();
+    return count;
   }
 }

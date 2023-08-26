@@ -1,7 +1,7 @@
-import { FirestoreCache } from '@/services/firestore';
+import { PlanetScaleCache } from '@/services/planetscale';
 import { NextApiHandler } from 'next';
 
-const cache = new FirestoreCache();
+const cache = new PlanetScaleCache();
 
 const handler: NextApiHandler = async (req, res) => {
 	try {
