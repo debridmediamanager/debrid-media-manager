@@ -3,7 +3,7 @@ services:
   debugger:
     image: ubuntu
     volumes:
-      - redis_data2:/userdata
+      - redis_data:/userdata
     entrypoint: ['tail', '-f', '/dev/null']
     deploy:
       replicas: 1
@@ -11,7 +11,7 @@ services:
   tor:
     image: dockage/tor-privoxy
     deploy:
-      replicas: 8
+      replicas: 4
 
   web:
     image: debridmediamanager/debrid-media-manager:latest
@@ -24,7 +24,7 @@ services:
       - tor
       - redis-sentinel
     deploy:
-      replicas: 8
+      replicas: 4
       restart_policy:
         condition: on-failure
 
@@ -34,7 +34,7 @@ services:
       - REDIS_REPLICATION_MODE=master
       - REDIS_PASSWORD=dmm123456
     volumes:
-      - redis_data2:/bitnami/redis/data
+      - redis_data:/bitnami/redis/data
     ports:
       - 6379
     deploy:
@@ -50,11 +50,11 @@ services:
     depends_on:
       - redis-master
     volumes:
-      - redis_data2:/bitnami/redis/data
+      - redis_data:/bitnami/redis/data
     ports:
       - 6379
     deploy:
-      replicas: 8
+      replicas: 4
 
   redis-sentinel:
     image: bitnami/redis-sentinel:latest
@@ -70,5 +70,5 @@ services:
       replicas: 1
 
 volumes:
-  redis_data2:
+  redis_data:
     external: true
