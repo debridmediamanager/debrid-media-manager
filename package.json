@@ -8,7 +8,7 @@
       "start": "next start",
       "lint": "next lint",
       "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,md}'",
-      "postinstall": "prisma generate"
+      "prisma:generate": "prisma generate"
    },
    "dependencies": {
       "@ctrl/video-filename-parser": "^4.12.0",
