@@ -18,8 +18,10 @@
 - [✔️] Find cached and selectable download on search
 - [✔️] 2.3.0: Show AD/RD download buttons even if status=downloaded
 - [✔️] 2.5.0: Add instant check in AD on search page (removed due to performance impact)
+- [✔️] 2.5.0: Add title filter buttons on search page
 - [] 2.7.0: Rescan library button in all other pages except library
-- [✔️] 2.9.0: Add title filter buttons on search page
+- [] 2.7.0: Add Auto-DL checkbox to download the "best" option from search
+- [] 2.9.0: New page: "Sync mdblist.com list"
 - [] 3.0.0: Add similarity search "Did you mean... ?"
 - [] 3.0.0: Add tests
 - [] 4.0.0: Refactor pages into different components
