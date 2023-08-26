@@ -41,8 +41,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          platform: linux/amd64
           push: true
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           tags: |
             debridmediamanager/debrid-media-manager:latest
             debridmediamanager/debrid-media-manager:${{ env.version }}
