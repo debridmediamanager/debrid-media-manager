@@ -16,9 +16,3 @@ model Cache {
   value Json
   updatedAt DateTime @updatedAt
 }
-
-model Counter {
-  id    String @id @default("cache")
-  count Int
-  updatedAt DateTime @updatedAt
-}
