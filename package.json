@@ -33,11 +33,14 @@
       "react-hot-toast": "^2.4.0",
       "react-icons": "^4.8.0",
       "socks-proxy-agent": "^7.0.0",
+      "user-agents": "^1.0.1444",
       "uuid": "^9.0.0"
    },
    "devDependencies": {
+      "@types/axios": "^0.14.0",
       "@types/node": "^16.11.10",
       "@types/qs": "^6.9.7",
+      "@types/user-agents": "^1.0.2",
       "autoprefixer": "^10.4.14",
       "postcss": "^8.4.21",
       "prettier": "^2.8.7",

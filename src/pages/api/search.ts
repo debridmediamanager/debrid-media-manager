@@ -40,7 +40,6 @@ export default async function handler(
 
 	const finalQuery = cleanSearchQuery(search);
 	const libraryTypes = getLibraryTypes(libraryType);
-	const client = createAxiosInstance(agent);
 
 	let speed: searchSpeedType = 'veryfast';
 	if (process.env.SEARCH_SPEED_PASSWORD) {
@@ -53,7 +52,7 @@ export default async function handler(
 	try {
 		const results = [];
 		for (const lType of libraryTypes) {
-			results.push(await fetchSearchResults(speed, client, finalQuery, lType));
+			results.push(await fetchSearchResults(speed, createAxiosInstance(agent), finalQuery, lType));
 		}
 		let processedResults = flattenAndRemoveDuplicates(results);
 		if (processedResults.length) processedResults = groupByParsedTitle(processedResults);

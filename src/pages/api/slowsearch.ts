@@ -34,12 +34,11 @@ export default async function handler(
 
 	const finalQuery = cleanSearchQuery(search);
 	const libraryTypes = getLibraryTypes(libraryType);
-	const client = createAxiosInstance(agent);
 
 	try {
 		const results = [];
 		for (const lType of libraryTypes) {
-			results.push(await fetchSearchResults('veryslow', client, finalQuery, lType));
+			results.push(await fetchSearchResults('veryslow', createAxiosInstance(agent), finalQuery, lType));
 		}
 		let processedResults = flattenAndRemoveDuplicates(results);
 		if (processedResults.length) processedResults = groupByParsedTitle(processedResults);
