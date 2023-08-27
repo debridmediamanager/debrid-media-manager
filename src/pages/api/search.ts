@@ -15,8 +15,6 @@ export type SearchApiResponse = {
 	errorMessage?: string;
 };
 
-const agent = new SocksProxyAgent(process.env.PROXY!, { timeout: 3000 });
-
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<SearchApiResponse>
@@ -55,7 +53,7 @@ export default async function handler(
 			results.push(
 				await fetchSearchResults(
 					speed,
-					createAxiosInstance(agent),
+					createAxiosInstance(new SocksProxyAgent(process.env.PROXY!, { timeout: 5000 })),
 					`${finalQuery} ${lType}`.trim(),
 					libraryType
 				)
