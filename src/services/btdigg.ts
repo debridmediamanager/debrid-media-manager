@@ -105,6 +105,7 @@ export async function fetchSearchResults(
 					finalQuery.split(' ')
 				);
 				if (cached) {
+					console.log(`Found cached results for ${finalQuery}`, cached.length);
 					return cached;
 				}
 			}
