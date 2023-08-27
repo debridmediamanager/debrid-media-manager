@@ -4,8 +4,8 @@ import getReleaseTags from '@/utils/score';
 import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
 import axios, { AxiosInstance } from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
-import { PlanetScaleCache } from './planetscale';
 import UserAgent from 'user-agents';
+import { PlanetScaleCache } from './planetscale';
 
 export type SearchResult = {
 	title: string;
@@ -95,14 +95,10 @@ export type searchSpeedType =
 export async function fetchSearchResults(
 	speed: searchSpeedType,
 	client: AxiosInstance,
-	searchQuery: string,
+	finalQuery: string,
 	libraryType: string
 ): Promise<SearchResult[]> {
 	try {
-		const finalQuery = `${searchQuery}${
-			!libraryType || libraryType === '1080pOr2160p' ? '' : ` ${libraryType}`
-		}`;
-
 		try {
 			if (!speed.includes('override')) {
 				const cached = await cache.getCachedJsonValue<SearchResult[]>(
@@ -119,7 +115,7 @@ export async function fetchSearchResults(
 		let pageNum = 1;
 
 		const createSearchUrl = (pg: number) =>
-			`${dhtSearchHostname}/search?q=${encodeURIComponent(finalQuery)}&p=${pg - 1}`;
+			`${dhtSearchHostname}/search?order=0&q=${encodeURIComponent(finalQuery)}&p=${pg - 1}`;
 
 		const BAD_RESULT_THRESHOLD = 11;
 		let badResults = 0;
@@ -168,7 +164,14 @@ export async function fetchSearchResults(
 					break;
 				} catch (error: any) {
 					console.error(`Error scraping page ${pageNum} (${finalQuery})`, error.message);
-					if (error.message.includes('status code 429') || error.message.includes('"socket" was not created')) {
+					if (error.message.includes('status code 404') && pageNum === 1) {
+						console.error('404 error, aborting search');
+						throw error;
+					}
+					if (
+						error.message.includes('status code 429') ||
+						error.message.includes('"socket" was not created')
+					) {
 						console.log('Waiting 5 seconds before retrying...');
 						await new Promise((resolve) => setTimeout(resolve, 5000));
 					} else {
@@ -182,10 +185,6 @@ export async function fetchSearchResults(
 					await new Promise((resolve) => setTimeout(resolve, delay));
 				}
 			}
-			console.log(
-				`Scrape successful for page ${pageNum} (${finalQuery})`,
-				new Date().getTime()
-			);
 			const fileSizes = Array.from(
 				responseData.matchAll(
 					/class=\"torrent_size\"[^>]*>(\d+(?:\.\d+)?)(?:[^A-Z<]+)?([A-Z]+)?/g
@@ -193,6 +192,9 @@ export async function fetchSearchResults(
 			);
 			const namesAndHashes = Array.from(
 				responseData.matchAll(/magnet:\?xt=urn:btih:([a-z\d]{40})&amp;dn=([^&]+)&/g)
+			);
+			console.log(
+				`Got ${fileSizes.length} tentative items for page ${pageNum} (${finalQuery})`
 			);
 
 			if (fileSizes.length !== namesAndHashes.length) {
@@ -207,9 +209,8 @@ export async function fetchSearchResults(
 				const info =
 					mediaType === 'movie' ? filenameParse(title) : filenameParse(title, true);
 
-				// Ignore results that don't have GB in fileSize
-				if (libraryType !== '1080pOr2160p' && !fileSizeStr.includes('GB')) {
-					badResults++;
+				if (libraryType === '2160p' && !fileSizeStr.includes('GB')) {
+					badResults++; // is 2160p but doesn't have GB in fileSize
 					continue;
 				}
 
@@ -219,19 +220,34 @@ export async function fetchSearchResults(
 					skippedResults++;
 					continue;
 				}
+				if (fileSizeStr.includes(' B') || fileSizeStr.includes(' KB')) {
+					skippedResults++;
+					continue;
+				}
 
 				// Check if every term in the query (tokenized by space) is contained in the title
 				const queryTerms = finalQuery.split(' ');
-				const containsAllTerms = queryTerms.every((term) =>
-					new RegExp(`\\b${term}`).test(title.toLowerCase())
-				);
-				if (!containsAllTerms) {
-					badResults++;
+				const containsMostTerms =
+					queryTerms.filter((term) => new RegExp(`${term}`).test(title.toLowerCase()))
+						.length /
+						queryTerms.length >
+					0.6;
+				if (!containsMostTerms) {
+					badResults++; // title doesn't contain most terms in the query
 					continue;
 				}
-				if (libraryType === '1080pOr2160p' && !/1080p|2160p/i.test(title.toLowerCase())) {
-					badResults++;
+				if (
+					!/\b360p|\b480p|\b576p|\b720p|\b1080p|\b2160p|dvd[^\w]?rip|dvd[^\w]?scr|\bx264\b|\bx265\b|\bxvid\b|\bdivx\b|\bav1\b|bd[^\w]?rip|br[^\w]?rip|hd[^\w]?rip|ppv[^\w]?rip|web[^\w]?rip|cam[^\w]?rip|\bcam\b|\bts\b|\bhdtc\b|\bscreener\b|\br5\b/i.test(
+						title.toLowerCase()
+					)
+				) {
+					badResults++; // doesn't contain video resolution fragments or clues in the title
 					continue;
+				}
+				if (libraryType === '2160p') {
+					if (!/\b2160p\b|\buhd\b/i.test(title.toLowerCase())) {
+						continue;
+					}
 				}
 
 				const hash = namesAndHashes[resIndex][1];
@@ -260,7 +276,7 @@ export async function fetchSearchResults(
 				badResults = 0;
 			}
 
-			// Stop execution if the last 5 results were ignored
+			// Stop execution if the last $BAD_RESULT_THRESHOLD results were ignored
 			if (badResults >= BAD_RESULT_THRESHOLD) {
 				console.log(
 					`Stopped execution after ${pageNum} pages because the last ${BAD_RESULT_THRESHOLD} results were ignored.`

@@ -40,11 +40,17 @@ export const cleanSearchQuery = (search: string): string => {
 		.replace(/[ñ]/g, 'n')
 		.replace(/[ş]/g, 's')
 		.replace(/[ğ]/g, 'g')
-		.replace(/[^\w\s]/g, '') // remove any non-word or non-space characters
 		.replace(/\s+/g, ' ') // replace multiple spaces with a single space
 		.trim();
 };
 
 export const getLibraryTypes = (libraryType: string): string[] => {
-	return libraryType === '1080pOr2160p' ? ['1080p', '2160p', ''] : [libraryType];
+	switch (libraryType) {
+		case '1080pOr2160p':
+			return ['1080p', '2160p', ''];
+		case '2160p':
+			return ['2160p', ''];
+		default:
+			return ['1080p', '2160p', ''];
+	}
 };
