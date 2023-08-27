@@ -12,5 +12,5 @@ ENTRYPOINT tor
 
 EXPOSE 9050/tcp
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=1 \
-    CMD curl -x socks5h://127.0.0.1:9050 -s http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion | grep -qm1 Histats
+HEALTHCHECK --interval=10s --timeout=5s --start-period=5s --retries=1 \
+    CMD curl -x socks5h://127.0.0.1:9050 -s http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion/search?q=Kraftfahrzeughaftpflichtversicherung | grep -qm1 Histats
