@@ -5,6 +5,7 @@ export class PlanetScaleCache {
 
   constructor() {
     this.prisma = new PrismaClient();
+    this.prisma.$queryRaw`SET @@boost_cached_queries = true`
   }
 
   public async cacheJsonValue<T>(key: string[], value: T) {

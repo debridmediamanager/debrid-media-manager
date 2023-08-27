@@ -57,6 +57,7 @@ export const flattenAndRemoveDuplicates = (arr: SearchResult[][]): SearchResult[
 
 export const groupByParsedTitle = (results: SearchResult[]): SearchResult[] => {
 	const frequency: Record<string, number> = {};
+	results = results.filter((result) => result.info.title);
 	for (const result of results) {
 		const mediaId = getMediaId(result.info, result.mediaType, true);
 		if (mediaId in frequency) {
