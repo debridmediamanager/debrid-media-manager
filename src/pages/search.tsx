@@ -420,7 +420,6 @@ function Search() {
 						onChange={handleLibraryTypeChange}
 						className="border rounded p-1 mr-4"
 					>
-						<option value="1080p">1080p</option>
 						<option value="2160p">2160p</option>
 						<option value="1080pOr2160p">does not matter</option>
 					</select>
