@@ -52,7 +52,14 @@ export default async function handler(
 	try {
 		const results = [];
 		for (const lType of libraryTypes) {
-			results.push(await fetchSearchResults(speed, createAxiosInstance(agent), finalQuery, lType));
+			results.push(
+				await fetchSearchResults(
+					speed,
+					createAxiosInstance(agent),
+					`${finalQuery} ${lType}`.trim(),
+					libraryType
+				)
+			);
 		}
 		let processedResults = flattenAndRemoveDuplicates(results);
 		if (processedResults.length) processedResults = groupByParsedTitle(processedResults);
