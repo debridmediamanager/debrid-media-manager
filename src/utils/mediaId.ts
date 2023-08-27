@@ -12,7 +12,6 @@ export const getMediaId = (
 		return `${systemOnlyId ? info.title.toLocaleLowerCase() : info.title}${
 			info.year ? ` (${info.year})` : ''
 		}`;
-
 	const { title, seasons, fullSeason, isMultiSeason, episodeNumbers } = info as ParsedShow;
 	const titleStr = systemOnlyId ? title.toLocaleLowerCase() : title;
 	if (tvShowTitleOnly) {
