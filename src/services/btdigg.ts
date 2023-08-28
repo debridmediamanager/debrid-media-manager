@@ -110,7 +110,7 @@ export async function fetchSearchResults(
 				}
 			}
 		} catch (e: any) {
-			console.warn(e);
+			console.warn(`cache read error:`, e.message);
 		}
 
 		let pageNum = 1;
