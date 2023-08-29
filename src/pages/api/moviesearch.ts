@@ -18,7 +18,7 @@ const handler: NextApiHandler = async (req, res) => {
             return;
         }
 
-        res.status(204).json({ results: [] });
+        res.status(204).json(null);
     } catch (error: any) {
         console.error('encountered a db issue', error);
         res.status(500).json({ errorMessage: error.message });
