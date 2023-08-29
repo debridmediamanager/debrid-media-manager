@@ -75,7 +75,13 @@ export class PlanetScaleCache {
 		});
 		if (requestedItem !== null) {
 			const imdbid = requestedItem.key.split(':')[1];
-			return imdbid;
+			// Check if there is a processing item for this imdbid
+			const processingItem = await this.prisma.scraped.findFirst({
+				where: { key: `processing:${imdbid}` },
+			});
+			if (!processingItem) {
+				return imdbid;
+			}
 		}
 		return null;
 	}
