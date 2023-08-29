@@ -5,7 +5,7 @@ const cache = new PlanetScaleCache();
 
 const handler: NextApiHandler = async (req, res) => {
 	try {
-		const size = await cache.getDbSize();
+		const size = await cache.getScrapedDbSize();
 		res.status(200).json({ size });
 	} catch (err: any) {
 		console.error(err);

@@ -8,7 +8,7 @@ RUN apk --no-cache --update --upgrade add tor curl grep netcat-openbsd \
     && chown -R tor /var/lib/tor \
     && echo "#!/bin/sh" > /usr/local/bin/check-and-renew.sh \
     && echo "while true; do" >> /usr/local/bin/check-and-renew.sh \
-    && echo "  curl -x socks5h://127.0.0.1:9050 -s http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion/search?q=Kraftfahrzeughaftpflichtversicherung | grep -qm1 Histats || (echo -e 'AUTHENTICATE \"\"\\nsignal NEWNYM\\nQUIT' | nc 127.0.0.1 9051)" >> /usr/local/bin/check-and-renew.sh \
+    && echo "  curl -x socks5h://127.0.0.1:9050 -s http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion/search?q=Kraftfahrzeughaftpflichtversicherung | grep -qm1 Histats || (echo -e 'AUTHENTICATE \"\"\\nsignal NEWNYM\\nQUIT' | nc 127.0.0.1 9051 && echo 'IP has been renewed')" >> /usr/local/bin/check-and-renew.sh \
     && echo "  sleep 30" >> /usr/local/bin/check-and-renew.sh \
     && echo "done" >> /usr/local/bin/check-and-renew.sh \
     && chmod +x /usr/local/bin/check-and-renew.sh

@@ -67,6 +67,29 @@ export class PlanetScaleCache {
 		return cacheEntry !== null;
 	}
 
+	public async getLatestRequest(): Promise<string | null> {
+		const requestedItem = await this.prisma.scraped.findFirst({
+			where: { key: { startsWith: "requested:" } },
+			orderBy: { updatedAt: 'desc' },
+			select: { key: true },
+		});
+		if (requestedItem !== null) {
+			const imdbid = requestedItem.key.split(':')[1];
+			return imdbid;
+		}
+		return null;
+	}
+
+	public async markAsDone(imdbId: string): Promise<void> {
+		const keys = [`requested:${imdbId}`, `processing:${imdbId}`];
+
+		for (const key of keys) {
+			await this.prisma.scraped.deleteMany({
+				where: { key: { startsWith: key }  },
+			});
+		}
+	}
+
 	// search results
 
 	public async saveSearchResults<T>(key: string, value: T) {
