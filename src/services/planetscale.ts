@@ -38,4 +38,33 @@ export class PlanetScaleCache {
     const count = await this.prisma.cache.count();
     return count;
   }
+
+  ///
+
+  public async saveScrapedResults<T>(key: string, value: T) {
+    await this.prisma.scraped.upsert({
+      where: { key },
+      update: { value } as any,
+      create: { key, value } as any,
+    });
+  }
+
+  public async getScrapedResults<T>(key: string): Promise<T | undefined> {
+    const cacheEntry = await this.prisma.scraped.findUnique({ where: { key } });
+    return cacheEntry?.value as T | undefined;
+  }
+
+  public async getScrapedDbSize(): Promise<number> {
+    const count = await this.prisma.scraped.count();
+    return count;
+  }
+
+  public async keyExists(key: string): Promise<boolean> {
+    const cacheEntry = await this.prisma.scraped.findFirst({
+      where: { key },
+      select: { key: true },
+    });
+    return cacheEntry !== null;
+  }
+
 }

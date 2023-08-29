@@ -16,3 +16,15 @@ model Cache {
   value Json
   updatedAt DateTime @updatedAt
 }
+
+model Scraped {
+  key   String @id
+  value Json
+  updatedAt DateTime @updatedAt
+}
+
+model Search {
+  key   String @id
+  value Json
+  updatedAt DateTime @updatedAt
+}
