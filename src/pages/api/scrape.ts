@@ -70,7 +70,7 @@ export default async function handler(
 	let itemType: 'movie' | 'tv' = 'movie';
 
 	if (tmdbResponse.data.movie_results.length > 0) {
-		if (override && override !== 'true') {
+		if (!override || override !== 'true') {
 			const keyExists = await db.keyExists(`movie:${imdbId}`);
 			if (keyExists) {
 				res.status(200).json({ status: 'skipped' });
@@ -128,7 +128,7 @@ export default async function handler(
 	}
 
 	if (tmdbResponse.data.tv_results.length > 0) {
-		if (override && override !== 'true') {
+		if (!override || override !== 'true') {
 			const keyExists = await db.keyExists(`tv:${imdbId}:1`);
 			if (keyExists) {
 				res.status(200).json({ status: 'skipped' });
