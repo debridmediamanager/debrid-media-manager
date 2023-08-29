@@ -48,14 +48,15 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<ScrapeResponse>
 ) {
-	const { imdbId, scrapePassword, override } = req.query;
+	const { scrapePassword } = req.query;
 	if (process.env.SEARCH_SPEED_PASSWORD && scrapePassword !== process.env.SEARCH_SPEED_PASSWORD) {
 		res.status(403).json({ status: 'error', errorMessage: 'You are not authorized to use this feature' });
 		return;
 	}
 
-	if (!imdbId || !(typeof imdbId === 'string')) {
-		res.status(400).json({ status: 'error', errorMessage: 'Missing "imdbId" query parameter' });
+	const imdbId = await db.getLatestRequest();
+	if (!imdbId) {
+		res.status(200).json({ status: 'done' });
 		return;
 	}
 
@@ -66,7 +67,7 @@ export default async function handler(
 	}
 
 	// imdbId to search for
-	const tmdbResponse = await axios.get(getTmdbInfo(imdbId.toString().trim()));
+	const tmdbResponse = await axios.get(getTmdbInfo(imdbId));
 
 	const movieTitles: string[] = [];
 	const tvTitles: string[] = [];
@@ -75,14 +76,6 @@ export default async function handler(
 	let itemType: 'movie' | 'tv' = 'movie';
 
 	if (tmdbResponse.data.movie_results.length > 0) {
-		if (!override || override !== 'true') {
-			const keyExists = await db.keyExists(`movie:${imdbId}`);
-			if (keyExists) {
-				res.status(200).json({ status: 'skipped' });
-				return;
-			}
-		}
-
 		itemType = 'movie';
 		tmdbItem = tmdbResponse.data.movie_results[0];
 		movieTitles.push(`"${cleanSearchQuery(tmdbItem.title)}"`);
@@ -91,7 +84,7 @@ export default async function handler(
 		if (tmdbItem.original_title && tmdbItem.original_title !== tmdbItem.title) {
 			movieTitles.push(`"${tmdbItem.original_title}"`);
 			movieTitles.push(`"${tmdbItem.original_title}" ${tmdbItem.release_date.substring(0, 4)}`);
-			const mdbItem = await axios.get(getMdbInfo(imdbId.toString().trim()));
+			const mdbItem = await axios.get(getMdbInfo(imdbId));
 			for (let rating of mdbItem.data.ratings) {
 				if (rating.source === 'tomatoes') {
 					const cleanedTitle = (
@@ -135,14 +128,6 @@ export default async function handler(
 	}
 
 	if (tmdbResponse.data.tv_results.length > 0) {
-		if (!override || override !== 'true') {
-			const keyExists = await db.keyExists(`tv:${imdbId}:1`);
-			if (keyExists) {
-				res.status(200).json({ status: 'skipped' });
-				return;
-			}
-		}
-
 		itemType = 'tv';
 		tmdbItem = tmdbResponse.data.tv_results[0];
 		tvTitles.push(`"${cleanSearchQuery(tmdbItem.name)}"`);
@@ -156,7 +141,7 @@ export default async function handler(
 		await db.saveScrapedResults(`processing:${imdbId}`, []);
 
 		let totalResultsCount = 0;
-		const showResponse = await axios.get(getMdbInfo(imdbId.toString().trim()));
+		const showResponse = await axios.get(getMdbInfo(imdbId));
 		for (const season of showResponse.data.seasons
 			? showResponse.data.seasons
 			: [{ season_number: 1, episode_count: 0 }]) {
@@ -203,5 +188,5 @@ export default async function handler(
 		res.status(200).json({ status: `scraped: ${totalResultsCount} items` });
 	}
 
-	await db.markAsDone(imdbId.toString().trim());
+	await db.markAsDone(imdbId);
 }

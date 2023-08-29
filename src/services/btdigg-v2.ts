@@ -65,156 +65,158 @@ export async function scrapeResults(
 	finalQuery: string,
 	libraryType: string
 ): Promise<SearchResult[]> {
-	try {
-		let pageNum = 1;
+	while (true) {
+		try {
+			let pageNum = 1;
 
-		const createSearchUrl = (pg: number) =>
-			`${dhtSearchHostname}/search?order=0&q=${encodeURIComponent(finalQuery)}&p=${pg - 1}`;
+			const createSearchUrl = (pg: number) =>
+				`${dhtSearchHostname}/search?order=0&q=${encodeURIComponent(finalQuery)}&p=${pg - 1}`;
 
-		const BAD_RESULT_THRESHOLD = 15;
-		let badResults = 0;
-		let searchResultsArr: SearchResult[] = [];
+			const BAD_RESULT_THRESHOLD = 15;
+			let badResults = 0;
+			let searchResultsArr: SearchResult[] = [];
 
-		const MAX_RETRIES = 5; // maximum number of retries
-		const RETRY_DELAY = 1500; // initial delay in ms, doubles with each retry
+			const MAX_RETRIES = 5; // maximum number of retries
+			const RETRY_DELAY = 1500; // initial delay in ms, doubles with each retry
 
-		while (pageNum <= 100) {
-			console.log(`Scraping page ${pageNum} (${finalQuery})...`, new Date().getTime());
-			let retries = 0; // current number of retries
-			let responseData = '';
-			let numResults = 0;
-			const searchUrl = createSearchUrl(pageNum);
-			while (true) {
-				try {
-					const response = await client.get(searchUrl);
-					responseData = response.data;
-					const numResultsStr = responseData.match(/(\d+) results found/) || [];
-					numResults = parseInt(numResultsStr[1], 10);
-					retries = 0;
-					break;
-				} catch (error: any) {
-					console.error(`Error scraping page ${pageNum} (${finalQuery})`, error.message);
-					if (error.message.includes('status code 404') && pageNum === 1) {
-						console.error('404 error, aborting search');
-						throw error;
-					}
-					if (
-						error.message.includes('status code 429') ||
-						error.message.includes('"socket" was not created')
-					) {
-						console.log('Waiting 5 seconds before retrying...');
-						await new Promise((resolve) => setTimeout(resolve, 5000));
-					} else {
-						retries++;
-						if (retries > MAX_RETRIES) {
-							console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);
+			while (pageNum <= 100) {
+				console.log(`Scraping page ${pageNum} (${finalQuery})...`, new Date().getTime());
+				let retries = 0; // current number of retries
+				let responseData = '';
+				let numResults = 0;
+				const searchUrl = createSearchUrl(pageNum);
+				while (true) {
+					try {
+						const response = await client.get(searchUrl);
+						responseData = response.data;
+						const numResultsStr = responseData.match(/(\d+) results found/) || [];
+						numResults = parseInt(numResultsStr[1], 10);
+						retries = 0;
+						break;
+					} catch (error: any) {
+						console.error(`Error scraping page ${pageNum} (${finalQuery})`, error.message);
+						if (error.message.includes('status code 404') && pageNum === 1) {
+							console.error('404 error, aborting search');
 							throw error;
 						}
+						if (
+							error.message.includes('status code 429') ||
+							error.message.includes('"socket" was not created')
+						) {
+							console.log('Waiting 5 seconds before retrying...');
+							await new Promise((resolve) => setTimeout(resolve, 5000));
+						} else {
+							retries++;
+							if (retries > MAX_RETRIES) {
+								console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);
+								throw error;
+							}
+						}
+						const delay = RETRY_DELAY * Math.pow(2, retries - 1);
+						await new Promise((resolve) => setTimeout(resolve, delay));
 					}
-					const delay = RETRY_DELAY * Math.pow(2, retries - 1);
-					await new Promise((resolve) => setTimeout(resolve, delay));
 				}
-			}
-			const fileSizes = Array.from(
-				responseData.matchAll(
-					/class=\"torrent_size\"[^>]*>(\d+(?:\.\d+)?)(?:[^A-Z<]+)?([A-Z]+)?/g
-				)
-			);
-			const namesAndHashes = Array.from(
-				responseData.matchAll(/magnet:\?xt=urn:btih:([a-z\d]{40})&amp;dn=([^&]+)&/g)
-			);
-			console.log(
-				`Got ${fileSizes.length} tentative items for page ${pageNum} (${finalQuery})`
-			);
-
-			if (fileSizes.length !== namesAndHashes.length) {
-				console.warn('Mismatch in file sizes and names');
-				break;
-			}
-
-			for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {
-				const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
-				const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
-
-				if (
-					!fileSizeStr.includes('GB') &&
-					(libraryType === '2160p' || !fileSizeStr.includes('MB'))
-				) {
-					badResults++;
-					continue;
-				}
-
-				// immediately check if filesize makes sense
-				const fileSize = convertToMB(fileSizeStr);
-				if (getMediaType(title) === 'movie' && fileSize > 150000) {
-					badResults++; // movie is too big
-					continue;
-				}
-				// if file size is too small, skip
-				if (fileSizeStr.includes(' B') || fileSizeStr.includes(' KB')) {
-					badResults++;
-					continue;
-				}
-
-				// Check if every term in the query (tokenized by space) is contained in the title
-				const queryTerms = finalQuery.replaceAll('"', ' ').split(' ').filter((e) => e !== '');
-				let requiredTerms =
-					queryTerms.length > 3 ? queryTerms.length : queryTerms.length - 1;
-				const containedTerms = queryTerms.filter((term) =>
-					new RegExp(`${term}`).test(title.toLowerCase())
-				).length;
-				const containsMostTerms = containedTerms >= requiredTerms;
-				if (!containsMostTerms) {
-					badResults++; // title doesn't contain most terms in the query
-					continue;
-				}
-				if (
-					!/\b360p|\b480p|\b576p|\b720p|\b1080p|\b2160p|dvd[^\w]?rip|dvd[^\w]?scr|\bx264\b|\bx265\b|\bxvid\b|\bdivx\b|\bav1\b|bd[^\w]?rip|br[^\w]?rip|hd[^\w]?rip|ppv[^\w]?rip|web[^\w]?rip|cam[^\w]?rip|\bcam\b|\bts\b|\bhdtc\b|\bscreener\b|\br5\b/i.test(
-						title.toLowerCase()
+				const fileSizes = Array.from(
+					responseData.matchAll(
+						/class=\"torrent_size\"[^>]*>(\d+(?:\.\d+)?)(?:[^A-Z<]+)?([A-Z]+)?/g
 					)
-				) {
-					badResults++; // doesn't contain video resolution fragments or clues in the title
-					continue;
+				);
+				const namesAndHashes = Array.from(
+					responseData.matchAll(/magnet:\?xt=urn:btih:([a-z\d]{40})&amp;dn=([^&]+)&/g)
+				);
+				console.log(
+					`Got ${fileSizes.length} tentative items for page ${pageNum} (${finalQuery})`
+				);
+
+				if (fileSizes.length !== namesAndHashes.length) {
+					console.warn('Mismatch in file sizes and names');
+					break;
 				}
-				if (libraryType === '2160p') {
-					if (!/\b2160p\b|\buhd\b/i.test(title.toLowerCase())) {
+
+				for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {
+					const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
+					const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
+
+					if (
+						!fileSizeStr.includes('GB') &&
+						(libraryType === '2160p' || !fileSizeStr.includes('MB'))
+					) {
+						badResults++;
 						continue;
 					}
+
+					// immediately check if filesize makes sense
+					const fileSize = convertToMB(fileSizeStr);
+					if (getMediaType(title) === 'movie' && fileSize > 150000) {
+						badResults++; // movie is too big
+						continue;
+					}
+					// if file size is too small, skip
+					if (fileSizeStr.includes(' B') || fileSizeStr.includes(' KB')) {
+						badResults++;
+						continue;
+					}
+
+					// Check if every term in the query (tokenized by space) is contained in the title
+					const queryTerms = finalQuery.replaceAll('"', ' ').split(' ').filter((e) => e !== '');
+					let requiredTerms =
+						queryTerms.length > 3 ? queryTerms.length : queryTerms.length - 1;
+					const containedTerms = queryTerms.filter((term) =>
+						new RegExp(`${term}`).test(title.toLowerCase())
+					).length;
+					const containsMostTerms = containedTerms >= requiredTerms;
+					if (!containsMostTerms) {
+						badResults++; // title doesn't contain most terms in the query
+						continue;
+					}
+					if (
+						!/\b360p|\b480p|\b576p|\b720p|\b1080p|\b2160p|dvd[^\w]?rip|dvd[^\w]?scr|\bx264\b|\bx265\b|\bxvid\b|\bdivx\b|\bav1\b|bd[^\w]?rip|br[^\w]?rip|hd[^\w]?rip|ppv[^\w]?rip|web[^\w]?rip|cam[^\w]?rip|\bcam\b|\bts\b|\bhdtc\b|\bscreener\b|\br5\b/i.test(
+							title.toLowerCase()
+						)
+					) {
+						badResults++; // doesn't contain video resolution fragments or clues in the title
+						continue;
+					}
+					if (libraryType === '2160p') {
+						if (!/\b2160p\b|\buhd\b/i.test(title.toLowerCase())) {
+							continue;
+						}
+					}
+
+					const hash = namesAndHashes[resIndex][1];
+
+					let resultObj: SearchResult = {
+						title,
+						fileSize,
+						hash,
+					};
+					searchResultsArr.push(resultObj);
+					// Reset ignoredResults counter
+					badResults = 0;
 				}
 
-				const hash = namesAndHashes[resIndex][1];
+				// Stop execution if the last $BAD_RESULT_THRESHOLD results were ignored
+				if (badResults >= BAD_RESULT_THRESHOLD) {
+					console.log(
+						`Stopped execution after ${pageNum} pages because the last ${BAD_RESULT_THRESHOLD} results were ignored.`
+					);
+					break;
+				}
 
-				let resultObj: SearchResult = {
-					title,
-					fileSize,
-					hash,
-				};
-				searchResultsArr.push(resultObj);
-				// Reset ignoredResults counter
-				badResults = 0;
+				if (numResults > pageNum * 10) {
+					pageNum++;
+				} else {
+					// No more pages, exit the loop
+					break;
+				}
 			}
 
-			// Stop execution if the last $BAD_RESULT_THRESHOLD results were ignored
-			if (badResults >= BAD_RESULT_THRESHOLD) {
-				console.log(
-					`Stopped execution after ${pageNum} pages because the last ${BAD_RESULT_THRESHOLD} results were ignored.`
-				);
-				break;
-			}
+			console.log(`Found ${searchResultsArr.length} results (${finalQuery})`);
 
-			if (numResults > pageNum * 10) {
-				pageNum++;
-			} else {
-				// No more pages, exit the loop
-				break;
-			}
+			return searchResultsArr;
+		} catch (error) {
+			console.error('fetchSearchResults page processing error', error);
+			await new Promise((resolve) => setTimeout(resolve, 5000));
 		}
-
-		console.log(`Found ${searchResultsArr.length} results (${finalQuery})`);
-
-		return searchResultsArr;
-	} catch (error) {
-		console.error('fetchSearchResults page processing error', error);
-		throw error;
 	}
 }

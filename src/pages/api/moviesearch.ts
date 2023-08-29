@@ -18,6 +18,13 @@ const handler: NextApiHandler = async (req, res) => {
             return;
         }
 
+        const isProcessing = await db.keyExists(`processing:${imdbId}`);
+		if (isProcessing) {
+			res.status(204).json(null);
+			return;
+		}
+
+        await db.saveScrapedResults(`requested:${imdbId.toString().trim()}`, []);
         res.status(204).json(null);
     } catch (error: any) {
         console.error('encountered a db issue', error);
