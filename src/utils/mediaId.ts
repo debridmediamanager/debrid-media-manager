@@ -3,14 +3,15 @@ import { ParsedMovie, ParsedShow } from '@ctrl/video-filename-parser';
 const prefix = (char: string, num: number): string => `${char}${num < 10 ? '0' : ''}${num}`;
 
 export const getMediaId = (
-	info: ParsedMovie | ParsedShow,
+	info: ParsedMovie | ParsedShow | string,
 	mediaType: 'tv' | 'movie',
 	systemOnlyId = true,
 	tvShowTitleOnly = false
 ) => {
+	const titleId: string = typeof info === 'string' ? info : info.title;
 	if (mediaType === 'movie')
-		return `${systemOnlyId ? info.title.toLocaleLowerCase() : info.title}${
-			info.year ? ` (${info.year})` : ''
+		return `${systemOnlyId ? titleId.toLocaleLowerCase() : titleId}${
+			typeof info !== 'string' && info.year ? ` (${info.year})` : ''
 		}`;
 	const { title, seasons, fullSeason, isMultiSeason, episodeNumbers } = info as ParsedShow;
 	const titleStr = systemOnlyId ? title.toLocaleLowerCase() : title;
