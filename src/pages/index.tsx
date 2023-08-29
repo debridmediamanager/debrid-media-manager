@@ -16,6 +16,10 @@ function IndexPage() {
 		router.push('/search');
 	};
 
+	const handleSearchV2Click = () => {
+		router.push('/search-v2');
+	};
+
 	const handleLogout = () => {
 		if (typeof window === 'undefined') {
 			// Running on the server, return null
@@ -79,6 +83,12 @@ function IndexPage() {
 								onClick={handleLibraryClick}
 							>
 								My Library
+							</button>
+							<button
+								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
+								onClick={handleSearchV2Click}
+							>
+								Search V2
 							</button>
 							<button
 								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
