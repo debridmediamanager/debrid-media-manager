@@ -43,10 +43,10 @@ type SearchResult = {
 };
 
 type TmdbResponse = {
-	movie_results: {
-		title: string;
+	tv_results: {
+		name: string;
 		overview: string;
-		release_date: string;
+		first_air_date: string;
 		poster_path: string;
 	}[];
 };
@@ -68,17 +68,17 @@ function Search() {
 		'adAutoInstantCheck',
 		false
 	);
-	const [movieInfo, setMovieInfo] = useState<TmdbResponse | null>(null);
+	const [showInfo, setShowInfo] = useState<TmdbResponse | null>(null);
 
 	const router = useRouter();
-	const { imdbid } = router.query;
+	const { imdbid, seasonNum } = router.query;
 
-	const fetchMovieInfo = async (imdbId: string) => {
+	const fetchShowInfo = async (imdbId: string) => {
 		try {
 			const response = await axios.get<TmdbResponse>(
 				`https://api.themoviedb.org/3/find/${imdbId}?api_key=${getTmdbKey()}&external_source=imdb_id`
 			);
-			setMovieInfo(response.data);
+			setShowInfo(response.data);
 		} catch (error) {
 			setErrorMessage('There was an error fetching movie info. Please try again.');
 			console.error(`error fetching movie data`, error);
@@ -86,19 +86,21 @@ function Search() {
 	};
 
 	useEffect(() => {
-		if (imdbid) {
-			fetchMovieInfo(imdbid as string);
-			fetchData(imdbid as string);
+		if (imdbid && seasonNum) {
+			fetchShowInfo(imdbid as string);
+			fetchData(imdbid as string, parseInt(seasonNum as string));
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [imdbid]);
+	}, [imdbid, seasonNum]);
 
-	const fetchData = async (imdbId: string) => {
+	const fetchData = async (imdbId: string, seasonNum: number) => {
 		setSearchResults([]);
 		setErrorMessage('');
 		setLoading(true);
 		try {
-			let endpoint = `/api/moviesearch?imdbId=${encodeURIComponent(imdbId)}`;
+			let endpoint = `/api/tvsearch?imdbId=${encodeURIComponent(
+				imdbId
+			)}&seasonNum=${seasonNum}`;
 			const response = await axios.get<SearchApiResponse>(endpoint);
 
 			setSearchResults(
@@ -316,13 +318,13 @@ function Search() {
 		<div className="mx-4 my-8 max-w-full">
 			<Head>
 				<title>
-					Debrid Media Manager - Movie - {movieInfo?.movie_results[0].title}
-					{movieInfo?.movie_results[0].release_date.substring(0, 4)}
+					Debrid Media Manager - TV Show - {showInfo?.tv_results[0].name} - Season{' '}
+					{seasonNum}
 				</title>
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-3xl font-bold">🎥</h1>
+				<h1 className="text-3xl font-bold">📺</h1>
 				<Link
 					href="/"
 					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
@@ -331,20 +333,21 @@ function Search() {
 				</Link>
 			</div>
 			{/* Display basic movie info */}
-			{movieInfo && (
+			{showInfo && (
 				<div className="flex items-start space-x-4">
 					<div className="flex w-1/4 justify-center items-center">
 						<Image
 							width={200}
 							height={300}
-							src={`https://image.tmdb.org/t/p/w200${movieInfo.movie_results[0].poster_path}`}
+							src={`https://image.tmdb.org/t/p/w200${showInfo.tv_results[0].poster_path}`}
 							alt="Movie poster"
 							className="shadow-lg"
 						/>
 					</div>
 					<div className="w-3/4 space-y-2">
-						<h2 className="text-2xl font-bold">{movieInfo.movie_results[0].title}</h2>
-						<p className="text-gray-700">{movieInfo.movie_results[0].overview}</p>
+						<h2 className="text-2xl font-bold">{showInfo.tv_results[0].name} - Season{' '}
+					{seasonNum}</h2>
+						<p className="text-gray-700">{showInfo.tv_results[0].overview}</p>
 					</div>
 				</div>
 			)}
@@ -454,93 +457,93 @@ rounded-lg overflow-hidden
 						Size: {(r.fileSize / 1024).toFixed(2)} GB
 					</p>
 					<div className="flex flex-wrap space-x-2">
-	{rd.isDownloading(r.hash) && rdCache![r.hash].id && (
-		<button
-		className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
-		onClick={() => {
-			handleDeleteTorrent(rdCache![r.hash].id);
-		}}
-		>
-		<FaTimes className="mr-2" />
-		RD ({rdCache![r.hash].progress}%)
-		</button>
-	)}
-	{rdKey && rd.notInLibrary(r.hash) && (
-		<button
-		className={`flex items-center justify-center bg-${
-			isAvailableInRd(r)
-			? "green"
-			: hasNoVideos(r)
-			? "gray"
-			: "blue"
-		}-500 hover:bg-${
-			isAvailableInRd(r)
-			? "green"
-			: hasNoVideos(r)
-			? "gray"
-			: "blue"
-		}-700 text-white py-2 px-4 rounded-full`}
-		onClick={() => {
-			handleAddAsMagnetInRd(r.hash, isAvailableInRd(r));
-		}}
-		>
-		{isAvailableInRd(r) ? (
-			<>
-			<FaFastForward className="mr-2" />
-			RD
-			</>
-		) : (
-			<>
-			<FaDownload className="mr-2" />
-			RD
-			</>
-		)}
-		</button>
-	)}
-	{ad.isDownloading(r.hash) && adCache![r.hash].id && (
-		<button
-		className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
-		onClick={() => {
-			handleDeleteTorrent(adCache![r.hash].id);
-		}}
-		>
-		<FaTimes className="mr-2" />
-		AD ({adCache![r.hash].progress}%)
-		</button>
-	)}
-	{adKey && ad.notInLibrary(r.hash) && (
-		<button
-		className={`flex items-center justify-center bg-${
-			isAvailableInAd(r)
-			? "green"
-			: hasNoVideos(r)
-			? "gray"
-			: "blue"
-		}-500 hover:bg-${
-			isAvailableInAd(r)
-			? "green"
-			: hasNoVideos(r)
-			? "gray"
-			: "blue"
-		}-700 text-white py-2 px-4 rounded-full`}
-		onClick={() => {
-			handleAddAsMagnetInAd(r.hash, isAvailableInAd(r));
-		}}
-		>
-		{isAvailableInAd(r) ? (
-			<>
-			<FaFastForward className="mr-2" />
-			AD
-			</>
-		) : (
-			<>
-			<FaDownload className="mr-2" />
-			AD
-			</>
-		)}
-		</button>
-	)}
-	</div>
+                {rd.isDownloading(r.hash) && rdCache![r.hash].id && (
+                    <button
+                    className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
+                    onClick={() => {
+                        handleDeleteTorrent(rdCache![r.hash].id);
+                    }}
+                    >
+                    <FaTimes className="mr-2" />
+                    RD ({rdCache![r.hash].progress}%)
+                    </button>
+                )}
+                {rdKey && rd.notInLibrary(r.hash) && (
+                    <button
+                    className={`flex items-center justify-center bg-${
+                        isAvailableInRd(r)
+                        ? "green"
+                        : hasNoVideos(r)
+                        ? "gray"
+                        : "blue"
+                    }-500 hover:bg-${
+                        isAvailableInRd(r)
+                        ? "green"
+                        : hasNoVideos(r)
+                        ? "gray"
+                        : "blue"
+                    }-700 text-white py-2 px-4 rounded-full`}
+                    onClick={() => {
+                        handleAddAsMagnetInRd(r.hash, isAvailableInRd(r));
+                    }}
+                    >
+                    {isAvailableInRd(r) ? (
+                        <>
+                        <FaFastForward className="mr-2" />
+                        RD
+                        </>
+                    ) : (
+                        <>
+                        <FaDownload className="mr-2" />
+                        RD
+                        </>
+                    )}
+                    </button>
+                )}
+                {ad.isDownloading(r.hash) && adCache![r.hash].id && (
+                    <button
+                    className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
+                    onClick={() => {
+                        handleDeleteTorrent(adCache![r.hash].id);
+                    }}
+                    >
+                    <FaTimes className="mr-2" />
+                    AD ({adCache![r.hash].progress}%)
+                    </button>
+                )}
+                {adKey && ad.notInLibrary(r.hash) && (
+                    <button
+                    className={`flex items-center justify-center bg-${
+                        isAvailableInAd(r)
+                        ? "green"
+                        : hasNoVideos(r)
+                        ? "gray"
+                        : "blue"
+                    }-500 hover:bg-${
+                        isAvailableInAd(r)
+                        ? "green"
+                        : hasNoVideos(r)
+                        ? "gray"
+                        : "blue"
+                    }-700 text-white py-2 px-4 rounded-full`}
+                    onClick={() => {
+                        handleAddAsMagnetInAd(r.hash, isAvailableInAd(r));
+                    }}
+                    >
+                    {isAvailableInAd(r) ? (
+                        <>
+                        <FaFastForward className="mr-2" />
+                        AD
+                        </>
+                    ) : (
+                        <>
+                        <FaDownload className="mr-2" />
+                        AD
+                        </>
+                    )}
+                    </button>
+                )}
+                </div>
 
 				</div>
 			</div>
@@ -553,7 +556,7 @@ rounded-lg overflow-hidden
 			{Object.keys(router.query).length !== 0 && searchResults.length === 0 && !loading && (
 				<>
 					<h2 className="text-2xl font-bold my-4">
-						Processing search request for &quot;{movieInfo?.movie_results[0].title}
+						Processing search request for &quot;{showInfo?.tv_results[0].name}
 						&quot;. Try again in a few minutes.
 					</h2>
 				</>
