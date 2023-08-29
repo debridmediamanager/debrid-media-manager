@@ -43,40 +43,9 @@ export const flattenAndRemoveDuplicates = (arr: SearchResult[][]): SearchResult[
 };
 
 export const groupByParsedTitle = (results: SearchResult[]): SearchResult[] => {
-	const frequency: Record<string, number> = {};
-	const infoCache: Record<string, any> = {};
-	const getInfoOrTitle = (result: SearchResult) => {
-		if (result.hash in infoCache && infoCache[result.hash].title) {
-			return infoCache[result.hash];
-		}
-		return result.title;
-	}
-
-	for (const result of results) {
-		// Use the cached info object if it exists, otherwise compute it and store it in the cache
-		if (!(result.hash in infoCache)) {
-			infoCache[result.hash] = getMediaType(result.title) === 'movie' ? filenameParse(result.title) : filenameParse(result.title, true);
-		}
-
-		const mediaId = getMediaId(getInfoOrTitle(result), getMediaType(result.title), true);
-
-		if (mediaId in frequency) {
-			frequency[mediaId] += result.fileSize;
-		} else {
-			frequency[mediaId] = result.fileSize;
-		}
-	}
-
 	results.sort((a, b) => {
-		const frequencyCompare =
-			frequency[getMediaId(getInfoOrTitle(b), getMediaType(b.title), true)] -
-			frequency[getMediaId(getInfoOrTitle(a), getMediaType(a.title), true)];
-		if (frequencyCompare === 0) {
-			return b.fileSize - a.fileSize;
-		}
-		return frequencyCompare;
+		return b.fileSize - a.fileSize;
 	});
-
 	return results;
 };
 
