@@ -1,9 +1,10 @@
-import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
-import { filenameParse } from '@ctrl/video-filename-parser';
 import axios, { AxiosInstance } from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import UserAgent from 'user-agents';
+
+const BTDIG = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
+// const BTDIG = 'http://btdig.com';
 
 export type SearchResult = {
 	title: string;
@@ -13,12 +14,12 @@ export type SearchResult = {
 
 export const createAxiosInstance = (agent: SocksProxyAgent) => {
 	return axios.create({
-		httpAgent: agent,
+		httpAgent: BTDIG.endsWith('.onion') ? agent : undefined,
 		headers: {
 			accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
 			'accept-language': 'en-US,en;q=0.5',
 			'accept-encoding': 'gzip, deflate, br',
-			referer: 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion/',
+			referer: `${BTDIG}/`,
 			connection: 'keep-alive',
 			'sec-fetch-dest': 'document',
 			'sec-fetch-mode': 'navigate',
@@ -58,11 +59,13 @@ function convertToMB(fileSizeStr: string) {
 	return Math.round(fileSize); // returns the rounded integer value
 }
 
-const dhtSearchHostname = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
+const dhtSearchHostname = `${BTDIG}`;
 
 export async function scrapeResults(
 	client: AxiosInstance,
 	finalQuery: string,
+	targetTitle: string,
+	mustHaveTerms: string[],
 	libraryType: string
 ): Promise<SearchResult[]> {
 	while (true) {
@@ -124,9 +127,6 @@ export async function scrapeResults(
 				const namesAndHashes = Array.from(
 					responseData.matchAll(/magnet:\?xt=urn:btih:([a-z\d]{40})&amp;dn=([^&]+)&/g)
 				);
-				console.log(
-					`Got ${fileSizes.length} tentative items for page ${pageNum} (${finalQuery})`
-				);
 
 				if (fileSizes.length !== namesAndHashes.length) {
 					console.warn('Mismatch in file sizes and names');
@@ -134,6 +134,7 @@ export async function scrapeResults(
 				}
 
 				for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {
+					console.log(`searchResultsArr:`, searchResultsArr.length)
 					const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
 					const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
 
@@ -158,15 +159,26 @@ export async function scrapeResults(
 					}
 
 					// Check if every term in the query (tokenized by space) is contained in the title
-					const queryTerms = finalQuery.replaceAll('"', ' ').split(' ').filter((e) => e !== '');
+					console.log(`scraped title`, title);
+					const queryTerms = targetTitle.replaceAll('"', ' ').split(' ').filter((e) => e !== '');
 					let requiredTerms =
 						queryTerms.length > 3 ? queryTerms.length : queryTerms.length - 1;
 					const containedTerms = queryTerms.filter((term) =>
 						new RegExp(`${term}`).test(title.toLowerCase())
 					).length;
-					const containsMostTerms = containedTerms >= requiredTerms;
-					if (!containsMostTerms) {
+					console.log(`title >`, queryTerms);
+					if (containedTerms < requiredTerms) {
+						console.log('not enough terms!');
 						badResults++; // title doesn't contain most terms in the query
+						continue;
+					}
+					console.log(`must have >`, mustHaveTerms);
+					const containedMustHaveTerms = queryTerms.filter((term) =>
+						new RegExp(`${term}`).test(title.toLowerCase())
+					).length;
+					if (containedMustHaveTerms < mustHaveTerms.length) {
+						console.log('not enough terms!');
+						badResults++;
 						continue;
 					}
 					if (

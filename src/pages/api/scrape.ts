@@ -59,12 +59,6 @@ export default async function handler(
 		return;
 	}
 
-	const isProcessing = await db.keyExists(`processing:${imdbId}`);
-	if (isProcessing) {
-		res.status(200).json({ status: 'processing' });
-		return;
-	}
-
 	// imdbId to search for
 	const tmdbResponse = await axios.get(getTmdbInfo(imdbId.toString().trim()));
 
@@ -76,6 +70,11 @@ export default async function handler(
 
 	if (tmdbResponse.data.movie_results.length > 0) {
 		if (!override || override !== 'true') {
+			const isProcessing = await db.keyExists(`processing:${imdbId}`);
+			if (isProcessing) {
+				res.status(200).json({ status: 'processing' });
+				return;
+			}
 			const keyExists = await db.keyExists(`movie:${imdbId}`);
 			if (keyExists) {
 				res.status(200).json({ status: 'skipped' });
@@ -106,15 +105,21 @@ export default async function handler(
 		await db.saveScrapedResults(`processing:${imdbId}`, []);
 
 		try {
-			const results = [];
+			const results: SearchResult[][] = [];
 			for (const movieTitle of movieTitles) {
 				for (const lType of ['720p', '1080p', '2160p', '']) {
+					console.log('Scraping >', `${movieTitle} ${lType}`.trim());
+					const mustHave = [];
+					let numbers = movieTitle.match(/\b\d{1,4}\b/g);
+					if (numbers) mustHave.push(...numbers);
 					results.push(
 						await scrapeResults(
 							createAxiosInstance(
 								new SocksProxyAgent(process.env.PROXY!, { timeout: 10000 })
 							),
 							`${movieTitle} ${lType}`.trim(),
+							movieTitle,
+							mustHave,
 							lType || '1080p',
 						)
 					);
@@ -136,6 +141,11 @@ export default async function handler(
 
 	if (tmdbResponse.data.tv_results.length > 0) {
 		if (!override || override !== 'true') {
+			const isProcessing = await db.keyExists(`processing:${imdbId}`);
+			if (isProcessing) {
+				res.status(200).json({ status: 'processing' });
+				return;
+			}
 			const keyExists = await db.keyExists(`tv:${imdbId}:1`);
 			if (keyExists) {
 				res.status(200).json({ status: 'skipped' });
@@ -163,15 +173,21 @@ export default async function handler(
 			if (season.season_number === 0) continue;
 			let seasonQueries = tvTitles.map((q) => `${q} "s${padWithZero(season.season_number)}"`);
 			try {
-				const results = [];
+				const results: SearchResult[][] = [];
 				for (const finalQuery of seasonQueries) {
 					for (const lType of ['720p', '1080p', '2160p', '']) {
+						console.log('Scraping >', `${finalQuery} ${lType}`.trim());
+						const mustHave = [];
+						let numbers = finalQuery.match(/\bs?\d{1,4}\b/g);
+						if (numbers) mustHave.push(...numbers);
 						results.push(
 							await scrapeResults(
 								createAxiosInstance(
 									new SocksProxyAgent(process.env.PROXY!, { timeout: 10000 })
 								),
 								`${finalQuery} ${lType}`.trim(),
+								finalQuery.replace(/\bs\d\d\b/g, ''),
+								mustHave,
 								lType || '1080p',
 							)
 						);

@@ -87,8 +87,9 @@ export default async function handler(
 			const mdbItem = await axios.get(getMdbInfo(imdbId));
 			for (let rating of mdbItem.data.ratings) {
 				if (rating.source === 'tomatoes') {
+					if (!rating.url) continue;
 					const cleanedTitle = (
-						itemType === 'movie' ? rating.url.split('/m/') : rating.url.split('/tv/')
+						itemType === 'movie' ? rating.url?.split('/m/') : rating.url?.split('/tv/')
 					)[1].replaceAll('_', ' ');
 					movieTitles.push(`"${cleanedTitle}"`);
 					movieTitles.push(`"${cleanedTitle}" ${tmdbItem.release_date.substring(0, 4)}`);
@@ -102,12 +103,17 @@ export default async function handler(
 			const results = [];
 			for (const movieTitle of movieTitles) {
 				for (const lType of ['720p', '1080p', '2160p', '']) {
+					const mustHave = [];
+					let numbers = movieTitle.match(/\b\d{1,4}\b/g);
+					if (numbers) mustHave.push(...numbers);
 					results.push(
 						await scrapeResults(
 							createAxiosInstance(
 								new SocksProxyAgent(process.env.PROXY!, { timeout: 10000 })
 							),
 							`${movieTitle} ${lType}`.trim(),
+							movieTitle,
+							mustHave,
 							lType || '1080p',
 						)
 					);
@@ -151,12 +157,17 @@ export default async function handler(
 				const results = [];
 				for (const finalQuery of seasonQueries) {
 					for (const lType of ['720p', '1080p', '2160p', '']) {
+						const mustHave = [];
+						let numbers = finalQuery.match(/\bs?\d{1,4}\b/g);
+						if (numbers) mustHave.push(...numbers);
 						results.push(
 							await scrapeResults(
 								createAxiosInstance(
 									new SocksProxyAgent(process.env.PROXY!, { timeout: 10000 })
 								),
 								`${finalQuery} ${lType}`.trim(),
+								finalQuery,
+								mustHave,
 								lType || '1080p',
 							)
 						);
