@@ -93,6 +93,7 @@ export default async function handler(
 			const mdbItem = await axios.get(getMdbInfo(imdbId.toString().trim()));
 			for (let rating of mdbItem.data.ratings) {
 				if (rating.source === 'tomatoes') {
+					if (!rating.url) continue;
 					const cleanedTitle = (
 						itemType === 'movie' ? rating.url.split('/m/') : rating.url.split('/tv/')
 					)[1].replaceAll('_', ' ');
