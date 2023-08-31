@@ -13,7 +13,7 @@ function IndexPage() {
 	};
 
 	const handleSearchV2Click = () => {
-		router.push('/search-v2');
+		router.push('/search');
 	};
 
 	const handleLogout = () => {

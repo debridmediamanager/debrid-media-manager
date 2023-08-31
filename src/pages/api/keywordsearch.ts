@@ -40,8 +40,6 @@ const handler: NextApiHandler = async (req, res) => {
             }
         }
 
-        console.log('search results', results.length);
-
         await db.saveSearchResults(keyword.toString().trim(), results);
 
         res.status(200).json({ results });
