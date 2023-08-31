@@ -1,16 +1,13 @@
 FROM alpine:latest
 
+COPY renew-tor.sh /usr/local/bin/check-and-renew.sh
+
 RUN apk --no-cache --update --upgrade add tor curl grep netcat-openbsd \
     && mv /etc/tor/torrc.sample  /etc/tor/torrc \
     && sed -i \
         -e 's/#SOCKSPort 192.168.0.1:9100/SOCKSPort 0.0.0.0:9050/g' \
+        -e 's/#ControlPort 9051/ControlPort 9051/g' \
         /etc/tor/torrc \
-    && chown -R tor /var/lib/tor \
-    && echo "#!/bin/sh" > /usr/local/bin/check-and-renew.sh \
-    && echo "while true; do" >> /usr/local/bin/check-and-renew.sh \
-    && echo "  curl -x socks5h://127.0.0.1:9050 -s http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion/search?q=Kraftfahrzeughaftpflichtversicherung | grep -qm1 Histats || (echo -e 'AUTHENTICATE \"\"\\nsignal NEWNYM\\nQUIT' | nc 127.0.0.1 9051 && echo 'IP has been renewed')" >> /usr/local/bin/check-and-renew.sh \
-    && echo "  sleep 30" >> /usr/local/bin/check-and-renew.sh \
-    && echo "done" >> /usr/local/bin/check-and-renew.sh \
     && chmod +x /usr/local/bin/check-and-renew.sh
 
 USER tor
