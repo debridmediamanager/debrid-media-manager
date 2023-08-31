@@ -28,11 +28,15 @@ const handler: NextApiHandler = async (req, res) => {
         for (let i = 0; i < results.length; i++) {
             if (results[i].type === 'show') {
                 const showResponse = await axios.get(getMdbInfo(results[i].imdbid));
-                const seasons = showResponse.data.seasons.filter((season: any) => season.season_number > 0)
-                    .map((season: any) => {
-                        return season.season_number;
-                    });
-                results[i].season_count = Math.max(...seasons);
+                if (showResponse.data.type === 'show' && showResponse.data.seasons?.length !== 0) {
+                    const seasons = showResponse.data.seasons.filter((season: any) => season.season_number > 0)
+                        .map((season: any) => {
+                            return season.season_number;
+                        });
+                    results[i].season_count = Math.max(...seasons);
+                } else {
+                    results[i].type = 'movie';
+                }
             }
         }
 

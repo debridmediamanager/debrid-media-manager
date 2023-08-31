@@ -12,10 +12,6 @@ function IndexPage() {
 		router.push('/library');
 	};
 
-	const handleSearchClick = () => {
-		router.push('/search');
-	};
-
 	const handleSearchV2Click = () => {
 		router.push('/search-v2');
 	};
@@ -85,17 +81,12 @@ function IndexPage() {
 								My Library
 							</button>
 							<button
-								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
+								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:shadow-glow"
 								onClick={handleSearchV2Click}
-							>
-								Search V2
-							</button>
-							<button
-								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
-								onClick={handleSearchClick}
 							>
 								Search
 							</button>
+
 							<button
 								className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
 								onClick={handleLogout}

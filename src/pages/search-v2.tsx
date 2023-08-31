@@ -85,7 +85,7 @@ function Search() {
 						className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
 						type="text"
 						id="query"
-						placeholder="if movie, add year e.g. greatest showman 2017; if tv series, add s01 e.g. game of thrones s01"
+						placeholder="type a movie or show name"
 						value={typedQuery}
 						onChange={(e) => setTypedQuery(e.target.value)}
 					/>
