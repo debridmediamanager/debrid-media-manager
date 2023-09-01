@@ -162,7 +162,7 @@ export async function scrapeResults(
 					console.log(`scraped title`, title);
 					const queryTerms = targetTitle.replaceAll('"', ' ').split(' ').filter((e) => e !== '');
 					let requiredTerms =
-						queryTerms.length > 3 ? queryTerms.length : queryTerms.length - 1;
+						queryTerms.length <= 3 ? queryTerms.length : queryTerms.length - 1;
 					const containedTerms = queryTerms.filter((term) =>
 						new RegExp(`${term}`).test(title.toLowerCase())
 					).length;
