@@ -23,16 +23,17 @@ export default async function handler(
 		}
 	} else {
 		imdbId = await db.getLatestRequest();
+		console.log('imdbId', imdbId);
 		if (!imdbId) {
 			res.status(200).json({ status: 'done' });
 			return;
 		}
 
-		const isProcessing = await db.keyExists(`processing:${imdbId}`);
-		if (isProcessing) {
-			res.status(200).json({ status: 'processing' });
-			return;
-		}
+		// const isProcessing = await db.keyExists(`processing:${imdbId}`);
+		// if (isProcessing) {
+		// 	res.status(200).json({ status: 'processing' });
+		// 	return;
+		// }
 	}
 
 	await generateScrapeJobs(res, imdbId, true);
