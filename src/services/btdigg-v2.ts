@@ -134,7 +134,7 @@ export async function scrapeResults(
 				}
 
 				for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {
-					console.log(`searchResultsArr:`, searchResultsArr.length)
+					console.log(` current count of searchResultsArr:`, searchResultsArr.length)
 					const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
 					const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
 
@@ -159,25 +159,25 @@ export async function scrapeResults(
 					}
 
 					// Check if every term in the query (tokenized by space) is contained in the title
-					console.log(`scraped title`, title);
+					console.log(`scraped torrent title >`, title);
 					const queryTerms = targetTitle.replaceAll('"', ' ').split(' ').filter((e) => e !== '');
 					let requiredTerms =
 						queryTerms.length <= 3 ? queryTerms.length : queryTerms.length - 1;
 					const containedTerms = queryTerms.filter((term) =>
 						new RegExp(`${term}`).test(title.toLowerCase())
 					).length;
-					console.log(`title >`, queryTerms);
+					console.log(`needed title >`, queryTerms);
+					console.log(`must have >`, mustHaveTerms);
 					if (containedTerms < requiredTerms) {
-						console.log('not enough terms!');
+						console.log('not enough title terms!');
 						badResults++; // title doesn't contain most terms in the query
 						continue;
 					}
-					console.log(`must have >`, mustHaveTerms);
-					const containedMustHaveTerms = queryTerms.filter((term) =>
+					const containedMustHaveTerms = mustHaveTerms.filter((term) =>
 						new RegExp(`${term}`).test(title.toLowerCase())
 					).length;
 					if (containedMustHaveTerms < mustHaveTerms.length) {
-						console.log('not enough terms!');
+						console.log('not enough must have terms!');
 						badResults++;
 						continue;
 					}
@@ -223,7 +223,7 @@ export async function scrapeResults(
 				}
 			}
 
-			console.log(`Found ${searchResultsArr.length} results (${finalQuery})`);
+			console.log(`>>>>>> Found ${searchResultsArr.length} results (${finalQuery})`);
 
 			return searchResultsArr;
 		} catch (error) {
