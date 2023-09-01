@@ -74,8 +74,10 @@ export async function generateScrapeJobs(
 
         itemType = 'movie';
         tmdbItem = tmdbResponse.data.movie_results[0];
-        movieTitles.push(`"${cleanSearchQuery(tmdbItem.title)}"`);
-        movieTitles.push(`"${cleanSearchQuery(tmdbItem.title)}" ${tmdbItem.release_date.substring(0, 4)}`);
+        const cleanTitle = cleanSearchQuery(tmdbItem.title);
+        const titleLength = cleanTitle.split(' ').length;
+        if (titleLength > 2) movieTitles.push(`"${cleanTitle}"`);
+        movieTitles.push(`"${cleanTitle}" ${tmdbItem.release_date.substring(0, 4)}`);
 
         if (tmdbItem.original_title && tmdbItem.original_title !== tmdbItem.title) {
             movieTitles.push(`"${tmdbItem.original_title}"
@@ -148,8 +150,10 @@ export async function generateScrapeJobs(
 
         itemType = 'tv';
         tmdbItem = tmdbResponse.data.tv_results[0];
-        tvTitles.push(`"${cleanSearchQuery(tmdbItem.name)}"`);
-        tvTitles.push(`"${cleanSearchQuery(tmdbItem.name)}" ${tmdbItem.first_air_date.substring(0, 4)}`);
+        const cleanTitle = cleanSearchQuery(tmdbItem.name);
+        const titleLength = cleanTitle.split(' ').length;
+        if (titleLength > 2) tvTitles.push(`"${cleanTitle}"`);
+        tvTitles.push(`"${cleanTitle}" ${tmdbItem.first_air_date.substring(0, 4)}`);
 
         if (tmdbItem.original_name && tmdbItem.original_name !== tmdbItem.name) {
             tvTitles.push(`"${tmdbItem.original_name}"`);
