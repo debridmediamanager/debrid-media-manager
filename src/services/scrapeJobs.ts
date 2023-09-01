@@ -87,7 +87,8 @@ export async function generateScrapeJobs(
                     if (!rating.url) continue;
                     const cleanedTitle = (
                         itemType === 'movie' ? rating.url.split('/m/') : rating.url.split('/tv/')
-                    )[1].replaceAll('_', ' ').replace(/\d{6,}/, '').trim();
+                    )[1].replaceAll('_', ' ');
+                    if (cleanedTitle.startsWith(/\d{6,}/)) continue;
                     movieTitles.push(`"${cleanedTitle}"`);
                     movieTitles.push(`"${cleanedTitle}" ${tmdbItem.release_date.substring(0, 4)}`);
                 }
