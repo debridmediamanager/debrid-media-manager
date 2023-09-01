@@ -86,6 +86,18 @@ export class PlanetScaleCache {
 		return null;
 	}
 
+	public async getOldestProcessing(): Promise<string | null> {
+		const requestedItem = await this.prisma.scraped.findFirst({
+			where: { key: { startsWith: "processing:" } },
+			orderBy: { updatedAt: 'asc' },
+			select: { key: true },
+		});
+		if (requestedItem !== null) {
+			return requestedItem.key.split(':')[1];
+		}
+		return null;
+	}
+
 	public async markAsDone(imdbId: string): Promise<void> {
 		const keys = [`requested:${imdbId}`, `processing:${imdbId}`];
 
