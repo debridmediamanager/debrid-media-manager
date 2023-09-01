@@ -151,8 +151,7 @@ export async function generateScrapeJobs(
         itemType = 'tv';
         tmdbItem = tmdbResponse.data.tv_results[0];
         const cleanTitle = cleanSearchQuery(tmdbItem.name);
-        const titleLength = cleanTitle.split(' ').length;
-        if (titleLength > 2) tvTitles.push(`"${cleanTitle}"`);
+        tvTitles.push(`"${cleanTitle}"`);
         tvTitles.push(`"${cleanTitle}" ${tmdbItem.first_air_date.substring(0, 4)}`);
 
         if (tmdbItem.original_name && tmdbItem.original_name !== tmdbItem.name) {
