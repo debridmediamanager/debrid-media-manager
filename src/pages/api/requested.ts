@@ -35,5 +35,5 @@ export default async function handler(
 		}
 	}
 
-	await generateScrapeJobs(res, imdbId, false);
+	await generateScrapeJobs(res, imdbId, true);
 }
