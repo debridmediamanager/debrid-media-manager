@@ -20,6 +20,7 @@ import {
 import { getTmdbKey } from '@/utils/freekeys';
 import { groupBy } from '@/utils/groupBy';
 import { getSelectableFiles, isVideo } from '@/utils/selectable';
+import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
 import Head from 'next/head';
@@ -52,11 +53,11 @@ type TmdbResponse = {
 };
 
 function Search() {
+	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
 	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
-	const [loading, setLoading] = useState(false);
 	const [masterAvailability, setMasterAvailability] = useState<HashAvailability>({});
 	const [rdCache, rd, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
 	const [adCache, ad, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
@@ -96,12 +97,18 @@ function Search() {
 	const fetchData = async (imdbId: string, seasonNum: number) => {
 		setSearchResults([]);
 		setErrorMessage('');
-		setLoading(true);
 		try {
 			let endpoint = `/api/tvsearch?imdbId=${encodeURIComponent(
 				imdbId
 			)}&seasonNum=${seasonNum}`;
 			const response = await axios.get<SearchApiResponse>(endpoint);
+			if (response.status === 204) {
+				setSearchState(response.headers['status']);
+				return;
+			}
+			else if (response.status === 200) {
+				setSearchState('loaded');
+			}
 
 			setSearchResults(
 				response.data.results?.map((r) => ({
@@ -111,20 +118,18 @@ function Search() {
 			);
 
 			if (response.data.results?.length) {
-				toast(`Found ${response.data.results.length} results`, { icon: '🔍' });
+				toast(`Found ${response.data.results.length} results`, searchToastOptions);
 
 				// instant checks
 				const hashArr = response.data.results.map((r) => r.hash);
 				if (rdKey && rdAutoInstantCheck) await instantCheckInRd(hashArr);
 				if (adKey && adAutoInstantCheck) await instantCheckInAd(hashArr);
 			} else {
-				toast(`No results found`, { icon: '🔍' });
+				toast(`No results found`, searchToastOptions);
 			}
 		} catch (error) {
 			console.error(error);
 			setErrorMessage('There was an error searching for the query. Please try again.');
-		} finally {
-			setLoading(false);
 		}
 	};
 
@@ -171,7 +176,7 @@ function Search() {
 				`Found ${
 					Object.values(rdAvailability).filter((a) => a.includes(':available')).length
 				} available in RD`,
-				{ icon: '🔍' }
+				searchToastOptions
 			);
 			setMasterAvailability(prevState => ({ ...prevState, ...rdAvailability }));
 		} catch (error) {
@@ -216,7 +221,7 @@ function Search() {
 				`Found ${
 					Object.values(adAvailability).filter((a) => a.includes(':available')).length
 				} available in AD`,
-				{ icon: '🔍' }
+				searchToastOptions
 			);
 			setMasterAvailability(prevState => ({ ...prevState, ...adAvailability }));
 		} catch (error) {
@@ -324,7 +329,7 @@ function Search() {
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-3xl font-bold">📺</h1>
+				<h1 className="text-3xl font-bold" onClick={() => router.back()} style={{ cursor: 'pointer' }}>📺</h1>
 				<Link
 					href="/"
 					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
@@ -354,9 +359,21 @@ function Search() {
 
 			<hr className="my-4" />
 
-			{loading && (
+			{searchState === 'loading' && (
 				<div className="flex justify-center items-center mt-4">
 					<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+				</div>
+			)}
+			{searchState === 'requested' && (
+				<div className="mt-4 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative">
+					<strong className="font-bold">Notice:</strong>
+					<span className="block sm:inline"> The request has been received. This might take at least 5 minutes.</span>
+				</div>
+			)}
+			{searchState === 'processing' && (
+				<div className="mt-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative">
+					<strong className="font-bold">Notice:</strong>
+					<span className="block sm:inline"> Looking for torrents in the dark web. Please wait for 1-2 minutes.</span>
 				</div>
 			)}
 			{errorMessage && (
@@ -367,7 +384,7 @@ function Search() {
 			)}
 			{searchResults.length > 0 && (
 				<>
-					{!loading && (
+					{searchState !== 'loading' && (
 						<div
 							className="mb-4 pb-1 whitespace-nowrap overflow-x-scroll"
 							style={{ scrollbarWidth: 'thin' }}
@@ -375,11 +392,11 @@ function Search() {
 							<button
 								className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
 								onClick={async () => {
-									setLoading(true);
+									setSearchState('loading');
 									await instantCheckInRd(
 										searchResults.map((result) => result.hash)
 									);
-									setLoading(false);
+									setSearchState('done');
 								}}
 							>
 								Check RD availability
@@ -403,11 +420,11 @@ function Search() {
 							<button
 								className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
 								onClick={async () => {
-									setLoading(true);
+									setSearchState('loading');
 									await instantCheckInAd(
 										searchResults.map((result) => result.hash)
 									);
-									setLoading(false);
+									setSearchState('done');
 								}}
 							>
 								Check AD availability
@@ -433,7 +450,7 @@ function Search() {
 					<div className="overflow-x-auto">
 						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
 {
-	!loading && searchResults.map((r: SearchResult) => (
+	searchState !== 'loading' && searchResults.map((r: SearchResult) => (
 			<div
 				key={r.hash}
 				className={`
@@ -551,14 +568,6 @@ rounded-lg overflow-hidden
 }
 						</div>
 					</div>
-				</>
-			)}
-			{Object.keys(router.query).length !== 0 && searchResults.length === 0 && !loading && (
-				<>
-					<h2 className="text-2xl font-bold my-4">
-						Processing search request for &quot;{showInfo?.tv_results[0].name}
-						&quot;. Try again in a few minutes.
-					</h2>
 				</>
 			)}
 		</div>
