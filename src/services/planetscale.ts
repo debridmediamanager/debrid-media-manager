@@ -92,6 +92,7 @@ export class PlanetScaleCache {
 			orderBy: { updatedAt: 'asc' },
 			select: { key: true },
 		});
+		console.log(requestedItem);
 		if (requestedItem !== null) {
 			return requestedItem.key.split(':')[1];
 		}
