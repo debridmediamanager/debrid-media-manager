@@ -159,17 +159,15 @@ export async function scrapeResults(
 					}
 
 					// Check if every term in the query (tokenized by space) is contained in the title
-					console.log(`scraped torrent title >`, title);
 					const queryTerms = targetTitle.replaceAll('"', ' ').split(' ').filter((e) => e !== '');
 					let requiredTerms =
-						queryTerms.length <= 3 ? queryTerms.length : queryTerms.length - 1;
+					queryTerms.length <= 3 ? queryTerms.length : queryTerms.length - 1;
 					const containedTerms = queryTerms.filter((term) =>
-						new RegExp(`${term.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')}`).test(title.toLowerCase())
+					new RegExp(`${term.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')}`).test(title.toLowerCase())
 					).length;
-					console.log(`needed title >`, queryTerms);
-					console.log(`must have >`, mustHaveTerms);
+					console.log(`check params >`, title, queryTerms, mustHaveTerms);
 					if (containedTerms < requiredTerms) {
-						console.log('not enough title terms!');
+						console.log('ERR not enough title terms!');
 						badResults++; // title doesn't contain most terms in the query
 						continue;
 					}
@@ -177,7 +175,7 @@ export async function scrapeResults(
 						new RegExp(`${term}`).test(title.toLowerCase())
 					).length;
 					if (containedMustHaveTerms < mustHaveTerms.length) {
-						console.log('not enough must have terms!');
+						console.log('ERR not enough must have terms!');
 						badResults++;
 						continue;
 					}

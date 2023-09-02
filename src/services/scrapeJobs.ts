@@ -24,7 +24,7 @@ function padWithZero(num: number) {
 }
 const cleanSearchQuery = (search: string): string => {
 	return search
-		.split(/[\s\=:\?\.\-\(\)\/]/) // split the search query into an array of elements
+		.split(/[\s\(\)\[\]\{\}\+\\\^\|·\?]/) // split the search query into an array of elements
 		.filter((e) => e !== '') // filter out any empty elements
 		.map((e) => e.toLowerCase()) // convert each element to lowercase
 		.join(' ') // join the remaining elements with a single space
@@ -33,6 +33,7 @@ const cleanSearchQuery = (search: string): string => {
 		.replace(/[íìïî]/g, 'i')
 		.replace(/[óòöô]/g, 'o')
 		.replace(/[úùüû]/g, 'u')
+        .replaceAll(':', ' ')
 		.replace(/\s+/g, ' ') // replace multiple spaces with a single space
 		.trim();
 };
@@ -81,8 +82,7 @@ export async function generateScrapeJobs(
 			movieTitles.push(`"${cleanTitle}" ${tmdbItem.release_date.substring(0, 4)}`);
 
 		if (tmdbItem.original_title && tmdbItem.original_title !== tmdbItem.title) {
-			movieTitles.push(`"${tmdbItem.original_title}"
-            imdbId`);
+			movieTitles.push(`"${tmdbItem.original_title}"`);
 			if (tmdbItem.release_date)
 				movieTitles.push(
 					`"${tmdbItem.original_title}" ${tmdbItem.release_date.substring(0, 4)}`
@@ -112,9 +112,8 @@ export async function generateScrapeJobs(
 			const results: SearchResult[][] = [];
 			for (const movieTitle of movieTitles) {
 				for (const lType of ['', '1080p', '2160p', '720p']) {
-					console.log('Scraping >', `${movieTitle} ${lType}`.trim());
 					const mustHave = [];
-					let numbers = movieTitle.match(/\b\d{1,4}\b/g);
+                    let numbers = movieTitle.match(/\b(\d+(\.\d+)?)\b/g);
 					if (numbers) mustHave.push(...numbers);
 					const scrapedResults = await scrapeResults(
 						createAxiosInstance(
@@ -185,9 +184,8 @@ export async function generateScrapeJobs(
 				const results: SearchResult[][] = [];
 				for (const finalQuery of seasonQueries) {
 					for (const lType of ['', '1080p', '2160p', '720p']) {
-						console.log('Scraping >', `${finalQuery} ${lType}`.trim());
 						const mustHave = [];
-						let numbers = finalQuery.match(/\bs?\d{1,4}\b/g);
+                        let numbers = finalQuery.match(/\bs?(\d+(\.\d+)?)\b/g);
 						if (numbers) mustHave.push(...numbers);
 						const scrapedResults = await scrapeResults(
 							createAxiosInstance(
