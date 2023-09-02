@@ -18,7 +18,9 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 
 	try {
-		const searchResults = await db.getScrapedResults<any[]>(`tv:${imdbId.toString().trim()}:${parseInt(seasonNum.toString().trim(), 10)}`);
+		const searchResults = await db.getScrapedResults<any[]>(
+			`tv:${imdbId.toString().trim()}:${parseInt(seasonNum.toString().trim(), 10)}`
+		);
 		if (searchResults) {
 			res.status(200).json({ results: searchResults });
 			return;
@@ -26,12 +28,12 @@ const handler: NextApiHandler = async (req, res) => {
 
 		const isProcessing = await db.keyExists(`processing:${imdbId.toString().trim()}`);
 		if (isProcessing) {
-			res.status(204).json(null);
+			res.setHeader('status', 'processing').status(204).json(null);
 			return;
 		}
 
 		await db.saveScrapedResults(`requested:${imdbId.toString().trim()}`, []);
-		res.status(204).json(null);
+		res.setHeader('status', 'requested').status(204).json(null);
 	} catch (error: any) {
 		console.error('encountered a db issue', error);
 		res.status(500).json({ errorMessage: error.message });

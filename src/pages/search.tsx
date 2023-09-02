@@ -5,25 +5,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-
-type SearchResult = {
-	id: string;
-	type: 'movie' | 'show';
-	year: number;
-	score: number;
-	title: string;
-	imdbid: string;
-	tmdbid: number;
-	tvdbid?: number;
-	traktid?: number;
-	season_count?: number;
-	score_average: number;
-};
+import { MdbSearchResult } from './api/keywordsearch';
 
 function Search() {
 	const [query, setQuery] = useState('');
 	const [typedQuery, setTypedQuery] = useState('');
-	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+	const [searchResults, setSearchResults] = useState<MdbSearchResult[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 
@@ -114,7 +101,7 @@ function Search() {
 						Search Results for &quot;{query}&quot;
 					</h2>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-						{searchResults.map((result) => (
+						{searchResults.map((result: MdbSearchResult) => (
 							<div key={result.id} className="bg-white shadow-lg rounded-lg p-6">
 								<Poster
 									imdbId={result.imdbid}
@@ -126,7 +113,7 @@ function Search() {
 									<p className="text-gray-600 text-sm">Score: {result.score}</p>
 									{result.type === 'movie' ? (
 										<Link
-											href={`/movies/${result.imdbid}`}
+											href={`/movie/${result.imdbid}`}
 											className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-700 rounded"
 										>
 											<span role="img" aria-label="movie" className="mr-2">
@@ -142,7 +129,7 @@ function Search() {
 											).map((season) => (
 												<Link
 													key={season}
-													href={`/shows/${result.imdbid}/${season}`}
+													href={`/show/${result.imdbid}/${season}`}
 													className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-700 rounded mr-2 mb-2"
 												>
 													<span
