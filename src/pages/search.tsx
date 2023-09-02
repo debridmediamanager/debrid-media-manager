@@ -1,24 +1,11 @@
 import Poster from '@/components/poster';
+import { SearchResult } from '@/services/btdigg';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-
-type SearchResult = {
-	id: string;
-	type: 'movie' | 'show';
-	year: number;
-	score: number;
-	title: string;
-	imdbid: string;
-	tmdbid: number;
-	tvdbid?: number;
-	traktid?: number;
-	season_count?: number;
-	score_average: number;
-};
 
 function Search() {
 	const [query, setQuery] = useState('');

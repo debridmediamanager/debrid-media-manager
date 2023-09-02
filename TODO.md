@@ -22,6 +22,6 @@
 - [] 2.7.0: Rescan library button in all other pages except library
 - [] 2.7.0: Add Auto-DL checkbox to download the "best" option from search
 - [] 2.9.0: New page: "Sync mdblist.com list"
-- [] 3.0.0: Add similarity search "Did you mean... ?"
-- [] 3.0.0: Add tests
-- [] 4.0.0: Refactor pages into different components
+- [] 3.0.0: Improve search by combining mdblist with TMDB and then using https://www.npmjs.com/package/fast-levenshtein
+- [] 4.0.0: Add tests
+- [] 5.0.0: Refactor pages into different components
