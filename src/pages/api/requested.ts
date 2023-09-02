@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const { scrapePassword, processing } = req.query;
+	const { scrapePassword, processing, override } = req.query;
 	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
 		res.status(403).json({
 			status: 'error',
@@ -22,18 +22,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			return;
 		}
 	} else {
-		imdbId = await db.getLatestRequest();
+		imdbId = await db.getOldestRequest();
 		console.log('imdbId', imdbId);
 		if (!imdbId) {
 			res.status(200).json({ status: 'done' });
 			return;
 		}
 
-		// const isProcessing = await db.keyExists(`processing:${imdbId}`);
-		// if (isProcessing) {
-		// 	res.status(200).json({ status: 'processing' });
-		// 	return;
-		// }
+		const isProcessing = await db.keyExists(`processing:${imdbId}`);
+		if (isProcessing && override !== 'true') {
+			res.status(200).json({ status: 'processing' });
+			return;
+		}
 	}
 
 	await generateScrapeJobs(res, imdbId, true);

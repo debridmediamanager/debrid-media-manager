@@ -67,7 +67,7 @@ export class PlanetScaleCache {
 		return cacheEntry !== null;
 	}
 
-	public async getLatestRequest(): Promise<string | null> {
+	public async getOldestRequest(): Promise<string | null> {
 		const requestedItem = await this.prisma.scraped.findFirst({
 			where: { key: { startsWith: 'requested:' } },
 			orderBy: { updatedAt: 'asc' },
