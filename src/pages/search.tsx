@@ -1,16 +1,16 @@
 import Poster from '@/components/poster';
-import { SearchResult } from '@/services/btdigg';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { MdbSearchResult } from './api/keywordsearch';
 
 function Search() {
 	const [query, setQuery] = useState('');
 	const [typedQuery, setTypedQuery] = useState('');
-	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+	const [searchResults, setSearchResults] = useState<MdbSearchResult[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 
@@ -101,7 +101,7 @@ function Search() {
 						Search Results for &quot;{query}&quot;
 					</h2>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-						{searchResults.map((result) => (
+						{searchResults.map((result: MdbSearchResult) => (
 							<div key={result.id} className="bg-white shadow-lg rounded-lg p-6">
 								<Poster
 									imdbId={result.imdbid}

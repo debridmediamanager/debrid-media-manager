@@ -11,7 +11,7 @@ const tmdbSearchTv = (keyword: string, tmdbKey: string) =>
 	`https://api.themoviedb.org/3/search/tv?api_key=${tmdbKey}&query=${keyword}&page=1`;
 const db = new PlanetScaleCache();
 
-type SearchResult = {
+export type MdbSearchResult = {
 	id: string;
 	type: 'movie' | 'show';
 	year: number;
@@ -42,7 +42,7 @@ const handler: NextApiHandler = async (req, res) => {
 		}
 
 		const searchResponse = await axios.get(searchMdb(cleanKeyword));
-		const results: SearchResult[] = [...searchResponse.data.search].filter(
+		const results: MdbSearchResult[] = [...searchResponse.data.search].filter(
 			(result: any) => result.imdbid
 		);
 
