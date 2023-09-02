@@ -81,8 +81,8 @@ function Search() {
 			);
 			setMovieInfo(response.data);
 		} catch (error) {
-			setErrorMessage('There was an error fetching movie info. Please try again.');
 			console.error(`error fetching movie data`, error);
+			setErrorMessage('There was an error fetching movie info. Please try again.');
 		}
 	};
 
@@ -177,10 +177,10 @@ function Search() {
 			);
 			setMasterAvailability((prevState) => ({ ...prevState, ...rdAvailability }));
 		} catch (error) {
+			console.error(error);
 			toast.error(
 				'There was an error checking availability in Real-Debrid. Please try again.'
 			);
-			throw error;
 		}
 	};
 
@@ -222,8 +222,8 @@ function Search() {
 			);
 			setMasterAvailability((prevState) => ({ ...prevState, ...adAvailability }));
 		} catch (error) {
+			console.error(error);
 			toast.error('There was an error checking availability in AllDebrid. Please try again.');
-			throw error;
 		}
 	};
 
@@ -239,9 +239,9 @@ function Search() {
 			rdCacheAdder.single(`rd:${id}`, hash, instantDownload ? 'downloaded' : 'downloading');
 			handleSelectFiles(`rd:${id}`, true); // add rd: to account for substr(3) in handleSelectFiles
 		} catch (error) {
+			console.error(error);
 			if (!disableToast)
 				toast.error('There was an error adding as magnet. Please try again.');
-			throw error;
 		}
 	};
 
@@ -262,9 +262,9 @@ function Search() {
 				instantDownload ? 'downloaded' : 'downloading'
 			);
 		} catch (error) {
+			console.error(error);
 			if (!disableToast)
 				toast.error('There was an error adding as magnet. Please try again.');
-			throw error;
 		}
 	};
 
@@ -283,8 +283,8 @@ function Search() {
 			if (id.startsWith('rd:')) removeFromRdCache(id);
 			if (id.startsWith('ad:')) removeFromAdCache(id);
 		} catch (error) {
+			console.error(error);
 			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
-			throw error;
 		}
 	};
 
@@ -292,6 +292,7 @@ function Search() {
 		try {
 			if (!rdKey) throw new Error('no_rd_key');
 			const response = await getTorrentInfo(rdKey, id.substring(3));
+			console.log(response);
 			if (response.filename === 'Magnet') return; // no files yet
 
 			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
@@ -304,6 +305,7 @@ function Search() {
 
 			await selectFiles(rdKey, id.substring(3), selectedFiles);
 		} catch (error) {
+			console.error(error);
 			if ((error as Error).message === 'no_files_for_selection') {
 				if (!disableToast)
 					toast.error(`No files for selection, deleting (${id})`, {
@@ -312,7 +314,6 @@ function Search() {
 			} else {
 				if (!disableToast) toast.error(`Error selecting files (${id})`);
 			}
-			throw error;
 		}
 	};
 
