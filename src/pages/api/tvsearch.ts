@@ -18,7 +18,9 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 
 	try {
-		const searchResults = await db.getScrapedResults<any[]>(`tv:${imdbId.toString().trim()}:${parseInt(seasonNum.toString().trim(), 10)}`);
+		const searchResults = await db.getScrapedResults<any[]>(
+			`tv:${imdbId.toString().trim()}:${parseInt(seasonNum.toString().trim(), 10)}`
+		);
 		if (searchResults) {
 			res.status(200).json({ results: searchResults });
 			return;

@@ -18,7 +18,7 @@ type SearchResult = {
 	score: number;
 	title: string;
 	imdbid: string;
-    tmdbid?: string;
+	tmdbid?: string;
 	season_count?: number;
 };
 
@@ -42,7 +42,9 @@ const handler: NextApiHandler = async (req, res) => {
 		}
 
 		const searchResponse = await axios.get(searchMdb(cleanKeyword));
-		const results: SearchResult[] = [...searchResponse.data.search].filter((result: any) => result.imdbid);
+		const results: SearchResult[] = [...searchResponse.data.search].filter(
+			(result: any) => result.imdbid
+		);
 
 		for (let i = 0; i < results.length; i++) {
 			if (results[i].type === 'show') {

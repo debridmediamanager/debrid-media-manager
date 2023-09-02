@@ -4,13 +4,13 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new PlanetScaleCache();
 
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<ScrapeResponse>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	const { scrapePassword, processing } = req.query;
 	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
-		res.status(403).json({ status: 'error', errorMessage: 'You are not authorized to use this feature' });
+		res.status(403).json({
+			status: 'error',
+			errorMessage: 'You are not authorized to use this feature',
+		});
 		return;
 	}
 

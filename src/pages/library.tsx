@@ -15,13 +15,13 @@ import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
 import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { withAuth } from '@/utils/withAuth';
-import { filenameParse, ParsedFilename } from '@ctrl/video-filename-parser';
+import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { toast, Toaster } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 import { FaArrowLeft, FaArrowRight, FaRecycle, FaShare, FaTrash } from 'react-icons/fa';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;

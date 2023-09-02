@@ -69,7 +69,7 @@ export class PlanetScaleCache {
 
 	public async getLatestRequest(): Promise<string | null> {
 		const requestedItem = await this.prisma.scraped.findFirst({
-			where: { key: { startsWith: "requested:" } },
+			where: { key: { startsWith: 'requested:' } },
 			orderBy: { updatedAt: 'asc' },
 			select: { key: true },
 		});
@@ -81,7 +81,7 @@ export class PlanetScaleCache {
 
 	public async getOldestProcessing(): Promise<string | null> {
 		const requestedItem = await this.prisma.scraped.findFirst({
-			where: { key: { startsWith: "processing:" } },
+			where: { key: { startsWith: 'processing:' } },
 			orderBy: { updatedAt: 'asc' },
 			select: { key: true },
 		});

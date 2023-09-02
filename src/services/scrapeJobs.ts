@@ -33,7 +33,7 @@ const cleanSearchQuery = (search: string): string => {
 		.replace(/[íìïî]/g, 'i')
 		.replace(/[óòöô]/g, 'o')
 		.replace(/[úùüû]/g, 'u')
-        .replaceAll(':', ' ')
+		.replaceAll(':', ' ')
 		.replace(/\s+/g, ' ') // replace multiple spaces with a single space
 		.trim();
 };
@@ -113,7 +113,7 @@ export async function generateScrapeJobs(
 			for (const movieTitle of movieTitles) {
 				for (const lType of ['', '1080p', '2160p', '720p']) {
 					const mustHave = [];
-                    let numbers = movieTitle.match(/\b(\d+(\.\d+)?)\b/g);
+					let numbers = movieTitle.match(/\b(\d+(\.\d+)?)\b/g);
 					if (numbers) mustHave.push(...numbers);
 					const scrapedResults = await scrapeResults(
 						createAxiosInstance(
@@ -185,7 +185,7 @@ export async function generateScrapeJobs(
 				for (const finalQuery of seasonQueries) {
 					for (const lType of ['', '1080p', '2160p', '720p']) {
 						const mustHave = [];
-                        let numbers = finalQuery.match(/\bs?(\d+(\.\d+)?)\b/g);
+						let numbers = finalQuery.match(/\bs?(\d+(\.\d+)?)\b/g);
 						if (numbers) mustHave.push(...numbers);
 						const scrapedResults = await scrapeResults(
 							createAxiosInstance(
@@ -196,7 +196,7 @@ export async function generateScrapeJobs(
 							mustHave,
 							lType || '1080p'
 						);
-                        if (!scrapedResults.length) continue;
+						if (!scrapedResults.length) continue;
 						results.push(scrapedResults);
 					}
 				}

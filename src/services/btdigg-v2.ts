@@ -50,7 +50,6 @@ export const groupByParsedTitle = (results: SearchResult[]): SearchResult[] => {
 	return results;
 };
 
-
 function convertToMB(fileSizeStr: string) {
 	let fileSize = parseFloat(fileSizeStr); // extracts the numeric part
 	if (fileSizeStr.includes('GB')) {
@@ -73,7 +72,9 @@ export async function scrapeResults(
 			let pageNum = 1;
 
 			const createSearchUrl = (pg: number) =>
-				`${dhtSearchHostname}/search?order=0&q=${encodeURIComponent(finalQuery)}&p=${pg - 1}`;
+				`${dhtSearchHostname}/search?order=0&q=${encodeURIComponent(finalQuery)}&p=${
+					pg - 1
+				}`;
 
 			const BAD_RESULT_THRESHOLD = 15;
 			let badResults = 0;
@@ -97,7 +98,10 @@ export async function scrapeResults(
 						retries = 0;
 						break;
 					} catch (error: any) {
-						console.error(`Error scraping page ${pageNum} (${finalQuery})`, error.message);
+						console.error(
+							`Error scraping page ${pageNum} (${finalQuery})`,
+							error.message
+						);
 						if (error.message.includes('status code 404') && pageNum === 1) {
 							console.error('404 error, aborting search');
 							throw error;
@@ -111,7 +115,9 @@ export async function scrapeResults(
 						} else {
 							retries++;
 							if (retries > MAX_RETRIES) {
-								console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);
+								console.error(
+									`Max retries reached (${MAX_RETRIES}), aborting search`
+								);
 								throw error;
 							}
 						}
@@ -134,9 +140,13 @@ export async function scrapeResults(
 				}
 
 				for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {
-					console.log(` current count of searchResultsArr:`, searchResultsArr.length)
-					const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
-					const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
+					console.log(` current count of searchResultsArr:`, searchResultsArr.length);
+					const title = decodeURIComponent(
+						namesAndHashes[resIndex][2].replaceAll('+', ' ')
+					);
+					const fileSizeStr = `${fileSizes[resIndex][1]} ${
+						fileSizes[resIndex][2] || 'B'
+					}`;
 
 					if (
 						!fileSizeStr.includes('GB') &&
@@ -159,11 +169,16 @@ export async function scrapeResults(
 					}
 
 					// Check if every term in the query (tokenized by space) is contained in the title
-					const queryTerms = targetTitle.replaceAll('"', ' ').split(' ').filter((e) => e !== '');
+					const queryTerms = targetTitle
+						.replaceAll('"', ' ')
+						.split(' ')
+						.filter((e) => e !== '');
 					let requiredTerms =
-					queryTerms.length <= 3 ? queryTerms.length : queryTerms.length - 1;
+						queryTerms.length <= 3 ? queryTerms.length : queryTerms.length - 1;
 					const containedTerms = queryTerms.filter((term) =>
-					new RegExp(`${term.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')}`).test(title.toLowerCase())
+						new RegExp(`${term.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')}`).test(
+							title.toLowerCase()
+						)
 					).length;
 					console.log(`check params >`, title, queryTerms, mustHaveTerms);
 					if (containedTerms < requiredTerms) {
