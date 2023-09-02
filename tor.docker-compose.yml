@@ -3,7 +3,7 @@ services:
   tor:
     image: debridmediamanager/tor
     deploy:
-      replicas: 4
+      replicas: 100
 
   web:
     image: debridmediamanager/debrid-media-manager:latest
@@ -15,6 +15,6 @@ services:
     depends_on:
       - tor
     deploy:
-      replicas: 4
+      replicas: 0
       restart_policy:
         condition: on-failure
