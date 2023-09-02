@@ -126,7 +126,7 @@ function Search() {
 									<p className="text-gray-600 text-sm">Score: {result.score}</p>
 									{result.type === 'movie' ? (
 										<Link
-											href={`/movies/${result.imdbid}`}
+											href={`/movie/${result.imdbid}`}
 											className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-700 rounded"
 										>
 											<span role="img" aria-label="movie" className="mr-2">
@@ -142,7 +142,7 @@ function Search() {
 											).map((season) => (
 												<Link
 													key={season}
-													href={`/shows/${result.imdbid}/${season}`}
+													href={`/show/${result.imdbid}/${season}`}
 													className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-700 rounded mr-2 mb-2"
 												>
 													<span
