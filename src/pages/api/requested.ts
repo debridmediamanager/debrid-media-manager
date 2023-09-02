@@ -9,7 +9,7 @@ export default async function handler(
 	res: NextApiResponse<ScrapeResponse>
 ) {
 	const { scrapePassword, processing } = req.query;
-	if (process.env.SEARCH_SPEED_PASSWORD && scrapePassword !== process.env.SEARCH_SPEED_PASSWORD) {
+	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
 		res.status(403).json({ status: 'error', errorMessage: 'You are not authorized to use this feature' });
 		return;
 	}

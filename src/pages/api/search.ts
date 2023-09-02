@@ -40,9 +40,9 @@ export default async function handler(
 	const libraryTypes = getLibraryTypes(libraryType);
 
 	let speed: searchSpeedType = 'veryfast';
-	if (process.env.SEARCH_SPEED_PASSWORD) {
+	if (process.env.SCRAPE_API_PASSWORD) {
 		speed =
-			searchSpeedPassword === process.env.SEARCH_SPEED_PASSWORD
+			searchSpeedPassword === process.env.SCRAPE_API_PASSWORD
 				? (searchSpeed as searchSpeedType)
 				: speed;
 	}
