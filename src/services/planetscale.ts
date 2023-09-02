@@ -69,26 +69,19 @@ export class PlanetScaleCache {
 
 	public async getLatestRequest(): Promise<string | null> {
 		const requestedItem = await this.prisma.scraped.findFirst({
-			where: { key: { startsWith: "requested:" } },
-			orderBy: { updatedAt: 'desc' },
+			where: { key: { startsWith: 'requested:' } },
+			orderBy: { updatedAt: 'asc' },
 			select: { key: true },
 		});
 		if (requestedItem !== null) {
-			const imdbid = requestedItem.key.split(':')[1];
-			// Check if there is a processing item for this imdbid
-			const processingItem = await this.prisma.scraped.findFirst({
-				where: { key: `processing:${imdbid}` },
-			});
-			if (!processingItem) {
-				return imdbid;
-			}
+			return requestedItem.key.split(':')[1];
 		}
 		return null;
 	}
 
 	public async getOldestProcessing(): Promise<string | null> {
 		const requestedItem = await this.prisma.scraped.findFirst({
-			where: { key: { startsWith: "processing:" } },
+			where: { key: { startsWith: 'processing:' } },
 			orderBy: { updatedAt: 'asc' },
 			select: { key: true },
 		});
@@ -103,7 +96,7 @@ export class PlanetScaleCache {
 
 		for (const key of keys) {
 			await this.prisma.scraped.deleteMany({
-				where: { key: { startsWith: key }  },
+				where: { key },
 			});
 		}
 	}

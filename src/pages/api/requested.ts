@@ -4,13 +4,13 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new PlanetScaleCache();
 
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<ScrapeResponse>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	const { scrapePassword, processing } = req.query;
-	if (process.env.SEARCH_SPEED_PASSWORD && scrapePassword !== process.env.SEARCH_SPEED_PASSWORD) {
-		res.status(403).json({ status: 'error', errorMessage: 'You are not authorized to use this feature' });
+	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
+		res.status(403).json({
+			status: 'error',
+			errorMessage: 'You are not authorized to use this feature',
+		});
 		return;
 	}
 
@@ -23,17 +23,18 @@ export default async function handler(
 		}
 	} else {
 		imdbId = await db.getLatestRequest();
+		console.log('imdbId', imdbId);
 		if (!imdbId) {
 			res.status(200).json({ status: 'done' });
 			return;
 		}
 
-		const isProcessing = await db.keyExists(`processing:${imdbId}`);
-		if (isProcessing) {
-			res.status(200).json({ status: 'processing' });
-			return;
-		}
+		// const isProcessing = await db.keyExists(`processing:${imdbId}`);
+		// if (isProcessing) {
+		// 	res.status(200).json({ status: 'processing' });
+		// 	return;
+		// }
 	}
 
-	await generateScrapeJobs(res, imdbId, false);
+	await generateScrapeJobs(res, imdbId, true);
 }
