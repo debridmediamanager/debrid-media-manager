@@ -164,7 +164,7 @@ export async function scrapeResults(
 					let requiredTerms =
 						queryTerms.length <= 3 ? queryTerms.length : queryTerms.length - 1;
 					const containedTerms = queryTerms.filter((term) =>
-						new RegExp(`${term}`).test(title.toLowerCase())
+						new RegExp(`${term.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')}`).test(title.toLowerCase())
 					).length;
 					console.log(`needed title >`, queryTerms);
 					console.log(`must have >`, mustHaveTerms);
