@@ -7,8 +7,8 @@ import {
 import axios from 'axios';
 import { NextApiResponse } from 'next';
 import { SocksProxyAgent } from 'socks-proxy-agent';
-import { PlanetScaleCache } from './planetscale';
 import { ScrapeSearchResult } from './mediasearch';
+import { PlanetScaleCache } from './planetscale';
 
 const tmdbKey = process.env.TMDB_KEY;
 const mdblistKey = process.env.MDBLIST_KEY;
