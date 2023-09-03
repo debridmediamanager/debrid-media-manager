@@ -34,7 +34,10 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 
 	try {
-		const cleanKeyword = encodeURIComponent(keyword.toString().trim().toLowerCase());
+		const cleanKeyword = encodeURIComponent(
+			keyword.toString().replaceAll(/[\W]+/g, ' ').split(' ').join(' ').trim().toLowerCase()
+		);
+		console.log(cleanKeyword);
 		const searchResults = await db.getSearchResults<any[]>(cleanKeyword);
 		if (searchResults) {
 			res.status(200).json({ results: searchResults.filter((r) => r.imdbid) });

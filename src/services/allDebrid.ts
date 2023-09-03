@@ -239,6 +239,7 @@ export const restartMagnet = async (apikey: string, id: string): Promise<MagnetR
 export interface MagnetFile {
 	n: string;
 	s: number;
+	e?: MagnetFile[];
 }
 
 interface MagnetData {
