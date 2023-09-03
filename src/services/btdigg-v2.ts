@@ -2,15 +2,10 @@ import { getMediaType } from '@/utils/mediaType';
 import axios, { AxiosInstance } from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import UserAgent from 'user-agents';
+import { SearchResult } from './mediasearch';
 
 const BTDIG = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
 // const BTDIG = 'http://btdig.com';
-
-export type SearchResult = {
-	title: string;
-	fileSize: number;
-	hash: string;
-};
 
 export const createAxiosInstance = (agent: SocksProxyAgent) => {
 	return axios.create({
@@ -66,7 +61,7 @@ export async function scrapeResults(
 	targetTitle: string,
 	mustHaveTerms: string[],
 	libraryType: string
-): Promise<SearchResult[]> {
+): Promise<Pick<SearchResult, 'title' | 'fileSize' | 'hash'>[]> {
 	while (true) {
 		try {
 			let pageNum = 1;
@@ -78,7 +73,7 @@ export async function scrapeResults(
 
 			const BAD_RESULT_THRESHOLD = 15;
 			let badResults = 0;
-			let searchResultsArr: SearchResult[] = [];
+			let searchResultsArr = [];
 
 			const MAX_RETRIES = 5; // maximum number of retries
 			const RETRY_DELAY = 1500; // initial delay in ms, doubles with each retry
@@ -210,7 +205,7 @@ export async function scrapeResults(
 
 					const hash = namesAndHashes[resIndex][1];
 
-					let resultObj: SearchResult = {
+					let resultObj = {
 						title,
 						fileSize,
 						hash,
