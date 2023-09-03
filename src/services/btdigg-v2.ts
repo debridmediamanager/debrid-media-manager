@@ -2,7 +2,7 @@ import { getMediaType } from '@/utils/mediaType';
 import axios, { AxiosInstance } from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import UserAgent from 'user-agents';
-import { SearchResult } from './mediasearch';
+import { ScrapeSearchResult } from './mediasearch';
 
 const BTDIG = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
 // const BTDIG = 'http://btdig.com';
@@ -27,9 +27,9 @@ export const createAxiosInstance = (agent: SocksProxyAgent) => {
 	});
 };
 
-export const flattenAndRemoveDuplicates = (arr: SearchResult[][]): SearchResult[] => {
+export const flattenAndRemoveDuplicates = (arr: ScrapeSearchResult[][]): ScrapeSearchResult[] => {
 	const flattened = arr.reduce((acc, val) => acc.concat(val), []);
-	const unique = new Map<string, SearchResult>();
+	const unique = new Map<string, ScrapeSearchResult>();
 	flattened.forEach((item) => {
 		if (!unique.has(item.hash)) {
 			unique.set(item.hash, item);
@@ -38,7 +38,7 @@ export const flattenAndRemoveDuplicates = (arr: SearchResult[][]): SearchResult[
 	return Array.from(unique.values());
 };
 
-export const groupByParsedTitle = (results: SearchResult[]): SearchResult[] => {
+export const groupByParsedTitle = (results: ScrapeSearchResult[]): ScrapeSearchResult[] => {
 	results.sort((a, b) => {
 		return b.fileSize - a.fileSize;
 	});
@@ -61,7 +61,7 @@ export async function scrapeResults(
 	targetTitle: string,
 	mustHaveTerms: string[],
 	libraryType: string
-): Promise<Pick<SearchResult, 'title' | 'fileSize' | 'hash'>[]> {
+): Promise<ScrapeSearchResult[]> {
 	while (true) {
 		try {
 			let pageNum = 1;

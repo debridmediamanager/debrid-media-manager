@@ -27,4 +27,8 @@
 - [] 5.0.0: Refactor pages into different components
 - [✔️] Fix requested api endpoint
 - [] Existing results checker
-- [] Add season jumper in shows page
+- [✔️] Add season jumper in shows page
+- [] Backup library feature (download library as a file for importing)
+- [] Restore library feature
+- [✔️] Fix issue with availability check
+- [✔️] AD availability check optimization

@@ -1,5 +1,4 @@
 import {
-	SearchResult,
 	createAxiosInstance,
 	flattenAndRemoveDuplicates,
 	groupByParsedTitle,
@@ -9,6 +8,7 @@ import axios from 'axios';
 import { NextApiResponse } from 'next';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import { PlanetScaleCache } from './planetscale';
+import { ScrapeSearchResult } from './mediasearch';
 
 const tmdbKey = process.env.TMDB_KEY;
 const mdblistKey = process.env.MDBLIST_KEY;
@@ -109,7 +109,7 @@ export async function generateScrapeJobs(
 		await db.saveScrapedResults(`processing:${imdbId}`, []);
 
 		try {
-			const results: SearchResult[][] = [];
+			const results = [];
 			for (const movieTitle of movieTitles) {
 				for (const lType of ['', '1080p', '2160p', '720p']) {
 					const mustHave = [];
@@ -131,7 +131,7 @@ export async function generateScrapeJobs(
 			let processedResults = flattenAndRemoveDuplicates(results);
 			if (processedResults.length) processedResults = groupByParsedTitle(processedResults);
 
-			await db.saveScrapedResults<SearchResult[]>(`movie:${imdbId}`, processedResults);
+			await db.saveScrapedResults<ScrapeSearchResult[]>(`movie:${imdbId}`, processedResults);
 
 			res.status(200).json({ status: `scraped: ${processedResults.length} movie torrents` });
 			await db.markAsDone(imdbId);
@@ -185,7 +185,7 @@ export async function generateScrapeJobs(
 			if (season.season_number === 0) continue;
 			let seasonQueries = tvTitles.map((q) => `${q} "s${padWithZero(season.season_number)}"`);
 			try {
-				const results: SearchResult[][] = [];
+				const results: ScrapeSearchResult[][] = [];
 				for (const finalQuery of seasonQueries) {
 					for (const lType of ['', '1080p', '2160p', '720p']) {
 						const mustHave = [];
@@ -208,7 +208,7 @@ export async function generateScrapeJobs(
 				if (processedResults.length)
 					processedResults = groupByParsedTitle(processedResults);
 
-				await db.saveScrapedResults<SearchResult[]>(
+				await db.saveScrapedResults<ScrapeSearchResult[]>(
 					`tv:${imdbId}:${season.season_number}`,
 					processedResults
 				);

@@ -11,3 +11,5 @@ export type SearchResult = {
 	adAvailable: boolean;
 	noVideos: boolean;
 };
+
+export type ScrapeSearchResult = Pick<SearchResult, 'title' | 'fileSize' | 'hash'>;
