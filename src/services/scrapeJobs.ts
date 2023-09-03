@@ -1,5 +1,4 @@
 import {
-	SearchResult,
 	createAxiosInstance,
 	flattenAndRemoveDuplicates,
 	groupByParsedTitle,
@@ -8,6 +7,7 @@ import {
 import axios from 'axios';
 import { NextApiResponse } from 'next';
 import { SocksProxyAgent } from 'socks-proxy-agent';
+import { ScrapeSearchResult } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 
 const tmdbKey = process.env.TMDB_KEY;
@@ -109,7 +109,7 @@ export async function generateScrapeJobs(
 		await db.saveScrapedResults(`processing:${imdbId}`, []);
 
 		try {
-			const results: SearchResult[][] = [];
+			const results = [];
 			for (const movieTitle of movieTitles) {
 				for (const lType of ['', '1080p', '2160p', '720p']) {
 					const mustHave = [];
@@ -131,15 +131,18 @@ export async function generateScrapeJobs(
 			let processedResults = flattenAndRemoveDuplicates(results);
 			if (processedResults.length) processedResults = groupByParsedTitle(processedResults);
 
-			await db.saveScrapedResults<SearchResult[]>(`movie:${imdbId}`, processedResults);
+			await db.saveScrapedResults<ScrapeSearchResult[]>(`movie:${imdbId}`, processedResults);
 
 			res.status(200).json({ status: `scraped: ${processedResults.length} movie torrents` });
+			await db.markAsDone(imdbId);
 		} catch (error: any) {
 			res.status(500).json({
 				status: 'error',
 				errorMessage: `An error occurred while scraping Btdigg (${error.message})`,
 			});
 		}
+
+		return;
 	}
 
 	if (tmdbResponse.data.tv_results.length > 0) {
@@ -175,13 +178,14 @@ export async function generateScrapeJobs(
 
 		let totalResultsCount = 0;
 		const showResponse = await axios.get(getMdbInfo(imdbId));
+		let lastError = null;
 		for (const season of showResponse.data.seasons
 			? showResponse.data.seasons
 			: [{ season_number: 1, episode_count: 0 }]) {
 			if (season.season_number === 0) continue;
 			let seasonQueries = tvTitles.map((q) => `${q} "s${padWithZero(season.season_number)}"`);
 			try {
-				const results: SearchResult[][] = [];
+				const results: ScrapeSearchResult[][] = [];
 				for (const finalQuery of seasonQueries) {
 					for (const lType of ['', '1080p', '2160p', '720p']) {
 						const mustHave = [];
@@ -204,31 +208,27 @@ export async function generateScrapeJobs(
 				if (processedResults.length)
 					processedResults = groupByParsedTitle(processedResults);
 
-				await db.saveScrapedResults<SearchResult[]>(
+				await db.saveScrapedResults<ScrapeSearchResult[]>(
 					`tv:${imdbId}:${season.season_number}`,
 					processedResults
 				);
 
 				totalResultsCount += processedResults.length;
 			} catch (error: any) {
-				res.status(500).json({
-					status: 'error',
-					errorMessage: `An error occurred while scraping Btdigg (${error.message})`,
-				});
+				lastError = error;
 			}
-			// if (season.episode_count === 0) continue;
-			// for (let i = 1; i <= season.episode_count; i++) {
-			// 	seasonQueries = seasonQueries.concat(
-			// 		tvTitles.map(
-			// 			(q) =>
-			// 				`${q} "s${padWithZero(season.season_number)}e${padWithZero(i)}"`
-			// 		)
-			// 	);
-			// }
 		}
 
-		res.status(200).json({ status: `scraped: ${totalResultsCount} tv torrents` });
-	}
+		if (lastError) {
+			res.status(500).json({
+				status: 'error',
+				errorMessage: `An error occurred while scraping Btdigg (${lastError.message})`,
+			});
+		} else {
+			await db.markAsDone(imdbId);
+			res.status(200).json({ status: `scraped: ${totalResultsCount} tv torrents` });
+		}
 
-	await db.markAsDone(imdbId);
+		return;
+	}
 }

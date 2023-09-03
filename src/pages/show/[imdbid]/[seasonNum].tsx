@@ -1,28 +1,17 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
 import useLocalStorage from '@/hooks/localStorage';
-import {
-	AdInstantAvailabilityResponse,
-	MagnetFile,
-	adInstantCheck,
-	deleteMagnet,
-	uploadMagnet,
-} from '@/services/allDebrid';
-import { Availability, HashAvailability } from '@/services/availability';
-import {
-	RdInstantAvailabilityResponse,
-	addHashAsMagnet,
-	deleteTorrent,
-	getTorrentInfo,
-	rdInstantCheck,
-	selectFiles,
-} from '@/services/realDebrid';
+import { deleteMagnet, uploadMagnet } from '@/services/allDebrid';
+import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
+import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
 import { getTmdbKey } from '@/utils/freekeys';
-import { groupBy } from '@/utils/groupBy';
+import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { getSelectableFiles, isVideo } from '@/utils/selectable';
+import { TmdbResponse } from '@/utils/tmdb';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -31,34 +20,12 @@ import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaDownload, FaFastForward, FaTimes } from 'react-icons/fa';
 
-export type SearchApiResponse = {
-	results?: SearchResult[];
-	errorMessage?: string;
-};
-
-type SearchResult = {
-	title: string;
-	fileSize: number;
-	hash: string;
-	available: Availability;
-};
-
-type TmdbResponse = {
-	tv_results: {
-		name: string;
-		overview: string;
-		first_air_date: string;
-		poster_path: string;
-	}[];
-};
-
-function Search() {
+function Search({ season_count }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
 	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
-	const [masterAvailability, setMasterAvailability] = useState<HashAvailability>({});
 	const [rdCache, rd, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
 	const [adCache, ad, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
 	const [rdAutoInstantCheck, setRdAutoInstantCheck] = useLocalStorage<boolean>(
@@ -81,8 +48,8 @@ function Search() {
 			);
 			setShowInfo(response.data);
 		} catch (error) {
-			setErrorMessage('There was an error fetching movie info. Please try again.');
 			console.error(`error fetching movie data`, error);
+			setErrorMessage('There was an error fetching movie info. Please try again.');
 		}
 	};
 
@@ -112,7 +79,9 @@ function Search() {
 			setSearchResults(
 				response.data.results?.map((r) => ({
 					...r,
-					available: 'unavailable',
+					rdAvailable: false,
+					adAvailable: false,
+					noVideos: false,
 				})) || []
 			);
 
@@ -121,111 +90,16 @@ function Search() {
 
 				// instant checks
 				const hashArr = response.data.results.map((r) => r.hash);
-				if (rdKey && rdAutoInstantCheck) await instantCheckInRd(hashArr);
-				if (adKey && adAutoInstantCheck) await instantCheckInAd(hashArr);
+				if (rdKey && rdAutoInstantCheck)
+					wrapLoading('RD', instantCheckInRd(rdKey, hashArr, setSearchResults));
+				if (adKey && adAutoInstantCheck)
+					wrapLoading('AD', instantCheckInAd(adKey, hashArr, setSearchResults));
 			} else {
 				toast(`No results found`, searchToastOptions);
 			}
 		} catch (error) {
 			console.error(error);
 			setErrorMessage('There was an error searching for the query. Please try again.');
-		}
-	};
-
-	useEffect(() => {
-		setSearchResults((prev) =>
-			prev.map((r) => ({
-				...r,
-				available: masterAvailability[r.hash],
-			}))
-		);
-	}, [masterAvailability]);
-
-	const instantCheckInRd = async (hashes: string[]): Promise<void> => {
-		const rdAvailability = {} as HashAvailability;
-
-		const setInstantFromRd = (resp: RdInstantAvailabilityResponse) => {
-			for (const masterHash in resp) {
-				if ('rd' in resp[masterHash] === false) continue;
-				if (masterAvailability[masterHash] === 'no_videos') continue;
-				const variants = resp[masterHash]['rd'];
-				if (!variants.length) rdAvailability[masterHash] = 'no_videos';
-				for (const variant of variants) {
-					for (const fileId in variant) {
-						const file = variant[fileId];
-						if (isVideo({ path: file.filename })) {
-							rdAvailability[masterHash] =
-								masterAvailability[masterHash] === 'ad:available' ||
-								masterAvailability[masterHash] === 'all:available'
-									? 'all:available'
-									: 'rd:available';
-
-							break;
-						}
-					}
-				}
-			}
-		};
-
-		try {
-			for (const hashGroup of groupBy(100, hashes)) {
-				if (rdKey) await rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd);
-			}
-			toast(
-				`Found ${
-					Object.values(rdAvailability).filter((a) => a.includes(':available')).length
-				} available in RD`,
-				searchToastOptions
-			);
-			setMasterAvailability((prevState) => ({ ...prevState, ...rdAvailability }));
-		} catch (error) {
-			toast.error(
-				'There was an error checking availability in Real-Debrid. Please try again.'
-			);
-			throw error;
-		}
-	};
-
-	const instantCheckInAd = async (hashes: string[]): Promise<void> => {
-		const adAvailability = {} as HashAvailability;
-
-		const setInstantFromAd = (resp: AdInstantAvailabilityResponse) => {
-			for (const magnetData of resp.data.magnets) {
-				const masterHash = magnetData.hash;
-				if (masterAvailability[masterHash] === 'no_videos') continue;
-				if (magnetData.instant) {
-					adAvailability[masterHash] = magnetData.files?.reduce(
-						(acc: boolean, curr: MagnetFile) => {
-							if (isVideo({ path: curr.n })) {
-								return true;
-							}
-							return acc;
-						},
-						false
-					)
-						? masterAvailability[masterHash] === 'rd:available' ||
-						  masterAvailability[masterHash] === 'all:available'
-							? 'all:available'
-							: 'ad:available'
-						: 'no_videos';
-				}
-			}
-		};
-
-		try {
-			for (const hashGroup of groupBy(30, hashes)) {
-				if (adKey) await adInstantCheck(adKey, hashGroup).then(setInstantFromAd);
-			}
-			toast(
-				`Found ${
-					Object.values(adAvailability).filter((a) => a.includes(':available')).length
-				} available in AD`,
-				searchToastOptions
-			);
-			setMasterAvailability((prevState) => ({ ...prevState, ...adAvailability }));
-		} catch (error) {
-			toast.error('There was an error checking availability in AllDebrid. Please try again.');
-			throw error;
 		}
 	};
 
@@ -270,12 +144,6 @@ function Search() {
 		}
 	};
 
-	const isAvailableInRd = (result: SearchResult) =>
-		result.available === 'rd:available' || result.available === 'all:available';
-	const isAvailableInAd = (result: SearchResult) =>
-		result.available === 'ad:available' || result.available === 'all:available';
-	const hasNoVideos = (result: SearchResult) => result.available === 'no_videos';
-
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
 			if (!rdKey && !adKey) throw new Error('no_keys');
@@ -318,6 +186,8 @@ function Search() {
 		}
 	};
 
+	const intSeasonNum = parseInt(seasonNum as string);
+
 	return (
 		<div className="mx-4 my-8 max-w-full">
 			<Head>
@@ -359,6 +229,26 @@ function Search() {
 							{showInfo.tv_results[0].name} - Season {seasonNum}
 						</h2>
 						<p className="text-gray-700">{showInfo.tv_results[0].overview}</p>
+						<>
+							{Array.from({ length: season_count || 0 }, (_, i) => i + 1).map(
+								(season) => (
+									<Link
+										key={season}
+										href={`/show/${imdbid}/${season}`}
+										className={`mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-${
+											intSeasonNum === season ? 'red' : 'yellow'
+										}-500 hover:bg-${
+											intSeasonNum === season ? 'red' : 'yellow'
+										}-700 rounded mr-2 mb-2`}
+									>
+										<span role="img" aria-label="tv show" className="mr-2">
+											📺
+										</span>{' '}
+										Season {season}
+									</Link>
+								)
+							)}
+						</>
 					</div>
 				</div>
 			)}
@@ -403,12 +293,15 @@ function Search() {
 						>
 							<button
 								className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
-								onClick={async () => {
-									setSearchState('loading');
-									await instantCheckInRd(
-										searchResults.map((result) => result.hash)
+								onClick={() => {
+									wrapLoading(
+										'RD',
+										instantCheckInRd(
+											rdKey!,
+											searchResults.map((result) => result.hash),
+											setSearchResults
+										)
 									);
-									setSearchState('done');
 								}}
 							>
 								Check RD availability
@@ -431,12 +324,15 @@ function Search() {
 							</label>
 							<button
 								className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
-								onClick={async () => {
-									setSearchState('loading');
-									await instantCheckInAd(
-										searchResults.map((result) => result.hash)
+								onClick={() => {
+									wrapLoading(
+										'AD',
+										instantCheckInAd(
+											adKey!,
+											searchResults.map((result) => result.hash),
+											setSearchResults
+										)
 									);
-									setSearchState('done');
 								}}
 							>
 								Check AD availability
@@ -503,26 +399,26 @@ rounded-lg overflow-hidden
 												{rdKey && rd.notInLibrary(r.hash) && (
 													<button
 														className={`flex items-center justify-center bg-${
-															isAvailableInRd(r)
+															r.rdAvailable
 																? 'green'
-																: hasNoVideos(r)
+																: r.noVideos
 																? 'gray'
 																: 'blue'
 														}-500 hover:bg-${
-															isAvailableInRd(r)
+															r.rdAvailable
 																? 'green'
-																: hasNoVideos(r)
+																: r.noVideos
 																? 'gray'
 																: 'blue'
 														}-700 text-white py-2 px-4 rounded-full`}
 														onClick={() => {
 															handleAddAsMagnetInRd(
 																r.hash,
-																isAvailableInRd(r)
+																r.rdAvailable
 															);
 														}}
 													>
-														{isAvailableInRd(r) ? (
+														{r.rdAvailable ? (
 															<>
 																<FaFastForward className="mr-2" />
 																RD
@@ -552,26 +448,26 @@ rounded-lg overflow-hidden
 												{adKey && ad.notInLibrary(r.hash) && (
 													<button
 														className={`flex items-center justify-center bg-${
-															isAvailableInAd(r)
+															r.adAvailable
 																? 'green'
-																: hasNoVideos(r)
+																: r.noVideos
 																? 'gray'
 																: 'blue'
 														}-500 hover:bg-${
-															isAvailableInAd(r)
+															r.adAvailable
 																? 'green'
-																: hasNoVideos(r)
+																: r.noVideos
 																? 'gray'
 																: 'blue'
 														}-700 text-white py-2 px-4 rounded-full`}
 														onClick={() => {
 															handleAddAsMagnetInAd(
 																r.hash,
-																isAvailableInAd(r)
+																r.adAvailable
 															);
 														}}
 													>
-														{isAvailableInAd(r) ? (
+														{r.adAvailable ? (
 															<>
 																<FaFastForward className="mr-2" />
 																AD
@@ -595,5 +491,32 @@ rounded-lg overflow-hidden
 		</div>
 	);
 }
+
+const mdblistKey = process.env.MDBLIST_KEY;
+const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const { params } = context;
+	let season_count = 1;
+	const showResponse = await axios.get(getMdbInfo(params!.imdbid as string));
+	if (showResponse.data.type === 'show' && showResponse.data.seasons?.length !== 0) {
+		const seasons = showResponse.data.seasons
+			.filter((season: any) => season.season_number > 0)
+			.map((season: any) => {
+				return season.season_number;
+			});
+		season_count = Math.max(...seasons);
+
+		if (params!.seasonNum && parseInt(params!.seasonNum as string) > season_count) {
+			return {
+				redirect: {
+					destination: `/show/${params!.imdbid}/1`,
+					permanent: false,
+				},
+			};
+		}
+	}
+	return { props: { season_count } };
+};
 
 export default withAuth(Search);

@@ -25,3 +25,10 @@
 - [] 3.0.0: Improve search by combining mdblist with TMDB and then using https://www.npmjs.com/package/fast-levenshtein
 - [] 4.0.0: Add tests
 - [] 5.0.0: Refactor pages into different components
+- [✔️] Fix requested api endpoint
+- [] Existing results checker
+- [✔️] Add season jumper in shows page
+- [] Backup library feature (download library as a file for importing)
+- [] Restore library feature
+- [✔️] Fix issue with availability check
+- [✔️] AD availability check optimization
