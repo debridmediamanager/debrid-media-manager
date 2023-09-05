@@ -20,6 +20,7 @@ export type MdbSearchResult = {
 	imdbid: string;
 	tmdbid?: string;
 	season_count?: number;
+	season_names?: string[];
 };
 
 const handler: NextApiHandler = async (req, res) => {
@@ -37,7 +38,6 @@ const handler: NextApiHandler = async (req, res) => {
 		const cleanKeyword = encodeURIComponent(
 			keyword.toString().replaceAll(/[\W]+/g, ' ').split(' ').join(' ').trim().toLowerCase()
 		);
-		console.log(cleanKeyword);
 		const searchResults = await db.getSearchResults<any[]>(cleanKeyword);
 		if (searchResults) {
 			res.status(200).json({ results: searchResults.filter((r) => r.imdbid) });
@@ -53,12 +53,17 @@ const handler: NextApiHandler = async (req, res) => {
 			if (results[i].type === 'show') {
 				const showResponse = await axios.get(getMdbInfo(results[i].imdbid));
 				if (showResponse.data.type === 'show' && showResponse.data.seasons?.length !== 0) {
-					const seasons = showResponse.data.seasons
-						.filter((season: any) => season.season_number > 0)
-						.map((season: any) => {
+					const seasons = showResponse.data.seasons.filter(
+						(season: any) => season.season_number > 0
+					);
+					results[i].season_count = Math.max(
+						...seasons.map((season: any) => {
 							return season.season_number;
-						});
-					results[i].season_count = Math.max(...seasons);
+						})
+					);
+					results[i].season_names = seasons.map((season: any) => {
+						return season.name;
+					});
 				} else {
 					results[i].type = 'movie';
 				}

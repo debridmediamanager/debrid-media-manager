@@ -139,7 +139,10 @@ function Search() {
 													>
 														📺
 													</span>{' '}
-													Season {season}
+													{result.season_names &&
+													result.season_names[season - 1]
+														? result.season_names[season - 1]
+														: `Season ${season}`}
 												</Link>
 											))}
 										</>

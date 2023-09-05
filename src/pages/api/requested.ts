@@ -23,7 +23,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		}
 	} else {
 		imdbId = await db.getOldestRequest();
-		console.log('imdbId', imdbId);
 		if (!imdbId) {
 			res.status(200).json({ status: 'done' });
 			return;
