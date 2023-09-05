@@ -131,6 +131,7 @@ const processPage = async (
 
 	for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {
 		const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
+		console.log(title);
 		const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
 
 		if (!fileSizeStr.includes('GB') && (is2160p || !fileSizeStr.includes('MB'))) {
@@ -170,18 +171,8 @@ const processPage = async (
 			badCount++;
 			continue;
 		}
-		if (
-			!/\b360p|\b480p|\b576p|\b720p|\b1080p|\b2160p|dvd[^\w]?rip|dvd[^\w]?scr|\bx264\b|\bx265\b|\bxvid\b|\bdivx\b|\bav1\b|bd[^\w]?rip|br[^\w]?rip|hd[^\w]?rip|ppv[^\w]?rip|web[^\w]?rip|cam[^\w]?rip|\bcam\b|\bts\b|\bhdtc\b|\bscreener\b|\br5\b/i.test(
-				title.toLowerCase()
-			)
-		) {
-			badCount++; // doesn't contain video resolution fragments or clues in the title
+		if (is2160p && !/\b2160p\b|\buhd\b/i.test(title.toLowerCase())) {
 			continue;
-		}
-		if (is2160p) {
-			if (!/\b2160p\b|\buhd\b/i.test(title.toLowerCase())) {
-				continue;
-			}
 		}
 
 		const hash = namesAndHashes[resIndex][1];
@@ -243,7 +234,7 @@ export async function scrapeResults(
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	while (true) {
-		console.log(`fetching search results for "${finalQuery}"...`);
+		console.log(`fetching search results for: ${finalQuery}`);
 		try {
 			let pageNum = 1;
 			const { results, numResults } = await processPage(

@@ -34,4 +34,4 @@
 - [✔️] AD availability check optimization
 - [✔️] Fix season parsing in Show page
 - [✔️] Fix season parsing in Search page
-- [] Fix season parsing in scraper
+- [✔️] Fix season parsing in scraper
