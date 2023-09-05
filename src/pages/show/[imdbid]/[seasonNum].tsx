@@ -20,7 +20,10 @@ import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaDownload, FaFastForward, FaTimes } from 'react-icons/fa';
 
-function Search({ season_count }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function Search({
+	season_count,
+	season_names,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -231,22 +234,23 @@ function Search({ season_count }: InferGetServerSidePropsType<typeof getServerSi
 						<p className="text-gray-700">{showInfo.tv_results[0].overview}</p>
 						<>
 							{Array.from({ length: season_count || 0 }, (_, i) => i + 1).map(
-								(season) => (
-									<Link
-										key={season}
-										href={`/show/${imdbid}/${season}`}
-										className={`mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-${
-											intSeasonNum === season ? 'red' : 'yellow'
-										}-500 hover:bg-${
-											intSeasonNum === season ? 'red' : 'yellow'
-										}-700 rounded mr-2 mb-2`}
-									>
-										<span role="img" aria-label="tv show" className="mr-2">
-											📺
-										</span>{' '}
-										Season {season}
-									</Link>
-								)
+								(season) => {
+									const color = intSeasonNum === season ? 'red' : 'yellow';
+									return (
+										<Link
+											key={season}
+											href={`/show/${imdbid}/${season}`}
+											className={`mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-2`}
+										>
+											<span role="img" aria-label="tv show" className="mr-2">
+												📺
+											</span>{' '}
+											{season_names && season_names[season - 1]
+												? season_names[season - 1]
+												: `Season ${season}`}
+										</Link>
+									);
+								}
 							)}
 						</>
 					</div>
@@ -358,10 +362,21 @@ function Search({ season_count }: InferGetServerSidePropsType<typeof getServerSi
 					<div className="overflow-x-auto">
 						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
 							{searchState !== 'loading' &&
-								searchResults.map((r: SearchResult) => (
-									<div
-										key={r.hash}
-										className={`
+								searchResults.map((r: SearchResult) => {
+									const rdColor = r.noVideos
+										? 'gray'
+										: r.rdAvailable
+										? 'green'
+										: 'blue';
+									const adColor = r.noVideos
+										? 'gray'
+										: r.adAvailable
+										? 'green'
+										: 'blue';
+									return (
+										<div
+											key={r.hash}
+											className={`
 bg-white
 ${
 	rd.isDownloaded(r.hash) || ad.isDownloaded(r.hash)
@@ -373,117 +388,88 @@ ${
 border-2 shadow hover:shadow-lg transition-shadow duration-200 ease-in
 rounded-lg overflow-hidden
 `}
-									>
-										<div className="p-6 space-y-4">
-											<h2 className="text-2xl font-bold leading-tight text-gray-900 break-words">
-												{r.title}
-											</h2>
-											<p className="text-gray-500">
-												Size: {(r.fileSize / 1024).toFixed(2)} GB
-											</p>
-											<div className="flex flex-wrap space-x-2">
-												{rd.isDownloading(r.hash) &&
-													rdCache![r.hash].id && (
+										>
+											<div className="p-6 space-y-4">
+												<h2 className="text-2xl font-bold leading-tight text-gray-900 break-words">
+													{r.title}
+												</h2>
+												<p className="text-gray-500">
+													Size: {(r.fileSize / 1024).toFixed(2)} GB
+												</p>
+												<div className="flex flex-wrap space-x-2">
+													{rd.isDownloading(r.hash) &&
+														rdCache![r.hash].id && (
+															<button
+																className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
+																onClick={() => {
+																	handleDeleteTorrent(
+																		rdCache![r.hash].id
+																	);
+																}}
+															>
+																<FaTimes className="mr-2" />
+																RD ({rdCache![r.hash].progress}%)
+															</button>
+														)}
+													{rdKey && rd.notInLibrary(r.hash) && (
 														<button
-															className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
-															onClick={() => {
-																handleDeleteTorrent(
-																	rdCache![r.hash].id
-																);
-															}}
+															className={`flex items-center justify-center bg-${rdColor}-500 hover:bg-${rdColor}-700 text-white py-2 px-4 rounded-full`}
+															onClick={() =>
+																handleAddAsMagnetInRd(
+																	r.hash,
+																	r.rdAvailable
+																)
+															}
 														>
-															<FaTimes className="mr-2" />
-															RD ({rdCache![r.hash].progress}%)
-														</button>
-													)}
-												{rdKey && rd.notInLibrary(r.hash) && (
-													<button
-														className={`flex items-center justify-center bg-${
-															r.rdAvailable
-																? 'green'
-																: r.noVideos
-																? 'gray'
-																: 'blue'
-														}-500 hover:bg-${
-															r.rdAvailable
-																? 'green'
-																: r.noVideos
-																? 'gray'
-																: 'blue'
-														}-700 text-white py-2 px-4 rounded-full`}
-														onClick={() => {
-															handleAddAsMagnetInRd(
-																r.hash,
-																r.rdAvailable
-															);
-														}}
-													>
-														{r.rdAvailable ? (
 															<>
-																<FaFastForward className="mr-2" />
+																{r.rdAvailable ? (
+																	<FaFastForward className="mr-2" />
+																) : (
+																	<FaDownload className="mr-2" />
+																)}
 																RD
 															</>
-														) : (
-															<>
-																<FaDownload className="mr-2" />
-																RD
-															</>
-														)}
-													</button>
-												)}
-												{ad.isDownloading(r.hash) &&
-													adCache![r.hash].id && (
-														<button
-															className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
-															onClick={() => {
-																handleDeleteTorrent(
-																	adCache![r.hash].id
-																);
-															}}
-														>
-															<FaTimes className="mr-2" />
-															AD ({adCache![r.hash].progress}%)
 														</button>
 													)}
-												{adKey && ad.notInLibrary(r.hash) && (
-													<button
-														className={`flex items-center justify-center bg-${
-															r.adAvailable
-																? 'green'
-																: r.noVideos
-																? 'gray'
-																: 'blue'
-														}-500 hover:bg-${
-															r.adAvailable
-																? 'green'
-																: r.noVideos
-																? 'gray'
-																: 'blue'
-														}-700 text-white py-2 px-4 rounded-full`}
-														onClick={() => {
-															handleAddAsMagnetInAd(
-																r.hash,
-																r.adAvailable
-															);
-														}}
-													>
-														{r.adAvailable ? (
-															<>
-																<FaFastForward className="mr-2" />
-																AD
-															</>
-														) : (
-															<>
-																<FaDownload className="mr-2" />
-																AD
-															</>
+													{ad.isDownloading(r.hash) &&
+														adCache![r.hash].id && (
+															<button
+																className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
+																onClick={() => {
+																	handleDeleteTorrent(
+																		adCache![r.hash].id
+																	);
+																}}
+															>
+																<FaTimes className="mr-2" />
+																AD ({adCache![r.hash].progress}%)
+															</button>
 														)}
-													</button>
-												)}
+													{adKey && ad.notInLibrary(r.hash) && (
+														<button
+															className={`flex items-center justify-center bg-${adColor}-500 hover:bg-${adColor}-700 text-white py-2 px-4 rounded-full`}
+															onClick={() =>
+																handleAddAsMagnetInAd(
+																	r.hash,
+																	r.adAvailable
+																)
+															}
+														>
+															<>
+																{r.adAvailable ? (
+																	<FaFastForward className="mr-2" />
+																) : (
+																	<FaDownload className="mr-2" />
+																)}
+																AD
+															</>
+														</button>
+													)}
+												</div>
 											</div>
 										</div>
-									</div>
-								))}
+									);
+								})}
 						</div>
 					</div>
 				</>
@@ -498,14 +484,18 @@ const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblis
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { params } = context;
 	let season_count = 1;
+	let season_names = [];
 	const showResponse = await axios.get(getMdbInfo(params!.imdbid as string));
 	if (showResponse.data.type === 'show' && showResponse.data.seasons?.length !== 0) {
-		const seasons = showResponse.data.seasons
-			.filter((season: any) => season.season_number > 0)
-			.map((season: any) => {
+		const seasons = showResponse.data.seasons.filter((season: any) => season.season_number > 0);
+		season_count = Math.max(
+			...seasons.map((season: any) => {
 				return season.season_number;
-			});
-		season_count = Math.max(...seasons);
+			})
+		);
+		season_names = seasons.map((season: any) => {
+			return season.name;
+		});
 
 		if (params!.seasonNum && parseInt(params!.seasonNum as string) > season_count) {
 			return {
@@ -516,7 +506,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			};
 		}
 	}
-	return { props: { season_count } };
+	return { props: { season_count, season_names } };
 };
 
 export default withAuth(Search);

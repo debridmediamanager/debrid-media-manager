@@ -5,11 +5,12 @@ import UserAgent from 'user-agents';
 import { ScrapeSearchResult } from './mediasearch';
 
 const BTDIG = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
-// const BTDIG = 'http://btdig.com';
+// const BTDIG = 'https://btdig.com';
 
 export const createAxiosInstance = (agent: SocksProxyAgent) => {
 	return axios.create({
-		httpAgent: BTDIG.endsWith('.onion') ? agent : undefined,
+		httpAgent: BTDIG.startsWith('http://') ? agent : undefined,
+		// httpsAgent: BTDIG.startsWith('https://') ? agent : undefined,
 		headers: {
 			accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
 			'accept-language': 'en-US,en;q=0.5',
@@ -60,9 +61,10 @@ export async function scrapeResults(
 	finalQuery: string,
 	targetTitle: string,
 	mustHaveTerms: string[],
-	libraryType: string
+	is2160p: boolean = false
 ): Promise<ScrapeSearchResult[]> {
 	while (true) {
+		console.log(`fetching search results for "${finalQuery}"...`);
 		try {
 			let pageNum = 1;
 
@@ -79,7 +81,6 @@ export async function scrapeResults(
 			const RETRY_DELAY = 1500; // initial delay in ms, doubles with each retry
 
 			while (pageNum <= 100) {
-				console.log(`Scraping page ${pageNum} (${finalQuery})...`, new Date().getTime());
 				let retries = 0; // current number of retries
 				let responseData = '';
 				let numResults = 0;
@@ -93,21 +94,17 @@ export async function scrapeResults(
 						retries = 0;
 						break;
 					} catch (error: any) {
-						console.error(
-							`Error scraping page ${pageNum} (${finalQuery})`,
-							error.message
-						);
 						if (error.message.includes('status code 404') && pageNum === 1) {
 							console.error('404 error, aborting search');
 							throw error;
-						}
-						if (
+						} else if (
 							error.message.includes('status code 429') ||
 							error.message.includes('"socket" was not created')
 						) {
-							console.log('Waiting 5 seconds before retrying...');
+							console.log('waiting 5 seconds before retrying...');
 							await new Promise((resolve) => setTimeout(resolve, 5000));
 						} else {
+							console.log('request error', error.message);
 							retries++;
 							if (retries > MAX_RETRIES) {
 								console.error(
@@ -135,7 +132,6 @@ export async function scrapeResults(
 				}
 
 				for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {
-					console.log(` current count of searchResultsArr:`, searchResultsArr.length);
 					const title = decodeURIComponent(
 						namesAndHashes[resIndex][2].replaceAll('+', ' ')
 					);
@@ -143,10 +139,7 @@ export async function scrapeResults(
 						fileSizes[resIndex][2] || 'B'
 					}`;
 
-					if (
-						!fileSizeStr.includes('GB') &&
-						(libraryType === '2160p' || !fileSizeStr.includes('MB'))
-					) {
+					if (!fileSizeStr.includes('GB') && (is2160p || !fileSizeStr.includes('MB'))) {
 						badResults++;
 						continue;
 					}
@@ -175,9 +168,7 @@ export async function scrapeResults(
 							title.toLowerCase()
 						)
 					).length;
-					console.log(`check params >`, title, queryTerms, mustHaveTerms);
 					if (containedTerms < requiredTerms) {
-						console.log('ERR not enough title terms!');
 						badResults++; // title doesn't contain most terms in the query
 						continue;
 					}
@@ -185,7 +176,6 @@ export async function scrapeResults(
 						new RegExp(`${term}`).test(title.toLowerCase())
 					).length;
 					if (containedMustHaveTerms < mustHaveTerms.length) {
-						console.log('ERR not enough must have terms!');
 						badResults++;
 						continue;
 					}
@@ -197,7 +187,7 @@ export async function scrapeResults(
 						badResults++; // doesn't contain video resolution fragments or clues in the title
 						continue;
 					}
-					if (libraryType === '2160p') {
+					if (is2160p) {
 						if (!/\b2160p\b|\buhd\b/i.test(title.toLowerCase())) {
 							continue;
 						}
@@ -217,21 +207,22 @@ export async function scrapeResults(
 
 				// Stop execution if the last $BAD_RESULT_THRESHOLD results were ignored
 				if (badResults >= BAD_RESULT_THRESHOLD) {
-					console.log(
-						`Stopped execution after ${pageNum} pages because the last ${BAD_RESULT_THRESHOLD} results were ignored.`
-					);
+					// console.log(
+					// 	`Stopped execution after ${pageNum} pages because the last ${BAD_RESULT_THRESHOLD} results were ignored.`
+					// );
 					break;
 				}
 
 				if (numResults > pageNum * 10) {
 					pageNum++;
 				} else {
+					// console.log(
+					// 	`Reached the end after ${pageNum} pages, stopping execution.`
+					// );
 					// No more pages, exit the loop
 					break;
 				}
 			}
-
-			console.log(`>>>>>> Found ${searchResultsArr.length} results (${finalQuery})`);
 
 			return searchResultsArr;
 		} catch (error) {
