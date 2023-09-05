@@ -32,3 +32,6 @@
 - [] Restore library feature
 - [✔️] Fix issue with availability check
 - [✔️] AD availability check optimization
+- [✔️] Fix season parsing in Show page
+- [✔️] Fix season parsing in Search page
+- [] Fix season parsing in scraper
