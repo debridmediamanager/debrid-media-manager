@@ -131,6 +131,7 @@ export async function scrapeTv(
 	tmdbItem: any,
 	db: PlanetScaleCache
 ): Promise<number> {
+	console.log(`Scraping ${tmdbItem.name} (${imdbId})...`);
 	const scrapeJobs: TvScrapeJob[] = [];
 
 	let cleanTitle = cleanSearchQuery(tmdbItem.name);

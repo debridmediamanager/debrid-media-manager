@@ -26,37 +26,6 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 	let sets: ScrapeSearchResult[][] = [];
 
 	sets.push(await scrapeResults(http, `"${job.title}" ${job.year ?? ''}`, job.title, [], false));
-	const resolutions = [
-		'1080p',
-		'2160p',
-		'720p',
-		'480p',
-		'x264',
-		'x265',
-		'h264',
-		'h265',
-		'aac',
-		'dts',
-		'xvid',
-	];
-	let prevLength = flattenAndRemoveDuplicates(sets).length;
-
-	for (let i = 0; i < resolutions.length; i++) {
-		sets.push(
-			await scrapeResults(
-				http,
-				`"${job.title}" ${job.year ?? ''} ${resolutions[i]}`,
-				job.title,
-				[],
-				false
-			)
-		);
-		let newLength = flattenAndRemoveDuplicates(sets).length;
-		if (newLength !== prevLength) {
-			console.log(`$$$$ length from ${resolutions[i]}:`, newLength);
-			prevLength = newLength;
-		}
-	}
 
 	if (job.originalTitle) {
 		sets.push(
@@ -90,11 +59,13 @@ export async function scrapeMovies(
 	tmdbItem: any,
 	db: PlanetScaleCache
 ): Promise<number> {
+	console.log(`Scraping ${tmdbItem.title} (${imdbId})...`);
 	const cleanTitle = cleanSearchQuery(tmdbItem.title);
 	const year = tmdbItem.release_date?.substring(0, 4);
 
-	let cleanedTitle;
+	let originalTitle, cleanedTitle;
 	if (tmdbItem.original_title && tmdbItem.original_title !== tmdbItem.title) {
+		originalTitle = tmdbItem.original_title.toLowerCase();
 		const mdbItem = await axios.get(getMdbInfo(imdbId));
 		for (let rating of mdbItem.data.ratings) {
 			if (rating.source === 'tomatoes') {
@@ -119,7 +90,7 @@ export async function scrapeMovies(
 
 	const searchResults = await getMovieSearchResults({
 		title: cleanTitle,
-		originalTitle: tmdbItem.original_title,
+		originalTitle,
 		cleanedTitle,
 		year,
 	});
