@@ -131,7 +131,6 @@ const processPage = async (
 
 	for (let resIndex = 0; resIndex < fileSizes.length; resIndex++) {
 		const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
-		console.log(title);
 		const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
 
 		if (!fileSizeStr.includes('GB') && (is2160p || !fileSizeStr.includes('MB'))) {
