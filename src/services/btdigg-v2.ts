@@ -98,8 +98,8 @@ const processPage = async (
 				error.message.includes('status code 429') ||
 				error.message.includes('"socket" was not created')
 			) {
-				console.log('waiting an extra 5 seconds before retrying...');
-				await new Promise((resolve) => setTimeout(resolve, 5000));
+				console.log('waiting an extra 10 seconds before retrying...');
+				await new Promise((resolve) => setTimeout(resolve, 10000));
 			} else {
 				console.log('request error:', error.message);
 				retries++;
