@@ -154,6 +154,17 @@ export async function scrapeTv(
 			seasonCode,
 			seasonYear,
 		});
+
+		if (cleanTitle.includes('&')) {
+			scrapeJobs.push({
+				title: cleanTitle.replaceAll('&', 'and'),
+				// originalTitle: cleanOriginalTitle?.replaceAll('&', 'and'),
+				seasonNumber,
+				seasonName,
+				seasonCode,
+				seasonYear,
+			});
+		}
 	}
 
 	await db.saveScrapedResults(`processing:${imdbId}`, []);

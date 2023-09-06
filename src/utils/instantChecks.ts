@@ -74,6 +74,7 @@ export const instantCheckInAd = async (
 				const checkVideoInFiles = (files: MagnetFile[]): boolean => {
 					return files.reduce((noVideo: boolean, curr: MagnetFile) => {
 						if (!noVideo) return false; // If we've already found a video, no need to continue checking
+						if (!curr.n) return false; // If 'n' property doesn't exist, it's not a video
 						if (curr.e) {
 							// If 'e' property exists, check it recursively
 							return checkVideoInFiles(curr.e);
