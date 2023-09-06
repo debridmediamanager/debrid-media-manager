@@ -74,7 +74,6 @@ const processPage = async (
 	pageNum: number
 ): Promise<ProcessPageResult> => {
 	const MAX_RETRIES = 5; // maximum number of retries
-	const RETRY_DELAY = 1500; // initial delay in ms, doubles with each retry
 
 	let results: ScrapeSearchResult[] = [];
 	let badCount = 0;
@@ -98,18 +97,20 @@ const processPage = async (
 				error.message.includes('status code 429') ||
 				error.message.includes('"socket" was not created')
 			) {
-				console.log('waiting an extra 10 seconds before retrying...');
-				await new Promise((resolve) => setTimeout(resolve, 10000));
+				console.log('429 error, waiting for a bit longer before retrying...');
+				retries++;
+			} else if (error.message.includes('timeout of')) {
+				console.log('timeout, waiting for a bit longer before retrying...');
+				retries++;
 			} else {
 				console.log('request error:', error.message);
 				retries++;
-				if (retries > MAX_RETRIES) {
+				if (retries >= MAX_RETRIES) {
 					console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);
 					return { results, badCount: MAX_RESULTS_PER_PAGE, numResults };
 				}
 			}
-			const delay = RETRY_DELAY * Math.pow(2, retries - 1);
-			await new Promise((resolve) => setTimeout(resolve, delay));
+			await new Promise((resolve) => setTimeout(resolve, 10000 * retries));
 		}
 	}
 	console.log(
@@ -170,18 +171,8 @@ const processPage = async (
 			badCount++;
 			continue;
 		}
-		if (
-			!/\b360p|\b480p|\b576p|\b720p|\b1080p|\b2160p|dvd[^\w]?rip|dvd[^\w]?scr|\bx264\b|\bx265\b|\bxvid\b|\bdivx\b|\bav1\b|bd[^\w]?rip|br[^\w]?rip|hd[^\w]?rip|ppv[^\w]?rip|web[^\w]?rip|cam[^\w]?rip|\bcam\b|\bts\b|\bhdtc\b|\bscreener\b|\br5\b/i.test(
-				title.toLowerCase()
-			)
-		) {
-			badCount++; // doesn't contain video resolution fragments or clues in the title
+		if (is2160p && !/\b2160p\b|\buhd\b/i.test(title.toLowerCase())) {
 			continue;
-		}
-		if (is2160p) {
-			if (!/\b2160p\b|\buhd\b/i.test(title.toLowerCase())) {
-				continue;
-			}
 		}
 
 		const hash = namesAndHashes[resIndex][1];
@@ -243,7 +234,7 @@ export async function scrapeResults(
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	while (true) {
-		console.log(`fetching search results for "${finalQuery}"...`);
+		console.log(`fetching search results for: ${finalQuery}`);
 		try {
 			let pageNum = 1;
 			const { results, numResults } = await processPage(

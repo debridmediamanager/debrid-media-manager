@@ -1,6 +1,6 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
-import { deleteMagnet, getMagnetStatus, restartMagnet } from '@/services/allDebrid';
+import { deleteMagnet, getMagnetStatus, restartMagnet, uploadMagnet } from '@/services/allDebrid';
 import { createShortUrl } from '@/services/hashlists';
 import {
 	addHashAsMagnet,
@@ -14,8 +14,10 @@ import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
 import { getSelectableFiles, isVideo } from '@/utils/selectable';
+import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
+import { saveAs } from 'file-saver';
 import lzString from 'lz-string';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -75,8 +77,8 @@ function TorrentsPage() {
 	const [totalBytes, setTotalBytes] = useState<number>(0);
 
 	// cache
-	const [_1, __1, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
-	const [_2, __2, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
+	const [_1, rdUtils, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
+	const [_2, adUtils, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
 
 	const handlePrevPage = useCallback(() => {
 		if (router.query.page === '1') return;
@@ -134,7 +136,7 @@ function TorrentsPage() {
 				);
 			} catch (error) {
 				setUserTorrentsList((prev) => [...prev]);
-				toast.error('Error fetching user torrents list');
+				toast.error('Error fetching user torrents list', libraryToastOptions);
 			} finally {
 				setRdLoading(false);
 			}
@@ -192,7 +194,7 @@ function TorrentsPage() {
 				);
 			} catch (error) {
 				setUserTorrentsList((prev) => [...prev]);
-				toast.error('Error fetching AllDebrid torrents list');
+				toast.error('Error fetching AllDebrid torrents list', libraryToastOptions);
 			} finally {
 				setAdLoading(false);
 			}
@@ -305,11 +307,11 @@ function TorrentsPage() {
 			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
 			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
 			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
-			if (!disableToast) toast.success(`Torrent deleted (${id})`);
+			if (!disableToast) toast.success(`Torrent deleted (${id})`, libraryToastOptions);
 			if (id.startsWith('rd:')) removeFromRdCache(id);
 			if (id.startsWith('ad:')) removeFromAdCache(id);
 		} catch (error) {
-			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
+			if (!disableToast) toast.error(`Error deleting torrent (${id})`, libraryToastOptions);
 			throw error;
 		}
 	};
@@ -386,10 +388,11 @@ function TorrentsPage() {
 		} catch (error) {
 			if ((error as Error).message === 'no_files_for_selection') {
 				toast.error(`No files for selection, deleting (${id})`, {
+					...libraryToastOptions,
 					duration: 5000,
 				});
 			} else {
-				toast.error(`Error selecting files (${id})`);
+				toast.error(`Error selecting files (${id})`, libraryToastOptions);
 			}
 			throw error;
 		}
@@ -409,10 +412,10 @@ function TorrentsPage() {
 			.map(wrapSelectFilesFn);
 		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 5, 500);
 		if (errors.length) {
-			toast.error(`Error selecting files on ${errors.length} torrents`);
+			toast.error(`Error selecting files on ${errors.length} torrents`, libraryToastOptions);
 		}
 		if (results.length) {
-			toast.success(`Started downloading ${results.length} torrents`);
+			toast.success(`Started downloading ${results.length} torrents`, libraryToastOptions);
 		}
 	}
 
@@ -427,10 +430,10 @@ function TorrentsPage() {
 			.map(wrapDeleteFn);
 		const [results, errors] = await runConcurrentFunctions(failedTorrents, 5, 500);
 		if (errors.length) {
-			toast.error(`Error deleting ${errors.length} failed torrents`);
+			toast.error(`Error deleting ${errors.length} failed torrents`, libraryToastOptions);
 		}
 		if (results.length) {
-			toast.success(`Deleted ${results.length} failed torrents`);
+			toast.success(`Deleted ${results.length} failed torrents`, libraryToastOptions);
 		}
 	}
 
@@ -444,13 +447,13 @@ function TorrentsPage() {
 		const torrentsToDelete = filteredList.map(wrapDeleteFn);
 		const [results, errors] = await runConcurrentFunctions(torrentsToDelete, 5, 500);
 		if (errors.length) {
-			toast.error(`Error deleting ${errors.length} torrents`);
+			toast.error(`Error deleting ${errors.length} torrents`, libraryToastOptions);
 		}
 		if (results.length) {
-			toast.success(`Deleted ${results.length} torrents`);
+			toast.success(`Deleted ${results.length} torrents`, libraryToastOptions);
 		}
 		if (!errors.length && !results.length) {
-			toast('No torrents to delete', { icon: '👏' });
+			toast('No torrents to delete', libraryToastOptions);
 		}
 	}
 
@@ -464,8 +467,8 @@ function TorrentsPage() {
 
 	async function generateHashList() {
 		toast('The hash list will return a 404 for the first 1-2 minutes', {
-			icon: '🔗',
-			duration: 30000,
+			...libraryToastOptions,
+			duration: 60000,
 		});
 		try {
 			const hashList = filteredList.map((t) => ({
@@ -480,8 +483,101 @@ function TorrentsPage() {
 			);
 			window.open(shortUrl);
 		} catch (error) {
-			toast.error(`Error generating hash list, try again later`);
+			toast.error(`Error generating hash list, try again later`, libraryToastOptions);
 		}
+	}
+
+	async function localBackup() {
+		toast('Generating a local backup file', libraryToastOptions);
+		try {
+			const hashList = userTorrentsList.map((t) => ({
+				filename: t.filename,
+				hash: t.hash,
+			}));
+			const blob = new Blob([JSON.stringify(hashList, null, 2)], {
+				type: 'application/json',
+			});
+			saveAs(blob, `backup-${Date.now()}.dmm.json`);
+		} catch (error) {
+			toast.error(`Error creating a backup file`, libraryToastOptions);
+		}
+	}
+
+	const addAsMagnetInRd = async (hash: string) => {
+		try {
+			if (!rdKey) throw new Error('no_rd_key');
+			const id = await addHashAsMagnet(rdKey, hash);
+			rdCacheAdder.single(`rd:${id}`, hash, 'downloading');
+			handleSelectFiles(`rd:${id}`); // add rd: to account for substr(3) in handleSelectFiles
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const addAsMagnetInAd = async (hash: string) => {
+		try {
+			if (!adKey) throw new Error('no_ad_key');
+			const resp = await uploadMagnet(adKey, [hash]);
+			if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
+				throw new Error('no_magnets');
+			adCacheAdder.single(`ad:${resp.data.magnets[0].id}`, hash, 'downloading');
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	async function localRestore(debridService: string): Promise<void> {
+		const filePicker = document.createElement('input');
+		filePicker.type = 'file';
+		filePicker.accept = '.json';
+		let file: File | null = null;
+
+		filePicker.onchange = (e: Event) => {
+			const target = e.target as HTMLInputElement;
+			file = target.files ? target.files[0] : new File([], '');
+		};
+		filePicker.click();
+
+		filePicker.addEventListener('change', async () => {
+			if (!file) return;
+
+			const reader: FileReader = new FileReader();
+			reader.readAsText(file, 'UTF-8');
+			reader.onload = async function (evt: ProgressEvent<FileReader>) {
+				const files: any[] = JSON.parse(evt.target?.result as string);
+				const utils = debridService === 'rd' ? rdUtils : adUtils;
+				const addMagnet = debridService === 'rd' ? addAsMagnetInRd : addAsMagnetInAd;
+
+				const processingPromise = new Promise<number>(async (resolve, reject) => {
+					try {
+						let count = 0;
+						for (let f of files) {
+							if (!utils.inLibrary(f.hash)) {
+								await addMagnet(f.hash);
+								count++;
+							}
+						}
+						resolve(count);
+					} catch (error) {
+						reject(error);
+					}
+				});
+
+				toast.promise(
+					processingPromise,
+					{
+						loading: `Processing backup...`,
+						success: (num) =>
+							`Restored ${num} torrents in your ${debridService.toUpperCase()} library`,
+						error: `There was an error processing the backup file.`,
+					},
+					libraryToastOptions
+				);
+
+				// refresh the page after 5 seconds
+				setTimeout(() => location.reload(), 5000);
+			};
+		});
 	}
 
 	async function handleShare(t: UserTorrent) {
@@ -507,9 +603,9 @@ function TorrentsPage() {
 			torrent.id = `rd:${id}`;
 			await handleSelectFiles(torrent.id);
 			await handleDeleteTorrent(oldId, true);
-			toast.success(`Torrent reinserted (${oldId}👉${torrent.id})`);
+			toast.success(`Torrent reinserted (${oldId}👉${torrent.id})`, libraryToastOptions);
 		} catch (error) {
-			toast.error(`Error reinserting torrent (${oldId})`);
+			toast.error(`Error reinserting torrent (${oldId})`, libraryToastOptions);
 			throw error;
 		}
 	};
@@ -518,9 +614,9 @@ function TorrentsPage() {
 		try {
 			if (!adKey) throw new Error('no_ad_key');
 			await restartMagnet(adKey, id.substring(3));
-			toast.success(`Torrent restarted (${id})`);
+			toast.success(`Torrent restarted (${id})`, libraryToastOptions);
 		} catch (error) {
-			toast.error(`Error restarting torrent (${id})`);
+			toast.error(`Error restarting torrent (${id})`, libraryToastOptions);
 			throw error;
 		}
 	};
@@ -641,6 +737,37 @@ function TorrentsPage() {
 				>
 					Share hash list
 				</button>
+				<button
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
+						filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
+					}`}
+					onClick={localBackup}
+					disabled={filteredList.length === 0}
+				>
+					Local backup
+				</button>
+				{rdKey && (
+					<button
+						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
+							filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
+						}`}
+						onClick={() => localRestore('rd')}
+						disabled={filteredList.length === 0}
+					>
+						Local restore to RD
+					</button>
+				)}
+				{adKey && (
+					<button
+						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
+							filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
+						}`}
+						onClick={() => localRestore('ad')}
+						disabled={filteredList.length === 0}
+					>
+						Local restore to AD
+					</button>
+				)}
 				<Link
 					href="/library?page=1"
 					className={`mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-1 rounded ${

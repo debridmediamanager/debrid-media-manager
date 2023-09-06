@@ -11,3 +11,8 @@ export const searchToastOptions = {
 	...globalToastOptions,
 	icon: '🔍',
 };
+
+export const libraryToastOptions = {
+	...globalToastOptions,
+	icon: '📚',
+};

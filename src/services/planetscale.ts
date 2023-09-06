@@ -80,14 +80,22 @@ export class PlanetScaleCache {
 	}
 
 	public async getOldestProcessing(): Promise<string | null> {
+		const oneHourAgo = new Date();
+		oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+
 		const requestedItem = await this.prisma.scraped.findFirst({
-			where: { key: { startsWith: 'processing:' } },
+			where: {
+				key: { startsWith: 'processing:' },
+				updatedAt: { lte: oneHourAgo },
+			},
 			orderBy: { updatedAt: 'asc' },
 			select: { key: true },
 		});
+
 		if (requestedItem !== null) {
 			return requestedItem.key.split(':')[1];
 		}
+
 		return null;
 	}
 

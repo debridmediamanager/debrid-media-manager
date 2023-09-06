@@ -1,6 +1,6 @@
 export const cleanSearchQuery = (search: string): string => {
 	return search
-		.split(/[\s\(\)\[\]\{\}\+\\\^\|·\?]/) // split the search query into an array of elements
+		.split(/[\s\(\)\[\]\{\}\+\\\^\|·\?,\/:;'"!]/) // split the search query into an array of elements
 		.filter((e) => e !== '') // filter out any empty elements
 		.map((e) => e.toLowerCase()) // convert each element to lowercase
 		.join(' ') // join the remaining elements with a single space
