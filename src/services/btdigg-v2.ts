@@ -74,7 +74,6 @@ const processPage = async (
 	pageNum: number
 ): Promise<ProcessPageResult> => {
 	const MAX_RETRIES = 5; // maximum number of retries
-	const RETRY_DELAY = 1500; // initial delay in ms, doubles with each retry
 
 	let results: ScrapeSearchResult[] = [];
 	let badCount = 0;
@@ -98,18 +97,20 @@ const processPage = async (
 				error.message.includes('status code 429') ||
 				error.message.includes('"socket" was not created')
 			) {
-				console.log('waiting an extra 10 seconds before retrying...');
-				await new Promise((resolve) => setTimeout(resolve, 10000));
+				console.log('429 error, waiting for a bit longer before retrying...');
+				retries++;
+			} else if (error.message.includes('timeout of')) {
+				console.log('timeout, waiting for a bit longer before retrying...');
+				retries++;
 			} else {
 				console.log('request error:', error.message);
 				retries++;
-				if (retries > MAX_RETRIES) {
+				if (retries >= MAX_RETRIES) {
 					console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);
 					return { results, badCount: MAX_RESULTS_PER_PAGE, numResults };
 				}
 			}
-			const delay = RETRY_DELAY * Math.pow(2, retries - 1);
-			await new Promise((resolve) => setTimeout(resolve, delay));
+			await new Promise((resolve) => setTimeout(resolve, 10000 * retries));
 		}
 	}
 	console.log(
