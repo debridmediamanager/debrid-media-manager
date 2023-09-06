@@ -137,6 +137,7 @@ function TorrentsPage() {
 			} catch (error) {
 				setUserTorrentsList((prev) => [...prev]);
 				toast.error('Error fetching user torrents list', libraryToastOptions);
+				console.error(error);
 			} finally {
 				setRdLoading(false);
 			}
@@ -195,6 +196,7 @@ function TorrentsPage() {
 			} catch (error) {
 				setUserTorrentsList((prev) => [...prev]);
 				toast.error('Error fetching AllDebrid torrents list', libraryToastOptions);
+				console.error(error);
 			} finally {
 				setAdLoading(false);
 			}
@@ -312,7 +314,7 @@ function TorrentsPage() {
 			if (id.startsWith('ad:')) removeFromAdCache(id);
 		} catch (error) {
 			if (!disableToast) toast.error(`Error deleting torrent (${id})`, libraryToastOptions);
-			throw error;
+			console.error(error);
 		}
 	};
 
@@ -374,6 +376,7 @@ function TorrentsPage() {
 			);
 			if (selectedFiles.length === 0) {
 				handleDeleteTorrent(id);
+				console.log(response.files);
 				throw new Error('no_files_for_selection');
 			}
 
@@ -381,7 +384,7 @@ function TorrentsPage() {
 			setUserTorrentsList((prevList) => {
 				const newList = [...prevList];
 				const index = newList.findIndex((t) => t.id === id);
-				newList[index].status = 'downloading';
+				if (index > -1) newList[index].status = 'downloading';
 				return newList;
 			});
 			rdCacheAdder.single(id, response.hash, response.status);
@@ -394,7 +397,7 @@ function TorrentsPage() {
 			} else {
 				toast.error(`Error selecting files (${id})`, libraryToastOptions);
 			}
-			throw error;
+			console.error(error);
 		}
 	};
 
@@ -484,6 +487,7 @@ function TorrentsPage() {
 			window.open(shortUrl);
 		} catch (error) {
 			toast.error(`Error generating hash list, try again later`, libraryToastOptions);
+			console.error(error);
 		}
 	}
 
@@ -500,6 +504,7 @@ function TorrentsPage() {
 			saveAs(blob, `backup-${Date.now()}.dmm.json`);
 		} catch (error) {
 			toast.error(`Error creating a backup file`, libraryToastOptions);
+			console.error(error);
 		}
 	}
 
@@ -509,7 +514,8 @@ function TorrentsPage() {
 			const id = await addHashAsMagnet(rdKey, hash);
 			rdCacheAdder.single(`rd:${id}`, hash, 'downloading');
 			handleSelectFiles(`rd:${id}`); // add rd: to account for substr(3) in handleSelectFiles
-		} catch (error) {
+		} catch (error: any) {
+			toast.error(`Error adding to RD: ${error.message}`, libraryToastOptions);
 			console.error(error);
 		}
 	};
@@ -521,7 +527,8 @@ function TorrentsPage() {
 			if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
 				throw new Error('no_magnets');
 			adCacheAdder.single(`ad:${resp.data.magnets[0].id}`, hash, 'downloading');
-		} catch (error) {
+		} catch (error: any) {
+			toast.error(`Error adding to AD: ${error.message}`, libraryToastOptions);
 			console.error(error);
 		}
 	};
@@ -548,34 +555,38 @@ function TorrentsPage() {
 				const utils = debridService === 'rd' ? rdUtils : adUtils;
 				const addMagnet = debridService === 'rd' ? addAsMagnetInRd : addAsMagnetInAd;
 
-				const processingPromise = new Promise<number>(async (resolve, reject) => {
-					try {
-						let count = 0;
-						for (let f of files) {
-							if (!utils.inLibrary(f.hash)) {
-								await addMagnet(f.hash);
-								count++;
-							}
-						}
-						resolve(count);
-					} catch (error) {
-						reject(error);
+				function wrapAddMagnetFn(hash: string) {
+					return async () => await addMagnet(hash);
+				}
+
+				const processingPromise = new Promise<{ success: number; error: number }>(
+					async (resolve) => {
+						toast.loading(`DO NOT REFRESH THE PAGE`, libraryToastOptions);
+						const toAdd = files
+							.map((f) => f.hash)
+							.filter((h) => !utils.inLibrary(h))
+							.map(wrapAddMagnetFn);
+						const [results, errors] = await runConcurrentFunctions(toAdd, 5, 500);
+						resolve({ success: results.length, error: errors.length });
 					}
-				});
+				);
 
 				toast.promise(
 					processingPromise,
 					{
-						loading: `Processing backup...`,
-						success: (num) =>
-							`Restored ${num} torrents in your ${debridService.toUpperCase()} library`,
-						error: `There was an error processing the backup file.`,
+						loading: `Restoring ${files.length} downloads in your library.`,
+						success: ({ success, error }) => {
+							window.localStorage.removeItem(`${debridService}:downloads`);
+							setTimeout(() => location.reload(), 10000);
+							return `Restored ${success} torrents but failed on ${error} others in your ${debridService.toUpperCase()} library. Refreshing the page in 10 seconds.`;
+						},
+						error: '',
 					},
-					libraryToastOptions
+					{
+						...libraryToastOptions,
+						duration: 10000,
+					}
 				);
-
-				// refresh the page after 5 seconds
-				setTimeout(() => location.reload(), 5000);
 			};
 		});
 	}
@@ -606,7 +617,7 @@ function TorrentsPage() {
 			toast.success(`Torrent reinserted (${oldId}👉${torrent.id})`, libraryToastOptions);
 		} catch (error) {
 			toast.error(`Error reinserting torrent (${oldId})`, libraryToastOptions);
-			throw error;
+			console.error(error);
 		}
 	};
 
@@ -617,7 +628,7 @@ function TorrentsPage() {
 			toast.success(`Torrent restarted (${id})`, libraryToastOptions);
 		} catch (error) {
 			toast.error(`Error restarting torrent (${id})`, libraryToastOptions);
-			throw error;
+			console.error(error);
 		}
 	};
 
@@ -739,31 +750,25 @@ function TorrentsPage() {
 				</button>
 				<button
 					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
-						filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
+						userTorrentsList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
 					}`}
 					onClick={localBackup}
-					disabled={filteredList.length === 0}
+					disabled={userTorrentsList.length === 0}
 				>
 					Local backup
 				</button>
 				{rdKey && (
 					<button
-						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
-							filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
-						}`}
+						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded`}
 						onClick={() => localRestore('rd')}
-						disabled={filteredList.length === 0}
 					>
 						Local restore to RD
 					</button>
 				)}
 				{adKey && (
 					<button
-						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
-							filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
-						}`}
+						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded`}
 						onClick={() => localRestore('ad')}
-						disabled={filteredList.length === 0}
 					>
 						Local restore to AD
 					</button>
