@@ -21,9 +21,7 @@ const isAlreadyScraped = async (
 	imdbId: string,
 	res: NextApiResponse<ScrapeResponse>
 ): Promise<boolean> => {
-	const keyExists = await db.keyExists(
-		`${mediaType}:${imdbId}${mediaType === 'tv' ? ':1' : ''}`
-	);
+	const keyExists = await db.keyExists(`${mediaType}:${imdbId}${mediaType === 'tv' ? ':1' : ''}`);
 	if (keyExists) {
 		res.status(200).json({ status: 'skipped' });
 		return true;
