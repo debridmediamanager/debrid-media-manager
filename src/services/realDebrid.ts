@@ -192,7 +192,7 @@ export const getUserTorrentsList = async (
 			`${config.realDebridHostname}/rest/1.0/torrents`,
 			{ headers, params: { offset, page, limit, filter } }
 		);
-		return response.data;
+		return response?.data || [];
 	} catch (error: any) {
 		console.error('Error fetching user torrents list:', error.message);
 		throw error;
