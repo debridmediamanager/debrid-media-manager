@@ -26,12 +26,16 @@
 - [] 4.0.0: Add tests
 - [] 5.0.0: Refactor pages into different components
 - [✔️] Fix requested api endpoint
-- [] Existing results checker
+- [✔️] Existing results checker
 - [✔️] Add season jumper in shows page
-- [] Backup library feature (download library as a file for importing)
-- [] Restore library feature
+- [✔️] Backup library feature (download library as a file for importing)
+- [✔️] Restore library feature
 - [✔️] Fix issue with availability check
 - [✔️] AD availability check optimization
 - [✔️] Fix season parsing in Show page
 - [✔️] Fix season parsing in Search page
 - [✔️] Fix season parsing in scraper
+- [] Library: Allow watching to preview downloads
+- [] Hashlist: Allow watching to preview downloads
+- [] Downloads/Movie: Allow watching to preview downloads
+- [] Downloads/TV?: Allow watching to preview downloads
