@@ -4,22 +4,28 @@ import useLocalStorage from '@/hooks/localStorage';
 import { deleteMagnet, uploadMagnet } from '@/services/allDebrid';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
-import { getTmdbKey } from '@/utils/freekeys';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { getSelectableFiles, isVideo } from '@/utils/selectable';
-import { TmdbResponse } from '@/utils/tmdb';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaDownload, FaFastForward, FaTimes } from 'react-icons/fa';
 
-function Search() {
+type MovieSearchProps = {
+	title: string;
+	description: string;
+	poster: string;
+	year: string;
+};
+
+const MovieSearch: FunctionComponent<MovieSearchProps> = ({ title, description, poster, year }) => {
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -35,26 +41,12 @@ function Search() {
 		'adAutoInstantCheck',
 		false
 	);
-	const [movieInfo, setMovieInfo] = useState<TmdbResponse | null>(null);
 
 	const router = useRouter();
 	const { imdbid } = router.query;
 
-	const fetchMovieInfo = async (imdbId: string) => {
-		try {
-			const response = await axios.get<TmdbResponse>(
-				`https://api.themoviedb.org/3/find/${imdbId}?api_key=${getTmdbKey()}&external_source=imdb_id`
-			);
-			setMovieInfo(response.data);
-		} catch (error) {
-			console.error(`error fetching movie data`, error);
-			setErrorMessage('There was an error fetching movie info. Please try again.');
-		}
-	};
-
 	useEffect(() => {
 		if (imdbid) {
-			fetchMovieInfo(imdbid as string);
 			fetchData(imdbid as string);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -186,8 +178,7 @@ function Search() {
 		<div className="mx-4 my-8 max-w-full">
 			<Head>
 				<title>
-					Debrid Media Manager - Movie - {movieInfo?.movie_results[0].title}
-					{movieInfo?.movie_results[0].release_date.substring(0, 4)}
+					Debrid Media Manager - Movie - {title} ({year})
 				</title>
 			</Head>
 			<Toaster position="bottom-right" />
@@ -207,23 +198,21 @@ function Search() {
 				</Link>
 			</div>
 			{/* Display basic movie info */}
-			{movieInfo && (
-				<div className="flex items-start space-x-4">
-					<div className="flex w-1/4 justify-center items-center">
-						<Image
-							width={200}
-							height={300}
-							src={`https://image.tmdb.org/t/p/w200${movieInfo.movie_results[0].poster_path}`}
-							alt="Movie poster"
-							className="shadow-lg"
-						/>
-					</div>
-					<div className="w-3/4 space-y-2">
-						<h2 className="text-2xl font-bold">{movieInfo.movie_results[0].title}</h2>
-						<p className="text-gray-700">{movieInfo.movie_results[0].overview}</p>
-					</div>
+			<div className="flex items-start space-x-4">
+				<div className="flex w-1/4 justify-center items-center">
+					<Image
+						width={200}
+						height={300}
+						src={poster}
+						alt="Movie poster"
+						className="shadow-lg"
+					/>
 				</div>
-			)}
+				<div className="w-3/4 space-y-2">
+					<h2 className="text-2xl font-bold">{title}</h2>
+					<p className="text-gray-700">{description}</p>
+				</div>
+			</div>
 
 			<hr className="my-4" />
 
@@ -462,6 +451,22 @@ rounded-lg overflow-hidden
 			)}
 		</div>
 	);
-}
+};
 
-export default withAuth(Search);
+const mdblistKey = process.env.MDBLIST_KEY;
+const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const { params } = context;
+	const movieResponse = await axios.get(getMdbInfo(params!.imdbid as string));
+	return {
+		props: {
+			title: movieResponse.data.title,
+			description: movieResponse.data.description,
+			poster: movieResponse.data.poster,
+			year: movieResponse.data.year,
+		},
+	};
+};
+
+export default withAuth(MovieSearch);

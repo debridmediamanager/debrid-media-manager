@@ -370,10 +370,12 @@ function TorrentsPage() {
 		try {
 			if (!rdKey) throw new Error('no_rd_key');
 			const response = await getTorrentInfo(rdKey, id.substring(3));
+			console.log(`${response.filename} files`, response.files);
 
 			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
 				(file) => file.id
 			);
+			console.log(`selected files`, selectedFiles);
 			if (selectedFiles.length === 0) {
 				handleDeleteTorrent(id);
 				console.log(response.files);
