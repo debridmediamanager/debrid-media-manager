@@ -161,6 +161,8 @@ const processPage = async (
 			new RegExp(`${term.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')}`, 'i').test(title)
 		).length;
 		if (containedTerms < requiredTerms) {
+			console.debug(title, '-title match-', targetTitle);
+			console.debug('bad title', containedTerms, requiredTerms);
 			badCount++; // title doesn't contain most terms in the query
 			continue;
 		}
@@ -173,6 +175,8 @@ const processPage = async (
 			return false;
 		}).length;
 		if (containedMustHaveTerms < mustHaveTerms.length) {
+			console.debug(title, '-must have-', mustHaveTerms);
+			console.debug('bad must have terms', containedMustHaveTerms, mustHaveTerms.length);
 			badCount++;
 			continue;
 		}
