@@ -84,14 +84,6 @@ export const instantCheckInAd = async (
 				};
 
 				torrent.noVideos = checkVideoInFiles(magnetData.files);
-
-				if (torrent.hash === 'ddc8c50f8f07cedce0f5a87b8dac3c5833573844') {
-					console.log(
-						'torrent.noVideos',
-						torrent.noVideos,
-						magnetData.files.map((f) => f.n)
-					);
-				}
 				if (!torrent.noVideos) {
 					torrent.adAvailable = magnetData.instant;
 					instantCount += 1;
