@@ -69,7 +69,7 @@ const processPage = async (
 	client: AxiosInstance,
 	finalQuery: string,
 	targetTitle: string,
-	mustHaveTerms: string[],
+	mustHaveTerms: (string | RegExp)[],
 	is2160p: boolean,
 	pageNum: number
 ): Promise<ProcessPageResult> => {
@@ -158,20 +158,31 @@ const processPage = async (
 			.filter((e) => e !== '');
 		let requiredTerms = queryTerms.length <= 3 ? queryTerms.length : queryTerms.length - 1;
 		const containedTerms = queryTerms.filter((term) =>
-			new RegExp(`${term.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')}`).test(title.toLowerCase())
+			new RegExp(`${term.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')}`, 'i').test(title)
 		).length;
 		if (containedTerms < requiredTerms) {
 			badCount++; // title doesn't contain most terms in the query
 			continue;
 		}
-		const containedMustHaveTerms = mustHaveTerms.filter((term) =>
-			new RegExp(`${term}`).test(title.toLowerCase())
-		).length;
+		const containedMustHaveTerms = mustHaveTerms.filter((term) => {
+			if (typeof term === 'string') {
+				return new RegExp(`${term}`, 'i').test(title);
+			} else if (term instanceof RegExp) {
+				return term.test(title);
+			}
+			return false;
+		}).length;
 		if (containedMustHaveTerms < mustHaveTerms.length) {
 			badCount++;
 			continue;
 		}
-		if (is2160p && !/\b2160p\b|\buhd\b/i.test(title.toLowerCase())) {
+		if (!targetTitle.match(/xxx/i)) {
+			if (title.match(/xxx/i)) {
+				badCount++;
+				continue;
+			}
+		}
+		if (is2160p && !/\b2160p\b|\buhd\b/i.test(title)) {
 			continue;
 		}
 
@@ -229,12 +240,12 @@ export async function scrapeResults(
 	client: AxiosInstance,
 	finalQuery: string,
 	targetTitle: string,
-	mustHaveTerms: string[],
+	mustHaveTerms: (string | RegExp)[],
 	is2160p: boolean = false
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	while (true) {
-		console.log(`fetching search results for: ${finalQuery}`);
+		console.log(`scraping btdig for: ${finalQuery}`);
 		try {
 			let pageNum = 1;
 			const { results, numResults } = await processPage(
@@ -266,6 +277,74 @@ export async function scrapeResults(
 			searchResultsArr.push(...(await processInBatches(promises, 2)));
 		} catch (error) {
 			console.error('fetchSearchResults page processing error', error);
+			await new Promise((resolve) => setTimeout(resolve, 5000));
+		}
+		// mkv
+		try {
+			let pageNum = 1;
+			const { results, numResults } = await processPage(
+				client,
+				finalQuery,
+				`${targetTitle} .mkv`,
+				mustHaveTerms,
+				is2160p,
+				pageNum++
+			);
+			searchResultsArr.push(...results);
+			const maxPages = calculateMaxPages(numResults);
+			let promises: (() => Promise<ProcessPageResult>)[] = [];
+			while (pageNum <= maxPages) {
+				promises.push(
+					((pageNum) => async () => {
+						return await processPage(
+							client,
+							finalQuery,
+							`${targetTitle} .mkv`,
+							mustHaveTerms,
+							is2160p,
+							pageNum
+						);
+					})(pageNum)
+				);
+				pageNum++;
+			}
+			searchResultsArr.push(...(await processInBatches(promises, 2)));
+		} catch (error) {
+			console.error('fetchSearchResults mkv page processing error', error);
+			await new Promise((resolve) => setTimeout(resolve, 5000));
+		}
+		// mp4
+		try {
+			let pageNum = 1;
+			const { results, numResults } = await processPage(
+				client,
+				finalQuery,
+				`${targetTitle} .mp4`,
+				mustHaveTerms,
+				is2160p,
+				pageNum++
+			);
+			searchResultsArr.push(...results);
+			const maxPages = calculateMaxPages(numResults);
+			let promises: (() => Promise<ProcessPageResult>)[] = [];
+			while (pageNum <= maxPages) {
+				promises.push(
+					((pageNum) => async () => {
+						return await processPage(
+							client,
+							finalQuery,
+							`${targetTitle} .mp4`,
+							mustHaveTerms,
+							is2160p,
+							pageNum
+						);
+					})(pageNum)
+				);
+				pageNum++;
+			}
+			searchResultsArr.push(...(await processInBatches(promises, 2)));
+		} catch (error) {
+			console.error('fetchSearchResults mp4 page processing error', error);
 			await new Promise((resolve) => setTimeout(resolve, 5000));
 		}
 		return searchResultsArr;

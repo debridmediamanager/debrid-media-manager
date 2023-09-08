@@ -4,26 +4,35 @@ import useLocalStorage from '@/hooks/localStorage';
 import { deleteMagnet, uploadMagnet } from '@/services/allDebrid';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
-import { getTmdbKey } from '@/utils/freekeys';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { getSelectableFiles, isVideo } from '@/utils/selectable';
-import { TmdbResponse } from '@/utils/tmdb';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaDownload, FaFastForward, FaTimes } from 'react-icons/fa';
 
-function Search({
+type TvSearchProps = {
+	title: string;
+	description: string;
+	poster: string;
+	season_count: number;
+	season_names: string[];
+};
+
+const TvSearch: FunctionComponent<TvSearchProps> = ({
+	title,
+	description,
+	poster,
 	season_count,
 	season_names,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}) => {
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -39,26 +48,12 @@ function Search({
 		'adAutoInstantCheck',
 		false
 	);
-	const [showInfo, setShowInfo] = useState<TmdbResponse | null>(null);
 
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
 
-	const fetchShowInfo = async (imdbId: string) => {
-		try {
-			const response = await axios.get<TmdbResponse>(
-				`https://api.themoviedb.org/3/find/${imdbId}?api_key=${getTmdbKey()}&external_source=imdb_id`
-			);
-			setShowInfo(response.data);
-		} catch (error) {
-			console.error(`error fetching movie data`, error);
-			setErrorMessage('There was an error fetching movie info. Please try again.');
-		}
-	};
-
 	useEffect(() => {
 		if (imdbid && seasonNum) {
-			fetchShowInfo(imdbid as string);
 			fetchData(imdbid as string, parseInt(seasonNum as string));
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -195,8 +190,7 @@ function Search({
 		<div className="mx-4 my-8 max-w-full">
 			<Head>
 				<title>
-					Debrid Media Manager - TV Show - {showInfo?.tv_results[0].name} - Season{' '}
-					{seasonNum}
+					Debrid Media Manager - TV Show - {title} - Season {seasonNum}
 				</title>
 			</Head>
 			<Toaster position="bottom-right" />
@@ -216,46 +210,44 @@ function Search({
 				</Link>
 			</div>
 			{/* Display basic movie info */}
-			{showInfo && (
-				<div className="flex items-start space-x-4">
-					<div className="flex w-1/4 justify-center items-center">
-						<Image
-							width={200}
-							height={300}
-							src={`https://image.tmdb.org/t/p/w200${showInfo.tv_results[0].poster_path}`}
-							alt="Movie poster"
-							className="shadow-lg"
-						/>
-					</div>
-					<div className="w-3/4 space-y-2">
-						<h2 className="text-2xl font-bold">
-							{showInfo.tv_results[0].name} - Season {seasonNum}
-						</h2>
-						<p className="text-gray-700">{showInfo.tv_results[0].overview}</p>
-						<>
-							{Array.from({ length: season_count || 0 }, (_, i) => i + 1).map(
-								(season) => {
-									const color = intSeasonNum === season ? 'red' : 'yellow';
-									return (
-										<Link
-											key={season}
-											href={`/show/${imdbid}/${season}`}
-											className={`mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-2`}
-										>
-											<span role="img" aria-label="tv show" className="mr-2">
-												📺
-											</span>{' '}
-											{season_names && season_names[season - 1]
-												? season_names[season - 1]
-												: `Season ${season}`}
-										</Link>
-									);
-								}
-							)}
-						</>
-					</div>
+			<div className="flex items-start space-x-4">
+				<div className="flex w-1/4 justify-center items-center">
+					<Image
+						width={200}
+						height={300}
+						src={poster}
+						alt="Movie poster"
+						className="shadow-lg"
+					/>
 				</div>
-			)}
+				<div className="w-3/4 space-y-2">
+					<h2 className="text-2xl font-bold">
+						{title} - Season {seasonNum}
+					</h2>
+					<p className="text-gray-700">{description}</p>
+					<>
+						{Array.from({ length: season_count || 0 }, (_, i) => i + 1).map(
+							(season) => {
+								const color = intSeasonNum === season ? 'red' : 'yellow';
+								return (
+									<Link
+										key={season}
+										href={`/show/${imdbid}/${season}`}
+										className={`mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-2`}
+									>
+										<span role="img" aria-label="tv show" className="mr-2">
+											📺
+										</span>{' '}
+										{season_names && season_names[season - 1]
+											? season_names[season - 1]
+											: `Season ${season}`}
+									</Link>
+								);
+							}
+						)}
+					</>
+				</div>
+			</div>
 
 			<hr className="my-4" />
 
@@ -476,7 +468,7 @@ rounded-lg overflow-hidden
 			)}
 		</div>
 	);
-}
+};
 
 const mdblistKey = process.env.MDBLIST_KEY;
 const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
@@ -506,7 +498,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			};
 		}
 	}
-	return { props: { season_count, season_names } };
+	return {
+		props: {
+			title: showResponse.data.title,
+			description: showResponse.data.description,
+			poster: showResponse.data.poster,
+			season_count,
+			season_names,
+		},
+	};
 };
 
-export default withAuth(Search);
+export default withAuth(TvSearch);

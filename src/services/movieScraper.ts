@@ -74,7 +74,7 @@ export async function scrapeMovies(
 	tmdbItem: any,
 	db: PlanetScaleCache
 ): Promise<number> {
-	console.log(`Scraping ${tmdbItem.title} (${imdbId})...`);
+	console.log(`Scraping movie: ${tmdbItem.title} (${imdbId})...`);
 	const cleanTitle = cleanSearchQuery(tmdbItem.title);
 	const year = tmdbItem.release_date?.substring(0, 4);
 
