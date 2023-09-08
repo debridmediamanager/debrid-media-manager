@@ -245,7 +245,7 @@ export async function scrapeResults(
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	while (true) {
-		console.log(`scraping btdig for: ${finalQuery}`);
+		console.log(`searching Btdigg: ${finalQuery}`);
 		try {
 			let pageNum = 1;
 			const { results, numResults } = await processPage(

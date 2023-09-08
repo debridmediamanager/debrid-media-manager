@@ -149,7 +149,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({ title, description, 
 		try {
 			if (!rdKey) throw new Error('no_rd_key');
 			const response = await getTorrentInfo(rdKey, id.substring(3));
-			console.log(response);
 			if (response.filename === 'Magnet') return; // no files yet
 
 			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
