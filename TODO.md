@@ -39,3 +39,4 @@
 - [] Hashlist: Allow watching to preview downloads
 - [] Downloads/Movie: Allow watching to preview downloads
 - [] Downloads/TV?: Allow watching to preview downloads
+- [] Better anime support
