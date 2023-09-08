@@ -168,12 +168,10 @@ const processPage = async (
 			if (typeof term === 'string') {
 				return new RegExp(`${term}`, 'i').test(title);
 			} else if (term instanceof RegExp) {
-				// console.log(term, title, term.test(title));
 				return term.test(title);
 			}
 			return false;
 		}).length;
-		// console.log(title, containedMustHaveTerms, mustHaveTerms);
 		if (containedMustHaveTerms < mustHaveTerms.length) {
 			badCount++;
 			continue;
@@ -247,7 +245,7 @@ export async function scrapeResults(
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	while (true) {
-		console.log(`fetching search results for: ${finalQuery}`);
+		console.log(`scraping btdig for: ${finalQuery}`);
 		try {
 			let pageNum = 1;
 			const { results, numResults } = await processPage(

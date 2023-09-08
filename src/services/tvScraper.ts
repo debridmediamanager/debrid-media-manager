@@ -29,7 +29,9 @@ function padWithZero(num: number) {
 }
 
 const getSeasons = (showResponse: any) =>
-	showResponse.data.seasons || [{ season_number: 1, episode_count: 0 }];
+	showResponse.data.seasons.length
+		? showResponse.data.seasons
+		: [{ name: 'Season 1', season_number: 1, episode_count: 0 }];
 
 const getSeasonNameAndCode = (season: any) => {
 	let seasonName, seasonCode;
@@ -61,7 +63,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 			http,
 			`"${job.title}" s${padWithZero(job.seasonNumber)}`,
 			job.title,
-			[new RegExp(`[0123]?${job.seasonNumber ?? ''}\b`, 'i')],
+			[new RegExp(`[0123]?${job.seasonNumber}[\\be]`, 'i')],
 			false
 		)
 	);
@@ -72,7 +74,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 				http,
 				`"${job.title}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
 				job.title,
-				[new RegExp(`[0123]?${job.seasonCode}\b`, 'i'), ...job.seasonName.split(/\s/)],
+				[new RegExp(`[0123]?${job.seasonCode}[\\be]`, 'i'), ...job.seasonName.split(/\s/)],
 				false
 			)
 		);
@@ -97,7 +99,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 			http,
 			`"${job.originalTitle}" s${padWithZero(job.seasonNumber)}`,
 			job.originalTitle,
-			[new RegExp(`[0123]?${job.seasonNumber ?? ''}\b`, 'i')],
+			[new RegExp(`[0123]?${job.seasonNumber}[\\be]`, 'i')],
 			false
 		)
 	);
@@ -107,7 +109,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 				http,
 				`"${job.originalTitle}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
 				job.originalTitle,
-				[new RegExp(`[0123]?${job.seasonCode}\b`, 'i'), ...job.seasonName.split(/\s/)],
+				[new RegExp(`[0123]?${job.seasonCode}[\\be]`, 'i'), ...job.seasonName.split(/\s/)],
 				false
 			)
 		);
@@ -131,7 +133,7 @@ export async function scrapeTv(
 	tmdbItem: any,
 	db: PlanetScaleCache
 ): Promise<number> {
-	console.log(`Scraping ${tmdbItem.name} (${imdbId})...`);
+	console.log(`Scraping tv show: ${tmdbItem.name} (${imdbId})...`);
 	const scrapeJobs: TvScrapeJob[] = [];
 
 	let cleanTitle = cleanSearchQuery(tmdbItem.name);

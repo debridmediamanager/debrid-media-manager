@@ -84,6 +84,7 @@ export async function generateScrapeJobs(
 		if (!override && (await isAlreadyScraped('tv', imdbId, res))) return;
 
 		try {
+			console.log('>>>>>>>>', tmdbResponse.data.tv_results[0].name, imdbId);
 			const resultsCount = await scrapeTv(imdbId, tmdbResponse.data.tv_results[0], db);
 			res.status(200).json({ status: `scraped: ${resultsCount} tv torrents` });
 		} catch (error: any) {
