@@ -12,6 +12,8 @@ export function isVideo(file: { path: string }) {
 
 export function getSelectableFiles(files: TorrentInfoResponse['files']) {
 	const maxFileSize = Math.max(...files.map((obj) => obj.bytes));
-	const selectableFiles = files.filter((f) => f.bytes >= maxFileSize * FILE_SIZE_PCT_THRESHOLD);
+	const selectableFiles = files.filter(
+		(f) => f.bytes >= maxFileSize * FILE_SIZE_PCT_THRESHOLD || /e[0123]\d/i.test(f.path)
+	);
 	return selectableFiles;
 }
