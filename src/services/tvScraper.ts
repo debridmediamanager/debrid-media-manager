@@ -63,7 +63,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 			http,
 			`"${job.title}" s${padWithZero(job.seasonNumber)}`,
 			job.title,
-			[new RegExp(`[0123]?${job.seasonNumber}[\\be]`, 'i')],
+			[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
 			false
 		)
 	);
@@ -74,7 +74,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 				http,
 				`"${job.title}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
 				job.title,
-				[new RegExp(`[0123]?${job.seasonCode}[\\be]`, 'i'), ...job.seasonName.split(/\s/)],
+				[new RegExp(`[0123]?${job.seasonCode}[ex\\W_]`, 'i'), ...job.seasonName.split(/\s/)],
 				false
 			)
 		);
@@ -90,6 +90,10 @@ const getSearchResults = async (job: TvScrapeJob) => {
 		);
 	}
 
+	if (job.title.split(/\s/).length > 3) {
+		sets.push(await scrapeResults(http, `"${job.title}"`, job.title, [], false));
+	}
+
 	if (!job.originalTitle) return sets;
 
 	let sets2: ScrapeSearchResult[][] = [];
@@ -99,7 +103,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 			http,
 			`"${job.originalTitle}" s${padWithZero(job.seasonNumber)}`,
 			job.originalTitle,
-			[new RegExp(`[0123]?${job.seasonNumber}[\\be]`, 'i')],
+			[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
 			false
 		)
 	);
@@ -109,7 +113,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 				http,
 				`"${job.originalTitle}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
 				job.originalTitle,
-				[new RegExp(`[0123]?${job.seasonCode}[\\be]`, 'i'), ...job.seasonName.split(/\s/)],
+				[new RegExp(`[0123]?${job.seasonCode}[ex\\W_]`, 'i'), ...job.seasonName.split(/\s/)],
 				false
 			)
 		);
