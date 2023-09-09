@@ -25,7 +25,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 
 	let sets: ScrapeSearchResult[][] = [];
 
-	sets.push(await scrapeResults(http, `"${job.title}" ${job.year ?? ''}`, job.title, [], false));
+	sets.push(await scrapeResults(http, `"${job.title}" ${job.year ?? ''}`, job.title, []));
 	if (job.title.includes('&')) {
 		sets.push(
 			await scrapeResults(
@@ -33,13 +33,12 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				`"${job.title.replaceAll('&', 'and')}" ${job.year ?? ''}`,
 				job.title,
 				[],
-				false
 			)
 		);
 	}
 
 	if (job.title.split(/\s/).length > 3) {
-		sets.push(await scrapeResults(http, `"${job.title}"`, job.title, [], false));
+		sets.push(await scrapeResults(http, `"${job.title}"`, job.title, []));
 	}
 
 	if (job.originalTitle) {
@@ -49,7 +48,6 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				`"${job.originalTitle}" ${job.year ?? ''}`,
 				job.originalTitle,
 				[],
-				false
 			)
 		);
 	}
@@ -61,7 +59,6 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				`"${job.cleanedTitle}" ${job.year ?? ''}`,
 				job.cleanedTitle,
 				[],
-				false
 			)
 		);
 	}

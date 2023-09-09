@@ -70,7 +70,6 @@ const processPage = async (
 	finalQuery: string,
 	targetTitle: string,
 	mustHaveTerms: (string | RegExp)[],
-	is2160p: boolean,
 	pageNum: number
 ): Promise<ProcessPageResult> => {
 	const MAX_RETRIES = 5; // maximum number of retries
@@ -134,7 +133,7 @@ const processPage = async (
 		const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
 		const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
 
-		if (!fileSizeStr.includes('GB') && (is2160p || !fileSizeStr.includes('MB'))) {
+		if (!fileSizeStr.includes('GB') || !fileSizeStr.includes('MB')) {
 			badCount++;
 			continue;
 		}
@@ -185,9 +184,6 @@ const processPage = async (
 				badCount++;
 				continue;
 			}
-		}
-		if (is2160p && !/\b2160p\b|\buhd\b/i.test(title)) {
-			continue;
 		}
 
 		const hash = namesAndHashes[resIndex][1];
@@ -245,7 +241,6 @@ export async function scrapeResults(
 	finalQuery: string,
 	targetTitle: string,
 	mustHaveTerms: (string | RegExp)[],
-	is2160p: boolean = false
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	while (true) {
@@ -257,7 +252,6 @@ export async function scrapeResults(
 				finalQuery,
 				targetTitle,
 				mustHaveTerms,
-				is2160p,
 				pageNum++
 			);
 			searchResultsArr.push(...results);
@@ -271,7 +265,6 @@ export async function scrapeResults(
 							finalQuery,
 							targetTitle,
 							mustHaveTerms,
-							is2160p,
 							pageNum
 						);
 					})(pageNum)
@@ -291,7 +284,6 @@ export async function scrapeResults(
 				finalQuery,
 				`${targetTitle} .mkv`,
 				mustHaveTerms,
-				is2160p,
 				pageNum++
 			);
 			searchResultsArr.push(...results);
@@ -305,7 +297,6 @@ export async function scrapeResults(
 							finalQuery,
 							`${targetTitle} .mkv`,
 							mustHaveTerms,
-							is2160p,
 							pageNum
 						);
 					})(pageNum)
@@ -325,7 +316,6 @@ export async function scrapeResults(
 				finalQuery,
 				`${targetTitle} .mp4`,
 				mustHaveTerms,
-				is2160p,
 				pageNum++
 			);
 			searchResultsArr.push(...results);
@@ -339,7 +329,6 @@ export async function scrapeResults(
 							finalQuery,
 							`${targetTitle} .mp4`,
 							mustHaveTerms,
-							is2160p,
 							pageNum
 						);
 					})(pageNum)
