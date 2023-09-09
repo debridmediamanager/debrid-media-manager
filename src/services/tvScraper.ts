@@ -156,7 +156,7 @@ export async function scrapeTv(
 		let seasonNumber = season.season_number;
 		const { seasonName, seasonCode } = getSeasonNameAndCode(season);
 		const seasonYear = getSeasonYear(season);
-		const airDate = mdbData.air_date ?? '2000-01-01';
+		const airDate = season.air_date ?? '2000-01-01';
 
 		scrapeJobs.push({
 			title: cleanTitle,
