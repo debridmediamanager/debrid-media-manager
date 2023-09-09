@@ -56,6 +56,50 @@ function convertToMB(fileSizeStr: string) {
 	return Math.round(fileSize); // returns the rounded integer value
 }
 
+function isFoundDateRecent(foundString: string, date: string): boolean {
+	const regex = /found\s(\d+)\s(years?|months?|weeks?|days?|hours?)\sago/;
+	const match = foundString.match(regex);
+
+	if (!match) {
+		throw new Error('Invalid found string');
+	}
+
+	const value = parseInt(match[1]);
+	const unit = match[2];
+
+	// set found date to last possible moment of the unit
+	const foundDate = new Date();
+	switch (unit) {
+		case 'years':
+		case 'year':
+			foundDate.setFullYear(foundDate.getFullYear() - value);
+			break;
+		case 'months':
+		case 'month':
+			foundDate.setMonth(foundDate.getMonth() - value);
+			break;
+		case 'weeks':
+		case 'week':
+			foundDate.setDate(foundDate.getDate() - 7 * value);
+			break;
+		case 'days':
+		case 'day':
+			foundDate.setDate(foundDate.getDate() - value);
+			break;
+		case 'hours':
+		case 'hour':
+			foundDate.setHours(foundDate.getHours() - value);
+			break;
+		default:
+			throw new Error('Invalid unit');
+	}
+
+	const airDate = new Date(date);
+
+	// Return true if the found date is more recent or equal
+	return foundDate >= airDate;
+}
+
 const createSearchUrl = (finalQuery: string, pg: number) =>
 	`${BTDIG}/search?order=0&q=${encodeURIComponent(finalQuery)}&p=${pg - 1}`;
 
@@ -70,6 +114,7 @@ const processPage = async (
 	finalQuery: string,
 	targetTitle: string,
 	mustHaveTerms: (string | RegExp)[],
+	airDate: string,
 	pageNum: number
 ): Promise<ProcessPageResult> => {
 	const MAX_RETRIES = 5; // maximum number of retries
@@ -123,8 +168,9 @@ const processPage = async (
 	const namesAndHashes = Array.from(
 		responseData.matchAll(/magnet:\?xt=urn:btih:([a-z\d]{40})&amp;dn=([^&]+)&/g)
 	);
+	const ages = Array.from(responseData.matchAll(/class=\"torrent_age\"[^>]*>([^<]+)/g));
 
-	if (fileSizes.length !== namesAndHashes.length) {
+	if (fileSizes.length !== namesAndHashes.length || fileSizes.length !== ages.length) {
 		console.warn('Mismatch in file sizes and names');
 		return { results, badCount: MAX_RESULTS_PER_PAGE, numResults };
 	}
@@ -133,19 +179,22 @@ const processPage = async (
 		const title = decodeURIComponent(namesAndHashes[resIndex][2].replaceAll('+', ' '));
 		const fileSizeStr = `${fileSizes[resIndex][1]} ${fileSizes[resIndex][2] || 'B'}`;
 
-		if (!fileSizeStr.includes('GB') || !fileSizeStr.includes('MB')) {
+		if (!fileSizeStr.includes('GB') && !fileSizeStr.includes('MB')) {
 			badCount++;
 			continue;
 		}
 
-		// immediately check if filesize makes sense
 		const fileSize = convertToMB(fileSizeStr);
-		if (getMediaType(title) === 'movie' && fileSize > 150000) {
+		if (getMediaType(title) === 'movie' && fileSize > 200000) {
 			badCount++; // movie is too big
 			continue;
 		}
-		// if file size is too small, skip
 		if (fileSizeStr.includes(' B') || fileSizeStr.includes(' KB')) {
+			badCount++;
+			continue;
+		}
+
+		if (!isFoundDateRecent(ages[resIndex][1], airDate)) {
 			badCount++;
 			continue;
 		}
@@ -160,8 +209,8 @@ const processPage = async (
 			new RegExp(`${term.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')}`, 'i').test(title)
 		).length;
 		if (containedTerms < requiredTerms) {
-			console.debug(title, '-title match-', targetTitle);
-			console.debug('bad title', containedTerms, requiredTerms);
+			// console.debug(title, '-title match-', targetTitle);
+			// console.debug('bad title', containedTerms, requiredTerms);
 			badCount++; // title doesn't contain most terms in the query
 			continue;
 		}
@@ -174,8 +223,8 @@ const processPage = async (
 			return false;
 		}).length;
 		if (containedMustHaveTerms < mustHaveTerms.length) {
-			console.debug(title, '-must have-', mustHaveTerms);
-			console.debug('bad must have terms', containedMustHaveTerms, mustHaveTerms.length);
+			// console.debug(title, '-must have-', mustHaveTerms);
+			// console.debug('bad must have terms', containedMustHaveTerms, mustHaveTerms.length);
 			badCount++;
 			continue;
 		}
@@ -241,6 +290,7 @@ export async function scrapeResults(
 	finalQuery: string,
 	targetTitle: string,
 	mustHaveTerms: (string | RegExp)[],
+	airDate: string,
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	while (true) {
@@ -252,6 +302,7 @@ export async function scrapeResults(
 				finalQuery,
 				targetTitle,
 				mustHaveTerms,
+				airDate,
 				pageNum++
 			);
 			searchResultsArr.push(...results);
@@ -265,6 +316,7 @@ export async function scrapeResults(
 							finalQuery,
 							targetTitle,
 							mustHaveTerms,
+							airDate,
 							pageNum
 						);
 					})(pageNum)
@@ -281,9 +333,10 @@ export async function scrapeResults(
 			let pageNum = 1;
 			const { results, numResults } = await processPage(
 				client,
-				finalQuery,
-				`${targetTitle} .mkv`,
+				`${finalQuery} .mkv`,
+				targetTitle,
 				mustHaveTerms,
+				airDate,
 				pageNum++
 			);
 			searchResultsArr.push(...results);
@@ -294,9 +347,10 @@ export async function scrapeResults(
 					((pageNum) => async () => {
 						return await processPage(
 							client,
-							finalQuery,
-							`${targetTitle} .mkv`,
+							`${finalQuery} .mkv`,
+							targetTitle,
 							mustHaveTerms,
+							airDate,
 							pageNum
 						);
 					})(pageNum)
@@ -313,9 +367,10 @@ export async function scrapeResults(
 			let pageNum = 1;
 			const { results, numResults } = await processPage(
 				client,
-				finalQuery,
-				`${targetTitle} .mp4`,
+				`${finalQuery} .mp4`,
+				targetTitle,
 				mustHaveTerms,
+				airDate,
 				pageNum++
 			);
 			searchResultsArr.push(...results);
@@ -326,9 +381,10 @@ export async function scrapeResults(
 					((pageNum) => async () => {
 						return await processPage(
 							client,
-							finalQuery,
-							`${targetTitle} .mp4`,
+							`${finalQuery} .mp4`,
+							targetTitle,
 							mustHaveTerms,
+							airDate,
 							pageNum
 						);
 					})(pageNum)
