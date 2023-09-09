@@ -122,7 +122,7 @@ export async function generateScrapeJobs(
 	await db.saveScrapedResults(`movie:${imdbId}`, []);
 	await db.saveScrapedResults(`tv:${imdbId}:1`, []);
 	await db.markAsDone(imdbId);
-	res.status(404).json({
+	res.status(200).json({
 		status: 'error',
 		errorMessage: 'no movie or TV show found for this ID',
 	});
