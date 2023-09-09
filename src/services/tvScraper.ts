@@ -74,7 +74,10 @@ const getSearchResults = async (job: TvScrapeJob) => {
 				http,
 				`"${job.title}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
 				job.title,
-				[new RegExp(`[0123]?${job.seasonCode}[ex\\W_]`, 'i'), ...job.seasonName.split(/\s/)],
+				[
+					new RegExp(`[0123]?${job.seasonCode}[ex\\W_]`, 'i'),
+					...job.seasonName.split(/\s/),
+				],
 				false
 			)
 		);
@@ -113,7 +116,10 @@ const getSearchResults = async (job: TvScrapeJob) => {
 				http,
 				`"${job.originalTitle}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
 				job.originalTitle,
-				[new RegExp(`[0123]?${job.seasonCode}[ex\\W_]`, 'i'), ...job.seasonName.split(/\s/)],
+				[
+					new RegExp(`[0123]?${job.seasonCode}[ex\\W_]`, 'i'),
+					...job.seasonName.split(/\s/),
+				],
 				false
 			)
 		);
