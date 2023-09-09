@@ -57,7 +57,7 @@ function convertToMB(fileSizeStr: string) {
 }
 
 function isFoundDateRecent(foundString: string, date: string): boolean {
-	const regex = /found\s(\d+)\s(years?|months?|weeks?|days?|hours?)\sago/;
+	const regex = /found\s(\d+)\s(years?|months?|weeks?|days?|hours?|minutes?|seconds?)\sago/;
 	const match = foundString.match(regex);
 
 	if (!match) {
@@ -88,8 +88,13 @@ function isFoundDateRecent(foundString: string, date: string): boolean {
 			break;
 		case 'hours':
 		case 'hour':
-			foundDate.setHours(foundDate.getHours() - value);
-			break;
+			return true;
+		case 'minutes':
+		case 'minute':
+			return true;
+		case 'seconds':
+		case 'second':
+			return true;
 		default:
 			throw new Error('Invalid unit');
 	}
