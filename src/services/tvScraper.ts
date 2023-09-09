@@ -1,6 +1,4 @@
-import { getMdbInfo } from '@/utils/mdblist';
 import { cleanSearchQuery } from '@/utils/search';
-import axios from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import {
 	createAxiosInstance,
@@ -18,6 +16,7 @@ type TvScrapeJob = {
 	seasonName?: string;
 	seasonCode?: number;
 	seasonYear?: string;
+	airDate: string;
 };
 
 function padWithZero(num: number) {
@@ -28,9 +27,9 @@ function padWithZero(num: number) {
 	}
 }
 
-const getSeasons = (showResponse: any) =>
-	showResponse.data.seasons.length
-		? showResponse.data.seasons
+const getSeasons = (mdbData: any) =>
+	mdbData.seasons.length
+		? mdbData.seasons
 		: [{ name: 'Season 1', season_number: 1, episode_count: 0 }];
 
 const getSeasonNameAndCode = (season: any) => {
@@ -64,7 +63,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 			`"${job.title}" s${padWithZero(job.seasonNumber)}`,
 			job.title,
 			[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
-			false
+			job.airDate,
 		)
 	);
 
@@ -78,7 +77,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 					new RegExp(`[0123]?${job.seasonCode}[ex\\W_]`, 'i'),
 					...job.seasonName.split(/\s/),
 				],
-				false
+				job.airDate,
 			)
 		);
 	} else if (job.seasonName && job.seasonName !== job.title) {
@@ -88,13 +87,13 @@ const getSearchResults = async (job: TvScrapeJob) => {
 				`"${job.title}" "${job.seasonName}"`,
 				job.title,
 				[...job.seasonName.split(/\s/)],
-				false
+				job.airDate,
 			)
 		);
 	}
 
 	if (job.title.split(/\s/).length > 3 && job.seasonNumber === 1) {
-		sets.push(await scrapeResults(http, `"${job.title}"`, job.title, [], false));
+		sets.push(await scrapeResults(http, `"${job.title}"`, job.title, [], job.airDate));
 	}
 
 	if (!job.originalTitle) return sets;
@@ -107,7 +106,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 			`"${job.originalTitle}" s${padWithZero(job.seasonNumber)}`,
 			job.originalTitle,
 			[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
-			false
+			job.airDate,
 		)
 	);
 	if (job.seasonName && job.seasonCode) {
@@ -120,7 +119,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 					new RegExp(`[0123]?${job.seasonCode}[ex\\W_]`, 'i'),
 					...job.seasonName.split(/\s/),
 				],
-				false
+				job.airDate,
 			)
 		);
 	} else if (job.seasonName && job.seasonName !== job.originalTitle) {
@@ -130,7 +129,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 				`"${job.originalTitle}" "${job.seasonName}"`,
 				job.originalTitle,
 				[...job.seasonName.split(/\s/)],
-				false
+				job.airDate,
 			)
 		);
 	}
@@ -140,23 +139,24 @@ const getSearchResults = async (job: TvScrapeJob) => {
 
 export async function scrapeTv(
 	imdbId: string,
-	tmdbItem: any,
+	tmdbData: any,
+	mdbData: any,
 	db: PlanetScaleCache
 ): Promise<number> {
-	console.log(`Scraping tv show: ${tmdbItem.name} (${imdbId})...`);
+	console.log(`Scraping tv show: ${tmdbData.name} (${imdbId})...`);
 	const scrapeJobs: TvScrapeJob[] = [];
 
-	let cleanTitle = cleanSearchQuery(tmdbItem.name);
+	let cleanTitle = cleanSearchQuery(tmdbData.name);
 	let cleanOriginalTitle;
-	if (tmdbItem.original_name && tmdbItem.original_name !== tmdbItem.name) {
-		cleanOriginalTitle = cleanSearchQuery(tmdbItem.original_name);
+	if (tmdbData.original_name && tmdbData.original_name !== tmdbData.name) {
+		cleanOriginalTitle = cleanSearchQuery(tmdbData.original_name);
 	}
-	const showResponse = await axios.get(getMdbInfo(imdbId));
-	for (const season of getSeasons(showResponse)) {
+	for (const season of getSeasons(mdbData)) {
 		if (season.season_number === 0) continue;
 		let seasonNumber = season.season_number;
 		const { seasonName, seasonCode } = getSeasonNameAndCode(season);
 		const seasonYear = getSeasonYear(season);
+		const airDate = mdbData.air_date ?? '2000-01-01';
 
 		scrapeJobs.push({
 			title: cleanTitle,
@@ -165,6 +165,7 @@ export async function scrapeTv(
 			seasonName,
 			seasonCode,
 			seasonYear,
+			airDate,
 		});
 
 		if (cleanTitle.includes('&')) {
@@ -175,6 +176,7 @@ export async function scrapeTv(
 				seasonName,
 				seasonCode,
 				seasonYear,
+				airDate,
 			});
 		}
 	}
