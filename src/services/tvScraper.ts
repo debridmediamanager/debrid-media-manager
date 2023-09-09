@@ -93,7 +93,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 		);
 	}
 
-	if (job.title.split(/\s/).length > 3) {
+	if (job.title.split(/\s/).length > 3 && job.seasonNumber === 1) {
 		sets.push(await scrapeResults(http, `"${job.title}"`, job.title, [], false));
 	}
 
