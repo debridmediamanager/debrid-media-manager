@@ -1,6 +1,4 @@
-import { getMdbInfo } from '@/utils/mdblist';
 import { cleanSearchQuery } from '@/utils/search';
-import axios from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import {
 	createAxiosInstance,
@@ -16,6 +14,7 @@ type MovieScrapeJob = {
 	originalTitle?: string;
 	cleanedTitle?: string;
 	year?: string;
+	airDate: string;
 };
 
 const getMovieSearchResults = async (job: MovieScrapeJob) => {
@@ -25,7 +24,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 
 	let sets: ScrapeSearchResult[][] = [];
 
-	sets.push(await scrapeResults(http, `"${job.title}" ${job.year ?? ''}`, job.title, [], false));
+	sets.push(await scrapeResults(http, `"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate));
 	if (job.title.includes('&')) {
 		sets.push(
 			await scrapeResults(
@@ -33,13 +32,13 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				`"${job.title.replaceAll('&', 'and')}" ${job.year ?? ''}`,
 				job.title,
 				[],
-				false
+				job.airDate,
 			)
 		);
 	}
 
 	if (job.title.split(/\s/).length > 3) {
-		sets.push(await scrapeResults(http, `"${job.title}"`, job.title, [], false));
+		sets.push(await scrapeResults(http, `"${job.title}"`, job.title, [], job.airDate));
 	}
 
 	if (job.originalTitle) {
@@ -49,7 +48,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				`"${job.originalTitle}" ${job.year ?? ''}`,
 				job.originalTitle,
 				[],
-				false
+				job.airDate,
 			)
 		);
 	}
@@ -61,7 +60,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				`"${job.cleanedTitle}" ${job.year ?? ''}`,
 				job.cleanedTitle,
 				[],
-				false
+				job.airDate,
 			)
 		);
 	}
@@ -71,18 +70,19 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 
 export async function scrapeMovies(
 	imdbId: string,
-	tmdbItem: any,
+	tmdbData: any,
+	mdbData: any,
 	db: PlanetScaleCache
 ): Promise<number> {
-	console.log(`Scraping movie: ${tmdbItem.title} (${imdbId})...`);
-	const cleanTitle = cleanSearchQuery(tmdbItem.title);
-	const year = tmdbItem.release_date?.substring(0, 4);
+	console.log(`Scraping movie: ${tmdbData.title} (${imdbId})...`);
+	const cleanTitle = cleanSearchQuery(tmdbData.title);
+	const year = mdbData.year ?? mdbData.released?.substring(0, 4) ?? tmdbData.release_date?.substring(0, 4);
+	const airDate = mdbData.released ?? tmdbData.release_date ?? '2000-01-01';
 
 	let originalTitle, cleanedTitle;
-	if (tmdbItem.original_title && tmdbItem.original_title !== tmdbItem.title) {
-		originalTitle = tmdbItem.original_title.toLowerCase();
-		const mdbItem = await axios.get(getMdbInfo(imdbId));
-		for (let rating of mdbItem.data.ratings) {
+	if (tmdbData.original_title && tmdbData.original_title !== tmdbData.title) {
+		originalTitle = tmdbData.original_title.toLowerCase();
+		for (let rating of mdbData.ratings) {
 			if (rating.source === 'tomatoes') {
 				if (!rating.url) continue;
 				const tomatoTitle = (
@@ -108,6 +108,7 @@ export async function scrapeMovies(
 		originalTitle,
 		cleanedTitle,
 		year,
+		airDate,
 	});
 	let processedResults = flattenAndRemoveDuplicates(searchResults);
 	if (processedResults.length) processedResults = groupByParsedTitle(processedResults);

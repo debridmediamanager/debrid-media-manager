@@ -77,9 +77,7 @@ export class PlanetScaleCache {
 		});
 
 		if (scrapedItem !== null) {
-			const splits = scrapedItem.key.split(':');
-			if (splits.length === 3 && splits[2] !== '1') return null;
-			return splits[1];
+			return scrapedItem.key.split(':')[1];
 		}
 
 		return null;
