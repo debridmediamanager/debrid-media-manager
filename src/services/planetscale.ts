@@ -85,6 +85,16 @@ export class PlanetScaleCache {
 		return null;
 	}
 
+	public async delete(imdbId: string): Promise<void> {
+		const keys = [`movie:${imdbId}`, `tv:${imdbId}%`];
+
+		for (const key of keys) {
+			await this.prisma.scraped.deleteMany({
+				where: { key: { contains: key } },
+			});
+		}
+	}
+
 	public async markAsDone(imdbId: string): Promise<void> {
 		const keys = [`requested:${imdbId}`, `processing:${imdbId}`];
 
