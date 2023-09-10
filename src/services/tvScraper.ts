@@ -143,7 +143,7 @@ export async function scrapeTv(
 	mdbData: any,
 	db: PlanetScaleCache
 ): Promise<number> {
-	console.log(`Scraping tv show: ${tmdbData.name} (${imdbId})...`);
+	console.log(`🏏 Scraping tv show: ${tmdbData.name} (${imdbId})...`);
 	const scrapeJobs: TvScrapeJob[] = [];
 
 	let cleanTitle = cleanSearchQuery(tmdbData.name);
@@ -200,7 +200,7 @@ export async function scrapeTv(
 			processedResults
 		);
 		console.log(
-			`Saved ${processedResults.length} results for ${job.title} season ${job.seasonNumber}`
+			`📺 Saved ${processedResults.length} results for ${job.title} season ${job.seasonNumber}`
 		);
 	}
 

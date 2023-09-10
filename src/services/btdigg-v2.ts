@@ -299,7 +299,7 @@ export async function scrapeResults(
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	while (true) {
-		console.log(`searching Btdigg: ${finalQuery}`);
+		console.log(`🔍 Searching Btdigg: ${finalQuery}`);
 		try {
 			let pageNum = 1;
 			const { results, numResults } = await processPage(
