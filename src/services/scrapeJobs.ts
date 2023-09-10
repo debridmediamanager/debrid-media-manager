@@ -53,11 +53,12 @@ export async function generateScrapeJobs(
 	imdbId: string,
 	override: boolean = false
 ) {
-	let tmdbResponse, mdbResponse;
+	let tmdbSearch, mdbInfo;
 	try {
-		tmdbResponse = await axios.get(getTmdbSearch(imdbId));
-		mdbResponse = await axios.get(getMdbInfo(imdbId));
+		tmdbSearch = await axios.get(getTmdbSearch(imdbId));
+		mdbInfo = await axios.get(getMdbInfo(imdbId));
 	} catch (error: any) {
+		console.error(error);
 		res.status(500).json({
 			status: 'error',
 			errorMessage: `an error occurred while fetching media info for '${imdbId}' (${error.message})`,
@@ -65,58 +66,75 @@ export async function generateScrapeJobs(
 		return;
 	}
 
-	const isMovie =
-		mdbResponse.data.type === 'movie' || tmdbResponse.data.movie_results?.length > 0;
-	const isTv = mdbResponse.data.type === 'show' || tmdbResponse.data.tv_results?.length > 0;
+	const isMovie = mdbInfo.data.type === 'movie' || tmdbSearch.data.movie_results?.length > 0;
+	const isTv = mdbInfo.data.type === 'show' || tmdbSearch.data.tv_results?.length > 0;
 
 	if (isMovie) {
 		if (!override && (await isAlreadyScraped('movie', imdbId, res))) return;
 
-		const tmdbId = mdbResponse.data.tmdbid ?? tmdbResponse.data.movie_results[0].id;
-
 		try {
-			const tmdbResponse = await axios.get(getTmdbMovieInfo(tmdbId));
-			const resultsCount = await scrapeMovies(imdbId, tmdbResponse.data, mdbResponse.data, db);
-			res.status(200).json({ status: `scraped: ${resultsCount} movie torrents for '${mdbResponse.data.title}'` });
+			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.movie_results[0]?.id;
+			const tmdbInfo = await axios.get(getTmdbMovieInfo(tmdbId));
+			const resultsCount = await scrapeMovies(imdbId, tmdbInfo.data, mdbInfo.data, db);
+			res.status(200).json({
+				status: `scraped: ${resultsCount} movie torrents for '${mdbInfo.data.title}'`,
+			});
+			return;
 		} catch (error: any) {
-			if (error.response?.status === 404) {
-				const convertedMdb = convertMdbToTmdb(mdbResponse.data);
-				const resultsCount = await scrapeMovies(imdbId, convertedMdb, mdbResponse.data, db);
-				res.status(200).json({ status: `scraped: ${resultsCount} movie torrents for '${mdbResponse.data.title}'` });
+			if (error.response?.status === 404 || error.message.includes("reading 'id'")) {
+				try {
+					const convertedMdb = convertMdbToTmdb(mdbInfo.data);
+					const resultsCount = await scrapeMovies(imdbId, convertedMdb, mdbInfo.data, db);
+					res.status(200).json({
+						status: `scraped: ${resultsCount} movie torrents for '${mdbInfo.data.title}'`,
+					});
+					return;
+				} catch (error: any) {
+					console.error(error);
+				}
 			} else {
+				console.error(error);
 				res.status(500).json({
 					status: 'error',
-					errorMessage: `an error occurred while scraping Btdigg for movie '${mdbResponse.data.title}' (${error.message})`,
+					errorMessage: `an error occurred while scraping Btdigg for movie '${mdbInfo.data.title}' (${error.message})`,
 				});
+				return;
 			}
 		}
-
-		return;
 	}
 
 	if (isTv) {
 		if (!override && (await isAlreadyScraped('tv', imdbId, res))) return;
 
-		const tmdbId = mdbResponse.data.tmdbid ?? tmdbResponse.data.tv_results[0].id;
-
 		try {
-			const tmdbResponse = await axios.get(getTmdbTvInfo(tmdbId));
-			const resultsCount = await scrapeTv(imdbId, tmdbResponse.data, mdbResponse.data, db);
-			res.status(200).json({ status: `scraped: ${resultsCount} tv torrents for '${mdbResponse.data.title}'` });
+			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.tv_results[0]?.id;
+			const tmdbInfo = await axios.get(getTmdbTvInfo(tmdbId));
+			const resultsCount = await scrapeTv(imdbId, tmdbInfo.data, mdbInfo.data, db);
+			res.status(200).json({
+				status: `scraped: ${resultsCount} tv torrents for '${mdbInfo.data.title}'`,
+			});
+			return;
 		} catch (error: any) {
-			if (error.response?.status === 404) {
-				const convertedMdb = convertMdbToTmdb(mdbResponse.data);
-				const resultsCount = await scrapeTv(imdbId, convertedMdb, mdbResponse.data, db);
-				res.status(200).json({ status: `scraped: ${resultsCount} tv torrents for '${mdbResponse.data.title}'` });
+			if (error.response?.status === 404 || error.message.includes("reading 'id'")) {
+				try {
+					const convertedMdb = convertMdbToTmdb(mdbInfo.data);
+					const resultsCount = await scrapeTv(imdbId, convertedMdb, mdbInfo.data, db);
+					res.status(200).json({
+						status: `scraped: ${resultsCount} tv torrents for '${mdbInfo.data.title}'`,
+					});
+					return;
+				} catch (error: any) {
+					console.error(error);
+				}
 			} else {
+				console.error(error);
 				res.status(500).json({
 					status: 'error',
-					errorMessage: `an error occurred while scraping Btdigg for tv '${mdbResponse.data.title}' (${error.message})`,
+					errorMessage: `an error occurred while scraping Btdigg for tv '${mdbInfo.data.title}' (${error.message})`,
 				});
+				return;
 			}
 		}
-
-		return;
 	}
 
 	await db.saveScrapedResults(`movie:${imdbId}`, []);
@@ -126,4 +144,5 @@ export async function generateScrapeJobs(
 		status: 'error',
 		errorMessage: 'no movie or TV show found for this ID',
 	});
+	return;
 }
