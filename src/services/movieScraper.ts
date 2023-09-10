@@ -24,7 +24,9 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 
 	let sets: ScrapeSearchResult[][] = [];
 
-	sets.push(await scrapeResults(http, `"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate));
+	sets.push(
+		await scrapeResults(http, `"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate)
+	);
 	if (job.title.includes('&')) {
 		sets.push(
 			await scrapeResults(
@@ -32,7 +34,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				`"${job.title.replaceAll('&', 'and')}" ${job.year ?? ''}`,
 				job.title,
 				[],
-				job.airDate,
+				job.airDate
 			)
 		);
 	}
@@ -48,7 +50,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				`"${job.originalTitle}" ${job.year ?? ''}`,
 				job.originalTitle,
 				[],
-				job.airDate,
+				job.airDate
 			)
 		);
 	}
@@ -60,7 +62,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				`"${job.cleanedTitle}" ${job.year ?? ''}`,
 				job.cleanedTitle,
 				[],
-				job.airDate,
+				job.airDate
 			)
 		);
 	}
@@ -76,7 +78,8 @@ export async function scrapeMovies(
 ): Promise<number> {
 	console.log(`Scraping movie: ${tmdbData.title} (${imdbId})...`);
 	const cleanTitle = cleanSearchQuery(tmdbData.title);
-	const year = mdbData.year ?? mdbData.released?.substring(0, 4) ?? tmdbData.release_date?.substring(0, 4);
+	const year =
+		mdbData.year ?? mdbData.released?.substring(0, 4) ?? tmdbData.release_date?.substring(0, 4);
 	const airDate = mdbData.released ?? tmdbData.release_date ?? '2000-01-01';
 
 	let originalTitle, cleanedTitle;

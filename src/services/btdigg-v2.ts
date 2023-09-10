@@ -295,7 +295,7 @@ export async function scrapeResults(
 	finalQuery: string,
 	targetTitle: string,
 	mustHaveTerms: (string | RegExp)[],
-	airDate: string,
+	airDate: string
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	while (true) {
