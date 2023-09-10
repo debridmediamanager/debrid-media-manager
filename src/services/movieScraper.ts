@@ -76,7 +76,7 @@ export async function scrapeMovies(
 	mdbData: any,
 	db: PlanetScaleCache
 ): Promise<number> {
-	console.log(`Scraping movie: ${tmdbData.title} (${imdbId})...`);
+	console.log(`🏹 Scraping movie: ${tmdbData.title} (${imdbId})...`);
 	const cleanTitle = cleanSearchQuery(tmdbData.title);
 	const year =
 		mdbData.year ?? mdbData.released?.substring(0, 4) ?? tmdbData.release_date?.substring(0, 4);
@@ -117,7 +117,7 @@ export async function scrapeMovies(
 	if (processedResults.length) processedResults = groupByParsedTitle(processedResults);
 
 	await db.saveScrapedResults<ScrapeSearchResult[]>(`movie:${imdbId}`, processedResults);
-	console.log(`Saved ${processedResults.length} results for ${cleanTitle}`);
+	console.log(`🎥 Saved ${processedResults.length} results for ${cleanTitle}`);
 
 	await db.markAsDone(imdbId);
 
