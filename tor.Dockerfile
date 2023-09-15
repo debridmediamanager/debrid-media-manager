@@ -11,7 +11,7 @@ COPY renew-tor.sh /etc/tor/
 RUN chmod +x /etc/tor/renew-tor.sh
 
 USER tor
-ENTRYPOINT /etc/tor/renew-tor.sh & tor
+ENTRYPOINT sh -c "/etc/tor/renew-tor.sh"
 
 EXPOSE 9050/tcp
 

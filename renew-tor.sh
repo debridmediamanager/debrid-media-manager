@@ -8,6 +8,11 @@ SLEEP_INTERVAL=30
 CHECK_IP_URL="https://check.torproject.org/api/ip"
 RENEW_DELAY=5
 
+echo "Starting Tor..."
+exec /usr/bin/tor -f /etc/tor/torrc &
+
+echo "Done. Running script..."
+
 while true; do
   sleep $SLEEP_INTERVAL
 
