@@ -1,4 +1,5 @@
 import { cleanSearchQuery } from '@/utils/search';
+import fs from 'fs';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import {
 	createAxiosInstance,
@@ -8,7 +9,6 @@ import {
 } from './btdigg-v2';
 import { ScrapeSearchResult } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
-import fs from 'fs';
 
 let wordSet: Set<string>;
 try {
@@ -27,12 +27,13 @@ type MovieScrapeJob = {
 };
 
 const countUncommonWordsInTitle = (title: string) => {
-	let processedTitle = title.split(/\s+/)
-		.map((word: string) => word.toLowerCase()
-		.replace(/'s/g, '')
-		.replace(/&/g, 'and').replaceAll(/[\W]+/g, ''));
+	let processedTitle = title
+		.split(/\s+/)
+		.map((word: string) =>
+			word.toLowerCase().replace(/'s/g, '').replace(/&/g, 'and').replaceAll(/[\W]+/g, '')
+		);
 	return processedTitle.filter((word: string) => !wordSet.has(word)).length;
-}
+};
 
 const getMovieSearchResults = async (job: MovieScrapeJob) => {
 	const http = createAxiosInstance(
@@ -143,7 +144,7 @@ export async function scrapeMovies(
 					.trim()
 					.toLowerCase();
 				if (tomatoTitle !== processedTitle) {
-					console.log('🎯 Found another title (1):', tomatoTitle)
+					console.log('🎯 Found another title (1):', tomatoTitle);
 					cleanedTitle = tomatoTitle;
 				}
 			}
@@ -162,7 +163,7 @@ export async function scrapeMovies(
 				.trim()
 				.toLowerCase();
 			if (metacriticTitle !== processedTitle && metacriticTitle !== cleanedTitle) {
-				console.log('🎯 Found another title (2):', metacriticTitle)
+				console.log('🎯 Found another title (2):', metacriticTitle);
 				anotherTitle = metacriticTitle;
 			}
 		}

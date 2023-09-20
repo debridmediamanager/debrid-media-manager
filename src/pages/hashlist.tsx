@@ -6,7 +6,7 @@ import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
-import { getSelectableFiles, isVideo } from '@/utils/selectable';
+import { getSelectableFiles, isVideoOrSubs } from '@/utils/selectable';
 import { withAuth } from '@/utils/withAuth';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
@@ -282,7 +282,7 @@ function TorrentsPage() {
 			if (!rdKey) throw new Error('no_rd_key');
 			const response = await getTorrentInfo(rdKey, id.substring(3));
 
-			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
+			const selectedFiles = getSelectableFiles(response.files.filter(isVideoOrSubs)).map(
 				(file) => file.id
 			);
 			if (selectedFiles.length === 0) {
