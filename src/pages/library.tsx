@@ -13,7 +13,7 @@ import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
-import { getSelectableFiles, isVideo } from '@/utils/selectable';
+import { getSelectableFiles, isVideoOrSubs } from '@/utils/selectable';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
@@ -372,7 +372,7 @@ function TorrentsPage() {
 			const response = await getTorrentInfo(rdKey, id.substring(3));
 			console.log(`${response.filename} files`, response.files);
 
-			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
+			const selectedFiles = getSelectableFiles(response.files.filter(isVideoOrSubs)).map(
 				(file) => file.id
 			);
 			console.log(`selected files`, selectedFiles);

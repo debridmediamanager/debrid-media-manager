@@ -4,7 +4,7 @@ import { RdInstantAvailabilityResponse, rdInstantCheck } from '@/services/realDe
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-hot-toast';
 import { groupBy } from './groupBy';
-import { isVideo } from './selectable';
+import { isVideoOrSubs } from './selectable';
 import { searchToastOptions } from './toastOptions';
 
 export const wrapLoading = function (debrid: string, checkAvailability: Promise<number>) {
@@ -36,7 +36,9 @@ export const instantCheckInRd = async (
 				if (!variants.length) continue;
 				torrent.noVideos = variants.reduce((noVideo, variant) => {
 					if (!noVideo) return false;
-					return !Object.values(variant).some((file) => isVideo({ path: file.filename }));
+					return !Object.values(variant).some((file) =>
+						isVideoOrSubs({ path: file.filename })
+					);
 				}, true);
 				// because it has variants and there's at least 1 video file
 				if (!torrent.noVideos) {
@@ -79,7 +81,7 @@ export const instantCheckInAd = async (
 							// If 'e' property exists, check it recursively
 							return checkVideoInFiles(curr.e);
 						}
-						return !isVideo({ path: curr.n });
+						return !isVideoOrSubs({ path: curr.n });
 					}, true);
 				};
 
