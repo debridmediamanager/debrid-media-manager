@@ -1,11 +1,5 @@
 import { cleanSearchQuery } from '@/utils/search';
-import { SocksProxyAgent } from 'socks-proxy-agent';
-import {
-	createAxiosInstance,
-	flattenAndRemoveDuplicates,
-	groupByParsedTitle,
-	scrapeResults,
-} from './btdigg-v2';
+import { flattenAndRemoveDuplicates, groupByParsedTitle, scrapeResults } from './btdigg-v2';
 import { ScrapeSearchResult } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 
@@ -51,15 +45,10 @@ const getSeasonNameAndCode = (season: any) => {
 const getSeasonYear = (season: any) => season.air_date?.substring(0, 4);
 
 const getSearchResults = async (job: TvScrapeJob) => {
-	const http = createAxiosInstance(
-		new SocksProxyAgent(process.env.PROXY!, { timeout: parseInt(process.env.REQUEST_TIMEOUT!) })
-	);
-
 	let sets: ScrapeSearchResult[][] = [];
 
 	sets.push(
 		await scrapeResults(
-			http,
 			`"${job.title}" s${padWithZero(job.seasonNumber)}`,
 			job.title,
 			[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
@@ -70,7 +59,6 @@ const getSearchResults = async (job: TvScrapeJob) => {
 	if (job.seasonName && job.seasonCode) {
 		sets.push(
 			await scrapeResults(
-				http,
 				`"${job.title}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
 				job.title,
 				[
@@ -83,7 +71,6 @@ const getSearchResults = async (job: TvScrapeJob) => {
 	} else if (job.seasonName && job.seasonName !== job.title) {
 		sets.push(
 			await scrapeResults(
-				http,
 				`"${job.title}" "${job.seasonName}"`,
 				job.title,
 				[...job.seasonName.split(/\s/)],
@@ -93,7 +80,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 	}
 
 	if (job.title.split(/\s/).length > 3 && job.seasonNumber === 1) {
-		sets.push(await scrapeResults(http, `"${job.title}"`, job.title, [], job.airDate));
+		sets.push(await scrapeResults(`"${job.title}"`, job.title, [], job.airDate));
 	}
 
 	if (!job.originalTitle) return sets;
@@ -102,7 +89,6 @@ const getSearchResults = async (job: TvScrapeJob) => {
 
 	sets2.push(
 		await scrapeResults(
-			http,
 			`"${job.originalTitle}" s${padWithZero(job.seasonNumber)}`,
 			job.originalTitle,
 			[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
@@ -112,7 +98,6 @@ const getSearchResults = async (job: TvScrapeJob) => {
 	if (job.seasonName && job.seasonCode) {
 		sets2.push(
 			await scrapeResults(
-				http,
 				`"${job.originalTitle}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
 				job.originalTitle,
 				[
@@ -125,7 +110,6 @@ const getSearchResults = async (job: TvScrapeJob) => {
 	} else if (job.seasonName && job.seasonName !== job.originalTitle) {
 		sets2.push(
 			await scrapeResults(
-				http,
 				`"${job.originalTitle}" "${job.seasonName}"`,
 				job.originalTitle,
 				[...job.seasonName.split(/\s/)],
