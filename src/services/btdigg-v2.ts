@@ -1,5 +1,5 @@
 import { getMediaType } from '@/utils/mediaType';
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import UserAgent from 'user-agents';
 import { ScrapeSearchResult } from './mediasearch';
@@ -115,7 +115,6 @@ type ProcessPageResult = {
 };
 
 const processPage = async (
-	client: AxiosInstance,
 	finalQuery: string,
 	targetTitle: string,
 	mustHaveTerms: (string | RegExp)[],
@@ -132,6 +131,14 @@ const processPage = async (
 	const searchUrl = createSearchUrl(finalQuery, pageNum);
 	while (true) {
 		try {
+			const client = createAxiosInstance(
+				new SocksProxyAgent(
+					`socks5h://${Math.random().toString(36).substring(2)}:${Math.random()
+						.toString(36)
+						.substring(2)}@${process.env.PROXY || ''}`,
+					{ timeout: parseInt(process.env.REQUEST_TIMEOUT!) }
+				)
+			);
 			const response = await client.get(searchUrl);
 			responseData = response.data;
 			const numResultsStr = responseData.match(/(\d+) results found/) || [];
@@ -291,7 +298,6 @@ async function processInBatches(
 }
 
 export async function scrapeResults(
-	client: AxiosInstance,
 	finalQuery: string,
 	targetTitle: string,
 	mustHaveTerms: (string | RegExp)[],
@@ -303,7 +309,6 @@ export async function scrapeResults(
 		try {
 			let pageNum = 1;
 			const { results, numResults } = await processPage(
-				client,
 				finalQuery,
 				targetTitle,
 				mustHaveTerms,
@@ -317,7 +322,6 @@ export async function scrapeResults(
 				promises.push(
 					((pageNum) => async () => {
 						return await processPage(
-							client,
 							finalQuery,
 							targetTitle,
 							mustHaveTerms,
@@ -337,7 +341,6 @@ export async function scrapeResults(
 		try {
 			let pageNum = 1;
 			const { results, numResults } = await processPage(
-				client,
 				`${finalQuery} .mkv`,
 				targetTitle,
 				mustHaveTerms,
@@ -351,7 +354,6 @@ export async function scrapeResults(
 				promises.push(
 					((pageNum) => async () => {
 						return await processPage(
-							client,
 							`${finalQuery} .mkv`,
 							targetTitle,
 							mustHaveTerms,
@@ -371,7 +373,6 @@ export async function scrapeResults(
 		try {
 			let pageNum = 1;
 			const { results, numResults } = await processPage(
-				client,
 				`${finalQuery} .mp4`,
 				targetTitle,
 				mustHaveTerms,
@@ -385,7 +386,6 @@ export async function scrapeResults(
 				promises.push(
 					((pageNum) => async () => {
 						return await processPage(
-							client,
 							`${finalQuery} .mp4`,
 							targetTitle,
 							mustHaveTerms,
