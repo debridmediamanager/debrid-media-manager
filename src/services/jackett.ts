@@ -190,6 +190,11 @@ const processPage = async (
 		}
 	}
 
+	responseData = responseData
+		.filter((item: any) => item.Size >= 1024 * 1024 * 100)
+		.filter((item: any) => item.Seeders > 0 || item.Peers > 0);
+	console.log(`Jackett processing ${responseData.length} results`);
+
 	const promises: (() => Promise<ScrapeSearchResult | undefined>)[] = responseData.map(
 		(item: any) => {
 			return () => processItem(item, targetTitle, mustHaveTerms, airDate);
