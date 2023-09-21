@@ -45,24 +45,25 @@ const getSeasonNameAndCode = (season: any) => {
 
 const getSeasonYear = (season: any) => season.air_date?.substring(0, 4);
 
+async function scrapeAll(
+	finalQuery: string,
+	targetTitle: string,
+	mustHaveTerms: (string | RegExp)[],
+	airDate: string
+): Promise<ScrapeSearchResult[][]> {
+	return await Promise.all([
+		scrapeBtdigg(finalQuery, targetTitle, mustHaveTerms, airDate),
+		scrapeJackett(finalQuery, targetTitle, mustHaveTerms, airDate),
+	]);
+}
+
 const getSearchResults = async (job: TvScrapeJob) => {
 	let sets: ScrapeSearchResult[][] = [];
-
-	sets.push(
-		await scrapeBtdigg(
-			`"${job.title}" s${padWithZero(job.seasonNumber)}`,
-			job.title,
-			[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
-			job.airDate
-		)
-	);
-	sets.push(
-		await scrapeJackett(
-			`"${job.title}" s${padWithZero(job.seasonNumber)}`,
-			job.title,
-			[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
-			job.airDate
-		)
+	sets = await scrapeAll(
+		`"${job.title}" s${padWithZero(job.seasonNumber)}`,
+		job.title,
+		[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
+		job.airDate
 	);
 
 	if (job.seasonName && job.seasonCode) {
@@ -96,13 +97,11 @@ const getSearchResults = async (job: TvScrapeJob) => {
 
 	let sets2: ScrapeSearchResult[][] = [];
 
-	sets2.push(
-		await scrapeBtdigg(
-			`"${job.originalTitle}" s${padWithZero(job.seasonNumber)}`,
-			job.originalTitle,
-			[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
-			job.airDate
-		)
+	sets2 = await scrapeAll(
+		`"${job.originalTitle}" s${padWithZero(job.seasonNumber)}`,
+		job.originalTitle,
+		[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
+		job.airDate
 	);
 	if (job.seasonName && job.seasonCode) {
 		sets2.push(

@@ -299,6 +299,7 @@ export async function scrapeBtdigg(
 	mustHaveTerms: (string | RegExp)[],
 	airDate: string
 ): Promise<ScrapeSearchResult[]> {
+	return [];
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	while (true) {
 		console.log(`🔍 Searching Btdigg: ${finalQuery}`);
@@ -328,7 +329,7 @@ export async function scrapeBtdigg(
 				);
 				pageNum++;
 			}
-			searchResultsArr.push(...(await processInBatches(promises, 2)));
+			searchResultsArr.push(...(await processInBatches(promises, 5)));
 		} catch (error) {
 			console.error('scrapeBtdigg page processing error', error);
 			await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -360,7 +361,7 @@ export async function scrapeBtdigg(
 				);
 				pageNum++;
 			}
-			searchResultsArr.push(...(await processInBatches(promises, 2)));
+			searchResultsArr.push(...(await processInBatches(promises, 5)));
 		} catch (error) {
 			console.error('scrapeBtdigg mkv page processing error', error);
 			await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -392,7 +393,7 @@ export async function scrapeBtdigg(
 				);
 				pageNum++;
 			}
-			searchResultsArr.push(...(await processInBatches(promises, 2)));
+			searchResultsArr.push(...(await processInBatches(promises, 5)));
 		} catch (error) {
 			console.error('scrapeBtdigg mp4 page processing error', error);
 			await new Promise((resolve) => setTimeout(resolve, 5000));
