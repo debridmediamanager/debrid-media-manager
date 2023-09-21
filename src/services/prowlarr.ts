@@ -170,7 +170,7 @@ const processPage = async (
 	console.log(searchUrl);
 	while (true) {
 		try {
-			const response = await axios.get(searchUrl, { timeout: 100000 });
+			const response = await axios.get(searchUrl, { timeout: 600000 });
 			responseData = response.data;
 			retries = 0;
 			break;
