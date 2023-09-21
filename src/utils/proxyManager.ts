@@ -11,20 +11,32 @@ class ProxyManager {
 	}
 
 	getWorkingProxy(): SocksProxyAgent {
-		if (ProxyManager.workingProxies.length > 0) {
+		if (ProxyManager.workingProxies.length > 5) {
+			const randomProxy =
+				ProxyManager.workingProxies[
+					Math.floor(Math.random() * ProxyManager.workingProxies.length)
+				];
 			return new SocksProxyAgent(
-				`socks5h://${ProxyManager.workingProxies[0]}:damama@${process.env.PROXY || ''}`,
+				`socks5h://${randomProxy}:damama@${process.env.PROXY || ''}`,
 				{ timeout: parseInt(process.env.REQUEST_TIMEOUT!) }
 			);
 		} else {
-			throw new Error('No working proxies');
+			this.myId = Math.random().toString(36).substring(2);
+			ProxyManager.workingProxies.push(this.myId);
+			return new SocksProxyAgent(
+				`socks5h://${this.myId}:damama@${process.env.PROXY || ''}`,
+				{ timeout: parseInt(process.env.REQUEST_TIMEOUT!) }
+			);
 		}
 	}
 
 	rerollProxy() {
 		if (this.myId) this.removeProxy(this.myId);
-		if (ProxyManager.workingProxies.length > 0) {
-			this.myId = ProxyManager.workingProxies[0];
+		if (ProxyManager.workingProxies.length > 5) {
+			this.myId =
+				ProxyManager.workingProxies[
+					Math.floor(Math.random() * ProxyManager.workingProxies.length)
+				];
 		} else {
 			this.myId = Math.random().toString(36).substring(2);
 			ProxyManager.workingProxies.push(this.myId);

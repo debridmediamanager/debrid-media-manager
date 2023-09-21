@@ -23,6 +23,7 @@ function extractHashFromMagnetLink(magnetLink: string) {
 	if (match) {
 		return match[1].toLowerCase();
 	} else {
+		process.stdout.write('x');
 		return undefined;
 	}
 }
@@ -33,6 +34,7 @@ async function computeHashFromTorrent(url: string): Promise<string | undefined> 
 			maxRedirects: 0, // Set maxRedirects to 0 to disable automatic redirects
 			validateStatus: (status) => status >= 200 && status < 400,
 			responseType: 'arraybuffer',
+			timeout: 8888,
 		});
 
 		if (response.status === 302) {
@@ -55,6 +57,7 @@ async function computeHashFromTorrent(url: string): Promise<string | undefined> 
 		return magnetHash.toLowerCase();
 	} catch (error: any) {
 		console.error('getMagnetURI error:', error.message);
+		process.stdout.write('x');
 		return undefined;
 	}
 }
@@ -69,12 +72,14 @@ async function processItem(
 
 	if (item.Size < 1024 * 1024) {
 		console.log(`❌ ${item.Tracker} : too small!`, item.Size);
+		process.stdout.write('x');
 		return undefined;
 	}
 	const fileSize = item.Size / 1024 / 1024;
 
 	if (!isFoundDateRecent(item.PublishDate, airDate)) {
 		console.log(`❌ ${item.Tracker} : too old!`, item.PublishDate);
+		process.stdout.write('x');
 		return undefined;
 	}
 
@@ -95,6 +100,7 @@ async function processItem(
 		// 	containedTerms,
 		// 	requiredTerms
 		// );
+		process.stdout.write('x');
 		return undefined;
 	}
 	const containedMustHaveTerms = mustHaveTerms.filter((term) => {
@@ -113,10 +119,12 @@ async function processItem(
 		// 	containedMustHaveTerms,
 		// 	mustHaveTerms.length
 		// );
+		process.stdout.write('x');
 		return undefined;
 	}
 	if (!targetTitle.match(/xxx/i)) {
 		if (title.match(/xxx/i)) {
+			process.stdout.write('x');
 			return undefined;
 		}
 	}
@@ -127,8 +135,11 @@ async function processItem(
 		(item.Link && (await computeHashFromTorrent(item.Link)));
 	if (!hash) {
 		console.log(`❌ ${item.Tracker} has no working link`);
+		process.stdout.write('x');
 		return undefined;
 	}
+
+	process.stdout.write('.');
 
 	return {
 		title,
@@ -167,7 +178,7 @@ const processPage = async (
 	const searchUrl = createSearchUrl(finalQuery);
 	while (true) {
 		try {
-			const response = await axios.get(searchUrl);
+			const response = await axios.get(searchUrl, { timeout: 100000 });
 			responseData = response.data.Results;
 			retries = 0;
 			break;

@@ -59,16 +59,19 @@ async function scrapeAll(
 
 const getSearchResults = async (job: TvScrapeJob) => {
 	let sets: ScrapeSearchResult[][] = [];
-	sets = await scrapeAll(
-		`"${job.title}" s${padWithZero(job.seasonNumber)}`,
-		job.title,
-		[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
-		job.airDate
+
+	sets.push(
+		...(await scrapeAll(
+			`"${job.title}" s${padWithZero(job.seasonNumber)}`,
+			job.title,
+			[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
+			job.airDate
+		))
 	);
 
 	if (job.seasonName && job.seasonCode) {
 		sets.push(
-			await scrapeBtdigg(
+			...(await scrapeAll(
 				`"${job.title}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
 				job.title,
 				[
@@ -76,21 +79,21 @@ const getSearchResults = async (job: TvScrapeJob) => {
 					...job.seasonName.split(/\s/),
 				],
 				job.airDate
-			)
+			))
 		);
 	} else if (job.seasonName && job.seasonName !== job.title) {
 		sets.push(
-			await scrapeBtdigg(
+			...(await scrapeAll(
 				`"${job.title}" "${job.seasonName}"`,
 				job.title,
 				[...job.seasonName.split(/\s/)],
 				job.airDate
-			)
+			))
 		);
 	}
 
 	if (job.title.split(/\s/).length > 3 && job.seasonNumber === 1) {
-		sets.push(await scrapeBtdigg(`"${job.title}"`, job.title, [], job.airDate));
+		sets.push(...(await scrapeAll(`"${job.title}"`, job.title, [], job.airDate)));
 	}
 
 	if (!job.originalTitle) return sets;
@@ -105,7 +108,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 	);
 	if (job.seasonName && job.seasonCode) {
 		sets2.push(
-			await scrapeBtdigg(
+			...(await scrapeAll(
 				`"${job.originalTitle}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
 				job.originalTitle,
 				[
@@ -113,16 +116,16 @@ const getSearchResults = async (job: TvScrapeJob) => {
 					...job.seasonName.split(/\s/),
 				],
 				job.airDate
-			)
+			))
 		);
 	} else if (job.seasonName && job.seasonName !== job.originalTitle) {
 		sets2.push(
-			await scrapeBtdigg(
+			...(await scrapeAll(
 				`"${job.originalTitle}" "${job.seasonName}"`,
 				job.originalTitle,
 				[...job.seasonName.split(/\s/)],
 				job.airDate
-			)
+			))
 		);
 	}
 
