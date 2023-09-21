@@ -126,7 +126,7 @@ async function processItem(
 		(item.MagnetUri && extractHashFromMagnetLink(item.MagnetUri)) ||
 		(item.Link && (await computeHashFromTorrent(item.Link)));
 	if (!hash) {
-		console.log(`❌ ${item.Tracker} has no working link`, item.Link);
+		console.log(`❌ ${item.Tracker} has no working link`);
 		return undefined;
 	}
 
