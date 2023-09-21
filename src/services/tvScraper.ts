@@ -1,5 +1,6 @@
 import { cleanSearchQuery } from '@/utils/search';
 import { flattenAndRemoveDuplicates, groupByParsedTitle, scrapeBtdigg } from './btdigg-v2';
+import { scrapeJackett } from './jackett';
 import { ScrapeSearchResult } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 import { scrapeProwlarr } from './prowlarr';
@@ -54,6 +55,7 @@ async function scrapeAll(
 	return await Promise.all([
 		scrapeBtdigg(finalQuery, targetTitle, mustHaveTerms, airDate),
 		scrapeProwlarr(finalQuery, targetTitle, mustHaveTerms, airDate),
+		scrapeJackett(finalQuery, targetTitle, mustHaveTerms, airDate),
 	]);
 }
 
