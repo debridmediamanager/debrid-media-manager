@@ -3,7 +3,7 @@ import bencode from 'bencode';
 import { createHash } from 'crypto';
 import { ScrapeSearchResult } from './mediasearch';
 
-const JACKETT = process.env.JACKETT ?? 'http://localhost:9117';
+const PROWLARR = process.env.PROWLARR ?? 'http://localhost:9696';
 
 function isFoundDateRecent(foundString: string, date: string): boolean {
 	const foundDate = new Date(foundString);
@@ -13,9 +13,9 @@ function isFoundDateRecent(foundString: string, date: string): boolean {
 }
 
 const createSearchUrl = (finalQuery: string) =>
-	`${JACKETT}/api/v2.0/indexers/all/results?apikey=2gzag8296wygpbvezrguhc8y2rnezvos&Query=${encodeURIComponent(
+	`${PROWLARR}/api/v1/search?query=${encodeURIComponent(
 		finalQuery
-	)}`;
+	)}&indexerIds=-2&categories[]=2000&categories[]=5000&type=search&apikey=2475bf3fd3964fdf9983cbfacac7d5fd`;
 
 function extractHashFromMagnetLink(magnetLink: string) {
 	const regex = /urn:btih:([A-Fa-f0-9]+)/;
@@ -34,10 +34,10 @@ async function computeHashFromTorrent(url: string): Promise<string | undefined> 
 			maxRedirects: 0, // Set maxRedirects to 0 to disable automatic redirects
 			validateStatus: (status) => status >= 200 && status < 400,
 			responseType: 'arraybuffer',
-			timeout: 8888,
+			timeout: 10000,
 		});
 
-		if (response.status === 302) {
+		if (response.status === 301 || response.status === 302) {
 			const redirectURL = response.headers.location;
 			if (redirectURL.startsWith('magnet:')) {
 				// If the redirect URL is a magnet link, return it directly
@@ -56,7 +56,6 @@ async function computeHashFromTorrent(url: string): Promise<string | undefined> 
 
 		return magnetHash.toLowerCase();
 	} catch (error: any) {
-		console.error('getMagnetURI error:', error.message);
 		process.stdout.write('x');
 		return undefined;
 	}
@@ -68,15 +67,15 @@ async function processItem(
 	mustHaveTerms: (string | RegExp)[],
 	airDate: string
 ): Promise<ScrapeSearchResult | undefined> {
-	const title = item.Title;
+	const title = item.title;
 
-	if (item.Size < 1024 * 1024) {
+	if (item.size < 1024 * 1024) {
 		process.stdout.write('-');
 		return undefined;
 	}
-	const fileSize = item.Size / 1024 / 1024;
+	const fileSize = item.size / 1024 / 1024;
 
-	if (!isFoundDateRecent(item.PublishDate, airDate)) {
+	if (!isFoundDateRecent(item.publishDate, airDate)) {
 		process.stdout.write('-');
 		return undefined;
 	}
@@ -94,7 +93,7 @@ async function processItem(
 		// console.debug(title, '-title match-', targetTitle);
 		// console.debug('bad title', containedTerms, requiredTerms);
 		// console.log(
-		// 	`❌ ${item.Tracker} returned a bad result (title match)`,
+		// 	`❌ ${item.indexer} returned a bad result (title match)`,
 		// 	containedTerms,
 		// 	requiredTerms
 		// );
@@ -113,7 +112,7 @@ async function processItem(
 		// console.debug(title, '-must have-', mustHaveTerms);
 		// console.debug('bad must have terms', containedMustHaveTerms, mustHaveTerms.length);
 		// console.log(
-		// 	`❌ ${item.Tracker} returned a bad result (must have terms)`,
+		// 	`❌ ${item.indexer} returned a bad result (must have terms)`,
 		// 	containedMustHaveTerms,
 		// 	mustHaveTerms.length
 		// );
@@ -128,11 +127,11 @@ async function processItem(
 	}
 
 	const hash =
-		item.InfoHash?.toLowerCase() ||
-		(item.MagnetUri && extractHashFromMagnetLink(item.MagnetUri)) ||
-		(item.Link && (await computeHashFromTorrent(item.Link)));
+		item.infoHash?.toLowerCase() ||
+		(item.magnetUrl && (await computeHashFromTorrent(item.magnetUrl))) ||
+		(item.downloadUrl && (await computeHashFromTorrent(item.downloadUrl)));
 	if (!hash) {
-		process.stdout.write('❌');
+		process.stdout.write('❌ ${item.indexer} ');
 		return undefined;
 	}
 
@@ -173,10 +172,11 @@ const processPage = async (
 	let retries = 0; // current number of retries
 	let responseData = [];
 	const searchUrl = createSearchUrl(finalQuery);
+	console.log(searchUrl);
 	while (true) {
 		try {
 			const response = await axios.get(searchUrl, { timeout: 100000 });
-			responseData = response.data.Results;
+			responseData = response.data;
 			retries = 0;
 			break;
 		} catch (error: any) {
@@ -190,27 +190,29 @@ const processPage = async (
 		}
 	}
 
+	console.log(`Prowlarr🔍 processing ${responseData.length} results`);
+
 	const promises: (() => Promise<ScrapeSearchResult | undefined>)[] = responseData.map(
 		(item: any) => {
 			return () => processItem(item, targetTitle, mustHaveTerms, airDate);
 		}
 	);
-	results.push(...(await processInBatches(promises, 10)));
+	results.push(...(await processInBatches(promises, 5)));
 
 	return results;
 };
 
-export async function scrapeJackett(
+export async function scrapeProwlarr(
 	finalQuery: string,
 	targetTitle: string,
 	mustHaveTerms: (string | RegExp)[],
 	airDate: string
 ): Promise<ScrapeSearchResult[]> {
-	console.log(`🔍 Searching Jackett: ${finalQuery}`);
+	console.log(`🔍 Searching Prowlarr: ${finalQuery}`);
 	try {
 		return await processPage(finalQuery, targetTitle, mustHaveTerms, airDate);
 	} catch (error) {
-		console.error('scrapeJackett page processing error', error);
+		console.error('scrapeProwlarr page processing error', error);
 	}
 	return [];
 }

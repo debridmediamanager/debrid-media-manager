@@ -23,10 +23,9 @@ class ProxyManager {
 		} else {
 			this.myId = Math.random().toString(36).substring(2);
 			ProxyManager.workingProxies.push(this.myId);
-			return new SocksProxyAgent(
-				`socks5h://${this.myId}:damama@${process.env.PROXY || ''}`,
-				{ timeout: parseInt(process.env.REQUEST_TIMEOUT!) }
-			);
+			return new SocksProxyAgent(`socks5h://${this.myId}:damama@${process.env.PROXY || ''}`, {
+				timeout: parseInt(process.env.REQUEST_TIMEOUT!),
+			});
 		}
 	}
 
