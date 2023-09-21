@@ -68,11 +68,6 @@ async function processItem(
 	airDate: string
 ): Promise<ScrapeSearchResult | undefined> {
 	const title = item.title;
-
-	if (item.size < 1024 * 1024) {
-		process.stdout.write('-');
-		return undefined;
-	}
 	const fileSize = item.size / 1024 / 1024;
 
 	if (!isFoundDateRecent(item.publishDate, airDate)) {
@@ -131,7 +126,7 @@ async function processItem(
 		(item.magnetUrl && (await computeHashFromTorrent(item.magnetUrl))) ||
 		(item.downloadUrl && (await computeHashFromTorrent(item.downloadUrl)));
 	if (!hash) {
-		process.stdout.write('❌ ${item.indexer} ');
+		process.stdout.write(`❌ ${item.indexer} `);
 		return undefined;
 	}
 
@@ -177,6 +172,9 @@ const processPage = async (
 		try {
 			const response = await axios.get(searchUrl, { timeout: 100000 });
 			responseData = response.data;
+			responseData = responseData
+				.filter((item: any) => item.size >= 1024 * 1024 * 100)
+				.filter((item: any) => item.leechers > 0 || item.seeders > 0);
 			retries = 0;
 			break;
 		} catch (error: any) {
