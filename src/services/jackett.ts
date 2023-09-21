@@ -45,7 +45,8 @@ async function getMagnetURI(url: string): Promise<string | undefined> {
 			}
 		}
 
-		const encodedInfo = bencode.encode(bencode.decode(response.data).info);
+		const info = bencode.decode(response.data).info;
+		const encodedInfo = bencode.encode(info);
 		const infoHash = createHash('sha1').update(encodedInfo).digest();
 		const magnetHash = base32Encode(infoHash, 'RFC3548');
 
@@ -91,11 +92,11 @@ async function processItem(
 	if (containedTerms < requiredTerms) {
 		// console.debug(title, '-title match-', targetTitle);
 		// console.debug('bad title', containedTerms, requiredTerms);
-		console.log(
-			`❌ ${item.Tracker} returned a bad result (title match)`,
-			containedTerms,
-			requiredTerms
-		);
+		// console.log(
+		// 	`❌ ${item.Tracker} returned a bad result (title match)`,
+		// 	containedTerms,
+		// 	requiredTerms
+		// );
 		return undefined;
 	}
 	const containedMustHaveTerms = mustHaveTerms.filter((term) => {
@@ -109,11 +110,11 @@ async function processItem(
 	if (containedMustHaveTerms < mustHaveTerms.length) {
 		// console.debug(title, '-must have-', mustHaveTerms);
 		// console.debug('bad must have terms', containedMustHaveTerms, mustHaveTerms.length);
-		console.log(
-			`❌ ${item.Tracker} returned a bad result (must have terms)`,
-			containedMustHaveTerms,
-			mustHaveTerms.length
-		);
+		// console.log(
+		// 	`❌ ${item.Tracker} returned a bad result (must have terms)`,
+		// 	containedMustHaveTerms,
+		// 	mustHaveTerms.length
+		// );
 		return undefined;
 	}
 	if (!targetTitle.match(/xxx/i)) {
@@ -128,7 +129,7 @@ async function processItem(
 		(item.MagnetUri && extractHashFromMagnetLink(item.MagnetUri)) ||
 		(item.Link && (await getMagnetURI(item.Link)));
 	if (!hash) {
-		console.log(`❌ ${item.Tracker} returned a bad result (hash)`, item.Link);
+		console.log(`❌ ${item.Tracker} returned a bad result (no hash)`, item.Link);
 		return undefined;
 	}
 
