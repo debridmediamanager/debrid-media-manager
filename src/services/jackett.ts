@@ -1,6 +1,4 @@
-import { getMediaType } from '@/utils/mediaType';
 import axios from 'axios';
-import base32Encode from 'base32-encode';
 import bencode from 'bencode';
 import { createHash } from 'crypto';
 import { ScrapeSearchResult } from './mediasearch';
@@ -29,7 +27,7 @@ function extractHashFromMagnetLink(magnetLink: string) {
 	}
 }
 
-async function getMagnetURI(url: string): Promise<string | undefined> {
+async function computeHashFromTorrent(url: string): Promise<string | undefined> {
 	try {
 		const response = await axios.get(url, {
 			maxRedirects: 0, // Set maxRedirects to 0 to disable automatic redirects
@@ -48,7 +46,11 @@ async function getMagnetURI(url: string): Promise<string | undefined> {
 		const info = bencode.decode(response.data).info;
 		const encodedInfo = bencode.encode(info);
 		const infoHash = createHash('sha1').update(encodedInfo).digest();
-		const magnetHash = base32Encode(infoHash, 'RFC3548');
+		const magnetHash = Array.prototype.map
+			.call(new Uint8Array(infoHash), (byte) => {
+				return ('0' + byte.toString(16)).slice(-2);
+			})
+			.join('');
 
 		return magnetHash.toLowerCase();
 	} catch (error: any) {
@@ -66,17 +68,13 @@ async function processItem(
 	const title = item.Title;
 
 	if (item.Size < 1024 * 1024) {
-		console.log(`❌ ${item.Tracker} returned a bad result (size < 1MB)`, item.Size);
+		console.log(`❌ ${item.Tracker} : too small!`, item.Size);
 		return undefined;
 	}
-	const fileSize = item.Size / 1024 / 1024; // convert to MB
-	if (getMediaType(title) === 'movie' && fileSize > 200_000) {
-		console.log(`❌ ${item.Tracker} returned a bad result (size > 200GB)`, item.Size);
-		return undefined;
-	}
+	const fileSize = item.Size / 1024 / 1024;
 
 	if (!isFoundDateRecent(item.PublishDate, airDate)) {
-		console.log(`❌ ${item.Tracker} returned a bad result (date)`, item.PublishDate);
+		console.log(`❌ ${item.Tracker} : too old!`, item.PublishDate);
 		return undefined;
 	}
 
@@ -119,7 +117,6 @@ async function processItem(
 	}
 	if (!targetTitle.match(/xxx/i)) {
 		if (title.match(/xxx/i)) {
-			console.log(`❌ ${item.Tracker} returned a XXX result`);
 			return undefined;
 		}
 	}
@@ -127,9 +124,9 @@ async function processItem(
 	const hash =
 		item.InfoHash?.toLowerCase() ||
 		(item.MagnetUri && extractHashFromMagnetLink(item.MagnetUri)) ||
-		(item.Link && (await getMagnetURI(item.Link)));
+		(item.Link && (await computeHashFromTorrent(item.Link)));
 	if (!hash) {
-		console.log(`❌ ${item.Tracker} returned a bad result (no hash)`, item.Link);
+		console.log(`❌ ${item.Tracker} has no working link`, item.Link);
 		return undefined;
 	}
 
