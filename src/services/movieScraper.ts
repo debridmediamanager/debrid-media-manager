@@ -46,19 +46,22 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 	let sets: ScrapeSearchResult[][] = [];
 	const hasUncommonWords = countUncommonWordsInTitle(job.title) >= 1;
 
-	sets = await scrapeAll(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate);
 	if (job.title.includes('&')) {
 		sets.push(
-			await scrapeBtdigg(
+			...(await scrapeAll(
 				`"${job.title.replaceAll('&', 'and')}" ${job.year ?? ''}`,
 				job.title,
 				[],
 				job.airDate
-			)
+			))
+		);
+	} else {
+		sets.push(
+			...(await scrapeAll(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate))
 		);
 	}
 	if (job.title.split(/\s/).length > 3 || hasUncommonWords) {
-		sets.push(await scrapeBtdigg(`"${job.title}"`, job.title, [], job.airDate));
+		sets.push(...(await scrapeAll(`"${job.title}"`, job.title, [], job.airDate)));
 	}
 
 	if (job.originalTitle) {
@@ -72,7 +75,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 		);
 		if (hasUncommonWords) {
 			sets.push(
-				await scrapeBtdigg(`"${job.originalTitle}"`, job.originalTitle, [], job.airDate)
+				...(await scrapeAll(`"${job.originalTitle}"`, job.originalTitle, [], job.airDate))
 			);
 		}
 	}
@@ -88,7 +91,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 		);
 		if (hasUncommonWords) {
 			sets.push(
-				await scrapeBtdigg(`"${job.cleanedTitle}"`, job.cleanedTitle, [], job.airDate)
+				...(await scrapeAll(`"${job.cleanedTitle}"`, job.cleanedTitle, [], job.airDate))
 			);
 		}
 	}
