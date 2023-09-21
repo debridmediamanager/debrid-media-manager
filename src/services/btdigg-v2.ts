@@ -299,7 +299,6 @@ export async function scrapeBtdigg(
 	mustHaveTerms: (string | RegExp)[],
 	airDate: string
 ): Promise<ScrapeSearchResult[]> {
-	return [];
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	while (true) {
 		console.log(`🔍 Searching Btdigg: ${finalQuery}`);
