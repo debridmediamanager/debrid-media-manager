@@ -172,9 +172,6 @@ const processPage = async (
 		try {
 			const response = await axios.get(searchUrl, { timeout: 100000 });
 			responseData = response.data;
-			responseData = responseData
-				.filter((item: any) => item.size >= 1024 * 1024 * 100)
-				.filter((item: any) => item.leechers > 0 || item.seeders > 0);
 			retries = 0;
 			break;
 		} catch (error: any) {
@@ -188,6 +185,9 @@ const processPage = async (
 		}
 	}
 
+	responseData = responseData
+		.filter((item: any) => item.size >= 1024 * 1024 * 100)
+		.filter((item: any) => item.leechers > 0 || item.seeders > 0);
 	console.log(`Prowlarr🔍 processing ${responseData.length} results`);
 
 	const promises: (() => Promise<ScrapeSearchResult | undefined>)[] = responseData.map(
