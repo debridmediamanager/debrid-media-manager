@@ -1,6 +1,7 @@
 import { cleanSearchQuery } from '@/utils/search';
 import fs from 'fs';
-import { flattenAndRemoveDuplicates, groupByParsedTitle, scrapeResults } from './btdigg-v2';
+import { flattenAndRemoveDuplicates, groupByParsedTitle, scrapeBtdigg } from './btdigg-v2';
+import { scrapeJackett } from './jackett';
 import { ScrapeSearchResult } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 
@@ -33,10 +34,11 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 	let sets: ScrapeSearchResult[][] = [];
 	const hasUncommonWords = countUncommonWordsInTitle(job.title) >= 1;
 
-	sets.push(await scrapeResults(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate));
+	sets.push(await scrapeBtdigg(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate));
+	sets.push(await scrapeJackett(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate));
 	if (job.title.includes('&')) {
 		sets.push(
-			await scrapeResults(
+			await scrapeBtdigg(
 				`"${job.title.replaceAll('&', 'and')}" ${job.year ?? ''}`,
 				job.title,
 				[],
@@ -45,12 +47,12 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 		);
 	}
 	if (job.title.split(/\s/).length > 3 || hasUncommonWords) {
-		sets.push(await scrapeResults(`"${job.title}"`, job.title, [], job.airDate));
+		sets.push(await scrapeBtdigg(`"${job.title}"`, job.title, [], job.airDate));
 	}
 
 	if (job.originalTitle) {
 		sets.push(
-			await scrapeResults(
+			await scrapeBtdigg(
 				`"${job.originalTitle}" ${job.year ?? ''}`,
 				job.originalTitle,
 				[],
@@ -59,14 +61,14 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 		);
 		if (hasUncommonWords) {
 			sets.push(
-				await scrapeResults(`"${job.originalTitle}"`, job.originalTitle, [], job.airDate)
+				await scrapeBtdigg(`"${job.originalTitle}"`, job.originalTitle, [], job.airDate)
 			);
 		}
 	}
 
 	if (job.cleanedTitle) {
 		sets.push(
-			await scrapeResults(
+			await scrapeBtdigg(
 				`"${job.cleanedTitle}" ${job.year ?? ''}`,
 				job.cleanedTitle,
 				[],
@@ -75,7 +77,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 		);
 		if (hasUncommonWords) {
 			sets.push(
-				await scrapeResults(`"${job.cleanedTitle}"`, job.cleanedTitle, [], job.airDate)
+				await scrapeBtdigg(`"${job.cleanedTitle}"`, job.cleanedTitle, [], job.airDate)
 			);
 		}
 	}
