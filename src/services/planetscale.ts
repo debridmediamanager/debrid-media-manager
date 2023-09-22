@@ -72,6 +72,11 @@ export class PlanetScaleCache {
 		});
 
 		if (requestedItem !== null) {
+			await this.prisma.scraped.update({
+				where: { key: requestedItem.key },
+				data: { updatedAt: new Date() },
+			});
+
 			return requestedItem.key.split(':')[1];
 		}
 

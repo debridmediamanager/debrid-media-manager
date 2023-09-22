@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiKey = process.env.MDBLIST_API_KEY || 'demo';
+const apiKey = process.env.MDBLIST_KEY || 'demo';
 const searchListsUrl = (term: string) =>
 	`https://mdblist.com/api/lists/search?s=${term}&apikey=${apiKey}`;
 const listItemsUrl = (listId: string) =>
@@ -41,6 +41,7 @@ export class ScrapeInput {
 					console.log(`(${searchTerm}:${i}/${lists.length}) ${list.slug}`, list);
 					yield list.id;
 				}
+				break;
 			} catch (error) {
 				console.error('byLists error', error);
 				await new Promise((resolve) => setTimeout(resolve, 10000));
