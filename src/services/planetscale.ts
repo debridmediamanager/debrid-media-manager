@@ -31,19 +31,34 @@ export class PlanetScaleCache {
 		return cacheEntry !== null;
 	}
 
-	public async getOldestRequest(): Promise<string | null> {
-		const requestedItem = await this.prisma.scraped.findFirst({
-			where: { key: { startsWith: 'requested:' } },
-			orderBy: { updatedAt: 'asc' },
-			select: { key: true },
-		});
-		if (requestedItem !== null) {
-			return requestedItem.key.split(':')[1];
+	public async getOldestRequest(
+		olderThan: Date | null = null
+	): Promise<{ key: string; updatedAt: Date } | null> {
+		const whereCondition: any = {
+			key: { startsWith: 'requested:' },
+		};
+
+		if (olderThan !== null) {
+			whereCondition.updatedAt = { gt: olderThan };
 		}
+
+		const requestedItem = await this.prisma.scraped.findFirst({
+			where: whereCondition,
+			orderBy: { updatedAt: 'asc' },
+			select: { key: true, updatedAt: true },
+		});
+
+		if (requestedItem !== null) {
+			return {
+				key: requestedItem.key.split(':')[1],
+				updatedAt: requestedItem.updatedAt,
+			};
+		}
+
 		return null;
 	}
 
-	public async getOldestProcessing(): Promise<string | null> {
+	public async processingMoreThanAnHour(): Promise<string | null> {
 		const oneHourAgo = new Date();
 		oneHourAgo.setHours(oneHourAgo.getHours() - 1);
 
@@ -64,13 +79,9 @@ export class PlanetScaleCache {
 	}
 
 	public async getOldestScrapedMedia(mediaType: 'tv' | 'movie'): Promise<string | null> {
-		const oneDayAgo = new Date();
-		oneDayAgo.setHours(oneDayAgo.getHours() - 24);
-
 		const scrapedItem = await this.prisma.scraped.findFirst({
 			where: {
 				key: { startsWith: `${mediaType}:` },
-				updatedAt: { lte: oneDayAgo },
 			},
 			orderBy: { updatedAt: 'asc' },
 			select: { key: true },
