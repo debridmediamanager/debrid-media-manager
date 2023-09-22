@@ -216,7 +216,10 @@ export const getTorrentInfo = async (accessToken: string, id: string) => {
 	}
 };
 
-export const rdInstantCheck = async (accessToken: string, hashes: string[]) => {
+export const rdInstantCheck = async (
+	accessToken: string,
+	hashes: string[]
+): Promise<RdInstantAvailabilityResponse> => {
 	try {
 		const headers = {
 			Authorization: `Bearer ${accessToken}`,
@@ -231,7 +234,10 @@ export const rdInstantCheck = async (accessToken: string, hashes: string[]) => {
 		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching torrent information:', error.message);
-		throw error;
+		console.log('Retrying availability check...');
+		const firstElement = hashes.shift() as string;
+		hashes.push(firstElement);
+		return rdInstantCheck(accessToken, hashes);
 	}
 };
 

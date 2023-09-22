@@ -1,4 +1,5 @@
 import { getMediaType } from '@/utils/mediaType';
+import ProxyManager from '@/utils/proxyManager';
 import axios from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import UserAgent from 'user-agents';
@@ -129,16 +130,10 @@ const processPage = async (
 	let responseData = '';
 	let numResults = 0;
 	const searchUrl = createSearchUrl(finalQuery, pageNum);
+	let proxy = new ProxyManager();
 	while (true) {
 		try {
-			const client = createAxiosInstance(
-				new SocksProxyAgent(
-					`socks5h://${Math.random().toString(36).substring(2)}:${Math.random()
-						.toString(36)
-						.substring(2)}@${process.env.PROXY || ''}`,
-					{ timeout: parseInt(process.env.REQUEST_TIMEOUT!) }
-				)
-			);
+			const client = createAxiosInstance(proxy.getWorkingProxy());
 			const response = await client.get(searchUrl);
 			responseData = response.data;
 			const numResultsStr = responseData.match(/(\d+) results found/) || [];
@@ -153,6 +148,7 @@ const processPage = async (
 				error.message.includes('status code 429') ||
 				error.message.includes('"socket" was not created')
 			) {
+				proxy.rerollProxy();
 				console.log('429 error, waiting for a bit longer before retrying...');
 				retries++;
 			} else if (error.message.includes('timeout of')) {
@@ -297,7 +293,7 @@ async function processInBatches(
 	return searchResultsArr;
 }
 
-export async function scrapeResults(
+export async function scrapeBtdigg(
 	finalQuery: string,
 	targetTitle: string,
 	mustHaveTerms: (string | RegExp)[],
@@ -332,9 +328,9 @@ export async function scrapeResults(
 				);
 				pageNum++;
 			}
-			searchResultsArr.push(...(await processInBatches(promises, 2)));
+			searchResultsArr.push(...(await processInBatches(promises, 5)));
 		} catch (error) {
-			console.error('fetchSearchResults page processing error', error);
+			console.error('scrapeBtdigg page processing error', error);
 			await new Promise((resolve) => setTimeout(resolve, 5000));
 		}
 		// mkv
@@ -364,9 +360,9 @@ export async function scrapeResults(
 				);
 				pageNum++;
 			}
-			searchResultsArr.push(...(await processInBatches(promises, 2)));
+			searchResultsArr.push(...(await processInBatches(promises, 5)));
 		} catch (error) {
-			console.error('fetchSearchResults mkv page processing error', error);
+			console.error('scrapeBtdigg mkv page processing error', error);
 			await new Promise((resolve) => setTimeout(resolve, 5000));
 		}
 		// mp4
@@ -396,9 +392,9 @@ export async function scrapeResults(
 				);
 				pageNum++;
 			}
-			searchResultsArr.push(...(await processInBatches(promises, 2)));
+			searchResultsArr.push(...(await processInBatches(promises, 5)));
 		} catch (error) {
-			console.error('fetchSearchResults mp4 page processing error', error);
+			console.error('scrapeBtdigg mp4 page processing error', error);
 			await new Promise((resolve) => setTimeout(resolve, 5000));
 		}
 		return searchResultsArr;
