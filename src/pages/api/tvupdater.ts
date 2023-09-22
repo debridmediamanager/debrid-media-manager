@@ -17,7 +17,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	while (true) {
 		let imdbId = await db.getOldestScrapedMedia('tv');
 		if (!imdbId) {
-			console.log('[tvupdater] There must be something wrong with the database, waiting 60 seconds');
+			console.log(
+				'[tvupdater] There must be something wrong with the database, waiting 60 seconds'
+			);
 			await new Promise((resolve) => setTimeout(resolve, 60000));
 			continue;
 		}
