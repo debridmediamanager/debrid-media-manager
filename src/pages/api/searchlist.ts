@@ -27,11 +27,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	for await (let listId of scrapeInput.byLists(search)) {
 		for await (let imdbId of scrapeInput.byListId(listId)) {
 			const isProcessing = await db.keyExists(`processing:${imdbId}`);
-			if (isProcessing && override !== 'true') {
+			if (isProcessing) {
 				console.log(`[searchlist] Already processing ${imdbId}, skipping`);
 				continue;
 			}
-			await generateScrapeJobs(res, imdbId, true);
+			await generateScrapeJobs(
+				res,
+				imdbId,
+				override === 'true' || (await db.isOlderThan(imdbId, 60 * 24))
+			);
 		}
 	}
 }
