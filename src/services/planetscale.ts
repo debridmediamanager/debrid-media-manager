@@ -31,6 +31,29 @@ export class PlanetScaleCache {
 		return cacheEntry !== null;
 	}
 
+	public async isOlderThan(imdbId: string, minutesAgo: number): Promise<boolean> {
+		const cacheEntry = await this.prisma.scraped.findFirst({
+			where: {
+				OR: [
+					{ key: { startsWith: `movie:${imdbId}` } },
+					{ key: { startsWith: `tv:${imdbId}` } },
+				],
+			},
+			select: { updatedAt: true },
+		});
+
+		if (!cacheEntry || !cacheEntry.updatedAt) {
+			return true; // If it doesn't exist, assume it's old
+		}
+
+		const currentTime = new Date();
+		const updatedAt = new Date(cacheEntry.updatedAt);
+		const timeDifference = currentTime.getTime() - updatedAt.getTime();
+
+		const minutesInMillis = minutesAgo * 60 * 1000;
+		return timeDifference <= minutesInMillis;
+	}
+
 	public async getOldestRequest(
 		olderThan: Date | null = null
 	): Promise<{ key: string; updatedAt: Date } | null> {

@@ -2,7 +2,7 @@ import { ScrapeResponse, generateScrapeJobs } from '@/services/scrapeJobs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const { imdbId, scrapePassword, override } = req.query;
+	const { imdbId, scrapePassword } = req.query;
 	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
 		res.status(403).json({
 			status: 'error',
@@ -16,5 +16,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		return;
 	}
 
-	await generateScrapeJobs(res, imdbId.toString().trim(), override === 'true');
+	await generateScrapeJobs(res, imdbId.toString().trim(), true);
 }
