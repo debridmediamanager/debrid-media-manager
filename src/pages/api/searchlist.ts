@@ -6,7 +6,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const { scrapePassword, search, override } = req.query;
+	const { scrapePassword, search, override, olderThan } = req.query;
 	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
 		res.status(403).json({
 			status: 'error',
@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			await generateScrapeJobs(
 				res,
 				imdbId,
-				override === 'true' || (await db.isOlderThan(imdbId, 60 * 24))
+				override === 'true' || (await db.isOlderThan(imdbId, parseInt(olderThan as string) || 60 * 24))
 			);
 		}
 	}
