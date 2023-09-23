@@ -48,10 +48,10 @@ export class PlanetScaleCache {
 
 		const currentTime = new Date();
 		const updatedAt = new Date(cacheEntry.updatedAt);
-		const timeDifference = currentTime.getTime() - updatedAt.getTime();
+		const ageInMillis = currentTime.getTime() - updatedAt.getTime();
 
-		const minutesInMillis = minutesAgo * 60 * 1000;
-		return timeDifference <= minutesInMillis;
+		const minutesAgoMillis = minutesAgo * 60 * 1000;
+		return ageInMillis >= minutesAgoMillis;
 	}
 
 	public async getOldestRequest(
