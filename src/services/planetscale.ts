@@ -49,8 +49,11 @@ export class PlanetScaleCache {
 		const currentTime = new Date();
 		const updatedAt = new Date(cacheEntry.updatedAt);
 		const ageInMillis = currentTime.getTime() - updatedAt.getTime();
-
 		const minutesAgoMillis = minutesAgo * 60 * 1000;
+		console.log(
+			`[isOlderThan] ${imdbId} is ${ageInMillis}ms old, checking if ${minutesAgoMillis}ms ago`,
+			ageInMillis >= minutesAgoMillis
+		);
 		return ageInMillis >= minutesAgoMillis;
 	}
 

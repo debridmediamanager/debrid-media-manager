@@ -6,7 +6,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const { scrapePassword, listId, override, olderThan } = req.query;
+	const { scrapePassword, listId, olderThanMins } = req.query;
 	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
 		res.status(403).json({
 			status: 'error',
@@ -30,10 +30,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.log(`[singlelist] Already processing ${imdbId}, skipping`);
 			continue;
 		}
-		await generateScrapeJobs(
-			res,
-			imdbId,
-			override === 'true' || (await db.isOlderThan(imdbId, parseInt(olderThan as string) || 60 * 24))
-		);
+		if (!await db.isOlderThan(imdbId, parseInt(olderThanMins as string) || 60 * 24)) {
+			console.log(`[singlelist] ${imdbId} was scraped recently, skipping`);
+			await new Promise(resolve => setTimeout(resolve, 1000));
+			continue;
+		}
+		await generateScrapeJobs(res, imdbId, true);
 	}
 }
