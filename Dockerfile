@@ -15,6 +15,7 @@ RUN npm install
 # ---- Build ----
 FROM dependencies AS build
 COPY . .
+RUN npm run prisma:generate
 RUN npm run build
 
 # --- Release ----
@@ -26,8 +27,6 @@ COPY . .
 # copy build files from build image
 COPY --from=build /app/.next ./.next
 COPY --from=build /app/public ./public
-
-RUN npm run prisma:generate
 
 # Expose the listening port
 EXPOSE 3000
