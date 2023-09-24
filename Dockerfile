@@ -33,7 +33,9 @@ COPY --from=build /app/public ./public
 EXPOSE 3000
 CMD ["npm", "start"]
 
-RUN apk --no-cache --update --upgrade add curl grep
+# Install additional tools (curl and grep)
+RUN apk --no-cache add curl grep
 
+# Healthcheck
 HEALTHCHECK --interval=30s --timeout=1s --start-period=3s --retries=1 \
-    CMD curl -s http://127.0.0.1:3000/api/healthz | grep -qm1 ok
+  CMD curl -s http://127.0.0.1:3000/api/healthz | grep -qm1 ok
