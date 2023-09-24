@@ -3,7 +3,8 @@ import bencode from 'bencode';
 import { createHash } from 'crypto';
 import { ScrapeSearchResult } from './mediasearch';
 
-const JACKETT = process.env.JACKETT ?? 'http://localhost:9117';
+const jackettHost = process.env.JACKETT ?? 'http://localhost:9117';
+const apikey = process.env.JACKETT_KEY ?? 'abc123';
 
 function isFoundDateRecent(foundString: string, date: string): boolean {
 	const foundDate = new Date(foundString);
@@ -13,7 +14,7 @@ function isFoundDateRecent(foundString: string, date: string): boolean {
 }
 
 const createSearchUrl = (finalQuery: string) =>
-	`${JACKETT}/api/v2.0/indexers/all/results?apikey=2gzag8296wygpbvezrguhc8y2rnezvos&Query=${encodeURIComponent(
+	`${jackettHost}/api/v2.0/indexers/all/results?apikey=${apikey}&Query=${encodeURIComponent(
 		finalQuery
 	)}`;
 
