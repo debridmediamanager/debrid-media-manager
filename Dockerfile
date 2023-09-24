@@ -34,4 +34,4 @@ RUN apk --no-cache add curl grep
 
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=1s --start-period=3s --retries=1 \
-  CMD curl -s http://127.0.0.1:3000/api/healthz | grep -qm1 ok
+  CMD curl -s http://172.17.0.2:3000/api/healthz | grep -qm1 ok
