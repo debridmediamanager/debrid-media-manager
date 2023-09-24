@@ -7,7 +7,6 @@ import { getMediaId } from '@/utils/mediaId';
 import { getMediaType } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
 import { getSelectableFiles, isVideoOrSubs } from '@/utils/selectable';
-import { withAuth } from '@/utils/withAuth';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
 import Head from 'next/head';
@@ -421,13 +420,13 @@ function TorrentsPage() {
 									<tr
 										key={t.hash}
 										className={`
-									hover:bg-purple-100
+									hover:bg-purple-900
 									border-t-2
 									${
 										rd.isDownloaded(t.hash) || ad.isDownloaded(t.hash)
-											? 'bg-green-100'
+											? 'bg-green-900'
 											: rd.isDownloading(t.hash) || ad.isDownloading(t.hash)
-											? 'bg-red-100'
+											? 'bg-red-900'
 											: ''
 									}
 								`}
@@ -518,4 +517,4 @@ function TorrentsPage() {
 	);
 }
 
-export default withAuth(TorrentsPage);
+export default TorrentsPage;
