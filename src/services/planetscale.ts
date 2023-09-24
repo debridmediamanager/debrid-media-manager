@@ -185,7 +185,7 @@ export class PlanetScaleCache {
 		});
 
 		return rows
-			.map((row) => {
+			.map((row: any) => {
 				const match = row.key.match(/^(movie|tv):([^:]+)/);
 				if (match) {
 					return `${match[1]}:${match[2]}`;
