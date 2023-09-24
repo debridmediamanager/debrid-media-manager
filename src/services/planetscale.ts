@@ -192,6 +192,6 @@ export class PlanetScaleCache {
 				}
 				return '';
 			})
-			.filter((key) => key !== '');
+			.filter((key: any) => key !== '');
 	}
 }
