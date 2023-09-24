@@ -1,16 +1,32 @@
 import Poster from '@/components/poster';
-import { PlanetScaleCache } from '@/services/planetscale';
 import { withAuth } from '@/utils/withAuth';
-import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
-interface RecentlyUpdatedProps {
-	searchResults: string[];
-}
+function RecentlyUpdated() {
+	const [searchResults, setSearchResults] = useState<string[]>([]);
+	const [loading, setLoading] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
 
-const RecentlyUpdated: NextPage<RecentlyUpdatedProps> = ({ searchResults }) => {
+	const fetchData = async () => {
+		setLoading(true);
+		try {
+			const res = await fetch(`/api/recent`);
+			const data = await res.json();
+			setSearchResults(data);
+		} catch (error: any) {
+			setErrorMessage(error.message);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchData();
+	}, []);
+
 	return (
 		<div className="mx-4 my-8 max-w-full">
 			<Head>
@@ -26,6 +42,17 @@ const RecentlyUpdated: NextPage<RecentlyUpdatedProps> = ({ searchResults }) => {
 					Go Home
 				</Link>
 			</div>
+			{loading && (
+				<div className="flex justify-center items-center mt-4">
+					<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+				</div>
+			)}
+			{errorMessage && (
+				<div className="mt-4 bg-red-900 border border-red-400 px-4 py-3 rounded relative">
+					<strong className="font-bold">Error:</strong>
+					<span className="block sm:inline"> {errorMessage}</span>
+				</div>
+			)}
 			{searchResults.length > 0 && (
 				<>
 					<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
@@ -51,28 +78,6 @@ const RecentlyUpdated: NextPage<RecentlyUpdatedProps> = ({ searchResults }) => {
 			)}
 		</div>
 	);
-};
-export const getServerSideProps: GetServerSideProps<RecentlyUpdatedProps> = async ({
-	req,
-	res,
-}) => {
-	res.setHeader('Cache-Control', 'public, s-maxage=600 , stale-while-revalidate=300');
-	try {
-		const db = new PlanetScaleCache();
-		const data = Array.from(new Set(await db.getRecentlyUpdatedContent()));
-
-		return {
-			props: {
-				searchResults: data,
-			},
-		};
-	} catch (error: any) {
-		return {
-			props: {
-				searchResults: [],
-			},
-		};
-	}
-};
+}
 
 export default withAuth(RecentlyUpdated);

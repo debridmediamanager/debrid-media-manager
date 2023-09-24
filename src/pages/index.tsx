@@ -12,6 +12,11 @@ function IndexPage() {
 		router.push('/library');
 	};
 
+	const handleHashListClick = () => {
+		const newTab = window.open('https://hashlists.debridmediamanager.com', '_blank');
+		newTab?.focus();
+	};
+
 	const handleSearchV2Click = () => {
 		router.push('/search');
 	};
@@ -100,6 +105,13 @@ function IndexPage() {
 								onClick={handleLibraryClick}
 							>
 								My Library
+							</button>
+
+							<button
+								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
+								onClick={handleHashListClick}
+							>
+								Hash list browser
 							</button>
 
 							<button
