@@ -22,11 +22,12 @@ ENV NODE_ENV production
 COPY --from=build /app/public ./public
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/.next ./.next
+COPY --from=build /app/.next/static ./.next/static
+COPY --from=build /app/.next/standalone .
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
 
 # Install additional tools (curl and grep)
 RUN apk --no-cache add curl grep
