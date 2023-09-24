@@ -257,7 +257,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				</div>
 			)}
 			{searchState === 'requested' && (
-				<div className="mt-4 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative">
+				<div className="mt-4 bg-yellow-500 border border-yellow-400 text-yellow-900 px-4 py-3 rounded relative">
 					<strong className="font-bold">Notice:</strong>
 					<span className="block sm:inline">
 						{' '}
@@ -266,7 +266,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				</div>
 			)}
 			{searchState === 'processing' && (
-				<div className="mt-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative">
+				<div className="mt-4 bg-blue-700 border border-blue-400 text-blue-100 px-4 py-3 rounded relative">
 					<strong className="font-bold">Notice:</strong>
 					<span className="block sm:inline">
 						{' '}
@@ -275,7 +275,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				</div>
 			)}
 			{errorMessage && (
-				<div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+				<div className="mt-4 bg-red-900 border border-red-400 px-4 py-3 rounded relative">
 					<strong className="font-bold">Error:</strong>
 					<span className="block sm:inline"> {errorMessage}</span>
 				</div>
