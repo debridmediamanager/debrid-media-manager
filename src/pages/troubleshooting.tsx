@@ -1,9 +1,11 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { getMagnetStatus } from '@/services/allDebrid';
 import { getUserTorrentsList } from '@/services/realDebrid';
+import { genericToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import getConfig from 'next/config';
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 function TroubleshootingPage() {
 	const { publicRuntimeConfig: config } = getConfig();
@@ -16,6 +18,38 @@ function TroubleshootingPage() {
 	const [testRunning, setTestRunning] = useState(false);
 
 	const startTest = async () => {
+		let cachedRdDownloads = JSON.parse(
+			localStorage.getItem('rd:downloads')?.toString() || '{}'
+		);
+		setTestResults(
+			(prev) =>
+				prev + `Real-Debrid cached downloads: ${Object.keys(cachedRdDownloads).length}\n`
+		);
+		localStorage.removeItem('rd:downloads');
+
+		cachedRdDownloads = JSON.parse(localStorage.getItem('rd:downloads')?.toString() || '{}');
+		setTestResults(
+			(prev) =>
+				prev + `Real-Debrid refreshed downloads: ${Object.keys(cachedRdDownloads).length}\n`
+		);
+		setTestResults((prev) => prev + `-----\n`);
+
+		let cachedAdDownloads = JSON.parse(
+			localStorage.getItem('ad:downloads')?.toString() || '{}'
+		);
+		setTestResults(
+			(prev) =>
+				prev + `AllDebrid cached downloads: ${Object.keys(cachedAdDownloads).length}\n`
+		);
+		localStorage.removeItem('ad:downloads');
+
+		cachedAdDownloads = JSON.parse(localStorage.getItem('ad:downloads')?.toString() || '{}');
+		setTestResults(
+			(prev) =>
+				prev + `AllDebrid refreshed downloads: ${Object.keys(cachedAdDownloads).length}\n`
+		);
+		setTestResults((prev) => prev + `-----\n`);
+
 		setTestRunning(true);
 		if (rdKey) {
 			setTestResults((prev) => prev + `Real-Debrid base URL: ${config.realDebridHostname}\n`);
@@ -79,10 +113,11 @@ function TroubleshootingPage() {
 			}
 			setTestResults((prev) => prev + `-----\n`);
 		}
-		setTestResults(
-			(prev) =>
-				prev +
-				`Test complete. Copy this and send to r/debridmediamanager or send to my Discord @ yowmamasita\n`
+		setTestResults((prev) => prev + `Test complete!\n`);
+
+		toast(
+			'Copy this and send to r/debridmediamanager or send to my Discord @ yowmamasita',
+			genericToastOptions
 		);
 	};
 
@@ -95,6 +130,7 @@ function TroubleshootingPage() {
 				</button>
 			)}
 			{testRunning && <pre>{testResults}</pre>}
+			<Toaster position="bottom-right" />
 		</div>
 	);
 }
