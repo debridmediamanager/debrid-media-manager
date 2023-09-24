@@ -23,9 +23,16 @@ type MovieSearchProps = {
 	description: string;
 	poster: string;
 	year: string;
+	imdb_score?: number;
 };
 
-const MovieSearch: FunctionComponent<MovieSearchProps> = ({ title, description, poster, year }) => {
+const MovieSearch: FunctionComponent<MovieSearchProps> = ({
+	title,
+	description,
+	poster,
+	year,
+	imdb_score,
+}) => {
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -209,7 +216,14 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({ title, description, 
 				</div>
 				<div className="w-3/4 space-y-2">
 					<h2 className="text-2xl font-bold">{title}</h2>
-					<p className="text-azure">{description}</p>
+					<p>{description}</p>
+					{imdb_score && (
+						<p>
+							<Link href={`https://www.imdb.com/title/${imdbid}/`}>
+								IMDB Score: {imdb_score}
+							</Link>
+						</p>
+					)}
 				</div>
 			</div>
 
@@ -457,12 +471,19 @@ const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblis
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { params } = context;
 	const movieResponse = await axios.get(getMdbInfo(params!.imdbid as string));
+	let imdb_score = movieResponse.data.ratings?.reduce((acc: number | undefined, rating: any) => {
+		if (rating.source === 'imdb') {
+			return rating.score as number;
+		}
+		return acc;
+	}, null);
 	return {
 		props: {
 			title: movieResponse.data.title,
 			description: movieResponse.data.description,
 			poster: movieResponse.data.poster,
 			year: movieResponse.data.year,
+			imdb_score,
 		},
 	};
 };

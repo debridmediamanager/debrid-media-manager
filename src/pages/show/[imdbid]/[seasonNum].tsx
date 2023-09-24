@@ -24,6 +24,7 @@ type TvSearchProps = {
 	poster: string;
 	season_count: number;
 	season_names: string[];
+	imdb_score?: number;
 };
 
 const TvSearch: FunctionComponent<TvSearchProps> = ({
@@ -32,6 +33,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	poster,
 	season_count,
 	season_names,
+	imdb_score,
 }) => {
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -224,7 +226,14 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					<h2 className="text-2xl font-bold">
 						{title} - Season {seasonNum}
 					</h2>
-					<p className="text-azure">{description}</p>
+					<p>{description}</p>
+					{imdb_score && (
+						<p>
+							<Link href={`https://www.imdb.com/title/${imdbid}/`}>
+								IMDB Score: {imdb_score}
+							</Link>
+						</p>
+					)}
 					<>
 						{Array.from({ length: season_count || 0 }, (_, i) => i + 1).map(
 							(season) => {
@@ -476,17 +485,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { params } = context;
 	let season_count = 1;
 	let season_names = [];
+	let imdb_score;
 	const showResponse = await axios.get(getMdbInfo(params!.imdbid as string));
 	if (showResponse.data.type === 'show' && showResponse.data.seasons?.length !== 0) {
 		const seasons = showResponse.data.seasons.filter((season: any) => season.season_number > 0);
-		season_count = Math.max(
-			...seasons.map((season: any) => {
-				return season.season_number;
-			})
-		);
-		season_names = seasons.map((season: any) => {
-			return season.name;
-		});
+		season_count = Math.max(...seasons.map((season: any) => season.season_number));
+		season_names = seasons.map((season: any) => season.name);
+		imdb_score = showResponse.data.ratings?.reduce((acc: number | undefined, rating: any) => {
+			if (rating.source === 'imdb') {
+				return rating.score as number;
+			}
+			return acc;
+		}, null);
 
 		if (params!.seasonNum && parseInt(params!.seasonNum as string) > season_count) {
 			return {
@@ -504,6 +514,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			poster: showResponse.data.poster,
 			season_count,
 			season_names,
+			imdb_score,
 		},
 	};
 };

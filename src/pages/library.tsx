@@ -106,24 +106,21 @@ function TorrentsPage() {
 		const fetchRealDebrid = async () => {
 			try {
 				if (!rdKey) throw new Error('no_rd_key');
-				const torrents = (await getUserTorrentsList(rdKey, 0, 1, 2500, '')).map(
-					(torrent) => {
-						const mediaType = getMediaType(torrent.filename);
-						const info =
-							mediaType === 'movie'
-								? filenameParse(torrent.filename)
-								: filenameParse(torrent.filename, true);
-						return {
-							score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE)
-								.score,
-							info,
-							mediaType,
-							title: getMediaId(info, mediaType, false),
-							...torrent,
-							id: `rd:${torrent.id}`,
-						};
-					}
-				) as UserTorrent[];
+				const torrents = (await getUserTorrentsList(rdKey)).map((torrent) => {
+					const mediaType = getMediaType(torrent.filename);
+					const info =
+						mediaType === 'movie'
+							? filenameParse(torrent.filename)
+							: filenameParse(torrent.filename, true);
+					return {
+						score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
+						info,
+						mediaType,
+						title: getMediaId(info, mediaType, false),
+						...torrent,
+						id: `rd:${torrent.id}`,
+					};
+				}) as UserTorrent[];
 
 				setUserTorrentsList((prev) => [...prev, ...torrents]);
 				rdCacheAdder.many(
