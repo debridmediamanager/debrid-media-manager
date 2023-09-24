@@ -336,7 +336,9 @@ function TorrentsPage() {
 			}
 		}
 		return query
-			? unfiltered.filter((t) => regexFilters.every((regex) => regex.test(t.filename)))
+			? unfiltered.filter((t) =>
+					regexFilters.every((regex) => regex.test(t.filename) || regex.test(t.id))
+			  )
 			: unfiltered;
 	}
 
@@ -657,7 +659,7 @@ function TorrentsPage() {
 			</div>
 			<div className="flex items-center border-b border-b-2 border-gray-500 py-2 mb-4">
 				<input
-					className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+					className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
 					type="text"
 					id="query"
 					placeholder="quick search on filename, hash, or id; supports regex"
@@ -865,7 +867,7 @@ function TorrentsPage() {
 									return (
 										<tr
 											key={torrent.id}
-											className="border-t-2 hover:bg-purple-100"
+											className="border-t-2 hover:bg-purple-900"
 										>
 											<td className="border px-4 py-2 max-w-0 overflow-hidden">
 												{torrent.id}

@@ -98,7 +98,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({ title, description, 
 		try {
 			if (!rdKey) throw new Error('no_rd_key');
 			const id = await addHashAsMagnet(rdKey, hash);
-			if (!disableToast) toast.success('Successfully added as magnet!');
+			if (!disableToast) toast('Successfully added as magnet!', searchToastOptions);
 			rdCacheAdder.single(`rd:${id}`, hash, instantDownload ? 'downloaded' : 'downloading');
 			handleSelectFiles(`rd:${id}`, true); // add rd: to account for substr(3) in handleSelectFiles
 		} catch (error) {
@@ -118,7 +118,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({ title, description, 
 			const resp = await uploadMagnet(adKey, [hash]);
 			if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
 				throw new Error('no_magnets');
-			if (!disableToast) toast.success('Successfully added as magnet!');
+			if (!disableToast) toast('Successfully added as magnet!', searchToastOptions);
 			adCacheAdder.single(
 				`ad:${resp.data.magnets[0].id}`,
 				hash,
@@ -136,7 +136,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({ title, description, 
 			if (!rdKey && !adKey) throw new Error('no_keys');
 			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
 			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
-			if (!disableToast) toast.success(`Download canceled (${id})`);
+			if (!disableToast) toast(`Download canceled (${id})`, searchToastOptions);
 			if (id.startsWith('rd:')) removeFromRdCache(id);
 			if (id.startsWith('ad:')) removeFromAdCache(id);
 		} catch (error) {
@@ -209,7 +209,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({ title, description, 
 				</div>
 				<div className="w-3/4 space-y-2">
 					<h2 className="text-2xl font-bold">{title}</h2>
-					<p className="text-gray-700">{description}</p>
+					<p className="text-azure">{description}</p>
 				</div>
 			</div>
 
@@ -322,23 +322,22 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({ title, description, 
 									<div
 										key={r.hash}
 										className={`
-bg-white
 ${
 	rd.isDownloaded(r.hash) || ad.isDownloaded(r.hash)
-		? 'border-green-400'
+		? 'border-green-400 border-4'
 		: rd.isDownloading(r.hash) || ad.isDownloading(r.hash)
-		? 'border-red-400'
-		: ''
+		? 'border-red-400 border-4'
+		: 'border-black border-2'
 }
-border-2 shadow hover:shadow-lg transition-shadow duration-200 ease-in
+shadow hover:shadow-lg transition-shadow duration-200 ease-in
 rounded-lg overflow-hidden
 `}
 									>
 										<div className="p-6 space-y-4">
-											<h2 className="text-2xl font-bold leading-tight text-gray-900 break-words">
+											<h2 className="text-2xl font-bold leading-tight break-words">
 												{r.title}
 											</h2>
-											<p className="text-gray-500">
+											<p className="text-gray-300">
 												Size: {(r.fileSize / 1024).toFixed(2)} GB
 											</p>
 											<div className="flex flex-wrap space-x-2">
