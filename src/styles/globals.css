@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind dark;
+
+body{
+    background: hsl(0, 0%, 12%);
+    color: azure;
+}
