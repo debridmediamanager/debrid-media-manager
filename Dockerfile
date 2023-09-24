@@ -15,13 +15,14 @@ RUN npm install
 # ---- Build ----
 FROM dependencies AS build
 COPY . .
-RUN npm run prisma:generate
 RUN npm run build
 
 # --- Release ----
 FROM base AS release
 # copy production node_modules
 COPY --from=dependencies /app/prod_node_modules ./node_modules
+# generate prisma client in node_modules
+RUN npm run prisma:generate
 # copy app sources
 COPY . .
 # copy build files from build image

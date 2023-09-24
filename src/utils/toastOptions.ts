@@ -16,3 +16,8 @@ export const libraryToastOptions = {
 	...globalToastOptions,
 	icon: '📚',
 };
+
+export const genericToastOptions = {
+	...globalToastOptions,
+	icon: '📢',
+};
