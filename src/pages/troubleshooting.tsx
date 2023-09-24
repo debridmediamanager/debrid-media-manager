@@ -25,7 +25,16 @@ function TroubleshootingPage() {
 			} catch (e) {
 				setTestResults((prev) => prev + `RD torrent error: ${e}\n`);
 			}
+			setTestResults((prev) => prev + `-----\n`);
 
+			config.realDebridHostname = 'https://corsproxy.io/?https://api.real-debrid.com';
+			setTestResults((prev) => prev + `Real-Debrid base URL: ${config.realDebridHostname}\n`);
+			try {
+				let rdTorrents = await getUserTorrentsList(rdKey);
+				setTestResults((prev) => prev + `RD torrent count: ${rdTorrents.length}\n`);
+			} catch (e) {
+				setTestResults((prev) => prev + `RD torrent error: ${e}\n`);
+			}
 			setTestResults((prev) => prev + `-----\n`);
 
 			config.realDebridHostname = 'https://api.real-debrid.com';
@@ -36,7 +45,6 @@ function TroubleshootingPage() {
 			} catch (e) {
 				setTestResults((prev) => prev + `RD torrent error: ${e}\n`);
 			}
-
 			setTestResults((prev) => prev + `-----\n`);
 		}
 		if (adKey) {
@@ -48,7 +56,17 @@ function TroubleshootingPage() {
 			} catch (e) {
 				setTestResults((prev) => prev + `AD torrent error: ${e}\n`);
 			}
+			setTestResults((prev) => prev + `-----\n`);
 
+			config.bypassHostname = 'https://corsproxy.io/?';
+			adBaseUrl = `${config.bypassHostname}${config.allDebridHostname}`;
+			setTestResults((prev) => prev + `AllDebrid base URL: ${adBaseUrl}\n`);
+			try {
+				let adTorrents = (await getMagnetStatus(adKey)).data.magnets;
+				setTestResults((prev) => prev + `AD torrent count: ${adTorrents.length}\n`);
+			} catch (e) {
+				setTestResults((prev) => prev + `AD torrent error: ${e}\n`);
+			}
 			setTestResults((prev) => prev + `-----\n`);
 
 			config.bypassHostname = '';
@@ -59,13 +77,12 @@ function TroubleshootingPage() {
 			} catch (e) {
 				setTestResults((prev) => prev + `AD torrent error: ${e}\n`);
 			}
-
 			setTestResults((prev) => prev + `-----\n`);
 		}
 		setTestResults(
 			(prev) =>
 				prev +
-				`Test complete. Post this to r/debridmediamanager or send to my discord @yowmamasita\n`
+				`Test complete. Copy this and send to r/debridmediamanager or send to my Discord @ yowmamasita\n`
 		);
 	};
 
