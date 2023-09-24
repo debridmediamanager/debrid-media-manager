@@ -21,10 +21,10 @@ RUN npm run build
 FROM base AS release
 # copy production node_modules
 COPY --from=dependencies /app/prod_node_modules ./node_modules
-# generate prisma client in node_modules
-RUN npm run prisma:generate
 # copy app sources
 COPY . .
+# generate prisma client in node_modules
+RUN npm run prisma:generate
 # copy build files from build image
 COPY --from=build /app/.next ./.next
 COPY --from=build /app/public ./public
