@@ -110,7 +110,9 @@ function Search() {
 								<div className="mt-4">
 									<h3 className="text-lg font-bold mb-2">{result.title}</h3>
 									<p className="text-gray-300 text-sm">Year: {result.year}</p>
-									<p className="text-gray-300 text-sm">Score: {result.score}</p>
+									<p className="text-gray-300 text-sm">
+										IMDB Score: {result.score}
+									</p>
 									{result.type === 'movie' ? (
 										<Link
 											href={`/movie/${result.imdbid}`}
