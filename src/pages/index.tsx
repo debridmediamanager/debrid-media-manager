@@ -16,6 +16,10 @@ function IndexPage() {
 		router.push('/search');
 	};
 
+	const handleRecentlyUpdated = () => {
+		router.push('/recentlyupdated');
+	};
+
 	const handleLogout = (prefix?: string) => {
 		if (typeof window === 'undefined') {
 			// Running on the server, return null
@@ -93,6 +97,14 @@ function IndexPage() {
 							>
 								My Library
 							</button>
+
+							<button
+								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								onClick={handleRecentlyUpdated}
+							>
+								Recently Updated
+							</button>
+
 							<button
 								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 								onClick={handleSearchV2Click}
