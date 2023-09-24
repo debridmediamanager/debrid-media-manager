@@ -69,7 +69,7 @@ function Search() {
 			<form onSubmit={handleSubmit}>
 				<div className="flex items-center border-b border-b-2 border-gray-500 py-2 mb-4">
 					<input
-						className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+						className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
 						type="text"
 						id="query"
 						placeholder="type a movie or show name"
@@ -102,19 +102,19 @@ function Search() {
 					</h2>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 						{searchResults.map((result: MdbSearchResult) => (
-							<div key={result.id} className="bg-white shadow-lg rounded-lg p-6">
+							<div key={result.id} className="shadow-lg rounded-lg p-6">
 								<Poster
 									imdbId={result.imdbid}
 									className="w-full h-64 object-cover object-center rounded-t-lg"
 								/>
 								<div className="mt-4">
 									<h3 className="text-lg font-bold mb-2">{result.title}</h3>
-									<p className="text-gray-600 text-sm">Year: {result.year}</p>
-									<p className="text-gray-600 text-sm">Score: {result.score}</p>
+									<p className="text-gray-300 text-sm">Year: {result.year}</p>
+									<p className="text-gray-300 text-sm">Score: {result.score}</p>
 									{result.type === 'movie' ? (
 										<Link
 											href={`/movie/${result.imdbid}`}
-											className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-700 rounded"
+											className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-300 rounded text-yellow-800"
 										>
 											<span role="img" aria-label="movie" className="mr-2">
 												🎥
@@ -130,7 +130,7 @@ function Search() {
 												<Link
 													key={season}
 													href={`/show/${result.imdbid}/${season}`}
-													className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-700 rounded mr-2 mb-2"
+													className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-300 rounded text-yellow-800"
 												>
 													<span
 														role="img"

@@ -16,13 +16,23 @@ function IndexPage() {
 		router.push('/search');
 	};
 
-	const handleLogout = () => {
+	const handleLogout = (prefix?: string) => {
 		if (typeof window === 'undefined') {
 			// Running on the server, return null
 			return null;
 		}
-		localStorage.clear();
-		router.push('/start');
+		if (prefix) {
+			for (let i = 0; i < localStorage.length; i++) {
+				const key = localStorage.key(i);
+				if (key && key.startsWith(prefix)) {
+					localStorage.removeItem(key);
+				}
+			}
+			router.reload();
+		} else {
+			localStorage.clear();
+			router.push('/start');
+		}
 	};
 
 	return (
@@ -72,6 +82,9 @@ function IndexPage() {
 								</Link>
 							)}
 						</p>
+						<p className="text-sm mb-4">
+							7+ million individual torrents collected from all corners of the web
+						</p>
 						<hr className="w-full" />
 						<div className="flex mt-4">
 							<button
@@ -81,18 +94,28 @@ function IndexPage() {
 								My Library
 							</button>
 							<button
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:shadow-glow"
+								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 								onClick={handleSearchV2Click}
 							>
 								Search
 							</button>
 
-							<button
-								className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-								onClick={handleLogout}
-							>
-								Logout
-							</button>
+							{rdUser && (
+								<button
+									className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm"
+									onClick={() => handleLogout('rd:')}
+								>
+									Logout Real-Debrid
+								</button>
+							)}
+							{adUser && (
+								<button
+									className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm"
+									onClick={() => handleLogout('ad:')}
+								>
+									Logout AllDebrid
+								</button>
+							)}
 						</div>
 					</div>
 				</>
