@@ -20,6 +20,10 @@ function IndexPage() {
 		router.push('/recentlyupdated');
 	};
 
+	const handleTroubleshooting = () => {
+		router.push('/troubleshooting');
+	};
+
 	const handleLogout = (prefix?: string) => {
 		if (typeof window === 'undefined') {
 			// Running on the server, return null
@@ -111,7 +115,14 @@ function IndexPage() {
 							>
 								Search
 							</button>
-
+						</div>
+						<div className="flex mt-4">
+							<button
+								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
+								onClick={handleTroubleshooting}
+							>
+								Troubleshoot
+							</button>
 							{rdUser && (
 								<button
 									className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm"
