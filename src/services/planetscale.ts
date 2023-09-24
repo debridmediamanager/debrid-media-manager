@@ -169,4 +169,29 @@ export class PlanetScaleCache {
 
 		return undefined;
 	}
+
+	public async getRecentlyUpdatedContent(): Promise<string[]> {
+		const rows = await this.prisma.scraped.findMany({
+			take: 200,
+			orderBy: {
+				updatedAt: 'desc',
+			},
+			where: {
+				OR: [{ key: { startsWith: 'movie:' } }, { key: { startsWith: 'tv:' } }],
+			},
+			select: {
+				key: true,
+			},
+		});
+
+		return rows
+			.map((row) => {
+				const match = row.key.match(/^(movie|tv):([^:]+)/);
+				if (match) {
+					return `${match[1]}:${match[2]}`;
+				}
+				return '';
+			})
+			.filter((key) => key !== '');
+	}
 }

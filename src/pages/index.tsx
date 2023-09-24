@@ -16,6 +16,14 @@ function IndexPage() {
 		router.push('/search');
 	};
 
+	const handleRecentlyUpdated = () => {
+		router.push('/recentlyupdated');
+	};
+
+	const handleTroubleshooting = () => {
+		router.push('/troubleshooting');
+	};
+
 	const handleLogout = (prefix?: string) => {
 		if (typeof window === 'undefined') {
 			// Running on the server, return null
@@ -83,7 +91,7 @@ function IndexPage() {
 							)}
 						</p>
 						<p className="text-sm mb-4">
-							7+ million individual torrents collected from all corners of the web
+							7+ million torrents collected from all corners of the web
 						</p>
 						<hr className="w-full" />
 						<div className="flex mt-4">
@@ -93,13 +101,28 @@ function IndexPage() {
 							>
 								My Library
 							</button>
+
+							<button
+								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								onClick={handleRecentlyUpdated}
+							>
+								Recently Updated
+							</button>
+
 							<button
 								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 								onClick={handleSearchV2Click}
 							>
 								Search
 							</button>
-
+						</div>
+						<div className="flex mt-4">
+							<button
+								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
+								onClick={handleTroubleshooting}
+							>
+								Troubleshoot
+							</button>
 							{rdUser && (
 								<button
 									className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm"

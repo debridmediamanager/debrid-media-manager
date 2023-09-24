@@ -176,23 +176,45 @@ export const getCurrentUser = async (accessToken: string) => {
 	}
 };
 
-export const getUserTorrentsList = async (
-	accessToken: string,
-	offset: number,
-	page: number,
-	limit: number,
-	filter: string
-) => {
+export const getUserTorrentsList = async (accessToken: string): Promise<UserTorrentResponse[]> => {
 	try {
 		const headers = {
 			Authorization: `Bearer ${accessToken}`,
 		};
 
-		const response = await axios.get<UserTorrentResponse[]>(
-			`${config.realDebridHostname}/rest/1.0/torrents`,
-			{ headers, params: { offset, page, limit, filter } }
-		);
-		return response?.data || [];
+		let torrents: UserTorrentResponse[] = [];
+		let page = 1;
+		let limit = 2500;
+
+		while (true) {
+			const response = await axios.get<UserTorrentResponse[]>(
+				`${config.realDebridHostname}/rest/1.0/torrents`,
+				{ headers, params: { page, limit } }
+			);
+
+			const {
+				data,
+				headers: { 'x-total-count': totalCount },
+			} = response;
+			torrents = torrents.concat(data);
+
+			if (data.length < limit || !totalCount) {
+				break;
+			}
+
+			const totalCountValue = parseInt(totalCount, 10);
+			if (isNaN(totalCountValue)) {
+				break;
+			}
+
+			if (data.length >= totalCountValue) {
+				break;
+			}
+
+			page++;
+		}
+
+		return torrents;
 	} catch (error: any) {
 		console.error('Error fetching user torrents list:', error.message);
 		throw error;
