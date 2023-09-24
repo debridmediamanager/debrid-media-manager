@@ -1,36 +1,31 @@
-# ---- Base Node ----
-FROM node:18-alpine AS base
+FROM node:18-alpine AS dependencies
+
 WORKDIR /app
-COPY package*.json ./
+COPY package.json package-lock.json ./
+RUN npm ci
 
-# ---- Dependencies ----
-FROM base AS dependencies
-RUN npm set progress=false && npm config set depth 0
-RUN npm install --only=production
-# copy production node_modules aside
-RUN cp -R node_modules prod_node_modules
-# install ALL node_modules, including 'devDependencies'
-RUN npm install
+FROM node:18-alpine AS build
 
-# ---- Build ----
-FROM dependencies AS build
+WORKDIR /app
+COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
+
+RUN npx prisma generate
 RUN npm run build
 
-# --- Release ----
-FROM base AS release
-# copy production node_modules
-COPY --from=dependencies /app/prod_node_modules ./node_modules
-# copy app sources
-COPY . .
-# generate prisma client in node_modules
-RUN npm run prisma:generate
-# copy build files from build image
-COPY --from=build /app/.next ./.next
-COPY --from=build /app/public ./public
+FROM node:18-alpine AS deploy
 
-# Expose the listening port
+WORKDIR /app
+
+ENV NODE_ENV production
+
+COPY --from=build /app/public ./public
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/prisma ./prisma
+COPY --from=build /app/.next ./.next
+
 EXPOSE 3000
+
 CMD ["npm", "start"]
 
 # Install additional tools (curl and grep)
