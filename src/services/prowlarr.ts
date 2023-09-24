@@ -3,7 +3,8 @@ import bencode from 'bencode';
 import { createHash } from 'crypto';
 import { ScrapeSearchResult } from './mediasearch';
 
-const PROWLARR = process.env.PROWLARR ?? 'http://localhost:9696';
+const prowlarrHost = process.env.PROWLARR ?? 'http://localhost:9696';
+const apikey = process.env.PROWLARR_KEY ?? 'abc123';
 
 function isFoundDateRecent(foundString: string, date: string): boolean {
 	const foundDate = new Date(foundString);
@@ -13,9 +14,9 @@ function isFoundDateRecent(foundString: string, date: string): boolean {
 }
 
 const createSearchUrl = (finalQuery: string) =>
-	`${PROWLARR}/api/v1/search?query=${encodeURIComponent(
+	`${prowlarrHost}/api/v1/search?query=${encodeURIComponent(
 		finalQuery
-	)}&indexerIds=-2&categories[]=2000&categories[]=5000&type=search&apikey=2475bf3fd3964fdf9983cbfacac7d5fd`;
+	)}&indexerIds=-2&categories[]=2000&categories[]=5000&type=search&apikey=${apikey}`;
 
 function extractHashFromMagnetLink(magnetLink: string) {
 	const regex = /urn:btih:([A-Fa-f0-9]+)/;

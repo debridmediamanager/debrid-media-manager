@@ -107,7 +107,11 @@ export async function scrapeMovies(
 	mdbData: any,
 	db: PlanetScaleCache
 ): Promise<number> {
-	console.log(`🏹 Scraping movie: ${tmdbData.title} (${imdbId})...`);
+	console.log(
+		`🏹 Scraping movie: ${tmdbData.title} (${imdbId}) (uncommon: ${countUncommonWordsInTitle(
+			tmdbData.title
+		)})...`
+	);
 	const cleanTitle = cleanSearchQuery(tmdbData.title);
 	const year =
 		mdbData.year ?? mdbData.released?.substring(0, 4) ?? tmdbData.release_date?.substring(0, 4);
@@ -139,7 +143,11 @@ export async function scrapeMovies(
 					.trim()
 					.toLowerCase();
 				if (tomatoTitle !== processedTitle) {
-					console.log('🎯 Found another title (1):', tomatoTitle);
+					console.log(
+						'🎯 Found another title (1):',
+						tomatoTitle,
+						`(uncommon: ${countUncommonWordsInTitle(tomatoTitle)})`
+					);
 					cleanedTitle = tomatoTitle;
 				}
 			}
@@ -159,7 +167,11 @@ export async function scrapeMovies(
 					.trim()
 					.toLowerCase();
 				if (metacriticTitle !== processedTitle && metacriticTitle !== cleanedTitle) {
-					console.log('🎯 Found another title (2):', metacriticTitle);
+					console.log(
+						'🎯 Found another title (2):',
+						metacriticTitle,
+						`(uncommon: ${countUncommonWordsInTitle(metacriticTitle)})`
+					);
 					anotherTitle = metacriticTitle;
 				}
 			}
