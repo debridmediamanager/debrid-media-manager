@@ -10,8 +10,6 @@ interface RecentlyUpdatedProps {
 	searchResults: string[];
 }
 
-const db = new PlanetScaleCache();
-
 const RecentlyUpdated: NextPage<RecentlyUpdatedProps> = ({ searchResults }) => {
 	return (
 		<div className="mx-4 my-8 max-w-full">
@@ -60,6 +58,7 @@ export const getServerSideProps: GetServerSideProps<RecentlyUpdatedProps> = asyn
 }) => {
 	res.setHeader('Cache-Control', 'public, s-maxage=600 , stale-while-revalidate=300');
 	try {
+		const db = new PlanetScaleCache();
 		const data = Array.from(new Set(await db.getRecentlyUpdatedContent()));
 
 		return {
