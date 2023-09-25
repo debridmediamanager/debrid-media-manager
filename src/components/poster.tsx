@@ -10,15 +10,19 @@ const Poster = ({ imdbId }: Record<string, string>) => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await axios.get(
-				`https://api.themoviedb.org/3/find/${imdbId}?api_key=${getTmdbKey()}&external_source=imdb_id`
-			);
-			const baseUrl = 'https://image.tmdb.org/t/p/w200';
-			const posterPath =
-				response.data.movie_results[0]?.poster_path ||
-				response.data.tv_results[0]?.poster_path;
-			if (!posterPath) setPosterUrl(`https://picsum.photos/seed/${imdbId}/200/300`);
-			else setPosterUrl(`${baseUrl}${posterPath}`);
+			try {
+				const response = await axios.get(
+					`https://api.themoviedb.org/3/find/${imdbId}?api_key=${getTmdbKey()}&external_source=imdb_id`
+				);
+				const baseUrl = 'https://image.tmdb.org/t/p/w200';
+				const posterPath =
+					response.data.movie_results[0]?.poster_path ||
+					response.data.tv_results[0]?.poster_path;
+				if (!posterPath) setPosterUrl(`https://picsum.photos/seed/${imdbId}/200/300`);
+				else setPosterUrl(`${baseUrl}${posterPath}`);
+			} catch (error: any) {
+				setPosterUrl(`https://picsum.photos/seed/${imdbId}/200/300`);
+			}
 		};
 
 		const imgObserver = new IntersectionObserver((entries, observer) => {
