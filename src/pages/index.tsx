@@ -21,6 +21,10 @@ function IndexPage() {
 		router.push('/search');
 	};
 
+	const handleBrowse = () => {
+		router.push('/browse');
+	};
+
 	const handleRecentlyUpdated = () => {
 		router.push('/recentlyupdated');
 	};
@@ -112,6 +116,13 @@ function IndexPage() {
 								onClick={handleHashListClick}
 							>
 								Hash list browser
+							</button>
+
+							<button
+								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								onClick={handleBrowse}
+							>
+								Browse
 							</button>
 
 							<button
