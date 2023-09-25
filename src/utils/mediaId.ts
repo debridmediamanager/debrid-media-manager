@@ -18,7 +18,7 @@ export const getMediaId = (
 	if (tvShowTitleOnly) {
 		return titleStr;
 	}
-	if (seasons.length === 0) return titleStr;
+	if (!seasons || seasons.length === 0) return titleStr;
 	const season = systemOnlyId ? 's' : 'S';
 	const episode = systemOnlyId ? 'e' : 'E';
 	if (fullSeason) {
