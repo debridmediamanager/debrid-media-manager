@@ -24,7 +24,7 @@ function extractHashFromMagnetLink(magnetLink: string) {
 	if (match) {
 		return match[1].toLowerCase();
 	} else {
-		process.stdout.write('x');
+		process.stdout.write('🍇');
 		return undefined;
 	}
 }
@@ -58,7 +58,7 @@ async function computeHashFromTorrent(url: string): Promise<string | undefined> 
 		return magnetHash.toLowerCase();
 	} catch (error: any) {
 		console.error('getMagnetURI error:', error.message);
-		process.stdout.write('x');
+		process.stdout.write('🍈');
 		return undefined;
 	}
 }
@@ -72,13 +72,13 @@ async function processItem(
 	const title = item.Title;
 
 	if (item.Size < 1024 * 1024) {
-		process.stdout.write('-');
+		process.stdout.write('🍉');
 		return undefined;
 	}
 	const fileSize = item.Size / 1024 / 1024;
 
 	if (!isFoundDateRecent(item.PublishDate, airDate)) {
-		process.stdout.write('-');
+		process.stdout.write('🍊');
 		return undefined;
 	}
 
@@ -99,7 +99,7 @@ async function processItem(
 		// 	containedTerms,
 		// 	requiredTerms
 		// );
-		process.stdout.write('x');
+		process.stdout.write('🍋');
 		return undefined;
 	}
 	const containedMustHaveTerms = mustHaveTerms.filter((term) => {
@@ -118,12 +118,12 @@ async function processItem(
 		// 	containedMustHaveTerms,
 		// 	mustHaveTerms.length
 		// );
-		process.stdout.write('x');
+		process.stdout.write('🍌');
 		return undefined;
 	}
 	if (!targetTitle.match(/xxx/i)) {
 		if (title.match(/xxx/i)) {
-			process.stdout.write('x');
+			process.stdout.write('🍍');
 			return undefined;
 		}
 	}
@@ -133,11 +133,11 @@ async function processItem(
 		(item.MagnetUri && extractHashFromMagnetLink(item.MagnetUri)) ||
 		(item.Link && (await computeHashFromTorrent(item.Link)));
 	if (!hash) {
-		process.stdout.write('❌');
+		process.stdout.write('🥭');
 		return undefined;
 	}
 
-	process.stdout.write('.');
+	process.stdout.write('🍭');
 
 	return {
 		title,
@@ -153,6 +153,7 @@ async function processInBatches(
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	let i = 0;
 	while (i < promises.length) {
+		process.stdout.write(`🌃${i}/${promises.length}`);
 		const promisesResults = await Promise.all(
 			promises.slice(i, i + batchSize).map(async (e) => await e())
 		);

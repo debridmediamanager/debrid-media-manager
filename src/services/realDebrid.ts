@@ -90,6 +90,14 @@ interface MasterHash {
 	[hash: string]: HosterHash;
 }
 
+interface UnrestrictCheckResponse {
+	host: string;
+	link: string;
+	filename: string;
+	filesize: number;
+	supported: number;
+}
+
 export interface RdInstantAvailabilityResponse extends MasterHash {}
 
 export interface AddMagnetResponse {
@@ -320,6 +328,31 @@ export const deleteTorrent = async (accessToken: string, id: string) => {
 		});
 	} catch (error: any) {
 		console.error('Error deleting torrent:', error.message);
+		throw error;
+	}
+};
+
+export const unrestrictCheck = async (
+	accessToken: string,
+	link: string
+): Promise<UnrestrictCheckResponse> => {
+	try {
+		const params = new URLSearchParams();
+		params.append('link', link);
+		const headers = {
+			Authorization: `Bearer ${accessToken}`,
+			'Content-Type': 'application/x-www-form-urlencoded',
+		};
+
+		const response = await axios.post<UnrestrictCheckResponse>(
+			`${config.realDebridHostname}/unrestrict/check`,
+			params.toString(),
+			{ headers }
+		);
+
+		return response.data;
+	} catch (error: any) {
+		console.error('Error checking unrestrict:', error.message);
 		throw error;
 	}
 };

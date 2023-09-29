@@ -24,7 +24,7 @@ function extractHashFromMagnetLink(magnetLink: string) {
 	if (match) {
 		return match[1].toLowerCase();
 	} else {
-		process.stdout.write('x');
+		process.stdout.write('🍱');
 		return undefined;
 	}
 }
@@ -57,7 +57,7 @@ async function computeHashFromTorrent(url: string): Promise<string | undefined> 
 
 		return magnetHash.toLowerCase();
 	} catch (error: any) {
-		process.stdout.write('x');
+		process.stdout.write('🍘');
 		return undefined;
 	}
 }
@@ -72,7 +72,7 @@ async function processItem(
 	const fileSize = item.size / 1024 / 1024;
 
 	if (!isFoundDateRecent(item.publishDate, airDate)) {
-		process.stdout.write('-');
+		process.stdout.write('🍙');
 		return undefined;
 	}
 
@@ -93,7 +93,7 @@ async function processItem(
 		// 	containedTerms,
 		// 	requiredTerms
 		// );
-		process.stdout.write('x');
+		process.stdout.write('🍚');
 		return undefined;
 	}
 	const containedMustHaveTerms = mustHaveTerms.filter((term) => {
@@ -112,12 +112,12 @@ async function processItem(
 		// 	containedMustHaveTerms,
 		// 	mustHaveTerms.length
 		// );
-		process.stdout.write('x');
+		process.stdout.write('🍛');
 		return undefined;
 	}
 	if (!targetTitle.match(/xxx/i)) {
 		if (title.match(/xxx/i)) {
-			process.stdout.write('x');
+			process.stdout.write('🍜');
 			return undefined;
 		}
 	}
@@ -127,11 +127,12 @@ async function processItem(
 		(item.magnetUrl && (await computeHashFromTorrent(item.magnetUrl))) ||
 		(item.downloadUrl && (await computeHashFromTorrent(item.downloadUrl)));
 	if (!hash) {
-		process.stdout.write(`❌ ${item.indexer} `);
+		// process.stdout.write(`❌ ${item.indexer} `);
+		process.stdout.write('🍠');
 		return undefined;
 	}
 
-	process.stdout.write('.');
+	process.stdout.write('🍦');
 
 	return {
 		title,
@@ -147,6 +148,7 @@ async function processInBatches(
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	let i = 0;
 	while (i < promises.length) {
+		process.stdout.write(`🌄${i}/${promises.length}`);
 		const promisesResults = await Promise.all(
 			promises.slice(i, i + batchSize).map(async (e) => await e())
 		);
@@ -188,7 +190,7 @@ const processPage = async (
 	responseData = responseData
 		.filter((item: any) => item.size >= 1024 * 1024 * 100)
 		.filter((item: any) => item.leechers > 0 || item.seeders > 0);
-	console.log(`Prowlarr🔍 processing ${responseData.length} results`);
+	console.log(`Prowlarr processing ${responseData.length} results`);
 
 	const promises: (() => Promise<ScrapeSearchResult | undefined>)[] = responseData.map(
 		(item: any) => {

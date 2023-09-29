@@ -8,6 +8,7 @@ import {
 	getTorrentInfo,
 	getUserTorrentsList,
 	selectFiles,
+	unrestrictCheck,
 } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
@@ -41,6 +42,7 @@ interface UserTorrent {
 	score: number;
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
+	links: string[];
 }
 
 interface SortBy {
@@ -119,6 +121,7 @@ function TorrentsPage() {
 						title: getMediaId(info, mediaType, false),
 						...torrent,
 						id: `rd:${torrent.id}`,
+						links: torrent.links.map((l) => l.replaceAll('/', '/')),
 					};
 				}) as UserTorrent[];
 
@@ -369,15 +372,12 @@ function TorrentsPage() {
 		try {
 			if (!rdKey) throw new Error('no_rd_key');
 			const response = await getTorrentInfo(rdKey, id.substring(3));
-			console.log(`${response.filename} files`, response.files);
 
 			const selectedFiles = getSelectableFiles(response.files.filter(isVideoOrSubs)).map(
 				(file) => file.id
 			);
-			console.log(`selected files`, selectedFiles);
 			if (selectedFiles.length === 0) {
 				handleDeleteTorrent(id);
-				console.log(response.files);
 				throw new Error('no_files_for_selection');
 			}
 
@@ -446,10 +446,12 @@ function TorrentsPage() {
 	}
 
 	async function deleteFilteredTorrents() {
-		if (!confirm(`This will delete the ${filteredList.length} torrents listed. Are you sure?`))
+		if (
+			!confirm(`This will delete the ${filteredList.length} torrents filtered. Are you sure?`)
+		)
 			return;
-		const torrentsToDelete = filteredList.map(wrapDeleteFn);
-		const [results, errors] = await runConcurrentFunctions(torrentsToDelete, 5, 500);
+		const toDelete = filteredList.map(wrapDeleteFn);
+		const [results, errors] = await runConcurrentFunctions(toDelete, 5, 500);
 		if (errors.length) {
 			toast.error(`Error deleting ${errors.length} torrents`, libraryToastOptions);
 		}
@@ -458,6 +460,33 @@ function TorrentsPage() {
 		}
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
+		}
+	}
+
+	function wrapUnrestrictCheck2(link: string) {
+		return async () => await unrestrictCheck(rdKey!, link);
+	}
+
+	function wrapUnrestrictCheck(t: UserTorrent) {
+		const toCheck = t.links.map(wrapUnrestrictCheck2);
+		return async () => await runConcurrentFunctions(toCheck, 5, 500);
+	}
+
+	async function checkTorrentsIfUnrestrictable() {
+		const toCheck = userTorrentsList.map(wrapUnrestrictCheck);
+		const results = await runConcurrentFunctions(toCheck, 5, 500);
+
+		const errors = results.filter((result) => result instanceof Error);
+		const successes = results.filter((result) => result);
+
+		if (errors.length) {
+			toast.error(`Error checking ${errors.length} torrents`, libraryToastOptions);
+		}
+		if (successes.length) {
+			toast.success(`Checked ${successes.length} torrents`, libraryToastOptions);
+		}
+		if (!errors.length && !successes.length) {
+			toast('No torrents to check', libraryToastOptions);
 		}
 	}
 

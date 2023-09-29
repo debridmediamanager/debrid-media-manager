@@ -31,7 +31,7 @@ export class PlanetScaleCache {
 		return cacheEntry !== null;
 	}
 
-	public async isOlderThan(imdbId: string, minutesAgo: number): Promise<boolean> {
+	public async isOlderThan(imdbId: string, daysAgo: number): Promise<boolean> {
 		const cacheEntry = await this.prisma.scraped.findFirst({
 			where: {
 				OR: [
@@ -49,8 +49,8 @@ export class PlanetScaleCache {
 		const currentTime = new Date();
 		const updatedAt = new Date(cacheEntry.updatedAt);
 		const ageInMillis = currentTime.getTime() - updatedAt.getTime();
-		const minutesAgoMillis = minutesAgo * 60 * 1000;
-		return ageInMillis >= minutesAgoMillis;
+		const daysAgoInMillis = daysAgo * 24 * 60 * 60 * 1000;
+		return ageInMillis >= daysAgoInMillis;
 	}
 
 	public async getOldestRequest(

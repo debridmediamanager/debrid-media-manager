@@ -149,10 +149,12 @@ const processPage = async (
 				error.message.includes('"socket" was not created')
 			) {
 				proxy.rerollProxy();
-				console.log('429 error, waiting for a bit longer before retrying...');
+				// console.log('429 error, waiting for a bit longer before retrying...');
+				process.stdout.write('🍺');
 				retries++;
 			} else if (error.message.includes('timeout of')) {
-				console.log('timeout, waiting for a bit longer before retrying...');
+				// console.log('timeout, waiting for a bit longer before retrying...');
+				process.stdout.write('⏱️');
 				retries++;
 			} else {
 				console.log('request error:', error.message);
@@ -165,11 +167,12 @@ const processPage = async (
 			await new Promise((resolve) => setTimeout(resolve, 10000 * retries));
 		}
 	}
-	console.log(
-		`${pageNum}/${calculateMaxPages(
-			numResults
-		)} : ${finalQuery}, ${targetTitle}, ${mustHaveTerms}`
-	);
+	// console.log(
+	// 	`${pageNum}/${calculateMaxPages(
+	// 		numResults
+	// 	)} : ${finalQuery}, ${targetTitle}, ${mustHaveTerms}`
+	// );
+	process.stdout.write(`[${pageNum}/${calculateMaxPages(numResults)}]`);
 	const fileSizes = Array.from(
 		responseData.matchAll(/class=\"torrent_size\"[^>]*>(\d+(?:\.\d+)?)(?:[^A-Z<]+)?([A-Z]+)?/g)
 	);
@@ -272,6 +275,7 @@ async function processInBatches(
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	let i = 0;
 	while (i < promises.length) {
+		process.stdout.write(`🌁${i}/${promises.length}`);
 		let totalBadCount = 0;
 		const promisesResults = await Promise.all(
 			promises.slice(i, i + batchSize).map(async (e) => await e())
