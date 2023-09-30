@@ -25,6 +25,7 @@ type MovieScrapeJob = {
 const countUncommonWordsInTitle = (title: string) => {
 	let processedTitle = title
 		.split(/\s+/)
+		.filter((word: string) => word.length > 3)
 		.map((word: string) =>
 			word.toLowerCase().replace(/'s/g, '').replace(/&/g, 'and').replaceAll(/[\W]+/g, '')
 		);

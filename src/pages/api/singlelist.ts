@@ -35,6 +35,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			await new Promise((resolve) => setTimeout(resolve, parseInt(skipMs as string) || 1000));
 			continue;
 		}
-		await generateScrapeJobs(res, imdbId, true);
+		await generateScrapeJobs(imdbId, true);
 	}
 }

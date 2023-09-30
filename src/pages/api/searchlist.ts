@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 				);
 				continue;
 			}
-			await generateScrapeJobs(res, imdbId, true);
+			await generateScrapeJobs(imdbId, true);
 		}
 	}
 }

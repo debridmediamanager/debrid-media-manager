@@ -132,11 +132,11 @@ const processPage = async (
 			) {
 				proxy.rerollProxy();
 				// console.log('429 error, waiting for a bit longer before retrying...');
-				process.stdout.write('🍺');
+				console.log('Btdigg 429');
 				retries++;
 			} else if (error.message.includes('timeout of')) {
 				// console.log('timeout, waiting for a bit longer before retrying...');
-				process.stdout.write('⏱️');
+				console.log('Btdigg ⏱');
 				retries++;
 			} else {
 				console.log('request error:', error.message);
@@ -154,7 +154,6 @@ const processPage = async (
 	// 		numResults
 	// 	)} : ${finalQuery}, ${targetTitle}, ${mustHaveTerms}`
 	// );
-	process.stdout.write(`[${pageNum}/${calculateMaxPages(numResults)}]`);
 	const fileSizes = Array.from(
 		responseData.matchAll(/class=\"torrent_size\"[^>]*>(\d+(?:\.\d+)?)(?:[^A-Z<]+)?([A-Z]+)?/g)
 	);
@@ -235,6 +234,7 @@ const processPage = async (
 			fileSize,
 			hash,
 		};
+
 		results.push(resultObj);
 	}
 
@@ -251,13 +251,19 @@ function calculateMaxPages(
 }
 
 async function processInBatches(
+	title: string,
 	promises: (() => Promise<ProcessPageResult>)[],
 	batchSize: number
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
 	let i = 0;
+	let lastPrintedIndex = 0;
 	while (i < promises.length) {
-		process.stdout.write(`🌁${i}/${promises.length}`);
+		let percentageIncrease = ((i - lastPrintedIndex) / promises.length) * 100;
+		if (percentageIncrease >= 10) {
+			console.log(`🌃 Btdigg batch ${i}/${promises.length}:${title}`);
+			lastPrintedIndex = i;
+		}
 		let totalBadCount = 0;
 		const promisesResults = await Promise.all(
 			promises.slice(i, i + batchSize).map(async (e) => await e())
@@ -314,7 +320,7 @@ export async function scrapeBtdigg(
 				);
 				pageNum++;
 			}
-			searchResultsArr.push(...(await processInBatches(promises, 5)));
+			searchResultsArr.push(...(await processInBatches(finalQuery, promises, 5)));
 		} catch (error) {
 			console.error('scrapeBtdigg page processing error', error);
 			await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -346,7 +352,7 @@ export async function scrapeBtdigg(
 				);
 				pageNum++;
 			}
-			searchResultsArr.push(...(await processInBatches(promises, 5)));
+			searchResultsArr.push(...(await processInBatches(`${finalQuery} .mkv`, promises, 5)));
 		} catch (error) {
 			console.error('scrapeBtdigg mkv page processing error', error);
 			await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -378,7 +384,7 @@ export async function scrapeBtdigg(
 				);
 				pageNum++;
 			}
-			searchResultsArr.push(...(await processInBatches(promises, 5)));
+			searchResultsArr.push(...(await processInBatches(`${finalQuery} .mp4`, promises, 5)));
 		} catch (error) {
 			console.error('scrapeBtdigg mp4 page processing error', error);
 			await new Promise((resolve) => setTimeout(resolve, 5000));
