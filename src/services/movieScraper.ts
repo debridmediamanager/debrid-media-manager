@@ -25,10 +25,14 @@ type MovieScrapeJob = {
 const countUncommonWordsInTitle = (title: string) => {
 	let processedTitle = title
 		.split(/\s+/)
-		.filter((word: string) => word.length > 3)
 		.map((word: string) =>
-			word.toLowerCase().replace(/'s/g, '').replace(/&/g, 'and').replaceAll(/[\W]+/g, '')
-		);
+			word
+				.toLowerCase()
+				.replace(/'s/g, '')
+				.replace(/\s&\s/g, ' and ')
+				.replaceAll(/[\W]+/g, '')
+		)
+		.filter((word: string) => word.length > 3);
 	return processedTitle.filter((word: string) => !wordSet.has(word)).length;
 };
 
@@ -49,15 +53,17 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 	let sets: ScrapeSearchResult[][] = [];
 	const hasUncommonWords = countUncommonWordsInTitle(job.title) >= 1;
 
-	if (job.title.includes('&')) {
-		sets.push(
-			...(await scrapeAll(
-				`"${job.title.replaceAll('&', 'and')}" ${job.year ?? ''}`,
+	if (job.title.includes(' & ')) {
+		const aSets = await Promise.all([
+			scrapeAll(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate),
+			scrapeAll(
+				`"${job.title.replaceAll(' & ', ' and ')}" ${job.year ?? ''}`,
 				job.title,
 				[],
 				job.airDate
-			))
-		);
+			),
+		]);
+		sets.push(...aSets.flat());
 	} else {
 		sets.push(
 			...(await scrapeAll(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate))

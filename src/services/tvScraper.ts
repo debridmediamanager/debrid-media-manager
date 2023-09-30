@@ -168,25 +168,28 @@ export async function scrapeTv(
 			seasonYear,
 			airDate,
 		});
-
-		if (cleanTitle.includes('&')) {
-			scrapeJobs.push({
-				title: cleanTitle.replaceAll('&', 'and'),
-				// originalTitle: cleanOriginalTitle?.replaceAll('&', 'and'),
-				seasonNumber,
-				seasonName,
-				seasonCode,
-				seasonYear,
-				airDate,
-			});
-		}
 	}
 
 	await db.saveScrapedResults(`processing:${imdbId}`, []);
 
 	let totalResultsCount = 0;
 	for (const job of scrapeJobs) {
-		const searchResults = await getSearchResults(job);
+		let searchResults: ScrapeSearchResult[][] = [];
+		if (job.title.includes(' & ')) {
+			const searchResultsArr = await Promise.all([
+				getSearchResults(job),
+				getSearchResults({
+					...job,
+					title: job.title.replace(' & ', ' and '),
+					originalTitle: job.originalTitle?.includes(' & ')
+						? job.originalTitle.replace(' & ', ' and ')
+						: job.originalTitle,
+				}),
+			]);
+			searchResults = searchResultsArr.flat();
+		} else {
+			searchResults = await getSearchResults(job);
+		}
 		let processedResults = flattenAndRemoveDuplicates(searchResults);
 		if (processedResults.length) processedResults = sortByFileSize(processedResults);
 		if (!/movie/i.test(job.title)) {
