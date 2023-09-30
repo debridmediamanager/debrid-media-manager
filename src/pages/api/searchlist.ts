@@ -6,7 +6,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const { scrapePassword, search, rescrapeIfXDaysOld, skipMs } = req.query;
+	const { scrapePassword, search, rescrapeIfXDaysOld, skipMs, quantity } = req.query;
 	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
 		res.status(403).json({
 			status: 'error',
@@ -25,6 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	const scrapeInput = new ScrapeInput();
 
 	for await (let listId of scrapeInput.byLists(search)) {
+		let imdbIds = [];
 		for await (let imdbId of scrapeInput.byListId(listId)) {
 			const isProcessing = await db.keyExists(`processing:${imdbId}`);
 			if (isProcessing) {
@@ -38,7 +39,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 				);
 				continue;
 			}
-			await generateScrapeJobs(imdbId, true);
+			imdbIds.push(imdbId);
+			if (imdbIds.length >= (parseInt(quantity as string) || 1)) {
+				await Promise.all(imdbIds.map(async (id) => await generateScrapeJobs(id, true)));
+				imdbIds = [];
+			}
+		}
+		if (imdbIds.length > 0) {
+			await Promise.all(imdbIds.map(async (id) => await generateScrapeJobs(id, true)));
 		}
 	}
 }

@@ -132,11 +132,11 @@ const processPage = async (
 			) {
 				proxy.rerollProxy();
 				// console.log('429 error, waiting for a bit longer before retrying...');
-				console.log('Btdigg 429');
+				// console.log('Btdigg 429');
 				retries++;
 			} else if (error.message.includes('timeout of')) {
 				// console.log('timeout, waiting for a bit longer before retrying...');
-				console.log('Btdigg ⏱');
+				// console.log('Btdigg ⏱');
 				retries++;
 			} else {
 				console.log('request error:', error.message);
