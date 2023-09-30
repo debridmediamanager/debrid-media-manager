@@ -1,8 +1,8 @@
 import { cleanSearchQuery } from '@/utils/search';
 import fs from 'fs';
-import { flattenAndRemoveDuplicates, groupByParsedTitle, scrapeBtdigg } from './btdigg-v2';
+import { scrapeBtdigg } from './btdigg-v2';
 import { scrapeJackett } from './jackett';
-import { ScrapeSearchResult } from './mediasearch';
+import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 import { scrapeProwlarr } from './prowlarr';
 
@@ -199,9 +199,9 @@ export async function scrapeMovies(
 		);
 	}
 	let processedResults = flattenAndRemoveDuplicates(searchResults);
-	if (processedResults.length) processedResults = groupByParsedTitle(processedResults);
+	if (processedResults.length) processedResults = sortByFileSize(processedResults);
 
-	await db.saveScrapedResults<ScrapeSearchResult[]>(`movie:${imdbId}`, processedResults);
+	await db.saveScrapedResults(`movie:${imdbId}`, processedResults);
 	console.log(`🎥 Saved ${processedResults.length} results for ${cleanTitle}`);
 
 	await db.markAsDone(imdbId);

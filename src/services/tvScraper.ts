@@ -1,7 +1,7 @@
 import { cleanSearchQuery } from '@/utils/search';
-import { flattenAndRemoveDuplicates, groupByParsedTitle, scrapeBtdigg } from './btdigg-v2';
+import { scrapeBtdigg } from './btdigg-v2';
 import { scrapeJackett } from './jackett';
-import { ScrapeSearchResult } from './mediasearch';
+import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 import { scrapeProwlarr } from './prowlarr';
 
@@ -188,7 +188,7 @@ export async function scrapeTv(
 	for (const job of scrapeJobs) {
 		const searchResults = await getSearchResults(job);
 		let processedResults = flattenAndRemoveDuplicates(searchResults);
-		if (processedResults.length) processedResults = groupByParsedTitle(processedResults);
+		if (processedResults.length) processedResults = sortByFileSize(processedResults);
 		if (!/movie/i.test(job.title)) {
 			processedResults = processedResults.filter((result) => {
 				return !/movie/i.test(result.title);
@@ -196,10 +196,7 @@ export async function scrapeTv(
 		}
 		totalResultsCount += processedResults.length;
 
-		await db.saveScrapedResults<ScrapeSearchResult[]>(
-			`tv:${imdbId}:${job.seasonNumber}`,
-			processedResults
-		);
+		await db.saveScrapedResults(`tv:${imdbId}:${job.seasonNumber}`, processedResults);
 		console.log(
 			`📺 Saved ${processedResults.length} results for ${job.title} season ${job.seasonNumber}`
 		);

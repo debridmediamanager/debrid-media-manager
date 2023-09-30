@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Scraped } from '@prisma/client';
+import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 
 export class PlanetScaleCache {
 	public prisma: PrismaClient;
@@ -10,12 +11,30 @@ export class PlanetScaleCache {
 
 	/// scraped results
 
-	public async saveScrapedResults<T>(key: string, value: T) {
-		await this.prisma.scraped.upsert({
+	public async saveScrapedResults(key: string, value: ScrapeSearchResult[]) {
+		// Fetch the existing record
+		const existingRecord: Scraped | null = await this.prisma.scraped.findUnique({
 			where: { key },
-			update: { value } as any,
-			create: { key, value } as any,
 		});
+
+		if (existingRecord) {
+			// If record exists, append the new values to it
+			let updatedValue = flattenAndRemoveDuplicates([
+				existingRecord.value as ScrapeSearchResult[],
+				value,
+			]);
+			updatedValue = sortByFileSize(updatedValue);
+
+			await this.prisma.scraped.update({
+				where: { key },
+				data: { value: updatedValue },
+			});
+		} else {
+			// If record doesn't exist, create a new one
+			await this.prisma.scraped.create({
+				data: { key, value },
+			});
+		}
 	}
 
 	public async getScrapedResults<T>(key: string): Promise<T | undefined> {

@@ -24,7 +24,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			continue;
 		}
 
-		await db.delete(imdbId);
 		await generateScrapeJobs(res, imdbId, true);
 	}
 }

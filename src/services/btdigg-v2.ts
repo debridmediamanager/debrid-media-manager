@@ -31,24 +31,6 @@ export const createAxiosInstance = (agent: SocksProxyAgent) => {
 	});
 };
 
-export const flattenAndRemoveDuplicates = (arr: ScrapeSearchResult[][]): ScrapeSearchResult[] => {
-	const flattened = arr.reduce((acc, val) => acc.concat(val), []);
-	const unique = new Map<string, ScrapeSearchResult>();
-	flattened.forEach((item) => {
-		if (!unique.has(item.hash)) {
-			unique.set(item.hash, item);
-		}
-	});
-	return Array.from(unique.values());
-};
-
-export const groupByParsedTitle = (results: ScrapeSearchResult[]): ScrapeSearchResult[] => {
-	results.sort((a, b) => {
-		return b.fileSize - a.fileSize;
-	});
-	return results;
-};
-
 function convertToMB(fileSizeStr: string) {
 	let fileSize = parseFloat(fileSizeStr); // extracts the numeric part
 	if (fileSizeStr.includes('GB')) {
