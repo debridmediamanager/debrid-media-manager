@@ -156,6 +156,7 @@ async function processInBatches(
 		promisesResults.forEach((e) => e && searchResultsArr.push(e));
 		i += batchSize;
 	}
+	console.log(`🌁 Jackett done! ${title}`);
 	return searchResultsArr;
 }
 
@@ -191,7 +192,7 @@ const processPage = async (
 	responseData = responseData
 		.filter((item: any) => item.Size >= 1024 * 1024 * 100)
 		.filter((item: any) => item.Seeders > 0 || item.Peers > 0);
-	console.log(`🌁 Jackett search returned ${responseData.length}`);
+	console.log(`🌁 Jackett search returned ${responseData.length} for ${finalQuery}`);
 
 	const promises: (() => Promise<ScrapeSearchResult | undefined>)[] = responseData.map(
 		(item: any) => {

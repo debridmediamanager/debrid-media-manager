@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	}
 
 	while (true) {
-		let imdbIds = await db.getOldestScrapedMedia('tv', parseInt(quantity as string));
+		let imdbIds = await db.getOldestScrapedMedia('tv', 10);
 		if (!imdbIds) {
 			console.log(
 				'[tvupdater] There must be something wrong with the database, waiting 60 seconds'
@@ -24,6 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			continue;
 		}
 
-		await Promise.all(imdbIds.map(async (imdbId) => await generateScrapeJobs(imdbId, true)));
+		let uniqueIds = Array.from(new Set(imdbIds));
+		uniqueIds = uniqueIds.slice(0, parseInt(quantity as string) || 1);
+		await Promise.all(uniqueIds.map(async (imdbId) => await generateScrapeJobs(imdbId, true)));
 	}
 }

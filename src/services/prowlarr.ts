@@ -151,6 +151,7 @@ async function processInBatches(
 		promisesResults.forEach((e) => e && searchResultsArr.push(e));
 		i += batchSize;
 	}
+	console.log(`🌄 Prowlarr done! ${title}`);
 	return searchResultsArr;
 }
 
@@ -186,7 +187,7 @@ const processPage = async (
 	responseData = responseData
 		.filter((item: any) => item.size >= 1024 * 1024 * 100)
 		.filter((item: any) => item.leechers > 0 || item.seeders > 0);
-	console.log(`🌄 Prowlarr search returned ${responseData.length}`);
+	console.log(`🌄 Prowlarr search returned ${responseData.length} for ${finalQuery}`);
 
 	const promises: (() => Promise<ScrapeSearchResult | undefined>)[] = responseData.map(
 		(item: any) => {

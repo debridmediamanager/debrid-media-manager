@@ -282,6 +282,7 @@ async function processInBatches(
 			break;
 		}
 	}
+	console.log(`🌃 Btdigg done! ${title}`);
 	return searchResultsArr;
 }
 
@@ -303,6 +304,7 @@ export async function scrapeBtdigg(
 				airDate,
 				pageNum++
 			);
+			console.log(`🌃 Btdigg search returned ${numResults} for ${finalQuery}`);
 			searchResultsArr.push(...results);
 			const maxPages = calculateMaxPages(numResults);
 			let promises: (() => Promise<ProcessPageResult>)[] = [];
