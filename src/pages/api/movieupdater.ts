@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const { scrapePassword } = req.query;
+	const { scrapePassword, quantity } = req.query;
 	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
 		res.status(403).json({
 			status: 'error',
@@ -15,8 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	}
 
 	while (true) {
-		let imdbId = await db.getOldestScrapedMedia('movie');
-		if (!imdbId) {
+		let imdbIds = await db.getOldestScrapedMedia('movie', parseInt(quantity as string));
+		if (!imdbIds) {
 			console.log(
 				'[movieupdater] There must be something wrong with the database, waiting 60 seconds'
 			);
@@ -24,6 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			continue;
 		}
 
-		await generateScrapeJobs(res, imdbId, true);
+		await Promise.all(
+			imdbIds.map(async (imdbId) => await generateScrapeJobs(res, imdbId, true))
+		);
 	}
 }

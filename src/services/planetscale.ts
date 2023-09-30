@@ -124,17 +124,21 @@ export class PlanetScaleCache {
 		return null;
 	}
 
-	public async getOldestScrapedMedia(mediaType: 'tv' | 'movie'): Promise<string | null> {
-		const scrapedItem = await this.prisma.scraped.findFirst({
+	public async getOldestScrapedMedia(
+		mediaType: 'tv' | 'movie',
+		quantity = 3
+	): Promise<string[] | null> {
+		const scrapedItems = await this.prisma.scraped.findMany({
 			where: {
 				key: { startsWith: `${mediaType}:` },
 			},
 			orderBy: { updatedAt: 'asc' },
+			take: quantity,
 			select: { key: true },
 		});
 
-		if (scrapedItem !== null) {
-			return scrapedItem.key.split(':')[1];
+		if (scrapedItems.length > 0) {
+			return scrapedItems.map((item) => item.key.split(':')[1]);
 		}
 
 		return null;
