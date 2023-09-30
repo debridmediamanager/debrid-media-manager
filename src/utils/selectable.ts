@@ -9,12 +9,7 @@ export function isVideoOrSubs(file: { path: string }) {
 	if (filePath.includes('.xxx.')) return false;
 	return (
 		filePath.endsWith('.mkv') ||
-		filePath.endsWith('.mp4') ||
-		filePath.endsWith('.srt') ||
-		filePath.endsWith('.smi') ||
-		filePath.endsWith('.ssa') ||
-		filePath.endsWith('.ass') ||
-		filePath.endsWith('.vtt')
+		filePath.endsWith('.mp4')
 	);
 }
 
