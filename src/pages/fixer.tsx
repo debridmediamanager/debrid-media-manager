@@ -113,9 +113,7 @@ function FixerPage() {
 
 	const fixBadTorrent = async (badTorrent: { id: string; filename: string; hash: string }) => {
 		setFixOutput(
-			(prev) =>
-				prev +
-				`\nBad torrent procedure\nRedownloading bad torrent: ${badTorrent.filename}\n`
+			(prev) => prev + `Bad torrent procedure, redownloading: ${badTorrent.filename}\n`
 		);
 		const hash = badTorrent.hash;
 		const id = await addHashAsMagnet(rdKey!, hash);
@@ -124,12 +122,18 @@ function FixerPage() {
 			(file) => file.id
 		);
 		if (selectedFiles.length === 0) {
-			setFixOutput((prev) => prev + `Error: no file for selection\n`);
+			setFixOutput(
+				(prev) => prev + `Error: no file for selection (${badTorrent.filename})\n`
+			);
 		} else {
 			await selectFiles(rdKey!, id, selectedFiles);
 		}
 		response = await getTorrentInfo(rdKey!, id);
-		setFixOutput((prev) => prev + `Unrestricting new links (${response.links.length})...\n`);
+		setFixOutput(
+			(prev) =>
+				prev +
+				`Unrestricting new links (${badTorrent.filename}, ${response.links.length})...\n`
+		);
 		for (let i = 0; i < response.links.length; i++) {
 			try {
 				const link = response.links[i];
@@ -146,7 +150,7 @@ function FixerPage() {
 		}
 		setFixOutput((prev) => prev + `Deleting old torrent...\n`);
 		await deleteTorrent(rdKey!, badTorrent.id);
-		setFixOutput((prev) => prev + `Bad torrent removed\n`);
+		setFixOutput((prev) => prev + `Bad torrent removed (${badTorrent.filename})\n`);
 	};
 
 	const startTest = async () => {
@@ -207,11 +211,19 @@ function FixerPage() {
 							const torrent2 = rdTorrents.find((t) => t.links.includes(cur.link));
 							if (!torrent2) return acc;
 							if (
-								torrent1.filename === torrent2.filename ||
+								torrent1.hash === torrent2.hash ||
 								torrent1.bytes === torrent2.bytes ||
-								torrent1.hash === torrent2.hash
-							)
-								dupeDownloads.push(cur);
+								torrent1.filename === torrent2.filename
+							) {
+								const torrent1date = new Date(torrent1.added);
+								const torrent2date = new Date(torrent2.added);
+								if (torrent1date < torrent2date) {
+									dupeDownloads.push(acc[key]);
+									acc[key] = cur;
+								} else {
+									dupeDownloads.push(cur);
+								}
+							}
 						} else if (!acc[key]) {
 							acc[key] = cur;
 						}
@@ -339,7 +351,7 @@ function FixerPage() {
 				);
 				for (let i = 0; i < streamable.length; i += 20) {
 					const batch = streamable.slice(i, i + 20);
-					processBatch(batch);
+					await processBatch(batch);
 					if (i % 100 === 0 && i > 0) {
 						setFixOutput(
 							(prev) =>
@@ -349,7 +361,6 @@ function FixerPage() {
 								)}%)\n`
 						);
 					}
-					await delay(1000);
 				}
 				setFixOutput((prev) => prev + `PHASE 4 DONE!\n\n`);
 			} catch (e) {
