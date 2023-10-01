@@ -56,12 +56,16 @@ function FixerPage() {
 					`https://corsproxy.org/?${downloadLink}`
 				);
 				if (downloadStatus < 300) {
+					setFixOutput((prev) => prev + `Identified: ${item.filename}...`);
 					await deleteDownload(rdKey!, item.id);
 					await unrestrictLink(rdKey!, item.link);
+					setFixOutput((prev) => prev + `done!\n`);
 				}
 			} catch (e) {
+				setFixOutput((prev) => prev + `Identified: ${item.filename}...`);
 				await deleteDownload(rdKey!, item.id);
 				await unrestrictLink(rdKey!, item.link);
+				setFixOutput((prev) => prev + `done!\n`);
 			}
 		});
 		await Promise.all(promises);
