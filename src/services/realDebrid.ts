@@ -37,7 +37,7 @@ interface UserResponse {
 	expiration: string;
 }
 
-interface UserTorrentResponse {
+export interface UserTorrentResponse {
 	id: string;
 	filename: string;
 	hash: string;
@@ -65,7 +65,7 @@ export interface DownloadResponse {
 	generated: string;
 }
 
-interface UnrestrictResponse {
+export interface UnrestrictResponse {
 	id: string;
 	filename: string;
 	mimeType: string;
