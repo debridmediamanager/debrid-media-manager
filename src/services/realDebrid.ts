@@ -51,6 +51,33 @@ interface UserTorrentResponse {
 	ended: string;
 }
 
+export interface DownloadResponse {
+	id: string;
+	filename: string;
+	mimeType: string;
+	filesize: number;
+	link: string;
+	host: string;
+	host_icon: string;
+	chunks: number;
+	download: string;
+	streamable: number;
+	generated: string;
+}
+
+interface UnrestrictResponse {
+	id: string;
+	filename: string;
+	mimeType: string;
+	filesize: number;
+	link: string;
+	host: string;
+	chunks: number;
+	crc: number;
+	download: string;
+	streamable: number;
+}
+
 export interface TorrentInfoResponse {
 	id: string;
 	filename: string;
@@ -229,6 +256,51 @@ export const getUserTorrentsList = async (accessToken: string): Promise<UserTorr
 	}
 };
 
+export const getDownloads = async (accessToken: string): Promise<DownloadResponse[]> => {
+	try {
+		const headers = {
+			Authorization: `Bearer ${accessToken}`,
+		};
+
+		let downloads: DownloadResponse[] = [];
+		let page = 1;
+		let limit = 2500;
+
+		while (true) {
+			const response = await axios.get<DownloadResponse[]>(
+				`${config.realDebridHostname}/rest/1.0/downloads`,
+				{ headers, params: { page, limit } }
+			);
+
+			const {
+				data,
+				headers: { 'x-total-count': totalCount },
+			} = response;
+			downloads = downloads.concat(data);
+
+			if (data.length < limit || !totalCount) {
+				break;
+			}
+
+			const totalCountValue = parseInt(totalCount, 10);
+			if (isNaN(totalCountValue)) {
+				break;
+			}
+
+			if (data.length >= totalCountValue) {
+				break;
+			}
+
+			page++;
+		}
+
+		return downloads;
+	} catch (error: any) {
+		console.error('Error fetching downloads list:', error.message);
+		throw error;
+	}
+};
+
 export const getTorrentInfo = async (accessToken: string, id: string) => {
 	try {
 		const headers = {
@@ -332,6 +404,21 @@ export const deleteTorrent = async (accessToken: string, id: string) => {
 	}
 };
 
+export const deleteDownload = async (accessToken: string, id: string) => {
+	try {
+		const headers = {
+			Authorization: `Bearer ${accessToken}`,
+		};
+
+		await axios.delete(`${config.realDebridHostname}/rest/1.0/downloads/delete/${id}`, {
+			headers,
+		});
+	} catch (error: any) {
+		console.error('Error deleting download:', error.message);
+		throw error;
+	}
+};
+
 export const unrestrictCheck = async (
 	accessToken: string,
 	link: string
@@ -345,7 +432,32 @@ export const unrestrictCheck = async (
 		};
 
 		const response = await axios.post<UnrestrictCheckResponse>(
-			`${config.realDebridHostname}/unrestrict/check`,
+			`${config.realDebridHostname}/rest/1.0/unrestrict/check`,
+			params.toString(),
+			{ headers }
+		);
+
+		return response.data;
+	} catch (error: any) {
+		console.error('Error checking unrestrict:', error.message);
+		throw error;
+	}
+};
+
+export const unrestrictLink = async (
+	accessToken: string,
+	link: string
+): Promise<UnrestrictResponse> => {
+	try {
+		const params = new URLSearchParams();
+		params.append('link', link);
+		const headers = {
+			Authorization: `Bearer ${accessToken}`,
+			'Content-Type': 'application/x-www-form-urlencoded',
+		};
+
+		const response = await axios.post<UnrestrictResponse>(
+			`${config.realDebridHostname}/rest/1.0/unrestrict/link`,
 			params.toString(),
 			{ headers }
 		);

@@ -7,10 +7,7 @@ export function isVideoOrSubs(file: { path: string }) {
 	if (filePath.startsWith('/rarbg')) return false;
 	if (filePath.match(/\bsample\b/)) return false;
 	if (filePath.includes('.xxx.')) return false;
-	return (
-		filePath.endsWith('.mkv') ||
-		filePath.endsWith('.mp4')
-	);
+	return filePath.endsWith('.mkv') || filePath.endsWith('.mp4');
 }
 
 export function getSelectableFiles(files: TorrentInfoResponse['files']) {

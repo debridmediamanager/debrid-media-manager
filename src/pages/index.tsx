@@ -122,6 +122,12 @@ function IndexPage() {
 						</div>
 
 						<div className="flex mt-4">
+							{/* <button
+								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
+								onClick={() => router.push('/fixer')}
+							>
+								Fix playback or scan problems
+							</button> */}
 							<button
 								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
 								onClick={() => router.push('/troubleshooting')}

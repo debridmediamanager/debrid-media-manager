@@ -472,6 +472,7 @@ function TorrentsPage() {
 		return async () => await runConcurrentFunctions(toCheck, 5, 500);
 	}
 
+	// TODO: use this
 	async function checkTorrentsIfUnrestrictable() {
 		const toCheck = userTorrentsList.map(wrapUnrestrictCheck);
 		const results = await runConcurrentFunctions(toCheck, 5, 500);
