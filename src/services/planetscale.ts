@@ -11,7 +11,11 @@ export class PlanetScaleCache {
 
 	/// scraped results
 
-	public async saveScrapedResults(key: string, value: ScrapeSearchResult[]) {
+	public async saveScrapedResults(
+		key: string,
+		value: ScrapeSearchResult[],
+		updateUpdatedAt: boolean = true
+	) {
 		// Fetch the existing record
 		const existingRecord: Scraped | null = await this.prisma.scraped.findUnique({
 			where: { key },
@@ -27,7 +31,10 @@ export class PlanetScaleCache {
 
 			await this.prisma.scraped.update({
 				where: { key },
-				data: { value: updatedValue },
+				data: {
+					value: updatedValue,
+					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt, // If updateUpdatedAt is false, keep the old updatedAt value
+				},
 			});
 		} else {
 			// If record doesn't exist, create a new one
@@ -134,6 +141,22 @@ export class PlanetScaleCache {
 			},
 			orderBy: { updatedAt: 'asc' },
 			take: quantity,
+			select: { key: true },
+		});
+
+		if (scrapedItems.length > 0) {
+			return scrapedItems.map((item) => item.key.split(':')[1]);
+		}
+
+		return null;
+	}
+
+	public async getAllImdbIds(mediaType: 'tv' | 'movie'): Promise<string[] | null> {
+		const scrapedItems = await this.prisma.scraped.findMany({
+			where: {
+				key: { startsWith: `${mediaType}:` },
+			},
+			orderBy: { updatedAt: 'asc' },
 			select: { key: true },
 		});
 
