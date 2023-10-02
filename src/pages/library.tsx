@@ -445,6 +445,83 @@ function TorrentsPage() {
 		return async () => await handleDeleteTorrent(t.id);
 	}
 
+	const getKeyByStatus = (status: string) => {
+		if (status === 'dupe') return (torrent: UserTorrent) => torrent.info.title;
+		return (torrent: UserTorrent) => torrent.hash;
+	};
+
+	async function dedupeBySize() {
+		if (
+			!confirm(
+				`This will delete duplicate torrents based on size (bigger size wins). Are you sure?`
+			)
+		)
+			return;
+		const getKey = getKeyByStatus(router.query.status as string);
+		const dupes: UserTorrent[] = [];
+		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
+			let key = getKey(cur);
+			if (acc[key]) {
+				if (acc[key].bytes < cur.bytes) {
+					dupes.push(acc[key]);
+					acc[key] = cur;
+				} else {
+					dupes.push(cur);
+				}
+			} else {
+				acc[key] = cur;
+			}
+			return acc;
+		}, {});
+		const toDelete = dupes.map(wrapDeleteFn);
+		const [results, errors] = await runConcurrentFunctions(toDelete, 5, 500);
+		if (errors.length) {
+			toast.error(`Error deleting ${errors.length} torrents`, libraryToastOptions);
+		}
+		if (results.length) {
+			toast.success(`Deleted ${results.length} torrents`, libraryToastOptions);
+		}
+		if (!errors.length && !results.length) {
+			toast('No torrents to delete', libraryToastOptions);
+		}
+	}
+
+	async function dedupeByRecency() {
+		if (
+			!confirm(
+				`This will delete duplicate torrents based on recency (recently added wins). Are you sure?`
+			)
+		)
+			return;
+		const getKey = getKeyByStatus(router.query.status as string);
+		const dupes: UserTorrent[] = [];
+		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
+			let key = getKey(cur);
+			if (acc[key]) {
+				if (acc[key].added < cur.added) {
+					dupes.push(acc[key]);
+					acc[key] = cur;
+				} else {
+					dupes.push(cur);
+				}
+			} else {
+				acc[key] = cur;
+			}
+			return acc;
+		}, {});
+		const toDelete = dupes.map(wrapDeleteFn);
+		const [results, errors] = await runConcurrentFunctions(toDelete, 5, 500);
+		if (errors.length) {
+			toast.error(`Error deleting ${errors.length} torrents`, libraryToastOptions);
+		}
+		if (results.length) {
+			toast.success(`Deleted ${results.length} torrents`, libraryToastOptions);
+		}
+		if (!errors.length && !results.length) {
+			toast('No torrents to delete', libraryToastOptions);
+		}
+	}
+
 	async function deleteFilteredTorrents() {
 		if (
 			!confirm(`This will delete the ${filteredList.length} torrents filtered. Are you sure?`)
@@ -751,6 +828,40 @@ function TorrentsPage() {
 				</Link>
 
 				<button
+					className={`mr-2 mb-2 bg-orange-700 hover:bg-orange-600 text-white font-bold py-1 px-1 rounded ${
+						filteredList.length === 0 ||
+						!((router.query.status as string) ?? '').startsWith('dupe')
+							? 'opacity-60 cursor-not-allowed'
+							: ''
+					}`}
+					onClick={dedupeBySize}
+					disabled={
+						filteredList.length === 0 ||
+						!((router.query.status as string) ?? '').startsWith('dupe')
+					}
+				>
+					By size
+				</button>
+
+				<button
+					className={`mr-2 mb-2 bg-orange-700 hover:bg-orange-600 text-white font-bold py-1 px-1 rounded ${
+						!query &&
+						(filteredList.length === 0 ||
+							!((router.query.status as string) ?? '').startsWith('dupe'))
+							? 'opacity-60 cursor-not-allowed'
+							: ''
+					}`}
+					onClick={dedupeByRecency}
+					disabled={
+						!query &&
+						(filteredList.length === 0 ||
+							!((router.query.status as string) ?? '').startsWith('dupe'))
+					}
+				>
+					By date
+				</button>
+
+				<button
 					className={`mr-2 mb-2 bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-1 rounded ${
 						!query &&
 						(filteredList.length === 0 ||
@@ -767,7 +878,7 @@ function TorrentsPage() {
 							router.query.status === 'dupe')
 					}
 				>
-					Delete torrents
+					Delete shown
 				</button>
 
 				<button
