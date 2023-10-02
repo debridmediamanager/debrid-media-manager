@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		});
 		return;
 	}
-	let startFromHere = startFrom as string ?? '';
+	let startFromHere = (startFrom as string) ?? '';
 	for (const imdbId of imdbIds) {
 		if (startFromHere && imdbId !== startFromHere) continue;
 		startFromHere = '';
