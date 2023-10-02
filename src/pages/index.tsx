@@ -8,29 +8,9 @@ function IndexPage() {
 	const router = useRouter();
 	const { realDebrid: rdUser, allDebrid: adUser } = useCurrentUser();
 
-	const handleLibraryClick = () => {
-		router.push('/library');
-	};
-
 	const handleHashListClick = () => {
 		const newTab = window.open('https://hashlists.debridmediamanager.com', '_blank');
 		newTab?.focus();
-	};
-
-	const handleSearchV2Click = () => {
-		router.push('/search');
-	};
-
-	const handleBrowse = () => {
-		router.push('/browse');
-	};
-
-	const handleRecentlyUpdated = () => {
-		router.push('/recentlyupdated');
-	};
-
-	const handleTroubleshooting = () => {
-		router.push('/troubleshooting');
 	};
 
 	const handleLogout = (prefix?: string) => {
@@ -100,16 +80,17 @@ function IndexPage() {
 							)}
 						</p>
 						<p className="text-sm mb-4">
-							7+ million torrents collected from all corners of the web
+							8.5+ million torrents collected from all corners of the web
 						</p>
 						<hr className="w-full" />
+
 						<div className="flex mt-4">
-							<button
+							<Link
+								href="/library"
 								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
-								onClick={handleLibraryClick}
 							>
 								My Library
-							</button>
+							</Link>
 
 							<button
 								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
@@ -118,31 +99,38 @@ function IndexPage() {
 								Hash list browser
 							</button>
 
-							<button
+							<Link
+								href="/search"
 								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-								onClick={handleBrowse}
-							>
-								Browse
-							</button>
-
-							<button
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-								onClick={handleRecentlyUpdated}
-							>
-								Recently Updated
-							</button>
-
-							<button
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-								onClick={handleSearchV2Click}
 							>
 								Search
-							</button>
+							</Link>
+
+							<Link
+								href="/recentlyupdated"
+								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+							>
+								Recently Updated
+							</Link>
+
+							<Link
+								href="/browse"
+								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+							>
+								Browse
+							</Link>
 						</div>
+
 						<div className="flex mt-4">
+							{/* <button
+								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
+								onClick={() => router.push('/fixer')}
+							>
+								Fix playback or scan problems
+							</button> */}
 							<button
 								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
-								onClick={handleTroubleshooting}
+								onClick={() => router.push('/troubleshooting')}
 							>
 								Troubleshoot
 							</button>

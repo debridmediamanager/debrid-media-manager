@@ -1,8 +1,8 @@
 import { cleanSearchQuery } from '@/utils/search';
 import fs from 'fs';
-import { flattenAndRemoveDuplicates, groupByParsedTitle, scrapeBtdigg } from './btdigg-v2';
+import { scrapeBtdigg } from './btdigg-v2';
 import { scrapeJackett } from './jackett';
-import { ScrapeSearchResult } from './mediasearch';
+import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 import { scrapeProwlarr } from './prowlarr';
 
@@ -26,8 +26,13 @@ const countUncommonWordsInTitle = (title: string) => {
 	let processedTitle = title
 		.split(/\s+/)
 		.map((word: string) =>
-			word.toLowerCase().replace(/'s/g, '').replace(/&/g, 'and').replaceAll(/[\W]+/g, '')
-		);
+			word
+				.toLowerCase()
+				.replace(/'s/g, '')
+				.replace(/\s&\s/g, ' and ')
+				.replaceAll(/[\W]+/g, '')
+		)
+		.filter((word: string) => word.length > 3);
 	return processedTitle.filter((word: string) => !wordSet.has(word)).length;
 };
 
@@ -48,15 +53,17 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 	let sets: ScrapeSearchResult[][] = [];
 	const hasUncommonWords = countUncommonWordsInTitle(job.title) >= 1;
 
-	if (job.title.includes('&')) {
-		sets.push(
-			...(await scrapeAll(
-				`"${job.title.replaceAll('&', 'and')}" ${job.year ?? ''}`,
+	if (job.title.includes(' & ')) {
+		const aSets = await Promise.all([
+			scrapeAll(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate),
+			scrapeAll(
+				`"${job.title.replaceAll(' & ', ' and ')}" ${job.year ?? ''}`,
 				job.title,
 				[],
 				job.airDate
-			))
-		);
+			),
+		]);
+		sets.push(...aSets.flat());
 	} else {
 		sets.push(
 			...(await scrapeAll(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate))
@@ -199,9 +206,9 @@ export async function scrapeMovies(
 		);
 	}
 	let processedResults = flattenAndRemoveDuplicates(searchResults);
-	if (processedResults.length) processedResults = groupByParsedTitle(processedResults);
+	if (processedResults.length) processedResults = sortByFileSize(processedResults);
 
-	await db.saveScrapedResults<ScrapeSearchResult[]>(`movie:${imdbId}`, processedResults);
+	await db.saveScrapedResults(`movie:${imdbId}`, processedResults);
 	console.log(`🎥 Saved ${processedResults.length} results for ${cleanTitle}`);
 
 	await db.markAsDone(imdbId);
