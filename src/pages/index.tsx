@@ -80,7 +80,7 @@ function IndexPage() {
 							)}
 						</p>
 						<p className="text-sm mb-4">
-							7+ million torrents collected from all corners of the web
+							8.5+ million torrents collected from all corners of the web
 						</p>
 						<hr className="w-full" />
 
