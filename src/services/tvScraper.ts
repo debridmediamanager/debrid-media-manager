@@ -94,7 +94,11 @@ const getSearchResults = async (job: TvScrapeJob) => {
 		);
 	}
 
-	if (job.title.split(/\s/).length > 3 && job.seasonNumber === 1) {
+	if (
+		job.title.replaceAll(' ', '').length > 5 &&
+		job.title.split(/\s/).length > 3 &&
+		job.seasonNumber === 1
+	) {
 		sets.push(...(await scrapeAll(`"${job.title}"`, job.title, [], job.airDate)));
 	}
 

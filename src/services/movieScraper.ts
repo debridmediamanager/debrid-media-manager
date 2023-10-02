@@ -69,7 +69,10 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 			...(await scrapeAll(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate))
 		);
 	}
-	if (job.title.split(/\s/).length > 3 || hasUncommonWords) {
+	if (
+		job.title.replaceAll(' ', '').length > 5 &&
+		(job.title.split(/\s/).length > 3 || hasUncommonWords)
+	) {
 		sets.push(...(await scrapeAll(`"${job.title}"`, job.title, [], job.airDate)));
 	}
 
@@ -82,7 +85,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				job.airDate
 			))
 		);
-		if (hasUncommonWords) {
+		if (job.originalTitle.replaceAll(' ', '').length > 5 && hasUncommonWords) {
 			sets.push(
 				...(await scrapeAll(`"${job.originalTitle}"`, job.originalTitle, [], job.airDate))
 			);
@@ -98,7 +101,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				job.airDate
 			))
 		);
-		if (hasUncommonWords) {
+		if (job.cleanedTitle.replaceAll(' ', '').length > 5 && hasUncommonWords) {
 			sets.push(
 				...(await scrapeAll(`"${job.cleanedTitle}"`, job.cleanedTitle, [], job.airDate))
 			);
