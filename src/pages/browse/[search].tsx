@@ -101,7 +101,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	}
 
 	let rng = lcg(new Date().getTime() / 1000 / 60 / 10);
-	topLists = shuffle(topLists, rng).slice(0, 32);
+	topLists = shuffle(topLists, rng).slice(0, 8);
 
 	const response: BrowseResponse = {};
 	for (const list of topLists) {

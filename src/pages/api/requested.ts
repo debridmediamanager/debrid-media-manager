@@ -30,6 +30,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			continue;
 		}
 
-		await generateScrapeJobs(res, request.key, true);
+		await generateScrapeJobs(request.key, true);
 	}
 }

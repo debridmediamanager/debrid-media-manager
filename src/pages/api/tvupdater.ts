@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const { scrapePassword } = req.query;
+	const { scrapePassword, quantity } = req.query;
 	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
 		res.status(403).json({
 			status: 'error',
@@ -15,8 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	}
 
 	while (true) {
-		let imdbId = await db.getOldestScrapedMedia('tv');
-		if (!imdbId) {
+		let imdbIds = await db.getOldestScrapedMedia('tv', 10);
+		if (!imdbIds) {
 			console.log(
 				'[tvupdater] There must be something wrong with the database, waiting 60 seconds'
 			);
@@ -24,7 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			continue;
 		}
 
-		await db.delete(imdbId);
-		await generateScrapeJobs(res, imdbId, true);
+		let uniqueIds = Array.from(new Set(imdbIds));
+		uniqueIds = uniqueIds.slice(0, parseInt(quantity as string) || 1);
+		await Promise.all(uniqueIds.map(async (imdbId) => await generateScrapeJobs(imdbId, true)));
 	}
 }

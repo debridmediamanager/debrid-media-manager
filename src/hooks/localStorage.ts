@@ -43,7 +43,7 @@ function useLocalStorage<T>(key: string, defaultValue: T | null = null) {
 		} else {
 			localStorage.setItem(key, JSON.stringify(evaluatedValue));
 		}
-		setValue(evaluatedValue);
+		setValue(() => evaluatedValue);
 	}
 
 	return [value, setValueWithExpiry] as const;

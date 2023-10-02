@@ -1,3 +1,4 @@
+import { PlanetScaleCache } from '@/services/planetscale';
 import { ScrapeResponse, generateScrapeJobs } from '@/services/scrapeJobs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -16,5 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		return;
 	}
 
-	await generateScrapeJobs(res, imdbId.toString().trim(), true);
+	await new PlanetScaleCache().delete(imdbId);
+	await generateScrapeJobs(imdbId.toString().trim(), true);
+	res.status(200).json({ status: 'success' });
 }

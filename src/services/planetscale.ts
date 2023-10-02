@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Scraped } from '@prisma/client';
+import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 
 export class PlanetScaleCache {
 	public prisma: PrismaClient;
@@ -10,12 +11,30 @@ export class PlanetScaleCache {
 
 	/// scraped results
 
-	public async saveScrapedResults<T>(key: string, value: T) {
-		await this.prisma.scraped.upsert({
+	public async saveScrapedResults(key: string, value: ScrapeSearchResult[]) {
+		// Fetch the existing record
+		const existingRecord: Scraped | null = await this.prisma.scraped.findUnique({
 			where: { key },
-			update: { value } as any,
-			create: { key, value } as any,
 		});
+
+		if (existingRecord) {
+			// If record exists, append the new values to it
+			let updatedValue = flattenAndRemoveDuplicates([
+				existingRecord.value as ScrapeSearchResult[],
+				value,
+			]);
+			updatedValue = sortByFileSize(updatedValue);
+
+			await this.prisma.scraped.update({
+				where: { key },
+				data: { value: updatedValue },
+			});
+		} else {
+			// If record doesn't exist, create a new one
+			await this.prisma.scraped.create({
+				data: { key, value },
+			});
+		}
 	}
 
 	public async getScrapedResults<T>(key: string): Promise<T | undefined> {
@@ -31,7 +50,7 @@ export class PlanetScaleCache {
 		return cacheEntry !== null;
 	}
 
-	public async isOlderThan(imdbId: string, minutesAgo: number): Promise<boolean> {
+	public async isOlderThan(imdbId: string, daysAgo: number): Promise<boolean> {
 		const cacheEntry = await this.prisma.scraped.findFirst({
 			where: {
 				OR: [
@@ -49,8 +68,8 @@ export class PlanetScaleCache {
 		const currentTime = new Date();
 		const updatedAt = new Date(cacheEntry.updatedAt);
 		const ageInMillis = currentTime.getTime() - updatedAt.getTime();
-		const minutesAgoMillis = minutesAgo * 60 * 1000;
-		return ageInMillis >= minutesAgoMillis;
+		const daysAgoInMillis = daysAgo * 24 * 60 * 60 * 1000;
+		return ageInMillis >= daysAgoInMillis;
 	}
 
 	public async getOldestRequest(
@@ -105,17 +124,21 @@ export class PlanetScaleCache {
 		return null;
 	}
 
-	public async getOldestScrapedMedia(mediaType: 'tv' | 'movie'): Promise<string | null> {
-		const scrapedItem = await this.prisma.scraped.findFirst({
+	public async getOldestScrapedMedia(
+		mediaType: 'tv' | 'movie',
+		quantity = 3
+	): Promise<string[] | null> {
+		const scrapedItems = await this.prisma.scraped.findMany({
 			where: {
 				key: { startsWith: `${mediaType}:` },
 			},
 			orderBy: { updatedAt: 'asc' },
+			take: quantity,
 			select: { key: true },
 		});
 
-		if (scrapedItem !== null) {
-			return scrapedItem.key.split(':')[1];
+		if (scrapedItems.length > 0) {
+			return scrapedItems.map((item) => item.key.split(':')[1]);
 		}
 
 		return null;
