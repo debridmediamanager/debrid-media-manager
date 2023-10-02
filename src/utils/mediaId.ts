@@ -21,13 +21,13 @@ export const getMediaId = (
 	if (!seasons || seasons.length === 0) return titleStr;
 	const season = systemOnlyId ? 's' : 'S';
 	const episode = systemOnlyId ? 'e' : 'E';
-	if (fullSeason) {
-		return `${titleStr} ${prefix(season, Math.min(...seasons))}`;
-	} else if (isMultiSeason) {
+	if (isMultiSeason) {
 		return `${titleStr} ${prefix(season, Math.min(...seasons))}${'-'}${prefix(
 			season,
 			Math.max(...seasons)
 		)}`;
+	} else if (fullSeason) {
+		return `${titleStr} ${prefix(season, Math.min(...seasons))}`;
 	}
 	return `${titleStr} ${prefix(season, Math.min(...seasons))}${prefix(
 		episode,
