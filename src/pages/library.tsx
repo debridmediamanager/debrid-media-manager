@@ -114,6 +114,8 @@ function TorrentsPage() {
 						mediaType === 'movie'
 							? filenameParse(torrent.filename)
 							: filenameParse(torrent.filename, true);
+					if (torrent.filename === 'Pokemon.S01-S19.DUBBED.WEBRip.AAC.2.0.x264-SRS')
+						console.log(info);
 					return {
 						score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
 						info,
