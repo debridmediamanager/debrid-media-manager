@@ -18,6 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	}
 
 	await new PlanetScaleCache().delete(imdbId);
-	await generateScrapeJobs(imdbId.toString().trim(), true);
+	await generateScrapeJobs(imdbId.toString().trim());
 	res.status(200).json({ status: 'success' });
 }

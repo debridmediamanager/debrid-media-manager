@@ -220,10 +220,14 @@ const processPage = async (
 			badCount++;
 			continue;
 		}
-		if (!targetTitle.match(/xxx/i)) {
-			if (title.match(/xxx/i)) {
-				badCount++;
-				continue;
+		let bannedWords = ['xxx', 'tits', 'clit'];
+		for (let word of bannedWords) {
+			let regex = new RegExp(`\b${word}`, 'i');
+			if (!targetTitle.match(regex)) {
+				if (title.match(regex)) {
+					badCount++;
+					break;
+				}
 			}
 		}
 

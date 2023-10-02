@@ -26,6 +26,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 		let uniqueIds = Array.from(new Set(imdbIds));
 		uniqueIds = uniqueIds.slice(0, parseInt(quantity as string) || 1);
-		await Promise.all(uniqueIds.map(async (imdbId) => await generateScrapeJobs(imdbId, true)));
+		await Promise.all(uniqueIds.map(async (imdbId) => await generateScrapeJobs(imdbId)));
 	}
 }

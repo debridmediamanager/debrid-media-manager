@@ -15,18 +15,6 @@ const getTmdbMovieInfo = (tmdbId: string) =>
 
 const db = new PlanetScaleCache();
 
-const isAlreadyScraped = async (mediaType: string, imdbId: string): Promise<boolean> => {
-	const keyExists = await db.keyExists(`${mediaType}:${imdbId}${mediaType === 'tv' ? ':1' : ''}`);
-	if (keyExists) {
-		return true;
-	}
-	const isProcessing = await db.keyExists(`processing:${imdbId}`);
-	if (isProcessing) {
-		return true;
-	}
-	return false;
-};
-
 function convertMdbToTmdb(apiResponse: any) {
 	return {
 		title: apiResponse.title,
@@ -41,7 +29,7 @@ export type ScrapeResponse = {
 	errorMessage?: string;
 };
 
-export async function generateScrapeJobs(imdbId: string, override: boolean = false) {
+export async function generateScrapeJobs(imdbId: string, replaceOldScrape: boolean = false) {
 	let tmdbSearch, mdbInfo;
 	try {
 		tmdbSearch = await axios.get(getTmdbSearch(imdbId));
@@ -55,18 +43,16 @@ export async function generateScrapeJobs(imdbId: string, override: boolean = fal
 	const isTv = mdbInfo.data.type === 'show' || tmdbSearch.data.tv_results?.length > 0;
 
 	if (isMovie) {
-		if (!override && (await isAlreadyScraped('movie', imdbId))) return;
-
 		try {
 			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.movie_results[0]?.id;
 			const tmdbInfo = await axios.get(getTmdbMovieInfo(tmdbId));
-			await scrapeMovies(imdbId, tmdbInfo.data, mdbInfo.data, db);
+			await scrapeMovies(imdbId, tmdbInfo.data, mdbInfo.data, db, replaceOldScrape);
 			return;
 		} catch (error: any) {
 			if (error.response?.status === 404 || error.message.includes("reading 'id'")) {
 				try {
 					const convertedMdb = convertMdbToTmdb(mdbInfo.data);
-					await scrapeMovies(imdbId, convertedMdb, mdbInfo.data, db);
+					await scrapeMovies(imdbId, convertedMdb, mdbInfo.data, db, replaceOldScrape);
 					return;
 				} catch (error: any) {
 					console.error(error);
@@ -79,18 +65,16 @@ export async function generateScrapeJobs(imdbId: string, override: boolean = fal
 	}
 
 	if (isTv) {
-		if (!override && (await isAlreadyScraped('tv', imdbId))) return;
-
 		try {
 			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.tv_results[0]?.id;
 			const tmdbInfo = await axios.get(getTmdbTvInfo(tmdbId));
-			await scrapeTv(imdbId, tmdbInfo.data, mdbInfo.data, db);
+			await scrapeTv(imdbId, tmdbInfo.data, mdbInfo.data, db, replaceOldScrape);
 			return;
 		} catch (error: any) {
 			if (error.response?.status === 404 || error.message.includes("reading 'id'")) {
 				try {
 					const convertedMdb = convertMdbToTmdb(mdbInfo.data);
-					await scrapeTv(imdbId, convertedMdb, mdbInfo.data, db);
+					await scrapeTv(imdbId, convertedMdb, mdbInfo.data, db, replaceOldScrape);
 					return;
 				} catch (error: any) {
 					console.error(error);

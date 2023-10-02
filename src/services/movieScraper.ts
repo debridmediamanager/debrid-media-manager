@@ -112,7 +112,8 @@ export async function scrapeMovies(
 	imdbId: string,
 	tmdbData: any,
 	mdbData: any,
-	db: PlanetScaleCache
+	db: PlanetScaleCache,
+	replaceOldScrape: boolean = false
 ): Promise<number> {
 	console.log(
 		`🏹 Scraping movie: ${tmdbData.title} (${imdbId}) (uncommon: ${countUncommonWordsInTitle(
@@ -208,7 +209,7 @@ export async function scrapeMovies(
 	let processedResults = flattenAndRemoveDuplicates(searchResults);
 	if (processedResults.length) processedResults = sortByFileSize(processedResults);
 
-	await db.saveScrapedResults(`movie:${imdbId}`, processedResults);
+	await db.saveScrapedResults(`movie:${imdbId}`, processedResults, replaceOldScrape);
 	console.log(`🎥 Saved ${processedResults.length} results for ${cleanTitle}`);
 
 	await db.markAsDone(imdbId);

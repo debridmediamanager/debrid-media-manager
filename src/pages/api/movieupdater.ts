@@ -24,6 +24,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			continue;
 		}
 
-		await Promise.all(imdbIds.map(async (imdbId) => await generateScrapeJobs(imdbId, true)));
+		await Promise.all(imdbIds.map(async (imdbId) => await generateScrapeJobs(imdbId)));
 	}
 }

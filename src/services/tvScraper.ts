@@ -138,7 +138,8 @@ export async function scrapeTv(
 	imdbId: string,
 	tmdbData: any,
 	mdbData: any,
-	db: PlanetScaleCache
+	db: PlanetScaleCache,
+	replaceOldScrape: boolean = false
 ): Promise<number> {
 	console.log(
 		`🏏 Scraping ${getSeasons(mdbData).length} season(s) of tv show: ${
@@ -199,7 +200,11 @@ export async function scrapeTv(
 		}
 		totalResultsCount += processedResults.length;
 
-		await db.saveScrapedResults(`tv:${imdbId}:${job.seasonNumber}`, processedResults);
+		await db.saveScrapedResults(
+			`tv:${imdbId}:${job.seasonNumber}`,
+			processedResults,
+			replaceOldScrape
+		);
 		console.log(
 			`📺 Saved ${processedResults.length} results for ${job.title} season ${job.seasonNumber}`
 		);
