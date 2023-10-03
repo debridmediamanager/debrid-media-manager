@@ -1,11 +1,13 @@
 import Poster from '@/components/poster';
 import { withAuth } from '@/utils/withAuth';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 function RecentlyUpdated() {
+	const { publicRuntimeConfig: config } = getConfig();
 	const [searchResults, setSearchResults] = useState<string[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -13,7 +15,7 @@ function RecentlyUpdated() {
 	const fetchData = async () => {
 		setLoading(true);
 		try {
-			const res = await fetch(`/api/recent`);
+			const res = await fetch(`${config.externalSearchApiHostname}/api/recent`);
 			const data = await res.json();
 			setSearchResults(data);
 		} catch (error: any) {

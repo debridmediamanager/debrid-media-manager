@@ -10,6 +10,7 @@ import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -33,6 +34,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	year,
 	imdb_score,
 }) => {
+	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -63,7 +65,9 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		setSearchResults([]);
 		setErrorMessage('');
 		try {
-			let endpoint = `/api/moviesearch?imdbId=${encodeURIComponent(imdbId)}`;
+			let endpoint = `${
+				config.externalSearchApiHostname
+			}/api/moviesearch%3FimdbId=${encodeURIComponent(imdbId)}`;
 			const response = await axios.get<SearchApiResponse>(endpoint);
 			if (response.status === 204) {
 				setSearchState(response.headers['status']);
