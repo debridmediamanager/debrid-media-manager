@@ -10,6 +10,7 @@ import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -35,6 +36,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	season_names,
 	imdb_score,
 }) => {
+	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
@@ -65,9 +67,9 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		setSearchResults([]);
 		setErrorMessage('');
 		try {
-			let endpoint = `/api/tvsearch?imdbId=${encodeURIComponent(
-				imdbId
-			)}&seasonNum=${seasonNum}`;
+			let endpoint = `${
+				config.externalSearchApiHostname
+			}/api/tvsearch%3FimdbId=${encodeURIComponent(imdbId)}&seasonNum=${seasonNum}`;
 			const response = await axios.get<SearchApiResponse>(endpoint);
 			if (response.status === 204) {
 				setSearchState(response.headers['status']);

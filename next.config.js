@@ -27,7 +27,7 @@ const nextConfig = {
 	reactStrictMode: false,
 	publicRuntimeConfig: {
 		// Will be available on both server and client
-		// externalSearchApiHostname: 'http://debridmediamanager.com',
+		externalSearchApiHostname: process.env.EXTERNAL_SEARCH_API_HOSTNAME,
 		realDebridHostname: 'https://corsproxy.org/?https://api.real-debrid.com',
 		allDebridHostname: 'https://api.alldebrid.com',
 		allDebridAgent: 'debridMediaManager',
