@@ -33,18 +33,23 @@ You can share your whole collection or select specific items you want to share. 
 ## Setup
 
 0. Signup for a free tier plan at [PlanetScale](https://planetscale.com/) - this is a serverless MySQL database hosted in the cloud
-1. Have Tor running at `127.0.0.1:9050` (needed for DHT search; if you don't use that then it's not needed)
-2. Clone this repository and go to the cloned directory
-3. Create a copy of the `.env` file `cp .env .env.local`
+1. Have Tor running at `127.0.0.1:9050` (needed for DHT search; if you don't need your own search database then refer to the secion `External Search API`)
+2. Clone this repository and go to the directory
+3. Create a copy of the `.env` file `cp .env .env.local` and fill in the details
 4. Fill in required settings in `.env.local` (e.g. `PROXY=socks5h://127.0.0.1:9050` if tor is running on your host machine)
 5. Get your Prisma database connection string from PlanetScale console and put that in your `.env.local` file
 6. Install the dependencies `npm i`
 7. This is a Next.js project so either go with `npm run dev` or `npm run build && npm run start`
 8. Head to `localhost:3000` and login
 
+### External Search API
+
+If you don't want to build your own library, edit the config `EXTERNAL_SEARCH_API_HOSTNAME` in your `.env.local` and set it to `https://corsproxy.org/?https://debridmediamanager.com`
+
 ### Docker Swarm
 
 ```
+cp .env .env.local
 docker swarm init
 docker stack deploy -c docker-compose.yml
 ```

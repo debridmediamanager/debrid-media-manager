@@ -1,5 +1,6 @@
 import Poster from '@/components/poster';
 import { withAuth } from '@/utils/withAuth';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -8,6 +9,7 @@ import { Toaster } from 'react-hot-toast';
 import { MdbSearchResult } from './api/keywordsearch';
 
 function Search() {
+	const { publicRuntimeConfig: config } = getConfig();
 	const [query, setQuery] = useState('');
 	const [typedQuery, setTypedQuery] = useState('');
 	const [searchResults, setSearchResults] = useState<MdbSearchResult[]>([]);
@@ -19,7 +21,9 @@ function Search() {
 	const fetchData = async (query: string) => {
 		setLoading(true);
 		try {
-			const res = await fetch(`/api/keywordsearch?keyword=${query}`);
+			const res = await fetch(
+				`${config.externalSearchApiHostname}/api/keywordsearch%3Fkeyword=${query}`
+			);
 			const data = await res.json();
 			setSearchResults(data.results);
 		} catch (error: any) {
