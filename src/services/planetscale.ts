@@ -14,14 +14,15 @@ export class PlanetScaleCache {
 	public async saveScrapedResults(
 		key: string,
 		value: ScrapeSearchResult[],
-		updateUpdatedAt: boolean = true
+		updateUpdatedAt: boolean = true,
+		replaceOldScrape: boolean = false
 	) {
 		// Fetch the existing record
 		const existingRecord: Scraped | null = await this.prisma.scraped.findUnique({
 			where: { key },
 		});
 
-		if (existingRecord) {
+		if (existingRecord && !replaceOldScrape) {
 			// If record exists, append the new values to it
 			let updatedValue = flattenAndRemoveDuplicates([
 				existingRecord.value as ScrapeSearchResult[],
@@ -33,7 +34,15 @@ export class PlanetScaleCache {
 				where: { key },
 				data: {
 					value: updatedValue,
-					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt, // If updateUpdatedAt is false, keep the old updatedAt value
+					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt,
+				},
+			});
+		} else if (existingRecord && replaceOldScrape) {
+			await this.prisma.scraped.update({
+				where: { key },
+				data: {
+					value,
+					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt,
 				},
 			});
 		} else {

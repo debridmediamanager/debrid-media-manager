@@ -1017,7 +1017,8 @@ function TorrentsPage() {
 													torrent.filename
 												) && (
 													<>
-														<strong>{torrent.title}</strong>{' '}
+														{torrent.mediaType === 'tv' ? '📺' : '🎥'}
+														&nbsp;<strong>{torrent.title}</strong>{' '}
 														<Link
 															className="text-sm text-green-600 hover:text-green-800"
 															href={`/library?filter=${getMediaId(

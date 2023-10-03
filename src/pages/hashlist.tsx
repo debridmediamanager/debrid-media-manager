@@ -38,6 +38,7 @@ interface SortBy {
 
 function TorrentsPage() {
 	const router = useRouter();
+	const [query, setQuery] = useState('');
 	const [loading, setLoading] = useState(true);
 	const [filtering, setFiltering] = useState(false);
 	const [grouping, setGrouping] = useState(false);
@@ -137,7 +138,7 @@ function TorrentsPage() {
 	useEffect(() => {
 		setFiltering(true);
 		if (Object.keys(router.query).length === 0) {
-			setFilteredList(userTorrentsList);
+			setFilteredList(applyQuickSearch(userTorrentsList));
 			setFiltering(false);
 			return;
 		}
@@ -146,21 +147,35 @@ function TorrentsPage() {
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
 			tmpList = tmpList.filter((t) => decodedTitleFilter === getMediaId(t.info, t.mediaType));
-			setFilteredList(tmpList);
+			setFilteredList(applyQuickSearch(tmpList));
 		}
 		if (mediaType) {
 			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
-			setFilteredList(tmpList);
+			setFilteredList(applyQuickSearch(tmpList));
 		}
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query, userTorrentsList, movieGrouping, tvGroupingByEpisode]);
+	}, [query, userTorrentsList, movieGrouping, tvGroupingByEpisode]);
 
 	function handleSort(column: typeof sortBy.column) {
 		setSortBy({
 			column,
 			direction: sortBy.column === column && sortBy.direction === 'asc' ? 'desc' : 'asc',
 		});
+	}
+
+	function applyQuickSearch(unfiltered: UserTorrent[]) {
+		let regexFilters: RegExp[] = [];
+		for (const q of query.split(' ')) {
+			try {
+				regexFilters.push(new RegExp(q, 'i'));
+			} catch (error) {
+				continue;
+			}
+		}
+		return query
+			? unfiltered.filter((t) => regexFilters.every((regex) => regex.test(t.filename)))
+			: unfiltered;
 	}
 
 	function sortedData() {
@@ -323,6 +338,18 @@ function TorrentsPage() {
 				>
 					Go Home
 				</Link>
+			</div>
+			<div className="flex items-center border-b border-b-2 border-gray-500 py-2 mb-4">
+				<input
+					className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
+					type="text"
+					id="query"
+					placeholder="quick search on filename, hash, or id; supports regex"
+					value={query}
+					onChange={(e) => {
+						setQuery(e.target.value.toLocaleLowerCase());
+					}}
+				/>
 			</div>
 			<div className="mb-4">
 				<Link

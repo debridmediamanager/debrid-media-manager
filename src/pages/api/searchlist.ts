@@ -41,12 +41,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			}
 			imdbIds.push(imdbId);
 			if (imdbIds.length >= (parseInt(quantity as string) || 1)) {
-				await Promise.all(imdbIds.map(async (id) => await generateScrapeJobs(id, true)));
+				await Promise.all(imdbIds.map(async (id) => await generateScrapeJobs(id)));
 				imdbIds = [];
 			}
 		}
 		if (imdbIds.length > 0) {
-			await Promise.all(imdbIds.map(async (id) => await generateScrapeJobs(id, true)));
+			await Promise.all(imdbIds.map(async (id) => await generateScrapeJobs(id)));
 		}
 	}
 }
