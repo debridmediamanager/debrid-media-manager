@@ -1,3 +1,4 @@
+import { meetsTitleConditions } from '@/utils/checks';
 import { getMediaType } from '@/utils/mediaType';
 import ProxyManager from '@/utils/proxyManager';
 import axios from 'axios';
@@ -6,14 +7,12 @@ import UserAgent from 'user-agents';
 import { ScrapeSearchResult } from './mediasearch';
 
 const BTDIG = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
-// const BTDIG = 'https://en.btdig.com';
 const MAX_RESULTS_PER_PAGE = 10;
 const BAD_RESULT_THRESHOLD = 20;
 
 export const createAxiosInstance = (agent: SocksProxyAgent) => {
 	return axios.create({
 		httpAgent: BTDIG.startsWith('http://') ? agent : undefined,
-		// httpsAgent: BTDIG.startsWith('https://') ? agent : undefined,
 		headers: {
 			accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
 			'accept-language': 'en-US,en;q=0.5',
@@ -131,12 +130,8 @@ const processPage = async (
 				error.message.includes('"socket" was not created')
 			) {
 				proxy.rerollProxy();
-				// console.log('429 error, waiting for a bit longer before retrying...');
-				// console.log('Btdigg 429');
 				retries++;
 			} else if (error.message.includes('timeout of')) {
-				// console.log('timeout, waiting for a bit longer before retrying...');
-				// console.log('Btdigg ⏱');
 				retries++;
 			} else {
 				console.log('request error:', error.message);
@@ -149,11 +144,6 @@ const processPage = async (
 			await new Promise((resolve) => setTimeout(resolve, 10000 * retries));
 		}
 	}
-	// console.log(
-	// 	`${pageNum}/${calculateMaxPages(
-	// 		numResults
-	// 	)} : ${finalQuery}, ${targetTitle}, ${mustHaveTerms}`
-	// );
 	const fileSizes = Array.from(
 		responseData.matchAll(/class=\"torrent_size\"[^>]*>(\d+(?:\.\d+)?)(?:[^A-Z<]+)?([A-Z]+)?/g)
 	);
@@ -191,44 +181,9 @@ const processPage = async (
 			continue;
 		}
 
-		// Check if every term in the query (tokenized by space) is contained in the title
-		const queryTerms = targetTitle
-			.replaceAll('"', ' ')
-			.split(' ')
-			.filter((e) => e !== '');
-		let requiredTerms = queryTerms.length <= 3 ? queryTerms.length : queryTerms.length - 1;
-		const containedTerms = queryTerms.filter((term) =>
-			new RegExp(`${term.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')}`, 'i').test(title)
-		).length;
-		if (containedTerms < requiredTerms) {
-			// console.debug(title, '-title match-', targetTitle);
-			// console.debug('bad title', containedTerms, requiredTerms);
-			badCount++; // title doesn't contain most terms in the query
-			continue;
-		}
-		const containedMustHaveTerms = mustHaveTerms.filter((term) => {
-			if (typeof term === 'string') {
-				return new RegExp(`${term}`, 'i').test(title);
-			} else if (term instanceof RegExp) {
-				return term.test(title);
-			}
-			return false;
-		}).length;
-		if (containedMustHaveTerms < mustHaveTerms.length) {
-			// console.debug(title, '-must have-', mustHaveTerms);
-			// console.debug('bad must have terms', containedMustHaveTerms, mustHaveTerms.length);
+		if (!meetsTitleConditions(targetTitle, mustHaveTerms, title)) {
 			badCount++;
 			continue;
-		}
-		let bannedWords = ['xxx', 'tits', 'clit'];
-		for (let word of bannedWords) {
-			let regex = new RegExp(`\b${word}`, 'i');
-			if (!targetTitle.match(regex)) {
-				if (title.match(regex)) {
-					badCount++;
-					break;
-				}
-			}
 		}
 
 		const hash = namesAndHashes[resIndex][1];

@@ -95,7 +95,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 	}
 
 	if (
-		job.title.replaceAll(' ', '').length > 5 &&
+		job.title.replaceAll(/[^a-z0-9]/gi, '').length > 5 &&
 		job.title.split(/\s/).length > 3 &&
 		job.seasonNumber === 1
 	) {
