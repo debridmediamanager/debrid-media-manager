@@ -1,3 +1,4 @@
+import { naked } from '@/utils/checks';
 import { cleanSearchQuery } from '@/utils/search';
 import fs from 'fs';
 import { scrapeBtdigg } from './btdigg-v2';
@@ -52,28 +53,40 @@ async function scrapeAll(
 const getMovieSearchResults = async (job: MovieScrapeJob) => {
 	let sets: ScrapeSearchResult[][] = [];
 	const hasUncommonWords = countUncommonWordsInTitle(job.title) >= 1;
+	const mustHaveFn = (title: string, year?: string) =>
+		naked(title).length <= 6 && year ? [year] : [];
 
+	let mustHave = mustHaveFn(job.title, job.year);
 	if (job.title.includes(' & ')) {
 		const aSets = await Promise.all([
-			scrapeAll(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate),
+			scrapeAll(`"${job.title}" ${job.year ?? ''}`, job.title, mustHave, job.airDate),
 			scrapeAll(
 				`"${job.title.replaceAll(' & ', ' and ')}" ${job.year ?? ''}`,
 				job.title,
-				[],
+				mustHave,
 				job.airDate
 			),
 		]);
 		sets.push(...aSets.flat());
 	} else {
 		sets.push(
-			...(await scrapeAll(`"${job.title}" ${job.year ?? ''}`, job.title, [], job.airDate))
+			...(await scrapeAll(
+				`"${job.title}" ${job.year ?? ''}`,
+				job.title,
+				mustHave,
+				job.airDate
+			))
 		);
 	}
-	if (job.title.split(/\s/).length > 3 || hasUncommonWords) {
-		sets.push(...(await scrapeAll(`"${job.title}"`, job.title, [], job.airDate)));
+	if (
+		job.title.replaceAll(/[^a-z0-9]/gi, '').length > 5 &&
+		(job.title.split(/\s/).length > 3 || hasUncommonWords)
+	) {
+		sets.push(...(await scrapeAll(`"${job.title}"`, job.title, mustHave, job.airDate)));
 	}
 
 	if (job.originalTitle) {
+		mustHave = mustHaveFn(job.originalTitle, job.year);
 		sets.push(
 			...(await scrapeAll(
 				`"${job.originalTitle}" ${job.year ?? ''}`,
@@ -82,7 +95,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				job.airDate
 			))
 		);
-		if (hasUncommonWords) {
+		if (job.originalTitle.replaceAll(/[^a-z0-9]/gi, '').length > 5 && hasUncommonWords) {
 			sets.push(
 				...(await scrapeAll(`"${job.originalTitle}"`, job.originalTitle, [], job.airDate))
 			);
@@ -90,6 +103,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 	}
 
 	if (job.cleanedTitle) {
+		mustHave = mustHaveFn(job.cleanedTitle, job.year);
 		sets.push(
 			...(await scrapeAll(
 				`"${job.cleanedTitle}" ${job.year ?? ''}`,
@@ -98,7 +112,7 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				job.airDate
 			))
 		);
-		if (hasUncommonWords) {
+		if (job.cleanedTitle.replaceAll(/[^a-z0-9]/gi, '').length > 5 && hasUncommonWords) {
 			sets.push(
 				...(await scrapeAll(`"${job.cleanedTitle}"`, job.cleanedTitle, [], job.airDate))
 			);
@@ -112,7 +126,8 @@ export async function scrapeMovies(
 	imdbId: string,
 	tmdbData: any,
 	mdbData: any,
-	db: PlanetScaleCache
+	db: PlanetScaleCache,
+	replaceOldScrape: boolean = false
 ): Promise<number> {
 	console.log(
 		`🏹 Scraping movie: ${tmdbData.title} (${imdbId}) (uncommon: ${countUncommonWordsInTitle(
@@ -208,7 +223,7 @@ export async function scrapeMovies(
 	let processedResults = flattenAndRemoveDuplicates(searchResults);
 	if (processedResults.length) processedResults = sortByFileSize(processedResults);
 
-	await db.saveScrapedResults(`movie:${imdbId}`, processedResults);
+	await db.saveScrapedResults(`movie:${imdbId}`, processedResults, replaceOldScrape);
 	console.log(`🎥 Saved ${processedResults.length} results for ${cleanTitle}`);
 
 	await db.markAsDone(imdbId);

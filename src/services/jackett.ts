@@ -1,3 +1,4 @@
+import { meetsTitleConditions } from '@/utils/checks';
 import axios from 'axios';
 import bencode from 'bencode';
 import { createHash } from 'crypto';
@@ -78,47 +79,8 @@ async function processItem(
 		return undefined;
 	}
 
-	// Check if every term in the query (tokenized by space) is contained in the title
-	const queryTerms = targetTitle
-		.replaceAll('"', ' ')
-		.split(' ')
-		.filter((e) => e !== '');
-	let requiredTerms = queryTerms.length <= 3 ? queryTerms.length : queryTerms.length - 1;
-	const containedTerms = queryTerms.filter((term) =>
-		new RegExp(`${term.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')}`, 'i').test(title)
-	).length;
-	if (containedTerms < requiredTerms) {
-		// console.debug(title, '-title match-', targetTitle);
-		// console.debug('bad title', containedTerms, requiredTerms);
-		// console.log(
-		// 	`❌ ${item.Tracker} returned a bad result (title match)`,
-		// 	containedTerms,
-		// 	requiredTerms
-		// );
+	if (!meetsTitleConditions(targetTitle, mustHaveTerms, title)) {
 		return undefined;
-	}
-	const containedMustHaveTerms = mustHaveTerms.filter((term) => {
-		if (typeof term === 'string') {
-			return new RegExp(`${term}`, 'i').test(title);
-		} else if (term instanceof RegExp) {
-			return term.test(title);
-		}
-		return false;
-	}).length;
-	if (containedMustHaveTerms < mustHaveTerms.length) {
-		// console.debug(title, '-must have-', mustHaveTerms);
-		// console.debug('bad must have terms', containedMustHaveTerms, mustHaveTerms.length);
-		// console.log(
-		// 	`❌ ${item.Tracker} returned a bad result (must have terms)`,
-		// 	containedMustHaveTerms,
-		// 	mustHaveTerms.length
-		// );
-		return undefined;
-	}
-	if (!targetTitle.match(/xxx/i)) {
-		if (title.match(/xxx/i)) {
-			return undefined;
-		}
 	}
 
 	const hash =

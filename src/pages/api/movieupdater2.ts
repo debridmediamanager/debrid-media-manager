@@ -34,7 +34,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		// show percentage
 		const index = imdbIds.indexOf(imdbId);
 		const percentage = Math.round((index / imdbIds.length) * 100);
-		let i = 1;
 		while (true) {
 			try {
 				const response = await axios.get(torrentioUrl(imdbId), {
@@ -56,16 +55,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 					`[movieupdater] ${imdbId} has ${torrentioLinks.length} links ${percentage}% (${index}/${imdbIds.length})`
 				);
 				await db.saveScrapedResults(`movie:${imdbId}`, torrentioLinks, false);
-				i = 1;
 				break;
 			} catch (e) {
 				console.log(`[movieupdater] ${imdbId} failed (${e}), retrying...`);
-				await new Promise((resolve) => setTimeout(resolve, 10000 * i));
-				i = i * 2;
+				await new Promise((resolve) => setTimeout(resolve, 600000));
 				continue;
 			}
 		}
-		await new Promise((resolve) => setTimeout(resolve, 5000));
+		await new Promise((resolve) => setTimeout(resolve, 10000));
 	}
 }
 
