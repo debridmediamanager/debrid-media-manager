@@ -1,5 +1,4 @@
 import { meetsTitleConditions } from '@/utils/checks';
-import { getMediaType } from '@/utils/mediaType';
 import ProxyManager from '@/utils/proxyManager';
 import axios from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
@@ -165,23 +164,14 @@ const processPage = async (
 			badCount++;
 			continue;
 		}
-
 		const fileSize = convertToMB(fileSizeStr);
-		if (getMediaType(title) === 'movie' && fileSize > 200000) {
-			badCount++; // movie is too big
-			continue;
-		}
-		if (fileSizeStr.includes(' B') || fileSizeStr.includes(' KB')) {
-			badCount++;
-			continue;
-		}
 
 		if (!isFoundDateRecent(ages[resIndex][1], airDate)) {
 			badCount++;
 			continue;
 		}
 
-		if (!meetsTitleConditions(targetTitle, mustHaveTerms, title)) {
+		if (!meetsTitleConditions(targetTitle, airDate.substring(0, 4), mustHaveTerms, title)) {
 			badCount++;
 			continue;
 		}

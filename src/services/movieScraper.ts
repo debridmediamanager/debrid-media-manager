@@ -1,19 +1,10 @@
-import { naked } from '@/utils/checks';
+import { countUncommonWords, naked } from '@/utils/checks';
 import { cleanSearchQuery } from '@/utils/search';
-import fs from 'fs';
 import { scrapeBtdigg } from './btdigg-v2';
 import { scrapeJackett } from './jackett';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 import { scrapeProwlarr } from './prowlarr';
-
-let wordSet: Set<string>;
-try {
-	let data = fs.readFileSync('./wordlist.txt', 'utf8');
-	wordSet = new Set(data.toLowerCase().split('\n'));
-} catch (err) {
-	console.error('error loading wordlist', err);
-}
 
 type MovieScrapeJob = {
 	title: string;
@@ -21,20 +12,6 @@ type MovieScrapeJob = {
 	cleanedTitle?: string;
 	year?: string;
 	airDate: string;
-};
-
-const countUncommonWordsInTitle = (title: string) => {
-	let processedTitle = title
-		.split(/\s+/)
-		.map((word: string) =>
-			word
-				.toLowerCase()
-				.replace(/'s/g, '')
-				.replace(/\s&\s/g, ' and ')
-				.replaceAll(/[\W]+/g, '')
-		)
-		.filter((word: string) => word.length > 3);
-	return processedTitle.filter((word: string) => !wordSet.has(word)).length;
 };
 
 async function scrapeAll(
@@ -52,7 +29,6 @@ async function scrapeAll(
 
 const getMovieSearchResults = async (job: MovieScrapeJob) => {
 	let sets: ScrapeSearchResult[][] = [];
-	const hasUncommonWords = countUncommonWordsInTitle(job.title) >= 1;
 	const mustHaveFn = (title: string, year?: string) =>
 		naked(title).length <= 6 && year ? [year] : [];
 
@@ -79,8 +55,8 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 		);
 	}
 	if (
-		job.title.replaceAll(/[^a-z0-9]/gi, '').length > 5 &&
-		(job.title.split(/\s/).length > 3 || hasUncommonWords)
+		job.title.replace(/[^a-z0-9]/gi, '').length > 5 &&
+		(job.title.split(/\s/).length > 3 || countUncommonWords(job.title))
 	) {
 		sets.push(...(await scrapeAll(`"${job.title}"`, job.title, mustHave, job.airDate)));
 	}
@@ -95,7 +71,10 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				job.airDate
 			))
 		);
-		if (job.originalTitle.replaceAll(/[^a-z0-9]/gi, '').length > 5 && hasUncommonWords) {
+		if (
+			job.originalTitle.replace(/[^a-z0-9]/gi, '').length > 5 &&
+			countUncommonWords(job.title)
+		) {
 			sets.push(
 				...(await scrapeAll(`"${job.originalTitle}"`, job.originalTitle, [], job.airDate))
 			);
@@ -112,7 +91,10 @@ const getMovieSearchResults = async (job: MovieScrapeJob) => {
 				job.airDate
 			))
 		);
-		if (job.cleanedTitle.replaceAll(/[^a-z0-9]/gi, '').length > 5 && hasUncommonWords) {
+		if (
+			job.cleanedTitle.replace(/[^a-z0-9]/gi, '').length > 5 &&
+			countUncommonWords(job.title)
+		) {
 			sets.push(
 				...(await scrapeAll(`"${job.cleanedTitle}"`, job.cleanedTitle, [], job.airDate))
 			);
@@ -130,7 +112,7 @@ export async function scrapeMovies(
 	replaceOldScrape: boolean = false
 ): Promise<number> {
 	console.log(
-		`🏹 Scraping movie: ${tmdbData.title} (${imdbId}) (uncommon: ${countUncommonWordsInTitle(
+		`🏹 Scraping movie: ${tmdbData.title} (${imdbId}) (uncommon: ${countUncommonWords(
 			tmdbData.title
 		)})...`
 	);
@@ -142,7 +124,7 @@ export async function scrapeMovies(
 
 	const processedTitle = tmdbData.title
 		.split(' ')
-		.map((word: string) => word.replaceAll(/[\W]+/g, ''))
+		.map((word: string) => word.replace(/[\W]+/g, ''))
 		.join(' ')
 		.trim()
 		.toLowerCase();
@@ -154,13 +136,13 @@ export async function scrapeMovies(
 	) {
 		originalTitle = tmdbData.original_title.toLowerCase();
 		for (let rating of mdbData.ratings) {
-			if (rating.source === 'tomatoes') {
+			if (rating.source === 'tomatoes' && rating.score > 0) {
 				if (!rating.url) continue;
 				let tomatoTitle = rating.url.split('/').pop();
 				if (tomatoTitle.match(/^\d{6,}/)) continue;
 				tomatoTitle = tomatoTitle
 					.split('_')
-					.map((word: string) => word.replaceAll(/[\W]+/g, ''))
+					.map((word: string) => word.replace(/[\W]+/g, ''))
 					.join(' ')
 					.trim()
 					.toLowerCase();
@@ -168,7 +150,7 @@ export async function scrapeMovies(
 					console.log(
 						'🎯 Found another title (1):',
 						tomatoTitle,
-						`(uncommon: ${countUncommonWordsInTitle(tomatoTitle)})`
+						`(uncommon: ${countUncommonWords(tomatoTitle)})`
 					);
 					cleanedTitle = tomatoTitle;
 				}
@@ -179,12 +161,12 @@ export async function scrapeMovies(
 	let anotherTitle;
 	if (mdbData.ratings?.length) {
 		for (let rating of mdbData.ratings) {
-			if (rating.source === 'metacritic') {
+			if (rating.source === 'metacritic' && rating.score > 0) {
 				if (!rating.url) continue;
 				let metacriticTitle = rating.url.split('/').pop();
 				metacriticTitle = metacriticTitle
 					.split('-')
-					.map((word: string) => word.replaceAll(/[\W]+/g, ''))
+					.map((word: string) => word.replace(/[\W]+/g, ''))
 					.join(' ')
 					.trim()
 					.toLowerCase();
@@ -192,7 +174,7 @@ export async function scrapeMovies(
 					console.log(
 						'🎯 Found another title (2):',
 						metacriticTitle,
-						`(uncommon: ${countUncommonWordsInTitle(metacriticTitle)})`
+						`(uncommon: ${countUncommonWords(metacriticTitle)})`
 					);
 					anotherTitle = metacriticTitle;
 				}
@@ -221,6 +203,11 @@ export async function scrapeMovies(
 		);
 	}
 	let processedResults = flattenAndRemoveDuplicates(searchResults);
+	// extra conditions based on media type = movie
+	processedResults = processedResults.filter((result) => !/s\d\de\d\d/i.test(result.title));
+	processedResults = processedResults.filter(
+		(result) => result.fileSize < 200000 && result.fileSize > 500
+	);
 	if (processedResults.length) processedResults = sortByFileSize(processedResults);
 
 	await db.saveScrapedResults(`movie:${imdbId}`, processedResults, replaceOldScrape);

@@ -21,9 +21,12 @@ function Search() {
 	const fetchData = async (query: string) => {
 		setLoading(true);
 		try {
-			const res = await fetch(
-				`${config.externalSearchApiHostname}/api/keywordsearch%3Fkeyword=${query}`
-			);
+			let path = `api/keywordsearch?keyword=${query}`;
+			if (config.externalSearchApiHostname) {
+				path = encodeURIComponent(path);
+			}
+			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
+			const res = await fetch(endpoint);
 			const data = await res.json();
 			setSearchResults(data.results);
 		} catch (error: any) {

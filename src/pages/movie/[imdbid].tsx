@@ -65,9 +65,11 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		setSearchResults([]);
 		setErrorMessage('');
 		try {
-			let endpoint = `${
-				config.externalSearchApiHostname
-			}/api/moviesearch%3FimdbId=${encodeURIComponent(imdbId)}`;
+			let path = `api/moviesearch?imdbId=${encodeURIComponent(imdbId)}`;
+			if (config.externalSearchApiHostname) {
+				path = encodeURIComponent(path);
+			}
+			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const response = await axios.get<SearchApiResponse>(endpoint);
 			if (response.status === 204) {
 				setSearchState(response.headers['status']);

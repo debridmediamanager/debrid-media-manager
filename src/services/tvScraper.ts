@@ -95,7 +95,7 @@ const getSearchResults = async (job: TvScrapeJob) => {
 	}
 
 	if (
-		job.title.replaceAll(/[^a-z0-9]/gi, '').length > 5 &&
+		job.title.replace(/[^a-z0-9]/gi, '').length > 5 &&
 		job.title.split(/\s/).length > 3 &&
 		job.seasonNumber === 1
 	) {
@@ -196,6 +196,10 @@ export async function scrapeTv(
 			searchResults = await getSearchResults(job);
 		}
 		let processedResults = flattenAndRemoveDuplicates(searchResults);
+		// extra conditions based on media type = tv
+		processedResults = processedResults.filter(
+			(result) => result.fileSize > 100
+		);
 		if (processedResults.length) processedResults = sortByFileSize(processedResults);
 		if (!/movie/i.test(job.title)) {
 			processedResults = processedResults.filter((result) => {

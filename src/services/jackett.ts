@@ -79,7 +79,7 @@ async function processItem(
 		return undefined;
 	}
 
-	if (!meetsTitleConditions(targetTitle, mustHaveTerms, title)) {
+	if (!meetsTitleConditions(targetTitle, airDate.substring(0, 4), mustHaveTerms, title)) {
 		return undefined;
 	}
 
