@@ -221,7 +221,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					/>
 				</div>
 				<div className="w-3/4 space-y-2">
-					<h2 className="text-2xl font-bold">{title}</h2>
+					<h2 className="text-2xl font-bold">{title} ({year})</h2>
 					<p>{description}</p>
 					{imdb_score && (
 						<p>
