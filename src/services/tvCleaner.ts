@@ -4,7 +4,6 @@ import {
 	getSeasonNameAndCode,
 	getSeasonYear,
 	grabTvMetadata,
-	hasSeason,
 	meetsTitleConditions,
 	padWithZero,
 } from '@/utils/checks';
@@ -84,27 +83,9 @@ function cleanScrapes(
 }
 
 const cleanBasedOnScrapeJob = (job: TvScrapeJob): ScrapeSearchResult[][] => {
-	let results: ScrapeSearchResult[][] = [];
-	for (let i = 0; i < job.titles.length; i++) {
-		const title = job.titles[i];
-		results.push(
-			cleanScrapes(title, job.airDate, job.scrapes).filter((s) =>
-				hasSeason(s.title, job.seasonNumber)
-			)
-		);
-		if (job.seasonName && job.seasonCode) {
-			results.push(
-				cleanScrapes(`${title} ${job.seasonName}`, job.airDate, job.scrapes).filter((s) =>
-					hasSeason(s.title, job.seasonCode!)
-				)
-			);
-		} else if (job.seasonName && job.seasonName !== title) {
-			results.push(cleanScrapes(`${title} ${job.seasonName}`, job.airDate, job.scrapes));
-		} else if (job.seasonNumber === 1) {
-			results.push(cleanScrapes(title, job.airDate, job.scrapes));
-		}
-	}
-	return results;
+	return job.titles.map((title) => {
+		return cleanScrapes(title, job.seasonYear ?? '', job.scrapes);
+	});
 };
 
 export async function cleanTvScrapes(
@@ -160,8 +141,8 @@ export async function cleanTvScrapes(
 			seasonCode
 		);
 		if (!scrapes.length) {
-			await db.saveScrapedResults(`tv:${imdbId}:${seasonNumber}`, scrapes, false, true);
-			await db.markAsDone(imdbId);
+			// await db.saveScrapedResults(`tv:${imdbId}:${seasonNumber}`, scrapes, false, true);
+			// await db.markAsDone(imdbId);
 			console.log(
 				`⚠️ Preliminary procedure removed all results left for ${cleanTitle} s${padWithZero(
 					seasonNumber
@@ -183,13 +164,13 @@ export async function cleanTvScrapes(
 		processedResults = sortByFileSize(processedResults);
 
 		if (processedResults.length < scrapesCount) {
-			await db.saveScrapedResults(
-				`tv:${imdbId}:${seasonNumber}`,
-				processedResults,
-				false,
-				true
-			);
-			await db.markAsDone(imdbId);
+			// await db.saveScrapedResults(
+			// 	`tv:${imdbId}:${seasonNumber}`,
+			// 	processedResults,
+			// 	false,
+			// 	true
+			// );
+			// await db.markAsDone(imdbId);
 			console.log(
 				scrapes
 					.filter((s) => !processedResults.find((p) => p.hash === s.hash))

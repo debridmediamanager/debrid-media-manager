@@ -46,16 +46,6 @@ export function hasYear(test: string, years: string[]) {
 	);
 }
 
-export function hasSeason(test: string, seasonNumber: number) {
-	if (seasonNumber < 10) {
-		const seasonStr = new RegExp(`[^\\d]0?${seasonNumber}[^\\d]`);
-		return test.match(seasonStr) !== null;
-	} else {
-		const seasonStr = new RegExp(`[^\\d]${seasonNumber}[^\\d]`);
-		return test.match(seasonStr) !== null;
-	}
-}
-
 function removeDiacritics(str: string) {
 	return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
@@ -470,13 +460,15 @@ export function filterByTvConditions(
 		})
 		.filter((result) => {
 			// drop 3xRus or 1xEng or AC3
-			let regex = /\b(\d)x([a-z]+)\b|\bac3\b|5\.1/gi;
+			let regex =
+				/\b(\d)x([a-z]+)\b|\bac3\b|\b5\.1|\bmp4|\bav1|\br[1-6]|\bdvd\-?\d|\bp2p|\bbd\d+/gi;
 			let resultTitle = result.title.replace(regex, '');
 
 			if (resultTitle.match(/\bs\d\de?/i)) {
 				const season = parseInt(resultTitle.match(/s(\d\d)e?/i)![1]);
 				return season === seasonNumber || season === seasonCode;
 			}
+
 			const seasons = grabSeasons(resultTitle);
 			if (
 				seasonName &&
@@ -484,18 +476,39 @@ export function filterByTvConditions(
 				resultTitle.match(new RegExp(seasonName, 'i')) &&
 				seasons.filter((s) => parseInt(s) === seasonCode).length > 0
 			) {
+				console.log(
+					'🎯 Found season name and code in title:',
+					seasonName,
+					seasonCode,
+					result.title,
+					seasons
+				);
 				return true;
 			}
 			if (seasonName && seasonName !== title && flexEq(resultTitle, seasonName)) {
+				console.log(
+					'🎯 Found season name only in title:',
+					seasonName,
+					result.title,
+					seasons
+				);
 				return true;
 			}
 			if (
 				seasons.filter((s) => parseInt(s) === seasonNumber || parseInt(s) === seasonCode)
 					.length > 0
 			) {
+				console.log(
+					'🎯 Found season number only in title:',
+					seasonNumber,
+					seasonCode,
+					result.title,
+					seasons
+				);
 				return true;
 			}
-			// should not contain any numbers
+			// it can contain no numbers if it's still season 1 (or only season 1)
+			console.log('🎯 Season number 1:', result.title, seasons);
 			return seasonNumber === 1 && grabSeasons(resultTitle).length === 0;
 		});
 }

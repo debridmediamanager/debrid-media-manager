@@ -6,7 +6,6 @@ import {
 	grabTvMetadata,
 	padWithZero,
 } from '@/utils/checks';
-import { filenameParse } from '@ctrl/video-filename-parser';
 import { scrapeBtdigg } from './btdigg-v2';
 import { scrapeJackett } from './jackett';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
@@ -52,9 +51,7 @@ const getSearchResults = async (job: TvScrapeJob): Promise<ScrapeSearchResult[][
 		} else if (job.seasonName && job.seasonName !== title) {
 			results.push(...(await scrapeAll(`"${title}" ${job.seasonName}`, title, job.airDate)));
 		} else if (job.seasonNumber === 1) {
-			let results2 = [...(await scrapeAll(`"${title}"`, title, job.airDate))].flat();
-			results2 = results2.filter((t) => filenameParse(t.title, true).title === title);
-			results.push(results2);
+			results.push(...(await scrapeAll(`"${title}"`, title, job.airDate)));
 		}
 	}
 	return results;
