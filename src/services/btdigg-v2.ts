@@ -171,6 +171,11 @@ const processPage = async (
 		}
 
 		if (!meetsTitleConditions(targetTitle, airDate.substring(0, 4), title)) {
+			console.log(
+				`🔥 ${title} does not meet title conditions`,
+				targetTitle,
+				airDate.substring(0, 4)
+			);
 			badCount++;
 			continue;
 		}

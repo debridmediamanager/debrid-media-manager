@@ -104,7 +104,7 @@ export function matchesTitle(target: string, year: string, test: string) {
 		let targetTitle2 = naked(target);
 		let testTitle2 = naked(test);
 		const magicLength = 5;
-		if (targetTitle2.length > magicLength && testTitle2.includes(targetTitle2)) {
+		if (targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2)) {
 			return true;
 		}
 		return flexEq(test, target) && containsYear;
@@ -116,7 +116,7 @@ export function matchesTitle(target: string, year: string, test: string) {
 		let targetTitle2 = target.replace(/\s/g, '');
 		let testTitle2 = test.replace(/\s/g, '');
 		const magicLength = 9;
-		if (targetTitle2.length > magicLength && testTitle2.includes(targetTitle2)) {
+		if (targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2)) {
 			return true;
 		} else if (flexEq(testTitle2, targetTitle2) && containsYear) {
 			return true;
@@ -128,9 +128,9 @@ export function matchesTitle(target: string, year: string, test: string) {
 	let targetTitle3 = naked(targetTitle2);
 	let testTitle3 = naked(testTitle2);
 	const magicLength = 9;
-	if (targetTitle3.length > magicLength && testTitle3.includes(targetTitle3)) {
+	if (targetTitle3.length >= magicLength && testTitle3.includes(targetTitle3)) {
 		return true;
-	} else if (targetTitle2.length > magicLength && testTitle2.includes(targetTitle2)) {
+	} else if (targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2)) {
 		return true;
 	} else if (flexEq(testTitle2, targetTitle2) && containsYear) {
 		return true;
@@ -496,7 +496,7 @@ export function filterByTvConditions(
 				return true;
 			}
 			// should not contain any numbers
-			return grabSeasons(resultTitle).length === 0;
+			return seasonNumber === 1 && grabSeasons(resultTitle).length === 0;
 		});
 }
 
