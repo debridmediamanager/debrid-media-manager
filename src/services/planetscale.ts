@@ -3,7 +3,7 @@ import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from '
 
 export class PlanetScaleCache {
 	private static instance: PrismaClient;
-	private prisma: PrismaClient;
+	public prisma: PrismaClient;
 
 	constructor() {
 		this.prisma = PlanetScaleCache.getInstance();
@@ -31,12 +31,15 @@ export class PlanetScaleCache {
 		});
 
 		if (existingRecord && !replaceOldScrape) {
+			const origLength = (existingRecord.value as ScrapeSearchResult[]).length;
 			// If record exists, append the new values to it
 			let updatedValue = flattenAndRemoveDuplicates([
 				existingRecord.value as ScrapeSearchResult[],
 				value,
 			]);
 			updatedValue = sortByFileSize(updatedValue);
+			const newLength = updatedValue.length;
+			console.log(`📝 ${key}: +${newLength - origLength} results`);
 
 			await this.prisma.scraped.update({
 				where: { key },

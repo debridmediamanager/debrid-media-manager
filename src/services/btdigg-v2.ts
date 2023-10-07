@@ -98,7 +98,6 @@ type ProcessPageResult = {
 const processPage = async (
 	finalQuery: string,
 	targetTitle: string,
-	mustHaveTerms: (string | RegExp)[],
 	airDate: string,
 	pageNum: number
 ): Promise<ProcessPageResult> => {
@@ -171,7 +170,7 @@ const processPage = async (
 			continue;
 		}
 
-		if (!meetsTitleConditions(targetTitle, airDate.substring(0, 4), mustHaveTerms, title)) {
+		if (!meetsTitleConditions(targetTitle, airDate.substring(0, 4), title)) {
 			badCount++;
 			continue;
 		}
@@ -238,7 +237,6 @@ async function processInBatches(
 export async function scrapeBtdigg(
 	finalQuery: string,
 	targetTitle: string,
-	mustHaveTerms: (string | RegExp)[],
 	airDate: string
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
@@ -249,7 +247,6 @@ export async function scrapeBtdigg(
 			const { results, numResults } = await processPage(
 				finalQuery,
 				targetTitle,
-				mustHaveTerms,
 				airDate,
 				pageNum++
 			);
@@ -260,13 +257,7 @@ export async function scrapeBtdigg(
 			while (pageNum <= maxPages) {
 				promises.push(
 					((pageNum) => async () => {
-						return await processPage(
-							finalQuery,
-							targetTitle,
-							mustHaveTerms,
-							airDate,
-							pageNum
-						);
+						return await processPage(finalQuery, targetTitle, airDate, pageNum);
 					})(pageNum)
 				);
 				pageNum++;
@@ -282,7 +273,6 @@ export async function scrapeBtdigg(
 			const { results, numResults } = await processPage(
 				`${finalQuery} .mkv`,
 				targetTitle,
-				mustHaveTerms,
 				airDate,
 				pageNum++
 			);
@@ -295,7 +285,6 @@ export async function scrapeBtdigg(
 						return await processPage(
 							`${finalQuery} .mkv`,
 							targetTitle,
-							mustHaveTerms,
 							airDate,
 							pageNum
 						);
@@ -314,7 +303,6 @@ export async function scrapeBtdigg(
 			const { results, numResults } = await processPage(
 				`${finalQuery} .mp4`,
 				targetTitle,
-				mustHaveTerms,
 				airDate,
 				pageNum++
 			);
@@ -327,7 +315,6 @@ export async function scrapeBtdigg(
 						return await processPage(
 							`${finalQuery} .mp4`,
 							targetTitle,
-							mustHaveTerms,
 							airDate,
 							pageNum
 						);

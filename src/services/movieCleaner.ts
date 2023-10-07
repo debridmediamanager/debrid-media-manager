@@ -1,10 +1,15 @@
-import { grabAllMetadata, grabYears, hasYear, meetsTitleConditions } from '@/utils/checks';
+import {
+	filterByMovieConditions,
+	getAllPossibleTitles,
+	grabMovieMetadata,
+	meetsTitleConditions,
+} from '@/utils/checks';
 import axios from 'axios';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 
 type MovieScrapeJob = {
-	titles: (string | undefined)[];
+	titles: string[];
 	year: string;
 	airDate: string;
 	scrapes: ScrapeSearchResult[];
@@ -69,12 +74,11 @@ function cleanScrapes(
 	year: string,
 	scrapes: ScrapeSearchResult[]
 ): ScrapeSearchResult[] {
-	const ret = scrapes.filter((scrape) => meetsTitleConditions(targetTitle, year, scrape.title));
-	return ret;
+	return scrapes.filter((scrape) => meetsTitleConditions(targetTitle, year, scrape.title));
 }
 
 const cleanBasedOnScrapeJob = (job: MovieScrapeJob): ScrapeSearchResult[][] => {
-	return job.titles.map((title) => (title ? cleanScrapes(title, job.year, job.scrapes) : []));
+	return job.titles.map((title) => cleanScrapes(title, job.year, job.scrapes));
 };
 
 export async function cleanMovieScrapes(
@@ -89,7 +93,7 @@ export async function cleanMovieScrapes(
 	}
 	const scrapesCount = scrapes.length;
 	if (!scrapes.length) {
-		console.log(`! No results for ${mdbData.title} !`);
+		console.log(`⚠️ No results for ${mdbData.title} !`);
 		return;
 	}
 
@@ -101,31 +105,23 @@ export async function cleanMovieScrapes(
 		cleanedTitle,
 		year,
 		airDate,
-	} = grabAllMetadata(imdbId, tmdbData, mdbData);
+	} = grabMovieMetadata(imdbId, tmdbData, mdbData);
 
-	// extra conditions based on media type = movie
-	scrapes = scrapes
-		.filter((result) => !/s\d\de\d\d/i.test(result.title))
-		.filter((result) => result.fileSize < 200000 && result.fileSize > 500)
-		.filter((result) => {
-			const yearsFromTitle = grabYears(cleanTitle);
-			const yearsFromFile = grabYears(result.title).filter(
-				(y) => !yearsFromTitle.includes(y)
-			);
-			return yearsFromFile.length > 0 && hasYear(result.title, year);
-		});
+	scrapes = filterByMovieConditions(cleanTitle, year, scrapes);
 	if (!scrapes.length) {
 		await db.saveScrapedResults(`movie:${imdbId}`, scrapes, false, true);
-		console.log(`!!! Prelim Removed all results left for ${cleanTitle}`);
+		await db.markAsDone(imdbId);
+		console.log(`⚠️ Preliminary procedure removed all results left for ${cleanTitle}`);
 		return;
 	}
 
-	const titles = [cleanTitle, originalTitle, cleanedTitle, titleWithSymbols, alternativeTitle];
-	titles.slice().forEach((title) => {
-		if (title?.includes(' & ')) {
-			titles.push(title.replace(' & ', ' and '));
-		}
-	});
+	const titles = getAllPossibleTitles([
+		cleanTitle,
+		originalTitle,
+		cleanedTitle,
+		titleWithSymbols,
+		alternativeTitle,
+	]);
 	const searchResults = cleanBasedOnScrapeJob({
 		titles,
 		year,
@@ -137,6 +133,7 @@ export async function cleanMovieScrapes(
 
 	if (processedResults.length < scrapesCount) {
 		await db.saveScrapedResults(`movie:${imdbId}`, processedResults, false, true);
+		await db.markAsDone(imdbId);
 		console.log(
 			scrapes
 				.filter((s) => !processedResults.find((p) => p.hash === s.hash))

@@ -1,3 +1,4 @@
+import { ScrapeSearchResult } from '@/services/mediasearch';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import fs from 'fs';
 import { cleanSearchQuery, liteCleanSearchQuery } from './search';
@@ -28,11 +29,31 @@ export function grabYears(str: string): string[] {
 	);
 }
 
-export function hasYear(test: string, year: string) {
-	const intYear = parseInt(year);
+export function grabSeasons(str: string): string[] {
+	return (str.match(/\d+/g) ?? []).filter((n) => parseInt(n, 10) > 0 && parseInt(n, 10) <= 100);
+}
+
+export function hasYear(test: string, years: string[]) {
 	return (
-		test.includes(year) || test.includes(`${intYear + 1}`) || test.includes(`${intYear - 1}`)
+		years.filter((year) => {
+			const intYear = parseInt(year);
+			return (
+				test.includes(year) ||
+				test.includes(`${intYear + 1}`) ||
+				test.includes(`${intYear - 1}`)
+			);
+		}).length > 0
 	);
+}
+
+export function hasSeason(test: string, seasonNumber: number) {
+	if (seasonNumber < 10) {
+		const seasonStr = new RegExp(`[^\\d]0?${seasonNumber}[^\\d]`);
+		return test.match(seasonStr) !== null;
+	} else {
+		const seasonStr = new RegExp(`[^\\d]${seasonNumber}[^\\d]`);
+		return test.match(seasonStr) !== null;
+	}
 }
 
 function removeDiacritics(str: string) {
@@ -43,7 +64,19 @@ function removeRepeats(str: string) {
 	return str.replace(/(.)\1+/g, '$1');
 }
 
-function flexIn(test: string, target: string) {
+function flexEq(test: string, target: string, strict = false) {
+	if (strict) {
+		const movieTitle = filenameParse(test).title.toLowerCase();
+		const tvTitle = filenameParse(test, true).title.toLowerCase();
+		return (
+			target === movieTitle ||
+			removeRepeats(target) === removeRepeats(movieTitle) ||
+			removeDiacritics(target) === removeDiacritics(movieTitle) ||
+			target === tvTitle ||
+			removeRepeats(target) === removeRepeats(tvTitle) ||
+			removeDiacritics(target) === removeDiacritics(tvTitle)
+		);
+	}
 	return (
 		test.includes(target) ||
 		removeRepeats(test).includes(removeRepeats(target)) ||
@@ -54,15 +87,17 @@ function flexIn(test: string, target: string) {
 export function matchesTitle(target: string, year: string, test: string) {
 	target = target.toLowerCase();
 	test = test.toLowerCase();
-	const containsYear = hasYear(test, year);
+	const containsYear = hasYear(test, [year]);
 
 	// if title doesn't contain any spaces, then we can do a simple match
 	if (!target.match(/\s/)) {
-		// if title is common, also check for year
-		if (countUncommonWords(target) === 0) {
-			if (flexIn(test, target) && containsYear) {
-				return true;
-			}
+		// if title is common and title matches perfectly, then we're good
+		if (countUncommonWords(target) === 0 && flexEq(test, target, true)) {
+			return true;
+		}
+		// if title is common and title has year too, then we're good
+		if (countUncommonWords(target) === 0 && flexEq(test, target) && containsYear) {
+			return true;
 		}
 		// if title is uncommon single word, remove all non-alphanumeric characters
 		// note: may contain symbols, or just be only symbols
@@ -71,9 +106,8 @@ export function matchesTitle(target: string, year: string, test: string) {
 		const magicLength = 5;
 		if (targetTitle2.length > magicLength && testTitle2.includes(targetTitle2)) {
 			return true;
-		} else if (flexIn(test, target) && containsYear) {
-			return true;
 		}
+		return flexEq(test, target) && containsYear;
 	}
 
 	// if title is alphanumeric with spaces, then we can do a simple match
@@ -84,7 +118,7 @@ export function matchesTitle(target: string, year: string, test: string) {
 		const magicLength = 9;
 		if (targetTitle2.length > magicLength && testTitle2.includes(targetTitle2)) {
 			return true;
-		} else if (flexIn(testTitle2, targetTitle2) && containsYear) {
+		} else if (flexEq(testTitle2, targetTitle2) && containsYear) {
 			return true;
 		}
 	}
@@ -98,7 +132,7 @@ export function matchesTitle(target: string, year: string, test: string) {
 		return true;
 	} else if (targetTitle2.length > magicLength && testTitle2.includes(targetTitle2)) {
 		return true;
-	} else if (flexIn(testTitle2, targetTitle2) && containsYear) {
+	} else if (flexEq(testTitle2, targetTitle2) && containsYear) {
 		return true;
 	}
 
@@ -157,7 +191,7 @@ export function includesMustHaveTerms(mustHaveTerms: string[], testTitle: string
 	});
 }
 
-export function movieHasNoBannedTerms(targetTitle: string, testTitle: string): boolean {
+export function hasNoBannedTerms(targetTitle: string, testTitle: string): boolean {
 	let processedTitle = filenameParse(testTitle)
 		.title.toLowerCase()
 		.split(/[^a-z0-9]+/)
@@ -174,9 +208,7 @@ export function meetsTitleConditions(
 	year: string,
 	testTitle: string
 ): boolean {
-	return (
-		matchesTitle(targetTitle, year, testTitle) && movieHasNoBannedTerms(targetTitle, testTitle)
-	);
+	return matchesTitle(targetTitle, year, testTitle) && hasNoBannedTerms(targetTitle, testTitle);
 }
 
 export function countUncommonWords(title: string) {
@@ -189,7 +221,7 @@ export function countUncommonWords(title: string) {
 	return processedTitle.filter((word: string) => !dictionary.has(word)).length;
 }
 
-export function grabAllMetadata(imdbId: string, tmdbData: any, mdbData: any) {
+export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 	const cleanTitle = cleanSearchQuery(tmdbData.title);
 	const liteCleantitle = liteCleanSearchQuery(tmdbData.title);
 	console.log(
@@ -281,3 +313,215 @@ export function grabAllMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 		airDate,
 	};
 }
+
+const getSeasons = (mdbData: any) =>
+	mdbData.seasons.length
+		? mdbData.seasons
+		: [{ name: 'Season 1', season_number: 1, episode_count: 0 }];
+
+export function grabTvMetadata(imdbId: string, tmdbData: any, mdbData: any) {
+	const cleanTitle = cleanSearchQuery(tmdbData.name);
+	const liteCleantitle = liteCleanSearchQuery(tmdbData.name);
+	console.log(
+		`🏏 Scraping ${getSeasons(mdbData).length} season(s) of tv show: ${
+			tmdbData.name
+		} (${imdbId})...`
+	);
+	const year: string =
+		mdbData.year ?? mdbData.released?.substring(0, 4) ?? tmdbData.release_date?.substring(0, 4);
+	let originalTitle: string | undefined, cleanedTitle: string | undefined;
+
+	const processedTitle = tmdbData.name
+		.split(' ')
+		.map((word: string) => word.replace(/[\W]+/g, ''))
+		.join(' ')
+		.trim()
+		.toLowerCase();
+
+	if (
+		tmdbData.original_name &&
+		tmdbData.original_name !== tmdbData.name &&
+		mdbData.ratings?.length
+	) {
+		originalTitle = tmdbData.original_name.toLowerCase();
+		console.log(
+			'🎯 Found original title:',
+			originalTitle,
+			`(uncommon: ${countUncommonWords(originalTitle!)})`
+		);
+		for (let rating of mdbData.ratings) {
+			if (rating.source === 'tomatoes' && rating.score > 0) {
+				if (!rating.url) continue;
+				let tomatoTitle = rating.url.split('/').pop();
+				if (tomatoTitle.match(/^\d{6,}/)) continue;
+				tomatoTitle = tomatoTitle
+					.split('_')
+					.map((word: string) => word.replace(/[\W]+/g, ''))
+					.join(' ')
+					.trim()
+					.toLowerCase();
+				if (tomatoTitle !== processedTitle) {
+					console.log(
+						'🎯 Found tomato title:',
+						tomatoTitle,
+						`(uncommon: ${countUncommonWords(tomatoTitle)})`
+					);
+					cleanedTitle = tomatoTitle;
+				}
+			}
+		}
+	}
+
+	let alternativeTitle: string | undefined;
+	if (mdbData.ratings?.length) {
+		for (let rating of mdbData.ratings) {
+			if (rating.source === 'metacritic' && rating.score > 0) {
+				if (!rating.url) continue;
+				let metacriticTitle = rating.url.split('/').pop();
+				if (metacriticTitle.startsWith('-')) continue;
+				metacriticTitle = metacriticTitle
+					.split('-')
+					.map((word: string) => word.replace(/[\W]+/g, ''))
+					.join(' ')
+					.trim()
+					.toLowerCase();
+				if (metacriticTitle !== processedTitle && metacriticTitle !== cleanedTitle) {
+					console.log(
+						'🎯 Found metacritic title:',
+						metacriticTitle,
+						`(uncommon: ${countUncommonWords(metacriticTitle)})`
+					);
+					alternativeTitle = metacriticTitle;
+				}
+			}
+		}
+	}
+	if (cleanTitle !== liteCleantitle) {
+		console.log('🎯 Title with symbols:', liteCleantitle);
+	}
+
+	return {
+		cleanTitle,
+		originalTitle,
+		titleWithSymbols: cleanTitle !== liteCleantitle ? liteCleantitle : undefined,
+		alternativeTitle,
+		cleanedTitle,
+		year,
+		seasons: getSeasons(mdbData),
+	};
+}
+
+export function getAllPossibleTitles(titles: (string | undefined)[]) {
+	const ret: string[] = [];
+	titles.forEach((title) => {
+		if (title) {
+			ret.push(title);
+			if (title.match(/\b&\b/)) {
+				ret.push(title.replace(/\b&\b/g, 'and'));
+			}
+			if (title.match(/\b\+\b/)) {
+				ret.push(title.replace(/\b\+\b/g, 'and'));
+			}
+			if (title.match(/\b@\b/)) {
+				ret.push(title.replace(/\b@\b/g, 'at'));
+			}
+		}
+	});
+	return ret;
+}
+
+export function filterByMovieConditions(title: string, year: string, items: ScrapeSearchResult[]) {
+	return items
+		.filter((result) => !/s\d\de\d\d/i.test(result.title))
+		.filter((result) => result.fileSize < 200000 && result.fileSize > 500)
+		.filter((result) => {
+			const yearsFromTitle = grabYears(title);
+			const yearsFromFile = grabYears(result.title).filter(
+				(y) => !yearsFromTitle.includes(y)
+			);
+			return (
+				(yearsFromFile.length > 0 && hasYear(result.title, [year])) ||
+				yearsFromFile.length === 0
+			);
+		});
+}
+
+export function filterByTvConditions(
+	items: ScrapeSearchResult[],
+	title: string,
+	firstYear: string,
+	seasonYear: string | undefined,
+	seasonNumber: number,
+	seasonName: string | undefined,
+	seasonCode: number | undefined
+) {
+	return items
+		.filter((result) => result.fileSize > 100)
+		.filter((result) => {
+			const yearsFromTitle = grabYears(title);
+			const yearsFromFile = grabYears(result.title).filter(
+				(y) => !yearsFromTitle.includes(y)
+			);
+			const years = [firstYear, seasonYear].filter((y) => y !== undefined) as string[];
+			return (
+				(yearsFromFile.length > 0 && hasYear(result.title, years)) ||
+				yearsFromFile.length === 0
+			);
+		})
+		.filter((result) => {
+			// drop 3xRus or 1xEng or AC3
+			let regex = /\b(\d)x([a-z]+)\b|\bac3\b|5\.1/gi;
+			let resultTitle = result.title.replace(regex, '');
+
+			if (resultTitle.match(/\bs\d\de?/i)) {
+				const season = parseInt(resultTitle.match(/s(\d\d)e?/i)![1]);
+				return season === seasonNumber || season === seasonCode;
+			}
+			const seasons = grabSeasons(resultTitle);
+			if (
+				seasonName &&
+				seasonCode &&
+				resultTitle.match(new RegExp(seasonName, 'i')) &&
+				seasons.filter((s) => parseInt(s) === seasonCode).length > 0
+			) {
+				return true;
+			}
+			if (seasonName && seasonName !== title && flexEq(resultTitle, seasonName)) {
+				return true;
+			}
+			if (
+				seasons.filter((s) => parseInt(s) === seasonNumber || parseInt(s) === seasonCode)
+					.length > 0
+			) {
+				return true;
+			}
+			// should not contain any numbers
+			return grabSeasons(resultTitle).length === 0;
+		});
+}
+
+export function padWithZero(num: number) {
+	if (num < 10) {
+		return '0' + num;
+	} else {
+		return num.toString();
+	}
+}
+
+export const getSeasonNameAndCode = (season: any) => {
+	let seasonName, seasonCode;
+	let parts = season.name.split(/\s+/);
+	for (let i = parts.length - 1; i >= 0; i--) {
+		let match = parts[i].match(/\(?(\d+)\)?$/);
+		if (match) {
+			seasonCode = parseInt(match[1]);
+			parts[i] = '';
+			break;
+		}
+	}
+	seasonName = cleanSearchQuery(parts.join(' ').trim());
+	if (/series|season/.test(seasonName)) seasonName = undefined;
+	return { seasonName, seasonCode };
+};
+
+export const getSeasonYear = (season: any) => season.air_date?.substring(0, 4);
