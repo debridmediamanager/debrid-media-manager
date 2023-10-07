@@ -2,11 +2,19 @@ import { PrismaClient, Scraped } from '@prisma/client';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 
 export class PlanetScaleCache {
-	public prisma: PrismaClient;
+	private static instance: PrismaClient;
+	private prisma: PrismaClient;
 
 	constructor() {
-		this.prisma = new PrismaClient();
-		this.prisma.$queryRaw`SET @@boost_cached_queries = true`;
+		this.prisma = PlanetScaleCache.getInstance();
+	}
+
+	private static getInstance(): PrismaClient {
+		if (!PlanetScaleCache.instance) {
+			PlanetScaleCache.instance = new PrismaClient();
+			PlanetScaleCache.instance.$queryRaw`SET @@boost_cached_queries = true`;
+		}
+		return PlanetScaleCache.instance;
 	}
 
 	/// scraped results

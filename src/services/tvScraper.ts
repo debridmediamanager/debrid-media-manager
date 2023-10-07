@@ -54,8 +54,8 @@ async function scrapeAll(
 ): Promise<ScrapeSearchResult[][]> {
 	return await Promise.all([
 		scrapeBtdigg(finalQuery, targetTitle, mustHaveTerms, airDate),
-		scrapeProwlarr(finalQuery, targetTitle, mustHaveTerms, airDate),
-		scrapeJackett(finalQuery, targetTitle, mustHaveTerms, airDate),
+		scrapeProwlarr(finalQuery, targetTitle, airDate),
+		scrapeJackett(finalQuery, targetTitle, airDate),
 	]);
 }
 
@@ -197,9 +197,7 @@ export async function scrapeTv(
 		}
 		let processedResults = flattenAndRemoveDuplicates(searchResults);
 		// extra conditions based on media type = tv
-		processedResults = processedResults.filter(
-			(result) => result.fileSize > 100
-		);
+		processedResults = processedResults.filter((result) => result.fileSize > 100);
 		if (processedResults.length) processedResults = sortByFileSize(processedResults);
 		if (!/movie/i.test(job.title)) {
 			processedResults = processedResults.filter((result) => {

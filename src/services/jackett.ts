@@ -65,7 +65,6 @@ async function computeHashFromTorrent(url: string): Promise<string | undefined> 
 async function processItem(
 	item: any,
 	targetTitle: string,
-	mustHaveTerms: (string | RegExp)[],
 	airDate: string
 ): Promise<ScrapeSearchResult | undefined> {
 	const title = item.Title;
@@ -79,7 +78,7 @@ async function processItem(
 		return undefined;
 	}
 
-	if (!meetsTitleConditions(targetTitle, airDate.substring(0, 4), mustHaveTerms, title)) {
+	if (!meetsTitleConditions(targetTitle, airDate.substring(0, 4), title)) {
 		return undefined;
 	}
 
@@ -125,7 +124,6 @@ async function processInBatches(
 const processPage = async (
 	finalQuery: string,
 	targetTitle: string,
-	mustHaveTerms: (string | RegExp)[],
 	airDate: string
 ): Promise<ScrapeSearchResult[]> => {
 	const MAX_RETRIES = 5; // maximum number of retries
@@ -158,7 +156,7 @@ const processPage = async (
 
 	const promises: (() => Promise<ScrapeSearchResult | undefined>)[] = responseData.map(
 		(item: any) => {
-			return () => processItem(item, targetTitle, mustHaveTerms, airDate);
+			return () => processItem(item, targetTitle, airDate);
 		}
 	);
 	results.push(...(await processInBatches(finalQuery, promises, 10)));
@@ -169,12 +167,11 @@ const processPage = async (
 export async function scrapeJackett(
 	finalQuery: string,
 	targetTitle: string,
-	mustHaveTerms: (string | RegExp)[],
 	airDate: string
 ): Promise<ScrapeSearchResult[]> {
 	console.log(`🔍 Searching Jackett: ${finalQuery}`);
 	try {
-		return await processPage(finalQuery, targetTitle, mustHaveTerms, airDate);
+		return await processPage(finalQuery, targetTitle, airDate);
 	} catch (error) {
 		console.error('scrapeJackett page processing error', error);
 	}
