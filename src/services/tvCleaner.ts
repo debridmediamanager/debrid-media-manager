@@ -166,7 +166,7 @@ export async function cleanTvScrapes(
 			await db.saveScrapedResults(
 				`tv:${imdbId}:${seasonNumber}`,
 				processedResults,
-				false,
+				true,
 				true
 			);
 			await db.markAsDone(imdbId);
