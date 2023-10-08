@@ -15,7 +15,12 @@ function RecentlyUpdated() {
 	const fetchData = async () => {
 		setLoading(true);
 		try {
-			const res = await fetch(`${config.externalSearchApiHostname}/api/recent`);
+			let path = 'api/recent';
+			if (config.externalSearchApiHostname) {
+				path = encodeURIComponent(path);
+			}
+			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
+			const res = await fetch(endpoint);
 			const data = await res.json();
 			setSearchResults(data);
 		} catch (error: any) {

@@ -1,4 +1,11 @@
-import { cleanSearchQuery } from '@/utils/search';
+import {
+	filterByTvConditions,
+	getAllPossibleTitles,
+	getSeasonNameAndCode,
+	getSeasonYear,
+	grabTvMetadata,
+	padWithZero,
+} from '@/utils/checks';
 import { scrapeBtdigg } from './btdigg-v2';
 import { scrapeJackett } from './jackett';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
@@ -6,136 +13,48 @@ import { PlanetScaleCache } from './planetscale';
 import { scrapeProwlarr } from './prowlarr';
 
 type TvScrapeJob = {
-	title: string;
-	originalTitle?: string;
+	titles: string[];
 	seasonNumber: number;
 	seasonName?: string;
 	seasonCode?: number;
-	seasonYear?: string;
+	seasonYear: string;
 	airDate: string;
 };
-
-function padWithZero(num: number) {
-	if (num < 10) {
-		return '0' + num;
-	} else {
-		return num.toString();
-	}
-}
-
-const getSeasons = (mdbData: any) =>
-	mdbData.seasons.length
-		? mdbData.seasons
-		: [{ name: 'Season 1', season_number: 1, episode_count: 0 }];
-
-const getSeasonNameAndCode = (season: any) => {
-	let seasonName, seasonCode;
-	let parts = season.name.split(/\s+/);
-	for (let i = parts.length - 1; i >= 0; i--) {
-		let match = parts[i].match(/\(?(\d+)\)?$/);
-		if (match) {
-			seasonCode = parseInt(match[1]);
-			parts[i] = '';
-			break;
-		}
-	}
-	seasonName = cleanSearchQuery(parts.join(' ').trim());
-	if (/series|season/.test(seasonName)) seasonName = undefined;
-	return { seasonName, seasonCode };
-};
-
-const getSeasonYear = (season: any) => season.air_date?.substring(0, 4);
 
 async function scrapeAll(
 	finalQuery: string,
 	targetTitle: string,
-	mustHaveTerms: (string | RegExp)[],
 	airDate: string
 ): Promise<ScrapeSearchResult[][]> {
 	return await Promise.all([
-		scrapeBtdigg(finalQuery, targetTitle, mustHaveTerms, airDate),
-		scrapeProwlarr(finalQuery, targetTitle, mustHaveTerms, airDate),
-		scrapeJackett(finalQuery, targetTitle, mustHaveTerms, airDate),
+		scrapeBtdigg(finalQuery, targetTitle, airDate),
+		scrapeProwlarr(finalQuery, targetTitle, airDate),
+		scrapeJackett(finalQuery, targetTitle, airDate),
 	]);
 }
 
-const getSearchResults = async (job: TvScrapeJob) => {
-	let sets: ScrapeSearchResult[][] = [];
-
-	sets.push(
-		...(await scrapeAll(
-			`"${job.title}" s${padWithZero(job.seasonNumber)}`,
-			job.title,
-			[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
-			job.airDate
-		))
-	);
-
-	if (job.seasonName && job.seasonCode) {
-		sets.push(
-			...(await scrapeAll(
-				`"${job.title}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
-				job.title,
-				[
-					new RegExp(`[0123]?${job.seasonCode}[ex\\W_]`, 'i'),
-					...job.seasonName.split(/\s/),
-				],
-				job.airDate
-			))
+const getSearchResults = async (job: TvScrapeJob): Promise<ScrapeSearchResult[][]> => {
+	let results: ScrapeSearchResult[][] = [];
+	for (let i = 0; i < job.titles.length; i++) {
+		const title = job.titles[i];
+		results.push(
+			...(await scrapeAll(`"${title}" s${padWithZero(job.seasonNumber)}`, title, job.airDate))
 		);
-	} else if (job.seasonName && job.seasonName !== job.title) {
-		sets.push(
-			...(await scrapeAll(
-				`"${job.title}" "${job.seasonName}"`,
-				job.title,
-				[...job.seasonName.split(/\s/)],
-				job.airDate
-			))
-		);
+		if (job.seasonName && job.seasonCode) {
+			results.push(
+				...(await scrapeAll(
+					`"${title}" ${job.seasonName} s${padWithZero(job.seasonCode)}`,
+					title,
+					job.airDate
+				))
+			);
+		} else if (job.seasonName && job.seasonName !== title) {
+			results.push(...(await scrapeAll(`"${title}" ${job.seasonName}`, title, job.airDate)));
+		} else if (job.seasonNumber === 1) {
+			results.push(...(await scrapeAll(`"${title}"`, title, job.airDate)));
+		}
 	}
-
-	if (
-		job.title.replaceAll(/[^a-z0-9]/gi, '').length > 5 &&
-		job.title.split(/\s/).length > 3 &&
-		job.seasonNumber === 1
-	) {
-		sets.push(...(await scrapeAll(`"${job.title}"`, job.title, [], job.airDate)));
-	}
-
-	if (!job.originalTitle) return sets;
-
-	let sets2: ScrapeSearchResult[][] = [];
-
-	sets2 = await scrapeAll(
-		`"${job.originalTitle}" s${padWithZero(job.seasonNumber)}`,
-		job.originalTitle,
-		[new RegExp(`[0123]?${job.seasonNumber}[ex\\W_]`, 'i')],
-		job.airDate
-	);
-	if (job.seasonName && job.seasonCode) {
-		sets2.push(
-			...(await scrapeAll(
-				`"${job.originalTitle}" "${job.seasonName}" s${padWithZero(job.seasonCode)}`,
-				job.originalTitle,
-				[
-					new RegExp(`[0123]?${job.seasonCode}[ex\\W_]`, 'i'),
-					...job.seasonName.split(/\s/),
-				],
-				job.airDate
-			))
-		);
-	} else if (job.seasonName && job.seasonName !== job.originalTitle) {
-		sets2.push(
-			...(await scrapeAll(
-				`"${job.originalTitle}" "${job.seasonName}"`,
-				job.originalTitle,
-				[...job.seasonName.split(/\s/)],
-				job.airDate
-			))
-		);
-	}
-
-	return [...sets, ...sets2];
+	return results;
 };
 
 export async function scrapeTv(
@@ -145,28 +64,34 @@ export async function scrapeTv(
 	db: PlanetScaleCache,
 	replaceOldScrape: boolean = false
 ): Promise<number> {
-	console.log(
-		`🏏 Scraping ${getSeasons(mdbData).length} season(s) of tv show: ${
-			tmdbData.name
-		} (${imdbId})...`
-	);
 	const scrapeJobs: TvScrapeJob[] = [];
 
-	let cleanTitle = cleanSearchQuery(tmdbData.name);
-	let cleanOriginalTitle;
-	if (tmdbData.original_name && tmdbData.original_name !== tmdbData.name) {
-		cleanOriginalTitle = cleanSearchQuery(tmdbData.original_name);
-	}
-	for (const season of getSeasons(mdbData)) {
+	const {
+		cleanTitle,
+		originalTitle,
+		titleWithSymbols,
+		alternativeTitle,
+		cleanedTitle,
+		year,
+		seasons,
+	} = grabTvMetadata(imdbId, tmdbData, mdbData);
+	for (const season of seasons) {
 		if (season.season_number === 0) continue;
 		let seasonNumber = season.season_number;
 		const { seasonName, seasonCode } = getSeasonNameAndCode(season);
-		const seasonYear = getSeasonYear(season);
+		const seasonYear = getSeasonYear(season) ?? year;
 		const airDate = season.air_date ?? '2000-01-01';
 
+		const titles = getAllPossibleTitles([
+			cleanTitle,
+			originalTitle,
+			cleanedTitle,
+			titleWithSymbols,
+			alternativeTitle,
+		]);
+
 		scrapeJobs.push({
-			title: cleanTitle,
-			originalTitle: cleanOriginalTitle,
+			titles,
 			seasonNumber,
 			seasonName,
 			seasonCode,
@@ -180,28 +105,18 @@ export async function scrapeTv(
 	let totalResultsCount = 0;
 	for (const job of scrapeJobs) {
 		let searchResults: ScrapeSearchResult[][] = [];
-		if (job.title.includes(' & ')) {
-			const searchResultsArr = await Promise.all([
-				getSearchResults(job),
-				getSearchResults({
-					...job,
-					title: job.title.replace(' & ', ' and '),
-					originalTitle: job.originalTitle?.includes(' & ')
-						? job.originalTitle.replace(' & ', ' and ')
-						: job.originalTitle,
-				}),
-			]);
-			searchResults = searchResultsArr.flat();
-		} else {
-			searchResults = await getSearchResults(job);
-		}
+		searchResults = await getSearchResults(job);
 		let processedResults = flattenAndRemoveDuplicates(searchResults);
+		processedResults = filterByTvConditions(
+			processedResults,
+			cleanTitle,
+			year,
+			job.seasonYear,
+			job.seasonNumber,
+			job.seasonName,
+			job.seasonCode
+		);
 		if (processedResults.length) processedResults = sortByFileSize(processedResults);
-		if (!/movie/i.test(job.title)) {
-			processedResults = processedResults.filter((result) => {
-				return !/movie/i.test(result.title);
-			});
-		}
 		totalResultsCount += processedResults.length;
 
 		await db.saveScrapedResults(
@@ -210,7 +125,7 @@ export async function scrapeTv(
 			replaceOldScrape
 		);
 		console.log(
-			`📺 Saved ${processedResults.length} results for ${job.title} season ${job.seasonNumber}`
+			`📺 Saved ${processedResults.length} results for ${cleanTitle} season ${job.seasonNumber}`
 		);
 	}
 

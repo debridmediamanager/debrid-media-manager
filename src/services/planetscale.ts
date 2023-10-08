@@ -2,11 +2,19 @@ import { PrismaClient, Scraped } from '@prisma/client';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 
 export class PlanetScaleCache {
+	private static instance: PrismaClient;
 	public prisma: PrismaClient;
 
 	constructor() {
-		this.prisma = new PrismaClient();
-		this.prisma.$queryRaw`SET @@boost_cached_queries = true`;
+		this.prisma = PlanetScaleCache.getInstance();
+	}
+
+	private static getInstance(): PrismaClient {
+		if (!PlanetScaleCache.instance) {
+			PlanetScaleCache.instance = new PrismaClient();
+			PlanetScaleCache.instance.$queryRaw`SET @@boost_cached_queries = true`;
+		}
+		return PlanetScaleCache.instance;
 	}
 
 	/// scraped results
@@ -23,12 +31,15 @@ export class PlanetScaleCache {
 		});
 
 		if (existingRecord && !replaceOldScrape) {
+			const origLength = (existingRecord.value as ScrapeSearchResult[]).length;
 			// If record exists, append the new values to it
 			let updatedValue = flattenAndRemoveDuplicates([
 				existingRecord.value as ScrapeSearchResult[],
 				value,
 			]);
 			updatedValue = sortByFileSize(updatedValue);
+			const newLength = updatedValue.length;
+			console.log(`📝 ${key}: +${newLength - origLength} results`);
 
 			await this.prisma.scraped.update({
 				where: { key },

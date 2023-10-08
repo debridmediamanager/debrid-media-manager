@@ -1,5 +1,4 @@
 import { meetsTitleConditions } from '@/utils/checks';
-import { getMediaType } from '@/utils/mediaType';
 import ProxyManager from '@/utils/proxyManager';
 import axios from 'axios';
 import { SocksProxyAgent } from 'socks-proxy-agent';
@@ -99,7 +98,6 @@ type ProcessPageResult = {
 const processPage = async (
 	finalQuery: string,
 	targetTitle: string,
-	mustHaveTerms: (string | RegExp)[],
 	airDate: string,
 	pageNum: number
 ): Promise<ProcessPageResult> => {
@@ -165,23 +163,19 @@ const processPage = async (
 			badCount++;
 			continue;
 		}
-
 		const fileSize = convertToMB(fileSizeStr);
-		if (getMediaType(title) === 'movie' && fileSize > 200000) {
-			badCount++; // movie is too big
-			continue;
-		}
-		if (fileSizeStr.includes(' B') || fileSizeStr.includes(' KB')) {
-			badCount++;
-			continue;
-		}
 
 		if (!isFoundDateRecent(ages[resIndex][1], airDate)) {
 			badCount++;
 			continue;
 		}
 
-		if (!meetsTitleConditions(targetTitle, mustHaveTerms, title)) {
+		if (!meetsTitleConditions(targetTitle, airDate.substring(0, 4), title)) {
+			// console.log(
+			// 	`🔥 ${title} does not meet title conditions`,
+			// 	targetTitle,
+			// 	airDate.substring(0, 4)
+			// );
 			badCount++;
 			continue;
 		}
@@ -219,7 +213,7 @@ async function processInBatches(
 	let lastPrintedIndex = 0;
 	while (i < promises.length) {
 		let percentageIncrease = ((i - lastPrintedIndex) / promises.length) * 100;
-		if (percentageIncrease >= 10) {
+		if (percentageIncrease >= 20) {
 			console.log(`🌃 Btdigg batch ${i}/${promises.length}:${title}`);
 			lastPrintedIndex = i;
 		}
@@ -248,7 +242,6 @@ async function processInBatches(
 export async function scrapeBtdigg(
 	finalQuery: string,
 	targetTitle: string,
-	mustHaveTerms: (string | RegExp)[],
 	airDate: string
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
@@ -259,7 +252,6 @@ export async function scrapeBtdigg(
 			const { results, numResults } = await processPage(
 				finalQuery,
 				targetTitle,
-				mustHaveTerms,
 				airDate,
 				pageNum++
 			);
@@ -270,13 +262,7 @@ export async function scrapeBtdigg(
 			while (pageNum <= maxPages) {
 				promises.push(
 					((pageNum) => async () => {
-						return await processPage(
-							finalQuery,
-							targetTitle,
-							mustHaveTerms,
-							airDate,
-							pageNum
-						);
+						return await processPage(finalQuery, targetTitle, airDate, pageNum);
 					})(pageNum)
 				);
 				pageNum++;
@@ -292,7 +278,6 @@ export async function scrapeBtdigg(
 			const { results, numResults } = await processPage(
 				`${finalQuery} .mkv`,
 				targetTitle,
-				mustHaveTerms,
 				airDate,
 				pageNum++
 			);
@@ -305,7 +290,6 @@ export async function scrapeBtdigg(
 						return await processPage(
 							`${finalQuery} .mkv`,
 							targetTitle,
-							mustHaveTerms,
 							airDate,
 							pageNum
 						);
@@ -324,7 +308,6 @@ export async function scrapeBtdigg(
 			const { results, numResults } = await processPage(
 				`${finalQuery} .mp4`,
 				targetTitle,
-				mustHaveTerms,
 				airDate,
 				pageNum++
 			);
@@ -337,7 +320,6 @@ export async function scrapeBtdigg(
 						return await processPage(
 							`${finalQuery} .mp4`,
 							targetTitle,
-							mustHaveTerms,
 							airDate,
 							pageNum
 						);

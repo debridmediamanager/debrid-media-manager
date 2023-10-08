@@ -36,7 +36,7 @@ const handler: NextApiHandler = async (req, res) => {
 
 	try {
 		const cleanKeyword = encodeURIComponent(
-			keyword.toString().replaceAll(/[\W]+/g, ' ').split(' ').join(' ').trim().toLowerCase()
+			keyword.toString().replace(/[\W]+/g, ' ').split(' ').join(' ').trim().toLowerCase()
 		);
 		const searchResults = await db.getSearchResults<any[]>(cleanKeyword);
 		if (searchResults) {

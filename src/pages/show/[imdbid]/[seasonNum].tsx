@@ -67,9 +67,11 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		setSearchResults([]);
 		setErrorMessage('');
 		try {
-			let endpoint = `${
-				config.externalSearchApiHostname
-			}/api/tvsearch%3FimdbId=${encodeURIComponent(imdbId)}&seasonNum=${seasonNum}`;
+			let path = `api/tvsearch?imdbId=${imdbId}&seasonNum=${seasonNum}`;
+			if (config.externalSearchApiHostname) {
+				path = encodeURIComponent(path);
+			}
+			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const response = await axios.get<SearchApiResponse>(endpoint);
 			if (response.status === 204) {
 				setSearchState(response.headers['status']);
