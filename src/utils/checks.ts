@@ -82,12 +82,8 @@ export function matchesTitle(target: string, year: string, test: string) {
 	// if title doesn't contain any spaces, then we can do a simple match
 	if (!target.match(/\s/)) {
 		// if title is common and title matches perfectly, then we're good
-		if (countUncommonWords(target) === 0 && flexEq(test, target, true)) {
-			return true;
-		}
-		// if title is common and title has year too, then we're good
-		if (countUncommonWords(target) === 0 && flexEq(test, target) && containsYear) {
-			return true;
+		if (countUncommonWords(target) === 0) {
+			return flexEq(test, target, true) || (flexEq(test, target) && containsYear);
 		}
 		// if title is uncommon single word, remove all non-alphanumeric characters
 		// note: may contain symbols, or just be only symbols

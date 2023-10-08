@@ -213,7 +213,7 @@ async function processInBatches(
 	let lastPrintedIndex = 0;
 	while (i < promises.length) {
 		let percentageIncrease = ((i - lastPrintedIndex) / promises.length) * 100;
-		if (percentageIncrease >= 10) {
+		if (percentageIncrease >= 20) {
 			console.log(`🌃 Btdigg batch ${i}/${promises.length}:${title}`);
 			lastPrintedIndex = i;
 		}
