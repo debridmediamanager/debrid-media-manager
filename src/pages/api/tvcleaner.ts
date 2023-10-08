@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		return;
 	}
 
-	let imdbIds = ['tt0903747']; //await db.getAllImdbIds('tv');
+	let imdbIds = await db.getAllImdbIds('tv');
 	if (!imdbIds) {
 		console.log(
 			'[moviecleaner] There must be something wrong with the database, waiting 60 seconds'

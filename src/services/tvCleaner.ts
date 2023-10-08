@@ -141,8 +141,8 @@ export async function cleanTvScrapes(
 			seasonCode
 		);
 		if (!scrapes.length) {
-			// await db.saveScrapedResults(`tv:${imdbId}:${seasonNumber}`, scrapes, false, true);
-			// await db.markAsDone(imdbId);
+			await db.saveScrapedResults(`tv:${imdbId}:${seasonNumber}`, scrapes, false, true);
+			await db.markAsDone(imdbId);
 			console.log(
 				`⚠️ Preliminary procedure removed all results left for ${cleanTitle} s${padWithZero(
 					seasonNumber
@@ -164,13 +164,13 @@ export async function cleanTvScrapes(
 		processedResults = sortByFileSize(processedResults);
 
 		if (processedResults.length < scrapesCount) {
-			// await db.saveScrapedResults(
-			// 	`tv:${imdbId}:${seasonNumber}`,
-			// 	processedResults,
-			// 	false,
-			// 	true
-			// );
-			// await db.markAsDone(imdbId);
+			await db.saveScrapedResults(
+				`tv:${imdbId}:${seasonNumber}`,
+				processedResults,
+				false,
+				true
+			);
+			await db.markAsDone(imdbId);
 			console.log(
 				scrapes
 					.filter((s) => !processedResults.find((p) => p.hash === s.hash))

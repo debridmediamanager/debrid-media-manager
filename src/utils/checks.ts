@@ -93,7 +93,7 @@ export function matchesTitle(target: string, year: string, test: string) {
 		// note: may contain symbols, or just be only symbols
 		let targetTitle2 = naked(target);
 		let testTitle2 = naked(test);
-		const magicLength = 5;
+		const magicLength = 4;
 		if (targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2)) {
 			return true;
 		}
@@ -105,7 +105,7 @@ export function matchesTitle(target: string, year: string, test: string) {
 		// remove spaces
 		let targetTitle2 = target.replace(/\s/g, '');
 		let testTitle2 = test.replace(/\s/g, '');
-		const magicLength = 9;
+		const magicLength = 5;
 		if (targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2)) {
 			return true;
 		} else if (flexEq(testTitle2, targetTitle2) && containsYear) {
@@ -117,7 +117,7 @@ export function matchesTitle(target: string, year: string, test: string) {
 	let testTitle2 = test.replace(/\s/g, '');
 	let targetTitle3 = naked(targetTitle2);
 	let testTitle3 = naked(testTitle2);
-	const magicLength = 9;
+	const magicLength = 5;
 	if (targetTitle3.length >= magicLength && testTitle3.includes(targetTitle3)) {
 		return true;
 	} else if (targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2)) {
@@ -215,7 +215,7 @@ export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 	const cleanTitle = cleanSearchQuery(tmdbData.title);
 	const liteCleantitle = liteCleanSearchQuery(tmdbData.title);
 	console.log(
-		`🏹 Cleaning movie: ${cleanTitle} Y${
+		`🏹 Movie: ${cleanTitle} Y${
 			mdbData.year ?? 'year'
 		} (${imdbId}) (uncommon: ${countUncommonWords(tmdbData.title)})`
 	);
@@ -313,9 +313,7 @@ export function grabTvMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 	const cleanTitle = cleanSearchQuery(tmdbData.name);
 	const liteCleantitle = liteCleanSearchQuery(tmdbData.name);
 	console.log(
-		`🏏 Scraping ${getSeasons(mdbData).length} season(s) of tv show: ${
-			tmdbData.name
-		} (${imdbId})...`
+		`🏏 ${getSeasons(mdbData).length} season(s) of tv show: ${tmdbData.name} (${imdbId})...`
 	);
 	const year: string =
 		mdbData.year ?? mdbData.released?.substring(0, 4) ?? tmdbData.release_date?.substring(0, 4);
@@ -473,42 +471,42 @@ export function filterByTvConditions(
 			if (
 				seasonName &&
 				seasonCode &&
-				resultTitle.match(new RegExp(seasonName, 'i')) &&
+				flexEq(naked(seasonName), naked(result.title)) &&
 				seasons.filter((s) => parseInt(s) === seasonCode).length > 0
 			) {
-				console.log(
-					'🎯 Found season name and code in title:',
-					seasonName,
-					seasonCode,
-					result.title,
-					seasons
-				);
+				// console.log(
+				// 	'🎯 Found season name and code in title:',
+				// 	seasonName,
+				// 	seasonCode,
+				// 	result.title,
+				// 	seasons
+				// );
 				return true;
 			}
 			if (seasonName && seasonName !== title && flexEq(resultTitle, seasonName)) {
-				console.log(
-					'🎯 Found season name only in title:',
-					seasonName,
-					result.title,
-					seasons
-				);
+				// console.log(
+				// 	'🎯 Found season name only in title:',
+				// 	seasonName,
+				// 	result.title,
+				// 	seasons
+				// );
 				return true;
 			}
 			if (
 				seasons.filter((s) => parseInt(s) === seasonNumber || parseInt(s) === seasonCode)
 					.length > 0
 			) {
-				console.log(
-					'🎯 Found season number only in title:',
-					seasonNumber,
-					seasonCode,
-					result.title,
-					seasons
-				);
+				// console.log(
+				// 	'🎯 Found season number only in title:',
+				// 	seasonNumber,
+				// 	seasonCode,
+				// 	result.title,
+				// 	seasons
+				// );
 				return true;
 			}
 			// it can contain no numbers if it's still season 1 (or only season 1)
-			console.log('🎯 Season number 1:', result.title, seasons);
+			// console.log('🎯 Season number 1:', result.title, seasons);
 			return seasonNumber === 1 && grabSeasons(resultTitle).length === 0;
 		});
 }
