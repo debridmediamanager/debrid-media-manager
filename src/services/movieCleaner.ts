@@ -132,7 +132,7 @@ export async function cleanMovieScrapes(
 	processedResults = sortByFileSize(processedResults);
 
 	if (processedResults.length < scrapesCount) {
-		await db.saveScrapedResults(`movie:${imdbId}`, processedResults, false, true);
+		await db.saveScrapedResults(`movie:${imdbId}`, processedResults, true, true);
 		await db.markAsDone(imdbId);
 		console.log(
 			scrapes

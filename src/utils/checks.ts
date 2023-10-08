@@ -155,9 +155,17 @@ export function matchesTitle(target: string, year: string, test: string) {
 			return true;
 		}
 	}
-	const mustHaveTerms: string[] = splits;
+	const uncommonTerms: string[] = splits.filter((s) => !dictionary.has(s));
+	const commonTerms: string[] = splits.filter((s) => dictionary.has(s));
+	if (
+		(uncommonTerms.join('').length >= commonTerms.join('').length ||
+			uncommonTerms.length > 1) &&
+		includesMustHaveTerms(uncommonTerms, test)
+	) {
+		return true;
+	}
 	// console.log('🎯 Comparison2:', mustHaveTerms, test, containsYear);
-	return containsYear && includesMustHaveTerms(mustHaveTerms, test);
+	return containsYear && includesMustHaveTerms(splits, test);
 }
 
 export function includesMustHaveTerms(mustHaveTerms: string[], testTitle: string) {
