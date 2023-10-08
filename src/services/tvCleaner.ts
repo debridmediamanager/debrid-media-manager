@@ -162,7 +162,6 @@ export async function cleanTvScrapes(
 		});
 		let processedResults = flattenAndRemoveDuplicates(searchResults);
 		processedResults = sortByFileSize(processedResults);
-
 		if (processedResults.length < scrapesCount) {
 			await db.saveScrapedResults(
 				`tv:${imdbId}:${seasonNumber}`,
@@ -180,6 +179,10 @@ export async function cleanTvScrapes(
 				`📺 Removed ${scrapesCount - processedResults.length}, left ${
 					processedResults.length
 				} results for ${cleanTitle} s${padWithZero(seasonNumber)}`
+			);
+		} else {
+			console.log(
+				`📺 No need to remove any results for ${cleanTitle} s${padWithZero(seasonNumber)}`
 			);
 		}
 	}
