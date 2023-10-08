@@ -81,15 +81,18 @@ export function matchesTitle(target: string, year: string, test: string) {
 
 	// if title doesn't contain any spaces, then we can do a simple match
 	if (!target.match(/\s/)) {
-		// if title is common and title matches perfectly, then we're good
+		// if title is common and title matches perfectly or not perfect but matches year, then we're good
 		if (countUncommonWords(target) === 0) {
 			return flexEq(test, target, true) || (flexEq(test, target) && containsYear);
 		}
 		// if title is uncommon single word, remove all non-alphanumeric characters
-		// note: may contain symbols, or just be only symbols
+		const magicLength = 4;
+		if (target.length >= magicLength && test.includes(target)) {
+			return true;
+		}
+		// if title is uncommon single word, remove all non-alphanumeric characters
 		let targetTitle2 = naked(target);
 		let testTitle2 = naked(test);
-		const magicLength = 4;
 		if (targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2)) {
 			return true;
 		}
@@ -102,6 +105,7 @@ export function matchesTitle(target: string, year: string, test: string) {
 		let targetTitle2 = target.replace(/\s/g, '');
 		let testTitle2 = test.replace(/\s/g, '');
 		const magicLength = 5;
+		// console.log('🎯 Comparison:', targetTitle2, testTitle2, targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2), flexEq(testTitle2, targetTitle2) && containsYear);
 		if (targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2)) {
 			return true;
 		} else if (flexEq(testTitle2, targetTitle2) && containsYear) {
@@ -125,32 +129,34 @@ export function matchesTitle(target: string, year: string, test: string) {
 	// last chance
 	const splits = target.split(/\s+/);
 	if (splits.length > 4) {
-		let target2 = target;
+		let test2 = test;
 		const actual = splits.filter((term) => {
-			let newTitle = target2.replace(term, '');
-			if (newTitle !== target2) {
-				target2 = newTitle;
+			let newTest = test2.replace(term, '');
+			if (newTest !== test2) {
+				test2 = newTest;
 				return true;
 			}
 
-			newTitle = target2.replace(removeDiacritics(term), '');
-			if (newTitle !== target2) {
-				target2 = newTitle;
+			newTest = test2.replace(removeDiacritics(term), '');
+			if (newTest !== test2) {
+				test2 = newTest;
 				return true;
 			}
 
-			newTitle = target2.replace(removeRepeats(term), '');
-			if (newTitle !== target2) {
-				target2 = newTitle;
+			newTest = test2.replace(removeRepeats(term), '');
+			if (newTest !== test2) {
+				test2 = newTest;
 				return true;
 			}
 			return false;
-		}).length;
-		if (actual + 1 >= splits.length) {
+		});
+		// console.log('🎯 Comparison3:', actual, splits.length);
+		if (actual.length + 1 >= splits.length) {
 			return true;
 		}
 	}
-	const mustHaveTerms: string[] = splits.filter((word) => !dictionary.has(word));
+	const mustHaveTerms: string[] = splits;
+	// console.log('🎯 Comparison2:', mustHaveTerms, test, containsYear);
 	return containsYear && includesMustHaveTerms(mustHaveTerms, test);
 }
 
@@ -194,6 +200,10 @@ export function meetsTitleConditions(
 	year: string,
 	testTitle: string
 ): boolean {
+	// console.log('🎯 Target title:', targetTitle);
+	// console.log('🎯 Test title:', testTitle);
+	// console.log('🎯 Year:', year);
+	// console.log('🎯 matchesTitle:', matchesTitle(targetTitle, year, testTitle));
 	return matchesTitle(targetTitle, year, testTitle) && hasNoBannedTerms(targetTitle, testTitle);
 }
 
@@ -400,14 +410,14 @@ export function getAllPossibleTitles(titles: (string | undefined)[]) {
 	titles.forEach((title) => {
 		if (title) {
 			ret.push(title);
-			if (title.match(/\b&\b/)) {
-				ret.push(title.replace(/\b&\b/g, 'and'));
+			if (title.match(/[a-z\s]&/i)) {
+				ret.push(title.replace(/&/g, ' and '));
 			}
-			if (title.match(/\b\+\b/)) {
-				ret.push(title.replace(/\b\+\b/g, 'and'));
+			if (title.match(/[a-z\s]\+/i)) {
+				ret.push(title.replace(/\+/g, ' and '));
 			}
-			if (title.match(/\b@\b/)) {
-				ret.push(title.replace(/\b@\b/g, 'at'));
+			if (title.match(/[a-z\s]@/i)) {
+				ret.push(title.replace(/@/g, ' at '));
 			}
 		}
 	});
