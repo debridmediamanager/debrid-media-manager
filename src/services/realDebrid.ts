@@ -49,6 +49,7 @@ export interface UserTorrentResponse {
 	added: string;
 	links: string[];
 	ended: string;
+	seeders: number;
 }
 
 export interface DownloadResponse {

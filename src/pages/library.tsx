@@ -43,6 +43,7 @@ interface UserTorrent {
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
 	links: string[];
+	seeders: number;
 }
 
 interface SortBy {
@@ -64,6 +65,7 @@ function TorrentsPage() {
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'added', direction: 'desc' });
+	const [helpText, setHelpText] = useState('');
 
 	// keys
 	const rdKey = useRealDebridAccessToken();
@@ -124,6 +126,7 @@ function TorrentsPage() {
 						...torrent,
 						id: `rd:${torrent.id}`,
 						links: torrent.links.map((l) => l.replaceAll('/', '/')),
+						seeders: torrent.seeders || 0,
 					};
 				}) as UserTorrent[];
 
@@ -219,8 +222,8 @@ function TorrentsPage() {
 		clearGroupings(tvGroupingByEpisode);
 		const hashes: string[] = [];
 		for (const t of userTorrentsList) {
-			if (!hashes.includes(t.hash)) hashes.push(t.hash);
-			else dupeHashes.push(t.hash);
+			if (!hashes.includes(`${t.bytes}-${t.hash}`)) hashes.push(`${t.bytes}-${t.hash}`);
+			else dupeHashes.push(`${t.bytes}-${t.hash}`);
 			tmpTotalBytes += t.bytes;
 			const mediaId = getMediaId(t.info, t.mediaType);
 			if (mediaId in getGroupings(t.mediaType)) {
@@ -261,6 +264,14 @@ function TorrentsPage() {
 			selectPlayableFiles(userTorrentsList);
 			deleteFailedTorrents(userTorrentsList);
 			setFiltering(false);
+			setHelpText(
+				[
+					'Tip: You can use hash lists to share you library with others anonymously. Click on the button, wait for the page to finish processing, and share the link to your friends.',
+					'Tip: You can make a local backup of your library by using the "Local backup" button. This will generate a file containing your whole library that you can use to restore your library later.',
+					'Tip: You can restore a local backup by using the "Local restore" button. It will only restore the torrents that are not already in your library.',
+					'Tip: The quick search box will filter the list by filename and id. You can use multiple words or even regex to filter your library. This way, you can select multiple torrents and delete them at once, or share them as a hash list.',
+				][Math.floor(Math.random() * 4)]
+			);
 			return;
 		}
 		const { filter: titleFilter, mediaType, status } = router.query;
@@ -268,27 +279,50 @@ function TorrentsPage() {
 		if (status === 'slow') {
 			tmpList = tmpList.filter(isTorrentSlow);
 			setFilteredList(applyQuickSearch(tmpList));
+			setHelpText(
+				'Torrents shown are older than 1 hour and has no seeders. Use "Delete shown" to delete them.'
+			);
 		}
 		if (status === 'dupe') {
 			tmpList = tmpList.filter((t) => hasDupes.includes(getMediaId(t.info, t.mediaType)));
 			setFilteredList(applyQuickSearch(tmpList));
+			setHelpText(
+				'Torrents shown have the same title parsed from the torrent name. Use "By size" to retain the larger torrent for each title, or "By date" to retain the more recent torrent. Take note: the parser might not work well for multi-season tv show torrents.'
+			);
 		}
 		if (status === 'dupehash') {
-			tmpList = tmpList.filter((t) => dupeHashes.includes(t.hash));
+			tmpList = tmpList.filter((t) => dupeHashes.includes(`${t.bytes}-${t.hash}`));
 			setFilteredList(applyQuickSearch(tmpList));
+			setHelpText(
+				'Torrents shown have the same hash and size. These are exact duplicates. Just using the hash still means that they could have different files selected so size is also used for comparison.'
+			);
 		}
 		if (status === 'non4k') {
-			tmpList = tmpList.filter((t) => !/\b2160p|\b4k|\buhd/i.test(t.filename));
+			tmpList = tmpList.filter(
+				(t) => !/\b2160|\b4k|\buhd|\bdovi|\bdolby.?vision|\bdv|\bremux/i.test(t.filename)
+			);
 			setFilteredList(applyQuickSearch(tmpList));
+			setHelpText('Torrents shown are not high quality based on the torrent name.');
+		}
+		if (status === '4k') {
+			tmpList = tmpList.filter((t) =>
+				/\b2160|\b4k|\buhd|\bdovi|\bdolby.?vision|\bdv|\bremux/i.test(t.filename)
+			);
+			setFilteredList(applyQuickSearch(tmpList));
+			setHelpText('Torrents shown are high quality based on the torrent name.');
 		}
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
 			tmpList = tmpList.filter((t) => decodedTitleFilter === getMediaId(t.info, t.mediaType));
 			setFilteredList(applyQuickSearch(tmpList));
+			setHelpText(`Torrents shown have the title "${titleFilter}".`);
 		}
 		if (mediaType) {
 			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
 			setFilteredList(applyQuickSearch(tmpList));
+			setHelpText(
+				`Torrents shown are detected as ${mediaType === 'movie' ? 'movies' : 'tv shows'}.`
+			);
 		}
 		selectPlayableFiles(tmpList);
 		deleteFailedTorrents(tmpList);
@@ -571,11 +605,11 @@ function TorrentsPage() {
 	}
 
 	function isTorrentSlow(t: UserTorrent) {
-		const oldTorrentAge = 86400000; // One day in milliseconds
+		const oldTorrentAge = 3600000; // 1 hour in milliseconds
 		const addedDate = new Date(t.added);
 		const now = new Date();
 		const ageInMillis = now.getTime() - addedDate.getTime();
-		return t.status.toLowerCase() === 'downloading' && ageInMillis >= oldTorrentAge;
+		return t.progress !== 100 && ageInMillis >= oldTorrentAge && t.seeders === 0;
 	}
 
 	async function generateHashList() {
@@ -814,19 +848,19 @@ function TorrentsPage() {
 					href="/library?status=slow&page=1"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
 				>
-					Slow downloads
+					No seeds
 				</Link>
 				<Link
 					href="/library?status=dupe&page=1"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
 				>
-					Duplicate titles
+					Same title
 				</Link>
 				<Link
 					href="/library?status=dupehash&page=1"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
 				>
-					Duplicate hashes
+					Same hash&size
 				</Link>
 
 				<button
@@ -928,6 +962,7 @@ function TorrentsPage() {
 					Reset
 				</Link>
 			</div>
+			{helpText !== '' && <div className="bg-blue-900">{helpText}</div>}
 			<div className="overflow-x-auto">
 				{rdLoading || adLoading || grouping || filtering ? (
 					<div className="flex justify-center items-center mt-4">
@@ -961,14 +996,14 @@ function TorrentsPage() {
 									{sortBy.column === 'bytes' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
-								<th
+								{/* <th
 									className="px-4 py-2 cursor-pointer"
 									onClick={() => handleSort('score')}
 								>
 									QScore{' '}
 									{sortBy.column === 'score' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
-								</th>
+								</th> */}
 								<th
 									className="px-4 py-2 cursor-pointer"
 									onClick={() => handleSort('progress')}
@@ -1046,9 +1081,9 @@ function TorrentsPage() {
 											<td className="border px-4 py-2">
 												{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
 											</td>
-											<td className="border px-4 py-2">
+											{/* <td className="border px-4 py-2">
 												{torrent.score.toFixed(1)}
-											</td>
+											</td> */}
 											<td className="border px-4 py-2">
 												{torrent.status === 'downloading'
 													? `${torrent.progress}%`

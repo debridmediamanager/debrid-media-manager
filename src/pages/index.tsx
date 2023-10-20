@@ -132,7 +132,7 @@ function IndexPage() {
 								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
 								onClick={() => router.push('/troubleshooting')}
 							>
-								Troubleshoot
+								Missing library items?
 							</button>
 							{rdUser && (
 								<button
