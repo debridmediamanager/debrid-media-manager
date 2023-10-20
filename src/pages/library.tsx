@@ -43,6 +43,7 @@ interface UserTorrent {
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
 	links: string[];
+	seeders: number;
 }
 
 interface SortBy {
@@ -124,6 +125,7 @@ function TorrentsPage() {
 						...torrent,
 						id: `rd:${torrent.id}`,
 						links: torrent.links.map((l) => l.replaceAll('/', '/')),
+						seeders: torrent.seeders || 0,
 					};
 				}) as UserTorrent[];
 
@@ -571,11 +573,11 @@ function TorrentsPage() {
 	}
 
 	function isTorrentSlow(t: UserTorrent) {
-		const oldTorrentAge = 86400000; // One day in milliseconds
+		const oldTorrentAge = 3600000; // 1 hour in milliseconds
 		const addedDate = new Date(t.added);
 		const now = new Date();
 		const ageInMillis = now.getTime() - addedDate.getTime();
-		return t.status.toLowerCase() === 'downloading' && ageInMillis >= oldTorrentAge;
+		return t.progress !== 100 && ageInMillis >= oldTorrentAge && t.seeders === 0;
 	}
 
 	async function generateHashList() {
@@ -814,19 +816,19 @@ function TorrentsPage() {
 					href="/library?status=slow&page=1"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
 				>
-					Slow downloads
+					No seeds
 				</Link>
 				<Link
 					href="/library?status=dupe&page=1"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
 				>
-					Duplicate titles
+					Same title
 				</Link>
 				<Link
 					href="/library?status=dupehash&page=1"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
 				>
-					Duplicate hashes
+					Same hash&size
 				</Link>
 
 				<button
