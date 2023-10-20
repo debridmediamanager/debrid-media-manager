@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { cleanMovieScrapes } from './movieCleaner';
 import { scrapeMovies } from './movieScraper';
 import { PlanetScaleCache } from './planetscale';
+import { cleanTvScrapes } from './tvCleaner';
 import { scrapeTv } from './tvScraper';
 
 const tmdbKey = process.env.TMDB_KEY;
@@ -46,6 +48,7 @@ export async function generateScrapeJobs(imdbId: string, replaceOldScrape: boole
 		try {
 			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.movie_results[0]?.id;
 			const tmdbInfo = await axios.get(getTmdbMovieInfo(tmdbId));
+			if (!replaceOldScrape) await cleanMovieScrapes(imdbId, tmdbInfo.data, mdbInfo.data, db);
 			await scrapeMovies(imdbId, tmdbInfo.data, mdbInfo.data, db, replaceOldScrape);
 			return;
 		} catch (error: any) {
@@ -68,6 +71,7 @@ export async function generateScrapeJobs(imdbId: string, replaceOldScrape: boole
 		try {
 			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.tv_results[0]?.id;
 			const tmdbInfo = await axios.get(getTmdbTvInfo(tmdbId));
+			if (!replaceOldScrape) await cleanTvScrapes(imdbId, tmdbInfo.data, mdbInfo.data, db);
 			await scrapeTv(imdbId, tmdbInfo.data, mdbInfo.data, db, replaceOldScrape);
 			return;
 		} catch (error: any) {
