@@ -42,3 +42,5 @@ src/utils/parser.ts
 
 tmp/
 temp/
+
+pscale_dump_dmm_main/
