@@ -74,7 +74,7 @@ function TorrentsPage() {
 	const [movieGrouping] = useState<Record<string, number>>({});
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
-	const [hasDupes] = useState<Array<string>>([]);
+	const [dupeTitles] = useState<Array<string>>([]);
 	const [dupeHashes] = useState<Array<string>>([]);
 
 	// stats
@@ -116,8 +116,6 @@ function TorrentsPage() {
 						mediaType === 'movie'
 							? filenameParse(torrent.filename)
 							: filenameParse(torrent.filename, true);
-					if (torrent.filename === 'Pokemon.S01-S19.DUBBED.WEBRip.AAC.2.0.x264-SRS')
-						console.log(info);
 					return {
 						score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
 						info,
@@ -220,14 +218,25 @@ function TorrentsPage() {
 		let tmpTotalBytes = 0;
 		clearGroupings(movieGrouping);
 		clearGroupings(tvGroupingByEpisode);
-		const hashes: string[] = [];
+		const hashes: Map<string, number> = new Map();
 		for (const t of userTorrentsList) {
-			if (!hashes.includes(`${t.bytes}-${t.hash}`)) hashes.push(`${t.bytes}-${t.hash}`);
-			else dupeHashes.push(`${t.bytes}-${t.hash}`);
-			tmpTotalBytes += t.bytes;
+			const key: string = `${t.filename}|${t.hash}`;
+			if (!(key in hashes)) {
+				hashes.set(key, t.bytes);
+				tmpTotalBytes += t.bytes;
+			}
+			else {
+				const prevBytes = hashes.get(key) || 0;
+				if (prevBytes < t.bytes) {
+					tmpTotalBytes -= prevBytes;
+					tmpTotalBytes += t.bytes;
+					hashes.set(key, t.bytes);
+				}
+				dupeHashes.push(key);
+			}
 			const mediaId = getMediaId(t.info, t.mediaType);
 			if (mediaId in getGroupings(t.mediaType)) {
-				if (getGroupings(t.mediaType)[mediaId] === 1) hasDupes.push(mediaId);
+				if (getGroupings(t.mediaType)[mediaId] === 1) dupeTitles.push(mediaId);
 				getGroupings(t.mediaType)[mediaId]++;
 			} else {
 				getGroupings(t.mediaType)[mediaId] = 1;
@@ -252,7 +261,7 @@ function TorrentsPage() {
 		movieGrouping,
 		tvGroupingByEpisode,
 		tvGroupingByTitle,
-		hasDupes,
+		dupeTitles,
 	]);
 
 	// set the list you see
@@ -284,14 +293,14 @@ function TorrentsPage() {
 			);
 		}
 		if (status === 'dupe') {
-			tmpList = tmpList.filter((t) => hasDupes.includes(getMediaId(t.info, t.mediaType)));
+			tmpList = tmpList.filter((t) => dupeTitles.includes(getMediaId(t.info, t.mediaType)));
 			setFilteredList(applyQuickSearch(tmpList));
 			setHelpText(
 				'Torrents shown have the same title parsed from the torrent name. Use "By size" to retain the larger torrent for each title, or "By date" to retain the more recent torrent. Take note: the parser might not work well for multi-season tv show torrents.'
 			);
 		}
 		if (status === 'dupehash') {
-			tmpList = tmpList.filter((t) => dupeHashes.includes(`${t.bytes}-${t.hash}`));
+			tmpList = tmpList.filter((t) => dupeHashes.includes(`${t.filename}|${t.hash}`));
 			setFilteredList(applyQuickSearch(tmpList));
 			setHelpText(
 				'Torrents shown have the same hash and size. These are exact duplicates. Just using the hash still means that they could have different files selected so size is also used for comparison.'
@@ -334,7 +343,7 @@ function TorrentsPage() {
 		rdLoading,
 		adLoading,
 		grouping,
-		hasDupes,
+		dupeTitles,
 		query,
 		currentPage,
 	]);
