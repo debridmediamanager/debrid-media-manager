@@ -220,8 +220,8 @@ function TorrentsPage() {
 		clearGroupings(tvGroupingByEpisode);
 		const hashes: Map<string, number> = new Map();
 		for (const t of userTorrentsList) {
-			const key: string = `${t.filename}|${t.hash}`;
-			if (!(key in hashes)) {
+			const key = `${t.filename}|${t.hash}`;
+			if (!hashes.has(key)) {
 				hashes.set(key, t.bytes);
 				tmpTotalBytes += t.bytes;
 			}
