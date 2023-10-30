@@ -88,22 +88,6 @@ function IndexPage() {
 							>
 								My Library
 							</Link>
-
-							<button
-								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
-								onClick={handleHashListClick}
-							>
-								Hash list browser
-							</button>
-						</div>
-
-						<div className="flex mt-4">
-							{/* <button
-								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
-								onClick={() => router.push('/fixer')}
-							>
-								Fix playback or scan problems
-							</button> */}
 							<button
 								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
 								onClick={() => router.push('/troubleshooting')}
