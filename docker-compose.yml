@@ -1,19 +1,10 @@
 version: '3.9'
 services:
-  tor:
-    image: debridmediamanager/tor
-    deploy:
-      replicas: 1
 
   web:
     image: debridmediamanager/debrid-media-manager:latest
     ports:
       - 3000:3000
-    env_file:
-      - .env
-      - .env.local
-    depends_on:
-      - tor
     deploy:
       replicas: 1
       restart_policy:
