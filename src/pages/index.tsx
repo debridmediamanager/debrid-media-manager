@@ -79,9 +79,6 @@ function IndexPage() {
 								</Link>
 							)}
 						</p>
-						<p className="text-sm mb-4">
-							8.5+ million torrents collected from all corners of the web
-						</p>
 						<hr className="w-full" />
 
 						<div className="flex mt-4">
@@ -98,27 +95,6 @@ function IndexPage() {
 							>
 								Hash list browser
 							</button>
-
-							<Link
-								href="/search"
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-							>
-								Search
-							</Link>
-
-							<Link
-								href="/recentlyupdated"
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-							>
-								Recently Updated
-							</Link>
-
-							<Link
-								href="/browse"
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-							>
-								Browse
-							</Link>
 						</div>
 
 						<div className="flex mt-4">
