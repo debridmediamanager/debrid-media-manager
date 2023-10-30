@@ -1,7 +1,6 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
 import { deleteMagnet, getMagnetStatus, restartMagnet, uploadMagnet } from '@/services/allDebrid';
-import { createShortUrl } from '@/services/hashlists';
 import {
 	addHashAsMagnet,
 	deleteTorrent,
@@ -621,29 +620,6 @@ function TorrentsPage() {
 		return t.progress !== 100 && ageInMillis >= oldTorrentAge && t.seeders === 0;
 	}
 
-	async function generateHashList() {
-		toast('The hash list will return a 404 for the first 1-2 minutes', {
-			...libraryToastOptions,
-			duration: 60000,
-		});
-		try {
-			const hashList = filteredList.map((t) => ({
-				filename: t.filename,
-				hash: t.hash,
-				bytes: t.bytes,
-			}));
-			const shortUrl = await createShortUrl(
-				`${window.location.protocol}//${
-					window.location.host
-				}/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
-			);
-			window.open(shortUrl);
-		} catch (error) {
-			toast.error(`Error generating hash list, try again later`, libraryToastOptions);
-			console.error(error);
-		}
-	}
-
 	async function localBackup() {
 		toast('Generating a local backup file', libraryToastOptions);
 		try {
@@ -926,15 +902,6 @@ function TorrentsPage() {
 					Delete shown
 				</button>
 
-				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
-						filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
-					}`}
-					onClick={generateHashList}
-					disabled={filteredList.length === 0}
-				>
-					Share hash list
-				</button>
 				<button
 					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
 						userTorrentsList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''

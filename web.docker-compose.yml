@@ -1,10 +1,5 @@
 version: '3.9'
 services:
-  tor:
-    image: debridmediamanager/tor
-    deploy:
-      replicas: 0
-
   web:
     image: debridmediamanager/debrid-media-manager:latest
     ports:
@@ -15,6 +10,6 @@ services:
     depends_on:
       - tor
     deploy:
-      replicas: 16
+      replicas: 4
       restart_policy:
         condition: on-failure
