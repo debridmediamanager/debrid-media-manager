@@ -5,6 +5,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
+	if (!process.env.JACKETT || !process.env.PROWLARR) {
+		res.status(403).json({ status: 'failed' });
+		return;
+	}
+
 	while (true) {
 		let imdbId = await db.processingMoreThanAnHour();
 		if (!imdbId) {

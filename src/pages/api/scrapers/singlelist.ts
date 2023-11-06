@@ -6,6 +6,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
+	if (!process.env.JACKETT || !process.env.PROWLARR) {
+		res.status(403).json({ status: 'failed' });
+		return;
+	}
+
 	const { listId, rescrapeIfXDaysOld, skipMs, quantity } = req.query;
 
 	if (!listId || typeof listId !== 'string') {

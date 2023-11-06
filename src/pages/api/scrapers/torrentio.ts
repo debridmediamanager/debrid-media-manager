@@ -10,6 +10,11 @@ const torrentioUrl = (imdbId: string) =>
 	`https://torrentio.strem.fun/sort=size%7Cqualityfilter=other,scr,cam,unknown/stream/movie/${imdbId}.json`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
+	if (!process.env.JACKETT || !process.env.PROWLARR) {
+		res.status(403).json({ status: 'failed' });
+		return;
+	}
+
 	const { startFrom } = req.query;
 
 	let imdbIds = await db.getAllImdbIds('movie');
