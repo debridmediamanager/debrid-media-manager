@@ -17,6 +17,49 @@ export class PlanetScaleCache {
 		return PlanetScaleCache.instance;
 	}
 
+	/// true scraped
+
+	public async saveScrapedTrueResults(
+		key: string,
+		value: ScrapeSearchResult[],
+		updateUpdatedAt: boolean = true
+	) {
+		// Fetch the existing record
+		const existingRecord: Scraped | null = await this.prisma.scrapedTrue.findUnique({
+			where: { key },
+		});
+
+		if (existingRecord) {
+			const origLength = (existingRecord.value as ScrapeSearchResult[]).length;
+			// If record exists, append the new values to it
+			let updatedValue = flattenAndRemoveDuplicates([
+				existingRecord.value as ScrapeSearchResult[],
+				value,
+			]);
+			updatedValue = sortByFileSize(updatedValue);
+			const newLength = updatedValue.length;
+			console.log(`📝 ${key}: +${newLength - origLength} results`);
+
+			await this.prisma.scrapedTrue.update({
+				where: { key },
+				data: {
+					value: updatedValue,
+					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt,
+				},
+			});
+		} else {
+			// If record doesn't exist, create a new one
+			await this.prisma.scrapedTrue.create({
+				data: { key, value },
+			});
+		}
+	}
+
+	public async getScrapedTrueResults<T>(key: string): Promise<T | undefined> {
+		const cacheEntry = await this.prisma.scrapedTrue.findUnique({ where: { key } });
+		return cacheEntry?.value as T | undefined;
+	}
+
 	/// scraped results
 
 	public async saveScrapedResults(
@@ -87,16 +130,15 @@ export class PlanetScaleCache {
 			},
 			select: { updatedAt: true },
 		});
-
 		if (!cacheEntry || !cacheEntry.updatedAt) {
 			return true; // If it doesn't exist, assume it's old
 		}
-
-		const currentTime = new Date();
-		const updatedAt = new Date(cacheEntry.updatedAt);
-		const ageInMillis = currentTime.getTime() - updatedAt.getTime();
-		const daysAgoInMillis = daysAgo * 24 * 60 * 60 * 1000;
-		return ageInMillis >= daysAgoInMillis;
+		const updatedAt = cacheEntry.updatedAt;
+		const currentTime = Date.now();
+		const millisAgo = daysAgo * 24 * 60 * 60 * 1000;
+		const dateXdaysAgo = new Date(currentTime - millisAgo);
+		console.log('updatedAt', updatedAt, 'dateXdaysAgo', dateXdaysAgo);
+		return updatedAt <= dateXdaysAgo;
 	}
 
 	public async getOldestRequest(

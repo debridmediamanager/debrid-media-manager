@@ -15,7 +15,7 @@ function RecentlyUpdated() {
 	const fetchData = async () => {
 		setLoading(true);
 		try {
-			let path = 'api/recent';
+			let path = 'api/browse/recent';
 			if (config.externalSearchApiHostname) {
 				path = encodeURIComponent(path);
 			}

@@ -224,8 +224,7 @@ function TorrentsPage() {
 			if (!hashes.has(key)) {
 				hashes.set(key, t.bytes);
 				tmpTotalBytes += t.bytes;
-			}
-			else {
+			} else {
 				const prevBytes = hashes.get(key) || 0;
 				if (prevBytes < t.bytes) {
 					tmpTotalBytes -= prevBytes;

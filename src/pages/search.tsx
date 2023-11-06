@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { MdbSearchResult } from './api/keywordsearch';
+import { MdbSearchResult } from './api/search/title';
 
 function Search() {
 	const { publicRuntimeConfig: config } = getConfig();
@@ -21,7 +21,7 @@ function Search() {
 	const fetchData = async (query: string) => {
 		setLoading(true);
 		try {
-			let path = `api/keywordsearch?keyword=${query}`;
+			let path = `api/search/title?keyword=${query}`;
 			if (config.externalSearchApiHostname) {
 				path = encodeURIComponent(path);
 			}
