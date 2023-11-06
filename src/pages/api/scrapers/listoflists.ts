@@ -6,14 +6,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const { scrapePassword, search, rescrapeIfXDaysOld, skipMs, quantity } = req.query;
-	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
-		res.status(403).json({
-			status: 'error',
-			errorMessage: 'You are not authorized to use this feature',
-		});
-		return;
-	}
+	const { search, rescrapeIfXDaysOld, skipMs, quantity } = req.query;
+
 	if (!search || typeof search !== 'string') {
 		res.status(400).json({
 			status: 'error',
@@ -49,4 +43,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			await Promise.all(imdbIds.map(async (id) => await generateScrapeJobs(id)));
 		}
 	}
+	process.exit(0);
 }

@@ -1,29 +1,21 @@
+import { cleanByImdbId } from '@/services/movieCleaner';
 import { PlanetScaleCache } from '@/services/planetscale';
 import { ScrapeResponse } from '@/services/scrapeJobs';
-import { cleanByImdbId } from '@/services/tvCleaner';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const { scrapePassword, id } = req.query;
-	if (process.env.SCRAPE_API_PASSWORD && scrapePassword !== process.env.SCRAPE_API_PASSWORD) {
-		res.status(403).json({
-			status: 'error',
-			errorMessage: 'You are not authorized to use this feature',
-		});
-		return;
-	}
+	const { id } = req.query;
 
-	let imdbIds = !!id ? [id as string] : await db.getAllImdbIds('tv');
+	let imdbIds = !!id ? [id as string] : await db.getAllImdbIds('movie');
 	if (!imdbIds) {
 		console.log(
 			'[moviecleaner] There must be something wrong with the database, waiting 60 seconds'
 		);
 		return;
 	}
-	let uniqueIds = Array.from(new Set(imdbIds));
-	for (let i = 0; i < uniqueIds.length; i++) {
+	for (let i = 0; i < imdbIds.length; i++) {
 		await cleanByImdbId(imdbIds[i]);
 	}
 	res.status(200).json({ status: 'success' });

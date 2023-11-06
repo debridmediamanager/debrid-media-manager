@@ -2,6 +2,7 @@ import MdbList from '@/services/mdblist';
 import { lcg, shuffle } from '@/utils/seededShuffle';
 import { NextApiHandler } from 'next';
 
+// unused atm
 const handler: NextApiHandler = async (req, res) => {
 	const mdblist = new MdbList();
 	let topLists = await mdblist.topLists();
