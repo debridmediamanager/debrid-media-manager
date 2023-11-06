@@ -39,6 +39,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+	const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
 	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
@@ -52,6 +53,10 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		'adAutoInstantCheck',
 		false
 	);
+	const [onlyShowCached, setOnlyShowCached] = useLocalStorage<boolean>(
+		'onlyShowCached',
+		false
+	);
 
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
@@ -63,11 +68,24 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imdbid, seasonNum]);
 
+	useEffect(() => {
+		if (searchResults.length > 0) {
+			const filtered = searchResults.filter((result) => {
+				if (onlyShowCached) {
+					return result.rdAvailable || result.adAvailable;
+				}
+				return true;
+			});
+			setFilteredResults(filtered);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchResults, onlyShowCached]);
+
 	const fetchData = async (imdbId: string, seasonNum: number) => {
 		setSearchResults([]);
 		setErrorMessage('');
 		try {
-			let path = `api/tvsearch?imdbId=${imdbId}&seasonNum=${seasonNum}`;
+			let path = `api/torrents/tv?imdbId=${imdbId}&seasonNum=${seasonNum}`;
 			if (config.externalSearchApiHostname) {
 				path = encodeURIComponent(path);
 			}
@@ -362,12 +380,32 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 							>
 								Auto
 							</label>
+							<input
+								id="show-cached"
+								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+								type="checkbox"
+								checked={onlyShowCached || false}
+								onChange={(event) => {
+									const isChecked = event.target.checked;
+									setOnlyShowCached(isChecked);
+								}}
+							/>{' '}
+							<label
+								htmlFor="show-cached"
+								className="ml-2 mr-2 mb-2 text-sm font-medium"
+							>
+								Only show cached
+							</label>
+
+							<span className="px-2.5 py-1 text-s bg-yellow-100 text-yellow-800">
+								{filteredResults.length} / {searchResults.length} shown
+							</span>
 						</div>
 					)}
 					<div className="overflow-x-auto">
 						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
 							{searchState !== 'loading' &&
-								searchResults.map((r: SearchResult) => {
+								filteredResults.map((r: SearchResult) => {
 									const rdColor = r.noVideos
 										? 'gray'
 										: r.rdAvailable

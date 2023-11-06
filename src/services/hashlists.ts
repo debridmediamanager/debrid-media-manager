@@ -6,7 +6,7 @@ interface CreateShortUrlResponse {
 
 export async function createShortUrl(originalUrl: string): Promise<string> {
 	try {
-		const response = await axios.post<CreateShortUrlResponse>(`/api/hashlists`, {
+		const response = await axios.post<CreateShortUrlResponse>(`api/hashlists`, {
 			url: originalUrl,
 		});
 
