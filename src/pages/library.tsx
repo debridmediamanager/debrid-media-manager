@@ -223,8 +223,7 @@ function TorrentsPage() {
 			if (!hashes.has(key)) {
 				hashes.set(key, t.bytes);
 				tmpTotalBytes += t.bytes;
-			}
-			else {
+			} else {
 				const prevBytes = hashes.get(key) || 0;
 				if (prevBytes < t.bytes) {
 					tmpTotalBytes -= prevBytes;
@@ -299,7 +298,9 @@ function TorrentsPage() {
 			);
 		}
 		if (status === 'dupehash') {
-			tmpList = tmpList.filter((t) => dupeHashes.includes(`${t.filename}|${t.hash}|${t.bytes}`));
+			tmpList = tmpList.filter((t) =>
+				dupeHashes.includes(`${t.filename}|${t.hash}|${t.bytes}`)
+			);
 			setFilteredList(applyQuickSearch(tmpList));
 			setHelpText(
 				'Torrents shown have the same hash and size. These are exact duplicates. Just using the hash still means that they could have different files selected so size is also used for comparison.'
