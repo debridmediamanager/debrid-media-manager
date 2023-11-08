@@ -79,12 +79,15 @@ function IndexPage() {
 								</Link>
 							)}
 						</p>
-						<p className="text-sm mb-4">
-							8.5+ million torrents collected from all corners of the web
-						</p>
-						<hr className="w-full" />
 
-						<div className="flex mt-4">
+						<p className="text-sm mb-4">
+							6.43+ million torrents collected from all corners of the web (as of
+							November 2023, post clean-up)
+						</p>
+
+						<hr className="w-full mb-4" />
+
+						<div className="flex mb-4">
 							<Link
 								href="/library"
 								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
@@ -121,7 +124,7 @@ function IndexPage() {
 							</Link>
 						</div>
 
-						<div className="flex mt-4">
+						<div className="flex mb-4">
 							{/* <button
 								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
 								onClick={() => router.push('/fixer')}
@@ -151,6 +154,69 @@ function IndexPage() {
 								</button>
 							)}
 						</div>
+						<hr className="w-full mb-4" />
+						<p className="text-sm mb-4">
+							Get your movies straight from{' '}
+							<b>
+								<a href="https://www.imdb.com/chart/top/" target="_blank">
+									IMDB
+								</a>
+							</b>{' '}
+							or{' '}
+							<b>
+								<a href="https://mdblist.com/" target="_blank">
+									MDBList
+								</a>
+							</b>{' '}
+							with{' '}
+							<span className="bg-green-100 text-green-800 px-1">
+								<b>DMM browser extensions</b>
+							</span>{' '}
+							for{' '}
+							<b>
+								<a
+									href="https://chromewebstore.google.com/u/1/detail/fahmnboccjgkbeeianfdiohbbgmgoibb/"
+									target="_blank"
+								>
+									Chrome
+								</a>
+							</b>{' '}
+							(soon,{' '}
+							<a href="https://github.com/debridmediamanager/browser-extension">
+								load unpacked
+							</a>{' '}
+							for now) and{' '}
+							<b>
+								<a
+									href="https://addons.mozilla.org/en-US/firefox/addon/debrid-media-manager/"
+									target="_blank"
+								>
+									Firefox
+								</a>
+							</b>
+						</p>
+						{/* <p className="text-sm mb-4">
+							<a
+								href="https://github.com/debridmediamanager/zurg-testing"
+								target="_blank"
+							>
+								<b>Beta is out</b> for an uber fast webdav server and rclone
+								alternative
+							</a>
+							. Mount your Real-Debrid library and play your files directly from your
+							computer.
+						</p> */}
+						<p className="text-sm mb-4">
+							<a
+								href="https://github.com/sponsors/debridmediamanager"
+								target="_blank"
+							>
+								DMM is a 1-person passion project and{' '}
+								<span className="text-pink-200">
+									sponsoring it will mean a lot to me
+								</span>
+							</a>
+						</p>
 					</div>
 				</>
 			) : (
