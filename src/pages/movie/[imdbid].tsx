@@ -51,10 +51,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		'adAutoInstantCheck',
 		false
 	);
-	const [onlyShowCached, setOnlyShowCached] = useLocalStorage<boolean>(
-		'onlyShowCached',
-		false
-	);
+	const [onlyShowCached, setOnlyShowCached] = useLocalStorage<boolean>('onlyShowCached', false);
 
 	const router = useRouter();
 	const { imdbid } = router.query;
@@ -353,6 +350,9 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 							>
 								Auto
 							</label>
+							<span className="px-2.5 py-1 text-s bg-green-100 text-green-800 mr-2">
+								{filteredResults.length} / {searchResults.length} shown
+							</span>
 							<input
 								id="show-cached"
 								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -369,10 +369,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 							>
 								Only show cached
 							</label>
-
-							<span className="px-2.5 py-1 text-s bg-yellow-100 text-yellow-800">
-								{filteredResults.length} / {searchResults.length} shown
-							</span>
 						</div>
 					)}
 					<div className="overflow-x-auto">

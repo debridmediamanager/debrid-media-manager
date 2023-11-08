@@ -27,7 +27,7 @@ const handler: NextApiHandler = async (req, res) => {
 			db.getScrapedTrueResults<any[]>(
 				`tv:${imdbId.toString().trim()}:${parseInt(seasonNum.toString().trim(), 10)}`
 			),
-		])
+		]);
 		// should contain both results
 		const searchResults = [...(results[0] || []), ...(results[1] || [])];
 		if (searchResults) {
