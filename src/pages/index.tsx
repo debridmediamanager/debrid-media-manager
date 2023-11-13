@@ -3,10 +3,18 @@ import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { Toaster, toast } from 'react-hot-toast';
 
 function IndexPage() {
 	const router = useRouter();
-	const { realDebrid: rdUser, allDebrid: adUser } = useCurrentUser();
+	const { realDebrid: rdUser, allDebrid: adUser, errors } = useCurrentUser();
+
+	if (errors.get('rd')) {
+		toast.error('Real-Debrid get user info failed, check your email and confirm the login coming from DMM');
+	}
+	if (errors.get('ad')) {
+		toast.error('AllDebrid get user info failed, check your email and confirm the login coming from DMM');
+	}
 
 	const handleHashListClick = () => {
 		const newTab = window.open('https://hashlists.debridmediamanager.com', '_blank');
@@ -47,6 +55,7 @@ function IndexPage() {
 					fill="#EDC951"
 				/>
 			</svg>
+			<Toaster position="bottom-right" />
 			{/* this is made by ChatGPT */}
 			{rdUser || adUser ? (
 				<>
