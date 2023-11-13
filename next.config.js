@@ -28,10 +28,9 @@ const nextConfig = {
 	publicRuntimeConfig: {
 		// Will be available on both server and client
 		externalSearchApiHostname: process.env.EXTERNAL_SEARCH_API_HOSTNAME,
-		realDebridHostname: 'https://corsproxy.org/?https://api.real-debrid.com',
-		allDebridHostname: 'https://api.alldebrid.com',
+		realDebridHostname: '/api/anticors?url=https://api.real-debrid.com',
+		allDebridHostname: '/api/anticors?url=https://api.alldebrid.com',
 		allDebridAgent: 'debridMediaManager',
-		bypassHostname: 'https://corsproxy.org/?',
 	},
 };
 

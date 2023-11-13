@@ -175,17 +175,13 @@ function IndexPage() {
 							for{' '}
 							<b>
 								<a
-									href="https://chromewebstore.google.com/u/1/detail/fahmnboccjgkbeeianfdiohbbgmgoibb/"
+									href="https://chromewebstore.google.com/detail/debrid-media-manager/fahmnboccjgkbeeianfdiohbbgmgoibb"
 									target="_blank"
 								>
 									Chrome
 								</a>
 							</b>{' '}
-							(soon,{' '}
-							<a href="https://github.com/debridmediamanager/browser-extension">
-								load unpacked
-							</a>{' '}
-							for now) and{' '}
+							and{' '}
 							<b>
 								<a
 									href="https://addons.mozilla.org/en-US/firefox/addon/debrid-media-manager/"
