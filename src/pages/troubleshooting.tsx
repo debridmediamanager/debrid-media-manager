@@ -82,7 +82,7 @@ function TroubleshootingPage() {
 			setTestResults((prev) => prev + `-----\n`);
 		}
 		if (adKey) {
-			let adBaseUrl = `${config.bypassHostname}${config.allDebridHostname}`;
+			let adBaseUrl = `${config.allDebridHostname}`;
 			setTestResults((prev) => prev + `AllDebrid base URL: ${adBaseUrl}\n`);
 			try {
 				let adTorrents = (await getMagnetStatus(adKey)).data.magnets;
@@ -92,8 +92,7 @@ function TroubleshootingPage() {
 			}
 			setTestResults((prev) => prev + `-----\n`);
 
-			config.bypassHostname = 'https://corsproxy.io/?';
-			adBaseUrl = `${config.bypassHostname}${config.allDebridHostname}`;
+			adBaseUrl = `${config.allDebridHostname}`;
 			setTestResults((prev) => prev + `AllDebrid base URL: ${adBaseUrl}\n`);
 			try {
 				let adTorrents = (await getMagnetStatus(adKey)).data.magnets;
@@ -103,7 +102,6 @@ function TroubleshootingPage() {
 			}
 			setTestResults((prev) => prev + `-----\n`);
 
-			config.bypassHostname = '';
 			setTestResults((prev) => prev + `AllDebrid base URL: ${config.allDebridHostname}\n`);
 			try {
 				let adTorrents = (await getMagnetStatus(adKey)).data.magnets;

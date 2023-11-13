@@ -13,7 +13,7 @@ function useLocalStorage<T>(key: string, defaultValue: T | null = null) {
 		}
 
 		const storedValue = localStorage.getItem(key);
-		if (storedValue !== null) {
+		if (storedValue !== null && storedValue !== 'undefined') {
 			const parsedValue = JSON.parse(storedValue) as ExpirableValue<T> | T;
 			if (isExpirableValue(parsedValue)) {
 				if (parsedValue.expiry >= new Date().getTime()) {

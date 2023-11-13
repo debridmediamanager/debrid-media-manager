@@ -18,9 +18,6 @@ interface PinResponse {
 export const getPin = async () => {
 	try {
 		let endpoint = `${config.allDebridHostname}/v4/pin/get?agent=${config.allDebridAgent}`;
-		if (config.bypassHostname) {
-			endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
-		}
 		const response = await axios.get<PinResponse>(endpoint);
 		return response.data.data;
 	} catch (error) {
@@ -40,9 +37,6 @@ interface PinCheckResponse {
 
 export const checkPin = async (pin: string, check: string) => {
 	let endpoint = `${config.allDebridHostname}/v4/pin/check?agent=${config.allDebridAgent}&check=${check}&pin=${pin}`;
-	if (config.bypassHostname) {
-		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
-	}
 	try {
 		let pinCheck = await axios.get<PinCheckResponse>(endpoint);
 
@@ -80,9 +74,6 @@ interface UserResponse {
 
 export const getAllDebridUser = async (apikey: string) => {
 	let endpoint = `${config.allDebridHostname}/v4/user?agent=${config.allDebridAgent}&apikey=${apikey}`;
-	if (config.bypassHostname) {
-		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
-	}
 	try {
 		const response = await axios.get<UserResponse>(endpoint);
 		return response.data.data.user;
@@ -117,9 +108,6 @@ export const uploadMagnet = async (apikey: string, hashes: string[]) => {
 		let endpoint = `${config.allDebridHostname}/v4/magnet/upload?agent=${config.allDebridAgent}&apikey=${apikey}`;
 		for (const hash of hashes) {
 			endpoint += `&magnets[]=${hash}`;
-		}
-		if (config.bypassHostname) {
-			endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
 		}
 		const response = await axios.post<MagnetUploadResponse>(endpoint);
 		return response.data;
@@ -183,9 +171,6 @@ export const getMagnetStatus = async (
 	if (counter) {
 		endpoint += `&counter=${counter}`;
 	}
-	if (config.bypassHostname) {
-		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
-	}
 	try {
 		const response = await axios.get<MagnetStatusResponse>(endpoint);
 		return response.data;
@@ -201,9 +186,6 @@ interface MagnetDeleteResponse {
 
 export const deleteMagnet = async (apikey: string, id: string): Promise<MagnetDeleteResponse> => {
 	let endpoint = `${config.allDebridHostname}/v4/magnet/delete?agent=${config.allDebridAgent}&apikey=${apikey}&id=${id}`;
-	if (config.bypassHostname) {
-		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
-	}
 	try {
 		const response = await axios.get<MagnetDeleteResponse>(endpoint);
 		return response.data;
@@ -224,9 +206,6 @@ interface MagnetRestartResponse {
 
 export const restartMagnet = async (apikey: string, id: string): Promise<MagnetRestartResponse> => {
 	let endpoint = `${config.allDebridHostname}/v4/magnet/restart?agent=${config.allDebridAgent}&apikey=${apikey}&id=${id}`;
-	if (config.bypassHostname) {
-		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
-	}
 	try {
 		const response = await axios.get<MagnetRestartResponse>(endpoint);
 		return response.data;
@@ -265,9 +244,6 @@ export const adInstantCheck = async (
 	let endpoint = `${config.allDebridHostname}/v4/magnet/instant?agent=${config.allDebridAgent}&apikey=${apikey}`;
 	for (const hash of hashes) {
 		endpoint += `&magnets[]=${hash}`;
-	}
-	if (config.bypassHostname) {
-		endpoint = `${config.bypassHostname}${encodeURIComponent(endpoint)}`;
 	}
 	try {
 		const response = await axios.get<AdInstantAvailabilityResponse>(endpoint);
