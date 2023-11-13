@@ -199,7 +199,7 @@ export class PlanetScaleCache {
 	): Promise<string[] | null> {
 		const scrapedItems = await this.prisma.scraped.findMany({
 			where: {
-				key: { startsWith: `${mediaType}:` },
+				key: { startsWith: `${mediaType}:tt` },
 			},
 			orderBy: { updatedAt: 'asc' },
 			take: quantity,
@@ -216,7 +216,7 @@ export class PlanetScaleCache {
 	public async getAllImdbIds(mediaType: 'tv' | 'movie'): Promise<string[] | null> {
 		const scrapedItems = await this.prisma.scraped.findMany({
 			where: {
-				key: { startsWith: `${mediaType}:` },
+				key: { startsWith: `${mediaType}:tt` },
 			},
 			orderBy: { updatedAt: 'asc' },
 			select: { key: true },
@@ -285,7 +285,7 @@ export class PlanetScaleCache {
 				updatedAt: 'desc',
 			},
 			where: {
-				OR: [{ key: { startsWith: 'movie:' } }, { key: { startsWith: 'tv:' } }],
+				OR: [{ key: { startsWith: 'movie:tt' } }, { key: { startsWith: 'tv:tt' } }],
 			},
 			select: {
 				key: true,
