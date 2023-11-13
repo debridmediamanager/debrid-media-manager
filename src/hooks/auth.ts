@@ -4,6 +4,7 @@ import { clearRdKeys } from '@/utils/clearLocalStorage';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useLocalStorage from './localStorage';
+import { E } from 'vitest/dist/reporters-5f784f42';
 
 interface RealDebridUser {
 	id: number;
@@ -87,20 +88,31 @@ export const useCurrentUser = () => {
 	const router = useRouter();
 	const [accessToken] = useLocalStorage<string>('rd:accessToken');
 	const [apiKey] = useLocalStorage<string>('ad:apiKey');
+	const [errors, setErrors] = useState<Map<string, any>>(new Map());
 
 	useEffect(() => {
 		(async () => {
 			if (!accessToken && !apiKey) return null;
-			if (accessToken) {
-				const rdUserResponse = await getRealDebridUser(accessToken);
-				if (rdUserResponse) setRdUser(<RealDebridUser>rdUserResponse);
+			try {
+				if (accessToken) {
+					const rdUserResponse = await getRealDebridUser(accessToken);
+					if (rdUserResponse) setRdUser(<RealDebridUser>rdUserResponse);
+				}
+			} catch (error: any) {
+				console.error('rd error', error);
+				setErrors((errors) => errors.set('rd', error));
 			}
-			if (apiKey) {
-				const adUserResponse = await getAllDebridUser(apiKey);
-				if (adUserResponse) setAdUser(<AllDebridUser>adUserResponse);
+			try {
+				if (apiKey) {
+					const adUserResponse = await getAllDebridUser(apiKey);
+					if (adUserResponse) setAdUser(<AllDebridUser>adUserResponse);
+				}
+			} catch (error) {
+				console.error('ad error', error);
+				setErrors((errors) => errors.set('ad', error));
 			}
 		})();
-	}, [accessToken, apiKey, router]);
+	}, [accessToken, apiKey, router, errors]);
 
-	return { realDebrid: rdUser, allDebrid: adUser };
+	return { realDebrid: rdUser, allDebrid: adUser, errors };
 };
