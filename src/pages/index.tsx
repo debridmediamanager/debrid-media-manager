@@ -3,18 +3,25 @@ import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 
 function IndexPage() {
 	const router = useRouter();
-	const { realDebrid: rdUser, allDebrid: adUser, errors } = useCurrentUser();
+	const { realDebrid: rdUser, allDebrid: adUser, rdError, adError } = useCurrentUser();
 
-	if (errors.get('rd')) {
-		toast.error('Real-Debrid get user info failed, check your email and confirm the login coming from DMM');
-	}
-	if (errors.get('ad')) {
-		toast.error('AllDebrid get user info failed, check your email and confirm the login coming from DMM');
-	}
+	useEffect(() => {
+		if (rdError) {
+			toast.error(
+				'Real-Debrid get user info failed, check your email and confirm the login coming from DMM'
+			);
+		}
+		if (adError) {
+			toast.error(
+				'AllDebrid get user info failed, check your email and confirm the login coming from DMM'
+			);
+		}
+	}, [rdError, adError]);
 
 	const handleHashListClick = () => {
 		const newTab = window.open('https://hashlists.debridmediamanager.com', '_blank');
