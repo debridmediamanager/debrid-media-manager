@@ -12,7 +12,7 @@ import {
 } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
-import { getMediaType } from '@/utils/mediaType';
+import { getMediaType, getMediaType2 } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
 import { getSelectableFiles, isVideoOrSubs } from '@/utils/selectable';
 import { libraryToastOptions } from '@/utils/toastOptions';
@@ -110,43 +110,52 @@ function TorrentsPage() {
 		const fetchRealDebrid = async () => {
 			try {
 				if (!rdKey) throw new Error('no_rd_key');
-				const torrents = (await getUserTorrentsList(rdKey)).map((torrent) => {
-					const mediaType = getMediaType(torrent.filename);
-					const info =
-						mediaType === 'movie'
-							? filenameParse(torrent.filename)
-							: filenameParse(torrent.filename, true);
-					return {
-						score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
-						info,
-						mediaType,
-						title: getMediaId(info, mediaType, false),
-						...torrent,
-						id: `rd:${torrent.id}`,
-						links: torrent.links.map((l) => l.replaceAll('/', '/')),
-						seeders: torrent.seeders || 0,
-					};
-				}) as UserTorrent[];
 
-				setUserTorrentsList((prev) => [...prev, ...torrents]);
-				rdCacheAdder.many(
-					torrents.map((t) => ({
-						id: t.id,
-						hash: t.hash,
-						status: t.status === 'downloaded' ? 'downloaded' : 'downloading',
-						progress: t.progress,
-					}))
-				);
+				// Iterate over each page of results from the generator
+				for await (let pageOfTorrents of getUserTorrentsList(rdKey)) {
+					const torrents = pageOfTorrents.map((torrent) => {
+						const mediaType = getMediaType2(torrent.filename, torrent.links.length);
+						const info =
+							mediaType === 'movie'
+								? filenameParse(torrent.filename)
+								: filenameParse(torrent.filename, true);
+						return {
+							score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE)
+								.score,
+							info,
+							mediaType,
+							title: getMediaId(info, mediaType, false) || torrent.filename,
+							...torrent,
+							id: `rd:${torrent.id}`,
+							links: torrent.links.map((l) => l.replaceAll('/', '/')),
+							seeders: torrent.seeders || 0,
+						};
+					}) as UserTorrent[]; // Cast the result to UserTorrent[] to ensure type correctness
+
+					// Add the current page of torrents directly to the state
+					setUserTorrentsList((prev) => [...prev, ...torrents]);
+
+					// Optionally add to cache or perform any other operation needed with the current page
+					rdCacheAdder.many(
+						torrents.map((t) => ({
+							id: t.id,
+							hash: t.hash,
+							status: t.status === 'downloaded' ? 'downloaded' : 'downloading',
+							progress: t.progress,
+						}))
+					);
+				}
 			} catch (error) {
-				setUserTorrentsList((prev) => [...prev]);
 				toast.error('Error fetching user torrents list', libraryToastOptions);
 				console.error(error);
 			} finally {
 				setRdLoading(false);
 			}
 		};
+
 		if (rdKey) fetchRealDebrid();
 		else setRdLoading(false);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdKey]);
 
@@ -176,7 +185,7 @@ function TorrentsPage() {
 						score: getReleaseTags(torrent.filename, torrent.size / ONE_GIGABYTE).score,
 						info,
 						mediaType,
-						title: getMediaId(info, mediaType, false),
+						title: getMediaId(info, mediaType, false) || torrent.filename,
 						id: `ad:${torrent.id}`,
 						filename: torrent.filename,
 						hash: torrent.hash,
@@ -233,15 +242,14 @@ function TorrentsPage() {
 				}
 				dupeHashes.push(key);
 			}
-			const mediaId = getMediaId(t.info, t.mediaType);
-			if (mediaId in getGroupings(t.mediaType)) {
-				if (getGroupings(t.mediaType)[mediaId] === 1) dupeTitles.push(mediaId);
-				getGroupings(t.mediaType)[mediaId]++;
+			if (t.title in getGroupings(t.mediaType)) {
+				if (getGroupings(t.mediaType)[t.title] === 1) dupeTitles.push(t.title);
+				getGroupings(t.mediaType)[t.title]++;
 			} else {
-				getGroupings(t.mediaType)[mediaId] = 1;
+				getGroupings(t.mediaType)[t.title] = 1;
 			}
 			if (t.mediaType === 'tv') {
-				const title = getMediaId(t.info, t.mediaType, true, true);
+				const title = t.title;
 				if (title in tvGroupingByTitle) {
 					tvGroupingByTitle[title]++;
 				} else {
@@ -285,14 +293,14 @@ function TorrentsPage() {
 		const { filter: titleFilter, mediaType, status } = router.query;
 		let tmpList = userTorrentsList;
 		if (status === 'slow') {
-			tmpList = tmpList.filter(isTorrentSlow);
+			tmpList = tmpList.filter(isSlowOrNoLinks);
 			setFilteredList(applyQuickSearch(tmpList));
 			setHelpText(
-				'Torrents shown are older than 1 hour and has no seeders. Use "Delete shown" to delete them.'
+				'The displayed torrents either do not contain any links or are older than one hour and lack any seeders. You can use the "Delete shown" option to remove them.'
 			);
 		}
 		if (status === 'dupe') {
-			tmpList = tmpList.filter((t) => dupeTitles.includes(getMediaId(t.info, t.mediaType)));
+			tmpList = tmpList.filter((t) => dupeTitles.includes(t.title));
 			setFilteredList(applyQuickSearch(tmpList));
 			setHelpText(
 				'Torrents shown have the same title parsed from the torrent name. Use "By size" to retain the larger torrent for each title, or "By date" to retain the more recent torrent. Take note: the parser might not work well for multi-season tv show torrents.'
@@ -323,7 +331,7 @@ function TorrentsPage() {
 		}
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
-			tmpList = tmpList.filter((t) => decodedTitleFilter === getMediaId(t.info, t.mediaType));
+			tmpList = tmpList.filter((t) => decodedTitleFilter === t.title);
 			setFilteredList(applyQuickSearch(tmpList));
 			setHelpText(`Torrents shown have the title "${titleFilter}".`);
 		}
@@ -400,6 +408,12 @@ function TorrentsPage() {
 			} else if (a[sortBy.column] < b[sortBy.column]) {
 				comparison = -1;
 			}
+
+			// If comparison is 0 and the column is 'progress', then compare by the length of the links property
+			if (comparison === 0 && sortBy.column === 'progress') {
+				comparison = a.links.length - b.links.length;
+			}
+
 			return isAsc ? comparison : comparison * -1;
 		});
 		return filteredList;
@@ -614,12 +628,15 @@ function TorrentsPage() {
 		}
 	}
 
-	function isTorrentSlow(t: UserTorrent) {
+	function isSlowOrNoLinks(t: UserTorrent) {
 		const oldTorrentAge = 3600000; // 1 hour in milliseconds
 		const addedDate = new Date(t.added);
 		const now = new Date();
 		const ageInMillis = now.getTime() - addedDate.getTime();
-		return t.progress !== 100 && ageInMillis >= oldTorrentAge && t.seeders === 0;
+		return (
+			(t.links.length === 0 && t.progress === 100) ||
+			(t.progress !== 100 && ageInMillis >= oldTorrentAge && t.seeders === 0)
+		);
 	}
 
 	async function generateHashList() {
@@ -1018,7 +1035,7 @@ function TorrentsPage() {
 									className="px-4 py-2 cursor-pointer"
 									onClick={() => handleSort('progress')}
 								>
-									Progress{' '}
+									Status{' '}
 									{sortBy.column === 'progress' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
@@ -1041,13 +1058,11 @@ function TorrentsPage() {
 								)
 								.map((torrent) => {
 									const groupCount = getGroupings(torrent.mediaType)[
-										getMediaId(torrent.info, torrent.mediaType)
+										torrent.title
 									];
 									const filterText =
 										groupCount > 1 && !router.query.filter
-											? `${groupCount - 1} other file${
-													groupCount === 1 ? '' : 's'
-											  }`
+											? `${groupCount} of same title`
 											: '';
 									return (
 										<tr
@@ -1062,24 +1077,22 @@ function TorrentsPage() {
 													torrent.filename
 												) && (
 													<>
-														{torrent.mediaType === 'tv' ? '📺' : '🎥'}
+														<span className="cursor-pointer">
+															{torrent.mediaType === 'tv'
+																? '📺'
+																: '🎥'}
+														</span>
 														&nbsp;<strong>{torrent.title}</strong>{' '}
 														<Link
 															className="text-sm text-green-600 hover:text-green-800"
-															href={`/library?filter=${getMediaId(
-																torrent.info,
-																torrent.mediaType
-															)}`}
+															href={`/library?filter=${torrent.title}`}
 														>
 															{filterText}
 														</Link>{' '}
 														<Link
 															target="_blank"
 															className="text-sm text-blue-600 hover:text-blue-800"
-															href={`/search?query=${getMediaId(
-																torrent.info,
-																torrent.mediaType
-															)}`}
+															href={`/search?query=${torrent.title}`}
 														>
 															Search again
 														</Link>
@@ -1095,9 +1108,11 @@ function TorrentsPage() {
 												{torrent.score.toFixed(1)}
 											</td> */}
 											<td className="border px-4 py-2">
-												{torrent.status === 'downloading'
+												{torrent.progress !== 100
 													? `${torrent.progress}%`
-													: torrent.status}
+													: `${torrent.links.length} file${
+															torrent.links.length === 1 ? '' : 's'
+													  }`}
 											</td>
 											<td className="border px-4 py-2">
 												{new Date(torrent.added).toLocaleString()}
