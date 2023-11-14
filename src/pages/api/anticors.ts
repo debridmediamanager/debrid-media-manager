@@ -74,14 +74,15 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 			}
 		});
 
-		res.status(response.status)
-			.setHeader('content-type', response.headers.get('content-type') || '')
-			Object.keys(responseHeaders).forEach(key => {
-				res.setHeader(key, responseHeaders[key]);
-			});
+		res.status(response.status).setHeader(
+			'content-type',
+			response.headers.get('content-type') || ''
+		);
+		Object.keys(responseHeaders).forEach((key) => {
+			res.setHeader(key, responseHeaders[key]);
+		});
 
 		res.send(responseBody);
-
 	} catch (err: unknown) {
 		console.error(err);
 		res.status(500).json({ error: 'Internal Server Error' });
