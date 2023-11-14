@@ -47,7 +47,7 @@ function TorrentsPage() {
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'title', direction: 'asc' });
 
-	const [rdKey] = useRealDebridAccessToken();
+	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 
 	const [movieCount, setMovieCount] = useState<number>(0);
