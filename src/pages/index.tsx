@@ -35,12 +35,16 @@ function IndexPage() {
 			return null;
 		}
 		if (prefix) {
-			for (let i = 0; i < localStorage.length; i++) {
+			// Start from the end of localStorage and move backwards
+			let i = localStorage.length - 1;
+			while (i >= 0) {
 				const key = localStorage.key(i);
 				if (key && key.startsWith(prefix)) {
 					localStorage.removeItem(key);
 				}
+				i--; // Decrement i regardless of whether an item was removed
 			}
+
 			router.reload();
 		} else {
 			localStorage.clear();

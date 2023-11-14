@@ -9,7 +9,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 	return function WithAuth(props: P) {
 		const router = useRouter();
 		const [isLoading, setIsLoading] = useState(true);
-		const rdKey = useRealDebridAccessToken();
+		const [rdKey] = useRealDebridAccessToken();
 		const adKey = useAllDebridApiKey();
 
 		useEffect(() => {
