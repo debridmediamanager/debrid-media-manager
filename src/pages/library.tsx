@@ -68,7 +68,7 @@ function TorrentsPage() {
 	const [helpText, setHelpText] = useState('');
 
 	// keys
-	const [rdKey] = useRealDebridAccessToken();
+	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 
 	const [movieGrouping] = useState<Record<string, number>>({});

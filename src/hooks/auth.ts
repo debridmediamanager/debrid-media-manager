@@ -51,7 +51,6 @@ export const useRealDebridAccessToken = () => {
 	const [clientSecret] = useLocalStorage<string>('rd:clientSecret');
 	const [refreshToken] = useLocalStorage<string>('rd:refreshToken');
 	const [accessToken, setAccessToken] = useLocalStorage<string>('rd:accessToken');
-	const canRefresh = !!refreshToken && !!clientId && !!clientSecret;
 
 	useEffect(() => {
 		(async () => {
@@ -74,7 +73,7 @@ export const useRealDebridAccessToken = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [clientId, clientSecret, refreshToken]);
 
-	return [accessToken, canRefresh];
+	return accessToken;
 };
 
 export const useAllDebridApiKey = () => {
