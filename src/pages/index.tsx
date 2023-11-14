@@ -1,4 +1,5 @@
 import { useCurrentUser } from '@/hooks/auth';
+import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -45,6 +46,12 @@ function IndexPage() {
 			localStorage.clear();
 			router.push('/start');
 		}
+	};
+
+	const handleClearCache = () => {
+		localStorage.removeItem('rd:downloads');
+		localStorage.removeItem('ad:downloads');
+		toast.success(`Library cache cleared, please check again`, libraryToastOptions);
 	};
 
 	return (
@@ -149,7 +156,7 @@ function IndexPage() {
 							</button> */}
 							<button
 								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
-								onClick={() => router.push('/troubleshooting')}
+								onClick={() => handleClearCache()}
 							>
 								Missing library items?
 							</button>
