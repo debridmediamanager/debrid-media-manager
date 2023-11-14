@@ -4,7 +4,7 @@ import { uploadMagnet } from '@/services/allDebrid';
 import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
-import { getMediaType } from '@/utils/mediaType';
+import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
 import { getSelectableFiles, isVideoOrSubs } from '@/utils/selectable';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
@@ -47,7 +47,7 @@ function TorrentsPage() {
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'title', direction: 'asc' });
 
-	const rdKey = useRealDebridAccessToken();
+	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 
 	const [movieCount, setMovieCount] = useState<number>(0);
@@ -72,7 +72,7 @@ function TorrentsPage() {
 		(async () => {
 			try {
 				const torrents = (await getUserTorrentsList()).map((torrent) => {
-					const mediaType = getMediaType(torrent.filename);
+					const mediaType = getTypeByName(torrent.filename);
 					const info =
 						mediaType === 'movie'
 							? filenameParse(torrent.filename)

@@ -1,18 +1,22 @@
-export const getMediaType = (filename: string): 'tv' | 'movie' => {
-	return /seasons?.\d/i.test(filename) ||
-		/s\d\d/i.test(filename) ||
+export const getTypeByName = (filename: string): 'tv' | 'movie' => {
+	return /(season|episode)s?.?\d/i.test(filename) ||
+		/[se]\d\d/i.test(filename) ||
 		/\b(tv|complete)/i.test(filename) ||
-		/\b(saison|stage)[\s\.]?\d/i.test(filename)
+		/\b(saison|stage).?\d/i.test(filename) ||
+		/[a-z]\s?\-\s?\d{2,4}\b/.test(filename) ||
+		/\d{2,4}\s?\-\s?\d{2,4}\b/.test(filename)
 		? 'tv'
 		: 'movie';
 };
 
-export const getMediaType2 = (filename: string, linkCount: number): 'tv' | 'movie' => {
+export const getTypeByNameAndFileCount = (filename: string, linkCount: number): 'tv' | 'movie' => {
 	if (
-		/seasons?.\d/i.test(filename) ||
-		/s\d\d/i.test(filename) ||
+		/(season|episode)s?.?\d/i.test(filename) ||
+		/[se]\d\d/i.test(filename) ||
 		/\b(tv|complete)/i.test(filename) ||
-		/\b(saison|stage)[\s\.]?\d/i.test(filename)
+		/\b(saison|stage).?\d/i.test(filename) ||
+		/[a-z]\s?\-\s?\d{2,4}\b/.test(filename) ||
+		/\d{2,4}\s?\-\s?\d{2,4}\b/.test(filename)
 	) {
 		return 'tv';
 	}

@@ -12,7 +12,7 @@ import {
 } from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
-import { getMediaType, getMediaType2 } from '@/utils/mediaType';
+import { getTypeByName, getTypeByNameAndFileCount } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
 import { getSelectableFiles, isVideoOrSubs } from '@/utils/selectable';
 import { libraryToastOptions } from '@/utils/toastOptions';
@@ -68,7 +68,7 @@ function TorrentsPage() {
 	const [helpText, setHelpText] = useState('');
 
 	// keys
-	const rdKey = useRealDebridAccessToken();
+	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 
 	const [movieGrouping] = useState<Record<string, number>>({});
@@ -114,7 +114,10 @@ function TorrentsPage() {
 				// Iterate over each page of results from the generator
 				for await (let pageOfTorrents of getUserTorrentsList(rdKey)) {
 					const torrents = pageOfTorrents.map((torrent) => {
-						const mediaType = getMediaType2(torrent.filename, torrent.links.length);
+						const mediaType = getTypeByNameAndFileCount(
+							torrent.filename,
+							torrent.links.length
+						);
 						const info =
 							mediaType === 'movie'
 								? filenameParse(torrent.filename)
@@ -164,7 +167,7 @@ function TorrentsPage() {
 			try {
 				if (!adKey) throw new Error('no_ad_key');
 				const torrents = (await getMagnetStatus(adKey)).data.magnets.map((torrent) => {
-					const mediaType = getMediaType(torrent.filename);
+					const mediaType = getTypeByName(torrent.filename);
 					const info =
 						mediaType === 'movie'
 							? filenameParse(torrent.filename)
