@@ -82,13 +82,14 @@ function TorrentsPage() {
 						score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
 						info,
 						mediaType,
-						title: getMediaId(info, mediaType, false),
+						title: getMediaId(info, mediaType, false) || torrent.filename,
 						...torrent,
 					};
 				}) as UserTorrent[];
 
 				setUserTorrentsList(torrents);
 			} catch (error) {
+				alert(error);
 				setUserTorrentsList([]);
 				toast.error('Error fetching user torrents list');
 			} finally {
@@ -110,19 +111,17 @@ function TorrentsPage() {
 		clearGroupings(tvGroupingByEpisode);
 		for (const t of userTorrentsList) {
 			tmpTotalBytes += t.bytes;
-			const mediaId = getMediaId(t.info, t.mediaType);
-			if (mediaId in getGroupings(t.mediaType)) {
-				if (getGroupings(t.mediaType)[mediaId] === 1) hasDupes.push(mediaId);
-				getGroupings(t.mediaType)[mediaId]++;
+			if (t.title in getGroupings(t.mediaType)) {
+				if (getGroupings(t.mediaType)[t.title] === 1) hasDupes.push(t.title);
+				getGroupings(t.mediaType)[t.title]++;
 			} else {
-				getGroupings(t.mediaType)[mediaId] = 1;
+				getGroupings(t.mediaType)[t.title] = 1;
 			}
 			if (t.mediaType === 'tv') {
-				const title = getMediaId(t.info, t.mediaType, true, true);
-				if (title in tvGroupingByTitle) {
-					tvGroupingByTitle[title]++;
+				if (t.title in tvGroupingByTitle) {
+					tvGroupingByTitle[t.title]++;
 				} else {
-					tvGroupingByTitle[title] = 1;
+					tvGroupingByTitle[t.title] = 1;
 				}
 			}
 		}
@@ -146,7 +145,7 @@ function TorrentsPage() {
 		let tmpList = userTorrentsList;
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
-			tmpList = tmpList.filter((t) => decodedTitleFilter === getMediaId(t.info, t.mediaType));
+			tmpList = tmpList.filter((t) => decodedTitleFilter === t.title);
 			setFilteredList(applyQuickSearch(tmpList));
 		}
 		if (mediaType) {
@@ -421,22 +420,12 @@ function TorrentsPage() {
 									{sortBy.column === 'bytes' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
-								<th
-									className="px-4 py-2 cursor-pointer"
-									onClick={() => handleSort('score')}
-								>
-									Score{' '}
-									{sortBy.column === 'score' &&
-										(sortBy.direction === 'asc' ? '↑' : '↓')}
-								</th>
 								<th className="px-4 py-2">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							{sortedData().map((t) => {
-								const groupCount = getGroupings(t.mediaType)[
-									getMediaId(t.info, t.mediaType)
-								];
+								const groupCount = getGroupings(t.mediaType)[t.filename];
 								const filterText =
 									groupCount > 1 && !router.query.filter
 										? `${groupCount - 1} other file${
@@ -462,20 +451,14 @@ function TorrentsPage() {
 											<strong>{t.title}</strong>{' '}
 											<Link
 												className="text-sm text-green-600 hover:text-green-800"
-												href={`/hashlist?filter=${getMediaId(
-													t.info,
-													t.mediaType
-												)}`}
+												href={`/hashlist?filter=${t.filename}`}
 											>
 												{filterText}
 											</Link>{' '}
 											<Link
 												target="_blank"
 												className="text-sm text-blue-600 hover:text-blue-800"
-												href={`/search?query=${getMediaId(
-													t.info,
-													t.mediaType
-												)}`}
+												href={`/search?query=${t.filename}`}
 											>
 												Search again
 											</Link>
@@ -485,7 +468,6 @@ function TorrentsPage() {
 										<td className="border px-4 py-2">
 											{(t.bytes / ONE_GIGABYTE).toFixed(1)} GB
 										</td>
-										<td className="border px-4 py-2">{t.score.toFixed(1)}</td>
 										<td className="border px-4 py-2">
 											{rd.isDownloading(t.hash) && rdCache![t.hash].id && (
 												<button

@@ -45,6 +45,7 @@ export interface UserTorrentResponse {
 	host: string;
 	split: number;
 	progress: number;
+	speed: number;
 	status: string;
 	added: string;
 	links: string[];

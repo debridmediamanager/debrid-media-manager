@@ -15,6 +15,7 @@ import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName, getTypeByNameAndFileCount } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
 import { getSelectableFiles, isVideoOrSubs } from '@/utils/selectable';
+import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
@@ -25,7 +26,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import { FaArrowLeft, FaArrowRight, FaRecycle, FaShare, FaTrash } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight, FaRecycle, FaSeedling, FaShare, FaTrash } from 'react-icons/fa';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
 const ITEMS_PER_PAGE = 100;
@@ -44,6 +45,7 @@ interface UserTorrent {
 	info: ParsedFilename;
 	links: string[];
 	seeders: number;
+	speed: number;
 }
 
 interface SortBy {
@@ -132,6 +134,7 @@ function TorrentsPage() {
 							id: `rd:${torrent.id}`,
 							links: torrent.links.map((l) => l.replaceAll('/', '/')),
 							seeders: torrent.seeders || 0,
+							speed: torrent.speed || 0,
 						};
 					}) as UserTorrent[]; // Cast the result to UserTorrent[] to ensure type correctness
 
@@ -331,6 +334,11 @@ function TorrentsPage() {
 			);
 			setFilteredList(applyQuickSearch(tmpList));
 			setHelpText('Torrents shown are high quality based on the torrent name.');
+		}
+		if (status === 'inprogress') {
+			tmpList = tmpList.filter((t) => t.progress !== 100);
+			setFilteredList(applyQuickSearch(tmpList));
+			setHelpText('Torrents that are still downloading');
 		}
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
@@ -1111,12 +1119,29 @@ function TorrentsPage() {
 												{torrent.score.toFixed(1)}
 											</td> */}
 											<td className="border px-4 py-2">
-												{torrent.progress !== 100
-													? `${torrent.progress}%`
-													: `${torrent.links.length} file${
-															torrent.links.length === 1 ? '' : 's'
-													  }`}
+												{torrent.progress !== 100 ? (
+													<>
+														<span className="inline-block align-middle">
+															{torrent.progress}%&nbsp;
+														</span>
+														<span className="inline-block align-middle">
+															<FaSeedling />
+														</span>
+														<span className="inline-block align-middle">
+															{torrent.seeders}
+														</span>
+														<br />
+														<span className="inline-block align-middle">
+															{shortenNumber(torrent.speed)}B/s
+														</span>
+													</>
+												) : (
+													`${torrent.links.length} file${
+														torrent.links.length === 1 ? '' : 's'
+													}`
+												)}
 											</td>
+
 											<td className="border px-4 py-2">
 												{new Date(torrent.added).toLocaleString()}
 											</td>
