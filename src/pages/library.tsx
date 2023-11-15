@@ -989,7 +989,7 @@ function TorrentsPage() {
 					className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
 					onClick={combineSameHash}
 				>
-					Combine same hash
+					Cleanup
 				</button>
 
 				<button
