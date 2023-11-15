@@ -165,7 +165,7 @@ function TorrentsPage() {
 
 	// fetch list from api
 	useEffect(() => {
-		(async () => {
+		const fetchUserTorrentsList = async () => {
 			try {
 				const torrents = (await getUserTorrentsList()).map((torrent) => {
 					const mediaType = getTypeByName(torrent.filename);
@@ -196,7 +196,8 @@ function TorrentsPage() {
 			} finally {
 				setLoading(false);
 			}
-		})();
+		};
+		if (userTorrentsList.length === 0) fetchUserTorrentsList();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdKey]);
 
@@ -256,7 +257,7 @@ function TorrentsPage() {
 		}
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [query, userTorrentsList, movieGrouping, tvGroupingByEpisode]);
+	}, [query, userTorrentsList, movieGrouping, tvGroupingByEpisode, router.query]);
 
 	function handleSort(column: typeof sortBy.column) {
 		setSortBy({
@@ -512,7 +513,7 @@ function TorrentsPage() {
 						<strong>
 							{userTorrentsList.length - filteredList.length} torrents hidden
 						</strong>{' '}
-						because its already in your library
+						because its filtered/already in your library
 					</span>
 				)}
 			</div>
