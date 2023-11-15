@@ -196,9 +196,14 @@ function TorrentsPage() {
 						filename: torrent.filename,
 						hash: torrent.hash,
 						bytes: torrent.size,
-						progress: torrent.processingPerc,
+						progress:
+							torrent.statusCode === 4
+								? 100
+								: (torrent.downloaded / torrent.size) * 100,
 						status,
 						added: formattedDate,
+						speed: torrent.downloadSpeed || 0,
+						links: torrent.links.map((l) => l.link),
 					};
 				}) as UserTorrent[];
 
@@ -422,7 +427,7 @@ function TorrentsPage() {
 
 			// If comparison is 0 and the column is 'progress', then compare by the length of the links property
 			if (comparison === 0 && sortBy.column === 'progress') {
-				comparison = a.links.length - b.links.length;
+				comparison = (a.links || []).length - (b.links || []).length;
 			}
 
 			return isAsc ? comparison : comparison * -1;

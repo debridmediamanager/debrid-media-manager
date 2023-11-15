@@ -1,8 +1,21 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
-import { uploadMagnet } from '@/services/allDebrid';
-import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
+import {
+	AdInstantAvailabilityResponse,
+	MagnetFile,
+	adInstantCheck,
+	uploadMagnet,
+} from '@/services/allDebrid';
+import {
+	RdInstantAvailabilityResponse,
+	addHashAsMagnet,
+	deleteTorrent,
+	getTorrentInfo,
+	rdInstantCheck,
+	selectFiles,
+} from '@/services/realDebrid';
 import { runConcurrentFunctions } from '@/utils/batch';
+import { groupBy } from '@/utils/groupBy';
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -12,7 +25,7 @@ import lzString from 'lz-string';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { FaDownload, FaTimes } from 'react-icons/fa';
 
@@ -29,12 +42,97 @@ interface UserTorrent extends TorrentHash {
 	score: number;
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
+	noVideos: boolean;
+	rdAvailable: boolean;
+	adAvailable: boolean;
 }
 
 interface SortBy {
 	column: 'filename' | 'title' | 'bytes' | 'score';
 	direction: 'asc' | 'desc';
 }
+
+const instantCheckInRd = async (
+	rdKey: string,
+	hashes: string[],
+	setSearchResults: Dispatch<SetStateAction<UserTorrent[]>>
+): Promise<number> => {
+	let instantCount = 0;
+	const setInstantFromRd = (resp: RdInstantAvailabilityResponse) => {
+		setSearchResults((prevSearchResults) => {
+			const newSearchResults = [...prevSearchResults];
+			for (const torrent of newSearchResults) {
+				if (torrent.noVideos) continue;
+				if (torrent.hash in resp === false) continue;
+				if ('rd' in resp[torrent.hash] === false) continue;
+				const variants = resp[torrent.hash]['rd'];
+				if (!variants.length) continue;
+				torrent.noVideos = variants.reduce((noVideo, variant) => {
+					if (!noVideo) return false;
+					return !Object.values(variant).some((file) =>
+						isVideoOrSubs({ path: file.filename })
+					);
+				}, true);
+				// because it has variants and there's at least 1 video file
+				if (!torrent.noVideos) {
+					torrent.rdAvailable = true;
+					instantCount += 1;
+				}
+			}
+			return newSearchResults;
+		});
+	};
+
+	for (const hashGroup of groupBy(100, hashes)) {
+		if (rdKey) await rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd);
+	}
+
+	return instantCount;
+};
+
+export const instantCheckInAd = async (
+	adKey: string,
+	hashes: string[],
+	setSearchResults: Dispatch<SetStateAction<UserTorrent[]>>
+): Promise<number> => {
+	let instantCount = 0;
+	const setInstantFromAd = (resp: AdInstantAvailabilityResponse) => {
+		setSearchResults((prevSearchResults) => {
+			const newSearchResults = [...prevSearchResults];
+			for (const magnetData of resp.data.magnets) {
+				const masterHash = magnetData.hash;
+				const torrent = newSearchResults.find((r) => r.hash === masterHash);
+				if (!torrent) continue;
+				if (torrent.noVideos) continue;
+				if (!magnetData.files) continue;
+
+				const checkVideoInFiles = (files: MagnetFile[]): boolean => {
+					return files.reduce((noVideo: boolean, curr: MagnetFile) => {
+						if (!noVideo) return false; // If we've already found a video, no need to continue checking
+						if (!curr.n) return false; // If 'n' property doesn't exist, it's not a video
+						if (curr.e) {
+							// If 'e' property exists, check it recursively
+							return checkVideoInFiles(curr.e);
+						}
+						return !isVideoOrSubs({ path: curr.n });
+					}, true);
+				};
+
+				torrent.noVideos = checkVideoInFiles(magnetData.files);
+				if (!torrent.noVideos) {
+					torrent.adAvailable = magnetData.instant;
+					instantCount += 1;
+				}
+			}
+			return newSearchResults;
+		});
+	};
+
+	for (const hashGroup of groupBy(100, hashes)) {
+		if (adKey) await adInstantCheck(adKey, hashGroup).then(setInstantFromAd);
+	}
+	return instantCount;
+};
 
 function TorrentsPage() {
 	const router = useRouter();
@@ -88,6 +186,11 @@ function TorrentsPage() {
 				}) as UserTorrent[];
 
 				setUserTorrentsList(torrents);
+
+				if (!torrents.length) return;
+				// const hashArr = torrents.map((r) => r.hash);
+				// if (rdKey) wrapLoading('RD', instantCheckInRd(rdKey, hashArr, setUserTorrentsList));
+				// if (adKey) wrapLoading('AD', instantCheckInAd(adKey, hashArr, setUserTorrentsList));
 			} catch (error) {
 				alert(error);
 				setUserTorrentsList([]);
@@ -136,13 +239,14 @@ function TorrentsPage() {
 	// set the list you see
 	useEffect(() => {
 		setFiltering(true);
+		const notYetDownloaded = filterOutAlreadyDownloaded(userTorrentsList);
 		if (Object.keys(router.query).length === 0) {
-			setFilteredList(applyQuickSearch(userTorrentsList));
+			setFilteredList(applyQuickSearch(notYetDownloaded));
 			setFiltering(false);
 			return;
 		}
 		const { filter: titleFilter, mediaType } = router.query;
-		let tmpList = userTorrentsList;
+		let tmpList = notYetDownloaded;
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
 			tmpList = tmpList.filter((t) => decodedTitleFilter === t.title);
@@ -161,6 +265,16 @@ function TorrentsPage() {
 			column,
 			direction: sortBy.column === column && sortBy.direction === 'asc' ? 'desc' : 'asc',
 		});
+	}
+
+	function filterOutAlreadyDownloaded(unfiltered: UserTorrent[]) {
+		return unfiltered.filter(
+			(t) =>
+				!rd.isDownloaded(t.hash) &&
+				!ad.isDownloaded(t.hash) &&
+				!rd.isDownloading(t.hash) &&
+				!ad.isDownloading(t.hash)
+		);
 	}
 
 	function applyQuickSearch(unfiltered: UserTorrent[]) {
@@ -393,6 +507,15 @@ function TorrentsPage() {
 					>
 						Reset
 					</Link>
+				)}
+
+				{(rdKey || adKey) && filteredList.length && (
+					<span className="px-2.5 py-1 text-s bg-green-100 text-green-800 mr-2">
+						<strong>
+							{userTorrentsList.length - filteredList.length} torrents hidden
+						</strong>{' '}
+						because its already in your library
+					</span>
 				)}
 			</div>
 			<div className="overflow-x-auto">
