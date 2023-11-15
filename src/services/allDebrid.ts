@@ -128,7 +128,6 @@ interface MagnetStatus {
 	uploaded: number;
 	seeders: number;
 	downloadSpeed: number;
-	processingPerc: number;
 	uploadSpeed: number;
 	uploadDate: number;
 	completionDate: number;
