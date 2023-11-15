@@ -1,4 +1,4 @@
-type AsyncFunction<T> = () => Promise<T>;
+export type AsyncFunction<T> = () => Promise<T>;
 
 async function sleep(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));

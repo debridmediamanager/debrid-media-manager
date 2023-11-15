@@ -19,7 +19,7 @@ import { groupBy } from '@/utils/groupBy';
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
-import { getSelectableFiles, isVideoOrSubs } from '@/utils/selectable';
+import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
 import Head from 'next/head';
@@ -69,9 +69,7 @@ const instantCheckInRd = async (
 				if (!variants.length) continue;
 				torrent.noVideos = variants.reduce((noVideo, variant) => {
 					if (!noVideo) return false;
-					return !Object.values(variant).some((file) =>
-						isVideoOrSubs({ path: file.filename })
-					);
+					return !Object.values(variant).some((file) => isVideo({ path: file.filename }));
 				}, true);
 				// because it has variants and there's at least 1 video file
 				if (!torrent.noVideos) {
@@ -114,7 +112,7 @@ export const instantCheckInAd = async (
 							// If 'e' property exists, check it recursively
 							return checkVideoInFiles(curr.e);
 						}
-						return !isVideoOrSubs({ path: curr.n });
+						return !isVideo({ path: curr.n });
 					}, true);
 				};
 
@@ -409,7 +407,7 @@ function TorrentsPage() {
 			if (!rdKey) throw new Error('no_rd_key');
 			const response = await getTorrentInfo(rdKey, id.substring(3));
 
-			const selectedFiles = getSelectableFiles(response.files.filter(isVideoOrSubs)).map(
+			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
 				(file) => file.id
 			);
 			if (selectedFiles.length === 0) {
@@ -509,7 +507,7 @@ function TorrentsPage() {
 					</Link>
 				)}
 
-				{(rdKey || adKey) && filteredList.length && (
+				{(rdKey || adKey) && !!filteredList.length && (
 					<span className="px-2.5 py-1 text-s bg-green-100 text-green-800 mr-2">
 						<strong>
 							{userTorrentsList.length - filteredList.length} torrents hidden
@@ -571,7 +569,10 @@ function TorrentsPage() {
 								`}
 									>
 										<td className="border px-4 py-2 max-w-2xl overflow-hidden overflow-ellipsis">
-											<strong>{t.title}</strong>{' '}
+											<span className="cursor-pointer">
+												{t.mediaType === 'tv' ? '📺' : '🎥'}
+											</span>
+											&nbsp;<strong>{t.title}</strong>{' '}
 											<Link
 												className="text-sm text-green-600 hover:text-green-800"
 												href={`/hashlist?filter=${t.filename}`}

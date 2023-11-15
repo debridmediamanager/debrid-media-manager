@@ -2,12 +2,17 @@ import { TorrentInfoResponse } from '@/services/realDebrid';
 
 const FILE_SIZE_PCT_THRESHOLD = 0.15;
 
-export function isVideoOrSubs(file: { path: string }) {
+export function isVideo(file: { path: string }) {
 	const filePath = `${file.path}`.toLowerCase();
-	if (filePath.startsWith('/rarbg')) return false;
+	if (filePath.startsWith('/rarbg') || filePath.startsWith('rarbg')) return false;
 	if (filePath.match(/\bsample\b/)) return false;
-	if (filePath.includes('.xxx.')) return false;
-	return filePath.endsWith('.mkv') || filePath.endsWith('.mp4');
+	if (filePath.includes('xxx')) return false;
+	return (
+		filePath.endsWith('.mkv') ||
+		filePath.endsWith('.mp4') ||
+		filePath.endsWith('.avi') ||
+		filePath.endsWith('.wmv')
+	);
 }
 
 export function getSelectableFiles(files: TorrentInfoResponse['files']) {

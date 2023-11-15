@@ -10,11 +10,11 @@ import {
 	selectFiles,
 	unrestrictCheck,
 } from '@/services/realDebrid';
-import { runConcurrentFunctions } from '@/utils/batch';
+import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName, getTypeByNameAndFileCount } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
-import { getSelectableFiles, isVideoOrSubs } from '@/utils/selectable';
+import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
@@ -76,8 +76,7 @@ function TorrentsPage() {
 	const [movieGrouping] = useState<Record<string, number>>({});
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
-	const [dupeTitles] = useState<Array<string>>([]);
-	const [dupeHashes] = useState<Array<string>>([]);
+	const [sameTitle, setSameTitle] = useState<Array<string>>([]);
 
 	// stats
 	const [totalBytes, setTotalBytes] = useState<number>(0);
@@ -85,6 +84,8 @@ function TorrentsPage() {
 	// cache
 	const [_1, rdUtils, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
 	const [_2, adUtils, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
+
+	const uniqId = (torrent: UserTorrent): string => `${torrent.hash}|${torrent.links.join()}`;
 
 	const handlePrevPage = useCallback(() => {
 		if (router.query.page === '1') return;
@@ -159,7 +160,7 @@ function TorrentsPage() {
 			}
 		};
 
-		if (rdKey) fetchRealDebrid();
+		if (rdKey && userTorrentsList.length === 0) fetchRealDebrid();
 		else setRdLoading(false);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -224,7 +225,7 @@ function TorrentsPage() {
 				setAdLoading(false);
 			}
 		};
-		if (adKey) fetchAllDebrid();
+		if (adKey && userTorrentsList.length === 0) fetchAllDebrid();
 		else setAdLoading(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [adKey]);
@@ -240,7 +241,7 @@ function TorrentsPage() {
 		clearGroupings(tvGroupingByEpisode);
 		const hashes: Map<string, number> = new Map();
 		for (const t of userTorrentsList) {
-			const key = `${t.filename}|${t.hash}|${t.bytes}`;
+			const key = uniqId(t);
 			if (!hashes.has(key)) {
 				hashes.set(key, t.bytes);
 				tmpTotalBytes += t.bytes;
@@ -251,10 +252,10 @@ function TorrentsPage() {
 					tmpTotalBytes += t.bytes;
 					hashes.set(key, t.bytes);
 				}
-				dupeHashes.push(key);
 			}
 			if (t.title in getGroupings(t.mediaType)) {
-				if (getGroupings(t.mediaType)[t.title] === 1) dupeTitles.push(t.title);
+				if (getGroupings(t.mediaType)[t.title] === 1)
+					setSameTitle((prev) => [...prev, t.title]);
 				getGroupings(t.mediaType)[t.title]++;
 			} else {
 				getGroupings(t.mediaType)[t.title] = 1;
@@ -279,7 +280,6 @@ function TorrentsPage() {
 		movieGrouping,
 		tvGroupingByEpisode,
 		tvGroupingByTitle,
-		dupeTitles,
 	]);
 
 	// set the list you see
@@ -310,20 +310,11 @@ function TorrentsPage() {
 				'The displayed torrents either do not contain any links or are older than one hour and lack any seeders. You can use the "Delete shown" option to remove them.'
 			);
 		}
-		if (status === 'dupe') {
-			tmpList = tmpList.filter((t) => dupeTitles.includes(t.title));
+		if (status === 'sametitle') {
+			tmpList = tmpList.filter((t) => sameTitle.includes(t.title));
 			setFilteredList(applyQuickSearch(tmpList));
 			setHelpText(
 				'Torrents shown have the same title parsed from the torrent name. Use "By size" to retain the larger torrent for each title, or "By date" to retain the more recent torrent. Take note: the parser might not work well for multi-season tv show torrents.'
-			);
-		}
-		if (status === 'dupehash') {
-			tmpList = tmpList.filter((t) =>
-				dupeHashes.includes(`${t.filename}|${t.hash}|${t.bytes}`)
-			);
-			setFilteredList(applyQuickSearch(tmpList));
-			setHelpText(
-				'Torrents shown have the same hash and size. These are exact duplicates. Just using the hash still means that they could have different files selected so size is also used for comparison.'
 			);
 		}
 		if (status === 'non4k') {
@@ -362,16 +353,7 @@ function TorrentsPage() {
 		deleteFailedTorrents(tmpList);
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		router.query,
-		userTorrentsList,
-		rdLoading,
-		adLoading,
-		grouping,
-		dupeTitles,
-		query,
-		currentPage,
-	]);
+	}, [router.query, userTorrentsList, rdLoading, adLoading, grouping, query, currentPage]);
 
 	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
 		try {
@@ -449,7 +431,7 @@ function TorrentsPage() {
 			if (!rdKey) throw new Error('no_rd_key');
 			const response = await getTorrentInfo(rdKey, id.substring(3));
 
-			const selectedFiles = getSelectableFiles(response.files.filter(isVideoOrSubs)).map(
+			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
 				(file) => file.id
 			);
 			if (selectedFiles.length === 0) {
@@ -522,7 +504,7 @@ function TorrentsPage() {
 	}
 
 	const getKeyByStatus = (status: string) => {
-		if (status === 'dupe') return (torrent: UserTorrent) => torrent.info.title;
+		if (status === 'sametitle') return (torrent: UserTorrent) => torrent.info.title;
 		return (torrent: UserTorrent) => torrent.hash;
 	};
 
@@ -595,6 +577,55 @@ function TorrentsPage() {
 		}
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
+		}
+	}
+
+	function wrapReinsertFn(t: UserTorrent) {
+		return async () =>
+			t.id.startsWith('rd:')
+				? await handleReinsertTorrent(t.id)
+				: await handleRestartTorrent(t.id);
+	}
+
+	async function combineSameHash() {
+		if (
+			!confirm(
+				`This will combine torrents with identical hashes and select all streamable files. Make sure to backup before doing this. Do you want to proceed?`
+			)
+		)
+			return;
+		const dupeHashes: Map<string, UserTorrent[]> = new Map();
+		userTorrentsList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
+			let key = cur.hash;
+			if (acc[key]) {
+				if (!dupeHashes.has(key)) {
+					dupeHashes.set(key, new Array(acc[key]));
+				}
+				dupeHashes.get(key)?.push(cur);
+			} else {
+				acc[key] = cur;
+			}
+			return acc;
+		}, {});
+		let toReinsertAndDelete: AsyncFunction<unknown>[] = [];
+		dupeHashes.forEach((sameHashTorrents: UserTorrent[]) => {
+			const reinsert = sameHashTorrents.pop();
+			if (reinsert) {
+				toReinsertAndDelete.push(wrapReinsertFn(reinsert));
+				toReinsertAndDelete = toReinsertAndDelete.concat(
+					sameHashTorrents.map(wrapDeleteFn)
+				);
+			}
+		});
+		const [results, errors] = await runConcurrentFunctions(toReinsertAndDelete, 5, 500);
+		if (errors.length) {
+			toast.error(`Error with merging ${errors.length} torrents`, libraryToastOptions);
+		}
+		if (results.length) {
+			toast.success(`Merged ${results.length} torrents`, libraryToastOptions);
+		}
+		if (!errors.length && !results.length) {
+			toast('No torrents to merge', libraryToastOptions);
 		}
 	}
 
@@ -894,29 +925,23 @@ function TorrentsPage() {
 					No seeds
 				</Link>
 				<Link
-					href="/library?status=dupe&page=1"
+					href="/library?status=sametitle&page=1"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
 				>
 					Same title
-				</Link>
-				<Link
-					href="/library?status=dupehash&page=1"
-					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
-				>
-					Same hash&size
 				</Link>
 
 				<button
 					className={`mr-2 mb-2 bg-orange-700 hover:bg-orange-600 text-white font-bold py-1 px-1 rounded ${
 						filteredList.length === 0 ||
-						!((router.query.status as string) ?? '').startsWith('dupe')
+						!((router.query.status as string) ?? '').startsWith('same')
 							? 'opacity-60 cursor-not-allowed'
 							: ''
 					}`}
 					onClick={dedupeBySize}
 					disabled={
 						filteredList.length === 0 ||
-						!((router.query.status as string) ?? '').startsWith('dupe')
+						!((router.query.status as string) ?? '').startsWith('same')
 					}
 				>
 					By size
@@ -926,7 +951,7 @@ function TorrentsPage() {
 					className={`mr-2 mb-2 bg-orange-700 hover:bg-orange-600 text-white font-bold py-1 px-1 rounded ${
 						!query &&
 						(filteredList.length === 0 ||
-							!((router.query.status as string) ?? '').startsWith('dupe'))
+							!((router.query.status as string) ?? '').startsWith('same'))
 							? 'opacity-60 cursor-not-allowed'
 							: ''
 					}`}
@@ -934,7 +959,7 @@ function TorrentsPage() {
 					disabled={
 						!query &&
 						(filteredList.length === 0 ||
-							!((router.query.status as string) ?? '').startsWith('dupe'))
+							!((router.query.status as string) ?? '').startsWith('same'))
 					}
 				>
 					By date
@@ -945,7 +970,7 @@ function TorrentsPage() {
 						!query &&
 						(filteredList.length === 0 ||
 							hasNoQueryParamsBut('mediaType', 'page') ||
-							router.query.status === 'dupe')
+							router.query.status === 'same')
 							? 'opacity-60 cursor-not-allowed'
 							: ''
 					}`}
@@ -954,10 +979,17 @@ function TorrentsPage() {
 						!query &&
 						(filteredList.length === 0 ||
 							hasNoQueryParamsBut('mediaType', 'page') ||
-							router.query.status === 'dupe')
+							router.query.status === 'same')
 					}
 				>
 					Delete shown
+				</button>
+
+				<button
+					className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
+					onClick={combineSameHash}
+				>
+					Combine same hash
 				</button>
 
 				<button
