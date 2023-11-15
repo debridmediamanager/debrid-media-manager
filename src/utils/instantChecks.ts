@@ -44,6 +44,8 @@ export const instantCheckInRd = async (
 				if (!torrent.noVideos) {
 					torrent.rdAvailable = true;
 					instantCount += 1;
+				} else {
+					torrent.rdAvailable = false;
 				}
 			}
 			return newSearchResults;
@@ -86,9 +88,11 @@ export const instantCheckInAd = async (
 				};
 
 				torrent.noVideos = checkVideoInFiles(magnetData.files);
-				if (!torrent.noVideos) {
-					torrent.adAvailable = magnetData.instant;
+				if (!torrent.noVideos && magnetData.instant) {
+					torrent.adAvailable = true;
 					instantCount += 1;
+				} else {
+					torrent.adAvailable = false;
 				}
 			}
 			return newSearchResults;

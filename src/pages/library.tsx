@@ -1072,7 +1072,7 @@ function TorrentsPage() {
 									(currentPage - 1) * ITEMS_PER_PAGE,
 									(currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
 								)
-								.map((torrent) => {
+								.map((torrent, i) => {
 									const groupCount = getGroupings(torrent.mediaType)[
 										torrent.title
 									];
@@ -1081,10 +1081,7 @@ function TorrentsPage() {
 											? `${groupCount} of same title`
 											: '';
 									return (
-										<tr
-											key={torrent.id}
-											className="border-t-2 hover:bg-purple-900"
-										>
+										<tr key={i} className="border-t-2 hover:bg-purple-900">
 											<td className="border px-4 py-2 max-w-0 overflow-hidden">
 												{torrent.id}
 											</td>
