@@ -1,5 +1,5 @@
 export const getTypeByName = (filename: string): 'tv' | 'movie' => {
-	return /(season|episode)s?.?\d/i.test(filename) ||
+	return /(season|episode)s?.?\d?/i.test(filename) ||
 		/[se]\d\d/i.test(filename) ||
 		/\b(tv|complete)/i.test(filename) ||
 		/\b(saison|stage).?\d/i.test(filename) ||
@@ -20,7 +20,7 @@ export const getTypeByNameAndFileCount = (filename: string, linkCount: number): 
 	) {
 		return 'tv';
 	}
-	if (linkCount > 3) {
+	if (linkCount > 4) {
 		return 'tv';
 	}
 	return 'movie';
