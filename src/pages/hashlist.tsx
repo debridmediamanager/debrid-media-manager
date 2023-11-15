@@ -547,7 +547,7 @@ function TorrentsPage() {
 							</tr>
 						</thead>
 						<tbody>
-							{sortedData().map((t) => {
+							{sortedData().map((t, i) => {
 								const groupCount = getGroupings(t.mediaType)[t.filename];
 								const filterText =
 									groupCount > 1 && !router.query.filter
@@ -557,7 +557,7 @@ function TorrentsPage() {
 										: '';
 								return (
 									<tr
-										key={t.hash}
+										key={i}
 										className={`
 									hover:bg-purple-900
 									border-t-2

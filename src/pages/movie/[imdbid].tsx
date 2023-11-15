@@ -37,7 +37,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-	const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
 	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
@@ -63,19 +62,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imdbid]);
 
-	useEffect(() => {
-		if (searchResults.length > 0) {
-			const filtered = searchResults.filter((result) => {
-				if (onlyShowCached) {
-					return result.rdAvailable || result.adAvailable;
-				}
-				return true;
-			});
-			setFilteredResults(filtered);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [searchResults, onlyShowCached]);
-
 	const fetchData = async (imdbId: string) => {
 		setSearchResults([]);
 		setErrorMessage('');
@@ -93,12 +79,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				setSearchState('loaded');
 			}
 
-			setSearchResults(
-				response.data.results?.map((r) => ({
-					...r,
-					available: 'unavailable',
-				})) || []
-			);
+			setSearchResults(response.data.results || []);
 
 			if (response.data.results?.length) {
 				toast(`Found ${response.data.results.length} results`, searchToastOptions);
@@ -351,7 +332,14 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 								Auto
 							</label>
 							<span className="px-2.5 py-1 text-s bg-green-100 text-green-800 mr-2">
-								{filteredResults.length} / {searchResults.length} shown
+								{
+									searchResults.filter(
+										(r) =>
+											(onlyShowCached && (r.rdAvailable || r.adAvailable)) ||
+											!onlyShowCached
+									).length
+								}{' '}
+								/ {searchResults.length} shown
 							</span>
 							<input
 								id="show-cached"
@@ -373,10 +361,14 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					)}
 					<div className="overflow-x-auto">
 						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-							{searchState !== 'loading' &&
-								filteredResults.map((r: SearchResult) => (
+							{searchResults
+								.filter(
+									(result) =>
+										!onlyShowCached || result.rdAvailable || result.adAvailable
+								)
+								.map((r: SearchResult, i: number) => (
 									<div
-										key={r.hash}
+										key={i}
 										className={`
 ${
 	rd.isDownloaded(r.hash) || ad.isDownloaded(r.hash)

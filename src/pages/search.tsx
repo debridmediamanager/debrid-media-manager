@@ -108,8 +108,8 @@ function Search() {
 						Search Results for &quot;{query}&quot;
 					</h2>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-						{searchResults.map((result: MdbSearchResult) => (
-							<div key={result.id} className="shadow-lg rounded-lg p-6">
+						{searchResults.map((result: MdbSearchResult, i: number) => (
+							<div key={i} className="shadow-lg rounded-lg p-6">
 								<Poster
 									imdbId={result.imdbid}
 									className="w-full h-64 object-cover object-center rounded-t-lg"
@@ -135,9 +135,9 @@ function Search() {
 											{Array.from(
 												{ length: result.season_count || 0 },
 												(_, i) => i + 1
-											).map((season) => (
+											).map((season, idx) => (
 												<Link
-													key={season}
+													key={idx}
 													href={`/show/${result.imdbid}/${season}`}
 													className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-300 rounded text-yellow-800"
 												>

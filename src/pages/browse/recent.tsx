@@ -63,14 +63,14 @@ function RecentlyUpdated() {
 			{searchResults.length > 0 && (
 				<>
 					<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
-						{searchResults.map((key: string) => {
+						{searchResults.map((key: string, idx: number) => {
 							const match = key.match(/^(movie|tv):(.+)/);
 							if (match) {
 								const mediaType = match[1] === 'movie' ? 'movie' : 'show';
 								const imdbid = match[2];
 
 								return (
-									<Link key={key} href={`/${mediaType}/${imdbid}`} className="">
+									<Link key={idx} href={`/${mediaType}/${imdbid}`} className="">
 										<Poster
 											imdbId={imdbid}
 											className="w-full h-64 object-cover object-center rounded-t-lg"
