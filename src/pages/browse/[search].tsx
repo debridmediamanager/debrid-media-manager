@@ -34,7 +34,7 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 					{Object.keys(response).map((listName: string, idx: number) => {
 						return (
 							<>
-								<h2 className="mt-4 text-2xl font-bold" key={listName}>
+								<h2 className="mt-4 text-2xl font-bold" key={idx}>
 									<span className="text-yellow-500">{idx + 1}</span> {listName}
 								</h2>
 								<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">

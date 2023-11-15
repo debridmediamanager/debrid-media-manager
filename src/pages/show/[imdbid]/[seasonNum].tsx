@@ -39,7 +39,6 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-	const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
 	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
@@ -64,19 +63,6 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imdbid, seasonNum]);
-
-	useEffect(() => {
-		if (searchResults.length > 0) {
-			const filtered = searchResults.filter((result) => {
-				if (onlyShowCached) {
-					return result.rdAvailable || result.adAvailable;
-				}
-				return true;
-			});
-			setFilteredResults(filtered);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [searchResults, onlyShowCached]);
 
 	const fetchData = async (imdbId: string, seasonNum: number) => {
 		setSearchResults([]);
@@ -255,11 +241,11 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					)}
 					<>
 						{Array.from({ length: season_count || 0 }, (_, i) => i + 1).map(
-							(season) => {
+							(season, idx) => {
 								const color = intSeasonNum === season ? 'red' : 'yellow';
 								return (
 									<Link
-										key={season}
+										key={idx}
 										href={`/show/${imdbid}/${season}`}
 										className={`mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-2`}
 									>
@@ -378,7 +364,14 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 								Auto
 							</label>
 							<span className="px-2.5 py-1 text-s bg-green-100 text-green-800 mr-2">
-								{filteredResults.length} / {searchResults.length} shown
+								{
+									searchResults.filter(
+										(r) =>
+											(onlyShowCached && (r.rdAvailable || r.adAvailable)) ||
+											!onlyShowCached
+									).length
+								}{' '}
+								/ {searchResults.length} shown
 							</span>
 							<input
 								id="show-cached"
@@ -400,8 +393,12 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					)}
 					<div className="overflow-x-auto">
 						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-							{searchState !== 'loading' &&
-								filteredResults.map((r: SearchResult) => {
+							{searchResults
+								.filter(
+									(result) =>
+										!onlyShowCached || result.rdAvailable || result.adAvailable
+								)
+								.map((r: SearchResult, i: number) => {
 									const rdColor = r.noVideos
 										? 'gray'
 										: r.rdAvailable
@@ -414,7 +411,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 										: 'blue';
 									return (
 										<div
-											key={r.hash}
+											key={i}
 											className={`
 ${
 	rd.isDownloaded(r.hash) || ad.isDownloaded(r.hash)
