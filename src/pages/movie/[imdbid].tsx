@@ -5,7 +5,7 @@ import { deleteMagnet, uploadMagnet } from '@/services/allDebrid';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
-import { getSelectableFiles, isVideoOrSubs } from '@/utils/selectable';
+import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
@@ -160,7 +160,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			const response = await getTorrentInfo(rdKey, id.substring(3));
 			if (response.filename === 'Magnet') return; // no files yet
 
-			const selectedFiles = getSelectableFiles(response.files.filter(isVideoOrSubs)).map(
+			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
 				(file) => file.id
 			);
 			if (selectedFiles.length === 0) {
