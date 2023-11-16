@@ -23,7 +23,7 @@ const handler: NextApiHandler = async (req, res) => {
 		if (searchResults) {
 			let processedResults = flattenAndRemoveDuplicates(searchResults);
 			processedResults = sortByFileSize(processedResults);
-			res.status(200).json({ results: searchResults });
+			res.status(200).json({ results: processedResults });
 			return;
 		}
 
