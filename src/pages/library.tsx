@@ -236,6 +236,7 @@ function TorrentsPage() {
 		if (rdLoading || adLoading) return;
 		setGrouping(true);
 		setTotalBytes(0);
+		setSameTitle([]);
 
 		let tmpTotalBytes = 0;
 		clearGroupings(movieGrouping);
@@ -1266,7 +1267,11 @@ function TorrentsPage() {
 										<tr
 											key={i}
 											className="border-t-2 hover:bg-purple-900 cursor-pointer"
-											onClick={() => showInfo(torrent)} // Add the onClick event here
+											onClick={() =>
+												torrent.id.startsWith('rd:')
+													? showInfo(torrent)
+													: null
+											} // Add the onClick event here
 											title="Click for more info"
 										>
 											<td className="border px-4 py-2 max-w-0 overflow-hidden">
