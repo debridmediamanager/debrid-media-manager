@@ -914,15 +914,21 @@ function TorrentsPage() {
 					downloadForm = `
 						<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 							<input type="hidden" name="links" value="${info.links[linkIndex++]}" />
-							<button type="submit" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-xs">Download</button>
+							<button type="submit" class="ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-xs">Download</button>
 						</form>
 					`;
 				}
 
 				// Return the list item for the file, with or without the download form
-				return `<li class="${file.selected ? 'font-bold' : 'font-normal'} text-blue-600">${
-					file.path
-				} - ${size.toFixed(2)} ${unit}${downloadForm}</li>`;
+				return `
+					<li class="flex items-center justify-between p-2 hover:bg-yellow-200 rounded ${
+						file.selected ? 'bg-yellow-50 font-bold' : 'font-normal'
+					}">
+						<span class="flex-1 truncate text-blue-600">${file.path}</span>
+						<span class="ml-4 text-sm text-gray-700">${size.toFixed(2)} ${unit}</span>
+						${downloadForm}
+					</li>
+			  	`;
 			})
 			.join('');
 
@@ -984,9 +990,12 @@ function TorrentsPage() {
 			</div>
 			${warning}
 			<h2 class="text-xl font-semibold mb-2">Files:</h2>
-			<div class="max-h-40 overflow-y-auto mb-4">
-				<ul class="list-none space-y-1">${filesList}</ul>
+			<div class="max-h-60 overflow-y-auto mb-4 text-left bg-blue-100 p-4 rounded shadow">
+				<ul class="list space-y-1">
+					${filesList}
+				</ul>
 			</div>
+
 				`,
 			showConfirmButton: false,
 			customClass: {
@@ -1092,17 +1101,15 @@ function TorrentsPage() {
 
 				<button
 					className={`mr-2 mb-2 bg-orange-700 hover:bg-orange-600 text-white font-bold py-1 px-1 rounded ${
-						!query &&
-						(filteredList.length === 0 ||
-							!((router.query.status as string) ?? '').startsWith('same'))
+						filteredList.length === 0 ||
+						!((router.query.status as string) ?? '').startsWith('same')
 							? 'opacity-60 cursor-not-allowed'
 							: ''
 					}`}
 					onClick={dedupeByRecency}
 					disabled={
-						!query &&
-						(filteredList.length === 0 ||
-							!((router.query.status as string) ?? '').startsWith('same'))
+						filteredList.length === 0 ||
+						!((router.query.status as string) ?? '').startsWith('same')
 					}
 				>
 					By date
