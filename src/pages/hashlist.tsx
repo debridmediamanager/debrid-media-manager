@@ -132,7 +132,7 @@ export const instantCheckInAd = async (
 	return instantCount;
 };
 
-function TorrentsPage() {
+function HashlistPage() {
 	const router = useRouter();
 	const [query, setQuery] = useState('');
 	const [loading, setLoading] = useState(true);
@@ -173,7 +173,6 @@ function TorrentsPage() {
 						mediaType === 'movie'
 							? filenameParse(torrent.filename)
 							: filenameParse(torrent.filename, true);
-
 					return {
 						score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
 						info,
@@ -267,6 +266,7 @@ function TorrentsPage() {
 	}
 
 	function filterOutAlreadyDownloaded(unfiltered: UserTorrent[]) {
+		if (unfiltered.length <= 1) return unfiltered;
 		return unfiltered.filter(
 			(t) =>
 				!rd.isDownloaded(t.hash) &&
@@ -356,6 +356,7 @@ function TorrentsPage() {
 	}
 
 	async function downloadNonDupeTorrentsInRd() {
+		if (!rdKey) throw new Error('no_rd_key');
 		const libraryHashes = Object.keys(rdCache!);
 		const yetToDownload = filteredList
 			.filter((t) => !libraryHashes.includes(t.hash))
@@ -373,6 +374,7 @@ function TorrentsPage() {
 	}
 
 	async function downloadNonDupeTorrentsInAd() {
+		if (!adKey) throw new Error('no_ad_key');
 		const libraryHashes = Object.keys(rdCache!);
 		const yetToDownload = filteredList
 			.filter((t) => !libraryHashes.includes(t.hash))
@@ -466,43 +468,39 @@ function TorrentsPage() {
 			<div className="mb-4">
 				<Link
 					href="/hashlist?mediaType=movie"
-					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
+					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded"
 				>
 					Show {movieCount} movies
 				</Link>
 				<Link
 					href="/hashlist?mediaType=tv"
-					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
+					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded"
 				>
 					Show {tvCount} TV shows
 				</Link>
-				{rdKey && (
-					<button
-						className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ${
-							filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
-						}`}
-						onClick={downloadNonDupeTorrentsInRd}
-						disabled={filteredList.length === 0}
-					>
-						Download all torrents in Real-Debrid
-					</button>
-				)}
-				{adKey && (
-					<button
-						className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ${
-							filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
-						}`}
-						onClick={downloadNonDupeTorrentsInAd}
-						disabled={filteredList.length === 0}
-					>
-						Download all torrents in AllDebrid
-					</button>
-				)}
+				<button
+					className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded ${
+						filteredList.length === 0 || !rdKey ? 'opacity-60 cursor-not-allowed' : ''
+					}`}
+					onClick={downloadNonDupeTorrentsInRd}
+					disabled={filteredList.length === 0 || !rdKey}
+				>
+					Download all in Real-Debrid
+				</button>
+				<button
+					className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded ${
+						filteredList.length === 0 || !adKey ? 'opacity-60 cursor-not-allowed' : ''
+					}`}
+					onClick={downloadNonDupeTorrentsInAd}
+					disabled={filteredList.length === 0 || !adKey}
+				>
+					Download all in AllDebrid
+				</button>
 
 				{Object.keys(router.query).length !== 0 && (
 					<Link
 						href="/hashlist"
-						className="mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-4 rounded"
+						className="mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-2 rounded"
 					>
 						Reset
 					</Link>
@@ -569,34 +567,51 @@ function TorrentsPage() {
 									}
 								`}
 									>
-										<td className="border px-4 py-2 max-w-2xl overflow-hidden overflow-ellipsis">
-											<span className="cursor-pointer">
-												{t.mediaType === 'tv' ? '📺' : '🎥'}
-											</span>
-											&nbsp;<strong>{t.title}</strong>{' '}
-											<Link
-												className="text-sm text-green-600 hover:text-green-800"
-												href={`/hashlist?filter=${t.filename}`}
-											>
-												{filterText}
-											</Link>{' '}
-											<Link
-												target="_blank"
-												className="text-sm text-blue-600 hover:text-blue-800"
-												href={`/search?query=${t.filename}`}
-											>
-												Search again
-											</Link>
-											<br />
+										<td className="border px-4 py-2">
+											{!['Invalid Magnet', 'Magnet'].includes(t.filename) && (
+												<>
+													<span className="cursor-pointer">
+														{t.mediaType === 'tv' ? '📺' : '🎥'}
+													</span>
+													&nbsp;<strong>{t.title}</strong>{' '}
+													{filterText && (
+														<Link
+															href={`/library?filter=${encodeURIComponent(
+																t.title
+															)}`}
+															className="inline-block bg-green-600 hover:bg-green-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer"
+															onClick={(e) => e.stopPropagation()}
+														>
+															{filterText}
+														</Link>
+													)}
+													<Link
+														href={`/search?query=${encodeURIComponent(
+															(
+																t.info.title +
+																' ' +
+																(t.info.year || '')
+															).trim() || t.title
+														)}`}
+														target="_blank"
+														className="inline-block bg-blue-600 hover:bg-blue-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer ml-1"
+														onClick={(e) => e.stopPropagation()}
+													>
+														Search again
+													</Link>
+													<br />
+												</>
+											)}
 											{t.filename}
 										</td>
+
 										<td className="border px-4 py-2">
 											{(t.bytes / ONE_GIGABYTE).toFixed(1)} GB
 										</td>
 										<td className="border px-4 py-2">
 											{rd.isDownloading(t.hash) && rdCache![t.hash].id && (
 												<button
-													className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+													className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
 													onClick={() => {
 														handleDeleteTorrent(rdCache![t.hash].id);
 													}}
@@ -607,7 +622,7 @@ function TorrentsPage() {
 											)}
 											{rdKey && rd.notInLibrary(t.hash) && (
 												<button
-													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
 													onClick={() => {
 														handleAddAsMagnetInRd(t.hash);
 													}}
@@ -619,7 +634,7 @@ function TorrentsPage() {
 
 											{ad.isDownloading(t.hash) && adCache![t.hash].id && (
 												<button
-													className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+													className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
 													onClick={() => {
 														handleDeleteTorrent(adCache![t.hash].id);
 													}}
@@ -630,7 +645,7 @@ function TorrentsPage() {
 											)}
 											{adKey && rd.notInLibrary(t.hash) && (
 												<button
-													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
 													onClick={() => {
 														handleAddAsMagnetInAd(t.hash);
 													}}
@@ -651,4 +666,4 @@ function TorrentsPage() {
 	);
 }
 
-export default TorrentsPage;
+export default HashlistPage;
