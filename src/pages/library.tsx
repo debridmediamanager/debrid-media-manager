@@ -26,15 +26,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import {
-	FaArrowLeft,
-	FaArrowRight,
-	FaGlasses,
-	FaRecycle,
-	FaSeedling,
-	FaShare,
-	FaTrash,
-} from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight, FaRecycle, FaSeedling, FaShare, FaTrash } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
@@ -901,8 +893,9 @@ function TorrentsPage() {
 		const info = await getTorrentInfo(rdKey!, torrent.id.substring(3));
 
 		let warning = '';
+		const isIntact = info.files.filter((f) => f.selected).length === info.links.length;
 		// Check if there is a mismatch between files and links
-		if (info.files.filter((f) => f.selected).length !== info.links.length) {
+		if (info.progress === 100 && !isIntact) {
 			warning = `<p class="text-red-500">Warning: Some files have expired</p>`;
 		}
 
@@ -917,7 +910,7 @@ function TorrentsPage() {
 				let downloadForm = '';
 
 				// Only create a download form for selected files
-				if (file.selected) {
+				if (file.selected && isIntact) {
 					downloadForm = `
 						<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 							<input type="hidden" name="links" value="${info.links[linkIndex++]}" />
@@ -958,6 +951,10 @@ function TorrentsPage() {
 			<div class="overflow-x-auto">
 				<table class="table-auto w-full mb-4 text-left">
 					<tbody>
+						<tr>
+							<td class="font-semibold">ID:</td>
+							<td>${info.id}</td>
+						</tr>
 						<tr>
 							<td class="font-semibold">Original filename:</td>
 							<td>${info.original_filename}</td>
@@ -1259,7 +1256,12 @@ function TorrentsPage() {
 											? `${groupCount} of same title`
 											: '';
 									return (
-										<tr key={i} className="border-t-2 hover:bg-purple-900">
+										<tr
+											key={i}
+											className="border-t-2 hover:bg-purple-900 cursor-pointer"
+											onClick={() => showInfo(torrent)} // Add the onClick event here
+											title="Click for more info"
+										>
 											<td className="border px-4 py-2 max-w-0 overflow-hidden">
 												{torrent.id}
 											</td>
@@ -1274,16 +1276,28 @@ function TorrentsPage() {
 																: '🎥'}
 														</span>
 														&nbsp;<strong>{torrent.title}</strong>{' '}
+														{filterText && (
+															<Link
+																href={`/library?filter=${encodeURIComponent(
+																	torrent.title
+																)}`}
+																className="inline-block bg-green-600 hover:bg-green-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer"
+																onClick={(e) => e.stopPropagation()}
+															>
+																{filterText}
+															</Link>
+														)}
 														<Link
-															className="text-sm text-green-600 hover:text-green-800"
-															href={`/library?filter=${torrent.title}`}
-														>
-															{filterText}
-														</Link>{' '}
-														<Link
+															href={`/search?query=${encodeURIComponent(
+																(
+																	torrent.info.title +
+																	' ' +
+																	(torrent.info.year || '')
+																).trim() || torrent.title
+															)}`}
 															target="_blank"
-															className="text-sm text-blue-600 hover:text-blue-800"
-															href={`/search?query=${torrent.title}`}
+															className="inline-block bg-blue-600 hover:bg-blue-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer ml-1"
+															onClick={(e) => e.stopPropagation()}
 														>
 															Search again
 														</Link>
@@ -1292,6 +1306,7 @@ function TorrentsPage() {
 												)}
 												{torrent.filename}
 											</td>
+
 											<td className="border px-4 py-2">
 												{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
 											</td>
@@ -1329,35 +1344,36 @@ function TorrentsPage() {
 												<button
 													title="Share"
 													className="mr-2 mb-2 text-indigo-600"
-													onClick={() => handleShare(torrent)}
+													onClick={(e) => {
+														e.stopPropagation(); // Prevent showInfo when clicking this button
+														handleShare(torrent);
+													}}
 												>
 													<FaShare />
 												</button>
 												<button
 													title="Delete"
 													className="mr-2 mb-2 text-red-500"
-													onClick={() => handleDeleteTorrent(torrent.id)}
+													onClick={(e) => {
+														e.stopPropagation(); // Prevent showInfo when clicking this button
+														handleDeleteTorrent(torrent.id);
+													}}
 												>
 													<FaTrash />
 												</button>
 												<button
 													title="Reinsert"
 													className="mr-2 mb-2 text-green-500"
-													onClick={() =>
+													onClick={(e) => {
+														e.stopPropagation(); // Prevent showInfo when clicking this button
 														torrent.id.startsWith('rd')
 															? handleReinsertTorrent(torrent.id)
-															: handleRestartTorrent(torrent.id)
-													}
+															: handleRestartTorrent(torrent.id);
+													}}
 												>
 													<FaRecycle />
 												</button>
-												<button
-													title="Check info"
-													className="mr-2 mb-2 text-blue-500"
-													onClick={() => showInfo(torrent)}
-												>
-													<FaGlasses />
-												</button>
+												{/* Removed the glasses icon since the row is now clickable */}
 											</td>
 										</tr>
 									);
