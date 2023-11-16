@@ -100,6 +100,8 @@ export interface TorrentInfoResponse {
 	}[];
 	links: string[];
 	ended: string;
+	speed: number;
+	seeders: number;
 }
 
 interface FileData {

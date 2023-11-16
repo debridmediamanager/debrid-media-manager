@@ -26,7 +26,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import { FaArrowLeft, FaArrowRight, FaRecycle, FaSeedling, FaShare, FaTrash } from 'react-icons/fa';
+import {
+	FaArrowLeft,
+	FaArrowRight,
+	FaGlasses,
+	FaRecycle,
+	FaSeedling,
+	FaShare,
+	FaTrash,
+} from 'react-icons/fa';
+import Swal from 'sweetalert2';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
 const ITEMS_PER_PAGE = 100;
@@ -510,9 +519,17 @@ function TorrentsPage() {
 
 	async function dedupeBySize() {
 		if (
-			!confirm(
-				`This will delete duplicate torrents based on size (bigger size wins). Are you sure?`
-			)
+			!(
+				await Swal.fire({
+					title: 'Delete by size',
+					text: 'This will delete duplicate torrents based on size (bigger size wins). Are you sure?',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, delete!',
+				})
+			).isConfirmed
 		)
 			return;
 		const getKey = getKeyByStatus(router.query.status as string);
@@ -546,9 +563,17 @@ function TorrentsPage() {
 
 	async function dedupeByRecency() {
 		if (
-			!confirm(
-				`This will delete duplicate torrents based on recency (recently added wins). Are you sure?`
-			)
+			!(
+				await Swal.fire({
+					title: 'Delete by date',
+					text: 'This will delete duplicate torrents based on recency (recently added wins). Are you sure?',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, delete!',
+				})
+			).isConfirmed
 		)
 			return;
 		const getKey = getKeyByStatus(router.query.status as string);
@@ -589,11 +614,20 @@ function TorrentsPage() {
 
 	async function combineSameHash() {
 		if (
-			!confirm(
-				`This will combine torrents with identical hashes and select all streamable files. Make sure to backup before doing this. Do you want to proceed?`
-			)
+			!(
+				await Swal.fire({
+					title: 'Cleanup',
+					text: 'This will combine torrents with identical hashes and select all streamable files. Make sure to backup before doing this. Do you want to proceed?',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, proceed!',
+				})
+			).isConfirmed
 		)
 			return;
+
 		const dupeHashes: Map<string, UserTorrent[]> = new Map();
 		userTorrentsList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
 			let key = cur.hash;
@@ -631,7 +665,17 @@ function TorrentsPage() {
 
 	async function deleteFilteredTorrents() {
 		if (
-			!confirm(`This will delete the ${filteredList.length} torrents filtered. Are you sure?`)
+			!(
+				await Swal.fire({
+					title: 'Delete shown',
+					text: `This will delete the ${filteredList.length} torrents filtered. Are you sure?`,
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, delete!',
+				})
+			).isConfirmed
 		)
 			return;
 		const toDelete = filteredList.map(wrapDeleteFn);
@@ -852,6 +896,108 @@ function TorrentsPage() {
 
 	const hasNoQueryParamsBut = (...params: string[]) =>
 		Object.keys(router.query).filter((p) => !params.includes(p)).length === 0;
+
+	const showInfo = async (torrent: UserTorrent) => {
+		const info = await getTorrentInfo(rdKey!, torrent.id.substring(3));
+
+		let warning = '';
+		// Check if there is a mismatch between files and links
+		if (info.files.filter((f) => f.selected).length !== info.links.length) {
+			warning = `<p class="text-red-500">Warning: Some files have expired</p>`;
+		}
+
+		// Initialize a separate index for the links array
+		let linkIndex = 0;
+
+		const filesList = info.files
+			.map((file) => {
+				let size = file.bytes < 1024 ** 3 ? file.bytes / 1024 ** 2 : file.bytes / 1024 ** 3;
+				let unit = file.bytes < 1024 ** 3 ? 'MB' : 'GB';
+
+				let downloadForm = '';
+
+				// Only create a download form for selected files
+				if (file.selected) {
+					downloadForm = `
+						<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
+							<input type="hidden" name="links" value="${info.links[linkIndex++]}" />
+							<button type="submit" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-xs">Download</button>
+						</form>
+					`;
+				}
+
+				// Return the list item for the file, with or without the download form
+				return `<li class="${file.selected ? 'font-bold' : 'font-normal'} text-blue-600">${
+					file.path
+				} - ${size.toFixed(2)} ${unit}${downloadForm}</li>`;
+			})
+			.join('');
+
+		// Handle the display of progress, speed, and seeders as table rows
+		const progressRow =
+			info.status === 'downloading'
+				? `<tr><td class="font-semibold align-left">Progress:</td><td class="align-left">${info.progress.toFixed(
+						2
+				  )}%</td></tr>`
+				: '';
+		const speedRow =
+			info.status === 'downloading'
+				? `<tr><td class="font-semibold align-left">Speed:</td><td class="align-left">${(
+						info.speed / 1024
+				  ).toFixed(2)} KB/s</td></tr>`
+				: '';
+		const seedersRow =
+			info.status === 'downloading'
+				? `<tr><td class="font-semibold align-left">Seeders:</td><td class="align-left">${info.seeders}</td></tr>`
+				: '';
+
+		Swal.fire({
+			icon: 'info',
+			html: `
+			<h1 class="text-2xl font-bold mb-4">${info.filename}</h1>
+			<div class="overflow-x-auto">
+				<table class="table-auto w-full mb-4 text-left">
+					<tbody>
+						<tr>
+							<td class="font-semibold">Original filename:</td>
+							<td>${info.original_filename}</td>
+						</tr>
+						<tr>
+							<td class="font-semibold">Size:</td>
+							<td>${(info.bytes / 1024 ** 3).toFixed(2)} GB</td>
+						</tr>
+						<tr>
+							<td class="font-semibold">Original size:</td>
+							<td>${(info.original_bytes / 1024 ** 3).toFixed(2)} GB
+							</td>
+						</tr>
+						<tr>
+							<td class="font-semibold">Status:</td>
+							<td>${info.status}</td>
+						</tr>
+						${progressRow}
+						${speedRow}
+						${seedersRow}
+						<tr>
+							<td class="font-semibold">Added:</td>
+							<td>${new Date(info.added).toLocaleString()}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			${warning}
+			<h2 class="text-xl font-semibold mb-2">Files:</h2>
+			<div class="max-h-40 overflow-y-auto mb-4">
+				<ul class="list-none space-y-1">${filesList}</ul>
+			</div>
+				`,
+			showConfirmButton: false,
+			customClass: {
+				popup: 'format-class',
+			},
+			width: '800px',
+		});
+	};
 
 	return (
 		<div className="mx-4 my-8">
@@ -1204,6 +1350,13 @@ function TorrentsPage() {
 													}
 												>
 													<FaRecycle />
+												</button>
+												<button
+													title="Check info"
+													className="mr-2 mb-2 text-blue-500"
+													onClick={() => showInfo(torrent)}
+												>
+													<FaGlasses />
 												</button>
 											</td>
 										</tr>

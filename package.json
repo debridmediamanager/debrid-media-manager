@@ -27,6 +27,7 @@
       "react-icons": "^4.8.0",
       "sharp": "^0.32.6",
       "socks-proxy-agent": "^7.0.0",
+      "sweetalert2": "^11.10.0",
       "user-agents": "^1.0.1444",
       "uuid": "^9.0.0"
    },
