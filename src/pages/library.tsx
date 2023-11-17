@@ -101,6 +101,10 @@ function TorrentsPage() {
 		});
 	}, [currentPage, router]);
 
+	useEffect(() => {
+		toast('Have you tried clicking on a library item?', libraryToastOptions);
+	}, []);
+
 	// pagination query params
 	useEffect(() => {
 		const { page } = router.query;

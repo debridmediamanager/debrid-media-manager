@@ -3,7 +3,8 @@ import axios from 'axios';
 import { NextApiHandler } from 'next';
 
 const mdblistKey = process.env.MDBLIST_KEY;
-const searchMdb = (keyword: string, year?: number) => `https://mdblist.com/api/?apikey=${mdblistKey}&s=${keyword}&y=${year}`;
+const searchMdb = (keyword: string, year?: number) =>
+	`https://mdblist.com/api/?apikey=${mdblistKey}&s=${keyword}&y=${year}`;
 const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
 const db = new PlanetScaleCache();
 
@@ -28,7 +29,7 @@ function parseTitleAndYear(searchQuery: string): [string, number?] {
 
 	// Check if the searchQuery is just a year
 	if (yearRegex.test(searchQuery) && searchQuery.trim().length === 4) {
-	  return [searchQuery.trim(), undefined];
+		return [searchQuery.trim(), undefined];
 	}
 
 	// Extract the year from the end of the search query
@@ -39,16 +40,16 @@ function parseTitleAndYear(searchQuery: string): [string, number?] {
 
 	// If there's a year match and it's within the valid range, parse it
 	if (match && match[0]) {
-	  const parsedYear = parseInt(match[0].trim(), 10);
-	  if (parsedYear >= 1900 && parsedYear <= currentYearPlusOne) {
-		year = parsedYear;
-		// Remove the year from the title
-		title = searchQuery.replace(yearRegex, '').trim();
-	  }
+		const parsedYear = parseInt(match[0].trim(), 10);
+		if (parsedYear >= 1900 && parsedYear <= currentYearPlusOne) {
+			year = parsedYear;
+			// Remove the year from the title
+			title = searchQuery.replace(yearRegex, '').trim();
+		}
 	}
 
 	return [title, year];
-  }
+}
 
 const handler: NextApiHandler = async (req, res) => {
 	const { keyword } = req.query;
@@ -62,7 +63,14 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 
 	try {
-		const cleanKeyword = keyword.toString().replace(/[\W]+/g, ' ').split(' ').filter(e => e).join(' ').trim().toLowerCase();
+		const cleanKeyword = keyword
+			.toString()
+			.replace(/[\W]+/g, ' ')
+			.split(' ')
+			.filter((e) => e)
+			.join(' ')
+			.trim()
+			.toLowerCase();
 		const searchResults = await db.getSearchResults<any[]>(encodeURIComponent(cleanKeyword));
 		if (searchResults) {
 			res.status(200).json({ results: searchResults.filter((r) => r.imdbid) });
