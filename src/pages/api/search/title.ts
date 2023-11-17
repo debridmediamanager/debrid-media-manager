@@ -3,12 +3,8 @@ import axios from 'axios';
 import { NextApiHandler } from 'next';
 
 const mdblistKey = process.env.MDBLIST_KEY;
-const searchMdb = (keyword: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&s=${keyword}`;
+const searchMdb = (keyword: string, year?: number) => `https://mdblist.com/api/?apikey=${mdblistKey}&s=${keyword}&y=${year}`;
 const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
-const tmdbSearchMovie = (keyword: string, tmdbKey: string) =>
-	`https://api.themoviedb.org/3/search/movie?api_key=${tmdbKey}&query=${keyword}&page=1`;
-const tmdbSearchTv = (keyword: string, tmdbKey: string) =>
-	`https://api.themoviedb.org/3/search/tv?api_key=${tmdbKey}&query=${keyword}&page=1`;
 const db = new PlanetScaleCache();
 
 export type MdbSearchResult = {
@@ -23,6 +19,37 @@ export type MdbSearchResult = {
 	season_names?: string[];
 };
 
+function parseTitleAndYear(searchQuery: string): [string, number?] {
+	// Get the current year + 1
+	const currentYearPlusOne = new Date().getFullYear() + 1;
+
+	// Regex to find a year at the end of the search query
+	const yearRegex = / (19\d{2}|20\d{2}|2100)$/;
+
+	// Check if the searchQuery is just a year
+	if (yearRegex.test(searchQuery) && searchQuery.trim().length === 4) {
+	  return [searchQuery.trim(), undefined];
+	}
+
+	// Extract the year from the end of the search query
+	const match = searchQuery.match(yearRegex);
+
+	let title: string = searchQuery;
+	let year: number | undefined;
+
+	// If there's a year match and it's within the valid range, parse it
+	if (match && match[0]) {
+	  const parsedYear = parseInt(match[0].trim(), 10);
+	  if (parsedYear >= 1900 && parsedYear <= currentYearPlusOne) {
+		year = parsedYear;
+		// Remove the year from the title
+		title = searchQuery.replace(yearRegex, '').trim();
+	  }
+	}
+
+	return [title, year];
+  }
+
 const handler: NextApiHandler = async (req, res) => {
 	const { keyword } = req.query;
 
@@ -35,16 +62,15 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 
 	try {
-		const cleanKeyword = encodeURIComponent(
-			keyword.toString().replace(/[\W]+/g, ' ').split(' ').join(' ').trim().toLowerCase()
-		);
-		const searchResults = await db.getSearchResults<any[]>(cleanKeyword);
+		const cleanKeyword = keyword.toString().replace(/[\W]+/g, ' ').split(' ').filter(e => e).join(' ').trim().toLowerCase();
+		const searchResults = await db.getSearchResults<any[]>(encodeURIComponent(cleanKeyword));
 		if (searchResults) {
 			res.status(200).json({ results: searchResults.filter((r) => r.imdbid) });
 			return;
 		}
 
-		const searchResponse = await axios.get(searchMdb(cleanKeyword));
+		const [searchTerm, year] = parseTitleAndYear(cleanKeyword);
+		const searchResponse = await axios.get(searchMdb(encodeURIComponent(searchTerm), year));
 		const results: MdbSearchResult[] = [...searchResponse.data.search].filter(
 			(result: any) => result.imdbid
 		);
