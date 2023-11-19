@@ -614,7 +614,7 @@ function TorrentsPage() {
 			!(
 				await Swal.fire({
 					title: 'Cleanup',
-					text: 'This will combine torrents with identical hashes and select all streamable files. Make sure to backup before doing this. Do you want to proceed?',
+					text: 'This will combine completed torrents with identical hashes and select all streamable files. Make sure to backup before doing this. Do you want to proceed?',
 					icon: 'warning',
 					showCancelButton: true,
 					confirmButtonColor: '#3085d6',
@@ -627,6 +627,7 @@ function TorrentsPage() {
 
 		const dupeHashes: Map<string, UserTorrent[]> = new Map();
 		userTorrentsList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
+			if (cur.progress !== 100) return acc;
 			let key = cur.hash;
 			if (acc[key]) {
 				if (!dupeHashes.has(key)) {
