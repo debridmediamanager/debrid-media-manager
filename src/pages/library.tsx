@@ -528,22 +528,8 @@ function TorrentsPage() {
 	};
 
 	async function dedupeBySize() {
-		// First confirmation dialog
-		const initialConfirmation = await Swal.fire({
-			title: 'Delete by size',
-			text: 'This will delete duplicate torrents based on size. Are you sure?',
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'Yes, proceed!',
-		});
-
-		if (!initialConfirmation.isConfirmed) return;
-
-		// New dialog to select whether to delete bigger or smaller torrents
 		const deletePreference = await Swal.fire({
-			title: 'Select which torrents to delete',
+			title: 'Delete by size',
 			text: 'Choose which duplicate torrents to delete based on size:',
 			icon: 'question',
 			showCancelButton: true,
@@ -601,22 +587,9 @@ function TorrentsPage() {
 	}
 
 	async function dedupeByRecency() {
-		// First confirmation dialog
-		const initialConfirmation = await Swal.fire({
-			title: 'Delete by date',
-			text: 'This will delete duplicate torrents based on recency. Are you sure?',
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'Yes, proceed!',
-		});
-
-		if (!initialConfirmation.isConfirmed) return;
-
 		// New dialog to select whether to delete newer or older torrents
 		const deletePreference = await Swal.fire({
-			title: 'Select which torrents to delete',
+			title: 'Delete by date',
 			text: 'Choose which duplicate torrents to delete:',
 			icon: 'question',
 			showCancelButton: true,
