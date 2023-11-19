@@ -77,7 +77,7 @@ function TorrentsPage() {
 	const [movieGrouping] = useState<Record<string, number>>({});
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
-	const [sameTitle, setSameTitle] = useState<Array<string>>([]);
+	const [sameTitle] = useState<Array<string>>([]);
 
 	// stats
 	const [totalBytes, setTotalBytes] = useState<number>(0);
@@ -100,10 +100,6 @@ function TorrentsPage() {
 			query: { ...router.query, page: currentPage + 1 },
 		});
 	}, [currentPage, router]);
-
-	useEffect(() => {
-		toast('Have you tried clicking on a library item?', libraryToastOptions);
-	}, []);
 
 	// pagination query params
 	useEffect(() => {
@@ -240,7 +236,7 @@ function TorrentsPage() {
 		if (rdLoading || adLoading) return;
 		setGrouping(true);
 		setTotalBytes(0);
-		setSameTitle([]);
+		sameTitle.length = 0; // clear array
 
 		let tmpTotalBytes = 0;
 		clearGroupings(movieGrouping);
@@ -260,8 +256,7 @@ function TorrentsPage() {
 				}
 			}
 			if (t.title in getGroupings(t.mediaType)) {
-				if (getGroupings(t.mediaType)[t.title] === 1)
-					setSameTitle((prev) => [...prev, t.title]);
+				if (getGroupings(t.mediaType)[t.title] === 1) sameTitle.push(t.title);
 				getGroupings(t.mediaType)[t.title]++;
 			} else {
 				getGroupings(t.mediaType)[t.title] = 1;
@@ -295,7 +290,7 @@ function TorrentsPage() {
 		if (hasNoQueryParamsBut('page')) {
 			setFilteredList(applyQuickSearch(userTorrentsList));
 			selectPlayableFiles(userTorrentsList);
-			deleteFailedTorrents(userTorrentsList);
+			// deleteFailedTorrents(userTorrentsList); // disabled because this is BAD!
 			setFiltering(false);
 			setHelpText(
 				[
@@ -303,7 +298,9 @@ function TorrentsPage() {
 					'Tip: You can make a local backup of your library by using the "Local backup" button. This will generate a file containing your whole library that you can use to restore your library later.',
 					'Tip: You can restore a local backup by using the "Local restore" button. It will only restore the torrents that are not already in your library.',
 					'Tip: The quick search box will filter the list by filename and id. You can use multiple words or even regex to filter your library. This way, you can select multiple torrents and delete them at once, or share them as a hash list.',
-				][Math.floor(Math.random() * 4)]
+					'Have you tried clicking on a torrent? You can see the links, the progress, and the status of the torrent. You can also select the files you want to download.',
+					'I don\'t know what to put here, so here\'s a random tip: "The average person walks the equivalent of five times around the world in a lifetime."',
+				][Math.floor(Math.random() * 6)]
 			);
 			return;
 		}
@@ -356,7 +353,7 @@ function TorrentsPage() {
 			);
 		}
 		selectPlayableFiles(tmpList);
-		deleteFailedTorrents(tmpList);
+		// deleteFailedTorrents(tmpList);
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query, userTorrentsList, rdLoading, adLoading, grouping, query, currentPage]);
@@ -505,6 +502,22 @@ function TorrentsPage() {
 		}
 	}
 
+	async function handleDeleteFailedTorrents() {
+		const consent = await Swal.fire({
+			title: 'Delete failed torrents',
+			text: 'This will delete torrents that have status of error, dead or virus. Are you sure?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, proceed!',
+		});
+
+		if (!consent.isConfirmed) return;
+
+		await deleteFailedTorrents(userTorrentsList);
+	}
+
 	function wrapDeleteFn(t: UserTorrent) {
 		return async () => await handleDeleteTorrent(t.id);
 	}
@@ -515,26 +528,51 @@ function TorrentsPage() {
 	};
 
 	async function dedupeBySize() {
-		if (
-			!(
-				await Swal.fire({
-					title: 'Delete by size',
-					text: 'This will delete duplicate torrents based on size (bigger size wins). Are you sure?',
-					icon: 'warning',
-					showCancelButton: true,
-					confirmButtonColor: '#3085d6',
-					cancelButtonColor: '#d33',
-					confirmButtonText: 'Yes, delete!',
-				})
-			).isConfirmed
-		)
-			return;
+		// First confirmation dialog
+		const initialConfirmation = await Swal.fire({
+			title: 'Delete by size',
+			text: 'This will delete duplicate torrents based on size. Are you sure?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, proceed!',
+		});
+
+		if (!initialConfirmation.isConfirmed) return;
+
+		// New dialog to select whether to delete bigger or smaller torrents
+		const deletePreference = await Swal.fire({
+			title: 'Select which torrents to delete',
+			text: 'Choose which duplicate torrents to delete based on size:',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			denyButtonColor: 'green',
+			confirmButtonText: 'Delete Smaller',
+			denyButtonText: 'Delete Bigger',
+			showDenyButton: true,
+			cancelButtonText: `Cancel`,
+		});
+
+		// If the user cancels the operation, return without doing anything
+		if (deletePreference.isDismissed) return;
+
+		// Determine the preference for deletion
+		const deleteBigger = deletePreference.isDenied;
+
+		// Get the key by status
 		const getKey = getKeyByStatus(router.query.status as string);
 		const dupes: UserTorrent[] = [];
 		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
 			let key = getKey(cur);
 			if (acc[key]) {
-				if (acc[key].bytes < cur.bytes) {
+				// Check if current is bigger or smaller based on the user's choice
+				const isPreferred = deleteBigger
+					? acc[key].bytes < cur.bytes
+					: acc[key].bytes > cur.bytes;
+				if (isPreferred) {
 					dupes.push(acc[key]);
 					acc[key] = cur;
 				} else {
@@ -545,8 +583,12 @@ function TorrentsPage() {
 			}
 			return acc;
 		}, {});
+
+		// Map duplicates to delete function based on preference
 		const toDelete = dupes.map(wrapDeleteFn);
 		const [results, errors] = await runConcurrentFunctions(toDelete, 5, 500);
+
+		// Handle toast notifications for errors and results
 		if (errors.length) {
 			toast.error(`Error deleting ${errors.length} torrents`, libraryToastOptions);
 		}
@@ -559,26 +601,51 @@ function TorrentsPage() {
 	}
 
 	async function dedupeByRecency() {
-		if (
-			!(
-				await Swal.fire({
-					title: 'Delete by date',
-					text: 'This will delete duplicate torrents based on recency (recently added wins). Are you sure?',
-					icon: 'warning',
-					showCancelButton: true,
-					confirmButtonColor: '#3085d6',
-					cancelButtonColor: '#d33',
-					confirmButtonText: 'Yes, delete!',
-				})
-			).isConfirmed
-		)
-			return;
+		// First confirmation dialog
+		const initialConfirmation = await Swal.fire({
+			title: 'Delete by date',
+			text: 'This will delete duplicate torrents based on recency. Are you sure?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, proceed!',
+		});
+
+		if (!initialConfirmation.isConfirmed) return;
+
+		// New dialog to select whether to delete newer or older torrents
+		const deletePreference = await Swal.fire({
+			title: 'Select which torrents to delete',
+			text: 'Choose which duplicate torrents to delete:',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			denyButtonColor: 'green',
+			confirmButtonText: 'Delete Older',
+			denyButtonText: 'Delete Newer',
+			showDenyButton: true,
+			cancelButtonText: `Cancel`,
+		});
+
+		// If the user cancels the operation, return without doing anything
+		if (deletePreference.isDismissed) return;
+
+		// Determine the preference for deletion
+		const deleteOlder = deletePreference.isConfirmed;
+
+		// Get the key by status
 		const getKey = getKeyByStatus(router.query.status as string);
 		const dupes: UserTorrent[] = [];
 		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
 			let key = getKey(cur);
 			if (acc[key]) {
-				if (acc[key].added < cur.added) {
+				// Check if current is newer based on the user's choice
+				const isPreferred = deleteOlder
+					? acc[key].added > cur.added
+					: acc[key].added < cur.added;
+				if (isPreferred) {
 					dupes.push(acc[key]);
 					acc[key] = cur;
 				} else {
@@ -589,8 +656,12 @@ function TorrentsPage() {
 			}
 			return acc;
 		}, {});
+
+		// Map duplicates to delete function based on preference
 		const toDelete = dupes.map(wrapDeleteFn);
 		const [results, errors] = await runConcurrentFunctions(toDelete, 5, 500);
+
+		// Handle toast notifications for errors and results
 		if (errors.length) {
 			toast.error(`Error deleting ${errors.length} torrents`, libraryToastOptions);
 		}
@@ -613,7 +684,7 @@ function TorrentsPage() {
 		if (
 			!(
 				await Swal.fire({
-					title: 'Cleanup',
+					title: 'Merge same hash',
 					text: 'This will combine completed torrents with identical hashes and select all streamable files. Make sure to backup before doing this. Do you want to proceed?',
 					icon: 'warning',
 					showCancelButton: true,
@@ -1143,9 +1214,16 @@ function TorrentsPage() {
 
 				<button
 					className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
+					onClick={handleDeleteFailedTorrents}
+				>
+					Delete failed
+				</button>
+
+				<button
+					className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
 					onClick={combineSameHash}
 				>
-					Cleanup
+					Merge same hash
 				</button>
 
 				<button
