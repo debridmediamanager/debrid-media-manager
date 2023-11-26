@@ -93,7 +93,7 @@ export async function cleanMovieScrapes(
 	}
 	const scrapesCount = scrapes.length;
 	if (!scrapes.length) {
-		console.log(`⚠️ No results for ${mdbData.title} !`);
+		console.log(`⚠️ No results for ${mdbData?.title} !`);
 		return;
 	}
 
