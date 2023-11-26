@@ -9,9 +9,9 @@ function find_free_port() {
 }
 
 function launch_scraper() {
-    DMM_PATH="/Users/bensarmiento/2023/debrid-torrent-manager"
+    DMM_PATH="$(dirname "$(readlink -f "\$0")")"
 
-    echo "Launching scraper...$1"
+    echo "Launching scraper: $1..."
 
     if [ "$1" = "upkeep" ]; then
         SESSION_NAME="upkeep"
