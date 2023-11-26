@@ -230,12 +230,14 @@ export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 	const liteCleantitle = liteCleanSearchQuery(tmdbData.title);
 	console.log(
 		`🏹 Movie: ${cleanTitle} Y${
-			mdbData.year ?? 'year'
+			mdbData?.year ?? 'year'
 		} (${imdbId}) (uncommon: ${countUncommonWords(tmdbData.title)})`
 	);
 	const year: string =
-		mdbData.year ?? mdbData.released?.substring(0, 4) ?? tmdbData.release_date?.substring(0, 4);
-	const airDate: string = mdbData.released ?? tmdbData.release_date ?? '2000-01-01';
+		mdbData?.year ??
+		mdbData?.released?.substring(0, 4) ??
+		tmdbData.release_date?.substring(0, 4);
+	const airDate: string = mdbData?.released ?? tmdbData.release_date ?? '2000-01-01';
 	let originalTitle: string | undefined, cleanedTitle: string | undefined;
 
 	const processedTitle = tmdbData.title
@@ -245,18 +247,14 @@ export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 		.trim()
 		.toLowerCase();
 
-	if (
-		tmdbData.original_title &&
-		tmdbData.original_title !== tmdbData.title &&
-		mdbData.ratings?.length
-	) {
+	if (tmdbData.original_title && tmdbData.original_title !== tmdbData.title) {
 		originalTitle = tmdbData.original_title.toLowerCase();
 		console.log(
 			'🎯 Found original title:',
 			originalTitle,
 			`(uncommon: ${countUncommonWords(originalTitle!)})`
 		);
-		for (let rating of mdbData.ratings) {
+		for (let rating of mdbData?.ratings ?? []) {
 			if (rating.source === 'tomatoes' && rating.score > 0) {
 				if (!rating.url) continue;
 				let tomatoTitle = rating.url.split('/').pop();
@@ -280,26 +278,24 @@ export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 	}
 
 	let alternativeTitle: string | undefined;
-	if (mdbData.ratings?.length) {
-		for (let rating of mdbData.ratings) {
-			if (rating.source === 'metacritic' && rating.score > 0) {
-				if (!rating.url) continue;
-				let metacriticTitle = rating.url.split('/').pop();
-				if (metacriticTitle.startsWith('-')) continue;
-				metacriticTitle = metacriticTitle
-					.split('-')
-					.map((word: string) => word.replace(/[\W]+/g, ''))
-					.join(' ')
-					.trim()
-					.toLowerCase();
-				if (metacriticTitle !== processedTitle && metacriticTitle !== cleanedTitle) {
-					console.log(
-						'🎯 Found metacritic title:',
-						metacriticTitle,
-						`(uncommon: ${countUncommonWords(metacriticTitle)})`
-					);
-					alternativeTitle = metacriticTitle;
-				}
+	for (let rating of mdbData?.ratings ?? []) {
+		if (rating.source === 'metacritic' && rating.score > 0) {
+			if (!rating.url) continue;
+			let metacriticTitle = rating.url.split('/').pop();
+			if (metacriticTitle.startsWith('-')) continue;
+			metacriticTitle = metacriticTitle
+				.split('-')
+				.map((word: string) => word.replace(/[\W]+/g, ''))
+				.join(' ')
+				.trim()
+				.toLowerCase();
+			if (metacriticTitle !== processedTitle && metacriticTitle !== cleanedTitle) {
+				console.log(
+					'🎯 Found metacritic title:',
+					metacriticTitle,
+					`(uncommon: ${countUncommonWords(metacriticTitle)})`
+				);
+				alternativeTitle = metacriticTitle;
 			}
 		}
 	}
@@ -319,8 +315,8 @@ export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 }
 
 const getSeasons = (mdbData: any) =>
-	mdbData.seasons.length
-		? mdbData.seasons
+	mdbData?.seasons?.length
+		? mdbData?.seasons
 		: [{ name: 'Season 1', season_number: 1, episode_count: 0 }];
 
 export function grabTvMetadata(imdbId: string, tmdbData: any, mdbData: any) {
@@ -330,7 +326,9 @@ export function grabTvMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 		`🏏 ${getSeasons(mdbData).length} season(s) of tv show: ${tmdbData.name} (${imdbId})...`
 	);
 	const year: string =
-		mdbData.year ?? mdbData.released?.substring(0, 4) ?? tmdbData.release_date?.substring(0, 4);
+		mdbData?.year ??
+		mdbData?.released?.substring(0, 4) ??
+		tmdbData.release_date?.substring(0, 4);
 	let originalTitle: string | undefined, cleanedTitle: string | undefined;
 
 	const processedTitle = tmdbData.name
@@ -340,18 +338,14 @@ export function grabTvMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 		.trim()
 		.toLowerCase();
 
-	if (
-		tmdbData.original_name &&
-		tmdbData.original_name !== tmdbData.name &&
-		mdbData.ratings?.length
-	) {
+	if (tmdbData.original_name && tmdbData.original_name !== tmdbData.name) {
 		originalTitle = tmdbData.original_name.toLowerCase();
 		console.log(
 			'🎯 Found original title:',
 			originalTitle,
 			`(uncommon: ${countUncommonWords(originalTitle!)})`
 		);
-		for (let rating of mdbData.ratings) {
+		for (let rating of mdbData?.ratings ?? []) {
 			if (rating.source === 'tomatoes' && rating.score > 0) {
 				if (!rating.url) continue;
 				let tomatoTitle = rating.url.split('/').pop();
@@ -375,26 +369,24 @@ export function grabTvMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 	}
 
 	let alternativeTitle: string | undefined;
-	if (mdbData.ratings?.length) {
-		for (let rating of mdbData.ratings) {
-			if (rating.source === 'metacritic' && rating.score > 0) {
-				if (!rating.url) continue;
-				let metacriticTitle = rating.url.split('/').pop();
-				if (metacriticTitle.startsWith('-')) continue;
-				metacriticTitle = metacriticTitle
-					.split('-')
-					.map((word: string) => word.replace(/[\W]+/g, ''))
-					.join(' ')
-					.trim()
-					.toLowerCase();
-				if (metacriticTitle !== processedTitle && metacriticTitle !== cleanedTitle) {
-					console.log(
-						'🎯 Found metacritic title:',
-						metacriticTitle,
-						`(uncommon: ${countUncommonWords(metacriticTitle)})`
-					);
-					alternativeTitle = metacriticTitle;
-				}
+	for (let rating of mdbData?.ratings ?? []) {
+		if (rating.source === 'metacritic' && rating.score > 0) {
+			if (!rating.url) continue;
+			let metacriticTitle = rating.url.split('/').pop();
+			if (metacriticTitle.startsWith('-')) continue;
+			metacriticTitle = metacriticTitle
+				.split('-')
+				.map((word: string) => word.replace(/[\W]+/g, ''))
+				.join(' ')
+				.trim()
+				.toLowerCase();
+			if (metacriticTitle !== processedTitle && metacriticTitle !== cleanedTitle) {
+				console.log(
+					'🎯 Found metacritic title:',
+					metacriticTitle,
+					`(uncommon: ${countUncommonWords(metacriticTitle)})`
+				);
+				alternativeTitle = metacriticTitle;
 			}
 		}
 	}
