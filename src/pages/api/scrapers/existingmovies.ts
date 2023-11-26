@@ -13,6 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	const { quantity } = req.query;
 
 	while (true) {
+		console.log('[movieupdater] Checking for old media');
 		let imdbIds = await db.getOldestScrapedMedia('movie', parseInt(quantity as string));
 		if (!imdbIds) {
 			console.log(
