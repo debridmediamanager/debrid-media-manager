@@ -14,8 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	while (true) {
 		let request = await db.getOldestRequest(updatedAt);
 		if (!request) {
-			console.log('[requested] No requested jobs found, waiting 30 seconds');
-			await new Promise((resolve) => setTimeout(resolve, 30000));
+			console.log('[requested] No requested jobs found, waiting 120 seconds');
+			await new Promise((resolve) => setTimeout(resolve, 120000));
 			continue;
 		}
 

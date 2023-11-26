@@ -68,7 +68,7 @@ export async function scrapeMovies(
 	processedResults = filterByMovieConditions(cleanTitle, year, processedResults);
 	if (processedResults.length) processedResults = sortByFileSize(processedResults);
 
-	await db.saveScrapedResults(`movie:${imdbId}`, processedResults, replaceOldScrape);
+	await db.saveScrapedResults(`movie:${imdbId}`, processedResults, true, replaceOldScrape);
 	await db.markAsDone(imdbId);
 	console.log(`🎥 Saved ${processedResults.length} results for ${cleanTitle}`);
 

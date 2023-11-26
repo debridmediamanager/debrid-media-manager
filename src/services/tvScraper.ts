@@ -122,6 +122,7 @@ export async function scrapeTv(
 		await db.saveScrapedResults(
 			`tv:${imdbId}:${job.seasonNumber}`,
 			processedResults,
+			true,
 			replaceOldScrape
 		);
 		console.log(
