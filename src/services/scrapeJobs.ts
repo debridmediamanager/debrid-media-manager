@@ -48,14 +48,15 @@ export async function generateScrapeJobs(imdbId: string, replaceOldScrape: boole
 		try {
 			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.movie_results[0]?.id;
 			const tmdbInfo = await axios.get(getTmdbMovieInfo(tmdbId));
-			if (!replaceOldScrape) await cleanMovieScrapes(imdbId, tmdbInfo.data, mdbInfo.data, db);
 			await scrapeMovies(imdbId, tmdbInfo.data, mdbInfo.data, db, replaceOldScrape);
+			await cleanMovieScrapes(imdbId, tmdbInfo.data, mdbInfo.data, db);
 			return;
 		} catch (error: any) {
 			if (error.response?.status === 404 || error.message.includes("reading 'id'")) {
 				try {
 					const convertedMdb = convertMdbToTmdb(mdbInfo.data);
 					await scrapeMovies(imdbId, convertedMdb, mdbInfo.data, db, replaceOldScrape);
+					await cleanMovieScrapes(imdbId, convertedMdb, mdbInfo.data, db);
 					return;
 				} catch (error: any) {
 					console.error(error);

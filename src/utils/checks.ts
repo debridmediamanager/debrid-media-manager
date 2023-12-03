@@ -19,6 +19,14 @@ try {
 	console.error('error loading banned wordlist', err);
 }
 
+let bannedWordSet2: Array<string>;
+try {
+	let data = fs.readFileSync('./bannedwordlist2.txt', 'utf8');
+	bannedWordSet2 = data.toLowerCase().split('\n');
+} catch (err) {
+	console.error('error loading banned wordlist 2', err);
+}
+
 export function naked(title: string): string {
 	return title.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
@@ -192,14 +200,18 @@ export function includesMustHaveTerms(mustHaveTerms: string[], testTitle: string
 }
 
 export function hasNoBannedTerms(targetTitle: string, testTitle: string): boolean {
-	let processedTitle = filenameParse(testTitle)
-		.title.toLowerCase()
-		.split(/[^a-z0-9]+/)
-		.filter((word: string) => word.length >= 3);
+	const words = testTitle.toLowerCase().split(/[^a-z0-9]+/)
+	let titleWithoutSymbols = words.join(' ');
+	let processedTitle = words.filter((word: string) => word.length >= 3);
+	const hasBannedCompoundWords = bannedWordSet2.some((compoundWord: string) => {
+		if (!targetTitle.includes(compoundWord) && titleWithoutSymbols.includes(compoundWord)) console.log('Found banned compound word in title:', compoundWord, testTitle);
+		return !targetTitle.includes(compoundWord) && titleWithoutSymbols.includes(compoundWord);
+	});
+
 	return (
 		processedTitle.filter(
 			(word: string) => !targetTitle.includes(word) && bannedWordSet.has(word)
-		).length === 0
+		).length === 0 && !hasBannedCompoundWords
 	);
 }
 
