@@ -4,6 +4,7 @@ import {
 	getSeasonNameAndCode,
 	getSeasonYear,
 	grabTvMetadata,
+	matchesTitle,
 	meetsTitleConditions,
 	padWithZero,
 } from '@/utils/checks';
@@ -13,6 +14,7 @@ import { PlanetScaleCache } from './planetscale';
 
 type TvScrapeJob = {
 	titles: string[];
+	year: string;
 	seasonNumber: number;
 	seasonName?: string;
 	seasonCode?: number;
@@ -76,15 +78,16 @@ export async function cleanByImdbId(imdbId: string) {
 
 function cleanScrapes(
 	targetTitle: string,
-	year: string,
+	years: string[],
 	scrapes: ScrapeSearchResult[]
 ): ScrapeSearchResult[] {
-	return scrapes.filter((scrape) => meetsTitleConditions(targetTitle, year, scrape.title));
+	return scrapes.filter((scrape) => meetsTitleConditions(targetTitle, years, scrape.title));
 }
 
 const cleanBasedOnScrapeJob = (job: TvScrapeJob): ScrapeSearchResult[][] => {
 	return job.titles.map((title) => {
-		return cleanScrapes(title, job.seasonYear ?? '', job.scrapes);
+		const years = [job.year, job.seasonYear].filter((y) => y !== undefined) as string[];
+		return cleanScrapes(title, years, job.scrapes);
 	});
 };
 
@@ -153,6 +156,7 @@ export async function cleanTvScrapes(
 
 		const searchResults = cleanBasedOnScrapeJob({
 			titles,
+			year,
 			seasonNumber,
 			seasonName,
 			seasonCode,
@@ -170,19 +174,21 @@ export async function cleanTvScrapes(
 				true
 			);
 			await db.markAsDone(imdbId);
+			const years = [year, seasonYear].filter((y) => y !== undefined) as string[];
 			console.log(
 				scrapes
 					.filter((s) => !processedResults.find((p) => p.hash === s.hash))
-					.map((s) => `⚡ ${s.title}`)
+					.map(
+						(s) =>
+							`⚡ ${s.title} ${
+								titles.some((t) => matchesTitle(t, years, s.title)) ? '✅' : '❌'
+							}`
+					)
 			);
 			console.log(
 				`📺 Removed ${scrapesCount - processedResults.length}, left ${
 					processedResults.length
 				} results for ${cleanTitle} s${padWithZero(seasonNumber)}`
-			);
-		} else {
-			console.log(
-				`📺 No need to remove any results for ${cleanTitle} s${padWithZero(seasonNumber)}`
 			);
 		}
 	}

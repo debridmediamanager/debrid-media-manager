@@ -65,7 +65,7 @@ export async function scrapeMovies(
 		airDate,
 	});
 	let processedResults = flattenAndRemoveDuplicates(searchResults);
-	processedResults = filterByMovieConditions(cleanTitle, year, processedResults);
+	processedResults = filterByMovieConditions(processedResults);
 	if (processedResults.length) processedResults = sortByFileSize(processedResults);
 
 	await db.saveScrapedResults(`movie:${imdbId}`, processedResults, true, replaceOldScrape);

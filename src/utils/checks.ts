@@ -37,8 +37,8 @@ export function grabYears(str: string): string[] {
 	);
 }
 
-export function grabSeasons(str: string): string[] {
-	return (str.match(/\d+/g) ?? []).filter((n) => parseInt(n, 10) > 0 && parseInt(n, 10) <= 100);
+export function grabPossibleSeasonNums(str: string): number[] {
+	return (str.match(/\d+/g) ?? []).map((n) => parseInt(n, 10)).filter((n) => n > 0 && n <= 100);
 }
 
 export function hasYear(test: string, years: string[]) {
@@ -62,118 +62,174 @@ function removeRepeats(str: string) {
 	return str.replace(/(.)\1+/g, '$1');
 }
 
-function flexEq(test: string, target: string, strict = false) {
-	if (strict) {
-		const movieTitle = filenameParse(test).title.toLowerCase();
-		const tvTitle = filenameParse(test, true).title.toLowerCase();
-		return (
-			target === movieTitle ||
-			removeRepeats(target) === removeRepeats(movieTitle) ||
-			removeDiacritics(target) === removeDiacritics(movieTitle) ||
-			target === tvTitle ||
-			removeRepeats(target) === removeRepeats(tvTitle) ||
-			removeDiacritics(target) === removeDiacritics(tvTitle)
-		);
+function romanToDecimal(roman: string): number {
+	const romanNumerals: { [key: string]: number } = {
+		I: 1,
+		V: 5,
+		X: 10,
+		L: 50,
+		C: 100,
+		D: 500,
+		M: 1000,
+	};
+	let total = 0;
+	let prevValue = 0;
+
+	for (let i = roman.length - 1; i >= 0; i--) {
+		const currentValue = romanNumerals[roman[i].toUpperCase()];
+		if (currentValue < prevValue) {
+			total -= currentValue;
+		} else {
+			total += currentValue;
+		}
+		prevValue = currentValue;
 	}
+
+	return total;
+}
+
+function replaceRomanWithDecimal(input: string): string {
+	const romanRegex = /m{0,4}(cm|cd|d?c{0,3})(xc|xl|l?x{0,3})(ix|iv|v?i{0,3})/g;
+	return input.replace(romanRegex, (match) => romanToDecimal(match).toString());
+}
+
+function strictEqual(title1: string, title2: string) {
+	title1 = title1.replace(/\s+/g, '');
+	title2 = title2.replace(/\s+/g, '');
 	return (
-		test.includes(target) ||
-		removeRepeats(test).includes(removeRepeats(target)) ||
-		removeDiacritics(test).includes(removeDiacritics(target))
+		title1 === title2 ||
+		naked(title1) === naked(title2) ||
+		removeRepeats(title1) === removeRepeats(title2) ||
+		removeDiacritics(title1) === removeDiacritics(title2)
 	);
 }
 
-export function matchesTitle(target: string, year: string, test: string) {
+function findTermsInText(test: string, target: string) {
+	let replaceCount = 0;
+	let prevReplaceCount = 0;
+	let prevOffset = 0;
+	const replacer = (match: string, offset: number) => {
+		prevOffset += offset;
+		replaceCount++;
+		return match;
+	};
+
+	const wordsInTitle = target.split(/\W+/);
+	const magicLength = 3;
+
+	const actual = wordsInTitle.filter((term) => {
+		const testStr = test.substring(prevOffset);
+
+		testStr.replace(term, replacer);
+		if (replaceCount > prevReplaceCount) {
+			prevReplaceCount = replaceCount;
+			return true;
+		}
+		if (removeDiacritics(term).length >= magicLength) {
+			testStr.replace(removeDiacritics(term), replacer);
+			if (replaceCount > prevReplaceCount) {
+				prevReplaceCount = replaceCount;
+				return true;
+			}
+		}
+		if (removeRepeats(term).length >= magicLength) {
+			testStr.replace(removeRepeats(term), replacer);
+			if (replaceCount > prevReplaceCount) {
+				prevReplaceCount = replaceCount;
+				return true;
+			}
+		}
+		if (naked(term).length >= magicLength) {
+			testStr.replace(naked(term), replacer);
+			if (replaceCount > prevReplaceCount) {
+				prevReplaceCount = replaceCount;
+				return true;
+			}
+		}
+		if (replaceRomanWithDecimal(term) !== term) {
+			testStr.replace(replaceRomanWithDecimal(term), replacer);
+			if (replaceCount > prevReplaceCount) {
+				// console.log(`Finding ${replaceRomanWithDecimal(term)} in ${testStr} 🐲`)
+				prevReplaceCount = replaceCount;
+				return true;
+			}
+		}
+
+		// console.log(`👻 Cannot find ${term} in ${testStr} 🧩`)
+		return false;
+	});
+	// console.log(actual, 'vs', wordsInTitle);
+
+	return actual.length;
+}
+
+function flexEq(test: string, target: string, years: string[]) {
+	const movieTitle = filenameParse(test).title.toLowerCase();
+	const tvTitle = filenameParse(test, true).title.toLowerCase();
+
+	const target2 = target.replace(/\s+/g, '');
+	const test2 = test.replace(/\s+/g, '');
+
+	let magicLength = 5; // Math.ceil(magicLength*1.5) = 8
+	if (hasYear(test, years)) magicLength = 3; // Math.ceil(magicLength*1.5) = 5
+
+	if (naked(target2).length >= magicLength && naked(test2).includes(naked(target2))) {
+		return true;
+	} else if (
+		removeRepeats(target2).length >= magicLength &&
+		removeRepeats(test2).includes(removeRepeats(target2))
+	) {
+		return true;
+	} else if (
+		removeDiacritics(target2).length >= magicLength &&
+		removeDiacritics(test2).includes(removeDiacritics(target2))
+	) {
+		return true;
+	} else if (target2.length >= Math.ceil(magicLength * 1.5) && test2.includes(target2)) {
+		return true;
+	}
+	return strictEqual(target, movieTitle) || strictEqual(target, tvTitle);
+}
+
+export function matchesTitle(target: string, years: string[], test: string): boolean {
 	target = target.toLowerCase();
 	test = test.toLowerCase();
-	const containsYear = hasYear(test, [year]);
 
-	// if title doesn't contain any spaces, then we can do a simple match
-	if (!target.match(/\s/)) {
-		// if title is common and title matches perfectly or not perfect but matches year, then we're good
-		if (countUncommonWords(target) === 0) {
-			return flexEq(test, target, true) || (flexEq(test, target) && containsYear);
-		}
-		// if title is uncommon single word, remove all non-alphanumeric characters
-		const magicLength = 4;
-		if (target.length >= magicLength && test.includes(target)) {
-			return true;
-		}
-		// if title is uncommon single word, remove all non-alphanumeric characters
-		let targetTitle2 = naked(target);
-		let testTitle2 = naked(test);
-		if (targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2)) {
-			return true;
-		}
-		return flexEq(test, target) && containsYear;
-	}
-
-	// if title is alphanumeric with spaces, then we can do a simple match
-	if (target.match(/^[a-z0-9\s]+$/) !== null) {
-		// remove spaces
-		let targetTitle2 = target.replace(/\s/g, '');
-		let testTitle2 = test.replace(/\s/g, '');
-		const magicLength = 5;
-		// console.log('🎯 Comparison:', targetTitle2, testTitle2, targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2), flexEq(testTitle2, targetTitle2) && containsYear);
-		if (targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2)) {
-			return true;
-		} else if (flexEq(testTitle2, targetTitle2) && containsYear) {
-			return true;
-		}
-	}
-	// if title is alphanumeric with symbols and spaces
-	let targetTitle2 = target.replace(/\s/g, '');
-	let testTitle2 = test.replace(/\s/g, '');
-	let targetTitle3 = naked(targetTitle2);
-	let testTitle3 = naked(testTitle2);
-	const magicLength = 5;
-	if (targetTitle3.length >= magicLength && testTitle3.includes(targetTitle3)) {
-		return true;
-	} else if (targetTitle2.length >= magicLength && testTitle2.includes(targetTitle2)) {
-		return true;
-	} else if (flexEq(testTitle2, targetTitle2) && containsYear) {
+	if (flexEq(test, target, years)) {
 		return true;
 	}
 
-	// last chance
-	const splits = target.split(/\s+/);
-	if (splits.length > 4) {
-		let test2 = test;
-		const actual = splits.filter((term) => {
-			let newTest = test2.replace(term, '');
-			if (newTest !== test2) {
-				test2 = newTest;
-				return true;
-			}
-
-			newTest = test2.replace(removeDiacritics(term), '');
-			if (newTest !== test2) {
-				test2 = newTest;
-				return true;
-			}
-
-			newTest = test2.replace(removeRepeats(term), '');
-			if (newTest !== test2) {
-				test2 = newTest;
-				return true;
-			}
-			return false;
-		});
-		// console.log('🎯 Comparison3:', actual, splits.length);
-		if (actual.length + 1 >= splits.length) {
-			return true;
-		}
+	const splits = target.split(/\W+/);
+	const foundTerms = findTermsInText(test, target);
+	if (foundTerms >= splits.length || foundTerms >= 5) {
+		return true;
 	}
-	const uncommonTerms: string[] = splits.filter((s) => !dictionary.has(s));
-	const commonTerms: string[] = splits.filter((s) => dictionary.has(s));
+	// console.log(`👻 Can only find ${findTermsInText(test, target)} out of ${splits.length} terms of '${target}' in '${test}'`);
+
+	let tolerance = 0;
+	if (hasYear(test, years)) {
+		tolerance = 1;
+	}
+
+	const keyTerms: string[] = splits.filter(
+		(s) => (s.length > 1 && !dictionary.has(s)) || s.length > 5
+	);
 	if (
-		(uncommonTerms.join('').length >= commonTerms.join('').length ||
-			uncommonTerms.length > 1) &&
-		includesMustHaveTerms(uncommonTerms, test)
+		keyTerms.length > 0 &&
+		findTermsInText(test, keyTerms.join(' ')) >= keyTerms.length - tolerance
 	) {
 		return true;
 	}
-	// console.log('🎯 Comparison2:', mustHaveTerms, test, containsYear);
-	return containsYear && includesMustHaveTerms(splits, test);
+	const keySet = new Set(keyTerms);
+	const commonTerms = splits.filter((s) => !keySet.has(s));
+	if (
+		commonTerms.length > 0 &&
+		findTermsInText(test, commonTerms.join(' ')) >= commonTerms.length - tolerance
+	) {
+		return true;
+	}
+	// console.log(`👻 '${target}' is not '${test}' !!!`)
+	return false;
 }
 
 export function includesMustHaveTerms(mustHaveTerms: string[], testTitle: string) {
@@ -200,34 +256,30 @@ export function includesMustHaveTerms(mustHaveTerms: string[], testTitle: string
 }
 
 export function hasNoBannedTerms(targetTitle: string, testTitle: string): boolean {
-	const words = testTitle.toLowerCase().split(/[^a-z0-9]+/)
+	const words = testTitle.toLowerCase().split(/[^a-z0-9]+/);
 
 	const hasBannedWords = words.some((word: string) => {
-		if (!targetTitle.includes(word) && bannedWordSet.has(word)) console.log('Found banned word in title:', word, testTitle);
+		if (!targetTitle.includes(word) && bannedWordSet.has(word))
+			console.log('💀 Found banned word in title:', word, ' <> ', testTitle);
 		return !targetTitle.includes(word) && bannedWordSet.has(word);
-	})
+	});
 
 	let titleWithoutSymbols = words.join(' ');
 	const hasBannedCompoundWords = bannedWordSet2.some((compoundWord: string) => {
-		if (!targetTitle.includes(compoundWord) && titleWithoutSymbols.includes(compoundWord)) console.log('Found banned compound word in title:', compoundWord, testTitle);
+		if (!targetTitle.includes(compoundWord) && titleWithoutSymbols.includes(compoundWord))
+			console.log('💀 Found banned compound word in title:', compoundWord, ' <> ', testTitle);
 		return !targetTitle.includes(compoundWord) && titleWithoutSymbols.includes(compoundWord);
 	});
 
-	return (
-		!hasBannedWords && !hasBannedCompoundWords
-	);
+	return !hasBannedWords && !hasBannedCompoundWords;
 }
 
 export function meetsTitleConditions(
 	targetTitle: string,
-	year: string,
+	years: string[],
 	testTitle: string
 ): boolean {
-	// console.log('🎯 Target title:', targetTitle);
-	// console.log('🎯 Test title:', testTitle);
-	// console.log('🎯 Year:', year);
-	// console.log('🎯 matchesTitle:', matchesTitle(targetTitle, year, testTitle));
-	return matchesTitle(targetTitle, year, testTitle) && hasNoBannedTerms(targetTitle, testTitle);
+	return matchesTitle(targetTitle, years, testTitle) && hasNoBannedTerms(targetTitle, testTitle);
 }
 
 export function countUncommonWords(title: string) {
@@ -244,9 +296,9 @@ export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 	const cleanTitle = cleanSearchQuery(tmdbData.title);
 	const liteCleantitle = liteCleanSearchQuery(tmdbData.title);
 	console.log(
-		`🏹 Movie: ${cleanTitle} Y${
-			mdbData?.year ?? 'year'
-		} (${imdbId}) (uncommon: ${countUncommonWords(tmdbData.title)})`
+		`🏹 Movie: ${cleanTitle} Y:${
+			mdbData?.year ?? '????'
+		} (${imdbId}) (uncommon terms: ${countUncommonWords(tmdbData.title)})`
 	);
 	const year: string =
 		mdbData?.year ??
@@ -439,20 +491,14 @@ export function getAllPossibleTitles(titles: (string | undefined)[]) {
 	return ret;
 }
 
-export function filterByMovieConditions(title: string, year: string, items: ScrapeSearchResult[]) {
-	return items
-		.filter((result) => !/s\d\de\d\d/i.test(result.title))
-		.filter((result) => result.fileSize < 200000 && result.fileSize > 500)
-		.filter((result) => {
-			const yearsFromTitle = grabYears(title);
-			const yearsFromFile = grabYears(result.title).filter(
-				(y) => !yearsFromTitle.includes(y)
-			);
-			return (
-				(yearsFromFile.length > 0 && hasYear(result.title, [year])) ||
-				yearsFromFile.length === 0
-			);
-		});
+export function filterByMovieConditions(items: ScrapeSearchResult[]) {
+	return (
+		items
+			// not a tv show
+			.filter((result) => !/s\d\de\d\d/i.test(result.title))
+			// check for file size
+			.filter((result) => result.fileSize < 200000 && result.fileSize > 500)
+	);
 }
 
 export function filterByTvConditions(
@@ -464,72 +510,55 @@ export function filterByTvConditions(
 	seasonName: string | undefined,
 	seasonCode: number | undefined
 ) {
-	return items
-		.filter((result) => result.fileSize > 100)
-		.filter((result) => {
-			const yearsFromTitle = grabYears(title);
-			const yearsFromFile = grabYears(result.title).filter(
-				(y) => !yearsFromTitle.includes(y)
-			);
-			const years = [firstYear, seasonYear].filter((y) => y !== undefined) as string[];
-			return (
-				(yearsFromFile.length > 0 && hasYear(result.title, years)) ||
-				yearsFromFile.length === 0
-			);
-		})
-		.filter((result) => {
-			// drop 3xRus or 1xEng or AC3
-			let regex =
-				/\b(\d)x([a-z]+)\b|\bac3\b|\b5\.1|\bmp4|\bav1|\br[1-6]|\bdvd\-?\d|\bp2p|\bbd\d+/gi;
-			let resultTitle = result.title.replace(regex, '');
+	const years = [firstYear, seasonYear].filter((y) => y !== undefined) as string[];
+	return (
+		items
+			// check for file size
+			.filter((result) => result.fileSize > 100)
+			// check for year
+			.filter((result) => {
+				const yearsFromTitle = grabYears(title);
+				const hasYearOnFilename =
+					grabYears(result.title).filter((y) => !yearsFromTitle.includes(y)).length > 0;
+				return (hasYearOnFilename && hasYear(result.title, years)) || !hasYearOnFilename;
+			})
+			// check for season number or season name
+			.filter((result) => {
+				// drop 3xRus or 1xEng or AC3
+				let regex =
+					/\b(\d)x([a-z]+)\b|\bac3\b|\b5\.1|\bmp4|\bav1|\br[1-6]|\bdvd\-?\d|\bp2p|\bbd\d+/gi;
+				let resultTitle = result.title.replace(regex, '');
 
-			if (resultTitle.match(/\bs\d\de?/i)) {
-				const season = parseInt(resultTitle.match(/s(\d\d)e?/i)![1]);
-				return season === seasonNumber || season === seasonCode;
-			}
+				if (resultTitle.match(/\bs\d\de?/i)) {
+					const season = parseInt(resultTitle.match(/s(\d\d)e?/i)![1]);
+					return season === seasonNumber || season === seasonCode;
+				}
 
-			const seasons = grabSeasons(resultTitle);
-			if (
-				seasonName &&
-				seasonCode &&
-				flexEq(naked(seasonName), naked(result.title)) &&
-				seasons.filter((s) => parseInt(s) === seasonCode).length > 0
-			) {
-				// console.log(
-				// 	'🎯 Found season name and code in title:',
-				// 	seasonName,
-				// 	seasonCode,
-				// 	result.title,
-				// 	seasons
-				// );
-				return true;
-			}
-			if (seasonName && seasonName !== title && flexEq(resultTitle, seasonName)) {
-				// console.log(
-				// 	'🎯 Found season name only in title:',
-				// 	seasonName,
-				// 	result.title,
-				// 	seasons
-				// );
-				return true;
-			}
-			if (
-				seasons.filter((s) => parseInt(s) === seasonNumber || parseInt(s) === seasonCode)
-					.length > 0
-			) {
-				// console.log(
-				// 	'🎯 Found season number only in title:',
-				// 	seasonNumber,
-				// 	seasonCode,
-				// 	result.title,
-				// 	seasons
-				// );
-				return true;
-			}
-			// it can contain no numbers if it's still season 1 (or only season 1)
-			// console.log('🎯 Season number 1:', result.title, seasons);
-			return seasonNumber === 1 && grabSeasons(resultTitle).length === 0;
-		});
+				resultTitle = resultTitle.replace(/e\d\d[^\d].*/g, '');
+				const seasonNums = grabPossibleSeasonNums(resultTitle);
+
+				if (
+					seasonName &&
+					seasonCode &&
+					flexEq(naked(seasonName), naked(result.title), years) &&
+					seasonNums.filter((num) => num === seasonCode).length > 0
+				) {
+					return true;
+				}
+				if (seasonName && seasonName !== title && flexEq(resultTitle, seasonName, years)) {
+					return true;
+				}
+				if (
+					seasonNums.filter((num) => num === seasonNumber || num === seasonCode).length >
+					0
+				) {
+					return true;
+				}
+				// it can contain no numbers if it's still season 1 (or only season 1)
+				// console.log('🎯 Season number 1:', result.title, seasons);
+				return seasonNumber === 1 && grabPossibleSeasonNums(resultTitle).length === 0;
+			})
+	);
 }
 
 export function padWithZero(num: number) {
