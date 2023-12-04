@@ -201,17 +201,20 @@ export function includesMustHaveTerms(mustHaveTerms: string[], testTitle: string
 
 export function hasNoBannedTerms(targetTitle: string, testTitle: string): boolean {
 	const words = testTitle.toLowerCase().split(/[^a-z0-9]+/)
+
+	const hasBannedWords = words.some((word: string) => {
+		if (!targetTitle.includes(word) && bannedWordSet.has(word)) console.log('Found banned word in title:', word, testTitle);
+		return !targetTitle.includes(word) && bannedWordSet.has(word);
+	})
+
 	let titleWithoutSymbols = words.join(' ');
-	let processedTitle = words.filter((word: string) => word.length >= 3);
 	const hasBannedCompoundWords = bannedWordSet2.some((compoundWord: string) => {
 		if (!targetTitle.includes(compoundWord) && titleWithoutSymbols.includes(compoundWord)) console.log('Found banned compound word in title:', compoundWord, testTitle);
 		return !targetTitle.includes(compoundWord) && titleWithoutSymbols.includes(compoundWord);
 	});
 
 	return (
-		processedTitle.filter(
-			(word: string) => !targetTitle.includes(word) && bannedWordSet.has(word)
-		).length === 0 && !hasBannedCompoundWords
+		!hasBannedWords && !hasBannedCompoundWords
 	);
 }
 
