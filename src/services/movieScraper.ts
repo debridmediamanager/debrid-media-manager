@@ -14,21 +14,25 @@ type MovieScrapeJob = {
 async function scrapeAll(
 	finalQuery: string,
 	targetTitle: string,
+	years: string[],
 	airDate: string
 ): Promise<ScrapeSearchResult[][]> {
 	return await Promise.all([
-		scrapeBtdigg(finalQuery, targetTitle, airDate),
-		scrapeProwlarr(finalQuery, targetTitle, airDate),
-		scrapeJackett(finalQuery, targetTitle, airDate),
+		scrapeBtdigg(finalQuery, targetTitle, years, airDate),
+		scrapeProwlarr(finalQuery, targetTitle, years, airDate),
+		scrapeJackett(finalQuery, targetTitle, years, airDate),
 	]);
 }
 
 const processMovieJob = async (job: MovieScrapeJob): Promise<ScrapeSearchResult[][]> => {
+	const years = [job.year, job.airDate.substring(0, 4)].filter(
+		(y) => y !== undefined
+	) as string[];
 	const results: ScrapeSearchResult[][] = [];
 	for (let i = 0; i < job.titles.length; i++) {
 		const title = job.titles[i];
-		results.push(...(await scrapeAll(`"${title}" ${job.year}`, title, job.airDate)));
-		results.push(...(await scrapeAll(`"${title}"`, title, job.airDate)));
+		results.push(...(await scrapeAll(`"${title}" ${job.year}`, title, years, job.airDate)));
+		results.push(...(await scrapeAll(`"${title}"`, title, years, job.airDate)));
 	}
 	return results;
 };
