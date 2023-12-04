@@ -16,13 +16,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	let imdbIds = !!id ? [id as string] : await db.getAllImdbIds('tv');
 	if (!imdbIds) {
 		console.log(
-			'[moviecleaner] There must be something wrong with the database, waiting 60 seconds'
+			'[tvcleaner] There must be something wrong with the database, waiting 60 seconds'
 		);
 		return;
 	}
 	let uniqueIds = Array.from(new Set(imdbIds));
 	for (let i = 0; i < uniqueIds.length; i++) {
-		await cleanByImdbId(imdbIds[i]);
+		console.log(`[ ${i + 1} / ${uniqueIds.length} ] `);
+		await cleanByImdbId(uniqueIds[i]);
 	}
 	res.status(200).json({ status: 'success' });
 	return;

@@ -2,27 +2,25 @@ import { hasNoBannedTerms, matchesTitle } from '@/utils/checks';
 import { NextApiHandler } from 'next';
 
 const handler: NextApiHandler = async (req, res) => {
-    function testMatchesTitle() {
-        let testTitle = "[RapidZona.com]_Duh Chudes OVA 1_ Spirit of Wonder_Miss China's Ring.1992.RUS.JAP.DVDRip.mkv"
-        let targetTitle = "spirit of wonder miss china's ring"
-        let year = "1992"
+	function testMatchesTitle() {
+		let testTitle =
+			'[Ohys-Raws] Doraemon the Movie Nobita`s New Dinosaur (BD 1280x720 x264 AAC).mp4';
+		let targetTitle = "Doraemon: Nobita's Dinosaur";
+		let years = ['2006'];
 
+		console.log(matchesTitle(targetTitle, years, testTitle));
+		console.log(hasNoBannedTerms(targetTitle, testTitle));
 
-        console.log(matchesTitle(targetTitle, year, testTitle))
-        console.log(hasNoBannedTerms(targetTitle, testTitle))
+		testTitle =
+			'Non Non Biyori The Movie Vacation 2018 1080p Blu-ray Remux AVC LPCM 5.1 - MH93.mkv';
+		targetTitle = 'Non Non Biyori: Vacation';
+		years = ['2018'];
 
-        testTitle = "(shinsuV2) Final Fantasy VII Advent Children BRrip 1080p (x265+TrueHD)(spa-ger-jap).mkv"
+		console.log(matchesTitle(targetTitle, years, testTitle));
+		console.log(hasNoBannedTerms(targetTitle, testTitle));
+	}
 
-        console.log(matchesTitle(targetTitle, year, testTitle))
-        console.log(hasNoBannedTerms(targetTitle, testTitle))
-
-        testTitle = "Final Fantasy VII Advent Children [BDRip 1080p Eng Jap   Sub Ita Eng]"
-
-        console.log(matchesTitle(targetTitle, year, testTitle))
-        console.log(hasNoBannedTerms(targetTitle, testTitle))
-    }
-
-    testMatchesTitle();
+	testMatchesTitle();
 
 	res.status(200).json({ status: 'ok' });
 };
