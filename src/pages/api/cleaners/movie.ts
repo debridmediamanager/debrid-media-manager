@@ -20,7 +20,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		);
 		return;
 	}
+	imdbIds.reverse();
 	for (let i = 0; i < imdbIds.length; i++) {
+		console.log(`[ ${i + 1} / ${imdbIds.length} ] `);
 		await cleanByImdbId(imdbIds[i]);
 	}
 	res.status(200).json({ status: 'success' });
