@@ -98,6 +98,7 @@ type ProcessPageResult = {
 const processPage = async (
 	finalQuery: string,
 	targetTitle: string,
+	years: string[],
 	airDate: string,
 	pageNum: number
 ): Promise<ProcessPageResult> => {
@@ -170,12 +171,7 @@ const processPage = async (
 			continue;
 		}
 
-		if (!meetsTitleConditions(targetTitle, airDate.substring(0, 4), title)) {
-			// console.log(
-			// 	`🔥 ${title} does not meet title conditions`,
-			// 	targetTitle,
-			// 	airDate.substring(0, 4)
-			// );
+		if (!meetsTitleConditions(targetTitle, years, title)) {
 			badCount++;
 			continue;
 		}
@@ -242,6 +238,7 @@ async function processInBatches(
 export async function scrapeBtdigg(
 	finalQuery: string,
 	targetTitle: string,
+	years: string[],
 	airDate: string
 ): Promise<ScrapeSearchResult[]> {
 	let searchResultsArr: ScrapeSearchResult[] = [];
@@ -252,6 +249,7 @@ export async function scrapeBtdigg(
 			const { results, numResults } = await processPage(
 				finalQuery,
 				targetTitle,
+				years,
 				airDate,
 				pageNum++
 			);
@@ -262,7 +260,7 @@ export async function scrapeBtdigg(
 			while (pageNum <= maxPages) {
 				promises.push(
 					((pageNum) => async () => {
-						return await processPage(finalQuery, targetTitle, airDate, pageNum);
+						return await processPage(finalQuery, targetTitle, years, airDate, pageNum);
 					})(pageNum)
 				);
 				pageNum++;
@@ -278,6 +276,7 @@ export async function scrapeBtdigg(
 			const { results, numResults } = await processPage(
 				`${finalQuery} .mkv`,
 				targetTitle,
+				years,
 				airDate,
 				pageNum++
 			);
@@ -290,6 +289,7 @@ export async function scrapeBtdigg(
 						return await processPage(
 							`${finalQuery} .mkv`,
 							targetTitle,
+							years,
 							airDate,
 							pageNum
 						);
@@ -308,6 +308,7 @@ export async function scrapeBtdigg(
 			const { results, numResults } = await processPage(
 				`${finalQuery} .mp4`,
 				targetTitle,
+				years,
 				airDate,
 				pageNum++
 			);
@@ -320,6 +321,7 @@ export async function scrapeBtdigg(
 						return await processPage(
 							`${finalQuery} .mp4`,
 							targetTitle,
+							years,
 							airDate,
 							pageNum
 						);

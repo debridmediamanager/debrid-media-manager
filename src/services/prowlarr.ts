@@ -64,6 +64,7 @@ async function computeHashFromTorrent(url: string): Promise<string | undefined> 
 async function processItem(
 	item: any,
 	targetTitle: string,
+	years: string[],
 	airDate: string
 ): Promise<ScrapeSearchResult | undefined> {
 	const title = item.title;
@@ -73,8 +74,7 @@ async function processItem(
 		return undefined;
 	}
 
-	if (!meetsTitleConditions(targetTitle, airDate.substring(0, 4), title)) {
-		// console.log(`🔥 ${title} does not meet title conditions`, targetTitle, airDate.substring(0, 4))
+	if (!meetsTitleConditions(targetTitle, years, title)) {
 		return undefined;
 	}
 
@@ -120,6 +120,7 @@ async function processInBatches(
 const processPage = async (
 	finalQuery: string,
 	targetTitle: string,
+	years: string[],
 	airDate: string
 ): Promise<ScrapeSearchResult[]> => {
 	const MAX_RETRIES = 5; // maximum number of retries
@@ -152,7 +153,7 @@ const processPage = async (
 
 	const promises: (() => Promise<ScrapeSearchResult | undefined>)[] = responseData.map(
 		(item: any) => {
-			return () => processItem(item, targetTitle, airDate);
+			return () => processItem(item, targetTitle, years, airDate);
 		}
 	);
 	results.push(...(await processInBatches(finalQuery, promises, 5)));
@@ -163,11 +164,12 @@ const processPage = async (
 export async function scrapeProwlarr(
 	finalQuery: string,
 	targetTitle: string,
+	years: string[],
 	airDate: string
 ): Promise<ScrapeSearchResult[]> {
 	console.log(`🔍 Searching Prowlarr: ${finalQuery}`);
 	try {
-		return await processPage(finalQuery, targetTitle, airDate);
+		return await processPage(finalQuery, targetTitle, years, airDate);
 	} catch (error) {
 		console.error('scrapeProwlarr page processing error', error);
 	}
