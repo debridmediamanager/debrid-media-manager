@@ -172,17 +172,12 @@ function findTermsInText(test: string, target: string, checkSequence = false) {
 
 	const remains = testStr.substring(prevOffset + prevLength);
 	if (
-		checkSequence &&
-		remains.length > 0 &&
-		remains.search(/s\d\d|[12]\d\d\d/i) >= wordTolerance
+		checkSequence && // we are checking for sequence
+		remains.length > 0 && // there are still words left
+		remains.search(/s\d\d|19[3-9]\d|20[012]\d/i) >= wordTolerance // found a year or season number
 	) {
-		// console.log(
-		// 	'🎅 Remaining:"' + remains + '" sequence is broken'
-		// );
 		sequenceMultiplier = -1;
 	}
-	// console.log(actual, 'vs', wordsInTitle);
-
 	return actual.length * sequenceMultiplier;
 }
 
