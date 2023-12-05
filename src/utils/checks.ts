@@ -97,10 +97,10 @@ function strictEqual(title1: string, title2: string) {
 	title1 = title1.replace(/\s+/g, '');
 	title2 = title2.replace(/\s+/g, '');
 	return (
-		title1 === title2 ||
-		naked(title1) === naked(title2) ||
-		removeRepeats(title1) === removeRepeats(title2) ||
-		removeDiacritics(title1) === removeDiacritics(title2)
+		(title1.length && title1 === title2) ||
+		(naked(title1).length && naked(title1) === naked(title2)) ||
+		(removeRepeats(title1).length && removeRepeats(title1) === removeRepeats(title2)) ||
+		(removeDiacritics(title1).length && removeDiacritics(title1) === removeDiacritics(title2))
 	);
 }
 
@@ -114,7 +114,7 @@ function findTermsInText(test: string, target: string) {
 		return match;
 	};
 
-	const wordsInTitle = target.split(/\W+/);
+	const wordsInTitle = target.split(/\W+/).filter(e => e)
 	const magicLength = 3;
 
 	const actual = wordsInTitle.filter((term) => {
@@ -174,20 +174,25 @@ function flexEq(test: string, target: string, years: string[]) {
 	if (hasYear(test, years)) magicLength = 3; // Math.ceil(magicLength*1.5) = 5
 
 	if (naked(target2).length >= magicLength && naked(test2).includes(naked(target2))) {
+		console.log(`🎲 Test:naked '${naked(target2)}' is found in '${naked(test2)}'`);
 		return true;
 	} else if (
 		removeRepeats(target2).length >= magicLength &&
 		removeRepeats(test2).includes(removeRepeats(target2))
 	) {
+		console.log(`🎲 Test:removeRepeats '${removeRepeats(target2)}' is found in '${removeRepeats(test2)}'`);
 		return true;
 	} else if (
 		removeDiacritics(target2).length >= magicLength &&
 		removeDiacritics(test2).includes(removeDiacritics(target2))
 	) {
+		console.log(`🎲 Test:removeDiacritics '${removeDiacritics(target2)}' is found in '${removeDiacritics(test2)}'`);
 		return true;
 	} else if (target2.length >= Math.ceil(magicLength * 1.5) && test2.includes(target2)) {
+		console.log(`🎲 Test:plain '${target2}' is found in '${test2}'`);
 		return true;
 	}
+	console.log(`🎲 Test:strictEqual '${target}' is${(strictEqual(target, movieTitle) || strictEqual(target, tvTitle)) ?'':' not'} found in '${movieTitle}' or '${tvTitle}'`);
 	return strictEqual(target, movieTitle) || strictEqual(target, tvTitle);
 }
 
@@ -196,34 +201,49 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 	test = test.toLowerCase();
 
 	if (flexEq(test, target, years)) {
+		console.log(`🎯 Exact match for '${target}' in '${test}'`)
 		return true;
 	}
-
-	const splits = target.split(/\W+/);
-	const foundTerms = findTermsInText(test, target);
-	if (foundTerms >= splits.length || foundTerms >= 5) {
-		return true;
-	}
-	// console.log(`👻 Can only find ${findTermsInText(test, target)} out of ${splits.length} terms of '${target}' in '${test}'`);
 
 	const containsYear = hasYear(test, years);
+
+	const splits = target.split(/\W+/).filter(e => e);
+	// const foundTerms = findTermsInText(test, target);
+	// if ((foundTerms >= splits.length && containsYear) || foundTerms >= 5) {
+	// 	console.log(`🎯 Found ALL ${foundTerms} out of ${splits.length} terms of '${target}' in '${test}'`)
+	// 	return true;
+	// }
+	// console.log(`👻 Can only find ${findTermsInText(test, target)} out of ${splits.length} terms of '${target}' in '${test}'`);
+
 	const totalTerms = splits.length;
+	if (totalTerms === 0 || (totalTerms <= 2 && !containsYear)) {
+		console.log(`👻 Too few terms in '${target}'`);
+		return false;
+	}
+
 	const keyTerms: string[] = splits.filter(
 		(s) => (s.length > 1 && !dictionary.has(s)) || s.length > 5
 	);
 	const keySet = new Set(keyTerms);
 	const commonTerms = splits.filter((s) => !keySet.has(s));
 
+	let hasYearScore = totalTerms*1.5;
+	let totalScore = (keyTerms.length*2)+(commonTerms.length)+(hasYearScore);
+
+	if (keyTerms.length === 0 && totalTerms <= 2 && !containsYear) {
+		console.log(`👻 No identifiable terms in '${target}'`);
+		return false;
+	}
+
 	let foundKeyTerms = findTermsInText(test, keyTerms.join(' '));
 	let foundCommonTerms = findTermsInText(test, commonTerms.join(' '));
-	const totalScore = (keyTerms.length*2)+commonTerms.length+1;
-	const score = (foundKeyTerms*2)+foundCommonTerms+(containsYear?2:0);
-	if (Math.ceil(score/0.6) >= totalScore) {
-		// console.log(`🎯 Found ${foundKeyTerms} key terms and ${foundCommonTerms} common terms out of ${totalTerms} terms of '${target}' in '${test}'`);
+	const score = (foundKeyTerms*2)+foundCommonTerms+(containsYear?hasYearScore:0);
+	if (Math.floor(score/0.85) >= totalScore) {
+		console.log(`🎯 Scored ${score} out of ${totalScore} for target '${target}' in '${test}' (+${foundKeyTerms*2} +${foundCommonTerms} +${containsYear?hasYearScore:0})`);
 		return true;
 	}
 
-	// console.log(`👻 '${target}' is not '${test}' !!!`)
+	console.log(`👻 '${target}' is not '${test}' !!!`)
 	return false;
 }
 
