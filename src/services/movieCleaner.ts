@@ -152,17 +152,16 @@ export async function cleanMovieScrapes(
 				processedResults.length
 			} results for ${cleanTitle}`
 		);
-		return
+		return;
 	}
 
 	console.log(scrapesCount, processedResults.length);
 	console.log(
-		scrapes
-			.map(
-				(s) =>
-					`🔋 ${s.title} ${
-						titles.some((t) => matchesTitle(t, [year], s.title)) ? '✅' : '❌'
-					}`
-			)
+		scrapes.map(
+			(s) =>
+				`🔋 ${s.title} ${
+					titles.some((t) => matchesTitle(t, [year], s.title)) ? '✅' : '❌'
+				}`
+		)
 	);
 }
