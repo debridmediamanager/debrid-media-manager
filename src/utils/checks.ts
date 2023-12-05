@@ -176,12 +176,9 @@ function findTermsInText(test: string, target: string, checkSequence = false) {
 		remains.length > 0 &&
 		remains.search(/s\d\d|[12]\d\d\d/i) >= wordTolerance
 	) {
-		console.log(
-			'🎅 Remaining:"' + testStr.substring(prevOffset + prevLength) + '"',
-			prevOffset,
-			prevLength,
-			actual.length
-		);
+		// console.log(
+		// 	'🎅 Remaining:"' + remains + '" sequence is broken'
+		// );
 		sequenceMultiplier = -1;
 	}
 	// console.log(actual, 'vs', wordsInTitle);
@@ -230,8 +227,8 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 
 	if (flexEq(test, target, years)) {
 		const sequenceCheck = findTermsInText(test, splits.join(' '), true);
-		if (sequenceCheck >= 0) return true;
-		else console.log('broken sequence check');
+		// console.log(`🎲 FlexEq '${target}' is found in '${test}'`, sequenceCheck);
+		return sequenceCheck >= 0;
 	}
 
 	const containsYear = hasYear(test, years);
@@ -292,7 +289,7 @@ export function includesMustHaveTerms(mustHaveTerms: string[], testTitle: string
 }
 
 export function hasNoBannedTerms(targetTitle: string, testTitle: string): boolean {
-	const words = testTitle.toLowerCase().split(/[^a-z0-9]+/);
+	const words = testTitle.toLowerCase().split(/\W+/);
 
 	const hasBannedWords = words.some((word: string) => {
 		if (!targetTitle.includes(word) && bannedWordSet.has(word))

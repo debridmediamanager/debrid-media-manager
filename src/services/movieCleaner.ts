@@ -155,7 +155,6 @@ export async function cleanMovieScrapes(
 		return;
 	}
 
-	console.log(scrapesCount, processedResults.length);
 	console.log(
 		scrapes.map(
 			(s) =>
