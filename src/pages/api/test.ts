@@ -3,8 +3,7 @@ import { NextApiHandler } from 'next';
 
 const handler: NextApiHandler = async (req, res) => {
 	function testMatchesTitle() {
-		let testTitle =
-			'[Ohys-Raws] Doraemon the Movie Nobita`s New Dinosaur (BD 1280x720 x264 AAC).mp4';
+		let testTitle = '[New-raws] Kizuna no Allele - 01~12 [1080p] [ENG]';
 		let targetTitle = "Doraemon: Nobita's Dinosaur";
 		let years = ['2006'];
 
