@@ -152,5 +152,6 @@ export async function cleanMovieScrapes(
 				processedResults.length
 			} results for ${cleanTitle}`
 		);
+		return
 	}
 }
