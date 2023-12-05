@@ -204,7 +204,7 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 	if (foundTerms >= splits.length || foundTerms >= 5) {
 		return true;
 	}
-	console.log(`👻 Can only find ${findTermsInText(test, target)} out of ${splits.length} terms of '${target}' in '${test}'`);
+	// console.log(`👻 Can only find ${findTermsInText(test, target)} out of ${splits.length} terms of '${target}' in '${test}'`);
 
 	let tolerance = 0;
 	if (hasYear(test, years) && splits.length > 3) {
@@ -228,7 +228,7 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 	) {
 		return true;
 	}
-	console.log(`👻 '${target}' is not '${test}' !!!`)
+	// console.log(`👻 '${target}' is not '${test}' !!!`)
 	return false;
 }
 
