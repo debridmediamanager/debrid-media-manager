@@ -154,4 +154,15 @@ export async function cleanMovieScrapes(
 		);
 		return
 	}
+
+	// console.log(scrapesCount, processedResults.length);
+	// console.log(
+	// 	scrapes
+	// 		.map(
+	// 			(s) =>
+	// 				`🔋 ${s.title} ${
+	// 					titles.some((t) => matchesTitle(t, [year], s.title)) ? '✅' : '❌'
+	// 				}`
+	// 		)
+	// );
 }
