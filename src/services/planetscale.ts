@@ -60,6 +60,16 @@ export class PlanetScaleCache {
 		return cacheEntry?.value as T | undefined;
 	}
 
+	public async deleteScrapedTrue(imdbId: string): Promise<void> {
+		const keys = [`movie:${imdbId}`, `tv:${imdbId}%`];
+
+		for (const key of keys) {
+			await this.prisma.scrapedTrue.deleteMany({
+				where: { key: { contains: key } },
+			});
+		}
+	}
+
 	/// scraped results
 
 	public async saveScrapedResults(
