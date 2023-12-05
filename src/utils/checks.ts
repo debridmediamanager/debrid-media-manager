@@ -110,21 +110,26 @@ function findTermsInText(test: string, target: string, checkSequence = false) {
 	let prevOffset = 0;
 	let prevLength = 0;
 	let sequenceMultiplier = 1;
-	const replacer = (match: string, offset: number) => {
-		if (checkSequence && offset >= 4) {
+	const wordTolerance = 5;
+
+	const wordsInTitle = target.split(/\W+/).filter((e) => e);
+	const magicLength = 3;
+	let testStr = test;
+
+	const replacer = (match: string, offset: number, str: string) => {
+		if (checkSequence && prevLength > 0 && offset >= wordTolerance) {
+			// console.log('sequence broken at', offset, 'in', testStr);
 			sequenceMultiplier = -1;
 		}
-		prevOffset += offset;
+		// if (checkSequence) console.log(`🎅 found '${match}' on offset:${offset} in '${str}'`);
+		prevOffset = offset;
 		prevLength = match.length;
 		replaceCount++;
 		return match;
 	};
 
-	const wordsInTitle = target.split(/\W+/).filter(e => e)
-	const magicLength = 3;
-
 	const actual = wordsInTitle.filter((term) => {
-		const testStr = test.substring(prevOffset+prevLength);
+		testStr = testStr.substring(prevOffset + prevLength);
 
 		testStr.replace(term, replacer);
 		if (replaceCount > prevReplaceCount) {
@@ -164,6 +169,21 @@ function findTermsInText(test: string, target: string, checkSequence = false) {
 		// console.log(`👻 Cannot find ${term} in ${testStr} 🧩`)
 		return false;
 	});
+
+	const remains = testStr.substring(prevOffset + prevLength);
+	if (
+		checkSequence &&
+		remains.length > 0 &&
+		remains.search(/s\d\d|[12]\d\d\d/i) >= wordTolerance
+	) {
+		console.log(
+			'🎅 Remaining:"' + testStr.substring(prevOffset + prevLength) + '"',
+			prevOffset,
+			prevLength,
+			actual.length
+		);
+		sequenceMultiplier = -1;
+	}
 	// console.log(actual, 'vs', wordsInTitle);
 
 	return actual.length * sequenceMultiplier;
@@ -180,25 +200,25 @@ function flexEq(test: string, target: string, years: string[]) {
 	if (hasYear(test, years)) magicLength = 3; // Math.ceil(magicLength*1.5) = 5
 
 	if (naked(target2).length >= magicLength && naked(test2).includes(naked(target2))) {
-		// console.log(`🎲 Test:naked '${naked(target2)}' is found in '${naked(test2)}'`);
+		// console.log(`🎲 Test:naked '${naked(target2)}' is found in '${naked(test2)}' | ${test}`);
 		return true;
 	} else if (
 		removeRepeats(target2).length >= magicLength &&
 		removeRepeats(test2).includes(removeRepeats(target2))
 	) {
-		// console.log(`🎲 Test:removeRepeats '${removeRepeats(target2)}' is found in '${removeRepeats(test2)}'`);
+		// console.log(`🎲 Test:removeRepeats '${removeRepeats(target2)}' is found in '${removeRepeats(test2)}' | ${test}`);
 		return true;
 	} else if (
 		removeDiacritics(target2).length >= magicLength &&
 		removeDiacritics(test2).includes(removeDiacritics(target2))
 	) {
-		// console.log(`🎲 Test:removeDiacritics '${removeDiacritics(target2)}' is found in '${removeDiacritics(test2)}'`);
+		// console.log(`🎲 Test:removeDiacritics '${removeDiacritics(target2)}' is found in '${removeDiacritics(test2)}' | ${test}`);
 		return true;
 	} else if (target2.length >= Math.ceil(magicLength * 1.5) && test2.includes(target2)) {
-		// console.log(`🎲 Test:plain '${target2}' is found in '${test2}'`);
+		// console.log(`🎲 Test:plain '${target2}' is found in '${test2}' | ${test}`);
 		return true;
 	}
-	// if (strictEqual(target, movieTitle) || strictEqual(target, tvTitle)) console.log(`🎲 Test:strictEqual '${target}' is found in '${movieTitle}' or '${tvTitle}'`);
+	// if (strictEqual(target, movieTitle) || strictEqual(target, tvTitle)) console.log(`🎲 Test:strictEqual '${target}' is found in '${movieTitle}' or '${tvTitle}' | ${test}`);
 	return strictEqual(target, movieTitle) || strictEqual(target, tvTitle);
 }
 
@@ -206,14 +226,15 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 	target = target.toLowerCase();
 	test = test.toLowerCase();
 
+	const splits = target.split(/\W+/).filter((e) => e);
+
 	if (flexEq(test, target, years)) {
-		// console.log(`🎯 Exact match for '${target}' in '${test}'`)
-		return true;
+		const sequenceCheck = findTermsInText(test, splits.join(' '), true);
+		if (sequenceCheck >= 0) return true;
+		else console.log('broken sequence check');
 	}
 
 	const containsYear = hasYear(test, years);
-
-	const splits = target.split(/\W+/).filter(e => e);
 
 	const totalTerms = splits.length;
 	if (totalTerms === 0 || (totalTerms <= 2 && !containsYear)) {
@@ -227,22 +248,18 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 	const keySet = new Set(keyTerms);
 	const commonTerms = splits.filter((s) => !keySet.has(s));
 
-	let hasYearScore = totalTerms*1.5;
-	let totalScore = (keyTerms.length*2)+(commonTerms.length)+(hasYearScore);
+	let hasYearScore = totalTerms * 1.5;
+	let totalScore = keyTerms.length * 2 + commonTerms.length + hasYearScore;
 
 	if (keyTerms.length === 0 && totalTerms <= 2 && !containsYear) {
 		// console.log(`👻 No identifiable terms in '${target}'`);
 		return false;
 	}
 
-	// check sequence of terms
-	const sequenceCheck = findTermsInText(test, splits.join(' '), true);
-	if (sequenceCheck < 0) return false;
-
 	let foundKeyTerms = findTermsInText(test, keyTerms.join(' '));
 	let foundCommonTerms = findTermsInText(test, commonTerms.join(' '));
-	const score = (foundKeyTerms*2)+foundCommonTerms+(containsYear?hasYearScore:0);
-	if (Math.floor(score/0.85) >= totalScore) {
+	const score = foundKeyTerms * 2 + foundCommonTerms + (containsYear ? hasYearScore : 0);
+	if (Math.floor(score / 0.85) >= totalScore) {
 		// console.log(`🎯 Scored ${score} out of ${totalScore} for target '${target}' in '${test}' (+${foundKeyTerms*2} +${foundCommonTerms} +${containsYear?hasYearScore:0})`);
 		return true;
 	}
