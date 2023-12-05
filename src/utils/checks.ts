@@ -215,17 +215,19 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 		(s) => (s.length > 1 && !dictionary.has(s)) || s.length > 5
 	);
 	if (
-		keyTerms.length > 0 &&
+		keyTerms.length > tolerance &&
 		findTermsInText(test, keyTerms.join(' ')) >= keyTerms.length - tolerance
 	) {
+		// console.log(`🎯 Found ${findTermsInText(test, keyTerms.join(' '))} out of ${keyTerms.length - tolerance} key terms for '${target}'`)
 		return true;
 	}
 	const keySet = new Set(keyTerms);
 	const commonTerms = splits.filter((s) => !keySet.has(s));
 	if (
-		commonTerms.length > 0 &&
+		commonTerms.length > tolerance &&
 		findTermsInText(test, commonTerms.join(' ')) >= commonTerms.length - tolerance
 	) {
+		// console.log(`🎯 Found ${findTermsInText(test, commonTerms.join(' '))} out of ${commonTerms.length - tolerance} common terms for '${target}'`)
 		return true;
 	}
 	// console.log(`👻 '${target}' is not '${test}' !!!`)
