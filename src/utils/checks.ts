@@ -206,30 +206,23 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 	}
 	// console.log(`👻 Can only find ${findTermsInText(test, target)} out of ${splits.length} terms of '${target}' in '${test}'`);
 
-	let tolerance = 0;
-	if (hasYear(test, years) && splits.length > 3) {
-		tolerance = 1;
-	}
-
+	const containsYear = hasYear(test, years);
+	const totalTerms = splits.length;
 	const keyTerms: string[] = splits.filter(
 		(s) => (s.length > 1 && !dictionary.has(s)) || s.length > 5
 	);
-	if (
-		keyTerms.length > tolerance &&
-		findTermsInText(test, keyTerms.join(' ')) >= keyTerms.length - tolerance
-	) {
-		// console.log(`🎯 Found ${findTermsInText(test, keyTerms.join(' '))} out of ${keyTerms.length - tolerance} key terms for '${target}'`)
-		return true;
-	}
 	const keySet = new Set(keyTerms);
 	const commonTerms = splits.filter((s) => !keySet.has(s));
-	if (
-		commonTerms.length > tolerance &&
-		findTermsInText(test, commonTerms.join(' ')) >= commonTerms.length - tolerance
-	) {
-		// console.log(`🎯 Found ${findTermsInText(test, commonTerms.join(' '))} out of ${commonTerms.length - tolerance} common terms for '${target}'`)
+
+	let foundKeyTerms = findTermsInText(test, keyTerms.join(' '));
+	let foundCommonTerms = findTermsInText(test, commonTerms.join(' '));
+	const totalScore = (keyTerms.length*2)+commonTerms.length+1;
+	const score = (foundKeyTerms*2)+foundCommonTerms+(containsYear?2:0);
+	if (Math.ceil(score/0.6) >= totalScore) {
+		// console.log(`🎯 Found ${foundKeyTerms} key terms and ${foundCommonTerms} common terms out of ${totalTerms} terms of '${target}' in '${test}'`);
 		return true;
 	}
+
 	// console.log(`👻 '${target}' is not '${test}' !!!`)
 	return false;
 }
