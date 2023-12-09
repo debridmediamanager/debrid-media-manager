@@ -104,81 +104,88 @@ function strictEqual(title1: string, title2: string) {
 	);
 }
 
-function findTermsInText(test: string, target: string, checkSequence = false) {
+function countTestTermsInTarget(test: string, target: string, shouldBeInSequence = false): number {
 	let replaceCount = 0;
 	let prevReplaceCount = 0;
 	let prevOffset = 0;
 	let prevLength = 0;
-	let sequenceMultiplier = 1;
 	const wordTolerance = 5;
 
 	const wordsInTitle = target.split(/\W+/).filter((e) => e);
 	const magicLength = 3;
 	let testStr = test;
 
+	let inSequenceTerms = 1;
+	let longestSequence = 0;
+
 	const replacer = (match: string, offset: number, str: string) => {
-		if (checkSequence && prevLength > 0 && offset >= wordTolerance) {
-			// console.log('sequence broken at', offset, 'in', testStr);
-			sequenceMultiplier = -1;
+		if (shouldBeInSequence && prevLength > 0 && offset >= wordTolerance) {
+			if (inSequenceTerms > longestSequence) longestSequence = inSequenceTerms;
+			inSequenceTerms = 0;
 		}
 		// if (checkSequence) console.log(`🎅 found '${match}' on offset:${offset} in '${str}'`);
 		prevOffset = offset;
 		prevLength = match.length;
 		replaceCount++;
+		inSequenceTerms++;
 		return match;
 	};
 
-	const actual = wordsInTitle.filter((term) => {
-		testStr = testStr.substring(prevOffset + prevLength);
+	const wrapReplace = (newTerm: string, first: boolean = false, last: boolean = false) => {
+		let prefix = '';
+		if (first) prefix = '\\b';
+		let suffix = '';
+		if (last) suffix = '\\b';
+		testStr.replace(new RegExp(`${prefix}${newTerm}${suffix}`), replacer);
+	};
 
-		testStr.replace(term, replacer);
+	const actual = wordsInTitle.filter((term: string, idx: number) => {
+		const first = idx === 0;
+		const last = idx === wordsInTitle.length - 1;
+		testStr = testStr.substring(prevOffset + prevLength);
+		wrapReplace(term, first, last);
 		if (replaceCount > prevReplaceCount) {
 			prevReplaceCount = replaceCount;
 			return true;
 		}
 		if (removeDiacritics(term).length >= magicLength) {
-			testStr.replace(removeDiacritics(term), replacer);
+			wrapReplace(removeDiacritics(term), first, last);
 			if (replaceCount > prevReplaceCount) {
 				prevReplaceCount = replaceCount;
 				return true;
 			}
 		}
 		if (removeRepeats(term).length >= magicLength) {
-			testStr.replace(removeRepeats(term), replacer);
+			wrapReplace(removeRepeats(term), first, last);
 			if (replaceCount > prevReplaceCount) {
 				prevReplaceCount = replaceCount;
 				return true;
 			}
 		}
 		if (naked(term).length >= magicLength) {
-			testStr.replace(naked(term), replacer);
+			wrapReplace(naked(term), first, last);
 			if (replaceCount > prevReplaceCount) {
 				prevReplaceCount = replaceCount;
 				return true;
 			}
 		}
 		if (replaceRomanWithDecimal(term) !== term) {
-			testStr.replace(replaceRomanWithDecimal(term), replacer);
+			wrapReplace(replaceRomanWithDecimal(term), first, last);
 			if (replaceCount > prevReplaceCount) {
 				// console.log(`Finding ${replaceRomanWithDecimal(term)} in ${testStr} 🐲`)
 				prevReplaceCount = replaceCount;
 				return true;
 			}
 		}
-
-		// console.log(`👻 Cannot find ${term} in ${testStr} 🧩`)
 		return false;
 	});
 
-	const remains = testStr.substring(prevOffset + prevLength);
-	if (
-		checkSequence && // we are checking for sequence
-		remains.length > 0 && // there are still words left
-		remains.search(/s\d\d|19[3-9]\d|20[012]\d/i) >= wordTolerance // found a year or season number
-	) {
-		sequenceMultiplier = -1;
+	if (shouldBeInSequence && inSequenceTerms > longestSequence) {
+		return inSequenceTerms;
+	} else if (shouldBeInSequence && inSequenceTerms < longestSequence) {
+		return longestSequence;
 	}
-	return actual.length * sequenceMultiplier;
+	return actual.length;
 }
 
 function flexEq(test: string, target: string, years: string[]) {
@@ -219,14 +226,12 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 	test = test.toLowerCase();
 
 	const splits = target.split(/\W+/).filter((e) => e);
-
-	if (flexEq(test, target, years)) {
-		const sequenceCheck = findTermsInText(test, splits.join(' '), true);
-		// console.log(`🎲 FlexEq '${target}' is found in '${test}'`, sequenceCheck);
-		return sequenceCheck >= 0;
-	}
-
 	const containsYear = hasYear(test, years);
+	if (flexEq(test, target, years)) {
+		const sequenceCheck = countTestTermsInTarget(test, splits.join(' '), true);
+		// console.log(`🎲 FlexEq '${target}' is found in '${test}'`, sequenceCheck);
+		return containsYear || sequenceCheck >= 0;
+	}
 
 	const totalTerms = splits.length;
 	if (totalTerms === 0 || (totalTerms <= 2 && !containsYear)) {
@@ -248,8 +253,8 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 		return false;
 	}
 
-	let foundKeyTerms = findTermsInText(test, keyTerms.join(' '));
-	let foundCommonTerms = findTermsInText(test, commonTerms.join(' '));
+	let foundKeyTerms = countTestTermsInTarget(test, keyTerms.join(' '));
+	let foundCommonTerms = countTestTermsInTarget(test, commonTerms.join(' '));
 	const score = foundKeyTerms * 2 + foundCommonTerms + (containsYear ? hasYearScore : 0);
 	if (Math.floor(score / 0.85) >= totalScore) {
 		// console.log(`🎯 Scored ${score} out of ${totalScore} for target '${target}' in '${test}' (+${foundKeyTerms*2} +${foundCommonTerms} +${containsYear?hasYearScore:0})`);
