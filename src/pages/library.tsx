@@ -26,7 +26,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import { FaArrowLeft, FaArrowRight, FaRecycle, FaSeedling, FaShare, FaTrash } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight, FaMagnet, FaRecycle, FaSeedling, FaShare, FaTrash } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
@@ -908,6 +908,12 @@ function TorrentsPage() {
 		);
 	}
 
+	async function handleCopyMagnet(hash: string) {
+		const magnet = `magnet:?xt=urn:btih:${hash}`;
+		await navigator.clipboard.writeText(magnet);
+		toast.success('Copied magnet url to clipboard', libraryToastOptions);
+	}
+
 	const handleReinsertTorrent = async (oldId: string) => {
 		try {
 			if (!rdKey) throw new Error('no_rd_key');
@@ -1322,7 +1328,7 @@ function TorrentsPage() {
 									return (
 										<tr
 											key={i}
-											className="border-t-2 hover:bg-purple-900 cursor-pointer"
+											className="border-t-2 hover:bg-purple-900"
 											onClick={() =>
 												torrent.id.startsWith('rd:')
 													? showInfo(torrent)
@@ -1411,7 +1417,7 @@ function TorrentsPage() {
 											<td className="border px-2 py-2">
 												<button
 													title="Share"
-													className="mr-2 mb-2 text-indigo-600"
+													className="cursor-pointer mr-2 mb-2 text-indigo-600"
 													onClick={(e) => {
 														e.stopPropagation(); // Prevent showInfo when clicking this button
 														handleShare(torrent);
@@ -1421,7 +1427,7 @@ function TorrentsPage() {
 												</button>
 												<button
 													title="Delete"
-													className="mr-2 mb-2 text-red-500"
+													className="cursor-pointer mr-2 mb-2 text-red-500"
 													onClick={(e) => {
 														e.stopPropagation(); // Prevent showInfo when clicking this button
 														handleDeleteTorrent(torrent.id);
@@ -1431,7 +1437,7 @@ function TorrentsPage() {
 												</button>
 												<button
 													title="Reinsert"
-													className="mr-2 mb-2 text-green-500"
+													className="cursor-pointer mr-2 mb-2 text-green-500"
 													onClick={(e) => {
 														e.stopPropagation(); // Prevent showInfo when clicking this button
 														torrent.id.startsWith('rd')
@@ -1440,6 +1446,16 @@ function TorrentsPage() {
 													}}
 												>
 													<FaRecycle />
+												</button>
+												<button
+													title="Copy magnet url"
+													className="cursor-pointer mr-2 mb-2 text-pink-500"
+													onClick={(e) => {
+														e.stopPropagation(); // Prevent showInfo when clicking this button
+														handleCopyMagnet(torrent.hash);
+													}}
+												>
+													<FaMagnet />
 												</button>
 												{/* Removed the glasses icon since the row is now clickable */}
 											</td>
