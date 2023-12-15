@@ -1,25 +1,15 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
-import {
-	AdInstantAvailabilityResponse,
-	MagnetFile,
-	adInstantCheck,
-	uploadMagnet,
-} from '@/services/allDebrid';
-import {
-	RdInstantAvailabilityResponse,
-	addHashAsMagnet,
-	deleteTorrent,
-	getTorrentInfo,
-	rdInstantCheck,
-	selectFiles,
-} from '@/services/realDebrid';
+import { AdInstantAvailabilityResponse, MagnetFile, adInstantCheck } from '@/services/allDebrid';
+import { RdInstantAvailabilityResponse, rdInstantCheck } from '@/services/realDebrid';
+import { handleAddAsMagnetInAd, handleAddAsMagnetInRd } from '@/utils/addMagnet';
 import { runConcurrentFunctions } from '@/utils/batch';
+import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { groupBy } from '@/utils/groupBy';
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
-import { getSelectableFiles, isVideo } from '@/utils/selectable';
+import { isVideo } from '@/utils/selectable';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
 import Head from 'next/head';
@@ -316,43 +306,13 @@ function HashlistPage() {
 		}
 	}
 
-	const handleAddAsMagnetInRd = async (hash: string, disableToast: boolean = false) => {
-		try {
-			if (!rdKey) throw new Error('no_rd_key');
-			const id = await addHashAsMagnet(rdKey, hash);
-			if (!disableToast) toast.success('Successfully added as magnet!');
-			rdCacheAdder.single(`rd:${id}`, hash);
-			handleSelectFiles(`rd:${id}`, true);
-		} catch (error) {
-			if (!disableToast)
-				toast.error(
-					'There was an error adding as magnet in Real-Debrid. Please try again.'
-				);
-			throw error;
-		}
-	};
-
-	const handleAddAsMagnetInAd = async (hash: string, disableToast: boolean = false) => {
-		try {
-			if (!adKey) throw new Error('no_ad_key');
-			const resp = await uploadMagnet(adKey, [hash]);
-			if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
-				throw new Error('no_magnets');
-			if (!disableToast) toast.success('Successfully added as magnet!');
-			adCacheAdder.single(`ad:${resp.data.magnets[0].id}`, hash);
-		} catch (error) {
-			if (!disableToast)
-				toast.error('There was an error adding as magnet in AllDebrid. Please try again.');
-			throw error;
-		}
-	};
-
 	function wrapDownloadFilesInRdFn(t: UserTorrent) {
-		return async () => await handleAddAsMagnetInRd(t.hash, true);
+		return async () =>
+			await handleAddAsMagnetInRd(rdKey!, t.hash, rdCacheAdder, removeFromRdCache, true);
 	}
 
 	function wrapDownloadFilesInAdFn(t: UserTorrent) {
-		return async () => await handleAddAsMagnetInAd(t.hash, true);
+		return async () => await handleAddAsMagnetInAd(adKey!, t.hash, adCacheAdder, true);
 	}
 
 	async function downloadNonDupeTorrentsInRd() {
@@ -375,7 +335,7 @@ function HashlistPage() {
 
 	async function downloadNonDupeTorrentsInAd() {
 		if (!adKey) throw new Error('no_ad_key');
-		const libraryHashes = Object.keys(rdCache!);
+		const libraryHashes = Object.keys(adCache!);
 		const yetToDownload = filteredList
 			.filter((t) => !libraryHashes.includes(t.hash))
 			.map(wrapDownloadFilesInAdFn);
@@ -390,47 +350,6 @@ function HashlistPage() {
 			toast('Everything has been downloaded', { icon: '👏' });
 		}
 	}
-
-	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
-		try {
-			if (!rdKey && !adKey) throw new Error('no_keys');
-			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
-			if (adKey && id.startsWith('ad:')) await deleteTorrent(adKey, id.substring(3));
-			if (!disableToast) toast.success(`Download canceled (${id})`);
-			if (id.startsWith('rd:')) removeFromRdCache(id);
-			if (id.startsWith('ad:')) removeFromAdCache(id);
-		} catch (error) {
-			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
-			throw error;
-		}
-	};
-
-	const handleSelectFiles = async (id: string, disableToast: boolean = false) => {
-		try {
-			if (!rdKey) throw new Error('no_rd_key');
-			const response = await getTorrentInfo(rdKey, id.substring(3));
-
-			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
-				(file) => file.id
-			);
-			if (selectedFiles.length === 0) {
-				handleDeleteTorrent(id, true);
-				throw new Error('no_files_for_selection');
-			}
-
-			await selectFiles(rdKey, id.substring(3), selectedFiles);
-		} catch (error) {
-			if ((error as Error).message === 'no_files_for_selection') {
-				if (!disableToast)
-					toast.error(`No files for selection, deleting (${id})`, {
-						duration: 5000,
-					});
-			} else {
-				if (!disableToast) toast.error(`Error selecting files (${id})`);
-			}
-			throw error;
-		}
-	};
 
 	return (
 		<div className="mx-4 my-8">
@@ -609,22 +528,34 @@ function HashlistPage() {
 											{(t.bytes / ONE_GIGABYTE).toFixed(1)} GB
 										</td>
 										<td className="border px-4 py-2">
-											{rd.isDownloading(t.hash) && rdCache![t.hash].id && (
-												<button
-													className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-													onClick={() => {
-														handleDeleteTorrent(rdCache![t.hash].id);
-													}}
-												>
-													<FaTimes />
-													RD ({rdCache![t.hash].progress}%)
-												</button>
-											)}
+											{rdKey &&
+												rd.isDownloading(t.hash) &&
+												rdCache![t.hash].id && (
+													<button
+														className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+														onClick={() => {
+															const id = rdCache![t.hash].id;
+															handleDeleteRdTorrent(
+																rdKey,
+																id,
+																removeFromRdCache
+															);
+														}}
+													>
+														<FaTimes />
+														RD ({rdCache![t.hash].progress}%)
+													</button>
+												)}
 											{rdKey && rd.notInLibrary(t.hash) && (
 												<button
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
 													onClick={() => {
-														handleAddAsMagnetInRd(t.hash);
+														handleAddAsMagnetInRd(
+															rdKey,
+															t.hash,
+															rdCacheAdder,
+															removeFromRdCache
+														);
 													}}
 												>
 													<FaDownload />
@@ -632,22 +563,33 @@ function HashlistPage() {
 												</button>
 											)}
 
-											{ad.isDownloading(t.hash) && adCache![t.hash].id && (
-												<button
-													className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-													onClick={() => {
-														handleDeleteTorrent(adCache![t.hash].id);
-													}}
-												>
-													<FaTimes />
-													AD ({adCache![t.hash].progress}%)
-												</button>
-											)}
+											{adKey &&
+												ad.isDownloading(t.hash) &&
+												adCache![t.hash].id && (
+													<button
+														className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+														onClick={() => {
+															const id = adCache![t.hash].id;
+															handleDeleteAdTorrent(
+																adKey,
+																id,
+																removeFromAdCache
+															);
+														}}
+													>
+														<FaTimes />
+														AD ({adCache![t.hash].progress}%)
+													</button>
+												)}
 											{adKey && rd.notInLibrary(t.hash) && (
 												<button
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
 													onClick={() => {
-														handleAddAsMagnetInAd(t.hash);
+														handleAddAsMagnetInAd(
+															adKey,
+															t.hash,
+															adCacheAdder
+														);
 													}}
 												>
 													<FaDownload />

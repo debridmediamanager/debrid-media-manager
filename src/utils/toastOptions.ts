@@ -21,3 +21,8 @@ export const genericToastOptions = {
 	...globalToastOptions,
 	icon: '📢',
 };
+
+export const magnetToastOptions = {
+	...globalToastOptions,
+	icon: '🧲',
+};
