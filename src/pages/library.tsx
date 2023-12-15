@@ -1,24 +1,24 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
-import { getMagnetStatus, restartMagnet, uploadMagnet } from '@/services/allDebrid';
+import { getMagnetStatus, restartMagnet } from '@/services/allDebrid';
 import { createShortUrl } from '@/services/hashlists';
+import { getTorrentInfo, getUserTorrentsList, unrestrictCheck } from '@/services/realDebrid';
+import { UserTorrent } from '@/types/userTorrent';
 import {
-	addHashAsMagnet,
-	getTorrentInfo,
-	getUserTorrentsList,
-	selectFiles,
-	unrestrictCheck,
-} from '@/services/realDebrid';
+	handleAddAsMagnetInAd,
+	handleAddAsMagnetInRd,
+	handleReinsertTorrent,
+	handleSelectFilesInRd,
+} from '@/utils/addMagnet';
 import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName, getTypeByNameAndFileCount } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
-import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
-import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
+import { filenameParse } from '@ctrl/video-filename-parser';
 import { saveAs } from 'file-saver';
 import lzString from 'lz-string';
 import Head from 'next/head';
@@ -39,23 +39,6 @@ import Swal from 'sweetalert2';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
 const ITEMS_PER_PAGE = 100;
-
-interface UserTorrent {
-	id: string;
-	filename: string;
-	title: string;
-	hash: string;
-	bytes: number;
-	progress: number;
-	status: string;
-	added: string;
-	score: number;
-	mediaType: 'movie' | 'tv';
-	info: ParsedFilename;
-	links: string[];
-	seeders: number;
-	speed: number;
-}
 
 interface SortBy {
 	column: 'id' | 'filename' | 'title' | 'bytes' | 'progress' | 'status' | 'added' | 'score';
@@ -422,42 +405,8 @@ function TorrentsPage() {
 		}
 	}
 
-	const handleSelectFiles = async (id: string) => {
-		try {
-			if (!rdKey) throw new Error('no_rd_key');
-			const response = await getTorrentInfo(rdKey, id.substring(3));
-
-			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
-				(file) => file.id
-			);
-			if (selectedFiles.length === 0) {
-				handleDeleteRdTorrent(rdKey, id, removeFromRdCache);
-				throw new Error('no_files_for_selection');
-			}
-
-			await selectFiles(rdKey, id.substring(3), selectedFiles);
-			setUserTorrentsList((prevList) => {
-				const newList = [...prevList];
-				const index = newList.findIndex((t) => t.id === id);
-				if (index > -1) newList[index].status = 'downloading';
-				return newList;
-			});
-			rdCacheAdder.single(id, response.hash, response.status);
-		} catch (error) {
-			if ((error as Error).message === 'no_files_for_selection') {
-				toast.error(`No files for selection, deleting (${id})`, {
-					...libraryToastOptions,
-					duration: 5000,
-				});
-			} else {
-				toast.error(`Error selecting files (${id})`, libraryToastOptions);
-			}
-			console.error(error);
-		}
-	};
-
 	function wrapSelectFilesFn(t: UserTorrent) {
-		return async () => await handleSelectFiles(t.id);
+		return async () => await handleSelectFilesInRd(rdKey!, t.id, removeFromRdCache);
 	}
 
 	async function selectPlayableFiles(torrents: UserTorrent[]) {
@@ -647,10 +596,11 @@ function TorrentsPage() {
 	}
 
 	function wrapReinsertFn(t: UserTorrent) {
-		return async () =>
-			t.id.startsWith('rd:')
-				? await handleReinsertTorrent(t.id)
-				: await handleRestartTorrent(t.id);
+		return async () => {
+			if (rdKey && t.id.startsWith('rd:'))
+				await handleReinsertTorrent(rdKey, t.id, userTorrentsList, removeFromRdCache);
+			if (adKey && t.id.startsWith('ad:')) await handleRestartTorrent(t.id);
+		};
 	}
 
 	async function combineSameHash() {
@@ -812,31 +762,6 @@ function TorrentsPage() {
 		}
 	}
 
-	const addAsMagnetInRd = async (hash: string) => {
-		try {
-			if (!rdKey) throw new Error('no_rd_key');
-			const id = await addHashAsMagnet(rdKey, hash);
-			rdCacheAdder.single(`rd:${id}`, hash, 'downloading');
-			handleSelectFiles(`rd:${id}`);
-		} catch (error: any) {
-			toast.error(`Error adding to RD: ${error.message}`, libraryToastOptions);
-			console.error(error);
-		}
-	};
-
-	const addAsMagnetInAd = async (hash: string) => {
-		try {
-			if (!adKey) throw new Error('no_ad_key');
-			const resp = await uploadMagnet(adKey, [hash]);
-			if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
-				throw new Error('no_magnets');
-			adCacheAdder.single(`ad:${resp.data.magnets[0].id}`, hash, 'downloading');
-		} catch (error: any) {
-			toast.error(`Error adding to AD: ${error.message}`, libraryToastOptions);
-			console.error(error);
-		}
-	};
-
 	async function localRestore(debridService: string): Promise<void> {
 		const filePicker = document.createElement('input');
 		filePicker.type = 'file';
@@ -857,7 +782,12 @@ function TorrentsPage() {
 			reader.onload = async function (evt: ProgressEvent<FileReader>) {
 				const files: any[] = JSON.parse(evt.target?.result as string);
 				const utils = debridService === 'rd' ? rdUtils : adUtils;
-				const addMagnet = debridService === 'rd' ? addAsMagnetInRd : addAsMagnetInAd;
+				const addMagnet = (hash: string) => {
+					if (rdKey && debridService === 'rd')
+						return handleAddAsMagnetInRd(rdKey, hash, rdCacheAdder, removeFromRdCache);
+					if (adKey && debridService === 'ad')
+						return handleAddAsMagnetInAd(adKey, hash, adCacheAdder);
+				};
 
 				function wrapAddMagnetFn(hash: string) {
 					return async () => await addMagnet(hash);
@@ -913,23 +843,6 @@ function TorrentsPage() {
 		await navigator.clipboard.writeText(magnet);
 		toast.success('Copied magnet url to clipboard', libraryToastOptions);
 	}
-
-	const handleReinsertTorrent = async (oldId: string) => {
-		try {
-			if (!rdKey) throw new Error('no_rd_key');
-			const torrent = userTorrentsList.find((t) => t.id === oldId);
-			if (!torrent) throw new Error('no_torrent_found');
-			const hash = torrent.hash;
-			const id = await addHashAsMagnet(rdKey, hash);
-			torrent.id = `rd:${id}`;
-			await handleSelectFiles(torrent.id);
-			await handleDeleteRdTorrent(rdKey, oldId, removeFromRdCache, true);
-			toast.success(`Torrent reinserted (${oldId}👉${torrent.id})`, libraryToastOptions);
-		} catch (error) {
-			toast.error(`Error reinserting torrent (${oldId})`, libraryToastOptions);
-			console.error(error);
-		}
-	};
 
 	const handleRestartTorrent = async (id: string) => {
 		try {
@@ -1449,9 +1362,15 @@ function TorrentsPage() {
 													className="cursor-pointer mr-2 mb-2 text-green-500"
 													onClick={(e) => {
 														e.stopPropagation(); // Prevent showInfo when clicking this button
-														torrent.id.startsWith('rd')
-															? handleReinsertTorrent(torrent.id)
-															: handleRestartTorrent(torrent.id);
+														if (rdKey && torrent.id.startsWith('rd'))
+															handleReinsertTorrent(
+																rdKey,
+																torrent.id,
+																userTorrentsList,
+																removeFromRdCache
+															);
+														if (adKey && torrent.id.startsWith('ad'))
+															handleRestartTorrent(torrent.id);
 													}}
 												>
 													<FaRecycle />
