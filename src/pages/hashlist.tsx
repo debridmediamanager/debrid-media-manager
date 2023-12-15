@@ -2,7 +2,11 @@ import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
 import { AdInstantAvailabilityResponse, MagnetFile, adInstantCheck } from '@/services/allDebrid';
 import { RdInstantAvailabilityResponse, rdInstantCheck } from '@/services/realDebrid';
-import { handleAddAsMagnetInAd, handleAddAsMagnetInRd } from '@/utils/addMagnet';
+import {
+	handleAddAsMagnetInAd,
+	handleAddAsMagnetInRd,
+	handleSelectFilesInRd,
+} from '@/utils/addMagnet';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { groupBy } from '@/utils/groupBy';
@@ -308,7 +312,10 @@ function HashlistPage() {
 
 	function wrapDownloadFilesInRdFn(t: UserTorrent) {
 		return async () =>
-			await handleAddAsMagnetInRd(rdKey!, t.hash, rdCacheAdder, removeFromRdCache, true);
+			await handleAddAsMagnetInRd(rdKey!, t.hash, (id: string) => {
+				rdCacheAdder.single(`rd:${id}`, t.hash, 'downloaded');
+				handleSelectFilesInRd(rdKey!, `rd:${id}`, removeFromRdCache, true);
+			});
 	}
 
 	function wrapDownloadFilesInAdFn(t: UserTorrent) {
@@ -553,8 +560,19 @@ function HashlistPage() {
 														handleAddAsMagnetInRd(
 															rdKey,
 															t.hash,
-															rdCacheAdder,
-															removeFromRdCache
+															(id: string) => {
+																rdCacheAdder.single(
+																	`rd:${id}`,
+																	t.hash,
+																	'downloading'
+																);
+																handleSelectFilesInRd(
+																	rdKey,
+																	`rd:${id}`,
+																	removeFromRdCache,
+																	true
+																);
+															}
 														);
 													}}
 												>

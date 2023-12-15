@@ -10,16 +10,13 @@ import { magnetToastOptions } from './toastOptions';
 export const handleAddAsMagnetInRd = async (
 	rdKey: string,
 	hash: string,
-	rdCacheAddr: ReturnType<typeof useDownloadsCache>[2],
-	removeFromRdCache: ReturnType<typeof useDownloadsCache>[3],
-	instantDownload: boolean = false,
+	callback: (id: string) => void,
 	disableToast: boolean = false
 ) => {
 	try {
 		const id = await addHashAsMagnet(rdKey, hash);
 		if (!disableToast) toast('Successfully added as magnet!', magnetToastOptions);
-		rdCacheAddr.single(`rd:${id}`, hash, instantDownload ? 'downloaded' : 'downloading');
-		handleSelectFilesInRd(rdKey, `rd:${id}`, removeFromRdCache, true);
+		callback(id);
 	} catch (error) {
 		console.error(error);
 		if (!disableToast) toast.error('There was an error adding as magnet. Please try again.');

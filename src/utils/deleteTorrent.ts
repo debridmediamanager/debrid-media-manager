@@ -11,7 +11,7 @@ export const handleDeleteRdTorrent = async (
 ) => {
 	try {
 		await deleteTorrent(rdKey, id.substring(3));
-		if (!disableToast) toast(`Download canceled (${id})`, magnetToastOptions);
+		if (!disableToast) toast(`Torrent deleted (${id})`, magnetToastOptions);
 		removeFromRdCache(id);
 	} catch (error) {
 		console.error(error);
@@ -27,7 +27,7 @@ export const handleDeleteAdTorrent = async (
 ) => {
 	try {
 		await deleteTorrent(adKey, id.substring(3));
-		if (!disableToast) toast(`Download canceled (${id})`, magnetToastOptions);
+		if (!disableToast) toast(`Torrent deleted (${id})`, magnetToastOptions);
 		removeFromAdCache(id);
 	} catch (error) {
 		console.error(error);
