@@ -1,16 +1,16 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
-import { deleteMagnet, getMagnetStatus, restartMagnet, uploadMagnet } from '@/services/allDebrid';
+import { getMagnetStatus, restartMagnet, uploadMagnet } from '@/services/allDebrid';
 import { createShortUrl } from '@/services/hashlists';
 import {
 	addHashAsMagnet,
-	deleteTorrent,
 	getTorrentInfo,
 	getUserTorrentsList,
 	selectFiles,
 	unrestrictCheck,
 } from '@/services/realDebrid';
 import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
+import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName, getTypeByNameAndFileCount } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -26,7 +26,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import { FaArrowLeft, FaArrowRight, FaMagnet, FaRecycle, FaSeedling, FaShare, FaTrash } from 'react-icons/fa';
+import {
+	FaArrowLeft,
+	FaArrowRight,
+	FaMagnet,
+	FaRecycle,
+	FaSeedling,
+	FaShare,
+	FaTrash,
+} from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
@@ -358,21 +366,6 @@ function TorrentsPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query, userTorrentsList, rdLoading, adLoading, grouping, query, currentPage]);
 
-	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
-		try {
-			if (!rdKey && !adKey) throw new Error('no_keys');
-			setUserTorrentsList((prevList) => prevList.filter((t) => t.id !== id));
-			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
-			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
-			if (!disableToast) toast.success(`Torrent deleted (${id})`, libraryToastOptions);
-			if (id.startsWith('rd:')) removeFromRdCache(id);
-			if (id.startsWith('ad:')) removeFromAdCache(id);
-		} catch (error) {
-			if (!disableToast) toast.error(`Error deleting torrent (${id})`, libraryToastOptions);
-			console.error(error);
-		}
-	};
-
 	function handleSort(column: typeof sortBy.column) {
 		setSortBy({
 			column,
@@ -438,7 +431,7 @@ function TorrentsPage() {
 				(file) => file.id
 			);
 			if (selectedFiles.length === 0) {
-				handleDeleteTorrent(id);
+				handleDeleteRdTorrent(rdKey, id, removeFromRdCache);
 				throw new Error('no_files_for_selection');
 			}
 
@@ -519,7 +512,14 @@ function TorrentsPage() {
 	}
 
 	function wrapDeleteFn(t: UserTorrent) {
-		return async () => await handleDeleteTorrent(t.id);
+		return async () => {
+			if (rdKey && t.id.startsWith('rd:')) {
+				await handleDeleteRdTorrent(rdKey, t.id, removeFromRdCache);
+			}
+			if (adKey && t.id.startsWith('ad:')) {
+				await handleDeleteAdTorrent(adKey, t.id, removeFromAdCache);
+			}
+		};
 	}
 
 	const getKeyByStatus = (status: string) => {
@@ -817,7 +817,7 @@ function TorrentsPage() {
 			if (!rdKey) throw new Error('no_rd_key');
 			const id = await addHashAsMagnet(rdKey, hash);
 			rdCacheAdder.single(`rd:${id}`, hash, 'downloading');
-			handleSelectFiles(`rd:${id}`); // add rd: to account for substr(3) in handleSelectFiles
+			handleSelectFiles(`rd:${id}`);
 		} catch (error: any) {
 			toast.error(`Error adding to RD: ${error.message}`, libraryToastOptions);
 			console.error(error);
@@ -923,7 +923,7 @@ function TorrentsPage() {
 			const id = await addHashAsMagnet(rdKey, hash);
 			torrent.id = `rd:${id}`;
 			await handleSelectFiles(torrent.id);
-			await handleDeleteTorrent(oldId, true);
+			await handleDeleteRdTorrent(rdKey, oldId, removeFromRdCache, true);
 			toast.success(`Torrent reinserted (${oldId}👉${torrent.id})`, libraryToastOptions);
 		} catch (error) {
 			toast.error(`Error reinserting torrent (${oldId})`, libraryToastOptions);
@@ -1241,11 +1241,7 @@ function TorrentsPage() {
 				)}
 				<Link
 					href="/library?page=1"
-					className={`mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-1 rounded ${
-						hasNoQueryParamsBut('page')
-							? 'opacity-60 cursor-not-allowed pointer-events-none'
-							: ''
-					}`}
+					className={`mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-1 rounded`}
 				>
 					Reset
 				</Link>
@@ -1430,7 +1426,20 @@ function TorrentsPage() {
 													className="cursor-pointer mr-2 mb-2 text-red-500"
 													onClick={(e) => {
 														e.stopPropagation(); // Prevent showInfo when clicking this button
-														handleDeleteTorrent(torrent.id);
+														if (rdKey && torrent.id.startsWith('rd:')) {
+															handleDeleteRdTorrent(
+																rdKey,
+																torrent.id,
+																removeFromRdCache
+															);
+														}
+														if (adKey && torrent.id.startsWith('ad:')) {
+															handleDeleteAdTorrent(
+																adKey,
+																torrent.id,
+																removeFromAdCache
+															);
+														}
 													}}
 												>
 													<FaTrash />

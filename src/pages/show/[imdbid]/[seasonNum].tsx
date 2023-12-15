@@ -1,11 +1,10 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
 import useLocalStorage from '@/hooks/localStorage';
-import { deleteMagnet, uploadMagnet } from '@/services/allDebrid';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
-import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
+import { handleAddAsMagnetInAd, handleAddAsMagnetInRd } from '@/utils/addMagnet';
+import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
-import { getSelectableFiles, isVideo } from '@/utils/selectable';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
@@ -105,89 +104,6 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		} catch (error) {
 			console.error(error);
 			setErrorMessage('There was an error searching for the query. Please try again.');
-		}
-	};
-
-	const handleAddAsMagnetInRd = async (
-		hash: string,
-		instantDownload: boolean = false,
-		disableToast: boolean = false
-	) => {
-		try {
-			if (!rdKey) throw new Error('no_rd_key');
-			const id = await addHashAsMagnet(rdKey, hash);
-			if (!disableToast) toast('Successfully added as magnet!', searchToastOptions);
-			rdCacheAdder.single(`rd:${id}`, hash, instantDownload ? 'downloaded' : 'downloading');
-			handleSelectFiles(`rd:${id}`, true); // add rd: to account for substr(3) in handleSelectFiles
-		} catch (error) {
-			if (!disableToast)
-				toast.error('There was an error adding as magnet. Please try again.');
-			throw error;
-		}
-	};
-
-	const handleAddAsMagnetInAd = async (
-		hash: string,
-		instantDownload: boolean = false,
-		disableToast: boolean = false
-	) => {
-		try {
-			if (!adKey) throw new Error('no_ad_key');
-			const resp = await uploadMagnet(adKey, [hash]);
-			if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
-				throw new Error('no_magnets');
-			if (!disableToast) toast('Successfully added as magnet!', searchToastOptions);
-			adCacheAdder.single(
-				`ad:${resp.data.magnets[0].id}`,
-				hash,
-				instantDownload ? 'downloaded' : 'downloading'
-			);
-		} catch (error) {
-			if (!disableToast)
-				toast.error('There was an error adding as magnet. Please try again.');
-			throw error;
-		}
-	};
-
-	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
-		try {
-			if (!rdKey && !adKey) throw new Error('no_keys');
-			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
-			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
-			if (!disableToast) toast(`Download canceled (${id})`, searchToastOptions);
-			if (id.startsWith('rd:')) removeFromRdCache(id);
-			if (id.startsWith('ad:')) removeFromAdCache(id);
-		} catch (error) {
-			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
-			throw error;
-		}
-	};
-
-	const handleSelectFiles = async (id: string, disableToast: boolean = false) => {
-		try {
-			if (!rdKey) throw new Error('no_rd_key');
-			const response = await getTorrentInfo(rdKey, id.substring(3));
-			if (response.filename === 'Magnet') return; // no files yet
-
-			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
-				(file) => file.id
-			);
-			if (selectedFiles.length === 0) {
-				handleDeleteTorrent(id, true);
-				throw new Error('no_files_for_selection');
-			}
-
-			await selectFiles(rdKey, id.substring(3), selectedFiles);
-		} catch (error) {
-			if ((error as Error).message === 'no_files_for_selection') {
-				if (!disableToast)
-					toast.error(`No files for selection, deleting (${id})`, {
-						duration: 5000,
-					});
-			} else {
-				if (!disableToast) toast.error(`Error selecting files (${id})`);
-			}
-			throw error;
 		}
 	};
 
@@ -432,13 +348,17 @@ rounded-lg overflow-hidden
 													Size: {(r.fileSize / 1024).toFixed(2)} GB
 												</p>
 												<div className="flex flex-wrap space-x-2">
-													{rd.isDownloading(r.hash) &&
+													{rdKey &&
+														rd.isDownloading(r.hash) &&
 														rdCache![r.hash].id && (
 															<button
 																className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
 																onClick={() => {
-																	handleDeleteTorrent(
-																		rdCache![r.hash].id
+																	const id = rdCache![r.hash].id;
+																	handleDeleteRdTorrent(
+																		rdKey,
+																		id,
+																		removeFromRdCache
 																	);
 																}}
 															>
@@ -451,7 +371,10 @@ rounded-lg overflow-hidden
 															className={`flex items-center justify-center bg-${rdColor}-500 hover:bg-${rdColor}-700 text-white py-2 px-4 rounded-full`}
 															onClick={() =>
 																handleAddAsMagnetInRd(
+																	rdKey,
 																	r.hash,
+																	rdCacheAdder,
+																	removeFromRdCache,
 																	r.rdAvailable
 																)
 															}
@@ -466,13 +389,17 @@ rounded-lg overflow-hidden
 															</>
 														</button>
 													)}
-													{ad.isDownloading(r.hash) &&
+													{adKey &&
+														ad.isDownloading(r.hash) &&
 														adCache![r.hash].id && (
 															<button
 																className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
 																onClick={() => {
-																	handleDeleteTorrent(
-																		adCache![r.hash].id
+																	const id = adCache![r.hash].id;
+																	handleDeleteAdTorrent(
+																		adKey,
+																		id,
+																		removeFromAdCache
 																	);
 																}}
 															>
@@ -485,7 +412,9 @@ rounded-lg overflow-hidden
 															className={`flex items-center justify-center bg-${adColor}-500 hover:bg-${adColor}-700 text-white py-2 px-4 rounded-full`}
 															onClick={() =>
 																handleAddAsMagnetInAd(
+																	adKey,
 																	r.hash,
+																	adCacheAdder,
 																	r.adAvailable
 																)
 															}
