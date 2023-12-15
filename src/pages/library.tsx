@@ -1,25 +1,24 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
-import { restartMagnet } from '@/services/allDebrid';
-import { createShortUrl } from '@/services/hashlists';
 import { getTorrentInfo } from '@/services/realDebrid';
 import { UserTorrent, uniqId } from '@/types/userTorrent';
 import {
 	handleAddAsMagnetInAd,
 	handleAddAsMagnetInRd,
 	handleReinsertTorrent,
+	handleRestartTorrent,
 	handleSelectFilesInRd,
 } from '@/utils/addMagnet';
 import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
+import { generateHashList, handleShare } from '@/utils/hashList';
 import { localRestore } from '@/utils/localRestore';
 import { applyQuickSearch } from '@/utils/quickSearch';
 import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { saveAs } from 'file-saver';
-import lzString from 'lz-string';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -498,7 +497,7 @@ function TorrentsPage() {
 		return async () => {
 			if (rdKey && t.id.startsWith('rd:'))
 				await handleReinsertTorrent(rdKey, t.id, userTorrentsList, removeFromRdCache);
-			if (adKey && t.id.startsWith('ad:')) await handleRestartTorrent(t.id);
+			if (adKey && t.id.startsWith('ad:')) await handleRestartTorrent(adKey, t.id);
 		};
 	}
 
@@ -593,29 +592,6 @@ function TorrentsPage() {
 		);
 	}
 
-	async function generateHashList() {
-		toast('The hash list will return a 404 for the first 1-2 minutes', {
-			...libraryToastOptions,
-			duration: 60000,
-		});
-		try {
-			const hashList = filteredList.map((t) => ({
-				filename: t.filename,
-				hash: t.hash,
-				bytes: t.bytes,
-			}));
-			const shortUrl = await createShortUrl(
-				`${window.location.protocol}//${
-					window.location.host
-				}/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
-			);
-			window.open(shortUrl);
-		} catch (error) {
-			toast.error(`Error generating hash list, try again later`, libraryToastOptions);
-			console.error(error);
-		}
-	}
-
 	async function localBackup() {
 		toast('Generating a local backup file', libraryToastOptions);
 		try {
@@ -633,35 +609,11 @@ function TorrentsPage() {
 		}
 	}
 
-	async function handleShare(t: UserTorrent) {
-		const hashList = [
-			{
-				filename: t.filename,
-				hash: t.hash,
-				bytes: t.bytes,
-			},
-		];
-		router.push(
-			`/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
-		);
-	}
-
 	async function handleCopyMagnet(hash: string) {
 		const magnet = `magnet:?xt=urn:btih:${hash}`;
 		await navigator.clipboard.writeText(magnet);
 		toast.success('Copied magnet url to clipboard', libraryToastOptions);
 	}
-
-	const handleRestartTorrent = async (id: string) => {
-		try {
-			if (!adKey) throw new Error('no_ad_key');
-			await restartMagnet(adKey, id.substring(3));
-			toast.success(`Torrent restarted (${id})`, libraryToastOptions);
-		} catch (error) {
-			toast.error(`Error restarting torrent (${id})`, libraryToastOptions);
-			console.error(error);
-		}
-	};
 
 	const hasNoQueryParamsBut = (...params: string[]) =>
 		Object.keys(router.query).filter((p) => !params.includes(p)).length === 0;
@@ -978,7 +930,7 @@ function TorrentsPage() {
 					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
 						filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
 					}`}
-					onClick={generateHashList}
+					onClick={() => generateHashList(filteredList)}
 					disabled={filteredList.length === 0}
 				>
 					Share hash list
@@ -1183,9 +1135,9 @@ function TorrentsPage() {
 												<button
 													title="Share"
 													className="cursor-pointer mr-2 mb-2 text-indigo-600"
-													onClick={(e) => {
+													onClick={async (e) => {
 														e.stopPropagation(); // Prevent showInfo when clicking this button
-														handleShare(torrent);
+														router.push(await handleShare(torrent));
 													}}
 												>
 													<FaShare />
@@ -1226,7 +1178,7 @@ function TorrentsPage() {
 																removeFromRdCache
 															);
 														if (adKey && torrent.id.startsWith('ad'))
-															handleRestartTorrent(torrent.id);
+															handleRestartTorrent(adKey, torrent.id);
 													}}
 												>
 													<FaRecycle />

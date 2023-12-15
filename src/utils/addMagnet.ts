@@ -1,5 +1,5 @@
 import { useDownloadsCache } from '@/hooks/cache';
-import { uploadMagnet } from '@/services/allDebrid';
+import { restartMagnet, uploadMagnet } from '@/services/allDebrid';
 import { addHashAsMagnet, getTorrentInfo, selectFiles } from '@/services/realDebrid';
 import { UserTorrent } from '@/types/userTorrent';
 import toast from 'react-hot-toast';
@@ -96,5 +96,15 @@ export const handleAddAsMagnetInAd = async (
 	} catch (error) {
 		console.error(error);
 		if (!disableToast) toast.error('There was an error adding as magnet. Please try again.');
+	}
+};
+
+export const handleRestartTorrent = async (adKey: string, id: string) => {
+	try {
+		await restartMagnet(adKey, id.substring(3));
+		toast.success(`Torrent restarted (${id})`, magnetToastOptions);
+	} catch (error) {
+		toast.error(`Error restarting torrent (${id})`, magnetToastOptions);
+		console.error(error);
 	}
 };
