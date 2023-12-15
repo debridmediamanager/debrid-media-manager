@@ -1,6 +1,7 @@
 import { useDownloadsCache } from '@/hooks/cache';
 import { uploadMagnet } from '@/services/allDebrid';
 import { addHashAsMagnet, getTorrentInfo, selectFiles } from '@/services/realDebrid';
+import { UserTorrent } from '@/types/userTorrent';
 import toast from 'react-hot-toast';
 import { handleDeleteRdTorrent } from './deleteTorrent';
 import { getSelectableFiles, isVideo } from './selectable';
@@ -54,6 +55,27 @@ export const handleSelectFilesInRd = async (
 		} else {
 			if (!disableToast) toast.error(`Error selecting files (${id})`);
 		}
+	}
+};
+
+export const handleReinsertTorrent = async (
+	rdKey: string,
+	oldId: string,
+	userTorrentsList: UserTorrent[],
+	removeFromRdCache: ReturnType<typeof useDownloadsCache>[3]
+) => {
+	try {
+		const torrent = userTorrentsList.find((t) => t.id === oldId);
+		if (!torrent) throw new Error('no_torrent_found');
+		const hash = torrent.hash;
+		const id = await addHashAsMagnet(rdKey, hash);
+		torrent.id = `rd:${id}`;
+		await handleSelectFilesInRd(rdKey, torrent.id, removeFromRdCache);
+		await handleDeleteRdTorrent(rdKey, oldId, removeFromRdCache, true);
+		toast.success(`Torrent reinserted (${oldId}👉${torrent.id})`, magnetToastOptions);
+	} catch (error) {
+		toast.error(`Error reinserting torrent (${oldId})`, magnetToastOptions);
+		console.error(error);
 	}
 };
 
