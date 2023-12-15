@@ -16,3 +16,5 @@ export interface UserTorrent {
 	seeders: number;
 	speed: number;
 }
+
+export const uniqId = (torrent: UserTorrent): string => `${torrent.hash}|${torrent.links.join()}`;

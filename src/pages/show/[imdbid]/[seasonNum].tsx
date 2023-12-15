@@ -2,7 +2,11 @@ import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
 import useLocalStorage from '@/hooks/localStorage';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
-import { handleAddAsMagnetInAd, handleAddAsMagnetInRd } from '@/utils/addMagnet';
+import {
+	handleAddAsMagnetInAd,
+	handleAddAsMagnetInRd,
+	handleSelectFilesInRd,
+} from '@/utils/addMagnet';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { searchToastOptions } from '@/utils/toastOptions';
@@ -373,9 +377,21 @@ rounded-lg overflow-hidden
 																handleAddAsMagnetInRd(
 																	rdKey,
 																	r.hash,
-																	rdCacheAdder,
-																	removeFromRdCache,
-																	r.rdAvailable
+																	(id: string) => {
+																		rdCacheAdder.single(
+																			`rd:${id}`,
+																			r.hash,
+																			r.rdAvailable
+																				? 'downloaded'
+																				: 'downloading'
+																		);
+																		handleSelectFilesInRd(
+																			rdKey,
+																			`rd:${id}`,
+																			removeFromRdCache,
+																			true
+																		);
+																	}
 																)
 															}
 														>
