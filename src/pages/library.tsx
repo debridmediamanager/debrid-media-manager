@@ -760,9 +760,22 @@ function TorrentsPage() {
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">
-					My Library ({userTorrentsList.length} downloads in total; size:{' '}
-					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
+					My Library 📚 {userTorrentsList.length} torrents{' '}
+					{totalBytes / ONE_GIGABYTE / 1024 > 10000
+						? '😱' // Fear for more than 10 PB
+						: totalBytes / ONE_GIGABYTE / 1024 > 1000
+						? '😨' // Fearful surprise for more than 1 PB
+						: totalBytes / ONE_GIGABYTE / 1024 > 100
+						? '😮' // Surprise for more than 100 TB
+						: totalBytes / ONE_GIGABYTE / 1024 > 10
+						? '🙂' // Smile for more than 10 TB
+						: totalBytes / ONE_GIGABYTE / 1024 > 1
+						? '😐' // Neutral for more than 1 TB
+						: '🙁'}{' '}
+					{/* Sad for 1 TB or less */}
+					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB
 				</h1>
+
 				<Link
 					href="/"
 					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
