@@ -3,9 +3,10 @@ import axios from 'axios';
 import { NextApiHandler } from 'next';
 
 const omdbKey = process.env.OMDB_KEY;
+const mdbKey = process.env.MDBLIST_KEY;
 const searchOmdb = (keyword: string, year?: number) =>
 	`https://www.omdbapi.com/?s=${keyword}&y=${year}&apikey=${omdbKey}`;
-const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${omdbKey}&i=${imdbId}`;
+const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdbKey}&i=${imdbId}`;
 const db = new PlanetScaleCache();
 
 export type MdbSearchResult = {
