@@ -1,7 +1,7 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
 import { getTorrentInfo } from '@/services/realDebrid';
-import { UserTorrent, uniqId } from '@/types/userTorrent';
+import { UserTorrent, getKeyByStatus, uniqId } from '@/types/userTorrent';
 import {
 	handleAddAsMagnetInAd,
 	handleAddAsMagnetInRd,
@@ -10,6 +10,7 @@ import {
 	handleSelectFilesInRd,
 } from '@/utils/addMagnet';
 import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
+import { deleteFilteredTorrents } from '@/utils/deleteList';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { generateHashList, handleShare } from '@/utils/hashList';
@@ -67,6 +68,11 @@ function TorrentsPage() {
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
 	const [sameTitle] = useState<Array<string>>([]);
+
+	// filter counts
+	const [slowCount, setSlowCount] = useState(0);
+	const [inProgressCount, setInProgressCount] = useState(0);
+	const [failedCount, setFailedCount] = useState(0);
 
 	// stats
 	const [totalBytes, setTotalBytes] = useState<number>(0);
@@ -211,6 +217,11 @@ function TorrentsPage() {
 			return;
 		}
 		const { filter: titleFilter, mediaType, status } = router.query;
+
+		setSlowCount(userTorrentsList.filter(isSlowOrNoLinks).length);
+		setInProgressCount(userTorrentsList.filter((t) => t.progress !== 100).length);
+		setFailedCount(userTorrentsList.filter((t) => /error|dead|virus/.test(t.status)).length);
+
 		let tmpList = userTorrentsList;
 		if (status === 'slow') {
 			tmpList = tmpList.filter(isSlowOrNoLinks);
@@ -244,6 +255,11 @@ function TorrentsPage() {
 			tmpList = tmpList.filter((t) => t.progress !== 100);
 			setFilteredList(applyQuickSearch(query, tmpList));
 			setHelpText('Torrents that are still downloading');
+		}
+		if (status === 'failed') {
+			tmpList = tmpList.filter((t) => /error|dead|virus/.test(t.status));
+			setFilteredList(applyQuickSearch(query, tmpList));
+			setHelpText('Torrents that have a failure status');
 		}
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
@@ -324,38 +340,23 @@ function TorrentsPage() {
 		}
 	}
 
-	async function deleteFailedTorrents(torrents: UserTorrent[]) {
-		const failedTorrents = torrents
-			.filter(
-				(t) =>
-					t.status.includes('error') ||
-					t.status.includes('dead') ||
-					t.status.includes('virus')
-			)
-			.map(wrapDeleteFn);
-		const [results, errors] = await runConcurrentFunctions(failedTorrents, 5, 500);
-		if (errors.length) {
-			toast.error(`Error deleting ${errors.length} failed torrents`, libraryToastOptions);
-		}
-		if (results.length) {
-			toast.success(`Deleted ${results.length} failed torrents`, libraryToastOptions);
-		}
-	}
-
-	async function handleDeleteFailedTorrents() {
-		const consent = await Swal.fire({
-			title: 'Delete failed torrents',
-			text: 'This will delete torrents that have status of error, dead or virus. Are you sure?',
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'Yes, proceed!',
-		});
-
-		if (!consent.isConfirmed) return;
-
-		await deleteFailedTorrents(userTorrentsList);
+	async function handleDeleteShownTorrents() {
+		if (
+			filteredList.length > 0 &&
+			!(
+				await Swal.fire({
+					title: 'Delete shown',
+					text: `This will delete the ${filteredList.length} torrents filtered. Are you sure?`,
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, delete!',
+				})
+			).isConfirmed
+		)
+			return;
+		await deleteFilteredTorrents(filteredList, wrapDeleteFn);
 	}
 
 	function wrapDeleteFn(t: UserTorrent) {
@@ -366,13 +367,9 @@ function TorrentsPage() {
 			if (adKey && t.id.startsWith('ad:')) {
 				await handleDeleteAdTorrent(adKey, t.id, removeFromAdCache);
 			}
+			setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== t.id));
 		};
 	}
-
-	const getKeyByStatus = (status: string) => {
-		if (status === 'sametitle') return (torrent: UserTorrent) => torrent.info.title;
-		return (torrent: UserTorrent) => torrent.hash;
-	};
 
 	async function dedupeBySize() {
 		const deletePreference = await Swal.fire({
@@ -502,21 +499,6 @@ function TorrentsPage() {
 	}
 
 	async function combineSameHash() {
-		if (
-			!(
-				await Swal.fire({
-					title: 'Merge same hash',
-					text: 'This will combine completed torrents with identical hashes and select all streamable files. Make sure to backup before doing this. Do you want to proceed?',
-					icon: 'warning',
-					showCancelButton: true,
-					confirmButtonColor: '#3085d6',
-					cancelButtonColor: '#d33',
-					confirmButtonText: 'Yes, proceed!',
-				})
-			).isConfirmed
-		)
-			return;
-
 		const dupeHashes: Map<string, UserTorrent[]> = new Map();
 		userTorrentsList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
 			if (cur.progress !== 100) return acc;
@@ -531,6 +513,22 @@ function TorrentsPage() {
 			}
 			return acc;
 		}, {});
+		const dupeHashesCount = dupeHashes.size;
+		if (
+			dupeHashesCount > 0 &&
+			!(
+				await Swal.fire({
+					title: 'Merge same hash',
+					text: `This will combine the ${dupeHashesCount} completed torrents with identical hashes and select all streamable files. Make sure to backup before doing this. Do you want to proceed?`,
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, proceed!',
+				})
+			).isConfirmed
+		)
+			return;
 		let toReinsertAndDelete: AsyncFunction<unknown>[] = [];
 		dupeHashes.forEach((sameHashTorrents: UserTorrent[]) => {
 			const reinsert = sameHashTorrents.pop();
@@ -550,34 +548,6 @@ function TorrentsPage() {
 		}
 		if (!errors.length && !results.length) {
 			toast('No torrents to merge', libraryToastOptions);
-		}
-	}
-
-	async function deleteFilteredTorrents() {
-		if (
-			!(
-				await Swal.fire({
-					title: 'Delete shown',
-					text: `This will delete the ${filteredList.length} torrents filtered. Are you sure?`,
-					icon: 'warning',
-					showCancelButton: true,
-					confirmButtonColor: '#3085d6',
-					cancelButtonColor: '#d33',
-					confirmButtonText: 'Yes, delete!',
-				})
-			).isConfirmed
-		)
-			return;
-		const toDelete = filteredList.map(wrapDeleteFn);
-		const [results, errors] = await runConcurrentFunctions(toDelete, 5, 500);
-		if (errors.length) {
-			toast.error(`Error deleting ${errors.length} torrents`, libraryToastOptions);
-		}
-		if (results.length) {
-			toast.success(`Deleted ${results.length} torrents`, libraryToastOptions);
-		}
-		if (!errors.length && !results.length) {
-			toast('No torrents to delete', libraryToastOptions);
 		}
 	}
 
@@ -815,7 +785,7 @@ function TorrentsPage() {
 			</div>
 			<div className="mb-4 flex">
 				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
+					className={`mr-1 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
 						currentPage <= 1 ? 'opacity-60 cursor-not-allowed' : ''
 					}`}
 					onClick={handlePrevPage}
@@ -823,9 +793,11 @@ function TorrentsPage() {
 				>
 					<FaArrowLeft />
 				</button>
-				<span className="w-24 text-center">Page {currentPage}</span>
+				<span className="w-16 text-center">
+					{currentPage}/{Math.ceil(sortedData().length / ITEMS_PER_PAGE)}
+				</span>
 				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
+					className={`ml-1 mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
 						currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)
 							? 'opacity-60 cursor-not-allowed'
 							: ''
@@ -835,95 +807,93 @@ function TorrentsPage() {
 				>
 					<FaArrowRight />
 				</button>
+
 				<Link
 					href="/library?mediaType=movie&page=1"
-					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-1 px-1 rounded"
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-white font-bold py-1 px-1 rounded"
 				>
-					Only movies
+					🎥
 				</Link>
 				<Link
 					href="/library?mediaType=tv&page=1"
-					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-1 px-1 rounded"
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-white font-bold py-1 px-1 rounded"
 				>
-					Only TV
+					📺
 				</Link>
-				<Link
-					href="/library?status=slow&page=1"
-					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
-				>
-					No seeds
-				</Link>
-				<Link
-					href="/library?status=sametitle&page=1"
-					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
-				>
-					Same title
-				</Link>
-
 				<button
-					className={`mr-2 mb-2 bg-orange-700 hover:bg-orange-600 text-white font-bold py-1 px-1 rounded ${
-						filteredList.length === 0 ||
-						!((router.query.status as string) ?? '').startsWith('same')
-							? 'opacity-60 cursor-not-allowed'
-							: ''
-					}`}
-					onClick={dedupeBySize}
-					disabled={
-						filteredList.length === 0 ||
-						!((router.query.status as string) ?? '').startsWith('same')
-					}
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded"
+					onClick={() => {
+						setQuery('');
+						router.push(`/library?page=1`);
+					}}
 				>
-					By size
+					Reset
 				</button>
 
-				<button
-					className={`mr-2 mb-2 bg-orange-700 hover:bg-orange-600 text-white font-bold py-1 px-1 rounded ${
-						filteredList.length === 0 ||
-						!((router.query.status as string) ?? '').startsWith('same')
-							? 'opacity-60 cursor-not-allowed'
-							: ''
-					}`}
-					onClick={dedupeByRecency}
-					disabled={
-						filteredList.length === 0 ||
-						!((router.query.status as string) ?? '').startsWith('same')
-					}
-				>
-					By date
-				</button>
+				{sameTitle.length > 0 && (
+					<>
+						<Link
+							href="/library?status=sametitle&page=1"
+							className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
+						>
+							👀 Same title
+						</Link>
+
+						<button
+							className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded"
+							onClick={dedupeBySize}
+						>
+							🧹 Size
+						</button>
+
+						<button
+							className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded"
+							onClick={dedupeByRecency}
+						>
+							🧹 Date
+						</button>
+
+						<button
+							className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
+							onClick={combineSameHash}
+						>
+							🧬 Same hash
+						</button>
+					</>
+				)}
+
+				{slowCount > 0 && (
+					<Link
+						href="/library?status=slow&page=1"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
+					>
+						👀 No seeds
+					</Link>
+				)}
+
+				{inProgressCount > 0 && (
+					<Link
+						href="/library?status=inprogress&page=1"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
+					>
+						👀 In progress
+					</Link>
+				)}
+
+				{failedCount > 0 && (
+					<Link
+						href="/library?status=failed&page=1"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
+					>
+						👀 Failed
+					</Link>
+				)}
 
 				<button
-					className={`mr-2 mb-2 bg-red-700 hover:bg-red-600 text-white font-bold py-1 px-1 rounded ${
-						!query &&
-						(filteredList.length === 0 ||
-							hasNoQueryParamsBut('mediaType', 'page') ||
-							router.query.status === 'same')
-							? 'opacity-60 cursor-not-allowed'
-							: ''
-					}`}
-					onClick={deleteFilteredTorrents}
-					disabled={
-						!query &&
-						(filteredList.length === 0 ||
-							hasNoQueryParamsBut('mediaType', 'page') ||
-							router.query.status === 'same')
-					}
+					className={`mr-2 mb-2 bg-red-600 hover:bg-red-500 text-white font-bold py-1 px-1 rounded`}
+					onClick={handleDeleteShownTorrents}
 				>
-					Delete shown
-				</button>
-
-				<button
-					className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
-					onClick={handleDeleteFailedTorrents}
-				>
-					Delete failed
-				</button>
-
-				<button
-					className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
-					onClick={combineSameHash}
-				>
-					Merge same hash
+					🗑️ Delete
 				</button>
 
 				<button
@@ -933,7 +903,7 @@ function TorrentsPage() {
 					onClick={() => generateHashList(filteredList)}
 					disabled={filteredList.length === 0}
 				>
-					Share hash list
+					🚀 Hash list
 				</button>
 				<button
 					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
@@ -942,14 +912,14 @@ function TorrentsPage() {
 					onClick={localBackup}
 					disabled={userTorrentsList.length === 0}
 				>
-					Local backup
+					💾 Backup
 				</button>
 				{rdKey && (
 					<button
 						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded`}
 						onClick={() => wrapLocalRestoreFn('rd')}
 					>
-						Local restore to RD
+						🪛 Restore to RD
 					</button>
 				)}
 				{adKey && (
@@ -957,15 +927,9 @@ function TorrentsPage() {
 						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded`}
 						onClick={() => wrapLocalRestoreFn('ad')}
 					>
-						Local restore to AD
+						🪛 Restore to AD
 					</button>
 				)}
-				<Link
-					href="/library?page=1"
-					className={`mr-2 mb-2 bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-1 rounded`}
-				>
-					Reset
-				</Link>
 			</div>
 			{helpText !== '' && <div className="bg-blue-900">{helpText}</div>}
 			<div className="overflow-x-auto">
@@ -1161,6 +1125,12 @@ function TorrentsPage() {
 																removeFromAdCache
 															);
 														}
+														setUserTorrentsList((prevList) =>
+															prevList.filter(
+																(prevTor) =>
+																	prevTor.id !== torrent.id
+															)
+														);
 													}}
 												>
 													<FaTrash />
