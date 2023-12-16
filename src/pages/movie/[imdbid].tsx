@@ -346,19 +346,17 @@ rounded-lg overflow-hidden
 															handleAddAsMagnetInRd(
 																rdKey,
 																r.hash,
-																(id: string) => {
-																	rdCacheAdder.single(
-																		`rd:${id}`,
-																		r.hash,
-																		r.rdAvailable
-																			? 'downloaded'
-																			: 'downloading'
-																	);
-																	handleSelectFilesInRd(
+																async (id: string) => {
+																	await handleSelectFilesInRd(
 																		rdKey,
 																		`rd:${id}`,
 																		removeFromRdCache,
 																		true
+																	);
+																	rdCacheAdder.single(
+																		`rd:${id}`,
+																		r.hash,
+																		r.rdAvailable
 																	);
 																}
 															);
@@ -414,8 +412,13 @@ rounded-lg overflow-hidden
 															handleAddAsMagnetInAd(
 																adKey,
 																r.hash,
-																adCacheAdder,
-																r.adAvailable
+																async (id: string) => {
+																	adCacheAdder.single(
+																		`ad:${id}`,
+																		r.hash,
+																		r.adAvailable
+																	);
+																}
 															);
 														}}
 													>

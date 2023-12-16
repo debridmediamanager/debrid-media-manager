@@ -6,13 +6,13 @@ export const useDownloadsCache = (providerKey: string) => {
 
 	const [cache, setCache] = useLocalStorage<cacheType>(`${providerKey}:downloads`, {});
 
-	const addOneToCache = (id: string, hash: string, status?: string) => {
+	const addOneToCache = (id: string, hash: string, status: boolean = true) => {
 		if (cache && hash in cache === true) {
 			setCache((prev) => ({
 				...prev,
 				[hash]: {
 					...prev[hash],
-					status: status === 'downloaded' ? 'downloaded' : 'downloading',
+					status: status ? 'downloaded' : 'downloading',
 				},
 			}));
 		} else {
@@ -22,7 +22,7 @@ export const useDownloadsCache = (providerKey: string) => {
 					id,
 					hash,
 					progress: 0,
-					status: status === 'downloaded' ? 'downloaded' : 'downloading',
+					status: status ? 'downloaded' : 'downloading',
 				},
 			}));
 		}

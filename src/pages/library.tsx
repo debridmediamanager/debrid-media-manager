@@ -1,6 +1,5 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useDownloadsCache } from '@/hooks/cache';
-import { getTorrentInfo } from '@/services/realDebrid';
 import { UserTorrent, getKeyByStatus, uniqId } from '@/types/userTorrent';
 import {
 	handleAddAsMagnetInAd,
@@ -16,6 +15,8 @@ import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { generateHashList, handleShare } from '@/utils/hashList';
 import { localRestore } from '@/utils/localRestore';
 import { applyQuickSearch } from '@/utils/quickSearch';
+import { showInfo } from '@/utils/showInfo';
+import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
@@ -102,34 +103,44 @@ function TorrentsPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router]);
 
-	// fetch list from api
-	useEffect(() => {
-		if (!rdKey || userTorrentsList.length > 0) {
+	const fillTableWithRDLibrary = async function (customLimit?: number) {
+		if (!rdKey) {
 			setRdLoading(false);
 			return;
 		}
-		fetchRealDebrid(rdKey, (torrents: UserTorrent[]) => {
-			setUserTorrentsList((prev) => [...prev, ...torrents]);
-			rdCacheAdder.many(
-				torrents.map((t) => ({
-					id: t.id,
-					hash: t.hash,
-					status: t.status === 'downloaded' ? 'downloaded' : 'downloading',
-					progress: t.progress,
-				}))
-			);
-			setRdLoading(false);
-		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey]);
+		fetchRealDebrid(
+			rdKey,
+			(torrents: UserTorrent[]) => {
+				setUserTorrentsList((prev) => {
+					const existingIds = new Set(prev.map((torrent) => torrent.id));
+					const newTorrents = torrents.filter((torrent) => !existingIds.has(torrent.id));
+					return [...prev, ...newTorrents];
+				});
+				rdCacheAdder.many(
+					torrents.map((t) => ({
+						id: t.id,
+						hash: t.hash,
+						status: t.status === 'downloaded' ? 'downloaded' : 'downloading',
+						progress: t.progress,
+					}))
+				);
+				setRdLoading(false);
+			},
+			customLimit
+		);
+	};
 
-	useEffect(() => {
-		if (!adKey || userTorrentsList.length > 0) {
+	const fillTableWithADLibrary = async function () {
+		if (!adKey) {
 			setAdLoading(false);
 			return;
 		}
 		fetchAllDebrid(adKey, (torrents: UserTorrent[]) => {
-			setUserTorrentsList((prev) => [...prev, ...torrents]);
+			setUserTorrentsList((prev) => {
+				const existingIds = new Set(prev.map((torrent) => torrent.id));
+				const newTorrents = torrents.filter((torrent) => !existingIds.has(torrent.id));
+				return [...prev, ...newTorrents];
+			});
 			adCacheAdder.many(
 				torrents.map((t) => ({
 					id: t.id,
@@ -140,6 +151,16 @@ function TorrentsPage() {
 			);
 			setAdLoading(false);
 		});
+	};
+
+	// fetch list from api
+	useEffect(() => {
+		fillTableWithRDLibrary();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [rdKey]);
+
+	useEffect(() => {
+		fillTableWithADLibrary();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [adKey]);
 
@@ -219,8 +240,8 @@ function TorrentsPage() {
 		const { filter: titleFilter, mediaType, status } = router.query;
 
 		setSlowCount(userTorrentsList.filter(isSlowOrNoLinks).length);
-		setInProgressCount(userTorrentsList.filter((t) => t.progress !== 100).length);
-		setFailedCount(userTorrentsList.filter((t) => /error|dead|virus/.test(t.status)).length);
+		setInProgressCount(userTorrentsList.filter(isInProgress).length);
+		setFailedCount(userTorrentsList.filter(isFailed).length);
 
 		let tmpList = userTorrentsList;
 		if (status === 'slow') {
@@ -237,27 +258,13 @@ function TorrentsPage() {
 				'Torrents shown have the same title parsed from the torrent name. Use "By size" to retain the larger torrent for each title, or "By date" to retain the more recent torrent. Take note: the parser might not work well for multi-season tv show torrents.'
 			);
 		}
-		if (status === 'non4k') {
-			tmpList = tmpList.filter(
-				(t) => !/\b2160|\b4k|\buhd|\bdovi|\bdolby.?vision|\bdv|\bremux/i.test(t.filename)
-			);
-			setFilteredList(applyQuickSearch(query, tmpList));
-			setHelpText('Torrents shown are not high quality based on the torrent name.');
-		}
-		if (status === '4k') {
-			tmpList = tmpList.filter((t) =>
-				/\b2160|\b4k|\buhd|\bdovi|\bdolby.?vision|\bdv|\bremux/i.test(t.filename)
-			);
-			setFilteredList(applyQuickSearch(query, tmpList));
-			setHelpText('Torrents shown are high quality based on the torrent name.');
-		}
 		if (status === 'inprogress') {
-			tmpList = tmpList.filter((t) => t.progress !== 100);
+			tmpList = tmpList.filter(isInProgress);
 			setFilteredList(applyQuickSearch(query, tmpList));
 			setHelpText('Torrents that are still downloading');
 		}
 		if (status === 'failed') {
-			tmpList = tmpList.filter((t) => /error|dead|virus/.test(t.status));
+			tmpList = tmpList.filter(isFailed);
 			setFilteredList(applyQuickSearch(query, tmpList));
 			setHelpText('Torrents that have a failure status');
 		}
@@ -275,7 +282,6 @@ function TorrentsPage() {
 			);
 		}
 		selectPlayableFiles(tmpList);
-		// deleteFailedTorrents(tmpList);
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query, userTorrentsList, rdLoading, adLoading, grouping, query, currentPage]);
@@ -513,13 +519,16 @@ function TorrentsPage() {
 			}
 			return acc;
 		}, {});
-		const dupeHashesCount = dupeHashes.size;
+		let dupeHashesCount = 0;
+		dupeHashes.forEach((hashes) => {
+			dupeHashesCount += hashes.length;
+		});
 		if (
 			dupeHashesCount > 0 &&
 			!(
 				await Swal.fire({
 					title: 'Merge same hash',
-					text: `This will combine the ${dupeHashesCount} completed torrents with identical hashes and select all streamable files. Make sure to backup before doing this. Do you want to proceed?`,
+					text: `This will combine the ${dupeHashesCount} completed torrents with identical hashes into ${dupeHashes.size} and select all streamable files. Make sure to backup before doing this. Do you want to proceed?`,
 					icon: 'warning',
 					showCancelButton: true,
 					confirmButtonColor: '#3085d6',
@@ -551,17 +560,6 @@ function TorrentsPage() {
 		}
 	}
 
-	function isSlowOrNoLinks(t: UserTorrent) {
-		const oldTorrentAge = 3600000; // 1 hour in milliseconds
-		const addedDate = new Date(t.added);
-		const now = new Date();
-		const ageInMillis = now.getTime() - addedDate.getTime();
-		return (
-			(t.links.length === 0 && t.progress === 100) ||
-			(t.progress !== 100 && ageInMillis >= oldTorrentAge && t.seeders === 0)
-		);
-	}
-
 	async function localBackup() {
 		toast('Generating a local backup file', libraryToastOptions);
 		try {
@@ -579,142 +577,29 @@ function TorrentsPage() {
 		}
 	}
 
-	async function handleCopyMagnet(hash: string) {
-		const magnet = `magnet:?xt=urn:btih:${hash}`;
-		await navigator.clipboard.writeText(magnet);
-		toast.success('Copied magnet url to clipboard', libraryToastOptions);
-	}
-
-	const hasNoQueryParamsBut = (...params: string[]) =>
-		Object.keys(router.query).filter((p) => !params.includes(p)).length === 0;
-
-	const showInfo = async (torrent: UserTorrent) => {
-		const info = await getTorrentInfo(rdKey!, torrent.id.substring(3));
-
-		let warning = '';
-		const isIntact = info.files.filter((f) => f.selected).length === info.links.length;
-		// Check if there is a mismatch between files and links
-		if (info.progress === 100 && !isIntact) {
-			warning = `<p class="text-red-500">Warning: Some files have expired</p>`;
-		}
-
-		// Initialize a separate index for the links array
-		let linkIndex = 0;
-
-		const filesList = info.files
-			.map((file) => {
-				let size = file.bytes < 1024 ** 3 ? file.bytes / 1024 ** 2 : file.bytes / 1024 ** 3;
-				let unit = file.bytes < 1024 ** 3 ? 'MB' : 'GB';
-
-				let downloadForm = '';
-
-				// Only create a download form for selected files
-				if (file.selected && isIntact) {
-					downloadForm = `
-						<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
-							<input type="hidden" name="links" value="${info.links[linkIndex++]}" />
-							<button type="submit" class="ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-xs">Download</button>
-						</form>
-					`;
-				}
-
-				// Return the list item for the file, with or without the download form
-				return `
-					<li class="flex items-center justify-between p-2 hover:bg-yellow-200 rounded ${
-						file.selected ? 'bg-yellow-50 font-bold' : 'font-normal'
-					}">
-						<span class="flex-1 truncate text-blue-600">${file.path}</span>
-						<span class="ml-4 text-sm text-gray-700">${size.toFixed(2)} ${unit}</span>
-						${downloadForm}
-					</li>
-			  	`;
-			})
-			.join('');
-
-		// Handle the display of progress, speed, and seeders as table rows
-		const progressRow =
-			info.status === 'downloading'
-				? `<tr><td class="font-semibold align-left">Progress:</td><td class="align-left">${info.progress.toFixed(
-						2
-				  )}%</td></tr>`
-				: '';
-		const speedRow =
-			info.status === 'downloading'
-				? `<tr><td class="font-semibold align-left">Speed:</td><td class="align-left">${(
-						info.speed / 1024
-				  ).toFixed(2)} KB/s</td></tr>`
-				: '';
-		const seedersRow =
-			info.status === 'downloading'
-				? `<tr><td class="font-semibold align-left">Seeders:</td><td class="align-left">${info.seeders}</td></tr>`
-				: '';
-
-		Swal.fire({
-			icon: 'info',
-			html: `
-			<h1 class="text-2xl font-bold mb-4">${info.filename}</h1>
-			<div class="overflow-x-auto">
-				<table class="table-auto w-full mb-4 text-left">
-					<tbody>
-						<tr>
-							<td class="font-semibold">ID:</td>
-							<td>${info.id}</td>
-						</tr>
-						<tr>
-							<td class="font-semibold">Original filename:</td>
-							<td>${info.original_filename}</td>
-						</tr>
-						<tr>
-							<td class="font-semibold">Size:</td>
-							<td>${(info.bytes / 1024 ** 3).toFixed(2)} GB</td>
-						</tr>
-						<tr>
-							<td class="font-semibold">Original size:</td>
-							<td>${(info.original_bytes / 1024 ** 3).toFixed(2)} GB
-							</td>
-						</tr>
-						<tr>
-							<td class="font-semibold">Status:</td>
-							<td>${info.status}</td>
-						</tr>
-						${progressRow}
-						${speedRow}
-						${seedersRow}
-						<tr>
-							<td class="font-semibold">Added:</td>
-							<td>${new Date(info.added).toLocaleString()}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			${warning}
-			<h2 class="text-xl font-semibold mb-2">Files:</h2>
-			<div class="max-h-60 overflow-y-auto mb-4 text-left bg-blue-100 p-4 rounded shadow">
-				<ul class="list space-y-1">
-					${filesList}
-				</ul>
-			</div>
-
-				`,
-			showConfirmButton: false,
-			customClass: {
-				popup: 'format-class',
-			},
-			width: '800px',
-		});
-	};
-
-	const wrapLocalRestoreFn = async (debridService: string) => {
+	async function wrapLocalRestoreFn(debridService: string) {
 		return await localRestore((files: any[]) => {
 			const utils = debridService === 'rd' ? rdUtils : adUtils;
 			const addMagnet = (hash: string) => {
 				if (rdKey && debridService === 'rd')
-					return handleAddAsMagnetInRd(rdKey, hash, (id: string) => {
-						rdCacheAdder.single(`rd:${id}`, hash, 'downloading');
-						handleSelectFilesInRd(rdKey, `rd:${id}`, removeFromRdCache, true);
-					});
+					return handleAddAsMagnetInRd(
+						rdKey,
+						hash,
+						async (id: string) => {
+							await handleSelectFilesInRd(rdKey, `rd:${id}`, removeFromRdCache, true);
+							rdCacheAdder.single(`rd:${id}`, hash);
+						},
+						true
+					);
 				if (adKey && debridService === 'ad')
-					return handleAddAsMagnetInAd(adKey, hash, adCacheAdder);
+					return handleAddAsMagnetInAd(
+						adKey,
+						hash,
+						async (id: string) => {
+							adCacheAdder.single(`ad:${id}`, hash);
+						},
+						true
+					);
 			};
 
 			function wrapAddMagnetFn(hash: string) {
@@ -750,7 +635,40 @@ function TorrentsPage() {
 				}
 			);
 		});
-	};
+	}
+
+	async function handleAddMagnet(debridService: string) {
+		const { value: hash } = await Swal.fire({
+			title: `Add magnet to your ${debridService.toUpperCase()} library`,
+			input: 'text',
+			inputLabel: 'Paste your Magnet link here',
+			inputValue: '',
+			showCancelButton: true,
+			inputValidator: (value) => !value && 'You need to put something!',
+		});
+		if (rdKey && hash && debridService === 'rd') {
+			handleAddAsMagnetInRd(rdKey, hash, async (id: string) => {
+				await handleSelectFilesInRd(rdKey, `rd:${id}`, removeFromRdCache, true);
+				await fillTableWithRDLibrary(10);
+				rdCacheAdder.single(`rd:${id}`, hash, false);
+			});
+		}
+		if (adKey && hash && debridService === 'ad') {
+			handleAddAsMagnetInAd(adKey, hash, async (id: string) => {
+				await fillTableWithADLibrary();
+				adCacheAdder.single(`ad:${id}`, hash, false);
+			});
+		}
+	}
+
+	async function handleCopyMagnet(hash: string) {
+		const magnet = `magnet:?xt=urn:btih:${hash}`;
+		await navigator.clipboard.writeText(magnet);
+		toast.success('Copied magnet url to clipboard', libraryToastOptions);
+	}
+
+	const hasNoQueryParamsBut = (...params: string[]) =>
+		Object.keys(router.query).filter((p) => !params.includes(p)).length === 0;
 
 	return (
 		<div className="mx-4 my-8">
@@ -796,6 +714,7 @@ function TorrentsPage() {
 					}}
 				/>
 			</div>
+			{/* Start of Main Menu */}
 			<div className="mb-4 flex">
 				<button
 					className={`mr-1 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
@@ -833,15 +752,6 @@ function TorrentsPage() {
 				>
 					📺
 				</Link>
-				<button
-					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded"
-					onClick={() => {
-						setQuery('');
-						router.push(`/library?page=1`);
-					}}
-				>
-					Reset
-				</button>
 
 				{sameTitle.length > 0 && (
 					<>
@@ -909,6 +819,24 @@ function TorrentsPage() {
 					🗑️ Delete
 				</button>
 
+				{/* Add torrent */}
+				{rdKey && (
+					<button
+						className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded`}
+						onClick={() => handleAddMagnet('rd')}
+					>
+						🧲 RD Add
+					</button>
+				)}
+				{adKey && (
+					<button
+						className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded`}
+						onClick={() => handleAddMagnet('ad')}
+					>
+						🧲 AD Add
+					</button>
+				)}
+
 				<button
 					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
 						filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
@@ -932,7 +860,7 @@ function TorrentsPage() {
 						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded`}
 						onClick={() => wrapLocalRestoreFn('rd')}
 					>
-						🪛 Restore to RD
+						🪛 RD Restore
 					</button>
 				)}
 				{adKey && (
@@ -940,11 +868,22 @@ function TorrentsPage() {
 						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded`}
 						onClick={() => wrapLocalRestoreFn('ad')}
 					>
-						🪛 Restore to AD
+						🪛 AD Restore
 					</button>
 				)}
+
+				<button
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded"
+					onClick={() => {
+						setQuery('');
+						router.push(`/library?page=1`);
+					}}
+				>
+					Reset
+				</button>
 			</div>
-			{helpText !== '' && <div className="bg-blue-900">{helpText}</div>}
+			{/* End of Main Menu */}
+			{helpText !== '' && <div className="bg-blue-900">💡 {helpText}</div>}
 			<div className="overflow-x-auto">
 				{rdLoading || adLoading || grouping || filtering ? (
 					<div className="flex justify-center items-center mt-4">
@@ -978,14 +917,6 @@ function TorrentsPage() {
 									{sortBy.column === 'bytes' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
-								{/* <th
-									className="px-4 py-2 cursor-pointer"
-									onClick={() => handleSort('score')}
-								>
-									QScore{' '}
-									{sortBy.column === 'score' &&
-										(sortBy.direction === 'asc' ? '↑' : '↓')}
-								</th> */}
 								<th
 									className="px-4 py-2 cursor-pointer"
 									onClick={() => handleSort('progress')}
@@ -1024,8 +955,8 @@ function TorrentsPage() {
 											key={i}
 											className="border-t-2 hover:bg-purple-900"
 											onClick={() =>
-												torrent.id.startsWith('rd:')
-													? showInfo(torrent)
+												rdKey && torrent.id.startsWith('rd:')
+													? showInfo(rdKey, torrent)
 													: null
 											} // Add the onClick event here
 											title="Click for more info"
