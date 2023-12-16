@@ -65,7 +65,7 @@ function Search() {
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-3xl font-bold">Search</h1>
+				<h1 className="text-3xl font-bold">Search, Improved Accuracy</h1>
 				<Link
 					href="/"
 					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
@@ -117,9 +117,9 @@ function Search() {
 								<div className="mt-4">
 									<h3 className="text-lg font-bold mb-2">{result.title}</h3>
 									<p className="text-gray-300 text-sm">Year: {result.year}</p>
-									<p className="text-gray-300 text-sm">
+									{/* <p className="text-gray-300 text-sm">
 										IMDB Score: {result.score}
-									</p>
+									</p> */}
 									{result.type === 'movie' ? (
 										<Link
 											href={`/movie/${result.imdbid}`}

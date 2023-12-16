@@ -2,22 +2,30 @@ import { PlanetScaleCache } from '@/services/planetscale';
 import axios from 'axios';
 import { NextApiHandler } from 'next';
 
-const mdblistKey = process.env.MDBLIST_KEY;
-const searchMdb = (keyword: string, year?: number) =>
-	`https://mdblist.com/api/?apikey=${mdblistKey}&s=${keyword}&y=${year}`;
-const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
+const omdbKey = process.env.OMDB_KEY;
+const searchOmdb = (keyword: string, year?: number) =>
+	`https://www.omdbapi.com/?s=${keyword}&y=${year}&apikey=${omdbKey}`;
+const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${omdbKey}&i=${imdbId}`;
 const db = new PlanetScaleCache();
 
 export type MdbSearchResult = {
 	id: string;
 	type: 'movie' | 'show';
 	year: number;
-	score: number;
+	// score: number;
 	title: string;
 	imdbid: string;
 	tmdbid?: string;
 	season_count?: number;
 	season_names?: string[];
+};
+
+type OmdbSearchResult = {
+	Title: string;
+	Year: string;
+	imdbID: string;
+	Type: string;
+	Poster: string;
 };
 
 function parseTitleAndYear(searchQuery: string): [string, number?] {
@@ -78,10 +86,16 @@ const handler: NextApiHandler = async (req, res) => {
 		}
 
 		const [searchTerm, year] = parseTitleAndYear(cleanKeyword);
-		const searchResponse = await axios.get(searchMdb(encodeURIComponent(searchTerm), year));
-		const results: MdbSearchResult[] = [...searchResponse.data.search].filter(
-			(result: any) => result.imdbid
-		);
+		const searchResponse = await axios.get(searchOmdb(encodeURIComponent(searchTerm), year));
+		const results: MdbSearchResult[] = [...searchResponse.data.Search]
+			.filter((r: OmdbSearchResult) => r.imdbID.startsWith('tt'))
+			.map((r: OmdbSearchResult) => ({
+				id: r.imdbID,
+				type: r.Type === 'series' ? 'show' : 'movie',
+				year: parseInt(r.Year, 10),
+				title: r.Title,
+				imdbid: r.imdbID,
+			}));
 
 		for (let i = 0; i < results.length; i++) {
 			if (results[i].type === 'show') {
