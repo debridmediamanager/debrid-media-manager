@@ -5,6 +5,7 @@ import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import {
 	handleAddAsMagnetInAd,
 	handleAddAsMagnetInRd,
+	handleCopyMagnet,
 	handleSelectFilesInRd,
 } from '@/utils/addMagnet';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
@@ -20,7 +21,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { FaDownload, FaFastForward, FaTimes } from 'react-icons/fa';
+import { FaDownload, FaFastForward, FaMagnet, FaTimes } from 'react-icons/fa';
 
 type TvSearchProps = {
 	title: string;
@@ -352,6 +353,12 @@ rounded-lg overflow-hidden
 													Size: {(r.fileSize / 1024).toFixed(2)} GB
 												</p>
 												<div className="flex flex-wrap space-x-2">
+													<button
+														className="flex items-center justify-center bg-pink-500 hover:bg-pink-700 text-white py-2 px-4 rounded-full"
+														onClick={() => handleCopyMagnet(r.hash)}
+													>
+														<FaMagnet />
+													</button>
 													{rdKey &&
 														rd.isDownloading(r.hash) &&
 														rdCache![r.hash].id && (

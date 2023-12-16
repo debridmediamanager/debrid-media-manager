@@ -103,3 +103,9 @@ export const handleRestartTorrent = async (adKey: string, id: string) => {
 		console.error(error);
 	}
 };
+
+export async function handleCopyMagnet(hash: string) {
+	const magnet = `magnet:?xt=urn:btih:${hash}`;
+	await navigator.clipboard.writeText(magnet);
+	toast.success('Copied magnet url to clipboard', magnetToastOptions);
+}
