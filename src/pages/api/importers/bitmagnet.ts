@@ -1,4 +1,3 @@
-import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
 import { ScrapeResponse } from '@/services/scrapeJobs';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -38,25 +37,25 @@ const fetchMovies = async () => {
 			console.log(`[${i}/${result.rows.length}] ${row.name} ${row.value}`);
 			const hash = row.id.split(':')[0];
 
-			let saved = await db.getScrapedTrueResults<ScrapeSearchResult[]>(`movie:${row.value}`);
-			if (!saved || saved.length === 0) {
-				saved = [];
-			}
+			// let saved = await db.getScrapedTrueResults<ScrapeSearchResult[]>(`movie:${row.value}`);
+			// if (!saved || saved.length === 0) {
+			// 	saved = [];
+			// }
 
-			await db.deleteScrapedTrue(row.value);
+			// await db.deleteScrapedTrue(row.value);
 
-			saved.splice(
-				saved.findIndex((s) => s.hash === hash),
-				1
-			);
+			// saved.splice(
+			// 	saved.findIndex((s) => s.hash === hash),
+			// 	1
+			// );
 			// console.log(row); // Process each row here
 			const scrape = {
 				title: row.name,
 				fileSize: parseInt(row.size) / 1024 / 1024,
 				hash,
 			};
-			saved.push(scrape);
-			await db.saveScrapedTrueResults(`movie:${row.value}`, saved, true);
+			// saved.push(scrape);
+			await db.saveScrapedTrueResults(`movie:${row.value}`, [scrape], true);
 			i++;
 		}
 

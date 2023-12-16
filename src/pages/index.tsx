@@ -108,8 +108,14 @@ function IndexPage() {
 						</p>
 
 						<p className="text-sm mb-4">
-							10+ million torrents collected from all corners of the web (as of
-							November 2023, post clean-up)
+							Besides the 10+ million torrents indexed (as of December 2023), no other
+							data is stored
+						</p>
+
+						<p className="text-sm mb-4">
+							<a href="https://www.reddit.com/r/debridmediamanager/" target="_blank">
+								🤖 r/debridmediamanager
+							</a>
 						</p>
 
 						<hr className="w-full mb-4" />
@@ -119,35 +125,35 @@ function IndexPage() {
 								href="/library"
 								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
 							>
-								My Library
+								📚 My Library
 							</Link>
 
 							<button
 								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
 								onClick={handleHashListClick}
 							>
-								Hash list browser
+								#️⃣ Hash list browser
 							</button>
 
 							<Link
 								href="/search"
 								className="mr-2 bg-blue-800 hover:bg-blue-700 text-yellow-200 font-bold py-2 px-4 rounded border-2 border-yellow-200"
 							>
-								Improved Search
+								🔎 Improved Search
 							</Link>
 
 							<Link
 								href="/browse/recent"
 								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 							>
-								Recently Updated
+								⏰ Recently Updated
 							</Link>
 
 							<Link
 								href="/browse"
 								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 							>
-								Browse
+								🌐 Browse
 							</Link>
 						</div>
 
@@ -202,6 +208,7 @@ function IndexPage() {
 							for{' '}
 							<b>
 								<a
+									className="underline"
 									href="https://chromewebstore.google.com/detail/debrid-media-manager/fahmnboccjgkbeeianfdiohbbgmgoibb"
 									target="_blank"
 								>
@@ -211,6 +218,7 @@ function IndexPage() {
 							and{' '}
 							<b>
 								<a
+									className="underline"
 									href="https://addons.mozilla.org/en-US/firefox/addon/debrid-media-manager/"
 									target="_blank"
 								>
@@ -220,29 +228,42 @@ function IndexPage() {
 						</p>
 						<p className="text-sm mb-4">
 							<a
+								className="underline"
 								href="https://github.com/debridmediamanager/zurg-testing"
 								target="_blank"
 							>
 								<b>Beta is out</b> for an uber fast webdav server and rclone
 								alternative
-							</a>
+							</a>{' '}
+							<span className="bg-purple-100 text-purple-800 px-1">
+								<b>zurg</b>
+							</span>
 							. Mount your Real-Debrid library and play your files directly from your
 							computer.
 						</p>
 						<p className="text-sm mb-4">
 							Sponsor this project&apos;s development on{' '}
 							<a
+								className="underline"
 								href="https://github.com/sponsors/debridmediamanager"
 								target="_blank"
 							>
 								Github
 							</a>
-							|
-							<a href="https://www.patreon.com/debridmediamanager" target="_blank">
+							&nbsp;|&nbsp;
+							<a
+								className="underline"
+								href="https://www.patreon.com/debridmediamanager"
+								target="_blank"
+							>
 								Patreon
 							</a>
-							|
-							<a href="https://paypal.me/yowmamasita" target="_blank">
+							&nbsp;|&nbsp;
+							<a
+								className="underline"
+								href="https://paypal.me/yowmamasita"
+								target="_blank"
+							>
 								Paypal
 							</a>
 						</p>
