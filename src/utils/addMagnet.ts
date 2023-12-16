@@ -10,13 +10,13 @@ import { magnetToastOptions } from './toastOptions';
 export const handleAddAsMagnetInRd = async (
 	rdKey: string,
 	hash: string,
-	callback: (id: string) => void,
-	disableToast: boolean = false
+	callback: (id: string) => Promise<void>,
+	disableToast: boolean = false // todo check if toast is ever disabled
 ) => {
 	try {
 		const id = await addHashAsMagnet(rdKey, hash);
+		await callback(id);
 		if (!disableToast) toast('Successfully added as magnet!', magnetToastOptions);
-		callback(id);
 	} catch (error) {
 		console.error(error);
 		if (!disableToast) toast.error('There was an error adding as magnet. Please try again.');
@@ -79,20 +79,15 @@ export const handleReinsertTorrent = async (
 export const handleAddAsMagnetInAd = async (
 	adKey: string,
 	hash: string,
-	cacheAddr: ReturnType<typeof useDownloadsCache>[2],
-	instantDownload: boolean = false,
+	callback: (id: string) => Promise<void>,
 	disableToast: boolean = false
 ) => {
 	try {
 		const resp = await uploadMagnet(adKey, [hash]);
 		if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
 			throw new Error('no_magnets');
+		await callback(`${resp.data.magnets[0].id}`);
 		if (!disableToast) toast('Successfully added as magnet!', magnetToastOptions);
-		cacheAddr.single(
-			`ad:${resp.data.magnets[0].id}`,
-			hash,
-			instantDownload ? 'downloaded' : 'downloading'
-		);
 	} catch (error) {
 		console.error(error);
 		if (!disableToast) toast.error('There was an error adding as magnet. Please try again.');
