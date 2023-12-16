@@ -4,6 +4,7 @@ import { UserTorrent, getKeyByStatus, uniqId } from '@/types/userTorrent';
 import {
 	handleAddAsMagnetInAd,
 	handleAddAsMagnetInRd,
+	handleCopyMagnet,
 	handleReinsertTorrent,
 	handleRestartTorrent,
 	handleSelectFilesInRd,
@@ -659,12 +660,6 @@ function TorrentsPage() {
 				adCacheAdder.single(`ad:${id}`, hash, false);
 			});
 		}
-	}
-
-	async function handleCopyMagnet(hash: string) {
-		const magnet = `magnet:?xt=urn:btih:${hash}`;
-		await navigator.clipboard.writeText(magnet);
-		toast.success('Copied magnet url to clipboard', libraryToastOptions);
 	}
 
 	const hasNoQueryParamsBut = (...params: string[]) =>
