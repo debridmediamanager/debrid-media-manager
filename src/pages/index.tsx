@@ -108,7 +108,7 @@ function IndexPage() {
 						</p>
 
 						<p className="text-sm mb-4">
-							6.43+ million torrents collected from all corners of the web (as of
+							10+ million torrents collected from all corners of the web (as of
 							November 2023, post clean-up)
 						</p>
 
@@ -131,9 +131,9 @@ function IndexPage() {
 
 							<Link
 								href="/search"
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								className="mr-2 bg-blue-800 hover:bg-blue-700 text-yellow-200 font-bold py-2 px-4 rounded border-2 border-yellow-200"
 							>
-								Search
+								Improved Search
 							</Link>
 
 							<Link
@@ -218,7 +218,7 @@ function IndexPage() {
 								</a>
 							</b>
 						</p>
-						{/* <p className="text-sm mb-4">
+						<p className="text-sm mb-4">
 							<a
 								href="https://github.com/debridmediamanager/zurg-testing"
 								target="_blank"
@@ -228,16 +228,22 @@ function IndexPage() {
 							</a>
 							. Mount your Real-Debrid library and play your files directly from your
 							computer.
-						</p> */}
+						</p>
 						<p className="text-sm mb-4">
+							Sponsor this project&apos;s development on{' '}
 							<a
 								href="https://github.com/sponsors/debridmediamanager"
 								target="_blank"
 							>
-								DMM is a 1-person passion project and{' '}
-								<span className="text-pink-200">
-									sponsoring it will mean a lot to me
-								</span>
+								Github
+							</a>
+							|
+							<a href="https://www.patreon.com/debridmediamanager" target="_blank">
+								Patreon
+							</a>
+							|
+							<a href="https://paypal.me/yowmamasita" target="_blank">
+								Paypal
 							</a>
 						</p>
 					</div>
