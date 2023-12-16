@@ -12,10 +12,11 @@ const ONE_GIGABYTE = 1024 * 1024 * 1024;
 
 export const fetchRealDebrid = async (
 	rdKey: string,
-	callback: (torrents: UserTorrent[]) => void
+	callback: (torrents: UserTorrent[]) => void,
+	customLimit?: number
 ) => {
 	try {
-		for await (let pageOfTorrents of getUserTorrentsList(rdKey)) {
+		for await (let pageOfTorrents of getUserTorrentsList(rdKey, customLimit)) {
 			const torrents = pageOfTorrents.map((torrent) => {
 				const mediaType = getTypeByNameAndFileCount(torrent.filename, torrent.links.length);
 				const info =

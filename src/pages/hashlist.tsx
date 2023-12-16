@@ -312,14 +312,27 @@ function HashlistPage() {
 
 	function wrapDownloadFilesInRdFn(t: UserTorrent) {
 		return async () =>
-			await handleAddAsMagnetInRd(rdKey!, t.hash, (id: string) => {
-				rdCacheAdder.single(`rd:${id}`, t.hash, 'downloaded');
-				handleSelectFilesInRd(rdKey!, `rd:${id}`, removeFromRdCache, true);
-			});
+			await handleAddAsMagnetInRd(
+				rdKey!,
+				t.hash,
+				async (id: string) => {
+					await handleSelectFilesInRd(rdKey!, `rd:${id}`, removeFromRdCache, true);
+					rdCacheAdder.single(`rd:${id}`, t.hash);
+				},
+				true
+			);
 	}
 
 	function wrapDownloadFilesInAdFn(t: UserTorrent) {
-		return async () => await handleAddAsMagnetInAd(adKey!, t.hash, adCacheAdder, true);
+		return async () =>
+			await handleAddAsMagnetInAd(
+				adKey!,
+				t.hash,
+				async (id: string) => {
+					adCacheAdder.single(`ad:${id}`, t.hash);
+				},
+				true
+			);
 	}
 
 	async function downloadNonDupeTorrentsInRd() {
@@ -560,17 +573,16 @@ function HashlistPage() {
 														handleAddAsMagnetInRd(
 															rdKey,
 															t.hash,
-															(id: string) => {
-																rdCacheAdder.single(
-																	`rd:${id}`,
-																	t.hash,
-																	'downloading'
-																);
-																handleSelectFilesInRd(
+															async (id: string) => {
+																await handleSelectFilesInRd(
 																	rdKey,
 																	`rd:${id}`,
 																	removeFromRdCache,
 																	true
+																);
+																rdCacheAdder.single(
+																	`rd:${id}`,
+																	t.hash
 																);
 															}
 														);
@@ -606,7 +618,12 @@ function HashlistPage() {
 														handleAddAsMagnetInAd(
 															adKey,
 															t.hash,
-															adCacheAdder
+															async (id: string) => {
+																adCacheAdder.single(
+																	`ad:${id}`,
+																	t.hash
+																);
+															}
 														);
 													}}
 												>

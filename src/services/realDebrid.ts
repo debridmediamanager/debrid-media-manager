@@ -215,13 +215,14 @@ export const getCurrentUser = async (accessToken: string) => {
 	}
 };
 
-export async function* getUserTorrentsList(accessToken: string) {
+export async function* getUserTorrentsList(accessToken: string, limit: number = 0) {
 	const headers = {
 		Authorization: `Bearer ${accessToken}`,
 	};
 
 	let page = 1;
-	let limit = 2500;
+	const limitSet = limit || Infinity;
+	if (!limit) limit = 2500;
 
 	while (true) {
 		const response = await axios.get<UserTorrentResponse[]>(
@@ -245,7 +246,7 @@ export async function* getUserTorrentsList(accessToken: string) {
 			break;
 		}
 
-		if (data.length >= totalCountValue) {
+		if (data.length >= limitSet || data.length >= totalCountValue) {
 			break;
 		}
 
