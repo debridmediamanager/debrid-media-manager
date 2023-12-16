@@ -30,15 +30,14 @@ const fetchMovies = async (): Promise<void> => {
 	const db = await initDB();
 
 	const query = `
-        SELECT
-            id, hash, title, dt, cat, size, imdb
-        FROM
-            items
-        WHERE
-            cat = 'movies'
-        ORDER BY
-            dt DESC
-        LIMIT 1;
+		SELECT
+			id, hash, title, dt, cat, size, imdb
+		FROM
+			items
+		WHERE
+			cat LIKE 'movies_%' AND imdb IS NOT NULL
+		ORDER BY
+			dt DESC;
     `;
 
 	try {
