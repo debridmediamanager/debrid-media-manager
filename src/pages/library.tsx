@@ -737,15 +737,15 @@ function TorrentsPage() {
 
 				<Link
 					href="/library?mediaType=movie&page=1"
-					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-white font-bold py-1 px-1 rounded"
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded"
 				>
-					🎥
+					🎥 Movies
 				</Link>
 				<Link
 					href="/library?mediaType=tv&page=1"
-					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-white font-bold py-1 px-1 rounded"
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded"
 				>
-					📺
+					📺 TV shows
 				</Link>
 
 				{sameTitle.length > 0 && (

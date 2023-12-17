@@ -41,17 +41,17 @@ export function grabPossibleSeasonNums(str: string): number[] {
 	return (str.match(/\d+/g) ?? []).map((n) => parseInt(n, 10)).filter((n) => n > 0 && n <= 100);
 }
 
-export function hasYear(test: string, years: string[]) {
-	return (
-		years.filter((year) => {
-			const intYear = parseInt(year);
-			return (
-				test.includes(year) ||
-				test.includes(`${intYear + 1}`) ||
-				test.includes(`${intYear - 1}`)
-			);
-		}).length > 0
-	);
+export function hasYear(test: string, years: string[], strictCheck: boolean = false) {
+	return strictCheck
+		? years.some((year) => test.includes(year))
+		: years.filter((year) => {
+				const intYear = parseInt(year);
+				return (
+					test.includes(year) ||
+					test.includes(`${intYear + 1}`) ||
+					test.includes(`${intYear - 1}`)
+				);
+		  }).length > 0;
 }
 
 function removeDiacritics(str: string) {
