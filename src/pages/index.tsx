@@ -112,12 +112,6 @@ function IndexPage() {
 							data is stored
 						</p>
 
-						<p className="text-sm mb-4">
-							<a href="https://www.reddit.com/r/debridmediamanager/" target="_blank">
-								🤖 r/debridmediamanager
-							</a>
-						</p>
-
 						<hr className="w-full mb-4" />
 
 						<div className="flex mb-4">
@@ -232,33 +226,39 @@ function IndexPage() {
 								href="https://github.com/debridmediamanager/zurg-testing"
 								target="_blank"
 							>
-								<b>Beta is out</b> for an uber fast webdav server and rclone
-								alternative
+								<span className="bg-purple-100 text-purple-800 px-1">
+									<b>zurg</b>
+								</span>{' '}
+								<b>beta is out</b>!
 							</a>{' '}
-							<span className="bg-purple-100 text-purple-800 px-1">
-								<b>zurg</b>
-							</span>
-							. Mount your Real-Debrid library and play your files directly from your
+							Mount your Real-Debrid library and play your files directly from your
 							computer.
 						</p>
 						<p className="text-sm mb-4">
-							Sponsor this project&apos;s development on{' '}
+							<a
+								className="text-azure"
+								href="https://www.reddit.com/r/debridmediamanager/"
+								target="_blank"
+							>
+								🤖 r/debridmediamanager
+							</a>{' '}
+							🤝 Sponsor this project&apos;s development on{' '}
 							<a
 								className="underline"
 								href="https://github.com/sponsors/debridmediamanager"
 								target="_blank"
 							>
 								Github
-							</a>
-							&nbsp;|&nbsp;
+							</a>{' '}
+							|{' '}
 							<a
 								className="underline"
 								href="https://www.patreon.com/debridmediamanager"
 								target="_blank"
 							>
 								Patreon
-							</a>
-							&nbsp;|&nbsp;
+							</a>{' '}
+							|{' '}
 							<a
 								className="underline"
 								href="https://paypal.me/yowmamasita"

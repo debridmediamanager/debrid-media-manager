@@ -41,8 +41,13 @@ export async function generateScrapeJobs(imdbId: string, replaceOldScrape: boole
 		return;
 	}
 
-	const isMovie = mdbInfo.data.type === 'movie' || tmdbSearch.data.movie_results?.length > 0;
-	const isTv = mdbInfo.data.type === 'show' || tmdbSearch.data.tv_results?.length > 0;
+	const isMovie =
+		mdbInfo.data.type === 'movie' ||
+		(tmdbSearch.data.movie_results?.length > 0 &&
+			tmdbSearch.data.movie_results[0].vote_count > 0);
+	const isTv =
+		mdbInfo.data.type === 'show' ||
+		(tmdbSearch.data.tv_results?.length > 0 && tmdbSearch.data.tv_results[0].vote_count > 0);
 
 	if (isMovie) {
 		try {
