@@ -25,6 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 	let imdbIds = [];
 	for await (let imdbId of scrapeInput.byListId(listId)) {
+		if (!imdbId.startsWith('tt')) continue;
 		const isProcessing = await db.keyExists(`processing:${imdbId}`);
 		if (isProcessing) {
 			console.log(`[singlelist] Already processing ${imdbId}, skipping`);

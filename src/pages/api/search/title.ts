@@ -88,6 +88,10 @@ const handler: NextApiHandler = async (req, res) => {
 
 		const [searchTerm, year] = parseTitleAndYear(cleanKeyword);
 		const searchResponse = await axios.get(searchOmdb(encodeURIComponent(searchTerm), year));
+		if (searchResponse.data.Error) {
+			res.status(401).json({ error: searchResponse.data.Error, results: [] });
+			return;
+		}
 		const results: MdbSearchResult[] = [...searchResponse.data.Search]
 			.filter((r: OmdbSearchResult) => r.imdbID.startsWith('tt'))
 			.map((r: OmdbSearchResult) => ({
