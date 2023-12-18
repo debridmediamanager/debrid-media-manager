@@ -155,7 +155,7 @@ export class PlanetScaleCache {
 		olderThan: Date | null = null
 	): Promise<{ key: string; updatedAt: Date } | null> {
 		const whereCondition: any = {
-			key: { startsWith: 'requested:' },
+			key: { startsWith: 'requested:tt' },
 		};
 
 		if (olderThan !== null) {
@@ -184,7 +184,7 @@ export class PlanetScaleCache {
 
 		const requestedItem = await this.prisma.scraped.findFirst({
 			where: {
-				key: { startsWith: 'processing:' },
+				key: { startsWith: 'processing:tt' },
 				updatedAt: { lte: oneHourAgo },
 			},
 			orderBy: { updatedAt: 'asc' },
