@@ -79,7 +79,12 @@ function Search() {
 		}
 	};
 
-	if (!loading && searchResults.length === 0 && Object.keys(router.query).length === 0)
+	if (
+		!loading &&
+		searchResults.length === 0 &&
+		Object.keys(router.query).length === 0 &&
+		Object.keys(miscResults).length === 0
+	)
 		fetchMiscData('');
 
 	return (
