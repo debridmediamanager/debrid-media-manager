@@ -13,6 +13,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		res.status(400).json({ status: 'error', errorMessage: 'Missing "id" query parameter' });
 		return;
 	}
+	if (!id.startsWith('tt')) {
+		res.status(400).json({ status: 'error', errorMessage: 'Invalid "id" query parameter' });
+		return;
+	}
 
 	await generateScrapeJobs(id.toString().trim(), replaceOldScrape === 'true');
 	res.status(200).json({ status: 'success' });

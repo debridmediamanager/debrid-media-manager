@@ -15,26 +15,9 @@ function Search() {
 	const [searchResults, setSearchResults] = useState<MdbSearchResult[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
+	const [miscResults, setMiscResults] = useState<Record<string, string[]>>({});
 
 	const router = useRouter();
-
-	const fetchData = async (query: string) => {
-		setLoading(true);
-		try {
-			let path = `api/search/title?keyword=${query}`;
-			if (config.externalSearchApiHostname) {
-				path = encodeURIComponent(path);
-			}
-			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
-			const res = await fetch(endpoint);
-			const data = await res.json();
-			setSearchResults(data.results);
-		} catch (error: any) {
-			setErrorMessage(error.message);
-		} finally {
-			setLoading(false);
-		}
-	};
 
 	const handleSubmit = useCallback(
 		(e?: React.FormEvent<HTMLFormElement>) => {
@@ -48,15 +31,56 @@ function Search() {
 	);
 
 	useEffect(() => {
+		if (Object.keys(router.query).length === 0) return;
 		const { query: searchQuery } = router.query;
-		if (!searchQuery) return;
 		const decodedQuery = decodeURIComponent(searchQuery as string);
-		if (decodedQuery === query) return;
-		setTypedQuery(decodedQuery);
+		if (typedQuery !== decodedQuery) setTypedQuery(decodedQuery);
 		setQuery(decodedQuery);
 		fetchData(decodedQuery);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query]);
+
+	const fetchMiscData = async (q: string) => {
+		try {
+			let path = `api/search/misc?keyword=${q}`;
+			if (config.externalSearchApiHostname) {
+				path = encodeURIComponent(path);
+			}
+			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
+			const res = await fetch(endpoint);
+			const data = await res.json();
+			if (Object.keys(data).length > 0) setMiscResults(data);
+			else fetchMiscData('');
+		} catch (error: any) {
+			console.error(error);
+		}
+	};
+
+	const fetchData = async (q: string) => {
+		setMiscResults({});
+		setErrorMessage('');
+		setLoading(true);
+		setSearchResults([]);
+		try {
+			let path = `api/search/title?keyword=${q}`;
+			if (config.externalSearchApiHostname) {
+				path = encodeURIComponent(path);
+			}
+			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
+			const res = await fetch(endpoint);
+			const data = await res.json();
+			if (data.error) throw new Error(data.error);
+			setSearchResults(data.results);
+		} catch (error: any) {
+			setErrorMessage(error.message);
+			fetchMiscData(q);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	if (!loading && searchResults.length === 0 && Object.keys(router.query).length === 0)
+		fetchMiscData('');
 
 	return (
 		<div className="mx-4 my-8 max-w-full">
@@ -162,11 +186,48 @@ function Search() {
 					</div>
 				</>
 			)}
-			{Object.keys(router.query).length !== 0 && searchResults.length === 0 && !loading && (
+			{!loading && searchResults.length === 0 && Object.keys(router.query).length !== 0 && (
 				<>
 					<h2 className="text-2xl font-bold my-4">
 						No results found for &quot;{query}&quot;
 					</h2>
+				</>
+			)}
+			{!loading && searchResults.length === 0 && Object.keys(miscResults).length > 0 && (
+				<>
+					{Object.keys(miscResults).map((listName: string, idx: number) => {
+						return (
+							<div key={listName}>
+								<h2 className="mt-4 text-2xl font-bold" key={idx}>
+									How about results from{' '}
+									<span className="text-yellow-500">{listName}</span>?
+								</h2>
+								<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
+									{miscResults[listName].map((key: string) => {
+										const match = key.match(/^(movie|show):(.+)/);
+										if (match) {
+											const mediaType =
+												match[1] === 'movie' ? 'movie' : 'show';
+											const imdbid = match[2];
+
+											return (
+												<Link
+													key={key}
+													href={`/${mediaType}/${imdbid}`}
+													className=""
+												>
+													<Poster
+														imdbId={imdbid}
+														className="w-full h-64 object-cover object-center rounded-t-lg"
+													/>
+												</Link>
+											);
+										}
+									})}
+								</div>
+							</div>
+						);
+					})}
 				</>
 			)}
 		</div>
