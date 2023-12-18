@@ -242,6 +242,7 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 	const keyTerms: string[] = splits.filter(
 		(s) => (s.length > 1 && !dictionary.has(s)) || s.length > 5
 	);
+	keyTerms.push(...target.split(/\w+/).filter((e) => e.length > 2));
 	const keySet = new Set(keyTerms);
 	const commonTerms = splits.filter((s) => !keySet.has(s));
 
@@ -257,7 +258,7 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 	let foundCommonTerms = countTestTermsInTarget(test, commonTerms.join(' '));
 	const score = foundKeyTerms * 2 + foundCommonTerms + (containsYear ? hasYearScore : 0);
 	if (Math.floor(score / 0.85) >= totalScore) {
-		// console.log(`🎯 Scored ${score} out of ${totalScore} for target '${target}' in '${test}' (+${foundKeyTerms*2} +${foundCommonTerms} +${containsYear?hasYearScore:0})`);
+		// console.log(`🎯 Scored ${score} out of ${totalScore} for target '${target}' in '${test}' (+${foundKeyTerms*2} +${foundCommonTerms} +${containsYear?hasYearScore:0})`, keyTerms, commonTerms);
 		return true;
 	}
 
