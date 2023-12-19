@@ -2,8 +2,10 @@ import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import UserTorrentDB from '@/torrent/db';
+import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
+import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
@@ -93,16 +95,18 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	}
 
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
-	async function fetchHashAndProgress() {
+	async function fetchHashAndProgress(hash?: string) {
 		const torrents = await torrentDB.all();
 		const records: Record<string, number> = {};
 		for (const t of torrents) {
+			if (hash && t.hash !== hash) continue;
 			records[t.hash] = t.progress;
 		}
-		setHashAndProgress(records);
+		setHashAndProgress((prev) => ({ ...prev, ...records }));
 	}
 	const isDownloading = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] < 100;
 	const isDownloaded = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] === 100;
+	const inLibrary = (hash: string) => hash in hashAndProgress;
 	const notInLibrary = (hash: string) => !(hash in hashAndProgress);
 
 	async function initialize() {
@@ -114,6 +118,43 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imdbid]);
+
+	async function addRd(hash: string) {
+		await handleAddAsMagnetInRd(rdKey!, hash);
+		await fetchRealDebrid(
+			rdKey!,
+			async (torrents) => {
+				await torrentDB.addAll(torrents);
+				await fetchHashAndProgress(hash);
+			},
+			2
+		);
+	}
+
+	async function addAd(hash: string) {
+		await handleAddAsMagnetInAd(adKey!, hash);
+		await fetchAllDebrid(
+			adKey!,
+			async (torrents: UserTorrent[]) => await torrentDB.addAll(torrents)
+		);
+		await fetchHashAndProgress();
+	}
+
+	async function deleteRd(hash: string) {
+		const torrent = await torrentDB.getLatestByHash(hash);
+		if (!torrent) return;
+		await handleDeleteRdTorrent(rdKey!, torrent.id);
+		await torrentDB.deleteByHash(hash);
+		await fetchHashAndProgress();
+	}
+
+	async function deleteAd(hash: string) {
+		const torrent = await torrentDB.getLatestByHash(hash);
+		if (!torrent) return;
+		await handleDeleteAdTorrent(adKey!, torrent.id);
+		await torrentDB.deleteByHash(hash);
+		await fetchHashAndProgress();
+	}
 
 	return (
 		<div className="mx-4 my-8 max-w-full">
@@ -328,21 +369,10 @@ rounded-lg overflow-hidden
 												>
 													<FaMagnet />
 												</button>
-												{rdKey && isDownloading(r.hash) && (
+												{rdKey && inLibrary(r.hash) && (
 													<button
 														className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
-														onClick={async () => {
-															const torrent =
-																await torrentDB.getLatestByHash(
-																	r.hash
-																);
-															if (!torrent) return;
-															await handleDeleteRdTorrent(
-																rdKey,
-																torrent.id
-															);
-															torrentDB.deleteByHash(r.hash);
-														}}
+														onClick={() => deleteRd(r.hash)}
 													>
 														<FaTimes className="mr-2" />
 														RD ({hashAndProgress[r.hash] + '%'})
@@ -363,9 +393,7 @@ rounded-lg overflow-hidden
 																? 'gray'
 																: 'blue'
 														}-700 text-white py-2 px-4 rounded-full`}
-														onClick={() =>
-															handleAddAsMagnetInRd(rdKey, r.hash)
-														}
+														onClick={() => addRd(r.hash)}
 													>
 														{r.rdAvailable ? (
 															<>
@@ -380,21 +408,10 @@ rounded-lg overflow-hidden
 														)}
 													</button>
 												)}
-												{adKey && isDownloading(r.hash) && (
+												{adKey && inLibrary(r.hash) && (
 													<button
 														className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
-														onClick={async () => {
-															const torrent =
-																await torrentDB.getLatestByHash(
-																	r.hash
-																);
-															if (!torrent) return;
-															await handleDeleteAdTorrent(
-																adKey,
-																torrent.id
-															);
-															torrentDB.deleteByHash(r.hash);
-														}}
+														onClick={() => deleteAd(r.hash)}
 													>
 														<FaTimes className="mr-2" />
 														AD ({hashAndProgress[r.hash] + '%'})
@@ -415,9 +432,7 @@ rounded-lg overflow-hidden
 																? 'gray'
 																: 'blue'
 														}-700 text-white py-2 px-4 rounded-full`}
-														onClick={() =>
-															handleAddAsMagnetInAd(adKey, r.hash)
-														}
+														onClick={() => addAd(r.hash)}
 													>
 														{r.adAvailable ? (
 															<>

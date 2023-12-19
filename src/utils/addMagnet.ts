@@ -13,7 +13,7 @@ export const handleAddAsMagnetInRd = async (
 ) => {
 	try {
 		const id = await addHashAsMagnet(rdKey, hash);
-		await handleSelectFilesInRd(rdKey, id);
+		await handleSelectFilesInRd(rdKey, `rd:${id}`);
 		if (callback) await callback();
 		toast('Successfully added as magnet!', magnetToastOptions);
 	} catch (error) {

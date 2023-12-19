@@ -39,8 +39,8 @@ class UserTorrentDB {
 
 	public async hashes(): Promise<Set<string>> {
 		const db = await this.getDB();
-		const keys = await db.getAllKeys(this.storeName);
-		return new Set(keys.map((key) => key.toString()));
+		const torrents = await db.getAllFromIndex(this.storeName, 'hash');
+		return new Set(torrents.map((t) => t.hash));
 	}
 
 	public async getLatestByHash(hash: string): Promise<UserTorrent | undefined> {
