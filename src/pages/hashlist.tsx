@@ -12,6 +12,7 @@ import getReleaseTags from '@/utils/score';
 import { isVideo } from '@/utils/selectable';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -198,10 +199,14 @@ function HashlistPage() {
 	const isDownloaded = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] === 100;
 	const inLibrary = (hash: string) => hash in hashAndProgress;
 	const notInLibrary = (hash: string) => !(hash in hashAndProgress);
+
+	async function initialize() {
+		await torrentDB.initializeDB();
+		await Promise.all([fetchUserTorrentsList(), fetchHashAndProgress()]);
+	}
 	useEffect(() => {
 		if (userTorrentsList.length !== 0) return;
-		fetchUserTorrentsList();
-		fetchHashAndProgress();
+		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdKey, adKey]);
 
@@ -603,4 +608,6 @@ function HashlistPage() {
 	);
 }
 
-export default HashlistPage;
+const HashlistPageNoSSR = dynamic(() => Promise.resolve(HashlistPage), { ssr: false });
+
+export default HashlistPageNoSSR;
