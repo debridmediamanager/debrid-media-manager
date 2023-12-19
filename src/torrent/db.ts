@@ -6,11 +6,9 @@ class UserTorrentDB {
 	private dbName = 'DMMDB';
 	private storeName = 'torrents';
 
-	constructor() {
-		this.initializeDB();
-	}
+	constructor() {}
 
-	private async initializeDB() {
+	public async initializeDB() {
 		const storeName = this.storeName;
 		this.db = await openDB(this.dbName, 1, {
 			upgrade(db) {

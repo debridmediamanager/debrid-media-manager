@@ -10,6 +10,7 @@ import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -113,10 +114,16 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	const isDownloaded = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] === 100;
 	const notInLibrary = (hash: string) => !(hash in hashAndProgress);
 
+	async function initialize() {
+		await torrentDB.initializeDB();
+		await Promise.all([
+			fetchData(imdbid as string, parseInt(seasonNum as string)),
+			fetchHashAndProgress(),
+		]);
+	}
 	useEffect(() => {
 		if (!imdbid || !seasonNum) return;
-		fetchData(imdbid as string, parseInt(seasonNum as string));
-		fetchHashAndProgress();
+		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imdbid, seasonNum]);
 
@@ -495,4 +502,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	};
 };
 
-export default withAuth(TvSearch);
+const TvSearchWithAuth = dynamic(() => Promise.resolve(withAuth(TvSearch)), { ssr: false });
+
+export default TvSearchWithAuth;
