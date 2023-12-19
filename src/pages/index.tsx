@@ -30,19 +30,12 @@ function IndexPage() {
 	};
 
 	const handleLogout = (prefix?: string) => {
-		if (typeof window === 'undefined') {
-			// Running on the server, return null
-			return null;
-		}
 		if (prefix) {
-			// Start from the end of localStorage and move backwards
 			let i = localStorage.length - 1;
 			while (i >= 0) {
 				const key = localStorage.key(i);
-				if (key && key.startsWith(prefix)) {
-					localStorage.removeItem(key);
-				}
-				i--; // Decrement i regardless of whether an item was removed
+				if (key && key.startsWith(prefix)) localStorage.removeItem(key);
+				i--;
 			}
 
 			router.reload();
@@ -53,8 +46,13 @@ function IndexPage() {
 	};
 
 	const handleClearCache = () => {
-		localStorage.removeItem('rd:downloads');
-		localStorage.removeItem('ad:downloads');
+		let i = localStorage.length - 1;
+		while (i >= 0) {
+			const key = localStorage.key(i);
+			if (key && (key.startsWith('rdc:') || key.startsWith('adc:')))
+				localStorage.removeItem(key);
+			i--;
+		}
 		toast.success(`Library cache cleared, please check again`, libraryToastOptions);
 	};
 

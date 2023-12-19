@@ -1,7 +1,6 @@
-import { useDownloadsCache } from '@/hooks/cache';
 import { restartMagnet, uploadMagnet } from '@/services/allDebrid';
 import { addHashAsMagnet, getTorrentInfo, selectFiles } from '@/services/realDebrid';
-import { UserTorrent } from '@/types/userTorrent';
+import { UserTorrent } from '@/torrent/userTorrent';
 import toast from 'react-hot-toast';
 import { handleDeleteRdTorrent } from './deleteTorrent';
 import { getSelectableFiles, isVideo } from './selectable';
@@ -10,25 +9,20 @@ import { magnetToastOptions } from './toastOptions';
 export const handleAddAsMagnetInRd = async (
 	rdKey: string,
 	hash: string,
-	callback: (id: string) => Promise<void>,
-	disableToast: boolean = false // todo check if toast is ever disabled
+	callback?: () => Promise<void>
 ) => {
 	try {
 		const id = await addHashAsMagnet(rdKey, hash);
-		await callback(id);
-		if (!disableToast) toast('Successfully added as magnet!', magnetToastOptions);
+		await handleSelectFilesInRd(rdKey, id);
+		if (callback) await callback();
+		toast('Successfully added as magnet!', magnetToastOptions);
 	} catch (error) {
 		console.error(error);
-		if (!disableToast) toast.error('There was an error adding as magnet. Please try again.');
+		toast.error('There was an error adding as magnet. Please try again.');
 	}
 };
 
-export const handleSelectFilesInRd = async (
-	rdKey: string,
-	id: string,
-	removeFromRdCache: ReturnType<typeof useDownloadsCache>[3],
-	disableToast: boolean = false
-) => {
+export const handleSelectFilesInRd = async (rdKey: string, id: string) => {
 	try {
 		const response = await getTorrentInfo(rdKey, id.substring(3));
 		if (response.filename === 'Magnet') return; // no files yet
@@ -37,7 +31,7 @@ export const handleSelectFilesInRd = async (
 			(file) => file.id
 		);
 		if (selectedFiles.length === 0) {
-			handleDeleteRdTorrent(rdKey, id, removeFromRdCache, true);
+			handleDeleteRdTorrent(rdKey, id, true);
 			throw new Error('no_files_for_selection');
 		}
 
@@ -45,12 +39,11 @@ export const handleSelectFilesInRd = async (
 	} catch (error) {
 		console.error(error);
 		if ((error as Error).message === 'no_files_for_selection') {
-			if (!disableToast)
-				toast.error(`No files for selection, deleting (${id})`, {
-					duration: 5000,
-				});
+			toast.error(`No files for selection, deleting (${id})`, {
+				duration: 5000,
+			});
 		} else {
-			if (!disableToast) toast.error(`Error selecting files (${id})`);
+			toast.error(`Error selecting files (${id})`);
 		}
 	}
 };
@@ -58,17 +51,16 @@ export const handleSelectFilesInRd = async (
 export const handleReinsertTorrent = async (
 	rdKey: string,
 	oldId: string,
-	userTorrentsList: UserTorrent[],
-	removeFromRdCache: ReturnType<typeof useDownloadsCache>[3]
+	userTorrentsList: UserTorrent[]
 ) => {
 	try {
 		const torrent = userTorrentsList.find((t) => t.id === oldId);
 		if (!torrent) throw new Error('no_torrent_found');
 		const hash = torrent.hash;
-		const id = await addHashAsMagnet(rdKey, hash);
-		torrent.id = `rd:${id}`;
-		await handleSelectFilesInRd(rdKey, torrent.id, removeFromRdCache);
-		await handleDeleteRdTorrent(rdKey, oldId, removeFromRdCache, true);
+		const newId = await addHashAsMagnet(rdKey, hash);
+		await handleSelectFilesInRd(rdKey, newId);
+		await handleDeleteRdTorrent(rdKey, oldId, true);
+		userTorrentsList.splice(userTorrentsList.indexOf(torrent), 1);
 		toast.success(`Torrent reinserted (${oldId}👉${torrent.id})`, magnetToastOptions);
 	} catch (error) {
 		toast.error(`Error reinserting torrent (${oldId})`, magnetToastOptions);
@@ -79,18 +71,17 @@ export const handleReinsertTorrent = async (
 export const handleAddAsMagnetInAd = async (
 	adKey: string,
 	hash: string,
-	callback: (id: string) => Promise<void>,
-	disableToast: boolean = false
+	callback?: () => Promise<void>
 ) => {
 	try {
 		const resp = await uploadMagnet(adKey, [hash]);
 		if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
 			throw new Error('no_magnets');
-		await callback(`${resp.data.magnets[0].id}`);
-		if (!disableToast) toast('Successfully added as magnet!', magnetToastOptions);
+		if (callback) await callback();
+		toast('Successfully added as magnet!', magnetToastOptions);
 	} catch (error) {
 		console.error(error);
-		if (!disableToast) toast.error('There was an error adding as magnet. Please try again.');
+		toast.error('There was an error adding as magnet. Please try again.');
 	}
 };
 
