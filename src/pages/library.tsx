@@ -97,7 +97,6 @@ function TorrentsPage() {
 
 	// pagination query params
 	useEffect(() => {
-		torrentDB.initializeDB();
 		const { page } = router.query;
 		if (!page || Array.isArray(page)) return;
 		setCurrentPage(parseInt(page, 10));
@@ -141,9 +140,18 @@ function TorrentsPage() {
 	};
 
 	// fetch list from api
+	async function initialize() {
+		await torrentDB.initializeDB();
+		const torrents = await torrentDB.all();
+		if (torrents.length) {
+			setUserTorrentsList(torrents);
+			setRdLoading(false);
+			setAdLoading(false);
+		}
+		await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents()]);
+	}
 	useEffect(() => {
-		fetchLatestRDTorrents();
-		fetchLatestADTorrents();
+		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdKey, adKey]);
 
@@ -200,6 +208,21 @@ function TorrentsPage() {
 	]);
 
 	// set the list you see
+	const tips = [
+		'Tip: You can use hash lists to share your library with others anonymously. Click on the button, wait for the page to finish processing, and share the link to your friends.',
+		'Tip: You can make a local backup of your library by using the "Local backup" button. This will generate a file containing your whole library that you can use to restore your library later.',
+		'Tip: You can restore a local backup by using the "Local restore" button. It will only restore the torrents that are not already in your library.',
+		'Tip: The quick search box will filter the list by filename and id. You can use multiple words or even regex to filter your library. This way, you can select multiple torrents and delete them at once, or share them as a hash list.',
+		'Have you tried clicking on a torrent? You can see the links, the progress, and the status of the torrent. You can also select the files you want to download.',
+		'I don\'t know what to put here, so here\'s a random tip: "The average person walks the equivalent of five times around the world in a lifetime."',
+	];
+	function setHelpTextBasedOnTime() {
+		const date = new Date();
+		const minute = date.getMinutes();
+		const index = minute % tips.length;
+		const helpText = tips[index];
+		setHelpText(helpText);
+	}
 	useEffect(() => {
 		if (rdLoading || adLoading || grouping) return;
 		setFiltering(true);
@@ -208,16 +231,7 @@ function TorrentsPage() {
 			selectPlayableFiles(userTorrentsList);
 			// deleteFailedTorrents(userTorrentsList); // disabled because this is BAD!
 			setFiltering(false);
-			setHelpText(
-				[
-					'Tip: You can use hash lists to share you library with others anonymously. Click on the button, wait for the page to finish processing, and share the link to your friends.',
-					'Tip: You can make a local backup of your library by using the "Local backup" button. This will generate a file containing your whole library that you can use to restore your library later.',
-					'Tip: You can restore a local backup by using the "Local restore" button. It will only restore the torrents that are not already in your library.',
-					'Tip: The quick search box will filter the list by filename and id. You can use multiple words or even regex to filter your library. This way, you can select multiple torrents and delete them at once, or share them as a hash list.',
-					'Have you tried clicking on a torrent? You can see the links, the progress, and the status of the torrent. You can also select the files you want to download.',
-					'I don\'t know what to put here, so here\'s a random tip: "The average person walks the equivalent of five times around the world in a lifetime."',
-				][Math.floor(Math.random() * 6)]
-			);
+			setHelpTextBasedOnTime();
 			return;
 		}
 		const { filter: titleFilter, mediaType, status } = router.query;
