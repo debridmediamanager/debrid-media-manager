@@ -489,7 +489,7 @@ function TorrentsPage() {
 			if (rdKey && t.id.startsWith('rd:')) {
 				await handleReinsertTorrent(rdKey, t.id, userTorrentsList);
 				torrentDB.deleteById(t.id);
-				fetchLatestRDTorrents(1);
+				fetchLatestRDTorrents(2);
 			}
 			if (adKey && t.id.startsWith('ad:')) {
 				await handleRestartTorrent(adKey, t.id);
@@ -635,7 +635,7 @@ function TorrentsPage() {
 			inputValidator: (value) => !value && 'You need to put something!',
 		});
 		if (rdKey && hash && debridService === 'rd') {
-			handleAddAsMagnetInRd(rdKey, hash, async () => await fetchLatestRDTorrents(1));
+			handleAddAsMagnetInRd(rdKey, hash, async () => await fetchLatestRDTorrents(2));
 		}
 		if (adKey && hash && debridService === 'ad') {
 			handleAddAsMagnetInAd(adKey, hash, async () => await fetchLatestADTorrents());
