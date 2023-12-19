@@ -12,7 +12,7 @@ const ONE_GIGABYTE = 1024 * 1024 * 1024;
 
 export const fetchRealDebrid = async (
 	rdKey: string,
-	callback: (torrents: UserTorrent[]) => void,
+	callback: (torrents: UserTorrent[]) => Promise<void>,
 	customLimit?: number
 ) => {
 	try {
@@ -35,10 +35,10 @@ export const fetchRealDebrid = async (
 					speed: torrent.speed || 0,
 				};
 			}) as UserTorrent[]; // Cast the result to UserTorrent[] to ensure type correctness
-			callback(torrents);
+			await callback(torrents);
 		}
 	} catch (error) {
-		callback([]);
+		await callback([]);
 		toast.error('Error fetching Real-Debrid torrents list', genericToastOptions);
 		console.error(error);
 	}
@@ -46,7 +46,7 @@ export const fetchRealDebrid = async (
 
 export const fetchAllDebrid = async (
 	adKey: string,
-	callback: (torrents: UserTorrent[]) => void
+	callback: (torrents: UserTorrent[]) => Promise<void>
 ) => {
 	try {
 		const torrents = (await getMagnetStatus(adKey)).data.magnets.map((torrent) => {
@@ -84,9 +84,9 @@ export const fetchAllDebrid = async (
 				links: torrent.links.map((l) => l.link),
 			};
 		}) as UserTorrent[];
-		callback(torrents);
+		await callback(torrents);
 	} catch (error) {
-		callback([]);
+		await callback([]);
 		toast.error('Error fetching AllDebrid torrents list', genericToastOptions);
 		console.error(error);
 	}

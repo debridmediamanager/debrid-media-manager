@@ -111,13 +111,13 @@ function TorrentsPage() {
 		}
 		fetchRealDebrid(
 			rdKey,
-			(torrents: UserTorrent[]) => {
+			async (torrents: UserTorrent[]) => {
 				setUserTorrentsList((prev) => {
 					const existingIds = new Set(prev.map((torrent) => torrent.id));
 					const newTorrents = torrents.filter((torrent) => !existingIds.has(torrent.id));
 					return [...prev, ...newTorrents];
 				});
-				torrentDB.addAll(torrents);
+				await torrentDB.addAll(torrents);
 				setRdLoading(false);
 			},
 			customLimit
@@ -129,21 +129,21 @@ function TorrentsPage() {
 			setAdLoading(false);
 			return;
 		}
-		fetchAllDebrid(adKey, (torrents: UserTorrent[]) => {
+		fetchAllDebrid(adKey, async (torrents: UserTorrent[]) => {
 			setUserTorrentsList((prev) => {
 				const existingIds = new Set(prev.map((torrent) => torrent.id));
 				const newTorrents = torrents.filter((torrent) => !existingIds.has(torrent.id));
 				return [...prev, ...newTorrents];
 			});
-			torrentDB.addAll(torrents);
+			await torrentDB.addAll(torrents);
 			setAdLoading(false);
 		});
 	};
 
 	// fetch list from api
 	useEffect(() => {
-		if (rdKey) fetchLatestRDTorrents();
-		if (adKey) fetchLatestADTorrents();
+		fetchLatestRDTorrents();
+		fetchLatestADTorrents();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdKey, adKey]);
 
@@ -310,7 +310,8 @@ function TorrentsPage() {
 
 	function wrapSelectFilesFn(t: UserTorrent) {
 		return async () => {
-			await handleSelectFilesInRd(rdKey!, t.id.substring(3));
+			await handleSelectFilesInRd(rdKey!, t.id);
+			t.status = 'downloading';
 		};
 	}
 
