@@ -1,20 +1,39 @@
 import { UserTorrent } from '@/torrent/userTorrent';
 import { IDBPDatabase, openDB } from 'idb';
 
+function currentISOWeekNumber(): number {
+	const target = new Date();
+	const dayNumber = (target.getUTCDay() + 6) % 7;
+	target.setUTCDate(target.getUTCDate() - dayNumber + 3);
+	const firstThursday = target.getTime(); // Convert to numeric value
+	target.setUTCMonth(0, 1);
+	if (target.getUTCDay() !== 4) {
+		target.setUTCMonth(0, 1 + ((4 - target.getUTCDay() + 7) % 7));
+	}
+	return 1 + Math.ceil((firstThursday - target.getTime()) / (7 * 24 * 3600 * 1000)); // Use getTime for arithmetic
+}
+
+function createObjectStore(db: IDBPDatabase, storeName: string) {
+	const store = db.createObjectStore(storeName, { keyPath: 'id' });
+	store.createIndex('hash', 'hash', { unique: false });
+}
+
+const storeBase = 'torrents';
+const backupToWeek = 2;
+
 class UserTorrentDB {
 	private db: IDBPDatabase | null = null;
 	private dbName = 'DMMDB';
-	private storeName = 'torrents';
-
-	constructor() {}
+	private storeName = `${storeBase}-${currentISOWeekNumber() % backupToWeek}`;
 
 	public async initializeDB() {
 		const storeName = this.storeName;
 		this.db = await openDB(this.dbName, 1, {
 			upgrade(db) {
 				if (!db.objectStoreNames.contains(storeName)) {
-					const store = db.createObjectStore(storeName, { keyPath: 'id' });
-					store.createIndex('hash', 'hash', { unique: false });
+					for (let i = 0; i < backupToWeek; i++) {
+						createObjectStore(db, `${storeBase}-${i}`);
+					}
 				}
 			},
 		});
