@@ -1,4 +1,4 @@
-import { UserTorrent } from '@/types/userTorrent';
+import { UserTorrent } from '@/torrent/userTorrent';
 import toast from 'react-hot-toast';
 import { AsyncFunction, runConcurrentFunctions } from './batch';
 import { magnetToastOptions } from './toastOptions';

@@ -1,6 +1,6 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { useDownloadsCache } from '@/hooks/cache';
-import { UserTorrent, getKeyByStatus, uniqId } from '@/types/userTorrent';
+import UserTorrentDB from '@/torrent/db';
+import { UserTorrent, keyByStatus, uniqId } from '@/torrent/userTorrent';
 import {
 	handleAddAsMagnetInAd,
 	handleAddAsMagnetInRd,
@@ -46,6 +46,8 @@ interface SortBy {
 	direction: 'asc' | 'desc';
 }
 
+const torrentDB = new UserTorrentDB();
+
 function TorrentsPage() {
 	const router = useRouter();
 	const [query, setQuery] = useState('');
@@ -79,10 +81,6 @@ function TorrentsPage() {
 	// stats
 	const [totalBytes, setTotalBytes] = useState<number>(0);
 
-	// cache
-	const [_1, rdUtils, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
-	const [_2, adUtils, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
-
 	const handlePrevPage = useCallback(() => {
 		if (router.query.page === '1') return;
 		router.push({
@@ -104,7 +102,7 @@ function TorrentsPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router]);
 
-	const fillTableWithRDLibrary = async function (customLimit?: number) {
+	const fetchLatestRDTorrents = async function (customLimit?: number) {
 		if (!rdKey) {
 			setRdLoading(false);
 			return;
@@ -117,21 +115,14 @@ function TorrentsPage() {
 					const newTorrents = torrents.filter((torrent) => !existingIds.has(torrent.id));
 					return [...prev, ...newTorrents];
 				});
-				rdCacheAdder.many(
-					torrents.map((t) => ({
-						id: t.id,
-						hash: t.hash,
-						status: t.status === 'downloaded' ? 'downloaded' : 'downloading',
-						progress: t.progress,
-					}))
-				);
+				torrentDB.addAll(torrents);
 				setRdLoading(false);
 			},
 			customLimit
 		);
 	};
 
-	const fillTableWithADLibrary = async function () {
+	const fetchLatestADTorrents = async function () {
 		if (!adKey) {
 			setAdLoading(false);
 			return;
@@ -142,28 +133,17 @@ function TorrentsPage() {
 				const newTorrents = torrents.filter((torrent) => !existingIds.has(torrent.id));
 				return [...prev, ...newTorrents];
 			});
-			adCacheAdder.many(
-				torrents.map((t) => ({
-					id: t.id,
-					hash: t.hash,
-					status: t.status === 'downloaded' ? 'downloaded' : 'downloading',
-					progress: t.progress,
-				}))
-			);
+			torrentDB.addAll(torrents);
 			setAdLoading(false);
 		});
 	};
 
 	// fetch list from api
 	useEffect(() => {
-		fillTableWithRDLibrary();
+		if (rdKey) fetchLatestRDTorrents();
+		if (adKey) fetchLatestADTorrents();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey]);
-
-	useEffect(() => {
-		fillTableWithADLibrary();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [adKey]);
+	}, [rdKey, adKey]);
 
 	// aggregate metadata
 	useEffect(() => {
@@ -327,7 +307,9 @@ function TorrentsPage() {
 	}
 
 	function wrapSelectFilesFn(t: UserTorrent) {
-		return async () => await handleSelectFilesInRd(rdKey!, t.id, removeFromRdCache);
+		return async () => {
+			await handleSelectFilesInRd(rdKey!, t.id.substring(3));
+		};
 	}
 
 	async function selectPlayableFiles(torrents: UserTorrent[]) {
@@ -369,10 +351,12 @@ function TorrentsPage() {
 	function wrapDeleteFn(t: UserTorrent) {
 		return async () => {
 			if (rdKey && t.id.startsWith('rd:')) {
-				await handleDeleteRdTorrent(rdKey, t.id, removeFromRdCache);
+				await handleDeleteRdTorrent(rdKey, t.id);
+				torrentDB.deleteById(t.id);
 			}
 			if (adKey && t.id.startsWith('ad:')) {
-				await handleDeleteAdTorrent(adKey, t.id, removeFromAdCache);
+				await handleDeleteAdTorrent(adKey, t.id);
+				torrentDB.deleteById(t.id);
 			}
 			setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== t.id));
 		};
@@ -400,7 +384,7 @@ function TorrentsPage() {
 		const deleteBigger = deletePreference.isDenied;
 
 		// Get the key by status
-		const getKey = getKeyByStatus(router.query.status as string);
+		const getKey = keyByStatus(router.query.status as string);
 		const dupes: UserTorrent[] = [];
 		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
 			let key = getKey(cur);
@@ -460,7 +444,7 @@ function TorrentsPage() {
 		const deleteOlder = deletePreference.isConfirmed;
 
 		// Get the key by status
-		const getKey = getKeyByStatus(router.query.status as string);
+		const getKey = keyByStatus(router.query.status as string);
 		const dupes: UserTorrent[] = [];
 		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
 			let key = getKey(cur);
@@ -499,9 +483,16 @@ function TorrentsPage() {
 
 	function wrapReinsertFn(t: UserTorrent) {
 		return async () => {
-			if (rdKey && t.id.startsWith('rd:'))
-				await handleReinsertTorrent(rdKey, t.id, userTorrentsList, removeFromRdCache);
-			if (adKey && t.id.startsWith('ad:')) await handleRestartTorrent(adKey, t.id);
+			if (rdKey && t.id.startsWith('rd:')) {
+				await handleReinsertTorrent(rdKey, t.id, userTorrentsList);
+				torrentDB.deleteById(t.id);
+				fetchLatestRDTorrents(1);
+			}
+			if (adKey && t.id.startsWith('ad:')) {
+				await handleRestartTorrent(adKey, t.id);
+				torrentDB.deleteById(t.id);
+				fetchLatestADTorrents();
+			}
 		};
 	}
 
@@ -580,27 +571,9 @@ function TorrentsPage() {
 
 	async function wrapLocalRestoreFn(debridService: string) {
 		return await localRestore((files: any[]) => {
-			const utils = debridService === 'rd' ? rdUtils : adUtils;
 			const addMagnet = (hash: string) => {
-				if (rdKey && debridService === 'rd')
-					return handleAddAsMagnetInRd(
-						rdKey,
-						hash,
-						async (id: string) => {
-							await handleSelectFilesInRd(rdKey, `rd:${id}`, removeFromRdCache, true);
-							rdCacheAdder.single(`rd:${id}`, hash);
-						},
-						true
-					);
-				if (adKey && debridService === 'ad')
-					return handleAddAsMagnetInAd(
-						adKey,
-						hash,
-						async (id: string) => {
-							adCacheAdder.single(`ad:${id}`, hash);
-						},
-						true
-					);
+				if (rdKey && debridService === 'rd') return handleAddAsMagnetInRd(rdKey, hash);
+				if (adKey && debridService === 'ad') return handleAddAsMagnetInAd(adKey, hash);
 			};
 
 			function wrapAddMagnetFn(hash: string) {
@@ -612,9 +585,20 @@ function TorrentsPage() {
 					toast.loading(`DO NOT REFRESH THE PAGE`, libraryToastOptions);
 					const toAdd = files
 						.map((f) => f.hash)
-						.filter((h) => !utils.inLibrary(h))
+						.filter((h) => !torrentDB.inLibrary(h))
 						.map(wrapAddMagnetFn);
-					const [results, errors] = await runConcurrentFunctions(toAdd, 5, 500);
+					const concurrencyCount = 5;
+					const refreshTorrents = async (_: number) => {
+						if (debridService === 'rd')
+							await fetchLatestRDTorrents(concurrencyCount + 1);
+						if (debridService === 'ad') await fetchLatestADTorrents();
+						await new Promise((r) => setTimeout(r, 500));
+					};
+					const [results, errors] = await runConcurrentFunctions(
+						toAdd,
+						concurrencyCount,
+						refreshTorrents
+					);
 					resolve({ success: results.length, error: errors.length });
 				}
 			);
@@ -648,17 +632,10 @@ function TorrentsPage() {
 			inputValidator: (value) => !value && 'You need to put something!',
 		});
 		if (rdKey && hash && debridService === 'rd') {
-			handleAddAsMagnetInRd(rdKey, hash, async (id: string) => {
-				await handleSelectFilesInRd(rdKey, `rd:${id}`, removeFromRdCache, true);
-				await fillTableWithRDLibrary(10);
-				rdCacheAdder.single(`rd:${id}`, hash, false);
-			});
+			handleAddAsMagnetInRd(rdKey, hash, async () => await fetchLatestRDTorrents(1));
 		}
 		if (adKey && hash && debridService === 'ad') {
-			handleAddAsMagnetInAd(adKey, hash, async (id: string) => {
-				await fillTableWithADLibrary();
-				adCacheAdder.single(`ad:${id}`, hash, false);
-			});
+			handleAddAsMagnetInAd(adKey, hash, async () => await fetchLatestADTorrents());
 		}
 	}
 
@@ -1048,21 +1025,21 @@ function TorrentsPage() {
 												<button
 													title="Delete"
 													className="cursor-pointer mr-2 mb-2 text-red-500"
-													onClick={(e) => {
+													onClick={async (e) => {
 														e.stopPropagation(); // Prevent showInfo when clicking this button
 														if (rdKey && torrent.id.startsWith('rd:')) {
-															handleDeleteRdTorrent(
+															await handleDeleteRdTorrent(
 																rdKey,
-																torrent.id,
-																removeFromRdCache
+																torrent.id
 															);
+															torrentDB.deleteById(torrent.id);
 														}
 														if (adKey && torrent.id.startsWith('ad:')) {
-															handleDeleteAdTorrent(
+															await handleDeleteAdTorrent(
 																adKey,
-																torrent.id,
-																removeFromAdCache
+																torrent.id
 															);
+															torrentDB.deleteById(torrent.id);
 														}
 														setUserTorrentsList((prevList) =>
 															prevList.filter(
@@ -1077,14 +1054,13 @@ function TorrentsPage() {
 												<button
 													title="Reinsert"
 													className="cursor-pointer mr-2 mb-2 text-green-500"
-													onClick={(e) => {
+													onClick={async (e) => {
 														e.stopPropagation(); // Prevent showInfo when clicking this button
 														if (rdKey && torrent.id.startsWith('rd'))
-															handleReinsertTorrent(
+															await handleReinsertTorrent(
 																rdKey,
 																torrent.id,
-																userTorrentsList,
-																removeFromRdCache
+																userTorrentsList
 															);
 														if (adKey && torrent.id.startsWith('ad'))
 															handleRestartTorrent(adKey, torrent.id);

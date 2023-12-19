@@ -1,13 +1,8 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { useDownloadsCache } from '@/hooks/cache';
 import useLocalStorage from '@/hooks/localStorage';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
-import {
-	handleAddAsMagnetInAd,
-	handleAddAsMagnetInRd,
-	handleCopyMagnet,
-	handleSelectFilesInRd,
-} from '@/utils/addMagnet';
+import UserTorrentDB from '@/torrent/db';
+import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { searchToastOptions } from '@/utils/toastOptions';
@@ -31,6 +26,8 @@ type MovieSearchProps = {
 	imdb_score?: number;
 };
 
+const torrentDB = new UserTorrentDB();
+
 const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	title,
 	description,
@@ -44,8 +41,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const [errorMessage, setErrorMessage] = useState('');
 	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
-	const [rdCache, rd, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
-	const [adCache, ad, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
 	const [rdAutoInstantCheck, setRdAutoInstantCheck] = useLocalStorage<boolean>(
 		'rdAutoInstantCheck',
 		false
@@ -59,14 +54,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const router = useRouter();
 	const { imdbid } = router.query;
 
-	useEffect(() => {
-		if (imdbid) {
-			fetchData(imdbid as string);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [imdbid]);
-
-	const fetchData = async (imdbId: string) => {
+	async function fetchData(imdbId: string) {
 		setSearchResults([]);
 		setErrorMessage('');
 		try {
@@ -101,7 +89,27 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			console.error(error);
 			setErrorMessage('There was an error searching for the query. Please try again.');
 		}
-	};
+	}
+
+	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
+	async function fetchHashAndProgress() {
+		const torrents = await torrentDB.all();
+		const records: Record<string, number> = {};
+		for (const t of torrents) {
+			records[t.hash] = t.progress;
+		}
+		setHashAndProgress(records);
+	}
+	const isDownloading = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] < 100;
+	const isDownloaded = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] === 100;
+	const notInLibrary = (hash: string) => !(hash in hashAndProgress);
+
+	useEffect(() => {
+		if (!imdbid) return;
+		fetchData(imdbid as string);
+		fetchHashAndProgress();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [imdbid]);
 
 	return (
 		<div className="mx-4 my-8 max-w-full">
@@ -292,9 +300,9 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										key={i}
 										className={`
 ${
-	rd.isDownloaded(r.hash) || ad.isDownloaded(r.hash)
+	isDownloaded(r.hash)
 		? 'border-green-400 border-4'
-		: rd.isDownloading(r.hash) || ad.isDownloading(r.hash)
+		: isDownloading(r.hash)
 		? 'border-red-400 border-4'
 		: 'border-black border-2'
 }
@@ -316,25 +324,27 @@ rounded-lg overflow-hidden
 												>
 													<FaMagnet />
 												</button>
-												{rdKey &&
-													rd.isDownloading(r.hash) &&
-													rdCache![r.hash].id && (
-														<button
-															className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
-															onClick={() => {
-																const id = rdCache![r.hash].id;
-																handleDeleteRdTorrent(
-																	rdKey,
-																	id,
-																	removeFromRdCache
+												{rdKey && isDownloading(r.hash) && (
+													<button
+														className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
+														onClick={async () => {
+															const torrent =
+																await torrentDB.getLatestByHash(
+																	r.hash
 																);
-															}}
-														>
-															<FaTimes className="mr-2" />
-															RD ({rdCache![r.hash].progress}%)
-														</button>
-													)}
-												{rdKey && rd.notInLibrary(r.hash) && (
+															if (!torrent) return;
+															await handleDeleteRdTorrent(
+																rdKey,
+																torrent.id
+															);
+															torrentDB.deleteByHash(r.hash);
+														}}
+													>
+														<FaTimes className="mr-2" />
+														RD ({hashAndProgress[r.hash] + '%'})
+													</button>
+												)}
+												{rdKey && notInLibrary(r.hash) && (
 													<button
 														className={`flex items-center justify-center bg-${
 															r.rdAvailable
@@ -349,25 +359,9 @@ rounded-lg overflow-hidden
 																? 'gray'
 																: 'blue'
 														}-700 text-white py-2 px-4 rounded-full`}
-														onClick={() => {
-															handleAddAsMagnetInRd(
-																rdKey,
-																r.hash,
-																async (id: string) => {
-																	await handleSelectFilesInRd(
-																		rdKey,
-																		`rd:${id}`,
-																		removeFromRdCache,
-																		true
-																	);
-																	rdCacheAdder.single(
-																		`rd:${id}`,
-																		r.hash,
-																		r.rdAvailable
-																	);
-																}
-															);
-														}}
+														onClick={() =>
+															handleAddAsMagnetInRd(rdKey, r.hash)
+														}
 													>
 														{r.rdAvailable ? (
 															<>
@@ -382,25 +376,27 @@ rounded-lg overflow-hidden
 														)}
 													</button>
 												)}
-												{adKey &&
-													ad.isDownloading(r.hash) &&
-													adCache![r.hash].id && (
-														<button
-															className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
-															onClick={() => {
-																const id = adCache![r.hash].id;
-																handleDeleteAdTorrent(
-																	adKey,
-																	id,
-																	removeFromAdCache
+												{adKey && isDownloading(r.hash) && (
+													<button
+														className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
+														onClick={async () => {
+															const torrent =
+																await torrentDB.getLatestByHash(
+																	r.hash
 																);
-															}}
-														>
-															<FaTimes className="mr-2" />
-															AD ({adCache![r.hash].progress}%)
-														</button>
-													)}
-												{adKey && ad.notInLibrary(r.hash) && (
+															if (!torrent) return;
+															await handleDeleteAdTorrent(
+																adKey,
+																torrent.id
+															);
+															torrentDB.deleteByHash(r.hash);
+														}}
+													>
+														<FaTimes className="mr-2" />
+														AD ({hashAndProgress[r.hash] + '%'})
+													</button>
+												)}
+												{adKey && notInLibrary(r.hash) && (
 													<button
 														className={`flex items-center justify-center bg-${
 															r.adAvailable
@@ -415,19 +411,9 @@ rounded-lg overflow-hidden
 																? 'gray'
 																: 'blue'
 														}-700 text-white py-2 px-4 rounded-full`}
-														onClick={() => {
-															handleAddAsMagnetInAd(
-																adKey,
-																r.hash,
-																async (id: string) => {
-																	adCacheAdder.single(
-																		`ad:${id}`,
-																		r.hash,
-																		r.adAvailable
-																	);
-																}
-															);
-														}}
+														onClick={() =>
+															handleAddAsMagnetInAd(adKey, r.hash)
+														}
 													>
 														{r.adAvailable ? (
 															<>

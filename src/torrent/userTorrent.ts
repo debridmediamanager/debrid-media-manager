@@ -19,7 +19,7 @@ export interface UserTorrent {
 
 export const uniqId = (torrent: UserTorrent): string => `${torrent.hash}|${torrent.links.join()}`;
 
-export const getKeyByStatus = (status: string) => {
+export const keyByStatus = (status: string) => {
 	if (status === 'sametitle') return (torrent: UserTorrent) => torrent.info.title;
 	return (torrent: UserTorrent) => torrent.hash;
 };

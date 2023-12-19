@@ -1,6 +1,6 @@
 import { getMagnetStatus } from '@/services/allDebrid';
 import { getUserTorrentsList } from '@/services/realDebrid';
-import { UserTorrent } from '@/types/userTorrent';
+import { UserTorrent } from '@/torrent/userTorrent';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import toast from 'react-hot-toast';
 import { getMediaId } from './mediaId';
