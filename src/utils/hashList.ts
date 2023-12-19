@@ -1,5 +1,5 @@
 import { createShortUrl } from '@/services/hashlists';
-import { UserTorrent } from '@/types/userTorrent';
+import { UserTorrent } from '@/torrent/userTorrent';
 import lzString from 'lz-string';
 import toast from 'react-hot-toast';
 import { libraryToastOptions } from './toastOptions';

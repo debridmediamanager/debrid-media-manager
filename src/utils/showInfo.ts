@@ -1,5 +1,5 @@
 import { getTorrentInfo } from '@/services/realDebrid';
-import { UserTorrent } from '@/types/userTorrent';
+import { UserTorrent } from '@/torrent/userTorrent';
 import Swal from 'sweetalert2';
 
 export const showInfo = async (rdKey: string, torrent: UserTorrent) => {

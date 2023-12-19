@@ -1,12 +1,8 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { useDownloadsCache } from '@/hooks/cache';
 import { AdInstantAvailabilityResponse, MagnetFile, adInstantCheck } from '@/services/allDebrid';
 import { RdInstantAvailabilityResponse, rdInstantCheck } from '@/services/realDebrid';
-import {
-	handleAddAsMagnetInAd,
-	handleAddAsMagnetInRd,
-	handleSelectFilesInRd,
-} from '@/utils/addMagnet';
+import UserTorrentDB from '@/torrent/db';
+import { handleAddAsMagnetInAd, handleAddAsMagnetInRd } from '@/utils/addMagnet';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { groupBy } from '@/utils/groupBy';
@@ -82,7 +78,7 @@ const instantCheckInRd = async (
 	return instantCount;
 };
 
-export const instantCheckInAd = async (
+const instantCheckInAd = async (
 	adKey: string,
 	hashes: string[],
 	setSearchResults: Dispatch<SetStateAction<UserTorrent[]>>
@@ -126,6 +122,8 @@ export const instantCheckInAd = async (
 	return instantCount;
 };
 
+const torrentDB = new UserTorrentDB();
+
 function HashlistPage() {
 	const router = useRouter();
 	const [query, setQuery] = useState('');
@@ -147,52 +145,65 @@ function HashlistPage() {
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
 	const [hasDupes] = useState<Array<string>>([]);
 	const [totalBytes, setTotalBytes] = useState<number>(0);
-	const [rdCache, rd, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
-	const [adCache, ad, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
 
-	const getUserTorrentsList = async (): Promise<TorrentHash[]> => {
+	// fetch list from api
+	async function getUserTorrentsList(): Promise<TorrentHash[]> {
 		const hash = window.location.hash;
 		if (!hash) return [];
 		const jsonString = lzString.decompressFromEncodedURIComponent(hash.substring(1));
 		return JSON.parse(jsonString) as TorrentHash[];
-	};
+	}
+	async function fetchUserTorrentsList() {
+		try {
+			const torrents = (await getUserTorrentsList()).map((torrent) => {
+				const mediaType = getTypeByName(torrent.filename);
+				const info =
+					mediaType === 'movie'
+						? filenameParse(torrent.filename)
+						: filenameParse(torrent.filename, true);
+				return {
+					score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
+					info,
+					mediaType,
+					title: getMediaId(info, mediaType, false) || torrent.filename,
+					...torrent,
+				};
+			}) as UserTorrent[];
 
-	// fetch list from api
+			setUserTorrentsList(torrents);
+
+			if (!torrents.length) return;
+			// const hashArr = torrents.map((r) => r.hash);
+			// if (rdKey) wrapLoading('RD', instantCheckInRd(rdKey, hashArr, setUserTorrentsList));
+			// if (adKey) wrapLoading('AD', instantCheckInAd(adKey, hashArr, setUserTorrentsList));
+		} catch (error) {
+			alert(error);
+			setUserTorrentsList([]);
+			toast.error('Error fetching user torrents list');
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
+	async function fetchHashAndProgress() {
+		const torrents = await torrentDB.all();
+		const records: Record<string, number> = {};
+		for (const t of torrents) {
+			records[t.hash] = t.progress;
+		}
+		setHashAndProgress(records);
+	}
+	const isDownloading = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] < 100;
+	const isDownloaded = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] === 100;
+	const inLibrary = (hash: string) => hash in hashAndProgress;
+	const notInLibrary = (hash: string) => !(hash in hashAndProgress);
 	useEffect(() => {
-		const fetchUserTorrentsList = async () => {
-			try {
-				const torrents = (await getUserTorrentsList()).map((torrent) => {
-					const mediaType = getTypeByName(torrent.filename);
-					const info =
-						mediaType === 'movie'
-							? filenameParse(torrent.filename)
-							: filenameParse(torrent.filename, true);
-					return {
-						score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
-						info,
-						mediaType,
-						title: getMediaId(info, mediaType, false) || torrent.filename,
-						...torrent,
-					};
-				}) as UserTorrent[];
-
-				setUserTorrentsList(torrents);
-
-				if (!torrents.length) return;
-				// const hashArr = torrents.map((r) => r.hash);
-				// if (rdKey) wrapLoading('RD', instantCheckInRd(rdKey, hashArr, setUserTorrentsList));
-				// if (adKey) wrapLoading('AD', instantCheckInAd(adKey, hashArr, setUserTorrentsList));
-			} catch (error) {
-				alert(error);
-				setUserTorrentsList([]);
-				toast.error('Error fetching user torrents list');
-			} finally {
-				setLoading(false);
-			}
-		};
-		if (userTorrentsList.length === 0) fetchUserTorrentsList();
+		if (userTorrentsList.length !== 0) return;
+		fetchUserTorrentsList();
+		fetchHashAndProgress();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey]);
+	}, [rdKey, adKey]);
 
 	// aggregate metadata
 	useEffect(() => {
@@ -229,9 +240,15 @@ function HashlistPage() {
 	}, [userTorrentsList]);
 
 	// set the list you see
-	useEffect(() => {
+	async function filterOutAlreadyDownloaded(unfiltered: UserTorrent[]) {
+		if (unfiltered.length <= 1) return unfiltered;
+		const hashes = await torrentDB.hashes();
+		return unfiltered.filter((t) => !hashes.has(t.hash));
+	}
+
+	async function filterList() {
 		setFiltering(true);
-		const notYetDownloaded = filterOutAlreadyDownloaded(userTorrentsList);
+		const notYetDownloaded = await filterOutAlreadyDownloaded(userTorrentsList);
 		if (Object.keys(router.query).length === 0) {
 			setFilteredList(applyQuickSearch(notYetDownloaded));
 			setFiltering(false);
@@ -249,6 +266,9 @@ function HashlistPage() {
 			setFilteredList(applyQuickSearch(tmpList));
 		}
 		setFiltering(false);
+	}
+	useEffect(() => {
+		filterList();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query, userTorrentsList, movieGrouping, tvGroupingByEpisode, router.query]);
 
@@ -257,17 +277,6 @@ function HashlistPage() {
 			column,
 			direction: sortBy.column === column && sortBy.direction === 'asc' ? 'desc' : 'asc',
 		});
-	}
-
-	function filterOutAlreadyDownloaded(unfiltered: UserTorrent[]) {
-		if (unfiltered.length <= 1) return unfiltered;
-		return unfiltered.filter(
-			(t) =>
-				!rd.isDownloaded(t.hash) &&
-				!ad.isDownloaded(t.hash) &&
-				!rd.isDownloading(t.hash) &&
-				!ad.isDownloading(t.hash)
-		);
 	}
 
 	function applyQuickSearch(unfiltered: UserTorrent[]) {
@@ -311,35 +320,13 @@ function HashlistPage() {
 	}
 
 	function wrapDownloadFilesInRdFn(t: UserTorrent) {
-		return async () =>
-			await handleAddAsMagnetInRd(
-				rdKey!,
-				t.hash,
-				async (id: string) => {
-					await handleSelectFilesInRd(rdKey!, `rd:${id}`, removeFromRdCache, true);
-					rdCacheAdder.single(`rd:${id}`, t.hash);
-				},
-				true
-			);
+		return async () => await handleAddAsMagnetInRd(rdKey!, t.hash);
 	}
-
-	function wrapDownloadFilesInAdFn(t: UserTorrent) {
-		return async () =>
-			await handleAddAsMagnetInAd(
-				adKey!,
-				t.hash,
-				async (id: string) => {
-					adCacheAdder.single(`ad:${id}`, t.hash);
-				},
-				true
-			);
-	}
-
 	async function downloadNonDupeTorrentsInRd() {
 		if (!rdKey) throw new Error('no_rd_key');
-		const libraryHashes = Object.keys(rdCache!);
+		const libraryHashes = await torrentDB.hashes();
 		const yetToDownload = filteredList
-			.filter((t) => !libraryHashes.includes(t.hash))
+			.filter((t) => !libraryHashes.has(t.hash))
 			.map(wrapDownloadFilesInRdFn);
 		const [results, errors] = await runConcurrentFunctions(yetToDownload, 5, 500);
 		if (errors.length) {
@@ -353,11 +340,14 @@ function HashlistPage() {
 		}
 	}
 
+	function wrapDownloadFilesInAdFn(t: UserTorrent) {
+		return async () => await handleAddAsMagnetInAd(adKey!, t.hash);
+	}
 	async function downloadNonDupeTorrentsInAd() {
 		if (!adKey) throw new Error('no_ad_key');
-		const libraryHashes = Object.keys(adCache!);
+		const libraryHashes = await torrentDB.hashes();
 		const yetToDownload = filteredList
-			.filter((t) => !libraryHashes.includes(t.hash))
+			.filter((t) => !libraryHashes.has(t.hash))
 			.map(wrapDownloadFilesInAdFn);
 		const [results, errors] = await runConcurrentFunctions(yetToDownload, 5, 500);
 		if (errors.length) {
@@ -497,13 +487,7 @@ function HashlistPage() {
 										className={`
 									hover:bg-purple-900
 									border-t-2
-									${
-										rd.isDownloaded(t.hash) || ad.isDownloaded(t.hash)
-											? 'bg-green-900'
-											: rd.isDownloading(t.hash) || ad.isDownloading(t.hash)
-											? 'bg-red-900'
-											: ''
-									}
+									${isDownloaded(t.hash) ? 'bg-green-900' : isDownloading(t.hash) ? 'bg-red-900' : ''}
 								`}
 									>
 										<td className="border px-4 py-2">
@@ -548,84 +532,60 @@ function HashlistPage() {
 											{(t.bytes / ONE_GIGABYTE).toFixed(1)} GB
 										</td>
 										<td className="border px-4 py-2">
-											{rdKey &&
-												rd.isDownloading(t.hash) &&
-												rdCache![t.hash].id && (
-													<button
-														className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-														onClick={() => {
-															const id = rdCache![t.hash].id;
-															handleDeleteRdTorrent(
-																rdKey,
-																id,
-																removeFromRdCache
-															);
-														}}
-													>
-														<FaTimes />
-														RD ({rdCache![t.hash].progress}%)
-													</button>
-												)}
-											{rdKey && rd.notInLibrary(t.hash) && (
+											{rdKey && inLibrary(t.hash) && (
+												<button
+													className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+													onClick={async () => {
+														const torrent =
+															await torrentDB.getLatestByHash(t.hash);
+														if (!torrent) return;
+														await handleDeleteRdTorrent(
+															rdKey,
+															torrent.id
+														);
+														torrentDB.deleteByHash(t.hash);
+													}}
+												>
+													<FaTimes />
+													RD ({hashAndProgress[t.hash] + '%'})
+												</button>
+											)}
+											{rdKey && notInLibrary(t.hash) && (
 												<button
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-													onClick={() => {
-														handleAddAsMagnetInRd(
-															rdKey,
-															t.hash,
-															async (id: string) => {
-																await handleSelectFilesInRd(
-																	rdKey,
-																	`rd:${id}`,
-																	removeFromRdCache,
-																	true
-																);
-																rdCacheAdder.single(
-																	`rd:${id}`,
-																	t.hash
-																);
-															}
-														);
-													}}
+													onClick={() =>
+														handleAddAsMagnetInRd(rdKey, t.hash)
+													}
 												>
 													<FaDownload />
 													RD
 												</button>
 											)}
 
-											{adKey &&
-												ad.isDownloading(t.hash) &&
-												adCache![t.hash].id && (
-													<button
-														className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-														onClick={() => {
-															const id = adCache![t.hash].id;
-															handleDeleteAdTorrent(
-																adKey,
-																id,
-																removeFromAdCache
-															);
-														}}
-													>
-														<FaTimes />
-														AD ({adCache![t.hash].progress}%)
-													</button>
-												)}
-											{adKey && rd.notInLibrary(t.hash) && (
+											{adKey && isDownloading(t.hash) && (
+												<button
+													className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+													onClick={async () => {
+														const torrent =
+															await torrentDB.getLatestByHash(t.hash);
+														if (!torrent) return;
+														await handleDeleteAdTorrent(
+															adKey,
+															torrent.id
+														);
+														torrentDB.deleteByHash(t.hash);
+													}}
+												>
+													<FaTimes />
+													AD ({hashAndProgress[t.hash] + '%'})
+												</button>
+											)}
+											{adKey && notInLibrary(t.hash) && (
 												<button
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-													onClick={() => {
-														handleAddAsMagnetInAd(
-															adKey,
-															t.hash,
-															async (id: string) => {
-																adCacheAdder.single(
-																	`ad:${id}`,
-																	t.hash
-																);
-															}
-														);
-													}}
+													onClick={() =>
+														handleAddAsMagnetInAd(adKey, t.hash)
+													}
 												>
 													<FaDownload />
 													AD

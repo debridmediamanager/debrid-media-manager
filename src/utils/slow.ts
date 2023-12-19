@@ -1,4 +1,4 @@
-import { UserTorrent } from '@/types/userTorrent';
+import { UserTorrent } from '@/torrent/userTorrent';
 
 export function isSlowOrNoLinks(t: UserTorrent) {
 	const oldTorrentAge = 3600000; // 1 hour in milliseconds

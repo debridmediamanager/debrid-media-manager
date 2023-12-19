@@ -1,4 +1,4 @@
-import { UserTorrent } from '@/types/userTorrent';
+import { UserTorrent } from '@/torrent/userTorrent';
 
 // given a list, filter by query and paginate
 export function applyQuickSearch(query: string, unfiltered: UserTorrent[]) {
