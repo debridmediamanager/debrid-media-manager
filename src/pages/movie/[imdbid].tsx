@@ -102,7 +102,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			if (hash && t.hash !== hash) continue;
 			records[t.hash] = t.progress;
 		}
-		setHashAndProgress(records);
+		setHashAndProgress((prev) => ({ ...prev, ...records }));
 	}
 	const isDownloading = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] < 100;
 	const isDownloaded = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] === 100;
@@ -145,7 +145,11 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		if (!torrent) return;
 		await handleDeleteRdTorrent(rdKey!, torrent.id);
 		await torrentDB.deleteByHash(hash);
-		await fetchHashAndProgress();
+		setHashAndProgress((prev) => {
+			const newHashAndProgress = { ...prev };
+			delete newHashAndProgress[hash];
+			return newHashAndProgress;
+		});
 	}
 
 	async function deleteAd(hash: string) {
@@ -153,7 +157,11 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		if (!torrent) return;
 		await handleDeleteAdTorrent(adKey!, torrent.id);
 		await torrentDB.deleteByHash(hash);
-		await fetchHashAndProgress();
+		setHashAndProgress((prev) => {
+			const newHashAndProgress = { ...prev };
+			delete newHashAndProgress[hash];
+			return newHashAndProgress;
+		});
 	}
 
 	return (
