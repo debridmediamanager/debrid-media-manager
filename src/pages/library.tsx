@@ -22,6 +22,7 @@ import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { saveAs } from 'file-saver';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -96,6 +97,7 @@ function TorrentsPage() {
 
 	// pagination query params
 	useEffect(() => {
+		torrentDB.initializeDB();
 		const { page } = router.query;
 		if (!page || Array.isArray(page)) return;
 		setCurrentPage(parseInt(page, 10));
@@ -1091,4 +1093,6 @@ function TorrentsPage() {
 	);
 }
 
-export default withAuth(TorrentsPage);
+const TorrentsPageWithAuth = dynamic(() => Promise.resolve(withAuth(TorrentsPage)), { ssr: false });
+
+export default TorrentsPageWithAuth;
