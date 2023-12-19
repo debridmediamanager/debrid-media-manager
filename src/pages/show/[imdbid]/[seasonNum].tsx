@@ -111,7 +111,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			if (hash && t.hash !== hash) continue;
 			records[t.hash] = t.progress;
 		}
-		setHashAndProgress((prev) => ({ ...prev, ...records }));
+		setHashAndProgress(records);
 	}
 	const isDownloading = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] < 100;
 	const isDownloaded = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] === 100;
