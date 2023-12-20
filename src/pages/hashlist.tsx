@@ -429,7 +429,7 @@ function HashlistPage() {
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-3xl font-bold">
+				<h1 className="text-xl font-bold">
 					Share this page ({userTorrentsList.length} files in total; size:{' '}
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>

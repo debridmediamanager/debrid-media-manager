@@ -102,7 +102,7 @@ function IndexPage() {
 
 						<hr className="w-full mb-4 w-screen" />
 
-						<div className="flex flex-row mb-4 w-screen md:justify-center overflow-x-auto">
+						<div className="flex flex-row mb-4 w-screen min-[600px]:justify-center overflow-x-auto">
 							<Link
 								href="/library"
 								className="text-sm mx-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
@@ -185,7 +185,7 @@ function IndexPage() {
 								</a>
 							</b>{' '}
 							with{' '}
-							<span className="bg-green-100 text-green-800 px-1">
+							<span className="bg-green-100 text-green-800 px-1 whitespace-nowrap">
 								<b>DMM browser extensions</b>
 							</span>{' '}
 							for{' '}

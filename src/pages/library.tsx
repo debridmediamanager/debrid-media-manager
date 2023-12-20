@@ -667,7 +667,7 @@ function TorrentsPage() {
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-2">
-				<h1 className="text-3xl font-bold">
+				<h1 className="text-xl font-bold">
 					Library 📚 {userTorrentsList.length} torrents{' '}
 					{totalBytes / ONE_GIGABYTE / 1024 > 10000
 						? '😱' // Fear for more than 10 PB
