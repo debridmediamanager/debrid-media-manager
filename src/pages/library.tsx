@@ -866,6 +866,7 @@ function TorrentsPage() {
 					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
 					onClick={() => {
 						setQuery('');
+						setSortBy({ column: 'added', direction: 'desc' });
 						router.push(`/library?page=1`);
 					}}
 				>
@@ -880,11 +881,11 @@ function TorrentsPage() {
 						<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
 					</div>
 				) : (
-					<table className="w-full table-auto">
+					<table className="w-full table-fixed">
 						<thead>
-							<tr>
+							<tr className="whitespace-nowrap text-xs">
 								<th
-									className="text-xs px-4 py-2 cursor-pointer"
+									className="min-w-24 max-w-24 w-24 px-1 py-0 cursor-pointer"
 									onClick={() => handleSort('id')}
 								>
 									ID{` (${sortedData().length}) `}
@@ -892,7 +893,7 @@ function TorrentsPage() {
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
 								<th
-									className="text-xs px-4 py-2 cursor-pointer"
+									className="min-w-96 w-[500px] max-w-[500px] w-96 px-1 py-0 cursor-pointer"
 									onClick={() => handleSort('title')}
 								>
 									Title{' '}
@@ -900,7 +901,7 @@ function TorrentsPage() {
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
 								<th
-									className="text-xs px-4 py-2 cursor-pointer"
+									className="min-w-20 max-w-20 w-20 px-1 py-0 cursor-pointer"
 									onClick={() => handleSort('bytes')}
 								>
 									Size{' '}
@@ -908,7 +909,7 @@ function TorrentsPage() {
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
 								<th
-									className="text-xs px-4 py-2 cursor-pointer"
+									className="min-w-20 max-w-20 w-20 px-1 py-0 cursor-pointer"
 									onClick={() => handleSort('progress')}
 								>
 									Status{' '}
@@ -916,14 +917,14 @@ function TorrentsPage() {
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
 								<th
-									className="text-xs px-4 py-2 cursor-pointer"
+									className="min-w-24 max-w-28 w-24 px-1 py-0 cursor-pointer"
 									onClick={() => handleSort('added')}
 								>
 									Added{' '}
 									{sortBy.column === 'added' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
-								<th className="text-xs px-4 py-2">Actions</th>
+								<th className="min-w-24 max-w-28 w-24 px-1 py-0">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -943,18 +944,18 @@ function TorrentsPage() {
 									return (
 										<tr
 											key={i}
-											className="border-t-2 hover:bg-purple-900"
+											className="align-middle hover:bg-purple-900"
 											onClick={() =>
 												rdKey && torrent.id.startsWith('rd:')
-													? showInfo(rdKey, torrent)
+													? showInfo('infuse', rdKey, torrent)
 													: null
 											} // Add the onClick event here
 											title="Click for more info"
 										>
-											<td className="border px-2 py-1 text-sm max-w-0 overflow-hidden">
+											<td className="px-1 py-1 text-sm truncate">
 												{torrent.id}
 											</td>
-											<td className="border px-2 py-1 text-sm">
+											<td className="px-1 py-1 text-sm truncate">
 												{!['Invalid Magnet', 'Magnet'].includes(
 													torrent.filename
 												) && (
@@ -996,13 +997,10 @@ function TorrentsPage() {
 												{torrent.filename}
 											</td>
 
-											<td className="border px-2 py-1 text-sm">
+											<td className="px-1 py-1 text-xs text-center">
 												{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
 											</td>
-											{/* <td className="border px-2 py-1 text-sm">
-												{torrent.score.toFixed(1)}
-											</td> */}
-											<td className="border px-2 py-1 text-sm">
+											<td className="px-1 py-1 text-xs text-center">
 												{torrent.progress !== 100 ? (
 													<>
 														<span className="inline-block align-middle">
@@ -1024,10 +1022,10 @@ function TorrentsPage() {
 												)}
 											</td>
 
-											<td className="border px-2 py-1 text-sm">
+											<td className="px-1 py-1 text-xs text-center">
 												{new Date(torrent.added).toLocaleString()}
 											</td>
-											<td className="border px-2 py-2">
+											<td className="px-1 py-1 flex place-content-center">
 												<button
 													title="Share"
 													className="cursor-pointer mr-2 mb-2 text-indigo-600"

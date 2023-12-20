@@ -3,7 +3,7 @@ export const globalToastOptions = {
 		borderRadius: '10px',
 		background: 'yellow',
 		color: '#000',
-		fontSize: '24px',
+		fontSize: '0.75rem',
 	},
 };
 
