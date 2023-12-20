@@ -25,6 +25,7 @@ type TvSearchProps = {
 	title: string;
 	description: string;
 	poster: string;
+	backdrop: string;
 	season_count: number;
 	season_names: string[];
 	imdb_score?: number;
@@ -36,6 +37,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	title,
 	description,
 	poster,
+	backdrop,
 	season_count,
 	season_names,
 	imdb_score,
@@ -48,11 +50,11 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	const adKey = useAllDebridApiKey();
 	const [rdAutoInstantCheck, setRdAutoInstantCheck] = useLocalStorage<boolean>(
 		'rdAutoInstantCheck',
-		false
+		!!rdKey
 	);
 	const [adAutoInstantCheck, setAdAutoInstantCheck] = useLocalStorage<boolean>(
 		'adAutoInstantCheck',
-		false
+		!!adKey
 	);
 	const [onlyShowCached, setOnlyShowCached] = useLocalStorage<boolean>('onlyShowCached', false);
 
@@ -178,6 +180,13 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		});
 	}
 
+	const backdropStyle = {
+		backgroundImage: `linear-gradient(to bottom, hsl(0, 0%, 12%,0.5) 0%, hsl(0, 0%, 12%,0) 50%, hsl(0, 0%, 12%,0.5) 100%), url(${backdrop})`,
+		backgroundPosition: 'center',
+		backgroundRepeat: 'no-repeat',
+		backgroundSize: 'screen',
+	};
+
 	return (
 		<div className="mx-2 my-1 max-w-full">
 			<Head>
@@ -202,8 +211,8 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				</Link>
 			</div>
 			{/* Display basic movie info */}
-			<div className="flex items-start space-x-4">
-				<div className="flex w-1/4 justify-center items-center">
+			<div className="flex items-start space-x-4" style={backdropStyle}>
+				<div className="flex justify-center items-center">
 					<Image
 						width={200}
 						height={300}
@@ -212,17 +221,17 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 						className="shadow-lg"
 					/>
 				</div>
-				<div className="w-3/4 space-y-2">
-					<h2 className="text-2xl font-bold">
+				<div className="w-9/12 space-y-2 align-baseline">
+					<h2 className="text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
 						{title} - Season {seasonNum}
 					</h2>
-					<p>{description}</p>
+					<div className="bg-slate-900/75 w-fit">{description}</div>
 					{imdb_score && (
-						<p>
-							<Link href={`https://www.imdb.com/title/${imdbid}/`}>
+						<div className="text-yellow-100">
+							<Link href={`https://www.imdb.com/title/${imdbid}/`} target="_blank">
 								IMDB Score: {imdb_score}
 							</Link>
-						</p>
+						</div>
 					)}
 					<>
 						{Array.from({ length: season_count || 0 }, (_, i) => i + 1).map(
@@ -232,7 +241,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 									<Link
 										key={idx}
 										href={`/show/${imdbid}/${season}`}
-										className={`mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-2`}
+										className={`mt-4 inline-flex items-center px-1 py-1 text-xs text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-2`}
 									>
 										<span role="img" aria-label="tv show" className="mr-2">
 											📺
@@ -286,69 +295,75 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 							className="mb-4 pb-1 whitespace-nowrap overflow-x-scroll"
 							style={{ scrollbarWidth: 'thin' }}
 						>
-							<button
-								className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
-								onClick={() => {
-									wrapLoading(
-										'RD',
-										instantCheckInRd(
-											rdKey!,
-											searchResults.map((result) => result.hash),
-											setSearchResults
-										)
-									);
-								}}
-							>
-								Check RD availability
-							</button>
-							<input
-								id="auto-check-rd"
-								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-								type="checkbox"
-								checked={rdAutoInstantCheck || false}
-								onChange={(event) => {
-									const isChecked = event.target.checked;
-									setRdAutoInstantCheck(isChecked);
-								}}
-							/>{' '}
-							<label
-								htmlFor="auto-check-rd"
-								className="mr-2 mb-2 text-sm font-medium"
-							>
-								Auto
-							</label>
-							<button
-								className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
-								onClick={() => {
-									wrapLoading(
-										'AD',
-										instantCheckInAd(
-											adKey!,
-											searchResults.map((result) => result.hash),
-											setSearchResults
-										)
-									);
-								}}
-							>
-								Check AD availability
-							</button>
-							<input
-								id="auto-check-ad"
-								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-								type="checkbox"
-								checked={adAutoInstantCheck || false}
-								onChange={(event) => {
-									const isChecked = event.target.checked;
-									setAdAutoInstantCheck(isChecked);
-								}}
-							/>{' '}
-							<label
-								htmlFor="auto-check-ad"
-								className="ml-2 mr-2 mb-2 text-sm font-medium"
-							>
-								Auto
-							</label>
-							<span className="px-2.5 py-1 text-s bg-green-100 text-green-800 mr-2">
+							{rdKey && (
+								<>
+									<button
+										className={`mr-2 mt-0 mb-2 bg-green-700 hover:bg-green-600 text-white py-2 px-1 text-xs rounded`}
+										onClick={() => {
+											wrapLoading(
+												'RD',
+												instantCheckInRd(
+													rdKey!,
+													searchResults.map((result) => result.hash),
+													setSearchResults
+												)
+											);
+										}}
+									>
+										Check RD availability
+									</button>
+									<input
+										id="auto-check-rd"
+										className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+										type="checkbox"
+										checked={rdAutoInstantCheck || false}
+										onChange={(event) => {
+											setRdAutoInstantCheck(event.target.checked);
+										}}
+									/>{' '}
+									<label
+										htmlFor="auto-check-rd"
+										className="mr-2 mb-2 text-sm font-medium"
+									>
+										Auto
+									</label>
+								</>
+							)}
+							{adKey && (
+								<>
+									<button
+										className={`mr-2 mt-0 mb-2 bg-green-700 hover:bg-green-600 text-white py-2 px-1 text-xs rounded`}
+										onClick={() => {
+											wrapLoading(
+												'AD',
+												instantCheckInAd(
+													adKey!,
+													searchResults.map((result) => result.hash),
+													setSearchResults
+												)
+											);
+										}}
+									>
+										Check AD availability
+									</button>
+									<input
+										id="auto-check-ad"
+										className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+										type="checkbox"
+										checked={adAutoInstantCheck || false}
+										onChange={(event) => {
+											setAdAutoInstantCheck(event.target.checked);
+										}}
+									/>{' '}
+									<label
+										htmlFor="auto-check-ad"
+										className="ml-2 mr-2 mb-2 text-sm font-medium"
+									>
+										Auto
+									</label>
+								</>
+							)}
+							<span className="px-1 py-1 text-xs bg-green-100 text-green-800 mr-2">
 								{
 									searchResults.filter(
 										(r) =>
@@ -409,66 +424,96 @@ shadow hover:shadow-lg transition-shadow duration-200 ease-in
 rounded-lg overflow-hidden
 `}
 										>
-											<div className="p-6 space-y-4">
-												<h2 className="text-2xl font-bold leading-tight break-words">
+											<div className="p-2 space-y-4">
+												<h2 className="text-xl font-bold leading-tight break-words">
 													{r.title}
 												</h2>
-												<p className="text-gray-300">
+												<div className="text-gray-300">
 													Size: {(r.fileSize / 1024).toFixed(2)} GB
-												</p>
+												</div>
 												<div className="flex flex-wrap space-x-2">
 													<button
-														className="flex items-center justify-center bg-pink-500 hover:bg-pink-700 text-white py-2 px-4 rounded-full"
+														className="bg-pink-500 hover:bg-pink-700 text-white rounded px-2 w-max"
 														onClick={() => handleCopyMagnet(r.hash)}
 													>
 														<FaMagnet />
 													</button>
 													{rdKey && inLibrary(r.hash) && (
 														<button
-															className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
+															className="bg-red-500 hover:bg-red-700 text-white rounded px-2 w-max"
 															onClick={() => deleteRd(r.hash)}
 														>
-															<FaTimes className="mr-2" />
+															<FaTimes className="mr-2 inline" />
 															RD ({hashAndProgress[r.hash] + '%'})
 														</button>
 													)}
 													{rdKey && notInLibrary(r.hash) && (
 														<button
-															className={`flex items-center justify-center bg-${rdColor}-500 hover:bg-${rdColor}-700 text-white py-2 px-4 rounded-full`}
+															className={`bg-${
+																r.rdAvailable
+																	? 'green'
+																	: r.noVideos
+																	? 'gray'
+																	: 'blue'
+															}-500 hover:bg-${
+																r.rdAvailable
+																	? 'green'
+																	: r.noVideos
+																	? 'gray'
+																	: 'blue'
+															}-700 text-white rounded px-2 w-max`}
 															onClick={() => addRd(r.hash)}
 														>
-															<>
-																{r.rdAvailable ? (
-																	<FaFastForward className="mr-2" />
-																) : (
-																	<FaDownload className="mr-2" />
-																)}
-																RD
-															</>
+															{r.rdAvailable ? (
+																<>
+																	<FaFastForward className="mr-2 inline" />
+																	RD
+																</>
+															) : (
+																<>
+																	<FaDownload className="mr-2 inline" />
+																	RD
+																</>
+															)}
 														</button>
 													)}
 													{adKey && inLibrary(r.hash) && (
 														<button
-															className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
+															className="bg-red-500 hover:bg-red-700 text-white rounded px-2 w-max"
 															onClick={() => deleteAd(r.hash)}
 														>
-															<FaTimes className="mr-2" />
+															<FaTimes className="mr-2 inline" />
 															AD ({hashAndProgress[r.hash] + '%'})
 														</button>
 													)}
 													{adKey && notInLibrary(r.hash) && (
 														<button
-															className={`flex items-center justify-center bg-${adColor}-500 hover:bg-${adColor}-700 text-white py-2 px-4 rounded-full`}
+															className={`bg-${
+																r.adAvailable
+																	? 'green'
+																	: r.noVideos
+																	? 'gray'
+																	: 'blue'
+															}-500 hover:bg-${
+																r.adAvailable
+																	? 'green'
+																	: r.noVideos
+																	? 'gray'
+																	: 'blue'
+															}-700 text-white rounded px-2 w-max`}
 															onClick={() => addAd(r.hash)}
 														>
-															<>
-																{r.adAvailable ? (
-																	<FaFastForward className="mr-2" />
-																) : (
-																	<FaDownload className="mr-2" />
-																)}
-																AD
-															</>
+															{r.adAvailable ? (
+																<>
+																	<FaFastForward className="mr-2 inline" />
+																	AD
+																</>
+															) : (
+																<>
+																	<FaDownload className="mr-2 inline" />
+																	AD
+																</>
+															)}
 														</button>
 													)}
 												</div>
@@ -518,6 +563,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			title: showResponse.data.title,
 			description: showResponse.data.description,
 			poster: showResponse.data.poster,
+			backdrop: showResponse.data.backdrop,
 			season_count,
 			season_names,
 			imdb_score,
