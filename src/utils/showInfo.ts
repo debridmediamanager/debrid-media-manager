@@ -31,7 +31,9 @@ export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent)
                 `;
 				if (app) {
 					watchBtn = `
-                        <button type="button" class="inline ml-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">Watch</button>
+                        <button type="button" class="inline ml-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs" onclick="window.open('/api/watch/infuse?token=${rdKey}&link=${fileLink}')">Infuse</button>
+                        <button type="button" class="inline ml-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs" onclick="window.open('/api/watch/vlc?token=${rdKey}&link=${fileLink}')">VLC</button>
+                        <button type="button" class="inline ml-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs" onclick="window.open('/api/watch/outplayer?token=${rdKey}&link=${fileLink}')">Outplayer</button>
                     `;
 				}
 			}
@@ -107,7 +109,7 @@ export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent)
             </table>
         </div>
         ${warning}
-        <div class="text-xs max-h-60 overflow-y-auto mb-4 text-left bg-blue-100 p-1">
+        <div class="text-xs max-h-60 mb-4 text-left bg-blue-100 p-1">
             <ul class="list space-y-1">
                 ${filesList}
             </ul>

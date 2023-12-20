@@ -1,5 +1,5 @@
 import { UserTorrent } from '@/torrent/userTorrent';
-import { IDBPDatabase, deleteDB, openDB } from 'idb';
+import { IDBPDatabase, openDB } from 'idb';
 
 function currentISOWeekNumber(): number {
 	const target = new Date();
@@ -126,7 +126,10 @@ class UserTorrentDB {
 }
 
 export const DeleteUserTorrentDB = async () => {
-	await deleteDB('DMMDB');
+	window.indexedDB.deleteDatabase('DMMDB');
+	// await deleteDB('DMMDB', {
+	// 	blocked: () => alert('database is still open, refresh the page first to delete cache'),
+	// });
 };
 
 export default UserTorrentDB;
