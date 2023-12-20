@@ -197,7 +197,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				</Link>
 			</div>
 			{/* Display basic movie info */}
-			<div className="flex items-start space-x-4" style={backdropStyle}>
+			<div className="flex items-start space-x-4 mb-2" style={backdropStyle}>
 				<div className="flex justify-center items-center">
 					<Image
 						width={200}
@@ -221,8 +221,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					)}
 				</div>
 			</div>
-
-			<hr className="my-4" />
 
 			{searchState === 'loading' && (
 				<div className="flex justify-center items-center mt-4">
