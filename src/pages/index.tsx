@@ -1,16 +1,16 @@
 import { useCurrentUser } from '@/hooks/auth';
 import { DeleteUserTorrentDB } from '@/torrent/db';
-import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 
 function IndexPage() {
 	const router = useRouter();
 	const { realDebrid: rdUser, allDebrid: adUser, rdError, adError } = useCurrentUser();
+	const [deleting, setDeleting] = useState(false);
 
 	useEffect(() => {
 		if (rdError) {
@@ -42,8 +42,10 @@ function IndexPage() {
 	};
 
 	const handleClearCache = async () => {
+		setDeleting(true);
 		await DeleteUserTorrentDB();
-		toast.success(`Library cache cleared, please check again`, libraryToastOptions);
+		setDeleting(false);
+		router.push('/library');
 	};
 
 	return (
@@ -63,7 +65,7 @@ function IndexPage() {
 			</svg>
 			<Toaster position="bottom-right" />
 			{/* this is made by ChatGPT */}
-			{rdUser || adUser ? (
+			{!deleting && (rdUser || adUser) ? (
 				<>
 					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager</h1>
 					<div className="flex flex-col items-center">
@@ -151,7 +153,7 @@ function IndexPage() {
 								className="mx-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded text-xs"
 								onClick={() => handleClearCache()}
 							>
-								Missing library items?
+								Refresh library cache
 							</button>
 							{rdUser && (
 								<button
