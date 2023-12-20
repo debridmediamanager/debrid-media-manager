@@ -1,6 +1,7 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
+import { SearchProfile } from '@/services/searchProfile';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
@@ -43,6 +44,11 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+	const [searchProfile, setSearchProfile] = useState<SearchProfile>({
+		stringSearch: '',
+		lowerBound: 0,
+		upperBound: Number.MAX_SAFE_INTEGER,
+	});
 	const [errorMessage, setErrorMessage] = useState('');
 	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
@@ -211,14 +217,19 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					<h2 className="text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
 						{title} ({year})
 					</h2>
-					<div className="bg-slate-900/75 w-fit">{description}</div>
-					{imdb_score && (
-						<div className="text-yellow-100">
-							<Link href={`https://www.imdb.com/title/${imdbid}/`} target="_blank">
-								IMDB Score: {imdb_score}
-							</Link>
-						</div>
-					)}
+					<div className="bg-slate-900/75 w-fit">
+						{description}{' '}
+						{imdb_score && (
+							<div className="text-yellow-100 inline">
+								<Link
+									href={`https://www.imdb.com/title/${imdbid}/`}
+									target="_blank"
+								>
+									IMDB Score: {imdb_score}
+								</Link>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 
