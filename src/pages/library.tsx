@@ -368,15 +368,15 @@ function TorrentsPage() {
 
 	function wrapDeleteFn(t: UserTorrent) {
 		return async () => {
+			const oldId = t.id;
 			if (rdKey && t.id.startsWith('rd:')) {
 				await handleDeleteRdTorrent(rdKey, t.id);
-				torrentDB.deleteById(t.id);
 			}
 			if (adKey && t.id.startsWith('ad:')) {
 				await handleDeleteAdTorrent(adKey, t.id);
-				torrentDB.deleteById(t.id);
 			}
-			setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== t.id));
+			setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== oldId));
+			torrentDB.deleteById(oldId);
 		};
 	}
 
@@ -501,16 +501,17 @@ function TorrentsPage() {
 
 	function wrapReinsertFn(t: UserTorrent) {
 		return async () => {
+			const oldId = t.id;
 			if (rdKey && t.id.startsWith('rd:')) {
 				await handleReinsertTorrent(rdKey, t.id, userTorrentsList);
-				torrentDB.deleteById(t.id);
+				setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== oldId));
 				fetchLatestRDTorrents(2);
 			}
 			if (adKey && t.id.startsWith('ad:')) {
 				await handleRestartTorrent(adKey, t.id);
-				torrentDB.deleteById(t.id);
 				fetchLatestADTorrents();
 			}
+			torrentDB.deleteById(oldId);
 		};
 	}
 
@@ -1040,7 +1041,7 @@ function TorrentsPage() {
 													title="Delete"
 													className="cursor-pointer mr-2 mb-2 text-red-500"
 													onClick={async (e) => {
-														e.stopPropagation(); // Prevent showInfo when clicking this button
+														e.stopPropagation();
 														if (rdKey && torrent.id.startsWith('rd:')) {
 															await handleDeleteRdTorrent(
 																rdKey,
@@ -1069,7 +1070,8 @@ function TorrentsPage() {
 													title="Reinsert"
 													className="cursor-pointer mr-2 mb-2 text-green-500"
 													onClick={async (e) => {
-														e.stopPropagation(); // Prevent showInfo when clicking this button
+														e.stopPropagation();
+														const oldId = torrent.id;
 														if (rdKey && torrent.id.startsWith('rd'))
 															await handleReinsertTorrent(
 																rdKey,
@@ -1078,6 +1080,13 @@ function TorrentsPage() {
 															);
 														if (adKey && torrent.id.startsWith('ad'))
 															handleRestartTorrent(adKey, torrent.id);
+														setUserTorrentsList((prev) =>
+															prev.filter(
+																(torrent) => torrent.id !== oldId
+															)
+														);
+														fetchLatestRDTorrents(2);
+														torrentDB.deleteById(oldId);
 													}}
 												>
 													<FaRecycle />
@@ -1086,7 +1095,7 @@ function TorrentsPage() {
 													title="Copy magnet url"
 													className="cursor-pointer mr-2 mb-2 text-pink-500"
 													onClick={(e) => {
-														e.stopPropagation(); // Prevent showInfo when clicking this button
+														e.stopPropagation();
 														handleCopyMagnet(torrent.hash);
 													}}
 												>
