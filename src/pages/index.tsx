@@ -59,7 +59,7 @@ function IndexPage() {
 			<Head>
 				<title>Debrid Media Manager - Home</title>
 			</Head>
-			<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+			<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 200 200">
 				<rect x="25" y="25" width="150" height="150" fill="#2C3E50" rx="20" ry="20" />
 				<circle cx="100" cy="100" r="60" fill="#00A0B0" />
 				<path d="M85,65 L85,135 L135,100 Z" fill="#ECF0F1" />
@@ -113,13 +113,13 @@ function IndexPage() {
 						<div className="flex mb-4">
 							<Link
 								href="/library"
-								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
+								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded"
 							>
 								📚 My Library
 							</Link>
 
 							<button
-								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
+								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded"
 								onClick={handleHashListClick}
 							>
 								#️⃣ Hash list browser
@@ -127,21 +127,21 @@ function IndexPage() {
 
 							<Link
 								href="/search"
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-yellow-200 font-bold py-2 px-4 rounded border-2 border-yellow-200"
+								className="mr-2 bg-blue-800 hover:bg-blue-700 text-yellow-200 font-bold py-1 px-2 rounded border-2 border-yellow-200"
 							>
 								🔎 Improved Search
 							</Link>
 
 							<Link
 								href="/browse/recent"
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
 							>
 								⏰ Recently Updated
 							</Link>
 
 							<Link
 								href="/browse"
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
 							>
 								🌐 Browse
 							</Link>
@@ -155,14 +155,14 @@ function IndexPage() {
 								Fix playback or scan problems
 							</button> */}
 							<button
-								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
+								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded text-sm"
 								onClick={() => handleClearCache()}
 							>
 								Missing library items?
 							</button>
 							{rdUser && (
 								<button
-									className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm"
+									className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm"
 									onClick={() => handleLogout('rd:')}
 								>
 									Logout Real-Debrid
@@ -170,7 +170,7 @@ function IndexPage() {
 							)}
 							{adUser && (
 								<button
-									className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm"
+									className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm"
 									onClick={() => handleLogout('ad:')}
 								>
 									Logout AllDebrid
