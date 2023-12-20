@@ -54,13 +54,13 @@ export const handleReinsertTorrent = async (
 	userTorrentsList: UserTorrent[]
 ) => {
 	try {
-		const torrent = userTorrentsList.find((t) => t.id === oldId);
+		const torrentIdx = userTorrentsList.findIndex((t) => t.id === oldId);
+		const torrent = userTorrentsList[torrentIdx];
 		if (!torrent) throw new Error('no_torrent_found');
 		const hash = torrent.hash;
 		const newId = await addHashAsMagnet(rdKey, hash);
-		await handleSelectFilesInRd(rdKey, newId);
+		await handleSelectFilesInRd(rdKey, `rd:${newId}`);
 		await handleDeleteRdTorrent(rdKey, oldId, true);
-		userTorrentsList.splice(userTorrentsList.indexOf(torrent), 1);
 		toast.success(`Torrent reinserted (${oldId}👉${torrent.id})`, magnetToastOptions);
 	} catch (error) {
 		toast.error(`Error reinserting torrent (${oldId})`, magnetToastOptions);
