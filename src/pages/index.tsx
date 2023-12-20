@@ -1,6 +1,5 @@
 import { useCurrentUser } from '@/hooks/auth';
 import { DeleteUserTorrentDB } from '@/torrent/db';
-import { landscapeMode } from '@/utils/landscapeMode';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
@@ -10,8 +9,6 @@ import { useEffect } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 
 function IndexPage() {
-	useEffect(landscapeMode, []);
-
 	const router = useRouter();
 	const { realDebrid: rdUser, allDebrid: adUser, rdError, adError } = useCurrentUser();
 
@@ -75,7 +72,7 @@ function IndexPage() {
 				<>
 					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager</h1>
 					<div className="flex flex-col items-center">
-						<p className="text-lg font-bold mb-4">
+						<div className="text-md font-bold mb-4 w-screen text-center">
 							Welcome back,{' '}
 							{rdUser ? (
 								<>
@@ -84,7 +81,7 @@ function IndexPage() {
 							) : (
 								<Link
 									href="/realdebrid/login"
-									className="px-1 py-1 m-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600"
+									className="px-1 py-1 m-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600 whitespace-nowrap"
 								>
 									Login with Real-Debrid
 								</Link>
@@ -96,52 +93,53 @@ function IndexPage() {
 							) : (
 								<Link
 									href="/alldebrid/login"
-									className="px-1 py-1 m-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600"
+									className="px-1 py-1 m-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600 whitespace-nowrap"
 								>
 									Login with AllDebrid
 								</Link>
 							)}
-						</p>
+						</div>
 
-						<p className="text-sm mb-4">
+						<div className="text-sm mb-4 w-screen text-center">
 							Besides the 10+ million torrents indexed (as of December 2023), no other
 							data is stored
-						</p>
+						</div>
 
-						<hr className="w-full mb-4" />
+						<hr className="w-full mb-4 w-screen" />
 
-						<div className="flex mb-4">
+						<div className="flex flex-row mb-4 w-screen md:justify-center overflow-x-auto">
 							<Link
 								href="/library"
-								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded"
+								className="text-sm mx-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
-								📚 My Library
+								📚 Library
 							</Link>
 
-							<button
-								className="mr-2 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded"
-								onClick={handleHashListClick}
+							<Link
+								href="https://hashlists.debridmediamanager.com"
+								target="_blank"
+								className="text-sm mx-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
-								#️⃣ Hash list browser
-							</button>
+								#️⃣ Hash lists
+							</Link>
 
 							<Link
 								href="/search"
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-yellow-200 font-bold py-1 px-2 rounded border-2 border-yellow-200"
+								className="text-sm mx-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
-								🔎 Improved Search
+								🔎 Search
 							</Link>
 
 							<Link
 								href="/browse/recent"
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+								className="text-sm mx-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								⏰ Recently Updated
 							</Link>
 
 							<Link
 								href="/browse"
-								className="mr-2 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+								className="text-sm mx-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								🌐 Browse
 							</Link>
@@ -149,20 +147,20 @@ function IndexPage() {
 
 						<div className="flex mb-4">
 							{/* <button
-								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
+								className="mx-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
 								onClick={() => router.push('/fixer')}
 							>
 								Fix playback or scan problems
 							</button> */}
 							<button
-								className="mr-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded text-sm"
+								className="mx-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded text-xs"
 								onClick={() => handleClearCache()}
 							>
 								Missing library items?
 							</button>
 							{rdUser && (
 								<button
-									className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm"
+									className="mx-1 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
 									onClick={() => handleLogout('rd:')}
 								>
 									Logout Real-Debrid
@@ -170,7 +168,7 @@ function IndexPage() {
 							)}
 							{adUser && (
 								<button
-									className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm"
+									className="mx-1 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm"
 									onClick={() => handleLogout('ad:')}
 								>
 									Logout AllDebrid
@@ -178,8 +176,8 @@ function IndexPage() {
 							)}
 						</div>
 						<hr className="w-full mb-4" />
-						<div className="text-sm text-center mb-4">
-							Get your movies straight from{' '}
+						<div className="text-sm mb-4 text-center">
+							✨Get your movies straight from{' '}
 							<b>
 								<a href="https://www.imdb.com/chart/top/" target="_blank">
 									IMDB
@@ -216,7 +214,8 @@ function IndexPage() {
 								</a>
 							</b>
 						</div>
-						<div className="text-sm text-center mb-4">
+						<div className="text-sm mb-4 text-center">
+							✨
 							<a
 								className="underline"
 								href="https://github.com/debridmediamanager/zurg-testing"
@@ -230,7 +229,8 @@ function IndexPage() {
 							Mount your Real-Debrid library and play your files directly from your
 							computer.
 						</div>
-						<div className="text-sm text-center mb-4">
+						<div className="text-sm mb-4 text-center">
+							✨
 							<a
 								className="text-azure"
 								href="https://www.reddit.com/r/debridmediamanager/"
