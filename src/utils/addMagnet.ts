@@ -22,9 +22,9 @@ export const handleAddAsMagnetInRd = async (
 	}
 };
 
-export const handleSelectFilesInRd = async (rdKey: string, id: string) => {
+export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boolean = false) => {
 	try {
-		const response = await getTorrentInfo(rdKey, id.substring(3));
+		const response = await getTorrentInfo(rdKey, id.substring(3), bare);
 		if (response.filename === 'Magnet') return; // no files yet
 
 		const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
@@ -35,7 +35,7 @@ export const handleSelectFilesInRd = async (rdKey: string, id: string) => {
 			throw new Error('no_files_for_selection');
 		}
 
-		await selectFiles(rdKey, id.substring(3), selectedFiles);
+		await selectFiles(rdKey, id.substring(3), selectedFiles, bare);
 	} catch (error) {
 		console.error(error);
 		if ((error as Error).message === 'no_files_for_selection') {

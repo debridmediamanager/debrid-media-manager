@@ -56,7 +56,9 @@ function TorrentsPage() {
 
 	// loading states
 	const [rdLoading, setRdLoading] = useState(true);
+	const [rdSyncing, setRdSyncing] = useState(true);
 	const [adLoading, setAdLoading] = useState(true);
+	const [adSyncing, setAdSyncing] = useState(true);
 	const [filtering, setFiltering] = useState(false);
 	const [grouping, setGrouping] = useState(false);
 
@@ -106,6 +108,7 @@ function TorrentsPage() {
 	const fetchLatestRDTorrents = async function (customLimit?: number) {
 		if (!rdKey) {
 			setRdLoading(false);
+			setRdSyncing(false);
 			return;
 		}
 		const oldTorrents = await torrentDB.all();
@@ -124,6 +127,7 @@ function TorrentsPage() {
 			},
 			customLimit
 		);
+		setRdSyncing(false);
 		if (customLimit) return;
 		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
 		await Promise.all(toDelete.map((id) => torrentDB.deleteById(id)));
@@ -133,6 +137,7 @@ function TorrentsPage() {
 	const fetchLatestADTorrents = async function () {
 		if (!adKey) {
 			setAdLoading(false);
+			setAdSyncing(false);
 			return;
 		}
 		const oldTorrents = await torrentDB.all();
@@ -147,6 +152,7 @@ function TorrentsPage() {
 			await torrentDB.addAll(newTorrents);
 			setAdLoading(false);
 		});
+		setAdSyncing(false);
 		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
 		await Promise.all(toDelete.map((id) => torrentDB.deleteById(id)));
 		setUserTorrentsList((prev) => prev.filter((torrent) => !toDelete.includes(torrent.id)));
@@ -683,7 +689,9 @@ function TorrentsPage() {
 			<div className="flex justify-between items-center mb-2">
 				<h1 className="text-xl font-bold">
 					Library 📚 {userTorrentsList.length} torrents{' '}
-					{totalBytes / ONE_GIGABYTE / 1024 > 10000
+					{rdSyncing || adSyncing
+						? '🤔' // Thinking if syncing
+						: totalBytes / ONE_GIGABYTE / 1024 > 10000
 						? '😱' // Fear for more than 10 PB
 						: totalBytes / ONE_GIGABYTE / 1024 > 1000
 						? '😨' // Fearful surprise for more than 1 PB
