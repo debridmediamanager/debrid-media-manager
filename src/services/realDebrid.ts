@@ -466,3 +466,28 @@ export const unrestrictLink = async (
 		throw error;
 	}
 };
+
+export const bareUnrestrictLink = async (
+	accessToken: string,
+	link: string
+): Promise<UnrestrictResponse> => {
+	try {
+		const params = new URLSearchParams();
+		params.append('link', link);
+		const headers = {
+			Authorization: `Bearer ${accessToken}`,
+			'Content-Type': 'application/x-www-form-urlencoded',
+		};
+
+		const response = await axios.post<UnrestrictResponse>(
+			`https://api.real-debrid.com/rest/1.0/unrestrict/link`,
+			params.toString(),
+			{ headers }
+		);
+
+		return response.data;
+	} catch (error: any) {
+		console.error('Error checking unrestrict:', error.message);
+		throw error;
+	}
+};
