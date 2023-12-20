@@ -442,6 +442,18 @@ rounded-lg overflow-hidden
 														)}
 													</button>
 												)}
+												{r.rdAvailable && (
+													<button
+														className="bg-orange-500 hover:bg-orange-700 text-white px-2 rounded"
+														onClick={() =>
+															window.open(
+																`/api/instantWatch/infuse?token=${rdKey}&hash=${r.hash}`
+															)
+														}
+													>
+														Infuse
+													</button>
+												)}
 												{adKey && inLibrary(r.hash) && (
 													<button
 														className="bg-red-500 hover:bg-red-700 text-white rounded px-2 w-max"
