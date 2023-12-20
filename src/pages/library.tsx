@@ -108,19 +108,26 @@ function TorrentsPage() {
 			setRdLoading(false);
 			return;
 		}
-		fetchRealDebrid(
+		const oldTorrents = await torrentDB.all();
+		const oldIds = new Set(oldTorrents.map((torrent) => torrent.id));
+		const newIds = new Set();
+		await fetchRealDebrid(
 			rdKey,
 			async (torrents: UserTorrent[]) => {
+				torrents.forEach((torrent) => newIds.add(torrent.id));
+				const newTorrents = torrents.filter((torrent) => !oldIds.has(torrent.id));
 				setUserTorrentsList((prev) => {
-					const existingIds = new Set(prev.map((torrent) => torrent.id));
-					const newTorrents = torrents.filter((torrent) => !existingIds.has(torrent.id));
 					return [...prev, ...newTorrents];
 				});
-				await torrentDB.addAll(torrents);
+				await torrentDB.addAll(newTorrents);
 				setRdLoading(false);
 			},
 			customLimit
 		);
+		if (customLimit) return;
+		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
+		await Promise.all(toDelete.map((id) => torrentDB.deleteById(id)));
+		setUserTorrentsList((prev) => prev.filter((torrent) => !toDelete.includes(torrent.id)));
 	};
 
 	const fetchLatestADTorrents = async function () {
@@ -128,15 +135,21 @@ function TorrentsPage() {
 			setAdLoading(false);
 			return;
 		}
-		fetchAllDebrid(adKey, async (torrents: UserTorrent[]) => {
+		const oldTorrents = await torrentDB.all();
+		const oldIds = new Set(oldTorrents.map((torrent) => torrent.id));
+		const newIds = new Set();
+		await fetchAllDebrid(adKey, async (torrents: UserTorrent[]) => {
+			torrents.forEach((torrent) => newIds.add(torrent.id));
+			const newTorrents = torrents.filter((torrent) => !oldIds.has(torrent.id));
 			setUserTorrentsList((prev) => {
-				const existingIds = new Set(prev.map((torrent) => torrent.id));
-				const newTorrents = torrents.filter((torrent) => !existingIds.has(torrent.id));
 				return [...prev, ...newTorrents];
 			});
-			await torrentDB.addAll(torrents);
+			await torrentDB.addAll(newTorrents);
 			setAdLoading(false);
 		});
+		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
+		await Promise.all(toDelete.map((id) => torrentDB.deleteById(id)));
+		setUserTorrentsList((prev) => prev.filter((torrent) => !toDelete.includes(torrent.id)));
 	};
 
 	// fetch list from api
