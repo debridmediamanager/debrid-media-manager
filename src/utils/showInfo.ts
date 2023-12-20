@@ -2,17 +2,15 @@ import { getTorrentInfo } from '@/services/realDebrid';
 import { UserTorrent } from '@/torrent/userTorrent';
 import Swal from 'sweetalert2';
 
-export const showInfo = async (rdKey: string, torrent: UserTorrent) => {
+export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent) => {
 	const info = await getTorrentInfo(rdKey, torrent.id.substring(3));
 
 	let warning = '';
 	const isIntact = info.files.filter((f) => f.selected).length === info.links.length;
-	// Check if there is a mismatch between files and links
 	if (info.progress === 100 && !isIntact) {
-		warning = `<p class="text-red-500">Warning: Some files have expired</p>`;
+		warning = `<div class="text-xs text-red-500">Warning: Some files have expired</div>`;
 	}
 
-	// Initialize a separate index for the links array
 	let linkIndex = 0;
 
 	const filesList = info.files
@@ -21,27 +19,34 @@ export const showInfo = async (rdKey: string, torrent: UserTorrent) => {
 			let unit = file.bytes < 1024 ** 3 ? 'MB' : 'GB';
 
 			let downloadForm = '';
+			let watchBtn = ``;
 
-			// Only create a download form for selected files
 			if (file.selected && isIntact) {
+				const fileLink = info.links[linkIndex++];
 				downloadForm = `
                     <form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
-                        <input type="hidden" name="links" value="${info.links[linkIndex++]}" />
-                        <button type="submit" class="ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-xs">Download</button>
+                        <input type="hidden" name="links" value="${fileLink}" />
+                        <button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-xs">Download</button>
                     </form>
                 `;
+				if (app) {
+					watchBtn = `
+                        <button type="button" class="inline ml-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">Watch</button>
+                    `;
+				}
 			}
 
 			// Return the list item for the file, with or without the download form
 			return `
-                <li class="flex items-center justify-between p-2 hover:bg-yellow-200 rounded ${
+                <li class="hover:bg-yellow-200 rounded ${
 					file.selected ? 'bg-yellow-50 font-bold' : 'font-normal'
 				}">
-                    <span class="flex-1 truncate text-blue-600">${file.path}</span>
-                    <span class="ml-4 text-sm text-gray-700">${size.toFixed(2)} ${unit}</span>
-                    ${downloadForm}
+                    <span class="inline text-blue-600">${file.path}</span>
+                    <span class="inline text-gray-700 w-fit">${size.toFixed(2)} ${unit}</span>
+                        ${downloadForm}
+                        ${watchBtn}
                 </li>
-              `;
+            `;
 		})
 		.join('');
 
@@ -64,10 +69,10 @@ export const showInfo = async (rdKey: string, torrent: UserTorrent) => {
 			: '';
 
 	Swal.fire({
-		icon: 'info',
+		// icon: 'info',
 		html: `
-        <h1 class="text-2xl font-bold mb-4">${info.filename}</h1>
-        <div class="overflow-x-auto">
+        <h1 class="text-lg font-bold mt-6 mb-4">${info.filename}</h1>
+        <div class="text-xs">
             <table class="table-auto w-full mb-4 text-left">
                 <tbody>
                     <tr>
@@ -102,8 +107,7 @@ export const showInfo = async (rdKey: string, torrent: UserTorrent) => {
             </table>
         </div>
         ${warning}
-        <h2 class="text-xl font-semibold mb-2">Files:</h2>
-        <div class="max-h-60 overflow-y-auto mb-4 text-left bg-blue-100 p-4 rounded shadow">
+        <div class="text-xs max-h-60 overflow-y-auto mb-4 text-left bg-blue-100 p-1">
             <ul class="list space-y-1">
                 ${filesList}
             </ul>
@@ -112,7 +116,7 @@ export const showInfo = async (rdKey: string, torrent: UserTorrent) => {
             `,
 		showConfirmButton: false,
 		customClass: {
-			popup: 'format-class',
+			htmlContainer: '!mx-1',
 		},
 		width: '800px',
 		showCloseButton: true,

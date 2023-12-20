@@ -10,8 +10,6 @@ export const landscapeMode = () => {
 			}
 		);
 	const isPortrait = () => window.matchMedia('(orientation: portrait)').matches;
-	const isMobileDevice = () =>
-		/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 	if (isMobileDevice() && isPortrait()) showWarning();
 	const handleOrientationChange = () => {
 		if (isMobileDevice() && isPortrait()) showWarning();
@@ -21,3 +19,6 @@ export const landscapeMode = () => {
 		window.removeEventListener('orientationchange', handleOrientationChange);
 	};
 };
+
+export const isMobileDevice = () =>
+	/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
