@@ -25,11 +25,6 @@ function IndexPage() {
 		}
 	}, [rdError, adError]);
 
-	const handleHashListClick = () => {
-		const newTab = window.open('https://hashlists.debridmediamanager.com', '_blank');
-		newTab?.focus();
-	};
-
 	const handleLogout = (prefix?: string) => {
 		if (prefix) {
 			let i = localStorage.length - 1;
@@ -56,7 +51,7 @@ function IndexPage() {
 			<Head>
 				<title>Debrid Media Manager - Home</title>
 			</Head>
-			<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 200 200">
+			<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 200 200">
 				<rect x="25" y="25" width="150" height="150" fill="#2C3E50" rx="20" ry="20" />
 				<circle cx="100" cy="100" r="60" fill="#00A0B0" />
 				<path d="M85,65 L85,135 L135,100 Z" fill="#ECF0F1" />
