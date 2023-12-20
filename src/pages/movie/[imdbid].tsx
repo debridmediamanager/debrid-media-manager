@@ -165,7 +165,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	}
 
 	return (
-		<div className="mx-4 my-8 max-w-full">
+		<div className="mx-2 my-1 max-w-full">
 			<Head>
 				<title>
 					Debrid Media Manager - Movie - {title} ({year})
