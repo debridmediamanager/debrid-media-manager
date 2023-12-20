@@ -299,14 +299,16 @@ export const getDownloads = async (accessToken: string): Promise<DownloadRespons
 	}
 };
 
-export const getTorrentInfo = async (accessToken: string, id: string) => {
+export const getTorrentInfo = async (accessToken: string, id: string, bare: boolean = false) => {
 	try {
 		const headers = {
 			Authorization: `Bearer ${accessToken}`,
 		};
 
 		const response = await axios.get<TorrentInfoResponse>(
-			`${config.realDebridHostname}/rest/1.0/torrents/info/${id}`,
+			`${
+				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
+			}/rest/1.0/torrents/info/${id}`,
 			{ headers }
 		);
 		return response.data;
@@ -341,7 +343,11 @@ export const rdInstantCheck = async (
 	}
 };
 
-export const addMagnet = async (accessToken: string, magnet: string): Promise<string> => {
+export const addMagnet = async (
+	accessToken: string,
+	magnet: string,
+	bare: boolean = false
+): Promise<string> => {
 	try {
 		const headers = {
 			Authorization: `Bearer ${accessToken}`,
@@ -351,7 +357,9 @@ export const addMagnet = async (accessToken: string, magnet: string): Promise<st
 		const formData = qs.stringify(data);
 
 		const response = await axios.post<AddMagnetResponse>(
-			`${config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
+			`${
+				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
+			}/rest/1.0/torrents/addMagnet`,
 			formData,
 			{
 				headers,
@@ -364,11 +372,20 @@ export const addMagnet = async (accessToken: string, magnet: string): Promise<st
 	}
 };
 
-export const addHashAsMagnet = async (accessToken: string, hash: string): Promise<string> => {
-	return await addMagnet(accessToken, `magnet:?xt=urn:btih:${hash}`);
+export const addHashAsMagnet = async (
+	accessToken: string,
+	hash: string,
+	bare: boolean = false
+): Promise<string> => {
+	return await addMagnet(accessToken, `magnet:?xt=urn:btih:${hash}`, bare);
 };
 
-export const selectFiles = async (accessToken: string, id: string, files: number[]) => {
+export const selectFiles = async (
+	accessToken: string,
+	id: string,
+	files: number[],
+	bare: boolean = false
+) => {
 	try {
 		const headers = {
 			Authorization: `Bearer ${accessToken}`,
@@ -377,7 +394,9 @@ export const selectFiles = async (accessToken: string, id: string, files: number
 		const formData = qs.stringify({ files: files.join(',') });
 
 		await axios.post(
-			`${config.realDebridHostname}/rest/1.0/torrents/selectFiles/${id}`,
+			`${
+				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
+			}/rest/1.0/torrents/selectFiles/${id}`,
 			formData,
 			{ headers }
 		);
@@ -387,15 +406,20 @@ export const selectFiles = async (accessToken: string, id: string, files: number
 	}
 };
 
-export const deleteTorrent = async (accessToken: string, id: string) => {
+export const deleteTorrent = async (accessToken: string, id: string, bare: boolean = false) => {
 	try {
 		const headers = {
 			Authorization: `Bearer ${accessToken}`,
 		};
 
-		await axios.delete(`${config.realDebridHostname}/rest/1.0/torrents/delete/${id}`, {
-			headers,
-		});
+		await axios.delete(
+			`${
+				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
+			}/rest/1.0/torrents/delete/${id}`,
+			{
+				headers,
+			}
+		);
 	} catch (error: any) {
 		console.error('Error deleting torrent:', error.message);
 		throw error;
@@ -444,7 +468,8 @@ export const unrestrictCheck = async (
 
 export const unrestrictLink = async (
 	accessToken: string,
-	link: string
+	link: string,
+	bare: boolean = false
 ): Promise<UnrestrictResponse> => {
 	try {
 		const params = new URLSearchParams();
@@ -455,32 +480,9 @@ export const unrestrictLink = async (
 		};
 
 		const response = await axios.post<UnrestrictResponse>(
-			`${config.realDebridHostname}/rest/1.0/unrestrict/link`,
-			params.toString(),
-			{ headers }
-		);
-
-		return response.data;
-	} catch (error: any) {
-		console.error('Error checking unrestrict:', error.message);
-		throw error;
-	}
-};
-
-export const bareUnrestrictLink = async (
-	accessToken: string,
-	link: string
-): Promise<UnrestrictResponse> => {
-	try {
-		const params = new URLSearchParams();
-		params.append('link', link);
-		const headers = {
-			Authorization: `Bearer ${accessToken}`,
-			'Content-Type': 'application/x-www-form-urlencoded',
-		};
-
-		const response = await axios.post<UnrestrictResponse>(
-			`https://api.real-debrid.com/rest/1.0/unrestrict/link`,
+			`${
+				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
+			}/rest/1.0/unrestrict/link`,
 			params.toString(),
 			{ headers }
 		);
