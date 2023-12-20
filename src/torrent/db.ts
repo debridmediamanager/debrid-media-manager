@@ -1,5 +1,5 @@
 import { UserTorrent } from '@/torrent/userTorrent';
-import { IDBPDatabase, openDB } from 'idb';
+import { IDBPDatabase, deleteDB, openDB } from 'idb';
 
 function currentISOWeekNumber(): number {
 	const target = new Date();
@@ -124,5 +124,9 @@ class UserTorrentDB {
 		return !!torrent && torrent.progress < 100;
 	}
 }
+
+export const DeleteUserTorrentDB = async () => {
+	await deleteDB('DMMDB');
+};
 
 export default UserTorrentDB;
