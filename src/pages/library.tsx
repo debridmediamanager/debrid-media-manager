@@ -226,6 +226,9 @@ function TorrentsPage() {
 	useEffect(() => {
 		if (rdLoading || adLoading || grouping) return;
 		setFiltering(true);
+		setSlowCount(userTorrentsList.filter(isSlowOrNoLinks).length);
+		setInProgressCount(userTorrentsList.filter(isInProgress).length);
+		setFailedCount(userTorrentsList.filter(isFailed).length);
 		if (hasNoQueryParamsBut('page')) {
 			setFilteredList(applyQuickSearch(query, userTorrentsList));
 			selectPlayableFiles(userTorrentsList);
@@ -236,9 +239,7 @@ function TorrentsPage() {
 		}
 		const { filter: titleFilter, mediaType, status } = router.query;
 
-		setSlowCount(userTorrentsList.filter(isSlowOrNoLinks).length);
-		setInProgressCount(userTorrentsList.filter(isInProgress).length);
-		setFailedCount(userTorrentsList.filter(isFailed).length);
+		console.log(slowCount, inProgressCount, failedCount);
 
 		let tmpList = userTorrentsList;
 		if (status === 'slow') {
@@ -667,7 +668,7 @@ function TorrentsPage() {
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-3xl font-bold">
-					My Library 📚 {userTorrentsList.length} torrents{' '}
+					Library 📚 {userTorrentsList.length} torrents{' '}
 					{totalBytes / ONE_GIGABYTE / 1024 > 10000
 						? '😱' // Fear for more than 10 PB
 						: totalBytes / ONE_GIGABYTE / 1024 > 1000
@@ -685,7 +686,7 @@ function TorrentsPage() {
 
 				<Link
 					href="/"
-					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
 				>
 					Go Home
 				</Link>
@@ -704,7 +705,7 @@ function TorrentsPage() {
 				/>
 			</div>
 			{/* Start of Main Menu */}
-			<div className="mb-4 flex">
+			<div className="mb-4 flex overflow-x-auto">
 				<button
 					className={`mr-1 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
 						currentPage <= 1 ? 'opacity-60 cursor-not-allowed' : ''
@@ -718,7 +719,7 @@ function TorrentsPage() {
 					{currentPage}/{Math.ceil(sortedData().length / ITEMS_PER_PAGE)}
 				</span>
 				<button
-					className={`ml-1 mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
+					className={`ml-1 mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs ${
 						currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)
 							? 'opacity-60 cursor-not-allowed'
 							: ''
@@ -731,13 +732,13 @@ function TorrentsPage() {
 
 				<Link
 					href="/library?mediaType=movie&page=1"
-					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded"
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
 				>
 					🎥 Movies
 				</Link>
 				<Link
 					href="/library?mediaType=tv&page=1"
-					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded"
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
 				>
 					📺 TV shows
 				</Link>
@@ -746,27 +747,27 @@ function TorrentsPage() {
 					<>
 						<Link
 							href="/library?status=sametitle&page=1"
-							className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
+							className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
 						>
 							👀 Same title
 						</Link>
 
 						<button
-							className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded"
+							className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs"
 							onClick={dedupeBySize}
 						>
 							🧹 Size
 						</button>
 
 						<button
-							className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded"
+							className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs"
 							onClick={dedupeByRecency}
 						>
 							🧹 Date
 						</button>
 
 						<button
-							className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
+							className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs`}
 							onClick={combineSameHash}
 						>
 							🧬 Same hash
@@ -777,7 +778,7 @@ function TorrentsPage() {
 				{slowCount > 0 && (
 					<Link
 						href="/library?status=slow&page=1"
-						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
 					>
 						👀 No seeds
 					</Link>
@@ -786,7 +787,7 @@ function TorrentsPage() {
 				{inProgressCount > 0 && (
 					<Link
 						href="/library?status=inprogress&page=1"
-						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
 					>
 						👀 In progress
 					</Link>
@@ -795,14 +796,14 @@ function TorrentsPage() {
 				{failedCount > 0 && (
 					<Link
 						href="/library?status=failed&page=1"
-						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
 					>
 						👀 Failed
 					</Link>
 				)}
 
 				<button
-					className={`mr-2 mb-2 bg-red-600 hover:bg-red-500 text-white font-bold py-1 px-1 rounded`}
+					className={`mr-2 mb-2 bg-red-600 hover:bg-red-500 text-white font-bold py-1 px-1 rounded text-xs`}
 					onClick={handleDeleteShownTorrents}
 				>
 					🗑️ Delete
@@ -811,7 +812,7 @@ function TorrentsPage() {
 				{/* Add torrent */}
 				{rdKey && (
 					<button
-						className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded`}
+						className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded text-xs`}
 						onClick={() => handleAddMagnet('rd')}
 					>
 						🧲 RD Add
@@ -819,7 +820,7 @@ function TorrentsPage() {
 				)}
 				{adKey && (
 					<button
-						className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded`}
+						className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded text-xs`}
 						onClick={() => handleAddMagnet('ad')}
 					>
 						🧲 AD Add
@@ -827,7 +828,7 @@ function TorrentsPage() {
 				)}
 
 				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs ${
 						filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
 					}`}
 					onClick={() => generateHashList(filteredList)}
@@ -836,7 +837,7 @@ function TorrentsPage() {
 					🚀 Hash list
 				</button>
 				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs ${
 						userTorrentsList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
 					}`}
 					onClick={localBackup}
@@ -846,7 +847,7 @@ function TorrentsPage() {
 				</button>
 				{rdKey && (
 					<button
-						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded`}
+						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs`}
 						onClick={() => wrapLocalRestoreFn('rd')}
 					>
 						🪛 RD Restore
@@ -854,7 +855,7 @@ function TorrentsPage() {
 				)}
 				{adKey && (
 					<button
-						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded`}
+						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs`}
 						onClick={() => wrapLocalRestoreFn('ad')}
 					>
 						🪛 AD Restore
@@ -862,7 +863,7 @@ function TorrentsPage() {
 				)}
 
 				<button
-					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded"
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
 					onClick={() => {
 						setQuery('');
 						router.push(`/library?page=1`);
@@ -872,7 +873,7 @@ function TorrentsPage() {
 				</button>
 			</div>
 			{/* End of Main Menu */}
-			{helpText !== '' && <div className="bg-blue-900">💡 {helpText}</div>}
+			{helpText !== '' && <div className="bg-blue-900 text-sm">💡 {helpText}</div>}
 			<div className="overflow-x-auto">
 				{rdLoading || adLoading || grouping || filtering ? (
 					<div className="flex justify-center items-center mt-4">
@@ -944,7 +945,9 @@ function TorrentsPage() {
 											key={i}
 											className="border-t-2 hover:bg-purple-900"
 											onClick={() =>
-												rdKey && torrent.id.startsWith('rd:')
+												rdKey &&
+												torrent.id.startsWith('rd:') &&
+												torrent.status.startsWith('download')
 													? showInfo(rdKey, torrent)
 													: null
 											} // Add the onClick event here

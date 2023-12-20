@@ -115,5 +115,7 @@ export const showInfo = async (rdKey: string, torrent: UserTorrent) => {
 			popup: 'format-class',
 		},
 		width: '800px',
+		showCloseButton: true,
+		inputAutoFocus: true,
 	});
 };

@@ -196,7 +196,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				</h1>
 				<Link
 					href="/"
-					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
 				>
 					Go Home
 				</Link>

@@ -7,6 +7,7 @@ import { runConcurrentFunctions } from '@/utils/batch';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { groupBy } from '@/utils/groupBy';
+import { landscapeMode } from '@/utils/landscapeMode';
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -128,6 +129,7 @@ const instantCheckInAd = async (
 const torrentDB = new UserTorrentDB();
 
 function HashlistPage() {
+	useEffect(landscapeMode, []);
 	const router = useRouter();
 	const [query, setQuery] = useState('');
 	const [loading, setLoading] = useState(true);
@@ -435,7 +437,7 @@ function HashlistPage() {
 				</h1>
 				<Link
 					href="/"
-					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
 				>
 					Go Home
 				</Link>
