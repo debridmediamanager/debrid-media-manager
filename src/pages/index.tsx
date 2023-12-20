@@ -84,7 +84,7 @@ function IndexPage() {
 							) : (
 								<Link
 									href="/realdebrid/login"
-									className="px-4 py-2 m-2 text-sm text-white bg-gray-500 rounded hover:bg-gray-600"
+									className="px-1 py-1 m-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600"
 								>
 									Login with Real-Debrid
 								</Link>
@@ -96,7 +96,7 @@ function IndexPage() {
 							) : (
 								<Link
 									href="/alldebrid/login"
-									className="px-4 py-2 m-2 text-white bg-gray-500 rounded hover:bg-gray-600"
+									className="px-1 py-1 m-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600"
 								>
 									Login with AllDebrid
 								</Link>
