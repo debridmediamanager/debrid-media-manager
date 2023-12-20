@@ -188,7 +188,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1
-					className="text-3xl font-bold"
+					className="text-xl font-bold"
 					onClick={() => router.back()}
 					style={{ cursor: 'pointer' }}
 				>

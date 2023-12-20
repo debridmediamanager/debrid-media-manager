@@ -20,7 +20,7 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-3xl font-bold">Browse</h1>
+				<h1 className="text-xl font-bold">Browse</h1>
 				<p>This page refreshes content every 10 minutes</p>
 				<Link
 					href="/"
