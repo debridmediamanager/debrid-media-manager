@@ -1,9 +1,10 @@
 export const globalToastOptions = {
 	style: {
 		borderRadius: '10px',
-		background: 'yellow',
+		background: 'rgba(255, 255, 0, 0.85)',
 		color: '#000',
-		fontSize: '0.75rem',
+		fontSize: '1rem',
+		padding: '0.1rem',
 	},
 };
 

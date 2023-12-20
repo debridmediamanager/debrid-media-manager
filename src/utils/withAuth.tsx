@@ -29,7 +29,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			// Render a loading indicator or placeholder on initial load
 			return (
 				<div className="flex flex-col items-center justify-center min-h-screen">
-					<h1 className="text-2xl font-bold">Debrid Media Manager is loading...</h1>
+					<h1 className="text-xl text-center">Debrid Media Manager is loading...</h1>
 				</div>
 			);
 		}

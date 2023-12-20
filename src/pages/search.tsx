@@ -133,7 +133,7 @@ function Search() {
 			)}
 			{searchResults.length > 0 && (
 				<>
-					<h2 className="text-2xl font-bold my-4">
+					<h2 className="text-xl font-bold my-4">
 						Search Results for &quot;{query}&quot;
 					</h2>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -193,7 +193,7 @@ function Search() {
 			)}
 			{!loading && searchResults.length === 0 && Object.keys(router.query).length !== 0 && (
 				<>
-					<h2 className="text-2xl font-bold my-4">
+					<h2 className="text-xl font-bold my-4">
 						No results found for &quot;{query}&quot;
 					</h2>
 				</>
@@ -203,7 +203,7 @@ function Search() {
 					{Object.keys(miscResults).map((listName: string, idx: number) => {
 						return (
 							<div key={listName}>
-								<h2 className="mt-4 text-2xl font-bold" key={idx}>
+								<h2 className="mt-4 text-xl font-bold" key={idx}>
 									How about results from{' '}
 									<span className="text-yellow-500">{listName}</span>?
 								</h2>
