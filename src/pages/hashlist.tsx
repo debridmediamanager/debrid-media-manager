@@ -422,7 +422,7 @@ function HashlistPage() {
 	}
 
 	return (
-		<div className="mx-4 my-8">
+		<div className="mx-2 my-1">
 			<Head>
 				<title>
 					Debrid Media Manager - Hash list:{' '}

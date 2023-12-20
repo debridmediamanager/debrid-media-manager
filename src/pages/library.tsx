@@ -661,12 +661,12 @@ function TorrentsPage() {
 		Object.keys(router.query).filter((p) => !params.includes(p)).length === 0;
 
 	return (
-		<div className="mx-4 my-8">
+		<div className="mx-2 my-1">
 			<Head>
 				<title>Debrid Media Manager - Library</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			<div className="flex justify-between items-center mb-4">
+			<div className="flex justify-between items-center mb-2">
 				<h1 className="text-3xl font-bold">
 					Library 📚 {userTorrentsList.length} torrents{' '}
 					{totalBytes / ONE_GIGABYTE / 1024 > 10000
@@ -691,9 +691,9 @@ function TorrentsPage() {
 					Go Home
 				</Link>
 			</div>
-			<div className="flex items-center border-b border-b-2 border-gray-500 py-2 mb-4">
+			<div className="flex items-center border-b border-b-2 border-gray-500 py-0 mb-4">
 				<input
-					className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
+					className="appearance-none bg-transparent border-none w-full text-xs text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
 					type="text"
 					id="query"
 					placeholder="quick search on filename, hash, or id; supports regex"
@@ -873,7 +873,7 @@ function TorrentsPage() {
 				</button>
 			</div>
 			{/* End of Main Menu */}
-			{helpText !== '' && <div className="bg-blue-900 text-sm">💡 {helpText}</div>}
+			{helpText !== '' && <div className="bg-blue-900 text-xs">💡 {helpText}</div>}
 			<div className="overflow-x-auto">
 				{rdLoading || adLoading || grouping || filtering ? (
 					<div className="flex justify-center items-center mt-4">
@@ -884,7 +884,7 @@ function TorrentsPage() {
 						<thead>
 							<tr>
 								<th
-									className="px-4 py-2 cursor-pointer"
+									className="text-xs px-4 py-2 cursor-pointer"
 									onClick={() => handleSort('id')}
 								>
 									ID{` (${sortedData().length}) `}
@@ -892,7 +892,7 @@ function TorrentsPage() {
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
 								<th
-									className="px-4 py-2 cursor-pointer"
+									className="text-xs px-4 py-2 cursor-pointer"
 									onClick={() => handleSort('title')}
 								>
 									Title{' '}
@@ -900,7 +900,7 @@ function TorrentsPage() {
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
 								<th
-									className="px-4 py-2 cursor-pointer"
+									className="text-xs px-4 py-2 cursor-pointer"
 									onClick={() => handleSort('bytes')}
 								>
 									Size{' '}
@@ -908,7 +908,7 @@ function TorrentsPage() {
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
 								<th
-									className="px-4 py-2 cursor-pointer"
+									className="text-xs px-4 py-2 cursor-pointer"
 									onClick={() => handleSort('progress')}
 								>
 									Status{' '}
@@ -916,14 +916,14 @@ function TorrentsPage() {
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
 								<th
-									className="px-4 py-2 cursor-pointer"
+									className="text-xs px-4 py-2 cursor-pointer"
 									onClick={() => handleSort('added')}
 								>
 									Added{' '}
 									{sortBy.column === 'added' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
-								<th className="px-4 py-2">Actions</th>
+								<th className="text-xs px-4 py-2">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -951,10 +951,10 @@ function TorrentsPage() {
 											} // Add the onClick event here
 											title="Click for more info"
 										>
-											<td className="border px-4 py-2 max-w-0 overflow-hidden">
+											<td className="border px-2 py-1 max-w-0 overflow-hidden">
 												{torrent.id}
 											</td>
-											<td className="border px-4 py-2">
+											<td className="border px-2 py-1">
 												{!['Invalid Magnet', 'Magnet'].includes(
 													torrent.filename
 												) && (
@@ -996,13 +996,13 @@ function TorrentsPage() {
 												{torrent.filename}
 											</td>
 
-											<td className="border px-4 py-2">
+											<td className="border px-2 py-1">
 												{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
 											</td>
-											{/* <td className="border px-4 py-2">
+											{/* <td className="border px-2 py-1">
 												{torrent.score.toFixed(1)}
 											</td> */}
-											<td className="border px-4 py-2">
+											<td className="border px-2 py-1">
 												{torrent.progress !== 100 ? (
 													<>
 														<span className="inline-block align-middle">
@@ -1026,7 +1026,7 @@ function TorrentsPage() {
 												)}
 											</td>
 
-											<td className="border px-4 py-2">
+											<td className="border px-2 py-1">
 												{new Date(torrent.added).toLocaleString()}
 											</td>
 											<td className="border px-2 py-2">
