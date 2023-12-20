@@ -441,38 +441,22 @@ export const deleteDownload = async (accessToken: string, id: string) => {
 	}
 };
 
-export const unrestrictCheck = async (
-	accessToken: string,
-	link: string
-): Promise<UnrestrictCheckResponse> => {
-	try {
-		const params = new URLSearchParams();
-		params.append('link', link);
-		const headers = {
-			Authorization: `Bearer ${accessToken}`,
-			'Content-Type': 'application/x-www-form-urlencoded',
-		};
-
-		const response = await axios.post<UnrestrictCheckResponse>(
-			`${config.realDebridHostname}/rest/1.0/unrestrict/check`,
-			params.toString(),
-			{ headers }
-		);
-
-		return response.data;
-	} catch (error: any) {
-		console.error('Error checking unrestrict:', error.message);
-		throw error;
-	}
-};
-
 export const unrestrictLink = async (
 	accessToken: string,
 	link: string,
+	ipAddress: string,
 	bare: boolean = false
 ): Promise<UnrestrictResponse> => {
 	try {
 		const params = new URLSearchParams();
+		if (
+			!ipAddress.startsWith('192.168') &&
+			!ipAddress.startsWith('10.') &&
+			!ipAddress.startsWith('127.') &&
+			!ipAddress.startsWith('169.254')
+		)
+			params.append('ip', ipAddress);
+
 		params.append('link', link);
 		const headers = {
 			Authorization: `Bearer ${accessToken}`,
