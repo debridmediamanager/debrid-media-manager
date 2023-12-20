@@ -951,10 +951,10 @@ function TorrentsPage() {
 											} // Add the onClick event here
 											title="Click for more info"
 										>
-											<td className="border px-2 py-1 max-w-0 overflow-hidden">
+											<td className="border px-2 py-1 text-sm max-w-0 overflow-hidden">
 												{torrent.id}
 											</td>
-											<td className="border px-2 py-1">
+											<td className="border px-2 py-1 text-sm">
 												{!['Invalid Magnet', 'Magnet'].includes(
 													torrent.filename
 												) && (
@@ -996,13 +996,13 @@ function TorrentsPage() {
 												{torrent.filename}
 											</td>
 
-											<td className="border px-2 py-1">
+											<td className="border px-2 py-1 text-sm">
 												{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
 											</td>
-											{/* <td className="border px-2 py-1">
+											{/* <td className="border px-2 py-1 text-sm">
 												{torrent.score.toFixed(1)}
 											</td> */}
-											<td className="border px-2 py-1">
+											<td className="border px-2 py-1 text-sm">
 												{torrent.progress !== 100 ? (
 													<>
 														<span className="inline-block align-middle">
@@ -1020,13 +1020,11 @@ function TorrentsPage() {
 														</span>
 													</>
 												) : (
-													`${torrent.links.length} file${
-														torrent.links.length === 1 ? '' : 's'
-													}`
+													`${torrent.links.length} 📂`
 												)}
 											</td>
 
-											<td className="border px-2 py-1">
+											<td className="border px-2 py-1 text-sm">
 												{new Date(torrent.added).toLocaleString()}
 											</td>
 											<td className="border px-2 py-2">
