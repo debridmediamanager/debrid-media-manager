@@ -42,7 +42,7 @@ function RecentlyUpdated() {
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-3xl font-bold">Recently Updated</h1>
+				<h1 className="text-xl font-bold">Recently Updated</h1>
 				<Link
 					href="/"
 					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
