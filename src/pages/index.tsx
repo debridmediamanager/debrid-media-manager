@@ -261,7 +261,7 @@ function IndexPage() {
 					</div>
 				</>
 			) : (
-				<h1 className="text-2xl font-bold">Debrid Media Manager is loading...</h1>
+				<h1 className="text-xl text-center">Debrid Media Manager is loading...</h1>
 			)}
 		</div>
 	);
