@@ -945,9 +945,7 @@ function TorrentsPage() {
 											key={i}
 											className="border-t-2 hover:bg-purple-900"
 											onClick={() =>
-												rdKey &&
-												torrent.id.startsWith('rd:') &&
-												torrent.status.startsWith('download')
+												rdKey && torrent.id.startsWith('rd:')
 													? showInfo(rdKey, torrent)
 													: null
 											} // Add the onClick event here
