@@ -1,4 +1,6 @@
 import { useCurrentUser } from '@/hooks/auth';
+import { DeleteUserTorrentDB } from '@/torrent/db';
+import { landscapeMode } from '@/utils/landscapeMode';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
@@ -8,6 +10,8 @@ import { useEffect } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 
 function IndexPage() {
+	useEffect(landscapeMode, []);
+
 	const router = useRouter();
 	const { realDebrid: rdUser, allDebrid: adUser, rdError, adError } = useCurrentUser();
 
@@ -45,14 +49,8 @@ function IndexPage() {
 		}
 	};
 
-	const handleClearCache = () => {
-		let i = localStorage.length - 1;
-		while (i >= 0) {
-			const key = localStorage.key(i);
-			if (key && (key.startsWith('rdc:') || key.startsWith('adc:')))
-				localStorage.removeItem(key);
-			i--;
-		}
+	const handleClearCache = async () => {
+		await DeleteUserTorrentDB();
 		toast.success(`Library cache cleared, please check again`, libraryToastOptions);
 	};
 
@@ -180,7 +178,7 @@ function IndexPage() {
 							)}
 						</div>
 						<hr className="w-full mb-4" />
-						<p className="text-sm mb-4">
+						<div className="text-sm text-center mb-4">
 							Get your movies straight from{' '}
 							<b>
 								<a href="https://www.imdb.com/chart/top/" target="_blank">
@@ -217,8 +215,8 @@ function IndexPage() {
 									Firefox
 								</a>
 							</b>
-						</p>
-						<p className="text-sm mb-4">
+						</div>
+						<div className="text-sm text-center mb-4">
 							<a
 								className="underline"
 								href="https://github.com/debridmediamanager/zurg-testing"
@@ -231,8 +229,8 @@ function IndexPage() {
 							</a>{' '}
 							Mount your Real-Debrid library and play your files directly from your
 							computer.
-						</p>
-						<p className="text-sm mb-4">
+						</div>
+						<div className="text-sm text-center mb-4">
 							<a
 								className="text-azure"
 								href="https://www.reddit.com/r/debridmediamanager/"
@@ -264,7 +262,7 @@ function IndexPage() {
 							>
 								Paypal
 							</a>
-						</p>
+						</div>
 					</div>
 				</>
 			) : (
