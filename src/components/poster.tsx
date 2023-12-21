@@ -3,7 +3,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
-const Poster = ({ imdbId }: Record<string, string>) => {
+const Poster = ({ imdbId, className }: Record<string, string>) => {
 	const [posterUrl, setPosterUrl] = useState('');
 	const [imgLoaded, setImgLoaded] = useState(false);
 	const imgRef = useRef<HTMLDivElement | null>(null);
@@ -51,7 +51,7 @@ const Poster = ({ imdbId }: Record<string, string>) => {
 	}, [imdbId]);
 
 	return (
-		<div ref={imgRef}>
+		<div ref={imgRef} className={className}>
 			{imgLoaded && posterUrl && (
 				<Image width={200} height={300} src={posterUrl} alt="Movie poster" />
 			)}

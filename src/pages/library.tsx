@@ -10,6 +10,7 @@ import {
 	handleSelectFilesInRd,
 } from '@/utils/addMagnet';
 import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
+import { defaultPlayer } from '@/utils/chooseYourPlayer';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
@@ -61,7 +62,7 @@ function TorrentsPage() {
 	const [adSyncing, setAdSyncing] = useState(true);
 	const [filtering, setFiltering] = useState(false);
 	const [grouping, setGrouping] = useState(false);
-	const [player, setPlayer] = useState('infuse');
+	const [player, setPlayer] = useState(defaultPlayer);
 
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
@@ -103,7 +104,7 @@ function TorrentsPage() {
 		const { page } = router.query;
 		if (!page || Array.isArray(page)) return;
 		setCurrentPage(parseInt(page, 10));
-		setPlayer(window.localStorage.getItem('player') || 'infuse');
+		setPlayer(window.localStorage.getItem('player') || defaultPlayer);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router]);
 

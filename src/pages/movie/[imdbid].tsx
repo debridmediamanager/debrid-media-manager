@@ -5,6 +5,7 @@ import { SearchProfile } from '@/services/searchProfile';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
+import { defaultPlayer } from '@/utils/chooseYourPlayer';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
@@ -44,7 +45,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-	const [player, setPlayer] = useState<string>('infuse');
+	const [player, setPlayer] = useState<string>(defaultPlayer);
 	const [searchProfile, setSearchProfile] = useState<SearchProfile>({
 		stringSearch: '',
 		lowerBound: 0,
@@ -123,7 +124,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		await Promise.all([fetchData(imdbid as string), fetchHashAndProgress()]);
 	}
 	useEffect(() => {
-		setPlayer(window.localStorage.getItem('player') || 'infuse');
+		setPlayer(window.localStorage.getItem('player') || defaultPlayer);
 		if (!imdbid) return;
 		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -449,7 +450,7 @@ rounded-lg overflow-hidden
 														className="bg-sky-500 hover:bg-sky-700 text-white px-2 rounded"
 														onClick={() =>
 															window.open(
-																`/api/instantWatch/${player}?token=${rdKey}&hash=${r.hash}`
+																`/api/watch/instant/${player}?token=${rdKey}&hash=${r.hash}`
 															)
 														}
 													>
