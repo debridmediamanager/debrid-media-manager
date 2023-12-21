@@ -46,6 +46,12 @@ export const getMediaId = (
 		}
 	}
 
+	mediaId = mediaId
+		.split(' ')
+		.filter((t) => t)
+		.join(' ')
+		.trim();
+
 	if (systemOnlyId) {
 		mediaId = mediaId.toLowerCase();
 	}

@@ -1,5 +1,5 @@
 import { useCurrentUser } from '@/hooks/auth';
-import { DeleteUserTorrentDB } from '@/torrent/db';
+import { genericToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -43,9 +43,21 @@ function IndexPage() {
 
 	const handleClearCache = async () => {
 		setDeleting(true);
-		await DeleteUserTorrentDB();
-		setDeleting(false);
-		router.push('/library');
+		const request = window.indexedDB.deleteDatabase('DMMDB');
+		request.onsuccess = function () {
+			window.location.assign('/library');
+		};
+		request.onerror = function (event) {
+			setDeleting(false);
+			toast('Database deletion failed', genericToastOptions);
+		};
+		request.onblocked = function () {
+			setDeleting(false);
+			toast(
+				'Database is still open, refresh the page first and then try deleting again',
+				genericToastOptions
+			);
+		};
 	};
 
 	return (

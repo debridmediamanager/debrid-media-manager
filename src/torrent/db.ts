@@ -125,11 +125,4 @@ class UserTorrentDB {
 	}
 }
 
-export const DeleteUserTorrentDB = async () => {
-	window.indexedDB.deleteDatabase('DMMDB');
-	// await deleteDB('DMMDB', {
-	// 	blocked: () => alert('database is still open, refresh the page first to delete cache'),
-	// });
-};
-
 export default UserTorrentDB;
