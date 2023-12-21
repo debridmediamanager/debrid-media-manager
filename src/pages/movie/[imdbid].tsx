@@ -453,7 +453,7 @@ rounded-lg overflow-hidden
 															)
 														}
 													>
-														Watch
+														👀 Watch
 													</button>
 												)}
 												{adKey && inLibrary(r.hash) && (
