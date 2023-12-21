@@ -42,7 +42,7 @@ function IndexPage() {
 		}
 	};
 
-	const chooseAPlayer = () => {
+	const chooseYourPlayer = () => {
 		Swal.fire({
 			title: 'Choose your player',
 			input: 'text',
@@ -174,9 +174,9 @@ function IndexPage() {
 						<div className="flex mb-4">
 							<button
 								className="mx-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded text-xs"
-								onClick={() => chooseAPlayer()}
+								onClick={() => chooseYourPlayer()}
 							>
-								👀 Choose a player
+								👀 Choose your player
 							</button>
 							<button
 								className="mx-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded text-xs"
