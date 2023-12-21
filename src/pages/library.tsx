@@ -104,7 +104,6 @@ function TorrentsPage() {
 		const { page } = router.query;
 		if (!page || Array.isArray(page)) return;
 		setCurrentPage(parseInt(page, 10));
-		setPlayer(window.localStorage.getItem('player') || defaultPlayer);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router]);
 
@@ -174,6 +173,7 @@ function TorrentsPage() {
 	}
 	useEffect(() => {
 		initialize();
+		setPlayer(window.localStorage.getItem('player') || defaultPlayer);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdKey, adKey]);
 
