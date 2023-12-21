@@ -176,13 +176,13 @@ function IndexPage() {
 								className="mx-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded text-xs"
 								onClick={() => chooseAPlayer()}
 							>
-								Choose a player
+								👀 Choose a player
 							</button>
 							<button
 								className="mx-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded text-xs"
 								onClick={() => handleClearCache()}
 							>
-								Refresh library cache
+								💦 Refresh library cache
 							</button>
 							{rdUser && (
 								<button

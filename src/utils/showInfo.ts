@@ -8,7 +8,7 @@ export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent)
 	let warning = '';
 	const isIntact = info.files.filter((f) => f.selected).length === info.links.length;
 	if (info.progress === 100 && !isIntact) {
-		warning = `<div class="text-xs text-red-500">Warning: Some files have expired</div>`;
+		warning = `<div class="text-sm text-red-500">Warning: Some files have expired</div>`;
 	}
 
 	let linkIndex = 0;
@@ -26,12 +26,12 @@ export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent)
 				downloadForm = `
                     <form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
                         <input type="hidden" name="links" value="${fileLink}" />
-                        <button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-xs">Download</button>
+                        <button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm">📲 DL</button>
                     </form>
                 `;
 				if (app) {
 					watchBtn = `
-                        <button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-xs" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">Watch</button>
+                        <button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">👀 Watch</button>
                     `;
 				}
 			}
@@ -72,7 +72,7 @@ export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent)
 		// icon: 'info',
 		html: `
         <h1 class="text-lg font-bold mt-6 mb-4">${info.filename}</h1>
-        <div class="text-xs">
+        <div class="text-sm">
             <table class="table-auto w-full mb-4 text-left">
                 <tbody>
                     <tr>
@@ -107,7 +107,7 @@ export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent)
             </table>
         </div>
         ${warning}
-        <div class="text-xs max-h-60 mb-4 text-left bg-blue-100 p-1">
+        <div class="text-sm max-h-60 mb-4 text-left bg-blue-100 p-1">
             <ul class="list space-y-1">
                 ${filesList}
             </ul>
