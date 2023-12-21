@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 function IndexPage() {
 	const router = useRouter();
@@ -39,6 +40,22 @@ function IndexPage() {
 			localStorage.clear();
 			router.push('/start');
 		}
+	};
+
+	const chooseAPlayer = () => {
+		Swal.fire({
+			title: 'Choose your player',
+			input: 'text',
+			inputLabel: 'Only infuse and vlc are supported for now. Mac and iOS only.',
+			inputValue: window.localStorage.getItem('player') || 'infuse',
+			showCancelButton: true,
+			inputValidator: (value) => {
+				if (!value) {
+					return 'You need to write something!';
+				}
+				window.localStorage.setItem('player', value);
+			},
+		});
 	};
 
 	const handleClearCache = async () => {
@@ -155,12 +172,12 @@ function IndexPage() {
 						</div>
 
 						<div className="flex mb-4">
-							{/* <button
-								className="mx-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded text-sm"
-								onClick={() => router.push('/fixer')}
+							<button
+								className="mx-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded text-xs"
+								onClick={() => chooseAPlayer()}
 							>
-								Fix playback or scan problems
-							</button> */}
+								Choose a player
+							</button>
 							<button
 								className="mx-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded text-xs"
 								onClick={() => handleClearCache()}
