@@ -31,9 +31,7 @@ export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent)
                 `;
 				if (app) {
 					watchBtn = `
-                        <button type="button" class="inline ml-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs" onclick="window.open('/api/watch/infuse?token=${rdKey}&link=${fileLink}')">Infuse</button>
-                        <button type="button" class="inline ml-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs" onclick="window.open('/api/watch/vlc?token=${rdKey}&link=${fileLink}')">VLC</button>
-                        <button type="button" class="inline ml-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs" onclick="window.open('/api/watch/outplayer?token=${rdKey}&link=${fileLink}')">Outplayer</button>
+                        <button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-xs" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">Watch</button>
                     `;
 				}
 			}

@@ -61,6 +61,7 @@ function TorrentsPage() {
 	const [adSyncing, setAdSyncing] = useState(true);
 	const [filtering, setFiltering] = useState(false);
 	const [grouping, setGrouping] = useState(false);
+	const [player, setPlayer] = useState('infuse');
 
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
@@ -102,6 +103,7 @@ function TorrentsPage() {
 		const { page } = router.query;
 		if (!page || Array.isArray(page)) return;
 		setCurrentPage(parseInt(page, 10));
+		setPlayer(window.localStorage.getItem('player') || 'infuse');
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router]);
 
@@ -974,7 +976,7 @@ function TorrentsPage() {
 											className="align-middle hover:bg-purple-900"
 											onClick={() =>
 												rdKey && torrent.id.startsWith('rd:')
-													? showInfo('infuse', rdKey, torrent)
+													? showInfo(player, rdKey, torrent)
 													: null
 											} // Add the onClick event here
 											title="Click for more info"
