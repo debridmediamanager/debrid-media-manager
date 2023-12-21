@@ -257,9 +257,6 @@ function TorrentsPage() {
 			return;
 		}
 		const { filter: titleFilter, mediaType, status } = router.query;
-
-		console.log(slowCount, inProgressCount, failedCount);
-
 		let tmpList = userTorrentsList;
 		if (status === 'slow') {
 			tmpList = tmpList.filter(isSlowOrNoLinks);
@@ -428,8 +425,8 @@ function TorrentsPage() {
 			if (acc[key]) {
 				// Check if current is bigger or smaller based on the user's choice
 				const isPreferred = deleteBigger
-					? acc[key].bytes < cur.bytes
-					: acc[key].bytes > cur.bytes;
+					? acc[key].bytes > cur.bytes
+					: acc[key].bytes < cur.bytes;
 				if (isPreferred) {
 					dupes.push(acc[key]);
 					acc[key] = cur;
@@ -456,6 +453,7 @@ function TorrentsPage() {
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
 		}
+		resetState();
 	}
 
 	async function dedupeByRecency() {
@@ -488,8 +486,8 @@ function TorrentsPage() {
 			if (acc[key]) {
 				// Check if current is newer based on the user's choice
 				const isPreferred = deleteOlder
-					? acc[key].added > cur.added
-					: acc[key].added < cur.added;
+					? acc[key].added < cur.added
+					: acc[key].added > cur.added;
 				if (isPreferred) {
 					dupes.push(acc[key]);
 					acc[key] = cur;
@@ -516,6 +514,7 @@ function TorrentsPage() {
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
 		}
+		resetState();
 	}
 
 	function wrapReinsertFn(t: UserTorrent) {
@@ -680,6 +679,12 @@ function TorrentsPage() {
 	const hasNoQueryParamsBut = (...params: string[]) =>
 		Object.keys(router.query).filter((p) => !params.includes(p)).length === 0;
 
+	const resetState = () => {
+		setQuery('');
+		setSortBy({ column: 'added', direction: 'desc' });
+		router.push(`/library?page=1`);
+	};
+
 	return (
 		<div className="mx-2 my-1">
 			<Head>
@@ -774,19 +779,23 @@ function TorrentsPage() {
 							👀 Same title
 						</Link>
 
-						<button
-							className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs"
-							onClick={dedupeBySize}
-						>
-							🧹 Size
-						</button>
+						{router.query.status === 'sametitle' && (
+							<>
+								<button
+									className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs"
+									onClick={dedupeBySize}
+								>
+									🧹 Size
+								</button>
 
-						<button
-							className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs"
-							onClick={dedupeByRecency}
-						>
-							🧹 Date
-						</button>
+								<button
+									className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs"
+									onClick={dedupeByRecency}
+								>
+									🧹 Date
+								</button>
+							</>
+						)}
 
 						<button
 							className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs`}
@@ -886,11 +895,7 @@ function TorrentsPage() {
 
 				<button
 					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
-					onClick={() => {
-						setQuery('');
-						setSortBy({ column: 'added', direction: 'desc' });
-						router.push(`/library?page=1`);
-					}}
+					onClick={() => resetState()}
 				>
 					Reset
 				</button>

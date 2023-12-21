@@ -24,17 +24,17 @@ export const fetchRealDebrid = async (
 						? filenameParse(torrent.filename)
 						: filenameParse(torrent.filename, true);
 				return {
+					...torrent,
 					score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
 					info,
 					mediaType,
-					title: getMediaId(info, mediaType, false) || torrent.filename,
-					...torrent,
 					id: `rd:${torrent.id}`,
 					links: torrent.links.map((l) => l.replaceAll('/', '/')),
 					seeders: torrent.seeders || 0,
 					speed: torrent.speed || 0,
+					title: getMediaId(info, mediaType, false) || torrent.filename,
 				};
-			}) as UserTorrent[]; // Cast the result to UserTorrent[] to ensure type correctness
+			}) as UserTorrent[];
 			await callback(torrents);
 		}
 	} catch (error) {
