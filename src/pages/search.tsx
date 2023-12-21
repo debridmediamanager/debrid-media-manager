@@ -94,7 +94,7 @@ function Search() {
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-xl font-bold">Search, Improved Accuracy</h1>
+				<h1 className="text-xl font-bold">Search</h1>
 				<Link
 					href="/"
 					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
@@ -113,7 +113,7 @@ function Search() {
 						onChange={(e) => setTypedQuery(e.target.value)}
 					/>
 					<button
-						className="flex-shrink-0 bg-gray-700 hover:bg-gray-600 border-gray-700 hover:border-gray-600 text-sm border-4 text-white py-1 px-2 rounded"
+						className="flex-shrink-0 bg-gray-700 hover:bg-gray-600 border-gray-700 hover:border-gray-600 text-xs border-4 text-white py-0 px-1 rounded"
 						type="submit"
 					>
 						Search
@@ -134,59 +134,26 @@ function Search() {
 			{searchResults.length > 0 && (
 				<>
 					<h2 className="text-xl font-bold my-4">
-						Search Results for &quot;{query}&quot;
+						Search Results for <span className="text-yellow-500">{query}</span>
 					</h2>
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
 						{searchResults.map((result: MdbSearchResult, i: number) => (
-							<div key={i} className="shadow-lg rounded-lg p-6">
+							<Link
+								key={i}
+								className="text-center cursor-pointer"
+								href={
+									result.type === 'movie'
+										? `/movie/${result.imdbid}`
+										: `/show/${result.imdbid}`
+								}
+							>
 								<Poster
 									imdbId={result.imdbid}
 									className="w-full h-64 object-cover object-center rounded-t-lg"
 								/>
-								<div className="mt-4">
-									<h3 className="text-lg font-bold mb-2">{result.title}</h3>
-									<p className="text-gray-300 text-sm">Year: {result.year}</p>
-									{/* <p className="text-gray-300 text-sm">
-										IMDB Score: {result.score}
-									</p> */}
-									{result.type === 'movie' ? (
-										<Link
-											href={`/movie/${result.imdbid}`}
-											className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-300 rounded text-yellow-800"
-										>
-											<span role="img" aria-label="movie" className="mr-2">
-												🎥
-											</span>{' '}
-											View
-										</Link>
-									) : (
-										<>
-											{Array.from(
-												{ length: result.season_count || 0 },
-												(_, i) => i + 1
-											).map((season, idx) => (
-												<Link
-													key={idx}
-													href={`/show/${result.imdbid}/${season}`}
-													className="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-300 rounded text-yellow-800"
-												>
-													<span
-														role="img"
-														aria-label="tv show"
-														className="mr-2"
-													>
-														📺
-													</span>{' '}
-													{result.season_names &&
-													result.season_names[season - 1]
-														? result.season_names[season - 1]
-														: `Season ${season}`}
-												</Link>
-											))}
-										</>
-									)}
-								</div>
-							</div>
+								<h3 className="text-lg text-slate-300 font-bold">{result.title}</h3>
+								<div className="text-gray-600 text-sm">{result.year}</div>
+							</Link>
 						))}
 					</div>
 				</>

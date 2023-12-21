@@ -131,12 +131,10 @@ function IndexPage() {
 							data is stored
 						</div>
 
-						<hr className="w-full mb-4 w-screen" />
-
-						<div className="flex flex-row mb-4 w-screen min-[600px]:justify-center overflow-x-auto">
+						<div className="mb-4 h-max text-center leading-10">
 							<Link
 								href="/library"
-								className="text-sm mx-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="text-md m-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								📚 Library
 							</Link>
@@ -144,28 +142,28 @@ function IndexPage() {
 							<Link
 								href="https://hashlists.debridmediamanager.com"
 								target="_blank"
-								className="text-sm mx-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="text-md m-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								#️⃣ Hash lists
 							</Link>
 
 							<Link
 								href="/search"
-								className="text-sm mx-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="text-md m-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								🔎 Search
 							</Link>
 
 							<Link
 								href="/browse/recent"
-								className="text-sm mx-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="text-md m-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								⏰ Recently Updated
 							</Link>
 
 							<Link
 								href="/browse"
-								className="text-sm mx-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="text-md m-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								🌐 Browse
 							</Link>
@@ -201,7 +199,7 @@ function IndexPage() {
 								</button>
 							)}
 						</div>
-						<hr className="w-full mb-4" />
+
 						<div className="text-sm mb-4 text-center">
 							✨Get your movies straight from{' '}
 							<b>
