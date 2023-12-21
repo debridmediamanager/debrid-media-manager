@@ -136,11 +136,11 @@ function Search() {
 					<h2 className="text-xl font-bold my-4">
 						Search Results for <span className="text-yellow-500">{query}</span>
 					</h2>
-					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
 						{searchResults.map((result: MdbSearchResult, i: number) => (
 							<Link
 								key={i}
-								className="text-center cursor-pointer"
+								className="text-center items-center cursor-pointer"
 								href={
 									result.type === 'movie'
 										? `/movie/${result.imdbid}`
@@ -149,7 +149,7 @@ function Search() {
 							>
 								<Poster
 									imdbId={result.imdbid}
-									className="w-full h-64 object-cover object-center rounded-t-lg"
+									className="flex flex-row justify-center items-center"
 								/>
 								<h3 className="text-lg text-slate-300 font-bold">{result.title}</h3>
 								<div className="text-gray-600 text-sm">{result.year}</div>

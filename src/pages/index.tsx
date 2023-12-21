@@ -1,4 +1,5 @@
 import { useCurrentUser } from '@/hooks/auth';
+import { chooseYourPlayer } from '@/utils/chooseYourPlayer';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
@@ -6,7 +7,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import Swal from 'sweetalert2';
 
 function IndexPage() {
 	const router = useRouter();
@@ -42,31 +42,15 @@ function IndexPage() {
 		}
 	};
 
-	const chooseYourPlayer = () => {
-		Swal.fire({
-			title: 'Choose your player',
-			input: 'text',
-			inputLabel: 'Only infuse and vlc are supported for now. Mac and iOS only.',
-			inputValue: window.localStorage.getItem('player') || 'infuse',
-			showCancelButton: true,
-			inputValidator: (value) => {
-				if (!value) {
-					return 'You need to write something!';
-				}
-				window.localStorage.setItem('player', value);
-			},
-		});
-	};
-
 	const handleClearCache = async () => {
 		setDeleting(true);
 		const request = window.indexedDB.deleteDatabase('DMMDB');
 		request.onsuccess = function () {
 			window.location.assign('/library');
 		};
-		request.onerror = function (event) {
+		request.onerror = function () {
 			setDeleting(false);
-			toast('Database deletion failed', genericToastOptions);
+			toast.error('Database deletion failed', genericToastOptions);
 		};
 		request.onblocked = function () {
 			setDeleting(false);
