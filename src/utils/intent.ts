@@ -49,6 +49,8 @@ export const getInstantIntent = async (
 				intent = `${player}://${resp.download.replace('https://', '')}`;
 			} else if (os === 'mac') {
 				intent = `${player}://${resp.download.replace('https://', '')}`;
+			} else {
+				intent = 'https://real-debrid.com/streaming-' + resp.id;
 			}
 		} catch (e) {
 			await deleteTorrent(rdKey, id, true);
@@ -80,6 +82,8 @@ export const getIntent = async (
 			intent = `${player}://${resp.download.replace('https://', '')}`;
 		} else if (os === 'mac') {
 			intent = `${player}://${resp.download.replace('https://', '')}`;
+		} else {
+			intent = 'https://real-debrid.com/streaming-' + resp.id;
 		}
 	} catch (e) {
 		console.log(e);
