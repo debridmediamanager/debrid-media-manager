@@ -10,6 +10,7 @@ import { defaultPlayer } from '@/utils/chooseYourPlayer';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
+import { isVideo } from '@/utils/selectable';
 import { showInfo } from '@/utils/showInfo';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
@@ -197,12 +198,14 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	};
 
 	const handleShowInfo = (result: SearchResult) => {
-		let files = result.files.map((file) => ({
-			id: file.fileId,
-			path: file.filename,
-			bytes: file.filesize,
-			selected: 1,
-		}));
+		let files = result.files
+			.filter((file) => isVideo({ path: file.filename }))
+			.map((file) => ({
+				id: file.fileId,
+				path: file.filename,
+				bytes: file.filesize,
+				selected: 1,
+			}));
 		files.sort();
 		const info = {
 			id: '',

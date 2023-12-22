@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 
 export const showInfo = async (app: string, rdKey: string, info: TorrentInfoResponse) => {
 	let warning = '';
-	const isIntact = info.files.filter((f) => f.selected).length === info.links.length;
+	const isIntact = info.fake || info.files.filter((f) => f.selected).length === info.links.length;
 	if (info.progress === 100 && !isIntact) {
 		warning = `<div class="text-sm text-red-500">Warning: Some files have expired</div>`;
 	}
@@ -18,18 +18,25 @@ export const showInfo = async (app: string, rdKey: string, info: TorrentInfoResp
 			let downloadForm = '';
 			let watchBtn = ``;
 
-			if (file.selected && isIntact && !info.fake) {
+			if (file.selected && isIntact) {
 				const fileLink = info.links[linkIndex++];
-				downloadForm = `
-                    <form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
-                        <input type="hidden" name="links" value="${fileLink}" />
-                        <button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm">📲 DL</button>
-                    </form>
-                `;
+				if (!info.fake)
+					downloadForm = `
+					<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
+						<input type="hidden" name="links" value="${fileLink}" />
+						<button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm">📲 DL</button>
+					</form>
+				`;
 				if (app) {
-					watchBtn = `
-                        <button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">👀 Watch</button>
-                    `;
+					if (info.fake) {
+						watchBtn = `
+							<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/instant/${app}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')">👀 Watch</button>
+						`;
+					} else {
+						watchBtn = `
+							<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">👀 Watch</button>
+						`;
+					}
 				}
 			}
 
