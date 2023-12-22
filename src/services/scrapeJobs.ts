@@ -31,7 +31,11 @@ export type ScrapeResponse = {
 	errorMessage?: string;
 };
 
-export async function generateScrapeJobs(imdbId: string, replaceOldScrape: boolean = false) {
+export async function generateScrapeJobs(
+	imdbId: string,
+	seasonRestriction: number = 0,
+	replaceOldScrape: boolean = false
+) {
 	let tmdbSearch, mdbInfo;
 	try {
 		tmdbSearch = await axios.get(getTmdbSearch(imdbId));
@@ -74,6 +78,18 @@ export async function generateScrapeJobs(imdbId: string, replaceOldScrape: boole
 	}
 
 	if (isTv) {
+		if (seasonRestriction > 0) {
+			mdbInfo.data.seasons = mdbInfo.data.seasons.filter(
+				(s: any) => s.season_number === seasonRestriction
+			);
+		}
+		// if seasonRestriction is -1 then scrape the latest season only
+		if (seasonRestriction === -1) {
+			// find the biggest number in the seasons array using reduce
+			mdbInfo.data.seasons = mdbInfo.data.seasons.reduce((prev: any, current: any) => {
+				return prev.season_number > current.season_number ? prev : current;
+			});
+		}
 		try {
 			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.tv_results[0]?.id;
 			const tmdbInfo = await axios.get(getTmdbTvInfo(tmdbId));

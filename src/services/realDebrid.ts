@@ -93,7 +93,7 @@ export interface TorrentInfoResponse {
 	status: string;
 	added: string;
 	files: {
-		id: number;
+		id: string;
 		path: string;
 		bytes: number;
 		selected: number;
@@ -102,6 +102,7 @@ export interface TorrentInfoResponse {
 	ended: string;
 	speed: number;
 	seeders: number;
+	fake: boolean;
 }
 
 interface FileData {
@@ -109,12 +110,12 @@ interface FileData {
 	filesize: number;
 }
 
-interface FileHash {
+interface SelectionVariant {
 	[fileId: number]: FileData;
 }
 
 interface HosterHash {
-	[hoster: string]: FileHash[];
+	[hoster: string]: SelectionVariant[];
 }
 
 interface MasterHash {
