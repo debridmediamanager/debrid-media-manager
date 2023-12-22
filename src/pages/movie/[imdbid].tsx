@@ -219,30 +219,15 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	};
 
 	return (
-		<div className="mx-2 my-1 max-w-full">
+		<div className="max-w-full">
 			<Head>
 				<title>
 					Debrid Media Manager - Movie - {title} ({year})
 				</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			<div className="flex justify-between items-center mb-4">
-				<h1
-					className="text-xl font-bold"
-					onClick={() => router.back()}
-					style={{ cursor: 'pointer' }}
-				>
-					🎥
-				</h1>
-				<Link
-					href="/"
-					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
-				>
-					Go Home
-				</Link>
-			</div>
 			{/* Display basic movie info */}
-			<div className="flex items-start space-x-4 mb-2" style={backdropStyle}>
+			<div className="flex items-start mb-2" style={backdropStyle}>
 				<div className="flex justify-center items-center">
 					<Image
 						width={200}
@@ -252,11 +237,17 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 						className="shadow-2xl"
 					/>
 				</div>
-				<div className="w-9/12 space-y-2 align-baseline">
-					<h2 className="text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
+				<div className="w-full space-y-2 p-2 flex flex-col">
+					<Link
+						href="/"
+						className="block w-fit self-end text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+					>
+						Go Home
+					</Link>
+					<h2 className="block text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
 						{title} ({year})
 					</h2>
-					<div className="bg-slate-900/75 w-fit">
+					<div className="block bg-slate-900/75 w-fit">
 						{description}{' '}
 						{imdb_score && (
 							<div className="text-yellow-100 inline">
@@ -302,110 +293,105 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				</div>
 			)}
 			{searchResults.length > 0 && (
-				<>
-					{searchState !== 'loading' && (
-						<div
-							className="mb-4 pb-1 whitespace-nowrap overflow-x-scroll"
-							style={{ scrollbarWidth: 'thin' }}
-						>
-							{rdKey && (
-								<>
-									<button
-										className={`mr-2 mt-0 mb-2 bg-green-700 hover:bg-green-600 text-white py-2 px-1 text-xs rounded`}
-										onClick={() => {
-											wrapLoading(
-												'RD',
-												instantCheckInRd(
-													rdKey!,
-													searchResults.map((result) => result.hash),
-													setSearchResults
-												)
-											);
-										}}
-									>
-										Check RD availability
-									</button>
-									<input
-										id="auto-check-rd"
-										className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-										type="checkbox"
-										checked={rdAutoInstantCheck || false}
-										onChange={(event) => {
-											const isChecked = event.target.checked;
-											setRdAutoInstantCheck(isChecked);
-										}}
-									/>{' '}
-									<label
-										htmlFor="auto-check-rd"
-										className="mr-2 mb-2 text-sm font-medium"
-									>
-										Auto
-									</label>
-								</>
-							)}
-							{adKey && (
-								<>
-									<button
-										className={`mr-2 mt-0 mb-2 bg-green-700 hover:bg-green-600 text-white py-2 px-1 text-xs rounded`}
-										onClick={() => {
-											wrapLoading(
-												'AD',
-												instantCheckInAd(
-													adKey!,
-													searchResults.map((result) => result.hash),
-													setSearchResults
-												)
-											);
-										}}
-									>
-										Check AD availability
-									</button>
-									<input
-										id="auto-check-ad"
-										className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-										type="checkbox"
-										checked={adAutoInstantCheck || false}
-										onChange={(event) => {
-											const isChecked = event.target.checked;
-											setAdAutoInstantCheck(isChecked);
-										}}
-									/>{' '}
-									<label
-										htmlFor="auto-check-ad"
-										className="ml-2 mr-2 mb-2 text-sm font-medium"
-									>
-										Auto
-									</label>
-								</>
-							)}
-							<span className="px-1 py-1 text-xs bg-green-100 text-green-800 mr-2">
-								{
-									searchResults.filter(
-										(r) =>
-											(onlyShowCached && (r.rdAvailable || r.adAvailable)) ||
-											!onlyShowCached
-									).length
-								}{' '}
-								/ {searchResults.length} shown
-							</span>
-							<input
-								id="show-cached"
-								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-								type="checkbox"
-								checked={onlyShowCached || false}
-								onChange={(event) => {
-									const isChecked = event.target.checked;
-									setOnlyShowCached(isChecked);
-								}}
-							/>{' '}
-							<label
-								htmlFor="show-cached"
-								className="ml-2 mr-2 mb-2 text-sm font-medium"
-							>
-								Only show cached
-							</label>
-						</div>
-					)}
+				<div className="mx-2 my-1">
+					<div
+						className="whitespace-nowrap overflow-x-scroll"
+						style={{ scrollbarWidth: 'thin' }}
+					>
+						{rdKey && (
+							<>
+								<button
+									className={`mr-2 mt-0 mb-2 bg-green-700 hover:bg-green-600 text-white py-2 px-1 text-xs rounded`}
+									onClick={() => {
+										wrapLoading(
+											'RD',
+											instantCheckInRd(
+												rdKey!,
+												searchResults.map((result) => result.hash),
+												setSearchResults
+											)
+										);
+									}}
+								>
+									Check RD availability
+								</button>
+								<input
+									id="auto-check-rd"
+									className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+									type="checkbox"
+									checked={rdAutoInstantCheck || false}
+									onChange={(event) => {
+										const isChecked = event.target.checked;
+										setRdAutoInstantCheck(isChecked);
+									}}
+								/>{' '}
+								<label
+									htmlFor="auto-check-rd"
+									className="mr-2 mb-2 text-sm font-medium"
+								>
+									Auto
+								</label>
+							</>
+						)}
+						{adKey && (
+							<>
+								<button
+									className={`mr-2 mt-0 mb-2 bg-green-700 hover:bg-green-600 text-white py-2 px-1 text-xs rounded`}
+									onClick={() => {
+										wrapLoading(
+											'AD',
+											instantCheckInAd(
+												adKey!,
+												searchResults.map((result) => result.hash),
+												setSearchResults
+											)
+										);
+									}}
+								>
+									Check AD availability
+								</button>
+								<input
+									id="auto-check-ad"
+									className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+									type="checkbox"
+									checked={adAutoInstantCheck || false}
+									onChange={(event) => {
+										const isChecked = event.target.checked;
+										setAdAutoInstantCheck(isChecked);
+									}}
+								/>{' '}
+								<label
+									htmlFor="auto-check-ad"
+									className="ml-2 mr-2 mb-2 text-sm font-medium"
+								>
+									Auto
+								</label>
+							</>
+						)}
+						<span className="px-1 py-1 text-xs bg-green-100 text-green-800 mr-2">
+							{
+								searchResults.filter(
+									(r) =>
+										(onlyShowCached && (r.rdAvailable || r.adAvailable)) ||
+										!onlyShowCached
+								).length
+							}{' '}
+							/ {searchResults.length} shown
+						</span>
+						<input
+							id="show-cached"
+							className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+							type="checkbox"
+							checked={onlyShowCached || false}
+							onChange={(event) => {
+								const isChecked = event.target.checked;
+								setOnlyShowCached(isChecked);
+							}}
+						/>{' '}
+						<label htmlFor="show-cached" className="ml-2 mr-2 mb-2 text-sm font-medium">
+							Only show cached
+						</label>
+					</div>
 					<div className="overflow-x-auto">
 						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
 							{searchResults
@@ -534,7 +520,7 @@ rounded-lg overflow-hidden
 								))}
 						</div>
 					</div>
-				</>
+				</div>
 			)}
 		</div>
 	);
