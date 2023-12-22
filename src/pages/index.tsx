@@ -116,7 +116,7 @@ function IndexPage() {
 							data is stored
 						</div>
 
-						<div className="mb-4 h-max text-center leading-10">
+						<div className="mb-2 h-max text-center leading-10">
 							<Link
 								href="/library"
 								className="text-md m-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
@@ -138,21 +138,21 @@ function IndexPage() {
 							>
 								🔎 Search
 							</Link>
-
-							<Link
-								href="/browse/recent"
-								className="text-md m-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
-							>
-								⏰ Recently Updated
-							</Link>
 						</div>
 
-						<div className="flex mb-4">
+						<div className="mb-2 h-max text-center leading-10">
 							<Link
 								href="/browse"
 								className="text-sm m-1 bg-neutral-600 hover:bg-neutral-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								🏆 top
+							</Link>
+
+							<Link
+								href="/browse/recent"
+								className="text-sm m-1 bg-neutral-600 hover:bg-neutral-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+							>
+								⏰ recent
 							</Link>
 
 							{getTerms(5).map((term) => (
@@ -166,7 +166,7 @@ function IndexPage() {
 							))}
 						</div>
 
-						<div className="flex mb-4">
+						<div className="mb-2 h-max text-center leading-10">
 							<button
 								className="mx-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded text-xs"
 								onClick={() => chooseYourPlayer()}
