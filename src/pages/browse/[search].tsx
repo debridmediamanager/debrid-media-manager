@@ -98,15 +98,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	}
 
 	let rng = lcg(new Date().getTime() / 1000 / 60 / 10);
-	topLists = shuffle(topLists, rng).slice(0, 8);
+	topLists = shuffle(topLists, rng).slice(0, 4);
 
 	const response: BrowseResponse = {};
 	for (const list of topLists) {
 		const itemsResponse = await mdblist.listItems(list.id);
 		response[list.name] = itemsResponse
 			.filter((item) => item.imdb_id)
-			.slice(0, 16)
+			.slice(0, 24)
 			.map((item) => `${list.mediatype}:${item.imdb_id}`);
+		response[list.name] = shuffle(response[list.name], rng);
 	}
 
 	responses[key] = {

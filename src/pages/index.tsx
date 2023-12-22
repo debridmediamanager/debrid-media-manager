@@ -1,4 +1,5 @@
 import { useCurrentUser } from '@/hooks/auth';
+import { getTerms } from '@/utils/browseTerms';
 import { chooseYourPlayer } from '@/utils/chooseYourPlayer';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
@@ -144,13 +145,25 @@ function IndexPage() {
 							>
 								⏰ Recently Updated
 							</Link>
+						</div>
 
+						<div className="flex mb-4">
 							<Link
 								href="/browse"
-								className="text-md m-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="text-sm m-1 bg-neutral-600 hover:bg-neutral-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
-								🌐 Browse
+								🏆 top
 							</Link>
+
+							{getTerms(5).map((term) => (
+								<Link
+									href={`/browse/${term.replace(/\W/g, '')}`}
+									className="text-sm m-1 bg-neutral-600 hover:bg-neutral-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+									key={term}
+								>
+									{term}
+								</Link>
+							))}
 						</div>
 
 						<div className="flex mb-4">
