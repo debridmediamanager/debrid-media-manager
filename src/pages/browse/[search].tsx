@@ -37,7 +37,7 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 								<h2 className="mt-4 text-xl font-bold" key={idx}>
 									<span className="text-yellow-500">{idx + 1}</span> {listName}
 								</h2>
-								<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
+								<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
 									{response[listName].map((key: string) => {
 										const match = key.match(/^(movie|show):(.+)/);
 										if (match) {
@@ -51,10 +51,7 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 													href={`/${mediaType}/${imdbid}`}
 													className=""
 												>
-													<Poster
-														imdbId={imdbid}
-														className="w-full h-64 object-cover object-center rounded-t-lg"
-													/>
+													<Poster imdbId={imdbid} />
 												</Link>
 											);
 										}

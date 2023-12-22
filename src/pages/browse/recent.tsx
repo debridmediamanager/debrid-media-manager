@@ -63,7 +63,7 @@ function RecentlyUpdated() {
 			)}
 			{searchResults.length > 0 && (
 				<>
-					<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
+					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
 						{searchResults.map((key: string, idx: number) => {
 							const match = key.match(/^(movie|tv):(.+)/);
 							if (match) {
@@ -72,10 +72,7 @@ function RecentlyUpdated() {
 
 								return (
 									<Link key={idx} href={`/${mediaType}/${imdbid}`} className="">
-										<Poster
-											imdbId={imdbid}
-											className="w-full h-64 object-cover object-center rounded-t-lg"
-										/>
+										<Poster imdbId={imdbid} />
 									</Link>
 								);
 							}
