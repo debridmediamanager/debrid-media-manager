@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 
-export const defaultPlayer = 'android/chooser';
+export const defaultPlayer = 'web/rd';
 
 export const chooseYourPlayer = async () => {
 	await Swal.fire({
