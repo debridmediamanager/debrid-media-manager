@@ -147,10 +147,7 @@ function Search() {
 										: `/show/${result.imdbid}`
 								}
 							>
-								<Poster
-									imdbId={result.imdbid}
-									className="flex flex-row justify-center items-center"
-								/>
+								<Poster imdbId={result.imdbid} />
 								<h3 className="text-lg text-slate-300 font-bold">{result.title}</h3>
 								<div className="text-gray-600 text-sm">{result.year}</div>
 							</Link>
@@ -174,7 +171,7 @@ function Search() {
 									How about results from{' '}
 									<span className="text-yellow-500">{listName}</span>?
 								</h2>
-								<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
+								<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
 									{miscResults[listName].map((key: string) => {
 										const match = key.match(/^(movie|show):(.+)/);
 										if (match) {
@@ -188,10 +185,7 @@ function Search() {
 													href={`/${mediaType}/${imdbid}`}
 													className=""
 												>
-													<Poster
-														imdbId={imdbid}
-														className="w-full h-64 object-cover object-center rounded-t-lg"
-													/>
+													<Poster imdbId={imdbid} />
 												</Link>
 											);
 										}

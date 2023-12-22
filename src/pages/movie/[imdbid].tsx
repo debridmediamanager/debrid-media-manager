@@ -1,6 +1,7 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
+import { TorrentInfoResponse } from '@/services/realDebrid';
 import { SearchProfile } from '@/services/searchProfile';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
@@ -9,6 +10,8 @@ import { defaultPlayer } from '@/utils/chooseYourPlayer';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
+import { isVideo } from '@/utils/selectable';
+import { showInfo } from '@/utils/showInfo';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
@@ -180,6 +183,39 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		backgroundPosition: 'center',
 		backgroundRepeat: 'no-repeat',
 		backgroundSize: 'screen',
+	};
+
+	const handleShowInfo = (result: SearchResult) => {
+		let files = result.files
+			.filter((file) => isVideo({ path: file.filename }))
+			.map((file) => ({
+				id: file.fileId,
+				path: file.filename,
+				bytes: file.filesize,
+				selected: 1,
+			}));
+		files.sort();
+		const info = {
+			id: '',
+			filename: result.title,
+			original_filename: result.title,
+			hash: result.hash,
+			bytes: result.fileSize * 1024 * 1024,
+			original_bytes: result.fileSize,
+			progress: 100,
+			files,
+			links: [],
+			fake: true,
+			/// extras
+			host: '',
+			split: 0,
+			status: '',
+			added: '',
+			ended: '',
+			speed: 0,
+			seeders: 0,
+		} as TorrentInfoResponse;
+		showInfo(window.localStorage.getItem('player') || defaultPlayer, rdKey!, info);
 	};
 
 	return (
@@ -448,11 +484,7 @@ rounded-lg overflow-hidden
 												{r.rdAvailable && (
 													<button
 														className="bg-sky-500 hover:bg-sky-700 text-white px-2 rounded"
-														onClick={() =>
-															window.open(
-																`/api/watch/instant/${player}?token=${rdKey}&hash=${r.hash}`
-															)
-														}
+														onClick={() => handleShowInfo(r)}
 													>
 														👀 Watch
 													</button>
