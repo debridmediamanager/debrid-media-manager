@@ -7,6 +7,9 @@ export const chooseYourPlayer = async () => {
 		title: 'Choose your player',
 		input: 'select',
 		inputOptions: {
+			Web: {
+				'web/rd': 'Real-Debrid Stream',
+			},
 			Android: {
 				'android/chooser': 'App chooser',
 				'android/org.videolan.vlc': 'VLC',

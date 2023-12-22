@@ -421,16 +421,16 @@ rounded-lg overflow-hidden
 											<div className="text-gray-300">
 												Size: {(r.fileSize / 1024).toFixed(2)} GB
 											</div>
-											<div className="flex flex-wrap space-x-2">
+											<div className="space-x-2 space-y-2">
 												<button
-													className="bg-pink-500 hover:bg-pink-700 text-white rounded px-2 w-max"
+													className="bg-pink-500 hover:bg-pink-700 text-white rounded inline px-1"
 													onClick={() => handleCopyMagnet(r.hash)}
 												>
-													<FaMagnet />
+													<FaMagnet className="inline" /> Get
 												</button>
 												{rdKey && inLibrary(r.hash) && (
 													<button
-														className="bg-red-500 hover:bg-red-700 text-white rounded px-2 w-max"
+														className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
 														onClick={() => deleteRd(r.hash)}
 													>
 														<FaTimes className="mr-2 inline" />
@@ -451,7 +451,7 @@ rounded-lg overflow-hidden
 																: r.noVideos
 																? 'gray'
 																: 'blue'
-														}-700 text-white rounded px-2 w-max`}
+														}-700 text-white rounded inline px-1`}
 														onClick={() => addRd(r.hash)}
 													>
 														{r.rdAvailable ? (
@@ -469,7 +469,7 @@ rounded-lg overflow-hidden
 												)}
 												{r.rdAvailable && (
 													<button
-														className="bg-sky-500 hover:bg-sky-700 text-white px-2 rounded"
+														className="bg-sky-500 hover:bg-sky-700 text-white rounded inline px-1"
 														onClick={() => handleShowInfo(r)}
 													>
 														👀 Watch
@@ -477,7 +477,7 @@ rounded-lg overflow-hidden
 												)}
 												{adKey && inLibrary(r.hash) && (
 													<button
-														className="bg-red-500 hover:bg-red-700 text-white rounded px-2 w-max"
+														className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
 														onClick={() => deleteAd(r.hash)}
 													>
 														<FaTimes className="mr-2 inline" />
@@ -498,7 +498,7 @@ rounded-lg overflow-hidden
 																: r.noVideos
 																? 'gray'
 																: 'blue'
-														}-700 text-white rounded px-2 w-max`}
+														}-700 text-white rounded inline px-1`}
 														onClick={() => addAd(r.hash)}
 													>
 														{r.adAvailable ? (
