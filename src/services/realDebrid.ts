@@ -384,7 +384,7 @@ export const addHashAsMagnet = async (
 export const selectFiles = async (
 	accessToken: string,
 	id: string,
-	files: number[],
+	files: string[],
 	bare: boolean = false
 ) => {
 	try {
@@ -451,6 +451,7 @@ export const unrestrictLink = async (
 	try {
 		const params = new URLSearchParams();
 		if (
+			/^\d/.test(ipAddress) &&
 			!ipAddress.startsWith('192.168') &&
 			!ipAddress.startsWith('10.') &&
 			!ipAddress.startsWith('127.') &&
