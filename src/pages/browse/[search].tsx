@@ -21,7 +21,6 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-xl font-bold">Browse</h1>
-				<p>This page refreshes content every 10 minutes</p>
 				<Link
 					href="/"
 					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
