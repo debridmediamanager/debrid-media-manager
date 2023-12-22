@@ -1,5 +1,5 @@
 import { AdInstantAvailabilityResponse, MagnetFile, adInstantCheck } from '@/services/allDebrid';
-import { SearchResult } from '@/services/mediasearch';
+import { FileData, SearchResult } from '@/services/mediasearch';
 import { RdInstantAvailabilityResponse, rdInstantCheck } from '@/services/realDebrid';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-hot-toast';
@@ -34,10 +34,15 @@ export const instantCheckInRd = async (
 				if ('rd' in resp[torrent.hash] === false) continue;
 				const variants = resp[torrent.hash]['rd'];
 				if (!variants.length) continue;
-				torrent.noVideos = variants.reduce((noVideo, variant) => {
-					if (!noVideo) return false;
-					return !Object.values(variant).some((file) => isVideo({ path: file.filename }));
-				}, true);
+				const files: Record<string, FileData> = {};
+				resp[torrent.hash]['rd'].forEach((variant) => {
+					for (const fileId in variant) {
+						if (fileId in files === false)
+							files[fileId] = { ...variant[fileId], fileId };
+					}
+				});
+				torrent.files = Object.values(files);
+				torrent.noVideos = !torrent.files.some((file) => isVideo({ path: file.filename }));
 				// because it has variants and there's at least 1 video file
 				if (!torrent.noVideos) {
 					torrent.rdAvailable = true;

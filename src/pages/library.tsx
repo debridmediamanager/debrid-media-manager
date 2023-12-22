@@ -1,4 +1,5 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
+import { getTorrentInfo } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, keyByStatus, uniqId } from '@/torrent/userTorrent';
 import {
@@ -62,7 +63,6 @@ function TorrentsPage() {
 	const [adSyncing, setAdSyncing] = useState(true);
 	const [filtering, setFiltering] = useState(false);
 	const [grouping, setGrouping] = useState(false);
-	const [player, setPlayer] = useState(defaultPlayer);
 
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
@@ -173,7 +173,6 @@ function TorrentsPage() {
 	}
 	useEffect(() => {
 		initialize();
-		setPlayer(window.localStorage.getItem('player') || defaultPlayer);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdKey, adKey]);
 
@@ -688,6 +687,11 @@ function TorrentsPage() {
 		router.push(`/library?page=1`);
 	};
 
+	const handleShowInfo = async (id: string) => {
+		const info = await getTorrentInfo(rdKey!, id.substring(3));
+		showInfo(window.localStorage.getItem('player') || defaultPlayer, rdKey!, info);
+	};
+
 	return (
 		<div className="mx-2 my-1">
 			<Head>
@@ -977,7 +981,7 @@ function TorrentsPage() {
 											className="align-middle hover:bg-purple-900"
 											onClick={() =>
 												rdKey && torrent.id.startsWith('rd:')
-													? showInfo(player, rdKey, torrent)
+													? handleShowInfo(torrent.id)
 													: null
 											} // Add the onClick event here
 											title="Click for more info"
