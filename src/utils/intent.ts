@@ -42,7 +42,9 @@ export const getInstantIntent = async (
 				intent = `intent://${resp.download.replace(
 					'https://',
 					''
-				)}#Intent;type=video/any;scheme=https;package=${player};end`;
+				)}#Intent;type=video/any;scheme=https${
+					player !== 'chooser' ? ';package=' + player : ''
+				};end`;
 			} else if (os === 'ios') {
 				intent = `${player}://${resp.download.replace('https://', '')}`;
 			} else if (os === 'mac') {
@@ -71,7 +73,9 @@ export const getIntent = async (
 			intent = `intent://${resp.download.replace(
 				'https://',
 				''
-			)}#Intent;type=video/any;scheme=https;package=${player};end`;
+			)}#Intent;type=video/any;scheme=https${
+				player !== 'chooser' ? ';package=' + player : ''
+			};end`;
 		} else if (os === 'ios') {
 			intent = `${player}://${resp.download.replace('https://', '')}`;
 		} else if (os === 'mac') {
