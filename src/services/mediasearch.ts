@@ -3,11 +3,18 @@ export type SearchApiResponse = {
 	errorMessage?: string;
 };
 
+export interface FileData {
+	fileId: string;
+	filename: string;
+	filesize: number;
+}
+
 export type SearchResult = {
 	title: string;
 	fileSize: number;
 	hash: string;
 	rdAvailable: boolean;
+	files: FileData[];
 	adAvailable: boolean;
 	noVideos: boolean;
 };

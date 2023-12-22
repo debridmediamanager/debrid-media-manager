@@ -1,10 +1,7 @@
-import { getTorrentInfo } from '@/services/realDebrid';
-import { UserTorrent } from '@/torrent/userTorrent';
+import { TorrentInfoResponse } from '@/services/realDebrid';
 import Swal from 'sweetalert2';
 
-export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent) => {
-	const info = await getTorrentInfo(rdKey, torrent.id.substring(3));
-
+export const showInfo = async (app: string, rdKey: string, info: TorrentInfoResponse) => {
 	let warning = '';
 	const isIntact = info.files.filter((f) => f.selected).length === info.links.length;
 	if (info.progress === 100 && !isIntact) {
@@ -21,7 +18,7 @@ export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent)
 			let downloadForm = '';
 			let watchBtn = ``;
 
-			if (file.selected && isIntact) {
+			if (file.selected && isIntact && !info.fake) {
 				const fileLink = info.links[linkIndex++];
 				downloadForm = `
                     <form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
@@ -68,13 +65,23 @@ export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent)
 			? `<tr><td class="font-semibold align-left">Seeders:</td><td class="align-left">${info.seeders}</td></tr>`
 			: '';
 
-	Swal.fire({
-		// icon: 'info',
-		html: `
-        <h1 class="text-lg font-bold mt-6 mb-4">${info.filename}</h1>
-        <div class="text-sm">
+	let html = `<h1 class="text-lg font-bold mt-6 mb-4">${info.filename}</h1>
+    <hr/>
+    <div class="text-sm max-h-60 mb-4 text-left bg-blue-100 p-1">
+        <ul class="list space-y-1">
+            ${filesList}
+        </ul>
+    </div>`;
+	if (!info.fake)
+		html = html.replace(
+			'<hr/>',
+			`<div class="text-sm">
             <table class="table-auto w-full mb-4 text-left">
                 <tbody>
+                    <tr>
+                        <td class="font-semibold">Size:</td>
+                        <td>${(info.bytes / 1024 ** 3).toFixed(2)} GB</td>
+                    </tr>
                     <tr>
                         <td class="font-semibold">ID:</td>
                         <td>${info.id}</td>
@@ -82,10 +89,6 @@ export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent)
                     <tr>
                         <td class="font-semibold">Original filename:</td>
                         <td>${info.original_filename}</td>
-                    </tr>
-                    <tr>
-                        <td class="font-semibold">Size:</td>
-                        <td>${(info.bytes / 1024 ** 3).toFixed(2)} GB</td>
                     </tr>
                     <tr>
                         <td class="font-semibold">Original size:</td>
@@ -106,14 +109,11 @@ export const showInfo = async (app: string, rdKey: string, torrent: UserTorrent)
                 </tbody>
             </table>
         </div>
-        ${warning}
-        <div class="text-sm max-h-60 mb-4 text-left bg-blue-100 p-1">
-            <ul class="list space-y-1">
-                ${filesList}
-            </ul>
-        </div>
-
-            `,
+        ${warning}`
+		);
+	Swal.fire({
+		// icon: 'info',
+		html,
 		showConfirmButton: false,
 		customClass: {
 			htmlContainer: '!mx-1',
