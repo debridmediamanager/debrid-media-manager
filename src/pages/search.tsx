@@ -93,7 +93,7 @@ function Search() {
 				<title>Debrid Media Manager - Search: {query}</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			<div className="flex justify-between items-center mb-4">
+			<div className="flex justify-between items-center mb-2">
 				<h1 className="text-xl font-bold">Search</h1>
 				<Link
 					href="/"

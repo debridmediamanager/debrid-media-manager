@@ -700,27 +700,32 @@ function TorrentsPage() {
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-2">
 				<h1 className="text-xl font-bold">
-					Library 📚 {userTorrentsList.length} torrents{' '}
-					{rdSyncing || adSyncing
-						? '🤔' // Thinking if syncing
-						: totalBytes / ONE_GIGABYTE / 1024 > 10000
-						? '😱' // Fear for more than 10 PB
-						: totalBytes / ONE_GIGABYTE / 1024 > 1000
-						? '😨' // Fearful surprise for more than 1 PB
-						: totalBytes / ONE_GIGABYTE / 1024 > 100
-						? '😮' // Surprise for more than 100 TB
-						: totalBytes / ONE_GIGABYTE / 1024 > 10
-						? '🙂' // Smile for more than 10 TB
-						: totalBytes / ONE_GIGABYTE / 1024 > 1
-						? '😐' // Neutral for more than 1 TB
-						: '🙁'}{' '}
-					{/* Sad for 1 TB or less */}
-					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB
+					Library 📚{' '}
+					<span className="text-sm whitespace-nowrap">
+						{userTorrentsList.length} torrents{' '}
+						{rdSyncing || adSyncing
+							? '🤔' // Thinking if syncing
+							: totalBytes / ONE_GIGABYTE / 1024 > 10000
+							? '😱' // Fear for more than 10 PB
+							: totalBytes / ONE_GIGABYTE / 1024 > 1000
+							? '😨' // Fearful surprise for more than 1 PB
+							: totalBytes / ONE_GIGABYTE / 1024 > 100
+							? '😮' // Surprise for more than 100 TB
+							: totalBytes / ONE_GIGABYTE / 1024 > 10
+							? '🙂' // Smile for more than 10 TB
+							: totalBytes / ONE_GIGABYTE / 1024 > 1
+							? '😐' // Neutral for more than 1 TB
+							: '🙁'}{' '}
+						{/* Sad for 1 TB or less */}
+					</span>
+					<span className="text-sm whitespace-nowrap">
+						{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB
+					</span>
 				</h1>
 
 				<Link
 					href="/"
-					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded whitespace-nowrap"
 				>
 					Go Home
 				</Link>

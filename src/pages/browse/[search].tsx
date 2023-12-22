@@ -19,7 +19,7 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 				<title>Debrid Media Manager - Recently Updated</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			<div className="flex justify-between items-center mb-4">
+			<div className="flex justify-between items-center mb-2">
 				<h1 className="text-xl font-bold">Browse</h1>
 				<Link
 					href="/"
