@@ -142,6 +142,8 @@ const handler: NextApiHandler = async (req, res) => {
 			...omdbResults,
 			...mdbResults.filter((mdbResult) => !omdbResults.find((r) => r.id === mdbResult.id)),
 		];
+		// pop the first result
+		const firstResult = results.shift();
 		// sort result by levenstein distance to search term
 		// start by computing the levenstein distance for each result
 		results.forEach((result) => {
@@ -170,6 +172,10 @@ const handler: NextApiHandler = async (req, res) => {
 					results[i].type = 'movie';
 				}
 			}
+		}
+		// put the first result back at the top
+		if (firstResult) {
+			results.unshift(firstResult);
 		}
 
 		await db.saveSearchResults(keyword.toString().trim(), results);
