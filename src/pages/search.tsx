@@ -71,6 +71,7 @@ function Search() {
 			const data = await res.json();
 			if (data.error) throw new Error(data.error);
 			setSearchResults(data.results);
+			if (data.results.length === 0) fetchMiscData(q);
 		} catch (error: any) {
 			setErrorMessage(error.message);
 			fetchMiscData(q);
