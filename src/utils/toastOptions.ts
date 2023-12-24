@@ -1,9 +1,10 @@
 export const globalToastOptions = {
 	style: {
 		borderRadius: '10px',
-		background: 'yellow',
+		background: 'rgba(255, 255, 0, 0.85)',
 		color: '#000',
-		fontSize: '24px',
+		fontSize: '1rem',
+		padding: '0.1rem',
 	},
 };
 
@@ -20,4 +21,9 @@ export const libraryToastOptions = {
 export const genericToastOptions = {
 	...globalToastOptions,
 	icon: '📢',
+};
+
+export const magnetToastOptions = {
+	...globalToastOptions,
+	icon: '🧲',
 };

@@ -44,3 +44,4 @@ tmp/
 temp/
 
 pscale_dump_dmm_main/
+*.sqlite

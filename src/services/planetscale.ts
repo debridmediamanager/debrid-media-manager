@@ -60,6 +60,16 @@ export class PlanetScaleCache {
 		return cacheEntry?.value as T | undefined;
 	}
 
+	public async deleteScrapedTrue(imdbId: string): Promise<void> {
+		const keys = [`movie:${imdbId}`, `tv:${imdbId}%`];
+
+		for (const key of keys) {
+			await this.prisma.scrapedTrue.deleteMany({
+				where: { key: { contains: key } },
+			});
+		}
+	}
+
 	/// scraped results
 
 	public async saveScrapedResults(
@@ -145,7 +155,7 @@ export class PlanetScaleCache {
 		olderThan: Date | null = null
 	): Promise<{ key: string; updatedAt: Date } | null> {
 		const whereCondition: any = {
-			key: { startsWith: 'requested:' },
+			key: { startsWith: 'requested:tt' },
 		};
 
 		if (olderThan !== null) {
@@ -174,7 +184,7 @@ export class PlanetScaleCache {
 
 		const requestedItem = await this.prisma.scraped.findFirst({
 			where: {
-				key: { startsWith: 'processing:' },
+				key: { startsWith: 'processing:tt' },
 				updatedAt: { lte: oneHourAgo },
 			},
 			orderBy: { updatedAt: 'asc' },
@@ -301,5 +311,31 @@ export class PlanetScaleCache {
 				return '';
 			})
 			.filter((key: any) => key !== '');
+	}
+
+	public async getEmptyMedia(quantity = 3): Promise<string[] | null> {
+		const scrapedItems = await this.prisma.scraped.findMany({
+			where: {
+				OR: [
+					{
+						key: { startsWith: `tv:tt` },
+						value: { equals: [] },
+					},
+					{
+						key: { startsWith: `movie:tt` },
+						value: { equals: [] },
+					},
+				],
+			},
+			orderBy: { updatedAt: 'asc' },
+			take: quantity,
+			select: { key: true },
+		});
+
+		if (scrapedItems.length > 0) {
+			return scrapedItems.map((item) => item.key.split(':')[1]);
+		}
+
+		return null;
 	}
 }

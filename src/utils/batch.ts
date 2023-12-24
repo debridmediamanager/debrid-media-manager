@@ -7,7 +7,7 @@ async function sleep(ms: number): Promise<void> {
 export async function runConcurrentFunctions<T>(
 	functions: Array<AsyncFunction<T>>,
 	concurrency: number,
-	delay: number
+	delay: number | ((index: number) => Promise<void>)
 ): Promise<[T[], Error[]]> {
 	let currentFunctions: Array<AsyncFunction<T>> = [];
 	const results: T[] = [];
@@ -28,7 +28,8 @@ export async function runConcurrentFunctions<T>(
 				errors.push(err);
 			})
 			.finally(async () => {
-				await sleep(delay);
+				if (typeof delay === 'number') await sleep(delay);
+				else await delay(functions.length);
 				const index = currentFunctions.indexOf(nextFunction);
 				currentFunctions.splice(index, 1);
 			});

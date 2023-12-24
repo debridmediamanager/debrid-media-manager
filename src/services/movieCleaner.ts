@@ -2,6 +2,7 @@ import {
 	filterByMovieConditions,
 	getAllPossibleTitles,
 	grabMovieMetadata,
+	matchesTitle,
 	meetsTitleConditions,
 } from '@/utils/checks';
 import axios from 'axios';
@@ -74,7 +75,7 @@ function cleanScrapes(
 	year: string,
 	scrapes: ScrapeSearchResult[]
 ): ScrapeSearchResult[] {
-	return scrapes.filter((scrape) => meetsTitleConditions(targetTitle, year, scrape.title));
+	return scrapes.filter((scrape) => meetsTitleConditions(targetTitle, [year], scrape.title));
 }
 
 const cleanBasedOnScrapeJob = (job: MovieScrapeJob): ScrapeSearchResult[][] => {
@@ -93,9 +94,11 @@ export async function cleanMovieScrapes(
 	}
 	const scrapesCount = scrapes.length;
 	if (!scrapes.length) {
-		console.log(`⚠️ No results for ${mdbData.title} !`);
+		console.log(`⚠️ No results for ${mdbData?.title} !`);
 		return;
 	}
+
+	console.log(`🎥 Cleaning ${scrapes.length} results for ${mdbData?.title} ...`);
 
 	const {
 		cleanTitle,
@@ -107,7 +110,7 @@ export async function cleanMovieScrapes(
 		airDate,
 	} = grabMovieMetadata(imdbId, tmdbData, mdbData);
 
-	scrapes = filterByMovieConditions(cleanTitle, year, scrapes);
+	scrapes = filterByMovieConditions(scrapes);
 	if (!scrapes.length) {
 		await db.saveScrapedResults(`movie:${imdbId}`, scrapes, false, true);
 		await db.markAsDone(imdbId);
@@ -137,12 +140,27 @@ export async function cleanMovieScrapes(
 		console.log(
 			scrapes
 				.filter((s) => !processedResults.find((p) => p.hash === s.hash))
-				.map((s) => `⚡ ${s.title}`)
+				.map(
+					(s) =>
+						`⚡ ${s.title} ${
+							titles.some((t) => matchesTitle(t, [year], s.title)) ? '✅' : '❌'
+						}`
+				)
 		);
 		console.log(
 			`🎥 Removed ${scrapesCount - processedResults.length}, left ${
 				processedResults.length
 			} results for ${cleanTitle}`
 		);
+		return;
 	}
+
+	console.log(
+		scrapes.map(
+			(s) =>
+				`🔋 ${s.title} ${
+					titles.some((t) => matchesTitle(t, [year], s.title)) ? '✅' : '❌'
+				}`
+		)
+	);
 }

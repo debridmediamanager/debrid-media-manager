@@ -32,19 +32,20 @@ function RecentlyUpdated() {
 
 	useEffect(() => {
 		fetchData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
-		<div className="mx-4 my-8 max-w-full">
+		<div className="mx-2 my-1 max-w-full">
 			<Head>
 				<title>Debrid Media Manager - Recently Updated</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-3xl font-bold">Recently Updated</h1>
+			<div className="flex justify-between items-center mb-2">
+				<h1 className="text-xl font-bold">Recently Updated</h1>
 				<Link
 					href="/"
-					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
 				>
 					Go Home
 				</Link>
@@ -62,7 +63,7 @@ function RecentlyUpdated() {
 			)}
 			{searchResults.length > 0 && (
 				<>
-					<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
+					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
 						{searchResults.map((key: string, idx: number) => {
 							const match = key.match(/^(movie|tv):(.+)/);
 							if (match) {
@@ -71,10 +72,7 @@ function RecentlyUpdated() {
 
 								return (
 									<Link key={idx} href={`/${mediaType}/${imdbid}`} className="">
-										<Poster
-											imdbId={imdbid}
-											className="w-full h-64 object-cover object-center rounded-t-lg"
-										/>
+										<Poster imdbId={imdbid} />
 									</Link>
 								);
 							}

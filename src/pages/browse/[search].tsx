@@ -14,17 +14,16 @@ type BrowseProps = {
 
 export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 	return (
-		<div className="mx-4 my-8 max-w-full">
+		<div className="mx-2 my-1 max-w-full">
 			<Head>
 				<title>Debrid Media Manager - Recently Updated</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-3xl font-bold">Browse</h1>
-				<p>This page refreshes content every 10 minutes</p>
+			<div className="flex justify-between items-center mb-2">
+				<h1 className="text-xl font-bold">Browse</h1>
 				<Link
 					href="/"
-					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
 				>
 					Go Home
 				</Link>
@@ -34,10 +33,10 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 					{Object.keys(response).map((listName: string, idx: number) => {
 						return (
 							<>
-								<h2 className="mt-4 text-2xl font-bold" key={idx}>
+								<h2 className="mt-4 text-xl font-bold" key={idx}>
 									<span className="text-yellow-500">{idx + 1}</span> {listName}
 								</h2>
-								<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
+								<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
 									{response[listName].map((key: string) => {
 										const match = key.match(/^(movie|show):(.+)/);
 										if (match) {
@@ -51,10 +50,7 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 													href={`/${mediaType}/${imdbid}`}
 													className=""
 												>
-													<Poster
-														imdbId={imdbid}
-														className="w-full h-64 object-cover object-center rounded-t-lg"
-													/>
+													<Poster imdbId={imdbid} />
 												</Link>
 											);
 										}
@@ -101,15 +97,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	}
 
 	let rng = lcg(new Date().getTime() / 1000 / 60 / 10);
-	topLists = shuffle(topLists, rng).slice(0, 8);
+	topLists = shuffle(topLists, rng).slice(0, 4);
 
 	const response: BrowseResponse = {};
 	for (const list of topLists) {
 		const itemsResponse = await mdblist.listItems(list.id);
 		response[list.name] = itemsResponse
 			.filter((item) => item.imdb_id)
-			.slice(0, 16)
+			.slice(0, 24)
 			.map((item) => `${list.mediatype}:${item.imdb_id}`);
+		response[list.name] = shuffle(response[list.name], rng);
 	}
 
 	responses[key] = {

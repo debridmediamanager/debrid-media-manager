@@ -9,9 +9,11 @@ function find_free_port() {
 }
 
 function launch_scraper() {
-    DMM_PATH="/Users/bensarmiento/2023/debrid-torrent-manager"
+    DMM_PATH="$(dirname "$(readlink -f "$0")")"
+    echo "$0"
+    echo "$(readlink -f $0)"
 
-    echo "Launching scraper...$1"
+    echo "Launching scraper ($DMM_PATH): $1..."
 
     if [ "$1" = "upkeep" ]; then
         SESSION_NAME="upkeep"
@@ -32,23 +34,30 @@ function launch_scraper() {
         tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/scrapers/stuck\" &" C-m
 
         # movie updater
-        tmux new-window -t upkeep:3 -n movie
+        tmux new-window -t upkeep:3 -n movieclean
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:3 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         sleep 3
-        tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/scrapers/existingmovies?quantity=3\" &" C-m
+        tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/cleaners/movie\" &" C-m
 
         # tv updater
-        tmux new-window -t upkeep:4 -n tv
+        tmux new-window -t upkeep:4 -n tvclean
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:4 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         sleep 3
-        tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/scrapers/existingshows?quantity=3\" &" C-m
+        tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/cleaners/tv\" &" C-m
 
-        # torrentio
-        tmux new-window -t upkeep:5 -n tv
+        # empty
+        tmux new-window -t upkeep:5 -n empty
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:5 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        sleep 3
+        tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/scrapers/empty?quantity=3\" &" C-m
+
+        # torrentio
+        tmux new-window -t upkeep:6 -n torrentio
+        PORT=$(find_free_port)
+        tmux send-keys -t upkeep:6 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         sleep 3
         tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/scrapers/torrentio\" &" C-m
 

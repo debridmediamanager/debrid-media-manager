@@ -14,6 +14,7 @@ import { scrapeProwlarr } from './prowlarr';
 
 type TvScrapeJob = {
 	titles: string[];
+	year: string;
 	seasonNumber: number;
 	seasonName?: string;
 	seasonCode?: number;
@@ -24,34 +25,44 @@ type TvScrapeJob = {
 async function scrapeAll(
 	finalQuery: string,
 	targetTitle: string,
+	years: string[],
 	airDate: string
 ): Promise<ScrapeSearchResult[][]> {
 	return await Promise.all([
-		scrapeBtdigg(finalQuery, targetTitle, airDate),
-		scrapeProwlarr(finalQuery, targetTitle, airDate),
-		scrapeJackett(finalQuery, targetTitle, airDate),
+		scrapeBtdigg(finalQuery, targetTitle, years, airDate),
+		scrapeProwlarr(finalQuery, targetTitle, years, airDate),
+		scrapeJackett(finalQuery, targetTitle, years, airDate),
 	]);
 }
 
 const getSearchResults = async (job: TvScrapeJob): Promise<ScrapeSearchResult[][]> => {
 	let results: ScrapeSearchResult[][] = [];
+	const years = [job.year, job.seasonYear].filter((y) => y !== undefined) as string[];
 	for (let i = 0; i < job.titles.length; i++) {
 		const title = job.titles[i];
 		results.push(
-			...(await scrapeAll(`"${title}" s${padWithZero(job.seasonNumber)}`, title, job.airDate))
+			...(await scrapeAll(
+				`"${title}" s${padWithZero(job.seasonNumber)}`,
+				title,
+				years,
+				job.airDate
+			))
 		);
 		if (job.seasonName && job.seasonCode) {
 			results.push(
 				...(await scrapeAll(
 					`"${title}" ${job.seasonName} s${padWithZero(job.seasonCode)}`,
 					title,
+					years,
 					job.airDate
 				))
 			);
 		} else if (job.seasonName && job.seasonName !== title) {
-			results.push(...(await scrapeAll(`"${title}" ${job.seasonName}`, title, job.airDate)));
+			results.push(
+				...(await scrapeAll(`"${title}" ${job.seasonName}`, title, years, job.airDate))
+			);
 		} else if (job.seasonNumber === 1) {
-			results.push(...(await scrapeAll(`"${title}"`, title, job.airDate)));
+			results.push(...(await scrapeAll(`"${title}"`, title, years, job.airDate)));
 		}
 	}
 	return results;
@@ -92,6 +103,7 @@ export async function scrapeTv(
 
 		scrapeJobs.push({
 			titles,
+			year,
 			seasonNumber,
 			seasonName,
 			seasonCode,
@@ -122,6 +134,7 @@ export async function scrapeTv(
 		await db.saveScrapedResults(
 			`tv:${imdbId}:${job.seasonNumber}`,
 			processedResults,
+			true,
 			replaceOldScrape
 		);
 		console.log(

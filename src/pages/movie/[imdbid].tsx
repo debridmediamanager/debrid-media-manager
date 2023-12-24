@@ -1,68 +1,76 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { useDownloadsCache } from '@/hooks/cache';
 import useLocalStorage from '@/hooks/localStorage';
-import { deleteMagnet, uploadMagnet } from '@/services/allDebrid';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
-import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
+import { TorrentInfoResponse } from '@/services/realDebrid';
+import { SearchProfile } from '@/services/searchProfile';
+import UserTorrentDB from '@/torrent/db';
+import { UserTorrent } from '@/torrent/userTorrent';
+import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
+import { defaultPlayer } from '@/utils/chooseYourPlayer';
+import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
+import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
-import { getSelectableFiles, isVideo } from '@/utils/selectable';
+import { isVideo } from '@/utils/selectable';
+import { showInfo } from '@/utils/showInfo';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { FaDownload, FaFastForward, FaTimes } from 'react-icons/fa';
+import { FaDownload, FaFastForward, FaMagnet, FaTimes } from 'react-icons/fa';
 
 type MovieSearchProps = {
 	title: string;
 	description: string;
 	poster: string;
+	backdrop: string;
 	year: string;
 	imdb_score?: number;
 };
+
+const torrentDB = new UserTorrentDB();
 
 const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	title,
 	description,
 	poster,
+	backdrop,
 	year,
 	imdb_score,
 }) => {
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+	const [player, setPlayer] = useState<string>(defaultPlayer);
+	const [searchProfile, setSearchProfile] = useState<SearchProfile>({
+		stringSearch: '',
+		lowerBound: 0,
+		upperBound: Number.MAX_SAFE_INTEGER,
+	});
 	const [errorMessage, setErrorMessage] = useState('');
 	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
-	const [rdCache, rd, rdCacheAdder, removeFromRdCache] = useDownloadsCache('rd');
-	const [adCache, ad, adCacheAdder, removeFromAdCache] = useDownloadsCache('ad');
 	const [rdAutoInstantCheck, setRdAutoInstantCheck] = useLocalStorage<boolean>(
 		'rdAutoInstantCheck',
-		false
+		!!rdKey
 	);
 	const [adAutoInstantCheck, setAdAutoInstantCheck] = useLocalStorage<boolean>(
 		'adAutoInstantCheck',
-		false
+		!!adKey
 	);
 	const [onlyShowCached, setOnlyShowCached] = useLocalStorage<boolean>('onlyShowCached', false);
 
 	const router = useRouter();
 	const { imdbid } = router.query;
 
-	useEffect(() => {
-		if (imdbid) {
-			fetchData(imdbid as string);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [imdbid]);
-
-	const fetchData = async (imdbId: string) => {
+	async function fetchData(imdbId: string) {
 		setSearchResults([]);
 		setErrorMessage('');
 		try {
@@ -97,141 +105,163 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			console.error(error);
 			setErrorMessage('There was an error searching for the query. Please try again.');
 		}
+	}
+
+	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
+	async function fetchHashAndProgress(hash?: string) {
+		const torrents = await torrentDB.all();
+		const records: Record<string, number> = {};
+		for (const t of torrents) {
+			if (hash && t.hash !== hash) continue;
+			records[t.hash] = t.progress;
+		}
+		setHashAndProgress((prev) => ({ ...prev, ...records }));
+	}
+	const isDownloading = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] < 100;
+	const isDownloaded = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] === 100;
+	const inLibrary = (hash: string) => hash in hashAndProgress;
+	const notInLibrary = (hash: string) => !(hash in hashAndProgress);
+
+	async function initialize() {
+		await torrentDB.initializeDB();
+		await Promise.all([fetchData(imdbid as string), fetchHashAndProgress()]);
+	}
+	useEffect(() => {
+		setPlayer(window.localStorage.getItem('player') || defaultPlayer);
+		if (!imdbid) return;
+		initialize();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [imdbid]);
+
+	async function addRd(hash: string) {
+		await handleAddAsMagnetInRd(rdKey!, hash);
+		await fetchRealDebrid(
+			rdKey!,
+			async (torrents) => {
+				await torrentDB.addAll(torrents);
+				await fetchHashAndProgress(hash);
+			},
+			2
+		);
+	}
+
+	async function addAd(hash: string) {
+		await handleAddAsMagnetInAd(adKey!, hash);
+		await fetchAllDebrid(
+			adKey!,
+			async (torrents: UserTorrent[]) => await torrentDB.addAll(torrents)
+		);
+		await fetchHashAndProgress();
+	}
+
+	async function deleteRd(hash: string) {
+		const torrent = await torrentDB.getLatestByHash(hash);
+		if (!torrent) return;
+		await handleDeleteRdTorrent(rdKey!, torrent.id);
+		await torrentDB.deleteByHash(hash);
+		setHashAndProgress((prev) => {
+			const newHashAndProgress = { ...prev };
+			delete newHashAndProgress[hash];
+			return newHashAndProgress;
+		});
+	}
+
+	async function deleteAd(hash: string) {
+		const torrent = await torrentDB.getLatestByHash(hash);
+		if (!torrent) return;
+		await handleDeleteAdTorrent(adKey!, torrent.id);
+		await torrentDB.deleteByHash(hash);
+		setHashAndProgress((prev) => {
+			const newHashAndProgress = { ...prev };
+			delete newHashAndProgress[hash];
+			return newHashAndProgress;
+		});
+	}
+
+	const backdropStyle = {
+		backgroundImage: `linear-gradient(to bottom, hsl(0, 0%, 12%,0.5) 0%, hsl(0, 0%, 12%,0) 50%, hsl(0, 0%, 12%,0.5) 100%), url(${backdrop})`,
+		backgroundPosition: 'center',
+		backgroundRepeat: 'no-repeat',
+		backgroundSize: 'screen',
 	};
 
-	const handleAddAsMagnetInRd = async (
-		hash: string,
-		instantDownload: boolean = false,
-		disableToast: boolean = false
-	) => {
-		try {
-			if (!rdKey) throw new Error('no_rd_key');
-			const id = await addHashAsMagnet(rdKey, hash);
-			if (!disableToast) toast('Successfully added as magnet!', searchToastOptions);
-			rdCacheAdder.single(`rd:${id}`, hash, instantDownload ? 'downloaded' : 'downloading');
-			handleSelectFiles(`rd:${id}`, true); // add rd: to account for substr(3) in handleSelectFiles
-		} catch (error) {
-			console.error(error);
-			if (!disableToast)
-				toast.error('There was an error adding as magnet. Please try again.');
-		}
-	};
-
-	const handleAddAsMagnetInAd = async (
-		hash: string,
-		instantDownload: boolean = false,
-		disableToast: boolean = false
-	) => {
-		try {
-			if (!adKey) throw new Error('no_ad_key');
-			const resp = await uploadMagnet(adKey, [hash]);
-			if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
-				throw new Error('no_magnets');
-			if (!disableToast) toast('Successfully added as magnet!', searchToastOptions);
-			adCacheAdder.single(
-				`ad:${resp.data.magnets[0].id}`,
-				hash,
-				instantDownload ? 'downloaded' : 'downloading'
-			);
-		} catch (error) {
-			console.error(error);
-			if (!disableToast)
-				toast.error('There was an error adding as magnet. Please try again.');
-		}
-	};
-
-	const handleDeleteTorrent = async (id: string, disableToast: boolean = false) => {
-		try {
-			if (!rdKey && !adKey) throw new Error('no_keys');
-			if (rdKey && id.startsWith('rd:')) await deleteTorrent(rdKey, id.substring(3));
-			if (adKey && id.startsWith('ad:')) await deleteMagnet(adKey, id.substring(3));
-			if (!disableToast) toast(`Download canceled (${id})`, searchToastOptions);
-			if (id.startsWith('rd:')) removeFromRdCache(id);
-			if (id.startsWith('ad:')) removeFromAdCache(id);
-		} catch (error) {
-			console.error(error);
-			if (!disableToast) toast.error(`Error deleting torrent (${id})`);
-		}
-	};
-
-	const handleSelectFiles = async (id: string, disableToast: boolean = false) => {
-		try {
-			if (!rdKey) throw new Error('no_rd_key');
-			const response = await getTorrentInfo(rdKey, id.substring(3));
-			if (response.filename === 'Magnet') return; // no files yet
-
-			const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
-				(file) => file.id
-			);
-			if (selectedFiles.length === 0) {
-				handleDeleteTorrent(id, true);
-				throw new Error('no_files_for_selection');
-			}
-
-			await selectFiles(rdKey, id.substring(3), selectedFiles);
-		} catch (error) {
-			console.error(error);
-			if ((error as Error).message === 'no_files_for_selection') {
-				if (!disableToast)
-					toast.error(`No files for selection, deleting (${id})`, {
-						duration: 5000,
-					});
-			} else {
-				if (!disableToast) toast.error(`Error selecting files (${id})`);
-			}
-		}
+	const handleShowInfo = (result: SearchResult) => {
+		let files = result.files
+			.filter((file) => isVideo({ path: file.filename }))
+			.map((file) => ({
+				id: file.fileId,
+				path: file.filename,
+				bytes: file.filesize,
+				selected: 1,
+			}));
+		files.sort();
+		const info = {
+			id: '',
+			filename: result.title,
+			original_filename: result.title,
+			hash: result.hash,
+			bytes: result.fileSize * 1024 * 1024,
+			original_bytes: result.fileSize,
+			progress: 100,
+			files,
+			links: [],
+			fake: true,
+			/// extras
+			host: '',
+			split: 0,
+			status: '',
+			added: '',
+			ended: '',
+			speed: 0,
+			seeders: 0,
+		} as TorrentInfoResponse;
+		showInfo(window.localStorage.getItem('player') || defaultPlayer, rdKey!, info);
 	};
 
 	return (
-		<div className="mx-4 my-8 max-w-full">
+		<div className="max-w-full">
 			<Head>
 				<title>
 					Debrid Media Manager - Movie - {title} ({year})
 				</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			<div className="flex justify-between items-center mb-4">
-				<h1
-					className="text-3xl font-bold"
-					onClick={() => router.back()}
-					style={{ cursor: 'pointer' }}
-				>
-					🎥
-				</h1>
-				<Link
-					href="/"
-					className="text-2xl bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
-				>
-					Go Home
-				</Link>
-			</div>
 			{/* Display basic movie info */}
-			<div className="flex items-start space-x-4">
-				<div className="flex w-1/4 justify-center items-center">
+			<div className="flex items-start mb-2" style={backdropStyle}>
+				<div className="flex justify-center items-center">
 					<Image
 						width={200}
 						height={300}
 						src={poster}
 						alt="Movie poster"
-						className="shadow-lg"
+						className="shadow-2xl"
 					/>
 				</div>
-				<div className="w-3/4 space-y-2">
-					<h2 className="text-2xl font-bold">
+				<div className="w-full space-y-2 p-2 flex flex-col">
+					<Link
+						href="/"
+						className="block w-fit self-end text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+					>
+						Go Home
+					</Link>
+					<h2 className="block text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
 						{title} ({year})
 					</h2>
-					<p>{description}</p>
-					{imdb_score && (
-						<p>
-							<Link href={`https://www.imdb.com/title/${imdbid}/`}>
-								IMDB Score: {imdb_score}
-							</Link>
-						</p>
-					)}
+					<div className="block bg-slate-900/75 w-fit">
+						{description}{' '}
+						{imdb_score && (
+							<div className="text-yellow-100 inline">
+								<Link
+									href={`https://www.imdb.com/title/${imdbid}/`}
+									target="_blank"
+								>
+									IMDB Score: {imdb_score}
+								</Link>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
-
-			<hr className="my-4" />
 
 			{searchState === 'loading' && (
 				<div className="flex justify-center items-center mt-4">
@@ -263,102 +293,105 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				</div>
 			)}
 			{searchResults.length > 0 && (
-				<>
-					{searchState !== 'loading' && (
-						<div
-							className="mb-4 pb-1 whitespace-nowrap overflow-x-scroll"
-							style={{ scrollbarWidth: 'thin' }}
-						>
-							<button
-								className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
-								onClick={() => {
-									wrapLoading(
-										'RD',
-										instantCheckInRd(
-											rdKey!,
-											searchResults.map((result) => result.hash),
-											setSearchResults
-										)
-									);
-								}}
-							>
-								Check RD availability
-							</button>
-							<input
-								id="auto-check-rd"
-								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-								type="checkbox"
-								checked={rdAutoInstantCheck || false}
-								onChange={(event) => {
-									const isChecked = event.target.checked;
-									setRdAutoInstantCheck(isChecked);
-								}}
-							/>{' '}
-							<label
-								htmlFor="auto-check-rd"
-								className="mr-2 mb-2 text-sm font-medium"
-							>
-								Auto
-							</label>
-							<button
-								className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded`}
-								onClick={() => {
-									wrapLoading(
-										'AD',
-										instantCheckInAd(
-											adKey!,
-											searchResults.map((result) => result.hash),
-											setSearchResults
-										)
-									);
-								}}
-							>
-								Check AD availability
-							</button>
-							<input
-								id="auto-check-ad"
-								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-								type="checkbox"
-								checked={adAutoInstantCheck || false}
-								onChange={(event) => {
-									const isChecked = event.target.checked;
-									setAdAutoInstantCheck(isChecked);
-								}}
-							/>{' '}
-							<label
-								htmlFor="auto-check-ad"
-								className="ml-2 mr-2 mb-2 text-sm font-medium"
-							>
-								Auto
-							</label>
-							<span className="px-2.5 py-1 text-s bg-green-100 text-green-800 mr-2">
-								{
-									searchResults.filter(
-										(r) =>
-											(onlyShowCached && (r.rdAvailable || r.adAvailable)) ||
-											!onlyShowCached
-									).length
-								}{' '}
-								/ {searchResults.length} shown
-							</span>
-							<input
-								id="show-cached"
-								className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-								type="checkbox"
-								checked={onlyShowCached || false}
-								onChange={(event) => {
-									const isChecked = event.target.checked;
-									setOnlyShowCached(isChecked);
-								}}
-							/>{' '}
-							<label
-								htmlFor="show-cached"
-								className="ml-2 mr-2 mb-2 text-sm font-medium"
-							>
-								Only show cached
-							</label>
-						</div>
-					)}
+				<div className="mx-2 my-1">
+					<div
+						className="whitespace-nowrap overflow-x-scroll"
+						style={{ scrollbarWidth: 'thin' }}
+					>
+						{rdKey && (
+							<>
+								<button
+									className={`mr-2 mt-0 mb-2 bg-green-700 hover:bg-green-600 text-white py-2 px-1 text-xs rounded`}
+									onClick={() => {
+										wrapLoading(
+											'RD',
+											instantCheckInRd(
+												rdKey!,
+												searchResults.map((result) => result.hash),
+												setSearchResults
+											)
+										);
+									}}
+								>
+									Check RD availability
+								</button>
+								<input
+									id="auto-check-rd"
+									className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+									type="checkbox"
+									checked={rdAutoInstantCheck || false}
+									onChange={(event) => {
+										const isChecked = event.target.checked;
+										setRdAutoInstantCheck(isChecked);
+									}}
+								/>{' '}
+								<label
+									htmlFor="auto-check-rd"
+									className="mr-2 mb-2 text-sm font-medium"
+								>
+									Auto
+								</label>
+							</>
+						)}
+						{adKey && (
+							<>
+								<button
+									className={`mr-2 mt-0 mb-2 bg-green-700 hover:bg-green-600 text-white py-2 px-1 text-xs rounded`}
+									onClick={() => {
+										wrapLoading(
+											'AD',
+											instantCheckInAd(
+												adKey!,
+												searchResults.map((result) => result.hash),
+												setSearchResults
+											)
+										);
+									}}
+								>
+									Check AD availability
+								</button>
+								<input
+									id="auto-check-ad"
+									className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+									type="checkbox"
+									checked={adAutoInstantCheck || false}
+									onChange={(event) => {
+										const isChecked = event.target.checked;
+										setAdAutoInstantCheck(isChecked);
+									}}
+								/>{' '}
+								<label
+									htmlFor="auto-check-ad"
+									className="ml-2 mr-2 mb-2 text-sm font-medium"
+								>
+									Auto
+								</label>
+							</>
+						)}
+						<span className="px-1 py-1 text-xs bg-green-100 text-green-800 mr-2">
+							{
+								searchResults.filter(
+									(r) =>
+										(onlyShowCached && (r.rdAvailable || r.adAvailable)) ||
+										!onlyShowCached
+								).length
+							}{' '}
+							/ {searchResults.length} shown
+						</span>
+						<input
+							id="show-cached"
+							className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+							type="checkbox"
+							checked={onlyShowCached || false}
+							onChange={(event) => {
+								const isChecked = event.target.checked;
+								setOnlyShowCached(isChecked);
+							}}
+						/>{' '}
+						<label htmlFor="show-cached" className="ml-2 mr-2 mb-2 text-sm font-medium">
+							Only show cached
+						</label>
+					</div>
 					<div className="overflow-x-auto">
 						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
 							{searchResults
@@ -371,9 +404,9 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										key={i}
 										className={`
 ${
-	rd.isDownloaded(r.hash) || ad.isDownloaded(r.hash)
+	isDownloaded(r.hash)
 		? 'border-green-400 border-4'
-		: rd.isDownloading(r.hash) || ad.isDownloading(r.hash)
+		: isDownloading(r.hash)
 		? 'border-red-400 border-4'
 		: 'border-black border-2'
 }
@@ -381,31 +414,32 @@ shadow hover:shadow-lg transition-shadow duration-200 ease-in
 rounded-lg overflow-hidden
 `}
 									>
-										<div className="p-6 space-y-4">
-											<h2 className="text-2xl font-bold leading-tight break-words">
+										<div className="p-2 space-y-4">
+											<h2 className="text-xl font-bold leading-tight break-words">
 												{r.title}
 											</h2>
-											<p className="text-gray-300">
+											<div className="text-gray-300">
 												Size: {(r.fileSize / 1024).toFixed(2)} GB
-											</p>
-											<div className="flex flex-wrap space-x-2">
-												{rd.isDownloading(r.hash) &&
-													rdCache![r.hash].id && (
-														<button
-															className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
-															onClick={() => {
-																handleDeleteTorrent(
-																	rdCache![r.hash].id
-																);
-															}}
-														>
-															<FaTimes className="mr-2" />
-															RD ({rdCache![r.hash].progress}%)
-														</button>
-													)}
-												{rdKey && rd.notInLibrary(r.hash) && (
+											</div>
+											<div className="space-x-2 space-y-2">
+												<button
+													className="bg-pink-500 hover:bg-pink-700 text-white rounded inline px-1"
+													onClick={() => handleCopyMagnet(r.hash)}
+												>
+													<FaMagnet className="inline" /> Get
+												</button>
+												{rdKey && inLibrary(r.hash) && (
 													<button
-														className={`flex items-center justify-center bg-${
+														className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
+														onClick={() => deleteRd(r.hash)}
+													>
+														<FaTimes className="mr-2 inline" />
+														RD ({hashAndProgress[r.hash] + '%'})
+													</button>
+												)}
+												{rdKey && notInLibrary(r.hash) && (
+													<button
+														className={`bg-${
 															r.rdAvailable
 																? 'green'
 																: r.noVideos
@@ -417,44 +451,42 @@ rounded-lg overflow-hidden
 																: r.noVideos
 																? 'gray'
 																: 'blue'
-														}-700 text-white py-2 px-4 rounded-full`}
-														onClick={() => {
-															handleAddAsMagnetInRd(
-																r.hash,
-																r.rdAvailable
-															);
-														}}
+														}-700 text-white rounded inline px-1`}
+														onClick={() => addRd(r.hash)}
 													>
 														{r.rdAvailable ? (
 															<>
-																<FaFastForward className="mr-2" />
+																<FaFastForward className="mr-2 inline" />
 																RD
 															</>
 														) : (
 															<>
-																<FaDownload className="mr-2" />
+																<FaDownload className="mr-2 inline" />
 																RD
 															</>
 														)}
 													</button>
 												)}
-												{ad.isDownloading(r.hash) &&
-													adCache![r.hash].id && (
-														<button
-															className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full"
-															onClick={() => {
-																handleDeleteTorrent(
-																	adCache![r.hash].id
-																);
-															}}
-														>
-															<FaTimes className="mr-2" />
-															AD ({adCache![r.hash].progress}%)
-														</button>
-													)}
-												{adKey && ad.notInLibrary(r.hash) && (
+												{r.rdAvailable && (
 													<button
-														className={`flex items-center justify-center bg-${
+														className="bg-sky-500 hover:bg-sky-700 text-white rounded inline px-1"
+														onClick={() => handleShowInfo(r)}
+													>
+														👀 Watch
+													</button>
+												)}
+												{adKey && inLibrary(r.hash) && (
+													<button
+														className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
+														onClick={() => deleteAd(r.hash)}
+													>
+														<FaTimes className="mr-2 inline" />
+														AD ({hashAndProgress[r.hash] + '%'})
+													</button>
+												)}
+												{adKey && notInLibrary(r.hash) && (
+													<button
+														className={`bg-${
 															r.adAvailable
 																? 'green'
 																: r.noVideos
@@ -466,22 +498,17 @@ rounded-lg overflow-hidden
 																: r.noVideos
 																? 'gray'
 																: 'blue'
-														}-700 text-white py-2 px-4 rounded-full`}
-														onClick={() => {
-															handleAddAsMagnetInAd(
-																r.hash,
-																r.adAvailable
-															);
-														}}
+														}-700 text-white rounded inline px-1`}
+														onClick={() => addAd(r.hash)}
 													>
 														{r.adAvailable ? (
 															<>
-																<FaFastForward className="mr-2" />
+																<FaFastForward className="mr-2 inline" />
 																AD
 															</>
 														) : (
 															<>
-																<FaDownload className="mr-2" />
+																<FaDownload className="mr-2 inline" />
 																AD
 															</>
 														)}
@@ -493,7 +520,7 @@ rounded-lg overflow-hidden
 								))}
 						</div>
 					</div>
-				</>
+				</div>
 			)}
 		</div>
 	);
@@ -516,10 +543,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			title: movieResponse.data.title,
 			description: movieResponse.data.description,
 			poster: movieResponse.data.poster,
+			backdrop: movieResponse.data.backdrop,
 			year: movieResponse.data.year,
 			imdb_score,
 		},
 	};
 };
 
-export default withAuth(MovieSearch);
+const MovieSearchWithAuth = dynamic(() => Promise.resolve(withAuth(MovieSearch)), { ssr: false });
+
+export default MovieSearchWithAuth;
