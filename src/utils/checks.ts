@@ -531,7 +531,9 @@ export function filterByMovieConditions(items: ScrapeSearchResult[]) {
 	return (
 		items
 			// not a tv show
-			.filter((result) => !/s\d\de\d\d/i.test(result.title))
+			.filter(
+				(result) => !/s\d\d?e\d\d?/i.test(result.title) && !/\bs\d\d?\b/i.test(result.title)
+			)
 			// check for file size
 			.filter((result) => result.fileSize < 200000 && result.fileSize > 500)
 	);
