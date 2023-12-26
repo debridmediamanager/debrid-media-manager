@@ -23,6 +23,12 @@ function Search() {
 		(e?: React.FormEvent<HTMLFormElement>) => {
 			if (e) e.preventDefault();
 			if (!typedQuery) return;
+			if (/(tt\d{7,})/.test(typedQuery)) {
+				setLoading(true);
+				const imdbid = typedQuery.match(/(tt\d{7,})/)?.[1];
+				router.push(`/x/${imdbid}/`);
+				return;
+			}
 			router.push({
 				query: { query: typedQuery },
 			});
@@ -110,7 +116,7 @@ function Search() {
 						className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
 						type="text"
 						id="query"
-						placeholder="type a movie or show name, add year at the end to narrow down results"
+						placeholder="e.g. breaking bad show, tt1234567, etc."
 						value={typedQuery}
 						onChange={(e) => setTypedQuery(e.target.value)}
 					/>
