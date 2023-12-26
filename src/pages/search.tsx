@@ -69,10 +69,11 @@ function Search() {
 			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const res = await fetch(endpoint);
 			const data = await res.json();
-			if (data.error) throw new Error(data.error);
+			if (data.errorMessage) throw new Error(data.errorMessage);
 			setSearchResults(data.results);
 			if (data.results.length === 0) fetchMiscData(q);
 		} catch (error: any) {
+			setSearchResults([]);
 			setErrorMessage(error.message);
 			fetchMiscData(q);
 		} finally {
