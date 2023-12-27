@@ -17,7 +17,6 @@ import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import getConfig from 'next/config';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -611,6 +610,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	};
 };
 
-const TvSearchWithAuth = dynamic(() => Promise.resolve(withAuth(TvSearch)), { ssr: false });
-
-export default TvSearchWithAuth;
+export default withAuth(TvSearch);
