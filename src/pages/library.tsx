@@ -24,7 +24,6 @@ import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { saveAs } from 'file-saver';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -1152,6 +1151,4 @@ function TorrentsPage() {
 	);
 }
 
-const TorrentsPageWithAuth = dynamic(() => Promise.resolve(withAuth(TorrentsPage)), { ssr: false });
-
-export default TorrentsPageWithAuth;
+export default withAuth(TorrentsPage);

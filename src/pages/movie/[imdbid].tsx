@@ -17,7 +17,6 @@ import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import getConfig from 'next/config';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -550,6 +549,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	};
 };
 
-const MovieSearchWithAuth = dynamic(() => Promise.resolve(withAuth(MovieSearch)), { ssr: false });
-
-export default MovieSearchWithAuth;
+export default withAuth(MovieSearch);

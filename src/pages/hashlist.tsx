@@ -14,7 +14,6 @@ import { isVideo } from '@/utils/selectable';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -647,6 +646,4 @@ function HashlistPage() {
 	);
 }
 
-const HashlistPageNoSSR = dynamic(() => Promise.resolve(HashlistPage), { ssr: false });
-
-export default HashlistPageNoSSR;
+export default HashlistPage;
