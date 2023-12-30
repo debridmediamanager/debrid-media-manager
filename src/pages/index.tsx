@@ -157,7 +157,7 @@ function IndexPage() {
 
 							{getTerms(5).map((term) => (
 								<Link
-									href={`/browse/${term.replace(/\W/g, '')}`}
+									href={`/browse/${term.replace(/\W/gi, '')}`}
 									className="text-sm m-1 bg-neutral-600 hover:bg-neutral-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 									key={term}
 								>
