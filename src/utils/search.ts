@@ -4,13 +4,13 @@ export const cleanSearchQuery = (search: string): string => {
 		.filter((e) => e !== '') // filter out any empty elements
 		.map((e) => e.toLowerCase()) // convert each element to lowercase
 		.join(' ') // join the remaining elements with a single space
-		.replace(/[áàäâ]/g, 'a') // replace certain characters with their equivalent
-		.replace(/[éèëê]/g, 'e')
-		.replace(/[íìïî]/g, 'i')
-		.replace(/[óòöô]/g, 'o')
-		.replace(/[úùüû]/g, 'u')
+		.replace(/[áàäâ]/gi, 'a') // replace certain characters with their equivalent
+		.replace(/[éèëê]/gi, 'e')
+		.replace(/[íìïî]/gi, 'i')
+		.replace(/[óòöô]/gi, 'o')
+		.replace(/[úùüû]/gi, 'u')
 		.replaceAll(':', ' ')
-		.replace(/\s+/g, ' ') // replace multiple spaces with a single space
+		.replace(/\s+/gi, ' ') // replace multiple spaces with a single space
 		.trim();
 };
 

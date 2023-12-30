@@ -168,7 +168,7 @@ const handler: NextApiHandler = async (req, res) => {
 	try {
 		const cleanKeyword = keyword
 			.toString()
-			.replace(/[\W]+/g, ' ')
+			.replace(/[\W]+/gi, ' ')
 			.split(' ')
 			.filter((e) => e)
 			.join(' ')
