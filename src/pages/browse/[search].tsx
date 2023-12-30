@@ -77,7 +77,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	let key = 'index';
 	if (params?.search) {
 		key = decodeURIComponent(params.search as string).toLowerCase();
-		key = key.replace(/[^a-z\s]/g, ' ');
+		key = key.replace(/[^a-z\s]/gi, ' ');
 	}
 
 	if (responses[key] && responses[key].lastUpdated > new Date().getTime() - 1000 * 60 * 10) {

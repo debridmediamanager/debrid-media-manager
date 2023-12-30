@@ -28,7 +28,12 @@ try {
 }
 
 export function naked(title: string): string {
-	return title.toLowerCase().replace(/[^a-z0-9]/g, '');
+	return title
+		.toLowerCase()
+		.replace(
+			/[^a-z0-9\x00-\x7F\u2000-\u206F\u2E00-\u2E7F'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~\s]/gi,
+			''
+		);
 }
 
 export function grabYears(str: string): string[] {
@@ -55,11 +60,11 @@ export function hasYear(test: string, years: string[], strictCheck: boolean = fa
 }
 
 function removeDiacritics(str: string) {
-	return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+	return str.normalize('NFD').replace(/[\u0300-\u036f]/gi, '');
 }
 
 function removeRepeats(str: string) {
-	return str.replace(/(.)\1+/g, '$1');
+	return str.replace(/(.)\1+/gi, '$1');
 }
 
 function romanToDecimal(roman: string): number {
@@ -94,8 +99,8 @@ function replaceRomanWithDecimal(input: string): string {
 }
 
 function strictEqual(title1: string, title2: string) {
-	title1 = title1.replace(/\s+/g, '');
-	title2 = title2.replace(/\s+/g, '');
+	title1 = title1.replace(/\s+/gi, '');
+	title2 = title2.replace(/\s+/gi, '');
 	return (
 		(title1.length && title1 === title2) ||
 		(naked(title1).length && naked(title1) === naked(title2)) ||
@@ -133,9 +138,9 @@ function countTestTermsInTarget(test: string, target: string, shouldBeInSequence
 
 	const wrapReplace = (newTerm: string, first: boolean = false, last: boolean = false) => {
 		let prefix = '';
-		if (first) prefix = '\\b';
+		if (first) prefix = '\\W';
 		let suffix = '';
-		if (last) suffix = '\\b';
+		if (last) suffix = '\\W';
 		testStr.replace(new RegExp(`${prefix}${newTerm}${suffix}`), replacer);
 	};
 
@@ -192,29 +197,41 @@ function flexEq(test: string, target: string, years: string[]) {
 	const movieTitle = filenameParse(test).title.toLowerCase();
 	const tvTitle = filenameParse(test, true).title.toLowerCase();
 
-	const target2 = target.replace(/\s+/g, '');
-	const test2 = test.replace(/\s+/g, '');
+	const target2 = target.replace(/\s+/gi, '');
+	const test2 = test.replace(/\s+/gi, '');
+
+	// console.log(`🎲 '${target2}' '${test2}' '${detectNonEnglishCharacters(target2)}'`);
 
 	let magicLength = 5; // Math.ceil(magicLength*1.5) = 8
 	if (hasYear(test, years)) magicLength = 3; // Math.ceil(magicLength*1.5) = 5
 
 	if (naked(target2).length >= magicLength && naked(test2).includes(naked(target2))) {
-		// console.log(`🎲 Test:naked '${naked(target2)}' is found in '${naked(test2)}' | ${test}`);
+		console.log(
+			`🎲 Test:naked '${naked(target2)}' is found in '${naked(test2)}' | ${target} ${test}`
+		);
 		return true;
 	} else if (
 		removeRepeats(target2).length >= magicLength &&
 		removeRepeats(test2).includes(removeRepeats(target2))
 	) {
-		// console.log(`🎲 Test:removeRepeats '${removeRepeats(target2)}' is found in '${removeRepeats(test2)}' | ${test}`);
+		console.log(
+			`🎲 Test:removeRepeats '${removeRepeats(target2)}' is found in '${removeRepeats(
+				test2
+			)}' | ${test}`
+		);
 		return true;
 	} else if (
 		removeDiacritics(target2).length >= magicLength &&
 		removeDiacritics(test2).includes(removeDiacritics(target2))
 	) {
-		// console.log(`🎲 Test:removeDiacritics '${removeDiacritics(target2)}' is found in '${removeDiacritics(test2)}' | ${test}`);
+		console.log(
+			`🎲 Test:removeDiacritics '${removeDiacritics(
+				target2
+			)}' is found in '${removeDiacritics(test2)}' | ${test}`
+		);
 		return true;
 	} else if (target2.length >= Math.ceil(magicLength * 1.5) && test2.includes(target2)) {
-		// console.log(`🎲 Test:plain '${target2}' is found in '${test2}' | ${test}`);
+		console.log(`🎲 Test:plain '${target2}' is found in '${test2}' | ${test}`);
 		return true;
 	}
 	// if (strictEqual(target, movieTitle) || strictEqual(target, tvTitle)) console.log(`🎲 Test:strictEqual '${target}' is found in '${movieTitle}' or '${tvTitle}' | ${test}`);
@@ -322,7 +339,7 @@ export function countUncommonWords(title: string) {
 	let processedTitle = title
 		.split(/\s+/)
 		.map((word: string) =>
-			word.toLowerCase().replace(/'s/g, '').replace(/\s&\s/g, '').replace(/[\W]+/g, '')
+			word.toLowerCase().replace(/'s/gi, '').replace(/\s&\s/gi, '').replace(/[\W]+/gi, '')
 		)
 		.filter((word: string) => word.length > 3);
 	return processedTitle.filter((word: string) => !dictionary.has(word)).length;
@@ -345,7 +362,7 @@ export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 
 	const processedTitle = tmdbData.title
 		.split(' ')
-		.map((word: string) => word.replace(/[\W]+/g, ''))
+		.map((word: string) => word.replace(/[\W]+/gi, ''))
 		.join(' ')
 		.trim()
 		.toLowerCase();
@@ -364,7 +381,7 @@ export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 				if (tomatoTitle.match(/^\d{6,}/)) continue;
 				tomatoTitle = tomatoTitle
 					.split('_')
-					.map((word: string) => word.replace(/[\W]+/g, ''))
+					.map((word: string) => word.replace(/[\W]+/gi, ''))
 					.join(' ')
 					.trim()
 					.toLowerCase();
@@ -388,7 +405,7 @@ export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 			if (metacriticTitle.startsWith('-')) continue;
 			metacriticTitle = metacriticTitle
 				.split('-')
-				.map((word: string) => word.replace(/[\W]+/g, ''))
+				.map((word: string) => word.replace(/[\W]+/gi, ''))
 				.join(' ')
 				.trim()
 				.toLowerCase();
@@ -436,7 +453,7 @@ export function grabTvMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 
 	const processedTitle = tmdbData.name
 		.split(' ')
-		.map((word: string) => word.replace(/[\W]+/g, ''))
+		.map((word: string) => word.replace(/[\W]+/gi, ''))
 		.join(' ')
 		.trim()
 		.toLowerCase();
@@ -455,7 +472,7 @@ export function grabTvMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 				if (tomatoTitle.match(/^\d{6,}/)) continue;
 				tomatoTitle = tomatoTitle
 					.split('_')
-					.map((word: string) => word.replace(/[\W]+/g, ''))
+					.map((word: string) => word.replace(/[\W]+/gi, ''))
 					.join(' ')
 					.trim()
 					.toLowerCase();
@@ -479,7 +496,7 @@ export function grabTvMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 			if (metacriticTitle.startsWith('-')) continue;
 			metacriticTitle = metacriticTitle
 				.split('-')
-				.map((word: string) => word.replace(/[\W]+/g, ''))
+				.map((word: string) => word.replace(/[\W]+/gi, ''))
 				.join(' ')
 				.trim()
 				.toLowerCase();
@@ -514,13 +531,13 @@ export function getAllPossibleTitles(titles: (string | undefined)[]) {
 		if (title) {
 			ret.push(title);
 			if (title.match(/[a-z\s]&/i)) {
-				ret.push(title.replace(/&/g, ' and '));
+				ret.push(title.replace(/&/gi, ' and '));
 			}
 			if (title.match(/[a-z\s]\+/i)) {
-				ret.push(title.replace(/\+/g, ' and '));
+				ret.push(title.replace(/\+/gi, ' and '));
 			}
 			if (title.match(/[a-z\s]@/i)) {
-				ret.push(title.replace(/@/g, ' at '));
+				ret.push(title.replace(/@/gi, ' at '));
 			}
 		}
 	});
@@ -532,7 +549,7 @@ export function filterByMovieConditions(items: ScrapeSearchResult[]) {
 		items
 			// not a tv show
 			.filter(
-				(result) => !/s\d\d?e\d\d?/i.test(result.title) && !/\bs\d\d?\b/i.test(result.title)
+				(result) => !/s\d\d?e\d\d?/i.test(result.title) && !/\Ws\d\d?\W/i.test(result.title)
 			)
 			// check for file size
 			.filter((result) => result.fileSize < 200000 && result.fileSize > 500)
@@ -564,16 +581,17 @@ export function filterByTvConditions(
 			.filter((result) => {
 				// drop 3xRus or 1xEng or AC3
 				let regex =
-					/\b(\d)x([a-z]+)\b|\bac3\b|\b5\.1|\bmp4|\bav1|\br[1-6]|\bdvd\-?\d|\bp2p|\bbd\d+/gi;
+					/\W(\d)x([a-z]+)\W|\Wac3\W|\W5\.1|\Wmp4|\Wav1|\Wr[1-6]|\Wdvd\-?\d|\Wp2p|\Wbd\d+/gi;
 				let resultTitle = result.title.replace(regex, '');
 
-				if (resultTitle.match(/\bs\d\de?/i)) {
+				if (resultTitle.match(/\Ws\d\de?/i)) {
 					const season = parseInt(resultTitle.match(/s(\d\d)e?/i)![1]);
 					return season === seasonNumber || season === seasonCode;
 				}
 
-				resultTitle = resultTitle.replace(/e\d\d[^\d].*/g, '');
+				resultTitle = resultTitle.replace(/e\d\d[^\d].*/gi, '');
 				const seasonNums = grabPossibleSeasonNums(resultTitle);
+				console.log(resultTitle, seasonNums);
 
 				if (
 					seasonName &&
