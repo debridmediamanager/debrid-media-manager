@@ -66,7 +66,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		setSearchState('loading');
 		setUncachedCount(0);
 		try {
-			let path = `api/torrents/movie?imdbId=${encodeURIComponent(imdbId)}`;
+			let path = `api/torrents/movie?imdbId=${imdbId}`;
 			if (config.externalSearchApiHostname) {
 				path = encodeURIComponent(path);
 			}
@@ -77,7 +77,14 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				return;
 			}
 
-			setSearchResults(response.data.results || []);
+			setSearchResults(
+				response.data.results?.map((r) => ({
+					...r,
+					rdAvailable: false,
+					adAvailable: false,
+					noVideos: false,
+				})) || []
+			);
 
 			if (response.data.results?.length) {
 				toast(`Found ${response.data.results.length} results`, searchToastOptions);
