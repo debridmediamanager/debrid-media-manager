@@ -7,8 +7,8 @@ import { groupBy } from './groupBy';
 import { isVideo } from './selectable';
 import { searchToastOptions } from './toastOptions';
 
-export const wrapLoading = function (debrid: string, checkAvailability: Promise<number>) {
-	toast.promise(
+export const wrapLoading = async function (debrid: string, checkAvailability: Promise<number>) {
+	return await toast.promise(
 		checkAvailability,
 		{
 			loading: `Checking ${debrid} availability...`,

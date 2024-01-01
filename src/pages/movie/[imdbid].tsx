@@ -1,5 +1,4 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import useLocalStorage from '@/hooks/localStorage';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/realDebrid';
 import { SearchProfile } from '@/services/searchProfile';
@@ -47,7 +46,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-	const [player, setPlayer] = useState<string>(defaultPlayer);
 	const [searchProfile, setSearchProfile] = useState<SearchProfile>({
 		stringSearch: '',
 		lowerBound: 0,
@@ -56,15 +54,8 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const [errorMessage, setErrorMessage] = useState('');
 	const rdKey = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
-	const [rdAutoInstantCheck, setRdAutoInstantCheck] = useLocalStorage<boolean>(
-		'rdAutoInstantCheck',
-		!!rdKey
-	);
-	const [adAutoInstantCheck, setAdAutoInstantCheck] = useLocalStorage<boolean>(
-		'adAutoInstantCheck',
-		!!adKey
-	);
-	const [onlyShowCached, setOnlyShowCached] = useLocalStorage<boolean>('onlyShowCached', false);
+	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
+	const [uncachedCount, setUncachedCount] = useState<number>(0);
 
 	const router = useRouter();
 	const { imdbid } = router.query;
@@ -72,6 +63,8 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	async function fetchData(imdbId: string) {
 		setSearchResults([]);
 		setErrorMessage('');
+		setSearchState('loading');
+		setUncachedCount(0);
 		try {
 			let path = `api/torrents/movie?imdbId=${encodeURIComponent(imdbId)}`;
 			if (config.externalSearchApiHostname) {
@@ -79,11 +72,9 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			}
 			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const response = await axios.get<SearchApiResponse>(endpoint);
-			if (response.status === 204) {
-				setSearchState(response.headers['status']);
+			if (response.status !== 200) {
+				setSearchState(response.headers.status ?? 'loaded');
 				return;
-			} else if (response.status === 200) {
-				setSearchState('loaded');
 			}
 
 			setSearchResults(response.data.results || []);
@@ -93,16 +84,26 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 
 				// instant checks
 				const hashArr = response.data.results.map((r) => r.hash);
-				if (rdKey && rdAutoInstantCheck)
-					wrapLoading('RD', instantCheckInRd(rdKey, hashArr, setSearchResults));
-				if (adKey && adAutoInstantCheck)
-					wrapLoading('AD', instantCheckInAd(adKey, hashArr, setSearchResults));
+				const instantChecks = [];
+				if (rdKey)
+					instantChecks.push(
+						wrapLoading('RD', instantCheckInRd(rdKey, hashArr, setSearchResults))
+					);
+				if (adKey)
+					instantChecks.push(
+						wrapLoading('AD', instantCheckInAd(adKey, hashArr, setSearchResults))
+					);
+				const counts = await Promise.all(instantChecks);
+				setSearchState('loaded');
+				setUncachedCount(hashArr.length - counts.reduce((acc, cur) => acc + cur, 0));
 			} else {
 				toast(`No results found`, searchToastOptions);
 			}
 		} catch (error) {
 			console.error(error);
 			setErrorMessage('There was an error searching for the query. Please try again.');
+		} finally {
+			setSearchState('loaded');
 		}
 	}
 
@@ -126,7 +127,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		await Promise.all([fetchData(imdbid as string), fetchHashAndProgress()]);
 	}
 	useEffect(() => {
-		setPlayer(window.localStorage.getItem('player') || defaultPlayer);
 		if (!imdbid) return;
 		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -180,7 +180,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const backdropStyle = {
 		backgroundImage: `linear-gradient(to bottom, hsl(0, 0%, 12%,0.5) 0%, hsl(0, 0%, 12%,0) 50%, hsl(0, 0%, 12%,0.5) 100%), url(${backdrop})`,
 		backgroundPosition: 'center',
-		backgroundRepeat: 'no-repeat',
+		// backgroundRepeat: 'no-repeat',
 		backgroundSize: 'screen',
 	};
 
@@ -226,46 +226,54 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			</Head>
 			<Toaster position="bottom-right" />
 			{/* Display basic movie info */}
-			<div className="flex items-start mb-2" style={backdropStyle}>
-				<div className="flex justify-center items-center">
-					<Image
-						width={200}
-						height={300}
-						src={poster}
-						alt="Movie poster"
-						className="shadow-2xl"
-					/>
-				</div>
-				<div className="w-full space-y-2 p-2 flex flex-col">
+			<div
+				className="grid grid-flow-col auto-cols-auto auto-rows-auto gap-2"
+				style={backdropStyle}
+			>
+				<Image
+					width={200}
+					height={300}
+					src={poster}
+					alt="Movie poster"
+					className="shadow-lg row-span-4"
+				/>
+				<div className="flex justify-end p-2">
 					<Link
 						href="/"
-						className="block w-fit self-end text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+						className="w-fit h-fit text-xs bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
 					>
 						Go Home
 					</Link>
-					<h2 className="block text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
-						{title} ({year})
-					</h2>
-					<div className="block bg-slate-900/75 w-fit">
-						{description}{' '}
-						{imdb_score && (
-							<div className="text-yellow-100 inline">
-								<Link
-									href={`https://www.imdb.com/title/${imdbid}/`}
-									target="_blank"
-								>
-									IMDB Score: {imdb_score}
-								</Link>
-							</div>
-						)}
-					</div>
+				</div>
+				<h2 className="text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
+					{title} ({year})
+				</h2>
+				<div className="w-fit h-fit bg-slate-900/75">
+					{description}{' '}
+					{imdb_score && (
+						<div className="text-yellow-100 inline">
+							<Link href={`https://www.imdb.com/title/${imdbid}/`} target="_blank">
+								IMDB Score: {imdb_score}
+							</Link>
+						</div>
+					)}
+				</div>
+				<div className="">
+					{onlyShowCached && uncachedCount > 0 && (
+						<button
+							className={`mr-2 mt-0 mb-2 bg-blue-700 hover:bg-blue-600 text-white p-1 text-xs rounded`}
+							onClick={() => {
+								setOnlyShowCached(false);
+							}}
+						>
+							👉 Show {uncachedCount} uncached results
+						</button>
+					)}
 				</div>
 			</div>
 
 			{searchState === 'loading' && (
-				<div className="flex justify-center items-center mt-4">
-					<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
-				</div>
+				<div className="flex justify-center items-center bg-black">Loading...</div>
 			)}
 			{searchState === 'requested' && (
 				<div className="mt-4 bg-yellow-500 border border-yellow-400 text-yellow-900 px-4 py-3 rounded relative">
@@ -292,116 +300,15 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				</div>
 			)}
 			{searchResults.length > 0 && (
-				<div className="mx-2 my-1">
-					<div
-						className="whitespace-nowrap overflow-x-scroll"
-						style={{ scrollbarWidth: 'thin' }}
-					>
-						{rdKey && (
-							<>
-								<button
-									className={`mr-2 mt-0 mb-2 bg-green-700 hover:bg-green-600 text-white py-2 px-1 text-xs rounded`}
-									onClick={() => {
-										wrapLoading(
-											'RD',
-											instantCheckInRd(
-												rdKey!,
-												searchResults.map((result) => result.hash),
-												setSearchResults
-											)
-										);
-									}}
-								>
-									Check RD availability
-								</button>
-								<input
-									id="auto-check-rd"
-									className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-									type="checkbox"
-									checked={rdAutoInstantCheck || false}
-									onChange={(event) => {
-										const isChecked = event.target.checked;
-										setRdAutoInstantCheck(isChecked);
-									}}
-								/>{' '}
-								<label
-									htmlFor="auto-check-rd"
-									className="mr-2 mb-2 text-sm font-medium"
-								>
-									Auto
-								</label>
-							</>
-						)}
-						{adKey && (
-							<>
-								<button
-									className={`mr-2 mt-0 mb-2 bg-green-700 hover:bg-green-600 text-white py-2 px-1 text-xs rounded`}
-									onClick={() => {
-										wrapLoading(
-											'AD',
-											instantCheckInAd(
-												adKey!,
-												searchResults.map((result) => result.hash),
-												setSearchResults
-											)
-										);
-									}}
-								>
-									Check AD availability
-								</button>
-								<input
-									id="auto-check-ad"
-									className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-									type="checkbox"
-									checked={adAutoInstantCheck || false}
-									onChange={(event) => {
-										const isChecked = event.target.checked;
-										setAdAutoInstantCheck(isChecked);
-									}}
-								/>{' '}
-								<label
-									htmlFor="auto-check-ad"
-									className="ml-2 mr-2 mb-2 text-sm font-medium"
-								>
-									Auto
-								</label>
-							</>
-						)}
-						<span className="px-1 py-1 text-xs bg-green-100 text-green-800 mr-2">
-							{
-								searchResults.filter(
-									(r) =>
-										(onlyShowCached && (r.rdAvailable || r.adAvailable)) ||
-										!onlyShowCached
-								).length
-							}{' '}
-							/ {searchResults.length} shown
-						</span>
-						<input
-							id="show-cached"
-							className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-							type="checkbox"
-							checked={onlyShowCached || false}
-							onChange={(event) => {
-								const isChecked = event.target.checked;
-								setOnlyShowCached(isChecked);
-							}}
-						/>{' '}
-						<label htmlFor="show-cached" className="ml-2 mr-2 mb-2 text-sm font-medium">
-							Only show cached
-						</label>
-					</div>
-					<div className="overflow-x-auto">
-						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-							{searchResults
-								.filter(
-									(result) =>
-										!onlyShowCached || result.rdAvailable || result.adAvailable
-								)
-								.map((r: SearchResult, i: number) => (
-									<div
-										key={i}
-										className={`
+				<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+					{searchResults
+						.filter(
+							(result) => !onlyShowCached || result.rdAvailable || result.adAvailable
+						)
+						.map((r: SearchResult, i: number) => (
+							<div
+								key={i}
+								className={`
 ${
 	isDownloaded(r.hash)
 		? 'border-green-400 border-4'
@@ -412,113 +319,111 @@ ${
 shadow hover:shadow-lg transition-shadow duration-200 ease-in
 rounded-lg overflow-hidden
 `}
-									>
-										<div className="p-2 space-y-4">
-											<h2 className="text-xl font-bold leading-tight break-words">
-												{r.title}
-											</h2>
-											<div className="text-gray-300">
-												Size: {(r.fileSize / 1024).toFixed(2)} GB
-											</div>
-											<div className="space-x-2 space-y-2">
-												<button
-													className="bg-pink-500 hover:bg-pink-700 text-white rounded inline px-1"
-													onClick={() => handleCopyMagnet(r.hash)}
-												>
-													<FaMagnet className="inline" /> Get
-												</button>
-												{rdKey && inLibrary(r.hash) && (
-													<button
-														className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
-														onClick={() => deleteRd(r.hash)}
-													>
-														<FaTimes className="mr-2 inline" />
-														RD ({hashAndProgress[r.hash] + '%'})
-													</button>
-												)}
-												{rdKey && notInLibrary(r.hash) && (
-													<button
-														className={`bg-${
-															r.rdAvailable
-																? 'green'
-																: r.noVideos
-																? 'gray'
-																: 'blue'
-														}-500 hover:bg-${
-															r.rdAvailable
-																? 'green'
-																: r.noVideos
-																? 'gray'
-																: 'blue'
-														}-700 text-white rounded inline px-1`}
-														onClick={() => addRd(r.hash)}
-													>
-														{r.rdAvailable ? (
-															<>
-																<FaFastForward className="mr-2 inline" />
-																RD
-															</>
-														) : (
-															<>
-																<FaDownload className="mr-2 inline" />
-																RD
-															</>
-														)}
-													</button>
-												)}
-												{r.rdAvailable && (
-													<button
-														className="bg-sky-500 hover:bg-sky-700 text-white rounded inline px-1"
-														onClick={() => handleShowInfo(r)}
-													>
-														👀 Watch
-													</button>
-												)}
-												{adKey && inLibrary(r.hash) && (
-													<button
-														className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
-														onClick={() => deleteAd(r.hash)}
-													>
-														<FaTimes className="mr-2 inline" />
-														AD ({hashAndProgress[r.hash] + '%'})
-													</button>
-												)}
-												{adKey && notInLibrary(r.hash) && (
-													<button
-														className={`bg-${
-															r.adAvailable
-																? 'green'
-																: r.noVideos
-																? 'gray'
-																: 'blue'
-														}-500 hover:bg-${
-															r.adAvailable
-																? 'green'
-																: r.noVideos
-																? 'gray'
-																: 'blue'
-														}-700 text-white rounded inline px-1`}
-														onClick={() => addAd(r.hash)}
-													>
-														{r.adAvailable ? (
-															<>
-																<FaFastForward className="mr-2 inline" />
-																AD
-															</>
-														) : (
-															<>
-																<FaDownload className="mr-2 inline" />
-																AD
-															</>
-														)}
-													</button>
-												)}
-											</div>
-										</div>
+							>
+								<div className="p-2 space-y-4">
+									<h2 className="text-xl font-bold leading-tight break-words">
+										{r.title}
+									</h2>
+									<div className="text-gray-300">
+										Size: {(r.fileSize / 1024).toFixed(2)} GB
 									</div>
-								))}
-						</div>
-					</div>
+									<div className="space-x-2 space-y-2">
+										<button
+											className="bg-pink-500 hover:bg-pink-700 text-white rounded inline px-1"
+											onClick={() => handleCopyMagnet(r.hash)}
+										>
+											<FaMagnet className="inline" /> Get
+										</button>
+										{rdKey && inLibrary(r.hash) && (
+											<button
+												className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
+												onClick={() => deleteRd(r.hash)}
+											>
+												<FaTimes className="mr-2 inline" />
+												RD ({hashAndProgress[r.hash] + '%'})
+											</button>
+										)}
+										{rdKey && notInLibrary(r.hash) && (
+											<button
+												className={`bg-${
+													r.rdAvailable
+														? 'green'
+														: r.noVideos
+														? 'gray'
+														: 'blue'
+												}-500 hover:bg-${
+													r.rdAvailable
+														? 'green'
+														: r.noVideos
+														? 'gray'
+														: 'blue'
+												}-700 text-white rounded inline px-1`}
+												onClick={() => addRd(r.hash)}
+											>
+												{r.rdAvailable ? (
+													<>
+														<FaFastForward className="mr-2 inline" />
+														RD
+													</>
+												) : (
+													<>
+														<FaDownload className="mr-2 inline" />
+														RD
+													</>
+												)}
+											</button>
+										)}
+										{r.rdAvailable && (
+											<button
+												className="bg-sky-500 hover:bg-sky-700 text-white rounded inline px-1"
+												onClick={() => handleShowInfo(r)}
+											>
+												👀 Watch
+											</button>
+										)}
+										{adKey && inLibrary(r.hash) && (
+											<button
+												className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
+												onClick={() => deleteAd(r.hash)}
+											>
+												<FaTimes className="mr-2 inline" />
+												AD ({hashAndProgress[r.hash] + '%'})
+											</button>
+										)}
+										{adKey && notInLibrary(r.hash) && (
+											<button
+												className={`bg-${
+													r.adAvailable
+														? 'green'
+														: r.noVideos
+														? 'gray'
+														: 'blue'
+												}-500 hover:bg-${
+													r.adAvailable
+														? 'green'
+														: r.noVideos
+														? 'gray'
+														: 'blue'
+												}-700 text-white rounded inline px-1`}
+												onClick={() => addAd(r.hash)}
+											>
+												{r.adAvailable ? (
+													<>
+														<FaFastForward className="mr-2 inline" />
+														AD
+													</>
+												) : (
+													<>
+														<FaDownload className="mr-2 inline" />
+														AD
+													</>
+												)}
+											</button>
+										)}
+									</div>
+								</div>
+							</div>
+						))}
 				</div>
 			)}
 		</div>
