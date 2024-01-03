@@ -20,7 +20,7 @@ async function scrapeAll(
 	return await Promise.all([
 		scrapeBtdigg(finalQuery, targetTitle, years, airDate),
 		scrapeProwlarr(finalQuery, targetTitle, years, airDate),
-		scrapeJackett(finalQuery, targetTitle, years, airDate),
+		scrapeJackett(finalQuery, targetTitle, years, airDate, 'movie'),
 	]);
 }
 
