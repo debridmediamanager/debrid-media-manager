@@ -14,10 +14,10 @@ function isFoundDateRecent(foundString: string, date: string): boolean {
 	return foundDate >= airDate;
 }
 
-const createSearchUrl = (finalQuery: string) =>
-	`${jackettHost}/api/v2.0/indexers/all/results?apikey=${apikey}&Query=${encodeURIComponent(
-		finalQuery
-	)}`;
+const createSearchUrl = (finalQuery: string, mediaType: string) =>
+	`${jackettHost}/api/v2.0/indexers/all/results?apikey=${apikey}&Category%5B%5D=${
+		mediaType === 'movie' ? '2000' : '5000'
+	}&Query=${encodeURIComponent(finalQuery)}`;
 
 function extractHashFromMagnetLink(magnetLink: string) {
 	const regex = /urn:btih:([A-Fa-f0-9]+)/;
@@ -126,14 +126,15 @@ const processPage = async (
 	finalQuery: string,
 	targetTitle: string,
 	years: string[],
-	airDate: string
+	airDate: string,
+	mediaType: string
 ): Promise<ScrapeSearchResult[]> => {
 	const MAX_RETRIES = 5; // maximum number of retries
 
 	let results: ScrapeSearchResult[] = [];
 	let retries = 0; // current number of retries
 	let responseData = [];
-	const searchUrl = createSearchUrl(finalQuery);
+	const searchUrl = createSearchUrl(finalQuery, mediaType);
 	while (true) {
 		try {
 			const response = await axios.get(searchUrl, { timeout: 600000 });
@@ -170,11 +171,12 @@ export async function scrapeJackett(
 	finalQuery: string,
 	targetTitle: string,
 	years: string[],
-	airDate: string
+	airDate: string,
+	mediaType: string = 'movie'
 ): Promise<ScrapeSearchResult[]> {
 	console.log(`🔍 Searching Jackett: ${finalQuery}`);
 	try {
-		return await processPage(finalQuery, targetTitle, years, airDate);
+		return await processPage(finalQuery, targetTitle, years, airDate, mediaType);
 	} catch (error) {
 		console.error('scrapeJackett page processing error', error);
 	}
