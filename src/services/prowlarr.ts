@@ -15,10 +15,12 @@ function isFoundDateRecent(foundString: string, date: string): boolean {
 }
 
 // add category 2000 (TV) and 5000 (Movies) to the query
-const createSearchUrl = (finalQuery: string) =>
+const createSearchUrl = (finalQuery: string, mediaType: string) =>
 	`${prowlarrHost}/api/v1/search?query=${encodeURIComponent(
 		finalQuery
-	)}&indexerIds=-2&categories[]=2000&categories[]=5000&type=search&apikey=${apikey}`;
+	)}&indexerIds=-2&categories[]=${
+		mediaType === 'movie' ? '2000' : '5000'
+	}&type=search&apikey=${apikey}`;
 
 function extractHashFromMagnetLink(magnetLink: string) {
 	const regex = /urn:btih:([A-Fa-f0-9]+)/;
@@ -122,14 +124,15 @@ const processPage = async (
 	finalQuery: string,
 	targetTitle: string,
 	years: string[],
-	airDate: string
+	airDate: string,
+	mediaType: string
 ): Promise<ScrapeSearchResult[]> => {
 	const MAX_RETRIES = 5; // maximum number of retries
 
 	let results: ScrapeSearchResult[] = [];
 	let retries = 0; // current number of retries
 	let responseData = [];
-	const searchUrl = createSearchUrl(finalQuery);
+	const searchUrl = createSearchUrl(finalQuery, mediaType);
 	while (true) {
 		try {
 			const response = await axios.get(searchUrl, { timeout: 600000 });
@@ -166,11 +169,12 @@ export async function scrapeProwlarr(
 	finalQuery: string,
 	targetTitle: string,
 	years: string[],
-	airDate: string
+	airDate: string,
+	mediaType: string = 'movie'
 ): Promise<ScrapeSearchResult[]> {
 	console.log(`🔍 Searching Prowlarr: ${finalQuery}`);
 	try {
-		return await processPage(finalQuery, targetTitle, years, airDate);
+		return await processPage(finalQuery, targetTitle, years, airDate, mediaType);
 	} catch (error) {
 		console.error('scrapeProwlarr page processing error', error);
 	}
