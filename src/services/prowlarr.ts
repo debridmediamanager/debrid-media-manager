@@ -14,6 +14,7 @@ function isFoundDateRecent(foundString: string, date: string): boolean {
 	return foundDate >= airDate;
 }
 
+// add category 2000 (TV) and 5000 (Movies) to the query
 const createSearchUrl = (finalQuery: string) =>
 	`${prowlarrHost}/api/v1/search?query=${encodeURIComponent(
 		finalQuery
