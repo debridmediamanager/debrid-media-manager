@@ -5,6 +5,8 @@ import { UserTorrent, keyByStatus, uniqId } from '@/torrent/userTorrent';
 import {
 	handleAddAsMagnetInAd,
 	handleAddAsMagnetInRd,
+	handleAddMultipleHashesInAd,
+	handleAddMultipleHashesInRd,
 	handleCopyMagnet,
 	handleReinsertTorrent,
 	handleRestartTorrent,
@@ -660,20 +662,31 @@ function TorrentsPage() {
 		});
 	}
 
+	function extractHashes(hashesStr: string): string[] {
+		const hashRegex = /\b[a-f0-9]{40}\b/gi;
+		const matches = hashesStr.match(hashRegex);
+		return matches || [];
+	}
+
 	async function handleAddMagnet(debridService: string) {
-		const { value: hash } = await Swal.fire({
+		const { value: hashesStr } = await Swal.fire({
 			title: `Add magnet to your ${debridService.toUpperCase()} library`,
-			input: 'text',
-			inputLabel: 'Paste your Magnet link here',
+			input: 'textarea',
+			inputLabel: 'Paste your Magnet link(s) here',
 			inputValue: '',
 			showCancelButton: true,
 			inputValidator: (value) => !value && 'You need to put something!',
 		});
-		if (rdKey && hash && debridService === 'rd') {
-			handleAddAsMagnetInRd(rdKey, hash, async () => await fetchLatestRDTorrents(2));
+		const hashes = extractHashes(hashesStr);
+		if (rdKey && hashes && debridService === 'rd') {
+			handleAddMultipleHashesInRd(
+				rdKey,
+				hashes,
+				async () => await fetchLatestRDTorrents(Math.ceil(hashes.length * 1.1))
+			);
 		}
-		if (adKey && hash && debridService === 'ad') {
-			handleAddAsMagnetInAd(adKey, hash, async () => await fetchLatestADTorrents());
+		if (adKey && hashes && debridService === 'ad') {
+			handleAddMultipleHashesInAd(adKey, hashes, async () => await fetchLatestADTorrents());
 		}
 	}
 

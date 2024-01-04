@@ -15,11 +15,31 @@ export const handleAddAsMagnetInRd = async (
 		const id = await addHashAsMagnet(rdKey, hash);
 		await handleSelectFilesInRd(rdKey, `rd:${id}`);
 		if (callback) await callback();
-		toast('Successfully added as magnet!', magnetToastOptions);
+		toast('Successfully added hash!', magnetToastOptions);
 	} catch (error) {
 		console.error(error);
-		toast.error('There was an error adding as magnet. Please try again.');
+		toast.error('There was an error adding hash. Please try again.');
 	}
+};
+
+export const handleAddMultipleHashesInRd = async (
+	rdKey: string,
+	hashes: string[],
+	callback?: () => Promise<void>
+) => {
+	let errorCount = 0;
+	for (const hash of hashes) {
+		try {
+			const id = await addHashAsMagnet(rdKey, hash);
+			await handleSelectFilesInRd(rdKey, `rd:${id}`);
+		} catch (error) {
+			errorCount++;
+			console.error(error);
+			toast.error('There was an error adding hash. Please try again.');
+		}
+	}
+	if (callback) await callback();
+	toast(`Successfully added ${hashes.length - errorCount} hashes!`, magnetToastOptions);
 };
 
 export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boolean = false) => {
@@ -78,10 +98,27 @@ export const handleAddAsMagnetInAd = async (
 		if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
 			throw new Error('no_magnets');
 		if (callback) await callback();
-		toast('Successfully added as magnet!', magnetToastOptions);
+		toast('Successfully added hash!', magnetToastOptions);
 	} catch (error) {
 		console.error(error);
-		toast.error('There was an error adding as magnet. Please try again.');
+		toast.error('There was an error adding hash. Please try again.');
+	}
+};
+
+export const handleAddMultipleHashesInAd = async (
+	adKey: string,
+	hashes: string[],
+	callback?: () => Promise<void>
+) => {
+	try {
+		const resp = await uploadMagnet(adKey, hashes);
+		if (resp.data.magnets.length === 0 || resp.data.magnets[0].error)
+			throw new Error('no_magnets');
+		if (callback) await callback();
+		toast(`Successfully added ${resp.data.magnets.length} hashes!`, magnetToastOptions);
+	} catch (error) {
+		console.error(error);
+		toast.error('There was an error adding hash. Please try again.');
 	}
 };
 
