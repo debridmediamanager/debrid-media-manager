@@ -1,6 +1,7 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useRouter } from 'next/router';
 import { ComponentType, useEffect, useState } from 'react';
+import { supportsLookbehind } from './lookbehind';
 
 const START_ROUTE = '/start';
 const LOGIN_ROUTE = '/login';
@@ -29,7 +30,15 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			// Render a loading indicator or placeholder on initial load
 			return (
 				<div className="flex flex-col items-center justify-center min-h-screen">
-					<h1 className="text-xl text-center">Debrid Media Manager is loading...</h1>
+					<h1 className="text-2xl">Debrid Media Manager is loading...</h1>
+					{!supportsLookbehind() && (
+						<div className="bg-red-900">
+							<a href="https://caniuse.com/js-regexp-lookbehind">
+								You are using an unsupported browser.
+							</a>{' '}
+							Update your browser/OS for DMM to work.
+						</div>
+					)}
 				</div>
 			);
 		}
