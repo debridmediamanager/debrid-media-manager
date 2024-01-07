@@ -49,14 +49,7 @@ export function grabPossibleSeasonNums(str: string): number[] {
 export function hasYear(test: string, years: string[], strictCheck: boolean = false) {
 	return strictCheck
 		? years.some((year) => test.includes(year))
-		: years.filter((year) => {
-				const intYear = parseInt(year);
-				return (
-					test.includes(year) ||
-					test.includes(`${intYear + 1}`) ||
-					test.includes(`${intYear - 1}`)
-				);
-		  }).length > 0;
+		: years.filter((year) => test.includes(year)).length > 0;
 }
 
 function removeDiacritics(str: string) {
@@ -310,7 +303,7 @@ export function hasNoBannedTerms(targetTitle: string, testTitle: string): boolea
 	const words = testTitle
 		.toLowerCase()
 		.split(/\W+/)
-		.filter((word: string) => word.length > 3);
+		.filter((word: string) => word.length >= 3);
 	const hasBannedWords = words.some((word: string) => {
 		if (!targetTitle.includes(word) && bannedWordSet.has(word))
 			console.log('💀 Found banned word in title:', word, ' <> ', testTitle);
