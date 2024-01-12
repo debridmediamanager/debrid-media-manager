@@ -55,7 +55,7 @@ export const instantCheckInRd = async (
 		});
 	};
 
-	for (const hashGroup of groupBy(100, hashes)) {
+	for (const hashGroup of groupBy(399, hashes)) {
 		if (rdKey) await rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd);
 	}
 

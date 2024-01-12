@@ -14,6 +14,7 @@ export const chooseYourPlayer = async () => {
 				'android/chooser': 'App chooser',
 				'android/org.videolan.vlc': 'VLC',
 				'android/com.mxtech.videoplayer.ad': 'MX Player',
+				'android/com.mxtech.videoplayer.pro': 'MX Player Pro',
 				'android/com.brouken.player': 'JustPlayer',
 			},
 			iOS: {
@@ -23,6 +24,9 @@ export const chooseYourPlayer = async () => {
 			},
 			MacOS: {
 				'mac/infuse': 'Infuse',
+				'mac2/iina': 'IINA',
+				'mac2/omniplayer': 'OmniPlayer',
+				'mac2/figplayer': 'Fig Player',
 			},
 		},
 		inputValue: window.localStorage.getItem('player') || undefined,
