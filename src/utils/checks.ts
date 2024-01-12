@@ -28,12 +28,12 @@ try {
 }
 
 export function naked(title: string): string {
-	return title
-		.toLowerCase()
-		.replace(
-			/[^a-z0-9\x00-\x7F\u2000-\u206F\u2E00-\u2E7F'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~\s]/gi,
-			''
-		);
+    return title
+        .toLowerCase()
+        .replace(
+            /[^a-z0-9\x00-\x7F\u0100-\u017F\u0180-\u024F\u0370-\u03FF\u0400-\u04FF\u0500-\u052F\u0590-\u05FF\u0600-\u06FF\u0700-\u074F\u0750-\u077F\u0780-\u07BF\u0800-\u083F\u0840-\u085F\u08A0-\u08FF\u0900-\u097F\u0980-\u09FF\u0A00-\u0A7F\u0A80-\u0AFF\u0B00-\u0B7F\u0B80-\u0BFF\u0C00-\u0C7F\u0C80-\u0CFF\u0D00-\u0D7F\u0D80-\u0DFF\u0E00-\u0E7F\u0E80-\u0EFF\u0F00-\u0FFF\u1000-\u109F\u10A0-\u10FF\u1100-\u11FF\u1200-\u137F\u13A0-\u13FF\u1400-\u167F\u1680-\u169F\u16A0-\u16FF\u1700-\u171F\u1720-\u173F\u1740-\u175F\u1760-\u177F\u1780-\u17FF\u1800-\u18AF\u1E00-\u1EFF\u1F00-\u1FFF\u2000-\u206F\u2E00-\u2E7F\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~\s]/gi,
+            ''
+        );
 }
 
 export function grabYears(str: string): string[] {
@@ -199,32 +199,32 @@ function flexEq(test: string, target: string, years: string[]) {
 	if (hasYear(test, years)) magicLength = 3; // Math.ceil(magicLength*1.5) = 5
 
 	if (naked(target2).length >= magicLength && naked(test2).includes(naked(target2))) {
-		console.log(
-			`🎲 Test:naked '${naked(target2)}' is found in '${naked(test2)}' | ${target} ${test}`
-		);
+		// console.log(
+		// 	`🎲 Test:naked '${naked(target2)}' is found in '${naked(test2)}' | ${target} ${test}`
+		// );
 		return true;
 	} else if (
 		removeRepeats(target2).length >= magicLength &&
 		removeRepeats(test2).includes(removeRepeats(target2))
 	) {
-		console.log(
-			`🎲 Test:removeRepeats '${removeRepeats(target2)}' is found in '${removeRepeats(
-				test2
-			)}' | ${test}`
-		);
+		// console.log(
+		// 	`🎲 Test:removeRepeats '${removeRepeats(target2)}' is found in '${removeRepeats(
+		// 		test2
+		// 	)}' | ${test}`
+		// );
 		return true;
 	} else if (
 		removeDiacritics(target2).length >= magicLength &&
 		removeDiacritics(test2).includes(removeDiacritics(target2))
 	) {
-		console.log(
-			`🎲 Test:removeDiacritics '${removeDiacritics(
-				target2
-			)}' is found in '${removeDiacritics(test2)}' | ${test}`
-		);
+		// console.log(
+		// 	`🎲 Test:removeDiacritics '${removeDiacritics(
+		// 		target2
+		// 	)}' is found in '${removeDiacritics(test2)}' | ${test}`
+		// );
 		return true;
 	} else if (target2.length >= Math.ceil(magicLength * 1.5) && test2.includes(target2)) {
-		console.log(`🎲 Test:plain '${target2}' is found in '${test2}' | ${test}`);
+		// console.log(`🎲 Test:plain '${target2}' is found in '${test2}' | ${test}`);
 		return true;
 	}
 	// if (strictEqual(target, movieTitle) || strictEqual(target, tvTitle)) console.log(`🎲 Test:strictEqual '${target}' is found in '${movieTitle}' or '${tvTitle}' | ${test}`);
@@ -305,15 +305,15 @@ export function hasNoBannedTerms(targetTitle: string, testTitle: string): boolea
 		.split(/\W+/)
 		.filter((word: string) => word.length >= 3);
 	const hasBannedWords = words.some((word: string) => {
-		if (!targetTitle.includes(word) && bannedWordSet.has(word))
-			console.log('💀 Found banned word in title:', word, ' <> ', testTitle);
+		// if (!targetTitle.includes(word) && bannedWordSet.has(word))
+		// 	console.log('💀 Found banned word in title:', word, ' <> ', testTitle);
 		return !targetTitle.includes(word) && bannedWordSet.has(word);
 	});
 
 	let titleWithoutSymbols = testTitle.toLowerCase().split(/\W+/).join(' ');
 	const hasBannedCompoundWords = bannedWordSet2.some((compoundWord: string) => {
-		if (!targetTitle.includes(compoundWord) && titleWithoutSymbols.includes(compoundWord))
-			console.log('💀 Found banned compound word in title:', compoundWord, ' <> ', testTitle);
+		// if (!targetTitle.includes(compoundWord) && titleWithoutSymbols.includes(compoundWord))
+		// 	console.log('💀 Found banned compound word in title:', compoundWord, ' <> ', testTitle);
 		return !targetTitle.includes(compoundWord) && titleWithoutSymbols.includes(compoundWord);
 	});
 
@@ -584,7 +584,6 @@ export function filterByTvConditions(
 
 				resultTitle = resultTitle.replace(/e\d\d[^\d].*/gi, '');
 				const seasonNums = grabPossibleSeasonNums(resultTitle);
-				console.log(resultTitle, seasonNums);
 
 				if (
 					seasonName &&

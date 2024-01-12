@@ -135,6 +135,7 @@ function TorrentsPage() {
 		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
 		await Promise.all(toDelete.map((id) => torrentDB.deleteById(id)));
 		setUserTorrentsList((prev) => prev.filter((torrent) => !toDelete.includes(torrent.id)));
+		toast.success(`Updated ${newIds.size} torrents in your Real-Debrid library`, libraryToastOptions);
 	};
 
 	const fetchLatestADTorrents = async function () {
@@ -253,7 +254,6 @@ function TorrentsPage() {
 		setFailedCount(userTorrentsList.filter(isFailed).length);
 		if (hasNoQueryParamsBut('page')) {
 			setFilteredList(applyQuickSearch(query, userTorrentsList));
-			selectPlayableFiles(userTorrentsList);
 			// deleteFailedTorrents(userTorrentsList); // disabled because this is BAD!
 			setFiltering(false);
 			setHelpTextBasedOnTime();
@@ -351,11 +351,7 @@ function TorrentsPage() {
 
 	async function selectPlayableFiles(torrents: UserTorrent[]) {
 		const waitingForSelection = torrents
-			.filter(
-				(t) =>
-					t.status === 'waiting_files_selection' ||
-					(t.status === 'magnet_conversion' && t.filename !== 'Magnet')
-			)
+			.filter(t => t.status === 'waiting_files_selection')
 			.map(wrapSelectFilesFn);
 		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 5, 500);
 		if (errors.length) {
