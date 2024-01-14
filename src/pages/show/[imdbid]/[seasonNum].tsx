@@ -54,7 +54,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		upperBound: Number.MAX_SAFE_INTEGER,
 	});
 	const [errorMessage, setErrorMessage] = useState('');
-	const rdKey = useRealDebridAccessToken();
+	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
 	const [uncachedCount, setUncachedCount] = useState<number>(0);

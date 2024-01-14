@@ -73,7 +73,7 @@ function TorrentsPage() {
 	const [selectedTorrents, setSelectedTorrents] = useState<Set<string>>(new Set());
 
 	// keys
-	const rdKey = useRealDebridAccessToken();
+	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 
 	const [movieGrouping] = useState<Record<string, number>>({});
@@ -89,7 +89,9 @@ function TorrentsPage() {
 	// stats
 	const [totalBytes, setTotalBytes] = useState<number>(0);
 
-	const relevantList = selectedTorrents.size ? userTorrentsList.filter(t => selectedTorrents.has(t.id)) : filteredList;
+	const relevantList = selectedTorrents.size
+		? userTorrentsList.filter((t) => selectedTorrents.has(t.id))
+		: filteredList;
 
 	// add hash to library
 	useEffect(() => {
@@ -98,8 +100,10 @@ function TorrentsPage() {
 		router.push(`/library?page=1`);
 		const hashes = extractHashes(addMagnet as string);
 		if (hashes.length !== 1) return;
-		if (rdKey) handleAddMultipleHashesInRd(rdKey, hashes, async () => await fetchLatestRDTorrents(2));
-		if (adKey) handleAddMultipleHashesInAd(adKey, hashes, async () => await fetchLatestADTorrents());
+		if (rdKey)
+			handleAddMultipleHashesInRd(rdKey, hashes, async () => await fetchLatestRDTorrents(2));
+		if (adKey)
+			handleAddMultipleHashesInAd(adKey, hashes, async () => await fetchLatestADTorrents());
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router]);
 
@@ -328,7 +332,7 @@ function TorrentsPage() {
 			setHelpText('Torrents that have a failure status');
 		}
 		if (status === 'selected') {
-			tmpList = tmpList.filter(t => selectedTorrents.has(t.id));
+			tmpList = tmpList.filter((t) => selectedTorrents.has(t.id));
 			setFilteredList(applyQuickSearch(query, tmpList));
 			setHelpText('Torrents that you have selected');
 		}
@@ -986,12 +990,14 @@ function TorrentsPage() {
 					</button>
 				)}
 
-				{(!hasNoQueryParamsBut('page') || currentPage > 1 || query) && <button
-					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
-					onClick={() => resetState()}
-				>
-					Reset filters
-				</button>}
+				{(!hasNoQueryParamsBut('page') || currentPage > 1 || query) && (
+					<button
+						className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
+						onClick={() => resetState()}
+					>
+						Reset filters
+					</button>
+				)}
 
 				{selectedTorrents.size > 0 && (
 					<button

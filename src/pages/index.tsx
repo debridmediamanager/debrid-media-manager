@@ -44,17 +44,17 @@ function IndexPage() {
 	};
 
 	const allowMagnetHandling = (): boolean => {
-        const userAgent = navigator.userAgent;
-        const isMobile = /Mobi|Android/i.test(userAgent);
+		const userAgent = navigator.userAgent;
+		const isMobile = /Mobi|Android/i.test(userAgent);
 
-        // Add conditions for supported browsers
-        const isChrome = /Chrome/.test(userAgent) && !isMobile;
-        const isEdge = /Edg/.test(userAgent) && !isMobile;
-        const isFirefox = /Firefox/.test(userAgent);
+		// Add conditions for supported browsers
+		const isChrome = /Chrome/.test(userAgent) && !isMobile;
+		const isEdge = /Edg/.test(userAgent) && !isMobile;
+		const isFirefox = /Firefox/.test(userAgent);
 		const isOpera = /OPR/.test(userAgent) && !isMobile;
 
-        return isChrome || isEdge || isFirefox || isOpera;
-    };
+		return isChrome || isEdge || isFirefox || isOpera;
+	};
 
 	const handleDefaultClient = async () => {
 		try {
@@ -191,12 +191,14 @@ function IndexPage() {
 						</div>
 
 						<div className="mb-2 h-max text-center leading-10">
-							{allowMagnetHandling() && <button
-								className="mx-1 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs"
-								onClick={() => handleDefaultClient()}
-							>
-								🧲 Set as default client
-							</button>}
+							{allowMagnetHandling() && (
+								<button
+									className="mx-1 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs"
+									onClick={() => handleDefaultClient()}
+								>
+									🧲 Set as default client
+								</button>
+							)}
 							<button
 								className="mx-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded text-xs"
 								onClick={() => chooseYourPlayer()}

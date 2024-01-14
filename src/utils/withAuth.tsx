@@ -10,7 +10,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 	return function WithAuth(props: P) {
 		const router = useRouter();
 		const [isLoading, setIsLoading] = useState(true);
-		const rdKey = useRealDebridAccessToken();
+		const [rdKey, rdLoading] = useRealDebridAccessToken();
 		const adKey = useAllDebridApiKey();
 
 		useEffect(() => {
@@ -18,13 +18,14 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 				!rdKey &&
 				!adKey &&
 				router.pathname !== START_ROUTE &&
-				!router.pathname.endsWith(LOGIN_ROUTE)
+				!router.pathname.endsWith(LOGIN_ROUTE) &&
+				!rdLoading
 			) {
 				router.push(START_ROUTE);
 			} else {
-				setIsLoading(false);
+				setIsLoading(rdLoading);
 			}
-		}, [rdKey, adKey, router]);
+		}, [rdKey, rdLoading, adKey, router]);
 
 		if (isLoading) {
 			// Render a loading indicator or placeholder on initial load

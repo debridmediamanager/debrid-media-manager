@@ -46,11 +46,12 @@ export const useDebridLogin = () => {
 	};
 };
 
-export const useRealDebridAccessToken = () => {
+export const useRealDebridAccessToken = (): [string | null, boolean] => {
 	const [clientId] = useLocalStorage<string>('rd:clientId');
 	const [clientSecret] = useLocalStorage<string>('rd:clientSecret');
 	const [refreshToken] = useLocalStorage<string>('rd:refreshToken');
 	const [accessToken, setAccessToken] = useLocalStorage<string>('rd:accessToken');
+	const [loading, setLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		(async () => {
@@ -69,11 +70,12 @@ export const useRealDebridAccessToken = () => {
 					clearRdKeys();
 				}
 			}
+			setLoading(false);
 		})();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [clientId, clientSecret, refreshToken]);
 
-	return accessToken;
+	return [accessToken, loading];
 };
 
 export const useAllDebridApiKey = () => {
