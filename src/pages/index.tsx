@@ -43,6 +43,14 @@ function IndexPage() {
 		}
 	};
 
+	const handleDefaultClient = async () => {
+		try {
+			navigator.registerProtocolHandler("magnet", `${window.location.origin}/quickadd?magnet=%s`);
+		} catch(err: unknown) {
+			toast.error('Your browser does not support this feature.', genericToastOptions);
+		}
+	};
+
 	const handleClearCache = async () => {
 		setDeleting(true);
 		const request = window.indexedDB.deleteDatabase('DMMDB');
@@ -168,6 +176,12 @@ function IndexPage() {
 
 						<div className="mb-2 h-max text-center leading-10">
 							<button
+								className="mx-1 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs"
+								onClick={() => handleDefaultClient()}
+							>
+								🧲 Set as default client
+							</button>
+							<button
 								className="mx-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded text-xs"
 								onClick={() => chooseYourPlayer()}
 							>
@@ -177,7 +191,7 @@ function IndexPage() {
 								className="mx-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded text-xs"
 								onClick={() => handleClearCache()}
 							>
-								💦 Refresh library cache
+								💦 Clear library cache
 							</button>
 							{rdUser && (
 								<button

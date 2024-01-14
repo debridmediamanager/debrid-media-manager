@@ -77,7 +77,7 @@ function TorrentsPage() {
 	const [movieGrouping] = useState<Record<string, number>>({});
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
-	const [sameTitle] = useState<Array<string>>([]);
+	const [sameTitle] = useState<Set<string>>(new Set());
 
 	// filter counts
 	const [slowCount, setSlowCount] = useState(0);
@@ -135,7 +135,10 @@ function TorrentsPage() {
 		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
 		await Promise.all(toDelete.map((id) => torrentDB.deleteById(id)));
 		setUserTorrentsList((prev) => prev.filter((torrent) => !toDelete.includes(torrent.id)));
-		toast.success(`Updated ${newIds.size} torrents in your Real-Debrid library`, libraryToastOptions);
+		toast.success(
+			`Updated ${newIds.size} torrents in your Real-Debrid library`,
+			libraryToastOptions
+		);
 	};
 
 	const fetchLatestADTorrents = async function () {
@@ -183,7 +186,7 @@ function TorrentsPage() {
 		if (rdLoading || adLoading) return;
 		setGrouping(true);
 		setTotalBytes(0);
-		sameTitle.length = 0; // clear array
+		sameTitle.clear();
 
 		let tmpTotalBytes = 0;
 		clearGroupings(movieGrouping);
@@ -195,6 +198,7 @@ function TorrentsPage() {
 				hashes.set(key, t.bytes);
 				tmpTotalBytes += t.bytes;
 			} else {
+				sameTitle.add(t.title);
 				const prevBytes = hashes.get(key) || 0;
 				if (prevBytes < t.bytes) {
 					tmpTotalBytes -= prevBytes;
@@ -203,7 +207,7 @@ function TorrentsPage() {
 				}
 			}
 			if (t.title in getGroupings(t.mediaType)) {
-				if (getGroupings(t.mediaType)[t.title] === 1) sameTitle.push(t.title);
+				if (getGroupings(t.mediaType)[t.title] === 1) sameTitle.add(t.title);
 				getGroupings(t.mediaType)[t.title]++;
 			} else {
 				getGroupings(t.mediaType)[t.title] = 1;
@@ -269,7 +273,7 @@ function TorrentsPage() {
 			);
 		}
 		if (status === 'sametitle') {
-			tmpList = tmpList.filter((t) => sameTitle.includes(t.title));
+			tmpList = tmpList.filter((t) => sameTitle.has(t.title));
 			setFilteredList(applyQuickSearch(query, tmpList));
 			setHelpText(
 				'Torrents shown have the same title parsed from the torrent name. Use "By size" to retain the larger torrent for each title, or "By date" to retain the more recent torrent. Take note: the parser might not work well for multi-season tv show torrents.'
@@ -346,12 +350,13 @@ function TorrentsPage() {
 		return async () => {
 			await handleSelectFilesInRd(rdKey!, t.id);
 			t.status = 'downloading';
+			torrentDB.add(t);
 		};
 	}
 
 	async function selectPlayableFiles(torrents: UserTorrent[]) {
 		const waitingForSelection = torrents
-			.filter(t => t.status === 'waiting_files_selection')
+			.filter((t) => t.status === 'waiting_files_selection')
 			.map(wrapSelectFilesFn);
 		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 5, 500);
 		if (errors.length) {
@@ -452,7 +457,7 @@ function TorrentsPage() {
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
 		}
-		resetState();
+		if (router.query.status === 'sametitle') resetState();
 	}
 
 	async function dedupeByRecency() {
@@ -513,7 +518,7 @@ function TorrentsPage() {
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
 		}
-		resetState();
+		if (router.query.status === 'sametitle') resetState();
 	}
 
 	function wrapReinsertFn(t: UserTorrent) {
@@ -534,7 +539,7 @@ function TorrentsPage() {
 
 	async function combineSameHash() {
 		const dupeHashes: Map<string, UserTorrent[]> = new Map();
-		userTorrentsList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
+		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
 			if (cur.progress !== 100) return acc;
 			let key = cur.hash;
 			if (acc[key]) {
@@ -557,7 +562,7 @@ function TorrentsPage() {
 				await Swal.fire({
 					title: 'Merge same hash',
 					text: `This will combine the ${dupeHashesCount} completed torrents with identical hashes into ${dupeHashes.size} and select all streamable files. Make sure to backup before doing this. Do you want to proceed?`,
-					icon: 'warning',
+					icon: 'question',
 					showCancelButton: true,
 					confirmButtonColor: '#3085d6',
 					cancelButtonColor: '#d33',
@@ -790,7 +795,7 @@ function TorrentsPage() {
 					📺 TV shows
 				</Link>
 
-				{sameTitle.length > 0 && (
+				{sameTitle.size > 0 && (
 					<>
 						<Link
 							href="/library?status=sametitle&page=1"
@@ -799,7 +804,8 @@ function TorrentsPage() {
 							👀 Same title
 						</Link>
 
-						{router.query.status === 'sametitle' && (
+						{(router.query.status === 'sametitle' ||
+						router.query.filter && filteredList.length > 1) && (
 							<>
 								<button
 									className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs"
@@ -814,15 +820,16 @@ function TorrentsPage() {
 								>
 									🧹 Date
 								</button>
+
+								<button
+									className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs`}
+									onClick={combineSameHash}
+								>
+									🧹 Hash
+								</button>
 							</>
 						)}
 
-						<button
-							className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs`}
-							onClick={combineSameHash}
-						>
-							🧬 Same hash
-						</button>
 					</>
 				)}
 
