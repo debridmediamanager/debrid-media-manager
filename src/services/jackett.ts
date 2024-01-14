@@ -57,7 +57,7 @@ async function computeHashFromTorrent(url: string): Promise<string | undefined> 
 
 		return magnetHash.toLowerCase();
 	} catch (error: any) {
-		console.error('getMagnetURI error:', error.message);
+		console.error('getMagnetURI error:', error.message, url);
 		return undefined;
 	}
 }
