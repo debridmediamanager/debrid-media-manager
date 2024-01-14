@@ -16,6 +16,7 @@ import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
 import { defaultPlayer } from '@/utils/chooseYourPlayer';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
+import { extractHashes } from '@/utils/extractHashes';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { generateHashList, handleShare } from '@/utils/hashList';
 import { localRestore } from '@/utils/localRestore';
@@ -69,6 +70,7 @@ function TorrentsPage() {
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'added', direction: 'desc' });
 	const [helpText, setHelpText] = useState('');
+	const [selectedTorrents, setSelectedTorrents] = useState<Set<string>>(new Set());
 
 	// keys
 	const rdKey = useRealDebridAccessToken();
@@ -77,7 +79,7 @@ function TorrentsPage() {
 	const [movieGrouping] = useState<Record<string, number>>({});
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
-	const [sameTitle] = useState<Set<string>>(new Set());
+	const [sameTitleOrHash] = useState<Set<string>>(new Set());
 
 	// filter counts
 	const [slowCount, setSlowCount] = useState(0);
@@ -86,6 +88,20 @@ function TorrentsPage() {
 
 	// stats
 	const [totalBytes, setTotalBytes] = useState<number>(0);
+
+	const relevantList = selectedTorrents.size ? userTorrentsList.filter(t => selectedTorrents.has(t.id)) : filteredList;
+
+	// add hash to library
+	useEffect(() => {
+		const { addMagnet } = router.query;
+		if (!addMagnet) return;
+		router.push(`/library?page=1`);
+		const hashes = extractHashes(addMagnet as string);
+		if (hashes.length !== 1) return;
+		if (rdKey) handleAddMultipleHashesInRd(rdKey, hashes, async () => await fetchLatestRDTorrents(2));
+		if (adKey) handleAddMultipleHashesInAd(adKey, hashes, async () => await fetchLatestADTorrents());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [router]);
 
 	const handlePrevPage = useCallback(() => {
 		if (router.query.page === '1') return;
@@ -133,7 +149,15 @@ function TorrentsPage() {
 		setRdSyncing(false);
 		if (customLimit) return;
 		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
-		await Promise.all(toDelete.map((id) => torrentDB.deleteById(id)));
+		await Promise.all(
+			toDelete.map((id) => {
+				torrentDB.deleteById(id);
+				setSelectedTorrents((prev) => {
+					prev.delete(id);
+					return new Set(prev);
+				});
+			})
+		);
 		setUserTorrentsList((prev) => prev.filter((torrent) => !toDelete.includes(torrent.id)));
 		toast.success(
 			`Updated ${newIds.size} torrents in your Real-Debrid library`,
@@ -161,8 +185,20 @@ function TorrentsPage() {
 		});
 		setAdSyncing(false);
 		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
-		await Promise.all(toDelete.map((id) => torrentDB.deleteById(id)));
+		await Promise.all(
+			toDelete.map((id) => {
+				torrentDB.deleteById(id);
+				setSelectedTorrents((prev) => {
+					prev.delete(id);
+					return new Set(prev);
+				});
+			})
+		);
 		setUserTorrentsList((prev) => prev.filter((torrent) => !toDelete.includes(torrent.id)));
+		toast.success(
+			`Updated ${newIds.size} torrents in your AllDebrid library`,
+			libraryToastOptions
+		);
 	};
 
 	// fetch list from api
@@ -186,7 +222,7 @@ function TorrentsPage() {
 		if (rdLoading || adLoading) return;
 		setGrouping(true);
 		setTotalBytes(0);
-		sameTitle.clear();
+		sameTitleOrHash.clear();
 
 		let tmpTotalBytes = 0;
 		clearGroupings(movieGrouping);
@@ -198,7 +234,7 @@ function TorrentsPage() {
 				hashes.set(key, t.bytes);
 				tmpTotalBytes += t.bytes;
 			} else {
-				sameTitle.add(t.title);
+				sameTitleOrHash.add(t.title);
 				const prevBytes = hashes.get(key) || 0;
 				if (prevBytes < t.bytes) {
 					tmpTotalBytes -= prevBytes;
@@ -207,7 +243,7 @@ function TorrentsPage() {
 				}
 			}
 			if (t.title in getGroupings(t.mediaType)) {
-				if (getGroupings(t.mediaType)[t.title] === 1) sameTitle.add(t.title);
+				if (getGroupings(t.mediaType)[t.title] === 1) sameTitleOrHash.add(t.title);
 				getGroupings(t.mediaType)[t.title]++;
 			} else {
 				getGroupings(t.mediaType)[t.title] = 1;
@@ -250,6 +286,8 @@ function TorrentsPage() {
 		const helpText = tips[index];
 		setHelpText(helpText);
 	}
+
+	// filter the list
 	useEffect(() => {
 		if (rdLoading || adLoading || grouping) return;
 		setFiltering(true);
@@ -272,8 +310,8 @@ function TorrentsPage() {
 				'The displayed torrents either do not contain any links or are older than one hour and lack any seeders. You can use the "Delete shown" option to remove them.'
 			);
 		}
-		if (status === 'sametitle') {
-			tmpList = tmpList.filter((t) => sameTitle.has(t.title));
+		if (status === 'sametitleorhash') {
+			tmpList = tmpList.filter((t) => sameTitleOrHash.has(t.title));
 			setFilteredList(applyQuickSearch(query, tmpList));
 			setHelpText(
 				'Torrents shown have the same title parsed from the torrent name. Use "By size" to retain the larger torrent for each title, or "By date" to retain the more recent torrent. Take note: the parser might not work well for multi-season tv show torrents.'
@@ -288,6 +326,11 @@ function TorrentsPage() {
 			tmpList = tmpList.filter(isFailed);
 			setFilteredList(applyQuickSearch(query, tmpList));
 			setHelpText('Torrents that have a failure status');
+		}
+		if (status === 'selected') {
+			tmpList = tmpList.filter(t => selectedTorrents.has(t.id));
+			setFilteredList(applyQuickSearch(query, tmpList));
+			setHelpText('Torrents that you have selected');
 		}
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
@@ -369,11 +412,11 @@ function TorrentsPage() {
 
 	async function handleDeleteShownTorrents() {
 		if (
-			filteredList.length > 0 &&
+			relevantList.length > 0 &&
 			!(
 				await Swal.fire({
 					title: 'Delete shown',
-					text: `This will delete the ${filteredList.length} torrents filtered. Are you sure?`,
+					text: `This will delete the ${relevantList.length} torrents filtered. Are you sure?`,
 					icon: 'warning',
 					showCancelButton: true,
 					confirmButtonColor: '#3085d6',
@@ -383,7 +426,7 @@ function TorrentsPage() {
 			).isConfirmed
 		)
 			return;
-		await deleteFilteredTorrents(filteredList, wrapDeleteFn);
+		await deleteFilteredTorrents(relevantList, wrapDeleteFn);
 	}
 
 	function wrapDeleteFn(t: UserTorrent) {
@@ -397,6 +440,30 @@ function TorrentsPage() {
 			}
 			setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== oldId));
 			torrentDB.deleteById(oldId);
+			setSelectedTorrents((prev) => {
+				prev.delete(oldId);
+				return new Set(prev);
+			});
+		};
+	}
+
+	function wrapReinsertFn(t: UserTorrent) {
+		return async () => {
+			const oldId = t.id;
+			if (rdKey && t.id.startsWith('rd:')) {
+				await handleReinsertTorrent(rdKey, t.id, userTorrentsList);
+				setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== oldId));
+				fetchLatestRDTorrents(2);
+			}
+			if (adKey && t.id.startsWith('ad:')) {
+				await handleRestartTorrent(adKey, t.id);
+				fetchLatestADTorrents();
+			}
+			torrentDB.deleteById(oldId);
+			setSelectedTorrents((prev) => {
+				prev.delete(oldId);
+				return new Set(prev);
+			});
 		};
 	}
 
@@ -457,7 +524,7 @@ function TorrentsPage() {
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
 		}
-		if (router.query.status === 'sametitle') resetState();
+		if (router.query.status === 'sametitleorhash') resetState();
 	}
 
 	async function dedupeByRecency() {
@@ -518,23 +585,7 @@ function TorrentsPage() {
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
 		}
-		if (router.query.status === 'sametitle') resetState();
-	}
-
-	function wrapReinsertFn(t: UserTorrent) {
-		return async () => {
-			const oldId = t.id;
-			if (rdKey && t.id.startsWith('rd:')) {
-				await handleReinsertTorrent(rdKey, t.id, userTorrentsList);
-				setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== oldId));
-				fetchLatestRDTorrents(2);
-			}
-			if (adKey && t.id.startsWith('ad:')) {
-				await handleRestartTorrent(adKey, t.id);
-				fetchLatestADTorrents();
-			}
-			torrentDB.deleteById(oldId);
-		};
+		if (router.query.status === 'sametitleorhash') resetState();
 	}
 
 	async function combineSameHash() {
@@ -663,12 +714,6 @@ function TorrentsPage() {
 		});
 	}
 
-	function extractHashes(hashesStr: string): string[] {
-		const hashRegex = /\b[a-f0-9]{40}\b/gi;
-		const matches = hashesStr.match(hashRegex);
-		return matches || [];
-	}
-
 	async function handleAddMagnet(debridService: string) {
 		const { value: hashesStr } = await Swal.fire({
 			title: `Add magnet to your ${debridService.toUpperCase()} library`,
@@ -678,6 +723,7 @@ function TorrentsPage() {
 			showCancelButton: true,
 			inputValidator: (value) => !value && 'You need to put something!',
 		});
+		if (!hashesStr) return;
 		const hashes = extractHashes(hashesStr);
 		if (rdKey && hashes && debridService === 'rd') {
 			handleAddMultipleHashesInRd(
@@ -698,6 +744,24 @@ function TorrentsPage() {
 		setQuery('');
 		setSortBy({ column: 'added', direction: 'desc' });
 		router.push(`/library?page=1`);
+	};
+
+	const resetSelection = () => {
+		setSelectedTorrents(new Set());
+	};
+
+	const handleSelectTorrent = async (id: string) => {
+		if (selectedTorrents.has(id)) {
+			setSelectedTorrents((prev) => {
+				prev.delete(id);
+				return new Set(prev);
+			});
+		} else {
+			setSelectedTorrents((prev) => {
+				prev.add(id);
+				return new Set(prev);
+			});
+		}
 	};
 
 	const handleShowInfo = async (id: string) => {
@@ -748,7 +812,7 @@ function TorrentsPage() {
 					className="appearance-none bg-transparent border-none w-full text-xs text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
 					type="text"
 					id="query"
-					placeholder="quick search on filename, hash, or id; supports regex"
+					placeholder="search by filename/hash/id, supports regex"
 					value={query}
 					onChange={(e) => {
 						setCurrentPage(1);
@@ -795,17 +859,17 @@ function TorrentsPage() {
 					📺 TV shows
 				</Link>
 
-				{sameTitle.size > 0 && (
+				{sameTitleOrHash.size > 0 && (
 					<>
 						<Link
-							href="/library?status=sametitle&page=1"
+							href="/library?status=sametitleorhash&page=1"
 							className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
 						>
-							👀 Same title
+							👀 Same title or hash
 						</Link>
 
-						{(router.query.status === 'sametitle' ||
-						router.query.filter && filteredList.length > 1) && (
+						{(router.query.status === 'sametitleorhash' ||
+							(router.query.filter && filteredList.length > 1)) && (
 							<>
 								<button
 									className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs"
@@ -829,7 +893,6 @@ function TorrentsPage() {
 								</button>
 							</>
 						)}
-
 					</>
 				)}
 
@@ -860,12 +923,14 @@ function TorrentsPage() {
 					</Link>
 				)}
 
-				<button
-					className={`mr-2 mb-2 bg-red-600 hover:bg-red-500 text-white font-bold py-1 px-1 rounded text-xs`}
-					onClick={handleDeleteShownTorrents}
-				>
-					🗑️ Delete
-				</button>
+				{selectedTorrents.size > 0 && (
+					<Link
+						href="/library?status=selected&page=1"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
+					>
+						👀 Selected
+					</Link>
+				)}
 
 				{/* Add torrent */}
 				{rdKey && (
@@ -886,20 +951,21 @@ function TorrentsPage() {
 				)}
 
 				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs ${
-						filteredList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
-					}`}
-					onClick={() => generateHashList(filteredList)}
-					disabled={filteredList.length === 0}
+					className={`mr-2 mb-2 bg-red-600 hover:bg-red-500 text-white font-bold py-1 px-1 rounded text-xs`}
+					onClick={handleDeleteShownTorrents}
 				>
-					🚀 Hash list
+					🗑️ Delete{selectedTorrents.size ? ` (${selectedTorrents.size})` : ''}
+				</button>
+
+				<button
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs`}
+					onClick={() => generateHashList(relevantList)}
+				>
+					🚀 Hash list{selectedTorrents.size ? ` (${selectedTorrents.size})` : ''}
 				</button>
 				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs ${
-						userTorrentsList.length === 0 ? 'opacity-60 cursor-not-allowed' : ''
-					}`}
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs`}
 					onClick={localBackup}
-					disabled={userTorrentsList.length === 0}
 				>
 					💾 Backup
 				</button>
@@ -920,12 +986,21 @@ function TorrentsPage() {
 					</button>
 				)}
 
-				<button
+				{(!hasNoQueryParamsBut('page') || currentPage > 1 || query) && <button
 					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
 					onClick={() => resetState()}
 				>
-					Reset
-				</button>
+					Reset filters
+				</button>}
+
+				{selectedTorrents.size > 0 && (
+					<button
+						className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
+						onClick={() => resetSelection()}
+					>
+						Unselect all
+					</button>
+				)}
 			</div>
 			{/* End of Main Menu */}
 			{helpText !== '' && <div className="bg-blue-900 text-xs">💡 {helpText}</div>}
@@ -939,10 +1014,13 @@ function TorrentsPage() {
 						<thead>
 							<tr className="whitespace-nowrap text-xs">
 								<th
-									className="min-w-24 max-w-24 w-24 px-1 py-0 cursor-pointer"
+									className="min-w-8 max-w-8 w-8 px-1 py-0 cursor-pointer"
 									onClick={() => handleSort('id')}
 								>
-									ID{` (${sortedData().length}) `}
+									Select
+									{selectedTorrents.size
+										? ` (${selectedTorrents.size})`
+										: ''}{' '}
 									{sortBy.column === 'id' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
@@ -950,7 +1028,7 @@ function TorrentsPage() {
 									className="min-w-96 w-[500px] max-w-[500px] w-96 px-1 py-0 cursor-pointer"
 									onClick={() => handleSort('title')}
 								>
-									Title{' '}
+									Title ({filteredList.length}){' '}
 									{sortBy.column === 'title' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
@@ -998,18 +1076,26 @@ function TorrentsPage() {
 									return (
 										<tr
 											key={i}
-											className="align-middle hover:bg-purple-900"
-											onClick={() =>
-												rdKey && torrent.id.startsWith('rd:')
-													? handleShowInfo(torrent.id)
-													: null
-											} // Add the onClick event here
-											title="Click for more info"
+											className={`align-middle lg:hover:bg-purple-900 ${
+												selectedTorrents.has(torrent.id)
+													? `bg-green-800`
+													: ``
+											}`}
 										>
-											<td className="px-1 py-1 text-sm truncate">
-												{torrent.id}
+											<td
+												onClick={() => handleSelectTorrent(torrent.id)}
+												className="px-1 py-1 text-sm truncate text-center"
+											>
+												{selectedTorrents.has(torrent.id) ? `✅` : `➕`}
 											</td>
-											<td className="px-1 py-1 text-sm truncate">
+											<td
+												onClick={() =>
+													rdKey && torrent.id.startsWith('rd:')
+														? handleShowInfo(torrent.id)
+														: null
+												}
+												className="px-1 py-1 text-sm truncate"
+											>
 												{!['Invalid Magnet', 'Magnet'].includes(
 													torrent.filename
 												) && (
@@ -1025,7 +1111,7 @@ function TorrentsPage() {
 																href={`/library?filter=${encodeURIComponent(
 																	torrent.title
 																)}`}
-																className="inline-block bg-green-600 hover:bg-green-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer"
+																className="inline-block bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer"
 																onClick={(e) => e.stopPropagation()}
 															>
 																{filterText}
@@ -1051,10 +1137,24 @@ function TorrentsPage() {
 												{torrent.filename}
 											</td>
 
-											<td className="px-1 py-1 text-xs text-center">
+											<td
+												onClick={() =>
+													rdKey && torrent.id.startsWith('rd:')
+														? handleShowInfo(torrent.id)
+														: null
+												}
+												className="px-1 py-1 text-xs text-center"
+											>
 												{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
 											</td>
-											<td className="px-1 py-1 text-xs text-center">
+											<td
+												onClick={() =>
+													rdKey && torrent.id.startsWith('rd:')
+														? handleShowInfo(torrent.id)
+														: null
+												}
+												className="px-1 py-1 text-xs text-center"
+											>
 												{torrent.progress !== 100 ? (
 													<>
 														<span className="inline-block align-middle">
@@ -1076,10 +1176,24 @@ function TorrentsPage() {
 												)}
 											</td>
 
-											<td className="px-1 py-1 text-xs text-center">
+											<td
+												onClick={() =>
+													rdKey && torrent.id.startsWith('rd:')
+														? handleShowInfo(torrent.id)
+														: null
+												}
+												className="px-1 py-1 text-xs text-center"
+											>
 												{new Date(torrent.added).toLocaleString()}
 											</td>
-											<td className="px-1 py-1 flex place-content-center">
+											<td
+												onClick={() =>
+													rdKey && torrent.id.startsWith('rd:')
+														? handleShowInfo(torrent.id)
+														: null
+												}
+												className="px-1 py-1 flex place-content-center"
+											>
 												<button
 													title="Share"
 													className="cursor-pointer mr-2 mb-2 text-indigo-600"
@@ -1101,6 +1215,10 @@ function TorrentsPage() {
 																torrent.id
 															);
 															torrentDB.deleteById(torrent.id);
+															setSelectedTorrents((prev) => {
+																prev.delete(torrent.id);
+																return new Set(prev);
+															});
 														}
 														if (adKey && torrent.id.startsWith('ad:')) {
 															await handleDeleteAdTorrent(
@@ -1108,6 +1226,10 @@ function TorrentsPage() {
 																torrent.id
 															);
 															torrentDB.deleteById(torrent.id);
+															setSelectedTorrents((prev) => {
+																prev.delete(torrent.id);
+																return new Set(prev);
+															});
 														}
 														setUserTorrentsList((prevList) =>
 															prevList.filter(
@@ -1140,6 +1262,10 @@ function TorrentsPage() {
 														);
 														fetchLatestRDTorrents(2);
 														torrentDB.deleteById(oldId);
+														setSelectedTorrents((prev) => {
+															prev.delete(oldId);
+															return new Set(prev);
+														});
 													}}
 												>
 													<FaRecycle />
