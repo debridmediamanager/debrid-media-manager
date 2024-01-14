@@ -1,5 +1,3 @@
-import assert from "assert";
-
 export function supportsLookbehind() {
 	try {
 		if ('$foo %foo foo'.replace(/(\$)foo/g, '$1bar') !== '$bar %foo foo') return false;
