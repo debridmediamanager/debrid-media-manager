@@ -1,4 +1,5 @@
 import { useCurrentUser } from '@/hooks/auth';
+import useLocalStorage from '@/hooks/localStorage';
 import { getTerms } from '@/utils/browseTerms';
 import { chooseYourPlayer } from '@/utils/chooseYourPlayer';
 import { genericToastOptions } from '@/utils/toastOptions';
@@ -8,10 +9,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-
 function IndexPage() {
 	const router = useRouter();
 	const { realDebrid: rdUser, allDebrid: adUser, rdError, adError } = useCurrentUser();
+	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [deleting, setDeleting] = useState(false);
 
 	useEffect(() => {
@@ -54,6 +55,12 @@ function IndexPage() {
 		const isOpera = /OPR/.test(userAgent) && !isMobile;
 
 		return isChrome || isEdge || isFirefox || isOpera;
+	};
+
+	const handleTraktLogin = async () => {
+		// generate authorization url
+		const authUrl = `/api/trakt/auth?redirect=${window.location.origin}`;
+		router.push(authUrl);
 	};
 
 	const handleDefaultClient = async () => {
@@ -116,7 +123,7 @@ function IndexPage() {
 							) : (
 								<Link
 									href="/realdebrid/login"
-									className="px-1 py-1 m-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600 whitespace-nowrap"
+									className="px-1 py-1 ml-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600 whitespace-nowrap"
 								>
 									Login with Real-Debrid
 								</Link>
@@ -128,10 +135,22 @@ function IndexPage() {
 							) : (
 								<Link
 									href="/alldebrid/login"
-									className="px-1 py-1 m-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600 whitespace-nowrap"
+									className="px-1 py-1 ml-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600 whitespace-nowrap"
 								>
 									Login with AllDebrid
 								</Link>
+							)}{' '}
+							{traktToken ? (
+								<>
+									Trakt: <span className="text-green-500">✅</span>
+								</>
+							) : (
+								<button
+									onClick={() => handleTraktLogin()}
+									className="px-1 py-1 ml-2 text-xs text-white bg-red-500 rounded hover:bg-red-600 whitespace-nowrap"
+								>
+									Login with Trakt
+								</button>
 							)}
 						</div>
 
