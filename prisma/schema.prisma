@@ -34,3 +34,15 @@ model Search {
   value Json
   updatedAt DateTime @updatedAt
 }
+
+model Cast {
+  id        String   @id @default(uuid())
+  imdbId    String
+  userId    String
+  hash      String
+  url       String
+  updatedAt DateTime @updatedAt
+
+  @@index([imdbId, userId])
+  @@index([updatedAt])
+}

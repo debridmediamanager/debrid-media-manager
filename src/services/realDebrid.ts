@@ -25,7 +25,7 @@ interface AccessTokenResponse {
 	token_type: string;
 }
 
-interface UserResponse {
+export interface UserResponse {
 	id: number;
 	username: string;
 	email: string;
