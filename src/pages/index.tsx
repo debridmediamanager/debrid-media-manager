@@ -140,7 +140,7 @@ function IndexPage() {
 									Login with AllDebrid
 								</Link>
 							)}{' '}
-							{traktToken ? (
+							{/* {traktToken ? (
 								<>
 									Trakt: <span className="text-green-500">✅</span>
 								</>
@@ -151,7 +151,7 @@ function IndexPage() {
 								>
 									Login with Trakt
 								</button>
-							)}
+							)} */}
 						</div>
 
 						<div className="text-sm mb-4 w-screen text-center">
