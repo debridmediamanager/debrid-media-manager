@@ -22,6 +22,12 @@ const nextConfig = {
 			port: '',
 			pathname: '/**',
 		  },
+		  {
+			protocol: 'https',
+			hostname: 'static.debridmediamanager.com',
+			port: '',
+			pathname: '/**',
+		  },
 		],
 	  },
 	reactStrictMode: false,
