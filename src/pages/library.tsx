@@ -287,8 +287,8 @@ function TorrentsPage() {
 		const date = new Date();
 		const minute = date.getMinutes();
 		const index = minute % tips.length;
-		const helpText = tips[index];
-		setHelpText(helpText);
+		const randomTip = tips[index];
+		if (helpText !== 'hide') setHelpText(randomTip);
 	}
 
 	// filter the list
@@ -310,44 +310,49 @@ function TorrentsPage() {
 		if (status === 'slow') {
 			tmpList = tmpList.filter(isSlowOrNoLinks);
 			setFilteredList(applyQuickSearch(query, tmpList));
-			setHelpText(
-				'The displayed torrents either do not contain any links or are older than one hour and lack any seeders. You can use the "Delete shown" option to remove them.'
-			);
+			if (helpText !== 'hide')
+				setHelpText(
+					'The displayed torrents either do not contain any links or are older than one hour and lack any seeders. You can use the "Delete shown" option to remove them.'
+				);
 		}
 		if (status === 'sametitleorhash') {
 			tmpList = tmpList.filter((t) => sameTitleOrHash.has(t.title));
 			setFilteredList(applyQuickSearch(query, tmpList));
-			setHelpText(
-				'Torrents shown have the same title parsed from the torrent name. Use "By size" to retain the larger torrent for each title, or "By date" to retain the more recent torrent. Take note: the parser might not work well for multi-season tv show torrents.'
-			);
+			if (helpText !== 'hide')
+				setHelpText(
+					'Torrents shown have the same title parsed from the torrent name. Use "By size" to retain the larger torrent for each title, or "By date" to retain the more recent torrent. Take note: the parser might not work well for multi-season tv show torrents.'
+				);
 		}
 		if (status === 'inprogress') {
 			tmpList = tmpList.filter(isInProgress);
 			setFilteredList(applyQuickSearch(query, tmpList));
-			setHelpText('Torrents that are still downloading');
+			if (helpText !== 'hide') setHelpText('Torrents that are still downloading');
 		}
 		if (status === 'failed') {
 			tmpList = tmpList.filter(isFailed);
 			setFilteredList(applyQuickSearch(query, tmpList));
-			setHelpText('Torrents that have a failure status');
+			if (helpText !== 'hide') setHelpText('Torrents that have a failure status');
 		}
 		if (status === 'selected') {
 			tmpList = tmpList.filter((t) => selectedTorrents.has(t.id));
 			setFilteredList(applyQuickSearch(query, tmpList));
-			setHelpText('Torrents that you have selected');
+			if (helpText !== 'hide') setHelpText('Torrents that you have selected');
 		}
 		if (titleFilter) {
 			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
 			tmpList = tmpList.filter((t) => decodedTitleFilter === t.title);
 			setFilteredList(applyQuickSearch(query, tmpList));
-			setHelpText(`Torrents shown have the title "${titleFilter}".`);
+			if (helpText !== 'hide') setHelpText(`Torrents shown have the title "${titleFilter}".`);
 		}
 		if (mediaType) {
 			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
 			setFilteredList(applyQuickSearch(query, tmpList));
-			setHelpText(
-				`Torrents shown are detected as ${mediaType === 'movie' ? 'movies' : 'tv shows'}.`
-			);
+			if (helpText !== 'hide')
+				setHelpText(
+					`Torrents shown are detected as ${
+						mediaType === 'movie' ? 'movies' : 'tv shows'
+					}.`
+				);
 		}
 		selectPlayableFiles(tmpList);
 		setFiltering(false);
@@ -869,7 +874,7 @@ function TorrentsPage() {
 							href="/library?status=sametitleorhash&page=1"
 							className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
 						>
-							👀 Same title or hash
+							👀 Same title/ hash
 						</Link>
 
 						{(router.query.status === 'sametitleorhash' ||
@@ -1009,7 +1014,11 @@ function TorrentsPage() {
 				)}
 			</div>
 			{/* End of Main Menu */}
-			{helpText !== '' && <div className="bg-blue-900 text-xs">💡 {helpText}</div>}
+			{helpText && helpText !== 'hide' && (
+				<div className="bg-blue-900 text-xs" onClick={() => setHelpText('hide')}>
+					💡 {helpText}
+				</div>
+			)}
 			<div className="overflow-x-auto">
 				{rdLoading || adLoading || grouping || filtering ? (
 					<div className="flex justify-center items-center mt-4">
