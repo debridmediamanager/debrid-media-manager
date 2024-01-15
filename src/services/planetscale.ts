@@ -1,4 +1,4 @@
-import { PrismaClient, Scraped } from '@prisma/client';
+import { Cast, PrismaClient, Scraped } from '@prisma/client';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 
 export class PlanetScaleCache {
@@ -337,5 +337,34 @@ export class PlanetScaleCache {
 		}
 
 		return null;
+	}
+
+	public async getLatestCast(imdbId: string, userId: string): Promise<string | null> {
+		const castItem = await this.prisma.cast.findFirst({
+			where: {
+				imdbId: imdbId,
+				userId: userId,
+			},
+			orderBy: {
+				updatedAt: 'desc',
+			},
+		});
+		return castItem?.url ?? null;
+	}
+
+	public async saveCast(
+		imdbId: string,
+		userId: string,
+		hash: string,
+		url: string
+	): Promise<Cast> {
+		return await this.prisma.cast.create({
+			data: {
+				imdbId: imdbId,
+				userId: userId,
+				hash: hash,
+				url: url,
+			},
+		});
 	}
 }

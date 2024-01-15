@@ -1,7 +1,13 @@
 import { TorrentInfoResponse } from '@/services/realDebrid';
 import Swal from 'sweetalert2';
 
-export const showInfo = async (app: string, rdKey: string, info: TorrentInfoResponse) => {
+export const showInfo = async (
+	app: string,
+	rdKey: string,
+	info: TorrentInfoResponse,
+	userId: string = '',
+	imdbId: string = ''
+) => {
 	let warning = '';
 	const isIntact = info.fake || info.files.filter((f) => f.selected).length === info.links.length;
 	if (info.progress === 100 && !isIntact) {
@@ -16,7 +22,8 @@ export const showInfo = async (app: string, rdKey: string, info: TorrentInfoResp
 			let unit = file.bytes < 1024 ** 3 ? 'MB' : 'GB';
 
 			let downloadForm = '';
-			let watchBtn = ``;
+			let watchBtn = '';
+			let castBtn = '';
 
 			if (file.selected && isIntact) {
 				const fileLink = info.links[linkIndex++];
@@ -37,6 +44,12 @@ export const showInfo = async (app: string, rdKey: string, info: TorrentInfoResp
 							<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">👀 Watch</button>
 						`;
 					}
+
+					if (userId && imdbId) {
+						castBtn = `
+							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/dmmcast/magic/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')">Cast✨</button>
+						`;
+					}
 				}
 			}
 
@@ -49,6 +62,7 @@ export const showInfo = async (app: string, rdKey: string, info: TorrentInfoResp
                     <span class="inline text-gray-700 w-fit">${size.toFixed(2)} ${unit}</span>
                         ${downloadForm}
                         ${watchBtn}
+						${castBtn}
                 </li>
             `;
 		})

@@ -1,4 +1,5 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
+import useLocalStorage from '@/hooks/localStorage';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/realDebrid';
 import { SearchProfile } from '@/services/searchProfile';
@@ -56,6 +57,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const adKey = useAllDebridApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
 	const [uncachedCount, setUncachedCount] = useState<number>(0);
+	const [dmmCastToken] = useLocalStorage<string>('dmmcast');
 
 	const router = useRouter();
 	const { imdbid } = router.query;
@@ -221,7 +223,13 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			speed: 0,
 			seeders: 0,
 		} as TorrentInfoResponse;
-		showInfo(window.localStorage.getItem('player') || defaultPlayer, rdKey!, info);
+		showInfo(
+			window.localStorage.getItem('player') || defaultPlayer,
+			rdKey!,
+			info,
+			dmmCastToken ?? '',
+			imdbid as string
+		);
 	};
 
 	return (

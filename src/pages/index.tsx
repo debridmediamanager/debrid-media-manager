@@ -181,6 +181,15 @@ function IndexPage() {
 							>
 								🔎 Search
 							</Link>
+
+							{rdUser && (
+								<Link
+									href="/stremio"
+									className="text-md m-1 bg-purple-800 hover:bg-purple-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								>
+									🔮 Stremio
+								</Link>
+							)}
 						</div>
 
 						<div className="mb-2 h-max text-center leading-10">
