@@ -231,19 +231,19 @@ function TorrentsPage() {
 		let tmpTotalBytes = 0;
 		clearGroupings(movieGrouping);
 		clearGroupings(tvGroupingByEpisode);
-		const hashes: Map<string, number> = new Map();
+		const keyMap: Map<string, number> = new Map();
 		for (const t of userTorrentsList) {
 			const key = uniqId(t);
-			if (!hashes.has(key)) {
-				hashes.set(key, t.bytes);
+			if (!keyMap.has(key)) {
+				keyMap.set(key, t.bytes);
 				tmpTotalBytes += t.bytes;
 			} else {
 				sameTitleOrHash.add(t.title);
-				const prevBytes = hashes.get(key) || 0;
+				const prevBytes = keyMap.get(key) || 0;
 				if (prevBytes < t.bytes) {
 					tmpTotalBytes -= prevBytes;
 					tmpTotalBytes += t.bytes;
-					hashes.set(key, t.bytes);
+					keyMap.set(key, t.bytes);
 				}
 			}
 			if (t.title in getGroupings(t.mediaType)) {
@@ -672,6 +672,7 @@ function TorrentsPage() {
 
 	async function wrapLocalRestoreFn(debridService: string) {
 		return await localRestore((files: any[]) => {
+			const allHashes = new Set(userTorrentsList.map((t) => t.hash));
 			const addMagnet = (hash: string) => {
 				if (rdKey && debridService === 'rd') return handleAddAsMagnetInRd(rdKey, hash);
 				if (adKey && debridService === 'ad') return handleAddAsMagnetInAd(adKey, hash);
@@ -684,15 +685,18 @@ function TorrentsPage() {
 			const processingPromise = new Promise<{ success: number; error: number }>(
 				async (resolve) => {
 					toast.loading(`DO NOT REFRESH THE PAGE`, libraryToastOptions);
+					const notAddingCount = files.filter((f) => allHashes.has(f.hash)).length;
+					if (notAddingCount > 0)
+						toast.error(
+							`${notAddingCount} torrents are already in your library`,
+							libraryToastOptions
+						);
 					const toAdd = files
 						.map((f) => f.hash)
-						.filter((h) => !torrentDB.inLibrary(h))
+						.filter((h) => !allHashes.has(h))
 						.map(wrapAddMagnetFn);
 					const concurrencyCount = 5;
 					const refreshTorrents = async (_: number) => {
-						if (debridService === 'rd')
-							await fetchLatestRDTorrents(concurrencyCount + 1);
-						if (debridService === 'ad') await fetchLatestADTorrents();
 						await new Promise((r) => setTimeout(r, 500));
 					};
 					const [results, errors] = await runConcurrentFunctions(
@@ -700,6 +704,9 @@ function TorrentsPage() {
 						concurrencyCount,
 						refreshTorrents
 					);
+					if (debridService === 'rd')
+						await fetchLatestRDTorrents(Math.ceil(concurrencyCount * 1.1));
+					if (debridService === 'ad') await fetchLatestADTorrents();
 					resolve({ success: results.length, error: errors.length });
 				}
 			);
@@ -709,7 +716,6 @@ function TorrentsPage() {
 				{
 					loading: `Restoring ${files.length} downloads in your library.`,
 					success: ({ success, error }) => {
-						window.localStorage.removeItem(`${debridService}:downloads`);
 						setTimeout(() => location.reload(), 10000);
 						return `Restored ${success} torrents but failed on ${error} others in your ${debridService.toUpperCase()} library. Refreshing the page in 10 seconds.`;
 					},
@@ -1229,23 +1235,18 @@ function TorrentsPage() {
 																rdKey,
 																torrent.id
 															);
-															torrentDB.deleteById(torrent.id);
-															setSelectedTorrents((prev) => {
-																prev.delete(torrent.id);
-																return new Set(prev);
-															});
 														}
 														if (adKey && torrent.id.startsWith('ad:')) {
 															await handleDeleteAdTorrent(
 																adKey,
 																torrent.id
 															);
-															torrentDB.deleteById(torrent.id);
-															setSelectedTorrents((prev) => {
-																prev.delete(torrent.id);
-																return new Set(prev);
-															});
 														}
+														torrentDB.deleteById(torrent.id);
+														setSelectedTorrents((prev) => {
+															prev.delete(torrent.id);
+															return new Set(prev);
+														});
 														setUserTorrentsList((prevList) =>
 															prevList.filter(
 																(prevTor) =>

@@ -223,7 +223,7 @@ export async function* getUserTorrentsList(accessToken: string, limit: number = 
 
 	let page = 1;
 	const limitSet = limit || Infinity;
-	if (!limit) limit = 100;
+	if (!limit) limit = 1000;
 
 	while (true) {
 		const response = await axios.get<UserTorrentResponse[]>(
