@@ -40,7 +40,7 @@ interface UserTorrent extends TorrentHash {
 }
 
 interface SortBy {
-	column: 'filename' | 'title' | 'bytes' | 'score';
+	column: 'hash' | 'filename' | 'title' | 'bytes' | 'score';
 	direction: 'asc' | 'desc';
 }
 
@@ -135,7 +135,7 @@ function HashlistPage() {
 
 	const [userTorrentsList, setUserTorrentsList] = useState<UserTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
-	const [sortBy, setSortBy] = useState<SortBy>({ column: 'title', direction: 'asc' });
+	const [sortBy, setSortBy] = useState<SortBy>({ column: 'hash', direction: 'asc' });
 
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
@@ -297,9 +297,11 @@ function HashlistPage() {
 	}
 
 	function sortedData() {
-		if (!sortBy.column) {
-			return filteredList;
-		}
+		// Check if sortBy.column is not set
+		// if (sortBy.column === 'hash') {
+		// 	// Randomize the list
+		// 	return filteredList.sort(() => Math.random() - 0.5);
+		// }
 		filteredList.sort((a, b) => {
 			const isAsc = sortBy.direction === 'asc';
 			let comparison = 0;
@@ -310,8 +312,10 @@ function HashlistPage() {
 			}
 			return isAsc ? comparison : comparison * -1;
 		});
+
 		return filteredList;
 	}
+
 
 	const getGroupings = (mediaType: UserTorrent['mediaType']) =>
 		mediaType === 'tv' ? tvGroupingByEpisode : movieGrouping;
