@@ -316,7 +316,6 @@ function HashlistPage() {
 		return filteredList;
 	}
 
-
 	const getGroupings = (mediaType: UserTorrent['mediaType']) =>
 		mediaType === 'tv' ? tvGroupingByEpisode : movieGrouping;
 

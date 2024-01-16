@@ -21,12 +21,15 @@ import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { generateHashList, handleShare } from '@/utils/hashList';
 import { localRestore } from '@/utils/localRestore';
 import { applyQuickSearch } from '@/utils/quickSearch';
+import { checkArithmeticSequenceInFilenames } from '@/utils/selectable';
 import { showInfo } from '@/utils/showInfo';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
+import { filenameParse } from '@ctrl/video-filename-parser';
 import { saveAs } from 'file-saver';
+import { every, some } from 'lodash';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -779,8 +782,28 @@ function TorrentsPage() {
 		}
 	};
 
-	const handleShowInfo = async (id: string) => {
-		const info = await getTorrentInfo(rdKey!, id.substring(3));
+	const handleShowInfo = async (t: UserTorrent) => {
+		const info = await getTorrentInfo(rdKey!, t.id.substring(3));
+		const filenames = info.files.map((f) => f.path);
+		if (
+			(checkArithmeticSequenceInFilenames(filenames) && t.mediaType === 'movie') ||
+			some(filenames, (f) => /s\d\d\d?e\d\d\d?/i.test(f)) ||
+			some(filenames, (f) => /season \d+/i.test(f)) ||
+			some(filenames, (f) => /episode \d+/i.test(f)) ||
+			some(filenames, (f) => /\b[a-fA-F0-9]{8}\b/.test(f))
+		) {
+			t.mediaType = 'tv';
+			t.info = filenameParse(t.filename, true);
+			await torrentDB.add(t);
+		} else if (
+			!checkArithmeticSequenceInFilenames(filenames) &&
+			t.mediaType === 'tv' &&
+			every(filenames, (f) => !/s\d\d\d?e\d\d\d?/i.test(f))
+		) {
+			t.mediaType = 'movie';
+			t.info = filenameParse(t.filename);
+			await torrentDB.add(t);
+		}
 		showInfo(window.localStorage.getItem('player') || defaultPlayer, rdKey!, info);
 	};
 
@@ -1112,7 +1135,7 @@ function TorrentsPage() {
 											<td
 												onClick={() =>
 													rdKey && torrent.id.startsWith('rd:')
-														? handleShowInfo(torrent.id)
+														? handleShowInfo(torrent)
 														: null
 												}
 												className="px-1 py-1 text-sm truncate"
@@ -1161,7 +1184,7 @@ function TorrentsPage() {
 											<td
 												onClick={() =>
 													rdKey && torrent.id.startsWith('rd:')
-														? handleShowInfo(torrent.id)
+														? handleShowInfo(torrent)
 														: null
 												}
 												className="px-1 py-1 text-xs text-center"
@@ -1171,7 +1194,7 @@ function TorrentsPage() {
 											<td
 												onClick={() =>
 													rdKey && torrent.id.startsWith('rd:')
-														? handleShowInfo(torrent.id)
+														? handleShowInfo(torrent)
 														: null
 												}
 												className="px-1 py-1 text-xs text-center"
@@ -1200,7 +1223,7 @@ function TorrentsPage() {
 											<td
 												onClick={() =>
 													rdKey && torrent.id.startsWith('rd:')
-														? handleShowInfo(torrent.id)
+														? handleShowInfo(torrent)
 														: null
 												}
 												className="px-1 py-1 text-xs text-center"
@@ -1210,7 +1233,7 @@ function TorrentsPage() {
 											<td
 												onClick={() =>
 													rdKey && torrent.id.startsWith('rd:')
-														? handleShowInfo(torrent.id)
+														? handleShowInfo(torrent)
 														: null
 												}
 												className="px-1 py-1 flex place-content-center"
