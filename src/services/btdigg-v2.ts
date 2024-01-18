@@ -113,7 +113,8 @@ const processPage = async (
 	let proxy = new ProxyManager();
 	while (true) {
 		try {
-			const client = createAxiosInstance(proxy.getWorkingProxy());
+			const torProxy = proxy.getWorkingProxy();
+			const client = createAxiosInstance(torProxy);
 			const response = await client.get(searchUrl);
 			responseData = response.data;
 			const numResultsStr = responseData.match(/(\d+) results found/) || [];
@@ -257,13 +258,11 @@ export async function scrapeBtdigg(
 			searchResultsArr.push(...results);
 			const maxPages = calculateMaxPages(numResults);
 			let promises: (() => Promise<ProcessPageResult>)[] = [];
-			while (pageNum <= maxPages) {
-				promises.push(
-					((pageNum) => async () => {
-						return await processPage(finalQuery, targetTitle, years, airDate, pageNum);
-					})(pageNum)
-				);
-				pageNum++;
+			for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
+				const processPageBound: () => Promise<any> = async () => {
+					return processPage(finalQuery, targetTitle, years, airDate, pageNum);
+				};
+				promises.push(processPageBound);
 			}
 			searchResultsArr.push(...(await processInBatches(finalQuery, promises, 5)));
 		} catch (error) {
