@@ -790,6 +790,14 @@ function TorrentsPage() {
 
 	const handleShowInfo = async (t: UserTorrent) => {
 		const info = await getTorrentInfo(rdKey!, t.id.substring(3));
+		if (t.progress !== 100) {
+			t.links = info.links;
+			t.seeders = info.seeders;
+			t.speed = info.speed;
+			t.status = info.status;
+			t.progress = info.progress;
+			await torrentDB.add(t);
+		}
 		const filenames = info.files.map((f) => f.path);
 		if (
 			(checkArithmeticSequenceInFilenames(filenames) && t.mediaType === 'movie') ||
