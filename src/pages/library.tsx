@@ -139,6 +139,7 @@ function TorrentsPage() {
 		}
 		const oldTorrents = await torrentDB.all();
 		const oldIds = new Set(oldTorrents.map((torrent) => torrent.id));
+		const inProgressIds = new Set(oldTorrents.filter(isInProgress).map((t) => t.id));
 		const newIds = new Set();
 		await fetchRealDebrid(
 			rdKey,
@@ -149,6 +150,11 @@ function TorrentsPage() {
 					return [...prev, ...newTorrents];
 				});
 				await torrentDB.addAll(newTorrents);
+				await torrentDB.addAll(
+					torrents.filter(
+						(torrent) => torrent.progress !== 100 || inProgressIds.has(torrent.id)
+					)
+				);
 				setRdLoading(false);
 			},
 			customLimit
