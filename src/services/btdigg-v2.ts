@@ -134,7 +134,7 @@ const processPage = async (
 			} else if (error.message.includes('timeout of')) {
 				retries++;
 			} else {
-				console.log('request error:', error.message);
+				console.log('request error:', error.message, searchUrl);
 				retries++;
 				if (retries >= MAX_RETRIES) {
 					console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);
