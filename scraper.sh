@@ -9,7 +9,7 @@ function find_free_port() {
 }
 
 function launch_scraper() {
-    DMM_PATH="$(dirname "$(readlink -f "$0")")"
+    DMM_PATH="/home/ben/debrid-media-manager"
     echo "$0"
     echo "$(readlink -f $0)"
 
@@ -64,6 +64,34 @@ function launch_scraper() {
         # done!
         sleep 3
         tmux kill-window -t upkeep:0
+
+    elif [ "$1" = "newepisodes" ]; then
+        PARAM="46119"
+        SLUG=$(curl -s "https://mdblist.com/api/lists/$PARAM/?apikey=55gg408ja72aa3f5d5p90w4zu" | jq -r '.[0].slug')
+        PORT=$(find_free_port)
+        SESSION_NAME="$SLUG-$PORT"
+        AGE="0"
+        tmux new-session -d -s $SESSION_NAME
+        tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        sleep 3
+        tmux new-window -t $SESSION_NAME:1
+        tmux send-keys -t $SESSION_NAME:1 "curl \"http://localhost:$PORT/api/scrapers/singlelist?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=5&listId=$PARAM&lastSeason=true\"" C-m
+        sleep 3
+        tmux kill-window -t $SESSION_NAME:1
+
+    elif [ "$1" = "newreleases" ]; then
+        PARAM="46446"
+        SLUG=$(curl -s "https://mdblist.com/api/lists/$PARAM/?apikey=55gg408ja72aa3f5d5p90w4zu" | jq -r '.[0].slug')
+        PORT=$(find_free_port)
+        SESSION_NAME="$SLUG-$PORT"
+        AGE="0"
+        tmux new-session -d -s $SESSION_NAME
+        tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        sleep 3
+        tmux new-window -t $SESSION_NAME:1
+        tmux send-keys -t $SESSION_NAME:1 "curl \"http://localhost:$PORT/api/scrapers/singlelist?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=5&listId=$PARAM&lastSeason=true\"" C-m
+        sleep 3
+        tmux kill-window -t $SESSION_NAME:1
 
     elif [[ "$1" =~ ^tt[a-z0-9]{3,20}$ ]]; then
         PARAM="$1"
