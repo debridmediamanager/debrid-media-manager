@@ -154,11 +154,6 @@ function IndexPage() {
 							)} */}
 						</div>
 
-						<div className="text-sm mb-4 w-screen text-center">
-							Besides the 10+ million torrents indexed (as of December 2023), no other
-							data is stored
-						</div>
-
 						<div className="mb-2 h-max text-center leading-10">
 							<Link
 								href="/library"
@@ -195,19 +190,19 @@ function IndexPage() {
 						<div className="mb-2 h-max text-center leading-10">
 							<Link
 								href="/browse"
-								className="text-sm m-1 bg-neutral-600 hover:bg-neutral-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="text-sm m-1 bg-blue-600 hover:bg-blue-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								🏆 top
 							</Link>
 
 							<Link
 								href="/browse/recent"
-								className="text-sm m-1 bg-neutral-600 hover:bg-neutral-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="text-sm m-1 bg-blue-600 hover:bg-blue-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								⏰ recent
 							</Link>
 
-							{getTerms(5).map((term) => (
+							{getTerms(4).map((term) => (
 								<Link
 									href={`/browse/${term.replace(/\W/gi, '')}`}
 									className="text-sm m-1 bg-neutral-600 hover:bg-neutral-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
@@ -216,6 +211,19 @@ function IndexPage() {
 									{term}
 								</Link>
 							))}
+
+							<Link
+								href={`/trakt/movies`}
+								className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+							>
+								🎥 movies
+							</Link>
+							<Link
+								href={`/trakt/shows`}
+								className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+							>
+								📺 shows
+							</Link>
 						</div>
 
 						<div className="mb-2 h-max text-center leading-10">
