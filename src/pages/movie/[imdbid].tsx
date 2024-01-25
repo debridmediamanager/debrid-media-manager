@@ -31,7 +31,7 @@ type MovieSearchProps = {
 	poster: string;
 	backdrop: string;
 	year: string;
-	imdb_score?: number;
+	imdb_score: number;
 };
 
 const torrentDB = new UserTorrentDB();
@@ -265,7 +265,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				</h2>
 				<div className="w-fit h-fit bg-slate-900/75">
 					{description}{' '}
-					{imdb_score && (
+					{imdb_score > 0 && (
 						<div className="text-yellow-100 inline">
 							<Link href={`https://www.imdb.com/title/${imdbid}/`} target="_blank">
 								IMDB Score: {imdb_score}
@@ -464,7 +464,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			poster: movieResponse.data.poster,
 			backdrop: movieResponse.data.backdrop,
 			year: movieResponse.data.year,
-			imdb_score,
+			imdb_score: imdb_score ?? 0,
 		},
 	};
 };
