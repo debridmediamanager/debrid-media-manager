@@ -86,7 +86,7 @@ export const checkForUncachedInRd = async (
 	};
 
 	const funcs = [];
-	for (const hashGroup of groupBy(300, hashes)) {
+	for (const hashGroup of groupBy(100, hashes)) {
 		if (rdKey) funcs.push(() => rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd));
 	}
 	await runConcurrentFunctions(funcs, 5, 100);

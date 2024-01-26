@@ -924,7 +924,7 @@ function TorrentsPage() {
 					Go Home
 				</Link>
 			</div>
-			<div className="flex items-center border-b border-b-2 border-gray-500 py-0 mb-4">
+			<div className="flex items-center border-b-2 border-gray-500 py-0 mb-4">
 				<input
 					className="appearance-none bg-transparent border-none w-full text-xs text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
 					type="text"
@@ -1164,7 +1164,7 @@ function TorrentsPage() {
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
 								<th
-									className="min-w-96 w-[500px] max-w-[500px] w-96 px-1 py-0 cursor-pointer"
+									className="min-w-96 w-[500px] max-w-[500px] px-1 py-0 cursor-pointer"
 									onClick={() => handleSort('title')}
 								>
 									Title ({filteredList.length}){' '}
