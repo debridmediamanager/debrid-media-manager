@@ -19,8 +19,10 @@ import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorr
 import { extractHashes } from '@/utils/extractHashes';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { generateHashList, handleShare } from '@/utils/hashList';
+import { checkForUncachedInAd, checkForUncachedInRd } from '@/utils/instantChecks';
 import { localRestore } from '@/utils/localRestore';
 import { applyQuickSearch } from '@/utils/quickSearch';
+import { reinsertFilteredTorrents } from '@/utils/reinsertList';
 import { checkArithmeticSequenceInFilenames } from '@/utils/selectable';
 import { showInfo } from '@/utils/showInfo';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
@@ -83,6 +85,8 @@ function TorrentsPage() {
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
 	const [sameTitleOrHash] = useState<Set<string>>(new Set());
+	const [uncachedRdHashes, setUncachedRdHashes] = useState<Set<string>>(new Set());
+	const [uncachedAdHashes, setUncachedAdHashes] = useState<Set<string>>(new Set());
 
 	// filter counts
 	const [slowCount, setSlowCount] = useState(0);
@@ -217,7 +221,7 @@ function TorrentsPage() {
 	// fetch list from api
 	async function initialize() {
 		await torrentDB.initializeDB();
-		const torrents = await torrentDB.all();
+		let torrents = await torrentDB.all();
 		if (torrents.length) {
 			setUserTorrentsList(torrents);
 			setRdLoading(false);
@@ -283,6 +287,27 @@ function TorrentsPage() {
 		tvGroupingByTitle,
 	]);
 
+	useEffect(() => {
+		if (rdKey && !rdSyncing) {
+			const hashes = new Set(
+				userTorrentsList.filter((r) => r.id.startsWith('rd:')).map((r) => r.hash)
+			);
+			userTorrentsList.filter((t) => t.progress !== 100).map((t) => hashes.delete(t.hash));
+			const hashesArr = Array.from(hashes);
+			hashesArr.sort();
+			checkForUncachedInRd(rdKey, hashesArr, setUncachedRdHashes);
+		}
+		if (adKey && !adSyncing) {
+			const hashes = new Set(
+				userTorrentsList.filter((r) => r.id.startsWith('ad:')).map((r) => r.hash)
+			);
+			userTorrentsList.filter((t) => t.progress !== 100).map((t) => hashes.delete(t.hash));
+			const hashesArr = Array.from(hashes);
+			hashesArr.sort();
+			checkForUncachedInAd(adKey, hashesArr, setUncachedAdHashes);
+		}
+	}, [adKey, adSyncing, rdKey, rdSyncing, userTorrentsList]);
+
 	// set the list you see
 	const tips = [
 		'Tip: You can use hash lists to share your library with others anonymously. Click on the button, wait for the page to finish processing, and share the link to your friends.',
@@ -342,6 +367,13 @@ function TorrentsPage() {
 			setFilteredList(applyQuickSearch(query, tmpList));
 			if (helpText !== 'hide') setHelpText('Torrents that have a failure status');
 		}
+		if (status === 'uncached') {
+			tmpList = tmpList.filter(
+				(t) => uncachedRdHashes.has(t.hash) || uncachedAdHashes.has(t.hash)
+			);
+			setFilteredList(applyQuickSearch(query, tmpList));
+			if (helpText !== 'hide') setHelpText('Torrents that are no longer cached');
+		}
 		if (status === 'selected') {
 			tmpList = tmpList.filter((t) => selectedTorrents.has(t.id));
 			setFilteredList(applyQuickSearch(query, tmpList));
@@ -366,7 +398,17 @@ function TorrentsPage() {
 		selectPlayableFiles(tmpList);
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query, userTorrentsList, rdLoading, adLoading, grouping, query, currentPage]);
+	}, [
+		router.query,
+		userTorrentsList,
+		rdLoading,
+		adLoading,
+		grouping,
+		query,
+		currentPage,
+		uncachedRdHashes,
+		uncachedAdHashes,
+	]);
 
 	function handleSort(column: typeof sortBy.column) {
 		setSortBy({
@@ -428,6 +470,25 @@ function TorrentsPage() {
 		}
 	}
 
+	async function handleReinsertTorrents() {
+		if (
+			relevantList.length > 0 &&
+			!(
+				await Swal.fire({
+					title: 'Reinsert shown',
+					text: `This will reinsert the ${relevantList.length} torrents filtered. Are you sure?`,
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, reinsert!',
+				})
+			).isConfirmed
+		)
+			return;
+		await reinsertFilteredTorrents(relevantList, wrapReinsertFn);
+	}
+
 	async function handleDeleteShownTorrents() {
 		if (
 			relevantList.length > 0 &&
@@ -467,21 +528,25 @@ function TorrentsPage() {
 
 	function wrapReinsertFn(t: UserTorrent) {
 		return async () => {
-			const oldId = t.id;
-			if (rdKey && t.id.startsWith('rd:')) {
-				await handleReinsertTorrent(rdKey, t.id, userTorrentsList);
-				setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== oldId));
-				fetchLatestRDTorrents(2);
+			try {
+				const oldId = t.id;
+				if (rdKey && t.id.startsWith('rd:')) {
+					await handleReinsertTorrent(rdKey, t.id, userTorrentsList);
+					setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== oldId));
+					fetchLatestRDTorrents(2);
+				}
+				if (adKey && t.id.startsWith('ad:')) {
+					await handleRestartTorrent(adKey, t.id);
+					fetchLatestADTorrents();
+				}
+				torrentDB.deleteById(oldId);
+				setSelectedTorrents((prev) => {
+					prev.delete(oldId);
+					return new Set(prev);
+				});
+			} catch (error) {
+				console.error(error);
 			}
-			if (adKey && t.id.startsWith('ad:')) {
-				await handleRestartTorrent(adKey, t.id);
-				fetchLatestADTorrents();
-			}
-			torrentDB.deleteById(oldId);
-			setSelectedTorrents((prev) => {
-				prev.delete(oldId);
-				return new Set(prev);
-			});
 		};
 	}
 
@@ -975,6 +1040,15 @@ function TorrentsPage() {
 					</Link>
 				)}
 
+				{uncachedRdHashes.size + uncachedAdHashes.size > 0 && (
+					<Link
+						href="/library?status=uncached&page=1"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
+					>
+						👀 Uncached
+					</Link>
+				)}
+
 				{selectedTorrents.size > 0 && (
 					<Link
 						href="/library?status=selected&page=1"
@@ -1007,6 +1081,13 @@ function TorrentsPage() {
 					onClick={handleDeleteShownTorrents}
 				>
 					🗑️ Delete{selectedTorrents.size ? ` (${selectedTorrents.size})` : ''}
+				</button>
+
+				<button
+					className={`mr-2 mb-2 bg-green-600 hover:bg-green-500 text-white font-bold py-1 px-1 rounded text-xs`}
+					onClick={handleReinsertTorrents}
+				>
+					🔄 Reinsert{selectedTorrents.size ? ` (${selectedTorrents.size})` : ''}
 				</button>
 
 				<button
@@ -1133,7 +1214,7 @@ function TorrentsPage() {
 											: '';
 									return (
 										<tr
-											key={i}
+											key={torrent.id}
 											className={`align-middle lg:hover:bg-purple-900 ${
 												selectedTorrents.has(torrent.id)
 													? `bg-green-800`
@@ -1262,6 +1343,7 @@ function TorrentsPage() {
 												>
 													<FaShare />
 												</button>
+
 												<button
 													title="Delete"
 													className="cursor-pointer mr-2 mb-2 text-red-500"
@@ -1294,35 +1376,7 @@ function TorrentsPage() {
 												>
 													<FaTrash />
 												</button>
-												<button
-													title="Reinsert"
-													className="cursor-pointer mr-2 mb-2 text-green-500"
-													onClick={async (e) => {
-														e.stopPropagation();
-														const oldId = torrent.id;
-														if (rdKey && torrent.id.startsWith('rd'))
-															await handleReinsertTorrent(
-																rdKey,
-																torrent.id,
-																userTorrentsList
-															);
-														if (adKey && torrent.id.startsWith('ad'))
-															handleRestartTorrent(adKey, torrent.id);
-														setUserTorrentsList((prev) =>
-															prev.filter(
-																(torrent) => torrent.id !== oldId
-															)
-														);
-														fetchLatestRDTorrents(2);
-														torrentDB.deleteById(oldId);
-														setSelectedTorrents((prev) => {
-															prev.delete(oldId);
-															return new Set(prev);
-														});
-													}}
-												>
-													<FaRecycle />
-												</button>
+
 												<button
 													title="Copy magnet url"
 													className="cursor-pointer mr-2 mb-2 text-pink-500"
@@ -1333,7 +1387,50 @@ function TorrentsPage() {
 												>
 													<FaMagnet />
 												</button>
-												{/* Removed the glasses icon since the row is now clickable */}
+
+												<button
+													title="Reinsert"
+													className="cursor-pointer mr-2 mb-2 text-green-500"
+													onClick={async (e) => {
+														e.stopPropagation();
+														try {
+															const oldId = torrent.id;
+															if (
+																rdKey &&
+																torrent.id.startsWith('rd')
+															)
+																await handleReinsertTorrent(
+																	rdKey,
+																	torrent.id,
+																	userTorrentsList
+																);
+															if (
+																adKey &&
+																torrent.id.startsWith('ad')
+															)
+																handleRestartTorrent(
+																	adKey,
+																	torrent.id
+																);
+															setUserTorrentsList((prev) =>
+																prev.filter(
+																	(torrent) =>
+																		torrent.id !== oldId
+																)
+															);
+															fetchLatestRDTorrents(2);
+															torrentDB.deleteById(oldId);
+															setSelectedTorrents((prev) => {
+																prev.delete(oldId);
+																return new Set(prev);
+															});
+														} catch (error) {
+															console.error(error);
+														}
+													}}
+												>
+													<FaRecycle />
+												</button>
 											</td>
 										</tr>
 									);

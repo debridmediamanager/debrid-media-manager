@@ -15,6 +15,13 @@ export interface UserTorrent {
 	links: string[];
 	seeders: number;
 	speed: number;
+	cached: boolean;
+}
+
+export interface TorrentFile {
+	fileId: string;
+	filename: string;
+	filesize: number;
 }
 
 export const uniqId = (torrent: UserTorrent): string => `${torrent.hash}|${torrent.links.join()}`;
