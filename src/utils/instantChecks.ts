@@ -3,6 +3,7 @@ import { FileData, SearchResult } from '@/services/mediasearch';
 import { RdInstantAvailabilityResponse, rdInstantCheck } from '@/services/realDebrid';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-hot-toast';
+import { runConcurrentFunctions } from './batch';
 import { groupBy } from './groupBy';
 import { isVideo } from './selectable';
 import { searchToastOptions } from './toastOptions';
@@ -22,11 +23,11 @@ export const wrapLoading = async function (debrid: string, checkAvailability: Pr
 export const instantCheckInRd = async (
 	rdKey: string,
 	hashes: string[],
-	setSearchResults: Dispatch<SetStateAction<SearchResult[]>>
+	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>
 ): Promise<number> => {
 	let instantCount = 0;
 	const setInstantFromRd = (resp: RdInstantAvailabilityResponse) => {
-		setSearchResults((prevSearchResults) => {
+		setTorrentList((prevSearchResults) => {
 			const newSearchResults = [...prevSearchResults];
 			for (const torrent of newSearchResults) {
 				if (torrent.noVideos) continue;
@@ -62,14 +63,49 @@ export const instantCheckInRd = async (
 	return instantCount;
 };
 
+export const checkForUncachedInRd = async (
+	rdKey: string,
+	hashes: string[],
+	setUncachedHashes: Dispatch<SetStateAction<Set<string>>>
+): Promise<void> => {
+	const cachedHashes: Set<string> = new Set();
+	const setInstantFromRd = (resp: RdInstantAvailabilityResponse) => {
+		for (const hash in resp) {
+			// Check if 'rd' key exists in resp[hash]
+			if ('rd' in resp[hash] === false) continue;
+			const variants = resp[hash]['rd'];
+			// Check if variants array is not empty
+			if (!variants.length) continue;
+			for (const variant of variants) {
+				if (Object.keys(variant).length > 0) {
+					cachedHashes.add(hash);
+					break;
+				}
+			}
+		}
+	};
+
+	const funcs = [];
+	for (const hashGroup of groupBy(300, hashes)) {
+		if (rdKey) funcs.push(() => rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd));
+	}
+	await runConcurrentFunctions(funcs, 5, 100);
+	const uncachedHashes = new Set(hashes.filter((hash) => !cachedHashes.has(hash)));
+	setUncachedHashes(uncachedHashes);
+	toast.success(
+		`Found ${uncachedHashes.size} uncached torrents in Real-Debrid`,
+		searchToastOptions
+	);
+};
+
 export const instantCheckInAd = async (
 	adKey: string,
 	hashes: string[],
-	setSearchResults: Dispatch<SetStateAction<SearchResult[]>>
+	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>
 ): Promise<number> => {
 	let instantCount = 0;
 	const setInstantFromAd = (resp: AdInstantAvailabilityResponse) => {
-		setSearchResults((prevSearchResults) => {
+		setTorrentList((prevSearchResults) => {
 			const newSearchResults = [...prevSearchResults];
 			for (const magnetData of resp.data.magnets) {
 				const masterHash = magnetData.hash;
@@ -102,8 +138,38 @@ export const instantCheckInAd = async (
 		});
 	};
 
+	const funcs = [];
 	for (const hashGroup of groupBy(100, hashes)) {
-		if (adKey) await adInstantCheck(adKey, hashGroup).then(setInstantFromAd);
+		if (adKey) funcs.push(() => adInstantCheck(adKey, hashGroup).then(setInstantFromAd));
 	}
+	await runConcurrentFunctions(funcs, 5, 100);
+
 	return instantCount;
+};
+
+export const checkForUncachedInAd = async (
+	adKey: string,
+	hashes: string[],
+	setUncachedHashes: Dispatch<SetStateAction<Set<string>>>
+): Promise<void> => {
+	const cachedHashes: Set<string> = new Set();
+	const setInstantFromAd = (resp: AdInstantAvailabilityResponse) => {
+		for (const magnetData of resp.data.magnets) {
+			const masterHash = magnetData.hash;
+			if (!magnetData.files) continue;
+			if (magnetData.instant) cachedHashes.add(masterHash);
+		}
+	};
+
+	const funcs = [];
+	for (const hashGroup of groupBy(100, hashes)) {
+		if (adKey) funcs.push(() => adInstantCheck(adKey, hashGroup).then(setInstantFromAd));
+	}
+	await runConcurrentFunctions(funcs, 5, 100);
+	const uncachedHashes = new Set(hashes.filter((hash) => !cachedHashes.has(hash)));
+	setUncachedHashes(uncachedHashes);
+	toast.success(
+		`Found ${uncachedHashes.size} uncached torrents in AllDebrid`,
+		searchToastOptions
+	);
 };
