@@ -1,23 +1,19 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { AdInstantAvailabilityResponse, MagnetFile, adInstantCheck } from '@/services/allDebrid';
-import { RdInstantAvailabilityResponse, rdInstantCheck } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd } from '@/utils/addMagnet';
 import { runConcurrentFunctions } from '@/utils/batch';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
-import { groupBy } from '@/utils/groupBy';
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
-import { isVideo } from '@/utils/selectable';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { FaDownload, FaTimes } from 'react-icons/fa';
 
@@ -43,86 +39,6 @@ interface SortBy {
 	column: 'hash' | 'filename' | 'title' | 'bytes' | 'score';
 	direction: 'asc' | 'desc';
 }
-
-const instantCheckInRd = async (
-	rdKey: string,
-	hashes: string[],
-	setSearchResults: Dispatch<SetStateAction<UserTorrent[]>>
-): Promise<number> => {
-	let instantCount = 0;
-	const setInstantFromRd = (resp: RdInstantAvailabilityResponse) => {
-		setSearchResults((prevSearchResults) => {
-			const newSearchResults = [...prevSearchResults];
-			for (const torrent of newSearchResults) {
-				if (torrent.noVideos) continue;
-				if (torrent.hash in resp === false) continue;
-				if ('rd' in resp[torrent.hash] === false) continue;
-				const variants = resp[torrent.hash]['rd'];
-				if (!variants.length) continue;
-				torrent.noVideos = variants.reduce((noVideo, variant) => {
-					if (!noVideo) return false;
-					return !Object.values(variant).some((file) => isVideo({ path: file.filename }));
-				}, true);
-				// because it has variants and there's at least 1 video file
-				if (!torrent.noVideos) {
-					torrent.rdAvailable = true;
-					instantCount += 1;
-				}
-			}
-			return newSearchResults;
-		});
-	};
-
-	for (const hashGroup of groupBy(100, hashes)) {
-		if (rdKey) await rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd);
-	}
-
-	return instantCount;
-};
-
-const instantCheckInAd = async (
-	adKey: string,
-	hashes: string[],
-	setSearchResults: Dispatch<SetStateAction<UserTorrent[]>>
-): Promise<number> => {
-	let instantCount = 0;
-	const setInstantFromAd = (resp: AdInstantAvailabilityResponse) => {
-		setSearchResults((prevSearchResults) => {
-			const newSearchResults = [...prevSearchResults];
-			for (const magnetData of resp.data.magnets) {
-				const masterHash = magnetData.hash;
-				const torrent = newSearchResults.find((r) => r.hash === masterHash);
-				if (!torrent) continue;
-				if (torrent.noVideos) continue;
-				if (!magnetData.files) continue;
-
-				const checkVideoInFiles = (files: MagnetFile[]): boolean => {
-					return files.reduce((noVideo: boolean, curr: MagnetFile) => {
-						if (!noVideo) return false; // If we've already found a video, no need to continue checking
-						if (!curr.n) return false; // If 'n' property doesn't exist, it's not a video
-						if (curr.e) {
-							// If 'e' property exists, check it recursively
-							return checkVideoInFiles(curr.e);
-						}
-						return !isVideo({ path: curr.n });
-					}, true);
-				};
-
-				torrent.noVideos = checkVideoInFiles(magnetData.files);
-				if (!torrent.noVideos) {
-					torrent.adAvailable = magnetData.instant;
-					instantCount += 1;
-				}
-			}
-			return newSearchResults;
-		});
-	};
-
-	for (const hashGroup of groupBy(100, hashes)) {
-		if (adKey) await adInstantCheck(adKey, hashGroup).then(setInstantFromAd);
-	}
-	return instantCount;
-};
 
 const torrentDB = new UserTorrentDB();
 
@@ -442,7 +358,7 @@ function HashlistPage() {
 					Go Home
 				</Link>
 			</div>
-			<div className="flex items-center border-b border-b-2 border-gray-500 py-2 mb-4">
+			<div className="flex items-center border-b-2 border-gray-500 py-2 mb-4">
 				<input
 					className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
 					type="text"
