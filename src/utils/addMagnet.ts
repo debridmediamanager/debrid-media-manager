@@ -3,7 +3,7 @@ import { addHashAsMagnet, getTorrentInfo, selectFiles } from '@/services/realDeb
 import { UserTorrent } from '@/torrent/userTorrent';
 import toast from 'react-hot-toast';
 import { handleDeleteRdTorrent } from './deleteTorrent';
-import { getSelectableFiles, isVideo } from './selectable';
+import { isVideo } from './selectable';
 import { magnetToastOptions } from './toastOptions';
 
 export const handleAddAsMagnetInRd = async (
@@ -47,12 +47,9 @@ export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boo
 		const response = await getTorrentInfo(rdKey, id.substring(3), bare);
 		if (response.filename === 'Magnet') return; // no files yet
 
-		const selectedFiles = getSelectableFiles(response.files.filter(isVideo)).map(
-			(file) => file.id
-		);
+		let selectedFiles = response.files.filter(isVideo).map((file) => file.id);
 		if (selectedFiles.length === 0) {
-			handleDeleteRdTorrent(rdKey, id, true);
-			throw new Error('no_files_for_selection');
+			selectedFiles = response.files.map((file) => file.id);
 		}
 
 		await selectFiles(rdKey, id.substring(3), selectedFiles, bare);
@@ -82,9 +79,12 @@ export const handleReinsertTorrent = async (
 		await handleSelectFilesInRd(rdKey, `rd:${newId}`);
 		await handleDeleteRdTorrent(rdKey, oldId, true);
 		toast.success(`Torrent reinserted (${oldId}👉${torrent.id})`, magnetToastOptions);
-	} catch (error) {
-		toast.error(`Error reinserting torrent (${oldId})`, magnetToastOptions);
-		console.error(error);
+	} catch (error: any) {
+		toast.error(
+			`Error reinserting torrent (${oldId}) ${error.response.data.error}`,
+			magnetToastOptions
+		);
+		throw error;
 	}
 };
 
@@ -100,8 +100,8 @@ export const handleAddAsMagnetInAd = async (
 		if (callback) await callback();
 		toast('Successfully added hash!', magnetToastOptions);
 	} catch (error) {
-		console.error(error);
 		toast.error('There was an error adding hash. Please try again.');
+		throw error;
 	}
 };
 

@@ -33,6 +33,7 @@ export const fetchRealDebrid = async (
 					seeders: torrent.seeders || 0,
 					speed: torrent.speed || 0,
 					title: getMediaId(info, mediaType, false) || torrent.filename,
+					cached: true,
 				};
 			}) as UserTorrent[];
 			await callback(torrents);
