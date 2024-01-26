@@ -59,7 +59,7 @@ export default function StartPage() {
 					</button>
 					<a
 						className="px-4 py-2 m-2 text-white bg-green-500 rounded hover:bg-green-600"
-						href="http://real-debrid.com/?id=440161"
+						href="http://real-debrid.com/?id=9783846"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
