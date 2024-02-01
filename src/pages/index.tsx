@@ -265,24 +265,20 @@ function IndexPage() {
 							)}
 						</div>
 
-						<div className="text-sm mb-4 text-center">
-							✨Get your movies straight from{' '}
-							<b>
-								<a href="https://www.imdb.com/chart/top/" target="_blank">
-									IMDB
-								</a>
-							</b>{' '}
-							or{' '}
-							<b>
-								<a href="https://mdblist.com/" target="_blank">
-									MDBList
-								</a>
-							</b>{' '}
-							with{' '}
-							<span className="bg-green-100 text-green-800 px-1 whitespace-nowrap">
-								<b>DMM browser extensions</b>
-							</span>{' '}
-							for{' '}
+						<div className="text-sm mb-1 text-center">
+							✨
+							<a
+								className="underline"
+								href="https://github.com/debridmediamanager/zurg-testing"
+								target="_blank"
+							>
+								<b>zurg v0.9.3</b>
+							</a>{' '}
+							is out! Mount your Real-Debrid library and play your files directly from
+							your computer or Plex
+						</div>
+						<div className="text-sm mb-1 text-center">
+							<b>Browser extensions</b> for{' '}
 							<b>
 								<a
 									className="underline"
@@ -302,30 +298,20 @@ function IndexPage() {
 									Firefox
 								</a>
 							</b>
-						</div>
-						<div className="text-sm mb-4 text-center">
-							✨
-							<a
-								className="underline"
-								href="https://github.com/debridmediamanager/zurg-testing"
-								target="_blank"
-							>
-								<span className="bg-purple-100 text-purple-800 px-1">
-									<b>zurg</b>
-								</span>{' '}
-								<b>beta is out</b>!
+							<span className="px-1">✨</span>
+							<a className="underline" href="https://zurg.club" target="_blank">
+								<b>zurg.club</b>
 							</a>{' '}
-							Mount your Real-Debrid library and play your files directly from your
-							computer.
+							is a an optimized Plex+zurg server hosting
 						</div>
-						<div className="text-sm mb-4 text-center">
+						<div className="text-sm mb-1 text-center">
 							✨
 							<a
-								className="text-azure"
+								className="text-azure bg-red-500 text-red-100 px-1"
 								href="https://www.reddit.com/r/debridmediamanager/"
 								target="_blank"
 							>
-								🤖 r/debridmediamanager
+								r/debridmediamanager
 							</a>{' '}
 							🤝 Sponsor this project&apos;s development on{' '}
 							<a
