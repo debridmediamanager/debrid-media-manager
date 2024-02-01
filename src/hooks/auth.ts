@@ -83,6 +83,11 @@ export const useAllDebridApiKey = () => {
 	return apiKey;
 };
 
+function removeToken(service: string) {
+	window.localStorage.removeItem(`${service}:accessToken`);
+	window.location.reload();
+}
+
 export const useCurrentUser = () => {
 	const [rdUser, setRdUser] = useState<RealDebridUser | null>(null);
 	const [adUser, setAdUser] = useState<AllDebridUser | null>(null);
@@ -101,7 +106,11 @@ export const useCurrentUser = () => {
 					if (rdUserResponse) setRdUser(<RealDebridUser>rdUserResponse);
 				}
 			} catch (error: any) {
-				setRdError(new Error(error));
+				if (error.response.status === 401) {
+					removeToken('rd');
+				} else {
+					setRdError(new Error(error));
+				}
 			}
 			try {
 				if (apiKey) {
@@ -109,7 +118,11 @@ export const useCurrentUser = () => {
 					if (adUserResponse) setAdUser(<AllDebridUser>adUserResponse);
 				}
 			} catch (error: any) {
-				setAdError(new Error(error));
+				if (error.response.status === 401) {
+					removeToken('ad');
+				} else {
+					setAdError(new Error(error));
+				}
 			}
 		})();
 	}, [accessToken, apiKey, router]);
