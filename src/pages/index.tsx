@@ -272,13 +272,13 @@ function IndexPage() {
 								href="https://github.com/debridmediamanager/zurg-testing"
 								target="_blank"
 							>
-								<b>zurg v0.9.3</b>
+								<b>zurg</b>
 							</a>{' '}
-							is out! Mount your Real-Debrid library and play your files directly from
-							your computer or Plex
+							mounts your Real-Debrid library and play your files directly from your
+							computer or with Plex
 						</div>
 						<div className="text-sm mb-1 text-center">
-							<b>Browser extensions</b> for{' '}
+							Browser extensions for{' '}
 							<b>
 								<a
 									className="underline"
