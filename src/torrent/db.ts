@@ -1,5 +1,7 @@
-import { UserTorrent } from '@/torrent/userTorrent';
+import { CachedHash, UserTorrent } from '@/torrent/userTorrent';
 import { IDBPDatabase, openDB } from 'idb';
+
+const backupToWeekNum = 2;
 
 function currentISOWeekNumber(): number {
 	const target = new Date();
@@ -13,28 +15,55 @@ function currentISOWeekNumber(): number {
 	return 1 + Math.ceil((firstThursday - target.getTime()) / (7 * 24 * 3600 * 1000)); // Use getTime for arithmetic
 }
 
-function createObjectStore(db: IDBPDatabase, storeName: string) {
-	const store = db.createObjectStore(storeName, { keyPath: 'id' });
-	store.createIndex('hash', 'hash', { unique: false });
+type Store = {
+	name: string;
+	keyPath: string;
+	indexes: { name: string; keyPath: string; options: { unique: boolean } }[];
+};
+
+function createObjectStores(db: IDBPDatabase, stores: Store[]) {
+	for (const store of stores) {
+		if (db.objectStoreNames.contains(store.name)) continue;
+		const objectStore = db.createObjectStore(store.name, { keyPath: store.keyPath });
+		for (const index of store.indexes) {
+			objectStore.createIndex(index.name, index.keyPath, index.options);
+		}
+	}
 }
 
-const storeBase = 'torrents';
-const backupToWeek = 2;
+function listTorrentObjectStores(): Store[] {
+	const stores = [];
+	for (let i = 0; i < backupToWeekNum; i++) {
+		stores.push({
+			name: `torrents-${i}`,
+			keyPath: 'id',
+			indexes: [{ name: 'hash', keyPath: 'hash', options: { unique: false } }],
+		});
+	}
+	return stores;
+}
+
+function listMiscObjectStores(): Store[] {
+	return [
+		{
+			name: 'cached-hashes',
+			keyPath: 'hash',
+			indexes: [],
+		},
+	];
+}
 
 class UserTorrentDB {
 	private db: IDBPDatabase | null = null;
 	private dbName = 'DMMDB';
-	private storeName = `${storeBase}-${currentISOWeekNumber() % backupToWeek}`;
+	private torrentsTbl = `torrents-${currentISOWeekNumber() % backupToWeekNum}`;
+	private hashesTbl = 'cached-hashes';
 
 	public async initializeDB() {
-		const storeName = this.storeName;
-		this.db = await openDB(this.dbName, 1, {
+		this.db = await openDB(this.dbName, 2, {
 			upgrade(db) {
-				if (!db.objectStoreNames.contains(storeName)) {
-					for (let i = 0; i < backupToWeek; i++) {
-						createObjectStore(db, `${storeBase}-${i}`);
-					}
-				}
+				createObjectStores(db, listTorrentObjectStores());
+				createObjectStores(db, listMiscObjectStores());
 			},
 		});
 	}
@@ -48,23 +77,23 @@ class UserTorrentDB {
 
 	private async insertToDB(torrent: UserTorrent) {
 		const db = await this.getDB();
-		await db.put(this.storeName, torrent);
+		await db.put(this.torrentsTbl, torrent);
 	}
 
 	public async all(): Promise<UserTorrent[]> {
 		const db = await this.getDB();
-		return db.getAll(this.storeName);
+		return db.getAll(this.torrentsTbl);
 	}
 
 	public async hashes(): Promise<Set<string>> {
 		const db = await this.getDB();
-		const torrents = await db.getAllFromIndex(this.storeName, 'hash');
+		const torrents = await db.getAllFromIndex(this.torrentsTbl, 'hash');
 		return new Set(torrents.map((t) => t.hash));
 	}
 
 	public async getLatestByHash(hash: string): Promise<UserTorrent | undefined> {
 		const db = await this.getDB();
-		const torrents = await db.getAllFromIndex(this.storeName, 'hash', hash);
+		const torrents = await db.getAllFromIndex(this.torrentsTbl, 'hash', hash);
 		if (torrents.length === 0) return undefined;
 		torrents.sort((a, b) => b.added.localeCompare(a.added));
 		return torrents[0];
@@ -72,7 +101,7 @@ class UserTorrentDB {
 
 	public async getById(id: string): Promise<UserTorrent | undefined> {
 		const db = await this.getDB();
-		return db.get(this.storeName, id);
+		return db.get(this.torrentsTbl, id);
 	}
 
 	public async add(torrent: UserTorrent) {
@@ -87,24 +116,24 @@ class UserTorrentDB {
 
 	public async deleteByHash(hash: string) {
 		const db = await this.getDB();
-		const torrents = await db.getAllFromIndex(this.storeName, 'hash', hash);
-		const deletePromises = torrents.map((torrent) => db.delete(this.storeName, torrent.id));
+		const torrents = await db.getAllFromIndex(this.torrentsTbl, 'hash', hash);
+		const deletePromises = torrents.map((torrent) => db.delete(this.torrentsTbl, torrent.id));
 		await Promise.all(deletePromises);
 	}
 
 	public async deleteById(id: string) {
 		const db = await this.getDB();
-		await db.delete(this.storeName, id);
+		await db.delete(this.torrentsTbl, id);
 	}
 
 	public async clear() {
 		const db = await this.getDB();
-		await db.clear(this.storeName);
+		await db.clear(this.torrentsTbl);
 	}
 
 	public async inLibrary(hash: string): Promise<boolean> {
 		const db = await this.getDB();
-		const count = await db.countFromIndex(this.storeName, 'hash', hash);
+		const count = await db.countFromIndex(this.torrentsTbl, 'hash', hash);
 		console.log(`inLibrary: ${hash} ${count}`);
 		return count > 0;
 	}
@@ -115,14 +144,39 @@ class UserTorrentDB {
 
 	public async isDownloaded(hash: string): Promise<boolean> {
 		const db = await this.getDB();
-		const torrent = (await db.get(this.storeName, hash)) as UserTorrent | undefined;
+		const torrent = (await db.get(this.torrentsTbl, hash)) as UserTorrent | undefined;
 		return !!torrent && torrent.progress === 100;
 	}
 
 	public async isDownloading(hash: string): Promise<boolean> {
 		const db = await this.getDB();
-		const torrent = (await db.get(this.storeName, hash)) as UserTorrent | undefined;
+		const torrent = (await db.get(this.torrentsTbl, hash)) as UserTorrent | undefined;
 		return !!torrent && torrent.progress < 100;
+	}
+
+	// Cached hashes
+	public async addCachedHash(hash: string) {
+		const db = await this.getDB();
+		await db.put(this.hashesTbl, { hash, added: new Date() });
+	}
+
+	private async removeCachedHash(hash: string) {
+		const db = await this.getDB();
+		await db.delete(this.hashesTbl, hash);
+	}
+
+	public async isCached(hash: string): Promise<boolean> {
+		const db = await this.getDB();
+		const status: CachedHash = await db.get(this.hashesTbl, hash);
+		if (!status) return false;
+		const expiredDate = new Date();
+		// check if expired (2 days)
+		expiredDate.setDate(expiredDate.getDate() - 2);
+		if (status.added < expiredDate) {
+			await this.removeCachedHash(hash);
+			return false;
+		}
+		return true;
 	}
 }
 
