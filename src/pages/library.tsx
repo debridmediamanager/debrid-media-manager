@@ -288,25 +288,25 @@ function TorrentsPage() {
 	]);
 
 	useEffect(() => {
+		const toCheck = userTorrentsList.filter((t) => t.progress === 100);
 		if (rdKey && !rdSyncing) {
 			const hashes = new Set(
-				userTorrentsList.filter((r) => r.id.startsWith('rd:')).map((r) => r.hash)
+				toCheck.filter((r) => r.id.startsWith('rd:')).map((r) => r.hash)
 			);
-			userTorrentsList.filter((t) => t.progress !== 100).map((t) => hashes.delete(t.hash));
 			const hashesArr = Array.from(hashes);
 			hashesArr.sort();
-			checkForUncachedInRd(rdKey, hashesArr, setUncachedRdHashes);
+			checkForUncachedInRd(rdKey, hashesArr, setUncachedRdHashes, torrentDB);
 		}
 		if (adKey && !adSyncing) {
 			const hashes = new Set(
-				userTorrentsList.filter((r) => r.id.startsWith('ad:')).map((r) => r.hash)
+				toCheck.filter((r) => r.id.startsWith('ad:')).map((r) => r.hash)
 			);
-			userTorrentsList.filter((t) => t.progress !== 100).map((t) => hashes.delete(t.hash));
 			const hashesArr = Array.from(hashes);
 			hashesArr.sort();
-			checkForUncachedInAd(adKey, hashesArr, setUncachedAdHashes);
+			checkForUncachedInAd(adKey, hashesArr, setUncachedAdHashes, torrentDB);
 		}
-	}, [adKey, adSyncing, rdKey, rdSyncing, userTorrentsList]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [adKey, adSyncing, rdKey, rdSyncing]);
 
 	// set the list you see
 	const tips = [
@@ -1119,7 +1119,11 @@ function TorrentsPage() {
 					</button>
 				)}
 
-				{(!hasNoQueryParamsBut('page') || currentPage > 1 || query) && (
+				{(!hasNoQueryParamsBut('page') ||
+					currentPage > 1 ||
+					query ||
+					sortBy.column !== 'added' ||
+					sortBy.direction !== 'desc') && (
 					<button
 						className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
 						onClick={() => resetState()}

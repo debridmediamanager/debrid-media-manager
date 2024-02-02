@@ -1,6 +1,7 @@
 import { AdInstantAvailabilityResponse, MagnetFile, adInstantCheck } from '@/services/allDebrid';
 import { FileData, SearchResult } from '@/services/mediasearch';
 import { RdInstantAvailabilityResponse, rdInstantCheck } from '@/services/realDebrid';
+import UserTorrentDB from '@/torrent/db';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-hot-toast';
 import { runConcurrentFunctions } from './batch';
@@ -66,10 +67,11 @@ export const instantCheckInRd = async (
 export const checkForUncachedInRd = async (
 	rdKey: string,
 	hashes: string[],
-	setUncachedHashes: Dispatch<SetStateAction<Set<string>>>
+	setUncachedHashes: Dispatch<SetStateAction<Set<string>>>,
+	db: UserTorrentDB
 ): Promise<void> => {
 	const cachedHashes: Set<string> = new Set();
-	const setInstantFromRd = (resp: RdInstantAvailabilityResponse) => {
+	const setInstantFromRd = async (resp: RdInstantAvailabilityResponse) => {
 		for (const hash in resp) {
 			// Check if 'rd' key exists in resp[hash]
 			if ('rd' in resp[hash] === false) continue;
@@ -79,15 +81,29 @@ export const checkForUncachedInRd = async (
 			for (const variant of variants) {
 				if (Object.keys(variant).length > 0) {
 					cachedHashes.add(hash);
+					await db.addCachedHash(hash);
 					break;
 				}
 			}
 		}
 	};
 
+	// Check if hash is in cached hashes db
+	for (const hash of hashes.slice()) {
+		const isCached = await db.isCached(hash);
+		if (isCached) {
+			cachedHashes.add(hash);
+			hashes.splice(hashes.indexOf(hash), 1);
+		}
+	}
+
 	const funcs = [];
 	for (const hashGroup of groupBy(100, hashes)) {
-		if (rdKey) funcs.push(() => rdInstantCheck(rdKey, hashGroup).then(setInstantFromRd));
+		if (rdKey)
+			funcs.push(async () => {
+				const resp = await rdInstantCheck(rdKey, hashGroup);
+				await setInstantFromRd(resp);
+			});
 	}
 	await runConcurrentFunctions(funcs, 5, 100);
 	const uncachedHashes = new Set(hashes.filter((hash) => !cachedHashes.has(hash)));
@@ -150,7 +166,8 @@ export const instantCheckInAd = async (
 export const checkForUncachedInAd = async (
 	adKey: string,
 	hashes: string[],
-	setUncachedHashes: Dispatch<SetStateAction<Set<string>>>
+	setUncachedHashes: Dispatch<SetStateAction<Set<string>>>,
+	db: UserTorrentDB
 ): Promise<void> => {
 	const cachedHashes: Set<string> = new Set();
 	const setInstantFromAd = (resp: AdInstantAvailabilityResponse) => {
@@ -161,9 +178,22 @@ export const checkForUncachedInAd = async (
 		}
 	};
 
+	// Check if hash is in cached hashes db
+	for (const hash of hashes.slice()) {
+		const isCached = await db.isCached(hash);
+		if (isCached) {
+			cachedHashes.add(hash);
+			hashes.splice(hashes.indexOf(hash), 1);
+		}
+	}
+
 	const funcs = [];
 	for (const hashGroup of groupBy(100, hashes)) {
-		if (adKey) funcs.push(() => adInstantCheck(adKey, hashGroup).then(setInstantFromAd));
+		if (adKey)
+			funcs.push(async () => {
+				const resp = await adInstantCheck(adKey, hashGroup);
+				await setInstantFromAd(resp);
+			});
 	}
 	await runConcurrentFunctions(funcs, 5, 100);
 	const uncachedHashes = new Set(hashes.filter((hash) => !cachedHashes.has(hash)));
