@@ -15,7 +15,11 @@ export interface UserTorrent {
 	links: string[];
 	seeders: number;
 	speed: number;
-	cached: boolean;
+}
+
+export interface CachedHash {
+	hash: string;
+	added: Date;
 }
 
 export interface TorrentFile {
