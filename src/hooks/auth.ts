@@ -1,5 +1,6 @@
 import { getAllDebridUser } from '@/services/allDebrid';
 import { getCurrentUser as getRealDebridUser, getToken } from '@/services/realDebrid';
+import { TraktUser, getTraktUser } from '@/services/trakt';
 import { clearRdKeys } from '@/utils/clearLocalStorage';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -91,18 +92,21 @@ function removeToken(service: string) {
 export const useCurrentUser = () => {
 	const [rdUser, setRdUser] = useState<RealDebridUser | null>(null);
 	const [adUser, setAdUser] = useState<AllDebridUser | null>(null);
+	const [traktUser, setTraktUser] = useState<TraktUser | null>(null);
 	const router = useRouter();
-	const [accessToken] = useLocalStorage<string>('rd:accessToken');
-	const [apiKey] = useLocalStorage<string>('ad:apiKey');
+	const [rdToken] = useLocalStorage<string>('rd:accessToken');
+	const [adToken] = useLocalStorage<string>('ad:apiKey');
+	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [rdError, setRdError] = useState<Error | null>(null);
 	const [adError, setAdError] = useState<Error | null>(null);
+	const [traktError, setTraktError] = useState<Error | null>(null);
 
 	useEffect(() => {
 		(async () => {
-			if (!accessToken && !apiKey) return null;
+			if (!rdToken && !adToken) return null;
 			try {
-				if (accessToken) {
-					const rdUserResponse = await getRealDebridUser(accessToken);
+				if (rdToken) {
+					const rdUserResponse = await getRealDebridUser(rdToken);
 					if (rdUserResponse) setRdUser(<RealDebridUser>rdUserResponse);
 				}
 			} catch (error: any) {
@@ -113,8 +117,8 @@ export const useCurrentUser = () => {
 				}
 			}
 			try {
-				if (apiKey) {
-					const adUserResponse = await getAllDebridUser(apiKey);
+				if (adToken) {
+					const adUserResponse = await getAllDebridUser(adToken);
 					if (adUserResponse) setAdUser(<AllDebridUser>adUserResponse);
 				}
 			} catch (error: any) {
@@ -124,8 +128,20 @@ export const useCurrentUser = () => {
 					setAdError(new Error(error));
 				}
 			}
+			try {
+				if (traktToken) {
+					const traktUserResponse = await getTraktUser(traktToken);
+					if (traktUserResponse) setTraktUser(traktUserResponse);
+				}
+			} catch (error: any) {
+				if (error.response?.status === 401) {
+					removeToken('trakt');
+				} else {
+					setTraktError(new Error(error));
+				}
+			}
 		})();
-	}, [accessToken, apiKey, router]);
+	}, [rdToken, adToken, traktToken, router]);
 
-	return { realDebrid: rdUser, allDebrid: adUser, rdError, adError };
+	return { rdUser, rdError, adUser, adError, traktUser, traktError };
 };
