@@ -94,11 +94,11 @@ export interface TraktUser {
 	};
 }
 
-export const getTraktUser = async (access_token: string) => {
+export const getTraktUser = async (accessToken: string) => {
 	try {
 		const headers = {
 			'Content-Type': 'application/json',
-			Authorization: `Bearer ${access_token}`,
+			Authorization: `Bearer ${accessToken}`,
 			'trakt-api-version': '2',
 			'trakt-api-key': config.traktClientId,
 		};
@@ -118,3 +118,107 @@ export const getTraktUser = async (access_token: string) => {
 		throw error;
 	}
 };
+
+interface TraktListIds {
+	trakt: number;
+	slug: string;
+}
+
+interface TraktListContainer {
+	list: TraktList;
+}
+
+interface TraktList {
+	name: string;
+	description: string;
+	privacy: string;
+	share_link: string;
+	type: string;
+	display_numbers: boolean;
+	allow_comments: boolean;
+	sort_by: string;
+	sort_how: string;
+	created_at: string;
+	updated_at: string;
+	item_count: number;
+	comment_count: number;
+	likes: number;
+	ids: TraktListIds;
+	user: {
+		username: string;
+		private: boolean;
+		name: string;
+		vip: boolean;
+		vip_ep: boolean;
+		ids: {
+			slug: string;
+		};
+	};
+}
+
+export const getUsersPersonalLists = async (
+	accessToken: string,
+	userSlug: string
+): Promise<TraktList[]> => {
+	const url = `${TRAKT_API_URL}/users/${userSlug}/lists`;
+	try {
+		const response = await axios.get<TraktList[]>(url, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+				'trakt-api-version': '2',
+				'trakt-api-key': config.traktClientId,
+			},
+		});
+		return response.data;
+	} catch (error) {
+		console.error("Error fetching user's personal lists:", error);
+		throw error;
+	}
+};
+
+export const getLikedLists = async (
+	accessToken: string,
+	userSlug: string
+): Promise<TraktListContainer[]> => {
+	const url = `${TRAKT_API_URL}/users/${userSlug}/likes/lists`;
+	try {
+		const response = await axios.get<TraktListContainer[]>(url, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+				'trakt-api-version': '2',
+				'trakt-api-key': config.traktClientId,
+			},
+		});
+		return response.data;
+	} catch (error) {
+		console.error("Error fetching user's personal lists:", error);
+		throw error;
+	}
+};
+
+export async function fetchListItems(
+	accessToken: string,
+	userSlug: string,
+	listId: number,
+	type?: string
+): Promise<TraktMediaItem[]> {
+	let apiEndpoint = `${TRAKT_API_URL}/users/${userSlug}/lists/${listId}/items`;
+	if (type) {
+		apiEndpoint += `/${type}`;
+	}
+	try {
+		const response = await axios.get<TraktMediaItem[]>(apiEndpoint, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+				'trakt-api-version': '2',
+				'trakt-api-key': config.traktClientId,
+			},
+		});
+		return response.data;
+	} catch (error) {
+		throw new Error('Error fetching list items');
+	}
+}
