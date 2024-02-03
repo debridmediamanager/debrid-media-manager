@@ -35,10 +35,10 @@ const nextConfig = {
 		// Will be available on both server and client
 		externalSearchApiHostname: process.env.EXTERNAL_SEARCH_API_HOSTNAME,
 		realDebridHostname: '/api/anticors?url=https://api.real-debrid.com',
-		realDebridClientId: process.env.REAL_DEBRID_CLIENT_ID,
+		realDebridClientId: 'X245A4XAIBGVM',
 		allDebridHostname: '/api/anticors?url=https://api.alldebrid.com',
 		allDebridAgent: 'debridMediaManager',
-		traktClientId: process.env.TRAKT_CLIENT_ID,
+		traktClientId: '8a7455d06804b07fa25e27454706c6f2107b6fe5ed2ad805eff3b456a17e79f0',
 	},
 };
 
