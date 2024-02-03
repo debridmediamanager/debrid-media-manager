@@ -9,11 +9,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
+
 function IndexPage() {
 	const router = useRouter();
 	const { rdUser, adUser, rdError, adError, traktUser, traktError } = useCurrentUser();
 	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [deleting, setDeleting] = useState(false);
+	const [browseTerms] = useState(getTerms(2));
 
 	useEffect(() => {
 		if (rdError) {
@@ -205,7 +207,7 @@ function IndexPage() {
 								⏰ recent
 							</Link>
 
-							{getTerms(2).map((term) => (
+							{browseTerms.map((term) => (
 								<Link
 									href={`/browse/${term.replace(/\W/gi, '')}`}
 									className="text-sm m-1 bg-neutral-600 hover:bg-neutral-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
