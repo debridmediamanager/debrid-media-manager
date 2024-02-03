@@ -2,7 +2,7 @@ import axios from 'axios';
 import getConfig from 'next/config';
 import qs from 'qs';
 
-const RD_OPENSOURCE_CLIENT_ID = 'X245A4XAIBGVM';
+const { publicRuntimeConfig: config } = getConfig();
 
 interface DeviceCodeResponse {
 	device_code: string;
@@ -137,15 +137,13 @@ export interface AddMagnetResponse {
 	uri: string;
 }
 
-const { publicRuntimeConfig: config } = getConfig();
-
 export const getDeviceCode = async () => {
 	try {
 		const response = await axios.get<DeviceCodeResponse>(
 			`${config.realDebridHostname}/oauth/v2/device/code`,
 			{
 				params: {
-					client_id: RD_OPENSOURCE_CLIENT_ID,
+					client_id: config.realDebridClientId,
 					new_credentials: 'yes',
 				},
 			}
@@ -163,7 +161,7 @@ export const getCredentials = async (deviceCode: string) => {
 			`${config.realDebridHostname}/oauth/v2/device/credentials`,
 			{
 				params: {
-					client_id: RD_OPENSOURCE_CLIENT_ID,
+					client_id: config.realDebridClientId,
 					code: deviceCode,
 				},
 			}
