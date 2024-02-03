@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 function IndexPage() {
 	const router = useRouter();
-	const { realDebrid: rdUser, allDebrid: adUser, rdError, adError } = useCurrentUser();
+	const { rdUser, adUser, rdError, adError, traktUser, traktError } = useCurrentUser();
 	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [deleting, setDeleting] = useState(false);
 
@@ -26,7 +26,10 @@ function IndexPage() {
 				'AllDebrid get user info failed, check your email and confirm the login coming from DMM'
 			);
 		}
-	}, [rdError, adError]);
+		if (traktError) {
+			toast.error('Trakt get user info failed');
+		}
+	}, [rdError, adError, traktError]);
 
 	const handleLogout = (prefix?: string) => {
 		if (prefix) {
@@ -140,7 +143,7 @@ function IndexPage() {
 									Login with AllDebrid
 								</Link>
 							)}{' '}
-							{/* {traktToken ? (
+							{traktToken ? (
 								<>
 									Trakt: <span className="text-green-500">✅</span>
 								</>
@@ -151,7 +154,7 @@ function IndexPage() {
 								>
 									Login with Trakt
 								</button>
-							)} */}
+							)}
 						</div>
 
 						<div className="mb-2 h-max text-center leading-10">
@@ -202,7 +205,7 @@ function IndexPage() {
 								⏰ recent
 							</Link>
 
-							{getTerms(4).map((term) => (
+							{getTerms(2).map((term) => (
 								<Link
 									href={`/browse/${term.replace(/\W/gi, '')}`}
 									className="text-sm m-1 bg-neutral-600 hover:bg-neutral-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
@@ -223,6 +226,12 @@ function IndexPage() {
 								className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								📺 shows
+							</Link>
+							<Link
+								href={`/trakt/mylists`}
+								className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+							>
+								🧏🏻‍♀️ my lists
 							</Link>
 						</div>
 
@@ -247,22 +256,6 @@ function IndexPage() {
 							>
 								💦 Clear library cache
 							</button>
-							{rdUser && (
-								<button
-									className="mx-1 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
-									onClick={() => handleLogout('rd:')}
-								>
-									Logout Real-Debrid
-								</button>
-							)}
-							{adUser && (
-								<button
-									className="mx-1 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm"
-									onClick={() => handleLogout('ad:')}
-								>
-									Logout AllDebrid
-								</button>
-							)}
 						</div>
 
 						<div className="text-sm mb-1 text-center">
@@ -337,6 +330,41 @@ function IndexPage() {
 							>
 								Paypal
 							</a>
+						</div>
+
+						<div className="mb-2 h-max text-center leading-10">
+							{rdUser && (
+								<button
+									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
+									onClick={() => handleLogout('rd:')}
+								>
+									Logout Real-Debrid
+								</button>
+							)}
+							{adUser && (
+								<button
+									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
+									onClick={() => handleLogout('ad:')}
+								>
+									Logout AllDebrid
+								</button>
+							)}
+							{traktUser && (
+								<button
+									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
+									onClick={() => handleLogout('trakt:')}
+								>
+									Logout Trakt
+								</button>
+							)}
+							{(rdUser || adUser || traktUser) && (
+								<button
+									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
+									onClick={() => handleLogout()}
+								>
+									Logout All
+								</button>
+							)}
 						</div>
 					</div>
 				</>
