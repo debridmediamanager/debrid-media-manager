@@ -97,6 +97,7 @@ export const useCurrentUser = () => {
 	const [rdToken] = useLocalStorage<string>('rd:accessToken');
 	const [adToken] = useLocalStorage<string>('ad:apiKey');
 	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
+	const [_, setTraktUserSlug] = useLocalStorage<string>('trakt:userSlug');
 	const [rdError, setRdError] = useState<Error | null>(null);
 	const [adError, setAdError] = useState<Error | null>(null);
 	const [traktError, setTraktError] = useState<Error | null>(null);
@@ -131,7 +132,10 @@ export const useCurrentUser = () => {
 			try {
 				if (traktToken) {
 					const traktUserResponse = await getTraktUser(traktToken);
-					if (traktUserResponse) setTraktUser(traktUserResponse);
+					if (traktUserResponse) {
+						setTraktUser(traktUserResponse);
+						setTraktUserSlug(traktUserResponse.user.ids.slug);
+					}
 				}
 			} catch (error: any) {
 				if (error.response?.status === 401) {
@@ -141,6 +145,7 @@ export const useCurrentUser = () => {
 				}
 			}
 		})();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdToken, adToken, traktToken, router]);
 
 	return { rdUser, rdError, adUser, adError, traktUser, traktError };
