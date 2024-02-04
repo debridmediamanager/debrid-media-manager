@@ -1,11 +1,10 @@
 FROM node:18-alpine
 WORKDIR /app
 ENV NODE_ENV production
-COPY ./public .
 COPY ./package*.json .
-COPY ./.next/static .
-COPY ./.next/standalone .
 COPY ./prisma/schema.prisma .
+COPY ./public .
+COPY ./.next .
 RUN npm ci && npx prisma generate
 EXPOSE 3000
 ENV PORT 3000
