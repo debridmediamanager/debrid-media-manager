@@ -5,6 +5,7 @@ COPY ./public .
 COPY ./package*.json .
 COPY ./.next/static .
 COPY ./.next/standalone .
+COPY ./prisma/schema.prisma .
 RUN npm ci && npx prisma generate
 EXPOSE 3000
 ENV PORT 3000
