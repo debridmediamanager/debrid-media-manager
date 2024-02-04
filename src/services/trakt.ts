@@ -7,11 +7,11 @@ const { publicRuntimeConfig: config } = getConfig();
 export interface TraktMedia {
 	title: string;
 	year: number;
-	ids: {
+	ids?: {
 		trakt: number;
 		slug: string;
 		tvdb?: number;
-		imdb: string;
+		imdb?: string;
 		tmdb: number;
 	};
 }
