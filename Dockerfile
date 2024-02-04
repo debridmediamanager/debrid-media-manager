@@ -1,22 +1,11 @@
-FROM node:18-alpine AS dependencies
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-
-FROM node:18-alpine AS build
-WORKDIR /app
-COPY --from=dependencies /app/node_modules ./node_modules
-COPY . .
-RUN npx prisma generate && npm run build
-
-FROM node:18-alpine AS deploy
+FROM node:18-alpine
 WORKDIR /app
 ENV NODE_ENV production
-COPY --from=build /app/public ./public
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/.next/static ./.next/static
-COPY --from=build /app/.next/standalone .
+COPY ./public ./public
+COPY ./package.json ./package.json
+COPY ./prisma ./prisma
+COPY ./.next/static ./.next/static
+COPY ./.next/standalone .
 EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
