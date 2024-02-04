@@ -23,6 +23,7 @@ jobs:
           node-version: 'lts/*'
 
       - run: npm ci
+      - run: npx prisma generate
       - run: npm run build
 
       - uses: actions/cache@v4
