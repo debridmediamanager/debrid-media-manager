@@ -75,9 +75,9 @@ export const TraktBrowse: FunctionComponent<TraktBrowseProps> = ({ mediaType, ar
 					<div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2">
 						{arrayOfResults[listName].map((item: TraktMediaItem) => {
 							const imdbid =
-								item.movie?.ids.imdb ||
-								item.show?.ids.imdb ||
-								(item as any).ids.imdb;
+								item.movie?.ids?.imdb ||
+								item.show?.ids?.imdb ||
+								(item as any).ids?.imdb;
 							if (!imdbid) {
 								return null;
 							}
@@ -125,7 +125,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			arrayOfResults[key] = responseCache[endpoint].results;
 			console.log(
 				responseCache[endpoint].results.map(
-					(item) => item.movie?.ids.imdb || item.show?.ids.imdb || (item as any).ids.imdb
+					(item) => item.movie?.ids?.imdb || item.show?.ids?.imdb || (item as any).ids?.imdb
 				)
 			);
 			continue;
@@ -144,7 +144,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			arrayOfResults[key] = responseCache[endpoint].results;
 			console.log(
 				responseCache[endpoint].results.map(
-					(item) => item.movie?.ids.imdb || item.show?.ids.imdb || (item as any).ids.imdb
+					(item) => item.movie?.ids?.imdb || item.show?.ids?.imdb || (item as any).ids?.imdb
 				)
 			);
 		} catch (error: any) {
