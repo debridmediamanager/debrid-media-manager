@@ -1,5 +1,5 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import useLocalStorage from '@/hooks/localStorage';
+import { useCastToken } from '@/hooks/cast';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/realDebrid';
 import { SearchProfile } from '@/services/searchProfile';
@@ -57,7 +57,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const adKey = useAllDebridApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
 	const [uncachedCount, setUncachedCount] = useState<number>(0);
-	const [dmmCastToken] = useLocalStorage<string>('dmmcast');
+	const dmmCastToken = useCastToken();
 
 	const router = useRouter();
 	const { imdbid } = router.query;

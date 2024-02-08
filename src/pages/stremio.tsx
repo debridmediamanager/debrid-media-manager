@@ -1,22 +1,11 @@
-import { useRealDebridAccessToken } from '@/hooks/auth';
-import useLocalStorage from '@/hooks/localStorage';
+import { useCastToken } from '@/hooks/cast';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
 
 function StremioPage() {
-	// fetch id from /api/dmmcast/magic/id
-	const [token] = useRealDebridAccessToken();
-	const [dmmCastToken, setDmmCastToken] = useLocalStorage<string>('dmmcast');
-	useEffect(() => {
-		if (!token || dmmCastToken) return;
-		fetch('/api/dmmcast/magic/id?token=' + token)
-			.then((res) => res.json())
-			.then((res) => setDmmCastToken(res.id));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [token]);
+	const dmmCastToken = useCastToken();
 
 	if (!dmmCastToken) {
 		return (
