@@ -47,9 +47,9 @@ export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boo
 		const response = await getTorrentInfo(rdKey, id.substring(3), bare);
 		if (response.filename === 'Magnet') return; // no files yet
 
-		let selectedFiles = response.files.filter(isVideo).map((file) => file.id);
+		let selectedFiles = response.files.filter(isVideo).map((file) => `${file.id}`);
 		if (selectedFiles.length === 0) {
-			selectedFiles = response.files.map((file) => file.id);
+			selectedFiles = response.files.map((file) => `${file.id}`);
 		}
 
 		await selectFiles(rdKey, id.substring(3), selectedFiles, bare);
