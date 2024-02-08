@@ -393,7 +393,7 @@ rounded-lg overflow-hidden
 												className="bg-sky-500 hover:bg-sky-700 text-white rounded inline px-1"
 												onClick={() => handleShowInfo(r)}
 											>
-												👀 Watch
+												👀 Look Inside
 											</button>
 										)}
 										{adKey && inLibrary(r.hash) && (
