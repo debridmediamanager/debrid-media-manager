@@ -36,11 +36,11 @@ export const instantCheckInRd = async (
 				if ('rd' in resp[torrent.hash] === false) continue;
 				const variants = resp[torrent.hash]['rd'];
 				if (!variants.length) continue;
-				const files: Record<string, FileData> = {};
+				const files: Record<number, FileData> = {};
 				resp[torrent.hash]['rd'].forEach((variant) => {
 					for (const fileId in variant) {
 						if (fileId in files === false)
-							files[fileId] = { ...variant[fileId], fileId };
+							files[fileId] = { ...variant[fileId], fileId: parseInt(fileId) };
 					}
 				});
 				torrent.files = Object.values(files);
