@@ -986,14 +986,14 @@ function TorrentsPage() {
 					href="/library?mediaType=tv&page=1"
 					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
 				>
-					📺 TV shows
+					📺 TV&nbsp;shows
 				</Link>
 
 				<Link
 					href="/library?status=sametitleorhash&page=1"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
 				>
-					👀 Same title
+					👀 Same&nbsp;title
 				</Link>
 				<Link
 					href="/library?status=uncached&page=1"
@@ -1020,7 +1020,7 @@ function TorrentsPage() {
 						href="/library?status=inprogress&page=1"
 						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
 					>
-						👀 In progress
+						👀 In&nbsp;progress
 					</Link>
 				)}
 				{slowCount > 0 && (
@@ -1028,7 +1028,7 @@ function TorrentsPage() {
 						href="/library?status=slow&page=1"
 						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
 					>
-						👀 No seeds
+						👀 No&nbsp;seeds
 					</Link>
 				)}
 				{failedCount > 0 && (
@@ -1071,7 +1071,7 @@ function TorrentsPage() {
 					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
 					onClick={() => generateHashList(relevantList)}
 				>
-					🚀 Hash list{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' All'}
+					🚀 Hashlist{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' All'}
 				</button>
 
 				{(router.query.status === 'sametitleorhash' ||
@@ -1106,7 +1106,7 @@ function TorrentsPage() {
 							className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
 							onClick={() => handleAddMagnet('rd')}
 						>
-							🧲 RD Add
+							🧲 RD&nbsp;Add
 						</button>
 						<button
 							className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
@@ -1122,7 +1122,7 @@ function TorrentsPage() {
 							className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
 							onClick={() => handleAddMagnet('ad')}
 						>
-							🧲 AD Add
+							🧲 AD&nbsp;Add
 						</button>
 						<button
 							className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
