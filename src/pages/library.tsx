@@ -440,6 +440,13 @@ function TorrentsPage() {
 		return filteredList;
 	}
 
+	function currentPageData() {
+		return sortedData().slice(
+			(currentPage - 1) * ITEMS_PER_PAGE,
+			(currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
+		);
+	}
+
 	const getGroupings = (mediaType: UserTorrent['mediaType']) =>
 		mediaType === 'tv' ? tvGroupingByEpisode : movieGrouping;
 
@@ -607,7 +614,7 @@ function TorrentsPage() {
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
 		}
-		if (router.query.status === 'sametitleorhash') resetState();
+		if (router.query.status === 'sametitleorhash') resetFilters();
 	}
 
 	async function dedupeByRecency() {
@@ -668,7 +675,7 @@ function TorrentsPage() {
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
 		}
-		if (router.query.status === 'sametitleorhash') resetState();
+		if (router.query.status === 'sametitleorhash') resetFilters();
 	}
 
 	async function combineSameHash() {
@@ -829,10 +836,17 @@ function TorrentsPage() {
 	const hasNoQueryParamsBut = (...params: string[]) =>
 		Object.keys(router.query).filter((p) => !params.includes(p)).length === 0;
 
-	const resetState = () => {
+	const resetFilters = () => {
 		setQuery('');
 		setSortBy({ column: 'added', direction: 'desc' });
 		router.push(`/library?page=1`);
+	};
+
+	const selectShown = () => {
+		setSelectedTorrents((prev) => {
+			currentPageData().forEach((t) => prev.add(t.id));
+			return new Set(prev);
+		});
 	};
 
 	const resetSelection = () => {
@@ -938,7 +952,7 @@ function TorrentsPage() {
 				/>
 			</div>
 			{/* Start of Main Menu */}
-			<div className="mb-4 flex overflow-x-auto">
+			<div className="mb-0 flex overflow-x-auto">
 				<button
 					className={`mr-1 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
 						currentPage <= 1 ? 'opacity-60 cursor-not-allowed' : ''
@@ -962,7 +976,6 @@ function TorrentsPage() {
 				>
 					<FaArrowRight />
 				</button>
-
 				<Link
 					href="/library?mediaType=movie&page=1"
 					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
@@ -976,51 +989,31 @@ function TorrentsPage() {
 					📺 TV shows
 				</Link>
 
-				{sameTitleOrHash.size > 0 && (
-					<>
-						<Link
-							href="/library?status=sametitleorhash&page=1"
-							className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
-						>
-							👀 Same title/ hash
-						</Link>
+				<Link
+					href="/library?status=sametitleorhash&page=1"
+					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
+				>
+					👀 Same title
+				</Link>
+				<Link
+					href="/library?status=uncached&page=1"
+					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
+				>
+					👀 Uncached
+				</Link>
+				<Link
+					href="/library?status=selected&page=1"
+					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
+				>
+					👀 Selected
+				</Link>
 
-						{(router.query.status === 'sametitleorhash' ||
-							(router.query.filter && filteredList.length > 1)) && (
-							<>
-								<button
-									className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs"
-									onClick={dedupeBySize}
-								>
-									🧹 Size
-								</button>
-
-								<button
-									className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs"
-									onClick={dedupeByRecency}
-								>
-									🧹 Date
-								</button>
-
-								<button
-									className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-xs`}
-									onClick={combineSameHash}
-								>
-									🧹 Hash
-								</button>
-							</>
-						)}
-					</>
-				)}
-
-				{slowCount > 0 && (
-					<Link
-						href="/library?status=slow&page=1"
-						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
-					>
-						👀 No seeds
-					</Link>
-				)}
+				<button
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
+					onClick={() => resetFilters()}
+				>
+					Reset
+				</button>
 
 				{inProgressCount > 0 && (
 					<Link
@@ -1030,7 +1023,14 @@ function TorrentsPage() {
 						👀 In progress
 					</Link>
 				)}
-
+				{slowCount > 0 && (
+					<Link
+						href="/library?status=slow&page=1"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
+					>
+						👀 No seeds
+					</Link>
+				)}
 				{failedCount > 0 && (
 					<Link
 						href="/library?status=failed&page=1"
@@ -1039,107 +1039,106 @@ function TorrentsPage() {
 						👀 Failed
 					</Link>
 				)}
-
-				{uncachedRdHashes.size + uncachedAdHashes.size > 0 && (
-					<Link
-						href="/library?status=uncached&page=1"
-						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
-					>
-						👀 Uncached
-					</Link>
-				)}
-
-				{selectedTorrents.size > 0 && (
-					<Link
-						href="/library?status=selected&page=1"
-						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
-					>
-						👀 Selected
-					</Link>
-				)}
-
-				{/* Add torrent */}
-				{rdKey && (
-					<button
-						className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded text-xs`}
-						onClick={() => handleAddMagnet('rd')}
-					>
-						🧲 RD Add
-					</button>
-				)}
-				{adKey && (
-					<button
-						className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded text-xs`}
-						onClick={() => handleAddMagnet('ad')}
-					>
-						🧲 AD Add
-					</button>
-				)}
+			</div>
+			{/* 2nd row menu */}
+			<div className="mb-4 flex overflow-x-auto">
+				<button
+					className="mr-2 mb-2 bg-orange-200 hover:bg-orange-400 text-black py-1 px-1 rounded text-[0.6rem]"
+					onClick={() => selectShown()}
+				>
+					✅ Select Shown
+				</button>
 
 				<button
-					className={`mr-2 mb-2 bg-red-600 hover:bg-red-500 text-white font-bold py-1 px-1 rounded text-xs`}
+					className="mr-2 mb-2 bg-orange-200 hover:bg-orange-400 text-black py-1 px-1 rounded text-[0.6rem]"
+					onClick={() => resetSelection()}
+				>
+					❌ Unselect All
+				</button>
+				<button
+					className={`mr-2 mb-2 bg-red-600 hover:bg-red-500 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
 					onClick={handleDeleteShownTorrents}
 				>
-					🗑️ Delete{selectedTorrents.size ? ` (${selectedTorrents.size})` : ''}
+					🗑️ Delete{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' All'}
 				</button>
-
 				<button
-					className={`mr-2 mb-2 bg-green-600 hover:bg-green-500 text-white font-bold py-1 px-1 rounded text-xs`}
+					className={`mr-2 mb-2 bg-green-600 hover:bg-green-500 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
 					onClick={handleReinsertTorrents}
 				>
-					🔄 Reinsert{selectedTorrents.size ? ` (${selectedTorrents.size})` : ''}
+					🔄 Reinsert{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' All'}
 				</button>
-
 				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs`}
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
 					onClick={() => generateHashList(relevantList)}
 				>
-					🚀 Hash list{selectedTorrents.size ? ` (${selectedTorrents.size})` : ''}
+					🚀 Hash list{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' All'}
 				</button>
+
+				{(router.query.status === 'sametitleorhash' ||
+					(router.query.filter && filteredList.length > 1)) && (
+					<>
+						<button
+							className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]"
+							onClick={dedupeBySize}
+						>
+							Size 🧹
+						</button>
+
+						<button
+							className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]"
+							onClick={dedupeByRecency}
+						>
+							Date 🧹
+						</button>
+
+						<button
+							className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
+							onClick={combineSameHash}
+						>
+							Hash 🧹
+						</button>
+					</>
+				)}
+
+				{rdKey && (
+					<>
+						<button
+							className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
+							onClick={() => handleAddMagnet('rd')}
+						>
+							🧲 RD Add
+						</button>
+						<button
+							className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
+							onClick={() => wrapLocalRestoreFn('rd')}
+						>
+							🪛 RD Restore
+						</button>
+					</>
+				)}
+				{adKey && (
+					<>
+						<button
+							className={`mr-2 mb-2 bg-teal-700 hover:bg-teal-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
+							onClick={() => handleAddMagnet('ad')}
+						>
+							🧲 AD Add
+						</button>
+						<button
+							className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
+							onClick={() => wrapLocalRestoreFn('ad')}
+						>
+							🪛 AD Restore
+						</button>
+					</>
+				)}
+
 				<button
-					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs`}
+					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
 					onClick={localBackup}
 				>
 					💾 Backup
 				</button>
-				{rdKey && (
-					<button
-						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs`}
-						onClick={() => wrapLocalRestoreFn('rd')}
-					>
-						🪛 RD Restore
-					</button>
-				)}
-				{adKey && (
-					<button
-						className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs`}
-						onClick={() => wrapLocalRestoreFn('ad')}
-					>
-						🪛 AD Restore
-					</button>
-				)}
-
-				{(!hasNoQueryParamsBut('page') ||
-					currentPage > 1 ||
-					query ||
-					sortBy.column !== 'added' ||
-					sortBy.direction !== 'desc') && (
-					<button
-						className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
-						onClick={() => resetState()}
-					>
-						Reset filters
-					</button>
-				)}
-
-				{selectedTorrents.size > 0 && (
-					<button
-						className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
-						onClick={() => resetSelection()}
-					>
-						Unselect all
-					</button>
-				)}
 			</div>
 			{/* End of Main Menu */}
 			{helpText && helpText !== 'hide' && (
@@ -1203,242 +1202,220 @@ function TorrentsPage() {
 							</tr>
 						</thead>
 						<tbody>
-							{sortedData()
-								.slice(
-									(currentPage - 1) * ITEMS_PER_PAGE,
-									(currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
-								)
-								.map((torrent, i) => {
-									const groupCount = getGroupings(torrent.mediaType)[
-										torrent.title
-									];
-									const filterText =
-										groupCount > 1 && !router.query.filter
-											? `${groupCount} of same title`
-											: '';
-									return (
-										<tr
-											key={torrent.id}
-											className={`align-middle lg:hover:bg-purple-900 ${
-												selectedTorrents.has(torrent.id)
-													? `bg-green-800`
-													: ``
-											}`}
+							{currentPageData().map((torrent) => {
+								const groupCount = getGroupings(torrent.mediaType)[torrent.title];
+								const filterText =
+									groupCount > 1 && !router.query.filter
+										? `${groupCount} of same title`
+										: '';
+								return (
+									<tr
+										key={torrent.id}
+										className={`align-middle lg:hover:bg-purple-900 ${
+											selectedTorrents.has(torrent.id) ? `bg-green-800` : ``
+										}`}
+									>
+										<td
+											onClick={() => handleSelectTorrent(torrent.id)}
+											className="px-1 py-1 text-sm truncate text-center"
 										>
-											<td
-												onClick={() => handleSelectTorrent(torrent.id)}
-												className="px-1 py-1 text-sm truncate text-center"
-											>
-												{selectedTorrents.has(torrent.id) ? `✅` : `➕`}
-											</td>
-											<td
-												onClick={() =>
-													rdKey && torrent.id.startsWith('rd:')
-														? handleShowInfo(torrent)
-														: null
-												}
-												className="px-1 py-1 text-sm truncate"
-											>
-												{!['Invalid Magnet', 'Magnet'].includes(
-													torrent.filename
-												) && (
-													<>
-														<span className="cursor-pointer">
-															{torrent.mediaType === 'tv'
-																? '📺'
-																: '🎥'}
-														</span>
-														&nbsp;<strong>{torrent.title}</strong>{' '}
-														{filterText && (
-															<Link
-																href={`/library?filter=${encodeURIComponent(
-																	torrent.title
-																)}`}
-																className="inline-block bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer"
-																onClick={(e) => e.stopPropagation()}
-															>
-																{filterText}
-															</Link>
-														)}
+											{selectedTorrents.has(torrent.id) ? `✅` : `➕`}
+										</td>
+										<td
+											onClick={() =>
+												rdKey && torrent.id.startsWith('rd:')
+													? handleShowInfo(torrent)
+													: null
+											}
+											className="px-1 py-1 text-sm truncate"
+										>
+											{!['Invalid Magnet', 'Magnet'].includes(
+												torrent.filename
+											) && (
+												<>
+													<span className="cursor-pointer">
+														{torrent.mediaType === 'tv' ? '📺' : '🎥'}
+													</span>
+													&nbsp;<strong>{torrent.title}</strong>{' '}
+													{filterText && (
 														<Link
-															href={`/search?query=${encodeURIComponent(
-																(
-																	torrent.info.title +
-																	' ' +
-																	(torrent.info.year || '')
-																).trim() || torrent.title
+															href={`/library?filter=${encodeURIComponent(
+																torrent.title
 															)}`}
-															target="_blank"
-															className="inline-block bg-blue-600 hover:bg-blue-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer ml-1"
+															className="inline-block bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer"
 															onClick={(e) => e.stopPropagation()}
 														>
-															Search again
+															{filterText}
 														</Link>
-														<br />
-													</>
-												)}
-												{torrent.filename}
-											</td>
+													)}
+													<Link
+														href={`/search?query=${encodeURIComponent(
+															(
+																torrent.info.title +
+																' ' +
+																(torrent.info.year || '')
+															).trim() || torrent.title
+														)}`}
+														target="_blank"
+														className="inline-block bg-blue-600 hover:bg-blue-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer ml-1"
+														onClick={(e) => e.stopPropagation()}
+													>
+														Search again
+													</Link>
+													<br />
+												</>
+											)}
+											{torrent.filename}
+										</td>
 
-											<td
-												onClick={() =>
-													rdKey && torrent.id.startsWith('rd:')
-														? handleShowInfo(torrent)
-														: null
-												}
-												className="px-1 py-1 text-xs text-center"
-											>
-												{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
-											</td>
-											<td
-												onClick={() =>
-													rdKey && torrent.id.startsWith('rd:')
-														? handleShowInfo(torrent)
-														: null
-												}
-												className="px-1 py-1 text-xs text-center"
-											>
-												{torrent.progress !== 100 ? (
-													<>
-														<span className="inline-block align-middle">
-															{torrent.progress}%&nbsp;
-														</span>
-														<span className="inline-block align-middle">
-															<FaSeedling />
-														</span>
-														<span className="inline-block align-middle">
-															{torrent.seeders}
-														</span>
-														<br />
-														<span className="inline-block align-middle">
-															{shortenNumber(torrent.speed)}B/s
-														</span>
-													</>
-												) : (
-													`${torrent.links.length} 📂`
-												)}
-											</td>
+										<td
+											onClick={() =>
+												rdKey && torrent.id.startsWith('rd:')
+													? handleShowInfo(torrent)
+													: null
+											}
+											className="px-1 py-1 text-xs text-center"
+										>
+											{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
+										</td>
+										<td
+											onClick={() =>
+												rdKey && torrent.id.startsWith('rd:')
+													? handleShowInfo(torrent)
+													: null
+											}
+											className="px-1 py-1 text-xs text-center"
+										>
+											{torrent.progress !== 100 ? (
+												<>
+													<span className="inline-block align-middle">
+														{torrent.progress}%&nbsp;
+													</span>
+													<span className="inline-block align-middle">
+														<FaSeedling />
+													</span>
+													<span className="inline-block align-middle">
+														{torrent.seeders}
+													</span>
+													<br />
+													<span className="inline-block align-middle">
+														{shortenNumber(torrent.speed)}B/s
+													</span>
+												</>
+											) : (
+												`${torrent.links.length} 📂`
+											)}
+										</td>
 
-											<td
-												onClick={() =>
-													rdKey && torrent.id.startsWith('rd:')
-														? handleShowInfo(torrent)
-														: null
-												}
-												className="px-1 py-1 text-xs text-center"
+										<td
+											onClick={() =>
+												rdKey && torrent.id.startsWith('rd:')
+													? handleShowInfo(torrent)
+													: null
+											}
+											className="px-1 py-1 text-xs text-center"
+										>
+											{new Date(torrent.added).toLocaleString()}
+										</td>
+										<td
+											onClick={() =>
+												rdKey && torrent.id.startsWith('rd:')
+													? handleShowInfo(torrent)
+													: null
+											}
+											className="px-1 py-1 flex place-content-center"
+										>
+											<button
+												title="Share"
+												className="cursor-pointer mr-2 mb-2 text-indigo-600"
+												onClick={async (e) => {
+													e.stopPropagation(); // Prevent showInfo when clicking this button
+													router.push(await handleShare(torrent));
+												}}
 											>
-												{new Date(torrent.added).toLocaleString()}
-											</td>
-											<td
-												onClick={() =>
-													rdKey && torrent.id.startsWith('rd:')
-														? handleShowInfo(torrent)
-														: null
-												}
-												className="px-1 py-1 flex place-content-center"
-											>
-												<button
-													title="Share"
-													className="cursor-pointer mr-2 mb-2 text-indigo-600"
-													onClick={async (e) => {
-														e.stopPropagation(); // Prevent showInfo when clicking this button
-														router.push(await handleShare(torrent));
-													}}
-												>
-													<FaShare />
-												</button>
+												<FaShare />
+											</button>
 
-												<button
-													title="Delete"
-													className="cursor-pointer mr-2 mb-2 text-red-500"
-													onClick={async (e) => {
-														e.stopPropagation();
-														if (rdKey && torrent.id.startsWith('rd:')) {
-															await handleDeleteRdTorrent(
+											<button
+												title="Delete"
+												className="cursor-pointer mr-2 mb-2 text-red-500"
+												onClick={async (e) => {
+													e.stopPropagation();
+													if (rdKey && torrent.id.startsWith('rd:')) {
+														await handleDeleteRdTorrent(
+															rdKey,
+															torrent.id
+														);
+													}
+													if (adKey && torrent.id.startsWith('ad:')) {
+														await handleDeleteAdTorrent(
+															adKey,
+															torrent.id
+														);
+													}
+													torrentDB.deleteById(torrent.id);
+													setSelectedTorrents((prev) => {
+														prev.delete(torrent.id);
+														return new Set(prev);
+													});
+													setUserTorrentsList((prevList) =>
+														prevList.filter(
+															(prevTor) => prevTor.id !== torrent.id
+														)
+													);
+												}}
+											>
+												<FaTrash />
+											</button>
+
+											<button
+												title="Copy magnet url"
+												className="cursor-pointer mr-2 mb-2 text-pink-500"
+												onClick={(e) => {
+													e.stopPropagation();
+													handleCopyMagnet(torrent.hash);
+												}}
+											>
+												<FaMagnet />
+											</button>
+
+											<button
+												title="Reinsert"
+												className="cursor-pointer mr-2 mb-2 text-green-500"
+												onClick={async (e) => {
+													e.stopPropagation();
+													try {
+														const oldId = torrent.id;
+														if (rdKey && torrent.id.startsWith('rd'))
+															await handleReinsertTorrent(
 																rdKey,
-																torrent.id
+																torrent.id,
+																userTorrentsList
 															);
-														}
-														if (adKey && torrent.id.startsWith('ad:')) {
-															await handleDeleteAdTorrent(
-																adKey,
-																torrent.id
-															);
-														}
-														torrentDB.deleteById(torrent.id);
-														setSelectedTorrents((prev) => {
-															prev.delete(torrent.id);
-															return new Set(prev);
-														});
-														setUserTorrentsList((prevList) =>
-															prevList.filter(
-																(prevTor) =>
-																	prevTor.id !== torrent.id
+														if (adKey && torrent.id.startsWith('ad'))
+															handleRestartTorrent(adKey, torrent.id);
+														setUserTorrentsList((prev) =>
+															prev.filter(
+																(torrent) => torrent.id !== oldId
 															)
 														);
-													}}
-												>
-													<FaTrash />
-												</button>
-
-												<button
-													title="Copy magnet url"
-													className="cursor-pointer mr-2 mb-2 text-pink-500"
-													onClick={(e) => {
-														e.stopPropagation();
-														handleCopyMagnet(torrent.hash);
-													}}
-												>
-													<FaMagnet />
-												</button>
-
-												<button
-													title="Reinsert"
-													className="cursor-pointer mr-2 mb-2 text-green-500"
-													onClick={async (e) => {
-														e.stopPropagation();
-														try {
-															const oldId = torrent.id;
-															if (
-																rdKey &&
-																torrent.id.startsWith('rd')
-															)
-																await handleReinsertTorrent(
-																	rdKey,
-																	torrent.id,
-																	userTorrentsList
-																);
-															if (
-																adKey &&
-																torrent.id.startsWith('ad')
-															)
-																handleRestartTorrent(
-																	adKey,
-																	torrent.id
-																);
-															setUserTorrentsList((prev) =>
-																prev.filter(
-																	(torrent) =>
-																		torrent.id !== oldId
-																)
-															);
-															fetchLatestRDTorrents(2);
-															torrentDB.deleteById(oldId);
-															setSelectedTorrents((prev) => {
-																prev.delete(oldId);
-																return new Set(prev);
-															});
-														} catch (error) {
-															console.error(error);
-														}
-													}}
-												>
-													<FaRecycle />
-												</button>
-											</td>
-										</tr>
-									);
-								})}
+														fetchLatestRDTorrents(2);
+														torrentDB.deleteById(oldId);
+														setSelectedTorrents((prev) => {
+															prev.delete(oldId);
+															return new Set(prev);
+														});
+													} catch (error) {
+														console.error(error);
+													}
+												}}
+											>
+												<FaRecycle />
+											</button>
+										</td>
+									</tr>
+								);
+							})}
 						</tbody>
 					</table>
 				)}
