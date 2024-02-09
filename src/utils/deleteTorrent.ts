@@ -1,6 +1,7 @@
 import { deleteTorrent } from '@/services/realDebrid';
 import toast from 'react-hot-toast';
 import { magnetToastOptions } from './toastOptions';
+import { deleteMagnet } from '@/services/allDebrid';
 
 export const handleDeleteRdTorrent = async (
 	rdKey: string,
@@ -22,7 +23,7 @@ export const handleDeleteAdTorrent = async (
 	disableToast: boolean = false
 ) => {
 	try {
-		await deleteTorrent(adKey, id.substring(3));
+		await deleteMagnet(adKey, id.substring(3));
 		if (!disableToast) toast(`Torrent deleted (${id})`, magnetToastOptions);
 	} catch (error) {
 		console.error(error);

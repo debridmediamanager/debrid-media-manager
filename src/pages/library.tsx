@@ -1389,7 +1389,7 @@ function TorrentsPage() {
 													e.stopPropagation();
 													try {
 														const oldId = torrent.id;
-														if (rdKey && torrent.id.startsWith('rd')) {
+														if (rdKey && torrent.id.startsWith('rd:')) {
 															await handleReinsertTorrent(
 																rdKey,
 																torrent.id,
@@ -1408,7 +1408,7 @@ function TorrentsPage() {
 																return new Set(prev);
 															});
 														}
-														if (adKey && torrent.id.startsWith('ad')) {
+														if (adKey && torrent.id.startsWith('ad:')) {
 															await handleRestartTorrent(
 																adKey,
 																torrent.id
