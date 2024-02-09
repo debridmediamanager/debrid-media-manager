@@ -17,6 +17,9 @@ export type SearchResult = {
 	files: FileData[];
 	adAvailable: boolean;
 	noVideos: boolean;
+	// for cached results in RD
+	biggestFileSize: number;
+	fileCount: number;
 };
 
 export type ScrapeSearchResult = Pick<SearchResult, 'title' | 'fileSize' | 'hash'>;
