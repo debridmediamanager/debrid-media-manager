@@ -9,6 +9,7 @@ import { defaultPlayer } from '@/utils/chooseYourPlayer';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
+import { borderColor, btnColor, btnIcon, fileSize, sortByFileSize } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { showInfo } from '@/utils/showInfo';
 import { searchToastOptions } from '@/utils/toastOptions';
@@ -22,7 +23,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { FaDownload, FaFastForward, FaMagnet, FaTimes } from 'react-icons/fa';
+import { FaMagnet, FaTimes } from 'react-icons/fa';
 
 type TvSearchProps = {
 	title: string;
@@ -85,6 +86,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					rdAvailable: false,
 					adAvailable: false,
 					noVideos: false,
+					files: [],
 				})) || []
 			);
 
@@ -115,6 +117,12 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			setSearchState('loaded');
 		}
 	}
+
+	// sort search results by size
+	useEffect(() => {
+		setSearchResults(sortByFileSize(searchResults));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchState]);
 
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	async function fetchHashAndProgress(hash?: string) {
@@ -342,35 +350,40 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 							(result) => !onlyShowCached || result.rdAvailable || result.adAvailable
 						)
 						.map((r: SearchResult, i: number) => {
+							const rdColor = btnColor(r.rdAvailable, r.noVideos);
+							const adColor = btnColor(r.adAvailable, r.noVideos);
 							return (
 								<div
 									key={i}
-									className={`
-${
-	isDownloaded(r.hash)
-		? 'border-green-400 border-4'
-		: isDownloading(r.hash)
-		? 'border-red-400 border-4'
-		: 'border-black border-2'
-}
-shadow hover:shadow-lg transition-shadow duration-200 ease-in
-rounded-lg overflow-hidden
-`}
+									className={`${borderColor(
+										isDownloaded(r.hash),
+										isDownloading(r.hash)
+									)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
 								>
 									<div className="p-2 space-y-4">
 										<h2 className="text-xl font-bold leading-tight break-words">
 											{r.title}
 										</h2>
+
 										<div className="text-gray-300">
-											Size: {(r.fileSize / 1024).toFixed(2)} GB
+											Size: {fileSize(r.fileSize)} GB
 										</div>
+										{r.fileCount > 0 && (
+											<div className="text-gray-300 mt-0 text-sm">
+												Biggest File: {fileSize(r.biggestFileSize)} GB (
+												{r.fileCount} 📂)
+											</div>
+										)}
+
 										<div className="space-x-2 space-y-2">
 											<button
 												className="bg-pink-500 hover:bg-pink-700 text-white rounded inline px-1"
 												onClick={() => handleCopyMagnet(r.hash)}
 											>
-												<FaMagnet className="inline" /> Get
+												<FaMagnet className="inline" /> Get&nbsp;magnet
 											</button>
+
+											{/* RD */}
 											{rdKey && inLibrary(r.hash) && (
 												<button
 													className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
@@ -382,32 +395,11 @@ rounded-lg overflow-hidden
 											)}
 											{rdKey && notInLibrary(r.hash) && (
 												<button
-													className={`bg-${
-														r.rdAvailable
-															? 'green'
-															: r.noVideos
-															? 'gray'
-															: 'blue'
-													}-500 hover:bg-${
-														r.rdAvailable
-															? 'green'
-															: r.noVideos
-															? 'gray'
-															: 'blue'
-													}-700 text-white rounded inline px-1`}
+													className={`bg-${rdColor}-500 hover:bg-${rdColor}-700 text-white rounded inline px-1`}
 													onClick={() => addRd(r.hash)}
 												>
-													{r.rdAvailable ? (
-														<>
-															<FaFastForward className="mr-2 inline" />
-															RD
-														</>
-													) : (
-														<>
-															<FaDownload className="mr-2 inline" />
-															RD
-														</>
-													)}
+													{btnIcon(r.rdAvailable)}
+													Add&nbsp;to&nbsp;RD&nbsp;library
 												</button>
 											)}
 											{r.rdAvailable && (
@@ -418,6 +410,8 @@ rounded-lg overflow-hidden
 													👀 Look Inside
 												</button>
 											)}
+
+											{/* AD */}
 											{adKey && inLibrary(r.hash) && (
 												<button
 													className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
@@ -429,32 +423,11 @@ rounded-lg overflow-hidden
 											)}
 											{adKey && notInLibrary(r.hash) && (
 												<button
-													className={`bg-${
-														r.adAvailable
-															? 'green'
-															: r.noVideos
-															? 'gray'
-															: 'blue'
-													}-500 hover:bg-${
-														r.adAvailable
-															? 'green'
-															: r.noVideos
-															? 'gray'
-															: 'blue'
-													}-700 text-white rounded inline px-1`}
+													className={`bg-${adColor}-500 hover:bg-${adColor}-700 text-white rounded inline px-1`}
 													onClick={() => addAd(r.hash)}
 												>
-													{r.adAvailable ? (
-														<>
-															<FaFastForward className="mr-2 inline" />
-															AD
-														</>
-													) : (
-														<>
-															<FaDownload className="mr-2 inline" />
-															AD
-														</>
-													)}
+													{btnIcon(r.adAvailable)}
+													Add&nbsp;to&nbsp;AD&nbsp;library
 												</button>
 											)}
 										</div>
