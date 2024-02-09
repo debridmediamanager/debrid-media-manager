@@ -153,7 +153,9 @@ function TorrentsPage() {
 				setUserTorrentsList((prev) => {
 					return [...prev, ...newTorrents];
 				});
+				// add all new torrents to the database
 				await torrentDB.addAll(newTorrents);
+				// refresh the torrents that are in progress
 				await torrentDB.addAll(
 					torrents.filter(
 						(torrent) => torrent.progress !== 100 || inProgressIds.has(torrent.id)
@@ -167,15 +169,15 @@ function TorrentsPage() {
 		if (customLimit) return;
 		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
 		await Promise.all(
-			toDelete.map((id) => {
-				torrentDB.deleteById(id);
+			toDelete.map(async (id) => {
+				setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== id));
+				await torrentDB.deleteById(id);
 				setSelectedTorrents((prev) => {
 					prev.delete(id);
 					return new Set(prev);
 				});
 			})
 		);
-		setUserTorrentsList((prev) => prev.filter((torrent) => !toDelete.includes(torrent.id)));
 		toast.success(
 			`Updated ${newIds.size} torrents in your Real-Debrid library`,
 			libraryToastOptions
@@ -203,15 +205,15 @@ function TorrentsPage() {
 		setAdSyncing(false);
 		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
 		await Promise.all(
-			toDelete.map((id) => {
-				torrentDB.deleteById(id);
+			toDelete.map(async (id) => {
+				setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== id));
+				await torrentDB.deleteById(id);
 				setSelectedTorrents((prev) => {
 					prev.delete(id);
 					return new Set(prev);
 				});
 			})
 		);
-		setUserTorrentsList((prev) => prev.filter((torrent) => !toDelete.includes(torrent.id)));
 		toast.success(
 			`Updated ${newIds.size} torrents in your AllDebrid library`,
 			libraryToastOptions
@@ -525,7 +527,7 @@ function TorrentsPage() {
 				await handleDeleteAdTorrent(adKey, t.id);
 			}
 			setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== oldId));
-			torrentDB.deleteById(oldId);
+			await torrentDB.deleteById(oldId);
 			setSelectedTorrents((prev) => {
 				prev.delete(oldId);
 				return new Set(prev);
@@ -540,11 +542,12 @@ function TorrentsPage() {
 				if (rdKey && t.id.startsWith('rd:')) {
 					await handleReinsertTorrent(rdKey, t.id, userTorrentsList);
 					setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== oldId));
-					fetchLatestRDTorrents(2);
+					await torrentDB.deleteById(oldId);
+					await fetchLatestRDTorrents(2);
 				}
 				if (adKey && t.id.startsWith('ad:')) {
 					await handleRestartTorrent(adKey, t.id);
-					fetchLatestADTorrents();
+					await fetchLatestADTorrents();
 				}
 				torrentDB.deleteById(oldId);
 				setSelectedTorrents((prev) => {
@@ -1353,16 +1356,16 @@ function TorrentsPage() {
 															torrent.id
 														);
 													}
-													torrentDB.deleteById(torrent.id);
-													setSelectedTorrents((prev) => {
-														prev.delete(torrent.id);
-														return new Set(prev);
-													});
 													setUserTorrentsList((prevList) =>
 														prevList.filter(
 															(prevTor) => prevTor.id !== torrent.id
 														)
 													);
+													await torrentDB.deleteById(torrent.id);
+													setSelectedTorrents((prev) => {
+														prev.delete(torrent.id);
+														return new Set(prev);
+													});
 												}}
 											>
 												<FaTrash />
@@ -1386,25 +1389,31 @@ function TorrentsPage() {
 													e.stopPropagation();
 													try {
 														const oldId = torrent.id;
-														if (rdKey && torrent.id.startsWith('rd'))
+														if (rdKey && torrent.id.startsWith('rd')) {
 															await handleReinsertTorrent(
 																rdKey,
 																torrent.id,
 																userTorrentsList
 															);
-														if (adKey && torrent.id.startsWith('ad'))
-															handleRestartTorrent(adKey, torrent.id);
-														setUserTorrentsList((prev) =>
-															prev.filter(
-																(torrent) => torrent.id !== oldId
-															)
-														);
-														fetchLatestRDTorrents(2);
-														torrentDB.deleteById(oldId);
-														setSelectedTorrents((prev) => {
-															prev.delete(oldId);
-															return new Set(prev);
-														});
+															await fetchLatestRDTorrents(2);
+															setUserTorrentsList((prev) =>
+																prev.filter(
+																	(torrent) =>
+																		torrent.id !== oldId
+																)
+															);
+															await torrentDB.deleteById(oldId);
+															setSelectedTorrents((prev) => {
+																prev.delete(oldId);
+																return new Set(prev);
+															});
+														}
+														if (adKey && torrent.id.startsWith('ad')) {
+															await handleRestartTorrent(
+																adKey,
+																torrent.id
+															);
+														}
 													} catch (error) {
 														console.error(error);
 													}
