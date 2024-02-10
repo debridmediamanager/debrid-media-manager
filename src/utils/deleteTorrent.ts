@@ -1,7 +1,7 @@
+import { deleteMagnet } from '@/services/allDebrid';
 import { deleteTorrent } from '@/services/realDebrid';
 import toast from 'react-hot-toast';
 import { magnetToastOptions } from './toastOptions';
-import { deleteMagnet } from '@/services/allDebrid';
 
 export const handleDeleteRdTorrent = async (
 	rdKey: string,

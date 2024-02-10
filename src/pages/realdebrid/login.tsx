@@ -85,29 +85,30 @@ export default function RealDebridLoginPage() {
 		})();
 	}, [accessToken, router]);
 
-	const handleAuthorize = () => {
-		if (verificationUrl) {
-			window.open(verificationUrl, '_blank');
-		}
-	};
-
 	return (
 		<div className="flex flex-col items-center justify-center h-screen">
 			<Head>
 				<title>Debrid Media Manager - Real-Debrid Login</title>
 			</Head>
 			{userCode && (
-				<p className="mb-4 text-lg font-bold">
-					Please click the button and enter this code: <strong>{userCode}</strong>{' '}
-					{isCopied && '(copied to clipboard)'}
-				</p>
+				<>
+					<p className="mb-4 text-lg font-bold">
+						Please click the button below. If asked for the code, enter this:{' '}
+						<strong>{userCode}</strong> {isCopied && '(copied to clipboard)'}
+					</p>
+					<form method="post" action={verificationUrl}>
+						<input type="hidden" name="usercode" value={userCode} />
+						<input type="hidden" name="action" value="Continue" />
+						<button
+							formTarget="_blank"
+							className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+							type="submit"
+						>
+							Authorize Debrid Media Manager
+						</button>
+					</form>
+				</>
 			)}
-			<button
-				className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-				onClick={handleAuthorize}
-			>
-				Authorize Debrid Media Manager
-			</button>
 		</div>
 	);
 }

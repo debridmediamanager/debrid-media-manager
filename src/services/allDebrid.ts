@@ -117,7 +117,7 @@ export const uploadMagnet = async (apikey: string, hashes: string[]) => {
 	}
 };
 
-interface MagnetStatus {
+export interface MagnetStatus {
 	id: number;
 	filename: string;
 	size: number;
@@ -153,7 +153,7 @@ interface MagnetStatusResponse {
 
 export const getMagnetStatus = async (
 	apikey: string,
-	magnetId?: number,
+	magnetId?: string,
 	statusFilter?: string,
 	session?: number,
 	counter?: number

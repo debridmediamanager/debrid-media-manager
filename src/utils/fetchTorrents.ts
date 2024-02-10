@@ -4,7 +4,7 @@ import { UserTorrent } from '@/torrent/userTorrent';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import toast from 'react-hot-toast';
 import { getMediaId } from './mediaId';
-import { getTypeByName, getTypeByNameAndFileCount } from './mediaType';
+import { getTypeByFilenames, getTypeByNameAndFileCount } from './mediaType';
 import getReleaseTags from './score';
 import { genericToastOptions } from './toastOptions';
 
@@ -28,6 +28,7 @@ export const fetchRealDebrid = async (
 					score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
 					info,
 					mediaType,
+					added: new Date(torrent.added.replace('Z', '+01:00')),
 					id: `rd:${torrent.id}`,
 					links: torrent.links.map((l) => l.replaceAll('/', '/')),
 					seeders: torrent.seeders || 0,
@@ -51,7 +52,13 @@ export const fetchAllDebrid = async (
 ) => {
 	try {
 		const torrents = (await getMagnetStatus(adKey)).data.magnets.map((torrent) => {
-			const mediaType = getTypeByName(torrent.filename);
+			if (torrent.filename === torrent.hash) {
+				torrent.filename = 'Magnet';
+			}
+			const mediaType = getTypeByFilenames(
+				torrent.filename,
+				torrent.links.map((l) => l.filename)
+			);
 			const info =
 				mediaType === 'movie'
 					? filenameParse(torrent.filename)
@@ -59,7 +66,6 @@ export const fetchAllDebrid = async (
 
 			const date = new Date(torrent.uploadDate * 1000);
 			// Format date string
-			const formattedDate = date.toISOString();
 
 			let status = 'error';
 			if (torrent.statusCode >= 0 && torrent.statusCode <= 3) {
@@ -67,6 +73,8 @@ export const fetchAllDebrid = async (
 			} else if (torrent.statusCode === 4) {
 				status = 'downloaded';
 			}
+
+			if (torrent.size === 0) torrent.size = 1;
 
 			return {
 				score: getReleaseTags(torrent.filename, torrent.size / ONE_GIGABYTE).score,
@@ -78,11 +86,14 @@ export const fetchAllDebrid = async (
 				hash: torrent.hash,
 				bytes: torrent.size,
 				progress:
-					torrent.statusCode === 4 ? 100 : (torrent.downloaded / torrent.size) * 100,
+					torrent.statusCode === 4
+						? 100
+						: ((torrent.downloaded ?? 0) / (torrent.size ?? 1)) * 100,
 				status,
-				added: formattedDate,
+				added: date,
 				speed: torrent.downloadSpeed || 0,
 				links: torrent.links.map((l) => l.link),
+				adData: torrent,
 			};
 		}) as UserTorrent[];
 		await callback(torrents);
