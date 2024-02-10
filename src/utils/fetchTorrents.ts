@@ -1,14 +1,11 @@
-import { getMagnetStatus } from '@/services/allDebrid';
-import { getUserTorrentsList } from '@/services/realDebrid';
-import { UserTorrent } from '@/torrent/userTorrent';
+import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
+import { UserTorrentResponse, getUserTorrentsList } from '@/services/realDebrid';
+import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import toast from 'react-hot-toast';
 import { getMediaId } from './mediaId';
 import { getTypeByFilenames, getTypeByNameAndFileCount } from './mediaType';
-import getReleaseTags from './score';
 import { genericToastOptions } from './toastOptions';
-
-const ONE_GIGABYTE = 1024 * 1024 * 1024;
 
 export const fetchRealDebrid = async (
 	rdKey: string,
@@ -22,15 +19,36 @@ export const fetchRealDebrid = async (
 					torrentInfo.filename,
 					torrentInfo.links.length
 				);
+				const serviceStatus = torrentInfo.status;
+				let status: UserTorrentStatus;
+				switch (torrentInfo.status) {
+					case 'magnet_conversion':
+					case 'waiting_files_selection':
+					case 'queued':
+						status = UserTorrentStatus.waiting;
+						break;
+					case 'downloading':
+					case 'compressing':
+					case 'uploading':
+						status = UserTorrentStatus.downloading;
+						break;
+					case 'downloaded':
+						status = UserTorrentStatus.finished;
+						break;
+					default:
+						status = UserTorrentStatus.error;
+						break;
+				}
 				const info =
 					mediaType === 'movie'
 						? filenameParse(torrentInfo.filename)
 						: filenameParse(torrentInfo.filename, true);
 				return {
 					...torrentInfo,
-					score: getReleaseTags(torrentInfo.filename, torrentInfo.bytes / ONE_GIGABYTE)
-						.score,
+					// score: getReleaseTags(torrentInfo.filename, torrentInfo.bytes / ONE_GIGABYTE).score,
 					info,
+					status,
+					serviceStatus,
 					mediaType,
 					added: new Date(torrentInfo.added.replace('Z', '+01:00')),
 					id: `rd:${torrentInfo.id}`,
@@ -69,19 +87,13 @@ export const fetchAllDebrid = async (
 					: filenameParse(magnetInfo.filename, true);
 
 			const date = new Date(magnetInfo.uploadDate * 1000);
-			// Format date string
 
-			let status = 'error';
-			if (magnetInfo.statusCode >= 0 && magnetInfo.statusCode <= 3) {
-				status = 'downloading';
-			} else if (magnetInfo.statusCode === 4) {
-				status = 'downloaded';
-			}
-
+			const serviceStatus = `${magnetInfo.statusCode}`;
+			const [status, progress] = getAdStatus(magnetInfo);
 			if (magnetInfo.size === 0) magnetInfo.size = 1;
 
 			return {
-				score: getReleaseTags(magnetInfo.filename, magnetInfo.size / ONE_GIGABYTE).score,
+				// score: getReleaseTags(magnetInfo.filename, magnetInfo.size / ONE_GIGABYTE).score,
 				info,
 				mediaType,
 				title: getMediaId(info, mediaType, false) || magnetInfo.filename,
@@ -89,11 +101,9 @@ export const fetchAllDebrid = async (
 				filename: magnetInfo.filename,
 				hash: magnetInfo.hash,
 				bytes: magnetInfo.size,
-				progress:
-					magnetInfo.statusCode === 4
-						? 100
-						: ((magnetInfo.downloaded ?? 0) / (magnetInfo.size ?? 1)) * 100,
+				progress,
 				status,
+				serviceStatus,
 				added: date,
 				speed: magnetInfo.downloadSpeed || 0,
 				links: magnetInfo.links.map((l) => l.link),
@@ -106,4 +116,52 @@ export const fetchAllDebrid = async (
 		toast.error('Error fetching AllDebrid torrents list', genericToastOptions);
 		console.error(error);
 	}
+};
+
+export const getRdStatus = (torrentInfo: UserTorrentResponse): UserTorrentStatus => {
+	let status: UserTorrentStatus;
+	switch (torrentInfo.status) {
+		case 'magnet_conversion':
+		case 'waiting_files_selection':
+		case 'queued':
+			status = UserTorrentStatus.waiting;
+			break;
+		case 'downloading':
+		case 'compressing':
+		case 'uploading':
+			status = UserTorrentStatus.downloading;
+			break;
+		case 'downloaded':
+			status = UserTorrentStatus.finished;
+			break;
+		default:
+			status = UserTorrentStatus.error;
+			break;
+	}
+	return status;
+};
+export const getAdStatus = (magnetInfo: MagnetStatus) => {
+	let status: UserTorrentStatus;
+	let progress: number;
+	switch (magnetInfo.statusCode) {
+		case 0:
+			status = UserTorrentStatus.waiting;
+			progress = 0;
+			break;
+		case 1:
+		case 2:
+		case 3:
+			status = UserTorrentStatus.downloading;
+			progress = (magnetInfo.downloaded / (magnetInfo.size || 1)) * 100;
+			break;
+		case 4:
+			status = UserTorrentStatus.finished;
+			progress = 100;
+			break;
+		default:
+			status = UserTorrentStatus.error;
+			progress = 0;
+			break;
+	}
+	return [status, progress];
 };

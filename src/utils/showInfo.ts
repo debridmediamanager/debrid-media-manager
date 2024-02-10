@@ -153,8 +153,7 @@ export const showInfoForAD = async (
 	userId: string = '',
 	imdbId: string = ''
 ) => {
-	const progress =
-		info.statusCode === 4 ? 100 : ((info.downloaded ?? 0) / (info.size ?? 1)) * 100;
+	console.log(info);
 	const filesList = info.links
 		.map((file) => {
 			let size = file.size < 1024 ** 3 ? file.size / 1024 ** 2 : file.size / 1024 ** 3;
@@ -195,24 +194,6 @@ export const showInfoForAD = async (
 		})
 		.join('');
 
-	// Handle the display of progress, speed, and seeders as table rows
-	const progressRow =
-		info.status === 'downloading'
-			? `<tr><td class="font-semibold align-left">Progress:</td><td class="align-left">${progress.toFixed(
-					2
-			  )}%</td></tr>`
-			: '';
-	const speedRow =
-		info.status === 'downloading'
-			? `<tr><td class="font-semibold align-left">Speed:</td><td class="align-left">${(
-					info.downloadSpeed / 1024
-			  ).toFixed(2)} KB/s</td></tr>`
-			: '';
-	const seedersRow =
-		info.status === 'downloading'
-			? `<tr><td class="font-semibold align-left">Seeders:</td><td class="align-left">${info.seeders}</td></tr>`
-			: '';
-
 	let html = `<h1 class="text-lg font-bold mt-6 mb-4">${info.filename}</h1>
     <hr/>
     <div class="text-sm max-h-60 mb-4 text-left bg-blue-100 p-1">
@@ -235,11 +216,8 @@ export const showInfoForAD = async (
 				</tr>
 				<tr>
 					<td class="font-semibold">Status:</td>
-					<td>${info.status}</td>
+					<td>${info.status} (code: ${info.statusCode})</td>
 				</tr>
-				${progressRow}
-				${speedRow}
-				${seedersRow}
 				<tr>
 					<td class="font-semibold">Added:</td>
 					<td>${new Date(info.uploadDate * 1000).toLocaleString()}</td>
