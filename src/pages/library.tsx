@@ -25,7 +25,7 @@ import { applyQuickSearch } from '@/utils/quickSearch';
 import { reinsertFilteredTorrents } from '@/utils/reinsertList';
 import { torrentPrefix } from '@/utils/results';
 import { checkArithmeticSequenceInFilenames } from '@/utils/selectable';
-import { showInfo, showInfo2 } from '@/utils/showInfo';
+import { showInfoForAD, showInfoForRD } from '@/utils/showInfo';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions } from '@/utils/toastOptions';
@@ -894,7 +894,7 @@ function TorrentsPage() {
 		}
 	};
 
-	const handleShowInfo = async (t: UserTorrent) => {
+	const handleShowInfoForRD = async (t: UserTorrent) => {
 		const info = await getTorrentInfo(rdKey!, t.id.substring(3));
 		if (t.progress !== 100) {
 			t.links = info.links;
@@ -924,15 +924,15 @@ function TorrentsPage() {
 			t.info = filenameParse(t.filename);
 			await torrentDB.add(t);
 		}
-		showInfo(window.localStorage.getItem('player') || defaultPlayer, rdKey!, info);
+		showInfoForRD(window.localStorage.getItem('player') || defaultPlayer, rdKey!, info);
 	};
 
-	const handleShowInfo2 = async (t: UserTorrent) => {
+	const handleShowInfoForAD = async (t: UserTorrent) => {
 		let player = window.localStorage.getItem('player') || defaultPlayer;
 		if (player === 'realdebrid') {
 			alert('No player selected');
 		}
-		showInfo2(window.localStorage.getItem('player') || defaultPlayer, rdKey!, t.adData!);
+		showInfoForAD(window.localStorage.getItem('player') || defaultPlayer, rdKey!, t.adData!);
 	};
 
 	return (
@@ -1023,6 +1023,12 @@ function TorrentsPage() {
 				>
 					📺 TV&nbsp;shows
 				</Link>
+				<button
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
+					onClick={() => resetFilters()}
+				>
+					Reset
+				</button>
 
 				<Link
 					href="/library?status=sametitleorhash&page=1"
@@ -1042,13 +1048,6 @@ function TorrentsPage() {
 				>
 					👀 Selected
 				</Link>
-
-				<button
-					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
-					onClick={() => resetFilters()}
-				>
-					Reset
-				</button>
 
 				{inProgressCount > 0 && (
 					<Link
@@ -1259,8 +1258,8 @@ function TorrentsPage() {
 										<td
 											onClick={() =>
 												torrent.id.startsWith('rd:')
-													? handleShowInfo(torrent)
-													: handleShowInfo2(torrent)
+													? handleShowInfoForRD(torrent)
+													: handleShowInfoForAD(torrent)
 											}
 											className="px-1 py-1 text-sm truncate"
 										>
@@ -1312,9 +1311,9 @@ function TorrentsPage() {
 
 										<td
 											onClick={() =>
-												rdKey && torrent.id.startsWith('rd:')
-													? handleShowInfo(torrent)
-													: null
+												torrent.id.startsWith('rd:')
+													? handleShowInfoForRD(torrent)
+													: handleShowInfoForAD(torrent)
 											}
 											className="px-1 py-1 text-xs text-center"
 										>
@@ -1322,9 +1321,9 @@ function TorrentsPage() {
 										</td>
 										<td
 											onClick={() =>
-												rdKey && torrent.id.startsWith('rd:')
-													? handleShowInfo(torrent)
-													: null
+												torrent.id.startsWith('rd:')
+													? handleShowInfoForRD(torrent)
+													: handleShowInfoForAD(torrent)
 											}
 											className="px-1 py-1 text-xs text-center"
 										>
@@ -1351,9 +1350,9 @@ function TorrentsPage() {
 
 										<td
 											onClick={() =>
-												rdKey && torrent.id.startsWith('rd:')
-													? handleShowInfo(torrent)
-													: null
+												torrent.id.startsWith('rd:')
+													? handleShowInfoForRD(torrent)
+													: handleShowInfoForAD(torrent)
 											}
 											className="px-1 py-1 text-xs text-center"
 										>
@@ -1361,9 +1360,9 @@ function TorrentsPage() {
 										</td>
 										<td
 											onClick={() =>
-												rdKey && torrent.id.startsWith('rd:')
-													? handleShowInfo(torrent)
-													: null
+												torrent.id.startsWith('rd:')
+													? handleShowInfoForRD(torrent)
+													: handleShowInfoForAD(torrent)
 											}
 											className="px-1 py-1 flex place-content-center"
 										>

@@ -17,23 +17,23 @@ export const fetchRealDebrid = async (
 ) => {
 	try {
 		for await (let pageOfTorrents of getUserTorrentsList(rdKey, customLimit)) {
-			const torrents = pageOfTorrents.map((torrent) => {
-				const mediaType = getTypeByNameAndFileCount(torrent.filename, torrent.links.length);
+			const torrents = pageOfTorrents.map((torrentInfo) => {
+				const mediaType = getTypeByNameAndFileCount(torrentInfo.filename, torrentInfo.links.length);
 				const info =
 					mediaType === 'movie'
-						? filenameParse(torrent.filename)
-						: filenameParse(torrent.filename, true);
+						? filenameParse(torrentInfo.filename)
+						: filenameParse(torrentInfo.filename, true);
 				return {
-					...torrent,
-					score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
+					...torrentInfo,
+					score: getReleaseTags(torrentInfo.filename, torrentInfo.bytes / ONE_GIGABYTE).score,
 					info,
 					mediaType,
-					added: new Date(torrent.added.replace('Z', '+01:00')),
-					id: `rd:${torrent.id}`,
-					links: torrent.links.map((l) => l.replaceAll('/', '/')),
-					seeders: torrent.seeders || 0,
-					speed: torrent.speed || 0,
-					title: getMediaId(info, mediaType, false) || torrent.filename,
+					added: new Date(torrentInfo.added.replace('Z', '+01:00')),
+					id: `rd:${torrentInfo.id}`,
+					links: torrentInfo.links.map((l) => l.replaceAll('/', '/')),
+					seeders: torrentInfo.seeders || 0,
+					speed: torrentInfo.speed || 0,
+					title: getMediaId(info, mediaType, false) || torrentInfo.filename,
 					cached: true,
 				};
 			}) as UserTorrent[];
@@ -51,52 +51,52 @@ export const fetchAllDebrid = async (
 	callback: (torrents: UserTorrent[]) => Promise<void>
 ) => {
 	try {
-		const torrents = (await getMagnetStatus(adKey)).data.magnets.map((torrent) => {
-			if (torrent.filename === torrent.hash) {
-				torrent.filename = 'Magnet';
+		const magnets = (await getMagnetStatus(adKey)).data.magnets.map((magnetInfo) => {
+			if (magnetInfo.filename === magnetInfo.hash) {
+				magnetInfo.filename = 'Magnet';
 			}
 			const mediaType = getTypeByFilenames(
-				torrent.filename,
-				torrent.links.map((l) => l.filename)
+				magnetInfo.filename,
+				magnetInfo.links.map((l) => l.filename)
 			);
 			const info =
 				mediaType === 'movie'
-					? filenameParse(torrent.filename)
-					: filenameParse(torrent.filename, true);
+					? filenameParse(magnetInfo.filename)
+					: filenameParse(magnetInfo.filename, true);
 
-			const date = new Date(torrent.uploadDate * 1000);
+			const date = new Date(magnetInfo.uploadDate * 1000);
 			// Format date string
 
 			let status = 'error';
-			if (torrent.statusCode >= 0 && torrent.statusCode <= 3) {
+			if (magnetInfo.statusCode >= 0 && magnetInfo.statusCode <= 3) {
 				status = 'downloading';
-			} else if (torrent.statusCode === 4) {
+			} else if (magnetInfo.statusCode === 4) {
 				status = 'downloaded';
 			}
 
-			if (torrent.size === 0) torrent.size = 1;
+			if (magnetInfo.size === 0) magnetInfo.size = 1;
 
 			return {
-				score: getReleaseTags(torrent.filename, torrent.size / ONE_GIGABYTE).score,
+				score: getReleaseTags(magnetInfo.filename, magnetInfo.size / ONE_GIGABYTE).score,
 				info,
 				mediaType,
-				title: getMediaId(info, mediaType, false) || torrent.filename,
-				id: `ad:${torrent.id}`,
-				filename: torrent.filename,
-				hash: torrent.hash,
-				bytes: torrent.size,
+				title: getMediaId(info, mediaType, false) || magnetInfo.filename,
+				id: `ad:${magnetInfo.id}`,
+				filename: magnetInfo.filename,
+				hash: magnetInfo.hash,
+				bytes: magnetInfo.size,
 				progress:
-					torrent.statusCode === 4
+					magnetInfo.statusCode === 4
 						? 100
-						: ((torrent.downloaded ?? 0) / (torrent.size ?? 1)) * 100,
+						: ((magnetInfo.downloaded ?? 0) / (magnetInfo.size ?? 1)) * 100,
 				status,
 				added: date,
-				speed: torrent.downloadSpeed || 0,
-				links: torrent.links.map((l) => l.link),
-				adData: torrent,
+				speed: magnetInfo.downloadSpeed || 0,
+				links: magnetInfo.links.map((l) => l.link),
+				adData: magnetInfo,
 			};
 		}) as UserTorrent[];
-		await callback(torrents);
+		await callback(magnets);
 	} catch (error) {
 		await callback([]);
 		toast.error('Error fetching AllDebrid torrents list', genericToastOptions);

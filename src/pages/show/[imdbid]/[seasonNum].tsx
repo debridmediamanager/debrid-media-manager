@@ -11,7 +11,7 @@ import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { borderColor, btnColor, btnIcon, fileSize, sortByFileSize } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
-import { showInfo } from '@/utils/showInfo';
+import { showInfoForRD } from '@/utils/showInfo';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
@@ -236,7 +236,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			speed: 0,
 			seeders: 0,
 		} as TorrentInfoResponse;
-		showInfo(window.localStorage.getItem('player') || defaultPlayer, rdKey!, info);
+		showInfoForRD(window.localStorage.getItem('player') || defaultPlayer, rdKey!, info);
 	};
 
 	return (
