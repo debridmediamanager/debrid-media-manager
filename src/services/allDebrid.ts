@@ -126,6 +126,7 @@ export interface MagnetStatus {
 	statusCode: number;
 	downloaded: number;
 	uploaded: number;
+	processingPerc: number;
 	seeders: number;
 	downloadSpeed: number;
 	uploadSpeed: number;

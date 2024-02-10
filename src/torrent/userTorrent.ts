@@ -2,6 +2,13 @@ import { MagnetStatus } from '@/services/allDebrid';
 import { TorrentInfoResponse } from '@/services/realDebrid';
 import { ParsedFilename } from '@ctrl/video-filename-parser';
 
+export enum UserTorrentStatus {
+	'waiting' = 'waiting',
+	'downloading' = 'downloading',
+	'finished' = 'finished',
+	'error' = 'error',
+}
+
 export interface UserTorrent {
 	id: string;
 	filename: string;
@@ -9,9 +16,10 @@ export interface UserTorrent {
 	hash: string;
 	bytes: number;
 	progress: number;
-	status: string;
+	status: UserTorrentStatus;
+	serviceStatus: string;
 	added: Date;
-	score: number;
+	// score: number;
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
 	links: string[];

@@ -57,7 +57,7 @@ class UserTorrentDB {
 	private db: IDBPDatabase | null = null;
 	private dbName = 'DMMDB';
 	private torrentsTbl = `torrents-${currentISOWeekNumber() % backupToWeekNum}`;
-	private hashesTbl = 'cached-hashes';
+	private rdHashesTbl = 'cached-hashes';
 
 	public async initializeDB() {
 		this.db = await openDB(this.dbName, 2, {
@@ -155,25 +155,25 @@ class UserTorrentDB {
 	}
 
 	// Cached hashes
-	public async addCachedHash(hash: string) {
+	public async addRdCachedHash(hash: string) {
 		const db = await this.getDB();
-		await db.put(this.hashesTbl, { hash, added: new Date() });
+		await db.put(this.rdHashesTbl, { hash, added: new Date() });
 	}
 
-	private async removeCachedHash(hash: string) {
+	private async removeRdCachedHash(hash: string) {
 		const db = await this.getDB();
-		await db.delete(this.hashesTbl, hash);
+		await db.delete(this.rdHashesTbl, hash);
 	}
 
-	public async isCached(hash: string): Promise<boolean> {
+	public async isRdCached(hash: string): Promise<boolean> {
 		const db = await this.getDB();
-		const status: CachedHash = await db.get(this.hashesTbl, hash);
+		const status: CachedHash = await db.get(this.rdHashesTbl, hash);
 		if (!status) return false;
 		const expiredDate = new Date();
 		// check if expired (2 days)
 		expiredDate.setDate(expiredDate.getDate() - 2);
 		if (status.added < expiredDate) {
-			await this.removeCachedHash(hash);
+			await this.removeRdCachedHash(hash);
 			return false;
 		}
 		return true;
