@@ -2,7 +2,7 @@ import { MagnetStatus } from '@/services/allDebrid';
 import { TorrentInfoResponse } from '@/services/realDebrid';
 import Swal from 'sweetalert2';
 
-export const showInfo = async (
+export const showInfoForRD = async (
 	app: string,
 	rdKey: string,
 	info: TorrentInfoResponse,
@@ -146,7 +146,7 @@ export const showInfo = async (
 	});
 };
 
-export const showInfo2 = async (
+export const showInfoForAD = async (
 	app: string,
 	rdKey: string,
 	info: MagnetStatus,
