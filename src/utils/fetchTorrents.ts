@@ -18,14 +18,18 @@ export const fetchRealDebrid = async (
 	try {
 		for await (let pageOfTorrents of getUserTorrentsList(rdKey, customLimit)) {
 			const torrents = pageOfTorrents.map((torrentInfo) => {
-				const mediaType = getTypeByNameAndFileCount(torrentInfo.filename, torrentInfo.links.length);
+				const mediaType = getTypeByNameAndFileCount(
+					torrentInfo.filename,
+					torrentInfo.links.length
+				);
 				const info =
 					mediaType === 'movie'
 						? filenameParse(torrentInfo.filename)
 						: filenameParse(torrentInfo.filename, true);
 				return {
 					...torrentInfo,
-					score: getReleaseTags(torrentInfo.filename, torrentInfo.bytes / ONE_GIGABYTE).score,
+					score: getReleaseTags(torrentInfo.filename, torrentInfo.bytes / ONE_GIGABYTE)
+						.score,
 					info,
 					mediaType,
 					added: new Date(torrentInfo.added.replace('Z', '+01:00')),
