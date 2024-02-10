@@ -1,4 +1,7 @@
-export function shortenNumber(num: number): string {
+export function shortenNumber(num?: number): string {
+	if (num === undefined) {
+		return '';
+	}
 	if (num < 1000) {
 		// For numbers less than 1000, we want to return the number with a maximum of one decimal place.
 		return num.toFixed(1);

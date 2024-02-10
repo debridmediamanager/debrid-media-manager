@@ -1,3 +1,5 @@
+import { MagnetStatus } from '@/services/allDebrid';
+import { TorrentInfoResponse } from '@/services/realDebrid';
 import { ParsedFilename } from '@ctrl/video-filename-parser';
 
 export interface UserTorrent {
@@ -8,13 +10,15 @@ export interface UserTorrent {
 	bytes: number;
 	progress: number;
 	status: string;
-	added: string;
+	added: Date;
 	score: number;
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
 	links: string[];
 	seeders: number;
 	speed: number;
+	rdData?: TorrentInfoResponse;
+	adData?: MagnetStatus;
 }
 
 export interface CachedHash {
