@@ -14,6 +14,21 @@ export const fileSize = (size: number) => (size / 1024).toFixed(2);
 export const btnColor = (avail: boolean, noVideos: boolean) =>
 	avail ? 'green' : noVideos ? 'gray' : 'blue';
 
+export const svcColor = (id: string) => (id.startsWith('rd:') ? '[#b5d496]' : '[#fbc730]');
+
+export const torrentTag = (id: string) =>
+	id.startsWith('rd:') ? (
+		<span className="text-[8px] text-black bg-[#b5d496]">Real-Debrid</span>
+	) : (
+		<span className="text-[8px] text-black bg-[#fbc730]">AllDebrid</span>
+	);
+export const torrentPrefix = (id: string) =>
+	id.startsWith('rd:') ? (
+		<span className="text-xs text-black bg-[#b5d496]">RD</span>
+	) : (
+		<span className="text-[8px] text-black bg-[#fbc730]">AD</span>
+	);
+
 export const btnIcon = (avail: boolean) =>
 	avail ? <FaFastForward className="mr-2 inline" /> : <FaDownload className="mr-2 inline" />;
 
