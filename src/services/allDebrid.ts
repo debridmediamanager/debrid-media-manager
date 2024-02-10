@@ -208,6 +208,7 @@ export const restartMagnet = async (apikey: string, id: string): Promise<MagnetR
 	let endpoint = `${config.allDebridHostname}/v4/magnet/restart?agent=${config.allDebridAgent}&apikey=${apikey}&id=${id}`;
 	try {
 		const response = await axios.get<MagnetRestartResponse>(endpoint);
+		if (response.data.error) throw new Error(response.data.error.message);
 		return response.data;
 	} catch (error) {
 		console.error('Error restarting magnet:', (error as any).message);
