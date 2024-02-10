@@ -1,6 +1,7 @@
 import { MagnetStatus } from '@/services/allDebrid';
 import { TorrentInfoResponse } from '@/services/realDebrid';
 import Swal from 'sweetalert2';
+import { isVideo } from './selectable';
 
 export const showInfoForRD = async (
 	app: string,
@@ -158,32 +159,22 @@ export const showInfoForAD = async (
 		.map((file) => {
 			let size = file.size < 1024 ** 3 ? file.size / 1024 ** 2 : file.size / 1024 ** 3;
 			let unit = file.size < 1024 ** 3 ? 'MB' : 'GB';
+			const isPlayable = isVideo({ path: file.filename });
 
 			let downloadForm = '';
 			let watchBtn = '';
 			let castBtn = '';
 
 			downloadForm = `
-					<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
-						<input type="hidden" name="links" value="${file.link}" />
+					<form action="https://alldebrid.com/service/" method="get" target="_blank" class="inline">
+						<input type="hidden" name="url" value="${file.link}" />
 						<button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm">📲 DL</button>
 					</form>
 				`;
-			if (app) {
-				watchBtn = `
-							<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${file.link}')">👀 Watch</button>
-						`;
-
-				if (userId && imdbId) {
-					castBtn = `
-							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/dmmcast/magic/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}')">Cast✨</button>
-						`;
-				}
-			}
 
 			// Return the list item for the file, with or without the download form
 			return `
-                <li class="hover:bg-yellow-200 rounded font-normal">
+				<li class="hover:bg-yellow-200 rounded ${isPlayable ? 'bg-yellow-50 font-bold' : 'font-normal'}">
                     <span class="inline text-blue-600">${file.filename}</span>
                     <span class="inline text-gray-700 w-fit">${size.toFixed(2)} ${unit}</span>
                         ${downloadForm}
