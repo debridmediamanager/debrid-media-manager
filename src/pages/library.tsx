@@ -8,7 +8,7 @@ import {
 	handleAddMultipleHashesInAd,
 	handleAddMultipleHashesInRd,
 	handleCopyMagnet,
-	handleReinsertTorrent,
+	handleReinsertTorrentinRd,
 	handleRestartTorrent,
 	handleSelectFilesInRd,
 } from '@/utils/addMagnet';
@@ -22,13 +22,12 @@ import { generateHashList, handleShare } from '@/utils/hashList';
 import { checkForUncachedInRd } from '@/utils/instantChecks';
 import { localRestore } from '@/utils/localRestore';
 import { applyQuickSearch } from '@/utils/quickSearch';
-import { reinsertFilteredTorrents } from '@/utils/reinsertList';
 import { torrentPrefix } from '@/utils/results';
 import { checkArithmeticSequenceInFilenames } from '@/utils/selectable';
 import { showInfoForAD, showInfoForRD } from '@/utils/showInfo';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { shortenNumber } from '@/utils/speed';
-import { libraryToastOptions, searchToastOptions } from '@/utils/toastOptions';
+import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import { saveAs } from 'file-saver';
@@ -515,9 +514,20 @@ function TorrentsPage() {
 			).isConfirmed
 		)
 			return;
-		await reinsertFilteredTorrents(relevantList, wrapReinsertFn);
-		await fetchLatestRDTorrents(Math.ceil(relevantList.length * 1.1));
-		await fetchLatestADTorrents();
+		const toReinsert = relevantList.map(wrapReinsertFn);
+		const [results, errors] = await runConcurrentFunctions(toReinsert, 5, 500);
+		if (errors.length) {
+			toast.error(`Error reinserting ${errors.length} torrents`, magnetToastOptions);
+		}
+		if (results.length) {
+			resetSelection();
+			await fetchLatestRDTorrents(Math.ceil(relevantList.length * 1.1));
+			await fetchLatestADTorrents();
+			toast.success(`Reinserted ${results.length} torrents`, magnetToastOptions);
+		}
+		if (!errors.length && !results.length) {
+			toast('No torrents to reinsert', magnetToastOptions);
+		}
 	}
 
 	async function handleDeleteShownTorrents() {
@@ -537,6 +547,7 @@ function TorrentsPage() {
 		)
 			return;
 		await deleteFilteredTorrents(relevantList, wrapDeleteFn);
+		resetSelection();
 	}
 
 	function wrapDeleteFn(t: UserTorrent) {
@@ -562,20 +573,19 @@ function TorrentsPage() {
 			try {
 				const oldId = t.id;
 				if (rdKey && t.id.startsWith('rd:')) {
-					await handleReinsertTorrent(rdKey, t.id, userTorrentsList);
+					await handleReinsertTorrentinRd(rdKey, t);
 					setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== oldId));
 					await torrentDB.deleteById(oldId);
+					setSelectedTorrents((prev) => {
+						prev.delete(oldId);
+						return new Set(prev);
+					});
 				}
 				if (adKey && t.id.startsWith('ad:')) {
 					await handleRestartTorrent(adKey, t.id);
 				}
-				torrentDB.deleteById(oldId);
-				setSelectedTorrents((prev) => {
-					prev.delete(oldId);
-					return new Set(prev);
-				});
 			} catch (error) {
-				console.error(error);
+				throw error;
 			}
 		};
 	}
@@ -739,9 +749,9 @@ function TorrentsPage() {
 		dupeHashes.forEach((sameHashTorrents: UserTorrent[]) => {
 			const reinsert = sameHashTorrents.pop();
 			if (reinsert) {
-				toReinsertAndDelete.push(wrapReinsertFn(reinsert));
-				toReinsertAndDelete = toReinsertAndDelete.concat(
-					sameHashTorrents.map(wrapDeleteFn)
+				toReinsertAndDelete.push(
+					wrapReinsertFn(reinsert),
+					...sameHashTorrents.map(wrapDeleteFn)
 				);
 			}
 		});
@@ -810,8 +820,10 @@ function TorrentsPage() {
 						concurrencyCount,
 						refreshTorrents
 					);
-					if (debridService === 'rd')
-						await fetchLatestRDTorrents(Math.ceil(concurrencyCount * 1.1));
+					if (results.length) {
+						await fetchLatestRDTorrents(Math.ceil(results.length * 1.1));
+						await fetchLatestADTorrents();
+					}
 					resolve({ success: results.length, error: errors.length });
 				}
 			);
@@ -1033,7 +1045,7 @@ function TorrentsPage() {
 					href="/library?status=selected&page=1"
 					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
 				>
-					👀 Selected
+					👀 Selected ({selectedTorrents.size})
 				</Link>
 				<Link
 					href="/library?status=uncached&page=1"
@@ -1427,10 +1439,9 @@ function TorrentsPage() {
 													try {
 														const oldId = torrent.id;
 														if (rdKey && torrent.id.startsWith('rd:')) {
-															await handleReinsertTorrent(
+															await handleReinsertTorrentinRd(
 																rdKey,
-																torrent.id,
-																userTorrentsList
+																torrent
 															);
 															await fetchLatestRDTorrents(2);
 															setUserTorrentsList((prev) =>
@@ -1450,6 +1461,7 @@ function TorrentsPage() {
 																adKey,
 																torrent.id
 															);
+															await fetchLatestADTorrents();
 														}
 													} catch (error) {
 														console.error(error);

@@ -65,20 +65,14 @@ export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boo
 	}
 };
 
-export const handleReinsertTorrent = async (
-	rdKey: string,
-	oldId: string,
-	userTorrentsList: UserTorrent[]
-) => {
+export const handleReinsertTorrentinRd = async (rdKey: string, torrent: UserTorrent) => {
+	const oldId = torrent.id;
 	try {
-		const torrentIdx = userTorrentsList.findIndex((t) => t.id === oldId);
-		const torrent = userTorrentsList[torrentIdx];
-		if (!torrent) throw new Error('no_torrent_found');
 		const hash = torrent.hash;
 		const newId = await addHashAsMagnet(rdKey, hash);
 		await handleSelectFilesInRd(rdKey, `rd:${newId}`);
 		await handleDeleteRdTorrent(rdKey, oldId, true);
-		toast.success(`Torrent reinserted (${oldId}👉${torrent.id})`, magnetToastOptions);
+		toast.success(`Torrent reinserted (${oldId}👉${newId})`, magnetToastOptions);
 	} catch (error: any) {
 		toast.error(
 			`Error reinserting torrent (${oldId}) ${error.response.data.error}`,
@@ -127,8 +121,9 @@ export const handleRestartTorrent = async (adKey: string, id: string) => {
 		await restartMagnet(adKey, id.substring(3));
 		toast.success(`Torrent restarted (${id})`, magnetToastOptions);
 	} catch (error) {
-		toast.error(`Error restarting torrent (${id})`, magnetToastOptions);
 		console.error(error);
+		toast.error(`Error restarting torrent (${id}) ${error}`, magnetToastOptions);
+		throw error;
 	}
 };
 
