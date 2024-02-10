@@ -64,6 +64,17 @@ function HashlistPage() {
 	const [hasDupes] = useState<Array<string>>([]);
 	const [totalBytes, setTotalBytes] = useState<number>(0);
 
+	async function initialize() {
+		await torrentDB.initializeDB();
+		await Promise.all([fetchUserTorrentsList(), fetchHashAndProgress()]);
+	}
+
+	useEffect(() => {
+		if (userTorrentsList.length !== 0) return;
+		initialize();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [rdKey, adKey]);
+
 	// fetch list from api
 	async function getUserTorrentsList(): Promise<TorrentHash[]> {
 		const hash = window.location.hash;
@@ -108,23 +119,17 @@ function HashlistPage() {
 		const records: Record<string, number> = {};
 		for (const t of torrents) {
 			if (hash && t.hash !== hash) continue;
-			records[t.hash] = t.progress;
+			records[`${t.id.substring(0, 3)}${t.hash}`] = t.progress;
 		}
 		setHashAndProgress((prev) => ({ ...prev, ...records }));
 	}
-	const isDownloading = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] < 100;
-	const isDownloaded = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] === 100;
-	const notInLibrary = (hash: string) => !(hash in hashAndProgress);
-
-	async function initialize() {
-		await torrentDB.initializeDB();
-		await Promise.all([fetchUserTorrentsList(), fetchHashAndProgress()]);
-	}
-	useEffect(() => {
-		if (userTorrentsList.length !== 0) return;
-		initialize();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey, adKey]);
+	const isDownloading = (service: string, hash: string) =>
+		`${service}:${hash}` in hashAndProgress && hashAndProgress[`${service}:${hash}`] < 100;
+	const isDownloaded = (service: string, hash: string) =>
+		`${service}:${hash}` in hashAndProgress && hashAndProgress[`${service}:${hash}`] === 100;
+	const inLibrary = (service: string, hash: string) => `${service}:${hash}` in hashAndProgress;
+	const notInLibrary = (service: string, hash: string) =>
+		!(`${service}:${hash}` in hashAndProgress);
 
 	// aggregate metadata
 	useEffect(() => {
@@ -314,27 +319,31 @@ function HashlistPage() {
 	}
 
 	async function deleteRd(hash: string) {
-		const torrent = await torrentDB.getLatestByHash(hash);
-		if (!torrent) return;
-		await handleDeleteRdTorrent(rdKey!, torrent.id);
-		await torrentDB.deleteByHash(hash);
-		setHashAndProgress((prev) => {
-			const newHashAndProgress = { ...prev };
-			delete newHashAndProgress[hash];
-			return newHashAndProgress;
-		});
+		const torrents = await torrentDB.getAllByHash(hash);
+		for (const t of torrents) {
+			if (!t.id.startsWith('rd:')) continue;
+			await handleDeleteRdTorrent(rdKey!, t.id);
+			await torrentDB.deleteByHash('rd', hash);
+			setHashAndProgress((prev) => {
+				const newHashAndProgress = { ...prev };
+				delete newHashAndProgress[`rd:${hash}`];
+				return newHashAndProgress;
+			});
+		}
 	}
 
 	async function deleteAd(hash: string) {
-		const torrent = await torrentDB.getLatestByHash(hash);
-		if (!torrent) return;
-		await handleDeleteAdTorrent(adKey!, torrent.id);
-		await torrentDB.deleteByHash(hash);
-		setHashAndProgress((prev) => {
-			const newHashAndProgress = { ...prev };
-			delete newHashAndProgress[hash];
-			return newHashAndProgress;
-		});
+		const torrents = await torrentDB.getAllByHash(hash);
+		for (const t of torrents) {
+			if (!t.id.startsWith('ad:')) continue;
+			await handleDeleteAdTorrent(rdKey!, t.id);
+			await torrentDB.deleteByHash('ad', hash);
+			setHashAndProgress((prev) => {
+				const newHashAndProgress = { ...prev };
+				delete newHashAndProgress[`ad:${hash}`];
+				return newHashAndProgress;
+			});
+		}
 	}
 
 	return (
@@ -471,7 +480,14 @@ function HashlistPage() {
 										className={`
 									hover:bg-purple-900
 									border-t-2
-									${isDownloaded(t.hash) ? 'bg-green-900' : isDownloading(t.hash) ? 'bg-red-900' : ''}
+									${
+										isDownloaded('rd', t.hash) || isDownloaded('ad', t.hash)
+											? 'bg-green-900'
+											: isDownloading('rd', t.hash) ||
+											  isDownloading('ad', t.hash)
+											? 'bg-red-900'
+											: ''
+									}
 								`}
 									>
 										<td className="border px-4 py-2">
@@ -516,16 +532,16 @@ function HashlistPage() {
 											{(t.bytes / ONE_GIGABYTE).toFixed(1)} GB
 										</td>
 										<td className="border px-4 py-2">
-											{rdKey && isDownloading(t.hash) && (
+											{rdKey && isDownloading('rd', t.hash) && (
 												<button
 													className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
 													onClick={() => deleteRd(t.hash)}
 												>
 													<FaTimes />
-													RD ({hashAndProgress[t.hash] + '%'})
+													RD ({hashAndProgress[`rd:${t.hash}`] + '%'})
 												</button>
 											)}
-											{rdKey && notInLibrary(t.hash) && (
+											{rdKey && notInLibrary('rd', t.hash) && (
 												<button
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
 													onClick={() => addRd(t.hash)}
@@ -535,16 +551,16 @@ function HashlistPage() {
 												</button>
 											)}
 
-											{adKey && isDownloading(t.hash) && (
+											{adKey && isDownloading('ad', t.hash) && (
 												<button
 													className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
 													onClick={() => deleteAd(t.hash)}
 												>
 													<FaTimes />
-													AD ({hashAndProgress[t.hash] + '%'})
+													AD ({hashAndProgress[`ad:${t.hash}`] + '%'})
 												</button>
 											)}
-											{adKey && notInLibrary(t.hash) && (
+											{adKey && notInLibrary('ad', t.hash) && (
 												<button
 													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
 													onClick={() => addAd(t.hash)}
