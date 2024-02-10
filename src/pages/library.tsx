@@ -958,7 +958,7 @@ function TorrentsPage() {
 					<span className="text-sm whitespace-nowrap">
 						{userTorrentsList.length} torrents{' '}
 						{rdSyncing || adSyncing
-							? '🤔' // Thinking if syncing
+							? '💭' // Thinking if syncing
 							: totalBytes / ONE_GIGABYTE / 1024 > 10000
 							? '😱' // Fear for more than 10 PB
 							: totalBytes / ONE_GIGABYTE / 1024 > 1000
