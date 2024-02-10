@@ -123,12 +123,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			responseCache[endpoint].lastUpdated > new Date().getTime() - 1000 * 60 * 10
 		) {
 			arrayOfResults[key] = responseCache[endpoint].results;
-			console.log(
-				responseCache[endpoint].results.map(
-					(item) =>
-						item.movie?.ids?.imdb || item.show?.ids?.imdb || (item as any).ids?.imdb
-				)
-			);
 			continue;
 		}
 
@@ -143,12 +137,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 				results: searchResults,
 			};
 			arrayOfResults[key] = responseCache[endpoint].results;
-			console.log(
-				responseCache[endpoint].results.map(
-					(item) =>
-						item.movie?.ids?.imdb || item.show?.ids?.imdb || (item as any).ids?.imdb
-				)
-			);
 		} catch (error: any) {
 			console.error(error);
 			return {

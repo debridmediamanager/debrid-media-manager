@@ -1,4 +1,4 @@
-import { UserTorrent } from '@/torrent/userTorrent';
+import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 
 export function isSlowOrNoLinks(t: UserTorrent) {
 	const oldTorrentAge = 3600000; // 1 hour in milliseconds
@@ -12,7 +12,7 @@ export function isSlowOrNoLinks(t: UserTorrent) {
 }
 
 export function isInProgress(t: UserTorrent) {
-	return t.progress !== 100;
+	return t.status === UserTorrentStatus.downloading;
 }
 
 export function isFailed(t: UserTorrent) {
