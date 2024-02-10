@@ -1,7 +1,7 @@
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 
 export function isSlowOrNoLinks(t: UserTorrent) {
-	const oldTorrentAge = 3600000; // 1 hour in milliseconds
+	const oldTorrentAge = 1200000; // 20 mins in milliseconds
 	const addedDate = new Date(t.added);
 	const now = new Date();
 	const ageInMillis = now.getTime() - addedDate.getTime();
