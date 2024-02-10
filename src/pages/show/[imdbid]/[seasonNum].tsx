@@ -63,6 +63,20 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
 
+	async function initialize() {
+		await torrentDB.initializeDB();
+		await Promise.all([
+			fetchData(imdbid as string, parseInt(seasonNum as string)),
+			fetchHashAndProgress(),
+		]);
+	}
+
+	useEffect(() => {
+		if (!imdbid || !seasonNum) return;
+		initialize();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [imdbid, seasonNum]);
+
 	async function fetchData(imdbId: string, seasonNum: number) {
 		setSearchResults([]);
 		setErrorMessage('');
@@ -130,27 +144,17 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		const records: Record<string, number> = {};
 		for (const t of torrents) {
 			if (hash && t.hash !== hash) continue;
-			records[t.hash] = t.progress;
+			records[`${t.id.substring(0, 3)}${t.hash}`] = t.progress;
 		}
 		setHashAndProgress((prev) => ({ ...prev, ...records }));
 	}
-	const isDownloading = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] < 100;
-	const isDownloaded = (hash: string) => hash in hashAndProgress && hashAndProgress[hash] === 100;
-	const inLibrary = (hash: string) => hash in hashAndProgress;
-	const notInLibrary = (hash: string) => !(hash in hashAndProgress);
-
-	async function initialize() {
-		await torrentDB.initializeDB();
-		await Promise.all([
-			fetchData(imdbid as string, parseInt(seasonNum as string)),
-			fetchHashAndProgress(),
-		]);
-	}
-	useEffect(() => {
-		if (!imdbid || !seasonNum) return;
-		initialize();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [imdbid, seasonNum]);
+	const isDownloading = (service: string, hash: string) =>
+		`${service}:${hash}` in hashAndProgress && hashAndProgress[`${service}:${hash}`] < 100;
+	const isDownloaded = (service: string, hash: string) =>
+		`${service}:${hash}` in hashAndProgress && hashAndProgress[`${service}:${hash}`] === 100;
+	const inLibrary = (service: string, hash: string) => `${service}:${hash}` in hashAndProgress;
+	const notInLibrary = (service: string, hash: string) =>
+		!(`${service}:${hash}` in hashAndProgress);
 
 	const intSeasonNum = parseInt(seasonNum as string);
 
@@ -176,27 +180,31 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	}
 
 	async function deleteRd(hash: string) {
-		const torrent = await torrentDB.getLatestByHash(hash);
-		if (!torrent) return;
-		await handleDeleteRdTorrent(rdKey!, torrent.id);
-		await torrentDB.deleteByHash(hash);
-		setHashAndProgress((prev) => {
-			const newHashAndProgress = { ...prev };
-			delete newHashAndProgress[hash];
-			return newHashAndProgress;
-		});
+		const torrents = await torrentDB.getAllByHash(hash);
+		for (const t of torrents) {
+			if (!t.id.startsWith('rd:')) continue;
+			await handleDeleteRdTorrent(rdKey!, t.id);
+			await torrentDB.deleteByHash('rd', hash);
+			setHashAndProgress((prev) => {
+				const newHashAndProgress = { ...prev };
+				delete newHashAndProgress[`rd:${hash}`];
+				return newHashAndProgress;
+			});
+		}
 	}
 
 	async function deleteAd(hash: string) {
-		const torrent = await torrentDB.getLatestByHash(hash);
-		if (!torrent) return;
-		await handleDeleteAdTorrent(adKey!, torrent.id);
-		await torrentDB.deleteByHash(hash);
-		setHashAndProgress((prev) => {
-			const newHashAndProgress = { ...prev };
-			delete newHashAndProgress[hash];
-			return newHashAndProgress;
-		});
+		const torrents = await torrentDB.getAllByHash(hash);
+		for (const t of torrents) {
+			if (!t.id.startsWith('ad:')) continue;
+			await handleDeleteAdTorrent(rdKey!, t.id);
+			await torrentDB.deleteByHash('ad', hash);
+			setHashAndProgress((prev) => {
+				const newHashAndProgress = { ...prev };
+				delete newHashAndProgress[`ad:${hash}`];
+				return newHashAndProgress;
+			});
+		}
 	}
 
 	const backdropStyle = {
@@ -356,8 +364,8 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 								<div
 									key={i}
 									className={`${borderColor(
-										isDownloaded(r.hash),
-										isDownloading(r.hash)
+										isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash),
+										isDownloading('rd', r.hash) || isDownloading('ad', r.hash)
 									)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
 								>
 									<div className="p-2 space-y-4">
@@ -384,16 +392,16 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											</button>
 
 											{/* RD */}
-											{rdKey && inLibrary(r.hash) && (
+											{rdKey && inLibrary('rd', r.hash) && (
 												<button
 													className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
 													onClick={() => deleteRd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
-													RD ({hashAndProgress[r.hash] + '%'})
+													RD ({hashAndProgress[`rd:${r.hash}`] + '%'})
 												</button>
 											)}
-											{rdKey && notInLibrary(r.hash) && (
+											{rdKey && notInLibrary('rd', r.hash) && (
 												<button
 													className={`bg-${rdColor}-500 hover:bg-${rdColor}-700 text-white rounded inline px-1`}
 													onClick={() => addRd(r.hash)}
@@ -412,16 +420,16 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											)}
 
 											{/* AD */}
-											{adKey && inLibrary(r.hash) && (
+											{adKey && inLibrary('ad', r.hash) && (
 												<button
 													className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
 													onClick={() => deleteAd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
-													AD ({hashAndProgress[r.hash] + '%'})
+													AD ({hashAndProgress[`ad:${r.hash}`] + '%'})
 												</button>
 											)}
-											{adKey && notInLibrary(r.hash) && (
+											{adKey && notInLibrary('ad', r.hash) && (
 												<button
 													className={`bg-${adColor}-500 hover:bg-${adColor}-700 text-white rounded inline px-1`}
 													onClick={() => addAd(r.hash)}
