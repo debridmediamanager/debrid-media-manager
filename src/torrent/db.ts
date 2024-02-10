@@ -93,10 +93,16 @@ class UserTorrentDB {
 
 	public async getLatestByHash(hash: string): Promise<UserTorrent | undefined> {
 		const db = await this.getDB();
-		const torrents = await db.getAllFromIndex(this.torrentsTbl, 'hash', hash);
+		const torrents: UserTorrent[] = await db.getAllFromIndex(this.torrentsTbl, 'hash', hash);
 		if (torrents.length === 0) return undefined;
-		torrents.sort((a, b) => b.added.localeCompare(a.added));
+		torrents.sort((a, b) => b.added.getTime() - a.added.getTime());
 		return torrents[0];
+	}
+
+	public async getAllByHash(hash: string): Promise<UserTorrent[]> {
+		const db = await this.getDB();
+		const torrents: UserTorrent[] = await db.getAllFromIndex(this.torrentsTbl, 'hash', hash);
+		return torrents;
 	}
 
 	public async getById(id: string): Promise<UserTorrent | undefined> {
@@ -114,10 +120,12 @@ class UserTorrentDB {
 		}
 	}
 
-	public async deleteByHash(hash: string) {
+	public async deleteByHash(service: string, hash: string) {
 		const db = await this.getDB();
-		const torrents = await db.getAllFromIndex(this.torrentsTbl, 'hash', hash);
-		const deletePromises = torrents.map((torrent) => db.delete(this.torrentsTbl, torrent.id));
+		const torrents: UserTorrent[] = await db.getAllFromIndex(this.torrentsTbl, 'hash', hash);
+		const deletePromises = torrents
+			.filter((t) => t.id.startsWith(service))
+			.map((t) => db.delete(this.torrentsTbl, t.id));
 		await Promise.all(deletePromises);
 	}
 
