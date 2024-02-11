@@ -164,7 +164,10 @@ function TorrentsPage() {
 				// refresh the torrents that are in progress
 				await torrentDB.addAll(
 					torrents.filter(
-						(torrent) => torrent.progress !== 100 || inProgressIds.has(torrent.id)
+						(torrent) =>
+							torrent.status === UserTorrentStatus.waiting ||
+							torrent.status === UserTorrentStatus.downloading ||
+							inProgressIds.has(torrent.id)
 					)
 				);
 				setLoading(false);
@@ -218,7 +221,10 @@ function TorrentsPage() {
 			// refresh the torrents that are in progress
 			await torrentDB.addAll(
 				torrents.filter(
-					(torrent) => torrent.progress !== 100 || inProgressIds.has(torrent.id)
+					(torrent) =>
+						torrent.status === UserTorrentStatus.waiting ||
+						torrent.status === UserTorrentStatus.downloading ||
+						inProgressIds.has(torrent.id)
 				)
 			);
 			setLoading(false);
@@ -274,7 +280,7 @@ function TorrentsPage() {
 		clearGroupings(tvGroupingByEpisode);
 		const keyMap: Map<string, number> = new Map();
 		for (const t of userTorrentsList) {
-			if (t.status.includes('error')) continue;
+			if (t.status === UserTorrentStatus.error) continue;
 			const key = uniqId(t);
 			if (!keyMap.has(key)) {
 				keyMap.set(key, t.bytes);
@@ -399,8 +405,9 @@ function TorrentsPage() {
 		if (status === 'uncached') {
 			tmpList = tmpList.filter(
 				(t) =>
-					(t.id.startsWith('rd:') && uncachedRdHashes.has(t.hash)) ||
-					(t.id.startsWith('ad:') && uncachedAdIDs.includes(t.id))
+					t.status === UserTorrentStatus.finished &&
+					((t.id.startsWith('rd:') && uncachedRdHashes.has(t.hash)) ||
+						(t.id.startsWith('ad:') && uncachedAdIDs.includes(t.id)))
 			);
 			setFilteredList(applyQuickSearch(query, tmpList));
 			if (helpText !== 'hide') setHelpText('Torrents that are no longer cached');
@@ -714,7 +721,7 @@ function TorrentsPage() {
 	async function combineSameHash() {
 		const dupeHashes: Map<string, UserTorrent[]> = new Map();
 		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
-			if (cur.progress !== 100) return acc;
+			if (cur.status !== UserTorrentStatus.finished) return acc;
 			let key = cur.hash;
 			if (acc[key]) {
 				if (!dupeHashes.has(key)) {
@@ -905,7 +912,7 @@ function TorrentsPage() {
 
 	const handleShowInfoForRD = async (t: UserTorrent) => {
 		const info = await getTorrentInfo(rdKey!, t.id.substring(3));
-		if (t.progress !== 100) {
+		if (t.status === UserTorrentStatus.waiting || t.status === UserTorrentStatus.downloading) {
 			t.links = info.links;
 			t.seeders = info.seeders;
 			t.speed = info.speed;
@@ -914,6 +921,7 @@ function TorrentsPage() {
 			t.progress = info.progress;
 			await torrentDB.add(t);
 		}
+
 		const filenames = info.files.map((f) => f.path);
 		if (
 			(checkArithmeticSequenceInFilenames(filenames) && t.mediaType === 'movie') ||
