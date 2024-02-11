@@ -101,6 +101,7 @@ export const fetchAllDebrid = async (
 				filename: magnetInfo.filename,
 				hash: magnetInfo.hash,
 				bytes: magnetInfo.size,
+				seeders: magnetInfo.seeders,
 				progress,
 				status,
 				serviceStatus,

@@ -6,15 +6,17 @@ export function isSlowOrNoLinks(t: UserTorrent) {
 	const now = new Date();
 	const ageInMillis = now.getTime() - addedDate.getTime();
 	return (
-		(t.links.length === 0 && t.progress === 100) ||
-		(t.progress !== 100 && ageInMillis >= oldTorrentAge && t.seeders === 0)
+		(t.links.length === 0 && t.status === UserTorrentStatus.finished) ||
+		(t.status === UserTorrentStatus.downloading &&
+			ageInMillis >= oldTorrentAge &&
+			t.seeders === 0)
 	);
 }
 
 export function isInProgress(t: UserTorrent) {
-	return t.status === UserTorrentStatus.downloading;
+	return t.status === UserTorrentStatus.downloading || t.status === UserTorrentStatus.waiting;
 }
 
 export function isFailed(t: UserTorrent) {
-	return /error|dead|virus/.test(t.status);
+	return t.status === UserTorrentStatus.error;
 }
