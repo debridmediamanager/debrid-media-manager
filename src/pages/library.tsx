@@ -446,10 +446,7 @@ function TorrentsPage() {
 	}
 
 	function sortedData() {
-		if (!sortBy.column) {
-			return filteredList;
-		}
-		filteredList.sort((a, b) => {
+		return filteredList.sort((a, b) => {
 			const isAsc = sortBy.direction === 'asc';
 			let comparison = 0;
 			if (a[sortBy.column] > b[sortBy.column]) {
@@ -465,7 +462,6 @@ function TorrentsPage() {
 
 			return isAsc ? comparison : comparison * -1;
 		});
-		return filteredList;
 	}
 
 	function currentPageData() {

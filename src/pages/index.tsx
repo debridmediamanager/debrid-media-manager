@@ -123,7 +123,10 @@ function IndexPage() {
 							Welcome back,{' '}
 							{rdUser ? (
 								<>
-									Real-Debrid: {rdUser.username} {rdUser.premium ? '✅' : '❌'}
+									<span className="bg-[#b5d496] text-green-800 text-sm px-1">
+										Real-Debrid
+									</span>{' '}
+									{rdUser.username} {rdUser.premium ? '✅' : '❌'}
 								</>
 							) : (
 								<Link
@@ -135,7 +138,10 @@ function IndexPage() {
 							)}{' '}
 							{adUser ? (
 								<>
-									AllDebrid: {adUser.username} {adUser.isPremium ? '✅' : '❌'}
+									<span className="bg-[#fbc730] text-yellow-800 text-sm px-1">
+										AllDebrid
+									</span>{' '}
+									{adUser.username} {adUser.isPremium ? '✅' : '❌'}
 								</>
 							) : (
 								<Link
@@ -145,9 +151,13 @@ function IndexPage() {
 									Login with AllDebrid
 								</Link>
 							)}{' '}
-							{traktToken ? (
+							{traktUser ? (
 								<>
-									Trakt: <span className="text-green-500">✅</span>
+									<span className="bg-[#ed161f] text-white text-sm px-1">
+										Trakt
+									</span>{' '}
+									{traktUser.user.username}{' '}
+									<span className="text-green-500">✅</span>
 								</>
 							) : (
 								<button
@@ -238,19 +248,17 @@ function IndexPage() {
 						</div>
 
 						<div className="mb-2 h-max text-center leading-10">
-							{allowMagnetHandling() && (
-								<button
-									className="mx-1 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs"
-									onClick={() => handleDefaultClient()}
-								>
-									🧲 Set as default client
-								</button>
-							)}
 							<button
 								className="mx-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded text-xs"
 								onClick={() => chooseYourPlayer()}
 							>
-								👀 Choose your player
+								🎬 Choose player
+							</button>
+							<button
+								className="mx-1 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs"
+								onClick={() => chooseYourPlayer()}
+							>
+								🛠️ Set quality prefs
 							</button>
 							<button
 								className="mx-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded text-xs"
@@ -335,6 +343,14 @@ function IndexPage() {
 						</div>
 
 						<div className="mb-2 h-max text-center leading-10">
+							{allowMagnetHandling() && (
+								<button
+									className="mx-1 bg-black hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs"
+									onClick={() => handleDefaultClient()}
+								>
+									🧲 Make DMM your torrent client
+								</button>
+							)}
 							{rdUser && (
 								<button
 									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
