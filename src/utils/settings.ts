@@ -1,13 +1,14 @@
 import Swal from 'sweetalert2';
 
 export const defaultPlayer = 'web/rd';
+export const defaultSize = '5';
 
 export const showSettings = async () => {
 	const storedPlayer = window.localStorage.getItem('player') || defaultPlayer;
 	const isPlayer = (player: string) =>
 		storedPlayer === player ? `value="${player}" selected` : `value="${player}"`;
 
-	const storedMaxSize = window.localStorage.getItem('maxSize') || '5';
+	const storedMaxSize = window.localStorage.getItem('maxSize') || defaultSize;
 	const isSize = (size: string) =>
 		storedMaxSize === size ? `value="${size}" selected` : `value="${size}"`;
 

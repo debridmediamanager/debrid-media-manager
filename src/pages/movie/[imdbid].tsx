@@ -2,7 +2,6 @@ import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/cast';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/realDebrid';
-import { SearchProfile } from '@/services/searchProfile';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
@@ -11,7 +10,7 @@ import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { borderColor, btnColor, btnIcon, fileSize, sortByBiggest } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
-import { defaultPlayer } from '@/utils/settings';
+import { defaultPlayer, defaultSize } from '@/utils/settings';
 import { showInfoForRD } from '@/utils/showInfo';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
@@ -45,14 +44,11 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	year,
 	imdb_score,
 }) => {
+	const player = window.localStorage.getItem('player') || defaultPlayer;
+	const biggestSize = window.localStorage.getItem('maxSize') || defaultSize;
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-	const [searchProfile, setSearchProfile] = useState<SearchProfile>({
-		stringSearch: '',
-		lowerBound: 0,
-		upperBound: Number.MAX_SAFE_INTEGER,
-	});
 	const [errorMessage, setErrorMessage] = useState('');
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
@@ -237,13 +233,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			speed: 0,
 			seeders: 0,
 		} as TorrentInfoResponse;
-		showInfoForRD(
-			window.localStorage.getItem('player') || defaultPlayer,
-			rdKey!,
-			info,
-			dmmCastToken ?? '',
-			imdbid as string
-		);
+		rdKey && showInfoForRD(player, rdKey, info, dmmCastToken ?? '', imdbid as string);
 	};
 
 	return (
@@ -387,14 +377,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 													Add&nbsp;to&nbsp;RD&nbsp;library
 												</button>
 											)}
-											{r.rdAvailable && (
-												<button
-													className="bg-sky-500 hover:bg-sky-700 text-white rounded inline px-1"
-													onClick={() => handleShowInfo(r)}
-												>
-													👀 Look Inside
-												</button>
-											)}
 
 											{/* AD */}
 											{adKey && inLibrary('ad', r.hash) && (
@@ -413,6 +395,15 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 												>
 													{btnIcon(r.adAvailable)}
 													Add&nbsp;to&nbsp;AD&nbsp;library
+												</button>
+											)}
+
+											{(r.rdAvailable || r.adAvailable) && (
+												<button
+													className="bg-sky-500 hover:bg-sky-700 text-white rounded inline px-1"
+													onClick={() => handleShowInfo(r)}
+												>
+													👀 Look Inside
 												</button>
 											)}
 										</div>
