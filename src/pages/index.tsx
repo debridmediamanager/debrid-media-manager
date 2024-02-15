@@ -1,7 +1,6 @@
 import { useCurrentUser } from '@/hooks/auth';
-import useLocalStorage from '@/hooks/localStorage';
 import { getTerms } from '@/utils/browseTerms';
-import { chooseYourPlayer } from '@/utils/chooseYourPlayer';
+import { showSettings } from '@/utils/settings';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
@@ -13,7 +12,6 @@ import { Toaster, toast } from 'react-hot-toast';
 function IndexPage() {
 	const router = useRouter();
 	const { rdUser, adUser, rdError, adError, traktUser, traktError } = useCurrentUser();
-	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [deleting, setDeleting] = useState(false);
 	const [browseTerms] = useState(getTerms(2));
 
@@ -49,34 +47,10 @@ function IndexPage() {
 		}
 	};
 
-	const allowMagnetHandling = (): boolean => {
-		const userAgent = navigator.userAgent;
-		const isMobile = /Mobi|Android/i.test(userAgent);
-
-		// Add conditions for supported browsers
-		const isChrome = /Chrome/.test(userAgent) && !isMobile;
-		const isEdge = /Edg/.test(userAgent) && !isMobile;
-		const isFirefox = /Firefox/.test(userAgent);
-		const isOpera = /OPR/.test(userAgent) && !isMobile;
-
-		return isChrome || isEdge || isFirefox || isOpera;
-	};
-
 	const handleTraktLogin = async () => {
 		// generate authorization url
 		const authUrl = `/api/trakt/auth?redirect=${window.location.origin}`;
 		router.push(authUrl);
-	};
-
-	const handleDefaultClient = async () => {
-		try {
-			navigator.registerProtocolHandler(
-				'magnet',
-				`${window.location.origin}/library?addMagnet=%s`
-			);
-		} catch (err: unknown) {
-			toast.error('Your browser does not support this feature.', genericToastOptions);
-		}
 	};
 
 	const handleClearCache = async () => {
@@ -120,7 +94,6 @@ function IndexPage() {
 					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager</h1>
 					<div className="flex flex-col items-center">
 						<div className="text-md font-bold mb-4 w-screen text-center">
-							Welcome back,{' '}
 							{rdUser ? (
 								<>
 									<span className="bg-[#b5d496] text-green-800 text-sm px-1">
@@ -180,14 +153,14 @@ function IndexPage() {
 							<Link
 								href="https://hashlists.debridmediamanager.com"
 								target="_blank"
-								className="text-md m-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="text-md m-1 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
-								#️⃣ Hash lists
+								🚀 Hash lists
 							</Link>
 
 							<Link
 								href="/search"
-								className="text-md m-1 bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="text-md m-1 bg-fuchsia-800 hover:bg-fuchsia-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 							>
 								🔎 Search
 							</Link>
@@ -200,6 +173,14 @@ function IndexPage() {
 									🔮 Stremio
 								</Link>
 							)}
+
+							<Link
+								href=""
+								onClick={() => showSettings()}
+								className="text-md m-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+							>
+								⚙️ Settings
+							</Link>
 						</div>
 
 						<div className="mb-2 h-max text-center leading-10">
@@ -245,27 +226,6 @@ function IndexPage() {
 							>
 								🧏🏻‍♀️ my lists
 							</Link>
-						</div>
-
-						<div className="mb-2 h-max text-center leading-10">
-							<button
-								className="mx-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded text-xs"
-								onClick={() => chooseYourPlayer()}
-							>
-								🎬 Choose player
-							</button>
-							<button
-								className="mx-1 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs"
-								onClick={() => chooseYourPlayer()}
-							>
-								🛠️ Set quality prefs
-							</button>
-							<button
-								className="mx-1 bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded text-xs"
-								onClick={() => handleClearCache()}
-							>
-								💦 Clear library cache
-							</button>
 						</div>
 
 						<div className="text-sm mb-1 text-center">
@@ -343,14 +303,12 @@ function IndexPage() {
 						</div>
 
 						<div className="mb-2 h-max text-center leading-10">
-							{allowMagnetHandling() && (
-								<button
-									className="mx-1 bg-black hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs"
-									onClick={() => handleDefaultClient()}
-								>
-									🧲 Make DMM your torrent client
-								</button>
-							)}
+							<button
+								className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
+								onClick={() => handleClearCache()}
+							>
+								Clear library cache
+							</button>
 							{rdUser && (
 								<button
 									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"

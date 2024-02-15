@@ -13,7 +13,6 @@ import {
 	handleSelectFilesInRd,
 } from '@/utils/addMagnet';
 import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
-import { defaultPlayer } from '@/utils/chooseYourPlayer';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { extractHashes } from '@/utils/extractHashes';
@@ -24,6 +23,7 @@ import { localRestore } from '@/utils/localRestore';
 import { applyQuickSearch } from '@/utils/quickSearch';
 import { torrentPrefix } from '@/utils/results';
 import { checkArithmeticSequenceInFilenames } from '@/utils/selectable';
+import { defaultPlayer } from '@/utils/settings';
 import { showInfoForAD, showInfoForRD } from '@/utils/showInfo';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { shortenNumber } from '@/utils/speed';
@@ -135,11 +135,6 @@ function TorrentsPage() {
 	}, [router]);
 
 	const fetchLatestRDTorrents = async function (customLimit?: number) {
-		if (!rdKey) {
-			setLoading(false);
-			setRdSyncing(false);
-			return;
-		}
 		const oldTorrents = await torrentDB.all();
 		const oldIds = new Set(
 			oldTorrents.map((torrent) => torrent.id).filter((id) => id.startsWith('rd:'))
@@ -151,31 +146,55 @@ function TorrentsPage() {
 				.filter((id) => id.startsWith('rd:'))
 		);
 		const newIds = new Set();
-		await fetchRealDebrid(
-			rdKey,
-			async (torrents: UserTorrent[]) => {
-				torrents.forEach((torrent) => newIds.add(torrent.id));
-				const newTorrents = torrents.filter((torrent) => !oldIds.has(torrent.id));
-				setUserTorrentsList((prev) => {
-					return [...prev, ...newTorrents];
-				});
-				// add all new torrents to the database
-				await torrentDB.addAll(newTorrents);
-				// refresh the torrents that are in progress
-				await torrentDB.addAll(
-					torrents.filter(
+
+		if (!rdKey) {
+			setLoading(false);
+			setRdSyncing(false);
+		} else {
+			await fetchRealDebrid(
+				rdKey,
+				async (torrents: UserTorrent[]) => {
+					// add all new torrents to the database
+					torrents.forEach((torrent) => newIds.add(torrent.id));
+					const newTorrents = torrents.filter((torrent) => !oldIds.has(torrent.id));
+					setUserTorrentsList((prev) => {
+						return [...prev, ...newTorrents];
+					});
+					await torrentDB.addAll(newTorrents);
+
+					// refresh the torrents that are in progress
+					const inProgressTorrents = torrents.filter(
 						(torrent) =>
 							torrent.status === UserTorrentStatus.waiting ||
 							torrent.status === UserTorrentStatus.downloading ||
 							inProgressIds.has(torrent.id)
-					)
-				);
-				setLoading(false);
-			},
-			customLimit
-		);
-		setRdSyncing(false);
-		if (customLimit) return;
+					);
+					setUserTorrentsList((prev) => {
+						return prev.map((t) => {
+							const found = inProgressTorrents.find((i) => i.id === t.id);
+							if (found) {
+								return found;
+							}
+							return t;
+						});
+					});
+					await torrentDB.addAll(inProgressTorrents);
+
+					setLoading(false);
+				},
+				customLimit
+			);
+			setRdSyncing(false);
+
+			// this is just a small sync
+			if (customLimit) return;
+
+			toast.success(
+				`Updated ${newIds.size} torrents in your Real-Debrid library`,
+				libraryToastOptions
+			);
+		}
+
 		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
 		await Promise.all(
 			toDelete.map(async (id) => {
@@ -187,18 +206,9 @@ function TorrentsPage() {
 				});
 			})
 		);
-		toast.success(
-			`Updated ${newIds.size} torrents in your Real-Debrid library`,
-			libraryToastOptions
-		);
 	};
 
 	const fetchLatestADTorrents = async function () {
-		if (!adKey) {
-			setLoading(false);
-			setAdSyncing(false);
-			return;
-		}
 		const oldTorrents = await torrentDB.all();
 		const oldIds = new Set(
 			oldTorrents.map((torrent) => torrent.id).filter((id) => id.startsWith('ad:'))
@@ -210,26 +220,47 @@ function TorrentsPage() {
 				.filter((id) => id.startsWith('ad:'))
 		);
 		const newIds = new Set();
-		await fetchAllDebrid(adKey, async (torrents: UserTorrent[]) => {
-			torrents.forEach((torrent) => newIds.add(torrent.id));
-			const newTorrents = torrents.filter((torrent) => !oldIds.has(torrent.id));
-			setUserTorrentsList((prev) => {
-				return [...prev, ...newTorrents];
-			});
-			// add all new torrents to the database
-			await torrentDB.addAll(newTorrents);
-			// refresh the torrents that are in progress
-			await torrentDB.addAll(
-				torrents.filter(
+
+		if (!adKey) {
+			setLoading(false);
+			setAdSyncing(false);
+		} else {
+			await fetchAllDebrid(adKey, async (torrents: UserTorrent[]) => {
+				// add all new torrents to the database
+				torrents.forEach((torrent) => newIds.add(torrent.id));
+				const newTorrents = torrents.filter((torrent) => !oldIds.has(torrent.id));
+				setUserTorrentsList((prev) => {
+					return [...prev, ...newTorrents];
+				});
+				await torrentDB.addAll(newTorrents);
+
+				// refresh the torrents that are in progress
+				const inProgressTorrents = torrents.filter(
 					(torrent) =>
 						torrent.status === UserTorrentStatus.waiting ||
 						torrent.status === UserTorrentStatus.downloading ||
 						inProgressIds.has(torrent.id)
-				)
+				);
+				setUserTorrentsList((prev) => {
+					return prev.map((t) => {
+						const found = inProgressTorrents.find((i) => i.id === t.id);
+						if (found) {
+							return found;
+						}
+						return t;
+					});
+				});
+				await torrentDB.addAll(inProgressTorrents);
+
+				setLoading(false);
+			});
+			setAdSyncing(false);
+			toast.success(
+				`Updated ${newIds.size} torrents in your AllDebrid library`,
+				libraryToastOptions
 			);
-			setLoading(false);
-		});
-		setAdSyncing(false);
+		}
+
 		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
 		await Promise.all(
 			toDelete.map(async (id) => {
@@ -240,10 +271,6 @@ function TorrentsPage() {
 					return new Set(prev);
 				});
 			})
-		);
-		toast.success(
-			`Updated ${newIds.size} torrents in your AllDebrid library`,
-			libraryToastOptions
 		);
 	};
 
@@ -262,6 +289,7 @@ function TorrentsPage() {
 			setLoading(false);
 		}
 		await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents()]);
+		selectPlayableFiles(userTorrentsList);
 	}
 	useEffect(() => {
 		initialize();
@@ -433,7 +461,6 @@ function TorrentsPage() {
 					}.`
 				);
 		}
-		selectPlayableFiles(tmpList);
 		setFiltering(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query, userTorrentsList, loading, grouping, query, currentPage, uncachedRdHashes]);
