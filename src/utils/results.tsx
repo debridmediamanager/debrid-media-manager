@@ -1,6 +1,5 @@
 import { SearchResult } from '@/services/mediasearch';
 import { FaDownload, FaFastForward } from 'react-icons/fa';
-import { isVideo } from './selectable';
 
 export const borderColor = (downloaded: boolean, downloading: boolean) =>
 	downloaded
@@ -33,24 +32,19 @@ export const btnIcon = (avail: boolean) =>
 	avail ? <FaFastForward className="mr-2 inline" /> : <FaDownload className="mr-2 inline" />;
 
 export const sortByFileSize = (searchResults: SearchResult[]): SearchResult[] => {
-	const results = searchResults.map((r) => ({
-		...r,
-		biggestFileSize: Math.max(...r.files.map((f) => f.filesize / 1024 / 1024)),
-		fileCount: r.files.filter((f) => isVideo({ path: f.filename })).length,
-	}));
-	results.sort((a, b) => {
-		const aSort = a.fileCount > 0 ? a.biggestFileSize * 1024 : a.fileSize;
-		const bSort = b.fileCount > 0 ? b.biggestFileSize * 1024 : b.fileSize;
+	searchResults.sort((a, b) => {
+		const aSort = a.videoCount > 0 ? a.medianFileSize * a.videoCount : a.fileSize; // Use medianFileSize for sorting
+		const bSort = b.videoCount > 0 ? b.medianFileSize * b.videoCount : b.fileSize; // Use medianFileSize for sorting
 		if (aSort !== bSort) {
 			return bSort - aSort;
 		}
-		if (a.fileCount !== b.fileCount) {
-			return b.fileCount - a.fileCount;
+		if (a.videoCount !== b.videoCount) {
+			return b.videoCount - a.videoCount;
 		}
 		if (a.fileSize !== b.fileSize) {
 			return b.fileSize - a.fileSize;
 		}
 		return a.title.localeCompare(b.title);
 	});
-	return results;
+	return searchResults;
 };

@@ -45,6 +45,17 @@ export const instantCheckInRd = async (
 					}
 				});
 				torrent.files = Object.values(files);
+				const sortedFileSizes = torrent.files
+					.map((f) => f.filesize / 1024 / 1024)
+					.sort((a, b) => a - b);
+				const mid = Math.floor(sortedFileSizes.length / 2);
+				torrent.medianFileSize =
+					torrent.medianFileSize ?? sortedFileSizes.length % 2 !== 0
+						? sortedFileSizes[mid]
+						: (sortedFileSizes[mid - 1] + sortedFileSizes[mid]) / 2;
+				torrent.videoCount = torrent.files.filter((f) =>
+					isVideo({ path: f.filename })
+				).length;
 				torrent.noVideos = !torrent.files.some((file) => isVideo({ path: file.filename }));
 				// because it has variants and there's at least 1 video file
 				if (!torrent.noVideos) {
@@ -144,6 +155,35 @@ export const instantCheckInAd = async (
 					}, true);
 				};
 
+				torrent.files = magnetData.files
+					.map((file, index) => {
+						if (file.e && file.e.length > 0) {
+							return file.e.map((f, i) => {
+								return {
+									fileId: index,
+									filename: f.n,
+									filesize: f.s,
+								};
+							});
+						}
+						return {
+							fileId: index,
+							filename: file.n,
+							filesize: file.s,
+						};
+					})
+					.flat();
+				const sortedFileSizes = torrent.files
+					.map((f) => f.filesize / 1024 / 1024)
+					.sort((a, b) => a - b);
+				const mid = Math.floor(sortedFileSizes.length / 2);
+				torrent.medianFileSize =
+					torrent.medianFileSize ?? sortedFileSizes.length % 2 !== 0
+						? sortedFileSizes[mid]
+						: (sortedFileSizes[mid - 1] + sortedFileSizes[mid]) / 2;
+				torrent.videoCount = torrent.files.filter((f) =>
+					isVideo({ path: f.filename })
+				).length;
 				torrent.noVideos = checkVideoInFiles(magnetData.files);
 				if (!torrent.noVideos && magnetData.instant) {
 					torrent.adAvailable = true;

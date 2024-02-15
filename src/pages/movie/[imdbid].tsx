@@ -353,12 +353,12 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										</h2>
 
 										<div className="text-gray-300">
-											Size: {fileSize(r.fileSize)} GB
+											Total: {fileSize(r.fileSize)} GB
 										</div>
-										{r.fileCount > 0 && (
+										{r.videoCount > 0 && (
 											<span className="text-gray-300 mt-0 text-sm">
-												Biggest File: {fileSize(r.biggestFileSize)} GB (
-												{r.fileCount} 📂)
+												Median: {fileSize(r.medianFileSize)} GB (
+												{r.videoCount} 📂)
 											</span>
 										)}
 
