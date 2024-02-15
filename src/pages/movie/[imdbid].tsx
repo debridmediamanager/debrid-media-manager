@@ -9,7 +9,7 @@ import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
-import { borderColor, btnColor, btnIcon, fileSize, sortByFileSize } from '@/utils/results';
+import { borderColor, btnColor, btnIcon, fileSize, sortByBiggest } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { defaultPlayer } from '@/utils/settings';
 import { showInfoForRD } from '@/utils/showInfo';
@@ -87,7 +87,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const response = await axios.get<SearchApiResponse>(endpoint);
 			if (response.status !== 200) {
-				setSearchState(response.headers.status ?? 'loaded');
 				return;
 			}
 
@@ -116,7 +115,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 						wrapLoading('AD', instantCheckInAd(adKey, hashArr, setSearchResults))
 					);
 				const counts = await Promise.all(instantChecks);
-				setSearchState('loaded');
 				setUncachedCount(hashArr.length - counts.reduce((acc, cur) => acc + cur, 0));
 			} else {
 				toast(`No results found`, searchToastOptions);
@@ -131,9 +129,9 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 
 	// sort search results by size
 	useEffect(() => {
-		setSearchResults(sortByFileSize(searchResults));
+		setSearchResults(sortByBiggest(searchResults));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [searchState]);
+	}, [searchResults]);
 
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	async function fetchHashAndProgress(hash?: string) {
@@ -357,7 +355,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										</div>
 										{r.videoCount > 0 && (
 											<span className="text-gray-300 mt-0 text-sm">
-												Median: {fileSize(r.medianFileSize)} GB (
+												Biggest: {fileSize(r.biggestFileSize)} GB (
 												{r.videoCount} 📂)
 											</span>
 										)}

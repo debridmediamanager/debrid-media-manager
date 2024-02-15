@@ -31,10 +31,28 @@ export const torrentPrefix = (id: string) =>
 export const btnIcon = (avail: boolean) =>
 	avail ? <FaFastForward className="mr-2 inline" /> : <FaDownload className="mr-2 inline" />;
 
-export const sortByFileSize = (searchResults: SearchResult[]): SearchResult[] => {
+export const sortByMedian = (searchResults: SearchResult[]): SearchResult[] => {
 	searchResults.sort((a, b) => {
-		const aSort = a.videoCount > 0 ? a.medianFileSize * a.videoCount : a.fileSize; // Use medianFileSize for sorting
-		const bSort = b.videoCount > 0 ? b.medianFileSize * b.videoCount : b.fileSize; // Use medianFileSize for sorting
+		const aSort = a.videoCount > 0 ? a.medianFileSize * Math.pow(10, a.videoCount) : a.fileSize;
+		const bSort = b.videoCount > 0 ? b.medianFileSize * Math.pow(10, b.videoCount) : b.fileSize;
+		if (aSort !== bSort) {
+			return bSort - aSort;
+		}
+		if (a.videoCount !== b.videoCount) {
+			return b.videoCount - a.videoCount;
+		}
+		if (a.fileSize !== b.fileSize) {
+			return b.fileSize - a.fileSize;
+		}
+		return a.title.localeCompare(b.title);
+	});
+	return searchResults;
+};
+
+export const sortByBiggest = (searchResults: SearchResult[]): SearchResult[] => {
+	searchResults.sort((a, b) => {
+		const aSort = a.videoCount > 0 ? a.biggestFileSize * 1_000_000 : a.fileSize;
+		const bSort = b.videoCount > 0 ? b.biggestFileSize * 1_000_000 : b.fileSize;
 		if (aSort !== bSort) {
 			return bSort - aSort;
 		}
