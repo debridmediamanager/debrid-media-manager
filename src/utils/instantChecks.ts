@@ -45,7 +45,8 @@ export const instantCheckInRd = async (
 					}
 				});
 				torrent.files = Object.values(files);
-				const sortedFileSizes = torrent.files
+				const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
+				const sortedFileSizes = videoFiles
 					.map((f) => f.filesize / 1024 / 1024)
 					.sort((a, b) => a - b);
 				const mid = Math.floor(sortedFileSizes.length / 2);
@@ -53,9 +54,8 @@ export const instantCheckInRd = async (
 					torrent.medianFileSize ?? sortedFileSizes.length % 2 !== 0
 						? sortedFileSizes[mid]
 						: (sortedFileSizes[mid - 1] + sortedFileSizes[mid]) / 2;
-				torrent.videoCount = torrent.files.filter((f) =>
-					isVideo({ path: f.filename })
-				).length;
+				torrent.biggestFileSize = sortedFileSizes[sortedFileSizes.length - 1];
+				torrent.videoCount = videoFiles.filter((f) => isVideo({ path: f.filename })).length;
 				torrent.noVideos = !torrent.files.some((file) => isVideo({ path: file.filename }));
 				// because it has variants and there's at least 1 video file
 				if (!torrent.noVideos) {
@@ -173,7 +173,8 @@ export const instantCheckInAd = async (
 						};
 					})
 					.flat();
-				const sortedFileSizes = torrent.files
+				const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
+				const sortedFileSizes = videoFiles
 					.map((f) => f.filesize / 1024 / 1024)
 					.sort((a, b) => a - b);
 				const mid = Math.floor(sortedFileSizes.length / 2);
@@ -181,9 +182,8 @@ export const instantCheckInAd = async (
 					torrent.medianFileSize ?? sortedFileSizes.length % 2 !== 0
 						? sortedFileSizes[mid]
 						: (sortedFileSizes[mid - 1] + sortedFileSizes[mid]) / 2;
-				torrent.videoCount = torrent.files.filter((f) =>
-					isVideo({ path: f.filename })
-				).length;
+				torrent.biggestFileSize = sortedFileSizes[sortedFileSizes.length - 1];
+				torrent.videoCount = videoFiles.length;
 				torrent.noVideos = checkVideoInFiles(magnetData.files);
 				if (!torrent.noVideos && magnetData.instant) {
 					torrent.adAvailable = true;

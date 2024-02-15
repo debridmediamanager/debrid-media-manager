@@ -8,7 +8,7 @@ import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
-import { borderColor, btnColor, btnIcon, fileSize, sortByFileSize } from '@/utils/results';
+import { borderColor, btnColor, btnIcon, fileSize, sortByMedian } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { defaultPlayer } from '@/utils/settings';
 import { showInfoForRD } from '@/utils/showInfo';
@@ -134,9 +134,9 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 
 	// sort search results by size
 	useEffect(() => {
-		setSearchResults(sortByFileSize(searchResults));
+		setSearchResults(sortByMedian(searchResults));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [searchState]);
+	}, [searchResults]);
 
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	async function fetchHashAndProgress(hash?: string) {
