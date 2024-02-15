@@ -9,7 +9,7 @@ import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { borderColor, btnColor, btnIcon, fileSize, sortByMedian } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
-import { defaultPlayer, defaultSize } from '@/utils/settings';
+import { defaultEpisodeSize, defaultPlayer } from '@/utils/settings';
 import { showInfoForRD } from '@/utils/showInfo';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
@@ -46,7 +46,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	imdb_score,
 }) => {
 	const player = window.localStorage.getItem('player') || defaultPlayer;
-	const biggestSize = window.localStorage.getItem('maxSize') || defaultSize;
+	const episodeMaxSize = window.localStorage.getItem('episodeMaxSize') || defaultEpisodeSize;
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -349,97 +349,105 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			)}
 			{searchResults.length > 0 && (
 				<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-					{searchResults
-						.filter(
-							(result) => !onlyShowCached || result.rdAvailable || result.adAvailable
+					{searchResults.map((r: SearchResult, i: number) => {
+						const downloaded = isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
+						const downloading =
+							isDownloading('rd', r.hash) || isDownloading('ad', r.hash);
+						const inYourLibrary = downloaded || downloading;
+						if (onlyShowCached && !r.rdAvailable && !r.adAvailable && !inYourLibrary)
+							return;
+						if (
+							episodeMaxSize !== '0' &&
+							(r.medianFileSize ?? r.fileSize) > parseFloat(episodeMaxSize) * 1024 &&
+							!inYourLibrary
 						)
-						.map((r: SearchResult, i: number) => {
-							const rdColor = btnColor(r.rdAvailable, r.noVideos);
-							const adColor = btnColor(r.adAvailable, r.noVideos);
-							return (
-								<div
-									key={i}
-									className={`${borderColor(
-										isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash),
-										isDownloading('rd', r.hash) || isDownloading('ad', r.hash)
-									)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
-								>
-									<div className="p-2 space-y-4">
-										<h2 className="text-xl font-bold leading-tight break-words">
-											{r.title}
-										</h2>
+							return;
+						const rdColor = btnColor(r.rdAvailable, r.noVideos);
+						const adColor = btnColor(r.adAvailable, r.noVideos);
+						return (
+							<div
+								key={i}
+								className={`${borderColor(
+									isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash),
+									isDownloading('rd', r.hash) || isDownloading('ad', r.hash)
+								)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
+							>
+								<div className="p-2 space-y-4">
+									<h2 className="text-xl font-bold leading-tight break-words">
+										{r.title}
+									</h2>
 
-										<div className="text-gray-300">
-											Total: {fileSize(r.fileSize)} GB
-										</div>
-										{r.videoCount > 0 && (
-											<span className="text-gray-300 mt-0 text-sm">
-												Median: {fileSize(r.medianFileSize)} GB (
-												{r.videoCount} 📂)
-											</span>
+									<div className="text-gray-300">
+										Total: {fileSize(r.fileSize)} GB
+									</div>
+									{r.videoCount > 0 && (
+										<span className="text-gray-300 mt-0 text-sm">
+											Median: {fileSize(r.medianFileSize)} GB ({r.videoCount}{' '}
+											📂)
+										</span>
+									)}
+
+									<div className="space-x-2 space-y-2">
+										<button
+											className="bg-pink-500 hover:bg-pink-700 text-white rounded inline px-1"
+											onClick={() => handleCopyMagnet(r.hash)}
+										>
+											<FaMagnet className="inline" /> Get&nbsp;magnet
+										</button>
+
+										{/* RD */}
+										{rdKey && inLibrary('rd', r.hash) && (
+											<button
+												className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
+												onClick={() => deleteRd(r.hash)}
+											>
+												<FaTimes className="mr-2 inline" />
+												RD ({hashAndProgress[`rd:${r.hash}`] + '%'})
+											</button>
+										)}
+										{rdKey && notInLibrary('rd', r.hash) && (
+											<button
+												className={`bg-${rdColor}-500 hover:bg-${rdColor}-700 text-white rounded inline px-1`}
+												onClick={() => addRd(r.hash)}
+											>
+												{btnIcon(r.rdAvailable)}
+												Add&nbsp;to&nbsp;RD&nbsp;library
+											</button>
 										)}
 
-										<div className="space-x-2 space-y-2">
+										{/* AD */}
+										{adKey && inLibrary('ad', r.hash) && (
 											<button
-												className="bg-pink-500 hover:bg-pink-700 text-white rounded inline px-1"
-												onClick={() => handleCopyMagnet(r.hash)}
+												className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
+												onClick={() => deleteAd(r.hash)}
 											>
-												<FaMagnet className="inline" /> Get&nbsp;magnet
+												<FaTimes className="mr-2 inline" />
+												AD ({hashAndProgress[`ad:${r.hash}`] + '%'})
 											</button>
+										)}
+										{adKey && notInLibrary('ad', r.hash) && (
+											<button
+												className={`bg-${adColor}-500 hover:bg-${adColor}-700 text-white rounded inline px-1`}
+												onClick={() => addAd(r.hash)}
+											>
+												{btnIcon(r.adAvailable)}
+												Add&nbsp;to&nbsp;AD&nbsp;library
+											</button>
+										)}
 
-											{/* RD */}
-											{rdKey && inLibrary('rd', r.hash) && (
-												<button
-													className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
-													onClick={() => deleteRd(r.hash)}
-												>
-													<FaTimes className="mr-2 inline" />
-													RD ({hashAndProgress[`rd:${r.hash}`] + '%'})
-												</button>
-											)}
-											{rdKey && notInLibrary('rd', r.hash) && (
-												<button
-													className={`bg-${rdColor}-500 hover:bg-${rdColor}-700 text-white rounded inline px-1`}
-													onClick={() => addRd(r.hash)}
-												>
-													{btnIcon(r.rdAvailable)}
-													Add&nbsp;to&nbsp;RD&nbsp;library
-												</button>
-											)}
-
-											{/* AD */}
-											{adKey && inLibrary('ad', r.hash) && (
-												<button
-													className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
-													onClick={() => deleteAd(r.hash)}
-												>
-													<FaTimes className="mr-2 inline" />
-													AD ({hashAndProgress[`ad:${r.hash}`] + '%'})
-												</button>
-											)}
-											{adKey && notInLibrary('ad', r.hash) && (
-												<button
-													className={`bg-${adColor}-500 hover:bg-${adColor}-700 text-white rounded inline px-1`}
-													onClick={() => addAd(r.hash)}
-												>
-													{btnIcon(r.adAvailable)}
-													Add&nbsp;to&nbsp;AD&nbsp;library
-												</button>
-											)}
-
-											{(r.rdAvailable || r.adAvailable) && (
-												<button
-													className="bg-sky-500 hover:bg-sky-700 text-white rounded inline px-1"
-													onClick={() => handleShowInfo(r)}
-												>
-													👀 Look Inside
-												</button>
-											)}
-										</div>
+										{(r.rdAvailable || r.adAvailable) && (
+											<button
+												className="bg-sky-500 hover:bg-sky-700 text-white rounded inline px-1"
+												onClick={() => handleShowInfo(r)}
+											>
+												👀 Look Inside
+											</button>
+										)}
 									</div>
 								</div>
-							);
-						})}
+							</div>
+						);
+					})}
 				</div>
 			)}
 		</div>
