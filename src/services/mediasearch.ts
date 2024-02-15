@@ -19,6 +19,7 @@ export type SearchResult = {
 	noVideos: boolean;
 	// for cached results in RD
 	medianFileSize: number;
+	biggestFileSize: number;
 	videoCount: number;
 };
 
