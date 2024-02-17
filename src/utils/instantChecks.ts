@@ -41,7 +41,7 @@ export const instantCheckInRd = async (
 				resp[torrent.hash]['rd'].forEach((variant) => {
 					for (const fileId in variant) {
 						if (fileId in files === false)
-							files[fileId] = { ...variant[fileId], fileId: parseInt(fileId) };
+							files[fileId] = { ...variant[fileId], fileId };
 					}
 				});
 				torrent.files = Object.values(files);
@@ -155,19 +155,20 @@ export const instantCheckInAd = async (
 					}, true);
 				};
 
+				let idx = 0;
 				torrent.files = magnetData.files
-					.map((file, index) => {
+					.map((file) => {
 						if (file.e && file.e.length > 0) {
-							return file.e.map((f, i) => {
+							return file.e.map((f) => {
 								return {
-									fileId: index,
+									fileId: idx++ + '',
 									filename: f.n,
 									filesize: f.s,
 								};
 							});
 						}
 						return {
-							fileId: index,
+							fileId: idx++ + '',
 							filename: file.n,
 							filesize: file.s,
 						};

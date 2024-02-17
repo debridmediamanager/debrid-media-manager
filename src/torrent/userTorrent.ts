@@ -23,6 +23,7 @@ export interface UserTorrent {
 	mediaType: 'movie' | 'tv';
 	info: ParsedFilename;
 	links: string[];
+	selectedFiles: SelectedFile[];
 	seeders: number;
 	speed: number;
 	rdData?: TorrentInfoResponse;
@@ -34,10 +35,11 @@ export interface CachedHash {
 	added: Date;
 }
 
-export interface TorrentFile {
+export interface SelectedFile {
 	fileId: string;
 	filename: string;
 	filesize: number;
+	link: string;
 }
 
 export const uniqId = (torrent: UserTorrent): string => `${torrent.hash}|${torrent.links.join()}`;

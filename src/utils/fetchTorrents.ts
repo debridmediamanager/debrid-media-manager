@@ -57,6 +57,7 @@ export const fetchRealDebrid = async (
 					speed: torrentInfo.speed || 0,
 					title: getMediaId(info, mediaType, false) || torrentInfo.filename,
 					cached: true,
+					selectedFiles: [],
 				};
 			}) as UserTorrent[];
 			await callback(torrents);
@@ -91,7 +92,7 @@ export const fetchAllDebrid = async (
 			const serviceStatus = `${magnetInfo.statusCode}`;
 			const [status, progress] = getAdStatus(magnetInfo);
 			if (magnetInfo.size === 0) magnetInfo.size = 1;
-
+			let idx = 0;
 			return {
 				// score: getReleaseTags(magnetInfo.filename, magnetInfo.size / ONE_GIGABYTE).score,
 				info,
@@ -109,6 +110,12 @@ export const fetchAllDebrid = async (
 				speed: magnetInfo.downloadSpeed || 0,
 				links: magnetInfo.links.map((l) => l.link),
 				adData: magnetInfo,
+				selectedFiles: magnetInfo.links.map((l) => ({
+					fileId: idx++ + '',
+					filename: l.filename,
+					filesize: l.size,
+					link: l.link,
+				})),
 			};
 		}) as UserTorrent[];
 		await callback(magnets);
