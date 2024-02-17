@@ -170,13 +170,13 @@ function TorrentsPage() {
 							inProgressIds.has(torrent.id)
 					);
 					setUserTorrentsList((prev) => {
-						return prev.map((t) => {
-							const found = inProgressTorrents.find((i) => i.id === t.id);
-							if (found) {
-								return found;
+						for (const t of inProgressTorrents) {
+							const idx = prev.findIndex((i) => i.id === t.id);
+							if (idx >= 0) {
+								prev[idx] = t;
 							}
-							return t;
-						});
+						}
+						return prev;
 					});
 					await torrentDB.addAll(inProgressTorrents);
 
@@ -289,7 +289,7 @@ function TorrentsPage() {
 			setLoading(false);
 		}
 		await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents()]);
-		selectPlayableFiles(userTorrentsList);
+		await selectPlayableFiles(userTorrentsList);
 	}
 	useEffect(() => {
 		initialize();
@@ -933,33 +933,63 @@ function TorrentsPage() {
 		}
 	};
 
+	const handleChangeType = async (t: UserTorrent) => {
+		t.mediaType = t.mediaType === 'tv' ? 'movie' : 'tv';
+		setUserTorrentsList((prev) => {
+			const idx = prev.findIndex((i) => i.id === t.id);
+			if (idx >= 0) {
+				prev[idx].mediaType = t.mediaType;
+			}
+			return prev;
+		});
+		await torrentDB.add(t);
+	};
+
 	const handleShowInfoForRD = async (t: UserTorrent) => {
 		const info = await getTorrentInfo(rdKey!, t.id.substring(3));
 		if (t.status === UserTorrentStatus.waiting || t.status === UserTorrentStatus.downloading) {
-			t.links = info.links;
-			t.seeders = info.seeders;
-			t.speed = info.speed;
-			t.status = getRdStatus(info);
-			t.serviceStatus = info.status;
-			t.progress = info.progress;
+			setUserTorrentsList((prev) => {
+				const idx = prev.findIndex((i) => i.id === t.id);
+				if (idx >= 0) {
+					prev[idx].progress = info.progress;
+					prev[idx].seeders = info.seeders;
+					prev[idx].speed = info.speed;
+					prev[idx].status = getRdStatus(info);
+					prev[idx].serviceStatus = info.status;
+					prev[idx].links = info.links;
+					const selectedFiles = info.files.filter((f) => f.selected);
+					prev[idx].selectedFiles = selectedFiles.map((f, idx) => ({
+						fileId: f.id,
+						filename: f.path,
+						filesize: f.bytes,
+						link: selectedFiles.length === info.links.length ? info.links[idx] : '',
+					}));
+				}
+				return prev;
+			});
 			await torrentDB.add(t);
 		}
 
 		const filenames = info.files.map((f) => f.path);
+		const torrentAndFiles = [t.filename, ...filenames];
+		const hasEpisodes = checkArithmeticSequenceInFilenames(filenames);
 		if (
-			(checkArithmeticSequenceInFilenames(filenames) && t.mediaType === 'movie') ||
-			some(filenames, (f) => /s\d\d\d?e\d\d\d?/i.test(f)) ||
-			some(filenames, (f) => /season \d+/i.test(f)) ||
-			some(filenames, (f) => /episode \d+/i.test(f)) ||
-			some(filenames, (f) => /\b[a-fA-F0-9]{8}\b/.test(f))
+			(hasEpisodes && t.mediaType === 'movie') ||
+			some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
+			some(torrentAndFiles, (f) => /season\s?\d+/i.test(f)) ||
+			some(torrentAndFiles, (f) => /episodes?\s?\d+/i.test(f)) ||
+			some(torrentAndFiles, (f) => /\b[a-fA-F0-9]{8}\b/.test(f))
 		) {
 			t.mediaType = 'tv';
 			t.info = filenameParse(t.filename, true);
 			await torrentDB.add(t);
 		} else if (
-			!checkArithmeticSequenceInFilenames(filenames) &&
+			!hasEpisodes &&
 			t.mediaType === 'tv' &&
-			every(filenames, (f) => !/s\d\d\d?e\d\d\d?/i.test(f))
+			every(torrentAndFiles, (f) => !/s\d\d\d?.?e\d\d\d?/i.test(f)) &&
+			every(torrentAndFiles, (f) => !/season\s?\d+/i.test(f)) &&
+			every(torrentAndFiles, (f) => !/episodes?\s?\d+/i.test(f)) &&
+			every(torrentAndFiles, (f) => !/\b[a-fA-F0-9]{8}\b/.test(f))
 		) {
 			t.mediaType = 'movie';
 			t.info = filenameParse(t.filename);
@@ -1309,9 +1339,15 @@ function TorrentsPage() {
 												torrent.filename
 											) && (
 												<>
-													<span className="cursor-pointer">
+													<div
+														className="cursor-pointer inline-block"
+														onClick={(e) => {
+															e.stopPropagation();
+															handleChangeType(torrent);
+														}}
+													>
 														{torrent.mediaType === 'tv' ? '📺' : '🎥'}
-													</span>
+													</div>
 													&nbsp;<strong>{torrent.title}</strong>{' '}
 													{filterText && (
 														<Link
