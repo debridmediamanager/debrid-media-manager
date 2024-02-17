@@ -4,7 +4,7 @@ export type SearchApiResponse = {
 };
 
 export interface FileData {
-	fileId: number;
+	fileId: string;
 	filename: string;
 	filesize: number;
 }

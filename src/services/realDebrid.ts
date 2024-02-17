@@ -93,7 +93,7 @@ export interface TorrentInfoResponse {
 	status: string;
 	added: string;
 	files: {
-		id: number;
+		id: string;
 		path: string;
 		bytes: number;
 		selected: number;
