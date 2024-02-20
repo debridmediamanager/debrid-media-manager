@@ -1335,7 +1335,7 @@ function TorrentsPage() {
 											}
 											className="px-1 py-1 text-sm truncate"
 										>
-											{!['Invalid Magnet', 'Magnet'].includes(
+											{!['Invalid Magnet', 'Magnet', 'noname'].includes(
 												torrent.filename
 											) && (
 												<>

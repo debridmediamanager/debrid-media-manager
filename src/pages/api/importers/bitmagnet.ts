@@ -97,14 +97,18 @@ const fetchShows = async () => {
 			// seasons: { '3': {} }
 			// }
 			console.log(`[${i}/${result.rows.length}] ${row.name}`);
-			Object.keys(row.seasons).forEach(async (season) => {
+			const promises: Promise<void>[] = [];
+			Object.keys(row.seasons).map((season): void => {
 				const scrape = {
 					title: row.name,
 					fileSize: parseInt(row.size) / 1024 / 1024,
 					hash: row.id.split(':')[0],
 				};
-				await db.saveScrapedTrueResults(`tv:${row.value}:${season}`, [scrape], true);
+				promises.push(
+					db.saveScrapedTrueResults(`tv:${row.value}:${season}`, [scrape], true)
+				);
 			});
+			await Promise.all(promises);
 			i++;
 		}
 
