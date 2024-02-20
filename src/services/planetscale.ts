@@ -36,6 +36,11 @@ export class PlanetScaleCache {
 				existingRecord.value as ScrapeSearchResult[],
 				value,
 			]);
+
+			updatedValue = updatedValue.filter((item) => item.hash.length === 40);
+			// filter hashes that ends with aaaaa
+			updatedValue = updatedValue.filter((item) => !item.hash.endsWith('aaaaa'));
+
 			updatedValue = sortByFileSize(updatedValue);
 			const newLength = updatedValue.length;
 			console.log(`📝 ${key}: +${newLength - origLength} results`);
