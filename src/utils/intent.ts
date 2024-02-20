@@ -30,10 +30,9 @@ export const getInstantIntent = async (
 				const biggestFileIdx = torrent.files.findIndex((f) => f.id === biggestFile.id);
 				link = torrent.links[biggestFileIdx] ?? torrent.links[0];
 			} else {
-				const intFileId = parseInt(fileId);
 				const fileIdx = torrent.files
 					.filter((f) => f.selected)
-					.findIndex((f) => f.id === intFileId);
+					.findIndex((f) => f.id === fileId);
 				link = torrent.links[fileIdx] ?? torrent.links[0];
 			}
 
