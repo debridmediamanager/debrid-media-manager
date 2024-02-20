@@ -111,10 +111,10 @@ const fetchRssAndDetails = async (
 			// Here you would fetch and log the details as before
 		}
 		scrapesMap.forEach(async (scrapes, key) => {
-			// const url = `https://debridmediamanager.com/${key
-			// 	.replaceAll(':', '/')
-			// 	.replaceAll('tv/', 'show/')}`;
-			// console.log(url, key, scrapes);
+			const url = `https://debridmediamanager.com/${key
+				.replaceAll(':', '/')
+				.replaceAll('tv/', 'show/')}`;
+			console.log(url, key, scrapes.length);
 			await pdb.saveScrapedTrueResults(key, scrapes, true);
 		});
 		return ids[0]; // Return the most recent ID to track it
