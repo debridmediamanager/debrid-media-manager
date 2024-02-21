@@ -1,7 +1,6 @@
 import { meetsTitleConditions } from '@/utils/checks';
+import { computeHashFromTorrent, extractHashFromMagnetLink } from '@/utils/extractHashFromTorrent';
 import axios from 'axios';
-import bencode from 'bencode';
-import { createHash } from 'crypto';
 import { ScrapeSearchResult } from './mediasearch';
 
 const jackettHost = process.env.JACKETT ?? 'http://localhost:9117';
@@ -18,49 +17,6 @@ const createSearchUrl = (finalQuery: string, mediaType: string) =>
 	`${jackettHost}/api/v2.0/indexers/all/results?apikey=${apikey}&Category%5B%5D=${
 		mediaType === 'movie' ? '2000' : '5000'
 	}&Query=${encodeURIComponent(finalQuery)}`;
-
-function extractHashFromMagnetLink(magnetLink: string) {
-	const regex = /urn:btih:([A-Fa-f0-9]+)/;
-	const match = magnetLink.match(regex);
-	if (match) {
-		return match[1].toLowerCase();
-	} else {
-		return undefined;
-	}
-}
-
-async function computeHashFromTorrent(url: string): Promise<string | undefined> {
-	try {
-		const response = await axios.get(url, {
-			maxRedirects: 0, // Set maxRedirects to 0 to disable automatic redirects
-			validateStatus: (status) => status >= 200 && status < 400,
-			responseType: 'arraybuffer',
-			timeout: 8888,
-		});
-
-		if (response.status === 302) {
-			const redirectURL = response.headers.location;
-			if (redirectURL.startsWith('magnet:')) {
-				// If the redirect URL is a magnet link, return it directly
-				return extractHashFromMagnetLink(redirectURL);
-			}
-		}
-
-		const info = bencode.decode(response.data).info;
-		const encodedInfo = bencode.encode(info);
-		const infoHash = createHash('sha1').update(encodedInfo).digest();
-		const magnetHash = Array.prototype.map
-			.call(new Uint8Array(infoHash), (byte) => {
-				return ('0' + byte.toString(16)).slice(-2);
-			})
-			.join('');
-
-		return magnetHash.toLowerCase();
-	} catch (error: any) {
-		console.error('getMagnetURI error:', error.message, url);
-		return undefined;
-	}
-}
 
 async function processItem(
 	item: any,
