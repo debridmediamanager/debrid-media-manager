@@ -100,7 +100,7 @@ const fetchRssAndDetails = async (
 				.replaceAll(':', '/')
 				.replaceAll('tv/', 'show/')}`;
 			console.log(url, key, scrapes);
-			// await pdb.saveScrapedTrueResults(key, scrapes, true);
+			await pdb.saveScrapedTrueResults(key, scrapes, true);
 		});
 		return ids[0]; // Return the most recent ID to track it
 	} catch (error) {
