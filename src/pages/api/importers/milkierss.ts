@@ -32,7 +32,6 @@ const fetchRssAndDetails = async (
 		const rssResponse = await fetch(rssUrl);
 		const rssContent = await rssResponse.text();
 		const ids = extractIds(rssContent);
-		console.log('IDS', ids.length);
 		const scrapesMap = new Map<string, any>();
 		for (const id of ids) {
 			if (id === lastId) {
@@ -108,13 +107,12 @@ const fetchRssAndDetails = async (
 			} else {
 				console.error('Unknown category', details.torrent);
 			}
-			// Here you would fetch and log the details as before
 		}
 		scrapesMap.forEach(async (scrapes, key) => {
 			const url = `https://debridmediamanager.com/${key
 				.replaceAll(':', '/')
 				.replaceAll('tv/', 'show/')}`;
-			console.log(url, key, scrapes.length);
+			console.log(url, key, scrapes);
 			await pdb.saveScrapedTrueResults(key, scrapes, true);
 		});
 		return ids[0]; // Return the most recent ID to track it
@@ -133,10 +131,8 @@ const startLoop = async (
 ) => {
 	let lastId = stopAtId;
 	while (true) {
-		console.log('Waking up');
 		const newLastId = await fetchRssAndDetails(rssUrl, bearerToken, lastId);
 		lastId = newLastId;
-		console.log('Sleeping for', interval, 'ms');
 		await sleep(interval);
 	}
 };
