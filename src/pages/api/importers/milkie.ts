@@ -31,7 +31,6 @@ const fetchContent = async (milkieToken: string): Promise<void> => {
 				nullCount = 0;
 				// get all ids and get details
 				const scrapesMap = new Map<string, any>();
-				let mediaType = 'unknown';
 				let imdbId: string | null = null;
 				for (const result of results) {
 					// console.log('Fetching', result.id);
@@ -55,7 +54,6 @@ const fetchContent = async (milkieToken: string): Promise<void> => {
 						continue;
 					}
 					if (details.torrent.category === 1) {
-						mediaType = 'movie';
 						// // movie
 						// console.log('Movie');
 						// console.log('Release name', details.torrent.releaseName);
@@ -73,7 +71,6 @@ const fetchContent = async (milkieToken: string): Promise<void> => {
 							scrapesMap.set(`movie:${imdbId}`, [scrape]);
 						}
 					} else if (details.torrent.category === 2) {
-						mediaType = 'tv';
 						// // tv
 						// console.log('TV');
 						// console.log('Release name', details.torrent.releaseName);
