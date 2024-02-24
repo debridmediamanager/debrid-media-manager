@@ -456,39 +456,63 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 
 const mdblistKey = process.env.MDBLIST_KEY;
 const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
+const getCinemetaInfo = (imdbId: string) =>
+	`https://v3-cinemeta.strem.io/meta/series/${imdbId}.json`;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { params } = context;
 	let season_count = 1;
 	let season_names = [];
 	let imdb_score;
-	const showResponse = await axios.get(getMdbInfo(params!.imdbid as string));
-	if (showResponse.data.type === 'show' && showResponse.data.seasons?.length !== 0) {
-		const seasons = showResponse.data.seasons.filter((season: any) => season.season_number > 0);
-		season_count = Math.max(...seasons.map((season: any) => season.season_number));
-		season_names = seasons.map((season: any) => season.name);
-		imdb_score = showResponse.data.ratings?.reduce((acc: number | undefined, rating: any) => {
-			if (rating.source === 'imdb') {
-				return rating.score as number;
-			}
-			return acc;
-		}, null);
-
-		if (params!.seasonNum && parseInt(params!.seasonNum as string) > season_count) {
-			return {
-				redirect: {
-					destination: `/show/${params!.imdbid}/1`,
-					permanent: false,
-				},
-			};
+	let mdbResponse = null;
+	let cinemetaResponse = null;
+	try {
+		cinemetaResponse = await axios.get(getCinemetaInfo(params!.imdbid as string));
+		if (cinemetaResponse.data.type === 'series') {
+			const seasons = cinemetaResponse.data.videos.filter((video: any) => video.season > 0);
+			const uniqueSeasons = Array.from(new Set(seasons.map((season: any) => season.season)));
+			season_names = cinemetaResponse.data.seasons.map((season: any) => season.name);
+			imdb_score = cinemetaResponse.data.imdbRating;
 		}
+	} catch (error) {
+		console.error('Error fetching cinemeta show info', error);
+	}
+	try {
+		mdbResponse = await axios.get(getMdbInfo(params!.imdbid as string));
+		if (mdbResponse.data.type === 'show' && mdbResponse.data.seasons?.length !== 0) {
+			const seasons = mdbResponse.data.seasons.filter(
+				(season: any) => season.season_number > 0
+			);
+			season_count = Math.max(...seasons.map((season: any) => season.season_number));
+			season_names = seasons.map((season: any) => season.name);
+			imdb_score = mdbResponse.data.ratings?.reduce(
+				(acc: number | undefined, rating: any) => {
+					if (rating.source === 'imdb') {
+						return rating.score as number;
+					}
+					return acc;
+				},
+				null
+			);
+
+			if (params!.seasonNum && parseInt(params!.seasonNum as string) > season_count) {
+				return {
+					redirect: {
+						destination: `/show/${params!.imdbid}/1`,
+						permanent: false,
+					},
+				};
+			}
+		}
+	} catch (error) {
+		console.error('Error fetching mdb show info', error);
 	}
 	return {
 		props: {
-			title: showResponse.data.title,
-			description: showResponse.data.description,
-			poster: showResponse.data.poster,
-			backdrop: showResponse.data.backdrop,
+			title: mdbResponse?.data?.title ?? '',
+			description: mdbResponse?.data?.description ?? '',
+			poster: mdbResponse?.data?.poster ?? '',
+			backdrop: mdbResponse?.data?.backdrop ?? '',
 			season_count,
 			season_names,
 			imdb_score: imdb_score ?? 0,
