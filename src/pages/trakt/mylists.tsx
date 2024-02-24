@@ -82,13 +82,15 @@ function TraktMyLists() {
 									return null;
 								}
 								const mediaType = item.movie ? 'movie' : 'show';
+								const title =
+									item.movie?.title || item.show?.title || (item as any).title;
 								return (
 									<Link
 										key={imdbid}
 										href={`/${mediaType}/${imdbid}`}
 										className=""
 									>
-										<Poster imdbId={imdbid} />
+										<Poster imdbId={imdbid} title={title} />
 									</Link>
 								);
 							})}

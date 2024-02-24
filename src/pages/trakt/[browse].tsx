@@ -81,9 +81,11 @@ export const TraktBrowse: FunctionComponent<TraktBrowseProps> = ({ mediaType, ar
 							if (!imdbid) {
 								return null;
 							}
+							const title =
+								item.movie?.title || item.show?.title || (item as any).title;
 							return (
 								<Link key={imdbid} href={`/${mediaType}/${imdbid}`} className="">
-									<Poster imdbId={imdbid} />
+									<Poster imdbId={imdbid} title={title} />
 								</Link>
 							);
 						})}

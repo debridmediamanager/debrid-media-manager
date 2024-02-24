@@ -31,7 +31,7 @@ const handler: NextApiHandler = async (req, res) => {
 		response[list.name] = itemsResponse
 			.filter((item) => item.imdb_id)
 			.slice(0, 16)
-			.map((item) => `${list.mediatype}:${item.imdb_id}`);
+			.map((item) => `${list.mediatype}:${item.imdb_id}:${item.title}`);
 	}
 
 	responses[keywordStr] = {
