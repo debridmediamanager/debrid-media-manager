@@ -427,6 +427,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 
 const mdblistKey = process.env.MDBLIST_KEY;
 const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
+// const https://v3-cinemeta.strem.io/meta/movie/${imdbId}.json
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { params } = context;

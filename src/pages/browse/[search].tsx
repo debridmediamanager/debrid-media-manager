@@ -38,11 +38,11 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 								</h2>
 								<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
 									{response[listName].map((key: string) => {
-										const match = key.match(/^(movie|show):(.+)/);
-										if (match) {
-											const mediaType =
-												match[1] === 'movie' ? 'movie' : 'show';
-											const imdbid = match[2];
+										const matches = key.split(':');
+										if (matches.length === 3) {
+											const mediaType = key.split(':')[0];
+											const imdbid = key.split(':')[1];
+											const title = key.split(':')[2];
 
 											return (
 												<Link
@@ -50,7 +50,7 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 													href={`/${mediaType}/${imdbid}`}
 													className=""
 												>
-													<Poster imdbId={imdbid} />
+													<Poster imdbId={imdbid} title={title} />
 												</Link>
 											);
 										}
@@ -105,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 		response[list.name] = itemsResponse
 			.filter((item) => item.imdb_id)
 			.slice(0, 24)
-			.map((item) => `${list.mediatype}:${item.imdb_id}`);
+			.map((item) => `${list.mediatype}:${item.imdb_id}:${item.title}`);
 		response[list.name] = shuffle(response[list.name], rng);
 	}
 
