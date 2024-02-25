@@ -1,3 +1,4 @@
+import Poster from '@/components/poster';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/cast';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
@@ -24,6 +25,7 @@ import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
+import UserAgent from 'user-agents';
 
 type MovieSearchProps = {
 	title: string;
@@ -249,13 +251,15 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				className="grid grid-flow-col auto-cols-auto auto-rows-auto gap-2"
 				style={backdropStyle}
 			>
-				<Image
-					width={200}
-					height={300}
-					src={poster}
-					alt="Movie poster"
-					className="shadow-lg row-span-4"
-				/>
+				{(poster && (
+					<Image
+						width={200}
+						height={300}
+						src={poster}
+						alt="Movie poster"
+						className="shadow-lg row-span-4"
+					/>
+				)) || <Poster imdbId={imdbid as string} title={title} />}
 				<div className="flex justify-end p-2">
 					<Link
 						href="/"
@@ -428,23 +432,51 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 const mdblistKey = process.env.MDBLIST_KEY;
 const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
 // const https://v3-cinemeta.strem.io/meta/movie/${imdbId}.json
+const getCinemetaInfo = (imdbId: string) =>
+	`https://v3-cinemeta.strem.io/meta/movie/${imdbId}.json`;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { params } = context;
-	const movieResponse = await axios.get(getMdbInfo(params!.imdbid as string));
-	let imdb_score = movieResponse.data.ratings?.reduce((acc: number | undefined, rating: any) => {
-		if (rating.source === 'imdb') {
-			return rating.score as number;
-		}
-		return acc;
-	}, null);
+	const mdbPromise = axios.get(getMdbInfo(params!.imdbid as string));
+	const cinePromise = axios.get(getCinemetaInfo(params!.imdbid as string), {
+		headers: {
+			accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+			'accept-language': 'en-US,en;q=0.5',
+			'accept-encoding': 'gzip, deflate, br',
+			connection: 'keep-alive',
+			'sec-fetch-dest': 'document',
+			'sec-fetch-mode': 'navigate',
+			'sec-fetch-site': 'same-origin',
+			'sec-fetch-user': '?1',
+			'upgrade-insecure-requests': '1',
+			'user-agent': new UserAgent().toString(),
+		},
+	});
+	const [mdbResponse, cinemetaResponse] = await Promise.all([mdbPromise, cinePromise]);
+
+	let imdb_score =
+		mdbResponse.data.ratings?.reduce((acc: number | undefined, rating: any) => {
+			if (rating.source === 'imdb') {
+				return rating.score as number;
+			}
+			return acc;
+		}, null) ?? cinemetaResponse.data.meta?.imdbRating
+			? parseFloat(cinemetaResponse.data.meta?.imdbRating) * 10
+			: null;
+
+	const title = mdbResponse.data.title ?? cinemetaResponse.data.meta?.name ?? 'Unknown';
+
 	return {
 		props: {
-			title: movieResponse.data.title,
-			description: movieResponse.data.description,
-			poster: movieResponse.data.poster,
-			backdrop: movieResponse.data.backdrop,
-			year: movieResponse.data.year,
+			title,
+			description:
+				mdbResponse.data.description ?? cinemetaResponse.data.meta?.description ?? 'n/a',
+			poster: mdbResponse.data.poster ?? cinemetaResponse.data.meta?.poster ?? '',
+			backdrop:
+				mdbResponse.data.backdrop ??
+				cinemetaResponse.data.meta?.background ??
+				'https://source.unsplash.com/random/1800x300?' + title,
+			year: mdbResponse.data.year ?? cinemetaResponse.data.meta?.releaseInfo ?? '????',
 			imdb_score: imdb_score ?? 0,
 		},
 	};
