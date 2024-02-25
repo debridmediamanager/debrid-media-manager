@@ -1,3 +1,4 @@
+import Poster from '@/components/poster';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/realDebrid';
@@ -23,6 +24,7 @@ import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
+import UserAgent from 'user-agents';
 
 type TvSearchProps = {
 	title: string;
@@ -256,13 +258,15 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				className="grid grid-flow-col auto-cols-auto auto-rows-auto gap-2"
 				style={backdropStyle}
 			>
-				<Image
-					width={200}
-					height={300}
-					src={poster}
-					alt="Movie poster"
-					className="shadow-lg row-span-4 justify-items-center"
-				/>
+				{(poster && (
+					<Image
+						width={200}
+						height={300}
+						src={poster}
+						alt="Show poster"
+						className="shadow-lg row-span-4"
+					/>
+				)) || <Poster imdbId={imdbid as string} title={title} />}
 				<div className="flex justify-end p-2">
 					<Link
 						href="/"
@@ -461,58 +465,76 @@ const getCinemetaInfo = (imdbId: string) =>
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { params } = context;
+	const mdbPromise = axios.get(getMdbInfo(params!.imdbid as string));
+	const cinePromise = axios.get(getCinemetaInfo(params!.imdbid as string), {
+		headers: {
+			accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+			'accept-language': 'en-US,en;q=0.5',
+			'accept-encoding': 'gzip, deflate, br',
+			connection: 'keep-alive',
+			'sec-fetch-dest': 'document',
+			'sec-fetch-mode': 'navigate',
+			'sec-fetch-site': 'same-origin',
+			'sec-fetch-user': '?1',
+			'upgrade-insecure-requests': '1',
+			'user-agent': new UserAgent().toString(),
+		},
+	});
+	const [mdbResponse, cinemetaResponse] = await Promise.all([mdbPromise, cinePromise]);
+
 	let season_count = 1;
 	let season_names = [];
 	let imdb_score;
-	let mdbResponse = null;
-	let cinemetaResponse = null;
-	try {
-		cinemetaResponse = await axios.get(getCinemetaInfo(params!.imdbid as string));
-		if (cinemetaResponse.data.type === 'series') {
-			const seasons = cinemetaResponse.data.videos.filter((video: any) => video.season > 0);
-			const uniqueSeasons = Array.from(new Set(seasons.map((season: any) => season.season)));
-			season_names = cinemetaResponse.data.seasons.map((season: any) => season.name);
-			imdb_score = cinemetaResponse.data.imdbRating;
-		}
-	} catch (error) {
-		console.error('Error fetching cinemeta show info', error);
-	}
-	try {
-		mdbResponse = await axios.get(getMdbInfo(params!.imdbid as string));
-		if (mdbResponse.data.type === 'show' && mdbResponse.data.seasons?.length !== 0) {
-			const seasons = mdbResponse.data.seasons.filter(
-				(season: any) => season.season_number > 0
-			);
-			season_count = Math.max(...seasons.map((season: any) => season.season_number));
-			season_names = seasons.map((season: any) => season.name);
-			imdb_score = mdbResponse.data.ratings?.reduce(
-				(acc: number | undefined, rating: any) => {
-					if (rating.source === 'imdb') {
-						return rating.score as number;
-					}
-					return acc;
-				},
-				null
-			);
 
-			if (params!.seasonNum && parseInt(params!.seasonNum as string) > season_count) {
-				return {
-					redirect: {
-						destination: `/show/${params!.imdbid}/1`,
-						permanent: false,
-					},
-				};
-			}
-		}
-	} catch (error) {
-		console.error('Error fetching mdb show info', error);
+	let cineSeasons =
+		cinemetaResponse.data.meta.videos.filter((video: any) => video.season > 0) || [];
+	const uniqueSeasons = Array.from(new Set(cineSeasons.map((video: any) => video.season)));
+	const cineSeasonCount = Math.max(...uniqueSeasons.map((video: any) => video.season));
+
+	let mdbSeasons =
+		mdbResponse.data.seasons.filter((season: any) => season.season_number > 0) || [];
+	const mdbSeasonCount = Math.max(...mdbSeasons.map((season: any) => season.season_number));
+	season_names = mdbSeasons.map((season: any) => season.name);
+
+	if (cineSeasonCount > mdbSeasonCount) {
+		season_count = cineSeasonCount;
+		// add remaining to season_names
+		const remaining = Array.from({ length: cineSeasonCount - mdbSeasonCount }, (_, i) => i + 1);
+		season_names = season_names.concat(remaining.map((i) => `Season ${mdbSeasonCount + i}`));
+	} else {
+		season_count = mdbSeasonCount;
 	}
+
+	if (params!.seasonNum && parseInt(params!.seasonNum as string) > season_count) {
+		return {
+			redirect: {
+				destination: `/show/${params!.imdbid}/1`,
+				permanent: false,
+			},
+		};
+	}
+
+	imdb_score =
+		cinemetaResponse.data.meta.imdbRating ??
+		mdbResponse.data.ratings?.reduce((acc: number | undefined, rating: any) => {
+			if (rating.source === 'imdb') {
+				return rating.score as number;
+			}
+			return acc;
+		}, null);
+
+	const title = mdbResponse?.data?.title ?? cinemetaResponse?.data?.title ?? 'Unknown';
+
 	return {
 		props: {
-			title: mdbResponse?.data?.title ?? '',
-			description: mdbResponse?.data?.description ?? '',
-			poster: mdbResponse?.data?.poster ?? '',
-			backdrop: mdbResponse?.data?.backdrop ?? '',
+			title,
+			description:
+				mdbResponse?.data?.description ?? cinemetaResponse?.data?.description ?? 'n/a',
+			poster: mdbResponse?.data?.poster ?? cinemetaResponse?.data?.poster ?? '',
+			backdrop:
+				mdbResponse?.data?.backdrop ??
+				cinemetaResponse?.data?.background ??
+				'https://source.unsplash.com/random/1800x300?' + title,
 			season_count,
 			season_names,
 			imdb_score: imdb_score ?? 0,
