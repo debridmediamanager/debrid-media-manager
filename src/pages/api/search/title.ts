@@ -3,6 +3,7 @@ import axios from 'axios';
 import { distance } from 'fastest-levenshtein';
 import _ from 'lodash';
 import { NextApiHandler } from 'next';
+import UserAgent from 'user-agents';
 
 const omdbKey = process.env.OMDB_KEY;
 const mdbKey = process.env.MDBLIST_KEY;
@@ -12,22 +13,21 @@ const searchOmdb = (keyword: string, year?: number, mediaType?: string) =>
 	}`;
 const searchMdb = (keyword: string, year?: number, mediaType?: string) =>
 	`https://mdblist.com/api/?apikey=${mdbKey}&s=${keyword}&y=${year ?? ''}&m=${mediaType ?? ''}`;
-const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdbKey}&i=${imdbId}`;
+const searchCinemetaSeries = (keyword: string) =>
+	`https://v3-cinemeta.strem.io/catalog/series/top/search=${keyword}.json`;
+const searchCinemetaMovies = (keyword: string) =>
+	`https://v3-cinemeta.strem.io/catalog/movie/top/search=${keyword}.json`;
 const db = new PlanetScaleCache();
 
-export type MdbSearchResult = {
+export type SearchResult = {
 	id: string;
 	type: 'movie' | 'show';
 	year: number;
 	title: string;
 	imdbid: string;
-	tmdbid?: string;
-	season_count?: number;
-	season_names?: string[];
+
 	score: number;
 	score_average: number;
-	distance?: number;
-	matchCount?: number;
 	searchTitle: string;
 };
 
@@ -39,7 +39,16 @@ type OmdbSearchResult = {
 	Poster: string;
 };
 
-function parseTitleAndYear(searchQuery: string): [string, number?, string?] {
+type CinemetaSearchResult = {
+	id: string;
+	imdb_id: string;
+	type: string;
+	name: string;
+	releaseInfo: string;
+	poster: string;
+};
+
+function parseQuery(searchQuery: string): [string, number?, string?] {
 	if (searchQuery.trim().indexOf(' ') === -1) {
 		return [searchQuery.trim(), undefined, undefined];
 	}
@@ -83,14 +92,18 @@ function parseTitleAndYear(searchQuery: string): [string, number?, string?] {
 
 const currentYear = new Date().getFullYear() + 1;
 
-async function searchOmdbApi(keyword: string, year?: number, mediaType?: string) {
+async function searchOmdbApi(
+	keyword: string,
+	year?: number,
+	mediaType?: string
+): Promise<SearchResult[]> {
 	const searchResponse = await axios.get(
 		searchOmdb(encodeURIComponent(keyword), year, mediaType)
 	);
 	if (searchResponse.data.Error || searchResponse.data.Response === 'False') {
 		return [];
 	}
-	const results: MdbSearchResult[] = [...searchResponse.data.Search]
+	const results: SearchResult[] = [...searchResponse.data.Search]
 		.filter(
 			(r: OmdbSearchResult) =>
 				r.imdbID?.startsWith('tt') &&
@@ -111,19 +124,71 @@ async function searchOmdbApi(keyword: string, year?: number, mediaType?: string)
 	return results;
 }
 
-async function searchMdbApi(keyword: string, year?: number, mediaType?: string) {
+async function searchMdbApi(
+	keyword: string,
+	year?: number,
+	mediaType?: string
+): Promise<SearchResult[]> {
 	const searchResponse = await axios.get(searchMdb(encodeURIComponent(keyword), year, mediaType));
 	if (searchResponse.data.error || !searchResponse.data.response) {
 		return [];
 	}
-	const results: MdbSearchResult[] = [...searchResponse.data.search].filter(
-		(r: MdbSearchResult) =>
+	const results: SearchResult[] = [...searchResponse.data.search].filter(
+		(r: SearchResult) =>
 			r.imdbid?.startsWith('tt') && r.year > 1888 && r.year <= currentYear && r.score > 0
 	);
-	return results.map((r: MdbSearchResult) => ({
+	return results.map((r: SearchResult) => ({
 		...r,
 		searchTitle: processSearchTitle(r.title, articleRegex.test(keyword)),
 	}));
+}
+
+async function searchCinemeta(keyword: string, mediaType?: string): Promise<SearchResult[]> {
+	const promises = [];
+	const requestConfig = {
+		headers: {
+			accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+			'accept-language': 'en-US,en;q=0.5',
+			'accept-encoding': 'gzip, deflate, br',
+			connection: 'keep-alive',
+			'sec-fetch-dest': 'document',
+			'sec-fetch-mode': 'navigate',
+			'sec-fetch-site': 'same-origin',
+			'sec-fetch-user': '?1',
+			'upgrade-insecure-requests': '1',
+			'user-agent': new UserAgent().toString(),
+		},
+	};
+	if (!mediaType) {
+		promises.push(axios.get(searchCinemetaSeries(encodeURIComponent(keyword)), requestConfig));
+		promises.push(axios.get(searchCinemetaMovies(encodeURIComponent(keyword)), requestConfig));
+	} else if (mediaType === 'movie') {
+		promises.push(axios.get(searchCinemetaMovies(encodeURIComponent(keyword)), requestConfig));
+	} else {
+		promises.push(axios.get(searchCinemetaSeries(encodeURIComponent(keyword)), requestConfig));
+	}
+	const results: SearchResult[] = (await Promise.all(promises))
+		.filter((r) => r.data && r.data.metas)
+		.map((r) => r.data.metas)
+		.flat()
+		.filter(
+			(r: CinemetaSearchResult) =>
+				r.imdb_id?.startsWith('tt') &&
+				(r.type === 'movie' || r.type === 'series') &&
+				parseInt(r.releaseInfo, 10) <= currentYear &&
+				r.poster?.startsWith('http')
+		)
+		.map((r: CinemetaSearchResult) => ({
+			id: r.id,
+			type: r.type === 'series' ? 'show' : 'movie',
+			year: parseInt(r.releaseInfo, 10),
+			title: r.name,
+			imdbid: r.imdb_id,
+			score: 1,
+			score_average: 1,
+			searchTitle: processSearchTitle(r.name, articleRegex.test(keyword)),
+		}));
+	return results;
 }
 
 function countSearchTerms(title: string, searchTerms: string[]): number {
@@ -157,14 +222,6 @@ const handler: NextApiHandler = async (req, res) => {
 		return;
 	}
 
-	if (keyword.length < 3) {
-		res.status(400).json({
-			status: 'error',
-			errorMessage: 'Keyword must be at least 3 characters',
-		});
-		return;
-	}
-
 	try {
 		const cleanKeyword = keyword
 			.toString()
@@ -174,7 +231,7 @@ const handler: NextApiHandler = async (req, res) => {
 			.join(' ')
 			.trim()
 			.toLowerCase();
-		const searchResults = await db.getSearchResults<MdbSearchResult[]>(
+		const searchResults = await db.getSearchResults<SearchResult[]>(
 			encodeURIComponent(cleanKeyword)
 		);
 		if (searchResults) {
@@ -182,11 +239,12 @@ const handler: NextApiHandler = async (req, res) => {
 			return;
 		}
 
-		const [title, year, mediaType] = parseTitleAndYear(cleanKeyword);
+		const [title, year, mediaType] = parseQuery(cleanKeyword);
 		const searchQuery = title.toLowerCase();
-		const [omdbResults, mdbResults] = await Promise.all([
+		const [omdbResults, mdbResults, cinemetaResults] = await Promise.all([
 			searchOmdbApi(searchQuery, year, mediaType),
 			searchMdbApi(searchQuery, year, mediaType),
+			searchCinemeta(searchQuery, mediaType),
 		]);
 		let queryTerms = searchQuery.split(/\W/).filter((w) => w);
 		if (queryTerms.length === 0) queryTerms = [searchQuery];
@@ -194,6 +252,11 @@ const handler: NextApiHandler = async (req, res) => {
 		let results = [
 			...mdbResults,
 			...omdbResults.filter((mdbResult) => !mdbResults.find((r) => r.id === mdbResult.id)),
+			...cinemetaResults.filter(
+				(mdbResult) =>
+					!mdbResults.find((r) => r.id === mdbResult.id) &&
+					!omdbResults.find((r) => r.id === mdbResult.id)
+			),
 		]
 			.map((result) => {
 				const lowercaseTitle = result.title.toLowerCase();
@@ -215,7 +278,7 @@ const handler: NextApiHandler = async (req, res) => {
 					matchCount: countSearchTerms(result.title, queryTerms),
 				};
 			})
-			.filter((result) => result.matchCount >= Math.ceil(queryTerms.length / 2));
+			.filter((result) => result.matchCount >= Math.ceil(queryTerms.length / 3));
 
 		let regex1 = new RegExp('^' + searchQuery + '$', 'i');
 		let exactMatches = results.filter((result) => regex1.test(result.searchTitle));
