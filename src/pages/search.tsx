@@ -6,13 +6,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { MdbSearchResult } from './api/search/title';
+import { SearchResult } from './api/search/title';
 
 function Search() {
 	const { publicRuntimeConfig: config } = getConfig();
 	const [query, setQuery] = useState('');
 	const [typedQuery, setTypedQuery] = useState('');
-	const [searchResults, setSearchResults] = useState<MdbSearchResult[]>([]);
+	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [miscResults, setMiscResults] = useState<Record<string, string[]>>({});
@@ -145,7 +145,7 @@ function Search() {
 						Search Results for <span className="text-yellow-500">{query}</span>
 					</h2>
 					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
-						{searchResults.map((result: MdbSearchResult, i: number) => (
+						{searchResults.map((result: SearchResult, i: number) => (
 							<Link
 								key={i}
 								className="text-center items-center cursor-pointer"
