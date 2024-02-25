@@ -70,7 +70,13 @@ const Poster = ({ imdbId, title = 'No poster' }: Record<string, string>) => {
 	return (
 		<div ref={imgRef}>
 			{imgLoaded && posterUrl && (
-				<Image width={200} height={300} src={posterUrl} alt="Movie poster" />
+				<Image
+					width={200}
+					height={300}
+					src={posterUrl}
+					priority={true}
+					alt="Movie poster"
+				/>
 			)}
 		</div>
 	);
