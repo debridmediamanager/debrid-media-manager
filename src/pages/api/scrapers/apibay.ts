@@ -26,6 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		});
 		return;
 	}
+	imdbIds = Array.from(new Set(imdbIds.map((e) => e.split(':')[0])));
 	imdbIds = imdbIds.sort();
 	let startFromHere = (startFrom as string) ?? '';
 	while (true) {
@@ -77,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 						let seasonNum: number | null = null;
 						const seasonMatch =
 							link.title.match(/S(\d{1,2})E?/i) ||
-							link.title.match(/Season\s?(\d{1,2})/i) ||
+							link.title.match(/S[a-z]+n\s?(\d{1,2})/i) ||
 							link.title.match(/(\d{1,2})x\d{1,2}/i);
 						if (seasonMatch && seasonMatch[1]) {
 							seasonNum = parseInt(seasonMatch[1], 10);
