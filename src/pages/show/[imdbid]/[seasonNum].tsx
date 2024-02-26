@@ -487,13 +487,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	let imdb_score;
 
 	let cineSeasons =
-		cinemetaResponse.data.meta.videos.filter((video: any) => video.season > 0) || [];
+		cinemetaResponse.data.meta?.videos.filter((video: any) => video.season > 0) || [];
 	const uniqueSeasons = Array.from(new Set(cineSeasons.map((video: any) => video.season)));
-	const cineSeasonCount = Math.max(...uniqueSeasons.map((video: any) => video.season));
+	const cineSeasonCount =
+		uniqueSeasons.length > 0 ? Math.max(...uniqueSeasons.map((video: any) => video.season)) : 1;
 
 	let mdbSeasons =
-		mdbResponse.data.seasons.filter((season: any) => season.season_number > 0) || [];
-	const mdbSeasonCount = Math.max(...mdbSeasons.map((season: any) => season.season_number));
+		mdbResponse.data.seasons?.filter((season: any) => season.season_number > 0) || [];
+	const mdbSeasonCount =
+		mdbSeasons.length > 0
+			? Math.max(...mdbSeasons.map((season: any) => season.season_number))
+			: 1;
 	season_names = mdbSeasons.map((season: any) => season.name);
 
 	if (cineSeasonCount > mdbSeasonCount) {
@@ -505,6 +509,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 		season_count = mdbSeasonCount;
 	}
 
+	console.log(
+		'season_count:',
+		season_count,
+		cineSeasonCount,
+		mdbSeasonCount,
+		uniqueSeasons,
+		mdbSeasons
+	);
+
 	if (params!.seasonNum && parseInt(params!.seasonNum as string) > season_count) {
 		return {
 			redirect: {
@@ -515,7 +528,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	}
 
 	imdb_score =
-		cinemetaResponse.data.meta.imdbRating ??
+		cinemetaResponse.data.meta?.imdbRating ??
 		mdbResponse.data.ratings?.reduce((acc: number | undefined, rating: any) => {
 			if (rating.source === 'imdb') {
 				return rating.score as number;
