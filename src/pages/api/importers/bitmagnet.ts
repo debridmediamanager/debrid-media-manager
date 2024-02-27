@@ -121,8 +121,12 @@ const fetchShows = async () => {
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	await fetchMovies();
-	await fetchShows();
+	const { mediaType } = req.query;
+	if (mediaType === 'movie') {
+		await fetchMovies();
+	} else if (mediaType === 'tv') {
+		await fetchShows();
+	}
 	res.status(200).json({ status: 'success' });
 	return;
 }
