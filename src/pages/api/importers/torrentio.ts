@@ -8,7 +8,7 @@ import UserAgent from 'user-agents';
 const db = new PlanetScaleCache();
 const torrentioUrl = (imdbId: string) =>
 	`https://torrentio.strem.fun/sort=size%7Cqualityfilter=other,scr,cam,unknown/stream/movie/${imdbId}.json`;
-
+// https://torrentio.strem.fun/sort=size%7Cqualityfilter=other,scr,cam,unknown/stream/series/tt2151337:2:1.json
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	if (!process.env.JACKETT || !process.env.PROWLARR) {
 		res.status(403).json({ status: 'failed' });
