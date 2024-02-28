@@ -238,7 +238,8 @@ export class PlanetScaleCache {
 		});
 
 		if (scrapedItems.length > 0) {
-			return scrapedItems.map((item) => item.key.split(':')[1]);
+			// ensure unique imdbIds
+			return Array.from(new Set(scrapedItems.map((item) => item.key.split(':')[1])));
 		}
 
 		return null;
