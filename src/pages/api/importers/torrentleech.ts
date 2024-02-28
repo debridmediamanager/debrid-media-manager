@@ -9,6 +9,7 @@ import UserAgent from 'user-agents';
 const db = new PlanetScaleCache();
 const tlUrl = (imdbId: string, page: number = 1) =>
 	`https://www.torrentleech.org/torrents/browse/list/imdbID/${imdbId}/page/${page}`;
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	const { tluid, tlpass, rssPass, mediaType } = req.query;
 	let imdbIds = (await db.getAllImdbIds(`${mediaType}` as 'movie' | 'tv')) ?? [];
