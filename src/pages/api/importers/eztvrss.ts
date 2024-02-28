@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 					)
 				);
 				console.log(`[eztv] found ${torrentsToProcess.length} torrents, page ${pg}`);
-				if (pg === 1) {
+				if (pg === 1 && torrentsToProcess.length > 0) {
 					lastId = torrentsToProcess[0].id ?? 0;
 				}
 			} catch (e) {
