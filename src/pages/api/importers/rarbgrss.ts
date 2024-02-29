@@ -8,17 +8,17 @@ const db = new PlanetScaleCache();
 const rarbgUrl = (page: number = 1) => `https://therarbg.to/get-posts/format:json/?page=${page}`;
 const rarbgItemUrl = (id: string) => `https://therarbg.com/post-detail/${id}/abcdef/?format=json`;
 
+// TODO: Add a way to process first page and second page
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	let pg = 1;
-	let nextPage: string | null = rarbgUrl(pg);
-	while (nextPage) {
+	while (true) {
+		const scrapesMap = new Map<string, any>();
 		try {
 			const response: any = await axios.get(rarbgUrl(pg));
-			nextPage = response.data?.links?.next ?? null;
 			let torrentsToProcess = response.data.results || [];
 			torrentsToProcess = torrentsToProcess.filter((e: any) => e.i && e.i.startsWith('tt'));
 			console.log(`[rarbg] found ${torrentsToProcess.length} torrents, page ${pg}`);
-			const scrapesMap = new Map<string, any>();
 			try {
 				for (const torrent of torrentsToProcess) {
 					const item: any = await axios.get(rarbgItemUrl(torrent.pk));
@@ -48,19 +48,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 						}
 					}
 				}
-				const toSave: { key: string; value: ScrapeSearchResult[] }[] = [];
-				scrapesMap.forEach((value: ScrapeSearchResult[], key: string) => {
-					toSave.push({ key, value });
-				});
-				for (const save of toSave) {
-					await db.saveScrapedTrueResults(save.key, save.value, true);
-				}
-				scrapesMap.forEach((scrapes, key) => {
-					const url = `https://debridmediamanager.com/${key
-						.replaceAll(':', '/')
-						.replaceAll('tv/', 'show/')}`;
-					console.log(url, scrapes);
-				});
 			} catch (e) {
 				console.log(`[rarbg] failed (${e})`);
 			}
@@ -68,6 +55,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		} catch (e) {
 			console.log(`[rarbg] failed (${e})`);
 		}
+		if (pg > 2) {
+			const toSave: { key: string; value: ScrapeSearchResult[] }[] = [];
+			scrapesMap.forEach((value: ScrapeSearchResult[], key: string) => {
+				toSave.push({ key, value });
+			});
+			for (const save of toSave) {
+				await db.saveScrapedTrueResults(save.key, save.value, true);
+			}
+			scrapesMap.forEach((scrapes, key) => {
+				const url = `https://debridmediamanager.com/${key
+					.replaceAll(':', '/')
+					.replaceAll('tv/', 'show/')}`;
+				console.log(url, scrapes);
+			});
+			pg = 1;
+			await new Promise((resolve) => setTimeout(resolve, 1000 * 60 * 5));
+		}
+		continue;
 	}
 }
 
