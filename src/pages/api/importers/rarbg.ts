@@ -1,70 +1,87 @@
+import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
 import { ScrapeResponse } from '@/services/scrapeJobs';
+import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Database, open } from 'sqlite';
-import sqlite3 from 'sqlite3';
 
-const pdb = new PlanetScaleCache();
-
-// Define a type for the row structure
-interface MovieRow {
-	id: number;
-	hash: string;
-	title: string;
-	dt: string;
-	cat: string;
-	size: number;
-	imdb: string;
-}
-
-// Initialize and open the SQLite database
-const initDB = async (): Promise<Database> => {
-	return open({
-		filename: './rarbg_db.sqlite',
-		driver: sqlite3.Database,
-	});
-};
-
-const fetchMovies = async (): Promise<void> => {
-	console.log('Fetching movies');
-	const db = await initDB();
-
-	const query = `
-		SELECT
-			id, hash, title, dt, cat, size, imdb
-		FROM
-			items
-		WHERE
-			cat LIKE 'movies_%' AND imdb IS NOT NULL
-		ORDER BY
-			dt DESC;
-    `;
-
-	try {
-		const rows = await db.all<MovieRow[]>(query);
-		console.log(`Found ${rows.length} movies`);
-		let i = 0;
-		for (const row of rows) {
-			console.log(`[${i}/${rows.length}] ${row.title} ${row.imdb}`);
-			// Convert hash to lowercase
-			const hashLower = row.hash.toLowerCase();
-			const scrape = {
-				title: row.title,
-				fileSize: row.size / 1024 / 1024,
-				hash: hashLower,
-			};
-			await pdb.saveScrapedTrueResults(`movie:${row.imdb}`, [scrape], true);
-			i++;
-		}
-	} catch (error) {
-		console.error('Error executing query', error);
-	} finally {
-		await db.close();
-	}
-};
+const db = new PlanetScaleCache();
+const rarbgUrl = (page: number = 1) => `https://therarbg.to/get-posts/format:json/?page=${page}`;
+const rarbgItemUrl = (id: string) => `https://therarbg.com/post-detail/${id}/abcdef/?format=json`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	await fetchMovies();
-	res.status(200).json({ status: 'success' });
-	return;
+	let pg = 1;
+	let nextPage: string | null = rarbgUrl(pg);
+	while (nextPage) {
+		try {
+			const response: any = await axios.get(rarbgUrl(pg));
+			nextPage = response.data?.links?.next ?? null;
+			let torrentsToProcess = response.data.results || [];
+			torrentsToProcess = torrentsToProcess.filter((e: any) => e.i && e.i.startsWith('tt'));
+			console.log(`[rarbg] found ${torrentsToProcess.length} torrents, page ${pg}`);
+			const scrapesMap = new Map<string, any>();
+			try {
+				for (const torrent of torrentsToProcess) {
+					const item: any = await axios.get(rarbgItemUrl(torrent.pk));
+					const result = processStream(item.data);
+					if (torrent.c === 'Movies') {
+						if (scrapesMap.has(`movie:${torrent.i}`)) {
+							scrapesMap.get(`movie:${torrent.i}`).push(result);
+						} else {
+							scrapesMap.set(`movie:${torrent.i}`, [result]);
+						}
+					} else {
+						let seasonNum: number | null = null;
+						const seasonMatch =
+							result.title.match(/S(\d{1,2})E?/i) ||
+							result.title.match(/S[a-z]+n\s?(\d{1,2})/i) ||
+							result.title.match(/(\d{1,2})x\d{1,2}/i);
+						if (seasonMatch && seasonMatch[1]) {
+							seasonNum = parseInt(seasonMatch[1], 10);
+						} else {
+							console.warn('No season match, setting to 1', result.title);
+							seasonNum = 1; // Default to season 1 if no match is found
+						}
+						if (scrapesMap.has(`tv:${torrent.i}:${seasonNum}`)) {
+							scrapesMap.get(`tv:${torrent.i}:${seasonNum}`).push(result);
+						} else {
+							scrapesMap.set(`tv:${torrent.i}:${seasonNum}`, [result]);
+						}
+					}
+				}
+				const toSave: { key: string; value: ScrapeSearchResult[] }[] = [];
+				scrapesMap.forEach((value: ScrapeSearchResult[], key: string) => {
+					toSave.push({ key, value });
+				});
+				for (const save of toSave) {
+					await db.saveScrapedTrueResults(save.key, save.value, true);
+				}
+				scrapesMap.forEach((scrapes, key) => {
+					const url = `https://debridmediamanager.com/${key
+						.replaceAll(':', '/')
+						.replaceAll('tv/', 'show/')}`;
+					console.log(url, scrapes);
+				});
+			} catch (e) {
+				console.log(`[rarbg] failed (${e})`);
+			}
+			pg++;
+		} catch (e) {
+			console.log(`[rarbg] failed (${e})`);
+		}
+	}
+}
+
+interface EztvItem {
+	eid: string;
+	name: string;
+	info_hash: string;
+	size: number;
+}
+
+function processStream(item: EztvItem): ScrapeSearchResult {
+	return {
+		title: item.name,
+		fileSize: item.size / 1024 / 1024,
+		hash: item.info_hash.toLowerCase(),
+	};
 }
