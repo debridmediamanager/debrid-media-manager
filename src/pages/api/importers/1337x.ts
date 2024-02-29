@@ -40,7 +40,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			if (matches) {
 				for (const match of matches) {
 					const tmdbId = match.match(/<a href="\/movie\/(\d+)\/[^"]+/)[1];
-					tmdbIds.push(tmdbId);
+					// push if not already in array
+					if (!tmdbIds.includes(tmdbId)) {
+						tmdbIds.push(tmdbId);
+					}
 				}
 			}
 		}
@@ -82,7 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 							/<strong>Total size<\/strong> <span>([^<]+)<\/span>/
 						);
 						// compute for size in megabytes number, so consider sizeMatch if TB or GB
-						let sizeNumber = parseFloat(sizeMatch[1] ?? '0');
+						let sizeNumber = parseFloat(sizeMatch[1].replace(',', '') ?? '0');
 						let fileSize = 0;
 						if (sizeMatch[1].endsWith('TB')) {
 							fileSize = sizeNumber * 1024 * 1024;
@@ -107,7 +110,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 						console.log(
 							`[1337x] ${x1337torrent(torrentId)} failed (${e}), trying again`
 						);
-						await new Promise((resolve) => setTimeout(resolve, 10000));
+						await new Promise((resolve) => setTimeout(resolve, 30000));
 					}
 				}
 			}
