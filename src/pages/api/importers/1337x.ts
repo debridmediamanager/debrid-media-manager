@@ -62,13 +62,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			imdbId = `tmdb-${tmdbId}`;
 		}
 		try {
-			const response = await axios.get(x1337movie(tmdbId), x1337config);
-			// // capture all by regex <a href="/torrent/347882/ and add to torrentIds
-			const matches = response.data.match(/<a href="\/torrent\/(\d+)\/[^"]+/g);
-			if (matches) {
-				for (const match of matches) {
-					const torrentId = match.match(/<a href="\/torrent\/(\d+)\/[^"]+/)[1];
-					torrentIds.push(torrentId);
+			while (true) {
+				try {
+					const response = await axios.get(x1337movie(tmdbId), x1337config);
+					// // capture all by regex <a href="/torrent/347882/ and add to torrentIds
+					const matches = response.data.match(/<a href="\/torrent\/(\d+)\/[^"]+/g);
+					if (matches) {
+						for (const match of matches) {
+							const torrentId = match.match(/<a href="\/torrent\/(\d+)\/[^"]+/)[1];
+							torrentIds.push(torrentId);
+						}
+					}
+					break;
+				} catch (e) {
+					console.log(`[1337x] ${x1337movie(tmdbId)} failed (${e})`);
+					await new Promise((resolve) => setTimeout(resolve, 30000));
 				}
 			}
 			const scrapes: ScrapeSearchResult[] = [];
