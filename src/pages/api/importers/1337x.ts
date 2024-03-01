@@ -5,8 +5,8 @@ import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new PlanetScaleCache();
-// const HOST_1337X = 'https://1337x.to'
-const HOST_1337X = 'https://1337x.st';
+const HOST_1337X = 'https://1337x.to';
+// const HOST_1337X = 'https://1337x.st';
 // const HOST_1337X = 'https://x1337x.ws'
 // const HOST_1337X = 'https://x1337x.eu'
 // const HOST_1337X = 'https://x1337x.se'
@@ -16,6 +16,7 @@ const HOST_1337X = 'https://1337x.st';
 // const HOST_1337X = 'https://1337x.ninjaproxy1.com'
 // const HOST_1337X = 'https://1337x.proxyninja.org'
 // const HOST_1337X = 'https://1337x.torrentbay.st'
+const x1337home = () => `${HOST_1337X}/home/`;
 const x1337library = (page: number) => `${HOST_1337X}/movie-library/${page}/`;
 const x1337movie = (tmdbId: number) => `${HOST_1337X}/movie/${tmdbId}/Seven-Lucky-Gods-2014/`;
 const x1337torrent = (torrentId: string) =>
@@ -26,7 +27,7 @@ const mdbListMovie = (tmdbId: number) =>
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	const x1337config = {
 		headers: {
-			cookie: 'cf_clearance=Nq2KLHa5bKTpuOA_.iMYPG0FsF.0j8RS2zC3JAmbjk0-1709248943-1.0-AUBu/qGl8UEw6KEKKthmZ/sZgEqKhXJsi/aXgxyiCJuf2lPUDdiGIeB+td6FevWIYoEYPCjRKaSZwokgnuRvnr4=',
+			cookie: 'cf_clearance=nah1u7n25DaX.Lsy4xaNizGzLicl.NAtkSx3sFbI098-1709329857-1.0.1.1-qPs.BCIDJ_fDU4OoXXOq0RriSXqxgP0jEWKxdEBodawsWhjoZYZvlseCSWIOw3PZwTMjQIXtNPstVqkoJ4i7qg; uid=260929; pass=77e9ebc60716eafd93f3f87ba61d8b87',
 			'user-agent':
 				'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
 		},
@@ -49,7 +50,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		}
 		console.log(`[1337x] found ${tmdbIds.length} movies`, tmdbIds.join(', '));
 	} catch (e) {
-		console.log(`[1337x] failed (${e})`);
+		console.log(`[1337x] library page failed (${e})`);
+		await new Promise((resolve) => setTimeout(resolve, 60000));
+		await axios.get(x1337home(), x1337config);
+		await new Promise((resolve) => setTimeout(resolve, 5000));
 	}
 	for (const tmdbId of tmdbIds) {
 		// show percentage
@@ -73,10 +77,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 							torrentIds.push(torrentId);
 						}
 					}
+					await new Promise((resolve) => setTimeout(resolve, 500));
 					break;
 				} catch (e) {
 					console.log(`[1337x] ${x1337movie(tmdbId)} failed (${e})`);
-					await new Promise((resolve) => setTimeout(resolve, 30000));
+					await new Promise((resolve) => setTimeout(resolve, 60000));
+					await axios.get(x1337home(), x1337config);
+					await new Promise((resolve) => setTimeout(resolve, 5000));
 				}
 			}
 			const scrapes: ScrapeSearchResult[] = [];
@@ -113,12 +120,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 							hash: hashMatch ? hashMatch[1].trim().toLowerCase() : '',
 						};
 						scrapes.push(scrape);
+						await new Promise((resolve) => setTimeout(resolve, 500));
 						break;
 					} catch (e) {
 						console.log(
 							`[1337x] ${x1337torrent(torrentId)} failed (${e}), trying again`
 						);
-						await new Promise((resolve) => setTimeout(resolve, 30000));
+						await new Promise((resolve) => setTimeout(resolve, 60000));
+						await axios.get(x1337home(), x1337config);
+						await new Promise((resolve) => setTimeout(resolve, 5000));
 					}
 				}
 			}
