@@ -103,6 +103,7 @@ async function searchOmdbApi(
 	if (searchResponse.data.Error || searchResponse.data.Response === 'False') {
 		return [];
 	}
+	// console.log('omdb search response', searchResponse.data);
 	const results: SearchResult[] = [...searchResponse.data.Search]
 		.filter(
 			(r: OmdbSearchResult) =>
@@ -133,10 +134,12 @@ async function searchMdbApi(
 	if (searchResponse.data.error || !searchResponse.data.response) {
 		return [];
 	}
+	// console.log('mdb search response', searchResponse.data);
 	const results: SearchResult[] = [...searchResponse.data.search].filter(
 		(r: SearchResult) =>
 			r.imdbid?.startsWith('tt') && r.year > 1888 && r.year <= currentYear && r.score > 0
 	);
+	// console.log('mdb results', results.map(r => `${r.title} ${r.year} =>> ${processSearchTitle(r.title, articleRegex.test(keyword))}`));
 	return results.map((r: SearchResult) => ({
 		...r,
 		searchTitle: processSearchTitle(r.title, articleRegex.test(keyword)),
@@ -167,7 +170,9 @@ async function searchCinemeta(keyword: string, mediaType?: string): Promise<Sear
 	} else {
 		promises.push(axios.get(searchCinemetaSeries(encodeURIComponent(keyword)), requestConfig));
 	}
-	const results: SearchResult[] = (await Promise.all(promises))
+	const responses = await Promise.all(promises);
+	// console.log('cinemeta search responses', responses.map((r) => r.data));
+	const results: SearchResult[] = responses
 		.filter((r) => r.data && r.data.metas)
 		.map((r) => r.data.metas)
 		.flat()
@@ -205,6 +210,7 @@ function removeLeadingArticles(str: string) {
 }
 
 function processSearchTitle(title: string, retainArticle: boolean) {
+	// Shōgun -> shogun
 	const deburred = _.deburr(title);
 	const lowercase = deburred.toLowerCase();
 	const searchTitle = retainArticle ? lowercase : removeLeadingArticles(lowercase);
@@ -248,6 +254,7 @@ const handler: NextApiHandler = async (req, res) => {
 		]);
 		let queryTerms = searchQuery.split(/\W/).filter((w) => w);
 		if (queryTerms.length === 0) queryTerms = [searchQuery];
+
 		// combine results and remove duplicates
 		let results = [
 			...mdbResults,
@@ -257,37 +264,41 @@ const handler: NextApiHandler = async (req, res) => {
 					!mdbResults.find((r) => r.id === mdbResult.id) &&
 					!omdbResults.find((r) => r.id === mdbResult.id)
 			),
-		]
-			.map((result) => {
-				const lowercaseTitle = result.title.toLowerCase();
-				const distanceValue = distance(lowercaseTitle, searchQuery);
-				if (articleRegex.test(lowercaseTitle)) {
-					// whichever lower distance value is better
-					const distanceValue2 = distance(result.searchTitle, searchQuery);
-					if (distanceValue2 < distanceValue) {
-						return {
-							...result,
-							distance: distanceValue2,
-							matchCount: countSearchTerms(result.searchTitle, queryTerms),
-						};
-					}
+		].map((result) => {
+			const lowercaseTitle = result.title.toLowerCase();
+			const distanceValue = distance(lowercaseTitle, searchQuery);
+			if (articleRegex.test(lowercaseTitle)) {
+				// whichever lower distance value is better
+				const distanceValue2 = distance(result.searchTitle, searchQuery);
+				if (distanceValue2 < distanceValue) {
+					return {
+						...result,
+						distance: distanceValue2,
+						matchCount: countSearchTerms(result.searchTitle, queryTerms),
+					};
 				}
-				return {
-					...result,
-					distance: distanceValue,
-					matchCount: countSearchTerms(result.title, queryTerms),
-				};
-			})
-			.filter((result) => result.matchCount >= Math.ceil(queryTerms.length / 3));
+			}
+			return {
+				...result,
+				distance: distanceValue,
+				matchCount: countSearchTerms(result.searchTitle, queryTerms),
+			};
+		});
+		// console.log('results', results);
+		// filter out results with less than 1/3 of the search terms
+		results = results.filter((result) => result.matchCount >= Math.ceil(queryTerms.length / 3));
 
+		// search for exact matches
 		let regex1 = new RegExp('^' + searchQuery + '$', 'i');
 		let exactMatches = results.filter((result) => regex1.test(result.searchTitle));
 		results = results.filter((result) => !regex1.test(result.searchTitle));
 
+		// search for start matches
 		let regex2 = new RegExp('^' + searchQuery, 'i');
 		let startMatches = results.filter((result) => regex2.test(result.searchTitle));
 		results = results.filter((result) => !regex2.test(result.searchTitle));
 
+		// search for near matches
 		let regex3 = new RegExp(searchQuery, 'i');
 		let nearMatches = results.filter((result) => regex3.test(result.searchTitle));
 		results = results.filter((result) => !regex3.test(result.searchTitle));

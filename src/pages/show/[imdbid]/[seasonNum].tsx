@@ -488,9 +488,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 	let cineSeasons =
 		cinemetaResponse.data.meta?.videos.filter((video: any) => video.season > 0) || [];
-	const uniqueSeasons = Array.from(new Set(cineSeasons.map((video: any) => video.season)));
-	const cineSeasonCount =
-		uniqueSeasons.length > 0 ? Math.max(...uniqueSeasons.map((video: any) => video.season)) : 1;
+	const uniqueSeasons: number[] = Array.from(
+		new Set(cineSeasons.map((video: any) => video.season))
+	);
+	const cineSeasonCount = uniqueSeasons.length > 0 ? Math.max(...uniqueSeasons) : 1;
 
 	let mdbSeasons =
 		mdbResponse.data.seasons?.filter((season: any) => season.season_number > 0) || [];
@@ -508,15 +509,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	} else {
 		season_count = mdbSeasonCount;
 	}
-
-	console.log(
-		'season_count:',
-		season_count,
-		cineSeasonCount,
-		mdbSeasonCount,
-		uniqueSeasons,
-		mdbSeasons
-	);
 
 	if (params!.seasonNum && parseInt(params!.seasonNum as string) > season_count) {
 		return {
