@@ -11,6 +11,7 @@ import { scrapeJackett } from './jackett';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 import { scrapeProwlarr } from './prowlarr';
+import { scrapeTorrentKitty } from './torrentkitty';
 
 type TvScrapeJob = {
 	titles: string[];
@@ -32,6 +33,7 @@ async function scrapeAll(
 		scrapeBtdigg(finalQuery, targetTitle, years, airDate),
 		scrapeProwlarr(finalQuery, targetTitle, years, airDate, 'tv'),
 		scrapeJackett(finalQuery, targetTitle, years, airDate, 'tv'),
+		scrapeTorrentKitty(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 	]);
 }
 
