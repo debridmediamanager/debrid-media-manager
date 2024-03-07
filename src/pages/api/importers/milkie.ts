@@ -80,7 +80,7 @@ const fetchContent = async (milkieToken: string): Promise<void> => {
 						let seasonNum: number | null = null;
 						const seasonMatch =
 							details.torrent.releaseName.match(/S(\d{1,2})E?/i) ||
-							details.torrent.releaseName.match(/Season\s?(\d{1,2})/i) ||
+							details.torrent.releaseName.match(/Season.?(\d{1,2})/i) ||
 							details.torrent.releaseName.match(/(\d{1,2})x\d{1,2}/i);
 
 						if (seasonMatch && seasonMatch[1]) {

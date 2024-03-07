@@ -44,7 +44,7 @@ const fetchRssAndDetails = async (rssUrl: string, lastId: string): Promise<strin
 		// 		let seasonNum: number | null = null;
 		// 		const seasonMatch =
 		// 			imdbId.torrent.releaseName.match(/S(\d{1,2})E?/i) ||
-		// 			imdbId.torrent.releaseName.match(/Season\s?(\d{1,2})/i) ||
+		// 			imdbId.torrent.releaseName.match(/Season.?(\d{1,2})/i) ||
 		// 			imdbId.torrent.releaseName.match(/(\d{1,2})x\d{1,2}/i);
 
 		// 		if (seasonMatch && seasonMatch[1]) {

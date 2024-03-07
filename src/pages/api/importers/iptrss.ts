@@ -73,7 +73,7 @@ const fetchRssAndDetails = async (
 					let seasonNum: number | null = null;
 					const seasonMatch =
 						details[i].name.match(/S(\d{1,2})E?/i) ||
-						details[i].name.match(/Season\s?(\d{1,2})/i) ||
+						details[i].name.match(/Season.?(\d{1,2})/i) ||
 						details[i].name.match(/(\d{1,2})x\d{1,2}/i);
 
 					if (seasonMatch && seasonMatch[1]) {
