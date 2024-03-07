@@ -976,7 +976,7 @@ function TorrentsPage() {
 		if (
 			(hasEpisodes && t.mediaType === 'movie') ||
 			some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
-			some(torrentAndFiles, (f) => /season\s?\d+/i.test(f)) ||
+			some(torrentAndFiles, (f) => /season.?\d+/i.test(f)) ||
 			some(torrentAndFiles, (f) => /episodes?\s?\d+/i.test(f)) ||
 			some(torrentAndFiles, (f) => /\b[a-fA-F0-9]{8}\b/.test(f))
 		) {
@@ -987,7 +987,7 @@ function TorrentsPage() {
 			!hasEpisodes &&
 			t.mediaType === 'tv' &&
 			every(torrentAndFiles, (f) => !/s\d\d\d?.?e\d\d\d?/i.test(f)) &&
-			every(torrentAndFiles, (f) => !/season\s?\d+/i.test(f)) &&
+			every(torrentAndFiles, (f) => !/season.?\d+/i.test(f)) &&
 			every(torrentAndFiles, (f) => !/episodes?\s?\d+/i.test(f)) &&
 			every(torrentAndFiles, (f) => !/\b[a-fA-F0-9]{8}\b/.test(f))
 		) {
