@@ -50,13 +50,13 @@ const fetchSearchPageAndDetails = async (
 			if (processedIds.has(id)) {
 				continue;
 			}
-			processedIds.add(id);
 			const details = await iptGetDetails(uid, pass, torrentPass, id);
 			if (!details.length) {
 				continue;
 			}
 			if (mediaType === 'movie') {
 				for (let i = 0; i < details.length; i++) {
+					processedIds.add(details[i].id);
 					let imdbId = details[i].imdb;
 					if (!imdbId) {
 						console.error('No IMDB, TMDB, or TVMaze ID', details[i]);
@@ -75,6 +75,7 @@ const fetchSearchPageAndDetails = async (
 				}
 			} else if (mediaType === 'tv') {
 				for (let i = 0; i < details.length; i++) {
+					processedIds.add(details[i].id);
 					let imdbId = details[i].imdb;
 					if (!imdbId) {
 						console.error('No IMDB, TMDB, or TVMaze ID', details[i]);
@@ -232,16 +233,16 @@ interface IPTDetails {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	const { mediaType, uid, pass, torrentPass } = req.query;
-	// https://iptorrents.com/t?72;p=4486
-	// https://iptorrents.com/t?73;p=11481
+	// https://iptorrents.com/t?72;p=4478
+	// https://iptorrents.com/t?73;p=11462
 	let searchPageUrl = '';
 	let lastPage = 0;
 	if (mediaType === 'movie') {
 		searchPageUrl = `https://iptorrents.com/t?72;p=`;
-		lastPage = 4486;
+		lastPage = 4479;
 	} else if (mediaType === 'tv') {
 		searchPageUrl = `https://iptorrents.com/t?73;p=`;
-		lastPage = 11481;
+		lastPage = 11463;
 	}
 	await startLoop(
 		searchPageUrl,
