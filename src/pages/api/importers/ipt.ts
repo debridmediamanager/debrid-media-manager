@@ -11,12 +11,16 @@ interface ScrapeResponse {
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const pdb = new PlanetScaleCache();
+const processedIds = new Set<string>();
 
-const extractDownloadLinks = (rssContent: string): string[] => {
-	const linkRegex = /<link>https:\/\/iptorrents.com\/download.php\/(\d+)\/[^<]+<\/link>/g;
+const extractDownloadLinks = (searchContent: string): string[] => {
+	// delete everything before the string " Active Torrents"
+	const start = searchContent.indexOf(' Active Torrents');
+	searchContent = searchContent.substring(start);
+	const linkRegex = /href="\/t\/(\d+)"/g;
 	let match;
 	const ids = [];
-	while ((match = linkRegex.exec(rssContent)) !== null) {
+	while ((match = linkRegex.exec(searchContent)) !== null) {
 		ids.push(match[1]);
 	}
 	return ids;
@@ -24,25 +28,29 @@ const extractDownloadLinks = (rssContent: string): string[] => {
 
 // TODO: Add a way to fetch torrents by imdb id
 
-// Define a function to fetch RSS content, extract IDs, and fetch details for each ID
-const fetchRssAndDetails = async (
-	rssUrl: string,
+// Define a function to fetch Search page content, extract IDs, and fetch details for each ID
+const fetchSearchPageAndDetails = async (
+	searchPageUrl: string,
 	uid: string,
 	pass: string,
 	mediaType: string,
 	torrentPass: string,
-	lastId: string
-): Promise<string> => {
+): Promise<void> => {
 	try {
-		const rssResponse = await fetch(rssUrl);
-		const rssContent = await rssResponse.text();
-		const ids = extractDownloadLinks(rssContent);
+		const searchResponse = await fetch(searchPageUrl, {
+			headers: {
+				Cookie: `uid=${uid}; pass=${pass}; cf_clearance=wTlYiDj9LEPtosSbpxMSpV.k1QMAR3x8JAr.VIl_neY-1708541520-1.0-Af3JVtdBkbBIchjmZ9P1dcGjLe6aV8atETZnuHk8g17HFc41OzdkPD+QTIS71fDvfDI5NIfuGna2NrHhnKCfSl8=;`,
+			},
+		});
+		console.log('Fetching search page url:', searchPageUrl);
+		const searchContent = await searchResponse.text();
+		const ids = extractDownloadLinks(searchContent);
 		const scrapesMap = new Map<string, any>();
 		for (const id of ids) {
-			if (id === lastId) {
-				// console.log('Encountered previously processed ID, stopping...');
-				break;
+			if (processedIds.has(id)) {
+				continue;
 			}
+			processedIds.add(id);
 			const details = await iptGetDetails(uid, pass, torrentPass, id);
 			if (!details.length) {
 				continue;
@@ -75,7 +83,7 @@ const fetchRssAndDetails = async (
 					let seasonNum: number | null = null;
 					const seasonMatch =
 						details[i].name.match(/S(\d{1,2})E?/i) ||
-						details[i].name.match(/Season\s?(\d{1,2})/i) ||
+						details[i].name.match(/Season.?(\d{1,2})/i) ||
 						details[i].name.match(/(\d{1,2})x\d{1,2}/i);
 
 					if (seasonMatch && seasonMatch[1]) {
@@ -104,10 +112,8 @@ const fetchRssAndDetails = async (
 			console.log(url, key, scrapes);
 			await pdb.saveScrapedTrueResults(key, scrapes, true);
 		});
-		return ids[0]; // Return the most recent ID to track it
 	} catch (error) {
-		console.error('An error occurred fetching rss link:', error);
-		return '';
+		console.error('An error occurred fetching search page url:', error);
 	}
 };
 
@@ -130,11 +136,12 @@ export const iptGetDetails = async (
 		const nameMatch = text.match(nameRegexp) ?? [];
 		const imdbMatch = text.match(/\/t\?q=(tt\d+)/) ?? [];
 		if (imdbMatch.length != 2) {
-			console.error('No IMDB match', url);
+			// console.error('No IMDB match', url);
 			return [];
 		}
 		const sizeMatch = text.match(/Size: ([\d.]+\s[MGT]B) in </i);
 		scrapes.push({
+			id,
 			imdb: imdbMatch[1],
 			name: decodeURIComponent(nameMatch[1]) ?? '',
 			size: sizeMatch
@@ -157,6 +164,7 @@ export const iptGetDetails = async (
 			const torMatch = otherTorrents[i].match(/download.php\/(\d+)\/(.*).torrent\">/i) ?? [];
 			const sizeMatch2 = otherTorrents[i].match(/>([\d.]+\s[MGT]B)</i);
 			scrapes.push({
+				id: torMatch[1],
 				imdb: imdbMatch[1],
 				name: decodeURIComponent(torMatch[2]) ?? '',
 				size: sizeMatch2
@@ -192,30 +200,30 @@ async function convertToHash(id: string, torrentPass: string): Promise<string> {
 
 // A looping function with sleep for periodic execution and stopping when encountering a specific ID
 const startLoop = async (
-	rssUrl: string,
+	searchPageUrl: string,
+	pageNum: number,
 	uid: string,
 	pass: string,
 	mediaType: string,
 	torrentPass: string,
 	interval: number,
-	stopAtId: string
 ) => {
-	let lastId = stopAtId;
-	while (true) {
-		const newLastId = await fetchRssAndDetails(
-			rssUrl,
+	while (pageNum > 0) {
+		let finalSearchUrl = searchPageUrl + pageNum;
+		await fetchSearchPageAndDetails(
+			finalSearchUrl,
 			uid,
 			pass,
 			mediaType,
 			torrentPass,
-			lastId
 		);
-		lastId = newLastId;
 		await sleep(interval);
+		pageNum--;
 	}
 };
 
 interface IPTDetails {
+	id: string;
 	imdb: string;
 	name: string;
 	size: number;
@@ -223,16 +231,26 @@ interface IPTDetails {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const { rss, uid, pass, mediaType, torrentPass } = req.query;
-	const rssUrl = decodeURIComponent(rss as string);
+	const { mediaType, uid, pass, torrentPass } = req.query;
+	// https://iptorrents.com/t?72;p=4486
+	// https://iptorrents.com/t?73;p=11481
+	let searchPageUrl = '';
+	let lastPage = 0;
+	if (mediaType === 'movie') {
+		searchPageUrl = `https://iptorrents.com/t?72;p=`;
+		lastPage = 4486;
+	} else if (mediaType === 'tv') {
+		searchPageUrl = `https://iptorrents.com/t?73;p=`;
+		lastPage = 11481;
+	}
 	await startLoop(
-		rssUrl,
+		searchPageUrl,
+		lastPage,
 		uid as string,
 		pass as string,
 		mediaType as string,
 		torrentPass as string,
-		60000,
-		''
+		1000,
 	);
 	res.status(200).json({
 		status: 'success',
