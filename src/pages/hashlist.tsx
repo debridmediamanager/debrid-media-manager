@@ -167,6 +167,8 @@ function HashlistPage() {
 		const notYetDownloaded = await filterOutAlreadyDownloaded(userTorrentsList);
 		let tmpList = notYetDownloaded;
 		tmpList = tmpList.filter((t) => t.rdAvailable || t.adAvailable);
+		// ensure tmpList is also unique in terms of hash
+		tmpList = tmpList.filter((t, i, self) => self.findIndex((s) => s.hash === t.hash) === i);
 		if (Object.keys(router.query).length === 0) {
 			setFilteredList(applyQuickSearch(tmpList));
 			return;
