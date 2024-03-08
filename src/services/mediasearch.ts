@@ -1,3 +1,5 @@
+import { ParsedFilename } from '@ctrl/video-filename-parser';
+
 export type SearchApiResponse = {
 	results?: SearchResult[];
 	errorMessage?: string;
@@ -22,6 +24,23 @@ export type SearchResult = {
 	biggestFileSize: number;
 	videoCount: number;
 };
+
+export interface HashlistTorrent {
+	filename: string;
+	hash: string;
+	bytes: number;
+}
+
+export interface EnrichedHashlistTorrent extends HashlistTorrent {
+	title: string;
+	score: number;
+	mediaType: 'movie' | 'tv';
+	info: ParsedFilename;
+	noVideos: boolean;
+	rdAvailable: boolean;
+	adAvailable: boolean;
+	files: FileData[];
+}
 
 export type ScrapeSearchResult = Pick<SearchResult, 'title' | 'fileSize' | 'hash'>;
 
