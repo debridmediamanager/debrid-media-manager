@@ -334,7 +334,9 @@ const handler: NextApiHandler = async (req, res) => {
 			(r) => r.type === 'movie' || r.type === 'show' || r.type === 'series'
 		);
 
-		await db.saveSearchResults(keyword.toString().trim(), results);
+		if (results.length > 0 && results[0].title.toLowerCase().indexOf(searchQuery) >= 0) {
+			await db.saveSearchResults(keyword.toString().trim(), results);
+		}
 
 		res.status(200).json({ results });
 	} catch (error: any) {

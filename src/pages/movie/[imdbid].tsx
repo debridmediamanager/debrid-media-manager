@@ -14,6 +14,7 @@ import { isVideo } from '@/utils/selectable';
 import { defaultMovieSize, defaultPlayer } from '@/utils/settings';
 import { showInfoForRD } from '@/utils/showInfo';
 import { searchToastOptions } from '@/utils/toastOptions';
+import { generateTokenAndHash } from '@/utils/token';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
@@ -73,12 +74,13 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	}, [imdbid]);
 
 	async function fetchData(imdbId: string) {
+		const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 		setSearchResults([]);
 		setErrorMessage('');
 		setSearchState('loading');
 		setUncachedCount(0);
 		try {
-			let path = `api/torrents/movie?imdbId=${imdbId}`;
+			let path = `api/torrents/movie?imdbId=${imdbId}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}`;
 			if (config.externalSearchApiHostname) {
 				path = encodeURIComponent(path);
 			}

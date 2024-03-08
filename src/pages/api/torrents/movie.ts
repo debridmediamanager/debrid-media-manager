@@ -1,12 +1,26 @@
 import { flattenAndRemoveDuplicates, sortByFileSize } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
+import { validateTokenWithHash } from '@/utils/token';
 import { NextApiHandler } from 'next';
 
 const db = new PlanetScaleCache();
 
 // returns scraped results or marks the imdb id as requested
 const handler: NextApiHandler = async (req, res) => {
-	const { imdbId } = req.query;
+	const { imdbId, dmmProblemKey, solution } = req.query;
+
+	if (
+		!dmmProblemKey ||
+		!(typeof dmmProblemKey === 'string') ||
+		!solution ||
+		!(typeof solution === 'string')
+	) {
+		res.status(401).json({ errorMessage: 'Authentication not provided' });
+		return;
+	} else if (!validateTokenWithHash(dmmProblemKey.toString(), solution.toString())) {
+		res.status(401).json({ errorMessage: 'Authentication error' });
+		return;
+	}
 
 	if (!imdbId || !(typeof imdbId === 'string')) {
 		res.status(400).json({ errorMessage: 'Missing "imdbId" query parameter' });

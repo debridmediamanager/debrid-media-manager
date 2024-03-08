@@ -13,6 +13,7 @@ import { isVideo } from '@/utils/selectable';
 import { defaultEpisodeSize, defaultPlayer } from '@/utils/settings';
 import { showInfoForRD } from '@/utils/showInfo';
 import { searchToastOptions } from '@/utils/toastOptions';
+import { generateTokenAndHash } from '@/utils/token';
 import { withAuth } from '@/utils/withAuth';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
@@ -76,12 +77,13 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	}, [imdbid, seasonNum]);
 
 	async function fetchData(imdbId: string, seasonNum: number) {
+		const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 		setSearchResults([]);
 		setErrorMessage('');
 		setSearchState('loading');
 		setUncachedCount(0);
 		try {
-			let path = `api/torrents/tv?imdbId=${imdbId}&seasonNum=${seasonNum}`;
+			let path = `api/torrents/tv?imdbId=${imdbId}&seasonNum=${seasonNum}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}`;
 			if (config.externalSearchApiHostname) {
 				path = encodeURIComponent(path);
 			}
