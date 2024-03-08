@@ -31,9 +31,6 @@ const torrentDB = new UserTorrentDB();
 function HashlistPage() {
 	const router = useRouter();
 	const [query, setQuery] = useState('');
-	const [loading, setLoading] = useState(true);
-	const [filtering, setFiltering] = useState(false);
-	const [grouping, setGrouping] = useState(false);
 
 	const [userTorrentsList, setUserTorrentsList] = useState<EnrichedHashlistTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<EnrichedHashlistTorrent[]>([]);
@@ -94,8 +91,6 @@ function HashlistPage() {
 		} catch (error) {
 			setUserTorrentsList([]);
 			toast.error('Error fetching user torrents list');
-		} finally {
-			setLoading(false);
 		}
 	}
 
@@ -119,7 +114,6 @@ function HashlistPage() {
 
 	// aggregate metadata
 	useEffect(() => {
-		setGrouping(true);
 		setMovieCount(0);
 		setTvCount(0);
 		setTotalBytes(0);
@@ -147,7 +141,6 @@ function HashlistPage() {
 		setMovieCount(Object.keys(movieGrouping).length);
 		setTvCount(Object.keys(tvGroupingByTitle).length);
 		setTotalBytes(tmpTotalBytes);
-		setGrouping(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userTorrentsList]);
 
@@ -171,13 +164,11 @@ function HashlistPage() {
 			: unfiltered;
 	}
 	async function filterList() {
-		setFiltering(true);
 		const notYetDownloaded = await filterOutAlreadyDownloaded(userTorrentsList);
 		let tmpList = notYetDownloaded;
 		tmpList = tmpList.filter((t) => t.rdAvailable || t.adAvailable);
 		if (Object.keys(router.query).length === 0) {
 			setFilteredList(applyQuickSearch(tmpList));
-			setFiltering(false);
 			return;
 		}
 		const { filter: titleFilter, mediaType } = router.query;
@@ -190,7 +181,6 @@ function HashlistPage() {
 			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
 			setFilteredList(applyQuickSearch(tmpList));
 		}
-		setFiltering(false);
 	}
 	useEffect(() => {
 		filterList();
@@ -425,46 +415,39 @@ function HashlistPage() {
 				)}
 			</div>
 			<div className="overflow-x-auto">
-				{loading || grouping || filtering ? (
-					<div className="flex justify-center items-center mt-4">
-						<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
-					</div>
-				) : (
-					<table className="w-full">
-						<thead>
-							<tr>
-								<th
-									className="px-4 py-2 cursor-pointer"
-									onClick={() => handleSort('title')}
-								>
-									Title{' '}
-									{sortBy.column === 'title' &&
-										(sortBy.direction === 'asc' ? '↑' : '↓')}
-								</th>
-								<th
-									className="px-4 py-2 cursor-pointer"
-									onClick={() => handleSort('bytes')}
-								>
-									Size{' '}
-									{sortBy.column === 'bytes' &&
-										(sortBy.direction === 'asc' ? '↑' : '↓')}
-								</th>
-								<th className="px-4 py-2">Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{sortedData().map((t, i) => {
-								const groupCount = getGroupings(t.mediaType)[t.filename];
-								const filterText =
-									groupCount > 1 && !router.query.filter
-										? `${groupCount - 1} other file${
-												groupCount === 1 ? '' : 's'
-										  }`
-										: '';
-								return (
-									<tr
-										key={i}
-										className={`
+				<table className="w-full">
+					<thead>
+						<tr>
+							<th
+								className="px-4 py-2 cursor-pointer"
+								onClick={() => handleSort('title')}
+							>
+								Title{' '}
+								{sortBy.column === 'title' &&
+									(sortBy.direction === 'asc' ? '↑' : '↓')}
+							</th>
+							<th
+								className="px-4 py-2 cursor-pointer"
+								onClick={() => handleSort('bytes')}
+							>
+								Size{' '}
+								{sortBy.column === 'bytes' &&
+									(sortBy.direction === 'asc' ? '↑' : '↓')}
+							</th>
+							<th className="px-4 py-2">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{sortedData().map((t, i) => {
+							const groupCount = getGroupings(t.mediaType)[t.filename];
+							const filterText =
+								groupCount > 1 && !router.query.filter
+									? `${groupCount - 1} other file${groupCount === 1 ? '' : 's'}`
+									: '';
+							return (
+								<tr
+									key={i}
+									className={`
 									hover:bg-purple-900
 									border-t-2
 									${
@@ -476,119 +459,110 @@ function HashlistPage() {
 											: ''
 									}
 								`}
-									>
-										<td className="border px-4 py-2">
-											{!['Invalid Magnet', 'Magnet'].includes(t.filename) && (
-												<>
-													<span className="cursor-pointer">
-														{t.mediaType === 'tv' ? '📺' : '🎥'}
-													</span>
-													&nbsp;<strong>{t.title}</strong>{' '}
-													{filterText && (
-														<Link
-															href={`/library?filter=${encodeURIComponent(
-																t.title
-															)}`}
-															className="inline-block bg-green-600 hover:bg-green-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer"
-															onClick={(e) => e.stopPropagation()}
-														>
-															{filterText}
-														</Link>
-													)}
+								>
+									<td className="border px-4 py-2">
+										{!['Invalid Magnet', 'Magnet'].includes(t.filename) && (
+											<>
+												<span className="cursor-pointer">
+													{t.mediaType === 'tv' ? '📺' : '🎥'}
+												</span>
+												&nbsp;<strong>{t.title}</strong>{' '}
+												{filterText && (
 													<Link
-														href={`/search?query=${encodeURIComponent(
-															(
-																t.info.title +
-																' ' +
-																(t.info.year || '')
-															).trim() || t.title
+														href={`/library?filter=${encodeURIComponent(
+															t.title
 														)}`}
-														target="_blank"
-														className="inline-block bg-blue-600 hover:bg-blue-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer ml-1"
+														className="inline-block bg-green-600 hover:bg-green-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer"
 														onClick={(e) => e.stopPropagation()}
 													>
-														Search again
+														{filterText}
 													</Link>
-													<br />
-												</>
-											)}
-											{t.filename}
-										</td>
-
-										<td className="border px-4 py-2">
-											{(t.bytes / ONE_GIGABYTE).toFixed(1)} GB
-										</td>
-										<td className="border px-4 py-2">
-											{rdKey && isDownloading('rd', t.hash) && (
-												<button
-													className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-													onClick={() => deleteRd(t.hash)}
+												)}
+												<Link
+													href={`/search?query=${encodeURIComponent(
+														(
+															t.info.title +
+															' ' +
+															(t.info.year || '')
+														).trim() || t.title
+													)}`}
+													target="_blank"
+													className="inline-block bg-blue-600 hover:bg-blue-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer ml-1"
+													onClick={(e) => e.stopPropagation()}
 												>
-													<FaTimes />
-													RD ({hashAndProgress[`rd:${t.hash}`] + '%'})
-												</button>
-											)}
-											{rdKey &&
-												!t.rdAvailable &&
-												notInLibrary('rd', t.hash) && (
-													<button
-														className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-														onClick={() => addRd(t.hash)}
-													>
-														<FaDownload />
-														RD
-													</button>
-												)}
-											{rdKey &&
-												t.rdAvailable &&
-												notInLibrary('rd', t.hash) && (
-													<button
-														className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
-														onClick={() => addRd(t.hash)}
-													>
-														<FaDownload />
-														RD
-													</button>
-												)}
+													Search again
+												</Link>
+												<br />
+											</>
+										)}
+										{t.filename}
+									</td>
 
-											{adKey && isDownloading('ad', t.hash) && (
-												<button
-													className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-													onClick={() => deleteAd(t.hash)}
-												>
-													<FaTimes />
-													AD ({hashAndProgress[`ad:${t.hash}`] + '%'})
-												</button>
-											)}
-											{adKey &&
-												!t.adAvailable &&
-												notInLibrary('ad', t.hash) && (
-													<button
-														className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-														onClick={() => addAd(t.hash)}
-													>
-														<FaDownload />
-														AD
-													</button>
-												)}
-											{adKey &&
-												t.adAvailable &&
-												notInLibrary('ad', t.hash) && (
-													<button
-														className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
-														onClick={() => addAd(t.hash)}
-													>
-														<FaDownload />
-														AD
-													</button>
-												)}
-										</td>
-									</tr>
-								);
-							})}
-						</tbody>
-					</table>
-				)}
+									<td className="border px-4 py-2">
+										{(t.bytes / ONE_GIGABYTE).toFixed(1)} GB
+									</td>
+									<td className="border px-4 py-2">
+										{rdKey && isDownloading('rd', t.hash) && (
+											<button
+												className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+												onClick={() => deleteRd(t.hash)}
+											>
+												<FaTimes />
+												RD ({hashAndProgress[`rd:${t.hash}`] + '%'})
+											</button>
+										)}
+										{rdKey && !t.rdAvailable && notInLibrary('rd', t.hash) && (
+											<button
+												className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+												onClick={() => addRd(t.hash)}
+											>
+												<FaDownload />
+												RD
+											</button>
+										)}
+										{rdKey && t.rdAvailable && notInLibrary('rd', t.hash) && (
+											<button
+												className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
+												onClick={() => addRd(t.hash)}
+											>
+												<FaDownload />
+												RD
+											</button>
+										)}
+
+										{adKey && isDownloading('ad', t.hash) && (
+											<button
+												className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+												onClick={() => deleteAd(t.hash)}
+											>
+												<FaTimes />
+												AD ({hashAndProgress[`ad:${t.hash}`] + '%'})
+											</button>
+										)}
+										{adKey && !t.adAvailable && notInLibrary('ad', t.hash) && (
+											<button
+												className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+												onClick={() => addAd(t.hash)}
+											>
+												<FaDownload />
+												AD
+											</button>
+										)}
+										{adKey && t.adAvailable && notInLibrary('ad', t.hash) && (
+											<button
+												className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
+												onClick={() => addAd(t.hash)}
+											>
+												<FaDownload />
+												AD
+											</button>
+										)}
+									</td>
+								</tr>
+							);
+						})}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	);
