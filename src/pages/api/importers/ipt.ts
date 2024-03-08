@@ -34,7 +34,7 @@ const fetchSearchPageAndDetails = async (
 	uid: string,
 	pass: string,
 	mediaType: string,
-	torrentPass: string,
+	torrentPass: string
 ): Promise<void> => {
 	try {
 		const searchResponse = await fetch(searchPageUrl, {
@@ -207,17 +207,11 @@ const startLoop = async (
 	pass: string,
 	mediaType: string,
 	torrentPass: string,
-	interval: number,
+	interval: number
 ) => {
 	while (pageNum > 0) {
 		let finalSearchUrl = searchPageUrl + pageNum;
-		await fetchSearchPageAndDetails(
-			finalSearchUrl,
-			uid,
-			pass,
-			mediaType,
-			torrentPass,
-		);
+		await fetchSearchPageAndDetails(finalSearchUrl, uid, pass, mediaType, torrentPass);
 		await sleep(interval);
 		pageNum--;
 	}
@@ -251,7 +245,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		pass as string,
 		mediaType as string,
 		torrentPass as string,
-		1000,
+		1000
 	);
 	res.status(200).json({
 		status: 'success',
