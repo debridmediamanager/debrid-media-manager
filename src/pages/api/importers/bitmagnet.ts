@@ -26,7 +26,8 @@ const fetchMovies = async () => {
             tc.content_type = 'movie'
             AND ca.source = 'imdb'
         ORDER BY
-            tc.created_at DESC;
+            tc.created_at DESC
+		LIMIT 500;
     `;
 
 	try {
@@ -80,7 +81,8 @@ const fetchShows = async () => {
             tc.content_type = 'tv_show'
             AND ca.source = 'imdb'
         ORDER BY
-            tc.created_at DESC;
+            tc.created_at DESC
+		LIMIT 500;
     `;
 
 	try {
@@ -126,6 +128,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		await fetchMovies();
 	} else if (mediaType === 'tv') {
 		await fetchShows();
+	} else {
+		while (true) {
+			await fetchMovies();
+			await fetchShows();
+			await new Promise((resolve) => setTimeout(resolve, 1000 * 60 * 5));
+		}
 	}
 	res.status(200).json({ status: 'success' });
 	return;
