@@ -50,3 +50,4 @@ pscale_dump_dmm_main/
 src/pages/api/importers/yts.json
 
 src/tgx/*.json
+src/hdt/*.json
