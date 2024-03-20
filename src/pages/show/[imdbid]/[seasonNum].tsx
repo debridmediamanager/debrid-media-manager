@@ -50,6 +50,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 }) => {
 	const player = window.localStorage.getItem('player') || defaultPlayer;
 	const episodeMaxSize = window.localStorage.getItem('episodeMaxSize') || defaultEpisodeSize;
+	const onlyTrustedTorrents = window.localStorage.getItem('onlyTrustedTorrents') === 'true';
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -83,7 +84,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		setSearchState('loading');
 		setUncachedCount(0);
 		try {
-			let path = `api/torrents/tv?imdbId=${imdbId}&seasonNum=${seasonNum}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}`;
+			let path = `api/torrents/tv?imdbId=${imdbId}&seasonNum=${seasonNum}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}&onlyTrusted=${onlyTrustedTorrents}`;
 			if (config.externalSearchApiHostname) {
 				path = encodeURIComponent(path);
 			}
