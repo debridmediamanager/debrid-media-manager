@@ -43,7 +43,7 @@ const handler: NextApiHandler = async (req, res) => {
 			promises.push(
 				db.getScrapedResults<any[]>(
 					`tv:${imdbId.toString().trim()}:${parseInt(seasonNum.toString().trim(), 10)}`
-				),
+				)
 			);
 		}
 		const results = await Promise.all(promises);
