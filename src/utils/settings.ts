@@ -17,7 +17,7 @@ export const showSettings = async () => {
 	const isEpisodeSize = (size: string) =>
 		episodeMaxSize === size ? `value="${size}" selected` : `value="${size}"`;
 
-	const onlyTrustedSources = window.localStorage.getItem('onlyTrustedSources') === 'true';
+	const onlyTrustedTorrents = window.localStorage.getItem('onlyTrustedTorrents') === 'true';
 
 	const { value: formValues } = await Swal.fire({
 		title: '⚙️ Settings',
@@ -75,8 +75,8 @@ export const showSettings = async () => {
 
 			<div name="divider" class="py-2"></div>
 
-            <label for="dmm-only-trusted-sources">Only show trusted sources:</label>
-			<input id="dmm-only-trusted-sources" type="checkbox" class="w-4 h-4 ml-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" ${onlyTrustedSources ? 'checked' : ''}>
+            <label for="dmm-only-trusted-torrents">Only show trusted torrents:</label>
+			<input id="dmm-only-trusted-torrents" type="checkbox" class="w-4 h-4 ml-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" ${onlyTrustedTorrents ? 'checked' : ''}>
 
 			<div name="divider" class="py-4"></div>
 
@@ -95,8 +95,8 @@ export const showSettings = async () => {
 				episodeMaxSize: (
 					document.getElementById('dmm-episode-max-size') as HTMLInputElement
 				).value,
-				onlyTrustedSources: (
-					document.getElementById('dmm-only-trusted-sources') as HTMLInputElement
+				onlyTrustedTorrents: (
+					document.getElementById('dmm-only-trusted-torrents') as HTMLInputElement
 				).checked,
 			};
 		},
@@ -106,6 +106,6 @@ export const showSettings = async () => {
 		window.localStorage.setItem('player', formValues.player);
 		window.localStorage.setItem('movieMaxSize', formValues.movieMaxSize);
 		window.localStorage.setItem('episodeMaxSize', formValues.episodeMaxSize);
-		window.localStorage.setItem('onlyTrustedSources', formValues.onlyTrustedSources);
+		window.localStorage.setItem('onlyTrustedTorrents', formValues.onlyTrustedTorrents);
 	}
 };
