@@ -1,3 +1,4 @@
+import { ApiBayItem, processStream } from '@/services/apibay';
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
 import { ScrapeResponse } from '@/services/scrapeJobs';
@@ -112,30 +113,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		}
 		startFromHere = '';
 	}
-}
-
-interface ApiBayItem {
-	id: string;
-	name: string;
-	info_hash: string;
-	leechers: string;
-	seeders: string;
-	num_files: string;
-	size: string;
-	username: string;
-	added: string;
-	status: string;
-	category: string;
-	imdb: string | null;
-}
-
-function processStream(item: ApiBayItem, imdbId: string): ScrapeSearchResult | null {
-	if (item.imdb !== imdbId) {
-		return null;
-	}
-	return {
-		title: item.name,
-		fileSize: parseInt(item.size, 10) / 1024 / 1024,
-		hash: item.info_hash.toLowerCase(),
-	};
 }
