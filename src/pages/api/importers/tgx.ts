@@ -15,46 +15,46 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	const movieImdbIdsLength = movieImdbIds.length;
 	console.log(`[tgx] movieImdbIdsLength: ${movieImdbIdsLength}`);
 
-	// const toSave: { key: string; value: ScrapeSearchResult[] }[] = [];
+	let toSave: { key: string; value: ScrapeSearchResult[] }[] = [];
 
-	// for (let i = 0; i < movieImdbIdsLength; i++) {
-	//     const imdbId = movieImdbIds[i];
-	//     // console.log(`[tgx] movieImdbId: ${imdbId}`);
-	//     // check if file imdbId-1.json exists and parse it, use fs
-	//     const getFname = (pg = 1) => `${cwd}/src/tgx/${imdbId}-${pg}.json`;
-	//     const scrapes: ScrapeSearchResult[] = [];
-	//     let page = 1;
-	//     while (true) {
-	//         if (fs.existsSync(getFname(page))) {
-	//             console.log(`[tgx] file ${getFname(page)} exists`);
-	//             const data = fs.readFileSync(getFname(page), 'utf8');
-	//             const hashes = JSON.parse(data);
-	//             for (const hash of hashes) {
-	//                 console.log(`[tgx] hash: ${hash.title.trim()}`);
-	//                 scrapes.push({
-	//                     title: hash.title.trim(),
-	//                     fileSize: hash.size,
-	//                     hash: hash.infoHash,
-	//                 });
-	//             }
-	//             page++;
-	//         } else {
-	//             console.log(`[tgx] file ${getFname(page)} does not exist`);
-	//             break;
-	//         }
-	//     }
-	//     toSave.push({ key: `movie:${imdbId}`, value: scrapes });
-	// }
-	// for (const save of toSave) {
-	//     await pdb.saveScrapedTrueResults(save.key, save.value, true);
-	// }
+	for (let i = 0; i < movieImdbIdsLength; i++) {
+		const imdbId = movieImdbIds[i];
+		// console.log(`[tgx] movieImdbId: ${imdbId}`);
+		// check if file imdbId-1.json exists and parse it, use fs
+		const getFname = (pg = 1) => `${cwd}/src/tgx/${imdbId}-${pg}.json`;
+		const scrapes: ScrapeSearchResult[] = [];
+		let page = 1;
+		while (true) {
+			if (fs.existsSync(getFname(page))) {
+				console.log(`[tgx] file ${getFname(page)} exists`);
+				const data = fs.readFileSync(getFname(page), 'utf8');
+				const hashes = JSON.parse(data);
+				for (const hash of hashes) {
+					console.log(`[tgx] hash: ${hash.title.trim()}`);
+					scrapes.push({
+						title: hash.title.trim(),
+						fileSize: hash.size,
+						hash: hash.infoHash,
+					});
+				}
+				page++;
+			} else {
+				console.log(`[tgx] file ${getFname(page)} does not exist`);
+				break;
+			}
+		}
+		toSave.push({ key: `movie:${imdbId}`, value: scrapes });
+	}
+	for (const save of toSave) {
+		await pdb.saveScrapedTrueResults(save.key, save.value, true);
+	}
 
 	// parse the json inside projectdir/tgx/tvImdbIds.json
 	const tvImdbIds = require('../../../tgx/tvImdbIds.json');
 	const tvImdbIdsLength = tvImdbIds.length;
 	console.log(`[tgx] tvImdbIdsLength: ${tvImdbIdsLength}`);
 
-	const toSave: { key: string; value: ScrapeSearchResult[] }[] = [];
+	toSave = [];
 	const scrapesMap = new Map<string, ScrapeSearchResult[]>();
 
 	for (let i = 0; i < tvImdbIdsLength; i++) {
