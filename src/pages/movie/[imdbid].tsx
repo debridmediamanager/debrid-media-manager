@@ -49,6 +49,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 }) => {
 	const player = window.localStorage.getItem('player') || defaultPlayer;
 	const movieMaxSize = window.localStorage.getItem('movieMaxSize') || defaultMovieSize;
+	const onlyTrustedTorrents = window.localStorage.getItem('onlyTrustedTorrents') === 'true';
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -80,7 +81,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		setSearchState('loading');
 		setUncachedCount(0);
 		try {
-			let path = `api/torrents/movie?imdbId=${imdbId}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}`;
+			let path = `api/torrents/movie?imdbId=${imdbId}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}&onlyTrusted=${onlyTrustedTorrents}`;
 			if (config.externalSearchApiHostname) {
 				path = encodeURIComponent(path);
 			}
