@@ -7,7 +7,7 @@ const db = new PlanetScaleCache();
 
 // returns scraped results or marks the imdb id as requested
 const handler: NextApiHandler = async (req, res) => {
-	const { imdbId, seasonNum, dmmProblemKey, solution } = req.query;
+	const { imdbId, seasonNum, dmmProblemKey, solution, onlyTrusted } = req.query;
 
 	if (
 		!dmmProblemKey ||
@@ -34,14 +34,19 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 
 	try {
-		const results = await Promise.all([
-			db.getScrapedResults<any[]>(
-				`tv:${imdbId.toString().trim()}:${parseInt(seasonNum.toString().trim(), 10)}`
-			),
+		const promises = [
 			db.getScrapedTrueResults<any[]>(
 				`tv:${imdbId.toString().trim()}:${parseInt(seasonNum.toString().trim(), 10)}`
 			),
-		]);
+		];
+		if (onlyTrusted !== 'true') {
+			promises.push(
+				db.getScrapedResults<any[]>(
+					`tv:${imdbId.toString().trim()}:${parseInt(seasonNum.toString().trim(), 10)}`
+				),
+			);
+		}
+		const results = await Promise.all(promises);
 		// should contain both results
 		const searchResults = [...(results[0] || []), ...(results[1] || [])];
 		if (searchResults) {
