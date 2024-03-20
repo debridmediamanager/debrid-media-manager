@@ -28,13 +28,9 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 
 	try {
-		const promises = [
-			db.getScrapedTrueResults<any[]>(`movie:${imdbId.toString().trim()}`),
-		];
+		const promises = [db.getScrapedTrueResults<any[]>(`movie:${imdbId.toString().trim()}`)];
 		if (onlyTrusted !== 'true') {
-			promises.push(
-				db.getScrapedResults<any[]>(`movie:${imdbId.toString().trim()}`),
-			);
+			promises.push(db.getScrapedResults<any[]>(`movie:${imdbId.toString().trim()}`));
 		}
 		const results = await Promise.all(promises);
 		// should contain both results
