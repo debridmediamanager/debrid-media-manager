@@ -10,13 +10,15 @@ type MovieScrapeJob = {
 	titles: string[];
 	year: string;
 	airDate: string;
+	imdbId: string;
 };
 
 async function scrapeAll(
 	finalQuery: string,
 	targetTitle: string,
 	years: string[],
-	airDate: string
+	airDate: string,
+	imdbId: string
 ): Promise<ScrapeSearchResult[][]> {
 	return await Promise.all([
 		scrapeBtdigg(finalQuery, targetTitle, years, airDate),
@@ -33,8 +35,10 @@ const processMovieJob = async (job: MovieScrapeJob): Promise<ScrapeSearchResult[
 	const results: ScrapeSearchResult[][] = [];
 	for (let i = 0; i < job.titles.length; i++) {
 		const title = job.titles[i];
-		results.push(...(await scrapeAll(`"${title}" ${job.year}`, title, years, job.airDate)));
-		results.push(...(await scrapeAll(`"${title}"`, title, years, job.airDate)));
+		results.push(
+			...(await scrapeAll(`"${title}" ${job.year}`, title, years, job.airDate, job.imdbId))
+		);
+		results.push(...(await scrapeAll(`"${title}"`, title, years, job.airDate, job.imdbId)));
 	}
 	return results;
 };
@@ -69,6 +73,7 @@ export async function scrapeMovies(
 		titles,
 		year,
 		airDate,
+		imdbId,
 	});
 	let processedResults = flattenAndRemoveDuplicates(searchResults);
 	processedResults = filterByMovieConditions(processedResults);

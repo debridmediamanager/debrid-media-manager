@@ -21,13 +21,15 @@ type TvScrapeJob = {
 	seasonCode?: number;
 	seasonYear: string;
 	airDate: string;
+	imdbId: string;
 };
 
 async function scrapeAll(
 	finalQuery: string,
 	targetTitle: string,
 	years: string[],
-	airDate: string
+	airDate: string,
+	imdbId: string
 ): Promise<ScrapeSearchResult[][]> {
 	return await Promise.all([
 		scrapeBtdigg(finalQuery, targetTitle, years, airDate),
@@ -47,7 +49,8 @@ const getSearchResults = async (job: TvScrapeJob): Promise<ScrapeSearchResult[][
 				`"${title}" s${padWithZero(job.seasonNumber)}`,
 				title,
 				years,
-				job.airDate
+				job.airDate,
+				job.imdbId
 			))
 		);
 		if (job.seasonName && job.seasonCode) {
@@ -56,15 +59,22 @@ const getSearchResults = async (job: TvScrapeJob): Promise<ScrapeSearchResult[][
 					`"${title}" ${job.seasonName} s${padWithZero(job.seasonCode)}`,
 					title,
 					years,
-					job.airDate
+					job.airDate,
+					job.imdbId
 				))
 			);
 		} else if (job.seasonName && job.seasonName !== title) {
 			results.push(
-				...(await scrapeAll(`"${title}" ${job.seasonName}`, title, years, job.airDate))
+				...(await scrapeAll(
+					`"${title}" ${job.seasonName}`,
+					title,
+					years,
+					job.airDate,
+					job.imdbId
+				))
 			);
 		} else if (job.seasonNumber === 1) {
-			results.push(...(await scrapeAll(`"${title}"`, title, years, job.airDate)));
+			results.push(...(await scrapeAll(`"${title}"`, title, years, job.airDate, job.imdbId)));
 		}
 	}
 	return results;
@@ -111,6 +121,7 @@ export async function scrapeTv(
 			seasonCode,
 			seasonYear,
 			airDate,
+			imdbId,
 		});
 	}
 
