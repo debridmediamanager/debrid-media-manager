@@ -55,6 +55,8 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
+	const [query, setQuery] = useState('');
+	const [descLimit, setDescLimit] = useState(100);
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
@@ -138,6 +140,34 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		setSearchResults(sortByMedian(searchResults));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchResults]);
+
+	useEffect(() => {
+		if (searchState === 'loading') return;
+		const tokens = new Map<string, number>();
+		// filter by cached
+		const toProcess = searchResults.filter((r) => r.rdAvailable || r.adAvailable);
+		toProcess.forEach((r) => {
+			r.title.split(/[ .\-\[\]]/).forEach((word) => {
+				if (word.length < 3) return;
+				// skip if word is in title
+				if (title.toLowerCase().includes(word.toLowerCase())) return;
+				word = word.toLowerCase();
+				if (tokens.has(word)) {
+					tokens.set(word, tokens.get(word)! + 1);
+				} else {
+					tokens.set(word, 1);
+				}
+			});
+		});
+		// iterate through tokens
+		let tokenEntries = Array.from(tokens.entries());
+		// sort by count
+		tokenEntries = tokenEntries.sort((a, b) => b[1] - a[1]);
+		// get only the tokens
+		const tokensArr = tokenEntries.map((a) => a[0].toLowerCase());
+		console.log(tokensArr);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchState]);
 
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	async function fetchHashAndProgress(hash?: string) {
@@ -267,7 +297,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 						height={300}
 						src={poster}
 						alt="Show poster"
-						className="shadow-lg row-span-4"
+						className="shadow-lg row-span-5"
 					/>
 				)) || <Poster imdbId={imdbid as string} title={title} />}
 				<div className="flex justify-end p-2">
@@ -282,17 +312,17 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					<span className="whitespace-nowrap">{title}</span> -{' '}
 					<span className="whitespace-nowrap">Season {seasonNum}</span>
 				</h2>
-				<div className="w-fit h-fit bg-slate-900/75">
-					{description}{' '}
+				<div className="w-fit h-fit bg-slate-900/75" onClick={() => setDescLimit(0)}>
+					{descLimit > 0 ? description.substring(0, descLimit) + '..' : description}{' '}
 					{imdb_score > 0 && (
 						<div className="text-yellow-100 inline">
 							<Link href={`https://www.imdb.com/title/${imdbid}/`} target="_blank">
-								IMDB Score: {imdb_score}
+								IMDB Score: {imdb_score < 10 ? imdb_score : imdb_score / 10}
 							</Link>
 						</div>
 					)}
 				</div>
-				<div className="">
+				<div className="flex items-center overflow-x-auto">
 					{Array.from({ length: season_count || 0 }, (_, i) => i + 1).map(
 						(season, idx) => {
 							const color = intSeasonNum === season ? 'red' : 'yellow';
@@ -300,18 +330,22 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 								<Link
 									key={idx}
 									href={`/show/${imdbid}/${season}`}
-									className={`w-fit inline-flex items-center p-1 text-xs text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-2`}
+									className={`inline-flex items-center p-1 text-xs text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-2`}
 								>
 									<span role="img" aria-label="tv show" className="mr-2">
 										📺
 									</span>{' '}
-									{season_names && season_names[season - 1]
-										? season_names[season - 1]
-										: `Season ${season}`}
+									<span className="whitespace-nowrap">
+										{season_names && season_names[season - 1]
+											? season_names[season - 1]
+											: `Season ${season}`}
+									</span>
 								</Link>
 							);
 						}
 					)}
+				</div>
+				<div>
 					{onlyShowCached && uncachedCount > 0 && (
 						<button
 							className={`mr-2 mt-0 mb-2 bg-blue-700 hover:bg-blue-600 text-white p-1 text-xs rounded`}
@@ -319,7 +353,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 								setOnlyShowCached(false);
 							}}
 						>
-							👉 Show {uncachedCount} uncached results
+							👉 Show {uncachedCount} uncached
 						</button>
 					)}
 				</div>
@@ -354,6 +388,47 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					<span className="block sm:inline"> {errorMessage}</span>
 				</div>
 			)}
+			<div className="flex items-center border-b-2 border-gray-500 py-2 mb-2">
+				<input
+					className="appearance-none bg-transparent border-none w-full text-lg text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
+					type="text"
+					id="query"
+					placeholder="filter results, supports regex"
+					value={query}
+					onChange={(e) => {
+						setQuery(e.target.value.toLocaleLowerCase());
+					}}
+				/>
+				<span
+					className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"
+					onClick={() => setQuery('')}
+				>
+					Reset
+				</span>
+			</div>
+			<div className="flex items-center p-1 mb-4 overflow-x-auto">
+				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+					S01
+				</span>
+				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+					S01E01
+				</span>
+				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+					S01E02
+				</span>
+				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+					S01E03
+				</span>
+				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+					S01E04
+				</span>
+				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+					S01E05
+				</span>
+				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+					S01E06
+				</span>
+			</div>
 			{searchResults.length > 0 && (
 				<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
 					{searchResults.map((r: SearchResult, i: number) => {
