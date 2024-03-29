@@ -996,15 +996,23 @@ function TorrentsPage() {
 			await torrentDB.add(t);
 		}
 
-		showInfoForRD(window.localStorage.getItem('player') || defaultPlayer, rdKey!, info);
+		showInfoForRD(
+			window.localStorage.getItem('settings:player') || defaultPlayer,
+			rdKey!,
+			info
+		);
 	};
 
 	const handleShowInfoForAD = async (t: UserTorrent) => {
-		let player = window.localStorage.getItem('player') || defaultPlayer;
+		let player = window.localStorage.getItem('settings:player') || defaultPlayer;
 		if (player === 'realdebrid') {
 			alert('No player selected');
 		}
-		showInfoForAD(window.localStorage.getItem('player') || defaultPlayer, rdKey!, t.adData!);
+		showInfoForAD(
+			window.localStorage.getItem('settings:player') || defaultPlayer,
+			rdKey!,
+			t.adData!
+		);
 	};
 
 	return (
