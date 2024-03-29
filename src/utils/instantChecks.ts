@@ -41,7 +41,7 @@ export const instantCheckInRd = async (
 				resp[torrent.hash]['rd'].forEach((variant) => {
 					for (const fileId in variant) {
 						if (fileId in files === false)
-							files[fileId] = { ...variant[fileId], fileId };
+							files[fileId] = { ...variant[fileId], fileId: parseInt(fileId, 10) };
 					}
 				});
 				torrent.files = Object.values(files);
@@ -96,7 +96,7 @@ export const instantCheckInRd2 = async (
 				resp[torrent.hash]['rd'].forEach((variant) => {
 					for (const fileId in variant) {
 						if (fileId in files === false)
-							files[fileId] = { ...variant[fileId], fileId };
+							files[fileId] = { ...variant[fileId], fileId: parseInt(fileId, 10) };
 					}
 				});
 				torrent.files = Object.values(files);
@@ -205,14 +205,14 @@ export const instantCheckInAd = async (
 						if (file.e && file.e.length > 0) {
 							return file.e.map((f) => {
 								return {
-									fileId: idx++ + '',
+									fileId: idx++,
 									filename: f.n,
 									filesize: f.s,
 								};
 							});
 						}
 						return {
-							fileId: idx++ + '',
+							fileId: idx++,
 							filename: file.n,
 							filesize: file.s,
 						};
@@ -285,14 +285,14 @@ export const instantCheckInAd2 = async (
 						if (file.e && file.e.length > 0) {
 							return file.e.map((f) => {
 								return {
-									fileId: idx++ + '',
+									fileId: idx++,
 									filename: f.n,
 									filesize: f.s,
 								};
 							});
 						}
 						return {
-							fileId: idx++ + '',
+							fileId: idx++,
 							filename: file.n,
 							filesize: file.s,
 						};

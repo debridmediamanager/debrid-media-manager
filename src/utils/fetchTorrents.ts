@@ -111,7 +111,7 @@ export const fetchAllDebrid = async (
 				links: magnetInfo.links.map((l) => l.link),
 				adData: magnetInfo,
 				selectedFiles: magnetInfo.links.map((l) => ({
-					fileId: idx++ + '',
+					fileId: idx++,
 					filename: l.filename,
 					filesize: l.size,
 					link: l.link,
