@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
-	const streamUrl = await getStreamUrl(token, hash, fileId, ipAddress);
+	const streamUrl = await getStreamUrl(token, hash, parseInt(fileId, 10), ipAddress);
 	if (streamUrl) {
 		await db.saveCast(imdbid, userid, hash, streamUrl);
 		res.status(200).json({

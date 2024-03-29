@@ -47,9 +47,10 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	year,
 	imdb_score,
 }) => {
-	const player = window.localStorage.getItem('player') || defaultPlayer;
-	const movieMaxSize = window.localStorage.getItem('movieMaxSize') || defaultMovieSize;
-	const onlyTrustedTorrents = window.localStorage.getItem('onlyTrustedTorrents') === 'true';
+	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
+	const movieMaxSize = window.localStorage.getItem('settings:movieMaxSize') || defaultMovieSize;
+	const onlyTrustedTorrents =
+		window.localStorage.getItem('settings:onlyTrustedTorrents') === 'true';
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);

@@ -9,7 +9,7 @@ import { handleSelectFilesInRd } from './addMagnet';
 export const getStreamUrl = async (
 	rdKey: string,
 	hash: string,
-	fileId: string,
+	fileId: number,
 	ipAddress: string
 ) => {
 	let streamUrl = '';

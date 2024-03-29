@@ -36,7 +36,7 @@ export interface CachedHash {
 }
 
 export interface SelectedFile {
-	fileId: string;
+	fileId: number;
 	filename: string;
 	filesize: number;
 	link: string;
