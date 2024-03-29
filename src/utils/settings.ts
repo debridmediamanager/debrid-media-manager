@@ -3,21 +3,27 @@ import Swal from 'sweetalert2';
 export const defaultPlayer = 'web/rd';
 export const defaultMovieSize = '0';
 export const defaultEpisodeSize = '0';
+export const defaultTorrentsFilter = '';
 
 export const showSettings = async () => {
-	const storedPlayer = window.localStorage.getItem('player') || defaultPlayer;
+	const storedPlayer = window.localStorage.getItem('settings:player') || defaultPlayer;
 	const isPlayer = (player: string) =>
 		storedPlayer === player ? `value="${player}" selected` : `value="${player}"`;
 
-	const movieMaxSize = window.localStorage.getItem('movieMaxSize') || defaultMovieSize;
+	const movieMaxSize = window.localStorage.getItem('settings:movieMaxSize') || defaultMovieSize;
 	const isMovieSize = (size: string) =>
 		movieMaxSize === size ? `value="${size}" selected` : `value="${size}"`;
 
-	const episodeMaxSize = window.localStorage.getItem('episodeMaxSize') || defaultEpisodeSize;
+	const episodeMaxSize =
+		window.localStorage.getItem('settings:episodeMaxSize') || defaultEpisodeSize;
 	const isEpisodeSize = (size: string) =>
 		episodeMaxSize === size ? `value="${size}" selected` : `value="${size}"`;
 
-	const onlyTrustedTorrents = window.localStorage.getItem('onlyTrustedTorrents') === 'true';
+	const onlyTrustedTorrents =
+		window.localStorage.getItem('settings:onlyTrustedTorrents') === 'true';
+
+	const defaultTorrentsFilter =
+		window.localStorage.getItem('settings:defaultTorrentsFilter') || '';
 
 	const { value: formValues } = await Swal.fire({
 		title: '⚙️ Settings',
@@ -75,8 +81,13 @@ export const showSettings = async () => {
 
 			<div name="divider" class="py-2"></div>
 
+			<label for="dmm-default-torrents-filter">Default torrents filter:</label>
+			<input id="dmm-default-torrents-filter" type="text" class="ml-4 outline-none text-md w-64" placeholder="filter results, supports regex" ${defaultTorrentsFilter}>
+
+			<div name="divider" class="py-4"></div>
+
             <label for="dmm-only-trusted-torrents">Only show trusted torrents:</label>
-			<input id="dmm-only-trusted-torrents" type="checkbox" class="w-4 h-4 ml-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" ${
+			<input id="dmm-only-trusted-torrents" type="checkbox" class="w-4 h-4 ml-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" ${
 				onlyTrustedTorrents ? 'checked' : ''
 			}>
 
@@ -105,9 +116,22 @@ export const showSettings = async () => {
 	});
 
 	if (formValues) {
-		window.localStorage.setItem('player', formValues.player);
-		window.localStorage.setItem('movieMaxSize', formValues.movieMaxSize);
-		window.localStorage.setItem('episodeMaxSize', formValues.episodeMaxSize);
-		window.localStorage.setItem('onlyTrustedTorrents', formValues.onlyTrustedTorrents);
+		window.localStorage.setItem('settings:player', formValues.player ?? defaultPlayer);
+		window.localStorage.setItem(
+			'settings:movieMaxSize',
+			formValues.movieMaxSize ?? defaultMovieSize
+		);
+		window.localStorage.setItem(
+			'settings:episodeMaxSize',
+			formValues.episodeMaxSize ?? defaultEpisodeSize
+		);
+		window.localStorage.setItem(
+			'settings:onlyTrustedTorrents',
+			formValues.onlyTrustedTorrents ?? false
+		);
+		window.localStorage.setItem(
+			'settings:defaultTorrentsFilter',
+			formValues.defaultTorrentsFilter ?? defaultTorrentsFilter
+		);
 	}
 };
