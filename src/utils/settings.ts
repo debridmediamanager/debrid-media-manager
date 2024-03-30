@@ -82,7 +82,7 @@ export const showSettings = async () => {
 			<div name="divider" class="py-2"></div>
 
 			<label for="dmm-default-torrents-filter">Default torrents filter:</label>
-			<input id="dmm-default-torrents-filter" type="text" class="ml-4 outline-none text-md w-64" placeholder="filter results, supports regex" ${defaultTorrentsFilter}>
+			<input id="dmm-default-torrents-filter" type="text" class="ml-4 outline-none text-md w-64" placeholder="filter results, supports regex" value=${defaultTorrentsFilter}>
 
 			<div name="divider" class="py-4"></div>
 
@@ -111,6 +111,9 @@ export const showSettings = async () => {
 				onlyTrustedTorrents: (
 					document.getElementById('dmm-only-trusted-torrents') as HTMLInputElement
 				).checked,
+				defaultTorrentsFilter: (
+					document.getElementById('dmm-default-torrents-filter') as HTMLInputElement
+				).value,
 			};
 		},
 	});
