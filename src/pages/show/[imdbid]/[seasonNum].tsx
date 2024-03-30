@@ -56,6 +56,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		window.localStorage.getItem('settings:onlyTrustedTorrents') === 'true';
 	const defaultTorrentsFilter =
 		window.localStorage.getItem('settings:defaultTorrentsFilter') ?? '';
+	console.log('defaultTorrentsFilter', defaultTorrentsFilter);
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -246,7 +247,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		const torrents = await torrentDB.getAllByHash(hash);
 		for (const t of torrents) {
 			if (!t.id.startsWith('ad:')) continue;
-			await handleDeleteAdTorrent(rdKey!, t.id);
+			await handleDeleteAdTorrent(adKey!, t.id);
 			await torrentDB.deleteByHash('ad', hash);
 			setHashAndProgress((prev) => {
 				const newHashAndProgress = { ...prev };
@@ -326,9 +327,8 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 						Go Home
 					</Link>
 				</div>
-				<h2 className="block text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
-					<span className="whitespace-nowrap">{title}</span> -{' '}
-					<span className="whitespace-nowrap">Season {seasonNum}</span>
+				<h2 className="text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
+					{title} - Season {seasonNum}
 				</h2>
 				<div className="w-fit h-fit bg-slate-900/75" onClick={() => setDescLimit(0)}>
 					{descLimit > 0 ? description.substring(0, descLimit) + '..' : description}{' '}
@@ -378,9 +378,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			</div>
 
 			{searchState === 'loading' && (
-				<div className="float-start flex justify-center items-center bg-black">
-					Loading...
-				</div>
+				<div className="flex justify-center items-center bg-black">Loading...</div>
 			)}
 			{searchState === 'requested' && (
 				<div className="mt-4 bg-yellow-500 border border-yellow-400 text-yellow-900 px-4 py-3 rounded relative">
@@ -424,7 +422,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					Reset
 				</span>
 			</div>
-			<div className="flex items-center p-1 mb-1 overflow-x-auto">
+			{/* <div className="flex items-center p-1 mb-1 overflow-x-auto">
 				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 cursor-pointer">
 					S01
 				</span>
@@ -446,7 +444,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 cursor-pointer">
 					S01E06
 				</span>
-			</div>
+			</div> */}
 			{searchResults.length > 0 && (
 				<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
 					{filteredResults.map((r: SearchResult, i: number) => {
@@ -468,8 +466,8 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 							<div
 								key={i}
 								className={`${borderColor(
-									isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash),
-									isDownloading('rd', r.hash) || isDownloading('ad', r.hash)
+									downloaded,
+									downloading
 								)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
 							>
 								<div className="p-2 space-y-4">
