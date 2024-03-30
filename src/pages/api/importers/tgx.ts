@@ -11,7 +11,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	console.log(`[tgx] cwd: ${cwd}`);
 
 	// parse the json inside projectdir/tgx/movieImdbIds.json
-	const movieImdbIds = require('../../../tgx/movieImdbIds.json');
+	// const movieImdbIds = require('../../../tgx/movieImdbIds.json');
+	const movieImdbIds: string[] = [];
 	const movieImdbIdsLength = movieImdbIds.length;
 	console.log(`[tgx] movieImdbIdsLength: ${movieImdbIdsLength}`);
 
@@ -50,7 +51,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	}
 
 	// parse the json inside projectdir/tgx/tvImdbIds.json
-	const tvImdbIds = require('../../../tgx/tvImdbIds.json');
+	// const tvImdbIds = require('../../../tgx/tvImdbIds.json');
+	const tvImdbIds: string[] = [];
 	const tvImdbIdsLength = tvImdbIds.length;
 	console.log(`[tgx] tvImdbIdsLength: ${tvImdbIdsLength}`);
 
