@@ -9,6 +9,7 @@ import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
+import { applyQuickSearch2 } from '@/utils/quickSearch';
 import { borderColor, btnColor, btnIcon, fileSize, sortByBiggest } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { defaultMovieSize, defaultPlayer } from '@/utils/settings';
@@ -16,7 +17,7 @@ import { showInfoForRD } from '@/utils/showInfo';
 import { searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { withAuth } from '@/utils/withAuth';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { GetServerSideProps } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -51,10 +52,15 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const movieMaxSize = window.localStorage.getItem('settings:movieMaxSize') || defaultMovieSize;
 	const onlyTrustedTorrents =
 		window.localStorage.getItem('settings:onlyTrustedTorrents') === 'true';
+	const defaultTorrentsFilter =
+		window.localStorage.getItem('settings:defaultTorrentsFilter') ?? '';
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+	const [filteredResults, setFilteredResults] = useState<SearchResult[]>([]);
 	const [errorMessage, setErrorMessage] = useState('');
+	const [query, setQuery] = useState(defaultTorrentsFilter);
+	const [descLimit, setDescLimit] = useState(100);
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
@@ -89,24 +95,25 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const response = await axios.get<SearchApiResponse>(endpoint);
 			if (response.status !== 200) {
+				setSearchState(response.headers.status ?? 'loaded');
 				return;
 			}
 
-			setSearchResults(
-				response.data.results?.map((r) => ({
-					...r,
-					rdAvailable: false,
-					adAvailable: false,
-					noVideos: false,
-					files: [],
-				})) || []
-			);
-
 			if (response.data.results?.length) {
-				toast(`Found ${response.data.results.length} results`, searchToastOptions);
+				const results = sortByBiggest(response.data.results);
+				setSearchResults(
+					results.map((r) => ({
+						...r,
+						rdAvailable: false,
+						adAvailable: false,
+						noVideos: false,
+						files: [],
+					}))
+				);
+				toast(`Found ${results.length} results`, searchToastOptions);
 
 				// instant checks
-				const hashArr = response.data.results.map((r) => r.hash);
+				const hashArr = results.map((r) => r.hash);
 				const instantChecks = [];
 				if (rdKey)
 					instantChecks.push(
@@ -117,23 +124,63 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 						wrapLoading('AD', instantCheckInAd(adKey, hashArr, setSearchResults))
 					);
 				const counts = await Promise.all(instantChecks);
+				setSearchState('loaded');
 				setUncachedCount(hashArr.length - counts.reduce((acc, cur) => acc + cur, 0));
 			} else {
+				setSearchResults([]);
 				toast(`No results found`, searchToastOptions);
 			}
 		} catch (error) {
 			console.error(error);
-			setErrorMessage('There was an error searching for the query. Please try again.');
+			if ((error as AxiosError).response?.status === 403) {
+				setErrorMessage(
+					'Please check the time in your device. If it is correct, please try again.'
+				);
+			} else {
+				setErrorMessage(
+					'There was an error searching for the query. Please try again later.'
+				);
+			}
 		} finally {
 			setSearchState('loaded');
 		}
 	}
 
-	// sort search results by size
 	useEffect(() => {
-		setSearchResults(sortByBiggest(searchResults));
+		if (searchResults.length === 0) return;
+		const filteredResults = applyQuickSearch2(query, searchResults);
+		setFilteredResults(filteredResults);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [searchResults]);
+	}, [query, searchResults]);
+
+	// tokens
+	useEffect(() => {
+		if (searchState === 'loading') return;
+		const tokens = new Map<string, number>();
+		// filter by cached
+		const toProcess = searchResults.filter((r) => r.rdAvailable || r.adAvailable);
+		toProcess.forEach((r) => {
+			r.title.split(/[ .\-\[\]]/).forEach((word) => {
+				if (word.length < 3) return;
+				// skip if word is in title
+				if (title.toLowerCase().includes(word.toLowerCase())) return;
+				word = word.toLowerCase();
+				if (tokens.has(word)) {
+					tokens.set(word, tokens.get(word)! + 1);
+				} else {
+					tokens.set(word, 1);
+				}
+			});
+		});
+		// iterate through tokens
+		let tokenEntries = Array.from(tokens.entries());
+		// sort by count
+		tokenEntries = tokenEntries.sort((a, b) => b[1] - a[1]);
+		// get only the tokens
+		const tokensArr = tokenEntries.map((a) => a[0].toLowerCase());
+		console.log(tokensArr);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchState]);
 
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	async function fetchHashAndProgress(hash?: string) {
@@ -261,7 +308,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 						height={300}
 						src={poster}
 						alt="Movie poster"
-						className="shadow-lg row-span-4"
+						className="shadow-lg row-span-5"
 					/>
 				)) || <Poster imdbId={imdbid as string} title={title} />}
 				<div className="flex justify-end p-2">
@@ -275,25 +322,25 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				<h2 className="text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
 					{title} ({year})
 				</h2>
-				<div className="w-fit h-fit bg-slate-900/75">
-					{description}{' '}
+				<div className="w-fit h-fit bg-slate-900/75" onClick={() => setDescLimit(0)}>
+					{descLimit > 0 ? description.substring(0, descLimit) + '..' : description}{' '}
 					{imdb_score > 0 && (
 						<div className="text-yellow-100 inline">
 							<Link href={`https://www.imdb.com/title/${imdbid}/`} target="_blank">
-								IMDB Score: {imdb_score}
+								IMDB Score: {imdb_score < 10 ? imdb_score : imdb_score / 10}
 							</Link>
 						</div>
 					)}
 				</div>
-				<div className="">
+				<div>
 					{onlyShowCached && uncachedCount > 0 && (
 						<button
-							className={`mr-2 mt-0 mb-2 bg-blue-700 hover:bg-blue-600 text-white p-1 text-xs rounded`}
+							className={`mr-2 mt-0 mb-1 bg-blue-700 hover:bg-blue-600 text-white p-1 text-xs rounded`}
 							onClick={() => {
 								setOnlyShowCached(false);
 							}}
 						>
-							👉 Show {uncachedCount} uncached results
+							👉 Show {uncachedCount} uncached
 						</button>
 					)}
 				</div>
@@ -326,9 +373,27 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					<span className="block sm:inline"> {errorMessage}</span>
 				</div>
 			)}
+			<div className="flex items-center border-b-2 border-gray-500 py-2 mb-1">
+				<input
+					className="appearance-none bg-transparent border-none w-full text-sm text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
+					type="text"
+					id="query"
+					placeholder="filter results, supports regex"
+					value={query}
+					onChange={(e) => {
+						setQuery(e.target.value.toLocaleLowerCase());
+					}}
+				/>
+				<span
+					className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300 cursor-pointer"
+					onClick={() => setQuery('')}
+				>
+					Reset
+				</span>
+			</div>
 			{searchResults.length > 0 && (
-				<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-					{searchResults.map((r: SearchResult, i: number) => {
+				<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+					{filteredResults.map((r: SearchResult, i: number) => {
 						const downloaded = isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
 						const downloading =
 							isDownloading('rd', r.hash) || isDownloading('ad', r.hash);
@@ -352,23 +417,24 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 								)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
 							>
 								<div className="p-2 space-y-4">
-									<h2 className="text-xl font-bold leading-tight break-words">
+									<h2 className="text-lg font-bold leading-tight break-words line-clamp-3 overflow-hidden text-ellipsis">
 										{r.title}
 									</h2>
 
-									<div className="text-gray-300">
-										Total: {fileSize(r.fileSize)} GB
-									</div>
-									{r.videoCount > 0 && (
-										<span className="text-gray-300 mt-0 text-sm">
-											Biggest: {fileSize(r.biggestFileSize)} GB (
-											{r.videoCount} 📂)
-										</span>
+									{r.videoCount > 0 ? (
+										<div className="text-gray-300 text-xs">
+											Total: {fileSize(r.fileSize)} GB; Biggest:{' '}
+											{fileSize(r.biggestFileSize)} GB ({r.videoCount} 📂)
+										</div>
+									) : (
+										<div className="text-gray-300 text-xs">
+											Total: {fileSize(r.fileSize)} GB
+										</div>
 									)}
 
 									<div className="space-x-2 space-y-2">
 										<button
-											className="bg-pink-500 hover:bg-pink-700 text-white rounded inline px-1"
+											className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1"
 											onClick={() => handleCopyMagnet(r.hash)}
 										>
 											<FaMagnet className="inline" /> Get&nbsp;magnet
@@ -377,7 +443,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										{/* RD */}
 										{rdKey && inLibrary('rd', r.hash) && (
 											<button
-												className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
+												className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
 												onClick={() => deleteRd(r.hash)}
 											>
 												<FaTimes className="mr-2 inline" />
@@ -386,7 +452,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										)}
 										{rdKey && notInLibrary('rd', r.hash) && (
 											<button
-												className={`bg-${rdColor}-500 hover:bg-${rdColor}-700 text-white rounded inline px-1`}
+												className={`bg-${rdColor}-500 hover:bg-${rdColor}-700 text-white text-xs rounded inline px-1`}
 												onClick={() => addRd(r.hash)}
 											>
 												{btnIcon(r.rdAvailable)}
@@ -397,7 +463,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										{/* AD */}
 										{adKey && inLibrary('ad', r.hash) && (
 											<button
-												className="bg-red-500 hover:bg-red-700 text-white rounded inline px-1"
+												className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
 												onClick={() => deleteAd(r.hash)}
 											>
 												<FaTimes className="mr-2 inline" />
@@ -406,7 +472,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										)}
 										{adKey && notInLibrary('ad', r.hash) && (
 											<button
-												className={`bg-${adColor}-500 hover:bg-${adColor}-700 text-white rounded inline px-1`}
+												className={`bg-${adColor}-500 hover:bg-${adColor}-700 text-white text-xs rounded inline px-1`}
 												onClick={() => addAd(r.hash)}
 											>
 												{btnIcon(r.adAvailable)}
@@ -416,7 +482,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 
 										{(r.rdAvailable || r.adAvailable) && (
 											<button
-												className="bg-sky-500 hover:bg-sky-700 text-white rounded inline px-1"
+												className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1"
 												onClick={() => handleShowInfo(r)}
 											>
 												👀 Look Inside
