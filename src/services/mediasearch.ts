@@ -52,7 +52,7 @@ export const flattenAndRemoveDuplicates = (arr: ScrapeSearchResult[][]): ScrapeS
 			unique.set(item.hash, item);
 		}
 	});
-	return Array.from(unique.values());
+	return Array.from(unique.values()).filter((r) => r.hash.match(/^[a-f0-9]{40}$/));
 };
 
 export const sortByFileSize = (results: ScrapeSearchResult[]): ScrapeSearchResult[] => {
