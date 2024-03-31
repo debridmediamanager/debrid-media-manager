@@ -220,12 +220,14 @@ function IndexPage() {
 							>
 								📺 shows
 							</Link>
-							<Link
-								href={`/trakt/mylists`}
-								className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
-							>
-								🧏🏻‍♀️ my lists
-							</Link>
+							{traktUser && (
+								<Link
+									href={`/trakt/mylists`}
+									className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								>
+									🧏🏻‍♀️ my lists
+								</Link>
+							)}
 						</div>
 
 						<div className="text-sm mb-1 text-center">
