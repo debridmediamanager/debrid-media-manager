@@ -335,10 +335,7 @@ export const rdInstantCheck = async (
 		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching torrent information:', error.message);
-		console.log('Retrying availability check...');
-		const firstElement = hashes.shift() as string;
-		hashes.push(firstElement);
-		return rdInstantCheck(accessToken, hashes);
+		throw error;
 	}
 };
 

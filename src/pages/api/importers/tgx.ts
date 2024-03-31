@@ -38,6 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 						hash: hash.infoHash,
 					});
 				}
+				fs.unlinkSync(getFname(page));
 				page++;
 			} else {
 				console.log(`[tgx] file ${getFname(page)} does not exist`);
@@ -95,6 +96,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 						scrapesMap.set(`tv:${imdbId}:${seasonNum}`, [scrape]);
 					}
 				}
+				fs.unlinkSync(getFname(page));
 				page++;
 			} else {
 				// console.log(`[tgx] file ${getFname(page)} does not exist`);
