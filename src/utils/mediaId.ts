@@ -27,22 +27,30 @@ export const getMediaId = (
 	} else if (typeof info === 'string' || tvShowTitleOnly) {
 		mediaId = titleId;
 	} else {
-		const { title, seasons, episodeNumbers } = info as ParsedShow;
-		if (!seasons || !seasons.length) {
-			mediaId = title;
+		// anime: \[[\da-z]{8}\]
+		let { title, seasons, episodeNumbers } = info as ParsedShow;
+		if (!seasons) seasons = [];
+		if (!episodeNumbers) episodeNumbers = [];
+		if (seasons.length > 1) {
+			if (isArrayContinuouslyIncreasing(seasons)) {
+				mediaId = `${title} ➡️ ${prefix('S', seasons[0])} to ${prefix(
+					'S',
+					seasons[seasons.length - 1]
+				)}`;
+			} else {
+				mediaId = `${title} ➡️ ${seasons.map((season) => prefix('S', season)).join(', ')}`;
+			}
 		} else if (seasons.length === 1) {
 			if (episodeNumbers.length === 1) {
 				mediaId = `${title} ➡️ ${prefix('S', seasons[0])}${prefix('E', episodeNumbers[0])}`;
 			} else {
 				mediaId = `${title} ➡️ ${prefix('S', seasons[0])}`;
 			}
-		} else if (isArrayContinuouslyIncreasing(seasons)) {
-			mediaId = `${title} ➡️ ${prefix('S', seasons[0])} to ${prefix(
-				'S',
-				seasons[seasons.length - 1]
-			)}`;
+		} else if (episodeNumbers.length > 0) {
+			seasons = [1];
+			mediaId = `${title} ➡️ ${prefix('S', seasons[0])}${prefix('E', episodeNumbers[0])}`;
 		} else {
-			mediaId = `${title} ➡️ ${seasons.map((season) => prefix('S', season)).join(', ')}`;
+			mediaId = `${title}`;
 		}
 	}
 
