@@ -358,14 +358,13 @@ function TorrentsPage() {
 
 	useEffect(() => {
 		if (!adKey || adSyncing) return;
-		setUncachedAdIDs(
-			userTorrentsList
-				.filter((r) => r.id.startsWith('ad:') && r.serviceStatus === '11')
-				.map((r) => r.id)
-		);
-		uncachedAdIDs.length &&
+		const uncachedIDs = userTorrentsList
+			.filter((r) => r.id.startsWith('ad:') && r.serviceStatus === '11')
+			.map((r) => r.id);
+		setUncachedAdIDs(uncachedIDs);
+		uncachedIDs.length &&
 			toast.success(
-				`Found ${uncachedAdIDs.length} uncached torrents in AllDebrid`,
+				`Found ${uncachedIDs.length} uncached torrents in AllDebrid`,
 				searchToastOptions
 			);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -433,9 +432,10 @@ function TorrentsPage() {
 		if (status === 'uncached') {
 			tmpList = tmpList.filter(
 				(t) =>
-					t.status === UserTorrentStatus.finished &&
-					((t.id.startsWith('rd:') && uncachedRdHashes.has(t.hash)) ||
-						(t.id.startsWith('ad:') && uncachedAdIDs.includes(t.id)))
+					(t.status === UserTorrentStatus.finished &&
+						t.id.startsWith('rd:') &&
+						uncachedRdHashes.has(t.hash)) ||
+					(t.id.startsWith('ad:') && uncachedAdIDs.includes(t.id))
 			);
 			setFilteredList(applyQuickSearch(query, tmpList));
 			if (helpText !== 'hide') setHelpText('Torrents that are no longer cached');
