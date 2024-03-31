@@ -18,7 +18,7 @@ function IndexPage() {
 	useEffect(() => {
 		if (rdError) {
 			toast.error(
-				'Real-Debrid get user info failed, check your email and confirm the login coming from DMM'
+				'Real-Debrid get user info failed, try clearing DMM site data and login again'
 			);
 		}
 		if (adError) {
@@ -53,11 +53,11 @@ function IndexPage() {
 		router.push(authUrl);
 	};
 
-	const handleClearCache = async () => {
+	const handleClearCache = async (redirectUrl: string) => {
 		setDeleting(true);
 		const request = window.indexedDB.deleteDatabase('DMMDB');
 		request.onsuccess = function () {
-			window.location.assign('/library');
+			window.location.assign(redirectUrl);
 		};
 		request.onerror = function () {
 			setDeleting(false);
@@ -70,6 +70,11 @@ function IndexPage() {
 				genericToastOptions
 			);
 		};
+	};
+
+	const handleClearSiteData = async () => {
+		await handleLogout();
+		await handleClearCache('/start');
 	};
 
 	return (
@@ -307,7 +312,7 @@ function IndexPage() {
 						<div className="mb-2 h-max text-center leading-10">
 							<button
 								className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
-								onClick={() => handleClearCache()}
+								onClick={() => handleClearCache('/library')}
 							>
 								Clear library cache
 							</button>
@@ -347,7 +352,15 @@ function IndexPage() {
 					</div>
 				</>
 			) : (
-				<h1 className="text-xl text-center">Debrid Media Manager is loading...</h1>
+				<>
+					<h1 className="text-xl text-center pb-4">Debrid Media Manager is loading...</h1>
+					<button
+						className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
+						onClick={() => handleClearSiteData()}
+					>
+						Clear site data
+					</button>
+				</>
 			)}
 		</div>
 	);
