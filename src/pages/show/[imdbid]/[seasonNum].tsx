@@ -56,7 +56,6 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		window.localStorage.getItem('settings:onlyTrustedTorrents') === 'true';
 	const defaultTorrentsFilter =
 		window.localStorage.getItem('settings:defaultTorrentsFilter') ?? '';
-	console.log('defaultTorrentsFilter', defaultTorrentsFilter);
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -184,7 +183,6 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		tokenEntries = tokenEntries.sort((a, b) => b[1] - a[1]);
 		// get only the tokens
 		const tokensArr = tokenEntries.map((a) => a[0].toLowerCase());
-		console.log(tokensArr);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchState]);
 

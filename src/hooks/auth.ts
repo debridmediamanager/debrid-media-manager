@@ -104,45 +104,29 @@ export const useCurrentUser = () => {
 
 	useEffect(() => {
 		(async () => {
-			if (!rdToken && !adToken) return null;
 			try {
-				if (rdToken) {
-					const rdUserResponse = await getRealDebridUser(rdToken);
-					if (rdUserResponse) setRdUser(<RealDebridUser>rdUserResponse);
-				}
+				if (!rdToken) return;
+				const rdUserResponse = await getRealDebridUser(rdToken!);
+				if (rdUserResponse) setRdUser(<RealDebridUser>rdUserResponse);
 			} catch (error: any) {
-				if (error.response.status === 401) {
-					removeToken('rd');
-				} else {
-					setRdError(new Error(error));
-				}
+				setRdError(new Error(error));
 			}
 			try {
-				if (adToken) {
-					const adUserResponse = await getAllDebridUser(adToken);
-					if (adUserResponse) setAdUser(<AllDebridUser>adUserResponse);
-				}
+				if (!adToken) return;
+				const adUserResponse = await getAllDebridUser(adToken!);
+				if (adUserResponse) setAdUser(<AllDebridUser>adUserResponse);
 			} catch (error: any) {
-				if (error.response.status === 401) {
-					removeToken('ad');
-				} else {
-					setAdError(new Error(error));
-				}
+				setAdError(new Error(error));
 			}
 			try {
-				if (traktToken) {
-					const traktUserResponse = await getTraktUser(traktToken);
-					if (traktUserResponse) {
-						setTraktUser(traktUserResponse);
-						setTraktUserSlug(traktUserResponse.user.ids.slug);
-					}
+				if (!traktToken) return;
+				const traktUserResponse = await getTraktUser(traktToken!);
+				if (traktUserResponse) {
+					setTraktUser(traktUserResponse);
+					setTraktUserSlug(traktUserResponse.user.ids.slug);
 				}
 			} catch (error: any) {
-				if (error.response?.status === 401) {
-					removeToken('trakt');
-				} else {
-					setTraktError(new Error(error));
-				}
+				setTraktError(new Error(error));
 			}
 		})();
 		// eslint-disable-next-line react-hooks/exhaustive-deps

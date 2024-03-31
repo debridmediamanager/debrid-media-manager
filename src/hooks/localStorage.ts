@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 type ExpirableValue<T> = {
 	value: T;
@@ -35,23 +35,6 @@ function useLocalStorage<T>(
 		}
 		return defaultValue;
 	});
-
-	useEffect(() => {
-		if (typeof window === 'undefined') {
-			// Do not interact with localStorage if on the server
-			return;
-		}
-
-		try {
-			if (storedValue === null) {
-				window.localStorage.removeItem(key);
-			} else {
-				window.localStorage.setItem(key, JSON.stringify(storedValue));
-			}
-		} catch (error) {
-			console.error('Error writing localStorage key “' + key + '”: ', error);
-		}
-	}, [key, storedValue]);
 
 	const setValue = (newValue: T | ((prevState: T | null) => T), expiryTimeInSecs?: number) => {
 		const valueToStore: T = newValue instanceof Function ? newValue(storedValue) : newValue;
