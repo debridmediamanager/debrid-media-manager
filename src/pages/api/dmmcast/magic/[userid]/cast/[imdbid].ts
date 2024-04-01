@@ -27,15 +27,42 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
-	const streamUrl = await getStreamUrl(token, hash, parseInt(fileId, 10), ipAddress);
+	const [streamUrl, seasonNumber, episodeNumber] = await getStreamUrl(
+		token,
+		hash,
+		parseInt(fileId, 10),
+		ipAddress
+	);
+
 	if (streamUrl) {
-		await db.saveCast(imdbid, userid, hash, streamUrl);
-		res.status(200).json({
-			status: 'success',
-			message: 'You can now cast the movie in Stremio',
-		});
+		let redirectUrl = `stremio://detail/movie/${imdbid}/${imdbid}`;
+		let message = 'You can now cast the movie in Stremio';
+		if (seasonNumber > 0 && episodeNumber > 0) {
+			redirectUrl = `stremio://detail/series/${imdbid}/${imdbid}:${seasonNumber}:${episodeNumber}`;
+			message = `You can now cast S${seasonNumber}E${episodeNumber} in Stremio`;
+		}
+
+		const castKey = `${imdbid}${
+			seasonNumber > 0 && episodeNumber > 0 ? `:${seasonNumber}:${episodeNumber}` : ''
+		}`;
+		await db.saveCast(castKey, userid, hash, streamUrl);
+
+		// send an html
+		res.setHeader('Content-Type', 'text/html');
+		res.status(200).send(`
+			<!doctype html>
+			<html>
+				<head>
+					<meta http-equiv="refresh" content="1;url=${redirectUrl}" />
+				</head>
+				<body>
+					${message}
+				</body>
+			</html>
+		`);
 		return;
 	}
+
 	res.status(500).json({
 		status: 'error',
 		errorMessage: 'Internal Server Error',
