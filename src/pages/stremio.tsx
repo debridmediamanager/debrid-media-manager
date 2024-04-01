@@ -46,13 +46,15 @@ function StremioPage() {
 						{window.location.origin}/api/dmmcast/magic/{dmmCastToken}/manifest.json
 					</code>
 				</div>
-				1. Choose a Movie to watch in DMM
+				1. Choose a Movie or TV Show to watch in DMM
 				<br />
-				2. Choose a Torrent &gt; Watch &gt; Cast✨
+				2. Select a Torrent &gt; click &quot;👀 Look Inside&quot; &gt; click &quot;Cast✨&quot; button
 				<br />
-				3. Open the same Movie in Stremio
+				📝 it will also open Stremio if you want to watch on the same device
 				<br />
-				4. Choose Stream🪄
+				3. Open the *same* Movie or TV Show in Stremio
+				<br />
+				4. Choose &quot;Stream🪄&quot;
 				<br />
 				5. Enjoy!🍿
 			</div>
