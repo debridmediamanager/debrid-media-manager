@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 	res.setHeader('access-control-allow-origin', '*');
-	// get a cast row from the last 5 minutes
+	// get the last casted stream url
 	const streamUrl = await db.getLatestCast(imdbid, userid);
 	// if present, redirect to row url
 	if (streamUrl) {
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	await new Promise((resolve) => setTimeout(resolve, 3000));
 	res.redirect(
 		302,
-		`${process.env.DMM_ORIGIN}/api/dmmcast/magic/${userid}/watch/${imdbid}/${
+		`${process.env.DMM_ORIGIN}/api/stremio/${userid}/watch/${imdbid}/${
 			pingpong === 'ping' ? 'pong' : 'ping'
 		}`
 	);

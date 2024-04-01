@@ -49,7 +49,7 @@ import { isVideo } from './selectable';
 
 // 					if (userId && imdbId) {
 // 						castBtn = `
-// 							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/dmmcast/magic/${userId}/cast/${imdbId}?token=${rdKey}&hash=${torrent.hash}&fileId=${file.id}')">Cast✨</button>
+// 							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${torrent.hash}&fileId=${file.id}')">Cast✨</button>
 // 						`;
 // 					}
 // 				}
@@ -203,7 +203,7 @@ export const showInfoForRD = async (
 						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
 					) {
 						castBtn = `
-							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/dmmcast/magic/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')">Cast✨</button>
+							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')">Cast✨</button>
 						`;
 					}
 				}

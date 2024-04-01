@@ -1,5 +1,6 @@
 import { UserResponse } from '@/services/realDebrid';
 import axios from 'axios';
+import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -45,14 +46,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		process.env.DMMCAST_SALT ??
 		'piyeJUVdDoLLf3q&i9NRkrfVmTDg$&KYZ5CEJmswjv5yetjwsyxrMHqdNuvw^$a7mZh^bgqg8K4kMKptFFEp4*RcQ!&Dmd9uvnqAF&zRqts4YwRzTqjGErp9j4wHVVTw';
 
-	const crypto = require('crypto');
-
 	let hash = crypto
-		.createHash('md5')
+		.createHash('sha256')
 		.update(username + salt)
-		.digest('hex');
+		.digest('base64')
+		.replace(/\+/g, 'a')
+		.replace(/\//g, 'b')
+		.replace(/=/g, '');
 
 	res.status(200).json({
-		id: hash,
+		id: hash.slice(0, 5),
 	});
 }

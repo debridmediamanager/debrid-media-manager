@@ -13,8 +13,8 @@ export const getStreamUrl = async (
 	ipAddress: string
 ): Promise<[string, number, number]> => {
 	let streamUrl = '';
-	let seasonNumber = 0;
-	let episodeNumber = 0;
+	let seasonNumber = -1;
+	let episodeNumber = -1;
 	try {
 		const id = await addHashAsMagnet(rdKey, hash, true);
 		try {
@@ -38,18 +38,18 @@ export const getStreamUrl = async (
 				let epRegex = /S(\d+)\s?E(\d+)/i;
 				seasonNumber = filePath.match(epRegex)?.length
 					? parseInt(filePath.match(epRegex)![1], 10)
-					: 0;
+					: -1;
 				episodeNumber = filePath.match(epRegex)?.length
 					? parseInt(filePath.match(epRegex)![2], 10)
-					: 0;
-				if (seasonNumber === 0 || episodeNumber === 0) {
+					: -1;
+				if (seasonNumber === -1 || episodeNumber === -1) {
 					epRegex = /(\d+)x(\d+)/i;
 					seasonNumber = filePath.match(epRegex)?.length
 						? parseInt(filePath.match(epRegex)![1], 10)
-						: 0;
+						: -1;
 					episodeNumber = filePath.match(epRegex)?.length
 						? parseInt(filePath.match(epRegex)![2], 10)
-						: 0;
+						: -1;
 				}
 			}
 
