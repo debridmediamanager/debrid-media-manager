@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new PlanetScaleCache();
 
+// cast: unrestricts a selected link and saves it to the database
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid, imdbid, token, hash, fileId } = req.query;
 	if (!userid || !imdbid || !token || !hash || !fileId) {
@@ -37,13 +38,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	if (streamUrl) {
 		let redirectUrl = `stremio://detail/movie/${imdbid}/${imdbid}`;
 		let message = 'You can now cast the movie in Stremio';
-		if (seasonNumber > 0 && episodeNumber > 0) {
+		if (seasonNumber >= 0 && episodeNumber >= 0) {
 			redirectUrl = `stremio://detail/series/${imdbid}/${imdbid}:${seasonNumber}:${episodeNumber}`;
 			message = `You can now cast S${seasonNumber}E${episodeNumber} in Stremio`;
 		}
 
 		const castKey = `${imdbid}${
-			seasonNumber > 0 && episodeNumber > 0 ? `:${seasonNumber}:${episodeNumber}` : ''
+			seasonNumber >= 0 && episodeNumber >= 0 ? `:${seasonNumber}:${episodeNumber}` : ''
 		}`;
 		await db.saveCast(castKey, userid, hash, streamUrl);
 

@@ -72,11 +72,6 @@ function IndexPage() {
 		};
 	};
 
-	const handleClearSiteData = async () => {
-		await handleLogout();
-		await handleClearCache('/start');
-	};
-
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen">
 			<Head>
@@ -356,9 +351,9 @@ function IndexPage() {
 					<h1 className="text-xl text-center pb-4">Debrid Media Manager is loading...</h1>
 					<button
 						className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
-						onClick={() => handleClearSiteData()}
+						onClick={() => handleLogout()}
 					>
-						Clear site data
+						Logout All
 					</button>
 				</>
 			)}
