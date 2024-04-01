@@ -1,5 +1,6 @@
 import Poster from '@/components/poster';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
+import { useCastToken } from '@/hooks/cast';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
@@ -67,6 +68,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	const adKey = useAllDebridApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
 	const [uncachedCount, setUncachedCount] = useState<number>(0);
+	const dmmCastToken = useCastToken();
 
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
@@ -292,7 +294,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			speed: 0,
 			seeders: 0,
 		} as TorrentInfoResponse;
-		rdKey && showInfoForRD(player, rdKey!, info);
+		rdKey && showInfoForRD(player, rdKey!, info, dmmCastToken ?? '', imdbid as string, 'tv');
 	};
 
 	return (
