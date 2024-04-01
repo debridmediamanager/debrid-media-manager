@@ -152,7 +152,8 @@ export const showInfoForRD = async (
 	rdKey: string,
 	info: TorrentInfoResponse,
 	userId: string = '',
-	imdbId: string = ''
+	imdbId: string = '',
+	mediaType: string = 'movie' // 'movie' | 'tv'
 ) => {
 	let warning = '';
 	const isIntact = info.fake || info.files.filter((f) => f.selected).length === info.links.length;
@@ -190,8 +191,17 @@ export const showInfoForRD = async (
 							<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">👀 Watch</button>
 						`;
 					}
-
-					if (userId && imdbId) {
+					let epRegex = /S(\d+)\s?E(\d+)/i;
+					let isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
+					if (mediaType === 'tv' && !isTvEpisode) {
+						epRegex = /(\d+)x(\d+)/i;
+						isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
+					}
+					if (
+						userId &&
+						imdbId &&
+						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
+					) {
 						castBtn = `
 							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/dmmcast/magic/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')">Cast✨</button>
 						`;

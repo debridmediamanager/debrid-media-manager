@@ -285,7 +285,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			speed: 0,
 			seeders: 0,
 		} as TorrentInfoResponse;
-		rdKey && showInfoForRD(player, rdKey, info, dmmCastToken ?? '', imdbid as string);
+		rdKey && showInfoForRD(player, rdKey, info, dmmCastToken ?? '', imdbid as string, 'movie');
 	};
 
 	return (

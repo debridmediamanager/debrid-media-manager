@@ -11,8 +11,10 @@ export const getStreamUrl = async (
 	hash: string,
 	fileId: number,
 	ipAddress: string
-) => {
+): Promise<[string, number, number]> => {
 	let streamUrl = '';
+	let seasonNumber = 0;
+	let episodeNumber = 0;
 	try {
 		const id = await addHashAsMagnet(rdKey, hash, true);
 		try {
@@ -32,16 +34,34 @@ export const getStreamUrl = async (
 					.filter((f) => f.selected)
 					.findIndex((f) => f.id === fileId);
 				link = torrent.links[fileIdx] ?? torrent.links[0];
+				const filePath = torrent.files[fileIdx].path;
+				let epRegex = /S(\d+)\s?E(\d+)/i;
+				seasonNumber = filePath.match(epRegex)?.length
+					? parseInt(filePath.match(epRegex)![1], 10)
+					: 0;
+				episodeNumber = filePath.match(epRegex)?.length
+					? parseInt(filePath.match(epRegex)![2], 10)
+					: 0;
+				if (seasonNumber === 0 || episodeNumber === 0) {
+					epRegex = /(\d+)x(\d+)/i;
+					seasonNumber = filePath.match(epRegex)?.length
+						? parseInt(filePath.match(epRegex)![1], 10)
+						: 0;
+					episodeNumber = filePath.match(epRegex)?.length
+						? parseInt(filePath.match(epRegex)![2], 10)
+						: 0;
+				}
 			}
 
 			const resp = await unrestrictLink(rdKey, link, ipAddress, true);
 			streamUrl = resp.download;
 			await deleteTorrent(rdKey, id, true);
 		} catch (e) {
+			console.log('error after adding hash', e);
 			await deleteTorrent(rdKey, id, true);
 		}
 	} catch (e) {
-		console.log(e);
+		console.log('error on adding hash', e);
 	}
-	return streamUrl;
+	return [streamUrl, seasonNumber, episodeNumber];
 };
