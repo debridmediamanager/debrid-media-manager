@@ -354,8 +354,30 @@ export class PlanetScaleCache {
 			orderBy: {
 				updatedAt: 'desc',
 			},
+			select: {
+				url: true,
+			},
 		});
 		return castItem?.url ?? null;
+	}
+
+	public async getCastURLs(imdbId: string, userId: string): Promise<string[]> {
+		const castItems = await this.prisma.cast.findMany({
+			where: {
+				imdbId: imdbId,
+				userId: userId,
+				updatedAt: {
+					gt: new Date(new Date().getTime() - 90 * 24 * 60 * 60 * 1000), // 90 days
+				},
+			},
+			orderBy: {
+				updatedAt: 'desc',
+			},
+			select: {
+				url: true,
+			},
+		});
+		return castItems.map((item) => item.url);
 	}
 
 	public async saveCast(

@@ -30,12 +30,23 @@ function StremioPage() {
 			<h1 className="text-2xl text-purple-600 font-bold mb-4">DMM Cast</h1>
 			<div className="flex flex-col items-center">
 				<strong>Cast from any device to Stremio</strong>
+				<div className="mt-2 mb-0 h-max text-center leading-10">
+					<Link
+						href={`stremio://${window.location.origin.replace(
+							/^https?:\/\//,
+							''
+						)}/api/stremio/${dmmCastToken}/manifest.json`}
+						className="text-md bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+					>
+						🗡️ Choose your unique User ID
+					</Link>
+				</div>
 				<div className="mt-2 mb-2 h-max text-center leading-10">
 					<Link
 						href={`stremio://${window.location.origin.replace(
 							/^https?:\/\//,
 							''
-						)}/api/dmmcast/magic/${dmmCastToken}/manifest.json`}
+						)}/api/stremio/${dmmCastToken}/manifest.json`}
 						className="text-md m-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 					>
 						🧙🏻‍♂️ Install
@@ -43,12 +54,13 @@ function StremioPage() {
 					or copy this link and paste it in Stremio&apos;s search bar
 					<br />
 					<code className="text-sm text-black bg-gray-100 p-1 rounded">
-						{window.location.origin}/api/dmmcast/magic/{dmmCastToken}/manifest.json
+						{window.location.origin}/api/stremio/{dmmCastToken}/manifest.json
 					</code>
 				</div>
 				1. Choose a Movie or TV Show to watch in DMM
 				<br />
-				2. Select a Torrent &gt; click &quot;👀 Look Inside&quot; &gt; click &quot;Cast✨&quot; button
+				2. Select a Torrent &gt; click &quot;👀 Look Inside&quot; &gt; click
+				&quot;Cast✨&quot; button
 				<br />
 				📝 it will also open Stremio if you want to watch on the same device
 				<br />
