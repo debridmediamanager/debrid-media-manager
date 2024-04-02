@@ -30,14 +30,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	];
 
 	// get urls from db
-	const streamUrls = await db.getCastURLs(imdbidStr, userid as string);
-	for (const url of streamUrls) {
-		let title = url.split('/').pop() ?? 'Unknown Title';
-		title = decodeURIComponent(title) + '\n' + url;
+	const castItems = await db.getCastURLs(imdbidStr, userid as string);
+	for (const item of castItems) {
+		let title = item.url.split('/').pop() ?? 'Unknown Title';
+		let sizeStr = '';
+		if (item.size > 1024) {
+			item.size = item.size / 1024;
+			sizeStr = `${item.size.toFixed(2)} GB`;
+		} else {
+			sizeStr = `${item.size.toFixed(2)} MB`;
+		}
+		title = decodeURIComponent(title) + '\n' + sizeStr;
 		streams.push({
-			name: 'DMM⚔️',
+			name: 'DMM ⚔️',
 			title,
-			url,
+			url: item.url,
 		});
 	}
 
