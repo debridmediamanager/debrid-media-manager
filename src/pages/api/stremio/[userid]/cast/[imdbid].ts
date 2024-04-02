@@ -7,10 +7,10 @@ const db = new PlanetScaleCache();
 // cast: unrestricts a selected link and saves it to the database
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid, imdbid, token, hash, fileId } = req.query;
-	if (!userid || !imdbid || !token || !hash || !fileId) {
+	if (!imdbid || !token || !hash || !fileId) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Missing "userid", "imdbid", "token", "hash" or "fileId" query parameter',
+			errorMessage: 'Missing "imdbid", "token", "hash" or "fileId" query parameter',
 		});
 		return;
 	}
@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Invalid "userid", "imdbid", "token", "hash" or "fileId" query parameter',
+			errorMessage: 'Invalid "imdbid", "token", "hash" or "fileId" query parameter',
 		});
 		return;
 	}
