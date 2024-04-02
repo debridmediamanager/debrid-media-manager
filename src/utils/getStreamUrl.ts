@@ -11,10 +11,11 @@ export const getStreamUrl = async (
 	hash: string,
 	fileId: number,
 	ipAddress: string
-): Promise<[string, number, number]> => {
+): Promise<[string, number, number, number]> => {
 	let streamUrl = '';
 	let seasonNumber = -1;
 	let episodeNumber = -1;
+	let fileSize = 0;
 	try {
 		const id = await addHashAsMagnet(rdKey, hash, true);
 		try {
@@ -34,34 +35,36 @@ export const getStreamUrl = async (
 					.filter((f) => f.selected)
 					.findIndex((f) => f.id === fileId);
 				link = torrent.links[fileIdx] ?? torrent.links[0];
-				const filePath = torrent.files[fileIdx].path;
-				let epRegex = /S(\d+)\s?E(\d+)/i;
+			}
+
+			const resp = await unrestrictLink(rdKey, link, ipAddress, true);
+			streamUrl = resp.download;
+			const filePath = streamUrl.split('/').pop() ?? '';
+			let epRegex = /S(\d+)\s?E(\d+)/i;
+			seasonNumber = filePath.match(epRegex)?.length
+				? parseInt(filePath.match(epRegex)![1], 10)
+				: -1;
+			episodeNumber = filePath.match(epRegex)?.length
+				? parseInt(filePath.match(epRegex)![2], 10)
+				: -1;
+			if (seasonNumber === -1 || episodeNumber === -1) {
+				epRegex = /[^\d](\d{1,3})x(\d{1,3})[^\d]/i;
 				seasonNumber = filePath.match(epRegex)?.length
 					? parseInt(filePath.match(epRegex)![1], 10)
 					: -1;
 				episodeNumber = filePath.match(epRegex)?.length
 					? parseInt(filePath.match(epRegex)![2], 10)
 					: -1;
-				if (seasonNumber === -1 || episodeNumber === -1) {
-					epRegex = /(\d+)x(\d+)/i;
-					seasonNumber = filePath.match(epRegex)?.length
-						? parseInt(filePath.match(epRegex)![1], 10)
-						: -1;
-					episodeNumber = filePath.match(epRegex)?.length
-						? parseInt(filePath.match(epRegex)![2], 10)
-						: -1;
-				}
 			}
+			fileSize = Math.round(resp.filesize / 1024 / 1024);
 
-			const resp = await unrestrictLink(rdKey, link, ipAddress, true);
-			streamUrl = resp.download;
 			await deleteTorrent(rdKey, id, true);
 		} catch (e) {
 			console.log('error after adding hash', e);
 			await deleteTorrent(rdKey, id, true);
 		}
 	} catch (e) {
-		console.log('error on adding hash', e);
+		console.log('error on adding hash', (e as any).message);
 	}
-	return [streamUrl, seasonNumber, episodeNumber];
+	return [streamUrl, seasonNumber, episodeNumber, fileSize];
 };

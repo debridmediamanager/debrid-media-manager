@@ -30,24 +30,14 @@ function StremioPage() {
 			<h1 className="text-2xl text-purple-600 font-bold mb-4">DMM Cast</h1>
 			<div className="flex flex-col items-center">
 				<strong>Cast from any device to Stremio</strong>
-				<div className="mt-2 mb-0 h-max text-center leading-10">
-					<Link
-						href={`stremio://${window.location.origin.replace(
-							/^https?:\/\//,
-							''
-						)}/api/stremio/${dmmCastToken}/manifest.json`}
-						className="text-md bg-blue-800 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
-					>
-						🗡️ Choose your unique User ID
-					</Link>
-				</div>
+				<div>We never ask for or store your API tokens 🔒</div>
 				<div className="mt-2 mb-2 h-max text-center leading-10">
 					<Link
 						href={`stremio://${window.location.origin.replace(
 							/^https?:\/\//,
 							''
 						)}/api/stremio/${dmmCastToken}/manifest.json`}
-						className="text-md m-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+						className="text-md m-1 bg-purple-800 hover:bg-purple-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 					>
 						🧙🏻‍♂️ Install
 					</Link>

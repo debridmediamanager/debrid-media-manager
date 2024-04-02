@@ -42,7 +42,11 @@ model Cast {
   hash      String
   url       String
   updatedAt DateTime @updatedAt
+  duration  Int      @default(0)
+  bitrate   Int      @default(0)
+  size      Int      @default(0)
+  mediaInfo Json?
 
-  @@index([imdbId, userId])
-  @@index([updatedAt])
+  @@index([imdbId, userId, updatedAt])
+  @@unique([userId, hash])
 }

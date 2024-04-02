@@ -1,5 +1,6 @@
-import { Cast, PrismaClient, Scraped } from '@prisma/client';
+import { PrismaClient, Scraped } from '@prisma/client';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
+import { MediaInfoDetails } from './realDebrid';
 
 export class PlanetScaleCache {
 	private static instance: PrismaClient;
@@ -361,7 +362,10 @@ export class PlanetScaleCache {
 		return castItem?.url ?? null;
 	}
 
-	public async getCastURLs(imdbId: string, userId: string): Promise<string[]> {
+	public async getCastURLs(
+		imdbId: string,
+		userId: string
+	): Promise<{ url: string; size: number }[]> {
 		const castItems = await this.prisma.cast.findMany({
 			where: {
 				imdbId: imdbId,
@@ -375,23 +379,50 @@ export class PlanetScaleCache {
 			},
 			select: {
 				url: true,
+				size: true,
 			},
 		});
-		return castItems.map((item) => item.url);
+		return castItems.map((item) => ({
+			url: item.url,
+			size: item.size,
+		}));
 	}
 
 	public async saveCast(
 		imdbId: string,
 		userId: string,
 		hash: string,
-		url: string
-	): Promise<Cast> {
-		return await this.prisma.cast.create({
-			data: {
+		url: string,
+		duration: number,
+		bitrate: number,
+		fileSize: number,
+		mediaInfo: MediaInfoDetails | null
+	): Promise<void> {
+		const mediaInfo2 = mediaInfo as any;
+		await this.prisma.cast.upsert({
+			where: {
+				userId_hash: {
+					userId: userId,
+					hash: hash,
+				},
+			},
+			update: {
+				imdbId: imdbId,
+				url: url,
+				duration: duration,
+				bitrate: bitrate,
+				size: fileSize,
+				mediaInfo: mediaInfo2,
+			},
+			create: {
 				imdbId: imdbId,
 				userId: userId,
 				hash: hash,
 				url: url,
+				duration: duration,
+				bitrate: bitrate,
+				size: fileSize,
+				mediaInfo: mediaInfo2,
 			},
 		});
 	}

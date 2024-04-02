@@ -474,3 +474,76 @@ export const unrestrictLink = async (
 		throw error;
 	}
 };
+
+export interface MediaInfoVideoDetails {
+	stream: string;
+	lang: string;
+	lang_iso: string;
+	codec: string;
+	colorspace: string;
+	width: number;
+	height: number;
+}
+
+export interface MediaInfoAudioDetails {
+	stream: string;
+	lang: string;
+	lang_iso: string;
+	codec: string;
+	sampling: number;
+	channels: number;
+}
+
+export interface MediaInfoSubtitlesDetails {
+	stream: string;
+	lang: string;
+	lang_iso: string;
+	type: string;
+}
+
+export interface MediaInfoDetails {
+	video: { [key: string]: MediaInfoVideoDetails };
+	audio: { [key: string]: MediaInfoAudioDetails };
+	subtitles: { [key: string]: MediaInfoSubtitlesDetails };
+}
+
+export interface MediaInfoResponse {
+	filename: string;
+	hoster: string;
+	link: string;
+	type: string;
+	season: string | null;
+	episode: string | null;
+	year: string | null;
+	duration: number;
+	bitrate: number;
+	size: number;
+	details: MediaInfoDetails;
+	poster_path: string;
+	audio_image: string;
+	backdrop_path: string;
+}
+
+export const getMediaInfo = async (
+	accessToken: string,
+	downloadId: string,
+	bare: boolean = false
+): Promise<MediaInfoResponse> => {
+	try {
+		const headers = {
+			Authorization: `Bearer ${accessToken}`,
+		};
+
+		const response = await axios.get<MediaInfoResponse>(
+			`${
+				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
+			}/rest/1.0/streaming/mediaInfos/${downloadId}`,
+			{ headers }
+		);
+
+		return response.data;
+	} catch (error: any) {
+		console.error('Error fetching media info:', error.message);
+		throw error;
+	}
+};
