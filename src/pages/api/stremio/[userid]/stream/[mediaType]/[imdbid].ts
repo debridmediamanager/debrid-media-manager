@@ -18,12 +18,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 	const streams = [
 		{
-			name: 'Cast✨',
+			name: '1.Cast✨',
 			title: 'Cast a file inside a torrent',
 			externalUrl,
 		},
 		{
-			name: 'Stream🪄',
+			name: '2.Stream🪄',
 			title: 'Stream the latest link you casted',
 			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/watch/${imdbidStr}/ping`,
 		},
@@ -40,7 +40,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		} else {
 			sizeStr = `${item.size.toFixed(2)} MB`;
 		}
-		title = decodeURIComponent(title) + '\n' + sizeStr;
+		title = decodeURIComponent(title);
+		if (title.length > 30) {
+			const mid = title.length / 2;
+			title = title.substring(0, mid) + '-\n' + title.substring(mid);
+		}
+		title = title + '\n' + `📦 ${sizeStr}`;
 		streams.push({
 			name: 'DMM ⚔️',
 			title,

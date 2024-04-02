@@ -426,4 +426,51 @@ export class PlanetScaleCache {
 			},
 		});
 	}
+
+	public async fetchCastedMovies(userId: string): Promise<string[]> {
+		const movies = await this.prisma.cast.findMany({
+			where: {
+				userId: userId,
+				imdbId: {
+					not: {
+						contains: ':', // Excludes shows
+					},
+				},
+			},
+			orderBy: {
+				updatedAt: 'desc',
+			},
+			distinct: ['imdbId'],
+			take: 10,
+			select: {
+				imdbId: true,
+			},
+		});
+
+		return movies.map((movie) => movie.imdbId);
+	}
+
+	public async fetchCastedShows(userId: string): Promise<string[]> {
+		const showsWithDuplicates = await this.prisma.cast.findMany({
+			where: {
+				userId: userId,
+				imdbId: {
+					contains: ':', // Includes only shows
+				},
+			},
+			orderBy: {
+				updatedAt: 'desc',
+			},
+			select: {
+				imdbId: true,
+			},
+		});
+
+		const uniqueShows = showsWithDuplicates
+			.map((show) => show.imdbId.split(':')[0]) // Extracts the base imdbId of the show
+			.filter((value, index, self) => self.indexOf(value) === index) // Ensures uniqueness
+			.slice(0, 10); // Takes the last 10 unique shows
+
+		return uniqueShows;
+	}
 }

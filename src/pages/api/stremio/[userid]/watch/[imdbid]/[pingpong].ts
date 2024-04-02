@@ -5,13 +5,6 @@ const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid, imdbid, pingpong } = req.query;
-	if (!userid || !imdbid || !pingpong) {
-		res.status(400).json({
-			status: 'error',
-			errorMessage: 'Missing "userid", "imdbid" or "pingpong" query parameter',
-		});
-		return;
-	}
 	if (typeof userid !== 'string' || typeof imdbid !== 'string' || typeof pingpong !== 'string') {
 		res.status(400).json({
 			status: 'error',
