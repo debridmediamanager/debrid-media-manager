@@ -15,7 +15,7 @@ import { borderColor, btnColor, btnIcon, fileSize, sortByMedian } from '@/utils/
 import { isVideo } from '@/utils/selectable';
 import { defaultEpisodeSize, defaultPlayer } from '@/utils/settings';
 import { showInfoForRD } from '@/utils/showInfo';
-import { searchToastOptions } from '@/utils/toastOptions';
+import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { withAuth } from '@/utils/withAuth';
 import axios, { AxiosError } from 'axios';
@@ -299,7 +299,15 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	};
 
 	async function handleCast(hash: string, fileIds: string[]) {
-		await handleCastTvShow(dmmCastToken!, imdbid as string, rdKey!, hash, fileIds);
+		await toast.promise(
+			handleCastTvShow(dmmCastToken!, imdbid as string, rdKey!, hash, fileIds),
+			{
+				loading: `Casting ${fileIds.length} episodes`,
+				success: 'Casting successful',
+				error: 'Casting failed',
+			},
+			castToastOptions
+		);
 	}
 
 	return (

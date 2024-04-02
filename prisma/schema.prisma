@@ -48,5 +48,5 @@ model Cast {
   mediaInfo Json?
 
   @@index([imdbId, userId, updatedAt])
-  @@unique([userId, hash])
+  @@unique([imdbId, userId, hash])
 }

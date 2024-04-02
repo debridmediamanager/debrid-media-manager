@@ -401,7 +401,8 @@ export class PlanetScaleCache {
 		const mediaInfo2 = mediaInfo as any;
 		await this.prisma.cast.upsert({
 			where: {
-				userId_hash: {
+				imdbId_userId_hash: {
+					imdbId: imdbId,
 					userId: userId,
 					hash: hash,
 				},
@@ -441,7 +442,7 @@ export class PlanetScaleCache {
 				updatedAt: 'desc',
 			},
 			distinct: ['imdbId'],
-			take: 10,
+			// take: 48,
 			select: {
 				imdbId: true,
 			},
@@ -468,8 +469,8 @@ export class PlanetScaleCache {
 
 		const uniqueShows = showsWithDuplicates
 			.map((show) => show.imdbId.split(':')[0]) // Extracts the base imdbId of the show
-			.filter((value, index, self) => self.indexOf(value) === index) // Ensures uniqueness
-			.slice(0, 10); // Takes the last 10 unique shows
+			.filter((value, index, self) => self.indexOf(value) === index); // Ensures uniqueness
+		// .slice(0, 48); // Takes the last 48 unique shows
 
 		return uniqueShows;
 	}
