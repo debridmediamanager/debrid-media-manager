@@ -24,21 +24,16 @@ export const getStreamUrl = async (
 			const torrent = await getTorrentInfo(rdKey, id, true);
 			let link = '';
 
-			if (!fileId) {
-				// get biggest file index
-				const biggestFile = torrent.files.reduce((prev, current) => {
-					return prev.bytes > current.bytes ? prev : current;
-				});
-				const biggestFileIdx = torrent.files.findIndex((f) => f.id === biggestFile.id);
-				link = torrent.links[biggestFileIdx] ?? torrent.links[0];
-			} else {
-				const fileIdx = torrent.files
-					.filter((f) => f.selected)
-					.findIndex((f) => f.id === fileId);
-				link = torrent.links[fileIdx] ?? torrent.links[0];
-			}
+			const fileIdx = torrent.files
+				.filter((f) => f.selected)
+				.findIndex((f) => f.id === fileId);
+			link = torrent.links[fileIdx] ?? torrent.links[0];
 
 			const resp = await unrestrictLink(rdKey, link, ipAddress, true);
+			if (!resp.streamable) {
+				throw new Error('not streamable');
+			}
+
 			streamUrl = resp.download;
 
 			if (mediaType === 'tv') {
@@ -67,9 +62,51 @@ export const getStreamUrl = async (
 		} catch (e) {
 			console.log('error after adding hash', e);
 			await deleteTorrent(rdKey, id, true);
+			throw e;
 		}
 	} catch (e) {
-		console.log('error on adding hash', (e as any).message);
+		throw e;
 	}
 	return [streamUrl, seasonNumber, episodeNumber, fileSize];
+};
+
+export const getBiggestFileStreamUrl = async (
+	rdKey: string,
+	hash: string,
+	ipAddress: string
+): Promise<[string, number]> => {
+	let streamUrl = '';
+	let fileSize = 0;
+	try {
+		const id = await addHashAsMagnet(rdKey, hash, true);
+		try {
+			await handleSelectFilesInRd(rdKey, `rd:${id}`, true);
+			const torrent = await getTorrentInfo(rdKey, id, true);
+			let link = '';
+
+			const biggestFile = torrent.files.reduce((prev, current) => {
+				return prev.bytes > current.bytes ? prev : current;
+			});
+			const biggestFileIdx = torrent.files.findIndex((f) => f.id === biggestFile.id);
+			link = torrent.links[biggestFileIdx] ?? torrent.links[0];
+
+			const resp = await unrestrictLink(rdKey, link, ipAddress, true);
+			if (!resp.streamable) {
+				throw new Error('not streamable');
+			}
+
+			streamUrl = resp.download;
+
+			fileSize = Math.round(resp.filesize / 1024 / 1024);
+
+			await deleteTorrent(rdKey, id, true);
+		} catch (e) {
+			console.log('error after adding hash', e);
+			await deleteTorrent(rdKey, id, true);
+			throw e;
+		}
+	} catch (e) {
+		throw e;
+	}
+	return [streamUrl, fileSize];
 };

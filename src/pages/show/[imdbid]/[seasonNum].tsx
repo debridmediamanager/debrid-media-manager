@@ -6,6 +6,7 @@ import { TorrentInfoResponse } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
+import { handleCastTvShow } from '@/utils/cast';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
@@ -297,6 +298,10 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		rdKey && showInfoForRD(player, rdKey!, info, dmmCastToken ?? '', imdbid as string, 'tv');
 	};
 
+	async function handleCast(hash: string, fileIds: string[]) {
+		await handleCastTvShow(dmmCastToken!, imdbid as string, rdKey!, hash, fileIds);
+	}
+
 	return (
 		<div className="max-w-full">
 			<Head>
@@ -462,6 +467,11 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 							return;
 						const rdColor = btnColor(r.rdAvailable, r.noVideos);
 						const adColor = btnColor(r.adAvailable, r.noVideos);
+						let epRegex1 = /S(\d+)\s?E(\d+)/i;
+						let epRegex2 = /[^\d](\d{1,2})x(\d{1,2})[^\d]/i;
+						const castableFileIds = r.files
+							.filter((f) => f.filename.match(epRegex1) || f.filename.match(epRegex2))
+							.map((f) => `${f.fileId}`);
 						return (
 							<div
 								key={i}
@@ -540,6 +550,15 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 												onClick={() => handleShowInfo(r)}
 											>
 												👀 Look Inside
+											</button>
+										)}
+
+										{rdKey && dmmCastToken && castableFileIds.length > 0 && (
+											<button
+												className="bg-black text-white text-xs rounded inline px-1"
+												onClick={() => handleCast(r.hash, castableFileIds)}
+											>
+												Cast✨
 											</button>
 										)}
 									</div>
