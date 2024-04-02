@@ -56,6 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				}
 			}
 		} catch (e) {
+			console.error(e);
 			errorEpisodes.push(`fileId:${fileId}`);
 		}
 	}

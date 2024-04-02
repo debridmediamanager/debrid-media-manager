@@ -15,7 +15,7 @@ import { borderColor, btnColor, btnIcon, fileSize, sortByBiggest } from '@/utils
 import { isVideo } from '@/utils/selectable';
 import { defaultMovieSize, defaultPlayer } from '@/utils/settings';
 import { showInfoForRD } from '@/utils/showInfo';
-import { searchToastOptions } from '@/utils/toastOptions';
+import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { withAuth } from '@/utils/withAuth';
 import axios, { AxiosError } from 'axios';
@@ -290,7 +290,15 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	};
 
 	async function handleCast(hash: string) {
-		await handleCastMovie(dmmCastToken!, imdbid as string, rdKey!, hash);
+		await toast.promise(
+			handleCastMovie(dmmCastToken!, imdbid as string, rdKey!, hash),
+			{
+				loading: 'Casting...',
+				success: 'Casting successful',
+				error: 'Casting failed',
+			},
+			castToastOptions
+		);
 	}
 
 	return (

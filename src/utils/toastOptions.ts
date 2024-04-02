@@ -27,3 +27,8 @@ export const magnetToastOptions = {
 	...globalToastOptions,
 	icon: '🧲',
 };
+
+export const castToastOptions = {
+	...globalToastOptions,
+	icon: '🪄',
+};
