@@ -10,7 +10,8 @@ export const getStreamUrl = async (
 	rdKey: string,
 	hash: string,
 	fileId: number,
-	ipAddress: string
+	ipAddress: string,
+	mediaType: string
 ): Promise<[string, number, number, number]> => {
 	let streamUrl = '';
 	let seasonNumber = -1;
@@ -39,23 +40,27 @@ export const getStreamUrl = async (
 
 			const resp = await unrestrictLink(rdKey, link, ipAddress, true);
 			streamUrl = resp.download;
-			const filePath = streamUrl.split('/').pop() ?? '';
-			let epRegex = /S(\d+)\s?E(\d+)/i;
-			seasonNumber = filePath.match(epRegex)?.length
-				? parseInt(filePath.match(epRegex)![1], 10)
-				: -1;
-			episodeNumber = filePath.match(epRegex)?.length
-				? parseInt(filePath.match(epRegex)![2], 10)
-				: -1;
-			if (seasonNumber === -1 || episodeNumber === -1) {
-				epRegex = /[^\d](\d{1,3})x(\d{1,3})[^\d]/i;
+
+			if (mediaType === 'tv') {
+				const filePath = streamUrl.split('/').pop() ?? '';
+				let epRegex = /S(\d+)\s?E(\d+)/i;
 				seasonNumber = filePath.match(epRegex)?.length
 					? parseInt(filePath.match(epRegex)![1], 10)
 					: -1;
 				episodeNumber = filePath.match(epRegex)?.length
 					? parseInt(filePath.match(epRegex)![2], 10)
 					: -1;
+				if (seasonNumber === -1 || episodeNumber === -1) {
+					epRegex = /[^\d](\d{1,2})x(\d{1,2})[^\d]/i;
+					seasonNumber = filePath.match(epRegex)?.length
+						? parseInt(filePath.match(epRegex)![1], 10)
+						: -1;
+					episodeNumber = filePath.match(epRegex)?.length
+						? parseInt(filePath.match(epRegex)![2], 10)
+						: -1;
+				}
 			}
+
 			fileSize = Math.round(resp.filesize / 1024 / 1024);
 
 			await deleteTorrent(rdKey, id, true);

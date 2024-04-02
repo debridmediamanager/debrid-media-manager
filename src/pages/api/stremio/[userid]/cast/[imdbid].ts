@@ -6,11 +6,11 @@ const db = new PlanetScaleCache();
 
 // cast: unrestricts a selected link and saves it to the database
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { userid, imdbid, token, hash, fileId } = req.query;
-	if (!imdbid || !token || !hash || !fileId) {
+	const { userid, imdbid, token, hash, fileId, mediaType } = req.query;
+	if (!token || !hash || !fileId || !mediaType) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Missing "imdbid", "token", "hash" or "fileId" query parameter',
+			errorMessage: 'Missing "token", "hash", "fileId" or "mediaType" query parameter',
 		});
 		return;
 	}
@@ -19,11 +19,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		typeof imdbid !== 'string' ||
 		typeof token !== 'string' ||
 		typeof hash !== 'string' ||
-		typeof fileId !== 'string'
+		typeof fileId !== 'string' ||
+		typeof mediaType !== 'string'
 	) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Invalid "imdbid", "token", "hash" or "fileId" query parameter',
+			errorMessage: 'Invalid "token", "hash", "fileId" or "mediaType" query parameter',
 		});
 		return;
 	}
@@ -32,7 +33,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		token,
 		hash,
 		parseInt(fileId, 10),
-		ipAddress
+		ipAddress,
+		mediaType
 	);
 
 	if (streamUrl) {
