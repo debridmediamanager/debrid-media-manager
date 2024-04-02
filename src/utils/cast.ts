@@ -1,0 +1,59 @@
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { runConcurrentFunctions } from './batch';
+import { groupBy } from './groupBy';
+import { magnetToastOptions } from './toastOptions';
+
+export const handleCastMovie = async (
+	castToken: string,
+	imdbId: string,
+	rdKey: string,
+	hash: string
+) => {
+	try {
+		const resp = await axios.get(
+			`/api/stremio/${castToken}/cast/movie/${imdbId}?token=${rdKey}&hash=${hash}`
+		);
+		toast(`Successfully casted movie ${resp.data.filename}`, magnetToastOptions);
+	} catch (error) {
+		console.error(error);
+		toast.error('There was an error casting the movie');
+	}
+};
+
+export const handleCastTvShow = async (
+	castToken: string,
+	imdbId: string,
+	rdKey: string,
+	hash: string,
+	fileIds: string[]
+) => {
+	const yetToCast = groupBy(5, fileIds).map((batch) => async () => {
+		try {
+			const fIdParam = batch.map((id) => `fileIds=${id}`).join('&');
+			const resp = await axios.get(
+				`/api/stremio/${castToken}/cast/series/${imdbId}?token=${rdKey}&hash=${hash}&${fIdParam}`
+			);
+			const errorEpisodes = resp.data.errorEpisodes;
+			if (errorEpisodes.length) {
+				toast.error(
+					`Error casting ${errorEpisodes[0]}${
+						errorEpisodes.length > 1
+							? ` and ${errorEpisodes.length - 1} other episodes`
+							: ''
+					}`,
+					magnetToastOptions
+				);
+			} else {
+				toast.success(`Successfully casted ${batch.length} episodes`, magnetToastOptions);
+			}
+		} catch (error) {
+			toast.error(`Error casting ${batch.length} episodes`, magnetToastOptions);
+		}
+	});
+
+	const [results] = await runConcurrentFunctions(yetToCast, 5, 500);
+	if (results.length) {
+		toast.success(`Finished casting all episodes in TV series torrent`, magnetToastOptions);
+	}
+};
