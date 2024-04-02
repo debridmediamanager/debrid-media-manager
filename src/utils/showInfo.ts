@@ -194,7 +194,7 @@ export const showInfoForRD = async (
 					let epRegex = /S(\d+)\s?E(\d+)/i;
 					let isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
 					if (mediaType === 'tv' && !isTvEpisode) {
-						epRegex = /(\d+)x(\d+)/i;
+						epRegex = /[^\d](\d{1,3})x(\d{1,3})[^\d]/i;
 						isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
 					}
 					if (

@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
-	const [streamUrl, seasonNumber, episodeNumber] = await getStreamUrl(
+	const [streamUrl, seasonNumber, episodeNumber, fileSize] = await getStreamUrl(
 		token,
 		hash,
 		parseInt(fileId, 10),
@@ -37,16 +37,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	if (streamUrl) {
 		let redirectUrl = `stremio://detail/movie/${imdbid}/${imdbid}`;
-		let message = 'You can now cast the movie in Stremio';
+		let message = 'You can now stream the movie in Stremio';
 		if (seasonNumber >= 0 && episodeNumber >= 0) {
 			redirectUrl = `stremio://detail/series/${imdbid}/${imdbid}:${seasonNumber}:${episodeNumber}`;
-			message = `You can now cast S${seasonNumber}E${episodeNumber} in Stremio`;
+			message = `You can now stream S${seasonNumber}E${episodeNumber} in Stremio`;
 		}
 
 		const castKey = `${imdbid}${
 			seasonNumber >= 0 && episodeNumber >= 0 ? `:${seasonNumber}:${episodeNumber}` : ''
 		}`;
-		await db.saveCast(castKey, userid, hash, streamUrl);
+		await db.saveCast(castKey, userid, hash, streamUrl, 0, 0, fileSize, null);
 
 		// send an html
 		res.setHeader('Content-Type', 'text/html');
