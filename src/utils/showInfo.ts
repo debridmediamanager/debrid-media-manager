@@ -49,7 +49,7 @@ import { isVideo } from './selectable';
 
 // 					if (userId && imdbId) {
 // 						castBtn = `
-// 							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${torrent.hash}&fileId=${file.id}')">Cast✨</button>
+// 							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${torrent.hash}&fileId=${file.id}&mediaType=${mediaType}')">Cast✨</button>
 // 						`;
 // 					}
 // 				}
@@ -194,7 +194,7 @@ export const showInfoForRD = async (
 					let epRegex = /S(\d+)\s?E(\d+)/i;
 					let isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
 					if (mediaType === 'tv' && !isTvEpisode) {
-						epRegex = /[^\d](\d{1,3})x(\d{1,3})[^\d]/i;
+						epRegex = /[^\d](\d{1,2})x(\d{1,2})[^\d]/i;
 						isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
 					}
 					if (
@@ -203,7 +203,7 @@ export const showInfoForRD = async (
 						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
 					) {
 						castBtn = `
-							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')">Cast✨</button>
+							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')">Cast✨</button>
 						`;
 					}
 				}
