@@ -6,6 +6,7 @@ import { TorrentInfoResponse } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
+import { handleCastMovie } from '@/utils/cast';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
@@ -288,6 +289,10 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		rdKey && showInfoForRD(player, rdKey, info, dmmCastToken ?? '', imdbid as string, 'movie');
 	};
 
+	async function handleCast(hash: string) {
+		await handleCastMovie(dmmCastToken!, imdbid as string, rdKey!, hash);
+	}
+
 	return (
 		<div className="max-w-full">
 			<Head>
@@ -485,6 +490,15 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 												onClick={() => handleShowInfo(r)}
 											>
 												👀 Look Inside
+											</button>
+										)}
+
+										{rdKey && dmmCastToken && (
+											<button
+												className="bg-black text-white text-xs rounded inline px-1"
+												onClick={() => handleCast(r.hash)}
+											>
+												Cast✨
 											</button>
 										)}
 									</div>
