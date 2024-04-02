@@ -30,7 +30,7 @@ function StremioPage() {
 			<h1 className="text-2xl text-purple-600 font-bold mb-4">DMM Cast</h1>
 			<div className="flex flex-col items-center">
 				<strong>Cast from any device to Stremio</strong>
-				<div>We never ask for or store your API tokens 🔒</div>
+				{/* <div>We never ask for or store your API tokens 🔒</div> */}
 				<div className="mt-2 mb-2 h-max text-center leading-10">
 					<Link
 						href={`stremio://${window.location.origin.replace(

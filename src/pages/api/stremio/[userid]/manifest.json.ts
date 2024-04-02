@@ -12,37 +12,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		version: '0.0.3',
 		resources: ['catalog', 'stream'],
 		types: ['movie', 'series'],
-		idPrefixes: ['tt', 'dmmrd'],
+		idPrefixes: ['tt'],
 		catalogs: [
 			{
-				id: 'dmmlibrary',
-				name: 'DMM Library',
-				type: 'other',
-				extra: [
-					{
-						name: 'search',
-						isRequired: false,
-					},
-					{
-						name: 'skip',
-						isRequired: false,
-					},
-				],
+				id: 'casted-movies',
+				name: 'DMM Casted Movies',
+				type: 'movie',
 			},
 			{
-				id: 'dmmdownloads',
-				name: 'DMM Downloads',
-				type: 'other',
-				extra: [
-					{
-						name: 'search',
-						isRequired: false,
-					},
-					{
-						name: 'skip',
-						isRequired: false,
-					},
-				],
+				id: 'casted-shows',
+				name: 'DMM Casted TV Shows',
+				type: 'series',
 			},
 		],
 		behaviorHints: { adult: false, p2p: false },
