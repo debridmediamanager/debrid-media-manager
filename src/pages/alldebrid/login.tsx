@@ -31,7 +31,7 @@ export default function AllDebridLoginPage() {
 
 				const checkResponse = await checkPin(pinResponse.pin, pinResponse.check);
 				if (checkResponse) {
-					setApiKey(checkResponse.data.apikey!, 86400);
+					setApiKey(checkResponse.data.apikey!, checkResponse.data.expires_in);
 				}
 			}
 		};
