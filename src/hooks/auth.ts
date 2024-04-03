@@ -105,25 +105,28 @@ export const useCurrentUser = () => {
 	useEffect(() => {
 		(async () => {
 			try {
-				if (!rdToken) return;
-				const rdUserResponse = await getRealDebridUser(rdToken!);
-				if (rdUserResponse) setRdUser(<RealDebridUser>rdUserResponse);
+				if (rdToken) {
+					const rdUserResponse = await getRealDebridUser(rdToken!);
+					if (rdUserResponse) setRdUser(<RealDebridUser>rdUserResponse);
+				}
 			} catch (error: any) {
 				setRdError(new Error(error));
 			}
 			try {
-				if (!adToken) return;
-				const adUserResponse = await getAllDebridUser(adToken!);
-				if (adUserResponse) setAdUser(<AllDebridUser>adUserResponse);
+				if (adToken) {
+					const adUserResponse = await getAllDebridUser(adToken!);
+					if (adUserResponse) setAdUser(<AllDebridUser>adUserResponse);
+				}
 			} catch (error: any) {
 				setAdError(new Error(error));
 			}
 			try {
-				if (!traktToken) return;
-				const traktUserResponse = await getTraktUser(traktToken!);
-				if (traktUserResponse) {
-					setTraktUser(traktUserResponse);
-					setTraktUserSlug(traktUserResponse.user.ids.slug);
+				if (traktToken) {
+					const traktUserResponse = await getTraktUser(traktToken!);
+					if (traktUserResponse) {
+						setTraktUser(traktUserResponse);
+						setTraktUserSlug(traktUserResponse.user.ids.slug);
+					}
 				}
 			} catch (error: any) {
 				setTraktError(new Error(error));
