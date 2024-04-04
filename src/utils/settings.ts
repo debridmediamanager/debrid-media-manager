@@ -50,6 +50,7 @@ export const showSettings = async () => {
 					<option ${isPlayer('mac2/iina')}>IINA</option>
 					<option ${isPlayer('mac2/omniplayer')}>OmniPlayer</option>
 					<option ${isPlayer('mac2/figplayer')}>Fig Player</option>
+					<option ${isPlayer('mac3/nplayer-mac')}>nPlayer</option>
 				</optgroup>
 			</select>
 
