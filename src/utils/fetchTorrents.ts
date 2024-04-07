@@ -39,7 +39,6 @@ export const fetchRealDebrid = async (
 						status = UserTorrentStatus.error;
 						break;
 				}
-				console.log(torrentInfo.filename, mediaType);
 				let info = {} as ParsedFilename;
 				try {
 					info =
