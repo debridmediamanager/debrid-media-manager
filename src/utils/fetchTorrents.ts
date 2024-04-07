@@ -1,7 +1,7 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
 import { UserTorrentResponse, getUserTorrentsList } from '@/services/realDebrid';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
-import { filenameParse } from '@ctrl/video-filename-parser';
+import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import toast from 'react-hot-toast';
 import { getMediaId } from './mediaId';
 import { getTypeByFilenames, getTypeByNameAndFileCount } from './mediaType';
@@ -15,7 +15,7 @@ export const fetchRealDebrid = async (
 	try {
 		for await (let pageOfTorrents of getUserTorrentsList(rdKey, customLimit)) {
 			const torrents = pageOfTorrents.map((torrentInfo) => {
-				const mediaType = getTypeByNameAndFileCount(
+				let mediaType = getTypeByNameAndFileCount(
 					torrentInfo.filename,
 					torrentInfo.links.length
 				);
@@ -39,10 +39,20 @@ export const fetchRealDebrid = async (
 						status = UserTorrentStatus.error;
 						break;
 				}
-				const info =
+				console.log(torrentInfo.filename, mediaType);
+				let info = {} as ParsedFilename;
+				try {
+					info =
+						mediaType === 'movie'
+							? filenameParse(torrentInfo.filename)
+							: filenameParse(torrentInfo.filename, true);
+				} catch (error) {
+					// flip the condition if error is thrown
+					mediaType = mediaType === 'movie' ? 'tv' : 'movie';
 					mediaType === 'movie'
 						? filenameParse(torrentInfo.filename)
 						: filenameParse(torrentInfo.filename, true);
+				}
 				return {
 					...torrentInfo,
 					// score: getReleaseTags(torrentInfo.filename, torrentInfo.bytes / ONE_GIGABYTE).score,
