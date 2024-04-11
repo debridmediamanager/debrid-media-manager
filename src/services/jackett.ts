@@ -98,7 +98,7 @@ const processPage = async (
 			retries = 0;
 			break;
 		} catch (error: any) {
-			console.log('request error:', error.message, searchUrl);
+			console.log('jackett request error:', error.message, searchUrl);
 			retries++;
 			if (retries >= MAX_RETRIES) {
 				console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);

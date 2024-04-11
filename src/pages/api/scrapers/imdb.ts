@@ -24,5 +24,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 	await generateScrapeJobs(id.toString().trim(), seasonNum, replaceOldScrape === 'true');
 	res.status(200).json({ status: 'success' });
-	process.exit(0);
+	// process.exit(0);
 }
