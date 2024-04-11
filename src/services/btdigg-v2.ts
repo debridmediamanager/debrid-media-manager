@@ -1,33 +1,11 @@
 import { meetsTitleConditions } from '@/utils/checks';
 import ProxyManager from '@/utils/proxyManager';
-import axios from 'axios';
-import { SocksProxyAgent } from 'socks-proxy-agent';
-import UserAgent from 'user-agents';
 import { ScrapeSearchResult } from './mediasearch';
+import { createAxiosInstance } from './proxy';
 
 const BTDIG = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
 const MAX_RESULTS_PER_PAGE = 10;
 const BAD_RESULT_THRESHOLD = 20;
-
-export const createAxiosInstance = (agent: SocksProxyAgent) => {
-	return axios.create({
-		httpAgent: BTDIG.startsWith('http://') ? agent : undefined,
-		headers: {
-			accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-			'accept-language': 'en-US,en;q=0.5',
-			'accept-encoding': 'gzip, deflate, br',
-			referer: `${BTDIG}/`,
-			connection: 'keep-alive',
-			'sec-fetch-dest': 'document',
-			'sec-fetch-mode': 'navigate',
-			'sec-fetch-site': 'same-origin',
-			'sec-fetch-user': '?1',
-			'upgrade-insecure-requests': '1',
-			'user-agent': new UserAgent().toString(),
-		},
-		timeout: parseInt(process.env.REQUEST_TIMEOUT || '3000', 10),
-	});
-};
 
 function convertToMB(fileSizeStr: string) {
 	let fileSize = parseFloat(fileSizeStr); // extracts the numeric part
@@ -134,7 +112,7 @@ const processPage = async (
 			} else if (error.message.includes('timeout of')) {
 				retries++;
 			} else {
-				console.log('request error:', error.message, searchUrl);
+				console.log('btdigg request error:', error.message, searchUrl);
 				retries++;
 				if (retries >= MAX_RETRIES) {
 					console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);

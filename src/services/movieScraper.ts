@@ -1,10 +1,9 @@
 import { filterByMovieConditions, getAllPossibleTitles, grabMovieMetadata } from '@/utils/checks';
-import { scrapeBtdigg } from './btdigg-v2';
-import { scrapeJackett } from './jackett';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
-import { scrapeProwlarr } from './prowlarr';
-import { scrapeTorrentKitty } from './torrentkitty';
+import { scrapeSnowFL } from './snowfl';
+import { scrapeSolidTorrent } from './solidtorrent';
+import { scrapeBtdigg } from './btdigg-v2';
 
 type MovieScrapeJob = {
 	titles: string[];
@@ -22,9 +21,10 @@ async function scrapeAll(
 ): Promise<ScrapeSearchResult[][]> {
 	return await Promise.all([
 		scrapeBtdigg(finalQuery, targetTitle, years, airDate),
-		scrapeProwlarr(finalQuery, targetTitle, years, airDate, 'movie'),
-		scrapeJackett(finalQuery, targetTitle, years, airDate, 'movie'),
-		scrapeTorrentKitty(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
+		// scrapeProwlarr(finalQuery, targetTitle, years, airDate, 'movie'),
+		// scrapeJackett(finalQuery, targetTitle, years, airDate, 'movie'),
+		scrapeSolidTorrent(finalQuery, targetTitle, years, airDate),
+		scrapeSnowFL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 	]);
 }
 
