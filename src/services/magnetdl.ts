@@ -21,7 +21,11 @@ const processPage = async (
 	let results: ScrapeSearchResult[] = [];
 	let retries = 0; // current number of retries
 	let responseData = '';
-	if (finalQuery.replace(/[^a-z0-9]/gi, '').length === 0) return results;
+	if (
+		finalQuery.replace(/[^a-z0-9]/gi, '').length === 0 ||
+		finalQuery.replace(/[^a-z0-9]/gi, '-').charAt(0) === '-'
+	)
+		return results;
 	const searchUrl = createSearchUrl(finalQuery);
 	let page = 1;
 	while (true) {
