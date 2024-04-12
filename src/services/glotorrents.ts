@@ -88,7 +88,7 @@ const processPage = async (
 		}))
 		.filter(({ title }) => meetsTitleConditions(targetTitle, years, title));
 
-	console.log(`🚀🪐🌕🌑☄️🛸 GloTorrents search returned ${results.length} for ${finalQuery}`);
+	console.log(`✨ GloTorrents search returned ${results.length} for ${finalQuery}`);
 
 	return results;
 };
