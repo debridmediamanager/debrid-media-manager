@@ -2,7 +2,6 @@ import { filterByMovieConditions, getAllPossibleTitles, grabMovieMetadata } from
 import { scrapeApiBay2 } from './apibay2';
 import { scrapeBtdigg } from './btdigg-v2';
 import { scrapeGloTorrents } from './glotorrents';
-import { scrapeIDope } from './idope';
 import { scrapeMagnetDL } from './magnetdl';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
@@ -25,15 +24,13 @@ async function scrapeAll(
 	imdbId: string
 ): Promise<ScrapeSearchResult[][]> {
 	return await Promise.all([
-		scrapeIDope(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
+		scrapeApiBay2(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeBtdigg(finalQuery, targetTitle, years, airDate),
-		scrapeSolidTorrent(finalQuery, targetTitle, years, airDate),
-		// scrapeSnowFL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
-		scrapeApiBay2(finalQuery, targetTitle, years, airDate),
-		scrapeMagnetDL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
-		scrapeTorrentGalaxy(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeGloTorrents(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
+		scrapeMagnetDL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeRuTor(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
+		scrapeSolidTorrent(finalQuery, targetTitle, years, airDate),
+		scrapeTorrentGalaxy(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 	]);
 }
 
