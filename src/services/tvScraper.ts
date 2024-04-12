@@ -13,6 +13,7 @@ import { scrapeIDope } from './idope';
 import { scrapeMagnetDL } from './magnetdl';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
+import { scrapeRuTor } from './rutor';
 import { scrapeSolidTorrent } from './solidtorrent';
 import { scrapeTorrentGalaxy } from './tgx';
 
@@ -43,6 +44,7 @@ async function scrapeAll(
 		scrapeMagnetDL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeTorrentGalaxy(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeGloTorrents(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
+		scrapeRuTor(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 	]);
 }
 
