@@ -6,10 +6,11 @@ import {
 	grabTvMetadata,
 	padWithZero,
 } from '@/utils/checks';
+import { scrapeApiBay2 } from './apibay2';
 import { scrapeBtdigg } from './btdigg-v2';
+import { scrapeMagnetDL } from './magnetdl';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
-import { scrapeSnowFL } from './snowfl';
 import { scrapeSolidTorrent } from './solidtorrent';
 
 type TvScrapeJob = {
@@ -35,7 +36,9 @@ async function scrapeAll(
 		// scrapeProwlarr(finalQuery, targetTitle, years, airDate, 'tv'),
 		// scrapeJackett(finalQuery, targetTitle, years, airDate, 'tv'),
 		scrapeSolidTorrent(finalQuery, targetTitle, years, airDate),
-		scrapeSnowFL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
+		// scrapeSnowFL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
+		scrapeApiBay2(finalQuery, targetTitle, years, airDate),
+		scrapeMagnetDL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 	]);
 }
 
