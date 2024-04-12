@@ -56,10 +56,6 @@ const processPage = async (
 	}
 	await scraper.close();
 
-	// save response to file
-	const fs = require('fs');
-	fs.writeFileSync('idope.html', responseData);
-
 	// get all titles from page by regex matching
 	const titleMatches = Array.from(
 		responseData.matchAll(/<div id="hidename\d+" class="hideinfohash">(.*?)<\/div>/gs)

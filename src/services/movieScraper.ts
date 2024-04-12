@@ -6,6 +6,7 @@ import { scrapeMagnetDL } from './magnetdl';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 import { scrapeSolidTorrent } from './solidtorrent';
+import { scrapeTorrentGalaxy } from './tgx';
 
 type MovieScrapeJob = {
 	titles: string[];
@@ -24,12 +25,11 @@ async function scrapeAll(
 	return await Promise.all([
 		scrapeIDope(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeBtdigg(finalQuery, targetTitle, years, airDate),
-		// // scrapeProwlarr(finalQuery, targetTitle, years, airDate, 'movie'),
-		// // scrapeJackett(finalQuery, targetTitle, years, airDate, 'movie'),
 		scrapeSolidTorrent(finalQuery, targetTitle, years, airDate),
-		// // scrapeSnowFL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
+		// scrapeSnowFL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeApiBay2(finalQuery, targetTitle, years, airDate),
 		scrapeMagnetDL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
+		scrapeTorrentGalaxy(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 	]);
 }
 
