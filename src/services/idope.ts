@@ -72,7 +72,7 @@ const processPage = async (
 
 	// <div class="resultdivbottonlength">3.9&nbsp;GB</div>
 	const sizeMatches = Array.from(
-		responseData.matchAll(/<div class="resultdivbottonlength">(.*?)<\/div>/gs)
+		responseData.matchAll(/<div class="resultdivbottonlength">([\d,.]+\&nbsp;[KMGT]B)<\/div>/gs)
 	);
 	const sizes = sizeMatches
 		.map((match) => match[1])

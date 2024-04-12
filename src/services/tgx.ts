@@ -54,7 +54,7 @@ const processPage = async (
 	// <div class="tgxtablecell collapsehide rounded txlight" style="text-align:right;"><span class="badge badge-secondary txlight" style="border-radius:4px;">1.31 GB</span></div>
 	const sizeMatches = Array.from(
 		responseData.matchAll(
-			/<span class='badge badge-secondary txlight' style='border-radius:4px;'>([\d.]+\s*[KMGT]B)<\/span>/gs
+			/<span class='badge badge-secondary txlight' style='border-radius:4px;'>([\d,.]+\s*[KMGT]B)<\/span>/gs
 		)
 	);
 	const sizes = sizeMatches
