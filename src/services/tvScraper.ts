@@ -8,6 +8,7 @@ import {
 } from '@/utils/checks';
 import { scrapeApiBay2 } from './apibay2';
 import { scrapeBtdigg } from './btdigg-v2';
+import { scrapeIDope } from './idope';
 import { scrapeMagnetDL } from './magnetdl';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
@@ -32,6 +33,7 @@ async function scrapeAll(
 	imdbId: string
 ): Promise<ScrapeSearchResult[][]> {
 	return await Promise.all([
+		scrapeIDope(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeBtdigg(finalQuery, targetTitle, years, airDate),
 		// scrapeProwlarr(finalQuery, targetTitle, years, airDate, 'tv'),
 		// scrapeJackett(finalQuery, targetTitle, years, airDate, 'tv'),
