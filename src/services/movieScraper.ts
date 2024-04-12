@@ -1,8 +1,9 @@
 import { filterByMovieConditions, getAllPossibleTitles, grabMovieMetadata } from '@/utils/checks';
+import { scrapeApiBay2 } from './apibay2';
 import { scrapeBtdigg } from './btdigg-v2';
+import { scrapeMagnetDL } from './magnetdl';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
-import { scrapeSnowFL } from './snowfl';
 import { scrapeSolidTorrent } from './solidtorrent';
 
 type MovieScrapeJob = {
@@ -24,7 +25,9 @@ async function scrapeAll(
 		// scrapeProwlarr(finalQuery, targetTitle, years, airDate, 'movie'),
 		// scrapeJackett(finalQuery, targetTitle, years, airDate, 'movie'),
 		scrapeSolidTorrent(finalQuery, targetTitle, years, airDate),
-		scrapeSnowFL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
+		// scrapeSnowFL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
+		scrapeApiBay2(finalQuery, targetTitle, years, airDate),
+		scrapeMagnetDL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 	]);
 }
 
