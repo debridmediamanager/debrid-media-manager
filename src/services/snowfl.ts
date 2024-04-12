@@ -2,7 +2,9 @@ import { meetsTitleConditions } from '@/utils/checks';
 import axios from 'axios';
 import { ScrapeSearchResult } from './mediasearch';
 
-const hostname = process.env.SNOWFL ?? 'https://snowfl.com';
+const hostname =
+	process.env.SNOWFL ??
+	'https://worker-wispy-sky-2cca.bensarmiento.workers.dev/?https://snowfl.com';
 
 const createSearchUrl = (finalQuery: string, page: number, token: string) => {
 	const randomStr = Array.from(Array(8), () => Math.random().toString(36)[2]).join('');
@@ -13,9 +15,7 @@ const createSearchUrl = (finalQuery: string, page: number, token: string) => {
 };
 
 const getToken = async () => {
-	const response = await axios.get(`${hostname}/index.html`);
-	const fileName = response.data.match(/src="(b\.min\.js\?[^"]+)"/)[1];
-	const script = await axios.get(`${hostname}/${fileName}`);
+	const script = await axios.get(`${hostname}/b.min.js%3F${Date.now()}`);
 	const token = script.data.match(/"([a-zA-Z0-9]+)";\$\(\(function\(\){var e,t,n,r,o,a,i=/)[1];
 	return token ?? '';
 };

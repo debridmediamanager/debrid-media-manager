@@ -6,11 +6,11 @@ import {
 	grabTvMetadata,
 	padWithZero,
 } from '@/utils/checks';
+import { scrapeBtdigg } from './btdigg-v2';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { PlanetScaleCache } from './planetscale';
 import { scrapeSnowFL } from './snowfl';
 import { scrapeSolidTorrent } from './solidtorrent';
-import { scrapeBtdigg } from './btdigg-v2';
 
 type TvScrapeJob = {
 	titles: string[];
