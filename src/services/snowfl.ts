@@ -2,20 +2,27 @@ import { meetsTitleConditions } from '@/utils/checks';
 import axios from 'axios';
 import { ScrapeSearchResult } from './mediasearch';
 
-const hostname =
-	process.env.SNOWFL ??
-	'https://worker-wispy-sky-2cca.bensarmiento.workers.dev/?https://snowfl.com';
+const getRandomHostname = () => {
+	const hostnames = [
+		'https://worker-wispy-sky-2cca.bensarmiento.workers.dev/?https://snowfl.com',
+		'https://hello-world-frosty-cell-5e7e.bensarmiento.workers.dev/?https://snowfl.com',
+		'https://worker-cold-dawn-92aa.bensarmiento.workers.dev/?https://snowfl.com',
+		'https://worker-dawn-shadow-0588.bensarmiento.workers.dev/?https://snowfl.com',
+		'https://worker-calm-term-a9e1.bensarmiento.workers.dev/?https://snowfl.com',
+	];
+	return hostnames[Math.floor(Math.random() * hostnames.length)];
+};
 
 const createSearchUrl = (finalQuery: string, page: number, token: string) => {
 	const randomStr = Array.from(Array(8), () => Math.random().toString(36)[2]).join('');
 	const timeMs = Date.now();
-	return `${hostname}/${token}/${encodeURIComponent(
+	return `${getRandomHostname()}/${token}/${encodeURIComponent(
 		finalQuery
-	)}/${randomStr}/${page}/SEED/NONE/1?_=${timeMs + page}`;
+	)}/${randomStr}/${page}/DATE/NONE/1?_=${timeMs + page}`;
 };
 
 const getToken = async () => {
-	const script = await axios.get(`${hostname}/b.min.js%3F${Date.now()}`);
+	const script = await axios.get(`${getRandomHostname()}/b.min.js%3F${Date.now()}`);
 	const token = script.data.match(/"([a-zA-Z0-9]+)";\$\(\(function\(\){var e,t,n,r,o,a,i=/)[1];
 	return token ?? '';
 };
