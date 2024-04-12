@@ -53,7 +53,7 @@ const processPage = async (
 		title: decodeURIComponent(match[2].replaceAll('+', ' ')),
 	}));
 
-	const sizeMatches = Array.from(responseData.matchAll(/<td>([\d.]+\s*[A-Z]{2})<\/td>/gs));
+	const sizeMatches = Array.from(responseData.matchAll(/<td>([\d,.]+\s*[KMGT]B)<\/td>/gs));
 	const sizes = sizeMatches
 		.map((match) => match[1])
 		.map((size) => {

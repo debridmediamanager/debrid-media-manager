@@ -50,7 +50,7 @@ const processPage = async (
 
 	// get all sizes from page by regex matching
 	const sizeMatches = Array.from(
-		responseData.matchAll(/<img[^>]*alt="Size"[^>]*>([\d.]+\s*[A-Z]{2})/gs)
+		responseData.matchAll(/<img[^>]*alt="Size"[^>]*>([\d,.]+\s*[KMGT]B)/gs)
 	);
 	const sizes = sizeMatches
 		.map((match) => match[1])
