@@ -25,14 +25,14 @@ const processPage = async (
 	const cookiePg = await scraper.browser?.newPage();
 	await cookiePg!.setCookie({
 		name: 'cf_clearance',
-		value: 'bs6X1CnKU8NjFuy4d_LbyzKu5AZ14MeJH94ADGbVZsM-1712929344-1.0.1.1-pPYpl9s1izi3yRZhZjCYQIbq_HsGwTH1ztIvdlxOqMCtA9GgJq6JATqHzYwyyICieWSmT.ttlQdJjZEBB2xHOg',
+		value: 'WMfWm_M0ZholrwsHv9PukLw0faPIoFFXqprQCYTFbKo-1712939514-1.0.1.1-rzhGlr1NZlZiA0nfE0fKUbBWuVBFylh6VtniQYkkIYiALRfDc1F7KKsODu5OFyW90N7FjidiWtAygjpd2AzDUw',
 		domain: '.idope.se',
 	});
 	while (true) {
 		try {
 			const pg = await scraper.browser?.newPage();
 			await pg!.goto(`${searchUrl}&p=${page}`, { waitUntil: 'domcontentloaded' });
-			await pg!.waitForSelector('#top-banner', { timeout: 10000 });
+			await pg!.waitForSelector('#top-banner', { timeout: 30000 });
 			const response = await pg!.content();
 			responseData = responseData + response;
 			console.log('response', response.length);
