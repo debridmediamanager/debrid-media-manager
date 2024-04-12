@@ -23,42 +23,55 @@ function launch_scraper() {
         tmux new-window -t upkeep:1 -n requested
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:1 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        sleep 3
+        # waiting until $PORT is ready
+        while ! nc -z localhost $PORT; do
+            sleep 1
+        done
         tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/scrapers/requested\" &" C-m
 
         # processed
         tmux new-window -t upkeep:2 -n processed
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:2 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        sleep 3
+        while ! nc -z localhost $PORT; do
+            sleep 1
+        done
         tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/scrapers/stuck\" &" C-m
 
         # movie updater
         tmux new-window -t upkeep:3 -n movieclean
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:3 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        sleep 3
+        while ! nc -z localhost $PORT; do
+            sleep 1
+        done
         tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/cleaners/movie\" &" C-m
 
         # tv updater
         tmux new-window -t upkeep:4 -n tvclean
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:4 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        sleep 3
+        while ! nc -z localhost $PORT; do
+            sleep 1
+        done
         tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/cleaners/tv\" &" C-m
 
         # empty
         tmux new-window -t upkeep:5 -n empty
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:5 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        sleep 3
+        while ! nc -z localhost $PORT; do
+            sleep 1
+        done
         tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/scrapers/empty?quantity=3\" &" C-m
 
         # torrentio
         tmux new-window -t upkeep:6 -n torrentio
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:6 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        sleep 3
+        while ! nc -z localhost $PORT; do
+            sleep 1
+        done
         tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/scrapers/torrentio\" &" C-m
 
         # done!
