@@ -112,8 +112,8 @@ export async function generateScrapeJobs(
 		}
 	}
 
-	await db.saveScrapedResults(`movie:${imdbId}`, []);
-	await db.saveScrapedResults(`tv:${imdbId}:1`, []);
+	await db.saveScrapedResults(`movie:${imdbId}`, [], true);
+	await db.saveScrapedResults(`tv:${imdbId}:1`, [], true);
 	await db.markAsDone(imdbId);
 	return;
 }

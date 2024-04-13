@@ -5,13 +5,13 @@ import {
 } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
 import { filterByMovieConditions, getAllPossibleTitles, grabMovieMetadata } from '@/utils/checks';
-import { scrapeApiBay2 } from '../sites/apibay2';
-import { scrapeBtdigg } from '../sites/btdigg-v2';
-import { scrapeGloTorrents } from '../sites/glotorrents';
-import { scrapeMagnetDL } from '../sites/magnetdl';
-import { scrapeRuTor } from '../sites/rutor';
-import { scrapeSolidTorrent } from '../sites/solidtorrent';
-import { scrapeTorrentGalaxy } from '../sites/tgx';
+import { scrapeApiBay2 } from './sites/apibay2';
+import { scrapeBtdigg } from './sites/btdigg-v2';
+import { scrapeGloTorrents } from './sites/glotorrents';
+import { scrapeMagnetDL } from './sites/magnetdl';
+import { scrapeRuTor } from './sites/rutor';
+import { scrapeSolidTorrent } from './sites/solidtorrent';
+import { scrapeTorrentGalaxy } from './sites/tgx';
 
 type MovieScrapeJob = {
 	titles: string[];
