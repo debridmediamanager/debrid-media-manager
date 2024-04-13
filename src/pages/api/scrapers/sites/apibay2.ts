@@ -1,6 +1,6 @@
+import { ScrapeSearchResult } from '@/services/mediasearch';
 import { meetsTitleConditions } from '@/utils/checks';
 import axios from 'axios';
-import { ScrapeSearchResult } from './mediasearch';
 
 const hostname = `https://apibay.org`;
 

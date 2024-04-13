@@ -187,9 +187,6 @@ function countTestTermsInTarget(test: string, target: string, shouldBeInSequence
 }
 
 function flexEq(test: string, target: string, years: string[]) {
-	const movieTitle = filenameParse(test).title.toLowerCase();
-	const tvTitle = filenameParse(test, true).title.toLowerCase();
-
 	const target2 = target.replace(/\s+/gi, '');
 	const test2 = test.replace(/\s+/gi, '');
 
@@ -228,7 +225,18 @@ function flexEq(test: string, target: string, years: string[]) {
 		return true;
 	}
 	// if (strictEqual(target, movieTitle) || strictEqual(target, tvTitle)) console.log(`🎲 Test:strictEqual '${target}' is found in '${movieTitle}' or '${tvTitle}' | ${test}`);
-	return strictEqual(target, movieTitle) || strictEqual(target, tvTitle);
+	try {
+		// check if test has 4 digits
+		if (test.match(/\d{4}/) && !target.match(/\d{4}/)) {
+			// remove year from test
+			test = test.replace(/\d{4}/, '');
+		}
+		const movieTitle = filenameParse(test).title.toLowerCase();
+		const tvTitle = filenameParse(test, true).title.toLowerCase();
+		return strictEqual(target, movieTitle) || strictEqual(target, tvTitle);
+	} catch (e) {
+		return false;
+	}
 }
 
 export function matchesTitle(target: string, years: string[], test: string): boolean {

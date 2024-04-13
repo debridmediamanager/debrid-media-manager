@@ -1,7 +1,7 @@
+import { ScrapeSearchResult } from '@/services/mediasearch';
+import { createAxiosInstance } from '@/services/proxy';
 import { meetsTitleConditions } from '@/utils/checks';
 import ProxyManager from '@/utils/proxyManager';
-import { ScrapeSearchResult } from './mediasearch';
-import { createAxiosInstance } from './proxy';
 
 const BTDIG = 'http://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion';
 const MAX_RESULTS_PER_PAGE = 10;

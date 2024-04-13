@@ -1,6 +1,6 @@
+import { ScrapeResponse } from '@/pages/api/scrapers/services/scrapeJobs';
 import { cleanByImdbId } from '@/services/movieCleaner';
 import { PlanetScaleCache } from '@/services/planetscale';
-import { ScrapeResponse } from '@/services/scrapeJobs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new PlanetScaleCache();

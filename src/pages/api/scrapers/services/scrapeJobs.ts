@@ -1,8 +1,8 @@
+import { cleanMovieScrapes } from '@/services/movieCleaner';
+import { PlanetScaleCache } from '@/services/planetscale';
+import { cleanTvScrapes } from '@/services/tvCleaner';
 import axios from 'axios';
-import { cleanMovieScrapes } from './movieCleaner';
 import { scrapeMovies } from './movieScraper';
-import { PlanetScaleCache } from './planetscale';
-import { cleanTvScrapes } from './tvCleaner';
 import { scrapeTv } from './tvScraper';
 
 const tmdbKey = process.env.TMDB_KEY;
