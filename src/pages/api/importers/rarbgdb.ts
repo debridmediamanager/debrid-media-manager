@@ -1,4 +1,4 @@
-import { ScrapeResponse } from '@/pages/api/scrapers/services/scrapeJobs';
+import { ScrapeResponse } from '@/pages/scrapers/scrapeJobs';
 import { PlanetScaleCache } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Database, open } from 'sqlite';

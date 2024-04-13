@@ -1,4 +1,4 @@
-import { ScrapeResponse } from '@/pages/api/scrapers/services/scrapeJobs';
+import { ScrapeResponse } from '@/pages/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
 import fs from 'fs';

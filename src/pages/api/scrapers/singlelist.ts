@@ -1,5 +1,5 @@
-import { ScrapeInput } from '@/pages/api/scrapers/services/scrapeInput';
-import { ScrapeResponse, generateScrapeJobs } from '@/pages/api/scrapers/services/scrapeJobs';
+import { ScrapeInput } from '@/pages/scrapers/scrapeInput';
+import { ScrapeResponse, generateScrapeJobs } from '@/pages/scrapers/scrapeJobs';
 import { PlanetScaleCache } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 
