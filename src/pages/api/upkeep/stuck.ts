@@ -13,8 +13,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	while (true) {
 		let imdbId = await db.processingMoreThanAnHour();
 		if (!imdbId) {
-			console.log('[stuck] No processing jobs found, waiting 120 seconds');
-			await new Promise((resolve) => setTimeout(resolve, 120000));
+			console.log('[stuck] No processing jobs found, waiting 300 seconds');
+			await new Promise((resolve) => setTimeout(resolve, 300000));
 			continue;
 		}
 		await generateScrapeJobs(imdbId);

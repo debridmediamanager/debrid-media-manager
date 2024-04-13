@@ -10,11 +10,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		return;
 	}
 
-	const { quantity } = req.query;
-
 	while (true) {
 		console.log('[movieupdater] Checking for old media');
-		let imdbIds = await db.getOldestScrapedMedia('movie', parseInt(quantity as string));
+		let imdbIds = await db.getOldestScrapedMedia('movie', 3);
 		if (!imdbIds) {
 			console.log(
 				'[movieupdater] There must be something wrong with the database, waiting 60 seconds'

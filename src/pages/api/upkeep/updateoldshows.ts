@@ -10,11 +10,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		return;
 	}
 
-	const { quantity } = req.query;
-
 	while (true) {
 		console.log('[tvupdater] Checking for old media');
-		let imdbIds = await db.getOldestScrapedMedia('tv', 10);
+		let imdbIds = await db.getOldestScrapedMedia('tv', 30);
 		if (!imdbIds) {
 			console.log(
 				'[tvupdater] There must be something wrong with the database, waiting 60 seconds'
@@ -24,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		}
 
 		let uniqueIds = Array.from(new Set(imdbIds));
-		uniqueIds = uniqueIds.slice(0, parseInt(quantity as string) || 1);
+		uniqueIds = uniqueIds.slice(0, 3);
 		await Promise.all(uniqueIds.map(async (imdbId) => await generateScrapeJobs(imdbId)));
 	}
 }
