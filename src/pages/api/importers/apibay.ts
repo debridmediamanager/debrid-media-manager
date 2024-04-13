@@ -1,5 +1,5 @@
-import { ScrapeResponse } from '@/pages/api/scrapers/services/scrapeJobs';
-import { ApiBayItem, processStream } from '@/pages/api/scrapers/sites/apibay';
+import { ScrapeResponse } from '@/pages/scrapers/scrapeJobs';
+import { ApiBayItem, processStream } from '@/pages/scrapers/sites/apibay';
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
 import axios from 'axios';
