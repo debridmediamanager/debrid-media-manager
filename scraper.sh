@@ -19,6 +19,7 @@ function wait_for_healthz_ok() {
             sleep 1
         fi
     done
+    sleep 1
 }
 
 function launch_scraper() {
@@ -47,11 +48,25 @@ function launch_scraper() {
         tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/upkeep/stuck\" &" C-m
 
         # empty
-        tmux new-window -t upkeep:5 -n empty
+        tmux new-window -t upkeep:3 -n empty
+        PORT=$(find_free_port)
+        tmux send-keys -t upkeep:3 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
+        tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/upkeep/empty?quantity=3\" &" C-m
+
+        # updateoldmovies
+        tmux new-window -t upkeep:4 -n updateoldmovies
+        PORT=$(find_free_port)
+        tmux send-keys -t upkeep:4 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
+        tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/upkeep/updateoldmovies\" &" C-m
+
+        # updateoldshows
+        tmux new-window -t upkeep:5 -n updateoldshows
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:5 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
-        tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/stuck/empty?quantity=3\" &" C-m
+        tmux send-keys -t upkeep:0 "curl \"http://localhost:$PORT/api/upkeep/updateoldshows\" &" C-m
 
         # done!
         sleep 3
@@ -85,6 +100,7 @@ function launch_scraper() {
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
 
+    # torrentio scraper
     elif [ "$1" = "torrentio" ]; then
         PORT=$(find_free_port)
         SESSION_NAME="torrentio-$PORT"
@@ -96,6 +112,7 @@ function launch_scraper() {
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
 
+    # for individual movies
     elif [[ "$1" =~ ^tt[a-z0-9]{3,20}$ ]]; then
         PARAM="$1"
         PORT=$(find_free_port)
@@ -109,6 +126,7 @@ function launch_scraper() {
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
 
+    # for individual movies, but replace old scrape (useful if match algo has been updated)
     elif [[ "$1" =~ ^rtt[a-z0-9]{3,20}$ ]]; then
         PARAM="${1#r}"
         PORT=$(find_free_port)
@@ -122,6 +140,7 @@ function launch_scraper() {
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
 
+    # it will search for multiple lists by name (e.g. series, top, etc.)
     elif [[ "$1" =~ ^[a-z]{3,20}$ ]]; then
         PARAM="$1"
         PORT=$(find_free_port)
@@ -135,6 +154,7 @@ function launch_scraper() {
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
 
+    # it will search for a single list by id
     else
         PARAM="$1"
         SLUG=$(curl -s "https://mdblist.com/api/lists/$PARAM/?apikey=55gg408ja72aa3f5d5p90w4zu" | jq -r '.[0].slug')
