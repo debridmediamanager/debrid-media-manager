@@ -1,4 +1,10 @@
 import {
+	ScrapeSearchResult,
+	flattenAndRemoveDuplicates,
+	sortByFileSize,
+} from '@/services/mediasearch';
+import { PlanetScaleCache } from '@/services/planetscale';
+import {
 	filterByTvConditions,
 	getAllPossibleTitles,
 	getSeasonNameAndCode,
@@ -6,15 +12,13 @@ import {
 	grabTvMetadata,
 	padWithZero,
 } from '@/utils/checks';
-import { scrapeApiBay2 } from './apibay2';
-import { scrapeBtdigg } from './btdigg-v2';
-import { scrapeGloTorrents } from './glotorrents';
-import { scrapeMagnetDL } from './magnetdl';
-import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
-import { PlanetScaleCache } from './planetscale';
-import { scrapeRuTor } from './rutor';
-import { scrapeSolidTorrent } from './solidtorrent';
-import { scrapeTorrentGalaxy } from './tgx';
+import { scrapeApiBay2 } from '../sites/apibay2';
+import { scrapeBtdigg } from '../sites/btdigg-v2';
+import { scrapeGloTorrents } from '../sites/glotorrents';
+import { scrapeMagnetDL } from '../sites/magnetdl';
+import { scrapeRuTor } from '../sites/rutor';
+import { scrapeSolidTorrent } from '../sites/solidtorrent';
+import { scrapeTorrentGalaxy } from '../sites/tgx';
 
 type TvScrapeJob = {
 	titles: string[];

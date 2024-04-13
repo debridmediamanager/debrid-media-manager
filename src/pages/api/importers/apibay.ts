@@ -1,7 +1,7 @@
-import { ApiBayItem, processStream } from '@/services/apibay';
+import { ScrapeResponse } from '@/pages/api/scrapers/services/scrapeJobs';
+import { ApiBayItem, processStream } from '@/pages/api/scrapers/sites/apibay';
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
-import { ScrapeResponse } from '@/services/scrapeJobs';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import UserAgent from 'user-agents';

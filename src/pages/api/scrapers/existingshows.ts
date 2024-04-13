@@ -1,5 +1,5 @@
+import { ScrapeResponse, generateScrapeJobs } from '@/pages/api/scrapers/services/scrapeJobs';
 import { PlanetScaleCache } from '@/services/planetscale';
-import { ScrapeResponse, generateScrapeJobs } from '@/services/scrapeJobs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new PlanetScaleCache();

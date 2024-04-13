@@ -1,6 +1,6 @@
+import { ScrapeResponse } from '@/pages/api/scrapers/services/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
-import { ScrapeResponse } from '@/services/scrapeJobs';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 

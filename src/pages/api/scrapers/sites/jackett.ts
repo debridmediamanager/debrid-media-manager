@@ -1,10 +1,10 @@
+import { ScrapeSearchResult } from '@/services/mediasearch';
 import { meetsTitleConditions } from '@/utils/checks';
-import { computeHashFromTorrent } from '@/utils/extractHashFromTorrent';
+import { computeHashFromTorrent, extractHashFromMagnetLink } from '@/utils/extractHashFromTorrent';
 import axios from 'axios';
-import { ScrapeSearchResult } from './mediasearch';
 
-const prowlarrHost = process.env.PROWLARR ?? 'http://localhost:9696';
-const apikey = process.env.PROWLARR_KEY ?? 'abc123';
+const jackettHost = process.env.JACKETT ?? 'http://localhost:9117';
+const apikey = process.env.JACKETT_KEY ?? 'abc123';
 
 function isFoundDateRecent(foundString: string, date: string): boolean {
 	const foundDate = new Date(foundString);
@@ -13,13 +13,10 @@ function isFoundDateRecent(foundString: string, date: string): boolean {
 	return foundDate >= airDate;
 }
 
-// add category 2000 (TV) and 5000 (Movies) to the query
 const createSearchUrl = (finalQuery: string, mediaType: string) =>
-	`${prowlarrHost}/api/v1/search?query=${encodeURIComponent(
-		finalQuery
-	)}&indexerIds=-2&categories[]=${
+	`${jackettHost}/api/v2.0/indexers/all/results?apikey=${apikey}&Category%5B%5D=${
 		mediaType === 'movie' ? '2000' : '5000'
-	}&type=search&apikey=${apikey}`;
+	}&Query=${encodeURIComponent(finalQuery)}`;
 
 async function processItem(
 	item: any,
@@ -27,10 +24,14 @@ async function processItem(
 	years: string[],
 	airDate: string
 ): Promise<ScrapeSearchResult | undefined> {
-	const title = item.title;
-	const fileSize = item.size / 1024 / 1024;
+	const title = item.Title;
 
-	if (!isFoundDateRecent(item.publishDate, airDate)) {
+	if (item.Size < 1024 * 1024) {
+		return undefined;
+	}
+	const fileSize = item.Size / 1024 / 1024;
+
+	if (!isFoundDateRecent(item.PublishDate, airDate)) {
 		return undefined;
 	}
 
@@ -39,9 +40,9 @@ async function processItem(
 	}
 
 	const hash =
-		item.infoHash?.toLowerCase() ||
-		(item.magnetUrl && (await computeHashFromTorrent(item.magnetUrl))) ||
-		(item.downloadUrl && (await computeHashFromTorrent(item.downloadUrl)));
+		item.InfoHash?.toLowerCase() ||
+		(item.MagnetUri && extractHashFromMagnetLink(item.MagnetUri)) ||
+		(item.Link && (await computeHashFromTorrent(item.Link)));
 	if (!hash) {
 		return undefined;
 	}
@@ -64,7 +65,7 @@ async function processInBatches(
 	while (i < promises.length) {
 		let percentageIncrease = ((i - lastPrintedIndex) / promises.length) * 100;
 		if (percentageIncrease >= 20) {
-			console.log(`🌄 Prowlarr batch ${i}/${promises.length}:${title}`);
+			console.log(`🌁 Jackett batch ${i}/${promises.length}:${title}`);
 			lastPrintedIndex = i;
 		}
 		const promisesResults = await Promise.all(
@@ -73,7 +74,7 @@ async function processInBatches(
 		promisesResults.forEach((e) => e && searchResultsArr.push(e));
 		i += batchSize;
 	}
-	console.log(`🌄 Prowlarr done! ${title}`);
+	console.log(`🌁 Jackett done! ${title}`);
 	return searchResultsArr;
 }
 
@@ -93,11 +94,11 @@ const processPage = async (
 	while (true) {
 		try {
 			const response = await axios.get(searchUrl, { timeout: 600000 });
-			responseData = response.data;
+			responseData = response.data.Results;
 			retries = 0;
 			break;
 		} catch (error: any) {
-			console.log('prowlarr request error:', error.message, searchUrl);
+			console.log('jackett request error:', error.message, searchUrl);
 			retries++;
 			if (retries >= MAX_RETRIES) {
 				console.error(`Max retries reached (${MAX_RETRIES}), aborting search`);
@@ -108,32 +109,32 @@ const processPage = async (
 	}
 
 	responseData = responseData
-		.filter((item: any) => item.size >= 1024 * 1024 * 100)
-		.filter((item: any) => item.leechers > 0 || item.seeders > 0);
-	console.log(`🌄 Prowlarr search returned ${responseData.length} for ${finalQuery}`);
+		.filter((item: any) => item.Size >= 1024 * 1024 * 100)
+		.filter((item: any) => item.Seeders > 0 || item.Peers > 0);
+	console.log(`🌁 Jackett search returned ${responseData.length} for ${finalQuery}`);
 
 	const promises: (() => Promise<ScrapeSearchResult | undefined>)[] = responseData.map(
 		(item: any) => {
 			return () => processItem(item, targetTitle, years, airDate);
 		}
 	);
-	results.push(...(await processInBatches(finalQuery, promises, 5)));
+	results.push(...(await processInBatches(finalQuery, promises, 10)));
 
 	return results;
 };
 
-export async function scrapeProwlarr(
+export async function scrapeJackett(
 	finalQuery: string,
 	targetTitle: string,
 	years: string[],
 	airDate: string,
 	mediaType: string = 'movie'
 ): Promise<ScrapeSearchResult[]> {
-	console.log(`🔍 Searching Prowlarr: ${finalQuery}`);
+	console.log(`🔍 Searching Jackett: ${finalQuery}`);
 	try {
 		return await processPage(finalQuery, targetTitle, years, airDate, mediaType);
 	} catch (error) {
-		console.error('scrapeProwlarr page processing error', error);
+		console.error('scrapeJackett page processing error', error);
 	}
 	return [];
 }

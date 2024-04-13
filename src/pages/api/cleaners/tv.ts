@@ -1,5 +1,5 @@
+import { ScrapeResponse } from '@/pages/api/scrapers/services/scrapeJobs';
 import { PlanetScaleCache } from '@/services/planetscale';
-import { ScrapeResponse } from '@/services/scrapeJobs';
 import { cleanByImdbId } from '@/services/tvCleaner';
 import { NextApiRequest, NextApiResponse } from 'next';
 

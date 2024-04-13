@@ -1,6 +1,6 @@
+import { ScrapeSearchResult } from '@/services/mediasearch';
+import { ScrapeBrowser } from '@/services/puppeteer';
 import { meetsTitleConditions } from '@/utils/checks';
-import { ScrapeSearchResult } from './mediasearch';
-import { ScrapeBrowser } from './puppeteer';
 
 const hostname = process.env.IDOPE ?? 'https://idope.se';
 
