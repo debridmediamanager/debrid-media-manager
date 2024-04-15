@@ -51,3 +51,4 @@ src/pages/api/importers/yts.json
 
 src/tgx/*.json
 src/hdt/*.json
+src/json-to-import
