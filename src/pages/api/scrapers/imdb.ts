@@ -1,4 +1,4 @@
-import { ScrapeResponse, generateScrapeJobs } from '@/pages/scrapers/scrapeJobs';
+import { ScrapeResponse, generateScrapeJobs } from '@/scrapers/scrapeJobs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
