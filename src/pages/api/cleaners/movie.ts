@@ -1,4 +1,4 @@
-import { ScrapeResponse } from '@/pages/scrapers/scrapeJobs';
+import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { cleanByImdbId } from '@/services/movieCleaner';
 import { PlanetScaleCache } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';

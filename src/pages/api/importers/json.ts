@@ -1,4 +1,4 @@
-import { ScrapeResponse } from '@/pages/scrapers/scrapeJobs';
+import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
 import fs from 'fs';
@@ -10,55 +10,55 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	const cwd = process.cwd();
 	console.log(`[json] cwd: ${cwd}`);
 
-    let toSave: { key: string; value: ScrapeSearchResult[] }[] = [];
+	let toSave: { key: string; value: ScrapeSearchResult[] }[] = [];
 	const scrapesMap = new Map<string, ScrapeSearchResult[]>();
-    let filesToDelete = [];
+	let filesToDelete = [];
 
 	// using fs, get the list of all json files in the directory
 	let files = fs.readdirSync(`${cwd}/src/json-to-import`);
-    //filter out everything where filename doesnt start with cine-
-    // files = files.filter((file) => file.includes('cine-'));
+	//filter out everything where filename doesnt start with cine-
+	// files = files.filter((file) => file.includes('cine-'));
 	// iterate over the files
 	for (const file of files) {
 		// check if the file is a json file
 		if (!file.endsWith('.json')) continue;
-        // log the file name and position in array
-        console.log(`[json] file: ${file}`, files.indexOf(file) + 1, 'of', files.length);
+		// log the file name and position in array
+		console.log(`[json] file: ${file}`, files.indexOf(file) + 1, 'of', files.length);
 		// read the file
 		const data = fs.readFileSync(`${cwd}/src/json-to-import/${file}`, 'utf8');
 		// parse the json
 		const contents = JSON.parse(data);
 		// contents in an array of objects with prop: title, infoHash, imdbId, size and category
 		for (const content of contents) {
-            console.log(`[json] content`, content);
-            const imdbId = content.imdbId ?? content.imdb;
-            if (!imdbId || imdbId.includes('not found')) continue;
-            if (!content.size.trim().endsWith('B')) continue;
-            let fileSize = 0;
-            let [size, unit] = content.size.trim().replace(/,/g, '').split(' ');
-            switch (unit[0].toLocaleLowerCase()) {
-                case 't':
-                    fileSize = parseFloat(size) * 1024 * 1024;
-                    break;
-                case 'g':
-                    fileSize = parseFloat(size) * 1024;
-                    break;
-                case 'm':
-                    fileSize = parseFloat(size);
-                    break;
-                case 'k':
-                    fileSize = parseFloat(size) / 1024;
-                    break;
-                default:
-                    fileSize = parseFloat(size);
-                    break;
-            }
-            let scrape = {
-                title: content.title.trim(),
-                fileSize,
-                hash: content.infoHash.toLocaleLowerCase(),
-            };
-            const category = content.category.trim().toLocaleLowerCase();
+			console.log(`[json] content`, content);
+			const imdbId = content.imdbId ?? content.imdb;
+			if (!imdbId || imdbId.includes('not found')) continue;
+			if (!content.size.trim().endsWith('B')) continue;
+			let fileSize = 0;
+			let [size, unit] = content.size.trim().replace(/,/g, '').split(' ');
+			switch (unit[0].toLocaleLowerCase()) {
+				case 't':
+					fileSize = parseFloat(size) * 1024 * 1024;
+					break;
+				case 'g':
+					fileSize = parseFloat(size) * 1024;
+					break;
+				case 'm':
+					fileSize = parseFloat(size);
+					break;
+				case 'k':
+					fileSize = parseFloat(size) / 1024;
+					break;
+				default:
+					fileSize = parseFloat(size);
+					break;
+			}
+			let scrape = {
+				title: content.title.trim(),
+				fileSize,
+				hash: content.infoHash.toLocaleLowerCase(),
+			};
+			const category = content.category.trim().toLocaleLowerCase();
 			if (category.includes('tv')) {
 				let seasonNum: number | null = null;
 				const seasonMatch =
@@ -79,71 +79,73 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 					scrapesMap.set(`tv:${imdbId}:${seasonNum}`, [scrape]);
 				}
 			} else {
-                if (scrapesMap.has(`movie:${imdbId}`)) {
-                    scrapesMap.get(`movie:${imdbId}`)!.push(scrape);
-                } else {
-                    scrapesMap.set(`movie:${imdbId}`, [scrape]);
-                }
+				if (scrapesMap.has(`movie:${imdbId}`)) {
+					scrapesMap.get(`movie:${imdbId}`)!.push(scrape);
+				} else {
+					scrapesMap.set(`movie:${imdbId}`, [scrape]);
+				}
 			}
 		}
 
-        scrapesMap.forEach((value: ScrapeSearchResult[], key: string) => {
+		scrapesMap.forEach((value: ScrapeSearchResult[], key: string) => {
 			toSave.push({ key, value });
 		});
 
-        filesToDelete.push(`${cwd}/src/json-to-import/${file}`);
+		filesToDelete.push(`${cwd}/src/json-to-import/${file}`);
 
-        if (toSave.length >= 1000) {
-            console.log(`[json] saving ${toSave.length} items`);
-            let promises = [];
-            for (const save of toSave) {
-                try {
-                    promises.push(pdb.saveScrapedTrueResults(save.key, save.value, true));
-                    if (promises.length >= 50) {
-                        await Promise.all(promises);
-                    }
-                } catch (e) {
-                    console.error(`[json] error saving ${save.key}`, e);
-                } finally {
-                    if (promises.length >= 50) {
-                        promises.length = 0;
-                    }
-                }
-            }
-            await Promise.all(promises);
-            toSave.length = 0;
-            scrapesMap.clear();
-            // delete the files
-            for (const file of filesToDelete) {
-                fs.unlinkSync(file);
-            }
-            filesToDelete.length = 0;
-        }
+		if (toSave.length >= 2000) {
+			console.log(`[json] saving ${toSave.length} items`);
+			let promises = [];
+			for (const save of toSave) {
+				try {
+					promises.push(pdb.saveScrapedTrueResults(save.key, save.value, true));
+					if (promises.length >= 50) {
+						await Promise.all(promises);
+					}
+				} catch (e) {
+					console.error(`[json] error saving ${save.key}`, e);
+				} finally {
+					if (promises.length >= 50) {
+						promises.length = 0;
+					}
+				}
+			}
+			await Promise.all(promises);
+			toSave.length = 0;
+			scrapesMap.clear();
+			// delete the files
+			for (const file of filesToDelete) {
+				fs.unlinkSync(file);
+			}
+			filesToDelete.length = 0;
+		}
 	}
 
-    console.log(`[json] saving ${toSave.length} items`);
+	console.log(`[json] saving ${toSave.length} items`);
 
-    let promises = [];
-    for (const save of toSave) {
-        try {
-            promises.push(pdb.saveScrapedTrueResults(save.key, save.value, true));
-            if (promises.length >= 50) {
-                await Promise.all(promises);
-            }
-        } catch (e) {
-            console.error(`[json] error saving ${save.key}`, e);
-        } finally {
-            if (promises.length >= 50) {
-                promises.length = 0;
-            }
-        }
+	let promises = [];
+	for (const save of toSave) {
+		try {
+			promises.push(pdb.saveScrapedTrueResults(save.key, save.value, true));
+			if (promises.length >= 10) {
+				await Promise.all(promises);
+			}
+		} catch (e) {
+			console.error(`[json] error saving ${save.key}`, e);
+		} finally {
+			if (promises.length >= 10) {
+				promises.length = 0;
+			}
+		}
 	}
-    await Promise.all(promises);
-    for (const file of filesToDelete) {
-        fs.unlinkSync(file);
-    }
+	try {
+		await Promise.all(promises);
+	} catch (e) {}
+	for (const file of filesToDelete) {
+		fs.unlinkSync(file);
+	}
 
-    console.log(`[json] done saving`);
+	console.log(`[json] done saving`);
 
 	res.status(200).json({ status: 'success' });
 }

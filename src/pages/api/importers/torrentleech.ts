@@ -1,4 +1,4 @@
-import { ScrapeResponse } from '@/pages/scrapers/scrapeJobs';
+import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
 import { computeHashFromTorrent } from '@/utils/extractHashFromTorrent';
