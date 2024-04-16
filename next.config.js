@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	// output: 'standalone',
+	output: 'standalone',
 	images: {
 		minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
 		remotePatterns: [
