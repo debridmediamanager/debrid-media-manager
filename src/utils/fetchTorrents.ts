@@ -29,9 +29,9 @@ export const fetchRealDebrid = async (
 						break;
 					case 'downloading':
 					case 'compressing':
-					case 'uploading':
 						status = UserTorrentStatus.downloading;
 						break;
+					case 'uploading':
 					case 'downloaded':
 						status = UserTorrentStatus.finished;
 						break;

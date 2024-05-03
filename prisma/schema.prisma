@@ -50,3 +50,13 @@ model Cast {
   @@index([imdbId, userId, updatedAt])
   @@unique([imdbId, userId, hash])
 }
+
+model Titles {
+  imdbid            String  @id
+  title             String
+  is_original_title Boolean
+  year              Int
+
+  @@unique([imdbid, is_original_title])
+  @@unique([imdbid, title])
+}
