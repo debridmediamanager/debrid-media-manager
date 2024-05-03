@@ -12,7 +12,8 @@ export function isVideo(file: { path: string }) {
 		filePath.endsWith('.mp4') ||
 		filePath.endsWith('.avi') ||
 		filePath.endsWith('.wmv') ||
-		filePath.endsWith('.m4v')
+		filePath.endsWith('.m4v') ||
+		filePath.endsWith('.m4b')
 	);
 }
 

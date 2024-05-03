@@ -99,13 +99,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			for (const save of toSave) {
 				try {
 					promises.push(pdb.saveScrapedTrueResults(save.key, save.value, true));
-					if (promises.length >= 50) {
+					if (promises.length >= 20) {
+						console.log('awaiting all promises...');
+						await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second
 						await Promise.all(promises);
 					}
 				} catch (e) {
 					console.error(`[json] error saving ${save.key}`, e);
+					await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second
+					await Promise.all(promises);
 				} finally {
-					if (promises.length >= 50) {
+					if (promises.length >= 20) {
 						promises.length = 0;
 					}
 				}
