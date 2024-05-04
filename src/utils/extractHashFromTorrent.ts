@@ -18,7 +18,7 @@ export async function computeHashFromTorrent(url: string): Promise<string | unde
 			maxRedirects: 0, // Set maxRedirects to 0 to disable automatic redirects
 			validateStatus: (status) => status >= 200 && status < 400,
 			responseType: 'arraybuffer',
-			timeout: 10000,
+			timeout: 5000,
 		});
 
 		if (response.status === 302) {
