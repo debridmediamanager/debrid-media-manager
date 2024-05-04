@@ -38,35 +38,35 @@ function launch_scraper() {
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:1 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
-        timeout 3 "curl \"http://localhost:$PORT/api/upkeep/requested\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/upkeep/requested\"
 
         # stuck
         tmux new-window -t upkeep:2 -n stuck
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:2 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
-        timeout 3 "curl \"http://localhost:$PORT/api/upkeep/stuck\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/upkeep/stuck\"
 
         # empty
         tmux new-window -t upkeep:3 -n empty
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:3 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
-        timeout 3 "curl \"http://localhost:$PORT/api/upkeep/empty?quantity=3\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/upkeep/empty?quantity=3\"
 
         # updateoldmovies
         tmux new-window -t upkeep:4 -n updateoldmovies
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:4 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
-        timeout 3 "curl \"http://localhost:$PORT/api/upkeep/updateoldmovies\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/upkeep/updateoldmovies\"
 
         # updateoldshows
         tmux new-window -t upkeep:5 -n updateoldshows
         PORT=$(find_free_port)
         tmux send-keys -t upkeep:5 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
-        timeout 3 "curl \"http://localhost:$PORT/api/upkeep/updateoldshows\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/upkeep/updateoldshows\"
 
         # done!
         sleep 3
@@ -82,7 +82,7 @@ function launch_scraper() {
         tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         sleep 3
         tmux new-window -t $SESSION_NAME:1
-        timeout 3 "curl \"http://localhost:$PORT/api/scrapers/singlelist?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=5&listId=$PARAM&lastSeason=true\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/scrapers/singlelist?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=5&listId=$PARAM&lastSeason=true\"
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
 
@@ -96,7 +96,7 @@ function launch_scraper() {
         tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         sleep 3
         tmux new-window -t $SESSION_NAME:1
-        timeout 3 "curl \"http://localhost:$PORT/api/scrapers/singlelist?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=5&listId=$PARAM&lastSeason=true\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/scrapers/singlelist?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=5&listId=$PARAM&lastSeason=true\"
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
 
@@ -108,7 +108,7 @@ function launch_scraper() {
         tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         sleep 3
         tmux new-window -t $SESSION_NAME:1
-        timeout 3 "curl \"http://localhost:$PORT/api/scrapers/torrentio\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/scrapers/torrentio\"
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
 
@@ -122,7 +122,7 @@ function launch_scraper() {
         tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         sleep 3
         tmux new-window -t $SESSION_NAME:1
-        timeout 3 "curl \"http://localhost:$PORT/api/scrapers/imdb?replaceOldScrape=false&id=$PARAM\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/scrapers/imdb?replaceOldScrape=false&id=$PARAM\"
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
 
@@ -136,7 +136,7 @@ function launch_scraper() {
         tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         sleep 3
         tmux new-window -t $SESSION_NAME:1
-        timeout 3 "curl \"http://localhost:$PORT/api/scrapers/imdb?replaceOldScrape=true&id=$PARAM\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/scrapers/imdb?replaceOldScrape=true&id=$PARAM\"
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
 
@@ -150,7 +150,7 @@ function launch_scraper() {
         tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         sleep 3
         tmux new-window -t $SESSION_NAME:1
-        timeout 3 "curl \"http://localhost:$PORT/api/scrapers/listoflists?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=3&search=$PARAM\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/scrapers/listoflists?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=3&search=$PARAM\"
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
 
@@ -165,7 +165,7 @@ function launch_scraper() {
         tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
         sleep 3
         tmux new-window -t $SESSION_NAME:1
-        timeout 3 "curl \"http://localhost:$PORT/api/scrapers/singlelist?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=3&listId=$PARAM\"" C-m
+        timeout 3 curl \"http://localhost:$PORT/api/scrapers/singlelist?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=3&listId=$PARAM\"
         sleep 3
         tmux kill-window -t $SESSION_NAME:1
     fi
