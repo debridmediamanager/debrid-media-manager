@@ -17,7 +17,6 @@ import { scrapeBtdigg } from './sites/btdigg-v2';
 import { scrapeGloTorrents } from './sites/glotorrents';
 import { scrapeMagnetDL } from './sites/magnetdl';
 import { scrapeRuTor } from './sites/rutor';
-import { scrapeSolidTorrent } from './sites/solidtorrent';
 import { scrapeTorrentGalaxy } from './sites/tgx';
 
 type TvScrapeJob = {
@@ -44,7 +43,6 @@ async function scrapeAll(
 		scrapeGloTorrents(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeMagnetDL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeRuTor(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
-		scrapeSolidTorrent(finalQuery, targetTitle, years, airDate),
 		scrapeTorrentGalaxy(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 	]);
 }
