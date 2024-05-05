@@ -518,13 +518,12 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 
 // alternative, execute this request: curl --http1.1 --compressed "https://api.jikan.moe/v3/anime/1"
 
-const getAnidbInfo = (aid: string) =>
-	`https://anime-kitsu.strem.fun/meta/series/anidb%3A${aid}.json`;
+const getAnimeInfo = (id: string) => `https://anime-kitsu.strem.fun/meta/series/${id}.json`;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { params } = context;
-	const anidbId = (params!.animeid as string).replace('anidb-', '');
-	const response = await axios.get(getAnidbInfo(anidbId));
+	const animeid = (params!.animeid as string).replace('anidb-', '');
+	const response = await axios.get(getAnimeInfo(animeid.replace('-', '%3A')));
 	// title is from type="main">{title}</title
 	const imdbRating = response.data.meta.imdbRating ?? '0';
 	const poster = response.data.meta.poster ?? '';
