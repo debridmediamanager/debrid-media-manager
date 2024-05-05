@@ -523,22 +523,33 @@ const getAnimeInfo = (id: string) => `https://anime-kitsu.strem.fun/meta/series/
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { params } = context;
 	const animeid = (params!.animeid as string).replace('anidb-', '');
-	const response = await axios.get(getAnimeInfo(animeid.replace('-', '%3A')));
-	// title is from type="main">{title}</title
-	const imdbRating = response.data.meta.imdbRating ?? '0';
-	const poster = response.data.meta.poster ?? '';
-	const backdrop = response.data.meta.background ?? '';
+	try {
+		const response = await axios.get(getAnimeInfo(animeid.replace('-', '%3A')));
+		// title is from type="main">{title}</title
+		const imdbRating = response.data.meta.imdbRating ?? '0';
 
-	return {
-		props: {
-			title: response.data.meta.name,
-			description: response.data.meta.description ?? '',
-			poster: response.data.meta.poster ?? '',
-			backdrop: response.data.meta.background ?? '',
-			imdbid: response.data.meta.imdb_id ?? '',
-			imdbRating: parseFloat(imdbRating),
-		},
-	};
+		return {
+			props: {
+				title: response.data.meta.name,
+				description: response.data.meta.description ?? '',
+				poster: response.data.meta.poster ?? '',
+				backdrop: response.data.meta.background ?? '',
+				imdbid: response.data.meta.imdb_id ?? '',
+				imdbRating: parseFloat(imdbRating),
+			},
+		};
+	} catch (error) {
+		return {
+			props: {
+				title: 'Unknown',
+				description: 'Unknown',
+				poster: 'https://picsum.photos/200/300',
+				backdrop: '',
+				imdbid: '',
+				imdbRating: 0,
+			},
+		};
+	}
 };
 
 export default withAuth(MovieSearch);
