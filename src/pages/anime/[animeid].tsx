@@ -27,6 +27,7 @@ import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
+import UserAgent from 'user-agents';
 
 type AnimeSearchProps = {
 	title: string;
@@ -524,7 +525,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	const { params } = context;
 	const animeid = (params!.animeid as string).replace('anidb-', '');
 	try {
-		const response = await axios.get(getAnimeInfo(animeid.replace('-', '%3A')));
+		const response = await axios.get(getAnimeInfo(animeid.replace('-', '%3A')), {
+			headers: {
+				accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+				'accept-language': 'en-US,en;q=0.5',
+				'accept-encoding': 'gzip, deflate, br',
+				connection: 'keep-alive',
+				'sec-fetch-dest': 'document',
+				'sec-fetch-mode': 'navigate',
+				'sec-fetch-site': 'same-origin',
+				'sec-fetch-user': '?1',
+				'upgrade-insecure-requests': '1',
+				'user-agent': new UserAgent().toString(),
+			},
+		});
 		// title is from type="main">{title}</title
 		const imdbRating = response.data.meta.imdbRating ?? '0';
 
