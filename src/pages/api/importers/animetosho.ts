@@ -2,12 +2,12 @@ import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
 import { computeHashFromTorrent } from '@/utils/extractHashFromTorrent';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new PlanetScaleCache();
 const animeUrl = (anidbId: number, page: number = 1) =>
-	`https://animetosho.org/series/${anidbId}?page=${page}&order=date-a`;
+	`https://animetosho.org/series/${anidbId}?page=${page}`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	const toSave: { key: string; value: ScrapeSearchResult[] }[] = [];
@@ -18,7 +18,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		const scrapesMap = new Map<string, any>();
 		try {
 			console.log(animeUrl(anidbId));
-			let response = await axios.get(animeUrl(anidbId));
+			let response = null;
+			while (true) {
+				await new Promise((resolve) => setTimeout(resolve, 10000));
+				try {
+					response = await axios.get(animeUrl(anidbId), {
+						headers: {
+							'User-Agent':
+								'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+						},
+					});
+					break;
+				} catch (e: any) {
+					console.log(`encountered error ${e}`, animeUrl(anidbId));
+					if (((e as AxiosError).response?.status ?? 0) / 100 < 5) {
+						break;
+					} else {
+						console.log('retrying after 30s', animeUrl(anidbId));
+						await new Promise((resolve) => setTimeout(resolve, 30000));
+					}
+				}
+			}
+			if (!response) {
+				continue;
+			}
 			const malId = response.data.match(
 				/<a href="https:\/\/myanimelist.net\/anime\/(\d+)">MAL<\/a>/i
 			);
@@ -29,27 +52,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 						/<div class="link"><a href="https:\/\/animetosho.org\/view\/[^>]+>([^<]+)/gi
 					)
 				);
-				console.log(filenames.length);
+				// console.log(filenames.length);
 				// <a href="{url}" class="dllink">Torrent</a>
 				const torrentUrl: RegExpMatchArray[] = Array.from(
 					response.data.matchAll(/<a href="([^"]+)" class="dllink">Torrent<\/a>/gi)
 				);
-				console.log(torrentUrl.length);
+				// console.log(torrentUrl.length);
 				const fileSizes: RegExpMatchArray[] = Array.from(
 					response.data.matchAll(
 						/<div class="size" title="Total file size: ([0-9,]+) bytes">\d/gi
 					)
 				);
-				console.log(fileSizes.length);
+				// console.log(fileSizes.length);
 
 				if (
 					filenames.length !== torrentUrl.length ||
 					torrentUrl.length !== fileSizes.length
 				) {
-					console.log(
-						'>>>>',
-						filenames.map((f) => f[1])
-					);
+					console.log('mismatch', filenames.length, torrentUrl.length, fileSizes.length);
 					break;
 				}
 
@@ -98,10 +118,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 				// do this while there is a next page
 				// href="{nextpageurl}">Older Entries
-				const nextPage = response.data.match(/href="([^"]+)">Older Entries/i);
+				const nextPage: RegExpMatchArray = response.data.match(
+					/href="([^"]+)">Older Entries/i
+				);
 				if (nextPage) {
+					await new Promise((resolve) => setTimeout(resolve, 10000));
 					console.log(nextPage[1]);
-					response = await axios.get(nextPage[1]);
+					response = await axios.get(nextPage[1], {
+						headers: {
+							'User-Agent':
+								'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+						},
+					});
 				} else {
 					break;
 				}
