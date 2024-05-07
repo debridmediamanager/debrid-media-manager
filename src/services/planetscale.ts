@@ -320,6 +320,27 @@ export class PlanetScaleCache {
 			.filter((key: any) => key !== '');
 	}
 
+	public async getRecentlyUpdatedAnime(): Promise<{ id: string; poster_url: string }[]> {
+		const results = await this.prisma.$queryRaw<any[]>`
+		SELECT
+			a.anidb_id,
+			a.mal_id,
+			a.poster_url,
+			MAX(s.updatedAt) AS last_updated
+		FROM Anime AS a
+		JOIN ScrapedTrue AS s
+		ON (a.mal_id = CAST(SUBSTRING(s.key, 11) AS UNSIGNED) AND SUBSTRING(s.key, 1, 9) = 'anime:mal')
+		OR (a.anidb_id = CAST(SUBSTRING(s.key, 13) AS UNSIGNED) AND SUBSTRING(s.key, 1, 11) = 'anime:anidb')
+		WHERE a.poster_url IS NOT NULL AND a.poster_url != ''
+		GROUP BY a.anidb_id, a.mal_id, a.poster_url
+		ORDER BY last_updated DESC
+		LIMIT 100`;
+		return results.map((anime) => ({
+			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
+			poster_url: anime.poster_url,
+		}));
+	}
+
 	public async getEmptyMedia(quantity = 3): Promise<string[] | null> {
 		const scrapedItems = await this.prisma.scraped.findMany({
 			where: {
