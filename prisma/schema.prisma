@@ -60,3 +60,27 @@ model Titles {
   @@unique([imdbid, is_original_title])
   @@unique([imdbid, title])
 }
+
+model Anime {
+  id         Int      @id @default(autoincrement())
+  anidb_id Int? @unique
+  anime_planet_id String? @unique
+  kitsu_id Int? @unique
+  mal_id Int? @unique
+  imdb_id String? @unique
+
+  title       String
+  type       String
+  aliases     Json
+  description String @db.Text
+
+  poster_url  String
+  background_url String
+  rating      Float
+
+  @@index([anidb_id])
+  @@index([anime_planet_id])
+  @@index([kitsu_id])
+  @@index([mal_id])
+  @@index([imdb_id])
+}
