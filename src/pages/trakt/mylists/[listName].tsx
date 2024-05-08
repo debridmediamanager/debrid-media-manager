@@ -8,8 +8,8 @@ import {
 } from '@/services/trakt';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
@@ -17,7 +17,10 @@ function TraktMyLists() {
 	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [traktUserSlug] = useLocalStorage<string>('trakt:userSlug');
 	const [arrayOfResults, setArrayOfResults] = useState<Record<string, TraktMediaItem[]>>({});
-	const [loading, setLoading] = useState(2);
+	const [loading, setLoading] = useState(true);
+
+	const router = useRouter();
+	const listName = decodeURIComponent(router.query.listName as string);
 
 	useEffect(() => {
 		if (!traktToken || !traktUserSlug) {
@@ -26,30 +29,30 @@ function TraktMyLists() {
 		(async () => {
 			const response = await getUsersPersonalLists(traktToken, traktUserSlug);
 			for (const list of response) {
-				const listName = list.name;
+				if (list.name !== decodeURIComponent(listName)) continue;
 				const items = await fetchListItems(traktToken, traktUserSlug, list.ids.trakt);
 				setArrayOfResults((prev) => ({
 					...prev,
 					[listName]: items,
 				}));
+				setLoading(false);
 			}
-			setLoading((prev) => prev - 1);
 		})();
 		(async () => {
 			const response = await getLikedLists(traktToken, traktUserSlug);
 			for (const listContainer of response) {
 				const list = listContainer.list;
-				const listName = list.name;
+				if (list.name !== decodeURIComponent(listName)) continue;
 				const items = await fetchListItems(traktToken, list.user.ids.slug, list.ids.trakt);
 				setArrayOfResults((prev) => ({
 					...prev,
 					[listName]: items,
 				}));
+				setLoading(false);
 			}
-			setLoading((prev) => prev - 1);
 		})();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [router.query.listName]);
 
 	return (
 		<div className="mx-2 my-1 max-w-full">
@@ -74,32 +77,7 @@ function TraktMyLists() {
 							<span className="text-yellow-500">{idx + 1}</span> {listName}
 						</h2>
 						<div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2">
-							{(arrayOfResults[listName].length >= 8
-								? arrayOfResults[listName].slice(0, 8)
-								: arrayOfResults[listName]
-							).map((item: TraktMediaItem, idx: number, arr: TraktMediaItem[]) => {
-								// check if end of list
-								if (
-									arrayOfResults[listName].length >= 8 &&
-									idx === arr.length - 1
-								) {
-									return (
-										<Link
-											key={listName}
-											href={`/trakt/mylists/${listName}`}
-											className="flex justify-center items-center bg-gray-800 text-white font-bold rounded"
-										>
-											<Image
-												src={`https://fakeimg.pl/400x600/282828/eae0d0?font_size=40&font=bebas&text=View ${
-													arrayOfResults[listName].length - 8
-												} more`}
-												alt="plus"
-												width={400}
-												height={600}
-											/>
-										</Link>
-									);
-								}
+							{arrayOfResults[listName].map((item: TraktMediaItem) => {
 								const imdbid =
 									item.movie?.ids?.imdb ||
 									item.show?.ids?.imdb ||
@@ -123,7 +101,7 @@ function TraktMyLists() {
 						</div>
 					</div>
 				))}
-			{loading !== 0 && (
+			{loading && (
 				<div className="flex justify-center items-center mt-4">
 					<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
 				</div>

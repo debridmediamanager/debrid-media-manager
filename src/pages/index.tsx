@@ -205,13 +205,6 @@ function IndexPage() {
 								⏰ recent
 							</Link>
 
-							<Link
-								href="/browse/anime"
-								className="text-sm m-1 bg-blue-600 hover:bg-blue-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
-							>
-								🍱 anime
-							</Link>
-
 							{browseTerms.map((term) => (
 								<Link
 									href={`/browse/${term.replace(/\W/gi, '')}`}
