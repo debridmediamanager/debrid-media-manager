@@ -153,7 +153,6 @@ export class PlanetScaleCache {
 		const currentTime = Date.now();
 		const millisAgo = daysAgo * 24 * 60 * 60 * 1000;
 		const dateXdaysAgo = new Date(currentTime - millisAgo);
-		console.log('updatedAt', updatedAt, 'dateXdaysAgo', dateXdaysAgo);
 		return updatedAt <= dateXdaysAgo;
 	}
 
@@ -320,7 +319,7 @@ export class PlanetScaleCache {
 			.filter((key: any) => key !== '');
 	}
 
-	public async getRecentlyUpdatedAnime(): Promise<{ id: string; poster_url: string }[]> {
+	public async getRecentlyUpdatedAnime(limit: number): Promise<AnimeItem[]> {
 		const results = await this.prisma.$queryRaw<any[]>`
 		SELECT
 			a.anidb_id,
@@ -334,9 +333,83 @@ export class PlanetScaleCache {
 		WHERE a.poster_url IS NOT NULL AND a.poster_url != ''
 		GROUP BY a.anidb_id, a.mal_id, a.poster_url
 		ORDER BY last_updated DESC
-		LIMIT 100`;
+		LIMIT ${limit}`;
 		return results.map((anime) => ({
 			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
+			poster_url: anime.poster_url,
+		}));
+	}
+
+	public async searchAnimeByTitle(query: string): Promise<AnimeSearchResult[]> {
+		const soundexQuery = soundex(query);
+		const results = await this.prisma.$queryRaw<any[]>`
+		SELECT
+			a.title,
+			a.anidb_id,
+			a.mal_id,
+			a.poster_url
+		FROM Anime AS a
+		WHERE (SOUNDEX(a.title) = ${soundexQuery} OR a.title LIKE ${
+			'%' + query.toLowerCase() + '%'
+		}) AND a.poster_url IS NOT NULL AND a.poster_url != ''
+		ORDER BY a.rating DESC`;
+		return results.map((anime) => ({
+			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
+			title: anime.title,
+			poster_url: anime.poster_url,
+		}));
+	}
+
+	// get anime by list of mal id
+	public async getAnimeByMalIds(malIds: number[]): Promise<AnimeSearchResult[]> {
+		const results = await this.prisma.anime.findMany({
+			where: {
+				kitsu_id: {
+					in: malIds,
+				},
+				poster_url: {
+					not: {
+						equals: '',
+					},
+				},
+			},
+			select: {
+				title: true,
+				anidb_id: true,
+				mal_id: true,
+				poster_url: true,
+			},
+		});
+		return results.map((anime) => ({
+			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
+			title: anime.title,
+			poster_url: anime.poster_url,
+		}));
+	}
+
+	// get anime by list of kitsu id
+	public async getAnimeByKitsuIds(kitsuIds: number[]): Promise<AnimeSearchResult[]> {
+		const results = await this.prisma.anime.findMany({
+			where: {
+				kitsu_id: {
+					in: kitsuIds,
+				},
+				poster_url: {
+					not: {
+						equals: '',
+					},
+				},
+			},
+			select: {
+				title: true,
+				anidb_id: true,
+				mal_id: true,
+				poster_url: true,
+			},
+		});
+		return results.map((anime) => ({
+			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
+			title: anime.title,
 			poster_url: anime.poster_url,
 		}));
 	}
@@ -495,4 +568,34 @@ export class PlanetScaleCache {
 
 		return uniqueShows;
 	}
+}
+
+// Function to generate the MySQL SOUNDEX value in JavaScript
+function soundex(query: string): string {
+	if (!query || query.length === 0) {
+		return '0000';
+	}
+
+	const upperQuery = query.toUpperCase();
+	const firstLetter = upperQuery.charAt(0).replace(/[^A-Z]/g, '');
+	const rest = upperQuery.slice(1).replace(/[^A-Z]/g, '');
+
+	let encoded =
+		firstLetter +
+		rest
+			.replace(/[AEIOUYHW]/g, '0')
+			.replace(/[BFPV]/g, '1')
+			.replace(/[CGJKQSXZ]/g, '2')
+			.replace(/[DT]/g, '3')
+			.replace(/[L]/g, '4')
+			.replace(/[MN]/g, '5')
+			.replace(/[R]/g, '6');
+
+	// Remove duplicates
+	encoded = encoded.charAt(0) + encoded.slice(1).replace(/(.)\1+/g, '$1');
+
+	// Remove all 0s and pad to ensure length is 4
+	encoded = encoded.replace(/0/g, '').padEnd(4, '0').slice(0, 4);
+
+	return encoded;
 }

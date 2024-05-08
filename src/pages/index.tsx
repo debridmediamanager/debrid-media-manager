@@ -165,6 +165,13 @@ function IndexPage() {
 								🔎 Search
 							</Link>
 
+							<Link
+								href="/animesearch"
+								className="text-md m-1 bg-pink-500 hover:bg-pink-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+							>
+								🌸 Anime
+							</Link>
+
 							{rdUser && (
 								<Link
 									href="/stremio"
@@ -238,19 +245,7 @@ function IndexPage() {
 						</div>
 
 						<div className="text-sm mb-1 text-center">
-							✨
-							<a
-								className="underline"
-								href="https://github.com/debridmediamanager/zurg-testing"
-								target="_blank"
-							>
-								<b>zurg</b>
-							</a>{' '}
-							mounts your Real-Debrid library and play your files directly from your
-							computer or with Plex
-						</div>
-						<div className="text-sm mb-1 text-center">
-							Browser extensions for{' '}
+							Get DMM browser extensions for{' '}
 							<b>
 								<a
 									className="underline"
@@ -270,11 +265,29 @@ function IndexPage() {
 									Firefox
 								</a>
 							</b>
-							<span className="px-1">✨</span>
-							<a className="underline" href="https://zurg.club" target="_blank">
-								<b>zurg.club</b>
+						</div>
+						<div className="text-sm mb-1 text-center">
+							✨
+							<a
+								className="underline"
+								href="https://github.com/debridmediamanager/zurg-testing"
+								target="_blank"
+							>
+								<b>zurg</b>
 							</a>{' '}
-							is a an optimized Plex+zurg server hosting
+							mounts your Real-Debrid library and play your files directly from your
+							computer or with Plex
+						</div>
+						<div className="text-sm mb-1 text-center">
+							✨
+							<a
+								className="underline"
+								href="https://elfhosted.com/guides/media/"
+								target="_blank"
+							>
+								<b>ElfHosted</b>
+							</a>{' '}
+							provides automated zurg+Plex (and friends) hosting with $10 free credit
 						</div>
 						<div className="text-sm mb-1 text-center">
 							✨
