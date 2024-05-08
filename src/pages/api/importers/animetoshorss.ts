@@ -8,13 +8,13 @@ const db = new PlanetScaleCache();
 const animeRssUrl = `https://feed.animetosho.org/rss2?only_tor=1`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const toSave: { key: string; value: ScrapeSearchResult[] }[] = [];
 	while (true) {
 		const rssResponse = await axios.get(animeRssUrl);
 		const rssItems = rssResponse.data.matchAll(
 			/<link>(https:\/\/animetosho\.org\/view\/[^<]+)<\/link>/gi
 		);
 		const scrapesMap = new Map<string, any>();
+		const toSave: { key: string; value: ScrapeSearchResult[] }[] = [];
 		for (const rssItem of rssItems) {
 			const torrentUrl = rssItem[1];
 			try {
@@ -79,8 +79,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		for (const save of toSave) {
 			await db.saveScrapedTrueResults(save.key, save.value, true);
 		}
-		// reset toSave
-		toSave.length = 0;
 		scrapesMap.forEach((scrapes, key) => {
 			const url = `https://debridmediamanager.com/${key.replaceAll(':', '/')}`;
 			console.log(url, scrapes);
