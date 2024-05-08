@@ -245,7 +245,7 @@ function IndexPage() {
 						</div>
 
 						<div className="text-sm mb-1 text-center">
-							Get DMM browser extensions for{' '}
+							✨ Get DMM browser extensions for{' '}
 							<b>
 								<a
 									className="underline"
