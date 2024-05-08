@@ -45,6 +45,12 @@ const nextConfig = {
 			hostname: 'media.kitsu.io',
 			port: '',
 			pathname: '/**',
+		  },
+		  {
+			protocol: 'https',
+			hostname: 'cdn.myanimelist.net',
+			port: '',
+			pathname: '/**',
 		  }
 		],
 	  },
