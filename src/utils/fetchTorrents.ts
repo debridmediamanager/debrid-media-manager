@@ -2,9 +2,11 @@ import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
 import { UserTorrentResponse, getUserTorrentsList } from '@/services/realDebrid';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
+import { every, some } from 'lodash';
 import toast from 'react-hot-toast';
 import { getMediaId } from './mediaId';
-import { getTypeByFilenames, getTypeByNameAndFileCount } from './mediaType';
+import { getTypeByNameAndFileCount } from './mediaType';
+import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
 import { genericToastOptions } from './toastOptions';
 
 export const fetchRealDebrid = async (
@@ -87,14 +89,35 @@ export const fetchAllDebrid = async (
 			if (magnetInfo.filename === magnetInfo.hash) {
 				magnetInfo.filename = 'Magnet';
 			}
-			const mediaType = getTypeByFilenames(
-				magnetInfo.filename,
-				magnetInfo.links.map((l) => l.filename)
-			);
-			const info =
-				mediaType === 'movie'
-					? filenameParse(magnetInfo.filename)
-					: filenameParse(magnetInfo.filename, true);
+			let mediaType = 'other';
+			let info = undefined;
+
+			const filenames = magnetInfo.links.map((f) => f.filename);
+			const torrentAndFiles = [magnetInfo.filename, ...filenames];
+			const hasEpisodes = checkArithmeticSequenceInFilenames(filenames);
+
+			if (every(torrentAndFiles, (f) => !isVideo({ path: f }))) {
+				mediaType = 'other';
+				info = undefined;
+			} else if (
+				hasEpisodes ||
+				some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
+				some(torrentAndFiles, (f) => /season.?\d+/i.test(f)) ||
+				some(torrentAndFiles, (f) => /episodes?\s?\d+/i.test(f)) ||
+				some(torrentAndFiles, (f) => /\b[a-fA-F0-9]{8}\b/.test(f))
+			) {
+				mediaType = 'tv';
+				info = filenameParse(magnetInfo.filename, true);
+			} else if (
+				!hasEpisodes &&
+				every(torrentAndFiles, (f) => !/s\d\d\d?.?e\d\d\d?/i.test(f)) &&
+				every(torrentAndFiles, (f) => !/season.?\d+/i.test(f)) &&
+				every(torrentAndFiles, (f) => !/episodes?\s?\d+/i.test(f)) &&
+				every(torrentAndFiles, (f) => !/\b[a-fA-F0-9]{8}\b/.test(f))
+			) {
+				mediaType = 'movie';
+				info = filenameParse(magnetInfo.filename);
+			}
 
 			const date = new Date(magnetInfo.uploadDate * 1000);
 
@@ -106,7 +129,10 @@ export const fetchAllDebrid = async (
 				// score: getReleaseTags(magnetInfo.filename, magnetInfo.size / ONE_GIGABYTE).score,
 				info,
 				mediaType,
-				title: getMediaId(info, mediaType, false) || magnetInfo.filename,
+				title:
+					info && (mediaType === 'movie' || mediaType == 'tv')
+						? getMediaId(info, mediaType, false)
+						: magnetInfo.filename,
 				id: `ad:${magnetInfo.id}`,
 				filename: magnetInfo.filename,
 				hash: magnetInfo.hash,

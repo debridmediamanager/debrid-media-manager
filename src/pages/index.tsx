@@ -54,8 +54,8 @@ function IndexPage() {
 	};
 
 	const handleClearCache = async (redirectUrl: string) => {
-		setDeleting(true);
 		const request = window.indexedDB.deleteDatabase('DMMDB');
+		setDeleting(true);
 		request.onsuccess = function () {
 			window.location.assign(redirectUrl);
 		};
@@ -362,6 +362,11 @@ function IndexPage() {
 			) : (
 				<>
 					<h1 className="text-xl text-center pb-4">Debrid Media Manager is loading...</h1>
+					{deleting && (
+						<h3 className="text-md text-center pb-4">
+							If it gets stuck here, close all DMM tabs first
+						</h3>
+					)}
 					<button
 						className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
 						onClick={() => handleLogout()}
