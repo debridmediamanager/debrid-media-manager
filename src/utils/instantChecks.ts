@@ -3,6 +3,7 @@ import { EnrichedHashlistTorrent, FileData, SearchResult } from '@/services/medi
 import { rdInstantCheck } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
+import { some } from 'lodash';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-hot-toast';
 import { runConcurrentFunctions } from './batch';
@@ -114,13 +115,15 @@ export const instantCheckInRd2 = async (
 	return instantCount;
 };
 
+// returns non-video hashes because I want to :)
 export const checkForUncachedInRd = async (
 	rdKey: string,
 	torrents: UserTorrent[],
 	setUncachedHashes: Dispatch<SetStateAction<Set<string>>>,
 	db: UserTorrentDB
-): Promise<void> => {
+): Promise<Set<string>> => {
 	const cachedHashes: Set<string> = new Set();
+	const nonVideoHashes: Set<string> = new Set();
 
 	// Check if hash is in cached hashes db
 	const hashesToCheck: Set<string> = new Set();
@@ -131,6 +134,7 @@ export const checkForUncachedInRd = async (
 		}
 	}
 	const hashes = Array.from(hashesToCheck);
+	console.log('Checking RD for uncached hashes:', hashes.length);
 
 	const funcs = [];
 	for (const hashGroup of groupBy(100, hashes)) {
@@ -142,11 +146,21 @@ export const checkForUncachedInRd = async (
 				const variants = resp[hash]['rd'];
 				// Check if variants array is not empty
 				if (!variants.length) continue;
+				let isCached = false,
+					allNonVideos = true;
 				for (const variant of variants) {
+					if (some(Object.values(variant), (file) => isVideo({ path: file.filename }))) {
+						allNonVideos = false;
+					}
 					if (Object.keys(variant).length > 0) {
-						cachedHashes.add(hash);
-						await db.addRdCachedHash(hash);
-						break;
+						isCached = true;
+					}
+				}
+				if (isCached) {
+					cachedHashes.add(hash);
+					await db.addRdCachedHash(hash);
+					if (allNonVideos) {
+						nonVideoHashes.add(hash);
 					}
 				}
 			}
@@ -160,6 +174,7 @@ export const checkForUncachedInRd = async (
 			`Found ${uncachedHashes.size} uncached torrents in Real-Debrid`,
 			searchToastOptions
 		);
+	return nonVideoHashes;
 };
 
 export const instantCheckInAd = async (
