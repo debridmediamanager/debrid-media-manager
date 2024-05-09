@@ -22,7 +22,7 @@ import { checkForUncachedInRd } from '@/utils/instantChecks';
 import { localRestore } from '@/utils/localRestore';
 import { applyQuickSearch } from '@/utils/quickSearch';
 import { torrentPrefix } from '@/utils/results';
-import { checkArithmeticSequenceInFilenames } from '@/utils/selectable';
+import { checkArithmeticSequenceInFilenames, isVideo } from '@/utils/selectable';
 import { defaultPlayer } from '@/utils/settings';
 import { showInfoForAD, showInfoForRD } from '@/utils/showInfo';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
@@ -80,6 +80,7 @@ function TorrentsPage() {
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 
+	const [defaultGrouping] = useState<Record<string, number>>({});
 	const [movieGrouping] = useState<Record<string, number>>({});
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
@@ -173,7 +174,9 @@ function TorrentsPage() {
 						for (const t of inProgressTorrents) {
 							const idx = prev.findIndex((i) => i.id === t.id);
 							if (idx >= 0) {
-								prev[idx] = t;
+								const newList = [...prev];
+								newList[idx] = t;
+								return newList;
 							}
 						}
 						return prev;
@@ -304,6 +307,7 @@ function TorrentsPage() {
 		sameTitleOrHash.clear();
 
 		let tmpTotalBytes = 0;
+		clearGroupings(defaultGrouping);
 		clearGroupings(movieGrouping);
 		clearGroupings(tvGroupingByEpisode);
 		const keyMap: Map<string, number> = new Map();
@@ -344,7 +348,14 @@ function TorrentsPage() {
 		setTotalBytes(tmpTotalBytes);
 		setGrouping(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [userTorrentsList, loading, movieGrouping, tvGroupingByEpisode, tvGroupingByTitle]);
+	}, [
+		userTorrentsList,
+		loading,
+		defaultGrouping,
+		movieGrouping,
+		tvGroupingByEpisode,
+		tvGroupingByTitle,
+	]);
 
 	useEffect(() => {
 		if (!rdKey || rdSyncing) return;
@@ -355,7 +366,20 @@ function TorrentsPage() {
 		);
 		const hashesArr = Array.from(hashes);
 		hashesArr.sort();
-		checkForUncachedInRd(rdKey, userTorrentsList, setUncachedRdHashes, torrentDB);
+		checkForUncachedInRd(rdKey, userTorrentsList, setUncachedRdHashes, torrentDB).then(
+			(nonVideoHashes) => {
+				setUserTorrentsList((prev) => {
+					return prev.map((t) => {
+						if (t.id.startsWith('rd:') && nonVideoHashes.has(t.hash)) {
+							t.mediaType = 'other';
+							t.info = undefined;
+							t.title = t.filename;
+						}
+						return t;
+					});
+				});
+			}
+		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdKey, rdSyncing]);
 
@@ -459,9 +483,7 @@ function TorrentsPage() {
 			setFilteredList(applyQuickSearch(query, tmpList));
 			if (helpText !== 'hide')
 				setHelpText(
-					`Torrents shown are detected as ${
-						mediaType === 'movie' ? 'movies' : 'tv shows'
-					}.`
+					`Torrents shown are detected as ${['movies', 'TV shows', 'non-movie/TV content'][['movie', 'tv', 'other'].indexOf(mediaType as string)]}.`
 				);
 		}
 		setFiltering(false);
@@ -501,8 +523,16 @@ function TorrentsPage() {
 		);
 	}
 
-	const getGroupings = (mediaType: UserTorrent['mediaType']) =>
-		mediaType === 'tv' ? tvGroupingByEpisode : movieGrouping;
+	const getGroupings = (mediaType: UserTorrent['mediaType']) => {
+		switch (mediaType) {
+			case 'movie':
+				return movieGrouping;
+			case 'tv':
+				return tvGroupingByEpisode;
+			default:
+				return defaultGrouping;
+		}
+	};
 
 	function clearGroupings(frequencyMap: { [x: string]: number }) {
 		for (let key in frequencyMap) {
@@ -937,11 +967,14 @@ function TorrentsPage() {
 	};
 
 	const handleChangeType = async (t: UserTorrent) => {
-		t.mediaType = t.mediaType === 'tv' ? 'movie' : 'tv';
+		t.mediaType = t.mediaType === 'movie' ? 'tv' : t.mediaType === 'tv' ? 'other' : 'movie';
 		setUserTorrentsList((prev) => {
 			const idx = prev.findIndex((i) => i.id === t.id);
 			if (idx >= 0) {
-				prev[idx].mediaType = t.mediaType;
+				// Create a copy of the array and modify the copy
+				const newList = [...prev];
+				newList[idx].mediaType = t.mediaType;
+				return newList;
 			}
 			return prev;
 		});
@@ -954,19 +987,21 @@ function TorrentsPage() {
 			setUserTorrentsList((prev) => {
 				const idx = prev.findIndex((i) => i.id === t.id);
 				if (idx >= 0) {
-					prev[idx].progress = info.progress;
-					prev[idx].seeders = info.seeders;
-					prev[idx].speed = info.speed;
-					prev[idx].status = getRdStatus(info);
-					prev[idx].serviceStatus = info.status;
-					prev[idx].links = info.links;
+					const newList = [...prev];
+					newList[idx].progress = info.progress;
+					newList[idx].seeders = info.seeders;
+					newList[idx].speed = info.speed;
+					newList[idx].status = getRdStatus(info);
+					newList[idx].serviceStatus = info.status;
+					newList[idx].links = info.links;
 					const selectedFiles = info.files.filter((f) => f.selected);
-					prev[idx].selectedFiles = selectedFiles.map((f, idx) => ({
+					newList[idx].selectedFiles = selectedFiles.map((f, idx) => ({
 						fileId: f.id,
 						filename: f.path,
 						filesize: f.bytes,
 						link: selectedFiles.length === info.links.length ? info.links[idx] : '',
 					}));
+					return newList;
 				}
 				return prev;
 			});
@@ -976,19 +1011,32 @@ function TorrentsPage() {
 		const filenames = info.files.map((f) => f.path);
 		const torrentAndFiles = [t.filename, ...filenames];
 		const hasEpisodes = checkArithmeticSequenceInFilenames(filenames);
+
 		if (
-			(hasEpisodes && t.mediaType === 'movie') ||
-			some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
-			some(torrentAndFiles, (f) => /season.?\d+/i.test(f)) ||
-			some(torrentAndFiles, (f) => /episodes?\s?\d+/i.test(f)) ||
-			some(torrentAndFiles, (f) => /\b[a-fA-F0-9]{8}\b/.test(f))
+			t.mediaType !== 'other' &&
+			(every(torrentAndFiles, (f) => !isVideo({ path: f })) ||
+				(info.progress === 100 &&
+					info.files.filter((f) => f.selected).length !== info.links.length &&
+					info.links.length === 1))
+		) {
+			t.mediaType = 'other';
+			t.title = t.filename;
+			t.info = undefined;
+			await torrentDB.add(t);
+		} else if (
+			t.mediaType !== 'tv' &&
+			(hasEpisodes ||
+				some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
+				some(torrentAndFiles, (f) => /season.?\d+/i.test(f)) ||
+				some(torrentAndFiles, (f) => /episodes?\s?\d+/i.test(f)) ||
+				some(torrentAndFiles, (f) => /\b[a-fA-F0-9]{8}\b/.test(f)))
 		) {
 			t.mediaType = 'tv';
 			t.info = filenameParse(t.filename, true);
 			await torrentDB.add(t);
 		} else if (
+			t.mediaType !== 'movie' &&
 			!hasEpisodes &&
-			t.mediaType === 'tv' &&
 			every(torrentAndFiles, (f) => !/s\d\d\d?.?e\d\d\d?/i.test(f)) &&
 			every(torrentAndFiles, (f) => !/season.?\d+/i.test(f)) &&
 			every(torrentAndFiles, (f) => !/episodes?\s?\d+/i.test(f)) &&
@@ -1105,6 +1153,12 @@ function TorrentsPage() {
 					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
 				>
 					📺 TV&nbsp;shows
+				</Link>
+				<Link
+					href="/library?mediaType=other&page=1"
+					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
+				>
+					🗂️ Others
 				</Link>
 				<button
 					className="mr-2 mb-2 bg-yellow-300 hover:bg-yellow-200 text-black py-1 px-1 rounded text-xs"
@@ -1363,7 +1417,13 @@ function TorrentsPage() {
 															handleChangeType(torrent);
 														}}
 													>
-														{torrent.mediaType === 'tv' ? '📺' : '🎥'}
+														{
+															['🎥', '📺', '🗂️'][
+																['movie', 'tv', 'other'].indexOf(
+																	torrent.mediaType
+																)
+															]
+														}
 													</div>
 													&nbsp;<strong>{torrent.title}</strong>{' '}
 													{filterText && (
@@ -1377,20 +1437,22 @@ function TorrentsPage() {
 															{filterText}
 														</Link>
 													)}
-													<Link
-														href={`/search?query=${encodeURIComponent(
-															(
-																torrent.info.title +
-																' ' +
-																(torrent.info.year || '')
-															).trim() || torrent.title
-														)}`}
-														target="_blank"
-														className="inline-block bg-blue-600 hover:bg-blue-800 text-white font-bold py-0 px-1 mr-2 rounded text-xs cursor-pointer ml-1"
-														onClick={(e) => e.stopPropagation()}
-													>
-														Search again
-													</Link>{' '}
+													{torrent.info && (
+														<Link
+															href={`/search?query=${encodeURIComponent(
+																(
+																	torrent.info.title +
+																	' ' +
+																	(torrent.info.year || '')
+																).trim() || torrent.title
+															)}`}
+															target="_blank"
+															className="inline-block bg-blue-600 hover:bg-blue-800 text-white font-bold py-0 px-1 mr-2 rounded text-xs cursor-pointer ml-1"
+															onClick={(e) => e.stopPropagation()}
+														>
+															Search again
+														</Link>
+													)}{' '}
 													<br />
 												</>
 											)}

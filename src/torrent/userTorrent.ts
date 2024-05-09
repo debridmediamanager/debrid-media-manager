@@ -20,8 +20,8 @@ export interface UserTorrent {
 	serviceStatus: string;
 	added: Date;
 	// score: number;
-	mediaType: 'movie' | 'tv';
-	info: ParsedFilename;
+	mediaType: 'movie' | 'tv' | 'other';
+	info?: ParsedFilename;
 	links: string[];
 	selectedFiles: SelectedFile[];
 	seeders: number;

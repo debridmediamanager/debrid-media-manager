@@ -155,7 +155,8 @@ export const showInfoForRD = async (
 	imdbId: string = '',
 	mediaType: string = 'movie' // 'movie' | 'tv'
 ) => {
-	let warning = '', downloadAllBtn = '';
+	let warning = '',
+		downloadAllBtn = '';
 	const isIntact = info.fake || info.files.filter((f) => f.selected).length === info.links.length;
 	if (info.progress === 100 && !isIntact) {
 		if (info.links.length === 1) {
@@ -171,7 +172,7 @@ export const showInfoForRD = async (
 		downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 		<input type="hidden" name="links" value="${info.links.join('\n')}" />
 		<button type="submit" class="inline ml-1 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm">🔗 Download all links</button>
-	</form>`
+	</form>`;
 		downloadAllBtn += `
 		<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/exportdl?token=${rdKey}&torrentId=${info.id}')">📤 Export DL links</button>
 	`;

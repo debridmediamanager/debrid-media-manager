@@ -8,12 +8,12 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 	const [filename, downloadLinks] = await exportDownloadLinks(
 		rdKey,
 		torrentId as string,
-		ipAddress,
+		ipAddress
 	);
 	if (downloadLinks) {
 		res.setHeader('Content-Disposition', `attachment; filename=${filename}-links.txt`);
-        res.setHeader('Content-Type', 'text/plain');
-        res.status(200).send(downloadLinks);
+		res.setHeader('Content-Type', 'text/plain');
+		res.status(200).send(downloadLinks);
 	} else {
 		res.status(500).send('Internal Server Error');
 	}
@@ -21,25 +21,22 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
 export default handler;
 
-export const exportDownloadLinks = async (
-	rdKey: string,
-	torrentId: string,
-	ipAddress: string
-) => {
-	let filename = '', intent = '';
+export const exportDownloadLinks = async (rdKey: string, torrentId: string, ipAddress: string) => {
+	let filename = '',
+		downloadLinks = '';
 	try {
-        const info = await getTorrentInfo(rdKey, torrentId, true);
-        filename = info.original_filename;
+		const info = await getTorrentInfo(rdKey, torrentId, true);
+		filename = info.original_filename;
 		for (const link of info.links) {
-            try {
-                const resp = await unrestrictLink(rdKey, link, ipAddress, true);
-                intent += resp.download + '\n';
-            } catch (e) {
-                console.log('exportdownload, unrestrict error', e);
-            }
-        }
+			try {
+				const resp = await unrestrictLink(rdKey, link, ipAddress, true);
+				downloadLinks += resp.download + '\n';
+			} catch (e) {
+				console.log('exportdownload, unrestrict error', e);
+			}
+		}
 	} catch (e) {
 		console.log('exportdownload, getinfo error', e);
 	}
-	return [filename, intent];
+	return [filename, downloadLinks];
 };
