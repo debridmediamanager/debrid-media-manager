@@ -1110,18 +1110,22 @@ function TorrentsPage() {
 					Reset
 				</button>
 
-				<Link
-					href="/library?status=selected&page=1"
-					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
-				>
-					👀 Selected ({selectedTorrents.size})
-				</Link>
-				<Link
-					href="/library?status=uncached&page=1"
-					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
-				>
-					👀 Uncached
-				</Link>
+				{selectedTorrents.size > 0 && (
+					<Link
+						href="/library?status=selected&page=1"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
+					>
+						👀 Selected ({selectedTorrents.size})
+					</Link>
+				)}
+				{uncachedAdIDs.length + uncachedRdHashes.size > 0 && (
+					<Link
+						href="/library?status=uncached&page=1"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
+					>
+						👀 Uncached
+					</Link>
+				)}
 				{sameTitleOrHash.size > 0 && (
 					<Link
 						href="/library?status=sametitleorhash&page=1"
