@@ -229,13 +229,13 @@ export const showInfoForRD = async (
 		info.status === 'downloading'
 			? `<tr><td class="font-semibold align-left">Progress:</td><td class="align-left">${info.progress.toFixed(
 					2
-			  )}%</td></tr>`
+				)}%</td></tr>`
 			: '';
 	const speedRow =
 		info.status === 'downloading'
 			? `<tr><td class="font-semibold align-left">Speed:</td><td class="align-left">${(
 					info.speed / 1024
-			  ).toFixed(2)} KB/s</td></tr>`
+				).toFixed(2)} KB/s</td></tr>`
 			: '';
 	const seedersRow =
 		info.status === 'downloading'

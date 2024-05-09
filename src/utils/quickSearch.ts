@@ -14,7 +14,7 @@ export function applyQuickSearch(query: string, unfiltered: UserTorrent[]) {
 	return query
 		? unfiltered.filter((t) =>
 				regexFilters.every((regex) => regex.test(t.filename) || regex.test(t.id))
-		  )
+			)
 		: unfiltered;
 }
 
