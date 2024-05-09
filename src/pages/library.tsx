@@ -1029,16 +1029,16 @@ function TorrentsPage() {
 						{rdSyncing || adSyncing
 							? '💭' // Thinking if syncing
 							: totalBytes / ONE_GIGABYTE / 1024 > 10000
-							? '😱' // Fear for more than 10 PB
-							: totalBytes / ONE_GIGABYTE / 1024 > 1000
-							? '😨' // Fearful surprise for more than 1 PB
-							: totalBytes / ONE_GIGABYTE / 1024 > 100
-							? '😮' // Surprise for more than 100 TB
-							: totalBytes / ONE_GIGABYTE / 1024 > 10
-							? '🙂' // Smile for more than 10 TB
-							: totalBytes / ONE_GIGABYTE / 1024 > 1
-							? '😐' // Neutral for more than 1 TB
-							: '🙁'}{' '}
+								? '😱' // Fear for more than 10 PB
+								: totalBytes / ONE_GIGABYTE / 1024 > 1000
+									? '😨' // Fearful surprise for more than 1 PB
+									: totalBytes / ONE_GIGABYTE / 1024 > 100
+										? '😮' // Surprise for more than 100 TB
+										: totalBytes / ONE_GIGABYTE / 1024 > 10
+											? '🙂' // Smile for more than 10 TB
+											: totalBytes / ONE_GIGABYTE / 1024 > 1
+												? '😐' // Neutral for more than 1 TB
+												: '🙁'}{' '}
 						{/* Sad for 1 TB or less */}
 					</span>
 					<span className="text-sm whitespace-nowrap">
@@ -1122,12 +1122,14 @@ function TorrentsPage() {
 				>
 					👀 Uncached
 				</Link>
-				<Link
-					href="/library?status=sametitleorhash&page=1"
-					className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
-				>
-					👀 Same&nbsp;title
-				</Link>
+				{sameTitleOrHash.size > 0 && (
+					<Link
+						href="/library?status=sametitleorhash&page=1"
+						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
+					>
+						👀 Same&nbsp;title
+					</Link>
+				)}
 
 				{inProgressCount > 0 && (
 					<Link

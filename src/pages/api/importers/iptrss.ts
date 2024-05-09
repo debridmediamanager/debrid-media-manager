@@ -137,11 +137,11 @@ export const iptGetDetails = async (
 			name: decodeURIComponent(nameMatch[1]) ?? '',
 			size: sizeMatch
 				? parseFloat(sizeMatch[1]) *
-				  (sizeMatch[1].endsWith('GB')
+					(sizeMatch[1].endsWith('GB')
 						? 1024
 						: sizeMatch[1].endsWith('TB')
-						? 1024 * 1024
-						: 1)
+							? 1024 * 1024
+							: 1)
 				: 0,
 			hash: await convertToHash(id, torrentPass),
 		});
@@ -159,11 +159,11 @@ export const iptGetDetails = async (
 				name: decodeURIComponent(torMatch[2]) ?? '',
 				size: sizeMatch2
 					? parseFloat(sizeMatch2[1]) *
-					  (sizeMatch2[1].endsWith('GB')
+						(sizeMatch2[1].endsWith('GB')
 							? 1024
 							: sizeMatch2[1].endsWith('TB')
-							? 1024 * 1024
-							: 1)
+								? 1024 * 1024
+								: 1)
 					: 0,
 				hash: await convertToHash(torMatch[1], torrentPass),
 			});

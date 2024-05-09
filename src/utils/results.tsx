@@ -5,8 +5,8 @@ export const borderColor = (downloaded: boolean, downloading: boolean) =>
 	downloaded
 		? 'border-green-400 border-4'
 		: downloading
-		? 'border-red-400 border-4'
-		: 'border-black border-2';
+			? 'border-red-400 border-4'
+			: 'border-black border-2';
 
 export const fileSize = (size: number) => (size / 1024).toFixed(2);
 
