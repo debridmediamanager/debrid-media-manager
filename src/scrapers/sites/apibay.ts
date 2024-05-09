@@ -51,10 +51,10 @@ async function processItem(
 	const fileSize = fileSizeMatch[1].includes('TB')
 		? parseFloat(fileSizeMatch[1]) * 1024 * 1024
 		: fileSizeMatch[1].includes('GB')
-		? parseFloat(fileSizeMatch[1]) * 1024
-		: fileSizeMatch[1].includes('MB')
-		? parseFloat(fileSizeMatch[1])
-		: parseFloat(fileSizeMatch[1]) / 1024;
+			? parseFloat(fileSizeMatch[1]) * 1024
+			: fileSizeMatch[1].includes('MB')
+				? parseFloat(fileSizeMatch[1])
+				: parseFloat(fileSizeMatch[1]) / 1024;
 
 	// parse created date from responseData
 	// <tr><th>Created On:</th><td>2016-04-10</td>

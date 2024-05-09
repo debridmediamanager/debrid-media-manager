@@ -456,9 +456,9 @@ function HashlistPage() {
 										isDownloaded('rd', t.hash) || isDownloaded('ad', t.hash)
 											? 'bg-green-900'
 											: isDownloading('rd', t.hash) ||
-											  isDownloading('ad', t.hash)
-											? 'bg-red-900'
-											: ''
+												  isDownloading('ad', t.hash)
+												? 'bg-red-900'
+												: ''
 									}
 								`}
 								>

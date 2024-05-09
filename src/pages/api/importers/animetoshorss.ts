@@ -55,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 				const fileSizeStr = response.data.match(/\(([0-9\.,]+) (MB|GB|TB)\)/i);
 				const size_bytes = fileSizeStr
 					? parseFloat(fileSizeStr[1].replaceAll(',', '')) *
-					  1024 ** ['MB', 'GB', 'TB'].indexOf(fileSizeStr[2])
+						1024 ** ['MB', 'GB', 'TB'].indexOf(fileSizeStr[2])
 					: 0;
 
 				const link = {

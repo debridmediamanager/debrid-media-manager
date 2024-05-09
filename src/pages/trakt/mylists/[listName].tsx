@@ -29,7 +29,7 @@ function TraktMyLists() {
 		(async () => {
 			const response = await getUsersPersonalLists(traktToken, traktUserSlug);
 			for (const list of response) {
-				if (list.name !== decodeURIComponent(listName)) continue;
+				if (list.name !== listName) continue;
 				const items = await fetchListItems(traktToken, traktUserSlug, list.ids.trakt);
 				setArrayOfResults((prev) => ({
 					...prev,
@@ -42,7 +42,7 @@ function TraktMyLists() {
 			const response = await getLikedLists(traktToken, traktUserSlug);
 			for (const listContainer of response) {
 				const list = listContainer.list;
-				if (list.name !== decodeURIComponent(listName)) continue;
+				if (list.name !== listName) continue;
 				const items = await fetchListItems(traktToken, list.user.ids.slug, list.ids.trakt);
 				setArrayOfResults((prev) => ({
 					...prev,
@@ -57,11 +57,15 @@ function TraktMyLists() {
 	return (
 		<div className="mx-2 my-1 max-w-full">
 			<Head>
-				<title>Debrid Media Manager - Trakt - {traktUserSlug}&apos;s lists</title>
+				<title>
+					Debrid Media Manager - Trakt - {traktUserSlug} - {listName}
+				</title>
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-2">
-				<h1 className="text-xl font-bold">Trakt - 🧏🏻‍♀️ {traktUserSlug}&apos;s lists</h1>
+				<h1 className="text-xl font-bold">
+					Trakt - {traktUserSlug} - {listName}
+				</h1>
 				<Link
 					href="/"
 					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
@@ -73,9 +77,6 @@ function TraktMyLists() {
 				.sort()
 				.map((listName: string, idx: number) => (
 					<div key={listName}>
-						<h2 className="mt-4 text-2xl font-bold">
-							<span className="text-yellow-500">{idx + 1}</span> {listName}
-						</h2>
 						<div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2">
 							{arrayOfResults[listName].map((item: TraktMediaItem) => {
 								const imdbid =
