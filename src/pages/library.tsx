@@ -307,8 +307,11 @@ function TorrentsPage() {
 		clearGroupings(movieGrouping);
 		clearGroupings(tvGroupingByEpisode);
 		const keyMap: Map<string, number> = new Map();
+
 		for (const t of userTorrentsList) {
 			if (t.status === UserTorrentStatus.error) continue;
+			else if (t.serviceStatus === 'magnet_conversion') continue;
+
 			const key = uniqId(t);
 			if (!keyMap.has(key)) {
 				keyMap.set(key, t.bytes);

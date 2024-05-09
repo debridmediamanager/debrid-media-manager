@@ -155,10 +155,26 @@ export const showInfoForRD = async (
 	imdbId: string = '',
 	mediaType: string = 'movie' // 'movie' | 'tv'
 ) => {
-	let warning = '';
+	let warning = '', downloadAllBtn = '';
 	const isIntact = info.fake || info.files.filter((f) => f.selected).length === info.links.length;
 	if (info.progress === 100 && !isIntact) {
-		warning = `<div class="text-sm text-red-500">Warning: Some files have expired</div>`;
+		if (info.links.length === 1) {
+			warning = `<div class="text-sm text-red-500">Warning: This torrent appears to have been rar'ed by Real-Debrid<br/></div>`;
+			downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
+			<input type="hidden" name="links" value="${info.links[0]}" />
+			<button type="submit" class="inline ml-1 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm">🗄️ Download RAR</button>
+		</form>`;
+		} else {
+			warning = `<div class="text-sm text-red-500">Warning: Some files have expired</div>`;
+		}
+	} else if (info.links.length > 1) {
+		downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
+		<input type="hidden" name="links" value="${info.links.join('\n')}" />
+		<button type="submit" class="inline ml-1 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm">🔗 Download all links</button>
+	</form>`
+		downloadAllBtn += `
+		<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/exportdl?token=${rdKey}&torrentId=${info.id}')">📤 Export DL links</button>
+	`;
 	}
 
 	let linkIndex = 0;
@@ -211,7 +227,7 @@ export const showInfoForRD = async (
 
 			// Return the list item for the file, with or without the download form
 			return `
-                <li class="hover:bg-yellow-200 rounded ${
+                <li class="mt-4 hover:bg-yellow-200 rounded ${
 					file.selected ? 'bg-yellow-50 font-bold' : 'font-normal'
 				}">
                     <span class="inline text-blue-600">${file.path}</span>
@@ -286,7 +302,7 @@ export const showInfoForRD = async (
                 </tbody>
             </table>
         </div>
-        ${warning}`
+        ${warning}${downloadAllBtn}`
 		);
 	Swal.fire({
 		// icon: 'info',
