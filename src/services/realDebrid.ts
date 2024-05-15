@@ -214,43 +214,40 @@ export const getCurrentUser = async (accessToken: string) => {
 	}
 };
 
-export async function* getUserTorrentsList(accessToken: string, limit: number = 0) {
+interface UserTorrentsResult {
+	data: UserTorrentResponse[];
+	totalCount: number | null;
+}
+
+export async function getUserTorrentsList(
+	accessToken: string,
+	limit: number = 0,
+	page: number = 1
+): Promise<UserTorrentsResult> {
 	const headers = {
 		Authorization: `Bearer ${accessToken}`,
 	};
 
-	let page = 1;
-	const limitSet = limit || Infinity;
-	if (!limit) limit = 1000;
+	const response = await axios.get<UserTorrentResponse[]>(
+		`${config.realDebridHostname}/rest/1.0/torrents`,
+		{ headers, params: { page, limit } }
+	);
 
-	while (true) {
-		const response = await axios.get<UserTorrentResponse[]>(
-			`${config.realDebridHostname}/rest/1.0/torrents`,
-			{ headers, params: { page, limit } }
-		);
+	const {
+		data,
+		headers: { 'x-total-count': totalCount },
+	} = response;
 
-		const {
-			data,
-			headers: { 'x-total-count': totalCount },
-		} = response;
-
-		yield data; // Yield the current page of torrents
-
-		if (data.length < limit || !totalCount) {
-			break;
-		}
-
-		const totalCountValue = parseInt(totalCount, 10);
+	// Parse the totalCount from the headers
+	let totalCountValue: number | null = null;
+	if (totalCount) {
+		totalCountValue = parseInt(totalCount, 10);
 		if (isNaN(totalCountValue)) {
-			break;
+			totalCountValue = null;
 		}
-
-		if (data.length >= limitSet || data.length >= totalCountValue) {
-			break;
-		}
-
-		page++;
 	}
+
+	return { data, totalCount: totalCountValue };
 }
 
 export const getDownloads = async (accessToken: string): Promise<DownloadResponse[]> => {

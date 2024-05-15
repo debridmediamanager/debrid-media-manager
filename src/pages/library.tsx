@@ -366,8 +366,8 @@ function TorrentsPage() {
 		);
 		const hashesArr = Array.from(hashes);
 		hashesArr.sort();
-		checkForUncachedInRd(rdKey, userTorrentsList, setUncachedRdHashes, torrentDB).then(
-			(nonVideoHashes) => {
+		checkForUncachedInRd(rdKey, userTorrentsList, setUncachedRdHashes, torrentDB)
+			.then((nonVideoHashes) => {
 				setUserTorrentsList((prev) => {
 					return prev.map((t) => {
 						if (t.id.startsWith('rd:') && nonVideoHashes.has(t.hash)) {
@@ -378,8 +378,11 @@ function TorrentsPage() {
 						return t;
 					});
 				});
-			}
-		);
+				return userTorrentsList.filter((t) => nonVideoHashes.has(t.hash));
+			})
+			.then((nonVideoTorrents) => {
+				return Promise.all(nonVideoTorrents.map((t) => torrentDB.add(t)));
+			});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdKey, rdSyncing]);
 
@@ -1019,31 +1022,55 @@ function TorrentsPage() {
 					info.files.filter((f) => f.selected).length !== info.links.length &&
 					info.links.length === 1))
 		) {
-			t.mediaType = 'other';
-			t.title = t.filename;
-			t.info = undefined;
+			setUserTorrentsList((prev) => {
+				const idx = prev.findIndex((i) => i.id === t.id);
+				if (idx >= 0) {
+					const newList = [...prev];
+					newList[idx].mediaType = 'other';
+					newList[idx].title = newList[idx].filename;
+					newList[idx].info = undefined;
+					return newList;
+				}
+				return prev;
+			});
 			await torrentDB.add(t);
 		} else if (
-			t.mediaType !== 'tv' &&
+			t.mediaType === 'movie' &&
 			(hasEpisodes ||
 				some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
 				some(torrentAndFiles, (f) => /season.?\d+/i.test(f)) ||
 				some(torrentAndFiles, (f) => /episodes?\s?\d+/i.test(f)) ||
 				some(torrentAndFiles, (f) => /\b[a-fA-F0-9]{8}\b/.test(f)))
 		) {
-			t.mediaType = 'tv';
-			t.info = filenameParse(t.filename, true);
+			setUserTorrentsList((prev) => {
+				const idx = prev.findIndex((i) => i.id === t.id);
+				if (idx >= 0) {
+					const newList = [...prev];
+					newList[idx].mediaType = 'tv';
+					newList[idx].info = filenameParse(t.filename, true);
+					return newList;
+				}
+				return prev;
+			});
 			await torrentDB.add(t);
 		} else if (
-			t.mediaType !== 'movie' &&
+			t.mediaType === 'tv' &&
 			!hasEpisodes &&
 			every(torrentAndFiles, (f) => !/s\d\d\d?.?e\d\d\d?/i.test(f)) &&
 			every(torrentAndFiles, (f) => !/season.?\d+/i.test(f)) &&
 			every(torrentAndFiles, (f) => !/episodes?\s?\d+/i.test(f)) &&
 			every(torrentAndFiles, (f) => !/\b[a-fA-F0-9]{8}\b/.test(f))
 		) {
-			t.mediaType = 'movie';
-			t.info = filenameParse(t.filename);
+			setUserTorrentsList((prev) => {
+				const idx = prev.findIndex((i) => i.id === t.id);
+				if (idx >= 0) {
+					const newList = [...prev];
+					newList[idx].mediaType = 'movie';
+					newList[idx].info = filenameParse(t.filename);
+					return newList;
+				}
+				return prev;
+			});
 			await torrentDB.add(t);
 		}
 

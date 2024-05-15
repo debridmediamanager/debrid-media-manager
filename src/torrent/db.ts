@@ -77,6 +77,7 @@ class UserTorrentDB {
 
 	private async insertToDB(torrent: UserTorrent) {
 		const db = await this.getDB();
+		await db.delete(this.torrentsTbl, torrent.id);
 		await db.put(this.torrentsTbl, torrent);
 	}
 
