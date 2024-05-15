@@ -15,70 +15,108 @@ export const fetchRealDebrid = async (
 	customLimit?: number
 ) => {
 	try {
-		for await (let pageOfTorrents of getUserTorrentsList(rdKey, customLimit)) {
-			const torrents = pageOfTorrents.map((torrentInfo) => {
-				let mediaType = getTypeByNameAndFileCount(
-					torrentInfo.filename,
-					torrentInfo.links.length
-				);
-				const serviceStatus = torrentInfo.status;
-				let status: UserTorrentStatus;
-				switch (torrentInfo.status) {
-					case 'magnet_conversion':
-					case 'waiting_files_selection':
-					case 'queued':
-						status = UserTorrentStatus.waiting;
-						break;
-					case 'downloading':
-					case 'compressing':
-						status = UserTorrentStatus.downloading;
-						break;
-					case 'uploading':
-					case 'downloaded':
-						status = UserTorrentStatus.finished;
-						break;
-					default:
-						status = UserTorrentStatus.error;
-						break;
-				}
-				let info = {} as ParsedFilename;
-				try {
-					info =
-						mediaType === 'movie'
-							? filenameParse(torrentInfo.filename)
-							: filenameParse(torrentInfo.filename, true);
-				} catch (error) {
-					// flip the condition if error is thrown
-					mediaType = mediaType === 'movie' ? 'tv' : 'movie';
-					mediaType === 'movie'
-						? filenameParse(torrentInfo.filename)
-						: filenameParse(torrentInfo.filename, true);
-				}
-				return {
-					...torrentInfo,
-					// score: getReleaseTags(torrentInfo.filename, torrentInfo.bytes / ONE_GIGABYTE).score,
-					info,
-					status,
-					serviceStatus,
-					mediaType,
-					added: new Date(torrentInfo.added.replace('Z', '+01:00')),
-					id: `rd:${torrentInfo.id}`,
-					links: torrentInfo.links.map((l) => l.replaceAll('/', '/')),
-					seeders: torrentInfo.seeders || 0,
-					speed: torrentInfo.speed || 0,
-					title: getMediaId(info, mediaType, false) || torrentInfo.filename,
-					cached: true,
-					selectedFiles: [],
-				};
-			}) as UserTorrent[];
-			await callback(torrents);
+		// Step 1: Initial request to get the first item and total count of items
+		const { data: initialData, totalCount } = await getUserTorrentsList(
+			rdKey,
+			customLimit ?? 1,
+			1
+		);
+
+		if (!initialData.length) {
+			await callback([]);
+			return;
 		}
+
+		// Step 2: If limit input is set, convert and call callback
+		if (customLimit && customLimit === 2) {
+			const torrents = await processTorrents(initialData);
+			await callback(torrents);
+			return;
+		}
+
+		// Step 3: Send requests in parallel to fetch the other items. Limit count should be 1000
+		const limit = 1000;
+		const maxPages = Math.ceil((totalCount ?? 0) / limit);
+		const allPagesPromises = [];
+
+		for (let page = 1; page <= maxPages; page++) {
+			allPagesPromises.push(getUserTorrentsList(rdKey, limit, page));
+			// if multiple of 5, wait for 1 second
+			if (page % 5 === 0) {
+				await new Promise((resolve) => setTimeout(resolve, 1000));
+			}
+		}
+
+		const pagesOfTorrents = await Promise.all(allPagesPromises);
+		const allData = pagesOfTorrents.flatMap((pageResult) => pageResult.data);
+
+		const torrents = await processTorrents(allData);
+		await callback(torrents);
 	} catch (error) {
 		await callback([]);
 		toast.error('Error fetching Real-Debrid torrents list', genericToastOptions);
 		console.error(error);
 	}
 };
+
+async function processTorrents(torrentData: UserTorrentResponse[]): Promise<UserTorrent[]> {
+	return Promise.all(
+		torrentData.map((torrentInfo) => {
+			let mediaType = getTypeByNameAndFileCount(
+				torrentInfo.filename,
+				torrentInfo.links.length
+			);
+			const serviceStatus = torrentInfo.status;
+			let status: UserTorrentStatus;
+			switch (torrentInfo.status) {
+				case 'magnet_conversion':
+				case 'waiting_files_selection':
+				case 'queued':
+					status = UserTorrentStatus.waiting;
+					break;
+				case 'downloading':
+				case 'compressing':
+					status = UserTorrentStatus.downloading;
+					break;
+				case 'uploading':
+				case 'downloaded':
+					status = UserTorrentStatus.finished;
+					break;
+				default:
+					status = UserTorrentStatus.error;
+					break;
+			}
+			let info = {} as ParsedFilename;
+			try {
+				info =
+					mediaType === 'movie'
+						? filenameParse(torrentInfo.filename)
+						: filenameParse(torrentInfo.filename, true);
+			} catch (error) {
+				// flip the condition if error is thrown
+				mediaType = mediaType === 'movie' ? 'tv' : 'movie';
+				mediaType === 'movie'
+					? filenameParse(torrentInfo.filename)
+					: filenameParse(torrentInfo.filename, true);
+			}
+			return {
+				...torrentInfo,
+				info,
+				status,
+				serviceStatus,
+				mediaType,
+				added: new Date(torrentInfo.added.replace('Z', '+01:00')),
+				id: `rd:${torrentInfo.id}`,
+				links: torrentInfo.links.map((l) => l.replaceAll('/', '/')),
+				seeders: torrentInfo.seeders || 0,
+				speed: torrentInfo.speed || 0,
+				title: getMediaId(info, mediaType, false) || torrentInfo.filename,
+				cached: true,
+				selectedFiles: [],
+			};
+		})
+	);
+}
 
 export const fetchAllDebrid = async (
 	adKey: string,

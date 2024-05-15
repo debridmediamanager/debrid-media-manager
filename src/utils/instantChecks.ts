@@ -134,7 +134,6 @@ export const checkForUncachedInRd = async (
 		}
 	}
 	const hashes = Array.from(hashesToCheck);
-	console.log('Checking RD for uncached hashes:', hashes.length);
 
 	const funcs = [];
 	for (const hashGroup of groupBy(100, hashes)) {
