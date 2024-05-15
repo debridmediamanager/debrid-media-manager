@@ -29,6 +29,26 @@ function IndexPage() {
 		if (traktError) {
 			toast.error('Trakt get user info failed');
 		}
+		if (localStorage.getItem('next_action') === 'clear_cache') {
+			setDeleting(true);
+			localStorage.removeItem('next_action');
+			const request = window.indexedDB.deleteDatabase('DMMDB');
+			setDeleting(true);
+			request.onsuccess = function () {
+				window.location.assign('/');
+			};
+			request.onerror = function () {
+				setDeleting(false);
+				toast.error('Database deletion failed', genericToastOptions);
+			};
+			request.onblocked = function () {
+				setDeleting(false);
+				toast(
+					'Database is still open, refresh the page first and then try deleting again',
+					genericToastOptions
+				);
+			};
+		}
 	}, [rdError, adError, traktError]);
 
 	const handleLogout = (prefix?: string) => {
@@ -39,7 +59,6 @@ function IndexPage() {
 				if (key && key.startsWith(prefix)) localStorage.removeItem(key);
 				i--;
 			}
-
 			router.reload();
 		} else {
 			localStorage.clear();
@@ -53,23 +72,9 @@ function IndexPage() {
 		router.push(authUrl);
 	};
 
-	const handleClearCache = async (redirectUrl: string) => {
-		const request = window.indexedDB.deleteDatabase('DMMDB');
-		setDeleting(true);
-		request.onsuccess = function () {
-			window.location.assign(redirectUrl);
-		};
-		request.onerror = function () {
-			setDeleting(false);
-			toast.error('Database deletion failed', genericToastOptions);
-		};
-		request.onblocked = function () {
-			setDeleting(false);
-			toast(
-				'Database is still open, refresh the page first and then try deleting again',
-				genericToastOptions
-			);
-		};
+	const handleClearCache = async () => {
+		localStorage.setItem('next_action', 'clear_cache');
+		window.location.assign('/');
 	};
 
 	return (
@@ -320,7 +325,7 @@ function IndexPage() {
 						<div className="mb-2 h-max text-center leading-10">
 							<button
 								className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
-								onClick={() => handleClearCache('/library')}
+								onClick={() => handleClearCache()}
 							>
 								Clear library cache
 							</button>
