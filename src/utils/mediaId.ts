@@ -14,7 +14,7 @@ function isArrayContinuouslyIncreasing(array: number[]) {
 
 export const getMediaId = (
 	info: ParsedMovie | ParsedShow | string,
-	mediaType: 'tv' | 'movie',
+	mediaType: 'tv' | 'movie' | 'other',
 	systemOnlyId = true,
 	tvShowTitleOnly = false
 ) => {
