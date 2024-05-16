@@ -159,7 +159,7 @@ function TorrentsPage() {
 					torrents.forEach((torrent) => newIds.add(torrent.id));
 					const newTorrents = torrents.filter((torrent) => !oldIds.has(torrent.id));
 					setUserTorrentsList((prev) => {
-						return [...prev, ...newTorrents];
+						return [...newTorrents, ...prev];
 					});
 					await torrentDB.addAll(newTorrents);
 
@@ -366,8 +366,8 @@ function TorrentsPage() {
 		);
 		const hashesArr = Array.from(hashes);
 		hashesArr.sort();
-		checkForUncachedInRd(rdKey, userTorrentsList, setUncachedRdHashes, torrentDB)
-			.then((nonVideoHashes) => {
+		checkForUncachedInRd(rdKey, userTorrentsList, setUncachedRdHashes, torrentDB).then(
+			(nonVideoHashes) => {
 				setUserTorrentsList((prev) => {
 					return prev.map((t) => {
 						if (t.id.startsWith('rd:') && nonVideoHashes.has(t.hash)) {
@@ -378,11 +378,13 @@ function TorrentsPage() {
 						return t;
 					});
 				});
-				return userTorrentsList.filter((t) => nonVideoHashes.has(t.hash));
-			})
-			.then((nonVideoTorrents) => {
-				return Promise.all(nonVideoTorrents.map((t) => torrentDB.add(t)));
-			});
+				return Promise.all(
+					userTorrentsList
+						.filter((t) => nonVideoHashes.has(t.hash))
+						.map((t) => torrentDB.add(t))
+				);
+			}
+		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdKey, rdSyncing]);
 
