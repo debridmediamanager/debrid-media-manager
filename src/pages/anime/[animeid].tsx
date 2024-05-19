@@ -11,9 +11,9 @@ import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorr
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { applyQuickSearch2 } from '@/utils/quickSearch';
-import { borderColor, btnColor, btnIcon, fileSize, sortByBiggest } from '@/utils/results';
+import { borderColor, btnColor, btnIcon, fileSize, sortByMedian } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
-import { defaultMovieSize, defaultPlayer } from '@/utils/settings';
+import { defaultPlayer } from '@/utils/settings';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { withAuth } from '@/utils/withAuth';
@@ -49,7 +49,7 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 	imdbRating,
 }) => {
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
-	const movieMaxSize = window.localStorage.getItem('settings:movieMaxSize') || defaultMovieSize;
+	// const movieMaxSize = window.localStorage.getItem('settings:movieMaxSize') || defaultMovieSize;
 	const onlyTrustedTorrents =
 		window.localStorage.getItem('settings:onlyTrustedTorrents') === 'true';
 	const defaultTorrentsFilter =
@@ -100,7 +100,7 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 			}
 
 			if (response.data.results?.length) {
-				const results = sortByBiggest(response.data.results);
+				const results = response.data.results;
 				setSearchResults(
 					results.map((r) => ({
 						...r,
@@ -117,11 +117,17 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 				const instantChecks = [];
 				if (rdKey)
 					instantChecks.push(
-						wrapLoading('RD', instantCheckInRd(rdKey, hashArr, setSearchResults))
+						wrapLoading(
+							'RD',
+							instantCheckInRd(rdKey, hashArr, setSearchResults, sortByMedian)
+						)
 					);
 				if (adKey)
 					instantChecks.push(
-						wrapLoading('AD', instantCheckInAd(adKey, hashArr, setSearchResults))
+						wrapLoading(
+							'AD',
+							instantCheckInAd(adKey, hashArr, setSearchResults, sortByMedian)
+						)
 					);
 				const counts = await Promise.all(instantChecks);
 				setSearchState('loaded');
@@ -409,12 +415,12 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 						const inYourLibrary = downloaded || downloading;
 						if (onlyShowCached && !r.rdAvailable && !r.adAvailable && !inYourLibrary)
 							return;
-						if (
-							movieMaxSize !== '0' &&
-							(r.biggestFileSize ?? r.fileSize) > parseInt(movieMaxSize) * 1024 &&
-							!inYourLibrary
-						)
-							return;
+						// if (
+						// 	movieMaxSize !== '0' &&
+						// 	(r.biggestFileSize ?? r.fileSize) > parseInt(movieMaxSize) * 1024 &&
+						// 	!inYourLibrary
+						// )
+						// 	return;
 						const rdColor = btnColor(r.rdAvailable, r.noVideos);
 						const adColor = btnColor(r.adAvailable, r.noVideos);
 						return (
@@ -432,8 +438,8 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 
 									{r.videoCount > 0 ? (
 										<div className="text-gray-300 text-xs">
-											Total: {fileSize(r.fileSize)} GB; Biggest:{' '}
-											{fileSize(r.biggestFileSize)} GB ({r.videoCount} 📂)
+											Total: {fileSize(r.fileSize)} GB; Median:{' '}
+											{fileSize(r.medianFileSize)} GB ({r.videoCount} 📂)
 										</div>
 									) : (
 										<div className="text-gray-300 text-xs">

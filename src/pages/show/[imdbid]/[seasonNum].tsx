@@ -107,7 +107,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			}
 
 			if (response.data.results?.length) {
-				const results = sortByMedian(response.data.results);
+				const results = response.data.results;
 
 				setSearchResults(
 					results.map((r) => ({
@@ -125,11 +125,17 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				const instantChecks = [];
 				if (rdKey)
 					instantChecks.push(
-						wrapLoading('RD', instantCheckInRd(rdKey, hashArr, setSearchResults))
+						wrapLoading(
+							'RD',
+							instantCheckInRd(rdKey, hashArr, setSearchResults, sortByMedian)
+						)
 					);
 				if (adKey)
 					instantChecks.push(
-						wrapLoading('AD', instantCheckInAd(adKey, hashArr, setSearchResults))
+						wrapLoading(
+							'AD',
+							instantCheckInAd(adKey, hashArr, setSearchResults, sortByMedian)
+						)
 					);
 				const counts = await Promise.all(instantChecks);
 				setSearchState('loaded');
