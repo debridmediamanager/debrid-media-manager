@@ -84,3 +84,35 @@ model Anime {
   @@index([mal_id])
   @@index([imdb_id])
 }
+
+model Subscriptions {
+  id        Int      @id @default(autoincrement())
+  refresh_token String
+  filled    Boolean
+}
+
+model Cast_v2 {
+  id        String   @id @default(uuid())
+  imdbId    String
+  userId    String
+  hash      String
+  original_link       String
+  refresh_token      String
+  updatedAt DateTime @updatedAt
+  duration  Int      @default(0)
+  bitrate   Int      @default(0)
+  size      Int      @default(0)
+  mediaInfo Json?
+
+  @@index([imdbId, userId, updatedAt])
+  @@unique([imdbId, userId, hash])
+}
+
+model Media {
+  id        String   @id @default(uuid())
+  imdbId    String?
+  tmdbId    Int?
+  tvdbId    Int?
+
+  @@index([imdbId])
+}
