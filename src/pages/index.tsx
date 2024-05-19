@@ -248,7 +248,7 @@ function IndexPage() {
 
 						<div className="text-sm mb-1 text-center cursor-pointer">
 							✨{' '}
-							<span onClick={() => setShowBookmarkletInfo(true)}>Bookmarklet❓</span>{' '}
+							<span onClick={() => setShowBookmarkletInfo(true)}>Bookmarklet v1.5.1❓</span>{' '}
 							<a href={BOOKMARKLET} className="bg-blue-500 px-1">
 								🤖DMM
 							</a>
