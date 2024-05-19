@@ -26,7 +26,8 @@ export const wrapLoading = async function (debrid: string, checkAvailability: Pr
 export const instantCheckInRd = async (
 	rdKey: string,
 	hashes: string[],
-	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>
+	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
+	sortFn: (searchResults: SearchResult[]) => SearchResult[]
 ): Promise<number> => {
 	let instantCount = 0;
 	for (const hashGroup of groupBy(20, hashes)) {
@@ -67,7 +68,7 @@ export const instantCheckInRd = async (
 					torrent.rdAvailable = false;
 				}
 			}
-			return newSearchResults;
+			return sortFn(newSearchResults);
 		});
 	}
 
@@ -179,7 +180,8 @@ export const checkForUncachedInRd = async (
 export const instantCheckInAd = async (
 	adKey: string,
 	hashes: string[],
-	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>
+	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
+	sortFn: (searchResults: SearchResult[]) => SearchResult[]
 ): Promise<number> => {
 	let instantCount = 0;
 	const funcs = [];
@@ -245,7 +247,7 @@ export const instantCheckInAd = async (
 						torrent.adAvailable = false;
 					}
 				}
-				return newSearchResults;
+				return sortFn(newSearchResults);
 			});
 		});
 	}

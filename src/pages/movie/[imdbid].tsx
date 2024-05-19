@@ -102,7 +102,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			}
 
 			if (response.data.results?.length) {
-				const results = sortByBiggest(response.data.results);
+				const results = response.data.results;
 				setSearchResults(
 					results.map((r) => ({
 						...r,
@@ -119,11 +119,17 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				const instantChecks = [];
 				if (rdKey)
 					instantChecks.push(
-						wrapLoading('RD', instantCheckInRd(rdKey, hashArr, setSearchResults))
+						wrapLoading(
+							'RD',
+							instantCheckInRd(rdKey, hashArr, setSearchResults, sortByBiggest)
+						)
 					);
 				if (adKey)
 					instantChecks.push(
-						wrapLoading('AD', instantCheckInAd(adKey, hashArr, setSearchResults))
+						wrapLoading(
+							'AD',
+							instantCheckInAd(adKey, hashArr, setSearchResults, sortByBiggest)
+						)
 					);
 				const counts = await Promise.all(instantChecks);
 				setSearchState('loaded');
