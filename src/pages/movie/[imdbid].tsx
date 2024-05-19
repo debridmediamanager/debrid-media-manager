@@ -1,4 +1,6 @@
 import Poster from '@/components/poster';
+import { showInfoForRD } from '@/components/showInfo';
+import { showSubscribeModal } from '@/components/subscribe';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/cast';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
@@ -14,7 +16,6 @@ import { applyQuickSearch2 } from '@/utils/quickSearch';
 import { borderColor, btnColor, btnIcon, fileSize, sortByBiggest } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { defaultMovieSize, defaultPlayer } from '@/utils/settings';
-import { showInfoForRD } from '@/utils/showInfo';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { withAuth } from '@/utils/withAuth';
@@ -345,6 +346,14 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					)}
 				</div>
 				<div>
+					<button
+						className={`mr-2 mt-0 mb-1 bg-rose-700 hover:bg-rose-600 text-white p-1 text-xs rounded font-bold`}
+						onClick={() => {
+							showSubscribeModal();
+						}}
+					>
+						🔔 Subscribe
+					</button>
 					{onlyShowCached && uncachedCount > 0 && (
 						<button
 							className={`mr-2 mt-0 mb-1 bg-blue-700 hover:bg-blue-600 text-white p-1 text-xs rounded`}

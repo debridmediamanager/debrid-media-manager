@@ -1,3 +1,4 @@
+import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { getTorrentInfo } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
@@ -24,7 +25,6 @@ import { applyQuickSearch } from '@/utils/quickSearch';
 import { torrentPrefix } from '@/utils/results';
 import { checkArithmeticSequenceInFilenames, isVideo } from '@/utils/selectable';
 import { defaultPlayer } from '@/utils/settings';
-import { showInfoForAD, showInfoForRD } from '@/utils/showInfo';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';

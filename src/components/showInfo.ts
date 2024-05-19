@@ -1,7 +1,7 @@
 import { MagnetStatus } from '@/services/allDebrid';
 import { TorrentInfoResponse } from '@/services/realDebrid';
+import { isVideo } from '@/utils/selectable';
 import Swal from 'sweetalert2';
-import { isVideo } from './selectable';
 
 export const showInfoForRD = async (
 	app: string,

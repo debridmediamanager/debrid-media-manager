@@ -1,4 +1,5 @@
 import Poster from '@/components/poster';
+import { showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/cast';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
@@ -14,7 +15,6 @@ import { applyQuickSearch2 } from '@/utils/quickSearch';
 import { borderColor, btnColor, btnIcon, fileSize, sortByMedian } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { defaultEpisodeSize, defaultPlayer } from '@/utils/settings';
-import { showInfoForRD } from '@/utils/showInfo';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { withAuth } from '@/utils/withAuth';
