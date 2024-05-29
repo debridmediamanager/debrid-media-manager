@@ -11,6 +11,7 @@ export const showInfoForRD = async (
 	imdbId: string = '',
 	mediaType: string = 'movie' // 'movie' | 'tv'
 ) => {
+	console.log(info.files.filter((f) => f.selected).map((f) => f.id));
 	let warning = '',
 		downloadAllBtn = '';
 	const isIntact = info.fake || info.files.filter((f) => f.selected).length === info.links.length;

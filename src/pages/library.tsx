@@ -171,15 +171,14 @@ function TorrentsPage() {
 							inProgressIds.has(torrent.id)
 					);
 					setUserTorrentsList((prev) => {
+						const newList = [...prev];
 						for (const t of inProgressTorrents) {
 							const idx = prev.findIndex((i) => i.id === t.id);
 							if (idx >= 0) {
-								const newList = [...prev];
 								newList[idx] = t;
-								return newList;
 							}
 						}
-						return prev;
+						return newList;
 					});
 					await torrentDB.addAll(inProgressTorrents);
 
@@ -974,14 +973,12 @@ function TorrentsPage() {
 	const handleChangeType = async (t: UserTorrent) => {
 		t.mediaType = t.mediaType === 'movie' ? 'tv' : t.mediaType === 'tv' ? 'other' : 'movie';
 		setUserTorrentsList((prev) => {
+			const newList = [...prev];
 			const idx = prev.findIndex((i) => i.id === t.id);
 			if (idx >= 0) {
-				// Create a copy of the array and modify the copy
-				const newList = [...prev];
 				newList[idx].mediaType = t.mediaType;
-				return newList;
 			}
-			return prev;
+			return newList;
 		});
 		await torrentDB.add(t);
 	};
@@ -990,9 +987,9 @@ function TorrentsPage() {
 		const info = await getTorrentInfo(rdKey!, t.id.substring(3));
 		if (t.status === UserTorrentStatus.waiting || t.status === UserTorrentStatus.downloading) {
 			setUserTorrentsList((prev) => {
+				const newList = [...prev];
 				const idx = prev.findIndex((i) => i.id === t.id);
 				if (idx >= 0) {
-					const newList = [...prev];
 					newList[idx].progress = info.progress;
 					newList[idx].seeders = info.seeders;
 					newList[idx].speed = info.speed;
@@ -1006,9 +1003,8 @@ function TorrentsPage() {
 						filesize: f.bytes,
 						link: selectedFiles.length === info.links.length ? info.links[idx] : '',
 					}));
-					return newList;
 				}
-				return prev;
+				return newList;
 			});
 			await torrentDB.add(t);
 		}
@@ -1025,15 +1021,14 @@ function TorrentsPage() {
 					info.links.length === 1))
 		) {
 			setUserTorrentsList((prev) => {
+				const newList = [...prev];
 				const idx = prev.findIndex((i) => i.id === t.id);
 				if (idx >= 0) {
-					const newList = [...prev];
 					newList[idx].mediaType = 'other';
 					newList[idx].title = newList[idx].filename;
 					newList[idx].info = undefined;
-					return newList;
 				}
-				return prev;
+				return newList;
 			});
 			await torrentDB.add(t);
 		} else if (
@@ -1045,14 +1040,13 @@ function TorrentsPage() {
 				some(torrentAndFiles, (f) => /\b[a-fA-F0-9]{8}\b/.test(f)))
 		) {
 			setUserTorrentsList((prev) => {
+				const newList = [...prev];
 				const idx = prev.findIndex((i) => i.id === t.id);
 				if (idx >= 0) {
-					const newList = [...prev];
 					newList[idx].mediaType = 'tv';
 					newList[idx].info = filenameParse(t.filename, true);
-					return newList;
 				}
-				return prev;
+				return newList;
 			});
 			await torrentDB.add(t);
 		} else if (
@@ -1064,14 +1058,13 @@ function TorrentsPage() {
 			every(torrentAndFiles, (f) => !/\b[a-fA-F0-9]{8}\b/.test(f))
 		) {
 			setUserTorrentsList((prev) => {
+				const newList = [...prev];
 				const idx = prev.findIndex((i) => i.id === t.id);
 				if (idx >= 0) {
-					const newList = [...prev];
 					newList[idx].mediaType = 'movie';
 					newList[idx].info = filenameParse(t.filename);
-					return newList;
 				}
-				return prev;
+				return newList;
 			});
 			await torrentDB.add(t);
 		}

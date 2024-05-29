@@ -15,10 +15,10 @@ const handler: NextApiHandler = async (req, res) => {
 		!solution ||
 		!(typeof solution === 'string')
 	) {
-		res.status(401).json({ errorMessage: 'Authentication not provided' });
+		res.status(403).json({ errorMessage: 'Authentication not provided' });
 		return;
 	} else if (!validateTokenWithHash(dmmProblemKey.toString(), solution.toString())) {
-		res.status(401).json({ errorMessage: 'Authentication error' });
+		res.status(403).json({ errorMessage: 'Authentication error' });
 		return;
 	}
 
