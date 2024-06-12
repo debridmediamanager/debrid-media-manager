@@ -1,5 +1,5 @@
 import { SearchResult } from '@/services/mediasearch';
-import { FaDownload, FaFastForward } from 'react-icons/fa';
+import { FaDownload } from 'react-icons/fa';
 
 export const borderColor = (downloaded: boolean, downloading: boolean) =>
 	downloaded
@@ -28,8 +28,10 @@ export const torrentPrefix = (id: string) =>
 		<span className="text-[8px] text-black bg-[#fbc730]">AD</span>
 	);
 
-export const btnIcon = (avail: boolean) =>
-	avail ? <FaFastForward className="mr-2 inline" /> : <FaDownload className="mr-2 inline" />;
+export const btnIcon = (avail: boolean) => (avail ? `⚡` : <FaDownload className="mr-2 inline" />);
+
+export const btnLabel = (avail: boolean, debridService: string) =>
+	avail ? <b>Instant {debridService}</b> : `DL with ${debridService}`;
 
 export const sortByMedian = (searchResults: SearchResult[]): SearchResult[] => {
 	searchResults.sort((a, b) => {
