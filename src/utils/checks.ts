@@ -201,6 +201,7 @@ function flexEq(test: string, target: string, targetYears: string[]) {
 		.filter((y) => y !== 1920);
 	if (
 		yearsFromTest.length > 0 &&
+		targetYears.length > 0 &&
 		!yearsFromTest.some(
 			(testYear) =>
 				targetYears.includes(testYear.toString()) ||
