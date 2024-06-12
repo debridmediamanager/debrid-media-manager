@@ -46,7 +46,7 @@ export function grabPossibleSeasonNums(str: string): number[] {
 	return (str.match(/\d+/g) ?? []).map((n) => parseInt(n, 10)).filter((n) => n > 0 && n <= 100);
 }
 
-export function hasYear(test: string, years: string[], strictCheck: boolean = false) {
+export function filenameHasGivenYear(test: string, years: string[], strictCheck: boolean = false) {
 	return strictCheck
 		? years.some((year) => test.includes(year))
 		: years.filter((year) => test.includes(year)).length > 0;
@@ -186,23 +186,42 @@ function countTestTermsInTarget(test: string, target: string, shouldBeInSequence
 	return actual.length;
 }
 
-function flexEq(test: string, target: string, years: string[]) {
-	const target2 = target.replace(/\s+/gi, '');
-	const test2 = test.replace(/\s+/gi, '');
+function flexEq(test: string, target: string, targetYears: string[]) {
+	const targetNoSpc = target.replace(/\s+/gi, '');
+	const testNoSpc = test.replace(/\s+/gi, '');
 
 	// console.log(`🎲 '${target2}' '${test2}' '${detectNonEnglishCharacters(target2)}'`);
 
 	let magicLength = 5; // Math.ceil(magicLength*1.5) = 8
-	if (hasYear(test, years)) magicLength = 3; // Math.ceil(magicLength*1.5) = 5
+	if (filenameHasGivenYear(test, targetYears)) magicLength = 3; // Math.ceil(magicLength*1.5) = 5
 
-	if (naked(target2).length >= magicLength && naked(test2).includes(naked(target2))) {
+	const yearRegex = /(189\d|19\d\d|20[012][012345])/g;
+	const yearsFromTest = [...test.matchAll(yearRegex)]
+		.map((m) => parseInt(m.pop()!, 10))
+		.filter((y) => y !== 1920);
+	if (
+		yearsFromTest.length > 0 &&
+		!yearsFromTest.some(
+			(testYear) =>
+				targetYears.includes(testYear.toString()) ||
+				targetYears.includes((testYear - 1).toString()) ||
+				targetYears.includes((testYear + 1).toString())
+		)
+	) {
+		return false;
+	}
+
+	const shouldCheckNaked = naked(targetNoSpc).length >= magicLength;
+	const shouldCheckRepeats = removeRepeats(targetNoSpc).length >= magicLength;
+	const shouldCheckDiacritics = removeDiacritics(targetNoSpc).length >= magicLength;
+	if (shouldCheckNaked && naked(testNoSpc).includes(naked(targetNoSpc))) {
 		// console.log(
 		// 	`🎲 Test:naked '${naked(target2)}' is found in '${naked(test2)}' | ${target} ${test}`
 		// );
 		return true;
 	} else if (
-		removeRepeats(target2).length >= magicLength &&
-		removeRepeats(test2).includes(removeRepeats(target2))
+		shouldCheckRepeats &&
+		removeRepeats(testNoSpc).includes(removeRepeats(targetNoSpc))
 	) {
 		// console.log(
 		// 	`🎲 Test:removeRepeats '${removeRepeats(target2)}' is found in '${removeRepeats(
@@ -211,8 +230,8 @@ function flexEq(test: string, target: string, years: string[]) {
 		// );
 		return true;
 	} else if (
-		removeDiacritics(target2).length >= magicLength &&
-		removeDiacritics(test2).includes(removeDiacritics(target2))
+		shouldCheckDiacritics &&
+		removeDiacritics(testNoSpc).includes(removeDiacritics(targetNoSpc))
 	) {
 		// console.log(
 		// 	`🎲 Test:removeDiacritics '${removeDiacritics(
@@ -220,7 +239,10 @@ function flexEq(test: string, target: string, years: string[]) {
 		// 	)}' is found in '${removeDiacritics(test2)}' | ${test}`
 		// );
 		return true;
-	} else if (target2.length >= Math.ceil(magicLength * 1.5) && test2.includes(target2)) {
+	} else if (
+		targetNoSpc.length >= Math.ceil(magicLength * 1.5) &&
+		testNoSpc.includes(targetNoSpc)
+	) {
 		// console.log(`🎲 Test:plain '${target2}' is found in '${test2}' | ${test}`);
 		return true;
 	}
@@ -243,31 +265,31 @@ export function matchesTitle(target: string, years: string[], test: string): boo
 	target = target.toLowerCase();
 	test = test.toLowerCase();
 
-	const splits = target.split(/\W+/).filter((e) => e);
-	const containsYear = hasYear(test, years);
+	const targetTerms = target.split(/\W+/).filter((e) => e);
+	const containsYear = filenameHasGivenYear(test, years);
 	if (flexEq(test, target, years)) {
-		const sequenceCheck = countTestTermsInTarget(test, splits.join(' '), true);
+		const sequenceCheck = countTestTermsInTarget(test, targetTerms.join(' '), true);
 		// console.log(`🎲 FlexEq '${target}' is found in '${test}'`, sequenceCheck);
 		return containsYear || sequenceCheck >= 0;
 	}
 
-	const totalTerms = splits.length;
-	if (totalTerms === 0 || (totalTerms <= 2 && !containsYear)) {
+	const targetTermsCount = targetTerms.length;
+	if (targetTermsCount === 0 || (targetTermsCount <= 2 && !containsYear)) {
 		// console.log(`👻 Too few terms in '${target}'`);
 		return false;
 	}
 
-	const keyTerms: string[] = splits.filter(
+	const keyTerms: string[] = targetTerms.filter(
 		(s) => (s.length > 1 && !dictionary.has(s)) || s.length > 5
 	);
 	keyTerms.push(...target.split(/\w+/).filter((e) => e.length > 2));
 	const keySet = new Set(keyTerms);
-	const commonTerms = splits.filter((s) => !keySet.has(s));
+	const commonTerms = targetTerms.filter((s) => !keySet.has(s));
 
-	let hasYearScore = totalTerms * 1.5;
+	let hasYearScore = targetTermsCount * 1.5;
 	let totalScore = keyTerms.length * 2 + commonTerms.length + hasYearScore;
 
-	if (keyTerms.length === 0 && totalTerms <= 2 && !containsYear) {
+	if (keyTerms.length === 0 && targetTermsCount <= 2 && !containsYear) {
 		// console.log(`👻 No identifiable terms in '${target}'`);
 		return false;
 	}
@@ -576,7 +598,10 @@ export function filterByTvConditions(
 				const yearsFromTitle = grabYears(title);
 				const hasYearOnFilename =
 					grabYears(result.title).filter((y) => !yearsFromTitle.includes(y)).length > 0;
-				return (hasYearOnFilename && hasYear(result.title, years)) || !hasYearOnFilename;
+				return (
+					(hasYearOnFilename && filenameHasGivenYear(result.title, years)) ||
+					!hasYearOnFilename
+				);
 			})
 			// check for season number or season name
 			.filter((result) => {
