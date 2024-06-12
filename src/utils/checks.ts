@@ -46,10 +46,13 @@ export function grabPossibleSeasonNums(str: string): number[] {
 	return (str.match(/\d+/g) ?? []).map((n) => parseInt(n, 10)).filter((n) => n > 0 && n <= 100);
 }
 
-export function filenameHasGivenYear(test: string, years: string[], strictCheck: boolean = false) {
-	return strictCheck
-		? years.some((year) => test.includes(year))
-		: years.filter((year) => test.includes(year)).length > 0;
+export function filenameHasGivenYear(test: string, years: string[]) {
+	return years.some(
+		(year) =>
+			test.includes(year) ||
+			test.includes(`${parseInt(year, 10) + 1}`) ||
+			test.includes(`${parseInt(year, 10) - 1}`)
+	);
 }
 
 function removeDiacritics(str: string) {
@@ -249,7 +252,7 @@ export function matchesTitle(target: string, targetYears: string[], test: string
 	target = target.toLowerCase();
 	test = test.toLowerCase();
 
-	const yearRegex = /(189\d|19\d\d|20[012][012345])/g;
+	const yearRegex = /189\d|19\d\d|20[012][012345]/g;
 	const yearsFromTest = [...test.matchAll(yearRegex)]
 		.map((m) => parseInt(m.pop()!, 10))
 		.filter((y) => y !== 1920);
@@ -263,7 +266,7 @@ export function matchesTitle(target: string, targetYears: string[], test: string
 				targetYears.includes((testYear + 1).toString())
 		)
 	) {
-		console.log(`👻 Year mismatch: ${targetYears} vs ${yearsFromTest}`);
+		console.log(`👻 Year mismatch:`, targetYears, yearsFromTest);
 		return false;
 	}
 
@@ -272,12 +275,15 @@ export function matchesTitle(target: string, targetYears: string[], test: string
 	if (flexEq(test, target, targetYears)) {
 		const sequenceCheck = countTestTermsInTarget(test, targetTerms.join(' '), true);
 		// console.log(`🎲 FlexEq '${target}' is found in '${test}'`, sequenceCheck);
+		if (!(containsYear || sequenceCheck >= 0)) {
+			console.log(`👻 FlexEq '${target}' is not '${test}' !!!`);
+		}
 		return containsYear || sequenceCheck >= 0;
 	}
 
 	const targetTermsCount = targetTerms.length;
 	if (targetTermsCount === 0 || (targetTermsCount <= 2 && !containsYear)) {
-		// console.log(`👻 Too few terms in '${target}'`);
+		console.log(`👻 Too few terms in '${target}'`);
 		return false;
 	}
 
@@ -288,23 +294,25 @@ export function matchesTitle(target: string, targetYears: string[], test: string
 	const keySet = new Set(keyTerms);
 	const commonTerms = targetTerms.filter((s) => !keySet.has(s));
 
-	let hasYearScore = targetTermsCount * 1.5;
-	let totalScore = keyTerms.length * 2 + commonTerms.length + hasYearScore;
+	let hasYearScore = targetTermsCount * 0.4;
+	let totalScore = keyTerms.length * 2 + commonTerms.length;
 
 	if (keyTerms.length === 0 && targetTermsCount <= 2 && !containsYear) {
-		// console.log(`👻 No identifiable terms in '${target}'`);
+		console.log(`👻 No identifiable terms in '${target}'`);
 		return false;
 	}
 
-	let foundKeyTerms = countTestTermsInTarget(test, keyTerms.join(' '));
-	let foundCommonTerms = countTestTermsInTarget(test, commonTerms.join(' '));
+	let foundKeyTerms = keyTerms.filter((term) => test.includes(term)).length;
+	let foundCommonTerms = commonTerms.filter((term) => test.includes(term)).length;
 	const score = foundKeyTerms * 2 + foundCommonTerms + (containsYear ? hasYearScore : 0);
-	if (Math.floor(score / 0.85) >= totalScore) {
+	if (Math.floor(score / 0.8) >= totalScore) {
 		// console.log(`🎯 Scored ${score} out of ${totalScore} for target '${target}' in '${test}' (+${foundKeyTerms*2} +${foundCommonTerms} +${containsYear?hasYearScore:0})`, keyTerms, commonTerms);
 		return true;
 	}
 
-	// console.log(`👻 '${target}' is not '${test}' !!!`)
+	console.log(
+		`👻 Found key terms ${foundKeyTerms}, common terms ${foundCommonTerms} in '${test}' (score: ${score}/${totalScore})`
+	);
 	return false;
 }
 
@@ -379,9 +387,9 @@ export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 		} (${imdbId}) (uncommon terms: ${countUncommonWords(tmdbData.title)})`
 	);
 	const year: string =
-		mdbData?.year ??
-		mdbData?.released?.substring(0, 4) ??
-		tmdbData.release_date?.substring(0, 4);
+		`${mdbData?.year}` ??
+		`${mdbData?.released?.substring(0, 4)}` ??
+		`${tmdbData.release_date?.substring(0, 4)}`;
 	const airDate: string = mdbData?.released ?? tmdbData.release_date ?? '2000-01-01';
 	let originalTitle: string | undefined, cleanedTitle: string | undefined;
 
@@ -471,9 +479,9 @@ export function grabTvMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 		`🏏 ${getSeasons(mdbData).length} season(s) of tv show: ${tmdbData.name} (${imdbId})...`
 	);
 	const year: string =
-		mdbData?.year ??
-		mdbData?.released?.substring(0, 4) ??
-		tmdbData.release_date?.substring(0, 4);
+		`${mdbData?.year}` ??
+		`${mdbData?.released?.substring(0, 4)}` ??
+		`${tmdbData.release_date?.substring(0, 4)}`;
 	let originalTitle: string | undefined, cleanedTitle: string | undefined;
 
 	const processedTitle = tmdbData.name
@@ -668,4 +676,4 @@ export const getSeasonNameAndCode = (season: any) => {
 	return { seasonName, seasonCode };
 };
 
-export const getSeasonYear = (season: any) => season.air_date?.substring(0, 4);
+export const getSeasonYear = (season: any): string => season.air_date?.substring(0, 4);
