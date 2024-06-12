@@ -11,7 +11,6 @@ export const showInfoForRD = async (
 	imdbId: string = '',
 	mediaType: string = 'movie' // 'movie' | 'tv'
 ) => {
-	console.log(info.files.filter((f) => f.selected).map((f) => f.id));
 	let warning = '',
 		downloadAllBtn = '';
 	const isIntact = info.fake || info.files.filter((f) => f.selected).length === info.links.length;
@@ -58,11 +57,11 @@ export const showInfoForRD = async (
 				if (app) {
 					if (info.fake) {
 						watchBtn = `
-							<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/instant/${app}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')">👀 Watch</button>
+							<button type="button" class="inline ml-1 bg-teal-500 hover:bg-teal-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/instant/${app}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')">🧐 Watch</button>
 						`;
 					} else {
 						watchBtn = `
-							<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">👀 Watch</button>
+							<button type="button" class="inline ml-1 bg-teal-500 hover:bg-teal-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">🧐 Watch</button>
 						`;
 					}
 					let epRegex = /S(\d+)\s?E(\d+)/i;

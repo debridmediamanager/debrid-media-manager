@@ -12,7 +12,7 @@ import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorr
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { applyQuickSearch2 } from '@/utils/quickSearch';
-import { borderColor, btnColor, btnIcon, fileSize, sortByMedian } from '@/utils/results';
+import { borderColor, btnColor, btnIcon, btnLabel, fileSize, sortByMedian } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { defaultEpisodeSize, defaultPlayer } from '@/utils/settings';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
@@ -511,13 +511,6 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 									)}
 
 									<div className="space-x-2 space-y-2">
-										<button
-											className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1"
-											onClick={() => handleCopyMagnet(r.hash)}
-										>
-											<FaMagnet className="inline" /> Get&nbsp;magnet
-										</button>
-
 										{/* RD */}
 										{rdKey && inLibrary('rd', r.hash) && (
 											<button
@@ -530,11 +523,11 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 										)}
 										{rdKey && notInLibrary('rd', r.hash) && (
 											<button
-												className={`bg-${rdColor}-500 hover:bg-${rdColor}-700 text-white text-xs rounded inline px-1`}
+												className={`bg-${rdColor}-600 hover:bg-${rdColor}-800 text-white text-xs rounded inline px-1`}
 												onClick={() => addRd(r.hash)}
 											>
 												{btnIcon(r.rdAvailable)}
-												Add&nbsp;to&nbsp;RD&nbsp;library
+												{btnLabel(r.rdAvailable, 'RD')}
 											</button>
 										)}
 
@@ -550,11 +543,11 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 										)}
 										{adKey && notInLibrary('ad', r.hash) && (
 											<button
-												className={`bg-${adColor}-500 hover:bg-${adColor}-700 text-white text-xs rounded inline px-1`}
+												className={`bg-${adColor}-600 hover:bg-${adColor}-800 text-white text-xs rounded inline px-1`}
 												onClick={() => addAd(r.hash)}
 											>
 												{btnIcon(r.adAvailable)}
-												Add&nbsp;to&nbsp;AD&nbsp;library
+												{btnLabel(r.adAvailable, 'AD')}
 											</button>
 										)}
 
@@ -575,6 +568,13 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 												Cast✨
 											</button>
 										)}
+
+										<button
+											className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1"
+											onClick={() => handleCopyMagnet(r.hash)}
+										>
+											<FaMagnet className="inline" /> Get&nbsp;magnet
+										</button>
 									</div>
 								</div>
 							</div>
