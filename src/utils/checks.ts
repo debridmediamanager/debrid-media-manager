@@ -195,23 +195,6 @@ function flexEq(test: string, target: string, targetYears: string[]) {
 	let magicLength = 5; // Math.ceil(magicLength*1.5) = 8
 	if (filenameHasGivenYear(test, targetYears)) magicLength = 3; // Math.ceil(magicLength*1.5) = 5
 
-	const yearRegex = /(189\d|19\d\d|20[012][012345])/g;
-	const yearsFromTest = [...test.matchAll(yearRegex)]
-		.map((m) => parseInt(m.pop()!, 10))
-		.filter((y) => y !== 1920);
-	if (
-		yearsFromTest.length > 0 &&
-		targetYears.length > 0 &&
-		!yearsFromTest.some(
-			(testYear) =>
-				targetYears.includes(testYear.toString()) ||
-				targetYears.includes((testYear - 1).toString()) ||
-				targetYears.includes((testYear + 1).toString())
-		)
-	) {
-		return false;
-	}
-
 	const shouldCheckNaked = naked(targetNoSpc).length >= magicLength;
 	const shouldCheckRepeats = removeRepeats(targetNoSpc).length >= magicLength;
 	const shouldCheckDiacritics = removeDiacritics(targetNoSpc).length >= magicLength;
@@ -262,13 +245,31 @@ function flexEq(test: string, target: string, targetYears: string[]) {
 	}
 }
 
-export function matchesTitle(target: string, years: string[], test: string): boolean {
+export function matchesTitle(target: string, targetYears: string[], test: string): boolean {
 	target = target.toLowerCase();
 	test = test.toLowerCase();
 
+	const yearRegex = /(189\d|19\d\d|20[012][012345])/g;
+	const yearsFromTest = [...test.matchAll(yearRegex)]
+		.map((m) => parseInt(m.pop()!, 10))
+		.filter((y) => y !== 1920);
+	if (
+		yearsFromTest.length > 0 &&
+		targetYears.length > 0 &&
+		!yearsFromTest.some(
+			(testYear) =>
+				targetYears.includes(testYear.toString()) ||
+				targetYears.includes((testYear - 1).toString()) ||
+				targetYears.includes((testYear + 1).toString())
+		)
+	) {
+		console.log(`👻 Year mismatch: ${targetYears} vs ${yearsFromTest}`);
+		return false;
+	}
+
 	const targetTerms = target.split(/\W+/).filter((e) => e);
-	const containsYear = filenameHasGivenYear(test, years);
-	if (flexEq(test, target, years)) {
+	const containsYear = filenameHasGivenYear(test, targetYears);
+	if (flexEq(test, target, targetYears)) {
 		const sequenceCheck = countTestTermsInTarget(test, targetTerms.join(' '), true);
 		// console.log(`🎲 FlexEq '${target}' is found in '${test}'`, sequenceCheck);
 		return containsYear || sequenceCheck >= 0;
