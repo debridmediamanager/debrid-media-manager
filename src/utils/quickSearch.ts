@@ -7,13 +7,22 @@ export function applyQuickSearch(query: string, unfiltered: UserTorrent[]) {
 		? unfiltered.filter((t) =>
 				query.split(' ').every((subquery) => {
 					const q = subquery.toLowerCase();
-					return (
-						new RegExp(q, 'i').test(t.filename) ||
-						t.id.substring(0, 3).toLowerCase() === q ||
-						t.id.substring(3).toLowerCase() === q ||
-						t.hash.toLowerCase() === q ||
-						t.serviceStatus.toLowerCase() === q
-					);
+					try {
+						return (
+							new RegExp(q, 'i').test(t.filename) ||
+							t.id.substring(0, 3).toLowerCase() === q ||
+							t.id.substring(3).toLowerCase() === q ||
+							t.hash.toLowerCase() === q ||
+							t.serviceStatus.toLowerCase() === q
+						);
+					} catch (e) {
+						return (
+							t.id.substring(0, 3).toLowerCase() === q ||
+							t.id.substring(3).toLowerCase() === q ||
+							t.hash.toLowerCase() === q ||
+							t.serviceStatus.toLowerCase() === q
+						);
+					}
 				})
 			)
 		: unfiltered;
@@ -24,7 +33,11 @@ export function applyQuickSearch2(query: string, unfiltered: SearchResult[]) {
 		? unfiltered.filter((t) =>
 				query.split(' ').every((subquery) => {
 					const q = subquery.toLowerCase();
-					return new RegExp(q, 'i').test(t.title) || t.hash === q;
+					try {
+						return new RegExp(q, 'i').test(t.title) || t.hash === q;
+					} catch (e) {
+						return t.hash === q;
+					}
 				})
 			)
 		: unfiltered;
