@@ -2,7 +2,7 @@ import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { getTorrentInfo } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
-import { UserTorrent, UserTorrentStatus, keyByStatus, uniqId } from '@/torrent/userTorrent';
+import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
 	handleAddAsMagnetInAd,
 	handleAddAsMagnetInRd,
@@ -21,6 +21,7 @@ import { fetchAllDebrid, fetchRealDebrid, getRdStatus } from '@/utils/fetchTorre
 import { generateHashList, handleShare } from '@/utils/hashList';
 import { checkForUncachedInRd } from '@/utils/instantChecks';
 import { localRestore } from '@/utils/localRestore';
+import { normalize } from '@/utils/mediaId';
 import { applyQuickSearch } from '@/utils/quickSearch';
 import { torrentPrefix } from '@/utils/results';
 import { checkArithmeticSequenceInFilenames, isVideo } from '@/utils/selectable';
@@ -60,6 +61,13 @@ const torrentDB = new UserTorrentDB();
 
 function TorrentsPage() {
 	const router = useRouter();
+	const {
+		title: titleFilter,
+		tvTitle: tvTitleFilter,
+		hash: hashFilter,
+		mediaType,
+		status,
+	} = router.query;
 	const [query, setQuery] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
 
@@ -80,11 +88,15 @@ function TorrentsPage() {
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 
-	const [defaultGrouping] = useState<Record<string, number>>({});
-	const [movieGrouping] = useState<Record<string, number>>({});
+	const [defaultTitleGrouping] = useState<Record<string, number>>({});
+	const [movieTitleGrouping] = useState<Record<string, number>>({});
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
-	const [sameTitleOrHash] = useState<Set<string>>(new Set());
+	const [hashGrouping] = useState<Record<string, number>>({});
+
+	const [sameTitle] = useState<Set<string>>(new Set());
+	const [sameHash] = useState<Set<string>>(new Set());
+
 	const [uncachedRdHashes, setUncachedRdHashes] = useState<Set<string>>(new Set());
 	const [uncachedAdIDs, setUncachedAdIDs] = useState<string[]>([]);
 
@@ -134,6 +146,24 @@ function TorrentsPage() {
 		setCurrentPage(parseInt(page, 10));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router]);
+
+	// pressing arrow keys to navigate
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'ArrowLeft') {
+				handlePrevPage();
+			}
+			if (e.key === 'ArrowRight') {
+				handleNextPage();
+			}
+			const queryBox = document.getElementById('query');
+			if (!queryBox?.matches(':focus') && /^[a-zA-Z]$/.test(e.key)) {
+				document.getElementById('query')?.focus();
+			}
+		};
+		document.addEventListener('keydown', handleKeyDown);
+		return () => document.removeEventListener('keydown', handleKeyDown);
+	}, [handlePrevPage, handleNextPage]);
 
 	const fetchLatestRDTorrents = async function (customLimit?: number) {
 		const oldTorrents = await torrentDB.all();
@@ -301,57 +331,59 @@ function TorrentsPage() {
 	// aggregate metadata
 	useEffect(() => {
 		if (loading) return;
+
 		setGrouping(true);
 		setTotalBytes(0);
-		sameTitleOrHash.clear();
+		sameTitle.clear();
+		sameHash.clear();
 
-		let tmpTotalBytes = 0;
-		clearGroupings(defaultGrouping);
-		clearGroupings(movieGrouping);
+		// title grouping
+		clearGroupings(defaultTitleGrouping);
+		clearGroupings(movieTitleGrouping);
 		clearGroupings(tvGroupingByEpisode);
-		const keyMap: Map<string, number> = new Map();
+		// tv show title grouping
+		clearGroupings(tvGroupingByTitle);
+		// hash grouping
+		clearGroupings(hashGrouping);
 
 		for (const t of userTorrentsList) {
-			if (t.status === UserTorrentStatus.error) continue;
-			else if (t.serviceStatus === 'magnet_conversion') continue;
+			if (/^Magnet/.test(t.title)) continue;
 
-			const key = uniqId(t);
-			if (!keyMap.has(key)) {
-				keyMap.set(key, t.bytes);
-				tmpTotalBytes += t.bytes;
+			// group by hash
+			if (t.hash in hashGrouping) {
+				if (hashGrouping[t.hash] === 1) sameHash.add(t.hash);
+				hashGrouping[t.hash]++;
 			} else {
-				sameTitleOrHash.add(t.title);
-				const prevBytes = keyMap.get(key) || 0;
-				if (prevBytes < t.bytes) {
-					tmpTotalBytes -= prevBytes;
-					tmpTotalBytes += t.bytes;
-					keyMap.set(key, t.bytes);
-				}
+				hashGrouping[t.hash] = 1;
+				setTotalBytes((prev) => prev + t.bytes);
 			}
-			if (t.title in getGroupings(t.mediaType)) {
-				if (getGroupings(t.mediaType)[t.title] === 1) sameTitleOrHash.add(t.title);
-				getGroupings(t.mediaType)[t.title]++;
+
+			/// group by title
+			const titleId = normalize(t.title);
+			if (titleId in getTitleGroupings(t.mediaType)) {
+				if (getTitleGroupings(t.mediaType)[titleId] === 1) sameTitle.add(titleId);
+				getTitleGroupings(t.mediaType)[titleId]++;
 			} else {
-				getGroupings(t.mediaType)[t.title] = 1;
+				getTitleGroupings(t.mediaType)[titleId] = 1;
 			}
-			if (t.mediaType === 'tv') {
-				const title = t.title;
-				if (title in tvGroupingByTitle) {
-					tvGroupingByTitle[title]++;
+
+			/// group by tv title
+			if (t.mediaType === 'tv' && t.info?.title) {
+				const tvShowTitleId = normalize(t.info.title);
+				if (tvShowTitleId in tvGroupingByTitle) {
+					tvGroupingByTitle[tvShowTitleId]++;
 				} else {
-					tvGroupingByTitle[title] = 1;
+					tvGroupingByTitle[tvShowTitleId] = 1;
 				}
 			}
 		}
-
-		setTotalBytes(tmpTotalBytes);
 		setGrouping(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		userTorrentsList,
 		loading,
-		defaultGrouping,
-		movieGrouping,
+		defaultTitleGrouping,
+		movieTitleGrouping,
 		tvGroupingByEpisode,
 		tvGroupingByTitle,
 	]);
@@ -432,7 +464,6 @@ function TorrentsPage() {
 			setHelpTextBasedOnTime();
 			return;
 		}
-		const { filter: titleFilter, mediaType, status } = router.query;
 		let tmpList = userTorrentsList;
 		if (status === 'slow') {
 			tmpList = tmpList.filter(isSlowOrNoLinks);
@@ -440,14 +471,6 @@ function TorrentsPage() {
 			if (helpText !== 'hide')
 				setHelpText(
 					'The displayed torrents either do not contain any links or are older than one hour and lack any seeders. You can use the "Delete shown" option to remove them.'
-				);
-		}
-		if (status === 'sametitleorhash') {
-			tmpList = tmpList.filter((t) => sameTitleOrHash.has(t.title));
-			setFilteredList(applyQuickSearch(query, tmpList));
-			if (helpText !== 'hide')
-				setHelpText(
-					'Torrents shown have the same title parsed from the torrent name. Use "By size" to retain the larger torrent for each title, or "By date" to retain the more recent torrent. Take note: the parser might not work well for multi-season tv show torrents.'
 				);
 		}
 		if (status === 'inprogress') {
@@ -477,10 +500,29 @@ function TorrentsPage() {
 			if (helpText !== 'hide') setHelpText('Torrents that you have selected');
 		}
 		if (titleFilter) {
-			const decodedTitleFilter = decodeURIComponent(titleFilter as string);
-			tmpList = tmpList.filter((t) => decodedTitleFilter === t.title);
+			const decoded = decodeURIComponent(titleFilter as string);
+			tmpList = tmpList.filter((t) => normalize(t.title) === decoded);
 			setFilteredList(applyQuickSearch(query, tmpList));
-			if (helpText !== 'hide') setHelpText(`Torrents shown have the title "${titleFilter}".`);
+		}
+		if (tvTitleFilter) {
+			const decoded = decodeURIComponent(tvTitleFilter as string);
+			tmpList = tmpList.filter(
+				(t) => t.mediaType === 'tv' && t.info?.title && normalize(t.info.title) === decoded
+			);
+			setFilteredList(applyQuickSearch(query, tmpList));
+		}
+		if (hashFilter) {
+			const hashVal = hashFilter as string;
+			tmpList = tmpList.filter((t) => t.hash === hashVal);
+			setFilteredList(applyQuickSearch(query, tmpList));
+		}
+		if (status === 'sametitle') {
+			tmpList = tmpList.filter((t) => sameTitle.has(normalize(t.title)));
+			setFilteredList(applyQuickSearch(query, tmpList));
+		}
+		if (status === 'samehash') {
+			tmpList = tmpList.filter((t) => sameHash.has(t.hash));
+			setFilteredList(applyQuickSearch(query, tmpList));
 		}
 		if (mediaType) {
 			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
@@ -527,14 +569,14 @@ function TorrentsPage() {
 		);
 	}
 
-	const getGroupings = (mediaType: UserTorrent['mediaType']) => {
+	const getTitleGroupings = (mediaType: UserTorrent['mediaType']) => {
 		switch (mediaType) {
 			case 'movie':
-				return movieGrouping;
+				return movieTitleGrouping;
 			case 'tv':
 				return tvGroupingByEpisode;
 			default:
-				return defaultGrouping;
+				return defaultTitleGrouping;
 		}
 	};
 
@@ -679,7 +721,7 @@ function TorrentsPage() {
 		const deleteBigger = deletePreference.isDenied;
 
 		// Get the key by status
-		const getKey = keyByStatus(router.query.status as string);
+		const getKey = (torrent: UserTorrent) => normalize(torrent.title);
 		const dupes: UserTorrent[] = [];
 		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
 			let key = getKey(cur);
@@ -714,7 +756,6 @@ function TorrentsPage() {
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
 		}
-		if (router.query.status === 'sametitleorhash') resetFilters();
 	}
 
 	async function dedupeByRecency() {
@@ -740,7 +781,7 @@ function TorrentsPage() {
 		const deleteOlder = deletePreference.isConfirmed;
 
 		// Get the key by status
-		const getKey = keyByStatus(router.query.status as string);
+		const getKey = (torrent: UserTorrent) => normalize(torrent.title);
 		const dupes: UserTorrent[] = [];
 		filteredList.reduce((acc: { [key: string]: UserTorrent }, cur: UserTorrent) => {
 			let key = getKey(cur);
@@ -775,7 +816,6 @@ function TorrentsPage() {
 		if (!errors.length && !results.length) {
 			toast('No torrents to delete', libraryToastOptions);
 		}
-		if (router.query.status === 'sametitleorhash') resetFilters();
 	}
 
 	async function combineSameHash() {
@@ -1205,10 +1245,18 @@ function TorrentsPage() {
 						👀 Uncached
 					</Link>
 				)}
-				{sameTitleOrHash.size > 0 && (
+				{sameHash.size > 0 && (
 					<Link
-						href="/library?status=sametitleorhash&page=1"
-						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
+						href="/library?status=samehash&page=1"
+						className="mr-2 mb-2 bg-orange-600 hover:bg-orange-800 text-white font-bold py-1 px-1 rounded text-xs"
+					>
+						👀 Same&nbsp;hash
+					</Link>
+				)}
+				{sameTitle.size > 0 && (
+					<Link
+						href="/library?status=sametitle&page=1"
+						className="mr-2 mb-2 bg-amber-600 hover:bg-amber-800 text-white font-bold py-1 px-1 rounded text-xs"
 					>
 						👀 Same&nbsp;title
 					</Link>
@@ -1313,8 +1361,8 @@ function TorrentsPage() {
 					💾 Backup
 				</button>
 
-				{(router.query.status === 'sametitleorhash' ||
-					(router.query.filter && filteredList.length > 1)) && (
+				{(router.query.status === 'sametitle' ||
+					(titleFilter && filteredList.length > 1)) && (
 					<>
 						<button
 							className="mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]"
@@ -1329,14 +1377,17 @@ function TorrentsPage() {
 						>
 							Date 🧹
 						</button>
-
-						<button
-							className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
-							onClick={combineSameHash}
-						>
-							Hash 🧹
-						</button>
 					</>
+				)}
+
+				{(router.query.status === 'samehash' ||
+					(hashFilter && filteredList.length > 1)) && (
+					<button
+						className={`mr-2 mb-2 bg-green-700 hover:bg-green-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
+						onClick={combineSameHash}
+					>
+						Hash 🧹
+					</button>
 				)}
 			</div>
 			{/* End of Main Menu */}
@@ -1402,11 +1453,33 @@ function TorrentsPage() {
 						</thead>
 						<tbody>
 							{currentPageData().map((torrent) => {
-								const groupCount = getGroupings(torrent.mediaType)[torrent.title];
-								const filterText =
-									groupCount > 1 && !router.query.filter
-										? `${groupCount} of same title`
+								/// hash
+								const hashGroupCount = hashGrouping[torrent.hash];
+								let hashFilterText =
+									hashGroupCount > 1 && !hashFilter
+										? `${hashGroupCount} same hash`
 										: '';
+								/// title
+								const titleGroupCount = getTitleGroupings(torrent.mediaType)[
+									normalize(torrent.title)
+								];
+								const titleFilterText =
+									titleGroupCount > 1 && !titleFilter && !hashFilter
+										? `${titleGroupCount} same title`
+										: '';
+								/// tv title
+								let tvTitleFilterText = ``;
+								if (torrent.mediaType === 'tv' && torrent.info?.title) {
+									const tvTitleGroupCount =
+										tvGroupingByTitle[normalize(torrent.info.title)];
+									if (
+										tvTitleGroupCount > 1 &&
+										!tvTitleFilter &&
+										titleGroupCount < tvTitleGroupCount
+									) {
+										tvTitleFilterText = `${tvTitleGroupCount} same show`;
+									}
+								}
 								return (
 									<tr
 										key={torrent.id}
@@ -1448,15 +1521,36 @@ function TorrentsPage() {
 														}
 													</div>
 													&nbsp;<strong>{torrent.title}</strong>{' '}
-													{filterText && (
+													{hashFilterText ? (
 														<Link
-															href={`/library?filter=${encodeURIComponent(
-																torrent.title
-															)}`}
-															className="inline-block bg-orange-500 hover:bg-orange-700 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer"
+															href={`/library?hash=${torrent.hash}&page=1`}
+															className="inline-block bg-orange-600 hover:bg-orange-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer ml-1"
 															onClick={(e) => e.stopPropagation()}
 														>
-															{filterText}
+															{hashFilterText}
+														</Link>
+													) : (
+														titleFilterText && (
+															<Link
+																href={`/library?title=${encodeURIComponent(
+																	normalize(torrent.title)
+																)}&page=1`}
+																className="inline-block bg-amber-600 hover:bg-amber-800 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer ml-1"
+																onClick={(e) => e.stopPropagation()}
+															>
+																{titleFilterText}
+															</Link>
+														)
+													)}
+													{tvTitleFilterText && torrent.info?.title && (
+														<Link
+															href={`/library?tvTitle=${encodeURIComponent(
+																normalize(torrent.info.title)
+															)}&page=1`}
+															className="inline-block bg-sky-700 hover:bg-sky-900 text-white font-bold py-0 px-1 rounded text-xs cursor-pointer ml-1"
+															onClick={(e) => e.stopPropagation()}
+														>
+															{tvTitleFilterText}
 														</Link>
 													)}
 													{torrent.info && (
@@ -1474,7 +1568,7 @@ function TorrentsPage() {
 														>
 															Search again
 														</Link>
-													)}{' '}
+													)}
 													<br />
 												</>
 											)}
