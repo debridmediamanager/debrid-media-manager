@@ -1229,6 +1229,23 @@ function TorrentsPage() {
 					Reset
 				</button>
 
+				{sameHash.size > 0 && (
+					<Link
+						href="/library?status=samehash&page=1"
+						className="mr-2 mb-2 bg-orange-600 hover:bg-orange-800 text-white font-bold py-1 px-1 rounded text-xs"
+					>
+						👀 Same&nbsp;hash
+					</Link>
+				)}
+				{sameTitle.size > 0 && sameHash.size < sameTitle.size && (
+					<Link
+						href="/library?status=sametitle&page=1"
+						className="mr-2 mb-2 bg-amber-600 hover:bg-amber-800 text-white font-bold py-1 px-1 rounded text-xs"
+					>
+						👀 Same&nbsp;title
+					</Link>
+				)}
+
 				{selectedTorrents.size > 0 && (
 					<Link
 						href="/library?status=selected&page=1"
@@ -1243,22 +1260,6 @@ function TorrentsPage() {
 						className="mr-2 mb-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-1 px-1 rounded text-xs"
 					>
 						👀 Uncached
-					</Link>
-				)}
-				{sameHash.size > 0 && (
-					<Link
-						href="/library?status=samehash&page=1"
-						className="mr-2 mb-2 bg-orange-600 hover:bg-orange-800 text-white font-bold py-1 px-1 rounded text-xs"
-					>
-						👀 Same&nbsp;hash
-					</Link>
-				)}
-				{sameTitle.size > 0 && (
-					<Link
-						href="/library?status=sametitle&page=1"
-						className="mr-2 mb-2 bg-amber-600 hover:bg-amber-800 text-white font-bold py-1 px-1 rounded text-xs"
-					>
-						👀 Same&nbsp;title
 					</Link>
 				)}
 
