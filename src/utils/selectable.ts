@@ -8,12 +8,23 @@ export function isVideo(file: { path: string }) {
 	if (filePath.match(/\bsample\b/)) return false;
 	if (filePath.match(/\btrailer\b/)) return false;
 	return (
-		filePath.endsWith('.mkv') ||
-		filePath.endsWith('.mp4') ||
-		filePath.endsWith('.avi') ||
-		filePath.endsWith('.wmv') ||
-		filePath.endsWith('.m4v') ||
-		filePath.endsWith('.m4b')
+		// filePath.endsWith('.3gp') || // confirmed NOT working
+		// filePath.endsWith('.asf') || // not yet confirmed working
+		// filePath.endsWith('.asx') || // not yet confirmed working
+		// filePath.endsWith('.avc') || // not yet confirmed working
+		filePath.endsWith('.avi') || // confirmed working
+		// filePath.endsWith('.divx') || // not yet confirmed working
+		// filePath.endsWith('.flv') || // not yet confirmed working
+		filePath.endsWith('.m2ts') || // confirmed working
+		filePath.endsWith('.m4v') || // confirmed working
+		filePath.endsWith('.mkv') || // confirmed working
+		filePath.endsWith('.mov') || // confirmed working
+		filePath.endsWith('.mp4') || // confirmed working
+		filePath.endsWith('.mpg') || // confirmed working (no watch option)
+		filePath.endsWith('.mpeg') || // confirmed working (no watch option)
+		filePath.endsWith('.ts') || // confirmed working
+		// filePath.endsWith('.vob') || // not yet confirmed working
+		filePath.endsWith('.wmv') // confirmed working
 	);
 }
 
