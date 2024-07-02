@@ -548,3 +548,13 @@ export const getMediaInfo = async (
 		throw error;
 	}
 };
+
+export const getTimeISO = async (): Promise<string> => {
+	try {
+		const response = await axios.get<string>(`${config.realDebridHostname}/rest/1.0/time/iso`);
+		return response.data;
+	} catch (error: any) {
+		console.error('Error fetching time:', error.message);
+		throw error;
+	}
+};
