@@ -1,11 +1,18 @@
+import { getTimeISO } from '@/services/realDebrid';
 import * as crypto from 'crypto';
 
 export async function generateTokenAndHash(): Promise<[string, string]> {
 	const token = generateRandomToken(); // Generate a secure random token
-	const timestamp = Math.floor(Date.now() / 1000); // UNIX timestamp in seconds
+	const timestamp = await fetchTimestamp(); // Fetch the timestamp from the API
 	const tokenWithTimestamp = `${token}-${timestamp}`;
 	const tokenHash = await generateHash(tokenWithTimestamp); // Hash the token with the timestamp
 	return [tokenWithTimestamp, tokenHash]; // Return both the token with embedded timestamp and its hash
+}
+
+async function fetchTimestamp(): Promise<number> {
+	const response = await getTimeISO();
+	const timestamp = Math.floor(new Date(response).getTime() / 1000);
+	return timestamp;
 }
 
 function generateRandomToken(): string {
@@ -25,6 +32,7 @@ async function generateHash(input: string): Promise<string> {
 	const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 	return hashHex;
 }
+
 
 export function validateTokenWithHash(tokenWithTimestamp: string, receivedHash: string): boolean {
 	const [token, timestampStr] = tokenWithTimestamp.split('-');
