@@ -17,7 +17,7 @@ function generateRandomToken(): string {
 async function generateHash(input: string): Promise<string> {
 	// Encode the input string as a Uint8Array
 	const encoder = new TextEncoder();
-	const data = encoder.encode(input);
+	const data = encoder.encode(input+'%25TDxyd$y#8Xo9d');
 	// Hash the data using SHA-256
 	const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
 	// Convert the hash to a hexadecimal string
@@ -31,7 +31,8 @@ export function validateTokenWithHash(tokenWithTimestamp: string, receivedHash: 
 	const timestamp = parseInt(timestampStr, 10);
 	const currentTimestamp = Math.floor(Date.now() / 1000);
 	// Check time validity (5 minutes = 60 seconds)
-	if (Math.abs(currentTimestamp - timestamp) > 60) {
+	const threshold = 60;
+	if (Math.abs(currentTimestamp - timestamp) > threshold) {
 		return false; // Token expired
 	}
 	// Recreate the hash with the received tokenWithTimestamp and compare
