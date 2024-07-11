@@ -11,7 +11,7 @@ const pool = new Pool({
 	port: 5432,
 });
 
-const fetchMovies = async () => {
+const fetchMovies = async (count: number) => {
 	const query = `
         SELECT
             tc.id, ca.value, t.name, t.size
@@ -27,7 +27,7 @@ const fetchMovies = async () => {
             AND ca.source = 'imdb'
         ORDER BY
             tc.created_at DESC
-		LIMIT 500;
+		LIMIT ${count};
     `;
 
 	try {
@@ -66,7 +66,7 @@ const fetchMovies = async () => {
 	}
 };
 
-const fetchShows = async () => {
+const fetchShows = async (count: number) => {
 	const query = `
         SELECT
             tc.id, ca.value, t.name, t.size, tc.episodes as seasons
@@ -82,7 +82,7 @@ const fetchShows = async () => {
             AND ca.source = 'imdb'
         ORDER BY
             tc.created_at DESC
-		LIMIT 500;
+		LIMIT ${count};
     `;
 
 	try {
@@ -123,15 +123,19 @@ const fetchShows = async () => {
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
-	const { mediaType } = req.query;
+	let itemCount = 500;
+	const { mediaType, count } = req.query;
+	if ( typeof count === 'string') {
+		itemCount = parseInt(count, 10);
+	}
 	if (mediaType === 'movie') {
-		await fetchMovies();
+		await fetchMovies(itemCount);
 	} else if (mediaType === 'tv') {
-		await fetchShows();
+		await fetchShows(itemCount);
 	} else {
 		while (true) {
-			await fetchMovies();
-			await fetchShows();
+			await fetchMovies(itemCount);
+			await fetchShows(itemCount);
 			await new Promise((resolve) => setTimeout(resolve, 1000 * 60 * 5));
 		}
 	}
