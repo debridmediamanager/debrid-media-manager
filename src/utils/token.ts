@@ -24,7 +24,7 @@ function generateRandomToken(): string {
 async function generateHash(input: string): Promise<string> {
 	// Encode the input string as a Uint8Array
 	const encoder = new TextEncoder();
-	const data = encoder.encode(input+'%25TDxyd$y#8Xo9d');
+	const data = encoder.encode(input + '%25TDxyd$y#8Xo9d');
 	// Hash the data using SHA-256
 	const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
 	// Convert the hash to a hexadecimal string
@@ -32,7 +32,6 @@ async function generateHash(input: string): Promise<string> {
 	const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 	return hashHex;
 }
-
 
 export function validateTokenWithHash(tokenWithTimestamp: string, receivedHash: string): boolean {
 	const [token, timestampStr] = tokenWithTimestamp.split('-');

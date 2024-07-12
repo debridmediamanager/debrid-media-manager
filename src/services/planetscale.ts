@@ -1,6 +1,6 @@
 import { PrismaClient, Scraped } from '@prisma/client';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
-import { MediaInfoDetails } from './realDebrid';
+import { MediaInfoDetails } from './types';
 
 export class PlanetScaleCache {
 	private static instance: PrismaClient;

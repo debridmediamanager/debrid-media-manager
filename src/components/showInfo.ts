@@ -1,5 +1,5 @@
 import { MagnetStatus } from '@/services/allDebrid';
-import { TorrentInfoResponse } from '@/services/realDebrid';
+import { TorrentInfoResponse } from '@/services/types';
 import { isVideo } from '@/utils/selectable';
 import Swal from 'sweetalert2';
 

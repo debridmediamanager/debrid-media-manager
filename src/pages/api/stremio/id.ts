@@ -1,4 +1,4 @@
-import { UserResponse } from '@/services/realDebrid';
+import { UserResponse } from '@/services/types';
 import axios from 'axios';
 import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';

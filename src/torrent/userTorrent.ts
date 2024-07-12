@@ -1,5 +1,5 @@
 import { MagnetStatus } from '@/services/allDebrid';
-import { TorrentInfoResponse } from '@/services/realDebrid';
+import { TorrentInfoResponse } from '@/services/types';
 import { ParsedFilename } from '@ctrl/video-filename-parser';
 
 export enum UserTorrentStatus {

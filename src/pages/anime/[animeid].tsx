@@ -2,7 +2,7 @@ import { showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/cast';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
-import { TorrentInfoResponse } from '@/services/realDebrid';
+import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
