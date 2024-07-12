@@ -1,8 +1,20 @@
 import axios from 'axios';
-import rateLimit from 'axios-rate-limit';
 import getConfig from 'next/config';
 import qs from 'qs';
-import { AccessTokenResponse, AddMagnetResponse, CredentialsResponse, DeviceCodeResponse, DownloadResponse, MediaInfoResponse, RdInstantAvailabilityResponse, TorrentInfoResponse, UnrestrictResponse, UserResponse, UserTorrentResponse, UserTorrentsResult } from './types';
+import {
+	AccessTokenResponse,
+	AddMagnetResponse,
+	CredentialsResponse,
+	DeviceCodeResponse,
+	DownloadResponse,
+	MediaInfoResponse,
+	RdInstantAvailabilityResponse,
+	TorrentInfoResponse,
+	UnrestrictResponse,
+	UserResponse,
+	UserTorrentResponse,
+	UserTorrentsResult,
+} from './types';
 
 const { publicRuntimeConfig: config } = getConfig();
 

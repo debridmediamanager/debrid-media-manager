@@ -125,7 +125,7 @@ const db = new PlanetScaleCache();
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	let itemCount = 500;
 	const { mediaType, count } = req.query;
-	if ( typeof count === 'string') {
+	if (typeof count === 'string') {
 		itemCount = parseInt(count, 10);
 	}
 	if (mediaType === 'movie') {
