@@ -100,7 +100,7 @@ function IndexPage() {
 			{/* this is made by ChatGPT */}
 			{!deleting && (rdUser || adUser) ? (
 				<>
-					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager</h1>
+					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager <a target='_blank' href="https://www.patreon.com/debridmediamanager">📢</a></h1>
 					<div className="flex flex-col items-center max-w-2xl">
 						<div className="text-md font-bold mb-4 w-screen text-center">
 							{rdUser ? (
@@ -311,6 +311,7 @@ function IndexPage() {
 								</a>
 							</b>
 						</div>
+
 						<div className="text-sm mb-1 text-center">
 							✨
 							<a

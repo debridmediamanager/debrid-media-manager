@@ -1,5 +1,5 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
-import { UserTorrentResponse, getUserTorrentsList } from '@/services/realDebrid';
+import { getUserTorrentsList } from '@/services/realDebrid';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import { every, some } from 'lodash';
@@ -8,6 +8,7 @@ import { getMediaId } from './mediaId';
 import { getTypeByNameAndFileCount } from './mediaType';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
 import { genericToastOptions } from './toastOptions';
+import { UserTorrentResponse } from '@/services/types';
 
 export const fetchRealDebrid = async (
 	rdKey: string,
