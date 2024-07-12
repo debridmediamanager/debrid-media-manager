@@ -8,7 +8,7 @@ export async function reinsertFilteredTorrents(
 	wrapReinsertFn: (t: UserTorrent) => AsyncFunction<void>
 ) {
 	const toReinsert = torrentList.map(wrapReinsertFn);
-	const [results, errors] = await runConcurrentFunctions(toReinsert, 5, 500);
+	const [results, errors] = await runConcurrentFunctions(toReinsert, 1, 250);
 	if (errors.length) {
 		toast.error(`Error reinserting ${errors.length} torrents`, magnetToastOptions);
 	}

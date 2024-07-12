@@ -166,7 +166,7 @@ export const checkForUncachedInRd = async (
 			}
 		});
 	}
-	await runConcurrentFunctions(funcs, 5, 100);
+	await runConcurrentFunctions(funcs, 1, 250);
 	const uncachedHashes = new Set(hashes.filter((hash) => !cachedHashes.has(hash)));
 	setUncachedHashes(uncachedHashes);
 	uncachedHashes.size &&
@@ -251,7 +251,7 @@ export const instantCheckInAd = async (
 			});
 		});
 	}
-	await runConcurrentFunctions(funcs, 5, 100);
+	await runConcurrentFunctions(funcs, 1, 250);
 	return instantCount;
 };
 
@@ -318,6 +318,6 @@ export const instantCheckInAd2 = async (
 			});
 		});
 	}
-	await runConcurrentFunctions(funcs, 5, 100);
+	await runConcurrentFunctions(funcs, 1, 250);
 	return instantCount;
 };

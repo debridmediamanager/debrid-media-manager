@@ -51,7 +51,7 @@ export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boo
 		if (selectedFiles.length === 0) {
 			selectedFiles = response.files.map((file) => `${file.id}`);
 		}
-
+		await new Promise((resolve) => setTimeout(resolve, 250));
 		await selectFiles(rdKey, id.substring(3), selectedFiles, bare);
 	} catch (error) {
 		console.error(error);
@@ -70,7 +70,9 @@ export const handleReinsertTorrentinRd = async (rdKey: string, torrent: UserTorr
 	try {
 		const hash = torrent.hash;
 		const newId = await addHashAsMagnet(rdKey, hash);
+		await new Promise((resolve) => setTimeout(resolve, 250));
 		await handleSelectFilesInRd(rdKey, `rd:${newId}`);
+		await new Promise((resolve) => setTimeout(resolve, 250));
 		await handleDeleteRdTorrent(rdKey, oldId, true);
 		toast.success(`Torrent reinserted (${oldId}👉${newId})`, magnetToastOptions);
 	} catch (error: any) {
