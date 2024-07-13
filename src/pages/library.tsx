@@ -470,7 +470,7 @@ function TorrentsPage() {
 			setFilteredList(applyQuickSearch(query, tmpList));
 			if (helpText !== 'hide')
 				setHelpText(
-					'The displayed torrents either do not contain any links or are older than one hour and lack any seeders. You can use the "Delete shown" option to remove them.'
+					'The displayed torrents are older than one hour and lack any seeders. You can use the "Delete shown" option to remove them.'
 				);
 		}
 		if (status === 'inprogress') {
@@ -551,11 +551,6 @@ function TorrentsPage() {
 				comparison = 1;
 			} else if (a[sortBy.column] < b[sortBy.column]) {
 				comparison = -1;
-			}
-
-			// If comparison is 0 and the column is 'progress', then compare by the length of the links property
-			if (comparison === 0 && sortBy.column === 'progress') {
-				comparison = (a.links || []).length - (b.links || []).length;
 			}
 
 			return isAsc ? comparison : comparison * -1;
@@ -1618,7 +1613,7 @@ function TorrentsPage() {
 													</span>
 												</>
 											) : (
-												`${torrent.links.length} 📂`
+												`${torrent.serviceStatus}`
 											)}
 										</td>
 
