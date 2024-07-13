@@ -102,10 +102,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	const response: BrowseResponse = {};
 	for (const list of topLists) {
 		const itemsResponse = await mdblist.listItems(list.id);
+		const defaultMediaType = list.name.toLowerCase().includes('movie') ? 'movie' : 'show';
 		response[list.name] = itemsResponse
 			.filter((item) => item.imdb_id)
 			.slice(0, 24)
-			.map((item) => `${list.mediatype}:${item.imdb_id}:${item.title}`);
+			.map((item) => `${list.mediatype || defaultMediaType}:${item.imdb_id}:${item.title}`);
 		response[list.name] = shuffle(response[list.name], rng);
 	}
 
