@@ -42,8 +42,6 @@ export interface SelectedFile {
 	link: string;
 }
 
-export const uniqId = (torrent: UserTorrent): string => `${torrent.hash}|${torrent.links.join()}`;
-
 export const keyByStatus = (status: string) => {
 	if (status === 'sametitleorhash') return (torrent: UserTorrent) => torrent.title;
 	return (torrent: UserTorrent) => torrent.hash;
