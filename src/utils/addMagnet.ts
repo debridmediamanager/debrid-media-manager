@@ -13,7 +13,9 @@ export const handleAddAsMagnetInRd = async (
 ) => {
 	try {
 		const id = await addHashAsMagnet(rdKey, hash);
+		await new Promise((resolve) => setTimeout(resolve, 250));
 		await handleSelectFilesInRd(rdKey, `rd:${id}`);
+		await new Promise((resolve) => setTimeout(resolve, 250));
 		if (callback) await callback();
 		toast('Successfully added hash!', magnetToastOptions);
 	} catch (error) {
@@ -31,7 +33,9 @@ export const handleAddMultipleHashesInRd = async (
 	for (const hash of hashes) {
 		try {
 			const id = await addHashAsMagnet(rdKey, hash);
+			await new Promise((resolve) => setTimeout(resolve, 250));
 			await handleSelectFilesInRd(rdKey, `rd:${id}`);
+			await new Promise((resolve) => setTimeout(resolve, 250));
 		} catch (error) {
 			errorCount++;
 			console.error(error);
