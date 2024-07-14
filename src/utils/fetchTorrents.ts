@@ -42,7 +42,6 @@ export const fetchRealDebrid = async (
 
 		for (let page = 1; page <= maxPages; page++) {
 			allPagesPromises.push(getUserTorrentsList(rdKey, limit, page));
-			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
 
 		const pagesOfTorrents = await Promise.all(allPagesPromises);
