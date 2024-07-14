@@ -593,7 +593,7 @@ function TorrentsPage() {
 		const waitingForSelection = torrents
 			.filter((t) => t.serviceStatus === 'waiting_files_selection')
 			.map(wrapSelectFilesFn);
-		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 1, 250);
+		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 1, 300);
 		if (errors.length) {
 			toast.error(`Error selecting files on ${errors.length} torrents`, libraryToastOptions);
 		}
@@ -619,7 +619,7 @@ function TorrentsPage() {
 		)
 			return;
 		const toReinsert = relevantList.map(wrapReinsertFn);
-		const [results, errors] = await runConcurrentFunctions(toReinsert, 1, 250);
+		const [results, errors] = await runConcurrentFunctions(toReinsert, 1, 300);
 		if (errors.length) {
 			toast.error(`Error reinserting ${errors.length} torrents`, magnetToastOptions);
 		}
@@ -739,7 +739,7 @@ function TorrentsPage() {
 
 		// Map duplicates to delete function based on preference
 		const toDelete = dupes.map(wrapDeleteFn);
-		const [results, errors] = await runConcurrentFunctions(toDelete, 1, 250);
+		const [results, errors] = await runConcurrentFunctions(toDelete, 1, 300);
 
 		// Handle toast notifications for errors and results
 		if (errors.length) {
@@ -799,7 +799,7 @@ function TorrentsPage() {
 
 		// Map duplicates to delete function based on preference
 		const toDelete = dupes.map(wrapDeleteFn);
-		const [results, errors] = await runConcurrentFunctions(toDelete, 1, 250);
+		const [results, errors] = await runConcurrentFunctions(toDelete, 1, 300);
 
 		// Handle toast notifications for errors and results
 		if (errors.length) {
@@ -857,7 +857,7 @@ function TorrentsPage() {
 				);
 			}
 		});
-		const [results, errors] = await runConcurrentFunctions(toReinsertAndDelete, 1, 250);
+		const [results, errors] = await runConcurrentFunctions(toReinsertAndDelete, 1, 300);
 		if (errors.length) {
 			toast.error(`Error with merging ${errors.length} torrents`, libraryToastOptions);
 		}
@@ -915,7 +915,7 @@ function TorrentsPage() {
 						.map(wrapAddMagnetFn);
 					const concurrencyCount = 1;
 					const refreshTorrents = async (_: number) => {
-						await new Promise((r) => setTimeout(r, 250));
+						await new Promise((r) => setTimeout(r, 300));
 					};
 					const [results, errors] = await runConcurrentFunctions(
 						toAdd,

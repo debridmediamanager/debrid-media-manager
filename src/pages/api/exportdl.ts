@@ -28,7 +28,7 @@ export const exportDownloadLinks = async (rdKey: string, torrentId: string, ipAd
 		const info = await getTorrentInfo(rdKey, torrentId, true);
 		filename = info.original_filename;
 		for (const link of info.links) {
-			await new Promise((resolve) => setTimeout(resolve, 250));
+			await new Promise((resolve) => setTimeout(resolve, 300));
 			try {
 				const resp = await unrestrictLink(rdKey, link, ipAddress, true);
 				downloadLinks += resp.download + '\n';

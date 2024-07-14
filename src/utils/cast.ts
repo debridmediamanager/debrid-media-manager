@@ -52,7 +52,7 @@ export const handleCastTvShow = async (
 		}
 	});
 
-	const [results] = await runConcurrentFunctions(yetToCast, 1, 250);
+	const [results] = await runConcurrentFunctions(yetToCast, 1, 300);
 	if (results.length) {
 		toast.success(`Finished casting all episodes in TV series torrent`, castToastOptions);
 	}

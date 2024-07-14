@@ -8,7 +8,7 @@ export async function deleteFilteredTorrents(
 	wrapDeleteFn: (t: UserTorrent) => AsyncFunction<void>
 ) {
 	const toDelete = torrentList.map(wrapDeleteFn);
-	const [results, errors] = await runConcurrentFunctions(toDelete, 1, 250);
+	const [results, errors] = await runConcurrentFunctions(toDelete, 1, 300);
 	if (errors.length) {
 		toast.error(`Error deleting ${errors.length} torrents`, magnetToastOptions);
 	}
