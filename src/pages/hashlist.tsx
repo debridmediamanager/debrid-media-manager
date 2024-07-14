@@ -233,7 +233,7 @@ function HashlistPage() {
 		const yetToDownload = filteredList
 			.filter((t) => !libraryHashes.has(t.hash))
 			.map(wrapDownloadFilesInRdFn);
-		const [results, errors] = await runConcurrentFunctions(yetToDownload, 1, 250);
+		const [results, errors] = await runConcurrentFunctions(yetToDownload, 1, 300);
 		await fetchRealDebrid(
 			rdKey!,
 			async (torrents) => {
@@ -265,7 +265,7 @@ function HashlistPage() {
 		const yetToDownload = filteredList
 			.filter((t) => !libraryHashes.has(t.hash))
 			.map(wrapDownloadFilesInAdFn);
-		const [results, errors] = await runConcurrentFunctions(yetToDownload, 1, 250);
+		const [results, errors] = await runConcurrentFunctions(yetToDownload, 1, 300);
 		if (errors.length) {
 			toast.error(`Error downloading files on ${errors.length} torrents`);
 		}
