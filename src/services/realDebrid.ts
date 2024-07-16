@@ -21,7 +21,7 @@ const { publicRuntimeConfig: config } = getConfig();
 export const getDeviceCode = async () => {
 	try {
 		const response = await axios.get<DeviceCodeResponse>(
-			`${config.proxy}${config.realDebridHostname}/oauth/v2/device/code`,
+			`${config.realDebridHostname}/oauth/v2/device/code`,
 			{
 				params: {
 					client_id: config.realDebridClientId,
