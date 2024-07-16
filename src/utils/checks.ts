@@ -252,24 +252,6 @@ export function matchesTitle(target: string, targetYears: string[], test: string
 	target = target.toLowerCase();
 	test = test.toLowerCase();
 
-	const yearRegex = /189\d|19\d\d|20[012][012345]/g;
-	const yearsFromTest = [...test.matchAll(yearRegex)]
-		.map((m) => parseInt(m.pop()!, 10))
-		.filter((y) => y !== 1920);
-	if (
-		yearsFromTest.length > 0 &&
-		targetYears.length > 0 &&
-		!yearsFromTest.some(
-			(testYear) =>
-				targetYears.includes(testYear.toString()) ||
-				targetYears.includes((testYear - 1).toString()) ||
-				targetYears.includes((testYear + 1).toString())
-		)
-	) {
-		console.log(`👻 Year mismatch:`, targetYears, yearsFromTest);
-		return false;
-	}
-
 	const targetTerms = target.split(/\W+/).filter((e) => e);
 	const containsYear = filenameHasGivenYear(test, targetYears);
 	if (flexEq(test, target, targetYears)) {
@@ -314,6 +296,27 @@ export function matchesTitle(target: string, targetYears: string[], test: string
 		`👻 Found key terms ${foundKeyTerms}, common terms ${foundCommonTerms} in '${test}' (score: ${score}/${totalScore})`
 	);
 	return false;
+}
+
+export function matchesYear(test: string, targetYears: string[]): boolean {
+	const yearRegex = /189\d|19\d\d|20[012][012345]/g;
+	const yearsFromTest = [...test.matchAll(yearRegex)]
+		.map((m) => parseInt(m.pop()!, 10))
+		.filter((y) => y !== 1920);
+	if (
+		yearsFromTest.length > 0 &&
+		targetYears.length > 0 &&
+		!yearsFromTest.some(
+			(testYear) =>
+				targetYears.includes(testYear.toString()) ||
+				targetYears.includes((testYear - 1).toString()) ||
+				targetYears.includes((testYear + 1).toString())
+		)
+	) {
+		console.log(`👻 Year mismatch:`, targetYears, yearsFromTest);
+		return false;
+	}
+	return true;
 }
 
 export function includesMustHaveTerms(mustHaveTerms: string[], testTitle: string) {
@@ -365,7 +368,11 @@ export function meetsTitleConditions(
 	years: string[],
 	testTitle: string
 ): boolean {
-	return matchesTitle(targetTitle, years, testTitle) && hasNoBannedTerms(targetTitle, testTitle);
+	return (
+		matchesTitle(targetTitle, years, testTitle) &&
+		hasNoBannedTerms(targetTitle, testTitle) &&
+		matchesYear(testTitle, years)
+	);
 }
 
 export function countUncommonWords(title: string) {

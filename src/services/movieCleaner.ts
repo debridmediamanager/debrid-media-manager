@@ -3,6 +3,7 @@ import {
 	getAllPossibleTitles,
 	grabMovieMetadata,
 	matchesTitle,
+	matchesYear,
 	meetsTitleConditions,
 } from '@/utils/checks';
 import axios from 'axios';
@@ -143,7 +144,7 @@ export async function cleanMovieScrapes(
 				.map(
 					(s) =>
 						`⚡ ${s.title} ${
-							titles.some((t) => matchesTitle(t, [year], s.title)) ? '✅' : '❌'
+							titles.some((t) => matchesYear(s.title, [year])) ? '✅' : '❌'
 						}`
 				)
 		);
