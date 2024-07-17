@@ -108,7 +108,6 @@ function HashlistPage() {
 		`${service}:${hash}` in hashAndProgress && hashAndProgress[`${service}:${hash}`] < 100;
 	const isDownloaded = (service: string, hash: string) =>
 		`${service}:${hash}` in hashAndProgress && hashAndProgress[`${service}:${hash}`] === 100;
-	const inLibrary = (service: string, hash: string) => `${service}:${hash}` in hashAndProgress;
 	const notInLibrary = (service: string, hash: string) =>
 		!(`${service}:${hash}` in hashAndProgress);
 
@@ -166,7 +165,6 @@ function HashlistPage() {
 	async function filterList() {
 		const notYetDownloaded = await filterOutAlreadyDownloaded(userTorrentsList);
 		let tmpList = notYetDownloaded;
-		tmpList = tmpList.filter((t) => t.rdAvailable || t.adAvailable);
 		// ensure tmpList is also unique in terms of hash
 		tmpList = tmpList.filter((t, i, self) => self.findIndex((s) => s.hash === t.hash) === i);
 		if (Object.keys(router.query).length === 0) {
@@ -183,6 +181,8 @@ function HashlistPage() {
 			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
 			setFilteredList(applyQuickSearch(tmpList));
 		}
+		if (!rdKey && !adKey) return;
+		tmpList = tmpList.filter((t) => t.rdAvailable || t.adAvailable);
 	}
 	useEffect(() => {
 		filterList();
@@ -328,10 +328,7 @@ function HashlistPage() {
 	return (
 		<div className="mx-2 my-1">
 			<Head>
-				<title>
-					Debrid Media Manager - Hash list:{' '}
-					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB
-				</title>
+				<title>Debrid Media Manager - Hash list ({userTorrentsList.length} files)</title>
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-2">
@@ -405,6 +402,14 @@ function HashlistPage() {
 					>
 						Reset
 					</Link>
+				)}
+
+				{!rdKey && !adKey && (
+					<>
+						<span className="mr-2 mb-2 text-white py-1 px-2 rounded">
+							Please login to Real-Debrid or AllDebrid to download
+						</span>
+					</>
 				)}
 
 				{(rdKey || adKey) && (
