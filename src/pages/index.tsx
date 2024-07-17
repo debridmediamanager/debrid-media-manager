@@ -20,6 +20,23 @@ function IndexPage() {
 	const [showBookmarkletInfo, setShowBookmarkletInfo] = useState(false);
 
 	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			(window as any).registerMagnetHandler = () => {
+				if ('registerProtocolHandler' in navigator) {
+					try {
+						navigator.registerProtocolHandler(
+							'magnet',
+							`${window.location.origin}/library?addMagnet=%s`
+						);
+					} catch (error) {
+						console.error('Error registering protocol handler:', error);
+					}
+				}
+			};
+		}
+	}, []);
+
+	useEffect(() => {
 		if (rdError) {
 			toast.error(
 				'Real-Debrid get user info failed, try clearing DMM site data and login again'
