@@ -97,11 +97,11 @@ export async function getUserTorrentsList(
 	page: number = 1
 ): Promise<UserTorrentsResult> {
 	const client = await createTorrentsClient(accessToken);
-	const host = limit === 1 ? `${config.proxy}${config.realDebridHostname}` : config.realDebridHostname;
-	const response = await client.get<UserTorrentResponse[]>(
-		`${host}/rest/1.0/torrents`,
-		{ params: { page, limit } }
-	);
+	const host =
+		limit === 1 ? `${config.proxy}${config.realDebridHostname}` : config.realDebridHostname;
+	const response = await client.get<UserTorrentResponse[]>(`${host}/rest/1.0/torrents`, {
+		params: { page, limit },
+	});
 
 	const {
 		data,
