@@ -322,6 +322,31 @@ export const unrestrictLink = async (
 	}
 };
 
+export const proxyUnrestrictLink = async (
+	accessToken: string,
+	link: string
+): Promise<UnrestrictResponse> => {
+	try {
+		const body = JSON.stringify({ link });
+		const headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`,
+		};
+
+		const client = await createAPIClient(accessToken);
+		const response = await client.post<UnrestrictResponse>(
+			`https://unrestrict.debridmediamanager.com/`,
+			body,
+			{ headers }
+		);
+
+		return response.data;
+	} catch (error: any) {
+		console.error('Error checking unrestrict:', error.message);
+		throw error;
+	}
+};
+
 export const getMediaInfo = async (
 	accessToken: string,
 	downloadId: string,
@@ -389,5 +414,5 @@ function createAxiosClient(token: string): AxiosInstance {
 	});
 }
 
-const createAPIClient = executeWithRateLimit(createAxiosClient, 255);
-const createTorrentsClient = executeWithRateLimit(createAxiosClient, 1005);
+const createAPIClient = executeWithRateLimit(createAxiosClient, 350);
+const createTorrentsClient = executeWithRateLimit(createAxiosClient, 1200);
