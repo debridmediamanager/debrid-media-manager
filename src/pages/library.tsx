@@ -1,6 +1,6 @@
 import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { getTorrentInfo } from '@/services/realDebrid';
+import { getTorrentInfo, proxyUnrestrictLink } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
@@ -111,6 +111,29 @@ function TorrentsPage() {
 	const relevantList = selectedTorrents.size
 		? userTorrentsList.filter((t) => selectedTorrents.has(t.id))
 		: filteredList;
+
+	// export download links list
+	useEffect(() => {
+		if (typeof window !== 'undefined' && rdKey) {
+			(window as any).exportLinks = async (filename: string, links: string[]) => {
+				let textContent = '';
+				for (const link of links) {
+					try {
+						const resp = await proxyUnrestrictLink(rdKey, link);
+						textContent += resp.download + '\n';
+					} catch (e) {
+						console.log('exportdownload, unrestrict error', e);
+					}
+				}
+				const blob = new Blob([textContent], { type: 'text/plain' });
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(blob);
+				link.download = `${filename}.txt`;
+				link.click();
+				URL.revokeObjectURL(link.href);
+			};
+		}
+	}, [rdKey]);
 
 	// add hash to library
 	useEffect(() => {
