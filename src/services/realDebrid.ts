@@ -1,141 +1,22 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import getConfig from 'next/config';
 import qs from 'qs';
+import {
+	AccessTokenResponse,
+	AddMagnetResponse,
+	CredentialsResponse,
+	DeviceCodeResponse,
+	DownloadResponse,
+	MediaInfoResponse,
+	RdInstantAvailabilityResponse,
+	TorrentInfoResponse,
+	UnrestrictResponse,
+	UserResponse,
+	UserTorrentResponse,
+	UserTorrentsResult,
+} from './types';
 
 const { publicRuntimeConfig: config } = getConfig();
-
-interface DeviceCodeResponse {
-	device_code: string;
-	user_code: string;
-	verification_url: string;
-	expires_in: number;
-	interval: number;
-	direct_verification_url: string;
-}
-
-interface CredentialsResponse {
-	client_id: string;
-	client_secret: string;
-}
-
-interface AccessTokenResponse {
-	access_token: string;
-	expires_in: number;
-	refresh_token: string;
-	token_type: string;
-}
-
-export interface UserResponse {
-	id: number;
-	username: string;
-	email: string;
-	points: number;
-	locale: string;
-	avatar: string;
-	type: string;
-	premium: number;
-	expiration: string;
-}
-
-export interface UserTorrentResponse {
-	id: string;
-	filename: string;
-	hash: string;
-	bytes: number;
-	host: string;
-	split: number;
-	progress: number;
-	speed: number;
-	status: string;
-	added: string;
-	links: string[];
-	ended: string;
-	seeders: number;
-}
-
-export interface DownloadResponse {
-	id: string;
-	filename: string;
-	mimeType: string;
-	filesize: number;
-	link: string;
-	host: string;
-	host_icon: string;
-	chunks: number;
-	download: string;
-	streamable: number;
-	generated: string;
-}
-
-export interface UnrestrictResponse {
-	id: string;
-	filename: string;
-	mimeType: string;
-	filesize: number;
-	link: string;
-	host: string;
-	chunks: number;
-	crc: number;
-	download: string;
-	streamable: number;
-}
-
-export interface TorrentInfoResponse {
-	id: string;
-	filename: string;
-	original_filename: string;
-	hash: string;
-	bytes: number;
-	original_bytes: number;
-	host: string;
-	split: number;
-	progress: number;
-	status: string;
-	added: string;
-	files: {
-		id: number;
-		path: string;
-		bytes: number;
-		selected: number;
-	}[];
-	links: string[];
-	ended: string;
-	speed: number;
-	seeders: number;
-	fake: boolean;
-}
-
-interface FileData {
-	filename: string;
-	filesize: number;
-}
-
-interface SelectionVariant {
-	[fileId: number]: FileData;
-}
-
-interface HosterHash {
-	[hoster: string]: SelectionVariant[];
-}
-
-interface MasterHash {
-	[hash: string]: HosterHash;
-}
-
-interface UnrestrictCheckResponse {
-	host: string;
-	link: string;
-	filename: string;
-	filesize: number;
-	supported: number;
-}
-
-export interface RdInstantAvailabilityResponse extends MasterHash {}
-
-export interface AddMagnetResponse {
-	id: string;
-	uri: string;
-}
 
 export const getDeviceCode = async () => {
 	try {
@@ -199,13 +80,9 @@ export const getToken = async (clientId: string, clientSecret: string, code: str
 
 export const getCurrentUser = async (accessToken: string) => {
 	try {
-		const headers = {
-			Authorization: `Bearer ${accessToken}`,
-		};
-
-		const response = await axios.get<UserResponse>(
-			`${config.realDebridHostname}/rest/1.0/user`,
-			{ headers }
+		const client = await createAPIClient(accessToken);
+		const response = await client.get<UserResponse>(
+			`${config.realDebridHostname}/rest/1.0/user`
 		);
 		return response.data;
 	} catch (error: any) {
@@ -214,24 +91,17 @@ export const getCurrentUser = async (accessToken: string) => {
 	}
 };
 
-interface UserTorrentsResult {
-	data: UserTorrentResponse[];
-	totalCount: number | null;
-}
-
 export async function getUserTorrentsList(
 	accessToken: string,
 	limit: number = 0,
 	page: number = 1
 ): Promise<UserTorrentsResult> {
-	const headers = {
-		Authorization: `Bearer ${accessToken}`,
-	};
-
-	const response = await axios.get<UserTorrentResponse[]>(
-		`${config.realDebridHostname}/rest/1.0/torrents`,
-		{ headers, params: { page, limit } }
-	);
+	const client = await createTorrentsClient(accessToken);
+	const host =
+		limit === 1 ? `${config.proxy}${config.realDebridHostname}` : config.realDebridHostname;
+	const response = await client.get<UserTorrentResponse[]>(`${host}/rest/1.0/torrents`, {
+		params: { page, limit },
+	});
 
 	const {
 		data,
@@ -252,18 +122,15 @@ export async function getUserTorrentsList(
 
 export const getDownloads = async (accessToken: string): Promise<DownloadResponse[]> => {
 	try {
-		const headers = {
-			Authorization: `Bearer ${accessToken}`,
-		};
-
 		let downloads: DownloadResponse[] = [];
 		let page = 1;
 		let limit = 2500;
 
 		while (true) {
-			const response = await axios.get<DownloadResponse[]>(
+			const client = await createAPIClient(accessToken);
+			const response = await client.get<DownloadResponse[]>(
 				`${config.realDebridHostname}/rest/1.0/downloads`,
-				{ headers, params: { page, limit } }
+				{ params: { page, limit } }
 			);
 
 			const {
@@ -297,15 +164,11 @@ export const getDownloads = async (accessToken: string): Promise<DownloadRespons
 
 export const getTorrentInfo = async (accessToken: string, id: string, bare: boolean = false) => {
 	try {
-		const headers = {
-			Authorization: `Bearer ${accessToken}`,
-		};
-
-		const response = await axios.get<TorrentInfoResponse>(
+		const client = await createAPIClient(accessToken);
+		const response = await client.get<TorrentInfoResponse>(
 			`${
 				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
-			}/rest/1.0/torrents/info/${id}`,
-			{ headers }
+			}/rest/1.0/torrents/info/${id}`
 		);
 		return response.data;
 	} catch (error: any) {
@@ -319,15 +182,9 @@ export const rdInstantCheck = async (
 	hashes: string[]
 ): Promise<RdInstantAvailabilityResponse> => {
 	try {
-		const headers = {
-			Authorization: `Bearer ${accessToken}`,
-		};
-
-		const response = await axios.get<RdInstantAvailabilityResponse>(
-			`${config.realDebridHostname}/rest/1.0/torrents/instantAvailability/${hashes.join(
-				'/'
-			)}`,
-			{ headers }
+		const client = await createAPIClient(accessToken);
+		const response = await client.get<RdInstantAvailabilityResponse>(
+			`${config.realDebridHostname}/rest/1.0/torrents/instantAvailability/${hashes.join('/')}`
 		);
 		return response.data;
 	} catch (error: any) {
@@ -343,13 +200,13 @@ export const addMagnet = async (
 ): Promise<string> => {
 	try {
 		const headers = {
-			Authorization: `Bearer ${accessToken}`,
 			'Content-Type': 'application/x-www-form-urlencoded',
 		};
 		const data = { magnet };
 		const formData = qs.stringify(data);
 
-		const response = await axios.post<AddMagnetResponse>(
+		const client = await createAPIClient(accessToken);
+		const response = await client.post<AddMagnetResponse>(
 			`${
 				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
 			}/rest/1.0/torrents/addMagnet`,
@@ -385,12 +242,12 @@ export const selectFiles = async (
 ) => {
 	try {
 		const headers = {
-			Authorization: `Bearer ${accessToken}`,
 			'Content-Type': 'application/x-www-form-urlencoded',
 		};
 		const formData = qs.stringify({ files: files.join(',') });
 
-		await axios.post(
+		const client = await createAPIClient(accessToken);
+		await client.post(
 			`${
 				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
 			}/rest/1.0/torrents/selectFiles/${id}`,
@@ -405,17 +262,11 @@ export const selectFiles = async (
 
 export const deleteTorrent = async (accessToken: string, id: string, bare: boolean = false) => {
 	try {
-		const headers = {
-			Authorization: `Bearer ${accessToken}`,
-		};
-
-		await axios.delete(
+		const client = await createAPIClient(accessToken);
+		await client.delete(
 			`${
 				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
-			}/rest/1.0/torrents/delete/${id}`,
-			{
-				headers,
-			}
+			}/rest/1.0/torrents/delete/${id}`
 		);
 	} catch (error: any) {
 		console.error('Error deleting torrent:', error.message);
@@ -425,13 +276,8 @@ export const deleteTorrent = async (accessToken: string, id: string, bare: boole
 
 export const deleteDownload = async (accessToken: string, id: string) => {
 	try {
-		const headers = {
-			Authorization: `Bearer ${accessToken}`,
-		};
-
-		await axios.delete(`${config.realDebridHostname}/rest/1.0/downloads/delete/${id}`, {
-			headers,
-		});
+		const client = await createAPIClient(accessToken);
+		await client.delete(`${config.realDebridHostname}/rest/1.0/downloads/delete/${id}`);
 	} catch (error: any) {
 		console.error('Error deleting download:', error.message);
 		throw error;
@@ -457,11 +303,11 @@ export const unrestrictLink = async (
 
 		params.append('link', link);
 		const headers = {
-			Authorization: `Bearer ${accessToken}`,
 			'Content-Type': 'application/x-www-form-urlencoded',
 		};
 
-		const response = await axios.post<UnrestrictResponse>(
+		const client = await createAPIClient(accessToken);
+		const response = await client.post<UnrestrictResponse>(
 			`${
 				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
 			}/rest/1.0/unrestrict/link`,
@@ -476,54 +322,30 @@ export const unrestrictLink = async (
 	}
 };
 
-export interface MediaInfoVideoDetails {
-	stream: string;
-	lang: string;
-	lang_iso: string;
-	codec: string;
-	colorspace: string;
-	width: number;
-	height: number;
-}
+export const proxyUnrestrictLink = async (
+	accessToken: string,
+	link: string
+): Promise<UnrestrictResponse> => {
+	try {
+		const body = JSON.stringify({ link });
+		const headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`,
+		};
 
-export interface MediaInfoAudioDetails {
-	stream: string;
-	lang: string;
-	lang_iso: string;
-	codec: string;
-	sampling: number;
-	channels: number;
-}
+		const client = await createAPIClient(accessToken);
+		const response = await client.post<UnrestrictResponse>(
+			`https://unrestrict.debridmediamanager.com/`,
+			body,
+			{ headers }
+		);
 
-export interface MediaInfoSubtitlesDetails {
-	stream: string;
-	lang: string;
-	lang_iso: string;
-	type: string;
-}
-
-export interface MediaInfoDetails {
-	video: { [key: string]: MediaInfoVideoDetails };
-	audio: { [key: string]: MediaInfoAudioDetails };
-	subtitles: { [key: string]: MediaInfoSubtitlesDetails };
-}
-
-export interface MediaInfoResponse {
-	filename: string;
-	hoster: string;
-	link: string;
-	type: string;
-	season: string | null;
-	episode: string | null;
-	year: string | null;
-	duration: number;
-	bitrate: number;
-	size: number;
-	details: MediaInfoDetails;
-	poster_path: string;
-	audio_image: string;
-	backdrop_path: string;
-}
+		return response.data;
+	} catch (error: any) {
+		console.error('Error checking unrestrict:', error.message);
+		throw error;
+	}
+};
 
 export const getMediaInfo = async (
 	accessToken: string,
@@ -531,15 +353,11 @@ export const getMediaInfo = async (
 	bare: boolean = false
 ): Promise<MediaInfoResponse> => {
 	try {
-		const headers = {
-			Authorization: `Bearer ${accessToken}`,
-		};
-
-		const response = await axios.get<MediaInfoResponse>(
+		const client = await createAPIClient(accessToken);
+		const response = await client.get<MediaInfoResponse>(
 			`${
 				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
-			}/rest/1.0/streaming/mediaInfos/${downloadId}`,
-			{ headers }
+			}/rest/1.0/streaming/mediaInfos/${downloadId}`
 		);
 
 		return response.data;
@@ -558,3 +376,43 @@ export const getTimeISO = async (): Promise<string> => {
 		throw error;
 	}
 };
+
+// Delay function that returns a promise which resolves after a given time
+const delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Wrapper function to control the rate of execution
+function executeWithRateLimit<T extends (...args: any[]) => any>(
+	fn: T,
+	interval: number
+): (...args: Parameters<T>) => Promise<ReturnType<T>> {
+	let lastExecutionTime = 0;
+	let queue: Promise<void> = Promise.resolve();
+
+	return async function (...args: Parameters<T>): Promise<ReturnType<T>> {
+		queue = queue.then(async () => {
+			const now = Date.now();
+			const timeSinceLastExecution = now - lastExecutionTime;
+
+			if (timeSinceLastExecution < interval) {
+				await delay(interval - timeSinceLastExecution);
+			}
+
+			lastExecutionTime = Date.now();
+			return fn(...args);
+		});
+
+		return queue as Promise<ReturnType<T>>;
+	};
+}
+
+// Function to create an Axios client with a given token
+function createAxiosClient(token: string): AxiosInstance {
+	return axios.create({
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+}
+
+const createAPIClient = executeWithRateLimit(createAxiosClient, 350);
+const createTorrentsClient = executeWithRateLimit(createAxiosClient, 1200);

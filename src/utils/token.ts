@@ -33,13 +33,13 @@ async function generateHash(input: string): Promise<string> {
 	return hashHex;
 }
 
-
 export function validateTokenWithHash(tokenWithTimestamp: string, receivedHash: string): boolean {
 	const [token, timestampStr] = tokenWithTimestamp.split('-');
 	const timestamp = parseInt(timestampStr, 10);
 	const currentTimestamp = Math.floor(Date.now() / 1000);
 	// Check time validity (5 minutes = 60 seconds)
-	if (Math.abs(currentTimestamp - timestamp) > 60) {
+	const threshold = 60;
+	if (Math.abs(currentTimestamp - timestamp) > threshold) {
 		return false; // Token expired
 	}
 	// Recreate the hash with the received tokenWithTimestamp and compare

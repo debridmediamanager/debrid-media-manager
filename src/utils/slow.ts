@@ -6,10 +6,9 @@ export function isSlowOrNoLinks(t: UserTorrent) {
 	const now = new Date();
 	const ageInMillis = now.getTime() - addedDate.getTime();
 	return (
-		(t.links.length === 0 && t.status === UserTorrentStatus.finished) ||
-		(t.status === UserTorrentStatus.downloading &&
-			ageInMillis >= oldTorrentAge &&
-			t.seeders === 0)
+		t.status === UserTorrentStatus.downloading &&
+		ageInMillis >= oldTorrentAge &&
+		t.seeders === 0
 	);
 }
 

@@ -21,13 +21,13 @@ export const getStreamUrl = async (
 		const id = await addHashAsMagnet(rdKey, hash, true);
 		try {
 			await handleSelectFilesInRd(rdKey, `rd:${id}`, true);
-			const torrent = await getTorrentInfo(rdKey, id, true);
+			const torrentInfo = await getTorrentInfo(rdKey, id, true);
 			let link = '';
 
-			const fileIdx = torrent.files
+			const fileIdx = torrentInfo.files
 				.filter((f) => f.selected)
 				.findIndex((f) => f.id === fileId);
-			link = torrent.links[fileIdx] ?? torrent.links[0];
+			link = torrentInfo.links[fileIdx] ?? torrentInfo.links[0];
 
 			const resp = await unrestrictLink(rdKey, link, ipAddress, true);
 			if (!resp.streamable) {

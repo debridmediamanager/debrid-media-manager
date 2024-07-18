@@ -1,5 +1,5 @@
 import { MagnetStatus } from '@/services/allDebrid';
-import { TorrentInfoResponse } from '@/services/realDebrid';
+import { TorrentInfoResponse } from '@/services/types';
 import { ParsedFilename } from '@ctrl/video-filename-parser';
 
 export enum UserTorrentStatus {
@@ -41,8 +41,6 @@ export interface SelectedFile {
 	filesize: number;
 	link: string;
 }
-
-export const uniqId = (torrent: UserTorrent): string => `${torrent.hash}|${torrent.links.join()}`;
 
 export const keyByStatus = (status: string) => {
 	if (status === 'sametitleorhash') return (torrent: UserTorrent) => torrent.title;

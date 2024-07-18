@@ -1,5 +1,6 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
-import { UserTorrentResponse, getUserTorrentsList } from '@/services/realDebrid';
+import { getUserTorrentsList } from '@/services/realDebrid';
+import { UserTorrentResponse } from '@/services/types';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import { every, some } from 'lodash';
@@ -41,10 +42,6 @@ export const fetchRealDebrid = async (
 
 		for (let page = 1; page <= maxPages; page++) {
 			allPagesPromises.push(getUserTorrentsList(rdKey, limit, page));
-			// if multiple of 5, wait for 1 second
-			if (page % 5 === 0) {
-				await new Promise((resolve) => setTimeout(resolve, 1000));
-			}
 		}
 
 		const pagesOfTorrents = await Promise.all(allPagesPromises);
@@ -62,10 +59,7 @@ export const fetchRealDebrid = async (
 async function processTorrents(torrentData: UserTorrentResponse[]): Promise<UserTorrent[]> {
 	return Promise.all(
 		torrentData.map((torrentInfo) => {
-			let mediaType = getTypeByNameAndFileCount(
-				torrentInfo.filename,
-				torrentInfo.links.length
-			);
+			let mediaType = getTypeByNameAndFileCount(torrentInfo.filename);
 			const serviceStatus = torrentInfo.status;
 			let status: UserTorrentStatus;
 			switch (torrentInfo.status) {

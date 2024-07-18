@@ -51,7 +51,6 @@ export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boo
 		if (selectedFiles.length === 0) {
 			selectedFiles = response.files.map((file) => `${file.id}`);
 		}
-
 		await selectFiles(rdKey, id.substring(3), selectedFiles, bare);
 	} catch (error) {
 		console.error(error);

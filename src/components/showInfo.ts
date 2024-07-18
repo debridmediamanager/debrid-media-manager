@@ -1,5 +1,5 @@
 import { MagnetStatus } from '@/services/allDebrid';
-import { TorrentInfoResponse } from '@/services/realDebrid';
+import { TorrentInfoResponse } from '@/services/types';
 import { isVideo } from '@/utils/selectable';
 import Swal from 'sweetalert2';
 
@@ -24,13 +24,16 @@ export const showInfoForRD = async (
 		} else {
 			warning = `<div class="text-sm text-red-500">Warning: Some files have expired</div>`;
 		}
-	} else if (info.links.length > 1) {
+	}
+	if (info.links.length > 1) {
 		downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
-		<input type="hidden" name="links" value="${info.links.join('\n')}" />
-		<button type="submit" class="inline ml-1 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm">🔗 Download all links</button>
-	</form>`;
+			<input type="hidden" name="links" value="${info.links.join('\n')}" />
+			<button type="submit" class="inline ml-1 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm">🔗 Download all links</button>
+		</form>`;
+	}
+	if (info.links.length > 0) {
 		downloadAllBtn += `
-		<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/exportdl?token=${rdKey}&torrentId=${info.id}')">📤 Export DL links</button>
+		<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="exportLinks('${info.original_filename}', [${info.links.map(l => `'${l}'`).join(',')}])">📤 Export DL links</button>
 	`;
 	}
 

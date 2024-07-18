@@ -1,6 +1,6 @@
 import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { getTorrentInfo } from '@/services/realDebrid';
+import { getTorrentInfo, proxyUnrestrictLink } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
@@ -111,6 +111,29 @@ function TorrentsPage() {
 	const relevantList = selectedTorrents.size
 		? userTorrentsList.filter((t) => selectedTorrents.has(t.id))
 		: filteredList;
+
+	// export download links list
+	useEffect(() => {
+		if (typeof window !== 'undefined' && rdKey) {
+			(window as any).exportLinks = async (filename: string, links: string[]) => {
+				let textContent = '';
+				for (const link of links) {
+					try {
+						const resp = await proxyUnrestrictLink(rdKey, link);
+						textContent += resp.download + '\n';
+					} catch (e) {
+						console.log('exportdownload, unrestrict error', e);
+					}
+				}
+				const blob = new Blob([textContent], { type: 'text/plain' });
+				const link = document.createElement('a');
+				link.href = URL.createObjectURL(blob);
+				link.download = `${filename}.txt`;
+				link.click();
+				URL.revokeObjectURL(link.href);
+			};
+		}
+	}, [rdKey]);
 
 	// add hash to library
 	useEffect(() => {
@@ -470,7 +493,7 @@ function TorrentsPage() {
 			setFilteredList(applyQuickSearch(query, tmpList));
 			if (helpText !== 'hide')
 				setHelpText(
-					'The displayed torrents either do not contain any links or are older than one hour and lack any seeders. You can use the "Delete shown" option to remove them.'
+					'The displayed torrents are older than one hour and lack any seeders. You can use the "Delete shown" option to remove them.'
 				);
 		}
 		if (status === 'inprogress') {
@@ -553,11 +576,6 @@ function TorrentsPage() {
 				comparison = -1;
 			}
 
-			// If comparison is 0 and the column is 'progress', then compare by the length of the links property
-			if (comparison === 0 && sortBy.column === 'progress') {
-				comparison = (a.links || []).length - (b.links || []).length;
-			}
-
 			return isAsc ? comparison : comparison * -1;
 		});
 	}
@@ -598,7 +616,7 @@ function TorrentsPage() {
 		const waitingForSelection = torrents
 			.filter((t) => t.serviceStatus === 'waiting_files_selection')
 			.map(wrapSelectFilesFn);
-		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 5, 500);
+		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 4, 0);
 		if (errors.length) {
 			toast.error(`Error selecting files on ${errors.length} torrents`, libraryToastOptions);
 		}
@@ -624,7 +642,7 @@ function TorrentsPage() {
 		)
 			return;
 		const toReinsert = relevantList.map(wrapReinsertFn);
-		const [results, errors] = await runConcurrentFunctions(toReinsert, 5, 500);
+		const [results, errors] = await runConcurrentFunctions(toReinsert, 4, 0);
 		if (errors.length) {
 			toast.error(`Error reinserting ${errors.length} torrents`, magnetToastOptions);
 		}
@@ -744,7 +762,7 @@ function TorrentsPage() {
 
 		// Map duplicates to delete function based on preference
 		const toDelete = dupes.map(wrapDeleteFn);
-		const [results, errors] = await runConcurrentFunctions(toDelete, 5, 500);
+		const [results, errors] = await runConcurrentFunctions(toDelete, 4, 0);
 
 		// Handle toast notifications for errors and results
 		if (errors.length) {
@@ -804,7 +822,7 @@ function TorrentsPage() {
 
 		// Map duplicates to delete function based on preference
 		const toDelete = dupes.map(wrapDeleteFn);
-		const [results, errors] = await runConcurrentFunctions(toDelete, 5, 500);
+		const [results, errors] = await runConcurrentFunctions(toDelete, 4, 0);
 
 		// Handle toast notifications for errors and results
 		if (errors.length) {
@@ -862,7 +880,7 @@ function TorrentsPage() {
 				);
 			}
 		});
-		const [results, errors] = await runConcurrentFunctions(toReinsertAndDelete, 5, 500);
+		const [results, errors] = await runConcurrentFunctions(toReinsertAndDelete, 4, 0);
 		if (errors.length) {
 			toast.error(`Error with merging ${errors.length} torrents`, libraryToastOptions);
 		}
@@ -918,14 +936,11 @@ function TorrentsPage() {
 						.map((f) => f.hash)
 						.filter((h) => !allHashes.has(h))
 						.map(wrapAddMagnetFn);
-					const concurrencyCount = 5;
-					const refreshTorrents = async (_: number) => {
-						await new Promise((r) => setTimeout(r, 500));
-					};
+					const concurrencyCount = 1;
 					const [results, errors] = await runConcurrentFunctions(
 						toAdd,
 						concurrencyCount,
-						refreshTorrents
+						0
 					);
 					if (results.length) {
 						await fetchLatestRDTorrents(Math.ceil(results.length * 1.1));
@@ -1618,7 +1633,7 @@ function TorrentsPage() {
 													</span>
 												</>
 											) : (
-												`${torrent.links.length} 📂`
+												`${torrent.serviceStatus}`
 											)}
 										</td>
 

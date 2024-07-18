@@ -1,4 +1,4 @@
-import { TorrentInfoResponse } from '@/services/realDebrid';
+import { TorrentInfoResponse } from '@/services/types';
 
 const FILE_SIZE_PCT_THRESHOLD = 0.15;
 
