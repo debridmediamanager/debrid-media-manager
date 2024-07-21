@@ -1,8 +1,9 @@
 #!/bin/bash
 
 function find_free_port() {
+    local port
     port=$(shuf -i 1024-65535 -n 1)
-    while netstat -an | grep -q LISTEN:$port; do
+    while ss -ltn | grep -q ":$port "; do
         port=$(shuf -i 1024-65535 -n 1)
     done
     echo $port
@@ -12,7 +13,7 @@ function wait_for_healthz_ok() {
     local url="$1"
     local response=""
     while true; do
-        response=$(curl -s "$url" | jq -r '.status')
+        response=$(curl -s "$url" | jq -r '.status' 2>/dev/null)
         if [ "$response" == "ok" ]; then
             break
         else
@@ -23,9 +24,15 @@ function wait_for_healthz_ok() {
 }
 
 function launch_scraper() {
-    DMM_PATH="/home/ben/debrid-media-manager"
+    local DMM_PATH="/home/ben/debrid-media-manager"
+    local SESSION_NAME
+    local PARAM
+    local SLUG
+    local PORT
+    local AGE
+
     echo "$0"
-    echo "$(readlink -f $0)"
+    echo "$(readlink -f "$0")"
 
     echo "Launching scraper ($DMM_PATH): $1..."
 
@@ -78,13 +85,13 @@ function launch_scraper() {
         PORT=$(find_free_port)
         SESSION_NAME="$SLUG-$PORT"
         AGE="0"
-        tmux new-session -d -s $SESSION_NAME
-        tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        tmux new-window -t $SESSION_NAME:1
+        tmux new-session -d -s "$SESSION_NAME"
+        tmux send-keys -t "$SESSION_NAME:0" "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        tmux new-window -t "$SESSION_NAME:1"
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
         timeout 3 curl "http://localhost:$PORT/api/scrapers/singlelist?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=5&listId=$PARAM&lastSeason=true"
         sleep 1
-        tmux kill-window -t $SESSION_NAME:1
+        tmux kill-window -t "$SESSION_NAME:1"
 
     elif [ "$1" = "newreleases" ]; then
         PARAM="46446"
@@ -92,25 +99,25 @@ function launch_scraper() {
         PORT=$(find_free_port)
         SESSION_NAME="$SLUG-$PORT"
         AGE="0"
-        tmux new-session -d -s $SESSION_NAME
-        tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        tmux new-window -t $SESSION_NAME:1
+        tmux new-session -d -s "$SESSION_NAME"
+        tmux send-keys -t "$SESSION_NAME:0" "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        tmux new-window -t "$SESSION_NAME:1"
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
         timeout 3 curl "http://localhost:$PORT/api/scrapers/singlelist?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=5&listId=$PARAM&lastSeason=true"
         sleep 1
-        tmux kill-window -t $SESSION_NAME:1
+        tmux kill-window -t "$SESSION_NAME:1"
 
     # torrentio scraper
     elif [ "$1" = "torrentio" ]; then
         PORT=$(find_free_port)
         SESSION_NAME="torrentio-$PORT"
-        tmux new-session -d -s $SESSION_NAME
-        tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        tmux new-window -t $SESSION_NAME:1
+        tmux new-session -d -s "$SESSION_NAME"
+        tmux send-keys -t "$SESSION_NAME:0" "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        tmux new-window -t "$SESSION_NAME:1"
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
         timeout 3 curl "http://localhost:$PORT/api/scrapers/torrentio"
         sleep 1
-        tmux kill-window -t $SESSION_NAME:1
+        tmux kill-window -t "$SESSION_NAME:1"
 
     # for individual movies
     elif [[ "$1" =~ ^tt[a-z0-9]{3,20}$ ]]; then
@@ -118,13 +125,13 @@ function launch_scraper() {
         PORT=$(find_free_port)
         SESSION_NAME="$PARAM-$PORT"
         AGE="$2"
-        tmux new-session -d -s $SESSION_NAME
-        tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        tmux new-window -t $SESSION_NAME:1
+        tmux new-session -d -s "$SESSION_NAME"
+        tmux send-keys -t "$SESSION_NAME:0" "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        tmux new-window -t "$SESSION_NAME:1"
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
         timeout 3 curl "http://localhost:$PORT/api/scrapers/imdb?replaceOldScrape=false&id=$PARAM"
         sleep 1
-        tmux kill-window -t $SESSION_NAME:1
+        tmux kill-window -t "$SESSION_NAME:1"
 
     # for individual movies, but replace old scrape (useful if match algo has been updated)
     elif [[ "$1" =~ ^rtt[a-z0-9]{3,20}$ ]]; then
@@ -132,13 +139,13 @@ function launch_scraper() {
         PORT=$(find_free_port)
         SESSION_NAME="$PARAM-$PORT"
         AGE="$2"
-        tmux new-session -d -s $SESSION_NAME
-        tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        tmux new-window -t $SESSION_NAME:1
+        tmux new-session -d -s "$SESSION_NAME"
+        tmux send-keys -t "$SESSION_NAME:0" "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        tmux new-window -t "$SESSION_NAME:1"
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
         timeout 3 curl "http://localhost:$PORT/api/scrapers/imdb?replaceOldScrape=true&id=$PARAM"
         sleep 1
-        tmux kill-window -t $SESSION_NAME:1
+        tmux kill-window -t "$SESSION_NAME:1"
 
     # it will search for multiple lists by name (e.g. series, top, etc.)
     elif [[ "$1" =~ ^[a-z]{3,20}$ ]]; then
@@ -146,13 +153,13 @@ function launch_scraper() {
         PORT=$(find_free_port)
         SESSION_NAME="$PARAM-$PORT"
         AGE="$2"
-        tmux new-session -d -s $SESSION_NAME
-        tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        tmux new-window -t $SESSION_NAME:1
+        tmux new-session -d -s "$SESSION_NAME"
+        tmux send-keys -t "$SESSION_NAME:0" "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        tmux new-window -t "$SESSION_NAME:1"
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
         timeout 3 curl "http://localhost:$PORT/api/scrapers/listoflists?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=3&search=$PARAM"
         sleep 1
-        tmux kill-window -t $SESSION_NAME:1
+        tmux kill-window -t "$SESSION_NAME:1"
 
     # it will search for a single list by id
     else
@@ -161,15 +168,17 @@ function launch_scraper() {
         PORT=$(find_free_port)
         SESSION_NAME="$SLUG-$PORT"
         AGE="$2"
-        tmux new-session -d -s $SESSION_NAME
-        tmux send-keys -t $SESSION_NAME:0 "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
-        tmux new-window -t $SESSION_NAME:1
+        tmux new-session -d -s "$SESSION_NAME"
+        tmux send-keys -t "$SESSION_NAME:0" "cd $DMM_PATH && npm start -- -p $PORT && exit" C-m
+        tmux new-window -t "$SESSION_NAME:1"
         wait_for_healthz_ok "http://localhost:$PORT/api/healthz"
         timeout 3 curl "http://localhost:$PORT/api/scrapers/singlelist?skipMs=1&rescrapeIfXDaysOld=$AGE&quantity=3&listId=$PARAM"
         sleep 1
-        tmux kill-window -t $SESSION_NAME:1
+        tmux kill-window -t "$SESSION_NAME:1"
     fi
 
-    tmux ls | grep $SESSION_NAME
+    tmux ls | grep "$SESSION_NAME"
     echo "Launched $SESSION_NAME"
 }
+
+launch_scraper "$1"
