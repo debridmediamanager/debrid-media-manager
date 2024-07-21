@@ -65,9 +65,6 @@ const nextConfig = {
 		allDebridAgent: 'debridMediaManager',
 		traktClientId: '8a7455d06804b07fa25e27454706c6f2107b6fe5ed2ad805eff3b456a17e79f0',
 	},
-	serverActions: {
-        bodySizeLimit: '100mb' // Set desired value here
-    },
 };
 
 module.exports = nextConfig;

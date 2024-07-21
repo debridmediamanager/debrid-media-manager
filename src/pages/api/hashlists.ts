@@ -7,6 +7,12 @@ const OWNER = 'debridmediamanager';
 const REPO = 'hashlists';
 const REF = 'heads/main';
 
+export const config = {
+	api: {
+		responseLimit: false,
+	},
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		res.status(405).json({ message: 'Method not allowed' });
