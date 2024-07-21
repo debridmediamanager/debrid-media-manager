@@ -33,7 +33,7 @@ export const showInfoForRD = async (
 	}
 	if (info.links.length > 0) {
 		downloadAllBtn += `
-		<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="exportLinks('${info.original_filename}', [${info.links.map(l => `'${l}'`).join(',')}])">📤 Export DL links</button>
+		<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])">📤 Export DL links</button>
 	`;
 	}
 
