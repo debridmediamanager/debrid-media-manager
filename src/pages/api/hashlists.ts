@@ -9,7 +9,9 @@ const REF = 'heads/main';
 
 export const config = {
 	api: {
-		responseLimit: false,
+		bodyParser: {
+			sizeLimit: '100mb',
+		},
 	},
 };
 
