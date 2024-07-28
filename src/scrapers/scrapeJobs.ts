@@ -36,6 +36,7 @@ export async function generateScrapeJobs(
 	seasonRestriction: number = 0,
 	replaceOldScrape: boolean = false
 ) {
+	// console.log(`[scrapeJobs] Generating scrape jobs for ${imdbId}`);
 	let tmdbSearch, mdbInfo;
 	try {
 		tmdbSearch = await axios.get(getTmdbSearch(imdbId));
