@@ -482,6 +482,7 @@ function TorrentsPage() {
 		'Tip: You can restore a local backup by using the "Local restore" button. It will only restore the torrents that are not already in your library.',
 		'Tip: The quick search box will filter the list by filename and id. You can use multiple words or even regex to filter your library. This way, you can select multiple torrents and delete them at once, or share them as a hash list.',
 		'Have you tried clicking on a torrent? You can see the links, the progress, and the status of the torrent. You can also select the files you want to download.',
+		'TorBox seeds back! Make sure you do too!',
 		'I don\'t know what to put here, so here\'s a random tip: "The average person walks the equivalent of five times around the world in a lifetime."',
 	];
 	function setHelpTextBasedOnTime() {
@@ -1439,7 +1440,7 @@ function TorrentsPage() {
 			</div>
 			{/* End of Main Menu */}
 			{helpText && helpText !== 'hide' && (
-				<div className="bg-blue-900 text-xs" onClick={() => setHelpText('hide')}>
+				<div className="bg-blue-900 text-xs p-2 my-1 rounded" onClick={() => setHelpText('hide')}>
 					💡 {helpText}
 				</div>
 			)}
