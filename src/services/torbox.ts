@@ -56,3 +56,30 @@ export const tbInstantCheck = async (apiKey: string, hashes: string[]) => {
         throw error;
     }
 }
+
+export const createTorBoxTorrent = async (apiKey: string, hashes: string[]) => {
+    var allResponses = []
+    try {
+        for (let i = 0; i < hashes.length; i++) {
+            let endpoint = `${config.torboxHostname}/torrents/createtorrent`;
+            const response = await axios.post(endpoint, {
+                magnet: `magnet:?xt=urn:btih:${hashes[i]}`
+            }, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Authorization": `Bearer ${apiKey}`
+                },
+                validateStatus: () => true
+            });
+            var responseData = response.data;
+            if (responseData.error) {
+                throw responseData.detail
+            }
+            allResponses.push(response.data)
+        }
+        return allResponses
+    } catch (error) {
+        console.error("Error creating torrent in TorBox:", (error as any).message)
+        throw error
+    }
+};

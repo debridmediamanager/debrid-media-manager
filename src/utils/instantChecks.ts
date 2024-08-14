@@ -330,7 +330,6 @@ export const instantCheckInTb = async (
 						torrent.tbAvailable = false;
 					}
 				}
-				console.log(newSearchResults)
 				return newSearchResults;
 			});
 		});

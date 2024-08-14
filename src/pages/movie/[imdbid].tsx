@@ -5,7 +5,7 @@ import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
-import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
+import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleAddAsMagnetInTb, handleCopyMagnet } from '@/utils/addMagnet';
 import { handleCastMovie } from '@/utils/cast';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
@@ -226,6 +226,11 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			async (torrents: UserTorrent[]) => await torrentDB.addAll(torrents)
 		);
 		await fetchHashAndProgress();
+	}
+
+	async function addTb(hash: string) {
+		await handleAddAsMagnetInTb(tbKey!, hash);
+		
 	}
 
 	async function deleteRd(hash: string) {
@@ -492,7 +497,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										{adKey && notInLibrary('ad', r.hash) && (
 											<button
 												className={`bg-${adColor}-500 hover:bg-${adColor}-700 text-white text-xs rounded inline px-1`}
-												onClick={() => addAd(r.hash)}
+												onClick={() => addTb(r.hash)}
 											>
 												{btnIcon(r.adAvailable)}
 												Add&nbsp;to&nbsp;AD&nbsp;library
@@ -512,7 +517,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										{tbKey && notInLibrary('tb', r.hash) && (
 											<button
 												className={`bg-[#04BF8A] hover:bg-[#095842] text-white text-xs rounded inline px-1`}
-												onClick={() => addAd(r.hash)}
+												onClick={() => addTb(r.hash)}
 											>
 												{btnIcon(r.tbAvailable)}
 												Add&nbsp;to&nbsp;TB&nbsp;library
