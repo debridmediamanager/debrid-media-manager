@@ -1423,7 +1423,6 @@ function TorrentsPage() {
 						</thead>
 						<tbody>
 							{currentPageData().map((torrent) => {
-								console.log(torrent)
 								const groupCount = getGroupings(torrent.mediaType)[torrent.title];
 								const filterText =
 									groupCount > 1 && !router.query.filter
@@ -1473,7 +1472,7 @@ function TorrentsPage() {
 															]
 														}
 													</div>
-													&nbsp;<strong>{torrent.name}</strong>{' '}
+													&nbsp;<strong>{torrent.filename}</strong>{' '}
 													{filterText && (
 														<Link
 															href={`/library?filter=${encodeURIComponent(
