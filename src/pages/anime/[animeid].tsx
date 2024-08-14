@@ -4,10 +4,10 @@ import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
-import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
+import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleAddAsMagnetInTb, handleCopyMagnet } from '@/utils/addMagnet';
 import { handleCastMovie } from '@/utils/cast';
-import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
-import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
+import { handleDeleteAdTorrent, handleDeleteRdTorrent, handleDeleteTbTorrent } from '@/utils/deleteTorrent';
+import { fetchAllDebrid, fetchRealDebrid, fetchTorBox } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, instantCheckInTb, wrapLoading } from '@/utils/instantChecks';
 import { applyQuickSearch2 } from '@/utils/quickSearch';
 import { borderColor, btnColor, btnIcon, fileSize, sortByBiggest } from '@/utils/results';
@@ -254,6 +254,29 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 		}
 	}
 
+	async function addTb(hash: string) {
+		await handleAddAsMagnetInTb(tbKey!, hash);
+		await fetchTorBox(
+			tbKey!,
+			async (torrents: UserTorrent[]) => await torrentDB.addAll(torrents)
+		)
+		await fetchHashAndProgress();
+	}
+
+	async function deleteTb(hash: string) {
+		const torrents = await torrentDB.getAllByHash(hash);
+		for (const t of torrents) {
+			if (!t.id.startsWith('tb:')) continue;
+			await handleDeleteTbTorrent(tbKey!, t.id);
+			await torrentDB.deleteByHash('tb', hash);
+			setHashAndProgress((prev) => {
+				const newHashAndProgress = { ...prev };
+				delete newHashAndProgress[`tb:${hash}`];
+				return newHashAndProgress;
+			});
+		}
+	}
+
 	const backdropStyle = {
 		backgroundImage: `linear-gradient(to bottom, hsl(0, 0%, 12%,0.5) 0%, hsl(0, 0%, 12%,0) 50%, hsl(0, 0%, 12%,0.5) 100%), url(${backdrop})`,
 		backgroundPosition: 'center',
@@ -409,9 +432,9 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 			{searchResults.length > 0 && (
 				<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
 					{filteredResults.map((r: SearchResult, i: number) => {
-						const downloaded = isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
+						const downloaded = isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash) || isDownloaded('tb', r.hash)
 						const downloading =
-							isDownloading('rd', r.hash) || isDownloading('ad', r.hash);
+							isDownloading('rd', r.hash) || isDownloading('ad', r.hash) || isDownloading('tb', r.hash)
 						const inYourLibrary = downloaded || downloading;
 						if (onlyShowCached && !r.rdAvailable && !r.adAvailable && !inYourLibrary)
 							return;
@@ -495,7 +518,27 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 											</button>
 										)}
 
-										{(r.rdAvailable || r.adAvailable) && (
+										{/* TB */}
+										{tbKey && inLibrary('tb', r.hash) && (
+											<button
+												className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
+												onClick={() => deleteTb(r.hash)}
+											>
+												<FaTimes className="mr-2 inline" />
+												TB ({hashAndProgress[`tb:${r.hash}`] + '%'})
+											</button>
+										)}
+										{tbKey && notInLibrary('tb', r.hash) && (
+											<button
+												className={`bg-[#04BF8A] hover:bg-[#095842] text-white text-xs rounded inline px-1`}
+												onClick={() => addTb(r.hash)}
+											>
+												{btnIcon(r.tbAvailable)}
+												Add&nbsp;to&nbsp;TB&nbsp;library
+											</button>
+										)}
+
+										{(r.rdAvailable || r.adAvailable || r.tbAvailable) && (
 											<button
 												className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1"
 												onClick={() => handleShowInfo(r)}
