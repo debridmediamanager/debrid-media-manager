@@ -129,7 +129,7 @@ export const fetchAllDebrid = async (
 				magnetInfo.filename = 'Magnet';
 			}
 			let mediaType = 'other';
-			let info = undefined;
+			let info = {} as ParsedFilename
 
 			const filenames = magnetInfo.links.map((f) => f.filename);
 			const torrentAndFiles = [magnetInfo.filename, ...filenames];
@@ -137,7 +137,7 @@ export const fetchAllDebrid = async (
 
 			if (every(torrentAndFiles, (f) => !isVideo({ path: f }))) {
 				mediaType = 'other';
-				info = undefined;
+				info = {} as ParsedFilename
 			} else if (
 				hasEpisodes ||
 				some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
@@ -209,7 +209,7 @@ export const fetchTorBox = async (
 			let mediaType = 'other';
 			let info = undefined;
 
-			const filenames = magnetInfo.files.map((f) => f.name);
+			const filenames = magnetInfo.files.map((f) => f.short_name);
 			const torrentAndFiles = [magnetInfo.name, ...filenames];
 			const hasEpisodes = checkArithmeticSequenceInFilenames(filenames);
 
@@ -225,6 +225,7 @@ export const fetchTorBox = async (
 			) {
 				mediaType = 'tv';
 				info = filenameParse(magnetInfo.name, true);
+				console.log(info)
 			} else if (
 				!hasEpisodes &&
 				every(torrentAndFiles, (f) => !/s\d\d\d?.?e\d\d\d?/i.test(f)) &&

@@ -192,7 +192,7 @@ export const showInfoForTB = async (
 			let castBtn = '';
 
 			downloadForm = `
-					<a href="https://torbox.app/download?id=${info.id}&type=torrent" target="_blank">
+					<a href="https://torbox.app/download?id=${info.id}&type=torrents" target="_blank">
 						<button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm">📲 DL</button>
 					</a>
 				`;
