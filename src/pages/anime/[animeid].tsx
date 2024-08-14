@@ -1,4 +1,4 @@
-import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
+import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxApiKey } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/cast';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/realDebrid';
@@ -8,7 +8,7 @@ import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '
 import { handleCastMovie } from '@/utils/cast';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
-import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
+import { instantCheckInAd, instantCheckInRd, instantCheckInTb, wrapLoading } from '@/utils/instantChecks';
 import { applyQuickSearch2 } from '@/utils/quickSearch';
 import { borderColor, btnColor, btnIcon, fileSize, sortByBiggest } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
@@ -63,6 +63,7 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 	const [descLimit, setDescLimit] = useState(100);
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
+	const tbKey = useTorBoxApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
 	const [uncachedCount, setUncachedCount] = useState<number>(0);
 	const dmmCastToken = useCastToken();
@@ -89,9 +90,9 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 		setUncachedCount(0);
 		try {
 			let path = `api/torrents/anime?animeId=${animeId}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}&onlyTrusted=${onlyTrustedTorrents}`;
-			if (config.externalSearchApiHostname) {
-				path = encodeURIComponent(path);
-			}
+			// if (config.externalSearchApiHostname) {
+			// 	path = encodeURIComponent(path);
+			// }
 			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const response = await axios.get<SearchApiResponse>(endpoint);
 			if (response.status !== 200) {
@@ -123,6 +124,11 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 					instantChecks.push(
 						wrapLoading('AD', instantCheckInAd(adKey, hashArr, setSearchResults))
 					);
+				if (tbKey) {
+					instantChecks.push(
+						wrapLoading("TorBox cache", instantCheckInTb(tbKey, hashArr, setSearchResults))
+					)
+				}
 				const counts = await Promise.all(instantChecks);
 				setSearchState('loaded');
 				setUncachedCount(hashArr.length - counts.reduce((acc, cur) => acc + cur, 0));

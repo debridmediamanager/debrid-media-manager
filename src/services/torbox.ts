@@ -38,3 +38,21 @@ export const getTorBoxUser = async (apiKey: string) => {
 		throw error;
     }
 };
+
+export const tbInstantCheck = async (apiKey: string, hashes: string[]) => {
+    let endpoint = `${config.torboxHostname}/torrents/checkcached?format=list&list_files=true`
+    for (const hash of hashes) {
+        endpoint += `&hash=${hash}`;
+    }
+    try {
+        const response = await axios.get(endpoint, {
+            headers: {
+                "Authorization": `Bearer ${apiKey}`
+            }
+        })
+        return response.data.data
+    } catch (error: any) {
+        console.error('Error fetching magnet availability from TorBox: ', error.message);
+        throw error;
+    }
+}

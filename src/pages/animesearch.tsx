@@ -48,9 +48,9 @@ function AnimeSearch() {
 	const fetchMiscData = async () => {
 		try {
 			let path = `api/browse/anime2`;
-			if (config.externalSearchApiHostname) {
-				path = encodeURIComponent(path);
-			}
+			// if (config.externalSearchApiHostname) {
+			// 	path = encodeURIComponent(path);
+			// }
 			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const res = await fetch(endpoint);
 			const data = await res.json();
@@ -67,9 +67,9 @@ function AnimeSearch() {
 		setSearchResults([]);
 		try {
 			let path = `api/search/anime?keyword=${q}`;
-			if (config.externalSearchApiHostname) {
-				path = encodeURIComponent(path);
-			}
+			// if (config.externalSearchApiHostname) {
+			// 	path = encodeURIComponent(path);
+			// }
 			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const res = await fetch(endpoint);
 			const data = await res.json();

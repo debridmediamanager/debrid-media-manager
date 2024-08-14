@@ -16,9 +16,9 @@ function RecentlyUpdated() {
 		setLoading(true);
 		try {
 			let path = 'api/browse/recent';
-			if (config.externalSearchApiHostname) {
-				path = encodeURIComponent(path);
-			}
+			// if (config.externalSearchApiHostname) {
+			// 	path = encodeURIComponent(path);
+			// }
 			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const res = await fetch(endpoint);
 			const data = await res.json();

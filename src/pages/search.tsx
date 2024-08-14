@@ -49,9 +49,9 @@ function Search() {
 	const fetchMiscData = async (q: string) => {
 		try {
 			let path = `api/search/misc?keyword=${q}`;
-			if (config.externalSearchApiHostname) {
-				path = encodeURIComponent(path);
-			}
+			// if (config.externalSearchApiHostname) {
+			// 	path = encodeURIComponent(path);
+			// }
 			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const res = await fetch(endpoint);
 			const data = await res.json();
@@ -69,9 +69,9 @@ function Search() {
 		setSearchResults([]);
 		try {
 			let path = `api/search/title?keyword=${q}`;
-			if (config.externalSearchApiHostname) {
-				path = encodeURIComponent(path);
-			}
+			// if (config.externalSearchApiHostname) {
+			// 	path = encodeURIComponent(path);
+			// }
 			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
 			const res = await fetch(endpoint);
 			const data = await res.json();
