@@ -69,6 +69,7 @@ function TorrentsPage() {
 	const [loading, setLoading] = useState(true);
 	const [rdSyncing, setRdSyncing] = useState(true);
 	const [adSyncing, setAdSyncing] = useState(true);
+	const [tbSyncing, setTbSyncing] = useState(true);
 	const [filtering, setFiltering] = useState(false);
 	const [grouping, setGrouping] = useState(false);
 
@@ -114,8 +115,8 @@ function TorrentsPage() {
 			handleAddMultipleHashesInRd(rdKey, hashes, async () => await fetchLatestRDTorrents(2));
 		if (adKey)
 			handleAddMultipleHashesInAd(adKey, hashes, async () => await fetchLatestADTorrents());
-		// if (tbKey)
-		// 	handleAddMultipleHashesInTb(tbKey, hashes, async () => await fetchLatestTBTorrents());
+		if (tbKey)
+			handleAddMultipleHashesInTb(tbKey, hashes, async () => await fetchLatestTBTorrents());
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router]);
 
@@ -282,6 +283,75 @@ function TorrentsPage() {
 		);
 	};
 
+	const fetchLatestTBTorrents = async function () {
+		const oldTorrents = await torrentDB.all();
+		const oldIds = new Set(
+			oldTorrents.map((torrent) => torrent.id).filter((id) => id.startsWith('tb:'))
+		);
+		const inProgressIds = new Set(
+			oldTorrents
+				.filter(isInProgress)
+				.map((t) => t.id)
+				.filter((id) => id.startsWith('tb:'))
+		);
+		const newIds = new Set();
+
+		if (!tbKey) {
+			setLoading(false);
+			setTbSyncing(false);
+		} else {
+			await fetchTorBox(tbKey, async (torrents: UserTorrent[]) => {
+				// add all new torrents to the database
+				torrents.forEach((torrent) => newIds.add(torrent.id));
+				const newTorrents = torrents.filter((torrent) => !oldIds.has(torrent.id));
+				setUserTorrentsList((prev) => {
+					return [...prev, ...newTorrents];
+				});
+				await torrentDB.addAll(newTorrents);
+
+				// refresh the torrents that are in progress
+				const inProgressTorrents = torrents.filter(
+					(torrent) =>
+						torrent.download_state === "downloading" ||
+						torrent.download_state === "stalled (no seeds)" ||
+						torrent.download_state === "checkingResumeData" ||
+						torrent.download_state === "metaDL" ||
+						torrent.download_state === "paused" ||
+						inProgressIds.has(torrent.id)
+				);
+				setUserTorrentsList((prev) => {
+					return prev.map((t) => {
+						const found = inProgressTorrents.find((i) => i.id === t.id);
+						if (found) {
+							return found;
+						}
+						return t;
+					});
+				});
+				await torrentDB.addAll(inProgressTorrents);
+
+				setLoading(false);
+			});
+			setTbSyncing(false);
+			toast.success(
+				`Updated ${newIds.size} torrents in your TorBox library`,
+				libraryToastOptions
+			);
+		}
+
+		const toDelete = Array.from(oldIds).filter((id) => !newIds.has(id));
+		await Promise.all(
+			toDelete.map(async (id) => {
+				setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== id));
+				await torrentDB.deleteById(id);
+				setSelectedTorrents((prev) => {
+					prev.delete(id);
+					return new Set(prev);
+				});
+			})
+		);
+	};
+
 	// fetch list from api
 	async function initialize() {
 		await torrentDB.initializeDB();
@@ -296,7 +366,7 @@ function TorrentsPage() {
 			});
 			setLoading(false);
 		}
-		await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents()]);
+		await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents(), fetchLatestTBTorrents()]);
 		await selectPlayableFiles(userTorrentsList);
 	}
 	useEffect(() => {
@@ -594,6 +664,7 @@ function TorrentsPage() {
 			resetSelection();
 			await fetchLatestRDTorrents(Math.ceil(relevantList.length * 1.1));
 			await fetchLatestADTorrents();
+			await fetchLatestTBTorrents();
 			toast.success(`Reinserted ${results.length} torrents`, magnetToastOptions);
 		}
 		if (!errors.length && !results.length) {
@@ -833,6 +904,7 @@ function TorrentsPage() {
 		if (results.length) {
 			await fetchLatestRDTorrents(Math.ceil(results.length * 1.1));
 			await fetchLatestADTorrents();
+			await fetchLatestTBTorrents();
 			toast.success(`Merged ${results.length} torrents`, libraryToastOptions);
 		}
 		if (!errors.length && !results.length) {
@@ -894,6 +966,7 @@ function TorrentsPage() {
 					if (results.length) {
 						await fetchLatestRDTorrents(Math.ceil(results.length * 1.1));
 						await fetchLatestADTorrents();
+						await fetchLatestTBTorrents();
 					}
 					resolve({ success: results.length, error: errors.length });
 				}
@@ -937,6 +1010,9 @@ function TorrentsPage() {
 		}
 		if (adKey && hashes && debridService === 'ad') {
 			handleAddMultipleHashesInAd(adKey, hashes, async () => await fetchLatestADTorrents());
+		}
+		if (tbKey && hashes && debridService === "tb") {
+			handleAddMultipleHashesInTb(tbKey, hashes, async () => fetchLatestTBTorrents());
 		}
 	}
 
@@ -1681,10 +1757,6 @@ function TorrentsPage() {
 														}
 														if (tbKey && torrent.id.startsWith('tb:')) {
 															await fetchLatestTBTorrents();
-															await handleRestartTorBoxTorrent(
-																tbKey,
-																torrent.id
-															);
 														}
 													} catch (error) {
 														console.error(error);
