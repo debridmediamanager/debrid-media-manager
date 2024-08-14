@@ -176,12 +176,11 @@ export const showInfoForRD = async (
 
 export const showInfoForTB = async (
 	app: string,
-	rdKey: string,
+	tbKey: string,
 	info: MagnetStatus,
 	userId: string = '',
 	imdbId: string = ''
 ) => {
-	console.log(info)
 	const filesList = info.files
 		.map((file) => {
 			let size = file.size < 1024 ** 3 ? file.size / 1024 ** 2 : file.size / 1024 ** 3;
@@ -193,10 +192,9 @@ export const showInfoForTB = async (
 			let castBtn = '';
 
 			downloadForm = `
-					<form action="https://alldebrid.com/service/" method="get" target="_blank" class="inline">
-						<input type="hidden" name="url" value="${file.link}" />
+					<a href="https://torbox.app/download?id=${info.id}&type=torrent" target="_blank">
 						<button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm">📲 DL</button>
-					</form>
+					</a>
 				`;
 
 			// Return the list item for the file, with or without the download form

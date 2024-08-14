@@ -1515,21 +1515,29 @@ function TorrentsPage() {
 										</td>
 
 										<td
-											onClick={() =>
-												torrent.id.startsWith('rd:')
-													? handleShowInfoForRD(torrent)
-													: handleShowInfoForAD(torrent)
-											}
+											onClick={() => {
+												if (torrent.id.startsWith("rd:")) {
+													handleShowInfoForRD(torrent);
+												} else if (torrent.id.startsWith("ad:")) {
+													handleShowInfoForAD(torrent);
+												} else if (torrent.id.startsWith("tb:")) {
+													handleShowInfoForTB(torrent);
+												}
+											}}
 											className="px-1 py-1 text-xs text-center"
 										>
 											{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
 										</td>
 										<td
-											onClick={() =>
-												torrent.id.startsWith('rd:')
-													? handleShowInfoForRD(torrent)
-													: handleShowInfoForAD(torrent)
-											}
+											onClick={() => {
+												if (torrent.id.startsWith("rd:")) {
+													handleShowInfoForRD(torrent);
+												} else if (torrent.id.startsWith("ad:")) {
+													handleShowInfoForAD(torrent);
+												} else if (torrent.id.startsWith("tb:")) {
+													handleShowInfoForTB(torrent);
+												}
+											}}
 											className="px-1 py-1 text-xs text-center"
 										>
 											{torrent.status !== UserTorrentStatus.finished ? (
@@ -1554,21 +1562,29 @@ function TorrentsPage() {
 										</td>
 
 										<td
-											onClick={() =>
-												torrent.id.startsWith('rd:')
-													? handleShowInfoForRD(torrent)
-													: handleShowInfoForAD(torrent)
-											}
+											onClick={() => {
+												if (torrent.id.startsWith("rd:")) {
+													handleShowInfoForRD(torrent);
+												} else if (torrent.id.startsWith("ad:")) {
+													handleShowInfoForAD(torrent);
+												} else if (torrent.id.startsWith("tb:")) {
+													handleShowInfoForTB(torrent);
+												}
+											}}
 											className="px-1 py-1 text-xs text-center"
 										>
 											{new Date(torrent.added).toLocaleString()}
 										</td>
 										<td
-											onClick={() =>
-												torrent.id.startsWith('rd:')
-													? handleShowInfoForRD(torrent)
-													: handleShowInfoForAD(torrent)
-											}
+											onClick={() => {
+												if (torrent.id.startsWith("rd:")) {
+													handleShowInfoForRD(torrent);
+												} else if (torrent.id.startsWith("ad:")) {
+													handleShowInfoForAD(torrent);
+												} else if (torrent.id.startsWith("tb:")) {
+													handleShowInfoForTB(torrent);
+												}
+											}}
 											className="px-1 py-1 flex place-content-center"
 										>
 											<button
@@ -1664,11 +1680,11 @@ function TorrentsPage() {
 															await fetchLatestADTorrents();
 														}
 														if (tbKey && torrent.id.startsWith('tb:')) {
+															await fetchLatestTBTorrents();
 															await handleRestartTorBoxTorrent(
 																tbKey,
 																torrent.id
 															);
-															await fetchLatestTBTorrents();
 														}
 													} catch (error) {
 														console.error(error);
