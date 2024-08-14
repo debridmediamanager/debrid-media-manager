@@ -158,6 +158,10 @@ export const handleRestartTorrent = async (adKey: string, id: string) => {
 	}
 };
 
+export const handleRestartTorBoxTorrent = async (tbKey: string, id: string) => {
+	toast.error(`This function is not allowed by TorBox.`)
+}
+
 export async function handleCopyMagnet(hash: string) {
 	const magnet = `magnet:?xt=urn:btih:${hash}`;
 	await navigator.clipboard.writeText(magnet);

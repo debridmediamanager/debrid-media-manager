@@ -12,6 +12,7 @@ import {
 	handleReinsertTorrentinRd,
 	handleRestartTorrent,
 	handleSelectFilesInRd,
+	handleRestartTorBoxTorrent
 } from '@/utils/addMagnet';
 import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
@@ -1661,6 +1662,13 @@ function TorrentsPage() {
 																torrent.id
 															);
 															await fetchLatestADTorrents();
+														}
+														if (tbKey && torrent.id.startsWith('tb:')) {
+															await handleRestartTorBoxTorrent(
+																tbKey,
+																torrent.id
+															);
+															await fetchLatestTBTorrents();
 														}
 													} catch (error) {
 														console.error(error);
