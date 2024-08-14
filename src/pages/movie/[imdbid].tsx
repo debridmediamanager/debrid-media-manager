@@ -108,6 +108,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 						...r,
 						rdAvailable: false,
 						adAvailable: false,
+						tbAvailable: false,
 						noVideos: false,
 						files: [],
 					}))
@@ -165,7 +166,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		if (searchState === 'loading') return;
 		const tokens = new Map<string, number>();
 		// filter by cached
-		const toProcess = searchResults.filter((r) => r.rdAvailable || r.adAvailable);
+		const toProcess = searchResults.filter((r) => r.rdAvailable || r.adAvailable || r.tbAvailable);
 		toProcess.forEach((r) => {
 			r.title.split(/[ .\-\[\]]/).forEach((word) => {
 				if (word.length < 3) return;
@@ -416,7 +417,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 						const downloading =
 							isDownloading('rd', r.hash) || isDownloading('ad', r.hash);
 						const inYourLibrary = downloaded || downloading;
-						if (onlyShowCached && !r.rdAvailable && !r.adAvailable && !inYourLibrary)
+						if (onlyShowCached && !r.rdAvailable && !r.adAvailable && !r.tbAvailable && !inYourLibrary)
 							return;
 						if (
 							movieMaxSize !== '0' &&
@@ -498,7 +499,27 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 											</button>
 										)}
 
-										{(r.rdAvailable || r.adAvailable) && (
+										{/* TB */}
+										{tbKey && inLibrary('tb', r.hash) && (
+											<button
+												className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
+												onClick={() => deleteAd(r.hash)}
+											>
+												<FaTimes className="mr-2 inline" />
+												TB ({hashAndProgress[`tb:${r.hash}`] + '%'})
+											</button>
+										)}
+										{tbKey && notInLibrary('tb', r.hash) && (
+											<button
+												className={`bg-[#04BF8A] hover:bg-[#095842] text-white text-xs rounded inline px-1`}
+												onClick={() => addAd(r.hash)}
+											>
+												{btnIcon(r.tbAvailable)}
+												Add&nbsp;to&nbsp;TB&nbsp;library
+											</button>
+										)}
+
+										{(r.rdAvailable || r.adAvailable || r.tbAvailable) && (
 											<button
 												className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1"
 												onClick={() => handleShowInfo(r)}

@@ -298,7 +298,7 @@ export const instantCheckInTb = async (
 									return {
 										fileId: idx++,
 										filename: f.name,
-										filesize: f.ssize,
+										filesize: f.size,
 									};
 								});
 							}
@@ -309,6 +309,7 @@ export const instantCheckInTb = async (
 							};
 						})
 						.flat();
+
 					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
 					const sortedFileSizes = videoFiles
 						.map((f) => f.filesize / 1024 / 1024)
@@ -321,13 +322,15 @@ export const instantCheckInTb = async (
 					torrent.biggestFileSize = sortedFileSizes[sortedFileSizes.length - 1];
 					torrent.videoCount = videoFiles.length;
 					torrent.noVideos = checkVideoInFiles(magnetData.files);
-					if (!torrent.noVideos && magnetData.instant) {
-						torrent.adAvailable = true;
+
+					if (!torrent.noVideos) {
+						torrent.tbAvailable = true;
 						instantCount += 1;
 					} else {
-						torrent.adAvailable = false;
+						torrent.tbAvailable = false;
 					}
 				}
+				console.log(newSearchResults)
 				return newSearchResults;
 			});
 		});
