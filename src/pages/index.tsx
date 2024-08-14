@@ -11,7 +11,7 @@ import { Toaster, toast } from 'react-hot-toast';
 
 function IndexPage() {
 	const router = useRouter();
-	const { rdUser, adUser, rdError, adError, traktUser, traktError } = useCurrentUser();
+	const { rdUser, rdError, adUser, adError, tbUser, tbError, traktUser, traktError } = useCurrentUser();
 	const [deleting, setDeleting] = useState(false);
 	const [browseTerms] = useState(getTerms(2));
 
@@ -25,6 +25,11 @@ function IndexPage() {
 			toast.error(
 				'AllDebrid get user info failed, check your email and confirm the login coming from DMM'
 			);
+		}
+		if (tbError) {
+			toast.error(
+				'TorBox get user info failed, try clearing DMM site data and login again'
+			)
 		}
 		if (traktError) {
 			toast.error('Trakt get user info failed');
@@ -49,7 +54,7 @@ function IndexPage() {
 				);
 			};
 		}
-	}, [rdError, adError, traktError]);
+	}, [rdError, adError, tbError, traktError]);
 
 	const handleLogout = (prefix?: string) => {
 		if (prefix) {
@@ -94,7 +99,7 @@ function IndexPage() {
 			</svg>
 			<Toaster position="bottom-right" />
 			{/* this is made by ChatGPT */}
-			{!deleting && (rdUser || adUser) ? (
+			{!deleting && (rdUser || adUser || tbUser) ? (
 				<>
 					<h1 className="text-2xl font-bold mb-4">Debrid Media Manager</h1>
 					<div className="flex flex-col items-center">
@@ -114,6 +119,21 @@ function IndexPage() {
 									Login with Real-Debrid
 								</Link>
 							)}{' '}
+							{tbUser ? (
+								<>
+									<span className="bg-[#04BF8A] text-white text-sm px-1">
+										TorBox
+									</span>{' '}
+									{tbUser.email} {tbUser.plan === 0 && ("Free")} {tbUser.plan === 1 && ("Essential")} {tbUser.plan === 2 && ("Pro")} {tbUser.plan === 3 && ("Standard")}
+								</>
+							) : (
+								<Link
+									href="/torbox/login"
+									className="px-1 py-1 ml-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600 whitespace-nowrap"
+								>
+									Login with TorBox
+								</Link>
+							)}
 							{adUser ? (
 								<>
 									<span className="bg-[#fbc730] text-yellow-800 text-sm px-1">

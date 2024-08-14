@@ -1,4 +1,4 @@
-import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
+import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxApiKey } from '@/hooks/auth';
 import { useRouter } from 'next/router';
 import { ComponentType, useEffect, useState } from 'react';
 import { supportsLookbehind } from './lookbehind';
@@ -12,11 +12,13 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 		const [isLoading, setIsLoading] = useState(true);
 		const [rdKey, rdLoading] = useRealDebridAccessToken();
 		const adKey = useAllDebridApiKey();
+		const tbKey = useTorBoxApiKey();
 
 		useEffect(() => {
 			if (
 				!rdKey &&
 				!adKey &&
+				!tbKey &&
 				router.pathname !== START_ROUTE &&
 				!router.pathname.endsWith(LOGIN_ROUTE) &&
 				!rdLoading
@@ -25,7 +27,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			} else {
 				setIsLoading(rdLoading);
 			}
-		}, [rdKey, rdLoading, adKey, router]);
+		}, [rdKey, rdLoading, adKey, tbKey, router]);
 
 		if (isLoading) {
 			// Render a loading indicator or placeholder on initial load
