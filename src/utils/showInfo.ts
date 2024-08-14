@@ -174,6 +174,91 @@ export const showInfoForRD = async (
 	});
 };
 
+export const showInfoForTB = async (
+	app: string,
+	rdKey: string,
+	info: MagnetStatus,
+	userId: string = '',
+	imdbId: string = ''
+) => {
+	console.log(info)
+	const filesList = info.files
+		.map((file) => {
+			let size = file.size < 1024 ** 3 ? file.size / 1024 ** 2 : file.size / 1024 ** 3;
+			let unit = file.size < 1024 ** 3 ? 'MB' : 'GB';
+			const isPlayable = isVideo({ path: file.name });
+
+			let downloadForm = '';
+			let watchBtn = '';
+			let castBtn = '';
+
+			downloadForm = `
+					<form action="https://alldebrid.com/service/" method="get" target="_blank" class="inline">
+						<input type="hidden" name="url" value="${file.link}" />
+						<button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm">📲 DL</button>
+					</form>
+				`;
+
+			// Return the list item for the file, with or without the download form
+			return `
+				<li class="hover:bg-yellow-200 rounded ${isPlayable ? 'bg-yellow-50 font-bold' : 'font-normal'}">
+                    <span class="inline text-blue-600">${file.short_name}</span>
+                    <span class="inline text-gray-700 w-fit">${size.toFixed(2)} ${unit}</span>
+                        ${downloadForm}
+                        ${watchBtn}
+						${castBtn}
+                </li>
+            `;
+		})
+		.join('');
+
+	let html = `<h1 class="text-lg font-bold mt-6 mb-4">${info.name}</h1>
+    <hr/>
+    <div class="text-sm max-h-60 mb-4 text-left bg-blue-100 p-1">
+        <ul class="list space-y-1">
+            ${filesList}
+        </ul>
+    </div>`;
+	html = html.replace(
+		'<hr/>',
+		`<div class="text-sm">
+		<table class="table-auto w-full mb-4 text-left">
+			<tbody>
+				<tr>
+					<td class="font-semibold">Size:</td>
+					<td>${(info.size / 1024 ** 3).toFixed(2)} GB</td>
+				</tr>
+				<tr>
+					<td class="font-semibold">ID:</td>
+					<td>${info.id}</td>
+				</tr>
+				<tr>
+					<td class="font-semibold">Status:</td>
+					<td>${info.download_state}</td>
+				</tr>
+				<tr>
+					<td class="font-semibold">Added:</td>
+					<td>${new Date(info.created_at).toLocaleString()}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>`
+	);
+
+	Swal.fire({
+		// icon: 'info',
+		html,
+		showConfirmButton: false,
+		customClass: {
+			htmlContainer: '!mx-1',
+		},
+		width: '800px',
+		showCloseButton: true,
+		inputAutoFocus: true,
+	});
+};
+
+
 export const showInfoForAD = async (
 	app: string,
 	rdKey: string,

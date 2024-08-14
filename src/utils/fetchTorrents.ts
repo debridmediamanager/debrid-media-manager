@@ -240,6 +240,7 @@ export const fetchTorBox = async (
 
 			if (magnetInfo.size === 0) magnetInfo.size = 1;
 			let idx = 0;
+			console.log(magnetInfo.files)
 			return {
 				// score: getReleaseTags(magnetInfo.filename, magnetInfo.size / ONE_GIGABYTE).score,
 				info,
@@ -258,7 +259,7 @@ export const fetchTorBox = async (
 				serviceStatus: 200,
 				added: date,
 				speed: magnetInfo.downloadSpeed || 0,
-				links: null,
+				links: magnetInfo.files,
 				tbData: magnetInfo,
 				selectedFiles: magnetInfo.files.map((l) => ({
 					fileId: idx++,

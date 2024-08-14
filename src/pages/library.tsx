@@ -1,4 +1,4 @@
-import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
+import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxApiKey } from '@/hooks/auth';
 import { getTorrentInfo } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus, keyByStatus, uniqId } from '@/torrent/userTorrent';
@@ -7,6 +7,7 @@ import {
 	handleAddAsMagnetInRd,
 	handleAddMultipleHashesInAd,
 	handleAddMultipleHashesInRd,
+	handleAddMultipleHashesInTb,
 	handleCopyMagnet,
 	handleReinsertTorrentinRd,
 	handleRestartTorrent,
@@ -14,9 +15,9 @@ import {
 } from '@/utils/addMagnet';
 import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
-import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
+import { handleDeleteAdTorrent, handleDeleteRdTorrent, handleDeleteTbTorrent } from '@/utils/deleteTorrent';
 import { extractHashes } from '@/utils/extractHashes';
-import { fetchAllDebrid, fetchRealDebrid, getRdStatus } from '@/utils/fetchTorrents';
+import { fetchAllDebrid, fetchRealDebrid, getRdStatus, fetchTorBox } from '@/utils/fetchTorrents';
 import { generateHashList, handleShare } from '@/utils/hashList';
 import { checkForUncachedInRd } from '@/utils/instantChecks';
 import { localRestore } from '@/utils/localRestore';
@@ -24,7 +25,7 @@ import { applyQuickSearch } from '@/utils/quickSearch';
 import { torrentPrefix } from '@/utils/results';
 import { checkArithmeticSequenceInFilenames, isVideo } from '@/utils/selectable';
 import { defaultPlayer } from '@/utils/settings';
-import { showInfoForAD, showInfoForRD } from '@/utils/showInfo';
+import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/utils/showInfo';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';
@@ -79,6 +80,7 @@ function TorrentsPage() {
 	// keys
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
+	const tbKey = useTorBoxApiKey();
 
 	const [defaultGrouping] = useState<Record<string, number>>({});
 	const [movieGrouping] = useState<Record<string, number>>({});
@@ -111,6 +113,8 @@ function TorrentsPage() {
 			handleAddMultipleHashesInRd(rdKey, hashes, async () => await fetchLatestRDTorrents(2));
 		if (adKey)
 			handleAddMultipleHashesInAd(adKey, hashes, async () => await fetchLatestADTorrents());
+		// if (tbKey)
+		// 	handleAddMultipleHashesInTb(tbKey, hashes, async () => await fetchLatestTBTorrents());
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router]);
 
@@ -1093,6 +1097,18 @@ function TorrentsPage() {
 		);
 	};
 
+	const handleShowInfoForTB = async (t: UserTorrent) => {
+		let player = window.localStorage.getItem('settings:player') || defaultPlayer;
+		if (player === 'realdebrid') {
+			alert('No player selected');
+		}
+		showInfoForTB(
+			window.localStorage.getItem('settings:player') || defaultPlayer,
+			tbKey!,
+			t.tbData!
+		)
+	}
+
 	return (
 		<div className="mx-2 my-1">
 			<Head>
@@ -1426,11 +1442,15 @@ function TorrentsPage() {
 											{selectedTorrents.has(torrent.id) ? `✅` : `➕`}
 										</td>
 										<td
-											onClick={() =>
-												torrent.id.startsWith('rd:')
-													? handleShowInfoForRD(torrent)
-													: handleShowInfoForAD(torrent)
-											}
+											onClick={() => {
+												if (torrent.id.startsWith("rd:")) {
+													handleShowInfoForRD(torrent);
+												} else if (torrent.id.startsWith("ad:")) {
+													handleShowInfoForAD(torrent);
+												} else if (torrent.id.startsWith("tb:")) {
+													handleShowInfoForTB(torrent);
+												}
+											}}
 											className="px-1 py-1 text-sm truncate"
 										>
 											{!['Invalid Magnet', 'Magnet', 'noname'].includes(

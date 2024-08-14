@@ -515,7 +515,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										{adKey && notInLibrary('ad', r.hash) && (
 											<button
 												className={`bg-${adColor}-500 hover:bg-${adColor}-700 text-white text-xs rounded inline px-1`}
-												onClick={() => addTb(r.hash)}
+												onClick={() => addAd(r.hash)}
 											>
 												{btnIcon(r.adAvailable)}
 												Add&nbsp;to&nbsp;AD&nbsp;library

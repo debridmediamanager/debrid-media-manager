@@ -28,6 +28,7 @@ export interface UserTorrent {
 	speed: number;
 	rdData?: TorrentInfoResponse;
 	adData?: MagnetStatus;
+	tbData?: any;
 }
 
 export interface CachedHash {

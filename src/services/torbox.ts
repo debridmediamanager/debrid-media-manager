@@ -123,3 +123,10 @@ export const getTorBoxTorrents = async (
 		throw error;
 	}
 };
+
+export const requestDownloadLink = async (
+    apiKey: string,
+    id: number
+) => {
+    
+}
