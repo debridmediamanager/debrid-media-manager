@@ -322,7 +322,6 @@ export const instantCheckInTb = async (
 					torrent.biggestFileSize = sortedFileSizes[sortedFileSizes.length - 1];
 					torrent.videoCount = videoFiles.length;
 					torrent.noVideos = checkVideoInFiles(magnetData.files);
-
 					if (!torrent.noVideos) {
 						torrent.tbAvailable = true;
 						instantCount += 1;

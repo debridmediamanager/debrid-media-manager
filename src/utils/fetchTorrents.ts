@@ -225,7 +225,6 @@ export const fetchTorBox = async (
 			) {
 				mediaType = 'tv';
 				info = filenameParse(magnetInfo.name, true);
-				console.log(info)
 			} else if (
 				!hasEpisodes &&
 				every(torrentAndFiles, (f) => !/s\d\d\d?.?e\d\d\d?/i.test(f)) &&

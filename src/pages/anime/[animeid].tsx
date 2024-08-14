@@ -164,7 +164,7 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 		if (searchState === 'loading') return;
 		const tokens = new Map<string, number>();
 		// filter by cached
-		const toProcess = searchResults.filter((r) => r.rdAvailable || r.adAvailable);
+		const toProcess = searchResults.filter((r) => r.rdAvailable || r.adAvailable || r.tbAvailable);
 		toProcess.forEach((r) => {
 			r.title.split(/[ .\-\[\]]/).forEach((word) => {
 				if (word.length < 3) return;
@@ -436,7 +436,7 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 						const downloading =
 							isDownloading('rd', r.hash) || isDownloading('ad', r.hash) || isDownloading('tb', r.hash)
 						const inYourLibrary = downloaded || downloading;
-						if (onlyShowCached && !r.rdAvailable && !r.adAvailable && !inYourLibrary)
+						if (onlyShowCached && !r.rdAvailable && !r.adAvailable && !r.tbAvailable && !inYourLibrary)
 							return;
 						if (
 							movieMaxSize !== '0' &&
