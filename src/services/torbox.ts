@@ -83,3 +83,21 @@ export const createTorBoxTorrent = async (apiKey: string, hashes: string[]) => {
         throw error
     }
 };
+
+export const deleteTorBoxTorrent = async (apiKey: string, id: string) => {
+	try {
+
+        let endpoint = `${config.torboxHostname}/torrents/controltorrent`;
+		await axios.post(endpoint, {
+            torrent_id: id,
+            operation: "delete"
+        }, {
+            headers: {
+                "Authorization": `Bearer ${apiKey}`
+            }
+        })
+	} catch (error: any) {
+		console.error('Error deleting torrent from TorBox:', error.message);
+		throw error;
+	}
+};

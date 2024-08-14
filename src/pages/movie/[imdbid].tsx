@@ -7,7 +7,7 @@ import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleAddAsMagnetInTb, handleCopyMagnet } from '@/utils/addMagnet';
 import { handleCastMovie } from '@/utils/cast';
-import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
+import { handleDeleteAdTorrent, handleDeleteRdTorrent, handleDeleteTbTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, instantCheckInTb, wrapLoading } from '@/utils/instantChecks';
 import { applyQuickSearch2 } from '@/utils/quickSearch';
@@ -261,6 +261,20 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		}
 	}
 
+	async function deleteTb(hash: string) {
+		const torrents = await torrentDB.getAllByHash(hash);
+		for (const t of torrents) {
+			if (!t.id.startsWith('tb:')) continue;
+			await handleDeleteTbTorrent(tbKey!, t.id);
+			await torrentDB.deleteByHash('tb', hash);
+			setHashAndProgress((prev) => {
+				const newHashAndProgress = { ...prev };
+				delete newHashAndProgress[`tb:${hash}`];
+				return newHashAndProgress;
+			});
+		}
+	}
+
 	const backdropStyle = {
 		backgroundImage: `linear-gradient(to bottom, hsl(0, 0%, 12%,0.5) 0%, hsl(0, 0%, 12%,0) 50%, hsl(0, 0%, 12%,0.5) 100%), url(${backdrop})`,
 		backgroundPosition: 'center',
@@ -508,7 +522,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										{tbKey && inLibrary('tb', r.hash) && (
 											<button
 												className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
-												onClick={() => deleteAd(r.hash)}
+												onClick={() => deleteTb(r.hash)}
 											>
 												<FaTimes className="mr-2 inline" />
 												TB ({hashAndProgress[`tb:${r.hash}`] + '%'})
