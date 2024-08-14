@@ -209,7 +209,7 @@ export const fetchTorBox = async (
 			let mediaType = 'other';
 			let info = undefined;
 
-			const filenames = magnetInfo.files.map((f) => f.short_name);
+			const filenames = magnetInfo.files?.map((f) => f.short_name) ?? []
 			const torrentAndFiles = [magnetInfo.name, ...filenames];
 			const hasEpisodes = checkArithmeticSequenceInFilenames(filenames);
 
@@ -258,12 +258,12 @@ export const fetchTorBox = async (
 				serviceStatus: 200,
 				added: date,
 				speed: magnetInfo.download_speed || 0,
-				links: magnetInfo.files,
+				links: magnetInfo.files ?? [],
 				tbData: magnetInfo,
-				selectedFiles: magnetInfo.files.map((l) => ({
+				selectedFiles: magnetInfo.files?.map((l, idx) => ({
 					fileId: idx++,
-					filename: l.name,
-					filesize: l.size,
+					filename: l?.name || null,
+					filesize: l?.size || null,
 					link: null,
 				})),
 			};

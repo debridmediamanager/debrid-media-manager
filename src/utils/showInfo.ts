@@ -181,7 +181,7 @@ export const showInfoForTB = async (
 	userId: string = '',
 	imdbId: string = ''
 ) => {
-	const filesList = info.files
+	var filesList = info.files ?? []
 		.map((file) => {
 			let size = file.size < 1024 ** 3 ? file.size / 1024 ** 2 : file.size / 1024 ** 3;
 			let unit = file.size < 1024 ** 3 ? 'MB' : 'GB';
@@ -209,6 +209,12 @@ export const showInfoForTB = async (
             `;
 		})
 		.join('');
+
+	if (!filesList) {
+		filesList = `
+			<span>This torrent is currently being downloaded from TorBox</span>
+		`
+	}
 
 	let html = `<h1 class="text-lg font-bold mt-6 mb-4">${info.name}</h1>
     <hr/>
