@@ -124,7 +124,10 @@ function IndexPage() {
 									<span className="bg-[#04BF8A] text-white text-sm px-1">
 										TorBox
 									</span>{' '}
-									{tbUser.email} {tbUser.plan === 0 && ("Free")} {tbUser.plan === 1 && ("Essential")} {tbUser.plan === 2 && ("Pro")} {tbUser.plan === 3 && ("Standard")}
+									{tbUser.email} 
+									<span className="uppercase text-[#04BF8A]">
+									{tbUser.plan === 0 && ("Free")} {tbUser.plan === 1 && ("Essential")} {tbUser.plan === 2 && ("Pro")} {tbUser.plan === 3 && ("Standard")}
+									</span>
 								</>
 							) : (
 								<Link

@@ -92,7 +92,7 @@ export default function StartPage() {
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						Create an account with TorBox
+						Create a free account with TorBox
 					</a>
 				</div>
 
