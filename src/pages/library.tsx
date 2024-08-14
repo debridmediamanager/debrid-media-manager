@@ -301,7 +301,7 @@ function TorrentsPage() {
 	useEffect(() => {
 		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey, adKey]);
+	}, [rdKey, adKey, tbKey]);
 
 	// aggregate metadata
 	useEffect(() => {
@@ -1423,6 +1423,7 @@ function TorrentsPage() {
 						</thead>
 						<tbody>
 							{currentPageData().map((torrent) => {
+								console.log(torrent)
 								const groupCount = getGroupings(torrent.mediaType)[torrent.title];
 								const filterText =
 									groupCount > 1 && !router.query.filter
@@ -1472,7 +1473,7 @@ function TorrentsPage() {
 															]
 														}
 													</div>
-													&nbsp;<strong>{torrent.title}</strong>{' '}
+													&nbsp;<strong>{torrent.name}</strong>{' '}
 													{filterText && (
 														<Link
 															href={`/library?filter=${encodeURIComponent(

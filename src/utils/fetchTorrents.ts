@@ -240,7 +240,6 @@ export const fetchTorBox = async (
 
 			if (magnetInfo.size === 0) magnetInfo.size = 1;
 			let idx = 0;
-			console.log(magnetInfo.files)
 			return {
 				// score: getReleaseTags(magnetInfo.filename, magnetInfo.size / ONE_GIGABYTE).score,
 				info,
@@ -248,17 +247,17 @@ export const fetchTorBox = async (
 				title:
 					info && (mediaType === 'movie' || mediaType == 'tv')
 						? getMediaId(info, mediaType, false)
-						: magnetInfo.filename,
+						: magnetInfo.name,
 				id: `tb:${magnetInfo.id}`,
-				filename: magnetInfo.filename,
+				filename: magnetInfo.name,
 				hash: magnetInfo.hash,
 				bytes: magnetInfo.size,
-				seeders: magnetInfo.seeders,
+				seeders: magnetInfo.seeds,
 				progress: magnetInfo.progress * 100,
 				status: magnetInfo.download_state,
 				serviceStatus: 200,
 				added: date,
-				speed: magnetInfo.downloadSpeed || 0,
+				speed: magnetInfo.download_speed || 0,
 				links: magnetInfo.files,
 				tbData: magnetInfo,
 				selectedFiles: magnetInfo.files.map((l) => ({

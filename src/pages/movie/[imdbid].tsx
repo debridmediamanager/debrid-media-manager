@@ -229,7 +229,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	}
 
 	async function addTb(hash: string) {
-		await handleAddAsMagnetInTb(tbKey!, hash);
+		// await handleAddAsMagnetInTb(tbKey!, hash);
 		await fetchTorBox(
 			tbKey!,
 			async (torrents: UserTorrent[]) => await torrentDB.addAll(torrents)
