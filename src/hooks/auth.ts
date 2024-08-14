@@ -30,6 +30,14 @@ interface AllDebridUser {
 	fidelityPoints: number;
 }
 
+interface TorBoxUser {
+	authId: string;
+	email: string;
+	plan: number;
+	isSubscribed: boolean;
+	premiumUntil: number;
+}
+
 export const useDebridLogin = () => {
 	const router = useRouter();
 
