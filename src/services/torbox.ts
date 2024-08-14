@@ -101,3 +101,25 @@ export const deleteTorBoxTorrent = async (apiKey: string, id: string) => {
 		throw error;
 	}
 };
+
+export const getTorBoxTorrents = async (
+	apiKey: string,
+    cacheBypass?: boolean,
+	id?: string
+) => {
+	let endpoint = `${config.torboxHostname}/torrents/mylist`;
+    if (cacheBypass) {
+        endpoint += "&bypass_cache=true"
+    }
+	try {
+		const response = await axios.get(endpoint, {
+            headers: {
+                "Authorization": `Bearer ${apiKey}`
+            }
+        });
+		return response.data.data;
+	} catch (error) {
+		console.error('Error fetching your TorBox torrents:', (error as any).message);
+		throw error;
+	}
+};

@@ -8,7 +8,7 @@ import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleAddAsMagnetInTb, handleCopyMagnet } from '@/utils/addMagnet';
 import { handleCastMovie } from '@/utils/cast';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent, handleDeleteTbTorrent } from '@/utils/deleteTorrent';
-import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
+import { fetchAllDebrid, fetchRealDebrid, fetchTorBox } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, instantCheckInTb, wrapLoading } from '@/utils/instantChecks';
 import { applyQuickSearch2 } from '@/utils/quickSearch';
 import { borderColor, btnColor, btnIcon, fileSize, sortByBiggest } from '@/utils/results';
@@ -230,7 +230,11 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 
 	async function addTb(hash: string) {
 		await handleAddAsMagnetInTb(tbKey!, hash);
-		
+		await fetchTorBox(
+			tbKey!,
+			async (torrents: UserTorrent[]) => await torrentDB.addAll(torrents)
+		)
+		await fetchHashAndProgress();
 	}
 
 	async function deleteRd(hash: string) {
