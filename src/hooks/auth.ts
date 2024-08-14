@@ -1,5 +1,6 @@
 import { getAllDebridUser } from '@/services/allDebrid';
 import { getCurrentUser as getRealDebridUser, getToken } from '@/services/realDebrid';
+import { getTorBoxUser } from '@/services/torbox';
 import { TraktUser, getTraktUser } from '@/services/trakt';
 import { clearRdKeys } from '@/utils/clearLocalStorage';
 import { useRouter } from 'next/router';
@@ -31,11 +32,19 @@ interface AllDebridUser {
 }
 
 interface TorBoxUser {
-	authId: string;
+	id: number;
+	created_at: string;
+	updated_at: string;
 	email: string;
-	plan: number;
-	isSubscribed: boolean;
-	premiumUntil: number;
+	plan: 0 | 1 | 2 | 3;
+	total_downloaded: number;
+	customer: string;
+	is_subscribed: boolean;
+	premium_expires_at: string;
+	cooldown_until: string;
+	auth_id: string;
+	user_referral: string;
+	base_emai: string;
 }
 
 export const useDebridLogin = () => {
@@ -143,9 +152,7 @@ export const useCurrentUser = () => {
 			}
 			try {
 				if (tbToken) {
-					// const tbUserResponse = await getTorBoxUser(tbToken!);
-					// TODO: get TorBox user
-					const tbUserResponse = null;
+					const tbUserResponse = await getTorBoxUser(tbToken!);
 					if (tbUserResponse) setTbUser(<TorBoxUser>tbUserResponse);
 				}
 			} catch (error: any) {
