@@ -49,9 +49,14 @@ export const useDebridLogin = () => {
 		await router.push('/alldebrid/login');
 	};
 
+	const loginWithTorBox = async  () => {
+		await router.push("/torbox/login");
+	}
+
 	return {
 		loginWithRealDebrid,
 		loginWithAllDebrid,
+		loginWithTorBox
 	};
 };
 
@@ -92,6 +97,11 @@ export const useAllDebridApiKey = () => {
 	return apiKey;
 };
 
+export const useTorBoxApiKey = () => {
+	const [apiKey] = useLocalStorage<string>("tb:apiKey");
+	return apiKey;
+}
+
 function removeToken(service: string) {
 	window.localStorage.removeItem(`${service}:accessToken`);
 	window.location.reload();
@@ -100,14 +110,17 @@ function removeToken(service: string) {
 export const useCurrentUser = () => {
 	const [rdUser, setRdUser] = useState<RealDebridUser | null>(null);
 	const [adUser, setAdUser] = useState<AllDebridUser | null>(null);
+	const [tbUser, setTbUser] = useState<TorBoxUser | null>(null);
 	const [traktUser, setTraktUser] = useState<TraktUser | null>(null);
 	const router = useRouter();
 	const [rdToken] = useLocalStorage<string>('rd:accessToken');
 	const [adToken] = useLocalStorage<string>('ad:apiKey');
+	const [tbToken] = useLocalStorage<string>('tb:apiKey');
 	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [_, setTraktUserSlug] = useLocalStorage<string>('trakt:userSlug');
 	const [rdError, setRdError] = useState<Error | null>(null);
 	const [adError, setAdError] = useState<Error | null>(null);
+	const [tbError, setTbError] = useState<Error | null>(null);
 	const [traktError, setTraktError] = useState<Error | null>(null);
 
 	useEffect(() => {
@@ -129,6 +142,16 @@ export const useCurrentUser = () => {
 				setAdError(new Error(error));
 			}
 			try {
+				if (tbToken) {
+					// const tbUserResponse = await getTorBoxUser(tbToken!);
+					// TODO: get TorBox user
+					const tbUserResponse = null;
+					if (tbUserResponse) setTbUser(<TorBoxUser>tbUserResponse);
+				}
+			} catch (error: any) {
+				setTbError(new Error(error));
+			}
+			try {
 				if (traktToken) {
 					const traktUserResponse = await getTraktUser(traktToken!);
 					if (traktUserResponse) {
@@ -141,7 +164,7 @@ export const useCurrentUser = () => {
 			}
 		})();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdToken, adToken, traktToken, router]);
+	}, [rdToken, adToken, tbToken, traktToken, router]);
 
-	return { rdUser, rdError, adUser, adError, traktUser, traktError };
+	return { rdUser, rdError, adUser, adError, tbUser, tbError, traktUser, traktError };
 };
