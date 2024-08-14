@@ -1598,6 +1598,12 @@ function TorrentsPage() {
 															torrent.id
 														);
 													}
+													if (tbKey && torrent.id.startsWith('tb:')) {
+														await handleDeleteTbTorrent(
+															tbKey,
+															torrent.id
+														)
+													}
 													setUserTorrentsList((prevList) =>
 														prevList.filter(
 															(prevTor) => prevTor.id !== torrent.id

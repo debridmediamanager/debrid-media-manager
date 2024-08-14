@@ -42,6 +42,6 @@ export const handleDeleteTbTorrent = async (
 		if (!disableToast) toast(`Torrent deleted (${id})`, magnetToastOptions);
 	} catch (error) {
 		console.error(error);
-		toast.error(`Error deleting torrent in AD (${id})`);
+		toast.error(`Error deleting TorBox torrent (${id})`);
 	}
 };
