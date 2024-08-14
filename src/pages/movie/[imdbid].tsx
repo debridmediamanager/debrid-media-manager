@@ -438,7 +438,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					{filteredResults.map((r: SearchResult, i: number) => {
 						const downloaded = isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
 						const downloading =
-							isDownloading('rd', r.hash) || isDownloading('ad', r.hash);
+							isDownloading('rd', r.hash) || isDownloading('ad', r.hash) || isDownloading('tb', r.hash)
 						const inYourLibrary = downloaded || downloading;
 						if (onlyShowCached && !r.rdAvailable && !r.adAvailable && !r.tbAvailable && !inYourLibrary)
 							return;
