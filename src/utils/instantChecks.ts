@@ -419,9 +419,6 @@ export const instantHashListCheckInTb = async (
 			if (resp === null) {
 				return []
 			}
-
-			console.log(resp)
-
 			setTorrentList((prevSearchResults) => {
 				const newSearchResults = [...prevSearchResults];
 				for (const magnetData of resp) {

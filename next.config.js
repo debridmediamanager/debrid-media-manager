@@ -69,7 +69,6 @@ const nextConfig = {
 		allDebridHostname: 'https://api.alldebrid.com',
 		allDebridAgent: 'debridMediaManager',
 		torboxHostname: 'https://api.torbox.app/v1/api',
-		// torboxHostname: 'http://localhost:8000/v1/api',
 		traktClientId: '8a7455d06804b07fa25e27454706c6f2107b6fe5ed2ad805eff3b456a17e79f0',
 	},
 };
