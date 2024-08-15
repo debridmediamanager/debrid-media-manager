@@ -37,7 +37,7 @@ You can share your whole collection or select specific items you want to share. 
 2. Clone this repository and go to the directory
 3. Create a copy of the `.env` file `cp .env .env.local` and fill in the details
 4. Fill in required settings in `.env.local` (e.g. `PROXY=socks5h://127.0.0.1:9050` if tor is running on your host machine)
-5. Get your Prisma database connection string from PlanetScale console and put that in your `.env.local` file
+5. Get your Prisma database connection string from Filess console and put that in your `.env.local` file
 6. Install the dependencies `npm i`
 7. This is a Next.js project so either go with `npm run dev` or `npm run build && npm run start`
 8. Head to `localhost:3000` and login

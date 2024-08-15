@@ -35,15 +35,14 @@ export const getTorBoxUser = async (apiKey: string) => {
         return userData.data.data
     } catch (error) {
         console.error('Error getting TorBox user data:', (error as any).message);
-		throw error;
+		throw new Error(`Failed to get TorBox user data: ${(error as any).message}`);
     }
 };
 
 export const tbInstantCheck = async (apiKey: string, hashes: string[]) => {
-    let endpoint = `${config.torboxHostname}/torrents/checkcached?format=list&list_files=true`
-    for (const hash of hashes) {
-        endpoint += `&hash=${hash}`;
-    }
+    const params = new URLSearchParams({ format: 'list', list_files: 'true' });
+    hashes.forEach(hash => params.append('hash', hash));
+    let endpoint = `${config.torboxHostname}/torrents/checkcached`
     try {
         const response = await axios.get(endpoint, {
             headers: {
@@ -80,7 +79,7 @@ export const createTorBoxTorrent = async (apiKey: string, hashes: string[]) => {
         return allResponses
     } catch (error) {
         console.error("Error creating torrent in TorBox:", (error as any).message)
-        throw error
+        throw new Error(`Error creating torrent: ${responseData.detail}`);
     }
 };
 
@@ -117,16 +116,9 @@ export const getTorBoxTorrents = async (
                 "Authorization": `Bearer ${apiKey}`
             }
         });
-		return response.data.data;
+		return response.data?.data;
 	} catch (error) {
 		console.error('Error fetching your TorBox torrents:', (error as any).message);
 		throw error;
 	}
 };
-
-export const requestDownloadLink = async (
-    apiKey: string,
-    id: number
-) => {
-    
-}

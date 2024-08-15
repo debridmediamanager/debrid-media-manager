@@ -207,7 +207,7 @@ export const fetchTorBox = async (
 	try {
 		const magnets = (await getTorBoxTorrents(tbKey)).map((magnetInfo) => {
 			let mediaType = 'other';
-			let info = undefined;
+			let info = {} as ParsedFilename; 
 
 			const filenames = magnetInfo.files?.map((f) => f.short_name) ?? []
 			const torrentAndFiles = [magnetInfo.name, ...filenames];
@@ -215,7 +215,7 @@ export const fetchTorBox = async (
 
 			if (every(torrentAndFiles, (f) => !isVideo({ path: f }))) {
 				mediaType = 'other';
-				info = undefined;
+				info = {} as ParsedFilename; 
 			} else if (
 				hasEpisodes ||
 				some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
@@ -239,7 +239,6 @@ export const fetchTorBox = async (
 			const date = new Date(magnetInfo.created_at);
 
 			if (magnetInfo.size === 0) magnetInfo.size = 1;
-			let idx = 0;
 			return {
 				// score: getReleaseTags(magnetInfo.filename, magnetInfo.size / ONE_GIGABYTE).score,
 				info,
