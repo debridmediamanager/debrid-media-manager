@@ -1,11 +1,11 @@
-import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
+import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxApiKey } from '@/hooks/auth';
 import { EnrichedHashlistTorrent, HashlistTorrent } from '@/services/mediasearch';
 import UserTorrentDB from '@/torrent/db';
-import { handleAddAsMagnetInAd, handleAddAsMagnetInRd } from '@/utils/addMagnet';
+import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleAddAsMagnetInTb } from '@/utils/addMagnet';
 import { runConcurrentFunctions } from '@/utils/batch';
-import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
-import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
-import { instantCheckInAd2, instantCheckInRd2, wrapLoading } from '@/utils/instantChecks';
+import { handleDeleteAdTorrent, handleDeleteRdTorrent, handleDeleteTbTorrent } from '@/utils/deleteTorrent';
+import { fetchAllDebrid, fetchRealDebrid, fetchTorBox } from '@/utils/fetchTorrents';
+import { instantCheckInAd2, instantCheckInRd2, instantHashListCheckInTb, wrapLoading } from '@/utils/instantChecks';
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
@@ -35,9 +35,11 @@ function HashlistPage() {
 	const [userTorrentsList, setUserTorrentsList] = useState<EnrichedHashlistTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<EnrichedHashlistTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'hash', direction: 'asc' });
+	const [isClient, setIsClient] = useState(false)
 
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
+	const tbKey = useTorBoxApiKey();
 
 	const [movieCount, setMovieCount] = useState<number>(0);
 	const [tvCount, setTvCount] = useState<number>(0);
@@ -55,8 +57,9 @@ function HashlistPage() {
 	useEffect(() => {
 		if (userTorrentsList.length !== 0) return;
 		initialize();
+		setIsClient(true)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey, adKey]);
+	}, [rdKey, adKey, tbKey]);
 
 	// fetch list from api
 	async function getUserTorrentsList(): Promise<HashlistTorrent[]> {
@@ -88,6 +91,7 @@ function HashlistPage() {
 			const hashArr = torrents.map((r) => r.hash);
 			if (rdKey) wrapLoading('RD', instantCheckInRd2(rdKey, hashArr, setUserTorrentsList));
 			if (adKey) wrapLoading('AD', instantCheckInAd2(adKey, hashArr, setUserTorrentsList));
+			if (tbKey) wrapLoading('TorBox cache', instantHashListCheckInTb(tbKey, hashArr, setUserTorrentsList))
 		} catch (error) {
 			setUserTorrentsList([]);
 			toast.error('Error fetching user torrents list');
@@ -277,6 +281,26 @@ function HashlistPage() {
 		}
 	}
 
+	function wrapDownloadFilesInTbFn(t: EnrichedHashlistTorrent) {
+		return async () => await addTb(t.hash);
+	}
+	async function downloadNonDupeTorrentsInTb() {
+		const libraryHashes = await torrentDB.hashes();
+		const yetToDownload = filteredList
+			.filter((t) => !libraryHashes.has(t.hash))
+			.map(wrapDownloadFilesInTbFn);
+		const [results, errors] = await runConcurrentFunctions(yetToDownload, 5, 500);
+		if (errors.length) {
+			toast.error(`Error downloading files on ${errors.length} torrents`);
+		}
+		if (results.length) {
+			toast.success(`Started downloading ${results.length} torrents`);
+		}
+		if (!errors.length && !results.length) {
+			toast('Everything has been downloaded', { icon: '👏' });
+		}
+	}
+
 	async function addRd(hash: string) {
 		await handleAddAsMagnetInRd(rdKey!, hash);
 		await fetchRealDebrid(
@@ -292,6 +316,14 @@ function HashlistPage() {
 	async function addAd(hash: string) {
 		await handleAddAsMagnetInAd(adKey!, hash);
 		await fetchAllDebrid(adKey!, async (torrents) => {
+			await torrentDB.addAll(torrents);
+			await fetchHashAndProgress(hash);
+		});
+	}
+
+	async function addTb(hash: string) {
+		await handleAddAsMagnetInTb(tbKey!, hash);
+		await fetchTorBox(tbKey!, async (torrents) => {
 			await torrentDB.addAll(torrents);
 			await fetchHashAndProgress(hash);
 		});
@@ -325,12 +357,25 @@ function HashlistPage() {
 		}
 	}
 
+	async function deleteTb(hash: string) {
+		const torrents = await torrentDB.getAllByHash(hash);
+		for (const t of torrents) {
+			if (!t.id.startsWith('tb:')) continue;
+			await handleDeleteTbTorrent(tbKey!, t.id);
+			await torrentDB.deleteByHash('tb', hash);
+			setHashAndProgress((prev) => {
+				const newHashAndProgress = { ...prev };
+				delete newHashAndProgress[`tb:${hash}`];
+				return newHashAndProgress;
+			});
+		}
+	}
+
 	return (
 		<div className="mx-2 my-1">
 			<Head>
 				<title>
-					Debrid Media Manager - Hash list:{' '}
-					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB
+					{`Debrid Media Manager - Hash list: ${(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB`}
 				</title>
 			</Head>
 			<Toaster position="bottom-right" />
@@ -371,7 +416,7 @@ function HashlistPage() {
 				>
 					Show {tvCount} TV shows
 				</Link>
-				{rdKey && (
+				{isClient && rdKey ? (
 					<button
 						className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded ${
 							filteredList.length === 0 || !rdKey
@@ -383,8 +428,8 @@ function HashlistPage() {
 					>
 						Download {filteredList.length} in Real-Debrid
 					</button>
-				)}
-				{adKey && (
+				) : null}
+				{isClient && adKey && (
 					<button
 						className={`mr-2 mb-2 bg-blue-700 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded ${
 							filteredList.length === 0 || !adKey
@@ -397,6 +442,19 @@ function HashlistPage() {
 						Download {filteredList.length} in AllDebrid
 					</button>
 				)}
+				{isClient && tbKey && (
+					<button
+						className={`mr-2 mb-2 bg-[#04BF8A] hover:bg-[#095842] text-white font-bold py-1 px-2 rounded ${
+							filteredList.length === 0 || !tbKey
+								? 'opacity-60 cursor-not-allowed'
+								: ''
+						}`}
+						onClick={downloadNonDupeTorrentsInTb}
+						disabled={filteredList.length === 0 || !tbKey}
+					>
+						Download {filteredList.length} in TorBox
+					</button>
+				)}
 
 				{Object.keys(router.query).length !== 0 && (
 					<Link
@@ -407,12 +465,12 @@ function HashlistPage() {
 					</Link>
 				)}
 
-				{(rdKey || adKey) && (
-					<span className="px-2.5 py-1 text-s bg-green-100 text-green-800 mr-2">
+				{isClient && (rdKey || adKey || tbKey) && (
+					<span className="py-1 px-2 text-md bg-green-100 text-green-800 mr-2 mb-2 rounded h-full">
 						<strong>
 							{userTorrentsList.length - filteredList.length} torrents hidden
 						</strong>{' '}
-						because its already in your library or its not cached in RD/AD
+						because its already in your library or its not cached in RD/AD/TB
 					</span>
 				)}
 			</div>
@@ -557,6 +615,34 @@ function HashlistPage() {
 											>
 												<FaDownload />
 												AD
+											</button>
+										)}
+
+										{tbKey && isDownloading('tb', t.hash) && (
+											<button
+												className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+												onClick={() => deleteTb(t.hash)}
+											>
+												<FaTimes />
+												TB ({hashAndProgress[`tb:${t.hash}`] + '%'})
+											</button>
+										)}
+										{tbKey && !t.tbAvailable && notInLibrary('tb', t.hash) && (
+											<button
+												className="bg-[#04BF8A] hover:bg-[#095842] text-white font-bold py-1 px-2 rounded"
+												onClick={() => addTb(t.hash)}
+											>
+												<FaDownload />
+												TB
+											</button>
+										)}
+										{tbKey && t.tbAvailable && notInLibrary('tb', t.hash) && (
+											<button
+												className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
+												onClick={() => addTb(t.hash)}
+											>
+												<FaDownload />
+												TB
 											</button>
 										)}
 									</td>

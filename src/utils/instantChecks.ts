@@ -403,3 +403,77 @@ export const instantCheckInAd2 = async (
 	await runConcurrentFunctions(funcs, 5, 100);
 	return instantCount;
 };
+
+// for hashlists
+export const instantHashListCheckInTb = async (
+	tbKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
+): Promise<number> => {
+	let instantCount = 0;
+	const funcs = [];
+	for (const hashGroup of groupBy(100, hashes)) {
+		funcs.push(async () => {
+			const resp = await tbInstantCheck(tbKey, hashGroup);
+			
+			if (resp === null) {
+				return []
+			}
+
+			console.log(resp)
+
+			setTorrentList((prevSearchResults) => {
+				const newSearchResults = [...prevSearchResults];
+				for (const magnetData of resp) {
+					const masterHash = magnetData.hash;
+					const torrent = newSearchResults.find((r) => r.hash === masterHash);
+					if (!torrent) continue;
+					if (torrent.noVideos) continue;
+					if (!magnetData.files) continue;
+
+					const checkVideoInFiles = (files: MagnetFile[]): boolean => {
+						return files.reduce((noVideo: boolean, curr: MagnetFile) => {
+							if (!noVideo) return false; // If we've already found a video, no need to continue checking
+							if (!curr.n) return false; // If 'n' property doesn't exist, it's not a video
+							if (curr.e) {
+								// If 'e' property exists, check it recursively
+								return checkVideoInFiles(curr.e);
+							}
+							return !isVideo({ path: curr.n });
+						}, true);
+					};
+
+					let idx = 0;
+					torrent.files = magnetData.files
+						.map((file) => {
+							if (file.e && file.e.length > 0) {
+								return file.e.map((f) => {
+									return {
+										fileId: idx++,
+										filename: f.name,
+										filesize: f.size,
+									};
+								});
+							}
+							return {
+								fileId: idx++,
+								filename: file.name,
+								filesize: file.size,
+							};
+						})
+						.flat();
+					torrent.noVideos = checkVideoInFiles(magnetData.files);
+					if (!torrent.noVideos && magnetData.instant) {
+						torrent.tbAvailable = true;
+						instantCount += 1;
+					} else {
+						torrent.tbAvailable = false;
+					}
+				}
+				return newSearchResults;
+			});
+		});
+	}
+	await runConcurrentFunctions(funcs, 5, 100);
+	return instantCount;
+};
