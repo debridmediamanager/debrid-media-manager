@@ -562,7 +562,7 @@ function HashlistPage() {
 										{(t.bytes / ONE_GIGABYTE).toFixed(1)} GB
 									</td>
 									<td className="border px-4 py-2">
-										{rdKey && isDownloading('rd', t.hash) && (
+										{isClient && rdKey && isDownloading('rd', t.hash) && (
 											<button
 												className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
 												onClick={() => deleteRd(t.hash)}
@@ -571,7 +571,7 @@ function HashlistPage() {
 												RD ({hashAndProgress[`rd:${t.hash}`] + '%'})
 											</button>
 										)}
-										{rdKey && !t.rdAvailable && notInLibrary('rd', t.hash) && (
+										{isClient && rdKey && !t.rdAvailable && notInLibrary('rd', t.hash) && (
 											<button
 												className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
 												onClick={() => addRd(t.hash)}
@@ -580,7 +580,7 @@ function HashlistPage() {
 												RD
 											</button>
 										)}
-										{rdKey && t.rdAvailable && notInLibrary('rd', t.hash) && (
+										{isClient && rdKey && t.rdAvailable && notInLibrary('rd', t.hash) && (
 											<button
 												className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
 												onClick={() => addRd(t.hash)}
@@ -590,7 +590,7 @@ function HashlistPage() {
 											</button>
 										)}
 
-										{adKey && isDownloading('ad', t.hash) && (
+										{isClient && adKey && isDownloading('ad', t.hash) && (
 											<button
 												className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
 												onClick={() => deleteAd(t.hash)}
@@ -599,7 +599,7 @@ function HashlistPage() {
 												AD ({hashAndProgress[`ad:${t.hash}`] + '%'})
 											</button>
 										)}
-										{adKey && !t.adAvailable && notInLibrary('ad', t.hash) && (
+										{isClient && adKey && !t.adAvailable && notInLibrary('ad', t.hash) && (
 											<button
 												className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
 												onClick={() => addAd(t.hash)}
@@ -608,7 +608,7 @@ function HashlistPage() {
 												AD
 											</button>
 										)}
-										{adKey && t.adAvailable && notInLibrary('ad', t.hash) && (
+										{isClient && adKey && t.adAvailable && notInLibrary('ad', t.hash) && (
 											<button
 												className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
 												onClick={() => addAd(t.hash)}
@@ -618,7 +618,7 @@ function HashlistPage() {
 											</button>
 										)}
 
-										{tbKey && isDownloading('tb', t.hash) && (
+										{isClient && tbKey && isDownloading('tb', t.hash) && (
 											<button
 												className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
 												onClick={() => deleteTb(t.hash)}
@@ -627,7 +627,7 @@ function HashlistPage() {
 												TB ({hashAndProgress[`tb:${t.hash}`] + '%'})
 											</button>
 										)}
-										{tbKey && !t.tbAvailable && notInLibrary('tb', t.hash) && (
+										{isClient && tbKey && !t.tbAvailable && notInLibrary('tb', t.hash) && (
 											<button
 												className="bg-[#04BF8A] hover:bg-[#095842] text-white font-bold py-1 px-2 rounded"
 												onClick={() => addTb(t.hash)}
@@ -636,7 +636,7 @@ function HashlistPage() {
 												TB
 											</button>
 										)}
-										{tbKey && t.tbAvailable && notInLibrary('tb', t.hash) && (
+										{isClient && tbKey && t.tbAvailable && notInLibrary('tb', t.hash) && (
 											<button
 												className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
 												onClick={() => addTb(t.hash)}
