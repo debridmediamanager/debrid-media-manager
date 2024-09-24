@@ -1,5 +1,4 @@
 import { getTimeISO } from '@/services/realDebrid';
-import * as crypto from 'crypto';
 
 const salt = '691Rbf3#aI@JL84xDD!2';
 
@@ -8,7 +7,6 @@ export async function generateTokenAndHash(): Promise<[string, string]> {
 	const timestamp = await fetchTimestamp(); // Fetch the timestamp from the API
 	const tokenWithTimestamp = `${token}-${timestamp}`;
 	const tokenTimestampHash = await generateHash(tokenWithTimestamp); // Hash the token with the timestamp
-	// append a random string to the token
 	const tokenSaltHash = await generateHash(salt+token)
 	const combinedHash = combineHashes(tokenTimestampHash, tokenSaltHash);
 	return [tokenWithTimestamp, combinedHash]; // Return both the token with embedded timestamp and its hash
@@ -55,8 +53,8 @@ export function validateTokenWithHash(tokenWithTimestamp: string, receivedHash: 
 		return false; // Token expired
 	}
 	// Recreate the hash with the received tokenWithTimestamp and compare
-	const tokenTimestampHash = crypto.createHash('sha256').update(tokenWithTimestamp).digest('hex');
-	const tokenSaltHash = crypto.createHash('sha256').update(salt+token).digest('hex');
+	const tokenTimestampHash = generateHash(tokenWithTimestamp);
+	const tokenSaltHash = generateHash(salt+token);
 	const combinedHash = combineHashes(tokenTimestampHash, tokenSaltHash);
 	return combinedHash === receivedHash;
 }
