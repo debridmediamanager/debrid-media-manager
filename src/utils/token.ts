@@ -1,11 +1,17 @@
 import { getTimeISO } from '@/services/realDebrid';
+import * as crypto from 'crypto';
+
+const salt = '691Rbf3#aI@JL84xDD!2';
 
 export async function generateTokenAndHash(): Promise<[string, string]> {
 	const token = generateRandomToken(); // Generate a secure random token
 	const timestamp = await fetchTimestamp(); // Fetch the timestamp from the API
 	const tokenWithTimestamp = `${token}-${timestamp}`;
-	const tokenHash = await generateSecureHash(tokenWithTimestamp); // Hash the token with the timestamp
-	return [tokenWithTimestamp, tokenHash]; // Return both the token with embedded timestamp and its hash
+	const tokenTimestampHash = await generateHash(tokenWithTimestamp); // Hash the token with the timestamp
+	// append a random string to the token
+	const tokenSaltHash = await generateHash(salt+token)
+	const combinedHash = combineHashes(tokenTimestampHash, tokenSaltHash);
+	return [tokenWithTimestamp, combinedHash]; // Return both the token with embedded timestamp and its hash
 }
 
 async function fetchTimestamp(): Promise<number> {
@@ -20,33 +26,20 @@ function generateRandomToken(): string {
 	return array[0].toString(16);
 }
 
-async function generateSecureHash(input: string): Promise<string> {
-	const salt = 'uBjg@V4g$oMzEL0GZmnR';
-    const saltedInput = input + salt; // Combine input with salt
-
-    if (typeof window !== 'undefined' && window.crypto && window.crypto.subtle) {
-        // Browser environment - use Web Crypto API
-        const encoder = new TextEncoder().encode(saltedInput); // Encode salted input
-        const hashBuffer = await window.crypto.subtle.digest('SHA-256', encoder);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        return obfuscateResult(salt, hashHex); // Return obfuscated result
-    } else {
-        // Node.js environment - use Node.js crypto module
-        const crypto = require('crypto');
-        const hashHex = crypto.createHash('sha256').update(saltedInput).digest('hex');
-        return obfuscateResult(salt, hashHex); // Return obfuscated result
-    }
+async function generateHash(input: string): Promise<string> {
+	// Encode the input string as a Uint8Array
+	const encoder = new TextEncoder();
+	const data = encoder.encode(input);
+	// Hash the data using SHA-256
+	const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+	// Convert the hash to a hexadecimal string
+	const hashArray = Array.from(new Uint8Array(hashBuffer));
+	const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+	return hashHex;
 }
 
-function obfuscateResult(salt: string, hash: string): string {
-    const randomPrefix = Math.random().toString(36).substr(2, 5); // Generate a random prefix for obfuscation
-    const combined = `${randomPrefix}${salt}${hash}`; // Combine the random prefix, salt, and hash
-    return combined.split('').reverse().join(''); // Reverse the result to make it harder to reverse-engineer
-}
-
-
-export async function validateTokenWithHash(tokenWithTimestamp: string, receivedHash: string): Promise<boolean> {
+// Validate the token with the hash, called by the server
+export function validateTokenWithHash(tokenWithTimestamp: string, receivedHash: string): boolean {
 	const [token, timestampStr] = tokenWithTimestamp.split('-');
 	const timestamp = parseInt(timestampStr, 10);
 	const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -56,6 +49,28 @@ export async function validateTokenWithHash(tokenWithTimestamp: string, received
 		return false; // Token expired
 	}
 	// Recreate the hash with the received tokenWithTimestamp and compare
-	const hash = await generateSecureHash(tokenWithTimestamp);
-	return hash === receivedHash;
+	const tokenTimestampHash = crypto.createHash('sha256').update(tokenWithTimestamp).digest('hex');
+	const tokenSaltHash = crypto.createHash('sha256').update(salt+token).digest('hex');
+	const combinedHash = combineHashes(tokenTimestampHash, tokenSaltHash);
+	return combinedHash === receivedHash;
 }
+
+function combineHashes(hash1: string, hash2: string) {
+	// Split the hashes into halves
+	const halfLength = Math.floor(hash1.length / 2);
+	const firstPart1 = hash1.slice(0, halfLength);
+	const secondPart1 = hash1.slice(halfLength);
+	const firstPart2 = hash2.slice(0, halfLength);
+	const secondPart2 = hash2.slice(halfLength);
+  
+	// Interleave parts from both hashes
+	let obfuscated = '';
+	for (let i = 0; i < halfLength; i++) {
+	  obfuscated += firstPart1[i] + firstPart2[i];
+	}
+  
+	// Add the remaining parts in reverse
+	obfuscated += secondPart2.split('').reverse().join('') + secondPart1.split('').reverse().join('');
+  
+	return obfuscated;
+  }
