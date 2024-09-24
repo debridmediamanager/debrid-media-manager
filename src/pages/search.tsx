@@ -77,23 +77,23 @@ function Search() {
 			const data = await res.json();
 			if (data.errorMessage) throw new Error(data.errorMessage);
 			setSearchResults(data.results);
-			if (data.results.length === 0) fetchMiscData(q);
+			// if (data.results.length === 0) fetchMiscData(q);
 		} catch (error: any) {
 			setSearchResults([]);
 			setErrorMessage(error.message);
-			fetchMiscData(q);
+			// fetchMiscData(q);
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	if (
-		!loading &&
-		searchResults.length === 0 &&
-		Object.keys(router.query).length === 0 &&
-		Object.keys(miscResults).length === 0
-	)
-		fetchMiscData('');
+	// if (
+	// 	!loading &&
+	// 	searchResults.length === 0 &&
+	// 	Object.keys(router.query).length === 0 &&
+	// 	Object.keys(miscResults).length === 0
+	// )
+	// 	fetchMiscData('');
 
 	return (
 		<div className="mx-2 my-1 max-w-full">
