@@ -26,16 +26,22 @@ function generateRandomToken(): string {
 	return array[0].toString(16);
 }
 
-async function generateHash(input: string): Promise<string> {
-	// Encode the input string as a Uint8Array
-	const encoder = new TextEncoder();
-	const data = encoder.encode(input);
-	// Hash the data using SHA-256
-	const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
-	// Convert the hash to a hexadecimal string
-	const hashArray = Array.from(new Uint8Array(hashBuffer));
-	const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-	return hashHex;
+function generateHash(str: string) {
+    let hash1 = 0xdeadbeef ^ str.length;
+    let hash2 = 0x41c6ce57 ^ str.length;
+  
+    for (let i = 0; i < str.length; i++) {
+        let charCode = str.charCodeAt(i);
+        hash1 = Math.imul(hash1 ^ charCode, 2654435761);
+        hash2 = Math.imul(hash2 ^ charCode, 1597334677);
+        hash1 = (hash1 << 5) | (hash1 >>> 27);  // Rotate left
+        hash2 = (hash2 << 5) | (hash2 >>> 27);  // Rotate left
+    }
+  
+    hash1 = (hash1 + Math.imul(hash2, 1566083941)) | 0;
+    hash2 = (hash2 + Math.imul(hash1, 2024237689)) | 0;
+
+    return ((hash1 ^ hash2) >>> 0).toString(16);  // Return as unsigned 32-bit integer in hexadecimal
 }
 
 // Validate the token with the hash, called by the server
