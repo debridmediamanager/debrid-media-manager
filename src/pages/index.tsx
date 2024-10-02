@@ -350,12 +350,24 @@ function IndexPage() {
 							✨
 							<a
 								className="underline"
+								href=" https://apps.apple.com/app/apple-store/id1659622164?pt=122790787&mt=8&ct=debridmediamanager"
+								target="_blank"
+							>
+								<b>VidHub</b>
+							</a>{' '}
+							is new media player that works with debrid services. Android coming
+							soon!
+						</div>
+						<div className="text-sm mb-1 text-center">
+							✨
+							<a
+								className="underline"
 								href="https://elfhosted.com/guides/media/"
 								target="_blank"
 							>
 								<b>ElfHosted</b>
 							</a>{' '}
-							provides automated zurg+Plex (and friends) hosting with $10 free credit
+							offers app hosting from $9/month with zurg, Plex & Riven
 						</div>
 						<div className="text-sm mb-1 text-center">
 							✨
