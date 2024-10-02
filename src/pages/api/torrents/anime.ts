@@ -17,7 +17,7 @@ const handler: NextApiHandler = async (req, res) => {
 	) {
 		res.status(403).json({ errorMessage: 'Authentication not provided' });
 		return;
-	} else if (! await validateTokenWithHash(dmmProblemKey.toString(), solution.toString())) {
+	} else if (!(await validateTokenWithHash(dmmProblemKey.toString(), solution.toString()))) {
 		res.status(403).json({ errorMessage: 'Authentication error' });
 		return;
 	}

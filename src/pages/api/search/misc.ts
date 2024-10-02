@@ -1,5 +1,3 @@
-import MdbList from '@/services/mdblist';
-import { lcg, shuffle } from '@/utils/seededShuffle';
 import { NextApiHandler } from 'next';
 
 type SearchMiscResponse = Record<string, string[]>;
