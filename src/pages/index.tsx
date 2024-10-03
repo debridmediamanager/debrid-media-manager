@@ -403,6 +403,18 @@ function IndexPage() {
 								Paypal
 							</a>
 						</div>
+						{/* add discord link */}
+						<div className="text-sm mb-1 text-center">
+							✨ Lastly... we got finally get a{' '}
+							<a
+								className="underline"
+								href="https://discord.gg/7u4YjMThXP"
+								target="_blank"
+							>
+								<b>Discord</b>
+							</a>{' '}
+							community
+						</div>
 
 						<div className="mb-2 h-max text-center leading-10">
 							<button
