@@ -355,7 +355,7 @@ function IndexPage() {
 							>
 								<b>VidHub</b>
 							</a>{' '}
-							is new media player that works with debrid services. Android coming
+							is a new media player that works with debrid services. Android is coming
 							soon!
 						</div>
 						<div className="text-sm mb-1 text-center">
@@ -405,7 +405,7 @@ function IndexPage() {
 						</div>
 						{/* add discord link */}
 						<div className="text-sm mb-1 text-center">
-							✨ Lastly... we got finally get a{' '}
+							✨ Lastly... we now have a{' '}
 							<a
 								className="underline"
 								href="https://discord.gg/7u4YjMThXP"
