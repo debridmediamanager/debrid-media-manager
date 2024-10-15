@@ -386,15 +386,12 @@ export const getMediaInfo = async (
 	}
 };
 
-export const getTimeISO = async (accessToken: string): Promise<string> => {
+export const getTimeISO = async (): Promise<string> => {
 	try {
 		return await apiClient.sendRequest<string>({
 			action: 'apiCall',
 			url: `${config.realDebridHostname}/rest/1.0/time/iso`,
 			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
 		});
 	} catch (error: any) {
 		console.error('Error fetching time:', error.message);
