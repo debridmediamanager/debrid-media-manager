@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import getConfig from 'next/config';
 import qs from 'qs';
+import { IframeProxy } from './iframeProxy';
 import {
 	AccessTokenResponse,
 	AddMagnetResponse,
@@ -15,7 +16,6 @@ import {
 	UserTorrentResponse,
 	UserTorrentsResult,
 } from './types';
-import { IframeProxy } from './iframeProxy';
 
 const { publicRuntimeConfig: config } = getConfig();
 
@@ -23,34 +23,24 @@ const apiClient = new IframeProxy();
 
 export const getDeviceCode = async () => {
 	try {
-		const response = await axios.get<DeviceCodeResponse>(
-			`${config.realDebridHostname}/oauth/v2/device/code`,
-			{
-				params: {
-					client_id: config.realDebridClientId,
-					new_credentials: 'yes',
-				},
-			}
-		);
-		return response.data;
-	} catch (error) {
-		console.error('Error fetching device code:', (error as any).message);
+		const url = `${config.realDebridHostname}/oauth/v2/device/code?client_id=${config.realDebridClientId}&new_credentials=yes`;
+		return await apiClient.sendRequest<DeviceCodeResponse>({
+			url,
+			method: 'GET',
+		});
+	} catch (error: any) {
+		console.error('Error fetching device code:', error.message);
 		throw error;
 	}
 };
 
 export const getCredentials = async (deviceCode: string) => {
 	try {
-		const response = await axios.get<CredentialsResponse>(
-			`${config.realDebridHostname}/oauth/v2/device/credentials`,
-			{
-				params: {
-					client_id: config.realDebridClientId,
-					code: deviceCode,
-				},
-			}
-		);
-		return response.data;
+		const url = `${config.realDebridHostname}/oauth/v2/device/credentials?client_id=${config.realDebridClientId}&code=${deviceCode}`;
+		return await apiClient.sendRequest<CredentialsResponse>({
+			url,
+			method: 'GET',
+		});
 	} catch (error: any) {
 		console.error('Error fetching credentials:', error.message);
 		throw error;
@@ -65,16 +55,14 @@ export const getToken = async (clientId: string, clientSecret: string, code: str
 		params.append('code', code);
 		params.append('grant_type', 'http://oauth.net/grant_type/device/1.0');
 
-		const headers = {
-			'Content-Type': 'application/x-www-form-urlencoded',
-		};
-
-		const response = await axios.post<AccessTokenResponse>(
-			`${config.realDebridHostname}/oauth/v2/token`,
-			params.toString(),
-			{ headers }
-		);
-		return response.data;
+		return await apiClient.sendRequest<AccessTokenResponse>({
+			url: `${config.realDebridHostname}/oauth/v2/token`,
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: params.toString(),
+		});
 	} catch (error: any) {
 		console.error('Error fetching access token:', error.message);
 		throw error;
@@ -84,7 +72,6 @@ export const getToken = async (clientId: string, clientSecret: string, code: str
 export const getCurrentUser = async (accessToken: string) => {
 	try {
 		return await apiClient.sendRequest<UserResponse>({
-			action: 'apiCall',
 			url: `${config.realDebridHostname}/rest/1.0/user`,
 			method: 'GET',
 			headers: {
@@ -97,9 +84,38 @@ export const getCurrentUser = async (accessToken: string) => {
 	}
 };
 
-export async function getUserTorrentsList(
+export const getUserTorrentsList2 = async (
 	accessToken: string,
 	limit: number = 0,
+	page: number = 1
+): Promise<UserTorrentsResult> => {
+	try {
+		const host =
+			limit === 1 ? `${config.proxy}${config.realDebridHostname}` : config.realDebridHostname;
+		const url = new URL(`${host}/rest/1.0/torrents`);
+		url.searchParams.append('page', page.toString());
+		url.searchParams.append('limit', limit.toString());
+
+		const response = await apiClient.sendRequest<UserTorrentResponse[]>({
+			url: url.toString(),
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
+		return {
+			data: response,
+			totalCount: response.length,
+		};
+	} catch (error: any) {
+		console.error('Error fetching user torrents list:', error.message);
+		throw error;
+	}
+};
+
+export async function getUserTorrentsList(
+	accessToken: string,
+	limit: number = 1,
 	page: number = 1
 ): Promise<UserTorrentsResult> {
 	const client = await createTorrentsClient(accessToken);
@@ -175,7 +191,6 @@ export const getTorrentInfo = async (
 ): Promise<TorrentInfoResponse> => {
 	try {
 		return await apiClient.sendRequest<TorrentInfoResponse>({
-			action: 'apiCall',
 			url: `${
 				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
 			}/rest/1.0/torrents/info/${id}`,
@@ -196,7 +211,6 @@ export const rdInstantCheck = async (
 ): Promise<RdInstantAvailabilityResponse> => {
 	try {
 		return await apiClient.sendRequest<RdInstantAvailabilityResponse>({
-			action: 'apiCall',
 			url: `${config.realDebridHostname}/rest/1.0/torrents/instantAvailability/${hashes.join('/')}`,
 			method: 'GET',
 			headers: {
@@ -216,7 +230,6 @@ export const addMagnet = async (
 ): Promise<string> => {
 	try {
 		const response = await apiClient.sendRequest<AddMagnetResponse>({
-			action: 'apiCall',
 			url: `${
 				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
 			}/rest/1.0/torrents/addMagnet`,
@@ -254,7 +267,6 @@ export const selectFiles = async (
 ): Promise<void> => {
 	try {
 		await apiClient.sendRequest<void>({
-			action: 'apiCall',
 			url: `${
 				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
 			}/rest/1.0/torrents/selectFiles/${id}`,
@@ -271,10 +283,13 @@ export const selectFiles = async (
 	}
 };
 
-export const deleteTorrent = async (accessToken: string, id: string, bare: boolean = false): Promise<void> => {
+export const deleteTorrent = async (
+	accessToken: string,
+	id: string,
+	bare: boolean = false
+): Promise<void> => {
 	try {
 		await apiClient.sendRequest<void>({
-			action: 'apiCall',
 			url: `${
 				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
 			}/rest/1.0/torrents/delete/${id}`,
@@ -292,7 +307,6 @@ export const deleteTorrent = async (accessToken: string, id: string, bare: boole
 export const deleteDownload = async (accessToken: string, id: string): Promise<void> => {
 	try {
 		await apiClient.sendRequest<void>({
-			action: 'apiCall',
 			url: `${config.realDebridHostname}/rest/1.0/downloads/delete/${id}`,
 			method: 'DELETE',
 			headers: {
@@ -325,7 +339,6 @@ export const unrestrictLink = async (
 		params.append('link', link);
 
 		return await apiClient.sendRequest<UnrestrictResponse>({
-			action: 'apiCall',
 			url: `${
 				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
 			}/rest/1.0/unrestrict/link`,
@@ -389,7 +402,6 @@ export const getMediaInfo = async (
 export const getTimeISO = async (): Promise<string> => {
 	try {
 		return await apiClient.sendRequest<string>({
-			action: 'apiCall',
 			url: `${config.realDebridHostname}/rest/1.0/time/iso`,
 			method: 'GET',
 		});
