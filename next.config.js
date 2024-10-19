@@ -42,7 +42,7 @@ const nextConfig = {
 		  },
 		  {
 			protocol: 'https',
-			hostname: 'media.kitsu.io',
+			hostname: 'media.kitsu.app',
 			port: '',
 			pathname: '/**',
 		  },
@@ -51,7 +51,13 @@ const nextConfig = {
 			hostname: 'cdn.myanimelist.net',
 			port: '',
 			pathname: '/**',
-		  }
+		  },
+		  {
+			protocol: 'https',
+			hostname: 'cdn-eu.anidb.net',
+			port: '',
+			pathname: '/**',
+		  },
 		],
 	  },
 	reactStrictMode: false,

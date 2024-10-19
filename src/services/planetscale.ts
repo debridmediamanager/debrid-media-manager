@@ -336,7 +336,7 @@ export class PlanetScaleCache {
 		LIMIT ${limit}`;
 		return results.map((anime) => ({
 			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
-			poster_url: anime.poster_url,
+			poster_url: `https://media.kitsu.app/anime/poster_images/${anime.anidb_id}/medium.jpg`,
 		}));
 	}
 
@@ -356,7 +356,7 @@ export class PlanetScaleCache {
 		return results.map((anime) => ({
 			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
 			title: anime.title,
-			poster_url: anime.poster_url,
+			poster_url: `https://media.kitsu.app/anime/poster_images/${anime.anidb_id}/medium.jpg`,
 		}));
 	}
 
@@ -383,7 +383,7 @@ export class PlanetScaleCache {
 		return results.map((anime) => ({
 			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
 			title: anime.title,
-			poster_url: anime.poster_url,
+			poster_url: `https://media.kitsu.app/anime/poster_images/${anime.anidb_id}/medium.jpg`,
 		}));
 	}
 
@@ -410,7 +410,7 @@ export class PlanetScaleCache {
 		return results.map((anime) => ({
 			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
 			title: anime.title,
-			poster_url: anime.poster_url,
+			poster_url: `https://media.kitsu.app/anime/poster_images/${anime.anidb_id}/medium.jpg`,
 		}));
 	}
 
