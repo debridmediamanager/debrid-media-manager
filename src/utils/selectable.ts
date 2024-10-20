@@ -14,7 +14,7 @@ export function isVideo(file: { path: string }) {
 		// filePath.endsWith('.avc') || // not yet confirmed working
 		filePath.endsWith('.avi') || // confirmed working
 		// filePath.endsWith('.divx') || // not yet confirmed working
-		// filePath.endsWith('.flv') || // not yet confirmed working
+		filePath.endsWith('.flv') || // confirmed working
 		filePath.endsWith('.m2ts') || // confirmed working
 		filePath.endsWith('.m4v') || // confirmed working
 		filePath.endsWith('.mkv') || // confirmed working
@@ -23,7 +23,11 @@ export function isVideo(file: { path: string }) {
 		filePath.endsWith('.mpg') || // confirmed working (no watch option)
 		filePath.endsWith('.mpeg') || // confirmed working (no watch option)
 		filePath.endsWith('.ts') || // confirmed working
+		filePath.endsWith('.mp3') || // confirmed working
+		filePath.endsWith('.flac') || // confirmed working
+		filePath.endsWith('.m4a') || // confirmed working
 		// filePath.endsWith('.vob') || // not yet confirmed working
+		filePath.endsWith('.webm') || // confirmed working
 		filePath.endsWith('.wmv') // confirmed working
 	);
 }
