@@ -367,7 +367,8 @@ function IndexPage() {
 							>
 								<b>ElfHosted</b>
 							</a>{' '}
-							offers app hosting from $9/month with zurg, Plex & Riven
+							offers hosted, turn-key streaming stacks including zurg, Plex & Riven,
+							with 7-day free trials
 						</div>
 						<div className="text-sm mb-1 text-center">
 							✨
