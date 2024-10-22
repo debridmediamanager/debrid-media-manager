@@ -1,8 +1,6 @@
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
-import fs from 'fs/promises';
 import { NextApiRequest, NextApiResponse } from 'next';
-import path from 'path';
 
 interface ScrapeResponse {
 	status: string;
@@ -15,15 +13,7 @@ const pdb = new PlanetScaleCache();
 const processJson = async (): Promise<void> => {
 	try {
 		// open file containing json and cast to YtsDetails[]
-		const filePath = path.join(__dirname, 'yts.json');
-		let json: YtsDetails[] = [];
-		try {
-			const fileContents = await fs.readFile(filePath, 'utf-8');
-			json = JSON.parse(fileContents) as YtsDetails[];
-		} catch (error) {
-			console.error('Error reading or parsing yts.json:', error);
-			return;
-		}
+		const json = require('./yts.json') as YtsDetails[];
 		const scrapesMap = new Map<string, any>();
 		for (const details of json) {
 			let imdbId = details.imdb_id;
