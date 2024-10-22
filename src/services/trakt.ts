@@ -271,3 +271,49 @@ export const getWatchlistShows = async (accessToken: string): Promise<TraktWatch
 		throw error;
 	}
 };
+
+// New interface for collection items
+export interface TraktCollectionItem {
+	last_collected_at: string;
+	last_updated_at: string;
+	movie?: TraktMedia;
+	show?: TraktMedia;
+}
+
+// New function to fetch collection movies
+export const getCollectionMovies = async (accessToken: string): Promise<TraktCollectionItem[]> => {
+	const url = `${TRAKT_API_URL}/sync/collection/movies`;
+	try {
+		const response = await axios.get<TraktCollectionItem[]>(url, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+				'trakt-api-version': '2',
+				'trakt-api-key': config.traktClientId,
+			},
+		});
+		return response.data;
+	} catch (error) {
+		console.error('Error fetching collection movies:', error);
+		throw error;
+	}
+};
+
+// New function to fetch collection shows
+export const getCollectionShows = async (accessToken: string): Promise<TraktCollectionItem[]> => {
+	const url = `${TRAKT_API_URL}/sync/collection/shows`;
+	try {
+		const response = await axios.get<TraktCollectionItem[]>(url, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+				'trakt-api-version': '2',
+				'trakt-api-key': config.traktClientId,
+			},
+		});
+		return response.data;
+	} catch (error) {
+		console.error('Error fetching collection shows:', error);
+		throw error;
+	}
+};
