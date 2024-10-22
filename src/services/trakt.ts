@@ -222,3 +222,52 @@ export async function fetchListItems(
 		throw new Error('Error fetching list items');
 	}
 }
+
+// New interfaces for watchlist items
+export interface TraktWatchlistItem {
+	rank: number;
+	id: number;
+	listed_at: string;
+	notes: string | null;
+	type: 'movie' | 'show';
+	movie?: TraktMedia;
+	show?: TraktMedia;
+}
+
+// New function to fetch watchlist movies
+export const getWatchlistMovies = async (accessToken: string): Promise<TraktWatchlistItem[]> => {
+	const url = `${TRAKT_API_URL}/sync/watchlist/movies/added`;
+	try {
+		const response = await axios.get<TraktWatchlistItem[]>(url, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+				'trakt-api-version': '2',
+				'trakt-api-key': config.traktClientId,
+			},
+		});
+		return response.data;
+	} catch (error) {
+		console.error('Error fetching watchlist movies:', error);
+		throw error;
+	}
+};
+
+// New function to fetch watchlist shows
+export const getWatchlistShows = async (accessToken: string): Promise<TraktWatchlistItem[]> => {
+	const url = `${TRAKT_API_URL}/sync/watchlist/shows/added`;
+	try {
+		const response = await axios.get<TraktWatchlistItem[]>(url, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+				'trakt-api-version': '2',
+				'trakt-api-key': config.traktClientId,
+			},
+		});
+		return response.data;
+	} catch (error) {
+		console.error('Error fetching watchlist shows:', error);
+		throw error;
+	}
+};

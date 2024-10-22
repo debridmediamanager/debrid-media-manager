@@ -241,7 +241,9 @@ function IndexPage() {
 									{term}
 								</Link>
 							))}
+						</div>
 
+						<div className="mb-2 h-max text-center leading-10">
 							<Link
 								href={`/trakt/movies`}
 								className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
@@ -255,12 +257,20 @@ function IndexPage() {
 								📺 shows
 							</Link>
 							{traktUser && (
-								<Link
-									href={`/trakt/mylists`}
-									className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
-								>
-									🧏🏻‍♀️ my lists
-								</Link>
+								<>
+									<Link
+										href={`/trakt/watchlist`}
+										className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+									>
+										👀 watchlist
+									</Link>
+									<Link
+										href={`/trakt/mylists`}
+										className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+									>
+										🧏🏻‍♀️ my lists
+									</Link>
+								</>
 							)}
 						</div>
 
