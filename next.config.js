@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-	enabled: process.env.ANALYZE === 'true', // Enable analyzer when ANALYZE=true
-});
-
 const nextConfig = {
 	output: 'standalone',
 	images: {
@@ -118,4 +114,4 @@ const nextConfig = {
 	},
 };
 
-module.exports = withBundleAnalyzer(nextConfig);
+module.exports = nextConfig;

@@ -41,7 +41,6 @@
       "uuid": "^9.0.0"
    },
    "devDependencies": {
-      "@next/bundle-analyzer": "^15.0.0",
       "@types/axios": "^0.14.0",
       "@types/bencode": "^2.0.2",
       "@types/file-saver": "^2.0.5",
