@@ -1,5 +1,5 @@
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { EnrichedHashlistTorrent, HashlistTorrent } from '@/services/mediasearch';
+import { EnrichedHashlistTorrent, Hashlist, HashlistTorrent } from '@/services/mediasearch';
 import UserTorrentDB from '@/torrent/db';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd } from '@/utils/addMagnet';
 import { runConcurrentFunctions } from '@/utils/batch';
@@ -15,11 +15,12 @@ import lzString from 'lz-string';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import { FaDownload, FaTimes } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight, FaDownload, FaTimes } from 'react-icons/fa';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
+const ITEMS_PER_PAGE = 100;
 
 interface SortBy {
 	column: 'hash' | 'filename' | 'title' | 'bytes' | 'score';
@@ -32,6 +33,7 @@ function HashlistPage() {
 	const router = useRouter();
 	const [query, setQuery] = useState('');
 
+	const [hashlistTitle, setHashlistTitle] = useState<string>('');
 	const [userTorrentsList, setUserTorrentsList] = useState<EnrichedHashlistTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<EnrichedHashlistTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'hash', direction: 'asc' });
@@ -39,6 +41,7 @@ function HashlistPage() {
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 
+	const [currentPage, setCurrentPage] = useState(1);
 	const [movieCount, setMovieCount] = useState<number>(0);
 	const [tvCount, setTvCount] = useState<number>(0);
 	const [movieGrouping] = useState<Record<string, number>>({});
@@ -58,16 +61,29 @@ function HashlistPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdKey, adKey]);
 
-	// fetch list from api
-	async function getUserTorrentsList(): Promise<HashlistTorrent[]> {
+	async function decodeJsonStringFromUrl(): Promise<string> {
 		const hash = window.location.hash;
-		if (!hash) return [];
+		if (!hash) return '';
 		const jsonString = lzString.decompressFromEncodedURIComponent(hash.substring(1));
-		return JSON.parse(jsonString) as HashlistTorrent[];
+		return jsonString;
 	}
+
+	async function readHashlist(): Promise<HashlistTorrent[]> {
+		const jsonString = await decodeJsonStringFromUrl();
+		if (jsonString.charAt(0) !== '[') {
+			const hashlist = JSON.parse(jsonString) as Hashlist;
+			setHashlistTitle(hashlist.title);
+			return hashlist.torrents;
+		}
+
+		const torrents = JSON.parse(jsonString) as HashlistTorrent[];
+		setHashlistTitle('Share this page');
+		return torrents;
+	}
+
 	async function fetchUserTorrentsList() {
 		try {
-			const torrents = (await getUserTorrentsList()).map((torrent) => {
+			const torrents = (await readHashlist()).map((torrent) => {
 				const mediaType = getTypeByName(torrent.filename);
 				const info =
 					mediaType === 'movie'
@@ -82,7 +98,6 @@ function HashlistPage() {
 				};
 			}) as EnrichedHashlistTorrent[];
 			if (!torrents.length) return;
-
 			setUserTorrentsList(torrents);
 
 			const hashArr = torrents.map((r) => r.hash);
@@ -216,6 +231,13 @@ function HashlistPage() {
 		return filteredList;
 	}
 
+	function currentPageData() {
+		return sortedData().slice(
+			(currentPage - 1) * ITEMS_PER_PAGE,
+			(currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
+		);
+	}
+
 	const getGroupings = (mediaType: EnrichedHashlistTorrent['mediaType']) =>
 		mediaType === 'tv' ? tvGroupingByEpisode : movieGrouping;
 
@@ -325,15 +347,23 @@ function HashlistPage() {
 		}
 	}
 
+	const handlePrevPage = useCallback(() => {
+		setCurrentPage((prev) => prev - 1);
+	}, []);
+
+	const handleNextPage = useCallback(() => {
+		setCurrentPage((prev) => prev + 1);
+	}, []);
+
 	return (
 		<div className="mx-2 my-1">
 			<Head>
-				<title>Debrid Media Manager - Hash list ({userTorrentsList.length} files)</title>
+				<title>{`Debrid Media Manager - Hash list (${userTorrentsList.length} files)`}</title>
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-2">
 				<h1 className="text-xl font-bold">
-					Share this page ({userTorrentsList.length} files in total; size:{' '}
+					{hashlistTitle} ({userTorrentsList.length} files in total; size:{' '}
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>
 				<Link
@@ -356,6 +386,29 @@ function HashlistPage() {
 				/>
 			</div>
 			<div className="mb-4">
+				<button
+					className={`mr-1 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded ${
+						currentPage <= 1 ? 'opacity-60 cursor-not-allowed' : ''
+					}`}
+					onClick={handlePrevPage}
+					disabled={currentPage <= 1}
+				>
+					<FaArrowLeft />
+				</button>
+				<span className="w-16 text-center">
+					{currentPage}/{Math.max(1, Math.ceil(sortedData().length / ITEMS_PER_PAGE))}
+				</span>
+				<button
+					className={`ml-1 mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-xs ${
+						currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)
+							? 'opacity-60 cursor-not-allowed'
+							: ''
+					}`}
+					onClick={handleNextPage}
+					disabled={currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)}
+				>
+					<FaArrowRight />
+				</button>
 				<Link
 					href="/hashlist?mediaType=movie"
 					className="mr-2 mb-2 bg-sky-800 hover:bg-sky-700 text-white font-bold py-1 px-2 rounded"
@@ -445,7 +498,7 @@ function HashlistPage() {
 						</tr>
 					</thead>
 					<tbody>
-						{sortedData().map((t, i) => {
+						{currentPageData().map((t, i) => {
 							const groupCount = getGroupings(t.mediaType)[t.filename];
 							const filterText =
 								groupCount > 1 && !router.query.filter
@@ -515,7 +568,7 @@ function HashlistPage() {
 												onClick={() => deleteRd(t.hash)}
 											>
 												<FaTimes />
-												RD ({hashAndProgress[`rd:${t.hash}`] + '%'})
+												RD ({hashAndProgress[`rd:${t.hash}`] || 0}%)
 											</button>
 										)}
 										{rdKey && !t.rdAvailable && notInLibrary('rd', t.hash) && (

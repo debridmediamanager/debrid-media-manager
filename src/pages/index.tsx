@@ -285,7 +285,15 @@ function IndexPage() {
 									Firefox
 								</a>
 							</b>{' '}
-							or the{' '}
+							or{' '}
+							<a
+								className="underline"
+								href="https://apps.apple.com/us/app/userscripts/id1463298887"
+								target="_blank"
+							>
+								Safari
+							</a>{' '}
+							with the{' '}
 							<b>
 								<a
 									className="underline"

@@ -4,21 +4,28 @@ import lzString from 'lz-string';
 import toast from 'react-hot-toast';
 import { libraryToastOptions } from './toastOptions';
 
-export async function generateHashList(filteredList: UserTorrent[]) {
-	toast('The hash list will return a 404 for the first 1-2 minutes', {
-		...libraryToastOptions,
-		duration: 60000,
-	});
+export async function generateHashList(title: string, filteredList: UserTorrent[]) {
+	toast(
+		'The hash list will return a 404 for the first 1-2 minutes, refresh the page and try again',
+		{
+			...libraryToastOptions,
+			duration: 60000,
+		}
+	);
 	try {
-		const hashList = filteredList.map((t) => ({
+		const torrents = filteredList.map((t) => ({
 			filename: t.filename,
 			hash: t.hash,
 			bytes: t.bytes,
 		}));
+		const hashlist = {
+			title,
+			torrents,
+		};
 		const shortUrl = await createShortUrl(
 			`${window.location.protocol}//${
 				window.location.host
-			}/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashList))}`
+			}/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashlist))}`
 		);
 		window.open(shortUrl);
 	} catch (error) {

@@ -657,6 +657,21 @@ function TorrentsPage() {
 		}
 	}
 
+	async function handleGenerateHashlist() {
+		// get title from input popup
+		const { value: title } = await Swal.fire({
+			title: 'Enter a title for the hash list',
+			input: 'text',
+			inputPlaceholder: 'Enter a title',
+			inputAttributes: {
+				autocapitalize: 'off',
+			},
+			showCancelButton: true,
+		});
+		if (!title) return;
+		generateHashList(title, relevantList);
+	}
+
 	async function handleDeleteShownTorrents() {
 		if (
 			relevantList.length > 0 &&
@@ -1326,7 +1341,7 @@ function TorrentsPage() {
 				</button>
 				<button
 					className={`mr-2 mb-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-1 rounded text-[0.6rem]`}
-					onClick={() => generateHashList(relevantList)}
+					onClick={handleGenerateHashlist}
 				>
 					🚀 Share{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' List'}
 				</button>
