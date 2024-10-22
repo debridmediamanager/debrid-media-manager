@@ -25,6 +25,11 @@ export type SearchResult = {
 	videoCount: number;
 };
 
+export interface Hashlist {
+	title: string;
+	torrents: HashlistTorrent[];
+}
+
 export interface HashlistTorrent {
 	filename: string;
 	hash: string;
