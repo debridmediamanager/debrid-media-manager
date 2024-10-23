@@ -3,6 +3,7 @@
 const nextConfig = {
 	output: 'standalone',
 	images: {
+		unoptimized: true,
 		minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
 		remotePatterns: [
 		  {
@@ -56,6 +57,12 @@ const nextConfig = {
 		  {
 			protocol: 'https',
 			hostname: 'cdn-eu.anidb.net',
+			port: '',
+			pathname: '/**',
+		  },
+		  {
+			protocol: 'https',
+			hostname: 'posters.debridmediamanager.com',
 			port: '',
 			pathname: '/**',
 		  },

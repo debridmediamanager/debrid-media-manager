@@ -411,7 +411,7 @@ function IndexPage() {
 							>
 								Clear library cache
 							</button>
-							{rdUser && (
+							{(rdUser || rdError) && (
 								<button
 									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
 									onClick={() => handleLogout('rd:')}
@@ -419,7 +419,7 @@ function IndexPage() {
 									Logout Real-Debrid
 								</button>
 							)}
-							{adUser && (
+							{(adUser || adError) && (
 								<button
 									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
 									onClick={() => handleLogout('ad:')}
@@ -427,7 +427,7 @@ function IndexPage() {
 									Logout AllDebrid
 								</button>
 							)}
-							{traktUser && (
+							{(traktUser || traktError) && (
 								<button
 									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
 									onClick={() => handleLogout('trakt:')}
