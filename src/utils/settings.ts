@@ -41,13 +41,13 @@ export const showSettings = async () => {
 						<option ${isPlayer('android/com.brouken.player')}>JustPlayer</option>
 					</optgroup>
 					<optgroup label="iOS">
-					<option ${isPlayer('ios2/open-vidhub')}>VidHub</option>
+						<option ${isPlayer('ios2/open-vidhub')}>VidHub</option>
 						<option ${isPlayer('ios/infuse')}>Infuse</option>
 						<option ${isPlayer('ios/vlc')}>VLC</option>
 						<option ${isPlayer('ios/outplayer')}>Outplayer</option>
 					</optgroup>
 					<optgroup label="MacOS">
-					<option ${isPlayer('mac4/open-vidhub')}>VidHub</option>
+						<option ${isPlayer('mac4/open-vidhub')}>VidHub</option>
 						<option ${isPlayer('mac/infuse')}>Infuse</option>
 						<option ${isPlayer('mac2/iina')}>IINA</option>
 						<option ${isPlayer('mac2/omniplayer')}>OmniPlayer</option>

@@ -84,7 +84,7 @@ export const getCurrentUser = async (accessToken: string) => {
 	}
 };
 
-export const getUserTorrentsList2 = async (
+export const getUserTorrentsList = async (
 	accessToken: string,
 	limit: number = 0,
 	page: number = 1
@@ -96,13 +96,35 @@ export const getUserTorrentsList2 = async (
 		url.searchParams.append('page', page.toString());
 		url.searchParams.append('limit', limit.toString());
 
-		const response = await apiClient.sendRequest<UserTorrentResponse[]>({
+		let response = await apiClient.sendRequest<UserTorrentResponse[]>({
 			url: url.toString(),
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${accessToken}`,
 			},
 		});
+
+		// Only retry for pages beyond the first page
+		if (page > 1) {
+			const maxRetries = 5;
+			let retryCount = 0;
+
+			while (response && response.length === 0 && retryCount < maxRetries) {
+				// Wait for a short time before retrying
+				await new Promise((resolve) => setTimeout(resolve, 1000));
+
+				response = await apiClient.sendRequest<UserTorrentResponse[]>({
+					url: url.toString(),
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+					},
+				});
+
+				retryCount++;
+			}
+		}
+
 		return {
 			data: response,
 			totalCount: response.length,
@@ -113,33 +135,38 @@ export const getUserTorrentsList2 = async (
 	}
 };
 
-export async function getUserTorrentsList(
+export async function getUserTorrentsListThruProxy(
 	accessToken: string,
 	limit: number = 1,
 	page: number = 1
 ): Promise<UserTorrentsResult> {
-	const client = await createTorrentsClient(accessToken);
-	const host =
-		limit === 1 ? `${config.proxy}${config.realDebridHostname}` : config.realDebridHostname;
-	const response = await client.get<UserTorrentResponse[]>(`${host}/rest/1.0/torrents`, {
-		params: { page, limit },
-	});
+	try {
+		const client = await createTorrentsClient(accessToken);
+		const host =
+			limit === 1 ? `${config.proxy}${config.realDebridHostname}` : config.realDebridHostname;
+		const response = await client.get<UserTorrentResponse[]>(`${host}/rest/1.0/torrents`, {
+			params: { page, limit },
+		});
 
-	const {
-		data,
-		headers: { 'x-total-count': totalCount },
-	} = response;
+		const {
+			data,
+			headers: { 'x-total-count': totalCount },
+		} = response;
 
-	// Parse the totalCount from the headers
-	let totalCountValue: number | null = null;
-	if (totalCount) {
-		totalCountValue = parseInt(totalCount, 10);
-		if (isNaN(totalCountValue)) {
-			totalCountValue = null;
+		// Parse the totalCount from the headers
+		let totalCountValue: number | null = null;
+		if (totalCount) {
+			totalCountValue = parseInt(totalCount, 10);
+			if (isNaN(totalCountValue)) {
+				totalCountValue = null;
+			}
 		}
-	}
 
-	return { data, totalCount: totalCountValue };
+		return { data, totalCount: totalCountValue };
+	} catch (error: any) {
+		console.error('Error fetching user torrents list:', error.message);
+		throw error;
+	}
 }
 
 export const getDownloads = async (accessToken: string): Promise<DownloadResponse[]> => {
