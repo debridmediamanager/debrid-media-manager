@@ -1,5 +1,5 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
-import { getUserTorrentsList, getUserTorrentsList2 } from '@/services/realDebrid';
+import { getUserTorrentsList, getUserTorrentsListThruProxy } from '@/services/realDebrid';
 import { UserTorrentResponse } from '@/services/types';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
@@ -17,7 +17,7 @@ export const fetchRealDebrid = async (
 ) => {
 	try {
 		// Step 1: Initial request to get the first item and total count of items
-		const { data: initialData, totalCount } = await getUserTorrentsList(
+		const { data: initialData, totalCount } = await getUserTorrentsListThruProxy(
 			rdKey,
 			customLimit ?? 1,
 			1
@@ -41,8 +41,8 @@ export const fetchRealDebrid = async (
 		const allPagesPromises = [];
 
 		for (let page = 1; page <= maxPages; page++) {
-			allPagesPromises.push(getUserTorrentsList2(rdKey, limit, page));
-			await new Promise((resolve) => setTimeout(resolve, 100));
+			allPagesPromises.push(getUserTorrentsList(rdKey, limit, page));
+			await new Promise((resolve) => setTimeout(resolve, 800));
 		}
 
 		const pagesOfTorrents = await Promise.all(allPagesPromises);
