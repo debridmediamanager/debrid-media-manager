@@ -47,12 +47,16 @@ export const getInstantIntent = async (
 				};end`;
 			} else if (os === 'ios') {
 				intent = `${player}://${resp.download.replace('https://', '')}`;
+			} else if (os === 'ios2') {
+				intent = `${player}://x-callback-url/open?url=${resp.download}`;
 			} else if (os === 'mac') {
 				intent = `${player}://${resp.download.replace('https://', '')}`;
 			} else if (os === 'mac2') {
 				intent = `${player}://weblink?url=${resp.download}`;
 			} else if (os === 'mac3') {
 				intent = `${player}://weblink?url=${resp.download}&new_window=1`;
+			} else if (os === 'mac4') {
+				intent = `${player}://x-callback-url/open?url=${resp.download}`;
 			} else {
 				intent = 'https://real-debrid.com/streaming-' + resp.id;
 			}
@@ -84,12 +88,16 @@ export const getIntent = async (
 			};end`;
 		} else if (os === 'ios') {
 			intent = `${player}://${resp.download.replace('https://', '')}`;
+		} else if (os === 'ios2') {
+			intent = `${player}://x-callback-url/open?url=${resp.download}`;
 		} else if (os === 'mac') {
 			intent = `${player}://${resp.download.replace('https://', '')}`;
 		} else if (os === 'mac2') {
 			intent = `${player}://weblink?url=${resp.download}`;
 		} else if (os === 'mac3') {
 			intent = `${player}://weblink?url=${resp.download}&new_window=1`;
+		} else if (os === 'mac4') {
+			intent = `${player}://x-callback-url/open?url=${resp.download}`;
 		} else {
 			intent = 'https://real-debrid.com/streaming-' + resp.id;
 		}
