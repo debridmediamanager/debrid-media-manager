@@ -93,7 +93,6 @@ function TorrentsPage() {
 	const [tvGroupingByEpisode] = useState<Record<string, number>>({});
 	const [tvGroupingByTitle] = useState<Record<string, number>>({});
 	const [hashGrouping] = useState<Record<string, number>>({});
-
 	const [sameTitle] = useState<Set<string>>(new Set());
 	const [sameHash] = useState<Set<string>>(new Set());
 
@@ -212,7 +211,9 @@ function TorrentsPage() {
 					torrents.forEach((torrent) => newIds.add(torrent.id));
 					const newTorrents = torrents.filter((torrent) => !oldIds.has(torrent.id));
 					setUserTorrentsList((prev) => {
-						return [...newTorrents, ...prev];
+						const newTorrentIds = new Set(newTorrents.map((t) => t.id));
+						const filteredPrev = prev.filter((t) => !newTorrentIds.has(t.id));
+						return [...newTorrents, ...filteredPrev];
 					});
 					await torrentDB.addAll(newTorrents);
 
@@ -285,7 +286,9 @@ function TorrentsPage() {
 				torrents.forEach((torrent) => newIds.add(torrent.id));
 				const newTorrents = torrents.filter((torrent) => !oldIds.has(torrent.id));
 				setUserTorrentsList((prev) => {
-					return [...prev, ...newTorrents];
+					const newTorrentIds = new Set(newTorrents.map((t) => t.id));
+					const filteredPrev = prev.filter((t) => !newTorrentIds.has(t.id));
+					return [...newTorrents, ...filteredPrev];
 				});
 				await torrentDB.addAll(newTorrents);
 
