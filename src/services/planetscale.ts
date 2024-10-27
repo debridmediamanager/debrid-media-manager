@@ -440,6 +440,8 @@ export class PlanetScaleCache {
 		return null;
 	}
 
+	// dmm cast
+
 	public async getLatestCast(imdbId: string, userId: string): Promise<string | null> {
 		const castItem = await this.prisma.cast.findFirst({
 			where: {
@@ -567,6 +569,52 @@ export class PlanetScaleCache {
 		// .slice(0, 48); // Takes the last 48 unique shows
 
 		return uniqueShows;
+	}
+
+	/**
+	 * Fetches all casted links for a given userId.
+	 * @param userId - The ID of the user.
+	 * @returns A promise that resolves to an array of URLs.
+	 */
+	public async fetchAllCastedLinks(userId: string): Promise<string[]> {
+		const castItems = await this.prisma.cast.findMany({
+			where: {
+				userId: userId,
+			},
+			select: {
+				imdbId: true,
+				url: true,
+				size: true,
+			},
+		});
+
+		return castItems.map((item) => item.url);
+	}
+
+	/**
+	 * Deletes a single casted link based on imdbId, userId, and hash.
+	 * @param imdbId - The IMDb ID of the movie/show.
+	 * @param userId - The ID of the user.
+	 * @param hash - The unique hash of the casted link.
+	 * @returns A promise that resolves when the deletion is complete.
+	 * @throws An error if the deletion fails (e.g., record not found).
+	 */
+	public async deleteCastedLink(imdbId: string, userId: string, hash: string): Promise<void> {
+		try {
+			await this.prisma.cast.delete({
+				where: {
+					imdbId_userId_hash: {
+						imdbId: imdbId,
+						userId: userId,
+						hash: hash,
+					},
+				},
+			});
+		} catch (error: any) {
+			// Handle specific Prisma errors if needed
+			// For example, Prisma.PrismaClientKnownRequestError with code 'P2025' for record not found
+			throw new Error(`Failed to delete casted link: ${error.message}`);
+		}
 	}
 }
 
