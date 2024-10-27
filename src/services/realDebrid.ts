@@ -7,8 +7,6 @@ import {
 	AddMagnetResponse,
 	CredentialsResponse,
 	DeviceCodeResponse,
-	DownloadResponse,
-	MediaInfoResponse,
 	RdInstantAvailabilityResponse,
 	TorrentInfoResponse,
 	UnrestrictResponse,
@@ -90,9 +88,8 @@ export const getUserTorrentsList = async (
 	page: number = 1
 ): Promise<UserTorrentsResult> => {
 	try {
-		const host =
-			limit === 1 ? `${config.proxy}${config.realDebridHostname}` : config.realDebridHostname;
-		const url = new URL(`${host}/rest/1.0/torrents`);
+		const url = new URL(`${config.realDebridHostname}/rest/1.0/torrents`);
+		console.log('path:', url.pathname);
 		url.searchParams.append('page', page.toString());
 		url.searchParams.append('limit', limit.toString());
 
@@ -103,27 +100,6 @@ export const getUserTorrentsList = async (
 				Authorization: `Bearer ${accessToken}`,
 			},
 		});
-
-		// Only retry for pages beyond the first page
-		if (page > 1) {
-			const maxRetries = 5;
-			let retryCount = 0;
-
-			while (response && response.length === 0 && retryCount < maxRetries) {
-				// Wait for a short time before retrying
-				await new Promise((resolve) => setTimeout(resolve, 1000));
-
-				response = await apiClient.sendRequest<UserTorrentResponse[]>({
-					url: url.toString(),
-					method: 'GET',
-					headers: {
-						Authorization: `Bearer ${accessToken}`,
-					},
-				});
-
-				retryCount++;
-			}
-		}
 
 		return {
 			data: response,
@@ -141,7 +117,7 @@ export async function getUserTorrentsListThruProxy(
 	page: number = 1
 ): Promise<UserTorrentsResult> {
 	try {
-		const client = await createTorrentsClient(accessToken);
+		const client = await createAxiosClient(accessToken);
 		const host =
 			limit === 1 ? `${config.proxy}${config.realDebridHostname}` : config.realDebridHostname;
 		const response = await client.get<UserTorrentResponse[]>(`${host}/rest/1.0/torrents`, {
@@ -168,48 +144,6 @@ export async function getUserTorrentsListThruProxy(
 		throw error;
 	}
 }
-
-export const getDownloads = async (accessToken: string): Promise<DownloadResponse[]> => {
-	try {
-		let downloads: DownloadResponse[] = [];
-		let page = 1;
-		let limit = 2500;
-
-		while (true) {
-			const client = await createAPIClient(accessToken);
-			const response = await client.get<DownloadResponse[]>(
-				`${config.realDebridHostname}/rest/1.0/downloads`,
-				{ params: { page, limit } }
-			);
-
-			const {
-				data,
-				headers: { 'x-total-count': totalCount },
-			} = response;
-			downloads = downloads.concat(data);
-
-			if (data.length < limit || !totalCount) {
-				break;
-			}
-
-			const totalCountValue = parseInt(totalCount, 10);
-			if (isNaN(totalCountValue)) {
-				break;
-			}
-
-			if (data.length >= totalCountValue) {
-				break;
-			}
-
-			page++;
-		}
-
-		return downloads;
-	} catch (error: any) {
-		console.error('Error fetching downloads list:', error.message);
-		throw error;
-	}
-};
 
 export const getTorrentInfo = async (
 	accessToken: string,
@@ -406,26 +340,6 @@ export const proxyUnrestrictLink = async (
 	}
 };
 
-export const getMediaInfo = async (
-	accessToken: string,
-	downloadId: string,
-	bare: boolean = false
-): Promise<MediaInfoResponse> => {
-	try {
-		const client = await createAPIClient(accessToken);
-		const response = await client.get<MediaInfoResponse>(
-			`${
-				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
-			}/rest/1.0/streaming/mediaInfos/${downloadId}`
-		);
-
-		return response.data;
-	} catch (error: any) {
-		console.error('Error fetching media info:', error.message);
-		throw error;
-	}
-};
-
 export const getTimeISO = async (): Promise<string> => {
 	try {
 		return await apiClient.sendRequest<string>({
@@ -438,34 +352,6 @@ export const getTimeISO = async (): Promise<string> => {
 	}
 };
 
-// Delay function that returns a promise which resolves after a given time
-const delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
-
-// Wrapper function to control the rate of execution
-function executeWithRateLimit<T extends (...args: any[]) => any>(
-	fn: T,
-	interval: number
-): (...args: Parameters<T>) => Promise<ReturnType<T>> {
-	let lastExecutionTime = 0;
-	let queue: Promise<void> = Promise.resolve();
-
-	return async function (...args: Parameters<T>): Promise<ReturnType<T>> {
-		queue = queue.then(async () => {
-			const now = Date.now();
-			const timeSinceLastExecution = now - lastExecutionTime;
-
-			if (timeSinceLastExecution < interval) {
-				await delay(interval - timeSinceLastExecution);
-			}
-
-			lastExecutionTime = Date.now();
-			return fn(...args);
-		});
-
-		return queue as Promise<ReturnType<T>>;
-	};
-}
-
 // Function to create an Axios client with a given token
 function createAxiosClient(token: string): AxiosInstance {
 	return axios.create({
@@ -474,6 +360,3 @@ function createAxiosClient(token: string): AxiosInstance {
 		},
 	});
 }
-
-export const createAPIClient = executeWithRateLimit(createAxiosClient, 350);
-export const createTorrentsClient = executeWithRateLimit(createAxiosClient, 1200);
