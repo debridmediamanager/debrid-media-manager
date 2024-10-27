@@ -89,7 +89,6 @@ export const getUserTorrentsList = async (
 ): Promise<UserTorrentsResult> => {
 	try {
 		const url = new URL(`${config.realDebridHostname}/rest/1.0/torrents`);
-		console.log('path:', url.pathname);
 		url.searchParams.append('page', page.toString());
 		url.searchParams.append('limit', limit.toString());
 
