@@ -2,14 +2,10 @@
 FROM node:18-alpine AS base
 WORKDIR /app
 
-# Dependencies stage
-FROM base AS dependencies
+# Build stage (combines dependencies and build)
+FROM base AS build
 COPY package*.json ./
 RUN npm ci
-
-# Build stage
-FROM base AS build
-COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate && npm run build
 
