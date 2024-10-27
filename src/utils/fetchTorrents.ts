@@ -5,6 +5,7 @@ import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import { every, some } from 'lodash';
 import toast from 'react-hot-toast';
+import { runConcurrentFunctions } from './batch';
 import { getMediaId } from './mediaId';
 import { getTypeByNameAndFileCount } from './mediaType';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
@@ -37,15 +38,18 @@ export const fetchRealDebrid = async (
 
 		// Step 3: Send requests in parallel to fetch the other items. Limit count should be 1000
 		const limit = 1000;
-		const maxPages = Math.ceil((totalCount ?? 0) / limit);
-		const allPagesPromises = [];
+		const maxPages = Math.ceil((totalCount ?? 1) / limit);
+		const funcs = [];
 
 		for (let page = 1; page <= maxPages; page++) {
-			allPagesPromises.push(getUserTorrentsList(rdKey, limit, page));
-			await new Promise((resolve) => setTimeout(resolve, 800));
+			funcs.push(() => getUserTorrentsList(rdKey, limit, page));
 		}
 
-		const pagesOfTorrents = await Promise.all(allPagesPromises);
+		const [pagesOfTorrents, errors] = await runConcurrentFunctions(funcs, 2, 0);
+		if (errors.length > 0) {
+			console.error('Some requests failed:', errors);
+		}
+
 		const allData = pagesOfTorrents.flatMap((pageResult) => pageResult.data);
 
 		const torrents = await processTorrents(allData);
