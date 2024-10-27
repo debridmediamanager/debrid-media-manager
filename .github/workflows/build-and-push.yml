@@ -40,4 +40,4 @@ jobs:
 
       - name: Deploy to Docker Swarm
         run: |
-          docker service update --image debridmediamanager/debrid-media-manager:latest --force dmm_web
+          docker service update --image debridmediamanager/debrid-media-manager:latest --force dmm_web &
