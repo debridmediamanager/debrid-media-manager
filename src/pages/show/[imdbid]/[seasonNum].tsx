@@ -12,7 +12,7 @@ import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorr
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { applyQuickSearch2 } from '@/utils/quickSearch';
-import { borderColor, btnColor, btnIcon, btnLabel, fileSize, sortByMedian } from '@/utils/results';
+import { borderColor, btnColor, btnIcon, btnLabel, fileSize, sortByBiggest } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { defaultEpisodeSize, defaultPlayer } from '@/utils/settings';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
@@ -127,14 +127,14 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					instantChecks.push(
 						wrapLoading(
 							'RD',
-							instantCheckInRd(rdKey, hashArr, setSearchResults, sortByMedian)
+							instantCheckInRd(rdKey, hashArr, setSearchResults, sortByBiggest)
 						)
 					);
 				if (adKey)
 					instantChecks.push(
 						wrapLoading(
 							'AD',
-							instantCheckInAd(adKey, hashArr, setSearchResults, sortByMedian)
+							instantCheckInAd(adKey, hashArr, setSearchResults, sortByBiggest)
 						)
 					);
 				const counts = await Promise.all(instantChecks);
