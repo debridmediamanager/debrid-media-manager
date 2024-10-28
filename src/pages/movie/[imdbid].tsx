@@ -56,6 +56,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		window.localStorage.getItem('settings:onlyTrustedTorrents') === 'true';
 	const defaultTorrentsFilter =
 		window.localStorage.getItem('settings:defaultTorrentsFilter') ?? '';
+	const hideMultipleFiles = window.localStorage.getItem('settings:hideMultipleFiles') === 'true';
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -425,7 +426,12 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 						const downloading =
 							isDownloading('rd', r.hash) || isDownloading('ad', r.hash);
 						const inYourLibrary = downloaded || downloading;
-						if (onlyShowCached && !r.rdAvailable && !r.adAvailable && !inYourLibrary)
+						if (
+							onlyShowCached &&
+							!inYourLibrary &&
+							((!r.rdAvailable && !r.adAvailable) ||
+								(hideMultipleFiles && r.videoCount > 1))
+						)
 							return;
 						if (
 							movieMaxSize !== '0' &&

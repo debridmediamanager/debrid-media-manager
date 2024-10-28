@@ -250,87 +250,102 @@ function flexEq(test: string, target: string, targetYears: string[]) {
 }
 
 function matchesTitle(filename: string, title: string): boolean {
-    const commonWords = new Set<string>(["the", "and", "of", "in", "a", "an", "with"]);
+	const commonWords = new Set<string>(['the', 'and', 'of', 'in', 'a', 'an', 'with']);
 
-    const symbolToWordsMap: { [key: string]: string[] } = {
-        "&": ["and"],
-        "@": ["at"],
-        "#": ["number", "no"],
-        "+": ["plus", "and"],
-        "%": ["percent", "pct"],
-    };
+	const symbolToWordsMap: { [key: string]: string[] } = {
+		'&': ['and'],
+		'@': ['at'],
+		'#': ['number', 'no'],
+		'+': ['plus', 'and'],
+		'%': ['percent', 'pct'],
+	};
 
-    const normalizeText = (text: string) => text
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")  // Remove diacritics
-        .replace(/['‘’`]/g, "")           // Remove apostrophes for flexibility
-        .replace(/[-.]/g, " ")            // Treat hyphens and dots as spaces
-        .replace(/\s+/g, " ")
-        .replace(/[^a-z0-9&@#%+ ]/g, ""); // Remove symbols except mapped ones
+	const normalizeText = (text: string) =>
+		text
+			.toLowerCase()
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+			.replace(/['‘’`]/g, '') // Remove apostrophes for flexibility
+			.replace(/[-.]/g, ' ') // Treat hyphens and dots as spaces
+			.replace(/\s+/g, ' ')
+			.replace(/[^a-z0-9&@#%+ ]/g, ''); // Remove symbols except mapped ones
 
-    let filenameNormalized = normalizeText(filename);
-    const titleNormalized = normalizeText(title);
+	let filenameNormalized = normalizeText(filename);
+	const titleNormalized = normalizeText(title);
 
-    // Substitute symbols with word equivalents in the filename
-    for (const [symbol, words] of Object.entries(symbolToWordsMap)) {
-        const wordAlternatives = words.map(escapeRegExp).join("|");
-        filenameNormalized = filenameNormalized.replace(new RegExp(`\\${symbol}`, "g"), ` (${wordAlternatives}) `);
-    }
+	// Substitute symbols with word equivalents in the filename
+	for (const [symbol, words] of Object.entries(symbolToWordsMap)) {
+		const wordAlternatives = words.map(escapeRegExp).join('|');
+		filenameNormalized = filenameNormalized.replace(
+			new RegExp(`\\${symbol}`, 'g'),
+			` (${wordAlternatives}) `
+		);
+	}
 
-    const titleTerms = titleNormalized.split(" ").filter(term => !commonWords.has(term));
-    const significantTermCount = titleTerms.length;
-    const requiredMatches = Math.ceil(significantTermCount / 2); // Majority
+	const titleTerms = titleNormalized.split(' ').filter((term) => !commonWords.has(term));
+	const significantTermCount = titleTerms.length;
+	const requiredMatches = Math.ceil(significantTermCount / 2); // Majority
 
-    let matchedTerms = 0;
+	let matchedTerms = 0;
 
-    for (let term of titleTerms) {
-        // Escape regex special characters in the term
-        const escapedTerm = escapeRegExp(term);
+	for (let term of titleTerms) {
+		// Escape regex special characters in the term
+		const escapedTerm = escapeRegExp(term);
 
-        const termIsRoman = /^[IVXLCDM]+$/.test(term);
-        const romanNumber = termIsRoman ? romanToNumber(term) : NaN;
+		const termIsRoman = /^[IVXLCDM]+$/.test(term);
+		const romanNumber = termIsRoman ? romanToNumber(term) : NaN;
 
-        // Flexible regex pattern to handle optional punctuation and spaces
-        const regexPattern = escapedTerm
-            .replace(/(.)\1{2,}/g, "$1{2}")
-            .replace(/[-.]/g, "[ -]?")
-            .replace(/\./g, "\\.?");
+		// Flexible regex pattern to handle optional punctuation and spaces
+		const regexPattern = escapedTerm
+			.replace(/(.)\1{2,}/g, '$1{2}')
+			.replace(/[-.]/g, '[ -]?')
+			.replace(/\./g, '\\.?');
 
-        const regex = new RegExp(`\\b${regexPattern}\\b${termIsRoman && !isNaN(romanNumber) ? `|\\b${romanNumber}\\b` : ""}`, "i");
+		const regex = new RegExp(
+			`\\b${regexPattern}\\b${termIsRoman && !isNaN(romanNumber) ? `|\\b${romanNumber}\\b` : ''}`,
+			'i'
+		);
 
-        if (regex.test(filenameNormalized)) {
-            matchedTerms++;
-            if (matchedTerms >= requiredMatches) {
-                return true;
-            }
-        }
-    }
+		if (regex.test(filenameNormalized)) {
+			matchedTerms++;
+			if (matchedTerms >= requiredMatches) {
+				return true;
+			}
+		}
+	}
 
-    return false;
+	return false;
 }
 
 // Helper function to escape regex special characters in a string
 function escapeRegExp(text: string): string {
-    return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+	return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
 // Helper function to convert Roman numerals to numbers
 function romanToNumber(roman: string): number {
-    const romanNumerals: { [key: string]: number } = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
-    let num = 0;
-    let prevValue = 0;
-    for (const char of roman.toUpperCase()) {
-        const value = romanNumerals[char];
-        if (!value) return NaN; // Invalid Roman numeral character
-        if (value <= prevValue) {
-            num += value;
-        } else {
-            num += value - 2 * prevValue;
-        }
-        prevValue = value;
-    }
-    return num;
+	const romanNumerals: { [key: string]: number } = {
+		I: 1,
+		V: 5,
+		X: 10,
+		L: 50,
+		C: 100,
+		D: 500,
+		M: 1000,
+	};
+	let num = 0;
+	let prevValue = 0;
+	for (const char of roman.toUpperCase()) {
+		const value = romanNumerals[char];
+		if (!value) return NaN; // Invalid Roman numeral character
+		if (value <= prevValue) {
+			num += value;
+		} else {
+			num += value - 2 * prevValue;
+		}
+		prevValue = value;
+	}
+	return num;
 }
 
 export function matchesYear(test: string, targetYears: number[]): boolean {
