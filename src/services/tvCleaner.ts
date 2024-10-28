@@ -4,7 +4,6 @@ import {
 	getSeasonNameAndCode,
 	getSeasonYear,
 	grabTvMetadata,
-	matchesTitle,
 	meetsTitleConditions,
 	padWithZero,
 } from '@/utils/checks';
@@ -130,7 +129,7 @@ export async function cleanTvScrapes(
 		}
 		const scrapesCount = scrapes.length;
 		if (!scrapes.length) {
-			console.log(`⚠️ No results for ${cleanTitle} s${padWithZero(seasonNumber)}`);
+			console.log(`⚠️ No results for ${cleanTitle} S${padWithZero(seasonNumber)}}`);
 			return;
 		}
 
@@ -147,9 +146,7 @@ export async function cleanTvScrapes(
 			await db.saveScrapedResults(`tv:${imdbId}:${seasonNumber}`, scrapes, false, true);
 			await db.markAsDone(imdbId);
 			console.log(
-				`⚠️ Preliminary procedure removed all results left for ${cleanTitle} s${padWithZero(
-					seasonNumber
-				)}`
+				`⚠️ Preliminary procedure removed all results left for ${cleanTitle} S${padWithZero(seasonNumber)}`
 			);
 			continue;
 		}
@@ -167,38 +164,23 @@ export async function cleanTvScrapes(
 		let processedResults = flattenAndRemoveDuplicates(searchResults);
 		processedResults = sortByFileSize(processedResults);
 		if (processedResults.length < scrapesCount) {
-			await db.saveScrapedResults(
-				`tv:${imdbId}:${seasonNumber}`,
-				processedResults,
-				true,
-				true
-			);
-			await db.markAsDone(imdbId);
-			const years = [year, seasonYear].filter((y) => y !== undefined) as string[];
+			// await db.saveScrapedResults(
+			// 	`tv:${imdbId}:${seasonNumber}`,
+			// 	processedResults,
+			// 	true,
+			// 	true
+			// );
+			// await db.markAsDone(imdbId);
 			console.log(
-				scrapes
-					.filter((s) => !processedResults.find((p) => p.hash === s.hash))
-					.map(
-						(s) =>
-							`⚡ ${s.title} ${
-								titles.some((t) => matchesTitle(t, years, s.title)) ? '✅' : '❌'
-							}`
-					)
-			);
-			console.log(
-				`📺 Removed ${scrapesCount - processedResults.length}, left ${
+				`🌟 Removed ${scrapesCount - processedResults.length}, left ${
 					processedResults.length
-				} results for ${cleanTitle} s${padWithZero(seasonNumber)}`
+				} results for ${cleanTitle} S${padWithZero(seasonNumber)}}`
 			);
 			return;
 		}
+
 		console.log(
-			scrapes.map(
-				(s) =>
-					`🔋 ${s.title} ${
-						titles.some((t) => matchesTitle(t, [year], s.title)) ? '✅' : '❌'
-					}`
-			)
+			`📺 Retained ${processedResults.length} results for ${cleanTitle} S${padWithZero(seasonNumber)}}`
 		);
 	}
 }
