@@ -2,10 +2,15 @@
 FROM node:18-alpine AS base
 WORKDIR /app
 
-# Build stage (combines dependencies and build)
-FROM base AS build
+# Dependencies stage - this will cache node_modules
+FROM base AS deps
 COPY package*.json ./
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
+
+# Build stage
+FROM base AS build
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate && npm run build
 
