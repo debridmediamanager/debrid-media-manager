@@ -2,8 +2,6 @@ import {
 	filterByMovieConditions,
 	getAllPossibleTitles,
 	grabMovieMetadata,
-	matchesTitle,
-	matchesYear,
 	meetsTitleConditions,
 } from '@/utils/checks';
 import axios from 'axios';
@@ -46,7 +44,6 @@ export async function cleanByImdbId(imdbId: string) {
 	}
 
 	const isMovie = mdbInfo.data.type === 'movie' || tmdbSearch.data.movie_results?.length > 0;
-
 	if (isMovie) {
 		try {
 			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.movie_results[0]?.id;
@@ -111,10 +108,10 @@ export async function cleanMovieScrapes(
 		airDate,
 	} = grabMovieMetadata(imdbId, tmdbData, mdbData);
 
-	scrapes = filterByMovieConditions(scrapes);
-	if (!scrapes.length) {
-		await db.saveScrapedResults(`movie:${imdbId}`, scrapes, false, true);
-		await db.markAsDone(imdbId);
+	let filteredScrapes = filterByMovieConditions(scrapes);
+	if (!filteredScrapes.length) {
+		// await db.saveScrapedResults(`movie:${imdbId}`, scrapes, false, true);
+		// await db.markAsDone(imdbId);
 		console.log(`⚠️ Preliminary procedure removed all results left for ${cleanTitle}`);
 		return;
 	}
@@ -130,38 +127,26 @@ export async function cleanMovieScrapes(
 		titles,
 		year,
 		airDate,
-		scrapes,
+		scrapes: filteredScrapes,
 	});
 	let processedResults = flattenAndRemoveDuplicates(searchResults);
 	processedResults = sortByFileSize(processedResults);
 
 	if (processedResults.length < scrapesCount) {
-		await db.saveScrapedResults(`movie:${imdbId}`, processedResults, true, true);
-		await db.markAsDone(imdbId);
+		// await db.saveScrapedResults(`movie:${imdbId}`, processedResults, true, true);
+		// await db.markAsDone(imdbId);
 		console.log(
-			scrapes
-				.filter((s) => !processedResults.find((p) => p.hash === s.hash))
-				.map(
-					(s) =>
-						`⚡ ${s.title} ${
-							titles.some((t) => matchesYear(s.title, [year])) ? '✅' : '❌'
-						}`
-				)
-		);
-		console.log(
-			`🎥 Removed ${scrapesCount - processedResults.length}, left ${
+			`🌟 Removed ${scrapesCount - processedResults.length}, left ${
 				processedResults.length
 			} results for ${cleanTitle}`
 		);
+		// show removed items from scrapes
+		const removedItems = scrapes.filter((scrape) => !processedResults.includes(scrape));
+		if (removedItems.length) {
+			console.log('Removed items:', removedItems);
+		}
 		return;
 	}
 
-	console.log(
-		scrapes.map(
-			(s) =>
-				`🔋 ${s.title} ${
-					titles.some((t) => matchesTitle(t, [year], s.title)) ? '✅' : '❌'
-				}`
-		)
-	);
+	console.log(`🎥 Retained ${processedResults.length} results for ${cleanTitle}`);
 }

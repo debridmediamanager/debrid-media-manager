@@ -1,6 +1,7 @@
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import fs from 'fs';
+import ptt from 'parse-torrent-title';
 import { cleanSearchQuery, liteCleanSearchQuery } from './search';
 
 let dictionary: Set<string>;
@@ -248,98 +249,113 @@ function flexEq(test: string, target: string, targetYears: string[]) {
 	}
 }
 
-export function matchesTitle(target: string, targetYears: string[], test: string): boolean {
-	target = target.toLowerCase();
-	test = test.toLowerCase();
+function matchesTitle(filename: string, title: string): boolean {
+    const commonWords = new Set<string>(["the", "and", "of", "in", "a", "an", "with"]);
 
-	const targetTerms = target.split(/\W+/).filter((e) => e);
-	const containsYear = filenameHasGivenYear(test, targetYears);
-	if (flexEq(test, target, targetYears)) {
-		const sequenceCheck = countTestTermsInTarget(test, targetTerms.join(' '), true);
-		// console.log(`🎲 FlexEq '${target}' is found in '${test}'`, sequenceCheck);
-		if (!(containsYear || sequenceCheck >= 0)) {
-			console.log(`👻 FlexEq '${target}' is not '${test}' !!!`);
-		}
-		return containsYear || sequenceCheck >= 0;
-	}
+    const symbolToWordsMap: { [key: string]: string[] } = {
+        "&": ["and"],
+        "@": ["at"],
+        "#": ["number", "no"],
+        "+": ["plus", "and"],
+        "%": ["percent", "pct"],
+    };
 
-	const targetTermsCount = targetTerms.length;
-	if (targetTermsCount === 0 || (targetTermsCount <= 2 && !containsYear)) {
-		console.log(`👻 Too few terms in '${target}'`);
-		return false;
-	}
+    const normalizeText = (text: string) => text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")  // Remove diacritics
+        .replace(/['‘’`]/g, "")           // Remove apostrophes for flexibility
+        .replace(/[-.]/g, " ")            // Treat hyphens and dots as spaces
+        .replace(/\s+/g, " ")
+        .replace(/[^a-z0-9&@#%+ ]/g, ""); // Remove symbols except mapped ones
 
-	const keyTerms: string[] = targetTerms.filter(
-		(s) => (s.length > 1 && !dictionary.has(s)) || s.length > 5
-	);
-	keyTerms.push(...target.split(/\w+/).filter((e) => e.length > 2));
-	const keySet = new Set(keyTerms);
-	const commonTerms = targetTerms.filter((s) => !keySet.has(s));
+    let filenameNormalized = normalizeText(filename);
+    const titleNormalized = normalizeText(title);
 
-	let hasYearScore = targetTermsCount * 0.4;
-	let totalScore = keyTerms.length * 2 + commonTerms.length;
+    // Substitute symbols with word equivalents in the filename
+    for (const [symbol, words] of Object.entries(symbolToWordsMap)) {
+        const wordAlternatives = words.map(escapeRegExp).join("|");
+        filenameNormalized = filenameNormalized.replace(new RegExp(`\\${symbol}`, "g"), ` (${wordAlternatives}) `);
+    }
 
-	if (keyTerms.length === 0 && targetTermsCount <= 2 && !containsYear) {
-		console.log(`👻 No identifiable terms in '${target}'`);
-		return false;
-	}
+    const titleTerms = titleNormalized.split(" ").filter(term => !commonWords.has(term));
+    const significantTermCount = titleTerms.length;
+    const requiredMatches = Math.ceil(significantTermCount / 2); // Majority
 
-	let foundKeyTerms = keyTerms.filter((term) => test.includes(term)).length;
-	let foundCommonTerms = commonTerms.filter((term) => test.includes(term)).length;
-	const score = foundKeyTerms * 2 + foundCommonTerms + (containsYear ? hasYearScore : 0);
-	if (Math.floor(score / 0.8) >= totalScore) {
-		// console.log(`🎯 Scored ${score} out of ${totalScore} for target '${target}' in '${test}' (+${foundKeyTerms*2} +${foundCommonTerms} +${containsYear?hasYearScore:0})`, keyTerms, commonTerms);
-		return true;
-	}
+    let matchedTerms = 0;
 
-	console.log(
-		`👻 Found key terms ${foundKeyTerms}, common terms ${foundCommonTerms} in '${test}' (score: ${score}/${totalScore})`
-	);
-	return false;
+    for (let term of titleTerms) {
+        // Escape regex special characters in the term
+        const escapedTerm = escapeRegExp(term);
+
+        const termIsRoman = /^[IVXLCDM]+$/.test(term);
+        const romanNumber = termIsRoman ? romanToNumber(term) : NaN;
+
+        // Flexible regex pattern to handle optional punctuation and spaces
+        const regexPattern = escapedTerm
+            .replace(/(.)\1{2,}/g, "$1{2}")
+            .replace(/[-.]/g, "[ -]?")
+            .replace(/\./g, "\\.?");
+
+        const regex = new RegExp(`\\b${regexPattern}\\b${termIsRoman && !isNaN(romanNumber) ? `|\\b${romanNumber}\\b` : ""}`, "i");
+
+        if (regex.test(filenameNormalized)) {
+            matchedTerms++;
+            if (matchedTerms >= requiredMatches) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
-export function matchesYear(test: string, targetYears: string[]): boolean {
-	const yearRegex = /189\d|19\d\d|20[012][012345]/g;
+// Helper function to escape regex special characters in a string
+function escapeRegExp(text: string): string {
+    return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
+// Helper function to convert Roman numerals to numbers
+function romanToNumber(roman: string): number {
+    const romanNumerals: { [key: string]: number } = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
+    let num = 0;
+    let prevValue = 0;
+    for (const char of roman.toUpperCase()) {
+        const value = romanNumerals[char];
+        if (!value) return NaN; // Invalid Roman numeral character
+        if (value <= prevValue) {
+            num += value;
+        } else {
+            num += value - 2 * prevValue;
+        }
+        prevValue = value;
+    }
+    return num;
+}
+
+export function matchesYear(test: string, targetYears: number[]): boolean {
+	// Improved regex with word boundaries for precise matching
+	const yearRegex = /\b(?:189\d|19\d\d|20[012][0-5])\b/g;
+
+	// Extract years from the test string
 	const yearsFromTest = [...test.matchAll(yearRegex)]
-		.map((m) => parseInt(m.pop()!, 10))
-		.filter((y) => y !== 1920);
+		.map((m) => parseInt(m[0], 10))
+		.filter((y) => y !== 1920); // Exclude the year 1920 if needed
+
 	if (
 		yearsFromTest.length > 0 &&
 		targetYears.length > 0 &&
-		!yearsFromTest.some(
-			(testYear) =>
-				targetYears.includes(testYear.toString()) ||
-				targetYears.includes((testYear - 1).toString()) ||
-				targetYears.includes((testYear + 1).toString())
-		)
+		!yearsFromTest.some((testYear) => {
+			return (
+				targetYears.includes(testYear) ||
+				targetYears.includes(testYear - 1) ||
+				targetYears.includes(testYear + 1)
+			);
+		})
 	) {
-		console.log(`👻 Year mismatch:`, targetYears, yearsFromTest);
 		return false;
 	}
 	return true;
-}
-
-export function includesMustHaveTerms(mustHaveTerms: string[], testTitle: string) {
-	return mustHaveTerms.every((term) => {
-		let newTitle = testTitle.replace(term, '');
-		if (newTitle !== testTitle) {
-			testTitle = newTitle;
-			return true;
-		}
-
-		newTitle = testTitle.replace(removeDiacritics(term), '');
-		if (newTitle !== testTitle) {
-			testTitle = newTitle;
-			return true;
-		}
-
-		newTitle = testTitle.replace(removeRepeats(term), '');
-		if (newTitle !== testTitle) {
-			testTitle = newTitle;
-			return true;
-		}
-		return false;
-	});
 }
 
 export function hasNoBannedTerms(targetTitle: string, testTitle: string): boolean {
@@ -368,11 +384,28 @@ export function meetsTitleConditions(
 	years: string[],
 	testTitle: string
 ): boolean {
-	return (
-		matchesTitle(targetTitle, years, testTitle) &&
-		hasNoBannedTerms(targetTitle, testTitle) &&
-		matchesYear(testTitle, years)
+	testTitle = testTitle.replace(/^www\.\w+\.(com|net|org)\s*-\s*/i, '');
+	testTitle = testTitle.replace(/^\[[^\]]+\]\s*/i, '');
+	const information = ptt.parse(testTitle);
+	const ratio =
+		1 -
+		levenshtein(targetTitle, information.title) /
+			(targetTitle.length + information.title.length);
+	if (ratio >= 0.85) return true;
+
+	const targetTitleNoSpecial = targetTitle.replace(/[^a-z0-9\s]/gi, '');
+	const testTitleNoSpecial = information.title.replace(/[^a-z0-9\s]/gi, '');
+	if (targetTitleNoSpecial.includes(testTitleNoSpecial)) return true;
+
+	if (information.group) {
+		testTitle = testTitle.replace(information.group, '');
+	}
+	const yearOk = matchesYear(
+		testTitle,
+		years.map((year) => parseInt(year, 10))
 	);
+	const isMatch = matchesTitle(testTitle, targetTitle) && yearOk;
+	return isMatch;
 }
 
 export function countUncommonWords(title: string) {
@@ -394,9 +427,10 @@ export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 		} (${imdbId}) (uncommon terms: ${countUncommonWords(tmdbData.title)})`
 	);
 	const year: string =
-		`${mdbData?.year}` ??
-		`${mdbData?.released?.substring(0, 4)}` ??
-		`${tmdbData.release_date?.substring(0, 4)}`;
+		mdbData?.year ??
+		mdbData?.released?.substring(0, 4) ??
+		tmdbData.release_date?.substring(0, 4) ??
+		'Unknown';
 	const airDate: string = mdbData?.released ?? tmdbData.release_date ?? '2000-01-01';
 	let originalTitle: string | undefined, cleanedTitle: string | undefined;
 
@@ -486,9 +520,10 @@ export function grabTvMetadata(imdbId: string, tmdbData: any, mdbData: any) {
 		`🏏 ${getSeasons(mdbData).length} season(s) of tv show: ${tmdbData.name} (${imdbId})...`
 	);
 	const year: string =
-		`${mdbData?.year}` ??
-		`${mdbData?.released?.substring(0, 4)}` ??
-		`${tmdbData.release_date?.substring(0, 4)}`;
+		mdbData?.year ??
+		mdbData?.released?.substring(0, 4) ??
+		tmdbData.release_date?.substring(0, 4) ??
+		'Unknown';
 	let originalTitle: string | undefined, cleanedTitle: string | undefined;
 
 	const processedTitle = tmdbData.name
@@ -592,7 +627,7 @@ export function filterByMovieConditions(items: ScrapeSearchResult[]) {
 				(result) => !/s\d\d?e\d\d?/i.test(result.title) && !/\Ws\d\d?\W/i.test(result.title)
 			)
 			// check for file size
-			.filter((result) => result.fileSize < 200000 && result.fileSize > 500)
+			.filter((result) => result.fileSize < 250000 && result.fileSize > 500)
 	);
 }
 
@@ -684,3 +719,102 @@ export const getSeasonNameAndCode = (season: any) => {
 };
 
 export const getSeasonYear = (season: any): string => season.air_date?.substring(0, 4);
+
+export function levenshtein(s: string, t: string) {
+	if (s === t) {
+		return 0;
+	}
+	var n = s.length,
+		m = t.length;
+	if (n === 0 || m === 0) {
+		return n + m;
+	}
+	var x = 0,
+		y,
+		a,
+		b,
+		c,
+		d,
+		g,
+		h,
+		k;
+	var p = new Array(n);
+	for (y = 0; y < n; ) {
+		p[y] = ++y;
+	}
+
+	for (; x + 3 < m; x += 4) {
+		var e1 = t.charCodeAt(x);
+		var e2 = t.charCodeAt(x + 1);
+		var e3 = t.charCodeAt(x + 2);
+		var e4 = t.charCodeAt(x + 3);
+		c = x;
+		b = x + 1;
+		d = x + 2;
+		g = x + 3;
+		h = x + 4;
+		for (y = 0; y < n; y++) {
+			k = s.charCodeAt(y);
+			a = p[y];
+			if (a < c || b < c) {
+				c = a > b ? b + 1 : a + 1;
+			} else {
+				if (e1 !== k) {
+					c++;
+				}
+			}
+
+			if (c < b || d < b) {
+				b = c > d ? d + 1 : c + 1;
+			} else {
+				if (e2 !== k) {
+					b++;
+				}
+			}
+
+			if (b < d || g < d) {
+				d = b > g ? g + 1 : b + 1;
+			} else {
+				if (e3 !== k) {
+					d++;
+				}
+			}
+
+			if (d < g || h < g) {
+				g = d > h ? h + 1 : d + 1;
+			} else {
+				if (e4 !== k) {
+					g++;
+				}
+			}
+			p[y] = h = g;
+			g = d;
+			d = b;
+			b = c;
+			c = a;
+		}
+	}
+
+	for (; x < m; ) {
+		var e = t.charCodeAt(x);
+		c = x;
+		d = ++x;
+		for (y = 0; y < n; y++) {
+			a = p[y];
+			if (a < c || d < c) {
+				d = a > d ? d + 1 : a + 1;
+			} else {
+				if (e !== s.charCodeAt(y)) {
+					d = c + 1;
+				} else {
+					d = c;
+				}
+			}
+			p[y] = d;
+			c = a;
+		}
+		h = d;
+	}
+
+	return h;
+}
