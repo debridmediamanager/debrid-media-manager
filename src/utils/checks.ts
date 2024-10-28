@@ -249,71 +249,53 @@ function flexEq(test: string, target: string, targetYears: string[]) {
 	}
 }
 
-function matchesTitle(filename: string, title: string): boolean {
-	const commonWords = new Set<string>(['the', 'and', 'of', 'in', 'a', 'an', 'with']);
+export function matchesTitle(target: string, targetYears: string[], test: string): boolean {
+	target = target.toLowerCase();
+	test = test.toLowerCase();
 
-	const symbolToWordsMap: { [key: string]: string[] } = {
-		'&': ['and'],
-		'@': ['at'],
-		'#': ['number', 'no'],
-		'+': ['plus', 'and'],
-		'%': ['percent', 'pct'],
-	};
-
-	const normalizeText = (text: string) =>
-		text
-			.toLowerCase()
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-			.replace(/['‘’`]/g, '') // Remove apostrophes for flexibility
-			.replace(/[-.]/g, ' ') // Treat hyphens and dots as spaces
-			.replace(/\s+/g, ' ')
-			.replace(/[^a-z0-9&@#%+ ]/g, ''); // Remove symbols except mapped ones
-
-	let filenameNormalized = normalizeText(filename);
-	const titleNormalized = normalizeText(title);
-
-	// Substitute symbols with word equivalents in the filename
-	for (const [symbol, words] of Object.entries(symbolToWordsMap)) {
-		const wordAlternatives = words.map(escapeRegExp).join('|');
-		filenameNormalized = filenameNormalized.replace(
-			new RegExp(`\\${symbol}`, 'g'),
-			` (${wordAlternatives}) `
-		);
-	}
-
-	const titleTerms = titleNormalized.split(' ').filter((term) => !commonWords.has(term));
-	const significantTermCount = titleTerms.length;
-	const requiredMatches = Math.ceil(significantTermCount / 2); // Majority
-
-	let matchedTerms = 0;
-
-	for (let term of titleTerms) {
-		// Escape regex special characters in the term
-		const escapedTerm = escapeRegExp(term);
-
-		const termIsRoman = /^[IVXLCDM]+$/.test(term);
-		const romanNumber = termIsRoman ? romanToNumber(term) : NaN;
-
-		// Flexible regex pattern to handle optional punctuation and spaces
-		const regexPattern = escapedTerm
-			.replace(/(.)\1{2,}/g, '$1{2}')
-			.replace(/[-.]/g, '[ -]?')
-			.replace(/\./g, '\\.?');
-
-		const regex = new RegExp(
-			`\\b${regexPattern}\\b${termIsRoman && !isNaN(romanNumber) ? `|\\b${romanNumber}\\b` : ''}`,
-			'i'
-		);
-
-		if (regex.test(filenameNormalized)) {
-			matchedTerms++;
-			if (matchedTerms >= requiredMatches) {
-				return true;
-			}
+	const targetTerms = target.split(/\W+/).filter((e) => e);
+	const containsYear = filenameHasGivenYear(test, targetYears);
+	if (flexEq(test, target, targetYears)) {
+		const sequenceCheck = countTestTermsInTarget(test, targetTerms.join(' '), true);
+		// console.log(`🎲 FlexEq '${target}' is found in '${test}'`, sequenceCheck);
+		if (!(containsYear || sequenceCheck >= 0)) {
+			console.log(`👻 FlexEq '${target}' is not '${test}' !!!`);
 		}
+		return containsYear || sequenceCheck >= 0;
 	}
 
+	const targetTermsCount = targetTerms.length;
+	if (targetTermsCount === 0 || (targetTermsCount <= 2 && !containsYear)) {
+		console.log(`👻 Too few terms in '${target}'`);
+		return false;
+	}
+
+	const keyTerms: string[] = targetTerms.filter(
+		(s) => (s.length > 1 && !dictionary.has(s)) || s.length > 5
+	);
+	keyTerms.push(...target.split(/\w+/).filter((e) => e.length > 2));
+	const keySet = new Set(keyTerms);
+	const commonTerms = targetTerms.filter((s) => !keySet.has(s));
+
+	let hasYearScore = targetTermsCount * 0.4;
+	let totalScore = keyTerms.length * 2 + commonTerms.length;
+
+	if (keyTerms.length === 0 && targetTermsCount <= 2 && !containsYear) {
+		console.log(`👻 No identifiable terms in '${target}'`);
+		return false;
+	}
+
+	let foundKeyTerms = keyTerms.filter((term) => test.includes(term)).length;
+	let foundCommonTerms = commonTerms.filter((term) => test.includes(term)).length;
+	const score = foundKeyTerms * 2 + foundCommonTerms + (containsYear ? hasYearScore : 0);
+	if (Math.floor(score / 0.8) >= totalScore) {
+		// console.log(`🎯 Scored ${score} out of ${totalScore} for target '${target}' in '${test}' (+${foundKeyTerms*2} +${foundCommonTerms} +${containsYear?hasYearScore:0})`, keyTerms, commonTerms);
+		return true;
+	}
+
+	console.log(
+		`👻 Found key terms ${foundKeyTerms}, common terms ${foundCommonTerms} in '${test}' (score: ${score}/${totalScore})`
+	);
 	return false;
 }
 
@@ -419,8 +401,7 @@ export function meetsTitleConditions(
 		testTitle,
 		years.map((year) => parseInt(year, 10))
 	);
-	const isMatch = matchesTitle(testTitle, targetTitle) && yearOk;
-	return isMatch;
+	return matchesTitle(targetTitle, years, testTitle) && yearOk;
 }
 
 export function countUncommonWords(title: string) {
