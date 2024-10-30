@@ -1,6 +1,8 @@
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
+import fs from 'fs';
+import path from 'path';
 
 interface ScrapeResponse {
 	status: string;
@@ -12,8 +14,11 @@ const pdb = new PlanetScaleCache();
 // Define a function to fetch RSS content, extract IDs, and fetch details for each ID
 const processJson = async (): Promise<void> => {
 	try {
-		// open file containing json and cast to YtsDetails[]
-		const json = require('./yts.json') as YtsDetails[];
+		// Read and parse the JSON file using fs
+		const jsonPath = path.join(process.cwd(), 'src', 'pages', 'api', 'importers', 'yts.json');
+		const jsonContent = fs.readFileSync(jsonPath, 'utf-8');
+		const json = JSON.parse(jsonContent) as YtsDetails[];
+		
 		const scrapesMap = new Map<string, any>();
 		for (const details of json) {
 			let imdbId = details.imdb_id;

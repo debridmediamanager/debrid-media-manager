@@ -55,6 +55,7 @@
       "@types/user-agents": "^1.0.2",
       "@types/uuid": "^9.0.4",
       "autoprefixer": "^10.4.14",
+      "critters": "^0.0.23",
       "eslint": "^8.49.0",
       "eslint-config-next": "^13.5.2",
       "postcss": "^8.4.21",
