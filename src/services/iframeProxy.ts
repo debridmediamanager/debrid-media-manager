@@ -90,7 +90,7 @@ export class IframeProxy {
 					return reject(new Error('iframe is not initialized'));
 				}
 
-				const messageId = crypto.randomUUID();
+				const messageId = Math.random().toString(36);
 				const fullRequestData: RequestData = { messageId, ...requestData };
 				this.pendingRequests.set(messageId, (data: any) => resolve(data as T));
 
