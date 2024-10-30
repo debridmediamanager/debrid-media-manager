@@ -54,3 +54,6 @@ src/hdt/*.json
 src/json-to-import
 
 public/sw.js
+public/workbox-*.js
+public/sw.js.map
+public/workbox-*.js.map
