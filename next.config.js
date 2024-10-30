@@ -76,7 +76,6 @@ const nextConfig = {
   },
   reactStrictMode: false,
   publicRuntimeConfig: {
-    // Will be available on both server and client
     externalSearchApiHostname: process.env.EXTERNAL_SEARCH_API_HOSTNAME,
     proxy: 'https://proxy.debridmediamanager.com/anticors?url=',
     realDebridHostname: 'https://app.real-debrid.com',
@@ -84,6 +83,43 @@ const nextConfig = {
     allDebridHostname: 'https://api.alldebrid.com',
     allDebridAgent: 'debridMediaManager',
     traktClientId: '8a7455d06804b07fa25e27454706c6f2107b6fe5ed2ad805eff3b456a17e79f0',
+  },
+  // Add optimization configurations
+  swcMinify: true, // Use SWC minifier
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production', // Remove console.log in production
+  },
+  experimental: {
+    optimizeCss: true, // Enable CSS optimization
+  },
+  webpack: (config, { dev, isServer }) => {
+    // Add webpack optimizations
+    if (!dev && !isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          minSize: 20000,
+          maxSize: 244000,
+          minChunks: 1,
+          maxAsyncRequests: 30,
+          maxInitialRequests: 30,
+          cacheGroups: {
+            defaultVendors: {
+              test: /[\\/]node_modules[\\/]/,
+              priority: -10,
+              reuseExistingChunk: true,
+            },
+            default: {
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      };
+    }
+    return config;
   },
 };
 
