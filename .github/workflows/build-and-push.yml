@@ -35,9 +35,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            debridmediamanager/debrid-media-manager:latest
-            debridmediamanager/debrid-media-manager:${{ steps.version.outputs.version }}
+            dmm-prod:latest
+            dmm-prod:${{ steps.version.outputs.version }}
 
       - name: Deploy to Docker Swarm
         run: |
-          docker service update --image debridmediamanager/debrid-media-manager:latest --force dmm_web
+          docker service update --image dmm-prod:latest --force dmm_web
