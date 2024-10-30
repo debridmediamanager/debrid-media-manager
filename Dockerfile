@@ -22,6 +22,8 @@ COPY --from=build /app/public ./public
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/.next/static ./.next/static
+# Copy the entire .next directory to ensure PWA files are included
+COPY --from=build /app/.next ./.next
 COPY --from=build /app/.next/standalone .
 RUN apk --no-cache add curl grep
 EXPOSE 3000
