@@ -5,12 +5,33 @@ export default function Document() {
 		<Html lang="en">
 			<Head>
 				<meta charSet="UTF-8" />
-				<meta name="description" content="Debrid Media Manager - Your personal media management solution" />
-				<meta name="keywords" content="media manager, digital media, streaming, movies, tv shows, anime" />
-				<meta name="theme-color" content="#ffffff" />
-				<meta name="apple-mobile-web-app-capable" content="yes" />
-				<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+				<meta
+					name="description"
+					content="Debrid Media Manager - Curate an infinite media library"
+				/>
+				<meta
+					name="keywords"
+					content="media manager, digital media, streaming, movies, tv shows, anime"
+				/>
+				<meta property="og:title" content="Debrid Media Manager" />
+				<meta property="og:description" content="Curate an infinite media library" />
+				<meta
+					property="og:image"
+					content="https://debridmediamanager.com/apple-touch-icon.png"
+				/>
+				<meta property="og:url" content="https://debridmediamanager.com" />
+				<meta property="og:type" content="website" />
+				<meta
+					name="viewport"
+					content="width=device-width, initial-scale=1, shrink-to-fit=no"
+				/>
+				<meta name="author" content="yowmamasita" />
+				<meta name="robots" content="noindex, nofollow" />
 				<meta name="apple-mobile-web-app-title" content="DMM" />
+				<meta name="theme-color" content="#1f1f1f" />
+				<meta name="color-scheme" content="dark" />
+				<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+				<meta name="apple-mobile-web-app-capable" content="yes" />
 				<meta name="mobile-web-app-capable" content="yes" />
 				<meta name="application-name" content="DMM" />
 				<meta name="format-detection" content="telephone=no" />
