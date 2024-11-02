@@ -1,7 +1,7 @@
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { PlanetScaleCache } from '@/services/planetscale';
-import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
+import { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
 
 interface ScrapeResponse {
@@ -18,7 +18,7 @@ const processJson = async (): Promise<void> => {
 		const jsonPath = path.join(process.cwd(), 'src', 'pages', 'api', 'importers', 'yts.json');
 		const jsonContent = fs.readFileSync(jsonPath, 'utf-8');
 		const json = JSON.parse(jsonContent) as YtsDetails[];
-		
+
 		const scrapesMap = new Map<string, any>();
 		for (const details of json) {
 			let imdbId = details.imdb_id;
