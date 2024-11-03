@@ -53,17 +53,26 @@ export const sortByMedian = (searchResults: SearchResult[]): SearchResult[] => {
 
 export const sortByBiggest = (searchResults: SearchResult[]): SearchResult[] => {
 	searchResults.sort((a, b) => {
+		// First compare availability
+		const aAvailable = a.rdAvailable || a.adAvailable;
+		const bAvailable = b.rdAvailable || b.adAvailable;
+		if (aAvailable !== bAvailable) {
+			return bAvailable ? 1 : -1;
+		}
+
+		// If both have same availability, then sort by size
 		const aSort = a.videoCount > 0 ? a.biggestFileSize * 1_000_000 : a.fileSize;
 		const bSort = b.videoCount > 0 ? b.biggestFileSize * 1_000_000 : b.fileSize;
 		if (aSort !== bSort) {
 			return bSort - aSort;
 		}
+
+		// If sizes are equal, sort by video count
 		if (a.videoCount !== b.videoCount) {
 			return b.videoCount - a.videoCount;
 		}
-		if (a.fileSize !== b.fileSize) {
-			return b.fileSize - a.fileSize;
-		}
+
+		// If all else is equal, sort alphabetically
 		return a.title.localeCompare(b.title);
 	});
 	return searchResults;

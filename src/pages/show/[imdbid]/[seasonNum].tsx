@@ -72,6 +72,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	const [uncachedCount, setUncachedCount] = useState<number>(0);
 	const dmmCastToken = useCastToken();
 	const [currentPage, setCurrentPage] = useState(0);
+	const [totalUncachedCount, setTotalUncachedCount] = useState<number>(0);
 
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
@@ -94,6 +95,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 		if (page === 0) {
 			setSearchResults([]);
+			setTotalUncachedCount(0);
 		}
 		setErrorMessage('');
 		setSearchState('loading');
@@ -123,16 +125,27 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 						}))
 					);
 				} else {
-					setSearchResults((prevResults) => [
-						...prevResults,
-						...results.map((r) => ({
-							...r,
-							rdAvailable: false,
-							adAvailable: false,
-							noVideos: false,
-							files: [],
-						})),
-					]);
+					setSearchResults((prevResults) => {
+						const newResults = [
+							...prevResults,
+							...results.map((r) => ({
+								...r,
+								rdAvailable: false,
+								adAvailable: false,
+								noVideos: false,
+								files: [],
+							})),
+						];
+						// Sort function that prioritizes instant availability
+						return newResults.sort((a, b) => {
+							const aAvailable = a.rdAvailable || a.adAvailable;
+							const bAvailable = b.rdAvailable || b.adAvailable;
+							if (aAvailable !== bAvailable) {
+								return aAvailable ? -1 : 1;
+							}
+							return b.fileSize - a.fileSize;
+						});
+					});
 				}
 				toast(`Found ${results.length} results`, searchToastOptions);
 
@@ -155,7 +168,9 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					);
 				const counts = await Promise.all(instantChecks);
 				setSearchState('loaded');
-				setUncachedCount(hashArr.length - counts.reduce((acc, cur) => acc + cur, 0));
+				const newUncachedCount = hashArr.length - counts.reduce((acc, cur) => acc + cur, 0);
+				setUncachedCount(newUncachedCount);
+				setTotalUncachedCount((prev) => prev + newUncachedCount);
 			} else {
 				setSearchResults([]);
 				toast(`No results found`, searchToastOptions);
@@ -447,14 +462,14 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 							<b>Cast✨</b>
 						</button>
 					)}
-					{onlyShowCached && uncachedCount > 0 && (
+					{onlyShowCached && totalUncachedCount > 0 && (
 						<button
 							className={`mr-2 mt-0 mb-1 bg-blue-700 hover:bg-blue-600 text-white p-1 text-xs rounded`}
 							onClick={() => {
 								setOnlyShowCached(false);
 							}}
 						>
-							Show {uncachedCount} uncached
+							Show {totalUncachedCount} uncached
 						</button>
 					)}
 				</div>
