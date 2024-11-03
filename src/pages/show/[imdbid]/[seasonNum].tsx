@@ -1,5 +1,6 @@
 import Poster from '@/components/poster';
 import { showInfoForRD } from '@/components/showInfo';
+import { showSubscribeModal } from '@/components/subscribe';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/cast';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
@@ -70,6 +71,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
 	const [uncachedCount, setUncachedCount] = useState<number>(0);
 	const dmmCastToken = useCastToken();
+	const [currentPage, setCurrentPage] = useState(0);
 
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
@@ -77,7 +79,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	async function initialize() {
 		await torrentDB.initializeDB();
 		await Promise.all([
-			fetchData(imdbid as string, parseInt(seasonNum as string)),
+			fetchData(imdbid as string, parseInt(seasonNum as string), 0),
 			fetchHashAndProgress(),
 		]);
 	}
@@ -88,14 +90,16 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imdbid, seasonNum]);
 
-	async function fetchData(imdbId: string, seasonNum: number) {
+	async function fetchData(imdbId: string, seasonNum: number, page: number = 0) {
 		const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-		setSearchResults([]);
+		if (page === 0) {
+			setSearchResults([]);
+		}
 		setErrorMessage('');
 		setSearchState('loading');
 		setUncachedCount(0);
 		try {
-			let path = `api/torrents/tv?imdbId=${imdbId}&seasonNum=${seasonNum}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}&onlyTrusted=${onlyTrustedTorrents}&maxSize=${episodeMaxSize}`;
+			let path = `api/torrents/tv?imdbId=${imdbId}&seasonNum=${seasonNum}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}&onlyTrusted=${onlyTrustedTorrents}&maxSize=${episodeMaxSize}&page=${page}`;
 			if (config.externalSearchApiHostname) {
 				path = encodeURIComponent(path);
 			}
@@ -108,16 +112,28 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 
 			if (response.data.results?.length) {
 				const results = response.data.results;
-
-				setSearchResults(
-					results.map((r) => ({
-						...r,
-						rdAvailable: false,
-						adAvailable: false,
-						noVideos: false,
-						files: [],
-					}))
-				);
+				if (page === 0) {
+					setSearchResults(
+						results.map((r) => ({
+							...r,
+							rdAvailable: false,
+							adAvailable: false,
+							noVideos: false,
+							files: [],
+						}))
+					);
+				} else {
+					setSearchResults((prevResults) => [
+						...prevResults,
+						...results.map((r) => ({
+							...r,
+							rdAvailable: false,
+							adAvailable: false,
+							noVideos: false,
+							files: [],
+						})),
+					]);
+				}
 				toast(`Found ${results.length} results`, searchToastOptions);
 
 				// instant checks
@@ -395,12 +411,20 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					)}
 				</div>
 				<div>
+					<button
+						className={`mr-2 mt-0 mb-1 bg-rose-700 hover:bg-rose-600 text-white p-1 text-xs rounded font-bold`}
+						onClick={() => {
+							showSubscribeModal();
+						}}
+					>
+						🔔Subscribe
+					</button>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
 							className={`mr-2 mt-0 mb-1 bg-green-600 hover:bg-green-800 text-white p-1 text-xs rounded`}
 							onClick={() => addRd(getFirstAvailableRdTorrent()!.hash)}
 						>
-							⚡ <b>Instant RD</b>
+							<b>⚡Instant RD</b>
 						</button>
 					)}
 					{rdKey && player && getFirstAvailableRdTorrent() && (
@@ -412,7 +436,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 								)
 							}
 						>
-							🧐 <b>Watch</b>
+							<b>🧐Watch</b>
 						</button>
 					)}
 					{rdKey && dmmCastToken && getFirstAvailableRdTorrent() && (
@@ -420,7 +444,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 							className="mr-2 mt-0 mb-1 bg-black hover:bg-gray-800 text-white p-1 text-xs rounded"
 							onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash, ['1'])}
 						>
-							<b>Cast</b>✨
+							<b>Cast✨</b>
 						</button>
 					)}
 					{onlyShowCached && uncachedCount > 0 && (
@@ -430,7 +454,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 								setOnlyShowCached(false);
 							}}
 						>
-							👉 Show {uncachedCount} uncached
+							Show {uncachedCount} uncached
 						</button>
 					)}
 				</div>
@@ -505,122 +529,153 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				</span>
 			</div> */}
 			{searchResults.length > 0 && (
-				<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-					{filteredResults.map((r: SearchResult, i: number) => {
-						const downloaded = isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
-						const downloading =
-							isDownloading('rd', r.hash) || isDownloading('ad', r.hash);
-						const inYourLibrary = downloaded || downloading;
-						if (onlyShowCached && !r.rdAvailable && !r.adAvailable && !inYourLibrary)
-							return;
-						if (
-							episodeMaxSize !== '0' &&
-							(r.medianFileSize ?? r.fileSize) > parseFloat(episodeMaxSize) * 1024 &&
-							!inYourLibrary
-						)
-							return;
-						const rdColor = btnColor(r.rdAvailable, r.noVideos);
-						const adColor = btnColor(r.adAvailable, r.noVideos);
-						let epRegex1 = /S(\d+)\s?E(\d+)/i;
-						let epRegex2 = /[^\d](\d{1,2})x(\d{1,2})[^\d]/i;
-						const castableFileIds = r.files
-							.filter((f) => f.filename.match(epRegex1) || f.filename.match(epRegex2))
-							.map((f) => `${f.fileId}`);
-						return (
-							<div
-								key={i}
-								className={`${borderColor(
-									downloaded,
-									downloading
-								)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
-							>
-								<div className="p-2 space-y-4">
-									<h2 className="text-lg font-bold leading-tight break-words line-clamp-3 overflow-hidden text-ellipsis">
-										{r.title}
-									</h2>
+				<>
+					<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+						{filteredResults.map((r: SearchResult, i: number) => {
+							const downloaded =
+								isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
+							const downloading =
+								isDownloading('rd', r.hash) || isDownloading('ad', r.hash);
+							const inYourLibrary = downloaded || downloading;
+							if (
+								onlyShowCached &&
+								!r.rdAvailable &&
+								!r.adAvailable &&
+								!inYourLibrary
+							)
+								return;
+							if (
+								episodeMaxSize !== '0' &&
+								(r.medianFileSize ?? r.fileSize) >
+									parseFloat(episodeMaxSize) * 1024 &&
+								!inYourLibrary
+							)
+								return;
+							const rdColor = btnColor(r.rdAvailable, r.noVideos);
+							const adColor = btnColor(r.adAvailable, r.noVideos);
+							let epRegex1 = /S(\d+)\s?E(\d+)/i;
+							let epRegex2 = /[^\d](\d{1,2})x(\d{1,2})[^\d]/i;
+							const castableFileIds = r.files
+								.filter(
+									(f) => f.filename.match(epRegex1) || f.filename.match(epRegex2)
+								)
+								.map((f) => `${f.fileId}`);
+							return (
+								<div
+									key={i}
+									className={`${borderColor(
+										downloaded,
+										downloading
+									)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
+								>
+									<div className="p-2 space-y-4">
+										<h2 className="text-lg font-bold leading-tight break-words line-clamp-3 overflow-hidden text-ellipsis">
+											{r.title}
+										</h2>
 
-									{r.videoCount > 0 ? (
-										<div className="text-gray-300 text-xs">
-											Total: {fileSize(r.fileSize)} GB; Median:{' '}
-											{fileSize(r.medianFileSize)} GB ({r.videoCount} 📂)
+										{r.videoCount > 0 ? (
+											<div className="text-gray-300 text-xs">
+												Total: {fileSize(r.fileSize)} GB; Median:{' '}
+												{fileSize(r.medianFileSize)} GB ({r.videoCount} 📂)
+											</div>
+										) : (
+											<div className="text-gray-300 text-xs">
+												Total: {fileSize(r.fileSize)} GB
+											</div>
+										)}
+
+										<div className="space-x-2 space-y-2">
+											{/* RD */}
+											{rdKey && inLibrary('rd', r.hash) && (
+												<button
+													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
+													onClick={() => deleteRd(r.hash)}
+												>
+													<FaTimes className="mr-2 inline" />
+													RD ({hashAndProgress[`rd:${r.hash}`] + '%'})
+												</button>
+											)}
+											{rdKey && notInLibrary('rd', r.hash) && (
+												<button
+													className={`bg-${rdColor}-600 hover:bg-${rdColor}-800 text-white text-xs rounded inline px-1`}
+													onClick={() => addRd(r.hash)}
+												>
+													{btnIcon(r.rdAvailable)}
+													{btnLabel(r.rdAvailable, 'RD')}
+												</button>
+											)}
+
+											{/* AD */}
+											{adKey && inLibrary('ad', r.hash) && (
+												<button
+													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
+													onClick={() => deleteAd(r.hash)}
+												>
+													<FaTimes className="mr-2 inline" />
+													AD ({hashAndProgress[`ad:${r.hash}`] + '%'})
+												</button>
+											)}
+											{adKey && notInLibrary('ad', r.hash) && (
+												<button
+													className={`bg-${adColor}-600 hover:bg-${adColor}-800 text-white text-xs rounded inline px-1`}
+													onClick={() => addAd(r.hash)}
+												>
+													{btnIcon(r.adAvailable)}
+													{btnLabel(r.adAvailable, 'AD')}
+												</button>
+											)}
+
+											{(r.rdAvailable || r.adAvailable) && (
+												<button
+													className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1"
+													onClick={() => handleShowInfo(r)}
+												>
+													👀Look Inside
+												</button>
+											)}
+
+											{rdKey &&
+												dmmCastToken &&
+												castableFileIds.length > 0 && (
+													<button
+														className="bg-black text-white text-xs rounded inline px-1"
+														onClick={() =>
+															handleCast(r.hash, castableFileIds)
+														}
+													>
+														Cast✨
+													</button>
+												)}
+
+											<button
+												className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1"
+												onClick={() => handleCopyMagnet(r.hash)}
+											>
+												<FaMagnet className="inline" /> Get&nbsp;magnet
+											</button>
 										</div>
-									) : (
-										<div className="text-gray-300 text-xs">
-											Total: {fileSize(r.fileSize)} GB
-										</div>
-									)}
-
-									<div className="space-x-2 space-y-2">
-										{/* RD */}
-										{rdKey && inLibrary('rd', r.hash) && (
-											<button
-												className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
-												onClick={() => deleteRd(r.hash)}
-											>
-												<FaTimes className="mr-2 inline" />
-												RD ({hashAndProgress[`rd:${r.hash}`] + '%'})
-											</button>
-										)}
-										{rdKey && notInLibrary('rd', r.hash) && (
-											<button
-												className={`bg-${rdColor}-600 hover:bg-${rdColor}-800 text-white text-xs rounded inline px-1`}
-												onClick={() => addRd(r.hash)}
-											>
-												{btnIcon(r.rdAvailable)}
-												{btnLabel(r.rdAvailable, 'RD')}
-											</button>
-										)}
-
-										{/* AD */}
-										{adKey && inLibrary('ad', r.hash) && (
-											<button
-												className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
-												onClick={() => deleteAd(r.hash)}
-											>
-												<FaTimes className="mr-2 inline" />
-												AD ({hashAndProgress[`ad:${r.hash}`] + '%'})
-											</button>
-										)}
-										{adKey && notInLibrary('ad', r.hash) && (
-											<button
-												className={`bg-${adColor}-600 hover:bg-${adColor}-800 text-white text-xs rounded inline px-1`}
-												onClick={() => addAd(r.hash)}
-											>
-												{btnIcon(r.adAvailable)}
-												{btnLabel(r.adAvailable, 'AD')}
-											</button>
-										)}
-
-										{(r.rdAvailable || r.adAvailable) && (
-											<button
-												className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1"
-												onClick={() => handleShowInfo(r)}
-											>
-												👀 Look Inside
-											</button>
-										)}
-
-										{rdKey && dmmCastToken && castableFileIds.length > 0 && (
-											<button
-												className="bg-black text-white text-xs rounded inline px-1"
-												onClick={() => handleCast(r.hash, castableFileIds)}
-											>
-												Cast✨
-											</button>
-										)}
-
-										<button
-											className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1"
-											onClick={() => handleCopyMagnet(r.hash)}
-										>
-											<FaMagnet className="inline" /> Get&nbsp;magnet
-										</button>
 									</div>
 								</div>
-							</div>
-						);
-					})}
-				</div>
+							);
+						})}
+					</div>
+
+					{searchState === 'loaded' && (
+						<button
+							className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 my-4 rounded"
+							onClick={() => {
+								setCurrentPage((prev) => prev + 1);
+								fetchData(
+									imdbid as string,
+									parseInt(seasonNum as string),
+									currentPage + 1
+								);
+							}}
+						>
+							Show More
+						</button>
+					)}
+				</>
 			)}
 		</div>
 	);

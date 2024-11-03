@@ -7,7 +7,7 @@ const db = new PlanetScaleCache();
 
 // returns scraped results or marks the imdb id as requested
 const handler: NextApiHandler = async (req, res) => {
-	const { imdbId, dmmProblemKey, solution, onlyTrusted, maxSize } = req.query;
+	const { imdbId, dmmProblemKey, solution, onlyTrusted, maxSize, page } = req.query;
 
 	if (
 		!dmmProblemKey ||
@@ -29,12 +29,21 @@ const handler: NextApiHandler = async (req, res) => {
 
 	try {
 		const maxSizeInGB = maxSize ? parseInt(maxSize.toString()) : 0;
+		const pageNum = page ? parseInt(page.toString()) : 0;
 		const promises = [
-			db.getScrapedTrueResults<any[]>(`movie:${imdbId.toString().trim()}`, maxSizeInGB),
+			db.getScrapedTrueResults<any[]>(
+				`movie:${imdbId.toString().trim()}`,
+				maxSizeInGB,
+				pageNum
+			),
 		];
 		if (onlyTrusted !== 'true') {
 			promises.push(
-				db.getScrapedResults<any[]>(`movie:${imdbId.toString().trim()}`, maxSizeInGB)
+				db.getScrapedResults<any[]>(
+					`movie:${imdbId.toString().trim()}`,
+					maxSizeInGB,
+					pageNum
+				)
 			);
 		}
 		const results = await Promise.all(promises);
