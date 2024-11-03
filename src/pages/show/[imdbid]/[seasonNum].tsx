@@ -26,7 +26,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
 import UserAgent from 'user-agents';
@@ -39,9 +39,53 @@ type TvSearchProps = {
 	season_count: number;
 	season_names: string[];
 	imdb_score: number;
+	season_episode_counts: Record<number, number>;
 };
 
 const torrentDB = new UserTorrentDB();
+
+// Update the getColorScale function with proper Tailwind color classes
+const getColorScale = (expectedEpisodeCount: number) => {
+	const scale = [
+		{ threshold: 1, color: 'gray-800', label: 'Single' },
+		{ threshold: expectedEpisodeCount - 1, color: 'fuchsia-800', label: 'Incomplete' },
+		{ threshold: expectedEpisodeCount, color: 'green-900', label: 'Complete' },
+		{ threshold: Infinity, color: 'blue-900', label: 'With extras' },
+	];
+	return scale;
+};
+
+// Modify the getEpisodeCountClass function to consider availability
+const getEpisodeCountClass = (
+	videoCount: number,
+	expectedEpisodeCount: number,
+	isInstantlyAvailable: boolean
+) => {
+	if (!isInstantlyAvailable) return ''; // No color for unavailable torrents
+	const scale = getColorScale(expectedEpisodeCount);
+	for (let i = 0; i < scale.length; i++) {
+		if (videoCount <= scale[i].threshold) {
+			return `bg-${scale[i].color}`;
+		}
+	}
+	return `bg-${scale[scale.length - 1].color}`;
+};
+
+const getEpisodeCountLabel = (videoCount: number, expectedEpisodeCount: number) => {
+	if (videoCount === 1) return `Single (1/${expectedEpisodeCount})`;
+	if (videoCount < expectedEpisodeCount)
+		return `Incomplete (${videoCount}/${expectedEpisodeCount})`;
+	if (videoCount === expectedEpisodeCount)
+		return `Complete (${videoCount}/${expectedEpisodeCount})`;
+	return `With extras (${videoCount}/${expectedEpisodeCount})`;
+};
+
+// Replace the direct access with a function
+const getExpectedEpisodeCount = (seasonNum: string | undefined, counts: Record<number, number>) => {
+	if (!seasonNum) return 13;
+	const num = parseInt(seasonNum);
+	return counts[num] || 13;
+};
 
 const TvSearch: FunctionComponent<TvSearchProps> = ({
 	title,
@@ -51,6 +95,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	season_count,
 	season_names,
 	imdb_score,
+	season_episode_counts,
 }) => {
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	const episodeMaxSize =
@@ -69,13 +114,18 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
-	const [uncachedCount, setUncachedCount] = useState<number>(0);
 	const dmmCastToken = useCastToken();
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalUncachedCount, setTotalUncachedCount] = useState<number>(0);
 
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
+
+	// Move this after router declaration and make it dynamic
+	const expectedEpisodeCount = useMemo(
+		() => getExpectedEpisodeCount(seasonNum as string | undefined, season_episode_counts),
+		[seasonNum, season_episode_counts]
+	);
 
 	async function initialize() {
 		await torrentDB.initializeDB();
@@ -99,7 +149,6 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		}
 		setErrorMessage('');
 		setSearchState('loading');
-		setUncachedCount(0);
 		try {
 			let path = `api/torrents/tv?imdbId=${imdbId}&seasonNum=${seasonNum}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}&onlyTrusted=${onlyTrustedTorrents}&maxSize=${episodeMaxSize}&page=${page}`;
 			if (config.externalSearchApiHostname) {
@@ -169,7 +218,6 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				const counts = await Promise.all(instantChecks);
 				setSearchState('loaded');
 				const newUncachedCount = hashArr.length - counts.reduce((acc, cur) => acc + cur, 0);
-				setUncachedCount(newUncachedCount);
 				setTotalUncachedCount((prev) => prev + newUncachedCount);
 			} else {
 				setSearchResults([]);
@@ -520,29 +568,19 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					Reset
 				</span>
 			</div>
-			{/* <div className="flex items-center p-1 mb-1 overflow-x-auto">
-				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 cursor-pointer">
-					S01
+			<div className="flex items-center gap-2 p-2 mb-2 overflow-x-auto">
+				<span className="text-xs text-gray-400">
+					Episode count (instant availability only, expected: {expectedEpisodeCount}):
 				</span>
-				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 cursor-pointer">
-					S01E01
-				</span>
-				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 cursor-pointer">
-					S01E02
-				</span>
-				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 cursor-pointer">
-					S01E03
-				</span>
-				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 cursor-pointer">
-					S01E04
-				</span>
-				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 cursor-pointer">
-					S01E05
-				</span>
-				<span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 cursor-pointer">
-					S01E06
-				</span>
-			</div> */}
+				{getColorScale(expectedEpisodeCount).map((scale, idx) => (
+					<span
+						key={idx}
+						className={`bg-${scale.color} text-white text-xs px-2 py-1 rounded whitespace-nowrap`}
+					>
+						{scale.label}
+					</span>
+				))}
+			</div>
 			{searchResults.length > 0 && (
 				<>
 					<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
@@ -581,7 +619,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 									className={`${borderColor(
 										downloaded,
 										downloading
-									)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
+									)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
 								>
 									<div className="p-2 space-y-4">
 										<h2 className="text-lg font-bold leading-tight break-words line-clamp-3 overflow-hidden text-ellipsis">
@@ -590,8 +628,16 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 
 										{r.videoCount > 0 ? (
 											<div className="text-gray-300 text-xs">
-												Total: {fileSize(r.fileSize)} GB; Median:{' '}
-												{fileSize(r.medianFileSize)} GB ({r.videoCount} 📂)
+												<span className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black">
+													{getEpisodeCountLabel(
+														r.videoCount,
+														expectedEpisodeCount
+													)}
+												</span>
+												<span className="ml-2">
+													Total: {fileSize(r.fileSize)} GB; Median:{' '}
+													{fileSize(r.medianFileSize)} GB
+												</span>
 											</div>
 										) : (
 											<div className="text-gray-300 text-xs">
@@ -768,6 +814,30 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 	const title = mdbResponse?.data?.title ?? cinemetaResponse?.data?.title ?? 'Unknown';
 
+	const season_episode_counts: Record<number, number> = {};
+
+	// Get counts from cinemeta
+	cineSeasons.forEach((video: any) => {
+		if (!season_episode_counts[video.season]) {
+			season_episode_counts[video.season] = 1;
+		} else {
+			season_episode_counts[video.season]++;
+		}
+	});
+
+	// Merge with mdb data if available
+	if (mdbResponse.data.seasons) {
+		mdbResponse.data.seasons.forEach((season: any) => {
+			if (season.episode_count && season.season_number) {
+				// Use the larger count between the two sources
+				season_episode_counts[season.season_number] = Math.max(
+					season_episode_counts[season.season_number] || 0,
+					season.episode_count
+				);
+			}
+		});
+	}
+
 	return {
 		props: {
 			title,
@@ -781,6 +851,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			season_count,
 			season_names,
 			imdb_score: imdb_score ?? 0,
+			season_episode_counts,
 		},
 	};
 };
