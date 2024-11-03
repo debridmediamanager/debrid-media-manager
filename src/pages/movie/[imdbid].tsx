@@ -575,10 +575,16 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 												<span className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black">
 													{getMovieCountLabel(r.videoCount)}
 												</span>
-												<span className="ml-2">
-													Total: {fileSize(r.fileSize)} GB; Biggest:{' '}
-													{fileSize(r.biggestFileSize)} GB
-												</span>
+												{r.videoCount > 1 ? (
+													<span className="ml-2">
+														Total: {fileSize(r.fileSize)} GB; Biggest:{' '}
+														{fileSize(r.biggestFileSize)} GB
+													</span>
+												) : (
+													<span className="ml-2">
+														Total: {fileSize(r.fileSize)} GB
+													</span>
+												)}
 											</div>
 										) : (
 											<div className="text-gray-300 text-xs">
