@@ -42,16 +42,22 @@ export const instantCheckInRd = async (
 					if ('rd' in resp[torrent.hash] === false) continue;
 					const variants = resp[torrent.hash]['rd'];
 					if (!variants.length) continue;
+
+					// Find variant with most files
+					const variantWithMostFiles = variants.reduce(
+						(prev, curr) =>
+							Object.keys(curr).length > Object.keys(prev).length ? curr : prev,
+						variants[0]
+					);
+
 					const files: Record<number, FileData> = {};
-					resp[torrent.hash]['rd'].forEach((variant) => {
-						for (const fileId in variant) {
-							if (fileId in files === false)
-								files[fileId] = {
-									...variant[fileId],
-									fileId: parseInt(fileId, 10),
-								};
-						}
-					});
+					for (const fileId in variantWithMostFiles) {
+						files[fileId] = {
+							...variantWithMostFiles[fileId],
+							fileId: parseInt(fileId, 10),
+						};
+					}
+
 					torrent.files = Object.values(files);
 					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
 					const sortedFileSizes = videoFiles
