@@ -250,21 +250,13 @@ function HashlistPage() {
 	function wrapDownloadFilesInRdFn(t: EnrichedHashlistTorrent) {
 		return async () => await addRd(t.hash);
 	}
+
 	async function downloadNonDupeTorrentsInRd() {
 		const libraryHashes = await torrentDB.hashes();
 		const yetToDownload = filteredList
 			.filter((t) => !libraryHashes.has(t.hash))
 			.map(wrapDownloadFilesInRdFn);
 		const [results, errors] = await runConcurrentFunctions(yetToDownload, 4, 0);
-		await fetchRealDebrid(
-			rdKey!,
-			async (torrents) => {
-				await torrentDB.addAll(torrents);
-				await fetchHashAndProgress();
-			},
-			results.length + 1
-		);
-		await fetchHashAndProgress();
 		if (errors.length) {
 			toast.error(
 				`Error downloading files on ${errors.length} torrents`,

@@ -21,15 +21,10 @@ export default function Document() {
 				/>
 				<meta property="og:url" content="https://debridmediamanager.com" />
 				<meta property="og:type" content="website" />
-				<meta
-					name="viewport"
-					content="width=device-width, initial-scale=1, shrink-to-fit=no"
-				/>
 				<meta name="author" content="yowmamasita" />
 				<meta name="robots" content="noindex, nofollow" />
 				<meta name="apple-mobile-web-app-title" content="DMM" />
 				<meta name="theme-color" content="#1f1f1f" />
-				<meta name="color-scheme" content="dark" />
 				<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 				<meta name="apple-mobile-web-app-capable" content="yes" />
 				<meta name="mobile-web-app-capable" content="yes" />
