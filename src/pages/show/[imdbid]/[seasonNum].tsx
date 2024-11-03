@@ -469,7 +469,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 									className={`inline-flex items-center p-1 text-xs text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-1`}
 								>
 									<span role="img" aria-label="tv show" className="mr-2">
-										📺
+										 📺
 									</span>{' '}
 									<span className="whitespace-nowrap">
 										{season_names && season_names[season - 1]
@@ -488,7 +488,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 							showSubscribeModal();
 						}}
 					>
-						🔔Subscribe
+						 🔔Subscribe
 					</button>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
@@ -577,9 +577,6 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				</span>
 			</div>
 			<div className="flex items-center gap-2 p-2 mb-2 overflow-x-auto">
-				<span className="text-xs text-gray-400">
-					Season episode count - {expectedEpisodeCount}:
-				</span>
 				{getColorScale(expectedEpisodeCount).map((scale, idx) => (
 					<span
 						key={idx}
@@ -598,7 +595,8 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			</div>
 			{searchResults.length > 0 && (
 				<>
-					<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+					{/* Adjust grid layout to single column and reduce margins */}
+					<div className="mx-1 my-1 overflow-x-auto grid grid-cols-1 gap-2">
 						{filteredResults.map((r: SearchResult, i: number) => {
 							const downloaded =
 								isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
@@ -636,8 +634,10 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 										downloading
 									)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
 								>
-									<div className="p-2 space-y-4">
-										<h2 className="text-lg font-bold leading-tight break-words line-clamp-3 overflow-hidden text-ellipsis">
+									{/* Reduce padding and adjust spacing */}
+									<div className="p-1 space-y-2">
+										{/* Adjust title font size */}
+										<h2 className="text-sm font-bold leading-tight break-words line-clamp-2 overflow-hidden text-ellipsis">
 											{r.title}
 										</h2>
 
@@ -660,11 +660,12 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											</div>
 										)}
 
-										<div className="space-x-2 space-y-2">
+										{/* Adjust buttons */}
+										<div className="space-x-1 space-y-1">
 											{/* RD */}
 											{rdKey && inLibrary('rd', r.hash) && (
 												<button
-													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
+													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1 border border-black"
 													onClick={() => deleteRd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
@@ -673,7 +674,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											)}
 											{rdKey && notInLibrary('rd', r.hash) && (
 												<button
-													className={`bg-${rdColor}-600 hover:bg-${rdColor}-800 text-white text-xs rounded inline px-1`}
+													className={`bg-${rdColor}-600 hover:bg-${rdColor}-800 text-white text-xs rounded inline px-1 border border-black`}
 													onClick={() => addRd(r.hash)}
 												>
 													{btnIcon(r.rdAvailable)}
@@ -684,7 +685,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											{/* AD */}
 											{adKey && inLibrary('ad', r.hash) && (
 												<button
-													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
+													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1 border border-black"
 													onClick={() => deleteAd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
@@ -693,7 +694,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											)}
 											{adKey && notInLibrary('ad', r.hash) && (
 												<button
-													className={`bg-${adColor}-600 hover:bg-${adColor}-800 text-white text-xs rounded inline px-1`}
+													className={`bg-${adColor}-600 hover:bg-${adColor}-800 text-white text-xs rounded inline px-1 border border-black`}
 													onClick={() => addAd(r.hash)}
 												>
 													{btnIcon(r.adAvailable)}
@@ -703,7 +704,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 
 											{(r.rdAvailable || r.adAvailable) && (
 												<button
-													className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1"
+													className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1 border border-black"
 													onClick={() => handleShowInfo(r)}
 												>
 													👀Look Inside
@@ -714,7 +715,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 												dmmCastToken &&
 												castableFileIds.length > 0 && (
 													<button
-														className="bg-black text-white text-xs rounded inline px-1"
+														className="bg-black text-white text-xs rounded inline px-1 border border-black"
 														onClick={() =>
 															handleCast(r.hash, castableFileIds)
 														}
@@ -724,10 +725,10 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 												)}
 
 											<button
-												className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1"
+												className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1 border border-black"
 												onClick={() => handleCopyMagnet(r.hash)}
 											>
-												<FaMagnet className="inline" /> Get&nbsp;magnet
+												<FaMagnet className="inline" /> Magnet
 											</button>
 										</div>
 									</div>
