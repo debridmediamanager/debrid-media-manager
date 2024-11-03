@@ -55,6 +55,14 @@ const getColorScale = (expectedEpisodeCount: number) => {
 	return scale;
 };
 
+// Add this helper function near the other utility functions at the top
+const getQueryForEpisodeCount = (videoCount: number, expectedEpisodeCount: number) => {
+	if (videoCount === 1) return 'videos:1'; // Single episode
+	if (videoCount === expectedEpisodeCount) return `videos:${expectedEpisodeCount}`; // Complete
+	if (videoCount < expectedEpisodeCount) return `videos:<${expectedEpisodeCount}`; // Incomplete
+	return `videos:>${expectedEpisodeCount}`; // With extras
+};
+
 // Modify the getEpisodeCountClass function to consider availability
 const getEpisodeCountClass = (
 	videoCount: number,
@@ -570,12 +578,19 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			</div>
 			<div className="flex items-center gap-2 p-2 mb-2 overflow-x-auto">
 				<span className="text-xs text-gray-400">
-					Episode count (instant availability only, expected: {expectedEpisodeCount}):
+					Season episode count - {expectedEpisodeCount}:
 				</span>
 				{getColorScale(expectedEpisodeCount).map((scale, idx) => (
 					<span
 						key={idx}
-						className={`bg-${scale.color} text-white text-xs px-2 py-1 rounded whitespace-nowrap`}
+						className={`bg-${scale.color} text-white text-xs px-2 py-1 rounded whitespace-nowrap cursor-pointer`}
+						onClick={() => {
+							const queryText = getQueryForEpisodeCount(
+								scale.threshold,
+								expectedEpisodeCount
+							);
+							setQuery(queryText);
+						}}
 					>
 						{scale.label}
 					</span>
