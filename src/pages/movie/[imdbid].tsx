@@ -67,7 +67,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
-	const [uncachedCount, setUncachedCount] = useState<number>(0);
 	const [totalUncachedCount, setTotalUncachedCount] = useState<number>(0);
 	const dmmCastToken = useCastToken();
 	const [currentPage, setCurrentPage] = useState(0);
@@ -94,7 +93,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		}
 		setErrorMessage('');
 		setSearchState('loading');
-		setUncachedCount(0);
 		try {
 			let path = `api/torrents/movie?imdbId=${imdbId}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}&onlyTrusted=${onlyTrustedTorrents}&maxSize=${movieMaxSize}&page=${page}`;
 			if (config.externalSearchApiHostname) {
@@ -164,7 +162,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				const counts = await Promise.all(instantChecks);
 				setSearchState('loaded');
 				const newUncachedCount = hashArr.length - counts.reduce((acc, cur) => acc + cur, 0);
-				setUncachedCount(newUncachedCount);
 				setTotalUncachedCount((prev) => prev + newUncachedCount);
 			} else {
 				setSearchResults([]);
