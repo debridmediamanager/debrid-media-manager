@@ -77,7 +77,7 @@ export const instantCheckInRd = async (
 						torrent.rdAvailable = false;
 					}
 				}
-				return sortFn(newSearchResults);
+				return sortFn(newSearchResults); // Apply sorting after each batch
 			});
 		});
 	}
@@ -265,7 +265,7 @@ export const instantCheckInAd = async (
 						torrent.adAvailable = false;
 					}
 				}
-				return sortFn(newSearchResults);
+				return sortFn(newSearchResults); // Apply sorting after each batch
 			});
 		});
 	}
