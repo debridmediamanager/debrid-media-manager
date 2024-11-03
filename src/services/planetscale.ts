@@ -20,13 +20,18 @@ export class PlanetScaleCache {
 
 	/// true scraped
 
-	public async getScrapedTrueResults<T>(key: string, maxSizeGB?: number): Promise<T | undefined> {
+	public async getScrapedTrueResults<T>(
+		key: string,
+		maxSizeGB?: number,
+		page: number = 0
+	): Promise<T | undefined> {
 		// Input Validation
 		if (!key || typeof key !== 'string') {
 			throw new Error('Invalid key provided.');
 		}
 
 		const maxSizeMB = maxSizeGB && maxSizeGB > 0 ? maxSizeGB * 1024 : null;
+		const offset = page * 50;
 
 		let query = Prisma.sql`
 			SELECT
@@ -34,7 +39,7 @@ export class PlanetScaleCache {
 					JSON_OBJECT(
 						'hash', jt.hash,
 						'title', jt.title,
-						'fileSize', jt.fileSize
+							'fileSize', jt.fileSize
 					)
 					) AS value
 			FROM (
@@ -59,6 +64,7 @@ export class PlanetScaleCache {
 				${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
 				ORDER BY jt.fileSize DESC
 				LIMIT 50
+				OFFSET ${offset}
 			) AS jt`;
 
 		try {
@@ -70,7 +76,11 @@ export class PlanetScaleCache {
 		}
 	}
 
-	public async getScrapedResults<T>(key: string, maxSizeGB?: number): Promise<T | undefined> {
+	public async getScrapedResults<T>(
+		key: string,
+		maxSizeGB?: number,
+		page: number = 0
+	): Promise<T | undefined> {
 		// Input Validation
 		if (!key || typeof key !== 'string') {
 			throw new Error('Invalid key provided.');
@@ -80,6 +90,7 @@ export class PlanetScaleCache {
 		}
 
 		const maxSizeMB = maxSizeGB ? maxSizeGB * 1024 : null;
+		const offset = page * 50;
 
 		let query = Prisma.sql`
 			SELECT
@@ -112,6 +123,7 @@ export class PlanetScaleCache {
 				${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
 				ORDER BY jt.fileSize DESC
 				LIMIT 50
+				OFFSET ${offset}
 			) AS jt`;
 
 		try {
