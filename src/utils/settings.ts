@@ -4,7 +4,6 @@ export const defaultPlayer = 'web/rd';
 export const defaultMovieSize = '0';
 export const defaultEpisodeSize = '0';
 export const defaultTorrentsFilter = '';
-export const defaultHideMultipleFiles = false; // New default setting
 
 export const showSettings = async () => {
 	const storedPlayer = window.localStorage.getItem('settings:player') || defaultPlayer;
@@ -25,8 +24,6 @@ export const showSettings = async () => {
 
 	const defaultTorrentsFilter =
 		window.localStorage.getItem('settings:defaultTorrentsFilter') || '';
-
-	const hideMultipleFiles = window.localStorage.getItem('settings:hideMultipleFiles') === 'true'; // Retrieve the new setting
 
 	const { value: formValues } = await Swal.fire({
 		title: '⚙️ Settings',
@@ -97,12 +94,6 @@ export const showSettings = async () => {
 
             <div name="divider" class="py-4"></div>
 
-            <!-- New Checkbox for Hiding Multiple File Torrents -->
-            <label for="dmm-hide-multiple-files">Hide movie torrents with multiple files:</label>
-            <input id="dmm-hide-multiple-files" type="checkbox" class="w-4 h-4 ml-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" ${hideMultipleFiles ? 'checked' : ''}>
-
-            <div name="divider" class="py-4"></div>
-
             <button id="dmm-default" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="registerMagnetHandler()">
                 🧲 Make DMM your torrent client
             </button>
@@ -123,9 +114,6 @@ export const showSettings = async () => {
 				defaultTorrentsFilter: (
 					document.getElementById('dmm-default-torrents-filter') as HTMLInputElement
 				).value,
-				hideMultipleFiles: (
-					document.getElementById('dmm-hide-multiple-files') as HTMLInputElement
-				).checked, // Capture the new setting
 			};
 		},
 	});
@@ -148,9 +136,5 @@ export const showSettings = async () => {
 			'settings:defaultTorrentsFilter',
 			formValues.defaultTorrentsFilter ?? defaultTorrentsFilter
 		);
-		window.localStorage.setItem(
-			'settings:hideMultipleFiles',
-			String(formValues.hideMultipleFiles)
-		); // Save the new setting
 	}
 };
