@@ -309,6 +309,18 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		);
 	}
 
+	const getFirstAvailableRdTorrent = () => {
+		return searchResults.find((r) => r.rdAvailable && !r.noVideos);
+	};
+
+	const getBiggestFileId = (result: SearchResult) => {
+		if (!result.files || !result.files.length) return '';
+		const biggestFile = result.files
+			.filter((f) => isVideo({ path: f.filename }))
+			.sort((a, b) => b.filesize - a.filesize)[0];
+		return biggestFile?.fileId ?? '';
+	};
+
 	return (
 		<div className="max-w-full">
 			<Head>
@@ -361,6 +373,34 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					>
 						🔔 Subscribe
 					</button>
+					{rdKey && getFirstAvailableRdTorrent() && (
+						<button
+							className={`mr-2 mt-0 mb-1 bg-green-600 hover:bg-green-800 text-white p-1 text-xs rounded`}
+							onClick={() => addRd(getFirstAvailableRdTorrent()!.hash)}
+						>
+							⚡ <b>Instant RD</b>
+						</button>
+					)}
+					{rdKey && player && getFirstAvailableRdTorrent() && (
+						<button
+							className="mr-2 mt-0 mb-1 bg-teal-500 hover:bg-teal-700 text-white p-1 text-xs rounded"
+							onClick={() =>
+								window.open(
+									`/api/watch/instant/${player}?token=${rdKey}&hash=${getFirstAvailableRdTorrent()!.hash}&fileId=${getBiggestFileId(getFirstAvailableRdTorrent()!)}`
+								)
+							}
+						>
+							🧐 <b>Watch</b>
+						</button>
+					)}
+					{rdKey && dmmCastToken && getFirstAvailableRdTorrent() && (
+						<button
+							className="mr-2 mt-0 mb-1 bg-black hover:bg-gray-800 text-white p-1 text-xs rounded"
+							onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash)}
+						>
+							<b>Cast</b> ✨
+						</button>
+					)}
 					{onlyShowCached && uncachedCount > 0 && (
 						<button
 							className={`mr-2 mt-0 mb-1 bg-blue-700 hover:bg-blue-600 text-white p-1 text-xs rounded`}
@@ -507,12 +547,26 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										)}
 
 										{(r.rdAvailable || r.adAvailable) && (
-											<button
-												className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1"
-												onClick={() => handleShowInfo(r)}
-											>
-												👀 Look Inside
-											</button>
+											<>
+												<button
+													className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1"
+													onClick={() => handleShowInfo(r)}
+												>
+													👀 Look Inside
+												</button>
+												{r.rdAvailable && player && (
+													<button
+														className="bg-teal-500 hover:bg-teal-700 text-white text-xs rounded inline px-1"
+														onClick={() =>
+															window.open(
+																`/api/watch/instant/${player}?token=${rdKey}&hash=${r.hash}&fileId=${getBiggestFileId(r)}`
+															)
+														}
+													>
+														🧐 Watch
+													</button>
+												)}
+											</>
 										)}
 
 										{rdKey && dmmCastToken && (
