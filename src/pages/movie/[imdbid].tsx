@@ -91,7 +91,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		setSearchState('loading');
 		setUncachedCount(0);
 		try {
-			let path = `api/torrents/movie?imdbId=${imdbId}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}&onlyTrusted=${onlyTrustedTorrents}`;
+			let path = `api/torrents/movie?imdbId=${imdbId}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}&onlyTrusted=${onlyTrustedTorrents}&maxSize=${movieMaxSize}`;
 			if (config.externalSearchApiHostname) {
 				path = encodeURIComponent(path);
 			}

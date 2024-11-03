@@ -95,7 +95,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		setSearchState('loading');
 		setUncachedCount(0);
 		try {
-			let path = `api/torrents/tv?imdbId=${imdbId}&seasonNum=${seasonNum}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}&onlyTrusted=${onlyTrustedTorrents}`;
+			let path = `api/torrents/tv?imdbId=${imdbId}&seasonNum=${seasonNum}&dmmProblemKey=${tokenWithTimestamp}&solution=${tokenHash}&onlyTrusted=${onlyTrustedTorrents}&maxSize=${episodeMaxSize}`;
 			if (config.externalSearchApiHostname) {
 				path = encodeURIComponent(path);
 			}
@@ -360,7 +360,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					)}
 				</div>
 				<div className="flex items-center overflow-x-auto">
-					{Array.from({ length: season_count || 0 }, (_, i) => i + 1).map(
+					{Array.from({ length: season_count || 0 }, (_, i) => season_count - i).map(
 						(season, idx) => {
 							const color = intSeasonNum === season ? 'red' : 'yellow';
 							return (
@@ -370,7 +370,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 									className={`inline-flex items-center p-1 text-xs text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-1`}
 								>
 									<span role="img" aria-label="tv show" className="mr-2">
-										📺
+										 📺
 									</span>{' '}
 									<span className="whitespace-nowrap">
 										{season_names && season_names[season - 1]
@@ -507,7 +507,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 									) : (
 										<div className="text-gray-300 text-xs">
 											Total: {fileSize(r.fileSize)} GB
-										</div>
+												</div>
 									)}
 
 									<div className="space-x-2 space-y-2">
@@ -556,7 +556,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 												className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1"
 												onClick={() => handleShowInfo(r)}
 											>
-												👀 Look Inside
+												 👀 Look Inside
 											</button>
 										)}
 
