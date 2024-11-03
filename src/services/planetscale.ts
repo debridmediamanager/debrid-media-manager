@@ -1,4 +1,4 @@
-import { PrismaClient, Scraped } from '@prisma/client';
+import { Prisma, PrismaClient, Scraped } from '@prisma/client';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { MediaInfoDetails } from './types';
 
@@ -20,50 +20,107 @@ export class PlanetScaleCache {
 
 	/// true scraped
 
-	public async saveScrapedTrueResults(
-		key: string,
-		value: ScrapeSearchResult[],
-		updateUpdatedAt: boolean = true
-	) {
-		// Fetch the existing record
-		const existingRecord: Scraped | null = await this.prisma.scrapedTrue.findUnique({
-			where: { key },
-		});
+	public async getScrapedTrueResults<T>(key: string, maxSizeGB?: number): Promise<T | undefined> {
+		// Input Validation
+		if (!key || typeof key !== 'string') {
+			throw new Error('Invalid key provided.');
+		}
 
-		if (existingRecord) {
-			const origLength = (existingRecord.value as ScrapeSearchResult[]).length;
-			// If record exists, append the new values to it
-			let updatedValue = flattenAndRemoveDuplicates([
-				existingRecord.value as ScrapeSearchResult[],
-				value,
-			]);
+		const maxSizeMB = maxSizeGB && maxSizeGB > 0 ? maxSizeGB * 1024 : null;
 
-			updatedValue = updatedValue.filter((item) => item.hash.length === 40);
-			// filter hashes that ends with aaaaa
-			updatedValue = updatedValue.filter((item) => !item.hash.endsWith('aaaaa'));
+		let query = Prisma.sql`
+			SELECT
+				JSON_ARRAYAGG(
+					JSON_OBJECT(
+						'hash', jt.hash,
+						'title', jt.title,
+						'fileSize', jt.fileSize
+					)
+					) AS value
+			FROM (
+				SELECT 
+					jt.hash, 
+					jt.title, 
+					jt.fileSize
+				FROM 
+					ScrapedTrue s
+				JOIN 
+					JSON_TABLE(
+						s.value,
+						'$[*]'
+						COLUMNS (
+							hash VARCHAR(255) PATH '$.hash',
+							title VARCHAR(255) PATH '$.title',
+							fileSize DECIMAL(10,2) PATH '$.fileSize'
+						)
+					) AS jt
+				WHERE 
+					s.key = ${key}
+				${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
+				ORDER BY jt.fileSize DESC
+				LIMIT 50
+			) AS jt`;
 
-			updatedValue = sortByFileSize(updatedValue);
-			const newLength = updatedValue.length;
-			console.log(`📝 ${key}: +${newLength - origLength} results`);
-
-			await this.prisma.scrapedTrue.update({
-				where: { key },
-				data: {
-					value: updatedValue,
-					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt,
-				},
-			});
-		} else {
-			// If record doesn't exist, create a new one
-			await this.prisma.scrapedTrue.create({
-				data: { key, value },
-			});
+		try {
+			const result = await this.prisma.$queryRaw<{ value: T }[]>(query);
+			return result.length > 0 ? result[0].value : undefined;
+		} catch (error) {
+			console.error('Database query failed:', error);
+			throw new Error('Failed to retrieve scrapedtrue results.');
 		}
 	}
 
-	public async getScrapedTrueResults<T>(key: string): Promise<T | undefined> {
-		const cacheEntry = await this.prisma.scrapedTrue.findUnique({ where: { key } });
-		return cacheEntry?.value as T | undefined;
+	public async getScrapedResults<T>(key: string, maxSizeGB?: number): Promise<T | undefined> {
+		// Input Validation
+		if (!key || typeof key !== 'string') {
+			throw new Error('Invalid key provided.');
+		}
+		if (maxSizeGB !== undefined && (typeof maxSizeGB !== 'number' || maxSizeGB < 0)) {
+			throw new Error('maxSizeGB must be a positive number.');
+		}
+
+		const maxSizeMB = maxSizeGB ? maxSizeGB * 1024 : null;
+
+		let query = Prisma.sql`
+			SELECT
+				JSON_ARRAYAGG(
+					JSON_OBJECT(
+						'hash', jt.hash,
+						'title', jt.title,
+						'fileSize', jt.fileSize
+					)
+					) AS value
+			FROM (
+				SELECT 
+					jt.hash, 
+					jt.title, 
+					jt.fileSize
+				FROM 
+					Scraped s
+				JOIN 
+					JSON_TABLE(
+						s.value,
+						'$[*]'
+						COLUMNS (
+							hash VARCHAR(255) PATH '$.hash',
+							title VARCHAR(255) PATH '$.title',
+							fileSize DECIMAL(10,2) PATH '$.fileSize'
+						)
+					) AS jt
+				WHERE 
+					s.key = ${key}
+				${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
+				ORDER BY jt.fileSize DESC
+				LIMIT 50
+			) AS jt`;
+
+		try {
+			const result = await this.prisma.$queryRaw<{ value: T }[]>(query);
+			return result.length > 0 ? result[0].value : undefined;
+		} catch (error) {
+			console.error('Database query failed:', error);
+			throw new Error('Failed to retrieve scraped results.');
+		}
 	}
 
 	public async deleteScrapedTrue(imdbId: string): Promise<void> {
@@ -121,11 +178,6 @@ export class PlanetScaleCache {
 				data: { key, value },
 			});
 		}
-	}
-
-	public async getScrapedResults<T>(key: string): Promise<T | undefined> {
-		const cacheEntry = await this.prisma.scraped.findUnique({ where: { key } });
-		return cacheEntry?.value as T | undefined;
 	}
 
 	public async keyExists(key: string): Promise<boolean> {
