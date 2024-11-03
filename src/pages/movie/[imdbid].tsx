@@ -399,7 +399,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 							showSubscribeModal();
 						}}
 					>
-						🔔Subscribe
+							🔔Subscribe
 					</button>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
@@ -487,7 +487,8 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			</div>
 			{searchResults.length > 0 && (
 				<>
-					<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+					{/* Adjust grid layout to single column and reduce margins */}
+					<div className="mx-1 my-1 overflow-x-auto grid grid-cols-1 gap-2">
 						{filteredResults.map((r: SearchResult, i: number) => {
 							const downloaded =
 								isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
@@ -517,8 +518,10 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 										downloading
 									)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
 								>
-									<div className="p-2 space-y-4">
-										<h2 className="text-lg font-bold leading-tight break-words line-clamp-3 overflow-hidden text-ellipsis">
+									{/* Reduce padding and adjust spacing */}
+									<div className="p-1 space-y-2">
+										{/* Adjust title font size */}
+										<h2 className="text-sm font-bold leading-tight break-words line-clamp-2 overflow-hidden text-ellipsis">
 											{r.title}
 										</h2>
 
@@ -533,11 +536,12 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 											</div>
 										)}
 
-										<div className="space-x-2 space-y-2">
+										{/* Adjust buttons */}
+										<div className="space-x-1 space-y-1">
 											{/* RD */}
 											{rdKey && inLibrary('rd', r.hash) && (
 												<button
-													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
+													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1 border border-black"
 													onClick={() => deleteRd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
@@ -546,7 +550,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 											)}
 											{rdKey && notInLibrary('rd', r.hash) && (
 												<button
-													className={`bg-${rdColor}-600 hover:bg-${rdColor}-800 text-white text-xs rounded inline px-1`}
+													className={`bg-${rdColor}-600 hover:bg-${rdColor}-800 text-white text-xs rounded inline px-1 border border-black`}
 													onClick={() => addRd(r.hash)}
 												>
 													{btnIcon(r.rdAvailable)}
@@ -557,7 +561,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 											{/* AD */}
 											{adKey && inLibrary('ad', r.hash) && (
 												<button
-													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
+													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1 border border-black"
 													onClick={() => deleteAd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
@@ -566,7 +570,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 											)}
 											{adKey && notInLibrary('ad', r.hash) && (
 												<button
-													className={`bg-${adColor}-600 hover:bg-${adColor}-800 text-white text-xs rounded inline px-1`}
+													className={`bg-${adColor}-600 hover:bg-${adColor}-800 text-white text-xs rounded inline px-1 border border-black`}
 													onClick={() => addAd(r.hash)}
 												>
 													{btnIcon(r.adAvailable)}
@@ -577,14 +581,14 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 											{(r.rdAvailable || r.adAvailable) && (
 												<>
 													<button
-														className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1"
+														className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1 border border-black"
 														onClick={() => handleShowInfo(r)}
 													>
 														👀Look Inside
 													</button>
 													{r.rdAvailable && player && (
 														<button
-															className="bg-teal-500 hover:bg-teal-700 text-white text-xs rounded inline px-1"
+															className="bg-teal-500 hover:bg-teal-700 text-white text-xs rounded inline px-1 border border-black"
 															onClick={() =>
 																window.open(
 																	`/api/watch/instant/${player}?token=${rdKey}&hash=${r.hash}&fileId=${getBiggestFileId(r)}`
@@ -599,7 +603,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 
 											{rdKey && dmmCastToken && (
 												<button
-													className="bg-black text-white text-xs rounded inline px-1"
+													className="bg-black text-white text-xs rounded inline px-1 border border-black"
 													onClick={() => handleCast(r.hash)}
 												>
 													Cast✨
@@ -607,10 +611,10 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 											)}
 
 											<button
-												className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1"
+												className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1 border border-black"
 												onClick={() => handleCopyMagnet(r.hash)}
 											>
-												<FaMagnet className="inline" /> Get&nbsp;magnet
+												<FaMagnet className="inline" /> Magnet
 											</button>
 										</div>
 									</div>

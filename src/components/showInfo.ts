@@ -19,7 +19,7 @@ export const showInfoForRD = async (
 			warning = `<div class="text-sm text-red-500">Warning: This torrent appears to have been rar'ed by Real-Debrid<br/></div>`;
 			downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 			<input type="hidden" name="links" value="${info.links[0]}" />
-			<button type="submit" class="inline ml-1 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm">🗄️ Download RAR</button>
+			<button type="submit" class="inline ml-1 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">🗄️ Download RAR</button>
 		</form>`;
 		} else {
 			warning = `<div class="text-sm text-red-500">Warning: Some files have expired</div>`;
@@ -28,12 +28,12 @@ export const showInfoForRD = async (
 	if (info.links.length > 1) {
 		downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 			<input type="hidden" name="links" value="${info.links.join('\n')}" />
-			<button type="submit" class="inline ml-1 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm">🔗 Download all links</button>
+			<button type="submit" class="inline ml-1 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">🔗 Download all links</button>
 		</form>`;
 	}
 	if (info.links.length > 0) {
 		downloadAllBtn += `
-		<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])">📤 Export DL links</button>
+		<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])">📤 Export DL links</button>
 	`;
 	}
 
@@ -54,17 +54,17 @@ export const showInfoForRD = async (
 					downloadForm = `
 					<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 						<input type="hidden" name="links" value="${fileLink}" />
-						<button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm">📲 DL</button>
+						<button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">📲 DL</button>
 					</form>
 				`;
 				if (app) {
 					if (info.fake) {
 						watchBtn = `
-							<button type="button" class="inline ml-1 bg-teal-500 hover:bg-teal-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/instant/${app}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')">🧐 Watch</button>
+							<button type="button" class="inline ml-1 bg-teal-500 hover:bg-teal-700 text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="window.open('/api/watch/instant/${app}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')">🧐Watch</button>
 						`;
 					} else {
 						watchBtn = `
-							<button type="button" class="inline ml-1 bg-teal-500 hover:bg-teal-700 text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">🧐 Watch</button>
+							<button type="button" class="inline ml-1 bg-teal-500 hover:bg-teal-700 text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">🧐Watch</button>
 						`;
 					}
 					let epRegex = /S(\d+)\s?E(\d+)/i;
@@ -79,7 +79,7 @@ export const showInfoForRD = async (
 						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
 					) {
 						castBtn = `
-							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm" onclick="window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')">Cast✨</button>
+							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')">Cast✨</button>
 						`;
 					}
 				}
@@ -197,7 +197,7 @@ export const showInfoForAD = async (
 			downloadForm = `
 					<form action="https://alldebrid.com/service/" method="get" target="_blank" class="inline">
 						<input type="hidden" name="url" value="${file.link}" />
-						<button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm">📲 DL</button>
+						<button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">📲 DL</button>
 					</form>
 				`;
 
