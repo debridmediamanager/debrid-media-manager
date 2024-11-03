@@ -35,17 +35,26 @@ export const btnLabel = (avail: boolean, debridService: string) =>
 
 export const sortByMedian = (searchResults: SearchResult[]): SearchResult[] => {
 	searchResults.sort((a, b) => {
-		const aSort = a.videoCount > 0 ? a.medianFileSize * Math.pow(10, a.videoCount) : a.fileSize;
-		const bSort = b.videoCount > 0 ? b.medianFileSize * Math.pow(10, b.videoCount) : b.fileSize;
+		// First compare availability
+		const aAvailable = a.rdAvailable || a.adAvailable;
+		const bAvailable = b.rdAvailable || b.adAvailable;
+		if (aAvailable !== bAvailable) {
+			return bAvailable ? 1 : -1;
+		}
+
+		// Sort by medianFileSize
+		const aSort = a.videoCount > 0 ? a.medianFileSize : a.fileSize / 1024;
+		const bSort = b.videoCount > 0 ? b.medianFileSize : b.fileSize / 1024;
 		if (aSort !== bSort) {
 			return bSort - aSort;
 		}
+
+		// If median sizes are equal, sort by video count
 		if (a.videoCount !== b.videoCount) {
 			return b.videoCount - a.videoCount;
 		}
-		if (a.fileSize !== b.fileSize) {
-			return b.fileSize - a.fileSize;
-		}
+
+		// If video counts are equal, sort alphabetically
 		return a.title.localeCompare(b.title);
 	});
 	return searchResults;
