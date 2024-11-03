@@ -316,6 +316,18 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		);
 	}
 
+	const getFirstAvailableRdTorrent = () => {
+		return searchResults.find((r) => r.rdAvailable && !r.noVideos);
+	};
+
+	const getBiggestFileId = (result: SearchResult) => {
+		if (!result.files || !result.files.length) return '';
+		const biggestFile = result.files
+			.filter((f) => isVideo({ path: f.filename }))
+			.sort((a, b) => b.filesize - a.filesize)[0];
+		return biggestFile?.fileId ?? '';
+	};
+
 	return (
 		<div className="max-w-full">
 			<Head>
@@ -383,6 +395,34 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					)}
 				</div>
 				<div>
+					{rdKey && getFirstAvailableRdTorrent() && (
+						<button
+							className={`mr-2 mt-0 mb-1 bg-green-600 hover:bg-green-800 text-white p-1 text-xs rounded`}
+							onClick={() => addRd(getFirstAvailableRdTorrent()!.hash)}
+						>
+							⚡ <b>Instant RD</b>
+						</button>
+					)}
+					{rdKey && player && getFirstAvailableRdTorrent() && (
+						<button
+							className="mr-2 mt-0 mb-1 bg-teal-500 hover:bg-teal-700 text-white p-1 text-xs rounded"
+							onClick={() =>
+								window.open(
+									`/api/watch/instant/${player}?token=${rdKey}&hash=${getFirstAvailableRdTorrent()!.hash}&fileId=${getBiggestFileId(getFirstAvailableRdTorrent()!)}`
+								)
+							}
+						>
+							🧐 <b>Watch</b>
+						</button>
+					)}
+					{rdKey && dmmCastToken && getFirstAvailableRdTorrent() && (
+						<button
+							className="mr-2 mt-0 mb-1 bg-black hover:bg-gray-800 text-white p-1 text-xs rounded"
+							onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash, ['1'])}
+						>
+							<b>Cast</b>✨
+						</button>
+					)}
 					{onlyShowCached && uncachedCount > 0 && (
 						<button
 							className={`mr-2 mt-0 mb-1 bg-blue-700 hover:bg-blue-600 text-white p-1 text-xs rounded`}

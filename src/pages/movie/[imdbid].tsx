@@ -398,7 +398,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 							className="mr-2 mt-0 mb-1 bg-black hover:bg-gray-800 text-white p-1 text-xs rounded"
 							onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash)}
 						>
-							<b>Cast</b> ✨
+							<b>Cast</b>✨
 						</button>
 					)}
 					{onlyShowCached && uncachedCount > 0 && (
