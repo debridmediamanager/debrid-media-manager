@@ -20,7 +20,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t dmm-prod:latest --push .
+          docker build -t dmm-prod:latest .
 
       - name: Deploy to Docker Swarm
         run: |
