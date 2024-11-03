@@ -718,7 +718,7 @@ function TorrentsPage() {
 			try {
 				const oldId = t.id;
 				if (rdKey && t.id.startsWith('rd:')) {
-					await handleReinsertTorrentinRd(rdKey, t);
+					await handleReinsertTorrentinRd(rdKey, t, true);
 					setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== oldId));
 					await torrentDB.deleteById(oldId);
 					setSelectedTorrents((prev) => {
@@ -1737,7 +1737,8 @@ function TorrentsPage() {
 														if (rdKey && torrent.id.startsWith('rd:')) {
 															await handleReinsertTorrentinRd(
 																rdKey,
-																torrent
+																torrent,
+																true
 															);
 															await fetchLatestRDTorrents(2);
 															setUserTorrentsList((prev) =>

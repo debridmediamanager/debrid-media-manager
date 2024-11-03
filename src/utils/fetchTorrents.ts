@@ -30,7 +30,7 @@ export const fetchRealDebrid = async (
 		}
 
 		// Step 2: If limit input is set, convert and call callback
-		if (customLimit && customLimit === 2) {
+		if (customLimit && customLimit <= 2) {
 			const torrents = await processTorrents(initialData);
 			await callback(torrents);
 			return;
