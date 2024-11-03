@@ -135,6 +135,51 @@ export class PlanetScaleCache {
 
 	/// scraped results
 
+	public async saveScrapedTrueResults(
+		key: string,
+		value: ScrapeSearchResult[],
+		updateUpdatedAt: boolean = true,
+		replaceOldScrape: boolean = false
+	) {
+		// Fetch the existing record
+		const existingRecord: Scraped | null = await this.prisma.scrapedTrue.findUnique({
+			where: { key },
+		});
+
+		if (existingRecord && !replaceOldScrape) {
+			const origLength = (existingRecord.value as ScrapeSearchResult[]).length;
+			// If record exists, append the new values to it
+			let updatedValue = flattenAndRemoveDuplicates([
+				existingRecord.value as ScrapeSearchResult[],
+				value,
+			]);
+			updatedValue = sortByFileSize(updatedValue);
+			const newLength = updatedValue.length;
+			console.log(`📝 ${key}: +${newLength - origLength} results`);
+
+			await this.prisma.scrapedTrue.update({
+				where: { key },
+				data: {
+					value: updatedValue,
+					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt,
+				},
+			});
+		} else if (existingRecord && replaceOldScrape) {
+			await this.prisma.scrapedTrue.update({
+				where: { key },
+				data: {
+					value,
+					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt,
+				},
+			});
+		} else {
+			// If record doesn't exist, create a new one
+			await this.prisma.scrapedTrue.create({
+				data: { key, value },
+			});
+		}
+	}
+
 	public async saveScrapedResults(
 		key: string,
 		value: ScrapeSearchResult[],
