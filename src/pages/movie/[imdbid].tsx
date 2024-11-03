@@ -42,6 +42,38 @@ type MovieSearchProps = {
 
 const torrentDB = new UserTorrentDB();
 
+// Update the getColorScale function with proper Tailwind color classes
+const getColorScale = () => {
+	const scale = [
+		{ threshold: 1, color: 'gray-800', label: 'Single' },
+		{ threshold: Infinity, color: 'blue-900', label: 'With extras' },
+	];
+	return scale;
+};
+
+// Add this helper function near the other utility functions at the top
+const getQueryForMovieCount = (videoCount: number) => {
+	if (videoCount === 1) return 'videos:1'; // Single episode
+	return `videos:>1`; // With extras
+};
+
+// Modify the getMovieCountClass function to consider availability
+const getMovieCountClass = (videoCount: number, isInstantlyAvailable: boolean) => {
+	if (!isInstantlyAvailable) return ''; // No color for unavailable torrents
+	const scale = getColorScale();
+	for (let i = 0; i < scale.length; i++) {
+		if (videoCount <= scale[i].threshold) {
+			return `bg-${scale[i].color}`;
+		}
+	}
+	return `bg-${scale[scale.length - 1].color}`;
+};
+
+const getMovieCountLabel = (videoCount: number) => {
+	if (videoCount === 1) return `Single`;
+	return `With extras (${videoCount})`;
+};
+
 const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	title,
 	description,
@@ -56,7 +88,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		window.localStorage.getItem('settings:onlyTrustedTorrents') === 'true';
 	const defaultTorrentsFilter =
 		window.localStorage.getItem('settings:defaultTorrentsFilter') ?? '';
-	const hideMultipleFiles = window.localStorage.getItem('settings:hideMultipleFiles') === 'true';
 	const { publicRuntimeConfig: config } = getConfig();
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -399,7 +430,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 							showSubscribeModal();
 						}}
 					>
-							🔔Subscribe
+						🔔Subscribe
 					</button>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
@@ -485,10 +516,24 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					Reset
 				</span>
 			</div>
+			<div className="flex items-center gap-2 p-2 mb-2 overflow-x-auto">
+				{getColorScale().map((scale, idx) => (
+					<span
+						key={idx}
+						className={`bg-${scale.color} text-white text-xs px-2 py-1 rounded whitespace-nowrap cursor-pointer`}
+						onClick={() => {
+							const queryText = getQueryForMovieCount(scale.threshold);
+							setQuery(queryText);
+						}}
+					>
+						{scale.label}
+					</span>
+				))}
+			</div>
 			{searchResults.length > 0 && (
 				<>
 					{/* Adjust grid layout to single column and reduce margins */}
-					<div className="mx-1 my-1 overflow-x-auto grid grid-cols-1 gap-2">
+					<div className="mx-1 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2">
 						{filteredResults.map((r: SearchResult, i: number) => {
 							const downloaded =
 								isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
@@ -498,8 +543,8 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 							if (
 								onlyShowCached &&
 								!inYourLibrary &&
-								((!r.rdAvailable && !r.adAvailable) ||
-									(hideMultipleFiles && r.videoCount > 1))
+								!r.rdAvailable &&
+								!r.adAvailable
 							)
 								return;
 							if (
@@ -516,7 +561,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 									className={`${borderColor(
 										downloaded,
 										downloading
-									)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
+									)} ${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
 								>
 									{/* Reduce padding and adjust spacing */}
 									<div className="p-1 space-y-2">
@@ -527,15 +572,19 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 
 										{r.videoCount > 0 ? (
 											<div className="text-gray-300 text-xs">
-												Total: {fileSize(r.fileSize)} GB; Biggest:{' '}
-												{fileSize(r.biggestFileSize)} GB ({r.videoCount} 📂)
+												<span className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black">
+													{getMovieCountLabel(r.videoCount)}
+												</span>
+												<span className="ml-2">
+													Total: {fileSize(r.fileSize)} GB; Biggest:{' '}
+													{fileSize(r.biggestFileSize)} GB
+												</span>
 											</div>
 										) : (
 											<div className="text-gray-300 text-xs">
 												Total: {fileSize(r.fileSize)} GB
 											</div>
 										)}
-
 										{/* Adjust buttons */}
 										<div className="space-x-1 space-y-1">
 											{/* RD */}

@@ -80,7 +80,7 @@ const getEpisodeCountClass = (
 };
 
 const getEpisodeCountLabel = (videoCount: number, expectedEpisodeCount: number) => {
-	if (videoCount === 1) return `Single (1/${expectedEpisodeCount})`;
+	if (videoCount === 1) return `Single`;
 	if (videoCount < expectedEpisodeCount)
 		return `Incomplete (${videoCount}/${expectedEpisodeCount})`;
 	if (videoCount === expectedEpisodeCount)
@@ -469,7 +469,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 									className={`inline-flex items-center p-1 text-xs text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-1`}
 								>
 									<span role="img" aria-label="tv show" className="mr-2">
-										 📺
+										📺
 									</span>{' '}
 									<span className="whitespace-nowrap">
 										{season_names && season_names[season - 1]
@@ -488,7 +488,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 							showSubscribeModal();
 						}}
 					>
-						 🔔Subscribe
+						🔔Subscribe
 					</button>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
@@ -596,7 +596,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			{searchResults.length > 0 && (
 				<>
 					{/* Adjust grid layout to single column and reduce margins */}
-					<div className="mx-1 my-1 overflow-x-auto grid grid-cols-1 gap-2">
+					<div className="mx-1 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2">
 						{filteredResults.map((r: SearchResult, i: number) => {
 							const downloaded =
 								isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
