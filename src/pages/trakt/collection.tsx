@@ -36,21 +36,25 @@ function TraktCollection() {
 	}, [traktToken, traktUserSlug]);
 
 	return (
-		<div className="mx-2 my-1 max-w-full">
+		<div className="mx-2 my-1 bg-gray-900 min-h-screen">
 			<Head>
 				<title>Debrid Media Manager - Trakt - {traktUserSlug}&apos;s Collection</title>
 			</Head>
 			<Toaster position="bottom-right" />
+
 			<div className="flex justify-between items-center mb-2">
-				<h1 className="text-xl font-bold">Trakt - 📚 {traktUserSlug}&apos;s Collection</h1>
+				<h1 className="text-xl font-bold text-white">
+					Trakt - 📚 {traktUserSlug}&apos;s Collection
+				</h1>
 				<Link
 					href="/"
-					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+					className="text-sm border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 py-1 px-2 rounded transition-colors"
 				>
 					Go Home
 				</Link>
 			</div>
-			<div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2">
+
+			<div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
 				{collectionItems.map((item: TraktCollectionItem) => {
 					const imdbid = item.movie?.ids?.imdb || item.show?.ids?.imdb;
 					if (!imdbid) {
@@ -65,6 +69,7 @@ function TraktCollection() {
 					);
 				})}
 			</div>
+
 			{loading && (
 				<div className="flex justify-center items-center mt-4">
 					<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
