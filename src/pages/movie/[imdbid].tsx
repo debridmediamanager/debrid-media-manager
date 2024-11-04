@@ -399,7 +399,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				<div className="flex justify-end p-2">
 					<Link
 						href="/"
-						className="w-fit h-fit text-xs bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+						className="w-fit h-fit text-sm border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 py-1 px-2 rounded transition-colors"
 					>
 						Go Home
 					</Link>
@@ -419,7 +419,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				</div>
 				<div>
 					<button
-						className={`mr-2 mt-0 mb-1 bg-rose-700 hover:bg-rose-600 text-white p-1 text-xs rounded font-bold`}
+						className="mr-2 mt-0 mb-1 border-2 border-rose-500 bg-rose-900/30 text-rose-100 hover:bg-rose-800/50 p-1 text-xs rounded transition-colors"
 						onClick={() => {
 							showSubscribeModal();
 						}}
@@ -428,7 +428,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					</button>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
-							className={`mr-2 mt-0 mb-1 bg-green-600 hover:bg-green-800 text-white p-1 text-xs rounded`}
+							className="mr-2 mt-0 mb-1 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 p-1 text-xs rounded transition-colors"
 							onClick={() => addRd(getFirstAvailableRdTorrent()!.hash)}
 						>
 							<b>⚡Instant RD</b>
@@ -436,7 +436,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					)}
 					{rdKey && player && getFirstAvailableRdTorrent() && (
 						<button
-							className="mr-2 mt-0 mb-1 bg-teal-500 hover:bg-teal-700 text-white p-1 text-xs rounded"
+							className="mr-2 mt-0 mb-1 border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 p-1 text-xs rounded transition-colors"
 							onClick={() =>
 								window.open(
 									`/api/watch/instant/${player}?token=${rdKey}&hash=${getFirstAvailableRdTorrent()!.hash}&fileId=${getBiggestFileId(getFirstAvailableRdTorrent()!)}`
@@ -448,7 +448,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					)}
 					{rdKey && dmmCastToken && getFirstAvailableRdTorrent() && (
 						<button
-							className="mr-2 mt-0 mb-1 bg-black hover:bg-gray-800 text-white p-1 text-xs rounded"
+							className="mr-2 mt-0 mb-1 border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 p-1 text-xs rounded transition-colors"
 							onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash)}
 						>
 							<b>Cast✨</b>
@@ -456,7 +456,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					)}
 					{onlyShowCached && totalUncachedCount > 0 && (
 						<button
-							className={`mr-2 mt-0 mb-1 bg-blue-700 hover:bg-blue-600 text-white p-1 text-xs rounded`}
+							className="mr-2 mt-0 mb-1 border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 p-1 text-xs rounded transition-colors"
 							onClick={() => {
 								setOnlyShowCached(false);
 							}}
@@ -526,7 +526,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			</div>
 			{searchResults.length > 0 && (
 				<>
-					{/* Adjust grid layout to single column and reduce margins */}
 					<div className="mx-1 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2">
 						{filteredResults.map((r: SearchResult, i: number) => {
 							const downloaded =
@@ -552,14 +551,12 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 							return (
 								<div
 									key={i}
-									className={`${borderColor(
+									className={`border-2 ${borderColor(
 										downloaded,
 										downloading
 									)} ${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
 								>
-									{/* Reduce padding and adjust spacing */}
 									<div className="p-1 space-y-2">
-										{/* Adjust title font size */}
 										<h2 className="text-sm font-bold leading-tight break-words line-clamp-2 overflow-hidden text-ellipsis">
 											{r.title}
 										</h2>
@@ -594,12 +591,11 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 												Total: {fileSize(r.fileSize)} GB
 											</div>
 										)}
-										{/* Adjust buttons */}
 										<div className="space-x-1 space-y-1">
 											{/* RD */}
 											{rdKey && inLibrary('rd', r.hash) && (
 												<button
-													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1 border border-black"
+													className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors"
 													onClick={() => deleteRd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
@@ -608,7 +604,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 											)}
 											{rdKey && notInLibrary('rd', r.hash) && (
 												<button
-													className={`bg-${rdColor}-600 hover:bg-${rdColor}-800 text-white text-xs rounded inline px-1 border border-black`}
+													className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 text-xs rounded inline px-1 transition-colors`}
 													onClick={() => addRd(r.hash)}
 												>
 													{btnIcon(r.rdAvailable)}
@@ -619,7 +615,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 											{/* AD */}
 											{adKey && inLibrary('ad', r.hash) && (
 												<button
-													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1 border border-black"
+													className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors"
 													onClick={() => deleteAd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
@@ -628,7 +624,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 											)}
 											{adKey && notInLibrary('ad', r.hash) && (
 												<button
-													className={`bg-${adColor}-600 hover:bg-${adColor}-800 text-white text-xs rounded inline px-1 border border-black`}
+													className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 text-xs rounded inline px-1 transition-colors`}
 													onClick={() => addAd(r.hash)}
 												>
 													{btnIcon(r.adAvailable)}
@@ -640,7 +636,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 												<>
 													{r.rdAvailable && player && (
 														<button
-															className="bg-teal-500 hover:bg-teal-700 text-white text-xs rounded inline px-1 border border-black"
+															className="border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 text-xs rounded inline px-1 transition-colors"
 															onClick={() =>
 																window.open(
 																	`/api/watch/instant/${player}?token=${rdKey}&hash=${r.hash}&fileId=${getBiggestFileId(r)}`
@@ -655,7 +651,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 
 											{rdKey && dmmCastToken && (
 												<button
-													className="bg-black text-white text-xs rounded inline px-1 border border-black"
+													className="border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 text-xs rounded inline px-1 transition-colors"
 													onClick={() => handleCast(r.hash)}
 												>
 													Cast✨
@@ -663,7 +659,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 											)}
 
 											<button
-												className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1 border border-black"
+												className="border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 text-xs rounded inline px-1 transition-colors"
 												onClick={() => handleCopyMagnet(r.hash)}
 											>
 												<FaMagnet className="inline" /> Magnet
@@ -676,7 +672,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					</div>
 					{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (
 						<button
-							className="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 py-2 px-4 my-4 rounded transition-colors duration-200 shadow-md hover:shadow-lg font-medium"
+							className="w-full border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 py-2 px-4 my-4 rounded transition-colors duration-200 shadow-md hover:shadow-lg font-medium"
 							onClick={() => {
 								setCurrentPage((prev) => prev + 1);
 								fetchData(imdbid as string, currentPage + 1);

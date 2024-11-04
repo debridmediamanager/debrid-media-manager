@@ -20,9 +20,10 @@ type ActionButtonProps = {
 
 const renderActionButton = (type: 'download' | 'watch' | 'cast', props: ActionButtonProps) => {
 	const styles = {
-		download: 'bg-blue-500 hover:bg-blue-700',
-		watch: 'bg-teal-500 hover:bg-teal-700',
-		cast: 'bg-black',
+		download:
+			'border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors',
+		watch: 'border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 transition-colors',
+		cast: 'border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 transition-colors',
 	};
 
 	const icon = {
@@ -34,9 +35,9 @@ const renderActionButton = (type: 'download' | 'watch' | 'cast', props: ActionBu
 	return props.link
 		? `<form action="${props.link}" method="get" target="_blank" class="inline">
             <input type="hidden" name="${props.linkParam?.name || 'links'}" value="${props.linkParam?.value || props.onClick || ''}" />
-            <button type="submit" class="inline m-0 ${styles[type]} text-white font-bold py-0 px-1 rounded text-sm border border-black">${icon[type]} ${props.text || type}</button>
+            <button type="submit" class="inline m-0 ${styles[type]} text-xs rounded px-1">${icon[type]} ${props.text || type}</button>
         </form>`
-		: `<button type="button" class="inline m-0 ${styles[type]} text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="${props.onClick}">${icon[type]} ${props.text || type}</button>`;
+		: `<button type="button" class="inline m-0 ${styles[type]} text-xs rounded px-1" onclick="${props.onClick}">${icon[type]} ${props.text || type}</button>`;
 };
 
 const renderFileRow = (file: {
@@ -48,13 +49,13 @@ const renderFileRow = (file: {
 }) => {
 	const { size, unit } = formatSize(file.size);
 	return `
-        <tr class="${file.isPlayable || file.isSelected ? 'bg-yellow-50 font-bold' : 'font-normal'} hover:bg-yellow-200 rounded">
+        <tr class="${file.isPlayable || file.isSelected ? 'bg-gray-800 font-bold' : 'font-normal'} hover:bg-gray-700 rounded">
             <td class="text-right whitespace-nowrap pr-2" style="width: auto;">
                 ${file.actions.join('')}
             </td>
             <td class="truncate" style="width: 100%; min-width: 0;">
-                <span class="text-blue-600">${file.path}</span>
-                <span class="text-gray-700 ml-2">${size.toFixed(2)} ${unit}</span>
+                <span class="text-blue-300">${file.path}</span>
+                <span class="text-gray-300 ml-2">${size.toFixed(2)} ${unit}</span>
             </td>
         </tr>
     `;
@@ -66,7 +67,7 @@ type InfoTableRow = {
 };
 
 const renderInfoTable = (rows: InfoTableRow[]) => `
-    <table class="table-auto w-full mb-4 text-left">
+    <table class="table-auto w-full mb-4 text-left text-gray-200">
         <tbody>
             ${rows
 				.map(
@@ -95,24 +96,24 @@ export const showInfoForRD = async (
 	const isIntact = info.fake || info.files.filter((f) => f.selected).length === info.links.length;
 	if (info.progress === 100 && !isIntact) {
 		if (info.links.length === 1) {
-			warning = `<div class="text-sm text-red-500">Warning: This torrent appears to have been rar'ed by Real-Debrid<br/></div>`;
+			warning = `<div class="text-sm text-red-400">Warning: This torrent appears to have been rar'ed by Real-Debrid<br/></div>`;
 			downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 			<input type="hidden" name="links" value="${info.links[0]}" />
-			<button type="submit" class="inline m-0 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">🗄️ Download RAR</button>
+			<button type="submit" class="inline m-0 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 text-xs rounded px-1 transition-colors">🗄️ Download RAR</button>
 		</form>`;
 		} else {
-			warning = `<div class="text-sm text-red-500">Warning: Some files have expired</div>`;
+			warning = `<div class="text-sm text-red-400">Warning: Some files have expired</div>`;
 		}
 	}
 	if (info.links.length > 1) {
 		downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 			<input type="hidden" name="links" value="${info.links.join('\n')}" />
-			<button type="submit" class="inline m-0 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">🔗 Download all links</button>
+			<button type="submit" class="inline m-0 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 text-xs rounded px-1 transition-colors">🔗 Download all links</button>
 		</form>`;
 	}
 	if (info.links.length > 0) {
 		downloadAllBtn += `
-		<button type="button" class="inline m-0 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])">📤 Export DL links</button>
+		<button type="button" class="inline m-0 border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 text-xs rounded px-1 transition-colors" onclick="exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])">📤 Export DL links</button>
 	`;
 	}
 
@@ -193,9 +194,9 @@ export const showInfoForRD = async (
 			: '';
 
 	// Update the wrapping HTML to include a table
-	let html = `<h1 class="text-lg font-bold mt-6 mb-4">${info.filename}</h1>
-	<hr/>
-	<div class="text-sm max-h-60 mb-4 text-left p-1">
+	let html = `<h1 class="text-lg font-bold mt-6 mb-4 text-gray-100">${info.filename}</h1>
+	<hr class="border-gray-600"/>
+	<div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
 		<table class="table-auto w-full">
 			<tbody>
 				${filesList}
@@ -205,8 +206,8 @@ export const showInfoForRD = async (
 
 	if (!info.fake)
 		html = html.replace(
-			'<hr/>',
-			`<div class="text-sm">
+			'<hr class="border-gray-600"/>',
+			`<div class="text-sm text-gray-200">
             ${renderInfoTable([
 				{ label: 'Size', value: (info.bytes / 1024 ** 3).toFixed(2) + ' GB' },
 				{ label: 'ID', value: info.id },
@@ -228,11 +229,11 @@ export const showInfoForRD = async (
         ${warning}${downloadAllBtn}`
 		);
 	Swal.fire({
-		// icon: 'info',
 		html,
 		showConfirmButton: false,
 		customClass: {
 			htmlContainer: '!mx-1',
+			popup: '!bg-gray-900 !text-gray-100',
 		},
 		width: '800px',
 		showCloseButton: true,
@@ -267,9 +268,9 @@ export const showInfoForAD = async (
 		.join('');
 
 	// Update the wrapping HTML to include a table
-	let html = `<h1 class="text-lg font-bold mt-6 mb-4">${info.filename}</h1>
-	<hr/>
-	<div class="text-sm max-h-60 mb-4 text-left bg-blue-100 p-1">
+	let html = `<h1 class="text-lg font-bold mt-6 mb-4 text-gray-100">${info.filename}</h1>
+	<hr class="border-gray-600"/>
+	<div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
 		<table class="table-auto w-full">
 			<tbody>
 				${filesList}
@@ -277,8 +278,8 @@ export const showInfoForAD = async (
 		</table>
 	</div>`;
 	html = html.replace(
-		'<hr/>',
-		`<div class="text-sm">
+		'<hr class="border-gray-600"/>',
+		`<div class="text-sm text-gray-200">
 		${renderInfoTable([
 			{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
 			{ label: 'ID', value: info.id },
@@ -289,11 +290,11 @@ export const showInfoForAD = async (
 	);
 
 	Swal.fire({
-		// icon: 'info',
 		html,
 		showConfirmButton: false,
 		customClass: {
 			htmlContainer: '!mx-1',
+			popup: '!bg-gray-900 !text-gray-100',
 		},
 		width: '800px',
 		showCloseButton: true,
