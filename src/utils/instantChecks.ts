@@ -140,6 +140,89 @@ export const instantCheckInRd2 = async (
 	return instantCount;
 };
 
+export const instantCheckAnimeInRd = async (
+	rdKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
+	sortFn: (searchResults: SearchResult[]) => SearchResult[]
+): Promise<number> => {
+	let instantCount = 0;
+	const funcs = [];
+	for (const hashGroup of groupBy(20, hashes)) {
+		funcs.push(async () => {
+			const resp = await rdInstantCheck(rdKey, hashGroup);
+			setTorrentList((prevSearchResults) => {
+				const newSearchResults = [...prevSearchResults];
+				for (const torrent of newSearchResults) {
+					if (torrent.noVideos) continue;
+					if (torrent.hash in resp === false) continue;
+					if ('rd' in resp[torrent.hash] === false) continue;
+					const variants = resp[torrent.hash]['rd'];
+					if (!variants.length) continue;
+
+					// Find variant with most files
+					const variantWithMostFiles = variants.reduce(
+						(prev, curr) =>
+							Object.keys(curr).length > Object.keys(prev).length ? curr : prev,
+						variants[0]
+					);
+
+					const files: Record<number, FileData> = {};
+					for (const fileId in variantWithMostFiles) {
+						files[fileId] = {
+							...variantWithMostFiles[fileId],
+							fileId: parseInt(fileId, 10),
+						};
+					}
+
+                    if (Object.keys(files).length >= 2) {
+                        const filenames = Object.values(files).map(f => f.filename);
+                        let commonPrefix = filenames[0];
+                        for (let i = 1; i < filenames.length; i++) {
+                            while (filenames[i].indexOf(commonPrefix) !== 0) {
+                                commonPrefix = commonPrefix.slice(0, -1);
+                                if (commonPrefix === '') break;
+                            }
+                        }
+                        if (commonPrefix !== '') {
+                            torrent.title = `${commonPrefix}X...`;
+                        }
+                    } else if (Object.keys(files).length === 1) {
+                        torrent.title = Object.values(files)[0].filename;
+                    }
+					torrent.files = Object.values(files);
+					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
+					const sortedFileSizes = videoFiles
+						.map((f) => f.filesize / 1024 / 1024)
+						.sort((a, b) => a - b);
+					const mid = Math.floor(sortedFileSizes.length / 2);
+					torrent.medianFileSize =
+						torrent.medianFileSize ?? sortedFileSizes.length % 2 !== 0
+							? sortedFileSizes[mid]
+							: (sortedFileSizes[mid - 1] + sortedFileSizes[mid]) / 2;
+					torrent.biggestFileSize = sortedFileSizes[sortedFileSizes.length - 1];
+					torrent.videoCount = videoFiles.filter((f) =>
+						isVideo({ path: f.filename })
+					).length;
+					torrent.noVideos = !torrent.files.some((file) =>
+						isVideo({ path: file.filename })
+					);
+					// because it has variants and there's at least 1 video file
+					if (!torrent.noVideos) {
+						torrent.rdAvailable = true;
+						instantCount += 1;
+					} else {
+						torrent.rdAvailable = false;
+					}
+				}
+				return sortFn(newSearchResults); // Apply sorting after each batch
+			});
+		});
+	}
+	await runConcurrentFunctions(funcs, 4, 0);
+	return instantCount;
+};
+
 // returns non-video hashes because I want to :)
 export const checkForUncachedInRd = async (
 	rdKey: string,
