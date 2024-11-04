@@ -19,8 +19,7 @@ import { defaultMovieSize, defaultPlayer } from '@/utils/settings';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { withAuth } from '@/utils/withAuth';
-import axios, { AxiosError } from 'axios';
-import { GetServerSideProps } from 'next';
+import axios from 'axios';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -29,9 +28,8 @@ import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
-import UserAgent from 'user-agents';
 
-type MovieSearchProps = {
+type MovieInfo = {
 	title: string;
 	description: string;
 	poster: string;
@@ -74,14 +72,18 @@ const getMovieCountLabel = (videoCount: number) => {
 	return `With extras (${videoCount})`;
 };
 
-const MovieSearch: FunctionComponent<MovieSearchProps> = ({
-	title,
-	description,
-	poster,
-	backdrop,
-	year,
-	imdb_score,
-}) => {
+const MovieSearch: FunctionComponent = () => {
+	const router = useRouter();
+	const { imdbid } = router.query;
+	const [movieInfo, setMovieInfo] = useState<MovieInfo>({
+		title: '',
+		description: '',
+		poster: '',
+		backdrop: '',
+		year: '',
+		imdb_score: 0,
+	});
+
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	const movieMaxSize = window.localStorage.getItem('settings:movieMaxSize') || defaultMovieSize;
 	const onlyTrustedTorrents =
@@ -103,8 +105,20 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	const [currentPage, setCurrentPage] = useState(0);
 	const [hasMoreResults, setHasMoreResults] = useState(true);
 
-	const router = useRouter();
-	const { imdbid } = router.query;
+	useEffect(() => {
+		if (!imdbid) return;
+
+		const fetchMovieInfo = async () => {
+			try {
+				const response = await axios.get(`/api/info/movie?imdbid=${imdbid}`);
+				setMovieInfo(response.data);
+			} catch (error) {
+				console.error('Failed to fetch movie info:', error);
+			}
+		};
+
+		fetchMovieInfo();
+	}, [imdbid]);
 
 	async function initialize() {
 		await torrentDB.initializeDB();
@@ -193,7 +207,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			}
 		} catch (error) {
 			console.error(error);
-			if ((error as AxiosError).response?.status === 403) {
+			if ((error as any).response?.status === 403) {
 				setErrorMessage(
 					'Please check the time in your device. If it is correct, please try again.'
 				);
@@ -214,34 +228,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		setFilteredResults(filteredResults);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query, searchResults]);
-
-	// tokens
-	useEffect(() => {
-		if (searchState === 'loading') return;
-		const tokens = new Map<string, number>();
-		// filter by cached
-		const toProcess = searchResults.filter((r) => r.rdAvailable || r.adAvailable);
-		toProcess.forEach((r) => {
-			r.title.split(/[ .\-\[\]]/).forEach((word) => {
-				if (word.length < 3) return;
-				// skip if word is in title
-				if (title.toLowerCase().includes(word.toLowerCase())) return;
-				word = word.toLowerCase();
-				if (tokens.has(word)) {
-					tokens.set(word, tokens.get(word)! + 1);
-				} else {
-					tokens.set(word, 1);
-				}
-			});
-		});
-		// iterate through tokens
-		let tokenEntries = Array.from(tokens.entries());
-		// sort by count
-		tokenEntries = tokenEntries.sort((a, b) => b[1] - a[1]);
-		// get only the tokens
-		const tokensArr = tokenEntries.map((a) => a[0].toLowerCase());
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [searchState]);
 
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	async function fetchHashAndProgress(hash?: string) {
@@ -311,9 +297,8 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	}
 
 	const backdropStyle = {
-		backgroundImage: `linear-gradient(to bottom, hsl(0, 0%, 12%,0.5) 0%, hsl(0, 0%, 12%,0) 50%, hsl(0, 0%, 12%,0.5) 100%), url(${backdrop})`,
+		backgroundImage: `linear-gradient(to bottom, hsl(0, 0%, 12%,0.5) 0%, hsl(0, 0%, 12%,0) 50%, hsl(0, 0%, 12%,0.5) 100%), url(${movieInfo.backdrop})`,
 		backgroundPosition: 'center',
-		// backgroundRepeat: 'no-repeat',
 		backgroundSize: 'screen',
 	};
 
@@ -374,11 +359,15 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 		return biggestFile?.fileId ?? '';
 	};
 
+	if (!movieInfo.title) {
+		return <div>Loading...</div>;
+	}
+
 	return (
 		<div className="max-w-full bg-gray-900 min-h-screen text-gray-100">
 			<Head>
 				<title>
-					Debrid Media Manager - Movie - {title} ({year})
+					Debrid Media Manager - Movie - {movieInfo.title} ({movieInfo.year})
 				</title>
 			</Head>
 			<Toaster position="bottom-right" />
@@ -387,15 +376,15 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				className="grid grid-flow-col auto-cols-auto auto-rows-auto gap-2"
 				style={backdropStyle}
 			>
-				{(poster && (
+				{(movieInfo.poster && (
 					<Image
 						width={200}
 						height={300}
-						src={poster}
+						src={movieInfo.poster}
 						alt="Movie poster"
 						className="shadow-lg row-span-5"
 					/>
-				)) || <Poster imdbId={imdbid as string} title={title} />}
+				)) || <Poster imdbId={imdbid as string} title={movieInfo.title} />}
 				<div className="flex justify-end p-2">
 					<Link
 						href="/"
@@ -405,14 +394,19 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					</Link>
 				</div>
 				<h2 className="text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
-					{title} ({year})
+					{movieInfo.title} ({movieInfo.year})
 				</h2>
 				<div className="w-fit h-fit bg-slate-900/75" onClick={() => setDescLimit(0)}>
-					{descLimit > 0 ? description.substring(0, descLimit) + '..' : description}{' '}
-					{imdb_score > 0 && (
+					{descLimit > 0
+						? movieInfo.description.substring(0, descLimit) + '..'
+						: movieInfo.description}{' '}
+					{movieInfo.imdb_score > 0 && (
 						<div className="text-yellow-100 inline">
 							<Link href={`https://www.imdb.com/title/${imdbid}/`} target="_blank">
-								IMDB Score: {imdb_score < 10 ? imdb_score : imdb_score / 10}
+								IMDB Score:{' '}
+								{movieInfo.imdb_score < 10
+									? movieInfo.imdb_score
+									: movieInfo.imdb_score / 10}
 							</Link>
 						</div>
 					)}
@@ -557,14 +551,14 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 								<div
 									key={i}
 									className={`
-										border-2 border-gray-700 
-										${borderColor(downloaded, downloading)}
-										${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable)}
-										shadow hover:shadow-lg 
-										transition-shadow duration-200 ease-in 
-										rounded-lg overflow-hidden 
-										bg-opacity-30
-									`}
+                                        border-2 border-gray-700 
+                                        ${borderColor(downloaded, downloading)}
+                                        ${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable)}
+                                        shadow hover:shadow-lg 
+                                        transition-shadow duration-200 ease-in 
+                                        rounded-lg overflow-hidden 
+                                        bg-opacity-30
+                                    `}
 								>
 									<div className="p-1 space-y-2">
 										<h2 className="text-sm font-bold leading-tight break-words line-clamp-2 overflow-hidden text-ellipsis">
@@ -691,59 +685,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 			)}
 		</div>
 	);
-};
-
-const mdblistKey = process.env.MDBLIST_KEY;
-const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
-// const https://v3-cinemeta.strem.io/meta/movie/${imdbId}.json
-const getCinemetaInfo = (imdbId: string) =>
-	`https://v3-cinemeta.strem.io/meta/movie/${imdbId}.json`;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-	const { params } = context;
-	const mdbPromise = axios.get(getMdbInfo(params!.imdbid as string));
-	const cinePromise = axios.get(getCinemetaInfo(params!.imdbid as string), {
-		headers: {
-			accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-			'accept-language': 'en-US,en;q=0.5',
-			'accept-encoding': 'gzip, deflate, br',
-			connection: 'keep-alive',
-			'sec-fetch-dest': 'document',
-			'sec-fetch-mode': 'navigate',
-			'sec-fetch-site': 'same-origin',
-			'sec-fetch-user': '?1',
-			'upgrade-insecure-requests': '1',
-			'user-agent': new UserAgent().toString(),
-		},
-	});
-	const [mdbResponse, cinemetaResponse] = await Promise.all([mdbPromise, cinePromise]);
-
-	let imdb_score =
-		mdbResponse.data.ratings?.reduce((acc: number | undefined, rating: any) => {
-			if (rating.source === 'imdb') {
-				return rating.score as number;
-			}
-			return acc;
-		}, null) ?? cinemetaResponse.data.meta?.imdbRating
-			? parseFloat(cinemetaResponse.data.meta?.imdbRating) * 10
-			: null;
-
-	const title = mdbResponse.data.title ?? cinemetaResponse.data.meta?.name ?? 'Unknown';
-
-	return {
-		props: {
-			title,
-			description:
-				mdbResponse.data.description ?? cinemetaResponse.data.meta?.description ?? 'n/a',
-			poster: mdbResponse.data.poster ?? cinemetaResponse.data.meta?.poster ?? '',
-			backdrop:
-				mdbResponse.data.backdrop ??
-				cinemetaResponse.data.meta?.background ??
-				'https://source.unsplash.com/random/1800x300?' + title,
-			year: mdbResponse.data.year ?? cinemetaResponse.data.meta?.releaseInfo ?? '????',
-			imdb_score: imdb_score ?? 0,
-		},
-	};
 };
 
 export default withAuth(MovieSearch);
