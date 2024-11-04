@@ -125,6 +125,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	const dmmCastToken = useCastToken();
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalUncachedCount, setTotalUncachedCount] = useState<number>(0);
+	const [hasMoreResults, setHasMoreResults] = useState(true);
 
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
@@ -171,39 +172,28 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 
 			if (response.data.results?.length) {
 				const results = response.data.results;
-				if (page === 0) {
-					setSearchResults(
-						results.map((r) => ({
+				setSearchResults((prevResults) => {
+					const newResults = [
+						...prevResults,
+						...results.map((r) => ({
 							...r,
 							rdAvailable: false,
 							adAvailable: false,
 							noVideos: false,
 							files: [],
-						}))
-					);
-				} else {
-					setSearchResults((prevResults) => {
-						const newResults = [
-							...prevResults,
-							...results.map((r) => ({
-								...r,
-								rdAvailable: false,
-								adAvailable: false,
-								noVideos: false,
-								files: [],
-							})),
-						];
-						// Sort function that prioritizes instant availability
-						return newResults.sort((a, b) => {
-							const aAvailable = a.rdAvailable || a.adAvailable;
-							const bAvailable = b.rdAvailable || b.adAvailable;
-							if (aAvailable !== bAvailable) {
-								return aAvailable ? -1 : 1;
-							}
-							return b.fileSize - a.fileSize;
-						});
+						})),
+					];
+					// Sort function that prioritizes instant availability
+					return newResults.sort((a, b) => {
+						const aAvailable = a.rdAvailable || a.adAvailable;
+						const bAvailable = b.rdAvailable || b.adAvailable;
+						if (aAvailable !== bAvailable) {
+							return aAvailable ? -1 : 1;
+						}
+						return b.fileSize - a.fileSize;
 					});
-				}
+				});
+				setHasMoreResults(results.length > 0);
 				toast(`Found ${results.length} results`, searchToastOptions);
 
 				// instant checks
@@ -228,8 +218,11 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				const newUncachedCount = hashArr.length - counts.reduce((acc, cur) => acc + cur, 0);
 				setTotalUncachedCount((prev) => prev + newUncachedCount);
 			} else {
-				setSearchResults([]);
-				toast(`No results found`, searchToastOptions);
+				if (page === 0) {
+					setSearchResults([]);
+				}
+				setHasMoreResults(false);
+				toast(`No${page === 0 ? '' : ' more'} results found`, searchToastOptions);
 			}
 		} catch (error) {
 			console.error(error);
@@ -241,6 +234,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				setErrorMessage(
 					'There was an error searching for the query. Please try again later.'
 				);
+				setHasMoreResults(false);
 			}
 		} finally {
 			setSearchState('loaded');
@@ -755,9 +749,9 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 						})}
 					</div>
 
-					{searchState === 'loaded' && (
+					{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (
 						<button
-							className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 my-4 rounded"
+							className="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 py-2 px-4 my-4 rounded transition-colors duration-200 shadow-md hover:shadow-lg font-medium"
 							onClick={() => {
 								setCurrentPage((prev) => prev + 1);
 								fetchData(
@@ -767,7 +761,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 								);
 							}}
 						>
-							Show More
+							Show More Results
 						</button>
 					)}
 				</>
