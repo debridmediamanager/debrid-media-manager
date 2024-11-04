@@ -9,7 +9,7 @@ import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '
 import { handleCastMovie } from '@/utils/cast';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
-import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
+import { instantCheckAnimeInRd, instantCheckInAd, wrapLoading } from '@/utils/instantChecks';
 import { applyQuickSearch2 } from '@/utils/quickSearch';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize, sortByMedian } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
@@ -17,8 +17,7 @@ import { defaultPlayer } from '@/utils/settings';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { withAuth } from '@/utils/withAuth';
-import axios, { AxiosError } from 'axios';
-import { GetServerSideProps } from 'next';
+import axios from 'axios';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -27,7 +26,6 @@ import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
-import UserAgent from 'user-agents';
 
 type AnimeSearchProps = {
 	title: string;
@@ -40,16 +38,19 @@ type AnimeSearchProps = {
 
 const torrentDB = new UserTorrentDB();
 
-const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
-	title,
-	description,
-	poster,
-	backdrop,
-	imdbid,
-	imdbRating,
-}) => {
+const MovieSearch: FunctionComponent = () => {
+	const router = useRouter();
+	const { animeid } = router.query;
+	const [animeInfo, setAnimeInfo] = useState<AnimeSearchProps>({
+		title: '',
+		description: '',
+		poster: '',
+		backdrop: '',
+		imdbid: '',
+		imdbRating: 0,
+	});
+
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
-	// const movieMaxSize = window.localStorage.getItem('settings:movieMaxSize') || defaultMovieSize;
 	const onlyTrustedTorrents =
 		window.localStorage.getItem('settings:onlyTrustedTorrents') === 'true';
 	const defaultTorrentsFilter =
@@ -67,8 +68,20 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 	const [uncachedCount, setUncachedCount] = useState<number>(0);
 	const dmmCastToken = useCastToken();
 
-	const router = useRouter();
-	const { animeid } = router.query;
+	useEffect(() => {
+		if (!animeid) return;
+
+		const fetchAnimeInfo = async () => {
+			try {
+				const response = await axios.get(`/api/info/anime?animeid=${animeid}`);
+				setAnimeInfo(response.data);
+			} catch (error) {
+				console.error('Failed to fetch anime info:', error);
+			}
+		};
+
+		fetchAnimeInfo();
+	}, [animeid]);
 
 	async function initialize() {
 		await torrentDB.initializeDB();
@@ -119,7 +132,7 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 					instantChecks.push(
 						wrapLoading(
 							'RD',
-							instantCheckInRd(rdKey, hashArr, setSearchResults, sortByMedian)
+							instantCheckAnimeInRd(rdKey, hashArr, setSearchResults, sortByMedian)
 						)
 					);
 				if (adKey)
@@ -138,7 +151,7 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 			}
 		} catch (error) {
 			console.error(error);
-			if ((error as AxiosError).response?.status === 403) {
+			if ((error as any).response?.status === 403) {
 				setErrorMessage(
 					'Please check the time in your device. If it is correct, please try again.'
 				);
@@ -158,34 +171,6 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 		setFilteredResults(filteredResults);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query, searchResults]);
-
-	// tokens
-	useEffect(() => {
-		if (searchState === 'loading') return;
-		const tokens = new Map<string, number>();
-		// filter by cached
-		const toProcess = searchResults.filter((r) => r.rdAvailable || r.adAvailable);
-		toProcess.forEach((r) => {
-			r.title.split(/[ .\-\[\]]/).forEach((word) => {
-				if (word.length < 3) return;
-				// skip if word is in title
-				if (title.toLowerCase().includes(word.toLowerCase())) return;
-				word = word.toLowerCase();
-				if (tokens.has(word)) {
-					tokens.set(word, tokens.get(word)! + 1);
-				} else {
-					tokens.set(word, 1);
-				}
-			});
-		});
-		// iterate through tokens
-		let tokenEntries = Array.from(tokens.entries());
-		// sort by count
-		tokenEntries = tokenEntries.sort((a, b) => b[1] - a[1]);
-		// get only the tokens
-		const tokensArr = tokenEntries.map((a) => a[0].toLowerCase());
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [searchState]);
 
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	async function fetchHashAndProgress(hash?: string) {
@@ -255,9 +240,8 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 	}
 
 	const backdropStyle = {
-		backgroundImage: `linear-gradient(to bottom, hsl(0, 0%, 12%,0.5) 0%, hsl(0, 0%, 12%,0) 50%, hsl(0, 0%, 12%,0.5) 100%), url(${backdrop})`,
+		backgroundImage: `linear-gradient(to bottom, hsl(0, 0%, 12%,0.5) 0%, hsl(0, 0%, 12%,0) 50%, hsl(0, 0%, 12%,0.5) 100%), url(${animeInfo.backdrop})`,
 		backgroundPosition: 'center',
-		// backgroundRepeat: 'no-repeat',
 		backgroundSize: 'screen',
 	};
 
@@ -306,10 +290,14 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 		);
 	}
 
+	if (!animeInfo.title) {
+		return <div>Loading...</div>;
+	}
+
 	return (
 		<div className="max-w-full">
 			<Head>
-				<title>Debrid Media Manager - Anime - {title}</title>
+				<title>Debrid Media Manager - Anime - {animeInfo.title}</title>
 			</Head>
 			<Toaster position="bottom-right" />
 			{/* Display basic movie info */}
@@ -317,11 +305,11 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 				className="grid grid-flow-col auto-cols-auto auto-rows-auto gap-2"
 				style={backdropStyle}
 			>
-				{poster && (
+				{animeInfo.poster && (
 					<Image
 						width={200}
 						height={300}
-						src={poster}
+						src={animeInfo.poster}
 						alt="Movie poster"
 						className="shadow-lg row-span-5"
 					/>
@@ -335,14 +323,22 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 					</Link>
 				</div>
 				<h2 className="text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
-					{title}
+					{animeInfo.title}
 				</h2>
 				<div className="w-fit h-fit bg-slate-900/75" onClick={() => setDescLimit(0)}>
-					{descLimit > 0 ? description.substring(0, descLimit) + '..' : description}{' '}
-					{imdbRating > 0 && (
+					{descLimit > 0
+						? animeInfo.description.substring(0, descLimit) + '..'
+						: animeInfo.description}{' '}
+					{animeInfo.imdbRating > 0 && (
 						<div className="text-yellow-100 inline">
-							<Link href={`https://www.imdb.com/title/${imdbid}/`} target="_blank">
-								IMDB Score: {imdbRating < 10 ? imdbRating : imdbRating / 10}
+							<Link
+								href={`https://www.imdb.com/title/${animeInfo.imdbid}/`}
+								target="_blank"
+							>
+								IMDB Score:{' '}
+								{animeInfo.imdbRating < 10
+									? animeInfo.imdbRating
+									: animeInfo.imdbRating / 10}
 							</Link>
 						</div>
 					)}
@@ -415,12 +411,6 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 						const inYourLibrary = downloaded || downloading;
 						if (onlyShowCached && !r.rdAvailable && !r.adAvailable && !inYourLibrary)
 							return;
-						// if (
-						// 	movieMaxSize !== '0' &&
-						// 	(r.biggestFileSize ?? r.fileSize) > parseInt(movieMaxSize) * 1024 &&
-						// 	!inYourLibrary
-						// )
-						// 	return;
 						const rdColor = btnColor(r.rdAvailable, r.noVideos);
 						const adColor = btnColor(r.adAvailable, r.noVideos);
 						return (
@@ -521,56 +511,6 @@ const MovieSearch: FunctionComponent<AnimeSearchProps> = ({
 			)}
 		</div>
 	);
-};
-
-// alternative, execute this request: curl --http1.1 --compressed "https://api.jikan.moe/v3/anime/1"
-
-const getAnimeInfo = (id: string) => `https://anime-kitsu.strem.fun/meta/series/${id}.json`;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-	const { params } = context;
-	const animeid = params!.animeid as string;
-	try {
-		const animeurl = getAnimeInfo(animeid.replace('-', '%3A'));
-		const response = await axios.get(animeurl, {
-			headers: {
-				accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-				'accept-language': 'en-US,en;q=0.5',
-				'accept-encoding': 'gzip, deflate, br',
-				connection: 'keep-alive',
-				'sec-fetch-dest': 'document',
-				'sec-fetch-mode': 'navigate',
-				'sec-fetch-site': 'same-origin',
-				'sec-fetch-user': '?1',
-				'upgrade-insecure-requests': '1',
-				'user-agent': new UserAgent().toString(),
-			},
-		});
-		// title is from type="main">{title}</title
-		const imdbRating = response.data.meta.imdbRating ?? '0';
-
-		return {
-			props: {
-				title: response.data.meta.name,
-				description: response.data.meta.description ?? '',
-				poster: response.data.meta.poster ?? '',
-				backdrop: response.data.meta.background ?? '',
-				imdbid: response.data.meta.imdb_id ?? '',
-				imdbRating: parseFloat(imdbRating),
-			},
-		};
-	} catch (error) {
-		return {
-			props: {
-				title: 'Unknown',
-				description: 'Unknown',
-				poster: 'https://picsum.photos/200/300',
-				backdrop: '',
-				imdbid: '',
-				imdbRating: 0,
-			},
-		};
-	}
 };
 
 export default withAuth(MovieSearch);
