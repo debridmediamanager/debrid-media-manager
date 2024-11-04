@@ -28,9 +28,12 @@ export const showSettings = async () => {
 	const { value: formValues } = await Swal.fire({
 		title: '⚙️ Settings',
 		html: `
-            <label for="dmm-player">Video player:</label>
-            <select id="dmm-player" class="swal2-input">
-                <optgroup label="Web">
+            <div class="text-sm text-gray-200">
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label class="font-semibold">Video player</label>
+                        <select id="dmm-player" class="bg-gray-800 text-gray-200 rounded px-2 py-2.5 w-full">
+                            <optgroup label="Web">
                     <option ${isPlayer('web/rd')}>Real-Debrid Stream</option>
                 </optgroup>
                 <optgroup label="Android">
@@ -54,52 +57,75 @@ export const showSettings = async () => {
                     <option ${isPlayer('mac2/figplayer')}>Fig Player</option>
                     <option ${isPlayer('mac3/nplayer-mac')}>nPlayer</option>
                 </optgroup>
-            </select>
+                        </select>
+                    </div>
+                    
+                    <div class="flex flex-col gap-1">
+                        <label class="font-semibold">Biggest movie size</label>
+                        <select id="dmm-movie-max-size" class="bg-gray-800 text-gray-200 rounded px-2 py-2.5 w-full">
+                            <option ${isMovieSize('1')}>1 GB</option>
+                            <option ${isMovieSize('3')}>3 GB</option>
+                            <option ${isMovieSize('5')}>5 GB</option>
+                            <option ${isMovieSize('15')}>15 GB</option>
+                            <option ${isMovieSize('30')}>30 GB</option>
+                            <option ${isMovieSize('60')}>60 GB</option>
+                            <option ${isMovieSize('0')}>Biggest available</option>
+                        </select>
+                    </div>
 
-            <div name="divider" class="py-2"></div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-semibold">Biggest episode size</label>
+                        <select id="dmm-episode-max-size" class="bg-gray-800 text-gray-200 rounded px-2 py-2.5 w-full">
+                            <option ${isEpisodeSize('0.1')}>100 MB</option>
+                            <option ${isEpisodeSize('0.3')}>300 MB</option>
+                            <option ${isEpisodeSize('0.5')}>500 MB</option>
+                            <option ${isEpisodeSize('1')}>1 GB</option>
+                            <option ${isEpisodeSize('3')}>3 GB</option>
+                            <option ${isEpisodeSize('5')}>5 GB</option>
+                            <option ${isEpisodeSize('0')}>Biggest available</option>
+                        </select>
+                    </div>
 
-            <label for="dmm-movie-max-size">Biggest movie size to show:</label>
-            <select id="dmm-movie-max-size" class="swal2-input">
-                <option ${isMovieSize('1')}>1 GB</option>
-                <option ${isMovieSize('3')}>3 GB</option>
-                <option ${isMovieSize('5')}>5 GB</option>
-                <option ${isMovieSize('15')}>15 GB</option>
-                <option ${isMovieSize('30')}>30 GB</option>
-                <option ${isMovieSize('60')}>60 GB</option>
-                <option ${isMovieSize('0')}>Biggest available</option>
-            </select>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-semibold">Default torrents filter</label>
+                        <input id="dmm-default-torrents-filter" type="text" 
+                            class="bg-gray-800 text-gray-200 rounded px-2 py-2.5 w-full"
+                            placeholder="filter results, supports regex" 
+                            value="${defaultTorrentsFilter}">
+                    </div>
 
-            <div name="divider" class="py-2"></div>
+                    <div class="flex items-center gap-2">
+                        <input id="dmm-only-trusted-torrents" type="checkbox" 
+                            class="w-5 h-5 bg-gray-800 border-gray-600 rounded" 
+                            ${onlyTrustedTorrents ? 'checked' : ''}>
+                        <label class="font-semibold">Only trusted torrents</label>
+                    </div>
+                </div>
 
-            <label for="dmm-episode-max-size">Biggest episode size to show:</label>
-            <select id="dmm-episode-max-size" class="swal2-input">
-                <option ${isEpisodeSize('0.1')}>100 MB</option>
-                <option ${isEpisodeSize('0.3')}>300 MB</option>
-                <option ${isEpisodeSize('0.5')}>500 MB</option>
-                <option ${isEpisodeSize('1')}>1 GB</option>
-                <option ${isEpisodeSize('3')}>3 GB</option>
-                <option ${isEpisodeSize('5')}>5 GB</option>
-                <option ${isEpisodeSize('0')}>Biggest available</option>
-            </select>
-
-            <div name="divider" class="py-2"></div>
-
-            <label for="dmm-default-torrents-filter">Default torrents filter:</label>
-            <input id="dmm-default-torrents-filter" type="text" class="ml-4 outline-none text-md w-64" placeholder="filter results, supports regex" value="${defaultTorrentsFilter}">
-
-            <div name="divider" class="py-4"></div>
-
-            <label for="dmm-only-trusted-torrents">Only show trusted torrents:</label>
-            <input id="dmm-only-trusted-torrents" type="checkbox" class="w-4 h-4 ml-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" ${onlyTrustedTorrents ? 'checked' : ''}>
-
-            <div name="divider" class="py-4"></div>
-
-            <button id="dmm-default" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="registerMagnetHandler()">
-                🧲 Make DMM your torrent client
-            </button>
+                <div class="text-center mt-6">
+                    <button id="dmm-default" 
+                        class="border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 text-sm rounded px-4 py-2 transition-colors"
+                        onclick="registerMagnetHandler()">
+                        🧲 Make DMM your torrent client
+                    </button>
+                </div>
+            </div>
         `,
-		focusConfirm: false,
-		showCancelButton: true, // Optional: Show a cancel button
+		showCancelButton: true,
+		confirmButtonText: 'Save',
+		customClass: {
+			htmlContainer: '!mx-1',
+			popup: '!bg-gray-900 !text-gray-100 !w-[95%] !max-w-[600px]',
+			confirmButton: '!bg-blue-600 !px-6',
+			cancelButton: '!bg-gray-600',
+		},
+		inputAttributes: {
+			autocomplete: 'off',
+			autocorrect: 'off',
+			autocapitalize: 'off',
+			spellcheck: 'false',
+		},
+		focusConfirm: true,
 		preConfirm: () => {
 			return {
 				player: (document.getElementById('dmm-player') as HTMLSelectElement).value,
