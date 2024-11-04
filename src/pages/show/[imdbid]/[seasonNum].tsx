@@ -415,6 +415,34 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		return biggestFile?.fileId ?? '';
 	};
 
+	// Modify the label component to be clickable
+	const EpisodeCountDisplay = ({
+		result,
+		videoCount,
+		expectedEpisodeCount,
+	}: {
+		result: SearchResult;
+		videoCount: number;
+		expectedEpisodeCount: number;
+	}) => {
+		if (videoCount === 1) {
+			return (
+				<span className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black">
+					{getEpisodeCountLabel(videoCount, expectedEpisodeCount)}
+				</span>
+			);
+		}
+
+		return (
+			<span
+				className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black cursor-pointer hover:bg-opacity-75"
+				onClick={() => handleShowInfo(result)}
+			>
+				{getEpisodeCountLabel(videoCount, expectedEpisodeCount)}
+			</span>
+		);
+	};
+
 	return (
 		<div className="max-w-full">
 			<Head>
@@ -643,12 +671,11 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 
 										{r.videoCount > 0 ? (
 											<div className="text-gray-300 text-xs">
-												<span className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black">
-													{getEpisodeCountLabel(
-														r.videoCount,
-														expectedEpisodeCount
-													)}
-												</span>
+												<EpisodeCountDisplay
+													result={r}
+													videoCount={r.videoCount}
+													expectedEpisodeCount={expectedEpisodeCount}
+												/>
 												<span className="ml-2">
 													Total: {fileSize(r.fileSize)} GB; Median:{' '}
 													{fileSize(r.medianFileSize)} GB
@@ -699,15 +726,6 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 												>
 													{btnIcon(r.adAvailable)}
 													{btnLabel(r.adAvailable, 'AD')}
-												</button>
-											)}
-
-											{(r.rdAvailable || r.adAvailable) && (
-												<button
-													className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1 border border-black"
-													onClick={() => handleShowInfo(r)}
-												>
-													👀Look Inside
 												</button>
 											)}
 
