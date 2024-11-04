@@ -48,7 +48,7 @@ const torrentDB = new UserTorrentDB();
 const getColorScale = (expectedEpisodeCount: number) => {
 	const scale = [
 		{ threshold: 1, color: 'gray-800', label: 'Single' },
-		{ threshold: expectedEpisodeCount - 1, color: 'fuchsia-800', label: 'Incomplete' },
+		{ threshold: expectedEpisodeCount - 1, color: 'purple-800', label: 'Incomplete' },
 		{ threshold: expectedEpisodeCount, color: 'green-900', label: 'Complete' },
 		{ threshold: Infinity, color: 'blue-900', label: 'With extras' },
 	];
@@ -600,7 +600,10 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 								scale.threshold,
 								expectedEpisodeCount
 							);
-							setQuery(queryText);
+							setQuery((prev) => {
+								const cleanedPrev = prev.replace(/\bvideos:[^\s]+/g, '').trim();
+								return cleanedPrev ? `${cleanedPrev} ${queryText}` : queryText;
+							});
 						}}
 					>
 						{scale.label}
