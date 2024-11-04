@@ -519,7 +519,10 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 						className={`bg-${scale.color} text-white text-xs px-2 py-1 rounded whitespace-nowrap cursor-pointer`}
 						onClick={() => {
 							const queryText = getQueryForMovieCount(scale.threshold);
-							setQuery(queryText);
+							setQuery((prev) => {
+								const cleanedPrev = prev.replace(/\bvideos:[^\s]+/g, '').trim();
+								return cleanedPrev ? `${cleanedPrev} ${queryText}` : queryText;
+							});
 						}}
 					>
 						{scale.label}
