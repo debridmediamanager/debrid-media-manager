@@ -49,14 +49,12 @@ const renderFileRow = (file: {
 	const { size, unit } = formatSize(file.size);
 	return `
         <tr class="${file.isPlayable || file.isSelected ? 'bg-yellow-50 font-bold' : 'font-normal'} hover:bg-yellow-200 rounded">
-            <td class="text-blue-600 truncate pr-2" style="width: 80%; min-width: 0;">
-                ${file.path}
-            </td>
-            <td class="text-gray-700 text-right whitespace-nowrap px-2" style="width: auto;">
-                ${size.toFixed(2)} ${unit}
-            </td>
-            <td class="text-right whitespace-nowrap pl-2" style="width: auto;">
+            <td class="text-right whitespace-nowrap pr-2" style="width: auto;">
                 ${file.actions.join('')}
+            </td>
+            <td class="truncate" style="width: 100%; min-width: 0;">
+                <span class="text-blue-600">${file.path}</span>
+                <span class="text-gray-700 ml-2">${size.toFixed(2)} ${unit}</span>
             </td>
         </tr>
     `;
