@@ -143,11 +143,15 @@ function IndexPage() {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center min-h-screen">
+		<div className="flex flex-col items-center justify-center min-h-screen p-4">
 			<Head>
 				<title>Debrid Media Manager - Home</title>
 			</Head>
-			<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 200 200">
+			<svg
+				className="w-24 h-24 mb-4"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 200 200"
+			>
 				<rect x="25" y="25" width="150" height="150" fill="#2C3E50" rx="20" ry="20" />
 				<circle cx="100" cy="100" r="60" fill="#00A0B0" />
 				<path d="M85,65 L85,135 L135,100 Z" fill="#ECF0F1" />
@@ -161,332 +165,331 @@ function IndexPage() {
 			{/* this is made by ChatGPT */}
 			{!deleting && (rdUser || adUser) ? (
 				<>
-					<h1 className="text-2xl font-bold mb-4">
+					<h1 className="text-2xl font-bold mb-6">
 						Debrid Media Manager{' '}
-						<a target="_blank" href="https://www.patreon.com/debridmediamanager">
+						<a href="https://www.patreon.com/debridmediamanager" className="text-2xl">
 							📢
 						</a>
 					</h1>
-					<div className="flex flex-col items-center max-w-2xl">
-						<div className="text-md font-bold mb-4 w-screen text-center">
+
+					<div className="flex flex-col items-center w-full max-w-md gap-6">
+						{/* Service Status Cards */}
+						<div className="grid grid-cols-1 gap-3 w-full">
 							{rdUser ? (
-								<>
-									<span className="bg-[#b5d496] text-green-800 text-sm px-1">
-										Real-Debrid
-									</span>{' '}
-									{rdUser.username} {rdUser.premium ? '✅' : '❌'}
-								</>
+								<div className="flex items-center justify-center gap-2 p-3 rounded border border-black">
+									<span className="font-medium">Real-Debrid</span>
+									<span>{rdUser.username}</span>
+									<span>{rdUser.premium ? '✅' : '❌'}</span>
+								</div>
 							) : (
 								<Link
 									href="/realdebrid/login"
-									className="px-1 py-1 ml-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600 whitespace-nowrap"
+									className="w-full text-center py-3 rounded border border-black hover:bg-black hover:text-white transition-colors"
 								>
 									Login with Real-Debrid
 								</Link>
-							)}{' '}
+							)}
 							{adUser ? (
-								<>
-									<span className="bg-[#fbc730] text-yellow-800 text-sm px-1">
-										AllDebrid
-									</span>{' '}
-									{adUser.username} {adUser.isPremium ? '✅' : '❌'}
-								</>
+								<div className="flex items-center justify-center gap-2 p-3 rounded border border-black">
+									<span className="font-medium">AllDebrid</span>
+									<span>{adUser.username}</span>
+									<span>{adUser.isPremium ? '✅' : '❌'}</span>
+								</div>
 							) : (
 								<Link
 									href="/alldebrid/login"
-									className="px-1 py-1 ml-2 text-xs text-white bg-gray-500 rounded hover:bg-gray-600 whitespace-nowrap"
+									className="w-full text-center py-3 rounded border border-black hover:bg-black hover:text-white transition-colors"
 								>
 									Login with AllDebrid
 								</Link>
-							)}{' '}
+							)}
 							{traktUser ? (
-								<>
-									<span className="bg-[#ed161f] text-white text-sm px-1">
-										Trakt
-									</span>{' '}
-									{traktUser.user.username}{' '}
+								<div className="flex items-center justify-center gap-2 p-3 rounded border border-black">
+									<span className="font-medium">Trakt</span>
+									<span>{traktUser.user.username}</span>
 									<span className="text-green-500">✅</span>
-								</>
+								</div>
 							) : (
 								<button
 									onClick={() => handleTraktLogin()}
-									className="px-1 py-1 ml-2 text-xs text-white bg-red-500 rounded hover:bg-red-600 whitespace-nowrap"
+									className="w-full text-center py-3 rounded border border-black hover:bg-black hover:text-white transition-colors"
 								>
 									Login with Trakt
 								</button>
 							)}
 						</div>
 
-						<div className="mb-2 h-max text-center leading-10">
+						{/* Main Actions */}
+						<div className="grid grid-cols-2 gap-3 w-full">
 							<Link
 								href="/library"
-								className="text-md m-1 bg-cyan-800 hover:bg-cyan-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="flex items-center justify-center gap-2 p-3 rounded border border-black hover:bg-black hover:text-white transition-colors"
 							>
-								📚 Library
+								<span>📚</span> Library
 							</Link>
-
+							<Link
+								href="/search"
+								className="flex items-center justify-center gap-2 p-3 rounded border border-black hover:bg-black hover:text-white transition-colors"
+							>
+								<span>🔎</span> Search
+							</Link>
 							<Link
 								href="https://hashlists.debridmediamanager.com"
 								target="_blank"
-								className="text-md m-1 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="flex items-center justify-center gap-2 p-3 rounded border border-black hover:bg-black hover:text-white transition-colors"
 							>
 								🚀 Hash lists
 							</Link>
-
-							<Link
-								href="/search"
-								className="text-md m-1 bg-fuchsia-800 hover:bg-fuchsia-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
-							>
-								🔎 Search
-							</Link>
-
 							<Link
 								href="/animesearch"
-								className="text-md m-1 bg-pink-500 hover:bg-pink-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="flex items-center justify-center gap-2 p-3 rounded border border-black hover:bg-black hover:text-white transition-colors"
 							>
-								🌸 Anime
+								<span>🌸</span> Anime
 							</Link>
-
 							{rdUser && (
 								<Link
 									href="/stremio"
-									className="text-md m-1 bg-purple-800 hover:bg-purple-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+									className="flex items-center justify-center gap-2 p-3 rounded border border-black hover:bg-black hover:text-white transition-colors"
 								>
-									🔮 Stremio
+									<span>🔮</span> Stremio
 								</Link>
 							)}
-
 							<Link
 								href=""
 								onClick={() => showSettings()}
-								className="text-md m-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="flex items-center justify-center gap-2 p-3 rounded border border-black hover:bg-black hover:text-white transition-colors"
 							>
 								⚙️ Settings
 							</Link>
 						</div>
 
-						<div className="mb-2 h-max text-center leading-10">
+						{/* Browse Section */}
+						<div className="flex flex-wrap justify-center gap-2">
 							<Link
 								href="/browse"
-								className="text-sm m-1 bg-blue-600 hover:bg-blue-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
 							>
 								🏆 top
 							</Link>
-
 							<Link
 								href="/browse/recent"
-								className="text-sm m-1 bg-blue-600 hover:bg-blue-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+								className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
 							>
 								⏰ recent
 							</Link>
-
 							{browseTerms.map((term) => (
 								<Link
-									href={`/browse/${term.replace(/\W/gi, '')}`}
-									className="text-sm m-1 bg-neutral-600 hover:bg-neutral-400 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
 									key={term}
+									href={`/browse/${term.replace(/\W/gi, '')}`}
+									className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
 								>
 									{term}
 								</Link>
 							))}
 						</div>
 
-						<div className="mb-2 h-max text-center leading-10">
-							<Link
-								href={`/trakt/movies`}
-								className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
-							>
-								🎥 movies
-							</Link>
-							<Link
-								href={`/trakt/shows`}
-								className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
-							>
-								📺 shows
-							</Link>
-							{traktUser && (
-								<>
-									<Link
-										href={`/trakt/watchlist`}
-										className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+						{/* Trakt Section */}
+						{traktUser && (
+							<div className="grid grid-cols-2 gap-3 w-full">
+								<Link
+									href="/trakt/movies"
+									className="flex items-center justify-center gap-2 p-3 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
+								>
+									🎥 Movies
+								</Link>
+								<Link
+									href="/trakt/shows"
+									className="flex items-center justify-center gap-2 p-3 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
+								>
+									📺 Shows
+								</Link>
+								<Link
+									href="/trakt/watchlist"
+									className="flex items-center justify-center gap-2 p-3 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
+								>
+									👀 Watchlist
+								</Link>
+								<Link
+									href="/trakt/collection"
+									className="flex items-center justify-center gap-2 p-3 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
+								>
+									🗃️ Collections
+								</Link>
+								<Link
+									href="/trakt/mylists"
+									className="flex items-center justify-center gap-2 p-3 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
+								>
+									🧏🏻‍♀️ My lists
+								</Link>
+							</div>
+						)}
+
+						{/* Info Section */}
+						<div className="space-y-3 text-sm text-center">
+							{/* Keep existing info content but wrapped in a border */}
+							<div className="p-4 rounded border border-black/10">
+								<div className="text-sm mb-1 text-center">
+									✨ Get DMM browser extensions for{' '}
+									<b>
+										<a
+											className="underline"
+											href="https://chromewebstore.google.com/detail/debrid-media-manager/fahmnboccjgkbeeianfdiohbbgmgoibb"
+											target="_blank"
+										>
+											Chrome
+										</a>
+									</b>{' '}
+									and{' '}
+									<b>
+										<a
+											className="underline"
+											href="https://addons.mozilla.org/en-US/firefox/addon/debrid-media-manager/"
+											target="_blank"
+										>
+											Firefox
+										</a>
+									</b>{' '}
+									or{' '}
+									<a
+										className="underline"
+										href="https://apps.apple.com/us/app/userscripts/id1463298887"
+										target="_blank"
 									>
-										👀 watchlist
-									</Link>
-									<Link
-										href={`/trakt/collection`}
-										className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+										Safari
+									</a>{' '}
+									with the{' '}
+									<b>
+										<a
+											className="underline"
+											href="https://greasyfork.org/en/scripts/463268-debrid-media-manager"
+											target="_blank"
+										>
+											userscript
+										</a>
+									</b>
+								</div>
+
+								<div className="text-sm mb-1 text-center">
+									✨
+									<a
+										className="underline"
+										href="https://github.com/debridmediamanager/zurg-testing"
+										target="_blank"
 									>
-										🗃️ collections
-									</Link>
-									<Link
-										href={`/trakt/mylists`}
-										className="text-sm m-1 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded whitespace-nowrap"
+										<b>zurg</b>
+									</a>{' '}
+									mounts your Real-Debrid library and play your files directly
+									from your computer or with Plex
+								</div>
+								<div className="text-sm mb-1 text-center">
+									✨
+									<a
+										className="underline"
+										href=" https://apps.apple.com/app/apple-store/id1659622164?pt=122790787&mt=8&ct=debridmediamanager"
+										target="_blank"
 									>
-										🧏🏻‍♀️ my lists
-									</Link>
-								</>
-							)}
+										<b>VidHub</b>
+									</a>{' '}
+									is a new media player that works with debrid services. Android
+									is coming soon!
+								</div>
+								<div className="text-sm mb-1 text-center">
+									✨
+									<a
+										className="underline"
+										href="https://elfhosted.com/guides/media/"
+										target="_blank"
+									>
+										<b>ElfHosted</b>
+									</a>{' '}
+									offers hosted, turn-key streaming stacks including zurg, Plex &
+									Riven, with 7-day free trials
+								</div>
+								<div className="text-sm mb-1 text-center">
+									✨
+									<a
+										className="text-azure bg-red-500 text-red-100 px-1"
+										href="https://www.reddit.com/r/debridmediamanager/"
+										target="_blank"
+									>
+										r/debridmediamanager
+									</a>{' '}
+									🤝 Sponsor this project&apos;s development on{' '}
+									<a
+										className="underline"
+										href="https://github.com/sponsors/debridmediamanager"
+										target="_blank"
+									>
+										Github
+									</a>{' '}
+									|{' '}
+									<a
+										className="underline"
+										href="https://www.patreon.com/debridmediamanager"
+										target="_blank"
+									>
+										Patreon
+									</a>{' '}
+									|{' '}
+									<a
+										className="underline"
+										href="https://paypal.me/yowmamasita"
+										target="_blank"
+									>
+										Paypal
+									</a>
+								</div>
+								{/* add discord link */}
+								<div className="text-sm mb-1 text-center">
+									✨ Lastly... we now have a{' '}
+									<a
+										className="underline"
+										href="https://discord.gg/7u4YjMThXP"
+										target="_blank"
+									>
+										<b>Discord</b>
+									</a>{' '}
+									community
+								</div>
+							</div>
 						</div>
 
-						<div className="text-sm mb-1 text-center">
-							✨ Get DMM browser extensions for{' '}
-							<b>
-								<a
-									className="underline"
-									href="https://chromewebstore.google.com/detail/debrid-media-manager/fahmnboccjgkbeeianfdiohbbgmgoibb"
-									target="_blank"
-								>
-									Chrome
-								</a>
-							</b>{' '}
-							and{' '}
-							<b>
-								<a
-									className="underline"
-									href="https://addons.mozilla.org/en-US/firefox/addon/debrid-media-manager/"
-									target="_blank"
-								>
-									Firefox
-								</a>
-							</b>{' '}
-							or{' '}
-							<a
-								className="underline"
-								href="https://apps.apple.com/us/app/userscripts/id1463298887"
-								target="_blank"
-							>
-								Safari
-							</a>{' '}
-							with the{' '}
-							<b>
-								<a
-									className="underline"
-									href="https://greasyfork.org/en/scripts/463268-debrid-media-manager"
-									target="_blank"
-								>
-									userscript
-								</a>
-							</b>
-						</div>
-
-						<div className="text-sm mb-1 text-center">
-							✨
-							<a
-								className="underline"
-								href="https://github.com/debridmediamanager/zurg-testing"
-								target="_blank"
-							>
-								<b>zurg</b>
-							</a>{' '}
-							mounts your Real-Debrid library and play your files directly from your
-							computer or with Plex
-						</div>
-						<div className="text-sm mb-1 text-center">
-							✨
-							<a
-								className="underline"
-								href=" https://apps.apple.com/app/apple-store/id1659622164?pt=122790787&mt=8&ct=debridmediamanager"
-								target="_blank"
-							>
-								<b>VidHub</b>
-							</a>{' '}
-							is a new media player that works with debrid services. Android is coming
-							soon!
-						</div>
-						<div className="text-sm mb-1 text-center">
-							✨
-							<a
-								className="underline"
-								href="https://elfhosted.com/guides/media/"
-								target="_blank"
-							>
-								<b>ElfHosted</b>
-							</a>{' '}
-							offers hosted, turn-key streaming stacks including zurg, Plex & Riven,
-							with 7-day free trials
-						</div>
-						<div className="text-sm mb-1 text-center">
-							✨
-							<a
-								className="text-azure bg-red-500 text-red-100 px-1"
-								href="https://www.reddit.com/r/debridmediamanager/"
-								target="_blank"
-							>
-								r/debridmediamanager
-							</a>{' '}
-							🤝 Sponsor this project&apos;s development on{' '}
-							<a
-								className="underline"
-								href="https://github.com/sponsors/debridmediamanager"
-								target="_blank"
-							>
-								Github
-							</a>{' '}
-							|{' '}
-							<a
-								className="underline"
-								href="https://www.patreon.com/debridmediamanager"
-								target="_blank"
-							>
-								Patreon
-							</a>{' '}
-							|{' '}
-							<a
-								className="underline"
-								href="https://paypal.me/yowmamasita"
-								target="_blank"
-							>
-								Paypal
-							</a>
-						</div>
-						{/* add discord link */}
-						<div className="text-sm mb-1 text-center">
-							✨ Lastly... we now have a{' '}
-							<a
-								className="underline"
-								href="https://discord.gg/7u4YjMThXP"
-								target="_blank"
-							>
-								<b>Discord</b>
-							</a>{' '}
-							community
-						</div>
-
-						<div className="mb-2 h-max text-center leading-10">
+						{/* Action Buttons */}
+						<div className="flex flex-wrap justify-center gap-2">
 							<button
-								className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
 								onClick={() => handleClearCache()}
+								className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
 							>
 								Clear library cache
 							</button>
 							{(rdUser || rdError) && (
 								<button
-									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
 									onClick={() => handleLogout('rd:')}
+									className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
 								>
 									Logout Real-Debrid
 								</button>
 							)}
 							{(adUser || adError) && (
 								<button
-									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
 									onClick={() => handleLogout('ad:')}
+									className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
 								>
 									Logout AllDebrid
 								</button>
 							)}
 							{(traktUser || traktError) && (
 								<button
-									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
 									onClick={() => handleLogout('trakt:')}
+									className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
 								>
 									Logout Trakt
 								</button>
 							)}
 							{(rdUser || adUser || traktUser) && (
 								<button
-									className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
 									onClick={() => handleLogout()}
+									className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
 								>
 									Logout All
 								</button>
@@ -503,8 +506,8 @@ function IndexPage() {
 						</h3>
 					)}
 					<button
-						className="mx-1 bg-black hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
 						onClick={() => handleLogout()}
+						className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
 					>
 						Logout All
 					</button>
