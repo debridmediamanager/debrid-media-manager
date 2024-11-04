@@ -438,7 +438,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 	};
 
 	return (
-		<div className="max-w-full">
+		<div className="max-w-full bg-gray-900 min-h-screen text-gray-100">
 			<Head>
 				<title>
 					Debrid Media Manager - TV Show - {title} - Season {seasonNum}
@@ -462,7 +462,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				<div className="flex justify-end p-2">
 					<Link
 						href="/"
-						className="w-fit h-fit text-xs bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+						className="w-fit h-fit text-sm border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 py-1 px-2 rounded transition-colors"
 					>
 						Go Home
 					</Link>
@@ -488,7 +488,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 								<Link
 									key={idx}
 									href={`/show/${imdbid}/${season}`}
-									className={`inline-flex items-center p-1 text-xs text-white bg-${color}-500 hover:bg-${color}-700 rounded mr-2 mb-1`}
+									className={`inline-flex items-center p-1 text-xs border-2 border-${color}-500 bg-${color}-900/30 text-${color}-100 hover:bg-${color}-800/50 rounded mr-2 mb-1 transition-colors`}
 								>
 									<span role="img" aria-label="tv show" className="mr-2">
 										📺
@@ -505,7 +505,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				</div>
 				<div>
 					<button
-						className={`mr-2 mt-0 mb-1 bg-rose-700 hover:bg-rose-600 text-white p-1 text-xs rounded font-bold`}
+						className="mr-2 mt-0 mb-1 border-2 border-rose-500 bg-rose-900/30 text-rose-100 hover:bg-rose-800/50 p-1 text-xs rounded transition-colors"
 						onClick={() => {
 							showSubscribeModal();
 						}}
@@ -514,7 +514,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					</button>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
-							className={`mr-2 mt-0 mb-1 bg-green-600 hover:bg-green-800 text-white p-1 text-xs rounded`}
+							className="mr-2 mt-0 mb-1 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 p-1 text-xs rounded transition-colors"
 							onClick={() => addRd(getFirstAvailableRdTorrent()!.hash)}
 						>
 							<b>⚡Instant RD</b>
@@ -522,7 +522,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					)}
 					{rdKey && player && getFirstAvailableRdTorrent() && (
 						<button
-							className="mr-2 mt-0 mb-1 bg-teal-500 hover:bg-teal-700 text-white p-1 text-xs rounded"
+							className="mr-2 mt-0 mb-1 border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 p-1 text-xs rounded transition-colors"
 							onClick={() =>
 								window.open(
 									`/api/watch/instant/${player}?token=${rdKey}&hash=${getFirstAvailableRdTorrent()!.hash}&fileId=${getBiggestFileId(getFirstAvailableRdTorrent()!)}`
@@ -534,7 +534,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					)}
 					{rdKey && dmmCastToken && getFirstAvailableRdTorrent() && (
 						<button
-							className="mr-2 mt-0 mb-1 bg-black hover:bg-gray-800 text-white p-1 text-xs rounded"
+							className="mr-2 mt-0 mb-1 border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 p-1 text-xs rounded transition-colors"
 							onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash, ['1'])}
 						>
 							<b>Cast✨</b>
@@ -542,7 +542,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					)}
 					{onlyShowCached && totalUncachedCount > 0 && (
 						<button
-							className={`mr-2 mt-0 mb-1 bg-blue-700 hover:bg-blue-600 text-white p-1 text-xs rounded`}
+							className="mr-2 mt-0 mb-1 border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 p-1 text-xs rounded transition-colors"
 							onClick={() => {
 								setOnlyShowCached(false);
 							}}
@@ -580,9 +580,9 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					<span className="block sm:inline"> {errorMessage}</span>
 				</div>
 			)}
-			<div className="flex items-center border-b-2 border-gray-500 py-2 mb-1">
+			<div className="flex items-center border-b-2 border-gray-600 py-2 mb-1">
 				<input
-					className="appearance-none bg-transparent border-none w-full text-sm text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
+					className="appearance-none bg-transparent border-none w-full text-sm text-gray-100 mr-3 py-1 px-2 leading-tight focus:outline-none"
 					type="text"
 					id="query"
 					placeholder="filter results, supports regex"
@@ -617,7 +617,6 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 			</div>
 			{searchResults.length > 0 && (
 				<>
-					{/* Adjust grid layout to single column and reduce margins */}
 					<div className="mx-1 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2">
 						{filteredResults.map((r: SearchResult, i: number) => {
 							const downloaded =
@@ -651,14 +650,17 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 							return (
 								<div
 									key={i}
-									className={`${borderColor(
-										downloaded,
-										downloading
-									)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
+									className={`
+										border-2 border-gray-700 
+										${borderColor(downloaded, downloading)}
+										${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable)}
+										shadow hover:shadow-lg 
+										transition-shadow duration-200 ease-in 
+										rounded-lg overflow-hidden 
+										bg-opacity-30
+									`}
 								>
-									{/* Reduce padding and adjust spacing */}
 									<div className="p-1 space-y-2">
-										{/* Adjust title font size */}
 										<h2 className="text-sm font-bold leading-tight break-words line-clamp-2 overflow-hidden text-ellipsis">
 											{r.title}
 										</h2>
@@ -681,12 +683,11 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											</div>
 										)}
 
-										{/* Adjust buttons */}
 										<div className="space-x-1 space-y-1">
 											{/* RD */}
 											{rdKey && inLibrary('rd', r.hash) && (
 												<button
-													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1 border border-black"
+													className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors"
 													onClick={() => deleteRd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
@@ -695,7 +696,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											)}
 											{rdKey && notInLibrary('rd', r.hash) && (
 												<button
-													className={`bg-${rdColor}-600 hover:bg-${rdColor}-800 text-white text-xs rounded inline px-1 border border-black`}
+													className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 text-xs rounded inline px-1 transition-colors`}
 													onClick={() => addRd(r.hash)}
 												>
 													{btnIcon(r.rdAvailable)}
@@ -706,7 +707,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											{/* AD */}
 											{adKey && inLibrary('ad', r.hash) && (
 												<button
-													className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1 border border-black"
+													className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors"
 													onClick={() => deleteAd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
@@ -715,7 +716,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											)}
 											{adKey && notInLibrary('ad', r.hash) && (
 												<button
-													className={`bg-${adColor}-600 hover:bg-${adColor}-800 text-white text-xs rounded inline px-1 border border-black`}
+													className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 text-xs rounded inline px-1 transition-colors`}
 													onClick={() => addAd(r.hash)}
 												>
 													{btnIcon(r.adAvailable)}
@@ -727,7 +728,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 												dmmCastToken &&
 												castableFileIds.length > 0 && (
 													<button
-														className="bg-black text-white text-xs rounded inline px-1 border border-black"
+														className="border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 text-xs rounded inline px-1 transition-colors"
 														onClick={() =>
 															handleCast(r.hash, castableFileIds)
 														}
@@ -737,7 +738,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 												)}
 
 											<button
-												className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1 border border-black"
+												className="border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 text-xs rounded inline px-1 transition-colors"
 												onClick={() => handleCopyMagnet(r.hash)}
 											>
 												<FaMagnet className="inline" /> Magnet
@@ -751,7 +752,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 
 					{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (
 						<button
-							className="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 py-2 px-4 my-4 rounded transition-colors duration-200 shadow-md hover:shadow-lg font-medium"
+							className="w-full border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 py-2 px-4 my-4 rounded transition-colors duration-200 shadow-md hover:shadow-lg font-medium"
 							onClick={() => {
 								setCurrentPage((prev) => prev + 1);
 								fetchData(
