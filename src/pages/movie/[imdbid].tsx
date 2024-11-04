@@ -572,9 +572,18 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 
 										{r.videoCount > 0 ? (
 											<div className="text-gray-300 text-xs">
-												<span className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black">
-													{getMovieCountLabel(r.videoCount)}
-												</span>
+												{r.videoCount === 1 ? (
+													<span className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black">
+														{getMovieCountLabel(r.videoCount)}
+													</span>
+												) : (
+													<span
+														className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black cursor-pointer hover:bg-opacity-75"
+														onClick={() => handleShowInfo(r)}
+													>
+														{getMovieCountLabel(r.videoCount)}
+													</span>
+												)}
 												{r.videoCount > 1 ? (
 													<span className="ml-2">
 														Total: {fileSize(r.fileSize)} GB; Biggest:{' '}
@@ -635,12 +644,6 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 
 											{(r.rdAvailable || r.adAvailable) && (
 												<>
-													<button
-														className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1 border border-black"
-														onClick={() => handleShowInfo(r)}
-													>
-														👀Look Inside
-													</button>
 													{r.rdAvailable && player && (
 														<button
 															className="bg-teal-500 hover:bg-teal-700 text-white text-xs rounded inline px-1 border border-black"
