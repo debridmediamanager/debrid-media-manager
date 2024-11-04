@@ -6,7 +6,7 @@ import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
-import { handleCastMovie } from '@/utils/cast';
+import { handleCastAnime } from '@/utils/cast';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckAnimeInRd, instantCheckInAd, wrapLoading } from '@/utils/instantChecks';
@@ -37,6 +37,40 @@ type AnimeSearchProps = {
 };
 
 const torrentDB = new UserTorrentDB();
+
+const getColorScale = () => {
+	const scale = [
+		{ threshold: 1, color: 'gray-800', label: 'Single' },
+		{ threshold: Infinity, color: 'blue-900', label: 'With extras' },
+	];
+	return scale;
+};
+
+const getMovieCountClass = (videoCount: number, isInstantlyAvailable: boolean) => {
+	if (!isInstantlyAvailable) return ''; // No color for unavailable torrents
+	const scale = getColorScale();
+	for (let i = 0; i < scale.length; i++) {
+		if (videoCount <= scale[i].threshold) {
+			return `bg-${scale[i].color}`;
+		}
+	}
+	return `bg-${scale[scale.length - 1].color}`;
+};
+
+const getMovieCountLabel = (videoCount: number) => {
+	if (videoCount === 1) return `Single`;
+	return `With extras (${videoCount})`;
+};
+
+const getQueryForMovieCount = (videoCount: number) => {
+	if (videoCount === 1) return 'videos:1';
+	return `videos:>1`;
+};
+
+const getVideoFileIds = (result: SearchResult) => {
+	if (!result.files || result.files.length === 0) return [];
+	return result.files.filter((f) => isVideo({ path: f.filename })).map((f) => `${f.fileId}`);
+};
 
 const MovieSearch: FunctionComponent = () => {
 	const router = useRouter();
@@ -278,11 +312,11 @@ const MovieSearch: FunctionComponent = () => {
 		rdKey && showInfoForRD(player, rdKey, info, dmmCastToken ?? '', animeid as string, 'movie');
 	};
 
-	async function handleCast(hash: string) {
+	async function handleCast(hash: string, fileIds: string[]) {
 		await toast.promise(
-			handleCastMovie(dmmCastToken!, animeid as string, rdKey!, hash),
+			handleCastAnime(dmmCastToken!, animeid as string, rdKey!, hash, fileIds),
 			{
-				loading: 'Casting...',
+				loading: `Casting ${fileIds.length} episodes`,
 				success: 'Casting successful',
 				error: 'Casting failed',
 			},
@@ -295,12 +329,11 @@ const MovieSearch: FunctionComponent = () => {
 	}
 
 	return (
-		<div className="max-w-full">
+		<div className="max-w-full bg-gray-900 min-h-screen text-gray-100">
 			<Head>
 				<title>Debrid Media Manager - Anime - {animeInfo.title}</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			{/* Display basic movie info */}
 			<div
 				className="grid grid-flow-col auto-cols-auto auto-rows-auto gap-2"
 				style={backdropStyle}
@@ -317,7 +350,7 @@ const MovieSearch: FunctionComponent = () => {
 				<div className="flex justify-end p-2">
 					<Link
 						href="/"
-						className="w-fit h-fit text-xs bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+						className="w-fit h-fit text-sm border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 py-1 px-2 rounded transition-colors"
 					>
 						Go Home
 					</Link>
@@ -346,12 +379,12 @@ const MovieSearch: FunctionComponent = () => {
 				<div>
 					{onlyShowCached && uncachedCount > 0 && (
 						<button
-							className={`mr-2 mt-0 mb-1 bg-blue-700 hover:bg-blue-600 text-white p-1 text-xs rounded`}
+							className="mr-2 mt-0 mb-1 border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 p-1 text-xs rounded transition-colors"
 							onClick={() => {
 								setOnlyShowCached(false);
 							}}
 						>
-							👉 Show {uncachedCount} uncached
+							Show {uncachedCount} uncached
 						</button>
 					)}
 				</div>
@@ -384,9 +417,9 @@ const MovieSearch: FunctionComponent = () => {
 					<span className="block sm:inline"> {errorMessage}</span>
 				</div>
 			)}
-			<div className="flex items-center border-b-2 border-gray-500 py-2 mb-1">
+			<div className="flex items-center border-b-2 border-gray-600 py-2 mb-1">
 				<input
-					className="appearance-none bg-transparent border-none w-full text-sm text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
+					className="appearance-none bg-transparent border-none w-full text-sm text-gray-100 mr-3 py-1 px-2 leading-tight focus:outline-none"
 					type="text"
 					id="query"
 					placeholder="filter results, supports regex"
@@ -402,8 +435,27 @@ const MovieSearch: FunctionComponent = () => {
 					Reset
 				</span>
 			</div>
+
+			<div className="flex items-center gap-2 p-2 mb-2 overflow-x-auto">
+				{getColorScale().map((scale, idx) => (
+					<span
+						key={idx}
+						className={`bg-${scale.color} text-white text-xs px-2 py-1 rounded whitespace-nowrap cursor-pointer`}
+						onClick={() => {
+							const queryText = getQueryForMovieCount(scale.threshold);
+							setQuery((prev) => {
+								const cleanedPrev = prev.replace(/\bvideos:[^\s]+/g, '').trim();
+								return cleanedPrev ? `${cleanedPrev} ${queryText}` : queryText;
+							});
+						}}
+					>
+						{scale.label}
+					</span>
+				))}
+			</div>
+
 			{searchResults.length > 0 && (
-				<div className="mx-2 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+				<div className="mx-1 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2">
 					{filteredResults.map((r: SearchResult, i: number) => {
 						const downloaded = isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
 						const downloading =
@@ -416,20 +468,39 @@ const MovieSearch: FunctionComponent = () => {
 						return (
 							<div
 								key={i}
-								className={`${borderColor(
-									downloaded,
-									downloading
-								)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
+								className={`
+									border-2 border-gray-700
+									${borderColor(downloaded, downloading)}
+									${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable)}
+									shadow hover:shadow-lg
+									transition-shadow duration-200 ease-in
+									rounded-lg overflow-hidden
+									bg-opacity-30
+								`}
 							>
-								<div className="p-2 space-y-4">
-									<h2 className="text-lg font-bold leading-tight break-words line-clamp-3 overflow-hidden text-ellipsis">
+								<div className="p-1 space-y-2">
+									<h2 className="text-sm font-bold leading-tight break-words line-clamp-2 overflow-hidden text-ellipsis">
 										{r.title}
 									</h2>
 
 									{r.videoCount > 0 ? (
 										<div className="text-gray-300 text-xs">
-											Total: {fileSize(r.fileSize)} GB; Median:{' '}
-											{fileSize(r.medianFileSize)} GB ({r.videoCount} 📂)
+											<span
+												className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black cursor-pointer hover:bg-opacity-75"
+												onClick={() => handleShowInfo(r)}
+											>
+												📂&nbsp;{getMovieCountLabel(r.videoCount)}
+											</span>
+											{r.videoCount > 1 ? (
+												<span className="ml-2">
+													Total: {fileSize(r.fileSize)} GB; Median:{' '}
+													{fileSize(r.medianFileSize)} GB
+												</span>
+											) : (
+												<span className="ml-2">
+													Total: {fileSize(r.fileSize)} GB
+												</span>
+											)}
 										</div>
 									) : (
 										<div className="text-gray-300 text-xs">
@@ -437,11 +508,11 @@ const MovieSearch: FunctionComponent = () => {
 										</div>
 									)}
 
-									<div className="space-x-2 space-y-2">
+									<div className="space-x-1 space-y-1">
 										{/* RD */}
 										{rdKey && inLibrary('rd', r.hash) && (
 											<button
-												className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
+												className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors"
 												onClick={() => deleteRd(r.hash)}
 											>
 												<FaTimes className="mr-2 inline" />
@@ -450,7 +521,7 @@ const MovieSearch: FunctionComponent = () => {
 										)}
 										{rdKey && notInLibrary('rd', r.hash) && (
 											<button
-												className={`bg-${rdColor}-600 hover:bg-${rdColor}-800 text-white text-xs rounded inline px-1`}
+												className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 text-xs rounded inline px-1 transition-colors`}
 												onClick={() => addRd(r.hash)}
 											>
 												{btnIcon(r.rdAvailable)}
@@ -461,7 +532,7 @@ const MovieSearch: FunctionComponent = () => {
 										{/* AD */}
 										{adKey && inLibrary('ad', r.hash) && (
 											<button
-												className="bg-red-500 hover:bg-red-700 text-white text-xs rounded inline px-1"
+												className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors"
 												onClick={() => deleteAd(r.hash)}
 											>
 												<FaTimes className="mr-2 inline" />
@@ -470,7 +541,7 @@ const MovieSearch: FunctionComponent = () => {
 										)}
 										{adKey && notInLibrary('ad', r.hash) && (
 											<button
-												className={`bg-${adColor}-600 hover:bg-${adColor}-800 text-white text-xs rounded inline px-1`}
+												className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 text-xs rounded inline px-1 transition-colors`}
 												onClick={() => addAd(r.hash)}
 											>
 												{btnIcon(r.adAvailable)}
@@ -478,26 +549,31 @@ const MovieSearch: FunctionComponent = () => {
 											</button>
 										)}
 
+										{/* Look Inside button */}
 										{(r.rdAvailable || r.adAvailable) && (
 											<button
-												className="bg-sky-500 hover:bg-sky-700 text-white text-xs rounded inline px-1"
+												className="border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 text-xs rounded inline px-1 transition-colors"
 												onClick={() => handleShowInfo(r)}
 											>
 												👀 Look Inside
 											</button>
 										)}
 
+										{/* Cast button */}
 										{rdKey && dmmCastToken && (
 											<button
-												className="bg-black text-white text-xs rounded inline px-1"
-												onClick={() => handleCast(r.hash)}
+												className="border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 text-xs rounded inline px-1 transition-colors"
+												onClick={() =>
+													handleCast(r.hash, getVideoFileIds(r))
+												}
 											>
 												Cast✨
 											</button>
 										)}
 
+										{/* Magnet button */}
 										<button
-											className="bg-pink-500 hover:bg-pink-700 text-white text-xs rounded inline px-1"
+											className="border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 text-xs rounded inline px-1 transition-colors"
 											onClick={() => handleCopyMagnet(r.hash)}
 										>
 											<FaMagnet className="inline" /> Get&nbsp;magnet
