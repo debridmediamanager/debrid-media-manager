@@ -3,6 +3,86 @@ import { TorrentInfoResponse } from '@/services/types';
 import { isVideo } from '@/utils/selectable';
 import Swal from 'sweetalert2';
 
+const formatSize = (bytes: number): { size: number; unit: string } => {
+    const isGB = bytes >= 1024 ** 3;
+    return {
+        size: bytes / (isGB ? 1024 ** 3 : 1024 ** 2),
+        unit: isGB ? 'GB' : 'MB'
+    };
+};
+
+type ActionButtonProps = {
+    link?: string;
+    onClick?: string;
+    text?: string;
+    linkParam?: { name: string; value: string };
+};
+
+const renderActionButton = (
+    type: 'download' | 'watch' | 'cast',
+    props: ActionButtonProps
+) => {
+    const styles = {
+        download: 'bg-blue-500 hover:bg-blue-700',
+        watch: 'bg-teal-500 hover:bg-teal-700',
+        cast: 'bg-black'
+    };
+    
+    const icon = {
+        download: '📲',
+        watch: '🧐',
+        cast: '✨'
+    };
+
+    return props.link ? 
+        `<form action="${props.link}" method="get" target="_blank" class="inline">
+            <input type="hidden" name="${props.linkParam?.name || 'links'}" value="${props.linkParam?.value || props.onClick || ''}" />
+            <button type="submit" class="inline m-0 ${styles[type]} text-white font-bold py-0 px-1 rounded text-sm border border-black">${icon[type]} ${props.text || type}</button>
+        </form>` :
+        `<button type="button" class="inline m-0 ${styles[type]} text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="${props.onClick}">${icon[type]} ${props.text || type}</button>`;
+};
+
+const renderFileRow = (file: {
+    path: string;
+    size: number;
+    isSelected?: boolean;
+    isPlayable?: boolean;
+    actions: string[];
+}) => {
+    const { size, unit } = formatSize(file.size);
+    return `
+        <tr class="${file.isPlayable || file.isSelected ? 'bg-yellow-50 font-bold' : 'font-normal'} hover:bg-yellow-200 rounded">
+            <td class="text-blue-600 truncate pr-2" style="width: 80%; min-width: 0;">
+                ${file.path}
+            </td>
+            <td class="text-gray-700 text-right whitespace-nowrap px-2" style="width: auto;">
+                ${size.toFixed(2)} ${unit}
+            </td>
+            <td class="text-right whitespace-nowrap pl-2" style="width: auto;">
+                ${file.actions.join('')}
+            </td>
+        </tr>
+    `;
+};
+
+type InfoTableRow = {
+    label: string;
+    value: string | number;  // Allow both string and number
+};
+
+const renderInfoTable = (rows: InfoTableRow[]) => `
+    <table class="table-auto w-full mb-4 text-left">
+        <tbody>
+            ${rows.map(row => `
+                <tr>
+                    <td class="font-semibold">${row.label}:</td>
+                    <td>${row.value.toString()}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    </table>
+`;
+
 export const showInfoForRD = async (
 	app: string,
 	rdKey: string,
@@ -19,7 +99,7 @@ export const showInfoForRD = async (
 			warning = `<div class="text-sm text-red-500">Warning: This torrent appears to have been rar'ed by Real-Debrid<br/></div>`;
 			downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 			<input type="hidden" name="links" value="${info.links[0]}" />
-			<button type="submit" class="inline ml-1 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">🗄️ Download RAR</button>
+			<button type="submit" class="inline m-0 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">🗄️ Download RAR</button>
 		</form>`;
 		} else {
 			warning = `<div class="text-sm text-red-500">Warning: Some files have expired</div>`;
@@ -28,140 +108,108 @@ export const showInfoForRD = async (
 	if (info.links.length > 1) {
 		downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 			<input type="hidden" name="links" value="${info.links.join('\n')}" />
-			<button type="submit" class="inline ml-1 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">🔗 Download all links</button>
+			<button type="submit" class="inline m-0 bg-green-500 hover:bg-green-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">🔗 Download all links</button>
 		</form>`;
 	}
 	if (info.links.length > 0) {
 		downloadAllBtn += `
-		<button type="button" class="inline ml-1 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])">📤 Export DL links</button>
+		<button type="button" class="inline m-0 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])">📤 Export DL links</button>
 	`;
 	}
 
 	let linkIndex = 0;
 
-	const filesList = info.files
-		.map((file) => {
-			let size = file.bytes < 1024 ** 3 ? file.bytes / 1024 ** 2 : file.bytes / 1024 ** 3;
-			let unit = file.bytes < 1024 ** 3 ? 'MB' : 'GB';
-
-			let downloadForm = '';
-			let watchBtn = '';
-			let castBtn = '';
-
-			if (file.selected && isIntact) {
-				const fileLink = info.links[linkIndex++];
-				if (!info.fake)
-					downloadForm = `
-					<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
-						<input type="hidden" name="links" value="${fileLink}" />
-						<button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">📲 DL</button>
-					</form>
-				`;
-				if (app) {
-					if (info.fake) {
-						watchBtn = `
-							<button type="button" class="inline ml-1 bg-teal-500 hover:bg-teal-700 text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="window.open('/api/watch/instant/${app}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')">🧐Watch</button>
-						`;
-					} else {
-						watchBtn = `
-							<button type="button" class="inline ml-1 bg-teal-500 hover:bg-teal-700 text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')">🧐Watch</button>
-						`;
-					}
-					let epRegex = /S(\d+)\s?E(\d+)/i;
-					let isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
-					if (mediaType === 'tv' && !isTvEpisode) {
-						epRegex = /[^\d](\d{1,2})x(\d{1,2})[^\d]/i;
-						isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
-					}
-					if (
-						userId &&
-						imdbId &&
-						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
-					) {
-						castBtn = `
-							<button type="button" class="inline ml-1 bg-black text-white font-bold py-0 px-1 rounded text-sm border border-black" onclick="window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')">Cast✨</button>
-						`;
-					}
-				}
-			}
-
-			// Return the list item for the file, with or without the download form
-			return `
-                <li class="mt-4 hover:bg-yellow-200 rounded ${
-					file.selected ? 'bg-yellow-50 font-bold' : 'font-normal'
-				}">
-                    <span class="inline text-blue-600">${file.path}</span>
-                    <span class="inline text-gray-700 w-fit">${size.toFixed(2)} ${unit}</span>
-                        ${downloadForm}
-                        ${watchBtn}
-						${castBtn}
-                </li>
-            `;
-		})
-		.join('');
+	const filesList = info.files.map(file => {
+        const actions = [];
+        if (file.selected && isIntact) {
+            const fileLink = info.links[linkIndex++];
+            if (!info.fake) {
+                actions.push(renderActionButton('download', { 
+                    link: 'https://real-debrid.com/downloader',
+                    linkParam: { name: 'links', value: fileLink }
+                }));
+            }
+            if (app) {
+                if (info.fake) {
+                    actions.push(renderActionButton('watch', { 
+                        onClick: `window.open('/api/watch/instant/${app}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')`,
+						text: 'Watch'
+                    }));
+                } else {
+                    actions.push(renderActionButton('watch', { 
+                        onClick: `window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')`,
+						text: 'Watch'
+                    }));
+                }
+                let epRegex = /S(\d+)\s?E(\d+)/i;
+                let isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
+                if (mediaType === 'tv' && !isTvEpisode) {
+                    epRegex = /[^\d](\d{1,2})x(\d{1,2})[^\d]/i;
+                    isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
+                }
+                if (
+                    userId &&
+                    imdbId &&
+                    (mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
+                ) {
+                    actions.push(renderActionButton('cast', { 
+                        onClick: `window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')`,
+                        text: 'Cast'
+                    }));
+                }
+            }
+        }
+        
+        return renderFileRow({
+            path: file.path,
+            size: file.bytes,
+            isSelected: Boolean(file.selected),  // Ensure boolean type
+            actions
+        });
+    }).join('');
 
 	// Handle the display of progress, speed, and seeders as table rows
 	const progressRow =
 		info.status === 'downloading'
-			? `<tr><td class="font-semibold align-left">Progress:</td><td class="align-left">${info.progress.toFixed(
-					2
-				)}%</td></tr>`
+			? `<tr><td class="font-semibold">Progress:</td><td>${info.progress.toFixed(2)}%</td></tr>`
 			: '';
 	const speedRow =
 		info.status === 'downloading'
-			? `<tr><td class="font-semibold align-left">Speed:</td><td class="align-left">${(
-					info.speed / 1024
-				).toFixed(2)} KB/s</td></tr>`
+			? `<tr><td class="font-semibold">Speed:</td><td>${(info.speed / 1024).toFixed(2)} KB/s</td></tr>`
 			: '';
 	const seedersRow =
 		info.status === 'downloading'
-			? `<tr><td class="font-semibold align-left">Seeders:</td><td class="align-left">${info.seeders}</td></tr>`
+			? `<tr><td class="font-semibold">Seeders:</td><td>${info.seeders}</td></tr>`
 			: '';
 
+	// Update the wrapping HTML to include a table
 	let html = `<h1 class="text-lg font-bold mt-6 mb-4">${info.filename}</h1>
-    <hr/>
-    <div class="text-sm max-h-60 mb-4 text-left p-1">
-        <ul class="list space-y-1 bg-blue-100">
-            ${filesList}
-        </ul>
-    </div>`;
+	<hr/>
+	<div class="text-sm max-h-60 mb-4 text-left p-1">
+		<table class="table-auto w-full">
+			<tbody>
+				${filesList}
+			</tbody>
+		</table>
+	</div>`;
+
 	if (!info.fake)
 		html = html.replace(
 			'<hr/>',
 			`<div class="text-sm">
-            <table class="table-auto w-full mb-4 text-left">
-                <tbody>
-                    <tr>
-                        <td class="font-semibold">Size:</td>
-                        <td>${(info.bytes / 1024 ** 3).toFixed(2)} GB</td>
-                    </tr>
-                    <tr>
-                        <td class="font-semibold">ID:</td>
-                        <td>${info.id}</td>
-                    </tr>
-                    <tr>
-                        <td class="font-semibold">Original filename:</td>
-                        <td>${info.original_filename}</td>
-                    </tr>
-                    <tr>
-                        <td class="font-semibold">Original size:</td>
-                        <td>${(info.original_bytes / 1024 ** 3).toFixed(2)} GB
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-semibold">Status:</td>
-                        <td>${info.status}</td>
-                    </tr>
-                    ${progressRow}
-                    ${speedRow}
-                    ${seedersRow}
-                    <tr>
-                        <td class="font-semibold">Added:</td>
-                        <td>${new Date(info.added).toLocaleString()}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            ${renderInfoTable([
+                { label: 'Size', value: (info.bytes / 1024 ** 3).toFixed(2) + ' GB' },
+                { label: 'ID', value: info.id },
+                { label: 'Original filename', value: info.original_filename },
+                { label: 'Original size', value: (info.original_bytes / 1024 ** 3).toFixed(2) + ' GB' },
+                { label: 'Status', value: info.status },
+                ...(info.status === 'downloading' ? [
+                    { label: 'Progress', value: info.progress.toFixed(2) + '%' },
+                    { label: 'Speed', value: (info.speed / 1024).toFixed(2) + ' KB/s' },
+                    { label: 'Seeders', value: info.seeders }
+                ] : []),
+                { label: 'Added', value: new Date(info.added).toLocaleString() }
+            ])}
         ${warning}${downloadAllBtn}`
 		);
 	Swal.fire({
@@ -184,66 +232,41 @@ export const showInfoForAD = async (
 	userId: string = '',
 	imdbId: string = ''
 ) => {
-	const filesList = info.links
-		.map((file) => {
-			let size = file.size < 1024 ** 3 ? file.size / 1024 ** 2 : file.size / 1024 ** 3;
-			let unit = file.size < 1024 ** 3 ? 'MB' : 'GB';
-			const isPlayable = isVideo({ path: file.filename });
+	const filesList = info.links.map(file => {
+        const actions = [
+            renderActionButton('download', { 
+                link: 'https://alldebrid.com/service/',
+                linkParam: { name: 'url', value: file.link }
+            })
+        ];
+        
+        return renderFileRow({
+            path: file.filename,
+            size: file.size,
+            isPlayable: Boolean(isVideo({ path: file.filename })),  // Ensure boolean type
+            actions
+        });
+    }).join('');
 
-			let downloadForm = '';
-			let watchBtn = '';
-			let castBtn = '';
-
-			downloadForm = `
-					<form action="https://alldebrid.com/service/" method="get" target="_blank" class="inline">
-						<input type="hidden" name="url" value="${file.link}" />
-						<button type="submit" class="inline ml-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-1 rounded text-sm border border-black">📲 DL</button>
-					</form>
-				`;
-
-			// Return the list item for the file, with or without the download form
-			return `
-				<li class="hover:bg-yellow-200 rounded ${isPlayable ? 'bg-yellow-50 font-bold' : 'font-normal'}">
-                    <span class="inline text-blue-600">${file.filename}</span>
-                    <span class="inline text-gray-700 w-fit">${size.toFixed(2)} ${unit}</span>
-                        ${downloadForm}
-                        ${watchBtn}
-						${castBtn}
-                </li>
-            `;
-		})
-		.join('');
-
+	// Update the wrapping HTML to include a table
 	let html = `<h1 class="text-lg font-bold mt-6 mb-4">${info.filename}</h1>
-    <hr/>
-    <div class="text-sm max-h-60 mb-4 text-left bg-blue-100 p-1">
-        <ul class="list space-y-1">
-            ${filesList}
-        </ul>
-    </div>`;
+	<hr/>
+	<div class="text-sm max-h-60 mb-4 text-left bg-blue-100 p-1">
+		<table class="table-auto w-full">
+			<tbody>
+				${filesList}
+			</tbody>
+		</table>
+	</div>`;
 	html = html.replace(
 		'<hr/>',
 		`<div class="text-sm">
-		<table class="table-auto w-full mb-4 text-left">
-			<tbody>
-				<tr>
-					<td class="font-semibold">Size:</td>
-					<td>${(info.size / 1024 ** 3).toFixed(2)} GB</td>
-				</tr>
-				<tr>
-					<td class="font-semibold">ID:</td>
-					<td>${info.id}</td>
-				</tr>
-				<tr>
-					<td class="font-semibold">Status:</td>
-					<td>${info.status} (code: ${info.statusCode})</td>
-				</tr>
-				<tr>
-					<td class="font-semibold">Added:</td>
-					<td>${new Date(info.uploadDate * 1000).toLocaleString()}</td>
-				</tr>
-			</tbody>
-		</table>
+		${renderInfoTable([
+            { label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
+            { label: 'ID', value: info.id },
+            { label: 'Status', value: `${info.status} (code: ${info.statusCode})` },
+            { label: 'Added', value: new Date(info.uploadDate * 1000).toLocaleString() }
+        ])}
 	</div>`
 	);
 
