@@ -6,13 +6,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		id: 'com.debridmediamanager.cast',
 		name: 'DMM Cast',
 		description:
-			'Cast your preferred Debrid Media Manager streams to your Stremio device; now supports TV shows and Movies!',
+			'Cast your preferred Debrid Media Manager streams to your Stremio device; supports Anime, TV shows and Movies!',
 		logo: 'https://static.debridmediamanager.com/dmmcast.png',
 		background: 'https://static.debridmediamanager.com/background.png',
-		version: '0.0.3',
+		version: '0.0.4',
 		resources: ['catalog', 'stream'],
-		types: ['movie', 'series'],
-		idPrefixes: ['tt'],
+		types: ['movie', 'series', 'anime'],
+		idPrefixes: ['tt', 'kitsu', 'mal', 'anilist', 'anidb'],
 		catalogs: [
 			{
 				id: 'casted-movies',
@@ -23,6 +23,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				id: 'casted-shows',
 				name: 'DMM Casted TV Shows',
 				type: 'series',
+			},
+			{
+				id: 'casted-anime',
+				name: 'DMM Casted Anime',
+				type: 'anime',
 			},
 		],
 		behaviorHints: { adult: false, p2p: false },
