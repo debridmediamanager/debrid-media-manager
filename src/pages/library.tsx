@@ -1322,7 +1322,7 @@ function TorrentsPage() {
 				)}
 			</div>
 			{/* 2nd row menu */}
-			<div className="mb-4 flex overflow-x-auto">
+			<div className="mb-0 flex overflow-x-auto">
 				<button
 					className="mr-2 mb-2 border-2 border-orange-500 bg-orange-900/30 text-orange-100 hover:bg-orange-800/50 py-1 px-1 rounded transition-colors text-[0.6rem]"
 					onClick={() => selectShown()}
