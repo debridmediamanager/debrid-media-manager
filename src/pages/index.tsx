@@ -142,6 +142,25 @@ function IndexPage() {
 		window.location.assign('/');
 	};
 
+	const handleTraktNavigate = (path: string) => {
+		if (!traktUser) {
+			Swal.fire({
+				title: 'Trakt Login Required',
+				text: 'Please login with Trakt to access this feature',
+				icon: 'info',
+				showCancelButton: true,
+				confirmButtonText: 'Login now',
+				cancelButtonText: 'Cancel',
+			}).then((result) => {
+				if (result.isConfirmed) {
+					handleTraktLogin();
+				}
+			});
+			return;
+		}
+		router.push(path);
+	};
+
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900">
 			<Head>
@@ -292,40 +311,42 @@ function IndexPage() {
 						</div>
 
 						{/* Trakt Section */}
-						{traktUser && (
-							<div className="grid grid-cols-2 gap-3 w-full">
-								<Link
-									href="/trakt/movies"
-									className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
-								>
-									🎥 Movies
-								</Link>
-								<Link
-									href="/trakt/shows"
-									className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
-								>
-									📺 Shows
-								</Link>
-								<Link
-									href="/trakt/watchlist"
-									className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
-								>
-									👀 Watchlist
-								</Link>
-								<Link
-									href="/trakt/collection"
-									className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
-								>
-									🗃️ Collections
-								</Link>
-								<Link
-									href="/trakt/mylists"
-									className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
-								>
-									🧏🏻‍♀️ My lists
-								</Link>
-							</div>
-						)}
+						<div className="grid grid-cols-2 gap-3 w-full">
+							<button
+								onClick={() => handleTraktNavigate('/trakt/movies')}
+								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
+							>
+								🎥 Movies
+							</button>
+							<button
+								onClick={() => handleTraktNavigate('/trakt/shows')}
+								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
+							>
+								📺 Shows
+							</button>
+							{traktUser && (
+								<>
+									<Link
+										href="/trakt/watchlist"
+										className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
+									>
+										👀 Watchlist
+									</Link>
+									<Link
+										href="/trakt/collection"
+										className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
+									>
+										🗃️ Collections
+									</Link>
+									<Link
+										href="/trakt/mylists"
+										className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
+									>
+										🧏🏻‍♀️ My lists
+									</Link>
+								</>
+							)}
+						</div>
 
 						{/* Info Section */}
 						<div className="space-y-3 text-sm text-center">
