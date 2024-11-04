@@ -126,7 +126,8 @@ export const showInfoForRD = async (
             if (!info.fake) {
                 actions.push(renderActionButton('download', { 
                     link: 'https://real-debrid.com/downloader',
-                    linkParam: { name: 'links', value: fileLink }
+                    linkParam: { name: 'links', value: fileLink },
+					text: 'DL'
                 }));
             }
             if (app) {
@@ -236,7 +237,8 @@ export const showInfoForAD = async (
         const actions = [
             renderActionButton('download', { 
                 link: 'https://alldebrid.com/service/',
-                linkParam: { name: 'url', value: file.link }
+                linkParam: { name: 'url', value: file.link },
+				text: 'DL'
             })
         ];
         
