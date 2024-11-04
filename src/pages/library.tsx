@@ -1162,30 +1162,29 @@ function TorrentsPage() {
 	};
 
 	return (
-		<div className="mx-2 my-1 bg-gray-900 min-h-screen text-gray-100">
+		<div className="mx-1 my-0 bg-gray-900 min-h-screen text-gray-100">
 			<Head>
 				<title>Debrid Media Manager - Library</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			<div className="flex justify-between items-center mb-2">
+			<div className="flex justify-between items-center mb-1">
 				<h1 className="text-xl font-bold text-white">
 					Library 📚{' '}
 					<span className="text-sm whitespace-nowrap">
 						{userTorrentsList.length} torrents{' '}
 						{rdSyncing || adSyncing
-							? '💭' // Thinking if syncing
+							? '💭'
 							: totalBytes / ONE_GIGABYTE / 1024 > 10000
-								? '😱' // Fear for more than 10 PB
+								? '😱'
 								: totalBytes / ONE_GIGABYTE / 1024 > 1000
-									? '😨' // Fearful surprise for more than 1 PB
+									? '😨'
 									: totalBytes / ONE_GIGABYTE / 1024 > 100
-										? '😮' // Surprise for more than 100 TB
+										? '😮'
 										: totalBytes / ONE_GIGABYTE / 1024 > 10
-											? '🙂' // Smile for more than 10 TB
+											? '🙂'
 											: totalBytes / ONE_GIGABYTE / 1024 > 1
-												? '😐' // Neutral for more than 1 TB
+												? '😐'
 												: '🙁'}{' '}
-						{/* Sad for 1 TB or less */}
 					</span>
 					<span className="text-sm whitespace-nowrap">
 						{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB
@@ -1194,14 +1193,14 @@ function TorrentsPage() {
 
 				<Link
 					href="/"
-					className="text-sm border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 py-1 px-2 rounded transition-colors"
+					className="text-sm border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 py-0.5 px-2 rounded transition-colors"
 				>
 					Go Home
 				</Link>
 			</div>
-			<div className="flex items-center border-b-2 border-gray-600 py-0 mb-4">
+			<div className="flex items-center border-b-2 border-gray-600 py-0 mb-2">
 				<input
-					className="appearance-none bg-transparent border-none w-full text-xs text-gray-100 mr-3 py-1 px-2 leading-tight focus:outline-none"
+					className="appearance-none bg-transparent border-none w-full text-xs text-gray-100 mr-3 py-0.5 px-2 leading-tight focus:outline-none"
 					type="text"
 					id="query"
 					placeholder="search by filename/hash/id, supports regex"
@@ -1215,7 +1214,7 @@ function TorrentsPage() {
 			{/* Start of Main Menu */}
 			<div className="mb-0 flex overflow-x-auto">
 				<button
-					className={`mr-1 mb-2 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-1 px-1 rounded transition-colors ${
+					className={`mr-1 mb-1 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-0.5 px-1 rounded transition-colors ${
 						currentPage <= 1 ? 'opacity-60 cursor-not-allowed' : ''
 					}`}
 					onClick={handlePrevPage}
@@ -1227,7 +1226,7 @@ function TorrentsPage() {
 					{currentPage}/{Math.ceil(sortedData().length / ITEMS_PER_PAGE)}
 				</span>
 				<button
-					className={`ml-1 mr-2 mb-2 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-1 px-1 rounded transition-colors text-xs ${
+					className={`ml-1 mr-2 mb-1 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-0.5 px-1 rounded transition-colors text-xs ${
 						currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)
 							? 'opacity-60 cursor-not-allowed'
 							: ''
@@ -1239,24 +1238,24 @@ function TorrentsPage() {
 				</button>
 				<Link
 					href="/library?mediaType=movie&page=1"
-					className="mr-2 mb-2 border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 py-1 px-1 rounded transition-colors text-xs"
+					className="mr-2 mb-1 border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 py-0.5 px-1 rounded transition-colors text-xs"
 				>
 					🎥 Movies
 				</Link>
 				<Link
 					href="/library?mediaType=tv&page=1"
-					className="mr-2 mb-2 border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 py-1 px-1 rounded transition-colors text-xs"
+					className="mr-2 mb-1 border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 py-0.5 px-1 rounded transition-colors text-xs"
 				>
 					📺 TV&nbsp;shows
 				</Link>
 				<Link
 					href="/library?mediaType=other&page=1"
-					className="mr-2 mb-2 border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 py-1 px-1 rounded transition-colors text-xs"
+					className="mr-2 mb-1 border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 py-0.5 px-1 rounded transition-colors text-xs"
 				>
 					🗂️ Others
 				</Link>
 				<button
-					className="mr-2 mb-2 border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 py-1 px-1 rounded transition-colors text-xs"
+					className="mr-2 mb-1 border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 py-0.5 px-1 rounded transition-colors text-xs"
 					onClick={() => resetFilters()}
 				>
 					Reset
@@ -1265,7 +1264,7 @@ function TorrentsPage() {
 				{sameHash.size > 0 && (
 					<Link
 						href="/library?status=samehash&page=1"
-						className="mr-2 mb-2 border-2 border-orange-500 bg-orange-900/30 text-orange-100 hover:bg-orange-800/50 font-bold py-1 px-1 rounded transition-colors text-xs"
+						className="mr-2 mb-1 border-2 border-orange-500 bg-orange-900/30 text-orange-100 hover:bg-orange-800/50 font-bold py-0.5 px-1 rounded transition-colors text-xs"
 					>
 						👀 Same&nbsp;hash
 					</Link>
@@ -1273,7 +1272,7 @@ function TorrentsPage() {
 				{sameTitle.size > 0 && sameHash.size < sameTitle.size && (
 					<Link
 						href="/library?status=sametitle&page=1"
-						className="mr-2 mb-2 border-2 border-amber-500 bg-amber-900/30 text-amber-100 hover:bg-amber-800/50 font-bold py-1 px-1 rounded transition-colors text-xs"
+						className="mr-2 mb-1 border-2 border-amber-500 bg-amber-900/30 text-amber-100 hover:bg-amber-800/50 font-bold py-0.5 px-1 rounded transition-colors text-xs"
 					>
 						👀 Same&nbsp;title
 					</Link>
@@ -1282,7 +1281,7 @@ function TorrentsPage() {
 				{selectedTorrents.size > 0 && (
 					<Link
 						href="/library?status=selected&page=1"
-						className="mr-2 mb-2 border-2 border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50 font-bold py-1 px-1 rounded transition-colors text-xs"
+						className="mr-2 mb-1 border-2 border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50 font-bold py-0.5 px-1 rounded transition-colors text-xs"
 					>
 						👀 Selected ({selectedTorrents.size})
 					</Link>
@@ -1290,7 +1289,7 @@ function TorrentsPage() {
 				{uncachedAdIDs.length + uncachedRdHashes.size > 0 && (
 					<Link
 						href="/library?status=uncached&page=1"
-						className="mr-2 mb-2 border-2 border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50 font-bold py-1 px-1 rounded transition-colors text-xs"
+						className="mr-2 mb-1 border-2 border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50 font-bold py-0.5 px-1 rounded transition-colors text-xs"
 					>
 						👀 Uncached
 					</Link>
@@ -1299,7 +1298,7 @@ function TorrentsPage() {
 				{inProgressCount > 0 && (
 					<Link
 						href="/library?status=inprogress&page=1"
-						className="mr-2 mb-2 border-2 border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50 font-bold py-1 px-1 rounded transition-colors text-xs"
+						className="mr-2 mb-1 border-2 border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50 font-bold py-0.5 px-1 rounded transition-colors text-xs"
 					>
 						👀 In&nbsp;progress
 					</Link>
@@ -1307,7 +1306,7 @@ function TorrentsPage() {
 				{slowCount > 0 && (
 					<Link
 						href="/library?status=slow&page=1"
-						className="mr-2 mb-2 border-2 border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50 font-bold py-1 px-1 rounded transition-colors text-xs"
+						className="mr-2 mb-1 border-2 border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50 font-bold py-0.5 px-1 rounded transition-colors text-xs"
 					>
 						👀 No&nbsp;seeds
 					</Link>
@@ -1315,41 +1314,40 @@ function TorrentsPage() {
 				{failedCount > 0 && (
 					<Link
 						href="/library?status=failed&page=1"
-						className="mr-2 mb-2 border-2 border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50 font-bold py-1 px-1 rounded transition-colors text-xs"
+						className="mr-2 mb-1 border-2 border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50 font-bold py-0.5 px-1 rounded transition-colors text-xs"
 					>
 						👀 Failed
 					</Link>
 				)}
 			</div>
-			{/* 2nd row menu */}
 			<div className="mb-0 flex overflow-x-auto">
 				<button
-					className="mr-2 mb-2 border-2 border-orange-500 bg-orange-900/30 text-orange-100 hover:bg-orange-800/50 py-1 px-1 rounded transition-colors text-[0.6rem]"
+					className="mr-2 mb-1 border-2 border-orange-500 bg-orange-900/30 text-orange-100 hover:bg-orange-800/50 py-0.5 px-1 rounded transition-colors text-[0.6rem]"
 					onClick={() => selectShown()}
 				>
 					✅ Select Shown
 				</button>
 
 				<button
-					className="mr-2 mb-2 border-2 border-orange-500 bg-orange-900/30 text-orange-100 hover:bg-orange-800/50 py-1 px-1 rounded transition-colors text-[0.6rem]"
+					className="mr-2 mb-1 border-2 border-orange-500 bg-orange-900/30 text-orange-100 hover:bg-orange-800/50 py-0.5 px-1 rounded transition-colors text-[0.6rem]"
 					onClick={() => resetSelection()}
 				>
 					❌ Unselect All
 				</button>
 				<button
-					className={`mr-2 mb-2 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 font-bold py-1 px-1 rounded transition-colors text-[0.6rem]`}
+					className={`mr-2 mb-1 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 font-bold py-0.5 px-1 rounded transition-colors text-[0.6rem]`}
 					onClick={handleReinsertTorrents}
 				>
 					🔄 Reinsert{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' List'}
 				</button>
 				<button
-					className={`mr-2 mb-2 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-1 px-1 rounded transition-colors text-[0.6rem]`}
+					className={`mr-2 mb-1 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-0.5 px-1 rounded transition-colors text-[0.6rem]`}
 					onClick={handleGenerateHashlist}
 				>
 					🚀 Share{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' List'}
 				</button>
 				<button
-					className={`mr-2 mb-2 border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 font-bold py-1 px-1 rounded transition-colors text-[0.6rem]`}
+					className={`mr-2 mb-1 border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 font-bold py-0.5 px-1 rounded transition-colors text-[0.6rem]`}
 					onClick={handleDeleteShownTorrents}
 				>
 					🗑️ Delete{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' List'}
@@ -1358,13 +1356,13 @@ function TorrentsPage() {
 				{rdKey && (
 					<>
 						<button
-							className={`mr-2 mb-2 border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 font-bold py-1 px-1 rounded transition-colors text-[0.6rem]`}
+							className={`mr-2 mb-1 border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 font-bold py-0.5 px-1 rounded transition-colors text-[0.6rem]`}
 							onClick={() => handleAddMagnet('rd')}
 						>
 							🧲 RD&nbsp;Add
 						</button>
 						<button
-							className={`mr-2 mb-2 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-1 px-1 rounded transition-colors text-[0.6rem]`}
+							className={`mr-2 mb-1 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-0.5 px-1 rounded transition-colors text-[0.6rem]`}
 							onClick={() => wrapLocalRestoreFn('rd')}
 						>
 							🪛 RD Restore
@@ -1374,13 +1372,13 @@ function TorrentsPage() {
 				{adKey && (
 					<>
 						<button
-							className={`mr-2 mb-2 border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 font-bold py-1 px-1 rounded transition-colors text-[0.6rem]`}
+							className={`mr-2 mb-1 border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 font-bold py-0.5 px-1 rounded transition-colors text-[0.6rem]`}
 							onClick={() => handleAddMagnet('ad')}
 						>
 							🧲 AD&nbsp;Add
 						</button>
 						<button
-							className={`mr-2 mb-2 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-1 px-1 rounded transition-colors text-[0.6rem]`}
+							className={`mr-2 mb-1 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-0.5 px-1 rounded transition-colors text-[0.6rem]`}
 							onClick={() => wrapLocalRestoreFn('ad')}
 						>
 							🪛 AD Restore
@@ -1389,7 +1387,7 @@ function TorrentsPage() {
 				)}
 
 				<button
-					className={`mr-2 mb-2 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-1 px-1 rounded transition-colors text-[0.6rem]`}
+					className={`mr-2 mb-1 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 font-bold py-0.5 px-1 rounded transition-colors text-[0.6rem]`}
 					onClick={localBackup}
 				>
 					💾 Backup
@@ -1399,14 +1397,14 @@ function TorrentsPage() {
 					(titleFilter && filteredList.length > 1)) && (
 					<>
 						<button
-							className="mr-2 mb-2 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 font-bold py-1 px-1 rounded transition-colors text-[0.6rem]"
+							className="mr-2 mb-1 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 font-bold py-0.5 px-1 rounded transition-colors text-[0.6rem]"
 							onClick={dedupeBySize}
 						>
 							Size 🧹
 						</button>
 
 						<button
-							className="mr-2 mb-2 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 font-bold py-1 px-1 rounded transition-colors text-[0.6rem]"
+							className="mr-2 mb-1 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 font-bold py-0.5 px-1 rounded transition-colors text-[0.6rem]"
 							onClick={dedupeByRecency}
 						>
 							Date 🧹
@@ -1417,22 +1415,21 @@ function TorrentsPage() {
 				{(router.query.status === 'samehash' ||
 					(hashFilter && filteredList.length > 1)) && (
 					<button
-						className={`mr-2 mb-2 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 font-bold py-1 px-1 rounded transition-colors text-[0.6rem]`}
+						className={`mr-2 mb-1 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 font-bold py-0.5 px-1 rounded transition-colors text-[0.6rem]`}
 						onClick={combineSameHash}
 					>
 						Hash 🧹
 					</button>
 				)}
 			</div>
-			{/* End of Main Menu */}
 			{helpText && helpText !== 'hide' && (
-				<div className="bg-blue-900 text-xs" onClick={() => setHelpText('hide')}>
+				<div className="bg-blue-900 text-xs py-0.5" onClick={() => setHelpText('hide')}>
 					💡 {helpText}
 				</div>
 			)}
 			<div className="overflow-x-auto">
 				{loading || grouping || filtering ? (
-					<div className="flex justify-center items-center mt-4">
+					<div className="flex justify-center items-center mt-2">
 						<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
 					</div>
 				) : (
@@ -1440,7 +1437,7 @@ function TorrentsPage() {
 						<thead>
 							<tr className="whitespace-nowrap text-xs border-b border-gray-700">
 								<th
-									className="min-w-8 max-w-8 w-8 px-1 py-2 text-gray-300"
+									className="min-w-8 max-w-8 w-8 px-0.5 py-1 text-gray-300"
 									onClick={() => handleSort('id')}
 								>
 									Select
@@ -1450,6 +1447,8 @@ function TorrentsPage() {
 									{sortBy.column === 'id' &&
 										(sortBy.direction === 'asc' ? '↑' : '↓')}
 								</th>
+								{/* Other table headers with same reduced padding */}
+								{/* ... Rest of the headers with px-0.5 py-1 ... */}
 								<th
 									className="min-w-96 w-[500px] max-w-[500px] px-1 py-2 text-gray-300"
 									onClick={() => handleSort('title')}
@@ -1525,17 +1524,19 @@ function TorrentsPage() {
 									>
 										<td
 											onClick={() => handleSelectTorrent(torrent.id)}
-											className="px-1 py-2 text-sm truncate text-center"
+											className="px-0.5 py-1 text-sm truncate text-center"
 										>
 											{selectedTorrents.has(torrent.id) ? `✅` : `➕`}
 										</td>
+										{/* Other table cells with same reduced padding */}
+										{/* ... Rest of the cells with px-0.5 py-1 ... */}
 										<td
 											onClick={() =>
 												torrent.id.startsWith('rd:')
 													? handleShowInfoForRD(torrent)
 													: handleShowInfoForAD(torrent)
 											}
-											className="px-1 py-2 text-sm truncate"
+											className="px-0.5 py-1 text-sm truncate"
 										>
 											{!['Invalid Magnet', 'Magnet', 'noname'].includes(
 												torrent.filename
@@ -1624,7 +1625,7 @@ function TorrentsPage() {
 													? handleShowInfoForRD(torrent)
 													: handleShowInfoForAD(torrent)
 											}
-											className="px-1 py-2 text-xs text-center"
+											className="px-0.5 py-1 text-xs text-center"
 										>
 											{(torrent.bytes / ONE_GIGABYTE).toFixed(1)} GB
 										</td>
@@ -1634,7 +1635,7 @@ function TorrentsPage() {
 													? handleShowInfoForRD(torrent)
 													: handleShowInfoForAD(torrent)
 											}
-											className="px-1 py-2 text-xs text-center"
+											className="px-0.5 py-1 text-xs text-center"
 										>
 											{torrent.status !== UserTorrentStatus.finished ? (
 												<>
@@ -1663,7 +1664,7 @@ function TorrentsPage() {
 													? handleShowInfoForRD(torrent)
 													: handleShowInfoForAD(torrent)
 											}
-											className="px-1 py-2 text-xs text-center"
+											className="px-0.5 py-1 text-xs text-center"
 										>
 											{new Date(torrent.added).toLocaleString()}
 										</td>
@@ -1673,7 +1674,7 @@ function TorrentsPage() {
 													? handleShowInfoForRD(torrent)
 													: handleShowInfoForAD(torrent)
 											}
-											className="px-1 py-2 flex place-content-center"
+											className="px-0.5 py-1 flex place-content-center"
 										>
 											<button
 												title="Share"
