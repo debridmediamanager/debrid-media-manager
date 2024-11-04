@@ -11,27 +11,51 @@ import { groupBy } from './groupBy';
 import { isVideo } from './selectable';
 import { searchToastOptions } from './toastOptions';
 
-export const wrapLoading = async function (debrid: string, checkAvailability: Promise<number>) {
-	return await toast.promise(
-		checkAvailability,
-		{
-			loading: `Checking ${debrid} availability...`,
-			success: (num) => `Found ${num} available torrents in ${debrid}`,
-			error: `There was an error checking availability in ${debrid}. Please try again.`,
-		},
-		searchToastOptions
-	);
+// Common utility functions
+const calculateFileStats = (videoFiles: FileData[]) => {
+	const sortedFileSizes = videoFiles.map((f) => f.filesize / 1024 / 1024).sort((a, b) => a - b);
+	const mid = Math.floor(sortedFileSizes.length / 2);
+	return {
+		medianFileSize:
+			sortedFileSizes.length % 2 !== 0
+				? sortedFileSizes[mid]
+				: (sortedFileSizes[mid - 1] + sortedFileSizes[mid]) / 2,
+		biggestFileSize: sortedFileSizes[sortedFileSizes.length - 1],
+		videoCount: videoFiles.length,
+	};
 };
 
-export const instantCheckInRd = async (
+const updateTorrentTitle = (torrent: SearchResult, files: FileData[]) => {
+	if (files.length >= 2) {
+		const filenames = files.map((f) => f.filename);
+		let commonPrefix = filenames[0];
+		for (let i = 1; i < filenames.length; i++) {
+			while (filenames[i].indexOf(commonPrefix) !== 0) {
+				commonPrefix = commonPrefix.slice(0, -1);
+				if (commonPrefix === '') break;
+			}
+		}
+		if (commonPrefix !== '') {
+			torrent.title = `${commonPrefix}X...`;
+		}
+	} else if (files.length === 1) {
+		torrent.title = files[0].filename;
+	}
+};
+
+// Generic RD instant check function
+const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTorrent>(
 	rdKey: string,
 	hashes: string[],
-	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
-	sortFn: (searchResults: SearchResult[]) => SearchResult[]
+	batchSize: number,
+	setTorrentList: Dispatch<SetStateAction<T[]>>,
+	sortFn?: (results: T[]) => T[],
+	shouldUpdateTitle = false
 ): Promise<number> => {
 	let instantCount = 0;
 	const funcs = [];
-	for (const hashGroup of groupBy(20, hashes)) {
+
+	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
 			const resp = await rdInstantCheck(rdKey, hashGroup);
 			setTorrentList((prevSearchResults) => {
@@ -43,7 +67,6 @@ export const instantCheckInRd = async (
 					const variants = resp[torrent.hash]['rd'];
 					if (!variants.length) continue;
 
-					// Find variant with most files
 					const variantWithMostFiles = variants.reduce(
 						(prev, curr) =>
 							Object.keys(curr).length > Object.keys(prev).length ? curr : prev,
@@ -59,23 +82,19 @@ export const instantCheckInRd = async (
 					}
 
 					torrent.files = Object.values(files);
+					if (shouldUpdateTitle) {
+						updateTorrentTitle(torrent as SearchResult, torrent.files);
+					}
+
 					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-					const sortedFileSizes = videoFiles
-						.map((f) => f.filesize / 1024 / 1024)
-						.sort((a, b) => a - b);
-					const mid = Math.floor(sortedFileSizes.length / 2);
-					torrent.medianFileSize =
-						torrent.medianFileSize ?? sortedFileSizes.length % 2 !== 0
-							? sortedFileSizes[mid]
-							: (sortedFileSizes[mid - 1] + sortedFileSizes[mid]) / 2;
-					torrent.biggestFileSize = sortedFileSizes[sortedFileSizes.length - 1];
-					torrent.videoCount = videoFiles.filter((f) =>
-						isVideo({ path: f.filename })
-					).length;
+					if ('medianFileSize' in torrent) {
+						const stats = calculateFileStats(videoFiles);
+						Object.assign(torrent, stats);
+					}
+
 					torrent.noVideos = !torrent.files.some((file) =>
 						isVideo({ path: file.filename })
 					);
-					// because it has variants and there's at least 1 video file
 					if (!torrent.noVideos) {
 						torrent.rdAvailable = true;
 						instantCount += 1;
@@ -83,7 +102,7 @@ export const instantCheckInRd = async (
 						torrent.rdAvailable = false;
 					}
 				}
-				return sortFn(newSearchResults); // Apply sorting after each batch
+				return sortFn ? sortFn(newSearchResults) : newSearchResults;
 			});
 		});
 	}
@@ -91,48 +110,69 @@ export const instantCheckInRd = async (
 	return instantCount;
 };
 
-// for hashlists
-export const instantCheckInRd2 = async (
-	rdKey: string,
+// Generic AD instant check function
+const processAdInstantCheck = async <T extends SearchResult | EnrichedHashlistTorrent>(
+	adKey: string,
 	hashes: string[],
-	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
+	setTorrentList: Dispatch<SetStateAction<T[]>>,
+	sortFn?: (results: T[]) => T[]
 ): Promise<number> => {
 	let instantCount = 0;
 	const funcs = [];
-	for (const hashGroup of groupBy(20, hashes)) {
+
+	const checkVideoInFiles = (files: MagnetFile[]): boolean => {
+		return files.reduce((noVideo: boolean, curr: MagnetFile) => {
+			if (!noVideo) return false;
+			if (!curr.n) return false;
+			if (curr.e) return checkVideoInFiles(curr.e);
+			return !isVideo({ path: curr.n });
+		}, true);
+	};
+
+	for (const hashGroup of groupBy(100, hashes)) {
 		funcs.push(async () => {
-			const resp = await rdInstantCheck(rdKey, hashGroup);
+			const resp = await adInstantCheck(adKey, hashGroup);
 			setTorrentList((prevSearchResults) => {
 				const newSearchResults = [...prevSearchResults];
-				for (const torrent of newSearchResults) {
-					if (torrent.noVideos) continue;
-					if (torrent.hash in resp === false) continue;
-					if ('rd' in resp[torrent.hash] === false) continue;
-					const variants = resp[torrent.hash]['rd'];
-					if (!variants.length) continue;
-					const files: Record<number, FileData> = {};
-					resp[torrent.hash]['rd'].forEach((variant) => {
-						for (const fileId in variant) {
-							if (fileId in files === false)
-								files[fileId] = {
-									...variant[fileId],
-									fileId: parseInt(fileId, 10),
-								};
-						}
-					});
-					torrent.files = Object.values(files);
-					torrent.noVideos = !torrent.files.some((file) =>
-						isVideo({ path: file.filename })
-					);
-					// because it has variants and there's at least 1 video file
-					if (!torrent.noVideos) {
-						torrent.rdAvailable = true;
+				for (const magnetData of resp.data.magnets) {
+					const torrent = newSearchResults.find((r) => r.hash === magnetData.hash);
+					if (!torrent || torrent.noVideos || !magnetData.files) continue;
+
+					let idx = 0;
+					torrent.files = magnetData.files
+						.map((file) => {
+							if (file.e && file.e.length > 0) {
+								return file.e.map((f) => ({
+									fileId: idx++,
+									filename: f.n,
+									filesize: f.s,
+								}));
+							}
+							return {
+								fileId: idx++,
+								filename: file.n,
+								filesize: file.s,
+							};
+						})
+						.flat();
+
+					if ('medianFileSize' in torrent) {
+						const videoFiles = torrent.files.filter((f) =>
+							isVideo({ path: f.filename })
+						);
+						const stats = calculateFileStats(videoFiles);
+						Object.assign(torrent, stats);
+					}
+
+					torrent.noVideos = checkVideoInFiles(magnetData.files);
+					if (!torrent.noVideos && magnetData.instant) {
+						torrent.adAvailable = true;
 						instantCount += 1;
 					} else {
-						torrent.rdAvailable = false;
+						torrent.adAvailable = false;
 					}
 				}
-				return newSearchResults;
+				return sortFn ? sortFn(newSearchResults) : newSearchResults;
 			});
 		});
 	}
@@ -140,91 +180,8 @@ export const instantCheckInRd2 = async (
 	return instantCount;
 };
 
-export const instantCheckAnimeInRd = async (
-	rdKey: string,
-	hashes: string[],
-	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
-	sortFn: (searchResults: SearchResult[]) => SearchResult[]
-): Promise<number> => {
-	let instantCount = 0;
-	const funcs = [];
-	for (const hashGroup of groupBy(20, hashes)) {
-		funcs.push(async () => {
-			const resp = await rdInstantCheck(rdKey, hashGroup);
-			setTorrentList((prevSearchResults) => {
-				const newSearchResults = [...prevSearchResults];
-				for (const torrent of newSearchResults) {
-					if (torrent.noVideos) continue;
-					if (torrent.hash in resp === false) continue;
-					if ('rd' in resp[torrent.hash] === false) continue;
-					const variants = resp[torrent.hash]['rd'];
-					if (!variants.length) continue;
-
-					// Find variant with most files
-					const variantWithMostFiles = variants.reduce(
-						(prev, curr) =>
-							Object.keys(curr).length > Object.keys(prev).length ? curr : prev,
-						variants[0]
-					);
-
-					const files: Record<number, FileData> = {};
-					for (const fileId in variantWithMostFiles) {
-						files[fileId] = {
-							...variantWithMostFiles[fileId],
-							fileId: parseInt(fileId, 10),
-						};
-					}
-
-                    if (Object.keys(files).length >= 2) {
-                        const filenames = Object.values(files).map(f => f.filename);
-                        let commonPrefix = filenames[0];
-                        for (let i = 1; i < filenames.length; i++) {
-                            while (filenames[i].indexOf(commonPrefix) !== 0) {
-                                commonPrefix = commonPrefix.slice(0, -1);
-                                if (commonPrefix === '') break;
-                            }
-                        }
-                        if (commonPrefix !== '') {
-                            torrent.title = `${commonPrefix}X...`;
-                        }
-                    } else if (Object.keys(files).length === 1) {
-                        torrent.title = Object.values(files)[0].filename;
-                    }
-					torrent.files = Object.values(files);
-					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-					const sortedFileSizes = videoFiles
-						.map((f) => f.filesize / 1024 / 1024)
-						.sort((a, b) => a - b);
-					const mid = Math.floor(sortedFileSizes.length / 2);
-					torrent.medianFileSize =
-						torrent.medianFileSize ?? sortedFileSizes.length % 2 !== 0
-							? sortedFileSizes[mid]
-							: (sortedFileSizes[mid - 1] + sortedFileSizes[mid]) / 2;
-					torrent.biggestFileSize = sortedFileSizes[sortedFileSizes.length - 1];
-					torrent.videoCount = videoFiles.filter((f) =>
-						isVideo({ path: f.filename })
-					).length;
-					torrent.noVideos = !torrent.files.some((file) =>
-						isVideo({ path: file.filename })
-					);
-					// because it has variants and there's at least 1 video file
-					if (!torrent.noVideos) {
-						torrent.rdAvailable = true;
-						instantCount += 1;
-					} else {
-						torrent.rdAvailable = false;
-					}
-				}
-				return sortFn(newSearchResults); // Apply sorting after each batch
-			});
-		});
-	}
-	await runConcurrentFunctions(funcs, 4, 0);
-	return instantCount;
-};
-
-// returns non-video hashes because I want to :)
-export const checkForUncachedInRd = async (
+// All function definitions should come before exports
+const checkForUncachedInRd = async (
 	rdKey: string,
 	torrents: UserTorrent[],
 	setUncachedHashes: Dispatch<SetStateAction<Set<string>>>,
@@ -233,7 +190,6 @@ export const checkForUncachedInRd = async (
 	const cachedHashes: Set<string> = new Set();
 	const nonVideoHashes: Set<string> = new Set();
 
-	// Check if hash is in cached hashes db
 	const hashesToCheck: Set<string> = new Set();
 	for (const torrent of torrents) {
 		const isCached = await db.isRdCached(torrent.hash);
@@ -248,10 +204,8 @@ export const checkForUncachedInRd = async (
 		funcs.push(async () => {
 			const resp = await rdInstantCheck(rdKey, hashGroup);
 			for (const hash in resp) {
-				// Check if 'rd' key exists in resp[hash]
 				if ('rd' in resp[hash] === false) continue;
 				const variants = resp[hash]['rd'];
-				// Check if variants array is not empty
 				if (!variants.length) continue;
 				let isCached = false,
 					allNonVideos = true;
@@ -284,147 +238,50 @@ export const checkForUncachedInRd = async (
 	return nonVideoHashes;
 };
 
-export const instantCheckInAd = async (
+// Wrapper functions
+export const wrapLoading = async function (debrid: string, checkAvailability: Promise<number>) {
+	return await toast.promise(
+		checkAvailability,
+		{
+			loading: `Checking ${debrid} availability...`,
+			success: (num) => `Found ${num} available torrents in ${debrid}`,
+			error: `There was an error checking availability in ${debrid}. Please try again.`,
+		},
+		searchToastOptions
+	);
+};
+
+export const instantCheckInRd = (
+	rdKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
+	sortFn: (searchResults: SearchResult[]) => SearchResult[]
+) => processRdInstantCheck(rdKey, hashes, 20, setTorrentList, sortFn);
+
+export const instantCheckAnimeInRd = (
+	rdKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
+	sortFn: (searchResults: SearchResult[]) => SearchResult[]
+) => processRdInstantCheck(rdKey, hashes, 20, setTorrentList, sortFn, true);
+
+export const instantCheckInRd2 = (
+	rdKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
+) => processRdInstantCheck(rdKey, hashes, 20, setTorrentList);
+
+export const instantCheckInAd = (
 	adKey: string,
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
 	sortFn: (searchResults: SearchResult[]) => SearchResult[]
-): Promise<number> => {
-	let instantCount = 0;
-	const funcs = [];
-	for (const hashGroup of groupBy(100, hashes)) {
-		funcs.push(async () => {
-			const resp = await adInstantCheck(adKey, hashGroup);
-			setTorrentList((prevSearchResults) => {
-				const newSearchResults = [...prevSearchResults];
-				for (const magnetData of resp.data.magnets) {
-					const masterHash = magnetData.hash;
-					const torrent = newSearchResults.find((r) => r.hash === masterHash);
-					if (!torrent) continue;
-					if (torrent.noVideos) continue;
-					if (!magnetData.files) continue;
+) => processAdInstantCheck(adKey, hashes, setTorrentList, sortFn);
 
-					const checkVideoInFiles = (files: MagnetFile[]): boolean => {
-						return files.reduce((noVideo: boolean, curr: MagnetFile) => {
-							if (!noVideo) return false; // If we've already found a video, no need to continue checking
-							if (!curr.n) return false; // If 'n' property doesn't exist, it's not a video
-							if (curr.e) {
-								// If 'e' property exists, check it recursively
-								return checkVideoInFiles(curr.e);
-							}
-							return !isVideo({ path: curr.n });
-						}, true);
-					};
-
-					let idx = 0;
-					torrent.files = magnetData.files
-						.map((file) => {
-							if (file.e && file.e.length > 0) {
-								return file.e.map((f) => {
-									return {
-										fileId: idx++,
-										filename: f.n,
-										filesize: f.s,
-									};
-								});
-							}
-							return {
-								fileId: idx++,
-								filename: file.n,
-								filesize: file.s,
-							};
-						})
-						.flat();
-					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-					const sortedFileSizes = videoFiles
-						.map((f) => f.filesize / 1024 / 1024)
-						.sort((a, b) => a - b);
-					const mid = Math.floor(sortedFileSizes.length / 2);
-					torrent.medianFileSize =
-						torrent.medianFileSize ?? sortedFileSizes.length % 2 !== 0
-							? sortedFileSizes[mid]
-							: (sortedFileSizes[mid - 1] + sortedFileSizes[mid]) / 2;
-					torrent.biggestFileSize = sortedFileSizes[sortedFileSizes.length - 1];
-					torrent.videoCount = videoFiles.length;
-					torrent.noVideos = checkVideoInFiles(magnetData.files);
-					if (!torrent.noVideos && magnetData.instant) {
-						torrent.adAvailable = true;
-						instantCount += 1;
-					} else {
-						torrent.adAvailable = false;
-					}
-				}
-				return sortFn(newSearchResults); // Apply sorting after each batch
-			});
-		});
-	}
-	await runConcurrentFunctions(funcs, 4, 0);
-	return instantCount;
-};
-
-// for hashlists
-export const instantCheckInAd2 = async (
+export const instantCheckInAd2 = (
 	adKey: string,
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
-): Promise<number> => {
-	let instantCount = 0;
-	const funcs = [];
-	for (const hashGroup of groupBy(100, hashes)) {
-		funcs.push(async () => {
-			const resp = await adInstantCheck(adKey, hashGroup);
-			setTorrentList((prevSearchResults) => {
-				const newSearchResults = [...prevSearchResults];
-				for (const magnetData of resp.data.magnets) {
-					const masterHash = magnetData.hash;
-					const torrent = newSearchResults.find((r) => r.hash === masterHash);
-					if (!torrent) continue;
-					if (torrent.noVideos) continue;
-					if (!magnetData.files) continue;
+) => processAdInstantCheck(adKey, hashes, setTorrentList);
 
-					const checkVideoInFiles = (files: MagnetFile[]): boolean => {
-						return files.reduce((noVideo: boolean, curr: MagnetFile) => {
-							if (!noVideo) return false; // If we've already found a video, no need to continue checking
-							if (!curr.n) return false; // If 'n' property doesn't exist, it's not a video
-							if (curr.e) {
-								// If 'e' property exists, check it recursively
-								return checkVideoInFiles(curr.e);
-							}
-							return !isVideo({ path: curr.n });
-						}, true);
-					};
-
-					let idx = 0;
-					torrent.files = magnetData.files
-						.map((file) => {
-							if (file.e && file.e.length > 0) {
-								return file.e.map((f) => {
-									return {
-										fileId: idx++,
-										filename: f.n,
-										filesize: f.s,
-									};
-								});
-							}
-							return {
-								fileId: idx++,
-								filename: file.n,
-								filesize: file.s,
-							};
-						})
-						.flat();
-					torrent.noVideos = checkVideoInFiles(magnetData.files);
-					if (!torrent.noVideos && magnetData.instant) {
-						torrent.adAvailable = true;
-						instantCount += 1;
-					} else {
-						torrent.adAvailable = false;
-					}
-				}
-				return newSearchResults;
-			});
-		});
-	}
-	await runConcurrentFunctions(funcs, 4, 0);
-	return instantCount;
-};
+export { checkForUncachedInRd };
