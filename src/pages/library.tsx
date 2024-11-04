@@ -332,23 +332,6 @@ function TorrentsPage() {
 		);
 	};
 
-	// fetch list from api
-	async function initialize() {
-		await torrentDB.initializeDB();
-		let torrents = await torrentDB.all();
-		if (torrents.length) {
-			// set userTorrentsList based on unique ids
-			setUserTorrentsList((prev) => {
-				const deleted = prev.filter((p) => !torrents.some((t) => t.id === p.id));
-				prev = prev.filter((p) => !deleted.some((d) => d.id === p.id));
-				const newTorrents = torrents.filter((t) => !prev.some((p) => p.id === t.id));
-				return [...prev, ...newTorrents];
-			});
-			setLoading(false);
-		}
-		await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents()]);
-		await selectPlayableFiles(userTorrentsList);
-	}
 	useEffect(() => {
 		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1161,10 +1144,55 @@ function TorrentsPage() {
 		);
 	};
 
+	const [isOnline, setIsOnline] = useState(true);
+
+	// Add network status detection
+	useEffect(() => {
+		const handleOnline = () => setIsOnline(true);
+		const handleOffline = () => setIsOnline(false);
+
+		// Set initial state
+		setIsOnline(navigator.onLine);
+
+		// Add event listeners
+		window.addEventListener('online', handleOnline);
+		window.addEventListener('offline', handleOffline);
+
+		return () => {
+			window.removeEventListener('online', handleOnline);
+			window.removeEventListener('offline', handleOffline);
+		};
+	}, []);
+
+	// Modify initialize function to work offline
+	async function initialize() {
+		await torrentDB.initializeDB();
+		let torrents = await torrentDB.all();
+		if (torrents.length) {
+			setUserTorrentsList((prev) => {
+				const deleted = prev.filter((p) => !torrents.some((t) => t.id === p.id));
+				prev = prev.filter((p) => !deleted.some((d) => d.id === p.id));
+				const newTorrents = torrents.filter((t) => !prev.some((p) => p.id === t.id));
+				return [...prev, ...newTorrents];
+			});
+			setLoading(false);
+		}
+
+		// Only fetch from APIs if online
+		if (isOnline) {
+			await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents()]);
+			await selectPlayableFiles(userTorrentsList);
+		} else {
+			setRdSyncing(false);
+			setAdSyncing(false);
+			setLoading(false);
+		}
+	}
+
 	return (
 		<div className="mx-1 my-0 bg-gray-900 min-h-screen text-gray-100">
 			<Head>
-				<title>Debrid Media Manager - Library</title>
+				<title>Debrid Media Manager - Library {!isOnline && '(Offline)'}</title>
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="flex justify-between items-center mb-1">
@@ -1172,19 +1200,21 @@ function TorrentsPage() {
 					Library 📚{' '}
 					<span className="text-sm whitespace-nowrap">
 						{userTorrentsList.length} torrents{' '}
-						{rdSyncing || adSyncing
-							? '💭'
-							: totalBytes / ONE_GIGABYTE / 1024 > 10000
-								? '😱'
-								: totalBytes / ONE_GIGABYTE / 1024 > 1000
-									? '😨'
-									: totalBytes / ONE_GIGABYTE / 1024 > 100
-										? '😮'
-										: totalBytes / ONE_GIGABYTE / 1024 > 10
-											? '🙂'
-											: totalBytes / ONE_GIGABYTE / 1024 > 1
-												? '😐'
-												: '🙁'}{' '}
+						{!isOnline
+							? '📴'
+							: rdSyncing || adSyncing
+								? '💭'
+								: totalBytes / ONE_GIGABYTE / 1024 > 10000
+									? '😱'
+									: totalBytes / ONE_GIGABYTE / 1024 > 1000
+										? '😨'
+										: totalBytes / ONE_GIGABYTE / 1024 > 100
+											? '😮'
+											: totalBytes / ONE_GIGABYTE / 1024 > 10
+												? '🙂'
+												: totalBytes / ONE_GIGABYTE / 1024 > 1
+													? '😐'
+													: '🙁'}{' '}
 					</span>
 					<span className="text-sm whitespace-nowrap">
 						{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB
