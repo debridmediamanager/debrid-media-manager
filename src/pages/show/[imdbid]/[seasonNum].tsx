@@ -59,7 +59,7 @@ const getColorScale = (expectedEpisodeCount: number) => {
 const getQueryForEpisodeCount = (videoCount: number, expectedEpisodeCount: number) => {
 	if (videoCount === 1) return 'videos:1'; // Single episode
 	if (videoCount === expectedEpisodeCount) return `videos:${expectedEpisodeCount}`; // Complete
-	if (videoCount < expectedEpisodeCount) return `videos:<${expectedEpisodeCount}`; // Incomplete
+	if (videoCount < expectedEpisodeCount) return `videos:>1 videos:<${expectedEpisodeCount}`; // Incomplete
 	return `videos:>${expectedEpisodeCount}`; // With extras
 };
 
@@ -419,20 +419,12 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 		videoCount: number;
 		expectedEpisodeCount: number;
 	}) => {
-		if (videoCount === 1) {
-			return (
-				<span className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black">
-					{getEpisodeCountLabel(videoCount, expectedEpisodeCount)}
-				</span>
-			);
-		}
-
 		return (
 			<span
 				className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black cursor-pointer hover:bg-opacity-75"
 				onClick={() => handleShowInfo(result)}
 			>
-				{getEpisodeCountLabel(videoCount, expectedEpisodeCount)}
+				📂&nbsp;{getEpisodeCountLabel(videoCount, expectedEpisodeCount)}
 			</span>
 		);
 	};

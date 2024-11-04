@@ -375,7 +375,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 	};
 
 	return (
-		<div className="max-w-full">
+		<div className="max-w-full bg-gray-900 min-h-screen text-gray-100">
 			<Head>
 				<title>
 					Debrid Media Manager - Movie - {title} ({year})
@@ -474,6 +474,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				<div className="mt-4 bg-yellow-500 border border-yellow-400 text-yellow-900 px-4 py-3 rounded relative">
 					<strong className="font-bold">Notice:</strong>
 					<span className="block sm:inline">
+						{' '}
 						The request has been received. This might take at least 5 minutes.
 					</span>
 				</div>
@@ -482,6 +483,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 				<div className="mt-4 bg-blue-700 border border-blue-400 text-blue-100 px-4 py-3 rounded relative">
 					<strong className="font-bold">Notice:</strong>
 					<span className="block sm:inline">
+						{' '}
 						Looking for torrents in the dark web. Please wait for 1-2 minutes.
 					</span>
 				</div>
@@ -492,9 +494,9 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 					<span className="block sm:inline"> {errorMessage}</span>
 				</div>
 			)}
-			<div className="flex items-center border-b-2 border-gray-500 py-2 mb-1">
+			<div className="flex items-center border-b-2 border-gray-600 py-2 mb-1">
 				<input
-					className="appearance-none bg-transparent border-none w-full text-sm text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
+					className="appearance-none bg-transparent border-none w-full text-sm text-gray-100 mr-3 py-1 px-2 leading-tight focus:outline-none"
 					type="text"
 					id="query"
 					placeholder="filter results, supports regex"
@@ -535,9 +537,9 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 							const inYourLibrary = downloaded || downloading;
 							if (
 								onlyShowCached &&
-								!inYourLibrary &&
 								!r.rdAvailable &&
-								!r.adAvailable
+								!r.adAvailable &&
+								!inYourLibrary
 							)
 								return;
 							if (
@@ -551,10 +553,15 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 							return (
 								<div
 									key={i}
-									className={`border-2 ${borderColor(
-										downloaded,
-										downloading
-									)} ${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable)} shadow hover:shadow-lg transition-shadow duration-200 ease-in rounded-lg overflow-hidden`}
+									className={`
+										border-2 border-gray-700 
+										${borderColor(downloaded, downloading)}
+										${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable)}
+										shadow hover:shadow-lg 
+										transition-shadow duration-200 ease-in 
+										rounded-lg overflow-hidden 
+										bg-opacity-30
+									`}
 								>
 									<div className="p-1 space-y-2">
 										<h2 className="text-sm font-bold leading-tight break-words line-clamp-2 overflow-hidden text-ellipsis">
@@ -563,18 +570,12 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 
 										{r.videoCount > 0 ? (
 											<div className="text-gray-300 text-xs">
-												{r.videoCount === 1 ? (
-													<span className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black">
-														{getMovieCountLabel(r.videoCount)}
-													</span>
-												) : (
-													<span
-														className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black cursor-pointer hover:bg-opacity-75"
-														onClick={() => handleShowInfo(r)}
-													>
-														{getMovieCountLabel(r.videoCount)}
-													</span>
-												)}
+												<span
+													className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black cursor-pointer hover:bg-opacity-75"
+													onClick={() => handleShowInfo(r)}
+												>
+													📂&nbsp;{getMovieCountLabel(r.videoCount)}
+												</span>
 												{r.videoCount > 1 ? (
 													<span className="ml-2">
 														Total: {fileSize(r.fileSize)} GB; Biggest:{' '}
@@ -591,6 +592,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 												Total: {fileSize(r.fileSize)} GB
 											</div>
 										)}
+
 										<div className="space-x-1 space-y-1">
 											{/* RD */}
 											{rdKey && inLibrary('rd', r.hash) && (
@@ -670,6 +672,7 @@ const MovieSearch: FunctionComponent<MovieSearchProps> = ({
 							);
 						})}
 					</div>
+
 					{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (
 						<button
 							className="w-full border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 py-2 px-4 my-4 rounded transition-colors duration-200 shadow-md hover:shadow-lg font-medium"
