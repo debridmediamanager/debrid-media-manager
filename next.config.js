@@ -1,10 +1,72 @@
-/** @type {import('next').NextConfig} */
 const withPWA = require('next-pwa')({
   dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
   register: true,
-  skipWaiting: true
-});
+  skipWaiting: true,
+  runtimeCaching: [
+    {
+      urlPattern: '/',
+      handler: 'StaleWhileRevalidate',
+      options: {
+        cacheName: 'start-url',
+        expiration: {
+          maxEntries: 1,
+          maxAgeSeconds: 24 * 60 * 60 // 24 hours
+        }
+      }
+    },
+    {
+      urlPattern: /^\/library/,
+      handler: 'StaleWhileRevalidate',
+      options: {
+        cacheName: 'library-page',
+        expiration: {
+          maxEntries: 1,
+          maxAgeSeconds: 24 * 60 * 60 // 24 hours
+        }
+      }
+    },
+    {
+      urlPattern: /\.(?:js|css)$/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'static-resources',
+        expiration: {
+          maxEntries: 32,
+          maxAgeSeconds: 24 * 60 * 60 // 24 hours
+        }
+      }
+    },
+    {
+      urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'images',
+        expiration: {
+          maxEntries: 64,
+          maxAgeSeconds: 24 * 60 * 60 // 24 hours
+        }
+      }
+    },
+    {
+      urlPattern: /^https?.*/,
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'offlineCache',
+        networkTimeoutSeconds: 10,
+        expiration: {
+          maxEntries: 200,
+          maxAgeSeconds: 24 * 60 * 60 // 24 hours
+        },
+        cacheableResponse: {
+          statuses: [0, 200]
+        }
+      }
+    }
+  ]
+})
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
   images: {
