@@ -14,6 +14,7 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 	const showUserInfo = (service: string) => {
 		let title = '';
 		let html = '';
+		let prefix = '';
 
 		if (service === 'rd' && user && 'premium' in user) {
 			const rdUser = user as RealDebridUser;
@@ -23,66 +24,72 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 						(new Date(rdUser.expiration).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
 					);
 
-			title = 'Real-Debrid User Info';
+			title = 'Real-Debrid';
+			prefix = 'rd:';
 			html = `
         <div class="text-left">
+		<p><strong>ID:</strong> ${rdUser.id}</p>
           <p><strong>Username:</strong> ${rdUser.username}</p>
           <p><strong>Email:</strong> ${rdUser.email}</p>
-          <p><strong>Type:</strong> ${rdUser.type}</p>
-          <p><strong>Premium:</strong> ${rdUser.premium ? 'Yes' : 'No'}</p>
-          <p><strong>Days Remaining:</strong> ${daysRemaining}</p>
           <p><strong>Points:</strong> ${rdUser.points}</p>
-          <button onclick="window.dispatchEvent(new CustomEvent('logout', {detail: 'rd:'}))" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 w-full">
-            Logout Real-Debrid
-          </button>
+          <p><strong>Type:</strong> ${rdUser.type}</p>
+          <p><strong>Days Remaining:</strong> ${daysRemaining}</p>
         </div>
       `;
 		} else if (service === 'ad' && user && 'isPremium' in user) {
 			const adUser = user as AllDebridUser;
-			title = 'AllDebrid User Info';
+			title = 'AllDebrid';
+			prefix = 'ad:';
 			html = `
         <div class="text-left">
           <p><strong>Username:</strong> ${adUser.username}</p>
           <p><strong>Email:</strong> ${adUser.email}</p>
-          <p><strong>Premium:</strong> ${adUser.isPremium ? 'Yes' : 'No'}</p>
+          <p><strong>Type:</strong> ${adUser.isPremium ? 'premium' : 'free'}</p>
           <p><strong>Premium Until:</strong> ${new Date(adUser.premiumUntil * 1000).toLocaleDateString()}</p>
-          <button onclick="window.dispatchEvent(new CustomEvent('logout', {detail: 'ad:'}))" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 w-full">
-            Logout AllDebrid
-          </button>
+		  <p><strong>Points:</strong> ${adUser.fidelityPoints}</p>
         </div>
       `;
 		} else if (service === 'trakt' && user && 'user' in user) {
 			const traktUser = user as TraktUser;
-			title = 'Trakt User Info';
+			title = 'Trakt';
+			prefix = 'trakt:';
 			html = `
         <div class="text-left">
           <p><strong>Username:</strong> ${traktUser.user.username}</p>
-          <p><strong>Name:</strong> ${traktUser.user.name}</p>
           <p><strong>Location:</strong> ${traktUser.user.location || 'Not set'}</p>
           <p><strong>Joined:</strong> ${new Date(traktUser.user.joined_at).toLocaleDateString()}</p>
           <p><strong>Private:</strong> ${traktUser.user.private ? 'Yes' : 'No'}</p>
           <p><strong>VIP:</strong> ${traktUser.user.vip ? 'Yes' : 'No'}</p>
-          <button onclick="window.dispatchEvent(new CustomEvent('logout', {detail: 'trakt:'}))" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 w-full">
-            Logout Trakt
-          </button>
         </div>
       `;
 		}
 
-		// Add event listener for logout
-		const logoutHandler = (e: CustomEvent) => {
-			onLogout(e.detail);
-			window.removeEventListener('logout', logoutHandler as EventListener);
-		};
-		window.addEventListener('logout', logoutHandler as EventListener);
-
 		Swal.fire({
 			title,
 			html,
+			showCancelButton: true,
 			confirmButtonText: 'Close',
-			didClose: () => {
-				window.removeEventListener('logout', logoutHandler as EventListener);
-			},
+			cancelButtonText: 'Logout',
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			reverseButtons: true,
+		}).then((result) => {
+			if (result.isDismissed && result.dismiss === Swal.DismissReason.cancel) {
+				Swal.fire({
+					title: 'Confirm Logout',
+					text: `Are you sure you want to logout from ${title}?`,
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonText: 'Yes, logout',
+					cancelButtonText: 'No, cancel',
+					confirmButtonColor: '#d33',
+					cancelButtonColor: '#3085d6',
+				}).then((confirmResult) => {
+					if (confirmResult.isConfirmed) {
+						onLogout(prefix);
+					}
+				});
+			}
 		});
 	};
 
