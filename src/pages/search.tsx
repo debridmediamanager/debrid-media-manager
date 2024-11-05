@@ -77,23 +77,13 @@ function Search() {
 			const data = await res.json();
 			if (data.errorMessage) throw new Error(data.errorMessage);
 			setSearchResults(data.results);
-			// if (data.results.length === 0) fetchMiscData(q);
 		} catch (error: any) {
 			setSearchResults([]);
 			setErrorMessage(error.message);
-			// fetchMiscData(q);
 		} finally {
 			setLoading(false);
 		}
 	};
-
-	// if (
-	// 	!loading &&
-	// 	searchResults.length === 0 &&
-	// 	Object.keys(router.query).length === 0 &&
-	// 	Object.keys(miscResults).length === 0
-	// )
-	// 	fetchMiscData('');
 
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900">
@@ -102,7 +92,7 @@ function Search() {
 			</Head>
 			<Toaster position="bottom-right" />
 			{/* Header with Go Home button */}
-			<div className="flex justify-between items-center w-full max-w-md mb-4">
+			<div className="flex justify-between items-center w-full max-w-3xl mb-4">
 				<h1 className="text-xl font-bold text-white">Search</h1>
 				<Link
 					href="/"
@@ -113,26 +103,28 @@ function Search() {
 				</Link>
 			</div>
 			{/* Main content */}
-			<div className="w-full max-w-md">
-				{/* Search form */}
-				<form onSubmit={handleSubmit}>
-					<div className="flex items-center border-b-2 border-gray-500 py-2 mb-4">
-						<input
-							className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
-							type="text"
-							id="query"
-							placeholder="e.g. breaking bad show, tt1234567, etc."
-							value={typedQuery}
-							onChange={(e) => setTypedQuery(e.target.value)}
-						/>
-						<button
-							className="flex-shrink-0 px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium haptic-sm"
-							type="submit"
-						>
-							Search
-						</button>
-					</div>
-				</form>
+			<div className="w-full">
+				{/* Search form - keep reasonable width for usability */}
+				<div className="max-w-3xl mx-auto">
+					<form onSubmit={handleSubmit}>
+						<div className="flex items-center border-b-2 border-gray-500 py-2 mb-4">
+							<input
+								className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
+								type="text"
+								id="query"
+								placeholder="e.g. breaking bad show, tt1234567, etc."
+								value={typedQuery}
+								onChange={(e) => setTypedQuery(e.target.value)}
+							/>
+							<button
+								className="flex-shrink-0 px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium haptic-sm"
+								type="submit"
+							>
+								Search
+							</button>
+						</div>
+					</form>
+				</div>
 				{/* Display loading indicator */}
 				{loading && (
 					<div className="flex justify-center items-center mt-4">
@@ -141,7 +133,7 @@ function Search() {
 				)}
 				{/* Display error message */}
 				{errorMessage && (
-					<div className="mt-4 bg-red-900 border border-red-400 px-4 py-3 rounded relative">
+					<div className="mt-4 max-w-3xl mx-auto bg-red-900 border border-red-400 px-4 py-3 rounded relative">
 						<strong className="font-bold">Error:</strong>
 						<span className="block sm:inline"> {errorMessage}</span>
 					</div>
@@ -149,10 +141,10 @@ function Search() {
 				{/* Update search results display */}
 				{searchResults.length > 0 && (
 					<>
-						<h2 className="text-xl font-bold my-4">
+						<h2 className="text-xl font-bold my-4 max-w-3xl mx-auto">
 							Search Results for <span className="text-yellow-500">{query}</span>
 						</h2>
-						<div className="grid grid-cols-2 gap-3 w-full">
+						<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 w-full px-4">
 							{searchResults.map((result: SearchResult) => (
 								<Link
 									key={result.imdbid}
@@ -164,7 +156,7 @@ function Search() {
 									}
 								>
 									<Poster imdbId={result.imdbid} title={result.title} />
-									<h3 className="text-lg text-slate-300 font-bold">
+									<h3 className="text-lg text-slate-300 font-bold text-center">
 										{result.title}
 									</h3>
 									<div className="text-gray-600 text-sm">{result.year}</div>
@@ -177,7 +169,7 @@ function Search() {
 				{!loading &&
 					searchResults.length === 0 &&
 					Object.keys(router.query).length !== 0 && (
-						<h2 className="text-xl font-bold my-4">
+						<h2 className="text-xl font-bold my-4 max-w-3xl mx-auto">
 							No results found for &quot;{query}&quot;
 						</h2>
 					)}

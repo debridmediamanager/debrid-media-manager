@@ -486,7 +486,7 @@ const MovieSearch: FunctionComponent = () => {
 									{r.videoCount > 0 ? (
 										<div className="text-gray-300 text-xs">
 											<span
-												className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black cursor-pointer hover:bg-opacity-75"
+												className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black cursor-pointer hover:bg-opacity-75 haptic-sm"
 												onClick={() => handleShowInfo(r)}
 											>
 												📂&nbsp;{getMovieCountLabel(r.videoCount)}

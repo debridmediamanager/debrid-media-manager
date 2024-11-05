@@ -87,10 +87,8 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 					}
 
 					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-					if ('medianFileSize' in torrent) {
-						const stats = calculateFileStats(videoFiles);
-						Object.assign(torrent, stats);
-					}
+					const stats = calculateFileStats(videoFiles);
+					Object.assign(torrent, stats);
 
 					torrent.noVideos = !torrent.files.some((file) =>
 						isVideo({ path: file.filename })
