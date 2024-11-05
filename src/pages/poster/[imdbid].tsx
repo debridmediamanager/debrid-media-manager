@@ -1,36 +1,50 @@
+import { TmdbResponse } from '@/utils/tmdb';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const mdblistKey = process.env.MDBLIST_KEY;
+	const tmdbKey = process.env.TMDB_API_KEY;
+	const getTmdbInfo = (imdbId: string) =>
+		`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`;
 	const getMdbInfo = (imdbId: string) =>
 		`https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
 	const imdbId = context.params!.imdbid as string;
 
 	try {
-		const resp = await axios.get(getMdbInfo(imdbId));
+		// Try TMDB first
+		const tmdbResp = await axios.get<TmdbResponse>(getTmdbInfo(imdbId));
+		const movieResult = tmdbResp.data.movie_results[0];
+		const tvResult = tmdbResp.data.tv_results[0];
+		const posterPath = movieResult?.poster_path || tvResult?.poster_path;
 
-		// If no poster or invalid poster URL
-		if (!resp.data.poster || !resp.data.poster.startsWith('http')) {
+		if (posterPath) {
 			return {
-				notFound: true,
+				redirect: {
+					destination: `https://image.tmdb.org/t/p/w500${posterPath}`,
+					permanent: false,
+				},
 			};
 		}
 
-		// Valid poster URL found
+		// If no TMDB poster, try mdblist as fallback
+		const mdbResp = await axios.get(getMdbInfo(imdbId));
+		if (mdbResp.data.poster && mdbResp.data.poster.startsWith('http')) {
+			return {
+				redirect: {
+					destination: mdbResp.data.poster,
+					permanent: false,
+				},
+			};
+		}
+
+		// return a 404
 		return {
-			redirect: {
-				destination: resp.data.poster,
-				permanent: false,
-			},
+			notFound: true,
 		};
 	} catch (error) {
-		// If API call fails, redirect to the main page for that ID
 		return {
-			redirect: {
-				destination: `/movie/${imdbId}`,
-				permanent: false,
-			},
+			notFound: true,
 		};
 	}
 };

@@ -98,12 +98,23 @@ function Search() {
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900">
 			<Head>
-				<title>Debrid Media Manager - Search: {query}</title>
+				<title>{`Debrid Media Manager - Search: ${query}`}</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			{/* Optional logo or header */}
+			{/* Header with Go Home button */}
+			<div className="flex justify-between items-center w-full max-w-md mb-4">
+				<h1 className="text-xl font-bold text-white">Search</h1>
+				<Link
+					href="/"
+					className="text-sm border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100
+						hover:bg-cyan-800/50 py-1 px-2 rounded transition-colors"
+				>
+					Go Home
+				</Link>
+			</div>
+			{/* Main content */}
 			<div className="w-full max-w-md">
-				{/* Update search form styling */}
+				{/* Search form */}
 				<form onSubmit={handleSubmit}>
 					<div className="flex items-center border-b-2 border-gray-500 py-2 mb-4">
 						<input
@@ -142,9 +153,9 @@ function Search() {
 							Search Results for <span className="text-yellow-500">{query}</span>
 						</h2>
 						<div className="grid grid-cols-2 gap-3 w-full">
-							{searchResults.map((result: SearchResult, i: number) => (
+							{searchResults.map((result: SearchResult) => (
 								<Link
-									key={i}
+									key={result.imdbid}
 									className="flex flex-col items-center justify-center gap-2 p-3 rounded border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 transition-colors haptic"
 									href={
 										result.type === 'movie'
