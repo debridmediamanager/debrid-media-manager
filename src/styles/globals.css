@@ -11,3 +11,14 @@ body{
 a {
     color: inherit;
 }
+
+/* Add these new utility classes for haptic feedback */
+.haptic {
+    @apply active:scale-95 transition-transform duration-75;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.haptic-sm {
+    @apply active:scale-[0.98] transition-transform duration-75;
+    -webkit-tap-highlight-color: transparent;
+}

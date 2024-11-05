@@ -187,7 +187,7 @@ function IndexPage() {
 							) : (
 								<Link
 									href="/realdebrid/login"
-									className="w-full text-center py-3 rounded border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 transition-colors"
+									className="w-full text-center py-3 rounded border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 transition-colors haptic"
 								>
 									Login with Real-Debrid
 								</Link>
@@ -201,7 +201,7 @@ function IndexPage() {
 							) : (
 								<Link
 									href="/alldebrid/login"
-									className="w-full text-center py-3 rounded border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 transition-colors"
+									className="w-full text-center py-3 rounded border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 transition-colors haptic"
 								>
 									Login with AllDebrid
 								</Link>
@@ -215,7 +215,7 @@ function IndexPage() {
 							) : (
 								<button
 									onClick={() => handleTraktLogin()}
-									className="w-full text-center py-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors"
+									className="w-full text-center py-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors haptic"
 								>
 									Login with Trakt
 								</button>
@@ -226,33 +226,33 @@ function IndexPage() {
 						<div className="grid grid-cols-2 gap-3 w-full">
 							<Link
 								href="/library"
-								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 transition-colors"
+								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 transition-colors haptic"
 							>
 								<span>📚</span> Library
 							</Link>
 							<Link
 								href="/search"
-								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-fuchsia-500 bg-fuchsia-900/30 text-fuchsia-100 hover:bg-fuchsia-800/50 transition-colors"
+								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-fuchsia-500 bg-fuchsia-900/30 text-fuchsia-100 hover:bg-fuchsia-800/50 transition-colors haptic"
 							>
 								<span>🔎</span> Search
 							</Link>
 							<Link
 								href="https://hashlists.debridmediamanager.com"
 								target="_blank"
-								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 transition-colors"
+								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 transition-colors haptic"
 							>
 								🚀 Hash lists
 							</Link>
 							<Link
 								href="/animesearch"
-								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 transition-colors"
+								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 transition-colors haptic"
 							>
 								<span>🌸</span> Anime
 							</Link>
 							{rdUser && (
 								<Link
 									href="/stremio"
-									className="flex items-center justify-center gap-2 p-3 rounded border-2 border-purple-500 bg-purple-900/30 text-purple-100 hover:bg-purple-800/50 transition-colors"
+									className="flex items-center justify-center gap-2 p-3 rounded border-2 border-purple-500 bg-purple-900/30 text-purple-100 hover:bg-purple-800/50 transition-colors haptic"
 								>
 									<span>🔮</span> Stremio
 								</Link>
@@ -260,7 +260,7 @@ function IndexPage() {
 							<Link
 								href=""
 								onClick={() => showSettings()}
-								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 transition-colors"
+								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 transition-colors haptic"
 							>
 								⚙️ Settings
 							</Link>
@@ -270,13 +270,13 @@ function IndexPage() {
 						<div className="flex flex-wrap justify-center gap-2">
 							<Link
 								href="/browse"
-								className="px-4 py-2 rounded border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors text-sm font-medium"
+								className="px-4 py-2 rounded border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors text-sm font-medium haptic-sm"
 							>
 								🏆 top
 							</Link>
 							<Link
 								href="/browse/recent"
-								className="px-4 py-2 rounded border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors text-sm font-medium"
+								className="px-4 py-2 rounded border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors text-sm font-medium haptic-sm"
 							>
 								⏰ recent
 							</Link>
@@ -284,7 +284,7 @@ function IndexPage() {
 								<Link
 									key={term}
 									href={`/browse/${term.replace(/\W/gi, '')}`}
-									className="px-4 py-2 rounded border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors text-sm font-medium"
+									className="px-4 py-2 rounded border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors text-sm font-medium haptic-sm"
 								>
 									{term}
 								</Link>
@@ -295,13 +295,13 @@ function IndexPage() {
 						<div className="grid grid-cols-2 gap-3 w-full">
 							<Link
 								href="/trakt/movies"
-								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
+								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium haptic"
 							>
 								🎥 Movies
 							</Link>
 							<Link
 								href="/trakt/shows"
-								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
+								className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium haptic"
 							>
 								📺 Shows
 							</Link>
@@ -309,19 +309,19 @@ function IndexPage() {
 								<>
 									<Link
 										href="/trakt/watchlist"
-										className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
+										className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium haptic"
 									>
 										👀 Watchlist
 									</Link>
 									<Link
 										href="/trakt/collection"
-										className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
+										className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium haptic"
 									>
 										🗃️ Collections
 									</Link>
 									<Link
 										href="/trakt/mylists"
-										className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium"
+										className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium haptic"
 									>
 										🧏🏻‍♀️ My lists
 									</Link>
@@ -463,14 +463,14 @@ function IndexPage() {
 						<div className="flex flex-wrap justify-center gap-2">
 							<button
 								onClick={() => handleClearCache()}
-								className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium"
+								className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium haptic-sm"
 							>
 								Clear library cache
 							</button>
 							{(rdUser || rdError) && (
 								<button
 									onClick={() => handleLogout('rd:')}
-									className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium"
+									className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium haptic-sm"
 								>
 									Logout Real-Debrid
 								</button>
@@ -478,7 +478,7 @@ function IndexPage() {
 							{(adUser || adError) && (
 								<button
 									onClick={() => handleLogout('ad:')}
-									className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium"
+									className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium haptic-sm"
 								>
 									Logout AllDebrid
 								</button>
@@ -486,7 +486,7 @@ function IndexPage() {
 							{(traktUser || traktError) && (
 								<button
 									onClick={() => handleLogout('trakt:')}
-									className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium"
+									className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium haptic-sm"
 								>
 									Logout Trakt
 								</button>
@@ -494,7 +494,7 @@ function IndexPage() {
 							{(rdUser || adUser || traktUser) && (
 								<button
 									onClick={() => handleLogout()}
-									className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium"
+									className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium haptic-sm"
 								>
 									Logout All
 								</button>
@@ -514,7 +514,7 @@ function IndexPage() {
 					)}
 					<button
 						onClick={() => handleLogout()}
-						className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm"
+						className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm haptic-sm"
 					>
 						Logout All
 					</button>
