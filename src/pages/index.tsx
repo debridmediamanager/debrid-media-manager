@@ -58,7 +58,6 @@ function IndexPage() {
 			setDeleting(true);
 			localStorage.removeItem('next_action');
 			const request = window.indexedDB.deleteDatabase('DMMDB');
-			setDeleting(true);
 			request.onsuccess = function () {
 				window.location.assign('/');
 			};

@@ -18,12 +18,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 	const streams = [
 		{
-			name: '1.Cast✨',
+			name: '​1:Cast✨',
 			title: 'Cast a file inside a torrent',
 			externalUrl,
 		},
 		{
-			name: '2.Stream🪄',
+			name: '​2:Stream🪄',
 			title: 'Stream the latest link you casted',
 			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/watch/${imdbidStr}/ping`,
 		},
