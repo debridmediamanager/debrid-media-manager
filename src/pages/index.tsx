@@ -3,7 +3,7 @@ import { InfoSection } from '@/components/InfoSection';
 import { MainActions } from '@/components/MainActions';
 import { ServiceCard } from '@/components/ServiceCard';
 import { TraktSection } from '@/components/TraktSection';
-import { useCurrentUser } from '@/hooks/auth';
+import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
 import { getTerms } from '@/utils/browseTerms';
 import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
@@ -18,6 +18,7 @@ import { Toaster, toast } from 'react-hot-toast';
 function IndexPage() {
 	const router = useRouter();
 	const { rdUser, adUser, rdError, adError, traktUser, traktError } = useCurrentUser();
+	const { loginWithRealDebrid, loginWithAllDebrid } = useDebridLogin();
 	const [deleting, setDeleting] = useState(false);
 	const [browseTerms] = useState(getTerms(2));
 
@@ -84,7 +85,7 @@ function IndexPage() {
 		}
 	}, [rdUser, router]);
 
-	const handleTraktLogin = async () => {
+	const loginWithTrakt = async () => {
 		const authUrl = `/api/trakt/auth?redirect=${window.location.origin}`;
 		router.push(authUrl);
 	};
@@ -132,19 +133,19 @@ function IndexPage() {
 							<ServiceCard
 								service="rd"
 								user={rdUser}
-								onTraktLogin={handleTraktLogin}
+								onTraktLogin={loginWithRealDebrid}
 								onLogout={(prefix) => handleLogout(prefix, router)}
 							/>
 							<ServiceCard
 								service="ad"
 								user={adUser}
-								onTraktLogin={handleTraktLogin}
+								onTraktLogin={loginWithAllDebrid}
 								onLogout={(prefix) => handleLogout(prefix, router)}
 							/>
 							<ServiceCard
 								service="trakt"
 								user={traktUser}
-								onTraktLogin={handleTraktLogin}
+								onTraktLogin={loginWithTrakt}
 								onLogout={(prefix) => handleLogout(prefix, router)}
 							/>
 						</div>
