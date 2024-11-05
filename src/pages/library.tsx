@@ -121,7 +121,7 @@ function TorrentsPage() {
 						const resp = await proxyUnrestrictLink(rdKey, link);
 						textContent += resp.download + '\n';
 					} catch (e) {
-						console.log('exportdownload, unrestrict error', e);
+						console.error(e);
 					}
 				}
 				const blob = new Blob([textContent], { type: 'text/plain' });

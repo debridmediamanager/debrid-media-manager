@@ -73,7 +73,6 @@ type BrowseResponseCache = {
 const responses: Record<string, BrowseResponseCache> = {};
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-	console.log('context1111', context);
 	const { params } = context;
 	let key = 'index';
 	if (params?.search) {
@@ -96,8 +95,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	} else {
 		topLists = await mdblist.searchLists(key);
 	}
-
-	console.log('topLists', topLists);
 
 	let rng = lcg(new Date().getTime() / 1000 / 60 / 10);
 	topLists = shuffle(topLists, rng).slice(0, 4);
