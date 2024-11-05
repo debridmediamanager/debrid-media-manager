@@ -15,7 +15,6 @@ function IndexPage() {
 	const { rdUser, adUser, rdError, adError, traktUser, traktError } = useCurrentUser();
 	const [deleting, setDeleting] = useState(false);
 	const [browseTerms] = useState(getTerms(2));
-	const [lastPremiumWarning, setLastPremiumWarning] = useState<number>(0);
 
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
