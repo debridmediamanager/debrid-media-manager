@@ -22,6 +22,41 @@ export interface TraktMediaItem {
 	show?: TraktMedia;
 }
 
+export interface TraktSearchResult {
+	type: 'movie' | 'show' | 'episode' | 'person';
+	score: number;
+	movie?: TraktMedia;
+	show?: TraktMedia;
+}
+
+// Search suggestions function
+export const getSearchSuggestions = async (
+	query: string,
+	types: ('movie' | 'show')[] = ['movie', 'show'],
+	client_id: string
+): Promise<TraktSearchResult[]> => {
+	if (!query) return [];
+
+	try {
+		const headers = {
+			'Content-Type': 'application/json',
+			'trakt-api-version': '2',
+			'trakt-api-key': client_id,
+		};
+
+		const typeParam = types.join(',');
+		const response = await axios.get<TraktSearchResult[]>(
+			`${TRAKT_API_URL}/search/${typeParam}?query=${encodeURIComponent(query)}`,
+			{ headers }
+		);
+
+		return response.data;
+	} catch (error: any) {
+		console.error('Error fetching search suggestions:', error.message);
+		return [];
+	}
+};
+
 // Generic Function to Fetch Media Data
 export const getMediaData = async (
 	client_id: string,

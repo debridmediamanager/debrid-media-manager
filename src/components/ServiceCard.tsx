@@ -28,7 +28,6 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 			prefix = 'rd:';
 			html = `
         <div class="text-left">
-		<p><strong>ID:</strong> ${rdUser.id}</p>
           <p><strong>Username:</strong> ${rdUser.username}</p>
           <p><strong>Email:</strong> ${rdUser.email}</p>
           <p><strong>Points:</strong> ${rdUser.points}</p>
@@ -56,7 +55,6 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 			html = `
         <div class="text-left">
           <p><strong>Username:</strong> ${traktUser.user.username}</p>
-          <p><strong>Location:</strong> ${traktUser.user.location || 'Not set'}</p>
           <p><strong>Joined:</strong> ${new Date(traktUser.user.joined_at).toLocaleDateString()}</p>
           <p><strong>Private:</strong> ${traktUser.user.private ? 'Yes' : 'No'}</p>
           <p><strong>VIP:</strong> ${traktUser.user.vip ? 'Yes' : 'No'}</p>

@@ -1,19 +1,20 @@
-import { BrowseSection } from '@/components/BrowseSection';
-import { InfoSection } from '@/components/InfoSection';
-import { MainActions } from '@/components/MainActions';
-import { ServiceCard } from '@/components/ServiceCard';
-import { TraktSection } from '@/components/TraktSection';
-import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
-import { getTerms } from '@/utils/browseTerms';
-import { handleLogout } from '@/utils/logout';
-import { checkPremiumStatus } from '@/utils/premiumCheck';
-import { showSettings } from '@/utils/settings';
-import { genericToastOptions } from '@/utils/toastOptions';
-import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
+import { BrowseSection } from '../components/BrowseSection';
+import { InfoSection } from '../components/InfoSection';
+import { MainActions } from '../components/MainActions';
+import { SearchBar } from '../components/SearchBar';
+import { ServiceCard } from '../components/ServiceCard';
+import { TraktSection } from '../components/TraktSection';
+import { useCurrentUser, useDebridLogin } from '../hooks/auth';
+import { getTerms } from '../utils/browseTerms';
+import { handleLogout } from '../utils/logout';
+import { checkPremiumStatus } from '../utils/premiumCheck';
+import { showSettings } from '../utils/settings';
+import { genericToastOptions } from '../utils/toastOptions';
+import { withAuth } from '../utils/withAuth';
 
 function IndexPage() {
 	const router = useRouter();
@@ -126,6 +127,11 @@ function IndexPage() {
 							📢
 						</a>
 					</h1>
+
+					{/* Search Bar */}
+					<div className="w-full max-w-md mb-6">
+						<SearchBar />
+					</div>
 
 					<div className="flex flex-col items-center w-full max-w-md gap-6">
 						{/* Service Status Cards */}
