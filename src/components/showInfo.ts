@@ -35,9 +35,9 @@ const renderActionButton = (type: 'download' | 'watch' | 'cast', props: ActionBu
 	return props.link
 		? `<form action="${props.link}" method="get" target="_blank" class="inline">
             <input type="hidden" name="${props.linkParam?.name || 'links'}" value="${props.linkParam?.value || props.onClick || ''}" />
-            <button type="submit" class="inline m-0 ${styles[type]} text-xs rounded px-1">${icon[type]} ${props.text || type}</button>
+            <button type="submit" class="inline m-0 ${styles[type]} text-xs rounded px-1 haptic-sm">${icon[type]} ${props.text || type}</button>
         </form>`
-		: `<button type="button" class="inline m-0 ${styles[type]} text-xs rounded px-1" onclick="${props.onClick}">${icon[type]} ${props.text || type}</button>`;
+		: `<button type="button" class="inline m-0 ${styles[type]} text-xs rounded px-1 haptic-sm" onclick="${props.onClick}">${icon[type]} ${props.text || type}</button>`;
 };
 
 const renderFileRow = (file: {
@@ -99,7 +99,7 @@ export const showInfoForRD = async (
 			warning = `<div class="text-sm text-red-400">Warning: This torrent appears to have been rar'ed by Real-Debrid<br/></div>`;
 			downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 			<input type="hidden" name="links" value="${info.links[0]}" />
-			<button type="submit" class="inline m-0 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 text-xs rounded px-1 transition-colors">🗄️ Download RAR</button>
+			<button type="submit" class="inline m-0 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 text-xs rounded px-1 transition-colors haptic-sm">🗄️ Download RAR</button>
 		</form>`;
 		} else {
 			warning = `<div class="text-sm text-red-400">Warning: Some files have expired</div>`;
@@ -108,12 +108,12 @@ export const showInfoForRD = async (
 	if (info.links.length > 1) {
 		downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
 			<input type="hidden" name="links" value="${info.links.join('\n')}" />
-			<button type="submit" class="inline m-0 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 text-xs rounded px-1 transition-colors">🔗 Download all links</button>
+			<button type="submit" class="inline m-0 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 text-xs rounded px-1 transition-colors haptic-sm">🔗 Download all links</button>
 		</form>`;
 	}
 	if (info.links.length > 0) {
 		downloadAllBtn += `
-		<button type="button" class="inline m-0 border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 text-xs rounded px-1 transition-colors" onclick="exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])">📤 Export DL links</button>
+		<button type="button" class="inline m-0 border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 text-xs rounded px-1 transition-colors haptic-sm" onclick="exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])">📤 Export DL links</button>
 	`;
 	}
 
@@ -234,6 +234,8 @@ export const showInfoForRD = async (
 		customClass: {
 			htmlContainer: '!mx-1',
 			popup: '!bg-gray-900 !text-gray-100',
+			confirmButton: 'haptic',
+			cancelButton: 'haptic',
 		},
 		width: '800px',
 		showCloseButton: true,
@@ -295,6 +297,8 @@ export const showInfoForAD = async (
 		customClass: {
 			htmlContainer: '!mx-1',
 			popup: '!bg-gray-900 !text-gray-100',
+			confirmButton: 'haptic',
+			cancelButton: 'haptic',
 		},
 		width: '800px',
 		showCloseButton: true,

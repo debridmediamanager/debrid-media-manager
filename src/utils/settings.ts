@@ -104,7 +104,7 @@ export const showSettings = async () => {
 
                 <div class="text-center mt-6">
                     <button id="dmm-default" 
-                        class="border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 text-sm rounded px-4 py-2 transition-colors"
+                        class="border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 text-sm rounded px-4 py-2 transition-colors haptic-sm"
                         onclick="registerMagnetHandler()">
                         🧲 Make DMM your torrent client
                     </button>
@@ -116,8 +116,8 @@ export const showSettings = async () => {
 		customClass: {
 			htmlContainer: '!mx-1',
 			popup: '!bg-gray-900 !text-gray-100 !w-[95%] !max-w-[600px]',
-			confirmButton: '!bg-blue-600 !px-6',
-			cancelButton: '!bg-gray-600',
+			confirmButton: '!bg-blue-600 !px-6 haptic',
+			cancelButton: '!bg-gray-600 haptic',
 		},
 		inputAttributes: {
 			autocomplete: 'off',
