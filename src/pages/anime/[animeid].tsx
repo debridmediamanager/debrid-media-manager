@@ -379,7 +379,7 @@ const MovieSearch: FunctionComponent = () => {
 				<div>
 					{onlyShowCached && uncachedCount > 0 && (
 						<button
-							className="mr-2 mt-0 mb-1 border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 p-1 text-xs rounded transition-colors"
+							className="mr-2 mt-0 mb-1 border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 p-1 text-xs rounded transition-colors haptic-sm"
 							onClick={() => {
 								setOnlyShowCached(false);
 							}}
@@ -512,7 +512,7 @@ const MovieSearch: FunctionComponent = () => {
 										{/* RD */}
 										{rdKey && inLibrary('rd', r.hash) && (
 											<button
-												className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors"
+												className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
 												onClick={() => deleteRd(r.hash)}
 											>
 												<FaTimes className="mr-2 inline" />
@@ -521,7 +521,7 @@ const MovieSearch: FunctionComponent = () => {
 										)}
 										{rdKey && notInLibrary('rd', r.hash) && (
 											<button
-												className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 text-xs rounded inline px-1 transition-colors`}
+												className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 text-xs rounded inline px-1 transition-colors haptic-sm`}
 												onClick={() => addRd(r.hash)}
 											>
 												{btnIcon(r.rdAvailable)}
@@ -532,7 +532,7 @@ const MovieSearch: FunctionComponent = () => {
 										{/* AD */}
 										{adKey && inLibrary('ad', r.hash) && (
 											<button
-												className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors"
+												className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
 												onClick={() => deleteAd(r.hash)}
 											>
 												<FaTimes className="mr-2 inline" />
@@ -541,7 +541,7 @@ const MovieSearch: FunctionComponent = () => {
 										)}
 										{adKey && notInLibrary('ad', r.hash) && (
 											<button
-												className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 text-xs rounded inline px-1 transition-colors`}
+												className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 text-xs rounded inline px-1 transition-colors haptic-sm`}
 												onClick={() => addAd(r.hash)}
 											>
 												{btnIcon(r.adAvailable)}
@@ -552,7 +552,7 @@ const MovieSearch: FunctionComponent = () => {
 										{/* Look Inside button */}
 										{(r.rdAvailable || r.adAvailable) && (
 											<button
-												className="border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 text-xs rounded inline px-1 transition-colors"
+												className="border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
 												onClick={() => handleShowInfo(r)}
 											>
 												👀 Look Inside
@@ -562,7 +562,7 @@ const MovieSearch: FunctionComponent = () => {
 										{/* Cast button */}
 										{rdKey && dmmCastToken && (
 											<button
-												className="border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 text-xs rounded inline px-1 transition-colors"
+												className="border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
 												onClick={() =>
 													handleCast(r.hash, getVideoFileIds(r))
 												}
@@ -573,7 +573,7 @@ const MovieSearch: FunctionComponent = () => {
 
 										{/* Magnet button */}
 										<button
-											className="border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 text-xs rounded inline px-1 transition-colors"
+											className="border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
 											onClick={() => handleCopyMagnet(r.hash)}
 										>
 											<FaMagnet className="inline" /> Get&nbsp;magnet

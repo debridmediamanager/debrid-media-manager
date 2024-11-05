@@ -497,7 +497,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 				</div>
 				<div>
 					<button
-						className="mr-2 mt-0 mb-1 border-2 border-rose-500 bg-rose-900/30 text-rose-100 hover:bg-rose-800/50 p-1 text-xs rounded transition-colors"
+						className="mr-2 mt-0 mb-1 border-2 border-rose-500 bg-rose-900/30 text-rose-100 hover:bg-rose-800/50 p-1 text-xs rounded transition-colors haptic-sm"
 						onClick={() => {
 							showSubscribeModal();
 						}}
@@ -506,7 +506,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					</button>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
-							className="mr-2 mt-0 mb-1 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 p-1 text-xs rounded transition-colors"
+							className="mr-2 mt-0 mb-1 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 p-1 text-xs rounded transition-colors haptic-sm"
 							onClick={() => addRd(getFirstAvailableRdTorrent()!.hash)}
 						>
 							<b>⚡Instant RD</b>
@@ -514,7 +514,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					)}
 					{rdKey && player && getFirstAvailableRdTorrent() && (
 						<button
-							className="mr-2 mt-0 mb-1 border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 p-1 text-xs rounded transition-colors"
+							className="mr-2 mt-0 mb-1 border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 p-1 text-xs rounded transition-colors haptic-sm"
 							onClick={() =>
 								window.open(
 									`/api/watch/instant/${player}?token=${rdKey}&hash=${getFirstAvailableRdTorrent()!.hash}&fileId=${getBiggestFileId(getFirstAvailableRdTorrent()!)}`
@@ -526,7 +526,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					)}
 					{rdKey && dmmCastToken && getFirstAvailableRdTorrent() && (
 						<button
-							className="mr-2 mt-0 mb-1 border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 p-1 text-xs rounded transition-colors"
+							className="mr-2 mt-0 mb-1 border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 p-1 text-xs rounded transition-colors haptic-sm"
 							onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash, ['1'])}
 						>
 							<b>Cast✨</b>
@@ -534,7 +534,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 					)}
 					{onlyShowCached && totalUncachedCount > 0 && (
 						<button
-							className="mr-2 mt-0 mb-1 border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 p-1 text-xs rounded transition-colors"
+							className="mr-2 mt-0 mb-1 border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 p-1 text-xs rounded transition-colors haptic-sm"
 							onClick={() => {
 								setOnlyShowCached(false);
 							}}
@@ -682,7 +682,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											{/* RD */}
 											{rdKey && inLibrary('rd', r.hash) && (
 												<button
-													className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors"
+													className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
 													onClick={() => deleteRd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
@@ -691,7 +691,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											)}
 											{rdKey && notInLibrary('rd', r.hash) && (
 												<button
-													className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 text-xs rounded inline px-1 transition-colors`}
+													className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 text-xs rounded inline px-1 transition-colors haptic-sm`}
 													onClick={() => addRd(r.hash)}
 												>
 													{btnIcon(r.rdAvailable)}
@@ -702,7 +702,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											{/* AD */}
 											{adKey && inLibrary('ad', r.hash) && (
 												<button
-													className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors"
+													className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
 													onClick={() => deleteAd(r.hash)}
 												>
 													<FaTimes className="mr-2 inline" />
@@ -711,7 +711,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 											)}
 											{adKey && notInLibrary('ad', r.hash) && (
 												<button
-													className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 text-xs rounded inline px-1 transition-colors`}
+													className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 text-xs rounded inline px-1 transition-colors haptic-sm`}
 													onClick={() => addAd(r.hash)}
 												>
 													{btnIcon(r.adAvailable)}
@@ -723,7 +723,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 												dmmCastToken &&
 												castableFileIds.length > 0 && (
 													<button
-														className="border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 text-xs rounded inline px-1 transition-colors"
+														className="border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
 														onClick={() =>
 															handleCast(r.hash, castableFileIds)
 														}
@@ -733,7 +733,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 												)}
 
 											<button
-												className="border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 text-xs rounded inline px-1 transition-colors"
+												className="border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
 												onClick={() => handleCopyMagnet(r.hash)}
 											>
 												<FaMagnet className="inline" /> Magnet
@@ -747,7 +747,7 @@ const TvSearch: FunctionComponent<TvSearchProps> = ({
 
 					{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (
 						<button
-							className="w-full border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 py-2 px-4 my-4 rounded transition-colors duration-200 shadow-md hover:shadow-lg font-medium"
+							className="w-full border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 py-2 px-4 my-4 rounded transition-colors duration-200 shadow-md hover:shadow-lg font-medium haptic"
 							onClick={() => {
 								setCurrentPage((prev) => prev + 1);
 								fetchData(
