@@ -50,7 +50,7 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	batchSize: number,
 	setTorrentList: Dispatch<SetStateAction<T[]>>,
 	sortFn?: (results: T[]) => T[],
-	shouldUpdateTitle = false
+	shouldUpdateTitleAndSize = false
 ): Promise<number> => {
 	let instantCount = 0;
 	const funcs = [];
@@ -82,8 +82,12 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 					}
 
 					torrent.files = Object.values(files);
-					if (shouldUpdateTitle) {
+					if (shouldUpdateTitleAndSize) {
 						updateTorrentTitle(torrent as SearchResult, torrent.files);
+						(torrent as SearchResult).fileSize =
+							torrent.files.reduce((acc, curr) => acc + curr.filesize, 0) /
+							1024 /
+							1024;
 					}
 
 					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));

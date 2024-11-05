@@ -549,16 +549,6 @@ const MovieSearch: FunctionComponent = () => {
 											</button>
 										)}
 
-										{/* Look Inside button */}
-										{(r.rdAvailable || r.adAvailable) && (
-											<button
-												className="border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
-												onClick={() => handleShowInfo(r)}
-											>
-												👀 Look Inside
-											</button>
-										)}
-
 										{/* Cast button */}
 										{rdKey && dmmCastToken && (
 											<button
@@ -576,7 +566,7 @@ const MovieSearch: FunctionComponent = () => {
 											className="border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
 											onClick={() => handleCopyMagnet(r.hash)}
 										>
-											<FaMagnet className="inline" /> Get&nbsp;magnet
+											<FaMagnet className="inline" /> Magnet
 										</button>
 									</div>
 								</div>
