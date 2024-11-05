@@ -3,34 +3,25 @@ import { useEffect, useState } from 'react';
 
 const Poster = ({ imdbId, title = 'No poster' }: Record<string, string>) => {
 	const [posterUrl, setPosterUrl] = useState('');
-	const [loadError, setLoadError] = useState(false);
+	const [fallbackAttempted, setFallbackAttempted] = useState(false);
 
 	useEffect(() => {
-		const fetchPosterUrl = async () => {
-			setLoadError(false);
-			const primaryUrl = `https://posters.debridmediamanager.com/${imdbId}-small.jpg`;
-
-			try {
-				const response = await fetch(primaryUrl, { method: 'HEAD' });
-				if (response.ok) {
-					setPosterUrl(primaryUrl);
-				} else {
-					setLoadError(true);
-					setPosterUrl(`/poster/${imdbId}`);
-				}
-			} catch (error) {
-				setLoadError(true);
-				setPosterUrl(`/poster/${imdbId}`);
-			}
-		};
-
-		fetchPosterUrl();
-	}, [imdbId, title]);
+		// Start with primary URL directly
+		setPosterUrl(`https://posters.debridmediamanager.com/${imdbId}-small.jpg`);
+		setFallbackAttempted(false);
+	}, [imdbId]);
 
 	const handleImageError = () => {
-		if (!loadError) {
-			setLoadError(true);
+		if (!fallbackAttempted) {
+			// First error - try local poster endpoint
+			setFallbackAttempted(true);
 			setPosterUrl(`/poster/${imdbId}`);
+		} else {
+			// If local poster fails, use fakeimg.pl as final fallback
+			const encodedTitle = encodeURIComponent(title);
+			setPosterUrl(
+				`https://fakeimg.pl/400x600/282828/eae0d0?font_size=40&font=bebas&text=${encodedTitle}&w=640&q=75`
+			);
 		}
 	};
 
@@ -44,7 +35,6 @@ const Poster = ({ imdbId, title = 'No poster' }: Record<string, string>) => {
 					alt={`Poster for ${title}`}
 					loading="lazy"
 					onError={handleImageError}
-					unoptimized={loadError} // Disable Next.js image optimization for fallback URL
 				/>
 			)}
 		</div>
