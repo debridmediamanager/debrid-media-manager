@@ -2,8 +2,8 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { TraktSearchResult, getSearchSuggestions } from '../services/trakt';
+import Poster from './poster';
 
-// Custom debounce hook
 function useDebounce<T>(value: T, delay: number): T {
 	const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
@@ -37,7 +37,6 @@ export function SearchBar({
 	const suggestionsRef = useRef<HTMLDivElement>(null);
 	const debouncedQuery = useDebounce(typedQuery, 300);
 
-	// Close suggestions when clicking outside
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
 			if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
@@ -51,7 +50,6 @@ export function SearchBar({
 		};
 	}, []);
 
-	// Fetch suggestions when query changes
 	useEffect(() => {
 		const fetchSuggestions = async () => {
 			if (debouncedQuery.length < 2) {
@@ -65,7 +63,7 @@ export function SearchBar({
 					['movie', 'show'],
 					config.traktClientId
 				);
-				setSuggestions(results);
+				setSuggestions(results.slice(0, 6));
 				setShowSuggestions(true);
 			} catch (error) {
 				console.error('Error fetching suggestions:', error);
@@ -103,7 +101,7 @@ export function SearchBar({
 			<form onSubmit={handleSearch}>
 				<div className="flex items-center border-b-2 border-gray-500 py-2">
 					<input
-						className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
+						className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none text-lg"
 						type="text"
 						placeholder={placeholder}
 						value={typedQuery}
@@ -112,18 +110,17 @@ export function SearchBar({
 					/>
 					<button
 						type="submit"
-						className="flex-shrink-0 px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium haptic-sm"
+						className="flex-shrink-0 px-4 py-2 rounded-lg border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-all text-sm font-medium haptic-sm"
 					>
 						Search
 					</button>
 				</div>
 			</form>
 
-			{/* Suggestions dropdown */}
 			{showSuggestions && suggestions.length > 0 && (
 				<div
 					ref={suggestionsRef}
-					className="absolute z-50 w-full bg-gray-800 border border-gray-700 rounded-md shadow-lg mt-1"
+					className="absolute z-50 w-full bg-gray-800/95 backdrop-blur-sm border border-gray-700 rounded-xl shadow-2xl mt-2 overflow-hidden divide-y divide-gray-700/50"
 				>
 					{suggestions.map((suggestion, index) => {
 						const media = suggestion.movie || suggestion.show;
@@ -131,13 +128,36 @@ export function SearchBar({
 						return (
 							<div
 								key={`${media.ids?.trakt}-${index}`}
-								className="p-2 hover:bg-gray-700 cursor-pointer flex items-center text-white"
+								className="relative h-[64px] cursor-pointer group overflow-hidden transition-all duration-300 ease-in-out"
 								onClick={() => handleSuggestionClick(suggestion)}
 							>
-								<div className="flex-1">
-									<div className="font-medium">{media.title}</div>
-									<div className="text-sm text-gray-400">
-										{suggestion.type} • {media.year}
+								{/* Content */}
+								<div className="relative z-20 h-full flex items-center">
+									<div className="flex items-center justify-between w-[calc(100%-42px)] px-3">
+										<div className="flex items-center space-x-2 max-w-[70%]">
+											<span className="font-medium text-base text-white group-hover:text-blue-400 transition-colors line-clamp-1">
+												{media.title}
+											</span>
+											<span className="text-sm text-gray-400 whitespace-nowrap">
+												({media.year})
+											</span>
+										</div>
+										<span className="text-xs text-gray-400 bg-gray-900/80 px-2 py-0.5 rounded-full whitespace-nowrap">
+											{suggestion.type.charAt(0).toUpperCase() +
+												suggestion.type.slice(1)}
+										</span>
+									</div>
+
+									{/* Right-side poster (full view) */}
+									<div className="absolute right-0 top-0 h-full aspect-[2/3] z-30">
+										{media.ids?.imdb && (
+											<div className="h-full w-full">
+												<Poster
+													imdbId={media.ids.imdb}
+													title={media.title}
+												/>
+											</div>
+										)}
 									</div>
 								</div>
 							</div>

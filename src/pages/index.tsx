@@ -101,11 +101,7 @@ function IndexPage() {
 			<Head>
 				<title>Debrid Media Manager - Home</title>
 			</Head>
-			<svg
-				className="w-24 h-24 mb-4"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 200 200"
-			>
+			<svg className="w-24 h-24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
 				<rect x="25" y="25" width="150" height="150" fill="#2C3E50" rx="20" ry="20" />
 				<circle cx="100" cy="100" r="60" fill="#00A0B0" />
 				<path d="M85,65 L85,135 L135,100 Z" fill="#ECF0F1" />
@@ -118,7 +114,7 @@ function IndexPage() {
 			<Toaster position="bottom-right" />
 			{!deleting && (rdUser || adUser) ? (
 				<>
-					<h1 className="text-2xl font-bold mb-6 text-white">
+					<h1 className="text-xl font-bold mb-2 text-white">
 						Debrid Media Manager{' '}
 						<a
 							href="https://www.patreon.com/debridmediamanager"
@@ -134,7 +130,9 @@ function IndexPage() {
 					</div>
 
 					<div className="flex flex-col items-center w-full max-w-md gap-6">
-						{/* Service Status Cards */}
+						<MainActions rdUser={rdUser} showSettings={showSettings} />
+						<BrowseSection terms={browseTerms} />
+						<TraktSection traktUser={traktUser} />
 						<div className="grid grid-cols-1 gap-3 w-full">
 							<ServiceCard
 								service="rd"
@@ -155,10 +153,6 @@ function IndexPage() {
 								onLogout={(prefix) => handleLogout(prefix, router)}
 							/>
 						</div>
-
-						<MainActions rdUser={rdUser} showSettings={showSettings} />
-						<BrowseSection terms={browseTerms} />
-						<TraktSection traktUser={traktUser} />
 						<InfoSection />
 
 						{/* Action Buttons */}
