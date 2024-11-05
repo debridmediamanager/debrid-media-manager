@@ -96,7 +96,7 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 		return rdUser ? (
 			<button
 				onClick={() => showUserInfo('rd')}
-				className="flex items-center justify-center gap-2 p-3 rounded border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 transition-colors haptic"
+				className="flex items-center justify-center gap-2 p-1 rounded border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 transition-colors haptic"
 			>
 				<span className="font-medium">Real-Debrid</span>
 				<span>{rdUser.username}</span>
@@ -105,9 +105,9 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 		) : (
 			<Link
 				href="/realdebrid/login"
-				className="w-full text-center py-3 rounded border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 transition-colors haptic"
+				className="w-full text-center py-1 rounded border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 transition-colors haptic"
 			>
-				Login with Real-Debrid
+				Real-Debrid Login
 			</Link>
 		);
 	}
@@ -117,7 +117,7 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 		return adUser ? (
 			<button
 				onClick={() => showUserInfo('ad')}
-				className="flex items-center justify-center gap-2 p-3 rounded border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 transition-colors haptic"
+				className="flex items-center justify-center gap-2 p-1 rounded border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 transition-colors haptic"
 			>
 				<span className="font-medium">AllDebrid</span>
 				<span>{adUser.username}</span>
@@ -126,9 +126,9 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 		) : (
 			<Link
 				href="/alldebrid/login"
-				className="w-full text-center py-3 rounded border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 transition-colors haptic"
+				className="w-full text-center py-1 rounded border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 transition-colors haptic"
 			>
-				Login with AllDebrid
+				AllDebrid Login
 			</Link>
 		);
 	}
@@ -138,7 +138,7 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 		return traktUser ? (
 			<button
 				onClick={() => showUserInfo('trakt')}
-				className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors haptic"
+				className="flex items-center justify-center gap-2 p-1 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors haptic"
 			>
 				<span className="font-medium">Trakt</span>
 				<span>{traktUser.user.username}</span>
@@ -147,9 +147,9 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 		) : (
 			<button
 				onClick={onTraktLogin}
-				className="w-full text-center py-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors haptic"
+				className="w-full text-center py-1 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors haptic"
 			>
-				Login with Trakt
+				Trakt Login
 			</button>
 		);
 	}
