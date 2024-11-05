@@ -8,15 +8,28 @@ const Poster = ({ imdbId, title = 'No poster' }: Record<string, string>) => {
 	useEffect(() => {
 		const fetchPosterUrl = async () => {
 			setLoadError(false);
-			setPosterUrl(`https://posters.debridmediamanager.com/${imdbId}-small.jpg`);
+			const primaryUrl = `https://posters.debridmediamanager.com/${imdbId}-small.jpg`;
+
+			try {
+				const response = await fetch(primaryUrl, { method: 'HEAD' });
+				if (response.ok) {
+					setPosterUrl(primaryUrl);
+				} else {
+					setLoadError(true);
+					setPosterUrl(`/poster/${imdbId}`);
+				}
+			} catch (error) {
+				setLoadError(true);
+				setPosterUrl(`/poster/${imdbId}`);
+			}
 		};
+
 		fetchPosterUrl();
 	}, [imdbId, title]);
 
 	const handleImageError = () => {
 		if (!loadError) {
 			setLoadError(true);
-			// Use the fallback poster endpoint
 			setPosterUrl(`/poster/${imdbId}`);
 		}
 	};
