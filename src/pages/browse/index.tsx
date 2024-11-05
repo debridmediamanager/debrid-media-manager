@@ -1,7 +1,5 @@
 import { withAuth } from '@/utils/withAuth';
-import { GetServerSideProps } from 'next';
-import { Browse, getServerSideProps as gssp } from './[search]';
+import { Browse } from './[search]';
 
-export const getServerSideProps: GetServerSideProps<any> = gssp;
-
+// Simply re-export the Browse component wrapped with auth
 export default withAuth(Browse);

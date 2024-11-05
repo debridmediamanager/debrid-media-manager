@@ -1,18 +1,58 @@
 import Poster from '@/components/poster';
-import MdbList from '@/services/mdblist';
-import { lcg, shuffle } from '@/utils/seededShuffle';
 import { withAuth } from '@/utils/withAuth';
-import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { FunctionComponent } from 'react';
+import { useRouter } from 'next/router';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 type BrowseProps = {
 	response: Record<string, string[]>;
 };
 
-export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
+export const Browse: FunctionComponent = () => {
+	const router = useRouter();
+	const { search } = router.query;
+	const [data, setData] = useState<BrowseProps | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState('');
+
+	useEffect(() => {
+		if (!search && search !== '') return;
+
+		const fetchData = async () => {
+			try {
+				const response = await fetch(
+					`/api/info/browse${search ? `?search=${search}` : ''}`
+				);
+				if (!response.ok) {
+					throw new Error('Failed to fetch data');
+				}
+				const result = await response.json();
+				setData({ response: result });
+			} catch (err) {
+				console.error('Error fetching browse data:', err);
+				setError('Failed to load data');
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		fetchData();
+	}, [search]);
+
+	if (isLoading) {
+		return <div className="mx-2 my-1 text-white">Loading...</div>;
+	}
+
+	if (error) {
+		return <div className="mx-2 my-1 text-white">Error: {error}</div>;
+	}
+
+	if (!data) {
+		return <div className="mx-2 my-1 text-white">No data available</div>;
+	}
+
 	return (
 		<div className="mx-2 my-1 max-w-full">
 			<Head>
@@ -28,16 +68,16 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 					Go Home
 				</Link>
 			</div>
-			{Object.keys(response).length > 0 && (
+			{Object.keys(data.response).length > 0 && (
 				<>
-					{Object.keys(response).map((listName: string, idx: number) => {
+					{Object.keys(data.response).map((listName: string, idx: number) => {
 						return (
-							<>
-								<h2 className="mt-4 text-xl font-bold" key={idx}>
+							<div key={listName}>
+								<h2 className="mt-4 text-xl font-bold">
 									<span className="text-yellow-500">{idx + 1}</span> {listName}
 								</h2>
 								<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
-									{response[listName].map((key: string) => {
+									{data.response[listName].map((key: string) => {
 										const matches = key.split(':');
 										if (matches.length === 3) {
 											const mediaType = key.split(':')[0];
@@ -56,70 +96,13 @@ export const Browse: FunctionComponent<BrowseProps> = ({ response }) => {
 										}
 									})}
 								</div>
-							</>
+							</div>
 						);
 					})}
 				</>
 			)}
 		</div>
 	);
-};
-
-type BrowseResponse = Record<string, string[]>;
-type BrowseResponseCache = {
-	lastUpdated: number;
-	response: BrowseResponse;
-};
-const responses: Record<string, BrowseResponseCache> = {};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-	const { params } = context;
-	let key = 'index';
-	if (params?.search) {
-		key = decodeURIComponent(params.search as string).toLowerCase();
-		key = key.replace(/[^a-z\s]/gi, ' ');
-	}
-
-	if (responses[key] && responses[key].lastUpdated > new Date().getTime() - 1000 * 60 * 10) {
-		return {
-			props: {
-				response: responses[key].response,
-			},
-		};
-	}
-
-	const mdblist = new MdbList();
-	let topLists;
-	if (key === 'index') {
-		topLists = await mdblist.topLists();
-	} else {
-		topLists = await mdblist.searchLists(key);
-	}
-
-	let rng = lcg(new Date().getTime() / 1000 / 60 / 10);
-	topLists = shuffle(topLists, rng).slice(0, 4);
-
-	const response: BrowseResponse = {};
-	for (const list of topLists) {
-		const itemsResponse = await mdblist.listItems(list.id);
-		const defaultMediaType = list.name.toLowerCase().includes('movie') ? 'movie' : 'show';
-		response[list.name] = itemsResponse
-			.filter((item) => item.imdb_id)
-			.slice(0, 24)
-			.map((item) => `${list.mediatype || defaultMediaType}:${item.imdb_id}:${item.title}`);
-		response[list.name] = shuffle(response[list.name], rng);
-	}
-
-	responses[key] = {
-		lastUpdated: new Date().getTime(),
-		response,
-	};
-
-	return {
-		props: {
-			response,
-		},
-	};
 };
 
 export default withAuth(Browse);

@@ -1,57 +1,62 @@
 import Poster from '@/components/poster';
-import { PlanetScaleCache } from '@/services/planetscale';
-import { TraktMediaItem, getMediaData } from '@/services/trakt';
+import { TraktMediaItem } from '@/services/trakt';
 import { withAuth } from '@/utils/withAuth';
-import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { FunctionComponent } from 'react';
+import { useRouter } from 'next/router';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-
-const movieEndpoints = new Map<string, string>([
-	['Box Office', 'movies/boxoffice'],
-	['Most Played Today', 'movies/played/daily'],
-	['Most Played This Month', 'movies/played/monthly'],
-	['Most Played All Time', 'movies/played/all'],
-	['Most Watched Today', 'movies/watched/daily'],
-	['Most Watched This Month', 'movies/watched/monthly'],
-	['Most Watched', 'movies/watched/all'],
-	['Most Collected Today', 'movies/collected/daily'],
-	['Most Collected This Month', 'movies/collected/monthly'],
-	['Most Collected All Time', 'movies/collected/all'],
-	['Most Favorited Today', 'movies/favorited/daily'],
-	['Most Favorited This Month', 'movies/favorited/monthly'],
-	['Most Favorited All Time', 'movies/favorited/all'],
-	['Popular', 'movies/popular'],
-	['Trending', 'movies/trending'],
-	['Most Anticipated', 'movies/anticipated'],
-]);
-
-const showEndpoints = new Map<string, string>([
-	['Most Played Today', 'shows/played/daily'],
-	['Most Played This Month', 'shows/played/monthly'],
-	['Most Played All Time', 'shows/played/all'],
-	['Most Watched Today', 'shows/watched/daily'],
-	['Most Watched This Month', 'shows/watched/monthly'],
-	['Most Watched All Time', 'shows/watched/all'],
-	['Most Collected Today', 'shows/collected/daily'],
-	['Most Collected This Month', 'shows/collected/monthly'],
-	['Most Collected All Time', 'shows/collected/all'],
-	['Most Favorited Today', 'shows/favorited/daily'],
-	['Most Favorited This Month', 'shows/favorited/monthly'],
-	['Most Favorited All Time', 'shows/favorited/all'],
-	['Popular', 'shows/popular'],
-	['Trending', 'shows/trending'],
-	['Most Anticipated', 'shows/anticipated'],
-]);
 
 type TraktBrowseProps = {
 	mediaType: string;
 	arrayOfResults: Record<string, TraktMediaItem[]>;
 };
 
-export const TraktBrowse: FunctionComponent<TraktBrowseProps> = ({ mediaType, arrayOfResults }) => {
-	const title = mediaType === 'movie' ? 'Movies 🎥' : 'Shows 📺';
+export const TraktBrowse: FunctionComponent = () => {
+	const router = useRouter();
+	const { browse } = router.query;
+	const [data, setData] = useState<TraktBrowseProps | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState('');
+
+	useEffect(() => {
+		if (!browse) return;
+
+		const fetchData = async () => {
+			try {
+				const response = await fetch(`/api/info/trakt?browse=${browse}`);
+				if (!response.ok) {
+					throw new Error('Failed to fetch data');
+				}
+				const result = await response.json();
+				setData(result);
+			} catch (err) {
+				console.error('Error fetching trakt data:', err);
+				setError('Failed to load data');
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		fetchData();
+	}, [browse]);
+
+	if (isLoading) {
+		return <div className="mx-2 my-1 bg-gray-900 min-h-screen text-white">Loading...</div>;
+	}
+
+	if (error) {
+		return <div className="mx-2 my-1 bg-gray-900 min-h-screen text-white">Error: {error}</div>;
+	}
+
+	if (!data) {
+		return (
+			<div className="mx-2 my-1 bg-gray-900 min-h-screen text-white">No data available</div>
+		);
+	}
+
+	const title = data.mediaType === 'movie' ? 'Movies 🎥' : 'Shows 📺';
+
 	return (
 		<div className="mx-2 my-1 bg-gray-900 min-h-screen">
 			<Head>
@@ -70,7 +75,7 @@ export const TraktBrowse: FunctionComponent<TraktBrowseProps> = ({ mediaType, ar
 			</div>
 
 			<div className="flex flex-col items-center w-full max-w-7xl gap-6">
-				{Object.keys(arrayOfResults)
+				{Object.keys(data.arrayOfResults)
 					.sort()
 					.map((listName: string, idx: number) => (
 						<div key={listName} className="w-full">
@@ -78,7 +83,7 @@ export const TraktBrowse: FunctionComponent<TraktBrowseProps> = ({ mediaType, ar
 								<span className="text-yellow-500">{idx + 1}</span> {listName}
 							</h2>
 							<div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
-								{arrayOfResults[listName].map((item: TraktMediaItem) => {
+								{data.arrayOfResults[listName].map((item: TraktMediaItem) => {
 									const imdbid =
 										item.movie?.ids?.imdb ||
 										item.show?.ids?.imdb ||
@@ -93,7 +98,7 @@ export const TraktBrowse: FunctionComponent<TraktBrowseProps> = ({ mediaType, ar
 									return (
 										<Link
 											key={imdbid}
-											href={`/${mediaType}/${imdbid}`}
+											href={`/${data.mediaType}/${imdbid}`}
 											className=""
 										>
 											<Poster imdbId={imdbid} title={title} />
@@ -106,65 +111,6 @@ export const TraktBrowse: FunctionComponent<TraktBrowseProps> = ({ mediaType, ar
 			</div>
 		</div>
 	);
-};
-
-type TraktBrowseResponseCache = {
-	lastUpdated: number;
-	results: TraktMediaItem[];
-};
-const responseCache: Record<string, TraktBrowseResponseCache> = {};
-
-const traktClientID = process.env.TRAKT_CLIENT_ID;
-const db = new PlanetScaleCache();
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-	const { params } = context;
-	let mediaType = 'movie';
-	if (params?.browse) {
-		mediaType = (params.browse as string).toLowerCase() === 'shows' ? 'show' : 'movie';
-	}
-
-	const arrayOfResults: Record<string, TraktMediaItem[]> = {};
-
-	let endpoints = mediaType === 'movie' ? movieEndpoints : showEndpoints;
-	const keys = Array.from(endpoints.keys());
-	for (let i = 0; i < keys.length; i++) {
-		const key = keys[i];
-		const endpoint = endpoints.get(key)!;
-		if (
-			responseCache[endpoint] &&
-			responseCache[endpoint].results.length &&
-			responseCache[endpoint].lastUpdated > new Date().getTime() - 1000 * 60 * 10
-		) {
-			arrayOfResults[key] = responseCache[endpoint].results;
-			continue;
-		}
-
-		try {
-			let searchResults = await db.getSearchResults<TraktMediaItem[]>(`trakt:${endpoint}`);
-			if (!searchResults?.length) {
-				searchResults = await getMediaData(traktClientID!, endpoint);
-				await db.saveSearchResults(`trakt:${endpoint}`, searchResults);
-			}
-			responseCache[endpoint] = {
-				lastUpdated: new Date().getTime(),
-				results: searchResults,
-			};
-			arrayOfResults[key] = responseCache[endpoint].results;
-		} catch (error: any) {
-			console.error(error);
-			return {
-				notFound: true,
-			};
-		}
-	}
-
-	return {
-		props: {
-			mediaType,
-			arrayOfResults,
-		},
-	};
 };
 
 export default withAuth(TraktBrowse);
