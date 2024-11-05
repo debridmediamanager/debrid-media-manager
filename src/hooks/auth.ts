@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useLocalStorage from './localStorage';
 
-interface RealDebridUser {
+export interface RealDebridUser {
 	id: number;
 	username: string;
 	email: string;
@@ -18,7 +18,7 @@ interface RealDebridUser {
 	expiration: string;
 }
 
-interface AllDebridUser {
+export interface AllDebridUser {
 	username: string;
 	email: string;
 	isPremium: boolean;
@@ -83,11 +83,6 @@ export const useAllDebridApiKey = () => {
 	const [apiKey] = useLocalStorage<string>('ad:apiKey');
 	return apiKey;
 };
-
-function removeToken(service: string) {
-	window.localStorage.removeItem(`${service}:accessToken`);
-	window.location.reload();
-}
 
 export const useCurrentUser = () => {
 	const [rdUser, setRdUser] = useState<RealDebridUser | null>(null);
