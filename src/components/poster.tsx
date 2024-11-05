@@ -3,14 +3,23 @@ import { useEffect, useState } from 'react';
 
 const Poster = ({ imdbId, title = 'No poster' }: Record<string, string>) => {
 	const [posterUrl, setPosterUrl] = useState('');
+	const [loadError, setLoadError] = useState(false);
 
 	useEffect(() => {
 		const fetchPosterUrl = async () => {
+			setLoadError(false);
 			setPosterUrl(`https://posters.debridmediamanager.com/${imdbId}-small.jpg`);
 		};
-
 		fetchPosterUrl();
 	}, [imdbId, title]);
+
+	const handleImageError = () => {
+		if (!loadError) {
+			setLoadError(true);
+			// Use the fallback poster endpoint
+			setPosterUrl(`/poster/${imdbId}`);
+		}
+	};
 
 	return (
 		<div>
@@ -21,6 +30,8 @@ const Poster = ({ imdbId, title = 'No poster' }: Record<string, string>) => {
 					src={posterUrl}
 					alt={`Poster for ${title}`}
 					loading="lazy"
+					onError={handleImageError}
+					unoptimized={loadError} // Disable Next.js image optimization for fallback URL
 				/>
 			)}
 		</div>
