@@ -71,12 +71,13 @@ export class IframeProxy {
 		) {
 			// Server-side logic
 			try {
-				const response = await this.axiosClient({
+				const response = await axios({
 					method: requestData.method,
 					url: requestData.url,
 					headers: requestData.headers,
 					data: requestData.body,
 				});
+				console.log('Request executed successfully:', response.data);
 				return response.data as T;
 			} catch (error: any) {
 				console.error('Error executing request:', error.message);

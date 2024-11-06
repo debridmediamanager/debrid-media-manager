@@ -146,6 +146,7 @@ const renderInfoTable = (rows: InfoTableRow[]): string => `
 const renderTorrentInfo = (
 	info: TorrentInfoResponse | MagnetStatus,
 	isRd: boolean,
+	rdKey: string,
 	app?: string,
 	userId?: string,
 	imdbId?: string,
@@ -196,7 +197,7 @@ const renderTorrentInfo = (
 					) {
 						actions.push(
 							renderButton('cast', {
-								onClick: `window.open('/api/stremio/${userId}/cast/${imdbId}?token=${info.hash}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')`,
+								onClick: `window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')`,
 								text: 'Cast',
 							})
 						);
@@ -293,7 +294,7 @@ export const showInfoForRD = async (
     <div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
         <table class="table-auto w-full">
             <tbody>
-                ${renderTorrentInfo(info, true, app, userId, imdbId, mediaType)}
+                ${renderTorrentInfo(info, true, rdKey, app, userId, imdbId, mediaType)}
             </tbody>
         </table>
     </div>`;
@@ -385,7 +386,7 @@ export const showInfoForAD = async (
     <div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
         <table class="table-auto w-full">
             <tbody>
-                ${renderTorrentInfo(info, false, app, userId, imdbId)}
+                ${renderTorrentInfo(info, false, '', app, userId, imdbId)}
             </tbody>
         </table>
     </div>`;
