@@ -34,7 +34,9 @@ export async function generateHashList(title: string, filteredList: UserTorrent[
 	}
 }
 
-export async function handleShare(t: UserTorrent): Promise<string> {
+export async function handleShare(
+	t: Pick<UserTorrent, 'filename' | 'hash' | 'bytes'>
+): Promise<string> {
 	const hashList = [
 		{
 			filename: t.filename,

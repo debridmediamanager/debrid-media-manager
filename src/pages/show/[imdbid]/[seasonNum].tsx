@@ -294,7 +294,7 @@ const TvSearch: FunctionComponent = () => {
 			fake: true,
 			host: '',
 			split: 0,
-			status: '',
+			status: 'downloaded',
 			added: '',
 			ended: '',
 			speed: 0,
