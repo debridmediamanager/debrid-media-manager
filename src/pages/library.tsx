@@ -1041,6 +1041,8 @@ function TorrentsPage() {
 
 	const handleShowInfoForRD = async (t: UserTorrent) => {
 		const info = await getTorrentInfo(rdKey!, t.id.substring(3));
+
+		// Update torrent info if needed
 		if (t.status === UserTorrentStatus.waiting || t.status === UserTorrentStatus.downloading) {
 			setUserTorrentsList((prev) => {
 				const newList = [...prev];
@@ -1064,6 +1066,35 @@ function TorrentsPage() {
 			});
 			await torrentDB.add(t);
 		}
+
+		// Pass handlers to window object
+		(window as any).handleShare = handleShare;
+		(window as any).handleDeleteRdTorrent = async (key: string, id: string) => {
+			await handleDeleteRdTorrent(key, id);
+			setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== id));
+			await torrentDB.deleteById(id);
+			setSelectedTorrents((prev) => {
+				prev.delete(id);
+				return new Set(prev);
+			});
+			Swal.close();
+		};
+		(window as any).handleCopyMagnet = handleCopyMagnet;
+		(window as any).handleReinsertTorrentinRd = async (
+			key: string,
+			torrent: UserTorrent,
+			reload: boolean
+		) => {
+			await handleReinsertTorrentinRd(key, torrent, reload);
+			await fetchLatestRDTorrents(2);
+			setUserTorrentsList((prev) => prev.filter((t) => t.id !== torrent.id));
+			await torrentDB.deleteById(torrent.id);
+			setSelectedTorrents((prev) => {
+				prev.delete(torrent.id);
+				return new Set(prev);
+			});
+			Swal.close();
+		};
 
 		const filenames = info.files.map((f) => f.path);
 		const torrentAndFiles = [t.filename, ...filenames];
@@ -1133,6 +1164,25 @@ function TorrentsPage() {
 	};
 
 	const handleShowInfoForAD = async (t: UserTorrent) => {
+		// Pass handlers to window object
+		(window as any).handleShare = handleShare;
+		(window as any).handleDeleteAdTorrent = async (key: string, id: string) => {
+			await handleDeleteAdTorrent(key, id);
+			setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== id));
+			await torrentDB.deleteById(id);
+			setSelectedTorrents((prev) => {
+				prev.delete(id);
+				return new Set(prev);
+			});
+			Swal.close();
+		};
+		(window as any).handleCopyMagnet = handleCopyMagnet;
+		(window as any).handleRestartTorrent = async (key: string, id: string) => {
+			await handleRestartTorrent(key, id);
+			await fetchLatestADTorrents();
+			Swal.close();
+		};
+
 		let player = window.localStorage.getItem('settings:player') || defaultPlayer;
 		if (player === 'realdebrid') {
 			alert('No player selected');
@@ -1294,7 +1344,7 @@ function TorrentsPage() {
 				{sameHash.size > 0 && (
 					<Link
 						href="/library?status=samehash&page=1"
-						className="mr-2 mb-1 border-2 border-orange-500 bg-orange-900/30 text-orange-100 hover:bg-orange-800/50 font-bold py-0.5 px-1 rounded transition-colors text-xs"
+						className="mr-2 mb-1 border-2 border-orange-500 bg-orange-900/30 text-orange-100 hover:bg-orange-800/50 font-bold py-0 px-1 rounded transition-colors text-xs"
 					>
 						👀 Same&nbsp;hash
 					</Link>
@@ -1302,7 +1352,7 @@ function TorrentsPage() {
 				{sameTitle.size > 0 && sameHash.size < sameTitle.size && (
 					<Link
 						href="/library?status=sametitle&page=1"
-						className="mr-2 mb-1 border-2 border-amber-500 bg-amber-900/30 text-amber-100 hover:bg-amber-800/50 font-bold py-0.5 px-1 rounded transition-colors text-xs"
+						className="mr-2 mb-1 border-2 border-amber-500 bg-amber-900/30 text-amber-100 hover:bg-amber-800/50 font-bold py-0 px-1 rounded transition-colors text-xs"
 					>
 						👀 Same&nbsp;title
 					</Link>

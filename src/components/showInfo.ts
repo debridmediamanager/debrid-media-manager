@@ -1,5 +1,12 @@
 import { MagnetStatus } from '@/services/allDebrid';
 import { TorrentInfoResponse } from '@/services/types';
+import {
+	handleCopyMagnet,
+	handleReinsertTorrentinRd,
+	handleRestartTorrent,
+} from '@/utils/addMagnet';
+import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
+import { handleShare } from '@/utils/hashList';
 import { isVideo } from '@/utils/selectable';
 import Swal from 'sweetalert2';
 
@@ -11,14 +18,17 @@ const formatSize = (bytes: number): { size: number; unit: string } => {
 	};
 };
 
-type ActionButtonProps = {
+interface ActionButtonProps {
 	link?: string;
 	onClick?: string;
 	text?: string;
 	linkParam?: { name: string; value: string };
-};
+}
 
-const renderActionButton = (type: 'download' | 'watch' | 'cast', props: ActionButtonProps) => {
+const renderActionButton = (
+	type: 'download' | 'watch' | 'cast',
+	props: ActionButtonProps
+): string => {
 	const styles = {
 		download:
 			'border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors',
@@ -40,13 +50,40 @@ const renderActionButton = (type: 'download' | 'watch' | 'cast', props: ActionBu
 		: `<button type="button" class="inline m-0 ${styles[type]} text-xs rounded px-1 haptic-sm" onclick="${props.onClick}">${icon[type]} ${props.text || type}</button>`;
 };
 
-const renderFileRow = (file: {
+interface LibraryActionButtonProps {
+	onClick: string;
+}
+
+const renderLibraryActionButton = (
+	action: 'share' | 'delete' | 'magnet' | 'reinsert',
+	props: LibraryActionButtonProps
+): string => {
+	const icons = {
+		share: '↗️',
+		delete: '🗑️',
+		magnet: '🧲',
+		reinsert: '🔄',
+	};
+
+	const styles = {
+		share: 'border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50',
+		delete: 'border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50',
+		magnet: 'border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50',
+		reinsert: 'border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50',
+	};
+
+	return `<button type="button" class="inline m-0 ${styles[action]} text-xs rounded px-1 mr-2 transition-colors haptic-sm" onclick="${props.onClick}">${icons[action]}</button>`;
+};
+
+interface FileRowProps {
 	path: string;
 	size: number;
 	isSelected?: boolean;
 	isPlayable?: boolean;
 	actions: string[];
-}) => {
+}
+
+const renderFileRow = (file: FileRowProps): string => {
 	const { size, unit } = formatSize(file.size);
 	return `
         <tr class="${file.isPlayable || file.isSelected ? 'bg-gray-800 font-bold' : 'font-normal'} hover:bg-gray-700 rounded">
@@ -61,12 +98,12 @@ const renderFileRow = (file: {
     `;
 };
 
-type InfoTableRow = {
+interface InfoTableRow {
 	label: string;
-	value: string | number; // Allow both string and number
-};
+	value: string | number;
+}
 
-const renderInfoTable = (rows: InfoTableRow[]) => `
+const renderInfoTable = (rows: InfoTableRow[]): string => `
     <table class="table-auto w-full mb-4 text-left text-gray-200">
         <tbody>
             ${rows
@@ -89,8 +126,8 @@ export const showInfoForRD = async (
 	info: TorrentInfoResponse,
 	userId: string = '',
 	imdbId: string = '',
-	mediaType: string = 'movie' // 'movie' | 'tv'
-) => {
+	mediaType: 'movie' | 'tv' = 'movie'
+): Promise<void> => {
 	let warning = '',
 		downloadAllBtn = '';
 	const isIntact = info.fake || info.files.filter((f) => f.selected).length === info.links.length;
@@ -173,28 +210,24 @@ export const showInfoForRD = async (
 			return renderFileRow({
 				path: file.path,
 				size: file.bytes,
-				isSelected: Boolean(file.selected), // Ensure boolean type
+				isSelected: Boolean(file.selected),
 				actions,
 			});
 		})
 		.join('');
 
-	// Handle the display of progress, speed, and seeders as table rows
-	const progressRow =
-		info.status === 'downloading'
-			? `<tr><td class="font-semibold">Progress:</td><td>${info.progress.toFixed(2)}%</td></tr>`
-			: '';
-	const speedRow =
-		info.status === 'downloading'
-			? `<tr><td class="font-semibold">Speed:</td><td>${(info.speed / 1024).toFixed(2)} KB/s</td></tr>`
-			: '';
-	const seedersRow =
-		info.status === 'downloading'
-			? `<tr><td class="font-semibold">Seeders:</td><td>${info.seeders}</td></tr>`
-			: '';
+	// Add library action buttons section after title
+	const libraryActions = `
+	<div class="mb-4">
+		${renderLibraryActionButton('share', { onClick: `window.handleShare({ id: 'rd:${info.id}', hash: '${info.hash}' })` })}
+		${renderLibraryActionButton('delete', { onClick: `window.handleDeleteRdTorrent('${rdKey}', 'rd:${info.id}')` })}
+		${renderLibraryActionButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
+		${renderLibraryActionButton('reinsert', { onClick: `window.handleReinsertTorrentinRd('${rdKey}', { id: 'rd:${info.id}', hash: '${info.hash}' }, true)` })}
+	</div>`;
 
 	// Update the wrapping HTML to include a table
 	let html = `<h1 class="text-lg font-bold mt-6 mb-4 text-gray-100">${info.filename}</h1>
+	${libraryActions}
 	<hr class="border-gray-600"/>
 	<div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
 		<table class="table-auto w-full">
@@ -228,7 +261,8 @@ export const showInfoForRD = async (
 			])}
         ${warning}${downloadAllBtn}`
 		);
-	Swal.fire({
+
+	await Swal.fire({
 		html,
 		showConfirmButton: false,
 		customClass: {
@@ -240,6 +274,13 @@ export const showInfoForRD = async (
 		width: '800px',
 		showCloseButton: true,
 		inputAutoFocus: true,
+		didOpen: () => {
+			// Make handlers available to window for the onclick events
+			(window as any).handleShare = handleShare;
+			(window as any).handleDeleteRdTorrent = handleDeleteRdTorrent;
+			(window as any).handleCopyMagnet = handleCopyMagnet;
+			(window as any).handleReinsertTorrentinRd = handleReinsertTorrentinRd;
+		},
 	});
 };
 
@@ -249,7 +290,7 @@ export const showInfoForAD = async (
 	info: MagnetStatus,
 	userId: string = '',
 	imdbId: string = ''
-) => {
+): Promise<void> => {
 	const filesList = info.links
 		.map((file) => {
 			const actions = [
@@ -263,14 +304,24 @@ export const showInfoForAD = async (
 			return renderFileRow({
 				path: file.filename,
 				size: file.size,
-				isPlayable: Boolean(isVideo({ path: file.filename })), // Ensure boolean type
+				isPlayable: Boolean(isVideo({ path: file.filename })),
 				actions,
 			});
 		})
 		.join('');
 
+	// Add library action buttons section after title
+	const libraryActions = `
+	<div class="mb-4">
+		${renderLibraryActionButton('share', { onClick: `window.handleShare({ id: 'ad:${info.id}', hash: '${info.hash}' })` })}
+		${renderLibraryActionButton('delete', { onClick: `window.handleDeleteAdTorrent('${rdKey}', 'ad:${info.id}')` })}
+		${renderLibraryActionButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
+		${renderLibraryActionButton('reinsert', { onClick: `window.handleRestartTorrent('${rdKey}', '${info.id}')` })}
+	</div>`;
+
 	// Update the wrapping HTML to include a table
 	let html = `<h1 class="text-lg font-bold mt-6 mb-4 text-gray-100">${info.filename}</h1>
+	${libraryActions}
 	<hr class="border-gray-600"/>
 	<div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
 		<table class="table-auto w-full">
@@ -291,7 +342,7 @@ export const showInfoForAD = async (
 	</div>`
 	);
 
-	Swal.fire({
+	await Swal.fire({
 		html,
 		showConfirmButton: false,
 		customClass: {
@@ -303,5 +354,12 @@ export const showInfoForAD = async (
 		width: '800px',
 		showCloseButton: true,
 		inputAutoFocus: true,
+		didOpen: () => {
+			// Make handlers available to window for the onclick events
+			(window as any).handleShare = handleShare;
+			(window as any).handleDeleteAdTorrent = handleDeleteAdTorrent;
+			(window as any).handleCopyMagnet = handleCopyMagnet;
+			(window as any).handleRestartTorrent = handleRestartTorrent;
+		},
 	});
 };
