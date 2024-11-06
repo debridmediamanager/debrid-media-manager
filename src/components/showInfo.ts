@@ -63,8 +63,9 @@ const buttonStyles = {
 	magnet: 'border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 p-3 m-1',
 	reinsert:
 		'border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 p-3 m-1',
-	downloadAll: 'border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50',
-	exportLinks: 'border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50',
+	downloadAll:
+		'border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 p-3 m-1',
+	exportLinks: 'border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 p-3 m-1',
 };
 
 const icons = {
@@ -75,8 +76,8 @@ const icons = {
 	delete: '<span style="font-size: 1.2rem;">🗑️</span>',
 	magnet: '<span style="font-size: 1.2rem;">🧲</span>',
 	reinsert: '<span style="font-size: 1.2rem;">🔄</span>',
-	downloadAll: '🔗',
-	exportLinks: '📤',
+	downloadAll: '<span style="font-size: 1.2rem;">📲</span>',
+	exportLinks: '<span style="font-size: 1.2rem;">📤</span>',
 };
 
 // UI Components
@@ -95,7 +96,14 @@ const renderButton = (
 	}
 
 	// Only apply larger text and touch-manipulation to library action buttons
-	const isLibraryAction = ['share', 'delete', 'magnet', 'reinsert'].includes(type);
+	const isLibraryAction = [
+		'share',
+		'delete',
+		'magnet',
+		'reinsert',
+		'downloadAll',
+		'exportLinks',
+	].includes(type);
 	const textSize = isLibraryAction ? 'text-base' : 'text-xs';
 	const touchClass = isLibraryAction ? 'touch-manipulation' : '';
 
@@ -233,37 +241,16 @@ export const showInfoForRD = async (
 	imdbId: string = '',
 	mediaType: 'movie' | 'tv' = 'movie'
 ): Promise<void> => {
-	let warning = '',
-		downloadAllBtn = '';
+	let warning = '';
 	const isIntact =
 		info.fake || info.files.filter((f) => f.selected === 1).length === info.links.length;
 
 	if (info.progress === 100 && !isIntact) {
 		if (info.links.length === 1) {
 			warning = `<div class="text-sm text-red-400">Warning: This torrent appears to have been rar'ed by Real-Debrid<br/></div>`;
-			downloadAllBtn = renderButton('downloadAll', {
-				link: 'https://real-debrid.com/downloader',
-				linkParam: { name: 'links', value: info.links[0] },
-				text: 'Download RAR',
-			});
 		} else {
 			warning = `<div class="text-sm text-red-400">Warning: Some files have expired</div>`;
 		}
-	}
-
-	if (info.links.length > 1) {
-		downloadAllBtn = renderButton('downloadAll', {
-			link: 'https://real-debrid.com/downloader',
-			linkParam: { name: 'links', value: info.links.join('\n') },
-			text: 'Download all links',
-		});
-	}
-
-	if (info.links.length > 0) {
-		downloadAllBtn += renderButton('exportLinks', {
-			onClick: `exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])`,
-			text: 'Export DL links',
-		});
 	}
 
 	const torrent = {
@@ -282,6 +269,21 @@ export const showInfoForRD = async (
         ${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteRdTorrent('${rdKey}', 'rd:${info.id}')` })}
         ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
         ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleReinsertTorrentinRd('${rdKey}', { id: 'rd:${info.id}', hash: '${info.hash}' }, true)` })}
+        ${
+			info.links.length > 1
+				? renderButton('downloadAll', {
+						link: 'https://real-debrid.com/downloader',
+						linkParam: { name: 'links', value: info.links.join('\n') },
+					})
+				: ''
+		}
+        ${
+			info.links.length > 0
+				? renderButton('exportLinks', {
+						onClick: `exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])`,
+					})
+				: ''
+		}
     </div>`
 		: '';
 
@@ -317,7 +319,7 @@ export const showInfoForRD = async (
 			'<hr class="border-gray-600"/>',
 			`<div class="text-sm text-gray-200">
                 ${renderInfoTable(infoRows)}
-                ${warning}${downloadAllBtn}
+                ${warning}
             </div>`
 		);
 	}
@@ -359,6 +361,21 @@ export const showInfoForAD = async (
         ${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteAdTorrent('${rdKey}', 'ad:${info.id}')` })}
         ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
         ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleRestartTorrent('${rdKey}', '${info.id}')` })}
+        ${
+			info.links.length > 1
+				? renderButton('downloadAll', {
+						link: 'https://alldebrid.com/service/',
+						linkParam: { name: 'url', value: info.links.map((l) => l.link).join('\n') },
+					})
+				: ''
+		}
+        ${
+			info.links.length > 0
+				? renderButton('exportLinks', {
+						onClick: `exportLinks('${info.filename}', [${info.links.map((l) => `'${l.link}'`).join(',')}])`,
+					})
+				: ''
+		}
     </div>`;
 
 	const html = `<h1 class="text-lg font-bold mt-6 mb-4 text-gray-100">${info.filename}</h1>
