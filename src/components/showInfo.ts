@@ -58,6 +58,7 @@ const buttonStyles = {
 		'border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors',
 	watch: 'border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 transition-colors',
 	cast: 'border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 transition-colors',
+	castAll: 'border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 p-3 m-1',
 	share: 'border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 p-3 m-1',
 	delete: 'border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 p-3 m-1',
 	magnet: 'border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 p-3 m-1',
@@ -72,6 +73,7 @@ const icons = {
 	download: '📲',
 	watch: '🧐',
 	cast: '✨',
+	castAll: '✨',
 	share: '<span style="font-size: 1.2rem;">🚀</span>',
 	delete: '<span style="font-size: 1.2rem;">🗑️</span>',
 	magnet: '<span style="font-size: 1.2rem;">🧲</span>',
@@ -103,6 +105,7 @@ const renderButton = (
 		'reinsert',
 		'downloadAll',
 		'exportLinks',
+		'castAll',
 	].includes(type);
 	const textSize = isLibraryAction ? 'text-base' : 'text-xs';
 	const touchClass = isLibraryAction ? 'touch-manipulation' : '';
@@ -272,7 +275,14 @@ export const showInfoForRD = async (
         ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
         ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleReinsertTorrentinRd('${rdKey}', { id: 'rd:${info.id}', hash: '${info.hash}' }, true)` })}
         ${
-			info.links.length > 1
+			userId
+				? renderButton('castAll', {
+						onClick: `window.open('/api/stremio/${userId}/cast/library/${info.id}?rdToken=${rdKey}')`,
+					})
+				: ''
+		}
+        ${
+			info.links.length > 0
 				? renderButton('downloadAll', {
 						onClick: `window.open('${downloadAllLink}')`,
 					})
