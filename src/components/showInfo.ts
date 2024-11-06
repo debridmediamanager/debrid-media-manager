@@ -262,6 +262,7 @@ export const showInfoForRD = async (
 		mediaType,
 	};
 
+	const downloadAllLink = `https://real-debrid.com/downloader?links=${info.links.map((l) => encodeURIComponent(l)).join('%0D%0A')}`;
 	const libraryActions = !info.fake
 		? `
     <div class="mb-4 flex justify-center items-center flex-wrap">
@@ -272,8 +273,7 @@ export const showInfoForRD = async (
         ${
 			info.links.length > 1
 				? renderButton('downloadAll', {
-						link: 'https://real-debrid.com/downloader',
-						linkParam: { name: 'links', value: info.links.join('\n') },
+						onClick: `window.open('${downloadAllLink}')`,
 					})
 				: ''
 		}
@@ -355,28 +355,22 @@ export const showInfoForAD = async (
 		mediaType: 'other',
 	};
 
+	const downloadAllLink = `https://alldebrid.com/service/?url=${info.links.map((l) => encodeURIComponent(l.link)).join('%0D%0A')}`;
 	const libraryActions = `
-    <div class="mb-4 flex justify-center items-center flex-wrap">
-        ${renderButton('share', { onClick: `router.push('${await handleShare(torrent)}')` })}
-        ${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteAdTorrent('${rdKey}', 'ad:${info.id}')` })}
-        ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
-        ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleRestartTorrent('${rdKey}', '${info.id}')` })}
-        ${
-			info.links.length > 1
-				? renderButton('downloadAll', {
-						link: 'https://alldebrid.com/service/',
-						linkParam: { name: 'url', value: info.links.map((l) => l.link).join('\n') },
-					})
-				: ''
-		}
-        ${
-			info.links.length > 0
-				? renderButton('exportLinks', {
-						onClick: `exportLinks('${info.filename}', [${info.links.map((l) => `'${l.link}'`).join(',')}])`,
-					})
-				: ''
-		}
-    </div>`;
+		<div class="mb-4 flex justify-center items-center flex-wrap">
+			${renderButton('share', { onClick: `window.open('${await handleShare(torrent)}')` })}
+			${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteAdTorrent('${rdKey}', 'ad:${info.id}')` })}
+			${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
+			${renderButton('reinsert', { onClick: `window.closePopup(); window.handleRestartTorrent('${rdKey}', '${info.id}')` })}
+			${info.links.length > 1 ? renderButton('downloadAll', { onClick: `window.open('${downloadAllLink}')` }) : ''}
+			${
+				info.links.length > 0
+					? renderButton('exportLinks', {
+							onClick: `exportLinks('${info.filename}', [${info.links.map((l) => `'${l.link}'`).join(',')}])`,
+						})
+					: ''
+			}
+		</div>`;
 
 	const html = `<h1 class="text-lg font-bold mt-6 mb-4 text-gray-100">${info.filename}</h1>
     ${libraryActions}
