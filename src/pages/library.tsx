@@ -1095,6 +1095,7 @@ function TorrentsPage() {
 			});
 			Swal.close();
 		};
+		(window as any).closePopup = Swal.close;
 
 		const filenames = info.files.map((f) => f.path);
 		const torrentAndFiles = [t.filename, ...filenames];
@@ -1182,6 +1183,7 @@ function TorrentsPage() {
 			await fetchLatestADTorrents();
 			Swal.close();
 		};
+		(window as any).closePopup = Swal.close;
 
 		let player = window.localStorage.getItem('settings:player') || defaultPlayer;
 		if (player === 'realdebrid') {

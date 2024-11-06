@@ -119,7 +119,7 @@ function IndexPage() {
 							href="https://www.patreon.com/debridmediamanager"
 							className="text-2xl hover:opacity-75"
 						>
-							📢
+							📣
 						</a>
 					</h1>
 

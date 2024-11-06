@@ -1,15 +1,10 @@
-import { MagnetStatus } from '@/services/allDebrid';
-import { TorrentInfoResponse } from '@/services/types';
-import {
-	handleCopyMagnet,
-	handleReinsertTorrentinRd,
-	handleRestartTorrent,
-} from '@/utils/addMagnet';
-import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
-import { handleShare } from '@/utils/hashList';
-import { isVideo } from '@/utils/selectable';
 import Swal from 'sweetalert2';
+import { MagnetStatus } from '../services/allDebrid';
+import { TorrentInfoResponse } from '../services/types';
+import { handleShare } from '../utils/hashList';
+import { isVideo } from '../utils/selectable';
 
+// Utility functions
 const formatSize = (bytes: number): { size: number; unit: string } => {
 	const isGB = bytes >= 1024 ** 3;
 	return {
@@ -18,6 +13,7 @@ const formatSize = (bytes: number): { size: number; unit: string } => {
 	};
 };
 
+// Types
 interface ActionButtonProps {
 	link?: string;
 	onClick?: string;
@@ -25,55 +21,9 @@ interface ActionButtonProps {
 	linkParam?: { name: string; value: string };
 }
 
-const renderActionButton = (
-	type: 'download' | 'watch' | 'cast',
-	props: ActionButtonProps
-): string => {
-	const styles = {
-		download:
-			'border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors',
-		watch: 'border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 transition-colors',
-		cast: 'border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 transition-colors',
-	};
-
-	const icon = {
-		download: '📲',
-		watch: '🧐',
-		cast: '✨',
-	};
-
-	return props.link
-		? `<form action="${props.link}" method="get" target="_blank" class="inline">
-            <input type="hidden" name="${props.linkParam?.name || 'links'}" value="${props.linkParam?.value || props.onClick || ''}" />
-            <button type="submit" class="inline m-0 ${styles[type]} text-xs rounded px-1 haptic-sm">${icon[type]} ${props.text || type}</button>
-        </form>`
-		: `<button type="button" class="inline m-0 ${styles[type]} text-xs rounded px-1 haptic-sm" onclick="${props.onClick}">${icon[type]} ${props.text || type}</button>`;
-};
-
 interface LibraryActionButtonProps {
 	onClick: string;
 }
-
-const renderLibraryActionButton = (
-	action: 'share' | 'delete' | 'magnet' | 'reinsert',
-	props: LibraryActionButtonProps
-): string => {
-	const icons = {
-		share: '↗️',
-		delete: '🗑️',
-		magnet: '🧲',
-		reinsert: '🔄',
-	};
-
-	const styles = {
-		share: 'border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50',
-		delete: 'border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50',
-		magnet: 'border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50',
-		reinsert: 'border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50',
-	};
-
-	return `<button type="button" class="inline m-0 ${styles[action]} text-xs rounded px-1 mr-2 transition-colors haptic-sm" onclick="${props.onClick}">${icons[action]}</button>`;
-};
 
 interface FileRowProps {
 	path: string;
@@ -82,6 +32,75 @@ interface FileRowProps {
 	isPlayable?: boolean;
 	actions: string[];
 }
+
+interface InfoTableRow {
+	label: string;
+	value: string | number;
+}
+
+// API returns selected as a number (0 or 1)
+interface ApiTorrentFile {
+	id: number;
+	path: string;
+	bytes: number;
+	selected: number;
+}
+
+interface MagnetLink {
+	filename: string;
+	link: string;
+	size: number;
+}
+
+// Styles configuration
+const buttonStyles = {
+	download:
+		'border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors',
+	watch: 'border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 transition-colors',
+	cast: 'border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 transition-colors',
+	share: 'border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 p-3 m-1',
+	delete: 'border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 p-3 m-1',
+	magnet: 'border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 p-3 m-1',
+	reinsert:
+		'border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 p-3 m-1',
+	downloadAll: 'border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50',
+	exportLinks: 'border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50',
+};
+
+const icons = {
+	download: '📲',
+	watch: '🧐',
+	cast: '✨',
+	share: '<span style="font-size: 1.2rem;">🚀</span>',
+	delete: '<span style="font-size: 1.2rem;">🗑️</span>',
+	magnet: '<span style="font-size: 1.2rem;">🧲</span>',
+	reinsert: '<span style="font-size: 1.2rem;">🔄</span>',
+	downloadAll: '🔗',
+	exportLinks: '📤',
+};
+
+// UI Components
+const renderButton = (
+	type: keyof typeof buttonStyles,
+	props: ActionButtonProps | LibraryActionButtonProps
+) => {
+	const style = buttonStyles[type];
+	const icon = icons[type];
+
+	if ('link' in props) {
+		return `<form action="${props.link}" method="get" target="_blank" class="inline">
+            <input type="hidden" name="${props.linkParam?.name || 'links'}" value="${props.linkParam?.value || props.onClick || ''}" />
+            <button type="submit" class="inline m-0 ${style} text-xs rounded px-1 haptic-sm">${icon} ${props.text || type}</button>
+        </form>`;
+	}
+
+	// Only apply larger text and touch-manipulation to library action buttons
+	const isLibraryAction = ['share', 'delete', 'magnet', 'reinsert'].includes(type);
+	const textSize = isLibraryAction ? 'text-base' : 'text-xs';
+	const touchClass = isLibraryAction ? 'touch-manipulation' : '';
+
+	return `<button type="button" class="inline ${style} ${textSize} rounded cursor-pointer ${touchClass}" onclick="${props.onClick}">${icon} ${'text' in props ? props.text || type : ''}</button>`;
+};
 
 const renderFileRow = (file: FileRowProps): string => {
 	const { size, unit } = formatSize(file.size);
@@ -97,11 +116,6 @@ const renderFileRow = (file: FileRowProps): string => {
         </tr>
     `;
 };
-
-interface InfoTableRow {
-	label: string;
-	value: string | number;
-}
 
 const renderInfoTable = (rows: InfoTableRow[]): string => `
     <table class="table-auto w-full mb-4 text-left text-gray-200">
@@ -120,72 +134,47 @@ const renderInfoTable = (rows: InfoTableRow[]): string => `
     </table>
 `;
 
-export const showInfoForRD = async (
-	app: string,
-	rdKey: string,
-	info: TorrentInfoResponse,
-	userId: string = '',
-	imdbId: string = '',
-	mediaType: 'movie' | 'tv' = 'movie'
-): Promise<void> => {
-	let warning = '',
-		downloadAllBtn = '';
-	const isIntact = info.fake || info.files.filter((f) => f.selected).length === info.links.length;
-	if (info.progress === 100 && !isIntact) {
-		if (info.links.length === 1) {
-			warning = `<div class="text-sm text-red-400">Warning: This torrent appears to have been rar'ed by Real-Debrid<br/></div>`;
-			downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
-			<input type="hidden" name="links" value="${info.links[0]}" />
-			<button type="submit" class="inline m-0 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 text-xs rounded px-1 transition-colors haptic-sm">🗄️ Download RAR</button>
-		</form>`;
-		} else {
-			warning = `<div class="text-sm text-red-400">Warning: Some files have expired</div>`;
-		}
-	}
-	if (info.links.length > 1) {
-		downloadAllBtn = `<form action="https://real-debrid.com/downloader" method="get" target="_blank" class="inline">
-			<input type="hidden" name="links" value="${info.links.join('\n')}" />
-			<button type="submit" class="inline m-0 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 text-xs rounded px-1 transition-colors haptic-sm">🔗 Download all links</button>
-		</form>`;
-	}
-	if (info.links.length > 0) {
-		downloadAllBtn += `
-		<button type="button" class="inline m-0 border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 text-xs rounded px-1 transition-colors haptic-sm" onclick="exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])">📤 Export DL links</button>
-	`;
-	}
-
-	let linkIndex = 0;
-
-	const filesList = info.files
-		.map((file) => {
+// Core display functions
+const renderTorrentInfo = (
+	info: TorrentInfoResponse | MagnetStatus,
+	isRd: boolean,
+	app?: string,
+	userId?: string,
+	imdbId?: string,
+	mediaType?: 'movie' | 'tv'
+) => {
+	if (isRd) {
+		const rdInfo = info as TorrentInfoResponse;
+		const filesList = rdInfo.files.map((file: ApiTorrentFile, linkIndex: number) => {
 			const actions = [];
-			if (file.selected && isIntact) {
-				const fileLink = info.links[linkIndex++];
-				if (!info.fake) {
+			if (file.selected === 1) {
+				const fileLink = rdInfo.links[linkIndex];
+				if (info.status === 'downloaded' && !rdInfo.fake) {
 					actions.push(
-						renderActionButton('download', {
+						renderButton('download', {
 							link: 'https://real-debrid.com/downloader',
 							linkParam: { name: 'links', value: fileLink },
 							text: 'DL',
 						})
 					);
 				}
-				if (app) {
-					if (info.fake) {
+				if (info.status === 'downloaded' && app) {
+					if (rdInfo.fake) {
 						actions.push(
-							renderActionButton('watch', {
-								onClick: `window.open('/api/watch/instant/${app}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')`,
+							renderButton('watch', {
+								onClick: `window.open('/api/watch/instant/${app}?token=${info.hash}&hash=${info.hash}&fileId=${file.id}')`,
 								text: 'Watch',
 							})
 						);
 					} else {
 						actions.push(
-							renderActionButton('watch', {
-								onClick: `window.open('/api/watch/${app}?token=${rdKey}&link=${fileLink}')`,
+							renderButton('watch', {
+								onClick: `window.open('/api/watch/${app}?token=${fileLink}')`,
 								text: 'Watch',
 							})
 						);
 					}
+
 					let epRegex = /S(\d+)\s?E(\d+)/i;
 					let isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
 					if (mediaType === 'tv' && !isTvEpisode) {
@@ -198,69 +187,140 @@ export const showInfoForRD = async (
 						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
 					) {
 						actions.push(
-							renderActionButton('cast', {
-								onClick: `window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')`,
+							renderButton('cast', {
+								onClick: `window.open('/api/stremio/${userId}/cast/${imdbId}?token=${info.hash}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')`,
 								text: 'Cast',
 							})
 						);
 					}
 				}
 			}
-
 			return renderFileRow({
 				path: file.path,
 				size: file.bytes,
-				isSelected: Boolean(file.selected),
+				isSelected: file.selected === 1,
 				actions,
 			});
-		})
-		.join('');
+		});
+		return filesList.join('');
+	} else {
+		const adInfo = info as MagnetStatus;
+		const filesList = adInfo.links.map((file: MagnetLink) => {
+			const actions = [
+				renderButton('download', {
+					link: 'https://alldebrid.com/service/',
+					linkParam: { name: 'url', value: file.link },
+					text: 'DL',
+				}),
+			];
+			return renderFileRow({
+				path: file.filename,
+				size: file.size,
+				isPlayable: Boolean(isVideo({ path: file.filename })),
+				actions,
+			});
+		});
+		return filesList.join('');
+	}
+};
 
-	// Add library action buttons section after title
-	const libraryActions = `
-	<div class="mb-4">
-		${renderLibraryActionButton('share', { onClick: `window.handleShare({ id: 'rd:${info.id}', hash: '${info.hash}' })` })}
-		${renderLibraryActionButton('delete', { onClick: `window.handleDeleteRdTorrent('${rdKey}', 'rd:${info.id}')` })}
-		${renderLibraryActionButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
-		${renderLibraryActionButton('reinsert', { onClick: `window.handleReinsertTorrentinRd('${rdKey}', { id: 'rd:${info.id}', hash: '${info.hash}' }, true)` })}
-	</div>`;
+// Main export functions
+export const showInfoForRD = async (
+	app: string,
+	rdKey: string,
+	info: TorrentInfoResponse,
+	userId: string = '',
+	imdbId: string = '',
+	mediaType: 'movie' | 'tv' = 'movie'
+): Promise<void> => {
+	let warning = '',
+		downloadAllBtn = '';
+	const isIntact =
+		info.fake || info.files.filter((f) => f.selected === 1).length === info.links.length;
 
-	// Update the wrapping HTML to include a table
+	if (info.progress === 100 && !isIntact) {
+		if (info.links.length === 1) {
+			warning = `<div class="text-sm text-red-400">Warning: This torrent appears to have been rar'ed by Real-Debrid<br/></div>`;
+			downloadAllBtn = renderButton('downloadAll', {
+				link: 'https://real-debrid.com/downloader',
+				linkParam: { name: 'links', value: info.links[0] },
+				text: 'Download RAR',
+			});
+		} else {
+			warning = `<div class="text-sm text-red-400">Warning: Some files have expired</div>`;
+		}
+	}
+
+	if (info.links.length > 1) {
+		downloadAllBtn = renderButton('downloadAll', {
+			link: 'https://real-debrid.com/downloader',
+			linkParam: { name: 'links', value: info.links.join('\n') },
+			text: 'Download all links',
+		});
+	}
+
+	if (info.links.length > 0) {
+		downloadAllBtn += renderButton('exportLinks', {
+			onClick: `exportLinks('${info.original_filename}', [${info.links.map((l) => `'${l}'`).join(',')}])`,
+			text: 'Export DL links',
+		});
+	}
+
+	const torrent = {
+		id: `rd:${info.id}`,
+		hash: info.hash,
+		filename: info.filename,
+		bytes: info.bytes,
+		title: info.filename,
+		mediaType,
+	};
+
+	const libraryActions = !info.fake
+		? `
+    <div class="mb-4 flex justify-center items-center flex-wrap">
+        ${renderButton('share', { onClick: `window.open('${await handleShare(torrent)}')` })}
+        ${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteRdTorrent('${rdKey}', 'rd:${info.id}')` })}
+        ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
+        ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleReinsertTorrentinRd('${rdKey}', { id: 'rd:${info.id}', hash: '${info.hash}' }, true)` })}
+    </div>`
+		: '';
+
 	let html = `<h1 class="text-lg font-bold mt-6 mb-4 text-gray-100">${info.filename}</h1>
-	${libraryActions}
-	<hr class="border-gray-600"/>
-	<div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
-		<table class="table-auto w-full">
-			<tbody>
-				${filesList}
-			</tbody>
-		</table>
-	</div>`;
+    ${libraryActions}
+    <hr class="border-gray-600"/>
+    <div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
+        <table class="table-auto w-full">
+            <tbody>
+                ${renderTorrentInfo(info, true, app, userId, imdbId, mediaType)}
+            </tbody>
+        </table>
+    </div>`;
 
-	if (!info.fake)
+	if (!info.fake) {
+		const infoRows = [
+			{ label: 'Size', value: (info.bytes / 1024 ** 3).toFixed(2) + ' GB' },
+			{ label: 'ID', value: info.id },
+			{ label: 'Original filename', value: info.original_filename },
+			{ label: 'Original size', value: (info.original_bytes / 1024 ** 3).toFixed(2) + ' GB' },
+			{ label: 'Status', value: info.status },
+			...(info.status === 'downloading'
+				? [
+						{ label: 'Progress', value: info.progress.toFixed(2) + '%' },
+						{ label: 'Speed', value: (info.speed / 1024).toFixed(2) + ' KB/s' },
+						{ label: 'Seeders', value: info.seeders },
+					]
+				: []),
+			{ label: 'Added', value: new Date(info.added).toLocaleString() },
+		];
+
 		html = html.replace(
 			'<hr class="border-gray-600"/>',
 			`<div class="text-sm text-gray-200">
-            ${renderInfoTable([
-				{ label: 'Size', value: (info.bytes / 1024 ** 3).toFixed(2) + ' GB' },
-				{ label: 'ID', value: info.id },
-				{ label: 'Original filename', value: info.original_filename },
-				{
-					label: 'Original size',
-					value: (info.original_bytes / 1024 ** 3).toFixed(2) + ' GB',
-				},
-				{ label: 'Status', value: info.status },
-				...(info.status === 'downloading'
-					? [
-							{ label: 'Progress', value: info.progress.toFixed(2) + '%' },
-							{ label: 'Speed', value: (info.speed / 1024).toFixed(2) + ' KB/s' },
-							{ label: 'Seeders', value: info.seeders },
-						]
-					: []),
-				{ label: 'Added', value: new Date(info.added).toLocaleString() },
-			])}
-        ${warning}${downloadAllBtn}`
+                ${renderInfoTable(infoRows)}
+                ${warning}${downloadAllBtn}
+            </div>`
 		);
+	}
 
 	await Swal.fire({
 		html,
@@ -274,13 +334,6 @@ export const showInfoForRD = async (
 		width: '800px',
 		showCloseButton: true,
 		inputAutoFocus: true,
-		didOpen: () => {
-			// Make handlers available to window for the onclick events
-			(window as any).handleShare = handleShare;
-			(window as any).handleDeleteRdTorrent = handleDeleteRdTorrent;
-			(window as any).handleCopyMagnet = handleCopyMagnet;
-			(window as any).handleReinsertTorrentinRd = handleReinsertTorrentinRd;
-		},
 	});
 };
 
@@ -291,56 +344,40 @@ export const showInfoForAD = async (
 	userId: string = '',
 	imdbId: string = ''
 ): Promise<void> => {
-	const filesList = info.links
-		.map((file) => {
-			const actions = [
-				renderActionButton('download', {
-					link: 'https://alldebrid.com/service/',
-					linkParam: { name: 'url', value: file.link },
-					text: 'DL',
-				}),
-			];
+	const torrent = {
+		id: `ad:${info.id}`,
+		hash: info.hash,
+		filename: info.filename,
+		bytes: info.size,
+		title: info.filename,
+		mediaType: 'other',
+	};
 
-			return renderFileRow({
-				path: file.filename,
-				size: file.size,
-				isPlayable: Boolean(isVideo({ path: file.filename })),
-				actions,
-			});
-		})
-		.join('');
-
-	// Add library action buttons section after title
 	const libraryActions = `
-	<div class="mb-4">
-		${renderLibraryActionButton('share', { onClick: `window.handleShare({ id: 'ad:${info.id}', hash: '${info.hash}' })` })}
-		${renderLibraryActionButton('delete', { onClick: `window.handleDeleteAdTorrent('${rdKey}', 'ad:${info.id}')` })}
-		${renderLibraryActionButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
-		${renderLibraryActionButton('reinsert', { onClick: `window.handleRestartTorrent('${rdKey}', '${info.id}')` })}
-	</div>`;
+    <div class="mb-4 flex justify-center items-center flex-wrap">
+        ${renderButton('share', { onClick: `router.push('${await handleShare(torrent)}')` })}
+        ${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteAdTorrent('${rdKey}', 'ad:${info.id}')` })}
+        ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
+        ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleRestartTorrent('${rdKey}', '${info.id}')` })}
+    </div>`;
 
-	// Update the wrapping HTML to include a table
-	let html = `<h1 class="text-lg font-bold mt-6 mb-4 text-gray-100">${info.filename}</h1>
-	${libraryActions}
-	<hr class="border-gray-600"/>
-	<div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
-		<table class="table-auto w-full">
-			<tbody>
-				${filesList}
-			</tbody>
-		</table>
-	</div>`;
-	html = html.replace(
-		'<hr class="border-gray-600"/>',
-		`<div class="text-sm text-gray-200">
-		${renderInfoTable([
+	const html = `<h1 class="text-lg font-bold mt-6 mb-4 text-gray-100">${info.filename}</h1>
+    ${libraryActions}
+    <div class="text-sm text-gray-200">
+        ${renderInfoTable([
 			{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
 			{ label: 'ID', value: info.id },
 			{ label: 'Status', value: `${info.status} (code: ${info.statusCode})` },
 			{ label: 'Added', value: new Date(info.uploadDate * 1000).toLocaleString() },
 		])}
-	</div>`
-	);
+    </div>
+    <div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
+        <table class="table-auto w-full">
+            <tbody>
+                ${renderTorrentInfo(info, false, app, userId, imdbId)}
+            </tbody>
+        </table>
+    </div>`;
 
 	await Swal.fire({
 		html,
@@ -354,12 +391,5 @@ export const showInfoForAD = async (
 		width: '800px',
 		showCloseButton: true,
 		inputAutoFocus: true,
-		didOpen: () => {
-			// Make handlers available to window for the onclick events
-			(window as any).handleShare = handleShare;
-			(window as any).handleDeleteAdTorrent = handleDeleteAdTorrent;
-			(window as any).handleCopyMagnet = handleCopyMagnet;
-			(window as any).handleRestartTorrent = handleRestartTorrent;
-		},
 	});
 };
