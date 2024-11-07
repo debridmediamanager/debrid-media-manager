@@ -1,3 +1,4 @@
+import { Logo } from '@/components/Logo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useRouter } from 'next/router';
 import { ComponentType, useEffect, useState } from 'react';
@@ -31,6 +32,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			// Render a loading indicator or placeholder on initial load
 			return (
 				<div className="flex min-h-screen flex-col items-center justify-center">
+					<Logo />
 					<h1 className="text-2xl">Debrid Media Manager is loading...</h1>
 					{!supportsLookbehind() && (
 						<div className="bg-red-900">
