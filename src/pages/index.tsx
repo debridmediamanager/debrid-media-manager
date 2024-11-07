@@ -19,7 +19,17 @@ import { withAuth } from '../utils/withAuth';
 
 function IndexPage() {
 	const router = useRouter();
-	const { rdUser, adUser, rdError, adError, traktUser, traktError } = useCurrentUser();
+	const {
+		rdUser,
+		adUser,
+		rdError,
+		adError,
+		traktUser,
+		traktError,
+		hasRDAuth,
+		hasADAuth,
+		hasTraktAuth,
+	} = useCurrentUser();
 	const { loginWithRealDebrid, loginWithAllDebrid } = useDebridLogin();
 	const [browseTerms] = useState(getTerms(2));
 
@@ -99,7 +109,9 @@ function IndexPage() {
 			</Head>
 			<Logo />
 			<Toaster position="bottom-right" />
-			{rdUser || adUser ? (
+			{(rdUser || rdError || !hasRDAuth) &&
+			(adUser || adError || !hasADAuth) &&
+			(traktUser || traktError || !hasTraktAuth) ? (
 				<>
 					<h1 className="mb-2 text-xl font-bold text-white">
 						Debrid Media Manager{' '}
@@ -160,17 +172,9 @@ function IndexPage() {
 					</div>
 				</>
 			) : (
-				<>
-					<h1 className="pb-4 text-center text-xl text-white">
-						Debrid Media Manager is loading...
-					</h1>
-					<button
-						onClick={() => handleLogout(undefined, router)}
-						className="haptic-sm rounded border border-black px-4 py-2 text-sm transition-colors hover:bg-black hover:text-white"
-					>
-						Logout All
-					</button>
-				</>
+				<h1 className="pb-4 text-center text-xl text-white">
+					Debrid Media Manager is loading...
+				</h1>
 			)}
 		</div>
 	);

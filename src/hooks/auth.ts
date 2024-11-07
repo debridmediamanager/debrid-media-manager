@@ -97,6 +97,10 @@ export const useCurrentUser = () => {
 	const [adError, setAdError] = useState<Error | null>(null);
 	const [traktError, setTraktError] = useState<Error | null>(null);
 
+	const hasRDAuth = !!rdToken;
+	const hasADAuth = !!adToken;
+	const hasTraktAuth = !!traktToken;
+
 	useEffect(() => {
 		(async () => {
 			try {
@@ -130,5 +134,15 @@ export const useCurrentUser = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [rdToken, adToken, traktToken, router]);
 
-	return { rdUser, rdError, adUser, adError, traktUser, traktError };
+	return {
+		rdUser,
+		rdError,
+		hasRDAuth,
+		adUser,
+		adError,
+		hasADAuth,
+		traktUser,
+		traktError,
+		hasTraktAuth,
+	};
 };
