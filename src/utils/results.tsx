@@ -17,15 +17,15 @@ export const svcColor = (id: string) => (id.startsWith('rd:') ? '[#b5d496]' : '[
 
 export const torrentTag = (id: string) =>
 	id.startsWith('rd:') ? (
-		<span className="text-[8px] text-black bg-[#b5d496]">Real-Debrid</span>
+		<span className="bg-[#b5d496] text-[8px] text-black">Real-Debrid</span>
 	) : (
-		<span className="text-[8px] text-black bg-[#fbc730]">AllDebrid</span>
+		<span className="bg-[#fbc730] text-[8px] text-black">AllDebrid</span>
 	);
 export const torrentPrefix = (id: string) =>
 	id.startsWith('rd:') ? (
-		<span className="text-xs text-black bg-[#b5d496]">RD</span>
+		<span className="bg-[#b5d496] text-xs text-black">RD</span>
 	) : (
-		<span className="text-[8px] text-black bg-[#fbc730]">AD</span>
+		<span className="bg-[#fbc730] text-[8px] text-black">AD</span>
 	);
 
 export const btnIcon = (avail: boolean) => (avail ? `⚡` : <FaDownload className="mr-2 inline" />);

@@ -58,7 +58,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 		videoCount: number;
 	}) => (
 		<span
-			className="inline-block px-2 py-1 rounded bg-opacity-50 bg-black cursor-pointer hover:bg-opacity-75 haptic-sm"
+			className="haptic-sm inline-block cursor-pointer rounded bg-black bg-opacity-50 px-2 py-1 hover:bg-opacity-75"
 			onClick={() => handleShowInfo(result)}
 		>
 			📂&nbsp;{getEpisodeCountLabel(videoCount, expectedEpisodeCount)}
@@ -74,7 +74,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	};
 
 	return (
-		<div className="mx-1 my-1 overflow-x-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2">
+		<div className="mx-1 my-1 grid grid-cols-1 gap-2 overflow-x-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
 			{filteredResults.map((r: SearchResult, i: number) => {
 				const downloaded = isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
 				const downloading = isDownloading('rd', r.hash) || isDownloading('ad', r.hash);
@@ -100,23 +100,15 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 				return (
 					<div
 						key={i}
-						className={`
-                            border-2 border-gray-700 
-                            ${borderColor(downloaded, downloading)}
-                            ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable)}
-                            shadow hover:shadow-lg 
-                            transition-shadow duration-200 ease-in 
-                            rounded-lg overflow-hidden 
-                            bg-opacity-30
-                        `}
+						className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable)} overflow-hidden rounded-lg bg-opacity-30 shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
 					>
-						<div className="p-1 space-y-2">
-							<h2 className="text-sm font-bold leading-tight break-words line-clamp-2 overflow-hidden text-ellipsis">
+						<div className="space-y-2 p-1">
+							<h2 className="line-clamp-2 overflow-hidden text-ellipsis break-words text-sm font-bold leading-tight">
 								{r.title}
 							</h2>
 
 							{r.videoCount > 0 ? (
-								<div className="text-gray-300 text-xs">
+								<div className="text-xs text-gray-300">
 									<EpisodeCountDisplay result={r} videoCount={r.videoCount} />
 									<span className="ml-2">
 										Total: {fileSize(r.fileSize)} GB; Median:{' '}
@@ -124,7 +116,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 									</span>
 								</div>
 							) : (
-								<div className="text-gray-300 text-xs">
+								<div className="text-xs text-gray-300">
 									Total: {fileSize(r.fileSize)} GB
 								</div>
 							)}
@@ -133,7 +125,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 								{/* RD */}
 								{rdKey && inLibrary('rd', r.hash) && (
 									<button
-										className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
+										className="haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50"
 										onClick={() => deleteRd(r.hash)}
 									>
 										<FaTimes className="mr-2 inline" />
@@ -142,7 +134,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 								)}
 								{rdKey && notInLibrary('rd', r.hash) && (
 									<button
-										className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 text-xs rounded inline px-1 transition-colors haptic-sm`}
+										className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors`}
 										onClick={() => addRd(r.hash)}
 									>
 										{btnIcon(r.rdAvailable)}
@@ -153,7 +145,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 								{/* AD */}
 								{adKey && inLibrary('ad', r.hash) && (
 									<button
-										className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
+										className="haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50"
 										onClick={() => deleteAd(r.hash)}
 									>
 										<FaTimes className="mr-2 inline" />
@@ -162,7 +154,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 								)}
 								{adKey && notInLibrary('ad', r.hash) && (
 									<button
-										className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 text-xs rounded inline px-1 transition-colors haptic-sm`}
+										className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors`}
 										onClick={() => addAd(r.hash)}
 									>
 										{btnIcon(r.adAvailable)}
@@ -172,7 +164,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 
 								{rdKey && dmmCastToken && castableFileIds.length > 0 && (
 									<button
-										className="border-2 border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
+										className="haptic-sm inline rounded border-2 border-gray-500 bg-gray-900/30 px-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50"
 										onClick={() => handleCast(r.hash, castableFileIds)}
 									>
 										Cast✨
@@ -181,7 +173,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 
 								{rdKey && player && r.rdAvailable && (
 									<button
-										className="border-2 border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
+										className="haptic-sm inline rounded border-2 border-teal-500 bg-teal-900/30 px-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50"
 										onClick={() =>
 											window.open(
 												`/api/watch/instant/${player}?token=${rdKey}&hash=${r.hash}&fileId=${getBiggestFileId(r)}`
@@ -193,7 +185,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 								)}
 
 								<button
-									className="border-2 border-pink-500 bg-pink-900/30 text-pink-100 hover:bg-pink-800/50 text-xs rounded inline px-1 transition-colors haptic-sm"
+									className="haptic-sm inline rounded border-2 border-pink-500 bg-pink-900/30 px-1 text-xs text-pink-100 transition-colors hover:bg-pink-800/50"
 									onClick={() => handleCopyMagnet(r.hash)}
 								>
 									<FaMagnet className="inline" /> Magnet

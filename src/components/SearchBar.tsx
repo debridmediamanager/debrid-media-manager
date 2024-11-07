@@ -101,7 +101,7 @@ export function SearchBar({
 			<form onSubmit={handleSearch}>
 				<div className="flex items-center border-b-2 border-gray-500 py-2">
 					<input
-						className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none text-lg"
+						className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-lg leading-tight text-white focus:outline-none"
 						type="text"
 						placeholder={placeholder}
 						value={typedQuery}
@@ -110,7 +110,7 @@ export function SearchBar({
 					/>
 					<button
 						type="submit"
-						className="flex-shrink-0 px-4 py-2 rounded-lg border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-all text-sm font-medium haptic-sm"
+						className="haptic-sm flex-shrink-0 rounded-lg border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-all hover:bg-gray-700/50"
 					>
 						Search
 					</button>
@@ -120,7 +120,7 @@ export function SearchBar({
 			{showSuggestions && suggestions.length > 0 && (
 				<div
 					ref={suggestionsRef}
-					className="absolute z-50 w-full bg-gray-800/95 backdrop-blur-sm border border-gray-700 rounded-xl shadow-2xl mt-2 overflow-hidden divide-y divide-gray-700/50"
+					className="absolute z-50 mt-2 w-full divide-y divide-gray-700/50 overflow-hidden rounded-xl border border-gray-700 bg-gray-800/95 shadow-2xl backdrop-blur-sm"
 				>
 					{suggestions.map((suggestion, index) => {
 						const media = suggestion.movie || suggestion.show;
@@ -128,28 +128,28 @@ export function SearchBar({
 						return (
 							<div
 								key={`${media.ids?.trakt}-${index}`}
-								className="relative h-[64px] cursor-pointer group overflow-hidden transition-all duration-300 ease-in-out"
+								className="group relative h-[64px] cursor-pointer overflow-hidden transition-all duration-300 ease-in-out"
 								onClick={() => handleSuggestionClick(suggestion)}
 							>
 								{/* Content */}
-								<div className="relative z-20 h-full flex items-center">
-									<div className="flex items-center justify-between w-[calc(100%-42px)] px-3">
-										<div className="flex items-center space-x-2 max-w-[70%]">
-											<span className="font-medium text-base text-white group-hover:text-blue-400 transition-colors line-clamp-1">
+								<div className="relative z-20 flex h-full items-center">
+									<div className="flex w-[calc(100%-42px)] items-center justify-between px-3">
+										<div className="flex max-w-[70%] items-center space-x-2">
+											<span className="line-clamp-1 text-base font-medium text-white transition-colors group-hover:text-blue-400">
 												{media.title}
 											</span>
-											<span className="text-sm text-gray-400 whitespace-nowrap">
+											<span className="whitespace-nowrap text-sm text-gray-400">
 												({media.year})
 											</span>
 										</div>
-										<span className="text-xs text-gray-400 bg-gray-900/80 px-2 py-0.5 rounded-full whitespace-nowrap">
+										<span className="whitespace-nowrap rounded-full bg-gray-900/80 px-2 py-0.5 text-xs text-gray-400">
 											{suggestion.type.charAt(0).toUpperCase() +
 												suggestion.type.slice(1)}
 										</span>
 									</div>
 
 									{/* Right-side poster (full view) */}
-									<div className="absolute right-0 top-0 h-full aspect-[2/3] z-30">
+									<div className="absolute right-0 top-0 z-30 aspect-[2/3] h-full">
 										{media.ids?.imdb && (
 											<div className="h-full w-full">
 												<Poster

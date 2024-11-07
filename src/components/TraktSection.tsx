@@ -7,16 +7,16 @@ interface TraktSectionProps {
 
 export function TraktSection({ traktUser }: TraktSectionProps) {
 	return (
-		<div className="grid grid-cols-2 gap-3 w-full">
+		<div className="grid w-full grid-cols-2 gap-3">
 			<Link
 				href="/trakt/movies"
-				className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium haptic"
+				className="haptic flex items-center justify-center gap-2 rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm font-medium text-red-100 transition-colors hover:bg-red-800/50"
 			>
 				🎥 Movies
 			</Link>
 			<Link
 				href="/trakt/shows"
-				className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium haptic"
+				className="haptic flex items-center justify-center gap-2 rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm font-medium text-red-100 transition-colors hover:bg-red-800/50"
 			>
 				📺 Shows
 			</Link>
@@ -24,19 +24,19 @@ export function TraktSection({ traktUser }: TraktSectionProps) {
 				<>
 					<Link
 						href="/trakt/watchlist"
-						className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium haptic"
+						className="haptic flex items-center justify-center gap-2 rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm font-medium text-red-100 transition-colors hover:bg-red-800/50"
 					>
 						👀 Watchlist
 					</Link>
 					<Link
 						href="/trakt/collection"
-						className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium haptic"
+						className="haptic flex items-center justify-center gap-2 rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm font-medium text-red-100 transition-colors hover:bg-red-800/50"
 					>
 						🗃️ Collections
 					</Link>
 					<Link
 						href="/trakt/mylists"
-						className="flex items-center justify-center gap-2 p-3 rounded border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 transition-colors text-sm font-medium haptic"
+						className="haptic flex items-center justify-center gap-2 rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm font-medium text-red-100 transition-colors hover:bg-red-800/50"
 					>
 						🧏🏻‍♀️ My lists
 					</Link>

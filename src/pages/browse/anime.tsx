@@ -41,29 +41,29 @@ function Anime() {
 				<title>Debrid Media Manager - Anime</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			<div className="flex justify-between items-center mb-2">
+			<div className="mb-2 flex items-center justify-between">
 				<h1 className="text-xl font-bold">Anime</h1>
 				<Link
 					href="/"
-					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+					className="rounded bg-cyan-800 px-2 py-1 text-sm text-white hover:bg-cyan-700"
 				>
 					Go Home
 				</Link>
 			</div>
 			{loading && (
-				<div className="flex justify-center items-center mt-4">
-					<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+				<div className="mt-4 flex items-center justify-center">
+					<div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
 				</div>
 			)}
 			{errorMessage && (
-				<div className="mt-4 bg-red-900 border border-red-400 px-4 py-3 rounded relative">
+				<div className="relative mt-4 rounded border border-red-400 bg-red-900 px-4 py-3">
 					<strong className="font-bold">Error:</strong>
 					<span className="block sm:inline"> {errorMessage}</span>
 				</div>
 			)}
 			{searchResults.length > 0 && (
 				<>
-					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
+					<div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
 						{searchResults.map(
 							(value: { id: string; poster_url: string }, idx: number) => {
 								return (

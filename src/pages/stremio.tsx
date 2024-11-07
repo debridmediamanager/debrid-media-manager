@@ -9,8 +9,8 @@ function StremioPage() {
 
 	if (!dmmCastToken) {
 		return (
-			<div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
-				<h1 className="text-xl text-center text-white">
+			<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900">
+				<h1 className="text-center text-xl text-white">
 					Debrid Media Manager is loading...
 				</h1>
 			</div>
@@ -18,7 +18,7 @@ function StremioPage() {
 	}
 
 	return (
-		<div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900">
+		<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 p-4">
 			<Head>
 				<title>Debrid Media Manager - Stremio</title>
 			</Head>
@@ -30,23 +30,23 @@ function StremioPage() {
 				alt="logo"
 				className="mb-4"
 			/>
-			<h1 className="text-2xl text-purple-400 font-bold mb-4">DMM Cast</h1>
+			<h1 className="mb-4 text-2xl font-bold text-purple-400">DMM Cast</h1>
 			<div className="flex flex-col items-center text-white">
 				<strong>Cast from any device to Stremio</strong>
-				<div className="mt-4 mb-4 h-max text-center leading-8">
+				<div className="mb-4 mt-4 h-max text-center leading-8">
 					<Link
 						href={`stremio://${window.location.origin.replace(
 							/^https?:\/\//,
 							''
 						)}/api/stremio/${dmmCastToken}/manifest.json`}
-						className="text-md m-1 px-4 py-2 rounded border-2 border-purple-500 bg-purple-800/30 text-gray-100 hover:bg-purple-700/50 transition-colors font-medium haptic-sm"
+						className="text-md haptic-sm m-1 rounded border-2 border-purple-500 bg-purple-800/30 px-4 py-2 font-medium text-gray-100 transition-colors hover:bg-purple-700/50"
 					>
 						🧙🏻‍♂️ Install
 					</Link>
 					<div className="mt-2 text-gray-300">
 						or copy this link and paste it in Stremio&apos;s search bar
 					</div>
-					<code className="text-sm bg-gray-800 p-2 rounded mt-2 text-gray-300">
+					<code className="mt-2 rounded bg-gray-800 p-2 text-sm text-gray-300">
 						{window.location.origin}/api/stremio/{dmmCastToken}/manifest.json
 					</code>
 				</div>
@@ -65,8 +65,7 @@ function StremioPage() {
 
 			<Link
 				href="/"
-				className="mt-6 px-4 py-2 rounded border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100
-						hover:bg-cyan-800/50 transition-colors text-sm font-medium haptic-sm"
+				className="haptic-sm mt-6 rounded border-2 border-cyan-500 bg-cyan-900/30 px-4 py-2 text-sm font-medium text-cyan-100 transition-colors hover:bg-cyan-800/50"
 			>
 				Go Home
 			</Link>

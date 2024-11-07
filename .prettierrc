@@ -1,9 +1,18 @@
 {
-  "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-sort-json"],
-  "singleQuote": true,
-  "tabWidth": 4,
-  "useTabs": true,
-  "semi": true,
-  "trailingComma": "es5",
-  "printWidth": 100
+  "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-sort-json", "prettier-plugin-tailwindcss"],
+  "printWidth": 100,                  
+  "tabWidth": 4,                      
+  "useTabs": true,                    
+  "semi": true,                       
+  "singleQuote": true,                
+  "quoteProps": "as-needed",          
+  "jsxSingleQuote": false,            
+  "trailingComma": "es5",             
+  "bracketSpacing": true,             
+  "bracketSameLine": false,           
+  "arrowParens": "always",            
+  "proseWrap": "preserve",            
+  "htmlWhitespaceSensitivity": "css", 
+  "endOfLine": "lf",                  
+  "embeddedLanguageFormatting": "auto"
 }
