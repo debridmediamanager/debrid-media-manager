@@ -109,9 +109,7 @@ function IndexPage() {
 			</Head>
 			<Logo />
 			<Toaster position="bottom-right" />
-			{(rdUser || rdError || !hasRDAuth) &&
-			(adUser || adError || !hasADAuth) &&
-			(traktUser || traktError || !hasTraktAuth) ? (
+			{(rdUser || !hasRDAuth) && (adUser || !hasADAuth) && (traktUser || !hasTraktAuth) ? (
 				<>
 					<h1 className="mb-2 text-xl font-bold text-white">
 						Debrid Media Manager{' '}
