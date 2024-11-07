@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { BrowseSection } from '../components/BrowseSection';
 import { InfoSection } from '../components/InfoSection';
+import { Logo } from '../components/Logo';
 import { MainActions } from '../components/MainActions';
 import { SearchBar } from '../components/SearchBar';
 import { ServiceCard } from '../components/ServiceCard';
@@ -20,7 +21,6 @@ function IndexPage() {
 	const router = useRouter();
 	const { rdUser, adUser, rdError, adError, traktUser, traktError } = useCurrentUser();
 	const { loginWithRealDebrid, loginWithAllDebrid } = useDebridLogin();
-	const [deleting, setDeleting] = useState(false);
 	const [browseTerms] = useState(getTerms(2));
 
 	useEffect(() => {
@@ -55,18 +55,15 @@ function IndexPage() {
 			toast.error('Trakt get user info failed');
 		}
 		if (localStorage.getItem('next_action') === 'clear_cache') {
-			setDeleting(true);
 			localStorage.removeItem('next_action');
 			const request = window.indexedDB.deleteDatabase('DMMDB');
 			request.onsuccess = function () {
 				window.location.assign('/');
 			};
 			request.onerror = function () {
-				setDeleting(false);
 				toast.error('Database deletion failed', genericToastOptions);
 			};
 			request.onblocked = function () {
-				setDeleting(false);
 				toast(
 					'Database is still open, refresh the page first and then try deleting again',
 					genericToastOptions
@@ -100,18 +97,9 @@ function IndexPage() {
 			<Head>
 				<title>Debrid Media Manager - Home</title>
 			</Head>
-			<svg className="h-24 w-24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-				<rect x="25" y="25" width="150" height="150" fill="#2C3E50" rx="20" ry="20" />
-				<circle cx="100" cy="100" r="60" fill="#00A0B0" />
-				<path d="M85,65 L85,135 L135,100 Z" fill="#ECF0F1" />
-				<path d="M60,90 Q80,60 100,90 T140,90" fill="#CC333F" />
-				<path
-					d="M75,121 L80,151 L90,136 L100,151 L110,136 L120,151 L125,121 Z"
-					fill="#EDC951"
-				/>
-			</svg>
+			<Logo />
 			<Toaster position="bottom-right" />
-			{!deleting && (rdUser || adUser) ? (
+			{rdUser || adUser ? (
 				<>
 					<h1 className="mb-2 text-xl font-bold text-white">
 						Debrid Media Manager{' '}
@@ -176,11 +164,6 @@ function IndexPage() {
 					<h1 className="pb-4 text-center text-xl text-white">
 						Debrid Media Manager is loading...
 					</h1>
-					{deleting && (
-						<h3 className="text-md pb-4 text-center text-white">
-							If it gets stuck here, close all DMM tabs first
-						</h3>
-					)}
 					<button
 						onClick={() => handleLogout(undefined, router)}
 						className="haptic-sm rounded border border-black px-4 py-2 text-sm transition-colors hover:bg-black hover:text-white"
