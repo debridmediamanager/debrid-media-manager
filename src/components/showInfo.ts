@@ -117,10 +117,10 @@ const renderFileRow = (file: FileRowProps): string => {
 	const { size, unit } = formatSize(file.size);
 	return `
         <tr class="${file.isPlayable || file.isSelected ? 'bg-gray-800 font-bold' : 'font-normal'} hover:bg-gray-700 rounded">
-            <td class="text-right whitespace-nowrap pr-2" style="width: auto;">
+            <td class="text-right whitespace-nowrap pr-2">
                 ${file.actions.join('')}
             </td>
-            <td class="truncate" style="width: 100%; min-width: 0;">
+            <td class="whitespace-nowrap">
                 <span class="text-blue-300">${file.path}</span>
                 <span class="text-gray-300 ml-2">${size.toFixed(2)} ${unit}</span>
             </td>
@@ -302,11 +302,13 @@ export const showInfoForRD = async (
     ${libraryActions}
     <hr class="border-gray-600"/>
     <div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
-        <table class="table-auto w-full">
-            <tbody>
-                ${renderTorrentInfo(info, true, rdKey, app, userId, imdbId, mediaType)}
-            </tbody>
-        </table>
+        <div class="overflow-x-auto" style="max-width: 100%;">
+            <table class="table-auto">
+                <tbody>
+                    ${renderTorrentInfo(info, true, rdKey, app, userId, imdbId, mediaType)}
+                </tbody>
+            </table>
+        </div>
     </div>`;
 
 	if (!info.fake) {
@@ -394,11 +396,13 @@ export const showInfoForAD = async (
 		])}
     </div>
     <div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
-        <table class="table-auto w-full">
-            <tbody>
-                ${renderTorrentInfo(info, false, '', app, userId, imdbId)}
-            </tbody>
-        </table>
+        <div class="overflow-x-auto" style="max-width: 100%;">
+            <table class="table-auto">
+                <tbody>
+                    ${renderTorrentInfo(info, false, '', app, userId, imdbId)}
+                </tbody>
+            </table>
+        </div>
     </div>`;
 
 	await Swal.fire({
