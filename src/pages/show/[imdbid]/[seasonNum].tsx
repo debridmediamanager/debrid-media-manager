@@ -328,19 +328,19 @@ const TvSearch: FunctionComponent = () => {
 		: {};
 
 	if (isLoading) {
-		return <div className="mx-2 my-1 bg-gray-900 min-h-screen text-white">Loading...</div>;
+		return <div className="mx-2 my-1 min-h-screen bg-gray-900 text-white">Loading...</div>;
 	}
 
 	if (!showInfo) {
 		return (
-			<div className="mx-2 my-1 bg-gray-900 min-h-screen text-white">
+			<div className="mx-2 my-1 min-h-screen bg-gray-900 text-white">
 				No show information available
 			</div>
 		);
 	}
 
 	return (
-		<div className="max-w-full bg-gray-900 min-h-screen text-gray-100">
+		<div className="min-h-screen max-w-full bg-gray-900 text-gray-100">
 			<Head>
 				<title>
 					Debrid Media Manager - TV Show - {showInfo.title} - Season {seasonNum}
@@ -349,7 +349,7 @@ const TvSearch: FunctionComponent = () => {
 			<Toaster position="bottom-right" />
 
 			<div
-				className="grid grid-flow-col auto-cols-auto auto-rows-auto gap-2"
+				className="grid auto-cols-auto grid-flow-col auto-rows-auto gap-2"
 				style={backdropStyle}
 			>
 				{(showInfo.poster && (
@@ -358,14 +358,14 @@ const TvSearch: FunctionComponent = () => {
 						height={300}
 						src={showInfo.poster}
 						alt="Show poster"
-						className="shadow-lg row-span-5"
+						className="row-span-5 shadow-lg"
 					/>
 				)) || <Poster imdbId={imdbid as string} title={showInfo.title} />}
 
 				<div className="flex justify-end p-2">
 					<Link
 						href="/"
-						className="w-fit h-fit text-sm border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 py-1 px-2 rounded transition-colors"
+						className="h-fit w-fit rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
 					>
 						Go Home
 					</Link>
@@ -375,12 +375,12 @@ const TvSearch: FunctionComponent = () => {
 					{showInfo.title} - Season {seasonNum}
 				</h2>
 
-				<div className="w-fit h-fit bg-slate-900/75" onClick={() => setDescLimit(0)}>
+				<div className="h-fit w-fit bg-slate-900/75" onClick={() => setDescLimit(0)}>
 					{descLimit > 0
 						? showInfo.description.substring(0, descLimit) + '..'
 						: showInfo.description}{' '}
 					{showInfo.imdb_score > 0 && (
-						<div className="text-yellow-100 inline">
+						<div className="inline text-yellow-100">
 							<Link href={`https://www.imdb.com/title/${imdbid}/`} target="_blank">
 								IMDB Score:{' '}
 								{showInfo.imdb_score < 10
@@ -401,7 +401,7 @@ const TvSearch: FunctionComponent = () => {
 							<Link
 								key={idx}
 								href={`/show/${imdbid}/${season}`}
-								className={`inline-flex items-center p-1 text-xs border-2 border-${color}-500 bg-${color}-900/30 text-${color}-100 hover:bg-${color}-800/50 rounded mr-2 mb-1 transition-colors`}
+								className={`inline-flex items-center border-2 p-1 text-xs border-${color}-500 bg-${color}-900/30 text-${color}-100 hover:bg-${color}-800/50 mb-1 mr-2 rounded transition-colors`}
 							>
 								<span role="img" aria-label="tv show" className="mr-2">
 									📺
@@ -418,7 +418,7 @@ const TvSearch: FunctionComponent = () => {
 
 				<div>
 					<button
-						className="mr-2 mt-0 mb-1 border-2 border-rose-500 bg-rose-900/30 text-rose-100 hover:bg-rose-800/50 p-1 text-xs rounded transition-colors haptic-sm"
+						className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-rose-500 bg-rose-900/30 p-1 text-xs text-rose-100 transition-colors hover:bg-rose-800/50"
 						onClick={() => {
 							showSubscribeModal();
 						}}
@@ -427,7 +427,7 @@ const TvSearch: FunctionComponent = () => {
 					</button>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
-							className="mr-2 mt-0 mb-1 border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 p-1 text-xs rounded transition-colors haptic-sm"
+							className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
 							onClick={() => addRd(getFirstAvailableRdTorrent()!.hash)}
 						>
 							<b>⚡Instant RD</b>
@@ -435,7 +435,7 @@ const TvSearch: FunctionComponent = () => {
 					)}
 					{onlyShowCached && totalUncachedCount > 0 && (
 						<button
-							className="mr-2 mt-0 mb-1 border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 p-1 text-xs rounded transition-colors haptic-sm"
+							className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-blue-500 bg-blue-900/30 p-1 text-xs text-blue-100 transition-colors hover:bg-blue-800/50"
 							onClick={() => {
 								setOnlyShowCached(false);
 							}}
@@ -447,10 +447,10 @@ const TvSearch: FunctionComponent = () => {
 			</div>
 
 			{searchState === 'loading' && (
-				<div className="flex justify-center items-center bg-black">Loading...</div>
+				<div className="flex items-center justify-center bg-black">Loading...</div>
 			)}
 			{searchState === 'requested' && (
-				<div className="mt-4 bg-yellow-500 border border-yellow-400 text-yellow-900 px-4 py-3 rounded relative">
+				<div className="relative mt-4 rounded border border-yellow-400 bg-yellow-500 px-4 py-3 text-yellow-900">
 					<strong className="font-bold">Notice:</strong>
 					<span className="block sm:inline">
 						{' '}
@@ -459,7 +459,7 @@ const TvSearch: FunctionComponent = () => {
 				</div>
 			)}
 			{searchState === 'processing' && (
-				<div className="mt-4 bg-blue-700 border border-blue-400 text-blue-100 px-4 py-3 rounded relative">
+				<div className="relative mt-4 rounded border border-blue-400 bg-blue-700 px-4 py-3 text-blue-100">
 					<strong className="font-bold">Notice:</strong>
 					<span className="block sm:inline">
 						{' '}
@@ -468,15 +468,15 @@ const TvSearch: FunctionComponent = () => {
 				</div>
 			)}
 			{errorMessage && (
-				<div className="mt-4 bg-red-900 border border-red-400 px-4 py-3 rounded relative">
+				<div className="relative mt-4 rounded border border-red-400 bg-red-900 px-4 py-3">
 					<strong className="font-bold">Error:</strong>
 					<span className="block sm:inline"> {errorMessage}</span>
 				</div>
 			)}
 
-			<div className="flex items-center border-b-2 border-gray-600 py-2 mb-1">
+			<div className="mb-1 flex items-center border-b-2 border-gray-600 py-2">
 				<input
-					className="appearance-none bg-transparent border-none w-full text-sm text-gray-100 mr-3 py-1 px-2 leading-tight focus:outline-none"
+					className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 text-sm leading-tight text-gray-100 focus:outline-none"
 					type="text"
 					id="query"
 					placeholder="filter results, supports regex"
@@ -486,18 +486,18 @@ const TvSearch: FunctionComponent = () => {
 					}}
 				/>
 				<span
-					className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300 cursor-pointer"
+					className="me-2 cursor-pointer rounded bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
 					onClick={() => setQuery('')}
 				>
 					Reset
 				</span>
 			</div>
 
-			<div className="flex items-center gap-2 p-2 mb-2 overflow-x-auto">
+			<div className="mb-2 flex items-center gap-2 overflow-x-auto p-2">
 				{getColorScale(expectedEpisodeCount).map((scale, idx) => (
 					<span
 						key={idx}
-						className={`bg-${scale.color} text-white text-xs px-2 py-1 rounded whitespace-nowrap cursor-pointer`}
+						className={`bg-${scale.color} cursor-pointer whitespace-nowrap rounded px-2 py-1 text-xs text-white`}
 						onClick={() => {
 							const queryText = getQueryForEpisodeCount(
 								scale.threshold,
@@ -536,7 +536,7 @@ const TvSearch: FunctionComponent = () => {
 
 			{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (
 				<button
-					className="w-full border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 py-2 px-4 my-4 rounded transition-colors duration-200 shadow-md hover:shadow-lg font-medium haptic"
+					className="haptic my-4 w-full rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 font-medium text-gray-100 shadow-md transition-colors duration-200 hover:bg-gray-700/50 hover:shadow-lg"
 					onClick={() => {
 						setCurrentPage((prev) => prev + 1);
 						fetchData(imdbid as string, parseInt(seasonNum as string), currentPage + 1);

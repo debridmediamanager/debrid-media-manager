@@ -54,7 +54,7 @@ export default function AllDebridLoginPage() {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center h-screen">
+		<div className="flex h-screen flex-col items-center justify-center">
 			<Head>
 				<title>Debrid Media Manager - AllDebrid Login</title>
 			</Head>
@@ -65,7 +65,7 @@ export default function AllDebridLoginPage() {
 				</p>
 			)}
 			<button
-				className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+				className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
 				onClick={handleAuthorize}
 			>
 				Authorize Debrid Media Manager

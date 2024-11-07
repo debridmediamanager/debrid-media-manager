@@ -96,11 +96,11 @@ function IndexPage() {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900">
+		<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 p-4">
 			<Head>
 				<title>Debrid Media Manager - Home</title>
 			</Head>
-			<svg className="w-24 h-24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+			<svg className="h-24 w-24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
 				<rect x="25" y="25" width="150" height="150" fill="#2C3E50" rx="20" ry="20" />
 				<circle cx="100" cy="100" r="60" fill="#00A0B0" />
 				<path d="M85,65 L85,135 L135,100 Z" fill="#ECF0F1" />
@@ -113,7 +113,7 @@ function IndexPage() {
 			<Toaster position="bottom-right" />
 			{!deleting && (rdUser || adUser) ? (
 				<>
-					<h1 className="text-xl font-bold mb-2 text-white">
+					<h1 className="mb-2 text-xl font-bold text-white">
 						Debrid Media Manager{' '}
 						<a
 							href="https://www.patreon.com/debridmediamanager"
@@ -124,15 +124,15 @@ function IndexPage() {
 					</h1>
 
 					{/* Search Bar */}
-					<div className="w-full max-w-md mb-6">
+					<div className="mb-6 w-full max-w-md">
 						<SearchBar />
 					</div>
 
-					<div className="flex flex-col items-center w-full max-w-md gap-6">
+					<div className="flex w-full max-w-md flex-col items-center gap-6">
 						<MainActions rdUser={rdUser} showSettings={showSettings} />
 						<BrowseSection terms={browseTerms} />
 						<TraktSection traktUser={traktUser} />
-						<div className="grid grid-cols-1 gap-3 w-full">
+						<div className="grid w-full grid-cols-1 gap-3">
 							<ServiceCard
 								service="rd"
 								user={rdUser}
@@ -158,13 +158,13 @@ function IndexPage() {
 						<div className="flex flex-wrap justify-center gap-2">
 							<button
 								onClick={() => handleClearCache()}
-								className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium haptic-sm"
+								className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
 							>
 								Clear library cache
 							</button>
 							<button
 								onClick={() => handleLogout(undefined, router)}
-								className="px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium haptic-sm"
+								className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
 							>
 								Logout All
 							</button>
@@ -173,17 +173,17 @@ function IndexPage() {
 				</>
 			) : (
 				<>
-					<h1 className="text-xl text-center pb-4 text-white">
+					<h1 className="pb-4 text-center text-xl text-white">
 						Debrid Media Manager is loading...
 					</h1>
 					{deleting && (
-						<h3 className="text-md text-center pb-4 text-white">
+						<h3 className="text-md pb-4 text-center text-white">
 							If it gets stuck here, close all DMM tabs first
 						</h3>
 					)}
 					<button
 						onClick={() => handleLogout(undefined, router)}
-						className="px-4 py-2 rounded border border-black hover:bg-black hover:text-white transition-colors text-sm haptic-sm"
+						className="haptic-sm rounded border border-black px-4 py-2 text-sm transition-colors hover:bg-black hover:text-white"
 					>
 						Logout All
 					</button>

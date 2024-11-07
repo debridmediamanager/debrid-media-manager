@@ -59,11 +59,11 @@ export const Browse: FunctionComponent = () => {
 				<title>Debrid Media Manager - Recently Updated</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			<div className="flex justify-between items-center mb-2">
+			<div className="mb-2 flex items-center justify-between">
 				<h1 className="text-xl font-bold">Browse</h1>
 				<Link
 					href="/"
-					className="text-sm bg-cyan-800 hover:bg-cyan-700 text-white py-1 px-2 rounded"
+					className="rounded bg-cyan-800 px-2 py-1 text-sm text-white hover:bg-cyan-700"
 				>
 					Go Home
 				</Link>
@@ -76,7 +76,7 @@ export const Browse: FunctionComponent = () => {
 								<h2 className="mt-4 text-xl font-bold">
 									<span className="text-yellow-500">{idx + 1}</span> {listName}
 								</h2>
-								<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
+								<div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
 									{data.response[listName].map((key: string) => {
 										const matches = key.split(':');
 										if (matches.length === 3) {

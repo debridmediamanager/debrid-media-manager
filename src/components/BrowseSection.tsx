@@ -9,13 +9,13 @@ export function BrowseSection({ terms }: BrowseSectionProps) {
 		<div className="flex flex-wrap justify-center gap-2">
 			<Link
 				href="/browse"
-				className="px-4 py-2 rounded border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors text-sm font-medium haptic-sm"
+				className="haptic-sm rounded border-2 border-blue-500 bg-blue-900/30 px-4 py-2 text-sm font-medium text-blue-100 transition-colors hover:bg-blue-800/50"
 			>
 				🏆 top
 			</Link>
 			<Link
 				href="/browse/recent"
-				className="px-4 py-2 rounded border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors text-sm font-medium haptic-sm"
+				className="haptic-sm rounded border-2 border-blue-500 bg-blue-900/30 px-4 py-2 text-sm font-medium text-blue-100 transition-colors hover:bg-blue-800/50"
 			>
 				⏰ recent
 			</Link>
@@ -23,7 +23,7 @@ export function BrowseSection({ terms }: BrowseSectionProps) {
 				<Link
 					key={term}
 					href={`/browse/${term.replace(/\W/gi, '')}`}
-					className="px-4 py-2 rounded border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 transition-colors text-sm font-medium haptic-sm"
+					className="haptic-sm rounded border-2 border-blue-500 bg-blue-900/30 px-4 py-2 text-sm font-medium text-blue-100 transition-colors hover:bg-blue-800/50"
 				>
 					{term}
 				</Link>

@@ -86,18 +86,17 @@ function Search() {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900">
+		<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 p-4">
 			<Head>
 				<title>{`Debrid Media Manager - Search: ${query}`}</title>
 			</Head>
 			<Toaster position="bottom-right" />
 			{/* Header with Go Home button */}
-			<div className="flex justify-between items-center w-full max-w-3xl mb-4">
+			<div className="mb-4 flex w-full max-w-3xl items-center justify-between">
 				<h1 className="text-xl font-bold text-white">Search</h1>
 				<Link
 					href="/"
-					className="text-sm border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100
-						hover:bg-cyan-800/50 py-1 px-2 rounded transition-colors"
+					className="rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
 				>
 					Go Home
 				</Link>
@@ -105,11 +104,11 @@ function Search() {
 			{/* Main content */}
 			<div className="w-full">
 				{/* Search form - keep reasonable width for usability */}
-				<div className="max-w-3xl mx-auto">
+				<div className="mx-auto max-w-3xl">
 					<form onSubmit={handleSubmit}>
-						<div className="flex items-center border-b-2 border-gray-500 py-2 mb-4">
+						<div className="mb-4 flex items-center border-b-2 border-gray-500 py-2">
 							<input
-								className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
+								className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 leading-tight text-white focus:outline-none"
 								type="text"
 								id="query"
 								placeholder="e.g. breaking bad show, tt1234567, etc."
@@ -117,7 +116,7 @@ function Search() {
 								onChange={(e) => setTypedQuery(e.target.value)}
 							/>
 							<button
-								className="flex-shrink-0 px-4 py-2 rounded border-2 border-gray-500 bg-gray-800/30 text-gray-100 hover:bg-gray-700/50 transition-colors text-sm font-medium haptic-sm"
+								className="haptic-sm flex-shrink-0 rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
 								type="submit"
 							>
 								Search
@@ -127,13 +126,13 @@ function Search() {
 				</div>
 				{/* Display loading indicator */}
 				{loading && (
-					<div className="flex justify-center items-center mt-4">
-						<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+					<div className="mt-4 flex items-center justify-center">
+						<div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
 					</div>
 				)}
 				{/* Display error message */}
 				{errorMessage && (
-					<div className="mt-4 max-w-3xl mx-auto bg-red-900 border border-red-400 px-4 py-3 rounded relative">
+					<div className="relative mx-auto mt-4 max-w-3xl rounded border border-red-400 bg-red-900 px-4 py-3">
 						<strong className="font-bold">Error:</strong>
 						<span className="block sm:inline"> {errorMessage}</span>
 					</div>
@@ -141,14 +140,14 @@ function Search() {
 				{/* Update search results display */}
 				{searchResults.length > 0 && (
 					<>
-						<h2 className="text-xl font-bold my-4 max-w-3xl mx-auto">
+						<h2 className="mx-auto my-4 max-w-3xl text-xl font-bold">
 							Search Results for <span className="text-yellow-500">{query}</span>
 						</h2>
-						<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 w-full px-4">
+						<div className="grid w-full grid-cols-2 gap-3 px-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
 							{searchResults.map((result: SearchResult) => (
 								<Link
 									key={result.imdbid}
-									className="flex flex-col items-center justify-center gap-2 p-3 rounded border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 transition-colors haptic"
+									className="haptic flex flex-col items-center justify-center gap-2 rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-cyan-100 transition-colors hover:bg-cyan-800/50"
 									href={
 										result.type === 'movie'
 											? `/movie/${result.imdbid}`
@@ -156,10 +155,10 @@ function Search() {
 									}
 								>
 									<Poster imdbId={result.imdbid} title={result.title} />
-									<h3 className="text-lg text-slate-300 font-bold text-center">
+									<h3 className="text-center text-lg font-bold text-slate-300">
 										{result.title}
 									</h3>
-									<div className="text-gray-600 text-sm">{result.year}</div>
+									<div className="text-sm text-gray-600">{result.year}</div>
 								</Link>
 							))}
 						</div>
@@ -169,7 +168,7 @@ function Search() {
 				{!loading &&
 					searchResults.length === 0 &&
 					Object.keys(router.query).length !== 0 && (
-						<h2 className="text-xl font-bold my-4 max-w-3xl mx-auto">
+						<h2 className="mx-auto my-4 max-w-3xl text-xl font-bold">
 							No results found for &quot;{query}&quot;
 						</h2>
 					)}

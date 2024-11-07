@@ -348,26 +348,26 @@ function HashlistPage() {
 	}, []);
 
 	return (
-		<div className="mx-2 my-1 bg-gray-900 min-h-screen text-gray-100">
+		<div className="mx-2 my-1 min-h-screen bg-gray-900 text-gray-100">
 			<Head>
 				<title>{`Debrid Media Manager - Hash list (${userTorrentsList.length} files)`}</title>
 			</Head>
 			<Toaster position="bottom-right" />
-			<div className="flex justify-between items-center mb-2">
+			<div className="mb-2 flex items-center justify-between">
 				<h1 className="text-xl font-bold text-white">
 					{hashlistTitle} ({userTorrentsList.length} files in total; size:{' '}
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>
 				<Link
 					href="/"
-					className="text-sm border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 py-1 px-2 rounded transition-colors"
+					className="rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
 				>
 					Go Home
 				</Link>
 			</div>
-			<div className="flex items-center border-b-2 border-gray-600 py-2 mb-4">
+			<div className="mb-4 flex items-center border-b-2 border-gray-600 py-2">
 				<input
-					className="appearance-none bg-transparent border-none w-full text-gray-100 mr-3 py-1 px-2 leading-tight focus:outline-none"
+					className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-1 leading-tight text-gray-100 focus:outline-none"
 					type="text"
 					id="query"
 					placeholder="quick search on filename, hash, or id; supports regex"
@@ -379,8 +379,8 @@ function HashlistPage() {
 			</div>
 			<div className="mb-4">
 				<button
-					className={`mr-1 mb-2 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 py-1 px-1 rounded transition-colors ${
-						currentPage <= 1 ? 'opacity-60 cursor-not-allowed' : ''
+					className={`mb-2 mr-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
+						currentPage <= 1 ? 'cursor-not-allowed opacity-60' : ''
 					}`}
 					onClick={handlePrevPage}
 					disabled={currentPage <= 1}
@@ -391,9 +391,9 @@ function HashlistPage() {
 					{currentPage}/{Math.max(1, Math.ceil(sortedData().length / ITEMS_PER_PAGE))}
 				</span>
 				<button
-					className={`ml-1 mr-2 mb-2 border-2 border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50 py-1 px-1 rounded transition-colors text-xs ${
+					className={`mb-2 ml-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
 						currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)
-							? 'opacity-60 cursor-not-allowed'
+							? 'cursor-not-allowed opacity-60'
 							: ''
 					}`}
 					onClick={handleNextPage}
@@ -403,21 +403,21 @@ function HashlistPage() {
 				</button>
 				<Link
 					href="/hashlist?mediaType=movie"
-					className="mr-2 mb-2 border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 py-1 px-2 rounded transition-colors"
+					className="mb-2 mr-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
 				>
 					Show {movieCount} movies
 				</Link>
 				<Link
 					href="/hashlist?mediaType=tv"
-					className="mr-2 mb-2 border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 py-1 px-2 rounded transition-colors"
+					className="mb-2 mr-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
 				>
 					Show {tvCount} TV shows
 				</Link>
 				{rdKey && (
 					<button
-						className={`mr-2 mb-2 border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 py-1 px-2 rounded transition-colors ${
+						className={`mb-2 mr-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50 ${
 							filteredList.length === 0 || !rdKey
-								? 'opacity-60 cursor-not-allowed'
+								? 'cursor-not-allowed opacity-60'
 								: ''
 						}`}
 						onClick={downloadNonDupeTorrentsInRd}
@@ -428,9 +428,9 @@ function HashlistPage() {
 				)}
 				{adKey && (
 					<button
-						className={`mr-2 mb-2 border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 py-1 px-2 rounded transition-colors ${
+						className={`mb-2 mr-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50 ${
 							filteredList.length === 0 || !adKey
-								? 'opacity-60 cursor-not-allowed'
+								? 'cursor-not-allowed opacity-60'
 								: ''
 						}`}
 						onClick={downloadNonDupeTorrentsInAd}
@@ -443,7 +443,7 @@ function HashlistPage() {
 				{Object.keys(router.query).length !== 0 && (
 					<Link
 						href="/hashlist"
-						className="mr-2 mb-2 border-2 border-yellow-500 bg-yellow-900/30 text-yellow-100 hover:bg-yellow-800/50 py-1 px-2 rounded transition-colors"
+						className="mb-2 mr-2 rounded border-2 border-yellow-500 bg-yellow-900/30 px-2 py-1 text-yellow-100 transition-colors hover:bg-yellow-800/50"
 					>
 						Reset
 					</Link>
@@ -451,14 +451,14 @@ function HashlistPage() {
 
 				{!rdKey && !adKey && (
 					<>
-						<span className="mr-2 mb-2 text-white py-1 px-2 rounded">
+						<span className="mb-2 mr-2 rounded px-2 py-1 text-white">
 							Please login to Real-Debrid or AllDebrid to download
 						</span>
 					</>
 				)}
 
 				{(rdKey || adKey) && (
-					<span className="px-2.5 py-1 text-s bg-green-100 text-green-800 mr-2">
+					<span className="text-s mr-2 bg-green-100 px-2.5 py-1 text-green-800">
 						<strong>
 							{userTorrentsList.length - filteredList.length} torrents hidden
 						</strong>{' '}
@@ -471,7 +471,7 @@ function HashlistPage() {
 					<thead>
 						<tr className="border-b border-gray-700">
 							<th
-								className="px-4 py-2 text-gray-300 cursor-pointer"
+								className="cursor-pointer px-4 py-2 text-gray-300"
 								onClick={() => handleSort('title')}
 							>
 								Title{' '}
@@ -479,7 +479,7 @@ function HashlistPage() {
 									(sortBy.direction === 'asc' ? '↑' : '↓')}
 							</th>
 							<th
-								className="px-4 py-2 text-gray-300 cursor-pointer"
+								className="cursor-pointer px-4 py-2 text-gray-300"
 								onClick={() => handleSort('bytes')}
 							>
 								Size{' '}
@@ -499,18 +499,14 @@ function HashlistPage() {
 							return (
 								<tr
 									key={i}
-									className={`
-									hover:bg-gray-800/50
-									border-b border-gray-800
-									${
+									className={`border-b border-gray-800 hover:bg-gray-800/50 ${
 										isDownloaded('rd', t.hash) || isDownloaded('ad', t.hash)
 											? 'bg-green-900'
 											: isDownloading('rd', t.hash) ||
 												  isDownloading('ad', t.hash)
 												? 'bg-red-900'
 												: ''
-									}
-								`}
+									} `}
 								>
 									<td className="border-0 px-4 py-2">
 										{!['Invalid Magnet', 'Magnet'].includes(t.filename) && (
@@ -524,7 +520,7 @@ function HashlistPage() {
 														href={`/library?filter=${encodeURIComponent(
 															t.title
 														)}`}
-														className="inline-block border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 py-0 px-1 rounded text-xs cursor-pointer transition-colors"
+														className="inline-block cursor-pointer rounded border-2 border-green-500 bg-green-900/30 px-1 py-0 text-xs text-green-100 transition-colors hover:bg-green-800/50"
 														onClick={(e) => e.stopPropagation()}
 													>
 														{filterText}
@@ -539,7 +535,7 @@ function HashlistPage() {
 														).trim() || t.title
 													)}`}
 													target="_blank"
-													className="inline-block border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 py-0 px-1 rounded text-xs cursor-pointer ml-1 transition-colors"
+													className="ml-1 inline-block cursor-pointer rounded border-2 border-blue-500 bg-blue-900/30 px-1 py-0 text-xs text-blue-100 transition-colors hover:bg-blue-800/50"
 													onClick={(e) => e.stopPropagation()}
 												>
 													Search again
@@ -556,56 +552,56 @@ function HashlistPage() {
 									<td className="border-0 px-4 py-2">
 										{rdKey && isDownloading('rd', t.hash) && (
 											<button
-												className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 py-1 px-2 rounded transition-colors"
+												className="rounded border-2 border-red-500 bg-red-900/30 px-2 py-1 text-red-100 transition-colors hover:bg-red-800/50"
 												onClick={() => deleteRd(t.hash)}
 											>
-												<FaTimes className="inline mr-1" />
+												<FaTimes className="mr-1 inline" />
 												RD ({hashAndProgress[`rd:${t.hash}`] || 0}%)
 											</button>
 										)}
 										{rdKey && !t.rdAvailable && notInLibrary('rd', t.hash) && (
 											<button
-												className="border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 py-1 px-2 rounded transition-colors"
+												className="rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50"
 												onClick={() => addRd(t.hash)}
 											>
-												<FaDownload className="inline mr-1" />
+												<FaDownload className="mr-1 inline" />
 												RD
 											</button>
 										)}
 										{rdKey && t.rdAvailable && notInLibrary('rd', t.hash) && (
 											<button
-												className="border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 py-1 px-2 rounded transition-colors"
+												className="rounded border-2 border-green-500 bg-green-900/30 px-2 py-1 text-green-100 transition-colors hover:bg-green-800/50"
 												onClick={() => addRd(t.hash)}
 											>
-												<FaDownload className="inline mr-1" />
+												<FaDownload className="mr-1 inline" />
 												RD
 											</button>
 										)}
 
 										{adKey && isDownloading('ad', t.hash) && (
 											<button
-												className="border-2 border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50 py-1 px-2 rounded transition-colors ml-2"
+												className="ml-2 rounded border-2 border-red-500 bg-red-900/30 px-2 py-1 text-red-100 transition-colors hover:bg-red-800/50"
 												onClick={() => deleteAd(t.hash)}
 											>
-												<FaTimes className="inline mr-1" />
+												<FaTimes className="mr-1 inline" />
 												AD ({hashAndProgress[`ad:${t.hash}`] + '%'})
 											</button>
 										)}
 										{adKey && !t.adAvailable && notInLibrary('ad', t.hash) && (
 											<button
-												className="border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 py-1 px-2 rounded transition-colors ml-2"
+												className="ml-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50"
 												onClick={() => addAd(t.hash)}
 											>
-												<FaDownload className="inline mr-1" />
+												<FaDownload className="mr-1 inline" />
 												AD
 											</button>
 										)}
 										{adKey && t.adAvailable && notInLibrary('ad', t.hash) && (
 											<button
-												className="border-2 border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50 py-1 px-2 rounded transition-colors ml-2"
+												className="ml-2 rounded border-2 border-green-500 bg-green-900/30 px-2 py-1 text-green-100 transition-colors hover:bg-green-800/50"
 												onClick={() => addAd(t.hash)}
 											>
-												<FaDownload className="inline mr-1" />
+												<FaDownload className="mr-1 inline" />
 												AD
 											</button>
 										)}

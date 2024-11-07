@@ -52,33 +52,33 @@ function TraktMyLists() {
 	}, []);
 
 	return (
-		<div className="mx-2 my-1 bg-gray-900 min-h-screen">
+		<div className="mx-2 my-1 min-h-screen bg-gray-900">
 			<Head>
 				<title>Debrid Media Manager - Trakt - {traktUserSlug}&apos;s lists</title>
 			</Head>
 			<Toaster position="bottom-right" />
 
-			<div className="flex justify-between items-center mb-2">
+			<div className="mb-2 flex items-center justify-between">
 				<h1 className="text-xl font-bold text-white">
 					Trakt - 🧏🏻‍♀️ {traktUserSlug}&apos;s lists
 				</h1>
 				<Link
 					href="/"
-					className="text-sm border-2 border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50 py-1 px-2 rounded transition-colors"
+					className="rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
 				>
 					Go Home
 				</Link>
 			</div>
 
-			<div className="flex flex-col items-center w-full max-w-7xl gap-6">
+			<div className="flex w-full max-w-7xl flex-col items-center gap-6">
 				{Object.keys(arrayOfResults)
 					.sort()
 					.map((listName: string, idx: number) => (
 						<div key={listName} className="w-full">
-							<h2 className="text-xl font-bold text-white mb-4">
+							<h2 className="mb-4 text-xl font-bold text-white">
 								<span className="text-yellow-500">{idx + 1}</span> {listName}
 							</h2>
-							<div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
+							<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">
 								{(arrayOfResults[listName].length >= 8
 									? arrayOfResults[listName].slice(0, 8)
 									: arrayOfResults[listName]
@@ -93,7 +93,7 @@ function TraktMyLists() {
 												<Link
 													key={listName}
 													href={`/trakt/mylists/${listName}`}
-													className="flex justify-center items-center bg-gray-800 text-white font-bold rounded"
+													className="flex items-center justify-center rounded bg-gray-800 font-bold text-white"
 												>
 													<Image
 														src={`https://fakeimg.pl/400x600/282828/eae0d0?font_size=40&font=bebas&text=View ${
@@ -134,8 +134,8 @@ function TraktMyLists() {
 					))}
 
 				{loading !== 0 && (
-					<div className="flex justify-center items-center mt-4">
-						<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+					<div className="mt-4 flex items-center justify-center">
+						<div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
 					</div>
 				)}
 			</div>
