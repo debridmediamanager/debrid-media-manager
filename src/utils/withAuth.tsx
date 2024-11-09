@@ -6,6 +6,7 @@ import { supportsLookbehind } from './lookbehind';
 
 const START_ROUTE = '/start';
 const LOGIN_ROUTE = '/login';
+const RETURN_URL_KEY = 'dmm_return_url';
 
 export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 	return function WithAuth(props: P) {
@@ -22,9 +23,16 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 				!router.pathname.endsWith(LOGIN_ROUTE) &&
 				!rdLoading
 			) {
+				// Store full URL including query parameters
+				localStorage.setItem(RETURN_URL_KEY, router.asPath);
 				router.push(START_ROUTE);
 			} else {
-				setIsLoading(rdLoading);
+				const returnUrl = localStorage.getItem(RETURN_URL_KEY);
+				if (returnUrl && returnUrl !== START_ROUTE && !returnUrl.endsWith(LOGIN_ROUTE)) {
+					localStorage.removeItem(RETURN_URL_KEY);
+					router.push(returnUrl);
+				}
+				setIsLoading(false);
 			}
 		}, [rdKey, rdLoading, adKey, router]);
 
