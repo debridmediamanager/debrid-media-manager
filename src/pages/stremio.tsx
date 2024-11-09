@@ -1,4 +1,5 @@
 import { useCastToken } from '@/hooks/cast';
+import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -73,6 +74,4 @@ function StremioPage() {
 	);
 }
 
-export default dynamic(() => Promise.resolve(StremioPage), {
-	ssr: false,
-});
+export default dynamic(() => Promise.resolve(withAuth(StremioPage)), { ssr: false });
