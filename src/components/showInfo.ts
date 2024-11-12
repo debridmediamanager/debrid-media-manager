@@ -26,6 +26,7 @@ interface LibraryActionButtonProps {
 }
 
 interface FileRowProps {
+	id: number;
 	path: string;
 	size: number;
 	isSelected?: boolean;
@@ -113,19 +114,36 @@ const renderButton = (
 	return `<button type="button" class="inline ${style} ${textSize} rounded cursor-pointer ${touchClass}" onclick="${props.onClick}">${icon} ${'text' in props ? props.text || type : ''}</button>`;
 };
 
-const renderFileRow = (file: FileRowProps): string => {
+const renderFileRow = (file: FileRowProps, showCheckbox: boolean = false): string => {
 	const { size, unit } = formatSize(file.size);
+	const checkboxId = `file-${file.path.replace(/[^a-zA-Z0-9]/g, '-')}`;
+	const checkboxColumn = showCheckbox
+		? `
+        <td class="pr-2">
+            <input type="checkbox" 
+                id="${checkboxId}" 
+                class="file-selector"
+                data-file-id="${file.id}"
+                ${file.isSelected ? 'checked' : ''}
+            />
+        </td>
+    `
+		: '';
+
 	return `
         <tr class="${file.isPlayable || file.isSelected ? 'bg-gray-800 font-bold' : 'font-normal'} hover:bg-gray-700 rounded">
+            ${checkboxColumn}
             <td class="text-right whitespace-nowrap pr-2">
                 ${file.actions.join('')}
             </td>
             <td class="whitespace-nowrap">
+        ${showCheckbox ? `<label for="${checkboxId}" class="cursor-pointer">` : ''}
                 <span class="text-blue-300">${file.path}</span>
                 <span class="text-gray-300 ml-2">${size.toFixed(2)} ${unit}</span>
+        ${showCheckbox ? '</label>' : ''}
             </td>
-        </tr>
-    `;
+</tr>
+        `;
 };
 
 const renderInfoTable = (rows: InfoTableRow[]): string => `
@@ -157,6 +175,7 @@ const renderTorrentInfo = (
 ) => {
 	if (isRd) {
 		const rdInfo = info as TorrentInfoResponse;
+		const showCheckbox = !rdInfo.fake;
 		const filesList = rdInfo.files.map((file: ApiTorrentFile, linkIndex: number) => {
 			const actions = [];
 			if (file.selected === 1) {
@@ -207,12 +226,16 @@ const renderTorrentInfo = (
 					}
 				}
 			}
-			return renderFileRow({
-				path: file.path,
-				size: file.bytes,
-				isSelected: file.selected === 1,
-				actions,
-			});
+			return renderFileRow(
+				{
+					id: file.id,
+					path: file.path,
+					size: file.bytes,
+					isSelected: file.selected === 1,
+					actions,
+				},
+				showCheckbox
+			);
 		});
 		return filesList.join('');
 	} else {
@@ -226,6 +249,7 @@ const renderTorrentInfo = (
 				}),
 			];
 			return renderFileRow({
+				id: 0,
 				path: file.filename,
 				size: file.size,
 				isPlayable: Boolean(isVideo({ path: file.filename })),
@@ -315,7 +339,19 @@ export const showInfoForRD = async (
     </div>`;
 
 	if (!info.fake) {
-		const infoRows = [
+		const saveButton = `
+            <div class="m-2">
+                <button
+                    class="px-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium rounded-sm shadow-lg transition-all duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]"
+                    onclick="window.saveSelection('rd:${info.id}', '${info.hash}', Array.from(document.querySelectorAll('.file-selector:checked')).map(cb => cb.dataset.fileId))"
+                >
+                    💾 Save File Selection
+                </button>
+            </div>
+        `;
+
+		// Define infoRows and add the save button after the info table instead of in the library actions
+		const infoRows: InfoTableRow[] = [
 			{ label: 'Size', value: (info.bytes / 1024 ** 3).toFixed(2) + ' GB' },
 			{ label: 'ID', value: info.id },
 			{ label: 'Original filename', value: info.original_filename },
@@ -329,14 +365,15 @@ export const showInfoForRD = async (
 					]
 				: []),
 			{ label: 'Added', value: new Date(info.added).toLocaleString() },
+			{ label: 'Progress', value: info.progress + '%' },
 		];
-
 		html = html.replace(
 			'<hr class="border-gray-600"/>',
 			`<div class="text-sm text-gray-200">
-                ${renderInfoTable(infoRows)}
-                ${warning}
-            </div>`
+			${renderInfoTable(infoRows)}
+			${warning}
+			${saveButton}
+		</div>`
 		);
 	}
 
@@ -373,20 +410,20 @@ export const showInfoForAD = async (
 
 	const downloadAllLink = `https://alldebrid.com/service/?url=${info.links.map((l) => encodeURIComponent(l.link)).join('%0D%0A')}`;
 	const libraryActions = `
-		<div class="mb-4 flex justify-center items-center flex-wrap">
-			${renderButton('share', { onClick: `window.open('${await handleShare(torrent)}')` })}
-			${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteAdTorrent('${rdKey}', 'ad:${info.id}')` })}
-			${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
-			${renderButton('reinsert', { onClick: `window.closePopup(); window.handleRestartTorrent('${rdKey}', '${info.id}')` })}
-			${info.links.length > 1 ? renderButton('downloadAll', { onClick: `window.open('${downloadAllLink}')` }) : ''}
-			${
+        <div class="mb-4 flex justify-center items-center flex-wrap">
+            ${renderButton('share', { onClick: `window.open('${await handleShare(torrent)}')` })}
+            ${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteAdTorrent('${rdKey}', 'ad:${info.id}')` })}
+            ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
+            ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleRestartTorrent('${rdKey}', '${info.id}')` })}
+            ${info.links.length > 1 ? renderButton('downloadAll', { onClick: `window.open('${downloadAllLink}')` }) : ''}
+            ${
 				info.links.length > 0
 					? renderButton('exportLinks', {
 							onClick: `exportLinks('${info.filename}', [${info.links.map((l) => `'${l.link}'`).join(',')}])`,
 						})
 					: ''
 			}
-		</div>`;
+        </div>`;
 
 	const html = `<h1 class="text-lg font-bold mt-6 mb-4 text-gray-100">${info.filename}</h1>
     ${libraryActions}
