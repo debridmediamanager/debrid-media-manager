@@ -266,7 +266,10 @@ export const showInfoForRD = async (
 		mediaType,
 	};
 
-	const downloadAllLink = `https://real-debrid.com/downloader?links=${info.links.map((l) => encodeURIComponent(l)).join('%0D%0A')}`;
+	const downloadAllLink = `https://real-debrid.com/downloader?links=${info.links
+		.slice(0, 553)
+		.map((l) => encodeURIComponent(l))
+		.join('%0A')}`;
 	const libraryActions = !info.fake
 		? `
     <div class="mb-4 flex justify-center items-center flex-wrap">
