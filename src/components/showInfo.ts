@@ -174,14 +174,14 @@ const renderTorrentInfo = (
 					if (rdInfo.fake) {
 						actions.push(
 							renderButton('watch', {
-								onClick: `window.open('/api/watch/instant/${app}?token=${info.hash}&hash=${info.hash}&fileId=${file.id}')`,
+								onClick: `window.open('/api/watch/instant/${app}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')`,
 								text: 'Watch',
 							})
 						);
 					} else {
 						actions.push(
 							renderButton('watch', {
-								onClick: `window.open('/api/watch/${app}?token=${fileLink}')`,
+								onClick: `window.open('/api/watch/${app}?token=${rdKey}&hash=${info.hash}&link=${fileLink}')`,
 								text: 'Watch',
 							})
 						);
