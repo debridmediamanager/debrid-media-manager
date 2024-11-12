@@ -80,6 +80,64 @@ export const getMediaData = async (
 	}
 };
 
+// Functions for genre-based media fetching
+export const getTrendingByGenre = async (
+	client_id: string,
+	genre: string,
+	type: 'movies' | 'shows',
+	limit: number = 20
+): Promise<TraktMediaItem[]> => {
+	try {
+		const headers = {
+			'Content-Type': 'application/json',
+			'trakt-api-version': '2',
+			'trakt-api-key': client_id,
+		};
+
+		const response = await axios.get<TraktMediaItem[]>(
+			`${TRAKT_API_URL}/${type}/trending?genres=${genre}&limit=${limit}`,
+			{ headers }
+		);
+
+		return response.data;
+	} catch (error: any) {
+		console.error(`Error fetching trending ${type} by genre:`, error.message);
+		return [];
+	}
+};
+
+export const getPopularByGenre = async (
+	client_id: string,
+	genre: string,
+	type: 'movies' | 'shows',
+	limit: number = 20
+): Promise<TraktMediaItem[]> => {
+	try {
+		const headers = {
+			'Content-Type': 'application/json',
+			'trakt-api-version': '2',
+			'trakt-api-key': client_id,
+		};
+
+		const response = await axios.get<TraktMedia[]>(
+			`${TRAKT_API_URL}/${type}/popular?genres=${genre}&limit=${limit}`,
+			{ headers }
+		);
+
+		// Transform the response to match the expected format
+		return response.data.map((item) => ({
+			[type === 'movies' ? 'movie' : 'show']: {
+				title: item.title,
+				year: item.year,
+				ids: item.ids,
+			},
+		}));
+	} catch (error: any) {
+		console.error(`Error fetching popular ${type} by genre:`, error.message);
+		return [];
+	}
+};
+
 export interface TraktUser {
 	user: {
 		username: string;
