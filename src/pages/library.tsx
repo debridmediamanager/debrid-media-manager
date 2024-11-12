@@ -1099,6 +1099,10 @@ function TorrentsPage() {
 			Swal.close();
 		};
 		(window as any).closePopup = Swal.close;
+		(window as any).saveSelection = async (key: string, hash: string, fileIDs: string[]) => {
+			console.log('Saving selection', key, hash, fileIDs);
+			Swal.close();
+		};
 
 		const filenames = info.files.map((f) => f.path);
 		const torrentAndFiles = [t.filename, ...filenames];
