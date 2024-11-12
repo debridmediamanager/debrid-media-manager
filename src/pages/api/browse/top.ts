@@ -2,12 +2,11 @@ import MdbList from '@/services/mdblist';
 import { lcg, shuffle } from '@/utils/seededShuffle';
 import { NextApiHandler } from 'next';
 
-// unused atm
 const handler: NextApiHandler = async (req, res) => {
 	const mdblist = new MdbList();
 	let topLists = await mdblist.topLists();
-	let rng = lcg(new Date().getTime() / 1000 / 60 / 10);
-	topLists = shuffle(topLists, rng).slice(0, 16);
+	let rng = lcg(new Date().getTime() / 1000 / 60 / 5);
+	topLists = shuffle(topLists, rng).slice(0, 4);
 
 	const response: Record<string, string[]> = {};
 	for (const list of topLists) {
