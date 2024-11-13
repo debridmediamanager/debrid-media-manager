@@ -11,17 +11,25 @@ const Poster = ({ imdbId, title = 'No poster' }: Record<string, string>) => {
 		setFallbackAttempted(false);
 	}, [imdbId]);
 
-	const handleImageError = () => {
+	const handleImageError = async () => {
 		if (!fallbackAttempted) {
-			// First error - try local poster endpoint
+			// First error - try API endpoint
 			setFallbackAttempted(true);
-			setPosterUrl(`/poster/${imdbId}`);
-		} else {
-			// If local poster fails, use fakeimg.pl as final fallback
-			const encodedTitle = encodeURIComponent(title);
-			setPosterUrl(
-				`https://fakeimg.pl/400x600/282828/eae0d0?font_size=40&font=bebas&text=${encodedTitle}&w=640&q=75`
-			);
+			try {
+				const response = await fetch(`/api/poster?imdbid=${imdbId}`);
+				if (response.ok) {
+					const data = await response.json();
+					setPosterUrl(data.url);
+					return;
+				}
+				throw new Error('API failed');
+			} catch (error) {
+				// If API fails or returns non-ok, use fakeimg.pl as final fallback
+				const encodedTitle = encodeURIComponent(title);
+				setPosterUrl(
+					`https://fakeimg.pl/400x600/282828/eae0d0?font_size=40&font=bebas&text=${encodedTitle}&w=640&q=75`
+				);
+			}
 		}
 	};
 
