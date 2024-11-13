@@ -1,8 +1,3 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-# Run prettier formatting
 npm run format
-
-# Add any files that were modified by prettier
 git add -A
