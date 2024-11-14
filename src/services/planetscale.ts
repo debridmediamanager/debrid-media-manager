@@ -664,9 +664,17 @@ export class PlanetScaleCache {
 	/**
 	 * Fetches all casted links for a given userId.
 	 * @param userId - The ID of the user.
-	 * @returns A promise that resolves to an array of URLs.
+	 * @returns A promise that resolves to an array of casted links.
 	 */
-	public async fetchAllCastedLinks(userId: string): Promise<string[]> {
+	public async fetchAllCastedLinks(userId: string): Promise<
+		{
+			imdbId: string;
+			url: string;
+			hash: string;
+			size: number;
+			updatedAt: Date;
+		}[]
+	> {
 		const castItems = await this.prisma.cast.findMany({
 			where: {
 				userId: userId,
@@ -674,11 +682,16 @@ export class PlanetScaleCache {
 			select: {
 				imdbId: true,
 				url: true,
+				hash: true,
 				size: true,
+				updatedAt: true,
+			},
+			orderBy: {
+				updatedAt: 'desc',
 			},
 		});
 
-		return castItems.map((item) => item.url);
+		return castItems;
 	}
 
 	/**
