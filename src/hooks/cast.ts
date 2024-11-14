@@ -2,12 +2,14 @@ import { useEffect } from 'react';
 import { useRealDebridAccessToken } from './auth';
 import useLocalStorage from './localStorage';
 
+export const DMM_CAST_TOKEN_KEY = 'dmmcast:0.0.2';
+
 export function useCastToken() {
 	const [token] = useRealDebridAccessToken();
-	const [dmmCastToken, setDmmCastToken] = useLocalStorage<string>('dmmcast:0.0.2');
+	const [dmmCastToken, setDmmCastToken] = useLocalStorage<string>(DMM_CAST_TOKEN_KEY);
 
 	useEffect(() => {
-		if (!token || dmmCastToken) {
+		if (!token) {
 			setDmmCastToken('default');
 			return;
 		}
