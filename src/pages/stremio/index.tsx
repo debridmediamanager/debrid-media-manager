@@ -79,6 +79,16 @@ function StremioPage() {
 						>
 							🧙🏻‍♂️ Install
 						</Link>
+						<Link
+							href={`https://web.stremio.com/#/addons?addon=${encodeURIComponent(
+								`${window.location.origin}/api/stremio/${dmmCastToken}/manifest.json`
+							)}`}
+							className="text-md haptic-sm m-1 rounded border-2 border-purple-500 bg-purple-800/30 px-4 py-2 font-medium text-gray-100 transition-colors hover:bg-purple-700/50"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							🌐 Install (web)
+						</Link>
 						<div className="mt-2 text-gray-300">
 							or copy this link and paste it in Stremio&apos;s search bar
 						</div>
