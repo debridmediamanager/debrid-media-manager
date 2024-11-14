@@ -7,10 +7,22 @@ export function useCastToken() {
 	const [dmmCastToken, setDmmCastToken] = useLocalStorage<string>('dmmcast:0.0.2');
 
 	useEffect(() => {
-		if (!token || dmmCastToken) return;
+		if (!token || dmmCastToken) {
+			setDmmCastToken('default');
+			return;
+		}
 		fetch('/api/stremio/id?token=' + token)
 			.then((res) => res.json())
-			.then((res) => setDmmCastToken(res.id));
+			.then((res) => {
+				if (
+					res.status === 'error' &&
+					res.errorMessage === 'Request failed with status code 401'
+				) {
+					setDmmCastToken('default');
+				} else {
+					setDmmCastToken(res.id);
+				}
+			});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [token]);
 
