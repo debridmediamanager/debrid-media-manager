@@ -11,30 +11,35 @@ datasource db {
   relationMode = "prisma"
 }
 
+// unused
 model Cache {
   key   String @id
   value Json
   updatedAt DateTime @updatedAt
 }
 
+// torrents identified by me
 model Scraped {
   key   String @id
   value Json
   updatedAt DateTime @updatedAt
 }
 
+// torrents identified by third party
 model ScrapedTrue {
   key   String @id
   value Json
   updatedAt DateTime @updatedAt
 }
 
+// search results from mdblist
 model Search {
   key   String @id
   value Json
   updatedAt DateTime @updatedAt
 }
 
+// casted torrents
 model Cast {
   id        String   @id @default(uuid())
   imdbId    String
@@ -51,6 +56,8 @@ model Cast {
   @@unique([imdbId, userId, hash])
 }
 
+
+// supposed to be used for imdb dump
 model Titles {
   imdbid            String  @id
   title             String
@@ -61,6 +68,7 @@ model Titles {
   @@unique([imdbid, title])
 }
 
+// scraped from https://github.com/manami-project/anime-offline-database
 model Anime {
   id         Int      @id @default(autoincrement())
   anidb_id Int? @unique
@@ -85,12 +93,6 @@ model Anime {
   @@index([imdb_id])
 }
 
-model Subscriptions {
-  id        Int      @id @default(autoincrement())
-  refresh_token String
-  filled    Boolean
-}
-
 model Cast_v2 {
   id        String   @id @default(uuid())
   imdbId    String
@@ -106,13 +108,4 @@ model Cast_v2 {
 
   @@index([imdbId, userId, updatedAt])
   @@unique([imdbId, userId, hash])
-}
-
-model Media {
-  id        String   @id @default(uuid())
-  imdbId    String?
-  tmdbId    Int?
-  tvdbId    Int?
-
-  @@index([imdbId])
 }

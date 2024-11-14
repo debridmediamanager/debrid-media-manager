@@ -1,3 +1,4 @@
+import { soundex } from '@/utils/soundex';
 import { Prisma, PrismaClient, Scraped } from '@prisma/client';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { MediaInfoDetails } from './types';
@@ -132,16 +133,6 @@ export class PlanetScaleCache {
 		} catch (error) {
 			console.error('Database query failed:', error);
 			throw new Error('Failed to retrieve scraped results.');
-		}
-	}
-
-	public async deleteScrapedTrue(imdbId: string): Promise<void> {
-		const keys = [`movie:${imdbId}`, `tv:${imdbId}%`];
-
-		for (const key of keys) {
-			await this.prisma.scrapedTrue.deleteMany({
-				where: { key: { contains: key } },
-			});
 		}
 	}
 
@@ -354,16 +345,6 @@ export class PlanetScaleCache {
 		return null;
 	}
 
-	public async delete(imdbId: string): Promise<void> {
-		const keys = [`movie:${imdbId}`, `tv:${imdbId}%`];
-
-		for (const key of keys) {
-			await this.prisma.scraped.deleteMany({
-				where: { key: { contains: key } },
-			});
-		}
-	}
-
 	public async markAsDone(imdbId: string): Promise<void> {
 		const keys = [`requested:${imdbId}`, `processing:${imdbId}`];
 
@@ -393,7 +374,7 @@ export class PlanetScaleCache {
 			const differenceInHours =
 				Math.abs(now.getTime() - updatedAt.getTime()) / 1000 / 60 / 60;
 
-			if (differenceInHours > 24) {
+			if (differenceInHours > 48) {
 				return undefined;
 			} else {
 				return cacheEntry.value as T;
@@ -725,34 +706,4 @@ export class PlanetScaleCache {
 			throw new Error(`Failed to delete casted link: ${error.message}`);
 		}
 	}
-}
-
-// Function to generate the MySQL SOUNDEX value in JavaScript
-function soundex(query: string): string {
-	if (!query || query.length === 0) {
-		return '0000';
-	}
-
-	const upperQuery = query.toUpperCase();
-	const firstLetter = upperQuery.charAt(0).replace(/[^A-Z]/g, '');
-	const rest = upperQuery.slice(1).replace(/[^A-Z]/g, '');
-
-	let encoded =
-		firstLetter +
-		rest
-			.replace(/[AEIOUYHW]/g, '0')
-			.replace(/[BFPV]/g, '1')
-			.replace(/[CGJKQSXZ]/g, '2')
-			.replace(/[DT]/g, '3')
-			.replace(/[L]/g, '4')
-			.replace(/[MN]/g, '5')
-			.replace(/[R]/g, '6');
-
-	// Remove duplicates
-	encoded = encoded.charAt(0) + encoded.slice(1).replace(/(.)\1+/g, '$1');
-
-	// Remove all 0s and pad to ensure length is 4
-	encoded = encoded.replace(/0/g, '').padEnd(4, '0').slice(0, 4);
-
-	return encoded;
 }
