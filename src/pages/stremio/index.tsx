@@ -4,9 +4,34 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 function StremioPage() {
 	const dmmCastToken = useCastToken();
+
+	useEffect(() => {
+		if (dmmCastToken === 'default') {
+			Swal.fire({
+				title: '⚠️ Debrid Provider Support',
+				html: `
+					<div class="text-sm text-gray-200">
+						<div class="flex flex-col gap-4">
+							<div>Only Real-Debrid is supported right now.</div>
+							<div>Other Debrid providers will come soon.</div>
+						</div>
+					</div>
+				`,
+				confirmButtonText: 'OK',
+				customClass: {
+					htmlContainer: '!mx-1',
+					popup: '!bg-gray-900 !text-gray-100 !w-[95%] !max-w-[600px]',
+					confirmButton: '!bg-blue-600 !px-6 haptic',
+				},
+				focusConfirm: true,
+			});
+		}
+	}, [dmmCastToken]);
 
 	if (!dmmCastToken) {
 		return (
@@ -34,23 +59,27 @@ function StremioPage() {
 			<h1 className="mb-4 text-2xl font-bold text-purple-400">DMM Cast</h1>
 			<div className="flex flex-col items-center text-white">
 				<strong>Cast from any device to Stremio</strong>
-				<div className="mb-4 mt-4 h-max text-center leading-8">
-					<Link
-						href={`stremio://${window.location.origin.replace(
-							/^https?:\/\//,
-							''
-						)}/api/stremio/${dmmCastToken}/manifest.json`}
-						className="text-md haptic-sm m-1 rounded border-2 border-purple-500 bg-purple-800/30 px-4 py-2 font-medium text-gray-100 transition-colors hover:bg-purple-700/50"
-					>
-						🧙🏻‍♂️ Install
-					</Link>
-					<div className="mt-2 text-gray-300">
-						or copy this link and paste it in Stremio&apos;s search bar
+
+				{dmmCastToken && dmmCastToken === 'default' && (
+					<div className="mb-4 mt-4 h-max text-center leading-8">
+						<Link
+							href={`stremio://${window.location.origin.replace(
+								/^https?:\/\//,
+								''
+							)}/api/stremio/${dmmCastToken}/manifest.json`}
+							className="text-md haptic-sm m-1 rounded border-2 border-purple-500 bg-purple-800/30 px-4 py-2 font-medium text-gray-100 transition-colors hover:bg-purple-700/50"
+						>
+							🧙🏻‍♂️ Install
+						</Link>
+						<div className="mt-2 text-gray-300">
+							or copy this link and paste it in Stremio&apos;s search bar
+						</div>
+						<code className="mt-2 rounded bg-gray-800 p-2 text-sm text-gray-300">
+							{window.location.origin}/api/stremio/{dmmCastToken}/manifest.json
+						</code>
 					</div>
-					<code className="mt-2 rounded bg-gray-800 p-2 text-sm text-gray-300">
-						{window.location.origin}/api/stremio/{dmmCastToken}/manifest.json
-					</code>
-				</div>
+				)}
+
 				<div className="space-y-2 text-gray-300">
 					<div>1. Choose a Movie or TV Show to watch in DMM</div>
 					<div>
@@ -65,13 +94,14 @@ function StremioPage() {
 			</div>
 
 			<div className="mt-6 flex gap-4">
-				<Link
-					href="/stremio/manage"
-					className="haptic-sm rounded border-2 border-purple-500 bg-purple-800/30 px-4 py-2 text-sm font-medium text-purple-100 transition-colors hover:bg-purple-700/50"
-				>
-					📝 Manage Casted Links
-				</Link>
-
+				{dmmCastToken && dmmCastToken === 'default' && (
+					<Link
+						href="/stremio/manage"
+						className="haptic-sm rounded border-2 border-purple-500 bg-purple-800/30 px-4 py-2 text-sm font-medium text-purple-100 transition-colors hover:bg-purple-700/50"
+					>
+						📝 Manage Casted Links
+					</Link>
+				)}
 				<Link
 					href="/"
 					className="haptic-sm rounded border-2 border-cyan-500 bg-cyan-900/30 px-4 py-2 text-sm font-medium text-cyan-100 transition-colors hover:bg-cyan-800/50"
