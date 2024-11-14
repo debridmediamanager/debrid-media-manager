@@ -1,4 +1,4 @@
-import { useCastToken } from '@/hooks/cast';
+import { DMM_CAST_TOKEN_KEY, useCastToken } from '@/hooks/cast';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -23,12 +23,20 @@ function StremioPage() {
 					</div>
 				`,
 				confirmButtonText: 'OK',
+				showCancelButton: true,
+				cancelButtonText: 'Refresh token',
 				customClass: {
 					htmlContainer: '!mx-1',
 					popup: '!bg-gray-900 !text-gray-100 !w-[95%] !max-w-[600px]',
 					confirmButton: '!bg-blue-600 !px-6 haptic',
+					cancelButton: '!bg-purple-600 !px-6 haptic',
 				},
 				focusConfirm: true,
+			}).then((result) => {
+				if (result.dismiss === Swal.DismissReason.cancel) {
+					window.localStorage.removeItem(DMM_CAST_TOKEN_KEY);
+					window.location.reload();
+				}
 			});
 		}
 	}, [dmmCastToken]);
@@ -60,7 +68,7 @@ function StremioPage() {
 			<div className="flex flex-col items-center text-white">
 				<strong>Cast from any device to Stremio</strong>
 
-				{dmmCastToken && dmmCastToken !== 'default' && (
+				{dmmCastToken !== 'default' && (
 					<div className="mb-4 mt-4 h-max text-center leading-8">
 						<Link
 							href={`stremio://${window.location.origin.replace(
@@ -94,7 +102,7 @@ function StremioPage() {
 			</div>
 
 			<div className="mt-6 flex gap-4">
-				{dmmCastToken && dmmCastToken !== 'default' && (
+				{dmmCastToken !== 'default' && (
 					<Link
 						href="/stremio/manage"
 						className="haptic-sm rounded border-2 border-purple-500 bg-purple-800/30 px-4 py-2 text-sm font-medium text-purple-100 transition-colors hover:bg-purple-700/50"
