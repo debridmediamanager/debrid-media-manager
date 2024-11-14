@@ -64,12 +64,21 @@ function StremioPage() {
 				</div>
 			</div>
 
-			<Link
-				href="/"
-				className="haptic-sm mt-6 rounded border-2 border-cyan-500 bg-cyan-900/30 px-4 py-2 text-sm font-medium text-cyan-100 transition-colors hover:bg-cyan-800/50"
-			>
-				Go Home
-			</Link>
+			<div className="mt-6 flex gap-4">
+				<Link
+					href="/stremio/manage"
+					className="haptic-sm rounded border-2 border-purple-500 bg-purple-800/30 px-4 py-2 text-sm font-medium text-purple-100 transition-colors hover:bg-purple-700/50"
+				>
+					📝 Manage Casted Links
+				</Link>
+
+				<Link
+					href="/"
+					className="haptic-sm rounded border-2 border-cyan-500 bg-cyan-900/30 px-4 py-2 text-sm font-medium text-cyan-100 transition-colors hover:bg-cyan-800/50"
+				>
+					Go Home
+				</Link>
+			</div>
 		</div>
 	);
 }
