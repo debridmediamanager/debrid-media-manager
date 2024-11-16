@@ -1,3 +1,4 @@
+import { useCastToken } from '@/hooks/cast';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -31,6 +32,7 @@ function IndexPage() {
 		hasTraktAuth,
 	} = useCurrentUser();
 	const { loginWithRealDebrid, loginWithAllDebrid } = useDebridLogin();
+	const _ = useCastToken();
 	const [browseTerms] = useState(getTerms(2));
 
 	useEffect(() => {
