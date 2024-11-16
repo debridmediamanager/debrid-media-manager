@@ -16,16 +16,12 @@ export function useCastToken() {
 		fetch('/api/stremio/id?token=' + token)
 			.then((res) => res.json())
 			.then((res) => {
-				if (
-					res.status === 'error' &&
-					res.errorMessage === 'Request failed with status code 401'
-				) {
+				if (res.status === 'error') {
 					setDmmCastToken('default');
 				} else {
 					setDmmCastToken(res.id);
 				}
 			});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [token]);
 
 	return dmmCastToken;
