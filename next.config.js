@@ -144,6 +144,7 @@ const nextConfig = {
     allDebridHostname: 'https://api.alldebrid.com',
     allDebridAgent: 'debridMediaManager',
     traktClientId: '8a7455d06804b07fa25e27454706c6f2107b6fe5ed2ad805eff3b456a17e79f0',
+    torboxHostname: 'https://api.torbox.app',
   },
   // Add optimization configurations
   swcMinify: true, // Use SWC minifier

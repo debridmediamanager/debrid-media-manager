@@ -4,13 +4,31 @@ import Link from 'next/link';
 import Swal from 'sweetalert2';
 
 interface ServiceCardProps {
-	service: 'rd' | 'ad' | 'trakt';
-	user: RealDebridUser | AllDebridUser | TraktUser | null;
+	service: 'rd' | 'ad' | 'tb' | 'trakt';
+	user: RealDebridUser | AllDebridUser | TraktUser | any | null;
 	onTraktLogin: () => void;
 	onLogout: (prefix: string) => void;
 }
 
+interface TorboxUser {
+	data: {
+		email: string;
+		is_subscribed: boolean;
+		premium_expires_at: string;
+		total_bytes_downloaded: number;
+		total_bytes_uploaded: number;
+		torrents_downloaded: number;
+	};
+}
+
 export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCardProps) {
+	const formatBytes = (bytes: number) => {
+		const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+		if (bytes === 0) return '0 B';
+		const i = Math.floor(Math.log(bytes) / Math.log(1024));
+		return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
+	};
+
 	const showUserInfo = (service: string) => {
 		let title = '';
 		let html = '';
@@ -46,6 +64,23 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
           <p><strong>Type:</strong> ${adUser.isPremium ? 'premium' : 'free'}</p>
           <p><strong>Premium Until:</strong> ${new Date(adUser.premiumUntil * 1000).toLocaleDateString()}</p>
 		  <p><strong>Points:</strong> ${adUser.fidelityPoints}</p>
+        </div>
+      `;
+		} else if (service === 'tb' && user && user.data) {
+			const tbUser = user as TorboxUser;
+			title = 'Torbox';
+			prefix = 'tb:';
+			const premiumExpiry = new Date(tbUser.data.premium_expires_at);
+			const isPremiumActive = premiumExpiry > new Date();
+
+			html = `
+        <div class="text-left">
+          <p><strong>Email:</strong> ${tbUser.data.email}</p>
+          <p><strong>Premium Status:</strong> ${isPremiumActive ? 'Active' : 'Inactive'}</p>
+          <p><strong>Premium Expires:</strong> ${new Date(tbUser.data.premium_expires_at).toLocaleDateString()}</p>
+          <p><strong>Downloads:</strong> ${tbUser.data.torrents_downloaded} torrents</p>
+          <p><strong>Downloaded:</strong> ${formatBytes(tbUser.data.total_bytes_downloaded)}</p>
+          <p><strong>Uploaded:</strong> ${formatBytes(tbUser.data.total_bytes_uploaded)}</p>
         </div>
       `;
 		} else if (service === 'trakt' && user && 'user' in user) {
@@ -129,6 +164,30 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 				className="haptic w-full rounded border-2 border-yellow-500 bg-yellow-900/30 py-1 text-center text-yellow-100 transition-colors hover:bg-yellow-800/50"
 			>
 				AllDebrid Login
+			</Link>
+		);
+	}
+
+	if (service === 'tb') {
+		const tbUser = user as TorboxUser | null;
+		const isPremiumActive = tbUser?.data?.premium_expires_at
+			? new Date(tbUser.data.premium_expires_at) > new Date()
+			: false;
+		return tbUser ? (
+			<button
+				onClick={() => showUserInfo('tb')}
+				className="haptic flex items-center justify-center gap-2 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-purple-100 transition-colors hover:bg-purple-800/50"
+			>
+				<span className="font-medium">Torbox</span>
+				<span>{tbUser.data.email.split('@')[0]}</span>
+				<span>{isPremiumActive ? '✅' : '❌'}</span>
+			</button>
+		) : (
+			<Link
+				href="/torbox/login"
+				className="haptic w-full rounded border-2 border-purple-500 bg-purple-900/30 py-1 text-center text-purple-100 transition-colors hover:bg-purple-800/50"
+			>
+				Torbox Login
 			</Link>
 		);
 	}

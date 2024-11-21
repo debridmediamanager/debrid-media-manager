@@ -2,7 +2,7 @@ import { useDebridLogin } from '@/hooks/auth';
 import Head from 'next/head';
 
 export default function StartPage() {
-	const { loginWithRealDebrid, loginWithAllDebrid } = useDebridLogin();
+	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
 
 	return (
 		<div className="flex h-screen flex-col items-center justify-center">
@@ -39,9 +39,7 @@ export default function StartPage() {
 
 			{/* Login Buttons */}
 			<div className="flex flex-col items-center">
-				<p className="text-sm">
-					Please login with one of the supported Debrid services below
-				</p>
+				<p className="text-sm">Please login with one of the supported services below</p>
 				{/* RealDebrid */}
 				<div className="flex flex-row">
 					<button
@@ -75,6 +73,24 @@ export default function StartPage() {
 						rel="noopener noreferrer"
 					>
 						Create an account with AllDebrid
+					</a>
+				</div>
+
+				{/* Torbox */}
+				<div className="flex flex-row">
+					<button
+						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						onClick={loginWithTorbox}
+					>
+						Login with Torbox
+					</button>
+					<a
+						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+						href="https://torbox.app"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Create an account with Torbox
 					</a>
 				</div>
 
