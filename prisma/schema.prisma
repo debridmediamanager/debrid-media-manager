@@ -1,45 +1,37 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
-// unused
 model Cache {
-  key   String @id
-  value Json
+  key       String   @id
+  value     Json
   updatedAt DateTime @updatedAt
 }
 
-// torrents identified by me
 model Scraped {
-  key   String @id
-  value Json
+  key       String   @id
+  value     Json
   updatedAt DateTime @updatedAt
 }
 
-// torrents identified by third party
 model ScrapedTrue {
-  key   String @id
-  value Json
+  key       String   @id
+  value     Json
   updatedAt DateTime @updatedAt
 }
 
-// search results from mdblist
 model Search {
-  key   String @id
-  value Json
+  key       String   @id
+  value     Json
   updatedAt DateTime @updatedAt
 }
 
-// casted torrents
 model Cast {
   id        String   @id @default(uuid())
   imdbId    String
@@ -52,12 +44,10 @@ model Cast {
   size      Int      @default(0)
   mediaInfo Json?
 
-  @@index([imdbId, userId, updatedAt])
   @@unique([imdbId, userId, hash])
+  @@index([imdbId, userId, updatedAt])
 }
 
-
-// supposed to be used for imdb dump
 model Titles {
   imdbid            String  @id
   title             String
@@ -68,44 +58,24 @@ model Titles {
   @@unique([imdbid, title])
 }
 
-// scraped from https://github.com/manami-project/anime-offline-database
 model Anime {
-  id         Int      @id @default(autoincrement())
-  anidb_id Int? @unique
+  id              Int     @id @default(autoincrement())
+  anidb_id        Int?    @unique
   anime_planet_id String? @unique
-  kitsu_id Int? @unique
-  mal_id Int? @unique
-  imdb_id String? @unique
-
-  title       String
-  type       String
-  aliases     Json
-  description String @db.Text
-
-  poster_url  String
-  background_url String
-  rating      Float
+  kitsu_id        Int?    @unique
+  mal_id          Int?    @unique
+  imdb_id         String? @unique
+  title           String
+  type            String
+  aliases         Json
+  description     String  @db.Text
+  poster_url      String
+  background_url  String
+  rating          Float
 
   @@index([anidb_id])
   @@index([anime_planet_id])
   @@index([kitsu_id])
   @@index([mal_id])
   @@index([imdb_id])
-}
-
-model Cast_v2 {
-  id        String   @id @default(uuid())
-  imdbId    String
-  userId    String
-  hash      String
-  original_link       String
-  refresh_token      String
-  updatedAt DateTime @updatedAt
-  duration  Int      @default(0)
-  bitrate   Int      @default(0)
-  size      Int      @default(0)
-  mediaInfo Json?
-
-  @@index([imdbId, userId, updatedAt])
-  @@unique([imdbId, userId, hash])
 }
