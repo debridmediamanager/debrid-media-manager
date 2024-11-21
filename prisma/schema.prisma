@@ -79,3 +79,33 @@ model Anime {
   @@index([mal_id])
   @@index([imdb_id])
 }
+
+model Available {
+  hash              String   @id
+  imdbId            String
+  filename          String
+  originalFilename  String
+  bytes             BigInt
+  originalBytes     BigInt
+  host              String
+  progress         Int
+  status           String
+  ended            DateTime
+  updatedAt        DateTime @updatedAt
+  files            AvailableFile[]
+
+  @@index([status])
+  @@index([imdbId])
+  @@index([imdbId, hash])
+}
+
+model AvailableFile {
+  link      String   @id
+  file_id   Int
+  hash      String
+  path      String
+  bytes     BigInt
+  available Available @relation(fields: [hash], references: [hash], onDelete: Cascade)
+
+  @@index([hash])
+}
