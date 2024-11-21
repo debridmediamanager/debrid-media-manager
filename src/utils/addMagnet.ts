@@ -14,6 +14,12 @@ export const handleAddAsMagnetInRd = async (
 	try {
 		const id = await addHashAsMagnet(rdKey, hash);
 		await handleSelectFilesInRd(rdKey, `rd:${id}`);
+		// get info to check if it's ready
+		const response = await getTorrentInfo(rdKey, id, true);
+		if (response.progress != 100) {
+			toast.success('Torrent added but not yet ready', magnetToastOptions);
+			return;
+		}
 		if (callback) await callback();
 		toast('Successfully added hash!', magnetToastOptions);
 	} catch (error) {
