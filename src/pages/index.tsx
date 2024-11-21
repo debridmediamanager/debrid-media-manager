@@ -23,15 +23,18 @@ function IndexPage() {
 	const {
 		rdUser,
 		adUser,
+		tbUser,
 		rdError,
 		adError,
+		tbError,
 		traktUser,
 		traktError,
 		hasRDAuth,
 		hasADAuth,
+		hasTBAuth,
 		hasTraktAuth,
 	} = useCurrentUser();
-	const { loginWithRealDebrid, loginWithAllDebrid } = useDebridLogin();
+	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
 	const _ = useCastToken();
 	const [browseTerms] = useState(getTerms(2));
 
@@ -63,6 +66,9 @@ function IndexPage() {
 				'AllDebrid get user info failed, check your email and confirm the login coming from DMM'
 			);
 		}
+		if (tbError) {
+			toast.error('Torbox get user info failed, please check your API key');
+		}
 		if (traktError) {
 			toast.error('Trakt get user info failed');
 		}
@@ -82,7 +88,7 @@ function IndexPage() {
 				);
 			};
 		}
-	}, [rdError, adError, traktError]);
+	}, [rdError, adError, tbError, traktError]);
 
 	useEffect(() => {
 		if (rdUser) {
@@ -111,7 +117,10 @@ function IndexPage() {
 			</Head>
 			<Logo />
 			<Toaster position="bottom-right" />
-			{(rdUser || !hasRDAuth) && (adUser || !hasADAuth) && (traktUser || !hasTraktAuth) ? (
+			{(rdUser || !hasRDAuth) &&
+			(adUser || !hasADAuth) &&
+			(tbUser || !hasTBAuth) &&
+			(traktUser || !hasTraktAuth) ? (
 				<>
 					<h1 className="mb-2 text-xl font-bold text-white">
 						Debrid Media Manager{' '}
@@ -143,6 +152,12 @@ function IndexPage() {
 								service="ad"
 								user={adUser}
 								onTraktLogin={loginWithAllDebrid}
+								onLogout={(prefix) => handleLogout(prefix, router)}
+							/>
+							<ServiceCard
+								service="tb"
+								user={tbUser}
+								onTraktLogin={loginWithTorbox}
 								onLogout={(prefix) => handleLogout(prefix, router)}
 							/>
 							<ServiceCard

@@ -1,5 +1,6 @@
 import { getAllDebridUser } from '@/services/allDebrid';
 import { getCurrentUser as getRealDebridUser, getToken } from '@/services/realDebrid';
+import { getUser as getTorboxUser } from '@/services/torbox';
 import { TraktUser, getTraktUser } from '@/services/trakt';
 import { clearRdKeys } from '@/utils/clearLocalStorage';
 import { useRouter } from 'next/router';
@@ -30,6 +31,102 @@ export interface AllDebridUser {
 	fidelityPoints: number;
 }
 
+export interface TorboxUser {
+	success: boolean;
+	error: null | string;
+	detail: string;
+	data: {
+		id: number;
+		email: string;
+		is_subscribed: boolean;
+		premium_expires_at: string;
+		total_bytes_downloaded: number;
+		total_bytes_uploaded: number;
+		torrents_downloaded: number;
+		[key: string]: any;
+	};
+}
+
+export const useCurrentUser = () => {
+	const [rdUser, setRdUser] = useState<RealDebridUser | null>(null);
+	const [adUser, setAdUser] = useState<AllDebridUser | null>(null);
+	const [tbUser, setTbUser] = useState<TorboxUser | null>(null);
+	const [traktUser, setTraktUser] = useState<TraktUser | null>(null);
+	const router = useRouter();
+	const [rdToken] = useLocalStorage<string>('rd:accessToken');
+	const [adToken] = useLocalStorage<string>('ad:apiKey');
+	const [tbToken] = useLocalStorage<string>('tb:apiKey');
+	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
+	const [_, setTraktUserSlug] = useLocalStorage<string>('trakt:userSlug');
+	const [rdError, setRdError] = useState<Error | null>(null);
+	const [adError, setAdError] = useState<Error | null>(null);
+	const [tbError, setTbError] = useState<Error | null>(null);
+	const [traktError, setTraktError] = useState<Error | null>(null);
+
+	const hasRDAuth = !!rdToken;
+	const hasADAuth = !!adToken;
+	const hasTBAuth = !!tbToken;
+	const hasTraktAuth = !!traktToken;
+
+	useEffect(() => {
+		(async () => {
+			try {
+				if (rdToken) {
+					const rdUserResponse = await getRealDebridUser(rdToken);
+					if (rdUserResponse) setRdUser(rdUserResponse as RealDebridUser);
+				}
+			} catch (error: any) {
+				setRdError(new Error(error));
+			}
+			try {
+				if (adToken) {
+					const adUserResponse = await getAllDebridUser(adToken);
+					if (adUserResponse) setAdUser(adUserResponse as AllDebridUser);
+				}
+			} catch (error: any) {
+				setAdError(new Error(error));
+			}
+			try {
+				if (tbToken) {
+					const tbUserResponse = await getTorboxUser(tbToken);
+					if (tbUserResponse && tbUserResponse.success) {
+						setTbUser(tbUserResponse as TorboxUser);
+					}
+				}
+			} catch (error: any) {
+				setTbError(new Error(error));
+			}
+			try {
+				if (traktToken) {
+					const traktUserResponse = await getTraktUser(traktToken);
+					if (traktUserResponse) {
+						setTraktUser(traktUserResponse);
+						setTraktUserSlug(traktUserResponse.user.ids.slug);
+					}
+				}
+			} catch (error: any) {
+				setTraktError(new Error(error));
+			}
+		})();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [rdToken, adToken, tbToken, traktToken, router]);
+
+	return {
+		rdUser,
+		rdError,
+		hasRDAuth,
+		adUser,
+		adError,
+		hasADAuth,
+		tbUser,
+		tbError,
+		hasTBAuth,
+		traktUser,
+		traktError,
+		hasTraktAuth,
+	};
+};
+
 export const useDebridLogin = () => {
 	const router = useRouter();
 
@@ -41,9 +138,14 @@ export const useDebridLogin = () => {
 		await router.push('/alldebrid/login');
 	};
 
+	const loginWithTorbox = async () => {
+		await router.push('/torbox/login');
+	};
+
 	return {
 		loginWithRealDebrid,
 		loginWithAllDebrid,
+		loginWithTorbox,
 	};
 };
 
@@ -82,67 +184,4 @@ export const useRealDebridAccessToken = (): [string | null, boolean] => {
 export const useAllDebridApiKey = () => {
 	const [apiKey] = useLocalStorage<string>('ad:apiKey');
 	return apiKey;
-};
-
-export const useCurrentUser = () => {
-	const [rdUser, setRdUser] = useState<RealDebridUser | null>(null);
-	const [adUser, setAdUser] = useState<AllDebridUser | null>(null);
-	const [traktUser, setTraktUser] = useState<TraktUser | null>(null);
-	const router = useRouter();
-	const [rdToken] = useLocalStorage<string>('rd:accessToken');
-	const [adToken] = useLocalStorage<string>('ad:apiKey');
-	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
-	const [_, setTraktUserSlug] = useLocalStorage<string>('trakt:userSlug');
-	const [rdError, setRdError] = useState<Error | null>(null);
-	const [adError, setAdError] = useState<Error | null>(null);
-	const [traktError, setTraktError] = useState<Error | null>(null);
-
-	const hasRDAuth = !!rdToken;
-	const hasADAuth = !!adToken;
-	const hasTraktAuth = !!traktToken;
-
-	useEffect(() => {
-		(async () => {
-			try {
-				if (rdToken) {
-					const rdUserResponse = await getRealDebridUser(rdToken!);
-					if (rdUserResponse) setRdUser(<RealDebridUser>rdUserResponse);
-				}
-			} catch (error: any) {
-				setRdError(new Error(error));
-			}
-			try {
-				if (adToken) {
-					const adUserResponse = await getAllDebridUser(adToken!);
-					if (adUserResponse) setAdUser(<AllDebridUser>adUserResponse);
-				}
-			} catch (error: any) {
-				setAdError(new Error(error));
-			}
-			try {
-				if (traktToken) {
-					const traktUserResponse = await getTraktUser(traktToken!);
-					if (traktUserResponse) {
-						setTraktUser(traktUserResponse);
-						setTraktUserSlug(traktUserResponse.user.ids.slug);
-					}
-				}
-			} catch (error: any) {
-				setTraktError(new Error(error));
-			}
-		})();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdToken, adToken, traktToken, router]);
-
-	return {
-		rdUser,
-		rdError,
-		hasRDAuth,
-		adUser,
-		adError,
-		hasADAuth,
-		traktUser,
-		traktError,
-		hasTraktAuth,
-	};
 };

@@ -14,11 +14,18 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 		const [isLoading, setIsLoading] = useState(true);
 		const [rdKey, rdLoading] = useRealDebridAccessToken();
 		const adKey = useAllDebridApiKey();
+		const [tbKey] = useState(() => {
+			if (typeof window !== 'undefined') {
+				return localStorage.getItem('tb:apiKey');
+			}
+			return null;
+		});
 
 		useEffect(() => {
 			if (
 				!rdKey &&
 				!adKey &&
+				!tbKey &&
 				router.pathname !== START_ROUTE &&
 				!router.pathname.endsWith(LOGIN_ROUTE) &&
 				!rdLoading
@@ -34,7 +41,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 				}
 				setIsLoading(false);
 			}
-		}, [rdKey, rdLoading, adKey, router]);
+		}, [rdKey, rdLoading, adKey, tbKey, router]);
 
 		if (isLoading) {
 			// Render a loading indicator or placeholder on initial load
