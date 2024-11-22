@@ -1,7 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import getConfig from 'next/config';
 import qs from 'qs';
-import { IframeProxy } from './iframeProxy';
 import {
 	AccessTokenResponse,
 	AddMagnetResponse,
@@ -17,8 +16,6 @@ import {
 
 const { publicRuntimeConfig: config } = getConfig();
 
-const apiClient = new IframeProxy();
-
 // Validate SHA40 hash format
 function isValidSHA40Hash(hash: string): boolean {
 	const hashRegex = /^[a-f0-9]{40}$/i;
@@ -27,11 +24,9 @@ function isValidSHA40Hash(hash: string): boolean {
 
 export const getDeviceCode = async () => {
 	try {
-		const url = `${config.realDebridHostname}/oauth/v2/device/code?client_id=${config.realDebridClientId}&new_credentials=yes`;
-		return await apiClient.sendRequest<DeviceCodeResponse>({
-			url,
-			method: 'GET',
-		});
+		const url = `${config.proxy}${config.realDebridHostname}/oauth/v2/device/code?client_id=${config.realDebridClientId}&new_credentials=yes`;
+		const response = await axios.get<DeviceCodeResponse>(url);
+		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching device code:', error.message);
 		throw error;
@@ -40,11 +35,9 @@ export const getDeviceCode = async () => {
 
 export const getCredentials = async (deviceCode: string) => {
 	try {
-		const url = `${config.realDebridHostname}/oauth/v2/device/credentials?client_id=${config.realDebridClientId}&code=${deviceCode}`;
-		return await apiClient.sendRequest<CredentialsResponse>({
-			url,
-			method: 'GET',
-		});
+		const url = `${config.proxy}${config.realDebridHostname}/oauth/v2/device/credentials?client_id=${config.realDebridClientId}&code=${deviceCode}`;
+		const response = await axios.get<CredentialsResponse>(url);
+		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching credentials:', error.message);
 		throw error;
@@ -59,14 +52,16 @@ export const getToken = async (clientId: string, clientSecret: string, code: str
 		params.append('code', code);
 		params.append('grant_type', 'http://oauth.net/grant_type/device/1.0');
 
-		return await apiClient.sendRequest<AccessTokenResponse>({
-			url: `${config.realDebridHostname}/oauth/v2/token`,
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: params.toString(),
-		});
+		const response = await axios.post<AccessTokenResponse>(
+			`${config.proxy}${config.realDebridHostname}/oauth/v2/token`,
+			params.toString(),
+			{
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+			}
+		);
+		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching access token:', error.message);
 		throw error;
@@ -75,13 +70,11 @@ export const getToken = async (clientId: string, clientSecret: string, code: str
 
 export const getCurrentUser = async (accessToken: string) => {
 	try {
-		return await apiClient.sendRequest<UserResponse>({
-			url: `${config.realDebridHostname}/rest/1.0/user`,
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
+		const client = await createAxiosClient(accessToken);
+		const response = await client.get<UserResponse>(
+			`${config.proxy}${config.realDebridHostname}/rest/1.0/user`
+		);
+		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching user information:', error.message);
 		throw error;
@@ -94,21 +87,16 @@ export const getUserTorrentsList = async (
 	page: number = 1
 ): Promise<UserTorrentsResult> => {
 	try {
-		const url = new URL(`${config.realDebridHostname}/rest/1.0/torrents`);
+		const url = new URL(`${config.proxy}${config.realDebridHostname}/rest/1.0/torrents`);
 		url.searchParams.append('page', page.toString());
 		url.searchParams.append('limit', limit.toString());
 
-		let response = await apiClient.sendRequest<UserTorrentResponse[]>({
-			url: url.toString(),
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
+		const client = await createAxiosClient(accessToken);
+		const response = await client.get<UserTorrentResponse[]>(url.toString());
 
 		return {
-			data: response,
-			totalCount: response.length,
+			data: response.data,
+			totalCount: response.data.length,
 		};
 	} catch (error: any) {
 		console.error('Error fetching user torrents list:', error.message);
@@ -156,15 +144,11 @@ export const getTorrentInfo = async (
 	bare: boolean = false
 ): Promise<TorrentInfoResponse> => {
 	try {
-		return await apiClient.sendRequest<TorrentInfoResponse>({
-			url: `${
-				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
-			}/rest/1.0/torrents/info/${id}`,
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
+		const client = await createAxiosClient(accessToken);
+		const response = await client.get<TorrentInfoResponse>(
+			`${bare ? 'https://api.real-debrid.com' : config.proxy + config.realDebridHostname}/rest/1.0/torrents/info/${id}`
+		);
+		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching torrent information:', error.message);
 		throw error;
@@ -183,13 +167,11 @@ export const rdInstantCheck = async (
 			return {}; // Return empty response if no valid hashes
 		}
 
-		return await apiClient.sendRequest<RdInstantAvailabilityResponse>({
-			url: `${config.realDebridHostname}/rest/1.0/torrents/instantAvailability/${validHashes.join('/')}`,
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
+		const client = await createAxiosClient(accessToken);
+		const response = await client.get<RdInstantAvailabilityResponse>(
+			`${config.proxy}${config.realDebridHostname}/rest/1.0/torrents/instantAvailability/${validHashes.join('/')}`
+		);
+		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching torrent information:', error.message);
 		throw error;
@@ -202,18 +184,17 @@ export const addMagnet = async (
 	bare: boolean = false
 ): Promise<string> => {
 	try {
-		const response = await apiClient.sendRequest<AddMagnetResponse>({
-			url: `${
-				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
-			}/rest/1.0/torrents/addMagnet`,
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: qs.stringify({ magnet }),
-		});
-		return response.id;
+		const client = await createAxiosClient(accessToken);
+		const response = await client.post<AddMagnetResponse>(
+			`${bare ? 'https://api.real-debrid.com' : config.proxy + config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
+			qs.stringify({ magnet }),
+			{
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+			}
+		);
+		return response.data.id;
 	} catch (error: any) {
 		console.error('Error adding magnet:', error.message);
 		throw error;
@@ -230,11 +211,7 @@ export const addHashAsMagnet = async (
 		throw new Error(`Invalid SHA40 hash: ${hash}`);
 	}
 
-	return await addMagnet(
-		accessToken,
-		`magnet:?xt=urn:btih:${hash}&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker1.bt.moack.co.kr%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.bittor.pw%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.free-tracker.ga%3A6969%2Fannounce&tr=udp%3A%2F%2Fisk.richardsw.club%3A6969%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fbt1.archive.org%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=http%3A%2F%2Ftracker1.bt.moack.co.kr%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker1.myporn.club%3A9337%2Fannounce&tr=udp%3A%2F%2Ftracker.dump.cl%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftamas3.ynh.fr%3A6969%2Fannounce&tr=udp%3A%2F%2Fryjer.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fretracker01-msk-virt.corbina.net%3A80%2Fannounce&tr=udp%3A%2F%2Fpublic.tracker.vraphim.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopentracker.io%3A6969%2Fannounce&tr=udp%3A%2F%2Fnew-line.net%3A6969%2Fannounce&tr=udp%3A%2F%2Fmoonburrow.club%3A6969%2Fannounce&tr=udp%3A%2F%2Fepider.me%3A6969%2Fannounce&tr=udp%3A%2F%2F6ahddutb1ucc3cp.ru%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.renfei.net%3A443%2Fannounce&tr=http%3A%2F%2Ftracker.renfei.net%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker.ipv6tracker.org%3A80%2Fannounce&tr=udp%3A%2F%2Fwepzone.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker2.dler.org%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.tryhackx.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.therarbg.to%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.therarbg.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.t-rb.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.qu.ax%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.publictracker.xyz%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.fnix.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.filemail.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.farted.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.edkj.club%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.0x7c0.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fsu-data.com%3A6969%2Fannounce&tr=udp%3A%2F%2Frun.publictracker.xyz%3A6969%2Fannounce&tr=udp%3A%2F%2Frun-2.publictracker.xyz%3A6969%2Fannounce&tr=udp%3A%2F%2Fpublic.publictracker.xyz%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.xxtor.com%3A3074%2Fannounce&tr=udp%3A%2F%2Fopen.u-p.pw%3A6969%2Fannounce&tr=udp%3A%2F%2Foh.fuuuuuck.com%3A6969%2Fannounce&tr=udp%3A%2F%2Finferno.demonoid.is%3A3391%2Fannounce&tr=udp%3A%2F%2Ffree.publictracker.xyz%3A6969%2Fannounce&tr=udp%3A%2F%2Fbubu.mapfactor.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fbt2.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fbt.ktrackers.com%3A6666%2Fannounce&tr=udp%3A%2F%2F1c.premierzal.ru%3A6969%2Fannounce&tr=https%3A%2F%2Fwww.peckservers.com%3A9443%2Fannounce&tr=https%3A%2F%2Ftracker.yemekyedim.com%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.loligirl.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.lilithraws.org%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.ipfsscan.io%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.gcrreen.xyz%3A443%2Fannounce&tr=https%3A%2F%2Ftr.burnabyhighstar.com%3A443%2Fannounce&tr=https%3A%2F%2Ft1.hloli.org%3A443%2Fannounce&tr=http%3A%2F%2Fwww.peckservers.com%3A9000%2Fannounce&tr=http%3A%2F%2Fwepzone.net%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker2.dler.org%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.qu.ax%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.mywaifu.best%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.files.fm%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.edkj.club%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=http%3A%2F%2Fch3oh.ru%3A6969%2Fannounce&tr=http%3A%2F%2Fcanardscitrons.nohost.me%3A6969%2Fannounce&tr=http%3A%2F%2F1337.abcvg.info%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.srv00.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ddunlimited.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.anima.nz%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker-udp.gbitt.info%3A80%2Fannounce&tr=udp%3A%2F%2Ftorrents.artixlinux.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fipv4.rer.lol%3A2710%2Fannounce&tr=udp%3A%2F%2Ffh2.cmp-gaming.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fevan.im%3A6969%2Fannounce&tr=udp%3A%2F%2Fconcen.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fbittorrent-tracker.e-n-c-r-y-p-t.net%3A1337%2Fannounce&tr=udp%3A%2F%2Faegir.sexy%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.gbitt.info%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.cloudit.top%3A443%2Fannounce&tr=http%3A%2F%2Ftracker1.itzmx.com%3A8080%2Fannounce&tr=http%3A%2F%2Ftracker.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Fbvarf.tracker.sh%3A2086%2Fannounce&tr=http%3A%2F%2Fbittorrent-tracker.e-n-c-r-y-p-t.net%3A1337%2Fannounce`,
-		bare
-	);
+	return await addMagnet(accessToken, `magnet:?xt=urn:btih:${hash}`, bare);
 };
 
 export const selectFiles = async (
@@ -244,17 +221,16 @@ export const selectFiles = async (
 	bare: boolean = false
 ): Promise<void> => {
 	try {
-		await apiClient.sendRequest<void>({
-			url: `${
-				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
-			}/rest/1.0/torrents/selectFiles/${id}`,
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: qs.stringify({ files: files.join(',') }),
-		});
+		const client = await createAxiosClient(accessToken);
+		await client.post(
+			`${bare ? 'https://api.real-debrid.com' : config.proxy + config.realDebridHostname}/rest/1.0/torrents/selectFiles/${id}`,
+			qs.stringify({ files: files.join(',') }),
+			{
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+			}
+		);
 	} catch (error: any) {
 		console.error('Error selecting files:', error.message);
 		throw error;
@@ -267,15 +243,10 @@ export const deleteTorrent = async (
 	bare: boolean = false
 ): Promise<void> => {
 	try {
-		await apiClient.sendRequest<void>({
-			url: `${
-				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
-			}/rest/1.0/torrents/delete/${id}`,
-			method: 'DELETE',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
+		const client = await createAxiosClient(accessToken);
+		await client.delete(
+			`${bare ? 'https://api.real-debrid.com' : config.proxy + config.realDebridHostname}/rest/1.0/torrents/delete/${id}`
+		);
 	} catch (error: any) {
 		console.error('Error deleting torrent:', error.message);
 		throw error;
@@ -284,13 +255,10 @@ export const deleteTorrent = async (
 
 export const deleteDownload = async (accessToken: string, id: string): Promise<void> => {
 	try {
-		await apiClient.sendRequest<void>({
-			url: `${config.realDebridHostname}/rest/1.0/downloads/delete/${id}`,
-			method: 'DELETE',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
+		const client = await createAxiosClient(accessToken);
+		await client.delete(
+			`${config.proxy}${config.realDebridHostname}/rest/1.0/downloads/delete/${id}`
+		);
 	} catch (error: any) {
 		console.error('Error deleting download:', error.message);
 		throw error;
@@ -316,17 +284,17 @@ export const unrestrictLink = async (
 		}
 		params.append('link', link);
 
-		return await apiClient.sendRequest<UnrestrictResponse>({
-			url: `${
-				bare ? 'https://api.real-debrid.com' : config.realDebridHostname
-			}/rest/1.0/unrestrict/link`,
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				Authorization: `Bearer ${accessToken}`,
-			},
-			body: params.toString(),
-		});
+		const client = await createAxiosClient(accessToken);
+		const response = await client.post<UnrestrictResponse>(
+			`${bare ? 'https://api.real-debrid.com' : config.proxy + config.realDebridHostname}/rest/1.0/unrestrict/link`,
+			params.toString(),
+			{
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+			}
+		);
+		return response.data;
 	} catch (error: any) {
 		console.error('Error checking unrestrict:', error.message);
 		throw error;
@@ -359,10 +327,10 @@ export const proxyUnrestrictLink = async (
 
 export const getTimeISO = async (): Promise<string> => {
 	try {
-		return await apiClient.sendRequest<string>({
-			url: `${config.realDebridHostname}/rest/1.0/time/iso`,
-			method: 'GET',
-		});
+		const response = await axios.get<string>(
+			`${config.proxy}${config.realDebridHostname}/rest/1.0/time/iso`
+		);
+		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching time:', error.message);
 		throw error;
@@ -371,9 +339,36 @@ export const getTimeISO = async (): Promise<string> => {
 
 // Function to create an Axios client with a given token
 function createAxiosClient(token: string): AxiosInstance {
-	return axios.create({
+	const client = axios.create({
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
 	});
+
+	// Rate limiting configuration
+	let requestCount = 0;
+	let lastResetTime = Date.now();
+	const MAX_REQUESTS_PER_MINUTE = 250;
+	const MINUTE = 60 * 1000;
+
+	// Add request interceptor for rate limiting
+	client.interceptors.request.use(async (config) => {
+		const now = Date.now();
+		if (now - lastResetTime >= MINUTE) {
+			requestCount = 0;
+			lastResetTime = now;
+		}
+
+		if (requestCount >= MAX_REQUESTS_PER_MINUTE) {
+			const timeToWait = MINUTE - (now - lastResetTime);
+			await new Promise((resolve) => setTimeout(resolve, timeToWait));
+			requestCount = 0;
+			lastResetTime = Date.now();
+		}
+
+		requestCount++;
+		return config;
+	});
+
+	return client;
 }
