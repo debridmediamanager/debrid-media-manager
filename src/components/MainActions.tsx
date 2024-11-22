@@ -28,12 +28,6 @@ export function MainActions({ rdUser, showSettings }: MainActionsProps) {
 			>
 				🚀 Hash lists
 			</Link>
-			<Link
-				href="/animesearch"
-				className="haptic flex items-center justify-center gap-2 rounded border-2 border-pink-500 bg-pink-900/30 p-3 text-pink-100 transition-colors hover:bg-pink-800/50"
-			>
-				<span>🌸</span> Anime
-			</Link>
 			{rdUser && (
 				<Link
 					href="/stremio"
