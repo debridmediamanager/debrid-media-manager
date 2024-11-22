@@ -52,6 +52,7 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	sortFn?: (results: T[]) => T[],
 	shouldUpdateTitleAndSize = false
 ): Promise<number> => {
+	return 0;
 	let instantCount = 0;
 	const funcs = [];
 
@@ -189,6 +190,7 @@ const checkForUncachedInRd = async (
 	setUncachedHashes: Dispatch<SetStateAction<Set<string>>>,
 	db: UserTorrentDB
 ): Promise<Set<string>> => {
+	return new Set();
 	const cachedHashes: Set<string> = new Set();
 	const nonVideoHashes: Set<string> = new Set();
 

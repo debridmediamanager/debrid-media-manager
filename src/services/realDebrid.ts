@@ -87,12 +87,10 @@ export const getUserTorrentsList = async (
 	page: number = 1
 ): Promise<UserTorrentsResult> => {
 	try {
-		const url = new URL(`${config.proxy}${config.realDebridHostname}/rest/1.0/torrents`);
-		url.searchParams.append('page', page.toString());
-		url.searchParams.append('limit', limit.toString());
+		const url = `${config.proxy}${config.realDebridHostname}/rest/1.0/torrents?page=${page}&limit=${limit}`;
 
 		const client = await createAxiosClient(accessToken);
-		const response = await client.get<UserTorrentResponse[]>(url.toString());
+		const response = await client.get<UserTorrentResponse[]>(url);
 
 		return {
 			data: response.data,
