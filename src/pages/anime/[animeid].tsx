@@ -98,7 +98,7 @@ const MovieSearch: FunctionComponent = () => {
 	const [descLimit, setDescLimit] = useState(100);
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
-	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
+	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(false);
 	const [uncachedCount, setUncachedCount] = useState<number>(0);
 	const dmmCastToken = useCastToken();
 
