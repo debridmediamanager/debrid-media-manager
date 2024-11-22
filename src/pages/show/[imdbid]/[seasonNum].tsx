@@ -65,7 +65,7 @@ const TvSearch: FunctionComponent = () => {
 	const [descLimit, setDescLimit] = useState(100);
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
-	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(true);
+	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(false);
 	const dmmCastToken = useCastToken();
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalUncachedCount, setTotalUncachedCount] = useState<number>(0);
