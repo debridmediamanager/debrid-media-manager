@@ -49,6 +49,13 @@ model Cast {
   @@index([imdbId, userId, updatedAt])
 }
 
+model CastProfile {
+  userId    String   @id
+  clientId  String
+  clientSecret String
+  updatedAt DateTime @updatedAt
+}
+
 model Titles {
   imdbid            String  @id
   title             String

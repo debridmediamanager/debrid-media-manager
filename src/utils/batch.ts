@@ -29,7 +29,6 @@ export async function runConcurrentFunctions<T>(
 			})
 			.finally(async () => {
 				if (typeof delay === 'number') await sleep(delay);
-				else await delay(functions.length);
 				const index = currentFunctions.indexOf(nextFunction);
 				currentFunctions.splice(index, 1);
 			});

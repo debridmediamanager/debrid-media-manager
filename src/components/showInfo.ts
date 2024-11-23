@@ -83,6 +83,20 @@ const icons = {
 	exportLinks: '<span style="font-size: 1.2rem;">📤</span>',
 };
 
+// Default button labels
+const defaultLabels = {
+	download: 'Download',
+	watch: 'Watch',
+	cast: 'Cast',
+	castAll: 'Cast',
+	share: 'Hashlist',
+	delete: 'Delete',
+	magnet: 'Copy Magnet',
+	reinsert: 'Reinsert',
+	downloadAll: 'Download All',
+	exportLinks: 'Get Links',
+};
+
 // UI Components
 const renderButton = (
 	type: keyof typeof buttonStyles,
@@ -90,11 +104,12 @@ const renderButton = (
 ) => {
 	const style = buttonStyles[type];
 	const icon = icons[type];
+	const defaultLabel = defaultLabels[type];
 
 	if ('link' in props) {
 		return `<form action="${props.link}" method="get" target="_blank" class="inline">
             <input type="hidden" name="${props.linkParam?.name || 'links'}" value="${props.linkParam?.value || props.onClick || ''}" />
-            <button type="submit" class="inline m-0 ${style} text-xs rounded px-1 haptic-sm">${icon} ${props.text || type}</button>
+            <button type="submit" class="inline m-0 ${style} text-xs rounded px-1 haptic-sm">${icon} ${props.text || defaultLabel}</button>
         </form>`;
 	}
 
@@ -111,7 +126,7 @@ const renderButton = (
 	const textSize = isLibraryAction ? 'text-base' : 'text-xs';
 	const touchClass = isLibraryAction ? 'touch-manipulation' : '';
 
-	return `<button type="button" class="inline ${style} ${textSize} rounded cursor-pointer ${touchClass}" onclick="${props.onClick}">${icon} ${'text' in props ? props.text || type : ''}</button>`;
+	return `<button type="button" class="inline ${style} ${textSize} rounded cursor-pointer ${touchClass}" onclick="${props.onClick}">${icon} ${'text' in props ? props.text || defaultLabel : defaultLabel}</button>`;
 };
 
 const renderFileRow = (file: FileRowProps, showCheckbox: boolean = false): string => {
