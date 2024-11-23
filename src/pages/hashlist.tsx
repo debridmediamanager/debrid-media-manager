@@ -10,6 +10,7 @@ import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
 import { genericToastOptions } from '@/utils/toastOptions';
+import { generateTokenAndHash } from '@/utils/token';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import lzString from 'lz-string';
 import Head from 'next/head';
@@ -101,7 +102,19 @@ function HashlistPage() {
 			setUserTorrentsList(torrents);
 
 			const hashArr = torrents.map((r) => r.hash);
-			if (rdKey) wrapLoading('RD', instantCheckInRd2(rdKey, hashArr, setUserTorrentsList));
+			if (rdKey) {
+				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+				wrapLoading(
+					'RD',
+					instantCheckInRd2(
+						tokenWithTimestamp,
+						tokenHash,
+						rdKey,
+						hashArr,
+						setUserTorrentsList
+					)
+				);
+			}
 			if (adKey) wrapLoading('AD', instantCheckInAd2(adKey, hashArr, setUserTorrentsList));
 		} catch (error) {
 			setUserTorrentsList([]);

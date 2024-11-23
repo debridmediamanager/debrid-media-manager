@@ -1,6 +1,11 @@
 import { TorrentInfoResponse } from '../services/types';
 
-export async function submitAvailability(torrentInfo: TorrentInfoResponse, imdbId: string) {
+export async function submitAvailability(
+	dmmProblemKey: string,
+	solution: string,
+	torrentInfo: TorrentInfoResponse,
+	imdbId: string
+) {
 	try {
 		const response = await fetch('/api/availability', {
 			method: 'POST',
@@ -10,6 +15,8 @@ export async function submitAvailability(torrentInfo: TorrentInfoResponse, imdbI
 			body: JSON.stringify({
 				...torrentInfo,
 				imdbId,
+				dmmProblemKey,
+				solution,
 			}),
 		});
 
@@ -25,7 +32,12 @@ export async function submitAvailability(torrentInfo: TorrentInfoResponse, imdbI
 	}
 }
 
-export async function checkAvailability(imdbId: string, hashes: string[]) {
+export async function checkAvailability(
+	dmmProblemKey: string,
+	solution: string,
+	imdbId: string,
+	hashes: string[]
+) {
 	try {
 		const response = await fetch('/api/availability/check', {
 			method: 'POST',
@@ -35,6 +47,8 @@ export async function checkAvailability(imdbId: string, hashes: string[]) {
 			body: JSON.stringify({
 				imdbId,
 				hashes,
+				dmmProblemKey,
+				solution,
 			}),
 		});
 
@@ -50,7 +64,11 @@ export async function checkAvailability(imdbId: string, hashes: string[]) {
 	}
 }
 
-export async function checkAvailabilityByHashes(hashes: string[]) {
+export async function checkAvailabilityByHashes(
+	dmmProblemKey: string,
+	solution: string,
+	hashes: string[]
+) {
 	try {
 		const response = await fetch('/api/availability/check2', {
 			method: 'POST',
@@ -59,6 +77,8 @@ export async function checkAvailabilityByHashes(hashes: string[]) {
 			},
 			body: JSON.stringify({
 				hashes,
+				dmmProblemKey,
+				solution,
 			}),
 		});
 
