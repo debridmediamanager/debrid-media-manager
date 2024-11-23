@@ -1,13 +1,19 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
+// Function to get random poster subdomain
+const getPosterUrl = (imdbId: string): string => {
+	const randomNum = Math.floor(Math.random() * 10);
+	return `https://posters${randomNum}.debridmediamanager.com/${imdbId}-small.jpg`;
+};
+
 const Poster = ({ imdbId, title = 'No poster' }: Record<string, string>) => {
 	const [posterUrl, setPosterUrl] = useState('');
 	const [fallbackAttempted, setFallbackAttempted] = useState(false);
 
 	useEffect(() => {
-		// Start with primary URL directly
-		setPosterUrl(`https://posters.debridmediamanager.com/${imdbId}-small.jpg`);
+		// Use random poster subdomain
+		setPosterUrl(getPosterUrl(imdbId));
 		setFallbackAttempted(false);
 	}, [imdbId]);
 
