@@ -15,7 +15,7 @@ export const handleAddAsMagnetInRd = async (
 		const id = await addHashAsMagnet(rdKey, hash);
 		await handleSelectFilesInRd(rdKey, `rd:${id}`);
 		// get info to check if it's ready
-		const response = await getTorrentInfo(rdKey, id, true);
+		const response = await getTorrentInfo(rdKey, id);
 		if (response.progress != 100) {
 			toast.success('Torrent added but not yet ready', magnetToastOptions);
 			return;
@@ -80,7 +80,7 @@ export const handleReinsertTorrentinRd = async (
 		const newId = await addHashAsMagnet(rdKey, torrent.hash);
 		await handleSelectFilesInRd(rdKey, `rd:${newId}`);
 		if (!forceDeleteOld) {
-			const response = await getTorrentInfo(rdKey, newId, true);
+			const response = await getTorrentInfo(rdKey, newId);
 			if (response.progress != 100) {
 				toast.success(
 					`Torrent reinserted (${newId}) but not yet ready`,
