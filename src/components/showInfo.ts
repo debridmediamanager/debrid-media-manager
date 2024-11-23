@@ -1,8 +1,8 @@
+import { MagnetStatus } from '@/services/allDebrid';
+import { TorrentInfoResponse } from '@/services/types';
+import { handleShare } from '@/utils/hashList';
+import { isVideo } from '@/utils/selectable';
 import Swal from 'sweetalert2';
-import { MagnetStatus } from '../services/allDebrid';
-import { TorrentInfoResponse } from '../services/types';
-import { handleShare } from '../utils/hashList';
-import { isVideo } from '../utils/selectable';
 
 // Utility functions
 const formatSize = (bytes: number): { size: number; unit: string } => {

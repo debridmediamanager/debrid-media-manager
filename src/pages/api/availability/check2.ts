@@ -1,5 +1,5 @@
+import { PlanetScaleCache } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PlanetScaleCache } from '../../../services/planetscale';
 
 function isValidTorrentHash(hash: string): boolean {
 	return /^[a-fA-F0-9]{40}$/.test(hash);

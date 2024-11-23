@@ -1,4 +1,4 @@
-import { DMM_CAST_TOKEN_KEY, useCastToken } from '@/hooks/cast';
+import { DMM_CAST_TOKEN_KEY, useCastToken } from '@/hooks/castToken';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';

@@ -1,13 +1,13 @@
 import { showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { useCastToken } from '@/hooks/cast';
+import { useCastToken } from '@/hooks/castToken';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
 import { submitAvailability } from '@/utils/availability';
-import { handleCastAnime } from '@/utils/cast';
+import { handleCastAnime } from '@/utils/castApiClient';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { instantCheckAnimeInRd, instantCheckInAd, wrapLoading } from '@/utils/instantChecks';

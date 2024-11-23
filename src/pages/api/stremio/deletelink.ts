@@ -1,16 +1,18 @@
 import { PlanetScaleCache } from '@/services/planetscale';
+import { handleApiError, validateMethod, validateToken } from '@/utils/castApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	if (req.method !== 'POST') {
-		res.setHeader('Allow', ['POST']);
-		return res.status(405).end(`Method ${req.method} Not Allowed`);
-	}
+	if (!validateMethod(req, res, ['POST'])) return;
 
-	const { token, imdbId, hash } = req.body;
+	const token = validateToken(req, res);
+	if (!token) return;
 
-	if (!token || !imdbId || !hash) {
-		return res.status(400).json({ error: 'Missing required parameters' });
+	const { imdbId, hash } = req.body;
+
+	if (!imdbId || !hash) {
+		res.status(400).json({ error: 'Missing required parameters' });
+		return;
 	}
 
 	try {
@@ -18,7 +20,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		await planetscale.deleteCastedLink(imdbId, token, hash);
 		res.status(200).json({ message: 'Link deleted successfully' });
 	} catch (error) {
-		console.error('Error deleting link:', error);
-		res.status(500).json({ error: 'Failed to delete link' });
+		handleApiError(error, res, 'Failed to delete link');
 	}
 }

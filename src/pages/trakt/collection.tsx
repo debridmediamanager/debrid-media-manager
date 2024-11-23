@@ -1,11 +1,11 @@
+import Poster from '@/components/poster';
+import useLocalStorage from '@/hooks/localStorage';
+import { TraktCollectionItem, getCollectionMovies, getCollectionShows } from '@/services/trakt';
+import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import Poster from '../../components/poster';
-import useLocalStorage from '../../hooks/localStorage';
-import { TraktCollectionItem, getCollectionMovies, getCollectionShows } from '../../services/trakt';
-import { withAuth } from '../../utils/withAuth';
 
 function TraktCollection() {
 	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
