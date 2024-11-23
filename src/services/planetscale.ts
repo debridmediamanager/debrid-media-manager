@@ -579,6 +579,7 @@ export class PlanetScaleCache {
 		userId: string,
 		hash: string,
 		url: string,
+		rdLink: string,
 		duration: number,
 		bitrate: number,
 		fileSize: number,
@@ -595,6 +596,7 @@ export class PlanetScaleCache {
 			},
 			update: {
 				imdbId: imdbId,
+				link: rdLink,
 				url: url,
 				duration: duration,
 				bitrate: bitrate,
@@ -605,6 +607,7 @@ export class PlanetScaleCache {
 				imdbId: imdbId,
 				userId: userId,
 				hash: hash,
+				link: rdLink,
 				url: url,
 				duration: duration,
 				bitrate: bitrate,

@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
-	const [streamUrl, seasonNumber, episodeNumber, fileSize] = await getStreamUrl(
+	const [streamUrl, rdLink, seasonNumber, episodeNumber, fileSize] = await getStreamUrl(
 		token,
 		hash,
 		parseInt(fileId, 10),
@@ -48,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const castKey = `${imdbid}${
 			seasonNumber >= 0 && episodeNumber >= 0 ? `:${seasonNumber}:${episodeNumber}` : ''
 		}`;
-		await db.saveCast(castKey, userid, hash, streamUrl, 0, 0, fileSize, null);
+		await db.saveCast(castKey, userid, hash, streamUrl, rdLink, 0, 0, fileSize, null);
 
 		// send an html
 		res.setHeader('Content-Type', 'text/html');

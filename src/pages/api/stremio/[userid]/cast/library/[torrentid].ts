@@ -1,4 +1,5 @@
 import { PlanetScaleCache } from '@/services/planetscale';
+import { getTorrentInfo } from '@/services/realDebrid';
 import { padWithZero } from '@/utils/checks';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -9,6 +10,7 @@ interface Stream {
 
 interface Video {
 	id: string;
+	title: string;
 	streams: Stream[];
 }
 
@@ -24,6 +26,14 @@ const db = new PlanetScaleCache();
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid, torrentid, rdToken } = req.query;
 
+	if (!rdToken || typeof rdToken !== 'string') {
+		res.status(400).json({
+			status: 'error',
+			errorMessage: 'Missing or invalid RD token',
+		});
+		return;
+	}
+
 	if (!userid || !torrentid || typeof userid !== 'string' || typeof torrentid !== 'string') {
 		res.status(400).json({
 			status: 'error',
@@ -33,6 +43,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
+		// get torrent info
+		const tInfo = await getTorrentInfo(rdToken, torrentid, true);
+		const selectedFiles = tInfo.files.filter((f) => f.selected);
+		// check if length of selected files is equal to length of links
+		if (selectedFiles.length !== tInfo.links.length) {
+			res.status(400).json({
+				status: 'error',
+				errorMessage: 'Cannot determine file link',
+			});
+			return;
+		}
+
 		const response = await fetch(
 			`https://torrentio.strem.fun/realdebrid=${rdToken}/meta/other/realdebrid%3A${torrentid}.json`
 		);
@@ -50,7 +72,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			video.id.startsWith('tt')
 		);
 		if (castableStreams.length === 0) {
-			console.log(data.meta.videos[0].id);
 			res.status(400).json({
 				status: 'error',
 				errorMessage: 'No castable streams found',
@@ -60,7 +81,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		// Process first stream (we'll redirect to the first episode)
 		const firstVideo = castableStreams[0];
-		console.log(`First video: ${firstVideo.id}`);
 		const [imdbid, season, episode] = firstVideo.id.split(':');
 		const hash = data.meta.infoHash;
 
@@ -71,16 +91,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			const castKey = `${vImdbid}${vSeason && vEpisode ? `:${vSeason}:${vEpisode}` : ''}`;
 			const headResp = await axios.head(vStreamUrl, { maxRedirects: 1 });
 			const vRedirectUrl = headResp.request.res.responseUrl || vStreamUrl;
+			const selectedFile = selectedFiles.find((f) => f.path === video.title);
+			const fileIndex = selectedFile ? selectedFiles.indexOf(selectedFile) : -1;
+			const rdLink = fileIndex !== -1 ? tInfo.links[fileIndex] : '';
 			const fileSize =
 				(headResp.headers['content-length']
 					? parseInt(headResp.headers['content-length'])
 					: 0) /
 				1024 /
 				1024;
-			console.log(
-				`Saving cast: ${castKey}, ${userid}, ${hash}, ${vRedirectUrl}, ${fileSize}`
-			);
-			await db.saveCast(castKey, userid, hash, vRedirectUrl, 0, 0, fileSize, null);
+			await db.saveCast(castKey, userid, hash, vRedirectUrl, rdLink, 0, 0, fileSize, null);
 		}
 
 		// Prepare redirect URL and message

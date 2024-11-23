@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const fileIdsArr = Array.isArray(fileIds) ? fileIds : [fileIds];
 	for (const fileId of fileIdsArr) {
 		try {
-			const [streamUrl, seasonNumber, episodeNumber, fileSize] = await getStreamUrl(
+			const [streamUrl, rdLink, seasonNumber, episodeNumber, fileSize] = await getStreamUrl(
 				token,
 				hash,
 				parseInt(fileId, 10),
@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 						? `:${seasonNumber}:${episodeNumber}`
 						: ''
 				}`;
-				await db.saveCast(castKey, userid, hash, streamUrl, 0, 0, fileSize, null);
+				await db.saveCast(castKey, userid, hash, streamUrl, rdLink, 0, 0, fileSize, null);
 			} else {
 				if (seasonNumber >= 0 && episodeNumber >= 0) {
 					errorEpisodes.push(`S${seasonNumber}E${episodeNumber}`);
