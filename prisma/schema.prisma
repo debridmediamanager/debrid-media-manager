@@ -37,7 +37,8 @@ model Cast {
   imdbId    String
   userId    String
   hash      String
-  url       String
+  link      String?
+  url       String   @db.Text
   updatedAt DateTime @updatedAt
   duration  Int      @default(0)
   bitrate   Int      @default(0)
