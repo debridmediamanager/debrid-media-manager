@@ -1,26 +1,18 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PlanetScaleCache } from '../../../services/planetscale';
 
-function isValidImdbId(imdbId: string): boolean {
-	return /^tt\d+$/.test(imdbId);
-}
-
 function isValidTorrentHash(hash: string): boolean {
 	return /^[a-fA-F0-9]{40}$/.test(hash);
 }
 
+// fetch availability with hashes, no IMDb ID constraint
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
 	try {
-		const { imdbId, hashes } = req.body;
-
-		// Validate imdbId
-		if (!imdbId || !isValidImdbId(imdbId)) {
-			return res.status(400).json({ error: 'Invalid IMDb ID' });
-		}
+		const { hashes } = req.body;
 
 		// Validate hashes array
 		if (!Array.isArray(hashes)) {
@@ -46,10 +38,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		const db = new PlanetScaleCache();
 
-		// Use the compound index [imdbId, hash] for efficient lookup
+		// Look up hashes without IMDb ID constraint
 		const availableHashes = await db.prisma.available.findMany({
 			where: {
-				imdbId,
 				hash: { in: hashes },
 			},
 			select: {
@@ -64,7 +55,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			},
 		});
 
-		// Return array of found hashes with their file details
 		return res.status(200).json({
 			available: availableHashes.map((record) => ({
 				hash: record.hash,
