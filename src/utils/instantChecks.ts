@@ -6,6 +6,7 @@ import { UserTorrent } from '@/torrent/userTorrent';
 import { some } from 'lodash';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-hot-toast';
+import { checkAvailability } from './availability';
 import { runConcurrentFunctions } from './batch';
 import { groupBy } from './groupBy';
 import { isVideo } from './selectable';
@@ -45,44 +46,36 @@ const updateTorrentTitle = (torrent: SearchResult, files: FileData[]) => {
 
 // Generic RD instant check function
 const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTorrent>(
-	rdKey: string,
+	imdbId: string,
 	hashes: string[],
 	batchSize: number,
 	setTorrentList: Dispatch<SetStateAction<T[]>>,
 	sortFn?: (results: T[]) => T[],
 	shouldUpdateTitleAndSize = false
 ): Promise<number> => {
-	return 0;
 	let instantCount = 0;
 	const funcs = [];
 
 	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
-			const resp = await rdInstantCheck(rdKey, hashGroup);
+			const resp = await checkAvailability(imdbId, hashGroup);
 			setTorrentList((prevSearchResults) => {
 				const newSearchResults = [...prevSearchResults];
 				for (const torrent of newSearchResults) {
 					if (torrent.noVideos) continue;
-					if (torrent.hash in resp === false) continue;
-					if ('rd' in resp[torrent.hash] === false) continue;
-					const variants = resp[torrent.hash]['rd'];
-					if (!variants.length) continue;
+					const availableTorrent = resp.available.find(
+						(t: { hash: string }) => t.hash === torrent.hash
+					);
+					if (!availableTorrent) continue;
 
-					const variantWithMostFiles = variants.reduce(
-						(prev, curr) =>
-							Object.keys(curr).length > Object.keys(prev).length ? curr : prev,
-						variants[0]
+					torrent.files = availableTorrent.files.map(
+						(file: { path: string; bytes: number }, index: number) => ({
+							fileId: index,
+							filename: file.path,
+							filesize: file.bytes,
+						})
 					);
 
-					const files: Record<number, FileData> = {};
-					for (const fileId in variantWithMostFiles) {
-						files[fileId] = {
-							...variantWithMostFiles[fileId],
-							fileId: parseInt(fileId, 10),
-						};
-					}
-
-					torrent.files = Object.values(files);
 					if (shouldUpdateTitleAndSize) {
 						updateTorrentTitle(torrent as SearchResult, torrent.files);
 						(torrent as SearchResult).fileSize =
@@ -256,24 +249,24 @@ export const wrapLoading = async function (debrid: string, checkAvailability: Pr
 };
 
 export const instantCheckInRd = (
-	rdKey: string,
+	imdbId: string,
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
 	sortFn: (searchResults: SearchResult[]) => SearchResult[]
-) => processRdInstantCheck(rdKey, hashes, 20, setTorrentList, sortFn);
+) => processRdInstantCheck(imdbId, hashes, 20, setTorrentList, sortFn);
 
 export const instantCheckAnimeInRd = (
 	rdKey: string,
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
 	sortFn: (searchResults: SearchResult[]) => SearchResult[]
-) => processRdInstantCheck(rdKey, hashes, 20, setTorrentList, sortFn, true);
+) => processRdInstantCheck('', hashes, 20, setTorrentList, sortFn, true);
 
 export const instantCheckInRd2 = (
 	rdKey: string,
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
-) => processRdInstantCheck(rdKey, hashes, 20, setTorrentList);
+) => processRdInstantCheck('', hashes, 20, setTorrentList);
 
 export const instantCheckInAd = (
 	adKey: string,

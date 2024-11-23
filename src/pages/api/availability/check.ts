@@ -68,7 +68,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(200).json({
 			available: availableHashes.map((record) => ({
 				hash: record.hash,
-				files: record.files,
+				files: record.files.map((file) => ({
+					path: file.path,
+					bytes: Number(file.bytes),
+				})),
 			})),
 		});
 	} catch (error) {
