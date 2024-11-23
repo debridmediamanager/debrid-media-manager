@@ -14,10 +14,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 	res.setHeader('access-control-allow-origin', '*');
 	// get the last casted stream url
-	const streamUrl = await db.getLatestCast(imdbid, userid);
+	const latestCast = await db.getLatestCast(imdbid, userid);
+	// if (latestCast && latestCast.link) {
+	// 	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
+	// 	const unrestrictResp = await unrestrictLink('token', latestCast.link, ipAddress, true);
+	// 	if (unrestrictResp) {
+	// 		res.redirect(302, unrestrictResp.download);
+	// 		return;
+	// 	}
+	// }
+
 	// if present, redirect to row url
-	if (streamUrl) {
-		res.redirect(302, streamUrl);
+	if (latestCast) {
+		res.redirect(302, latestCast.url);
 		return;
 	}
 	// if not then redirect to ping pong

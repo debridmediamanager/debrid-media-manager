@@ -532,7 +532,7 @@ export class PlanetScaleCache {
 
 	// dmm cast
 
-	public async getLatestCast(imdbId: string, userId: string): Promise<string | null> {
+	public async getLatestCast(imdbId: string, userId: string): Promise<LatestCast | null> {
 		const castItem = await this.prisma.cast.findFirst({
 			where: {
 				imdbId: imdbId,
@@ -543,9 +543,12 @@ export class PlanetScaleCache {
 			},
 			select: {
 				url: true,
+				link: true,
 			},
 		});
-		return castItem?.url ?? null;
+		return castItem && castItem.url && castItem.link
+			? { url: castItem.url, link: castItem.link }
+			: null;
 	}
 
 	public async getCastURLs(
