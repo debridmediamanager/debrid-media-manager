@@ -5,10 +5,6 @@ function isValidTorrentHash(hash: string): boolean {
 	return /^[a-fA-F0-9]{40}$/.test(hash);
 }
 
-function isValidImdbId(imdbId: string): boolean {
-	return /^tt\d+$/.test(imdbId);
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' });
@@ -35,19 +31,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return res.status(400).json({ error: 'Missing required fields' });
 		}
 
-		// Validate IMDb ID format
-		if (!isValidImdbId(imdbId)) {
-			return res.status(400).json({ error: 'Invalid IMDb ID format' });
-		}
-
 		// Validate host
 		if (host !== 'real-debrid.com') {
 			return res.status(400).json({ error: 'Invalid host. Only real-debrid.com is allowed' });
-		}
-
-		// Validate status
-		if (status !== 'downloaded') {
-			return res.status(400).json({ error: 'Invalid status. Must be "downloaded"' });
 		}
 
 		// Validate progress
@@ -70,21 +56,38 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return res.status(400).json({ error: 'Files and links must be arrays' });
 		}
 
+		const db = new PlanetScaleCache();
+
 		// Get selected files
 		const selectedFiles = files.filter((file) => file.selected === 1);
 
 		// Validate link distribution
-		if (selectedFiles.length === 0 || selectedFiles.length !== links.length) {
-			return res
-				.status(400)
-				.json({ error: 'Number of selected files must match number of links' });
+		if (selectedFiles.length === 0) {
+			return res.status(400).json({ error: 'Torrent is fully expired' });
+		} else if (selectedFiles.length !== links.length) {
+			return res.status(400).json({ error: 'Torrent is partially expired' });
 		}
 
-		const db = new PlanetScaleCache();
-
 		// Create available record with only selected files
-		await db.prisma.available.create({
-			data: {
+		await db.prisma.available.upsert({
+			where: {
+				hash: hash,
+			},
+			update: {
+				originalFilename: original_filename,
+				originalBytes: BigInt(original_bytes),
+				ended: new Date(ended),
+				files: {
+					deleteMany: {},
+					create: selectedFiles.map((file, index) => ({
+						link: links[index],
+						file_id: file.id,
+						path: file.path,
+						bytes: BigInt(file.bytes),
+					})),
+				},
+			},
+			create: {
 				hash,
 				imdbId,
 				filename,
