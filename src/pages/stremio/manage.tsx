@@ -1,12 +1,12 @@
-import { useCastToken } from '@/hooks/cast';
+import { Logo } from '@/components/Logo';
+import Poster from '@/components/poster';
+import { useCastToken } from '@/hooks/castToken';
+import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import { Logo } from '../../components/Logo';
-import Poster from '../../components/poster';
-import { withAuth } from '../../utils/withAuth';
 
 interface CastedLink {
 	imdbId: string;

@@ -1,4 +1,4 @@
-import { TorrentInfoResponse } from '../services/types';
+import { TorrentInfoResponse } from '@/services/types';
 
 export async function submitAvailability(
 	dmmProblemKey: string,

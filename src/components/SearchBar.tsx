@@ -1,7 +1,7 @@
+import { TraktSearchResult, getSearchSuggestions } from '@/services/trakt';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { TraktSearchResult, getSearchSuggestions } from '../services/trakt';
 import Poster from './poster';
 
 function useDebounce<T>(value: T, delay: number): T {

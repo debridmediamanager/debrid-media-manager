@@ -1,6 +1,6 @@
+import { PlanetScaleCache } from '@/services/planetscale';
 import { validateTokenWithHash } from '@/utils/token';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PlanetScaleCache } from '../../../services/planetscale';
 
 function isValidImdbId(imdbId: string): boolean {
 	return /^tt\d+$/.test(imdbId);

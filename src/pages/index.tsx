@@ -1,4 +1,4 @@
-import { useCastToken } from '@/hooks/cast';
+import { useCastToken } from '@/hooks/castToken';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
