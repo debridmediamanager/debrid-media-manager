@@ -169,7 +169,7 @@ const TvSearch: FunctionComponent = () => {
 					instantChecks.push(
 						wrapLoading(
 							'RD',
-							instantCheckInRd(rdKey, hashArr, setSearchResults, sortByMedian)
+							instantCheckInRd(imdbId, hashArr, setSearchResults, sortByMedian)
 						)
 					);
 				if (adKey)

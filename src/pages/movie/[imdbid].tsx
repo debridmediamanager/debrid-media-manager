@@ -185,7 +185,7 @@ const MovieSearch: FunctionComponent = () => {
 					instantChecks.push(
 						wrapLoading(
 							'RD',
-							instantCheckInRd(rdKey, hashArr, setSearchResults, sortByBiggest)
+							instantCheckInRd(imdbId, hashArr, setSearchResults, sortByBiggest)
 						)
 					);
 				if (adKey)
