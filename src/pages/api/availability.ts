@@ -90,6 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				hash: hash,
 			},
 			update: {
+				imdbId,
 				originalFilename: original_filename,
 				originalBytes: BigInt(original_bytes),
 				ended: new Date(ended),
