@@ -44,12 +44,12 @@ export const getCredentials = async (deviceCode: string) => {
 	}
 };
 
-export const getToken = async (clientId: string, clientSecret: string, code: string) => {
+export const getToken = async (clientId: string, clientSecret: string, refreshToken: string) => {
 	try {
 		const params = new URLSearchParams();
 		params.append('client_id', clientId);
 		params.append('client_secret', clientSecret);
-		params.append('code', code);
+		params.append('code', refreshToken);
 		params.append('grant_type', 'http://oauth.net/grant_type/device/1.0');
 
 		const response = await axios.post<AccessTokenResponse>(
