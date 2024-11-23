@@ -5,7 +5,14 @@ var proxy_default = {
     const url = new URL(request.url);
     const proxyUrl = url.searchParams.get("url");
     if (!proxyUrl) {
-      return new Response("Bad request: Missing `url` query param", { status: 400 });
+      return new Response("Bad request: Missing `url` query param", { 
+        status: 400,
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0"
+        }
+      });
     }
 
     // Basic CORS headers
@@ -14,6 +21,9 @@ var proxy_default = {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "GET, POST, DELETE",
       "Access-Control-Allow-Headers": "Authorization, Content-Type, X-Requested-With",
+      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0"
     };
 
     // Add expose headers only for torrents endpoint
@@ -24,14 +34,11 @@ var proxy_default = {
     // Freeze headers for better performance
     const frozenCorsHeaders = Object.freeze(corsHeaders);
 
-    // Quick return for OPTIONS with aggressive caching
+    // Quick return for OPTIONS without caching
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
-        headers: { ...frozenCorsHeaders,
-          "Access-Control-Max-Age": "86400",
-          "Cache-Control": "public, max-age=86400"
-        }
+        headers: frozenCorsHeaders
       });
     }
 
@@ -41,16 +48,20 @@ var proxy_default = {
     try {
       parsedProxyUrl = new URL(proxyUrl);
       if (!ALLOWED_HOSTS.has(parsedProxyUrl.hostname)) {
-        return new Response("Host not allowed", { status: 403 });
+        return new Response("Host not allowed", { 
+          status: 403,
+          headers: frozenCorsHeaders
+        });
       }
     } catch {
-      return new Response("Invalid URL", { status: 400 });
+      return new Response("Invalid URL", { 
+        status: 400,
+        headers: frozenCorsHeaders
+      });
     }
 
-    // Add cache buster only for non-GET requests
-    if (request.method !== 'GET') {
-      parsedProxyUrl.searchParams.set("t", Date.now().toString());
-    }
+    // Add cache buster to all requests
+    parsedProxyUrl.searchParams.set("_", Date.now().toString());
 
     // Copy query params efficiently
     for (const [key, value] of url.searchParams) {
@@ -65,6 +76,8 @@ var proxy_default = {
       "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
       "X-Requested-With": "XMLHttpRequest",
       "Priority": "u=1, i",
+      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      "Pragma": "no-cache",
     });
 
     // Copy important headers from original request
@@ -105,7 +118,10 @@ var proxy_default = {
         headers: responseHeaders
       });
     } catch (error) {
-      return new Response("Gateway error", { status: 502 });
+      return new Response("Gateway error", { 
+        status: 502,
+        headers: frozenCorsHeaders
+      });
     }
   }
 };
@@ -128,7 +144,14 @@ var src_default = {
     }
     return new Response(
       `<a href="${url.origin}/anticors?url=https://api.real-debrid.com/rest/1.0/time/iso">Proxy</a>`,
-      { headers: { "Content-Type": "text/html" } }
+      { 
+        headers: { 
+          "Content-Type": "text/html",
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0"
+        } 
+      }
     );
   }
 };

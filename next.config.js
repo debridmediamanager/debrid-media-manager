@@ -72,7 +72,7 @@ const nextConfig = {
 	publicRuntimeConfig: {
 		// Will be available on both server and client
 		externalSearchApiHostname: process.env.EXTERNAL_SEARCH_API_HOSTNAME,
-		proxy: 'https://anticors-staging.bensarmiento.workers.dev/anticors?url=',
+		proxy: 'https://proxy.debridmediamanager.com/anticors?url=',
 		realDebridHostname: 'https://api.real-debrid.com',
 		realDebridClientId: 'X245A4XAIBGVM',
 		allDebridHostname: 'https://api.alldebrid.com',
