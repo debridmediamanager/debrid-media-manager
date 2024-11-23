@@ -13,7 +13,7 @@ var proxy_default = {
       "Access-Control-Allow-Origin": getOrigin(request),
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "GET, POST, DELETE",
-      "Access-Control-Allow-Headers": "Authorization, Content-Type",
+      "Access-Control-Allow-Headers": "Authorization, Content-Type, X-Requested-With",
     };
 
     // Add expose headers only for torrents endpoint
@@ -36,7 +36,7 @@ var proxy_default = {
     }
 
     // Validate URL early
-    const ALLOWED_HOSTS = new Set(["app.real-debrid.com", "api.real-debrid.com", "api.alldebrid.com"]);
+    const ALLOWED_HOSTS = new Set(["app.real-debrid.com", "api.real-debrid.com", "api.alldebrid.com", "real-debrid.com"]);
     let parsedProxyUrl;
     try {
       parsedProxyUrl = new URL(proxyUrl);
@@ -57,9 +57,19 @@ var proxy_default = {
       if (key !== "url") parsedProxyUrl.searchParams.append(key, value);
     }
 
-    // Efficient headers handling
-    const reqHeaders = new Headers();
-    for (const header of ["authorization"]) {
+    // Enhanced headers with optimizations from the curl request
+    const reqHeaders = new Headers({
+      "Accept": "application/json, text/javascript, */*; q=0.01",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Accept-Language": "en-US,en;q=0.9",
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "X-Requested-With": "XMLHttpRequest",
+      "Priority": "u=1, i",
+    });
+
+    // Copy important headers from original request
+    const headersToKeep = ["authorization", "cookie", "referer"];
+    for (const header of headersToKeep) {
       const value = request.headers.get(header);
       if (value) reqHeaders.set(header, value);
     }
@@ -77,14 +87,15 @@ var proxy_default = {
     try {
       const res = await fetch(parsedProxyUrl.toString(), reqInit);
       
-      // Stream the response
+      // Stream the response with enhanced headers
       const responseHeaders = new Headers({
         ...frozenCorsHeaders
       });
 
-      // Efficient header copying
+      // Copy important response headers
       for (const [key, value] of res.headers) {
-        if (key.toLowerCase().startsWith("x-")) {
+        if (key.toLowerCase().startsWith("x-") || 
+            ["content-encoding", "content-type", "content-length", "set-cookie"].includes(key.toLowerCase())) {
           responseHeaders.set(key, value);
         }
       }
