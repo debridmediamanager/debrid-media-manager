@@ -17,6 +17,18 @@ export const handleAddAsMagnetInRd = async (
 		await handleSelectFilesInRd(rdKey, `rd:${id}`);
 		// get info to check if it's ready
 		const response = await getTorrentInfo(rdKey, id);
+		if (
+			response.status &&
+			![
+				'downloading',
+				'downloaded',
+				'uploading',
+				'queued',
+				'compressing',
+				'waiting_files_selection',
+			].includes(response.status)
+		)
+			throw new Error(response.status);
 		if (response.progress != 100) {
 			toast.success('Torrent added but not yet ready', magnetToastOptions);
 			return;
@@ -50,9 +62,11 @@ export const handleAddMultipleHashesInRd = async (
 };
 
 export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boolean = false) => {
+	console.warn('Selecting files in RD', id);
 	try {
 		const response = await getTorrentInfo(rdKey, id.substring(3), bare);
-		if (response.filename === 'Magnet') return; // no files yet
+		if (response.filename === 'Magnet' || response.filename === 'Invalid Magnet')
+			throw new Error('no_files_for_selection');
 
 		let selectedFiles = response.files.filter(isVideo).map((file) => `${file.id}`);
 		if (selectedFiles.length === 0) {
@@ -62,7 +76,7 @@ export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boo
 	} catch (error) {
 		console.error(error);
 		if ((error as Error).message === 'no_files_for_selection') {
-			toast.error(`No files for selection, deleting (${id})`, {
+			toast.error(`No files for selection (${id})`, {
 				duration: 5000,
 			});
 		} else {

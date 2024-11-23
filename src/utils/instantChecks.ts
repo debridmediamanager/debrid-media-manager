@@ -46,6 +46,8 @@ const updateTorrentTitle = (torrent: SearchResult, files: FileData[]) => {
 
 // Generic RD instant check function
 const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTorrent>(
+	dmmProblemKey: string,
+	solution: string,
 	imdbId: string,
 	hashes: string[],
 	batchSize: number,
@@ -58,7 +60,7 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 
 	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
-			const resp = await checkAvailability(imdbId, hashGroup);
+			const resp = await checkAvailability(dmmProblemKey, solution, imdbId, hashGroup);
 			setTorrentList((prevSearchResults) => {
 				const newSearchResults = [...prevSearchResults];
 				for (const torrent of newSearchResults) {
@@ -249,24 +251,30 @@ export const wrapLoading = async function (debrid: string, checkAvailability: Pr
 };
 
 export const instantCheckInRd = (
+	dmmProblemKey: string,
+	solution: string,
 	imdbId: string,
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
 	sortFn: (searchResults: SearchResult[]) => SearchResult[]
-) => processRdInstantCheck(imdbId, hashes, 20, setTorrentList, sortFn);
+) => processRdInstantCheck(dmmProblemKey, solution, imdbId, hashes, 20, setTorrentList, sortFn);
 
 export const instantCheckAnimeInRd = (
+	dmmProblemKey: string,
+	solution: string,
 	rdKey: string,
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
 	sortFn: (searchResults: SearchResult[]) => SearchResult[]
-) => processRdInstantCheck('', hashes, 20, setTorrentList, sortFn, true);
+) => processRdInstantCheck(dmmProblemKey, solution, '', hashes, 20, setTorrentList, sortFn, true);
 
 export const instantCheckInRd2 = (
+	dmmProblemKey: string,
+	solution: string,
 	rdKey: string,
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
-) => processRdInstantCheck('', hashes, 20, setTorrentList);
+) => processRdInstantCheck(dmmProblemKey, solution, '', hashes, 20, setTorrentList);
 
 export const instantCheckInAd = (
 	adKey: string,

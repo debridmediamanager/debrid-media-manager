@@ -163,13 +163,22 @@ const MovieSearch: FunctionComponent = () => {
 				// instant checks
 				const hashArr = results.map((r) => r.hash);
 				const instantChecks = [];
-				if (rdKey)
+				if (rdKey) {
+					const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 					instantChecks.push(
 						wrapLoading(
 							'RD',
-							instantCheckAnimeInRd(rdKey, hashArr, setSearchResults, sortByMedian)
+							instantCheckAnimeInRd(
+								tokenWithTimestamp,
+								tokenHash,
+								rdKey,
+								hashArr,
+								setSearchResults,
+								sortByMedian
+							)
 						)
 					);
+				}
 				if (adKey)
 					instantChecks.push(
 						wrapLoading(
@@ -227,7 +236,8 @@ const MovieSearch: FunctionComponent = () => {
 
 	async function addRd(hash: string) {
 		await handleAddAsMagnetInRd(rdKey!, hash, async (info: TorrentInfoResponse) => {
-			await submitAvailability(info, animeid as string);
+			const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+			await submitAvailability(tokenWithTimestamp, tokenHash, info, animeid as string);
 		});
 		await fetchRealDebrid(
 			rdKey!,

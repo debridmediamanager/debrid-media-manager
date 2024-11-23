@@ -165,13 +165,22 @@ const TvSearch: FunctionComponent = () => {
 
 				const hashArr = results.map((r) => r.hash);
 				const instantChecks = [];
-				if (rdKey)
+				if (rdKey) {
+					const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 					instantChecks.push(
 						wrapLoading(
 							'RD',
-							instantCheckInRd(imdbId, hashArr, setSearchResults, sortByMedian)
+							instantCheckInRd(
+								tokenWithTimestamp,
+								tokenHash,
+								imdbId,
+								hashArr,
+								setSearchResults,
+								sortByMedian
+							)
 						)
 					);
+				}
 				if (adKey)
 					instantChecks.push(
 						wrapLoading(
@@ -225,7 +234,8 @@ const TvSearch: FunctionComponent = () => {
 
 	async function addRd(hash: string) {
 		await handleAddAsMagnetInRd(rdKey!, hash, async (info: TorrentInfoResponse) => {
-			await submitAvailability(info, imdbid as string);
+			const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+			await submitAvailability(tokenWithTimestamp, tokenHash, info, imdbid as string);
 		});
 		await fetchRealDebrid(
 			rdKey!,

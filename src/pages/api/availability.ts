@@ -1,3 +1,4 @@
+import { validateTokenWithHash } from '@/utils/token';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PlanetScaleCache } from '../../services/planetscale';
 
@@ -12,6 +13,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	try {
 		const {
+			dmmProblemKey,
+			solution,
 			filename,
 			original_filename,
 			hash,
@@ -25,6 +28,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			ended,
 			imdbId,
 		} = req.body;
+
+		if (
+			!dmmProblemKey ||
+			!(typeof dmmProblemKey === 'string') ||
+			!solution ||
+			!(typeof solution === 'string')
+		) {
+			res.status(403).json({ errorMessage: 'Authentication not provided' });
+			return;
+		} else if (!(await validateTokenWithHash(dmmProblemKey.toString(), solution.toString()))) {
+			res.status(403).json({ errorMessage: 'Authentication error' });
+			return;
+		}
 
 		// Validate required fields and conditions
 		if (!hash || !filename || !imdbId) {
