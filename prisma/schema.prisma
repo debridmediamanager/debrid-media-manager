@@ -37,13 +37,13 @@ model Cast {
   imdbId    String
   userId    String
   hash      String
-  link      String?
   url       String   @db.Text
   updatedAt DateTime @updatedAt
   duration  Int      @default(0)
   bitrate   Int      @default(0)
   size      Int      @default(0)
   mediaInfo Json?
+  link      String?
 
   @@unique([imdbId, userId, hash])
   @@index([imdbId, userId, updatedAt])
@@ -82,17 +82,17 @@ model Anime {
 }
 
 model Available {
-  hash              String   @id
-  imdbId            String
-  filename          String
-  originalFilename  String
-  bytes             BigInt
-  originalBytes     BigInt
-  host              String
+  hash             String          @id
+  imdbId           String
+  filename         String
+  originalFilename String
+  bytes            BigInt
+  originalBytes    BigInt
+  host             String
   progress         Int
   status           String
   ended            DateTime
-  updatedAt        DateTime @updatedAt
+  updatedAt        DateTime        @updatedAt
   files            AvailableFile[]
 
   @@index([status])
@@ -101,7 +101,7 @@ model Available {
 }
 
 model AvailableFile {
-  link      String   @id
+  link      String    @id
   file_id   Int
   hash      String
   path      String
