@@ -65,8 +65,7 @@ export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boo
 	console.warn('Selecting files in RD', id);
 	try {
 		const response = await getTorrentInfo(rdKey, id.substring(3), bare);
-		if (response.filename === 'Magnet' || response.filename === 'Invalid Magnet')
-			throw new Error('no_files_for_selection');
+		if (response.files.length === 0) throw new Error('no_files_for_selection');
 
 		let selectedFiles = response.files.filter(isVideo).map((file) => `${file.id}`);
 		if (selectedFiles.length === 0) {
