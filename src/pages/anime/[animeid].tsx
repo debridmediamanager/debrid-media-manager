@@ -6,6 +6,7 @@ import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
+import { submitAvailability } from '@/utils/availability';
 import { handleCastAnime } from '@/utils/cast';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
@@ -225,7 +226,9 @@ const MovieSearch: FunctionComponent = () => {
 		!(`${service}:${hash}` in hashAndProgress);
 
 	async function addRd(hash: string) {
-		await handleAddAsMagnetInRd(rdKey!, hash);
+		await handleAddAsMagnetInRd(rdKey!, hash, async (info: TorrentInfoResponse) => {
+			await submitAvailability(info, animeid as string);
+		});
 		await fetchRealDebrid(
 			rdKey!,
 			async (torrents) => {
