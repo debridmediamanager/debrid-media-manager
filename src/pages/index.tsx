@@ -1,22 +1,22 @@
+import { BrowseSection } from '@/components/BrowseSection';
+import { InfoSection } from '@/components/InfoSection';
+import { Logo } from '@/components/Logo';
+import { MainActions } from '@/components/MainActions';
+import { SearchBar } from '@/components/SearchBar';
+import { ServiceCard } from '@/components/ServiceCard';
+import { TraktSection } from '@/components/TraktSection';
+import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/castToken';
+import { getTerms } from '@/utils/browseTerms';
+import { handleLogout } from '@/utils/logout';
+import { checkPremiumStatus } from '@/utils/premiumCheck';
+import { showSettings } from '@/utils/settings';
+import { genericToastOptions } from '@/utils/toastOptions';
+import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import { BrowseSection } from '../components/BrowseSection';
-import { InfoSection } from '../components/InfoSection';
-import { Logo } from '../components/Logo';
-import { MainActions } from '../components/MainActions';
-import { SearchBar } from '../components/SearchBar';
-import { ServiceCard } from '../components/ServiceCard';
-import { TraktSection } from '../components/TraktSection';
-import { useCurrentUser, useDebridLogin } from '../hooks/auth';
-import { getTerms } from '../utils/browseTerms';
-import { handleLogout } from '../utils/logout';
-import { checkPremiumStatus } from '../utils/premiumCheck';
-import { showSettings } from '../utils/settings';
-import { genericToastOptions } from '../utils/toastOptions';
-import { withAuth } from '../utils/withAuth';
 
 function IndexPage() {
 	const router = useRouter();
