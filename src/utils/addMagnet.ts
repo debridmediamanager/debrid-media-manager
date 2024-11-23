@@ -25,7 +25,7 @@ export const handleAddAsMagnetInRd = async (
 		toast('Successfully added hash!', magnetToastOptions);
 	} catch (error) {
 		console.error(error);
-		toast.error('There was an error adding hash. Please try again.');
+		toast.error(error instanceof Error ? error.message : 'An error occurred');
 	}
 };
 

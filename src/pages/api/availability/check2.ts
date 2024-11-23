@@ -47,7 +47,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				hash: true,
 				files: {
 					select: {
-						link: true,
 						path: true,
 						bytes: true,
 					},
