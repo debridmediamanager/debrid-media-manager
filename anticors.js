@@ -21,9 +21,6 @@ var proxy_default = {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "GET, POST, DELETE",
       "Access-Control-Allow-Headers": "Authorization, Content-Type, X-Requested-With",
-      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-      "Pragma": "no-cache",
-      "Expires": "0"
     };
 
     // Add expose headers only for torrents endpoint
@@ -31,16 +28,25 @@ var proxy_default = {
       corsHeaders["Access-Control-Expose-Headers"] = "x-total-count";
     }
 
-    // Freeze headers for better performance
-    const frozenCorsHeaders = Object.freeze(corsHeaders);
-
-    // Quick return for OPTIONS without caching
+    // Quick return for OPTIONS with maximum caching
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
-        headers: frozenCorsHeaders
+        headers: {
+          ...corsHeaders,
+          "Access-Control-Max-Age": "86400",
+          "Cache-Control": "public, max-age=86400"
+        }
       });
     }
+
+    // Add no-cache headers for non-OPTIONS requests
+    const frozenCorsHeaders = Object.freeze({
+      ...corsHeaders,
+      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0"
+    });
 
     // Validate URL early
     const ALLOWED_HOSTS = new Set(["app.real-debrid.com", "api.real-debrid.com", "api.alldebrid.com", "real-debrid.com"]);
