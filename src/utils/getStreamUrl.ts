@@ -12,8 +12,9 @@ export const getStreamUrl = async (
 	fileId: number,
 	ipAddress: string,
 	mediaType: string
-): Promise<[string, number, number, number]> => {
+): Promise<[string, string, number, number, number]> => {
 	let streamUrl = '';
+	let rdLink = '';
 	let seasonNumber = -1;
 	let episodeNumber = -1;
 	let fileSize = 0;
@@ -35,6 +36,7 @@ export const getStreamUrl = async (
 			}
 
 			streamUrl = resp.download;
+			rdLink = resp.link;
 
 			if (mediaType === 'tv') {
 				const filePath = streamUrl.split('/').pop() ?? '';
@@ -67,15 +69,16 @@ export const getStreamUrl = async (
 	} catch (e) {
 		throw e;
 	}
-	return [streamUrl, seasonNumber, episodeNumber, fileSize];
+	return [streamUrl, rdLink, seasonNumber, episodeNumber, fileSize];
 };
 
 export const getBiggestFileStreamUrl = async (
 	rdKey: string,
 	hash: string,
 	ipAddress: string
-): Promise<[string, number]> => {
+): Promise<[string, string, number]> => {
 	let streamUrl = '';
+	let rdLink = '';
 	let fileSize = 0;
 	try {
 		const id = await addHashAsMagnet(rdKey, hash, true);
@@ -96,6 +99,7 @@ export const getBiggestFileStreamUrl = async (
 			}
 
 			streamUrl = resp.download;
+			rdLink = resp.link;
 
 			fileSize = Math.round(resp.filesize / 1024 / 1024);
 
@@ -108,5 +112,5 @@ export const getBiggestFileStreamUrl = async (
 	} catch (e) {
 		throw e;
 	}
-	return [streamUrl, fileSize];
+	return [streamUrl, rdLink, fileSize];
 };

@@ -29,12 +29,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
 
 	try {
-		const [streamUrl, fileSize] = await getBiggestFileStreamUrl(token, hash, ipAddress);
+		const [streamUrl, rdLink, fileSize] = await getBiggestFileStreamUrl(token, hash, ipAddress);
 
 		if (streamUrl) {
 			let message = 'You can now stream the movie in Stremio';
 
-			await db.saveCast(imdbid, userid, hash, streamUrl, 0, 0, fileSize, null);
+			await db.saveCast(imdbid, userid, hash, streamUrl, rdLink, 0, 0, fileSize, null);
 
 			const filename = streamUrl.split('/').pop() ?? '???';
 
