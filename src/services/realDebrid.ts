@@ -336,6 +336,8 @@ export const getTimeISO = async (): Promise<string> => {
 	}
 };
 
+const MIN_REQUEST_INTERVAL = (60 * 1000) / 250; // 240ms between requests
+
 // Function to create an Axios client with a given token
 function createAxiosClient(token: string): AxiosInstance {
 	const client = axios.create({
@@ -345,27 +347,10 @@ function createAxiosClient(token: string): AxiosInstance {
 	});
 
 	// Rate limiting configuration
-	let requestCount = 0;
-	let lastResetTime = Date.now();
-	const MAX_REQUESTS_PER_MINUTE = 250;
-	const MINUTE = 60 * 1000;
 
 	// Add request interceptor for rate limiting
 	client.interceptors.request.use(async (config) => {
-		const now = Date.now();
-		if (now - lastResetTime >= MINUTE) {
-			requestCount = 0;
-			lastResetTime = now;
-		}
-
-		if (requestCount >= MAX_REQUESTS_PER_MINUTE) {
-			const timeToWait = MINUTE - (now - lastResetTime);
-			await new Promise((resolve) => setTimeout(resolve, timeToWait));
-			requestCount = 0;
-			lastResetTime = Date.now();
-		}
-
-		requestCount++;
+		await new Promise((resolve) => setTimeout(resolve, MIN_REQUEST_INTERVAL));
 		return config;
 	});
 

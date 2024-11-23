@@ -48,7 +48,7 @@ export const fetchRealDebrid = async (
 		// Adjust concurrent requests to stay within rate limit
 		// 75 requests per minute = 1.25 requests per second
 		// Using 1 request per second to be safe
-		const [pagesOfTorrents, errors] = await runConcurrentFunctions(funcs, 2, 0);
+		const [pagesOfTorrents, errors] = await runConcurrentFunctions(funcs, 3, 0);
 		if (errors.length > 0) {
 			console.error('Some requests failed:', errors);
 		}

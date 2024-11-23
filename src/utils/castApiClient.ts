@@ -94,3 +94,28 @@ export const handleCastAnime = async (
 		toast.success(`Finished casting all episodes in anime series torrent`, castToastOptions);
 	}
 };
+
+export const saveCastProfile = async (
+	userId: string,
+	clientId: string,
+	clientSecret: string,
+	refreshToken: string
+) => {
+	const storageKey = `cast-profile-${userId}-updated`;
+	const existingUpdatedAt = localStorage.getItem(storageKey);
+	if (existingUpdatedAt) {
+		return;
+	}
+
+	try {
+		const response = await axios.post(`/api/stremio/${userId}/cast/saveProfile`, {
+			clientId,
+			clientSecret,
+			refreshToken,
+		});
+
+		localStorage.setItem(storageKey, response.data.updatedAt);
+	} catch (error) {
+		console.error('Error saving cast profile:', error);
+	}
+};
