@@ -101,7 +101,7 @@ export const saveCastProfile = async (
 	clientSecret: string,
 	refreshToken: string
 ) => {
-	const storageKey = `cast-profile-${userId}-updated`;
+	const storageKey = `cast-profile-${userId}-updated:0.0.1`;
 	const existingUpdatedAt = localStorage.getItem(storageKey);
 	if (existingUpdatedAt) {
 		return;

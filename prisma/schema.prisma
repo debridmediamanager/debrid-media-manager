@@ -50,10 +50,11 @@ model Cast {
 }
 
 model CastProfile {
-  userId    String   @id
-  clientId  String
+  userId       String   @id
+  clientId     String
   clientSecret String
-  updatedAt DateTime @updatedAt
+  updatedAt    DateTime @updatedAt
+  refreshToken String
 }
 
 model Titles {
