@@ -34,6 +34,26 @@ export default function Document() {
 				<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 				<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 				<link rel="manifest" href="/site.webmanifest" />
+				<link rel="dns-prefetch" href="//posters0.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//posters1.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//posters2.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//posters3.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//posters4.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//posters5.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//posters6.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//posters7.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//posters8.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//posters9.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//proxy0.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//proxy1.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//proxy2.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//proxy3.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//proxy4.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//proxy5.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//proxy6.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//proxy7.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//proxy8.debridmediamanager.com" />
+				<link rel="dns-prefetch" href="//proxy9.debridmediamanager.com" />
 			</Head>
 			<body>
 				<Main />
