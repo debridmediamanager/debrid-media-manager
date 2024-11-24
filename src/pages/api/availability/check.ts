@@ -66,6 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			where: {
 				imdbId,
 				hash: { in: hashes },
+				status: 'downloaded',
 			},
 			select: {
 				hash: true,

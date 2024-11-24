@@ -18,10 +18,8 @@ export const handleAddAsMagnetInRd = async (
 		const response = await getTorrentInfo(rdKey, id);
 		if (response.status === 'downloaded') {
 			toast.success('Successfully added torrent!', magnetToastOptions);
-		} else if (response.status === 'waiting_files_selection') {
-			toast.success('Torrent added but not yet ready', magnetToastOptions);
 		} else {
-			toast.error(`Added but status is ${response.status}`, magnetToastOptions);
+			toast.error(`Torrent added but status is ${response.status}`, magnetToastOptions);
 		}
 		if (callback) await callback(response);
 	} catch (error) {
