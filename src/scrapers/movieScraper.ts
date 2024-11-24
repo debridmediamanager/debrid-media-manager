@@ -7,8 +7,6 @@ import { PlanetScaleCache } from '@/services/planetscale';
 import { filterByMovieConditions, getAllPossibleTitles, grabMovieMetadata } from '@/utils/checks';
 import { scrapeApiBay2 } from './sites/apibay2';
 import { scrapeBtdigg } from './sites/btdigg-v2';
-import { scrapeGloTorrents } from './sites/glotorrents';
-import { scrapeMagnetDL } from './sites/magnetdl';
 import { scrapeRuTor } from './sites/rutor';
 import { scrapeTorrentGalaxy } from './sites/tgx';
 
@@ -29,8 +27,6 @@ async function scrapeAll(
 	return await Promise.all([
 		scrapeApiBay2(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeBtdigg(finalQuery, targetTitle, years, airDate),
-		scrapeGloTorrents(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
-		scrapeMagnetDL(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeRuTor(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 		scrapeTorrentGalaxy(finalQuery.replaceAll('"', ''), targetTitle, years, airDate),
 	]);
