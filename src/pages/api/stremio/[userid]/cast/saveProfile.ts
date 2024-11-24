@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	try {
 		const { userid } = req.query;
-		const { clientId, clientSecret } = req.body;
+		const { clientId, clientSecret, refreshToken } = req.body;
 
 		if (!userid || typeof userid !== 'string') {
 			return res.status(400).json({ error: 'Invalid userId' });
@@ -27,12 +27,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			update: {
 				clientId,
 				clientSecret,
+				refreshToken,
 				updatedAt: new Date(),
 			},
 			create: {
 				userId: userid,
 				clientId,
 				clientSecret,
+				refreshToken,
 				updatedAt: new Date(),
 			},
 		});
