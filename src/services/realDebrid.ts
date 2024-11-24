@@ -198,6 +198,9 @@ export const addMagnet = async (
 				},
 			}
 		);
+		if (response.status !== 201) {
+			throw new Error('Failed to add magnet, status: ' + response.status);
+		}
 		return response.data.id;
 	} catch (error: any) {
 		console.error('Error adding magnet:', error.message);
