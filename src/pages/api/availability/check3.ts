@@ -20,13 +20,13 @@ interface DbResult {
 const handler: NextApiHandler = async (req, res) => {
 	const { imdbId } = req.query;
 
-	let imdbIds = !!imdbId ? [imdbId as string] : await db.getAllImdbIds('movie');
+	let imdbIds = !!imdbId ? [imdbId as string] : (await db.getAllImdbIds('movie')) || [];
 	const rdKey = process.env.REALDEBRID_KEY;
 	if (!rdKey) {
 		return res.status(500).json({ error: 'RealDebrid key not configured' });
 	}
 
-	for (let imdbId in imdbIds) {
+	for (const imdbId of imdbIds) {
 		try {
 			const searchResults = await getSearchResults(imdbId);
 			if (!searchResults.length) {
