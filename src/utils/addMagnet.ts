@@ -15,24 +15,13 @@ export const handleAddAsMagnetInRd = async (
 	try {
 		const id = await addHashAsMagnet(rdKey, hash);
 		await handleSelectFilesInRd(rdKey, `rd:${id}`);
-		// get info to check if it's ready
 		const response = await getTorrentInfo(rdKey, id);
-		if (
-			response.status &&
-			![
-				'downloading',
-				'downloaded',
-				'uploading',
-				'queued',
-				'compressing',
-				'waiting_files_selection',
-			].includes(response.status)
-		)
-			throw new Error(response.status);
-		if (response.progress === 100) {
-			toast.success('Successfully added hash!', magnetToastOptions);
-		} else {
+		if (response.status === 'downloaded') {
+			toast.success('Successfully added torrent!', magnetToastOptions);
+		} else if (response.status === 'waiting_files_selection') {
 			toast.success('Torrent added but not yet ready', magnetToastOptions);
+		} else {
+			toast.error(`Added but status is ${response.status}`, magnetToastOptions);
 		}
 		if (callback) await callback(response);
 	} catch (error) {
@@ -62,24 +51,20 @@ export const handleAddMultipleHashesInRd = async (
 };
 
 export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boolean = false) => {
-	console.warn('Selecting files in RD', id);
 	try {
 		const response = await getTorrentInfo(rdKey, id.substring(3), bare);
 		if (response.files.length === 0) throw new Error('no_files_for_selection');
 
 		let selectedFiles = response.files.filter(isVideo).map((file) => `${file.id}`);
 		if (selectedFiles.length === 0) {
+			// select all files if no videos
 			selectedFiles = response.files.map((file) => `${file.id}`);
 		}
+
 		await selectFiles(rdKey, id.substring(3), selectedFiles, bare);
 	} catch (error) {
-		console.error(error);
-		if ((error as Error).message === 'no_files_for_selection') {
-			toast.error(`No files for selection (${id})`, {
-				duration: 5000,
-			});
-		} else {
-			toast.error(`Error selecting files (${id})`);
+		if (error instanceof Error && error.message !== 'no_files_for_selection') {
+			toast.error(`Error selecting files (${id}) - ${error}`);
 		}
 	}
 };

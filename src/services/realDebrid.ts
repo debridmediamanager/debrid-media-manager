@@ -226,7 +226,7 @@ export const selectFiles = async (
 ): Promise<void> => {
 	try {
 		const client = await createAxiosClient(accessToken);
-		await client.post(
+		const response = await client.post(
 			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/selectFiles/${id}`,
 			qs.stringify({ files: files.join(',') }),
 			{
