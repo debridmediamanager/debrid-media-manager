@@ -6,6 +6,11 @@ export async function submitAvailability(
 	torrentInfo: TorrentInfoResponse,
 	imdbId: string
 ) {
+	// filter out any torrents that are not downloaded for now
+	if (torrentInfo.status !== 'downloaded') {
+		return;
+	}
+
 	try {
 		const response = await fetch('/api/availability', {
 			method: 'POST',

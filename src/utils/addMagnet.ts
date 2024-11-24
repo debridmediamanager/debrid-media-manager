@@ -29,12 +29,12 @@ export const handleAddAsMagnetInRd = async (
 			].includes(response.status)
 		)
 			throw new Error(response.status);
-		if (response.progress != 100) {
+		if (response.progress === 100) {
+			toast.success('Successfully added hash!', magnetToastOptions);
+		} else {
 			toast.success('Torrent added but not yet ready', magnetToastOptions);
-			return;
 		}
 		if (callback) await callback(response);
-		toast('Successfully added hash!', magnetToastOptions);
 	} catch (error) {
 		console.error(error);
 		toast.error(error instanceof Error ? error.message : 'An error occurred');

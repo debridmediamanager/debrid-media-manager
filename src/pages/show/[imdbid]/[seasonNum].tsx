@@ -17,7 +17,7 @@ import {
 	getExpectedEpisodeCount,
 	getQueryForEpisodeCount,
 } from '@/utils/episodeUtils';
-import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
+import { convertToUserTorrent, fetchAllDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { applyQuickSearch2 } from '@/utils/quickSearch';
 import { sortByMedian } from '@/utils/results';
@@ -235,16 +235,11 @@ const TvSearch: FunctionComponent = () => {
 	async function addRd(hash: string) {
 		await handleAddAsMagnetInRd(rdKey!, hash, async (info: TorrentInfoResponse) => {
 			const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-			await submitAvailability(tokenWithTimestamp, tokenHash, info, imdbid as string);
+			await Promise.all([
+				submitAvailability(tokenWithTimestamp, tokenHash, info, imdbid as string),
+				torrentDB.add(convertToUserTorrent(info)).then(() => fetchHashAndProgress(hash)),
+			]);
 		});
-		await fetchRealDebrid(
-			rdKey!,
-			async (torrents) => {
-				await torrentDB.addAll(torrents);
-				await fetchHashAndProgress(hash);
-			},
-			2
-		);
 	}
 
 	async function addAd(hash: string) {

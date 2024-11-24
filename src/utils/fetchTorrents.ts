@@ -64,60 +64,43 @@ export const fetchRealDebrid = async (
 	}
 };
 
+export function convertToUserTorrent(torrentInfo: UserTorrentResponse): UserTorrent {
+	let mediaType = getTypeByNameAndFileCount(torrentInfo.filename);
+	const serviceStatus = torrentInfo.status;
+	const status = getRdStatus(torrentInfo);
+
+	let info = {} as ParsedFilename;
+	try {
+		info =
+			mediaType === 'movie'
+				? filenameParse(torrentInfo.filename)
+				: filenameParse(torrentInfo.filename, true);
+	} catch (error) {
+		// flip the condition if error is thrown
+		mediaType = mediaType === 'movie' ? 'tv' : 'movie';
+		mediaType === 'movie'
+			? filenameParse(torrentInfo.filename)
+			: filenameParse(torrentInfo.filename, true);
+	}
+
+	return {
+		...torrentInfo,
+		info,
+		status,
+		serviceStatus,
+		mediaType,
+		added: new Date(torrentInfo.added.replace('Z', '+01:00')),
+		id: `rd:${torrentInfo.id}`,
+		links: torrentInfo.links.map((l) => l.replaceAll('/', '/')),
+		seeders: torrentInfo.seeders || 0,
+		speed: torrentInfo.speed || 0,
+		title: getMediaId(info, mediaType, false) || torrentInfo.filename,
+		selectedFiles: [],
+	};
+}
+
 async function processTorrents(torrentData: UserTorrentResponse[]): Promise<UserTorrent[]> {
-	return Promise.all(
-		torrentData.map((torrentInfo) => {
-			let mediaType = getTypeByNameAndFileCount(torrentInfo.filename);
-			const serviceStatus = torrentInfo.status;
-			let status: UserTorrentStatus;
-			switch (torrentInfo.status) {
-				case 'magnet_conversion':
-				case 'waiting_files_selection':
-				case 'queued':
-					status = UserTorrentStatus.waiting;
-					break;
-				case 'downloading':
-				case 'compressing':
-					status = UserTorrentStatus.downloading;
-					break;
-				case 'uploading':
-				case 'downloaded':
-					status = UserTorrentStatus.finished;
-					break;
-				default:
-					status = UserTorrentStatus.error;
-					break;
-			}
-			let info = {} as ParsedFilename;
-			try {
-				info =
-					mediaType === 'movie'
-						? filenameParse(torrentInfo.filename)
-						: filenameParse(torrentInfo.filename, true);
-			} catch (error) {
-				// flip the condition if error is thrown
-				mediaType = mediaType === 'movie' ? 'tv' : 'movie';
-				mediaType === 'movie'
-					? filenameParse(torrentInfo.filename)
-					: filenameParse(torrentInfo.filename, true);
-			}
-			return {
-				...torrentInfo,
-				info,
-				status,
-				serviceStatus,
-				mediaType,
-				added: new Date(torrentInfo.added.replace('Z', '+01:00')),
-				id: `rd:${torrentInfo.id}`,
-				links: torrentInfo.links.map((l) => l.replaceAll('/', '/')),
-				seeders: torrentInfo.seeders || 0,
-				speed: torrentInfo.speed || 0,
-				title: getMediaId(info, mediaType, false) || torrentInfo.filename,
-				cached: true,
-				selectedFiles: [],
-			};
-		})
-	);
+	return Promise.all(torrentData.map(convertToUserTorrent));
 }
 
 export const fetchAllDebrid = async (
