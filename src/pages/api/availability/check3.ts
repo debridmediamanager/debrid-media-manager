@@ -20,35 +20,32 @@ interface DbResult {
 const handler: NextApiHandler = async (req, res) => {
 	const { imdbId } = req.query;
 
-	if (!imdbId || typeof imdbId !== 'string') {
-		return res
-			.status(400)
-			.json({ errorMessage: 'Missing or invalid "imdbId" query parameter' });
-	}
-
+	let imdbIds = !!imdbId ? [imdbId as string] : await db.getAllImdbIds('movie');
 	const rdKey = process.env.REALDEBRID_KEY;
 	if (!rdKey) {
 		return res.status(500).json({ error: 'RealDebrid key not configured' });
 	}
 
-	try {
-		const searchResults = await getSearchResults(imdbId);
-		if (!searchResults.length) {
-			return res.status(404).json({ error: 'No results found' });
+	for (let imdbId in imdbIds) {
+		try {
+			const searchResults = await getSearchResults(imdbId);
+			if (!searchResults.length) {
+				return res.status(404).json({ error: 'No results found' });
+			}
+
+			const availableHashes = await getAvailableHashes(imdbId, searchResults);
+			const newResults = searchResults.filter((result) => !availableHashes.has(result.hash));
+
+			for (const result of newResults) {
+				console.log(`Processing hash ${result.hash}`);
+				await processTorrent(result.hash, imdbId, rdKey);
+			}
+
+			res.status(200).json({ results: 'done' });
+		} catch (error) {
+			console.error('Error in availability check:', error);
+			res.status(500).json({ error: 'Internal server error' });
 		}
-
-		const availableHashes = await getAvailableHashes(imdbId, searchResults);
-		const newResults = searchResults.filter((result) => !availableHashes.has(result.hash));
-
-		for (const result of newResults) {
-			console.log(`Processing hash ${result.hash}`);
-			await processTorrent(result.hash, imdbId, rdKey);
-		}
-
-		res.status(200).json({ results: 'done' });
-	} catch (error) {
-		console.error('Error in availability check:', error);
-		res.status(500).json({ error: 'Internal server error' });
 	}
 };
 
