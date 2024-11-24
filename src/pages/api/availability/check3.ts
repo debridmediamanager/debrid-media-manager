@@ -30,7 +30,8 @@ const handler: NextApiHandler = async (req, res) => {
 		try {
 			const searchResults = await getSearchResults(imdbId);
 			if (!searchResults.length) {
-				return res.status(404).json({ error: 'No results found' });
+				console.log(`No search results for ${imdbId}`);
+				continue;
 			}
 
 			const availableHashes = await getAvailableHashes(imdbId, searchResults);
