@@ -17,14 +17,27 @@ interface DbResult {
 	value: SearchResult;
 }
 
-const handler: NextApiHandler = async (req, res) => {
-	const { imdbId } = req.query;
+const TERMINAL_STATUS = ['magnet_error', 'error', 'virus', 'dead'];
 
-	let imdbIds = !!imdbId ? [imdbId as string] : (await db.getAllImdbIds('movie')) || [];
+const handler: NextApiHandler = async (req, res) => {
 	const rdKey = process.env.REALDEBRID_KEY;
 	if (!rdKey) {
 		return res.status(500).json({ error: 'RealDebrid key not configured' });
 	}
+
+	const { imdbId } = req.query;
+	let imdbIds: string[] = [];
+	if (!!imdbId) {
+		imdbIds = [imdbId as string];
+	} else {
+		const movieImdbIds = (await db.getAllImdbIds('movie')) || [];
+		const tvImdbIds = (await db.getAllImdbIds('tv')) || [];
+		imdbIds = [...movieImdbIds, ...tvImdbIds];
+		// make sure to remove duplicates
+		imdbIds = [...new Set(imdbIds)];
+	}
+
+	console.log(`Checking availability for ${imdbIds.length} imdbIds`);
 
 	for (const imdbId of imdbIds) {
 		try {
@@ -38,16 +51,19 @@ const handler: NextApiHandler = async (req, res) => {
 			const availableHashes = await getAvailableHashes(imdbId, searchResults);
 			let newResults = searchResults.filter((result) => !availableHashes.has(result.hash));
 			console.log(`Found ${newResults.length} new results for ${imdbId}`);
-			newResults.sort((a, b) => a.fileSize - b.fileSize);
+			// newResults.sort((a, b) => a.fileSize - b.fileSize);
+			// shuffle results
+			newResults.sort(() => Math.random() - 0.5);
 
-			for (const result of newResults) {
+			const resultsToProcess = !!imdbId ? newResults : newResults.splice(0, 50);
+			for (const result of resultsToProcess) {
 				console.log(`Processing hash ${result.hash}`);
 				await processTorrent(result.hash, imdbId, rdKey);
 			}
 
 			res.status(200).json({ results: 'done' });
 		} catch (error) {
-			console.error('Error in availability check:', error);
+			console.error(`Error processing ${imdbId}: ${error}`);
 			res.status(500).json({ error: 'Internal server error' });
 		}
 	}
@@ -57,32 +73,41 @@ async function processTorrent(hash: string, imdbId: string, rdKey: string): Prom
 	let id = '';
 	try {
 		id = await addHashAsMagnet(rdKey, hash, true);
-		console.log(`Added torrent ${id}`);
+		// console.log(`Added torrent ${id}`);
 
-		const torrentInfo = await getTorrentInfo(rdKey, id, true);
-		if (torrentInfo.status !== 'waiting_files_selection') {
-			throw new Error(`Torrent ${id} status: ${torrentInfo.status}`);
+		let torrentInfo = await getTorrentInfo(rdKey, id, true);
+		while (torrentInfo.status === 'queued') {
+			console.log(`Torrent ${id} is queued`);
+			await new Promise((resolve) => setTimeout(resolve, 5000));
+			torrentInfo = await getTorrentInfo(rdKey, id, true);
 		}
 
-		const fileIDs = await getFileIDsToSelect(torrentInfo);
-		if (fileIDs.length === 0) {
-			throw new Error(`No files to select for torrent ${id}`);
+		if (torrentInfo.status === 'waiting_files_selection') {
+			const fileIDs = await getFileIDsToSelect(torrentInfo);
+			if (fileIDs.length === 0) {
+				throw new Error(`No files to select for torrent ${id}`);
+			}
+
+			await selectFiles(rdKey, id, fileIDs, true);
+			// console.log(`Selected files for torrent ${id}`);
+
+			const updatedInfo = await getTorrentInfo(rdKey, id, true);
+			// console.log(`Status of torrent ${id}: ${updatedInfo.status}`);
+
+			if (updatedInfo.status !== 'downloaded') {
+				throw new Error(`Torrent ${id} is not cached, status: ${updatedInfo.status}`);
+			}
+
+			await handleDownloadedTorrent(updatedInfo, hash, imdbId);
+			console.log(`**Successfully** processed hash >>> ${hash}`);
+		} else if (TERMINAL_STATUS.includes(torrentInfo.status)) {
+			await handleDownloadedTorrent(torrentInfo, hash, imdbId);
+			console.log(`!!Terminal status!! processed hash >>> ${hash} = ${torrentInfo.status}`);
+		} else {
+			console.log(`Torrent ${id} is not ready yet, status: ${torrentInfo.status}`);
 		}
 
-		await selectFiles(rdKey, id, fileIDs, true);
-		console.log(`Selected files for torrent ${id}`);
-
-		const updatedInfo = await getTorrentInfo(rdKey, id, true);
-		console.log(`Status of torrent ${id}: ${updatedInfo.status}`);
-
-		if (updatedInfo.status !== 'downloaded') {
-			throw new Error(`Torrent ${id} is not cached`);
-		}
-
-		await handleDownloadedTorrent(updatedInfo, hash, imdbId);
 		await deleteTorrent(rdKey, id, true);
-
-		console.log(`Successfully processed hash ${hash}`);
 	} catch (error) {
 		if (id) await deleteTorrent(rdKey, id, true);
 		console.error(`Error processing hash ${hash}: ${error}`);
@@ -103,51 +128,61 @@ async function handleDownloadedTorrent(
 	hash: string,
 	imdbId: string
 ): Promise<void> {
-	const selectedFiles = torrentInfo.files.filter((file) => file.selected === 1);
+	const selectedFiles = torrentInfo.files?.filter((file) => file.selected === 1) || [];
 
-	if (selectedFiles.length === 0 || selectedFiles.length !== torrentInfo.links.length) {
-		console.error(
-			`Error saving available torrent ${hash}: selectedFiles.length=${selectedFiles.length}, links.length=${torrentInfo.links.length}`
-		);
-		return;
+	if (selectedFiles.length === 0 || selectedFiles.length !== (torrentInfo.links?.length || 0)) {
+		if (torrentInfo.status === 'downloaded') {
+			torrentInfo.status = 'partially_downloaded';
+		}
 	}
+
+	if (!torrentInfo.ended) {
+		torrentInfo.ended = '0';
+	}
+
+	const baseData = {
+		hash,
+		imdbId,
+		filename: torrentInfo.filename,
+		originalFilename: torrentInfo.original_filename,
+		bytes: BigInt(torrentInfo.bytes || 0),
+		originalBytes: BigInt(torrentInfo.original_bytes || 0),
+		host: 'real-debrid.com',
+		progress: torrentInfo.progress,
+		status: torrentInfo.status,
+		ended: new Date(torrentInfo.ended),
+	};
 
 	await db.prisma.available.upsert({
 		where: { hash },
 		update: {
-			imdbId,
-			originalFilename: torrentInfo.original_filename,
-			originalBytes: BigInt(torrentInfo.original_bytes),
-			ended: new Date(torrentInfo.ended),
-			files: {
-				deleteMany: {},
-				create: selectedFiles.map((file, index) => ({
-					link: torrentInfo.links[index],
-					file_id: file.id,
-					path: file.path,
-					bytes: BigInt(file.bytes),
-				})),
-			},
+			...baseData,
+			files:
+				selectedFiles.length > 0
+					? {
+							deleteMany: {},
+							create: selectedFiles.map((file, index) => ({
+								link: torrentInfo.links?.[index] || '',
+								file_id: file.id,
+								path: file.path,
+								bytes: BigInt(file.bytes || 0),
+							})),
+						}
+					: undefined,
 		},
 		create: {
-			hash,
-			imdbId,
-			filename: torrentInfo.filename,
-			originalFilename: torrentInfo.original_filename,
-			bytes: BigInt(torrentInfo.bytes),
-			originalBytes: BigInt(torrentInfo.original_bytes),
-			host: 'real-debrid.com',
-			progress: torrentInfo.progress,
-			status: torrentInfo.status,
-			ended: new Date(torrentInfo.ended),
-			files: {
-				create: selectedFiles.map((file, index) => ({
-					link: torrentInfo.links[index],
-					file_id: file.id,
-					path: file.path,
-					bytes: BigInt(file.bytes),
-				})),
-			},
+			...baseData,
+			files:
+				selectedFiles.length > 0
+					? {
+							create: selectedFiles.map((file, index) => ({
+								link: torrentInfo.links?.[index] || '',
+								file_id: file.id,
+								path: file.path,
+								bytes: BigInt(file.bytes || 0),
+							})),
+						}
+					: undefined,
 		},
 	});
 }
