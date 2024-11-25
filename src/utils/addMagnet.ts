@@ -24,7 +24,7 @@ export const handleAddAsMagnetInRd = async (
 		if (callback) await callback(response);
 	} catch (error) {
 		console.error(error);
-		toast.error(error instanceof Error ? error.message : 'An error occurred');
+		toast.error(`There was an error adding hash: ${error}`, magnetToastOptions);
 	}
 };
 
@@ -41,7 +41,7 @@ export const handleAddMultipleHashesInRd = async (
 		} catch (error) {
 			errorCount++;
 			console.error(error);
-			toast.error('There was an error adding hash. Please try again.');
+			toast.error(`There was an error adding hash: ${error}`);
 		}
 	}
 	if (callback) await callback();

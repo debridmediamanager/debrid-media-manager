@@ -110,6 +110,11 @@ function IndexPage() {
 		window.location.assign('/');
 	};
 
+	const handleClearLocalStorage = () => {
+		localStorage.clear();
+		window.location.reload();
+	};
+
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 p-4">
 			<Head>
@@ -187,9 +192,17 @@ function IndexPage() {
 					</div>
 				</>
 			) : (
-				<h1 className="pb-4 text-center text-xl text-white">
-					Debrid Media Manager is loading...
-				</h1>
+				<div className="flex flex-col items-center gap-4">
+					<h1 className="pb-4 text-center text-xl text-white">
+						Debrid Media Manager is loading...
+					</h1>
+					<button
+						onClick={handleClearLocalStorage}
+						className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+					>
+						Clear Data and Reload
+					</button>
+				</div>
 			)}
 		</div>
 	);

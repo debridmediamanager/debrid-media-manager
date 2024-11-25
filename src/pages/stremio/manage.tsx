@@ -29,6 +29,7 @@ function ManagePage() {
 	const dmmCastToken = useCastToken();
 	const [groupedLinks, setGroupedLinks] = useState<GroupedLinks>({});
 	const [loading, setLoading] = useState(true);
+	const [selectedLinks, setSelectedLinks] = useState<Set<string>>(new Set());
 
 	useEffect(() => {
 		const fetchLinks = async () => {
@@ -123,6 +124,86 @@ function ManagePage() {
 		}
 	};
 
+	const handleDeleteSelected = async () => {
+		if (selectedLinks.size === 0) return;
+
+		try {
+			const deletePromises = Array.from(selectedLinks).map(async (url) => {
+				let link: CastedLink | null = null;
+				for (const links of Object.values(groupedLinks)) {
+					link = links.find((l) => l.url === url) || null;
+					if (link) break;
+				}
+				if (!link) return;
+
+				const response = await fetch('/api/stremio/deletelink', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						token: dmmCastToken,
+						imdbId: link.imdbId,
+						hash: link.hash,
+					}),
+				});
+
+				if (!response.ok) throw new Error('Failed to delete link');
+				return url;
+			});
+
+			const deletedUrls = await Promise.all(deletePromises);
+
+			// Update state after successful deletions
+			setGroupedLinks((prev) => {
+				const newGrouped = { ...prev };
+				Object.keys(newGrouped).forEach((imdbId) => {
+					newGrouped[imdbId] = newGrouped[imdbId].filter(
+						(link) => !deletedUrls.includes(link.url)
+					);
+					if (newGrouped[imdbId].length === 0) {
+						delete newGrouped[imdbId];
+					}
+				});
+				return newGrouped;
+			});
+
+			setSelectedLinks(new Set());
+			toast.success('Selected links deleted successfully');
+		} catch (error) {
+			console.error(error);
+			toast.error('Failed to delete selected links');
+		}
+	};
+
+	const toggleLinkSelection = (url: string) => {
+		setSelectedLinks((prev) => {
+			const newSet = new Set(prev);
+			if (newSet.has(url)) {
+				newSet.delete(url);
+			} else {
+				newSet.add(url);
+			}
+			return newSet;
+		});
+	};
+
+	const toggleGroupSelection = (imdbId: string) => {
+		const links = groupedLinks[imdbId];
+		const urls = links.map((link) => link.url);
+		const allSelected = urls.every((url) => selectedLinks.has(url));
+
+		setSelectedLinks((prev) => {
+			const newSet = new Set(prev);
+			if (allSelected) {
+				urls.forEach((url) => newSet.delete(url));
+			} else {
+				urls.forEach((url) => newSet.add(url));
+			}
+			return newSet;
+		});
+	};
+
 	const formatSize = (size: number) => {
 		const gb = size / 1024;
 		return `${gb.toFixed(2)} GB`;
@@ -165,7 +246,17 @@ function ManagePage() {
 			<Logo />
 			<Toaster position="bottom-right" />
 
-			<h1 className="mb-6 text-xl font-bold text-white">Manage Casted Links</h1>
+			<div className="mb-6 flex items-center justify-between gap-4">
+				<h1 className="text-xl font-bold text-white">Manage Casted Links</h1>
+				{selectedLinks.size > 0 && (
+					<button
+						onClick={handleDeleteSelected}
+						className="haptic-sm rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+					>
+						Delete Selected ({selectedLinks.size})
+					</button>
+				)}
+			</div>
 
 			{loading ? (
 				<p className="text-white">Loading...</p>
@@ -173,44 +264,77 @@ function ManagePage() {
 				<p className="text-white">No casted links found</p>
 			) : (
 				<div className="grid w-full max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-3">
-					{Object.entries(groupedLinks).map(([imdbId, links]) => (
-						<div key={imdbId} className="rounded-lg bg-gray-800 p-4">
-							<div className="mb-4 flex justify-center">
-								<Poster imdbId={imdbId} title={imdbId} />
-							</div>
-							<div className="space-y-2">
-								{links.map((link) => {
-									const episodeLabel = formatEpisodeLabel(link.imdbId);
-									return (
-										<div
-											key={link.url}
-											className="flex items-center justify-between rounded bg-gray-700 p-2"
-										>
-											<div className="mr-2 flex min-w-0 flex-1 flex-col">
-												{episodeLabel && (
-													<span className="text-sm font-medium text-purple-300">
-														{episodeLabel}
-													</span>
-												)}
-												<span className="truncate text-sm text-gray-300">
-													{getFilename(link.url)}
-												</span>
-												<span className="text-xs text-gray-400">
-													{formatSize(link.size)}
-												</span>
-											</div>
-											<button
-												onClick={() => handleDelete(link)}
-												className="haptic-sm shrink-0 rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
+					{Object.entries(groupedLinks).map(([imdbId, links]) => {
+						const allSelected = links.every((link) => selectedLinks.has(link.url));
+						const someSelected = links.some((link) => selectedLinks.has(link.url));
+						return (
+							<div key={imdbId} className="rounded-lg bg-gray-800 p-4">
+								<div className="mb-4 flex items-center justify-between">
+									<div className="flex items-center gap-2">
+										<input
+											type="checkbox"
+											checked={allSelected}
+											ref={(input) => {
+												if (input) {
+													input.indeterminate =
+														someSelected && !allSelected;
+												}
+											}}
+											onChange={() => toggleGroupSelection(imdbId)}
+											className="h-4 w-4 rounded border-gray-300 bg-gray-700 text-purple-600 focus:ring-purple-500"
+										/>
+										<span className="text-sm font-medium text-white">
+											Select All
+										</span>
+									</div>
+								</div>
+								<div className="mb-4 flex justify-center">
+									<Poster imdbId={imdbId} title={imdbId} />
+								</div>
+								<div className="space-y-2">
+									{links.map((link) => {
+										const episodeLabel = formatEpisodeLabel(link.imdbId);
+										return (
+											<div
+												key={link.url}
+												className="flex items-center justify-between rounded bg-gray-700 p-2"
 											>
-												Delete
-											</button>
-										</div>
-									);
-								})}
+												<div className="mr-2 flex min-w-0 flex-1 items-center gap-2">
+													<input
+														type="checkbox"
+														checked={selectedLinks.has(link.url)}
+														onChange={() =>
+															toggleLinkSelection(link.url)
+														}
+														className="h-4 w-4 rounded border-gray-300 bg-gray-600 text-purple-600 focus:ring-purple-500"
+													/>
+													<div className="flex min-w-0 flex-1 flex-col">
+														{episodeLabel && (
+															<span className="text-sm font-medium text-purple-300">
+																{episodeLabel}
+															</span>
+														)}
+														<span className="truncate text-sm text-gray-300">
+															{getFilename(link.url)}
+														</span>
+														<span className="text-xs text-gray-400">
+															{formatSize(link.size)}
+														</span>
+													</div>
+												</div>
+												<button
+													onClick={() => handleDelete(link)}
+													className="haptic-sm shrink-0 rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
+												>
+													Delete
+												</button>
+											</div>
+										);
+									})}
+								</div>
 							</div>
-						</div>
-					))}
+						);
+					})}
 				</div>
 			)}
 
