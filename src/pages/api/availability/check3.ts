@@ -33,9 +33,11 @@ const handler: NextApiHandler = async (req, res) => {
 				console.log(`No search results for ${imdbId}`);
 				continue;
 			}
+			console.log(`Found ${searchResults.length} search results for ${imdbId}`);
 
 			const availableHashes = await getAvailableHashes(imdbId, searchResults);
 			let newResults = searchResults.filter((result) => !availableHashes.has(result.hash));
+			console.log(`Found ${newResults.length} new results for ${imdbId}`);
 			newResults.sort((a, b) => a.fileSize - b.fileSize);
 
 			for (const result of newResults) {
@@ -151,17 +153,22 @@ async function handleDownloadedTorrent(
 }
 
 async function getSearchResults(imdbId: string): Promise<SearchResult[]> {
-	const results = (await Promise.all([
-		db.prisma.scraped.findFirst({
-			where: { key: `movie:${imdbId}` },
+	const results = await Promise.all([
+		db.prisma.scraped.findMany({
+			where: {
+				OR: [{ key: `movie:${imdbId}` }, { key: { startsWith: `tv:${imdbId}:` } }],
+			},
 		}),
-		db.prisma.scrapedTrue.findFirst({
-			where: { key: `movie:${imdbId}` },
+		db.prisma.scrapedTrue.findMany({
+			where: {
+				OR: [{ key: `movie:${imdbId}` }, { key: { startsWith: `tv:${imdbId}:` } }],
+			},
 		}),
-	])) as unknown as DbResult[];
+	]);
 
 	return results
-		.map((result) => result?.value)
+		.flat()
+		.map((result) => (result as unknown as DbResult).value)
 		.flat()
 		.filter(Boolean);
 }
