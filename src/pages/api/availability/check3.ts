@@ -55,7 +55,7 @@ const handler: NextApiHandler = async (req, res) => {
 			// shuffle results
 			newResults.sort(() => Math.random() - 0.5);
 
-			const resultsToProcess = !!imdbId ? newResults : newResults.splice(0, 50);
+			const resultsToProcess = !!imdbId ? newResults : newResults.splice(0, 100);
 			for (const result of resultsToProcess) {
 				console.log(`Processing hash ${result.hash}`);
 				await processTorrent(result.hash, imdbId, rdKey);
