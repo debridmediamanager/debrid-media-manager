@@ -35,7 +35,8 @@ const handler: NextApiHandler = async (req, res) => {
 			}
 
 			const availableHashes = await getAvailableHashes(imdbId, searchResults);
-			const newResults = searchResults.filter((result) => !availableHashes.has(result.hash));
+			let newResults = searchResults.filter((result) => !availableHashes.has(result.hash));
+			newResults.sort((a, b) => a.fileSize - b.fileSize);
 
 			for (const result of newResults) {
 				console.log(`Processing hash ${result.hash}`);
