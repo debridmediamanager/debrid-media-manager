@@ -1204,26 +1204,6 @@ function TorrentsPage() {
 		);
 	};
 
-	const [isOnline, setIsOnline] = useState(true);
-
-	// Add network status detection
-	useEffect(() => {
-		const handleOnline = () => setIsOnline(true);
-		const handleOffline = () => setIsOnline(false);
-
-		// Set initial state
-		setIsOnline(navigator.onLine);
-
-		// Add event listeners
-		window.addEventListener('online', handleOnline);
-		window.addEventListener('offline', handleOffline);
-
-		return () => {
-			window.removeEventListener('online', handleOnline);
-			window.removeEventListener('offline', handleOffline);
-		};
-	}, []);
-
 	// Modify initialize function to work offline
 	async function initialize() {
 		await torrentDB.initializeDB();
@@ -1238,21 +1218,14 @@ function TorrentsPage() {
 			setLoading(false);
 		}
 
-		// Only fetch from APIs if online
-		if (isOnline) {
-			await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents()]);
-			await selectPlayableFiles(userTorrentsList);
-		} else {
-			setRdSyncing(false);
-			setAdSyncing(false);
-			setLoading(false);
-		}
+		await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents()]);
+		await selectPlayableFiles(userTorrentsList);
 	}
 
 	return (
 		<div className="mx-1 my-0 min-h-screen bg-gray-900 text-gray-100">
 			<Head>
-				<title>Debrid Media Manager - Library {!isOnline && '(Offline)'}</title>
+				<title>Debrid Media Manager - Library</title>
 			</Head>
 			<Toaster position="bottom-right" />
 			<div className="mb-1 flex items-center justify-between">
@@ -1260,21 +1233,19 @@ function TorrentsPage() {
 					Library 📚{' '}
 					<span className="whitespace-nowrap text-sm">
 						{userTorrentsList.length} torrents{' '}
-						{!isOnline
-							? '📴'
-							: rdSyncing || adSyncing
-								? '💭'
-								: totalBytes / ONE_GIGABYTE / 1024 > 10000
-									? '😱'
-									: totalBytes / ONE_GIGABYTE / 1024 > 1000
-										? '😨'
-										: totalBytes / ONE_GIGABYTE / 1024 > 100
-											? '😮'
-											: totalBytes / ONE_GIGABYTE / 1024 > 10
-												? '🙂'
-												: totalBytes / ONE_GIGABYTE / 1024 > 1
-													? '😐'
-													: '🙁'}{' '}
+						{rdSyncing || adSyncing
+							? '💭'
+							: totalBytes / ONE_GIGABYTE / 1024 > 10000
+								? '😱'
+								: totalBytes / ONE_GIGABYTE / 1024 > 1000
+									? '😨'
+									: totalBytes / ONE_GIGABYTE / 1024 > 100
+										? '😮'
+										: totalBytes / ONE_GIGABYTE / 1024 > 10
+											? '🙂'
+											: totalBytes / ONE_GIGABYTE / 1024 > 1
+												? '😐'
+												: '🙁'}{' '}
 					</span>
 					<span className="whitespace-nowrap text-sm">
 						{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB

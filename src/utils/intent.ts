@@ -20,6 +20,10 @@ export const getInstantIntent = async (
 		try {
 			await handleSelectFilesInRd(rdKey, `rd:${id}`, true);
 			const torrentInfo = await getTorrentInfo(rdKey, id, true);
+			if (torrentInfo.status !== 'downloaded') {
+				throw new Error('Torrent not downloaded');
+			}
+
 			let link = '';
 
 			if (!fileId) {
