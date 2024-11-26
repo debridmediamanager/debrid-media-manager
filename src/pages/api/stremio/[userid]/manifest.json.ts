@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		background: 'https://static.debridmediamanager.com/background.png',
 		version: '0.0.4',
 		resources: ['catalog', 'stream'],
-		types: ['movie', 'series', 'anime'],
+		types: ['movie', 'series', 'other'],
 		idPrefixes: ['tt', 'kitsu', 'mal', 'anilist', 'anidb'],
 		catalogs: [
 			{
@@ -25,9 +25,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				type: 'series',
 			},
 			{
-				id: 'casted-anime',
-				name: 'DMM Casted Anime',
-				type: 'anime',
+				id: 'casted-other',
+				name: 'DMM Library',
+				type: 'other',
 			},
 		],
 		behaviorHints: { adult: false, p2p: false },

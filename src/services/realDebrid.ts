@@ -49,7 +49,12 @@ export const getCredentials = async (deviceCode: string) => {
 	}
 };
 
-export const getToken = async (clientId: string, clientSecret: string, refreshToken: string) => {
+export const getToken = async (
+	clientId: string,
+	clientSecret: string,
+	refreshToken: string,
+	bare: boolean = false
+) => {
 	try {
 		const params = new URLSearchParams();
 		params.append('client_id', clientId);
@@ -58,7 +63,7 @@ export const getToken = async (clientId: string, clientSecret: string, refreshTo
 		params.append('grant_type', 'http://oauth.net/grant_type/device/1.0');
 
 		const response = await axios.post<AccessTokenResponse>(
-			`${getProxyUrl(config.proxy)}${config.realDebridHostname}/oauth/v2/token`,
+			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/oauth/v2/token`,
 			params.toString(),
 			{
 				headers: {
