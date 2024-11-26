@@ -147,27 +147,3 @@ export async function handleCopyMagnet(hash: string) {
 	await navigator.clipboard.writeText(magnet);
 	toast.success('Copied magnet url to clipboard', magnetToastOptions);
 }
-
-// used for search result pages, sends to availability database
-// send info response to endpoint
-export const handleAddAsMagnetInRd2 = async (
-	rdKey: string,
-	hash: string,
-	callback?: () => Promise<void>
-) => {
-	try {
-		const id = await addHashAsMagnet(rdKey, hash);
-		await handleSelectFilesInRd(rdKey, `rd:${id}`);
-		// get info to check if it's ready
-		const response = await getTorrentInfo(rdKey, id);
-		if (response.progress != 100) {
-			toast.success('Torrent added but not yet ready', magnetToastOptions);
-			return;
-		}
-		if (callback) await callback();
-		toast('Successfully added hash!', magnetToastOptions);
-	} catch (error) {
-		console.error(error);
-		toast.error('There was an error adding hash. Please try again.');
-	}
-};
