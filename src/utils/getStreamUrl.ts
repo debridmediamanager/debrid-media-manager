@@ -4,6 +4,7 @@ import {
 	getTorrentInfo,
 	unrestrictLink,
 } from '@/services/realDebrid';
+import ptt from 'parse-torrent-title';
 import { handleSelectFilesInRd } from './addMagnet';
 
 export const getStreamUrl = async (
@@ -39,23 +40,9 @@ export const getStreamUrl = async (
 			rdLink = resp.link;
 
 			if (mediaType === 'tv') {
-				const filePath = streamUrl.split('/').pop() ?? '';
-				let epRegex = /S(\d+)\s?E(\d+)/i;
-				seasonNumber = filePath.match(epRegex)?.length
-					? parseInt(filePath.match(epRegex)![1], 10)
-					: -1;
-				episodeNumber = filePath.match(epRegex)?.length
-					? parseInt(filePath.match(epRegex)![2], 10)
-					: -1;
-				if (seasonNumber === -1 || episodeNumber === -1) {
-					epRegex = /[^\d](\d{1,2})x(\d{1,2})[^\d]/i;
-					seasonNumber = filePath.match(epRegex)?.length
-						? parseInt(filePath.match(epRegex)![1], 10)
-						: -1;
-					episodeNumber = filePath.match(epRegex)?.length
-						? parseInt(filePath.match(epRegex)![2], 10)
-						: -1;
-				}
+				const info = ptt.parse(resp.filename.split('/').pop() || '');
+				seasonNumber = info.season || -1;
+				episodeNumber = info.episode || -1;
 			}
 
 			fileSize = Math.round(resp.filesize / 1024 / 1024);

@@ -5,6 +5,7 @@ import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
+import ptt from 'parse-torrent-title';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 
@@ -86,6 +87,19 @@ function ManagePage() {
 			};
 		}
 		return null;
+	};
+
+	const getStremioUrl = (link: CastedLink): string => {
+		const baseImdbId = link.imdbId.split(':')[0];
+		const filename = link.url.split('/').pop() || '';
+		const info = ptt.parse(filename);
+		const seasonNumber = info.season;
+		const episodeNumber = info.episode;
+
+		if (seasonNumber !== undefined && episodeNumber !== undefined) {
+			return `stremio://detail/series/${baseImdbId}/${baseImdbId}:${seasonNumber}:${episodeNumber}`;
+		}
+		return `stremio://detail/movie/${baseImdbId}/${baseImdbId}`;
 	};
 
 	const handleDelete = async (link: CastedLink) => {
@@ -314,7 +328,7 @@ function ManagePage() {
 																{episodeLabel}
 															</span>
 														)}
-														<span className="truncate text-sm text-gray-300">
+														<span className="break-all text-sm text-gray-300">
 															{getFilename(link.url)}
 														</span>
 														<span className="text-xs text-gray-400">
@@ -322,12 +336,20 @@ function ManagePage() {
 														</span>
 													</div>
 												</div>
-												<button
-													onClick={() => handleDelete(link)}
-													className="haptic-sm shrink-0 rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
-												>
-													Delete
-												</button>
+												<div className="flex shrink-0 gap-2">
+													<a
+														href={getStremioUrl(link)}
+														className="haptic-sm rounded bg-cyan-600 px-3 py-1 text-sm text-white hover:bg-cyan-700"
+													>
+														Watch
+													</a>
+													<button
+														onClick={() => handleDelete(link)}
+														className="haptic-sm rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
+													>
+														Delete
+													</button>
+												</div>
 											</div>
 										);
 									})}
