@@ -44,13 +44,13 @@ export class PlanetScaleCache {
 					)
 					) AS value
 			FROM (
-				SELECT 
-					jt.hash, 
-					jt.title, 
+				SELECT
+					jt.hash,
+					jt.title,
 					jt.fileSize
-				FROM 
+				FROM
 					ScrapedTrue s
-				JOIN 
+				JOIN
 					JSON_TABLE(
 						s.value,
 						'$[*]'
@@ -60,7 +60,7 @@ export class PlanetScaleCache {
 							fileSize DECIMAL(10,2) PATH '$.fileSize'
 						)
 					) AS jt
-				WHERE 
+				WHERE
 					s.key = ${key}
 				${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
 				ORDER BY jt.fileSize DESC
@@ -103,13 +103,13 @@ export class PlanetScaleCache {
 					)
 					) AS value
 			FROM (
-				SELECT 
-					jt.hash, 
-					jt.title, 
+				SELECT
+					jt.hash,
+					jt.title,
 					jt.fileSize
-				FROM 
+				FROM
 					Scraped s
-				JOIN 
+				JOIN
 					JSON_TABLE(
 						s.value,
 						'$[*]'
@@ -119,7 +119,7 @@ export class PlanetScaleCache {
 							fileSize DECIMAL(10,2) PATH '$.fileSize'
 						)
 					) AS jt
-				WHERE 
+				WHERE
 					s.key = ${key}
 				${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
 				ORDER BY jt.fileSize DESC
@@ -560,7 +560,7 @@ export class PlanetScaleCache {
 				imdbId: imdbId,
 				userId: userId,
 				updatedAt: {
-					gt: new Date(new Date().getTime() - 90 * 24 * 60 * 60 * 1000), // 90 days
+					gt: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000), // 30 days
 				},
 			},
 			orderBy: {
@@ -575,6 +575,53 @@ export class PlanetScaleCache {
 			url: item.url,
 			size: item.size,
 		}));
+	}
+
+	public async getOtherCastURLs(
+		imdbId: string
+	): Promise<{ url: string; link: string; size: number }[]> {
+		const castItems = await this.prisma.cast.findMany({
+			where: {
+				imdbId: imdbId,
+				link: {
+					not: null,
+				},
+			},
+			distinct: ['size'],
+			orderBy: {
+				size: 'desc',
+			},
+			take: 2,
+			select: {
+				url: true,
+				link: true,
+				size: true,
+			},
+		});
+
+		return castItems
+			.filter((item): item is { url: string; link: string; size: number } => !!item.link)
+			.map((item) => ({
+				url: item.url,
+				link: item.link,
+				size: item.size,
+			}));
+	}
+
+	public async getCastProfile(userId: string): Promise<{
+		clientId: string;
+		clientSecret: string;
+		refreshToken: string;
+	} | null> {
+		const profile = await this.prisma.castProfile.findUnique({
+			where: { userId },
+			select: {
+				clientId: true,
+				clientSecret: true,
+				refreshToken: true,
+			},
+		});
+		return profile;
 	}
 
 	public async saveCast(

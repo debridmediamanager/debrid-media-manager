@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new PlanetScaleCache();
 
+// lists all available streams for a movie or show
 // note, addon prefix is /api/stremio/${userid}
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid, mediaType, imdbid } = req.query;
@@ -30,7 +31,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	];
 
 	// get urls from db
-	const castItems = await db.getCastURLs(imdbidStr, userid as string);
+	const [castItems, otherCastItems] = await Promise.all([
+		db.getCastURLs(imdbidStr, userid as string),
+		db.getOtherCastURLs(imdbidStr),
+	]);
+
 	for (const item of castItems) {
 		let title = item.url.split('/').pop() ?? 'Unknown Title';
 		let sizeStr = '';
@@ -47,9 +52,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 		title = title + '\n' + `📦 ${sizeStr}`;
 		streams.push({
-			name: 'DMM ⚔️',
+			name: 'DMM 🧙‍♂️',
 			title,
 			url: item.url,
+		});
+	}
+
+	const icons = ['🔮', '🦄'];
+	for (const item of otherCastItems) {
+		let title = item.url.split('/').pop() ?? 'Unknown Title';
+		let sizeStr = '';
+		if (item.size > 1024) {
+			item.size = item.size / 1024;
+			sizeStr = `${item.size.toFixed(2)} GB`;
+		} else {
+			sizeStr = `${item.size.toFixed(2)} MB`;
+		}
+		title = decodeURIComponent(title);
+		if (title.length > 30) {
+			const mid = title.length / 2;
+			title = title.substring(0, mid) + '-\n' + title.substring(mid);
+		}
+		title = title + '\n' + `📦 ${sizeStr}`;
+		streams.push({
+			name: `DMM ${icons.pop()}`,
+			title,
+			url: `http://localhost:3000/api/stremio/${userid}/play/${item.link.substring(26, 39)}`,
 		});
 	}
 
