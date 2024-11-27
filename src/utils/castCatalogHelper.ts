@@ -70,6 +70,20 @@ export async function getDMMTorrent(userid: string, torrentID: string) {
 	if (selectedFiles.length !== info.links.length) {
 		return { error: 'Torrent is no longer cached', status: 404 };
 	}
+	const videos = selectedFiles.map((file, idx) => ({
+		id: `dmm:${torrentID}:${file.id}`,
+		title: `${file.path.split('/').pop()} - ${(file.bytes / 1024 / 1024 / 1024).toFixed(2)} GB`,
+		streams: [
+			{
+				url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${info.links[idx].substring(26, 39)}`,
+				behaviorHints: {
+					bingeGroup: `dmm:${torrentID}`,
+				},
+			},
+		],
+	}));
+	// sort videos by title
+	videos.sort((a, b) => a.title.localeCompare(b.title));
 
 	return {
 		data: {
@@ -77,18 +91,7 @@ export async function getDMMTorrent(userid: string, torrentID: string) {
 				id: `dmm:${torrentID}`,
 				type: 'other',
 				name: `DMM: ${info.original_filename} - ${(info.original_bytes / 1024 / 1024 / 1024).toFixed(2)} GB`,
-				videos: selectedFiles.map((file, idx) => ({
-					id: `dmm:${torrentID}:${file.id}`,
-					title: `${file.path.split('/').pop()} - ${(file.bytes / 1024 / 1024 / 1024).toFixed(2)} GB`,
-					streams: [
-						{
-							url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${info.links[idx].substring(26, 39)}`,
-							behaviorHints: {
-								bingeGroup: `dmm:${torrentID}`,
-							},
-						},
-					],
-				})),
+				videos,
 			},
 			cacheMaxAge: 0,
 		},

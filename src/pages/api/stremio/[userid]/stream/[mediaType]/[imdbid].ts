@@ -22,11 +22,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			name: '​1:Cast✨',
 			title: 'Cast a file inside a torrent',
 			externalUrl,
+			behaviorHints: {
+				bingeGroup: `dmm:${imdbidStr}:actions`,
+			},
 		},
 		{
 			name: '​2:Stream🪄',
 			title: 'Stream the latest link you casted',
 			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/watch/${imdbidStr}/ping`,
+			behaviorHints: {
+				bingeGroup: `dmm:${imdbidStr}:actions`,
+			},
 		},
 	];
 
@@ -55,6 +61,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			name: 'DMM 🧙‍♂️ Yours',
 			title,
 			url: item.url,
+			behaviorHints: {
+				bingeGroup: `dmm:${imdbidStr}:yours`,
+			},
 		});
 	}
 
@@ -78,6 +87,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			name: `DMM ${icons.pop()} Other`,
 			title,
 			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26, 39)}`,
+			behaviorHints: {
+				bingeGroup: `dmm:${imdbidStr}:other`,
+			},
 		});
 	}
 

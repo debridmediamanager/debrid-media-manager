@@ -586,6 +586,9 @@ export class PlanetScaleCache {
 				link: {
 					not: null,
 				},
+				size: {
+					gt: 10,
+				},
 			},
 			distinct: ['size'],
 			orderBy: {
