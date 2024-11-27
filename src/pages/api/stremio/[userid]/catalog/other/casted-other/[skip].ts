@@ -1,4 +1,4 @@
-import { getCastedOtherMetas, PAGE_SIZE } from '@/utils/castedOther';
+import { getDMMLibrary, PAGE_SIZE } from '@/utils/castCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const skipNum = skip.replaceAll(/^skip=/g, '').replaceAll(/\.json$/g, '');
 	const page = Math.floor(Number(skipNum) / PAGE_SIZE) + 1;
 
-	const result = await getCastedOtherMetas(userid as string, page);
+	const result = await getDMMLibrary(userid as string, page);
 
 	res.setHeader('access-control-allow-origin', '*');
 	if ('error' in result) {
