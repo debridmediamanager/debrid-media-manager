@@ -1,6 +1,5 @@
 import { showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { useCastToken } from '@/hooks/castToken';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
@@ -101,7 +100,6 @@ const MovieSearch: FunctionComponent = () => {
 	const adKey = useAllDebridApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(false);
 	const [uncachedCount, setUncachedCount] = useState<number>(0);
-	const dmmCastToken = useCastToken();
 
 	useEffect(() => {
 		if (!animeid) return;
@@ -317,12 +315,12 @@ const MovieSearch: FunctionComponent = () => {
 			speed: 0,
 			seeders: 0,
 		} as TorrentInfoResponse;
-		rdKey && showInfoForRD(player, rdKey, info, dmmCastToken ?? '', animeid as string, 'movie');
+		rdKey && showInfoForRD(player, rdKey, info, animeid as string, 'movie');
 	};
 
 	async function handleCast(hash: string, fileIds: string[]) {
 		await toast.promise(
-			handleCastAnime(dmmCastToken!, animeid as string, rdKey!, hash, fileIds),
+			handleCastAnime(animeid as string, rdKey!, hash, fileIds),
 			{
 				loading: `Casting ${fileIds.length} episodes`,
 				success: 'Casting successful',
@@ -550,7 +548,7 @@ const MovieSearch: FunctionComponent = () => {
 										)}
 
 										{/* Cast button */}
-										{rdKey && dmmCastToken && (
+										{rdKey && (
 											<button
 												className="haptic-sm inline rounded border-2 border-gray-500 bg-gray-900/30 px-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50"
 												onClick={() =>

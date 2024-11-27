@@ -6,6 +6,8 @@ function isValidTorrentHash(hash: string): boolean {
 	return /^[a-fA-F0-9]{40}$/.test(hash);
 }
 
+const db = new PlanetScaleCache();
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' });
@@ -71,8 +73,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		if (!Array.isArray(files) || !Array.isArray(links)) {
 			return res.status(400).json({ error: 'Files and links must be arrays' });
 		}
-
-		const db = new PlanetScaleCache();
 
 		// Get selected files
 		const selectedFiles = files.filter((file) => file.selected === 1);

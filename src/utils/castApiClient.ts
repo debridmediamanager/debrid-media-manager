@@ -4,15 +4,10 @@ import { runConcurrentFunctions } from './batch';
 import { groupBy } from './groupBy';
 import { castToastOptions } from './toastOptions';
 
-export const handleCastMovie = async (
-	castToken: string,
-	imdbId: string,
-	rdKey: string,
-	hash: string
-) => {
+export const handleCastMovie = async (imdbId: string, rdKey: string, hash: string) => {
 	try {
 		const resp = await axios.get(
-			`/api/stremio/${castToken}/cast/movie/${imdbId}?token=${rdKey}&hash=${hash}`
+			`/api/stremio/cast/movie/${imdbId}?token=${rdKey}&hash=${hash}`
 		);
 		toast(`Successfully casted movie ${resp.data.filename}`, castToastOptions);
 	} catch (error) {
@@ -22,7 +17,6 @@ export const handleCastMovie = async (
 };
 
 export const handleCastTvShow = async (
-	castToken: string,
 	imdbId: string,
 	rdKey: string,
 	hash: string,
@@ -32,7 +26,7 @@ export const handleCastTvShow = async (
 		try {
 			const fIdParam = batch.map((id) => `fileIds=${id}`).join('&');
 			const resp = await axios.get(
-				`/api/stremio/${castToken}/cast/series/${imdbId}?token=${rdKey}&hash=${hash}&${fIdParam}`
+				`/api/stremio/cast/series/${imdbId}?token=${rdKey}&hash=${hash}&${fIdParam}`
 			);
 			const errorEpisodes = resp.data.errorEpisodes;
 			if (errorEpisodes.length) {
@@ -59,7 +53,6 @@ export const handleCastTvShow = async (
 };
 
 export const handleCastAnime = async (
-	castToken: string,
 	anidbId: string,
 	rdKey: string,
 	hash: string,
@@ -69,7 +62,7 @@ export const handleCastAnime = async (
 		try {
 			const fIdParam = batch.map((id) => `fileIds=${id}`).join('&');
 			const resp = await axios.get(
-				`/api/stremio/${castToken}/cast/anime/${anidbId}?token=${rdKey}&hash=${hash}&${fIdParam}`
+				`/api/stremio/cast/anime/${anidbId}?token=${rdKey}&hash=${hash}&${fIdParam}`
 			);
 			const errorEpisodes = resp.data.errorEpisodes;
 			if (errorEpisodes.length) {
@@ -96,10 +89,10 @@ export const handleCastAnime = async (
 };
 
 export const saveCastProfile = async (
-	userId: string,
 	clientId: string,
 	clientSecret: string,
-	refreshToken: string
+	refreshToken: string,
+	accessToken: string
 ) => {
 	const storageKey = `cast-profile-${userId}-updated:0.0.1`;
 	const existingUpdatedAt = localStorage.getItem(storageKey);

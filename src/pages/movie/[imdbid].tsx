@@ -2,7 +2,6 @@ import Poster from '@/components/poster';
 import { showInfoForRD } from '@/components/showInfo';
 import { showSubscribeModal } from '@/components/subscribe';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { useCastToken } from '@/hooks/castToken';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
@@ -102,7 +101,6 @@ const MovieSearch: FunctionComponent = () => {
 	const adKey = useAllDebridApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(false);
 	const [totalUncachedCount, setTotalUncachedCount] = useState<number>(0);
-	const dmmCastToken = useCastToken();
 	const [currentPage, setCurrentPage] = useState(0);
 	const [hasMoreResults, setHasMoreResults] = useState(true);
 
@@ -340,12 +338,12 @@ const MovieSearch: FunctionComponent = () => {
 			speed: 0,
 			seeders: 0,
 		} as TorrentInfoResponse;
-		rdKey && showInfoForRD(player, rdKey, info, dmmCastToken ?? '', imdbid as string, 'movie');
+		rdKey && showInfoForRD(player, rdKey, info, imdbid as string, 'movie');
 	};
 
 	async function handleCast(hash: string) {
 		await toast.promise(
-			handleCastMovie(dmmCastToken!, imdbid as string, rdKey!, hash),
+			handleCastMovie(imdbid as string, rdKey!, hash),
 			{
 				loading: 'Casting...',
 				success: 'Casting successful',
@@ -448,7 +446,7 @@ const MovieSearch: FunctionComponent = () => {
 							<b>🧐Watch</b>
 						</button>
 					)}
-					{rdKey && dmmCastToken && getFirstAvailableRdTorrent() && (
+					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
 							className="mb-1 mr-2 mt-0 rounded border-2 border-gray-500 bg-gray-900/30 p-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50"
 							onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash)}
@@ -648,7 +646,7 @@ const MovieSearch: FunctionComponent = () => {
 												</>
 											)}
 
-											{rdKey && dmmCastToken && (
+											{rdKey && (
 												<button
 													className="haptic-sm inline rounded border-2 border-gray-500 bg-gray-900/30 px-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50"
 													onClick={() => handleCast(r.hash)}

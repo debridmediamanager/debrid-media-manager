@@ -3,7 +3,6 @@ import Poster from '@/components/poster';
 import { showInfoForRD } from '@/components/showInfo';
 import { showSubscribeModal } from '@/components/subscribe';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { useCastToken } from '@/hooks/castToken';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
@@ -67,7 +66,6 @@ const TvSearch: FunctionComponent = () => {
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(false);
-	const dmmCastToken = useCastToken();
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalUncachedCount, setTotalUncachedCount] = useState<number>(0);
 	const [hasMoreResults, setHasMoreResults] = useState(true);
@@ -308,12 +306,12 @@ const TvSearch: FunctionComponent = () => {
 			speed: 0,
 			seeders: 0,
 		} as TorrentInfoResponse;
-		rdKey && showInfoForRD(player, rdKey!, info, dmmCastToken ?? '', imdbid as string, 'tv');
+		rdKey && showInfoForRD(player, rdKey!, info, imdbid as string, 'tv');
 	};
 
 	async function handleCast(hash: string, fileIds: string[]) {
 		await toast.promise(
-			handleCastTvShow(dmmCastToken!, imdbid as string, rdKey!, hash, fileIds),
+			handleCastTvShow(imdbid as string, rdKey!, hash, fileIds),
 			{
 				loading: `Casting ${fileIds.length} episodes`,
 				success: 'Casting successful',
@@ -529,9 +527,7 @@ const TvSearch: FunctionComponent = () => {
 				episodeMaxSize={episodeMaxSize}
 				rdKey={rdKey}
 				adKey={adKey}
-				dmmCastToken={dmmCastToken}
 				player={player}
-				imdbid={imdbid as string}
 				hashAndProgress={hashAndProgress}
 				handleShowInfo={handleShowInfo}
 				handleCast={handleCast}

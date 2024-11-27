@@ -1,11 +1,12 @@
 import { PlanetScaleCache } from '@/services/planetscale';
+import { generateUserId } from '@/utils/castApiHelpers';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { userid, anidbid, token, hash, fileIds } = req.query;
+	const { anidbid, token, hash, fileIds } = req.query;
 	if (!token || !hash || !fileIds) {
 		res.status(400).json({
 			status: 'error',
@@ -14,7 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 	if (
-		typeof userid !== 'string' ||
 		typeof anidbid !== 'string' ||
 		typeof token !== 'string' ||
 		typeof hash !== 'string' ||
@@ -30,6 +30,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const errorEpisodes: string[] = [];
 
 	const fileIdsArr = Array.isArray(fileIds) ? fileIds : [fileIds];
+
+	const userid = await generateUserId(token);
+
 	for (const fileId of fileIdsArr) {
 		try {
 			const [streamUrl, rdLink, seasonNumber, episodeNumber, fileSize] = await getStreamUrl(

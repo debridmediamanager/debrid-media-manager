@@ -135,8 +135,8 @@ const renderFileRow = (file: FileRowProps, showCheckbox: boolean = false): strin
 	const checkboxColumn = showCheckbox
 		? `
         <td class="pr-2">
-            <input type="checkbox" 
-                id="${checkboxId}" 
+            <input type="checkbox"
+                id="${checkboxId}"
                 class="file-selector"
                 data-file-id="${file.id}"
                 ${file.isSelected ? 'checked' : ''}
@@ -184,7 +184,6 @@ const renderTorrentInfo = (
 	isRd: boolean,
 	rdKey: string,
 	app?: string,
-	userId?: string,
 	imdbId?: string,
 	mediaType?: 'movie' | 'tv'
 ) => {
@@ -228,13 +227,13 @@ const renderTorrentInfo = (
 						isTvEpisode = file.path.match(epRegex)?.length ?? 0 > 0;
 					}
 					if (
-						userId &&
+						rdKey &&
 						imdbId &&
 						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
 					) {
 						actions.push(
 							renderButton('cast', {
-								onClick: `window.open('/api/stremio/${userId}/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')`,
+								onClick: `window.open('/api/stremio/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')`,
 								text: 'Cast',
 							})
 						);
@@ -280,7 +279,6 @@ export const showInfoForRD = async (
 	app: string,
 	rdKey: string,
 	info: TorrentInfoResponse,
-	userId: string = '',
 	imdbId: string = '',
 	mediaType: 'movie' | 'tv' = 'movie'
 ): Promise<void> => {
@@ -317,9 +315,9 @@ export const showInfoForRD = async (
         ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
         ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleReinsertTorrentinRd('${rdKey}', { id: 'rd:${info.id}', hash: '${info.hash}' }, true)` })}
         ${
-			userId
+			rdKey
 				? renderButton('castAll', {
-						onClick: `window.open('/api/stremio/${userId}/cast/library/${info.id}?rdToken=${rdKey}')`,
+						onClick: `window.open('/api/stremio/cast/library/${info.id}?rdToken=${rdKey}')`,
 					})
 				: ''
 		}
@@ -347,7 +345,7 @@ export const showInfoForRD = async (
         <div class="overflow-x-auto" style="max-width: 100%;">
             <table class="table-auto">
                 <tbody>
-                    ${renderTorrentInfo(info, true, rdKey, app, userId, imdbId, mediaType)}
+                    ${renderTorrentInfo(info, true, rdKey, app, imdbId, mediaType)}
                 </tbody>
             </table>
         </div>
@@ -411,7 +409,6 @@ export const showInfoForAD = async (
 	app: string,
 	rdKey: string,
 	info: MagnetStatus,
-	userId: string = '',
 	imdbId: string = ''
 ): Promise<void> => {
 	const torrent = {
@@ -454,7 +451,7 @@ export const showInfoForAD = async (
         <div class="overflow-x-auto" style="max-width: 100%;">
             <table class="table-auto">
                 <tbody>
-                    ${renderTorrentInfo(info, false, '', app, userId, imdbId)}
+                    ${renderTorrentInfo(info, false, '', app, imdbId)}
                 </tbody>
             </table>
         </div>

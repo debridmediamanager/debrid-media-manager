@@ -1,4 +1,5 @@
 import { PlanetScaleCache } from '@/services/planetscale';
+import { generateUserId } from '@/utils/castApiHelpers';
 import { getBiggestFileStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -7,7 +8,7 @@ const db = new PlanetScaleCache();
 // MOVIE cast: unrestricts a selected link and saves it to the database
 // called in the movie page
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { userid, imdbid, token, hash } = req.query;
+	const { imdbid, token, hash } = req.query;
 	if (!token || !hash) {
 		res.status(400).json({
 			status: 'error',
@@ -15,12 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		});
 		return;
 	}
-	if (
-		typeof userid !== 'string' ||
-		typeof imdbid !== 'string' ||
-		typeof token !== 'string' ||
-		typeof hash !== 'string'
-	) {
+	if (typeof imdbid !== 'string' || typeof token !== 'string' || typeof hash !== 'string') {
 		res.status(400).json({
 			status: 'error',
 			errorMessage: 'Invalid "token" or "hash" query parameter',
@@ -34,6 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		if (streamUrl) {
 			let message = 'You can now stream the movie in Stremio';
+
+			const userid = await generateUserId(token);
 
 			await db.saveCast(imdbid, userid, hash, streamUrl, rdLink, 0, 0, fileSize, null);
 

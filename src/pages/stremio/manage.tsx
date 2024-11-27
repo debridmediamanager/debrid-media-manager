@@ -1,6 +1,6 @@
 import { Logo } from '@/components/Logo';
 import Poster from '@/components/poster';
-import { useCastToken } from '@/hooks/castToken';
+import { useRealDebridAccessToken } from '@/hooks/auth';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -27,56 +27,60 @@ interface EpisodeInfo {
 }
 
 function ManagePage() {
-	const dmmCastToken = useCastToken();
+	const [rdKey] = useRealDebridAccessToken();
 	const [groupedLinks, setGroupedLinks] = useState<GroupedLinks>({});
 	const [loading, setLoading] = useState(true);
 	const [selectedLinks, setSelectedLinks] = useState<Set<string>>(new Set());
 
 	useEffect(() => {
 		const fetchLinks = async () => {
-			if (dmmCastToken) {
-				try {
-					const response = await fetch(`/api/stremio/links?token=${dmmCastToken}`);
-					if (!response.ok) throw new Error('Failed to fetch links');
-					const links = await response.json();
+			if (!rdKey) {
+				setLoading(false);
+				return;
+			}
 
-					// Group links by imdbId
-					const grouped = links.reduce((acc: GroupedLinks, link: CastedLink) => {
-						const baseImdbId = link.imdbId.split(':')[0]; // Handle TV show episodes
-						if (!acc[baseImdbId]) {
-							acc[baseImdbId] = [];
-						}
-						acc[baseImdbId].push(link);
-						return acc;
-					}, {});
+			try {
+				const response = await fetch(`/api/stremio/links?token=${rdKey}`);
+				if (!response.ok) throw new Error('Failed to fetch links');
+				const links = await response.json();
 
-					// Sort links within each group by season and episode numbers
-					Object.keys(grouped).forEach((imdbId) => {
-						grouped[imdbId].sort((a: CastedLink, b: CastedLink) => {
-							const aEpisode = getEpisodeInfo(a.imdbId);
-							const bEpisode = getEpisodeInfo(b.imdbId);
-							if (!aEpisode && !bEpisode) return 0;
-							if (!aEpisode) return -1;
-							if (!bEpisode) return 1;
-							return (
-								aEpisode.season * 1000 +
-								aEpisode.episode -
-								(bEpisode.season * 1000 + bEpisode.episode)
-							);
-						});
+				// Group links by imdbId
+				const grouped = links.reduce((acc: GroupedLinks, link: CastedLink) => {
+					const baseImdbId = link.imdbId.split(':')[0]; // Handle TV show episodes
+					if (!acc[baseImdbId]) {
+						acc[baseImdbId] = [];
+					}
+					acc[baseImdbId].push(link);
+					return acc;
+				}, {});
+
+				// Sort links within each group by season and episode numbers
+				Object.keys(grouped).forEach((imdbId) => {
+					grouped[imdbId].sort((a: CastedLink, b: CastedLink) => {
+						const aEpisode = getEpisodeInfo(a.imdbId);
+						const bEpisode = getEpisodeInfo(b.imdbId);
+						if (!aEpisode && !bEpisode) return 0;
+						if (!aEpisode) return -1;
+						if (!bEpisode) return 1;
+						return (
+							aEpisode.season * 1000 +
+							aEpisode.episode -
+							(bEpisode.season * 1000 + bEpisode.episode)
+						);
 					});
+				});
 
-					setGroupedLinks(grouped);
-				} catch (error) {
-					console.error(error);
-					toast.error('Failed to fetch casted links');
-				}
+				setGroupedLinks(grouped);
+			} catch (error) {
+				console.error(error);
+				toast.error('Failed to fetch casted links');
+			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchLinks();
-	}, [dmmCastToken]);
+	}, [rdKey]);
 
 	const getEpisodeInfo = (imdbId: string): EpisodeInfo | null => {
 		const parts = imdbId.split(':');
@@ -104,7 +108,7 @@ function ManagePage() {
 
 	const handleDelete = async (link: CastedLink) => {
 		try {
-			if (!dmmCastToken) return;
+			if (!rdKey) return;
 
 			const response = await fetch('/api/stremio/deletelink', {
 				method: 'POST',
@@ -112,7 +116,7 @@ function ManagePage() {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					token: dmmCastToken,
+					token: rdKey,
 					imdbId: link.imdbId,
 					hash: link.hash,
 				}),
@@ -156,7 +160,7 @@ function ManagePage() {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({
-						token: dmmCastToken,
+						token: rdKey,
 						imdbId: link.imdbId,
 						hash: link.hash,
 					}),
@@ -242,7 +246,7 @@ function ManagePage() {
 		return null;
 	};
 
-	if (!dmmCastToken) {
+	if (!rdKey) {
 		return (
 			<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900">
 				<h1 className="text-center text-xl text-white">
