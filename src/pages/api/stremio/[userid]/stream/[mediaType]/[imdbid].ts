@@ -76,6 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	const icons = ['🦄', '🐈'];
+	otherCastItems.sort((a, b) => a.size - b.size);
 	for (const item of otherCastItems) {
 		let title = item.url.split('/').pop() ?? 'Unknown Title';
 		let sizeStr = '';
@@ -96,7 +97,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			title,
 			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26)}`,
 			behaviorHints: {
-				bingeGroup: `dmm:${imdbidStr}:other`,
+				bingeGroup: `dmm:${imdbidStr}:other:${icons.length}`,
 			},
 		});
 	}
