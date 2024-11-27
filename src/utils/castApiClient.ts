@@ -91,24 +91,13 @@ export const handleCastAnime = async (
 export const saveCastProfile = async (
 	clientId: string,
 	clientSecret: string,
-	refreshToken: string,
-	accessToken: string
+	refreshToken: string
 ) => {
-	const storageKey = `cast-profile-${userId}-updated:0.0.1`;
-	const existingUpdatedAt = localStorage.getItem(storageKey);
-	if (existingUpdatedAt) {
-		return;
-	}
-
 	try {
-		const response = await axios.post(`/api/stremio/${userId}/cast/saveProfile`, {
+		await axios.post(`/api/stremio/cast/saveProfile`, {
 			clientId,
 			clientSecret,
 			refreshToken,
 		});
-
-		localStorage.setItem(storageKey, response.data.updatedAt);
-	} catch (error) {
-		console.error('Error saving cast profile:', error);
-	}
+	} catch (error) {}
 };
