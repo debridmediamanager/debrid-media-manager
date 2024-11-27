@@ -589,7 +589,7 @@ export class PlanetScaleCache {
 			},
 			distinct: ['size'],
 			orderBy: {
-				size: 'desc',
+				updatedAt: 'desc',
 			},
 			take: 2,
 			select: {

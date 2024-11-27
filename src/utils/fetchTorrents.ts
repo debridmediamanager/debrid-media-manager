@@ -1,5 +1,5 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
-import { getUserTorrentsList, getUserTorrentsListThruProxy } from '@/services/realDebrid';
+import { getUserTorrentsList } from '@/services/realDebrid';
 import { UserTorrentResponse } from '@/services/types';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
@@ -18,7 +18,7 @@ export const fetchRealDebrid = async (
 ) => {
 	try {
 		// Step 1: Initial request to get the first item and total count of items
-		const { data: initialData, totalCount } = await getUserTorrentsListThruProxy(
+		const { data: initialData, totalCount } = await getUserTorrentsList(
 			rdKey,
 			customLimit ?? 1,
 			1
