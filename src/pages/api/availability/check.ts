@@ -60,35 +60,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		const db = new PlanetScaleCache();
-
-		// Use the compound index [imdbId, hash] for efficient lookup
-		const availableHashes = await db.prisma.available.findMany({
-			where: {
-				imdbId,
-				hash: { in: hashes },
-				status: 'downloaded',
-			},
-			select: {
-				hash: true,
-				files: {
-					select: {
-						path: true,
-						bytes: true,
-					},
-				},
-			},
-		});
+		const availableHashes = await db.checkAvailability(imdbId, hashes);
 
 		// Return array of found hashes with their file details
-		return res.status(200).json({
-			available: availableHashes.map((record) => ({
-				hash: record.hash,
-				files: record.files.map((file) => ({
-					path: file.path,
-					bytes: Number(file.bytes),
-				})),
-			})),
-		});
+		return res.status(200).json({ available: availableHashes });
 	} catch (error) {
 		console.error('Error checking available hashes:', error);
 		return res.status(500).json({ error: 'Failed to check available hashes' });

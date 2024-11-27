@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { PlanetScaleCache } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const prisma = new PrismaClient();
+const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -20,30 +20,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return res.status(400).json({ error: 'Missing required fields' });
 		}
 
-		const profile = await prisma.castProfile.upsert({
-			where: {
-				userId: userid,
-			},
-			update: {
-				clientId,
-				clientSecret,
-				refreshToken,
-				updatedAt: new Date(),
-			},
-			create: {
-				userId: userid,
-				clientId,
-				clientSecret,
-				refreshToken,
-				updatedAt: new Date(),
-			},
-		});
+		const profile = await db.saveCastProfile(
+			userid,
+			clientId,
+			clientSecret,
+			refreshToken || null
+		);
 
 		return res.status(200).json(profile);
 	} catch (error) {
 		console.error('Error saving cast profile:', error);
 		return res.status(500).json({ error: 'Internal server error' });
-	} finally {
-		await prisma.$disconnect();
 	}
 }

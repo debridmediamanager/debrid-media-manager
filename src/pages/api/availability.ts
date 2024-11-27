@@ -85,45 +85,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		// Create available record with only selected files
-		await db.prisma.available.upsert({
-			where: {
-				hash: hash,
-			},
-			update: {
-				imdbId,
-				originalFilename: original_filename,
-				originalBytes: BigInt(original_bytes),
-				ended: new Date(ended),
-				files: {
-					deleteMany: {},
-					create: selectedFiles.map((file, index) => ({
-						link: links[index],
-						file_id: file.id,
-						path: file.path,
-						bytes: BigInt(file.bytes),
-					})),
-				},
-			},
-			create: {
-				hash,
-				imdbId,
-				filename,
-				originalFilename: original_filename,
-				bytes: BigInt(bytes),
-				originalBytes: BigInt(original_bytes),
-				host,
-				progress,
-				status,
-				ended: new Date(ended),
-				files: {
-					create: selectedFiles.map((file, index) => ({
-						link: links[index],
-						file_id: file.id,
-						path: file.path,
-						bytes: BigInt(file.bytes),
-					})),
-				},
-			},
+		await db.upsertAvailability({
+			hash,
+			imdbId,
+			filename,
+			originalFilename: original_filename,
+			bytes,
+			originalBytes: original_bytes,
+			host,
+			progress,
+			status,
+			ended,
+			selectedFiles,
+			links,
 		});
 
 		return res.status(200).json({ success: true });
