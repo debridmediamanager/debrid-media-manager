@@ -5,6 +5,8 @@ function isValidTorrentHash(hash: string): boolean {
 	return /^[a-fA-F0-9]{40}$/.test(hash);
 }
 
+const db = new PlanetScaleCache();
+
 // fetch availability with hashes, no IMDb ID constraint
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -35,8 +37,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				hash: invalidHash,
 			});
 		}
-
-		const db = new PlanetScaleCache();
 
 		// Look up hashes without IMDb ID constraint
 		const availableHashes = await db.prisma.available.findMany({

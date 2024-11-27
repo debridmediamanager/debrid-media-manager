@@ -1,45 +1,12 @@
-import { DMM_CAST_TOKEN_KEY, useCastToken } from '@/hooks/castToken';
+import { useCastToken } from '@/hooks/castToken';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
-import Swal from 'sweetalert2';
 
 function StremioPage() {
 	const dmmCastToken = useCastToken();
-
-	useEffect(() => {
-		if (dmmCastToken === 'default') {
-			Swal.fire({
-				title: '⚠️ Debrid Provider Support',
-				html: `
-					<div class="text-sm text-gray-200">
-						<div class="flex flex-col gap-4">
-							<div>Only Real-Debrid is supported right now.</div>
-							<div>Other Debrid providers will come soon.</div>
-						</div>
-					</div>
-				`,
-				confirmButtonText: 'OK',
-				showCancelButton: true,
-				cancelButtonText: 'Refresh token',
-				customClass: {
-					htmlContainer: '!mx-1',
-					popup: '!bg-gray-900 !text-gray-100 !w-[95%] !max-w-[600px]',
-					confirmButton: '!bg-blue-600 !px-6 haptic',
-					cancelButton: '!bg-purple-600 !px-6 haptic',
-				},
-				focusConfirm: true,
-			}).then((result) => {
-				if (result.dismiss === Swal.DismissReason.cancel) {
-					window.localStorage.removeItem(DMM_CAST_TOKEN_KEY);
-					window.location.reload();
-				}
-			});
-		}
-	}, [dmmCastToken]);
 
 	if (!dmmCastToken) {
 		return (

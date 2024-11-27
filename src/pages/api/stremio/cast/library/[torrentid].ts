@@ -1,5 +1,6 @@
 import { PlanetScaleCache } from '@/services/planetscale';
 import { getTorrentInfo } from '@/services/realDebrid';
+import { generateUserId } from '@/utils/castApiHelpers';
 import { padWithZero } from '@/utils/checks';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -24,7 +25,7 @@ interface TorrentioResponse {
 const db = new PlanetScaleCache();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { userid, torrentid, rdToken } = req.query;
+	const { torrentid, rdToken } = req.query;
 
 	if (!rdToken || typeof rdToken !== 'string') {
 		res.status(400).json({
@@ -34,10 +35,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	if (!userid || !torrentid || typeof userid !== 'string' || typeof torrentid !== 'string') {
+	if (!torrentid || typeof torrentid !== 'string') {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Missing or invalid userid or torrentid',
+			errorMessage: 'Missing or invalid torrentid',
 		});
 		return;
 	}
@@ -83,6 +84,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const firstVideo = castableStreams[0];
 		const [imdbid, season, episode] = firstVideo.id.split(':');
 		const hash = data.meta.infoHash;
+		const userid = await generateUserId(rdToken);
 
 		// Save all streams to database
 		for (const video of castableStreams) {

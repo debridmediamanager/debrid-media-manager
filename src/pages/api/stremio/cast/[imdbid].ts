@@ -1,4 +1,5 @@
 import { PlanetScaleCache } from '@/services/planetscale';
+import { generateUserId } from '@/utils/castApiHelpers';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -7,7 +8,7 @@ const db = new PlanetScaleCache();
 // cast: unrestricts a selected link and saves it to the database
 // called in the showInfo component
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { userid, imdbid, token, hash, fileId, mediaType } = req.query;
+	const { imdbid, token, hash, fileId, mediaType } = req.query;
 	if (!token || !hash || !fileId || !mediaType) {
 		res.status(400).json({
 			status: 'error',
@@ -16,7 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 	if (
-		typeof userid !== 'string' ||
 		typeof imdbid !== 'string' ||
 		typeof token !== 'string' ||
 		typeof hash !== 'string' ||
@@ -50,6 +50,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			const castKey = `${imdbid}${
 				seasonNumber >= 0 && episodeNumber >= 0 ? `:${seasonNumber}:${episodeNumber}` : ''
 			}`;
+
+			const userid = await generateUserId(token);
+
 			await db.saveCast(castKey, userid, hash, streamUrl, rdLink, 0, 0, fileSize, null);
 
 			// send an html

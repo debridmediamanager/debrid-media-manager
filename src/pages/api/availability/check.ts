@@ -10,6 +10,8 @@ function isValidTorrentHash(hash: string): boolean {
 	return /^[a-fA-F0-9]{40}$/.test(hash);
 }
 
+const db = new PlanetScaleCache();
+
 // check availability with IMDb ID and hashes
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -59,7 +61,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			});
 		}
 
-		const db = new PlanetScaleCache();
 		const availableHashes = await db.checkAvailability(imdbId, hashes);
 
 		// Return array of found hashes with their file details

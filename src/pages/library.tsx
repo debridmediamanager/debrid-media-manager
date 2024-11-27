@@ -1,6 +1,5 @@
 import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { useCastToken } from '@/hooks/castToken';
 import { getTorrentInfo, proxyUnrestrictLink } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
@@ -1040,8 +1039,6 @@ function TorrentsPage() {
 		await torrentDB.add(t);
 	};
 
-	const dmmCastToken = useCastToken();
-
 	const handleShowInfoForRD = async (t: UserTorrent) => {
 		const info = await getTorrentInfo(rdKey!, t.id.substring(3));
 
@@ -1167,8 +1164,7 @@ function TorrentsPage() {
 		showInfoForRD(
 			window.localStorage.getItem('settings:player') || defaultPlayer,
 			rdKey!,
-			info,
-			dmmCastToken || ''
+			info
 		);
 	};
 

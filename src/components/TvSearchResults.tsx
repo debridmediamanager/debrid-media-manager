@@ -10,9 +10,7 @@ type TvSearchResultsProps = {
 	episodeMaxSize: string;
 	rdKey: string | null;
 	adKey: string | null;
-	dmmCastToken: string | null;
 	player: string;
-	imdbid: string;
 	hashAndProgress: Record<string, number>;
 	handleShowInfo: (result: SearchResult) => void;
 	handleCast: (hash: string, fileIds: string[]) => Promise<void>;
@@ -30,9 +28,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	episodeMaxSize,
 	rdKey,
 	adKey,
-	dmmCastToken,
 	player,
-	imdbid,
 	hashAndProgress,
 	handleShowInfo,
 	handleCast,
@@ -162,7 +158,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 									</button>
 								)}
 
-								{rdKey && dmmCastToken && castableFileIds.length > 0 && (
+								{rdKey && castableFileIds.length > 0 && (
 									<button
 										className="haptic-sm inline rounded border-2 border-gray-500 bg-gray-900/30 px-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50"
 										onClick={() => handleCast(r.hash, castableFileIds)}

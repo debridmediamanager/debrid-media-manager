@@ -8,7 +8,7 @@ export async function HEAD(req: NextApiRequest, res: NextApiResponse) {
 	res.status(200).end();
 }
 
-// Cast a link
+// Unrestrict and play a link
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid, link } = req.query;
 	if (typeof userid !== 'string' || typeof link !== 'string') {

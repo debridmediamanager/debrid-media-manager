@@ -1,4 +1,6 @@
 import { PlanetScaleCache } from '@/services/planetscale';
+import { getToken } from '@/services/realDebrid';
+import { generateUserId } from '@/utils/castApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new PlanetScaleCache();
@@ -9,16 +11,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		const { userid } = req.query;
 		const { clientId, clientSecret, refreshToken } = req.body;
-
-		if (!userid || typeof userid !== 'string') {
-			return res.status(400).json({ error: 'Invalid userId' });
-		}
 
 		if (!clientId || !clientSecret) {
 			return res.status(400).json({ error: 'Missing required fields' });
 		}
+
+		const response = await getToken(clientId, clientSecret, refreshToken, true);
+
+		const userid = await generateUserId(response.access_token);
 
 		const profile = await db.saveCastProfile(
 			userid,

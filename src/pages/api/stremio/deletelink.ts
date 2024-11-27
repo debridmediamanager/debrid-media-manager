@@ -2,6 +2,8 @@ import { PlanetScaleCache } from '@/services/planetscale';
 import { handleApiError, validateMethod, validateToken } from '@/utils/castApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+const db = new PlanetScaleCache();
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (!validateMethod(req, res, ['POST'])) return;
 
@@ -16,8 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		const planetscale = new PlanetScaleCache();
-		await planetscale.deleteCastedLink(imdbId, token, hash);
+		await db.deleteCastedLink(imdbId, token, hash);
 		res.status(200).json({ message: 'Link deleted successfully' });
 	} catch (error) {
 		handleApiError(error, res, 'Failed to delete link');

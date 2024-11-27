@@ -1,6 +1,7 @@
 import { getDMMTorrent } from '@/utils/castCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+// gets information about a torrent (viewing your library)
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid, id } = req.query;
 	if (typeof userid !== 'string' || typeof id !== 'string') {
