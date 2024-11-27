@@ -36,10 +36,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		},
 	];
 
+	if (typeof userid !== 'string' || typeof imdbid !== 'string' || typeof mediaType !== 'string') {
+		res.status(400).json({
+			status: 'error',
+			errorMessage: 'Invalid "userid", "imdbid" or "mediaType" query parameter',
+		});
+		return;
+	}
+
 	// get urls from db
 	const [castItems, otherCastItems] = await Promise.all([
-		db.getCastURLs(imdbidStr, userid as string),
-		db.getOtherCastURLs(imdbidStr),
+		db.getCastURLs(imdbidStr, userid),
+		db.getOtherCastURLs(imdbidStr, userid),
 	]);
 
 	for (const item of castItems) {
@@ -86,7 +94,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		streams.push({
 			name: `DMM ${icons.pop()} Other`,
 			title,
-			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26, 39)}`,
+			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26)}`,
 			behaviorHints: {
 				bingeGroup: `dmm:${imdbidStr}:other`,
 			},

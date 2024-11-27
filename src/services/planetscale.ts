@@ -578,7 +578,8 @@ export class PlanetScaleCache {
 	}
 
 	public async getOtherCastURLs(
-		imdbId: string
+		imdbId: string,
+		userId: string
 	): Promise<{ url: string; link: string; size: number }[]> {
 		const castItems = await this.prisma.cast.findMany({
 			where: {
@@ -588,6 +589,9 @@ export class PlanetScaleCache {
 				},
 				size: {
 					gt: 10,
+				},
+				userId: {
+					not: userId,
 				},
 			},
 			distinct: ['size'],
