@@ -6,6 +6,7 @@ import { SearchBar } from '@/components/SearchBar';
 import { ServiceCard } from '@/components/ServiceCard';
 import { TraktSection } from '@/components/TraktSection';
 import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
+import { useCastToken } from '@/hooks/castToken';
 import { getTerms } from '@/utils/browseTerms';
 import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
@@ -35,6 +36,8 @@ function IndexPage() {
 	} = useCurrentUser();
 	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
 	const [browseTerms] = useState(getTerms(2));
+
+	useCastToken();
 
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
