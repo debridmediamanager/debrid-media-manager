@@ -91,36 +91,16 @@ export const getCurrentUser = async (accessToken: string) => {
 	}
 };
 
-export const getUserTorrentsList = async (
-	accessToken: string,
-	limit: number = 0,
-	page: number = 1
-): Promise<UserTorrentsResult> => {
-	try {
-		const url = `${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/torrents?page=${page}&limit=${limit}`;
-
-		const client = await createAxiosClient(accessToken);
-		const response = await client.get<UserTorrentResponse[]>(url);
-
-		return {
-			data: response.data,
-			totalCount: response.data.length,
-		};
-	} catch (error: any) {
-		console.error('Error fetching user torrents list:', error.message);
-		throw error;
-	}
-};
-
-export async function getUserTorrentsListThruProxy(
+export async function getUserTorrentsList(
 	accessToken: string,
 	limit: number = 1,
-	page: number = 1
+	page: number = 1,
+	bare: boolean = false
 ): Promise<UserTorrentsResult> {
 	try {
 		const client = await createAxiosClient(accessToken);
 		const response = await client.get<UserTorrentResponse[]>(
-			`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/torrents`,
+			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents`,
 			{
 				params: { page, limit },
 			}

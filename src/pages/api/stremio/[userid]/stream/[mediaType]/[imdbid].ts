@@ -52,13 +52,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 		title = title + '\n' + `📦 ${sizeStr}`;
 		streams.push({
-			name: 'DMM 🧙‍♂️',
+			name: 'DMM 🧙‍♂️ Yours',
 			title,
 			url: item.url,
 		});
 	}
 
-	const icons = ['🔮', '🦄'];
+	const icons = ['🦄', '🐈'];
 	for (const item of otherCastItems) {
 		let title = item.url.split('/').pop() ?? 'Unknown Title';
 		let sizeStr = '';
@@ -75,9 +75,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 		title = title + '\n' + `📦 ${sizeStr}`;
 		streams.push({
-			name: `DMM ${icons.pop()}`,
+			name: `DMM ${icons.pop()} Other`,
 			title,
-			url: `http://localhost:3000/api/stremio/${userid}/play/${item.link.substring(26, 39)}`,
+			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26, 39)}`,
 		});
 	}
 
