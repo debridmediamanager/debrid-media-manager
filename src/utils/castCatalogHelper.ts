@@ -61,7 +61,7 @@ export async function getDMMTorrent(userid: string, torrentID: string) {
 		return { error: 'Go to DMM and connect your RD account', status: 500 };
 	}
 
-	const info = await getTorrentInfo(response.access_token, torrentID);
+	const info = await getTorrentInfo(response.access_token, torrentID, true);
 	if (!info) {
 		return { error: 'Failed to get torrent info', status: 500 };
 	}
