@@ -28,46 +28,54 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		});
 		return;
 	}
-	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
-	const [streamUrl, rdLink, seasonNumber, episodeNumber, fileSize] = await getStreamUrl(
-		token,
-		hash,
-		parseInt(fileId, 10),
-		ipAddress,
-		mediaType
-	);
+	try {
+		const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
+		const [streamUrl, rdLink, seasonNumber, episodeNumber, fileSize] = await getStreamUrl(
+			token,
+			hash,
+			parseInt(fileId, 10),
+			ipAddress,
+			mediaType
+		);
 
-	if (streamUrl) {
-		let redirectUrl = `stremio://detail/movie/${imdbid}/${imdbid}`;
-		let message = 'You can now stream the movie in Stremio';
-		if (seasonNumber >= 0 && episodeNumber >= 0) {
-			redirectUrl = `stremio://detail/series/${imdbid}/${imdbid}:${seasonNumber}:${episodeNumber}`;
-			message = `You can now stream S${seasonNumber}E${episodeNumber} in Stremio`;
+		if (streamUrl) {
+			let redirectUrl = `stremio://detail/movie/${imdbid}/${imdbid}`;
+			let message = 'You can now stream the movie in Stremio';
+			if (seasonNumber >= 0 && episodeNumber >= 0) {
+				redirectUrl = `stremio://detail/series/${imdbid}/${imdbid}:${seasonNumber}:${episodeNumber}`;
+				message = `You can now stream S${seasonNumber}E${episodeNumber} in Stremio`;
+			}
+
+			const castKey = `${imdbid}${
+				seasonNumber >= 0 && episodeNumber >= 0 ? `:${seasonNumber}:${episodeNumber}` : ''
+			}`;
+			await db.saveCast(castKey, userid, hash, streamUrl, rdLink, 0, 0, fileSize, null);
+
+			// send an html
+			res.setHeader('Content-Type', 'text/html');
+			res.status(200).send(`
+				<!doctype html>
+				<html>
+					<head>
+						<meta http-equiv="refresh" content="1;url=${redirectUrl}" />
+					</head>
+					<body>
+						${message}
+					</body>
+				</html>
+			`);
+			return;
 		}
 
-		const castKey = `${imdbid}${
-			seasonNumber >= 0 && episodeNumber >= 0 ? `:${seasonNumber}:${episodeNumber}` : ''
-		}`;
-		await db.saveCast(castKey, userid, hash, streamUrl, rdLink, 0, 0, fileSize, null);
-
-		// send an html
-		res.setHeader('Content-Type', 'text/html');
-		res.status(200).send(`
-			<!doctype html>
-			<html>
-				<head>
-					<meta http-equiv="refresh" content="1;url=${redirectUrl}" />
-				</head>
-				<body>
-					${message}
-				</body>
-			</html>
-		`);
-		return;
+		res.status(500).json({
+			status: 'error',
+			errorMessage: 'Failed to cast, no streamUrl',
+		});
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({
+			status: 'error',
+			errorMessage: `Failed to cast: ${error}`,
+		});
 	}
-
-	res.status(500).json({
-		status: 'error',
-		errorMessage: 'Internal Server Error',
-	});
 }
