@@ -5,6 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const db = new PlanetScaleCache();
 
 // cast: unrestricts a selected link and saves it to the database
+// called in the showInfo component
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid, imdbid, token, hash, fileId, mediaType } = req.query;
 	if (!token || !hash || !fileId || !mediaType) {

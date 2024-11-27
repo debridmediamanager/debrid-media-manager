@@ -5,6 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const db = new PlanetScaleCache();
 
 // MOVIE cast: unrestricts a selected link and saves it to the database
+// called in the movie page
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid, imdbid, token, hash } = req.query;
 	if (!token || !hash) {
