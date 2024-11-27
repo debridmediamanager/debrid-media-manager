@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			title: 'Cast a file inside a torrent',
 			externalUrl,
 			behaviorHints: {
-				bingeGroup: `dmm:${imdbidStr}:actions`,
+				bingeGroup: `dmm:${imdbidStr}:cast`,
 			},
 		},
 		{
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			title: 'Stream the latest link you casted',
 			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/watch/${imdbidStr}/ping`,
 			behaviorHints: {
-				bingeGroup: `dmm:${imdbidStr}:actions`,
+				bingeGroup: `dmm:${imdbidStr}:stream`,
 			},
 		},
 	];
