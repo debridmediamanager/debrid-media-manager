@@ -963,6 +963,7 @@ export class PlanetScaleCache {
 	 * @throws An error if the deletion fails (e.g., record not found).
 	 */
 	public async deleteCastedLink(imdbId: string, userId: string, hash: string): Promise<void> {
+		console.log(`Deleting casted link: ${imdbId}, ${userId}, ${hash}`);
 		try {
 			await this.prisma.cast.delete({
 				where: {
