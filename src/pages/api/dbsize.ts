@@ -1,7 +1,7 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiHandler } from 'next';
 
-const cache = new PlanetScaleCache();
+const cache = new Repository();
 
 const handler: NextApiHandler = async (req, res) => {
 	try {

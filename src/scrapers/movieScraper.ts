@@ -3,7 +3,7 @@ import {
 	flattenAndRemoveDuplicates,
 	sortByFileSize,
 } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { filterByMovieConditions, getAllPossibleTitles, grabMovieMetadata } from '@/utils/checks';
 import { scrapeApiBay2 } from './sites/apibay2';
 import { scrapeBtdigg } from './sites/btdigg-v2';
@@ -51,7 +51,7 @@ export async function scrapeMovies(
 	imdbId: string,
 	tmdbData: any,
 	mdbData: any,
-	db: PlanetScaleCache,
+	db: Repository,
 	replaceOldScrape: boolean = false
 ): Promise<number> {
 	const {

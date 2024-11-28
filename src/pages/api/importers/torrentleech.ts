@@ -1,12 +1,12 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { computeHashFromTorrent } from '@/utils/extractHashFromTorrent';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import UserAgent from 'user-agents';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 const tlUrl = (imdbId: string, page: number = 1) =>
 	`https://www.torrentleech.org/torrents/browse/list/imdbID/${imdbId}/page/${page}`;
 

@@ -1,10 +1,10 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 const tgRssUrl = () => `https://torrentgalaxy.to/rss`;
 const tgItemUrl = (id: string) => `https://torrentgalaxy.to/torrent/${id}`;
 

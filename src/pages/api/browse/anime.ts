@@ -1,7 +1,7 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiHandler } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 const handler: NextApiHandler = async (req, res) => {
 	const data = Array.from(new Set(await db.getRecentlyUpdatedAnime(100)));

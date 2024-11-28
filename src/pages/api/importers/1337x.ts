@@ -1,10 +1,10 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 const HOST_1337X = 'https://1337x.to';
 // const HOST_1337X = 'https://1337x.st';
 // const HOST_1337X = 'https://x1337x.ws'

@@ -1,5 +1,5 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Pool } from 'pg';
 
@@ -120,7 +120,7 @@ const fetchShows = async (count: number) => {
 	}
 };
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	let itemCount = 500;

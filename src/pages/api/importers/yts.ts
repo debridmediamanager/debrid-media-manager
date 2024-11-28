@@ -1,5 +1,5 @@
 import { ScrapeSearchResult } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import fs from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
@@ -9,7 +9,7 @@ interface ScrapeResponse {
 	message?: string;
 }
 
-const pdb = new PlanetScaleCache();
+const pdb = new Repository();
 
 // Define a function to fetch RSS content, extract IDs, and fetch details for each ID
 const processJson = async (): Promise<void> => {

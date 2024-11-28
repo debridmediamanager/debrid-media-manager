@@ -1,8 +1,8 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const pdb = new PlanetScaleCache();
+const pdb = new Repository();
 
 const fetchContent = async (milkieToken: string): Promise<void> => {
 	console.log('Fetching content');

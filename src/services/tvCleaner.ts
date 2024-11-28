@@ -9,7 +9,7 @@ import {
 } from '@/utils/checks';
 import axios from 'axios';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
-import { PlanetScaleCache } from './planetscale';
+import { Repository } from './planetscale';
 
 type TvScrapeJob = {
 	titles: string[];
@@ -22,7 +22,7 @@ type TvScrapeJob = {
 	scrapes: ScrapeSearchResult[];
 };
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 const tmdbKey = process.env.TMDB_KEY;
 const getTmdbSearch = (imdbId: string) =>
 	`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`;
@@ -90,12 +90,7 @@ const cleanBasedOnScrapeJob = (job: TvScrapeJob): ScrapeSearchResult[][] => {
 	});
 };
 
-export async function cleanTvScrapes(
-	imdbId: string,
-	tmdbData: any,
-	mdbData: any,
-	db: PlanetScaleCache
-) {
+export async function cleanTvScrapes(imdbId: string, tmdbData: any, mdbData: any, db: Repository) {
 	const {
 		cleanTitle,
 		originalTitle,

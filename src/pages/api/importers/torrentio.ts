@@ -1,11 +1,11 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import UserAgent from 'user-agents';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 const torrentioUrl = (imdbId: string) =>
 	`https://torrentio.strem.fun/sort=size%7Cqualityfilter=other,scr,cam,unknown/stream/movie/${imdbId}.json`;
 // https://torrentio.strem.fun/sort=size%7Cqualityfilter=other,scr,cam,unknown/stream/series/tt2151337:2:1.json

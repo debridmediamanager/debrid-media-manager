@@ -1,10 +1,10 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 const rarbgUrl = (page: number = 1) => `https://therarbg.to/get-posts/format:json/?page=${page}`;
 const rarbgItemUrl = (id: string) => `https://therarbg.com/post-detail/${id}/abcdef/?format=json`;
 

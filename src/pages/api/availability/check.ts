@@ -1,4 +1,4 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { validateTokenWithHash } from '@/utils/token';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -10,7 +10,7 @@ function isValidTorrentHash(hash: string): boolean {
 	return /^[a-fA-F0-9]{40}$/.test(hash);
 }
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 // check availability with IMDb ID and hashes
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

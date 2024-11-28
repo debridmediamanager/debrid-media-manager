@@ -1,4 +1,4 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { computeHashFromTorrent } from '@/utils/extractHashFromTorrent';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -10,7 +10,7 @@ interface ScrapeResponse {
 // Define a sleep function
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const pdb = new PlanetScaleCache();
+const pdb = new Repository();
 
 const extractDownloadLinks = (rssContent: string): string[] => {
 	const linkRegex = /<link>https:\/\/iptorrents.com\/download.php\/(\d+)\/[^<]+<\/link>/g;
