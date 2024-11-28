@@ -59,7 +59,11 @@ function StremioPage() {
 						<div className="mt-2 text-gray-300">
 							or copy this link and paste it in Stremio&apos;s search bar
 						</div>
-						<code className="mt-2 rounded bg-gray-800 p-2 text-sm text-gray-300">
+						<div className="mt-2 text-sm text-red-400">
+							⚠️ Warning: Never share this install URL with anyone. It is unique to
+							your account and sharing it could compromise your access.
+						</div>
+						<code className="mt-2 block w-full break-all rounded bg-gray-800 p-2 text-sm text-gray-300">
 							{window.location.origin}/api/stremio/{dmmCastToken}/manifest.json
 						</code>
 					</div>

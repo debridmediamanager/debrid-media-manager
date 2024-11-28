@@ -40,7 +40,9 @@ const handler: NextApiHandler = async (req, res) => {
 
 	console.log(`Checking availability for ${imdbIds.length} imdbIds`);
 
-	for (const imdbId of imdbIds) {
+	for (let i = 0; i < imdbIds.length; i++) {
+		const imdbId = imdbIds[i];
+		console.log(`Checking availability for ${imdbId} (${i + 1}/${imdbIds.length})`);
 		try {
 			const searchResults = await getSearchResults(imdbId);
 			if (!searchResults.length) {
@@ -94,6 +96,11 @@ async function processTorrent(hash: string, imdbId: string, rdKey: string): Prom
 
 			const updatedInfo = await getTorrentInfo(rdKey, id, true);
 			// console.log(`Status of torrent ${id}: ${updatedInfo.status}`);
+			while (torrentInfo.status === 'queued') {
+				console.log(`Torrent ${id} is queued`);
+				await new Promise((resolve) => setTimeout(resolve, 5000));
+				torrentInfo = await getTorrentInfo(rdKey, id, true);
+			}
 
 			if (updatedInfo.status !== 'downloaded') {
 				throw new Error(`Torrent ${id} is not cached, status: ${updatedInfo.status}`);
