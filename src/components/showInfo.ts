@@ -231,6 +231,7 @@ const renderTorrentInfo = (
 						imdbId &&
 						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
 					) {
+						// Cast button when there's IMDB ID (and real-debrid token)
 						actions.push(
 							renderButton('cast', {
 								onClick: `window.open('/api/stremio/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')`,
@@ -317,7 +318,7 @@ export const showInfoForRD = async (
         ${
 			rdKey
 				? renderButton('castAll', {
-						onClick: `window.open('/api/stremio/cast/library/${info.id}?rdToken=${rdKey}')`,
+						onClick: `window.open('/api/stremio/cast/library/${info.id}:${info.hash}?rdToken=${rdKey}')`,
 					})
 				: ''
 		}

@@ -1,4 +1,4 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import {
 	generateUserId,
 	handleApiError,
@@ -7,7 +7,7 @@ import {
 } from '@/utils/castApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (!validateMethod(req, res, ['POST'])) return;

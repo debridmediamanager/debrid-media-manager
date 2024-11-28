@@ -1,10 +1,10 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Database, open } from 'sqlite';
 import sqlite3 from 'sqlite3';
 
-const pdb = new PlanetScaleCache();
+const pdb = new Repository();
 
 // Define a type for the row structure
 interface MovieRow {

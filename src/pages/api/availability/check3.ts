@@ -1,11 +1,11 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
 import { TorrentInfoResponse } from '@/services/types';
 import { isVideo } from '@/utils/selectable';
 import { handleDownloadedTorrent } from '@/utils/submitAvailability';
 import { NextApiHandler } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 interface SearchResult {
 	title: string;

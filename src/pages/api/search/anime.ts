@@ -1,7 +1,7 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiHandler } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 const inMemoryCache: Record<string, number[]> = {};
 
 const handler: NextApiHandler = async (req, res) => {

@@ -1,7 +1,7 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { TorrentInfoResponse } from '@/services/types';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 export async function handleDownloadedTorrent(
 	torrentInfo: TorrentInfoResponse,

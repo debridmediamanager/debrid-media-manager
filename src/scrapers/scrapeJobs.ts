@@ -1,5 +1,5 @@
 import { cleanMovieScrapes } from '@/services/movieCleaner';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { cleanTvScrapes } from '@/services/tvCleaner';
 import axios from 'axios';
 import { scrapeMovies } from './movieScraper';
@@ -15,7 +15,7 @@ const getTmdbTvInfo = (tmdbId: string) =>
 const getTmdbMovieInfo = (tmdbId: string) =>
 	`https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${tmdbKey}`;
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 function convertMdbToTmdb(apiResponse: any) {
 	return {

@@ -1,7 +1,7 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { getToken, getTorrentInfo, getUserTorrentsList } from '@/services/realDebrid';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 export const PAGE_SIZE = 12;
 
 export async function getDMMLibrary(userid: string, page: number) {

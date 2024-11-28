@@ -1,4 +1,4 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface ScrapeResponse {
@@ -9,7 +9,7 @@ interface ScrapeResponse {
 // Define a sleep function
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const pdb = new PlanetScaleCache();
+const pdb = new Repository();
 
 const extractSlugs = (rssContent: string): string[] => {
 	const linkRegex = /<link>https:\/\/yts.mx\/movies\/(.*)<\/link>/g;

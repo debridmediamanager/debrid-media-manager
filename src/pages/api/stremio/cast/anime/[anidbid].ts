@@ -1,9 +1,9 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { anidbid, token, hash, fileIds } = req.query;

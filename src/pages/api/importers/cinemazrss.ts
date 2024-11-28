@@ -1,4 +1,4 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface ScrapeResponse {
@@ -8,7 +8,7 @@ interface ScrapeResponse {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const pdb = new PlanetScaleCache();
+const pdb = new Repository();
 
 type CinemazMovieItem = {
 	title: string;

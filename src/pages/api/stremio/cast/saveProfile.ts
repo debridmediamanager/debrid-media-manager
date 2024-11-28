@@ -1,9 +1,9 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { getToken } from '@/services/realDebrid';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {

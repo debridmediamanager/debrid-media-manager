@@ -1,4 +1,4 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface ScrapeResponse {
@@ -9,7 +9,7 @@ interface ScrapeResponse {
 // Define a sleep function
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const pdb = new PlanetScaleCache();
+const pdb = new Repository();
 
 // Define a function to fetch RSS content, extract IDs, and fetch details for each ID
 const fetchRssAndDetails = async (rssUrl: string, lastId: string): Promise<string> => {

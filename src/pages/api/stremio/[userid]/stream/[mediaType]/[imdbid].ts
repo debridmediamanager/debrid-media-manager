@@ -1,7 +1,7 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 // lists all available streams for a movie or show
 // note, addon prefix is /api/stremio/${userid}
@@ -68,7 +68,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		streams.push({
 			name: 'DMM 🧙‍♂️ Yours',
 			title,
-			url: item.url,
+			url: item.link
+				? `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26)}`
+				: item.url,
 			behaviorHints: {
 				bingeGroup: `dmm:${imdbidStr}:yours`,
 			},

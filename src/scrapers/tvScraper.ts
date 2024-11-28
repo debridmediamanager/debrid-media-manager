@@ -3,7 +3,7 @@ import {
 	flattenAndRemoveDuplicates,
 	sortByFileSize,
 } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import {
 	filterByTvConditions,
 	getAllPossibleTitles,
@@ -88,7 +88,7 @@ export async function scrapeTv(
 	imdbId: string,
 	tmdbData: any,
 	mdbData: any,
-	db: PlanetScaleCache,
+	db: Repository,
 	replaceOldScrape: boolean = false
 ): Promise<number> {
 	const scrapeJobs: TvScrapeJob[] = [];

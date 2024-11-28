@@ -1,4 +1,4 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { TraktMediaItem, getMediaData } from '@/services/trakt';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -46,7 +46,7 @@ type TraktBrowseResponseCache = {
 const responseCache: Record<string, TraktBrowseResponseCache> = {};
 
 const traktClientID = process.env.TRAKT_CLIENT_ID;
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { browse } = req.query;

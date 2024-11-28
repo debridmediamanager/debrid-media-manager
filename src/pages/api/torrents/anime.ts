@@ -1,9 +1,9 @@
 import { flattenAndRemoveDuplicates, sortByFileSize } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { validateTokenWithHash } from '@/utils/token';
 import { NextApiHandler } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 // returns scraped results or marks the imdb id as requested
 const handler: NextApiHandler = async (req, res) => {

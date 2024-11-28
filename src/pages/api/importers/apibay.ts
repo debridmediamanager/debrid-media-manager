@@ -1,12 +1,12 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ApiBayItem, processStream } from '@/scrapers/sites/apibay';
 import { ScrapeSearchResult } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import UserAgent from 'user-agents';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 const apiBayUrl = (imdbId: string) => `https://apibay.org/q.php?q=${imdbId}`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {

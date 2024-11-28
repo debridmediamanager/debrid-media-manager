@@ -1,4 +1,4 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { milkieGetDetails } from './milkie';
 
@@ -10,7 +10,7 @@ interface ScrapeResponse {
 // Define a sleep function
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const pdb = new PlanetScaleCache();
+const pdb = new Repository();
 
 const extractIds = (rssContent: string): string[] => {
 	const linkRegex = /<link>https:\/\/milkie.cc\/api\/v1\/torrents\/(.*?)\/[^<]+<\/link>/g;

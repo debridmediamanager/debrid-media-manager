@@ -3,20 +3,28 @@ import { Prisma, PrismaClient, Scraped } from '@prisma/client';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { MediaInfoDetails, TorrentInfoResponse } from './types';
 
-export class PlanetScaleCache {
+export class Repository {
 	private static instance: PrismaClient;
 	public prisma: PrismaClient;
 
 	constructor() {
-		this.prisma = PlanetScaleCache.getInstance();
+		this.prisma = Repository.getInstance();
 	}
 
 	private static getInstance(): PrismaClient {
-		if (!PlanetScaleCache.instance) {
-			PlanetScaleCache.instance = new PrismaClient();
-			PlanetScaleCache.instance.$queryRaw`SET @@boost_cached_queries = true`;
+		if (!Repository.instance) {
+			Repository.instance = new PrismaClient();
+			Repository.instance.$queryRaw`SET @@boost_cached_queries = true`;
 		}
-		return PlanetScaleCache.instance;
+		return Repository.instance;
+	}
+
+	public async getIMDBIdByHash(hash: string): Promise<string | null> {
+		const available = await this.prisma.available.findFirst({
+			where: { hash },
+			select: { imdbId: true },
+		});
+		return available?.imdbId || null;
 	}
 
 	public async saveCastProfile(
@@ -754,7 +762,7 @@ export class PlanetScaleCache {
 	public async getCastURLs(
 		imdbId: string,
 		userId: string
-	): Promise<{ url: string; size: number }[]> {
+	): Promise<{ url: string; link: string | null; size: number }[]> {
 		const castItems = await this.prisma.cast.findMany({
 			where: {
 				imdbId: imdbId,
@@ -769,10 +777,12 @@ export class PlanetScaleCache {
 			select: {
 				url: true,
 				size: true,
+				link: true,
 			},
 		});
 		return castItems.map((item) => ({
 			url: item.url,
+			link: item.link,
 			size: item.size,
 		}));
 	}

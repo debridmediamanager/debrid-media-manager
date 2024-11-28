@@ -1,10 +1,10 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 const eztvUrl = (imdbId: string, page: number = 1) =>
 	`https://eztv.tf/api/get-torrents?imdb_id=${imdbId.replace('tt', '')}&limit=100&page=${page}`;
 const eztvUrl2 = (page: number = 1) => `https://eztv.tf/api/get-torrents?limit=100&page=${page}`;

@@ -1,7 +1,7 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid, imdbid, pingpong } = req.query;
@@ -25,7 +25,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	// }
 
 	// if present, redirect to row url
-	if (latestCast) {
+	if (latestCast && latestCast.link) {
+		res.redirect(
+			302,
+			`${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${latestCast.link.substring(26)}`
+		);
+		return;
+	}
+	if (latestCast && latestCast.url) {
 		res.redirect(302, latestCast.url);
 		return;
 	}

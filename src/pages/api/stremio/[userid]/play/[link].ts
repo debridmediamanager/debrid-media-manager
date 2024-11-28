@@ -1,8 +1,8 @@
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { getToken, unrestrictLink } from '@/services/realDebrid';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 export async function HEAD(req: NextApiRequest, res: NextApiResponse) {
 	res.status(200).end();

@@ -1,9 +1,9 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import { cleanByImdbId } from '@/services/tvCleaner';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const db = new PlanetScaleCache();
+const db = new Repository();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	if (!process.env.JACKETT || !process.env.PROWLARR) {

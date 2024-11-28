@@ -1,10 +1,10 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
-import { PlanetScaleCache } from '@/services/planetscale';
+import { Repository } from '@/services/planetscale';
 import fs from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const pdb = new PlanetScaleCache();
+const pdb = new Repository();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	const cwd = process.cwd();
