@@ -27,7 +27,7 @@ export function MainActions({ rdUser, showSettings }: MainActionsProps) {
 					href="/stremio"
 					className="haptic flex items-center justify-center gap-2 rounded border-2 border-purple-500 bg-purple-900/30 p-3 text-purple-100 transition-colors hover:bg-purple-800/50"
 				>
-					<span>🔮</span> Stremio
+					🔮 Stremio
 				</Link>
 			)}
 			<Link

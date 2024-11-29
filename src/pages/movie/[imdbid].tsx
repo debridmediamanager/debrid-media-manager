@@ -1,6 +1,5 @@
 import Poster from '@/components/poster';
 import { showInfoForRD } from '@/components/showInfo';
-import { showSubscribeModal } from '@/components/subscribe';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
@@ -420,14 +419,6 @@ const MovieSearch: FunctionComponent = () => {
 					)}
 				</div>
 				<div>
-					<button
-						className="mb-1 mr-2 mt-0 rounded border-2 border-rose-500 bg-rose-900/30 p-1 text-xs text-rose-100 transition-colors hover:bg-rose-800/50"
-						onClick={() => {
-							showSubscribeModal();
-						}}
-					>
-						🔔Subscribe
-					</button>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
 							className="mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
@@ -462,7 +453,7 @@ const MovieSearch: FunctionComponent = () => {
 									window.open(`stremio://detail/movie/${imdbid}/${imdbid}`)
 								}
 							>
-								<b>🟣Stremio</b>
+								<b>🔮Stremio</b>
 							</button>
 						</>
 					)}
