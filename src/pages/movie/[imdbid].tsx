@@ -351,6 +351,8 @@ const MovieSearch: FunctionComponent = () => {
 			},
 			castToastOptions
 		);
+		// open stremio after casting
+		window.open(`stremio://detail/movie/${imdbid}/${imdbid}`);
 	}
 
 	const getFirstAvailableRdTorrent = () => {
