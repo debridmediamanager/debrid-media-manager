@@ -39,10 +39,7 @@ model Cast {
   hash      String
   url       String   @db.Text
   updatedAt DateTime @updatedAt
-  duration  Int      @default(0)
-  bitrate   Int      @default(0)
-  size      Int      @default(0)
-  mediaInfo Json?
+  size      BigInt   @default(0)
   link      String?
 
   @@unique([imdbId, userId, hash])
@@ -112,7 +109,7 @@ model AvailableFile {
   link      String    @id
   file_id   Int
   hash      String
-  path      String
+  path      String    @db.Text
   bytes     BigInt
   available Available @relation(fields: [hash], references: [hash], onDelete: Cascade)
 
