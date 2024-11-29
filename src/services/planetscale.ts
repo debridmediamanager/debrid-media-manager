@@ -1,7 +1,21 @@
 import { soundex } from '@/utils/soundex';
 import { Prisma, PrismaClient, Scraped } from '@prisma/client';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
-import { MediaInfoDetails, TorrentInfoResponse } from './types';
+import { TorrentInfoResponse } from './types';
+
+interface AnimeItem {
+	id: string;
+	poster_url: string;
+}
+
+interface AnimeSearchResult extends AnimeItem {
+	title: string;
+}
+
+interface LatestCast {
+	url: string;
+	link: string;
+}
 
 export class Repository {
 	private static instance: PrismaClient;
@@ -372,7 +386,7 @@ export class Repository {
 				where: { key },
 				data: {
 					value: updatedValue,
-					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt,
+					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
 				},
 			});
 		} else if (existingRecord && replaceOldScrape) {
@@ -380,7 +394,7 @@ export class Repository {
 				where: { key },
 				data: {
 					value,
-					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt,
+					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
 				},
 			});
 		} else {
@@ -417,7 +431,7 @@ export class Repository {
 				where: { key },
 				data: {
 					value: updatedValue,
-					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt,
+					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
 				},
 			});
 		} else if (existingRecord && replaceOldScrape) {
@@ -425,11 +439,10 @@ export class Repository {
 				where: { key },
 				data: {
 					value,
-					updatedAt: updateUpdatedAt ? undefined : existingRecord.updatedAt,
+					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
 				},
 			});
 		} else {
-			// If record doesn't exist, create a new one
 			await this.prisma.scraped.create({
 				data: { key, value },
 			});
@@ -634,7 +647,7 @@ export class Repository {
 		LIMIT ${limit}`;
 		return results.map((anime) => ({
 			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
-			poster_url: `https://media.kitsu.app/anime/poster_images/${anime.anidb_id}/medium.jpg`,
+			poster_url: anime.poster_url,
 		}));
 	}
 
@@ -654,15 +667,14 @@ export class Repository {
 		return results.map((anime) => ({
 			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
 			title: anime.title,
-			poster_url: `https://media.kitsu.app/anime/poster_images/${anime.anidb_id}/medium.jpg`,
+			poster_url: anime.poster_url,
 		}));
 	}
 
-	// get anime by list of mal id
 	public async getAnimeByMalIds(malIds: number[]): Promise<AnimeSearchResult[]> {
 		const results = await this.prisma.anime.findMany({
 			where: {
-				kitsu_id: {
+				mal_id: {
 					in: malIds,
 				},
 				poster_url: {
@@ -681,11 +693,10 @@ export class Repository {
 		return results.map((anime) => ({
 			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
 			title: anime.title,
-			poster_url: `https://media.kitsu.app/anime/poster_images/${anime.anidb_id}/medium.jpg`,
+			poster_url: anime.poster_url,
 		}));
 	}
 
-	// get anime by list of kitsu id
 	public async getAnimeByKitsuIds(kitsuIds: number[]): Promise<AnimeSearchResult[]> {
 		const results = await this.prisma.anime.findMany({
 			where: {
@@ -708,7 +719,7 @@ export class Repository {
 		return results.map((anime) => ({
 			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
 			title: anime.title,
-			poster_url: `https://media.kitsu.app/anime/poster_images/${anime.anidb_id}/medium.jpg`,
+			poster_url: anime.poster_url,
 		}));
 	}
 
@@ -780,11 +791,15 @@ export class Repository {
 				link: true,
 			},
 		});
-		return castItems.map((item) => ({
-			url: item.url,
-			link: item.link,
-			size: item.size,
-		}));
+		return castItems
+			.filter(
+				(item): item is { url: string; link: string; size: bigint } => item.link !== null
+			)
+			.map((item) => ({
+				url: item.url,
+				link: item.link,
+				size: Number(item.size),
+			}));
 	}
 
 	public async getOtherCastURLs(
@@ -817,11 +832,11 @@ export class Repository {
 		});
 
 		return castItems
-			.filter((item): item is { url: string; link: string; size: number } => !!item.link)
+			.filter((item): item is { url: string; link: string; size: bigint } => !!item.link)
 			.map((item) => ({
 				url: item.url,
 				link: item.link,
-				size: item.size,
+				size: Number(item.size),
 			}));
 	}
 
@@ -847,12 +862,8 @@ export class Repository {
 		hash: string,
 		url: string,
 		rdLink: string,
-		duration: number,
-		bitrate: number,
-		fileSize: number,
-		mediaInfo: MediaInfoDetails | null
+		fileSize: number
 	): Promise<void> {
-		const mediaInfo2 = mediaInfo as any;
 		await this.prisma.cast.upsert({
 			where: {
 				imdbId_userId_hash: {
@@ -865,10 +876,7 @@ export class Repository {
 				imdbId: imdbId,
 				link: rdLink,
 				url: url,
-				duration: duration,
-				bitrate: bitrate,
-				size: fileSize,
-				mediaInfo: mediaInfo2,
+				size: BigInt(fileSize),
 			},
 			create: {
 				imdbId: imdbId,
@@ -876,10 +884,7 @@ export class Repository {
 				hash: hash,
 				link: rdLink,
 				url: url,
-				duration: duration,
-				bitrate: bitrate,
-				size: fileSize,
-				mediaInfo: mediaInfo2,
+				size: BigInt(fileSize),
 			},
 		});
 	}
@@ -898,7 +903,6 @@ export class Repository {
 				updatedAt: 'desc',
 			},
 			distinct: ['imdbId'],
-			// take: 48,
 			select: {
 				imdbId: true,
 			},
@@ -961,7 +965,10 @@ export class Repository {
 			},
 		});
 
-		return castItems;
+		return castItems.map((item) => ({
+			...item,
+			size: Number(item.size),
+		}));
 	}
 
 	/**
@@ -973,7 +980,6 @@ export class Repository {
 	 * @throws An error if the deletion fails (e.g., record not found).
 	 */
 	public async deleteCastedLink(imdbId: string, userId: string, hash: string): Promise<void> {
-		console.log(`Deleting casted link: ${imdbId}, ${userId}, ${hash}`);
 		try {
 			await this.prisma.cast.delete({
 				where: {

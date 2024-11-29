@@ -232,6 +232,7 @@ const renderTorrentInfo = (
 						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
 					) {
 						// Cast button when there's IMDB ID (and real-debrid token)
+						// inside popup in movie and show pages
 						actions.push(
 							renderButton('cast', {
 								onClick: `window.open('/api/stremio/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')`,
