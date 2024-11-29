@@ -55,7 +55,9 @@ export const sortByMedian = (searchResults: SearchResult[]): SearchResult[] => {
 		}
 
 		// If video counts are equal, sort alphabetically
-		return a.title.localeCompare(b.title);
+		const titleA = a.title || '';
+		const titleB = b.title || '';
+		return titleA.localeCompare(titleB);
 	});
 	return searchResults;
 };
@@ -81,8 +83,8 @@ export const sortByBiggest = (searchResults: SearchResult[]): SearchResult[] => 
 			return b.videoCount - a.videoCount;
 		}
 
-		// If all else is equal, sort alphabetically
-		return a.title.localeCompare(b.title);
+		// If all else is equal, sort alphabetically (with null check)
+		return (a.title || '').localeCompare(b.title || '');
 	});
 	return searchResults;
 };
