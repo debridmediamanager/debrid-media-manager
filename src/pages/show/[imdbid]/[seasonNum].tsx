@@ -319,6 +319,8 @@ const TvSearch: FunctionComponent = () => {
 			},
 			castToastOptions
 		);
+		// open stremio after casting
+		window.open(`stremio://detail/series/${imdbid}/${imdbid}:${seasonNum}`);
 	}
 
 	const getFirstAvailableRdTorrent = () => {
@@ -442,7 +444,9 @@ const TvSearch: FunctionComponent = () => {
 							<button
 								className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
 								onClick={() =>
-									window.open(`stremio://detail/movie/${imdbid}/${imdbid}`)
+									window.open(
+										`stremio://detail/series/${imdbid}/${imdbid}:${seasonNum}`
+									)
 								}
 							>
 								<b>🟣Stremio</b>
