@@ -38,6 +38,7 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 	deleteAd,
 }) => {
 	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
+	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
 
 	const isDownloading = (service: string, hash: string) =>
 		`${service}:${hash}` in hashAndProgress && hashAndProgress[`${service}:${hash}`] < 100;
@@ -103,6 +104,20 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 		}
 	};
 
+	const handleCastWithLoading = async (hash: string) => {
+		if (castingHashes.has(hash)) return;
+		setCastingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await handleCast(hash);
+		} finally {
+			setCastingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
 	const getBiggestFileId = (result: SearchResult) => {
 		if (!result.files || !result.files.length) return '';
 		const biggestFile = result.files
@@ -141,6 +156,7 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 				const rdColor = btnColor(r.rdAvailable, r.noVideos);
 				const adColor = btnColor(r.adAvailable, r.noVideos);
 				const isLoading = loadingHashes.has(r.hash);
+				const isCasting = castingHashes.has(r.hash);
 
 				return (
 					<div
@@ -261,10 +277,20 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 
 								{rdKey && (
 									<button
-										className="haptic-sm inline rounded border-2 border-gray-500 bg-gray-900/30 px-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50"
-										onClick={() => handleCast(r.hash)}
+										className={`haptic-sm inline rounded border-2 border-gray-500 bg-gray-900/30 px-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50 ${isCasting ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleCastWithLoading(r.hash)}
+										disabled={isCasting}
 									>
-										Cast✨
+										{isCasting ? (
+											<>
+												<span className="inline-block animate-spin">
+													⌛
+												</span>{' '}
+												Casting...
+											</>
+										) : (
+											'Cast✨'
+										)}
 									</button>
 								)}
 
