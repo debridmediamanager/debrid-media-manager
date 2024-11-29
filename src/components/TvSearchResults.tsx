@@ -1,6 +1,7 @@
 import { SearchResult } from '@/services/mediasearch';
 import { getEpisodeCountClass, getEpisodeCountLabel } from '@/utils/episodeUtils';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize } from '@/utils/results';
+import { useState } from 'react';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
 
 type TvSearchResultsProps = {
@@ -38,6 +39,8 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	deleteRd,
 	deleteAd,
 }) => {
+	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
+
 	const isDownloading = (service: string, hash: string) =>
 		`${service}:${hash}` in hashAndProgress && hashAndProgress[`${service}:${hash}`] < 100;
 	const isDownloaded = (service: string, hash: string) =>
@@ -45,6 +48,62 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	const inLibrary = (service: string, hash: string) => `${service}:${hash}` in hashAndProgress;
 	const notInLibrary = (service: string, hash: string) =>
 		!(`${service}:${hash}` in hashAndProgress);
+
+	const handleAddRd = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await addRd(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
+	const handleAddAd = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await addAd(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
+	const handleDeleteRd = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await deleteRd(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
+	const handleDeleteAd = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await deleteAd(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
 
 	const EpisodeCountDisplay = ({
 		result,
@@ -93,6 +152,8 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 					.filter((f) => f.filename.match(epRegex1) || f.filename.match(epRegex2))
 					.map((f) => `${f.fileId}`);
 
+				const isLoading = loadingHashes.has(r.hash);
+
 				return (
 					<div
 						key={i}
@@ -118,43 +179,67 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 							)}
 
 							<div className="space-x-1 space-y-1">
-								{/* RD */}
+								{/* RD download/delete */}
 								{rdKey && inLibrary('rd', r.hash) && (
 									<button
-										className="haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50"
-										onClick={() => deleteRd(r.hash)}
+										className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleDeleteRd(r.hash)}
+										disabled={isLoading}
 									>
-										<FaTimes className="mr-2 inline" />
-										RD ({hashAndProgress[`rd:${r.hash}`] + '%'})
+										{isLoading ? (
+											<span className="inline-block animate-spin">⌛</span>
+										) : (
+											<FaTimes className="mr-2 inline" />
+										)}
+										{isLoading
+											? 'Removing...'
+											: `RD (${hashAndProgress[`rd:${r.hash}`] + '%'})`}
 									</button>
 								)}
 								{rdKey && notInLibrary('rd', r.hash) && (
 									<button
-										className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors`}
-										onClick={() => addRd(r.hash)}
+										className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleAddRd(r.hash)}
+										disabled={isLoading}
 									>
-										{btnIcon(r.rdAvailable)}
-										{btnLabel(r.rdAvailable, 'RD')}
+										{isLoading ? (
+											<span className="inline-block animate-spin">⌛</span>
+										) : (
+											btnIcon(r.rdAvailable)
+										)}
+										{isLoading ? 'Adding...' : btnLabel(r.rdAvailable, 'RD')}
 									</button>
 								)}
 
-								{/* AD */}
+								{/* AD download/delete */}
 								{adKey && inLibrary('ad', r.hash) && (
 									<button
-										className="haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50"
-										onClick={() => deleteAd(r.hash)}
+										className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleDeleteAd(r.hash)}
+										disabled={isLoading}
 									>
-										<FaTimes className="mr-2 inline" />
-										AD ({hashAndProgress[`ad:${r.hash}`] + '%'})
+										{isLoading ? (
+											<span className="inline-block animate-spin">⌛</span>
+										) : (
+											<FaTimes className="mr-2 inline" />
+										)}
+										{isLoading
+											? 'Removing...'
+											: `AD (${hashAndProgress[`ad:${r.hash}`] + '%'})`}
 									</button>
 								)}
 								{adKey && notInLibrary('ad', r.hash) && (
 									<button
-										className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors`}
-										onClick={() => addAd(r.hash)}
+										className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleAddAd(r.hash)}
+										disabled={isLoading}
 									>
-										{btnIcon(r.adAvailable)}
-										{btnLabel(r.adAvailable, 'AD')}
+										{isLoading ? (
+											<span className="inline-block animate-spin">⌛</span>
+										) : (
+											btnIcon(r.adAvailable)
+										)}
+										{isLoading ? 'Adding...' : btnLabel(r.adAvailable, 'AD')}
 									</button>
 								)}
 

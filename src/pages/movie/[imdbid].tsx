@@ -83,6 +83,8 @@ const MovieSearch: FunctionComponent = () => {
 		imdb_score: 0,
 	});
 
+	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
+
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	const movieMaxSize = window.localStorage.getItem('settings:movieMaxSize') || defaultMovieSize;
 	const onlyTrustedTorrents =
@@ -254,6 +256,62 @@ const MovieSearch: FunctionComponent = () => {
 	const notInLibrary = (service: string, hash: string) =>
 		!(`${service}:${hash}` in hashAndProgress);
 
+	const handleAddRd = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await addRd(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
+	const handleAddAd = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await addAd(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
+	const handleDeleteRd = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await deleteRd(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
+	const handleDeleteAd = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await deleteAd(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
 	async function addRd(hash: string) {
 		await handleAddAsMagnetInRd(rdKey!, hash, async (info: TorrentInfoResponse) => {
 			const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
@@ -421,10 +479,17 @@ const MovieSearch: FunctionComponent = () => {
 				<div>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<button
-							className="mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
-							onClick={() => addRd(getFirstAvailableRdTorrent()!.hash)}
+							className={`mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 ${loadingHashes.has(getFirstAvailableRdTorrent()!.hash) ? 'cursor-not-allowed opacity-50' : ''}`}
+							onClick={() => handleAddRd(getFirstAvailableRdTorrent()!.hash)}
+							disabled={loadingHashes.has(getFirstAvailableRdTorrent()!.hash)}
 						>
-							<b>⚡Instant RD</b>
+							{loadingHashes.has(getFirstAvailableRdTorrent()!.hash) ? (
+								<>
+									<span className="inline-block animate-spin">⌛</span> Adding...
+								</>
+							) : (
+								<b>⚡Instant RD</b>
+							)}
 						</button>
 					)}
 					{rdKey && player && getFirstAvailableRdTorrent() && (
@@ -556,6 +621,8 @@ const MovieSearch: FunctionComponent = () => {
 								return;
 							const rdColor = btnColor(r.rdAvailable, r.noVideos);
 							const adColor = btnColor(r.adAvailable, r.noVideos);
+							const isLoading = loadingHashes.has(r.hash);
+
 							return (
 								<div
 									key={i}
@@ -592,27 +659,45 @@ const MovieSearch: FunctionComponent = () => {
 										)}
 
 										<div className="space-x-1 space-y-1">
-											{/* RD */}
+											{/* RD download/delete */}
 											{rdKey && inLibrary('rd', r.hash) && (
 												<button
-													className="haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50"
-													onClick={() => deleteRd(r.hash)}
+													className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+													onClick={() => handleDeleteRd(r.hash)}
+													disabled={isLoading}
 												>
-													<FaTimes className="mr-2 inline" />
-													RD ({hashAndProgress[`rd:${r.hash}`] + '%'})
+													{isLoading ? (
+														<span className="inline-block animate-spin">
+															⌛
+														</span>
+													) : (
+														<FaTimes className="mr-2 inline" />
+													)}
+													{isLoading
+														? 'Removing...'
+														: `RD (${hashAndProgress[`rd:${r.hash}`] + '%'})`}
 												</button>
 											)}
 											{rdKey && notInLibrary('rd', r.hash) && (
 												<button
-													className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors`}
-													onClick={() => addRd(r.hash)}
+													className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+													onClick={() => handleAddRd(r.hash)}
+													disabled={isLoading}
 												>
-													{btnIcon(r.rdAvailable)}
-													{btnLabel(r.rdAvailable, 'RD')}
+													{isLoading ? (
+														<span className="inline-block animate-spin">
+															⌛
+														</span>
+													) : (
+														btnIcon(r.rdAvailable)
+													)}
+													{isLoading
+														? 'Adding...'
+														: btnLabel(r.rdAvailable, 'RD')}
 												</button>
 											)}
 
-											{/* AD */}
+											{/* AD download/delete */}
 											{adKey && inLibrary('ad', r.hash) && (
 												<button
 													className="haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50"
