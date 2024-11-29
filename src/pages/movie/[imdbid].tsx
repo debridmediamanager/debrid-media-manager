@@ -1,3 +1,4 @@
+import MovieSearchResults from '@/components/MovieSearchResults';
 import Poster from '@/components/poster';
 import { showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
@@ -12,7 +13,7 @@ import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorr
 import { convertToUserTorrent, fetchAllDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { applyQuickSearch2 } from '@/utils/quickSearch';
-import { borderColor, btnColor, btnIcon, btnLabel, fileSize, sortByBiggest } from '@/utils/results';
+import { sortByBiggest } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { defaultMovieSize, defaultPlayer } from '@/utils/settings';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
@@ -26,7 +27,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { FaMagnet, FaTimes } from 'react-icons/fa';
 
 type MovieInfo = {
 	title: string;
@@ -54,23 +54,6 @@ const getQueryForMovieCount = (videoCount: number) => {
 	return `videos:>1`; // With extras
 };
 
-// Modify the getMovieCountClass function to consider availability
-const getMovieCountClass = (videoCount: number, isInstantlyAvailable: boolean) => {
-	if (!isInstantlyAvailable) return ''; // No color for unavailable torrents
-	const scale = getColorScale();
-	for (let i = 0; i < scale.length; i++) {
-		if (videoCount <= scale[i].threshold) {
-			return `bg-${scale[i].color}`;
-		}
-	}
-	return `bg-${scale[scale.length - 1].color}`;
-};
-
-const getMovieCountLabel = (videoCount: number) => {
-	if (videoCount === 1) return `Single`;
-	return `With extras (${videoCount})`;
-};
-
 const MovieSearch: FunctionComponent = () => {
 	const router = useRouter();
 	const { imdbid } = router.query;
@@ -82,8 +65,6 @@ const MovieSearch: FunctionComponent = () => {
 		year: '',
 		imdb_score: 0,
 	});
-
-	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
 
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	const movieMaxSize = window.localStorage.getItem('settings:movieMaxSize') || defaultMovieSize;
@@ -104,6 +85,7 @@ const MovieSearch: FunctionComponent = () => {
 	const [totalUncachedCount, setTotalUncachedCount] = useState<number>(0);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [hasMoreResults, setHasMoreResults] = useState(true);
+	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 
 	useEffect(() => {
 		if (!imdbid) return;
@@ -128,7 +110,6 @@ const MovieSearch: FunctionComponent = () => {
 	useEffect(() => {
 		if (!imdbid) return;
 		initialize();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imdbid]);
 
 	async function fetchData(imdbId: string, page: number = 0) {
@@ -164,7 +145,6 @@ const MovieSearch: FunctionComponent = () => {
 							files: [],
 						})),
 					];
-					// Sort function that prioritizes instant availability
 					return newResults.sort((a, b) => {
 						const aAvailable = a.rdAvailable || a.adAvailable;
 						const bAvailable = b.rdAvailable || b.adAvailable;
@@ -177,7 +157,6 @@ const MovieSearch: FunctionComponent = () => {
 				setHasMoreResults(results.length > 0);
 				toast(`Found ${results.length} results`, searchToastOptions);
 
-				// instant checks
 				const hashArr = results.map((r) => r.hash);
 				const instantChecks = [];
 				if (rdKey) {
@@ -235,10 +214,8 @@ const MovieSearch: FunctionComponent = () => {
 		if (searchResults.length === 0) return;
 		const filteredResults = applyQuickSearch2(query, searchResults);
 		setFilteredResults(filteredResults);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query, searchResults]);
 
-	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	async function fetchHashAndProgress(hash?: string) {
 		const torrents = await torrentDB.all();
 		const records: Record<string, number> = {};
@@ -248,69 +225,6 @@ const MovieSearch: FunctionComponent = () => {
 		}
 		setHashAndProgress((prev) => ({ ...prev, ...records }));
 	}
-	const isDownloading = (service: string, hash: string) =>
-		`${service}:${hash}` in hashAndProgress && hashAndProgress[`${service}:${hash}`] < 100;
-	const isDownloaded = (service: string, hash: string) =>
-		`${service}:${hash}` in hashAndProgress && hashAndProgress[`${service}:${hash}`] === 100;
-	const inLibrary = (service: string, hash: string) => `${service}:${hash}` in hashAndProgress;
-	const notInLibrary = (service: string, hash: string) =>
-		!(`${service}:${hash}` in hashAndProgress);
-
-	const handleAddRd = async (hash: string) => {
-		if (loadingHashes.has(hash)) return;
-		setLoadingHashes((prev) => new Set(prev).add(hash));
-		try {
-			await addRd(hash);
-		} finally {
-			setLoadingHashes((prev) => {
-				const newSet = new Set(prev);
-				newSet.delete(hash);
-				return newSet;
-			});
-		}
-	};
-
-	const handleAddAd = async (hash: string) => {
-		if (loadingHashes.has(hash)) return;
-		setLoadingHashes((prev) => new Set(prev).add(hash));
-		try {
-			await addAd(hash);
-		} finally {
-			setLoadingHashes((prev) => {
-				const newSet = new Set(prev);
-				newSet.delete(hash);
-				return newSet;
-			});
-		}
-	};
-
-	const handleDeleteRd = async (hash: string) => {
-		if (loadingHashes.has(hash)) return;
-		setLoadingHashes((prev) => new Set(prev).add(hash));
-		try {
-			await deleteRd(hash);
-		} finally {
-			setLoadingHashes((prev) => {
-				const newSet = new Set(prev);
-				newSet.delete(hash);
-				return newSet;
-			});
-		}
-	};
-
-	const handleDeleteAd = async (hash: string) => {
-		if (loadingHashes.has(hash)) return;
-		setLoadingHashes((prev) => new Set(prev).add(hash));
-		try {
-			await deleteAd(hash);
-		} finally {
-			setLoadingHashes((prev) => {
-				const newSet = new Set(prev);
-				newSet.delete(hash);
-				return newSet;
-			});
-		}
-	};
 
 	async function addRd(hash: string) {
 		await handleAddAsMagnetInRd(rdKey!, hash, async (info: TorrentInfoResponse) => {
@@ -386,7 +300,6 @@ const MovieSearch: FunctionComponent = () => {
 			files,
 			links: [],
 			fake: true,
-			/// extras
 			host: '',
 			split: 0,
 			status: 'downloaded',
@@ -478,34 +391,23 @@ const MovieSearch: FunctionComponent = () => {
 				</div>
 				<div>
 					{rdKey && getFirstAvailableRdTorrent() && (
-						<button
-							className={`mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 ${loadingHashes.has(getFirstAvailableRdTorrent()!.hash) ? 'cursor-not-allowed opacity-50' : ''}`}
-							onClick={() => handleAddRd(getFirstAvailableRdTorrent()!.hash)}
-							disabled={loadingHashes.has(getFirstAvailableRdTorrent()!.hash)}
-						>
-							{loadingHashes.has(getFirstAvailableRdTorrent()!.hash) ? (
-								<>
-									<span className="inline-block animate-spin">⌛</span> Adding...
-								</>
-							) : (
-								<b>⚡Instant RD</b>
-							)}
-						</button>
-					)}
-					{rdKey && player && getFirstAvailableRdTorrent() && (
-						<button
-							className="mb-1 mr-2 mt-0 rounded border-2 border-teal-500 bg-teal-900/30 p-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50"
-							onClick={() =>
-								window.open(
-									`/api/watch/instant/${player}?token=${rdKey}&hash=${getFirstAvailableRdTorrent()!.hash}&fileId=${getBiggestFileId(getFirstAvailableRdTorrent()!)}`
-								)
-							}
-						>
-							<b>🧐Watch</b>
-						</button>
-					)}
-					{rdKey && getFirstAvailableRdTorrent() && (
 						<>
+							<button
+								className="mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
+								onClick={() => addRd(getFirstAvailableRdTorrent()!.hash)}
+							>
+								<b>⚡Instant RD</b>
+							</button>
+							<button
+								className="mb-1 mr-2 mt-0 rounded border-2 border-teal-500 bg-teal-900/30 p-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50"
+								onClick={() =>
+									window.open(
+										`/api/watch/instant/${player}?token=${rdKey}&hash=${getFirstAvailableRdTorrent()!.hash}&fileId=${getBiggestFileId(getFirstAvailableRdTorrent()!)}`
+									)
+								}
+							>
+								<b>🧐Watch</b>
+							</button>
 							<button
 								className="mb-1 mr-2 mt-0 rounded border-2 border-gray-500 bg-gray-900/30 p-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50"
 								onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash)}
@@ -597,164 +499,25 @@ const MovieSearch: FunctionComponent = () => {
 					</span>
 				))}
 			</div>
+
 			{searchResults.length > 0 && (
 				<>
-					<div className="mx-1 my-1 grid grid-cols-1 gap-2 overflow-x-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-						{filteredResults.map((r: SearchResult, i: number) => {
-							const downloaded =
-								isDownloaded('rd', r.hash) || isDownloaded('ad', r.hash);
-							const downloading =
-								isDownloading('rd', r.hash) || isDownloading('ad', r.hash);
-							const inYourLibrary = downloaded || downloading;
-							if (
-								onlyShowCached &&
-								!r.rdAvailable &&
-								!r.adAvailable &&
-								!inYourLibrary
-							)
-								return;
-							if (
-								movieMaxSize !== '0' &&
-								(r.biggestFileSize ?? r.fileSize) > parseInt(movieMaxSize) * 1024 &&
-								!inYourLibrary
-							)
-								return;
-							const rdColor = btnColor(r.rdAvailable, r.noVideos);
-							const adColor = btnColor(r.adAvailable, r.noVideos);
-							const isLoading = loadingHashes.has(r.hash);
-
-							return (
-								<div
-									key={i}
-									className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable)} overflow-hidden rounded-lg bg-opacity-30 shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
-								>
-									<div className="space-y-2 p-1">
-										<h2 className="line-clamp-2 overflow-hidden text-ellipsis break-words text-sm font-bold leading-tight">
-											{r.title}
-										</h2>
-
-										{r.videoCount > 0 ? (
-											<div className="text-xs text-gray-300">
-												<span
-													className="haptic-sm haptic-sm inline-block cursor-pointer rounded bg-black bg-opacity-50 px-2 py-1 hover:bg-opacity-75"
-													onClick={() => handleShowInfo(r)}
-												>
-													📂&nbsp;{getMovieCountLabel(r.videoCount)}
-												</span>
-												{r.videoCount > 1 ? (
-													<span className="ml-2">
-														Total: {fileSize(r.fileSize)} GB; Biggest:{' '}
-														{fileSize(r.biggestFileSize)} GB
-													</span>
-												) : (
-													<span className="ml-2">
-														Total: {fileSize(r.fileSize)} GB
-													</span>
-												)}
-											</div>
-										) : (
-											<div className="text-xs text-gray-300">
-												Total: {fileSize(r.fileSize)} GB
-											</div>
-										)}
-
-										<div className="space-x-1 space-y-1">
-											{/* RD download/delete */}
-											{rdKey && inLibrary('rd', r.hash) && (
-												<button
-													className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-													onClick={() => handleDeleteRd(r.hash)}
-													disabled={isLoading}
-												>
-													{isLoading ? (
-														<span className="inline-block animate-spin">
-															⌛
-														</span>
-													) : (
-														<FaTimes className="mr-2 inline" />
-													)}
-													{isLoading
-														? 'Removing...'
-														: `RD (${hashAndProgress[`rd:${r.hash}`] + '%'})`}
-												</button>
-											)}
-											{rdKey && notInLibrary('rd', r.hash) && (
-												<button
-													className={`border-2 border-${rdColor}-500 bg-${rdColor}-900/30 text-${rdColor}-100 hover:bg-${rdColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-													onClick={() => handleAddRd(r.hash)}
-													disabled={isLoading}
-												>
-													{isLoading ? (
-														<span className="inline-block animate-spin">
-															⌛
-														</span>
-													) : (
-														btnIcon(r.rdAvailable)
-													)}
-													{isLoading
-														? 'Adding...'
-														: btnLabel(r.rdAvailable, 'RD')}
-												</button>
-											)}
-
-											{/* AD download/delete */}
-											{adKey && inLibrary('ad', r.hash) && (
-												<button
-													className="haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50"
-													onClick={() => deleteAd(r.hash)}
-												>
-													<FaTimes className="mr-2 inline" />
-													AD ({hashAndProgress[`ad:${r.hash}`] + '%'})
-												</button>
-											)}
-											{adKey && notInLibrary('ad', r.hash) && (
-												<button
-													className={`border-2 border-${adColor}-500 bg-${adColor}-900/30 text-${adColor}-100 hover:bg-${adColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors`}
-													onClick={() => addAd(r.hash)}
-												>
-													{btnIcon(r.adAvailable)}
-													{btnLabel(r.adAvailable, 'AD')}
-												</button>
-											)}
-
-											{(r.rdAvailable || r.adAvailable) && (
-												<>
-													{r.rdAvailable && player && (
-														<button
-															className="haptic-sm inline rounded border-2 border-teal-500 bg-teal-900/30 px-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50"
-															onClick={() =>
-																window.open(
-																	`/api/watch/instant/${player}?token=${rdKey}&hash=${r.hash}&fileId=${getBiggestFileId(r)}`
-																)
-															}
-														>
-															🧐Watch
-														</button>
-													)}
-												</>
-											)}
-
-											{rdKey && (
-												<button
-													className="haptic-sm inline rounded border-2 border-gray-500 bg-gray-900/30 px-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50"
-													onClick={() => handleCast(r.hash)}
-												>
-													Cast✨
-												</button>
-											)}
-
-											<button
-												className="haptic-sm inline rounded border-2 border-pink-500 bg-pink-900/30 px-1 text-xs text-pink-100 transition-colors hover:bg-pink-800/50"
-												onClick={() => handleCopyMagnet(r.hash)}
-											>
-												<FaMagnet className="inline" /> Magnet
-											</button>
-										</div>
-									</div>
-								</div>
-							);
-						})}
-					</div>
+					<MovieSearchResults
+						filteredResults={filteredResults}
+						onlyShowCached={onlyShowCached}
+						movieMaxSize={movieMaxSize}
+						rdKey={rdKey}
+						adKey={adKey}
+						player={player}
+						hashAndProgress={hashAndProgress}
+						handleShowInfo={handleShowInfo}
+						handleCast={handleCast}
+						handleCopyMagnet={handleCopyMagnet}
+						addRd={addRd}
+						addAd={addAd}
+						deleteRd={deleteRd}
+						deleteAd={deleteAd}
+					/>
 
 					{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (
 						<button
