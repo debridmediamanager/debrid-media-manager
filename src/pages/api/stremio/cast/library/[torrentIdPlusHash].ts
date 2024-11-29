@@ -75,12 +75,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					stremioKey,
 					userid,
 					tInfo.hash,
-					'',
+					selectedFile.path,
 					tInfo.links[i],
-					0,
-					0,
-					selectedFile.bytes,
-					null
+					Math.ceil(selectedFile.bytes / 1024 / 1024)
 				);
 			}
 		} else {
@@ -137,10 +134,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					tInfo.hash,
 					vRedirectUrl,
 					rdLink,
-					0,
-					0,
-					fileSize,
-					null
+					Math.ceil(fileSize / 1024 / 1024)
 				);
 			}
 		}

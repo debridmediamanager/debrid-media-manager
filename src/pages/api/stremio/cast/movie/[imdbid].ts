@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 			const userid = await generateUserId(token);
 
-			await db.saveCast(imdbid, userid, hash, streamUrl, rdLink, 0, 0, fileSize, null);
+			await db.saveCast(imdbid, userid, hash, streamUrl, rdLink, fileSize);
 
 			const filename = streamUrl.split('/').pop() ?? '???';
 

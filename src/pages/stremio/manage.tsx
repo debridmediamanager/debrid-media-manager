@@ -1,9 +1,9 @@
-import { Logo } from '@/components/Logo';
 import Poster from '@/components/poster';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import ptt from 'parse-torrent-title';
 import { useEffect, useState } from 'react';
@@ -229,10 +229,7 @@ function ManagePage() {
 
 	const getFilename = (url: string) => {
 		try {
-			const urlObj = new URL(url);
-			const pathParts = urlObj.pathname.split('/');
-			const lastPart = pathParts[pathParts.length - 1];
-			return decodeURIComponent(lastPart);
+			return decodeURIComponent(url.split('/').pop() || '');
 		} catch (error) {
 			return 'Unknown file';
 		}
@@ -259,13 +256,19 @@ function ManagePage() {
 	return (
 		<div className="flex min-h-screen flex-col items-center bg-gray-900 p-4">
 			<Head>
-				<title>DMM - Manage Casted Links</title>
+				<title>DMM Cast - Manage Casted Links</title>
 			</Head>
-			<Logo />
+			<Image
+				width={100}
+				height={100}
+				src="https://static.debridmediamanager.com/dmmcast.png"
+				alt="logo"
+				className="mb-4"
+			/>
 			<Toaster position="bottom-right" />
 
 			<div className="mb-6 flex items-center justify-between gap-4">
-				<h1 className="text-xl font-bold text-white">Manage Casted Links</h1>
+				<h1 className="text-xl font-bold text-white">DMM Cast - Manage Casted Links</h1>
 				{selectedLinks.size > 0 && (
 					<button
 						onClick={handleDeleteSelected}
@@ -345,13 +348,13 @@ function ManagePage() {
 														href={getStremioUrl(link)}
 														className="haptic-sm rounded bg-cyan-600 px-3 py-1 text-sm text-white hover:bg-cyan-700"
 													>
-														Watch
+														👀
 													</a>
 													<button
 														onClick={() => handleDelete(link)}
 														className="haptic-sm rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
 													>
-														Delete
+														🗑️
 													</button>
 												</div>
 											</div>

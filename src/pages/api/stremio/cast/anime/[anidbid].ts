@@ -49,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 						? `:${seasonNumber}:${episodeNumber}`
 						: ''
 				}`;
-				await db.saveCast(castKey, userid, hash, streamUrl, rdLink, 0, 0, fileSize, null);
+				await db.saveCast(castKey, userid, hash, streamUrl, rdLink, fileSize);
 			} else {
 				if (seasonNumber >= 0 && episodeNumber >= 0) {
 					errorEpisodes.push(`S${seasonNumber}E${episodeNumber}`);

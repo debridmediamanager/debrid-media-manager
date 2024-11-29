@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 			const userid = await generateUserId(token);
 
-			await db.saveCast(castKey, userid, hash, streamUrl, rdLink, 0, 0, fileSize, null);
+			await db.saveCast(castKey, userid, hash, streamUrl, rdLink, fileSize);
 
 			// send an html
 			res.setHeader('Content-Type', 'text/html');
