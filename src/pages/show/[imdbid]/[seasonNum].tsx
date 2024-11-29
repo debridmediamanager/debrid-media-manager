@@ -1,7 +1,6 @@
 import TvSearchResults from '@/components/TvSearchResults';
 import Poster from '@/components/poster';
 import { showInfoForRD } from '@/components/showInfo';
-import { showSubscribeModal } from '@/components/subscribe';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
@@ -425,14 +424,6 @@ const TvSearch: FunctionComponent = () => {
 				</div>
 
 				<div>
-					<button
-						className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-rose-500 bg-rose-900/30 p-1 text-xs text-rose-100 transition-colors hover:bg-rose-800/50"
-						onClick={() => {
-							showSubscribeModal();
-						}}
-					>
-						🔔Subscribe
-					</button>
 					{rdKey && getFirstAvailableRdTorrent() && (
 						<>
 							<button
@@ -449,7 +440,7 @@ const TvSearch: FunctionComponent = () => {
 									)
 								}
 							>
-								<b>🟣Stremio</b>
+								<b>🔮Stremio</b>
 							</button>
 						</>
 					)}
