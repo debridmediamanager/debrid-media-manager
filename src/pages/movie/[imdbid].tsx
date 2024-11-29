@@ -447,12 +447,22 @@ const MovieSearch: FunctionComponent = () => {
 						</button>
 					)}
 					{rdKey && getFirstAvailableRdTorrent() && (
-						<button
-							className="mb-1 mr-2 mt-0 rounded border-2 border-gray-500 bg-gray-900/30 p-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50"
-							onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash)}
-						>
-							<b>Cast✨</b>
-						</button>
+						<>
+							<button
+								className="mb-1 mr-2 mt-0 rounded border-2 border-gray-500 bg-gray-900/30 p-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50"
+								onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash)}
+							>
+								<b>Cast✨</b>
+							</button>
+							<button
+								className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
+								onClick={() =>
+									window.open(`stremio://detail/movie/${imdbid}/${imdbid}`)
+								}
+							>
+								<b>🟣Stremio</b>
+							</button>
+						</>
 					)}
 					{onlyShowCached && totalUncachedCount > 0 && (
 						<button
