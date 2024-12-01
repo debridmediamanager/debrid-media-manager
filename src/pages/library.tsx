@@ -8,7 +8,7 @@ import {
 	handleAddAsMagnetInRd,
 	handleAddMultipleHashesInAd,
 	handleAddMultipleHashesInRd,
-	handleCopyMagnet,
+	handleCopyOrDownloadMagnet,
 	handleReinsertTorrentinRd,
 	handleRestartTorrent,
 	handleSelectFilesInRd,
@@ -1079,7 +1079,7 @@ function TorrentsPage() {
 			});
 			Swal.close();
 		};
-		(window as any).handleCopyMagnet = handleCopyMagnet;
+		(window as any).handleCopyMagnet = handleCopyOrDownloadMagnet;
 		(window as any).handleReinsertTorrentinRd = async (
 			key: string,
 			torrent: UserTorrent,
@@ -1181,7 +1181,7 @@ function TorrentsPage() {
 			});
 			Swal.close();
 		};
-		(window as any).handleCopyMagnet = handleCopyMagnet;
+		(window as any).handleCopyMagnet = handleCopyOrDownloadMagnet;
 		(window as any).handleRestartTorrent = async (key: string, id: string) => {
 			await handleRestartTorrent(key, id);
 			await fetchLatestADTorrents();
@@ -1781,7 +1781,7 @@ function TorrentsPage() {
 												className="mb-2 mr-2 cursor-pointer text-pink-500"
 												onClick={(e) => {
 													e.stopPropagation();
-													handleCopyMagnet(torrent.hash);
+													handleCopyOrDownloadMagnet(torrent.hash);
 												}}
 											>
 												<FaMagnet />

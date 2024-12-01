@@ -4,7 +4,11 @@ import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
-import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
+import {
+	handleAddAsMagnetInAd,
+	handleAddAsMagnetInRd,
+	handleCopyOrDownloadMagnet,
+} from '@/utils/addMagnet';
 import { submitAvailability } from '@/utils/availability';
 import { handleCastAnime } from '@/utils/castApiClient';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
@@ -562,7 +566,7 @@ const MovieSearch: FunctionComponent = () => {
 										{/* Magnet button */}
 										<button
 											className="haptic-sm inline rounded border-2 border-pink-500 bg-pink-900/30 px-1 text-xs text-pink-100 transition-colors hover:bg-pink-800/50"
-											onClick={() => handleCopyMagnet(r.hash)}
+											onClick={() => handleCopyOrDownloadMagnet(r.hash)}
 										>
 											<FaMagnet className="inline" /> Magnet
 										</button>
