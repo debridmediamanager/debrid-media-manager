@@ -51,6 +51,80 @@ export const SettingsSection = () => {
 			{isExpanded && (
 				<div className="mt-4 text-sm text-gray-200">
 					<div className="flex flex-col gap-4">
+						<div className="rounded border-2 border-yellow-500/30 p-4">
+							<div className="mb-4 text-center text-sm font-medium text-yellow-200">
+								⚠️ Experiencing lag or buffering? Try smaller files
+							</div>
+
+							<div className="flex flex-col gap-4">
+								<div className="text-center text-xs text-gray-400">
+									Check your connection speed:{' '}
+									<a
+										href="https://real-debrid.com/speedtest"
+										target="_blank"
+										rel="noopener"
+										className="text-blue-400 hover:underline"
+									>
+										Real-Debrid
+									</a>
+									{' · '}
+									<a
+										href="https://alldebrid.com/speedtest"
+										target="_blank"
+										rel="noopener"
+										className="text-blue-400 hover:underline"
+									>
+										AllDebrid
+									</a>
+									{' · '}
+									<a
+										href="https://speedtest.torbox.app/"
+										target="_blank"
+										rel="noopener"
+										className="text-blue-400 hover:underline"
+									>
+										Torbox
+									</a>
+								</div>
+
+								<div className="flex flex-col gap-1">
+									<label className="font-semibold">Biggest movie size</label>
+									<select
+										id="dmm-movie-max-size"
+										className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+										defaultValue={movieMaxSize}
+										onChange={handleMovieSizeChange}
+									>
+										<option value="1">1 GB (~1.5 Mbps)</option>
+										<option value="3">3 GB (~4.5 Mbps)</option>
+										<option value="5">5 GB (~7.5 Mbps)</option>
+										<option value="15">15 GB (~22 Mbps)</option>
+										<option value="30">30 GB (~45 Mbps)</option>
+										<option value="60">60 GB (~90 Mbps)</option>
+										<option value="0">Biggest available</option>
+									</select>
+								</div>
+
+								<div className="flex flex-col gap-1">
+									<label className="font-semibold">Biggest episode size</label>
+									<select
+										id="dmm-episode-max-size"
+										className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
+										defaultValue={episodeMaxSize}
+										onChange={handleEpisodeSizeChange}
+									>
+										<option value="0.1">100 MB (~0.7 Mbps)</option>
+										<option value="0.3">300 MB (~2 Mbps)</option>
+										<option value="0.5">500 MB (~3.5 Mbps)</option>
+										<option value="1">1 GB (~7 Mbps)</option>
+										<option value="3">3 GB (~21 Mbps)</option>
+										<option value="5">5 GB (~35 Mbps)</option>
+										<option value="0">Biggest available</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
 						<div className="flex flex-col gap-1">
 							<label className="font-semibold">Video player</label>
 							<select
@@ -91,42 +165,6 @@ export const SettingsSection = () => {
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<label className="font-semibold">Biggest movie size</label>
-							<select
-								id="dmm-movie-max-size"
-								className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-								defaultValue={movieMaxSize}
-								onChange={handleMovieSizeChange}
-							>
-								<option value="1">1 GB</option>
-								<option value="3">3 GB</option>
-								<option value="5">5 GB</option>
-								<option value="15">15 GB</option>
-								<option value="30">30 GB</option>
-								<option value="60">60 GB</option>
-								<option value="0">Biggest available</option>
-							</select>
-						</div>
-
-						<div className="flex flex-col gap-1">
-							<label className="font-semibold">Biggest episode size</label>
-							<select
-								id="dmm-episode-max-size"
-								className="w-full rounded bg-gray-800 px-2 py-2.5 text-gray-200"
-								defaultValue={episodeMaxSize}
-								onChange={handleEpisodeSizeChange}
-							>
-								<option value="0.1">100 MB</option>
-								<option value="0.3">300 MB</option>
-								<option value="0.5">500 MB</option>
-								<option value="1">1 GB</option>
-								<option value="3">3 GB</option>
-								<option value="5">5 GB</option>
-								<option value="0">Biggest available</option>
-							</select>
-						</div>
-
-						<div className="flex flex-col gap-1">
 							<label className="font-semibold">Default torrents filter</label>
 							<input
 								id="dmm-default-torrents-filter"
@@ -148,33 +186,28 @@ export const SettingsSection = () => {
 							/>
 							<label className="font-semibold">Only trusted torrents</label>
 						</div>
-
-						<div className="text-center">
-							<button
-								id="dmm-default"
-								className="haptic-sm rounded border-2 border-green-500 bg-green-900/30 px-4 py-2 text-sm text-green-100 transition-colors hover:bg-green-800/50"
-								onClick={() => {
-									if ('registerProtocolHandler' in navigator) {
-										try {
-											navigator.registerProtocolHandler(
-												'magnet',
-												`${window.location.origin}/library?addMagnet=%s`
-											);
-										} catch (error) {
-											console.error(
-												'Error registering protocol handler:',
-												error
-											);
-										}
-									}
-								}}
-							>
-								🧲 Make DMM your torrent client
-							</button>
-						</div>
 					</div>
 				</div>
 			)}
+
+			<button
+				id="dmm-default"
+				className="haptic-sm mt-4 w-full rounded border-2 border-green-500 bg-green-900/30 px-4 py-2 text-sm text-green-100 transition-colors hover:bg-green-800/50"
+				onClick={() => {
+					if ('registerProtocolHandler' in navigator) {
+						try {
+							navigator.registerProtocolHandler(
+								'magnet',
+								`${window.location.origin}/library?addMagnet=%s`
+							);
+						} catch (error) {
+							console.error('Error registering protocol handler:', error);
+						}
+					}
+				}}
+			>
+				🧲 Make DMM your default torrent client
+			</button>
 		</div>
 	);
 };
