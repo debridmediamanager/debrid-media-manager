@@ -25,3 +25,10 @@ jobs:
       - name: Deploy to Docker Swarm
         run: |
           docker service update --image dmm-prod:latest --force dmm_web
+
+      - name: Purge Cloudflare Cache
+        run: |
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/1113bf74d053778e6c321886ba4c5850/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CF_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything":true}'
