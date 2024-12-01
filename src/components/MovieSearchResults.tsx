@@ -1,7 +1,8 @@
 import { SearchResult } from '@/services/mediasearch';
+import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
 
 type MovieSearchResultsProps = {
@@ -39,6 +40,13 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 }) => {
 	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
+	const [downloadMagnets, setDownloadMagnets] = useState(false);
+
+	useEffect(() => {
+		const shouldDownloadMagnets =
+			window.localStorage.getItem('settings:downloadMagnets') === 'true';
+		setDownloadMagnets(shouldDownloadMagnets);
+	}, []);
 
 	const isDownloading = (service: string, hash: string) =>
 		`${service}:${hash}` in hashAndProgress && hashAndProgress[`${service}:${hash}`] < 100;
@@ -115,6 +123,14 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 				newSet.delete(hash);
 				return newSet;
 			});
+		}
+	};
+
+	const handleMagnetAction = (hash: string) => {
+		if (downloadMagnets) {
+			downloadMagnetFile(hash);
+		} else {
+			handleCopyMagnet(hash);
 		}
 	};
 
@@ -296,9 +312,10 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 
 								<button
 									className="haptic-sm inline rounded border-2 border-pink-500 bg-pink-900/30 px-1 text-xs text-pink-100 transition-colors hover:bg-pink-800/50"
-									onClick={() => handleCopyMagnet(r.hash)}
+									onClick={() => handleMagnetAction(r.hash)}
 								>
-									<FaMagnet className="inline" /> Magnet
+									<FaMagnet className="inline" />{' '}
+									{downloadMagnets ? 'Download' : 'Copy'}
 								</button>
 							</div>
 						</div>
