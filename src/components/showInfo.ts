@@ -91,7 +91,8 @@ const defaultLabels = {
 	castAll: 'Cast',
 	share: 'Hashlist',
 	delete: 'Delete',
-	magnet: 'Copy Magnet',
+	magnet: () =>
+		window.localStorage.getItem('settings:downloadMagnets') === 'true' ? 'Download' : 'Copy',
 	reinsert: 'Reinsert',
 	downloadAll: 'Download All',
 	exportLinks: 'Get Links',
@@ -104,7 +105,8 @@ const renderButton = (
 ) => {
 	const style = buttonStyles[type];
 	const icon = icons[type];
-	const defaultLabel = defaultLabels[type];
+	const defaultLabel =
+		typeof defaultLabels[type] === 'function' ? defaultLabels[type]() : defaultLabels[type];
 
 	if ('link' in props) {
 		return `<form action="${props.link}" method="get" target="_blank" class="inline">
