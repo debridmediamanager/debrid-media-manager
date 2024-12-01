@@ -6,7 +6,11 @@ import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
-import { handleAddAsMagnetInAd, handleAddAsMagnetInRd, handleCopyMagnet } from '@/utils/addMagnet';
+import {
+	handleAddAsMagnetInAd,
+	handleAddAsMagnetInRd,
+	handleCopyOrDownloadMagnet,
+} from '@/utils/addMagnet';
 import { submitAvailability } from '@/utils/availability';
 import { handleCastMovie } from '@/utils/castApiClient';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
@@ -512,7 +516,7 @@ const MovieSearch: FunctionComponent = () => {
 						hashAndProgress={hashAndProgress}
 						handleShowInfo={handleShowInfo}
 						handleCast={handleCast}
-						handleCopyMagnet={handleCopyMagnet}
+						handleCopyMagnet={handleCopyOrDownloadMagnet}
 						addRd={addRd}
 						addAd={addAd}
 						deleteRd={deleteRd}
