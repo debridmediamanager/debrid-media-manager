@@ -4,13 +4,13 @@ import { Logo } from '@/components/Logo';
 import { MainActions } from '@/components/MainActions';
 import { SearchBar } from '@/components/SearchBar';
 import { ServiceCard } from '@/components/ServiceCard';
+import { SettingsSection } from '@/components/SettingsSection';
 import { TraktSection } from '@/components/TraktSection';
 import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/castToken';
 import { getTerms } from '@/utils/browseTerms';
 import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
-import { showSettings } from '@/utils/settings';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
@@ -145,7 +145,8 @@ function IndexPage() {
 					</div>
 
 					<div className="flex w-full max-w-md flex-col items-center gap-6">
-						<MainActions rdUser={rdUser} showSettings={showSettings} />
+						<MainActions rdUser={rdUser} />
+						<SettingsSection />
 						<BrowseSection terms={browseTerms} />
 						<TraktSection traktUser={traktUser} />
 						<div className="grid w-full grid-cols-1 gap-3">
