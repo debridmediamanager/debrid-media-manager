@@ -24,22 +24,10 @@ export const getInstantIntent = async (
 				throw new Error('Torrent not downloaded');
 			}
 
-			let link = '';
-
-			if (!fileId) {
-				// get biggest file index
-				const biggestFile = torrentInfo.files.reduce((prev, current) => {
-					return prev.bytes > current.bytes ? prev : current;
-				});
-				const biggestFileIdx = torrentInfo.files.findIndex((f) => f.id === biggestFile.id);
-				link = torrentInfo.links[biggestFileIdx] ?? torrentInfo.links[0];
-			} else {
-				const fileIdx = torrentInfo.files
-					.filter((f) => f.selected)
-					.findIndex((f) => f.id === fileId);
-				link = torrentInfo.links[fileIdx] ?? torrentInfo.links[0];
-			}
-
+			const fileIdx = torrentInfo.files
+				.filter((f) => f.selected)
+				.findIndex((f) => f.id === fileId);
+			const link = torrentInfo.links[fileIdx] ?? torrentInfo.links[0];
 			const resp = await unrestrictLink(rdKey, link, ipAddress, true);
 			await deleteTorrent(rdKey, id, true);
 			if (os === 'android') {

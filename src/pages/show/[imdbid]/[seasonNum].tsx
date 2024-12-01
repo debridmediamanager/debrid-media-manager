@@ -285,7 +285,6 @@ const TvSearch: FunctionComponent = () => {
 				bytes: file.filesize,
 				selected: 1,
 			}));
-		files.sort();
 		const info = {
 			id: '',
 			filename: result.title,

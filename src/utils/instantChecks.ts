@@ -71,8 +71,8 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 					if (!availableTorrent) continue;
 
 					torrent.files = availableTorrent.files.map(
-						(file: { path: string; bytes: number }, index: number) => ({
-							fileId: index,
+						(file: { file_id: number; path: string; bytes: number }) => ({
+							fileId: file.file_id,
 							filename: file.path,
 							filesize: file.bytes,
 						})
