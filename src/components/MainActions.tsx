@@ -12,7 +12,7 @@ export function MainActions({ rdUser }: MainActionsProps) {
 				href="/library"
 				className="haptic flex items-center justify-center gap-2 rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-cyan-100 transition-colors hover:bg-cyan-800/50"
 			>
-				<span>📚</span> Library
+				📚 Library
 			</Link>
 			<Link
 				href="https://hashlists.debridmediamanager.com"
