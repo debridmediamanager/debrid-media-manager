@@ -91,12 +91,15 @@ const defaultLabels = {
 	castAll: 'Cast',
 	share: 'Hashlist',
 	delete: 'Delete',
-	magnet: () =>
-		window.localStorage.getItem('settings:downloadMagnets') === 'true' ? 'Download' : 'Copy',
+	magnet: 'Copy',
 	reinsert: 'Reinsert',
 	downloadAll: 'Download All',
 	exportLinks: 'Get Links',
 };
+
+if (window.localStorage.getItem('settings:downloadMagnets') === 'true') {
+	defaultLabels.magnet = 'Download';
+}
 
 // UI Components
 const renderButton = (
@@ -105,8 +108,7 @@ const renderButton = (
 ) => {
 	const style = buttonStyles[type];
 	const icon = icons[type];
-	const defaultLabel =
-		typeof defaultLabels[type] === 'function' ? defaultLabels[type]() : defaultLabels[type];
+	const defaultLabel = defaultLabels[type];
 
 	if ('link' in props) {
 		return `<form action="${props.link}" method="get" target="_blank" class="inline">
