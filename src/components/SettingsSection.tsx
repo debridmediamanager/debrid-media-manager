@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+	defaultDownloadMagnets,
 	defaultEpisodeSize,
 	defaultMagnetHandlerEnabled,
 	defaultMagnetInstructionsHidden,
@@ -25,6 +26,9 @@ export const SettingsSection = () => {
 		window.localStorage.getItem('settings:onlyTrustedTorrents') === 'true';
 	const defaultTorrentsFilterValue =
 		window.localStorage.getItem('settings:defaultTorrentsFilter') || defaultTorrentsFilter;
+	const downloadMagnets =
+		window.localStorage.getItem('settings:downloadMagnets') === 'true' ||
+		defaultDownloadMagnets;
 
 	useEffect(() => {
 		// Check if protocol handler is registered
@@ -62,6 +66,10 @@ export const SettingsSection = () => {
 
 	const handleTrustedTorrentsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		window.localStorage.setItem('settings:onlyTrustedTorrents', String(e.target.checked));
+	};
+
+	const handleDownloadMagnetsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		window.localStorage.setItem('settings:downloadMagnets', String(e.target.checked));
 	};
 
 	const handleHideInstructions = () => {
@@ -245,6 +253,19 @@ export const SettingsSection = () => {
 								onChange={handleTrustedTorrentsChange}
 							/>
 							<label className="font-semibold">Only trusted torrents</label>
+						</div>
+
+						<div className="flex items-center gap-2">
+							<input
+								id="dmm-download-magnets"
+								type="checkbox"
+								className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+								defaultChecked={downloadMagnets}
+								onChange={handleDownloadMagnetsChange}
+							/>
+							<label className="font-semibold">
+								Download .magnet files instead of copy
+							</label>
 						</div>
 					</div>
 				</div>
