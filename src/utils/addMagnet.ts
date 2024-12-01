@@ -145,6 +145,7 @@ export const handleRestartTorrent = async (adKey: string, id: string) => {
 
 export const handleCopyOrDownloadMagnet = (hash: string) => {
 	const shouldDownloadMagnets =
+		typeof window !== 'undefined' &&
 		window.localStorage.getItem('settings:downloadMagnets') === 'true';
 	if (shouldDownloadMagnets) {
 		downloadMagnetFile(hash);
