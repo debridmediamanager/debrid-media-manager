@@ -190,10 +190,12 @@ const renderTorrentInfo = (
 	if (isRd) {
 		const rdInfo = info as TorrentInfoResponse;
 		const showCheckbox = !rdInfo.fake;
-		const filesList = rdInfo.files.map((file: ApiTorrentFile, linkIndex: number) => {
+		let linkIndex = 0;
+		rdInfo.files.sort((a, b) => a.path.localeCompare(b.path));
+		const filesList = rdInfo.files.map((file: ApiTorrentFile) => {
 			const actions = [];
 			if (file.selected === 1) {
-				const fileLink = rdInfo.links[linkIndex];
+				const fileLink = rdInfo.links[linkIndex++];
 				if (info.status === 'downloaded' && !rdInfo.fake) {
 					actions.push(
 						renderButton('download', {
@@ -256,6 +258,7 @@ const renderTorrentInfo = (
 		return filesList.join('');
 	} else {
 		const adInfo = info as MagnetStatus;
+		adInfo.links.sort((a, b) => a.filename.localeCompare(b.filename));
 		const filesList = adInfo.links.map((file: MagnetLink) => {
 			const actions = [
 				renderButton('download', {

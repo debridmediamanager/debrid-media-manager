@@ -210,6 +210,7 @@ export class Repository {
 		Array<{
 			hash: string;
 			files: Array<{
+				file_id: number;
 				path: string;
 				bytes: number;
 			}>;
@@ -225,6 +226,7 @@ export class Repository {
 				hash: true,
 				files: {
 					select: {
+						file_id: true,
 						path: true,
 						bytes: true,
 					},
@@ -235,6 +237,7 @@ export class Repository {
 		return availableHashes.map((record) => ({
 			hash: record.hash,
 			files: record.files.map((file) => ({
+				file_id: file.file_id,
 				path: file.path,
 				bytes: Number(file.bytes),
 			})),
