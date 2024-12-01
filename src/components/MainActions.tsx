@@ -3,12 +3,11 @@ import Link from 'next/link';
 
 interface MainActionsProps {
 	rdUser: RealDebridUser | null;
-	showSettings: () => void;
 }
 
-export function MainActions({ rdUser, showSettings }: MainActionsProps) {
+export function MainActions({ rdUser }: MainActionsProps) {
 	return (
-		<div className="grid w-full grid-cols-2 gap-3">
+		<div className="grid w-full grid-cols-3 gap-3">
 			<Link
 				href="/library"
 				className="haptic flex items-center justify-center gap-2 rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-cyan-100 transition-colors hover:bg-cyan-800/50"
@@ -30,13 +29,6 @@ export function MainActions({ rdUser, showSettings }: MainActionsProps) {
 					🔮 Stremio
 				</Link>
 			)}
-			<Link
-				href=""
-				onClick={showSettings}
-				className="haptic flex items-center justify-center gap-2 rounded border-2 border-gray-500 bg-gray-900/30 p-3 text-gray-100 transition-colors hover:bg-gray-800/50"
-			>
-				⚙️ Settings
-			</Link>
 		</div>
 	);
 }
