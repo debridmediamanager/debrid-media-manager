@@ -6,13 +6,10 @@ import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
-import {
-	handleAddAsMagnetInAd,
-	handleAddAsMagnetInRd,
-	handleCopyOrDownloadMagnet,
-} from '@/utils/addMagnet';
+import { handleAddAsMagnetInAd, handleAddAsMagnetInRd } from '@/utils/addMagnet';
 import { submitAvailability } from '@/utils/availability';
 import { handleCastTvShow } from '@/utils/castApiClient';
+import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import {
 	getColorScale,
@@ -73,6 +70,11 @@ const TvSearch: FunctionComponent = () => {
 	const [totalUncachedCount, setTotalUncachedCount] = useState<number>(0);
 	const [hasMoreResults, setHasMoreResults] = useState(true);
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
+	const [shouldDownloadMagnets] = useState(
+		() =>
+			typeof window !== 'undefined' &&
+			window.localStorage.getItem('settings:downloadMagnets') === 'true'
+	);
 
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
@@ -308,7 +310,7 @@ const TvSearch: FunctionComponent = () => {
 			speed: 0,
 			seeders: 0,
 		} as TorrentInfoResponse;
-		rdKey && showInfoForRD(player, rdKey!, info, imdbid as string, 'tv');
+		rdKey && showInfoForRD(player, rdKey!, info, imdbid as string, 'tv', shouldDownloadMagnets);
 	};
 
 	async function handleCast(hash: string, fileIds: string[]) {
@@ -539,7 +541,7 @@ const TvSearch: FunctionComponent = () => {
 				hashAndProgress={hashAndProgress}
 				handleShowInfo={handleShowInfo}
 				handleCast={handleCast}
-				handleCopyMagnet={handleCopyOrDownloadMagnet}
+				handleCopyMagnet={(hash) => handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)}
 				addRd={addRd}
 				addAd={addAd}
 				deleteRd={deleteRd}

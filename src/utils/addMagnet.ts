@@ -4,7 +4,6 @@ import { TorrentInfoResponse } from '@/services/types';
 import { UserTorrent } from '@/torrent/userTorrent';
 import toast from 'react-hot-toast';
 import { handleDeleteRdTorrent } from './deleteTorrent';
-import { downloadMagnetFile } from './downloadMagnet';
 import { isVideo } from './selectable';
 import { magnetToastOptions } from './toastOptions';
 
@@ -140,19 +139,5 @@ export const handleRestartTorrent = async (adKey: string, id: string) => {
 		console.error(error);
 		toast.error(`Error restarting torrent (${id}) ${error}`, magnetToastOptions);
 		throw error;
-	}
-};
-
-export const handleCopyOrDownloadMagnet = (hash: string) => {
-	const shouldDownloadMagnets =
-		typeof window !== 'undefined' &&
-		window.localStorage.getItem('settings:downloadMagnets') === 'true';
-	if (shouldDownloadMagnets) {
-		downloadMagnetFile(hash);
-		toast.success('Magnet file downloaded', magnetToastOptions);
-	} else {
-		const magnetLink = `magnet:?xt=urn:btih:${hash}`;
-		navigator.clipboard.writeText(magnetLink);
-		toast.success('Magnet link copied to clipboard', magnetToastOptions);
 	}
 };
