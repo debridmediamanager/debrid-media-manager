@@ -97,10 +97,6 @@ const defaultLabels = {
 	exportLinks: 'Get Links',
 };
 
-if (window.localStorage.getItem('settings:downloadMagnets') === 'true') {
-	defaultLabels.magnet = 'Download';
-}
-
 // UI Components
 const renderButton = (
 	type: keyof typeof buttonStyles,
@@ -289,7 +285,8 @@ export const showInfoForRD = async (
 	rdKey: string,
 	info: TorrentInfoResponse,
 	imdbId: string = '',
-	mediaType: 'movie' | 'tv' = 'movie'
+	mediaType: 'movie' | 'tv' = 'movie',
+	shouldDownloadMagnets?: boolean
 ): Promise<void> => {
 	let warning = '';
 	const isIntact =
@@ -321,7 +318,7 @@ export const showInfoForRD = async (
     <div class="mb-4 flex justify-center items-center flex-wrap">
         ${renderButton('share', { onClick: `window.open('${await handleShare(torrent)}')` })}
         ${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteRdTorrent('${rdKey}', 'rd:${info.id}')` })}
-        ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
+        ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}', ${shouldDownloadMagnets})`, text: shouldDownloadMagnets ? 'Download' : 'Copy' })}
         ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleReinsertTorrentinRd('${rdKey}', { id: 'rd:${info.id}', hash: '${info.hash}' }, true)` })}
         ${
 			rdKey
@@ -418,7 +415,8 @@ export const showInfoForAD = async (
 	app: string,
 	rdKey: string,
 	info: MagnetStatus,
-	imdbId: string = ''
+	imdbId: string = '',
+	shouldDownloadMagnets?: boolean
 ): Promise<void> => {
 	const torrent = {
 		id: `ad:${info.id}`,
@@ -434,7 +432,7 @@ export const showInfoForAD = async (
         <div class="mb-4 flex justify-center items-center flex-wrap">
             ${renderButton('share', { onClick: `window.open('${await handleShare(torrent)}')` })}
             ${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteAdTorrent('${rdKey}', 'ad:${info.id}')` })}
-            ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}')` })}
+            ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}', ${shouldDownloadMagnets})`, text: shouldDownloadMagnets ? 'Download' : 'Copy' })}
             ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleRestartTorrent('${rdKey}', '${info.id}')` })}
             ${info.links.length > 1 ? renderButton('downloadAll', { onClick: `window.open('${downloadAllLink}')` }) : ''}
             ${

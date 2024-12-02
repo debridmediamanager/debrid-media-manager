@@ -8,12 +8,12 @@ import {
 	handleAddAsMagnetInRd,
 	handleAddMultipleHashesInAd,
 	handleAddMultipleHashesInRd,
-	handleCopyOrDownloadMagnet,
 	handleReinsertTorrentinRd,
 	handleRestartTorrent,
 	handleSelectFilesInRd,
 } from '@/utils/addMagnet';
 import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
+import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { extractHashes } from '@/utils/extractHashes';
@@ -98,6 +98,11 @@ function TorrentsPage() {
 
 	const [uncachedRdHashes, setUncachedRdHashes] = useState<Set<string>>(new Set());
 	const [uncachedAdIDs, setUncachedAdIDs] = useState<string[]>([]);
+	const [shouldDownloadMagnets] = useState(
+		() =>
+			typeof window !== 'undefined' &&
+			window.localStorage.getItem('settings:downloadMagnets') === 'true'
+	);
 
 	// filter counts
 	const [slowCount, setSlowCount] = useState(0);
@@ -1781,7 +1786,10 @@ function TorrentsPage() {
 												className="mb-2 mr-2 cursor-pointer text-pink-500"
 												onClick={(e) => {
 													e.stopPropagation();
-													handleCopyOrDownloadMagnet(torrent.hash);
+													handleCopyOrDownloadMagnet(
+														torrent.hash,
+														shouldDownloadMagnets
+													);
 												}}
 											>
 												<FaMagnet />
