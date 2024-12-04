@@ -115,3 +115,22 @@ model AvailableFile {
 
   @@index([hash])
 }
+
+model User {
+  id                  Int                  @id @default(autoincrement())
+  patreonId           String?              @unique
+  githubId            String?              @unique
+  discordId           String?              @unique
+
+  patreonSubscription PatreonSubscription?
+}
+
+model PatreonSubscription {
+  id            Int      @id @default(autoincrement())
+  tier          String
+  perks         String
+  subscriptionDate DateTime @default(now())
+
+  userId        Int      @unique
+  user          User     @relation(fields: [userId], references: [id])
+}
