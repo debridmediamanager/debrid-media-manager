@@ -79,6 +79,9 @@ const nextConfig = {
 		allDebridAgent: 'debridMediaManager',
 		traktClientId: '8a7455d06804b07fa25e27454706c6f2107b6fe5ed2ad805eff3b456a17e79f0',
 		torboxHostname: 'https://api.torbox.app',
+		patreonClientId: process.env.PATREON_CLIENT_ID,
+		githubClientId: process.env.GITHUB_CLIENT_ID,
+		discordClientId: process.env.DISCORD_CLIENT_ID,
 	},
 	webpack: (config) => {
 		config.cache = false;
