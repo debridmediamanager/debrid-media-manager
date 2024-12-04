@@ -267,16 +267,19 @@ function ManagePage() {
 			/>
 			<Toaster position="bottom-right" />
 
-			<div className="mb-6 flex items-center justify-between gap-4">
-				<h1 className="text-xl font-bold text-white">DMM Cast - Manage Casted Links</h1>
-				{selectedLinks.size > 0 && (
+			{selectedLinks.size > 0 && (
+				<div className="fixed left-0 right-0 top-0 z-50 flex justify-center bg-gray-900/95 p-4 backdrop-blur">
 					<button
 						onClick={handleDeleteSelected}
 						className="haptic-sm rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
 					>
 						Delete Selected ({selectedLinks.size})
 					</button>
-				)}
+				</div>
+			)}
+
+			<div className="mb-6 flex flex-col items-center gap-4">
+				<h1 className="text-xl font-bold text-white">DMM Cast - Manage Casted Links</h1>
 			</div>
 
 			{loading ? (
@@ -291,7 +294,7 @@ function ManagePage() {
 						return (
 							<div key={imdbId} className="rounded-lg bg-gray-800 p-4">
 								<div className="mb-4 flex items-center justify-between">
-									<div className="flex items-center gap-2">
+									<label className="flex cursor-pointer items-center gap-2">
 										<input
 											type="checkbox"
 											checked={allSelected}
@@ -307,12 +310,23 @@ function ManagePage() {
 										<span className="text-sm font-medium text-white">
 											Select All
 										</span>
-									</div>
+									</label>
+									<Link
+										href={`/x/${imdbId}`}
+										className="haptic-sm rounded bg-purple-600 px-3 py-1 text-sm text-white hover:bg-purple-700"
+									>
+										Cast other torrents
+									</Link>
 								</div>
 								<div className="mb-4 flex justify-center">
-									<Poster imdbId={imdbId} title={imdbId} />
+									<div
+										className="cursor-pointer"
+										onClick={() => toggleGroupSelection(imdbId)}
+									>
+										<Poster imdbId={imdbId} title={imdbId} />
+									</div>
 								</div>
-								<div className="space-y-2">
+								<div className="max-h-[300px] space-y-2 overflow-y-auto">
 									{links.map((link) => {
 										const episodeLabel = formatEpisodeLabel(link.imdbId);
 										return (
