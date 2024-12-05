@@ -1,5 +1,5 @@
-import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import LibraryTorrentRow from '@/components/LibraryTorrentRow';
+import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { getTorrentInfo, proxyUnrestrictLink } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
@@ -24,11 +24,9 @@ import { checkForUncachedInRd } from '@/utils/instantChecks';
 import { localRestore } from '@/utils/localRestore';
 import { normalize } from '@/utils/mediaId';
 import { applyQuickSearch } from '@/utils/quickSearch';
-import { torrentPrefix } from '@/utils/results';
 import { checkArithmeticSequenceInFilenames, isVideo } from '@/utils/selectable';
 import { defaultPlayer } from '@/utils/settings';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
-import { shortenNumber } from '@/utils/speed';
 import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { filenameParse } from '@ctrl/video-filename-parser';
@@ -39,15 +37,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import {
-	FaArrowLeft,
-	FaArrowRight,
-	FaMagnet,
-	FaRecycle,
-	FaSeedling,
-	FaShare,
-	FaTrash,
-} from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
