@@ -14,8 +14,8 @@ const ONE_GIGABYTE = 1024 * 1024 * 1024;
 
 interface TorrentRowProps {
 	torrent: UserTorrent;
-	rdKey?: string;
-	adKey?: string;
+	rdKey: string | null;
+	adKey: string | null;
 	shouldDownloadMagnets: boolean;
 	hashGrouping: Record<string, number>;
 	titleGrouping: Record<string, number>;
