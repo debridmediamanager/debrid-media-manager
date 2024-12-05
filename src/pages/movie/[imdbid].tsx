@@ -318,6 +318,39 @@ const MovieSearch: FunctionComponent = () => {
 			showInfoForRD(player, rdKey, info, imdbid as string, 'movie', shouldDownloadMagnets);
 	};
 
+	async function handleAvailabilityTest() {
+		const nonAvailableResults = searchResults.filter((r) => !r.rdAvailable);
+
+		const processInBatches = async () => {
+			for (let i = 0; i < nonAvailableResults.length; i += 2) {
+				const batch = nonAvailableResults.slice(i, i + 2);
+				await Promise.all(
+					batch.map(async (result) => {
+						await addRd(result.hash);
+						await deleteRd(result.hash);
+					})
+				);
+			}
+		};
+
+		await toast.promise(
+			processInBatches(),
+			{
+				loading: `Testing availability...`,
+				success: `Completed availability test for ${nonAvailableResults.length} results`,
+				error: 'Failed to complete availability test',
+			},
+			{
+				loading: {
+					duration: Infinity,
+				},
+				success: {
+					duration: 5000,
+				},
+			}
+		);
+	}
+
 	async function handleCast(hash: string) {
 		await toast.promise(
 			handleCastMovie(imdbid as string, rdKey!, hash),
@@ -428,6 +461,12 @@ const MovieSearch: FunctionComponent = () => {
 								}
 							>
 								<b>🔮Stremio</b>
+							</button>
+							<button
+								className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50"
+								onClick={handleAvailabilityTest}
+							>
+								<b>🔍Availability Test</b>
 							</button>
 						</>
 					)}
