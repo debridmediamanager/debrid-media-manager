@@ -471,6 +471,16 @@ const TvSearch: FunctionComponent = () => {
 							>
 								<b>⚡Instant RD</b>
 							</button>
+						</>
+					)}
+					{rdKey && (
+						<>
+							<button
+								className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50"
+								onClick={handleAvailabilityTest}
+							>
+								<b>🕵🏻Scan Available</b>
+							</button>
 							<button
 								className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
 								onClick={() =>
@@ -480,12 +490,6 @@ const TvSearch: FunctionComponent = () => {
 								}
 							>
 								<b>🔮Stremio</b>
-							</button>
-							<button
-								className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50"
-								onClick={handleAvailabilityTest}
-							>
-								<b>🕵🏻Scan Available</b>
 							</button>
 						</>
 					)}
