@@ -1,7 +1,7 @@
 import LibraryActionButtons from '@/components/LibraryActionButtons';
-import LibrarySize from '@/components/LibrarySize';
 import LibraryHelpText from '@/components/LibraryHelpText';
 import LibraryMenuButtons from '@/components/LibraryMenuButtons';
+import LibrarySize from '@/components/LibrarySize';
 import LibraryTableHeader from '@/components/LibraryTableHeader';
 import LibraryTorrentRow from '@/components/LibraryTorrentRow';
 import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
@@ -26,6 +26,9 @@ import { extractHashes } from '@/utils/extractHashes';
 import { fetchAllDebrid, fetchRealDebrid, getRdStatus } from '@/utils/fetchTorrents';
 import { generateHashList, handleShare } from '@/utils/hashList';
 import { checkForUncachedInRd } from '@/utils/instantChecks';
+import { initializeLibrary } from '@/utils/libraryInitialization';
+import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
+import { handleChangeType } from '@/utils/libraryTypeManagement';
 import { localRestore } from '@/utils/localRestore';
 import { normalize } from '@/utils/mediaId';
 import { applyQuickSearch } from '@/utils/quickSearch';
@@ -44,7 +47,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 
-const ONE_GIGABYTE = 1024 * 1024 * 1024;
 const ITEMS_PER_PAGE = 100;
 
 interface SortBy {
@@ -598,19 +600,6 @@ function TorrentsPage() {
 		};
 	}
 
-	async function selectPlayableFiles(torrents: UserTorrent[]) {
-		const waitingForSelection = torrents
-			.filter((t) => t.serviceStatus === 'waiting_files_selection')
-			.map(wrapSelectFilesFn);
-		const [results, errors] = await runConcurrentFunctions(waitingForSelection, 4, 0);
-		if (errors.length) {
-			toast.error(`Error selecting files on ${errors.length} torrents`, libraryToastOptions);
-		}
-		if (results.length) {
-			toast.success(`Started downloading ${results.length} torrents`, libraryToastOptions);
-		}
-	}
-
 	async function handleReinsertTorrents() {
 		if (
 			relevantList.length > 0 &&
@@ -633,7 +622,7 @@ function TorrentsPage() {
 			toast.error(`Error reinserting ${errors.length} torrents`, magnetToastOptions);
 		}
 		if (results.length) {
-			resetSelection();
+			resetSelection(setSelectedTorrents);
 			await fetchLatestRDTorrents(Math.ceil(relevantList.length * 1.1));
 			await fetchLatestADTorrents();
 			toast.success(`Reinserted ${results.length} torrents`, magnetToastOptions);
@@ -675,7 +664,7 @@ function TorrentsPage() {
 		)
 			return;
 		await deleteFilteredTorrents(relevantList, wrapDeleteFn);
-		resetSelection();
+		resetSelection(setSelectedTorrents);
 	}
 
 	function wrapDeleteFn(t: UserTorrent) {
@@ -1001,8 +990,6 @@ function TorrentsPage() {
 		router.push(`/library?page=1`);
 	};
 
-
-
 	const handleShowInfoForRD = async (t: UserTorrent) => {
 		const info = await getTorrentInfo(rdKey!, t.id.substring(3));
 
@@ -1187,7 +1174,7 @@ function TorrentsPage() {
 			<div className="mb-1 flex items-center justify-between">
 				<h1 className="text-xl font-bold text-white">
 					Library 📚{' '}
-					<LibrarySize 
+					<LibrarySize
 						torrentCount={userTorrentsList.length}
 						totalBytes={totalBytes}
 						isLoading={rdSyncing || adSyncing}
@@ -1282,7 +1269,13 @@ function TorrentsPage() {
 									titleFilter={titleFilter as string}
 									tvTitleFilter={tvTitleFilter as string}
 									isSelected={selectedTorrents.has(torrent.id)}
-									onSelect={(id) => handleSelectTorrent(id, selectedTorrents, setSelectedTorrents)}
+									onSelect={(id) =>
+										handleSelectTorrent(
+											id,
+											selectedTorrents,
+											setSelectedTorrents
+										)
+									}
 									onDelete={async (id) => {
 										setUserTorrentsList((prevList) =>
 											prevList.filter((prevTor) => prevTor.id !== id)
@@ -1298,7 +1291,9 @@ function TorrentsPage() {
 											? handleShowInfoForRD(t)
 											: handleShowInfoForAD(t)
 									}
-									onTypeChange={(t) => handleChangeType(t, setUserTorrentsList, torrentDB)}
+									onTypeChange={(t) =>
+										handleChangeType(t, setUserTorrentsList, torrentDB)
+									}
 								/>
 							))}
 						</tbody>
