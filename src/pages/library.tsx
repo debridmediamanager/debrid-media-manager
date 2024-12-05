@@ -1001,43 +1001,7 @@ function TorrentsPage() {
 		router.push(`/library?page=1`);
 	};
 
-	const selectShown = () => {
-		setSelectedTorrents((prev) => {
-			currentPageData().forEach((t) => prev.add(t.id));
-			return new Set(prev);
-		});
-	};
 
-	const resetSelection = () => {
-		setSelectedTorrents(new Set());
-	};
-
-	const handleSelectTorrent = async (id: string) => {
-		if (selectedTorrents.has(id)) {
-			setSelectedTorrents((prev) => {
-				prev.delete(id);
-				return new Set(prev);
-			});
-		} else {
-			setSelectedTorrents((prev) => {
-				prev.add(id);
-				return new Set(prev);
-			});
-		}
-	};
-
-	const handleChangeType = async (t: UserTorrent) => {
-		t.mediaType = t.mediaType === 'movie' ? 'tv' : t.mediaType === 'tv' ? 'other' : 'movie';
-		setUserTorrentsList((prev) => {
-			const newList = [...prev];
-			const idx = prev.findIndex((i) => i.id === t.id);
-			if (idx >= 0) {
-				newList[idx].mediaType = t.mediaType;
-			}
-			return newList;
-		});
-		await torrentDB.add(t);
-	};
 
 	const handleShowInfoForRD = async (t: UserTorrent) => {
 		const info = await getTorrentInfo(rdKey!, t.id.substring(3));
@@ -1202,20 +1166,16 @@ function TorrentsPage() {
 
 	// Modify initialize function to work offline
 	async function initialize() {
-		await torrentDB.initializeDB();
-		let torrents = await torrentDB.all();
-		if (torrents.length) {
-			setUserTorrentsList((prev) => {
-				const deleted = prev.filter((p) => !torrents.some((t) => t.id === p.id));
-				prev = prev.filter((p) => !deleted.some((d) => d.id === p.id));
-				const newTorrents = torrents.filter((t) => !prev.some((p) => p.id === t.id));
-				return [...prev, ...newTorrents];
-			});
-			setLoading(false);
-		}
-
-		await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents()]);
-		await selectPlayableFiles(userTorrentsList);
+		await initializeLibrary(
+			torrentDB,
+			setUserTorrentsList,
+			setLoading,
+			rdKey,
+			adKey,
+			fetchLatestRDTorrents,
+			fetchLatestADTorrents,
+			userTorrentsList
+		);
 	}
 
 	return (
@@ -1269,8 +1229,8 @@ function TorrentsPage() {
 				failedCount={failedCount}
 			/>
 			<LibraryActionButtons
-				onSelectShown={selectShown}
-				onResetSelection={resetSelection}
+				onSelectShown={() => selectShown(currentPageData(), setSelectedTorrents)}
+				onResetSelection={() => resetSelection(setSelectedTorrents)}
 				onReinsertTorrents={handleReinsertTorrents}
 				onGenerateHashlist={handleGenerateHashlist}
 				onDeleteShownTorrents={handleDeleteShownTorrents}
@@ -1322,7 +1282,7 @@ function TorrentsPage() {
 									titleFilter={titleFilter as string}
 									tvTitleFilter={tvTitleFilter as string}
 									isSelected={selectedTorrents.has(torrent.id)}
-									onSelect={handleSelectTorrent}
+									onSelect={(id) => handleSelectTorrent(id, selectedTorrents, setSelectedTorrents)}
 									onDelete={async (id) => {
 										setUserTorrentsList((prevList) =>
 											prevList.filter((prevTor) => prevTor.id !== id)
@@ -1338,7 +1298,7 @@ function TorrentsPage() {
 											? handleShowInfoForRD(t)
 											: handleShowInfoForAD(t)
 									}
-									onTypeChange={handleChangeType}
+									onTypeChange={(t) => handleChangeType(t, setUserTorrentsList, torrentDB)}
 								/>
 							))}
 						</tbody>
