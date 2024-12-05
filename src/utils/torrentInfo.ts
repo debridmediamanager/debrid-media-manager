@@ -7,7 +7,7 @@ import { every, some } from 'lodash';
 import { getRdStatus } from './fetchTorrents';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
 
-export async function handleShowInfoForRD(
+export async function handleShowInfoForRD2(
 	t: UserTorrent,
 	rdKey: string,
 	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
