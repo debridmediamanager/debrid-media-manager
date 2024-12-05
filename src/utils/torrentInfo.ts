@@ -1,6 +1,8 @@
 import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import { getTorrentInfo } from '@/services/realDebrid';
+import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
+import { Dispatch, SetStateAction } from 'react';
 import { defaultPlayer } from '@/utils/settings';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import { every, some } from 'lodash';
@@ -16,7 +18,8 @@ export async function handleShowInfoForRD(
 	t: UserTorrent,
 	rdKey: string,
 	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
-	torrentDB: any
+	torrentDB: UserTorrentDB,
+	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>
 ) {
 	const info = await getTorrentInfo(rdKey, t.id.substring(3));
 
@@ -144,9 +147,9 @@ export async function handleShowInfoForRD(
 export function handleShowInfoForAD(
 	t: UserTorrent,
 	rdKey: string,
-	setUserTorrentsList: any,
-	torrentDB: any,
-	setSelectedTorrents: any
+	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
+	torrentDB: UserTorrentDB,
+	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>
 ) {
 	let player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	if (player === 'realdebrid') {
