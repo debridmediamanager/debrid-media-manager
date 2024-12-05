@@ -1,9 +1,9 @@
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
-import { toast } from 'react-hot-toast';
 import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
 import { libraryToastOptions } from '@/utils/toastOptions';
 import { Dispatch, SetStateAction } from 'react';
+import { toast } from 'react-hot-toast';
 
 export async function fetchLatestRDTorrents(
 	rdKey: string | null,
@@ -20,7 +20,11 @@ export async function fetchLatestRDTorrents(
 	);
 	const inProgressIds = new Set(
 		oldTorrents
-			.filter((t) => t.status === UserTorrentStatus.waiting || t.status === UserTorrentStatus.downloading)
+			.filter(
+				(t) =>
+					t.status === UserTorrentStatus.waiting ||
+					t.status === UserTorrentStatus.downloading
+			)
 			.map((t) => t.id)
 			.filter((id) => id.startsWith('rd:'))
 	);
@@ -104,7 +108,11 @@ export async function fetchLatestADTorrents(
 	);
 	const inProgressIds = new Set(
 		oldTorrents
-			.filter((t) => t.status === UserTorrentStatus.waiting || t.status === UserTorrentStatus.downloading)
+			.filter(
+				(t) =>
+					t.status === UserTorrentStatus.waiting ||
+					t.status === UserTorrentStatus.downloading
+			)
 			.map((t) => t.id)
 			.filter((id) => id.startsWith('ad:'))
 	);

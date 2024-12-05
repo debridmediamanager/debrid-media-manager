@@ -2,16 +2,17 @@ import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import { getTorrentInfo } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
-import { Dispatch, SetStateAction } from 'react';
 import { defaultPlayer } from '@/utils/settings';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import { every, some } from 'lodash';
+import { Dispatch, SetStateAction } from 'react';
 import Swal from 'sweetalert2';
 import { handleReinsertTorrentinRd } from './addMagnet';
 import { handleCopyOrDownloadMagnet } from './copyMagnet';
 import { handleDeleteRdTorrent } from './deleteTorrent';
 import { getRdStatus } from './fetchTorrents';
 import { handleShare } from './hashList';
+import { fetchLatestRDTorrents } from './libraryFetching';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
 
 export async function handleShowInfoForRD(
@@ -126,7 +127,15 @@ export async function handleShowInfoForRD(
 		reload: boolean
 	) => {
 		await handleReinsertTorrentinRd(key, torrent, reload);
-		await fetchLatestRDTorrents(2);
+		await fetchLatestRDTorrents(
+			rdKey,
+			torrentDB,
+			setUserTorrentsList,
+			(loading) => console.log('Loading:', loading),
+			(syncing) => console.log('Syncing:', syncing),
+			setSelectedTorrents,
+			2
+		);
 		setUserTorrentsList((prev) => prev.filter((t) => t.id !== torrent.id));
 		await torrentDB.deleteById(torrent.id);
 		setSelectedTorrents((prev) => {
