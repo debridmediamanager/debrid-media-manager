@@ -322,8 +322,8 @@ const MovieSearch: FunctionComponent = () => {
 		const nonAvailableResults = searchResults.filter((r) => !r.rdAvailable);
 
 		const processInBatches = async () => {
-			for (let i = 0; i < nonAvailableResults.length; i += 2) {
-				const batch = nonAvailableResults.slice(i, i + 2);
+			for (let i = 0; i < nonAvailableResults.length; i += 3) {
+				const batch = nonAvailableResults.slice(i, i + 3);
 				await Promise.all(
 					batch.map(async (result) => {
 						await addRd(result.hash);
@@ -336,8 +336,8 @@ const MovieSearch: FunctionComponent = () => {
 		await toast.promise(
 			processInBatches(),
 			{
-				loading: `Testing availability...`,
-				success: `Completed availability test for ${nonAvailableResults.length} results`,
+				loading: `Testing availability (do not close until done)...`,
+				success: `Completed availability test for ${nonAvailableResults.length} results. Reloading the page.`,
 				error: 'Failed to complete availability test',
 			},
 			{
@@ -349,6 +349,7 @@ const MovieSearch: FunctionComponent = () => {
 				},
 			}
 		);
+		window.location.reload();
 	}
 
 	async function handleCast(hash: string) {
@@ -466,7 +467,7 @@ const MovieSearch: FunctionComponent = () => {
 								className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50"
 								onClick={handleAvailabilityTest}
 							>
-								<b>🔍Availability Test</b>
+								<b>🕵🏻Scan Available</b>
 							</button>
 						</>
 					)}
