@@ -3,7 +3,6 @@ import { handleReinsertTorrentinRd, handleRestartTorrent } from '@/utils/addMagn
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { handleShare } from '@/utils/hashList';
-import { handleShowInfoForRD } from '@/utils/showInfoForRD';
 import { normalize } from '@/utils/mediaId';
 import { torrentPrefix } from '@/utils/results';
 import { shortenNumber } from '@/utils/speed';

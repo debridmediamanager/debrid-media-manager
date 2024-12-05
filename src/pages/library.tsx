@@ -4,9 +4,8 @@ import LibraryMenuButtons from '@/components/LibraryMenuButtons';
 import LibrarySize from '@/components/LibrarySize';
 import LibraryTableHeader from '@/components/LibraryTableHeader';
 import LibraryTorrentRow from '@/components/LibraryTorrentRow';
-import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
-import { getTorrentInfo, proxyUnrestrictLink } from '@/services/realDebrid';
+import { proxyUnrestrictLink } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
@@ -19,12 +18,11 @@ import {
 	handleSelectFilesInRd,
 } from '@/utils/addMagnet';
 import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
-import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { extractHashes } from '@/utils/extractHashes';
-import { fetchAllDebrid, fetchRealDebrid, getRdStatus } from '@/utils/fetchTorrents';
-import { generateHashList, handleShare } from '@/utils/hashList';
+import { fetchAllDebrid, fetchRealDebrid } from '@/utils/fetchTorrents';
+import { generateHashList } from '@/utils/hashList';
 import { checkForUncachedInRd } from '@/utils/instantChecks';
 import { initializeLibrary } from '@/utils/libraryInitialization';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
@@ -32,15 +30,10 @@ import { handleChangeType } from '@/utils/libraryTypeManagement';
 import { localRestore } from '@/utils/localRestore';
 import { normalize } from '@/utils/mediaId';
 import { applyQuickSearch } from '@/utils/quickSearch';
-import { checkArithmeticSequenceInFilenames, isVideo } from '@/utils/selectable';
-import { defaultPlayer } from '@/utils/settings';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';
-import { handleShowInfoForRD2 } from '@/utils/torrentInfo';
 import { withAuth } from '@/utils/withAuth';
-import { filenameParse } from '@ctrl/video-filename-parser';
 import { saveAs } from 'file-saver';
-import { every, some } from 'lodash';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -991,7 +984,6 @@ function TorrentsPage() {
 		router.push(`/library?page=1`);
 	};
 
-
 	// Modify initialize function to work offline
 	async function initialize() {
 		await initializeLibrary(
@@ -1129,8 +1121,20 @@ function TorrentsPage() {
 									}}
 									onShowInfo={(t) =>
 										t.id.startsWith('rd:')
-											? handleShowInfoForRD(t, rdKey!, setUserTorrentsList, torrentDB, setSelectedTorrents)
-											: handleShowInfoForAD(t, rdKey!, setUserTorrentsList, torrentDB, setSelectedTorrents)
+											? handleShowInfoForRD(
+													t,
+													rdKey!,
+													setUserTorrentsList,
+													torrentDB,
+													setSelectedTorrents
+												)
+											: handleShowInfoForAD(
+													t,
+													rdKey!,
+													setUserTorrentsList,
+													torrentDB,
+													setSelectedTorrents
+												)
 									}
 									onTypeChange={(t) =>
 										handleChangeType(t, setUserTorrentsList, torrentDB)

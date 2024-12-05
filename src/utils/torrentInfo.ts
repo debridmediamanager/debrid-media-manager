@@ -4,7 +4,12 @@ import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { defaultPlayer } from '@/utils/settings';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import { every, some } from 'lodash';
+import Swal from 'sweetalert2';
+import { handleReinsertTorrentinRd } from './addMagnet';
+import { handleCopyOrDownloadMagnet } from './copyMagnet';
+import { handleDeleteRdTorrent } from './deleteTorrent';
 import { getRdStatus } from './fetchTorrents';
+import { handleShare } from './hashList';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
 
 export async function handleShowInfoForRD(
@@ -136,7 +141,13 @@ export async function handleShowInfoForRD(
 	showInfoForRD(window.localStorage.getItem('settings:player') || defaultPlayer, rdKey, info);
 }
 
-export function handleShowInfoForAD(t: UserTorrent, rdKey: string, setUserTorrentsList: any, torrentDB: any, setSelectedTorrents: any) {
+export function handleShowInfoForAD(
+	t: UserTorrent,
+	rdKey: string,
+	setUserTorrentsList: any,
+	torrentDB: any,
+	setSelectedTorrents: any
+) {
 	let player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	if (player === 'realdebrid') {
 		alert('No player selected');
