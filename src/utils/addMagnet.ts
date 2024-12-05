@@ -32,6 +32,11 @@ export const handleAddAsMagnetInRd = async (
 			await new Promise((resolve) => setTimeout(resolve, 5000));
 			await handleAddAsMagnetInRd(rdKey, hash, callback);
 			return;
+		} else if (error instanceof AxiosError && error.response?.status === 503) {
+			toast.error('Cannot add torrent. Infringing files are blocked by RD.', {
+				...magnetToastOptions,
+			});
+			return;
 		}
 		console.error(error);
 		toast.error(`There was an error adding hash: ${error}`, magnetToastOptions);
