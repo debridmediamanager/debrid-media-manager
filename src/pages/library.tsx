@@ -21,9 +21,12 @@ import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { extractHashes } from '@/utils/extractHashes';
-import { fetchLatestRDTorrents as fetchLatestRDTorrentsUtil, fetchLatestADTorrents as fetchLatestADTorrentsUtil } from '@/utils/libraryFetching';
 import { generateHashList } from '@/utils/hashList';
 import { checkForUncachedInRd } from '@/utils/instantChecks';
+import {
+	fetchLatestADTorrents as fetchLatestADTorrentsUtil,
+	fetchLatestRDTorrents as fetchLatestRDTorrentsUtil,
+} from '@/utils/libraryFetching';
 import { initializeLibrary } from '@/utils/libraryInitialization';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
 import { handleChangeType } from '@/utils/libraryTypeManagement';
@@ -32,6 +35,7 @@ import { normalize } from '@/utils/mediaId';
 import { applyQuickSearch } from '@/utils/quickSearch';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';
+import { handleShowInfoForAD, handleShowInfoForRD } from '@/utils/torrentInfo';
 import { withAuth } from '@/utils/withAuth';
 import { saveAs } from 'file-saver';
 import Head from 'next/head';
