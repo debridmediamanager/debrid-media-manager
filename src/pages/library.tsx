@@ -36,6 +36,7 @@ import { checkArithmeticSequenceInFilenames, isVideo } from '@/utils/selectable'
 import { defaultPlayer } from '@/utils/settings';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';
+import { handleShowInfoForRD2 } from '@/utils/torrentInfo';
 import { withAuth } from '@/utils/withAuth';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import { saveAs } from 'file-saver';
@@ -1025,7 +1026,7 @@ function TorrentsPage() {
 			Swal.close();
 		};
 
-		await handleShowInfoForRD(t, rdKey!, setUserTorrentsList, torrentDB);
+		await handleShowInfoForRD2(t, rdKey!, setUserTorrentsList, torrentDB);
 	};
 
 	const handleShowInfoForAD = async (t: UserTorrent) => {
