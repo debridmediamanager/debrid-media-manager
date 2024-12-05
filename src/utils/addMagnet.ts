@@ -2,6 +2,7 @@ import { restartMagnet, uploadMagnet } from '@/services/allDebrid';
 import { addHashAsMagnet, getTorrentInfo, selectFiles } from '@/services/realDebrid';
 import { TorrentInfoResponse } from '@/services/types';
 import { UserTorrent } from '@/torrent/userTorrent';
+import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { handleDeleteRdTorrent } from './deleteTorrent';
 import { isVideo } from './selectable';
@@ -22,7 +23,16 @@ export const handleAddAsMagnetInRd = async (
 			toast.error(`Torrent added but status is ${response.status}`, magnetToastOptions);
 		}
 		if (callback) await callback(response);
-	} catch (error) {
+	} catch (error: unknown) {
+		if (error instanceof AxiosError && error.response?.status === 509) {
+			toast.error('Your RD download slots are full. Retrying in 5 seconds...', {
+				...magnetToastOptions,
+				duration: 5000,
+			});
+			await new Promise((resolve) => setTimeout(resolve, 5000));
+			await handleAddAsMagnetInRd(rdKey, hash, callback);
+			return;
+		}
 		console.error(error);
 		toast.error(`There was an error adding hash: ${error}`, magnetToastOptions);
 	}
