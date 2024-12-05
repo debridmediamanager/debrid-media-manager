@@ -1,5 +1,8 @@
-import LibraryTorrentRow from '@/components/LibraryTorrentRow';
+import LibraryActionButtons from '@/components/LibraryActionButtons';
+import LibraryHelpText from '@/components/LibraryHelpText';
+import LibraryMenuButtons from '@/components/LibraryMenuButtons';
 import LibraryTableHeader from '@/components/LibraryTableHeader';
+import LibraryTorrentRow from '@/components/LibraryTorrentRow';
 import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { getTorrentInfo, proxyUnrestrictLink } from '@/services/realDebrid';
@@ -38,7 +41,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
@@ -1294,8 +1296,13 @@ function TorrentsPage() {
 				selectedTorrentsSize={selectedTorrents.size}
 				rdKey={rdKey}
 				adKey={adKey}
-				showDedupe={router.query.status === 'sametitle' || (titleFilter && filteredList.length > 1)}
-				showHashCombine={router.query.status === 'samehash' || (hashFilter && filteredList.length > 1)}
+				showDedupe={
+					router.query.status === 'sametitle' ||
+					(!!titleFilter && filteredList.length > 1)
+				}
+				showHashCombine={
+					router.query.status === 'samehash' || (!!hashFilter && filteredList.length > 1)
+				}
 			/>
 			<LibraryHelpText helpText={helpText} onHide={() => setHelpText('hide')} />
 			<div className="overflow-x-auto">
