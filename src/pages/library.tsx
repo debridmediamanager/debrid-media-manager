@@ -991,75 +991,6 @@ function TorrentsPage() {
 		router.push(`/library?page=1`);
 	};
 
-	const handleShowInfoForRD = async (t: UserTorrent) => {
-		// Pass handlers to window object
-		(window as any).handleShare = handleShare;
-		(window as any).handleDeleteRdTorrent = async (key: string, id: string) => {
-			await handleDeleteRdTorrent(key, id);
-			setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== id));
-			await torrentDB.deleteById(id);
-			setSelectedTorrents((prev) => {
-				prev.delete(id);
-				return new Set(prev);
-			});
-			Swal.close();
-		};
-		(window as any).handleCopyMagnet = handleCopyOrDownloadMagnet;
-		(window as any).handleReinsertTorrentinRd = async (
-			key: string,
-			torrent: UserTorrent,
-			reload: boolean
-		) => {
-			await handleReinsertTorrentinRd(key, torrent, reload);
-			await fetchLatestRDTorrents(2);
-			setUserTorrentsList((prev) => prev.filter((t) => t.id !== torrent.id));
-			await torrentDB.deleteById(torrent.id);
-			setSelectedTorrents((prev) => {
-				prev.delete(torrent.id);
-				return new Set(prev);
-			});
-			Swal.close();
-		};
-		(window as any).closePopup = Swal.close;
-		(window as any).saveSelection = async (key: string, hash: string, fileIDs: string[]) => {
-			console.log('Saving selection', key, hash, fileIDs);
-			Swal.close();
-		};
-
-		await handleShowInfoForRD2(t, rdKey!, setUserTorrentsList, torrentDB);
-	};
-
-	const handleShowInfoForAD = async (t: UserTorrent) => {
-		// Pass handlers to window object
-		(window as any).handleShare = handleShare;
-		(window as any).handleDeleteAdTorrent = async (key: string, id: string) => {
-			await handleDeleteAdTorrent(key, id);
-			setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== id));
-			await torrentDB.deleteById(id);
-			setSelectedTorrents((prev) => {
-				prev.delete(id);
-				return new Set(prev);
-			});
-			Swal.close();
-		};
-		(window as any).handleCopyMagnet = handleCopyOrDownloadMagnet;
-		(window as any).handleRestartTorrent = async (key: string, id: string) => {
-			await handleRestartTorrent(key, id);
-			await fetchLatestADTorrents();
-			Swal.close();
-		};
-		(window as any).closePopup = Swal.close;
-
-		let player = window.localStorage.getItem('settings:player') || defaultPlayer;
-		if (player === 'realdebrid') {
-			alert('No player selected');
-		}
-		showInfoForAD(
-			window.localStorage.getItem('settings:player') || defaultPlayer,
-			rdKey!,
-			t.adData!
-		);
-	};
 
 	// Modify initialize function to work offline
 	async function initialize() {
@@ -1198,8 +1129,8 @@ function TorrentsPage() {
 									}}
 									onShowInfo={(t) =>
 										t.id.startsWith('rd:')
-											? handleShowInfoForRD(t)
-											: handleShowInfoForAD(t)
+											? handleShowInfoForRD(t, rdKey!, setUserTorrentsList, torrentDB, setSelectedTorrents)
+											: handleShowInfoForAD(t, rdKey!, setUserTorrentsList, torrentDB, setSelectedTorrents)
 									}
 									onTypeChange={(t) =>
 										handleChangeType(t, setUserTorrentsList, torrentDB)

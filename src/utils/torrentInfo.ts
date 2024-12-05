@@ -7,7 +7,7 @@ import { every, some } from 'lodash';
 import { getRdStatus } from './fetchTorrents';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
 
-export async function handleShowInfoForRD2(
+export async function handleShowInfoForRD(
 	t: UserTorrent,
 	rdKey: string,
 	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
@@ -99,10 +99,44 @@ export async function handleShowInfoForRD2(
 		await torrentDB.add(t);
 	}
 
+	// Set up window handlers
+	(window as any).handleShare = handleShare;
+	(window as any).handleDeleteRdTorrent = async (key: string, id: string) => {
+		await handleDeleteRdTorrent(key, id);
+		setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== id));
+		await torrentDB.deleteById(id);
+		setSelectedTorrents((prev) => {
+			prev.delete(id);
+			return new Set(prev);
+		});
+		Swal.close();
+	};
+	(window as any).handleCopyMagnet = handleCopyOrDownloadMagnet;
+	(window as any).handleReinsertTorrentinRd = async (
+		key: string,
+		torrent: UserTorrent,
+		reload: boolean
+	) => {
+		await handleReinsertTorrentinRd(key, torrent, reload);
+		await fetchLatestRDTorrents(2);
+		setUserTorrentsList((prev) => prev.filter((t) => t.id !== torrent.id));
+		await torrentDB.deleteById(torrent.id);
+		setSelectedTorrents((prev) => {
+			prev.delete(torrent.id);
+			return new Set(prev);
+		});
+		Swal.close();
+	};
+	(window as any).closePopup = Swal.close;
+	(window as any).saveSelection = async (key: string, hash: string, fileIDs: string[]) => {
+		console.log('Saving selection', key, hash, fileIDs);
+		Swal.close();
+	};
+
 	showInfoForRD(window.localStorage.getItem('settings:player') || defaultPlayer, rdKey, info);
 }
 
-export function handleShowInfoForAD(t: UserTorrent, rdKey: string) {
+export function handleShowInfoForAD(t: UserTorrent, rdKey: string, setUserTorrentsList: any, torrentDB: any, setSelectedTorrents: any) {
 	let player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	if (player === 'realdebrid') {
 		alert('No player selected');
