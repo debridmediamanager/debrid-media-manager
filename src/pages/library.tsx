@@ -1265,222 +1265,39 @@ function TorrentsPage() {
 					}}
 				/>
 			</div>
-			{/* Start of Main Menu */}
-			<div className="mb-0 flex overflow-x-auto">
-				<button
-					className={`mb-1 mr-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 font-bold text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
-						currentPage <= 1 ? 'cursor-not-allowed opacity-60' : ''
-					}`}
-					onClick={handlePrevPage}
-					disabled={currentPage <= 1}
-				>
-					<FaArrowLeft />
-				</button>
-				<span className="w-16 text-center">
-					{currentPage}/{Math.ceil(sortedData().length / ITEMS_PER_PAGE)}
-				</span>
-				<button
-					className={`mb-1 ml-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-xs font-bold text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
-						currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)
-							? 'cursor-not-allowed opacity-60'
-							: ''
-					}`}
-					onClick={handleNextPage}
-					disabled={currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)}
-				>
-					<FaArrowRight />
-				</button>
-				<Link
-					href="/library?mediaType=movie&page=1"
-					className="mb-1 mr-2 rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 py-0.5 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50"
-				>
-					🎥 Movies
-				</Link>
-				<Link
-					href="/library?mediaType=tv&page=1"
-					className="mb-1 mr-2 rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 py-0.5 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50"
-				>
-					📺 TV&nbsp;shows
-				</Link>
-				<Link
-					href="/library?mediaType=other&page=1"
-					className="mb-1 mr-2 rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 py-0.5 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50"
-				>
-					🗂️ Others
-				</Link>
-				<button
-					className="mb-1 mr-2 rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 py-0.5 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50"
-					onClick={() => resetFilters()}
-				>
-					Reset
-				</button>
-
-				{sameHash.size > 0 && (
-					<Link
-						href="/library?status=samehash&page=1"
-						className="mb-1 mr-2 rounded border-2 border-orange-500 bg-orange-900/30 px-1 py-0 text-xs font-bold text-orange-100 transition-colors hover:bg-orange-800/50"
-					>
-						👀 Same&nbsp;hash
-					</Link>
-				)}
-				{sameTitle.size > 0 && sameHash.size < sameTitle.size && (
-					<Link
-						href="/library?status=sametitle&page=1"
-						className="mb-1 mr-2 rounded border-2 border-amber-500 bg-amber-900/30 px-1 py-0 text-xs font-bold text-amber-100 transition-colors hover:bg-amber-800/50"
-					>
-						👀 Same&nbsp;title
-					</Link>
-				)}
-
-				{selectedTorrents.size > 0 && (
-					<Link
-						href="/library?status=selected&page=1"
-						className="mb-1 mr-2 rounded border-2 border-slate-500 bg-slate-900/30 px-1 py-0.5 text-xs font-bold text-slate-100 transition-colors hover:bg-slate-800/50"
-					>
-						👀 Selected ({selectedTorrents.size})
-					</Link>
-				)}
-				{uncachedAdIDs.length + uncachedRdHashes.size > 0 && (
-					<Link
-						href="/library?status=uncached&page=1"
-						className="mb-1 mr-2 rounded border-2 border-slate-500 bg-slate-900/30 px-1 py-0.5 text-xs font-bold text-slate-100 transition-colors hover:bg-slate-800/50"
-					>
-						👀 Uncached
-					</Link>
-				)}
-
-				{inProgressCount > 0 && (
-					<Link
-						href="/library?status=inprogress&page=1"
-						className="mb-1 mr-2 rounded border-2 border-slate-500 bg-slate-900/30 px-1 py-0.5 text-xs font-bold text-slate-100 transition-colors hover:bg-slate-800/50"
-					>
-						👀 In&nbsp;progress
-					</Link>
-				)}
-				{slowCount > 0 && (
-					<Link
-						href="/library?status=slow&page=1"
-						className="mb-1 mr-2 rounded border-2 border-slate-500 bg-slate-900/30 px-1 py-0.5 text-xs font-bold text-slate-100 transition-colors hover:bg-slate-800/50"
-					>
-						👀 No&nbsp;seeds
-					</Link>
-				)}
-				{failedCount > 0 && (
-					<Link
-						href="/library?status=failed&page=1"
-						className="mb-1 mr-2 rounded border-2 border-slate-500 bg-slate-900/30 px-1 py-0.5 text-xs font-bold text-slate-100 transition-colors hover:bg-slate-800/50"
-					>
-						👀 Failed
-					</Link>
-				)}
-			</div>
-			<div className="mb-0 flex overflow-x-auto">
-				<button
-					className="mb-1 mr-2 rounded border-2 border-orange-500 bg-orange-900/30 px-1 py-0.5 text-[0.6rem] text-orange-100 transition-colors hover:bg-orange-800/50"
-					onClick={() => selectShown()}
-				>
-					✅ Select Shown
-				</button>
-
-				<button
-					className="mb-1 mr-2 rounded border-2 border-orange-500 bg-orange-900/30 px-1 py-0.5 text-[0.6rem] text-orange-100 transition-colors hover:bg-orange-800/50"
-					onClick={() => resetSelection()}
-				>
-					❌ Unselect All
-				</button>
-				<button
-					className={`mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-green-100 transition-colors hover:bg-green-800/50`}
-					onClick={handleReinsertTorrents}
-				>
-					🔄 Reinsert{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' List'}
-				</button>
-				<button
-					className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-indigo-100 transition-colors hover:bg-indigo-800/50`}
-					onClick={handleGenerateHashlist}
-				>
-					🚀 Share{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' List'}
-				</button>
-				<button
-					className={`mb-1 mr-2 rounded border-2 border-red-500 bg-red-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-red-100 transition-colors hover:bg-red-800/50`}
-					onClick={handleDeleteShownTorrents}
-				>
-					🗑️ Delete{selectedTorrents.size ? ` (${selectedTorrents.size})` : ' List'}
-				</button>
-
-				{rdKey && (
-					<>
-						<button
-							className={`mb-1 mr-2 rounded border-2 border-teal-500 bg-teal-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-teal-100 transition-colors hover:bg-teal-800/50`}
-							onClick={() => handleAddMagnet('rd')}
-						>
-							🧲 RD&nbsp;Add
-						</button>
-						<button
-							className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-indigo-100 transition-colors hover:bg-indigo-800/50`}
-							onClick={() => wrapLocalRestoreFn('rd')}
-						>
-							🪛 RD Restore
-						</button>
-					</>
-				)}
-				{adKey && (
-					<>
-						<button
-							className={`mb-1 mr-2 rounded border-2 border-teal-500 bg-teal-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-teal-100 transition-colors hover:bg-teal-800/50`}
-							onClick={() => handleAddMagnet('ad')}
-						>
-							🧲 AD&nbsp;Add
-						</button>
-						<button
-							className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-indigo-100 transition-colors hover:bg-indigo-800/50`}
-							onClick={() => wrapLocalRestoreFn('ad')}
-						>
-							🪛 AD Restore
-						</button>
-					</>
-				)}
-
-				<button
-					className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-indigo-100 transition-colors hover:bg-indigo-800/50`}
-					onClick={localBackup}
-				>
-					💾 Backup
-				</button>
-
-				{(router.query.status === 'sametitle' ||
-					(titleFilter && filteredList.length > 1)) && (
-					<>
-						<button
-							className="mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-green-100 transition-colors hover:bg-green-800/50"
-							onClick={dedupeBySize}
-						>
-							Size 🧹
-						</button>
-
-						<button
-							className="mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-green-100 transition-colors hover:bg-green-800/50"
-							onClick={dedupeByRecency}
-						>
-							Date 🧹
-						</button>
-					</>
-				)}
-
-				{(router.query.status === 'samehash' ||
-					(hashFilter && filteredList.length > 1)) && (
-					<button
-						className={`mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-green-100 transition-colors hover:bg-green-800/50`}
-						onClick={combineSameHash}
-					>
-						Hash 🧹
-					</button>
-				)}
-			</div>
-			{helpText && helpText !== 'hide' && (
-				<div className="bg-blue-900 py-0.5 text-xs" onClick={() => setHelpText('hide')}>
-					💡 {helpText}
-				</div>
-			)}
+			<LibraryMenuButtons
+				currentPage={currentPage}
+				maxPages={Math.ceil(sortedData().length / ITEMS_PER_PAGE)}
+				onPrevPage={handlePrevPage}
+				onNextPage={handleNextPage}
+				onResetFilters={resetFilters}
+				sameHashSize={sameHash.size}
+				sameTitleSize={sameTitle.size}
+				selectedTorrentsSize={selectedTorrents.size}
+				uncachedCount={uncachedAdIDs.length + uncachedRdHashes.size}
+				inProgressCount={inProgressCount}
+				slowCount={slowCount}
+				failedCount={failedCount}
+			/>
+			<LibraryActionButtons
+				onSelectShown={selectShown}
+				onResetSelection={resetSelection}
+				onReinsertTorrents={handleReinsertTorrents}
+				onGenerateHashlist={handleGenerateHashlist}
+				onDeleteShownTorrents={handleDeleteShownTorrents}
+				onAddMagnet={handleAddMagnet}
+				onLocalRestore={wrapLocalRestoreFn}
+				onLocalBackup={localBackup}
+				onDedupeBySize={dedupeBySize}
+				onDedupeByRecency={dedupeByRecency}
+				onCombineSameHash={combineSameHash}
+				selectedTorrentsSize={selectedTorrents.size}
+				rdKey={rdKey}
+				adKey={adKey}
+				showDedupe={router.query.status === 'sametitle' || (titleFilter && filteredList.length > 1)}
+				showHashCombine={router.query.status === 'samehash' || (hashFilter && filteredList.length > 1)}
+			/>
+			<LibraryHelpText helpText={helpText} onHide={() => setHelpText('hide')} />
 			<div className="overflow-x-auto">
 				{loading || grouping || filtering ? (
 					<div className="mt-2 flex items-center justify-center">
