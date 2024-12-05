@@ -1,4 +1,5 @@
 import LibraryActionButtons from '@/components/LibraryActionButtons';
+import LibrarySize from '@/components/LibrarySize';
 import LibraryHelpText from '@/components/LibraryHelpText';
 import LibraryMenuButtons from '@/components/LibraryMenuButtons';
 import LibraryTableHeader from '@/components/LibraryTableHeader';
@@ -1226,25 +1227,11 @@ function TorrentsPage() {
 			<div className="mb-1 flex items-center justify-between">
 				<h1 className="text-xl font-bold text-white">
 					Library 📚{' '}
-					<span className="whitespace-nowrap text-sm">
-						{userTorrentsList.length} torrents{' '}
-						{rdSyncing || adSyncing
-							? '💭'
-							: totalBytes / ONE_GIGABYTE / 1024 > 10000
-								? '😱'
-								: totalBytes / ONE_GIGABYTE / 1024 > 1000
-									? '😨'
-									: totalBytes / ONE_GIGABYTE / 1024 > 100
-										? '😮'
-										: totalBytes / ONE_GIGABYTE / 1024 > 10
-											? '🙂'
-											: totalBytes / ONE_GIGABYTE / 1024 > 1
-												? '😐'
-												: '🙁'}{' '}
-					</span>
-					<span className="whitespace-nowrap text-sm">
-						{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB
-					</span>
+					<LibrarySize 
+						torrentCount={userTorrentsList.length}
+						totalBytes={totalBytes}
+						isLoading={rdSyncing || adSyncing}
+					/>
 				</h1>
 
 				<Link
