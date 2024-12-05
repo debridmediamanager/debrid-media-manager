@@ -1,4 +1,5 @@
 import LibraryTorrentRow from '@/components/LibraryTorrentRow';
+import LibraryTableHeader from '@/components/LibraryTableHeader';
 import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { getTorrentInfo, proxyUnrestrictLink } from '@/services/realDebrid';
@@ -1488,56 +1489,12 @@ function TorrentsPage() {
 				) : (
 					<table className="w-full">
 						<thead>
-							<tr className="whitespace-nowrap border-b border-gray-700 text-xs">
-								<th
-									className="w-8 min-w-8 max-w-8 px-0.5 py-1 text-gray-300"
-									onClick={() => handleSort('id')}
-								>
-									Select
-									{selectedTorrents.size
-										? ` (${selectedTorrents.size})`
-										: ''}{' '}
-									{sortBy.column === 'id' &&
-										(sortBy.direction === 'asc' ? '↑' : '↓')}
-								</th>
-								{/* Other table headers with same reduced padding */}
-								{/* ... Rest of the headers with px-0.5 py-1 ... */}
-								<th
-									className="w-[500px] min-w-96 max-w-[500px] px-1 py-2 text-gray-300"
-									onClick={() => handleSort('title')}
-								>
-									Title ({filteredList.length}){' '}
-									{sortBy.column === 'title' &&
-										(sortBy.direction === 'asc' ? '↑' : '↓')}
-								</th>
-								<th
-									className="w-20 min-w-20 max-w-20 px-1 py-2 text-gray-300"
-									onClick={() => handleSort('bytes')}
-								>
-									Size{' '}
-									{sortBy.column === 'bytes' &&
-										(sortBy.direction === 'asc' ? '↑' : '↓')}
-								</th>
-								<th
-									className="w-20 min-w-20 max-w-20 px-1 py-2 text-gray-300"
-									onClick={() => handleSort('progress')}
-								>
-									Status{' '}
-									{sortBy.column === 'progress' &&
-										(sortBy.direction === 'asc' ? '↑' : '↓')}
-								</th>
-								<th
-									className="w-24 min-w-24 max-w-28 px-1 py-2 text-gray-300"
-									onClick={() => handleSort('added')}
-								>
-									Added{' '}
-									{sortBy.column === 'added' &&
-										(sortBy.direction === 'asc' ? '↑' : '↓')}
-								</th>
-								<th className="w-24 min-w-24 max-w-28 px-1 py-2 text-gray-300">
-									Actions
-								</th>
-							</tr>
+							<LibraryTableHeader
+								sortBy={sortBy}
+								onSort={handleSort}
+								filteredListLength={filteredList.length}
+								selectedTorrentsSize={selectedTorrents.size}
+							/>
 						</thead>
 						<tbody>
 							{currentPageData().map((torrent) => (
