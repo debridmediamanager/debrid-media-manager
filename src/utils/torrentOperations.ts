@@ -5,6 +5,7 @@ import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import { normalize } from './mediaId';
 import { libraryToastOptions } from './toastOptions';
 
 export async function dedupeBySize(
