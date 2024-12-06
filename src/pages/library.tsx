@@ -831,16 +831,60 @@ function TorrentsPage() {
 	}
 
 	async function handleAddMagnet(debridService: string) {
-		const { value: hashesStr } = await Swal.fire({
-			title: `Add magnet to your ${debridService.toUpperCase()} library`,
-			input: 'textarea',
-			inputLabel: 'Paste your Magnet link(s) here',
-			inputValue: '',
+		const { value: input, dismiss } = await Swal.fire({
+			title: `Add to your ${debridService.toUpperCase()} library`,
+			html: `
+				<textarea id="magnetInput" class="swal2-textarea" placeholder="Paste your Magnet link(s) here"></textarea>
+				<div class="mt-4">
+					<label class="block text-sm font-medium text-gray-700">Or upload .torrent file(s)</label>
+					<input type="file" id="torrentFile" accept=".torrent" multiple class="mt-1 block w-full text-sm text-gray-500
+						file:mr-4 file:py-2 file:px-4
+						file:rounded-full file:border-0
+						file:text-sm file:font-semibold
+						file:bg-violet-50 file:text-violet-700
+						hover:file:bg-violet-100
+					"/>
+				</div>
+			`,
 			showCancelButton: true,
-			inputValidator: (value) => !value && 'You need to put something!',
+			preConfirm: async () => {
+				const magnetInput = (document.getElementById('magnetInput') as HTMLTextAreaElement).value;
+				const fileInput = document.getElementById('torrentFile') as HTMLInputElement;
+				const files = fileInput.files;
+				
+				let hashes: string[] = [];
+				
+				// Process magnet links
+				if (magnetInput) {
+					hashes.push(...extractHashes(magnetInput));
+				}
+				
+				// Process torrent files
+				if (files && files.length > 0) {
+					try {
+						const fileHashes = await Promise.all(
+							Array.from(files).map(file => torrentFileToMagnetHash(file))
+						);
+						hashes.push(...fileHashes);
+					} catch (error) {
+						Swal.showValidationMessage(`Failed to process torrent file: ${error}`);
+						return false;
+					}
+				}
+				
+				if (hashes.length === 0) {
+					Swal.showValidationMessage('Please provide either magnet links or torrent files');
+					return false;
+				}
+				
+				return hashes;
+			}
 		});
-		if (!hashesStr) return;
-		const hashes = extractHashes(hashesStr);
+
+		if (dismiss === Swal.DismissReason.cancel || !input) return;
+		
+		const hashes = input as string[];
+		
 		if (rdKey && hashes && debridService === 'rd') {
 			handleAddMultipleHashesInRd(
 				rdKey,
