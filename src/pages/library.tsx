@@ -31,6 +31,7 @@ import { normalize } from '@/utils/mediaId';
 import { applyQuickSearch } from '@/utils/quickSearch';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';
+import { getHashOfTorrent } from '@/utils/torrentFile';
 import { handleShowInfoForAD, handleShowInfoForRD } from '@/utils/torrentInfo';
 import { withAuth } from '@/utils/withAuth';
 import { saveAs } from 'file-saver';
@@ -834,57 +835,84 @@ function TorrentsPage() {
 		const { value: input, dismiss } = await Swal.fire({
 			title: `Add to your ${debridService.toUpperCase()} library`,
 			html: `
-				<textarea id="magnetInput" class="swal2-textarea" placeholder="Paste your Magnet link(s) here"></textarea>
-				<div class="mt-4">
-					<label class="block text-sm font-medium text-gray-700">Or upload .torrent file(s)</label>
-					<input type="file" id="torrentFile" accept=".torrent" multiple class="mt-1 block w-full text-sm text-gray-500
-						file:mr-4 file:py-2 file:px-4
-						file:rounded-full file:border-0
-						file:text-sm file:font-semibold
-						file:bg-violet-50 file:text-violet-700
-						hover:file:bg-violet-100
-					"/>
+				<div class="bg-gray-900 p-4 rounded-lg">
+					<textarea
+						id="magnetInput"
+						class="w-full h-32 bg-gray-800 text-gray-100 border border-gray-700 rounded p-2 placeholder-gray-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+						placeholder="Paste your Magnet link(s) here"
+					></textarea>
+					<div class="mt-4">
+						<label class="block text-sm text-gray-300 mb-2">Or upload .torrent file(s)</label>
+						<input
+							type="file"
+							id="torrentFile"
+							accept=".torrent"
+							multiple
+							class="block w-full text-sm text-gray-300
+								file:mr-4 file:py-2 file:px-4
+								file:rounded file:border-0
+								file:text-sm file:font-medium
+								file:bg-cyan-900 file:text-cyan-100
+								hover:file:bg-cyan-800
+								cursor-pointer
+								border border-gray-700 rounded
+							"
+						/>
+					</div>
 				</div>
 			`,
+			background: '#111827',
+			color: '#f3f4f6',
+			confirmButtonColor: '#0891b2',
+			cancelButtonColor: '#374151',
 			showCancelButton: true,
+			customClass: {
+				popup: 'bg-gray-900',
+				htmlContainer: 'text-gray-100',
+			},
 			preConfirm: async () => {
-				const magnetInput = (document.getElementById('magnetInput') as HTMLTextAreaElement).value;
+				const magnetInput = (document.getElementById('magnetInput') as HTMLTextAreaElement)
+					.value;
 				const fileInput = document.getElementById('torrentFile') as HTMLInputElement;
 				const files = fileInput.files;
-				
+
 				let hashes: string[] = [];
-				
+
 				// Process magnet links
 				if (magnetInput) {
 					hashes.push(...extractHashes(magnetInput));
 				}
-				
+
 				// Process torrent files
 				if (files && files.length > 0) {
 					try {
 						const fileHashes = await Promise.all(
-							Array.from(files).map(file => torrentFileToMagnetHash(file))
+							Array.from(files).map((file) => getHashOfTorrent(file))
 						);
-						hashes.push(...fileHashes);
+						hashes.push(
+							...fileHashes.filter((hash): hash is string => hash !== undefined)
+						);
 					} catch (error) {
 						Swal.showValidationMessage(`Failed to process torrent file: ${error}`);
 						return false;
 					}
 				}
-				
+
 				if (hashes.length === 0) {
-					Swal.showValidationMessage('Please provide either magnet links or torrent files');
+					Swal.showValidationMessage(
+						'Please provide either magnet links or torrent files'
+					);
 					return false;
 				}
-				
+
 				return hashes;
-			}
+			},
 		});
 
 		if (dismiss === Swal.DismissReason.cancel || !input) return;
-		
+
 		const hashes = input as string[];
-		
+
 		if (rdKey && hashes && debridService === 'rd') {
 			handleAddMultipleHashesInRd(
 				rdKey,
