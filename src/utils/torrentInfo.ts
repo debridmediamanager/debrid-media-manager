@@ -153,16 +153,10 @@ export async function handleShowInfoForRD(
 	showInfoForRD(window.localStorage.getItem('settings:player') || defaultPlayer, rdKey, info);
 }
 
-export function handleShowInfoForAD(
-	t: UserTorrent,
-	rdKey: string,
-	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
-	torrentDB: UserTorrentDB,
-	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>
-) {
+export function handleShowInfoForAD(t: UserTorrent, adKey: string) {
 	let player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	if (player === 'realdebrid') {
 		alert('No player selected');
 	}
-	showInfoForAD(player, rdKey, t.adData!);
+	showInfoForAD(player, adKey, t.adData!);
 }

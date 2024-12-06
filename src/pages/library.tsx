@@ -15,7 +15,6 @@ import {
 	handleAddMultipleHashesInRd,
 	handleReinsertTorrentinRd,
 	handleRestartTorrent,
-	handleSelectFilesInRd,
 } from '@/utils/addMagnet';
 import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
@@ -23,10 +22,7 @@ import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorr
 import { extractHashes } from '@/utils/extractHashes';
 import { generateHashList } from '@/utils/hashList';
 import { checkForUncachedInRd } from '@/utils/instantChecks';
-import {
-	fetchLatestADTorrents as fetchLatestADTorrentsUtil,
-	fetchLatestRDTorrents as fetchLatestRDTorrentsUtil,
-} from '@/utils/libraryFetching';
+import { fetchLatestADTorrents, fetchLatestRDTorrents } from '@/utils/libraryFetching';
 import { initializeLibrary } from '@/utils/libraryInitialization';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
 import { handleChangeType } from '@/utils/libraryTypeManagement';
@@ -142,9 +138,17 @@ function TorrentsPage() {
 		const hashes = extractHashes(addMagnet as string);
 		if (hashes.length !== 1) return;
 		if (rdKey)
-			handleAddMultipleHashesInRd(rdKey, hashes, async () => await fetchLatestRDTorrents(2));
+			handleAddMultipleHashesInRd(
+				rdKey,
+				hashes,
+				async () => await triggerFetchLatestRDTorrents(2)
+			);
 		if (adKey)
-			handleAddMultipleHashesInAd(adKey, hashes, async () => await fetchLatestADTorrents());
+			handleAddMultipleHashesInAd(
+				adKey,
+				hashes,
+				async () => await triggerFetchLatestADTorrents()
+			);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router]);
 
@@ -187,8 +191,8 @@ function TorrentsPage() {
 		return () => document.removeEventListener('keydown', handleKeyDown);
 	}, [handlePrevPage, handleNextPage]);
 
-	const fetchLatestRDTorrents = async (customLimit?: number) => {
-		await fetchLatestRDTorrentsUtil(
+	const triggerFetchLatestRDTorrents = async (customLimit?: number) => {
+		await fetchLatestRDTorrents(
 			rdKey,
 			torrentDB,
 			setUserTorrentsList,
@@ -199,8 +203,8 @@ function TorrentsPage() {
 		);
 	};
 
-	const fetchLatestADTorrents = async () => {
-		await fetchLatestADTorrentsUtil(
+	const triggerFetchLatestADTorrents = async () => {
+		await fetchLatestADTorrents(
 			adKey,
 			torrentDB,
 			setUserTorrentsList,
@@ -468,14 +472,6 @@ function TorrentsPage() {
 		}
 	}
 
-	function wrapSelectFilesFn(t: UserTorrent) {
-		return async () => {
-			await handleSelectFilesInRd(rdKey!, t.id);
-			t.status = UserTorrentStatus.downloading;
-			torrentDB.add(t);
-		};
-	}
-
 	async function handleReinsertTorrents() {
 		if (
 			relevantList.length > 0 &&
@@ -499,8 +495,8 @@ function TorrentsPage() {
 		}
 		if (results.length) {
 			resetSelection(setSelectedTorrents);
-			await fetchLatestRDTorrents(Math.ceil(relevantList.length * 1.1));
-			await fetchLatestADTorrents();
+			await triggerFetchLatestRDTorrents(Math.ceil(relevantList.length * 1.1));
+			await triggerFetchLatestADTorrents();
 			toast.success(`Reinserted ${results.length} torrents`, magnetToastOptions);
 		}
 		if (!errors.length && !results.length) {
@@ -751,8 +747,8 @@ function TorrentsPage() {
 			toast.error(`Error with merging ${errors.length} torrents`, libraryToastOptions);
 		}
 		if (results.length) {
-			await fetchLatestRDTorrents(Math.ceil(results.length * 1.1));
-			await fetchLatestADTorrents();
+			await triggerFetchLatestRDTorrents(Math.ceil(results.length * 1.1));
+			await triggerFetchLatestADTorrents();
 			toast.success(`Merged ${results.length} torrents`, libraryToastOptions);
 		}
 		if (!errors.length && !results.length) {
@@ -809,8 +805,8 @@ function TorrentsPage() {
 						0
 					);
 					if (results.length) {
-						await fetchLatestRDTorrents(Math.ceil(results.length * 1.1));
-						await fetchLatestADTorrents();
+						await triggerFetchLatestRDTorrents(Math.ceil(results.length * 1.1));
+						await triggerFetchLatestADTorrents();
 					}
 					resolve({ success: results.length, error: errors.length });
 				}
@@ -849,11 +845,15 @@ function TorrentsPage() {
 			handleAddMultipleHashesInRd(
 				rdKey,
 				hashes,
-				async () => await fetchLatestRDTorrents(Math.ceil(hashes.length * 1.1))
+				async () => await triggerFetchLatestRDTorrents(Math.ceil(hashes.length * 1.1))
 			);
 		}
 		if (adKey && hashes && debridService === 'ad') {
-			handleAddMultipleHashesInAd(adKey, hashes, async () => await fetchLatestADTorrents());
+			handleAddMultipleHashesInAd(
+				adKey,
+				hashes,
+				async () => await triggerFetchLatestADTorrents()
+			);
 		}
 	}
 
@@ -874,8 +874,8 @@ function TorrentsPage() {
 			setLoading,
 			rdKey,
 			adKey,
-			fetchLatestRDTorrents,
-			fetchLatestADTorrents,
+			triggerFetchLatestRDTorrents,
+			triggerFetchLatestADTorrents,
 			userTorrentsList
 		);
 	}
@@ -1010,13 +1010,7 @@ function TorrentsPage() {
 													torrentDB,
 													setSelectedTorrents
 												)
-											: handleShowInfoForAD(
-													t,
-													rdKey!,
-													setUserTorrentsList,
-													torrentDB,
-													setSelectedTorrents
-												)
+											: handleShowInfoForAD(t, adKey!)
 									}
 									onTypeChange={(t) =>
 										handleChangeType(t, setUserTorrentsList, torrentDB)

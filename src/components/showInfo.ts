@@ -413,7 +413,7 @@ export const showInfoForRD = async (
 
 export const showInfoForAD = async (
 	app: string,
-	rdKey: string,
+	adKey: string,
 	info: MagnetStatus,
 	imdbId: string = '',
 	shouldDownloadMagnets?: boolean
@@ -431,9 +431,9 @@ export const showInfoForAD = async (
 	const libraryActions = `
         <div class="mb-4 flex justify-center items-center flex-wrap">
             ${renderButton('share', { onClick: `window.open('${await handleShare(torrent)}')` })}
-            ${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteAdTorrent('${rdKey}', 'ad:${info.id}')` })}
+            ${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteAdTorrent('${adKey}', 'ad:${info.id}')` })}
             ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}', ${shouldDownloadMagnets})`, text: shouldDownloadMagnets ? 'Download' : 'Copy' })}
-            ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleRestartTorrent('${rdKey}', '${info.id}')` })}
+            ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleRestartTorrent('${adKey}', '${info.id}')` })}
             ${info.links.length > 1 ? renderButton('downloadAll', { onClick: `window.open('${downloadAllLink}')` }) : ''}
             ${
 				info.links.length > 0
