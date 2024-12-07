@@ -326,8 +326,13 @@ const MovieSearch: FunctionComponent = () => {
 				const batch = nonAvailableResults.slice(i, i + 3);
 				await Promise.all(
 					batch.map(async (result) => {
-						await addRd(result.hash);
-						await deleteRd(result.hash);
+						if (`rd:${result.hash}` in hashAndProgress) {
+							await deleteRd(result.hash);
+							await addRd(result.hash);
+						} else {
+							await addRd(result.hash);
+							await deleteRd(result.hash);
+						}
 					})
 				);
 			}
