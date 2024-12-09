@@ -12,13 +12,13 @@ export function TraktSection({ traktUser }: TraktSectionProps) {
 				href="/trakt/movies"
 				className="haptic flex items-center justify-center gap-2 rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm font-medium text-red-100 transition-colors hover:bg-red-800/50"
 			>
-				🎥 Movies
+				🎥&nbsp;Movies
 			</Link>
 			<Link
 				href="/trakt/shows"
 				className="haptic flex items-center justify-center gap-2 rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm font-medium text-red-100 transition-colors hover:bg-red-800/50"
 			>
-				📺 Shows
+				📺&nbsp;Shows
 			</Link>
 			{traktUser && (
 				<div className="col-span-2 grid grid-cols-3 gap-3">
@@ -26,19 +26,19 @@ export function TraktSection({ traktUser }: TraktSectionProps) {
 						href="/trakt/watchlist"
 						className="haptic flex items-center justify-center gap-2 rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm font-medium text-red-100 transition-colors hover:bg-red-800/50"
 					>
-						👀 Watchlist
+						👀&nbsp;Watchlist
 					</Link>
 					<Link
 						href="/trakt/collection"
 						className="haptic flex items-center justify-center gap-2 rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm font-medium text-red-100 transition-colors hover:bg-red-800/50"
 					>
-						🗃️ Collections
+						🗃️&nbsp;Collections
 					</Link>
 					<Link
 						href="/trakt/mylists"
 						className="haptic flex items-center justify-center gap-2 rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm font-medium text-red-100 transition-colors hover:bg-red-800/50"
 					>
-						🧏🏻‍♀️ My lists
+						🧏🏻‍♀️&nbsp;My lists
 					</Link>
 				</div>
 			)}
