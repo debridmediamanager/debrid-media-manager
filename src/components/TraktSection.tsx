@@ -21,7 +21,7 @@ export function TraktSection({ traktUser }: TraktSectionProps) {
 				📺 Shows
 			</Link>
 			{traktUser && (
-				<>
+				<div className="col-span-2 grid grid-cols-3 gap-3">
 					<Link
 						href="/trakt/watchlist"
 						className="haptic flex items-center justify-center gap-2 rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm font-medium text-red-100 transition-colors hover:bg-red-800/50"
@@ -40,7 +40,7 @@ export function TraktSection({ traktUser }: TraktSectionProps) {
 					>
 						🧏🏻‍♀️ My lists
 					</Link>
-				</>
+				</div>
 			)}
 		</div>
 	);
