@@ -37,7 +37,9 @@ export function BrowseSection({ terms }: BrowseSectionProps) {
 				href={`/browse/${randomTerm.replace(/\W/gi, '')}`}
 				className="haptic-sm rounded border-2 border-blue-500 bg-blue-900/30 px-4 py-2 text-sm font-medium text-blue-100 transition-colors hover:bg-blue-800/50"
 			>
-				{randomTerm.length > 5 ? `${randomTerm.slice(0, 5)}...` : randomTerm}
+				{randomTerm.split(' ')[0].length > 5 
+					? `${randomTerm.split(' ')[0].slice(0, 5)}...` 
+					: randomTerm.split(' ')[0]}
 			</Link>
 			<button
 				onClick={handleCustomSearch}
