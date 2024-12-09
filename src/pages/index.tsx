@@ -180,6 +180,12 @@ function IndexPage() {
 						{/* Action Buttons */}
 						<div className="flex flex-wrap justify-center gap-2">
 							<button
+								onClick={() => window.location.reload()}
+								className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+							>
+								Refresh
+							</button>
+							<button
 								onClick={() => handleClearCache()}
 								className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
 							>
@@ -199,19 +205,21 @@ function IndexPage() {
 					<h1 className="pb-4 text-center text-xl text-white">
 						Debrid Media Manager is loading...
 					</h1>
-					<div className="flex gap-2">
-						<button
-							onClick={() => window.location.reload()}
-							className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-						>
-							Refresh
-						</button>
-						<button
-							onClick={handleClearLocalStorage}
-							className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-						>
-							Clear Data and Reload
-						</button>
+					<div className="flex flex-col items-center gap-4">
+						<div className="flex gap-2">
+							<button
+								onClick={() => window.location.reload()}
+								className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+							>
+								Refresh
+							</button>
+							<button
+								onClick={handleClearLocalStorage}
+								className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+							>
+								Clear Data and Reload
+							</button>
+						</div>
 					</div>
 				</div>
 			)}
