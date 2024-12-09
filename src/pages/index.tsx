@@ -208,12 +208,6 @@ function IndexPage() {
 					<div className="flex flex-col items-center gap-4">
 						<div className="flex gap-2">
 							<button
-								onClick={() => window.location.reload()}
-								className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-							>
-								Refresh
-							</button>
-							<button
 								onClick={handleClearLocalStorage}
 								className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
 							>
