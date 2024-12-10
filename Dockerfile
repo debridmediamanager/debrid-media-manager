@@ -1,5 +1,5 @@
 # Use the same base image for all stages
-FROM node:18 AS base
+FROM node:latest AS base
 WORKDIR /app
 
 # Dependencies stage - this will cache node_modules
