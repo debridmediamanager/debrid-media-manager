@@ -1,5 +1,5 @@
 # Use the same base image for all stages
-FROM node:latest AS base
+FROM node:latest-focal AS base
 WORKDIR /app
 
 # Dependencies stage - this will cache node_modules
@@ -25,7 +25,7 @@ COPY --from=build /app/.next/static ./.next/static
 # Copy the entire .next directory to ensure PWA files are included
 COPY --from=build /app/.next ./.next
 COPY --from=build /app/.next/standalone .
-RUN apk --no-cache add curl grep
+RUN apt-get update && apt-get install -y curl grep && rm -rf /var/lib/apt/lists/*
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
