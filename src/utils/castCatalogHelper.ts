@@ -14,7 +14,7 @@ export async function getDMMLibrary(userid: string, page: number) {
 		profile.clientId,
 		profile.clientSecret,
 		profile.refreshToken,
-		true
+		false
 	);
 	if (!response) {
 		return { error: 'Go to DMM and connect your RD account', status: 500 };
@@ -55,7 +55,7 @@ export async function getDMMTorrent(userid: string, torrentID: string) {
 		profile.clientId,
 		profile.clientSecret,
 		profile.refreshToken,
-		true
+		false
 	);
 	if (!response) {
 		return { error: 'Go to DMM and connect your RD account', status: 500 };

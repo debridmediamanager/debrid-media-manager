@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		profile.clientId,
 		profile.clientSecret,
 		profile.refreshToken,
-		true
+		false
 	);
 	if (!response) {
 		return res.status(500).json({ error: 'Go to DMM and connect your RD account' });

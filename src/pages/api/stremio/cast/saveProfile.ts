@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return res.status(400).json({ error: 'Missing required fields' });
 		}
 
-		const response = await getToken(clientId, clientSecret, refreshToken, true);
+		const response = await getToken(clientId, clientSecret, refreshToken, false);
 
 		const userid = await generateUserId(response.access_token);
 
