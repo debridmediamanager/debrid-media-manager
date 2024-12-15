@@ -85,7 +85,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 		res.send(responseBody);
 	} catch (err: unknown) {
 		console.error(err);
-		res.status(500).json({ error: 'Internal Server Error' });
+		res.status(500).json({ error: `Internal Server Error: ${err}` });
 	}
 };
 

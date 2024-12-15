@@ -64,6 +64,6 @@ export const generateUserId = async (token: string): Promise<string> => {
 export const handleApiError = (error: any, res: NextApiResponse, customMessage?: string) => {
 	console.error(customMessage || 'API Error:', error);
 	res.status(500).json({
-		error: customMessage || 'Internal server error',
+		error: customMessage || `Internal Server Error: ${error}`,
 	});
 };
