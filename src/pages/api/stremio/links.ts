@@ -20,6 +20,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const links = await db.fetchAllCastedLinks(userId);
 		res.status(200).json(links);
 	} catch (error) {
-		handleApiError(error, res, 'Failed to fetch links');
+		handleApiError(error, res, `Failed to fetch links, ${error}`);
 	}
 }

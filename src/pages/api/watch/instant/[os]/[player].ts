@@ -17,7 +17,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 	if (intent) {
 		res.redirect(307, intent);
 	} else {
-		res.status(500).send('Internal Server Error');
+		res.status(500).json({ error: `No intent found for ${hash}` });
 	}
 };
 

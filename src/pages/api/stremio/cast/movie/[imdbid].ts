@@ -46,10 +46,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 	} catch (e) {
 		console.error(e);
+		res.status(500).json({
+			status: 'error',
+			errorMessage: `Failed to get stream URL for ${imdbid}, ${e}`,
+		});
+		return;
 	}
-
-	res.status(500).json({
-		status: 'error',
-		errorMessage: 'Internal Server Error',
-	});
 }

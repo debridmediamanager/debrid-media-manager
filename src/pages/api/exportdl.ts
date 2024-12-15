@@ -15,7 +15,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 		res.setHeader('Content-Type', 'text/plain');
 		res.status(200).send(downloadLinks);
 	} else {
-		res.status(500).send('Internal Server Error');
+		res.status(500).json({ error: `No download links found for torrent ${torrentId}` });
 	}
 };
 
