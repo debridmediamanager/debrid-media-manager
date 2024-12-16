@@ -145,7 +145,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		res.setHeader('access-control-allow-origin', '*');
-		res.status(200).json({ streams });
+		res.status(200).json({
+			streams,
+			cacheMaxAge: 0,
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: `Failed to get casted URLs: ${error}` });
