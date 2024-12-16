@@ -29,13 +29,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	const response = await getToken(
-		profile.clientId,
-		profile.clientSecret,
-		profile.refreshToken,
-		false
-	);
-	if (!response) {
+	let response: { access_token: string } | null = null;
+	try {
+		response = await getToken(
+			profile.clientId,
+			profile.clientSecret,
+			profile.refreshToken,
+			true
+		);
+		if (!response) {
+			throw new Error(`no token found for user ${userid}`);
+		}
+	} catch (error) {
+		console.error(error);
 		res.status(500).json({ error: `Failed to get Real-Debrid token for user ${userid}` });
 		return;
 	}

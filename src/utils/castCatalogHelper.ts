@@ -5,8 +5,17 @@ const db = new Repository();
 export const PAGE_SIZE = 12;
 
 export async function getDMMLibrary(userid: string, page: number) {
-	const profile = await db.getCastProfile(userid);
-	if (!profile) {
+	let profile: {
+		clientId: string;
+		clientSecret: string;
+		refreshToken: string;
+	} | null = null;
+	try {
+		profile = await db.getCastProfile(userid);
+		if (!profile) {
+			throw new Error(`no profile found for user ${userid}`);
+		}
+	} catch (error) {
 		return { error: 'Go to DMM and connect your RD account', status: 401 };
 	}
 
