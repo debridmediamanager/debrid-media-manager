@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			profile.clientId,
 			profile.clientSecret,
 			profile.refreshToken,
-			false
+			true
 		);
 		if (!response) {
 			throw new Error(`no token found for user ${userid}`);
