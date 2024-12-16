@@ -1,3 +1,4 @@
+import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
 import Poster from '@/components/poster';
 import { showInfoForRD } from '@/components/showInfo';
@@ -559,6 +560,14 @@ const TvSearch: FunctionComponent = () => {
 			</div>
 
 			<div className="mb-2 flex items-center gap-2 overflow-x-auto p-2">
+				<SearchTokens
+					title={showInfo.title}
+					year={seasonNum as string}
+					isShow={true}
+					onTokenClick={(token) =>
+						setQuery((prev) => (prev ? `${prev} ${token}` : token))
+					}
+				/>
 				{getColorScale(expectedEpisodeCount).map((scale, idx) => (
 					<span
 						key={idx}
