@@ -10,9 +10,9 @@ const movieEndpoints = new Map<string, string>([
 	['Most Watched Today', 'movies/watched/daily'],
 	['Most Watched This Month', 'movies/watched/monthly'],
 	['Most Watched', 'movies/watched/all'],
-	['Most Collected Today', 'movies/collected/daily'],
-	['Most Collected This Month', 'movies/collected/monthly'],
-	['Most Collected All Time', 'movies/collected/all'],
+	// ['Most Collected Today', 'movies/collected/daily'],
+	// // ['Most Collected This Month', 'movies/collected/monthly'],
+	// // ['Most Collected All Time', 'movies/collected/all'],
 	['Most Favorited Today', 'movies/favorited/daily'],
 	['Most Favorited This Month', 'movies/favorited/monthly'],
 	['Most Favorited All Time', 'movies/favorited/all'],
@@ -28,9 +28,9 @@ const showEndpoints = new Map<string, string>([
 	['Most Watched Today', 'shows/watched/daily'],
 	['Most Watched This Month', 'shows/watched/monthly'],
 	['Most Watched All Time', 'shows/watched/all'],
-	['Most Collected Today', 'shows/collected/daily'],
-	['Most Collected This Month', 'shows/collected/monthly'],
-	['Most Collected All Time', 'shows/collected/all'],
+	// // ['Most Collected Today', 'shows/collected/daily'],
+	// // ['Most Collected This Month', 'shows/collected/monthly'],
+	// // ['Most Collected All Time', 'shows/collected/all'],
 	['Most Favorited Today', 'shows/favorited/daily'],
 	['Most Favorited This Month', 'shows/favorited/monthly'],
 	['Most Favorited All Time', 'shows/favorited/all'],
@@ -56,7 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	let mediaType = browse.toLowerCase() === 'shows' ? 'show' : 'movie';
-	const arrayOfResults: Record<string, TraktMediaItem[]> = {};
+	const arrayOfResults = new Map<string, TraktMediaItem[]>();
 
 	try {
 		let endpoints = mediaType === 'movie' ? movieEndpoints : showEndpoints;
@@ -71,7 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				responseCache[endpoint].results.length &&
 				responseCache[endpoint].lastUpdated > new Date().getTime() - 1000 * 60 * 10
 			) {
-				arrayOfResults[key] = responseCache[endpoint].results;
+				arrayOfResults.set(key, responseCache[endpoint].results);
 				continue;
 			}
 
@@ -87,7 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					lastUpdated: new Date().getTime(),
 					results: searchResults,
 				};
-				arrayOfResults[key] = responseCache[endpoint].results;
+				arrayOfResults.set(key, responseCache[endpoint].results);
 			} catch (error: any) {
 				console.error(`Error fetching ${endpoint}:`, error);
 				continue;
@@ -96,7 +96,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		res.status(200).json({
 			mediaType,
-			arrayOfResults,
+			arrayOfResults: Object.fromEntries(arrayOfResults),
 		});
 	} catch (error) {
 		console.error('Error in trakt info handler:', error);
