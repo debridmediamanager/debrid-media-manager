@@ -319,7 +319,7 @@ const MovieSearch: FunctionComponent = () => {
 	};
 
 	async function handleAvailabilityTest() {
-		const nonAvailableResults = searchResults.filter((r) => !r.rdAvailable);
+		const nonAvailableResults = filteredResults.filter((r) => !r.rdAvailable);
 
 		const processInBatches = async () => {
 			for (let i = 0; i < nonAvailableResults.length; i += 3) {
@@ -342,7 +342,7 @@ const MovieSearch: FunctionComponent = () => {
 			processInBatches(),
 			{
 				loading: `Testing availability (do not close until done)...`,
-				success: `Completed availability test for ${nonAvailableResults.length} results. Reloading the page.`,
+				success: `Completed availability test for ${nonAvailableResults.length} filtered results. Reloading the page.`,
 				error: 'Failed to complete availability test',
 			},
 			{
