@@ -1,4 +1,5 @@
 import { Repository } from '@/services/planetscale';
+import { getToken } from '@/services/realDebrid';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new Repository();
@@ -7,6 +8,33 @@ const db = new Repository();
 // note, addon prefix is /api/stremio/${userid}
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid, mediaType, imdbid } = req.query;
+
+	if (typeof userid !== 'string' || typeof imdbid !== 'string' || typeof mediaType !== 'string') {
+		res.status(400).json({
+			status: 'error',
+			errorMessage: 'Invalid "userid", "imdbid" or "mediaType" query parameter',
+		});
+		return;
+	}
+
+	if (req.method === 'OPTIONS') {
+		return res.status(200).end();
+	}
+
+	const profile = await db.getCastProfile(userid);
+	if (!profile) {
+		return { error: 'Go to DMM and connect your RD account', status: 401 };
+	}
+
+	const response = await getToken(
+		profile.clientId,
+		profile.clientSecret,
+		profile.refreshToken,
+		false
+	);
+	if (!response) {
+		return { error: 'Go to DMM and connect your RD account', status: 500 };
+	}
 
 	const imdbidStr = (imdbid as string).replace(/\.json$/, '');
 	const typeSlug = mediaType === 'movie' ? 'movie' : 'show';
@@ -29,20 +57,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		{
 			name: '​2:Stream🪄',
 			title: 'Stream the latest link you casted',
-			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/watch/${imdbidStr}/ping`,
+			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/watch/${imdbidStr}/ping?token=${response.access_token}`,
 			behaviorHints: {
 				bingeGroup: `dmm:${imdbidStr}:stream`,
 			},
 		},
 	];
-
-	if (typeof userid !== 'string' || typeof imdbid !== 'string' || typeof mediaType !== 'string') {
-		res.status(400).json({
-			status: 'error',
-			errorMessage: 'Invalid "userid", "imdbid" or "mediaType" query parameter',
-		});
-		return;
-	}
 
 	// get urls from db
 	const [castItems, otherCastItems] = await Promise.all([
@@ -69,7 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			name: 'DMM 🧙‍♂️ Yours',
 			title,
 			url: item.link
-				? `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26)}`
+				? `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26)}?token=${response.access_token}`
 				: item.url,
 			behaviorHints: {
 				bingeGroup: `dmm:${imdbidStr}:yours`,
@@ -97,7 +117,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		streams.push({
 			name: `DMM ${icons.pop()} Other`,
 			title,
-			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26)}`,
+			url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${item.link.substring(26)}?token=${response.access_token}`,
 			behaviorHints: {
 				bingeGroup: `dmm:${imdbidStr}:other:${icons.length}`,
 			},

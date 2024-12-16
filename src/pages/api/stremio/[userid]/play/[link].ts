@@ -1,33 +1,24 @@
 import { Repository } from '@/services/planetscale';
-import { getToken, unrestrictLink } from '@/services/realDebrid';
+import { unrestrictLink } from '@/services/realDebrid';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new Repository();
 
 // Unrestrict and play a link
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { userid, link } = req.query;
-	if (typeof userid !== 'string' || typeof link !== 'string') {
-		return res.status(400).json({ error: 'Invalid "userid" or "link" query parameter' });
+	const { userid, link, token } = req.query;
+	if (typeof userid !== 'string' || typeof link !== 'string' || typeof token !== 'string') {
+		res.status(400).json({
+			status: 'error',
+			errorMessage: 'Invalid "userid", "link" or "token" query parameter',
+		});
+		return;
 	}
 
 	try {
-		const profile = await db.getCastProfile(userid as string);
-		if (!profile) {
-			return res.status(401).json({ error: 'Go to DMM and connect your RD account' });
-		}
-		const response = await getToken(
-			profile.clientId,
-			profile.clientSecret,
-			profile.refreshToken,
-			false
-		);
-		if (!response) {
-			return res.status(500).json({ error: 'Go to DMM and connect your RD account' });
-		}
 		const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
 		const unrestrict = await unrestrictLink(
-			response.access_token,
+			token,
 			`https://real-debrid.com/d/${link.substring(0, 13)}`,
 			ipAddress,
 			false

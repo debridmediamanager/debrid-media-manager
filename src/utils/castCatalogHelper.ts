@@ -45,37 +45,25 @@ export async function getDMMLibrary(userid: string, page: number) {
 	};
 }
 
-export async function getDMMTorrent(userid: string, torrentID: string) {
-	const profile = await db.getCastProfile(userid);
-	if (!profile) {
-		return { error: 'Go to DMM and connect your RD account', status: 401 };
-	}
-
-	const response = await getToken(
-		profile.clientId,
-		profile.clientSecret,
-		profile.refreshToken,
-		false
-	);
-	if (!response) {
-		return { error: 'Go to DMM and connect your RD account', status: 500 };
-	}
-
-	const info = await getTorrentInfo(response.access_token, torrentID, true);
+export async function getDMMTorrent(userid: string, torrentID: string, token: string) {
+	const info = await getTorrentInfo(token, torrentID, true);
 	if (!info) {
 		return { error: 'Failed to get torrent info', status: 500 };
 	}
 
 	const selectedFiles = info.files.filter((file) => file.selected);
 	if (selectedFiles.length !== info.links.length) {
-		return { error: 'Torrent is no longer cached', status: 404 };
+		return {
+			error: `Torrent is missing ${selectedFiles.length - info.links.length} files`,
+			status: 500,
+		};
 	}
 	const videos = selectedFiles.map((file, idx) => ({
 		id: `dmm:${torrentID}:${file.id}`,
 		title: `${file.path.split('/').pop()} - ${(file.bytes / 1024 / 1024 / 1024).toFixed(2)} GB`,
 		streams: [
 			{
-				url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${info.links[idx].substring(26)}`,
+				url: `${process.env.DMM_ORIGIN}/api/stremio/${userid}/play/${info.links[idx].substring(26)}?token=${token}`,
 				behaviorHints: {
 					bingeGroup: `dmm:${torrentID}`,
 				},

@@ -5,6 +5,18 @@ const db = new Repository();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { userid } = req.query;
+	if (typeof userid !== 'string') {
+		res.status(400).json({
+			status: 'error',
+			errorMessage: 'Invalid "userid" query parameter',
+		});
+		return;
+	}
+
+	if (req.method === 'OPTIONS') {
+		return res.status(200).end();
+	}
+
 	const castedMovies = await db.fetchCastedMovies(userid as string);
 	const movies = [];
 	for (const movie of castedMovies) {
