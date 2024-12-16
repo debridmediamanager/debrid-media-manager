@@ -32,7 +32,8 @@ export function applyQuickSearch2(query: string, unfiltered: SearchResult[]) {
 	if (!query) return unfiltered;
 	return unfiltered.filter((t) =>
 		query.split(' ').every((subquery) => {
-			const q = subquery.toLowerCase();
+			const isExclusion = subquery.startsWith('-');
+			const q = (isExclusion ? subquery.substring(1) : subquery).toLowerCase();
 
 			// Handle video count queries
 			if (q.startsWith('videos:')) {
@@ -59,9 +60,11 @@ export function applyQuickSearch2(query: string, unfiltered: SearchResult[]) {
 
 			// Regular title/hash search
 			try {
-				return new RegExp(q, 'i').test(t.title) || t.hash === q;
+				const matches = new RegExp(q, 'i').test(t.title) || t.hash === q;
+				return isExclusion ? !matches : matches;
 			} catch (e) {
-				return t.hash === q;
+				const matches = t.hash === q;
+				return isExclusion ? !matches : matches;
 			}
 		})
 	);
