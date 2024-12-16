@@ -23,7 +23,7 @@ export async function getDMMLibrary(userid: string, page: number) {
 		profile.clientId,
 		profile.clientSecret,
 		profile.refreshToken,
-		false
+		true
 	);
 	if (!response) {
 		return { error: 'Go to DMM and connect your RD account', status: 500 };

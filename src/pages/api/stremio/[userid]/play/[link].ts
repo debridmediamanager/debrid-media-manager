@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			token,
 			`https://real-debrid.com/d/${link.substring(0, 13)}`,
 			ipAddress,
-			false
+			true
 		);
 		if (!unrestrict) {
 			return res.status(500).json({ error: 'Failed to unrestrict link' });
