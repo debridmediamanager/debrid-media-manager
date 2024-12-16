@@ -30,11 +30,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	try {
 		profile = await db.getCastProfile(userid);
 		if (!profile) {
-			return { error: 'Go to DMM and connect your RD account', status: 401 };
+			throw new Error(`no profile found for user ${userid}`);
 		}
 	} catch (error) {
 		console.error(error);
-		return { error: `Failed to get Real-Debrid profile for user ${userid}`, status: 500 };
+		res.status(500).json({ error: `Failed to get Real-Debrid profile for user ${userid}` });
+		return;
 	}
 
 	let response: { access_token: string } | null = null;
@@ -46,11 +47,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			false
 		);
 		if (!response) {
-			return { error: 'Go to DMM and connect your RD account', status: 500 };
+			throw new Error(`no token found for user ${userid}`);
 		}
 	} catch (error) {
 		console.error(error);
-		return { error: `Failed to get Real-Debrid token for user ${userid}`, status: 500 };
+		res.status(500).json({ error: `Failed to get Real-Debrid token for user ${userid}` });
+		return;
 	}
 
 	const imdbidStr = (imdbid as string).replace(/\.json$/, '');
@@ -147,5 +149,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ error: `Failed to get casted URLs: ${error}` });
+		return;
 	}
 }
