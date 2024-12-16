@@ -2,49 +2,99 @@ import { Repository } from '@/services/planetscale';
 import { TraktMediaItem, getMediaData } from '@/services/trakt';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const movieEndpoints = new Map<string, string>([
-	['Box Office', 'movies/boxoffice'],
-	['Most Played Today', 'movies/played/daily'],
-	['Most Played This Month', 'movies/played/monthly'],
-	['Most Played All Time', 'movies/played/all'],
-	['Most Watched Today', 'movies/watched/daily'],
-	['Most Watched This Month', 'movies/watched/monthly'],
-	['Most Watched', 'movies/watched/all'],
-	// ['Most Collected Today', 'movies/collected/daily'],
-	// // ['Most Collected This Month', 'movies/collected/monthly'],
-	// // ['Most Collected All Time', 'movies/collected/all'],
-	['Most Favorited Today', 'movies/favorited/daily'],
-	['Most Favorited This Month', 'movies/favorited/monthly'],
-	['Most Favorited All Time', 'movies/favorited/all'],
-	['Popular', 'movies/popular'],
-	['Trending', 'movies/trending'],
-	['Most Anticipated', 'movies/anticipated'],
-]);
+type Category = {
+	name: string;
+	items: [string, string][];
+};
 
-const showEndpoints = new Map<string, string>([
-	['Most Played Today', 'shows/played/daily'],
-	['Most Played This Month', 'shows/played/monthly'],
-	['Most Played All Time', 'shows/played/all'],
-	['Most Watched Today', 'shows/watched/daily'],
-	['Most Watched This Month', 'shows/watched/monthly'],
-	['Most Watched All Time', 'shows/watched/all'],
-	// // ['Most Collected Today', 'shows/collected/daily'],
-	// // ['Most Collected This Month', 'shows/collected/monthly'],
-	// // ['Most Collected All Time', 'shows/collected/all'],
-	['Most Favorited Today', 'shows/favorited/daily'],
-	['Most Favorited This Month', 'shows/favorited/monthly'],
-	['Most Favorited All Time', 'shows/favorited/all'],
-	['Popular', 'shows/popular'],
-	['Trending', 'shows/trending'],
-	['Most Anticipated', 'shows/anticipated'],
-]);
+// Movie endpoints organized by category
+const movieEndpoints: Category[] = [
+	{
+		name: 'Box Office',
+		items: [['Box Office', 'movies/boxoffice']],
+	},
+	{
+		name: 'Popular & Trending',
+		items: [
+			['Popular', 'movies/popular'],
+			['Trending', 'movies/trending'],
+		],
+	},
+	{
+		name: 'Most Played',
+		items: [
+			['Most Played Today', 'movies/played/daily'],
+			['Most Played This Month', 'movies/played/monthly'],
+			['Most Played All Time', 'movies/played/all'],
+		],
+	},
+	{
+		name: 'Most Watched',
+		items: [
+			['Most Watched Today', 'movies/watched/daily'],
+			['Most Watched This Month', 'movies/watched/monthly'],
+			['Most Watched All Time', 'movies/watched/all'],
+		],
+	},
+	{
+		name: 'Most Favorited',
+		items: [
+			['Most Favorited Today', 'movies/favorited/daily'],
+			['Most Favorited This Month', 'movies/favorited/monthly'],
+			['Most Favorited All Time', 'movies/favorited/all'],
+		],
+	},
+	{
+		name: 'Anticipated',
+		items: [['Most Anticipated', 'movies/anticipated']],
+	},
+];
+
+// Show endpoints organized by category
+const showEndpoints: Category[] = [
+	{
+		name: 'Popular & Trending',
+		items: [
+			['Popular', 'shows/popular'],
+			['Trending', 'shows/trending'],
+		],
+	},
+	{
+		name: 'Most Played',
+		items: [
+			['Most Played Today', 'shows/played/daily'],
+			['Most Played This Month', 'shows/played/monthly'],
+			['Most Played All Time', 'shows/played/all'],
+		],
+	},
+	{
+		name: 'Most Watched',
+		items: [
+			['Most Watched Today', 'shows/watched/daily'],
+			['Most Watched This Month', 'shows/watched/monthly'],
+			['Most Watched All Time', 'shows/watched/all'],
+		],
+	},
+	{
+		name: 'Most Favorited',
+		items: [
+			['Most Favorited Today', 'shows/favorited/daily'],
+			['Most Favorited This Month', 'shows/favorited/monthly'],
+			['Most Favorited All Time', 'shows/favorited/all'],
+		],
+	},
+	{
+		name: 'Anticipated',
+		items: [['Most Anticipated', 'shows/anticipated']],
+	},
+];
 
 type TraktBrowseResponseCache = {
 	lastUpdated: number;
 	results: TraktMediaItem[];
 };
-const responseCache: Record<string, TraktBrowseResponseCache> = {};
 
+const responseCache: Record<string, TraktBrowseResponseCache> = {};
 const traktClientID = process.env.TRAKT_CLIENT_ID;
 const db = new Repository();
 
@@ -56,47 +106,54 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	let mediaType = browse.toLowerCase() === 'shows' ? 'show' : 'movie';
-	const arrayOfResults = new Map<string, TraktMediaItem[]>();
+	const categories: { name: string; results: Record<string, TraktMediaItem[]> }[] = [];
 
 	try {
-		let endpoints = mediaType === 'movie' ? movieEndpoints : showEndpoints;
-		const keys = Array.from(endpoints.keys());
+		const endpoints = mediaType === 'movie' ? movieEndpoints : showEndpoints;
 
-		for (let i = 0; i < keys.length; i++) {
-			const key = keys[i];
-			const endpoint = endpoints.get(key)!;
+		for (const category of endpoints) {
+			const categoryResults: Record<string, TraktMediaItem[]> = {};
 
-			if (
-				responseCache[endpoint] &&
-				responseCache[endpoint].results.length &&
-				responseCache[endpoint].lastUpdated > new Date().getTime() - 1000 * 60 * 10
-			) {
-				arrayOfResults.set(key, responseCache[endpoint].results);
-				continue;
+			for (const [key, endpoint] of category.items) {
+				if (
+					responseCache[endpoint] &&
+					responseCache[endpoint].results.length &&
+					responseCache[endpoint].lastUpdated > new Date().getTime() - 1000 * 60 * 10
+				) {
+					categoryResults[key] = responseCache[endpoint].results;
+					continue;
+				}
+
+				try {
+					let searchResults = await db.getSearchResults<TraktMediaItem[]>(
+						`trakt:${endpoint}`
+					);
+					if (!searchResults?.length) {
+						searchResults = await getMediaData(traktClientID!, endpoint);
+						await db.saveSearchResults(`trakt:${endpoint}`, searchResults);
+					}
+					responseCache[endpoint] = {
+						lastUpdated: new Date().getTime(),
+						results: searchResults,
+					};
+					categoryResults[key] = responseCache[endpoint].results;
+				} catch (error: any) {
+					console.error(`Error fetching ${endpoint}:`, error);
+					continue;
+				}
 			}
 
-			try {
-				let searchResults = await db.getSearchResults<TraktMediaItem[]>(
-					`trakt:${endpoint}`
-				);
-				if (!searchResults?.length) {
-					searchResults = await getMediaData(traktClientID!, endpoint);
-					await db.saveSearchResults(`trakt:${endpoint}`, searchResults);
-				}
-				responseCache[endpoint] = {
-					lastUpdated: new Date().getTime(),
-					results: searchResults,
-				};
-				arrayOfResults.set(key, responseCache[endpoint].results);
-			} catch (error: any) {
-				console.error(`Error fetching ${endpoint}:`, error);
-				continue;
+			if (Object.keys(categoryResults).length > 0) {
+				categories.push({
+					name: category.name,
+					results: categoryResults,
+				});
 			}
 		}
 
 		res.status(200).json({
 			mediaType,
-			arrayOfResults: Object.fromEntries(arrayOfResults),
+			categories,
 		});
 	} catch (error) {
 		console.error('Error in trakt info handler:', error);
