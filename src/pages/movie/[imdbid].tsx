@@ -1,5 +1,6 @@
 import MovieSearchResults from '@/components/MovieSearchResults';
 import Poster from '@/components/poster';
+import SearchTokens from '@/components/SearchTokens';
 import { showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
@@ -539,6 +540,13 @@ const MovieSearch: FunctionComponent = () => {
 				</span>
 			</div>
 			<div className="mb-2 flex items-center gap-2 overflow-x-auto p-2">
+				<SearchTokens
+					title={movieInfo.title}
+					year={movieInfo.year}
+					onTokenClick={(token) =>
+						setQuery((prev) => (prev ? `${prev} ${token}` : token))
+					}
+				/>
 				{getColorScale().map((scale, idx) => (
 					<span
 						key={idx}
