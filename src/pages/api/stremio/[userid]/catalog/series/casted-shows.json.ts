@@ -14,6 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	if (req.method === 'OPTIONS') {
+		res.setHeader('access-control-allow-origin', '*');
 		return res.status(200).end();
 	}
 
