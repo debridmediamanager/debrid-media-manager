@@ -17,7 +17,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return res.status(400).json({ error: 'Missing required fields' });
 		}
 
-		const response = await getToken(clientId, clientSecret, refreshToken, false);
+		let response: { access_token: string } | null = null;
+		try {
+			response = await getToken(clientId, clientSecret, refreshToken, true);
+			if (!response) {
+				throw new Error(`no token found`);
+			}
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({ error: `Failed to get Real-Debrid token: ${error}` });
+			return;
+		}
 
 		const userid = await generateUserId(response.access_token);
 
