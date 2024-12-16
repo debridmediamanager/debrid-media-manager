@@ -7,9 +7,14 @@ import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
+type Category = {
+	name: string;
+	results: Record<string, TraktMediaItem[]>;
+};
+
 type TraktBrowseProps = {
 	mediaType: string;
-	arrayOfResults: Record<string, TraktMediaItem[]>;
+	categories: Category[];
 };
 
 export const TraktBrowse: FunctionComponent = () => {
@@ -75,39 +80,45 @@ export const TraktBrowse: FunctionComponent = () => {
 			</div>
 
 			<div className="flex w-full max-w-7xl flex-col items-center gap-6">
-				{Object.keys(data.arrayOfResults)
-					.sort()
-					.map((listName: string, idx: number) => (
-						<div key={listName} className="w-full">
-							<h2 className="mb-4 text-xl font-bold text-white">
-								<span className="text-yellow-500">{idx + 1}</span> {listName}
-							</h2>
-							<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">
-								{data.arrayOfResults[listName].map((item: TraktMediaItem) => {
-									const imdbid =
-										item.movie?.ids?.imdb ||
-										item.show?.ids?.imdb ||
-										(item as any).ids?.imdb;
-									if (!imdbid) {
-										return null;
-									}
-									const title =
-										item.movie?.title ||
-										item.show?.title ||
-										(item as any).title;
-									return (
-										<Link
-											key={imdbid}
-											href={`/${data.mediaType}/${imdbid}`}
-											className=""
-										>
-											<Poster imdbId={imdbid} title={title} />
-										</Link>
-									);
-								})}
+				{data.categories.map((category, categoryIndex) => (
+					<div key={category.name} className="w-full">
+						<h2 className="mb-4 text-xl font-bold text-white">
+							<span className="text-yellow-500">{categoryIndex + 1}</span>{' '}
+							{category.name}
+						</h2>
+						{Object.entries(category.results).map(([listName, items]) => (
+							<div key={listName} className="mb-6 last:mb-0">
+								<h3 className="mb-4 text-lg font-semibold text-gray-300">
+									{listName}
+								</h3>
+								<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">
+									{items.map((item: TraktMediaItem) => {
+										const imdbid =
+											item.movie?.ids?.imdb ||
+											item.show?.ids?.imdb ||
+											(item as any).ids?.imdb;
+										if (!imdbid) {
+											return null;
+										}
+										const title =
+											item.movie?.title ||
+											item.show?.title ||
+											(item as any).title;
+										return (
+											<Link
+												key={imdbid}
+												href={`/${data.mediaType}/${imdbid}`}
+												className=""
+											>
+												<Poster imdbId={imdbid} title={title} />
+											</Link>
+										);
+									})}
+								</div>
 							</div>
-						</div>
-					))}
+						))}
+					</div>
+				))}
 			</div>
 		</div>
 	);
