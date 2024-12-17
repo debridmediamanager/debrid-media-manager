@@ -1,6 +1,7 @@
 import MovieSearchResults from '@/components/MovieSearchResults';
-import Poster from '@/components/poster';
+import RelatedMedia from '@/components/RelatedMedia';
 import SearchTokens from '@/components/SearchTokens';
+import Poster from '@/components/poster';
 import { showInfoForRD } from '@/components/showInfo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
@@ -491,6 +492,7 @@ const MovieSearch: FunctionComponent = () => {
 							Show {totalUncachedCount} uncached
 						</button>
 					)}
+					<RelatedMedia imdbId={imdbid as string} mediaType="movie" />
 				</div>
 			</div>
 
