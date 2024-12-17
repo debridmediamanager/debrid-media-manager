@@ -1,3 +1,4 @@
+import RelatedMedia from '@/components/RelatedMedia';
 import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
 import Poster from '@/components/poster';
@@ -509,6 +510,7 @@ const TvSearch: FunctionComponent = () => {
 							Show {totalUncachedCount} uncached
 						</button>
 					)}
+					<RelatedMedia imdbId={imdbid as string} mediaType="show" />
 				</div>
 			</div>
 
