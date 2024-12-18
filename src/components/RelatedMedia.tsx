@@ -25,9 +25,15 @@ export default function RelatedMedia({ imdbId, mediaType }: RelatedMediaProps) {
 	const [showRelated, setShowRelated] = useState(false);
 	const [relatedMedia, setRelatedMedia] = useState<MediaItem[]>([]);
 
-	const handleItemClick = (itemImdbId: string) => {
+	const handleItemClick = (e: React.MouseEvent, itemImdbId: string) => {
 		const path = `/${mediaType}/${itemImdbId}${mediaType === 'show' ? '/1' : ''}`;
-		window.location.href = path; // Force page reload
+		if (e.ctrlKey || e.metaKey) {
+			// Open in new tab if ctrl/cmd is pressed
+			window.open(path, '_blank');
+		} else {
+			// Force page reload in current tab
+			window.location.href = path;
+		}
 	};
 
 	const fetchRelatedMedia = async () => {
@@ -73,7 +79,7 @@ export default function RelatedMedia({ imdbId, mediaType }: RelatedMediaProps) {
 						{relatedMedia.map((item) => (
 							<div
 								key={item.ids.imdb}
-								onClick={() => handleItemClick(item.ids.imdb)}
+								onClick={(e) => handleItemClick(e, item.ids.imdb)}
 								className="cursor-pointer transition-transform hover:scale-105"
 							>
 								<div className="flex flex-col items-center">
