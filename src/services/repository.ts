@@ -27,10 +27,30 @@ export class Repository {
 
 	private static getInstance(): PrismaClient {
 		if (!Repository.instance) {
-			Repository.instance = new PrismaClient();
-			Repository.instance.$queryRaw`SET @@boost_cached_queries = true`;
+			Repository.instance = new PrismaClient({
+				log: ['warn', 'error'],
+			});
+
+			// Handle cleanup on process termination
+			['SIGINT', 'SIGTERM'].forEach((signal) => {
+				process.on(signal, async () => {
+					await Repository.instance.$disconnect();
+				});
+			});
+
+			// Handle connection cleanup
+			process.on('beforeExit', async () => {
+				await Repository.instance.$disconnect();
+			});
 		}
 		return Repository.instance;
+	}
+
+	// Ensure connection is properly closed when repository is no longer needed
+	public async disconnect(): Promise<void> {
+		if (Repository.instance) {
+			await Repository.instance.$disconnect();
+		}
 	}
 
 	public async getIMDBIdByHash(hash: string): Promise<string | null> {
