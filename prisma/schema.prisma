@@ -134,3 +134,16 @@ model PatreonSubscription {
   userId        Int      @unique
   user          User     @relation(fields: [userId], references: [id])
 }
+
+model Report {
+  id        Int      @id @default(autoincrement())
+  hash      String
+  imdbId    String
+  userId    String
+  type      String   // "porn" or "wrong_imdb" or "wrong_season"
+  createdAt DateTime @default(now())
+
+  @@unique([hash, userId])
+  @@index([imdbId])
+  @@index([hash])
+}

@@ -6,7 +6,7 @@ import {
 } from '@/utils/checks';
 import axios from 'axios';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
-import { Repository } from './planetscale';
+import { Repository } from './repository';
 
 type MovieScrapeJob = {
 	titles: string[];

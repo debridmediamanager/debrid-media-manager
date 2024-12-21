@@ -1,4 +1,4 @@
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { NextApiHandler } from 'next';
 
 const db = new Repository();

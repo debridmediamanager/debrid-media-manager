@@ -1,6 +1,6 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { ScrapeSearchResult } from '@/services/mediasearch';
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { computeHashFromTorrent } from '@/utils/extractHashFromTorrent';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';

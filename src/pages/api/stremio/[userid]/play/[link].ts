@@ -1,5 +1,5 @@
-import { Repository } from '@/services/planetscale';
 import { unrestrictLink } from '@/services/realDebrid';
+import { Repository } from '@/services/repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new Repository();

@@ -1,5 +1,5 @@
 import { cleanMovieScrapes } from '@/services/movieCleaner';
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { cleanTvScrapes } from '@/services/tvCleaner';
 import axios from 'axios';
 import { scrapeMovies } from './movieScraper';

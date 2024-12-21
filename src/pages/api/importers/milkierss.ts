@@ -1,4 +1,4 @@
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { milkieGetDetails } from './milkie';
 

@@ -23,6 +23,7 @@ export type SearchResult = {
 	medianFileSize: number;
 	biggestFileSize: number;
 	videoCount: number;
+	imdbId?: string;
 };
 
 export interface Hashlist {

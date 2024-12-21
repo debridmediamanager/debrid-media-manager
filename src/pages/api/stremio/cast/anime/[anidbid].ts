@@ -1,4 +1,4 @@
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';

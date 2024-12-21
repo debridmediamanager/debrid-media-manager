@@ -1,4 +1,4 @@
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { validateTokenWithHash } from '@/utils/token';
 import { NextApiRequest, NextApiResponse } from 'next';
 

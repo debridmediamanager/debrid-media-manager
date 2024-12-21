@@ -4,6 +4,7 @@ import { borderColor, btnColor, btnIcon, btnLabel, fileSize } from '@/utils/resu
 import { isVideo } from '@/utils/selectable';
 import { useEffect, useState } from 'react';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
+import ReportButton from './ReportButton';
 
 type MovieSearchResultsProps = {
 	filteredResults: SearchResult[];
@@ -20,6 +21,7 @@ type MovieSearchResultsProps = {
 	addAd: (hash: string) => Promise<void>;
 	deleteRd: (hash: string) => Promise<void>;
 	deleteAd: (hash: string) => Promise<void>;
+	imdbId?: string;
 };
 
 const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
@@ -37,6 +39,7 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 	addAd,
 	deleteRd,
 	deleteAd,
+	imdbId,
 }) => {
 	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
@@ -317,6 +320,12 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 									<FaMagnet className="inline" />{' '}
 									{downloadMagnets ? 'Download' : 'Copy'}
 								</button>
+
+								<ReportButton
+									hash={r.hash}
+									imdbId={imdbId!}
+									userId={rdKey || adKey || ''}
+								/>
 							</div>
 						</div>
 					</div>
