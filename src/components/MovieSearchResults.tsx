@@ -4,7 +4,6 @@ import { borderColor, btnColor, btnIcon, btnLabel, fileSize } from '@/utils/resu
 import { isVideo } from '@/utils/selectable';
 import { useEffect, useState } from 'react';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
-import MediaInfoButton from './MediaInfoButton';
 import ReportButton from './ReportButton';
 
 type MovieSearchResultsProps = {
@@ -321,8 +320,6 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 									<FaMagnet className="inline" />{' '}
 									{downloadMagnets ? 'Download' : 'Copy'}
 								</button>
-
-								{r.rdAvailable && <MediaInfoButton hash={r.hash} />}
 
 								<ReportButton
 									hash={r.hash}
