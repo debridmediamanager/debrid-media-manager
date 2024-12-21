@@ -32,6 +32,9 @@ export function applyQuickSearch2(query: string, unfiltered: SearchResult[]) {
 	if (!query) return unfiltered;
 	return unfiltered.filter((t) =>
 		query.split(' ').every((subquery) => {
+			// Skip if the term is just a hyphen
+			if (subquery === '-') return true;
+
 			const isExclusion = subquery.startsWith('-');
 			const q = (isExclusion ? subquery.substring(1) : subquery).toLowerCase();
 
