@@ -1,9 +1,152 @@
+import axios from 'axios';
 import Swal from 'sweetalert2';
 import { handleShare } from '../../utils/hashList';
 import { isVideo } from '../../utils/selectable';
 import { renderButton, renderFileRow, renderInfoTable } from './components';
 import { ApiTorrentFile, MagnetLink } from './types';
 import { getEpisodeInfo } from './utils';
+
+interface Stream {
+	codec_type: string;
+	codec_name: string;
+	tags?: {
+		language?: string;
+		title?: string;
+	};
+	width?: number;
+	height?: number;
+	channel_layout?: string;
+}
+
+interface MediaInfoResponse {
+	SelectedFiles: {
+		[key: string]: {
+			MediaInfo?: {
+				streams: Stream[];
+				format: {
+					duration: string;
+				};
+				chapters?: {
+					tags: {
+						title: string;
+					};
+				}[];
+			};
+		};
+	};
+}
+
+const languageEmojis: { [key: string]: string } = {
+	ara: '🇸🇦',
+	chi: '🇨🇳',
+	cze: '🇨🇿',
+	dan: '🇩🇰',
+	dut: '🇳🇱',
+	eng: '🇬🇧',
+	fin: '🇫🇮',
+	fre: '🇫🇷',
+	ger: '🇩🇪',
+	gre: '🇬🇷',
+	heb: '🇮🇱',
+	hrv: '🇭🇷',
+	hun: '🇭🇺',
+	ind: '🇮🇩',
+	ita: '🇮🇹',
+	jpn: '🇯🇵',
+	kor: '🇰🇷',
+	may: '🇲🇾',
+	nob: '🇳🇴',
+	nor: '🇳🇴',
+	pol: '🇵🇱',
+	por: '🇵🇹',
+	rum: '🇷🇴',
+	rus: '🇷🇺',
+	spa: '🇪🇸',
+	swe: '🇸🇪',
+	tha: '🇹🇭',
+	tur: '🇹🇷',
+	ukr: '🇺🇦',
+	vie: '🇻🇳',
+};
+
+const generatePasswordHash = async (hash: string): Promise<string> => {
+	const salt = 'debridmediamanager.com';
+	const msgBuffer = new TextEncoder().encode(hash + salt);
+	const hashBuffer = await crypto.subtle.digest('SHA-1', msgBuffer);
+	const hashArray = Array.from(new Uint8Array(hashBuffer));
+	return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+};
+
+const formatDuration = (seconds: string) => {
+	const duration = parseFloat(seconds);
+	const hours = Math.floor(duration / 3600);
+	const minutes = Math.floor((duration % 3600) / 60);
+	return `${hours}h ${minutes}m`;
+};
+
+const getStreamInfo = (mediaInfo: MediaInfoResponse | null) => {
+	if (!mediaInfo) return [];
+	const fileInfo = Object.values(mediaInfo.SelectedFiles)[0];
+	if (!fileInfo.MediaInfo) return [];
+
+	const { streams, format, chapters } = fileInfo.MediaInfo;
+	const videoStream = streams.find((s) => s.codec_type === 'video');
+	const audioStreams = streams.filter((s) => s.codec_type === 'audio');
+	const subtitleStreams = streams.filter((s) => s.codec_type === 'subtitle');
+
+	const rows: { label: string; value: string }[] = [];
+
+	if (videoStream) {
+		rows.push({
+			label: '🎥 Video',
+			value: `${videoStream.codec_name.toUpperCase()} • ${videoStream.width}x${videoStream.height}`,
+		});
+	}
+
+	if (audioStreams.length > 0) {
+		rows.push({
+			label: '🔊 Audio Tracks',
+			value:
+				`${audioStreams.length} tracks: ` +
+				audioStreams
+					.map(
+						(stream) =>
+							`${stream.tags?.language ? languageEmojis[stream.tags.language] || stream.tags.language : '🌐'} ${stream.codec_name.toUpperCase()}`
+					)
+					.join(', '),
+		});
+	}
+
+	if (subtitleStreams.length > 0) {
+		rows.push({
+			label: '💬 Subtitles',
+			value:
+				`${subtitleStreams.length} tracks: ` +
+				subtitleStreams
+					.map(
+						(stream) =>
+							`${stream.tags?.language ? languageEmojis[stream.tags.language] || stream.tags.language : '🌐'}`
+					)
+					.join(', '),
+		});
+	}
+
+	if (format.duration) {
+		rows.push({
+			label: '⏱️ Duration',
+			value: formatDuration(format.duration),
+		});
+	}
+
+	if (chapters && chapters.length > 0) {
+		rows.push({
+			label: '📑 Chapters',
+			value: `${chapters.length} chapters included`,
+		});
+	}
+
+	return rows;
+};
 
 const renderTorrentInfo = (
 	info: any,
@@ -107,6 +250,18 @@ export const showInfoForRD = async (
 	shouldDownloadMagnets?: boolean
 ): Promise<void> => {
 	let warning = '';
+	let mediaInfo: MediaInfoResponse | null = null;
+
+	try {
+		const password = await generatePasswordHash(info.hash);
+		const response = await axios.get<MediaInfoResponse>(
+			`https://debridmediamanager.com/mediainfo?hash=${info.hash}&password=${password}`
+		);
+		mediaInfo = response.data;
+	} catch (error) {
+		console.error('MediaInfo error:', error);
+		// Silently fail as media info is optional
+	}
 	const isIntact =
 		info.fake ||
 		info.files.filter((f: ApiTorrentFile) => f.selected === 1).length === info.links.length;
@@ -176,43 +331,53 @@ export const showInfoForRD = async (
         </div>
     </div>`;
 
-	if (!info.fake) {
-		const saveButton = `
-            <div class="m-2">
-                <button
-                    class="px-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium rounded-sm shadow-lg transition-all duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]"
-                    onclick="window.saveSelection('rd:${info.id}', '${info.hash}', Array.from(document.querySelectorAll('.file-selector:checked')).map(cb => cb.dataset.fileId))"
-                >
-                    💾 Save File Selection
-                </button>
-            </div>
-        `;
+	const saveButton = !info.fake
+		? `
+		<div class="m-2">
+			<button
+				class="px-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium rounded-sm shadow-lg transition-all duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]"
+				onclick="window.saveSelection('rd:${info.id}', '${info.hash}', Array.from(document.querySelectorAll('.file-selector:checked')).map(cb => cb.dataset.fileId))"
+			>
+				💾 Save File Selection
+			</button>
+		</div>
+	`
+		: '';
 
-		const infoRows = [
-			{ label: 'Size', value: (info.bytes / 1024 ** 3).toFixed(2) + ' GB' },
-			{ label: 'ID', value: info.id },
-			{ label: 'Original filename', value: info.original_filename },
-			{ label: 'Original size', value: (info.original_bytes / 1024 ** 3).toFixed(2) + ' GB' },
-			{ label: 'Status', value: info.status },
-			...(info.status === 'downloading'
-				? [
-						{ label: 'Progress', value: info.progress.toFixed(2) + '%' },
-						{ label: 'Speed', value: (info.speed / 1024).toFixed(2) + ' KB/s' },
-						{ label: 'Seeders', value: info.seeders },
-					]
-				: []),
-			{ label: 'Added', value: new Date(info.added).toLocaleString() },
-			{ label: 'Progress', value: info.progress + '%' },
-		];
-		html = html.replace(
-			'<hr class="border-gray-600"/>',
-			`<div class="text-sm text-gray-200">
-            ${renderInfoTable(infoRows)}
-            ${warning}
-            ${saveButton}
-        </div>`
-		);
-	}
+	const infoRows = info.fake
+		? [
+				{ label: 'Size', value: (info.bytes / 1024 ** 3).toFixed(2) + ' GB' },
+				...getStreamInfo(mediaInfo),
+			]
+		: [
+				{ label: 'Size', value: (info.bytes / 1024 ** 3).toFixed(2) + ' GB' },
+				{ label: 'ID', value: info.id },
+				{ label: 'Original filename', value: info.original_filename },
+				{
+					label: 'Original size',
+					value: (info.original_bytes / 1024 ** 3).toFixed(2) + ' GB',
+				},
+				{ label: 'Status', value: info.status },
+				...(info.status === 'downloading'
+					? [
+							{ label: 'Progress', value: info.progress.toFixed(2) + '%' },
+							{ label: 'Speed', value: (info.speed / 1024).toFixed(2) + ' KB/s' },
+							{ label: 'Seeders', value: info.seeders },
+						]
+					: []),
+				{ label: 'Added', value: new Date(info.added).toLocaleString() },
+				{ label: 'Progress', value: info.progress + '%' },
+				...getStreamInfo(mediaInfo),
+			];
+
+	html = html.replace(
+		'<hr class="border-gray-600"/>',
+		`<div class="text-sm text-gray-200">
+		${renderInfoTable(infoRows)}
+		${warning}
+		${saveButton}
+	</div>`
+	);
 
 	await Swal.fire({
 		html,
@@ -236,6 +401,18 @@ export const showInfoForAD = async (
 	imdbId: string = '',
 	shouldDownloadMagnets?: boolean
 ): Promise<void> => {
+	let mediaInfo: MediaInfoResponse | null = null;
+
+	try {
+		const password = await generatePasswordHash(info.hash);
+		const response = await axios.get<MediaInfoResponse>(
+			`https://debridmediamanager.com/mediainfo?hash=${info.hash}&password=${password}`
+		);
+		mediaInfo = response.data;
+	} catch (error) {
+		console.error('MediaInfo error:', error);
+		// Silently fail as media info is optional
+	}
 	const torrent = {
 		id: `ad:${info.id}`,
 		hash: info.hash,
@@ -262,15 +439,18 @@ export const showInfoForAD = async (
 			}
         </div>`;
 
+	const allInfoRows = [
+		{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
+		{ label: 'ID', value: info.id },
+		{ label: 'Status', value: `${info.status} (code: ${info.statusCode})` },
+		{ label: 'Added', value: new Date(info.uploadDate * 1000).toLocaleString() },
+		...getStreamInfo(mediaInfo),
+	];
+
 	const html = `<h1 class="text-lg font-bold mt-6 mb-4 text-gray-100">${info.filename}</h1>
     ${libraryActions}
     <div class="text-sm text-gray-200">
-        ${renderInfoTable([
-			{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
-			{ label: 'ID', value: info.id },
-			{ label: 'Status', value: `${info.status} (code: ${info.statusCode})` },
-			{ label: 'Added', value: new Date(info.uploadDate * 1000).toLocaleString() },
-		])}
+        ${renderInfoTable(allInfoRows)}
     </div>
     <div class="text-sm max-h-60 mb-4 text-left p-1 bg-gray-900">
         <div class="overflow-x-auto" style="max-width: 100%;">

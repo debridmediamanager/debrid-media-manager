@@ -4,7 +4,6 @@ import { getEpisodeCountClass, getEpisodeCountLabel } from '@/utils/episodeUtils
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize } from '@/utils/results';
 import { useEffect, useState } from 'react';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
-import MediaInfoButton from './MediaInfoButton';
 import ReportButton from './ReportButton';
 
 type TvSearchResultsProps = {
@@ -320,8 +319,6 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 									<FaMagnet className="inline" />{' '}
 									{downloadMagnets ? 'Download' : 'Copy'}
 								</button>
-
-								{r.rdAvailable && <MediaInfoButton hash={r.hash} />}
 
 								<ReportButton
 									hash={r.hash}
