@@ -470,16 +470,6 @@ const TvSearch: FunctionComponent = () => {
 				</div>
 
 				<div>
-					{rdKey && getFirstAvailableRdTorrent() && (
-						<>
-							<button
-								className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
-								onClick={() => addRd(getFirstAvailableRdTorrent()!.hash)}
-							>
-								<b>⚡Instant RD</b>
-							</button>
-						</>
-					)}
 					{rdKey && (
 						<>
 							<button
@@ -488,6 +478,14 @@ const TvSearch: FunctionComponent = () => {
 							>
 								<b>🕵🏻Scan Available</b>
 							</button>
+							{getFirstAvailableRdTorrent() && (
+								<button
+									className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
+									onClick={() => addRd(getFirstAvailableRdTorrent()!.hash)}
+								>
+									<b>⚡Instant RD</b>
+								</button>
+							)}
 							<button
 								className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
 								onClick={() =>
