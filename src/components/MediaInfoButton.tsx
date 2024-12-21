@@ -76,7 +76,7 @@ export default function MediaInfoButton({ hash }: MediaInfoButtonProps) {
 			setLoading(true);
 			const password = await generatePasswordHash(hash);
 			const response = await axios.get<MediaInfoResponse>(
-				`https://mediainfo.bensarmiento.workers.dev/mediainfo?hash=${hash}&password=${password}`
+				`https://debridmediamanager.com/mediainfo?hash=${hash}&password=${password}`
 			);
 			setMediaInfo(response.data);
 		} catch (error) {
