@@ -15,7 +15,7 @@ import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { convertToUserTorrent, fetchAllDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
-import { applyQuickSearch2 } from '@/utils/quickSearch';
+import { quickSearch } from '@/utils/quickSearch';
 import { sortByBiggest } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { defaultMovieSize, defaultPlayer } from '@/utils/settings';
@@ -220,7 +220,7 @@ const MovieSearch: FunctionComponent = () => {
 
 	useEffect(() => {
 		if (searchResults.length === 0) return;
-		const filteredResults = applyQuickSearch2(query, searchResults);
+		const filteredResults = quickSearch(query, searchResults);
 		setFilteredResults(filteredResults);
 	}, [query, searchResults]);
 
