@@ -322,7 +322,7 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 									{downloadMagnets ? 'Download' : 'Copy'}
 								</button>
 
-								<MediaInfoButton hash={r.hash} />
+								{r.rdAvailable && <MediaInfoButton hash={r.hash} />}
 
 								<ReportButton
 									hash={r.hash}
