@@ -28,7 +28,7 @@ import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librar
 import { handleChangeType } from '@/utils/libraryTypeManagement';
 import { localRestore } from '@/utils/localRestore';
 import { normalize } from '@/utils/mediaId';
-import { applyQuickSearch } from '@/utils/quickSearch';
+import { quickSearchLibrary } from '@/utils/quickSearch';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { getHashOfTorrent } from '@/utils/torrentFile';
@@ -350,7 +350,7 @@ function TorrentsPage() {
 		setInProgressCount(userTorrentsList.filter(isInProgress).length);
 		setFailedCount(userTorrentsList.filter(isFailed).length);
 		if (hasNoQueryParamsBut('page')) {
-			setFilteredList(applyQuickSearch(query, userTorrentsList));
+			setFilteredList(quickSearchLibrary(query, userTorrentsList));
 			// deleteFailedTorrents(userTorrentsList); // disabled because this is BAD!
 			setFiltering(false);
 			setHelpTextBasedOnTime();
@@ -359,7 +359,7 @@ function TorrentsPage() {
 		let tmpList = userTorrentsList;
 		if (status === 'slow') {
 			tmpList = tmpList.filter(isSlowOrNoLinks);
-			setFilteredList(applyQuickSearch(query, tmpList));
+			setFilteredList(quickSearchLibrary(query, tmpList));
 			if (helpText !== 'hide')
 				setHelpText(
 					'The displayed torrents are older than one hour and lack any seeders. You can use the "Delete shown" option to remove them.'
@@ -367,12 +367,12 @@ function TorrentsPage() {
 		}
 		if (status === 'inprogress') {
 			tmpList = tmpList.filter(isInProgress);
-			setFilteredList(applyQuickSearch(query, tmpList));
+			setFilteredList(quickSearchLibrary(query, tmpList));
 			if (helpText !== 'hide') setHelpText('Torrents that are still downloading');
 		}
 		if (status === 'failed') {
 			tmpList = tmpList.filter(isFailed);
-			setFilteredList(applyQuickSearch(query, tmpList));
+			setFilteredList(quickSearchLibrary(query, tmpList));
 			if (helpText !== 'hide') setHelpText('Torrents that have a failure status');
 		}
 		if (status === 'uncached') {
@@ -383,42 +383,42 @@ function TorrentsPage() {
 						uncachedRdHashes.has(t.hash)) ||
 					(t.id.startsWith('ad:') && uncachedAdIDs.includes(t.id))
 			);
-			setFilteredList(applyQuickSearch(query, tmpList));
+			setFilteredList(quickSearchLibrary(query, tmpList));
 			if (helpText !== 'hide') setHelpText('Torrents that are no longer cached');
 		}
 		if (status === 'selected') {
 			tmpList = tmpList.filter((t) => selectedTorrents.has(t.id));
-			setFilteredList(applyQuickSearch(query, tmpList));
+			setFilteredList(quickSearchLibrary(query, tmpList));
 			if (helpText !== 'hide') setHelpText('Torrents that you have selected');
 		}
 		if (titleFilter) {
 			const decoded = decodeURIComponent(titleFilter as string);
 			tmpList = tmpList.filter((t) => normalize(t.title) === decoded);
-			setFilteredList(applyQuickSearch(query, tmpList));
+			setFilteredList(quickSearchLibrary(query, tmpList));
 		}
 		if (tvTitleFilter) {
 			const decoded = decodeURIComponent(tvTitleFilter as string);
 			tmpList = tmpList.filter(
 				(t) => t.mediaType === 'tv' && t.info?.title && normalize(t.info.title) === decoded
 			);
-			setFilteredList(applyQuickSearch(query, tmpList));
+			setFilteredList(quickSearchLibrary(query, tmpList));
 		}
 		if (hashFilter) {
 			const hashVal = hashFilter as string;
 			tmpList = tmpList.filter((t) => t.hash === hashVal);
-			setFilteredList(applyQuickSearch(query, tmpList));
+			setFilteredList(quickSearchLibrary(query, tmpList));
 		}
 		if (status === 'sametitle') {
 			tmpList = tmpList.filter((t) => sameTitle.has(normalize(t.title)));
-			setFilteredList(applyQuickSearch(query, tmpList));
+			setFilteredList(quickSearchLibrary(query, tmpList));
 		}
 		if (status === 'samehash') {
 			tmpList = tmpList.filter((t) => sameHash.has(t.hash));
-			setFilteredList(applyQuickSearch(query, tmpList));
+			setFilteredList(quickSearchLibrary(query, tmpList));
 		}
 		if (mediaType) {
 			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
-			setFilteredList(applyQuickSearch(query, tmpList));
+			setFilteredList(quickSearchLibrary(query, tmpList));
 			if (helpText !== 'hide')
 				setHelpText(
 					`Torrents shown are detected as ${['movies', 'TV shows', 'non-movie/TV content'][['movie', 'tv', 'other'].indexOf(mediaType as string)]}.`

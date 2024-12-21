@@ -2,7 +2,7 @@ import { SearchResult } from '@/services/mediasearch';
 import { UserTorrent } from '@/torrent/userTorrent';
 
 // given a list, filter by query and paginate
-export function applyQuickSearch(query: string, unfiltered: UserTorrent[]) {
+export function quickSearchLibrary(query: string, unfiltered: UserTorrent[]) {
 	return query
 		? unfiltered.filter((t) =>
 				query.split(' ').every((subquery) => {
@@ -28,7 +28,7 @@ export function applyQuickSearch(query: string, unfiltered: UserTorrent[]) {
 		: unfiltered;
 }
 
-export function applyQuickSearch2(query: string, unfiltered: SearchResult[]) {
+export function quickSearch(query: string, unfiltered: SearchResult[]) {
 	if (!query) return unfiltered;
 	return unfiltered.filter((t) =>
 		query.split(' ').every((subquery) => {

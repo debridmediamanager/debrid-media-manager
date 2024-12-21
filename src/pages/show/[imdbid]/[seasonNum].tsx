@@ -20,7 +20,7 @@ import {
 } from '@/utils/episodeUtils';
 import { convertToUserTorrent, fetchAllDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
-import { applyQuickSearch2 } from '@/utils/quickSearch';
+import { quickSearch } from '@/utils/quickSearch';
 import { sortByMedian } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { defaultEpisodeSize, defaultPlayer } from '@/utils/settings';
@@ -223,7 +223,7 @@ const TvSearch: FunctionComponent = () => {
 
 	useEffect(() => {
 		if (searchResults.length === 0) return;
-		const filteredResults = applyQuickSearch2(query, searchResults);
+		const filteredResults = quickSearch(query, searchResults);
 		setFilteredResults(filteredResults);
 	}, [query, searchResults]);
 
