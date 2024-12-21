@@ -1,4 +1,4 @@
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import axios from 'axios';
 import { distance } from 'fastest-levenshtein';
 import _ from 'lodash';

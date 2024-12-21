@@ -1,5 +1,5 @@
-import { Repository } from '@/services/planetscale';
 import { getTorrentInfo } from '@/services/realDebrid';
+import { Repository } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { padWithZero } from '@/utils/checks';
 import axios from 'axios';

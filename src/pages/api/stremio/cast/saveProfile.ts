@@ -1,5 +1,5 @@
-import { Repository } from '@/services/planetscale';
 import { getToken } from '@/services/realDebrid';
+import { Repository } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 

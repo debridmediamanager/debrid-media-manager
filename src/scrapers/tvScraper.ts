@@ -3,7 +3,7 @@ import {
 	flattenAndRemoveDuplicates,
 	sortByFileSize,
 } from '@/services/mediasearch';
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import {
 	filterByTvConditions,
 	getAllPossibleTitles,

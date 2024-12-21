@@ -1,4 +1,4 @@
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { computeHashFromTorrent } from '@/utils/extractHashFromTorrent';
 import { NextApiRequest, NextApiResponse } from 'next';
 

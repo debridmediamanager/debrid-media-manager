@@ -1,5 +1,5 @@
-import { Repository } from '@/services/planetscale';
 import { getToken, getTorrentInfo, getUserTorrentsList } from '@/services/realDebrid';
+import { Repository } from '@/services/repository';
 
 const db = new Repository();
 export const PAGE_SIZE = 12;

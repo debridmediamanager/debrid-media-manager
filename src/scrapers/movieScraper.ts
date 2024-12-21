@@ -3,7 +3,7 @@ import {
 	flattenAndRemoveDuplicates,
 	sortByFileSize,
 } from '@/services/mediasearch';
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { filterByMovieConditions, getAllPossibleTitles, grabMovieMetadata } from '@/utils/checks';
 import { scrapeApiBay2 } from './sites/apibay2';
 import { scrapeBtdigg } from './sites/btdigg-v2';

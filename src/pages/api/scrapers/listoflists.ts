@@ -1,6 +1,6 @@
 import { ScrapeInput } from '@/scrapers/scrapeInput';
 import { ScrapeResponse, generateScrapeJobs } from '@/scrapers/scrapeJobs';
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new Repository();

@@ -1,4 +1,4 @@
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { TorrentInfoResponse } from '@/services/types';
 
 const db = new Repository();

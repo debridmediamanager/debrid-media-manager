@@ -997,4 +997,42 @@ export class Repository {
 			throw new Error(`Failed to delete casted link: ${error.message}`);
 		}
 	}
+
+	/**
+	 * Creates or updates a report for incorrect content.
+	 * @param hash - The hash of the torrent being reported
+	 * @param imdbId - The IMDB ID of the content
+	 * @param userId - The user ID (from RealDebrid or AllDebrid)
+	 * @param type - The type of report ('porn', 'wrong_imdb', or 'wrong_season')
+	 * @returns A promise that resolves when the report is saved
+	 */
+	public async reportContent(
+		hash: string,
+		imdbId: string,
+		userId: string,
+		type: 'porn' | 'wrong_imdb' | 'wrong_season'
+	): Promise<void> {
+		try {
+			await this.prisma.report.upsert({
+				where: {
+					hash_userId: {
+						hash,
+						userId,
+					},
+				},
+				update: {
+					type,
+					createdAt: new Date(),
+				},
+				create: {
+					hash,
+					imdbId,
+					userId,
+					type,
+				},
+			});
+		} catch (error: any) {
+			throw new Error(`Failed to save report: ${error.message}`);
+		}
+	}
 }

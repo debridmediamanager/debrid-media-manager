@@ -4,6 +4,7 @@ import { getEpisodeCountClass, getEpisodeCountLabel } from '@/utils/episodeUtils
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize } from '@/utils/results';
 import { useEffect, useState } from 'react';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
+import ReportButton from './ReportButton';
 
 type TvSearchResultsProps = {
 	filteredResults: SearchResult[];
@@ -21,6 +22,7 @@ type TvSearchResultsProps = {
 	addAd: (hash: string) => Promise<void>;
 	deleteRd: (hash: string) => Promise<void>;
 	deleteAd: (hash: string) => Promise<void>;
+	imdbId?: string;
 };
 
 const TvSearchResults: React.FC<TvSearchResultsProps> = ({
@@ -39,6 +41,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	addAd,
 	deleteRd,
 	deleteAd,
+	imdbId,
 }) => {
 	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
@@ -316,6 +319,13 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 									<FaMagnet className="inline" />{' '}
 									{downloadMagnets ? 'Download' : 'Copy'}
 								</button>
+
+								<ReportButton
+									hash={r.hash}
+									imdbId={imdbId!}
+									userId={rdKey || adKey || ''}
+									isShow={true}
+								/>
 							</div>
 						</div>
 					</div>

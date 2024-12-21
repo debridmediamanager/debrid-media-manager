@@ -1,5 +1,5 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { cleanByImdbId } from '@/services/tvCleaner';
 import { NextApiRequest, NextApiResponse } from 'next';
 

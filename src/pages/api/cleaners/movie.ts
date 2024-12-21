@@ -1,6 +1,6 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
 import { cleanByImdbId } from '@/services/movieCleaner';
-import { Repository } from '@/services/planetscale';
+import { Repository } from '@/services/repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new Repository();

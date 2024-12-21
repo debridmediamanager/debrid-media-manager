@@ -587,6 +587,7 @@ const MovieSearch: FunctionComponent = () => {
 						addAd={addAd}
 						deleteRd={deleteRd}
 						deleteAd={deleteAd}
+						imdbId={imdbid as string}
 					/>
 
 					{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (

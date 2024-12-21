@@ -1,5 +1,5 @@
-import { Repository } from '@/services/planetscale';
 import { addHashAsMagnet, deleteTorrent, getTorrentInfo, selectFiles } from '@/services/realDebrid';
+import { Repository } from '@/services/repository';
 import { TorrentInfoResponse } from '@/services/types';
 import { isVideo } from '@/utils/selectable';
 import { handleDownloadedTorrent } from '@/utils/submitAvailability';
