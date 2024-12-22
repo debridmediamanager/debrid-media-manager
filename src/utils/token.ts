@@ -47,7 +47,7 @@ export function validateTokenWithHash(tokenWithTimestamp: string, receivedHash: 
 	const [token, timestampStr] = tokenWithTimestamp.split('-');
 	const timestamp = parseInt(timestampStr, 10);
 	const currentTimestamp = Math.floor(Date.now() / 1000);
-	const threshold = 10; // seconds
+	const threshold = 30; // seconds
 	if (Math.abs(currentTimestamp - timestamp) > threshold) {
 		return false; // Token expired
 	}
