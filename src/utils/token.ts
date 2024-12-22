@@ -47,13 +47,13 @@ export function validateTokenWithHash(tokenWithTimestamp: string, receivedHash: 
 	const [token, timestampStr] = tokenWithTimestamp.split('-');
 	const timestamp = parseInt(timestampStr, 10);
 	const currentTimestamp = Math.floor(Date.now() / 1000);
-	const threshold = 30; // seconds
+	const threshold = 10; // seconds
 	if (Math.abs(currentTimestamp - timestamp) > threshold) {
 		return false; // Token expired
 	}
 	// Recreate the hash with the received tokenWithTimestamp and compare
 	const tokenTimestampHash = generateHash(tokenWithTimestamp);
-	const tokenSaltHash = generateHash(salt + token);
+	const tokenSaltHash = generateHash(`${salt}-${token}`);
 	const combinedHash = combineHashes(tokenTimestampHash, tokenSaltHash);
 	return combinedHash === receivedHash;
 }
