@@ -1,13 +1,13 @@
 import { getTimeISO } from '@/services/realDebrid';
 
-const salt = '691Rbf3#aI@JL84xDD!2';
+const salt = 'debridmediamanager.com%%fe7#td00rA3vHz%VmI';
 
 export async function generateTokenAndHash(): Promise<[string, string]> {
 	const token = generateRandomToken(); // Generate a secure random token
 	const timestamp = await fetchTimestamp(); // Fetch the timestamp from the API
 	const tokenWithTimestamp = `${token}-${timestamp}`;
 	const tokenTimestampHash = await generateHash(tokenWithTimestamp); // Hash the token with the timestamp
-	const tokenSaltHash = await generateHash(salt + token);
+	const tokenSaltHash = await generateHash(`${salt}-${token}`); // Hash the token with the salt
 	const combinedHash = combineHashes(tokenTimestampHash, tokenSaltHash);
 	return [tokenWithTimestamp, combinedHash]; // Return both the token with embedded timestamp and its hash
 }
@@ -47,8 +47,7 @@ export function validateTokenWithHash(tokenWithTimestamp: string, receivedHash: 
 	const [token, timestampStr] = tokenWithTimestamp.split('-');
 	const timestamp = parseInt(timestampStr, 10);
 	const currentTimestamp = Math.floor(Date.now() / 1000);
-	// Check time validity (5 minutes = 60 seconds)
-	const threshold = 60;
+	const threshold = 10; // seconds
 	if (Math.abs(currentTimestamp - timestamp) > threshold) {
 		return false; // Token expired
 	}
