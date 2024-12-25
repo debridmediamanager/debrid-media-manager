@@ -37,6 +37,7 @@ function HashlistPage() {
 	const [hashlistTitle, setHashlistTitle] = useState<string>('');
 	const [userTorrentsList, setUserTorrentsList] = useState<EnrichedHashlistTorrent[]>([]);
 	const [filteredList, setFilteredList] = useState<EnrichedHashlistTorrent[]>([]);
+	const [showOnlyAvailable, setShowOnlyAvailable] = useState(true);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'hash', direction: 'asc' });
 
 	const [rdKey] = useRealDebridAccessToken();
@@ -195,6 +196,12 @@ function HashlistPage() {
 		let tmpList = notYetDownloaded;
 		// ensure tmpList is also unique in terms of hash
 		tmpList = tmpList.filter((t, i, self) => self.findIndex((s) => s.hash === t.hash) === i);
+
+		// Filter for instantly available torrents if enabled and keys are present
+		if (showOnlyAvailable && (rdKey || adKey)) {
+			tmpList = tmpList.filter((t) => t.rdAvailable || t.adAvailable);
+		}
+
 		if (Object.keys(router.query).length === 0) {
 			setFilteredList(applyQuickSearch(tmpList));
 			return;
@@ -209,13 +216,18 @@ function HashlistPage() {
 			tmpList = tmpList.filter((t) => mediaType === t.mediaType);
 			setFilteredList(applyQuickSearch(tmpList));
 		}
-		if (!rdKey && !adKey) return;
-		tmpList = tmpList.filter((t) => t.rdAvailable || t.adAvailable);
 	}
 	useEffect(() => {
 		filterList();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [query, userTorrentsList, movieGrouping, tvGroupingByEpisode, router.query]);
+	}, [
+		query,
+		userTorrentsList,
+		movieGrouping,
+		tvGroupingByEpisode,
+		router.query,
+		showOnlyAvailable,
+	]);
 
 	function handleSort(column: typeof sortBy.column) {
 		setSortBy({
@@ -418,39 +430,58 @@ function HashlistPage() {
 					href="/hashlist?mediaType=movie"
 					className="mb-2 mr-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
 				>
-					Show {movieCount} movies
+					{movieCount} Movies
 				</Link>
 				<Link
 					href="/hashlist?mediaType=tv"
 					className="mb-2 mr-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
 				>
-					Show {tvCount} TV shows
+					{tvCount} TV Shows
 				</Link>
-				{rdKey && (
+				{(rdKey || adKey) && (
 					<button
-						className={`mb-2 mr-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50 ${
-							filteredList.length === 0 || !rdKey
-								? 'cursor-not-allowed opacity-60'
-								: ''
-						}`}
-						onClick={downloadNonDupeTorrentsInRd}
-						disabled={filteredList.length === 0 || !rdKey}
+						className={`mb-2 mr-2 rounded border-2 ${
+							showOnlyAvailable
+								? 'border-green-500 bg-green-900/30 text-green-100'
+								: 'border-gray-500 bg-gray-900/30 text-gray-100'
+						} px-2 py-1 transition-colors hover:bg-opacity-70`}
+						onClick={() => {
+							setShowOnlyAvailable(!showOnlyAvailable);
+							setCurrentPage(1);
+						}}
 					>
-						Download {filteredList.length} in Real-Debrid
+						{showOnlyAvailable ? 'Instant Only' : 'All Torrents'}
 					</button>
 				)}
+				{rdKey && (
+					<>
+						<button
+							className={`mb-2 mr-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50 ${
+								filteredList.length === 0 || !rdKey
+									? 'cursor-not-allowed opacity-60'
+									: ''
+							}`}
+							onClick={downloadNonDupeTorrentsInRd}
+							disabled={filteredList.length === 0 || !rdKey}
+						>
+							RD ({filteredList.length})
+						</button>
+					</>
+				)}
 				{adKey && (
-					<button
-						className={`mb-2 mr-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50 ${
-							filteredList.length === 0 || !adKey
-								? 'cursor-not-allowed opacity-60'
-								: ''
-						}`}
-						onClick={downloadNonDupeTorrentsInAd}
-						disabled={filteredList.length === 0 || !adKey}
-					>
-						Download {filteredList.length} in AllDebrid
-					</button>
+					<>
+						<button
+							className={`mb-2 mr-2 rounded border-2 border-blue-500 bg-blue-900/30 px-2 py-1 text-blue-100 transition-colors hover:bg-blue-800/50 ${
+								filteredList.length === 0 || !adKey
+									? 'cursor-not-allowed opacity-60'
+									: ''
+							}`}
+							onClick={downloadNonDupeTorrentsInAd}
+							disabled={filteredList.length === 0 || !adKey}
+						>
+							AD ({filteredList.length})
+						</button>
+					</>
 				)}
 
 				{Object.keys(router.query).length !== 0 && (
@@ -465,17 +496,14 @@ function HashlistPage() {
 				{!rdKey && !adKey && (
 					<>
 						<span className="mb-2 mr-2 rounded px-2 py-1 text-white">
-							Please login to Real-Debrid or AllDebrid to download
+							Login to RD/AD to download
 						</span>
 					</>
 				)}
 
 				{(rdKey || adKey) && (
 					<span className="text-s mr-2 bg-green-100 px-2.5 py-1 text-green-800">
-						<strong>
-							{userTorrentsList.length - filteredList.length} torrents hidden
-						</strong>{' '}
-						because its already in your library or its not cached in RD/AD
+						<strong>{userTorrentsList.length - filteredList.length}</strong> hidden
 					</span>
 				)}
 			</div>
