@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import Swal from 'sweetalert2';
 import { useLibraryBatchActions } from '../hooks/useLibraryBatchActions';
 import { useLibraryData } from '../hooks/useLibraryData';
 import { useLibraryFilter } from '../hooks/useLibraryFilter';
@@ -166,7 +167,26 @@ export function LibraryMainView() {
 				onGenerateHashlist={() => handleGenerateHashlist(relevantList)}
 				onDeleteShownTorrents={() => handleDeleteShownTorrents(relevantList)}
 				onLocalRestore={handleLocalRestore}
-				onLocalBackup={localBackup}
+				onLocalBackup={async () => {
+					const result = await Swal.fire({
+						title: 'Choose backup type',
+						text: `Do you want to backup all torrents (${userTorrentsList.length}) or just the filtered list (${filteredList.length})?`,
+						icon: 'question',
+						showDenyButton: true,
+						confirmButtonText: 'All Torrents',
+						denyButtonText: 'Filtered List',
+						confirmButtonColor: '#3085d6',
+						denyButtonColor: '#2b5c8f',
+						showCancelButton: true,
+						cancelButtonText: 'Cancel',
+					});
+
+					if (result.isConfirmed) {
+						await localBackup(userTorrentsList);
+					} else if (result.isDenied) {
+						await localBackup(filteredList);
+					}
+				}}
 				onDedupeBySize={() => dedupeBySize(filteredList)}
 				onDedupeByRecency={() => dedupeByRecency(filteredList)}
 				onCombineSameHash={() => combineSameHash(filteredList)}

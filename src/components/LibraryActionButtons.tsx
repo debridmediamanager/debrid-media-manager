@@ -6,7 +6,7 @@ interface LibraryActionButtonsProps {
 	onDeleteShownTorrents: () => void;
 	onAddMagnet: (service: string) => void;
 	onLocalRestore: (service: 'rd' | 'ad') => Promise<void>;
-	onLocalBackup: () => void;
+	onLocalBackup: () => Promise<void>;
 	onDedupeBySize: () => void;
 	onDedupeByRecency: () => void;
 	onCombineSameHash: () => void;

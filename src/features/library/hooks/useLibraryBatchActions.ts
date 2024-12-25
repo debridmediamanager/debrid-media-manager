@@ -320,10 +320,10 @@ export function useLibraryBatchActions(
 		}
 	};
 
-	const localBackup = async () => {
+	const localBackup = async (torrentsToBackup: UserTorrent[]) => {
 		toast('Generating a local backup file', libraryToastOptions);
 		try {
-			const hashList = userTorrentsList.map((t) => ({
+			const hashList = torrentsToBackup.map((t) => ({
 				filename: t.filename,
 				hash: t.hash,
 			}));
