@@ -191,24 +191,36 @@ export class AvailabilityService extends DatabaseClient {
 		Array<{
 			hash: string;
 			files: Array<{
+				file_id: number;
 				path: string;
-				bytes: bigint;
+				bytes: number;
 			}>;
 		}>
 	> {
-		return this.prisma.available.findMany({
+		const availableHashes = await this.prisma.available.findMany({
 			where: {
 				hash: { in: hashes },
+				status: 'downloaded',
 			},
 			select: {
 				hash: true,
 				files: {
 					select: {
+						file_id: true,
 						path: true,
 						bytes: true,
 					},
 				},
 			},
 		});
+
+		return availableHashes.map((record) => ({
+			hash: record.hash,
+			files: record.files.map((file) => ({
+				file_id: file.file_id,
+				path: file.path,
+				bytes: Number(file.bytes),
+			})),
+		}));
 	}
 }
