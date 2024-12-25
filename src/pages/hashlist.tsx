@@ -118,6 +118,7 @@ function HashlistPage() {
 			}
 			if (adKey) wrapLoading('AD', instantCheckInAd2(adKey, hashArr, setUserTorrentsList));
 		} catch (error) {
+			console.error('Error fetching user torrents list:', error);
 			setUserTorrentsList([]);
 			toast.error('Error fetching user torrents list');
 		}
@@ -464,7 +465,7 @@ function HashlistPage() {
 							onClick={downloadNonDupeTorrentsInRd}
 							disabled={filteredList.length === 0 || !rdKey}
 						>
-							RD ({filteredList.length})
+							RD Download ({filteredList.length})
 						</button>
 					</>
 				)}

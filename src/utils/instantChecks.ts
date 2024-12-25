@@ -44,6 +44,32 @@ const updateTorrentTitle = (torrent: SearchResult, files: FileData[]) => {
 	}
 };
 
+// Rate limiter for RD requests - 10 requests per 10 seconds
+const rdRequestTimestamps: number[] = [];
+const MAX_REQUESTS = 10;
+const TIME_WINDOW = 10000; // 10 seconds in milliseconds
+
+async function waitForRateLimit() {
+	const now = Date.now();
+	// Remove timestamps older than the time window
+	while (rdRequestTimestamps.length > 0 && rdRequestTimestamps[0] < now - TIME_WINDOW) {
+		rdRequestTimestamps.shift();
+	}
+
+	// If we've hit the rate limit, wait until we can make another request
+	if (rdRequestTimestamps.length >= MAX_REQUESTS) {
+		const oldestTimestamp = rdRequestTimestamps[0];
+		const waitTime = oldestTimestamp + TIME_WINDOW - now;
+		if (waitTime > 0) {
+			await new Promise((resolve) => setTimeout(resolve, waitTime));
+			return waitForRateLimit(); // Recheck after waiting
+		}
+	}
+
+	// Add current timestamp
+	rdRequestTimestamps.push(now);
+}
+
 // Generic RD instant check function without IMDB constraint
 const processRdInstantCheckByHashes = async <T extends SearchResult | EnrichedHashlistTorrent>(
 	dmmProblemKey: string,
@@ -59,6 +85,7 @@ const processRdInstantCheckByHashes = async <T extends SearchResult | EnrichedHa
 
 	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
+			await waitForRateLimit();
 			const resp = await checkAvailabilityByHashes(dmmProblemKey, solution, hashGroup);
 			setTorrentList((prevSearchResults) => {
 				const newSearchResults = [...prevSearchResults];
@@ -123,6 +150,7 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 
 	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
+			await waitForRateLimit();
 			const resp = await checkAvailability(dmmProblemKey, solution, imdbId, hashGroup);
 			setTorrentList((prevSearchResults) => {
 				const newSearchResults = [...prevSearchResults];
@@ -264,6 +292,7 @@ const checkForUncachedInRd = async (
 	const funcs = [];
 	for (const hashGroup of groupBy(50, hashes)) {
 		funcs.push(async () => {
+			await waitForRateLimit();
 			const resp = await rdInstantCheck(rdKey, hashGroup);
 			for (const hash in resp) {
 				if ('rd' in resp[hash] === false) continue;
