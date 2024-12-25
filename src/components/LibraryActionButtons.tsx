@@ -5,7 +5,7 @@ interface LibraryActionButtonsProps {
 	onGenerateHashlist: () => void;
 	onDeleteShownTorrents: () => void;
 	onAddMagnet: (service: string) => void;
-	onLocalRestore: (service: string) => Promise<void>;
+	onLocalRestore: (service: 'rd' | 'ad') => Promise<void>;
 	onLocalBackup: () => void;
 	onDedupeBySize: () => void;
 	onDedupeByRecency: () => void;
