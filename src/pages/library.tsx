@@ -758,16 +758,35 @@ function TorrentsPage() {
 	}
 
 	async function localBackup() {
+		const backupChoice = await Swal.fire({
+			title: 'Backup Library',
+			text: 'Choose which torrents to backup:',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			denyButtonColor: 'green',
+			confirmButtonText: 'All Torrents',
+			denyButtonText: 'Filtered List',
+			showDenyButton: true,
+			cancelButtonText: 'Cancel',
+		});
+
+		if (backupChoice.isDismissed) return;
+
+		const listToBackup = backupChoice.isConfirmed ? userTorrentsList : filteredList;
+		const backupType = backupChoice.isConfirmed ? 'full' : 'filtered';
+
 		toast('Generating a local backup file', libraryToastOptions);
 		try {
-			const hashList = userTorrentsList.map((t) => ({
+			const hashList = listToBackup.map((t) => ({
 				filename: t.filename,
 				hash: t.hash,
 			}));
 			const blob = new Blob([JSON.stringify(hashList, null, 2)], {
 				type: 'application/json',
 			});
-			saveAs(blob, `backup-${Date.now()}.dmm.json`);
+			saveAs(blob, `backup-${backupType}-${Date.now()}.dmm.json`);
 		} catch (error) {
 			toast.error(`Error creating a backup file`, libraryToastOptions);
 			console.error(error);
