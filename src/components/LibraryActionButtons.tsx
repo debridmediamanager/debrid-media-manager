@@ -51,19 +51,19 @@ export default function LibraryActionButtons({
 				❌ Unselect All
 			</button>
 			<button
-				className={`mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-green-100 transition-colors hover:bg-green-800/50`}
+				className={`mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] text-green-100 transition-colors hover:bg-green-800/50`}
 				onClick={onReinsertTorrents}
 			>
 				🔄 Reinsert{selectedTorrentsSize ? ` (${selectedTorrentsSize})` : ' List'}
 			</button>
 			<button
-				className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-indigo-100 transition-colors hover:bg-indigo-800/50`}
+				className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] text-indigo-100 transition-colors hover:bg-indigo-800/50`}
 				onClick={onGenerateHashlist}
 			>
 				🚀 Share{selectedTorrentsSize ? ` (${selectedTorrentsSize})` : ' List'}
 			</button>
 			<button
-				className={`mb-1 mr-2 rounded border-2 border-red-500 bg-red-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-red-100 transition-colors hover:bg-red-800/50`}
+				className={`mb-1 mr-2 rounded border-2 border-red-500 bg-red-900/30 px-1 py-0.5 text-[0.6rem] text-red-100 transition-colors hover:bg-red-800/50`}
 				onClick={onDeleteShownTorrents}
 			>
 				🗑️ Delete{selectedTorrentsSize ? ` (${selectedTorrentsSize})` : ' List'}
@@ -72,13 +72,13 @@ export default function LibraryActionButtons({
 			{rdKey && (
 				<>
 					<button
-						className={`mb-1 mr-2 rounded border-2 border-teal-500 bg-teal-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-teal-100 transition-colors hover:bg-teal-800/50`}
+						className={`mb-1 mr-2 rounded border-2 border-teal-500 bg-teal-900/30 px-1 py-0.5 text-[0.6rem] text-teal-100 transition-colors hover:bg-teal-800/50`}
 						onClick={() => onAddMagnet('rd')}
 					>
 						🧲 RD&nbsp;Add
 					</button>
 					<button
-						className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-indigo-100 transition-colors hover:bg-indigo-800/50`}
+						className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] text-indigo-100 transition-colors hover:bg-indigo-800/50`}
 						onClick={() => onLocalRestore('rd')}
 					>
 						🪛 RD Restore
@@ -88,13 +88,13 @@ export default function LibraryActionButtons({
 			{adKey && (
 				<>
 					<button
-						className={`mb-1 mr-2 rounded border-2 border-teal-500 bg-teal-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-teal-100 transition-colors hover:bg-teal-800/50`}
+						className={`mb-1 mr-2 rounded border-2 border-teal-500 bg-teal-900/30 px-1 py-0.5 text-[0.6rem] text-teal-100 transition-colors hover:bg-teal-800/50`}
 						onClick={() => onAddMagnet('ad')}
 					>
 						🧲 AD&nbsp;Add
 					</button>
 					<button
-						className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-indigo-100 transition-colors hover:bg-indigo-800/50`}
+						className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] text-indigo-100 transition-colors hover:bg-indigo-800/50`}
 						onClick={() => onLocalRestore('ad')}
 					>
 						🪛 AD Restore
@@ -103,7 +103,7 @@ export default function LibraryActionButtons({
 			)}
 
 			<button
-				className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-indigo-100 transition-colors hover:bg-indigo-800/50`}
+				className={`mb-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-0.5 text-[0.6rem] text-indigo-100 transition-colors hover:bg-indigo-800/50`}
 				onClick={onLocalBackup}
 			>
 				💾 Backup
@@ -112,14 +112,14 @@ export default function LibraryActionButtons({
 			{showDedupe && (
 				<>
 					<button
-						className="mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-green-100 transition-colors hover:bg-green-800/50"
+						className="mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] text-green-100 transition-colors hover:bg-green-800/50"
 						onClick={onDedupeBySize}
 					>
 						Size 🧹
 					</button>
 
 					<button
-						className="mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-green-100 transition-colors hover:bg-green-800/50"
+						className="mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] text-green-100 transition-colors hover:bg-green-800/50"
 						onClick={onDedupeByRecency}
 					>
 						Date 🧹
@@ -129,7 +129,7 @@ export default function LibraryActionButtons({
 
 			{showHashCombine && (
 				<button
-					className={`mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] font-bold text-green-100 transition-colors hover:bg-green-800/50`}
+					className={`mb-1 mr-2 rounded border-2 border-green-500 bg-green-900/30 px-1 py-0.5 text-[0.6rem] text-green-100 transition-colors hover:bg-green-800/50`}
 					onClick={onCombineSameHash}
 				>
 					Hash 🧹

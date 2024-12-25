@@ -482,9 +482,15 @@ function TorrentsPage() {
 					text: `This will reinsert the ${relevantList.length} torrents filtered. Are you sure?`,
 					icon: 'warning',
 					showCancelButton: true,
-					confirmButtonColor: '#3085d6',
-					cancelButtonColor: '#d33',
+					confirmButtonColor: '#0891b2',
+					cancelButtonColor: '#374151',
 					confirmButtonText: 'Yes, reinsert!',
+					background: '#111827',
+					color: '#f3f4f6',
+					customClass: {
+						popup: 'bg-gray-900',
+						htmlContainer: 'text-gray-100',
+					},
 				})
 			).isConfirmed
 		)
@@ -515,6 +521,15 @@ function TorrentsPage() {
 				autocapitalize: 'off',
 			},
 			showCancelButton: true,
+			confirmButtonColor: '#0891b2',
+			cancelButtonColor: '#374151',
+			background: '#111827',
+			color: '#f3f4f6',
+			customClass: {
+				popup: 'bg-gray-900',
+				htmlContainer: 'text-gray-100',
+				input: 'bg-gray-800 text-gray-100 border border-gray-700 rounded p-2 placeholder-gray-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500',
+			},
 		});
 		if (!title) return;
 		generateHashList(title, relevantList);
@@ -529,9 +544,15 @@ function TorrentsPage() {
 					text: `This will delete the ${relevantList.length} torrents filtered. Are you sure?`,
 					icon: 'warning',
 					showCancelButton: true,
-					confirmButtonColor: '#3085d6',
-					cancelButtonColor: '#d33',
+					confirmButtonColor: '#0891b2',
+					cancelButtonColor: '#374151',
 					confirmButtonText: 'Yes, delete!',
+					background: '#111827',
+					color: '#f3f4f6',
+					customClass: {
+						popup: 'bg-gray-900',
+						htmlContainer: 'text-gray-100',
+					},
 				})
 			).isConfirmed
 		)
@@ -586,13 +607,19 @@ function TorrentsPage() {
 			text: 'Choose which duplicate torrents to delete based on size:',
 			icon: 'question',
 			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			denyButtonColor: 'green',
+			confirmButtonColor: '#0891b2',
+			cancelButtonColor: '#374151',
+			denyButtonColor: '#059669',
 			confirmButtonText: 'Delete Smaller',
 			denyButtonText: 'Delete Bigger',
 			showDenyButton: true,
 			cancelButtonText: `Cancel`,
+			background: '#111827',
+			color: '#f3f4f6',
+			customClass: {
+				popup: 'bg-gray-900',
+				htmlContainer: 'text-gray-100',
+			},
 		});
 
 		// If the user cancels the operation, return without doing anything
@@ -646,13 +673,19 @@ function TorrentsPage() {
 			text: 'Choose which duplicate torrents to delete:',
 			icon: 'question',
 			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			denyButtonColor: 'green',
+			confirmButtonColor: '#0891b2',
+			cancelButtonColor: '#374151',
+			denyButtonColor: '#059669',
 			confirmButtonText: 'Delete Older',
 			denyButtonText: 'Delete Newer',
 			showDenyButton: true,
 			cancelButtonText: `Cancel`,
+			background: '#111827',
+			color: '#f3f4f6',
+			customClass: {
+				popup: 'bg-gray-900',
+				htmlContainer: 'text-gray-100',
+			},
 		});
 
 		// If the user cancels the operation, return without doing anything
@@ -726,9 +759,15 @@ function TorrentsPage() {
 					text: `This will combine the ${dupeHashesCount} completed torrents with identical hashes into ${dupeHashes.size} and select all streamable files. Make sure to backup before doing this. Do you want to proceed?`,
 					icon: 'question',
 					showCancelButton: true,
-					confirmButtonColor: '#3085d6',
-					cancelButtonColor: '#d33',
+					confirmButtonColor: '#0891b2',
+					cancelButtonColor: '#374151',
 					confirmButtonText: 'Yes, proceed!',
+					background: '#111827',
+					color: '#f3f4f6',
+					customClass: {
+						popup: 'bg-gray-900',
+						htmlContainer: 'text-gray-100',
+					},
 				})
 			).isConfirmed
 		)
@@ -763,13 +802,19 @@ function TorrentsPage() {
 			text: 'Choose which torrents to backup:',
 			icon: 'question',
 			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			denyButtonColor: 'green',
+			confirmButtonColor: '#0891b2',
+			cancelButtonColor: '#374151',
+			denyButtonColor: '#059669',
 			confirmButtonText: 'All Torrents',
 			denyButtonText: 'Filtered List',
 			showDenyButton: true,
 			cancelButtonText: 'Cancel',
+			background: '#111827',
+			color: '#f3f4f6',
+			customClass: {
+				popup: 'bg-gray-900',
+				htmlContainer: 'text-gray-100',
+			},
 		});
 
 		if (backupChoice.isDismissed) return;
