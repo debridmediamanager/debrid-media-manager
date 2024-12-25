@@ -6,7 +6,7 @@ import { UserTorrent } from '@/torrent/userTorrent';
 import { some } from 'lodash';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-hot-toast';
-import { checkAvailability } from './availability';
+import { checkAvailability, checkAvailabilityByHashes } from './availability';
 import { runConcurrentFunctions } from './batch';
 import { groupBy } from './groupBy';
 import { isVideo } from './selectable';
@@ -42,6 +42,69 @@ const updateTorrentTitle = (torrent: SearchResult, files: FileData[]) => {
 	} else if (files.length === 1) {
 		torrent.title = files[0].filename;
 	}
+};
+
+// Generic RD instant check function without IMDB constraint
+const processRdInstantCheckByHashes = async <T extends SearchResult | EnrichedHashlistTorrent>(
+	dmmProblemKey: string,
+	solution: string,
+	hashes: string[],
+	batchSize: number,
+	setTorrentList: Dispatch<SetStateAction<T[]>>,
+	sortFn?: (results: T[]) => T[],
+	shouldUpdateTitleAndSize = false
+): Promise<number> => {
+	let instantCount = 0;
+	const funcs = [];
+
+	for (const hashGroup of groupBy(batchSize, hashes)) {
+		funcs.push(async () => {
+			const resp = await checkAvailabilityByHashes(dmmProblemKey, solution, hashGroup);
+			setTorrentList((prevSearchResults) => {
+				const newSearchResults = [...prevSearchResults];
+				for (const torrent of newSearchResults) {
+					if (torrent.noVideos) continue;
+					const availableTorrent = resp.available.find(
+						(t: { hash: string }) => t.hash === torrent.hash
+					);
+					if (!availableTorrent) continue;
+
+					torrent.files = availableTorrent.files.map(
+						(file: { file_id: number; path: string; bytes: number }) => ({
+							fileId: file.file_id,
+							filename: file.path,
+							filesize: file.bytes,
+						})
+					);
+
+					if (shouldUpdateTitleAndSize) {
+						updateTorrentTitle(torrent as SearchResult, torrent.files);
+						(torrent as SearchResult).fileSize =
+							torrent.files.reduce((acc, curr) => acc + curr.filesize, 0) /
+							1024 /
+							1024;
+					}
+
+					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
+					const stats = calculateFileStats(videoFiles);
+					Object.assign(torrent, stats);
+
+					torrent.noVideos = !torrent.files.some((file) =>
+						isVideo({ path: file.filename })
+					);
+					if (!torrent.noVideos) {
+						torrent.rdAvailable = true;
+						instantCount += 1;
+					} else {
+						torrent.rdAvailable = false;
+					}
+				}
+				return sortFn ? sortFn(newSearchResults) : newSearchResults;
+			});
+		});
+	}
+	await runConcurrentFunctions(funcs, 4, 0);
+	return instantCount;
 };
 
 // Generic RD instant check function
@@ -274,7 +337,7 @@ export const instantCheckInRd2 = (
 	rdKey: string,
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
-) => processRdInstantCheck(dmmProblemKey, solution, '', hashes, 20, setTorrentList);
+) => processRdInstantCheckByHashes(dmmProblemKey, solution, hashes, 20, setTorrentList);
 
 export const instantCheckInAd = (
 	adKey: string,
