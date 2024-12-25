@@ -1,5 +1,5 @@
-import { Repository } from '@/services/repository';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { Repository } from '../../../services/repository';
 
 function isValidTorrentHash(hash: string): boolean {
 	return /^[a-fA-F0-9]{40}$/.test(hash);
@@ -38,21 +38,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			});
 		}
 
-		// Look up hashes without IMDb ID constraint
-		const availableHashes = await db.prisma.available.findMany({
-			where: {
-				hash: { in: hashes },
-			},
-			select: {
-				hash: true,
-				files: {
-					select: {
-						path: true,
-						bytes: true,
-					},
-				},
-			},
-		});
+		// Look up hashes without IMDb ID constraint using the new method
+		const availableHashes = await db.checkAvailabilityByHashes(hashes);
 
 		return res.status(200).json({
 			available: availableHashes.map((record) => ({
