@@ -1,173 +1,53 @@
-import { soundex } from '@/utils/soundex';
-import { Prisma, PrismaClient, Scraped } from '@prisma/client';
-import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
+import {
+	AnimeService,
+	AvailabilityService,
+	CastService,
+	ReportService,
+	ScrapedService,
+	SearchService,
+} from './database';
+import { ScrapeSearchResult } from './mediasearch';
 import { TorrentInfoResponse } from './types';
 
-interface AnimeItem {
-	id: string;
-	poster_url: string;
-}
-
-interface AnimeSearchResult extends AnimeItem {
-	title: string;
-}
-
-interface LatestCast {
-	url: string;
-	link: string;
-}
-
 export class Repository {
-	private static instance: PrismaClient;
-	public prisma: PrismaClient;
+	private availabilityService: AvailabilityService;
+	private scrapedService: ScrapedService;
+	private searchService: SearchService;
+	private animeService: AnimeService;
+	private castService: CastService;
+	private reportService: ReportService;
 
 	constructor() {
-		this.prisma = Repository.getInstance();
-	}
-
-	private static getInstance(): PrismaClient {
-		if (!Repository.instance) {
-			Repository.instance = new PrismaClient({
-				log: ['warn', 'error'],
-			});
-
-			// Handle cleanup on process termination
-			['SIGINT', 'SIGTERM'].forEach((signal) => {
-				process.on(signal, async () => {
-					await Repository.instance.$disconnect();
-				});
-			});
-
-			// Handle connection cleanup
-			process.on('beforeExit', async () => {
-				await Repository.instance.$disconnect();
-			});
-		}
-		return Repository.instance;
+		this.availabilityService = new AvailabilityService();
+		this.scrapedService = new ScrapedService();
+		this.searchService = new SearchService();
+		this.animeService = new AnimeService();
+		this.castService = new CastService();
+		this.reportService = new ReportService();
 	}
 
 	// Ensure connection is properly closed when repository is no longer needed
 	public async disconnect(): Promise<void> {
-		if (Repository.instance) {
-			await Repository.instance.$disconnect();
-		}
+		await Promise.all([
+			this.availabilityService.disconnect(),
+			this.scrapedService.disconnect(),
+			this.searchService.disconnect(),
+			this.animeService.disconnect(),
+			this.castService.disconnect(),
+			this.reportService.disconnect(),
+		]);
 	}
 
-	public async getIMDBIdByHash(hash: string): Promise<string | null> {
-		const available = await this.prisma.available.findFirst({
-			where: { hash },
-			select: { imdbId: true },
-		});
-		return available?.imdbId || null;
+	// Availability Service Methods
+	public getIMDBIdByHash(hash: string) {
+		return this.availabilityService.getIMDBIdByHash(hash);
 	}
 
-	public async saveCastProfile(
-		userId: string,
-		clientId: string,
-		clientSecret: string,
-		refreshToken: string | null = null
-	) {
-		return this.prisma.castProfile.upsert({
-			where: {
-				userId: userId,
-			},
-			update: {
-				clientId,
-				clientSecret,
-				refreshToken: refreshToken ?? undefined,
-				updatedAt: new Date(),
-			},
-			create: {
-				userId: userId,
-				clientId,
-				clientSecret,
-				refreshToken: refreshToken ?? '',
-				updatedAt: new Date(),
-			},
-		});
+	public handleDownloadedTorrent(torrentInfo: TorrentInfoResponse, hash: string, imdbId: string) {
+		return this.availabilityService.handleDownloadedTorrent(torrentInfo, hash, imdbId);
 	}
 
-	public async handleDownloadedTorrent(
-		torrentInfo: TorrentInfoResponse,
-		hash: string,
-		imdbId: string
-	): Promise<void> {
-		const selectedFiles = torrentInfo.files?.filter((file) => file.selected === 1) || [];
-
-		if (
-			selectedFiles.length === 0 ||
-			selectedFiles.length !== (torrentInfo.links?.length || 0)
-		) {
-			if (torrentInfo.status === 'downloaded') {
-				torrentInfo.status = 'partially_downloaded';
-			}
-		}
-
-		if (!torrentInfo.ended) {
-			torrentInfo.ended = '0';
-		}
-
-		const baseData = {
-			hash,
-			imdbId,
-			filename: torrentInfo.filename,
-			originalFilename: torrentInfo.original_filename,
-			bytes: BigInt(torrentInfo.bytes || 0),
-			originalBytes: BigInt(torrentInfo.original_bytes || 0),
-			host: 'real-debrid.com',
-			progress: torrentInfo.progress,
-			status: torrentInfo.status,
-			ended: new Date(torrentInfo.ended),
-		};
-
-		await this.prisma.available.upsert({
-			where: { hash },
-			update: {
-				...baseData,
-				files:
-					selectedFiles.length > 0
-						? {
-								deleteMany: {},
-								create: selectedFiles.map((file, index) => ({
-									link: torrentInfo.links?.[index] || '',
-									file_id: file.id,
-									path: file.path,
-									bytes: BigInt(file.bytes || 0),
-								})),
-							}
-						: undefined,
-			},
-			create: {
-				...baseData,
-				files:
-					selectedFiles.length > 0
-						? {
-								create: selectedFiles.map((file, index) => ({
-									link: torrentInfo.links?.[index] || '',
-									file_id: file.id,
-									path: file.path,
-									bytes: BigInt(file.bytes || 0),
-								})),
-							}
-						: undefined,
-			},
-		});
-	}
-
-	public async upsertAvailability({
-		hash,
-		imdbId,
-		filename,
-		originalFilename,
-		bytes,
-		originalBytes,
-		host,
-		progress,
-		status,
-		ended,
-		selectedFiles,
-		links,
-	}: {
+	public upsertAvailability(data: {
 		hash: string;
 		imdbId: string;
 		filename: string;
@@ -181,878 +61,189 @@ export class Repository {
 		selectedFiles: Array<{ id: number; path: string; bytes: number; selected: number }>;
 		links: string[];
 	}) {
-		return this.prisma.available.upsert({
-			where: {
-				hash: hash,
-			},
-			update: {
-				imdbId,
-				originalFilename,
-				originalBytes: BigInt(originalBytes),
-				ended: new Date(ended),
-				files: {
-					deleteMany: {},
-					create: selectedFiles.map((file, index) => ({
-						link: links[index],
-						file_id: file.id,
-						path: file.path,
-						bytes: BigInt(file.bytes),
-					})),
-				},
-			},
-			create: {
-				hash,
-				imdbId,
-				filename,
-				originalFilename,
-				bytes: BigInt(bytes),
-				originalBytes: BigInt(originalBytes),
-				host,
-				progress,
-				status,
-				ended: new Date(ended),
-				files: {
-					create: selectedFiles.map((file, index) => ({
-						link: links[index],
-						file_id: file.id,
-						path: file.path,
-						bytes: BigInt(file.bytes),
-					})),
-				},
-			},
-		});
+		return this.availabilityService.upsertAvailability(data);
 	}
 
-	public async checkAvailability(
-		imdbId: string,
-		hashes: string[]
-	): Promise<
-		Array<{
-			hash: string;
-			files: Array<{
-				file_id: number;
-				path: string;
-				bytes: number;
-			}>;
-		}>
-	> {
-		const availableHashes = await this.prisma.available.findMany({
-			where: {
-				imdbId,
-				hash: { in: hashes },
-				status: 'downloaded',
-			},
-			select: {
-				hash: true,
-				files: {
-					select: {
-						file_id: true,
-						path: true,
-						bytes: true,
-					},
-				},
-			},
-		});
-
-		return availableHashes.map((record) => ({
-			hash: record.hash,
-			files: record.files.map((file) => ({
-				file_id: file.file_id,
-				path: file.path,
-				bytes: Number(file.bytes),
-			})),
-		}));
+	public checkAvailability(imdbId: string, hashes: string[]) {
+		return this.availabilityService.checkAvailability(imdbId, hashes);
 	}
 
-	/// true scraped
-
-	public async getScrapedTrueResults<T>(
-		key: string,
-		maxSizeGB?: number,
-		page: number = 0
-	): Promise<T | undefined> {
-		// Input Validation
-		if (!key || typeof key !== 'string') {
-			throw new Error('Invalid key provided.');
-		}
-
-		const maxSizeMB = maxSizeGB && maxSizeGB > 0 ? maxSizeGB * 1024 : null;
-		const offset = page * 50;
-
-		let query = Prisma.sql`
-			SELECT
-				JSON_ARRAYAGG(
-					JSON_OBJECT(
-						'hash', jt.hash,
-						'title', jt.title,
-							'fileSize', jt.fileSize
-					)
-					) AS value
-			FROM (
-				SELECT
-					jt.hash,
-					jt.title,
-					jt.fileSize
-				FROM
-					ScrapedTrue s
-				JOIN
-					JSON_TABLE(
-						s.value,
-						'$[*]'
-						COLUMNS (
-							hash VARCHAR(255) PATH '$.hash',
-							title VARCHAR(255) PATH '$.title',
-							fileSize DECIMAL(10,2) PATH '$.fileSize'
-						)
-					) AS jt
-				WHERE
-					s.key = ${key}
-				${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
-				ORDER BY jt.fileSize DESC
-				LIMIT 50
-				OFFSET ${offset}
-			) AS jt`;
-
-		try {
-			const result = await this.prisma.$queryRaw<{ value: T }[]>(query);
-			return result.length > 0 ? result[0].value : undefined;
-		} catch (error) {
-			console.error('Database query failed:', error);
-			throw new Error('Failed to retrieve scrapedtrue results.');
-		}
+	public checkAvailabilityByHashes(hashes: string[]) {
+		return this.availabilityService.checkAvailabilityByHashes(hashes);
 	}
 
-	public async getScrapedResults<T>(
-		key: string,
-		maxSizeGB?: number,
-		page: number = 0
-	): Promise<T | undefined> {
-		// Input Validation
-		if (!key || typeof key !== 'string') {
-			throw new Error('Invalid key provided.');
-		}
-		if (maxSizeGB !== undefined && (typeof maxSizeGB !== 'number' || maxSizeGB < 0)) {
-			throw new Error('maxSizeGB must be a positive number.');
-		}
-
-		const maxSizeMB = maxSizeGB ? maxSizeGB * 1024 : null;
-		const offset = page * 50;
-
-		let query = Prisma.sql`
-			SELECT
-				JSON_ARRAYAGG(
-					JSON_OBJECT(
-						'hash', jt.hash,
-						'title', jt.title,
-						'fileSize', jt.fileSize
-					)
-					) AS value
-			FROM (
-				SELECT
-					jt.hash,
-					jt.title,
-					jt.fileSize
-				FROM
-					Scraped s
-				JOIN
-					JSON_TABLE(
-						s.value,
-						'$[*]'
-						COLUMNS (
-							hash VARCHAR(255) PATH '$.hash',
-							title VARCHAR(255) PATH '$.title',
-							fileSize DECIMAL(10,2) PATH '$.fileSize'
-						)
-					) AS jt
-				WHERE
-					s.key = ${key}
-				${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
-				ORDER BY jt.fileSize DESC
-				LIMIT 50
-				OFFSET ${offset}
-			) AS jt`;
-
-		try {
-			const result = await this.prisma.$queryRaw<{ value: T }[]>(query);
-			return result.length > 0 ? result[0].value : undefined;
-		} catch (error) {
-			console.error('Database query failed:', error);
-			throw new Error('Failed to retrieve scraped results.');
-		}
+	// Scraped Service Methods
+	public getScrapedTrueResults<T>(key: string, maxSizeGB?: number, page?: number) {
+		return this.scrapedService.getScrapedTrueResults<T>(key, maxSizeGB, page);
 	}
 
-	/// scraped results
+	public getScrapedResults<T>(key: string, maxSizeGB?: number, page?: number) {
+		return this.scrapedService.getScrapedResults<T>(key, maxSizeGB, page);
+	}
 
-	public async saveScrapedTrueResults(
+	public saveScrapedTrueResults(
 		key: string,
 		value: ScrapeSearchResult[],
-		updateUpdatedAt: boolean = true,
-		replaceOldScrape: boolean = false
+		updateUpdatedAt?: boolean,
+		replaceOldScrape?: boolean
 	) {
-		// Fetch the existing record
-		const existingRecord: Scraped | null = await this.prisma.scrapedTrue.findUnique({
-			where: { key },
-		});
-
-		if (existingRecord && !replaceOldScrape) {
-			const origLength = (existingRecord.value as ScrapeSearchResult[]).length;
-			// If record exists, append the new values to it
-			let updatedValue = flattenAndRemoveDuplicates([
-				existingRecord.value as ScrapeSearchResult[],
-				value,
-			]);
-			updatedValue = sortByFileSize(updatedValue);
-			const newLength = updatedValue.length;
-			console.log(`📝 ${key}: +${newLength - origLength} results`);
-
-			await this.prisma.scrapedTrue.update({
-				where: { key },
-				data: {
-					value: updatedValue,
-					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
-				},
-			});
-		} else if (existingRecord && replaceOldScrape) {
-			await this.prisma.scrapedTrue.update({
-				where: { key },
-				data: {
-					value,
-					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
-				},
-			});
-		} else {
-			// If record doesn't exist, create a new one
-			await this.prisma.scrapedTrue.create({
-				data: { key, value },
-			});
-		}
+		return this.scrapedService.saveScrapedTrueResults(
+			key,
+			value,
+			updateUpdatedAt,
+			replaceOldScrape
+		);
 	}
 
-	public async saveScrapedResults(
+	public saveScrapedResults(
 		key: string,
 		value: ScrapeSearchResult[],
-		updateUpdatedAt: boolean = true,
-		replaceOldScrape: boolean = false
+		updateUpdatedAt?: boolean,
+		replaceOldScrape?: boolean
 	) {
-		// Fetch the existing record
-		const existingRecord: Scraped | null = await this.prisma.scraped.findUnique({
-			where: { key },
-		});
-
-		if (existingRecord && !replaceOldScrape) {
-			const origLength = (existingRecord.value as ScrapeSearchResult[]).length;
-			// If record exists, append the new values to it
-			let updatedValue = flattenAndRemoveDuplicates([
-				existingRecord.value as ScrapeSearchResult[],
-				value,
-			]);
-			updatedValue = sortByFileSize(updatedValue);
-			const newLength = updatedValue.length;
-			console.log(`📝 ${key}: +${newLength - origLength} results`);
-
-			await this.prisma.scraped.update({
-				where: { key },
-				data: {
-					value: updatedValue,
-					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
-				},
-			});
-		} else if (existingRecord && replaceOldScrape) {
-			await this.prisma.scraped.update({
-				where: { key },
-				data: {
-					value,
-					updatedAt: updateUpdatedAt ? new Date() : existingRecord.updatedAt,
-				},
-			});
-		} else {
-			await this.prisma.scraped.create({
-				data: { key, value },
-			});
-		}
+		return this.scrapedService.saveScrapedResults(
+			key,
+			value,
+			updateUpdatedAt,
+			replaceOldScrape
+		);
 	}
 
-	public async keyExists(key: string): Promise<boolean> {
-		const cacheEntry = await this.prisma.scraped.findFirst({
-			where: { key },
-			select: { key: true },
-		});
-		return cacheEntry !== null;
+	public keyExists(key: string) {
+		return this.scrapedService.keyExists(key);
 	}
 
-	public async isOlderThan(imdbId: string, daysAgo: number): Promise<boolean> {
-		const cacheEntry = await this.prisma.scraped.findFirst({
-			where: {
-				OR: [
-					{ key: { startsWith: `movie:${imdbId}` } },
-					{ key: { startsWith: `tv:${imdbId}` } },
-				],
-			},
-			select: { updatedAt: true },
-		});
-		if (!cacheEntry || !cacheEntry.updatedAt) {
-			return true; // If it doesn't exist, assume it's old
-		}
-		const updatedAt = cacheEntry.updatedAt;
-		const currentTime = Date.now();
-		const millisAgo = daysAgo * 24 * 60 * 60 * 1000;
-		const dateXdaysAgo = new Date(currentTime - millisAgo);
-		return updatedAt <= dateXdaysAgo;
+	public isOlderThan(imdbId: string, daysAgo: number) {
+		return this.scrapedService.isOlderThan(imdbId, daysAgo);
 	}
 
-	public async getOldestRequest(
-		olderThan: Date | null = null
-	): Promise<{ key: string; updatedAt: Date } | null> {
-		const whereCondition: any = {
-			key: { startsWith: 'requested:tt' },
-		};
-
-		if (olderThan !== null) {
-			whereCondition.updatedAt = { gt: olderThan };
-		}
-
-		const requestedItem = await this.prisma.scraped.findFirst({
-			where: whereCondition,
-			orderBy: { updatedAt: 'asc' },
-			select: { key: true, updatedAt: true },
-		});
-
-		if (requestedItem !== null) {
-			return {
-				key: requestedItem.key.split(':')[1],
-				updatedAt: requestedItem.updatedAt,
-			};
-		}
-
-		return null;
+	public getOldestRequest(olderThan?: Date | null) {
+		return this.scrapedService.getOldestRequest(olderThan);
 	}
 
-	public async processingMoreThanAnHour(): Promise<string | null> {
-		const oneHourAgo = new Date();
-		oneHourAgo.setHours(oneHourAgo.getHours() - 1);
-
-		const requestedItem = await this.prisma.scraped.findFirst({
-			where: {
-				key: { startsWith: 'processing:tt' },
-				updatedAt: { lte: oneHourAgo },
-			},
-			orderBy: { updatedAt: 'asc' },
-			select: { key: true },
-		});
-
-		if (requestedItem !== null) {
-			await this.prisma.scraped.update({
-				where: { key: requestedItem.key },
-				data: { updatedAt: new Date() },
-			});
-
-			return requestedItem.key.split(':')[1];
-		}
-
-		return null;
+	public processingMoreThanAnHour() {
+		return this.scrapedService.processingMoreThanAnHour();
 	}
 
-	public async getOldestScrapedMedia(
-		mediaType: 'tv' | 'movie',
-		quantity = 3
-	): Promise<string[] | null> {
-		const scrapedItems = await this.prisma.scraped.findMany({
-			where: {
-				key: { startsWith: `${mediaType}:tt` },
-			},
-			orderBy: { updatedAt: 'asc' },
-			take: quantity,
-			select: { key: true },
-		});
-
-		if (scrapedItems.length > 0) {
-			return scrapedItems.map((item) => item.key.split(':')[1]);
-		}
-
-		return null;
+	public getOldestScrapedMedia(mediaType: 'tv' | 'movie', quantity?: number) {
+		return this.scrapedService.getOldestScrapedMedia(mediaType, quantity);
 	}
 
-	public async getAllImdbIds(mediaType: 'tv' | 'movie'): Promise<string[] | null> {
-		const scrapedItems = await this.prisma.scraped.findMany({
-			where: {
-				key: { startsWith: `${mediaType}:tt` },
-			},
-			orderBy: { updatedAt: 'asc' },
-			select: { key: true },
-		});
-
-		if (scrapedItems.length > 0) {
-			// ensure unique imdbIds
-			return Array.from(new Set(scrapedItems.map((item) => item.key.split(':')[1])));
-		}
-
-		return null;
+	public getAllImdbIds(mediaType: 'tv' | 'movie') {
+		return this.scrapedService.getAllImdbIds(mediaType);
 	}
 
-	public async markAsDone(imdbId: string): Promise<void> {
-		const keys = [`requested:${imdbId}`, `processing:${imdbId}`];
-
-		for (const key of keys) {
-			await this.prisma.scraped.deleteMany({
-				where: { key },
-			});
-		}
+	public markAsDone(imdbId: string) {
+		return this.scrapedService.markAsDone(imdbId);
 	}
 
-	// search results
-
-	public async saveSearchResults<T>(key: string, value: T) {
-		await this.prisma.search.upsert({
-			where: { key },
-			update: { value } as any,
-			create: { key, value } as any,
-		});
+	public getRecentlyUpdatedContent() {
+		return this.scrapedService.getRecentlyUpdatedContent();
 	}
 
-	public async getSearchResults<T>(key: string): Promise<T | undefined> {
-		const cacheEntry = await this.prisma.search.findUnique({ where: { key } });
-
-		if (cacheEntry) {
-			const updatedAt = cacheEntry.updatedAt;
-			const now = new Date();
-			const differenceInHours =
-				Math.abs(now.getTime() - updatedAt.getTime()) / 1000 / 60 / 60;
-
-			if (differenceInHours > 48) {
-				return undefined;
-			} else {
-				return cacheEntry.value as T;
-			}
-		}
-
-		return undefined;
+	// Search Service Methods
+	public saveSearchResults<T>(key: string, value: T) {
+		return this.searchService.saveSearchResults(key, value);
 	}
 
-	public async getRecentlyUpdatedContent(): Promise<string[]> {
-		const rows = await this.prisma.scraped.findMany({
-			take: 200,
-			orderBy: {
-				updatedAt: 'desc',
-			},
-			where: {
-				OR: [{ key: { startsWith: 'movie:tt' } }, { key: { startsWith: 'tv:tt' } }],
-			},
-			select: {
-				key: true,
-			},
-		});
-
-		return rows
-			.map((row: any) => {
-				const match = row.key.match(/^(movie|tv):([^:]+)/);
-				if (match) {
-					return `${match[1]}:${match[2]}`;
-				}
-				return '';
-			})
-			.filter((key: any) => key !== '');
+	public getSearchResults<T>(key: string) {
+		return this.searchService.getSearchResults<T>(key);
 	}
 
-	public async getRecentlyUpdatedAnime(limit: number): Promise<AnimeItem[]> {
-		const results = await this.prisma.$queryRaw<any[]>`
-		SELECT
-			a.anidb_id,
-			a.mal_id,
-			a.poster_url,
-			MAX(s.updatedAt) AS last_updated
-		FROM Anime AS a
-		JOIN ScrapedTrue AS s
-		ON (a.mal_id = CAST(SUBSTRING(s.key, 11) AS UNSIGNED) AND SUBSTRING(s.key, 1, 9) = 'anime:mal')
-		OR (a.anidb_id = CAST(SUBSTRING(s.key, 13) AS UNSIGNED) AND SUBSTRING(s.key, 1, 11) = 'anime:anidb')
-		WHERE a.poster_url IS NOT NULL AND a.poster_url != ''
-		GROUP BY a.anidb_id, a.mal_id, a.poster_url
-		ORDER BY last_updated DESC
-		LIMIT ${limit}`;
-		return results.map((anime) => ({
-			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
-			poster_url: anime.poster_url,
-		}));
+	// Anime Service Methods
+	public getRecentlyUpdatedAnime(limit: number) {
+		return this.animeService.getRecentlyUpdatedAnime(limit);
 	}
 
-	public async searchAnimeByTitle(query: string): Promise<AnimeSearchResult[]> {
-		const soundexQuery = soundex(query);
-		const results = await this.prisma.$queryRaw<any[]>`
-		SELECT
-			a.title,
-			a.anidb_id,
-			a.mal_id,
-			a.poster_url
-		FROM Anime AS a
-		WHERE (SOUNDEX(a.title) = ${soundexQuery} OR a.title LIKE ${
-			'%' + query.toLowerCase() + '%'
-		}) AND a.poster_url IS NOT NULL AND a.poster_url != ''
-		ORDER BY a.rating DESC`;
-		return results.map((anime) => ({
-			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
-			title: anime.title,
-			poster_url: anime.poster_url,
-		}));
+	public searchAnimeByTitle(query: string) {
+		return this.animeService.searchAnimeByTitle(query);
 	}
 
-	public async getAnimeByMalIds(malIds: number[]): Promise<AnimeSearchResult[]> {
-		const results = await this.prisma.anime.findMany({
-			where: {
-				mal_id: {
-					in: malIds,
-				},
-				poster_url: {
-					not: {
-						equals: '',
-					},
-				},
-			},
-			select: {
-				title: true,
-				anidb_id: true,
-				mal_id: true,
-				poster_url: true,
-			},
-		});
-		return results.map((anime) => ({
-			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
-			title: anime.title,
-			poster_url: anime.poster_url,
-		}));
+	public getAnimeByMalIds(malIds: number[]) {
+		return this.animeService.getAnimeByMalIds(malIds);
 	}
 
-	public async getAnimeByKitsuIds(kitsuIds: number[]): Promise<AnimeSearchResult[]> {
-		const results = await this.prisma.anime.findMany({
-			where: {
-				kitsu_id: {
-					in: kitsuIds,
-				},
-				poster_url: {
-					not: {
-						equals: '',
-					},
-				},
-			},
-			select: {
-				title: true,
-				anidb_id: true,
-				mal_id: true,
-				poster_url: true,
-			},
-		});
-		return results.map((anime) => ({
-			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
-			title: anime.title,
-			poster_url: anime.poster_url,
-		}));
+	public getAnimeByKitsuIds(kitsuIds: number[]) {
+		return this.animeService.getAnimeByKitsuIds(kitsuIds);
 	}
 
-	public async getEmptyMedia(quantity = 3): Promise<string[] | null> {
-		const scrapedItems = await this.prisma.scraped.findMany({
-			where: {
-				OR: [
-					{
-						key: { startsWith: `tv:tt` },
-						value: { equals: [] },
-					},
-					{
-						key: { startsWith: `movie:tt` },
-						value: { equals: [] },
-					},
-				],
-			},
-			orderBy: { updatedAt: 'asc' },
-			take: quantity,
-			select: { key: true },
-		});
-
-		if (scrapedItems.length > 0) {
-			return scrapedItems.map((item) => item.key.split(':')[1]);
-		}
-
-		return null;
+	// Cast Service Methods
+	public saveCastProfile(
+		userId: string,
+		clientId: string,
+		clientSecret: string,
+		refreshToken?: string | null
+	) {
+		return this.castService.saveCastProfile(userId, clientId, clientSecret, refreshToken);
 	}
 
-	// dmm cast
-
-	public async getLatestCast(imdbId: string, userId: string): Promise<LatestCast | null> {
-		const castItem = await this.prisma.cast.findFirst({
-			where: {
-				imdbId: imdbId,
-				userId: userId,
-			},
-			orderBy: {
-				updatedAt: 'desc',
-			},
-			select: {
-				url: true,
-				link: true,
-			},
-		});
-		return castItem && castItem.url && castItem.link
-			? { url: castItem.url, link: castItem.link }
-			: null;
+	public getLatestCast(imdbId: string, userId: string) {
+		return this.castService.getLatestCast(imdbId, userId);
 	}
 
-	public async getCastURLs(
-		imdbId: string,
-		userId: string
-	): Promise<{ url: string; link: string | null; size: number }[]> {
-		const castItems = await this.prisma.cast.findMany({
-			where: {
-				imdbId: imdbId,
-				userId: userId,
-				updatedAt: {
-					gt: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000), // 30 days
-				},
-			},
-			orderBy: {
-				updatedAt: 'desc',
-			},
-			select: {
-				url: true,
-				size: true,
-				link: true,
-			},
-		});
-		return castItems
-			.filter(
-				(item): item is { url: string; link: string; size: bigint } => item.link !== null
-			)
-			.map((item) => ({
-				url: item.url,
-				link: item.link,
-				size: Number(item.size),
-			}));
+	public getCastURLs(imdbId: string, userId: string) {
+		return this.castService.getCastURLs(imdbId, userId);
 	}
 
-	public async getOtherCastURLs(
-		imdbId: string,
-		userId: string
-	): Promise<{ url: string; link: string; size: number }[]> {
-		const castItems = await this.prisma.cast.findMany({
-			where: {
-				imdbId: imdbId,
-				link: {
-					not: null,
-				},
-				size: {
-					gt: 10,
-				},
-				userId: {
-					not: userId,
-				},
-			},
-			distinct: ['size'],
-			orderBy: {
-				updatedAt: 'desc',
-			},
-			take: 2,
-			select: {
-				url: true,
-				link: true,
-				size: true,
-			},
-		});
-
-		return castItems
-			.filter((item): item is { url: string; link: string; size: bigint } => !!item.link)
-			.map((item) => ({
-				url: item.url,
-				link: item.link,
-				size: Number(item.size),
-			}));
+	public getOtherCastURLs(imdbId: string, userId: string) {
+		return this.castService.getOtherCastURLs(imdbId, userId);
 	}
 
-	public async getCastProfile(userId: string): Promise<{
-		clientId: string;
-		clientSecret: string;
-		refreshToken: string;
-	} | null> {
-		const profile = await this.prisma.castProfile.findUnique({
-			where: { userId },
-			select: {
-				clientId: true,
-				clientSecret: true,
-				refreshToken: true,
-			},
-		});
-		return profile;
+	public getCastProfile(userId: string) {
+		return this.castService.getCastProfile(userId);
 	}
 
-	public async saveCast(
+	public saveCast(
 		imdbId: string,
 		userId: string,
 		hash: string,
 		url: string,
 		rdLink: string,
 		fileSize: number
-	): Promise<void> {
-		await this.prisma.cast.upsert({
-			where: {
-				imdbId_userId_hash: {
-					imdbId: imdbId,
-					userId: userId,
-					hash: hash,
-				},
-			},
-			update: {
-				imdbId: imdbId,
-				link: rdLink,
-				url: url,
-				size: BigInt(fileSize),
-			},
-			create: {
-				imdbId: imdbId,
-				userId: userId,
-				hash: hash,
-				link: rdLink,
-				url: url,
-				size: BigInt(fileSize),
-			},
-		});
+	) {
+		return this.castService.saveCast(imdbId, userId, hash, url, rdLink, fileSize);
 	}
 
-	public async fetchCastedMovies(userId: string): Promise<string[]> {
-		const movies = await this.prisma.cast.findMany({
-			where: {
-				userId: userId,
-				imdbId: {
-					not: {
-						contains: ':', // Excludes shows
-					},
-				},
-			},
-			orderBy: {
-				updatedAt: 'desc',
-			},
-			distinct: ['imdbId'],
-			select: {
-				imdbId: true,
-			},
-		});
-
-		return movies.map((movie) => movie.imdbId);
+	public fetchCastedMovies(userId: string) {
+		return this.castService.fetchCastedMovies(userId);
 	}
 
-	public async fetchCastedShows(userId: string): Promise<string[]> {
-		const showsWithDuplicates = await this.prisma.cast.findMany({
-			where: {
-				userId: userId,
-				imdbId: {
-					contains: ':', // Includes only shows
-				},
-			},
-			orderBy: {
-				updatedAt: 'desc',
-			},
-			select: {
-				imdbId: true,
-			},
-		});
-
-		const uniqueShows = showsWithDuplicates
-			.map((show) => show.imdbId.split(':')[0]) // Extracts the base imdbId of the show
-			.filter((value, index, self) => self.indexOf(value) === index); // Ensures uniqueness
-		// .slice(0, 48); // Takes the last 48 unique shows
-
-		return uniqueShows;
+	public fetchCastedShows(userId: string) {
+		return this.castService.fetchCastedShows(userId);
 	}
 
-	/**
-	 * Fetches all casted links for a given userId.
-	 * @param userId - The ID of the user.
-	 * @returns A promise that resolves to an array of casted links.
-	 */
-	public async fetchAllCastedLinks(userId: string): Promise<
-		{
-			imdbId: string;
-			url: string;
-			hash: string;
-			size: number;
-			updatedAt: Date;
-		}[]
-	> {
-		const castItems = await this.prisma.cast.findMany({
-			where: {
-				userId: userId,
-			},
-			select: {
-				imdbId: true,
-				url: true,
-				hash: true,
-				size: true,
-				updatedAt: true,
-			},
-			orderBy: {
-				updatedAt: 'desc',
-			},
-		});
-
-		return castItems.map((item) => ({
-			...item,
-			size: Number(item.size),
-		}));
+	public fetchAllCastedLinks(userId: string) {
+		return this.castService.fetchAllCastedLinks(userId);
 	}
 
-	/**
-	 * Deletes a single casted link based on imdbId, userId, and hash.
-	 * @param imdbId - The IMDb ID of the movie/show.
-	 * @param userId - The ID of the user.
-	 * @param hash - The unique hash of the casted link.
-	 * @returns A promise that resolves when the deletion is complete.
-	 * @throws An error if the deletion fails (e.g., record not found).
-	 */
-	public async deleteCastedLink(imdbId: string, userId: string, hash: string): Promise<void> {
-		try {
-			await this.prisma.cast.delete({
-				where: {
-					imdbId_userId_hash: {
-						imdbId,
-						userId,
-						hash,
-					},
-				},
-			});
-		} catch (error: any) {
-			throw new Error(`Failed to delete casted link: ${error.message}`);
-		}
+	public deleteCastedLink(imdbId: string, userId: string, hash: string) {
+		return this.castService.deleteCastedLink(imdbId, userId, hash);
 	}
 
-	/**
-	 * Creates or updates a report for incorrect content.
-	 * @param hash - The hash of the torrent being reported
-	 * @param imdbId - The IMDB ID of the content
-	 * @param userId - The user ID (from RealDebrid or AllDebrid)
-	 * @param type - The type of report ('porn', 'wrong_imdb', or 'wrong_season')
-	 * @returns A promise that resolves when the report is saved
-	 */
-	public async reportContent(
+	// Report Service Methods
+	public reportContent(
 		hash: string,
 		imdbId: string,
 		userId: string,
 		type: 'porn' | 'wrong_imdb' | 'wrong_season'
-	): Promise<void> {
-		try {
-			await this.prisma.report.upsert({
-				where: {
-					hash_userId: {
-						hash,
-						userId,
-					},
-				},
-				update: {
-					type,
-					createdAt: new Date(),
-				},
-				create: {
-					hash,
-					imdbId,
-					userId,
-					type,
-				},
-			});
-		} catch (error: any) {
-			throw new Error(`Failed to save report: ${error.message}`);
-		}
+	) {
+		return this.reportService.reportContent(hash, imdbId, userId, type);
+	}
+
+	public getEmptyMedia(quantity?: number) {
+		return this.reportService.getEmptyMedia(quantity);
+	}
+
+	// Database Size Methods
+	public getContentSize() {
+		return this.scrapedService.getContentSize();
+	}
+
+	public getProcessingCount() {
+		return this.scrapedService.getProcessingCount();
+	}
+
+	public getRequestedCount() {
+		return this.scrapedService.getRequestedCount();
 	}
 }

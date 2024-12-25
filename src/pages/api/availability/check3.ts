@@ -132,24 +132,21 @@ async function getFileIDsToSelect(torrentInfo: TorrentInfoResponse): Promise<str
 }
 
 async function getSearchResults(imdbId: string): Promise<SearchResult[]> {
+	const movieKey = `movie:${imdbId}`;
+	const tvKey = `tv:${imdbId}`;
+
 	const results = await Promise.all([
-		db.prisma.scraped.findMany({
-			where: {
-				OR: [{ key: `movie:${imdbId}` }, { key: { startsWith: `tv:${imdbId}:` } }],
-			},
-		}),
-		db.prisma.scrapedTrue.findMany({
-			where: {
-				OR: [{ key: `movie:${imdbId}` }, { key: { startsWith: `tv:${imdbId}:` } }],
-			},
-		}),
+		db.getScrapedResults<SearchResult[]>(movieKey),
+		db.getScrapedResults<SearchResult[]>(tvKey),
+		db.getScrapedTrueResults<SearchResult[]>(movieKey),
+		db.getScrapedTrueResults<SearchResult[]>(tvKey),
 	]);
 
+	// Filter out undefined results and flatten the array
 	return results
+		.filter((result): result is SearchResult[] => result !== undefined)
 		.flat()
-		.map((result) => (result as unknown as DbResult).value)
-		.flat()
-		.filter(Boolean);
+		.filter((result): result is SearchResult => result !== undefined);
 }
 
 async function getAvailableHashes(
@@ -157,16 +154,7 @@ async function getAvailableHashes(
 	searchResults: SearchResult[]
 ): Promise<Set<string>> {
 	const hashes = searchResults.map((result) => result.hash);
-	const availableHashes = await db.prisma.available.findMany({
-		where: {
-			imdbId,
-			hash: { in: hashes },
-		},
-		select: {
-			hash: true,
-		},
-	});
-
+	const availableHashes = await db.checkAvailabilityByHashes(hashes);
 	return new Set(availableHashes.map((ah) => ah.hash));
 }
 
