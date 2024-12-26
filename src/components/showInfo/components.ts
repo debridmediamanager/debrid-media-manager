@@ -65,18 +65,18 @@ export const renderFileRow = (file: FileRowProps, showCheckbox: boolean = false)
 };
 
 export const renderInfoTable = (rows: InfoTableRow[]): string => `
-    <table class="table-auto w-full mb-4 text-left text-gray-200">
-        <tbody>
+    <div class="overflow-x-auto">
+        <table class="min-w-full table-auto mb-4 text-left text-gray-200">
             ${rows
 				.map(
 					(row) => `
-                <tr>
-                    <td class="font-semibold">${row.label}:</td>
-                    <td>${row.value.toString()}</td>
-                </tr>
-            `
+                    <tr>
+                        <td class="font-semibold pr-4 truncate">${row.label}</td>
+                        <td>${row.value.toString()}</td>
+                    </tr>
+                `
 				)
 				.join('')}
-        </tbody>
-    </table>
+        </table>
+    </div>
 `;
