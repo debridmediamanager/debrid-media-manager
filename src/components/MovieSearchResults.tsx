@@ -1,8 +1,10 @@
 import { SearchResult } from '@/services/mediasearch';
+import { createTorrent, requestDownloadLink } from '@/services/torbox';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
 import ReportButton from './ReportButton';
 
@@ -12,6 +14,7 @@ type MovieSearchResultsProps = {
 	movieMaxSize: string;
 	rdKey: string | null;
 	adKey: string | null;
+	torboxKey: string | null;
 	player: string;
 	hashAndProgress: Record<string, number>;
 	handleShowInfo: (result: SearchResult) => void;
@@ -24,12 +27,13 @@ type MovieSearchResultsProps = {
 	imdbId?: string;
 };
 
-const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
+const MovieSearchResults = ({
 	filteredResults,
 	onlyShowCached,
 	movieMaxSize,
 	rdKey,
 	adKey,
+	torboxKey,
 	player,
 	hashAndProgress,
 	handleShowInfo,
@@ -40,7 +44,7 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 	deleteRd,
 	deleteAd,
 	imdbId,
-}) => {
+}: MovieSearchResultsProps) => {
 	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
 	const [downloadMagnets, setDownloadMagnets] = useState(false);
@@ -321,10 +325,53 @@ const MovieSearchResults: React.FC<MovieSearchResultsProps> = ({
 									{downloadMagnets ? 'Download' : 'Copy'}
 								</button>
 
+								{torboxKey && !r.noVideos && (
+									<button
+										className="haptic-sm inline rounded border-2 border-purple-500 bg-purple-900/30 px-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
+										onClick={async () => {
+											await toast.promise(
+												(async () => {
+													const createResponse = await createTorrent(
+														torboxKey,
+														{
+															magnet: `magnet:?xt=urn:btih:${r.hash}`,
+															name: r.title,
+														}
+													);
+													if (
+														!createResponse.success ||
+														!createResponse.data.torrent_id
+													) {
+														throw new Error('Failed to create torrent');
+													}
+													const downloadResponse =
+														await requestDownloadLink(torboxKey, {
+															torrent_id:
+																createResponse.data.torrent_id,
+														});
+													if (!downloadResponse.success) {
+														throw new Error(
+															'Failed to get download link'
+														);
+													}
+													window.open(downloadResponse.data);
+												})(),
+												{
+													loading: 'Creating TorBox download...',
+													success: 'Download started!',
+													error: 'Failed to create TorBox download',
+												}
+											);
+										}}
+									>
+										<b>📥TorBox</b>
+									</button>
+								)}
+
 								<ReportButton
 									hash={r.hash}
 									imdbId={imdbId!}
-									userId={rdKey || adKey || ''}
+									userId={rdKey || adKey || torboxKey || ''}
 								/>
 							</div>
 						</div>

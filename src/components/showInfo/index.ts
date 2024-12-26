@@ -16,6 +16,9 @@ interface Stream {
 	width?: number;
 	height?: number;
 	channel_layout?: string;
+	side_data_list?: {
+		dv_profile?: number;
+	}[];
 }
 
 interface MediaInfoResponse {
@@ -37,36 +40,131 @@ interface MediaInfoResponse {
 }
 
 const languageEmojis: { [key: string]: string } = {
+	aka: '🇬🇭',
+	alb: '🇦🇱',
+	amh: '🇪🇹',
 	ara: '🇸🇦',
+	arm: '🇦🇲',
+	asm: '🇮🇳',
+	aym: '🇧🇴',
+	aze: '🇦🇿',
+	bam: '🇲🇱',
+	baq: '🇪🇸',
+	bel: '🇧🇾',
+	ben: '🇧🇩',
+	bho: '🇮🇳',
+	bos: '🇧🇦',
+	bul: '🇧🇬',
+	bur: '🇲🇲',
+	cat: '🇪🇸',
+	ceb: '🇵🇭',
 	chi: '🇨🇳',
+	cos: '🇫🇷',
 	cze: '🇨🇿',
 	dan: '🇩🇰',
+	doi: '🇮🇳',
 	dut: '🇳🇱',
 	eng: '🇬🇧',
+	epo: '🌍',
+	est: '🇪🇪',
+	ewe: '🇬🇭',
 	fin: '🇫🇮',
 	fre: '🇫🇷',
+	fry: '🇳🇱',
+	geo: '🇬🇪',
 	ger: '🇩🇪',
+	gla: '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+	gle: '🇮🇪',
+	glg: '🇪🇸',
 	gre: '🇬🇷',
+	grn: '🇵🇾',
+	guj: '🇮🇳',
+	hat: '🇭🇹',
+	hau: '🇳🇬',
 	heb: '🇮🇱',
+	hin: '🇮🇳',
+	hmn: '🇨🇳',
 	hrv: '🇭🇷',
 	hun: '🇭🇺',
+	ice: '🇮🇸',
+	ibo: '🇳🇬',
+	ilo: '🇵🇭',
 	ind: '🇮🇩',
 	ita: '🇮🇹',
 	jpn: '🇯🇵',
+	kan: '🇮🇳',
+	kaz: '🇰🇿',
+	khm: '🇰🇭',
+	kin: '🇷🇼',
+	kir: '🇰🇬',
+	kok: '🇮🇳',
 	kor: '🇰🇷',
+	kur: '🇮🇶',
+	lao: '🇱🇦',
+	lat: '🏛️',
+	lav: '🇱🇻',
+	lin: '🇨🇩',
+	lit: '🇱🇹',
+	lug: '🇺🇬',
+	lus: '🇮🇳',
+	ltz: '🇱🇺',
+	mac: '🇲🇰',
+	mai: '🇮🇳',
+	mal: '🇮🇳',
+	mao: '🇳🇿',
+	mar: '🇮🇳',
 	may: '🇲🇾',
+	mlg: '🇲🇬',
+	mlt: '🇲🇹',
+	mon: '🇲🇳',
+	nep: '🇳🇵',
 	nob: '🇳🇴',
 	nor: '🇳🇴',
+	nso: '🇿🇦',
+	nya: '🇲🇼',
+	ori: '🇮🇳',
+	orm: '🇪🇹',
+	pan: '🇮🇳',
+	per: '🇮🇷',
 	pol: '🇵🇱',
 	por: '🇵🇹',
+	pus: '🇦🇫',
+	que: '🇵🇪',
 	rum: '🇷🇴',
 	rus: '🇷🇺',
+	san: '🇮🇳',
+	sin: '🇱🇰',
+	slo: '🇸🇰',
+	slv: '🇸🇮',
+	smo: '🇼🇸',
+	sna: '🇿🇼',
+	snd: '🇵🇰',
+	som: '🇸🇴',
 	spa: '🇪🇸',
+	sot: '🇱🇸',
+	srp: '🇷🇸',
+	sun: '🇮🇩',
+	swa: '🇹🇿',
 	swe: '🇸🇪',
+	tam: '🇮🇳',
+	tel: '🇮🇳',
+	tgk: '🇹🇯',
+	tgl: '🇵🇭',
 	tha: '🇹🇭',
+	tir: '🇪🇷',
+	tso: '🇿🇦',
+	tuk: '🇹🇲',
 	tur: '🇹🇷',
+	uig: '🇨🇳',
 	ukr: '🇺🇦',
+	urd: '🇵🇰',
+	uzb: '🇺🇿',
 	vie: '🇻🇳',
+	wel: '🏴󠁧󠁢󠁷󠁬󠁿',
+	xho: '🇿🇦',
+	yid: '🇮🇱',
+	yor: '🇳🇬',
+	zul: '🇿🇦',
 };
 
 const generatePasswordHash = async (hash: string): Promise<string> => {
@@ -97,21 +195,29 @@ const getStreamInfo = (mediaInfo: MediaInfoResponse | null) => {
 	const rows: { label: string; value: string }[] = [];
 
 	if (videoStream) {
+		let videoInfo = `${videoStream.codec_name.toUpperCase()} • ${videoStream.width}x${videoStream.height}`;
+		// Check for Dolby Vision profile
+		if (videoStream.side_data_list) {
+			const dvStream = videoStream.side_data_list.find((sd: any) => sd.dv_profile > 0);
+			if (dvStream) {
+				videoInfo += ` • Dolby Vision profile ${dvStream.dv_profile}`;
+			}
+		}
 		rows.push({
-			label: '🎥 Video',
-			value: `${videoStream.codec_name.toUpperCase()} • ${videoStream.width}x${videoStream.height}`,
+			label: 'Video',
+			value: videoInfo,
 		});
 	}
 
 	if (audioStreams.length > 0) {
 		rows.push({
-			label: '🔊 Audio Tracks',
+			label: 'Audio',
 			value:
 				`${audioStreams.length} tracks: ` +
 				audioStreams
 					.map(
 						(stream) =>
-							`${stream.tags?.language ? languageEmojis[stream.tags.language] || stream.tags.language : '🌐'} ${stream.codec_name.toUpperCase()}`
+							`${stream.tags?.language ? `${languageEmojis[stream.tags.language] || stream.tags.language} ${stream.tags.language}` : '🌐'} (${stream.codec_name.toUpperCase()})`
 					)
 					.join(', '),
 		});
@@ -119,13 +225,13 @@ const getStreamInfo = (mediaInfo: MediaInfoResponse | null) => {
 
 	if (subtitleStreams.length > 0) {
 		rows.push({
-			label: '💬 Subtitles',
+			label: 'Subs',
 			value:
 				`${subtitleStreams.length} tracks: ` +
 				subtitleStreams
 					.map(
 						(stream) =>
-							`${stream.tags?.language ? languageEmojis[stream.tags.language] || stream.tags.language : '🌐'}`
+							`${stream.tags?.language ? `${languageEmojis[stream.tags.language] || stream.tags.language} ${stream.tags.language}` : '🌐'}`
 					)
 					.join(', '),
 		});
@@ -133,14 +239,14 @@ const getStreamInfo = (mediaInfo: MediaInfoResponse | null) => {
 
 	if (format.duration) {
 		rows.push({
-			label: '⏱️ Duration',
+			label: 'Duration',
 			value: formatDuration(format.duration),
 		});
 	}
 
 	if (chapters && chapters.length > 0) {
 		rows.push({
-			label: '📑 Chapters',
+			label: 'Chapters',
 			value: `${chapters.length} chapters included`,
 		});
 	}

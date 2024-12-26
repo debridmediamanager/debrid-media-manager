@@ -169,3 +169,8 @@ export const useAllDebridApiKey = () => {
 	const [apiKey] = useLocalStorage<string>('ad:apiKey');
 	return apiKey;
 };
+
+export const useTorBoxAccessToken = () => {
+	const [apiKey] = useLocalStorage<string>('tb:apiKey');
+	return apiKey;
+};

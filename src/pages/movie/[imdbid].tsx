@@ -3,7 +3,7 @@ import RelatedMedia from '@/components/RelatedMedia';
 import SearchTokens from '@/components/SearchTokens';
 import Poster from '@/components/poster';
 import { showInfoForRD } from '@/components/showInfo';
-import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
+import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
 import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
@@ -84,6 +84,7 @@ const MovieSearch: FunctionComponent = () => {
 	const [descLimit, setDescLimit] = useState(100);
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
+	const torboxKey = useTorBoxAccessToken();
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(false);
 	const [totalUncachedCount, setTotalUncachedCount] = useState<number>(0);
 	const [currentPage, setCurrentPage] = useState(0);
@@ -474,16 +475,14 @@ const MovieSearch: FunctionComponent = () => {
 									</button>
 								</>
 							)}
-							<button
-								className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
-								onClick={() =>
-									window.open(`stremio://detail/movie/${imdbid}/${imdbid}`)
-								}
-							>
-								<b>🔮Stremio</b>
-							</button>
 						</>
 					)}
+					<button
+						className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
+						onClick={() => window.open(`stremio://detail/movie/${imdbid}/${imdbid}`)}
+					>
+						<b>🔮Stremio</b>
+					</button>
 					{onlyShowCached && totalUncachedCount > 0 && (
 						<button
 							className="mb-1 mr-2 mt-0 rounded border-2 border-blue-500 bg-blue-900/30 p-1 text-xs text-blue-100 transition-colors hover:bg-blue-800/50"
@@ -576,6 +575,7 @@ const MovieSearch: FunctionComponent = () => {
 						movieMaxSize={movieMaxSize}
 						rdKey={rdKey}
 						adKey={adKey}
+						torboxKey={torboxKey}
 						player={player}
 						hashAndProgress={hashAndProgress}
 						handleShowInfo={handleShowInfo}
