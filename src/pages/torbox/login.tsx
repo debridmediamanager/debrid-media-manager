@@ -1,5 +1,5 @@
 import useLocalStorage from '@/hooks/localStorage';
-import { getUser } from '@/services/torbox';
+import { getUserData } from '@/services/torbox';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ export default function TorboxLoginPage() {
 		try {
 			console.log('Attempting to validate API key...');
 			// Verify the API key works by attempting to get user info
-			const userData = await getUser(inputApiKey);
+			const userData = await getUserData(inputApiKey);
 			console.log('API response:', userData);
 
 			// If successful, save the API key
