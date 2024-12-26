@@ -1,10 +1,10 @@
-import { getAllDebridUser } from '@/services/allDebrid';
-import { getCurrentUser as getRealDebridUser, getToken } from '@/services/realDebrid';
-import { getUser as getTorboxUser } from '@/services/torbox';
-import { TraktUser, getTraktUser } from '@/services/trakt';
-import { clearRdKeys } from '@/utils/clearLocalStorage';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { getAllDebridUser } from '../services/allDebrid';
+import { getCurrentUser as getRealDebridUser, getToken } from '../services/realDebrid';
+import { TorBoxUser, getUserData } from '../services/torbox';
+import { TraktUser, getTraktUser } from '../services/trakt';
+import { clearRdKeys } from '../utils/clearLocalStorage';
 import useLocalStorage from './localStorage';
 
 export interface RealDebridUser {
@@ -31,26 +31,10 @@ export interface AllDebridUser {
 	fidelityPoints: number;
 }
 
-export interface TorboxUser {
-	success: boolean;
-	error: null | string;
-	detail: string;
-	data: {
-		id: number;
-		email: string;
-		is_subscribed: boolean;
-		premium_expires_at: string;
-		total_bytes_downloaded: number;
-		total_bytes_uploaded: number;
-		torrents_downloaded: number;
-		[key: string]: any;
-	};
-}
-
 export const useCurrentUser = () => {
 	const [rdUser, setRdUser] = useState<RealDebridUser | null>(null);
 	const [adUser, setAdUser] = useState<AllDebridUser | null>(null);
-	const [tbUser, setTbUser] = useState<TorboxUser | null>(null);
+	const [tbUser, setTbUser] = useState<TorBoxUser | null>(null);
 	const [traktUser, setTraktUser] = useState<TraktUser | null>(null);
 	const router = useRouter();
 	const [rdToken] = useLocalStorage<string>('rd:accessToken');
@@ -88,9 +72,9 @@ export const useCurrentUser = () => {
 			}
 			try {
 				if (tbToken) {
-					const tbUserResponse = await getTorboxUser(tbToken);
+					const tbUserResponse = await getUserData(tbToken);
 					if (tbUserResponse && tbUserResponse.success) {
-						setTbUser(tbUserResponse as TorboxUser);
+						setTbUser(tbUserResponse.data);
 					}
 				}
 			} catch (error: any) {

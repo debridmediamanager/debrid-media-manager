@@ -1,5 +1,6 @@
 import { AllDebridUser, RealDebridUser } from '@/hooks/auth';
 import { TraktUser } from '@/services/trakt';
+import { TorBoxUser } from '@/services/types';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
 
@@ -8,17 +9,6 @@ interface ServiceCardProps {
 	user: RealDebridUser | AllDebridUser | TraktUser | any | null;
 	onTraktLogin: () => void;
 	onLogout: (prefix: string) => void;
-}
-
-interface TorboxUser {
-	data: {
-		email: string;
-		is_subscribed: boolean;
-		premium_expires_at: string;
-		total_bytes_downloaded: number;
-		total_bytes_uploaded: number;
-		torrents_downloaded: number;
-	};
 }
 
 export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCardProps) {
@@ -66,21 +56,35 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 		  <p><strong>Points:</strong> ${adUser.fidelityPoints}</p>
         </div>
       `;
-		} else if (service === 'tb' && user && user.data) {
-			const tbUser = user as TorboxUser;
+		} else if (service === 'tb' && user) {
+			const tbUser = user as TorBoxUser;
 			title = 'Torbox';
 			prefix = 'tb:';
-			const premiumExpiry = new Date(tbUser.data.premium_expires_at);
+			const premiumExpiry = new Date(tbUser.premium_expires_at);
 			const isPremiumActive = premiumExpiry > new Date();
 
 			html = `
         <div class="text-left">
-          <p><strong>Email:</strong> ${tbUser.data.email}</p>
+          <p><strong>Email:</strong> ${tbUser.email}</p>
+          <p><strong>Created:</strong> ${tbUser.created_at ? new Date(tbUser.created_at).toLocaleDateString() : 'N/A'}</p>
+          <p><strong>Plan:</strong> ${
+				tbUser.plan === 2
+					? 'Pro'
+					: tbUser.plan === 1
+						? 'Standard'
+						: tbUser.plan === 0
+							? 'Essential'
+							: `Free`
+			}</p>
           <p><strong>Premium Status:</strong> ${isPremiumActive ? 'Active' : 'Inactive'}</p>
-          <p><strong>Premium Expires:</strong> ${new Date(tbUser.data.premium_expires_at).toLocaleDateString()}</p>
-          <p><strong>Downloads:</strong> ${tbUser.data.torrents_downloaded} torrents</p>
-          <p><strong>Downloaded:</strong> ${formatBytes(tbUser.data.total_bytes_downloaded)}</p>
-          <p><strong>Uploaded:</strong> ${formatBytes(tbUser.data.total_bytes_uploaded)}</p>
+          <p><strong>Premium Expires:</strong> ${tbUser.premium_expires_at ? new Date(tbUser.premium_expires_at).toLocaleDateString() : 'N/A'}</p>
+          <p><strong>Downloads:</strong> ${tbUser.total_downloaded} torrents</p>
+          ${
+				tbUser.cooldown_until && new Date(tbUser.cooldown_until) > new Date()
+					? `<p><strong>Cooldown Until:</strong> ${new Date(tbUser.cooldown_until).toLocaleDateString()}</p>`
+					: ''
+			}
+          ${tbUser.user_referral ? `<p><strong>Referral Code:</strong> ${tbUser.user_referral}</p>` : ''}
         </div>
       `;
 		} else if (service === 'trakt' && user && 'user' in user) {
@@ -169,9 +173,9 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 	}
 
 	if (service === 'tb') {
-		const tbUser = user as TorboxUser | null;
-		const isPremiumActive = tbUser?.data?.premium_expires_at
-			? new Date(tbUser.data.premium_expires_at) > new Date()
+		const tbUser = user as TorBoxUser | null;
+		const isPremiumActive = tbUser?.premium_expires_at
+			? new Date(tbUser.premium_expires_at) > new Date()
 			: false;
 		return tbUser ? (
 			<button
@@ -179,7 +183,7 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 				className="haptic flex items-center justify-center gap-2 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-purple-100 transition-colors hover:bg-purple-800/50"
 			>
 				<span className="font-medium">Torbox</span>
-				<span>{tbUser.data.email.split('@')[0]}</span>
+				<span>{tbUser.email.split('@')[0]}</span>
 				<span>{isPremiumActive ? '✅' : '❌'}</span>
 			</button>
 		) : (

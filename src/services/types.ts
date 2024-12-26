@@ -184,3 +184,82 @@ export interface MediaInfoResponse {
 	audio_image: string;
 	backdrop_path: string;
 }
+
+// TorBox Types
+
+export interface TorBoxResponse<T = any> {
+	success: boolean;
+	error: string | null | boolean;
+	detail: string;
+	data: T;
+}
+
+export interface TorBoxFile {
+	id: number;
+	md5: string;
+	s3_path: string;
+	name: string;
+	size: number;
+	mimetype: string;
+	short_name: string;
+}
+
+export interface TorBoxTorrentInfo {
+	id: number;
+	hash: string;
+	created_at: string;
+	updated_at: string;
+	magnet: string;
+	size: number;
+	active: boolean;
+	auth_id: string;
+	download_state: string;
+	seeds: number;
+	peers: number;
+	ratio: number;
+	progress: number;
+	download_speed: number;
+	upload_speed: number;
+	name: string;
+	eta: number;
+	server: number;
+	torrent_file: boolean;
+	expires_at: string;
+	download_present: boolean;
+	download_finished: boolean;
+	files: TorBoxFile[];
+	inactive_check: number;
+	availability: number;
+}
+
+export interface TorBoxUser {
+	id: number;
+	created_at: string;
+	updated_at: string;
+	email: string;
+	plan: number;
+	total_downloaded: number;
+	customer: string;
+	server: number;
+	is_subscribed: boolean;
+	premium_expires_at: string;
+	cooldown_until: string;
+	auth_id: string;
+	user_referral: string;
+	base_email: string;
+	settings?: Record<string, any>;
+}
+
+export interface TorBoxStats {
+	total_downloads: number;
+	total_users: number;
+	total_bytes_downloaded: number;
+	total_bytes_uploaded: number;
+	active_torrents: number;
+	active_usenet_downloads: number;
+	active_web_downloads: number;
+	total_usenet_downloads: number;
+	total_torrent_downloads: number;
+	total_web_downloads: number;
+	total_servers: number;
+}
