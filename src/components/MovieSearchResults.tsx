@@ -1,5 +1,5 @@
 import { SearchResult } from '@/services/mediasearch';
-import { createTorrent, requestDownloadLink } from '@/services/torbox';
+import { createTorrent } from '@/services/torbox';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
@@ -281,23 +281,75 @@ const MovieSearchResults = ({
 									</button>
 								)}
 
-								{(r.rdAvailable || r.adAvailable) && (
-									<>
-										{r.rdAvailable && player && (
-											<button
-												className="haptic-sm inline rounded border-2 border-teal-500 bg-teal-900/30 px-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50"
-												onClick={() =>
-													window.open(
-														`/api/watch/instant/${player}?token=${rdKey}&hash=${r.hash}&fileId=${getBiggestFileId(r)}`
-													)
-												}
-											>
-												🧐Watch
-											</button>
+								{/* TorBox download/delete */}
+								{torboxKey && inLibrary('torbox', r.hash) && (
+									<button
+										className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleDeleteRd(r.hash)}
+										disabled={isLoading}
+									>
+										{isLoading ? (
+											<span className="inline-block animate-spin">⌛</span>
+										) : (
+											<FaTimes className="mr-2 inline" />
 										)}
-									</>
+										{isLoading
+											? 'Removing...'
+											: `TorBox (${hashAndProgress[`torbox:${r.hash}`] + '%'})`}
+									</button>
+								)}
+								{torboxKey && notInLibrary('torbox', r.hash) && (
+									<button
+										className={`border-2 border-${btnColor(r.rdAvailable, r.noVideos)}-500 bg-${btnColor(r.rdAvailable, r.noVideos)}-900/30 text-${btnColor(r.rdAvailable, r.noVideos)}-100 hover:bg-${btnColor(r.rdAvailable, r.noVideos)}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={async () => {
+											setLoadingHashes((prev) => new Set(prev).add(r.hash));
+											try {
+												await toast.promise(
+													(async () => {
+														const createResponse = await createTorrent(
+															torboxKey,
+															{
+																magnet: `magnet:?xt=urn:btih:${r.hash}`,
+																name: r.title,
+															}
+														);
+														if (
+															!createResponse.success ||
+															!createResponse.data.torrent_id
+														) {
+															throw new Error(
+																'Failed to create torrent'
+															);
+														}
+													})(),
+													{
+														loading: 'Creating TorBox download...',
+														success: 'Download started!',
+														error: 'Failed to create TorBox download',
+													}
+												);
+											} finally {
+												setLoadingHashes((prev) => {
+													const newSet = new Set(prev);
+													newSet.delete(r.hash);
+													return newSet;
+												});
+											}
+										}}
+										disabled={isLoading}
+									>
+										{isLoading ? (
+											<span className="inline-block animate-spin">⌛</span>
+										) : (
+											btnIcon(r.rdAvailable)
+										)}
+										{isLoading
+											? 'Adding...'
+											: btnLabel(r.rdAvailable, 'TorBox')}
+									</button>
 								)}
 
+								{/* Cast btn */}
 								{rdKey && (
 									<button
 										className={`haptic-sm inline rounded border-2 border-gray-500 bg-gray-900/30 px-1 text-xs text-gray-100 transition-colors hover:bg-gray-800/50 ${isCasting ? 'cursor-not-allowed opacity-50' : ''}`}
@@ -317,6 +369,25 @@ const MovieSearchResults = ({
 									</button>
 								)}
 
+								{/* Watch btn */}
+								{(r.rdAvailable || r.adAvailable) && (
+									<>
+										{r.rdAvailable && player && (
+											<button
+												className="haptic-sm inline rounded border-2 border-teal-500 bg-teal-900/30 px-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50"
+												onClick={() =>
+													window.open(
+														`/api/watch/instant/${player}?token=${rdKey}&hash=${r.hash}&fileId=${getBiggestFileId(r)}`
+													)
+												}
+											>
+												🧐Watch
+											</button>
+										)}
+									</>
+								)}
+
+								{/* Magnet btn */}
 								<button
 									className="haptic-sm inline rounded border-2 border-pink-500 bg-pink-900/30 px-1 text-xs text-pink-100 transition-colors hover:bg-pink-800/50"
 									onClick={() => handleMagnetAction(r.hash)}
@@ -325,49 +396,7 @@ const MovieSearchResults = ({
 									{downloadMagnets ? 'Download' : 'Copy'}
 								</button>
 
-								{torboxKey && !r.noVideos && (
-									<button
-										className="haptic-sm inline rounded border-2 border-purple-500 bg-purple-900/30 px-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
-										onClick={async () => {
-											await toast.promise(
-												(async () => {
-													const createResponse = await createTorrent(
-														torboxKey,
-														{
-															magnet: `magnet:?xt=urn:btih:${r.hash}`,
-															name: r.title,
-														}
-													);
-													if (
-														!createResponse.success ||
-														!createResponse.data.torrent_id
-													) {
-														throw new Error('Failed to create torrent');
-													}
-													const downloadResponse =
-														await requestDownloadLink(torboxKey, {
-															torrent_id:
-																createResponse.data.torrent_id,
-														});
-													if (!downloadResponse.success) {
-														throw new Error(
-															'Failed to get download link'
-														);
-													}
-													window.open(downloadResponse.data);
-												})(),
-												{
-													loading: 'Creating TorBox download...',
-													success: 'Download started!',
-													error: 'Failed to create TorBox download',
-												}
-											);
-										}}
-									>
-										<b>📥TorBox</b>
-									</button>
-								)}
-
+								{/* Report btn */}
 								<ReportButton
 									hash={r.hash}
 									imdbId={imdbId!}
