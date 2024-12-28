@@ -1,5 +1,5 @@
 import { MagnetStatus } from '@/services/allDebrid';
-import { TorrentInfoResponse } from '@/services/types';
+import { TorBoxTorrentInfo, TorrentInfoResponse } from '@/services/types';
 import { ParsedFilename } from '@ctrl/video-filename-parser';
 
 export enum UserTorrentStatus {
@@ -28,6 +28,7 @@ export interface UserTorrent {
 	speed: number;
 	rdData?: TorrentInfoResponse;
 	adData?: MagnetStatus;
+	tbData?: TorBoxTorrentInfo;
 }
 
 export interface CachedHash {

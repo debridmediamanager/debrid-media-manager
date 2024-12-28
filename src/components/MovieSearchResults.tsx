@@ -1,10 +1,8 @@
 import { SearchResult } from '@/services/mediasearch';
-import { createTorrent } from '@/services/torbox';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { FaMagnet, FaTimes } from 'react-icons/fa';
 import ReportButton from './ReportButton';
 
@@ -22,8 +20,10 @@ type MovieSearchResultsProps = {
 	handleCopyMagnet: (hash: string) => void;
 	addRd: (hash: string) => Promise<void>;
 	addAd: (hash: string) => Promise<void>;
+	addTb: (hash: string) => Promise<void>;
 	deleteRd: (hash: string) => Promise<void>;
 	deleteAd: (hash: string) => Promise<void>;
+	deleteTb: (hash: string) => Promise<void>;
 	imdbId?: string;
 };
 
@@ -41,8 +41,10 @@ const MovieSearchResults = ({
 	handleCopyMagnet,
 	addRd,
 	addAd,
+	addTb,
 	deleteRd,
 	deleteAd,
+	deleteTb,
 	imdbId,
 }: MovieSearchResultsProps) => {
 	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
@@ -91,11 +93,39 @@ const MovieSearchResults = ({
 		}
 	};
 
+	const handleAddTb = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await addTb(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
 	const handleDeleteRd = async (hash: string) => {
 		if (loadingHashes.has(hash)) return;
 		setLoadingHashes((prev) => new Set(prev).add(hash));
 		try {
 			await deleteRd(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
+	const handleDeleteTb = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await deleteTb(hash);
 		} finally {
 			setLoadingHashes((prev) => {
 				const newSet = new Set(prev);
@@ -178,6 +208,7 @@ const MovieSearchResults = ({
 
 				const rdColor = btnColor(r.rdAvailable, r.noVideos);
 				const adColor = btnColor(r.adAvailable, r.noVideos);
+				const tbColor = btnColor(r.tbAvailable, r.noVideos);
 				const isLoading = loadingHashes.has(r.hash);
 				const isCasting = castingHashes.has(r.hash);
 
@@ -285,7 +316,7 @@ const MovieSearchResults = ({
 								{torboxKey && inLibrary('tb', r.hash) && (
 									<button
 										className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => handleDeleteRd(r.hash)}
+										onClick={() => handleDeleteTb(r.hash)}
 										disabled={isLoading}
 									>
 										{isLoading ? (
@@ -300,50 +331,16 @@ const MovieSearchResults = ({
 								)}
 								{torboxKey && notInLibrary('tb', r.hash) && (
 									<button
-										className={`border-2 border-${btnColor(r.rdAvailable, r.noVideos)}-500 bg-${btnColor(r.rdAvailable, r.noVideos)}-900/30 text-${btnColor(r.rdAvailable, r.noVideos)}-100 hover:bg-${btnColor(r.rdAvailable, r.noVideos)}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={async () => {
-											setLoadingHashes((prev) => new Set(prev).add(r.hash));
-											try {
-												await toast.promise(
-													(async () => {
-														const createResponse = await createTorrent(
-															torboxKey,
-															{
-																magnet: `magnet:?xt=urn:btih:${r.hash}`,
-																name: r.title,
-															}
-														);
-														if (
-															!createResponse.success ||
-															!createResponse.data.torrent_id
-														) {
-															throw new Error(
-																'Failed to create torrent'
-															);
-														}
-													})(),
-													{
-														loading: 'Creating TorBox download...',
-														success: 'Download started!',
-														error: 'Failed to create TorBox download',
-													}
-												);
-											} finally {
-												setLoadingHashes((prev) => {
-													const newSet = new Set(prev);
-													newSet.delete(r.hash);
-													return newSet;
-												});
-											}
-										}}
+										className={`border-2 border-${tbColor}-500 bg-${tbColor}-900/30 text-${tbColor}-100 hover:bg-${tbColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleAddTb(r.hash)}
 										disabled={isLoading}
 									>
 										{isLoading ? (
 											<span className="inline-block animate-spin">⌛</span>
 										) : (
-											btnIcon(r.rdAvailable)
+											btnIcon(r.tbAvailable)
 										)}
-										{isLoading ? 'Adding...' : btnLabel(r.rdAvailable, 'TB')}
+										{isLoading ? 'Adding...' : btnLabel(r.tbAvailable, 'TB')}
 									</button>
 								)}
 

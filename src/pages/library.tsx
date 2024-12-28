@@ -21,7 +21,6 @@ import { deleteFilteredTorrents } from '@/utils/deleteList';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
 import { extractHashes } from '@/utils/extractHashes';
 import { generateHashList } from '@/utils/hashList';
-import { checkForUncachedInRd } from '@/utils/instantChecks';
 import { fetchLatestADTorrents, fetchLatestRDTorrents } from '@/utils/libraryFetching';
 import { initializeLibrary } from '@/utils/libraryInitialization';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
@@ -279,37 +278,6 @@ function TorrentsPage() {
 		tvGroupingByEpisode,
 		tvGroupingByTitle,
 	]);
-
-	useEffect(() => {
-		if (!rdKey || rdSyncing) return;
-		const hashes = new Set(
-			userTorrentsList
-				.filter((r) => r.id.startsWith('rd:') && r.status === UserTorrentStatus.finished)
-				.map((r) => r.hash)
-		);
-		const hashesArr = Array.from(hashes);
-		hashesArr.sort();
-		checkForUncachedInRd(rdKey, userTorrentsList, setUncachedRdHashes, torrentDB).then(
-			(nonVideoHashes) => {
-				setUserTorrentsList((prev) => {
-					return prev.map((t) => {
-						if (t.id.startsWith('rd:') && nonVideoHashes.has(t.hash)) {
-							t.mediaType = 'other';
-							t.info = undefined;
-							t.title = t.filename;
-						}
-						return t;
-					});
-				});
-				return Promise.all(
-					userTorrentsList
-						.filter((t) => nonVideoHashes.has(t.hash))
-						.map((t) => torrentDB.add(t))
-				);
-			}
-		);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey, rdSyncing]);
 
 	useEffect(() => {
 		if (!adKey || adSyncing) return;

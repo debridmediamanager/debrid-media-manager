@@ -1,9 +1,5 @@
 import { MagnetFile, adInstantCheck } from '@/services/allDebrid';
 import { EnrichedHashlistTorrent, FileData, SearchResult } from '@/services/mediasearch';
-import { rdInstantCheck } from '@/services/realDebrid';
-import UserTorrentDB from '@/torrent/db';
-import { UserTorrent } from '@/torrent/userTorrent';
-import { some } from 'lodash';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-hot-toast';
 import { checkAvailability, checkAvailabilityByHashes } from './availability';
@@ -269,66 +265,6 @@ const processAdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	return instantCount;
 };
 
-// All function definitions should come before exports
-const checkForUncachedInRd = async (
-	rdKey: string,
-	torrents: UserTorrent[],
-	setUncachedHashes: Dispatch<SetStateAction<Set<string>>>,
-	db: UserTorrentDB
-): Promise<Set<string>> => {
-	return new Set();
-	const cachedHashes: Set<string> = new Set();
-	const nonVideoHashes: Set<string> = new Set();
-
-	const hashesToCheck: Set<string> = new Set();
-	for (const torrent of torrents) {
-		const isCached = await db.isRdCached(torrent.hash);
-		if (!isCached) {
-			hashesToCheck.add(torrent.hash);
-		}
-	}
-	const hashes = Array.from(hashesToCheck);
-
-	const funcs = [];
-	for (const hashGroup of groupBy(50, hashes)) {
-		funcs.push(async () => {
-			await waitForRateLimit();
-			const resp = await rdInstantCheck(rdKey, hashGroup);
-			for (const hash in resp) {
-				if ('rd' in resp[hash] === false) continue;
-				const variants = resp[hash]['rd'];
-				if (!variants.length) continue;
-				let isCached = false,
-					allNonVideos = true;
-				for (const variant of variants) {
-					if (some(Object.values(variant), (file) => isVideo({ path: file.filename }))) {
-						allNonVideos = false;
-					}
-					if (Object.keys(variant).length > 0) {
-						isCached = true;
-					}
-				}
-				if (isCached) {
-					cachedHashes.add(hash);
-					await db.addRdCachedHash(hash);
-					if (allNonVideos) {
-						nonVideoHashes.add(hash);
-					}
-				}
-			}
-		});
-	}
-	await runConcurrentFunctions(funcs, 4, 0);
-	const uncachedHashes = new Set(hashes.filter((hash) => !cachedHashes.has(hash)));
-	setUncachedHashes(uncachedHashes);
-	uncachedHashes.size &&
-		toast.success(
-			`Found ${uncachedHashes.size} uncached torrents in Real-Debrid`,
-			searchToastOptions
-		);
-	return nonVideoHashes;
-};
-
 // Wrapper functions
 export const wrapLoading = async function (debrid: string, checkAvailability: Promise<number>) {
 	return await toast.promise(
@@ -380,5 +316,3 @@ export const instantCheckInAd2 = (
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
 ) => processAdInstantCheck(adKey, hashes, setTorrentList);
-
-export { checkForUncachedInRd };
