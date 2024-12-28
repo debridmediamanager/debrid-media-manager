@@ -8,11 +8,19 @@ import { SearchApiResponse, SearchResult } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
-import { handleAddAsMagnetInAd, handleAddAsMagnetInRd } from '@/utils/addMagnet';
+import {
+	handleAddAsMagnetInAd,
+	handleAddAsMagnetInRd,
+	handleAddAsMagnetInTb,
+} from '@/utils/addMagnet';
 import { submitAvailability } from '@/utils/availability';
 import { handleCastMovie } from '@/utils/castApiClient';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
-import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
+import {
+	handleDeleteAdTorrent,
+	handleDeleteRdTorrent,
+	handleDeleteTbTorrent,
+} from '@/utils/deleteTorrent';
 import { convertToUserTorrent, fetchAllDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
 import { quickSearch } from '@/utils/quickSearch';
@@ -254,6 +262,13 @@ const MovieSearch: FunctionComponent = () => {
 		await fetchHashAndProgress();
 	}
 
+	async function addTb(hash: string) {
+		await handleAddAsMagnetInTb(torboxKey!, hash, async (userTorrent: UserTorrent) => {
+			await torrentDB.add(userTorrent);
+			await fetchHashAndProgress();
+		});
+	}
+
 	async function deleteRd(hash: string) {
 		const torrents = await torrentDB.getAllByHash(hash);
 		for (const t of torrents) {
@@ -277,6 +292,20 @@ const MovieSearch: FunctionComponent = () => {
 			setHashAndProgress((prev) => {
 				const newHashAndProgress = { ...prev };
 				delete newHashAndProgress[`ad:${hash}`];
+				return newHashAndProgress;
+			});
+		}
+	}
+
+	async function deleteTb(hash: string) {
+		const torrents = await torrentDB.getAllByHash(hash);
+		for (const t of torrents) {
+			if (!t.id.startsWith('tb:')) continue;
+			await handleDeleteTbTorrent(torboxKey!, t.id);
+			await torrentDB.deleteByHash('tb', hash);
+			setHashAndProgress((prev) => {
+				const newHashAndProgress = { ...prev };
+				delete newHashAndProgress[`tb:${hash}`];
 				return newHashAndProgress;
 			});
 		}
@@ -585,8 +614,10 @@ const MovieSearch: FunctionComponent = () => {
 						}
 						addRd={addRd}
 						addAd={addAd}
+						addTb={addTb}
 						deleteRd={deleteRd}
 						deleteAd={deleteAd}
+						deleteTb={deleteTb}
 						imdbId={imdbid as string}
 					/>
 

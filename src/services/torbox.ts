@@ -109,6 +109,26 @@ export const createTorrent = async (
 	}
 };
 
+export const deleteTorrent = async (
+	accessToken: string,
+	hash: string
+): Promise<TorBoxResponse<null>> => {
+	try {
+		const client = await createAxiosClient(accessToken);
+		const response = await client.post<TorBoxResponse<null>>(
+			`/${API_VERSION}/api/torrents/controltorrent`,
+			{
+				hash,
+				operation: 'delete',
+			}
+		);
+		return response.data;
+	} catch (error: any) {
+		console.error('Error deleting torrent:', error.message);
+		throw error;
+	}
+};
+
 export const controlTorrent = async (
 	accessToken: string,
 	params: {

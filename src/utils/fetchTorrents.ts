@@ -1,6 +1,6 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
 import { getUserTorrentsList } from '@/services/realDebrid';
-import { UserTorrentResponse } from '@/services/types';
+import { TorBoxTorrentInfo, UserTorrentResponse } from '@/services/types';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import { every, some } from 'lodash';
@@ -206,6 +206,79 @@ export const getRdStatus = (torrentInfo: UserTorrentResponse): UserTorrentStatus
 	}
 	return status;
 };
+
+export const convertToTbUserTorrent = (info: TorBoxTorrentInfo): UserTorrent => {
+	let mediaType = getTypeByNameAndFileCount(info.name);
+	const serviceStatus = info.download_state;
+	let status: UserTorrentStatus;
+
+	// Map TorBox status to UserTorrentStatus
+	switch (info.download_state.toLowerCase()) {
+		case 'queued':
+		case 'checking':
+			status = UserTorrentStatus.waiting;
+			break;
+		case 'downloading':
+		case 'uploading':
+			status = UserTorrentStatus.downloading;
+			break;
+		case 'finished':
+		case 'seeding':
+			status = UserTorrentStatus.finished;
+			break;
+		default:
+			status = UserTorrentStatus.error;
+			break;
+	}
+
+	// Parse filename for media info
+	let parsedInfo = {} as ParsedFilename;
+	try {
+		parsedInfo =
+			mediaType === 'movie' ? filenameParse(info.name) : filenameParse(info.name, true);
+	} catch (error) {
+		// flip the condition if error is thrown
+		mediaType = mediaType === 'movie' ? 'tv' : 'movie';
+		try {
+			parsedInfo =
+				mediaType === 'movie' ? filenameParse(info.name) : filenameParse(info.name, true);
+		} catch {
+			// If both parsing attempts fail, leave parsedInfo empty
+		}
+	}
+
+	// Convert TorBoxFile[] to SelectedFile[]
+	const selectedFiles =
+		info.files?.map((file, index) => ({
+			fileId: index,
+			filename: file.name,
+			filesize: file.size,
+			link: file.s3_path,
+		})) ?? [];
+
+	return {
+		id: `tb:${info.id}`,
+		links: selectedFiles.map((f) => f.link),
+		seeders: info.seeds,
+		speed: info.download_speed,
+		title:
+			parsedInfo && (mediaType === 'movie' || mediaType === 'tv')
+				? getMediaId(parsedInfo, mediaType, false) || info.name
+				: info.name,
+		selectedFiles,
+		filename: info.name,
+		bytes: info.size,
+		status,
+		serviceStatus,
+		progress: info.progress,
+		added: new Date(info.created_at),
+		hash: info.hash,
+		mediaType,
+		info: Object.keys(parsedInfo).length > 0 ? parsedInfo : undefined,
+		tbData: info,
+	};
+};
+
 export const getAdStatus = (magnetInfo: MagnetStatus) => {
 	let status: UserTorrentStatus;
 	let progress: number;

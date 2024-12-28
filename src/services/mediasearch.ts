@@ -15,9 +15,10 @@ export type SearchResult = {
 	title: string;
 	fileSize: number;
 	hash: string;
-	rdAvailable: boolean;
+	rdAvailable: boolean; // Real Debrid
+	adAvailable: boolean; // AllDebrid
+	tbAvailable: boolean; // Torbox
 	files: FileData[];
-	adAvailable: boolean;
 	noVideos: boolean;
 	// for cached results in RD
 	medianFileSize: number;

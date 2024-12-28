@@ -1,10 +1,12 @@
 import { restartMagnet, uploadMagnet } from '@/services/allDebrid';
 import { addHashAsMagnet, getTorrentInfo, selectFiles } from '@/services/realDebrid';
-import { TorrentInfoResponse } from '@/services/types';
+import { createTorrent, getTorrentList } from '@/services/torbox';
+import { TorBoxTorrentInfo, TorrentInfoResponse } from '@/services/types';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { handleDeleteRdTorrent } from './deleteTorrent';
+import { convertToTbUserTorrent } from './fetchTorrents';
 import { isVideo } from './selectable';
 import { magnetToastOptions } from './toastOptions';
 
@@ -153,6 +155,31 @@ export const handleRestartTorrent = async (adKey: string, id: string) => {
 	} catch (error) {
 		console.error(error);
 		toast.error(`Error restarting torrent (${id}) ${error}`, magnetToastOptions);
+		throw error;
+	}
+};
+
+export const handleAddAsMagnetInTb = async (
+	tbKey: string,
+	hash: string,
+	callback?: (torrent: UserTorrent) => Promise<void>
+) => {
+	try {
+		const response = await createTorrent(tbKey, {
+			magnet: hash,
+		});
+		if (response.data?.torrent_id || response.data?.queued_id) {
+			const torrentInfo = await getTorrentList(tbKey, { id: response.data.torrent_id });
+			const info = torrentInfo.data as TorBoxTorrentInfo;
+			const userTorrent = convertToTbUserTorrent(info);
+			if (callback) await callback(userTorrent);
+			toast.success('Successfully added torrent!', magnetToastOptions);
+		} else {
+			toast.error('Torrent added but no ID returned', magnetToastOptions);
+		}
+	} catch (error: any) {
+		console.error(error);
+		toast.error(`Error adding torrent: ${error.message}`, magnetToastOptions);
 		throw error;
 	}
 };
