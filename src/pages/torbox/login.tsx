@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 export default function TorboxLoginPage() {
 	const router = useRouter();
-	const [apiKey, setApiKey] = useLocalStorage<string>('tb:apiKey');
+	const [, setApiKey] = useLocalStorage<string>('tb:apiKey');
 	const [inputApiKey, setInputApiKey] = useState('');
 	const [error, setError] = useState('');
 
@@ -20,7 +20,7 @@ export default function TorboxLoginPage() {
 			console.log('API response:', userData);
 
 			// If successful, save the API key
-			setApiKey(inputApiKey, 86400);
+			setApiKey(inputApiKey);
 			await router.push('/');
 		} catch (err: any) {
 			console.error('Error details:', {
