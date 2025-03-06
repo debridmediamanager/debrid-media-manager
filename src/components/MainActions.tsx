@@ -3,9 +3,10 @@ import Link from 'next/link';
 
 interface MainActionsProps {
 	rdUser: RealDebridUser | null;
+	isLoading: boolean;
 }
 
-export function MainActions({ rdUser }: MainActionsProps) {
+export function MainActions({ rdUser, isLoading }: MainActionsProps) {
 	return (
 		<div className="grid w-full grid-cols-3 gap-3">
 			<Link

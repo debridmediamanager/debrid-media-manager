@@ -33,6 +33,7 @@ function IndexPage() {
 		hasADAuth,
 		hasTBAuth,
 		hasTraktAuth,
+		isLoading,
 	} = useCurrentUser();
 	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
 	const [browseTerms] = useState(getTerms(2));
@@ -124,7 +125,8 @@ function IndexPage() {
 			</Head>
 			<Logo />
 			<Toaster position="bottom-right" />
-			{(rdUser || !hasRDAuth) &&
+			{!isLoading &&
+			(rdUser || !hasRDAuth) &&
 			(adUser || !hasADAuth) &&
 			(tbUser || !hasTBAuth) &&
 			(traktUser || !hasTraktAuth) ? (
@@ -145,7 +147,7 @@ function IndexPage() {
 					</div>
 
 					<div className="flex w-full max-w-md flex-col items-center gap-6">
-						<MainActions rdUser={rdUser} />
+						<MainActions rdUser={rdUser} isLoading={isLoading} />
 						<SettingsSection />
 						<BrowseSection terms={browseTerms} />
 						<TraktSection traktUser={traktUser} />

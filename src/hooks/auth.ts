@@ -31,138 +31,117 @@ export interface AllDebridUser {
 	fidelityPoints: number;
 }
 
-export const useCurrentUser = () => {
-	const [rdUser, setRdUser] = useState<RealDebridUser | null>(null);
-	const [adUser, setAdUser] = useState<AllDebridUser | null>(null);
-	const [tbUser, setTbUser] = useState<TorBoxUser | null>(null);
-	const [traktUser, setTraktUser] = useState<TraktUser | null>(null);
-	const router = useRouter();
-	const [rdToken] = useLocalStorage<string>('rd:accessToken');
-	const [adToken] = useLocalStorage<string>('ad:apiKey');
-	const [tbToken] = useLocalStorage<string>('tb:apiKey');
-	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
-	const [_, setTraktUserSlug] = useLocalStorage<string>('trakt:userSlug');
-	const [rdError, setRdError] = useState<Error | null>(null);
-	const [adError, setAdError] = useState<Error | null>(null);
-	const [tbError, setTbError] = useState<Error | null>(null);
-	const [traktError, setTraktError] = useState<Error | null>(null);
-
-	const hasRDAuth = !!rdToken;
-	const hasADAuth = !!adToken;
-	const hasTBAuth = !!tbToken;
-	const hasTraktAuth = !!traktToken;
-
-	useEffect(() => {
-		(async () => {
-			try {
-				if (rdToken) {
-					const rdUserResponse = await getRealDebridUser(rdToken);
-					if (rdUserResponse) setRdUser(rdUserResponse as RealDebridUser);
-				}
-			} catch (error: any) {
-				setRdError(new Error(error));
-			}
-			try {
-				if (adToken) {
-					const adUserResponse = await getAllDebridUser(adToken);
-					if (adUserResponse) setAdUser(adUserResponse as AllDebridUser);
-				}
-			} catch (error: any) {
-				setAdError(new Error(error));
-			}
-			try {
-				if (tbToken) {
-					const tbUserResponse = await getUserData(tbToken);
-					if (tbUserResponse && tbUserResponse.success) {
-						setTbUser(tbUserResponse.data);
-					}
-				}
-			} catch (error: any) {
-				setTbError(new Error(error));
-			}
-			try {
-				if (traktToken) {
-					const traktUserResponse = await getTraktUser(traktToken);
-					if (traktUserResponse) {
-						setTraktUser(traktUserResponse);
-						setTraktUserSlug(traktUserResponse.user.ids.slug);
-					}
-				}
-			} catch (error: any) {
-				setTraktError(new Error(error));
-			}
-		})();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdToken, adToken, tbToken, traktToken, router]);
-
-	return {
-		rdUser,
-		rdError,
-		hasRDAuth,
-		adUser,
-		adError,
-		hasADAuth,
-		tbUser,
-		tbError,
-		hasTBAuth,
-		traktUser,
-		traktError,
-		hasTraktAuth,
-	};
-};
-
-export const useDebridLogin = () => {
-	const router = useRouter();
-
-	const loginWithRealDebrid = async () => {
-		await router.push('/realdebrid/login');
-	};
-
-	const loginWithAllDebrid = async () => {
-		await router.push('/alldebrid/login');
-	};
-
-	const loginWithTorbox = async () => {
-		await router.push('/torbox/login');
-	};
-
-	return {
-		loginWithRealDebrid,
-		loginWithAllDebrid,
-		loginWithTorbox,
-	};
-};
-
-export const useRealDebridAccessToken = (): [string | null, boolean] => {
+// Simplified hook that handles RealDebrid auth
+const useRealDebrid = () => {
+	const [user, setUser] = useState<RealDebridUser | null>(null);
+	const [error, setError] = useState<Error | null>(null);
+	const [loading, setLoading] = useState(true);
+	const [token, setToken] = useLocalStorage<string>('rd:accessToken');
 	const [clientId] = useLocalStorage<string>('rd:clientId');
 	const [clientSecret] = useLocalStorage<string>('rd:clientSecret');
 	const [refreshToken] = useLocalStorage<string>('rd:refreshToken');
-	const [accessToken, setAccessToken] = useLocalStorage<string>('rd:accessToken');
-	const [loading, setLoading] = useState<boolean>(true);
 
 	useEffect(() => {
-		(async () => {
-			if (!accessToken && refreshToken && clientId && clientSecret) {
-				try {
-					// Refresh token is available, so try to get new tokens
-					const response = await getToken(clientId, clientSecret, refreshToken);
-					if (response) {
-						// New tokens obtained, save them and return authenticated
-						const { access_token, expires_in } = response;
-						setAccessToken(access_token, expires_in);
-					} else {
-						throw new Error('Unable to get proper response');
-					}
-				} catch (error) {
-					clearRdKeys();
-				}
+		const auth = async () => {
+			if (!refreshToken || !clientId || !clientSecret) {
+				setLoading(false);
+				return;
 			}
-			setLoading(false);
-		})();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [clientId, clientSecret, refreshToken]);
 
-	return [accessToken, loading];
+			try {
+				// Try current token first
+				if (token) {
+					try {
+						const user = await getRealDebridUser(token);
+						setUser(user as RealDebridUser);
+						setError(null);
+						setLoading(false);
+						return;
+					} catch {} // Token invalid, continue to refresh
+				}
+
+				// Get new token
+				const { access_token, expires_in } = await getToken(
+					clientId,
+					clientSecret,
+					refreshToken
+				);
+				setToken(access_token, expires_in);
+				const user = await getRealDebridUser(access_token);
+				setUser(user as RealDebridUser);
+				setError(null);
+			} catch (e) {
+				clearRdKeys();
+				setError(e as Error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		auth();
+	}, [token, refreshToken, clientId, clientSecret]);
+
+	return { user, error, loading, hasAuth: !!token };
+};
+
+// Separate hooks for other services
+const useAllDebrid = () => {
+	const [user, setUser] = useState<AllDebridUser | null>(null);
+	const [error, setError] = useState<Error | null>(null);
+	const [token] = useLocalStorage<string>('ad:apiKey');
+
+	useEffect(() => {
+		if (!token) return;
+
+		getAllDebridUser(token)
+			.then((user) => setUser(user as AllDebridUser))
+			.catch((e) => setError(e as Error));
+	}, [token]);
+
+	return { user, error, hasAuth: !!token };
+};
+
+const useTorBox = () => {
+	const [user, setUser] = useState<TorBoxUser | null>(null);
+	const [error, setError] = useState<Error | null>(null);
+	const [token] = useLocalStorage<string>('tb:apiKey');
+
+	useEffect(() => {
+		if (!token) return;
+
+		getUserData(token)
+			.then((response) => response.success && setUser(response.data))
+			.catch((e) => setError(e as Error));
+	}, [token]);
+
+	return { user, error, hasAuth: !!token };
+};
+
+const useTrakt = () => {
+	const [user, setUser] = useState<TraktUser | null>(null);
+	const [error, setError] = useState<Error | null>(null);
+	const [token] = useLocalStorage<string>('trakt:accessToken');
+	const [_, setUserSlug] = useLocalStorage<string>('trakt:userSlug');
+
+	useEffect(() => {
+		if (!token) return;
+
+		getTraktUser(token)
+			.then((user) => {
+				setUser(user);
+				setUserSlug(user.user.ids.slug);
+			})
+			.catch((e) => setError(e as Error));
+	}, [token]);
+
+	return { user, error, hasAuth: !!token };
+};
+
+// Backward compatibility hook for withAuth.tsx
+export const useRealDebridAccessToken = (): [string | null, boolean] => {
+	const { user, loading } = useRealDebrid();
+	const [token] = useLocalStorage<string>('rd:accessToken');
+	return [token, loading];
 };
 
 export const useAllDebridApiKey = () => {
@@ -173,4 +152,38 @@ export const useAllDebridApiKey = () => {
 export const useTorBoxAccessToken = () => {
 	const [apiKey] = useLocalStorage<string>('tb:apiKey');
 	return apiKey;
+};
+
+// Main hook that combines all services
+export const useCurrentUser = () => {
+	const rd = useRealDebrid();
+	const ad = useAllDebrid();
+	const tb = useTorBox();
+	const trakt = useTrakt();
+
+	return {
+		rdUser: rd.user,
+		rdError: rd.error,
+		hasRDAuth: rd.hasAuth,
+		adUser: ad.user,
+		adError: ad.error,
+		hasADAuth: ad.hasAuth,
+		tbUser: tb.user,
+		tbError: tb.error,
+		hasTBAuth: tb.hasAuth,
+		traktUser: trakt.user,
+		traktError: trakt.error,
+		hasTraktAuth: trakt.hasAuth,
+		isLoading: rd.loading,
+	};
+};
+
+export const useDebridLogin = () => {
+	const router = useRouter();
+
+	return {
+		loginWithRealDebrid: () => router.push('/realdebrid/login'),
+		loginWithAllDebrid: () => router.push('/alldebrid/login'),
+		loginWithTorbox: () => router.push('/torbox/login'),
+	};
 };
