@@ -15,7 +15,7 @@ type TvSearchResultsProps = {
 	episodeMaxSize: string;
 	rdKey: string | null;
 	adKey: string | null;
-	torboxKey: string | null;
+	torboxKey?: string | null;
 	player: string;
 	hashAndProgress: Record<string, number>;
 	handleShowInfo: (result: SearchResult) => void;
