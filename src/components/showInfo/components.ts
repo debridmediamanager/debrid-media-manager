@@ -42,6 +42,7 @@ export const renderFileRow = (file: FileRowProps, showCheckbox: boolean = false)
                 id="${checkboxId}"
                 class="file-selector"
                 data-file-id="${file.id}"
+                data-file-path="${file.path}"
                 ${file.isSelected ? 'checked' : ''}
             />
         </td>

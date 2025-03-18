@@ -1,351 +1,56 @@
+import { addHashAsMagnet, selectFiles } from '@/services/realDebrid';
+import { handleDeleteRdTorrent } from '@/utils/deleteTorrent';
+import { magnetToastOptions } from '@/utils/toastOptions';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { handleShare } from '../../utils/hashList';
 import { isVideo } from '../../utils/selectable';
-import { renderButton, renderFileRow, renderInfoTable } from './components';
-import { ApiTorrentFile, MagnetLink } from './types';
-import { getEpisodeInfo } from './utils';
+import { renderButton, renderInfoTable } from './components';
+import { renderTorrentInfo } from './render';
+import { ApiTorrentFile, MagnetLink, MediaInfoResponse } from './types';
+import { generatePasswordHash, getStreamInfo } from './utils';
 
-interface Stream {
-	codec_type: string;
-	codec_name: string;
-	tags?: {
-		language?: string;
-		title?: string;
-	};
-	width?: number;
-	height?: number;
-	channel_layout?: string;
-	side_data_list?: {
-		dv_profile?: number;
-	}[];
+declare global {
+	interface Window {
+		addHashAsMagnet: typeof addHashAsMagnet;
+		selectFiles: typeof selectFiles;
+		handleDeleteRdTorrent: typeof handleDeleteRdTorrent;
+		closePopup: () => void;
+		toast: typeof toast;
+		magnetToastOptions: typeof magnetToastOptions;
+		selectAllVideos: () => void;
+		unselectAll: () => void;
+		resetSelection?: () => void;
+	}
 }
 
-interface MediaInfoResponse {
-	SelectedFiles: {
-		[key: string]: {
-			MediaInfo?: {
-				streams: Stream[];
-				format: {
-					duration: string;
-				};
-				chapters?: {
-					tags: {
-						title: string;
-					};
-				}[];
-			};
-		};
+if (typeof window !== 'undefined') {
+	// Expose required functions to window
+	window.addHashAsMagnet = addHashAsMagnet;
+	window.selectFiles = selectFiles;
+	window.handleDeleteRdTorrent = handleDeleteRdTorrent;
+	window.closePopup = () => Swal.close();
+	window.toast = toast;
+	window.magnetToastOptions = magnetToastOptions;
+
+	window.selectAllVideos = () => {
+		const checkboxes = document.querySelectorAll<HTMLInputElement>('.file-selector');
+		checkboxes.forEach((checkbox) => {
+			const filePath = checkbox.dataset.filePath;
+			if (filePath && isVideo({ path: filePath })) {
+				checkbox.checked = true;
+			}
+		});
+	};
+
+	window.unselectAll = () => {
+		const checkboxes = document.querySelectorAll<HTMLInputElement>('.file-selector');
+		checkboxes.forEach((checkbox) => {
+			checkbox.checked = false;
+		});
 	};
 }
-
-const languageEmojis: { [key: string]: string } = {
-	aka: '🇬🇭',
-	alb: '🇦🇱',
-	amh: '🇪🇹',
-	ara: '🇸🇦',
-	arm: '🇦🇲',
-	asm: '🇮🇳',
-	aym: '🇧🇴',
-	aze: '🇦🇿',
-	bam: '🇲🇱',
-	baq: '🇪🇸',
-	bel: '🇧🇾',
-	ben: '🇧🇩',
-	bho: '🇮🇳',
-	bos: '🇧🇦',
-	bul: '🇧🇬',
-	bur: '🇲🇲',
-	cat: '🇪🇸',
-	ceb: '🇵🇭',
-	chi: '🇨🇳',
-	cos: '🇫🇷',
-	cze: '🇨🇿',
-	dan: '🇩🇰',
-	doi: '🇮🇳',
-	dut: '🇳🇱',
-	eng: '🇬🇧',
-	epo: '🌍',
-	est: '🇪🇪',
-	ewe: '🇬🇭',
-	fin: '🇫🇮',
-	fre: '🇫🇷',
-	fry: '🇳🇱',
-	geo: '🇬🇪',
-	ger: '🇩🇪',
-	gla: '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
-	gle: '🇮🇪',
-	glg: '🇪🇸',
-	gre: '🇬🇷',
-	grn: '🇵🇾',
-	guj: '🇮🇳',
-	hat: '🇭🇹',
-	hau: '🇳🇬',
-	heb: '🇮🇱',
-	hin: '🇮🇳',
-	hmn: '🇨🇳',
-	hrv: '🇭🇷',
-	hun: '🇭🇺',
-	ice: '🇮🇸',
-	ibo: '🇳🇬',
-	ilo: '🇵🇭',
-	ind: '🇮🇩',
-	ita: '🇮🇹',
-	jpn: '🇯🇵',
-	kan: '🇮🇳',
-	kaz: '🇰🇿',
-	khm: '🇰🇭',
-	kin: '🇷🇼',
-	kir: '🇰🇬',
-	kok: '🇮🇳',
-	kor: '🇰🇷',
-	kur: '🇮🇶',
-	lao: '🇱🇦',
-	lat: '🏛️',
-	lav: '🇱🇻',
-	lin: '🇨🇩',
-	lit: '🇱🇹',
-	lug: '🇺🇬',
-	lus: '🇮🇳',
-	ltz: '🇱🇺',
-	mac: '🇲🇰',
-	mai: '🇮🇳',
-	mal: '🇮🇳',
-	mao: '🇳🇿',
-	mar: '🇮🇳',
-	may: '🇲🇾',
-	mlg: '🇲🇬',
-	mlt: '🇲🇹',
-	mon: '🇲🇳',
-	nep: '🇳🇵',
-	nob: '🇳🇴',
-	nor: '🇳🇴',
-	nso: '🇿🇦',
-	nya: '🇲🇼',
-	ori: '🇮🇳',
-	orm: '🇪🇹',
-	pan: '🇮🇳',
-	per: '🇮🇷',
-	pol: '🇵🇱',
-	por: '🇵🇹',
-	pus: '🇦🇫',
-	que: '🇵🇪',
-	rum: '🇷🇴',
-	rus: '🇷🇺',
-	san: '🇮🇳',
-	sin: '🇱🇰',
-	slo: '🇸🇰',
-	slv: '🇸🇮',
-	smo: '🇼🇸',
-	sna: '🇿🇼',
-	snd: '🇵🇰',
-	som: '🇸🇴',
-	spa: '🇪🇸',
-	sot: '🇱🇸',
-	srp: '🇷🇸',
-	sun: '🇮🇩',
-	swa: '🇹🇿',
-	swe: '🇸🇪',
-	tam: '🇮🇳',
-	tel: '🇮🇳',
-	tgk: '🇹🇯',
-	tgl: '🇵🇭',
-	tha: '🇹🇭',
-	tir: '🇪🇷',
-	tso: '🇿🇦',
-	tuk: '🇹🇲',
-	tur: '🇹🇷',
-	uig: '🇨🇳',
-	ukr: '🇺🇦',
-	urd: '🇵🇰',
-	uzb: '🇺🇿',
-	vie: '🇻🇳',
-	wel: '🏴󠁧󠁢󠁷󠁬󠁿',
-	xho: '🇿🇦',
-	yid: '🇮🇱',
-	yor: '🇳🇬',
-	zul: '🇿🇦',
-};
-
-const generatePasswordHash = async (hash: string): Promise<string> => {
-	const salt = 'debridmediamanager.com';
-	const msgBuffer = new TextEncoder().encode(hash + salt);
-	const hashBuffer = await crypto.subtle.digest('SHA-1', msgBuffer);
-	const hashArray = Array.from(new Uint8Array(hashBuffer));
-	return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-};
-
-const formatDuration = (seconds: string) => {
-	const duration = parseFloat(seconds);
-	const hours = Math.floor(duration / 3600);
-	const minutes = Math.floor((duration % 3600) / 60);
-	return `${hours}h ${minutes}m`;
-};
-
-const getStreamInfo = (mediaInfo: MediaInfoResponse | null) => {
-	if (!mediaInfo) return [];
-	const fileInfo = Object.values(mediaInfo.SelectedFiles)[0];
-	if (!fileInfo.MediaInfo) return [];
-
-	const { streams, format, chapters } = fileInfo.MediaInfo;
-	const videoStream = streams.find((s) => s.codec_type === 'video');
-	const audioStreams = streams.filter((s) => s.codec_type === 'audio');
-	const subtitleStreams = streams.filter((s) => s.codec_type === 'subtitle');
-
-	const rows: { label: string; value: string }[] = [];
-
-	if (videoStream) {
-		let videoInfo = `${videoStream.codec_name.toUpperCase()} • ${videoStream.width}x${videoStream.height}`;
-		// Check for Dolby Vision profile
-		if (videoStream.side_data_list) {
-			const dvStream = videoStream.side_data_list.find((sd: any) => sd.dv_profile > 0);
-			if (dvStream) {
-				videoInfo += ` • Dolby Vision profile ${dvStream.dv_profile}`;
-			}
-		}
-		rows.push({
-			label: 'Video',
-			value: videoInfo,
-		});
-	}
-
-	if (audioStreams.length > 0) {
-		rows.push({
-			label: 'Audio',
-			value:
-				`${audioStreams.length} tracks: ` +
-				audioStreams
-					.map(
-						(stream) =>
-							`${stream.tags?.language ? `${languageEmojis[stream.tags.language] || stream.tags.language} ${stream.tags.language}` : '🌐'} (${stream.codec_name.toUpperCase()})`
-					)
-					.join(', '),
-		});
-	}
-
-	if (subtitleStreams.length > 0) {
-		rows.push({
-			label: 'Subs',
-			value:
-				`${subtitleStreams.length} tracks: ` +
-				subtitleStreams
-					.map(
-						(stream) =>
-							`${stream.tags?.language ? `${languageEmojis[stream.tags.language] || stream.tags.language} ${stream.tags.language}` : '🌐'}`
-					)
-					.join(', '),
-		});
-	}
-
-	if (format.duration) {
-		rows.push({
-			label: 'Duration',
-			value: formatDuration(format.duration),
-		});
-	}
-
-	if (chapters && chapters.length > 0) {
-		rows.push({
-			label: 'Chapters',
-			value: `${chapters.length} chapters included`,
-		});
-	}
-
-	return rows;
-};
-
-const renderTorrentInfo = (
-	info: any,
-	isRd: boolean,
-	rdKey: string,
-	app?: string,
-	imdbId?: string,
-	mediaType?: 'movie' | 'tv'
-) => {
-	if (isRd) {
-		const rdInfo = info;
-		const showCheckbox = !rdInfo.fake;
-		let linkIndex = 0;
-		rdInfo.files.sort((a: ApiTorrentFile, b: ApiTorrentFile) => a.path.localeCompare(b.path));
-		const filesList = rdInfo.files.map((file: ApiTorrentFile) => {
-			const actions = [];
-			if (file.selected === 1) {
-				const fileLink = rdInfo.links[linkIndex++];
-				if (info.status === 'downloaded' && !rdInfo.fake) {
-					actions.push(
-						renderButton('download', {
-							link: 'https://real-debrid.com/downloader',
-							linkParam: { name: 'links', value: fileLink },
-							text: 'DL',
-						})
-					);
-				}
-				if (info.status === 'downloaded' && app) {
-					if (rdInfo.fake) {
-						actions.push(
-							renderButton('watch', {
-								onClick: `window.open('/api/watch/instant/${app}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}')`,
-								text: 'Watch',
-							})
-						);
-					} else {
-						actions.push(
-							renderButton('watch', {
-								onClick: `window.open('/api/watch/${app}?token=${rdKey}&hash=${info.hash}&link=${fileLink}')`,
-								text: 'Watch',
-							})
-						);
-					}
-
-					const { isTvEpisode } = getEpisodeInfo(file.path, mediaType);
-					if (
-						rdKey &&
-						imdbId &&
-						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
-					) {
-						actions.push(
-							renderButton('cast', {
-								onClick: `window.open('/api/stremio/cast/${imdbId}?token=${rdKey}&hash=${info.hash}&fileId=${file.id}&mediaType=${mediaType}')`,
-								text: 'Cast',
-							})
-						);
-					}
-				}
-			}
-			return renderFileRow(
-				{
-					id: file.id,
-					path: file.path,
-					size: file.bytes,
-					isSelected: file.selected === 1,
-					actions,
-				},
-				showCheckbox
-			);
-		});
-		return filesList.join('');
-	} else {
-		const adInfo = info;
-		adInfo.links.sort((a: MagnetLink, b: MagnetLink) => a.filename.localeCompare(b.filename));
-		const filesList = adInfo.links.map((file: MagnetLink) => {
-			const actions = [
-				renderButton('download', {
-					link: 'https://alldebrid.com/service/',
-					linkParam: { name: 'url', value: file.link },
-					text: 'DL',
-				}),
-			];
-			return renderFileRow({
-				id: 0,
-				path: file.filename,
-				size: file.size,
-				isPlayable: Boolean(isVideo({ path: file.filename })),
-				actions,
-			});
-		});
-		return filesList.join('');
-	}
-};
 
 export const showInfoForRD = async (
 	app: string,
@@ -438,16 +143,65 @@ export const showInfoForRD = async (
     </div>`;
 
 	const saveButton = !info.fake
-		? `
-		<div class="m-2">
-			<button
-				class="px-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium rounded-sm shadow-lg transition-all duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]"
-				onclick="window.saveSelection('rd:${info.id}', '${info.hash}', Array.from(document.querySelectorAll('.file-selector:checked')).map(cb => cb.dataset.fileId))"
-			>
-				💾 Save File Selection
-			</button>
-		</div>
-	`
+		? (() => {
+				// Store initial selection state
+				const initialSelection = info.files.reduce(
+					(acc: { [key: string]: boolean }, f: ApiTorrentFile) => {
+						acc[f.id] = f.selected === 1;
+						return acc;
+					},
+					{}
+				);
+
+				window.resetSelection = () => {
+					const checkboxes =
+						document.querySelectorAll<HTMLInputElement>('.file-selector');
+					checkboxes.forEach((checkbox) => {
+						const fileId = checkbox.dataset.fileId;
+						checkbox.checked = fileId ? initialSelection[fileId] : false;
+					});
+				};
+
+				return `
+				<div class="m-2 flex gap-2 justify-center">
+					<button
+						class="px-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-medium rounded-sm shadow-lg transition-all duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]"
+						onclick="window.selectAllVideos()"
+					>
+						🎥 Select All Videos
+					</button>
+					<button
+						class="px-2 bg-gradient-to-r from-gray-600 to-gray-500 hover:from-gray-500 hover:to-gray-400 text-white font-medium rounded-sm shadow-lg transition-all duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]"
+						onclick="window.unselectAll()"
+					>
+						❌ Unselect All
+					</button>
+					<button
+						class="px-2 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-white font-medium rounded-sm shadow-lg transition-all duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]"
+						onclick="window.resetSelection()"
+					>
+						↩️ Reset Selection
+					</button>
+					<button
+						class="px-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium rounded-sm shadow-lg transition-all duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98]"
+						onclick="(async () => {
+							const oldId = 'rd:${info.id}';
+							try {
+								const newId = await window.addHashAsMagnet('${rdKey}', '${info.hash}');
+								await window.selectFiles('${rdKey}', newId, Array.from(document.querySelectorAll('.file-selector:checked')).map(cb => cb.dataset.fileId));
+								await window.handleDeleteRdTorrent('${rdKey}', oldId, true);
+								window.closePopup();
+								window.toast.success('Selection saved and torrent reinserted', window.magnetToastOptions);
+							} catch (error) {
+								window.toast.error('Error saving selection: ' + error, window.magnetToastOptions);
+							}
+						})()"
+					>
+						💾 Save File Selection
+					</button>
+				</div>
+			`;
+			})()
 		: '';
 
 	const infoRows = info.fake
