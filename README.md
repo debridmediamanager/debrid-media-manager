@@ -16,7 +16,7 @@ To make this process even easier, I've developed this **free** and open source w
 
 ## Features
 
-This builds on top of the amazing service brought by [Real-Debrid](http://real-debrid.com/?id=9783846) and [AllDebrid](https://alldebrid.com/?uid=1kk5i&lang=en).
+This builds on top of the amazing service brought by [Real-Debrid](http://real-debrid.com/?id=440161) and [AllDebrid](https://alldebrid.com/?uid=1kk5i&lang=en).
 
 ### Library management
 
