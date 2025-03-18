@@ -1,6 +1,39 @@
 import { MagnetStatus } from '../../services/allDebrid';
 import { TorrentInfoResponse } from '../../services/types';
 
+interface Stream {
+	codec_type: string;
+	codec_name: string;
+	tags?: {
+		language?: string;
+		title?: string;
+	};
+	width?: number;
+	height?: number;
+	channel_layout?: string;
+	side_data_list?: {
+		dv_profile?: number;
+	}[];
+}
+
+export interface MediaInfoResponse {
+	SelectedFiles: {
+		[key: string]: {
+			MediaInfo?: {
+				streams: Stream[];
+				format: {
+					duration: string;
+				};
+				chapters?: {
+					tags: {
+						title: string;
+					};
+				}[];
+			};
+		};
+	};
+}
+
 export interface ActionButtonProps {
 	link?: string;
 	onClick?: string;
