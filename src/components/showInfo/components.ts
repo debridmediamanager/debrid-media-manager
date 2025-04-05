@@ -24,6 +24,7 @@ export const renderButton = (
 		'reinsert',
 		'downloadAll',
 		'exportLinks',
+		'generateStrm',
 		'castAll',
 	].includes(type);
 	const textSize = isLibraryAction ? 'text-base' : 'text-xs';

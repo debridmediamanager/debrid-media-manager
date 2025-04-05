@@ -12,6 +12,8 @@ export const buttonStyles = {
 	downloadAll:
 		'border-2 border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50 p-3 m-1',
 	exportLinks: 'border-2 border-sky-500 bg-sky-900/30 text-sky-100 hover:bg-sky-800/50 p-3 m-1',
+	generateStrm:
+		'border-2 border-purple-500 bg-purple-900/30 text-purple-100 hover:bg-purple-800/50 p-3 m-1',
 };
 
 export const icons = {
@@ -25,6 +27,7 @@ export const icons = {
 	reinsert: '<span style="font-size: 1.2rem;">🔄</span>',
 	downloadAll: '<span style="font-size: 1.2rem;">📲</span>',
 	exportLinks: '<span style="font-size: 1.2rem;">📤</span>',
+	generateStrm: '<span style="font-size: 1.2rem;">🎬</span>',
 };
 
 export const defaultLabels = {
@@ -38,4 +41,5 @@ export const defaultLabels = {
 	reinsert: 'Reinsert',
 	downloadAll: 'Download All',
 	exportLinks: 'Get Links',
+	generateStrm: 'STRM Files',
 };
