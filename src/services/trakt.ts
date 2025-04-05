@@ -254,16 +254,34 @@ export const getUsersPersonalLists = async (
 	userSlug: string
 ): Promise<TraktList[]> => {
 	const url = `${TRAKT_API_URL}/users/${userSlug}/lists`;
+	let page = 1;
+	const limit = 100; // Maximum items per page
+	let allLists: TraktList[] = [];
+
 	try {
-		const response = await axios.get<TraktList[]>(url, {
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				'Content-Type': 'application/json',
-				'trakt-api-version': '2',
-				'trakt-api-key': config.traktClientId,
-			},
-		});
-		return response.data;
+		while (true) {
+			const response = await axios.get<TraktList[]>(url, {
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+					'Content-Type': 'application/json',
+					'trakt-api-version': '2',
+					'trakt-api-key': config.traktClientId,
+				},
+				params: {
+					page,
+					limit,
+				},
+			});
+
+			const lists = response.data;
+			if (lists.length === 0) break;
+
+			allLists = [...allLists, ...lists];
+			if (lists.length < limit) break;
+
+			page++;
+		}
+		return allLists;
 	} catch (error) {
 		console.error("Error fetching user's personal lists:", error);
 		throw error;
@@ -275,16 +293,34 @@ export const getLikedLists = async (
 	userSlug: string
 ): Promise<TraktListContainer[]> => {
 	const url = `${TRAKT_API_URL}/users/${userSlug}/likes/lists`;
+	let page = 1;
+	const limit = 100; // Maximum items per page
+	let allLists: TraktListContainer[] = [];
+
 	try {
-		const response = await axios.get<TraktListContainer[]>(url, {
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				'Content-Type': 'application/json',
-				'trakt-api-version': '2',
-				'trakt-api-key': config.traktClientId,
-			},
-		});
-		return response.data;
+		while (true) {
+			const response = await axios.get<TraktListContainer[]>(url, {
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+					'Content-Type': 'application/json',
+					'trakt-api-version': '2',
+					'trakt-api-key': config.traktClientId,
+				},
+				params: {
+					page,
+					limit,
+				},
+			});
+
+			const lists = response.data;
+			if (lists.length === 0) break;
+
+			allLists = [...allLists, ...lists];
+			if (lists.length < limit) break;
+
+			page++;
+		}
+		return allLists;
 	} catch (error) {
 		console.error("Error fetching user's personal lists:", error);
 		throw error;
@@ -301,16 +337,35 @@ export async function fetchListItems(
 	if (type) {
 		apiEndpoint += `/${type}`;
 	}
+
+	let page = 1;
+	const limit = 100; // Maximum items per page
+	let allItems: TraktMediaItem[] = [];
+
 	try {
-		const response = await axios.get<TraktMediaItem[]>(apiEndpoint, {
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				'Content-Type': 'application/json',
-				'trakt-api-version': '2',
-				'trakt-api-key': config.traktClientId,
-			},
-		});
-		return response.data;
+		while (true) {
+			const response = await axios.get<TraktMediaItem[]>(apiEndpoint, {
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+					'Content-Type': 'application/json',
+					'trakt-api-version': '2',
+					'trakt-api-key': config.traktClientId,
+				},
+				params: {
+					page,
+					limit,
+				},
+			});
+
+			const items = response.data;
+			if (items.length === 0) break;
+
+			allItems = [...allItems, ...items];
+			if (items.length < limit) break;
+
+			page++;
+		}
+		return allItems;
 	} catch (error) {
 		throw new Error('Error fetching list items');
 	}
