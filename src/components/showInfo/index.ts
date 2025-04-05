@@ -126,6 +126,13 @@ export const showInfoForRD = async (
 					})
 				: ''
 		}
+		${
+			info.links.length > 0
+				? renderButton('generateStrm', {
+						onClick: `generateStrmFiles('${info.original_filename}', [${info.links.map((l: string) => `'${l}'`).join(',')}])`,
+					})
+				: ''
+		}
     </div>`
 		: '';
 
@@ -297,6 +304,13 @@ export const showInfoForAD = async (
 						})
 					: ''
 			}
+   ${
+		info.links.length > 0
+			? renderButton('generateStrm', {
+					onClick: `generateStrmFiles('${info.filename}', [${info.links.map((l: MagnetLink) => `'${l.link}'`).join(',')}])`,
+				})
+			: ''
+   }
         </div>`;
 
 	const allInfoRows = [

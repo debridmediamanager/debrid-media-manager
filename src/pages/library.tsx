@@ -107,6 +107,42 @@ function TorrentsPage() {
 		? userTorrentsList.filter((t) => selectedTorrents.has(t.id))
 		: filteredList;
 
+	// generate STRM files for each video in torrent
+	useEffect(() => {
+		if (typeof window !== 'undefined' && rdKey) {
+			(window as any).generateStrmFiles = async (filename: string, links: string[]) => {
+				for (const link of links) {
+					try {
+						// Get unrestricted link first
+						const resp = await proxyUnrestrictLink(rdKey, link);
+
+						// Get filename from Real-Debrid response
+						const nameWithoutExt = resp.filename.substring(
+							0,
+							resp.filename.lastIndexOf('.')
+						);
+
+						// If streamable, use just the name without extension
+						// If not streamable, keep the original extension
+						const strmName = resp.streamable
+							? `${nameWithoutExt}.strm`
+							: `${resp.filename}.strm`;
+
+						// Create STRM file with just the direct URL
+						const blob = new Blob([resp.download], { type: 'text/plain' });
+						const strmLink = document.createElement('a');
+						strmLink.href = URL.createObjectURL(blob);
+						strmLink.download = strmName;
+						strmLink.click();
+						URL.revokeObjectURL(strmLink.href);
+					} catch (e) {
+						console.error(e);
+					}
+				}
+			};
+		}
+	}, [rdKey]);
+
 	// export download links list
 	useEffect(() => {
 		if (typeof window !== 'undefined' && rdKey) {
