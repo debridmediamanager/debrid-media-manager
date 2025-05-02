@@ -142,8 +142,22 @@ function IndexPage() {
 					</h1>
 
 					{/* Search Bar */}
-					<div className="mb-6 w-full max-w-md">
+					<div className="mb-4 w-full max-w-md">
 						<SearchBar />
+					</div>
+
+					{/* ElfHosted Promo Banner */}
+					<div className="mb-4 w-full max-w-md rounded-md border border-blue-500 bg-blue-900/30 p-2 text-center text-sm shadow-md">
+						<span className="text-yellow-300">✨ Our Sponsor</span>{' '}
+						<a
+							className="font-medium text-blue-300 underline hover:text-blue-200"
+							href="https://elfhosted.com/guides/media/"
+							target="_blank"
+						>
+							<b>ElfHosted</b>
+						</a>{' '}
+						offers hosted, turn-key streaming stacks including zurg, Plex & Riven, with
+						<span className="ml-1 font-bold text-green-300">7-day free trials</span>
 					</div>
 
 					<div className="flex w-full max-w-md flex-col items-center gap-6">
