@@ -8,6 +8,7 @@ import {
 	padWithZero,
 } from '@/utils/checks';
 import axios from 'axios';
+import { getMdblistClient } from './mdblistClient';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { Repository } from './repository';
 
@@ -23,11 +24,10 @@ type TvScrapeJob = {
 };
 
 const db = new Repository();
+const mdblistClient = getMdblistClient();
 const tmdbKey = process.env.TMDB_KEY;
 const getTmdbSearch = (imdbId: string) =>
 	`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`;
-const mdbKey = process.env.MDBLIST_KEY;
-const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdbKey}&i=${imdbId}`;
 const getTmdbTvInfo = (tmdbId: string) =>
 	`https://api.themoviedb.org/3/tv/${tmdbId}?api_key=${tmdbKey}`;
 
@@ -44,24 +44,24 @@ export async function cleanByImdbId(imdbId: string) {
 	let tmdbSearch, mdbInfo;
 	try {
 		tmdbSearch = await axios.get(getTmdbSearch(imdbId));
-		mdbInfo = await axios.get(getMdbInfo(imdbId));
+		mdbInfo = await mdblistClient.getInfoByImdbId(imdbId);
 	} catch (error: any) {
 		console.error(error);
 		return;
 	}
 
-	const isTv = mdbInfo.data.type === 'show' || tmdbSearch.data.tv_results?.length > 0;
+	const isTv = mdbInfo.type === 'show' || tmdbSearch.data.tv_results?.length > 0;
 	if (isTv) {
 		try {
-			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.tv_results[0]?.id;
+			const tmdbId = mdbInfo.tmdbid ?? tmdbSearch.data.tv_results[0]?.id;
 			const tmdbInfo = await axios.get(getTmdbTvInfo(tmdbId));
-			await cleanTvScrapes(imdbId, tmdbInfo.data, mdbInfo.data, db);
+			await cleanTvScrapes(imdbId, tmdbInfo.data, mdbInfo, db);
 			return;
 		} catch (error: any) {
 			if (error.response?.status === 404 || error.message.includes("reading 'id'")) {
 				try {
-					const convertedMdb = convertMdbToTmdb(mdbInfo.data);
-					await cleanTvScrapes(imdbId, convertedMdb, mdbInfo.data, db);
+					const convertedMdb = convertMdbToTmdb(mdbInfo);
+					await cleanTvScrapes(imdbId, convertedMdb, mdbInfo, db);
 					return;
 				} catch (error: any) {
 					console.error(error);

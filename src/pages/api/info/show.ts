@@ -1,9 +1,8 @@
+import { getMdblistClient } from '@/services/mdblistClient';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import UserAgent from 'user-agents';
 
-const mdblistKey = process.env.MDBLIST_KEY;
-const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
 const getCinemetaInfo = (imdbId: string) =>
 	`https://v3-cinemeta.strem.io/meta/series/${imdbId}.json`;
 
@@ -15,7 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		const mdbPromise = axios.get(getMdbInfo(imdbid));
+		const mdblistClient = getMdblistClient();
+		const mdbPromise = mdblistClient.getInfoByImdbId(imdbid);
 		const cinePromise = axios.get(getCinemetaInfo(imdbid), {
 			headers: {
 				accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const cineSeasonCount = uniqueSeasons.length > 0 ? Math.max(...uniqueSeasons) : 1;
 
 		let mdbSeasons =
-			mdbResponse.data.seasons?.filter((season: any) => season.season_number > 0) || [];
+			mdbResponse.seasons?.filter((season: any) => season.season_number > 0) || [];
 		const mdbSeasonCount =
 			mdbSeasons.length > 0
 				? Math.max(...mdbSeasons.map((season: any) => season.season_number))
@@ -68,14 +68,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		imdb_score =
 			cinemetaResponse.data.meta?.imdbRating ??
-			mdbResponse.data.ratings?.reduce((acc: number | undefined, rating: any) => {
+			mdbResponse.ratings?.reduce((acc: number | undefined, rating: any) => {
 				if (rating.source === 'imdb') {
 					return rating.score as number;
 				}
 				return acc;
 			}, null);
 
-		const title = mdbResponse?.data?.title ?? cinemetaResponse?.data?.title ?? 'Unknown';
+		const title = mdbResponse?.title ?? cinemetaResponse?.data?.meta?.name ?? 'Unknown';
 
 		const season_episode_counts: Record<number, number> = {};
 
@@ -89,8 +89,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		});
 
 		// Merge with mdb data if available
-		if (mdbResponse.data.seasons) {
-			mdbResponse.data.seasons.forEach((season: any) => {
+		if (mdbResponse.seasons) {
+			mdbResponse.seasons.forEach((season: any) => {
 				if (season.episode_count && season.season_number) {
 					// Use the larger count between the two sources
 					season_episode_counts[season.season_number] = Math.max(
@@ -104,11 +104,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		res.status(200).json({
 			title,
 			description:
-				mdbResponse?.data?.description ?? cinemetaResponse?.data?.description ?? 'n/a',
-			poster: mdbResponse?.data?.poster ?? cinemetaResponse?.data?.poster ?? '',
+				mdbResponse?.description ?? cinemetaResponse?.data?.meta?.description ?? 'n/a',
+			poster: mdbResponse?.poster ?? cinemetaResponse?.data?.meta?.poster ?? '',
 			backdrop:
-				mdbResponse?.data?.backdrop ??
-				cinemetaResponse?.data?.background ??
+				mdbResponse?.backdrop ??
+				cinemetaResponse?.data?.meta?.background ??
 				'https://source.unsplash.com/random/1800x300?' + title,
 			season_count,
 			season_names,

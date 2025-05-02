@@ -1,15 +1,13 @@
-import axios from 'axios';
+import { getMdblistClient } from '@/services/mdblistClient';
 import { GetServerSideProps } from 'next';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-	const mdblistKey = process.env.MDBLIST_KEY;
-	const getMdbInfo = (imdbId: string) =>
-		`https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
+	const mdblistClient = getMdblistClient();
 	const imdbId = context.params!.imdbid as string;
-	const resp = await axios.get(getMdbInfo(imdbId));
+	const resp = await mdblistClient.getInfoByImdbId(imdbId);
 	return {
 		redirect: {
-			destination: `/${resp.data.type}/${imdbId}`,
+			destination: `/${resp.type}/${imdbId}`,
 			permanent: true,
 		},
 	};

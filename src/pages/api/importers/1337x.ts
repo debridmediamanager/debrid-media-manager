@@ -1,10 +1,12 @@
 import { ScrapeResponse } from '@/scrapers/scrapeJobs';
+import { getMdblistClient } from '@/services/mdblistClient';
 import { ScrapeSearchResult } from '@/services/mediasearch';
 import { Repository } from '@/services/repository';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new Repository();
+const mdblistClient = getMdblistClient();
 const HOST_1337X = 'https://1337x.to';
 // const HOST_1337X = 'https://1337x.st';
 // const HOST_1337X = 'https://x1337x.ws'
@@ -21,8 +23,6 @@ const x1337library = (page: number) => `${HOST_1337X}/movie-library/${page}/`;
 const x1337movie = (tmdbId: number) => `${HOST_1337X}/movie/${tmdbId}/Seven-Lucky-Gods-2014/`;
 const x1337torrent = (torrentId: string) =>
 	`${HOST_1337X}/torrent/${torrentId}/Seven-Lucky-Gods-2014-1080p-YTS-YIFY/`;
-const mdbListMovie = (tmdbId: number) =>
-	`https://mdblist.com/api/?apikey=${process.env.MDBLIST_KEY}&tm=${tmdbId}`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
 	const x1337config = {
@@ -60,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		const index = tmdbIds.indexOf(tmdbId);
 		const percentage = Math.round((index / tmdbIds.length) * 100);
 		const torrentIds: string[] = [];
-		const mdbResp = await axios.get(mdbListMovie(tmdbId));
+		const mdbResp = await mdblistClient.getInfoByTmdbId(tmdbId);
 		let imdbId = mdbResp.data.imdbid ?? '';
 		if (!imdbId) {
 			imdbId = `tmdb-${tmdbId}`;
