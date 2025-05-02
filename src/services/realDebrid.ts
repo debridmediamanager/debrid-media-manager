@@ -56,37 +56,56 @@ export const getToken = async (
 	bare: boolean = false
 ) => {
 	try {
+		console.log('[RD API] getToken - starting request');
 		const params = new URLSearchParams();
 		params.append('client_id', clientId);
 		params.append('client_secret', clientSecret);
 		params.append('code', refreshToken);
 		params.append('grant_type', 'http://oauth.net/grant_type/device/1.0');
 
-		const response = await axios.post<AccessTokenResponse>(
-			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/oauth/v2/token`,
-			params.toString(),
-			{
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-			}
-		);
+		const url = `${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/oauth/v2/token`;
+		console.log('[RD API] getToken - using URL:', url);
+
+		const response = await axios.post<AccessTokenResponse>(url, params.toString(), {
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+		});
+		console.log('[RD API] getToken - successful response', {
+			status: response.status,
+			access_token: !!response.data.access_token,
+			expires_in: response.data.expires_in,
+			refresh_token: !!response.data.refresh_token,
+		});
 		return response.data;
 	} catch (error: any) {
-		console.error('Error fetching access token:', error.message);
+		console.error('[RD API] getToken - error response:', {
+			message: error.message,
+			status: error.response?.status,
+			statusText: error.response?.statusText,
+		});
 		throw error;
 	}
 };
 
 export const getCurrentUser = async (accessToken: string) => {
 	try {
+		console.log('[RD API] getCurrentUser - starting request');
 		const client = await createAxiosClient(accessToken);
 		const response = await client.get<UserResponse>(
 			`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/user`
 		);
+		console.log('[RD API] getCurrentUser - successful response', {
+			status: response.status,
+			hasData: !!response.data,
+		});
 		return response.data;
 	} catch (error: any) {
-		console.error('Error fetching user information:', error.message);
+		console.error('[RD API] getCurrentUser - error response:', {
+			message: error.message,
+			status: error.response?.status,
+			statusText: error.response?.statusText,
+		});
 		throw error;
 	}
 };

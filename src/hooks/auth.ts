@@ -40,10 +40,21 @@ const useRealDebrid = () => {
 	const [clientId] = useLocalStorage<string>('rd:clientId');
 	const [clientSecret] = useLocalStorage<string>('rd:clientSecret');
 	const [refreshToken] = useLocalStorage<string>('rd:refreshToken');
+	const [isRefreshing, setIsRefreshing] = useState(false);
 
 	useEffect(() => {
 		const auth = async () => {
+			console.log('[RD AUTH] Starting auth check', {
+				hasToken: !!token,
+				hasRefreshToken: !!refreshToken,
+				hasClientId: !!clientId,
+				hasClientSecret: !!clientSecret,
+				loading,
+				isRefreshing,
+			});
+
 			if (!refreshToken || !clientId || !clientSecret) {
+				console.log('[RD AUTH] Missing credentials, skipping auth');
 				setLoading(false);
 				return;
 			}
@@ -52,27 +63,41 @@ const useRealDebrid = () => {
 				// Try current token first
 				if (token) {
 					try {
+						console.log('[RD AUTH] Have token, checking if valid');
 						const user = await getRealDebridUser(token);
+						console.log('[RD AUTH] Token is valid, user fetched successfully');
 						setUser(user as RealDebridUser);
 						setError(null);
 						setLoading(false);
 						return;
-					} catch {} // Token invalid, continue to refresh
+					} catch (e) {
+						console.log('[RD AUTH] Token invalid or expired, will refresh', e);
+					} // Token invalid, continue to refresh
+				} else {
+					console.log('[RD AUTH] No token found, will get a new one');
 				}
 
 				// Get new token
+				console.log('[RD AUTH] Refreshing token');
+				setIsRefreshing(true);
 				const { access_token, expires_in } = await getToken(
 					clientId,
 					clientSecret,
 					refreshToken
 				);
+				console.log('[RD AUTH] Got new token, expires in', expires_in);
 				setToken(access_token, expires_in);
+				console.log('[RD AUTH] Fetching user with new token');
 				const user = await getRealDebridUser(access_token);
+				console.log('[RD AUTH] User fetched successfully with new token');
 				setUser(user as RealDebridUser);
 				setError(null);
+				setIsRefreshing(false);
 			} catch (e) {
+				console.log('[RD AUTH] Error refreshing token, clearing keys', e);
 				clearRdKeys();
 				setError(e as Error);
+				setIsRefreshing(false);
 			} finally {
 				setLoading(false);
 			}
@@ -81,7 +106,7 @@ const useRealDebrid = () => {
 		auth();
 	}, [token, refreshToken, clientId, clientSecret]);
 
-	return { user, error, loading, hasAuth: !!token };
+	return { user, error, loading, isRefreshing, hasAuth: !!token };
 };
 
 // Separate hooks for other services
@@ -138,10 +163,11 @@ const useTrakt = () => {
 };
 
 // Backward compatibility hook for withAuth.tsx
-export const useRealDebridAccessToken = (): [string | null, boolean] => {
-	const { user, loading } = useRealDebrid();
+export const useRealDebridAccessToken = (): [string | null, boolean, boolean] => {
+	const { user, loading, isRefreshing } = useRealDebrid();
 	const [token] = useLocalStorage<string>('rd:accessToken');
-	return [token, loading];
+	console.log('[RD ACCESS TOKEN HOOK]', { token, loading, isRefreshing });
+	return [token, loading, isRefreshing];
 };
 
 export const useAllDebridApiKey = () => {
@@ -165,6 +191,7 @@ export const useCurrentUser = () => {
 		rdUser: rd.user,
 		rdError: rd.error,
 		hasRDAuth: rd.hasAuth,
+		rdIsRefreshing: rd.isRefreshing,
 		adUser: ad.user,
 		adError: ad.error,
 		hasADAuth: ad.hasAuth,
