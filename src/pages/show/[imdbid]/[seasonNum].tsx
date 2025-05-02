@@ -122,6 +122,10 @@ const TvSearch: FunctionComponent = () => {
 
 	useEffect(() => {
 		if (!imdbid || !seasonNum || isLoading) return;
+		// Clear previous results and query input when season changes
+		setSearchResults([]);
+		setFilteredResults([]);
+		setQuery(defaultTorrentsFilter); // Reset query to default filter
 		initialize();
 	}, [imdbid, seasonNum, isLoading]);
 
@@ -200,6 +204,7 @@ const TvSearch: FunctionComponent = () => {
 			} else {
 				if (page === 0) {
 					setSearchResults([]);
+					setFilteredResults([]);
 				}
 				setHasMoreResults(false);
 				toast(`No${page === 0 ? '' : ' more'} results found`, searchToastOptions);
@@ -222,7 +227,10 @@ const TvSearch: FunctionComponent = () => {
 	}
 
 	useEffect(() => {
-		if (searchResults.length === 0) return;
+		if (searchResults.length === 0) {
+			setFilteredResults([]);
+			return;
+		}
 		const filteredResults = quickSearch(query, searchResults);
 		setFilteredResults(filteredResults);
 	}, [query, searchResults]);
