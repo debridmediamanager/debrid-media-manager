@@ -44,17 +44,7 @@ const useRealDebrid = () => {
 
 	useEffect(() => {
 		const auth = async () => {
-			console.log('[RD AUTH] Starting auth check', {
-				hasToken: !!token,
-				hasRefreshToken: !!refreshToken,
-				hasClientId: !!clientId,
-				hasClientSecret: !!clientSecret,
-				loading,
-				isRefreshing,
-			});
-
 			if (!refreshToken || !clientId || !clientSecret) {
-				console.log('[RD AUTH] Missing credentials, skipping auth');
 				setLoading(false);
 				return;
 			}
@@ -63,38 +53,27 @@ const useRealDebrid = () => {
 				// Try current token first
 				if (token) {
 					try {
-						console.log('[RD AUTH] Have token, checking if valid');
 						const user = await getRealDebridUser(token);
-						console.log('[RD AUTH] Token is valid, user fetched successfully');
 						setUser(user as RealDebridUser);
 						setError(null);
 						setLoading(false);
 						return;
-					} catch (e) {
-						console.log('[RD AUTH] Token invalid or expired, will refresh', e);
-					} // Token invalid, continue to refresh
-				} else {
-					console.log('[RD AUTH] No token found, will get a new one');
+					} catch {} // Token invalid, continue to refresh
 				}
 
 				// Get new token
-				console.log('[RD AUTH] Refreshing token');
 				setIsRefreshing(true);
 				const { access_token, expires_in } = await getToken(
 					clientId,
 					clientSecret,
 					refreshToken
 				);
-				console.log('[RD AUTH] Got new token, expires in', expires_in);
 				setToken(access_token, expires_in);
-				console.log('[RD AUTH] Fetching user with new token');
 				const user = await getRealDebridUser(access_token);
-				console.log('[RD AUTH] User fetched successfully with new token');
 				setUser(user as RealDebridUser);
 				setError(null);
 				setIsRefreshing(false);
 			} catch (e) {
-				console.log('[RD AUTH] Error refreshing token, clearing keys', e);
 				clearRdKeys();
 				setError(e as Error);
 				setIsRefreshing(false);
@@ -166,7 +145,6 @@ const useTrakt = () => {
 export const useRealDebridAccessToken = (): [string | null, boolean, boolean] => {
 	const { user, loading, isRefreshing } = useRealDebrid();
 	const [token] = useLocalStorage<string>('rd:accessToken');
-	console.log('[RD ACCESS TOKEN HOOK]', { token, loading, isRefreshing });
 	return [token, loading, isRefreshing];
 };
 
