@@ -87,12 +87,20 @@ export const handleSelectFilesInRd = async (rdKey: string, id: string, bare: boo
 export const handleReinsertTorrentinRd = async (
 	rdKey: string,
 	torrent: UserTorrent,
-	forceDeleteOld: boolean
+	forceDeleteOld: boolean,
+	selectedFileIds?: string[]
 ) => {
 	const oldId = torrent.id;
 	try {
 		const newId = await addHashAsMagnet(rdKey, torrent.hash);
-		await handleSelectFilesInRd(rdKey, `rd:${newId}`);
+
+		// Use selected file IDs if provided, otherwise use the default selection logic
+		if (selectedFileIds && selectedFileIds.length > 0) {
+			await selectFiles(rdKey, newId, selectedFileIds);
+		} else {
+			await handleSelectFilesInRd(rdKey, `rd:${newId}`);
+		}
+
 		if (!forceDeleteOld) {
 			const response = await getTorrentInfo(rdKey, newId);
 			if (response.progress != 100) {
@@ -107,7 +115,7 @@ export const handleReinsertTorrentinRd = async (
 		toast.success(`Torrent reinserted (${oldId}👉${newId})`, magnetToastOptions);
 	} catch (error: any) {
 		toast.error(
-			`Error reinserting torrent (${oldId}) ${error.response.data.error}`,
+			`Error reinserting torrent (${oldId}) ${error.response?.data?.error || error.message}`,
 			magnetToastOptions
 		);
 		throw error;

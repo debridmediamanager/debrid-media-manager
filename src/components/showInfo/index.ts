@@ -16,12 +16,19 @@ declare global {
 		addHashAsMagnet: typeof addHashAsMagnet;
 		selectFiles: typeof selectFiles;
 		handleDeleteRdTorrent: typeof handleDeleteRdTorrent;
+		handleReinsertTorrentinRd: (
+			key: string,
+			torrent: any,
+			reload: boolean,
+			selectedFileIds?: string[]
+		) => Promise<void>;
 		closePopup: () => void;
 		toast: typeof toast;
 		magnetToastOptions: typeof magnetToastOptions;
 		selectAllVideos: () => void;
 		unselectAll: () => void;
 		resetSelection?: () => void;
+		triggerFetchLatestRDTorrents: (limit?: number) => Promise<void>;
 	}
 }
 
@@ -104,7 +111,13 @@ export const showInfoForRD = async (
         ${renderButton('share', { onClick: `window.open('${await handleShare(torrent)}')` })}
         ${renderButton('delete', { onClick: `window.closePopup(); window.handleDeleteRdTorrent('${rdKey}', 'rd:${info.id}')` })}
         ${renderButton('magnet', { onClick: `window.handleCopyMagnet('${info.hash}', ${shouldDownloadMagnets})`, text: shouldDownloadMagnets ? 'Download' : 'Copy' })}
-        ${renderButton('reinsert', { onClick: `window.closePopup(); window.handleReinsertTorrentinRd('${rdKey}', { id: 'rd:${info.id}', hash: '${info.hash}' }, true)` })}
+        ${renderButton('reinsert', {
+			onClick: `(async () => {
+            const selectedFileIds = Array.from(document.querySelectorAll('.file-selector:checked')).map(cb => cb.dataset.fileId);
+            window.closePopup(); 
+            window.handleReinsertTorrentinRd('${rdKey}', { id: 'rd:${info.id}', hash: '${info.hash}' }, true, selectedFileIds);
+          })()`,
+		})}
         ${
 			rdKey
 				? renderButton('castAll', {
@@ -199,6 +212,10 @@ export const showInfoForRD = async (
 								await window.handleDeleteRdTorrent('${rdKey}', oldId, true);
 								window.closePopup();
 								window.toast.success('Selection saved and torrent reinserted', window.magnetToastOptions);
+								// Refresh the library list with the updated torrent
+								if (typeof window.triggerFetchLatestRDTorrents === 'function') {
+									await window.triggerFetchLatestRDTorrents(2);
+								}
 							} catch (error) {
 								window.toast.error('Error saving selection: ' + error, window.magnetToastOptions);
 							}

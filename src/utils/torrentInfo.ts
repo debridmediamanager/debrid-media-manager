@@ -124,9 +124,10 @@ export async function handleShowInfoForRD(
 	(window as any).handleReinsertTorrentinRd = async (
 		key: string,
 		torrent: UserTorrent,
-		reload: boolean
+		reload: boolean,
+		selectedFileIds?: string[]
 	) => {
-		await handleReinsertTorrentinRd(key, torrent, reload);
+		await handleReinsertTorrentinRd(key, torrent, reload, selectedFileIds);
 		await fetchLatestRDTorrents(
 			rdKey,
 			torrentDB,
@@ -143,6 +144,18 @@ export async function handleShowInfoForRD(
 			return new Set(prev);
 		});
 		Swal.close();
+	};
+	// Add a method to trigger the fetch for latest RD torrents
+	(window as any).triggerFetchLatestRDTorrents = async (limit: number = 2) => {
+		await fetchLatestRDTorrents(
+			rdKey,
+			torrentDB,
+			setUserTorrentsList,
+			(loading) => console.log('Loading:', loading),
+			(syncing) => console.log('Syncing:', syncing),
+			setSelectedTorrents,
+			limit
+		);
 	};
 	(window as any).closePopup = Swal.close;
 	(window as any).saveSelection = async (key: string, hash: string, fileIDs: string[]) => {
