@@ -12,7 +12,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 	return function WithAuth(props: P) {
 		const router = useRouter();
 		const [isLoading, setIsLoading] = useState(true);
-		const [rdKey, rdLoading] = useRealDebridAccessToken();
+		const [rdKey, rdLoading, rdIsRefreshing] = useRealDebridAccessToken();
 		const adKey = useAllDebridApiKey();
 		const [tbKey] = useState(() => {
 			if (typeof window !== 'undefined') {
@@ -21,27 +21,59 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			return null;
 		});
 
+		// Check for refresh credentials
+		const [hasRefreshCredentials] = useState(() => {
+			if (typeof window !== 'undefined') {
+				const refreshToken = localStorage.getItem('rd:refreshToken');
+				const clientId = localStorage.getItem('rd:clientId');
+				const clientSecret = localStorage.getItem('rd:clientSecret');
+				return !!(refreshToken && clientId && clientSecret);
+			}
+			return false;
+		});
+
 		useEffect(() => {
+			console.log('[withAuth]', {
+				rdKey,
+				rdLoading,
+				rdIsRefreshing,
+				hasRefreshCredentials,
+				pathname: router.pathname,
+				adKey: !!adKey,
+				tbKey: !!tbKey,
+			});
+
+			// Don't redirect if token is refreshing
+			if (rdIsRefreshing) {
+				console.log('[withAuth] Token is refreshing, skipping redirect check');
+				return;
+			}
+
+			// If we have refreshing credentials but no key yet, we're probably in the process
+			// of refreshing the token, so don't redirect
 			if (
 				!rdKey &&
 				!adKey &&
 				!tbKey &&
 				router.pathname !== START_ROUTE &&
 				!router.pathname.endsWith(LOGIN_ROUTE) &&
-				!rdLoading
+				!rdLoading &&
+				!hasRefreshCredentials
 			) {
+				console.log('[withAuth] No auth, redirecting to start page');
 				// Store full URL including query parameters
 				localStorage.setItem(RETURN_URL_KEY, router.asPath);
 				router.push(START_ROUTE);
 			} else {
 				const returnUrl = localStorage.getItem(RETURN_URL_KEY);
 				if (returnUrl && returnUrl !== START_ROUTE && !returnUrl.endsWith(LOGIN_ROUTE)) {
+					console.log('[withAuth] Auth verified, redirecting to return URL:', returnUrl);
 					localStorage.removeItem(RETURN_URL_KEY);
 					router.push(returnUrl);
 				}
 				setIsLoading(false);
 			}
-		}, [rdKey, rdLoading, adKey, tbKey, router]);
+		}, [rdKey, rdLoading, rdIsRefreshing, hasRefreshCredentials, adKey, tbKey, router]);
 
 		if (isLoading) {
 			// Render a loading indicator or placeholder on initial load
