@@ -1,3 +1,4 @@
+import { MRating } from '@/services/mdblist';
 import { getMdblistClient } from '@/services/mdblistClient';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -38,12 +39,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const [mdbResponse, cinemetaResponse] = await Promise.all([mdbPromise, cinePromise]);
 
 		let imdb_score =
-			(mdbResponse.ratings?.reduce((acc: number | undefined, rating: any) => {
+			(mdbResponse.ratings?.reduce((acc: number | undefined, rating: MRating) => {
 				if (rating.source === 'imdb') {
 					return rating.score as number;
 				}
 				return acc;
-			}, null) ?? cinemetaResponse.data.meta?.imdbRating)
+			}, undefined) ?? cinemetaResponse.data.meta?.imdbRating)
 				? parseFloat(cinemetaResponse.data.meta?.imdbRating) * 10
 				: null;
 

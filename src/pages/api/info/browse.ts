@@ -1,4 +1,5 @@
-import MdbList from '@/services/mdblist';
+import { MList, MListItem } from '@/services/mdblist';
+import { getMdblistClient } from '@/services/mdblistClient';
 import { lcg, shuffle } from '@/utils/seededShuffle';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -23,26 +24,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return res.status(200).json(responses[key].response);
 		}
 
-		const mdblist = new MdbList();
+		const mdblistClient = getMdblistClient();
 		let topLists;
 		if (key === 'index') {
-			topLists = await mdblist.topLists();
+			topLists = await mdblistClient.getTopLists();
 		} else {
-			topLists = await mdblist.searchLists(key);
+			topLists = await mdblistClient.searchLists(key);
 		}
 
 		let rng = lcg(new Date().getTime() / 1000 / 60 / 10);
 		topLists = shuffle(topLists, rng).slice(0, 4);
 
 		const response: BrowseResponse = {};
-		for (const list of topLists) {
-			const itemsResponse = await mdblist.listItems(list.id);
+		for (const list of topLists as MList[]) {
+			const itemsResponse = await mdblistClient.getListItems(list.id.toString());
 			const defaultMediaType = list.name.toLowerCase().includes('movie') ? 'movie' : 'show';
 			response[list.name] = itemsResponse
-				.filter((item) => item.imdb_id)
+				.filter((item: MListItem) => item.imdb_id)
 				.slice(0, 24)
 				.map(
-					(item) => `${list.mediatype || defaultMediaType}:${item.imdb_id}:${item.title}`
+					(item: MListItem) =>
+						`${list.mediatype || defaultMediaType}:${item.imdb_id}:${item.title}`
 				);
 			response[list.name] = shuffle(response[list.name], rng);
 		}
