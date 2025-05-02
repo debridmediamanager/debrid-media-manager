@@ -5,6 +5,7 @@ import {
 	meetsTitleConditions,
 } from '@/utils/checks';
 import axios from 'axios';
+import { getMdblistClient } from './mdblistClient';
 import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from './mediasearch';
 import { Repository } from './repository';
 
@@ -16,11 +17,10 @@ type MovieScrapeJob = {
 };
 
 const db = new Repository();
+const mdblistClient = getMdblistClient();
 const tmdbKey = process.env.TMDB_KEY;
 const getTmdbSearch = (imdbId: string) =>
 	`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`;
-const mdbKey = process.env.MDBLIST_KEY;
-const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdbKey}&i=${imdbId}`;
 const getTmdbMovieInfo = (tmdbId: string) =>
 	`https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${tmdbKey}`;
 
@@ -37,24 +37,24 @@ export async function cleanByImdbId(imdbId: string) {
 	let tmdbSearch, mdbInfo;
 	try {
 		tmdbSearch = await axios.get(getTmdbSearch(imdbId));
-		mdbInfo = await axios.get(getMdbInfo(imdbId));
+		mdbInfo = await mdblistClient.getInfoByImdbId(imdbId);
 	} catch (error: any) {
 		console.error(error);
 		return;
 	}
 
-	const isMovie = mdbInfo.data.type === 'movie' || tmdbSearch.data.movie_results?.length > 0;
+	const isMovie = mdbInfo.type === 'movie' || tmdbSearch.data.movie_results?.length > 0;
 	if (isMovie) {
 		try {
-			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.movie_results[0]?.id;
+			const tmdbId = mdbInfo.tmdbid ?? tmdbSearch.data.movie_results[0]?.id;
 			const tmdbInfo = await axios.get(getTmdbMovieInfo(tmdbId));
-			await cleanMovieScrapes(imdbId, tmdbInfo.data, mdbInfo.data, db);
+			await cleanMovieScrapes(imdbId, tmdbInfo.data, mdbInfo, db);
 			return;
 		} catch (error: any) {
 			if (error.response?.status === 404 || error.message.includes("reading 'id'")) {
 				try {
-					const convertedMdb = convertMdbToTmdb(mdbInfo.data);
-					await cleanMovieScrapes(imdbId, convertedMdb, mdbInfo.data, db);
+					const convertedMdb = convertMdbToTmdb(mdbInfo);
+					await cleanMovieScrapes(imdbId, convertedMdb, mdbInfo, db);
 					return;
 				} catch (error: any) {
 					console.error(error);

@@ -1,3 +1,4 @@
+import { getMdblistClient } from '@/services/mdblistClient';
 import { Repository } from '@/services/repository';
 import axios from 'axios';
 import { distance } from 'fastest-levenshtein';
@@ -6,13 +7,10 @@ import { NextApiHandler } from 'next';
 import UserAgent from 'user-agents';
 
 const omdbKey = process.env.OMDB_KEY;
-const mdbKey = process.env.MDBLIST_KEY;
 const searchOmdb = (keyword: string, year?: number, mediaType?: string) =>
 	`https://www.omdbapi.com/?s=${keyword}&y=${year ?? ''}&apikey=${omdbKey}&type=${
 		mediaType ?? ''
 	}`;
-const searchMdb = (keyword: string, year?: number, mediaType?: string) =>
-	`https://mdblist.com/api/?apikey=${mdbKey}&s=${keyword}&y=${year ?? ''}&m=${mediaType ?? ''}`;
 const searchCinemetaSeries = (keyword: string) =>
 	`https://v3-cinemeta.strem.io/catalog/series/top/search=${keyword}.json`;
 const searchCinemetaMovies = (keyword: string) =>
@@ -130,12 +128,13 @@ async function searchMdbApi(
 	year?: number,
 	mediaType?: string
 ): Promise<SearchResult[]> {
-	const searchResponse = await axios.get(searchMdb(encodeURIComponent(keyword), year, mediaType));
-	if (searchResponse.data.error || !searchResponse.data.response) {
+	const mdblistClient = getMdblistClient();
+	const searchResponse = await mdblistClient.search(encodeURIComponent(keyword), year, mediaType);
+	if (searchResponse.error || !searchResponse.response) {
 		return [];
 	}
-	// console.log('mdb search response', searchResponse.data);
-	const results: SearchResult[] = [...searchResponse.data.search].filter(
+	// console.log('mdb search response', searchResponse);
+	const results: SearchResult[] = [...searchResponse.search].filter(
 		(r: SearchResult) =>
 			r.imdbid?.startsWith('tt') && r.year > 1888 && r.year <= currentYear && r.score > 0
 	);

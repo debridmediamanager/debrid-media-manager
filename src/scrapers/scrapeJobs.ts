@@ -1,3 +1,4 @@
+import { getMdblistClient } from '@/services/mdblistClient';
 import { cleanMovieScrapes } from '@/services/movieCleaner';
 import { Repository } from '@/services/repository';
 import { cleanTvScrapes } from '@/services/tvCleaner';
@@ -8,14 +9,13 @@ import { scrapeTv } from './tvScraper';
 const tmdbKey = process.env.TMDB_KEY;
 const getTmdbSearch = (imdbId: string) =>
 	`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`;
-const mdbKey = process.env.MDBLIST_KEY;
-const getMdbInfo = (imdbId: string) => `https://mdblist.com/api/?apikey=${mdbKey}&i=${imdbId}`;
 const getTmdbTvInfo = (tmdbId: string) =>
 	`https://api.themoviedb.org/3/tv/${tmdbId}?api_key=${tmdbKey}`;
 const getTmdbMovieInfo = (tmdbId: string) =>
 	`https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${tmdbKey}`;
 
 const db = new Repository();
+const mdblistClient = getMdblistClient();
 
 function convertMdbToTmdb(apiResponse: any) {
 	return {
@@ -40,33 +40,33 @@ export async function generateScrapeJobs(
 	let tmdbSearch, mdbInfo;
 	try {
 		tmdbSearch = await axios.get(getTmdbSearch(imdbId));
-		mdbInfo = await axios.get(getMdbInfo(imdbId));
+		mdbInfo = await mdblistClient.getInfoByImdbId(imdbId);
 	} catch (error: any) {
 		console.error(error);
 		return;
 	}
 
 	const isMovie =
-		mdbInfo.data.type === 'movie' ||
+		mdbInfo.type === 'movie' ||
 		(tmdbSearch.data.movie_results?.length > 0 &&
 			tmdbSearch.data.movie_results[0].vote_count > 0);
 	const isTv =
-		mdbInfo.data.type === 'show' ||
+		mdbInfo.type === 'show' ||
 		(tmdbSearch.data.tv_results?.length > 0 && tmdbSearch.data.tv_results[0].vote_count > 0);
 
 	if (isMovie) {
 		try {
-			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.movie_results[0]?.id;
+			const tmdbId = mdbInfo.tmdbid ?? tmdbSearch.data.movie_results[0]?.id;
 			const tmdbInfo = await axios.get(getTmdbMovieInfo(tmdbId));
-			await scrapeMovies(imdbId, tmdbInfo.data, mdbInfo.data, db, replaceOldScrape);
-			await cleanMovieScrapes(imdbId, tmdbInfo.data, mdbInfo.data, db);
+			await scrapeMovies(imdbId, tmdbInfo.data, mdbInfo, db, replaceOldScrape);
+			await cleanMovieScrapes(imdbId, tmdbInfo.data, mdbInfo, db);
 			return;
 		} catch (error: any) {
 			if (error.response?.status === 404 || error.message.includes("reading 'id'")) {
 				try {
-					const convertedMdb = convertMdbToTmdb(mdbInfo.data);
-					await scrapeMovies(imdbId, convertedMdb, mdbInfo.data, db, replaceOldScrape);
-					await cleanMovieScrapes(imdbId, convertedMdb, mdbInfo.data, db);
+					const convertedMdb = convertMdbToTmdb(mdbInfo);
+					await scrapeMovies(imdbId, convertedMdb, mdbInfo, db, replaceOldScrape);
+					await cleanMovieScrapes(imdbId, convertedMdb, mdbInfo, db);
 					return;
 				} catch (error: any) {
 					console.error(error);
@@ -80,28 +80,28 @@ export async function generateScrapeJobs(
 
 	if (isTv) {
 		if (seasonRestriction > 0) {
-			mdbInfo.data.seasons = mdbInfo.data.seasons.filter(
+			mdbInfo.seasons = mdbInfo.seasons.filter(
 				(s: any) => s.season_number === seasonRestriction
 			);
 		}
 		// if seasonRestriction is -1 then scrape the latest season only
 		if (seasonRestriction === -1) {
 			// find the biggest number in the seasons array using reduce
-			mdbInfo.data.seasons = mdbInfo.data.seasons.reduce((prev: any, current: any) => {
+			mdbInfo.seasons = mdbInfo.seasons.reduce((prev: any, current: any) => {
 				return prev.season_number > current.season_number ? prev : current;
 			});
 		}
 		try {
-			const tmdbId = mdbInfo.data.tmdbid ?? tmdbSearch.data.tv_results[0]?.id;
+			const tmdbId = mdbInfo.tmdbid ?? tmdbSearch.data.tv_results[0]?.id;
 			const tmdbInfo = await axios.get(getTmdbTvInfo(tmdbId));
-			if (!replaceOldScrape) await cleanTvScrapes(imdbId, tmdbInfo.data, mdbInfo.data, db);
-			await scrapeTv(imdbId, tmdbInfo.data, mdbInfo.data, db, replaceOldScrape);
+			if (!replaceOldScrape) await cleanTvScrapes(imdbId, tmdbInfo.data, mdbInfo, db);
+			await scrapeTv(imdbId, tmdbInfo.data, mdbInfo, db, replaceOldScrape);
 			return;
 		} catch (error: any) {
 			if (error.response?.status === 404 || error.message.includes("reading 'id'")) {
 				try {
-					const convertedMdb = convertMdbToTmdb(mdbInfo.data);
-					await scrapeTv(imdbId, convertedMdb, mdbInfo.data, db, replaceOldScrape);
+					const convertedMdb = convertMdbToTmdb(mdbInfo);
+					await scrapeTv(imdbId, convertedMdb, mdbInfo, db, replaceOldScrape);
 					return;
 				} catch (error: any) {
 					console.error(error);

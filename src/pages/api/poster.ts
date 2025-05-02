@@ -1,3 +1,4 @@
+import { getMdblistClient } from '@/services/mdblistClient';
 import { getTmdbKey } from '@/utils/freekeys';
 import { TmdbResponse } from '@/utils/tmdb';
 import axios from 'axios';
@@ -10,11 +11,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(400).json({ error: 'IMDB ID is required' });
 	}
 
-	const mdblistKey = process.env.MDBLIST_KEY;
+	const mdblistClient = getMdblistClient();
 	const getTmdbInfo = (imdbId: string) =>
 		`https://api.themoviedb.org/3/find/${imdbId}?api_key=${getTmdbKey()}&external_source=imdb_id`;
-	const getMdbInfo = (imdbId: string) =>
-		`https://mdblist.com/api/?apikey=${mdblistKey}&i=${imdbId}`;
 
 	try {
 		const tmdbResp = await axios.get<TmdbResponse>(getTmdbInfo(imdbid));
@@ -26,9 +25,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return res.json({ url: `https://image.tmdb.org/t/p/w500${posterPath}` });
 		}
 
-		const mdbResp = await axios.get(getMdbInfo(imdbid));
-		if (mdbResp.data.poster && mdbResp.data.poster.startsWith('http')) {
-			return res.json({ url: mdbResp.data.poster });
+		const mdbResp = await mdblistClient.getInfoByImdbId(imdbid);
+		if (mdbResp.poster && mdbResp.poster.startsWith('http')) {
+			return res.json({ url: mdbResp.poster });
 		}
 
 		return res.status(404).json({ error: 'Poster not found' });

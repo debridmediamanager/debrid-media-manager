@@ -1,6 +1,5 @@
-import axios from 'axios';
-
-type MList = {
+// MDBList API interface types
+export type MList = {
 	id: number;
 	name: string;
 	slug: string;
@@ -12,7 +11,7 @@ type MList = {
 	description: string;
 };
 
-type MListItem = {
+export type MListItem = {
 	id: number;
 	rank: number;
 	adult: number; // or boolean if 0 represents false and 1 represents true
@@ -24,7 +23,7 @@ type MListItem = {
 	spoken_language: string;
 };
 
-type MRating = {
+export type MRating = {
 	source: string;
 	value: number | null;
 	score: number | null;
@@ -34,17 +33,17 @@ type MRating = {
 	id?: string | null;
 };
 
-type MStream = {
+export type MStream = {
 	id: number;
 	name: string;
 };
 
-type MKeyword = {
+export type MKeyword = {
 	id: number;
 	name: string;
 };
 
-type MSeason = {
+export type MSeason = {
 	tmdbid: number;
 	name: string;
 	air_date: string | null;
@@ -54,7 +53,7 @@ type MSeason = {
 	poster_path: string;
 };
 
-type MReview = {
+export type MReview = {
 	updated_at: string;
 	author: string;
 	rating: number;
@@ -62,12 +61,12 @@ type MReview = {
 	content: string;
 };
 
-type MWatchProvider = {
+export type MWatchProvider = {
 	id: number;
 	name: string;
 };
 
-type MMovie = {
+export type MMovie = {
 	title: string;
 	year: number;
 	released: string;
@@ -80,9 +79,9 @@ type MMovie = {
 	tmdbid: number;
 	type: string;
 	ratings: MRating[];
-	streams: MStream[]; // Replace with the appropriate type if you know the structure
+	streams: MStream[];
 	watch_providers: MWatchProvider[];
-	reviews: MReview[]; // Replace with the appropriate type if you know the structure
+	reviews: MReview[];
 	keywords: MKeyword[];
 	language: string;
 	spoken_language: string;
@@ -98,7 +97,7 @@ type MMovie = {
 	apiused: number;
 };
 
-type MShow = {
+export type MShow = {
 	title: string;
 	year: number;
 	released: string;
@@ -112,8 +111,8 @@ type MShow = {
 	type: string;
 	ratings: MRating[];
 	streams: MStream[];
-	watch_providers: MWatchProvider[]; // Replace with the appropriate type if you know the structure
-	reviews: MReview[]; // Replace with the appropriate type if you know the structure
+	watch_providers: MWatchProvider[];
+	reviews: MReview[];
 	keywords: MKeyword[];
 	language: string;
 	spoken_language: string;
@@ -131,7 +130,7 @@ type MShow = {
 	seasons: MSeason[];
 };
 
-type MSearchResult = {
+export type MSearchResult = {
 	id: string;
 	title: string;
 	year: number;
@@ -143,49 +142,8 @@ type MSearchResult = {
 	traktid: number;
 };
 
-type MSearchResponse = {
+export type MSearchResponse = {
 	search: MSearchResult[];
 	total: number;
 	response: boolean;
 };
-
-class MdbList {
-	private mdblistKey: string;
-
-	constructor() {
-		this.mdblistKey = process.env.MDBLIST_KEY || 'demo';
-	}
-
-	async search(keyword: string): Promise<MSearchResponse> {
-		return (await axios.get(`https://mdblist.com/api/?apikey=${this.mdblistKey}&s=${keyword}`))
-			.data;
-	}
-
-	async getInfo(imdbId: string): Promise<MMovie | MShow> {
-		return (await axios.get(`https://mdblist.com/api/?apikey=${this.mdblistKey}&i=${imdbId}`))
-			.data;
-	}
-
-	async searchLists(term: string): Promise<MList[]> {
-		return (
-			await axios.get(
-				`https://mdblist.com/api/lists/search?apikey=${this.mdblistKey}&s=${term}`
-			)
-		).data;
-	}
-
-	async listItems(listId: number): Promise<MListItem[]> {
-		return (
-			await axios.get(
-				`https://mdblist.com/api/lists/${listId}/items?apikey=${this.mdblistKey}`
-			)
-		).data;
-	}
-
-	async topLists(): Promise<MList[]> {
-		return (await axios.get(`https://mdblist.com/api/lists/top?apikey=${this.mdblistKey}`))
-			.data;
-	}
-}
-
-export default MdbList;

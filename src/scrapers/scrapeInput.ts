@@ -1,10 +1,6 @@
-import axios from 'axios';
+import { getMdblistClient } from '@/services/mdblistClient';
 
-const apiKey = process.env.MDBLIST_KEY || 'demo';
-const searchListsUrl = (term: string) =>
-	`https://mdblist.com/api/lists/search?s=${term}&apikey=${apiKey}`;
-const listItemsUrl = (listId: string) =>
-	`https://mdblist.com/api/lists/${listId}/items?apikey=${apiKey}`;
+const mdblistClient = getMdblistClient();
 
 export class ScrapeInput {
 	constructor() {}
@@ -12,8 +8,7 @@ export class ScrapeInput {
 	async *byListId(listId: string): AsyncIterableIterator<string> {
 		while (true) {
 			try {
-				const listItemsResponse = await axios.get(listItemsUrl(listId));
-				const listItems = listItemsResponse.data;
+				const listItems = await mdblistClient.getListItems(listId);
 				for (const listItem of listItems) {
 					if (listItem.imdb_id) {
 						console.log(
@@ -34,8 +29,7 @@ export class ScrapeInput {
 	async *byLists(searchTerm: string): AsyncIterableIterator<string> {
 		while (true) {
 			try {
-				const searchListResp = await axios.get(searchListsUrl(searchTerm));
-				const lists = searchListResp.data;
+				const lists = await mdblistClient.searchLists(searchTerm);
 				for (let i = 0; i < lists.length; i++) {
 					const list = lists[i];
 					console.log(`(${searchTerm}:${i}/${lists.length}) ${list.slug}`, list);
