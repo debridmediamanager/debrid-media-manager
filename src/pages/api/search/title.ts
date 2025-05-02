@@ -130,14 +130,13 @@ async function searchMdbApi(
 ): Promise<SearchResult[]> {
 	const mdblistClient = getMdblistClient();
 	const searchResponse = await mdblistClient.search(encodeURIComponent(keyword), year, mediaType);
-	if (searchResponse.error || !searchResponse.response) {
+	if (!searchResponse.response) {
 		return [];
 	}
 	// console.log('mdb search response', searchResponse);
-	const results: SearchResult[] = [...searchResponse.search].filter(
-		(r: SearchResult) =>
-			r.imdbid?.startsWith('tt') && r.year > 1888 && r.year <= currentYear && r.score > 0
-	);
+	const results = [...searchResponse.search].filter(
+		(r) => r.imdbid?.startsWith('tt') && r.year > 1888 && r.year <= currentYear && r.score > 0
+	) as any[];
 	// console.log('mdb results', results.map(r => `${r.title} ${r.year} =>> ${processSearchTitle(r.title, articleRegex.test(keyword))}`));
 	return results.map((r: SearchResult) => ({
 		...r,

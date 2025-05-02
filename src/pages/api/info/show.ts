@@ -1,3 +1,4 @@
+import { MRating, MShow } from '@/services/mdblist';
 import { getMdblistClient } from '@/services/mdblistClient';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -44,13 +45,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		);
 		const cineSeasonCount = uniqueSeasons.length > 0 ? Math.max(...uniqueSeasons) : 1;
 
-		let mdbSeasons =
-			mdbResponse.seasons?.filter((season: any) => season.season_number > 0) || [];
+		// Check if mdbResponse is MShow type by checking if it has seasons property
+		const isShowType = (response: any): response is MShow => {
+			return 'seasons' in response;
+		};
+
+		const mdbSeasons = isShowType(mdbResponse)
+			? mdbResponse.seasons.filter((season) => season.season_number > 0)
+			: [];
+
 		const mdbSeasonCount =
 			mdbSeasons.length > 0
-				? Math.max(...mdbSeasons.map((season: any) => season.season_number))
+				? Math.max(...mdbSeasons.map((season) => season.season_number))
 				: 1;
-		season_names = mdbSeasons.map((season: any) => season.name);
+		season_names = mdbSeasons.map((season) => season.name);
 
 		if (cineSeasonCount > mdbSeasonCount) {
 			season_count = cineSeasonCount;
@@ -68,12 +76,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		imdb_score =
 			cinemetaResponse.data.meta?.imdbRating ??
-			mdbResponse.ratings?.reduce((acc: number | undefined, rating: any) => {
+			mdbResponse.ratings?.reduce((acc: number | undefined, rating: MRating) => {
 				if (rating.source === 'imdb') {
 					return rating.score as number;
 				}
 				return acc;
-			}, null);
+			}, undefined);
 
 		const title = mdbResponse?.title ?? cinemetaResponse?.data?.meta?.name ?? 'Unknown';
 
@@ -89,8 +97,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		});
 
 		// Merge with mdb data if available
-		if (mdbResponse.seasons) {
-			mdbResponse.seasons.forEach((season: any) => {
+		if (isShowType(mdbResponse) && mdbResponse.seasons) {
+			mdbResponse.seasons.forEach((season) => {
 				if (season.episode_count && season.season_number) {
 					// Use the larger count between the two sources
 					season_episode_counts[season.season_number] = Math.max(

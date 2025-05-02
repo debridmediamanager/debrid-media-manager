@@ -47,7 +47,7 @@ export async function cleanByImdbId(imdbId: string) {
 	if (isMovie) {
 		try {
 			const tmdbId = mdbInfo.tmdbid ?? tmdbSearch.data.movie_results[0]?.id;
-			const tmdbInfo = await axios.get(getTmdbMovieInfo(tmdbId));
+			const tmdbInfo = await axios.get(getTmdbMovieInfo(String(tmdbId)));
 			await cleanMovieScrapes(imdbId, tmdbInfo.data, mdbInfo, db);
 			return;
 		} catch (error: any) {
