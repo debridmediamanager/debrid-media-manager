@@ -170,9 +170,9 @@ function IndexPage() {
 							{elfHostedExpanded && (
 								<div className="mt-2 rounded-md bg-blue-800/50 p-2 text-left">
 									Self-hosting too much of a struggle? Skip the pain and just reap
-									the gain with ElfHosted's turn-key streaming stacks, including
-									Zurg, Plex / Jellyfin / Emby, Seerrbridge, Radarr/Sonarr, Riven,
-									cli_debrid, and friends! If you sign up as{' '}
+									the gain with ElfHosted&apos;s turn-key streaming stacks,
+									including Zurg, Plex / Jellyfin / Emby, Seerrbridge,
+									Radarr/Sonarr, Riven, cli_debrid, and friends! If you sign up as{' '}
 									<a
 										href="https://store.elfhosted.com/affiliate/"
 										className="text-blue-300 underline hover:text-blue-200"
@@ -180,7 +180,8 @@ function IndexPage() {
 									>
 										an affiliate
 									</a>
-									, you'll get a referral code for some affiliate commissions too
+									, you&apos;ll get a referral code for some affiliate commissions
+									too
 								</div>
 							)}
 						</div>
