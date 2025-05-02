@@ -58,29 +58,6 @@ export function InfoSection() {
 				<div className="mb-1 text-center text-sm">
 					✨
 					<a
-						className="text-blue-300 underline hover:text-blue-200"
-						href=" https://apps.apple.com/app/apple-store/id1659622164?pt=122790787&mt=8&ct=debridmediamanager"
-						target="_blank"
-					>
-						<b>VidHub</b>
-					</a>{' '}
-					is a new media player that works with debrid services. Android is coming soon!
-				</div>
-				<div className="mb-1 text-center text-sm">
-					✨
-					<a
-						className="text-blue-300 underline hover:text-blue-200"
-						href="https://elfhosted.com/guides/media/"
-						target="_blank"
-					>
-						<b>ElfHosted</b>
-					</a>{' '}
-					offers hosted, turn-key streaming stacks including zurg, Plex & Riven, with
-					7-day free trials
-				</div>
-				<div className="mb-1 text-center text-sm">
-					✨
-					<a
 						className="text-azure bg-red-500 px-1 text-red-100"
 						href="https://www.reddit.com/r/debridmediamanager/"
 						target="_blank"
