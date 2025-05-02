@@ -33,24 +33,11 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 		});
 
 		useEffect(() => {
-			console.log('[withAuth]', {
-				rdKey,
-				rdLoading,
-				rdIsRefreshing,
-				hasRefreshCredentials,
-				pathname: router.pathname,
-				adKey: !!adKey,
-				tbKey: !!tbKey,
-			});
-
 			// Don't redirect if token is refreshing
 			if (rdIsRefreshing) {
-				console.log('[withAuth] Token is refreshing, skipping redirect check');
 				return;
 			}
 
-			// If we have refreshing credentials but no key yet, we're probably in the process
-			// of refreshing the token, so don't redirect
 			if (
 				!rdKey &&
 				!adKey &&
@@ -60,14 +47,12 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 				!rdLoading &&
 				!hasRefreshCredentials
 			) {
-				console.log('[withAuth] No auth, redirecting to start page');
 				// Store full URL including query parameters
 				localStorage.setItem(RETURN_URL_KEY, router.asPath);
 				router.push(START_ROUTE);
 			} else {
 				const returnUrl = localStorage.getItem(RETURN_URL_KEY);
 				if (returnUrl && returnUrl !== START_ROUTE && !returnUrl.endsWith(LOGIN_ROUTE)) {
-					console.log('[withAuth] Auth verified, redirecting to return URL:', returnUrl);
 					localStorage.removeItem(RETURN_URL_KEY);
 					router.push(returnUrl);
 				}
