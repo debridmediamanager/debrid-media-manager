@@ -37,6 +37,7 @@ function IndexPage() {
 	} = useCurrentUser();
 	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
 	const [browseTerms] = useState(getTerms(2));
+	const [elfHostedExpanded, setElfHostedExpanded] = useState(false);
 
 	useCastToken();
 
@@ -148,16 +149,41 @@ function IndexPage() {
 
 					{/* ElfHosted Promo Banner */}
 					<div className="mb-4 w-full max-w-md rounded-md border border-blue-500 bg-blue-900/30 p-2 text-center text-sm shadow-md">
-						<span className="text-yellow-300">✨ Our Sponsor</span>{' '}
-						<a
-							className="font-medium text-blue-300 underline hover:text-blue-200"
-							href="https://elfhosted.com/guides/media/"
-							target="_blank"
-						>
-							<b>ElfHosted</b>
-						</a>{' '}
-						offers hosted, turn-key streaming stacks including zurg, Plex & Riven, with
-						<span className="ml-1 font-bold text-green-300">7-day free trials</span>
+						<div className="relative">
+							<div
+								className="cursor-pointer"
+								onClick={() => setElfHostedExpanded(!elfHostedExpanded)}
+							>
+								<span className="text-yellow-300">✨ Our Sponsor</span>{' '}
+								<a
+									className="font-medium text-blue-300 underline hover:text-blue-200"
+									href="https://store.elfhosted.com/affiliate/"
+									target="_blank"
+									onClick={(e) => e.stopPropagation()}
+								>
+									<b>ElfHosted</b>
+								</a>
+								<span className="ml-1 text-xs text-green-300">
+									[See hosting options ↓]
+								</span>
+							</div>
+							{elfHostedExpanded && (
+								<div className="mt-2 rounded-md bg-blue-800/50 p-2 text-left">
+									Self-hosting too much of a struggle? Skip the pain and just reap
+									the gain with ElfHosted's turn-key streaming stacks, including
+									Zurg, Plex / Jellyfin / Emby, Seerrbridge, Radarr/Sonarr, Riven,
+									cli_debrid, and friends! If you sign up as{' '}
+									<a
+										href="https://store.elfhosted.com/affiliate/"
+										className="text-blue-300 underline hover:text-blue-200"
+										target="_blank"
+									>
+										an affiliate
+									</a>
+									, you'll get a referral code for some affiliate commissions too
+								</div>
+							)}
+						</div>
 					</div>
 
 					<div className="flex w-full max-w-md flex-col items-center gap-6">
