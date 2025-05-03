@@ -16,6 +16,10 @@ import {
 
 const { publicRuntimeConfig: config } = getConfig();
 
+// Constants for timeout and retry
+const REQUEST_TIMEOUT = 5000; // 5 seconds timeout
+const MIN_REQUEST_INTERVAL = (60 * 1000) / 250; // 240ms between requests
+
 // Function to replace #num# with random number 0-9
 function getProxyUrl(baseUrl: string): string {
 	return baseUrl.replace('#num#', Math.floor(Math.random() * 10).toString());
@@ -27,10 +31,196 @@ function isValidSHA40Hash(hash: string): boolean {
 	return hashRegex.test(hash);
 }
 
+// Function to create an Axios client with a given token
+function createAxiosClient(token: string): AxiosInstance {
+	const client = axios.create({
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+		timeout: REQUEST_TIMEOUT, // Apply timeout to all requests
+	});
+
+	// Rate limiting configuration
+	let lastRequestTime = 0;
+
+	// Add request interceptor for rate limiting
+	client.interceptors.request.use(async (config) => {
+		const now = Date.now();
+		const timeSinceLastRequest = now - lastRequestTime;
+		if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
+			await new Promise((resolve) =>
+				setTimeout(resolve, MIN_REQUEST_INTERVAL - timeSinceLastRequest)
+			);
+		}
+		lastRequestTime = Date.now();
+		return config;
+	});
+
+	// Add response interceptor for handling all retries (including timeouts and 429 errors)
+	client.interceptors.response.use(
+		(response) => response,
+		async (error) => {
+			let retryCount = 0;
+			const originalConfig = error.config;
+
+			// If config doesn't exist or the retry option is not set, reject
+			if (!originalConfig || originalConfig.__isRetryRequest) {
+				return Promise.reject(error);
+			}
+
+			// Set flag to avoid infinite retry loops
+			originalConfig.__isRetryRequest = true;
+
+			// Determine if we should retry
+			const shouldRetry = () => {
+				// Network error codes that should trigger retry
+				const retryableNetworkErrors = [
+					'ECONNABORTED', // axios timeout
+					'ECONNRESET', // connection reset by peer
+					'ECONNREFUSED', // connection refused
+					'ENETUNREACH', // network unreachable
+					'EHOSTUNREACH', // host unreachable
+					'EAI_AGAIN', // temporary failure in name resolution
+				];
+
+				// Retry on specific error codes
+				const isRetryableNetworkError = retryableNetworkErrors.includes(error.code);
+
+				// Retry on timeout errors (in case error.code isn't set but message indicates timeout)
+				const isTimeout =
+					!isRetryableNetworkError && error.message && error.message.includes('timeout');
+
+				// Retry on 429 rate limit errors
+				const isRateLimit = error.response?.status === 429;
+
+				// Retry on network errors without specific code
+				const isGenericNetworkError = !error.response && !isRetryableNetworkError;
+
+				// Retry on specific 5xx server errors
+				const isServerError = error.response?.status >= 500 && error.response?.status < 600;
+
+				return (
+					isRetryableNetworkError ||
+					isTimeout ||
+					isRateLimit ||
+					isGenericNetworkError ||
+					isServerError
+				);
+			};
+
+			// Retry logic - will retry indefinitely
+			while (shouldRetry()) {
+				retryCount++;
+
+				// For 429 errors, use exponential backoff
+				let delay = 1000; // Default 1 second delay
+				if (error.response?.status === 429) {
+					delay = Math.min(Math.pow(2, retryCount) * 1000, 30000); // Exponential backoff: max 30s
+				}
+
+				console.log(
+					`Request failed (${error.message}). Retrying (attempt #${retryCount}) after ${delay}ms delay...`
+				);
+
+				await new Promise((resolve) => setTimeout(resolve, delay));
+
+				try {
+					return await client.request(originalConfig);
+				} catch (retryError) {
+					error = retryError;
+				}
+			}
+
+			return Promise.reject(error);
+		}
+	);
+
+	return client;
+}
+
+// Create a generic axios instance for non-authenticated requests
+const genericAxios = axios.create({
+	timeout: REQUEST_TIMEOUT,
+});
+
+// Apply same retry logic to the generic axios instance
+genericAxios.interceptors.response.use(
+	(response) => response,
+	async (error) => {
+		let retryCount = 0;
+		const originalConfig = error.config;
+
+		if (!originalConfig || originalConfig.__isRetryRequest) {
+			return Promise.reject(error);
+		}
+
+		originalConfig.__isRetryRequest = true;
+
+		const shouldRetry = () => {
+			// Network error codes that should trigger retry
+			const retryableNetworkErrors = [
+				'ECONNABORTED', // axios timeout
+				'ECONNRESET', // connection reset by peer
+				'ECONNREFUSED', // connection refused
+				'ENETUNREACH', // network unreachable
+				'EHOSTUNREACH', // host unreachable
+				'EAI_AGAIN', // temporary failure in name resolution
+			];
+
+			// Retry on specific error codes
+			const isRetryableNetworkError = retryableNetworkErrors.includes(error.code);
+
+			// Retry on timeout errors (in case error.code isn't set but message indicates timeout)
+			const isTimeout =
+				!isRetryableNetworkError && error.message && error.message.includes('timeout');
+
+			// Retry on 429 rate limit errors
+			const isRateLimit = error.response?.status === 429;
+
+			// Retry on network errors without specific code
+			const isGenericNetworkError = !error.response && !isRetryableNetworkError;
+
+			// Retry on specific 5xx server errors
+			const isServerError = error.response?.status >= 500 && error.response?.status < 600;
+
+			return (
+				isRetryableNetworkError ||
+				isTimeout ||
+				isRateLimit ||
+				isGenericNetworkError ||
+				isServerError
+			);
+		};
+
+		while (shouldRetry()) {
+			retryCount++;
+
+			let delay = 1000;
+			if (error.response?.status === 429) {
+				delay = Math.min(Math.pow(2, retryCount) * 1000, 30000);
+			}
+
+			console.log(
+				`Request failed (${error.message}). Retrying (attempt #${retryCount}) after ${delay}ms delay...`
+			);
+
+			await new Promise((resolve) => setTimeout(resolve, delay));
+
+			try {
+				return await genericAxios.request(originalConfig);
+			} catch (retryError) {
+				error = retryError;
+			}
+		}
+
+		return Promise.reject(error);
+	}
+);
+
 export const getDeviceCode = async () => {
 	try {
 		const url = `${getProxyUrl(config.proxy)}${config.realDebridHostname}/oauth/v2/device/code?client_id=${config.realDebridClientId}&new_credentials=yes`;
-		const response = await axios.get<DeviceCodeResponse>(url);
+		const response = await genericAxios.get<DeviceCodeResponse>(url);
 		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching device code:', error.message);
@@ -41,7 +231,7 @@ export const getDeviceCode = async () => {
 export const getCredentials = async (deviceCode: string) => {
 	try {
 		const url = `${getProxyUrl(config.proxy)}${config.realDebridHostname}/oauth/v2/device/credentials?client_id=${config.realDebridClientId}&code=${deviceCode}`;
-		const response = await axios.get<CredentialsResponse>(url);
+		const response = await genericAxios.get<CredentialsResponse>(url);
 		return response.data;
 	} catch (error: any) {
 		console.error('Error fetching credentials:', error.message);
@@ -62,7 +252,7 @@ export const getToken = async (
 		params.append('code', refreshToken);
 		params.append('grant_type', 'http://oauth.net/grant_type/device/1.0');
 
-		const response = await axios.post<AccessTokenResponse>(
+		const response = await genericAxios.post<AccessTokenResponse>(
 			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/oauth/v2/token`,
 			params.toString(),
 			{
@@ -304,7 +494,7 @@ export const proxyUnrestrictLink = async (
 			Authorization: `Bearer ${accessToken}`,
 		};
 
-		const response = await axios.post<UnrestrictResponse>(
+		const response = await genericAxios.post<UnrestrictResponse>(
 			`https://unrestrict.debridmediamanager.com/`,
 			body,
 			{ headers }
@@ -319,7 +509,7 @@ export const proxyUnrestrictLink = async (
 
 export const getTimeISO = async (): Promise<string> => {
 	try {
-		const response = await axios.get<string>(
+		const response = await genericAxios.get<string>(
 			`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/time/iso`
 		);
 		return response.data;
@@ -328,54 +518,3 @@ export const getTimeISO = async (): Promise<string> => {
 		throw error;
 	}
 };
-
-const MIN_REQUEST_INTERVAL = (60 * 1000) / 250; // 240ms between requests
-
-// Function to create an Axios client with a given token
-function createAxiosClient(token: string): AxiosInstance {
-	const client = axios.create({
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
-
-	// Rate limiting configuration
-	let lastRequestTime = 0;
-
-	// Add request interceptor for rate limiting
-	client.interceptors.request.use(async (config) => {
-		const now = Date.now();
-		const timeSinceLastRequest = now - lastRequestTime;
-		if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
-			await new Promise((resolve) =>
-				setTimeout(resolve, MIN_REQUEST_INTERVAL - timeSinceLastRequest)
-			);
-		}
-		lastRequestTime = Date.now();
-		return config;
-	});
-
-	// Add response interceptor for handling 429 errors
-	client.interceptors.response.use(
-		(response) => response,
-		async (error) => {
-			const maxRetries = 10;
-			let retryCount = 0;
-
-			while (error.response?.status === 429 && retryCount < maxRetries) {
-				retryCount++;
-				const delay = Math.min(Math.pow(2, retryCount) * 1000, 30000); // Exponential backoff: 2s, 4s, 8s, ... max 30s
-				await new Promise((resolve) => setTimeout(resolve, delay));
-				try {
-					return await client.request(error.config);
-				} catch (retryError) {
-					error = retryError;
-				}
-			}
-
-			throw error;
-		}
-	);
-
-	return client;
-}
