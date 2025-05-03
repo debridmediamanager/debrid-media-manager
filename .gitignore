@@ -53,9 +53,13 @@ src/tgx/*.json
 src/hdt/*.json
 src/json-to-import
 
-public/sw.js
-public/workbox-*.js
-public/sw.js.map
-public/workbox-*.js.map
 .aider*
 .env
+
+# PWA files
+public/service-worker.js
+public/workbox-*.js
+public/worker-*.js
+public/sw.js
+public/sw.js.map
+public/workbox-*.js.map
