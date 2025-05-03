@@ -17,7 +17,8 @@ import {
 const { publicRuntimeConfig: config } = getConfig();
 
 // Constants for timeout and retry
-const REQUEST_TIMEOUT = 5000; // 5 seconds timeout
+const REQUEST_TIMEOUT = 5000;
+const TORRENT_REQUEST_TIMEOUT = 15000;
 const MIN_REQUEST_INTERVAL = (60 * 1000) / 250; // 240ms between requests
 
 // Function to replace #num# with random number 0-9
@@ -32,12 +33,12 @@ function isValidSHA40Hash(hash: string): boolean {
 }
 
 // Function to create an Axios client with a given token
-function createAxiosClient(token: string): AxiosInstance {
+function createAxiosClient(token: string, timeout: number = REQUEST_TIMEOUT): AxiosInstance {
 	const client = axios.create({
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
-		timeout: REQUEST_TIMEOUT, // Apply timeout to all requests
+		timeout: timeout, // Use the provided timeout value
 	});
 
 	// Rate limiting configuration
@@ -142,6 +143,17 @@ function createAxiosClient(token: string): AxiosInstance {
 const genericAxios = axios.create({
 	timeout: REQUEST_TIMEOUT,
 });
+
+// Function to get a configured generic axios instance with custom timeout
+function getGenericAxios(timeout: number = REQUEST_TIMEOUT) {
+	if (timeout === REQUEST_TIMEOUT) {
+		return genericAxios;
+	}
+
+	return axios.create({
+		timeout: timeout,
+	});
+}
 
 // Apply same retry logic to the generic axios instance
 genericAxios.interceptors.response.use(
@@ -288,7 +300,7 @@ export async function getUserTorrentsList(
 	bare: boolean = false
 ): Promise<UserTorrentsResult> {
 	try {
-		const client = await createAxiosClient(accessToken);
+		const client = await createAxiosClient(accessToken, TORRENT_REQUEST_TIMEOUT);
 		const response = await client.get<UserTorrentResponse[]>(
 			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents`,
 			{
