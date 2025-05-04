@@ -38,6 +38,7 @@ function IndexPage() {
 	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
 	const [browseTerms] = useState(getTerms(2));
 	const [elfHostedExpanded, setElfHostedExpanded] = useState(false);
+	const [showElfHostedBanner, setShowElfHostedBanner] = useState(true);
 
 	useCastToken();
 
@@ -103,6 +104,14 @@ function IndexPage() {
 		}
 	}, [rdUser, router]);
 
+	// Check if ElfHosted banner should be hidden
+	useEffect(() => {
+		const hideElfHostedBanner = localStorage.getItem('hideElfHostedBanner');
+		if (hideElfHostedBanner === 'true') {
+			setShowElfHostedBanner(false);
+		}
+	}, []);
+
 	const loginWithTrakt = async () => {
 		const authUrl = `/api/trakt/auth?redirect=${window.location.origin}`;
 		router.push(authUrl);
@@ -116,6 +125,11 @@ function IndexPage() {
 	const handleClearLocalStorage = () => {
 		localStorage.clear();
 		window.location.reload();
+	};
+
+	const handleHideElfHostedBanner = () => {
+		localStorage.setItem('hideElfHostedBanner', 'true');
+		setShowElfHostedBanner(false);
 	};
 
 	return (
@@ -147,26 +161,35 @@ function IndexPage() {
 						<SearchBar />
 					</div>
 
-					{/* ElfHosted Promo Banner */}
-					<div className="mb-4 w-full max-w-md rounded-md border border-blue-500 bg-blue-900/30 p-2 text-center text-sm shadow-md">
-						<div className="relative">
-							<div>
-								<span className="text-yellow-300">✨ Our Sponsor</span>{' '}
-								<a
-									className="font-medium text-blue-300 underline hover:text-blue-200"
-									href="https://store.elfhosted.com/product-category/streaming-bundles/"
-									target="_blank"
+					{/* ElfHosted Promo Banner - Compact Version */}
+					{showElfHostedBanner && (
+						<div className="mb-2 w-full max-w-md rounded-md border border-blue-500 bg-blue-900/30 p-1.5 text-xs shadow-sm">
+							<div className="flex justify-between">
+								<div className="flex-1">
+									<span className="text-yellow-300">✨ Sponsor:</span>{' '}
+									<a
+										className="font-medium text-blue-300 underline hover:text-blue-200"
+										href="https://store.elfhosted.com/product-category/streaming-bundles/"
+										target="_blank"
+									>
+										<b>ElfHosted</b>
+									</a>{' '}
+									- Self-hosting too stressful? Try ElfHosted's turn-key streaming
+									stack including Zurg, Plex, Seerrbridge, Radarr/Sonarr & more!{' '}
+									<span className="whitespace-nowrap">
+										7-day trial available.
+									</span>
+								</div>
+								<button
+									onClick={handleHideElfHostedBanner}
+									className="ml-1 text-gray-400 hover:text-gray-200"
+									title="Hide banner"
 								>
-									<b>ElfHosted</b>
-								</a>
-							</div>
-							<div className="mt-2 rounded-md bg-blue-800/50 p-2 text-left">
-								Self-hosting too stressful? Grab a 7-day trial of an ElfHosted
-								turn-key streaming stack, including Zurg, Plex / Jellyfin / Emby,
-								Seerrbridge, Radarr/Sonarr, Riven, cli_debrid, and friends!
+									✕
+								</button>
 							</div>
 						</div>
-					</div>
+					)}
 
 					<div className="flex w-full max-w-md flex-col items-center gap-6">
 						<MainActions rdUser={rdUser} isLoading={isLoading} />
