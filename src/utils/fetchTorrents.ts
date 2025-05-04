@@ -5,11 +5,61 @@ import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import { every, some } from 'lodash';
 import toast from 'react-hot-toast';
-import { runConcurrentFunctions } from './batch';
 import { getMediaId } from './mediaId';
 import { getTypeByNameAndFileCount } from './mediaType';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
 import { genericToastOptions } from './toastOptions';
+
+// Custom queue implementation for controlled concurrency
+class RequestQueue {
+	private queue: (() => Promise<any>)[] = [];
+	private running = 0;
+	private maxConcurrent: number;
+	private results: any[] = [];
+	private errors: any[] = [];
+
+	constructor(maxConcurrent: number) {
+		this.maxConcurrent = maxConcurrent;
+	}
+
+	add(fn: () => Promise<any>) {
+		this.queue.push(fn);
+		this.tryExecuteNext();
+		return this;
+	}
+
+	private async tryExecuteNext() {
+		if (this.running >= this.maxConcurrent || this.queue.length === 0) {
+			return;
+		}
+
+		this.running++;
+		const task = this.queue.shift()!;
+
+		try {
+			const result = await task();
+			this.results.push(result);
+		} catch (error) {
+			this.errors.push(error);
+			console.error('Task error:', error);
+		} finally {
+			this.running--;
+			this.tryExecuteNext();
+		}
+	}
+
+	async waitForCompletion() {
+		// Keep checking until queue is empty and no tasks are running
+		while (this.queue.length > 0 || this.running > 0) {
+			await new Promise((resolve) => setTimeout(resolve, 100));
+		}
+
+		return {
+			results: this.results,
+			errors: this.errors,
+		};
+	}
+}
 
 export const fetchRealDebrid = async (
 	rdKey: string,
@@ -36,19 +86,20 @@ export const fetchRealDebrid = async (
 			return;
 		}
 
-		// Step 3: Send requests in parallel to fetch the other items. Limit count should be 1000
+		// Step 3: Send requests in parallel with exactly 4 concurrent requests
 		const limit = 1000;
 		const maxPages = Math.ceil((totalCount ?? 1) / limit);
-		const funcs = [];
+
+		// Use the custom RequestQueue to maintain exactly 4 requests at all times
+		const requestQueue = new RequestQueue(4);
 
 		for (let page = 1; page <= maxPages; page++) {
-			funcs.push(() => getUserTorrentsList(rdKey, limit, page));
+			requestQueue.add(() => getUserTorrentsList(rdKey, limit, page));
 		}
 
-		// Adjust concurrent requests to stay within rate limit
-		// 75 requests per minute = 1.25 requests per second
-		// Using 1 request per second to be safe
-		const [pagesOfTorrents, errors] = await runConcurrentFunctions(funcs, 3, 0);
+		// Wait for all requests to complete
+		const { results: pagesOfTorrents, errors } = await requestQueue.waitForCompletion();
+
 		if (errors.length > 0) {
 			console.error('Some requests failed:', errors);
 		}
@@ -105,84 +156,128 @@ async function processTorrents(torrentData: UserTorrentResponse[]): Promise<User
 
 export const fetchAllDebrid = async (
 	adKey: string,
-	callback: (torrents: UserTorrent[]) => Promise<void>
+	callback: (torrents: UserTorrent[]) => Promise<void>,
+	customLimit?: number
 ) => {
 	try {
-		const magnets = (await getMagnetStatus(adKey)).data.magnets.map((magnetInfo) => {
-			if (magnetInfo.filename === magnetInfo.hash) {
-				magnetInfo.filename = 'Magnet';
-			}
-			let mediaType = 'other';
-			let info = undefined;
+		// Step 1: Get all magnets from AllDebrid
+		const response = await getMagnetStatus(adKey);
+		const magnetInfos = response.data.magnets;
 
-			const filenames = magnetInfo.links.map((f) => f.filename);
-			const torrentAndFiles = [magnetInfo.filename, ...filenames];
-			const hasEpisodes = checkArithmeticSequenceInFilenames(filenames);
+		if (!magnetInfos.length) {
+			await callback([]);
+			return;
+		}
 
-			if (every(torrentAndFiles, (f) => !isVideo({ path: f }))) {
-				mediaType = 'other';
-				info = undefined;
-			} else if (
-				hasEpisodes ||
-				some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
-				some(torrentAndFiles, (f) => /season.?\d+/i.test(f)) ||
-				some(torrentAndFiles, (f) => /episodes?\s?\d+/i.test(f)) ||
-				some(torrentAndFiles, (f) => /\b[a-fA-F0-9]{8}\b/.test(f))
-			) {
-				mediaType = 'tv';
-				info = filenameParse(magnetInfo.filename, true);
-			} else if (
-				!hasEpisodes &&
-				every(torrentAndFiles, (f) => !/s\d\d\d?.?e\d\d\d?/i.test(f)) &&
-				every(torrentAndFiles, (f) => !/season.?\d+/i.test(f)) &&
-				every(torrentAndFiles, (f) => !/episodes?\s?\d+/i.test(f)) &&
-				every(torrentAndFiles, (f) => !/\b[a-fA-F0-9]{8}\b/.test(f))
-			) {
-				mediaType = 'movie';
-				info = filenameParse(magnetInfo.filename);
-			}
+		// Step 2: If limit input is set, apply it
+		const limitedMagnets = customLimit ? magnetInfos.slice(0, customLimit) : magnetInfos;
 
-			const date = new Date(magnetInfo.uploadDate * 1000);
-
-			const serviceStatus = `${magnetInfo.statusCode}`;
-			const [status, progress] = getAdStatus(magnetInfo);
-			if (magnetInfo.size === 0) magnetInfo.size = 1;
-			let idx = 0;
-			return {
-				// score: getReleaseTags(magnetInfo.filename, magnetInfo.size / ONE_GIGABYTE).score,
-				info,
-				mediaType,
-				title:
-					info && (mediaType === 'movie' || mediaType == 'tv')
-						? getMediaId(info, mediaType, false)
-						: magnetInfo.filename,
-				id: `ad:${magnetInfo.id}`,
-				filename: magnetInfo.filename,
-				hash: magnetInfo.hash,
-				bytes: magnetInfo.size,
-				seeders: magnetInfo.seeders,
-				progress,
-				status,
-				serviceStatus,
-				added: date,
-				speed: magnetInfo.downloadSpeed || 0,
-				links: magnetInfo.links.map((l) => l.link),
-				adData: magnetInfo,
-				selectedFiles: magnetInfo.links.map((l) => ({
-					fileId: idx++,
-					filename: l.filename,
-					filesize: l.size,
-					link: l.link,
-				})),
-			};
-		}) as UserTorrent[];
-		await callback(magnets);
+		// Step 3: Process the magnets
+		const torrents = await processAllDebridTorrents(limitedMagnets);
+		await callback(torrents);
 	} catch (error) {
 		await callback([]);
 		toast.error('Error fetching AllDebrid torrents list', genericToastOptions);
 		console.error(error);
 	}
 };
+
+export function convertToAllDebridUserTorrent(magnetInfo: MagnetStatus): UserTorrent {
+	// Normalize filename if it's just a hash
+	if (magnetInfo.filename === magnetInfo.hash) {
+		magnetInfo.filename = 'Magnet';
+	}
+
+	// Determine media type
+	let mediaType = getTypeByNameAndFileCount(magnetInfo.filename);
+
+	// Get filenames for additional type detection
+	const filenames = magnetInfo.links.map((f) => f.filename);
+	const torrentAndFiles = [magnetInfo.filename, ...filenames];
+	const hasEpisodes = checkArithmeticSequenceInFilenames(filenames);
+
+	// Refine media type detection
+	if (every(torrentAndFiles, (f) => !isVideo({ path: f }))) {
+		// Default to movie if we can't determine the type but need a valid value
+		mediaType = 'movie';
+	} else if (
+		hasEpisodes ||
+		some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
+		some(torrentAndFiles, (f) => /season.?\d+/i.test(f)) ||
+		some(torrentAndFiles, (f) => /episodes?\s?\d+/i.test(f)) ||
+		some(torrentAndFiles, (f) => /\b[a-fA-F0-9]{8}\b/.test(f))
+	) {
+		mediaType = 'tv';
+	} else if (
+		!hasEpisodes &&
+		every(torrentAndFiles, (f) => !/s\d\d\d?.?e\d\d\d?/i.test(f)) &&
+		every(torrentAndFiles, (f) => !/season.?\d+/i.test(f)) &&
+		every(torrentAndFiles, (f) => !/episodes?\s?\d+/i.test(f)) &&
+		every(torrentAndFiles, (f) => !/\b[a-fA-F0-9]{8}\b/.test(f))
+	) {
+		mediaType = 'movie';
+	}
+
+	// Parse filename for media info
+	let info = {} as ParsedFilename;
+	try {
+		info =
+			mediaType === 'movie'
+				? filenameParse(magnetInfo.filename)
+				: filenameParse(magnetInfo.filename, true);
+	} catch (error) {
+		// flip the condition if error is thrown
+		mediaType = mediaType === 'movie' ? 'tv' : 'movie';
+		try {
+			info =
+				mediaType === 'movie'
+					? filenameParse(magnetInfo.filename)
+					: filenameParse(magnetInfo.filename, true);
+		} catch {
+			// If both parsing attempts fail, leave info as empty object
+		}
+	}
+
+	const date = new Date(magnetInfo.uploadDate * 1000);
+	const serviceStatus = `${magnetInfo.statusCode}`;
+	// Explicitly type the destructured values
+	const [adStatus, adProgress] = getAdStatus(magnetInfo);
+
+	// Ensure size is not zero to avoid division by zero
+	if (magnetInfo.size === 0) magnetInfo.size = 1;
+
+	// Create selected files array
+	let idx = 0;
+	const selectedFiles = magnetInfo.links.map((l) => ({
+		fileId: idx++,
+		filename: l.filename,
+		filesize: l.size,
+		link: l.link,
+	}));
+
+	return {
+		info,
+		mediaType,
+		title: getMediaId(info, mediaType, false) || magnetInfo.filename,
+		id: `ad:${magnetInfo.id}`,
+		filename: magnetInfo.filename,
+		hash: magnetInfo.hash,
+		bytes: magnetInfo.size,
+		seeders: magnetInfo.seeders,
+		progress: adProgress,
+		status: adStatus,
+		serviceStatus,
+		added: date,
+		speed: magnetInfo.downloadSpeed || 0,
+		links: magnetInfo.links.map((l) => l.link),
+		adData: magnetInfo,
+		selectedFiles,
+	};
+}
+
+async function processAllDebridTorrents(magnetInfos: MagnetStatus[]): Promise<UserTorrent[]> {
+	return Promise.all(magnetInfos.map(convertToAllDebridUserTorrent));
+}
 
 export const getRdStatus = (torrentInfo: UserTorrentResponse): UserTorrentStatus => {
 	let status: UserTorrentStatus;
@@ -279,7 +374,7 @@ export const convertToTbUserTorrent = (info: TorBoxTorrentInfo): UserTorrent => 
 	};
 };
 
-export const getAdStatus = (magnetInfo: MagnetStatus) => {
+export const getAdStatus = (magnetInfo: MagnetStatus): [UserTorrentStatus, number] => {
 	let status: UserTorrentStatus;
 	let progress: number;
 	switch (magnetInfo.statusCode) {

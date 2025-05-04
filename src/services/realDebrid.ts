@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 import qs from 'qs';
 import {
@@ -19,7 +19,18 @@ const { publicRuntimeConfig: config } = getConfig();
 // Constants for timeout and retry
 const REQUEST_TIMEOUT = 5000;
 const TORRENT_REQUEST_TIMEOUT = 15000;
+// Adjust rate limits to be compatible with the service worker cache timing
+// Service worker cache is 5 seconds, so we need to ensure requests are spaced
+// to avoid conflicting with cache invalidation
 const MIN_REQUEST_INTERVAL = (60 * 1000) / 250; // 240ms between requests
+const CACHE_BACKOFF_TIME = 6000; // Slightly longer than the service worker cache (5s)
+
+// Add a cache-aware ID generator to ensure unique cache entries for retries
+// This prevents retry requests from hitting stale cached errors
+let requestCount = 0;
+function getUniqueRequestId() {
+	return `req-${Date.now()}-${requestCount++}`;
+}
 
 // Function to replace #num# with random number 0-9
 function getProxyUrl(baseUrl: string): string {
@@ -30,6 +41,11 @@ function getProxyUrl(baseUrl: string): string {
 function isValidSHA40Hash(hash: string): boolean {
 	const hashRegex = /^[a-f0-9]{40}$/i;
 	return hashRegex.test(hash);
+}
+
+// Extend the Axios request config type to include our custom property
+interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
+	__isRetryRequest?: boolean;
 }
 
 // Function to create an Axios client with a given token
@@ -45,7 +61,7 @@ function createAxiosClient(token: string, timeout: number = REQUEST_TIMEOUT): Ax
 	let lastRequestTime = 0;
 
 	// Add request interceptor for rate limiting
-	client.interceptors.request.use(async (config) => {
+	client.interceptors.request.use(async (config: ExtendedAxiosRequestConfig) => {
 		const now = Date.now();
 		const timeSinceLastRequest = now - lastRequestTime;
 		if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
@@ -53,6 +69,14 @@ function createAxiosClient(token: string, timeout: number = REQUEST_TIMEOUT): Ax
 				setTimeout(resolve, MIN_REQUEST_INTERVAL - timeSinceLastRequest)
 			);
 		}
+
+		// Add cache-busting parameter for retries to prevent hitting cached errors
+		if (config.__isRetryRequest) {
+			// Add a unique ID to the URL to bypass service worker cache for retries
+			const separator = config.url?.includes('?') ? '&' : '?';
+			config.url = `${config.url}${separator}_cache_buster=${getUniqueRequestId()}`;
+		}
+
 		lastRequestTime = Date.now();
 		return config;
 	});
@@ -62,10 +86,10 @@ function createAxiosClient(token: string, timeout: number = REQUEST_TIMEOUT): Ax
 		(response) => response,
 		async (error) => {
 			let retryCount = 0;
-			const originalConfig = error.config;
+			const originalConfig = error.config as ExtendedAxiosRequestConfig;
 
-			// If config doesn't exist or the retry option is not set, reject
-			if (!originalConfig || originalConfig.__isRetryRequest) {
+			// If config doesn't exist or the retry counter exceeds limit, reject
+			if (!originalConfig || retryCount > 5) {
 				return Promise.reject(error);
 			}
 
@@ -109,14 +133,17 @@ function createAxiosClient(token: string, timeout: number = REQUEST_TIMEOUT): Ax
 				);
 			};
 
-			// Retry logic - will retry indefinitely
-			while (shouldRetry()) {
+			// Retry logic with improved awareness of service worker cache
+			while (shouldRetry() && retryCount < 5) {
 				retryCount++;
 
 				// For 429 errors, use exponential backoff
-				let delay = 1000; // Default 1 second delay
+				let delay = CACHE_BACKOFF_TIME; // Default wait longer than cache TTL
 				if (error.response?.status === 429) {
-					delay = Math.min(Math.pow(2, retryCount) * 1000, 30000); // Exponential backoff: max 30s
+					delay = Math.max(
+						CACHE_BACKOFF_TIME,
+						Math.min(Math.pow(2, retryCount) * 1000, 30000)
+					); // Max 30s, min greater than cache TTL
 				}
 
 				console.log(
@@ -160,9 +187,10 @@ genericAxios.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		let retryCount = 0;
-		const originalConfig = error.config;
+		const originalConfig = error.config as ExtendedAxiosRequestConfig;
 
-		if (!originalConfig || originalConfig.__isRetryRequest) {
+		// If config doesn't exist or the retry counter exceeds limit, reject
+		if (!originalConfig || retryCount > 5) {
 			return Promise.reject(error);
 		}
 
@@ -204,12 +232,17 @@ genericAxios.interceptors.response.use(
 			);
 		};
 
-		while (shouldRetry()) {
+		// Retry logic with improved awareness of service worker cache
+		while (shouldRetry() && retryCount < 5) {
 			retryCount++;
 
-			let delay = 1000;
+			// For 429 errors, use exponential backoff
+			let delay = CACHE_BACKOFF_TIME; // Default wait longer than cache TTL
 			if (error.response?.status === 429) {
-				delay = Math.min(Math.pow(2, retryCount) * 1000, 30000);
+				delay = Math.max(
+					CACHE_BACKOFF_TIME,
+					Math.min(Math.pow(2, retryCount) * 1000, 30000)
+				); // Max 30s, min greater than cache TTL
 			}
 
 			console.log(
@@ -219,6 +252,11 @@ genericAxios.interceptors.response.use(
 			await new Promise((resolve) => setTimeout(resolve, delay));
 
 			try {
+				// Add cache-busting parameter for retries
+				if (originalConfig.url) {
+					const separator = originalConfig.url.includes('?') ? '&' : '?';
+					originalConfig.url = `${originalConfig.url}${separator}_cache_buster=${getUniqueRequestId()}`;
+				}
 				return await genericAxios.request(originalConfig);
 			} catch (retryError) {
 				error = retryError;
@@ -301,11 +339,13 @@ export async function getUserTorrentsList(
 ): Promise<UserTorrentsResult> {
 	try {
 		const client = await createAxiosClient(accessToken, TORRENT_REQUEST_TIMEOUT);
+
+		// Add a cache-aware parameter to ensure fresh results for critical requests
+		// This helps avoid conflicts with the service worker cache
+		const cacheParam = page === 1 ? `&_fresh=${Date.now()}` : '';
+
 		const response = await client.get<UserTorrentResponse[]>(
-			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents`,
-			{
-				params: { page, limit },
-			}
+			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents?page=${page}&limit=${limit}${cacheParam}`
 		);
 
 		const {
