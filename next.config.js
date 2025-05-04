@@ -10,37 +10,23 @@ const withPWA = require('next-pwa')({
 	runtimeCaching: [
 		// For anticors proxy requests to Real-Debrid
 		{
-			urlPattern: /^https:\/\/proxy\d+\.debridmediamanager\.com\/anticors\?url=.*/,
-			handler: 'NetworkFirst',
+			urlPattern: /^https:\/\/proxy\d+\.debridmediamanager\.com\/.*$/,
+			handler: 'CacheFirst',
 			options: {
-				cacheName: 'rd-api-proxied',
+				cacheName: 'rerender-cache',
 				expiration: {
 					maxAgeSeconds: 5, // Tiny cache window to absorb re-renders
-					maxEntries: 50,
 				},
 				networkTimeoutSeconds: 30,
 			},
 		},
 		{
-			urlPattern: /^https:\/\/posters\d+\.debridmediamanager\.com\/.*\.jpg$/,
+			urlPattern: /^https:\/\/posters\d+\.debridmediamanager\.com\/.*$/,
 			handler: 'CacheFirst',
 			options: {
 				cacheName: 'poster-images',
 				expiration: {
-					maxEntries: 200,
-					maxAgeSeconds: 60 * 60 * 24 * 30,
-				},
-				cacheableResponse: {
-					statuses: [0, 200],
-				},
-				cacheKeyWillBeUsed: async ({ request }) => {
-					const url = new URL(request.url);
-					const fileName = url.pathname.split('/').pop();
-					const cacheKey = new Request(`${url.origin}/${fileName}`, {
-						method: request.method,
-						headers: request.headers,
-					});
-					return cacheKey;
+					maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
 				},
 			},
 		},
