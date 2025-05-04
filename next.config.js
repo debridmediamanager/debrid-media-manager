@@ -25,22 +25,25 @@ const withPWA = require('next-pwa')({
 			urlPattern: /^https:\/\/posters\d+\.debridmediamanager\.com\/.*\.jpg$/,
 			handler: 'CacheFirst',
 			options: {
-			  cacheName: 'poster-images',
-			  expiration: {
-				maxEntries: 200,
-				maxAgeSeconds: 60 * 60 * 24 * 30,
-			  },
-			  cacheableResponse: {
-				statuses: [0, 200],
-			  },
-			  cacheKeyWillBeUsed: async ({request, url}) => {
-				const pathname = new URL(url).pathname;
-				// Normalize cache key to just the filename
-				const filename = pathname.substring(pathname.lastIndexOf('/') + 1);
-				return new Request(`https://posters.debridmediamanager.com/${filename}`);
-			  },
+				cacheName: 'poster-images',
+				expiration: {
+					maxEntries: 200,
+					maxAgeSeconds: 60 * 60 * 24 * 30,
+				},
+				cacheableResponse: {
+					statuses: [0, 200],
+				},
+				cacheKeyWillBeUsed: async ({ request }) => {
+					const url = new URL(request.url);
+					const fileName = url.pathname.split('/').pop();
+					const cacheKey = new Request(`${url.origin}/${fileName}`, {
+						method: request.method,
+						headers: request.headers,
+					});
+					return cacheKey;
+				},
 			},
-		  },
+		},
 	],
 });
 
@@ -51,67 +54,67 @@ const nextConfig = {
 		minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
 		remotePatterns: [
 			{
-			  protocol: 'https',
-			  hostname: 'image.tmdb.org',
-			  port: '',
-			  pathname: '/**',
+				protocol: 'https',
+				hostname: 'image.tmdb.org',
+				port: '',
+				pathname: '/**',
 			},
 			{
-			  protocol: 'https',
-			  hostname: 'picsum.photos',
-			  port: '',
-			  pathname: '/**',
+				protocol: 'https',
+				hostname: 'picsum.photos',
+				port: '',
+				pathname: '/**',
 			},
 			{
-			  protocol: 'https',
-			  hostname: 'm.media-amazon.com',
-			  port: '',
-			  pathname: '/**',
+				protocol: 'https',
+				hostname: 'm.media-amazon.com',
+				port: '',
+				pathname: '/**',
 			},
 			{
-			  protocol: 'https',
-			  hostname: 'static.debridmediamanager.com',
-			  port: '',
-			  pathname: '/**',
+				protocol: 'https',
+				hostname: 'static.debridmediamanager.com',
+				port: '',
+				pathname: '/**',
 			},
 			{
-			  protocol: 'https',
-			  hostname: 'images.metahub.space',
-			  port: '',
-			  pathname: '/**',
+				protocol: 'https',
+				hostname: 'images.metahub.space',
+				port: '',
+				pathname: '/**',
 			},
 			{
-			  protocol: 'https',
-			  hostname: 'fakeimg.pl',
-			  port: '',
-			  pathname: '/**',
+				protocol: 'https',
+				hostname: 'fakeimg.pl',
+				port: '',
+				pathname: '/**',
 			},
 			{
-			  protocol: 'https',
-			  hostname: 'media.kitsu.app',
-			  port: '',
-			  pathname: '/**',
+				protocol: 'https',
+				hostname: 'media.kitsu.app',
+				port: '',
+				pathname: '/**',
 			},
 			{
-			  protocol: 'https',
-			  hostname: 'cdn.myanimelist.net',
-			  port: '',
-			  pathname: '/**',
+				protocol: 'https',
+				hostname: 'cdn.myanimelist.net',
+				port: '',
+				pathname: '/**',
 			},
 			{
-			  protocol: 'https',
-			  hostname: 'cdn-eu.anidb.net',
-			  port: '',
-			  pathname: '/**',
+				protocol: 'https',
+				hostname: 'cdn-eu.anidb.net',
+				port: '',
+				pathname: '/**',
 			},
 			{
-			  protocol: 'https',
-			  hostname: 'posters.debridmediamanager.com',
-			  port: '',
-			  pathname: '/**',
+				protocol: 'https',
+				hostname: 'posters.debridmediamanager.com',
+				port: '',
+				pathname: '/**',
 			},
-		  ],
-	  },
+		],
+	},
 	reactStrictMode: false,
 	publicRuntimeConfig: {
 		// Will be available on both server and client
@@ -131,7 +134,7 @@ const nextConfig = {
 		config.cache = {
 			type: 'filesystem',
 			buildDependencies: {
-			  config: [__filename],
+				config: [__filename],
 			},
 		};
 		return config;
