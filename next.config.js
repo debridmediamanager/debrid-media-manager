@@ -17,7 +17,6 @@ const withPWA = require('next-pwa')({
 				expiration: {
 					maxAgeSeconds: 5, // Tiny cache window to absorb re-renders
 				},
-				networkTimeoutSeconds: 30,
 			},
 		},
 		{
