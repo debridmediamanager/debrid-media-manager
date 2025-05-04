@@ -173,6 +173,7 @@ function TorrentsPage() {
 		router.push(`/library?page=1`);
 		const hashes = extractHashes(addMagnet as string);
 		if (hashes.length !== 1) return;
+
 		if (rdKey)
 			handleAddMultipleHashesInRd(
 				rdKey,
@@ -1022,6 +1023,9 @@ function TorrentsPage() {
 
 	// Modify initialize function to work offline
 	async function initialize() {
+		// Skip full library reload if we're just adding a magnet
+		const { addMagnet } = router.query;
+
 		await initializeLibrary(
 			torrentDB,
 			setUserTorrentsList,
@@ -1030,7 +1034,8 @@ function TorrentsPage() {
 			adKey,
 			triggerFetchLatestRDTorrents,
 			triggerFetchLatestADTorrents,
-			userTorrentsList
+			userTorrentsList,
+			!!addMagnet // Pass flag to indicate we're adding a magnet
 		);
 	}
 

@@ -38,7 +38,8 @@ export async function initializeLibrary(
 	adKey: string | null,
 	fetchLatestRDTorrents: () => Promise<void>,
 	fetchLatestADTorrents: () => Promise<void>,
-	userTorrentsList: UserTorrent[]
+	userTorrentsList: UserTorrent[],
+	skipFullLoad: boolean = false
 ) {
 	await torrentDB.initializeDB();
 	let torrents = await torrentDB.all();
@@ -52,6 +53,9 @@ export async function initializeLibrary(
 		setLoading(false);
 	}
 
-	await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents()]);
-	await selectPlayableFiles(userTorrentsList, rdKey, torrentDB);
+	// Skip full library reload if we're just adding a magnet
+	if (!skipFullLoad) {
+		await Promise.all([fetchLatestRDTorrents(), fetchLatestADTorrents()]);
+		await selectPlayableFiles(userTorrentsList, rdKey, torrentDB);
+	}
 }
