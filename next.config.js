@@ -6,7 +6,42 @@ const withPWA = require('next-pwa')({
 	// disable: process.env.NODE_ENV === 'development',
 	scope: '/',
 	sw: 'service-worker.js',
-	cacheOnFrontEndNav: true,
+	cacheOnFrontEndNav: false,
+	runtimeCaching: [
+		// For anticors proxy requests to Real-Debrid
+		{
+			urlPattern: /^https:\/\/proxy\d+\.debridmediamanager\.com\/anticors\?url=.*/,
+			handler: 'NetworkFirst',
+			options: {
+				cacheName: 'rd-api-proxied',
+				expiration: {
+					maxAgeSeconds: 5, // Tiny cache window to absorb re-renders
+					maxEntries: 50,
+				},
+				networkTimeoutSeconds: 30,
+			},
+		},
+		{
+			urlPattern: /^https:\/\/posters\d+\.debridmediamanager\.com\/.*\.jpg$/,
+			handler: 'CacheFirst',
+			options: {
+			  cacheName: 'poster-images',
+			  expiration: {
+				maxEntries: 200,
+				maxAgeSeconds: 60 * 60 * 24 * 30,
+			  },
+			  cacheableResponse: {
+				statuses: [0, 200],
+			  },
+			  cacheKeyWillBeUsed: async ({request, url}) => {
+				const pathname = new URL(url).pathname;
+				// Normalize cache key to just the filename
+				const filename = pathname.substring(pathname.lastIndexOf('/') + 1);
+				return new Request(`https://posters.debridmediamanager.com/${filename}`);
+			  },
+			},
+		  },
+	],
 });
 
 const nextConfig = {
@@ -93,7 +128,12 @@ const nextConfig = {
 		discordClientId: process.env.DISCORD_CLIENT_ID,
 	},
 	webpack: (config) => {
-		config.cache = false;
+		config.cache = {
+			type: 'filesystem',
+			buildDependencies: {
+			  config: [__filename],
+			},
+		};
 		return config;
 	},
 };
