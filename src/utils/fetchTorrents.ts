@@ -86,12 +86,12 @@ export const fetchRealDebrid = async (
 			return;
 		}
 
-		// Step 3: Send requests in parallel with exactly 4 concurrent requests
+		// Step 3: Send requests in parallel with exactly 3 concurrent requests
 		const limit = 1000;
 		const maxPages = Math.ceil((totalCount ?? 1) / limit);
 
-		// Use the custom RequestQueue to maintain exactly 4 requests at all times
-		const requestQueue = new RequestQueue(4);
+		// Use the custom RequestQueue to maintain exactly 3 requests at all times
+		const requestQueue = new RequestQueue(3);
 
 		for (let page = 1; page <= maxPages; page++) {
 			requestQueue.add(() => getUserTorrentsList(rdKey, limit, page));
