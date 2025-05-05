@@ -174,8 +174,9 @@ function IndexPage() {
 									>
 										<b>ElfHosted</b>
 									</a>{' '}
-									- Self-hosting too stressful? Try ElfHosted's turn-key streaming
-									stack including Zurg, Plex, Seerrbridge, Radarr/Sonarr & more!{' '}
+									- Self-hosting too stressful? Try ElfHosted&apos;s turn-key
+									streaming stack including Zurg, Plex, Seerrbridge, Radarr/Sonarr
+									& more!{' '}
 									<span className="whitespace-nowrap">
 										7-day trial available.
 									</span>
