@@ -318,17 +318,35 @@ export const getToken = async (
 	}
 };
 
+// Simple promise cache to prevent duplicate requests
+const userRequestCache = new Map<string, Promise<UserResponse>>();
+
 export const getCurrentUser = async (accessToken: string) => {
-	try {
-		const client = await createAxiosClient(accessToken);
-		const response = await client.get<UserResponse>(
-			`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/user`
-		);
-		return response.data;
-	} catch (error: any) {
-		console.error('Error fetching user information:', error.message);
-		throw error;
+	// Check if we already have a pending request for this token
+	const cached = userRequestCache.get(accessToken);
+	if (cached) {
+		return cached;
 	}
+
+	// Create the promise and cache it
+	const promise = (async () => {
+		try {
+			const client = await createAxiosClient(accessToken);
+			const response = await client.get<UserResponse>(
+				`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/user`
+			);
+			return response.data;
+		} catch (error: any) {
+			console.error('Error fetching user information:', error.message);
+			throw error;
+		} finally {
+			// Clean up cache after request completes (success or error)
+			setTimeout(() => userRequestCache.delete(accessToken), 100);
+		}
+	})();
+
+	userRequestCache.set(accessToken, promise);
+	return promise;
 };
 
 export async function getUserTorrentsList(
