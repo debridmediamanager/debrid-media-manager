@@ -41,13 +41,21 @@ const useRealDebrid = () => {
 	const [clientSecret] = useLocalStorage<string>('rd:clientSecret');
 	const [refreshToken] = useLocalStorage<string>('rd:refreshToken');
 	const [isRefreshing, setIsRefreshing] = useState(false);
+	const [hasCheckedUser, setHasCheckedUser] = useState(false);
 
 	useEffect(() => {
 		const auth = async () => {
+			// Prevent duplicate API calls
+			if (hasCheckedUser) {
+				return;
+			}
+
 			if (!refreshToken || !clientId || !clientSecret) {
 				setLoading(false);
 				return;
 			}
+
+			setHasCheckedUser(true);
 
 			try {
 				// Try current token first
@@ -83,7 +91,7 @@ const useRealDebrid = () => {
 		};
 
 		auth();
-	}, [token, refreshToken, clientId, clientSecret]);
+	}, [refreshToken, clientId, clientSecret, setToken, hasCheckedUser]);
 
 	return { user, error, loading, isRefreshing, hasAuth: !!token };
 };
