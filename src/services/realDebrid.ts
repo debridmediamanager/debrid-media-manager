@@ -17,8 +17,8 @@ import {
 const { publicRuntimeConfig: config } = getConfig();
 
 // Constants for timeout and retry
-const REQUEST_TIMEOUT = 5000;
-const TORRENT_REQUEST_TIMEOUT = 15000;
+const REQUEST_TIMEOUT = 10000; // Increased from 5s to 10s
+const TORRENT_REQUEST_TIMEOUT = 30000; // Increased from 15s to 30s
 // Adjust rate limits to be compatible with the service worker cache timing
 // Service worker cache is 5 seconds, so we need to ensure requests are spaced
 // to avoid conflicting with cache invalidation
@@ -320,6 +320,11 @@ export const getToken = async (
 
 // Simple promise cache to prevent duplicate requests
 const userRequestCache = new Map<string, Promise<UserResponse>>();
+// Cache for time ISO requests - cache for 10 seconds to prevent duplicate calls
+const timeISOCache: { promise: Promise<string> | null; timestamp: number } = {
+	promise: null,
+	timestamp: 0,
+};
 
 export const getCurrentUser = async (accessToken: string) => {
 	// Check if we already have a pending request for this token
@@ -578,13 +583,33 @@ export const proxyUnrestrictLink = async (
 };
 
 export const getTimeISO = async (): Promise<string> => {
-	try {
-		const response = await genericAxios.get<string>(
-			`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/time/iso`
-		);
-		return response.data;
-	} catch (error: any) {
-		console.error('Error fetching time:', error.message);
-		throw error;
+	const now = Date.now();
+	const CACHE_DURATION = 10000; // 10 seconds
+
+	// Check if we have a valid cached response
+	if (timeISOCache.promise && now - timeISOCache.timestamp < CACHE_DURATION) {
+		return timeISOCache.promise;
 	}
+
+	// Create new promise and cache it
+	const promise = (async () => {
+		try {
+			const response = await genericAxios.get<string>(
+				`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/time/iso`
+			);
+			return response.data;
+		} catch (error: any) {
+			console.error('Error fetching time:', error.message);
+			// Clear cache on error so next call will retry
+			timeISOCache.promise = null;
+			timeISOCache.timestamp = 0;
+			throw error;
+		}
+	})();
+
+	// Update cache
+	timeISOCache.promise = promise;
+	timeISOCache.timestamp = now;
+
+	return promise;
 };

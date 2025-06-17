@@ -34,6 +34,7 @@ export default function Document() {
 				<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 				<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 				<link rel="manifest" href="/site.webmanifest" />
+				{/* DNS prefetch for faster DNS lookups */}
 				<link rel="dns-prefetch" href="//posters0.debridmediamanager.com" />
 				<link rel="dns-prefetch" href="//posters1.debridmediamanager.com" />
 				<link rel="dns-prefetch" href="//posters2.debridmediamanager.com" />
@@ -54,6 +55,108 @@ export default function Document() {
 				<link rel="dns-prefetch" href="//proxy7.debridmediamanager.com" />
 				<link rel="dns-prefetch" href="//proxy8.debridmediamanager.com" />
 				<link rel="dns-prefetch" href="//proxy9.debridmediamanager.com" />
+
+				{/* Preconnect to establish early connections (DNS + TCP + TLS) for all proxy and poster domains */}
+				<link
+					rel="preconnect"
+					href="https://proxy0.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://proxy1.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://proxy2.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://proxy3.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://proxy4.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://proxy5.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://proxy6.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://proxy7.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://proxy8.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://proxy9.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://posters0.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://posters1.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://posters2.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://posters3.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://posters4.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://posters5.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://posters6.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://posters7.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://posters8.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="preconnect"
+					href="https://posters9.debridmediamanager.com"
+					crossOrigin="anonymous"
+				/>
 			</Head>
 			<body>
 				<Main />

@@ -8,36 +8,6 @@ const withPWA = require('next-pwa')({
 	sw: 'service-worker.js',
 	cacheOnFrontEndNav: false,
 	runtimeCaching: [
-		// For anticors proxy requests to Real-Debrid
-		// Updated for compatibility with API retry mechanism
-		{
-			urlPattern: /^https:\/\/proxy\d+\.debridmediamanager\.com\/.*(?<!_cache_buster=).*$/,
-			handler: 'CacheFirst',
-			options: {
-				cacheName: 'rerender-cache',
-				expiration: {
-					maxAgeSeconds: 5, // Tiny cache window to absorb re-renders
-				},
-				// Add cache key function to respect query params
-				cacheableResponse: {
-					statuses: [0, 200], // Cache successful responses
-				},
-				// Don't cache responses with _cache_buster parameter
-				matchOptions: {
-					ignoreSearch: false, // Consider query params in cache key
-				}
-			},
-		},
-		// Special cache configuration for retry requests
-		// Retry requests will bypass cache due to _cache_buster parameter
-		{
-			urlPattern: /^https:\/\/proxy\d+\.debridmediamanager\.com\/.*_cache_buster=.*$/,
-			handler: 'NetworkOnly', // Always fetch from network for retry requests
-			options: {
-				cacheName: 'retry-requests',
-				// No expiration needed for NetworkOnly strategy
-			},
-		},
 		{
 			urlPattern: /^https:\/\/posters\d+\.debridmediamanager\.com\/.*$/,
 			handler: 'CacheFirst',
