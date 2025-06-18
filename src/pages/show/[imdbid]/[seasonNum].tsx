@@ -338,6 +338,32 @@ const TvSearch: FunctionComponent = () => {
 		window.open(`stremio://detail/series/${imdbid}/${imdbid}:${seasonNum}:1`);
 	}
 
+	async function handleCheckAvailability(result: SearchResult) {
+		if (result.rdAvailable) {
+			toast.success('This torrent is already available in Real Debrid');
+			return;
+		}
+
+		const toastId = toast.loading('Checking availability...');
+
+		try {
+			// Check if torrent is in progress
+			if (`rd:${result.hash}` in hashAndProgress) {
+				await deleteRd(result.hash);
+				await addRd(result.hash);
+			} else {
+				await addRd(result.hash);
+				await deleteRd(result.hash);
+			}
+
+			toast.success('Availability check complete. Reloading...', { id: toastId });
+			setTimeout(() => window.location.reload(), 1000);
+		} catch (error) {
+			toast.error('Failed to check availability', { id: toastId });
+			console.error('Availability check error:', error);
+		}
+	}
+
 	async function handleAvailabilityTest() {
 		const nonAvailableResults = filteredResults.filter((r) => !r.rdAvailable);
 		let progressToast: string | null = null;
@@ -638,6 +664,7 @@ const TvSearch: FunctionComponent = () => {
 				handleShowInfo={handleShowInfo}
 				handleCast={handleCast}
 				handleCopyMagnet={(hash) => handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)}
+				handleCheckAvailability={handleCheckAvailability}
 				addRd={addRd}
 				addAd={addAd}
 				deleteRd={deleteRd}

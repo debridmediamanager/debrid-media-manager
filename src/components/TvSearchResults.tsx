@@ -21,6 +21,7 @@ type TvSearchResultsProps = {
 	handleShowInfo: (result: SearchResult) => void;
 	handleCast: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCopyMagnet: (hash: string) => void;
+	handleCheckAvailability: (result: SearchResult) => Promise<void>;
 	addRd: (hash: string) => Promise<void>;
 	addAd: (hash: string) => Promise<void>;
 	deleteRd: (hash: string) => Promise<void>;
@@ -41,6 +42,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	handleShowInfo,
 	handleCast,
 	handleCopyMagnet,
+	handleCheckAvailability,
 	addRd,
 	addAd,
 	deleteRd,
@@ -49,6 +51,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 }) => {
 	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
+	const [checkingHashes, setCheckingHashes] = useState<Set<string>>(new Set());
 	const [downloadMagnets, setDownloadMagnets] = useState(false);
 
 	useEffect(() => {
@@ -135,6 +138,20 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 		}
 	};
 
+	const handleCheckWithLoading = async (result: SearchResult) => {
+		if (checkingHashes.has(result.hash)) return;
+		setCheckingHashes((prev) => new Set(prev).add(result.hash));
+		try {
+			await handleCheckAvailability(result);
+		} finally {
+			setCheckingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(result.hash);
+				return newSet;
+			});
+		}
+	};
+
 	const handleMagnetAction = (hash: string) => {
 		if (downloadMagnets) {
 			downloadMagnetFile(hash);
@@ -194,6 +211,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 
 						const isLoading = loadingHashes.has(r.hash);
 						const isCasting = castingHashes.has(r.hash);
+						const isChecking = checkingHashes.has(r.hash);
 
 						return (
 							<div
@@ -390,6 +408,26 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													</>
 												) : (
 													'Cast✨'
+												)}
+											</button>
+										)}
+
+										{/* Check availability btn */}
+										{rdKey && !r.rdAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 ${checkingHashes.has(r.hash) ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleCheckWithLoading(r)}
+												disabled={checkingHashes.has(r.hash)}
+											>
+												{checkingHashes.has(r.hash) ? (
+													<>
+														<span className="inline-block animate-spin">
+															⌛
+														</span>{' '}
+														Checking...
+													</>
+												) : (
+													'🔍Check'
 												)}
 											</button>
 										)}
