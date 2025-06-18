@@ -37,7 +37,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useRef, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 type MovieInfo = {
@@ -69,6 +69,7 @@ const getQueryForMovieCount = (videoCount: number) => {
 const MovieSearch: FunctionComponent = () => {
 	const router = useRouter();
 	const { imdbid } = router.query;
+	const isMounted = useRef(true);
 	const [movieInfo, setMovieInfo] = useState<MovieInfo>({
 		title: '',
 		description: '',
@@ -130,6 +131,12 @@ const MovieSearch: FunctionComponent = () => {
 		initialize();
 	}, [imdbid]);
 
+	useEffect(() => {
+		return () => {
+			isMounted.current = false;
+		};
+	}, []);
+
 	async function fetchData(imdbId: string, page: number = 0) {
 		const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 		if (page === 0) {
@@ -150,7 +157,7 @@ const MovieSearch: FunctionComponent = () => {
 				return;
 			}
 
-			if (response.data.results?.length) {
+			if (response.data.results?.length && isMounted.current) {
 				const results = response.data.results;
 				setSearchResults((prevResults) => {
 					const newResults = [
@@ -400,15 +407,23 @@ const MovieSearch: FunctionComponent = () => {
 					{ duration: 5000 }
 				);
 			} else {
-				toast.success(
-					`Successfully tested all ${results.length} torrents. Reloading page...`,
-					{ duration: 3000 }
-				);
+				toast.success(`Successfully tested all ${results.length} torrents`, {
+					duration: 3000,
+				});
 			}
 
-			// Only reload if we had some successes
-			if (succeeded.length > 0) {
-				setTimeout(() => window.location.reload(), 1500);
+			// Refetch data if we had some successes
+			if (succeeded.length > 0 && isMounted.current) {
+				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+				const successfulHashes = succeeded.map((r) => r.item.hash);
+				await instantCheckInRd(
+					tokenWithTimestamp,
+					tokenHash,
+					imdbid as string,
+					successfulHashes,
+					setSearchResults,
+					sortByBiggest
+				);
 			}
 		} catch (error) {
 			if (progressToast) {
@@ -451,8 +466,21 @@ const MovieSearch: FunctionComponent = () => {
 				await deleteRd(result.hash);
 			}
 
-			toast.success('Availability check complete. Reloading...', { id: toastId });
-			setTimeout(() => window.location.reload(), 1000);
+			toast.success('Availability check complete', { id: toastId });
+
+			// Refetch data instead of reloading
+			if (isMounted.current) {
+				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+				const hashArr = [result.hash];
+				await instantCheckInRd(
+					tokenWithTimestamp,
+					tokenHash,
+					imdbid as string,
+					hashArr,
+					setSearchResults,
+					sortByBiggest
+				);
+			}
 		} catch (error) {
 			toast.error('Failed to check availability', { id: toastId });
 			console.error('Availability check error:', error);

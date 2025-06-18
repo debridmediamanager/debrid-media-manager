@@ -33,7 +33,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useEffect, useMemo, useState } from 'react';
+import { FunctionComponent, useEffect, useMemo, useRef, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 type ShowInfo = {
@@ -50,6 +50,7 @@ type ShowInfo = {
 const torrentDB = new UserTorrentDB();
 
 const TvSearch: FunctionComponent = () => {
+	const isMounted = useRef(true);
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	const episodeMaxSize =
 		window.localStorage.getItem('settings:episodeMaxSize') || defaultEpisodeSize;
@@ -130,6 +131,12 @@ const TvSearch: FunctionComponent = () => {
 		initialize();
 	}, [imdbid, seasonNum, isLoading]);
 
+	useEffect(() => {
+		return () => {
+			isMounted.current = false;
+		};
+	}, []);
+
 	async function fetchData(imdbId: string, seasonNum: number, page: number = 0) {
 		const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 		if (page === 0) {
@@ -148,7 +155,7 @@ const TvSearch: FunctionComponent = () => {
 				return;
 			}
 
-			if (response.data.results?.length) {
+			if (response.data.results?.length && isMounted.current) {
 				const results = response.data.results;
 				setSearchResults((prevResults) => {
 					const newResults = [
@@ -356,8 +363,21 @@ const TvSearch: FunctionComponent = () => {
 				await deleteRd(result.hash);
 			}
 
-			toast.success('Availability check complete. Reloading...', { id: toastId });
-			setTimeout(() => window.location.reload(), 1000);
+			toast.success('Availability check complete', { id: toastId });
+
+			// Refetch data instead of reloading
+			if (isMounted.current) {
+				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+				const hashArr = [result.hash];
+				await instantCheckInRd(
+					tokenWithTimestamp,
+					tokenHash,
+					imdbid as string,
+					hashArr,
+					setSearchResults,
+					sortByMedian
+				);
+			}
 		} catch (error) {
 			toast.error('Failed to check availability', { id: toastId });
 			console.error('Availability check error:', error);
@@ -413,15 +433,23 @@ const TvSearch: FunctionComponent = () => {
 					{ duration: 5000 }
 				);
 			} else {
-				toast.success(
-					`Successfully tested all ${results.length} torrents. Reloading page...`,
-					{ duration: 3000 }
-				);
+				toast.success(`Successfully tested all ${results.length} torrents`, {
+					duration: 3000,
+				});
 			}
 
-			// Only reload if we had some successes
-			if (succeeded.length > 0) {
-				setTimeout(() => window.location.reload(), 1500);
+			// Refetch data if we had some successes
+			if (succeeded.length > 0 && isMounted.current) {
+				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+				const successfulHashes = succeeded.map((r) => r.item.hash);
+				await instantCheckInRd(
+					tokenWithTimestamp,
+					tokenHash,
+					imdbid as string,
+					successfulHashes,
+					setSearchResults,
+					sortByMedian
+				);
 			}
 		} catch (error) {
 			if (progressToast) {
