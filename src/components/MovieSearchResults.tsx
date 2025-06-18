@@ -397,7 +397,7 @@ const MovieSearchResults = ({
 												Checking...
 											</>
 										) : (
-											'🔍Check'
+											'🕵🏻Check'
 										)}
 									</button>
 								)}

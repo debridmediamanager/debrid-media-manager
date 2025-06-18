@@ -427,7 +427,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 														Checking...
 													</>
 												) : (
-													'🔍Check'
+													'🕵🏻Check'
 												)}
 											</button>
 										)}
