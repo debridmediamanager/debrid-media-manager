@@ -20,6 +20,7 @@ import {
 } from '@/utils/episodeUtils';
 import { convertToUserTorrent, fetchAllDebrid } from '@/utils/fetchTorrents';
 import { instantCheckInAd, instantCheckInRd, wrapLoading } from '@/utils/instantChecks';
+import { processWithConcurrency } from '@/utils/parallelProcessor';
 import { quickSearch } from '@/utils/quickSearch';
 import { sortByMedian } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
@@ -339,41 +340,70 @@ const TvSearch: FunctionComponent = () => {
 
 	async function handleAvailabilityTest() {
 		const nonAvailableResults = filteredResults.filter((r) => !r.rdAvailable);
+		let progressToast: string | null = null;
 
-		const processInBatches = async () => {
-			for (let i = 0; i < nonAvailableResults.length; i += 3) {
-				const batch = nonAvailableResults.slice(i, i + 3);
-				await Promise.all(
-					batch.map(async (result) => {
-						if (`rd:${result.hash}` in hashAndProgress) {
-							await deleteRd(result.hash);
-							await addRd(result.hash);
-						} else {
-							await addRd(result.hash);
-							await deleteRd(result.hash);
-						}
-					})
-				);
+		const processResult = async (result: SearchResult) => {
+			try {
+				if (`rd:${result.hash}` in hashAndProgress) {
+					await deleteRd(result.hash);
+					await addRd(result.hash);
+				} else {
+					await addRd(result.hash);
+					await deleteRd(result.hash);
+				}
+			} catch (error) {
+				console.error(`Failed to process ${result.title}:`, error);
+				throw error;
 			}
 		};
 
-		await toast.promise(
-			processInBatches(),
-			{
-				loading: `Testing availability (do not close until done)...`,
-				success: `Completed availability test for ${nonAvailableResults.length} filtered results. Reloading the page.`,
-				error: 'Failed to complete availability test',
-			},
-			{
-				loading: {
-					duration: Infinity,
-				},
-				success: {
-					duration: 5000,
-				},
+		const onProgress = (completed: number, total: number) => {
+			const message = `Testing availability: ${completed}/${total}`;
+			if (progressToast) {
+				toast.loading(message, { id: progressToast });
+			} else {
+				progressToast = toast.loading(message);
 			}
-		);
-		window.location.reload();
+		};
+
+		try {
+			const results = await processWithConcurrency(
+				nonAvailableResults,
+				processResult,
+				3,
+				onProgress
+			);
+
+			const failed = results.filter((r) => !r.success);
+			const succeeded = results.filter((r) => r.success);
+
+			if (progressToast) {
+				toast.dismiss(progressToast);
+			}
+
+			if (failed.length > 0) {
+				toast.error(
+					`Failed to test ${failed.length} out of ${results.length} torrents. Successfully tested ${succeeded.length}.`,
+					{ duration: 5000 }
+				);
+			} else {
+				toast.success(
+					`Successfully tested all ${results.length} torrents. Reloading page...`,
+					{ duration: 3000 }
+				);
+			}
+
+			// Only reload if we had some successes
+			if (succeeded.length > 0) {
+				setTimeout(() => window.location.reload(), 1500);
+			}
+		} catch (error) {
+			if (progressToast) {
+				toast.dismiss(progressToast);
+			}
+			toast.error('Failed to complete availability test');
+			console.error('Availability test error:', error);
+		}
 	}
 
 	const getFirstAvailableRdTorrent = () => {
