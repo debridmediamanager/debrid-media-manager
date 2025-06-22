@@ -133,6 +133,7 @@ const TvSearch: FunctionComponent = () => {
 		};
 
 		initializeData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imdbid, seasonNum, isLoading, defaultTorrentsFilter]);
 
 	useEffect(() => {
