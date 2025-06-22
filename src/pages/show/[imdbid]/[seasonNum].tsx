@@ -33,7 +33,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FunctionComponent, useEffect, useMemo, useRef, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 type ShowInfo = {
@@ -56,8 +56,10 @@ const TvSearch: FunctionComponent = () => {
 		window.localStorage.getItem('settings:episodeMaxSize') || defaultEpisodeSize;
 	const onlyTrustedTorrents =
 		window.localStorage.getItem('settings:onlyTrustedTorrents') === 'true';
-	const defaultTorrentsFilter =
-		window.localStorage.getItem('settings:defaultTorrentsFilter') ?? '';
+	const defaultTorrentsFilter = useMemo(
+		() => window.localStorage.getItem('settings:defaultTorrentsFilter') ?? '',
+		[]
+	);
 
 	const [showInfo, setShowInfo] = useState<ShowInfo | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
@@ -114,22 +116,24 @@ const TvSearch: FunctionComponent = () => {
 		fetchShowInfo();
 	}, [imdbid, seasonNum, router]);
 
-	const initialize = useCallback(async () => {
-		await torrentDB.initializeDB();
-		await Promise.all([
-			fetchData(imdbid as string, parseInt(seasonNum as string), 0),
-			fetchHashAndProgress(),
-		]);
-	}, [imdbid, seasonNum]);
-
 	useEffect(() => {
 		if (!imdbid || !seasonNum || isLoading) return;
+
 		// Clear previous results and query input when season changes
 		setSearchResults([]);
 		setFilteredResults([]);
 		setQuery(defaultTorrentsFilter); // Reset query to default filter
-		initialize();
-	}, [imdbid, seasonNum, isLoading, defaultTorrentsFilter, initialize]);
+
+		const initializeData = async () => {
+			await torrentDB.initializeDB();
+			await Promise.all([
+				fetchData(imdbid as string, parseInt(seasonNum as string), 0),
+				fetchHashAndProgress(),
+			]);
+		};
+
+		initializeData();
+	}, [imdbid, seasonNum, isLoading, defaultTorrentsFilter]);
 
 	useEffect(() => {
 		return () => {

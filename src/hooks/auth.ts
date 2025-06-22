@@ -45,26 +45,25 @@ const useRealDebrid = () => {
 
 	useEffect(() => {
 		const auth = async () => {
-			// Prevent duplicate API calls
-			if (hasCheckedUser) {
-				return;
-			}
-
 			if (!refreshToken || !clientId || !clientSecret) {
 				setLoading(false);
 				return;
 			}
 
-			setHasCheckedUser(true);
+			// Prevent concurrent refresh attempts
+			if (isRefreshing) {
+				return;
+			}
 
 			try {
-				// Try current token first
-				if (token) {
+				// Try current token first if we haven't checked yet
+				if (token && !hasCheckedUser) {
 					try {
 						const user = await getRealDebridUser(token);
 						setUser(user as RealDebridUser);
 						setError(null);
 						setLoading(false);
+						setHasCheckedUser(true);
 						return;
 					} catch {} // Token invalid, continue to refresh
 				}
@@ -81,6 +80,7 @@ const useRealDebrid = () => {
 				setUser(user as RealDebridUser);
 				setError(null);
 				setIsRefreshing(false);
+				setHasCheckedUser(true);
 			} catch (e) {
 				clearRdKeys();
 				setError(e as Error);
@@ -91,7 +91,7 @@ const useRealDebrid = () => {
 		};
 
 		auth();
-	}, [refreshToken, clientId, clientSecret, setToken, hasCheckedUser, token]);
+	}, [refreshToken, clientId, clientSecret, setToken, isRefreshing]);
 
 	return { user, error, loading, isRefreshing, hasAuth: !!token };
 };

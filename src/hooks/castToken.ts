@@ -11,9 +11,11 @@ export function useCastToken() {
 	const [dmmCastToken, setDmmCastToken] = useLocalStorage<string>('rd:castToken');
 
 	useEffect(() => {
-		const fetchToken = async () => {
-			if (dmmCastToken || !clientId || !clientSecret || !refreshToken) return;
+		// Only run if we don't have a token but have all required credentials
+		if (!clientId || !clientSecret || !refreshToken || !accessToken) return;
+		if (dmmCastToken) return;
 
+		const fetchToken = async () => {
 			try {
 				const res = await fetch('/api/stremio/id?token=' + accessToken);
 				const data = await res.json();
@@ -27,7 +29,7 @@ export function useCastToken() {
 		};
 
 		fetchToken();
-	}, [accessToken, clientId, clientSecret, dmmCastToken, refreshToken, setDmmCastToken]);
+	}, [accessToken, clientId, clientSecret, refreshToken, dmmCastToken, setDmmCastToken]);
 
 	return dmmCastToken;
 }

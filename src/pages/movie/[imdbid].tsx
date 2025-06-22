@@ -37,7 +37,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
+import { FunctionComponent, useEffect, useRef, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 type MovieInfo = {
@@ -121,15 +121,16 @@ const MovieSearch: FunctionComponent = () => {
 		fetchMovieInfo();
 	}, [imdbid]);
 
-	const initialize = useCallback(async () => {
-		await torrentDB.initializeDB();
-		await Promise.all([fetchData(imdbid as string), fetchHashAndProgress()]);
-	}, [imdbid]);
-
 	useEffect(() => {
 		if (!imdbid) return;
-		initialize();
-	}, [imdbid, initialize]);
+
+		const initializeData = async () => {
+			await torrentDB.initializeDB();
+			await Promise.all([fetchData(imdbid as string), fetchHashAndProgress()]);
+		};
+
+		initializeData();
+	}, [imdbid]);
 
 	useEffect(() => {
 		return () => {
