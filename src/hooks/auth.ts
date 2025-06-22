@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getAllDebridUser } from '../services/allDebrid';
 import { getCurrentUser as getRealDebridUser, getToken } from '../services/realDebrid';
 import { TorBoxUser, getUserData } from '../services/torbox';
@@ -40,60 +40,76 @@ const useRealDebrid = () => {
 	const [clientId] = useLocalStorage<string>('rd:clientId');
 	const [clientSecret] = useLocalStorage<string>('rd:clientSecret');
 	const [refreshToken] = useLocalStorage<string>('rd:refreshToken');
-	const [isRefreshing, setIsRefreshing] = useState(false);
-	const [hasCheckedUser, setHasCheckedUser] = useState(false);
+	const hasInitializedRef = useRef(false);
 
 	useEffect(() => {
+		let isMounted = true;
+
 		const auth = async () => {
+			// Prevent duplicate initialization
+			if (hasInitializedRef.current) {
+				return;
+			}
+
 			if (!refreshToken || !clientId || !clientSecret) {
 				setLoading(false);
 				return;
 			}
 
-			// Prevent concurrent refresh attempts
-			if (isRefreshing) {
-				return;
-			}
+			hasInitializedRef.current = true;
 
 			try {
-				// Try current token first if we haven't checked yet
-				if (token && !hasCheckedUser) {
+				// Try current token first
+				if (token) {
 					try {
 						const user = await getRealDebridUser(token);
-						setUser(user as RealDebridUser);
-						setError(null);
-						setLoading(false);
-						setHasCheckedUser(true);
+						if (isMounted) {
+							setUser(user as RealDebridUser);
+							setError(null);
+							setLoading(false);
+						}
 						return;
-					} catch {} // Token invalid, continue to refresh
+					} catch {
+						// Token invalid, continue to refresh
+					}
 				}
 
 				// Get new token
-				setIsRefreshing(true);
 				const { access_token, expires_in } = await getToken(
 					clientId,
 					clientSecret,
 					refreshToken
 				);
-				setToken(access_token, expires_in);
-				const user = await getRealDebridUser(access_token);
-				setUser(user as RealDebridUser);
-				setError(null);
-				setIsRefreshing(false);
-				setHasCheckedUser(true);
+
+				if (isMounted) {
+					setToken(access_token, expires_in);
+					const user = await getRealDebridUser(access_token);
+					setUser(user as RealDebridUser);
+					setError(null);
+				}
 			} catch (e) {
-				clearRdKeys();
-				setError(e as Error);
-				setIsRefreshing(false);
+				if (isMounted) {
+					clearRdKeys();
+					setError(e as Error);
+					// Reset initialization flag on error to allow retry
+					hasInitializedRef.current = false;
+				}
 			} finally {
-				setLoading(false);
+				if (isMounted) {
+					setLoading(false);
+				}
 			}
 		};
 
 		auth();
-	}, [refreshToken, clientId, clientSecret, setToken, isRefreshing]);
 
-	return { user, error, loading, isRefreshing, hasAuth: !!token };
+		return () => {
+			isMounted = false;
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [refreshToken, clientId, clientSecret, setToken]);
+
+	return { user, error, loading, isRefreshing: false, hasAuth: !!token };
 };
 
 // Separate hooks for other services
@@ -151,9 +167,9 @@ const useTrakt = () => {
 
 // Backward compatibility hook for withAuth.tsx
 export const useRealDebridAccessToken = (): [string | null, boolean, boolean] => {
-	const { user, loading, isRefreshing } = useRealDebrid();
+	const { user, loading } = useRealDebrid();
 	const [token] = useLocalStorage<string>('rd:accessToken');
-	return [token, loading, isRefreshing];
+	return [token, loading, false];
 };
 
 export const useAllDebridApiKey = () => {

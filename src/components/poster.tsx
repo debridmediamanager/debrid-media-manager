@@ -1,10 +1,21 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-// Function to get random poster subdomain
+// Function to get deterministic poster subdomain based on IMDB ID
 const getPosterUrl = (imdbId: string): string => {
-	const randomNum = Math.floor(Math.random() * 10);
-	return `https://posters${randomNum}.debridmediamanager.com/${imdbId}-small.jpg`;
+	// Extract numeric part from IMDB ID (e.g., "tt1234567" -> "1234567")
+	const numericId = imdbId.replace(/[^0-9]/g, '');
+
+	// Simple hash function for good distribution
+	let hash = 0;
+	for (let i = 0; i < numericId.length; i++) {
+		hash = (hash << 5) - hash + parseInt(numericId[i]);
+		hash = hash & hash; // Convert to 32bit integer
+	}
+
+	// Ensure positive number and get value 0-9
+	const subdomain = Math.abs(hash) % 10;
+	return `https://posters${subdomain}.debridmediamanager.com/${imdbId}-small.jpg`;
 };
 
 const Poster = ({ imdbId, title = 'No poster' }: Record<string, string>) => {

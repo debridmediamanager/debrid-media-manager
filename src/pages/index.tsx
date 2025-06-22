@@ -37,7 +37,6 @@ function IndexPage() {
 	} = useCurrentUser();
 	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
 	const [browseTerms] = useState(getTerms(2));
-	const [elfHostedExpanded, setElfHostedExpanded] = useState(false);
 	const [showElfHostedBanner, setShowElfHostedBanner] = useState(true);
 
 	useCastToken();

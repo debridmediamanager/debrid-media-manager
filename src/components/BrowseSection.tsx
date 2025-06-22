@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 
 interface BrowseSectionProps {
 	terms: string[];
@@ -7,7 +8,7 @@ interface BrowseSectionProps {
 
 export function BrowseSection({ terms }: BrowseSectionProps) {
 	const router = useRouter();
-	const randomTerm = terms[Math.floor(Math.random() * terms.length)];
+	const randomTerm = useMemo(() => terms[Math.floor(Math.random() * terms.length)], [terms]);
 
 	const handleCustomSearch = () => {
 		const term = prompt('Enter one word to browse:');
