@@ -303,7 +303,7 @@ export const getToken = async (
 		params.append('grant_type', 'http://oauth.net/grant_type/device/1.0');
 
 		const response = await genericAxios.post<AccessTokenResponse>(
-			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/oauth/v2/token`,
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/oauth/v2/token`,
 			params.toString(),
 			{
 				headers: {
@@ -368,7 +368,7 @@ export async function getUserTorrentsList(
 		const cacheParam = page === 1 ? `&_fresh=${Date.now()}` : '';
 
 		const response = await client.get<UserTorrentResponse[]>(
-			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents?page=${page}&limit=${limit}${cacheParam}`
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents?page=${page}&limit=${limit}${cacheParam}`
 		);
 
 		const {
@@ -400,7 +400,7 @@ export const getTorrentInfo = async (
 	try {
 		const client = await createAxiosClient(accessToken);
 		const response = await client.get<TorrentInfoResponse>(
-			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/info/${id}`
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/info/${id}`
 		);
 		return response.data;
 	} catch (error: any) {
@@ -440,7 +440,7 @@ export const addMagnet = async (
 	try {
 		const client = await createAxiosClient(accessToken);
 		const response = await client.post<AddMagnetResponse>(
-			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
 			qs.stringify({ magnet }),
 			{
 				headers: {
@@ -480,7 +480,7 @@ export const selectFiles = async (
 	try {
 		const client = await createAxiosClient(accessToken);
 		const response = await client.post(
-			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/selectFiles/${id}`,
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/selectFiles/${id}`,
 			qs.stringify({ files: files.join(',') }),
 			{
 				headers: {
@@ -502,7 +502,7 @@ export const deleteTorrent = async (
 	try {
 		const client = await createAxiosClient(accessToken);
 		await client.delete(
-			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/delete/${id}`
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/delete/${id}`
 		);
 	} catch (error: any) {
 		console.error('Error deleting torrent:', error.message);
@@ -543,7 +543,7 @@ export const unrestrictLink = async (
 
 		const client = await createAxiosClient(accessToken);
 		const response = await client.post<UnrestrictResponse>(
-			`${bare ? 'https://api.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/unrestrict/link`,
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/unrestrict/link`,
 			params.toString(),
 			{
 				headers: {

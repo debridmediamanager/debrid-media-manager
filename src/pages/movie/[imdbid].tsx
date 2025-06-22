@@ -284,9 +284,7 @@ const MovieSearch: FunctionComponent = () => {
 						prev.map((r) => (r.hash === hash ? { ...r, rdAvailable: false } : r))
 					);
 
-					toast.error(
-						'This torrent was incorrectly marked as available. Database updated.'
-					);
+					toast.error('This torrent was incorrectly marked as available.');
 				}
 			}
 

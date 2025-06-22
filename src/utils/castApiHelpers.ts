@@ -34,7 +34,7 @@ export const generateUserId = async (token: string): Promise<string> => {
 		};
 
 		const response = await axios.get<UserResponse>(
-			'https://api.real-debrid.com/rest/1.0/user',
+			'https://app.real-debrid.com/rest/1.0/user',
 			{ headers }
 		);
 
