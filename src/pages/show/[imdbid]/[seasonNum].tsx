@@ -608,7 +608,7 @@ const TvSearch: FunctionComponent = () => {
 								className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50"
 								onClick={handleAvailabilityTest}
 							>
-								<b>🕵🏻Scan Available</b>
+								<b>🕵🏻Check Available</b>
 							</button>
 							{getFirstAvailableRdTorrent() && (
 								<button

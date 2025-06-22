@@ -238,6 +238,10 @@ export class Repository {
 		return this.reportService.getEmptyMedia(quantity);
 	}
 
+	public getReportedHashes(imdbId: string) {
+		return this.reportService.getReportedHashes(imdbId);
+	}
+
 	// Database Size Methods
 	public getContentSize() {
 		return this.scrapedService.getContentSize();
