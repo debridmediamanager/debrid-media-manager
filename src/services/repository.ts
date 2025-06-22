@@ -72,6 +72,10 @@ export class Repository {
 		return this.availabilityService.checkAvailabilityByHashes(hashes);
 	}
 
+	public removeAvailability(hash: string) {
+		return this.availabilityService.removeAvailability(hash);
+	}
+
 	// Scraped Service Methods
 	public getScrapedTrueResults<T>(key: string, maxSizeGB?: number, page?: number) {
 		return this.scrapedService.getScrapedTrueResults<T>(key, maxSizeGB, page);

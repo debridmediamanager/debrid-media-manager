@@ -223,4 +223,10 @@ export class AvailabilityService extends DatabaseClient {
 			})),
 		}));
 	}
+
+	public async removeAvailability(hash: string): Promise<void> {
+		await this.prisma.available.delete({
+			where: { hash },
+		});
+	}
 }

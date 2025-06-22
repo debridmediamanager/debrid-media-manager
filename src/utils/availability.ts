@@ -98,3 +98,35 @@ export async function checkAvailabilityByHashes(
 		throw error;
 	}
 }
+
+export async function removeAvailability(
+	dmmProblemKey: string,
+	solution: string,
+	hash: string,
+	reason: string
+) {
+	try {
+		const response = await fetch('/api/availability/remove', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				hash,
+				reason,
+				dmmProblemKey,
+				solution,
+			}),
+		});
+
+		if (!response.ok) {
+			const error = await response.json();
+			throw new Error(error.error || 'Failed to remove availability');
+		}
+
+		return await response.json();
+	} catch (error) {
+		console.error('Error removing availability:', error);
+		throw error;
+	}
+}

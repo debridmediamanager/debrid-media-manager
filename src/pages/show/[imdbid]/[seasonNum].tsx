@@ -9,7 +9,7 @@ import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { handleAddAsMagnetInAd, handleAddAsMagnetInRd } from '@/utils/addMagnet';
-import { submitAvailability } from '@/utils/availability';
+import { removeAvailability, submitAvailability } from '@/utils/availability';
 import { handleCastTvShow } from '@/utils/castApiClient';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
@@ -256,13 +256,47 @@ const TvSearch: FunctionComponent = () => {
 		setHashAndProgress((prev) => ({ ...prev, ...records }));
 	}
 
-	async function addRd(hash: string) {
+	async function addRd(hash: string, isCheckingAvailability = false) {
+		const torrentResult = searchResults.find((r) => r.hash === hash);
+		const wasMarkedAvailable = torrentResult?.rdAvailable || false;
+
 		await handleAddAsMagnetInRd(rdKey!, hash, async (info: TorrentInfoResponse) => {
 			const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-			await Promise.all([
-				submitAvailability(tokenWithTimestamp, tokenHash, info, imdbid as string),
-				torrentDB.add(convertToUserTorrent(info)).then(() => fetchHashAndProgress(hash)),
-			]);
+
+			// Only handle false positives for actual usage, not availability checks
+			if (!isCheckingAvailability && wasMarkedAvailable) {
+				// Check for false positive conditions
+				const isFalsePositive =
+					info.status !== 'downloaded' ||
+					info.progress !== 100 ||
+					info.files?.filter((f) => f.selected === 1).length === 0;
+
+				if (isFalsePositive) {
+					// Remove false positive from availability database
+					await removeAvailability(
+						tokenWithTimestamp,
+						tokenHash,
+						hash,
+						`Status: ${info.status}, Progress: ${info.progress}%, Selected files: ${info.files?.filter((f) => f.selected === 1).length || 0}`
+					);
+
+					// Update UI
+					setSearchResults((prev) =>
+						prev.map((r) => (r.hash === hash ? { ...r, rdAvailable: false } : r))
+					);
+
+					toast.error(
+						'This torrent was incorrectly marked as available. Database updated.'
+					);
+				}
+			}
+
+			// Only submit availability for truly available torrents
+			if (info.status === 'downloaded' && info.progress === 100) {
+				await submitAvailability(tokenWithTimestamp, tokenHash, info, imdbid as string);
+			}
+
+			await torrentDB.add(convertToUserTorrent(info)).then(() => fetchHashAndProgress(hash));
 		});
 	}
 
@@ -360,9 +394,9 @@ const TvSearch: FunctionComponent = () => {
 			// Check if torrent is in progress
 			if (`rd:${result.hash}` in hashAndProgress) {
 				await deleteRd(result.hash);
-				await addRd(result.hash);
+				await addRd(result.hash, true); // Pass flag to indicate this is a check
 			} else {
-				await addRd(result.hash);
+				await addRd(result.hash, true); // Pass flag to indicate this is a check
 				await deleteRd(result.hash);
 			}
 
@@ -395,9 +429,9 @@ const TvSearch: FunctionComponent = () => {
 			try {
 				if (`rd:${result.hash}` in hashAndProgress) {
 					await deleteRd(result.hash);
-					await addRd(result.hash);
+					await addRd(result.hash, true); // Pass flag for availability test
 				} else {
-					await addRd(result.hash);
+					await addRd(result.hash, true); // Pass flag for availability test
 					await deleteRd(result.hash);
 				}
 			} catch (error) {
