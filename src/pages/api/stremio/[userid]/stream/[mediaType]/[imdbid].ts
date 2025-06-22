@@ -33,7 +33,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			throw new Error(`no profile found for user ${userid}`);
 		}
 	} catch (error) {
-		console.error(error);
+		console.error(
+			'Failed to get Real-Debrid profile:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
 		res.status(500).json({ error: `Failed to get Real-Debrid profile for user ${userid}` });
 		return;
 	}
@@ -50,7 +53,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			throw new Error(`no token found for user ${userid}`);
 		}
 	} catch (error) {
-		console.error(error);
+		console.error(
+			'Failed to get Real-Debrid token:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
 		res.status(500).json({ error: `Failed to get Real-Debrid token for user ${userid}` });
 		return;
 	}
@@ -150,8 +156,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			cacheMaxAge: 0,
 		});
 	} catch (error) {
-		console.error(error);
-		res.status(500).json({ error: `Failed to get casted URLs: ${error}` });
+		console.error(
+			'Failed to get casted URLs:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		res.status(500).json({ error: 'Failed to get casted URLs' });
 		return;
 	}
 }

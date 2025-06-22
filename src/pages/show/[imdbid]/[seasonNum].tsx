@@ -218,7 +218,10 @@ const TvSearch: FunctionComponent = () => {
 				toast(`No${page === 0 ? '' : ' more'} results found`, searchToastOptions);
 			}
 		} catch (error) {
-			console.error(error);
+			console.error(
+				'Error fetching torrents:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
 			if ((error as AxiosError).response?.status === 403) {
 				setErrorMessage(
 					'Please check the time in your device. If it is correct, please try again.'

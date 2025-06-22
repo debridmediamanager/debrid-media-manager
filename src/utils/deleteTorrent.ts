@@ -13,7 +13,10 @@ export const handleDeleteRdTorrent = async (
 		await deleteRdTorrent(rdKey, id.substring(3));
 		if (!disableToast) toast(`Torrent deleted (${id})`, magnetToastOptions);
 	} catch (error) {
-		console.error(error);
+		console.error(
+			'Error deleting RD torrent:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
 		toast.error(`Error deleting torrent in RD (${id})`);
 	}
 };
@@ -27,7 +30,10 @@ export const handleDeleteAdTorrent = async (
 		await deleteAdTorrent(adKey, id.substring(3));
 		if (!disableToast) toast(`Torrent deleted (${id})`, magnetToastOptions);
 	} catch (error) {
-		console.error(error);
+		console.error(
+			'Error deleting AD torrent:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
 		toast.error(`Error deleting torrent in AD (${id})`);
 	}
 };
@@ -41,7 +47,10 @@ export const handleDeleteTbTorrent = async (
 		await deleteTbTorrent(tbKey, id.substring(3));
 		if (!disableToast) toast(`Torrent deleted (${id})`, magnetToastOptions);
 	} catch (error) {
-		console.error(error);
+		console.error(
+			'Error deleting TB torrent:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
 		toast.error(`Error deleting torrent in TB (${id})`);
 	}
 };

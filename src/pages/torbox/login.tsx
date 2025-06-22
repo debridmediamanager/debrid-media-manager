@@ -14,20 +14,17 @@ export default function TorboxLoginPage() {
 		e.preventDefault();
 		setError('');
 		try {
-			console.log('Attempting to validate API key...');
 			// Verify the API key works by attempting to get user info
 			const userData = await getUserData(inputApiKey);
-			console.log('API response:', userData);
 
 			// If successful, save the API key
 			setApiKey(inputApiKey);
 			await router.push('/');
 		} catch (err: any) {
-			console.error('Error details:', {
-				message: err.message,
-				response: err.response?.data,
-				status: err.response?.status,
-			});
+			console.error(
+				'Failed to validate API key:',
+				err instanceof Error ? err.message : 'Unknown error'
+			);
 			setError(
 				`API Error: ${err.response?.data?.message || err.message || 'Could not validate API key'}. Status: ${err.response?.status || 'unknown'}`
 			);

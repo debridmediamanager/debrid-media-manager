@@ -77,7 +77,6 @@ export class IframeProxy {
 					headers: requestData.headers,
 					data: requestData.body,
 				});
-				console.log('Request executed successfully:', response.data);
 				return response.data as T;
 			} catch (error: any) {
 				console.error('Error executing request:', error.message);

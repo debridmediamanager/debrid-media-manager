@@ -338,8 +338,11 @@ const handler: NextApiHandler = async (req, res) => {
 
 		res.status(200).json({ results });
 	} catch (error: any) {
-		console.error('encountered a search issue', error);
-		res.status(500).json({ status: 'error', errorMessage: error.message });
+		console.error(
+			'Encountered a search issue:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		res.status(500).json({ status: 'error', errorMessage: 'An internal error occurred' });
 	}
 };
 

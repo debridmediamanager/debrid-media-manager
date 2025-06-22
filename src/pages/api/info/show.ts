@@ -124,7 +124,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			season_episode_counts,
 		});
 	} catch (error) {
-		console.error('Error fetching show info:', error);
+		if (axios.isAxiosError(error)) {
+			console.error('Error fetching show info:', {
+				message: error.message,
+				status: error.response?.status,
+				statusText: error.response?.statusText,
+				url: error.config?.url,
+			});
+		} else {
+			console.error('Error fetching show info:', error);
+		}
 		res.status(500).json({ error: 'Failed to fetch show information' });
 	}
 }

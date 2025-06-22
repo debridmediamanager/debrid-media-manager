@@ -54,7 +54,10 @@ export class ScrapedService extends DatabaseClient {
 			const result = await this.prisma.$queryRaw<{ value: T }[]>(query);
 			return result.length > 0 ? result[0].value : undefined;
 		} catch (error) {
-			console.error('Database query failed:', error);
+			console.error(
+				'Database query failed:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
 			throw new Error('Failed to retrieve scrapedtrue results.');
 		}
 	}
@@ -113,7 +116,10 @@ export class ScrapedService extends DatabaseClient {
 			const result = await this.prisma.$queryRaw<{ value: T }[]>(query);
 			return result.length > 0 ? result[0].value : undefined;
 		} catch (error) {
-			console.error('Database query failed:', error);
+			console.error(
+				'Database query failed:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
 			throw new Error('Failed to retrieve scraped results.');
 		}
 	}
@@ -138,7 +144,8 @@ export class ScrapedService extends DatabaseClient {
 			]);
 			updatedValue = sortByFileSize(updatedValue);
 			const newLength = updatedValue.length;
-			console.log(`📝 ${key}: +${newLength - origLength} results`);
+			// Log update count without exposing the key
+			console.log(`📝 Updated: +${newLength - origLength} results`);
 
 			await this.prisma.scrapedTrue.update({
 				where: { key },
@@ -182,7 +189,8 @@ export class ScrapedService extends DatabaseClient {
 			]);
 			updatedValue = sortByFileSize(updatedValue);
 			const newLength = updatedValue.length;
-			console.log(`📝 ${key}: +${newLength - origLength} results`);
+			// Log update count without exposing the key
+			console.log(`📝 Updated: +${newLength - origLength} results`);
 
 			await this.prisma.scraped.update({
 				where: { key },

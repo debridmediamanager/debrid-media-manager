@@ -11,7 +11,10 @@ export const handleCastMovie = async (imdbId: string, rdKey: string, hash: strin
 		);
 		toast(`Successfully casted movie ${resp.data.filename}`, castToastOptions);
 	} catch (error) {
-		console.error(error);
+		console.error(
+			'Error casting movie:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
 		toast.error('There was an error casting the movie');
 	}
 };

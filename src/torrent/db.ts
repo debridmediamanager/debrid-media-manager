@@ -143,7 +143,6 @@ class UserTorrentDB {
 	public async inLibrary(hash: string): Promise<boolean> {
 		const db = await this.getDB();
 		const count = await db.countFromIndex(this.torrentsTbl, 'hash', hash);
-		console.log(`inLibrary: ${hash} ${count}`);
 		return count > 0;
 	}
 

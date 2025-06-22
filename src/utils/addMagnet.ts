@@ -40,8 +40,11 @@ export const handleAddAsMagnetInRd = async (
 			});
 			return;
 		}
-		console.error(error);
-		toast.error(`There was an error adding hash: ${error}`, magnetToastOptions);
+		console.error(
+			'Error adding hash:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		toast.error('There was an error adding hash', magnetToastOptions);
 	}
 };
 
@@ -57,8 +60,11 @@ export const handleAddMultipleHashesInRd = async (
 			await handleSelectFilesInRd(rdKey, `rd:${id}`);
 		} catch (error) {
 			errorCount++;
-			console.error(error);
-			toast.error(`There was an error adding hash: ${error}`);
+			console.error(
+				'Error adding hash:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
+			toast.error('There was an error adding hash');
 		}
 	}
 	if (callback) await callback();
@@ -151,7 +157,10 @@ export const handleAddMultipleHashesInAd = async (
 		if (callback) await callback();
 		toast(`Successfully added ${resp.data.magnets.length} hashes!`, magnetToastOptions);
 	} catch (error) {
-		console.error(error);
+		console.error(
+			'Error adding hash:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
 		toast.error('There was an error adding hash. Please try again.');
 	}
 };
@@ -161,8 +170,11 @@ export const handleRestartTorrent = async (adKey: string, id: string) => {
 		await restartMagnet(adKey, id.substring(3));
 		toast.success(`Torrent restarted (${id})`, magnetToastOptions);
 	} catch (error) {
-		console.error(error);
-		toast.error(`Error restarting torrent (${id}) ${error}`, magnetToastOptions);
+		console.error(
+			'Error restarting torrent:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		toast.error(`Error restarting torrent (${id})`, magnetToastOptions);
 		throw error;
 	}
 };
@@ -186,8 +198,11 @@ export const handleAddAsMagnetInTb = async (
 			toast.error('Torrent added but no ID returned', magnetToastOptions);
 		}
 	} catch (error: any) {
-		console.error(error);
-		toast.error(`Error adding torrent: ${error.message}`, magnetToastOptions);
+		console.error(
+			'Error adding torrent:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		toast.error('Error adding torrent', magnetToastOptions);
 		throw error;
 	}
 };

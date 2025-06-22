@@ -13,8 +13,11 @@ const handler: NextApiHandler = async (req, res) => {
 
 		res.status(200).json({ contentSize, processing, requested });
 	} catch (err: any) {
-		console.error(err);
-		res.status(500).json({ error: err.message });
+		console.error(
+			'Error fetching database size:',
+			err instanceof Error ? err.message : 'Unknown error'
+		);
+		res.status(500).json({ error: 'Failed to fetch database size' });
 	}
 };
 

@@ -91,8 +91,11 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 
 		res.send(responseBody);
 	} catch (err: unknown) {
-		console.error(err);
-		res.status(500).json({ error: `Internal Server Error: ${err}` });
+		console.error(
+			'Proxy request failed:',
+			err instanceof Error ? err.message : 'Unknown error'
+		);
+		res.status(500).json({ error: 'Internal Server Error' });
 	}
 };
 

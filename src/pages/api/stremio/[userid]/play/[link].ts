@@ -29,7 +29,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		res.redirect(unrestrict.download);
 	} catch (error: any) {
-		console.error(error);
-		res.status(500).json({ error: `Failed to play link: ${error}` });
+		console.error(
+			'Failed to play link:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		res.status(500).json({ error: 'Failed to play link' });
 	}
 }
