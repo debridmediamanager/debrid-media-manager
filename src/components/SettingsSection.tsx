@@ -29,6 +29,8 @@ export const SettingsSection = () => {
 	const downloadMagnets =
 		window.localStorage.getItem('settings:downloadMagnets') === 'true' ||
 		defaultDownloadMagnets;
+	const showMassReportButtons =
+		window.localStorage.getItem('settings:showMassReportButtons') === 'true';
 
 	useEffect(() => {
 		// Check if protocol handler is registered
@@ -70,6 +72,10 @@ export const SettingsSection = () => {
 
 	const handleDownloadMagnetsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		window.localStorage.setItem('settings:downloadMagnets', String(e.target.checked));
+	};
+
+	const handleMassReportButtonsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		window.localStorage.setItem('settings:showMassReportButtons', String(e.target.checked));
 	};
 
 	const handleHideInstructions = () => {
@@ -266,6 +272,17 @@ export const SettingsSection = () => {
 							<label className="font-semibold">
 								Download .magnet files instead of copy
 							</label>
+						</div>
+
+						<div className="flex items-center gap-2">
+							<input
+								id="dmm-show-mass-report-buttons"
+								type="checkbox"
+								className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+								defaultChecked={showMassReportButtons}
+								onChange={handleMassReportButtonsChange}
+							/>
+							<label className="font-semibold">Show mass report buttons</label>
 						</div>
 					</div>
 				</div>

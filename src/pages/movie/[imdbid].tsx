@@ -105,6 +105,11 @@ const MovieSearch: FunctionComponent = () => {
 			typeof window !== 'undefined' &&
 			window.localStorage.getItem('settings:downloadMagnets') === 'true'
 	);
+	const [showMassReportButtons] = useState(
+		() =>
+			typeof window !== 'undefined' &&
+			window.localStorage.getItem('settings:showMassReportButtons') === 'true'
+	);
 
 	useEffect(() => {
 		if (!imdbid) return;
@@ -528,6 +533,61 @@ const MovieSearch: FunctionComponent = () => {
 		return searchResults.find((r) => r.rdAvailable && !r.noVideos);
 	};
 
+	async function handleMassReport(type: 'porn' | 'wrong_imdb' | 'wrong_season') {
+		if (!rdKey) {
+			toast.error('Please login to Real-Debrid first');
+			return;
+		}
+
+		if (filteredResults.length === 0) {
+			toast.error('No torrents to report');
+			return;
+		}
+
+		// Confirm with user
+		const typeLabels = {
+			porn: 'pornographic content',
+			wrong_imdb: 'wrong IMDB ID',
+			wrong_season: 'wrong season',
+		};
+		const confirmMessage = `Report ${filteredResults.length} torrents as ${typeLabels[type]}?`;
+		if (!confirm(confirmMessage)) return;
+
+		const toastId = toast.loading(`Reporting ${filteredResults.length} torrents...`);
+
+		try {
+			// Use the RD key as userId, same as individual ReportButton
+			const userId = rdKey || adKey || torboxKey || '';
+
+			// Prepare reports data
+			const reports = filteredResults.map((result) => ({
+				hash: result.hash,
+				imdbId: imdbid as string,
+			}));
+
+			// Send mass report
+			const response = await axios.post('/api/report/mass', {
+				reports,
+				userId,
+				type,
+			});
+
+			if (response.data.success) {
+				toast.success(`Successfully reported ${response.data.reported} torrents`, {
+					id: toastId,
+				});
+				if (response.data.failed > 0) {
+					toast.error(`Failed to report ${response.data.failed} torrents`);
+				}
+			} else {
+				toast.error('Failed to report torrents', { id: toastId });
+			}
+		} catch (error) {
+			console.error('Mass report error:', error);
+			toast.error('Failed to report torrents', { id: toastId });
+		}
+	}
+
 	const getBiggestFileId = (result: SearchResult) => {
 		if (!result.files || !result.files.length) return '';
 		const biggestFile = result.files
@@ -691,6 +751,24 @@ const MovieSearch: FunctionComponent = () => {
 				>
 					Reset
 				</span>
+				{query && filteredResults.length > 0 && rdKey && showMassReportButtons && (
+					<div className="ml-2 flex gap-2">
+						<span
+							className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+							onClick={() => handleMassReport('porn')}
+							title="Report all filtered torrents as pornographic content"
+						>
+							Report as Porn ({filteredResults.length})
+						</span>
+						<span
+							className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+							onClick={() => handleMassReport('wrong_imdb')}
+							title="Report all filtered torrents as wrong IMDB ID"
+						>
+							Report Wrong IMDB ({filteredResults.length})
+						</span>
+					</div>
+				)}
 			</div>
 			<div className="mb-2 flex items-center gap-2 overflow-x-auto p-2">
 				<SearchTokens
