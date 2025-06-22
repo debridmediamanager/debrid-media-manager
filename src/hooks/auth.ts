@@ -116,53 +116,86 @@ const useRealDebrid = () => {
 const useAllDebrid = () => {
 	const [user, setUser] = useState<AllDebridUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
+	const [loading, setLoading] = useState(false);
 	const [token] = useLocalStorage<string>('ad:apiKey');
 
 	useEffect(() => {
-		if (!token) return;
+		if (!token) {
+			return;
+		}
 
+		setLoading(true);
 		getAllDebridUser(token)
-			.then((user) => setUser(user as AllDebridUser))
-			.catch((e) => setError(e as Error));
+			.then((user) => {
+				setUser(user as AllDebridUser);
+				setError(null);
+				setLoading(false);
+			})
+			.catch((e) => {
+				setError(e as Error);
+				setLoading(false);
+			});
 	}, [token]);
 
-	return { user, error, hasAuth: !!token };
+	return { user, error, hasAuth: !!token, loading };
 };
 
 const useTorBox = () => {
 	const [user, setUser] = useState<TorBoxUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
+	const [loading, setLoading] = useState(false);
 	const [token] = useLocalStorage<string>('tb:apiKey');
 
 	useEffect(() => {
-		if (!token) return;
+		if (!token) {
+			return;
+		}
 
+		setLoading(true);
 		getUserData(token)
-			.then((response) => response.success && setUser(response.data))
-			.catch((e) => setError(e as Error));
+			.then((response) => {
+				if (response.success) {
+					setUser(response.data);
+					setError(null);
+				}
+				setLoading(false);
+			})
+			.catch((e) => {
+				setError(e as Error);
+				setLoading(false);
+			});
 	}, [token]);
 
-	return { user, error, hasAuth: !!token };
+	return { user, error, hasAuth: !!token, loading };
 };
 
 const useTrakt = () => {
 	const [user, setUser] = useState<TraktUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
+	const [loading, setLoading] = useState(false);
 	const [token] = useLocalStorage<string>('trakt:accessToken');
 	const [_, setUserSlug] = useLocalStorage<string>('trakt:userSlug');
 
 	useEffect(() => {
-		if (!token) return;
+		if (!token) {
+			return;
+		}
 
+		setLoading(true);
 		getTraktUser(token)
 			.then((user) => {
 				setUser(user);
 				setUserSlug(user.user.ids.slug);
+				setError(null);
+				setLoading(false);
 			})
-			.catch((e) => setError(e as Error));
+			.catch((e) => {
+				setError(e as Error);
+				setLoading(false);
+			});
 	}, [token, setUserSlug]);
 
-	return { user, error, hasAuth: !!token };
+	return { user, error, hasAuth: !!token, loading };
 };
 
 // Backward compatibility hook for withAuth.tsx
