@@ -91,7 +91,7 @@ const useRealDebrid = () => {
 		};
 
 		auth();
-	}, [refreshToken, clientId, clientSecret, setToken, hasCheckedUser]);
+	}, [refreshToken, clientId, clientSecret, setToken, hasCheckedUser, token]);
 
 	return { user, error, loading, isRefreshing, hasAuth: !!token };
 };
@@ -144,7 +144,7 @@ const useTrakt = () => {
 				setUserSlug(user.user.ids.slug);
 			})
 			.catch((e) => setError(e as Error));
-	}, [token]);
+	}, [token, setUserSlug]);
 
 	return { user, error, hasAuth: !!token };
 };

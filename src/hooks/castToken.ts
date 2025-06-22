@@ -27,7 +27,7 @@ export function useCastToken() {
 		};
 
 		fetchToken();
-	}, [accessToken]);
+	}, [accessToken, clientId, clientSecret, dmmCastToken, refreshToken, setDmmCastToken]);
 
 	return dmmCastToken;
 }

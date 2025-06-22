@@ -33,7 +33,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useEffect, useMemo, useRef, useState } from 'react';
+import { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 type ShowInfo = {
@@ -114,13 +114,13 @@ const TvSearch: FunctionComponent = () => {
 		fetchShowInfo();
 	}, [imdbid, seasonNum, router]);
 
-	async function initialize() {
+	const initialize = useCallback(async () => {
 		await torrentDB.initializeDB();
 		await Promise.all([
 			fetchData(imdbid as string, parseInt(seasonNum as string), 0),
 			fetchHashAndProgress(),
 		]);
-	}
+	}, [imdbid, seasonNum]);
 
 	useEffect(() => {
 		if (!imdbid || !seasonNum || isLoading) return;
@@ -129,7 +129,7 @@ const TvSearch: FunctionComponent = () => {
 		setFilteredResults([]);
 		setQuery(defaultTorrentsFilter); // Reset query to default filter
 		initialize();
-	}, [imdbid, seasonNum, isLoading]);
+	}, [imdbid, seasonNum, isLoading, defaultTorrentsFilter, initialize]);
 
 	useEffect(() => {
 		return () => {
