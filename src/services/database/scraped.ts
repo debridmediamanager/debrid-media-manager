@@ -334,20 +334,41 @@ export class ScrapedService extends DatabaseClient {
 	}
 
 	public async getRecentlyUpdatedContent(): Promise<string[]> {
-		const rows = await this.prisma.scraped.findMany({
-			take: 200,
-			orderBy: {
-				updatedAt: 'desc',
-			},
-			where: {
-				OR: [{ key: { startsWith: 'movie:tt' } }, { key: { startsWith: 'tv:tt' } }],
-			},
-			select: {
-				key: true,
-			},
-		});
+		const [scrapedRows, scrapedTrueRows] = await Promise.all([
+			this.prisma.scraped.findMany({
+				take: 100,
+				orderBy: {
+					updatedAt: 'desc',
+				},
+				where: {
+					OR: [{ key: { startsWith: 'movie:tt' } }, { key: { startsWith: 'tv:tt' } }],
+				},
+				select: {
+					key: true,
+					updatedAt: true,
+				},
+			}),
+			this.prisma.scrapedTrue.findMany({
+				take: 100,
+				orderBy: {
+					updatedAt: 'desc',
+				},
+				where: {
+					OR: [{ key: { startsWith: 'movie:tt' } }, { key: { startsWith: 'tv:tt' } }],
+				},
+				select: {
+					key: true,
+					updatedAt: true,
+				},
+			}),
+		]);
 
-		return rows
+		// Combine and sort by updatedAt
+		const allRows = [...scrapedRows, ...scrapedTrueRows]
+			.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+			.slice(0, 200);
+
+		return allRows
 			.map((row: any) => {
 				const match = row.key.match(/^(movie|tv):([^:]+)/);
 				if (match) {
