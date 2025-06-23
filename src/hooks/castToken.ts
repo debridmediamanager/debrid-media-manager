@@ -29,7 +29,8 @@ export function useCastToken() {
 		};
 
 		fetchToken();
-	}, [accessToken, clientId, clientSecret, refreshToken, dmmCastToken, setDmmCastToken]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [accessToken, clientId, clientSecret, refreshToken, dmmCastToken]);
 
 	return dmmCastToken;
 }

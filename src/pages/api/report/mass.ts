@@ -44,7 +44,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				results.push({ hash: report.hash, success: true });
 			} catch (error) {
 				console.error(`Failed to report ${report.hash}:`, error);
-				errors.push({ hash: report.hash, error: error.message });
+				errors.push({
+					hash: report.hash,
+					error: error instanceof Error ? error.message : 'Unknown error',
+				});
 			}
 		}
 

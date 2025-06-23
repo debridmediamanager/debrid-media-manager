@@ -107,7 +107,7 @@ const useRealDebrid = () => {
 			isMounted = false;
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [refreshToken, clientId, clientSecret, setToken]);
+	}, [refreshToken, clientId, clientSecret]);
 
 	return { user, error, loading, isRefreshing: false, hasAuth: !!token };
 };
@@ -193,7 +193,8 @@ const useTrakt = () => {
 				setError(e as Error);
 				setLoading(false);
 			});
-	}, [token, setUserSlug]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [token]);
 
 	return { user, error, hasAuth: !!token, loading };
 };
