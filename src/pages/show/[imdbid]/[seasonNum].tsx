@@ -271,11 +271,13 @@ const TvSearch: FunctionComponent = () => {
 		setHashAndProgress((prev) => ({ ...prev, ...records }));
 	}
 
-	async function addRd(hash: string, isCheckingAvailability = false) {
+	async function addRd(hash: string, isCheckingAvailability = false): Promise<any> {
 		const torrentResult = searchResults.find((r) => r.hash === hash);
 		const wasMarkedAvailable = torrentResult?.rdAvailable || false;
+		let torrentInfo: TorrentInfoResponse | null = null;
 
 		await handleAddAsMagnetInRd(rdKey!, hash, async (info: TorrentInfoResponse) => {
+			torrentInfo = info;
 			const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 
 			// Only handle false positives for actual usage, not availability checks
@@ -311,6 +313,8 @@ const TvSearch: FunctionComponent = () => {
 
 			await torrentDB.add(convertToUserTorrent(info)).then(() => fetchHashAndProgress(hash));
 		});
+
+		return isCheckingAvailability ? torrentInfo : undefined;
 	}
 
 	async function addAd(hash: string) {
@@ -453,6 +457,7 @@ const TvSearch: FunctionComponent = () => {
 
 		const nonAvailableResults = filteredResults.filter((r) => !r.rdAvailable);
 		let progressToast: string | null = null;
+		let availableCount = 0;
 
 		// Show initial toast immediately
 		if (nonAvailableResults.length === 0) {
@@ -467,12 +472,18 @@ const TvSearch: FunctionComponent = () => {
 
 		const processResult = async (result: SearchResult) => {
 			try {
+				let addRdResponse: any;
 				if (`rd:${result.hash}` in hashAndProgress) {
 					await deleteRd(result.hash);
-					await addRd(result.hash, true); // Pass flag for availability test
+					addRdResponse = await addRd(result.hash, true); // Pass flag for availability test
 				} else {
-					await addRd(result.hash, true); // Pass flag for availability test
+					addRdResponse = await addRd(result.hash, true); // Pass flag for availability test
 					await deleteRd(result.hash);
+				}
+
+				// Check if addRd returned a response with an ID (meaning torrent is available)
+				if (addRdResponse && addRdResponse.id) {
+					availableCount++;
 				}
 			} catch (error) {
 				console.error(`Failed to process ${result.title}:`, error);
@@ -481,7 +492,10 @@ const TvSearch: FunctionComponent = () => {
 		};
 
 		const onProgress = (completed: number, total: number) => {
-			const message = `Testing availability: ${completed}/${total}`;
+			const message =
+				availableCount > 0
+					? `Testing availability: ${completed}/${total} (${availableCount} found)`
+					: `Testing availability: ${completed}/${total}`;
 			if (progressToast && isMounted.current) {
 				toast.loading(message, { id: progressToast });
 			}
