@@ -43,9 +43,26 @@ function isValidSHA40Hash(hash: string): boolean {
 	return hashRegex.test(hash);
 }
 
-// Extend the Axios request config type to include our custom property
+// Extend the Axios request config type to include our custom properties
 interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
 	__isRetryRequest?: boolean;
+	__retryCount?: number;
+}
+
+// Helper function to calculate exponential backoff delay with jitter
+function calculateRetryDelay(retryCount: number): number {
+	// Base delay: 1s, doubled each attempt (1s, 2s, 4s, 8s, 16s)
+	const baseDelay = Math.pow(2, retryCount - 1) * 1000;
+
+	// Cap at 60s first
+	const cappedDelay = Math.min(baseDelay, 60000);
+
+	// Add ±20% jitter to prevent thundering herd
+	// Apply jitter AFTER capping so even at 60s we get variation (48s-72s)
+	const jitterFactor = 0.8 + Math.random() * 0.4; // Random between 0.8 and 1.2
+	const delayWithJitter = cappedDelay * jitterFactor;
+
+	return delayWithJitter;
 }
 
 // Function to create an Axios client with a given token
@@ -71,95 +88,69 @@ function createAxiosClient(token: string, timeout: number = REQUEST_TIMEOUT): Ax
 		}
 
 		// Add cache-busting parameter for retries to prevent hitting cached errors
-		if (config.__isRetryRequest) {
-			// Add a unique ID to the URL to bypass service worker cache for retries
-			const separator = config.url?.includes('?') ? '&' : '?';
-			config.url = `${config.url}${separator}_cache_buster=${getUniqueRequestId()}`;
+		if (config.__isRetryRequest && config.url) {
+			// Parse the URL to properly manage query parameters
+			const url = new URL(config.url, 'http://dummy-base.com'); // dummy base for relative URLs
+			// Replace any existing cache buster with a new one
+			url.searchParams.set('_cache_buster', getUniqueRequestId());
+			// Update the config URL, preserving relative vs absolute
+			config.url = config.url.startsWith('http') ? url.toString() : url.pathname + url.search;
 		}
 
 		lastRequestTime = Date.now();
 		return config;
 	});
 
-	// Add response interceptor for handling all retries (including timeouts and 429 errors)
+	// Add response interceptor for handling retries with exponential backoff
 	client.interceptors.response.use(
 		(response) => response,
 		async (error) => {
-			let retryCount = 0;
 			const originalConfig = error.config as ExtendedAxiosRequestConfig;
 
-			// If config doesn't exist or the retry counter exceeds limit, reject
-			if (!originalConfig || retryCount > 5) {
+			// If config doesn't exist, reject
+			if (!originalConfig) {
 				return Promise.reject(error);
 			}
+
+			// Initialize retry count if not set
+			if (originalConfig.__retryCount === undefined) {
+				originalConfig.__retryCount = 0;
+			}
+
+			// Check if we've exceeded max retries
+			if (originalConfig.__retryCount >= 7) {
+				return Promise.reject(error);
+			}
+
+			// Only retry on 5xx server errors
+			const isServerError = error.response?.status >= 500 && error.response?.status < 600;
+
+			if (!isServerError) {
+				return Promise.reject(error);
+			}
+
+			// Increment retry count
+			originalConfig.__retryCount++;
 
 			// Set flag to avoid infinite retry loops
 			originalConfig.__isRetryRequest = true;
 
-			// Determine if we should retry
-			const shouldRetry = () => {
-				// Network error codes that should trigger retry
-				const retryableNetworkErrors = [
-					'ECONNABORTED', // axios timeout
-					'ECONNRESET', // connection reset by peer
-					'ECONNREFUSED', // connection refused
-					'ENETUNREACH', // network unreachable
-					'EHOSTUNREACH', // host unreachable
-					'EAI_AGAIN', // temporary failure in name resolution
-				];
+			// Calculate delay with exponential backoff and jitter
+			const delay = calculateRetryDelay(originalConfig.__retryCount);
 
-				// Retry on specific error codes
-				const isRetryableNetworkError = retryableNetworkErrors.includes(error.code);
+			console.log(
+				`Request failed with ${error.response?.status} error. Retrying (attempt ${originalConfig.__retryCount}/7) after ${Math.round(delay)}ms delay...`
+			);
 
-				// Retry on timeout errors (in case error.code isn't set but message indicates timeout)
-				const isTimeout =
-					!isRetryableNetworkError && error.message && error.message.includes('timeout');
+			// Wait for the calculated delay
+			await new Promise((resolve) => setTimeout(resolve, delay));
 
-				// Retry on 429 rate limit errors
-				const isRateLimit = error.response?.status === 429;
-
-				// Retry on network errors without specific code
-				const isGenericNetworkError = !error.response && !isRetryableNetworkError;
-
-				// Retry on specific 5xx server errors
-				const isServerError = error.response?.status >= 500 && error.response?.status < 600;
-
-				return (
-					isRetryableNetworkError ||
-					isTimeout ||
-					isRateLimit ||
-					isGenericNetworkError ||
-					isServerError
-				);
-			};
-
-			// Retry logic with improved awareness of service worker cache
-			while (shouldRetry() && retryCount < 5) {
-				retryCount++;
-
-				// For 429 errors, use exponential backoff
-				let delay = CACHE_BACKOFF_TIME; // Default wait longer than cache TTL
-				if (error.response?.status === 429) {
-					delay = Math.max(
-						CACHE_BACKOFF_TIME,
-						Math.min(Math.pow(2, retryCount) * 1000, 30000)
-					); // Max 30s, min greater than cache TTL
-				}
-
-				console.log(
-					`Request failed (${error.message}). Retrying (attempt #${retryCount}) after ${delay}ms delay...`
-				);
-
-				await new Promise((resolve) => setTimeout(resolve, delay));
-
-				try {
-					return await client.request(originalConfig);
-				} catch (retryError) {
-					error = retryError;
-				}
+			try {
+				return await client.request(originalConfig);
+			} catch (retryError) {
+				// Pass along the retry error for the next iteration
+				return Promise.reject(retryError);
 			}
-
-			return Promise.reject(error);
 		}
 	);
 
@@ -186,84 +177,63 @@ function getGenericAxios(timeout: number = REQUEST_TIMEOUT) {
 genericAxios.interceptors.response.use(
 	(response) => response,
 	async (error) => {
-		let retryCount = 0;
 		const originalConfig = error.config as ExtendedAxiosRequestConfig;
 
-		// If config doesn't exist or the retry counter exceeds limit, reject
-		if (!originalConfig || retryCount > 5) {
+		// If config doesn't exist, reject
+		if (!originalConfig) {
 			return Promise.reject(error);
 		}
 
-		originalConfig.__isRetryRequest = true;
-
-		const shouldRetry = () => {
-			// Network error codes that should trigger retry
-			const retryableNetworkErrors = [
-				'ECONNABORTED', // axios timeout
-				'ECONNRESET', // connection reset by peer
-				'ECONNREFUSED', // connection refused
-				'ENETUNREACH', // network unreachable
-				'EHOSTUNREACH', // host unreachable
-				'EAI_AGAIN', // temporary failure in name resolution
-			];
-
-			// Retry on specific error codes
-			const isRetryableNetworkError = retryableNetworkErrors.includes(error.code);
-
-			// Retry on timeout errors (in case error.code isn't set but message indicates timeout)
-			const isTimeout =
-				!isRetryableNetworkError && error.message && error.message.includes('timeout');
-
-			// Retry on 429 rate limit errors
-			const isRateLimit = error.response?.status === 429;
-
-			// Retry on network errors without specific code
-			const isGenericNetworkError = !error.response && !isRetryableNetworkError;
-
-			// Retry on specific 5xx server errors
-			const isServerError = error.response?.status >= 500 && error.response?.status < 600;
-
-			return (
-				isRetryableNetworkError ||
-				isTimeout ||
-				isRateLimit ||
-				isGenericNetworkError ||
-				isServerError
-			);
-		};
-
-		// Retry logic with improved awareness of service worker cache
-		while (shouldRetry() && retryCount < 5) {
-			retryCount++;
-
-			// For 429 errors, use exponential backoff
-			let delay = CACHE_BACKOFF_TIME; // Default wait longer than cache TTL
-			if (error.response?.status === 429) {
-				delay = Math.max(
-					CACHE_BACKOFF_TIME,
-					Math.min(Math.pow(2, retryCount) * 1000, 30000)
-				); // Max 30s, min greater than cache TTL
-			}
-
-			console.log(
-				`Request failed (${error.message}). Retrying (attempt #${retryCount}) after ${delay}ms delay...`
-			);
-
-			await new Promise((resolve) => setTimeout(resolve, delay));
-
-			try {
-				// Add cache-busting parameter for retries
-				if (originalConfig.url) {
-					const separator = originalConfig.url.includes('?') ? '&' : '?';
-					originalConfig.url = `${originalConfig.url}${separator}_cache_buster=${getUniqueRequestId()}`;
-				}
-				return await genericAxios.request(originalConfig);
-			} catch (retryError) {
-				error = retryError;
-			}
+		// Initialize retry count if not set
+		if (originalConfig.__retryCount === undefined) {
+			originalConfig.__retryCount = 0;
 		}
 
-		return Promise.reject(error);
+		// Check if we've exceeded max retries
+		if (originalConfig.__retryCount >= 7) {
+			return Promise.reject(error);
+		}
+
+		// Only retry on 5xx server errors
+		const isServerError = error.response?.status >= 500 && error.response?.status < 600;
+
+		if (!isServerError) {
+			return Promise.reject(error);
+		}
+
+		// Increment retry count
+		originalConfig.__retryCount++;
+
+		// Set flag to avoid infinite retry loops
+		originalConfig.__isRetryRequest = true;
+
+		// Calculate delay with exponential backoff and jitter
+		const delay = calculateRetryDelay(originalConfig.__retryCount);
+
+		console.log(
+			`Request failed with ${error.response?.status} error. Retrying (attempt ${originalConfig.__retryCount}/7) after ${Math.round(delay)}ms delay...`
+		);
+
+		// Wait for the calculated delay
+		await new Promise((resolve) => setTimeout(resolve, delay));
+
+		try {
+			// Add cache-busting parameter for retries
+			if (originalConfig.url) {
+				// Parse the URL to properly manage query parameters
+				const url = new URL(originalConfig.url, 'http://dummy-base.com'); // dummy base for relative URLs
+				// Replace any existing cache buster with a new one
+				url.searchParams.set('_cache_buster', getUniqueRequestId());
+				// Update the config URL, preserving relative vs absolute
+				originalConfig.url = originalConfig.url.startsWith('http')
+					? url.toString()
+					: url.pathname + url.search;
+			}
+			return await genericAxios.request(originalConfig);
+		} catch (retryError) {
+			// Pass along the retry error for the next iteration
+			return Promise.reject(retryError);
+		}
 	}
 );
 
