@@ -414,7 +414,7 @@ const MovieSearch: FunctionComponent = () => {
 
 		const nonAvailableResults = filteredResults.filter((r) => !r.rdAvailable);
 		let progressToast: string | null = null;
-		let availableCount = 0;
+		let realtimeAvailableCount = 0;
 
 		// Show initial toast immediately
 		if (nonAvailableResults.length === 0) {
@@ -438,9 +438,14 @@ const MovieSearch: FunctionComponent = () => {
 					await deleteRd(result.hash);
 				}
 
-				// Check if addRd returned a response with an ID (meaning torrent is available)
-				if (addRdResponse && addRdResponse.id) {
-					availableCount++;
+				// Check if addRd returned a response with an ID AND is truly available
+				if (
+					addRdResponse &&
+					addRdResponse.id &&
+					addRdResponse.status === 'downloaded' &&
+					addRdResponse.progress === 100
+				) {
+					realtimeAvailableCount++;
 				}
 			} catch (error) {
 				console.error(`Failed to process ${result.title}:`, error);
@@ -450,8 +455,8 @@ const MovieSearch: FunctionComponent = () => {
 
 		const onProgress = (completed: number, total: number) => {
 			const message =
-				availableCount > 0
-					? `Testing availability: ${completed}/${total} (${availableCount} found)`
+				realtimeAvailableCount > 0
+					? `Testing availability: ${completed}/${total} (${realtimeAvailableCount} found)`
 					: `Testing availability: ${completed}/${total}`;
 			if (progressToast && isMounted.current) {
 				toast.loading(message, { id: progressToast });
