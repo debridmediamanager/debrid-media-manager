@@ -403,6 +403,21 @@ const MovieSearch: FunctionComponent = () => {
 	async function handleAvailabilityTest() {
 		const nonAvailableResults = filteredResults.filter((r) => !r.rdAvailable);
 		let progressToast: string | null = null;
+		let availableCount = 0;
+		const processedHashes = new Set<string>();
+
+		// Show initial toast immediately
+		if (nonAvailableResults.length === 0) {
+			toast.error('No torrents to test for availability');
+			return;
+		}
+
+		progressToast = toast.loading(
+			`Starting availability test for ${nonAvailableResults.length} torrents...`
+		);
+
+		// Store original state to track changes
+		const originalAvailability = new Map(searchResults.map((r) => [r.hash, r.rdAvailable]));
 
 		const processResult = async (result: SearchResult) => {
 			try {
@@ -413,18 +428,40 @@ const MovieSearch: FunctionComponent = () => {
 					await addRd(result.hash, true); // Pass flag for availability test
 					await deleteRd(result.hash);
 				}
+
+				// Mark this hash as processed
+				processedHashes.add(result.hash);
 			} catch (error) {
 				console.error(`Failed to process ${result.title}:`, error);
 				throw error;
 			}
 		};
 
-		const onProgress = (completed: number, total: number) => {
-			const message = `Testing availability: ${completed}/${total}`;
+		const onProgress = async (completed: number, total: number) => {
+			// Check availability for processed hashes
+			if (processedHashes.size > 0) {
+				try {
+					const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+					const count = await instantCheckInRd(
+						tokenWithTimestamp,
+						tokenHash,
+						imdbid as string,
+						Array.from(processedHashes),
+						setSearchResults,
+						sortByBiggest
+					);
+					availableCount = count;
+				} catch (err) {
+					// Silently continue if check fails
+				}
+			}
+
+			const message =
+				availableCount > 0
+					? `Testing availability: ${completed}/${total} (${availableCount} found)`
+					: `Testing availability: ${completed}/${total}`;
 			if (progressToast) {
 				toast.loading(message, { id: progressToast });
-			} else {
-				progressToast = toast.loading(message);
 			}
 		};
 
@@ -443,22 +480,11 @@ const MovieSearch: FunctionComponent = () => {
 				toast.dismiss(progressToast);
 			}
 
-			if (failed.length > 0) {
-				toast.error(
-					`Failed to test ${failed.length} out of ${results.length} torrents. Successfully tested ${succeeded.length}.`,
-					{ duration: 5000 }
-				);
-			} else {
-				toast.success(`Successfully tested all ${results.length} torrents`, {
-					duration: 3000,
-				});
-			}
-
-			// Refetch data if we had some successes
+			// Refetch data if we had some successes to get the final accurate count
 			if (succeeded.length > 0 && isMounted.current) {
 				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 				const successfulHashes = succeeded.map((r) => r.item.hash);
-				await instantCheckInRd(
+				const finalCount = await instantCheckInRd(
 					tokenWithTimestamp,
 					tokenHash,
 					imdbid as string,
@@ -466,13 +492,39 @@ const MovieSearch: FunctionComponent = () => {
 					setSearchResults,
 					sortByBiggest
 				);
+				// Use the final count from the instant check
+				availableCount = finalCount;
 			}
+
+			if (failed.length > 0) {
+				toast.error(
+					`Failed to test ${failed.length} out of ${results.length} torrents. Successfully tested ${succeeded.length} (${availableCount} found).`,
+					{ duration: 5000 }
+				);
+			} else {
+				toast.success(
+					`Successfully tested all ${results.length} torrents (${availableCount} found)`,
+					{
+						duration: 3000,
+					}
+				);
+			}
+
+			// Reload the page after a short delay to show the final result
+			setTimeout(() => {
+				window.location.reload();
+			}, 1500);
 		} catch (error) {
 			if (progressToast) {
 				toast.dismiss(progressToast);
 			}
 			toast.error('Failed to complete availability test');
 			console.error('Availability test error:', error);
+
+			// Reload the page after a short delay even on error
+			setTimeout(() => {
+				window.location.reload();
+			}, 1500);
 		}
 	}
 
@@ -582,9 +634,19 @@ const MovieSearch: FunctionComponent = () => {
 			} else {
 				toast.error('Failed to report torrents', { id: toastId });
 			}
+
+			// Reload the page after a short delay to refresh the results
+			setTimeout(() => {
+				window.location.reload();
+			}, 1500);
 		} catch (error) {
 			console.error('Mass report error:', error);
 			toast.error('Failed to report torrents', { id: toastId });
+
+			// Reload the page after a short delay even on error
+			setTimeout(() => {
+				window.location.reload();
+			}, 1500);
 		}
 	}
 
