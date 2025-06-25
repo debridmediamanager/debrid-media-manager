@@ -86,6 +86,7 @@ const TvSearch: FunctionComponent = () => {
 			typeof window !== 'undefined' &&
 			window.localStorage.getItem('settings:showMassReportButtons') === 'true'
 	);
+	const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
 
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
@@ -193,18 +194,22 @@ const TvSearch: FunctionComponent = () => {
 				const hashArr = results.map((r) => r.hash);
 				const instantChecks = [];
 				if (rdKey) {
-					const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+					// Generate fresh token for instant checks
 					instantChecks.push(
 						wrapLoading(
 							'RD',
-							instantCheckInRd(
-								tokenWithTimestamp,
-								tokenHash,
-								imdbId,
-								hashArr,
-								setSearchResults,
-								sortByMedian
-							)
+							(async () => {
+								const [tokenWithTimestamp, tokenHash] =
+									await generateTokenAndHash();
+								return instantCheckInRd(
+									tokenWithTimestamp,
+									tokenHash,
+									imdbId,
+									hashArr,
+									setSearchResults,
+									sortByMedian
+								);
+							})()
 						)
 					);
 				}
@@ -423,17 +428,31 @@ const TvSearch: FunctionComponent = () => {
 					sortByMedian
 				);
 			}
+
+			// Reload the page after a short delay to show the result
+			setTimeout(() => {
+				if (isMounted.current) {
+					window.location.reload();
+				}
+			}, 1500);
 		} catch (error) {
 			toast.error('Failed to check availability', { id: toastId });
 			console.error('Availability check error:', error);
+
+			// Reload the page after a short delay even on error
+			setTimeout(() => {
+				if (isMounted.current) {
+					window.location.reload();
+				}
+			}, 1500);
 		}
 	}
 
 	async function handleAvailabilityTest() {
+		if (isCheckingAvailability) return;
+
 		const nonAvailableResults = filteredResults.filter((r) => !r.rdAvailable);
 		let progressToast: string | null = null;
-		let availableCount = 0;
-		const processedHashes = new Set<string>();
 
 		// Show initial toast immediately
 		if (nonAvailableResults.length === 0) {
@@ -441,12 +460,10 @@ const TvSearch: FunctionComponent = () => {
 			return;
 		}
 
+		setIsCheckingAvailability(true);
 		progressToast = toast.loading(
 			`Starting availability test for ${nonAvailableResults.length} torrents...`
 		);
-
-		// Store original state to track changes
-		const originalAvailability = new Map(searchResults.map((r) => [r.hash, r.rdAvailable]));
 
 		const processResult = async (result: SearchResult) => {
 			try {
@@ -457,39 +474,15 @@ const TvSearch: FunctionComponent = () => {
 					await addRd(result.hash, true); // Pass flag for availability test
 					await deleteRd(result.hash);
 				}
-
-				// Mark this hash as processed
-				processedHashes.add(result.hash);
 			} catch (error) {
 				console.error(`Failed to process ${result.title}:`, error);
 				throw error;
 			}
 		};
 
-		const onProgress = async (completed: number, total: number) => {
-			// Check availability for processed hashes
-			if (processedHashes.size > 0) {
-				try {
-					const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-					const count = await instantCheckInRd(
-						tokenWithTimestamp,
-						tokenHash,
-						imdbid as string,
-						Array.from(processedHashes),
-						setSearchResults,
-						sortByMedian
-					);
-					availableCount = count;
-				} catch (err) {
-					// Silently continue if check fails
-				}
-			}
-
-			const message =
-				availableCount > 0
-					? `Testing availability: ${completed}/${total} (${availableCount} found)`
-					: `Testing availability: ${completed}/${total}`;
-			if (progressToast) {
+		const onProgress = (completed: number, total: number) => {
+			const message = `Testing availability: ${completed}/${total}`;
+			if (progressToast && isMounted.current) {
 				toast.loading(message, { id: progressToast });
 			}
 		};
@@ -505,15 +498,16 @@ const TvSearch: FunctionComponent = () => {
 			const failed = results.filter((r) => !r.success);
 			const succeeded = results.filter((r) => r.success);
 
-			if (progressToast) {
+			if (progressToast && isMounted.current) {
 				toast.dismiss(progressToast);
 			}
 
-			// Refetch data if we had some successes to get the final accurate count
+			// Get the final accurate count with a single instant check
+			let availableCount = 0;
 			if (succeeded.length > 0 && isMounted.current) {
 				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 				const successfulHashes = succeeded.map((r) => r.item.hash);
-				const finalCount = await instantCheckInRd(
+				availableCount = await instantCheckInRd(
 					tokenWithTimestamp,
 					tokenHash,
 					imdbid as string,
@@ -521,8 +515,6 @@ const TvSearch: FunctionComponent = () => {
 					setSearchResults,
 					sortByMedian
 				);
-				// Use the final count from the instant check
-				availableCount = finalCount;
 			}
 
 			if (failed.length > 0) {
@@ -541,19 +533,27 @@ const TvSearch: FunctionComponent = () => {
 
 			// Reload the page after a short delay to show the final result
 			setTimeout(() => {
-				window.location.reload();
+				if (isMounted.current) {
+					window.location.reload();
+				}
 			}, 1500);
 		} catch (error) {
-			if (progressToast) {
+			if (progressToast && isMounted.current) {
 				toast.dismiss(progressToast);
 			}
-			toast.error('Failed to complete availability test');
+			if (isMounted.current) {
+				toast.error('Failed to complete availability test');
+			}
 			console.error('Availability test error:', error);
 
 			// Reload the page after a short delay even on error
 			setTimeout(() => {
-				window.location.reload();
+				if (isMounted.current) {
+					window.location.reload();
+				}
 			}, 1500);
+		} finally {
+			setIsCheckingAvailability(false);
 		}
 	}
 
@@ -727,10 +727,15 @@ const TvSearch: FunctionComponent = () => {
 					{rdKey && (
 						<>
 							<button
-								className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50"
+								className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 								onClick={handleAvailabilityTest}
+								disabled={isCheckingAvailability}
 							>
-								<b>🕵🏻Check Available</b>
+								<b>
+									{isCheckingAvailability
+										? '🔄 Checking...'
+										: '🕵🏻Check Available'}
+								</b>
 							</button>
 							{getFirstAvailableRdTorrent() && (
 								<button

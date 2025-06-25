@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, { InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 import qs from 'qs';
 import {
@@ -24,6 +24,32 @@ const TORRENT_REQUEST_TIMEOUT = 30000; // Increased from 15s to 30s
 // to avoid conflicting with cache invalidation
 const MIN_REQUEST_INTERVAL = (60 * 1000) / 250; // 240ms between requests
 const CACHE_BACKOFF_TIME = 6000; // Slightly longer than the service worker cache (5s)
+
+// Global rate limiter for all RealDebrid API requests
+// This implementation uses a Promise chain to serialize all requests and ensure
+// a minimum 240ms delay between ANY RealDebrid API call, preventing 429 errors
+let globalRequestQueue: Promise<void> = Promise.resolve();
+let globalLastRequestTime = 0;
+
+// Shared rate limiting function that serializes all requests
+async function enforceRateLimit(): Promise<void> {
+	// Chain onto the global queue to ensure serialization
+	globalRequestQueue = globalRequestQueue.then(async () => {
+		const now = Date.now();
+		const timeSinceLastRequest = now - globalLastRequestTime;
+
+		if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
+			await new Promise((resolve) =>
+				setTimeout(resolve, MIN_REQUEST_INTERVAL - timeSinceLastRequest)
+			);
+		}
+
+		globalLastRequestTime = Date.now();
+	});
+
+	// Wait for our turn in the queue
+	await globalRequestQueue;
+}
 
 // Add a cache-aware ID generator to ensure unique cache entries for retries
 // This prevents retry requests from hitting stale cached errors
@@ -65,44 +91,110 @@ function calculateRetryDelay(retryCount: number): number {
 	return delayWithJitter;
 }
 
-// Function to create an Axios client with a given token
-function createAxiosClient(token: string, timeout: number = REQUEST_TIMEOUT): AxiosInstance {
-	const client = axios.create({
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-		timeout: timeout, // Use the provided timeout value
+// Create a global axios instance for RealDebrid API requests
+const realDebridAxios = axios.create({
+	// No default authorization header - will be passed per request
+	timeout: REQUEST_TIMEOUT,
+});
+
+// Add request interceptor for rate limiting and cache busting
+realDebridAxios.interceptors.request.use(async (config: ExtendedAxiosRequestConfig) => {
+	// Use global rate limiter
+	await enforceRateLimit();
+
+	// Add cache-busting parameter for retries to prevent hitting cached errors
+	if (config.__isRetryRequest && config.url) {
+		// Parse the URL to properly manage query parameters
+		const url = new URL(config.url, 'http://dummy-base.com'); // dummy base for relative URLs
+		// Replace any existing cache buster with a new one
+		url.searchParams.set('_cache_buster', getUniqueRequestId());
+		// Update the config URL, preserving relative vs absolute
+		config.url = config.url.startsWith('http') ? url.toString() : url.pathname + url.search;
+	}
+
+	return config;
+});
+
+// Add response interceptor for handling retries with exponential backoff
+realDebridAxios.interceptors.response.use(
+	(response) => response,
+	async (error) => {
+		const originalConfig = error.config as ExtendedAxiosRequestConfig;
+
+		// If config doesn't exist, reject
+		if (!originalConfig) {
+			return Promise.reject(error);
+		}
+
+		// Initialize retry count if not set
+		if (originalConfig.__retryCount === undefined) {
+			originalConfig.__retryCount = 0;
+		}
+
+		// Check if we've exceeded max retries
+		if (originalConfig.__retryCount >= 7) {
+			return Promise.reject(error);
+		}
+
+		// Retry on 5xx server errors OR 429 rate limit errors
+		const status = error.response?.status;
+		const shouldRetry = (status >= 500 && status < 600) || status === 429;
+
+		if (!shouldRetry) {
+			return Promise.reject(error);
+		}
+
+		// Increment retry count
+		originalConfig.__retryCount++;
+
+		// Set flag to avoid infinite retry loops
+		originalConfig.__isRetryRequest = true;
+
+		// Calculate delay with exponential backoff and jitter
+		const delay = calculateRetryDelay(originalConfig.__retryCount);
+
+		const errorType = error.response?.status === 429 ? 'rate limit' : 'server';
+		console.log(
+			`RealDebrid API request failed with ${error.response?.status} ${errorType} error. Retrying (attempt ${originalConfig.__retryCount}/7) after ${Math.round(delay)}ms delay...`
+		);
+
+		// Wait for the calculated delay
+		await new Promise((resolve) => setTimeout(resolve, delay));
+
+		try {
+			return await realDebridAxios.request(originalConfig);
+		} catch (retryError) {
+			// Pass along the retry error for the next iteration
+			return Promise.reject(retryError);
+		}
+	}
+);
+
+// Create a generic axios instance for non-authenticated requests
+const genericAxios = axios.create({
+	timeout: REQUEST_TIMEOUT,
+});
+
+// Function to get a configured generic axios instance with custom timeout
+function getGenericAxios(timeout: number = REQUEST_TIMEOUT) {
+	if (timeout === REQUEST_TIMEOUT) {
+		return genericAxios;
+	}
+
+	const customAxios = axios.create({
+		timeout: timeout,
 	});
 
-	// Rate limiting configuration
-	let lastRequestTime = 0;
+	// Add rate limiting interceptor to custom instance
+	customAxios.interceptors.request.use(async (config: ExtendedAxiosRequestConfig) => {
+		// Use global rate limiter
+		await enforceRateLimit();
 
-	// Add request interceptor for rate limiting
-	client.interceptors.request.use(async (config: ExtendedAxiosRequestConfig) => {
-		const now = Date.now();
-		const timeSinceLastRequest = now - lastRequestTime;
-		if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
-			await new Promise((resolve) =>
-				setTimeout(resolve, MIN_REQUEST_INTERVAL - timeSinceLastRequest)
-			);
-		}
-
-		// Add cache-busting parameter for retries to prevent hitting cached errors
-		if (config.__isRetryRequest && config.url) {
-			// Parse the URL to properly manage query parameters
-			const url = new URL(config.url, 'http://dummy-base.com'); // dummy base for relative URLs
-			// Replace any existing cache buster with a new one
-			url.searchParams.set('_cache_buster', getUniqueRequestId());
-			// Update the config URL, preserving relative vs absolute
-			config.url = config.url.startsWith('http') ? url.toString() : url.pathname + url.search;
-		}
-
-		lastRequestTime = Date.now();
 		return config;
 	});
 
-	// Add response interceptor for handling retries with exponential backoff
-	client.interceptors.response.use(
+	// Add retry interceptor with same logic as genericAxios
+	customAxios.interceptors.response.use(
 		(response) => response,
 		async (error) => {
 			const originalConfig = error.config as ExtendedAxiosRequestConfig;
@@ -122,10 +214,11 @@ function createAxiosClient(token: string, timeout: number = REQUEST_TIMEOUT): Ax
 				return Promise.reject(error);
 			}
 
-			// Only retry on 5xx server errors
-			const isServerError = error.response?.status >= 500 && error.response?.status < 600;
+			// Retry on 5xx server errors OR 429 rate limit errors
+			const status = error.response?.status;
+			const shouldRetry = (status >= 500 && status < 600) || status === 429;
 
-			if (!isServerError) {
+			if (!shouldRetry) {
 				return Promise.reject(error);
 			}
 
@@ -138,15 +231,27 @@ function createAxiosClient(token: string, timeout: number = REQUEST_TIMEOUT): Ax
 			// Calculate delay with exponential backoff and jitter
 			const delay = calculateRetryDelay(originalConfig.__retryCount);
 
+			const errorType = error.response?.status === 429 ? 'rate limit' : 'server';
 			console.log(
-				`Request failed with ${error.response?.status} error. Retrying (attempt ${originalConfig.__retryCount}/7) after ${Math.round(delay)}ms delay...`
+				`Custom axios request failed with ${error.response?.status} ${errorType} error. Retrying (attempt ${originalConfig.__retryCount}/7) after ${Math.round(delay)}ms delay...`
 			);
 
 			// Wait for the calculated delay
 			await new Promise((resolve) => setTimeout(resolve, delay));
 
 			try {
-				return await client.request(originalConfig);
+				// Add cache-busting parameter for retries
+				if (originalConfig.url) {
+					// Parse the URL to properly manage query parameters
+					const url = new URL(originalConfig.url, 'http://dummy-base.com'); // dummy base for relative URLs
+					// Replace any existing cache buster with a new one
+					url.searchParams.set('_cache_buster', getUniqueRequestId());
+					// Update the config URL, preserving relative vs absolute
+					originalConfig.url = originalConfig.url.startsWith('http')
+						? url.toString()
+						: url.pathname + url.search;
+				}
+				return await customAxios.request(originalConfig);
 			} catch (retryError) {
 				// Pass along the retry error for the next iteration
 				return Promise.reject(retryError);
@@ -154,24 +259,16 @@ function createAxiosClient(token: string, timeout: number = REQUEST_TIMEOUT): Ax
 		}
 	);
 
-	return client;
+	return customAxios;
 }
 
-// Create a generic axios instance for non-authenticated requests
-const genericAxios = axios.create({
-	timeout: REQUEST_TIMEOUT,
+// Add request interceptor for rate limiting to generic axios
+genericAxios.interceptors.request.use(async (config: ExtendedAxiosRequestConfig) => {
+	// Use global rate limiter
+	await enforceRateLimit();
+
+	return config;
 });
-
-// Function to get a configured generic axios instance with custom timeout
-function getGenericAxios(timeout: number = REQUEST_TIMEOUT) {
-	if (timeout === REQUEST_TIMEOUT) {
-		return genericAxios;
-	}
-
-	return axios.create({
-		timeout: timeout,
-	});
-}
 
 // Apply same retry logic to the generic axios instance
 genericAxios.interceptors.response.use(
@@ -194,10 +291,11 @@ genericAxios.interceptors.response.use(
 			return Promise.reject(error);
 		}
 
-		// Only retry on 5xx server errors
-		const isServerError = error.response?.status >= 500 && error.response?.status < 600;
+		// Retry on 5xx server errors OR 429 rate limit errors
+		const status = error.response?.status;
+		const shouldRetry = (status >= 500 && status < 600) || status === 429;
 
-		if (!isServerError) {
+		if (!shouldRetry) {
 			return Promise.reject(error);
 		}
 
@@ -210,8 +308,9 @@ genericAxios.interceptors.response.use(
 		// Calculate delay with exponential backoff and jitter
 		const delay = calculateRetryDelay(originalConfig.__retryCount);
 
+		const errorType = error.response?.status === 429 ? 'rate limit' : 'server';
 		console.log(
-			`Request failed with ${error.response?.status} error. Retrying (attempt ${originalConfig.__retryCount}/7) after ${Math.round(delay)}ms delay...`
+			`Generic API request failed with ${error.response?.status} ${errorType} error. Retrying (attempt ${originalConfig.__retryCount}/7) after ${Math.round(delay)}ms delay...`
 		);
 
 		// Wait for the calculated delay
@@ -306,9 +405,13 @@ export const getCurrentUser = async (accessToken: string) => {
 	// Create the promise and cache it
 	const promise = (async () => {
 		try {
-			const client = await createAxiosClient(accessToken);
-			const response = await client.get<UserResponse>(
-				`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/user`
+			const response = await realDebridAxios.get<UserResponse>(
+				`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/user`,
+				{
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
 			);
 			return response.data;
 		} catch (error: any) {
@@ -331,14 +434,18 @@ export async function getUserTorrentsList(
 	bare: boolean = false
 ): Promise<UserTorrentsResult> {
 	try {
-		const client = await createAxiosClient(accessToken, TORRENT_REQUEST_TIMEOUT);
-
 		// Add a cache-aware parameter to ensure fresh results for critical requests
 		// This helps avoid conflicts with the service worker cache
 		const cacheParam = page === 1 ? `&_fresh=${Date.now()}` : '';
 
-		const response = await client.get<UserTorrentResponse[]>(
-			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents?page=${page}&limit=${limit}${cacheParam}`
+		const response = await realDebridAxios.get<UserTorrentResponse[]>(
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents?page=${page}&limit=${limit}${cacheParam}`,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+				timeout: TORRENT_REQUEST_TIMEOUT,
+			}
 		);
 
 		const {
@@ -368,9 +475,13 @@ export const getTorrentInfo = async (
 	bare: boolean = false
 ): Promise<TorrentInfoResponse> => {
 	try {
-		const client = await createAxiosClient(accessToken);
-		const response = await client.get<TorrentInfoResponse>(
-			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/info/${id}`
+		const response = await realDebridAxios.get<TorrentInfoResponse>(
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/info/${id}`,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}
 		);
 		return response.data;
 	} catch (error: any) {
@@ -391,9 +502,13 @@ export const rdInstantCheck = async (
 			return {}; // Return empty response if no valid hashes
 		}
 
-		const client = await createAxiosClient(accessToken);
-		const response = await client.get<RdInstantAvailabilityResponse>(
-			`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/torrents/instantAvailability/${validHashes.join('/')}`
+		const response = await realDebridAxios.get<RdInstantAvailabilityResponse>(
+			`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/torrents/instantAvailability/${validHashes.join('/')}`,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}
 		);
 		return response.data;
 	} catch (error: any) {
@@ -408,13 +523,13 @@ export const addMagnet = async (
 	bare: boolean = false
 ): Promise<string> => {
 	try {
-		const client = await createAxiosClient(accessToken);
-		const response = await client.post<AddMagnetResponse>(
+		const response = await realDebridAxios.post<AddMagnetResponse>(
 			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
 			qs.stringify({ magnet }),
 			{
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
+					Authorization: `Bearer ${accessToken}`,
 				},
 			}
 		);
@@ -448,13 +563,13 @@ export const selectFiles = async (
 	bare: boolean = false
 ): Promise<void> => {
 	try {
-		const client = await createAxiosClient(accessToken);
-		const response = await client.post(
+		const response = await realDebridAxios.post(
 			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/selectFiles/${id}`,
 			qs.stringify({ files: files.join(',') }),
 			{
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
+					Authorization: `Bearer ${accessToken}`,
 				},
 			}
 		);
@@ -470,9 +585,13 @@ export const deleteTorrent = async (
 	bare: boolean = false
 ): Promise<void> => {
 	try {
-		const client = await createAxiosClient(accessToken);
-		await client.delete(
-			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/delete/${id}`
+		await realDebridAxios.delete(
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/delete/${id}`,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}
 		);
 	} catch (error: any) {
 		console.error('Error deleting torrent:', error.message);
@@ -482,9 +601,13 @@ export const deleteTorrent = async (
 
 export const deleteDownload = async (accessToken: string, id: string): Promise<void> => {
 	try {
-		const client = await createAxiosClient(accessToken);
-		await client.delete(
-			`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/downloads/delete/${id}`
+		await realDebridAxios.delete(
+			`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/downloads/delete/${id}`,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			}
 		);
 	} catch (error: any) {
 		console.error('Error deleting download:', error.message);
@@ -511,13 +634,13 @@ export const unrestrictLink = async (
 		}
 		params.append('link', link);
 
-		const client = await createAxiosClient(accessToken);
-		const response = await client.post<UnrestrictResponse>(
+		const response = await realDebridAxios.post<UnrestrictResponse>(
 			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/unrestrict/link`,
 			params.toString(),
 			{
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
+					Authorization: `Bearer ${accessToken}`,
 				},
 			}
 		);
