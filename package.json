@@ -32,7 +32,7 @@
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
     "socks-proxy-agent": "^8.0.5",
-    "sweetalert2": "^11.17.2",
+    "sweetalert2": "^11.22.4",
     "user-agents": "^1.1.500",
     "uuid": "^11.1.0"
   },
