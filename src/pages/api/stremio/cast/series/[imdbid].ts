@@ -1,5 +1,5 @@
 import { Repository } from '@/services/repository';
-import { generateUserId } from '@/utils/castApiHelpers';
+import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -8,11 +8,13 @@ const db = new Repository();
 // TV SHOW cast: unrestricts a selected link and saves it to the database
 // called in the show page
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { imdbid, token, hash, fileIds } = req.query;
+	const { imdbid, hash, fileIds } = req.query;
+	const token = extractToken(req);
+
 	if (!token || !hash || !fileIds) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Missing "token", "hash" or "fileIds" query parameter',
+			errorMessage: 'Missing "token", "hash" or "fileIds" parameter',
 		});
 		return;
 	}
@@ -24,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Invalid "token", "hash" or "fileIds" query parameter',
+			errorMessage: 'Invalid "token", "hash" or "fileIds" parameter',
 		});
 		return;
 	}

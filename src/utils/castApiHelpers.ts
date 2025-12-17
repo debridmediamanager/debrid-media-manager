@@ -19,12 +19,46 @@ export const validateMethod = (
 };
 
 export const validateToken = (req: NextApiRequest, res: NextApiResponse): string | null => {
+	// Try Authorization header first (Bearer token)
+	const authHeader = req.headers.authorization;
+	if (authHeader?.startsWith('Bearer ')) {
+		const token = authHeader.substring(7);
+		if (token) {
+			return token;
+		}
+	}
+
+	// Fall back to query/body (existing behavior)
 	const token = req.query.token || req.body.token;
 	if (!token || typeof token !== 'string') {
 		res.status(401).json({ error: 'Invalid or missing token' });
 		return null;
 	}
 	return token;
+};
+
+/**
+ * Extract token from request without sending error response
+ * Supports: Authorization header, query parameter, or body
+ * Use this for endpoints that manually handle token validation
+ */
+export const extractToken = (req: NextApiRequest): string | null => {
+	// Try Authorization header first (Bearer token)
+	const authHeader = req.headers.authorization;
+	if (authHeader?.startsWith('Bearer ')) {
+		const token = authHeader.substring(7);
+		if (token) {
+			return token;
+		}
+	}
+
+	// Fall back to query/body
+	const token = req.query.token || req.body.token;
+	if (token && typeof token === 'string') {
+		return token;
+	}
+
+	return null;
 };
 
 export const generateUserId = async (token: string): Promise<string> => {

@@ -1,5 +1,5 @@
 import { Repository } from '@/services/repository';
-import { generateUserId } from '@/utils/castApiHelpers';
+import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getBiggestFileStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -8,18 +8,20 @@ const db = new Repository();
 // MOVIE cast: unrestricts a selected link and saves it to the database
 // called in the movie page
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { imdbid, token, hash } = req.query;
+	const { imdbid, hash } = req.query;
+	const token = extractToken(req);
+
 	if (!token || !hash) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Missing "token" or "hash" query parameter',
+			errorMessage: 'Missing "token" or "hash" parameter',
 		});
 		return;
 	}
 	if (typeof imdbid !== 'string' || typeof token !== 'string' || typeof hash !== 'string') {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Invalid "token" or "hash" query parameter',
+			errorMessage: 'Invalid "token" or "hash" parameter',
 		});
 		return;
 	}
