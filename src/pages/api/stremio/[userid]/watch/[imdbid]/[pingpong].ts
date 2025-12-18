@@ -1,14 +1,17 @@
 import { Repository } from '@/services/repository';
+import { extractToken } from '@/utils/castApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new Repository();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { userid, imdbid, pingpong, token } = req.query;
-	if (typeof userid !== 'string' || typeof imdbid !== 'string' || typeof pingpong !== 'string') {
+	const { userid, imdbid, pingpong } = req.query;
+	const token = extractToken(req);
+
+	if (!token || typeof userid !== 'string' || typeof token !== 'string' || typeof imdbid !== 'string' || typeof pingpong !== 'string') {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Invalid "userid", "imdbid" or "pingpong" query parameter',
+			errorMessage: 'Invalid or missing "userid", "imdbid", "pingpong" or "token" parameter',
 		});
 		return;
 	}

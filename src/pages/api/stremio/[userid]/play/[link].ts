@@ -1,16 +1,19 @@
 import { unrestrictLink } from '@/services/realDebrid';
 import { Repository } from '@/services/repository';
+import { extractToken } from '@/utils/castApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const db = new Repository();
 
 // Unrestrict and play a link
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { userid, link, token } = req.query;
-	if (typeof userid !== 'string' || typeof link !== 'string' || typeof token !== 'string') {
+	const { userid, link } = req.query;
+	const token = extractToken(req);
+
+	if (!token || typeof userid !== 'string' || typeof token !== 'string' || typeof link !== 'string') {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Invalid "userid", "link" or "token" query parameter',
+			errorMessage: 'Invalid or missing "userid", "link" or "token" parameter',
 		});
 		return;
 	}

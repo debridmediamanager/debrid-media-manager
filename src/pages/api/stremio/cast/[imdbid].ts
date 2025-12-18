@@ -1,5 +1,5 @@
 import { Repository } from '@/services/repository';
-import { generateUserId } from '@/utils/castApiHelpers';
+import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -8,11 +8,13 @@ const db = new Repository();
 // cast: unrestricts a selected link and saves it to the database
 // called in the showInfo component
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { imdbid, token, hash, fileId, mediaType } = req.query;
+	const { imdbid, hash, fileId, mediaType } = req.query;
+	const token = extractToken(req);
+
 	if (!token || !hash || !fileId || !mediaType) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Missing "token", "hash", "fileId" or "mediaType" query parameter',
+			errorMessage: 'Missing "token", "hash", "fileId" or "mediaType" parameter',
 		});
 		return;
 	}
@@ -25,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Invalid "token", "hash", "fileId" or "mediaType" query parameter',
+			errorMessage: 'Invalid "token", "hash", "fileId" or "mediaType" parameter',
 		});
 		return;
 	}
