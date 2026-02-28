@@ -26,45 +26,36 @@ model ScrapedTrue {
   updatedAt DateTime @updatedAt
 }
 
-// ═══════════════════════════════════════════════════════════════
-// MUSIC DATA TABLES (MusicBrainz Integration)
-// ═══════════════════════════════════════════════════════════════
-
-// Scraped music torrents, keyed by MusicBrainz release-group ID
-// Key format: "music:{mbid}" where mbid is the release-group UUID
-// Value: JSON array of {hash, title, fileSize, format, tracks}
 model ScrapedMusic {
-  key       String   @id // "music:{mbid}"
-  value     Json // Array of torrent entries
+  key       String   @id
+  value     Json
   updatedAt DateTime @updatedAt
 
   @@index([updatedAt])
 }
 
-// Music metadata from MusicBrainz
 model MusicMetadata {
-  mbid       String   @id @db.VarChar(36) // MusicBrainz release-group UUID
-  artistMbid String?  @db.VarChar(36) // MusicBrainz artist UUID
+  mbid       String   @id @db.VarChar(36)
+  artistMbid String?  @db.VarChar(36)
   artist     String   @db.VarChar(500)
   album      String   @db.VarChar(500)
   year       Int?
-  coverUrl   String?  @db.VarChar(500) // Album cover URL from iTunes
   updatedAt  DateTime @updatedAt
+  coverUrl   String?  @db.VarChar(500)
 
   @@index([artist])
   @@index([year])
   @@fulltext([artist, album])
 }
 
-// Available music torrents (cached in debrid service)
 model AvailableMusic {
   hash             String               @id
-  mbid             String               @db.VarChar(36) // MusicBrainz release-group UUID
+  mbid             String               @db.VarChar(36)
   filename         String
   originalFilename String
   bytes            BigInt
   originalBytes    BigInt
-  host             String               // "rd", "ad", "tb"
+  host             String
   progress         Int
   status           String
   ended            DateTime
@@ -77,37 +68,32 @@ model AvailableMusic {
   @@index([mbid, status, bytes])
 }
 
-// Files within available music torrents
 model AvailableMusicFile {
   link           String         @id
   file_id        Int
   hash           String
   path           String         @db.Text
   bytes          BigInt
-  trackNumber    Int?           // Track number if detectable
+  trackNumber    Int?
   availableMusic AvailableMusic @relation(fields: [hash], references: [hash], onDelete: Cascade)
 
   @@index([hash])
 }
 
-// ═══════════════════════════════════════════════════════════════
-// DHT CONTENT TABLES (Bitmagnet Integration, keyed by info_hash)
-// ═══════════════════════════════════════════════════════════════
-
 model ScrapedXxx {
-  hash            String   @id @db.VarChar(40)
-  name            String   @db.Text
+  hash            String    @id @db.VarChar(40)
+  name            String    @db.Text
   size            BigInt
   filesCount      Int?
   seeders         Int?
   leechers        Int?
-  videoResolution String?  @db.VarChar(20)  // e.g. "2160p", "1080p", "720p"
-  videoCodec      String?  @db.VarChar(20)  // e.g. "h264", "h265", "hevc"
-  videoSource     String?  @db.VarChar(20)  // e.g. "web", "bluray"
-  languages       Json?                      // e.g. ["en", "ja"]
+  videoResolution String?   @db.VarChar(20)
+  videoCodec      String?   @db.VarChar(20)
+  videoSource     String?   @db.VarChar(20)
+  languages       Json?
   publishedAt     DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@index([updatedAt])
   @@index([size])
@@ -116,16 +102,16 @@ model ScrapedXxx {
 }
 
 model ScrapedAudiobook {
-  hash        String   @id @db.VarChar(40)
-  name        String   @db.Text
+  hash        String    @id @db.VarChar(40)
+  name        String    @db.Text
   size        BigInt
   filesCount  Int?
   seeders     Int?
   leechers    Int?
-  languages   Json?                          // e.g. ["en"]
+  languages   Json?
   publishedAt DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([updatedAt])
   @@index([size])
@@ -134,16 +120,16 @@ model ScrapedAudiobook {
 }
 
 model ScrapedComic {
-  hash        String   @id @db.VarChar(40)
-  name        String   @db.Text
+  hash        String    @id @db.VarChar(40)
+  name        String    @db.Text
   size        BigInt
   filesCount  Int?
   seeders     Int?
   leechers    Int?
-  languages   Json?                          // e.g. ["en"]
+  languages   Json?
   publishedAt DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([updatedAt])
   @@index([size])
@@ -152,16 +138,16 @@ model ScrapedComic {
 }
 
 model ScrapedEbook {
-  hash        String   @id @db.VarChar(40)
-  name        String   @db.Text
+  hash        String    @id @db.VarChar(40)
+  name        String    @db.Text
   size        BigInt
   filesCount  Int?
   seeders     Int?
   leechers    Int?
-  languages   Json?                          // e.g. ["en"]
+  languages   Json?
   publishedAt DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([updatedAt])
   @@index([size])
@@ -201,68 +187,56 @@ model CastProfile {
   hideCastOption    Boolean  @default(false)
 }
 
-// ═══════════════════════════════════════════════════════════════
-// TORBOX CAST TABLES (DMM Cast for TorBox)
-// ═══════════════════════════════════════════════════════════════
-
-// TorBox Cast - stores individual casted content
 model TorBoxCast {
   id        String   @id @default(uuid())
-  imdbId    String           // IMDB ID (format: tt1234567 or tt1234567:S:E)
-  userId    String           // 12-character hashed user ID (from TorBox email)
-  hash      String           // Torrent hash
-  url       String   @db.Text // Torrent name/filename for display
+  imdbId    String
+  userId    String
+  hash      String
+  url       String   @db.Text
   updatedAt DateTime @updatedAt
-  size      BigInt   @default(0)  // File size in MB
-  link      String?  @db.Text     // TorBox permalink URL
-  torrentId Int?             // TorBox torrent ID (for reference)
-  fileId    Int?             // TorBox file ID within torrent
+  size      BigInt   @default(0)
+  link      String?  @db.Text
+  torrentId Int?
+  fileId    Int?
 
   @@unique([imdbId, userId, hash])
   @@index([imdbId, userId, updatedAt])
 }
 
-// TorBox Cast Profile - stores user API key and preferences
 model TorBoxCastProfile {
-  userId            String   @id    // 12-character hashed user ID
-  apiKey            String   @db.Text // TorBox API key (stored securely)
+  userId            String   @id
+  apiKey            String   @db.Text
   updatedAt         DateTime @updatedAt
-  movieMaxSize      Float    @default(0)   // Max movie size filter (GB)
-  episodeMaxSize    Float    @default(0)   // Max episode size filter (GB)
-  otherStreamsLimit Int      @default(5)   // Max community streams (0-5)
-  hideCastOption    Boolean  @default(false) // Hide "Cast a file" option in Stremio
+  movieMaxSize      Float    @default(0)
+  episodeMaxSize    Float    @default(0)
+  otherStreamsLimit Int      @default(5)
+  hideCastOption    Boolean  @default(false)
 }
 
-// ═══════════════════════════════════════════════════════════════
-// ALLDEBRID CAST TABLES (DMM Cast for AllDebrid)
-// ═══════════════════════════════════════════════════════════════
-
-// AllDebrid Cast - stores individual casted content
 model AllDebridCast {
   id        String   @id @default(uuid())
-  imdbId    String           // IMDB ID (format: tt1234567 or tt1234567:S:E)
-  userId    String           // 12-character hashed user ID (from AD username)
-  hash      String           // Torrent hash
-  url       String   @db.Text // Filename for display
+  imdbId    String
+  userId    String
+  hash      String
+  url       String   @db.Text
   updatedAt DateTime @updatedAt
-  size      BigInt   @default(0)  // File size in MB
-  link      String?  @db.Text     // Direct download link (expires)
-  magnetId  Int?             // AllDebrid magnet ID (for re-fetching links)
-  fileIndex Int?             // File index within flattened file list
+  size      BigInt   @default(0)
+  link      String?  @db.Text
+  magnetId  Int?
+  fileIndex Int?
 
   @@unique([imdbId, userId, hash])
   @@index([imdbId, userId, updatedAt])
 }
 
-// AllDebrid Cast Profile - stores user API key and preferences
 model AllDebridCastProfile {
-  userId            String   @id    // 12-character hashed user ID
-  apiKey            String   @db.Text // AllDebrid API key (stored securely)
+  userId            String   @id
+  apiKey            String   @db.Text
   updatedAt         DateTime @updatedAt
-  movieMaxSize      Float    @default(0)   // Max movie size filter (GB)
-  episodeMaxSize    Float    @default(0)   // Max episode size filter (GB)
-  otherStreamsLimit Int      @default(5)   // Max community streams (0-5)
-  hideCastOption    Boolean  @default(false) // Hide "Cast a file" option in Stremio
+  movieMaxSize      Float    @default(0)
+  episodeMaxSize    Float    @default(0)
+  otherStreamsLimit Int      @default(5)
+  hideCastOption    Boolean  @default(false)
 }
 
 model Titles {
@@ -375,11 +349,10 @@ model AvailableAdFile {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  patreonId String? @unique
-  githubId  String? @unique
-  discordId String? @unique
-
+  id                  Int                  @id @default(autoincrement())
+  patreonId           String?              @unique
+  githubId            String?              @unique
+  discordId           String?              @unique
   patreonSubscription PatreonSubscription?
 }
 
@@ -388,9 +361,8 @@ model PatreonSubscription {
   tier             String
   perks            String
   subscriptionDate DateTime @default(now())
-
-  userId Int  @unique
-  user   User @relation(fields: [userId], references: [id])
+  userId           Int      @unique
+  user             User     @relation(fields: [userId], references: [id])
 }
 
 model Report {
@@ -398,7 +370,7 @@ model Report {
   hash      String
   imdbId    String
   userId    String
-  type      String // "porn" or "wrong_imdb" or "wrong_season"
+  type      String
   createdAt DateTime @default(now())
 
   @@unique([hash, userId])
@@ -432,7 +404,7 @@ model TorrentSnapshot {
 
 model MdblistCache {
   id        String   @id
-  type      String // "movie", "show", "search", "list", etc.
+  type      String
   data      Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -443,16 +415,14 @@ model MdblistCache {
 
 model ZurgKeys {
   apiKey     String    @id
-  validUntil DateTime?
   createdAt  DateTime  @default(now())
+  validUntil DateTime?
 
   @@index([validUntil])
 }
 
-// Stream server health check results
-// Stores the latest health check for each server
 model StreamServerHealth {
-  host      String   @id // e.g., "1.download.real-debrid.com"
+  host      String   @id
   status    Int?
   latencyMs Float?
   ok        Boolean  @default(false)
@@ -465,21 +435,15 @@ model StreamServerHealth {
   @@index([checkedAt])
 }
 
-// ═══════════════════════════════════════════════════════════════
-// HISTORICAL DATA FOR 90-DAY OBSERVABILITY
-// ═══════════════════════════════════════════════════════════════
-
-// RD Operations - Hourly aggregates (kept for 7 days, then rolled into daily)
-// This table is updated via atomic increments, no raw events stored
 model RdOperationalHourly {
   id           Int      @id @default(autoincrement())
-  hour         DateTime // Start of hour (UTC), e.g., 2024-01-15T14:00:00Z
-  operation    String   // "GET /user", "GET /torrents", etc.
-  totalCount   Int      @default(0) // Total requests in this hour
-  successCount Int      @default(0) // 2xx responses
-  failureCount Int      @default(0) // 5xx responses
-  otherCount   Int      @default(0) // 3xx, 4xx (not counted in availability)
-  successRate  Float    @default(0) // Pre-computed: successCount / (successCount + failureCount)
+  hour         DateTime
+  operation    String
+  totalCount   Int      @default(0)
+  successCount Int      @default(0)
+  failureCount Int      @default(0)
+  otherCount   Int      @default(0)
+  successRate  Float    @default(0)
   createdAt    DateTime @default(now())
 
   @@unique([hour, operation])
@@ -487,18 +451,17 @@ model RdOperationalHourly {
   @@index([operation, hour])
 }
 
-// RD Operations - Daily aggregates (kept for 90 days)
 model RdOperationalDaily {
   id             Int      @id @default(autoincrement())
-  date           DateTime // Start of day (UTC)
+  date           DateTime
   operation      String
-  totalCount     Int      // Sum of hourly totals
+  totalCount     Int
   successCount   Int
   failureCount   Int
-  avgSuccessRate Float    // Average of hourly success rates
-  minSuccessRate Float    // Worst hour of the day
-  maxSuccessRate Float    // Best hour of the day
-  peakHour       Int?     // Hour with most traffic (0-23)
+  avgSuccessRate Float
+  minSuccessRate Float
+  maxSuccessRate Float
+  peakHour       Int?
   createdAt      DateTime @default(now())
 
   @@unique([date, operation])
@@ -506,105 +469,94 @@ model RdOperationalDaily {
   @@index([operation, date])
 }
 
-// Stream Health - Individual check results (kept for 24 hours, last 50 max)
 model StreamCheckResult {
   id        Int      @id @default(autoincrement())
-  ok        Boolean  // Whether the check passed
-  latencyMs Float?   // Latency if passed
-  server    String?  // Server that was tested
-  error     String?  // Error message if failed
+  ok        Boolean
+  latencyMs Float?
+  server    String?
+  error     String?
   checkedAt DateTime @default(now())
 
   @@index([checkedAt])
 }
 
-// Torrentio Health - Individual check results (kept last 50 max)
 model TorrentioCheckResult {
   id        Int      @id @default(autoincrement())
-  ok        Boolean  // Whether all 3 URLs returned 302 with real-debrid in location
-  latencyMs Float?   // Average latency across the 3 checks
-  error     String?  @db.Text // Error message if failed
-  urls      Json     @default("[]") // Results for each URL: [{url, ok, status, hasLocation}]
+  ok        Boolean
+  latencyMs Float?
+  error     String?  @db.Text
+  urls      Json     @default(dbgenerated("(_utf8mb4\\'[]\\')"))
   checkedAt DateTime @default(now())
 
   @@index([checkedAt])
 }
 
-// Torrentio Health - Hourly snapshots (kept for 7 days)
 model TorrentioHealthHourly {
   id           Int      @id @default(autoincrement())
-  hour         DateTime // Start of hour (UTC)
-  successCount Int      @default(0) // Number of successful checks in hour
-  totalCount   Int      @default(0) // Total checks in hour
-  successRate  Float    @default(0) // successCount / totalCount
-  avgLatencyMs Float?   // Average latency of checks
+  hour         DateTime @unique
+  successCount Int      @default(0)
+  totalCount   Int      @default(0)
+  successRate  Float    @default(0)
+  avgLatencyMs Float?
   createdAt    DateTime @default(now())
 
-  @@unique([hour])
   @@index([hour])
 }
 
-// Torrentio Health - Daily aggregates (kept for 90 days)
 model TorrentioHealthDaily {
   id             Int      @id @default(autoincrement())
-  date           DateTime // Start of day (UTC)
-  avgSuccessRate Float    // Average success rate across all checks
-  minSuccessRate Float    // Worst hour of the day
-  maxSuccessRate Float    // Best hour of the day
-  avgLatencyMs   Float?   // Average latency across all checks
-  checksCount    Int      // Total health checks that day
+  date           DateTime @unique
+  avgSuccessRate Float
+  minSuccessRate Float
+  maxSuccessRate Float
+  avgLatencyMs   Float?
+  checksCount    Int
   createdAt      DateTime @default(now())
 
-  @@unique([date])
   @@index([date])
 }
 
-// Stream Health - Hourly snapshots (kept for 7 days)
 model StreamHealthHourly {
   id             Int      @id @default(autoincrement())
-  hour           DateTime // Start of hour (UTC)
-  totalServers   Int      // Always 360
-  workingServers Int      // How many passed all 3 iterations
-  workingRate    Float    // workingServers / totalServers
-  avgLatencyMs   Float?   // Average latency of working servers
-  minLatencyMs   Float?   // Fastest server latency
-  maxLatencyMs   Float?   // Slowest working server latency
-  fastestServer  String?  // Hostname of fastest server
-  checksInHour   Int      @default(1) // Number of checks aggregated
-  failedServers  Json     @default("[]") // Array of failed server hostnames
+  hour           DateTime @unique
+  totalServers   Int
+  workingServers Int
+  workingRate    Float
+  avgLatencyMs   Float?
+  minLatencyMs   Float?
+  maxLatencyMs   Float?
+  fastestServer  String?
+  checksInHour   Int      @default(1)
+  failedServers  Json
   createdAt      DateTime @default(now())
 
-  @@unique([hour])
   @@index([hour])
 }
 
-// Stream Health - Daily aggregates (kept for 90 days)
 model StreamHealthDaily {
   id             Int      @id @default(autoincrement())
-  date           DateTime // Start of day (UTC)
-  avgWorkingRate Float    // Average % of servers working across all checks
-  minWorkingRate Float    // Worst check of the day
-  maxWorkingRate Float    // Best check of the day
-  avgLatencyMs   Float?   // Average latency across all checks
-  checksCount    Int      // Total health checks that day
-  alwaysWorking  Int      @default(0) // Servers that never failed
-  neverWorking   Int      @default(0) // Servers that never worked
-  flaky          Int      @default(0) // Intermittent servers
+  date           DateTime @unique
+  avgWorkingRate Float
+  minWorkingRate Float
+  maxWorkingRate Float
+  avgLatencyMs   Float?
+  checksCount    Int
+  alwaysWorking  Int      @default(0)
+  neverWorking   Int      @default(0)
+  flaky          Int      @default(0)
   createdAt      DateTime @default(now())
 
-  @@unique([date])
   @@index([date])
 }
 
-// Per-server daily reliability (for server-level analysis)
 model ServerReliabilityDaily {
   id           Int      @id @default(autoincrement())
   date         DateTime
-  host         String   // Server hostname
-  checksCount  Int      // Times checked
-  successCount Int      // Times it was working
-  avgLatencyMs Float?   // Average latency when working
-  reliability  Float    // successCount / checksCount
+  host         String
+  checksCount  Int
+  successCount Int
+  avgLatencyMs Float?
+  reliability  Float
   createdAt    DateTime @default(now())
 
   @@unique([date, host])
@@ -612,10 +564,6 @@ model ServerReliabilityDaily {
   @@index([host])
   @@index([reliability])
 }
-
-// ═══════════════════════════════════════════════════════════════
-// IMDB DATA TABLES
-// ═══════════════════════════════════════════════════════════════
 
 model ImdbTitleBasics {
   tconst         String   @id @map("tconst") @db.VarChar(12)
@@ -631,6 +579,7 @@ model ImdbTitleBasics {
   @@index([isAdult], map: "idx_is_adult")
   @@index([startYear], map: "idx_start_year")
   @@fulltext([primaryTitle], map: "ft_ngram_primary_title")
+  @@fulltext([primaryTitle], map: "ft_primary_title")
   @@map("imdb_title_basics")
 }
 
@@ -725,10 +674,6 @@ model ImdbProfessions {
   @@map("imdb_professions")
 }
 
-// ═══════════════════════════════════════════════════════════════
-// SPONSORSHIP & ACCESS TABLES
-// ═══════════════════════════════════════════════════════════════
-
 model DonationHistory {
   id             String   @id
   createdAt      DateTime @default(now())
@@ -799,12 +744,12 @@ model Sponsors {
 }
 
 model DiscordUser {
-  id             String   @id @db.VarChar(30)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  discordUserId  String   @unique
+  id              String   @id @db.VarChar(30)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  discordUserId   String   @unique
   discordUsername String?
-  rdApiToken     String?
+  rdApiToken      String?
 }
 
 model TempAuthData {
