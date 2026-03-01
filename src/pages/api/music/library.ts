@@ -176,7 +176,17 @@ export default async function handler(
 		});
 
 		// Filter out albums with no audio tracks
-		const albumsWithTracks = albums.filter((a) => a.trackCount > 0);
+		const albumsWithTracksAll = albums.filter((a) => a.trackCount > 0);
+
+		// Deduplicate by mbid — keep the version with the most tracks (most complete)
+		const albumsByMbid = new Map<string, MusicAlbum>();
+		for (const album of albumsWithTracksAll) {
+			const existing = albumsByMbid.get(album.mbid);
+			if (!existing || album.trackCount > existing.trackCount) {
+				albumsByMbid.set(album.mbid, album);
+			}
+		}
+		const albumsWithTracks = Array.from(albumsByMbid.values());
 
 		const response: MusicLibraryResponse = {
 			albums: albumsWithTracks,

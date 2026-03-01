@@ -77,14 +77,13 @@ export function MainActions({ rdUser, tbUser, adUser, isLoading }: MainActionsPr
 					<Rocket className="mr-1 inline-block h-4 w-4 text-indigo-400" />
 					Hash lists
 				</Link>
-				{/* Music button disabled for now */}
-				<div
-					className="flex cursor-not-allowed items-center justify-center gap-2 rounded border-2 border-gray-600 bg-gray-800/30 p-3 text-gray-500 opacity-50"
-					title="Coming soon"
+				<Link
+					href="/albums"
+					className="haptic flex items-center justify-center gap-2 rounded border-2 border-green-500 bg-green-900/30 p-3 text-green-100 transition-colors hover:bg-green-800/50"
 				>
-					<Music2 className="mr-1 inline-block h-4 w-4 text-gray-500" />
+					<Music2 className="mr-1 inline-block h-4 w-4 text-green-400" />
 					Music
-				</div>
+				</Link>
 			</div>
 
 			{/* Second row: Cast buttons */}

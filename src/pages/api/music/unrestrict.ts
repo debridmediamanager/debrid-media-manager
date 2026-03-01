@@ -1,4 +1,10 @@
-import { unrestrictLink } from '@/services/realDebrid';
+import {
+	addHashAsMagnet,
+	deleteTorrent,
+	getTorrentInfo,
+	unrestrictLink,
+} from '@/services/realDebrid';
+import { handleSelectFilesInRd } from '@/utils/addMagnet';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export interface UnrestrictRequest {
@@ -39,24 +45,38 @@ export default async function handler(
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { link, accessToken } = req.body as UnrestrictRequest;
+	const { hash, fileId, accessToken } = req.body as UnrestrictRequest;
 
 	if (!accessToken) {
 		return res.status(401).json({ error: 'Missing access token' });
 	}
 
-	if (!link) {
-		return res.status(400).json({ error: 'Missing link parameter' });
+	if (!hash || fileId === undefined) {
+		return res.status(400).json({ error: 'Missing hash or fileId' });
 	}
 
-	const ipAddress =
-		(req.headers['cf-connecting-ip'] as string) ??
-		(req.headers['x-forwarded-for'] as string)?.split(',')[0] ??
-		req.socket.remoteAddress ??
-		'';
+	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress ?? '';
+
+	let torrentId: string | undefined;
 
 	try {
-		const unrestricted = await unrestrictLink(accessToken, link, ipAddress);
+		// Same flow as cast: add magnet, select files, get fresh link, unrestrict
+		torrentId = await addHashAsMagnet(accessToken, hash, false);
+		await handleSelectFilesInRd(accessToken, `rd:${torrentId}`, false);
+		const torrentInfo = await getTorrentInfo(accessToken, torrentId, false);
+
+		const fileIdx = torrentInfo.files
+			.filter((f) => f.selected)
+			.findIndex((f) => f.id === fileId);
+		const link = torrentInfo.links[fileIdx] ?? torrentInfo.links[0];
+
+		if (!link) {
+			throw new Error('No download link found for this track');
+		}
+
+		const unrestricted = await unrestrictLink(accessToken, link, ipAddress, false);
+
+		await deleteTorrent(accessToken, torrentId, false);
 
 		return res.status(200).json({
 			streamUrl: unrestricted.download,
@@ -65,13 +85,22 @@ export default async function handler(
 			mimeType: getMimeType(unrestricted.filename),
 		});
 	} catch (error: unknown) {
+		if (torrentId) {
+			try {
+				await deleteTorrent(accessToken, torrentId, false);
+			} catch {
+				// ignore cleanup errors
+			}
+		}
+
 		const axiosError = (error as any)?.response?.data;
 		const errorCode = axiosError?.error_code;
 		const errorMessage =
 			axiosError?.error || (error as Error)?.message || 'Failed to unrestrict link';
 
 		console.error('[Music Unrestrict] Error:', {
-			link: link?.substring(0, 50),
+			hash,
+			fileId,
 			errorCode,
 			errorMessage,
 			status: (error as any)?.response?.status,
