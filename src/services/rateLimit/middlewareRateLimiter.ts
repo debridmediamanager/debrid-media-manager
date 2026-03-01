@@ -230,16 +230,12 @@ export class HybridRateLimiter {
 }
 
 /**
- * Get client IP from request headers
- * Priority: cf-connecting-ip (Cloudflare) > x-forwarded-for > unknown
+ * Get client IP from request headers (behind nginx proxy manager).
+ * Priority: x-real-ip > x-forwarded-for (first IP) > unknown
  */
-export function getClientIp(
-	cfConnectingIp: string | null,
-	xForwardedFor: string | null
-): string {
-	// Cloudflare provides the real client IP in cf-connecting-ip
-	if (cfConnectingIp?.trim()) {
-		return cfConnectingIp.trim();
+export function getClientIp(xRealIp: string | null, xForwardedFor: string | null): string {
+	if (xRealIp?.trim()) {
+		return xRealIp.trim();
 	}
 	// Fallback to x-forwarded-for (first IP in the chain)
 	if (xForwardedFor?.trim()) {
@@ -255,12 +251,12 @@ export function getClientIp(
  */
 export function extractIdentifier(
 	pathname: string,
-	cfConnectingIp: string | null,
+	xRealIp: string | null,
 	xForwardedFor: string | null
 ): string {
 	// For torrents API, always use IP-based rate limiting
 	if (pathname.startsWith('/api/torrents')) {
-		return getClientIp(cfConnectingIp, xForwardedFor);
+		return getClientIp(xRealIp, xForwardedFor);
 	}
 
 	// For Stremio API, try to extract user ID from path
@@ -271,7 +267,7 @@ export function extractIdentifier(
 	}
 
 	// Fallback to IP
-	return getClientIp(cfConnectingIp, xForwardedFor);
+	return getClientIp(xRealIp, xForwardedFor);
 }
 
 /**

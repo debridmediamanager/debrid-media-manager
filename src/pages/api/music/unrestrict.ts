@@ -5,6 +5,7 @@ import {
 	unrestrictLink,
 } from '@/services/realDebrid';
 import { handleSelectFilesInRd } from '@/utils/addMagnet';
+import { getClientIpFromRequest } from '@/utils/clientIp';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export interface UnrestrictRequest {
@@ -55,7 +56,7 @@ export default async function handler(
 		return res.status(400).json({ error: 'Missing hash or fileId' });
 	}
 
-	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress ?? '';
+	const ipAddress = getClientIpFromRequest(req);
 
 	let torrentId: string | undefined;
 

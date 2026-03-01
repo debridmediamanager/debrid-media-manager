@@ -1,10 +1,11 @@
 import { getTorrentInfo, unrestrictLink } from '@/services/realDebrid';
+import { getClientIpFromRequest } from '@/utils/clientIp';
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 	const { token, torrentId } = req.query;
 	const rdKey = token as string;
-	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
+	const ipAddress = getClientIpFromRequest(req);
 	const [filename, downloadLinks] = await exportDownloadLinks(
 		rdKey,
 		torrentId as string,

@@ -1,5 +1,6 @@
 import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getBiggestFileStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -23,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		});
 		return;
 	}
-	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
+	const ipAddress = getClientIpFromRequest(req);
 
 	try {
 		const [streamUrl, rdLink, fileSize] = await getBiggestFileStreamUrl(token, hash, ipAddress);

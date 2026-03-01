@@ -61,7 +61,7 @@ describe('API /api/scrapers/imdb', () => {
 					lastSeason: 'false',
 					replaceOldScrape: 'true',
 				},
-				headers: { 'cf-connecting-ip': '1.1.1.1' },
+				headers: { 'x-real-ip': '1.1.1.1' },
 			} as any,
 			res
 		);

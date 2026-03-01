@@ -25,7 +25,7 @@ describe('/api/exportdl', () => {
 	it('returns a text file with unrestricted links', async () => {
 		const req = createMockRequest({
 			query: { token: 'tok', torrentId: '123' },
-			headers: { 'cf-connecting-ip': '127.0.0.1' },
+			headers: { 'x-real-ip': '127.0.0.1' },
 		});
 		const res = createMockResponse();
 
@@ -45,7 +45,7 @@ describe('/api/exportdl', () => {
 		mockGetTorrentInfo.mockRejectedValue(new Error('rd down'));
 		const req = createMockRequest({
 			query: { token: 'tok', torrentId: '123' },
-			headers: { 'cf-connecting-ip': '127.0.0.1' },
+			headers: { 'x-real-ip': '127.0.0.1' },
 		});
 		const res = createMockResponse();
 

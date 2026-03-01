@@ -50,7 +50,7 @@ describe('/api/stremio/cast/movie/[imdbid]', () => {
 
 		const req = createMockRequest({
 			query: { imdbid: 'tt1234567', token: 'token-abc', hash: 'hashabc' },
-			headers: { 'cf-connecting-ip': '127.0.0.1' },
+			headers: { 'x-real-ip': '127.0.0.1' },
 		});
 		const res = createMockResponse();
 
@@ -83,7 +83,7 @@ describe('/api/stremio/cast/movie/[imdbid]', () => {
 
 		const req = createMockRequest({
 			query: { imdbid: 'tt7654321', token: 'token-abc', hash: 'hashabc' },
-			headers: { 'cf-connecting-ip': '10.0.0.2' },
+			headers: { 'x-real-ip': '10.0.0.2' },
 		});
 		const res = createMockResponse();
 

@@ -1,5 +1,6 @@
 import { getToken, unrestrictLink } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
+import { getClientIpFromRequest } from '@/utils/clientIp';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // Unrestrict and play a link
@@ -57,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const rdLink = `https://real-debrid.com/d/${link.substring(0, 13)}`;
 
 	try {
-		const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
+		const ipAddress = getClientIpFromRequest(req);
 		const unrestrict = await unrestrictLink(response.access_token, rdLink, ipAddress, false);
 		if (!unrestrict) {
 			console.error('Failed to unrestrict link:', rdLink);

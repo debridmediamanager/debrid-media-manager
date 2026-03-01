@@ -63,7 +63,7 @@ describe('/api/stremio/cast/[imdbid]', () => {
 				fileId: '10',
 				mediaType: 'tv',
 			},
-			headers: { 'cf-connecting-ip': '1.1.1.1' },
+			headers: { 'x-real-ip': '1.1.1.1' },
 		});
 		const res = createMockResponse();
 

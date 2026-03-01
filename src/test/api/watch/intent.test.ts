@@ -31,7 +31,7 @@ describe('API watch intents', () => {
 		await watchHandler(
 			{
 				query: { token: 'tok', link: 'link', os: 'ios', player: 'infuse' },
-				headers: { 'cf-connecting-ip': '3.3.3.3' },
+				headers: { 'x-real-ip': '3.3.3.3' },
 				socket: { remoteAddress: '2.2.2.2' },
 			} as any,
 			res

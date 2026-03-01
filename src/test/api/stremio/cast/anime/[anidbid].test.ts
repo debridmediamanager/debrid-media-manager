@@ -66,7 +66,7 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 	it('saves casted anime streams for each requested file id', async () => {
 		const req = createMockRequest({
 			query: { anidbid: 'anidb1', token: 'tok', hash: 'hash', fileIds: ['101'] },
-			headers: { 'cf-connecting-ip': '127.0.0.1' },
+			headers: { 'x-real-ip': '127.0.0.1' },
 		});
 		const res = createMockResponse();
 
@@ -89,7 +89,7 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 		mockGetStreamUrl.mockRejectedValueOnce(new Error('rd down'));
 		const req = createMockRequest({
 			query: { anidbid: 'anidb1', token: 'tok', hash: 'hash', fileIds: ['201'] },
-			headers: { 'cf-connecting-ip': '10.0.0.5' },
+			headers: { 'x-real-ip': '10.0.0.5' },
 		});
 		const res = createMockResponse();
 

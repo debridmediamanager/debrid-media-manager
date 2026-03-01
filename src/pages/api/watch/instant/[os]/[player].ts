@@ -1,10 +1,11 @@
+import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getInstantIntent } from '@/utils/intent';
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 	const { os, player, token, hash, fileId } = req.query;
 	const rdKey = token as string;
-	const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
+	const ipAddress = getClientIpFromRequest(req);
 	const selectedFileId = parseInt(fileId as string, 10);
 	const intent = await getInstantIntent(
 		rdKey,

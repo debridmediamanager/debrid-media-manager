@@ -95,11 +95,11 @@ describe('middlewareRateLimiter', () => {
 	});
 
 	describe('getClientIp', () => {
-		it('should prefer cf-connecting-ip over x-forwarded-for', () => {
+		it('should prefer x-real-ip over x-forwarded-for', () => {
 			expect(getClientIp('1.2.3.4', '5.6.7.8')).toBe('1.2.3.4');
 		});
 
-		it('should use x-forwarded-for when cf-connecting-ip is null', () => {
+		it('should use x-forwarded-for when x-real-ip is null', () => {
 			expect(getClientIp(null, '5.6.7.8')).toBe('5.6.7.8');
 		});
 
@@ -131,30 +131,30 @@ describe('middlewareRateLimiter', () => {
 			expect(extractIdentifier('/api/stremio/6xPzgFqT0tKI/catalog/movie', null, null)).toBe(
 				'6xPzgFqT0tKI'
 			);
-			expect(extractIdentifier('/api/stremio/abcdef123456/meta/movie/tt123', null, null)).toBe(
-				'abcdef123456'
-			);
+			expect(
+				extractIdentifier('/api/stremio/abcdef123456/meta/movie/tt123', null, null)
+			).toBe('abcdef123456');
 		});
 
 		it('should extract user ID from stremio-tb path', () => {
-			expect(extractIdentifier('/api/stremio-tb/ZNxmirFYKwK0/catalog/series', null, null)).toBe(
-				'ZNxmirFYKwK0'
-			);
+			expect(
+				extractIdentifier('/api/stremio-tb/ZNxmirFYKwK0/catalog/series', null, null)
+			).toBe('ZNxmirFYKwK0');
 		});
 
 		it('should extract user ID from stremio-ad path', () => {
-			expect(extractIdentifier('/api/stremio-ad/OYDJaDP0l5yM/catalog/movie', null, null)).toBe(
-				'OYDJaDP0l5yM'
-			);
+			expect(
+				extractIdentifier('/api/stremio-ad/OYDJaDP0l5yM/catalog/movie', null, null)
+			).toBe('OYDJaDP0l5yM');
 		});
 
 		it('should fall back to IP when no user ID in path', () => {
-			// Uses cf-connecting-ip first
+			// Uses x-real-ip first
 			expect(extractIdentifier('/api/stremio/id', '192.168.1.1', null)).toBe('192.168.1.1');
-			// Uses x-forwarded-for when cf-connecting-ip is null
-			expect(extractIdentifier('/api/stremio/cast/movie', null, '10.0.0.1, 192.168.1.1')).toBe(
-				'10.0.0.1'
-			);
+			// Uses x-forwarded-for when x-real-ip is null
+			expect(
+				extractIdentifier('/api/stremio/cast/movie', null, '10.0.0.1, 192.168.1.1')
+			).toBe('10.0.0.1');
 		});
 
 		it('should return "unknown" when no user ID and no IP', () => {
@@ -345,10 +345,10 @@ describe('middlewareRateLimiter', () => {
 				expect(extractIdentifier('/api/stremio/id', '   ', '   ')).toBe('unknown');
 			});
 
-			it('should use cf-connecting-ip for torrents even when x-forwarded-for available', () => {
-				expect(
-					extractIdentifier('/api/torrents/download', '1.2.3.4', '5.6.7.8')
-				).toBe('1.2.3.4');
+			it('should use x-real-ip for torrents even when x-forwarded-for available', () => {
+				expect(extractIdentifier('/api/torrents/download', '1.2.3.4', '5.6.7.8')).toBe(
+					'1.2.3.4'
+				);
 			});
 		});
 

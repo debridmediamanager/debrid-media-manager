@@ -52,7 +52,7 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 	it('unrestricts the link and redirects to the download URL', async () => {
 		const req = createMockRequest({
 			query: { userid: 'user', link: 'abcdef1234567890' },
-			headers: { 'cf-connecting-ip': '127.0.0.1' },
+			headers: { 'x-real-ip': '127.0.0.1' },
 		});
 		const res = createMockResponse();
 		(res.redirect as Mock).mockReturnValue(res);
@@ -103,7 +103,7 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 		mockUnrestrictLink.mockResolvedValue(null);
 		const req = createMockRequest({
 			query: { userid: 'user', link: 'abcdef1234567890' },
-			headers: { 'cf-connecting-ip': '127.0.0.1' },
+			headers: { 'x-real-ip': '127.0.0.1' },
 		});
 		const res = createMockResponse();
 

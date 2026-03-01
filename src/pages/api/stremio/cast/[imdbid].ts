@@ -1,5 +1,6 @@
 import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -30,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 	try {
-		const ipAddress = (req.headers['cf-connecting-ip'] as string) ?? req.socket.remoteAddress;
+		const ipAddress = getClientIpFromRequest(req);
 		const [streamUrl, rdLink, seasonNumber, episodeNumber, fileSize] = await getStreamUrl(
 			token,
 			hash,
