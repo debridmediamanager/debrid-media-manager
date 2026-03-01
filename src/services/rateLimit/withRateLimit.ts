@@ -26,9 +26,15 @@ function getRateLimiter(): HybridRateLimiter {
  * Get identifier for rate limiting based on request
  */
 function getIdentifier(req: NextApiRequest, pathname: string): string {
+	const cfConnectingIp = req.headers['cf-connecting-ip'] as string | undefined;
 	const xRealIp = req.headers['x-real-ip'] as string | undefined;
 	const xForwardedFor = req.headers['x-forwarded-for'] as string | undefined;
-	return extractIdentifier(pathname, xRealIp || null, xForwardedFor || null);
+	return extractIdentifier(
+		pathname,
+		cfConnectingIp || null,
+		xRealIp || null,
+		xForwardedFor || null
+	);
 }
 
 /**
@@ -94,9 +100,14 @@ export function withCustomRateLimit(
  */
 export function withIpRateLimit(handler: NextApiHandler, config: RateLimitConfig): NextApiHandler {
 	return async (req: NextApiRequest, res: NextApiResponse) => {
+		const cfConnectingIp = req.headers['cf-connecting-ip'] as string | undefined;
 		const xRealIp = req.headers['x-real-ip'] as string | undefined;
 		const xForwardedFor = req.headers['x-forwarded-for'] as string | undefined;
-		const identifier = getClientIp(xRealIp || null, xForwardedFor || null);
+		const identifier = getClientIp(
+			cfConnectingIp || null,
+			xRealIp || null,
+			xForwardedFor || null
+		);
 
 		const limiter = getRateLimiter();
 		const now = Date.now();

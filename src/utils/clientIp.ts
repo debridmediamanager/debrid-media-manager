@@ -1,10 +1,14 @@
 import { NextApiRequest } from 'next';
 
 /**
- * Get client IP from request headers (behind nginx proxy manager).
- * Priority: x-real-ip > x-forwarded-for (first IP) > socket remote address
+ * Get client IP from request headers.
+ * Priority: cf-connecting-ip (Cloudflare) > x-real-ip (nginx) > x-forwarded-for > socket remote address
  */
 export function getClientIpFromRequest(req: NextApiRequest): string {
+	const cfIp = req.headers['cf-connecting-ip'] as string | undefined;
+	if (cfIp?.trim()) {
+		return cfIp.trim();
+	}
 	const xRealIp = req.headers['x-real-ip'] as string | undefined;
 	if (xRealIp?.trim()) {
 		return xRealIp.trim();
