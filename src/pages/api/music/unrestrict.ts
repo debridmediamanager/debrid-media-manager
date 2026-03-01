@@ -2,9 +2,9 @@ import {
 	addHashAsMagnet,
 	deleteTorrent,
 	getTorrentInfo,
+	selectFiles,
 	unrestrictLink,
 } from '@/services/realDebrid';
-import { handleSelectFilesInRd } from '@/utils/addMagnet';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -38,6 +38,47 @@ function getMimeType(filename: string): string {
 	return MIME_TYPES[ext] ?? 'audio/mpeg';
 }
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Wait for the torrent to have files available (magnet conversion complete).
+ * Polls getTorrentInfo until files appear or timeout is reached.
+ */
+async function waitForFiles(
+	accessToken: string,
+	torrentId: string,
+	maxAttempts = 10,
+	intervalMs = 1000
+): Promise<Awaited<ReturnType<typeof getTorrentInfo>>> {
+	for (let i = 0; i < maxAttempts; i++) {
+		const info = await getTorrentInfo(accessToken, torrentId, false);
+		if (info.files.length > 0) return info;
+		await delay(intervalMs);
+	}
+	throw new Error('Timed out waiting for torrent files');
+}
+
+/**
+ * Wait for the torrent to reach "downloaded" status (links available).
+ * Polls getTorrentInfo until status is downloaded or timeout is reached.
+ */
+async function waitForDownloaded(
+	accessToken: string,
+	torrentId: string,
+	maxAttempts = 15,
+	intervalMs = 1000
+): Promise<Awaited<ReturnType<typeof getTorrentInfo>>> {
+	for (let i = 0; i < maxAttempts; i++) {
+		const info = await getTorrentInfo(accessToken, torrentId, false);
+		if (info.status === 'downloaded' && info.links.length > 0) return info;
+		if (info.status === 'error' || info.status === 'dead' || info.status === 'virus') {
+			throw new Error(`Torrent status: ${info.status}`);
+		}
+		await delay(intervalMs);
+	}
+	throw new Error('Timed out waiting for torrent to be ready');
+}
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<UnrestrictTrackResponse | { error: string; errorCode?: number }>
@@ -61,10 +102,17 @@ export default async function handler(
 	let torrentId: string | undefined;
 
 	try {
-		// Same flow as cast: add magnet, select files, get fresh link, unrestrict
 		torrentId = await addHashAsMagnet(accessToken, hash, false);
-		await handleSelectFilesInRd(accessToken, `rd:${torrentId}`, false);
-		const torrentInfo = await getTorrentInfo(accessToken, torrentId, false);
+
+		// Wait for magnet conversion to complete (files become available)
+		const initialInfo = await waitForFiles(accessToken, torrentId);
+
+		// Select all files (music torrents have no video files)
+		const allFileIds = initialInfo.files.map((f) => `${f.id}`);
+		await selectFiles(accessToken, torrentId, allFileIds, false);
+
+		// Wait for torrent to reach "downloaded" status so links are populated
+		const torrentInfo = await waitForDownloaded(accessToken, torrentId);
 
 		const fileIdx = torrentInfo.files
 			.filter((f) => f.selected)
