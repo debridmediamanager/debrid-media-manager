@@ -6,6 +6,7 @@ import {
 	unrestrictLink,
 } from '@/services/realDebrid';
 import { getClientIpFromRequest } from '@/utils/clientIp';
+import { isVideo } from '@/utils/selectable';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export interface UnrestrictRequest {
@@ -107,9 +108,13 @@ export default async function handler(
 		// Wait for magnet conversion to complete (files become available)
 		const initialInfo = await waitForFiles(accessToken, torrentId);
 
-		// Select all files (music torrents have no video files)
-		const allFileIds = initialInfo.files.map((f) => `${f.id}`);
-		await selectFiles(accessToken, torrentId, allFileIds, false);
+		// Select only media files (audio/video), skip junk like .nfo, .txt, .jpg, .cue, .log
+		let mediaFileIds = initialInfo.files.filter(isVideo).map((f) => `${f.id}`);
+		if (mediaFileIds.length === 0) {
+			// Fallback to all files if no recognized media files found
+			mediaFileIds = initialInfo.files.map((f) => `${f.id}`);
+		}
+		await selectFiles(accessToken, torrentId, mediaFileIds, false);
 
 		// Wait for torrent to reach "downloaded" status so links are populated
 		const torrentInfo = await waitForDownloaded(accessToken, torrentId);
