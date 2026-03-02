@@ -65,10 +65,34 @@ export default function AlbumsPage() {
 		}
 	}, [albumHash]);
 
-	// Queue and playback state
-	const [queue, setQueue] = useState<QueuedTrack[]>([]);
-	const [originalQueue, setOriginalQueue] = useState<QueuedTrack[]>([]);
-	const [currentIndex, setCurrentIndex] = useState<number>(-1);
+	// Queue and playback state (persisted to localStorage)
+	const [queue, setQueue] = useState<QueuedTrack[]>(() => {
+		if (typeof window === 'undefined') return [];
+		try {
+			const saved = window.localStorage.getItem('music:queue');
+			return saved ? JSON.parse(saved) : [];
+		} catch {
+			return [];
+		}
+	});
+	const [originalQueue, setOriginalQueue] = useState<QueuedTrack[]>(() => {
+		if (typeof window === 'undefined') return [];
+		try {
+			const saved = window.localStorage.getItem('music:originalQueue');
+			return saved ? JSON.parse(saved) : [];
+		} catch {
+			return [];
+		}
+	});
+	const [currentIndex, setCurrentIndex] = useState<number>(() => {
+		if (typeof window === 'undefined') return -1;
+		try {
+			const saved = window.localStorage.getItem('music:currentIndex');
+			return saved !== null ? JSON.parse(saved) : -1;
+		} catch {
+			return -1;
+		}
+	});
 	const [playerState, setPlayerState] = useState<PlayerState>({
 		isPlaying: false,
 		currentTime: 0,
@@ -82,6 +106,21 @@ export default function AlbumsPage() {
 
 	// Persist volume
 	const [savedVolume, setSavedVolume] = useLocalStorage<number>('music:volume', 1);
+
+	// Persist queue state to localStorage (strip streamUrl from tracks since RD links expire)
+	useEffect(() => {
+		const stripped = queue.map(({ streamUrl, ...rest }) => rest);
+		window.localStorage.setItem('music:queue', JSON.stringify(stripped));
+	}, [queue]);
+
+	useEffect(() => {
+		const stripped = originalQueue.map(({ streamUrl, ...rest }) => rest);
+		window.localStorage.setItem('music:originalQueue', JSON.stringify(stripped));
+	}, [originalQueue]);
+
+	useEffect(() => {
+		window.localStorage.setItem('music:currentIndex', JSON.stringify(currentIndex));
+	}, [currentIndex]);
 
 	// Audio element ref
 	const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -338,6 +377,11 @@ export default function AlbumsPage() {
 
 		if (playerState.isPlaying) {
 			audioRef.current.pause();
+		} else if (!audioRef.current.src || audioRef.current.src === window.location.href) {
+			// No audio loaded (e.g. after restore from localStorage) — unrestrict and play
+			if (currentIndex >= 0 && currentIndex < queue.length) {
+				playTrackAtIndex(currentIndex);
+			}
 		} else {
 			audioRef.current.play().catch(console.error);
 		}
@@ -442,14 +486,25 @@ export default function AlbumsPage() {
 
 			<div className="flex h-screen flex-col bg-gradient-to-b from-gray-900 via-gray-900 to-black text-white">
 				{/* Header */}
-				<header className="flex items-center justify-between border-b border-white/5 bg-black/30 px-6 py-4 backdrop-blur-md">
-					<div className="flex items-center gap-2">
-						<Music2 className="h-6 w-6 text-green-500" />
-						<h1 className="text-xl font-bold">Albums</h1>
+				<header className="flex flex-col gap-3 border-b border-white/5 bg-black/30 px-4 py-3 backdrop-blur-md md:flex-row md:items-center md:justify-between md:px-6 md:py-4">
+					<div className="flex items-center justify-between">
+						<div className="flex items-center gap-2">
+							<Music2 className="h-5 w-5 text-green-500 md:h-6 md:w-6" />
+							<h1 className="text-lg font-bold md:text-xl">Albums</h1>
+						</div>
+						{/* Stats - mobile inline, desktop separate */}
+						{library && (
+							<div className="flex items-center gap-2 text-xs text-gray-400 md:hidden">
+								<span>
+									{library.totalAlbums} albums &middot; {library.totalTracks}{' '}
+									tracks
+								</span>
+							</div>
+						)}
 					</div>
 
 					{/* Search */}
-					<div className="w-96">
+					<div className="w-full md:w-96">
 						<input
 							type="text"
 							placeholder="Search artists or albums..."
@@ -459,9 +514,9 @@ export default function AlbumsPage() {
 						/>
 					</div>
 
-					{/* Stats */}
+					{/* Stats - desktop only */}
 					{library && (
-						<div className="flex items-center gap-2 text-sm text-gray-400">
+						<div className="hidden items-center gap-2 text-sm text-gray-400 md:flex">
 							<Library className="h-4 w-4" />
 							<span>
 								{library.totalAlbums} albums &middot; {library.totalTracks} tracks
@@ -471,7 +526,7 @@ export default function AlbumsPage() {
 				</header>
 
 				{/* Main content */}
-				<main ref={mainRef} className="flex-1 overflow-y-auto pb-32">
+				<main ref={mainRef} className="flex-1 overflow-y-auto pb-24 md:pb-32">
 					{libraryLoading ? (
 						<div className="flex h-full items-center justify-center">
 							<Loader2 className="h-8 w-8 animate-spin text-green-500" />
