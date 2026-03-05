@@ -334,15 +334,19 @@ export const handleAddAsMagnetInAd = async (
 		const isInstant = isAdMagnetInstant(upload);
 
 		if (!isInstant) {
-			// Not instant - delete and optionally notify
-			await deleteMagnetAd(adKey, upload.id);
-
 			if (deleteIfNotInstant) {
+				// Availability check mode - delete and notify
+				await deleteMagnetAd(adKey, upload.id);
 				toast.error('Torrent not instant; removed.', magnetToastOptions);
-			} else {
-				toast.error('Torrent not cached in AllDebrid.', magnetToastOptions);
+				if (callback) await callback(null);
+				return;
 			}
 
+			// User wants to download - keep magnet in AD for peer downloading
+			toast.success(
+				'Torrent added (not cached, downloading from peers).',
+				magnetToastOptions
+			);
 			if (callback) await callback(null);
 			return;
 		}
