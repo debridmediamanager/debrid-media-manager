@@ -29,7 +29,7 @@ export default function QueuePanel({
 	}, [currentIndex]);
 
 	return (
-		<div className="fixed bottom-24 right-4 z-50 flex w-96 flex-col rounded-xl border border-white/10 bg-black/90 shadow-music-2xl backdrop-blur-xl">
+		<div className="fixed bottom-[4.5rem] left-0 right-0 z-50 flex flex-col border-t border-white/10 bg-black/95 backdrop-blur-xl md:bottom-24 md:left-auto md:right-4 md:w-96 md:rounded-xl md:border md:bg-black/90 md:shadow-music-2xl">
 			{/* Header */}
 			<div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
 				<div className="flex items-center gap-2">

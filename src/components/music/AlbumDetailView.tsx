@@ -26,7 +26,7 @@ export default function AlbumDetailView({
 			{/* Ambient background gradient */}
 			<div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-green-900/30 via-gray-900/80 to-transparent" />
 
-			<div className="relative z-10 p-8 pb-32">
+			<div className="relative z-10 p-4 pb-32 md:p-8">
 				{/* Back button */}
 				<button
 					onClick={onBack}
@@ -38,7 +38,7 @@ export default function AlbumDetailView({
 
 				{/* Album header */}
 				<div className="flex flex-col gap-8 md:flex-row md:items-end">
-					<div className="relative h-64 w-64 flex-shrink-0 overflow-hidden rounded-xl bg-gray-800 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:scale-[1.02]">
+					<div className="relative mx-auto h-48 w-48 flex-shrink-0 overflow-hidden rounded-xl bg-gray-800 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:scale-[1.02] md:mx-0 md:h-64 md:w-64">
 						{/* Fallback icon */}
 						<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-700 to-gray-800">
 							<Disc3 className="h-24 w-24 text-gray-500" />
@@ -57,17 +57,17 @@ export default function AlbumDetailView({
 						)}
 					</div>
 
-					<div className="flex flex-col justify-end gap-4">
+					<div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
 						<div>
 							<span className="text-xs font-bold uppercase tracking-wider text-green-500">
 								Album
 							</span>
-							<h2 className="mt-2 text-4xl font-black tracking-tight text-white md:text-6xl md:leading-tight">
+							<h2 className="mt-2 text-2xl font-black tracking-tight text-white sm:text-4xl md:text-6xl md:leading-tight">
 								{album.album}
 							</h2>
 						</div>
 
-						<div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-gray-300">
+						<div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm font-medium text-gray-300 md:justify-start">
 							<span className="text-white">{album.artist}</span>
 							{album.year && (
 								<>
@@ -81,7 +81,7 @@ export default function AlbumDetailView({
 							<span className="text-gray-400">{formatSize(album.totalBytes)}</span>
 						</div>
 
-						<div className="mt-4 flex flex-wrap gap-4">
+						<div className="mt-4 flex flex-wrap justify-center gap-4 md:justify-start">
 							<button
 								onClick={() => onPlay(album)}
 								className="flex items-center gap-2 rounded-full bg-green-500 px-8 py-3.5 font-bold text-black shadow-lg shadow-green-500/25 transition-all duration-200 hover:scale-105 hover:bg-green-400 active:scale-95"
@@ -100,7 +100,7 @@ export default function AlbumDetailView({
 				</div>
 
 				{/* Track list */}
-				<div className="mt-12">
+				<div className="mt-8 md:mt-12">
 					<div className="mb-4 grid grid-cols-[40px_1fr_auto] gap-4 border-b border-white/10 px-4 py-2 text-xs font-medium uppercase tracking-wider text-gray-400">
 						<span className="text-center">#</span>
 						<span>Title</span>

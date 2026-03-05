@@ -19,9 +19,9 @@ export default function AlbumCard({ album, onSelect, onPlay }: AlbumCardProps) {
 					onSelect(album);
 				}
 			}}
-			className="group flex cursor-pointer flex-col rounded-xl bg-gray-800/40 p-4 text-left transition-all duration-300 hover:-translate-y-1.5 hover:bg-gray-800/70 hover:shadow-music-lg"
+			className="group flex cursor-pointer flex-col rounded-xl bg-gray-800/40 p-3 text-left transition-all duration-300 hover:-translate-y-1.5 hover:bg-gray-800/70 hover:shadow-music-lg sm:p-4"
 		>
-			<div className="relative mb-4 aspect-square w-full overflow-hidden rounded-lg bg-gradient-to-br from-gray-700 to-gray-800 shadow-lg">
+			<div className="relative mb-3 aspect-square w-full overflow-hidden rounded-lg bg-gradient-to-br from-gray-700 to-gray-800 shadow-lg sm:mb-4">
 				{/* Fallback icon */}
 				<div className="flex h-full w-full items-center justify-center">
 					<Disc3 className="h-16 w-16 text-gray-500" />

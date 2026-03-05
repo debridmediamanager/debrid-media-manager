@@ -11,8 +11,8 @@ interface AlbumGridProps {
 
 export default function AlbumGrid({ albums, searchQuery, onSelect, onPlay }: AlbumGridProps) {
 	return (
-		<div className="p-6">
-			<h2 className="mb-6 text-2xl font-bold text-white">Your Library</h2>
+		<div className="p-3 md:p-6">
+			<h2 className="mb-4 text-xl font-bold text-white md:mb-6 md:text-2xl">Your Library</h2>
 
 			{albums.length === 0 ? (
 				<div className="flex flex-col items-center justify-center py-20 text-gray-400">
@@ -25,7 +25,7 @@ export default function AlbumGrid({ albums, searchQuery, onSelect, onPlay }: Alb
 					</p>
 				</div>
 			) : (
-				<div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-5">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] sm:gap-5">
 					{albums.map((album) => (
 						<AlbumCard
 							key={album.hash}

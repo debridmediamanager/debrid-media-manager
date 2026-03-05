@@ -22,7 +22,7 @@ export default function TrackListItem({
 	return (
 		<button
 			onClick={onPlay}
-			className={`group grid w-full grid-cols-[40px_1fr_auto] items-center gap-4 rounded-lg px-4 py-3 text-left transition-all duration-200 ${
+			className={`group grid w-full grid-cols-[32px_1fr_auto] items-center gap-2 rounded-lg px-3 py-2.5 text-left transition-all duration-200 sm:grid-cols-[40px_1fr_auto] sm:gap-4 sm:px-4 sm:py-3 ${
 				isCurrentTrack
 					? 'border-l-[3px] border-l-green-500 bg-green-500/10 pl-[calc(1rem-3px)] text-green-500'
 					: 'border-l-[3px] border-l-transparent text-gray-300 hover:bg-white/5 hover:text-white'
