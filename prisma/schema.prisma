@@ -421,6 +421,11 @@ model ZurgKeys {
   @@index([validUntil])
 }
 
+model DmmApiKeys {
+  apiKey    String   @id
+  createdAt DateTime @default(now())
+}
+
 model StreamServerHealth {
   host      String   @id
   status    Int?
@@ -675,7 +680,7 @@ model ImdbProfessions {
 }
 
 model DonationHistory {
-  id             String   @id
+  id             String   @id @default(cuid())
   createdAt      DateTime @default(now())
   githubUsername String
   amountInCents  Int
@@ -691,7 +696,7 @@ model DonationHistory {
 }
 
 model PatreonUsageHistory {
-  id             String    @id
+  id             String    @id @default(cuid())
   createdAt      DateTime  @default(now())
   patreonUserId  String
   githubUsername String
@@ -703,7 +708,7 @@ model PatreonUsageHistory {
 }
 
 model RepoAccess {
-  id             String    @id
+  id             String    @id @default(cuid())
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   githubUsername String
@@ -722,7 +727,7 @@ model RepoAccess {
 }
 
 model Sponsors {
-  id                     String    @id
+  id                     String    @id @default(cuid())
   shortId                String    @unique
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
@@ -738,13 +743,15 @@ model Sponsors {
   discordUsername        String?
   zurgApiKey             String?   @unique
   zurgApiKeyVersion      Int       @default(1)
+  dmmApiKey              String?   @unique
+  dmmApiKeyVersion       Int       @default(1)
 
   @@index([githubSponsoring, patreonAmount])
   @@index([updatedAt])
 }
 
 model DiscordUser {
-  id              String   @id @db.VarChar(30)
+  id              String   @id @default(cuid()) @db.VarChar(30)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   discordUserId   String   @unique
@@ -753,7 +760,7 @@ model DiscordUser {
 }
 
 model TempAuthData {
-  id              String   @id
+  id              String   @id @default(cuid())
   token           String   @unique
   createdAt       DateTime @default(now())
   githubUsername  String?
