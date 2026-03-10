@@ -88,7 +88,7 @@ export default async function handler(
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { hash, fileId, accessToken } = req.body as UnrestrictRequest;
+	const { link, hash, fileId, accessToken } = req.body as UnrestrictRequest;
 
 	if (!accessToken) {
 		return res.status(401).json({ error: 'Missing access token' });
@@ -99,6 +99,28 @@ export default async function handler(
 	}
 
 	const ipAddress = getClientIpFromRequest(req);
+
+	// Fast path: try to unrestrict the stored link directly (avoids full magnet flow)
+	if (link) {
+		try {
+			const unrestricted = await unrestrictLink(accessToken, link, ipAddress, false);
+			console.log('[Music Unrestrict] Fast path succeeded', { hash, fileId });
+			return res.status(200).json({
+				streamUrl: unrestricted.download,
+				filename: unrestricted.filename,
+				filesize: unrestricted.filesize,
+				mimeType: getMimeType(unrestricted.filename),
+			});
+		} catch (fastPathError: unknown) {
+			console.log('[Music Unrestrict] Fast path failed, falling back to magnet flow', {
+				hash,
+				fileId,
+				error:
+					(fastPathError as any)?.response?.data?.error ||
+					(fastPathError as Error)?.message,
+			});
+		}
+	}
 
 	let torrentId: string | undefined;
 
@@ -131,6 +153,8 @@ export default async function handler(
 		const unrestricted = await unrestrictLink(accessToken, link, ipAddress, false);
 
 		await deleteTorrent(accessToken, torrentId, false);
+
+		console.log('[Music Unrestrict] Magnet flow succeeded', { hash, fileId });
 
 		return res.status(200).json({
 			streamUrl: unrestricted.download,
