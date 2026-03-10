@@ -402,6 +402,17 @@ model TorrentSnapshot {
   @@index([hash, addedDate])
 }
 
+model HashImdb {
+  id        String   @id
+  hash      String
+  imdbId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([hash])
+  @@index([imdbId])
+}
+
 model MdblistCache {
   id        String   @id
   type      String

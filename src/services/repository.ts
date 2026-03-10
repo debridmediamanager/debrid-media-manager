@@ -4,6 +4,7 @@ import {
 	AnimeService,
 	AvailabilityService,
 	CastService,
+	HashImdbService,
 	HashSearchService,
 	HistoryAggregationService,
 	ImdbSearchService,
@@ -32,6 +33,7 @@ export type RepositoryDependencies = Partial<{
 	allDebridCastService: AllDebridCastService;
 	reportService: ReportService;
 	torrentSnapshotService: TorrentSnapshotService;
+	hashImdbService: HashImdbService;
 	hashSearchService: HashSearchService;
 	zurgKeysService: ZurgKeysService;
 	streamHealthService: StreamHealthService;
@@ -50,6 +52,7 @@ export class Repository {
 	private allDebridCastService: AllDebridCastService;
 	private reportService: ReportService;
 	private torrentSnapshotService: TorrentSnapshotService;
+	private hashImdbService: HashImdbService;
 	private hashSearchService: HashSearchService;
 	private zurgKeysService: ZurgKeysService;
 	private streamHealthService: StreamHealthService;
@@ -67,6 +70,7 @@ export class Repository {
 		allDebridCastService,
 		reportService,
 		torrentSnapshotService,
+		hashImdbService,
 		hashSearchService,
 		zurgKeysService,
 		streamHealthService,
@@ -83,6 +87,7 @@ export class Repository {
 		this.allDebridCastService = allDebridCastService ?? new AllDebridCastService();
 		this.reportService = reportService ?? new ReportService();
 		this.torrentSnapshotService = torrentSnapshotService ?? new TorrentSnapshotService();
+		this.hashImdbService = hashImdbService ?? new HashImdbService();
 		this.hashSearchService = hashSearchService ?? new HashSearchService();
 		this.zurgKeysService = zurgKeysService ?? new ZurgKeysService();
 		this.streamHealthService = streamHealthService ?? new StreamHealthService();
@@ -104,6 +109,7 @@ export class Repository {
 			this.allDebridCastService.disconnect(),
 			this.reportService.disconnect(),
 			this.torrentSnapshotService.disconnect(),
+			this.hashImdbService.disconnect(),
 			this.hashSearchService.disconnect(),
 			this.zurgKeysService.disconnect(),
 			this.streamHealthService.disconnect(),
@@ -559,6 +565,19 @@ export class Repository {
 
 	public getSnapshotsByHashes(hashes: string[]) {
 		return this.torrentSnapshotService.getSnapshotsByHashes(hashes);
+	}
+
+	// Hash-IMDB Mapping Methods
+	public upsertHashImdbBatch(pairs: { hash: string; imdbId: string }[]) {
+		return this.hashImdbService.upsertBatch(pairs);
+	}
+
+	public getHashImdbByHash(hash: string) {
+		return this.hashImdbService.getByHash(hash);
+	}
+
+	public getHashImdbByHashes(hashes: string[]) {
+		return this.hashImdbService.getByHashes(hashes);
 	}
 
 	// Report Service Methods

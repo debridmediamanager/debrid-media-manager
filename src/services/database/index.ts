@@ -2,6 +2,7 @@ import { AllDebridCastService } from './allDebridCast';
 import { AnimeService } from './anime';
 import { AvailabilityService } from './availability';
 import { CastService } from './cast';
+import { HashImdbService } from './hashImdb';
 import { HashSearchService } from './hashSearch';
 import { HistoryAggregationService } from './historyAggregation';
 import { ImdbSearchService } from './imdbSearch';
@@ -19,6 +20,7 @@ export {
 	AnimeService,
 	AvailabilityService,
 	CastService,
+	HashImdbService,
 	HashSearchService,
 	HistoryAggregationService,
 	ImdbSearchService,
