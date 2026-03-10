@@ -1,5 +1,6 @@
 import AlbumDetailView from '@/components/music/AlbumDetailView';
 import AlbumGrid from '@/components/music/AlbumGrid';
+import KeyboardShortcutsModal from '@/components/music/KeyboardShortcutsModal';
 import MusicPlayerBar from '@/components/music/MusicPlayerBar';
 import QueuePanel from '@/components/music/QueuePanel';
 import { PlayerState, QueuedTrack } from '@/components/music/types';
@@ -8,7 +9,7 @@ import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { MusicAlbum, MusicLibraryResponse, MusicTrack } from '@/pages/api/music/library';
 import { UnrestrictTrackResponse } from '@/pages/api/music/unrestrict';
-import { Library, Loader2, Music2 } from 'lucide-react';
+import { Keyboard, Library, Loader2, Music2 } from 'lucide-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -25,6 +26,7 @@ export default function AlbumsPage() {
 	// View state
 	const [searchQuery, setSearchQuery] = useState('');
 	const [isQueueOpen, setIsQueueOpen] = useState(false);
+	const [showShortcuts, setShowShortcuts] = useState(false);
 
 	// Get selected album from URL path param
 	const slug = router.query.slug as string[] | undefined;
@@ -459,6 +461,93 @@ export default function AlbumsPage() {
 		setPlayerState((prev) => ({ ...prev, isMuted: !prev.isMuted }));
 	};
 
+	// Keyboard shortcuts
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			const tag = (e.target as HTMLElement).tagName;
+			if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+			switch (e.key) {
+				case ' ':
+					e.preventDefault();
+					togglePlay();
+					break;
+				case 'ArrowRight':
+					e.preventDefault();
+					skipNext();
+					break;
+				case 'ArrowLeft':
+					e.preventDefault();
+					skipPrev();
+					break;
+				case 'ArrowUp':
+					e.preventDefault();
+					if (audioRef.current) {
+						const newVol = Math.min(1, (audioRef.current.volume ?? 1) + 0.05);
+						audioRef.current.volume = newVol;
+						audioRef.current.muted = false;
+						setPlayerState((prev) => ({ ...prev, volume: newVol, isMuted: false }));
+						setSavedVolume(newVol);
+					}
+					break;
+				case 'ArrowDown':
+					e.preventDefault();
+					if (audioRef.current) {
+						const newVol = Math.max(0, (audioRef.current.volume ?? 1) - 0.05);
+						audioRef.current.volume = newVol;
+						audioRef.current.muted = false;
+						setPlayerState((prev) => ({ ...prev, volume: newVol, isMuted: false }));
+						setSavedVolume(newVol);
+					}
+					break;
+				case 'm':
+				case 'M':
+					toggleMute();
+					break;
+				case 's':
+				case 'S':
+					toggleShuffle();
+					break;
+				case 'r':
+				case 'R':
+					toggleRepeat();
+					break;
+				case 'q':
+				case 'Q':
+					setIsQueueOpen((prev) => !prev);
+					break;
+				case '?':
+					setShowShortcuts((prev) => !prev);
+					break;
+				case 'F1':
+					e.preventDefault();
+					setShowShortcuts((prev) => !prev);
+					break;
+				case 'Escape':
+					setShowShortcuts(false);
+					break;
+			}
+		};
+
+		window.addEventListener('keydown', handleKeyDown);
+		return () => window.removeEventListener('keydown', handleKeyDown);
+	});
+
+	// Download a track
+	const downloadTrack = async (track: MusicTrack) => {
+		const streamUrl = await unrestrictAndPlay(track);
+		if (!streamUrl) return;
+
+		const a = document.createElement('a');
+		a.href = streamUrl;
+		a.download = track.filename;
+		a.target = '_blank';
+		a.rel = 'noopener noreferrer';
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+	};
+
 	// Filter albums by search
 	const filteredAlbums =
 		library?.albums.filter((album) => {
@@ -492,15 +581,22 @@ export default function AlbumsPage() {
 							<Music2 className="h-5 w-5 text-green-500 md:h-6 md:w-6" />
 							<h1 className="text-lg font-bold md:text-xl">Albums</h1>
 						</div>
-						{/* Stats - mobile inline, desktop separate */}
-						{library && (
-							<div className="flex items-center gap-2 text-xs text-gray-400 md:hidden">
-								<span>
+						{/* Stats + shortcuts - mobile */}
+						<div className="flex items-center gap-2 md:hidden">
+							{library && (
+								<span className="text-xs text-gray-400">
 									{library.totalAlbums} albums &middot; {library.totalTracks}{' '}
 									tracks
 								</span>
-							</div>
-						)}
+							)}
+							<button
+								onClick={() => setShowShortcuts(true)}
+								className="flex h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs text-gray-400"
+								title="Keyboard shortcuts"
+							>
+								?
+							</button>
+						</div>
 					</div>
 
 					{/* Search */}
@@ -514,15 +610,26 @@ export default function AlbumsPage() {
 						/>
 					</div>
 
-					{/* Stats - desktop only */}
-					{library && (
-						<div className="hidden items-center gap-2 text-sm text-gray-400 md:flex">
-							<Library className="h-4 w-4" />
-							<span>
-								{library.totalAlbums} albums &middot; {library.totalTracks} tracks
-							</span>
-						</div>
-					)}
+					{/* Stats + shortcuts button - desktop */}
+					<div className="hidden items-center gap-3 md:flex">
+						{library && (
+							<div className="flex items-center gap-2 text-sm text-gray-400">
+								<Library className="h-4 w-4" />
+								<span>
+									{library.totalAlbums} albums &middot; {library.totalTracks}{' '}
+									tracks
+								</span>
+							</div>
+						)}
+						<button
+							onClick={() => setShowShortcuts(true)}
+							className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-400 transition-all duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white"
+							title="Keyboard shortcuts (?)"
+						>
+							<Keyboard className="h-3.5 w-3.5" />
+							<span>?</span>
+						</button>
+					</div>
 				</header>
 
 				{/* Main content */}
@@ -543,6 +650,7 @@ export default function AlbumsPage() {
 							onPlay={playAlbum}
 							onAddToQueue={addAlbumToQueue}
 							onBack={() => selectAlbum(null)}
+							onDownload={downloadTrack}
 						/>
 					) : (
 						<AlbumGrid
@@ -562,6 +670,7 @@ export default function AlbumsPage() {
 						isPlaying={playerState.isPlaying}
 						onPlayTrack={(index) => playTrackAtIndex(index)}
 						onClose={() => setIsQueueOpen(false)}
+						onDownload={downloadTrack}
 					/>
 				)}
 
@@ -583,6 +692,8 @@ export default function AlbumsPage() {
 					/>
 				)}
 			</div>
+
+			{showShortcuts && <KeyboardShortcutsModal onClose={() => setShowShortcuts(false)} />}
 		</>
 	);
 }

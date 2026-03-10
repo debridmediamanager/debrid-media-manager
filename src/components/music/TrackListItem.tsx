@@ -1,5 +1,6 @@
 import { MusicAlbum, MusicTrack } from '@/pages/api/music/library';
-import { Play } from 'lucide-react';
+import { Download, Loader2, Play } from 'lucide-react';
+import { useState } from 'react';
 import { formatSize, removeExtension } from './utils';
 
 interface TrackListItemProps {
@@ -9,6 +10,7 @@ interface TrackListItemProps {
 	isCurrentTrack: boolean;
 	isPlaying: boolean;
 	onPlay: () => void;
+	onDownload: (track: MusicTrack) => Promise<void>;
 }
 
 export default function TrackListItem({
@@ -18,11 +20,25 @@ export default function TrackListItem({
 	isCurrentTrack,
 	isPlaying,
 	onPlay,
+	onDownload,
 }: TrackListItemProps) {
+	const [isDownloading, setIsDownloading] = useState(false);
+
+	const handleDownload = async (e: React.MouseEvent) => {
+		e.stopPropagation();
+		if (isDownloading) return;
+		setIsDownloading(true);
+		try {
+			await onDownload(track);
+		} finally {
+			setIsDownloading(false);
+		}
+	};
+
 	return (
 		<button
 			onClick={onPlay}
-			className={`group grid w-full grid-cols-[32px_1fr_auto] items-center gap-2 rounded-lg px-3 py-2.5 text-left transition-all duration-200 sm:grid-cols-[40px_1fr_auto] sm:gap-4 sm:px-4 sm:py-3 ${
+			className={`group grid w-full grid-cols-[32px_1fr_auto_auto] items-center gap-2 rounded-lg px-3 py-2.5 text-left transition-all duration-200 sm:grid-cols-[40px_1fr_auto_auto] sm:gap-4 sm:px-4 sm:py-3 ${
 				isCurrentTrack
 					? 'border-l-[3px] border-l-green-500 bg-green-500/10 pl-[calc(1rem-3px)] text-green-500'
 					: 'border-l-[3px] border-l-transparent text-gray-300 hover:bg-white/5 hover:text-white'
@@ -66,6 +82,22 @@ export default function TrackListItem({
 
 			<span className="font-mono text-sm text-gray-500 group-hover:text-gray-400">
 				{formatSize(track.bytes)}
+			</span>
+
+			<span
+				onClick={handleDownload}
+				className={`flex items-center justify-center rounded-full p-1.5 transition-all duration-200 ${
+					isDownloading
+						? 'text-green-500'
+						: 'text-gray-500 hover:bg-white/10 hover:text-white'
+				}`}
+				title="Download"
+			>
+				{isDownloading ? (
+					<Loader2 className="h-4 w-4 animate-spin" />
+				) : (
+					<Download className="h-4 w-4" />
+				)}
 			</span>
 		</button>
 	);

@@ -1,4 +1,4 @@
-import { MusicAlbum } from '@/pages/api/music/library';
+import { MusicAlbum, MusicTrack } from '@/pages/api/music/library';
 import { ChevronLeft, Disc3, Play } from 'lucide-react';
 import TrackListItem from './TrackListItem';
 import { PlayerState, QueuedTrack } from './types';
@@ -11,6 +11,7 @@ interface AlbumDetailViewProps {
 	onPlay: (album: MusicAlbum, startIndex?: number) => void;
 	onAddToQueue: (album: MusicAlbum) => void;
 	onBack: () => void;
+	onDownload: (track: MusicTrack) => Promise<void>;
 }
 
 export default function AlbumDetailView({
@@ -20,6 +21,7 @@ export default function AlbumDetailView({
 	onPlay,
 	onAddToQueue,
 	onBack,
+	onDownload,
 }: AlbumDetailViewProps) {
 	return (
 		<div className="relative min-h-full">
@@ -101,10 +103,11 @@ export default function AlbumDetailView({
 
 				{/* Track list */}
 				<div className="mt-8 md:mt-12">
-					<div className="mb-4 grid grid-cols-[40px_1fr_auto] gap-4 border-b border-white/10 px-4 py-2 text-xs font-medium uppercase tracking-wider text-gray-400">
+					<div className="mb-4 grid grid-cols-[40px_1fr_auto_auto] gap-4 border-b border-white/10 px-4 py-2 text-xs font-medium uppercase tracking-wider text-gray-400">
 						<span className="text-center">#</span>
 						<span>Title</span>
 						<span className="text-right">Size</span>
+						<span className="w-7" />
 					</div>
 
 					<div className="flex flex-col gap-0.5">
@@ -117,6 +120,7 @@ export default function AlbumDetailView({
 								isCurrentTrack={currentTrack?.track.id === track.id}
 								isPlaying={playerState.isPlaying}
 								onPlay={() => onPlay(album, index)}
+								onDownload={onDownload}
 							/>
 						))}
 					</div>

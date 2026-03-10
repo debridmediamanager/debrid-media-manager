@@ -1,3 +1,4 @@
+import { MusicTrack } from '@/pages/api/music/library';
 import { ListMusic, X } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import TrackListItem from './TrackListItem';
@@ -9,6 +10,7 @@ interface QueuePanelProps {
 	isPlaying: boolean;
 	onPlayTrack: (index: number) => void;
 	onClose: () => void;
+	onDownload: (track: MusicTrack) => Promise<void>;
 }
 
 export default function QueuePanel({
@@ -17,6 +19,7 @@ export default function QueuePanel({
 	isPlaying,
 	onPlayTrack,
 	onClose,
+	onDownload,
 }: QueuePanelProps) {
 	const listRef = useRef<HTMLDivElement>(null);
 
@@ -58,6 +61,7 @@ export default function QueuePanel({
 						isCurrentTrack={index === currentIndex}
 						isPlaying={isPlaying}
 						onPlay={() => onPlayTrack(index)}
+						onDownload={onDownload}
 					/>
 				))}
 			</div>
