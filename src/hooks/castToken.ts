@@ -11,6 +11,12 @@ export function useCastToken() {
 	const [accessToken] = useLocalStorage<string>('rd:accessToken');
 	const [dmmCastToken, setDmmCastToken] = useLocalStorage<string>('rd:castToken');
 
+	// Always sync credentials to server when they change
+	useEffect(() => {
+		if (!clientId || !clientSecret || !refreshToken || !accessToken) return;
+		saveCastProfile(clientId, clientSecret, refreshToken);
+	}, [clientId, clientSecret, refreshToken, accessToken]);
+
 	useEffect(() => {
 		// Only run if we don't have a token but have all required credentials
 		if (!clientId || !clientSecret || !refreshToken || !accessToken) return;
@@ -28,10 +34,7 @@ export function useCastToken() {
 				const res = await fetch('/api/stremio/id?token=' + accessToken);
 				const data = await res.json();
 				if (data.status !== 'error') {
-					saveCastProfile(clientId, clientSecret, refreshToken);
 					setDmmCastToken(data.id);
-
-					// Migration endpoint removed; no action needed here
 				}
 			} catch (error) {
 				toast.error('Failed to fetch DMM Cast token.');
