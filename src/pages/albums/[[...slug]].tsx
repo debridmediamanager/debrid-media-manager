@@ -109,15 +109,32 @@ export default function AlbumsPage() {
 	// Persist volume
 	const [savedVolume, setSavedVolume] = useLocalStorage<number>('music:volume', 1);
 
-	// Persist queue state to localStorage (strip streamUrl from tracks since RD links expire)
+	// Persist queue state to localStorage (strip streamUrl and album.tracks to save space)
 	useEffect(() => {
-		const stripped = queue.map(({ streamUrl, ...rest }) => rest);
-		window.localStorage.setItem('music:queue', JSON.stringify(stripped));
+		const stripped = queue.map(({ streamUrl, album, ...rest }) => ({
+			...rest,
+			album: { ...album, tracks: [] },
+		}));
+		try {
+			window.localStorage.setItem('music:queue', JSON.stringify(stripped));
+		} catch {
+			// QuotaExceededError — clear stale queues and retry
+			window.localStorage.removeItem('music:queue');
+			window.localStorage.removeItem('music:originalQueue');
+		}
 	}, [queue]);
 
 	useEffect(() => {
-		const stripped = originalQueue.map(({ streamUrl, ...rest }) => rest);
-		window.localStorage.setItem('music:originalQueue', JSON.stringify(stripped));
+		const stripped = originalQueue.map(({ streamUrl, album, ...rest }) => ({
+			...rest,
+			album: { ...album, tracks: [] },
+		}));
+		try {
+			window.localStorage.setItem('music:originalQueue', JSON.stringify(stripped));
+		} catch {
+			window.localStorage.removeItem('music:queue');
+			window.localStorage.removeItem('music:originalQueue');
+		}
 	}, [originalQueue]);
 
 	useEffect(() => {
