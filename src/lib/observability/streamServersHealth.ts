@@ -281,6 +281,11 @@ async function executeCheck(): Promise<void> {
 	checkInProgress = true;
 	try {
 		const statuses = await inspectServers();
+		if (statuses.length === 0) {
+			console.log('[StreamHealth] No statuses to process, skipping DB updates');
+			return;
+		}
+
 		const workingServers = statuses.filter((status) => status.ok);
 		const working = workingServers.length;
 
