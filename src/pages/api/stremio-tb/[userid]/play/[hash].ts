@@ -14,6 +14,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 //    - Without ?file: uses biggest file (for movies)
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
+	res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
 
 	const { userid, hash, file, h: fallbackHash } = req.query;
 	if (typeof userid !== 'string' || typeof hash !== 'string') {
@@ -89,7 +90,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// If direct lookup failed and we have a fallback hash, use it
 			if (!streamUrl && typeof fallbackHash === 'string') {
 				if (filename) {
-					const [url] = await getFileByNameTorBoxStreamUrl(apiKey, fallbackHash, filename);
+					const [url] = await getFileByNameTorBoxStreamUrl(
+						apiKey,
+						fallbackHash,
+						filename
+					);
 					streamUrl = url;
 				} else {
 					const [url] = await getBiggestFileTorBoxStreamUrl(apiKey, fallbackHash);

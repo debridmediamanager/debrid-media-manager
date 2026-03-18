@@ -32,6 +32,7 @@ function flattenFiles(files: MagnetFile[], parentPath: string = ''): FlatFile[] 
 // Format: magnetId:fileIndex (e.g., "123456:0")
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
+	res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
 
 	const { userid, hash } = req.query;
 	if (typeof userid !== 'string' || typeof hash !== 'string') {

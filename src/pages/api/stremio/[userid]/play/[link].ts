@@ -6,6 +6,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 // Unrestrict and play a link
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
+	res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
 
 	const { userid, link } = req.query;
 	if (typeof userid !== 'string' || typeof link !== 'string') {
