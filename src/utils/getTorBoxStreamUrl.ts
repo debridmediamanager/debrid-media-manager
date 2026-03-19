@@ -116,9 +116,6 @@ export const getTorBoxStreamUrl = async (
 			}
 
 			fileSize = Math.round((file.size || 0) / 1024 / 1024);
-
-			// Clean up - delete the torrent after getting the link
-			await deleteTorrent(apiKey, torrentId);
 		} catch (e) {
 			// Clean up on error
 			await deleteTorrent(apiKey, torrentId);
@@ -221,9 +218,6 @@ export const getFileByNameTorBoxStreamUrl = async (
 
 			streamUrl = downloadResult.data;
 			fileSize = Math.round((matchedFile.size || 0) / 1024 / 1024);
-
-			// Clean up - delete the torrent after getting the link
-			await deleteTorrent(apiKey, torrentId);
 		} catch (e) {
 			// Clean up on error
 			await deleteTorrent(apiKey, torrentId);
@@ -304,9 +298,6 @@ export const getBiggestFileTorBoxStreamUrl = async (
 
 			streamUrl = downloadResult.data;
 			fileSize = Math.round((biggestFile.size || 0) / 1024 / 1024);
-
-			// Clean up - delete the torrent after getting the link
-			await deleteTorrent(apiKey, torrentId);
 		} catch (e) {
 			// Clean up on error
 			await deleteTorrent(apiKey, torrentId);

@@ -1,5 +1,4 @@
 import { repository as db } from '@/services/repository';
-import { deleteTorrent } from '@/services/torbox';
 import { getTorBoxStreamUrlKeepTorrent } from '@/utils/getTorBoxStreamUrl';
 import { generateTorBoxUserId } from '@/utils/torboxCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -29,7 +28,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	try {
 		const userid = await generateTorBoxUserId(apiKey);
 		const errorEpisodes: string[] = [];
-		let lastTorrentId: number | null = null;
 
 		for (const fileIdStr of fileIdArray) {
 			const fileId = parseInt(fileIdStr, 10);
@@ -41,8 +39,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				const [streamUrl, seasonNumber, episodeNumber, fileSize, torrentId, , filename] =
 					await getTorBoxStreamUrlKeepTorrent(apiKey, hash, fileId, 'series');
-
-				lastTorrentId = torrentId;
 
 				if (streamUrl) {
 					// Build imdbId with season:episode suffix
@@ -67,15 +63,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			} catch (e) {
 				console.error(`Error casting file ${fileId}:`, e);
 				errorEpisodes.push(`File ${fileId}`);
-			}
-		}
-
-		// Clean up: delete the torrent after processing all files
-		if (lastTorrentId) {
-			try {
-				await deleteTorrent(apiKey, lastTorrentId);
-			} catch (e) {
-				console.error('Error deleting torrent:', e);
 			}
 		}
 
