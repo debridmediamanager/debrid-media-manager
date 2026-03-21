@@ -52,6 +52,7 @@ const renderTv = (override?: Partial<React.ComponentProps<typeof TvSearchResults
 		deleteAd: vi.fn().mockResolvedValue(undefined),
 		deleteTb: vi.fn().mockResolvedValue(undefined),
 		imdbId: 'tt456',
+		isHashServiceChecking: () => false,
 		...override,
 	};
 

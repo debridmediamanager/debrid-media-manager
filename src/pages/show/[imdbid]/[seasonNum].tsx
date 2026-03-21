@@ -138,23 +138,27 @@ const TvSearch: FunctionComponent = () => {
 
 	const { fetchEpisodeFromExternalSource, getEnabledSources } = useExternalSources(rdKey);
 
-	const { isCheckingAvailability, checkServiceAvailability, checkServiceAvailabilityBulk } =
-		useAvailabilityCheck(
-			rdKey,
-			adKey,
-			torboxKey,
-			imdbid as string,
-			searchResults,
-			setSearchResults,
-			hashAndProgress,
-			addRd,
-			addAd,
-			addTb,
-			deleteRd,
-			deleteAd,
-			deleteTb,
-			sortByMedian
-		);
+	const {
+		isAnyChecking,
+		isHashServiceChecking,
+		checkServiceAvailability,
+		checkServiceAvailabilityBulk,
+	} = useAvailabilityCheck(
+		rdKey,
+		adKey,
+		torboxKey,
+		imdbid as string,
+		searchResults,
+		setSearchResults,
+		hashAndProgress,
+		addRd,
+		addAd,
+		addTb,
+		deleteRd,
+		deleteAd,
+		deleteTb,
+		sortByMedian
+	);
 
 	const { handleMassReport } = useMassReport(rdKey, adKey, torboxKey, imdbid as string);
 
@@ -574,7 +578,7 @@ const TvSearch: FunctionComponent = () => {
 		rdKey,
 		adKey,
 		torboxKey,
-		isCheckingAvailability,
+		isAnyChecking,
 		isLibrarySyncing,
 		checkServiceAvailabilityBulk,
 		filteredResults,
@@ -951,10 +955,10 @@ const TvSearch: FunctionComponent = () => {
 						<button
 							className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['RD'])}
-							disabled={isCheckingAvailability}
+							disabled={isAnyChecking}
 						>
 							<b className="flex items-center justify-center">
-								{isCheckingAvailability ? (
+								{isAnyChecking ? (
 									<>
 										<Loader2 className="mr-1 h-3 w-3 animate-spin text-yellow-500" />
 										Checking RD...
@@ -972,10 +976,10 @@ const TvSearch: FunctionComponent = () => {
 						<button
 							className="mb-1 mr-2 mt-0 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['AD'])}
-							disabled={isCheckingAvailability}
+							disabled={isAnyChecking}
 						>
 							<b className="flex items-center justify-center">
-								{isCheckingAvailability ? (
+								{isAnyChecking ? (
 									<>
 										<Loader2 className="mr-1 h-3 w-3 animate-spin text-orange-500" />
 										Checking AD...
@@ -993,10 +997,10 @@ const TvSearch: FunctionComponent = () => {
 						<button
 							className="mb-1 mr-2 mt-0 rounded border-2 border-cyan-500 bg-cyan-900/30 p-1 text-xs text-cyan-100 transition-colors hover:bg-cyan-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['TB'])}
-							disabled={isCheckingAvailability}
+							disabled={isAnyChecking}
 						>
 							<b className="flex items-center justify-center">
-								{isCheckingAvailability ? (
+								{isAnyChecking ? (
 									<>
 										<Loader2 className="mr-1 h-3 w-3 animate-spin text-cyan-500" />
 										Checking TB...
@@ -1218,7 +1222,7 @@ const TvSearch: FunctionComponent = () => {
 				deleteAd={deleteAd}
 				deleteTb={deleteTb}
 				imdbId={imdbid as string}
-				isCheckingAvailability={isCheckingAvailability}
+				isHashServiceChecking={isHashServiceChecking}
 			/>
 
 			{searchResults.length > 0 && searchState === 'loaded' && hasMoreResults && (

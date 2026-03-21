@@ -15,6 +15,8 @@ export type DebridService = 'RD' | 'AD' | 'TB';
 const formatServicesLabel = (services: DebridService[]) =>
 	services.length ? services.join(' / ') : 'services';
 
+const checkingKey = (hash: string, service: DebridService) => `${hash}:${service}`;
+
 export function useAvailabilityCheck(
 	rdKey: string | null,
 	adKey: string | null,
@@ -31,8 +33,31 @@ export function useAvailabilityCheck(
 	deleteTb: (hash: string) => Promise<void>,
 	sortFunction: (searchResults: SearchResult[]) => SearchResult[]
 ) {
-	const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
+	const [checkingSet, setCheckingSet] = useState<Set<string>>(new Set());
 	const isMounted = useRef(true);
+
+	const addChecking = useCallback((hash: string, services: DebridService[]) => {
+		setCheckingSet((prev) => {
+			const next = new Set(prev);
+			for (const s of services) next.add(checkingKey(hash, s));
+			return next;
+		});
+	}, []);
+
+	const removeChecking = useCallback((hash: string, services: DebridService[]) => {
+		setCheckingSet((prev) => {
+			const next = new Set(prev);
+			for (const s of services) next.delete(checkingKey(hash, s));
+			return next;
+		});
+	}, []);
+
+	const isHashServiceChecking = useCallback(
+		(hash: string, service: DebridService) => checkingSet.has(checkingKey(hash, service)),
+		[checkingSet]
+	);
+
+	const isAnyChecking = checkingSet.size > 0;
 	const resolveServicesToCheck = useCallback(
 		(requested?: DebridService[]) => {
 			const available: DebridService[] = [];
@@ -84,6 +109,8 @@ export function useAvailabilityCheck(
 				toast.success(`Already cached in ${cachedLabel}.`);
 				return;
 			}
+
+			addChecking(result.hash, servicesNeedingCheck);
 
 			const toastId = toast.loading(
 				`Checking availability (${formatServicesLabel(servicesNeedingCheck)})...`
@@ -298,25 +325,13 @@ export function useAvailabilityCheck(
 						);
 					}
 				}
-
-				// Reload the page after a short delay to show the result
-				setTimeout(() => {
-					if (isMounted.current) {
-						window.location.reload();
-					}
-				}, 1500);
 			} catch (error) {
 				toast.error(`Service check failed (${formatServicesLabel(services)}).`, {
 					id: toastId,
 				});
 				console.error('Service availability check error:', error);
-
-				// Reload the page after a short delay even on error
-				setTimeout(() => {
-					if (isMounted.current) {
-						window.location.reload();
-					}
-				}, 1500);
+			} finally {
+				removeChecking(result.hash, servicesNeedingCheck);
 			}
 		},
 		[
@@ -336,12 +351,14 @@ export function useAvailabilityCheck(
 			sortFunction,
 			resolveServicesToCheck,
 			isServiceAvailable,
+			addChecking,
+			removeChecking,
 		]
 	);
 
 	const checkServiceAvailabilityBulk = useCallback(
 		async (filteredResults: SearchResult[], servicesToCheck?: DebridService[]) => {
-			if (isCheckingAvailability) return;
+			if (isAnyChecking) return;
 
 			const services = resolveServicesToCheck(servicesToCheck);
 			if (services.length === 0) {
@@ -374,7 +391,11 @@ export function useAvailabilityCheck(
 				);
 			}
 
-			setIsCheckingAvailability(true);
+			// Mark all torrents being checked with their respective services
+			for (const t of torrentsToCheck) {
+				const servicesForHash = services.filter((s) => !isServiceAvailable(s, t));
+				if (servicesForHash.length > 0) addChecking(t.hash, servicesForHash);
+			}
 
 			const servicesLabel = formatServicesLabel(services);
 			let progressToast: string | null = toast.loading(
@@ -467,6 +488,8 @@ export function useAvailabilityCheck(
 												error
 											);
 											throw error;
+										} finally {
+											removeChecking(result.hash, ['RD']);
 										}
 									},
 									3,
@@ -510,6 +533,8 @@ export function useAvailabilityCheck(
 												error
 											);
 											throw error;
+										} finally {
+											removeChecking(result.hash, ['AD']);
 										}
 									},
 									3,
@@ -552,6 +577,8 @@ export function useAvailabilityCheck(
 												error
 											);
 											throw error;
+										} finally {
+											removeChecking(result.hash, ['TB']);
 										}
 									},
 									3,
@@ -753,13 +780,6 @@ export function useAvailabilityCheck(
 						{ duration: 3000 }
 					);
 				}
-
-				// Reload the page after a short delay to show the final result
-				setTimeout(() => {
-					if (isMounted.current) {
-						window.location.reload();
-					}
-				}, 1500);
 			} catch (error) {
 				if (progressToast && isMounted.current) {
 					toast.dismiss(progressToast);
@@ -768,15 +788,6 @@ export function useAvailabilityCheck(
 					toast.error(`${servicesLabel}: service check failed.`);
 				}
 				console.error('Service check error:', error);
-
-				// Reload the page after a short delay even on error
-				setTimeout(() => {
-					if (isMounted.current) {
-						window.location.reload();
-					}
-				}, 1500);
-			} finally {
-				setIsCheckingAvailability(false);
 			}
 		},
 		[
@@ -793,14 +804,17 @@ export function useAvailabilityCheck(
 			deleteAd,
 			deleteTb,
 			sortFunction,
-			isCheckingAvailability,
+			isAnyChecking,
 			resolveServicesToCheck,
 			isServiceAvailable,
+			addChecking,
+			removeChecking,
 		]
 	);
 
 	return {
-		isCheckingAvailability,
+		isAnyChecking,
+		isHashServiceChecking,
 		checkServiceAvailability,
 		checkServiceAvailabilityBulk,
 	};

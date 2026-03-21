@@ -51,6 +51,7 @@ const renderComponent = (override?: Partial<React.ComponentProps<typeof MovieSea
 		deleteAd: vi.fn().mockResolvedValue(undefined),
 		deleteTb: vi.fn().mockResolvedValue(undefined),
 		imdbId: 'tt123',
+		isHashServiceChecking: () => false,
 		...override,
 	};
 
