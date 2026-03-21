@@ -1,5 +1,5 @@
 import { MusicAlbum, MusicTrack } from '@/pages/api/music/library';
-import { Download, Loader2, Play } from 'lucide-react';
+import { Download, ListEnd, Loader2, Play, X } from 'lucide-react';
 import { useState } from 'react';
 import { formatSize, removeExtension } from './utils';
 
@@ -11,6 +11,9 @@ interface TrackListItemProps {
 	isPlaying: boolean;
 	onPlay: () => void;
 	onDownload: (track: MusicTrack) => Promise<void>;
+	onRemove?: () => void;
+	showRemove?: boolean;
+	onPlayNext?: (track: MusicTrack, album: MusicAlbum) => void;
 }
 
 export default function TrackListItem({
@@ -21,6 +24,9 @@ export default function TrackListItem({
 	isPlaying,
 	onPlay,
 	onDownload,
+	onRemove,
+	showRemove = false,
+	onPlayNext,
 }: TrackListItemProps) {
 	const [isDownloading, setIsDownloading] = useState(false);
 
@@ -84,21 +90,47 @@ export default function TrackListItem({
 				{formatSize(track.bytes)}
 			</span>
 
-			<span
-				onClick={handleDownload}
-				className={`flex items-center justify-center rounded-full p-1.5 transition-all duration-200 ${
-					isDownloading
-						? 'text-green-500'
-						: 'text-gray-500 hover:bg-white/10 hover:text-white'
-				}`}
-				title="Download"
-			>
-				{isDownloading ? (
-					<Loader2 className="h-4 w-4 animate-spin" />
-				) : (
-					<Download className="h-4 w-4" />
+			<div className="flex items-center gap-0.5">
+				{onPlayNext && (
+					<span
+						onClick={(e) => {
+							e.stopPropagation();
+							onPlayNext(track, album);
+						}}
+						className="flex items-center justify-center rounded-full p-1.5 text-gray-500 opacity-0 transition-all duration-200 hover:bg-white/10 hover:text-white group-hover:opacity-100"
+						title="Play next"
+					>
+						<ListEnd className="h-4 w-4" />
+					</span>
 				)}
-			</span>
+				<span
+					onClick={handleDownload}
+					className={`flex items-center justify-center rounded-full p-1.5 transition-all duration-200 ${
+						isDownloading
+							? 'text-green-500'
+							: 'text-gray-500 hover:bg-white/10 hover:text-white'
+					}`}
+					title="Download"
+				>
+					{isDownloading ? (
+						<Loader2 className="h-4 w-4 animate-spin" />
+					) : (
+						<Download className="h-4 w-4" />
+					)}
+				</span>
+				{showRemove && onRemove && (
+					<span
+						onClick={(e) => {
+							e.stopPropagation();
+							onRemove();
+						}}
+						className="flex items-center justify-center rounded-full p-1.5 text-gray-500 transition-all duration-200 hover:bg-red-500/10 hover:text-red-400"
+						title="Remove from queue"
+					>
+						<X className="h-4 w-4" />
+					</span>
+				)}
+			</div>
 		</button>
 	);
 }

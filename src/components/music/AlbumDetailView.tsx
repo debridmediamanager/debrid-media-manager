@@ -1,5 +1,5 @@
 import { MusicAlbum, MusicTrack } from '@/pages/api/music/library';
-import { ChevronLeft, Disc3, Play } from 'lucide-react';
+import { ChevronLeft, Disc3, ListEnd, Play } from 'lucide-react';
 import TrackListItem from './TrackListItem';
 import { PlayerState, QueuedTrack } from './types';
 import { formatSize } from './utils';
@@ -10,8 +10,11 @@ interface AlbumDetailViewProps {
 	playerState: PlayerState;
 	onPlay: (album: MusicAlbum, startIndex?: number) => void;
 	onAddToQueue: (album: MusicAlbum) => void;
+	onPlayNext: (album: MusicAlbum) => void;
+	onPlayTrackNext: (track: MusicTrack, album: MusicAlbum) => void;
 	onBack: () => void;
 	onDownload: (track: MusicTrack) => Promise<void>;
+	hasQueue: boolean;
 }
 
 export default function AlbumDetailView({
@@ -20,8 +23,11 @@ export default function AlbumDetailView({
 	playerState,
 	onPlay,
 	onAddToQueue,
+	onPlayNext,
+	onPlayTrackNext,
 	onBack,
 	onDownload,
+	hasQueue,
 }: AlbumDetailViewProps) {
 	return (
 		<div className="relative min-h-full">
@@ -83,7 +89,7 @@ export default function AlbumDetailView({
 							<span className="text-gray-400">{formatSize(album.totalBytes)}</span>
 						</div>
 
-						<div className="mt-4 flex flex-wrap justify-center gap-4 md:justify-start">
+						<div className="mt-4 flex flex-wrap justify-center gap-3 md:justify-start">
 							<button
 								onClick={() => onPlay(album)}
 								className="flex items-center gap-2 rounded-full bg-green-500 px-8 py-3.5 font-bold text-black shadow-lg shadow-green-500/25 transition-all duration-200 hover:scale-105 hover:bg-green-400 active:scale-95"
@@ -97,6 +103,15 @@ export default function AlbumDetailView({
 							>
 								Add to Queue
 							</button>
+							{hasQueue && (
+								<button
+									onClick={() => onPlayNext(album)}
+									className="flex items-center gap-2 rounded-full border border-gray-600 bg-white/5 px-6 py-3.5 font-bold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/30 hover:bg-white/10 active:scale-95"
+								>
+									<ListEnd className="h-5 w-5" />
+									Play Next
+								</button>
+							)}
 						</div>
 					</div>
 				</div>
@@ -121,6 +136,7 @@ export default function AlbumDetailView({
 								isPlaying={playerState.isPlaying}
 								onPlay={() => onPlay(album, index)}
 								onDownload={onDownload}
+								onPlayNext={hasQueue ? onPlayTrackNext : undefined}
 							/>
 						))}
 					</div>

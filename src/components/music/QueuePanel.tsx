@@ -1,5 +1,5 @@
 import { MusicTrack } from '@/pages/api/music/library';
-import { ListMusic, X } from 'lucide-react';
+import { ListMusic, Trash2, X } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import TrackListItem from './TrackListItem';
 import { QueuedTrack } from './types';
@@ -11,6 +11,8 @@ interface QueuePanelProps {
 	onPlayTrack: (index: number) => void;
 	onClose: () => void;
 	onDownload: (track: MusicTrack) => Promise<void>;
+	onRemoveTrack: (index: number) => void;
+	onClearQueue: () => void;
 }
 
 export default function QueuePanel({
@@ -20,6 +22,8 @@ export default function QueuePanel({
 	onPlayTrack,
 	onClose,
 	onDownload,
+	onRemoveTrack,
+	onClearQueue,
 }: QueuePanelProps) {
 	const listRef = useRef<HTMLDivElement>(null);
 
@@ -42,12 +46,22 @@ export default function QueuePanel({
 						{queue.length} {queue.length === 1 ? 'track' : 'tracks'}
 					</span>
 				</div>
-				<button
-					onClick={onClose}
-					className="rounded-full p-1.5 text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
-				>
-					<X className="h-4 w-4" />
-				</button>
+				<div className="flex items-center gap-1">
+					<button
+						onClick={onClearQueue}
+						className="rounded-full p-1.5 text-gray-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
+						title="Clear queue"
+					>
+						<Trash2 className="h-4 w-4" />
+					</button>
+					<button
+						onClick={onClose}
+						className="rounded-full p-1.5 text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
+						title="Close queue"
+					>
+						<X className="h-4 w-4" />
+					</button>
+				</div>
 			</div>
 
 			{/* Track list */}
@@ -62,6 +76,8 @@ export default function QueuePanel({
 						isPlaying={isPlaying}
 						onPlay={() => onPlayTrack(index)}
 						onDownload={onDownload}
+						onRemove={() => onRemoveTrack(index)}
+						showRemove
 					/>
 				))}
 			</div>

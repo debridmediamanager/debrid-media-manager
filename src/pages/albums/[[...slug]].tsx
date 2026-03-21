@@ -4,12 +4,12 @@ import KeyboardShortcutsModal from '@/components/music/KeyboardShortcutsModal';
 import MusicPlayerBar from '@/components/music/MusicPlayerBar';
 import QueuePanel from '@/components/music/QueuePanel';
 import { PlayerState, QueuedTrack } from '@/components/music/types';
-import { shuffleArray } from '@/components/music/utils';
+import { removeExtension, shuffleArray } from '@/components/music/utils';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { MusicAlbum, MusicLibraryResponse, MusicTrack } from '@/pages/api/music/library';
 import { UnrestrictTrackResponse } from '@/pages/api/music/unrestrict';
-import { Keyboard, Library, Loader2, Music2 } from 'lucide-react';
+import { Keyboard, Library, Loader2, Music2, X } from 'lucide-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -27,6 +27,7 @@ export default function AlbumsPage() {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [isQueueOpen, setIsQueueOpen] = useState(false);
 	const [showShortcuts, setShowShortcuts] = useState(false);
+	const [sortBy, setSortBy] = useState<'recent' | 'name' | 'artist' | 'year'>('recent');
 
 	// Get selected album from URL path param
 	const slug = router.query.slug as string[] | undefined;
@@ -95,15 +96,29 @@ export default function AlbumsPage() {
 			return -1;
 		}
 	});
-	const [playerState, setPlayerState] = useState<PlayerState>({
-		isPlaying: false,
-		currentTime: 0,
-		duration: 0,
-		volume: 1,
-		isMuted: false,
-		isLoading: false,
-		repeatMode: 'off',
-		isShuffled: false,
+	const [playerState, setPlayerState] = useState<PlayerState>(() => {
+		let repeatMode: 'off' | 'all' | 'one' = 'off';
+		let isShuffled = false;
+		if (typeof window !== 'undefined') {
+			try {
+				const savedRepeat = window.localStorage.getItem('music:repeatMode');
+				if (savedRepeat === 'off' || savedRepeat === 'all' || savedRepeat === 'one') {
+					repeatMode = savedRepeat;
+				}
+				const savedShuffle = window.localStorage.getItem('music:isShuffled');
+				if (savedShuffle === 'true') isShuffled = true;
+			} catch {}
+		}
+		return {
+			isPlaying: false,
+			currentTime: 0,
+			duration: 0,
+			volume: 1,
+			isMuted: false,
+			isLoading: false,
+			repeatMode,
+			isShuffled,
+		};
 	});
 
 	// Persist volume
@@ -140,6 +155,15 @@ export default function AlbumsPage() {
 	useEffect(() => {
 		window.localStorage.setItem('music:currentIndex', JSON.stringify(currentIndex));
 	}, [currentIndex]);
+
+	// Persist shuffle and repeat state
+	useEffect(() => {
+		window.localStorage.setItem('music:repeatMode', playerState.repeatMode);
+	}, [playerState.repeatMode]);
+
+	useEffect(() => {
+		window.localStorage.setItem('music:isShuffled', String(playerState.isShuffled));
+	}, [playerState.isShuffled]);
 
 	// Audio element ref
 	const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -290,6 +314,50 @@ export default function AlbumsPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	// MediaSession API — OS-level media controls
+	useEffect(() => {
+		if (!('mediaSession' in navigator) || !currentTrack) return;
+
+		navigator.mediaSession.metadata = new MediaMetadata({
+			title: removeExtension(currentTrack.track.filename),
+			artist: currentTrack.album.artist,
+			album: currentTrack.album.album,
+			...(currentTrack.album.coverUrl
+				? {
+						artwork: [
+							{
+								src: currentTrack.album.coverUrl,
+								sizes: '600x600',
+								type: 'image/jpeg',
+							},
+						],
+					}
+				: {}),
+		});
+	}, [currentTrack]);
+
+	useEffect(() => {
+		if (!('mediaSession' in navigator)) return;
+
+		navigator.mediaSession.setActionHandler('play', () => togglePlay());
+		navigator.mediaSession.setActionHandler('pause', () => togglePlay());
+		navigator.mediaSession.setActionHandler('previoustrack', () => skipPrev());
+		navigator.mediaSession.setActionHandler('nexttrack', () => skipNext());
+		navigator.mediaSession.setActionHandler('seekto', (details) => {
+			if (audioRef.current && details.seekTime != null) {
+				audioRef.current.currentTime = details.seekTime;
+			}
+		});
+
+		return () => {
+			navigator.mediaSession.setActionHandler('play', null);
+			navigator.mediaSession.setActionHandler('pause', null);
+			navigator.mediaSession.setActionHandler('previoustrack', null);
+			navigator.mediaSession.setActionHandler('nexttrack', null);
+			navigator.mediaSession.setActionHandler('seekto', null);
+		};
+	});
+
 	// Unrestrict and play a track
 	const unrestrictAndPlay = async (track: MusicTrack): Promise<string | undefined> => {
 		if (!accessToken) return undefined;
@@ -387,6 +455,83 @@ export default function AlbumsPage() {
 		}));
 
 		setQueue((prev) => [...prev, ...newTracks]);
+		setOriginalQueue((prev) => [...prev, ...newTracks]);
+	};
+
+	// Remove a track from the queue
+	const removeFromQueue = (index: number) => {
+		if (index < 0 || index >= queue.length) return;
+
+		if (queue.length === 1) {
+			// Last track — clear everything
+			clearQueue();
+			return;
+		}
+
+		if (index === currentIndex) {
+			// Removing current track — stop and play next
+			if (audioRef.current) {
+				audioRef.current.pause();
+				audioRef.current.src = '';
+			}
+			setQueue((prev) => prev.filter((_, i) => i !== index));
+			setOriginalQueue((prev) => {
+				const removedTrack = queue[index];
+				return prev.filter((t) => t.track.id !== removedTrack.track.id);
+			});
+			// Play the track that slides into this position (or previous if at end)
+			const nextIndex = index < queue.length - 1 ? index : index - 1;
+			setCurrentIndex(nextIndex);
+			// Defer playback to after state update
+			setTimeout(
+				() =>
+					playTrackAtIndex(
+						nextIndex,
+						0,
+						queue.filter((_, i) => i !== index)
+					),
+				0
+			);
+		} else {
+			setQueue((prev) => prev.filter((_, i) => i !== index));
+			setOriginalQueue((prev) => {
+				const removedTrack = queue[index];
+				return prev.filter((t) => t.track.id !== removedTrack.track.id);
+			});
+			if (index < currentIndex) {
+				setCurrentIndex((prev) => prev - 1);
+			}
+		}
+	};
+
+	// Clear the entire queue
+	const clearQueue = () => {
+		if (audioRef.current) {
+			audioRef.current.pause();
+			audioRef.current.src = '';
+		}
+		setQueue([]);
+		setOriginalQueue([]);
+		setCurrentIndex(-1);
+		setPlayerState((prev) => ({ ...prev, isPlaying: false, isLoading: false }));
+		setIsQueueOpen(false);
+	};
+
+	// Play a track/album next (insert after current track)
+	const playTrackNext = (track: MusicTrack, album: MusicAlbum) => {
+		const newItem: QueuedTrack = { track, album };
+		const insertAt = currentIndex + 1;
+		setQueue((prev) => [...prev.slice(0, insertAt), newItem, ...prev.slice(insertAt)]);
+		setOriginalQueue((prev) => [...prev, newItem]);
+	};
+
+	const playAlbumNext = (album: MusicAlbum) => {
+		const newTracks: QueuedTrack[] = album.tracks.map((track) => ({
+			track,
+			album,
+		}));
+		const insertAt = currentIndex + 1;
+		setQueue((prev) => [...prev.slice(0, insertAt), ...newTracks, ...prev.slice(insertAt)]);
 		setOriginalQueue((prev) => [...prev, ...newTracks]);
 	};
 
@@ -565,15 +710,34 @@ export default function AlbumsPage() {
 		document.body.removeChild(a);
 	};
 
-	// Filter albums by search
-	const filteredAlbums =
-		library?.albums.filter((album) => {
-			const query = searchQuery.toLowerCase();
-			return (
-				album.artist.toLowerCase().includes(query) ||
-				album.album.toLowerCase().includes(query)
-			);
-		}) ?? [];
+	// Filter and sort albums
+	const filteredAlbums = (() => {
+		let albums =
+			library?.albums.filter((album) => {
+				const query = searchQuery.toLowerCase();
+				return (
+					album.artist.toLowerCase().includes(query) ||
+					album.album.toLowerCase().includes(query)
+				);
+			}) ?? [];
+
+		switch (sortBy) {
+			case 'name':
+				albums = [...albums].sort((a, b) => a.album.localeCompare(b.album));
+				break;
+			case 'artist':
+				albums = [...albums].sort((a, b) => a.artist.localeCompare(b.artist));
+				break;
+			case 'year':
+				albums = [...albums].sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+				break;
+			case 'recent':
+			default:
+				break; // already sorted by most recent from API
+		}
+
+		return albums;
+	})();
 
 	// Redirect if not authenticated
 	if (!isLoading && !accessToken) {
@@ -585,8 +749,11 @@ export default function AlbumsPage() {
 		<>
 			<Head>
 				<title>
-					{selectedAlbum ? `${selectedAlbum.album} - ${selectedAlbum.artist}` : 'Albums'}{' '}
-					- DMM
+					{currentTrack && playerState.isPlaying
+						? `${removeExtension(currentTrack.track.filename)} - ${currentTrack.album.artist} - DMM`
+						: selectedAlbum
+							? `${selectedAlbum.album} - ${selectedAlbum.artist} - DMM`
+							: 'Albums - DMM'}
 				</title>
 			</Head>
 
@@ -617,14 +784,23 @@ export default function AlbumsPage() {
 					</div>
 
 					{/* Search */}
-					<div className="w-full md:w-96">
+					<div className="relative w-full md:w-96">
 						<input
 							type="text"
 							placeholder="Search artists or albums..."
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
-							className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm placeholder-gray-400 outline-none backdrop-blur-sm transition-all duration-200 focus:border-green-500/50 focus:bg-white/10 focus:ring-1 focus:ring-green-500/30"
+							className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-2 pr-9 text-sm placeholder-gray-400 outline-none backdrop-blur-sm transition-all duration-200 focus:border-green-500/50 focus:bg-white/10 focus:ring-1 focus:ring-green-500/30"
 						/>
+						{searchQuery && (
+							<button
+								onClick={() => setSearchQuery('')}
+								className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-gray-400 transition-colors hover:text-white"
+								title="Clear search"
+							>
+								<X className="h-4 w-4" />
+							</button>
+						)}
 					</div>
 
 					{/* Stats + shortcuts button - desktop */}
@@ -666,8 +842,11 @@ export default function AlbumsPage() {
 							playerState={playerState}
 							onPlay={playAlbum}
 							onAddToQueue={addAlbumToQueue}
+							onPlayNext={playAlbumNext}
+							onPlayTrackNext={playTrackNext}
 							onBack={() => selectAlbum(null)}
 							onDownload={downloadTrack}
+							hasQueue={queue.length > 0}
 						/>
 					) : (
 						<AlbumGrid
@@ -675,6 +854,10 @@ export default function AlbumsPage() {
 							searchQuery={searchQuery}
 							onSelect={selectAlbum}
 							onPlay={playAlbum}
+							sortBy={sortBy}
+							onSortChange={setSortBy}
+							nowPlayingAlbumHash={currentTrack?.album.hash ?? null}
+							isPlaying={playerState.isPlaying}
 						/>
 					)}
 				</main>
@@ -688,6 +871,8 @@ export default function AlbumsPage() {
 						onPlayTrack={(index) => playTrackAtIndex(index)}
 						onClose={() => setIsQueueOpen(false)}
 						onDownload={downloadTrack}
+						onRemoveTrack={removeFromQueue}
+						onClearQueue={clearQueue}
 					/>
 				)}
 

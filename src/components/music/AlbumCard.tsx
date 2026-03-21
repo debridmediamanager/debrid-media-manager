@@ -1,13 +1,21 @@
 import { MusicAlbum } from '@/pages/api/music/library';
-import { Disc3, Play } from 'lucide-react';
+import { Disc3, Pause, Play } from 'lucide-react';
 
 interface AlbumCardProps {
 	album: MusicAlbum;
 	onSelect: (album: MusicAlbum) => void;
 	onPlay: (album: MusicAlbum) => void;
+	isNowPlaying?: boolean;
+	isPlaying?: boolean;
 }
 
-export default function AlbumCard({ album, onSelect, onPlay }: AlbumCardProps) {
+export default function AlbumCard({
+	album,
+	onSelect,
+	onPlay,
+	isNowPlaying = false,
+	isPlaying = false,
+}: AlbumCardProps) {
 	return (
 		<div
 			role="button"
@@ -19,7 +27,11 @@ export default function AlbumCard({ album, onSelect, onPlay }: AlbumCardProps) {
 					onSelect(album);
 				}
 			}}
-			className="group flex cursor-pointer flex-col rounded-xl bg-gray-800/40 p-3 text-left transition-all duration-300 hover:-translate-y-1.5 hover:bg-gray-800/70 hover:shadow-music-lg sm:p-4"
+			className={`group flex cursor-pointer flex-col rounded-xl p-3 text-left transition-all duration-300 hover:-translate-y-1.5 hover:shadow-music-lg sm:p-4 ${
+				isNowPlaying
+					? 'bg-green-500/10 ring-1 ring-green-500/30 hover:bg-green-500/15'
+					: 'bg-gray-800/40 hover:bg-gray-800/70'
+			}`}
 		>
 			<div className="relative mb-3 aspect-square w-full overflow-hidden rounded-lg bg-gradient-to-br from-gray-700 to-gray-800 shadow-lg sm:mb-4">
 				{/* Fallback icon */}
@@ -37,6 +49,33 @@ export default function AlbumCard({ album, onSelect, onPlay }: AlbumCardProps) {
 							(e.target as HTMLImageElement).style.display = 'none';
 						}}
 					/>
+				)}
+
+				{/* Now Playing indicator */}
+				{isNowPlaying && (
+					<div className="absolute left-2 top-2 z-10 flex items-center gap-1 rounded-full bg-green-500 px-2 py-1 text-[10px] font-bold text-black shadow-lg">
+						{isPlaying ? (
+							<>
+								<span className="flex h-3 items-end gap-0.5">
+									<span className="h-2 w-0.5 animate-pulse bg-black" />
+									<span
+										className="h-3 w-0.5 animate-pulse bg-black"
+										style={{ animationDelay: '0.15s' }}
+									/>
+									<span
+										className="h-1.5 w-0.5 animate-pulse bg-black"
+										style={{ animationDelay: '0.3s' }}
+									/>
+								</span>
+								PLAYING
+							</>
+						) : (
+							<>
+								<Pause className="h-2.5 w-2.5" fill="currentColor" />
+								PAUSED
+							</>
+						)}
+					</div>
 				)}
 
 				{/* Play button overlay */}
