@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	const { apiKey } = req.body;
+	const { apiKey, movieMaxSize, episodeMaxSize, otherStreamsLimit, hideCastOption } = req.body;
 
 	if (!apiKey || typeof apiKey !== 'string') {
 		res.status(400).json({
@@ -19,6 +19,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			errorMessage: 'Missing or invalid "apiKey" in request body',
 		});
 		return;
+	}
+
+	if (otherStreamsLimit !== undefined) {
+		const limit = Number(otherStreamsLimit);
+		if (!Number.isInteger(limit) || limit < 0 || limit > 5) {
+			res.status(400).json({
+				status: 'error',
+				errorMessage: 'otherStreamsLimit must be an integer between 0 and 5',
+			});
+			return;
+		}
 	}
 
 	try {
@@ -35,8 +46,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		// Generate user ID
 		const userId = await generateTorBoxUserId(apiKey);
 
-		// Save the profile
-		const profile = await db.saveTorBoxCastProfile(userId, apiKey);
+		// Save the profile with settings
+		const profile = await db.saveTorBoxCastProfile(
+			userId,
+			apiKey,
+			typeof movieMaxSize === 'number' ? movieMaxSize : undefined,
+			typeof episodeMaxSize === 'number' ? episodeMaxSize : undefined,
+			typeof otherStreamsLimit === 'number' ? otherStreamsLimit : undefined,
+			hideCastOption !== undefined ? Boolean(hideCastOption) : undefined
+		);
 
 		res.status(200).json({
 			status: 'success',
@@ -45,6 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				movieMaxSize: profile.movieMaxSize,
 				episodeMaxSize: profile.episodeMaxSize,
 				otherStreamsLimit: profile.otherStreamsLimit,
+				hideCastOption: profile.hideCastOption,
 			},
 		});
 	} catch (error) {

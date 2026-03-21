@@ -62,13 +62,21 @@ export const handleCastTvShow = async (
 export const saveCastProfile = async (
 	clientId: string,
 	clientSecret: string,
-	refreshToken: string
+	refreshToken: string,
+	movieMaxSize?: number,
+	episodeMaxSize?: number,
+	otherStreamsLimit?: number,
+	hideCastOption?: boolean
 ) => {
 	try {
 		await axios.post(`/api/stremio/cast/saveProfile`, {
 			clientId,
 			clientSecret,
 			refreshToken,
+			...(movieMaxSize !== undefined && { movieMaxSize }),
+			...(episodeMaxSize !== undefined && { episodeMaxSize }),
+			...(otherStreamsLimit !== undefined && { otherStreamsLimit }),
+			...(hideCastOption !== undefined && { hideCastOption }),
 		});
 	} catch (error) {}
 };

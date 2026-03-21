@@ -59,10 +59,20 @@ export const handleCastTvShowAllDebrid = async (
 	}
 };
 
-export const saveAllDebridCastProfile = async (apiKey: string) => {
+export const saveAllDebridCastProfile = async (
+	apiKey: string,
+	movieMaxSize?: number,
+	episodeMaxSize?: number,
+	otherStreamsLimit?: number,
+	hideCastOption?: boolean
+) => {
 	try {
 		await axios.post(`/api/stremio-ad/cast/saveProfile`, {
 			apiKey,
+			...(movieMaxSize !== undefined && { movieMaxSize }),
+			...(episodeMaxSize !== undefined && { episodeMaxSize }),
+			...(otherStreamsLimit !== undefined && { otherStreamsLimit }),
+			...(hideCastOption !== undefined && { hideCastOption }),
 		});
 	} catch (error) {
 		console.error('Error saving AllDebrid cast profile:', error);

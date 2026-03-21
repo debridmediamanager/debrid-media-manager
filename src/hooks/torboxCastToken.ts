@@ -1,3 +1,5 @@
+import { getLocalStorageBoolean, getLocalStorageItemOrDefault } from '@/utils/browserStorage';
+import { defaultEpisodeSize, defaultMovieSize, defaultOtherStreamsLimit } from '@/utils/settings';
 import { saveTorBoxCastProfile } from '@/utils/torboxCastApiClient';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
@@ -17,8 +19,27 @@ export function useTorBoxCastToken() {
 				const res = await fetch('/api/stremio-tb/id?apiKey=' + apiKey);
 				const data = await res.json();
 				if (data.status !== 'error' && data.id) {
-					// Save profile to backend
-					await saveTorBoxCastProfile(apiKey);
+					// Save profile with settings to backend
+					const movieMaxSize = Number(
+						getLocalStorageItemOrDefault('settings:movieMaxSize', defaultMovieSize)
+					);
+					const episodeMaxSize = Number(
+						getLocalStorageItemOrDefault('settings:episodeMaxSize', defaultEpisodeSize)
+					);
+					const otherStreamsLimit = Number(
+						getLocalStorageItemOrDefault(
+							'settings:otherStreamsLimit',
+							defaultOtherStreamsLimit
+						)
+					);
+					const hideCastOption = getLocalStorageBoolean('settings:hideCastOption', false);
+					await saveTorBoxCastProfile(
+						apiKey,
+						movieMaxSize,
+						episodeMaxSize,
+						otherStreamsLimit,
+						hideCastOption
+					);
 					setDmmCastToken(data.id);
 				}
 			} catch (error) {

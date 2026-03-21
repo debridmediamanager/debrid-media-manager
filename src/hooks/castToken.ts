@@ -1,5 +1,7 @@
+import { getLocalStorageBoolean, getLocalStorageItemOrDefault } from '@/utils/browserStorage';
 import { saveCastProfile } from '@/utils/castApiClient';
 import { isLegacyToken } from '@/utils/castApiHelpers';
+import { defaultEpisodeSize, defaultMovieSize, defaultOtherStreamsLimit } from '@/utils/settings';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import useLocalStorage from './localStorage';
@@ -11,10 +13,28 @@ export function useCastToken() {
 	const [accessToken] = useLocalStorage<string>('rd:accessToken');
 	const [dmmCastToken, setDmmCastToken] = useLocalStorage<string>('rd:castToken');
 
-	// Always sync credentials to server when they change
+	// Always sync credentials and settings to server when they change
 	useEffect(() => {
 		if (!clientId || !clientSecret || !refreshToken || !accessToken) return;
-		saveCastProfile(clientId, clientSecret, refreshToken);
+		const movieMaxSize = Number(
+			getLocalStorageItemOrDefault('settings:movieMaxSize', defaultMovieSize)
+		);
+		const episodeMaxSize = Number(
+			getLocalStorageItemOrDefault('settings:episodeMaxSize', defaultEpisodeSize)
+		);
+		const otherStreamsLimit = Number(
+			getLocalStorageItemOrDefault('settings:otherStreamsLimit', defaultOtherStreamsLimit)
+		);
+		const hideCastOption = getLocalStorageBoolean('settings:hideCastOption', false);
+		saveCastProfile(
+			clientId,
+			clientSecret,
+			refreshToken,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption
+		);
 	}, [clientId, clientSecret, refreshToken, accessToken]);
 
 	useEffect(() => {

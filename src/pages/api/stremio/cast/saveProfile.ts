@@ -11,10 +11,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		const { clientId, clientSecret, refreshToken } = req.body;
+		const {
+			clientId,
+			clientSecret,
+			refreshToken,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption,
+		} = req.body;
 
 		if (!clientId || !clientSecret) {
 			return res.status(400).json({ error: 'Missing required fields' });
+		}
+
+		if (otherStreamsLimit !== undefined) {
+			const limit = Number(otherStreamsLimit);
+			if (!Number.isInteger(limit) || limit < 0 || limit > 5) {
+				return res.status(400).json({
+					error: 'otherStreamsLimit must be an integer between 0 and 5',
+				});
+			}
 		}
 
 		let response: { access_token: string } | null = null;
@@ -35,7 +52,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			userid,
 			clientId,
 			clientSecret,
-			refreshToken || null
+			refreshToken || null,
+			movieMaxSize !== undefined ? Number(movieMaxSize) : undefined,
+			episodeMaxSize !== undefined ? Number(episodeMaxSize) : undefined,
+			otherStreamsLimit !== undefined ? Number(otherStreamsLimit) : undefined,
+			hideCastOption !== undefined ? Boolean(hideCastOption) : undefined
 		);
 
 		return res.status(200).json(profile);

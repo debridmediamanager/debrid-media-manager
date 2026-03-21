@@ -401,6 +401,313 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		expect(stream?.title).toContain('🎬 DMM Cast RD (Yours)');
 	});
 
+	describe('settings behavior', () => {
+		const setupProfile = (overrides: Record<string, unknown> = {}) => {
+			mockRepository.getCastProfile = vi.fn().mockResolvedValue({
+				clientId: 'id',
+				clientSecret: 'secret',
+				refreshToken: 'refresh',
+				movieMaxSize: 0,
+				episodeMaxSize: 0,
+				otherStreamsLimit: 5,
+				hideCastOption: false,
+				...overrides,
+			});
+		};
+
+		const userStream = {
+			url: 'https://files.dmm.test/MyMovie.mkv',
+			link: 'https://app.real-debrid.com/d/abcdefghijklm',
+			size: 5120,
+			filename: 'MyMovie.mkv',
+			hash: 'userhash1234',
+		};
+
+		const otherStream = {
+			url: 'https://files.dmm.test/OtherMovie.mkv',
+			link: 'https://app.real-debrid.com/d/zyxwvutsrqpon',
+			size: 3072,
+			filename: 'OtherMovie.mkv',
+			hash: 'otherhash5678',
+		};
+
+		beforeEach(() => {
+			mockRepository.getSnapshotsByHashes = vi.fn().mockResolvedValue([]);
+		});
+
+		it('otherStreamsLimit does not affect user cast streams', async () => {
+			setupProfile({ otherStreamsLimit: 0 });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([userStream]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			// getUserCastStreams always called with limit 5
+			expect(mockRepository.getUserCastStreams).toHaveBeenCalledWith('tt111', 'user1', 5);
+			// otherStreamsLimit 0 passed to getOtherStreams
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith(
+				'tt111',
+				'user1',
+				0,
+				undefined
+			);
+
+			const payload = (res.json as Mock).mock.calls[0][0];
+			// cast option + 1 user stream = 2 (no other streams)
+			const nonCastStreams = payload.streams.filter((s: any) => !s.externalUrl);
+			expect(nonCastStreams).toHaveLength(1);
+			expect(nonCastStreams[0].title).toContain('MyMovie.mkv');
+		});
+
+		it('passes otherStreamsLimit to getOtherStreams query', async () => {
+			setupProfile({ otherStreamsLimit: 3 });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith(
+				'tt111',
+				'user1',
+				3,
+				undefined
+			);
+		});
+
+		it.each([0, 1, 2, 3, 4, 5])('respects otherStreamsLimit=%i', async (limit) => {
+			setupProfile({ otherStreamsLimit: limit });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith(
+				'tt111',
+				'user1',
+				limit,
+				undefined
+			);
+		});
+
+		it('clamps otherStreamsLimit above 5 to 5', async () => {
+			setupProfile({ otherStreamsLimit: 99 });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith(
+				'tt111',
+				'user1',
+				5,
+				undefined
+			);
+		});
+
+		it('clamps negative otherStreamsLimit to 0', async () => {
+			setupProfile({ otherStreamsLimit: -3 });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith(
+				'tt111',
+				'user1',
+				0,
+				undefined
+			);
+		});
+
+		it('defaults otherStreamsLimit to 5 when null/undefined', async () => {
+			setupProfile({ otherStreamsLimit: null });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith(
+				'tt111',
+				'user1',
+				5,
+				undefined
+			);
+		});
+
+		it('uses movieMaxSize for movies', async () => {
+			setupProfile({ movieMaxSize: 15, episodeMaxSize: 3 });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith('tt111', 'user1', 5, 15);
+		});
+
+		it('uses episodeMaxSize for shows', async () => {
+			setupProfile({ movieMaxSize: 15, episodeMaxSize: 3 });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'series', imdbid: 'tt111:1:2.json' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith('tt111:1:2', 'user1', 5, 3);
+		});
+
+		it('passes undefined maxSize when movieMaxSize is 0 (biggest available)', async () => {
+			setupProfile({ movieMaxSize: 0 });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith(
+				'tt111',
+				'user1',
+				5,
+				undefined
+			);
+		});
+
+		it('passes undefined maxSize when episodeMaxSize is 0 (biggest available)', async () => {
+			setupProfile({ episodeMaxSize: 0 });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'series', imdbid: 'tt111:1:1.json' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith(
+				'tt111:1:1',
+				'user1',
+				5,
+				undefined
+			);
+		});
+
+		it('hideCastOption hides the cast stream entry', async () => {
+			setupProfile({ hideCastOption: true });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([userStream]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			const payload = (res.json as Mock).mock.calls[0][0];
+			const castOptionStream = payload.streams.find(
+				(s: any) => s.externalUrl && s.name === 'DMM Cast RD✨'
+			);
+			expect(castOptionStream).toBeUndefined();
+			// user stream still present
+			expect(payload.streams).toHaveLength(1);
+		});
+
+		it('shows cast option when hideCastOption is false', async () => {
+			setupProfile({ hideCastOption: false });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			const payload = (res.json as Mock).mock.calls[0][0];
+			const castOptionStream = payload.streams.find((s: any) => s.name === 'DMM Cast RD✨');
+			expect(castOptionStream).toBeDefined();
+		});
+
+		it('user streams are always returned regardless of maxSize settings', async () => {
+			// movieMaxSize=1 but user stream is 5GB — should still appear
+			setupProfile({ movieMaxSize: 1 });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([userStream]); // 5120 MB
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			// getUserCastStreams called with hardcoded 5, no maxSize param
+			expect(mockRepository.getUserCastStreams).toHaveBeenCalledWith('tt111', 'user1', 5);
+			const payload = (res.json as Mock).mock.calls[0][0];
+			const nonCastStreams = payload.streams.filter((s: any) => !s.externalUrl);
+			expect(nonCastStreams).toHaveLength(1);
+		});
+
+		it('combines user and other streams correctly', async () => {
+			setupProfile({ otherStreamsLimit: 2, movieMaxSize: 30 });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([userStream]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([otherStream]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			expect(mockRepository.getUserCastStreams).toHaveBeenCalledWith('tt111', 'user1', 5);
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith('tt111', 'user1', 2, 30);
+
+			const payload = (res.json as Mock).mock.calls[0][0];
+			// cast option + 1 user + 1 other = 3
+			expect(payload.streams).toHaveLength(3);
+
+			const yourStream = payload.streams.find((s: any) =>
+				s.behaviorHints?.bingeGroup?.includes(':yours')
+			);
+			const otherResultStream = payload.streams.find((s: any) =>
+				s.behaviorHints?.bingeGroup?.includes(':other:')
+			);
+			expect(yourStream).toBeDefined();
+			expect(otherResultStream).toBeDefined();
+		});
+	});
+
 	it('fetches snapshots for unique hashes only', async () => {
 		mockRepository.getCastProfile = vi.fn().mockResolvedValue({
 			clientId: 'id',

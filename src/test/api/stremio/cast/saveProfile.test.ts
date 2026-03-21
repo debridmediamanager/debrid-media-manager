@@ -61,9 +61,63 @@ describe('/api/stremio/cast/saveProfile', () => {
 
 		expect(mockGetToken).toHaveBeenCalledWith('id', 'secret', 'refresh', true);
 		expect(mockGenerateUserId).toHaveBeenCalledWith('rd-token');
-		expect(mockSaveCastProfile).toHaveBeenCalledWith('user-1', 'id', 'secret', 'refresh');
+		expect(mockSaveCastProfile).toHaveBeenCalledWith(
+			'user-1',
+			'id',
+			'secret',
+			'refresh',
+			undefined,
+			undefined,
+			undefined,
+			undefined
+		);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({ ok: true });
+	});
+
+	it('saves the profile with settings when provided', async () => {
+		const req = createMockRequest({
+			method: 'POST',
+			body: {
+				clientId: 'id',
+				clientSecret: 'secret',
+				refreshToken: 'refresh',
+				movieMaxSize: 15,
+				episodeMaxSize: 3,
+				otherStreamsLimit: 2,
+				hideCastOption: true,
+			},
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveCastProfile).toHaveBeenCalledWith(
+			'user-1',
+			'id',
+			'secret',
+			'refresh',
+			15,
+			3,
+			2,
+			true
+		);
+		expect(res.status).toHaveBeenCalledWith(200);
+	});
+
+	it('validates otherStreamsLimit range', async () => {
+		const req = createMockRequest({
+			method: 'POST',
+			body: { clientId: 'id', clientSecret: 'secret', otherStreamsLimit: 10 },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({
+			error: 'otherStreamsLimit must be an integer between 0 and 5',
+		});
 	});
 
 	it('returns 500 when Real-Debrid token fetch fails', async () => {

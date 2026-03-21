@@ -1,4 +1,6 @@
 import { saveAllDebridCastProfile } from '@/utils/allDebridCastApiClient';
+import { getLocalStorageBoolean, getLocalStorageItemOrDefault } from '@/utils/browserStorage';
+import { defaultEpisodeSize, defaultMovieSize, defaultOtherStreamsLimit } from '@/utils/settings';
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import useLocalStorage from './localStorage';
@@ -13,9 +15,28 @@ export function useAllDebridCastToken() {
 
 		const ensureProfileAndToken = async () => {
 			try {
-				// Always try to save profile to ensure it exists in database
+				// Always try to save profile with settings to ensure it exists in database
 				if (!hasEnsuredProfile.current) {
-					await saveAllDebridCastProfile(apiKey);
+					const movieMaxSize = Number(
+						getLocalStorageItemOrDefault('settings:movieMaxSize', defaultMovieSize)
+					);
+					const episodeMaxSize = Number(
+						getLocalStorageItemOrDefault('settings:episodeMaxSize', defaultEpisodeSize)
+					);
+					const otherStreamsLimit = Number(
+						getLocalStorageItemOrDefault(
+							'settings:otherStreamsLimit',
+							defaultOtherStreamsLimit
+						)
+					);
+					const hideCastOption = getLocalStorageBoolean('settings:hideCastOption', false);
+					await saveAllDebridCastProfile(
+						apiKey,
+						movieMaxSize,
+						episodeMaxSize,
+						otherStreamsLimit,
+						hideCastOption
+					);
 					hasEnsuredProfile.current = true;
 				}
 

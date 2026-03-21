@@ -59,10 +59,20 @@ export const handleCastTvShowTorBox = async (
 	}
 };
 
-export const saveTorBoxCastProfile = async (apiKey: string) => {
+export const saveTorBoxCastProfile = async (
+	apiKey: string,
+	movieMaxSize?: number,
+	episodeMaxSize?: number,
+	otherStreamsLimit?: number,
+	hideCastOption?: boolean
+) => {
 	try {
 		await axios.post(`/api/stremio-tb/cast/saveProfile`, {
 			apiKey,
+			...(movieMaxSize !== undefined && { movieMaxSize }),
+			...(episodeMaxSize !== undefined && { episodeMaxSize }),
+			...(otherStreamsLimit !== undefined && { otherStreamsLimit }),
+			...(hideCastOption !== undefined && { hideCastOption }),
 		});
 	} catch (error) {
 		console.error('Error saving TorBox cast profile:', error);
