@@ -31,13 +31,12 @@ export const generateUserId = async (token: string): Promise<string> => {
 			throw new Error('Invalid username');
 		}
 
-		// Use environment variable for salt, with a secure fallback
-		const salt =
-			process.env.DMMCAST_SALT ??
-			'piyeJUVdDoLLf3q&i9NRkrfVmTDg$&KYZ5CEJmswjv5yetjwsyxrMHqdNuvw^$a7mZh^bgqg8K4kMKptFFEp4*RcQ!&Dmd9uvnqAF&zRqts4YwRzTqjGErp9j4wHVVTw';
+		const salt = process.env.DMMCAST_SALT;
+		if (!salt) {
+			throw new Error('DMMCAST_SALT environment variable is not set');
+		}
 
-		// Use SHA-256 with HMAC for better security
-		const hmac = crypto.createHmac('sha256', salt).update(username).digest('base64url'); // base64url is URL-safe (no +, /, or =)
+		const hmac = crypto.createHmac('sha256', salt).update(username).digest('base64url');
 
 		// Return 12 characters for much better collision resistance
 		// With 62^12 possible values, collision probability is effectively 0 for millions of users
@@ -55,9 +54,10 @@ export const generateLegacyUserId = async (token: string): Promise<string> => {
 			throw new Error('Invalid username');
 		}
 
-		const salt =
-			process.env.DMMCAST_SALT ??
-			'piyeJUVdDoLLf3q&i9NRkrfVmTDg$&KYZ5CEJmswjv5yetjwsyxrMHqdNuvw^$a7mZh^bgqg8K4kMKptFFEp4*RcQ!&Dmd9uvnqAF&zRqts4YwRzTqjGErp9j4wHVVTw';
+		const salt = process.env.DMMCAST_SALT;
+		if (!salt) {
+			throw new Error('DMMCAST_SALT environment variable is not set');
+		}
 
 		const hash = crypto
 			.createHash('sha256')

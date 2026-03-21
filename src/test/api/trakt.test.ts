@@ -26,10 +26,17 @@ beforeEach(() => {
 describe('API /api/trakt/auth', () => {
 	it('redirects to trakt oauth', async () => {
 		const res = createRes();
-		await authHandler({ query: { redirect: 'https://app' } } as any, res);
+		await authHandler({ query: { redirect: 'https://debridmediamanager.com' } } as any, res);
 		expect(res.redirect).toHaveBeenCalledWith(
-			`https://trakt.tv/oauth/authorize?response_type=code&client_id=client-id&redirect_uri=https://app/trakt/callback`
+			`https://trakt.tv/oauth/authorize?response_type=code&client_id=client-id&redirect_uri=${encodeURIComponent('https://debridmediamanager.com/trakt/callback')}`
 		);
+	});
+
+	it('rejects invalid redirect origins', async () => {
+		const res = createRes();
+		await authHandler({ query: { redirect: 'https://evil.com' } } as any, res);
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.redirect).not.toHaveBeenCalled();
 	});
 });
 

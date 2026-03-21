@@ -33,12 +33,12 @@ export const generateAllDebridUserId = async (apiKey: string): Promise<string> =
 
 		const username = userData.username;
 
-		// Use environment variable for salt, with a secure fallback
-		const salt =
-			process.env.DMMCAST_SALT ??
-			'piyeJUVdDoLLf3q&i9NRkrfVmTDg$&KYZ5CEJmswjv5yetjwsyxrMHqdNuvw^$a7mZh^bgqg8K4kMKptFFEp4*RcQ!&Dmd9uvnqAF&zRqts4YwRzTqjGErp9j4wHVVTw';
+		const salt = process.env.DMMCAST_SALT;
+		if (!salt) {
+			throw new Error('DMMCAST_SALT environment variable is not set');
+		}
 
-		// Use HMAC-SHA256 with salt, prefixed with 'alldebrid:' to ensure different IDs from RD/TB
+		// Prefixed with 'alldebrid:' to ensure different IDs from RD/TB
 		const hmac = crypto
 			.createHmac('sha256', salt)
 			.update(`alldebrid:${username}`)

@@ -33,12 +33,12 @@ export const generateTorBoxUserId = async (apiKey: string): Promise<string> => {
 
 		const email = userData.data.email;
 
-		// Use environment variable for salt, with a secure fallback
-		const salt =
-			process.env.DMMCAST_SALT ??
-			'piyeJUVdDoLLf3q&i9NRkrfVmTDg$&KYZ5CEJmswjv5yetjwsyxrMHqdNuvw^$a7mZh^bgqg8K4kMKptFFEp4*RcQ!&Dmd9uvnqAF&zRqts4YwRzTqjGErp9j4wHVVTw';
+		const salt = process.env.DMMCAST_SALT;
+		if (!salt) {
+			throw new Error('DMMCAST_SALT environment variable is not set');
+		}
 
-		// Use HMAC-SHA256 with salt, prefixed with 'torbox:' to ensure different IDs from RD
+		// Prefixed with 'torbox:' to ensure different IDs from RD
 		const hmac = crypto
 			.createHmac('sha256', salt)
 			.update(`torbox:${email}`)

@@ -39,15 +39,16 @@ export class ImdbSearchService extends DatabaseClient {
 			return [];
 		}
 
-		// Build type filter
-		const typeFilter = mediaType
-			? mediaType === 'movie'
-				? "AND b.title_type = 'movie'"
-				: "AND b.title_type IN ('tvSeries', 'tvMiniSeries')"
-			: "AND b.title_type IN ('movie', 'tvSeries', 'tvMiniSeries')";
+		// Build type filter as parameterized Prisma.sql
+		const typeFilter =
+			mediaType === 'movie'
+				? Prisma.sql`AND b.title_type = 'movie'`
+				: mediaType === 'show'
+					? Prisma.sql`AND b.title_type IN ('tvSeries', 'tvMiniSeries')`
+					: Prisma.sql`AND b.title_type IN ('movie', 'tvSeries', 'tvMiniSeries')`;
 
-		// Build year filter
-		const yearFilter = year ? `AND b.start_year = ${year}` : '';
+		// Build year filter as parameterized Prisma.sql
+		const yearFilter = year ? Prisma.sql`AND b.start_year = ${year}` : Prisma.empty;
 
 		// Try fulltext search on imdb_title_basics first (faster, smaller table)
 		try {
@@ -126,8 +127,8 @@ export class ImdbSearchService extends DatabaseClient {
 
 	private async searchBasicsFulltext(
 		keyword: string,
-		typeFilter: string,
-		yearFilter: string,
+		typeFilter: Prisma.Sql,
+		yearFilter: Prisma.Sql,
 		limit: number
 	): Promise<ImdbSearchResult[]> {
 		// Prepare keyword for fulltext boolean mode
@@ -171,8 +172,8 @@ export class ImdbSearchService extends DatabaseClient {
 			FROM imdb_title_basics b
 			INNER JOIN imdb_title_ratings r ON b.tconst = r.tconst
 			WHERE MATCH(b.primary_title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)
-				${Prisma.raw(typeFilter)}
-				${Prisma.raw(yearFilter)}
+				${typeFilter}
+				${yearFilter}
 				AND b.is_adult = 0
 			ORDER BY relevance DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
 			LIMIT ${limit}
@@ -194,8 +195,8 @@ export class ImdbSearchService extends DatabaseClient {
 
 	private async searchWithFulltext(
 		keyword: string,
-		typeFilter: string,
-		yearFilter: string,
+		typeFilter: Prisma.Sql,
+		yearFilter: Prisma.Sql,
 		limit: number
 	): Promise<ImdbSearchResult[]> {
 		// Prepare keyword for fulltext boolean mode
@@ -241,8 +242,8 @@ export class ImdbSearchService extends DatabaseClient {
 			JOIN imdb_title_basics b ON a.title_id = b.tconst
 			INNER JOIN imdb_title_ratings r ON b.tconst = r.tconst
 			WHERE MATCH(a.title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)
-				${Prisma.raw(typeFilter)}
-				${Prisma.raw(yearFilter)}
+				${typeFilter}
+				${yearFilter}
 				AND b.is_adult = 0
 			GROUP BY b.tconst, b.title_type, b.start_year, b.primary_title, b.original_title, r.average_rating, r.num_votes
 			ORDER BY relevance DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
@@ -265,8 +266,8 @@ export class ImdbSearchService extends DatabaseClient {
 
 	private async searchWithLike(
 		keyword: string,
-		typeFilter: string,
-		yearFilter: string,
+		typeFilter: Prisma.Sql,
+		yearFilter: Prisma.Sql,
 		limit: number
 	): Promise<ImdbSearchResult[]> {
 		// Use imdb_title_basics for faster search (smaller table, ~11M rows vs 54M in akas)
@@ -295,8 +296,8 @@ export class ImdbSearchService extends DatabaseClient {
 			INNER JOIN imdb_title_ratings r ON b.tconst = r.tconst
 			WHERE (LOWER(b.primary_title) LIKE LOWER(${likePattern})
 				OR LOWER(b.original_title) LIKE LOWER(${likePattern}))
-				${Prisma.raw(typeFilter)}
-				${Prisma.raw(yearFilter)}
+				${typeFilter}
+				${yearFilter}
 				AND b.is_adult = 0
 			ORDER BY matchQuality DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
 			LIMIT ${limit}
