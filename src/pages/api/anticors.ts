@@ -2,6 +2,7 @@ import {
 	recordRdOperationEvent,
 	resolveRealDebridOperation,
 } from '@/lib/observability/rdOperationalStats';
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { randomUUID } from 'crypto';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
@@ -244,4 +245,4 @@ export const config = {
 	},
 };
 
-export default handler;
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.proxy);

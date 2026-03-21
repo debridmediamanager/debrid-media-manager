@@ -4,6 +4,8 @@ import Redis from 'ioredis';
 export const RATE_LIMIT_CONFIGS = {
 	stream: { rateLimit: 1, windowSeconds: 5 }, // 1 request per 5 seconds for stream endpoints
 	torrents: { rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for torrents API
+	proxy: { rateLimit: 3, windowSeconds: 1 }, // 3 requests per second for proxy endpoints
+	report: { rateLimit: 5, windowSeconds: 10 }, // 5 reports per 10 seconds
 	default: { rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;
 
