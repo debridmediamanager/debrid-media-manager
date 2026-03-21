@@ -45,6 +45,7 @@ export class ScrapedService extends DatabaseClient {
         WHERE
           s.key = ${key}
         ${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
+        AND jt.title NOT REGEXP '^[А-Яа-яЁё]'
         ORDER BY jt.fileSize DESC
         LIMIT 50
         OFFSET ${offset}
@@ -107,6 +108,7 @@ export class ScrapedService extends DatabaseClient {
         WHERE
           s.key = ${key}
         ${maxSizeMB ? Prisma.sql`AND jt.fileSize <= ${maxSizeMB}` : Prisma.empty}
+        AND jt.title NOT REGEXP '^[А-Яа-яЁё]'
         ORDER BY jt.fileSize DESC
         LIMIT 50
         OFFSET ${offset}
