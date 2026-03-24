@@ -38,6 +38,7 @@ const initialRealDebridState = {
 	loading: true,
 	hasAuth: false,
 	isInitialized: false,
+	isRefreshing: false,
 	subscribers: new Set<() => void>(),
 };
 
@@ -49,6 +50,7 @@ const useRealDebrid = () => {
 	const [user, setUser] = useState<RealDebridUser | null>(globalRealDebridState.user);
 	const [error, setError] = useState<Error | null>(globalRealDebridState.error);
 	const [loading, setLoading] = useState(globalRealDebridState.loading);
+	const [isRefreshing, setIsRefreshing] = useState(globalRealDebridState.isRefreshing);
 	const [token, setToken] = useLocalStorage<string>('rd:accessToken');
 	const [clientId] = useLocalStorage<string>('rd:clientId');
 	const [clientSecret] = useLocalStorage<string>('rd:clientSecret');
@@ -59,6 +61,7 @@ const useRealDebrid = () => {
 			setUser(globalRealDebridState.user);
 			setError(globalRealDebridState.error);
 			setLoading(globalRealDebridState.loading);
+			setIsRefreshing(globalRealDebridState.isRefreshing);
 		};
 
 		// Subscribe to global state changes
@@ -70,8 +73,14 @@ const useRealDebrid = () => {
 
 	useEffect(() => {
 		let isMounted = true;
+		let retryTimeout: ReturnType<typeof setTimeout> | null = null;
 
-		const auth = async () => {
+		const isAuthError = (e: unknown) => {
+			const status = (e as any)?.response?.status;
+			return status === 401 || status === 403;
+		};
+
+		const auth = async (attempt = 0): Promise<void> => {
 			// Prevent duplicate initialization globally, but allow retry if no user yet
 			if (globalRealDebridState.isInitialized && globalRealDebridState.user) {
 				return;
@@ -104,6 +113,9 @@ const useRealDebrid = () => {
 				}
 
 				// Get new token
+				globalRealDebridState.isRefreshing = true;
+				globalRealDebridState.subscribers.forEach((fn) => fn());
+
 				const { access_token, expires_in } = await getToken(
 					clientId,
 					clientSecret,
@@ -121,19 +133,30 @@ const useRealDebrid = () => {
 			} catch (e) {
 				if (isMounted) {
 					console.error('RealDebrid auth error:', e);
-					clearRdKeys();
+					if (isAuthError(e)) {
+						clearRdKeys();
+					} else if (attempt < 3) {
+						// Retry with exponential backoff for transient errors
+						const delay = 1000 * Math.pow(2, attempt); // 1s, 2s, 4s
+						globalRealDebridState.isInitialized = false;
+						retryTimeout = setTimeout(() => {
+							if (isMounted) {
+								auth(attempt + 1);
+							}
+						}, delay);
+						return; // Keep loading/refreshing state active during retry
+					}
 					globalRealDebridState.error = e as Error;
 					globalRealDebridState.user = null;
 					globalRealDebridState.hasAuth = false;
-					// Reset initialization flag on error to allow retry
 					globalRealDebridState.isInitialized = false;
-					globalRealDebridState.subscribers.forEach((fn) => fn());
 				}
-			} finally {
-				if (isMounted) {
-					globalRealDebridState.loading = false;
-					globalRealDebridState.subscribers.forEach((fn) => fn());
-				}
+			}
+
+			if (isMounted) {
+				globalRealDebridState.loading = false;
+				globalRealDebridState.isRefreshing = false;
+				globalRealDebridState.subscribers.forEach((fn) => fn());
 			}
 		};
 
@@ -141,11 +164,12 @@ const useRealDebrid = () => {
 
 		return () => {
 			isMounted = false;
+			if (retryTimeout) clearTimeout(retryTimeout);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [refreshToken, clientId, clientSecret]);
 
-	return { user, error, loading, isRefreshing: false, hasAuth: !!token };
+	return { user, error, loading, isRefreshing, hasAuth: !!token };
 };
 
 export const __resetRealDebridStateForTests = () => {
@@ -244,9 +268,9 @@ const useTrakt = () => {
 
 // Backward compatibility hook for withAuth.tsx
 export const useRealDebridAccessToken = (): [string | null, boolean, boolean] => {
-	const { user, loading } = useRealDebrid();
+	const { loading, isRefreshing } = useRealDebrid();
 	const [token] = useLocalStorage<string>('rd:accessToken');
-	return [token, loading, false];
+	return [token, loading, isRefreshing];
 };
 
 export const useAllDebridApiKey = () => {

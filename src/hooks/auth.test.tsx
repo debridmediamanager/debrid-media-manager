@@ -42,6 +42,7 @@ describe('auth hooks', () => {
 		window.localStorage.clear();
 		__resetRealDebridStateForTests();
 		vi.clearAllMocks();
+		vi.useRealTimers();
 	});
 
 	it('returns existing RD token once the user is validated', async () => {
@@ -97,6 +98,59 @@ describe('auth hooks', () => {
 		expect(result.current.tbUser?.email).toBe('tb@example.com');
 		expect(result.current.hasTraktAuth).toBe(true);
 		expect(window.localStorage.getItem('trakt:userSlug')).toContain('sluggy');
+	});
+
+	it('does not clear credentials on transient errors and retries with backoff', async () => {
+		vi.useFakeTimers();
+		setStoredValue('rd:accessToken', 'stale');
+		setStoredValue('rd:refreshToken', 'refresh');
+		setStoredValue('rd:clientId', 'client');
+		setStoredValue('rd:clientSecret', 'secret');
+		// Reject stale token consistently, accept new token
+		mockGetRealDebridUser
+			.mockRejectedValueOnce(new Error('expired')) // attempt 0: token check
+			.mockRejectedValueOnce(new Error('expired')) // attempt 1: token check
+			.mockResolvedValueOnce({ username: 'rd-user' }); // attempt 1: after refresh
+		// Fail first, then succeed on retry
+		mockGetToken
+			.mockRejectedValueOnce(new Error('Network Error'))
+			.mockResolvedValueOnce({ access_token: 'new-token', expires_in: 60 });
+
+		renderHook(() => useRealDebridAccessToken());
+
+		// Let initial async operations complete
+		await vi.advanceTimersByTimeAsync(0);
+
+		// Credentials should NOT be cleared on transient errors
+		expect(window.localStorage.getItem('rd:refreshToken')).not.toBeNull();
+		expect(mockGetToken).toHaveBeenCalledTimes(1);
+
+		// Advance past first retry delay (1s) and let retry async ops complete
+		await vi.advanceTimersByTimeAsync(1100);
+
+		expect(mockGetToken).toHaveBeenCalledTimes(2);
+	});
+
+	it('clears credentials on 401 auth error during token refresh', async () => {
+		const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+		setStoredValue('rd:accessToken', 'stale');
+		setStoredValue('rd:refreshToken', 'refresh');
+		setStoredValue('rd:clientId', 'client');
+		setStoredValue('rd:clientSecret', 'secret');
+		mockGetRealDebridUser.mockRejectedValueOnce(new Error('expired'));
+		// Simulate a 401 response (invalid refresh token)
+		const authError = new Error('Unauthorized');
+		(authError as any).response = { status: 401 };
+		mockGetToken.mockRejectedValue(authError);
+
+		const { result } = renderHook(() => useRealDebridAccessToken());
+
+		await waitFor(() => expect(result.current[1]).toBe(false));
+		// Verify catch block was reached
+		expect(errorSpy).toHaveBeenCalledWith('RealDebrid auth error:', authError);
+		// clearRdKeys removes all rd: keys on auth errors
+		expect(window.localStorage.getItem('rd:refreshToken')).toBeNull();
+		errorSpy.mockRestore();
 	});
 
 	it('authenticates after login when page remounts with new tokens', async () => {
