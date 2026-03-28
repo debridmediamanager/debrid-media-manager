@@ -12,6 +12,22 @@ import {
 // Re-export for convenience
 export { RATE_LIMIT_CONFIGS };
 
+// Parsed whitelist IPs (cached after first access)
+let whitelistedIps: Set<string> | null = null;
+
+function getWhitelistedIps(): Set<string> {
+	if (!whitelistedIps) {
+		const raw = process.env.RATE_LIMIT_WHITELIST_IPS || '';
+		whitelistedIps = new Set(
+			raw
+				.split(',')
+				.map((ip) => ip.trim())
+				.filter(Boolean)
+		);
+	}
+	return whitelistedIps;
+}
+
 // Singleton rate limiter instance
 let rateLimiter: HybridRateLimiter | null = null;
 
@@ -44,6 +60,11 @@ export function withRateLimit(handler: NextApiHandler): NextApiHandler {
 	return async (req: NextApiRequest, res: NextApiResponse) => {
 		const pathname = req.url?.split('?')[0] || '';
 		const identifier = getIdentifier(req, pathname);
+
+		if (getWhitelistedIps().has(identifier)) {
+			return handler(req, res);
+		}
+
 		const config = getRateLimitConfig(pathname);
 
 		const limiter = getRateLimiter();
@@ -75,6 +96,10 @@ export function withCustomRateLimit(
 	return async (req: NextApiRequest, res: NextApiResponse) => {
 		const pathname = req.url?.split('?')[0] || '';
 		const identifier = getIdentifier(req, pathname);
+
+		if (getWhitelistedIps().has(identifier)) {
+			return handler(req, res);
+		}
 
 		const limiter = getRateLimiter();
 		const now = Date.now();
@@ -108,6 +133,10 @@ export function withIpRateLimit(handler: NextApiHandler, config: RateLimitConfig
 			xRealIp || null,
 			xForwardedFor || null
 		);
+
+		if (getWhitelistedIps().has(identifier)) {
+			return handler(req, res);
+		}
 
 		const limiter = getRateLimiter();
 		const now = Date.now();

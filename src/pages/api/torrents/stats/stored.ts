@@ -1,5 +1,4 @@
 import { TrackerStatsService } from '@/services/database/trackerStats';
-import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { NextApiHandler } from 'next';
 
 function isValidTorrentHash(hash: string): boolean {
@@ -66,4 +65,4 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 };
 
-export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.torrents);
+export default handler;
