@@ -12,27 +12,7 @@ const MAX_RETRIES = 7;
 
 // Delay function using MessageChannel to avoid browser throttling in background tabs
 function delayWithMessageChannel(ms: number): Promise<void> {
-	if (typeof MessageChannel === 'undefined') {
-		return new Promise((resolve) => setTimeout(resolve, ms));
-	}
-
-	return new Promise((resolve) => {
-		const start = performance.now();
-		const channel = new MessageChannel();
-
-		const check = () => {
-			if (performance.now() - start >= ms) {
-				channel.port1.close();
-				channel.port2.close();
-				resolve();
-			} else {
-				channel.port2.postMessage(null);
-			}
-		};
-
-		channel.port1.onmessage = check;
-		channel.port2.postMessage(null);
-	});
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // Helper function to calculate exponential backoff delay with jitter

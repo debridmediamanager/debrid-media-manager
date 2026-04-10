@@ -48,28 +48,7 @@ let globalLastRequestTime = 0;
 // Unlike setTimeout which gets throttled to 1s+ in inactive tabs, MessageChannel
 // uses the browser's message queue which maintains timing accuracy
 function delayWithMessageChannel(ms: number): Promise<void> {
-	// Fall back to setTimeout for server-side rendering or if MessageChannel is unavailable
-	if (typeof MessageChannel === 'undefined') {
-		return new Promise((resolve) => setTimeout(resolve, ms));
-	}
-
-	return new Promise((resolve) => {
-		const start = performance.now();
-		const channel = new MessageChannel();
-
-		const check = () => {
-			if (performance.now() - start >= ms) {
-				channel.port1.close();
-				channel.port2.close();
-				resolve();
-			} else {
-				channel.port2.postMessage(null);
-			}
-		};
-
-		channel.port1.onmessage = check;
-		channel.port2.postMessage(null);
-	});
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // Shared rate limiting function that serializes all requests
