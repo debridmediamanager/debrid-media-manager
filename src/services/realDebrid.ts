@@ -16,6 +16,7 @@ import {
 // Safely access Next.js runtime config in test/non-Next environments
 const fallbackRuntimeConfig = {
 	proxy: '',
+	authProxy: '',
 	realDebridHostname: 'https://app.real-debrid.com',
 	realDebridClientId: 'X245A4XAIBGVM',
 };
@@ -77,7 +78,7 @@ function getUniqueRequestId() {
 }
 
 function getProxyUrl(baseUrl: string): string {
-	return baseUrl;
+	return baseUrl.replace('#num#', Math.floor(Math.random() * 1000).toString());
 }
 
 // Validate SHA40 hash format
@@ -423,7 +424,7 @@ export const getCurrentUser = async (accessToken: string) => {
 	const promise = (async () => {
 		try {
 			const response = await realDebridAxios.get<UserResponse>(
-				`${getProxyUrl(config.proxy)}${config.realDebridHostname}/rest/1.0/user`,
+				`${getProxyUrl(config.authProxy)}${config.realDebridHostname}/rest/1.0/user`,
 				{
 					headers: {
 						Authorization: `Bearer ${accessToken}`,
@@ -460,7 +461,7 @@ export async function getUserTorrentsList(
 		const cacheParam = `&_fresh=${Date.now()}`;
 
 		const response = await realDebridAxios.get<UserTorrentResponse[]>(
-			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents?page=${page}&limit=${limit}${cacheParam}`,
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents?page=${page}&limit=${limit}${cacheParam}`,
 			{
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
@@ -503,7 +504,7 @@ export const getTorrentInfo = async (
 ): Promise<TorrentInfoResponse> => {
 	try {
 		const response = await realDebridAxios.get<TorrentInfoResponse>(
-			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/info/${id}`,
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/info/${id}`,
 			{
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
@@ -532,7 +533,7 @@ export const addHashAsMagnet = async (
 
 	try {
 		const response = await realDebridAxios.post(
-			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
 			qs.stringify({ magnet: `magnet:?xt=urn:btih:${hash}` }),
 			{
 				headers: {
@@ -561,7 +562,7 @@ export const addTorrentFile = async (
 ): Promise<string> => {
 	const arrayBuffer = await file.arrayBuffer();
 	const response = await realDebridAxios.put(
-		`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/addTorrent`,
+		`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/addTorrent`,
 		arrayBuffer,
 		{
 			headers: {
@@ -584,7 +585,7 @@ export const selectFiles = async (
 ): Promise<void> => {
 	try {
 		const response = await realDebridAxios.post(
-			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/selectFiles/${id}`,
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/selectFiles/${id}`,
 			qs.stringify({ files: files.join(',') }),
 			{
 				headers: {
@@ -609,7 +610,7 @@ export const deleteTorrent = async (
 ): Promise<void> => {
 	try {
 		const response = await realDebridAxios.delete(
-			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/torrents/delete/${id}`,
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/delete/${id}`,
 			{
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
@@ -659,7 +660,7 @@ export const unrestrictLink = async (
 		}
 
 		const response = await realDebridAxios.post<UnrestrictResponse>(
-			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.proxy) + config.realDebridHostname}/rest/1.0/unrestrict/link`,
+			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/unrestrict/link`,
 			params.toString(),
 			{
 				headers: {

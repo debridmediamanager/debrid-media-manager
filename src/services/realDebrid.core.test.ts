@@ -4,6 +4,7 @@ vi.mock('next/config', () => ({
 	default: () => ({
 		publicRuntimeConfig: {
 			proxy: 'https://proxy.test/',
+			authProxy: 'https://authproxy.test/',
 			realDebridHostname: 'https://rd.test',
 			realDebridClientId: 'CLIENT_ID',
 		},
