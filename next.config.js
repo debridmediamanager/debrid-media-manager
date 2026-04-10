@@ -15,10 +15,7 @@ const nextConfig = {
 		return config;
 	},
 	async rewrites() {
-		return [
-			// Support external callers using /anticors path by rewriting to API route
-			{ source: '/anticors', destination: '/api/anticors' },
-		];
+		return [];
 	},
 	images: {
 		unoptimized: true,
@@ -90,8 +87,8 @@ const nextConfig = {
 	publicRuntimeConfig: {
 		// Will be available on both server and client
 		externalSearchApiHostname: process.env.EXTERNAL_SEARCH_API_HOSTNAME,
-		// Use external cors.* subdomains (rewritten /anticors -> /api/anticors)
-		proxy: 'https://#num#.cors.debridmediamanager.com/api/anticors?url=',
+		// Cloudflare Worker anticors proxy
+		proxy: 'https://anticors.debridmediamanager.com/anticors?url=',
 		realDebridHostname: 'https://app.real-debrid.com',
 		realDebridClientId: 'X245A4XAIBGVM',
 		allDebridHostname: 'https://api.alldebrid.com',

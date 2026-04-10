@@ -94,9 +94,8 @@ function calculateRetryDelay(retryCount: number): number {
 	return delayWithJitter;
 }
 
-// Function to get proxy URL with random number for load balancing
 function getProxyUrl(baseUrl: string): string {
-	return baseUrl.replace('#num#', Math.floor(Math.random() * 1000).toString());
+	return baseUrl;
 }
 
 // Get the base URL for TorBox API (with or without proxy)
