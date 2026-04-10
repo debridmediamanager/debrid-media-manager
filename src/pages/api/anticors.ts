@@ -5,9 +5,10 @@ import {
 
 import { randomUUID } from 'crypto';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import { Agent } from 'undici';
+import { Agent, fetch as undiciFetch } from 'undici';
 
 // Force IPv6 for upstream requests to avoid IPv4 rate limiting
+// Global fetch ignores the dispatcher option; must use undici.fetch directly
 const ipv6Dispatcher = new Agent({ connect: { family: 6 } });
 
 // Origins allowed to use this cross-origin proxy
@@ -186,12 +187,12 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 	}
 
 	try {
-		const upstreamResponse = await fetch(parsedProxyUrl.toString(), {
+		const upstreamResponse = (await undiciFetch(parsedProxyUrl.toString(), {
 			method: req.method,
 			headers: proxyHeaders,
-			body: requestBody,
+			body: requestBody as any,
 			dispatcher: ipv6Dispatcher,
-		} as any);
+		})) as unknown as Response;
 
 		const responseContentType = upstreamResponse.headers.get('content-type') || '';
 		const responseBody = await buildResponseBody(upstreamResponse, responseContentType);

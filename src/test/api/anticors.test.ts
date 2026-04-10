@@ -1,7 +1,15 @@
 import handler from '@/pages/api/anticors';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import type { Mock } from 'vitest';
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+const { mockFetch } = vi.hoisted(() => ({
+	mockFetch: vi.fn(),
+}));
+
+vi.mock('undici', () => ({
+	Agent: vi.fn(() => ({})),
+	fetch: mockFetch,
+}));
 
 vi.mock('crypto', async () => {
 	const actual = await vi.importActual<typeof import('crypto')>('crypto');
@@ -9,16 +17,6 @@ vi.mock('crypto', async () => {
 		...actual,
 		randomUUID: vi.fn(() => 'uuid-123'),
 	};
-});
-
-const originalFetch = global.fetch;
-
-beforeAll(() => {
-	global.fetch = vi.fn();
-});
-
-afterAll(() => {
-	global.fetch = originalFetch;
 });
 
 beforeEach(() => {
@@ -85,8 +83,7 @@ describe('/api/anticors', () => {
 				'x-total-count': '1',
 			},
 		});
-		const fetchMock = global.fetch as unknown as Mock;
-		fetchMock.mockResolvedValue(upstreamResponse);
+		mockFetch.mockResolvedValue(upstreamResponse);
 
 		const req = createMockRequest({
 			method: 'GET',
@@ -104,7 +101,7 @@ describe('/api/anticors', () => {
 
 		await handler(req, res);
 
-		expect(global.fetch).toHaveBeenCalledWith(
+		expect(mockFetch).toHaveBeenCalledWith(
 			expect.stringContaining('https://api.real-debrid.com/resource?t='),
 			expect.objectContaining({
 				method: 'GET',
@@ -139,8 +136,7 @@ describe('/api/anticors', () => {
 	});
 
 	it('handles upstream failures', async () => {
-		const fetchMock = global.fetch as unknown as Mock;
-		fetchMock.mockRejectedValue(new Error('network'));
+		mockFetch.mockRejectedValue(new Error('network'));
 
 		const req = createMockRequest({
 			method: 'GET',
