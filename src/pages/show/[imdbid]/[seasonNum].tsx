@@ -260,6 +260,8 @@ const TvSearch: FunctionComponent = () => {
 			});
 		};
 
+		const titleStartsWithYear = showInfo ? /^\d{4}\b/.test(showInfo.title) : false;
+
 		// Helper to process results from any source
 		const processSourceResults = async (sourceResults: SearchResult[], sourceName: string) => {
 			if (!isMounted.current) return;
@@ -268,7 +270,10 @@ const TvSearch: FunctionComponent = () => {
 			setSearchResults((prevResults) => {
 				const existingHashes = new Set(prevResults.map((r) => r.hash));
 				const newUniqueResults = sourceResults.filter(
-					(r) => r.hash && !existingHashes.has(r.hash)
+					(r) =>
+						r.hash &&
+						!existingHashes.has(r.hash) &&
+						(titleStartsWithYear || !/^\d{4}\)/.test(r.title))
 				);
 
 				if (newUniqueResults.length === 0) {

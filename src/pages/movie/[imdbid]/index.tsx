@@ -303,13 +303,18 @@ const MovieSearch: FunctionComponent = () => {
 			});
 		};
 
+		const titleStartsWithYear = /^\d{4}\b/.test(movieInfo.title);
+
 		const processSourceResults = async (sourceResults: SearchResult[], sourceName: string) => {
 			if (!isMounted.current) return;
 
 			setSearchResults((prevResults) => {
 				const existingHashes = new Set(prevResults.map((r) => r.hash));
 				const newUniqueResults = sourceResults.filter(
-					(r) => r.hash && !existingHashes.has(r.hash)
+					(r) =>
+						r.hash &&
+						!existingHashes.has(r.hash) &&
+						(titleStartsWithYear || !/^\d{4}\)/.test(r.title))
 				);
 
 				if (newUniqueResults.length === 0) {
