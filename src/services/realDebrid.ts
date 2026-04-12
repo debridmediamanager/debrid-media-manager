@@ -380,7 +380,7 @@ export const getToken = async (
 	clientId: string,
 	clientSecret: string,
 	refreshToken: string,
-	_bare: boolean = false
+	bare: boolean = false
 ) => {
 	try {
 		const params = new URLSearchParams();
@@ -389,10 +389,11 @@ export const getToken = async (
 		params.append('code', refreshToken);
 		params.append('grant_type', 'http://oauth.net/grant_type/device/1.0');
 
-		// Always use CF Worker proxy - this is an unauthenticated endpoint
-		// that gets rate-limited by IP when called directly
+		const baseUrl = bare
+			? 'https://app.real-debrid.com'
+			: `${getProxyUrl(config.proxy)}${config.realDebridHostname}`;
 		const response = await genericAxios.post<AccessTokenResponse>(
-			`${getProxyUrl(config.proxy)}${config.realDebridHostname}/oauth/v2/token`,
+			`${baseUrl}/oauth/v2/token`,
 			params.toString(),
 			{
 				headers: {
