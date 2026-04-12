@@ -112,6 +112,11 @@ describe('extractToken', () => {
 		expect(extractToken(req)).toBeNull();
 	});
 
+	it('accepts bearer header with lowercase scheme', () => {
+		const req = mockReq({ headers: { authorization: 'bearer mytoken123' } });
+		expect(extractToken(req)).toBe('mytoken123');
+	});
+
 	it('returns null for empty Bearer token', () => {
 		const req = mockReq({ headers: { authorization: 'Bearer ' } });
 		expect(extractToken(req)).toBeNull();
