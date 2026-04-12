@@ -491,7 +491,11 @@ export async function getUserTorrentsList(
 			}
 		}
 
-		return { data, totalCount: totalCountValue };
+		// RD occasionally returns a non-array body (e.g. empty object) on 200.
+		// Normalize to an empty array so callers can safely iterate.
+		const safeData = Array.isArray(data) ? data : [];
+
+		return { data: safeData, totalCount: totalCountValue };
 	} catch (error: any) {
 		const status = axios.isAxiosError(error) ? (error.response?.status ?? 500) : 500;
 		recordRdOperationEvent('GET /torrents', status);
