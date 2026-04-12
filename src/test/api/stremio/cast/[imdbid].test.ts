@@ -10,6 +10,13 @@ vi.mock('@/utils/getStreamUrl', () => ({
 	getStreamUrl: vi.fn(),
 }));
 vi.mock('@/utils/castApiHelpers', () => ({
+	extractToken: vi.fn(
+		(req: { query: Record<string, string>; headers: Record<string, string> }) => {
+			const auth = req.headers?.authorization;
+			if (auth && auth.toLowerCase().startsWith('bearer ')) return auth.substring(7).trim();
+			return req.query?.token ?? null;
+		}
+	),
 	generateUserId: vi.fn(),
 }));
 
@@ -34,7 +41,7 @@ describe('/api/stremio/cast/[imdbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
 			status: 'error',
-			errorMessage: 'Missing "token", "hash", "fileId" or "mediaType" query parameter',
+			errorMessage: 'Missing "token", "hash", "fileId" or "mediaType" parameter',
 		});
 	});
 
@@ -49,7 +56,7 @@ describe('/api/stremio/cast/[imdbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
 			status: 'error',
-			errorMessage: 'Invalid "token", "hash", "fileId" or "mediaType" query parameter',
+			errorMessage: 'Invalid "token", "hash", "fileId" or "mediaType" parameter',
 		});
 	});
 

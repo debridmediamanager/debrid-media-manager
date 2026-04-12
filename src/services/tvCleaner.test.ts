@@ -23,6 +23,10 @@ const {
 	sortByFileSizeMock: vi.fn(),
 }));
 
+vi.mock('./mdblistClient', () => ({
+	getMdblistClient: vi.fn(() => ({})),
+}));
+
 vi.mock('@/utils/checks', () => ({
 	filterByTvConditions: filterByTvConditionsMock,
 	getAllPossibleTitles: getAllPossibleTitlesMock,
