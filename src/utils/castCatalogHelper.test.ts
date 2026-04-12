@@ -66,7 +66,7 @@ describe('castCatalogHelper', () => {
 
 		const result = await getDMMLibrary('user-1', 2);
 
-		expect(getUserTorrentsListMock).toHaveBeenCalledWith('token', PAGE_SIZE, 2, false);
+		expect(getUserTorrentsListMock).toHaveBeenCalledWith('token', PAGE_SIZE, 2, true);
 		expect(result.status).toBe(200);
 		expect(result.data?.metas).toEqual([
 			{ id: 'dmm:1', name: 'First', type: 'other' },

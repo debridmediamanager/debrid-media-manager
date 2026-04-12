@@ -64,7 +64,7 @@ describe('/api/stremio/[userid]/play/[link]', () => {
 			'fresh-token',
 			expect.stringContaining('https://real-debrid.com/d/abcdef123456'),
 			'127.0.0.1',
-			false
+			true
 		);
 		expect(res.redirect).toHaveBeenCalledWith('https://rd/download');
 	});

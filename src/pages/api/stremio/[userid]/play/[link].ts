@@ -60,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	try {
 		const ipAddress = getClientIpFromRequest(req);
-		const unrestrict = await unrestrictLink(response.access_token, rdLink, ipAddress, false);
+		const unrestrict = await unrestrictLink(response.access_token, rdLink, ipAddress, true);
 		if (!unrestrict) {
 			console.error('Failed to unrestrict link:', rdLink);
 

@@ -106,7 +106,7 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 
 		await handler(req, res);
 
-		expect(mockGetTorrentInfo).toHaveBeenCalledWith('token', '1', false);
+		expect(mockGetTorrentInfo).toHaveBeenCalledWith('token', '1', true);
 		expect(mockDbSaveCast).toHaveBeenCalledWith(
 			'tt1234567',
 			'user-1',

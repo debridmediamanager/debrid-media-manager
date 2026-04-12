@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const [torrentId, hash] = torrentIdPlusHash.split(':');
 
 	// get torrent info
-	const tInfo = await getTorrentInfo(rdToken, torrentId, false);
+	const tInfo = await getTorrentInfo(rdToken, torrentId, true);
 	const selectedFiles = tInfo.files.filter((f) => f.selected);
 	// check if length of selected files is equal to length of links
 	if (selectedFiles.length !== tInfo.links.length) {

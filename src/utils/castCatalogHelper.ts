@@ -28,7 +28,7 @@ export async function getDMMLibrary(userid: string, page: number) {
 		return { error: 'Go to DMM and connect your RD account', status: 500 };
 	}
 
-	const results = await getUserTorrentsList(response.access_token, PAGE_SIZE, page, false);
+	const results = await getUserTorrentsList(response.access_token, PAGE_SIZE, page, true);
 	if (!results) {
 		return { error: 'Failed to get user torrents list', status: 500 };
 	}
@@ -54,7 +54,7 @@ export async function getDMMLibrary(userid: string, page: number) {
 }
 
 export async function getDMMTorrent(userid: string, torrentID: string, token: string) {
-	const info = await getTorrentInfo(token, torrentID, false);
+	const info = await getTorrentInfo(token, torrentID, true);
 	if (!info) {
 		return { error: 'Failed to get torrent info', status: 500 };
 	}
