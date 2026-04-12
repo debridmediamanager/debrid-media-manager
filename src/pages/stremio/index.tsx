@@ -1,15 +1,7 @@
 import { CastSettingsPanel } from '@/components/CastSettingsPanel';
 import { useCastToken } from '@/hooks/castToken';
 import { withAuth } from '@/utils/withAuth';
-import {
-	AlertTriangle,
-	Cast,
-	ClipboardList,
-	EyeOff,
-	Globe,
-	Popcorn,
-	Wand2,
-} from 'lucide-react';
+import { AlertTriangle, Cast, ClipboardList, EyeOff, Globe, Popcorn, Wand2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -124,7 +116,7 @@ export function StremioPage() {
 								href={`stremio://${window.location.origin.replace(
 									/^https?:\/\//,
 									''
-								)}/api/stremio/${dmmCastToken}/manifest-no-catalog.json`}
+								)}/api/stremio/${dmmCastToken}/no-catalog/manifest.json`}
 								className="haptic-sm m-1 rounded border border-gray-600 bg-gray-800/50 px-3 py-1 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700/50"
 							>
 								<Wand2 className="mr-1 inline-block h-3 w-3 text-gray-400" />
@@ -132,7 +124,7 @@ export function StremioPage() {
 							</Link>
 							<Link
 								href={`https://web.stremio.com/#/addons?addon=${encodeURIComponent(
-									`${window.location.origin}/api/stremio/${dmmCastToken}/manifest-no-catalog.json`
+									`${window.location.origin}/api/stremio/${dmmCastToken}/no-catalog/manifest.json`
 								)}`}
 								className="haptic-sm m-1 rounded border border-gray-600 bg-gray-800/50 px-3 py-1 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700/50"
 								target="_blank"
