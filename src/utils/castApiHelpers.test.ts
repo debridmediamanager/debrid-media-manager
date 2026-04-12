@@ -117,6 +117,11 @@ describe('extractToken', () => {
 		expect(extractToken(req)).toBe('mytoken123');
 	});
 
+	it('accepts bearer header with tab or multiple spaces after scheme', () => {
+		const req = mockReq({ headers: { authorization: 'Bearer\t\tmytoken123' } });
+		expect(extractToken(req)).toBe('mytoken123');
+	});
+
 	it('returns null for empty Bearer token', () => {
 		const req = mockReq({ headers: { authorization: 'Bearer ' } });
 		expect(extractToken(req)).toBeNull();

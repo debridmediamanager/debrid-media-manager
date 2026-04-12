@@ -9,16 +9,14 @@ vi.mock('@/services/repository');
 vi.mock('@/utils/getStreamUrl', () => ({
 	getStreamUrl: vi.fn(),
 }));
-vi.mock('@/utils/castApiHelpers', () => ({
-	extractToken: vi.fn(
-		(req: { query: Record<string, string>; headers: Record<string, string> }) => {
-			const auth = req.headers?.authorization;
-			if (auth && auth.toLowerCase().startsWith('bearer ')) return auth.substring(7).trim();
-			return req.query?.token ?? null;
-		}
-	),
-	generateUserId: vi.fn(),
-}));
+vi.mock('@/utils/castApiHelpers', async () => {
+	const actual =
+		await vi.importActual<typeof import('@/utils/castApiHelpers')>('@/utils/castApiHelpers');
+	return {
+		...actual,
+		generateUserId: vi.fn(),
+	};
+});
 
 const mockRepository = vi.mocked(repository);
 const mockGetStreamUrl = vi.mocked(getStreamUrl);

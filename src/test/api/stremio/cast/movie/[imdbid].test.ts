@@ -14,16 +14,14 @@ vi.mock('@/services/repository', () => ({
 	},
 }));
 
-vi.mock('@/utils/castApiHelpers', () => ({
-	extractToken: vi.fn(
-		(req: { query: Record<string, string>; headers: Record<string, string> }) => {
-			const auth = req.headers?.authorization;
-			if (auth && auth.toLowerCase().startsWith('bearer ')) return auth.substring(7).trim();
-			return req.query?.token ?? null;
-		}
-	),
-	generateUserId: mockGenerateUserId,
-}));
+vi.mock('@/utils/castApiHelpers', async () => {
+	const actual =
+		await vi.importActual<typeof import('@/utils/castApiHelpers')>('@/utils/castApiHelpers');
+	return {
+		...actual,
+		generateUserId: mockGenerateUserId,
+	};
+});
 
 vi.mock('@/utils/getStreamUrl', () => ({
 	getBiggestFileStreamUrl: mockGetBiggestFileStreamUrl,

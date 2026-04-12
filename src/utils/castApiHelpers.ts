@@ -18,9 +18,12 @@ export const validateMethod = (
 export const extractToken = (req: NextApiRequest): string | null => {
 	// Check Authorization: Bearer header first
 	const authHeader = req.headers.authorization;
-	if (authHeader && authHeader.toLowerCase().startsWith('bearer ')) {
-		const token = authHeader.substring(7).trim();
-		if (token) return token;
+	if (authHeader) {
+		const bearerMatch = authHeader.match(/^Bearer\s+(.+)$/i);
+		if (bearerMatch) {
+			const token = bearerMatch[1].trim();
+			if (token) return token;
+		}
 	}
 	// Fall back to query param
 	const queryToken = req.query.token;
