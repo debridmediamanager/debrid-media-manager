@@ -98,7 +98,9 @@ describe('/api/info/movie - trailer fallback sources', () => {
 			json: vi.fn(),
 		} as unknown as NextApiResponse;
 
+		process.env.TMDB_KEY = 'test-key';
 		await handler(req, res);
+		delete process.env.TMDB_KEY;
 
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(
