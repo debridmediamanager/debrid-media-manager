@@ -99,9 +99,12 @@ function getProxyUrl(baseUrl: string): string {
 }
 
 // Get the base URL for TorBox API (with or without proxy)
+// Server-side calls bypass the proxy (the CF Worker rejects them with 403);
+// client-side calls go through the proxy to avoid CORS.
 function getTorBoxBaseUrl(): string {
 	const torboxHost = config.torboxHostname || BASE_URL;
-	if (config.proxy) {
+	const isServer = typeof window === 'undefined';
+	if (config.proxy && !isServer) {
 		return `${getProxyUrl(config.proxy)}${torboxHost}`;
 	}
 	return torboxHost;

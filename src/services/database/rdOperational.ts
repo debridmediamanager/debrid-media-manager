@@ -113,41 +113,27 @@ export class RdOperationalService extends DatabaseClient {
 		const isOther = !isSuccess && !isFailure; // 3xx, 4xx
 
 		try {
-			// First, try to get existing record to compute new successRate
-			const existing = await this.prisma.rdOperationalHourly.findUnique({
+			// Atomic upsert avoids the race where two concurrent writers both see
+			// no existing row and both try to create, hitting the unique constraint.
+			// successRate is always recomputed from counts on read, so it's unused here.
+			await this.prisma.rdOperationalHourly.upsert({
 				where: { hour_operation: { hour, operation } },
+				create: {
+					hour,
+					operation,
+					totalCount: 1,
+					successCount: isSuccess ? 1 : 0,
+					failureCount: isFailure ? 1 : 0,
+					otherCount: isOther ? 1 : 0,
+					successRate: isSuccess ? 1 : 0,
+				},
+				update: {
+					totalCount: { increment: 1 },
+					...(isSuccess && { successCount: { increment: 1 } }),
+					...(isFailure && { failureCount: { increment: 1 } }),
+					...(isOther && { otherCount: { increment: 1 } }),
+				},
 			});
-
-			if (existing) {
-				const newSuccessCount = existing.successCount + (isSuccess ? 1 : 0);
-				const newFailureCount = existing.failureCount + (isFailure ? 1 : 0);
-				const considered = newSuccessCount + newFailureCount;
-				const newSuccessRate = considered > 0 ? newSuccessCount / considered : 0;
-
-				await this.prisma.rdOperationalHourly.update({
-					where: { hour_operation: { hour, operation } },
-					data: {
-						totalCount: { increment: 1 },
-						...(isSuccess && { successCount: { increment: 1 } }),
-						...(isFailure && { failureCount: { increment: 1 } }),
-						...(isOther && { otherCount: { increment: 1 } }),
-						successRate: newSuccessRate,
-					},
-				});
-			} else {
-				const successRate = isSuccess ? 1 : 0;
-				await this.prisma.rdOperationalHourly.create({
-					data: {
-						hour,
-						operation,
-						totalCount: 1,
-						successCount: isSuccess ? 1 : 0,
-						failureCount: isFailure ? 1 : 0,
-						otherCount: isOther ? 1 : 0,
-						successRate,
-					},
-				});
-			}
 		} catch (error: any) {
 			if (error?.code === 'P2021' || error?.message?.includes('does not exist')) {
 				return;
