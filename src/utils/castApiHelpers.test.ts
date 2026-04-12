@@ -78,6 +78,13 @@ function mockRes(): NextApiResponse {
 }
 
 describe('extractToken', () => {
+	it('returns null when Authorization header is an array', () => {
+		const req = mockReq({
+			headers: { authorization: ['Bearer tokenA', 'Bearer tokenB'] as any },
+		});
+		expect(extractToken(req)).toBeNull();
+	});
+
 	it('returns token from Authorization Bearer header', () => {
 		const req = mockReq({ headers: { authorization: 'Bearer mytoken123' } });
 		expect(extractToken(req)).toBe('mytoken123');
