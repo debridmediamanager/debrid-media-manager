@@ -102,7 +102,17 @@ describe('/api/info/show - trailer fallback sources', () => {
 			json: vi.fn(),
 		} as unknown as NextApiResponse;
 
-		await handler(req, res);
+		const previousTmdbKey = process.env.TMDB_KEY;
+		try {
+			process.env.TMDB_KEY = 'test-key';
+			await handler(req, res);
+		} finally {
+			if (previousTmdbKey === undefined) {
+				delete process.env.TMDB_KEY;
+			} else {
+				process.env.TMDB_KEY = previousTmdbKey;
+			}
+		}
 
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(

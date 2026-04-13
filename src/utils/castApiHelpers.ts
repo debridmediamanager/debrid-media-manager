@@ -15,9 +15,28 @@ export const validateMethod = (
 	return true;
 };
 
+export const extractToken = (req: NextApiRequest): string | null => {
+	// Check Authorization: Bearer header first
+	const authHeader = req.headers.authorization;
+	if (typeof authHeader === 'string') {
+		const bearerMatch = authHeader.match(/^Bearer\s+(.+)$/i);
+		if (bearerMatch) {
+			const token = bearerMatch[1].trim();
+			if (token) return token;
+		}
+	}
+	// Fall back to query param
+	const queryToken = req.query.token;
+	if (queryToken && typeof queryToken === 'string') return queryToken;
+	// Fall back to request body
+	const bodyToken = req.body?.token;
+	if (bodyToken && typeof bodyToken === 'string') return bodyToken;
+	return null;
+};
+
 export const validateToken = (req: NextApiRequest, res: NextApiResponse): string | null => {
-	const token = req.query.token || req.body.token;
-	if (!token || typeof token !== 'string') {
+	const token = extractToken(req);
+	if (!token) {
 		res.status(401).json({ error: 'Invalid or missing token' });
 		return null;
 	}

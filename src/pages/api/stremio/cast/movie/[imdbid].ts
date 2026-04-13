@@ -1,5 +1,5 @@
 import { repository as db } from '@/services/repository';
-import { generateUserId } from '@/utils/castApiHelpers';
+import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getBiggestFileStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -9,18 +9,19 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
 
-	const { imdbid, token, hash } = req.query;
+	const { imdbid, hash } = req.query;
+	const token = extractToken(req);
 	if (!token || !hash) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Missing "token" or "hash" query parameter',
+			errorMessage: 'Missing "token" or "hash" parameter',
 		});
 		return;
 	}
-	if (typeof imdbid !== 'string' || typeof token !== 'string' || typeof hash !== 'string') {
+	if (typeof imdbid !== 'string' || typeof hash !== 'string') {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Invalid "token" or "hash" query parameter',
+			errorMessage: 'Invalid "token" or "hash" parameter',
 		});
 		return;
 	}

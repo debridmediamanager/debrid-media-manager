@@ -9,9 +9,14 @@ vi.mock('@/services/repository');
 vi.mock('@/utils/getStreamUrl', () => ({
 	getStreamUrl: vi.fn(),
 }));
-vi.mock('@/utils/castApiHelpers', () => ({
-	generateUserId: vi.fn(),
-}));
+vi.mock('@/utils/castApiHelpers', async () => {
+	const actual =
+		await vi.importActual<typeof import('@/utils/castApiHelpers')>('@/utils/castApiHelpers');
+	return {
+		...actual,
+		generateUserId: vi.fn(),
+	};
+});
 
 const mockRepository = vi.mocked(repository);
 const mockGetStreamUrl = vi.mocked(getStreamUrl);
@@ -34,7 +39,7 @@ describe('/api/stremio/cast/[imdbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
 			status: 'error',
-			errorMessage: 'Missing "token", "hash", "fileId" or "mediaType" query parameter',
+			errorMessage: 'Missing "token", "hash", "fileId" or "mediaType" parameter',
 		});
 	});
 
@@ -49,7 +54,7 @@ describe('/api/stremio/cast/[imdbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
 			status: 'error',
-			errorMessage: 'Invalid "token", "hash", "fileId" or "mediaType" query parameter',
+			errorMessage: 'Invalid "token", "hash", "fileId" or "mediaType" parameter',
 		});
 	});
 

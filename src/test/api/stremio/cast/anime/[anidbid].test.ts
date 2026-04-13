@@ -8,9 +8,14 @@ const { mockGenerateUserId, mockSaveCast, mockGetStreamUrl } = vi.hoisted(() => 
 	mockGetStreamUrl: vi.fn(),
 }));
 
-vi.mock('@/utils/castApiHelpers', () => ({
-	generateUserId: mockGenerateUserId,
-}));
+vi.mock('@/utils/castApiHelpers', async () => {
+	const actual =
+		await vi.importActual<typeof import('@/utils/castApiHelpers')>('@/utils/castApiHelpers');
+	return {
+		...actual,
+		generateUserId: mockGenerateUserId,
+	};
+});
 
 vi.mock('@/services/repository', () => ({
 	repository: {
@@ -44,7 +49,7 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
 			status: 'error',
-			errorMessage: 'Missing "token", "hash" or "fileIds" query parameter',
+			errorMessage: 'Missing "token", "hash" or "fileIds" parameter',
 		});
 	});
 
@@ -59,7 +64,7 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
 			status: 'error',
-			errorMessage: 'Invalid "token", "hash" or "fileIds" query parameter',
+			errorMessage: 'Invalid "token", "hash" or "fileIds" parameter',
 		});
 	});
 

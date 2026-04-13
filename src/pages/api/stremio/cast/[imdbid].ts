@@ -1,5 +1,5 @@
 import { repository as db } from '@/services/repository';
-import { generateUserId } from '@/utils/castApiHelpers';
+import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getStreamUrl } from '@/utils/getStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -9,24 +9,24 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
 
-	const { imdbid, token, hash, fileId, mediaType } = req.query;
+	const { imdbid, hash, fileId, mediaType } = req.query;
+	const token = extractToken(req);
 	if (!token || !hash || !fileId || !mediaType) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Missing "token", "hash", "fileId" or "mediaType" query parameter',
+			errorMessage: 'Missing "token", "hash", "fileId" or "mediaType" parameter',
 		});
 		return;
 	}
 	if (
 		typeof imdbid !== 'string' ||
-		typeof token !== 'string' ||
 		typeof hash !== 'string' ||
 		typeof fileId !== 'string' ||
 		typeof mediaType !== 'string'
 	) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Invalid "token", "hash", "fileId" or "mediaType" query parameter',
+			errorMessage: 'Invalid "token", "hash", "fileId" or "mediaType" parameter',
 		});
 		return;
 	}
