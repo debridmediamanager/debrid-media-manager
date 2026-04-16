@@ -376,36 +376,68 @@ export const getCredentials = async (deviceCode: string) => {
 	}
 };
 
+// In-memory access token cache keyed by clientId (unique per user)
+const accessTokenCache = new Map<string, { data: AccessTokenResponse; expiresAt: number }>();
+// Dedup concurrent token requests for the same user
+const inflightTokenRequests = new Map<string, Promise<AccessTokenResponse>>();
+
 export const getToken = async (
 	clientId: string,
 	clientSecret: string,
 	refreshToken: string,
 	bare: boolean = false
-) => {
-	try {
-		const params = new URLSearchParams();
-		params.append('client_id', clientId);
-		params.append('client_secret', clientSecret);
-		params.append('code', refreshToken);
-		params.append('grant_type', 'http://oauth.net/grant_type/device/1.0');
-
-		const baseUrl = bare
-			? 'https://app.real-debrid.com'
-			: `${getProxyUrl(config.proxy)}${config.realDebridHostname}`;
-		const response = await genericAxios.post<AccessTokenResponse>(
-			`${baseUrl}/oauth/v2/token`,
-			params.toString(),
-			{
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-			}
-		);
-		return response.data;
-	} catch (error: any) {
-		console.error('Error fetching access token:', error.message);
-		throw error;
+): Promise<AccessTokenResponse> => {
+	// Return cached token if still valid
+	const cached = accessTokenCache.get(clientId);
+	if (cached && cached.expiresAt > Date.now()) {
+		return cached.data;
 	}
+
+	// Dedup concurrent requests for the same user
+	const inflight = inflightTokenRequests.get(clientId);
+	if (inflight) return inflight;
+
+	const fetchPromise = (async (): Promise<AccessTokenResponse> => {
+		try {
+			const params = new URLSearchParams();
+			params.append('client_id', clientId);
+			params.append('client_secret', clientSecret);
+			params.append('code', refreshToken);
+			params.append('grant_type', 'http://oauth.net/grant_type/device/1.0');
+
+			const baseUrl = bare
+				? 'https://app.real-debrid.com'
+				: `${getProxyUrl(config.proxy)}${config.realDebridHostname}`;
+			const response = await genericAxios.post<AccessTokenResponse>(
+				`${baseUrl}/oauth/v2/token`,
+				params.toString(),
+				{
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+				}
+			);
+
+			// Cache with 5 minute safety margin before expiry
+			const expiresIn = response.data.expires_in || 3600;
+			accessTokenCache.set(clientId, {
+				data: response.data,
+				expiresAt: Date.now() + Math.max(expiresIn - 300, 60) * 1000,
+			});
+
+			return response.data;
+		} catch (error: any) {
+			// Clear stale cache on auth errors so next request retries fresh
+			accessTokenCache.delete(clientId);
+			console.error('Error fetching access token:', error.message);
+			throw error;
+		} finally {
+			inflightTokenRequests.delete(clientId);
+		}
+	})();
+
+	inflightTokenRequests.set(clientId, fetchPromise);
+	return fetchPromise;
 };
 
 // Simple promise cache to prevent duplicate requests
@@ -754,5 +786,9 @@ export const __testing = {
 	resetTimeISOCache: () => {
 		timeISOCache.promise = null;
 		timeISOCache.timestamp = 0;
+	},
+	clearAccessTokenCache: () => {
+		accessTokenCache.clear();
+		inflightTokenRequests.clear();
 	},
 };

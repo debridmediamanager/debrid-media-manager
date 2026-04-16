@@ -44,6 +44,7 @@ beforeEach(() => {
 	genericAxios.post = vi.fn();
 	__testing.clearUserRequestCache();
 	__testing.resetTimeISOCache();
+	__testing.clearAccessTokenCache();
 });
 
 describe('RealDebrid auth helpers', () => {
