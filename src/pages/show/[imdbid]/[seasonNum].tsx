@@ -714,11 +714,11 @@ const TvSearch: FunctionComponent = () => {
 		window.open(`stremio://detail/series/${imdbid}/${imdbid}:${seasonNum}:1`);
 	}
 
-	async function handleCastAllDebrid(hash: string, fileIds: string[]) {
+	async function handleCastAllDebrid(hash: string, files: { filename: string }[]) {
 		await toast.promise(
-			handleCastTvShowAllDebrid(imdbid as string, adKey!, hash, fileIds),
+			handleCastTvShowAllDebrid(imdbid as string, adKey!, hash, files),
 			{
-				loading: `Casting ${fileIds.length} episodes (AllDebrid)...`,
+				loading: `Casting ${files.length} episodes (AllDebrid)...`,
 				success: 'Casting succeeded.',
 				error: 'Casting failed.',
 			},

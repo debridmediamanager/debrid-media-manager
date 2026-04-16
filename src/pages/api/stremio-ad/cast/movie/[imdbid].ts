@@ -1,67 +1,56 @@
 import { repository as db } from '@/services/repository';
 import { generateAllDebridUserId } from '@/utils/allDebridCastApiHelpers';
-import { getBiggestFileAllDebridStreamUrl } from '@/utils/getAllDebridStreamUrl';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-// MOVIE cast: gets a stream URL from AllDebrid and saves it to the database
+// MOVIE cast (save): the client (browser) performs the AllDebrid magnet upload +
+// file discovery — AllDebrid blocks `magnet/upload` from datacenter IPs, so the
+// server can't do it. This endpoint just persists the resulting metadata.
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
 
-	const { imdbid, apiKey, hash } = req.query;
-	if (!apiKey || !hash) {
-		res.status(400).json({
-			status: 'error',
-			errorMessage: 'Missing "apiKey" or "hash" query parameter',
-		});
+	if (req.method !== 'POST') {
+		res.setHeader('Allow', 'POST');
+		res.status(405).json({ status: 'error', errorMessage: 'Method not allowed' });
 		return;
 	}
-	if (typeof imdbid !== 'string' || typeof apiKey !== 'string' || typeof hash !== 'string') {
-		res.status(400).json({
-			status: 'error',
-			errorMessage: 'Invalid "apiKey" or "hash" query parameter',
-		});
+
+	const { imdbid } = req.query;
+	const { apiKey, hash, magnetId, fileIndex, streamUrl, filename, fileSize } = req.body ?? {};
+
+	if (
+		typeof imdbid !== 'string' ||
+		typeof apiKey !== 'string' ||
+		typeof hash !== 'string' ||
+		typeof magnetId !== 'number' ||
+		typeof fileIndex !== 'number' ||
+		typeof streamUrl !== 'string' ||
+		typeof filename !== 'string' ||
+		typeof fileSize !== 'number'
+	) {
+		res.status(400).json({ status: 'error', errorMessage: 'Missing or invalid fields' });
 		return;
 	}
 
 	try {
-		const [streamUrl, fileSize, magnetId, fileIndex, filename] =
-			await getBiggestFileAllDebridStreamUrl(apiKey, hash);
-
-		if (streamUrl) {
-			const message = 'You can now stream the movie in Stremio';
-
-			const userid = await generateAllDebridUserId(apiKey);
-
-			await db.saveAllDebridCast(
-				imdbid,
-				userid,
-				hash,
-				filename, // url field stores the filename for display
-				streamUrl, // link field stores the actual stream URL
-				fileSize,
-				magnetId,
-				fileIndex
-			);
-
-			res.status(200).json({
-				status: 'success',
-				message,
-				filename,
-			});
-			return;
-		} else {
-			res.status(500).json({
-				status: 'error',
-				errorMessage: 'Failed to get stream URL',
-			});
-		}
+		const userid = await generateAllDebridUserId(apiKey);
+		await db.saveAllDebridCast(
+			imdbid,
+			userid,
+			hash,
+			filename,
+			streamUrl,
+			fileSize,
+			magnetId,
+			fileIndex
+		);
+		res.status(200).json({
+			status: 'success',
+			message: 'You can now stream the movie in Stremio',
+			filename,
+		});
 	} catch (e) {
 		console.error(e);
 		const message = e instanceof Error ? e.message : String(e);
-		res.status(500).json({
-			status: 'error',
-			errorMessage: message,
-		});
-		return;
+		res.status(500).json({ status: 'error', errorMessage: message });
 	}
 }

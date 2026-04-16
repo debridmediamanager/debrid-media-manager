@@ -94,12 +94,19 @@ export async function getAllDebridDMMTorrent(apiKey: string, magnetID: string, u
 		// Flatten files
 		const flatFiles = flattenFiles(magnetFiles.files || []);
 
-		// Filter for video files
+		// Filter for video files, then sort by filename so the index assigned here
+		// matches the index that /play/[hash].ts resolves (it sorts by filename too).
 		const videoExtensions = ['.mkv', '.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.m4v'];
-		const videoFiles = flatFiles.filter((f) => {
-			const filename = f.path.split('/').pop()?.toLowerCase() || '';
-			return videoExtensions.some((ext) => filename.endsWith(ext));
-		});
+		const videoFiles = flatFiles
+			.filter((f) => {
+				const filename = f.path.split('/').pop()?.toLowerCase() || '';
+				return videoExtensions.some((ext) => filename.endsWith(ext));
+			})
+			.sort((a, b) => {
+				const aName = a.path.split('/').pop() || '';
+				const bName = b.path.split('/').pop() || '';
+				return aName.localeCompare(bName);
+			});
 
 		const videos = videoFiles.map((file, index) => ({
 			id: `dmm-ad:${magnetID}:${index}`,
@@ -113,9 +120,6 @@ export async function getAllDebridDMMTorrent(apiKey: string, magnetID: string, u
 				},
 			],
 		}));
-
-		// Sort videos by title
-		videos.sort((a, b) => a.title.localeCompare(b.title));
 
 		const totalSize = flatFiles.reduce((sum, f) => sum + f.size, 0);
 

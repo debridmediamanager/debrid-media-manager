@@ -1,15 +1,31 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { runConcurrentFunctions } from './batch';
+import {
+	findVideoByName,
+	pickBiggestVideo,
+	prepareMagnetForCast,
+} from './allDebridCastClientPipeline';
 import { groupBy } from './groupBy';
 import { castToastOptions } from './toastOptions';
 
+export interface CastableAdFile {
+	filename: string;
+}
+
 export const handleCastMovieAllDebrid = async (imdbId: string, apiKey: string, hash: string) => {
 	try {
-		const resp = await axios.get(
-			`/api/stremio-ad/cast/movie/${imdbId}?apiKey=${apiKey}&hash=${hash}`
-		);
-		toast(`Casted ${resp.data.filename} to Stremio (AllDebrid).`, castToastOptions);
+		const { magnetId, videoFiles } = await prepareMagnetForCast(apiKey, hash);
+		const picked = pickBiggestVideo(videoFiles);
+		await axios.post(`/api/stremio-ad/cast/movie/${imdbId}`, {
+			apiKey,
+			hash,
+			magnetId,
+			fileIndex: picked.fileIndex,
+			streamUrl: picked.link,
+			filename: picked.filename,
+			fileSize: picked.fileSize,
+		});
+		toast(`Casted ${picked.filename} to Stremio (AllDebrid).`, castToastOptions);
 	} catch (error: any) {
 		const errorMessage =
 			error?.response?.data?.errorMessage ||
@@ -23,15 +39,43 @@ export const handleCastTvShowAllDebrid = async (
 	imdbId: string,
 	apiKey: string,
 	hash: string,
-	fileIndices: string[]
+	files: CastableAdFile[]
 ) => {
-	const yetToCast = groupBy(5, fileIndices).map((batch) => async () => {
+	// Prepare the magnet once; all requested files come from the same torrent.
+	let magnetId: number;
+	let videoFiles: Awaited<ReturnType<typeof prepareMagnetForCast>>['videoFiles'];
+	try {
+		const prepared = await prepareMagnetForCast(apiKey, hash);
+		magnetId = prepared.magnetId;
+		videoFiles = prepared.videoFiles;
+	} catch (error: any) {
+		const message = error instanceof Error ? error.message : 'Unknown error';
+		toast.error(`AllDebrid cast prep failed: ${message}`, castToastOptions);
+		return;
+	}
+
+	const resolved = files
+		.map((f) => findVideoByName(videoFiles, f.filename))
+		.filter((f): f is NonNullable<typeof f> => f !== null);
+
+	const missing = files.length - resolved.length;
+	if (missing > 0) {
+		toast.error(
+			`${missing} episode file${missing === 1 ? '' : 's'} not found in magnet (AllDebrid).`,
+			castToastOptions
+		);
+	}
+	if (resolved.length === 0) return;
+
+	const batches = groupBy(5, resolved).map((batch) => async () => {
 		try {
-			const fIdxParam = batch.map((idx) => `fileIndices=${idx}`).join('&');
-			const resp = await axios.get(
-				`/api/stremio-ad/cast/series/${imdbId}?apiKey=${apiKey}&hash=${hash}&${fIdxParam}`
-			);
-			const errorEpisodes = resp.data.errorEpisodes;
+			const resp = await axios.post(`/api/stremio-ad/cast/series/${imdbId}`, {
+				apiKey,
+				hash,
+				magnetId,
+				files: batch,
+			});
+			const errorEpisodes: string[] = resp.data?.errorEpisodes ?? [];
 			if (errorEpisodes.length) {
 				toast.error(
 					`Cast failed for ${errorEpisodes[0]}${
@@ -53,10 +97,8 @@ export const handleCastTvShowAllDebrid = async (
 		}
 	});
 
-	const [results] = await runConcurrentFunctions(yetToCast, 4, 0);
-	if (results.length) {
-		toast.success(`Finished casting all episodes to Stremio (AllDebrid).`, castToastOptions);
-	}
+	for (const run of batches) await run();
+	toast.success(`Finished casting all episodes to Stremio (AllDebrid).`, castToastOptions);
 };
 
 export const saveAllDebridCastProfile = async (

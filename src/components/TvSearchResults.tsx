@@ -28,7 +28,7 @@ type TvSearchResultsProps = {
 	handleShowInfo: (result: SearchResult) => void;
 	handleCast: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCastTorBox?: (hash: string, fileIds: string[]) => Promise<void>;
-	handleCastAllDebrid?: (hash: string, fileIds: string[]) => Promise<void>;
+	handleCastAllDebrid?: (hash: string, files: { filename: string }[]) => Promise<void>;
 	handleCopyMagnet: (hash: string) => void;
 	checkServiceAvailability: (
 		result: SearchResult,
@@ -173,11 +173,11 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 		}
 	};
 
-	const handleCastAllDebridWithLoading = async (hash: string, fileIds: string[]) => {
+	const handleCastAllDebridWithLoading = async (hash: string, files: { filename: string }[]) => {
 		if (!handleCastAllDebrid || castingAdHashes.has(hash)) return;
 		setCastingAdHashes((prev) => new Set(prev).add(hash));
 		try {
-			await handleCastAllDebrid(hash, fileIds);
+			await handleCastAllDebrid(hash, files);
 		} finally {
 			setCastingAdHashes((prev) => {
 				const newSet = new Set(prev);
@@ -252,9 +252,13 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						const adColor = btnColor(r.adAvailable, r.noVideos);
 						let epRegex1 = /S(\d+)\s?E(\d+)/i;
 						let epRegex2 = /[^\d](\d{1,2})x(\d{1,2})[^\d]/i;
-						const castableFileIds = r.files
-							.filter((f) => f.filename.match(epRegex1) || f.filename.match(epRegex2))
-							.map((f) => `${f.fileId}`);
+						const castableFiles = r.files.filter(
+							(f) => f.filename.match(epRegex1) || f.filename.match(epRegex2)
+						);
+						const castableFileIds = castableFiles.map((f) => `${f.fileId}`);
+						const castableAdFiles = castableFiles.map((f) => ({
+							filename: f.filename.split('/').pop() || f.filename,
+						}));
 
 						const isLoading = loadingHashes.has(r.hash);
 						const isCasting = castingHashes.has(r.hash);
@@ -492,13 +496,13 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 										{adKey &&
 											handleCastAllDebrid &&
 											r.adAvailable &&
-											castableFileIds.length > 0 && (
+											castableAdFiles.length > 0 && (
 												<button
 													className={`haptic-sm inline rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 ${isCastingAd ? 'cursor-not-allowed opacity-50' : ''}`}
 													onClick={() =>
 														handleCastAllDebridWithLoading(
 															r.hash,
-															castableFileIds
+															castableAdFiles
 														)
 													}
 													disabled={isCastingAd}
