@@ -77,6 +77,7 @@ interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
 	__isRetryRequest?: boolean;
 	__retryCount?: number;
 	__torboxToken?: string;
+	__skipRetry?: boolean;
 }
 
 // Helper function to calculate exponential backoff delay with jitter
@@ -136,6 +137,14 @@ torBoxAxios.interceptors.response.use(
 		const originalConfig = error.config as ExtendedAxiosRequestConfig;
 
 		if (!originalConfig) {
+			return Promise.reject(error);
+		}
+
+		// Callers that want fast-fail behavior (e.g. the Stremio play endpoint's
+		// direct-lookup path, where TorBox's 500 for a foreign torrent_id is
+		// semantic rather than transient) set __skipRetry so the fallback path
+		// isn't delayed by minutes of exponential backoff.
+		if (originalConfig.__skipRetry) {
 			return Promise.reject(error);
 		}
 
@@ -291,7 +300,8 @@ export const requestDownloadLink = async (
 		zip_link?: boolean;
 		user_ip?: string;
 		redirect?: boolean;
-	}
+	},
+	options?: { skipRetry?: boolean; timeout?: number }
 ): Promise<TorBoxResponse<string>> => {
 	const response = await torBoxAxios.get<TorBoxResponse<string>>(
 		`${getTorBoxBaseUrl()}/${API_VERSION}/api/torrents/requestdl`,
@@ -301,7 +311,9 @@ export const requestDownloadLink = async (
 				...params,
 			},
 			...getAxiosConfig(accessToken),
-		}
+			...(options?.timeout && { timeout: options.timeout }),
+			...(options?.skipRetry && { __skipRetry: true }),
+		} as any
 	);
 	return response.data;
 };

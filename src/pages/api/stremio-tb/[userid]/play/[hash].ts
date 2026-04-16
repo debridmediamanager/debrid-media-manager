@@ -70,12 +70,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				return;
 			}
 
-			// Try direct lookup first
+			// Try direct lookup first. Skip retries so a 500 from TorBox (e.g.
+			// when torrentId belongs to a different user) falls back to the hash
+			// path immediately instead of stalling on ~2min of exponential backoff.
 			try {
-				const downloadResult = await requestDownloadLink(apiKey, {
-					torrent_id: torrentId,
-					file_id: fileId,
-				});
+				const downloadResult = await requestDownloadLink(
+					apiKey,
+					{ torrent_id: torrentId, file_id: fileId },
+					{ skipRetry: true, timeout: 8000 }
+				);
 
 				if (downloadResult.success && downloadResult.data) {
 					streamUrl = downloadResult.data;

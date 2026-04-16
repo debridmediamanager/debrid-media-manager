@@ -137,9 +137,6 @@ export class TorBoxCastService extends DatabaseClient {
 			where: {
 				imdbId: imdbId,
 				userId: userId,
-				updatedAt: {
-					gt: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000), // 30 days
-				},
 			},
 			orderBy: {
 				updatedAt: 'desc',
@@ -402,9 +399,6 @@ export class TorBoxCastService extends DatabaseClient {
 				link: {
 					not: null,
 				},
-				updatedAt: {
-					gt: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000),
-				},
 			},
 			orderBy: {
 				updatedAt: 'desc',
@@ -422,8 +416,16 @@ export class TorBoxCastService extends DatabaseClient {
 
 		return castItems
 			.filter(
-				(item): item is { url: string; link: string; size: bigint; hash: string; torrentId: number | null; fileId: number | null } =>
-					item.link !== null
+				(
+					item
+				): item is {
+					url: string;
+					link: string;
+					size: bigint;
+					hash: string;
+					torrentId: number | null;
+					fileId: number | null;
+				} => item.link !== null
 			)
 			.map((item) => ({
 				url: item.url,
@@ -491,8 +493,16 @@ export class TorBoxCastService extends DatabaseClient {
 
 		const castStreams = otherCastItems
 			.filter(
-				(item): item is { url: string; link: string; size: bigint; hash: string; torrentId: number | null; fileId: number | null } =>
-					item.link !== null
+				(
+					item
+				): item is {
+					url: string;
+					link: string;
+					size: bigint;
+					hash: string;
+					torrentId: number | null;
+					fileId: number | null;
+				} => item.link !== null
 			)
 			.map((item) => ({
 				url: item.url,
