@@ -1,9 +1,10 @@
 import Poster from '@/components/poster';
+import { useCachedList } from '@/hooks/useCachedList';
 import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { MouseEvent, useMemo } from 'react';
 
 type MediaItem = {
 	title: string;
@@ -23,38 +24,24 @@ export default function RelatedMoviesPage() {
 		return typeof raw === 'string' ? raw : '';
 	}, [router.query.imdbid]);
 
-	const [relatedMedia, setRelatedMedia] = useState<MediaItem[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [statusMessage, setStatusMessage] = useState<string | null>(null);
-
-	const fetchRelated = useCallback(async () => {
-		if (!imdbIdParam) return;
+	const {
+		data,
+		loading: isLoading,
+		error,
+	} = useCachedList<{
+		results: MediaItem[];
+		message?: string;
+	}>(router.isReady && imdbIdParam ? `related:movie:${imdbIdParam}` : null, async () => {
 		console.info('Fetching related movies', { imdbId: imdbIdParam });
-		setIsLoading(true);
-		setStatusMessage(null);
-		try {
-			const response = await axios.get<{ results: MediaItem[]; message?: string }>(
-				`/api/related/movie`,
-				{
-					params: {
-						imdbId: imdbIdParam,
-					},
-				}
-			);
-			setRelatedMedia(response.data.results);
-			setStatusMessage(response.data.message ?? null);
-		} catch (requestError) {
-			console.error('Failed to load related movies', { imdbId: imdbIdParam, requestError });
-			setStatusMessage('Failed to load related movies.');
-		} finally {
-			setIsLoading(false);
-		}
-	}, [imdbIdParam]);
+		const response = await axios.get<{ results: MediaItem[]; message?: string }>(
+			`/api/related/movie`,
+			{ params: { imdbId: imdbIdParam } }
+		);
+		return response.data;
+	});
 
-	useEffect(() => {
-		if (!router.isReady) return;
-		void fetchRelated();
-	}, [fetchRelated, router.isReady]);
+	const relatedMedia = data?.results ?? [];
+	const statusMessage = error ? 'Failed to load related movies.' : (data?.message ?? null);
 
 	const handleNavigate = (event: MouseEvent<HTMLButtonElement>, imdbId: string) => {
 		const destination = buildDestination(imdbId, 'movie');

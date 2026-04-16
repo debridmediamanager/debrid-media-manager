@@ -1,36 +1,27 @@
 import Poster from '@/components/poster';
 import useLocalStorage from '@/hooks/localStorage';
+import { useCachedList } from '@/hooks/useCachedList';
 import { TraktWatchlistItem, getWatchlistMovies, getWatchlistShows } from '@/services/trakt';
 import { withAuth } from '@/utils/withAuth';
 import { Eye } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 function TraktWatchlist() {
 	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [traktUserSlug] = useLocalStorage<string>('trakt:userSlug');
-	const [watchlistItems, setWatchlistItems] = useState<TraktWatchlistItem[]>([]);
-	const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		if (!traktToken || !traktUserSlug) {
-			return;
+	const { data, loading } = useCachedList<TraktWatchlistItem[]>(
+		traktToken && traktUserSlug ? `trakt:watchlist:${traktUserSlug}` : null,
+		async () => {
+			const movies = await getWatchlistMovies(traktToken!);
+			const shows = await getWatchlistShows(traktToken!);
+			return [...movies, ...shows].sort((a, b) => a.rank - b.rank);
 		}
-		(async () => {
-			try {
-				const movies = await getWatchlistMovies(traktToken);
-				const shows = await getWatchlistShows(traktToken);
-				const combinedWatchlist = [...movies, ...shows].sort((a, b) => a.rank - b.rank);
-				setWatchlistItems(combinedWatchlist);
-			} catch (error) {
-				console.error('Error fetching watchlist:', error);
-			} finally {
-				setLoading(false);
-			}
-		})();
-	}, [traktToken, traktUserSlug]);
+	);
+
+	const watchlistItems = data ?? [];
 
 	return (
 		<div className="mx-2 my-1 min-h-screen bg-gray-900">

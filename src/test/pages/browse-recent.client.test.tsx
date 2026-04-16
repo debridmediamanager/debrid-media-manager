@@ -36,10 +36,12 @@ vi.mock('next/config', () => ({
 	default: () => ({ publicRuntimeConfig: runtimeConfig }),
 }));
 
+import { clearCachedList } from '@/hooks/useCachedList';
 import RecentlyUpdated from '@/pages/browse/recent';
 
 describe('RecentlyUpdated page', () => {
 	beforeEach(() => {
+		clearCachedList();
 		runtimeConfig.externalSearchApiHostname = '';
 		fetchMock.mockReset();
 		global.fetch = fetchMock as any;

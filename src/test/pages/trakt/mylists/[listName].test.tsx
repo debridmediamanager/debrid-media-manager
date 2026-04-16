@@ -41,9 +41,11 @@ vi.mock('react-hot-toast', () => ({
 	Toaster: () => null,
 }));
 
+import { clearCachedList } from '@/hooks/useCachedList';
 import TraktMyLists from '@/pages/trakt/mylists/[listName]';
 
 beforeEach(() => {
+	clearCachedList();
 	vi.clearAllMocks();
 });
 

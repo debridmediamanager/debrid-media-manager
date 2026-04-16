@@ -1,10 +1,11 @@
 import Poster from '@/components/poster';
+import { useCachedList } from '@/hooks/useCachedList';
 import { TraktMediaItem } from '@/services/trakt';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 type Category = {
@@ -20,38 +21,29 @@ type TraktBrowseProps = {
 export const TraktBrowse: FunctionComponent = () => {
 	const router = useRouter();
 	const { browse } = router.query;
-	const [data, setData] = useState<TraktBrowseProps | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
-	const [error, setError] = useState('');
+	const browseKey = typeof browse === 'string' ? browse : '';
 
-	useEffect(() => {
-		if (!browse) return;
-
-		const fetchData = async () => {
-			try {
-				const response = await fetch(`/api/info/trakt?browse=${browse}`);
-				if (!response.ok) {
-					throw new Error('Failed to fetch data');
-				}
-				const result = await response.json();
-				setData(result);
-			} catch (err) {
-				console.error('Error fetching trakt data:', err);
-				setError('Failed to load data');
-			} finally {
-				setIsLoading(false);
+	const { data, loading, error } = useCachedList<TraktBrowseProps>(
+		browseKey ? `trakt:${browseKey}` : null,
+		async () => {
+			const response = await fetch(`/api/info/trakt?browse=${browseKey}`);
+			if (!response.ok) {
+				throw new Error('Failed to fetch data');
 			}
-		};
+			return response.json();
+		}
+	);
 
-		fetchData();
-	}, [browse]);
-
-	if (isLoading) {
+	if (!browseKey || (loading && !data)) {
 		return <div className="mx-2 my-1 min-h-screen bg-gray-900 text-white">Loading...</div>;
 	}
 
 	if (error) {
-		return <div className="mx-2 my-1 min-h-screen bg-gray-900 text-white">Error: {error}</div>;
+		return (
+			<div className="mx-2 my-1 min-h-screen bg-gray-900 text-white">
+				Error: Failed to load data
+			</div>
+		);
 	}
 
 	if (!data) {

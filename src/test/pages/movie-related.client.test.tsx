@@ -1,3 +1,4 @@
+import { clearCachedList } from '@/hooks/useCachedList';
 import RelatedMoviesPage from '@/pages/movie/[imdbid]/related';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -36,6 +37,7 @@ vi.mock('@/components/poster', () => ({
 
 describe('movie related page', () => {
 	beforeEach(() => {
+		clearCachedList();
 		axiosGetMock.mockReset();
 		pushMock.mockClear();
 		window.open = vi.fn();

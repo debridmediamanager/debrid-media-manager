@@ -1,40 +1,31 @@
 import Poster from '@/components/poster';
 import useLocalStorage from '@/hooks/localStorage';
+import { useCachedList } from '@/hooks/useCachedList';
 import { TraktCollectionItem, getCollectionMovies, getCollectionShows } from '@/services/trakt';
 import { withAuth } from '@/utils/withAuth';
 import { Archive } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 function TraktCollection() {
 	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [traktUserSlug] = useLocalStorage<string>('trakt:userSlug');
-	const [collectionItems, setCollectionItems] = useState<TraktCollectionItem[]>([]);
-	const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		if (!traktToken || !traktUserSlug) {
-			return;
+	const { data, loading } = useCachedList<TraktCollectionItem[]>(
+		traktToken && traktUserSlug ? `trakt:collection:${traktUserSlug}` : null,
+		async () => {
+			const movies = await getCollectionMovies(traktToken!);
+			const shows = await getCollectionShows(traktToken!);
+			return [...movies, ...shows].sort(
+				(a, b) =>
+					new Date(b.last_collected_at).getTime() -
+					new Date(a.last_collected_at).getTime()
+			);
 		}
-		(async () => {
-			try {
-				const movies = await getCollectionMovies(traktToken);
-				const shows = await getCollectionShows(traktToken);
-				const combinedCollection = [...movies, ...shows].sort(
-					(a, b) =>
-						new Date(b.last_collected_at).getTime() -
-						new Date(a.last_collected_at).getTime()
-				);
-				setCollectionItems(combinedCollection);
-			} catch (error) {
-				console.error('Error fetching collection:', error);
-			} finally {
-				setLoading(false);
-			}
-		})();
-	}, [traktToken, traktUserSlug]);
+	);
+
+	const collectionItems = data ?? [];
 
 	return (
 		<div className="mx-2 my-1 min-h-screen bg-gray-900">

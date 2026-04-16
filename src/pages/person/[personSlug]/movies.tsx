@@ -1,9 +1,10 @@
 import Poster from '@/components/poster';
+import { useCachedList } from '@/hooks/useCachedList';
 import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { MouseEvent, useMemo } from 'react';
 
 type MediaItem = {
 	title: string;
@@ -30,30 +31,21 @@ export default function PersonMoviesPage() {
 		return typeof raw === 'string' ? raw : '';
 	}, [router.query.personSlug]);
 
-	const [movies, setMovies] = useState<MediaItem[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [statusMessage, setStatusMessage] = useState<string | null>(null);
-
-	const fetchCredits = useCallback(async () => {
-		if (!personSlug) return;
-		console.info('Fetching person movie credits', { personSlug });
-		setIsLoading(true);
-		setStatusMessage(null);
-		try {
+	const {
+		data,
+		loading: isLoading,
+		error,
+	} = useCachedList<MediaItem[]>(
+		router.isReady && personSlug ? `person:${personSlug}:movies` : null,
+		async () => {
+			console.info('Fetching person movie credits', { personSlug });
 			const response = await axios.get<PersonCreditsResponse>(`/api/person/${personSlug}`);
-			setMovies(response.data.movies);
-		} catch (requestError) {
-			console.error('Failed to load person movie credits', { personSlug, requestError });
-			setStatusMessage('Failed to load movie credits.');
-		} finally {
-			setIsLoading(false);
+			return response.data.movies;
 		}
-	}, [personSlug]);
+	);
 
-	useEffect(() => {
-		if (!router.isReady) return;
-		void fetchCredits();
-	}, [fetchCredits, router.isReady]);
+	const movies = data ?? [];
+	const statusMessage = error ? 'Failed to load movie credits.' : null;
 
 	const handleNavigate = (event: MouseEvent<HTMLButtonElement>, imdbId: string) => {
 		const destination = `/movie/${imdbId}`;

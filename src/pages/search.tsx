@@ -1,4 +1,5 @@
 import Poster from '@/components/poster';
+import { useCachedList } from '@/hooks/useCachedList';
 import { withAuth } from '@/utils/withAuth';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -10,24 +11,50 @@ import { SearchResult } from './api/search/title';
 
 function Search() {
 	const { publicRuntimeConfig: config } = getConfig();
-	const [query, setQuery] = useState('');
 	const [typedQuery, setTypedQuery] = useState('');
-	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-	const [loading, setLoading] = useState(false);
-	const [errorMessage, setErrorMessage] = useState('');
-	const [miscResults, setMiscResults] = useState<Record<string, string[]>>({});
-
 	const router = useRouter();
+
+	const rawQuery = router.query.query;
+	const query = typeof rawQuery === 'string' && rawQuery ? decodeURIComponent(rawQuery) : '';
+
+	useEffect(() => {
+		if (query && typedQuery !== query) setTypedQuery(query);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [query]);
+
+	const { data, loading, error, reset } = useCachedList<SearchResult[]>(
+		query ? `search:${query}` : null,
+		async () => {
+			try {
+				let path = `api/search/title?keyword=${query}`;
+				if (config.externalSearchApiHostname) {
+					path = encodeURIComponent(path);
+				}
+				const endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
+				const res = await fetch(endpoint);
+				const body = await res.json();
+				if (body.errorMessage) throw new Error(body.errorMessage);
+				return body.results ?? [];
+			} catch (err) {
+				console.error('[Search] fetchData failed', { query, error: err });
+				throw err;
+			}
+		}
+	);
+
+	const searchResults = data ?? [];
+	const errorMessage = error
+		? error.message.includes('Failed to fetch search results')
+			? error.message
+			: 'Failed to fetch search results; try again soon.'
+		: '';
 
 	const handleSubmit = useCallback(
 		(e?: React.FormEvent<HTMLFormElement>) => {
 			if (e) e.preventDefault();
 			if (!typedQuery) return;
-			setErrorMessage('');
-			setSearchResults([]);
-			setMiscResults({});
+			reset();
 			if (/(tt\d{7,})/.test(typedQuery)) {
-				setLoading(true);
 				const imdbid = typedQuery.match(/(tt\d{7,})/)?.[1];
 				router.push(`/x/${imdbid}/`);
 				return;
@@ -36,65 +63,8 @@ function Search() {
 				query: { query: typedQuery },
 			});
 		},
-		[router, typedQuery]
+		[router, typedQuery, reset]
 	);
-
-	useEffect(() => {
-		if (Object.keys(router.query).length === 0) return;
-		const { query: searchQuery } = router.query;
-		const decodedQuery = decodeURIComponent(searchQuery as string);
-		if (typedQuery !== decodedQuery) setTypedQuery(decodedQuery);
-		setQuery(decodedQuery);
-		fetchData(decodedQuery);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query]);
-
-	const fetchMiscData = async (q: string) => {
-		try {
-			let path = `api/search/misc?keyword=${q}`;
-			if (config.externalSearchApiHostname) {
-				path = encodeURIComponent(path);
-			}
-			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
-			const res = await fetch(endpoint);
-			const data = await res.json();
-			if (Object.keys(data).length > 0) setMiscResults(data);
-			else fetchMiscData('');
-		} catch (error: any) {
-			console.error(error);
-		}
-	};
-
-	const fetchData = async (q: string) => {
-		setMiscResults({});
-		setErrorMessage('');
-		setLoading(true);
-		setSearchResults([]);
-		try {
-			let path = `api/search/title?keyword=${q}`;
-			if (config.externalSearchApiHostname) {
-				path = encodeURIComponent(path);
-			}
-			let endpoint = `${config.externalSearchApiHostname || ''}/${path}`;
-			const res = await fetch(endpoint);
-			const data = await res.json();
-			if (data.errorMessage) throw new Error(data.errorMessage);
-			setSearchResults(data.results);
-		} catch (error: any) {
-			setSearchResults([]);
-			console.error('[Search] fetchData failed', { query: q, error });
-			const fallbackMessage = 'Failed to fetch search results; try again soon.';
-			const parsedMessage =
-				error instanceof Error && error.message ? error.message : String(error);
-			setErrorMessage(
-				parsedMessage.includes('Failed to fetch search results')
-					? parsedMessage
-					: fallbackMessage
-			);
-		} finally {
-			setLoading(false);
-		}
-	};
 
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 p-4">
@@ -136,7 +106,7 @@ function Search() {
 					</form>
 				</div>
 				{/* Display loading indicator */}
-				{loading && (
+				{loading && searchResults.length === 0 && (
 					<div className="mt-4 flex items-center justify-center">
 						<div
 							className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"
@@ -179,13 +149,11 @@ function Search() {
 					</>
 				)}
 				{/* No results found message */}
-				{!loading &&
-					searchResults.length === 0 &&
-					Object.keys(router.query).length !== 0 && (
-						<h2 className="mx-auto my-4 max-w-3xl text-xl font-bold">
-							No results found for &quot;{query}&quot;
-						</h2>
-					)}
+				{!loading && searchResults.length === 0 && query && (
+					<h2 className="mx-auto my-4 max-w-3xl text-xl font-bold">
+						No results found for &quot;{query}&quot;
+					</h2>
+				)}
 			</div>
 		</div>
 	);

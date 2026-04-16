@@ -1,3 +1,4 @@
+import { clearCachedList } from '@/hooks/useCachedList';
 import SearchPage from '@/pages/search';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import getConfig from 'next/config';
@@ -43,6 +44,7 @@ describe('SearchPage', () => {
 	let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
 	beforeEach(() => {
+		clearCachedList();
 		mockPush = vi.fn();
 		mockQuery = {};
 		consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});

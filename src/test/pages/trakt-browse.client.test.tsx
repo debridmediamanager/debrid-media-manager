@@ -44,10 +44,12 @@ vi.mock('next/link', () => ({
 	default: ({ href, children }: any) => <a href={href}>{children}</a>,
 }));
 
+import { clearCachedList } from '@/hooks/useCachedList';
 import { TraktBrowse } from '@/pages/trakt/[browse]';
 
 describe('Trakt browse page', () => {
 	beforeEach(() => {
+		clearCachedList();
 		routerMock.query = {};
 		fetchMock.mockReset();
 		global.fetch = fetchMock as any;

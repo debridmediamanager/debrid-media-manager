@@ -62,10 +62,12 @@ vi.mock('next/config', () => ({
 	default: () => ({ publicRuntimeConfig: runtimeConfig }),
 }));
 
+import { clearCachedList } from '@/hooks/useCachedList';
 import { Genre } from '@/pages/browse/genre/[genre]';
 
 describe('Browse genre page', () => {
 	beforeEach(() => {
+		clearCachedList();
 		routerMock.query = {};
 		traktMocks.getTrendingByGenre.mockReset();
 		traktMocks.getPopularByGenre.mockReset();

@@ -1,9 +1,10 @@
 import Poster from '@/components/poster';
+import { useCachedList } from '@/hooks/useCachedList';
 import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { MouseEvent, useMemo } from 'react';
 
 type MediaItem = {
 	title: string;
@@ -30,30 +31,21 @@ export default function PersonShowsPage() {
 		return typeof raw === 'string' ? raw : '';
 	}, [router.query.personSlug]);
 
-	const [shows, setShows] = useState<MediaItem[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [statusMessage, setStatusMessage] = useState<string | null>(null);
-
-	const fetchCredits = useCallback(async () => {
-		if (!personSlug) return;
-		console.info('Fetching person TV show credits', { personSlug });
-		setIsLoading(true);
-		setStatusMessage(null);
-		try {
+	const {
+		data,
+		loading: isLoading,
+		error,
+	} = useCachedList<MediaItem[]>(
+		router.isReady && personSlug ? `person:${personSlug}:shows` : null,
+		async () => {
+			console.info('Fetching person TV show credits', { personSlug });
 			const response = await axios.get<PersonCreditsResponse>(`/api/person/${personSlug}`);
-			setShows(response.data.shows);
-		} catch (requestError) {
-			console.error('Failed to load person TV show credits', { personSlug, requestError });
-			setStatusMessage('Failed to load TV show credits.');
-		} finally {
-			setIsLoading(false);
+			return response.data.shows;
 		}
-	}, [personSlug]);
+	);
 
-	useEffect(() => {
-		if (!router.isReady) return;
-		void fetchCredits();
-	}, [fetchCredits, router.isReady]);
+	const shows = data ?? [];
+	const statusMessage = error ? 'Failed to load TV show credits.' : null;
 
 	const handleNavigate = (event: MouseEvent<HTMLButtonElement>, imdbId: string) => {
 		const destination = `/show/${imdbId}/1`;

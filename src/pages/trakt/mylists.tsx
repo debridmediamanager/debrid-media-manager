@@ -1,5 +1,6 @@
 import Poster from '@/components/poster';
 import useLocalStorage from '@/hooks/localStorage';
+import { useCachedList } from '@/hooks/useCachedList';
 import {
 	TraktMediaItem,
 	fetchListItems,
@@ -10,47 +11,46 @@ import { withAuth } from '@/utils/withAuth';
 import { List } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 function TraktMyLists() {
 	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [traktUserSlug] = useLocalStorage<string>('trakt:userSlug');
-	const [arrayOfResults, setArrayOfResults] = useState<Record<string, TraktMediaItem[]>>({});
 	const [selectedList, setSelectedList] = useState<string>('');
-	const [loading, setLoading] = useState(2);
 
-	useEffect(() => {
-		if (!traktToken || !traktUserSlug) {
-			return;
+	const { data, loading } = useCachedList<Record<string, TraktMediaItem[]>>(
+		traktToken && traktUserSlug ? `trakt:mylists:${traktUserSlug}` : null,
+		async () => {
+			const [personalLists, likedLists] = await Promise.all([
+				getUsersPersonalLists(traktToken!, traktUserSlug!),
+				getLikedLists(traktToken!, traktUserSlug!),
+			]);
+
+			const personalEntries = await Promise.all(
+				personalLists.map(async (list) => {
+					const items = await fetchListItems(traktToken!, traktUserSlug!, list.ids.trakt);
+					return [list.name, items] as const;
+				})
+			);
+
+			const likedEntries = await Promise.all(
+				likedLists.map(async (listContainer) => {
+					const list = listContainer.list;
+					const items = await fetchListItems(
+						traktToken!,
+						list.user.ids.slug,
+						list.ids.trakt
+					);
+					return [list.name, items] as const;
+				})
+			);
+
+			return Object.fromEntries([...personalEntries, ...likedEntries]);
 		}
-		(async () => {
-			const response = await getUsersPersonalLists(traktToken, traktUserSlug);
-			for (const list of response) {
-				const listName = list.name;
-				const items = await fetchListItems(traktToken, traktUserSlug, list.ids.trakt);
-				setArrayOfResults((prev) => ({
-					...prev,
-					[listName]: items,
-				}));
-			}
-			setLoading((prev) => prev - 1);
-		})();
-		(async () => {
-			const response = await getLikedLists(traktToken, traktUserSlug);
-			for (const listContainer of response) {
-				const list = listContainer.list;
-				const listName = list.name;
-				const items = await fetchListItems(traktToken, list.user.ids.slug, list.ids.trakt);
-				setArrayOfResults((prev) => ({
-					...prev,
-					[listName]: items,
-				}));
-			}
-			setLoading((prev) => prev - 1);
-		})();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	);
+
+	const arrayOfResults = data ?? {};
 
 	return (
 		<div className="mx-2 my-1 min-h-screen bg-gray-900">
@@ -125,7 +125,7 @@ function TraktMyLists() {
 					</div>
 				)}
 
-				{loading !== 0 && (
+				{loading && Object.keys(arrayOfResults).length === 0 && (
 					<div className="mt-4 flex items-center justify-center">
 						<div className="h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
 					</div>

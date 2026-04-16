@@ -1,5 +1,6 @@
 import Poster from '@/components/poster';
 import useLocalStorage from '@/hooks/localStorage';
+import { useCachedList } from '@/hooks/useCachedList';
 import {
 	TraktMediaItem,
 	fetchListItems,
@@ -10,49 +11,47 @@ import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 function TraktMyLists() {
 	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
 	const [traktUserSlug] = useLocalStorage<string>('trakt:userSlug');
-	const [arrayOfResults, setArrayOfResults] = useState<Record<string, TraktMediaItem[]>>({});
-	const [loading, setLoading] = useState(true);
 
 	const router = useRouter();
-	const listName = decodeURIComponent(router.query.listName as string);
+	const listName =
+		typeof router.query.listName === 'string' ? decodeURIComponent(router.query.listName) : '';
 
-	useEffect(() => {
-		if (!traktToken || !traktUserSlug) {
-			return;
+	const { data, loading } = useCachedList<Record<string, TraktMediaItem[]>>(
+		traktToken && traktUserSlug && listName
+			? `trakt:mylist:${traktUserSlug}:${listName}`
+			: null,
+		async () => {
+			const [personalLists, likedLists] = await Promise.all([
+				getUsersPersonalLists(traktToken!, traktUserSlug!),
+				getLikedLists(traktToken!, traktUserSlug!),
+			]);
+
+			const personal = personalLists.find((l) => l.name === listName);
+			if (personal) {
+				const items = await fetchListItems(traktToken!, traktUserSlug!, personal.ids.trakt);
+				return { [listName]: items };
+			}
+
+			const liked = likedLists.find((lc) => lc.list.name === listName);
+			if (liked) {
+				const items = await fetchListItems(
+					traktToken!,
+					liked.list.user.ids.slug,
+					liked.list.ids.trakt
+				);
+				return { [listName]: items };
+			}
+
+			return {};
 		}
-		(async () => {
-			const response = await getUsersPersonalLists(traktToken, traktUserSlug);
-			for (const list of response) {
-				if (list.name !== listName) continue;
-				const items = await fetchListItems(traktToken, traktUserSlug, list.ids.trakt);
-				setArrayOfResults((prev) => ({
-					...prev,
-					[listName]: items,
-				}));
-				setLoading(false);
-			}
-		})();
-		(async () => {
-			const response = await getLikedLists(traktToken, traktUserSlug);
-			for (const listContainer of response) {
-				const list = listContainer.list;
-				if (list.name !== listName) continue;
-				const items = await fetchListItems(traktToken, list.user.ids.slug, list.ids.trakt);
-				setArrayOfResults((prev) => ({
-					...prev,
-					[listName]: items,
-				}));
-				setLoading(false);
-			}
-		})();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query.listName]);
+	);
+
+	const arrayOfResults = data ?? {};
 
 	return (
 		<div className="mx-2 my-1 min-h-screen bg-gray-900">

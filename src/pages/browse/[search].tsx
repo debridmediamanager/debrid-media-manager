@@ -1,14 +1,13 @@
 import Poster from '@/components/poster';
+import { useCachedList } from '@/hooks/useCachedList';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { Toaster } from 'react-hot-toast';
 
-type BrowseProps = {
-	response: Record<string, string[]>;
-};
+type BrowseResponse = Record<string, string[]>;
 
 const genres = [
 	{
@@ -124,40 +123,27 @@ const genres = [
 export const Browse: FunctionComponent = () => {
 	const router = useRouter();
 	const { search } = router.query;
-	const [data, setData] = useState<BrowseProps | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
-	const [error, setError] = useState('');
+	const searchKey = typeof search === 'string' ? search : '';
 
-	useEffect(() => {
-		if (!search && search !== '') return;
-
-		const fetchData = async () => {
-			try {
-				const response = await fetch(
-					`/api/info/browse${search ? `?search=${search}` : ''}`
-				);
-				if (!response.ok) {
-					throw new Error('Failed to fetch data');
-				}
-				const result = await response.json();
-				setData({ response: result });
-			} catch (err) {
-				console.error('Error fetching browse data:', err);
-				setError('Failed to load data');
-			} finally {
-				setIsLoading(false);
+	const { data, loading, error } = useCachedList<BrowseResponse>(
+		search !== undefined ? `browse:${searchKey}` : null,
+		async () => {
+			const response = await fetch(
+				`/api/info/browse${searchKey ? `?search=${searchKey}` : ''}`
+			);
+			if (!response.ok) {
+				throw new Error('Failed to fetch data');
 			}
-		};
+			return response.json();
+		}
+	);
 
-		fetchData();
-	}, [search]);
-
-	if (isLoading && search) {
+	if (loading && search && !data) {
 		return <div className="mx-2 my-1 text-white">Loading...</div>;
 	}
 
 	if (error) {
-		return <div className="mx-2 my-1 text-white">Error: {error}</div>;
+		return <div className="mx-2 my-1 text-white">Error: Failed to load data</div>;
 	}
 
 	return (
@@ -191,9 +177,9 @@ export const Browse: FunctionComponent = () => {
 				</div>
 			) : (
 				data &&
-				Object.keys(data.response).length > 0 && (
+				Object.keys(data).length > 0 && (
 					<>
-						{Object.keys(data.response).map((listName: string, idx: number) => {
+						{Object.keys(data).map((listName: string, idx: number) => {
 							return (
 								<div key={listName}>
 									<h2 className="mt-4 text-xl font-bold">
@@ -201,7 +187,7 @@ export const Browse: FunctionComponent = () => {
 										{listName}
 									</h2>
 									<div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
-										{data.response[listName].map((key: string) => {
+										{data[listName].map((key: string) => {
 											const matches = key.split(':');
 											if (matches.length === 3) {
 												const mediaType = key.split(':')[0];

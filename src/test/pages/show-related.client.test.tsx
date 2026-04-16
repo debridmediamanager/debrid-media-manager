@@ -1,3 +1,4 @@
+import { clearCachedList } from '@/hooks/useCachedList';
 import RelatedShowsPage from '@/pages/show/[imdbid]/related';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -41,6 +42,7 @@ vi.mock('@/components/poster', () => ({
 
 describe('show related page', () => {
 	beforeEach(() => {
+		clearCachedList();
 		axiosGetMock.mockReset();
 		pushMock.mockClear();
 		routerState.query = { imdbid: 'tt9876543' };

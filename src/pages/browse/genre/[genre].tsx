@@ -1,11 +1,12 @@
 import Poster from '@/components/poster';
+import { useCachedList } from '@/hooks/useCachedList';
 import { TraktMediaItem, getPopularByGenre, getTrendingByGenre } from '@/services/trakt';
 import { withAuth } from '@/utils/withAuth';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 const { publicRuntimeConfig: config } = getConfig();
@@ -20,47 +21,27 @@ type GenrePageProps = {
 export const Genre: FunctionComponent = () => {
 	const router = useRouter();
 	const { genre } = router.query;
-	const [data, setData] = useState<GenrePageProps | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
-	const [error, setError] = useState('');
+	const genreSlug = typeof genre === 'string' ? genre.replace('genre:', '') : '';
 
-	useEffect(() => {
-		if (!genre) return;
+	const { data, loading, error } = useCachedList<GenrePageProps>(
+		genreSlug ? `genre:${genreSlug}` : null,
+		async () => {
+			const [trendingMovies, trendingShows, popularMovies, popularShows] = await Promise.all([
+				getTrendingByGenre(config.traktClientId, genreSlug, 'movies'),
+				getTrendingByGenre(config.traktClientId, genreSlug, 'shows'),
+				getPopularByGenre(config.traktClientId, genreSlug, 'movies'),
+				getPopularByGenre(config.traktClientId, genreSlug, 'shows'),
+			]);
+			return { trendingMovies, trendingShows, popularMovies, popularShows };
+		}
+	);
 
-		const fetchData = async () => {
-			try {
-				const genreSlug = typeof genre === 'string' ? genre.replace('genre:', '') : '';
-				const [trendingMovies, trendingShows, popularMovies, popularShows] =
-					await Promise.all([
-						getTrendingByGenre(config.traktClientId, genreSlug, 'movies'),
-						getTrendingByGenre(config.traktClientId, genreSlug, 'shows'),
-						getPopularByGenre(config.traktClientId, genreSlug, 'movies'),
-						getPopularByGenre(config.traktClientId, genreSlug, 'shows'),
-					]);
-
-				setData({
-					trendingMovies,
-					trendingShows,
-					popularMovies,
-					popularShows,
-				});
-			} catch (err) {
-				console.error('Error fetching genre data:', err);
-				setError('Failed to load data');
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		fetchData();
-	}, [genre]);
-
-	if (isLoading) {
+	if (!genreSlug || (loading && !data)) {
 		return <div className="mx-2 my-1 text-white">Loading...</div>;
 	}
 
 	if (error) {
-		return <div className="mx-2 my-1 text-white">Error: {error}</div>;
+		return <div className="mx-2 my-1 text-white">Error: Failed to load data</div>;
 	}
 
 	if (!data) {

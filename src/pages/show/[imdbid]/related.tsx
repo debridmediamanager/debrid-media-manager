@@ -1,9 +1,10 @@
 import Poster from '@/components/poster';
+import { useCachedList } from '@/hooks/useCachedList';
 import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { MouseEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { MouseEvent, useMemo } from 'react';
 
 type MediaItem = {
 	title: string;
@@ -27,41 +28,24 @@ export default function RelatedShowsPage() {
 		return trimmed.length > 0 ? trimmed : null;
 	}, [router.query.imdbid]);
 
-	const [relatedMedia, setRelatedMedia] = useState<MediaItem[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [statusMessage, setStatusMessage] = useState<string | null>(null);
-
-	const fetchRelated = useCallback(async () => {
-		if (!imdbIdParam) {
-			console.info('Skipping related shows fetch because IMDb id is missing');
-			return;
-		}
+	const {
+		data,
+		loading: isLoading,
+		error,
+	} = useCachedList<{
+		results: MediaItem[];
+		message?: string;
+	}>(router.isReady && imdbIdParam ? `related:show:${imdbIdParam}` : null, async () => {
 		console.info('Fetching related shows', { imdbId: imdbIdParam });
-		setIsLoading(true);
-		setStatusMessage(null);
-		try {
-			const response = await axios.get<{ results: MediaItem[]; message?: string }>(
-				`/api/related/show`,
-				{
-					params: {
-						imdbId: imdbIdParam,
-					},
-				}
-			);
-			setRelatedMedia(response.data.results);
-			setStatusMessage(response.data.message ?? null);
-		} catch (requestError) {
-			console.error('Failed to load related shows', { imdbId: imdbIdParam, requestError });
-			setStatusMessage('Failed to load related shows.');
-		} finally {
-			setIsLoading(false);
-		}
-	}, [imdbIdParam]);
+		const response = await axios.get<{ results: MediaItem[]; message?: string }>(
+			`/api/related/show`,
+			{ params: { imdbId: imdbIdParam } }
+		);
+		return response.data;
+	});
 
-	useEffect(() => {
-		if (!router.isReady) return;
-		void fetchRelated();
-	}, [fetchRelated, router.isReady]);
+	const relatedMedia = data?.results ?? [];
+	const statusMessage = error ? 'Failed to load related shows.' : (data?.message ?? null);
 
 	const handleNavigate = (event: MouseEvent<HTMLButtonElement>, imdbId: string) => {
 		const normalizedImdbId = imdbId.trim();
