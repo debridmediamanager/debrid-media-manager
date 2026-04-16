@@ -72,7 +72,7 @@ const nextConfig = {
 			},
 			{
 				protocol: 'https',
-				hostname: 'fakeimg.pl',
+				hostname: 'live.metahub.space',
 				port: '',
 				pathname: '/**',
 			},
