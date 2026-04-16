@@ -43,6 +43,25 @@ async function waitForTorrentReady(
 	return null;
 }
 
+// TorBox's /torrents/createtorrent is fast when adding a new torrent but can
+// hang 30+s when the torrent already exists in the user's account (returns
+// "Found Cached Torrent"). To avoid that slow path, we first try to locate the
+// torrent in the user's existing library via /torrents/mylist (consistently
+// fast). If found, we skip createTorrent entirely.
+async function findUserTorrentByHash(
+	apiKey: string,
+	hash: string
+): Promise<TorBoxTorrentInfo | null> {
+	try {
+		const result = await getTorrentList(apiKey, { limit: 1000 });
+		if (!result.success || !result.data) return null;
+		const list = Array.isArray(result.data) ? result.data : [result.data];
+		return list.find((t) => t.hash?.toLowerCase() === hash.toLowerCase()) ?? null;
+	} catch {
+		return null;
+	}
+}
+
 export const getTorBoxStreamUrl = async (
 	apiKey: string,
 	hash: string,
@@ -54,6 +73,7 @@ export const getTorBoxStreamUrl = async (
 	let episodeNumber = -1;
 	let fileSize = 0;
 	let torrentId = 0;
+	let addedThisCall = false;
 
 	try {
 		// First check if the torrent is cached
@@ -67,24 +87,35 @@ export const getTorBoxStreamUrl = async (
 			throw new Error('Torrent not cached on TorBox');
 		}
 
-		// Add the torrent
-		const createResult = await createTorrent(apiKey, {
-			magnet: `magnet:?xt=urn:btih:${hash}`,
-		});
-
+		const existing = await findUserTorrentByHash(apiKey, hash);
+		let torrent: TorBoxTorrentInfo | null = null;
 		if (
-			!createResult.success ||
-			!createResult.data ||
-			createResult.data.torrent_id === undefined
+			existing &&
+			(existing.download_finished ||
+				existing.download_state === 'completed' ||
+				existing.download_state === 'cached')
 		) {
-			throw new Error('Failed to add torrent to TorBox');
+			torrentId = existing.id;
+			torrent = existing;
+		} else {
+			addedThisCall = true;
+			const createResult = await createTorrent(apiKey, {
+				magnet: `magnet:?xt=urn:btih:${hash}`,
+			});
+
+			if (
+				!createResult.success ||
+				!createResult.data ||
+				createResult.data.torrent_id === undefined
+			) {
+				throw new Error('Failed to add torrent to TorBox');
+			}
+
+			torrentId = createResult.data.torrent_id;
+			torrent = await waitForTorrentReady(apiKey, torrentId);
 		}
 
-		torrentId = createResult.data.torrent_id;
-
 		try {
-			// Wait for torrent to be ready
-			const torrent = await waitForTorrentReady(apiKey, torrentId);
 			if (!torrent) {
 				throw new Error('Torrent did not become ready in time');
 			}
@@ -117,8 +148,11 @@ export const getTorBoxStreamUrl = async (
 
 			fileSize = Math.round((file.size || 0) / 1024 / 1024);
 		} catch (e) {
-			// Clean up on error
-			await deleteTorrent(apiKey, torrentId);
+			// Clean up only torrents this call added, so we don't delete the
+			// user's preexisting library entries on transient failures.
+			if (addedThisCall && torrentId) {
+				await deleteTorrent(apiKey, torrentId).catch(() => undefined);
+			}
 			throw e;
 		}
 	} catch (e) {
@@ -139,6 +173,7 @@ export const getFileByNameTorBoxStreamUrl = async (
 	let torrentId = 0;
 	let fileId = 0;
 	let filename = '';
+	let addedThisCall = false;
 
 	try {
 		// First check if the torrent is cached
@@ -152,24 +187,35 @@ export const getFileByNameTorBoxStreamUrl = async (
 			throw new Error('Torrent not cached on TorBox');
 		}
 
-		// Add the torrent
-		const createResult = await createTorrent(apiKey, {
-			magnet: `magnet:?xt=urn:btih:${hash}`,
-		});
-
+		const existing = await findUserTorrentByHash(apiKey, hash);
+		let torrent: TorBoxTorrentInfo | null = null;
 		if (
-			!createResult.success ||
-			!createResult.data ||
-			createResult.data.torrent_id === undefined
+			existing &&
+			(existing.download_finished ||
+				existing.download_state === 'completed' ||
+				existing.download_state === 'cached')
 		) {
-			throw new Error('Failed to add torrent to TorBox');
+			torrentId = existing.id;
+			torrent = existing;
+		} else {
+			addedThisCall = true;
+			const createResult = await createTorrent(apiKey, {
+				magnet: `magnet:?xt=urn:btih:${hash}`,
+			});
+
+			if (
+				!createResult.success ||
+				!createResult.data ||
+				createResult.data.torrent_id === undefined
+			) {
+				throw new Error('Failed to add torrent to TorBox');
+			}
+
+			torrentId = createResult.data.torrent_id;
+			torrent = await waitForTorrentReady(apiKey, torrentId);
 		}
 
-		torrentId = createResult.data.torrent_id;
-
 		try {
-			// Wait for torrent to be ready
-			const torrent = await waitForTorrentReady(apiKey, torrentId);
 			if (!torrent) {
 				throw new Error('Torrent did not become ready in time');
 			}
@@ -219,8 +265,9 @@ export const getFileByNameTorBoxStreamUrl = async (
 			streamUrl = downloadResult.data;
 			fileSize = Math.round((matchedFile.size || 0) / 1024 / 1024);
 		} catch (e) {
-			// Clean up on error
-			await deleteTorrent(apiKey, torrentId);
+			if (addedThisCall && torrentId) {
+				await deleteTorrent(apiKey, torrentId).catch(() => undefined);
+			}
 			throw e;
 		}
 	} catch (e) {
@@ -239,6 +286,7 @@ export const getBiggestFileTorBoxStreamUrl = async (
 	let torrentId = 0;
 	let fileId = 0;
 	let filename = '';
+	let addedThisCall = false;
 
 	try {
 		// First check if the torrent is cached
@@ -252,24 +300,35 @@ export const getBiggestFileTorBoxStreamUrl = async (
 			throw new Error('Torrent not cached on TorBox');
 		}
 
-		// Add the torrent
-		const createResult = await createTorrent(apiKey, {
-			magnet: `magnet:?xt=urn:btih:${hash}`,
-		});
-
+		const existing = await findUserTorrentByHash(apiKey, hash);
+		let torrent: TorBoxTorrentInfo | null = null;
 		if (
-			!createResult.success ||
-			!createResult.data ||
-			createResult.data.torrent_id === undefined
+			existing &&
+			(existing.download_finished ||
+				existing.download_state === 'completed' ||
+				existing.download_state === 'cached')
 		) {
-			throw new Error('Failed to add torrent to TorBox');
+			torrentId = existing.id;
+			torrent = existing;
+		} else {
+			addedThisCall = true;
+			const createResult = await createTorrent(apiKey, {
+				magnet: `magnet:?xt=urn:btih:${hash}`,
+			});
+
+			if (
+				!createResult.success ||
+				!createResult.data ||
+				createResult.data.torrent_id === undefined
+			) {
+				throw new Error('Failed to add torrent to TorBox');
+			}
+
+			torrentId = createResult.data.torrent_id;
+			torrent = await waitForTorrentReady(apiKey, torrentId);
 		}
 
-		torrentId = createResult.data.torrent_id;
-
 		try {
-			// Wait for torrent to be ready
-			const torrent = await waitForTorrentReady(apiKey, torrentId);
 			if (!torrent) {
 				throw new Error('Torrent did not become ready in time');
 			}
@@ -299,8 +358,9 @@ export const getBiggestFileTorBoxStreamUrl = async (
 			streamUrl = downloadResult.data;
 			fileSize = Math.round((biggestFile.size || 0) / 1024 / 1024);
 		} catch (e) {
-			// Clean up on error
-			await deleteTorrent(apiKey, torrentId);
+			if (addedThisCall && torrentId) {
+				await deleteTorrent(apiKey, torrentId).catch(() => undefined);
+			}
 			throw e;
 		}
 	} catch (e) {
@@ -337,23 +397,33 @@ export const getTorBoxStreamUrlKeepTorrent = async (
 			throw new Error('Torrent not cached on TorBox');
 		}
 
-		// Add the torrent
-		const createResult = await createTorrent(apiKey, {
-			magnet: `magnet:?xt=urn:btih:${hash}`,
-		});
-
+		const existing = await findUserTorrentByHash(apiKey, hash);
+		let torrent: TorBoxTorrentInfo | null = null;
 		if (
-			!createResult.success ||
-			!createResult.data ||
-			createResult.data.torrent_id === undefined
+			existing &&
+			(existing.download_finished ||
+				existing.download_state === 'completed' ||
+				existing.download_state === 'cached')
 		) {
-			throw new Error('Failed to add torrent to TorBox');
+			torrentId = existing.id;
+			torrent = existing;
+		} else {
+			const createResult = await createTorrent(apiKey, {
+				magnet: `magnet:?xt=urn:btih:${hash}`,
+			});
+
+			if (
+				!createResult.success ||
+				!createResult.data ||
+				createResult.data.torrent_id === undefined
+			) {
+				throw new Error('Failed to add torrent to TorBox');
+			}
+
+			torrentId = createResult.data.torrent_id;
+			torrent = await waitForTorrentReady(apiKey, torrentId);
 		}
 
-		torrentId = createResult.data.torrent_id;
-
-		// Wait for torrent to be ready
-		const torrent = await waitForTorrentReady(apiKey, torrentId);
 		if (!torrent) {
 			throw new Error('Torrent did not become ready in time');
 		}
