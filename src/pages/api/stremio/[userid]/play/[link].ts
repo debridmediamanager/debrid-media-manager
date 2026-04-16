@@ -1,4 +1,4 @@
-import { getToken, unrestrictLink } from '@/services/realDebrid';
+import { RdTokenExpiredError, getToken, unrestrictLink } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -48,6 +48,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			throw new Error(`no token found for user ${userid}`);
 		}
 	} catch (error) {
+		if (error instanceof RdTokenExpiredError) {
+			res.status(403).json({
+				error: 'Real-Debrid authorization expired. Please re-authenticate at https://debridmediamanager.com/stremio',
+			});
+			return;
+		}
 		console.error(
 			'Failed to get Real-Debrid token:',
 			error instanceof Error ? error.message : 'Unknown error'

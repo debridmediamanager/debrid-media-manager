@@ -1,4 +1,9 @@
-import { getToken, getTorrentInfo, getUserTorrentsList } from '@/services/realDebrid';
+import {
+	RdTokenExpiredError,
+	getToken,
+	getTorrentInfo,
+	getUserTorrentsList,
+} from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 
 export const PAGE_SIZE = 12;
@@ -18,12 +23,23 @@ export async function getDMMLibrary(userid: string, page: number) {
 		return { error: 'Go to DMM and connect your RD account', status: 401 };
 	}
 
-	const response = await getToken(
-		profile.clientId,
-		profile.clientSecret,
-		profile.refreshToken,
-		true
-	);
+	let response: { access_token: string } | null = null;
+	try {
+		response = await getToken(
+			profile.clientId,
+			profile.clientSecret,
+			profile.refreshToken,
+			true
+		);
+	} catch (error) {
+		if (error instanceof RdTokenExpiredError) {
+			return {
+				error: 'RD authorization expired. Re-authenticate at debridmediamanager.com/stremio',
+				status: 403,
+			};
+		}
+		throw error;
+	}
 	if (!response) {
 		return { error: 'Go to DMM and connect your RD account', status: 500 };
 	}

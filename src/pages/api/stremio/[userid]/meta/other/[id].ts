@@ -1,4 +1,4 @@
-import { getToken } from '@/services/realDebrid';
+import { RdTokenExpiredError, getToken } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 import { isLegacyToken } from '@/utils/castApiHelpers';
 import { getDMMTorrent } from '@/utils/castCatalogHelper';
@@ -83,6 +83,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 			console.log('[meta/other/id] Token obtained successfully');
 		} catch (error) {
+			if (error instanceof RdTokenExpiredError) {
+				res.status(200).json({
+					meta: {
+						id: cleanId,
+						name: '⚠️ RD Auth Expired',
+						type: 'other',
+						description:
+							'Your Real-Debrid authorization has expired. Please re-authenticate at https://debridmediamanager.com/stremio',
+					},
+				});
+				return;
+			}
 			console.error('[meta/other/id] Token error:', error);
 			res.status(500).json({ error: `Failed to get Real-Debrid token for user ${userid}` });
 			return;

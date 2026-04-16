@@ -377,9 +377,22 @@ export const getCredentials = async (deviceCode: string) => {
 };
 
 // In-memory access token cache keyed by clientId (unique per user)
-const accessTokenCache = new Map<string, { data: AccessTokenResponse; expiresAt: number }>();
+// Stores either a valid token or a 403 "dead" marker to avoid retrying revoked tokens
+const accessTokenCache = new Map<
+	string,
+	{ data: AccessTokenResponse; expiresAt: number } | { dead: true; expiresAt: number }
+>();
 // Dedup concurrent token requests for the same user
 const inflightTokenRequests = new Map<string, Promise<AccessTokenResponse>>();
+
+export class RdTokenExpiredError extends Error {
+	constructor(clientId: string) {
+		super(
+			`Real-Debrid authorization expired or revoked for client ${clientId.substring(0, 6)}...`
+		);
+		this.name = 'RdTokenExpiredError';
+	}
+}
 
 export const getToken = async (
 	clientId: string,
@@ -387,9 +400,10 @@ export const getToken = async (
 	refreshToken: string,
 	bare: boolean = false
 ): Promise<AccessTokenResponse> => {
-	// Return cached token if still valid
+	// Return cached token if still valid, or throw immediately if token is known-dead
 	const cached = accessTokenCache.get(clientId);
 	if (cached && cached.expiresAt > Date.now()) {
+		if ('dead' in cached) throw new RdTokenExpiredError(clientId);
 		return cached.data;
 	}
 
@@ -427,7 +441,17 @@ export const getToken = async (
 
 			return response.data;
 		} catch (error: any) {
-			// Clear stale cache on auth errors so next request retries fresh
+			const status = error?.response?.status;
+			if (status === 403) {
+				// Token revoked/expired — cache as dead for 1 hour to stop retrying
+				accessTokenCache.set(clientId, {
+					dead: true,
+					expiresAt: Date.now() + 3600 * 1000,
+				});
+				console.error('RD token expired/revoked for client:', clientId.substring(0, 6));
+				throw new RdTokenExpiredError(clientId);
+			}
+			// For other errors (429, network), clear cache so next request retries
 			accessTokenCache.delete(clientId);
 			console.error('Error fetching access token:', error.message);
 			throw error;

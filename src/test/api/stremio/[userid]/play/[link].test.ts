@@ -13,7 +13,8 @@ const { mockUnrestrictLink, mockGetToken, mockRepository } = vi.hoisted(() => ({
 	},
 }));
 
-vi.mock('@/services/realDebrid', () => ({
+vi.mock('@/services/realDebrid', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/services/realDebrid')>()),
 	unrestrictLink: mockUnrestrictLink,
 	getToken: mockGetToken,
 }));
