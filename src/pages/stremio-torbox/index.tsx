@@ -107,7 +107,7 @@ export function StremioTorBoxPage() {
 						<div className="mt-4 border-t border-gray-700 pt-4">
 							<div className="mb-2 flex items-center justify-center text-sm text-gray-400">
 								<EyeOff className="mr-1 h-3 w-3" />
-								No Catalog Version (hides library from Stremio home)
+								No Catalog Version (hides all catalogs from Stremio home)
 							</div>
 							<Link
 								href={`stremio://${window.location.origin.replace(

@@ -15,26 +15,24 @@ const nextConfig = {
 		return config;
 	},
 	async rewrites() {
-		return [
-			// Support external callers using /anticors path by rewriting to API route
-			{ source: '/anticors', destination: '/api/anticors' },
-			// Stremio builds resource URLs relative to the manifest base path.
-			// The no-catalog manifest lives at /api/stremio*/[userid]/no-catalog/manifest.json,
-			// so Stremio requests .../no-catalog/catalog/..., .../no-catalog/stream/..., etc.
-			// Rewrite these back to the real endpoints.
-			{
-				source: '/api/stremio/:userid/no-catalog/:path*',
-				destination: '/api/stremio/:userid/:path*',
-			},
-			{
-				source: '/api/stremio-tb/:userid/no-catalog/:path*',
-				destination: '/api/stremio-tb/:userid/:path*',
-			},
-			{
-				source: '/api/stremio-ad/:userid/no-catalog/:path*',
-				destination: '/api/stremio-ad/:userid/:path*',
-			},
-		];
+		return {
+			beforeFiles: [],
+			afterFiles: [{ source: '/anticors', destination: '/api/anticors' }],
+			fallback: [
+				{
+					source: '/api/stremio/:userid/no-catalog/:path*',
+					destination: '/api/stremio/:userid/:path*',
+				},
+				{
+					source: '/api/stremio-tb/:userid/no-catalog/:path*',
+					destination: '/api/stremio-tb/:userid/:path*',
+				},
+				{
+					source: '/api/stremio-ad/:userid/no-catalog/:path*',
+					destination: '/api/stremio-ad/:userid/:path*',
+				},
+			],
+		};
 	},
 	images: {
 		unoptimized: true,

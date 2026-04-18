@@ -22,18 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			},
 		],
 		types: ['movie', 'series'],
-		catalogs: [
-			{
-				id: 'tb-casted-movies',
-				name: 'DMM TB Movies',
-				type: 'movie',
-			},
-			{
-				id: 'tb-casted-shows',
-				name: 'DMM TB TV Shows',
-				type: 'series',
-			},
-		],
+		catalogs: [],
 		behaviorHints: { adult: false, p2p: false },
 	});
 }

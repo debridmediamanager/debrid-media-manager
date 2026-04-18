@@ -24,18 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			},
 		],
 		types: ['movie', 'series'],
-		catalogs: [
-			{
-				id: 'casted-movies',
-				name: 'DMM RD Movies',
-				type: 'movie',
-			},
-			{
-				id: 'casted-shows',
-				name: 'DMM RD TV Shows',
-				type: 'series',
-			},
-		],
+		catalogs: [],
 		behaviorHints: { adult: false, p2p: false },
 	});
 }
