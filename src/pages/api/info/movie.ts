@@ -82,7 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			backdrop:
 				mdbResponse.backdrop ??
 				cinemetaResponse.meta?.background ??
-				'https://source.unsplash.com/random/1800x300?' + title,
+				`https://picsum.photos/seed/${encodeURIComponent(title)}/1800/300`,
 			year: mdbResponse.year ?? cinemetaResponse.meta?.releaseInfo ?? '????',
 			imdb_score: imdb_score ?? 0,
 			trailer,
@@ -93,7 +93,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			title: 'Unknown',
 			description: 'n/a',
 			poster: '',
-			backdrop: 'https://source.unsplash.com/random/1800x300?movie',
+			backdrop: 'https://picsum.photos/seed/movie/1800/300',
 			year: '????',
 			imdb_score: 0,
 			trailer: '',
