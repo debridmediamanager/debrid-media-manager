@@ -100,4 +100,47 @@ describe('/api/stremio/cast/movie/[imdbid]', () => {
 			errorMessage: 'rd offline',
 		});
 	});
+
+	it('accepts token via Authorization Bearer header instead of query', async () => {
+		mockGenerateUserId.mockResolvedValue('user-1');
+		mockGetBiggestFileStreamUrl.mockResolvedValue([
+			'https://files.example.com/Video.mkv',
+			'https://rd.example.com/link',
+			900,
+		]);
+
+		const req = createMockRequest({
+			query: { imdbid: 'tt1234567', hash: 'hashabc' },
+			headers: {
+				authorization: 'Bearer header-token',
+				'x-real-ip': '127.0.0.1',
+			},
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockGenerateUserId).toHaveBeenCalledWith('header-token');
+		expect(mockGetBiggestFileStreamUrl).toHaveBeenCalledWith(
+			'header-token',
+			'hashabc',
+			'127.0.0.1'
+		);
+		expect(res.status).toHaveBeenCalledWith(200);
+	});
+
+	it('returns 400 when no token is provided via any source', async () => {
+		const req = createMockRequest({
+			query: { imdbid: 'tt1', hash: 'hashabc' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({
+			status: 'error',
+			errorMessage: 'Missing "token" or "hash" parameter',
+		});
+	});
 });

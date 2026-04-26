@@ -90,6 +90,45 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 		expect(res.json).toHaveBeenCalledWith({ errorEpisodes: [] });
 	});
 
+	it('accepts token via Authorization Bearer header instead of query', async () => {
+		const req = createMockRequest({
+			query: { anidbid: 'anidb1', hash: 'hash', fileIds: ['101'] },
+			headers: {
+				authorization: 'Bearer header-token',
+				'x-real-ip': '127.0.0.1',
+			},
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockGenerateUserId).toHaveBeenCalledWith('header-token');
+		expect(mockGetStreamUrl).toHaveBeenCalledWith(
+			'header-token',
+			'hash',
+			101,
+			'127.0.0.1',
+			'anime'
+		);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ errorEpisodes: [] });
+	});
+
+	it('returns 400 when no token is provided via any source', async () => {
+		const req = createMockRequest({
+			query: { anidbid: 'anidb1', hash: 'hash', fileIds: '1' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({
+			status: 'error',
+			errorMessage: 'Missing "token", "hash" or "fileIds" parameter',
+		});
+	});
+
 	it('records failed episodes when stream acquisition errors occur', async () => {
 		mockGetStreamUrl.mockRejectedValueOnce(new Error('rd down'));
 		const req = createMockRequest({

@@ -131,4 +131,47 @@ describe('/api/stremio/cast/[imdbid]', () => {
 			errorMessage: expect.stringContaining('Failed to cast:'),
 		});
 	});
+
+	it('accepts token via Authorization Bearer header instead of query', async () => {
+		mockGetStreamUrl.mockResolvedValue(['https://streams/100', 'https://rd/link', 1, 2, 123]);
+		const req = createMockRequest({
+			query: {
+				imdbid: 'tt1234567',
+				hash: 'hash',
+				fileId: '10',
+				mediaType: 'tv',
+			},
+			headers: {
+				authorization: 'Bearer header-token',
+				'x-real-ip': '1.1.1.1',
+			},
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockGenerateUserId).toHaveBeenCalledWith('header-token');
+		expect(mockGetStreamUrl).toHaveBeenCalledWith('header-token', 'hash', 10, '1.1.1.1', 'tv');
+		expect(res.status).toHaveBeenCalledWith(200);
+	});
+
+	it('returns 400 when no token is provided via any source', async () => {
+		const req = createMockRequest({
+			query: {
+				imdbid: 'tt1',
+				hash: 'hash',
+				fileId: '1',
+				mediaType: 'movie',
+			},
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({
+			status: 'error',
+			errorMessage: 'Missing "token", "hash", "fileId" or "mediaType" parameter',
+		});
+	});
 });

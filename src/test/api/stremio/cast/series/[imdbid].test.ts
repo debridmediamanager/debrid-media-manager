@@ -75,6 +75,46 @@ describe('/api/stremio/cast/series/[imdbid]', () => {
 		expect(res.json).toHaveBeenCalledWith({ errorEpisodes: [] });
 	});
 
+	it('accepts token via Authorization Bearer header instead of query', async () => {
+		mockGetStreamUrl.mockResolvedValue([
+			'https://files.example.com/Video-S01E01.mkv',
+			'https://rd.example.com/link',
+			1,
+			2,
+			700,
+		]);
+		const req = createMockRequest({
+			query: { imdbid: 'tt999', hash: 'hash', fileIds: '101' },
+			headers: {
+				authorization: 'Bearer header-token',
+				'x-real-ip': '1.1.1.1',
+			},
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockGenerateUserId).toHaveBeenCalledWith('header-token');
+		expect(mockGetStreamUrl).toHaveBeenCalledWith('header-token', 'hash', 101, '1.1.1.1', 'tv');
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ errorEpisodes: [] });
+	});
+
+	it('returns 400 when no token is provided via any source', async () => {
+		const req = createMockRequest({
+			query: { imdbid: 'tt1', hash: 'hash', fileIds: '1' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({
+			status: 'error',
+			errorMessage: 'Missing "token", "hash" or "fileIds" parameter',
+		});
+	});
+
 	it('tracks episodes that fail to cast', async () => {
 		mockGetStreamUrl
 			.mockResolvedValueOnce([
