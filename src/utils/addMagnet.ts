@@ -23,6 +23,7 @@ import {
 } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorrentInfoResponse } from '@/services/types';
 import { UserTorrent } from '@/torrent/userTorrent';
+import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { handleDeleteRdTorrent } from './deleteTorrent';
@@ -49,7 +50,6 @@ const getTbError = (error: unknown): string | null => {
 	return null;
 };
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const retryDelay = process.env.VITEST_WORKER_ID ? 0 : 5000;
 const MAX_509_RETRIES = 5;
 

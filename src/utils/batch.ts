@@ -1,8 +1,6 @@
-export type AsyncFunction<T> = () => Promise<T>;
+import { delay as sleep } from '@/utils/delay';
 
-async function sleep(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
+export type AsyncFunction<T> = () => Promise<T>;
 
 export async function runConcurrentFunctions<T>(
 	functions: Array<AsyncFunction<T>>,

@@ -1,4 +1,5 @@
 import { recordRdOperationEvent } from '@/lib/observability/rdOperationalStats';
+import { delay as delayWithMessageChannel } from '@/utils/delay';
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 import qs from 'qs';
@@ -44,13 +45,6 @@ const CACHE_BACKOFF_TIME = 6000; // Slightly longer than the service worker cach
 // a minimum 240ms delay between ANY RealDebrid API call, preventing 429 errors
 let globalRequestQueue: Promise<void> = Promise.resolve();
 let globalLastRequestTime = 0;
-
-// Delay function using MessageChannel to avoid browser throttling in background tabs
-// Unlike setTimeout which gets throttled to 1s+ in inactive tabs, MessageChannel
-// uses the browser's message queue which maintains timing accuracy
-function delayWithMessageChannel(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 // Shared rate limiting function that serializes all requests
 async function enforceRateLimit(): Promise<void> {

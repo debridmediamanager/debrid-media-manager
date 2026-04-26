@@ -1,6 +1,7 @@
 import { MagnetFile, adInstantCheck } from '@/services/allDebrid';
 import { EnrichedHashlistTorrent, FileData, SearchResult } from '@/services/mediasearch';
 import { checkCachedStatus } from '@/services/torbox';
+import { delay } from '@/utils/delay';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-hot-toast';
 import { checkAvailability, checkAvailabilityAd, checkAvailabilityByHashes } from './availability';
@@ -58,7 +59,7 @@ async function waitForRateLimit() {
 		const oldestTimestamp = rdRequestTimestamps[0];
 		const waitTime = oldestTimestamp + TIME_WINDOW - now;
 		if (waitTime > 0) {
-			await new Promise((resolve) => setTimeout(resolve, waitTime));
+			await delay(waitTime);
 			return waitForRateLimit(); // Recheck after waiting
 		}
 	}
@@ -297,7 +298,7 @@ const processAdInstantCheckDb = async <T extends SearchResult | EnrichedHashlist
 			const oldestTimestamp = adRequestTimestamps[0];
 			const waitTime = oldestTimestamp + AD_TIME_WINDOW - now;
 			if (waitTime > 0) {
-				await new Promise((resolve) => setTimeout(resolve, waitTime));
+				await delay(waitTime);
 				return waitForAdRateLimit(); // Recheck after waiting
 			}
 		}

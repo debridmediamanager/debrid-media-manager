@@ -8,12 +8,9 @@
  * - Respects Retry-After header
  */
 
-const MAX_RETRIES = 7;
+import { delay as delayWithMessageChannel } from '@/utils/delay';
 
-// Delay function using MessageChannel to avoid browser throttling in background tabs
-function delayWithMessageChannel(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
+const MAX_RETRIES = 7;
 
 // Helper function to calculate exponential backoff delay with jitter
 function calculateRetryDelay(retryCount: number, retryAfterHeader?: string | null): number {

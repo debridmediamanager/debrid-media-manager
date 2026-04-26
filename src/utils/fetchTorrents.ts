@@ -3,6 +3,7 @@ import { getUserTorrentsList } from '@/services/realDebrid';
 import { getTorrentList } from '@/services/torbox';
 import { TorBoxTorrentInfo, UserTorrentResponse } from '@/services/types';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
+import { delay } from '@/utils/delay';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import { AxiosError } from 'axios';
 import { every, some } from 'lodash';
@@ -65,7 +66,7 @@ class RequestQueue {
 	async waitForCompletion() {
 		// Keep checking until queue is empty and no tasks are running
 		while (this.queue.length > 0 || this.running > 0) {
-			await new Promise((resolve) => setTimeout(resolve, 100));
+			await delay(100);
 		}
 
 		return {

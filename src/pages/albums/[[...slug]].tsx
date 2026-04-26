@@ -9,6 +9,7 @@ import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { MusicAlbum, MusicLibraryResponse, MusicTrack } from '@/pages/api/music/library';
 import { UnrestrictTrackResponse } from '@/pages/api/music/unrestrict';
+import { delay } from '@/utils/delay';
 import { Keyboard, Library, Loader2, Music2, X } from 'lucide-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -238,7 +239,7 @@ export default function AlbumsPage() {
 					console.error(`Failed to fetch cover for ${album.album}:`, err);
 				}
 
-				await new Promise((r) => setTimeout(r, 200));
+				await delay(200);
 			}
 		}
 

@@ -1,3 +1,4 @@
+import { delay as delayWithMessageChannel } from '@/utils/delay';
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 
@@ -22,11 +23,6 @@ const MIN_REQUEST_INTERVAL = (60 * 1000) / 250; // 240ms between requests (match
 // Global rate limiter for all AllDebrid API requests
 let globalRequestQueue: Promise<void> = Promise.resolve();
 let globalLastRequestTime = 0;
-
-// Delay function using MessageChannel to avoid browser throttling in background tabs
-function delayWithMessageChannel(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 // Shared rate limiting function that serializes all requests
 async function enforceRateLimit(): Promise<void> {
@@ -327,7 +323,7 @@ export const checkPin = async (pin: string, check: string): Promise<PinCheckData
 		}
 
 		while (!pinCheck.data.data!.activated) {
-			await new Promise((resolve) => setTimeout(resolve, 5000));
+			await delayWithMessageChannel(5000);
 			pinCheck = await allDebridAxios.post<ApiResponse<PinCheckData>>(endpoint, params, {
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
@@ -858,7 +854,7 @@ export async function waitForAdRateLimit(): Promise<void> {
 		const waitTime = oldestTimestamp + AD_TIME_WINDOW - now;
 
 		if (waitTime > 0) {
-			await new Promise((resolve) => setTimeout(resolve, waitTime));
+			await delayWithMessageChannel(waitTime);
 			// Recursively call to clean up and check again
 			return waitForAdRateLimit();
 		}

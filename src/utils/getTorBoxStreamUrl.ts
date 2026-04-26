@@ -6,6 +6,7 @@ import {
 	requestDownloadLink,
 } from '@/services/torbox';
 import { TorBoxTorrentInfo } from '@/services/types';
+import { delay } from '@/utils/delay';
 import ptt from 'parse-torrent-title';
 
 const MAX_POLL_ATTEMPTS = 30;
@@ -18,13 +19,13 @@ async function waitForTorrentReady(
 	for (let i = 0; i < MAX_POLL_ATTEMPTS; i++) {
 		const result = await getTorrentList(apiKey, { id: torrentId });
 		if (!result.success || !result.data) {
-			await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
+			await delay(POLL_INTERVAL_MS);
 			continue;
 		}
 
 		const torrent = Array.isArray(result.data) ? result.data[0] : result.data;
 		if (!torrent) {
-			await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
+			await delay(POLL_INTERVAL_MS);
 			continue;
 		}
 
@@ -37,7 +38,7 @@ async function waitForTorrentReady(
 			return torrent;
 		}
 
-		await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
+		await delay(POLL_INTERVAL_MS);
 	}
 
 	return null;

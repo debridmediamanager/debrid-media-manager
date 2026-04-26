@@ -15,6 +15,7 @@ import {
 	MagnetFile,
 	uploadMagnet,
 } from '@/services/allDebrid';
+import { delay } from '@/utils/delay';
 import ptt from 'parse-torrent-title';
 
 const VIDEO_EXTENSIONS = ['.mkv', '.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.m4v'];
@@ -71,7 +72,7 @@ async function waitForReady(apiKey: string, magnetId: number): Promise<void> {
 		if (status && status.statusCode >= 5) {
 			throw new Error(`Magnet failed: ${status.status}`);
 		}
-		await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
+		await delay(POLL_INTERVAL_MS);
 	}
 	throw new Error('Magnet did not become ready in time');
 }

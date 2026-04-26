@@ -1,3 +1,4 @@
+import { delay as delayWithMessageChannel } from '@/utils/delay';
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 import {
@@ -43,11 +44,6 @@ export class TorBoxRateLimitError extends Error {
 		super(message);
 		this.name = 'TorBoxRateLimitError';
 	}
-}
-
-// Delay function using MessageChannel to avoid browser throttling in background tabs
-function delayWithMessageChannel(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // Shared rate limiting function that serializes all requests

@@ -16,6 +16,7 @@ import axiosWithRetry from '@/utils/axiosWithRetry';
 import { getLocalStorageBoolean, getLocalStorageItemOrDefault } from '@/utils/browserStorage';
 import { handleCastTvShow } from '@/utils/castApiClient';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
+import { delay } from '@/utils/delay';
 import {
 	getColorScale,
 	getExpectedEpisodeCount,
@@ -457,7 +458,7 @@ const TvSearch: FunctionComponent = () => {
 								episodeNum += 2;
 
 								// Add a small delay to avoid hammering the API
-								await new Promise((resolve) => setTimeout(resolve, 100));
+								await delay(100);
 							}
 						} catch (error) {
 							console.error(`Error fetching ${source}:`, error);

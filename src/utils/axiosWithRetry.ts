@@ -8,6 +8,7 @@
  * - Respects Retry-After header
  */
 
+import { delay as delayWithMessageChannel } from '@/utils/delay';
 import axios, { InternalAxiosRequestConfig } from 'axios';
 
 const MAX_RETRIES = 7;
@@ -17,11 +18,6 @@ const REQUEST_TIMEOUT = 30000; // 30s timeout for internal API
 interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
 	__isRetryRequest?: boolean;
 	__retryCount?: number;
-}
-
-// Delay function using MessageChannel to avoid browser throttling in background tabs
-function delayWithMessageChannel(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // Helper function to calculate exponential backoff delay with jitter

@@ -2,6 +2,7 @@
  * Unified rate limiter for all debrid services
  * Implements Zurg's rate limiting patterns with browser adaptations
  */
+import { delay } from '@/utils/delay';
 
 interface RateLimitConfig {
 	maxRequestsPerMinute: number;
@@ -193,7 +194,7 @@ export class UnifiedRateLimiter {
 			const queue = this.queues.get(service);
 			if (queue && queue.length > 0) {
 				// Schedule next processing cycle
-				setTimeout(() => this.processQueue(service), 10);
+				delay(10).then(() => this.processQueue(service));
 			}
 		}
 	}
@@ -377,7 +378,7 @@ export class UnifiedRateLimiter {
 	}
 
 	private sleep(ms: number): Promise<void> {
-		return new Promise((resolve) => setTimeout(resolve, ms));
+		return delay(ms);
 	}
 
 	/**
