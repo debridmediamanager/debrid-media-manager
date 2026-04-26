@@ -3,7 +3,12 @@ import { normalizeHash } from '@/utils/extractHashes';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
-export function useExternalSources(rdKey: string | null) {
+export function useExternalSources(
+	rdKey: string | null,
+	adKey?: string | null,
+	tbKey?: string | null
+) {
+	const hasAnyDebridKey = !!(rdKey || adKey || tbKey);
 	const [mediafusionHash, setMediafusionHash] = useState<string>('');
 
 	// Get or generate MediaFusion hash
@@ -269,7 +274,7 @@ export function useExternalSources(rdKey: string | null) {
 
 	const fetchExternalSource = useCallback(
 		async (url: string, source: string, imdbId: string): Promise<SearchResult[]> => {
-			if (!rdKey) return [];
+			if (!hasAnyDebridKey) return [];
 
 			try {
 				let response;
@@ -305,7 +310,7 @@ export function useExternalSources(rdKey: string | null) {
 				return [];
 			}
 		},
-		[rdKey, transformExternalStream]
+		[hasAnyDebridKey, transformExternalStream]
 	);
 
 	const fetchMovieFromExternalSource = useCallback(
@@ -364,7 +369,7 @@ export function useExternalSources(rdKey: string | null) {
 
 			return fetchExternalSource(url, source, imdbId);
 		},
-		[rdKey, mediafusionHash, fetchExternalSource]
+		[rdKey, hasAnyDebridKey, mediafusionHash, fetchExternalSource]
 	);
 
 	const fetchEpisodeFromExternalSource = useCallback(
@@ -425,7 +430,7 @@ export function useExternalSources(rdKey: string | null) {
 
 			return fetchExternalSource(url, source, imdbId);
 		},
-		[rdKey, mediafusionHash, fetchExternalSource]
+		[rdKey, hasAnyDebridKey, mediafusionHash, fetchExternalSource]
 	);
 
 	const getEnabledSources = useCallback(() => {

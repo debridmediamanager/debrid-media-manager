@@ -151,7 +151,11 @@ const MovieSearch: FunctionComponent = () => {
 		setSearchResults
 	);
 
-	const { fetchMovieFromExternalSource, getEnabledSources } = useExternalSources(rdKey);
+	const { fetchMovieFromExternalSource, getEnabledSources } = useExternalSources(
+		rdKey,
+		adKey,
+		torboxKey
+	);
 
 	const {
 		isAnyChecking,

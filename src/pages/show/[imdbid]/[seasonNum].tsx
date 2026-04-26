@@ -137,7 +137,11 @@ const TvSearch: FunctionComponent = () => {
 		setSearchResults
 	);
 
-	const { fetchEpisodeFromExternalSource, getEnabledSources } = useExternalSources(rdKey);
+	const { fetchEpisodeFromExternalSource, getEnabledSources } = useExternalSources(
+		rdKey,
+		adKey,
+		torboxKey
+	);
 
 	const {
 		isAnyChecking,
