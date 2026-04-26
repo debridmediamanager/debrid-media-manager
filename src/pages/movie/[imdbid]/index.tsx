@@ -312,6 +312,9 @@ const MovieSearch: FunctionComponent = () => {
 		const processSourceResults = async (sourceResults: SearchResult[], sourceName: string) => {
 			if (!isMounted.current) return;
 
+			let hashesToCheck: string[] = [];
+			let resultCount = 0;
+
 			setSearchResults((prevResults) => {
 				const existingHashes = new Set(prevResults.map((r) => r.hash));
 				const newUniqueResults = sourceResults.filter(
@@ -327,7 +330,6 @@ const MovieSearch: FunctionComponent = () => {
 						allSourcesCompleted = true;
 						finalResultCount = prevResults.length;
 						setSearchState('loaded');
-						checkAndShowFinalToast();
 					}
 					return prevResults;
 				}
@@ -347,82 +349,74 @@ const MovieSearch: FunctionComponent = () => {
 					return a.hash.localeCompare(b.hash);
 				});
 
-				const nonCachedNew = newUniqueResults.filter(
-					(r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable
-				);
+				hashesToCheck = newUniqueResults
+					.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
+					.map((r) => r.hash);
 
 				completedSources++;
-
-				if (nonCachedNew.length > 0) {
-					const hashArr = nonCachedNew.map((r) => r.hash);
-
-					// Check RD database for cached availability
-					if (rdKey) {
-						pendingAvailabilityChecks++;
-
-						(async () => {
-							const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-							const count = await checkDatabaseAvailabilityRd(
-								tokenWithTimestamp,
-								tokenHash,
-								imdbId,
-								hashArr,
-								setSearchResults,
-								sortByBiggest
-							);
-							rdAvailableCount += count;
-							pendingAvailabilityChecks--;
-							checkAndShowFinalToast();
-						})();
-					}
-
-					// Check AllDebrid database for cached availability
-					if (adKey) {
-						pendingAvailabilityChecks++;
-
-						(async () => {
-							const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-							const count = await checkDatabaseAvailabilityAd(
-								tokenWithTimestamp,
-								tokenHash,
-								imdbId,
-								hashArr,
-								setSearchResults,
-								sortByBiggest
-							);
-							adAvailableCount += count;
-							pendingAvailabilityChecks--;
-							checkAndShowFinalToast();
-						})();
-					}
-
-					// Check TorBox database for cached availability
-					if (torboxKey) {
-						pendingAvailabilityChecks++;
-
-						(async () => {
-							const count = await checkDatabaseAvailabilityTb(
-								torboxKey,
-								hashArr,
-								setSearchResults,
-								sortByBiggest
-							);
-							tbAvailableCount += count;
-							pendingAvailabilityChecks--;
-							checkAndShowFinalToast();
-						})();
-					}
-				}
 
 				if (completedSources === totalSources) {
 					allSourcesCompleted = true;
 					finalResultCount = sorted.length;
 					setSearchState('loaded');
-					checkAndShowFinalToast();
 				}
 
+				resultCount = sorted.length;
 				return sorted;
 			});
+
+			// Fire availability checks outside the state updater
+			if (hashesToCheck.length > 0) {
+				if (rdKey) {
+					pendingAvailabilityChecks++;
+					generateTokenAndHash().then(async ([tokenWithTimestamp, tokenHash]) => {
+						const count = await checkDatabaseAvailabilityRd(
+							tokenWithTimestamp,
+							tokenHash,
+							imdbId,
+							hashesToCheck,
+							setSearchResults,
+							sortByBiggest
+						);
+						rdAvailableCount += count;
+						pendingAvailabilityChecks--;
+						checkAndShowFinalToast();
+					});
+				}
+
+				if (adKey) {
+					pendingAvailabilityChecks++;
+					generateTokenAndHash().then(async ([tokenWithTimestamp, tokenHash]) => {
+						const count = await checkDatabaseAvailabilityAd(
+							tokenWithTimestamp,
+							tokenHash,
+							imdbId,
+							hashesToCheck,
+							setSearchResults,
+							sortByBiggest
+						);
+						adAvailableCount += count;
+						pendingAvailabilityChecks--;
+						checkAndShowFinalToast();
+					});
+				}
+
+				if (torboxKey) {
+					pendingAvailabilityChecks++;
+					checkDatabaseAvailabilityTb(
+						torboxKey,
+						hashesToCheck,
+						setSearchResults,
+						sortByBiggest
+					).then((count) => {
+						tbAvailableCount += count;
+						pendingAvailabilityChecks--;
+						checkAndShowFinalToast();
+					});
+				}
+			}
+
+			checkAndShowFinalToast();
 		};
 
 		try {

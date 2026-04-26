@@ -79,56 +79,59 @@ const processRdInstantCheckByHashes = async <T extends SearchResult | EnrichedHa
 	shouldUpdateTitleAndSize = false
 ): Promise<number> => {
 	let instantCount = 0;
+	const allAvailable: {
+		hash: string;
+		files: { file_id: number; path: string; bytes: number }[];
+	}[] = [];
 	const funcs = [];
 
 	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
 			await waitForRateLimit();
 			const resp = await checkAvailabilityByHashes(dmmProblemKey, solution, hashGroup);
-			setTorrentList((prevSearchResults) => {
-				const newSearchResults = [...prevSearchResults];
-				for (const torrent of newSearchResults) {
-					if (torrent.noVideos) continue;
-					const availableTorrent = resp.available.find(
-						(t: { hash: string }) => t.hash === torrent.hash
-					);
-					if (!availableTorrent) continue;
-
-					torrent.files = availableTorrent.files.map(
-						(file: { file_id: number; path: string; bytes: number }) => ({
-							fileId: file.file_id,
-							filename: file.path,
-							filesize: file.bytes,
-						})
-					);
-
-					if (shouldUpdateTitleAndSize) {
-						updateTorrentTitle(torrent as SearchResult, torrent.files);
-						(torrent as SearchResult).fileSize =
-							torrent.files.reduce((acc, curr) => acc + curr.filesize, 0) /
-							1024 /
-							1024;
-					}
-
-					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-					const stats = calculateFileStats(videoFiles);
-					Object.assign(torrent, stats);
-
-					torrent.noVideos = !torrent.files.some((file) =>
-						isVideo({ path: file.filename })
-					);
-					if (!torrent.noVideos) {
-						torrent.rdAvailable = true;
-						instantCount += 1;
-					} else {
-						torrent.rdAvailable = false;
-					}
-				}
-				return sortFn ? sortFn(newSearchResults) : newSearchResults;
-			});
+			allAvailable.push(...resp.available);
 		});
 	}
 	await runConcurrentFunctions(funcs, 4, 0);
+
+	if (allAvailable.length === 0) return 0;
+
+	const availableMap = new Map(allAvailable.map((t) => [t.hash, t]));
+
+	setTorrentList((prevSearchResults) => {
+		const newSearchResults = [...prevSearchResults];
+		for (const torrent of newSearchResults) {
+			if (torrent.noVideos) continue;
+			const availableTorrent = availableMap.get(torrent.hash);
+			if (!availableTorrent) continue;
+
+			torrent.files = availableTorrent.files.map((file) => ({
+				fileId: file.file_id,
+				filename: file.path,
+				filesize: file.bytes,
+			}));
+
+			if (shouldUpdateTitleAndSize) {
+				updateTorrentTitle(torrent as SearchResult, torrent.files);
+				(torrent as SearchResult).fileSize =
+					torrent.files.reduce((acc, curr) => acc + curr.filesize, 0) / 1024 / 1024;
+			}
+
+			const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
+			const stats = calculateFileStats(videoFiles);
+			Object.assign(torrent, stats);
+
+			torrent.noVideos = !torrent.files.some((file) => isVideo({ path: file.filename }));
+			if (!torrent.noVideos) {
+				torrent.rdAvailable = true;
+				instantCount += 1;
+			} else {
+				torrent.rdAvailable = false;
+			}
+		}
+		return sortFn ? sortFn(newSearchResults) : newSearchResults;
+	});
+
 	return instantCount;
 };
 
@@ -144,56 +147,59 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	shouldUpdateTitleAndSize = false
 ): Promise<number> => {
 	let instantCount = 0;
+	const allAvailable: {
+		hash: string;
+		files: { file_id: number; path: string; bytes: number }[];
+	}[] = [];
 	const funcs = [];
 
 	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
 			await waitForRateLimit();
 			const resp = await checkAvailability(dmmProblemKey, solution, imdbId, hashGroup);
-			setTorrentList((prevSearchResults) => {
-				const newSearchResults = [...prevSearchResults];
-				for (const torrent of newSearchResults) {
-					if (torrent.noVideos) continue;
-					const availableTorrent = resp.available.find(
-						(t: { hash: string }) => t.hash === torrent.hash
-					);
-					if (!availableTorrent) continue;
-
-					torrent.files = availableTorrent.files.map(
-						(file: { file_id: number; path: string; bytes: number }) => ({
-							fileId: file.file_id,
-							filename: file.path,
-							filesize: file.bytes,
-						})
-					);
-
-					if (shouldUpdateTitleAndSize) {
-						updateTorrentTitle(torrent as SearchResult, torrent.files);
-						(torrent as SearchResult).fileSize =
-							torrent.files.reduce((acc, curr) => acc + curr.filesize, 0) /
-							1024 /
-							1024;
-					}
-
-					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-					const stats = calculateFileStats(videoFiles);
-					Object.assign(torrent, stats);
-
-					torrent.noVideos = !torrent.files.some((file) =>
-						isVideo({ path: file.filename })
-					);
-					if (!torrent.noVideos) {
-						torrent.rdAvailable = true;
-						instantCount += 1;
-					} else {
-						torrent.rdAvailable = false;
-					}
-				}
-				return sortFn ? sortFn(newSearchResults) : newSearchResults;
-			});
+			allAvailable.push(...resp.available);
 		});
 	}
 	await runConcurrentFunctions(funcs, 4, 0);
+
+	if (allAvailable.length === 0) return 0;
+
+	const availableMap = new Map(allAvailable.map((t) => [t.hash, t]));
+
+	setTorrentList((prevSearchResults) => {
+		const newSearchResults = [...prevSearchResults];
+		for (const torrent of newSearchResults) {
+			if (torrent.noVideos) continue;
+			const availableTorrent = availableMap.get(torrent.hash);
+			if (!availableTorrent) continue;
+
+			torrent.files = availableTorrent.files.map((file) => ({
+				fileId: file.file_id,
+				filename: file.path,
+				filesize: file.bytes,
+			}));
+
+			if (shouldUpdateTitleAndSize) {
+				updateTorrentTitle(torrent as SearchResult, torrent.files);
+				(torrent as SearchResult).fileSize =
+					torrent.files.reduce((acc, curr) => acc + curr.filesize, 0) / 1024 / 1024;
+			}
+
+			const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
+			const stats = calculateFileStats(videoFiles);
+			Object.assign(torrent, stats);
+
+			torrent.noVideos = !torrent.files.some((file) => isVideo({ path: file.filename }));
+			if (!torrent.noVideos) {
+				torrent.rdAvailable = true;
+				instantCount += 1;
+			} else {
+				torrent.rdAvailable = false;
+			}
+		}
+		return sortFn ? sortFn(newSearchResults) : newSearchResults;
+	});
+
 	return instantCount;
 };
 
@@ -205,6 +211,7 @@ const processAdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	sortFn?: (results: T[]) => T[]
 ): Promise<number> => {
 	let instantCount = 0;
+	const allMagnets: any[] = [];
 	const funcs = [];
 
 	const checkVideoInFiles = (files: MagnetFile[]): boolean => {
@@ -219,51 +226,56 @@ const processAdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	for (const hashGroup of groupBy(100, hashes)) {
 		funcs.push(async () => {
 			const resp = await adInstantCheck(adKey, hashGroup);
-			setTorrentList((prevSearchResults) => {
-				const newSearchResults = [...prevSearchResults];
-				for (const magnetData of resp.data.magnets) {
-					const torrent = newSearchResults.find((r) => r.hash === magnetData.hash);
-					if (!torrent || torrent.noVideos || !magnetData.files) continue;
-
-					let idx = 0;
-					torrent.files = magnetData.files
-						.map((file: any) => {
-							if (file.e && file.e.length > 0) {
-								return file.e.map((f: any) => ({
-									fileId: idx++,
-									filename: f.n,
-									filesize: f.s,
-								}));
-							}
-							return {
-								fileId: idx++,
-								filename: file.n,
-								filesize: file.s,
-							};
-						})
-						.flat();
-
-					if ('medianFileSize' in torrent) {
-						const videoFiles = torrent.files.filter((f) =>
-							isVideo({ path: f.filename })
-						);
-						const stats = calculateFileStats(videoFiles);
-						Object.assign(torrent, stats);
-					}
-
-					torrent.noVideos = checkVideoInFiles(magnetData.files);
-					if (!torrent.noVideos && magnetData.instant) {
-						torrent.adAvailable = true;
-						instantCount += 1;
-					} else {
-						torrent.adAvailable = false;
-					}
-				}
-				return sortFn ? sortFn(newSearchResults) : newSearchResults;
-			});
+			allMagnets.push(...resp.data.magnets);
 		});
 	}
 	await runConcurrentFunctions(funcs, 4, 0);
+
+	if (allMagnets.length === 0) return 0;
+
+	const magnetMap = new Map(allMagnets.map((m) => [m.hash, m]));
+
+	setTorrentList((prevSearchResults) => {
+		const newSearchResults = [...prevSearchResults];
+		for (const torrent of newSearchResults) {
+			const magnetData = magnetMap.get(torrent.hash);
+			if (!magnetData || torrent.noVideos || !magnetData.files) continue;
+
+			let idx = 0;
+			torrent.files = magnetData.files
+				.map((file: any) => {
+					if (file.e && file.e.length > 0) {
+						return file.e.map((f: any) => ({
+							fileId: idx++,
+							filename: f.n,
+							filesize: f.s,
+						}));
+					}
+					return {
+						fileId: idx++,
+						filename: file.n,
+						filesize: file.s,
+					};
+				})
+				.flat();
+
+			if ('medianFileSize' in torrent) {
+				const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
+				const stats = calculateFileStats(videoFiles);
+				Object.assign(torrent, stats);
+			}
+
+			torrent.noVideos = checkVideoInFiles(magnetData.files);
+			if (!torrent.noVideos && magnetData.instant) {
+				torrent.adAvailable = true;
+				instantCount += 1;
+			} else {
+				torrent.adAvailable = false;
+			}
+		}
+		return sortFn ? sortFn(newSearchResults) : newSearchResults;
+	});
+
 	return instantCount;
 };
 
@@ -279,6 +291,10 @@ const processAdInstantCheckDb = async <T extends SearchResult | EnrichedHashlist
 	shouldUpdateTitleAndSize = false
 ): Promise<number> => {
 	let instantCount = 0;
+	const allAvailable: {
+		hash: string;
+		files: { file_id: number; path: string; bytes: number }[];
+	}[] = [];
 	const funcs = [];
 
 	// AD rate limiter - 500 requests per minute (buffer from 600)
@@ -288,22 +304,19 @@ const processAdInstantCheckDb = async <T extends SearchResult | EnrichedHashlist
 
 	async function waitForAdRateLimit() {
 		const now = Date.now();
-		// Remove timestamps older than the time window
 		while (adRequestTimestamps.length > 0 && adRequestTimestamps[0] < now - AD_TIME_WINDOW) {
 			adRequestTimestamps.shift();
 		}
 
-		// If we've hit the rate limit, wait until we can make another request
 		if (adRequestTimestamps.length >= AD_MAX_REQUESTS) {
 			const oldestTimestamp = adRequestTimestamps[0];
 			const waitTime = oldestTimestamp + AD_TIME_WINDOW - now;
 			if (waitTime > 0) {
 				await delay(waitTime);
-				return waitForAdRateLimit(); // Recheck after waiting
+				return waitForAdRateLimit();
 			}
 		}
 
-		// Add current timestamp
 		adRequestTimestamps.push(now);
 	}
 
@@ -311,50 +324,51 @@ const processAdInstantCheckDb = async <T extends SearchResult | EnrichedHashlist
 		funcs.push(async () => {
 			await waitForAdRateLimit();
 			const resp = await checkAvailabilityAd(dmmProblemKey, solution, imdbId, hashGroup);
-			setTorrentList((prevSearchResults) => {
-				const newSearchResults = [...prevSearchResults];
-				for (const torrent of newSearchResults) {
-					if (torrent.noVideos) continue;
-					const availableTorrent = resp.available.find(
-						(t: { hash: string }) => t.hash === torrent.hash
-					);
-					if (!availableTorrent) continue;
-
-					torrent.files = availableTorrent.files.map(
-						(file: { file_id: number; path: string; bytes: number }) => ({
-							fileId: file.file_id,
-							filename: file.path,
-							filesize: file.bytes,
-						})
-					);
-
-					if (shouldUpdateTitleAndSize) {
-						updateTorrentTitle(torrent as SearchResult, torrent.files);
-						(torrent as SearchResult).fileSize =
-							torrent.files.reduce((acc, curr) => acc + curr.filesize, 0) /
-							1024 /
-							1024;
-					}
-
-					const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-					const stats = calculateFileStats(videoFiles);
-					Object.assign(torrent, stats);
-
-					torrent.noVideos = !torrent.files.some((file) =>
-						isVideo({ path: file.filename })
-					);
-					if (!torrent.noVideos) {
-						torrent.adAvailable = true;
-						instantCount += 1;
-					} else {
-						torrent.adAvailable = false;
-					}
-				}
-				return sortFn ? sortFn(newSearchResults) : newSearchResults;
-			});
+			allAvailable.push(...resp.available);
 		});
 	}
 	await runConcurrentFunctions(funcs, 4, 0);
+
+	if (allAvailable.length === 0) return 0;
+
+	const availableMap = new Map(allAvailable.map((t) => [t.hash, t]));
+
+	setTorrentList((prevSearchResults) => {
+		const newSearchResults = [...prevSearchResults];
+		for (const torrent of newSearchResults) {
+			if (torrent.noVideos) continue;
+			const availableTorrent = availableMap.get(torrent.hash);
+			if (!availableTorrent) continue;
+
+			torrent.files = availableTorrent.files.map(
+				(file: { file_id: number; path: string; bytes: number }) => ({
+					fileId: file.file_id,
+					filename: file.path,
+					filesize: file.bytes,
+				})
+			);
+
+			if (shouldUpdateTitleAndSize) {
+				updateTorrentTitle(torrent as SearchResult, torrent.files);
+				(torrent as SearchResult).fileSize =
+					torrent.files.reduce((acc, curr) => acc + curr.filesize, 0) / 1024 / 1024;
+			}
+
+			const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
+			const stats = calculateFileStats(videoFiles);
+			Object.assign(torrent, stats);
+
+			torrent.noVideos = !torrent.files.some((file) => isVideo({ path: file.filename }));
+			if (!torrent.noVideos) {
+				torrent.adAvailable = true;
+				instantCount += 1;
+			} else {
+				torrent.adAvailable = false;
+			}
+		}
+		return sortFn ? sortFn(newSearchResults) : newSearchResults;
+	});
+
 	return instantCount;
 };
 
@@ -366,6 +380,7 @@ const processTbInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	sortFn?: (results: T[]) => T[]
 ): Promise<number> => {
 	let instantCount = 0;
+	const allCachedData: Record<string, any> = {};
 	const funcs = [];
 
 	for (const hashGroup of groupBy(100, hashes)) {
@@ -380,47 +395,45 @@ const processTbInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 			);
 
 			if (resp.success && resp.data) {
-				setTorrentList((prevSearchResults) => {
-					const newSearchResults = [...prevSearchResults];
-					for (const torrent of newSearchResults) {
-						if (torrent.noVideos) continue;
-
-						// Check if this hash is in the cached response
-						const cachedData = resp.data as any;
-						const availableTorrent = cachedData[torrent.hash];
-						if (!availableTorrent) continue;
-
-						// Map TorBox file structure to our format
-						if (availableTorrent.files && Array.isArray(availableTorrent.files)) {
-							torrent.files = availableTorrent.files.map(
-								(file: any, index: number) => ({
-									fileId: index, // TorBox cached API doesn't provide file IDs, use index
-									filename: file.name,
-									filesize: file.size,
-								})
-							);
-
-							const videoFiles = torrent.files.filter((f) =>
-								isVideo({ path: f.filename })
-							);
-							const stats = calculateFileStats(videoFiles);
-							Object.assign(torrent, stats);
-
-							torrent.noVideos = videoFiles.length === 0;
-							if (!torrent.noVideos) {
-								torrent.tbAvailable = true;
-								instantCount += 1;
-							} else {
-								torrent.tbAvailable = false;
-							}
-						}
-					}
-					return sortFn ? sortFn(newSearchResults) : newSearchResults;
-				});
+				Object.assign(allCachedData, resp.data as any);
 			}
 		});
 	}
 	await runConcurrentFunctions(funcs, 4, 0);
+
+	if (Object.keys(allCachedData).length === 0) return 0;
+
+	setTorrentList((prevSearchResults) => {
+		const newSearchResults = [...prevSearchResults];
+		for (const torrent of newSearchResults) {
+			if (torrent.noVideos) continue;
+
+			const availableTorrent = allCachedData[torrent.hash];
+			if (!availableTorrent) continue;
+
+			if (availableTorrent.files && Array.isArray(availableTorrent.files)) {
+				torrent.files = availableTorrent.files.map((file: any, index: number) => ({
+					fileId: index,
+					filename: file.name,
+					filesize: file.size,
+				}));
+
+				const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
+				const stats = calculateFileStats(videoFiles);
+				Object.assign(torrent, stats);
+
+				torrent.noVideos = videoFiles.length === 0;
+				if (!torrent.noVideos) {
+					torrent.tbAvailable = true;
+					instantCount += 1;
+				} else {
+					torrent.tbAvailable = false;
+				}
+			}
+		}
+		return sortFn ? sortFn(newSearchResults) : newSearchResults;
+	});
+
 	return instantCount;
 };
 

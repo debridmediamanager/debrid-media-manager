@@ -271,7 +271,8 @@ const TvSearch: FunctionComponent = () => {
 		const processSourceResults = async (sourceResults: SearchResult[], sourceName: string) => {
 			if (!isMounted.current) return;
 
-			// Deduplicate and update results
+			let hashesToCheck: string[] = [];
+
 			setSearchResults((prevResults) => {
 				const existingHashes = new Set(prevResults.map((r) => r.hash));
 				const newUniqueResults = sourceResults.filter(
@@ -283,17 +284,14 @@ const TvSearch: FunctionComponent = () => {
 
 				if (newUniqueResults.length === 0) {
 					completedSources++;
-					// Check if all done
 					if (completedSources === totalSources) {
 						allSourcesCompleted = true;
 						finalResultCount = prevResults.length;
 						setSearchState('loaded');
-						checkAndShowFinalToast();
 					}
 					return prevResults;
 				}
 
-				// Merge and sort
 				const merged = [...prevResults, ...newUniqueResults];
 				const sorted = merged.sort((a, b) => {
 					const aAvailable = a.rdAvailable || a.adAvailable;
@@ -301,108 +299,79 @@ const TvSearch: FunctionComponent = () => {
 					if (aAvailable !== bAvailable) {
 						return aAvailable ? -1 : 1;
 					}
-					// Second priority: file size (largest first)
 					if (a.fileSize !== b.fileSize) {
 						return b.fileSize - a.fileSize;
 					}
-					// Third priority: hash (alphabetically)
 					return a.hash.localeCompare(b.hash);
 				});
 
-				// Check availability for new non-cached results
-				const nonCachedNew = newUniqueResults.filter(
-					(r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable
-				);
+				hashesToCheck = newUniqueResults
+					.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
+					.map((r) => r.hash);
 
-				// Always increment the completed sources counter synchronously
 				completedSources++;
 
-				if (nonCachedNew.length > 0) {
-					const hashArr = nonCachedNew.map((r) => r.hash);
-
-					// Check RD database for cached availability
-					if (rdKey) {
-						// Track pending availability check
-						pendingAvailabilityChecks++;
-
-						// Start async RD database check
-						(async () => {
-							const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-							const count = await checkDatabaseAvailabilityRd(
-								tokenWithTimestamp,
-								tokenHash,
-								imdbId,
-								hashArr,
-								setSearchResults,
-								sortByMedian
-							);
-							// Update the count
-							rdAvailableCount += count;
-
-							// Decrement pending checks
-							pendingAvailabilityChecks--;
-							checkAndShowFinalToast();
-						})();
-					}
-
-					// Check AllDebrid database for cached availability
-					if (adKey) {
-						// Track pending availability check
-						pendingAvailabilityChecks++;
-
-						// Start async AllDebrid database check
-						(async () => {
-							const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-							const count = await checkDatabaseAvailabilityAd(
-								tokenWithTimestamp,
-								tokenHash,
-								imdbId,
-								hashArr,
-								setSearchResults,
-								sortByMedian
-							);
-							// Update the count
-							adAvailableCount += count;
-
-							// Decrement pending checks
-							pendingAvailabilityChecks--;
-							checkAndShowFinalToast();
-						})();
-					}
-
-					// Check TorBox database for cached availability
-					if (torboxKey) {
-						// Track pending availability check
-						pendingAvailabilityChecks++;
-
-						// Start async TorBox database check
-						(async () => {
-							const count = await checkDatabaseAvailabilityTb(
-								torboxKey,
-								hashArr,
-								setSearchResults,
-								sortByMedian
-							);
-							// Update the count
-							tbAvailableCount += count;
-
-							// Decrement pending checks
-							pendingAvailabilityChecks--;
-							checkAndShowFinalToast();
-						})();
-					}
-				}
-
-				// Check if all sources completed
 				if (completedSources === totalSources) {
 					allSourcesCompleted = true;
 					finalResultCount = sorted.length;
 					setSearchState('loaded');
-					checkAndShowFinalToast();
 				}
 
 				return sorted;
 			});
+
+			// Fire availability checks outside the state updater
+			if (hashesToCheck.length > 0) {
+				if (rdKey) {
+					pendingAvailabilityChecks++;
+					generateTokenAndHash().then(async ([tokenWithTimestamp, tokenHash]) => {
+						const count = await checkDatabaseAvailabilityRd(
+							tokenWithTimestamp,
+							tokenHash,
+							imdbId,
+							hashesToCheck,
+							setSearchResults,
+							sortByMedian
+						);
+						rdAvailableCount += count;
+						pendingAvailabilityChecks--;
+						checkAndShowFinalToast();
+					});
+				}
+
+				if (adKey) {
+					pendingAvailabilityChecks++;
+					generateTokenAndHash().then(async ([tokenWithTimestamp, tokenHash]) => {
+						const count = await checkDatabaseAvailabilityAd(
+							tokenWithTimestamp,
+							tokenHash,
+							imdbId,
+							hashesToCheck,
+							setSearchResults,
+							sortByMedian
+						);
+						adAvailableCount += count;
+						pendingAvailabilityChecks--;
+						checkAndShowFinalToast();
+					});
+				}
+
+				if (torboxKey) {
+					pendingAvailabilityChecks++;
+					checkDatabaseAvailabilityTb(
+						torboxKey,
+						hashesToCheck,
+						setSearchResults,
+						sortByMedian
+					).then((count) => {
+						tbAvailableCount += count;
+						pendingAvailabilityChecks--;
+						checkAndShowFinalToast();
+					});
+				}
+			}
+
+			checkAndShowFinalToast();
 		};
 
 		try {
