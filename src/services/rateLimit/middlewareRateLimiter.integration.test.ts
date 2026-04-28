@@ -4,7 +4,16 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { HybridRateLimiter, RATE_LIMIT_CONFIGS, RedisRateLimiter } from './middlewareRateLimiter';
 
-describe('Redis Rate Limiter Integration Tests', () => {
+let dockerAvailable = false;
+try {
+	const { getContainerRuntimeClient } = await import('testcontainers');
+	await getContainerRuntimeClient();
+	dockerAvailable = true;
+} catch {
+	dockerAvailable = false;
+}
+
+describe.skipIf(!dockerAvailable)('Redis Rate Limiter Integration Tests', () => {
 	let container: StartedTestContainer;
 	let redisUrl: string;
 	let redis: Redis;
@@ -235,7 +244,9 @@ describe('Redis Rate Limiter Integration Tests', () => {
 
 			// IP 1 uses up limit
 			await limiter.check('torrents-ip-5.6.7.8', torrentsConfig);
-			expect((await limiter.check('torrents-ip-5.6.7.8', torrentsConfig)).success).toBe(false);
+			expect((await limiter.check('torrents-ip-5.6.7.8', torrentsConfig)).success).toBe(
+				false
+			);
 
 			// IP 2 should still work
 			const result = await limiter.check('torrents-ip-9.10.11.12', torrentsConfig);

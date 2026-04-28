@@ -20,3 +20,11 @@ npm run -s typecheck
 # Run unit tests only (fail commit on failing tests)
 # Integration tests require Docker and are run separately in CI
 npm run -s test:unit
+
+# Run E2E tests if macmini tunnel is available (port 3333)
+if curl -s -o /dev/null -w '' --connect-timeout 2 http://localhost:3333/start 2>/dev/null; then
+  echo "🧪 Running E2E tests (macmini tunnel detected)..."
+  npm run -s test:e2e
+else
+  echo "⏭️  Skipping E2E tests (no macmini tunnel on port 3333)"
+fi

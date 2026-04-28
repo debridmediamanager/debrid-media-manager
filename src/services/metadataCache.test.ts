@@ -88,24 +88,42 @@ describe('MetadataCacheService fetchWithCache', () => {
 
 describe('MetadataCacheService API helpers', () => {
 	it('throws when OMDB key is missing', async () => {
-		const service = new MetadataCacheService();
-		await expect(service.getOmdbInfo('tt123')).rejects.toThrow(
-			'OMDB_KEY environment variable is not set'
-		);
+		const saved = process.env.OMDB_KEY;
+		delete process.env.OMDB_KEY;
+		try {
+			const service = new MetadataCacheService();
+			await expect(service.getOmdbInfo('tt123')).rejects.toThrow(
+				'OMDB_KEY environment variable is not set'
+			);
+		} finally {
+			process.env.OMDB_KEY = saved;
+		}
 	});
 
 	it('throws when TMDB key is missing', async () => {
-		const service = new MetadataCacheService();
-		await expect(service.searchTmdbByImdb('tt123')).rejects.toThrow(
-			'TMDB_KEY environment variable is not set'
-		);
+		const saved = process.env.TMDB_KEY;
+		delete process.env.TMDB_KEY;
+		try {
+			const service = new MetadataCacheService();
+			await expect(service.searchTmdbByImdb('tt123')).rejects.toThrow(
+				'TMDB_KEY environment variable is not set'
+			);
+		} finally {
+			process.env.TMDB_KEY = saved;
+		}
 	});
 
 	it('throws when Trakt client id is missing', async () => {
-		const service = new MetadataCacheService();
-		await expect(service.getTraktTrending('movies')).rejects.toThrow(
-			'TRAKT_CLIENT_ID environment variable is not set'
-		);
+		const saved = process.env.TRAKT_CLIENT_ID;
+		delete process.env.TRAKT_CLIENT_ID;
+		try {
+			const service = new MetadataCacheService();
+			await expect(service.getTraktTrending('movies')).rejects.toThrow(
+				'TRAKT_CLIENT_ID environment variable is not set'
+			);
+		} finally {
+			process.env.TRAKT_CLIENT_ID = saved;
+		}
 	});
 
 	it('delegates to fetchWithCache with proper cache hints', async () => {
