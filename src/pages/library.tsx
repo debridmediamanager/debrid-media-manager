@@ -93,6 +93,7 @@ function TorrentsPage() {
 		setLibraryItems: setCachedLibraryItems,
 		addTorrent,
 		removeTorrent: removeFromCache,
+		removeTorrents: removeMultipleFromCache,
 		updateTorrent: updateInCache,
 		error: cacheError,
 		lastFetchTime,
@@ -636,13 +637,22 @@ function TorrentsPage() {
 			}
 		);
 
+		const removedIds = results.filter((id): id is string => !!id);
+		if (removedIds.length > 0) {
+			removeMultipleFromCache(removedIds);
+			setSelectedTorrents((prev) => {
+				const newSet = new Set(prev);
+				for (const id of removedIds) newSet.delete(id);
+				return newSet;
+			});
+		}
+
 		// Update the progress toast to show final result
 		if (errors.length && results.length) {
 			toast.error(`Reinserted ${results.length}; ${errors.length} failed.`, {
 				id: progressToast,
 				...magnetToastOptions,
 			});
-			resetSelection(setSelectedTorrents);
 			await refreshLibrary();
 		} else if (errors.length) {
 			toast.error(`Failed to reinsert ${errors.length} torrents.`, {
@@ -654,7 +664,6 @@ function TorrentsPage() {
 				id: progressToast,
 				...magnetToastOptions,
 			});
-			resetSelection(setSelectedTorrents);
 			await refreshLibrary();
 		} else {
 			toast.dismiss(progressToast);
@@ -707,86 +716,48 @@ function TorrentsPage() {
 			).isConfirmed
 		)
 			return;
-		await deleteFilteredTorrents(relevantList, wrapDeleteFn);
+		const deletedIds = await deleteFilteredTorrents(relevantList, wrapDeleteFn);
+		if (deletedIds.length > 0) {
+			removeMultipleFromCache(deletedIds);
+		}
 		resetSelection(setSelectedTorrents);
 	}
 
 	const wrapDeleteFn = useCallback(
 		(t: UserTorrent) => {
-			return async () => {
-				const oldId = t.id;
-				const torrentBackup = t; // Store the torrent for rollback
-
-				// Optimistic update - remove from cache immediately
-				removeFromCache(oldId);
-				setSelectedTorrents((prev) => {
-					const newSet = new Set(prev);
-					newSet.delete(oldId);
-					return newSet;
-				});
-
-				try {
-					if (rdKey && t.id.startsWith('rd:')) {
-						await handleDeleteRdTorrent(rdKey, t.id);
-					}
-					if (adKey && t.id.startsWith('ad:')) {
-						await handleDeleteAdTorrent(adKey, t.id);
-					}
-					if (tbKey && t.id.startsWith('tb:')) {
-						await handleDeleteTbTorrent(tbKey, t.id);
-					}
-				} catch (error) {
-					// Rollback optimistic update on failure
-					console.error('Failed to delete torrent:', error);
-
-					// Re-add the torrent to cache
-					addTorrent(torrentBackup);
-
-					// Re-add to selection if it was selected
-					setSelectedTorrents((prev) => {
-						const newSet = new Set(prev);
-						newSet.add(oldId);
-						return newSet;
-					});
-
-					// Show error message to user
-					toast.error(
-						`Delete failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-						libraryToastOptions
-					);
-
-					// Throw error so caller knows it failed
-					throw error;
+			return async (): Promise<string> => {
+				if (rdKey && t.id.startsWith('rd:')) {
+					await handleDeleteRdTorrent(rdKey, t.id);
 				}
+				if (adKey && t.id.startsWith('ad:')) {
+					await handleDeleteAdTorrent(adKey, t.id);
+				}
+				if (tbKey && t.id.startsWith('tb:')) {
+					await handleDeleteTbTorrent(tbKey, t.id);
+				}
+				return t.id;
 			};
 		},
-		[rdKey, adKey, tbKey, removeFromCache, addTorrent]
+		[rdKey, adKey, tbKey]
 	);
 
 	const wrapReinsertFn = useCallback(
 		(t: UserTorrent) => {
-			return async () => {
-				try {
-					const oldId = t.id;
-					if (rdKey && t.id.startsWith('rd:')) {
-						// The function now handles fetching info and preserving selection internally
-						await handleReinsertTorrentinRd(rdKey, t, true);
-						await torrentDB.deleteById(oldId);
-						removeFromCache(oldId); // Update global cache - this will trigger re-render
-						setSelectedTorrents((prev) => {
-							prev.delete(oldId);
-							return new Set(prev);
-						});
-					}
-					if (adKey && t.id.startsWith('ad:')) {
-						await handleRestartTorrent(adKey, t.id);
-					}
-				} catch (error) {
-					throw error;
+			return async (): Promise<string | undefined> => {
+				const oldId = t.id;
+				if (rdKey && t.id.startsWith('rd:')) {
+					await handleReinsertTorrentinRd(rdKey, t, true);
+					await torrentDB.deleteById(oldId);
+					return oldId;
 				}
+				if (adKey && t.id.startsWith('ad:')) {
+					await handleRestartTorrent(adKey, t.id);
+					return oldId;
+				}
+				return undefined;
 			};
 		},
-		[rdKey, adKey, removeFromCache]
+		[rdKey, adKey]
 	);
 
 	async function dedupeBySize() {
@@ -863,6 +834,10 @@ function TorrentsPage() {
 				toast.loading(message, { id: progressToast });
 			}
 		);
+
+		if (results.length > 0) {
+			removeMultipleFromCache(results);
+		}
 
 		// Update the progress toast to show final result
 		if (errors.length && results.length) {
@@ -961,6 +936,10 @@ function TorrentsPage() {
 			}
 		);
 
+		if (results.length > 0) {
+			removeMultipleFromCache(results);
+		}
+
 		// Update the progress toast to show final result
 		if (errors.length && results.length) {
 			toast.error(`Deleted ${results.length}; ${errors.length} duplicates failed.`, {
@@ -1022,7 +1001,7 @@ function TorrentsPage() {
 			).isConfirmed
 		)
 			return;
-		let toReinsertAndDelete: AsyncFunction<unknown>[] = [];
+		let toReinsertAndDelete: AsyncFunction<string | undefined>[] = [];
 		dupeHashes.forEach((sameHashTorrents: UserTorrent[]) => {
 			const reinsert = sameHashTorrents.pop();
 			if (reinsert) {
@@ -1054,6 +1033,11 @@ function TorrentsPage() {
 				toast.loading(message, { id: progressToast });
 			}
 		);
+
+		const removedIds = results.filter((id): id is string => !!id);
+		if (removedIds.length > 0) {
+			removeMultipleFromCache(removedIds);
+		}
 
 		// Update the progress toast to show final result
 		if (errors.length && results.length) {

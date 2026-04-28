@@ -27,7 +27,7 @@ describe('deleteFilteredTorrents', () => {
 	});
 
 	it('notifies the user when there are no torrents to delete', async () => {
-		await deleteFilteredTorrents([], () => () => Promise.resolve());
+		await deleteFilteredTorrents([], () => () => Promise.resolve(''));
 
 		expect(toast).toHaveBeenCalledWith('No torrents to delete.', expect.any(Object));
 		expect(runConcurrentFunctionsMock).not.toHaveBeenCalled();
@@ -71,7 +71,7 @@ describe('deleteFilteredTorrents', () => {
 		const torrents = [{ id: 'a' }] as any[];
 		runConcurrentFunctionsMock.mockResolvedValueOnce([[{ id: 'a' }], [new Error('fail')]]);
 
-		await deleteFilteredTorrents(torrents, () => vi.fn(async () => undefined));
+		await deleteFilteredTorrents(torrents, () => vi.fn(async () => ''));
 
 		expect(toast.error).toHaveBeenCalledWith(
 			'Deleted 1; 1 failed.',
@@ -83,7 +83,7 @@ describe('deleteFilteredTorrents', () => {
 		const torrents = [{ id: 'a' }] as any[];
 		runConcurrentFunctionsMock.mockResolvedValueOnce([[], [new Error('fail'), new Error('x')]]);
 
-		await deleteFilteredTorrents(torrents, () => vi.fn(async () => undefined));
+		await deleteFilteredTorrents(torrents, () => vi.fn(async () => ''));
 
 		expect(toast.error).toHaveBeenCalledWith(
 			'Failed to delete 2 torrents.',
@@ -95,7 +95,7 @@ describe('deleteFilteredTorrents', () => {
 		const torrents = [{ id: 'a' }] as any[];
 		runConcurrentFunctionsMock.mockResolvedValueOnce([[], []]);
 
-		await deleteFilteredTorrents(torrents, () => vi.fn(async () => undefined));
+		await deleteFilteredTorrents(torrents, () => vi.fn(async () => ''));
 
 		expect(toast.dismiss).toHaveBeenCalledWith('toast-id');
 	});

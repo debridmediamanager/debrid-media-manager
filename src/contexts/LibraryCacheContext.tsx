@@ -17,6 +17,7 @@ export interface LibraryCacheContextType {
 	setLibraryItems: React.Dispatch<React.SetStateAction<UserTorrent[]>>;
 	addTorrent: (torrent: UserTorrent) => void;
 	removeTorrent: (torrentId: string) => void;
+	removeTorrents: (torrentIds: string[]) => void;
 	updateTorrent: (torrentId: string, updates: Partial<UserTorrent>) => void;
 }
 
@@ -122,6 +123,7 @@ export function useLibraryCache(): LibraryCacheContextType {
 		setLibraryItems,
 		addTorrent: enhanced.addTorrent,
 		removeTorrent: enhanced.removeTorrent,
+		removeTorrents: enhanced.removeTorrents,
 		updateTorrent: enhanced.updateTorrent,
 	};
 }

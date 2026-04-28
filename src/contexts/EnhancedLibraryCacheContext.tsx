@@ -94,6 +94,7 @@ interface EnhancedLibraryCacheContextType {
 	// Individual item operations
 	addTorrent: (torrent: UserTorrent) => void;
 	removeTorrent: (torrentId: string) => void;
+	removeTorrents: (torrentIds: string[]) => void;
 	updateTorrent: (torrentId: string, updates: Partial<UserTorrent>) => void;
 }
 
@@ -704,6 +705,29 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		}
 	};
 
+	const removeTorrents = (torrentIds: string[]) => {
+		if (torrentIds.length === 0) return;
+		const idSet = new Set(torrentIds);
+		setLibraryItems((prev) => prev.filter((t) => !idSet.has(t.id)));
+		torrentDB.deleteMany(torrentIds);
+
+		const rdIds = torrentIds.filter((id) => id.startsWith('rd:'));
+		const adIds = torrentIds.filter((id) => id.startsWith('ad:'));
+		const tbIds = torrentIds.filter((id) => id.startsWith('tb:'));
+		if (rdIds.length > 0) {
+			const rdSet = new Set(rdIds);
+			setRdLibrary((prev) => prev.filter((t) => !rdSet.has(t.id)));
+		}
+		if (adIds.length > 0) {
+			const adSet = new Set(adIds);
+			setAdLibrary((prev) => prev.filter((t) => !adSet.has(t.id)));
+		}
+		if (tbIds.length > 0) {
+			const tbSet = new Set(tbIds);
+			setTbLibrary((prev) => prev.filter((t) => !tbSet.has(t.id)));
+		}
+	};
+
 	const updateTorrent = (torrentId: string, updates: Partial<UserTorrent>) => {
 		const updateFn = (prev: UserTorrent[]) =>
 			prev.map((t) => (t.id === torrentId ? { ...t, ...updates } : t));
@@ -739,6 +763,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		clearCache,
 		addTorrent,
 		removeTorrent,
+		removeTorrents,
 		updateTorrent,
 	};
 

@@ -5,13 +5,13 @@ import { magnetToastOptions } from './toastOptions';
 
 export async function deleteFilteredTorrents(
 	torrentList: UserTorrent[],
-	wrapDeleteFn: (t: UserTorrent) => AsyncFunction<void>
-) {
+	wrapDeleteFn: (t: UserTorrent) => AsyncFunction<string>
+): Promise<string[]> {
 	const toDelete = torrentList.map(wrapDeleteFn);
 
 	if (toDelete.length === 0) {
 		toast('No torrents to delete.', magnetToastOptions);
-		return;
+		return [];
 	}
 
 	const progressToast = toast.loading(
@@ -51,4 +51,6 @@ export async function deleteFilteredTorrents(
 	} else {
 		toast.dismiss(progressToast);
 	}
+
+	return results;
 }
