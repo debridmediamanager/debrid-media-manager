@@ -23,6 +23,13 @@
 		"experimentalDecorators": true,
 		"sourceMap": true
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-	"exclude": ["node_modules", "prod_node_modules", "vitest.config.ts"]
+	"exclude": [
+		"node_modules",
+		"prod_node_modules",
+		"vitest.config.ts",
+		"**/*.test.ts",
+		"**/*.test.tsx",
+		"src/test/**"
+	],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
