@@ -8,40 +8,53 @@ export async function runConcurrentFunctions<T>(
 	delay: number | ((index: number) => Promise<void>),
 	onProgress?: (completed: number, total: number, errors: number) => void
 ): Promise<[T[], Error[]]> {
-	let currentFunctions: Array<AsyncFunction<T>> = [];
 	const results: T[] = [];
 	const errors: Error[] = [];
 	const total = functions.length;
 	let completed = 0;
+	let running = 0;
+	let resolveSlot: (() => void) | null = null;
 
-	while (functions.length > 0) {
-		if (currentFunctions.length >= concurrency) {
-			await sleep(10);
-			continue;
+	function waitForSlot(): Promise<void> {
+		if (running < concurrency) return Promise.resolve();
+		return new Promise((resolve) => {
+			resolveSlot = resolve;
+		});
+	}
+
+	function onTaskDone() {
+		running--;
+		completed++;
+		if (onProgress) {
+			onProgress(completed, total, errors.length);
 		}
-		const nextFunction = functions.shift()!;
-		currentFunctions.push(nextFunction);
-		nextFunction()
-			.then(async (result) => {
+		if (resolveSlot) {
+			const resolve = resolveSlot;
+			resolveSlot = null;
+			resolve();
+		}
+	}
+
+	const pending: Promise<void>[] = [];
+
+	for (const fn of functions) {
+		await waitForSlot();
+		running++;
+		const task = fn()
+			.then((result) => {
 				results.push(result);
 			})
-			.catch(async (err) => {
+			.catch((err) => {
 				errors.push(err);
 			})
-			.finally(async () => {
-				if (typeof delay === 'number') await sleep(delay);
-				const index = currentFunctions.indexOf(nextFunction);
-				currentFunctions.splice(index, 1);
-				completed++;
-				if (onProgress) {
-					onProgress(completed, total, errors.length);
-				}
+			.then(async () => {
+				if (typeof delay === 'number' && delay > 0) await sleep(delay);
+				onTaskDone();
 			});
+		pending.push(task);
 	}
 
-	while (currentFunctions.length > 0) {
-		await sleep(10);
-	}
+	await Promise.all(pending);
 
 	return [results, errors];
 }
