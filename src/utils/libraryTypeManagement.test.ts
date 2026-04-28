@@ -1,4 +1,5 @@
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
+import { describe, expect, it, vi } from 'vitest';
 import { handleChangeType } from './libraryTypeManagement';
 
 const createTorrent = (overrides: Partial<UserTorrent> = {}): UserTorrent => ({

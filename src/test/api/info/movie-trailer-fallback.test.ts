@@ -1,7 +1,7 @@
 import handler from '@/pages/api/info/movie';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/mdblistClient');
 vi.mock('@/services/metadataCache');

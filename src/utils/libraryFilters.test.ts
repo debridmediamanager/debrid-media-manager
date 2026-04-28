@@ -1,4 +1,5 @@
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
+import { describe, expect, it, vi } from 'vitest';
 import { filterLibraryItems } from './libraryFilters';
 
 vi.mock('@/utils/slow', () => ({

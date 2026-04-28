@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 
 describe('KeyboardShortcutsModal', () => {

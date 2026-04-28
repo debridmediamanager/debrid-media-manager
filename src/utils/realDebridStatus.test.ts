@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { getRealDebridStatusText } from './realDebridStatus';
 
 describe('getRealDebridStatusText', () => {

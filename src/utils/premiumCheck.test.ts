@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 const modalFireMock = vi.fn();
 const openMock = vi.fn();
 

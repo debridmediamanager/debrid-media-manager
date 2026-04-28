@@ -1,6 +1,6 @@
 import handler from '@/pages/api/info/show';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/mdblistClient');
 vi.mock('@/services/metadataCache');

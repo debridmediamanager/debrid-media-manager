@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import { handleSelectTorrent, resetSelection, selectShown } from './librarySelection';
 
 describe('library selection helpers', () => {

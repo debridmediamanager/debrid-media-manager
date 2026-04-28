@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 const clearMock = vi.fn();
 
 vi.mock('@/torrent/db', () => ({

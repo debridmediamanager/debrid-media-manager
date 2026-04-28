@@ -106,7 +106,7 @@ describe('torboxCastCatalogHelper', () => {
 
 			const result = await getTorBoxDMMLibrary('user1', 1);
 
-			expect(result.data.hasMore).toBe(true);
+			expect(result.data!.hasMore).toBe(true);
 		});
 
 		it('sets hasMore false when results less than PAGE_SIZE', async () => {
@@ -118,7 +118,7 @@ describe('torboxCastCatalogHelper', () => {
 
 			const result = await getTorBoxDMMLibrary('user1', 1);
 
-			expect(result.data.hasMore).toBe(false);
+			expect(result.data!.hasMore).toBe(false);
 		});
 
 		it('calculates correct offset from page number', async () => {

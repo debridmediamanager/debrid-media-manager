@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { storedValues, setIntervalMock, routerReplaceMock, getSafeRedirectPathMock } = vi.hoisted(
 	() => ({
