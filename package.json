@@ -45,7 +45,7 @@
 		"recharts": "^3.6.0",
 		"socks-proxy-agent": "^8.0.5",
 		"user-agents": "^1.1.500",
-		"uuid": "^13.0.0"
+		"uuid": "^14.0.0"
 	},
 	"devDependencies": {
 		"@testing-library/jest-dom": "^6.8.0",
