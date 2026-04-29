@@ -23,7 +23,7 @@
 		"@ctrl/video-filename-parser": "^5.2.2",
 		"@octokit/rest": "^22.0.0",
 		"@prisma/client": "^6.5.0",
-		"axios": "^1.13.6",
+		"axios": "^1.15.0",
 		"bencode": "^4.0.0",
 		"better-sqlite3": "^12.2.0",
 		"bittorrent-tracker": "^11.2.1",
