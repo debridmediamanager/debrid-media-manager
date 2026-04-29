@@ -75,7 +75,7 @@
 		"jsdom": "^27.0.0",
 		"lint-staged": "^15.5.2",
 		"null-loader": "^4.0.1",
-		"postcss": "^8.5.3",
+		"postcss": "^8.5.10",
 		"prettier": "^3.5.3",
 		"prettier-plugin-organize-imports": "^4.1.0",
 		"prettier-plugin-sort-json": "^4.1.1",
