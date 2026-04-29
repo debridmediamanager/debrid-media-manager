@@ -9,6 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ptt from 'parse-torrent-title';
 import { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { Toaster, toast } from 'react-hot-toast';
 
 interface CastedLink {
@@ -206,14 +207,18 @@ export function TorBoxManagePage() {
 			// Update state after successful deletion
 			const baseImdbId = link.imdbId.split(':')[0];
 			let removedImdbId: string | null = null;
-			setGroupedLinks((prev) => {
-				const newGrouped = { ...prev };
-				newGrouped[baseImdbId] = newGrouped[baseImdbId].filter((l) => l.url !== link.url);
-				if (newGrouped[baseImdbId].length === 0) {
-					delete newGrouped[baseImdbId];
-					removedImdbId = baseImdbId;
-				}
-				return newGrouped;
+			flushSync(() => {
+				setGroupedLinks((prev) => {
+					const newGrouped = { ...prev };
+					newGrouped[baseImdbId] = newGrouped[baseImdbId].filter(
+						(l) => l.url !== link.url
+					);
+					if (newGrouped[baseImdbId].length === 0) {
+						delete newGrouped[baseImdbId];
+						removedImdbId = baseImdbId;
+					}
+					return newGrouped;
+				});
 			});
 
 			if (removedImdbId) {
@@ -268,18 +273,20 @@ export function TorBoxManagePage() {
 
 			// Update state after successful deletions
 			const removedImdbIds: string[] = [];
-			setGroupedLinks((prev) => {
-				const newGrouped = { ...prev };
-				Object.keys(newGrouped).forEach((imdbId) => {
-					newGrouped[imdbId] = newGrouped[imdbId].filter(
-						(link) => !deletedUrls.includes(link.url)
-					);
-					if (newGrouped[imdbId].length === 0) {
-						delete newGrouped[imdbId];
-						removedImdbIds.push(imdbId);
-					}
+			flushSync(() => {
+				setGroupedLinks((prev) => {
+					const newGrouped = { ...prev };
+					Object.keys(newGrouped).forEach((imdbId) => {
+						newGrouped[imdbId] = newGrouped[imdbId].filter(
+							(link) => !deletedUrls.includes(link.url)
+						);
+						if (newGrouped[imdbId].length === 0) {
+							delete newGrouped[imdbId];
+							removedImdbIds.push(imdbId);
+						}
+					});
+					return newGrouped;
 				});
-				return newGrouped;
 			});
 
 			if (removedImdbIds.length > 0) {

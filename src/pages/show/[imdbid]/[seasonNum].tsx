@@ -46,6 +46,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
 type ShowInfo = {
@@ -273,51 +274,53 @@ const TvSearch: FunctionComponent = () => {
 
 			let hashesToCheck: string[] = [];
 
-			setSearchResults((prevResults) => {
-				const existingHashes = new Set(prevResults.map((r) => r.hash));
-				const newUniqueResults = sourceResults.filter(
-					(r) =>
-						r.hash &&
-						!existingHashes.has(r.hash) &&
-						(titleStartsWithYear || !/^\d{4}\)/.test(r.title))
-				);
+			flushSync(() => {
+				setSearchResults((prevResults) => {
+					const existingHashes = new Set(prevResults.map((r) => r.hash));
+					const newUniqueResults = sourceResults.filter(
+						(r) =>
+							r.hash &&
+							!existingHashes.has(r.hash) &&
+							(titleStartsWithYear || !/^\d{4}\)/.test(r.title))
+					);
 
-				if (newUniqueResults.length === 0) {
+					if (newUniqueResults.length === 0) {
+						completedSources++;
+						if (completedSources === totalSources) {
+							allSourcesCompleted = true;
+							finalResultCount = prevResults.length;
+							setSearchState('loaded');
+						}
+						return prevResults;
+					}
+
+					const merged = [...prevResults, ...newUniqueResults];
+					const sorted = merged.sort((a, b) => {
+						const aAvailable = a.rdAvailable || a.adAvailable;
+						const bAvailable = b.rdAvailable || b.adAvailable;
+						if (aAvailable !== bAvailable) {
+							return aAvailable ? -1 : 1;
+						}
+						if (a.fileSize !== b.fileSize) {
+							return b.fileSize - a.fileSize;
+						}
+						return a.hash.localeCompare(b.hash);
+					});
+
+					hashesToCheck = newUniqueResults
+						.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
+						.map((r) => r.hash);
+
 					completedSources++;
+
 					if (completedSources === totalSources) {
 						allSourcesCompleted = true;
-						finalResultCount = prevResults.length;
+						finalResultCount = sorted.length;
 						setSearchState('loaded');
 					}
-					return prevResults;
-				}
 
-				const merged = [...prevResults, ...newUniqueResults];
-				const sorted = merged.sort((a, b) => {
-					const aAvailable = a.rdAvailable || a.adAvailable;
-					const bAvailable = b.rdAvailable || b.adAvailable;
-					if (aAvailable !== bAvailable) {
-						return aAvailable ? -1 : 1;
-					}
-					if (a.fileSize !== b.fileSize) {
-						return b.fileSize - a.fileSize;
-					}
-					return a.hash.localeCompare(b.hash);
+					return sorted;
 				});
-
-				hashesToCheck = newUniqueResults
-					.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
-					.map((r) => r.hash);
-
-				completedSources++;
-
-				if (completedSources === totalSources) {
-					allSourcesCompleted = true;
-					finalResultCount = sorted.length;
-					setSearchState('loaded');
-				}
-
-				return sorted;
 			});
 
 			// Fire availability checks outside the state updater

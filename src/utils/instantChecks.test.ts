@@ -1,10 +1,13 @@
 import { adInstantCheck } from '@/services/allDebrid';
 import { checkCachedStatus } from '@/services/torbox';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { checkAvailabilityByHashes } from './availability';
+import { checkAvailability, checkAvailabilityAd, checkAvailabilityByHashes } from './availability';
 import {
+	checkDatabaseAvailabilityAd,
 	checkDatabaseAvailabilityAd2,
+	checkDatabaseAvailabilityRd,
 	checkDatabaseAvailabilityRd2,
+	checkDatabaseAvailabilityTb,
 	checkDatabaseAvailabilityTb2,
 	wrapLoading,
 } from './instantChecks';
@@ -12,6 +15,7 @@ import {
 vi.mock('./availability', () => ({
 	checkAvailabilityByHashes: vi.fn(),
 	checkAvailability: vi.fn(),
+	checkAvailabilityAd: vi.fn(),
 }));
 
 vi.mock('@/services/allDebrid', () => ({
@@ -42,6 +46,8 @@ vi.mock('@/utils/selectable', () => ({
 }));
 
 const mockCheckAvailabilityByHashes = vi.mocked(checkAvailabilityByHashes);
+const mockCheckAvailability = vi.mocked(checkAvailability);
+const mockCheckAvailabilityAd = vi.mocked(checkAvailabilityAd);
 const mockAdInstantCheck = vi.mocked(adInstantCheck);
 const mockCheckCachedStatus = vi.mocked(checkCachedStatus);
 
@@ -150,5 +156,176 @@ describe('instantChecks utilities', () => {
 		const asyncCheck = Promise.resolve(3);
 		const result = await wrapLoading('RD', asyncCheck);
 		expect(result).toBe(3);
+	});
+
+	describe('imdb-based availability checks', () => {
+		const identity = (r: any[]) => r;
+
+		it('checkDatabaseAvailabilityRd calls checkAvailability with imdbId and marks matching results as rdAvailable', async () => {
+			mockCheckAvailability.mockResolvedValue({
+				available: [
+					{
+						hash: 'hash-rd-imdb',
+						files: [{ file_id: 1, path: 'Movie.mkv', bytes: 4096 }],
+					},
+				],
+			} as any);
+			const { setter, getState } = createStateHarness([
+				{
+					hash: 'hash-rd-imdb',
+					noVideos: false,
+					rdAvailable: false,
+					files: [],
+				},
+			] as any[]);
+
+			const hits = await checkDatabaseAvailabilityRd(
+				'problem',
+				'solution',
+				'tt1234567',
+				['hash-rd-imdb'],
+				setter,
+				identity
+			);
+
+			expect(mockCheckAvailability).toHaveBeenCalledWith('problem', 'solution', 'tt1234567', [
+				'hash-rd-imdb',
+			]);
+			expect(hits).toBe(1);
+			expect(getState()[0].rdAvailable).toBe(true);
+			expect(getState()[0].files).toHaveLength(1);
+			expect(getState()[0].files[0]).toMatchObject({ filename: 'Movie.mkv', filesize: 4096 });
+		});
+
+		it('checkDatabaseAvailabilityAd calls checkAvailabilityAd with imdbId and marks matching results as adAvailable', async () => {
+			mockCheckAvailabilityAd.mockResolvedValue({
+				available: [
+					{
+						hash: 'hash-ad-imdb',
+						files: [{ file_id: 1, path: 'Episode.mkv', bytes: 2048 }],
+					},
+				],
+			} as any);
+			const { setter, getState } = createStateHarness([
+				{
+					hash: 'hash-ad-imdb',
+					noVideos: false,
+					adAvailable: false,
+					files: [],
+				},
+			] as any[]);
+
+			const hits = await checkDatabaseAvailabilityAd(
+				'problem',
+				'solution',
+				'tt7654321',
+				['hash-ad-imdb'],
+				setter,
+				identity
+			);
+
+			expect(mockCheckAvailabilityAd).toHaveBeenCalledWith(
+				'problem',
+				'solution',
+				'tt7654321',
+				['hash-ad-imdb']
+			);
+			expect(hits).toBe(1);
+			expect(getState()[0].adAvailable).toBe(true);
+			expect(getState()[0].files).toHaveLength(1);
+			expect(getState()[0].files[0]).toMatchObject({
+				filename: 'Episode.mkv',
+				filesize: 2048,
+			});
+		});
+
+		it('checkDatabaseAvailabilityTb calls checkCachedStatus and marks matching results as tbAvailable', async () => {
+			mockCheckCachedStatus.mockResolvedValue({
+				success: true,
+				data: {
+					'hash-tb-imdb': {
+						files: [{ name: 'Show.mkv', size: 3072 }],
+					},
+				},
+			} as any);
+			const { setter, getState } = createStateHarness([
+				{
+					hash: 'hash-tb-imdb',
+					noVideos: false,
+					tbAvailable: false,
+					files: [],
+				},
+			] as any[]);
+
+			const hits = await checkDatabaseAvailabilityTb(
+				'tb-key',
+				['hash-tb-imdb'],
+				setter,
+				identity
+			);
+
+			expect(hits).toBe(1);
+			expect(getState()[0].tbAvailable).toBe(true);
+			expect(getState()[0].files[0]).toMatchObject({ filename: 'Show.mkv', filesize: 3072 });
+		});
+
+		it('returns 0 and marks nothing available when checkAvailability returns no matches', async () => {
+			mockCheckAvailability.mockResolvedValue({
+				available: [],
+			} as any);
+			const { setter, getState } = createStateHarness([
+				{
+					hash: 'hash-no-match',
+					noVideos: false,
+					rdAvailable: false,
+					files: [],
+				},
+			] as any[]);
+
+			const hits = await checkDatabaseAvailabilityRd(
+				'problem',
+				'solution',
+				'tt0000000',
+				['hash-no-match'],
+				setter,
+				identity
+			);
+
+			expect(hits).toBe(0);
+			expect(getState()[0].rdAvailable).toBe(false);
+			expect(getState()[0].files).toHaveLength(0);
+		});
+
+		it('skips torrents with noVideos: true', async () => {
+			mockCheckAvailability.mockResolvedValue({
+				available: [
+					{
+						hash: 'hash-novideo',
+						files: [{ file_id: 1, path: 'Movie.mkv', bytes: 1024 }],
+					},
+				],
+			} as any);
+			const { setter, getState } = createStateHarness([
+				{
+					hash: 'hash-novideo',
+					noVideos: true,
+					rdAvailable: false,
+					files: [],
+				},
+			] as any[]);
+
+			const hits = await checkDatabaseAvailabilityRd(
+				'problem',
+				'solution',
+				'tt1111111',
+				['hash-novideo'],
+				setter,
+				identity
+			);
+
+			expect(hits).toBe(0);
+			expect(getState()[0].rdAvailable).toBe(false);
+			expect(getState()[0].files).toHaveLength(0);
+		});
 	});
 });
