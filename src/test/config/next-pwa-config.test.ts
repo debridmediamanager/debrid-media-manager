@@ -19,15 +19,35 @@ describe('next-pwa configuration', () => {
 		pwaConfig = await loadConfig();
 	});
 
-	it('excludes dynamic css manifest from precache', () => {
-		const buildExcludes = pwaConfig.buildExcludes ?? [];
-		const excludesDynamicCss = buildExcludes.some((entry) => {
-			if (entry instanceof RegExp) {
-				return entry.test('static/css/dynamic-css-manifest.json');
-			}
-			return false;
+	describe('buildExcludes - dynamic css manifest', () => {
+		const pathVariants = [
+			'dynamic-css-manifest.json',
+			'static/css/dynamic-css-manifest.json',
+			'_next/dynamic-css-manifest.json',
+			'/_next/dynamic-css-manifest.json',
+		];
+
+		it.each(pathVariants)('excludes dynamic css manifest at path: %s', (path) => {
+			const buildExcludes = pwaConfig.buildExcludes ?? [];
+			const excluded = buildExcludes.some((entry) => {
+				if (entry instanceof RegExp) {
+					return entry.test(path);
+				}
+				return false;
+			});
+			expect(excluded).toBe(true);
 		});
-		expect(excludesDynamicCss).toBe(true);
+
+		it('does not exclude unrelated json files', () => {
+			const buildExcludes = pwaConfig.buildExcludes ?? [];
+			const excluded = buildExcludes.some((entry) => {
+				if (entry instanceof RegExp) {
+					return entry.test('_buildManifest.js');
+				}
+				return false;
+			});
+			expect(excluded).toBe(false);
+		});
 	});
 
 	it('enables cache for client navigation', () => {

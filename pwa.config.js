@@ -6,7 +6,7 @@ module.exports = {
 	scope: '/',
 	sw: 'service-worker.js',
 	cacheOnFrontEndNav: true,
-	buildExcludes: [/^.*\/dynamic-css-manifest\.json$/],
+	buildExcludes: [/dynamic-css-manifest\.json$/],
 	runtimeCaching: [
 		{
 			urlPattern: /^https:\/\/posters\d+\.debridmediamanager\.com\/.*$/,
