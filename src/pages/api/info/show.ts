@@ -170,7 +170,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			backdrop:
 				mdbResponse?.backdrop ??
 				cinemetaResponse?.meta?.background ??
-				'https://source.unsplash.com/random/1800x300?' + title,
+				'https://picsum.photos/1800/300?random=' + encodeURIComponent(title),
 			season_count,
 			season_names,
 			has_specials,
