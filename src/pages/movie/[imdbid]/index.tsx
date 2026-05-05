@@ -21,6 +21,7 @@ import {
 	checkDatabaseAvailabilityRd,
 	checkDatabaseAvailabilityTb,
 } from '@/utils/instantChecks';
+import { formatReleaseDate } from '@/utils/movieReleaseDates';
 import { quickSearch } from '@/utils/quickSearch';
 import { sortByBiggest } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
@@ -52,6 +53,10 @@ type MovieInfo = {
 	year: string;
 	imdb_score: number;
 	trailer: string;
+	digitalReleaseDate?: string;
+	expectedDigitalReleaseDate?: string;
+	expectedDigitalReleaseSource?: 'tmdb' | 'estimated' | null;
+	digitalReleaseAvailable?: boolean;
 };
 
 const torrentDB = new UserTorrentDB();
@@ -84,6 +89,10 @@ const MovieSearch: FunctionComponent = () => {
 		year: '',
 		imdb_score: 0,
 		trailer: '',
+		digitalReleaseDate: '',
+		expectedDigitalReleaseDate: '',
+		expectedDigitalReleaseSource: null,
+		digitalReleaseAvailable: false,
 	});
 
 	// Settings
@@ -533,6 +542,23 @@ const MovieSearch: FunctionComponent = () => {
 			.length;
 	}, [filteredResults]);
 
+	const movieReleaseInfo = useMemo(() => {
+		if (!movieInfo.expectedDigitalReleaseDate) return null;
+		const date = formatReleaseDate(movieInfo.expectedDigitalReleaseDate);
+		const label =
+			movieInfo.expectedDigitalReleaseSource === 'estimated'
+				? 'Expected digital release'
+				: 'Digital release';
+		return (
+			<div className="w-fit rounded bg-slate-900/75 px-2 py-1 text-xs text-slate-100">
+				<span className="text-slate-400">{label}:</span> {date}
+				{movieInfo.expectedDigitalReleaseSource === 'estimated' && (
+					<span className="text-slate-400"> estimate</span>
+				)}
+			</div>
+		);
+	}, [movieInfo.expectedDigitalReleaseDate, movieInfo.expectedDigitalReleaseSource]);
+
 	// Handle toast notifications when search completes
 	useEffect(() => {
 		if (!searchCompleteInfo) return;
@@ -834,6 +860,7 @@ const MovieSearch: FunctionComponent = () => {
 				onDescToggle={() => setDescLimit(0)}
 				actionButtons={handleActionButtons()}
 				trailer={movieInfo.trailer}
+				additionalInfo={movieReleaseInfo}
 			/>
 
 			{searchState === 'loading' && (
@@ -880,6 +907,16 @@ const MovieSearch: FunctionComponent = () => {
 				year={movieInfo.year}
 				colorScales={getColorScale()}
 				getQueryForScale={getQueryForMovieCount}
+				extraTokens={
+					movieInfo.digitalReleaseAvailable
+						? [
+								{
+									label: 'Quality releases',
+									query: 'web.?dl|web.?rip|blu.?ray|remux|dovi|hdr10|2160p',
+								},
+							]
+						: undefined
+				}
 			/>
 
 			{searchResults.length > 0 && (

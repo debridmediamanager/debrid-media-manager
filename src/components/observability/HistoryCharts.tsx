@@ -124,56 +124,70 @@ export function HistoryCharts() {
 	const [error, setError] = useState<string | null>(null);
 	const [granularity, setGranularity] = useState<'hourly' | 'daily'>('hourly');
 
-	const fetchHistory = useCallback(async () => {
-		setLoading(true);
-		setError(null);
+	const fetchHistory = useCallback(
+		async (isActive: () => boolean = () => true) => {
+			if (!isActive()) return;
+			setLoading(true);
+			setError(null);
 
-		try {
-			const origin =
-				typeof window !== 'undefined' && window.location?.origin
-					? window.location.origin
-					: 'http://localhost:3000';
+			try {
+				const origin =
+					typeof window !== 'undefined' && window.location?.origin
+						? window.location.origin
+						: 'http://localhost:3000';
 
-			const [streamResponse, rdResponse, torrentioResponse] = await Promise.all([
-				fetch(`${origin}/api/observability/history?type=stream&range=${range}`),
-				fetch(`${origin}/api/observability/history?type=rd&range=${range}`),
-				fetch(`${origin}/api/observability/history?type=torrentio&range=${range}`),
-			]);
+				const [streamResponse, rdResponse, torrentioResponse] = await Promise.all([
+					fetch(`${origin}/api/observability/history?type=stream&range=${range}`),
+					fetch(`${origin}/api/observability/history?type=rd&range=${range}`),
+					fetch(`${origin}/api/observability/history?type=torrentio&range=${range}`),
+				]);
 
-			if (!streamResponse.ok) {
-				throw new Error('Failed to fetch stream history data');
-			}
+				if (!streamResponse.ok) {
+					throw new Error('Failed to fetch stream history data');
+				}
 
-			const streamJson = (await streamResponse.json()) as HistoryResponse<
-				StreamHourlyData | StreamDailyData
-			>;
-
-			setStreamData(streamJson.data ?? []);
-			setGranularity((streamJson.granularity as 'hourly' | 'daily') ?? 'hourly');
-
-			if (rdResponse.ok) {
-				const rdJson = (await rdResponse.json()) as HistoryResponse<
-					RdHourlyData | RdDailyData
+				const streamJson = (await streamResponse.json()) as HistoryResponse<
+					StreamHourlyData | StreamDailyData
 				>;
-				setRdData(rdJson.data ?? []);
-			}
 
-			if (torrentioResponse.ok) {
-				const torrentioJson = (await torrentioResponse.json()) as HistoryResponse<
-					TorrentioHourlyData | TorrentioDailyData
-				>;
-				setTorrentioData(torrentioJson.data ?? []);
+				if (!isActive()) return;
+				setStreamData(streamJson.data ?? []);
+				setGranularity((streamJson.granularity as 'hourly' | 'daily') ?? 'hourly');
+
+				if (rdResponse.ok) {
+					const rdJson = (await rdResponse.json()) as HistoryResponse<
+						RdHourlyData | RdDailyData
+					>;
+					if (!isActive()) return;
+					setRdData(rdJson.data ?? []);
+				}
+
+				if (torrentioResponse.ok) {
+					const torrentioJson = (await torrentioResponse.json()) as HistoryResponse<
+						TorrentioHourlyData | TorrentioDailyData
+					>;
+					if (!isActive()) return;
+					setTorrentioData(torrentioJson.data ?? []);
+				}
+			} catch (err) {
+				if (!isActive()) return;
+				console.error('Failed to fetch history:', err);
+				setError(err instanceof Error ? err.message : 'Failed to load history');
+			} finally {
+				if (isActive()) {
+					setLoading(false);
+				}
 			}
-		} catch (err) {
-			console.error('Failed to fetch history:', err);
-			setError(err instanceof Error ? err.message : 'Failed to load history');
-		} finally {
-			setLoading(false);
-		}
-	}, [range]);
+		},
+		[range]
+	);
 
 	useEffect(() => {
-		fetchHistory();
+		let isActive = true;
+		fetchHistory(() => isActive);
+		return () => {
+			isActive = false;
+		};
 	}, [fetchHistory]);
 
 	const isMultiDay = granularity === 'hourly' && range !== '24h';
@@ -268,7 +282,7 @@ export function HistoryCharts() {
 						<p>Unable to load historical data</p>
 						<p className="mt-1 text-xs text-slate-500">{error}</p>
 						<button
-							onClick={fetchHistory}
+							onClick={() => fetchHistory()}
 							className="mt-3 rounded-lg bg-slate-700 px-4 py-2 text-sm hover:bg-slate-600"
 						>
 							Retry

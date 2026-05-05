@@ -1,5 +1,6 @@
 import TrailerModal from '@/components/TrailerModal';
 import { formatGenreForUrl, mapTmdbGenreToTrakt } from '@/utils/genreMapping';
+import { formatReleaseDate } from '@/utils/movieReleaseDates';
 import axios from 'axios';
 import { Play, Popcorn } from 'lucide-react';
 import Head from 'next/head';
@@ -25,6 +26,10 @@ type MovieDetails = {
 	title: string;
 	overview: string;
 	releaseDate: string;
+	digitalReleaseDate: string;
+	expectedDigitalReleaseDate: string;
+	expectedDigitalReleaseSource: 'tmdb' | 'estimated' | null;
+	digitalReleaseAvailable: boolean;
 	runtime: number;
 	genres: Array<{ id: number; name: string }>;
 	voteAverage: number;
@@ -82,6 +87,11 @@ export default function MovieInfoPage() {
 		const mins = minutes % 60;
 		return `${hours}h ${mins}m`;
 	};
+
+	const digitalReleaseLabel =
+		movieDetails?.expectedDigitalReleaseSource === 'estimated'
+			? 'Expected Digital Release'
+			: 'Digital Release';
 
 	return (
 		<div className="min-h-screen bg-gray-900 text-gray-100">
@@ -159,8 +169,27 @@ export default function MovieInfoPage() {
 								<div className="mt-4 space-y-2">
 									<div className="text-sm">
 										<span className="text-gray-400">Release Date:</span>{' '}
-										{movieDetails.releaseDate}
+										{formatReleaseDate(movieDetails.releaseDate)}
 									</div>
+									{movieDetails.expectedDigitalReleaseDate && (
+										<div className="text-sm">
+											<span className="text-gray-400">
+												{digitalReleaseLabel}:
+											</span>{' '}
+											{formatReleaseDate(
+												movieDetails.expectedDigitalReleaseDate
+											)}
+											{movieDetails.expectedDigitalReleaseSource ===
+												'estimated' && (
+												<span className="text-gray-500"> estimate</span>
+											)}
+										</div>
+									)}
+									{movieDetails.digitalReleaseAvailable && (
+										<div className="text-sm text-emerald-300">
+											Release window reached
+										</div>
+									)}
 									<div className="text-sm">
 										<span className="text-gray-400">Runtime:</span>{' '}
 										{formatRuntime(movieDetails.runtime)}

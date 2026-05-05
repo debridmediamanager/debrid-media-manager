@@ -99,6 +99,16 @@ describe('/api/info/movie-details', () => {
 						title: 'Test Movie',
 						overview: 'A test movie',
 						release_date: '2024-01-01',
+						release_dates: {
+							results: [
+								{
+									iso_3166_1: 'US',
+									release_dates: [
+										{ type: 4, release_date: '2024-02-15T00:00:00.000Z' },
+									],
+								},
+							],
+						},
 						runtime: 120,
 						genres: [{ id: 1, name: 'Action' }],
 						vote_average: 8.0,
@@ -143,6 +153,10 @@ describe('/api/info/movie-details', () => {
 		expect(data.title).toBe('Test Movie');
 		expect(data.overview).toBe('A test movie');
 		expect(data.releaseDate).toBe('2024-01-01');
+		expect(data.digitalReleaseDate).toBe('2024-02-15');
+		expect(data.expectedDigitalReleaseDate).toBe('2024-02-15');
+		expect(data.expectedDigitalReleaseSource).toBe('tmdb');
+		expect(data.digitalReleaseAvailable).toBe(true);
 		expect(data.runtime).toBe(120);
 		expect(data.cast).toHaveLength(1);
 		expect(data.cast[0].name).toBe('Actor One');

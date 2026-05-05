@@ -92,6 +92,10 @@ describe('/api/info/movie', () => {
 			year: 2020,
 			imdb_score: 75,
 			trailer: '',
+			digitalReleaseDate: '',
+			expectedDigitalReleaseDate: '',
+			expectedDigitalReleaseSource: null,
+			digitalReleaseAvailable: false,
 		});
 	});
 
@@ -116,6 +120,10 @@ describe('/api/info/movie', () => {
 			year: '????',
 			imdb_score: 0,
 			trailer: '',
+			digitalReleaseDate: '',
+			expectedDigitalReleaseDate: '',
+			expectedDigitalReleaseSource: null,
+			digitalReleaseAvailable: false,
 		});
 		consoleSpy.mockRestore();
 	});

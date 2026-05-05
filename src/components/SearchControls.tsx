@@ -16,6 +16,7 @@ interface SearchControlsProps {
 	isShow?: boolean;
 	colorScales?: Array<{ threshold: number; color: string; label: string }>;
 	getQueryForScale?: (threshold: number) => string;
+	extraTokens?: Array<{ label: string; query: string }>;
 }
 
 const SearchControls: React.FC<SearchControlsProps> = ({
@@ -32,6 +33,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 	isShow,
 	colorScales,
 	getQueryForScale,
+	extraTokens,
 }) => {
 	return (
 		<>
@@ -109,6 +111,18 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 							{scale.label}
 						</span>
 					))}
+				{extraTokens?.map((token) => (
+					<span
+						key={token.label}
+						className="cursor-pointer whitespace-nowrap rounded bg-emerald-900 px-2 py-1 text-xs text-emerald-100"
+						onClick={() => {
+							const nextQuery = query ? `${query} ${token.query}` : token.query;
+							onQueryChange(nextQuery);
+						}}
+					>
+						{token.label}
+					</span>
+				))}
 			</div>
 		</>
 	);

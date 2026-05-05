@@ -1,6 +1,11 @@
 import { MRating } from '@/services/mdblist';
 import { getMdblistClient } from '@/services/mdblistClient';
 import { getMetadataCache } from '@/services/metadataCache';
+import {
+	extractDigitalReleaseDate,
+	getExpectedDigitalReleaseDate,
+	isIsoDateOnOrBeforeToday,
+} from '@/utils/movieReleaseDates';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import UserAgent from 'user-agents';
@@ -51,28 +56,57 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const title = mdbResponse.title ?? cinemetaResponse.meta?.name ?? 'Unknown';
 
 		let trailer = mdbResponse.trailer ?? '';
+		let digitalReleaseDate = '';
+		let expectedDigitalReleaseDate = '';
+		let expectedDigitalReleaseSource: 'tmdb' | 'estimated' | null = null;
+		let digitalReleaseAvailable = false;
 
 		if (!trailer && cinemetaResponse.meta?.trailers?.[0]?.source) {
 			trailer = `https://youtube.com/watch?v=${cinemetaResponse.meta.trailers[0].source}`;
 		}
 
-		if (!trailer && mdbResponse.tmdbid) {
+		if (mdbResponse.tmdbid) {
 			try {
 				const tmdbKey = process.env.TMDB_KEY;
 				if (tmdbKey) {
 					const tmdbResponse = await axios.get(
-						`https://api.themoviedb.org/3/movie/${mdbResponse.tmdbid}/videos?api_key=${tmdbKey}`
+						`https://api.themoviedb.org/3/movie/${mdbResponse.tmdbid}`,
+						{
+							params: {
+								api_key: tmdbKey,
+								append_to_response: 'videos,release_dates',
+							},
+						}
 					);
-					const tmdbTrailer = tmdbResponse.data.results?.find(
+					const tmdbTrailer = tmdbResponse.data.videos?.results?.find(
 						(v: any) => v.type === 'Trailer' && v.site === 'YouTube'
 					);
-					if (tmdbTrailer?.key) {
+					if (!trailer && tmdbTrailer?.key) {
 						trailer = `https://youtube.com/watch?v=${tmdbTrailer.key}`;
 					}
+
+					digitalReleaseDate = extractDigitalReleaseDate(tmdbResponse.data.release_dates);
+					const expectedDigitalRelease = getExpectedDigitalReleaseDate(
+						tmdbResponse.data.release_date ?? mdbResponse.released,
+						digitalReleaseDate
+					);
+					expectedDigitalReleaseDate = expectedDigitalRelease.date;
+					expectedDigitalReleaseSource = expectedDigitalRelease.source;
+					digitalReleaseAvailable = isIsoDateOnOrBeforeToday(expectedDigitalReleaseDate);
 				}
 			} catch (error) {
-				console.error('Error fetching TMDB trailer:', error);
+				console.error('Error fetching TMDB movie release metadata:', error);
 			}
+		}
+
+		if (!expectedDigitalReleaseDate) {
+			const expectedDigitalRelease = getExpectedDigitalReleaseDate(
+				mdbResponse.released,
+				digitalReleaseDate
+			);
+			expectedDigitalReleaseDate = expectedDigitalRelease.date;
+			expectedDigitalReleaseSource = expectedDigitalRelease.source;
+			digitalReleaseAvailable = isIsoDateOnOrBeforeToday(expectedDigitalReleaseDate);
 		}
 
 		return res.status(200).json({
@@ -86,6 +120,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			year: mdbResponse.year ?? cinemetaResponse.meta?.releaseInfo ?? '????',
 			imdb_score: imdb_score ?? 0,
 			trailer,
+			digitalReleaseDate,
+			expectedDigitalReleaseDate,
+			expectedDigitalReleaseSource,
+			digitalReleaseAvailable,
 		});
 	} catch (error) {
 		console.error('Error fetching movie info:', error);
@@ -97,6 +135,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			year: '????',
 			imdb_score: 0,
 			trailer: '',
+			digitalReleaseDate: '',
+			expectedDigitalReleaseDate: '',
+			expectedDigitalReleaseSource: null,
+			digitalReleaseAvailable: false,
 		});
 	}
 }

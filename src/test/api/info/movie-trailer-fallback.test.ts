@@ -78,10 +78,20 @@ describe('/api/info/movie - trailer fallback sources', () => {
 
 		(axios.get as any).mockResolvedValue({
 			data: {
-				results: [
-					{ type: 'Trailer', site: 'YouTube', key: 'TMDB789' },
-					{ type: 'Teaser', site: 'YouTube', key: 'TMDB012' },
-				],
+				videos: {
+					results: [
+						{ type: 'Trailer', site: 'YouTube', key: 'TMDB789' },
+						{ type: 'Teaser', site: 'YouTube', key: 'TMDB012' },
+					],
+				},
+				release_dates: {
+					results: [
+						{
+							iso_3166_1: 'US',
+							release_dates: [{ type: 4, release_date: '2024-03-01T00:00:00.000Z' }],
+						},
+					],
+				},
 			},
 		});
 

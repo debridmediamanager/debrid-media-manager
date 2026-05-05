@@ -1,3 +1,8 @@
+import {
+	extractDigitalReleaseDate,
+	getExpectedDigitalReleaseDate,
+	isIsoDateOnOrBeforeToday,
+} from '@/utils/movieReleaseDates';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import getConfig from 'next/config';
@@ -68,11 +73,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const detailsResponse = await axios.get(`${TMDB_BASE_URL}/movie/${tmdbId}`, {
 			params: {
 				api_key: tmdbKey,
-				append_to_response: 'credits',
+				append_to_response: 'credits,release_dates',
 			},
 		});
 
 		const movie = detailsResponse.data;
+		const digitalReleaseDate = extractDigitalReleaseDate(movie.release_dates);
+		const expectedDigitalRelease = getExpectedDigitalReleaseDate(
+			movie.release_date,
+			digitalReleaseDate
+		);
 		const cast = movie.credits?.cast || [];
 		const crew = movie.credits?.crew || [];
 
@@ -158,6 +168,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			title: movie.title,
 			overview: movie.overview,
 			releaseDate: movie.release_date,
+			digitalReleaseDate,
+			expectedDigitalReleaseDate: expectedDigitalRelease.date,
+			expectedDigitalReleaseSource: expectedDigitalRelease.source,
+			digitalReleaseAvailable: isIsoDateOnOrBeforeToday(expectedDigitalRelease.date),
 			runtime: movie.runtime,
 			genres: movie.genres,
 			voteAverage: movie.vote_average,
