@@ -1,12 +1,12 @@
 import { Settings } from 'lucide-react';
 import { useState } from 'react';
 import { updateAllDebridSizeLimits } from '../utils/allDebridCastApiClient';
-import { getLocalStorageBoolean, getLocalStorageItemOrDefault } from '../utils/browserStorage';
 import {
-	defaultEpisodeSize,
-	defaultMovieSize,
-	defaultOtherStreamsLimit,
-} from '../utils/settings';
+	getLocalStorageBoolean,
+	getLocalStorageItemOrDefault,
+	getLocalStorageString,
+} from '../utils/browserStorage';
+import { defaultEpisodeSize, defaultMovieSize, defaultOtherStreamsLimit } from '../utils/settings';
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
 
 interface CastSettingsPanelProps {
@@ -76,7 +76,8 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 							clientSecret,
 							refreshToken,
 							movieMaxSize: movieSize !== undefined ? Number(movieSize) : undefined,
-							episodeMaxSize: episodeSize !== undefined ? Number(episodeSize) : undefined,
+							episodeMaxSize:
+								episodeSize !== undefined ? Number(episodeSize) : undefined,
 							otherStreamsLimit:
 								streamsLimit !== undefined ? Number(streamsLimit) : undefined,
 							hideCastOption: hideCast,
@@ -84,7 +85,7 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 					});
 				}
 			} else if (service === 'tb') {
-				const tbApiKey = localStorage.getItem('tb:apiKey');
+				const tbApiKey = getLocalStorageString('tb:apiKey');
 				if (tbApiKey) {
 					await updateTorBoxSizeLimits(
 						tbApiKey,
@@ -95,7 +96,7 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 					);
 				}
 			} else if (service === 'ad') {
-				const adApiKey = localStorage.getItem('ad:apiKey');
+				const adApiKey = getLocalStorageString('ad:apiKey');
 				if (adApiKey) {
 					await updateAllDebridSizeLimits(
 						adApiKey,
@@ -148,7 +149,9 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 	};
 
 	return (
-		<div className={`mt-6 w-full max-w-md rounded-lg border ${colors.border} bg-gray-800/50 p-4`}>
+		<div
+			className={`mt-6 w-full max-w-md rounded-lg border ${colors.border} bg-gray-800/50 p-4`}
+		>
 			<div className="mb-4 flex items-center gap-2">
 				<Settings className={`h-5 w-5 ${colors.icon}`} />
 				<h2 className={`text-lg font-semibold ${colors.title}`}>Cast Settings</h2>

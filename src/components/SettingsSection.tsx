@@ -1,7 +1,11 @@
 import { AlertTriangle, Check, Link2, Settings } from 'lucide-react';
 import { useState } from 'react';
 import { updateAllDebridSizeLimits } from '../utils/allDebridCastApiClient';
-import { getLocalStorageBoolean, getLocalStorageItemOrDefault } from '../utils/browserStorage';
+import {
+	getLocalStorageBoolean,
+	getLocalStorageItemOrDefault,
+	getLocalStorageString,
+} from '../utils/browserStorage';
 import {
 	defaultAvailabilityCheckLimit,
 	defaultDownloadMagnets,
@@ -154,7 +158,7 @@ export const SettingsSection = () => {
 		}
 
 		// Update TorBox cast settings
-		const tbApiKey = localStorage.getItem('tb:apiKey');
+		const tbApiKey = getLocalStorageString('tb:apiKey');
 		if (tbApiKey) {
 			updatePromises.push(
 				updateTorBoxSizeLimits(
@@ -168,7 +172,7 @@ export const SettingsSection = () => {
 		}
 
 		// Update AllDebrid cast settings
-		const adApiKey = localStorage.getItem('ad:apiKey');
+		const adApiKey = getLocalStorageString('ad:apiKey');
 		if (adApiKey) {
 			updatePromises.push(
 				updateAllDebridSizeLimits(

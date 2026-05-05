@@ -3,6 +3,7 @@ import {
 	getLocalStorageBoolean,
 	getLocalStorageItem,
 	getLocalStorageItemOrDefault,
+	getLocalStorageString,
 } from './browserStorage';
 
 describe('browserStorage', () => {
@@ -49,6 +50,22 @@ describe('browserStorage', () => {
 			spy.mockReturnValue(null);
 			expect(getLocalStorageItemOrDefault('testKey', 'defaultValue')).toBe('defaultValue');
 			spy.mockRestore();
+		});
+	});
+
+	describe('getLocalStorageString', () => {
+		it('returns raw strings stored directly', () => {
+			localStorage.setItem('apiKey', 'raw-key');
+			expect(getLocalStorageString('apiKey')).toBe('raw-key');
+		});
+
+		it('returns parsed strings stored by useLocalStorage', () => {
+			localStorage.setItem('apiKey', JSON.stringify('json-key'));
+			expect(getLocalStorageString('apiKey')).toBe('json-key');
+		});
+
+		it('returns null when value does not exist', () => {
+			expect(getLocalStorageString('missingKey')).toBeNull();
 		});
 	});
 

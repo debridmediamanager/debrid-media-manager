@@ -12,6 +12,16 @@ vi.mock('../utils/torboxCastApiClient', () => ({
 vi.mock('../utils/browserStorage', () => ({
 	getLocalStorageItemOrDefault: vi.fn((_key: string, fallback: string) => fallback),
 	getLocalStorageBoolean: vi.fn((_key: string, fallback: boolean) => fallback),
+	getLocalStorageString: vi.fn((key: string) => {
+		const value = window.localStorage.getItem(key);
+		if (value === null) return null;
+		try {
+			const parsed = JSON.parse(value);
+			return typeof parsed === 'string' ? parsed : value;
+		} catch {
+			return value;
+		}
+	}),
 }));
 
 vi.mock('../utils/settings', () => ({
@@ -109,7 +119,7 @@ describe('CastSettingsPanel', () => {
 	});
 
 	it('calls updateTorBoxSizeLimits for tb service', async () => {
-		mockLocalStorage['tb:apiKey'] = 'tb-key';
+		mockLocalStorage['tb:apiKey'] = '"tb-key"';
 
 		render(<CastSettingsPanel service="tb" accentColor="purple" />);
 		const selects = screen.getAllByRole('combobox');
@@ -127,7 +137,7 @@ describe('CastSettingsPanel', () => {
 	});
 
 	it('calls updateAllDebridSizeLimits for ad service', async () => {
-		mockLocalStorage['ad:apiKey'] = 'ad-key';
+		mockLocalStorage['ad:apiKey'] = '"ad-key"';
 
 		render(<CastSettingsPanel service="ad" accentColor="yellow" />);
 		const selects = screen.getAllByRole('combobox');

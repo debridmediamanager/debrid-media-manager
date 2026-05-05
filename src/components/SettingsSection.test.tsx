@@ -1,6 +1,17 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('../utils/allDebridCastApiClient', () => ({
+	updateAllDebridSizeLimits: vi.fn().mockResolvedValue(undefined),
+}));
+
+vi.mock('../utils/torboxCastApiClient', () => ({
+	updateTorBoxSizeLimits: vi.fn().mockResolvedValue(undefined),
+}));
+
+import { updateAllDebridSizeLimits } from '../utils/allDebridCastApiClient';
+import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
 import { SettingsSection } from './SettingsSection';
 
 describe('SettingsSection', () => {
@@ -254,5 +265,45 @@ describe('SettingsSection', () => {
 		} finally {
 			errorSpy.mockRestore();
 		}
+	});
+
+	it('updates TorBox cast profile using decoded api key from /settings', async () => {
+		localStorage.setItem('tb:apiKey', JSON.stringify('tb-key'));
+
+		render(<SettingsSection />);
+		const user = userEvent.setup();
+
+		const otherStreamsContainer = screen.getByText('Other streams limit').closest('div')!;
+		const otherStreamsSelect = within(otherStreamsContainer).getByRole('combobox');
+		await user.selectOptions(otherStreamsSelect, '0');
+
+		expect(updateTorBoxSizeLimits).toHaveBeenCalledWith(
+			'tb-key',
+			undefined,
+			undefined,
+			0,
+			undefined
+		);
+	});
+
+	it('updates AllDebrid cast profile using decoded api key from /settings', async () => {
+		localStorage.setItem('ad:apiKey', JSON.stringify('ad-key'));
+
+		render(<SettingsSection />);
+		const user = userEvent.setup();
+
+		const hideCastContainer = screen
+			.getByText('Hide "Cast a file inside a torrent" option')
+			.closest('div')!;
+		const hideCastCheckbox = within(hideCastContainer).getByRole('checkbox');
+		await user.click(hideCastCheckbox);
+
+		expect(updateAllDebridSizeLimits).toHaveBeenCalledWith(
+			'ad-key',
+			undefined,
+			undefined,
+			undefined,
+			true
+		);
 	});
 });
