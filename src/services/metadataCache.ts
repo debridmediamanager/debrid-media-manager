@@ -19,6 +19,7 @@ export class MetadataCacheService {
 		TRENDING: 3600000, // 1 hour
 		POPULAR: 21600000, // 6 hours
 		TOP_LISTS: 86400000, // 24 hours
+		EPISODE_SCHEDULE: 43200000, // 12 hours
 		// TV series metadata can change as new seasons are added
 		TV_SERIES: 604800000, // 7 days
 	};
@@ -308,7 +309,10 @@ export class MetadataCacheService {
 
 		try {
 			const cached = await this.cache.getWithMetadata(cacheKey);
-			if (cached && !this.isCacheExpired(cached.updatedAt, this.CACHE_DURATIONS.TRENDING)) {
+			if (
+				cached &&
+				!this.isCacheExpired(cached.updatedAt, this.CACHE_DURATIONS.EPISODE_SCHEDULE)
+			) {
 				return cached.data;
 			}
 
