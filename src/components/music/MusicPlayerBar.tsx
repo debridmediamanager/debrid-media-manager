@@ -13,7 +13,7 @@ import {
 	VolumeX,
 } from 'lucide-react';
 import { PlayerState, QueuedTrack } from './types';
-import { formatDuration, removeExtension } from './utils';
+import { formatDuration, formatTrackTitle } from './utils';
 
 interface MusicPlayerBarProps {
 	currentTrack: QueuedTrack;
@@ -71,7 +71,7 @@ export default function MusicPlayerBar({
 					{/* Track info */}
 					<div className="min-w-0 flex-1">
 						<p className="truncate text-sm font-medium text-white">
-							{removeExtension(currentTrack.track.filename)}
+							{formatTrackTitle(currentTrack.track.filename)}
 						</p>
 						<p className="truncate text-xs text-gray-400">
 							{currentTrack.album.artist}
@@ -151,7 +151,7 @@ export default function MusicPlayerBar({
 					</div>
 					<div className="min-w-0">
 						<p className="truncate font-medium text-white">
-							{removeExtension(currentTrack.track.filename)}
+							{formatTrackTitle(currentTrack.track.filename)}
 						</p>
 						<p className="truncate text-sm text-gray-400">
 							{currentTrack.album.artist}

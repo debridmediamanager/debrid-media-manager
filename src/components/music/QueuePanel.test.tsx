@@ -88,9 +88,9 @@ describe('QueuePanel', () => {
 				onClearQueue={vi.fn()}
 			/>
 		);
-		expect(screen.getByText('01 - Song One')).toBeInTheDocument();
-		expect(screen.getByText('02 - Song Two')).toBeInTheDocument();
-		expect(screen.getByText('03 - Song Three')).toBeInTheDocument();
+		expect(screen.getByText('Song One')).toBeInTheDocument();
+		expect(screen.getByText('Song Two')).toBeInTheDocument();
+		expect(screen.getByText('Song Three')).toBeInTheDocument();
 	});
 
 	it('calls onClose when close button clicked', async () => {

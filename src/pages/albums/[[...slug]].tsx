@@ -4,7 +4,7 @@ import KeyboardShortcutsModal from '@/components/music/KeyboardShortcutsModal';
 import MusicPlayerBar from '@/components/music/MusicPlayerBar';
 import QueuePanel from '@/components/music/QueuePanel';
 import { PlayerState, QueuedTrack } from '@/components/music/types';
-import { removeExtension, shuffleArray } from '@/components/music/utils';
+import { formatTrackTitle, shuffleArray } from '@/components/music/utils';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { MusicAlbum, MusicLibraryResponse, MusicTrack } from '@/pages/api/music/library';
@@ -16,6 +16,91 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const MUSIC_BASE_PATH = '/music';
 const MUSIC_PAGE_SIZE = 48;
+const RECENT_ALBUM_LIMIT = 24;
+
+interface SidebarAlbumButtonProps {
+	album: MusicAlbum;
+	isSelected: boolean;
+	onSelect: (album: MusicAlbum) => void;
+	onCoverLoaded: (album: MusicAlbum, coverUrl: string) => void;
+}
+
+function SidebarAlbumButton({
+	album,
+	isSelected,
+	onSelect,
+	onCoverLoaded,
+}: SidebarAlbumButtonProps) {
+	const [coverUrl, setCoverUrl] = useState(album.coverUrl);
+
+	useEffect(() => {
+		setCoverUrl(album.coverUrl);
+	}, [album.coverUrl]);
+
+	useEffect(() => {
+		if (coverUrl) return;
+		let isCancelled = false;
+
+		async function fetchCover() {
+			try {
+				const response = await fetch('/api/music/cover', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						mbid: album.mbid,
+						artist: album.artist,
+						album: album.album,
+					}),
+				});
+
+				if (!response.ok) return;
+				const data = await response.json();
+				if (!isCancelled && data.coverUrl) {
+					setCoverUrl(data.coverUrl);
+					onCoverLoaded(album, data.coverUrl);
+				}
+			} catch (err) {
+				console.error(`Failed to fetch cover for ${album.album}:`, err);
+			}
+		}
+
+		fetchCover();
+		return () => {
+			isCancelled = true;
+		};
+	}, [album, coverUrl, onCoverLoaded]);
+
+	return (
+		<button
+			onClick={() => onSelect(album)}
+			className={`flex w-full min-w-0 items-center gap-3 rounded-md px-3 py-2 text-left transition-colors ${
+				isSelected
+					? 'bg-white/10 text-white'
+					: 'text-gray-300 hover:bg-white/5 hover:text-white'
+			}`}
+		>
+			<div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded bg-gray-800">
+				<Music2 className="h-4 w-4 text-gray-500" />
+				{coverUrl && (
+					// eslint-disable-next-line @next/next/no-img-element
+					<img
+						src={coverUrl}
+						alt={album.album}
+						loading="lazy"
+						className="absolute inset-0 h-full w-full object-cover"
+						onError={(e) => {
+							(e.target as HTMLImageElement).style.display = 'none';
+						}}
+					/>
+				)}
+			</div>
+			<div className="min-w-0">
+				<p className="truncate text-sm font-medium">{album.album}</p>
+				<p className="truncate text-xs text-gray-500">{album.artist}</p>
+			</div>
+		</button>
+	);
+}
 
 export default function AlbumsPage() {
 	const router = useRouter();
@@ -26,12 +111,13 @@ export default function AlbumsPage() {
 	const [libraryLoading, setLibraryLoading] = useState(true);
 	const [libraryLoadingMore, setLibraryLoadingMore] = useState(false);
 	const [libraryError, setLibraryError] = useState<string | null>(null);
+	const [recentAlbums, setRecentAlbums] = useState<MusicAlbum[]>([]);
 
 	// View state
 	const [searchQuery, setSearchQuery] = useState('');
 	const [isQueueOpen, setIsQueueOpen] = useState(false);
 	const [showShortcuts, setShowShortcuts] = useState(false);
-	const [sortBy, setSortBy] = useState<'recent' | 'name' | 'artist' | 'year'>('recent');
+	const [sortBy, setSortBy] = useState<'recent' | 'name' | 'artist' | 'year'>('name');
 
 	// Get selected album from URL path param
 	const slug = router.query.slug as string[] | undefined;
@@ -183,6 +269,7 @@ export default function AlbumsPage() {
 	const loadMoreRef = useRef<HTMLDivElement | null>(null);
 	const savedScrollPosition = useRef<number>(0);
 	const libraryRequestId = useRef<number>(0);
+	const recentAlbumsRequestId = useRef<number>(0);
 
 	// Current track being played
 	const currentTrack =
@@ -198,6 +285,11 @@ export default function AlbumsPage() {
 						),
 					}
 				: prev
+		);
+		setRecentAlbums((prev) =>
+			prev.map((existing) =>
+				existing.mbid === album.mbid ? { ...existing, coverUrl } : existing
+			)
 		);
 		setSelectedAlbumDetail((prev) =>
 			prev?.mbid === album.mbid ? { ...prev, coverUrl } : prev
@@ -253,6 +345,26 @@ export default function AlbumsPage() {
 		[searchQuery, sortBy]
 	);
 
+	const fetchRecentAlbums = useCallback(async () => {
+		const requestId = ++recentAlbumsRequestId.current;
+		try {
+			const params = new URLSearchParams({
+				summary: '1',
+				page: '1',
+				limit: String(RECENT_ALBUM_LIMIT),
+				sortBy: 'recent',
+			});
+			const response = await fetch(`/api/music/library?${params.toString()}`);
+			if (!response.ok) throw new Error('Failed to fetch recent albums');
+			const data: MusicLibraryResponse = await response.json();
+			if (requestId === recentAlbumsRequestId.current) {
+				setRecentAlbums(data.albums);
+			}
+		} catch (err) {
+			console.error('Failed to fetch recent albums:', err);
+		}
+	}, []);
+
 	useEffect(() => {
 		const timeout = setTimeout(
 			() => {
@@ -262,6 +374,10 @@ export default function AlbumsPage() {
 		);
 		return () => clearTimeout(timeout);
 	}, [fetchLibraryPage, searchQuery]);
+
+	useEffect(() => {
+		fetchRecentAlbums();
+	}, [fetchRecentAlbums]);
 
 	useEffect(() => {
 		if (
@@ -412,7 +528,7 @@ export default function AlbumsPage() {
 		if (!('mediaSession' in navigator) || !currentTrack) return;
 
 		navigator.mediaSession.metadata = new MediaMetadata({
-			title: removeExtension(currentTrack.track.filename),
+			title: formatTrackTitle(currentTrack.track.filename),
 			artist: currentTrack.album.artist,
 			album: currentTrack.album.album,
 			...(currentTrack.album.coverUrl
@@ -804,7 +920,7 @@ export default function AlbumsPage() {
 	};
 
 	const visibleAlbums = library?.albums ?? [];
-	const sidebarAlbums = useMemo(() => library?.albums.slice(0, 24) ?? [], [library?.albums]);
+	const sidebarAlbums = useMemo(() => recentAlbums.slice(0, RECENT_ALBUM_LIMIT), [recentAlbums]);
 
 	// Redirect if not authenticated
 	if (!isLoading && !accessToken) {
@@ -817,7 +933,7 @@ export default function AlbumsPage() {
 			<Head>
 				<title>
 					{currentTrack && playerState.isPlaying
-						? `${removeExtension(currentTrack.track.filename)} - ${currentTrack.album.artist} - DMM`
+						? `${formatTrackTitle(currentTrack.track.filename)} - ${currentTrack.album.artist} - DMM`
 						: selectedAlbum
 							? `${selectedAlbum.album} - ${selectedAlbum.artist} - DMM`
 							: 'Music - DMM'}
@@ -912,27 +1028,13 @@ export default function AlbumsPage() {
 								Recently added
 							</p>
 							{sidebarAlbums.map((album) => (
-								<button
+								<SidebarAlbumButton
 									key={album.hash}
-									onClick={() => selectAlbum(album)}
-									className={`flex w-full min-w-0 items-center gap-3 rounded-md px-3 py-2 text-left transition-colors ${
-										album.hash === albumHash
-											? 'bg-white/10 text-white'
-											: 'text-gray-300 hover:bg-white/5 hover:text-white'
-									}`}
-								>
-									<div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded bg-gray-800">
-										<Music2 className="h-4 w-4 text-gray-500" />
-									</div>
-									<div className="min-w-0">
-										<p className="truncate text-sm font-medium">
-											{album.album}
-										</p>
-										<p className="truncate text-xs text-gray-500">
-											{album.artist}
-										</p>
-									</div>
-								</button>
+									album={album}
+									isSelected={album.hash === albumHash}
+									onSelect={selectAlbum}
+									onCoverLoaded={handleCoverLoaded}
+								/>
 							))}
 						</div>
 					</aside>

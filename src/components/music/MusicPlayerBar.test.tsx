@@ -52,9 +52,9 @@ const defaultProps = () => ({
 });
 
 describe('MusicPlayerBar', () => {
-	it('renders track name without extension', () => {
+	it('renders track name without extension or leading track number', () => {
 		render(<MusicPlayerBar {...defaultProps()} />);
-		const trackNames = screen.getAllByText('01 - Song');
+		const trackNames = screen.getAllByText('Song');
 		expect(trackNames.length).toBeGreaterThan(0);
 	});
 

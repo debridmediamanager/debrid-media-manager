@@ -71,8 +71,8 @@ describe('AlbumDetailView', () => {
 
 	it('renders all tracks', () => {
 		render(<AlbumDetailView {...defaultProps()} />);
-		expect(screen.getByText('01 - First')).toBeInTheDocument();
-		expect(screen.getByText('02 - Second')).toBeInTheDocument();
+		expect(screen.getByText('First')).toBeInTheDocument();
+		expect(screen.getByText('Second')).toBeInTheDocument();
 	});
 
 	it('calls onBack when Back button clicked', async () => {

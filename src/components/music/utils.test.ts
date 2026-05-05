@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { formatDuration, formatSize, removeExtension, shuffleArray } from './utils';
+import {
+	formatDuration,
+	formatSize,
+	formatTrackTitle,
+	removeExtension,
+	shuffleArray,
+} from './utils';
 
 describe('formatDuration', () => {
 	it('formats zero seconds', () => {
@@ -81,6 +87,28 @@ describe('removeExtension', () => {
 	it('handles dotfiles (removes extension-like suffix)', () => {
 		// The regex treats .hidden as an extension and removes it
 		expect(removeExtension('.hidden')).toBe('');
+	});
+});
+
+describe('formatTrackTitle', () => {
+	it('removes extension and leading dash-separated track number', () => {
+		expect(formatTrackTitle('01 - Song.flac')).toBe('Song');
+	});
+
+	it('removes leading dot-separated track number', () => {
+		expect(formatTrackTitle("10. Talkin' An' Signifyin'.flac")).toBe("Talkin' An' Signifyin'");
+	});
+
+	it('removes bracketed track number', () => {
+		expect(formatTrackTitle('[05] Track Five.flac')).toBe('Track Five');
+	});
+
+	it('keeps names without track prefixes', () => {
+		expect(formatTrackTitle('file.backup.mp3')).toBe('file.backup');
+	});
+
+	it('falls back to the filename when the prefix is the whole name', () => {
+		expect(formatTrackTitle('01.flac')).toBe('01');
 	});
 });
 

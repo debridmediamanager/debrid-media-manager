@@ -29,7 +29,7 @@ const makeAlbum = (overrides = {}) => ({
 });
 
 describe('TrackListItem', () => {
-	it('renders track filename without extension', () => {
+	it('renders track filename without extension or leading track number', () => {
 		render(
 			<TrackListItem
 				track={makeTrack()}
@@ -41,7 +41,7 @@ describe('TrackListItem', () => {
 				onDownload={vi.fn()}
 			/>
 		);
-		expect(screen.getByText('01 - Test Song')).toBeInTheDocument();
+		expect(screen.getByText('Test Song')).toBeInTheDocument();
 	});
 
 	it('renders artist name', () => {

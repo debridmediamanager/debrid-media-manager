@@ -15,6 +15,17 @@ export function removeExtension(filename: string): string {
 	return filename.replace(/\.[^/.]+$/, '');
 }
 
+export function formatTrackTitle(filename: string): string {
+	const title = removeExtension(filename).trim();
+	const formattedTitle = title
+		.replace(/^\s*\[(\d{1,3})\]\s*/, '')
+		.replace(/^\s*\d{1,3}\s*[-_.]\s*/, '')
+		.replace(/^\s*\d{1,3}\)\s*/, '')
+		.replace(/^\s*track\s*\d{1,3}\s*[-_.]?\s*/i, '')
+		.trim();
+	return formattedTitle || title;
+}
+
 export function shuffleArray<T>(array: T[]): T[] {
 	const shuffled = [...array];
 	for (let i = shuffled.length - 1; i > 0; i--) {

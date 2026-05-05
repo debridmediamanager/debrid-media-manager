@@ -266,7 +266,7 @@ describe('Albums page queue management logic', () => {
 	describe('dynamic page title', () => {
 		it('shows track info when playing', () => {
 			const isPlaying = true;
-			const trackName = '01 - Song';
+			const trackName = 'Song';
 			const artist = 'Artist';
 			const albumName = 'Album';
 
@@ -276,7 +276,7 @@ describe('Albums page queue management logic', () => {
 					? `${albumName} - ${artist} - DMM`
 					: 'Albums - DMM';
 
-			expect(title).toBe('01 - Song - Artist - DMM');
+			expect(title).toBe('Song - Artist - DMM');
 		});
 
 		it('shows album info when viewing album but not playing', () => {

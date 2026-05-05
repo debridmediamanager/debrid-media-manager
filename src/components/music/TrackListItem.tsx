@@ -1,7 +1,7 @@
 import { MusicAlbum, MusicTrack } from '@/pages/api/music/library';
 import { Download, ListEnd, Loader2, Play, X } from 'lucide-react';
 import { useState } from 'react';
-import { formatSize, removeExtension } from './utils';
+import { formatSize, formatTrackTitle } from './utils';
 
 interface TrackListItemProps {
 	track: MusicTrack;
@@ -79,7 +79,7 @@ export default function TrackListItem({
 				<span
 					className={`truncate font-medium ${isCurrentTrack ? 'text-green-500' : 'text-white'}`}
 				>
-					{removeExtension(track.filename)}
+					{formatTrackTitle(track.filename)}
 				</span>
 				<span className="truncate text-xs text-gray-500 group-hover:text-gray-400">
 					{album.artist}
