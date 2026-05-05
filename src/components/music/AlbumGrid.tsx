@@ -47,7 +47,9 @@ export default function AlbumGrid({
 					{sortOptions.map(({ value, label, icon: Icon }) => (
 						<button
 							key={value}
+							type="button"
 							onClick={() => onSortChange(value)}
+							aria-pressed={sortBy === value}
 							className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
 								sortBy === value
 									? 'bg-green-500/20 text-green-500'

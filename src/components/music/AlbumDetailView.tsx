@@ -79,6 +79,7 @@ export default function AlbumDetailView({
 			<div className="relative z-10 p-4 pb-32 md:p-8">
 				{/* Back button */}
 				<button
+					type="button"
 					onClick={onBack}
 					className="mb-6 flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/20 active:scale-95"
 				>
@@ -133,6 +134,7 @@ export default function AlbumDetailView({
 
 						<div className="mt-4 flex flex-wrap justify-center gap-3 md:justify-start">
 							<button
+								type="button"
 								onClick={() => onPlay(album)}
 								className="flex items-center gap-2 rounded-full bg-green-500 px-8 py-3.5 font-bold text-black shadow-lg shadow-green-500/25 transition-all duration-200 hover:scale-105 hover:bg-green-400 active:scale-95"
 							>
@@ -140,6 +142,7 @@ export default function AlbumDetailView({
 								Play
 							</button>
 							<button
+								type="button"
 								onClick={() => onAddToQueue(album)}
 								className="flex items-center gap-2 rounded-full border border-gray-600 bg-white/5 px-6 py-3.5 font-bold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/30 hover:bg-white/10 active:scale-95"
 							>
@@ -147,6 +150,7 @@ export default function AlbumDetailView({
 							</button>
 							{hasQueue && (
 								<button
+									type="button"
 									onClick={() => onPlayNext(album)}
 									className="flex items-center gap-2 rounded-full border border-gray-600 bg-white/5 px-6 py-3.5 font-bold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/30 hover:bg-white/10 active:scale-95"
 								>

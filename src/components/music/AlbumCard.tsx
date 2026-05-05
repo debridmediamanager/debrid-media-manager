@@ -87,6 +87,7 @@ export default function AlbumCard({
 			ref={cardRef}
 			role="button"
 			tabIndex={0}
+			aria-label={`Open ${album.album} by ${album.artist}`}
 			onClick={() => onSelect(album)}
 			onKeyDown={(e) => {
 				if (e.key === 'Enter' || e.key === ' ') {
@@ -149,10 +150,13 @@ export default function AlbumCard({
 				{/* Play button overlay */}
 				<div className="absolute bottom-2 right-2 z-10 translate-y-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
 					<button
+						type="button"
 						onClick={(e) => {
 							e.stopPropagation();
 							onPlay(album);
 						}}
+						aria-label={`Play ${album.album} by ${album.artist}`}
+						title={`Play ${album.album}`}
 						className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500 shadow-lg shadow-green-500/25 transition-transform duration-200 hover:scale-110 hover:bg-green-400 active:scale-95"
 					>
 						<Play className="h-6 w-6 text-black" fill="currentColor" />

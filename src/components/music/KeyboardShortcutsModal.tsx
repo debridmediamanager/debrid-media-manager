@@ -23,19 +23,26 @@ export default function KeyboardShortcutsModal({ onClose }: KeyboardShortcutsMod
 		<div
 			className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm"
 			onClick={onClose}
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="music-shortcuts-title"
 		>
 			<div
 				className="relative mx-4 w-full max-w-sm rounded-2xl border border-white/10 bg-gray-900 p-6 shadow-2xl"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<button
+					type="button"
 					onClick={onClose}
+					aria-label="Close keyboard shortcuts"
 					className="absolute right-4 top-4 text-gray-400 transition-colors hover:text-white"
 				>
 					<X className="h-5 w-5" />
 				</button>
 
-				<h2 className="mb-5 text-lg font-bold text-white">Keyboard Shortcuts</h2>
+				<h2 id="music-shortcuts-title" className="mb-5 text-lg font-bold text-white">
+					Keyboard Shortcuts
+				</h2>
 
 				<div className="flex flex-col gap-2.5">
 					{SHORTCUTS.map(({ key, description }) => (

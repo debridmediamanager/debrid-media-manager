@@ -80,12 +80,21 @@ export default function MusicPlayerBar({
 
 					{/* Core controls */}
 					<div className="flex items-center gap-3">
-						<button onClick={onSkipPrev} className="text-gray-400 active:text-white">
+						<button
+							type="button"
+							onClick={onSkipPrev}
+							className="text-gray-400 active:text-white"
+							aria-label="Previous track"
+							title="Previous"
+						>
 							<SkipBack className="h-5 w-5" fill="currentColor" />
 						</button>
 						<button
+							type="button"
 							onClick={onTogglePlay}
 							disabled={playerState.isLoading}
+							aria-label={playerState.isPlaying ? 'Pause' : 'Play'}
+							title={playerState.isPlaying ? 'Pause' : 'Play'}
 							className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-black disabled:opacity-50"
 						>
 							{playerState.isLoading ? (
@@ -96,12 +105,22 @@ export default function MusicPlayerBar({
 								<Play className="h-4 w-4 pl-0.5" fill="currentColor" />
 							)}
 						</button>
-						<button onClick={onSkipNext} className="text-gray-400 active:text-white">
+						<button
+							type="button"
+							onClick={onSkipNext}
+							className="text-gray-400 active:text-white"
+							aria-label="Next track"
+							title="Next"
+						>
 							<SkipForward className="h-5 w-5" fill="currentColor" />
 						</button>
 						<button
+							type="button"
 							onClick={onToggleQueue}
 							className={isQueueOpen ? 'text-green-500' : 'text-gray-400'}
+							aria-label="Queue"
+							aria-pressed={isQueueOpen}
+							title="Queue"
 						>
 							<ListMusic className="h-5 w-5" />
 						</button>
@@ -119,6 +138,7 @@ export default function MusicPlayerBar({
 						max={playerState.duration || 100}
 						value={playerState.currentTime}
 						onChange={onSeek}
+						aria-label="Playback position"
 						className="h-1 flex-1 cursor-pointer appearance-none rounded-full bg-gray-600 accent-green-500 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white"
 					/>
 					<span className="w-8 font-mono text-[10px] text-gray-400">
@@ -163,28 +183,36 @@ export default function MusicPlayerBar({
 				<div className="flex flex-1 flex-col items-center gap-2">
 					<div className="flex items-center gap-6">
 						<button
+							type="button"
 							onClick={onToggleShuffle}
 							className={`transition-all duration-200 hover:scale-110 ${
 								playerState.isShuffled
 									? 'text-green-500'
 									: 'text-gray-400 hover:text-white'
 							}`}
+							aria-label="Shuffle"
+							aria-pressed={playerState.isShuffled}
 							title="Shuffle"
 						>
 							<Shuffle className="h-4 w-4" />
 						</button>
 
 						<button
+							type="button"
 							onClick={onSkipPrev}
 							className="text-gray-400 transition-all duration-200 hover:scale-110 hover:text-white"
+							aria-label="Previous track"
 							title="Previous"
 						>
 							<SkipBack className="h-5 w-5" fill="currentColor" />
 						</button>
 
 						<button
+							type="button"
 							onClick={onTogglePlay}
 							disabled={playerState.isLoading}
+							aria-label={playerState.isPlaying ? 'Pause' : 'Play'}
+							title={playerState.isPlaying ? 'Pause' : 'Play'}
 							className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-black shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-50"
 						>
 							{playerState.isLoading ? (
@@ -197,20 +225,25 @@ export default function MusicPlayerBar({
 						</button>
 
 						<button
+							type="button"
 							onClick={onSkipNext}
 							className="text-gray-400 transition-all duration-200 hover:scale-110 hover:text-white"
+							aria-label="Next track"
 							title="Next"
 						>
 							<SkipForward className="h-5 w-5" fill="currentColor" />
 						</button>
 
 						<button
+							type="button"
 							onClick={onToggleRepeat}
 							className={`transition-all duration-200 hover:scale-110 ${
 								playerState.repeatMode !== 'off'
 									? 'text-green-500'
 									: 'text-gray-400 hover:text-white'
 							}`}
+							aria-label={`Repeat: ${playerState.repeatMode}`}
+							aria-pressed={playerState.repeatMode !== 'off'}
 							title="Repeat"
 						>
 							{playerState.repeatMode === 'one' ? (
@@ -232,6 +265,7 @@ export default function MusicPlayerBar({
 							max={playerState.duration || 100}
 							value={playerState.currentTime}
 							onChange={onSeek}
+							aria-label="Playback position"
 							className="h-1 flex-1 cursor-pointer appearance-none rounded-full bg-gray-600 accent-green-500 transition-all hover:h-1.5 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:transition-all group-hover:[&::-webkit-slider-thumb]:h-4 group-hover:[&::-webkit-slider-thumb]:w-4"
 						/>
 						<span className="w-10 font-mono text-xs text-gray-400">
@@ -243,17 +277,25 @@ export default function MusicPlayerBar({
 				{/* Volume & Queue */}
 				<div className="flex w-48 items-center justify-end gap-2">
 					<button
+						type="button"
 						onClick={onToggleQueue}
 						className={`transition-colors ${
 							isQueueOpen ? 'text-green-500' : 'text-gray-400 hover:text-white'
 						}`}
+						aria-label="Queue"
+						aria-pressed={isQueueOpen}
 						title="Queue"
 					>
 						<ListMusic className="h-5 w-5" />
 					</button>
 					<button
+						type="button"
 						onClick={onToggleMute}
 						className="text-gray-400 transition-colors hover:text-white"
+						aria-label={
+							playerState.isMuted || playerState.volume === 0 ? 'Unmute' : 'Mute'
+						}
+						title={playerState.isMuted || playerState.volume === 0 ? 'Unmute' : 'Mute'}
 					>
 						{playerState.isMuted || playerState.volume === 0 ? (
 							<VolumeX className="h-5 w-5" />
@@ -268,6 +310,7 @@ export default function MusicPlayerBar({
 						step={0.01}
 						value={playerState.isMuted ? 0 : playerState.volume}
 						onChange={onVolumeChange}
+						aria-label="Volume"
 						className="h-1 w-24 cursor-pointer appearance-none rounded-full bg-gray-600 accent-green-500 hover:h-1.5 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white"
 					/>
 				</div>

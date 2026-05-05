@@ -72,7 +72,10 @@ function SidebarAlbumButton({
 
 	return (
 		<button
+			type="button"
 			onClick={() => onSelect(album)}
+			aria-current={isSelected ? 'true' : undefined}
+			aria-label={`Open ${album.album} by ${album.artist}`}
 			className={`flex w-full min-w-0 items-center gap-3 rounded-md px-3 py-2 text-left transition-colors ${
 				isSelected
 					? 'bg-white/10 text-white'
@@ -478,50 +481,61 @@ export default function AlbumsPage() {
 	}, [currentIndex, queue.length, playerState.repeatMode]);
 	handleTrackEndedRef.current = handleTrackEnded;
 
-	// Initialize audio element
-	useEffect(() => {
-		const audio = new Audio();
-		audio.volume = savedVolume ?? 1;
-		audioRef.current = audio;
+	// Attach audio element ref (rendered as <audio> in JSX for mobile background playback)
+	const audioRefCallback = useCallback(
+		(audio: HTMLAudioElement | null) => {
+			if (!audio || audioRef.current === audio) return;
+			audioRef.current = audio;
+			audio.volume = savedVolume ?? 1;
 
-		audio.addEventListener('timeupdate', () => {
-			setPlayerState((prev) => ({ ...prev, currentTime: audio.currentTime }));
-		});
+			audio.addEventListener('timeupdate', () => {
+				setPlayerState((prev) => ({ ...prev, currentTime: audio.currentTime }));
+				if ('mediaSession' in navigator && audio.duration && isFinite(audio.duration)) {
+					navigator.mediaSession.setPositionState({
+						duration: audio.duration,
+						playbackRate: audio.playbackRate,
+						position: audio.currentTime,
+					});
+				}
+			});
 
-		audio.addEventListener('durationchange', () => {
-			setPlayerState((prev) => ({ ...prev, duration: audio.duration }));
-		});
+			audio.addEventListener('durationchange', () => {
+				setPlayerState((prev) => ({ ...prev, duration: audio.duration }));
+			});
 
-		audio.addEventListener('ended', () => {
-			handleTrackEndedRef.current();
-		});
+			audio.addEventListener('ended', () => {
+				handleTrackEndedRef.current();
+			});
 
-		audio.addEventListener('play', () => {
-			setPlayerState((prev) => ({ ...prev, isPlaying: true }));
-		});
+			audio.addEventListener('play', () => {
+				setPlayerState((prev) => ({ ...prev, isPlaying: true }));
+				if ('mediaSession' in navigator) {
+					navigator.mediaSession.playbackState = 'playing';
+				}
+			});
 
-		audio.addEventListener('pause', () => {
-			setPlayerState((prev) => ({ ...prev, isPlaying: false }));
-		});
+			audio.addEventListener('pause', () => {
+				setPlayerState((prev) => ({ ...prev, isPlaying: false }));
+				if ('mediaSession' in navigator) {
+					navigator.mediaSession.playbackState = 'paused';
+				}
+			});
 
-		audio.addEventListener('waiting', () => {
-			setPlayerState((prev) => ({ ...prev, isLoading: true }));
-		});
+			audio.addEventListener('waiting', () => {
+				setPlayerState((prev) => ({ ...prev, isLoading: true }));
+			});
 
-		audio.addEventListener('canplay', () => {
-			setPlayerState((prev) => ({ ...prev, isLoading: false }));
-		});
+			audio.addEventListener('canplay', () => {
+				setPlayerState((prev) => ({ ...prev, isLoading: false }));
+			});
 
-		audio.addEventListener('error', () => {
-			setPlayerState((prev) => ({ ...prev, isLoading: false, isPlaying: false }));
-		});
-
-		return () => {
-			audio.pause();
-			audio.src = '';
-		};
+			audio.addEventListener('error', () => {
+				setPlayerState((prev) => ({ ...prev, isLoading: false, isPlaying: false }));
+			});
+		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+		[]
+	);
 
 	// MediaSession API — OS-level media controls
 	useEffect(() => {
@@ -957,8 +971,10 @@ export default function AlbumsPage() {
 								</span>
 							)}
 							<button
+								type="button"
 								onClick={() => setShowShortcuts(true)}
 								className="flex h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs text-gray-400"
+								aria-label="Keyboard shortcuts"
 								title="Keyboard shortcuts"
 							>
 								?
@@ -973,12 +989,15 @@ export default function AlbumsPage() {
 							placeholder="Search artists or albums..."
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
+							aria-label="Search artists or albums"
 							className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-2 pr-9 text-sm placeholder-gray-400 outline-none backdrop-blur-sm transition-all duration-200 focus:border-green-500/50 focus:bg-white/10 focus:ring-1 focus:ring-green-500/30"
 						/>
 						{searchQuery && (
 							<button
+								type="button"
 								onClick={() => setSearchQuery('')}
 								className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-gray-400 transition-colors hover:text-white"
+								aria-label="Clear search"
 								title="Clear search"
 							>
 								<X className="h-4 w-4" />
@@ -998,8 +1017,10 @@ export default function AlbumsPage() {
 							</div>
 						)}
 						<button
+							type="button"
 							onClick={() => setShowShortcuts(true)}
 							className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-400 transition-all duration-200 hover:border-white/20 hover:bg-white/10 hover:text-white"
+							aria-label="Keyboard shortcuts"
 							title="Keyboard shortcuts (?)"
 						>
 							<Keyboard className="h-3.5 w-3.5" />
@@ -1012,7 +1033,9 @@ export default function AlbumsPage() {
 					<aside className="hidden w-72 flex-col border-r border-white/5 bg-black/25 lg:flex">
 						<div className="border-b border-white/5 p-4">
 							<button
+								type="button"
 								onClick={() => selectAlbum(null)}
+								aria-current={!albumHash ? 'page' : undefined}
 								className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-bold transition-colors ${
 									albumHash
 										? 'text-gray-300 hover:bg-white/5 hover:text-white'
@@ -1131,6 +1154,8 @@ export default function AlbumsPage() {
 			</div>
 
 			{showShortcuts && <KeyboardShortcutsModal onClose={() => setShowShortcuts(false)} />}
+			{/* DOM-attached audio element for reliable mobile background playback */}
+			<audio ref={audioRefCallback} playsInline preload="auto" />
 		</>
 	);
 }
