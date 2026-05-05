@@ -283,8 +283,15 @@ export default async function handler(
 			const meta = metadataMap.get(music.mbid);
 			const files = includeTracks ? ((music as any).files ?? []) : [];
 
-			// Filter only audio files (include common audio extensions)
-			const audioFiles = includeTracks ? files.filter((f: any) => isAudioPath(f.path)) : [];
+			// Filter only audio files and deduplicate by file_id
+			const audioFiles = includeTracks
+				? files
+						.filter((f: any) => isAudioPath(f.path))
+						.filter(
+							(f: any, i: number, arr: any[]) =>
+								arr.findIndex((x: any) => x.file_id === f.file_id) === i
+						)
+				: [];
 
 			// Sort by track number, then filename
 			const sortedTracks = audioFiles.sort((a: any, b: any) => {
