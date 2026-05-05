@@ -32,6 +32,7 @@ describe('/api/info/show - trailer fallback sources', () => {
 					videos: [{ season: 1, episode: 1 }],
 				},
 			}),
+			getTraktShowEpisode: vi.fn().mockResolvedValue(null),
 		};
 
 		vi.mocked(getMdblistClient).mockReturnValue(mockMdblistClient as any);
@@ -78,6 +79,7 @@ describe('/api/info/show - trailer fallback sources', () => {
 					videos: [{ season: 1, episode: 1 }],
 				},
 			}),
+			getTraktShowEpisode: vi.fn().mockResolvedValue(null),
 		};
 
 		(axios.get as any).mockResolvedValue({
@@ -148,6 +150,7 @@ describe('/api/info/show - trailer fallback sources', () => {
 					videos: [{ season: 1, episode: 1 }],
 				},
 			}),
+			getTraktShowEpisode: vi.fn().mockResolvedValue(null),
 		};
 
 		vi.mocked(getMdblistClient).mockReturnValue(mockMdblistClient as any);

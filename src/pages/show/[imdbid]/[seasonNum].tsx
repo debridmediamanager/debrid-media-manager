@@ -62,7 +62,7 @@ import { flushSync } from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
 type EpisodeAirInfo = {
-	air_date: string;
+	first_aired: string;
 	episode_number: number;
 	season_number: number;
 	name: string;
@@ -969,12 +969,17 @@ const TvSearch: FunctionComponent = () => {
 	);
 
 	const formatAirDate = (dateStr: string) => {
-		const date = new Date(dateStr + 'T00:00:00');
-		return date.toLocaleDateString(undefined, {
+		const date = new Date(dateStr);
+		const datePart = new Intl.DateTimeFormat(undefined, {
+			weekday: 'short',
 			month: 'short',
 			day: 'numeric',
-			year: 'numeric',
+		}).format(date);
+		const timePart = date.toLocaleTimeString([], {
+			hour: '2-digit',
+			minute: '2-digit',
 		});
+		return `${datePart} ${timePart}`;
 	};
 
 	const airingStatus = (() => {
@@ -1027,7 +1032,7 @@ const TvSearch: FunctionComponent = () => {
 					className="inline-flex items-center rounded border border-cyan-500 bg-cyan-900/30 px-2 py-0.5 text-xs text-cyan-100"
 				>
 					<Calendar className="mr-1 h-3 w-3" />
-					Next: {epCode} &middot; {formatAirDate(next.air_date)}
+					Next: {epCode} &middot; {formatAirDate(next.first_aired)}
 				</span>
 			);
 		} else if (status === 'Returning Series' && last) {
@@ -1038,7 +1043,7 @@ const TvSearch: FunctionComponent = () => {
 					key="last"
 					className="inline-flex items-center rounded border border-blue-500 bg-blue-900/30 px-2 py-0.5 text-xs text-blue-100"
 				>
-					Last aired: {epCode} &middot; {formatAirDate(last.air_date)}
+					Last aired: {epCode} &middot; {formatAirDate(last.first_aired)}
 				</span>
 			);
 		}

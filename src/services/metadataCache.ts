@@ -285,6 +285,48 @@ export class MetadataCacheService {
 	}
 
 	/**
+	 * Get Trakt next/last episode for a show with caching
+	 */
+	async getTraktShowEpisode(
+		showId: string,
+		which: 'next_episode' | 'last_episode'
+	): Promise<any | null> {
+		const clientId = process.env.TRAKT_CLIENT_ID || this.runtimeConfig.traktClientId;
+		if (!clientId) return null;
+
+		const url = `https://api.trakt.tv/shows/${showId}/${which}?extended=full`;
+		const cacheKey = `trakt_${which}_${showId}`;
+
+		const config: AxiosRequestConfig = {
+			headers: {
+				'Content-Type': 'application/json',
+				'trakt-api-version': '2',
+				'trakt-api-key': clientId,
+			},
+			validateStatus: (status: number) => status === 200 || status === 204,
+		};
+
+		try {
+			const cached = await this.cache.getWithMetadata(cacheKey);
+			if (cached && !this.isCacheExpired(cached.updatedAt, this.CACHE_DURATIONS.TRENDING)) {
+				return cached.data;
+			}
+
+			const response = await axios.get(url, config);
+			if (response.status === 204 || !response.data) {
+				await this.cache.set(cacheKey, `trakt_${which}`, null);
+				return null;
+			}
+
+			await this.cache.set(cacheKey, `trakt_${which}`, response.data);
+			return response.data;
+		} catch (error) {
+			console.error(`[MetadataCache] Failed to fetch Trakt ${which} for ${showId}`, error);
+			return null;
+		}
+	}
+
+	/**
 	 * Search Trakt with caching
 	 */
 	async searchTrakt(query: string, type?: 'movie' | 'show'): Promise<any> {

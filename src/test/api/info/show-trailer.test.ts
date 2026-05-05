@@ -40,6 +40,7 @@ describe('/api/info/show - trailer field', () => {
 					],
 				},
 			}),
+			getTraktShowEpisode: vi.fn().mockResolvedValue(null),
 		};
 
 		vi.mocked(getMdblistClient).mockReturnValue(mockMdblistClient as any);
@@ -86,6 +87,7 @@ describe('/api/info/show - trailer field', () => {
 					videos: [],
 				},
 			}),
+			getTraktShowEpisode: vi.fn().mockResolvedValue(null),
 		};
 
 		vi.mocked(getMdblistClient).mockReturnValue(mockMdblistClient as any);

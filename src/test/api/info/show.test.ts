@@ -25,6 +25,7 @@ describe('/api/info/show', () => {
 	};
 	const mockMetadataCache = {
 		getCinemetaSeries: vi.fn(),
+		getTraktShowEpisode: vi.fn().mockResolvedValue(null),
 	};
 
 	beforeEach(() => {
@@ -90,6 +91,9 @@ describe('/api/info/show', () => {
 				3: 3,
 			},
 			trailer: '',
+			status: undefined,
+			next_episode_to_air: undefined,
+			last_episode_to_air: undefined,
 		});
 	});
 

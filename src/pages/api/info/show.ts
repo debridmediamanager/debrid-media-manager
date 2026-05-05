@@ -141,61 +141,69 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		let trailer = mdbResponse?.trailer ?? '';
 		let status: string | undefined;
 		let next_episode_to_air:
-			| { air_date: string; episode_number: number; season_number: number; name: string }
+			| { first_aired: string; episode_number: number; season_number: number; name: string }
 			| undefined;
 		let last_episode_to_air:
-			| { air_date: string; episode_number: number; season_number: number; name: string }
+			| { first_aired: string; episode_number: number; season_number: number; name: string }
 			| undefined;
 
 		if (!trailer && cinemetaResponse.meta?.trailers?.[0]?.source) {
 			trailer = `https://youtube.com/watch?v=${cinemetaResponse.meta.trailers[0].source}`;
 		}
 
-		// Fetch TMDB TV details for scheduling data and trailer fallback
-		if (mdbResponse?.tmdbid) {
-			try {
-				const tmdbKey = process.env.TMDB_KEY;
-				if (tmdbKey) {
-					const tmdbResponse = await axios.get(
-						`https://api.themoviedb.org/3/tv/${mdbResponse.tmdbid}?api_key=${tmdbKey}&append_to_response=videos`
-					);
-					const tmdbData = tmdbResponse.data;
-
-					// Extract scheduling data
-					status = tmdbData.status;
-					if (tmdbData.next_episode_to_air) {
-						next_episode_to_air = {
-							air_date: tmdbData.next_episode_to_air.air_date,
-							episode_number: tmdbData.next_episode_to_air.episode_number,
-							season_number: tmdbData.next_episode_to_air.season_number,
-							name: tmdbData.next_episode_to_air.name,
-						};
-					}
-					if (tmdbData.last_episode_to_air) {
-						last_episode_to_air = {
-							air_date: tmdbData.last_episode_to_air.air_date,
-							episode_number: tmdbData.last_episode_to_air.episode_number,
-							season_number: tmdbData.last_episode_to_air.season_number,
-							name: tmdbData.last_episode_to_air.name,
-						};
-					}
-
-					// Trailer fallback from TMDB videos
-					if (!trailer) {
-						const tmdbTrailer = tmdbData.videos?.results?.find(
-							(v: any) => v.type === 'Trailer' && v.site === 'YouTube'
+		// Fetch Trakt next/last episode (accurate datetimes) and TMDB for trailer/status
+		const traktNextPromise = metadataCache.getTraktShowEpisode(imdbid, 'next_episode');
+		const traktLastPromise = metadataCache.getTraktShowEpisode(imdbid, 'last_episode');
+		const tmdbPromise = mdbResponse?.tmdbid
+			? (async () => {
+					try {
+						const tmdbKey = process.env.TMDB_KEY;
+						if (!tmdbKey) return null;
+						const resp = await axios.get(
+							`https://api.themoviedb.org/3/tv/${mdbResponse.tmdbid}?api_key=${tmdbKey}&append_to_response=videos`
 						);
-						if (tmdbTrailer?.key) {
-							trailer = `https://youtube.com/watch?v=${tmdbTrailer.key}`;
-						}
+						return resp.data;
+					} catch {
+						return null;
 					}
+				})()
+			: Promise.resolve(null);
+
+		const [traktNext, traktLast, tmdbData] = await Promise.all([
+			traktNextPromise,
+			traktLastPromise,
+			tmdbPromise,
+		]);
+
+		if (traktNext?.first_aired) {
+			next_episode_to_air = {
+				first_aired: traktNext.first_aired,
+				episode_number: traktNext.number,
+				season_number: traktNext.season,
+				name: traktNext.title,
+			};
+		}
+		if (traktLast?.first_aired) {
+			last_episode_to_air = {
+				first_aired: traktLast.first_aired,
+				episode_number: traktLast.number,
+				season_number: traktLast.season,
+				name: traktLast.title,
+			};
+		}
+
+		if (tmdbData) {
+			status = tmdbData.status;
+			if (!trailer) {
+				const tmdbTrailer = tmdbData.videos?.results?.find(
+					(v: any) => v.type === 'Trailer' && v.site === 'YouTube'
+				);
+				if (tmdbTrailer?.key) {
+					trailer = `https://youtube.com/watch?v=${tmdbTrailer.key}`;
 				}
-			} catch (error) {
-				console.error('Error fetching TMDB data:', error);
 			}
 		}
 
-		// Fall back to mdblist status if TMDB didn't provide one
 		if (!status) {
 			status = mdbResponse?.status;
 		}
