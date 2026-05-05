@@ -6,6 +6,10 @@ vi.mock('@/utils/prisma', () => ({
 	prisma: {
 		availableMusic: {
 			findMany: vi.fn(),
+			count: vi.fn(),
+		},
+		availableMusicFile: {
+			count: vi.fn(),
 		},
 		musicMetadata: {
 			findMany: vi.fn(),
@@ -44,6 +48,7 @@ function makeAlbum(
 		bytes: bigint;
 		ended: Date;
 		files: any[];
+		_count: { files: number };
 	}> = {}
 ) {
 	return {
@@ -53,6 +58,7 @@ function makeAlbum(
 		bytes: BigInt(50000000),
 		ended: new Date('2024-01-01'),
 		files: [],
+		_count: { files: 0 },
 		...overrides,
 	};
 }
@@ -62,6 +68,8 @@ describe('/api/music/library', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		mockedPrisma.availableMusic.count.mockResolvedValue(0);
+		mockedPrisma.availableMusicFile.count.mockResolvedValue(0);
 	});
 
 	it('rejects non-GET methods', async () => {
@@ -234,6 +242,101 @@ describe('/api/music/library', () => {
 		expect(data.totalAlbums).toBe(1);
 		expect(data.albums[0].trackCount).toBe(3);
 		expect(data.albums[0].hash).toBe('hash2');
+	});
+
+	it('paginates summary responses without returning track arrays', async () => {
+		mockedPrisma.availableMusic.findMany.mockResolvedValue([
+			makeAlbum({
+				hash: 'hash1',
+				mbid: 'mbid-1',
+				filename: 'First Album',
+				_count: { files: 10 },
+			}),
+			makeAlbum({
+				hash: 'hash2',
+				mbid: 'mbid-2',
+				filename: 'Second Album',
+				_count: { files: 12 },
+			}),
+			makeAlbum({
+				hash: 'hash3',
+				mbid: 'mbid-3',
+				filename: 'Third Album',
+				_count: { files: 8 },
+			}),
+		] as any);
+		mockedPrisma.availableMusic.count.mockResolvedValue(3);
+		mockedPrisma.availableMusicFile.count.mockResolvedValue(30);
+		mockedPrisma.musicMetadata.findMany.mockResolvedValue([]);
+
+		const req = createMockRequest({
+			method: 'GET',
+			query: { summary: '1', page: '1', limit: '2' },
+		});
+		res = createMockResponse();
+		await handler(req, res);
+
+		const data = res._getData() as any;
+		expect(data.albums).toHaveLength(2);
+		expect(data.albums[0].tracks).toEqual([]);
+		expect(data.totalAlbums).toBe(3);
+		expect(data.totalTracks).toBe(30);
+		expect(data.hasMore).toBe(true);
+		expect(data.nextPage).toBe(2);
+	});
+
+	it('searches summaries across the full library before pagination', async () => {
+		mockedPrisma.availableMusic.findMany.mockResolvedValue([
+			makeAlbum({
+				hash: 'hash1',
+				mbid: 'mbid-1',
+				filename: 'The Wall',
+				_count: { files: 10 },
+			}),
+			makeAlbum({
+				hash: 'hash2',
+				mbid: 'mbid-2',
+				filename: 'OK Computer',
+				_count: { files: 12 },
+			}),
+			makeAlbum({
+				hash: 'hash3',
+				mbid: 'mbid-3',
+				filename: 'Wish You Were Here',
+				_count: { files: 8 },
+			}),
+		] as any);
+		mockedPrisma.musicMetadata.findMany.mockResolvedValue([
+			{ mbid: 'mbid-1', artist: 'Pink Floyd', album: 'The Wall', year: 1979, coverUrl: null },
+			{
+				mbid: 'mbid-2',
+				artist: 'Radiohead',
+				album: 'OK Computer',
+				year: 1997,
+				coverUrl: null,
+			},
+			{
+				mbid: 'mbid-3',
+				artist: 'Pink Floyd',
+				album: 'Wish You Were Here',
+				year: 1975,
+				coverUrl: null,
+			},
+		] as any);
+
+		const req = createMockRequest({
+			method: 'GET',
+			query: { summary: '1', search: 'pink', page: '1', limit: '1' },
+		});
+		res = createMockResponse();
+		await handler(req, res);
+
+		const data = res._getData() as any;
+		expect(data.albums).toHaveLength(1);
+		expect(data.totalAlbums).toBe(2);
+		expect(data.totalTracks).toBe(18);
+		expect(data.hasMore).toBe(true);
+		expect(data.albums[0].artist).toBe('Pink Floyd');
 	});
 
 	it('returns 500 on error', async () => {

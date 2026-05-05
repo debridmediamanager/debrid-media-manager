@@ -1,5 +1,6 @@
 import { MusicAlbum } from '@/pages/api/music/library';
 import { Disc3, Pause, Play } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 interface AlbumCardProps {
 	album: MusicAlbum;
@@ -7,6 +8,7 @@ interface AlbumCardProps {
 	onPlay: (album: MusicAlbum) => void;
 	isNowPlaying?: boolean;
 	isPlaying?: boolean;
+	onCoverLoaded?: (album: MusicAlbum, coverUrl: string) => void;
 }
 
 export default function AlbumCard({
@@ -15,9 +17,74 @@ export default function AlbumCard({
 	onPlay,
 	isNowPlaying = false,
 	isPlaying = false,
+	onCoverLoaded,
 }: AlbumCardProps) {
+	const cardRef = useRef<HTMLDivElement>(null);
+	const [coverUrl, setCoverUrl] = useState(album.coverUrl);
+	const [shouldFetchCover, setShouldFetchCover] = useState(false);
+
+	useEffect(() => {
+		setCoverUrl(album.coverUrl);
+	}, [album.coverUrl]);
+
+	useEffect(() => {
+		if (album.coverUrl || !onCoverLoaded) return;
+		const element = cardRef.current;
+		if (!element || typeof IntersectionObserver === 'undefined') {
+			setShouldFetchCover(true);
+			return;
+		}
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries.some((entry) => entry.isIntersecting)) {
+					setShouldFetchCover(true);
+					observer.disconnect();
+				}
+			},
+			{ rootMargin: '360px' }
+		);
+		observer.observe(element);
+		return () => observer.disconnect();
+	}, [album.coverUrl, onCoverLoaded]);
+
+	useEffect(() => {
+		if (!shouldFetchCover || coverUrl || !onCoverLoaded) return;
+		let isCancelled = false;
+		const handleCoverLoaded = onCoverLoaded;
+
+		async function fetchCover() {
+			try {
+				const response = await fetch('/api/music/cover', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						mbid: album.mbid,
+						artist: album.artist,
+						album: album.album,
+					}),
+				});
+
+				if (!response.ok) return;
+				const data = await response.json();
+				if (!isCancelled && data.coverUrl) {
+					setCoverUrl(data.coverUrl);
+					handleCoverLoaded(album, data.coverUrl);
+				}
+			} catch (err) {
+				console.error(`Failed to fetch cover for ${album.album}:`, err);
+			}
+		}
+
+		fetchCover();
+		return () => {
+			isCancelled = true;
+		};
+	}, [album, coverUrl, onCoverLoaded, shouldFetchCover]);
+
 	return (
 		<div
+			ref={cardRef}
 			role="button"
 			tabIndex={0}
 			onClick={() => onSelect(album)}
@@ -39,11 +106,12 @@ export default function AlbumCard({
 					<Disc3 className="h-16 w-16 text-gray-500" />
 				</div>
 				{/* Album cover */}
-				{album.coverUrl && (
+				{coverUrl && (
 					// eslint-disable-next-line @next/next/no-img-element
 					<img
-						src={album.coverUrl}
+						src={coverUrl}
 						alt={album.album}
+						loading="lazy"
 						className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
 						onError={(e) => {
 							(e.target as HTMLImageElement).style.display = 'none';

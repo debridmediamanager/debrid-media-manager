@@ -9,11 +9,13 @@ import { useRealDebridAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { MusicAlbum, MusicLibraryResponse, MusicTrack } from '@/pages/api/music/library';
 import { UnrestrictTrackResponse } from '@/pages/api/music/unrestrict';
-import { delay } from '@/utils/delay';
 import { Keyboard, Library, Loader2, Music2, X } from 'lucide-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+const MUSIC_BASE_PATH = '/music';
+const MUSIC_PAGE_SIZE = 48;
 
 export default function AlbumsPage() {
 	const router = useRouter();
@@ -22,6 +24,7 @@ export default function AlbumsPage() {
 	// Library state
 	const [library, setLibrary] = useState<MusicLibraryResponse | null>(null);
 	const [libraryLoading, setLibraryLoading] = useState(true);
+	const [libraryLoadingMore, setLibraryLoadingMore] = useState(false);
 	const [libraryError, setLibraryError] = useState<string | null>(null);
 
 	// View state
@@ -33,7 +36,13 @@ export default function AlbumsPage() {
 	// Get selected album from URL path param
 	const slug = router.query.slug as string[] | undefined;
 	const albumHash = slug?.[0];
-	const selectedAlbum = library?.albums.find((a) => a.hash === albumHash) ?? null;
+	const selectedAlbumSummary = library?.albums.find((a) => a.hash === albumHash) ?? null;
+	const [selectedAlbumDetail, setSelectedAlbumDetail] = useState<MusicAlbum | null>(null);
+	const [selectedAlbumLoading, setSelectedAlbumLoading] = useState(false);
+	const selectedAlbum =
+		albumHash && selectedAlbumDetail?.hash === albumHash
+			? selectedAlbumDetail
+			: selectedAlbumSummary;
 
 	// Track previous album to detect album changes
 	const prevAlbumHash = useRef<string | undefined>(undefined);
@@ -44,9 +53,9 @@ export default function AlbumsPage() {
 			if (mainRef.current) {
 				savedScrollPosition.current = mainRef.current.scrollTop;
 			}
-			router.push(`/albums/${album.hash}`, undefined, { shallow: true });
+			router.push(`${MUSIC_BASE_PATH}/${album.hash}`, undefined, { shallow: true });
 		} else {
-			router.push('/albums', undefined, { shallow: true });
+			router.push(MUSIC_BASE_PATH, undefined, { shallow: true });
 		}
 	};
 
@@ -171,85 +180,168 @@ export default function AlbumsPage() {
 
 	// Scroll container ref and saved scroll position
 	const mainRef = useRef<HTMLElement | null>(null);
+	const loadMoreRef = useRef<HTMLDivElement | null>(null);
 	const savedScrollPosition = useRef<number>(0);
+	const libraryRequestId = useRef<number>(0);
 
 	// Current track being played
 	const currentTrack =
 		currentIndex >= 0 && currentIndex < queue.length ? queue[currentIndex] : null;
 
-	// Fetch library on mount
-	useEffect(() => {
-		async function fetchLibrary() {
-			try {
-				setLibraryLoading(true);
-				const response = await fetch('/api/music/library');
-				if (!response.ok) throw new Error('Failed to fetch library');
-				const data: MusicLibraryResponse = await response.json();
-				setLibrary(data);
-			} catch (err) {
-				setLibraryError(err instanceof Error ? err.message : 'Failed to load library');
-			} finally {
-				setLibraryLoading(false);
-			}
-		}
-		fetchLibrary();
+	const handleCoverLoaded = useCallback((album: MusicAlbum, coverUrl: string) => {
+		setLibrary((prev) =>
+			prev
+				? {
+						...prev,
+						albums: prev.albums.map((existing) =>
+							existing.mbid === album.mbid ? { ...existing, coverUrl } : existing
+						),
+					}
+				: prev
+		);
+		setSelectedAlbumDetail((prev) =>
+			prev?.mbid === album.mbid ? { ...prev, coverUrl } : prev
+		);
 	}, []);
 
-	// Fetch album covers for albums without cover URLs
-	useEffect(() => {
-		if (!library || library.albums.length === 0) return;
+	const fetchLibraryPage = useCallback(
+		async (pageToLoad: number = 1, append: boolean = false) => {
+			const requestId = ++libraryRequestId.current;
+			try {
+				setLibraryError(null);
+				if (append) {
+					setLibraryLoadingMore(true);
+				} else {
+					setLibraryLoading(true);
+				}
+				const params = new URLSearchParams({
+					summary: '1',
+					page: String(pageToLoad),
+					limit: String(MUSIC_PAGE_SIZE),
+					sortBy,
+				});
+				const trimmedSearch = searchQuery.trim();
+				if (trimmedSearch) params.set('search', trimmedSearch);
 
-		const albumsWithoutCovers = library.albums.filter((a) => !a.coverUrl);
-		if (albumsWithoutCovers.length === 0) return;
+				const response = await fetch(`/api/music/library?${params.toString()}`);
+				if (!response.ok) throw new Error('Failed to fetch library');
+				const data: MusicLibraryResponse = await response.json();
+				if (requestId !== libraryRequestId.current) return;
+
+				setLibrary((prev) => {
+					if (!append || !prev) return data;
+					const existingHashes = new Set(prev.albums.map((album) => album.hash));
+					const nextAlbums = data.albums.filter(
+						(album) => !existingHashes.has(album.hash)
+					);
+					return {
+						...data,
+						albums: [...prev.albums, ...nextAlbums],
+					};
+				});
+			} catch (err) {
+				if (requestId === libraryRequestId.current) {
+					setLibraryError(err instanceof Error ? err.message : 'Failed to load library');
+				}
+			} finally {
+				if (requestId === libraryRequestId.current) {
+					setLibraryLoading(false);
+					setLibraryLoadingMore(false);
+				}
+			}
+		},
+		[searchQuery, sortBy]
+	);
+
+	useEffect(() => {
+		const timeout = setTimeout(
+			() => {
+				fetchLibraryPage(1, false);
+			},
+			searchQuery.trim() ? 250 : 0
+		);
+		return () => clearTimeout(timeout);
+	}, [fetchLibraryPage, searchQuery]);
+
+	useEffect(() => {
+		if (
+			albumHash ||
+			!library?.hasMore ||
+			libraryLoading ||
+			libraryLoadingMore ||
+			!loadMoreRef.current
+		) {
+			return;
+		}
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries.some((entry) => entry.isIntersecting) && library.hasMore) {
+					fetchLibraryPage(library.nextPage ?? (library.page ?? 1) + 1, true);
+				}
+			},
+			{ rootMargin: '600px' }
+		);
+		observer.observe(loadMoreRef.current);
+		return () => observer.disconnect();
+	}, [
+		albumHash,
+		fetchLibraryPage,
+		library?.hasMore,
+		library?.nextPage,
+		library?.page,
+		libraryLoading,
+		libraryLoadingMore,
+	]);
+
+	useEffect(() => {
+		if (!albumHash) {
+			setSelectedAlbumDetail(null);
+			setSelectedAlbumLoading(false);
+			return;
+		}
 
 		let isCancelled = false;
+		const activeAlbumHash = albumHash;
 
-		async function fetchCovers() {
-			for (const album of albumsWithoutCovers) {
-				if (isCancelled) break;
-
-				try {
-					const response = await fetch('/api/music/cover', {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({
-							mbid: album.mbid,
-							artist: album.artist,
-							album: album.album,
-						}),
-					});
-
-					if (response.ok) {
-						const data = await response.json();
-						if (data.coverUrl) {
-							setLibrary((prev) => {
-								if (!prev) return prev;
-								return {
-									...prev,
-									albums: prev.albums.map((a) =>
-										a.mbid === album.mbid
-											? { ...a, coverUrl: data.coverUrl }
-											: a
-									),
-								};
-							});
-						}
+		async function fetchAlbumDetail() {
+			try {
+				setSelectedAlbumLoading(true);
+				const response = await fetch(
+					`/api/music/library?hash=${encodeURIComponent(activeAlbumHash)}`
+				);
+				if (!response.ok) throw new Error('Failed to fetch album');
+				const data: MusicLibraryResponse = await response.json();
+				const album = data.albums[0] ?? null;
+				if (!isCancelled) {
+					setSelectedAlbumDetail(album);
+					if (album) {
+						setLibrary((prev) =>
+							prev
+								? {
+										...prev,
+										albums: prev.albums.map((existing) =>
+											existing.hash === album.hash ? album : existing
+										),
+									}
+								: prev
+						);
 					}
-				} catch (err) {
-					console.error(`Failed to fetch cover for ${album.album}:`, err);
 				}
-
-				await delay(200);
+			} catch (err) {
+				console.error('Failed to fetch album detail:', err);
+				if (!isCancelled) setSelectedAlbumDetail(null);
+			} finally {
+				if (!isCancelled) setSelectedAlbumLoading(false);
 			}
 		}
 
-		fetchCovers();
+		fetchAlbumDetail();
 
 		return () => {
 			isCancelled = true;
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [library?.albums.length]);
+	}, [albumHash]);
 
 	// Handle track ended — defined before audio init so the ref is available
 	const handleTrackEndedRef = useRef<() => void>(() => {});
@@ -711,38 +803,12 @@ export default function AlbumsPage() {
 		document.body.removeChild(a);
 	};
 
-	// Filter and sort albums
-	const filteredAlbums = (() => {
-		let albums =
-			library?.albums.filter((album) => {
-				const query = searchQuery.toLowerCase();
-				return (
-					album.artist.toLowerCase().includes(query) ||
-					album.album.toLowerCase().includes(query)
-				);
-			}) ?? [];
-
-		switch (sortBy) {
-			case 'name':
-				albums = [...albums].sort((a, b) => a.album.localeCompare(b.album));
-				break;
-			case 'artist':
-				albums = [...albums].sort((a, b) => a.artist.localeCompare(b.artist));
-				break;
-			case 'year':
-				albums = [...albums].sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
-				break;
-			case 'recent':
-			default:
-				break; // already sorted by most recent from API
-		}
-
-		return albums;
-	})();
+	const visibleAlbums = library?.albums ?? [];
+	const sidebarAlbums = useMemo(() => library?.albums.slice(0, 24) ?? [], [library?.albums]);
 
 	// Redirect if not authenticated
 	if (!isLoading && !accessToken) {
-		router.push('/realdebrid/login?redirect=/albums');
+		router.push(`/realdebrid/login?redirect=${MUSIC_BASE_PATH}`);
 		return null;
 	}
 
@@ -754,7 +820,7 @@ export default function AlbumsPage() {
 						? `${removeExtension(currentTrack.track.filename)} - ${currentTrack.album.artist} - DMM`
 						: selectedAlbum
 							? `${selectedAlbum.album} - ${selectedAlbum.artist} - DMM`
-							: 'Albums - DMM'}
+							: 'Music - DMM'}
 				</title>
 			</Head>
 
@@ -764,7 +830,7 @@ export default function AlbumsPage() {
 					<div className="flex items-center justify-between">
 						<div className="flex items-center gap-2">
 							<Music2 className="h-5 w-5 text-green-500 md:h-6 md:w-6" />
-							<h1 className="text-lg font-bold md:text-xl">Albums</h1>
+							<h1 className="text-lg font-bold md:text-xl">Music</h1>
 						</div>
 						{/* Stats + shortcuts - mobile */}
 						<div className="flex items-center gap-2 md:hidden">
@@ -826,42 +892,108 @@ export default function AlbumsPage() {
 					</div>
 				</header>
 
-				{/* Main content */}
-				<main ref={mainRef} className="flex-1 overflow-y-auto pb-24 md:pb-32">
-					{libraryLoading ? (
-						<div className="flex h-full items-center justify-center">
-							<Loader2 className="h-8 w-8 animate-spin text-green-500" />
+				<div className="flex min-h-0 flex-1">
+					<aside className="hidden w-72 flex-col border-r border-white/5 bg-black/25 lg:flex">
+						<div className="border-b border-white/5 p-4">
+							<button
+								onClick={() => selectAlbum(null)}
+								className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-bold transition-colors ${
+									albumHash
+										? 'text-gray-300 hover:bg-white/5 hover:text-white'
+										: 'bg-white/10 text-white'
+								}`}
+							>
+								<Library className="h-4 w-4" />
+								Your Library
+							</button>
 						</div>
-					) : libraryError ? (
-						<div className="flex h-full items-center justify-center text-red-400">
-							{libraryError}
+						<div className="min-h-0 flex-1 overflow-y-auto p-2">
+							<p className="px-3 py-2 text-xs font-bold uppercase text-gray-500">
+								Recently added
+							</p>
+							{sidebarAlbums.map((album) => (
+								<button
+									key={album.hash}
+									onClick={() => selectAlbum(album)}
+									className={`flex w-full min-w-0 items-center gap-3 rounded-md px-3 py-2 text-left transition-colors ${
+										album.hash === albumHash
+											? 'bg-white/10 text-white'
+											: 'text-gray-300 hover:bg-white/5 hover:text-white'
+									}`}
+								>
+									<div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded bg-gray-800">
+										<Music2 className="h-4 w-4 text-gray-500" />
+									</div>
+									<div className="min-w-0">
+										<p className="truncate text-sm font-medium">
+											{album.album}
+										</p>
+										<p className="truncate text-xs text-gray-500">
+											{album.artist}
+										</p>
+									</div>
+								</button>
+							))}
 						</div>
-					) : selectedAlbum ? (
-						<AlbumDetailView
-							album={selectedAlbum}
-							currentTrack={currentTrack}
-							playerState={playerState}
-							onPlay={playAlbum}
-							onAddToQueue={addAlbumToQueue}
-							onPlayNext={playAlbumNext}
-							onPlayTrackNext={playTrackNext}
-							onBack={() => selectAlbum(null)}
-							onDownload={downloadTrack}
-							hasQueue={queue.length > 0}
-						/>
-					) : (
-						<AlbumGrid
-							albums={filteredAlbums}
-							searchQuery={searchQuery}
-							onSelect={selectAlbum}
-							onPlay={playAlbum}
-							sortBy={sortBy}
-							onSortChange={setSortBy}
-							nowPlayingAlbumHash={currentTrack?.album.hash ?? null}
-							isPlaying={playerState.isPlaying}
-						/>
-					)}
-				</main>
+					</aside>
+
+					{/* Main content */}
+					<main ref={mainRef} className="flex-1 overflow-y-auto pb-24 md:pb-32">
+						{libraryLoading ? (
+							<div className="flex h-full items-center justify-center">
+								<Loader2 className="h-8 w-8 animate-spin text-green-500" />
+							</div>
+						) : libraryError ? (
+							<div className="flex h-full items-center justify-center text-red-400">
+								{libraryError}
+							</div>
+						) : selectedAlbum && selectedAlbum.tracks.length > 0 ? (
+							<AlbumDetailView
+								album={selectedAlbum}
+								currentTrack={currentTrack}
+								playerState={playerState}
+								onPlay={playAlbum}
+								onAddToQueue={addAlbumToQueue}
+								onPlayNext={playAlbumNext}
+								onPlayTrackNext={playTrackNext}
+								onBack={() => selectAlbum(null)}
+								onDownload={downloadTrack}
+								hasQueue={queue.length > 0}
+								onCoverLoaded={handleCoverLoaded}
+							/>
+						) : albumHash && selectedAlbumLoading ? (
+							<div className="flex h-full items-center justify-center">
+								<Loader2 className="h-8 w-8 animate-spin text-green-500" />
+							</div>
+						) : (
+							<>
+								<AlbumGrid
+									albums={visibleAlbums}
+									searchQuery={searchQuery}
+									onSelect={selectAlbum}
+									onPlay={playAlbum}
+									sortBy={sortBy}
+									onSortChange={setSortBy}
+									nowPlayingAlbumHash={currentTrack?.album.hash ?? null}
+									isPlaying={playerState.isPlaying}
+									onCoverLoaded={handleCoverLoaded}
+								/>
+								<div
+									ref={loadMoreRef}
+									className="flex min-h-20 items-center justify-center pb-8 text-sm text-gray-500"
+								>
+									{libraryLoadingMore ? (
+										<Loader2 className="h-5 w-5 animate-spin text-green-500" />
+									) : library?.hasMore ? (
+										<span>Loading more albums...</span>
+									) : visibleAlbums.length > 0 ? (
+										<span>End of library</span>
+									) : null}
+								</div>
+							</>
+						)}
+					</main>
+				</div>
 
 				{/* Queue Panel */}
 				{currentTrack && isQueueOpen && (

@@ -1,5 +1,6 @@
 import { MusicAlbum, MusicTrack } from '@/pages/api/music/library';
 import { ChevronLeft, Disc3, ListEnd, Play } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import TrackListItem from './TrackListItem';
 import { PlayerState, QueuedTrack } from './types';
 import { formatSize } from './utils';
@@ -15,6 +16,7 @@ interface AlbumDetailViewProps {
 	onBack: () => void;
 	onDownload: (track: MusicTrack) => Promise<void>;
 	hasQueue: boolean;
+	onCoverLoaded?: (album: MusicAlbum, coverUrl: string) => void;
 }
 
 export default function AlbumDetailView({
@@ -28,7 +30,47 @@ export default function AlbumDetailView({
 	onBack,
 	onDownload,
 	hasQueue,
+	onCoverLoaded,
 }: AlbumDetailViewProps) {
+	const [coverUrl, setCoverUrl] = useState(album.coverUrl);
+
+	useEffect(() => {
+		setCoverUrl(album.coverUrl);
+	}, [album.coverUrl]);
+
+	useEffect(() => {
+		if (coverUrl || !onCoverLoaded) return;
+		let isCancelled = false;
+		const handleCoverLoaded = onCoverLoaded;
+
+		async function fetchCover() {
+			try {
+				const response = await fetch('/api/music/cover', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						mbid: album.mbid,
+						artist: album.artist,
+						album: album.album,
+					}),
+				});
+				if (!response.ok) return;
+				const data = await response.json();
+				if (!isCancelled && data.coverUrl) {
+					setCoverUrl(data.coverUrl);
+					handleCoverLoaded(album, data.coverUrl);
+				}
+			} catch (err) {
+				console.error(`Failed to fetch cover for ${album.album}:`, err);
+			}
+		}
+
+		fetchCover();
+		return () => {
+			isCancelled = true;
+		};
+	}, [album, coverUrl, onCoverLoaded]);
+
 	return (
 		<div className="relative min-h-full">
 			{/* Ambient background gradient */}
@@ -52,10 +94,10 @@ export default function AlbumDetailView({
 							<Disc3 className="h-24 w-24 text-gray-500" />
 						</div>
 						{/* Album cover */}
-						{album.coverUrl && (
+						{coverUrl && (
 							// eslint-disable-next-line @next/next/no-img-element
 							<img
-								src={album.coverUrl}
+								src={coverUrl}
 								alt={album.album}
 								className="absolute inset-0 z-10 h-full w-full object-cover"
 								onError={(e) => {

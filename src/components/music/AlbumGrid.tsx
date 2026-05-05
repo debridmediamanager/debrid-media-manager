@@ -13,6 +13,7 @@ interface AlbumGridProps {
 	onSortChange: (sort: SortOption) => void;
 	nowPlayingAlbumHash: string | null;
 	isPlaying: boolean;
+	onCoverLoaded?: (album: MusicAlbum, coverUrl: string) => void;
 }
 
 const sortOptions: { value: SortOption; label: string; icon: typeof Clock }[] = [
@@ -31,11 +32,17 @@ export default function AlbumGrid({
 	onSortChange,
 	nowPlayingAlbumHash,
 	isPlaying,
+	onCoverLoaded,
 }: AlbumGridProps) {
 	return (
 		<div className="p-3 md:p-6">
-			<div className="mb-4 flex items-center justify-between md:mb-6">
-				<h2 className="text-xl font-bold text-white md:text-2xl">Your Library</h2>
+			<div className="mb-5 flex flex-col gap-3 md:mb-6 md:flex-row md:items-end md:justify-between">
+				<div>
+					<p className="text-xs font-bold uppercase text-gray-400">Collection</p>
+					<h2 className="mt-1 text-2xl font-black text-white md:text-4xl">
+						Your Library
+					</h2>
+				</div>
 				<div className="flex items-center gap-1">
 					{sortOptions.map(({ value, label, icon: Icon }) => (
 						<button
@@ -75,6 +82,7 @@ export default function AlbumGrid({
 							onPlay={onPlay}
 							isNowPlaying={album.hash === nowPlayingAlbumHash}
 							isPlaying={isPlaying}
+							onCoverLoaded={onCoverLoaded}
 						/>
 					))}
 				</div>

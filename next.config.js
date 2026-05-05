@@ -34,6 +34,20 @@ const nextConfig = {
 			],
 		};
 	},
+	async redirects() {
+		return [
+			{
+				source: '/albums',
+				destination: '/music',
+				permanent: false,
+			},
+			{
+				source: '/albums/:path*',
+				destination: '/music/:path*',
+				permanent: false,
+			},
+		];
+	},
 	images: {
 		unoptimized: true,
 		minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
