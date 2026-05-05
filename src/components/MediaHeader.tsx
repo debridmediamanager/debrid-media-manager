@@ -64,16 +64,18 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 					title={title}
 				/>
 			)}
-			<div className="flex gap-2" style={backdropStyle}>
-				{(poster && (
-					<Image
-						width={200}
-						height={300}
-						src={poster}
-						alt={`${mediaType === 'movie' ? 'Movie' : 'Show'} poster`}
-						className="flex-shrink-0 shadow-lg"
-					/>
-				)) || <Poster imdbId={imdbId} title={title} />}
+			<div className="flex items-start gap-2" style={backdropStyle}>
+				<div className="relative aspect-[2/3] w-[200px] max-w-[50vw] shrink-0 self-start shadow-lg">
+					{(poster && (
+						<Image
+							fill
+							sizes="(max-width: 640px) 50vw, 200px"
+							src={poster}
+							alt={`${mediaType === 'movie' ? 'Movie' : 'Show'} poster`}
+							className="object-cover"
+						/>
+					)) || <Poster imdbId={imdbId} title={title} />}
+				</div>
 
 				<div className="flex min-w-0 flex-col gap-2">
 					<div className="flex justify-end p-2">

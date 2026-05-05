@@ -67,10 +67,10 @@ describe('MediaHeader', () => {
 
 		expect(screen.getByRole('heading', { name: 'Inception (2010)' })).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: /Go Home/i })).toHaveAttribute('href', '/');
-		expect(screen.getByRole('img', { name: /Movie poster/i })).toHaveAttribute(
-			'src',
-			props.poster
-		);
+		const posterImage = screen.getByRole('img', { name: /Movie poster/i });
+		expect(posterImage).toHaveAttribute('src', props.poster);
+		expect(posterImage).toHaveClass('object-cover');
+		expect(posterImage.parentElement).toHaveClass('aspect-[2/3]', 'shrink-0', 'self-start');
 
 		const imdbLink = screen.getByRole('link', { name: /IMDB Score: 8.5/i });
 		expect(imdbLink).toHaveAttribute('href', `https://www.imdb.com/title/${props.imdbId}/`);
