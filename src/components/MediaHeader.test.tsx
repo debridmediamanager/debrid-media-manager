@@ -80,6 +80,10 @@ describe('MediaHeader', () => {
 		);
 		await userEvent.click(descriptionNode);
 		expect(props.onDescToggle).toHaveBeenCalledTimes(1);
+		expect(screen.getByTestId('actions').parentElement).toHaveClass(
+			'col-span-2',
+			'sm:col-start-2'
+		);
 
 		const [relatedProps] = relatedMediaMock.mock.calls.at(-1)!;
 		expect(relatedProps).toMatchObject({ imdbId: props.imdbId, mediaType: 'movie' });

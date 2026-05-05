@@ -64,8 +64,11 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 					title={title}
 				/>
 			)}
-			<div className="flex items-start gap-2" style={backdropStyle}>
-				<div className="relative aspect-[2/3] w-[200px] max-w-[50vw] shrink-0 self-start shadow-lg">
+			<div
+				className="grid grid-cols-[minmax(0,auto)_minmax(0,1fr)] items-start gap-2"
+				style={backdropStyle}
+			>
+				<div className="relative col-start-1 row-start-1 aspect-[2/3] w-[200px] max-w-[50vw] shrink-0 self-start shadow-lg sm:row-span-3">
 					{(poster && (
 						<Image
 							fill
@@ -77,7 +80,7 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 					)) || <Poster imdbId={imdbId} title={title} />}
 				</div>
 
-				<div className="flex min-w-0 flex-col gap-2">
+				<div className="col-start-2 row-start-1 flex min-w-0 flex-col gap-2">
 					<div className="flex justify-end p-2">
 						<Link
 							href="/"
@@ -126,10 +129,15 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 							</div>
 						)}
 					</div>
+				</div>
 
-					{additionalInfo}
-
-					<div className="flex flex-wrap items-center gap-2">{actionButtons}</div>
+				{additionalInfo && (
+					<div className="col-span-2 flex flex-col gap-2 sm:col-span-1 sm:col-start-2">
+						{additionalInfo}
+					</div>
+				)}
+				<div className="col-span-2 flex flex-wrap items-center gap-2 sm:col-span-1 sm:col-start-2">
+					{actionButtons}
 				</div>
 			</div>
 		</>
