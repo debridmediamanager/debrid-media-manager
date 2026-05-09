@@ -17,6 +17,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 const MUSIC_BASE_PATH = '/music';
 const MUSIC_PAGE_SIZE = 48;
 const RECENT_ALBUM_LIMIT = 24;
+const ALBUM_DOWNLOAD_DELAY_MS = 250;
 
 interface SidebarAlbumButtonProps {
 	album: MusicAlbum;
@@ -919,18 +920,30 @@ export default function AlbumsPage() {
 	});
 
 	// Download a track
-	const downloadTrack = async (track: MusicTrack) => {
-		const streamUrl = await unrestrictAndPlay(track);
-		if (!streamUrl) return;
-
+	const triggerBrowserDownload = (streamUrl: string, filename: string) => {
 		const a = document.createElement('a');
 		a.href = streamUrl;
-		a.download = track.filename;
+		a.download = filename;
 		a.target = '_blank';
 		a.rel = 'noopener noreferrer';
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
+	};
+
+	const downloadTrack = async (track: MusicTrack) => {
+		const streamUrl = await unrestrictAndPlay(track);
+		if (!streamUrl) return;
+		triggerBrowserDownload(streamUrl, track.filename);
+	};
+
+	const downloadAlbum = async (album: MusicAlbum) => {
+		for (const track of album.tracks) {
+			const streamUrl = await unrestrictAndPlay(track);
+			if (!streamUrl) continue;
+			triggerBrowserDownload(streamUrl, track.filename);
+			await new Promise((resolve) => setTimeout(resolve, ALBUM_DOWNLOAD_DELAY_MS));
+		}
 	};
 
 	const visibleAlbums = library?.albums ?? [];
@@ -1083,6 +1096,7 @@ export default function AlbumsPage() {
 								onPlayTrackNext={playTrackNext}
 								onBack={() => selectAlbum(null)}
 								onDownload={downloadTrack}
+								onDownloadAlbum={downloadAlbum}
 								hasQueue={queue.length > 0}
 								onCoverLoaded={handleCoverLoaded}
 							/>

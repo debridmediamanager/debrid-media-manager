@@ -46,6 +46,7 @@ const defaultProps = () => ({
 	onPlayTrackNext: vi.fn(),
 	onBack: vi.fn(),
 	onDownload: vi.fn(),
+	onDownloadAlbum: vi.fn(),
 	hasQueue: false,
 });
 
@@ -96,6 +97,13 @@ describe('AlbumDetailView', () => {
 		render(<AlbumDetailView {...props} />);
 		await userEvent.setup().click(screen.getByText('Add to Queue'));
 		expect(props.onAddToQueue).toHaveBeenCalledWith(props.album);
+	});
+
+	it('calls onDownloadAlbum when Download Album clicked', async () => {
+		const props = defaultProps();
+		render(<AlbumDetailView {...props} />);
+		await userEvent.setup().click(screen.getByText('Download Album'));
+		expect(props.onDownloadAlbum).toHaveBeenCalledWith(props.album);
 	});
 
 	it('does not show Play Next button when hasQueue is false', () => {

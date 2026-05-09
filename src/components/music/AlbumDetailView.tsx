@@ -1,5 +1,5 @@
 import { MusicAlbum, MusicTrack } from '@/pages/api/music/library';
-import { ChevronLeft, Disc3, ListEnd, Play } from 'lucide-react';
+import { ChevronLeft, Disc3, Download, ListEnd, Loader2, Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import TrackListItem from './TrackListItem';
 import { PlayerState, QueuedTrack } from './types';
@@ -15,6 +15,7 @@ interface AlbumDetailViewProps {
 	onPlayTrackNext: (track: MusicTrack, album: MusicAlbum) => void;
 	onBack: () => void;
 	onDownload: (track: MusicTrack) => Promise<void>;
+	onDownloadAlbum: (album: MusicAlbum) => Promise<void>;
 	hasQueue: boolean;
 	onCoverLoaded?: (album: MusicAlbum, coverUrl: string) => void;
 }
@@ -29,10 +30,12 @@ export default function AlbumDetailView({
 	onPlayTrackNext,
 	onBack,
 	onDownload,
+	onDownloadAlbum,
 	hasQueue,
 	onCoverLoaded,
 }: AlbumDetailViewProps) {
 	const [coverUrl, setCoverUrl] = useState(album.coverUrl);
+	const [isDownloadingAlbum, setIsDownloadingAlbum] = useState(false);
 
 	useEffect(() => {
 		setCoverUrl(album.coverUrl);
@@ -70,6 +73,16 @@ export default function AlbumDetailView({
 			isCancelled = true;
 		};
 	}, [album, coverUrl, onCoverLoaded]);
+
+	const handleAlbumDownload = async () => {
+		if (isDownloadingAlbum) return;
+		setIsDownloadingAlbum(true);
+		try {
+			await onDownloadAlbum(album);
+		} finally {
+			setIsDownloadingAlbum(false);
+		}
+	};
 
 	return (
 		<div className="relative min-h-full">
@@ -147,6 +160,19 @@ export default function AlbumDetailView({
 								className="flex items-center gap-2 rounded-full border border-gray-600 bg-white/5 px-6 py-3.5 font-bold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/30 hover:bg-white/10 active:scale-95"
 							>
 								Add to Queue
+							</button>
+							<button
+								type="button"
+								onClick={handleAlbumDownload}
+								disabled={isDownloadingAlbum}
+								className="flex items-center gap-2 rounded-full border border-gray-600 bg-white/5 px-6 py-3.5 font-bold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/30 hover:bg-white/10 active:scale-95 disabled:cursor-wait disabled:opacity-70"
+							>
+								{isDownloadingAlbum ? (
+									<Loader2 className="h-5 w-5 animate-spin" />
+								) : (
+									<Download className="h-5 w-5" />
+								)}
+								Download Album
 							</button>
 							{hasQueue && (
 								<button
