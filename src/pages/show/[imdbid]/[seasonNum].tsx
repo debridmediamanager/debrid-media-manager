@@ -37,6 +37,7 @@ import {
 	defaultPlayer,
 	defaultShowSeasonFilter,
 } from '@/utils/settings';
+import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { handleCastTvShowTorBox } from '@/utils/torboxCastApiClient';
@@ -714,7 +715,9 @@ const TvSearch: FunctionComponent = () => {
 			castToastOptions
 		);
 		// open stremio after casting
-		window.open(`stremio://detail/series/${imdbid}/${imdbid}:${seasonNum}:1`);
+		window.open(
+			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
+		);
 	}
 
 	async function handleCastTorBox(hash: string, fileIds: string[]) {
@@ -728,7 +731,9 @@ const TvSearch: FunctionComponent = () => {
 			castToastOptions
 		);
 		// open stremio after casting
-		window.open(`stremio://detail/series/${imdbid}/${imdbid}:${seasonNum}:1`);
+		window.open(
+			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
+		);
 	}
 
 	async function handleCastAllDebrid(hash: string, files: { filename: string }[]) {
@@ -742,7 +747,9 @@ const TvSearch: FunctionComponent = () => {
 			castToastOptions
 		);
 		// open stremio after casting
-		window.open(`stremio://detail/series/${imdbid}/${imdbid}:${seasonNum}:1`);
+		window.open(
+			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
+		);
 	}
 
 	// Helper function to find all complete season torrents (RD-available with matching episode count)
@@ -1157,7 +1164,9 @@ const TvSearch: FunctionComponent = () => {
 					<button
 						className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
 						onClick={() =>
-							window.open(`stremio://detail/series/${imdbId}/${imdbId}:${seasonId}:1`)
+							window.open(
+								getStremioDetailUrl(imdbId, { season: seasonId, episode: 1 })
+							)
 						}
 					>
 						<b className="flex items-center justify-center">

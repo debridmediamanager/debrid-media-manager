@@ -1,6 +1,7 @@
 import Poster from '@/components/poster';
 import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
 import useLocalStorage from '@/hooks/localStorage';
+import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { withAuth } from '@/utils/withAuth';
 import { Eye, Trash2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -181,9 +182,12 @@ export function AllDebridManagePage() {
 		const episodeNumber = info.episode;
 
 		if (seasonNumber !== undefined && episodeNumber !== undefined) {
-			return `stremio://detail/series/${baseImdbId}/${baseImdbId}:${seasonNumber}:${episodeNumber}`;
+			return getStremioDetailUrl(baseImdbId, {
+				season: seasonNumber,
+				episode: episodeNumber,
+			});
 		}
-		return `stremio://detail/movie/${baseImdbId}/${baseImdbId}`;
+		return getStremioDetailUrl(baseImdbId);
 	};
 
 	const handleDelete = async (link: CastedLink) => {

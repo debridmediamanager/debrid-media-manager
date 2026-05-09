@@ -118,7 +118,7 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
 			status: 'success',
-			redirectUrl: 'stremio://detail/movie/tt1234567/tt1234567',
+			redirectUrl: 'stremio:///detail/movie/tt1234567/tt1234567',
 			imdbId: 'tt1234567',
 			mediaType: 'movie',
 			season: undefined,
@@ -171,7 +171,7 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
 			status: 'success',
-			redirectUrl: 'stremio://detail/movie/tt7654321/tt7654321',
+			redirectUrl: 'stremio:///detail/movie/tt7654321/tt7654321',
 			imdbId: 'tt7654321',
 			mediaType: 'movie',
 			season: undefined,

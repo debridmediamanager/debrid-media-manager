@@ -1,6 +1,7 @@
 import { getTorrentInfo } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { NextApiRequest, NextApiResponse } from 'next';
 import ptt from 'parse-torrent-title';
 
@@ -158,11 +159,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const episode = firstFileInfo.episode ? String(firstFileInfo.episode) : '';
 
 	// Prepare redirect URL
-	let redirectUrl = `stremio://detail/movie/${imdbid}/${imdbid}`;
+	let redirectUrl = getStremioDetailUrl(imdbid);
 	let mediaType = 'movie';
 
 	if (season && episode) {
-		redirectUrl = `stremio://detail/series/${imdbid}/${imdbid}:${season}:${episode}`;
+		redirectUrl = getStremioDetailUrl(imdbid, { season, episode });
 		mediaType = 'series';
 	}
 

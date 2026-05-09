@@ -31,6 +31,7 @@ import {
 	defaultMovieYearFilter,
 	defaultPlayer,
 } from '@/utils/settings';
+import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { handleCastMovieTorBox } from '@/utils/torboxCastApiClient';
@@ -661,7 +662,7 @@ const MovieSearch: FunctionComponent = () => {
 			},
 			castToastOptions
 		);
-		window.open(`stremio://detail/movie/${imdbid}/${imdbid}`);
+		window.open(getStremioDetailUrl(imdbid as string));
 	}
 
 	async function handleCastTorBox(hash: string) {
@@ -674,7 +675,7 @@ const MovieSearch: FunctionComponent = () => {
 			},
 			castToastOptions
 		);
-		window.open(`stremio://detail/movie/${imdbid}/${imdbid}`);
+		window.open(getStremioDetailUrl(imdbid as string));
 	}
 
 	async function handleCastAllDebrid(hash: string) {
@@ -687,7 +688,7 @@ const MovieSearch: FunctionComponent = () => {
 			},
 			castToastOptions
 		);
-		window.open(`stremio://detail/movie/${imdbid}/${imdbid}`);
+		window.open(getStremioDetailUrl(imdbid as string));
 	}
 
 	const getFirstAvailableRdTorrent = () => {
@@ -815,7 +816,7 @@ const MovieSearch: FunctionComponent = () => {
 			)}
 			<button
 				className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
-				onClick={() => window.open(`stremio://detail/movie/${imdbid}/${imdbid}`)}
+				onClick={() => window.open(getStremioDetailUrl(imdbid as string))}
 			>
 				<b className="flex items-center justify-center">
 					<Sparkles className="mr-1 h-3 w-3 text-purple-500" />

@@ -2,6 +2,7 @@ import { repository as db } from '@/services/repository';
 import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { getStreamUrl } from '@/utils/getStreamUrl';
+import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // cast: unrestricts a selected link and saves it to the database
@@ -41,10 +42,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		);
 
 		if (streamUrl) {
-			let redirectUrl = `stremio://detail/movie/${imdbid}/${imdbid}`;
+			let redirectUrl = getStremioDetailUrl(imdbid);
 			let message = 'You can now stream the movie in Stremio';
 			if (seasonNumber >= 0 && episodeNumber >= 0) {
-				redirectUrl = `stremio://detail/series/${imdbid}/${imdbid}:${seasonNumber}:${episodeNumber}`;
+				redirectUrl = getStremioDetailUrl(imdbid, {
+					season: seasonNumber,
+					episode: episodeNumber,
+				});
 				message = `You can now stream S${seasonNumber}E${episodeNumber} in Stremio`;
 			}
 

@@ -85,6 +85,9 @@ describe('/api/stremio/cast/[imdbid]', () => {
 		);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.send).toHaveBeenCalledWith(expect.stringContaining('You can now stream'));
+		expect(res.send).toHaveBeenCalledWith(
+			expect.stringContaining('stremio:///detail/series/tt1234567/tt1234567:1:2')
+		);
 	});
 
 	it('returns 500 when no stream url is available', async () => {
