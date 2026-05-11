@@ -1,9 +1,10 @@
 # Use the same base image for all stages
-FROM node:latest AS base
+FROM node:22-slim AS base
 WORKDIR /app
 
 # Dependencies stage - this will cache node_modules
 FROM base AS deps
+RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
 COPY package*.json ./
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
