@@ -109,8 +109,9 @@ export class RdOperationalService extends DatabaseClient {
 	public async recordOperation(operation: RealDebridOperation, status: number): Promise<void> {
 		const hour = getHourStart();
 		const isSuccess = status >= 200 && status < 300;
-		const isFailure = status >= 500 && status < 600;
-		const isOther = !isSuccess && !isFailure; // 3xx, 4xx
+		// 5xx are server errors; 451 is RD-side legal takedown, not a client mistake
+		const isFailure = (status >= 500 && status < 600) || status === 451;
+		const isOther = !isSuccess && !isFailure;
 
 		try {
 			// Atomic upsert avoids the race where two concurrent writers both see

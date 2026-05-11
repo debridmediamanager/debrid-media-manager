@@ -54,13 +54,15 @@ const retryDelay = process.env.VITEST_WORKER_ID ? 0 : 5000;
 const infoRetryDelay = process.env.VITEST_WORKER_ID ? 0 : 2000;
 const MAX_509_RETRIES = 5;
 
+export type RdAddResult = 'success' | 'infringing_file' | 'error';
+
 export const handleAddAsMagnetInRd = async (
 	rdKey: string,
 	hash: string,
 	callback?: (info: TorrentInfoResponse) => Promise<void>,
 	deleteIfNotInstant: boolean = false,
 	retryCount: number = 0
-) => {
+): Promise<RdAddResult> => {
 	try {
 		const id = await addHashAsMagnet(rdKey, hash);
 		await handleSelectFilesInRd(rdKey, `rd:${id}`);
@@ -82,6 +84,7 @@ export const handleAddAsMagnetInRd = async (
 			toast.error(`Torrent added with status ${response.status}.`, magnetToastOptions);
 			if (callback) await callback(response);
 		}
+		return 'success';
 	} catch (error: unknown) {
 		if (error instanceof AxiosError && error.response?.status === 509) {
 			if (retryCount >= MAX_509_RETRIES) {
@@ -89,15 +92,14 @@ export const handleAddAsMagnetInRd = async (
 					'RD slots full. Please free up a slot and try again.',
 					magnetToastOptions
 				);
-				return;
+				return 'error';
 			}
 			toast.error(`RD slots full. Retrying in 5s... (${retryCount + 1}/${MAX_509_RETRIES})`, {
 				...magnetToastOptions,
 				duration: 5000,
 			});
 			await delay(retryDelay);
-			await handleAddAsMagnetInRd(rdKey, hash, callback, deleteIfNotInstant, retryCount + 1);
-			return;
+			return handleAddAsMagnetInRd(rdKey, hash, callback, deleteIfNotInstant, retryCount + 1);
 		}
 		const rdError = getRdError(error);
 		console.error(
@@ -105,6 +107,8 @@ export const handleAddAsMagnetInRd = async (
 			error instanceof Error ? error.message : 'Unknown error'
 		);
 		toast.error(rdError ? `RD error: ${rdError}` : 'Failed to add hash.', magnetToastOptions);
+		if (rdError === 'infringing_file') return 'infringing_file';
+		return 'error';
 	}
 };
 

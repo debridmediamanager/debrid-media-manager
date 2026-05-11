@@ -55,7 +55,7 @@ export function useTorrentManagement(
 			const wasMarkedAvailable = torrentResult?.rdAvailable || false;
 			let torrentInfo: TorrentInfoResponse | null = null;
 
-			await handleAddAsMagnetInRd(
+			const addResult = await handleAddAsMagnetInRd(
 				rdKey,
 				hash,
 				async (info: TorrentInfoResponse) => {
@@ -113,16 +113,21 @@ export function useTorrentManagement(
 				deleteIfNotInstant
 			);
 
-			// When deleteIfNotInstant is true and the torrent wasn't instant,
-			// handleAddAsMagnetInRd deletes the torrent and skips the callback.
-			// Clean up the false positive in the availability database.
-			if (deleteIfNotInstant && torrentInfo === null && wasMarkedAvailable) {
+			// Clean up false positives: when the torrent wasn't instant (deleteIfNotInstant)
+			// or when RD rejected it as infringing, remove from availability database.
+			const shouldRemoveAvailability =
+				(deleteIfNotInstant || addResult === 'infringing_file') &&
+				torrentInfo === null &&
+				wasMarkedAvailable;
+			if (shouldRemoveAvailability) {
 				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 				await removeAvailability(
 					tokenWithTimestamp,
 					tokenHash,
 					hash,
-					'Torrent not instant; deleted from RD'
+					addResult === 'infringing_file'
+						? 'RD infringing_file'
+						: 'Torrent not instant; deleted from RD'
 				);
 				setSearchResults((prev) =>
 					prev.map((r) => (r.hash === hash ? { ...r, rdAvailable: false } : r))
