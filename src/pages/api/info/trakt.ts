@@ -104,7 +104,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(400).json({ error: 'Browse parameter is required' });
 	}
 
-	let mediaType = browse.toLowerCase() === 'shows' ? 'show' : 'movie';
+	let mediaType = browse.toLowerCase().startsWith('shows') ? 'show' : 'movie';
 	const categories: { name: string; results: Record<string, TraktMediaItem[]> }[] = [];
 
 	try {
