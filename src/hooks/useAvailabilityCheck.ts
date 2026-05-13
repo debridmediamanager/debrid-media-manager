@@ -17,6 +17,44 @@ const formatServicesLabel = (services: DebridService[]) =>
 
 const checkingKey = (hash: string, service: DebridService) => `${hash}:${service}`;
 
+const markAvailableServices = (
+	setSearchResults: React.Dispatch<React.SetStateAction<SearchResult[]>>,
+	sortFunction: (searchResults: SearchResult[]) => SearchResult[],
+	availableHashesByService: Partial<Record<DebridService, Set<string>>>
+) => {
+	setSearchResults((prevResults) => {
+		let hasChanges = false;
+		const nextResults = prevResults.map((result) => {
+			const rdAvailable =
+				result.rdAvailable || Boolean(availableHashesByService.RD?.has(result.hash));
+			const adAvailable =
+				result.adAvailable || Boolean(availableHashesByService.AD?.has(result.hash));
+			const tbAvailable =
+				result.tbAvailable || Boolean(availableHashesByService.TB?.has(result.hash));
+
+			if (
+				rdAvailable === result.rdAvailable &&
+				adAvailable === result.adAvailable &&
+				tbAvailable === result.tbAvailable
+			) {
+				return result;
+			}
+
+			hasChanges = true;
+			const updated = {
+				...result,
+				rdAvailable,
+				adAvailable,
+				tbAvailable,
+			};
+			delete updated.trackerStats;
+			return updated;
+		});
+
+		return hasChanges ? sortFunction(nextResults) : prevResults;
+	});
+};
+
 export function useAvailabilityCheck(
 	rdKey: string | null,
 	adKey: string | null,
@@ -242,6 +280,15 @@ export function useAvailabilityCheck(
 					isCachedInTB = tbCheckResult.value.isCachedInTB;
 				} else if (torboxKey && servicesNeedingCheck.includes('TB')) {
 					console.error('TorBox availability check failed:', tbCheckResult.reason);
+				}
+
+				const positiveAvailability: Partial<Record<DebridService, Set<string>>> = {};
+				if (isCachedInRD) positiveAvailability.RD = new Set([result.hash]);
+				if (isCachedInAD) positiveAvailability.AD = new Set([result.hash]);
+				if (isCachedInTB) positiveAvailability.TB = new Set([result.hash]);
+
+				if (Object.keys(positiveAvailability).length > 0 && isMounted.current) {
+					markAvailableServices(setSearchResults, sortFunction, positiveAvailability);
 				}
 
 				// Process tracker stats result (only if not cached in any service)
@@ -705,10 +752,28 @@ export function useAvailabilityCheck(
 						.filter((r) => r.success && r.result?.isCachedInTB)
 						.map((r) => r.item.hash);
 
+					const positiveAvailability: Partial<Record<DebridService, Set<string>>> = {};
+					if (rdSuccessfulHashes.length > 0) {
+						positiveAvailability.RD = new Set(rdSuccessfulHashes);
+						availableByService.RD = rdSuccessfulHashes.length;
+					}
+					if (adSuccessfulHashes.length > 0) {
+						positiveAvailability.AD = new Set(adSuccessfulHashes);
+						availableByService.AD = adSuccessfulHashes.length;
+					}
+					if (tbSuccessfulHashes.length > 0) {
+						positiveAvailability.TB = new Set(tbSuccessfulHashes);
+						availableByService.TB = tbSuccessfulHashes.length;
+					}
+
+					if (Object.keys(positiveAvailability).length > 0) {
+						markAvailableServices(setSearchResults, sortFunction, positiveAvailability);
+					}
+
 					// Update RD database cache
 					if (rdKey && services.includes('RD') && rdSuccessfulHashes.length > 0) {
 						const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-						availableByService.RD += await checkDatabaseAvailabilityRd(
+						const dbAvailableCount = await checkDatabaseAvailabilityRd(
 							tokenWithTimestamp,
 							tokenHash,
 							imdbId,
@@ -716,12 +781,16 @@ export function useAvailabilityCheck(
 							setSearchResults,
 							sortFunction
 						);
+						availableByService.RD = Math.max(
+							availableByService.RD,
+							dbAvailableCount ?? 0
+						);
 					}
 
 					// Update AD database cache
 					if (adKey && services.includes('AD') && adSuccessfulHashes.length > 0) {
 						const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-						availableByService.AD += await checkDatabaseAvailabilityAd(
+						const dbAvailableCount = await checkDatabaseAvailabilityAd(
 							tokenWithTimestamp,
 							tokenHash,
 							imdbId,
@@ -729,15 +798,23 @@ export function useAvailabilityCheck(
 							setSearchResults,
 							sortFunction
 						);
+						availableByService.AD = Math.max(
+							availableByService.AD,
+							dbAvailableCount ?? 0
+						);
 					}
 
 					// Update TorBox database cache
 					if (torboxKey && services.includes('TB') && tbSuccessfulHashes.length > 0) {
-						availableByService.TB += await checkDatabaseAvailabilityTb(
+						const dbAvailableCount = await checkDatabaseAvailabilityTb(
 							torboxKey,
 							tbSuccessfulHashes,
 							setSearchResults,
 							sortFunction
+						);
+						availableByService.TB = Math.max(
+							availableByService.TB,
+							dbAvailableCount ?? 0
 						);
 					}
 				}

@@ -294,6 +294,18 @@ describe('useAvailabilityCheck', () => {
 			);
 		});
 
+		it('marks the current card as AD available when the live AD check is cached', async () => {
+			mockCheckDatabaseAvailabilityAd.mockResolvedValue(0);
+			const { result } = renderAvailabilityHook({ rdKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailability(searchResults[0], ['AD']);
+			});
+
+			expect(searchResults[0].adAvailable).toBe(true);
+			expect(mockCheckDatabaseAvailabilityAd).toHaveBeenCalled();
+		});
+
 		it('shows already cached message for AD', async () => {
 			window.localStorage.removeItem('settings:availabilityCheckLimit');
 			const cachedResult = createSearchResult({ adAvailable: true });
@@ -374,6 +386,21 @@ describe('useAvailabilityCheck', () => {
 			expect(mockCheckDatabaseAvailabilityRd).toHaveBeenCalled();
 			expect(mockCheckDatabaseAvailabilityAd).toHaveBeenCalled();
 			expect(mockCheckDatabaseAvailabilityTb).toHaveBeenCalled();
+		});
+
+		it('marks bulk AD live-check hits available even when database refresh returns no rows', async () => {
+			mockCheckDatabaseAvailabilityAd.mockResolvedValue(0);
+			const { result } = renderAvailabilityHook({ rdKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['AD']);
+			});
+
+			expect(searchResults.every((r) => r.adAvailable)).toBe(true);
+			expect(mockToast.success).toHaveBeenCalledWith(
+				expect.stringContaining('AD: checked 2; AD: 2 available.'),
+				{ duration: 3000 }
+			);
 		});
 
 		it('respects availabilityCheckLimit from localStorage', async () => {
