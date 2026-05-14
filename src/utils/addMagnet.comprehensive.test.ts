@@ -158,7 +158,7 @@ describe('addMagnet utilities', () => {
 				links: [],
 			} as any);
 			vi.mocked(selectFiles).mockResolvedValue({} as any);
-			vi.mocked(handleDeleteRdTorrent).mockResolvedValue(undefined);
+			vi.mocked(handleDeleteRdTorrent).mockResolvedValue(true);
 
 			const callback = vi.fn();
 			await handleAddAsMagnetInRd(rdKey, hash, callback, true);
@@ -468,7 +468,7 @@ describe('addMagnet utilities', () => {
 				progress: 100,
 			} as any);
 
-			vi.mocked(handleDeleteRdTorrent).mockResolvedValue(undefined);
+			vi.mocked(handleDeleteRdTorrent).mockResolvedValue(true);
 
 			await handleReinsertTorrentinRd(rdKey, mockTorrent, false);
 
@@ -491,7 +491,7 @@ describe('addMagnet utilities', () => {
 				status: 'downloaded',
 				progress: 100,
 			} as any);
-			vi.mocked(handleDeleteRdTorrent).mockResolvedValue(undefined);
+			vi.mocked(handleDeleteRdTorrent).mockResolvedValue(true);
 
 			await handleReinsertTorrentinRd(rdKey, mockTorrent, false, selectedFileIds);
 
@@ -533,7 +533,7 @@ describe('addMagnet utilities', () => {
 				id: 'new222',
 				files: [],
 			} as any);
-			vi.mocked(handleDeleteRdTorrent).mockResolvedValue(undefined);
+			vi.mocked(handleDeleteRdTorrent).mockResolvedValue(true);
 
 			await handleReinsertTorrentinRd(rdKey, mockTorrent, true);
 

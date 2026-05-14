@@ -1,7 +1,13 @@
 import { addHashAsMagnet, proxyUnrestrictLink, selectFiles } from '@/services/realDebrid';
+import { requestDownloadLink } from '@/services/torbox';
+import { TorBoxTorrentInfo } from '@/services/types';
 import { handleRestartTorrent } from '@/utils/addMagnet';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
-import { handleDeleteAdTorrent, handleDeleteRdTorrent } from '@/utils/deleteTorrent';
+import {
+	handleDeleteAdTorrent,
+	handleDeleteRdTorrent,
+	handleDeleteTbTorrent,
+} from '@/utils/deleteTorrent';
 import { magnetToastOptions } from '@/utils/toastOptions';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
@@ -9,7 +15,7 @@ import { handleShare } from '../../utils/hashList';
 import { isVideo } from '../../utils/selectable';
 import Modal from '../modals/modal';
 import { renderButton, renderInfoTable } from './components';
-import { renderTorrentInfo } from './render';
+import { renderTorrentInfo, renderTorrentInfoTB } from './render';
 import { icons } from './styles';
 import { ApiTorrentFile, MagnetLink } from './types';
 import { buildSearchQueryFromFilename, fetchMediaInfo, getStreamInfo } from './utils';
@@ -941,6 +947,180 @@ export const showInfoForAD = async (
 						apiError ? `AD error: ${apiError}` : 'Failed to generate STRM files.',
 						magnetToastOptions
 					);
+				}
+			});
+		},
+	});
+};
+
+export const showInfoForTB = async (
+	tbKey: string,
+	info: TorBoxTorrentInfo,
+	shouldDownloadMagnets?: boolean,
+	handlers: {
+		onDeleteTb?: (tbKey: string, id: string) => Promise<void>;
+	} = {}
+): Promise<void> => {
+	Modal.showLoading();
+	const mediaInfo = await fetchMediaInfo(info.hash);
+	const torrent = {
+		id: `tb:${info.id}`,
+		hash: info.hash,
+		filename: info.name,
+		bytes: info.size,
+		title: info.name,
+		mediaType: 'other' as const,
+	};
+
+	const libraryActions = `
+        <div class="mb-3 flex justify-center items-center flex-wrap">
+            ${renderButton('share', { link: `${await handleShare(torrent)}` })}
+            ${renderButton('delete', { id: 'btn-delete-tb' })}
+            ${renderButton('magnet', { id: 'btn-magnet-copy', text: shouldDownloadMagnets ? 'Download' : 'Copy' })}
+            ${info.files.length > 0 ? renderButton('exportLinks', { id: 'btn-export-links' }) : ''}
+        </div>`;
+
+	const statusLabel = info.download_finished
+		? 'Downloaded'
+		: info.download_state.charAt(0).toUpperCase() + info.download_state.slice(1);
+
+	const infoRows = [
+		{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
+		{ label: 'ID', value: info.id },
+		{ label: 'Status', value: statusLabel },
+		...(info.download_state === 'downloading'
+			? [
+					{ label: 'Progress', value: info.progress.toFixed(2) + '%' },
+					{ label: 'Speed', value: (info.download_speed / 1024).toFixed(2) + ' KB/s' },
+					{ label: 'Seeds', value: info.seeds },
+				]
+			: []),
+		{
+			label: 'Added',
+			value: new Date(info.created_at).toLocaleString(undefined, { timeZone: 'UTC' }),
+		},
+		...getStreamInfo(mediaInfo),
+	];
+
+	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${info.name}</h1>
+    ${libraryActions}
+    <div class="text-sm text-gray-200">
+        ${renderInfoTable(infoRows)}
+    </div>
+    <div class="text-sm max-h-60 mb-2 text-left p-1 bg-gray-900">
+        <div class="overflow-x-auto" style="max-width: 100%;">
+            <table class="table-auto">
+                <tbody>
+                    ${renderTorrentInfoTB(info.files || [])}
+                </tbody>
+            </table>
+        </div>
+    </div>`;
+
+	await Modal.fire({
+		html,
+		showConfirmButton: false,
+		showCancelButton: false,
+		customClass: {
+			htmlContainer: '!mx-1',
+			popup: '!bg-gray-900 !text-gray-100 !px-4 !py-3',
+			confirmButton: 'haptic',
+			cancelButton: 'haptic',
+		},
+		width: '800px',
+		showCloseButton: true,
+		inputAutoFocus: true,
+		didOpen: () => {
+			const logAction = (event: string, data: Record<string, unknown> = {}) => {
+				console.log('[torrentModal]', event, data);
+			};
+			const magnetBtn = document.getElementById('btn-magnet-copy');
+			logAction('binding magnet button (TB)', {
+				exists: Boolean(magnetBtn),
+				hash: info.hash,
+				shouldDownloadMagnets,
+			});
+			magnetBtn?.addEventListener('click', () => {
+				logAction('magnet button clicked (TB)', { hash: info.hash });
+				void handleCopyOrDownloadMagnet(info.hash, shouldDownloadMagnets);
+			});
+
+			const deleteBtn = document.getElementById('btn-delete-tb');
+			logAction('binding delete button (TB)', {
+				exists: Boolean(deleteBtn),
+				hash: info.hash,
+			});
+			deleteBtn?.addEventListener('click', async () => {
+				logAction('delete clicked (TB)', {
+					usingHandler: Boolean(handlers.onDeleteTb),
+					id: `tb:${info.id}`,
+				});
+				try {
+					if (handlers.onDeleteTb) {
+						await handlers.onDeleteTb(tbKey, `tb:${info.id}`);
+					} else {
+						await handleDeleteTbTorrent(tbKey, `tb:${info.id}`);
+					}
+					logAction('delete completed (TB)', { id: `tb:${info.id}` });
+					Modal.close();
+				} catch (error) {
+					logAction('delete failed (TB)', {
+						id: `tb:${info.id}`,
+						error: error instanceof Error ? error.message : String(error),
+					});
+				}
+			});
+
+			const exportBtn = document.getElementById('btn-export-links');
+			logAction('binding export-links button (TB)', {
+				exists: Boolean(exportBtn),
+				hash: info.hash,
+				fileCount: info.files?.length ?? 0,
+			});
+			exportBtn?.addEventListener('click', async () => {
+				logAction('export-links clicked (TB)', { hash: info.hash });
+				if (!info.files?.length) {
+					toast.error('No files to export.', magnetToastOptions);
+					return;
+				}
+				const toastId = toast.loading('Fetching download links...', magnetToastOptions);
+				try {
+					const lines: string[] = [];
+					for (const file of info.files) {
+						try {
+							const resp = await requestDownloadLink(tbKey, {
+								torrent_id: info.id,
+								file_id: file.id,
+							});
+							if (resp.data) lines.push(resp.data);
+						} catch (e) {
+							console.error('Failed to get link for file', file.name, e);
+						}
+					}
+					if (!lines.length) {
+						toast.error('Failed to fetch download links.', magnetToastOptions);
+						return;
+					}
+					const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+					const a = document.createElement('a');
+					a.href = URL.createObjectURL(blob);
+					a.download = `${info.name}.txt`;
+					a.click();
+					URL.revokeObjectURL(a.href);
+					toast.success('Download links exported.', magnetToastOptions);
+					logAction('export-links completed (TB)', {
+						hash: info.hash,
+						linesCount: lines.length,
+					});
+				} catch (e) {
+					console.error(e);
+					logAction('export-links failed (TB)', {
+						hash: info.hash,
+						error: e instanceof Error ? e.message : String(e),
+					});
+					toast.error('Failed to export download links.', magnetToastOptions);
+				} finally {
+					toast.dismiss(toastId);
 				}
 			});
 		},

@@ -1,4 +1,4 @@
-import { showInfoForAD, showInfoForRD } from '@/components/showInfo';
+import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/components/showInfo/index';
 import { getTorrentInfo } from '@/services/realDebrid';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
@@ -230,4 +230,29 @@ export function handleShowInfoForAD(t: UserTorrent, adKey: string) {
 		alert('No player selected');
 	}
 	showInfoForAD(player, adKey, t.adData!);
+}
+
+export async function handleShowInfoForTB(
+	t: UserTorrent,
+	tbKey: string,
+	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
+	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>
+) {
+	if (!t.tbData) {
+		alert(`No TorBox data available for: ${t.title}`);
+		return;
+	}
+
+	const onDeleteTb = async (key: string, id: string) => {
+		const { handleDeleteTbTorrent } = await import('./deleteTorrent');
+		await handleDeleteTbTorrent(key, id);
+		setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== id));
+		setSelectedTorrents((prev) => {
+			prev.delete(id);
+			return new Set(prev);
+		});
+		Modal.close();
+	};
+
+	void showInfoForTB(tbKey, t.tbData, undefined, { onDeleteTb });
 }

@@ -1,3 +1,4 @@
+import { TorBoxFile } from '@/services/types';
 import { isVideo } from '@/utils/selectable';
 import { renderButton, renderFileRow } from './components';
 import { ApiTorrentFile, MagnetLink } from './types';
@@ -117,4 +118,18 @@ export const renderTorrentInfo = (
 		});
 		return filesList.join('');
 	}
+};
+
+export const renderTorrentInfoTB = (files: TorBoxFile[]) => {
+	const sorted = [...files].sort((a, b) => a.name.localeCompare(b.name));
+	const filesList = sorted.map((file) => {
+		return renderFileRow({
+			id: file.id,
+			path: file.name,
+			size: file.size,
+			isPlayable: Boolean(isVideo({ path: file.name })),
+			actions: [],
+		});
+	});
+	return filesList.join('');
 };

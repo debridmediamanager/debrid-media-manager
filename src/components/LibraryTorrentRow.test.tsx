@@ -288,7 +288,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 
 	describe('Delete Button', () => {
 		it('should call appropriate delete function for RD torrents', async () => {
-			mockHandleDeleteRdTorrent.mockResolvedValueOnce(undefined);
+			mockHandleDeleteRdTorrent.mockResolvedValueOnce(true);
 
 			const { container } = render(<LibraryTorrentRow {...defaultProps} />);
 
@@ -310,7 +310,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 				adKey: 'test-ad-key',
 			};
 
-			mockHandleDeleteAdTorrent.mockResolvedValueOnce(undefined);
+			mockHandleDeleteAdTorrent.mockResolvedValueOnce(true);
 
 			const { container } = render(<LibraryTorrentRow {...adProps} />);
 
@@ -333,7 +333,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 				tbKey: 'test-tb-key',
 			};
 
-			mockHandleDeleteTbTorrent.mockResolvedValueOnce(undefined);
+			mockHandleDeleteTbTorrent.mockResolvedValueOnce(true);
 
 			const { container } = render(<LibraryTorrentRow {...tbProps} />);
 

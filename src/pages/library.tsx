@@ -40,7 +40,7 @@ import { quickSearchLibrary } from '@/utils/quickSearch';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { getHashOfTorrent } from '@/utils/torrentFile';
-import { handleShowInfoForAD, handleShowInfoForRD } from '@/utils/torrentInfo';
+import { handleShowInfoForAD, handleShowInfoForRD, handleShowInfoForTB } from '@/utils/torrentInfo';
 import { withAuth } from '@/utils/withAuth';
 import { saveAs } from 'file-saver';
 import { BookOpen } from 'lucide-react';
@@ -726,15 +726,17 @@ function TorrentsPage() {
 	const wrapDeleteFn = useCallback(
 		(t: UserTorrent) => {
 			return async (): Promise<string> => {
+				let success = false;
 				if (rdKey && t.id.startsWith('rd:')) {
-					await handleDeleteRdTorrent(rdKey, t.id);
+					success = await handleDeleteRdTorrent(rdKey, t.id);
 				}
 				if (adKey && t.id.startsWith('ad:')) {
-					await handleDeleteAdTorrent(adKey, t.id);
+					success = await handleDeleteAdTorrent(adKey, t.id);
 				}
 				if (tbKey && t.id.startsWith('tb:')) {
-					await handleDeleteTbTorrent(tbKey, t.id);
+					success = await handleDeleteTbTorrent(tbKey, t.id);
 				}
+				if (!success) throw new Error(`Failed to delete ${t.id}`);
 				return t.id;
 			};
 		},
@@ -1752,11 +1754,11 @@ function TorrentsPage() {
 													} else if (t.id.startsWith('ad:') && adKey) {
 														await handleShowInfoForAD(t, adKey);
 													} else if (t.id.startsWith('tb:') && tbKey) {
-														// For now, show basic info for TorBox torrents
-														console.log('TorBox torrent info:', t);
-														// TODO: Implement detailed TorBox info modal
-														alert(
-															`TorBox torrent: ${t.title}\nStatus: ${t.serviceStatus}\nProgress: ${t.progress}%\nSize: ${(t.bytes / 1024 / 1024 / 1024).toFixed(2)} GB`
+														await handleShowInfoForTB(
+															t,
+															tbKey,
+															setUserTorrentsList,
+															setSelectedTorrents
 														);
 													} else {
 														console.error(

@@ -300,16 +300,17 @@ function TorrentRow({
 						className="mb-2 mr-2 cursor-pointer text-red-500"
 						onClick={async (e) => {
 							e.stopPropagation();
+							let success = false;
 							if (rdKey && torrent.id.startsWith('rd:')) {
-								await handleDeleteRdTorrent(rdKey, torrent.id);
+								success = await handleDeleteRdTorrent(rdKey, torrent.id);
 							}
 							if (adKey && torrent.id.startsWith('ad:')) {
-								await handleDeleteAdTorrent(adKey, torrent.id);
+								success = await handleDeleteAdTorrent(adKey, torrent.id);
 							}
 							if (tbKey && torrent.id.startsWith('tb:')) {
-								await handleDeleteTbTorrent(tbKey, torrent.id);
+								success = await handleDeleteTbTorrent(tbKey, torrent.id);
 							}
-							onDelete(torrent.id);
+							if (success) onDelete(torrent.id);
 						}}
 					>
 						<Trash2 className="h-4 w-4 text-red-500" />

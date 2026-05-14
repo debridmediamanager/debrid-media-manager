@@ -73,7 +73,7 @@ describe('handleReinsertTorrentinRd', () => {
 				status: 'downloaded',
 				progress: 100,
 			} as any);
-			mockHandleDeleteRdTorrent.mockResolvedValueOnce(undefined);
+			mockHandleDeleteRdTorrent.mockResolvedValueOnce(true);
 
 			await handleReinsertTorrentinRd(mockRdKey, mockTorrent, true);
 
@@ -101,7 +101,7 @@ describe('handleReinsertTorrentinRd', () => {
 				status: 'downloaded',
 				progress: 100,
 			} as any);
-			mockHandleDeleteRdTorrent.mockResolvedValueOnce(undefined);
+			mockHandleDeleteRdTorrent.mockResolvedValueOnce(true);
 
 			await handleReinsertTorrentinRd(mockRdKey, mockTorrent, true, customSelectedIds);
 
@@ -147,7 +147,7 @@ describe('handleReinsertTorrentinRd', () => {
 				progress: 100,
 			} as any);
 
-			mockHandleDeleteRdTorrent.mockResolvedValueOnce(undefined);
+			mockHandleDeleteRdTorrent.mockResolvedValueOnce(true);
 
 			await handleReinsertTorrentinRd(mockRdKey, mockTorrent, true);
 
@@ -255,7 +255,7 @@ describe('handleReinsertTorrentinRd', () => {
 
 			mockAddHashAsMagnet.mockResolvedValueOnce('456');
 			mockSelectFiles.mockResolvedValueOnce({} as any);
-			mockHandleDeleteRdTorrent.mockResolvedValueOnce(undefined);
+			mockHandleDeleteRdTorrent.mockResolvedValueOnce(true);
 
 			await handleReinsertTorrentinRd(mockRdKey, mockTorrent, true);
 
@@ -280,7 +280,7 @@ describe('handleReinsertTorrentinRd', () => {
 
 			mockAddHashAsMagnet.mockResolvedValueOnce('456');
 			mockSelectFiles.mockResolvedValueOnce({} as any);
-			mockHandleDeleteRdTorrent.mockResolvedValueOnce(undefined);
+			mockHandleDeleteRdTorrent.mockResolvedValueOnce(true);
 
 			// Pass empty array - should fetch current selection
 			await handleReinsertTorrentinRd(mockRdKey, mockTorrent, true, []);
@@ -309,7 +309,7 @@ describe('handleReinsertTorrentinRd', () => {
 			} as any);
 
 			// selectFiles should not be called since handleSelectFilesInRd will throw
-			mockHandleDeleteRdTorrent.mockResolvedValueOnce(undefined);
+			mockHandleDeleteRdTorrent.mockResolvedValueOnce(true);
 
 			await handleReinsertTorrentinRd(mockRdKey, mockTorrent, true);
 

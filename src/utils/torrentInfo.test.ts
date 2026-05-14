@@ -13,9 +13,10 @@ const modalMock = vi.hoisted(() => ({
 	showLoading: vi.fn(),
 }));
 
-vi.mock('@/components/showInfo', () => ({
+vi.mock('@/components/showInfo/index', () => ({
 	showInfoForRD: showInfoSpy,
 	showInfoForAD: vi.fn(),
+	showInfoForTB: vi.fn(),
 }));
 
 vi.mock('@/services/realDebrid', () => ({
@@ -286,7 +287,7 @@ describe('handleShowInfoForRD reinsert handler', () => {
 		);
 
 		expect(capturedHandlers?.onDeleteRd).toBeTypeOf('function');
-		vi.mocked(handleDeleteRdTorrent).mockResolvedValue(undefined);
+		vi.mocked(handleDeleteRdTorrent).mockResolvedValue(true);
 
 		await capturedHandlers.onDeleteRd('rdKey', baseTorrent.id);
 
