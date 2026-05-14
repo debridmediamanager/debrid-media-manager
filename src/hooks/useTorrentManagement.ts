@@ -116,6 +116,7 @@ export function useTorrentManagement(
 			// Clean up false positives: when the torrent wasn't instant (deleteIfNotInstant)
 			// or when RD rejected it as infringing, remove from availability database.
 			const shouldRemoveAvailability =
+				addResult !== 'error' &&
 				(deleteIfNotInstant || addResult === 'infringing_file') &&
 				torrentInfo === null &&
 				wasMarkedAvailable;
