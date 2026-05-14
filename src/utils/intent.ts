@@ -13,15 +13,17 @@ export const getInstantIntent = async (
 	ipAddress: string,
 	os: string,
 	player: string
-) => {
-	let intent = '';
+): Promise<{ intent?: string; error?: string }> => {
 	try {
 		const id = await addHashAsMagnet(rdKey, hash, false);
 		try {
 			await handleSelectFilesInRd(rdKey, `rd:${id}`, false);
 			const torrentInfo = await getTorrentInfo(rdKey, id, false);
 			if (torrentInfo.status !== 'downloaded') {
-				throw new Error('Torrent not downloaded');
+				await deleteTorrent(rdKey, id, false);
+				return {
+					error: `Torrent status is '${torrentInfo.status}', expected 'downloaded'`,
+				};
 			}
 
 			const fileIdx = torrentInfo.files
@@ -30,6 +32,7 @@ export const getInstantIntent = async (
 			const link = torrentInfo.links[fileIdx] ?? torrentInfo.links[0];
 			const resp = await unrestrictLink(rdKey, link, ipAddress, false);
 			await deleteTorrent(rdKey, id, false);
+			let intent: string;
 			if (os === 'android') {
 				intent = `intent://${resp.download.replace(
 					'https://',
@@ -54,13 +57,14 @@ export const getInstantIntent = async (
 			} else {
 				intent = 'https://real-debrid.com/streaming-' + resp.id;
 			}
-		} catch (e) {
-			await deleteTorrent(rdKey, id, false);
+			return { intent };
+		} catch (e: any) {
+			await deleteTorrent(rdKey, id, false).catch(() => {});
+			return { error: `Failed to process torrent: ${e.message || e}` };
 		}
-	} catch (e) {
-		console.log(e);
+	} catch (e: any) {
+		return { error: `Failed to add magnet: ${e.message || e}` };
 	}
-	return intent;
 };
 
 export const getIntent = async (
@@ -69,10 +73,10 @@ export const getIntent = async (
 	ipAddress: string,
 	os: string,
 	player: string
-) => {
-	let intent = '';
+): Promise<{ intent?: string; error?: string }> => {
 	try {
 		const resp = await unrestrictLink(rdKey, link, ipAddress, false);
+		let intent: string;
 		if (os === 'android') {
 			intent = `intent://${resp.download.replace(
 				'https://',
@@ -97,8 +101,8 @@ export const getIntent = async (
 		} else {
 			intent = 'https://real-debrid.com/streaming-' + resp.id;
 		}
-	} catch (e) {
-		console.log(e);
+		return { intent };
+	} catch (e: any) {
+		return { error: `Failed to unrestrict link: ${e.message || e}` };
 	}
-	return intent;
 };

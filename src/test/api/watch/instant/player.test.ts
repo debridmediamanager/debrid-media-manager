@@ -20,7 +20,7 @@ describe('/api/watch/instant/[os]/[player]', () => {
 	});
 
 	it('redirects 307 when intent is found', async () => {
-		mockedGetInstantIntent.mockResolvedValueOnce('vlc://instant-stream');
+		mockedGetInstantIntent.mockResolvedValueOnce({ intent: 'vlc://instant-stream' });
 		const req = createMockRequest({
 			query: {
 				os: 'windows',
@@ -37,7 +37,7 @@ describe('/api/watch/instant/[os]/[player]', () => {
 	});
 
 	it('returns 500 when no intent is found', async () => {
-		mockedGetInstantIntent.mockResolvedValueOnce(undefined as any);
+		mockedGetInstantIntent.mockResolvedValueOnce({ error: 'Failed to add magnet: not found' });
 		const req = createMockRequest({
 			query: {
 				os: 'macos',
@@ -51,11 +51,11 @@ describe('/api/watch/instant/[os]/[player]', () => {
 		await handler(req, res);
 
 		expect(res._getStatusCode()).toBe(500);
-		expect(res._getData()).toEqual({ error: 'No intent found for def456' });
+		expect(res._getData()).toEqual({ error: 'Failed to add magnet: not found' });
 	});
 
 	it('parses fileId as integer', async () => {
-		mockedGetInstantIntent.mockResolvedValueOnce('intent-url');
+		mockedGetInstantIntent.mockResolvedValueOnce({ intent: 'intent-url' });
 		const req = createMockRequest({
 			query: { os: 'linux', player: 'mpv', token: 'tok', hash: 'h1', fileId: '99' },
 		});
@@ -74,7 +74,7 @@ describe('/api/watch/instant/[os]/[player]', () => {
 
 	it('passes correct params to getInstantIntent', async () => {
 		mockedGetClientIp.mockReturnValue('10.0.0.5');
-		mockedGetInstantIntent.mockResolvedValueOnce('intent-url');
+		mockedGetInstantIntent.mockResolvedValueOnce({ intent: 'intent-url' });
 		const req = createMockRequest({
 			query: { os: 'android', player: 'vlc', token: 'my-token', hash: 'xyz789', fileId: '3' },
 		});

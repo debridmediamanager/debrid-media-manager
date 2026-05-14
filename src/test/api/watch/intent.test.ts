@@ -25,7 +25,7 @@ beforeEach(() => {
 
 describe('API watch intents', () => {
 	it('redirects when a standard intent exists', async () => {
-		intentMocks.getIntent.mockResolvedValue('app://play');
+		intentMocks.getIntent.mockResolvedValue({ intent: 'app://play' });
 		const res = createRes();
 
 		await watchHandler(
@@ -48,7 +48,7 @@ describe('API watch intents', () => {
 	});
 
 	it('returns 500 when the instant intent is missing', async () => {
-		intentMocks.getInstantIntent.mockResolvedValue('');
+		intentMocks.getInstantIntent.mockResolvedValue({ error: 'Failed to add magnet: bad hash' });
 		const res = createRes();
 
 		await instantHandler(
@@ -61,6 +61,6 @@ describe('API watch intents', () => {
 		);
 
 		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({ error: 'No intent found for hash' });
+		expect(res.json).toHaveBeenCalledWith({ error: 'Failed to add magnet: bad hash' });
 	});
 });

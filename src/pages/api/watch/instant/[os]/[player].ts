@@ -7,7 +7,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 	const rdKey = token as string;
 	const ipAddress = getClientIpFromRequest(req);
 	const selectedFileId = parseInt(fileId as string, 10);
-	const intent = await getInstantIntent(
+	const result = await getInstantIntent(
 		rdKey,
 		hash as string,
 		selectedFileId,
@@ -15,10 +15,10 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 		os as string,
 		player as string
 	);
-	if (intent) {
-		res.redirect(307, intent);
+	if (result.intent) {
+		res.redirect(307, result.intent);
 	} else {
-		res.status(500).json({ error: `No intent found for ${hash}` });
+		res.status(500).json({ error: result.error || `No intent found for ${hash}` });
 	}
 };
 

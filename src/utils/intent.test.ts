@@ -57,9 +57,9 @@ describe('intent helpers', () => {
 			'com.vlc'
 		);
 
-		expect(intent).toBe(
-			'intent://files.domain/video.mp4#Intent;type=video/any;scheme=https;package=com.vlc;end'
-		);
+		expect(intent).toEqual({
+			intent: 'intent://files.domain/video.mp4#Intent;type=video/any;scheme=https;package=com.vlc;end',
+		});
 		expect(deleteTorrentMock).toHaveBeenCalledWith('rd-token', 'rd123', false);
 	});
 
@@ -77,8 +77,8 @@ describe('intent helpers', () => {
 		});
 		deleteTorrentMock.mockResolvedValue(undefined);
 
-		const intent = await getInstantIntent('rd', 'hash', 1, 'ip', 'linux', 'player');
-		expect(intent).toBe('https://real-debrid.com/streaming-stream-xyz');
+		const result = await getInstantIntent('rd', 'hash', 1, 'ip', 'linux', 'player');
+		expect(result).toEqual({ intent: 'https://real-debrid.com/streaming-stream-xyz' });
 		expect(deleteTorrentMock).toHaveBeenCalledTimes(1);
 	});
 
@@ -92,9 +92,11 @@ describe('intent helpers', () => {
 		});
 		deleteTorrentMock.mockResolvedValue(undefined);
 
-		const intent = await getInstantIntent('rd', 'hash', 1, 'ip', 'android', 'chooser');
+		const result = await getInstantIntent('rd', 'hash', 1, 'ip', 'android', 'chooser');
 
-		expect(intent).toBe('');
+		expect(result).toEqual({
+			error: "Torrent status is 'downloading', expected 'downloaded'",
+		});
 		expect(deleteTorrentMock).toHaveBeenCalledWith('rd', 'rd999', false);
 	});
 
@@ -104,15 +106,17 @@ describe('intent helpers', () => {
 			download: 'https://files.domain/video.mp4',
 		});
 
-		const intent = await getIntent('rd', 'https://link', 'ip', 'mac3', 'vlc');
-		expect(intent).toBe('vlc://weblink?url=https://files.domain/video.mp4&new_window=1');
+		const result = await getIntent('rd', 'https://link', 'ip', 'mac3', 'vlc');
+		expect(result).toEqual({
+			intent: 'vlc://weblink?url=https://files.domain/video.mp4&new_window=1',
+		});
 	});
 
 	it('returns an empty string when unrestricting fails', async () => {
 		unrestrictLinkMock.mockRejectedValue(new Error('rd down'));
 
-		const intent = await getIntent('rd', 'https://link', 'ip', 'android', 'chooser');
-		expect(intent).toBe('');
+		const result = await getIntent('rd', 'https://link', 'ip', 'android', 'chooser');
+		expect(result).toEqual({ error: 'Failed to unrestrict link: rd down' });
 	});
 
 	it('builds Windows intent with player URL scheme', async () => {
@@ -121,8 +125,8 @@ describe('intent helpers', () => {
 			download: 'https://files.domain/video.mp4',
 		});
 
-		const intent = await getIntent('rd', 'https://link', 'ip', 'windows', 'vlc');
-		expect(intent).toBe('vlc://https://files.domain/video.mp4');
+		const result = await getIntent('rd', 'https://link', 'ip', 'windows', 'vlc');
+		expect(result).toEqual({ intent: 'vlc://https://files.domain/video.mp4' });
 	});
 
 	it('builds Windows intent for PotPlayer', async () => {
@@ -131,7 +135,7 @@ describe('intent helpers', () => {
 			download: 'https://files.domain/video.mp4',
 		});
 
-		const intent = await getIntent('rd', 'https://link', 'ip', 'windows', 'potplayer');
-		expect(intent).toBe('potplayer://https://files.domain/video.mp4');
+		const result = await getIntent('rd', 'https://link', 'ip', 'windows', 'potplayer');
+		expect(result).toEqual({ intent: 'potplayer://https://files.domain/video.mp4' });
 	});
 });

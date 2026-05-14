@@ -6,17 +6,17 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 	const { os, player, token, link } = req.query;
 	const rdKey = token as string;
 	const ipAddress = getClientIpFromRequest(req);
-	const intent = await getIntent(
+	const result = await getIntent(
 		rdKey,
 		link as string,
 		ipAddress,
 		os as string,
 		player as string
 	);
-	if (intent) {
-		res.redirect(307, intent);
+	if (result.intent) {
+		res.redirect(307, result.intent);
 	} else {
-		res.status(500).json({ error: `No intent found for ${link}` });
+		res.status(500).json({ error: result.error || `No intent found for ${link}` });
 	}
 };
 

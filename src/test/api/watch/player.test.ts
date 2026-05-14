@@ -20,7 +20,7 @@ describe('/api/watch/[os]/[player]', () => {
 	});
 
 	it('redirects 307 when intent is found', async () => {
-		mockedGetIntent.mockResolvedValueOnce('vlc://stream-url');
+		mockedGetIntent.mockResolvedValueOnce({ intent: 'vlc://stream-url' });
 		const req = createMockRequest({
 			query: {
 				os: 'windows',
@@ -36,7 +36,7 @@ describe('/api/watch/[os]/[player]', () => {
 	});
 
 	it('returns 500 when no intent is found', async () => {
-		mockedGetIntent.mockResolvedValueOnce(undefined as any);
+		mockedGetIntent.mockResolvedValueOnce({ error: 'Failed to unrestrict link: not found' });
 		const req = createMockRequest({
 			query: {
 				os: 'macos',
@@ -50,12 +50,12 @@ describe('/api/watch/[os]/[player]', () => {
 
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getData()).toEqual({
-			error: 'No intent found for https://example.com/file.mkv',
+			error: 'Failed to unrestrict link: not found',
 		});
 	});
 
 	it('passes correct params to getIntent', async () => {
-		mockedGetIntent.mockResolvedValueOnce('intent-url');
+		mockedGetIntent.mockResolvedValueOnce({ intent: 'intent-url' });
 		const req = createMockRequest({
 			query: { os: 'android', player: 'mpv', token: 'my-token', link: 'https://rd.link/abc' },
 		});
@@ -73,7 +73,7 @@ describe('/api/watch/[os]/[player]', () => {
 
 	it('uses client IP from request', async () => {
 		mockedGetClientIp.mockReturnValue('10.0.0.5');
-		mockedGetIntent.mockResolvedValueOnce('intent-url');
+		mockedGetIntent.mockResolvedValueOnce({ intent: 'intent-url' });
 		const req = createMockRequest({
 			query: { os: 'linux', player: 'vlc', token: 'tok', link: 'https://link' },
 		});
