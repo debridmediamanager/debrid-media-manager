@@ -82,13 +82,6 @@ export default function LibraryMenuButtons({
 				<FolderOpen className="mr-1 inline-block h-4 w-4 text-orange-400" />
 				Others
 			</LibraryLinkButton>
-			{hasActiveFilter && (
-				<LibraryButton variant="red" size="xs" onClick={onResetFilters}>
-					<RotateCcw className="mr-1 inline-block h-3 w-3 text-red-300" />
-					Reset
-				</LibraryButton>
-			)}
-
 			{sameHashSize > 0 && (
 				<LibraryLinkButton
 					href="/library?status=samehash&page=1"
@@ -162,6 +155,12 @@ export default function LibraryMenuButtons({
 					<Eye className="mr-1 inline-block h-4 w-4 text-slate-400" />
 					Failed
 				</LibraryLinkButton>
+			)}
+			{hasActiveFilter && (
+				<LibraryButton variant="red" size="xs" onClick={onResetFilters}>
+					<RotateCcw className="mr-1 inline-block h-3 w-3 text-red-300" />
+					Reset
+				</LibraryButton>
 			)}
 		</div>
 	);

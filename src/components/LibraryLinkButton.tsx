@@ -39,7 +39,7 @@ export default function LibraryLinkButton({
 
 	return (
 		<Link
-			href={href}
+			href={active ? '/library?page=1' : href}
 			className={`mb-1 mr-2 rounded border-2 px-1 ${sizeClasses} ${styles} transition-colors`}
 			onClick={onClick}
 		>
