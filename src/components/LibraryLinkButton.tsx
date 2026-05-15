@@ -8,6 +8,7 @@ interface LibraryLinkButtonProps {
 	variant: ButtonVariant;
 	children: ReactNode;
 	size?: 'xs' | 'sm';
+	active?: boolean;
 	onClick?: (e: React.MouseEvent) => void;
 }
 
@@ -18,19 +19,28 @@ const variantStyles: Record<ButtonVariant, string> = {
 	slate: 'border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50',
 };
 
+const activeVariantStyles: Record<ButtonVariant, string> = {
+	orange: 'border-orange-400 bg-orange-500/60 text-white ring-1 ring-orange-400/50',
+	yellow: 'border-yellow-400 bg-yellow-500/60 text-white ring-1 ring-yellow-400/50',
+	amber: 'border-amber-400 bg-amber-500/60 text-white ring-1 ring-amber-400/50',
+	slate: 'border-slate-400 bg-slate-500/60 text-white ring-1 ring-slate-400/50',
+};
+
 export default function LibraryLinkButton({
 	href,
 	variant,
 	children,
 	size = 'xs',
+	active = false,
 	onClick,
 }: LibraryLinkButtonProps) {
 	const sizeClasses = size === 'xs' ? 'text-xs py-0.5' : 'text-xs py-0';
+	const styles = active ? activeVariantStyles[variant] : variantStyles[variant];
 
 	return (
 		<Link
 			href={href}
-			className={`mb-1 mr-2 rounded border-2 px-1 ${sizeClasses} ${variantStyles[variant]} transition-colors`}
+			className={`mb-1 mr-2 rounded border-2 px-1 ${sizeClasses} ${styles} transition-colors`}
 			onClick={onClick}
 		>
 			{children}

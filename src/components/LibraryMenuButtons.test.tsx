@@ -43,9 +43,14 @@ describe('LibraryMenuButtons', () => {
 		expect(screen.getByText('Others')).toBeInTheDocument();
 	});
 
-	it('renders Reset button', () => {
-		render(<LibraryMenuButtons {...defaultProps} />);
+	it('renders Reset button when a filter is active', () => {
+		render(<LibraryMenuButtons {...defaultProps} activeMediaType="movie" />);
 		expect(screen.getByText('Reset')).toBeInTheDocument();
+	});
+
+	it('hides Reset button when no filter is active', () => {
+		render(<LibraryMenuButtons {...defaultProps} />);
+		expect(screen.queryByText('Reset')).not.toBeInTheDocument();
 	});
 
 	it('disables prev button on first page', () => {
@@ -85,7 +90,13 @@ describe('LibraryMenuButtons', () => {
 
 	it('calls onResetFilters when Reset is clicked', () => {
 		const onResetFilters = vi.fn();
-		render(<LibraryMenuButtons {...defaultProps} onResetFilters={onResetFilters} />);
+		render(
+			<LibraryMenuButtons
+				{...defaultProps}
+				onResetFilters={onResetFilters}
+				activeStatus="samehash"
+			/>
+		);
 		fireEvent.click(screen.getByText('Reset'));
 		expect(onResetFilters).toHaveBeenCalledOnce();
 	});

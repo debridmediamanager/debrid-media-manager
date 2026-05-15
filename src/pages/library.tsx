@@ -1626,6 +1626,8 @@ function TorrentsPage() {
 						inProgressCount={memoInProgressCount}
 						slowCount={memoSlowCount}
 						failedCount={memoFailedCount}
+						activeMediaType={mediaType as string | undefined}
+						activeStatus={status as string | undefined}
 					/>
 					<LibraryActionButtons
 						onSelectShown={() => selectShown(currentPageData, setSelectedTorrents)}

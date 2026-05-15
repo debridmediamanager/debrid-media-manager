@@ -134,6 +134,7 @@ describe('LibraryMenuButtons', () => {
 				inProgressCount={1}
 				slowCount={1}
 				failedCount={1}
+				activeStatus="samehash"
 			/>
 		);
 
