@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Complete List of Real-Debrid's Filename Filters</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0a0e14;
+  color: #d4d4d8;
+  padding: 48px 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.7;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: 700;
+  color: #f4f4f5;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+h1 code {
+  font-size: 0.75em;
+  vertical-align: middle;
+}
+
+h2 {
+  color: #71717a;
+  margin-top: 56px;
+  margin-bottom: 20px;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+h3 {
+  color: #e4e4e7;
+  margin-top: 28px;
+  margin-bottom: 12px;
+  font-size: 1em;
+  font-weight: 600;
+}
+
+code {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  background: rgba(255, 166, 87, 0.08);
+  padding: 2px 7px;
+  border-radius: 5px;
+  color: #fbbf24;
+  font-size: 0.88em;
+  font-weight: 500;
+}
+
+p { margin-bottom: 12px; }
+ul { margin: 8px 0 16px 20px; }
+li { margin-bottom: 6px; }
+strong { color: #f4f4f5; font-weight: 600; }
+
+.hero {
+  background: linear-gradient(135deg, #12161f 0%, #0f1318 100%);
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 32px;
+  margin: 32px 0;
+  font-size: 1.05em;
+  line-height: 1.8;
+}
+
+.stats { display: flex; gap: 16px; margin: 24px 0; flex-wrap: wrap; }
+.stat {
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 1.5em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.sb { background: rgba(239, 68, 68, 0.08); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.15); }
+.so { background: rgba(34, 197, 94, 0.08); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.15); }
+
+.rule {
+  background: #111318;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  padding: 28px;
+  margin: 20px 0;
+}
+
+.rule-title { color: #ef4444; font-weight: 700; font-size: 1.1em; margin-bottom: 10px; }
+.bypass { color: #22c55e; }
+
+.tldr {
+  background: linear-gradient(135deg, #1a1207 0%, #120d06 100%);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: 14px;
+  padding: 28px 32px;
+  margin: 28px 0;
+}
+.tldr h3 { color: #fbbf24; margin: 0 0 16px; font-size: 1.1em; }
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 16px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #1e293b;
+}
+th, td {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 0.88em;
+}
+th {
+  background: #111318;
+  color: #a1a1aa;
+  font-weight: 600;
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #1e293b;
+}
+td { border-bottom: 1px solid rgba(30, 41, 59, 0.5); }
+tr:last-child td { border-bottom: none; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+.safe {
+  background: rgba(34, 197, 94, 0.04);
+  border: 1px solid rgba(34, 197, 94, 0.12);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.safe h4 { color: #22c55e; margin: 0 0 10px; font-size: 0.8em; text-transform: uppercase; letter-spacing: 1.5px; }
+.safe code { font-size: 0.82em; background: rgba(34, 197, 94, 0.06); color: #86efac; }
+
+.combo-table td, .combo-table th { text-align: center; padding: 10px 14px; }
+.combo-table td.b { color: #ef4444; font-weight: 700; background: rgba(239, 68, 68, 0.06); }
+.combo-table td.o { color: #22c55e; background: rgba(34, 197, 94, 0.04); }
+.combo-table th:first-child { text-align: left; }
+.combo-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+.combo-table tr:hover td.b { background: rgba(239, 68, 68, 0.1); }
+.combo-table tr:hover td.o { background: rgba(34, 197, 94, 0.08); }
+
+.ts { color: #52525b; font-size: 0.75em; }
+
+.note {
+  background: rgba(59, 130, 246, 0.05);
+  border-left: 3px solid #3b82f6;
+  padding: 16px 20px;
+  margin: 24px 0;
+  border-radius: 0 12px 12px 0;
+  font-size: 0.95em;
+}
+
+details { margin: 16px 0; }
+summary {
+  cursor: pointer;
+  color: #60a5fa;
+  font-weight: 600;
+  padding: 10px 0;
+  font-size: 0.95em;
+  transition: color 0.15s;
+}
+summary:hover { color: #93c5fd; }
+summary::marker { color: #3b82f6; }
+
+.example {
+  background: #0c1018;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 10px 0;
+  font-size: 0.88em;
+}
+.example p { margin-bottom: 6px; }
+.example .b { color: #ef4444; }
+.example .o { color: #22c55e; }
+
+.impact {
+  background: linear-gradient(135deg, #1a1207 0%, #120d06 100%);
+  border: 1px solid rgba(251, 191, 36, 0.12);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+}
+.impact h4 { color: #fbbf24; margin: 0 0 10px; font-size: 0.95em; }
+
+::selection { background: rgba(59, 130, 246, 0.3); }
+</style></head><body>
+
+<h1>Complete List of Real-Debrid's Filename Filters</h1>
+
+<div class="hero">
+<p>I tested several thousand scene releases against Real-Debrid's torrent upload filter to map exactly which filename patterns trigger the <code>infringing_file</code> rejection (error_code 35). RD checks only the filename inside the .torrent metadata, it never downloads or inspects the actual file content.</p>
+</div>
+
+<div class="tldr">
+<h3>TL;DR: Two Pattern Types, Every Current Release Format Affected</h3>
+
+<p><strong>Type 1: 5 substring matches</strong> (case-insensitive, anywhere in filename):</p>
+<p style="font-size:1.15em;letter-spacing:1px"><code>web-dl</code> &nbsp; <code>webrip</code> &nbsp; <code>bdrip</code> &nbsp; <code>hdrip</code> &nbsp; <code>dvdrip</code></p>
+
+<p><strong>Type 2: Source.Codec dot-adjacency matches</strong> (case-insensitive):</p>
+<p style="font-size:1.15em;letter-spacing:1px">
+<code>BluRay.x264</code> &nbsp;
+<code>HDTV.x264</code> &nbsp; <code>HDTV.XviD</code> &nbsp;
+<code>WEB.x264</code> &nbsp; <code>WEB.h264</code> &nbsp; <code>WEB.H264</code>
+</p>
+
+<div class="impact">
+<h4>Real-World Impact</h4>
+<p>From current PirateBay releases tested: <strong>56 out of 165 filenames are blocked</strong> (~34%). The most impacted formats:</p>
+<ul>
+<li><strong>All <code>[WEBRip]</code> bracket releases</strong>, every single one blocked (Zootopia 2, Hoppers, Faces of Death, etc.)</li>
+<li><strong>All <code>WEB-DL</code> releases</strong>: AMZN/NF/DSNP/ATVP/HMAX/PMTP/iT/MA/TEN WEB-DLs all blocked</li>
+<li><strong>All <code>.WEB.h264</code> scene releases</strong>: GRACE, ETHEL, EDITH groups all blocked</li>
+<li><strong>All <code>.WEB.H264</code> releases</strong>: HiggsBoson, SYLiX groups blocked</li>
+<li><strong>All <code>.HDTV.x264</code> releases</strong>: SYNCOPY group blocked</li>
+</ul>
+<p><strong>Safe formats:</strong> <code>.WEB.h265</code>, <code>BluRay.x265</code>, <code>HEVC x265</code>, <code>TELESYNC</code>, <code>HDTS</code>, <code>DCP</code></p>
+</div>
+</div>
+
+<h2>Rule 1: Substring Matches</h2>
+<div class="rule">
+<p>If the filename contains any of these strings (case-insensitive), the torrent is rejected immediately. Extension doesn't matter. Works in both dot-separated and space-separated names, and inside brackets.</p>
+<table>
+<tr><th>Pattern</th><th>Blocked Real-World Examples</th></tr>
+<tr><td><code>web-dl</code></td><td><code>Euphoria.US.S03E05...AMZN.WEB-DL...H.264-FLUX</code><br>
+<code>From.S03.COMPLETE.1080p.AMZN.WEB-DL...H.264-FLUX[TGx]</code><br>
+<code>Apex.2026.2160p.NF.WEB-DL...H.265-APEX</code><br>
+<code>Taskmaster Australia S05E02 1080p TEN WEB-DL AAC2 0 H 264-RAWR</code></td></tr>
+<tr><td><code>webrip</code></td><td><code>Project Hail Mary (2026) [1080p] [WEBRip] [5.1]</code><br>
+<code>Apex.2026.1080p.NF.WEBRip.DD5.1.x265.6CH-SupaCvnt</code><br>
+<code>Euphoria.US.S01.REPACK.1080p.AMZN.WEBRip.DDP5.1.x264-KiNGS</code><br>
+<code>The.Super.Mario.Galaxy.Movie.2026.1080p.Webrip.MULTi.Line.Audio.x264-SyncUP</code></td></tr>
+<tr><td><code>bdrip</code></td><td><code>[Group] Show [BDRip][1080p]</code></td></tr>
+<tr><td><code>hdrip</code></td><td><code>[Group] Show [HDRip][720p]</code></td></tr>
+<tr><td><code>dvdrip</code></td><td><code>[Group] Show [DVDRip][480p]</code></td></tr>
+</table>
+
+<p><strong>Properties:</strong></p>
+<ul>
+<li>Case-insensitive: <code>WEBrip</code>, <code>Webrip</code>, <code>WEBRIP</code>, <code>WeB-dL</code> all blocked</li>
+<li>Substring: <code>WEB-DLRip</code>, <code>PreDVDRip</code> blocked (contain the pattern)</li>
+<li>Extension-independent: <code>.mp4</code>, <code>.mkv</code>, <code>.avi</code> all checked</li>
+<li>Works with spaces: <code>1080p WEBRip DDP5 1 x264</code> blocked</li>
+<li>Works in brackets: <code>[WEBRip]</code>, <code>[BDRip]</code> blocked</li>
+</ul>
+</div>
+
+<h2>Rule 2: Source.Codec Dot-Adjacency Matches</h2>
+<div class="rule">
+<p>When certain source tags appear <strong>immediately before</strong> certain codec tags with a <strong>dot separator</strong>, the torrent is blocked. Case-insensitive on both source and codec.</p>
+
+<h3>Complete Matrix (168 combos tested across 21 sources × 8 codecs)</h3>
+<table class="combo-table">
+<tr><th style="text-align:left">Source \ Codec</th><th>x264</th><th>x265</th><th>h264</th><th>h265</th><th>HEVC</th><th>AV1</th><th>XviD</th><th>AVC</th></tr>
+<tr><td style="text-align:left"><strong>BluRay / BLURAY / bluray</strong></td><td class="b">BLOCK</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
+<tr><td style="text-align:left"><strong>HDTV / hdtv / Hdtv</strong></td><td class="b">BLOCK</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="b">BLOCK</td><td class="o">ok</td></tr>
+<tr><td style="text-align:left"><strong>WEB / web / Web</strong></td><td class="b">BLOCK</td><td class="o">ok</td><td class="b">BLOCK</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
+<tr><td style="text-align:left;color:#3fb950">Blu-Ray / BD</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
+<tr><td style="text-align:left;color:#3fb950">HDTS / Telesync / TELESYNC</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
+<tr><td style="text-align:left;color:#3fb950">PDTV / CAM / TS / REMUX / DCP</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
+<tr><td style="text-align:left;color:#3fb950">CR / BILI / NF / AMZN / HIDIVE / FUNI</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td><td class="o">ok</td></tr>
+</table>
+
+<div class="impact">
+<h4>Key: <code>WEB.H264</code> is blocked (capital H)</h4>
+<p>This was confirmed in run 4 with real releases: <code>For.All.Mankind.S05E08.MULTI.1080p.WEB.H264-HiggsBoson</code> and <code>Chicago.Fire.S14E21.720p.WEB.H264-SYLiX</code> both blocked. The match is case-insensitive on both source and codec.</p>
+</div>
+
+<div class="impact">
+<h4>Key: <code>HDTV.h264</code> is NOT blocked</h4>
+<p>Despite <code>HDTV.x264</code> and <code>HDTV.XviD</code> being blocked, <code>HDTV.h264</code> and <code>HDTV.H264</code> both pass. The HDTV rule only matches <code>x264</code> and <code>XviD</code>, not <code>h264</code>.</p>
+</div>
+
+<p><strong>Properties:</strong></p>
+<ul>
+<li><strong>Only <code>.</code> (dot) triggers:</strong> <code>BluRay-x264</code> ✅, <code>WEB-h264</code> ✅, <code>HDTV_x264</code> ✅</li>
+<li><strong>Must be adjacent:</strong> <code>WEB.Line.H264</code> ✅ (Line breaks adjacency)</li>
+<li><strong>Order matters:</strong> <code>x264.BluRay</code> ✅</li>
+<li><strong>h265 / x265 / HEVC / AV1 never blocked</strong> in any source combo</li>
+</ul>
+
+
+</div>
+
+<h2>Real-World Release Validation</h2>
+<div class="rule">
+<p>I tested 165 actual release names from current PirateBay listings. Here's how they break down:</p>
+
+<details open><summary>Blocked Real-World Releases (56): why each is blocked</summary>
+<div class="example">
+<p><strong>Blocked by <code>web-dl</code> substring (24):</strong></p>
+<p class="b">All AMZN/NF/DSNP/ATVP/HMAX/PMTP/iT/MA/TEN WEB-DL releases</p>
+<p>Examples: <code>Euphoria.US...AMZN.WEB-DL...H.264-FLUX</code>, <code>Superman 2025 1080p WEB-DL HEVC x265 5.1 BONE</code></p>
+</div>
+<div class="example">
+<p><strong>Blocked by <code>webrip</code> substring (21):</strong></p>
+<p class="b">All [WEBRip] bracket releases + all .WEBRip. dot releases + WEBrip/Webrip variants</p>
+<p>Examples: <code>Project Hail Mary (2026) [1080p] [WEBRip] [5.1]</code>, <code>Apex.2026.1080p.NF.WEBRip.DD5.1.x265</code></p>
+</div>
+<div class="example">
+<p><strong>Blocked by <code>WEB.h264</code> / <code>WEB.H264</code> adjacency (10):</strong></p>
+<p class="b">Modern scene format used by GRACE, ETHEL, EDITH, HiggsBoson, SYLiX groups</p>
+<p>Examples: <code>From.S04E04.1080p.WEB.h264-GRACE</code>, <code>For.All.Mankind.S05E08.MULTI.1080p.WEB.H264-HiggsBoson</code></p>
+</div>
+<div class="example">
+<p><strong>Blocked by <code>HDTV.x264</code> adjacency (4):</strong></p>
+<p class="b">SYNCOPY group releases</p>
+<p>Examples: <code>Ghosts.2021.S05E20.720p.HDTV.x264-SYNCOPY</code>, <code>Law.and.Order.S25E21.720p.HDTV.x264-SYNCOPY</code></p>
+</div>
+</details>
+
+<details><summary>Safe Real-World Releases (109): formats that pass</summary>
+<div class="example">
+<p><strong><code>.WEB.h265</code> scene releases ✅</strong></p>
+<p class="o"><code>Project.Hail.Mary.2026.PROPER.HDR.2160p.WEB.h265-GRACE</code></p>
+</div>
+<div class="example">
+<p><strong><code>BluRay.x265</code> releases ✅</strong></p>
+<p class="o"><code>Blade.II.2002.1080p.BluRay.x265.10bit.EAC3.7.1.Celdra</code></p>
+<p class="o"><code>The.Boys.2019.S02.1080p.BluRay.x265.HEVC.10bit.AAC.5.1.Silence</code></p>
+</div>
+<div class="example">
+<p><strong><code>HEVC x265</code> releases (space-separated) ✅</strong></p>
+<p class="o"><code>The Boys S05E06 Though the Heavens Fall 1080p HEVC x265-MeGusta</code></p>
+<p class="o"><code>Crime 101 2026 1080p WEB Line HEVC x265 BONE</code></p>
+</div>
+<div class="example">
+<p><strong>TELESYNC / HDTS releases ✅</strong></p>
+<p class="o"><code>Michael.2026.1080p.HDTS.h265.Dual.YG⭐</code></p>
+<p class="o"><code>The.Devil.Wears.Prada.2.2026.1080p.Telesync.h265.Latino.YG</code></p>
+<p class="o"><code>Mortal.Kombat.II.2026.1080p.TELESYNC.LiTE.x264.ENG.HIN.TAM.TEL-EaZy</code></p>
+</div>
+<div class="example">
+<p><strong>DCP releases ✅</strong></p>
+<p class="o"><code>Hoppers 2026 1080p DCP Line Audio H264-DJT</code></p>
+</div>
+<div class="example">
+<p><strong>WEB.Line.H264 (Line breaks adjacency) ✅</strong></p>
+<p class="o"><code>Project Hail Mary 2026 1080p WEB Line AC3 H264-DJT</code></p>
+</div>
+<div class="example">
+<p><strong>[BluRay] bracket style ✅</strong></p>
+<p class="o"><code>The Devil Wears Prada (2006) [REPACK] [1080p] [BluRay] [5.1]</code></p>
+</div>
+<div class="example">
+<p><strong>x265-only releases ✅</strong></p>
+<p class="o"><code>The.Boys.S05E07.1080p.x265-ELiTE</code></p>
+<p class="o"><code>Chicago Med S11E21 1080p x265-ELiTE</code></p>
+</div>
+</details>
+</div>
+
+<h2>Confirmed Safe: Exhaustive List</h2>
+<div class="grid">
+<div class="safe"><h4>Source Tags (standalone)</h4><code>BluRay</code> <code>Blu-Ray</code> <code>BD</code> <code>HDTV</code> <code>WEB</code> <code>REMUX</code> <code>CAM</code> <code>TS</code> <code>HDTS</code> <code>PDTV</code> <code>HDCAM</code> <code>TELESYNC</code> <code>Telesync</code> <code>TELECINE</code> <code>SCREENER</code> <code>DVDScr</code> <code>DCP</code> <code>R5</code> <code>WORKPRINT</code> <code>WEBCAP</code> <code>VODRip</code> <code>BRRip</code> <code>PPVRip</code> <code>TVRip</code> <code>SATRip</code> <code>VHSRip</code> <code>DSRip</code> <code>DTHRip</code> <code>DVBRip</code> <code>HDTVRip</code> <code>DTVRip</code> <code>LDRip</code> <code>COMPLETE.BLURAY</code> <code>BDRemux</code> <code>MA</code></div>
+
+<div class="safe"><h4>Codecs (standalone)</h4><code>x264</code> <code>x265</code> <code>H.264</code> <code>H.265</code> <code>h264</code> <code>h265</code> <code>H264</code> <code>H265</code> <code>HEVC</code> <code>AVC</code> <code>AV1</code> <code>DivX</code> <code>XviD</code> <code>MPEG4</code> <code>Hi10P</code></div>
+
+<div class="safe"><h4>Resolutions</h4><code>480p</code> <code>540p</code> <code>576p</code> <code>720p</code> <code>1080p</code> <code>1080i</code> <code>2160p</code> <code>4K</code> <code>UHD</code></div>
+
+<div class="safe"><h4>Audio</h4><code>AAC</code> <code>AAC2.0</code> <code>AAC5.1</code> <code>AC3</code> <code>AC-3</code> <code>EAC3</code> <code>DTS</code> <code>DTS-HD.MA</code> <code>DD5.1</code> <code>DDP5.1</code> <code>DDP2.0</code> <code>Atmos</code> <code>TrueHD</code> <code>FLAC</code> <code>LPCM</code> <code>PCM</code> <code>Opus</code> <code>OGG</code> <code>Line</code> <code>Line.Audio</code> <code>Line.AC3</code></div>
+
+<div class="safe"><h4>Channel Counts</h4><code>5.1</code> <code>7.1</code> <code>2.0</code> <code>6CH</code> <code>2CH</code> <code>8CH</code></div>
+
+<div class="safe"><h4>Release Groups (60+ tested)</h4><code>GRACE</code> <code>ETHEL</code> <code>EDITH</code> <code>FLUX</code> <code>NTb</code> <code>SYNCOPY</code> <code>MeGusta</code> <code>ELiTE</code> <code>mSD</code> <code>LESS</code> <code>KiNGS</code> <code>Rapta</code> <code>NeoNoir</code> <code>SyncUP</code> <code>HiggsBoson</code> <code>SYLiX</code> <code>RAWR</code> <code>DJT</code> <code>DH</code> <code>BONE</code> <code>Kitsune</code> <code>SCOPE</code> <code>BTM</code> <code>RDNYB</code> <code>BYNDR</code> <code>playWEB</code> <code>TheMrG</code> <code>SupaCvnt</code> <code>YIFY</code> <code>YTS</code> <code>RARBG</code> <code>FGT</code> <code>EVO</code> <code>SPARKS</code> <code>CMRG</code> <code>DiRT</code> <code>SOMBRA</code> + anime groups</div>
+
+<div class="safe"><h4>Streaming Services</h4><code>AMZN</code> <code>NF</code> <code>DSNP</code> <code>HMAX</code> <code>ATVP</code> <code>PCOK</code> <code>PMTP</code> <code>PMNTP</code> <code>HULU</code> <code>CR</code> <code>BILI</code> <code>IQIYI</code> <code>iT</code> <code>MA</code> <code>TEN</code> <code>HIDIVE</code> <code>FUNI</code> <code>STAN</code> <code>ROKU</code> <code>SHO</code> <code>STARZ</code> <code>MAX</code> <code>TUBI</code></div>
+
+<div class="safe"><h4>Scene Modifiers</h4><code>iNTERNAL</code> <code>RETAiL</code> <code>PROPER</code> <code>REPACK</code> <code>REPACK2</code> <code>RERIP</code> <code>LiTE</code> <code>V2</code> <code>DIRFIX</code> <code>NFOFIX</code> <code>LIMITED</code> <code>UNRATED</code> <code>EXTENDED</code> <code>DIRECTORS.CUT</code> <code>REMASTERED</code> <code>CRITERION</code> <code>READNFO</code> <code>CONVERT</code> <code>THEATRICAL</code> <code>Early.Release</code> <code>[LEAK]</code> <code>[TGx]</code></div>
+
+<div class="safe"><h4>Languages</h4><code>GERMAN</code> <code>FRENCH</code> <code>SPANiSH</code> <code>iTALiAN</code> <code>DUTCH</code> <code>KOREAN</code> <code>JAPANESE</code> <code>CHINESE</code> <code>RUSSiAN</code> <code>ENGLiSH</code> <code>Latino</code> <code>MULTi</code> <code>DUAL</code> <code>Dual</code> <code>ENG</code> <code>HIN</code> <code>TAM</code> <code>TEL</code></div>
+
+<div class="safe"><h4>Quality / Bit Depth / HDR</h4><code>HDR</code> <code>HDR10</code> <code>HDR10+</code> <code>DV</code> <code>DoVi</code> <code>10bit</code> <code>10Bit</code> <code>10bits</code> <code>10BIT</code> <code>8bit</code> <code>IMAX</code> <code>Lossless</code></div>
+
+<div class="safe"><h4>Episode / Season / Misc</h4><code>S01E01</code> <code>Season.1</code> <code>COMPLETE</code> <code>Batch</code> <code>sample</code> <code>Trailer</code> <code>Uncensored</code> <code>SUBBED</code> <code>DUBBED</code> <code>Multi-Subs</code> <code>Dual-Audio</code></div>
+
+<div class="safe"><h4>Special Characters</h4><code>YG⭐</code> (emoji OK) <code>€lon_EaZy</code> (currency symbol OK)</div>
+</div>
+
+<div class="note">
+<strong>Note:</strong> There is also a separate <strong>content-level block</strong> that operates post-upload. RD identifies known copyrighted releases (likely via info hash or content fingerprinting) and silently deletes the torrent. This manifests as <code>unknown_ressource</code> (404) when polling. Content-level blocks <strong>cannot</strong> be bypassed via filename changes.
+</div>
+
+
+</body></html>
