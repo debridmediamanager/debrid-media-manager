@@ -28,6 +28,7 @@ import {
 	checkDatabaseAvailabilityTb,
 } from '@/utils/instantChecks';
 import { quickSearch } from '@/utils/quickSearch';
+import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { sortByMedian } from '@/utils/results';
 import { buildSeasonRegex } from '@/utils/seasonFilter';
 import { isVideo } from '@/utils/selectable';
@@ -96,6 +97,15 @@ const TvSearch: FunctionComponent = () => {
 		defaultEpisodeSize
 	);
 	const onlyTrustedTorrents = getLocalStorageBoolean('settings:onlyTrustedTorrents', false);
+	const hideRdBlockedTorrents = (() => {
+		if (typeof localStorage === 'undefined') return false;
+		const stored = localStorage.getItem('settings:hideRdBlockedTorrents');
+		if (stored !== null) return stored === 'true';
+		const hasRd = !!localStorage.getItem('rd:accessToken');
+		const hasAd = !!localStorage.getItem('ad:apiKey');
+		const hasTb = !!localStorage.getItem('tb:apiKey');
+		return hasRd && !hasAd && !hasTb;
+	})();
 	const storedTorrentsFilter = useMemo(
 		() => getLocalStorageItemOrDefault('settings:defaultTorrentsFilter', defaultFilterSetting),
 		[]
@@ -541,8 +551,12 @@ const TvSearch: FunctionComponent = () => {
 		if (searchResults.length === 0) {
 			return [];
 		}
-		return quickSearch(query, searchResults);
-	}, [query, searchResults]);
+		let results = quickSearch(query, searchResults);
+		if (hideRdBlockedTorrents) {
+			results = results.filter((r) => !isRdBlockedFilename(r.title));
+		}
+		return results;
+	}, [query, searchResults, hideRdBlockedTorrents]);
 
 	const totalUncachedCount = useMemo(() => {
 		return filteredResults.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)

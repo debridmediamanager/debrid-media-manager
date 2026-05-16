@@ -10,6 +10,7 @@ import {
 	defaultAvailabilityCheckLimit,
 	defaultDownloadMagnets,
 	defaultEpisodeSize,
+	defaultHideRdBlockedTorrents,
 	defaultMagnetHandlerEnabled,
 	defaultMovieSize,
 	defaultMovieYearFilter,
@@ -111,6 +112,15 @@ export const SettingsSection = () => {
 	const [hideCastOption, setHideCastOption] = useState(() =>
 		getLocalStorageBoolean('settings:hideCastOption', false)
 	);
+	const [hideRdBlockedTorrents, setHideRdBlockedTorrents] = useState(() => {
+		if (typeof localStorage === 'undefined') return defaultHideRdBlockedTorrents;
+		const stored = localStorage.getItem('settings:hideRdBlockedTorrents');
+		if (stored !== null) return stored === 'true';
+		const hasRd = !!localStorage.getItem('rd:accessToken');
+		const hasAd = !!localStorage.getItem('ad:apiKey');
+		const hasTb = !!localStorage.getItem('tb:apiKey');
+		return hasRd && !hasAd && !hasTb;
+	});
 
 	const handlePlayerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const value = e.target.value;
@@ -231,6 +241,13 @@ export const SettingsSection = () => {
 		setOnlyTrustedTorrents(checked);
 		if (typeof localStorage !== 'undefined')
 			localStorage.setItem('settings:onlyTrustedTorrents', String(checked));
+	};
+
+	const handleHideRdBlockedTorrentsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const checked = e.target.checked;
+		setHideRdBlockedTorrents(checked);
+		if (typeof localStorage !== 'undefined')
+			localStorage.setItem('settings:hideRdBlockedTorrents', String(checked));
 	};
 
 	const handleMovieYearFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -607,6 +624,35 @@ export const SettingsSection = () => {
 										onChange={handleTrustedTorrentsChange}
 									/>
 									<label className="font-semibold">Only trusted torrents</label>
+								</div>
+
+								<div className="flex flex-col gap-1">
+									<div className="flex items-center gap-2">
+										<input
+											id="dmm-hide-rd-blocked-torrents"
+											type="checkbox"
+											className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+											checked={hideRdBlockedTorrents}
+											onChange={handleHideRdBlockedTorrentsChange}
+										/>
+										<label
+											htmlFor="dmm-hide-rd-blocked-torrents"
+											className="font-semibold"
+										>
+											Hide Real-Debrid blocked torrents
+										</label>
+									</div>
+									<p className="mt-1 text-xs text-gray-400">
+										Hide torrents with filenames that Real-Debrid blocks (e.g.
+										WEB-DL, WEBRip, BluRay.x264).{' '}
+										<a
+											href="/rd-filename-filters.html"
+											target="_blank"
+											className="text-blue-400 hover:underline"
+										>
+											Learn more
+										</a>
+									</p>
 								</div>
 
 								<div className="flex flex-col gap-1">

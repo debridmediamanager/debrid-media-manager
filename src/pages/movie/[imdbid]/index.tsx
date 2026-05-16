@@ -23,6 +23,7 @@ import {
 } from '@/utils/instantChecks';
 import { formatReleaseDate } from '@/utils/movieReleaseDates';
 import { quickSearch } from '@/utils/quickSearch';
+import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { sortByBiggest } from '@/utils/results';
 import { isVideo } from '@/utils/selectable';
 import {
@@ -100,6 +101,15 @@ const MovieSearch: FunctionComponent = () => {
 	const player = getLocalStorageItemOrDefault('settings:player', defaultPlayer);
 	const movieMaxSize = getLocalStorageItemOrDefault('settings:movieMaxSize', defaultMovieSize);
 	const onlyTrustedTorrents = getLocalStorageBoolean('settings:onlyTrustedTorrents', false);
+	const hideRdBlockedTorrents = (() => {
+		if (typeof localStorage === 'undefined') return false;
+		const stored = localStorage.getItem('settings:hideRdBlockedTorrents');
+		if (stored !== null) return stored === 'true';
+		const hasRd = !!localStorage.getItem('rd:accessToken');
+		const hasAd = !!localStorage.getItem('ad:apiKey');
+		const hasTb = !!localStorage.getItem('tb:apiKey');
+		return hasRd && !hasAd && !hasTb;
+	})();
 	const defaultTorrentsFilter = getLocalStorageItemOrDefault(
 		'settings:defaultTorrentsFilter',
 		defaultFilterSetting
@@ -535,8 +545,12 @@ const MovieSearch: FunctionComponent = () => {
 		if (searchResults.length === 0) {
 			return [];
 		}
-		return quickSearch(query, searchResults);
-	}, [query, searchResults]);
+		let results = quickSearch(query, searchResults);
+		if (hideRdBlockedTorrents) {
+			results = results.filter((r) => !isRdBlockedFilename(r.title));
+		}
+		return results;
+	}, [query, searchResults, hideRdBlockedTorrents]);
 
 	const totalUncachedCount = useMemo(() => {
 		return filteredResults.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
