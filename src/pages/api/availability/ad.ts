@@ -92,11 +92,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return res.status(400).json({ error: 'Files must be a non-empty array' });
 		}
 
-		// Validate file structure (n, s, l fields)
+		// Validate file structure (n and s required, l is optional)
 		for (const file of files) {
-			if (!file.n || !file.s || !file.l) {
+			if (!file.n || !file.s) {
 				return res.status(400).json({
-					error: 'Invalid file structure. Each file must have n (name), s (size), and l (link)',
+					error: 'Invalid file structure. Each file must have n (name) and s (size)',
 				});
 			}
 		}

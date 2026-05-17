@@ -273,7 +273,7 @@ describe('/api/availability/ad', () => {
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
-			error: 'Invalid file structure. Each file must have n (name), s (size), and l (link)',
+			error: 'Invalid file structure. Each file must have n (name) and s (size)',
 		});
 	});
 
@@ -288,11 +288,11 @@ describe('/api/availability/ad', () => {
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
-			error: 'Invalid file structure. Each file must have n (name), s (size), and l (link)',
+			error: 'Invalid file structure. Each file must have n (name) and s (size)',
 		});
 	});
 
-	it('returns 400 when file is missing l field', async () => {
+	it('returns 200 when file is missing l field', async () => {
 		const req = createMockRequest({
 			method: 'POST',
 			body: buildBody({ files: [{ n: 'file.mkv', s: 100 }] }),
@@ -301,10 +301,8 @@ describe('/api/availability/ad', () => {
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({
-			error: 'Invalid file structure. Each file must have n (name), s (size), and l (link)',
-		});
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ success: true });
 	});
 
 	it('returns 200 with success:true on valid request', async () => {
