@@ -1,6 +1,7 @@
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { isLegacyToken } from '@/utils/castApiHelpers';
+import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import {
 	extractStreamMetadata,
 	formatStremioStreamTitle,
@@ -97,9 +98,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			),
 		]);
 
+		const filteredUserCastItems = userCastItems.filter(
+			(item) => !isRdBlockedFilename(item.filename)
+		);
+		const filteredOtherItems = otherItems.filter((item) => !isRdBlockedFilename(item.filename));
+
 		const allHashes = [
-			...userCastItems.map((item) => item.hash),
-			...otherItems.map((item) => item.hash),
+			...filteredUserCastItems.map((item) => item.hash),
+			...filteredOtherItems.map((item) => item.hash),
 		];
 		const uniqueHashes = Array.from(new Set(allHashes));
 
@@ -107,13 +113,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const snapshotMap = new Map(snapshots.map((s) => [s.hash, s]));
 
 		console.log('[Stremio Stream] Metadata enrichment stats:', {
-			totalStreams: userCastItems.length + otherItems.length,
+			totalStreams: filteredUserCastItems.length + filteredOtherItems.length,
 			uniqueHashes: uniqueHashes.length,
 			snapshotsFound: snapshots.length,
 			hitRate: `${((snapshots.length / uniqueHashes.length) * 100).toFixed(1)}%`,
 		});
 
-		for (const item of userCastItems) {
+		for (const item of filteredUserCastItems) {
 			const snapshot = snapshotMap.get(item.hash);
 			const metadata = snapshot ? extractStreamMetadata(snapshot.payload) : null;
 			const title = formatStremioStreamTitle(
@@ -136,8 +142,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			} as any);
 		}
 
-		for (let i = 0; i < otherItems.length; i++) {
-			const item = otherItems[i];
+		for (let i = 0; i < filteredOtherItems.length; i++) {
+			const item = filteredOtherItems[i];
 			const snapshot = snapshotMap.get(item.hash);
 			const metadata = snapshot ? extractStreamMetadata(snapshot.payload) : null;
 			const title = formatStremioStreamTitle(
