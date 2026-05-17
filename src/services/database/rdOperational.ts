@@ -109,8 +109,7 @@ export class RdOperationalService extends DatabaseClient {
 	public async recordOperation(operation: RealDebridOperation, status: number): Promise<void> {
 		const hour = getHourStart();
 		const isSuccess = status >= 200 && status < 300;
-		// 5xx are server errors; 451 is RD-side legal takedown, not a client mistake
-		const isFailure = (status >= 500 && status < 600) || status === 451;
+		const isFailure = status >= 500 && status < 600;
 		const isOther = !isSuccess && !isFailure;
 
 		try {

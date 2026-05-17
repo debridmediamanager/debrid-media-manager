@@ -46,6 +46,15 @@ const CACHE_BACKOFF_TIME = 6000; // Slightly longer than the service worker cach
 let globalRequestQueue: Promise<void> = Promise.resolve();
 let globalLastRequestTime = 0;
 
+// Track recent 429s to detect when RD is rate-limiting.
+// When rate-limiting is active, other errors like "infringing_file" may be false positives.
+const RATE_LIMIT_WINDOW_MS = 3 * 60 * 1000; // 3 minutes
+let lastRd429Timestamp = 0;
+
+export function hasRecentRd429s(): boolean {
+	return Date.now() - lastRd429Timestamp < RATE_LIMIT_WINDOW_MS;
+}
+
 // Shared rate limiting function that serializes all requests
 async function enforceRateLimit(): Promise<void> {
 	// Chain onto the global queue to ensure serialization
@@ -166,6 +175,9 @@ realDebridAxios.interceptors.response.use(
 		const delay = calculateRetryDelay(originalConfig.__retryCount);
 
 		const errorType = error.response?.status === 429 ? 'rate limit' : 'server';
+		if (error.response?.status === 429) {
+			lastRd429Timestamp = Date.now();
+		}
 		console.log(
 			`RealDebrid API request failed with ${error.response?.status} ${errorType} error. Retrying (attempt ${originalConfig.__retryCount}/7) after ${Math.round(delay)}ms delay...`
 		);

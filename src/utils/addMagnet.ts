@@ -13,6 +13,7 @@ import {
 	addHashAsMagnet,
 	addTorrentFile,
 	getTorrentInfo,
+	hasRecentRd429s,
 	selectFiles,
 } from '@/services/realDebrid';
 import {
@@ -107,7 +108,7 @@ export const handleAddAsMagnetInRd = async (
 			error instanceof Error ? error.message : 'Unknown error'
 		);
 		toast.error(rdError ? `RD error: ${rdError}` : 'Failed to add hash.', magnetToastOptions);
-		if (rdError === 'infringing_file') return 'infringing_file';
+		if (rdError === 'infringing_file' && !hasRecentRd429s()) return 'infringing_file';
 		return 'error';
 	}
 };
