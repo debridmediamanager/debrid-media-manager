@@ -6,14 +6,13 @@ export async function handleChangeType(
 	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
 	torrentDB: UserTorrentDB
 ) {
-	t.mediaType = t.mediaType === 'movie' ? 'tv' : t.mediaType === 'tv' ? 'other' : 'movie';
+	const mediaType: UserTorrent['mediaType'] =
+		t.mediaType === 'movie' ? 'tv' : t.mediaType === 'tv' ? 'other' : 'movie';
+	const updatedTorrent = { ...t, mediaType };
+
 	setUserTorrentsList((prev) => {
-		const newList = [...prev];
-		const idx = prev.findIndex((i) => i.id === t.id);
-		if (idx >= 0) {
-			newList[idx].mediaType = t.mediaType;
-		}
-		return newList;
+		return prev.map((torrent) => (torrent.id === t.id ? { ...torrent, mediaType } : torrent));
 	});
-	await torrentDB.add(t);
+	await torrentDB.add(updatedTorrent);
+	return updatedTorrent;
 }

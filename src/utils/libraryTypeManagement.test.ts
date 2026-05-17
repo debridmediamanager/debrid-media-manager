@@ -30,10 +30,13 @@ describe('handleChangeType', () => {
 		};
 		const addMock = vi.fn();
 
-		await handleChangeType(torrent, setUserTorrentsList, { add: addMock } as any);
+		const updatedTorrent = await handleChangeType(torrent, setUserTorrentsList, {
+			add: addMock,
+		} as any);
 
-		expect(torrent.mediaType).toBe('tv');
+		expect(torrent.mediaType).toBe('movie');
+		expect(updatedTorrent.mediaType).toBe('tv');
 		expect(updatedList?.[0].mediaType).toBe('tv');
-		expect(addMock).toHaveBeenCalledWith(torrent);
+		expect(addMock).toHaveBeenCalledWith(updatedTorrent);
 	});
 });

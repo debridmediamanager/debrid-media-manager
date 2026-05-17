@@ -31,6 +31,17 @@ const torrentSnapshotReplacer = (_key: string, value: unknown) => {
 const buildTorrentSignature = (torrent: UserTorrent): string =>
 	JSON.stringify(torrent, torrentSnapshotReplacer);
 
+const upsertTorrentById = (torrents: UserTorrent[], torrent: UserTorrent): UserTorrent[] => {
+	const existingIndex = torrents.findIndex((item) => item.id === torrent.id);
+	if (existingIndex === -1) {
+		return [...torrents, torrent];
+	}
+
+	const next = torrents.slice();
+	next[existingIndex] = torrent;
+	return next;
+};
+
 const normalizeToken = (token: string | null | undefined): string | null => {
 	if (typeof token !== 'string') {
 		return null;
@@ -676,17 +687,17 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 
 	// Individual item operations
 	const addTorrent = (torrent: UserTorrent) => {
-		setLibraryItems((prev) => [...prev, torrent]);
+		setLibraryItems((prev) => upsertTorrentById(prev, torrent));
 		// Adapt to current DB API
 		torrentDB.add(torrent);
 
 		// Add to service-specific library
 		if (torrent.id.startsWith('rd:')) {
-			setRdLibrary((prev) => [...prev, torrent]);
+			setRdLibrary((prev) => upsertTorrentById(prev, torrent));
 		} else if (torrent.id.startsWith('ad:')) {
-			setAdLibrary((prev) => [...prev, torrent]);
+			setAdLibrary((prev) => upsertTorrentById(prev, torrent));
 		} else if (torrent.id.startsWith('tb:')) {
-			setTbLibrary((prev) => [...prev, torrent]);
+			setTbLibrary((prev) => upsertTorrentById(prev, torrent));
 		}
 	};
 
@@ -744,7 +755,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		}
 
 		// Update in database
-		const torrent = libraryItems.find((t) => t.id === torrentId);
+		const torrent = [...rdLibrary, ...adLibrary, ...tbLibrary].find((t) => t.id === torrentId);
 		if (torrent) {
 			// No explicit update method; re-add to replace existing
 			torrentDB.add({ ...torrent, ...updates });

@@ -52,6 +52,12 @@ import Modal from '../components/modals/modal';
 
 const ITEMS_PER_PAGE = 100;
 
+const getValidPage = (page: string | string[] | undefined) => {
+	const rawPage = Array.isArray(page) ? page[0] : page;
+	const parsedPage = rawPage ? Number.parseInt(rawPage, 10) : 1;
+	return Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1;
+};
+
 interface SortBy {
 	column: 'id' | 'filename' | 'title' | 'bytes' | 'progress' | 'status' | 'added';
 	direction: 'asc' | 'desc';
@@ -317,26 +323,29 @@ function TorrentsPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query.addMagnet]);
 
+	const maxPages = useMemo(
+		() => Math.max(1, Math.ceil(filteredList.length / ITEMS_PER_PAGE)),
+		[filteredList.length]
+	);
+
 	const handlePrevPage = useCallback(() => {
-		if (router.query.page === '1') return;
+		if (currentPage <= 1) return;
 		router.push({
 			query: { ...router.query, page: currentPage - 1 },
 		});
 	}, [currentPage, router]);
 
 	const handleNextPage = useCallback(() => {
+		if (currentPage >= maxPages) return;
 		router.push({
 			query: { ...router.query, page: currentPage + 1 },
 		});
-	}, [currentPage, router]);
+	}, [currentPage, maxPages, router]);
 
 	// pagination query params
 	useEffect(() => {
-		const { page } = router.query;
-		if (!page || Array.isArray(page)) return;
-		setCurrentPage(parseInt(page, 10));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router]);
+		setCurrentPage(getValidPage(router.query.page));
+	}, [router.query.page]);
 
 	// pressing arrow keys to navigate
 	useEffect(() => {
@@ -564,6 +573,19 @@ function TorrentsPage() {
 			(currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
 		);
 	}, [sortedData, currentPage]);
+
+	useEffect(() => {
+		if (!router.isReady || loading || grouping || currentPage <= maxPages) return;
+		setCurrentPage(maxPages);
+		router.replace(
+			{
+				pathname: router.pathname,
+				query: { ...router.query, page: maxPages },
+			},
+			undefined,
+			{ shallow: true }
+		);
+	}, [currentPage, grouping, loading, maxPages, router]);
 
 	const relevantList = selectedTorrents.size
 		? userTorrentsList.filter((t) => selectedTorrents.has(t.id))
@@ -1774,7 +1796,7 @@ function TorrentsPage() {
 					</div>
 					<LibraryMenuButtons
 						currentPage={currentPage}
-						maxPages={Math.ceil(sortedData.length / ITEMS_PER_PAGE)}
+						maxPages={maxPages}
 						onPrevPage={handlePrevPage}
 						onNextPage={handleNextPage}
 						onResetFilters={resetFilters}
@@ -1932,9 +1954,6 @@ function TorrentsPage() {
 													}
 												}}
 												onTypeChange={(t) => {
-													// Update in cache optimistically
-													updateInCache(t.id, { mediaType: t.mediaType });
-													// Also update in database
 													handleChangeType(
 														t,
 														setUserTorrentsList,

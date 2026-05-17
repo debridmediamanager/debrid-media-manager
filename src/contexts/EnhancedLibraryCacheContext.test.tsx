@@ -384,4 +384,23 @@ describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 
 		hook.unmount();
 	});
+
+	it('upserts manually added torrents instead of duplicating service entries', async () => {
+		const { result } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+
+		await waitFor(() => expect(result.current.syncStatus.isLoading).toBe(false));
+
+		const original = buildTorrent('rd:manual');
+		const updated = { ...original, title: 'updated title' };
+
+		act(() => {
+			result.current.addTorrent(original);
+			result.current.addTorrent(updated);
+		});
+
+		await waitFor(() => expect(result.current.rdLibrary).toHaveLength(1));
+		expect(result.current.libraryItems).toHaveLength(1);
+		expect(result.current.rdLibrary[0]?.title).toBe('updated title');
+		expect(result.current.libraryItems[0]?.title).toBe('updated title');
+	});
 });
