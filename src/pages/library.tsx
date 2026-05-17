@@ -1211,7 +1211,9 @@ function TorrentsPage() {
 	}
 
 	async function wrapLocalRestoreFn(debridService: string) {
-		const allHashes = new Set(userTorrentsList.map((t) => t.hash));
+		const serviceHashes = new Set(
+			userTorrentsList.filter((t) => t.id.startsWith(`${debridService}:`)).map((t) => t.hash)
+		);
 
 		const result = await Modal.fire({
 			title: `Restore to your ${debridService.toUpperCase()} library`,
@@ -1234,7 +1236,7 @@ function TorrentsPage() {
 					/>
 					<div id="restore-stats" class="mt-4 text-sm text-gray-400 hidden">
 						<p>Total hashes: <strong id="restore-total" class="text-gray-200">0</strong></p>
-						<p>Already in library (will be skipped): <strong id="restore-skipped" class="text-yellow-400">0</strong></p>
+						<p>Already in ${debridService.toUpperCase()} library (will be skipped): <strong id="restore-skipped" class="text-yellow-400">0</strong></p>
 						<p>New hashes to restore: <strong id="restore-new" class="text-green-400">0</strong></p>
 					</div>
 					${
@@ -1244,6 +1246,7 @@ function TorrentsPage() {
 						<input type="checkbox" id="tb-cached-only" checked
 							class="w-4 h-4 rounded accent-cyan-500" />
 						Only restore cached (available) items
+						<span id="cached-status" class="text-gray-500 text-xs"></span>
 					</label>
 					`
 							: ''
@@ -1258,19 +1261,82 @@ function TorrentsPage() {
 					const file = fileInput.files?.[0];
 					if (!file) return;
 					const reader = new FileReader();
-					reader.onload = (evt) => {
+					reader.onload = async (evt) => {
 						try {
 							const files: { hash: string }[] = JSON.parse(
 								evt.target?.result as string
 							);
 							const total = files.length;
-							const skipped = files.filter((f) => allHashes.has(f.hash)).length;
+							const skipped = files.filter((f) => serviceHashes.has(f.hash)).length;
 							const newCount = total - skipped;
 							document.getElementById('restore-stats')?.classList.remove('hidden');
 							document.getElementById('restore-total')!.textContent = String(total);
 							document.getElementById('restore-skipped')!.textContent =
 								String(skipped);
 							document.getElementById('restore-new')!.textContent = String(newCount);
+
+							const newHashes = files
+								.map((f) => f.hash)
+								.filter((h) => !serviceHashes.has(h));
+							if (newHashes.length === 0) return;
+
+							if (
+								(debridService === 'tb' && tbKey) ||
+								(debridService === 'rd' && rdKey)
+							) {
+								const statusEl = document.getElementById('cached-status');
+								if (statusEl) statusEl.textContent = '(checking availability...)';
+
+								try {
+									let cachedCount = 0;
+									if (debridService === 'rd' && rdKey) {
+										const { checkAvailabilityByHashes } = await import(
+											'@/utils/availability'
+										);
+										const availableSet = new Set<string>();
+										for (let i = 0; i < newHashes.length; i += 100) {
+											const batch = newHashes.slice(i, i + 100);
+											const resp = await checkAvailabilityByHashes(
+												'',
+												'',
+												batch
+											);
+											if (resp?.available) {
+												resp.available.forEach((t: { hash: string }) =>
+													availableSet.add(t.hash)
+												);
+											}
+										}
+										cachedCount = availableSet.size;
+									} else if (debridService === 'tb' && tbKey) {
+										const { checkCachedStatus } = await import(
+											'@/services/torbox'
+										);
+										const availableSet = new Set<string>();
+										for (let i = 0; i < newHashes.length; i += 100) {
+											const batch = newHashes.slice(i, i + 100);
+											const resp = await checkCachedStatus(
+												{ hash: batch, format: 'object' },
+												tbKey
+											);
+											if (resp?.data) {
+												Object.entries(resp.data).forEach(
+													([hash, data]: [string, any]) => {
+														if (data) availableSet.add(hash);
+													}
+												);
+											}
+										}
+										cachedCount = availableSet.size;
+									}
+									const uncachedCount = newHashes.length - cachedCount;
+									if (statusEl)
+										statusEl.textContent = `(${cachedCount} cached, ${uncachedCount} uncached)`;
+								} catch {
+									const statusEl = document.getElementById('cached-status');
+									if (statusEl) statusEl.textContent = '(check failed)';
+								}
+							}
 						} catch {
 							document.getElementById('restore-stats')?.classList.remove('hidden');
 							document.getElementById('restore-total')!.textContent = 'Invalid file';
@@ -1333,7 +1399,7 @@ function TorrentsPage() {
 			async (resolve) => {
 				toast.loading('Restoring... do not refresh.', libraryToastOptions);
 
-				const newHashes = files.map((f) => f.hash).filter((h) => !allHashes.has(h));
+				const newHashes = files.map((f) => f.hash).filter((h) => !serviceHashes.has(h));
 
 				if (newHashes.length === 0) {
 					resolve({ success: 0, error: 0 });
