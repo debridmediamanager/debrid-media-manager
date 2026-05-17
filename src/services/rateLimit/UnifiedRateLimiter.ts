@@ -53,12 +53,12 @@ export class UnifiedRateLimiter {
 		});
 
 		this.configs.set('torbox', {
-			maxRequestsPerMinute: 500,
-			maxConcurrent: 8,
-			retryAttempts: 10,
+			maxRequestsPerMinute: 250,
+			maxConcurrent: 4,
+			retryAttempts: 3,
 			backoffMultiplier: 2,
 			jitterRange: 0.2,
-			burstSize: 20,
+			burstSize: 10,
 		});
 
 		// Initialize structures for each service
@@ -373,8 +373,8 @@ export class UnifiedRateLimiter {
 			}
 		}
 
-		// Default to 60 seconds if no header found
-		return 60000;
+		// Default to 300 seconds (TorBox recovery window)
+		return 300000;
 	}
 
 	private sleep(ms: number): Promise<void> {

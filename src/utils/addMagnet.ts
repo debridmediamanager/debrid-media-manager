@@ -63,6 +63,7 @@ const MAX_509_RETRIES = 5;
 // Each hash requires addMagnet + selectFiles (2 calls), so 500ms between hashes
 // keeps us well under the burst budget.
 const BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 500;
+const TB_BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 1000;
 
 export type RdAddResult = 'success' | 'infringing_file' | 'error';
 
@@ -532,9 +533,10 @@ export const handleAddMultipleHashesInTb = async (
 ) => {
 	let errorCount = 0;
 	let rateLimited = false;
-	for (const hash of hashes) {
+	for (let i = 0; i < hashes.length; i++) {
+		if (i > 0) await delay(TB_BATCH_MAGNET_DELAY);
 		try {
-			await handleAddAsMagnetInTb(tbKey, hash);
+			await handleAddAsMagnetInTb(tbKey, hashes[i]);
 		} catch (error) {
 			errorCount++;
 			console.error(
@@ -576,9 +578,10 @@ export const handleAddMultipleTorrentFilesInTb = async (
 	let success = 0;
 	let errors = 0;
 	let rateLimited = false;
-	for (const file of files) {
+	for (let i = 0; i < files.length; i++) {
+		if (i > 0) await delay(TB_BATCH_MAGNET_DELAY);
 		try {
-			const resp = await createTorrent(tbKey, { file });
+			const resp = await createTorrent(tbKey, { file: files[i] });
 			const id = resp?.data?.torrent_id ?? resp?.data?.queued_id;
 			if (!id) throw new Error('no_id_returned');
 			// Fetch info and convert to UserTorrent for cache/DB layers that may listen elsewhere

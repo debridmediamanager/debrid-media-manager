@@ -10,7 +10,7 @@ import { delay } from '@/utils/delay';
 import ptt from 'parse-torrent-title';
 
 const MAX_POLL_ATTEMPTS = 30;
-const POLL_INTERVAL_MS = 1000;
+const POLL_INTERVAL_MS = 2000;
 
 async function waitForTorrentReady(
 	apiKey: string,

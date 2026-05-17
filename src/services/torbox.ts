@@ -30,13 +30,24 @@ const config = (() => {
 
 // Constants
 const REQUEST_TIMEOUT = 10000;
-const MIN_REQUEST_INTERVAL = (60 * 1000) / 250; // 240ms between requests (matching RealDebrid)
 const BASE_URL = 'https://api.torbox.app';
 const API_VERSION = 'v1';
 
-// Global rate limiter for all TorBox API requests
-let globalRequestQueue: Promise<void> = Promise.resolve();
-let globalLastRequestTime = 0;
+// Per-endpoint rate budgets (requests per minute)
+const ENDPOINT_LIMITS: Record<string, number> = {
+	requestdl: 80,
+	createtorrent: 50,
+	default: 250,
+};
+
+const MAX_GLOBAL_CONCURRENT = 15;
+const DEFAULT_RETRY_AFTER_MS = 300_000; // 5 minutes
+
+// Rate limiting state
+let globalConcurrent = 0;
+let globalPausedUntil = 0;
+const endpointTimestamps: Record<string, number[]> = {};
+const concurrencyWaiters: Array<() => void> = [];
 
 // Custom error class for rate limiting
 export class TorBoxRateLimitError extends Error {
@@ -46,20 +57,57 @@ export class TorBoxRateLimitError extends Error {
 	}
 }
 
-// Shared rate limiting function that serializes all requests
-async function enforceRateLimit(): Promise<void> {
-	globalRequestQueue = globalRequestQueue.then(async () => {
-		const now = Date.now();
-		const timeSinceLastRequest = now - globalLastRequestTime;
+function getEndpointKey(url?: string): string {
+	if (!url) return 'default';
+	if (url.includes('/requestdl')) return 'requestdl';
+	if (url.includes('/createtorrent')) return 'createtorrent';
+	return 'default';
+}
 
-		if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
-			await delayWithMessageChannel(MIN_REQUEST_INTERVAL - timeSinceLastRequest);
-		}
+async function acquireConcurrencySlot(): Promise<void> {
+	while (globalConcurrent >= MAX_GLOBAL_CONCURRENT) {
+		await new Promise<void>((resolve) => concurrencyWaiters.push(resolve));
+	}
+	globalConcurrent++;
+}
 
-		globalLastRequestTime = Date.now();
-	});
+function releaseConcurrencySlot(): void {
+	globalConcurrent = Math.max(0, globalConcurrent - 1);
+	const waiter = concurrencyWaiters.shift();
+	if (waiter) waiter();
+}
 
-	await globalRequestQueue;
+async function enforceEndpointLimit(endpointKey: string): Promise<void> {
+	// Global pause from 429
+	const pauseRemaining = globalPausedUntil - Date.now();
+	if (pauseRemaining > 0) {
+		console.log(
+			`[TorBox] Global rate limit pause, waiting ${Math.round(pauseRemaining / 1000)}s`
+		);
+		await delayWithMessageChannel(pauseRemaining);
+	}
+
+	const limit = ENDPOINT_LIMITS[endpointKey] ?? ENDPOINT_LIMITS.default;
+	if (!endpointTimestamps[endpointKey]) endpointTimestamps[endpointKey] = [];
+	const timestamps = endpointTimestamps[endpointKey];
+
+	const now = Date.now();
+	const windowStart = now - 60_000;
+	// Prune old entries
+	while (timestamps.length > 0 && timestamps[0] < windowStart) timestamps.shift();
+
+	if (timestamps.length >= limit) {
+		const waitMs = timestamps[0] + 60_000 - now + Math.random() * 500;
+		console.log(
+			`[TorBox] ${endpointKey} rate limit (${timestamps.length}/${limit}/min), waiting ${Math.round(waitMs)}ms`
+		);
+		await delayWithMessageChannel(waitMs);
+		// Re-prune after waiting
+		const now2 = Date.now();
+		while (timestamps.length > 0 && timestamps[0] < now2 - 60_000) timestamps.shift();
+	}
+
+	timestamps.push(Date.now());
 }
 
 // Add a cache-aware ID generator to ensure unique cache entries for retries
@@ -68,27 +116,32 @@ function getUniqueRequestId() {
 	return `req-${Date.now()}-${requestCount++}`;
 }
 
-// Extend the Axios request config type to include our custom properties
 interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
 	__isRetryRequest?: boolean;
 	__retryCount?: number;
 	__torboxToken?: string;
 	__skipRetry?: boolean;
+	__endpointKey?: string;
+	__slotAcquired?: boolean;
 }
 
-// Helper function to calculate exponential backoff delay with jitter
-function calculateRetryDelay(retryCount: number): number {
-	// Base delay: 1s, doubled each attempt (1s, 2s, 4s, 8s, 16s)
+function calculateRetryDelay(retryCount: number, retryAfterMs?: number): number {
+	if (retryAfterMs && retryAfterMs > 0) {
+		return retryAfterMs + Math.random() * 5000;
+	}
 	const baseDelay = Math.pow(2, retryCount - 1) * 1000;
-
-	// Cap at 60s first
-	const cappedDelay = Math.min(baseDelay, 60000);
-
-	// Add ±20% jitter to prevent thundering herd
+	const cappedDelay = Math.min(baseDelay, DEFAULT_RETRY_AFTER_MS);
 	const jitterFactor = 0.8 + Math.random() * 0.4;
-	const delayWithJitter = cappedDelay * jitterFactor;
+	return cappedDelay * jitterFactor;
+}
 
-	return delayWithJitter;
+function parseRetryAfterMs(error: any): number | undefined {
+	const retryAfter = error.response?.headers?.['retry-after'];
+	if (retryAfter) {
+		const seconds = parseInt(retryAfter, 10);
+		if (!isNaN(seconds) && seconds > 0) return seconds * 1000;
+	}
+	return undefined;
 }
 
 function getProxyUrl(baseUrl: string): string {
@@ -112,11 +165,17 @@ const torBoxAxios = axios.create({
 	timeout: REQUEST_TIMEOUT,
 });
 
-// Add request interceptor for rate limiting and cache busting
 torBoxAxios.interceptors.request.use(async (config: ExtendedAxiosRequestConfig) => {
-	await enforceRateLimit();
+	const endpointKey = getEndpointKey(config.url);
+	config.__endpointKey = endpointKey;
 
-	// Add cache-busting parameter for retries to prevent hitting cached errors
+	if (!config.__slotAcquired) {
+		await acquireConcurrencySlot();
+		config.__slotAcquired = true;
+	}
+
+	await enforceEndpointLimit(endpointKey);
+
 	if (config.__isRetryRequest && config.url) {
 		const url = new URL(config.url, 'http://dummy-base.com');
 		url.searchParams.set('_cache_buster', getUniqueRequestId());
@@ -126,9 +185,15 @@ torBoxAxios.interceptors.request.use(async (config: ExtendedAxiosRequestConfig) 
 	return config;
 });
 
-// Add response interceptor for handling retries with exponential backoff
 torBoxAxios.interceptors.response.use(
-	(response) => response,
+	(response) => {
+		const cfg = response.config as ExtendedAxiosRequestConfig;
+		if (cfg.__slotAcquired) {
+			releaseConcurrencySlot();
+			cfg.__slotAcquired = false;
+		}
+		return response;
+	},
 	async (error) => {
 		const originalConfig = error.config as ExtendedAxiosRequestConfig;
 
@@ -136,11 +201,15 @@ torBoxAxios.interceptors.response.use(
 			return Promise.reject(error);
 		}
 
-		// Callers that want fast-fail behavior (e.g. the Stremio play endpoint's
-		// direct-lookup path, where TorBox's 500 for a foreign torrent_id is
-		// semantic rather than transient) set __skipRetry so the fallback path
-		// isn't delayed by minutes of exponential backoff.
+		const releaseSlot = () => {
+			if (originalConfig.__slotAcquired) {
+				releaseConcurrencySlot();
+				originalConfig.__slotAcquired = false;
+			}
+		};
+
 		if (originalConfig.__skipRetry) {
+			releaseSlot();
 			return Promise.reject(error);
 		}
 
@@ -148,34 +217,40 @@ torBoxAxios.interceptors.response.use(
 			originalConfig.__retryCount = 0;
 		}
 
-		// Max 7 retries (matching RealDebrid)
-		if (originalConfig.__retryCount >= 7) {
-			// If we exhausted retries due to rate limiting, throw a specific error
-			if (error.response?.status === 429) {
-				return Promise.reject(new TorBoxRateLimitError());
-			}
+		const status = error.response?.status;
+		const is429 = status === 429;
+		const maxRetries = is429 ? 3 : 7;
+
+		if (originalConfig.__retryCount >= maxRetries) {
+			releaseSlot();
+			if (is429) return Promise.reject(new TorBoxRateLimitError());
 			return Promise.reject(error);
 		}
 
-		// Retry on 5xx server errors OR 429 rate limit errors
-		const status = error.response?.status;
-		const shouldRetry = (status >= 500 && status < 600) || status === 429;
-
+		const shouldRetry = (status >= 500 && status < 600) || is429;
 		if (!shouldRetry) {
+			releaseSlot();
 			return Promise.reject(error);
 		}
 
 		originalConfig.__retryCount++;
 		originalConfig.__isRetryRequest = true;
 
-		const delay = calculateRetryDelay(originalConfig.__retryCount);
+		let retryAfterMs: number | undefined;
+		if (is429) {
+			retryAfterMs = parseRetryAfterMs(error) ?? DEFAULT_RETRY_AFTER_MS;
+			globalPausedUntil = Date.now() + retryAfterMs;
+		}
 
-		const errorType = error.response?.status === 429 ? 'rate limit' : 'server';
+		const retryDelay = calculateRetryDelay(originalConfig.__retryCount, retryAfterMs);
+		const errorType = is429 ? 'rate limit' : 'server';
 		console.log(
-			`TorBox API request failed with ${error.response?.status} ${errorType} error. Retrying (attempt ${originalConfig.__retryCount}/7) after ${Math.round(delay)}ms delay...`
+			`[TorBox] ${originalConfig.__endpointKey} ${status} ${errorType}. Retry ${originalConfig.__retryCount}/${maxRetries} after ${Math.round(retryDelay / 1000)}s`
 		);
 
-		await delayWithMessageChannel(delay);
+		// Release slot before waiting so other requests aren't blocked during the pause
+		releaseSlot();
+		await delayWithMessageChannel(retryDelay);
 
 		try {
 			return await torBoxAxios.request(originalConfig);
@@ -455,4 +530,36 @@ export const getStats = async (): Promise<TorBoxResponse<any>> => {
 		console.error('Error getting stats:', error.message);
 		throw error;
 	}
+};
+
+export const _testing = {
+	getEndpointKey,
+	calculateRetryDelay,
+	parseRetryAfterMs,
+	acquireConcurrencySlot,
+	releaseConcurrencySlot,
+	enforceEndpointLimit,
+	get globalConcurrent() {
+		return globalConcurrent;
+	},
+	set globalConcurrent(v: number) {
+		globalConcurrent = v;
+	},
+	get globalPausedUntil() {
+		return globalPausedUntil;
+	},
+	set globalPausedUntil(v: number) {
+		globalPausedUntil = v;
+	},
+	endpointTimestamps,
+	concurrencyWaiters,
+	ENDPOINT_LIMITS,
+	MAX_GLOBAL_CONCURRENT,
+	DEFAULT_RETRY_AFTER_MS,
+	resetState() {
+		globalConcurrent = 0;
+		globalPausedUntil = 0;
+		for (const key of Object.keys(endpointTimestamps)) delete endpointTimestamps[key];
+		concurrencyWaiters.length = 0;
+	},
 };

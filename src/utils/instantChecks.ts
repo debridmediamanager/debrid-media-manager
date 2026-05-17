@@ -399,7 +399,7 @@ const processTbInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 			}
 		});
 	}
-	await runConcurrentFunctions(funcs, 4, 0);
+	await runConcurrentFunctions(funcs, 2, 200);
 
 	if (Object.keys(allCachedData).length === 0) return 0;
 
