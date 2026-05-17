@@ -1328,6 +1328,45 @@ function TorrentsPage() {
 						unavailableHashes = newHashes;
 					}
 
+					if (
+						tbKey &&
+						debridService === 'tb' &&
+						unavailableHashes.length > 0 &&
+						availableHashes.length > 0
+					) {
+						const result = await Modal.fire({
+							title: 'TorBox Restore',
+							html: `
+								<p class="text-gray-300 mb-4">
+									Found <strong>${availableHashes.length}</strong> cached and
+									<strong>${unavailableHashes.length}</strong> uncached torrents.
+								</p>
+								<label class="flex items-center gap-2 text-gray-300 cursor-pointer justify-center">
+									<input type="checkbox" id="tb-cached-only" checked
+										class="w-4 h-4 rounded accent-cyan-500" />
+									Only restore cached items
+								</label>
+							`,
+							confirmButtonText: 'Restore',
+							showCancelButton: true,
+							preConfirm: () => {
+								const checkbox = document.getElementById(
+									'tb-cached-only'
+								) as HTMLInputElement;
+								return { cachedOnly: checkbox?.checked ?? true };
+							},
+						});
+
+						if (!result.isConfirmed) {
+							resolve({ success: 0, error: 0 });
+							return;
+						}
+
+						if (result.value?.cachedOnly) {
+							unavailableHashes = [];
+						}
+					}
+
 					// Process available torrents first (higher concurrency), then unavailable ones
 					const toAddAvailable = availableHashes.map(wrapAddMagnetFn);
 					const toAddUnavailable = unavailableHashes.map(wrapAddMagnetFn);
