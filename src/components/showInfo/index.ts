@@ -977,8 +977,10 @@ export const showInfoForTB = async (
             ${renderButton('share', { link: `${await handleShare(torrent)}` })}
             ${renderButton('delete', { id: 'btn-delete-tb' })}
             ${renderButton('magnet', { id: 'btn-magnet-copy', text: shouldDownloadMagnets ? 'Download' : 'Copy' })}
-            ${info.files.length > 0 ? renderButton('exportLinks', { id: 'btn-export-links' }) : ''}
+            ${info.files?.length ? renderButton('exportLinks', { id: 'btn-export-links' }) : ''}
         </div>`;
+
+	const files = info.files ?? [];
 
 	const statusLabel = info.download_finished
 		? 'Downloaded'
@@ -1011,7 +1013,7 @@ export const showInfoForTB = async (
         <div class="overflow-x-auto" style="max-width: 100%;">
             <table class="table-auto">
                 <tbody>
-                    ${renderTorrentInfoTB(info.files || [])}
+                    ${renderTorrentInfoTB(files)}
                 </tbody>
             </table>
         </div>
@@ -1075,18 +1077,18 @@ export const showInfoForTB = async (
 			logAction('binding export-links button (TB)', {
 				exists: Boolean(exportBtn),
 				hash: info.hash,
-				fileCount: info.files?.length ?? 0,
+				fileCount: files.length,
 			});
 			exportBtn?.addEventListener('click', async () => {
 				logAction('export-links clicked (TB)', { hash: info.hash });
-				if (!info.files?.length) {
+				if (!files.length) {
 					toast.error('No files to export.', magnetToastOptions);
 					return;
 				}
 				const toastId = toast.loading('Fetching download links...', magnetToastOptions);
 				try {
 					const lines: string[] = [];
-					for (const file of info.files) {
+					for (const file of files) {
 						try {
 							const resp = await requestDownloadLink(tbKey, {
 								torrent_id: info.id,

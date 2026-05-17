@@ -151,7 +151,7 @@ export interface TorBoxTorrentInfo {
 	expires_at: string;
 	download_present: boolean;
 	download_finished: boolean;
-	files: TorBoxFile[];
+	files: TorBoxFile[] | null;
 	inactive_check: number;
 	availability: number;
 }
@@ -241,5 +241,5 @@ export interface TorBoxUsenetDownload {
 	expires_at: string;
 	download_present: boolean;
 	download_finished: boolean;
-	files: TorBoxFile[];
+	files: TorBoxFile[] | null;
 }
