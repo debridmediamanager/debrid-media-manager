@@ -46,13 +46,18 @@ const CACHE_BACKOFF_TIME = 6000; // Slightly longer than the service worker cach
 let globalRequestQueue: Promise<void> = Promise.resolve();
 let globalLastRequestTime = 0;
 
-// Track recent 429s to detect when RD is rate-limiting.
-// When rate-limiting is active, other errors like "infringing_file" may be false positives.
-const RATE_LIMIT_WINDOW_MS = 3 * 60 * 1000; // 3 minutes
-let lastRd429Timestamp = 0;
+// Track recent rate-limit responses (HTTP 429 or RD error_code 34) to detect
+// when RD is throttling. During active throttling, error_code 35 (infringing_file)
+// may be a penalty escalation rather than a genuine content block.
+const RATE_LIMIT_WINDOW_MS = 30_000; // 30s — bucket resets in ~10s
+let lastRdRateLimitTimestamp = 0;
 
-export function hasRecentRd429s(): boolean {
-	return Date.now() - lastRd429Timestamp < RATE_LIMIT_WINDOW_MS;
+export function recordRdRateLimit(): void {
+	lastRdRateLimitTimestamp = Date.now();
+}
+
+export function hasRecentRdRateLimits(): boolean {
+	return Date.now() - lastRdRateLimitTimestamp < RATE_LIMIT_WINDOW_MS;
 }
 
 // Shared rate limiting function that serializes all requests
@@ -176,7 +181,7 @@ realDebridAxios.interceptors.response.use(
 
 		const errorType = error.response?.status === 429 ? 'rate limit' : 'server';
 		if (error.response?.status === 429) {
-			lastRd429Timestamp = Date.now();
+			lastRdRateLimitTimestamp = Date.now();
 		}
 		console.log(
 			`RealDebrid API request failed with ${error.response?.status} ${errorType} error. Retrying (attempt ${originalConfig.__retryCount}/7) after ${Math.round(delay)}ms delay...`

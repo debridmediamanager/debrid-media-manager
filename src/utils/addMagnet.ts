@@ -13,7 +13,8 @@ import {
 	addHashAsMagnet,
 	addTorrentFile,
 	getTorrentInfo,
-	hasRecentRd429s,
+	hasRecentRdRateLimits,
+	recordRdRateLimit,
 	selectFiles,
 } from '@/services/realDebrid';
 import {
@@ -33,12 +34,16 @@ import { isVideo } from './selectable';
 import { magnetToastOptions } from './toastOptions';
 
 // Extract error message from API response based on service type
-// RD: { error: "message" } or { error: "code", error_code: 35 }
+// RD: { error: "message" } or { error: "code", error_code: 34|35 }
 // AD: { error: { code: "...", message: "..." } }
 // TB: { detail: "message" } or { error: "message" }
 const getRdError = (error: unknown): string | null => {
 	if (error instanceof AxiosError) {
-		return error.response?.data?.error || null;
+		const data = error.response?.data;
+		if (data?.error_code === 34) {
+			recordRdRateLimit();
+		}
+		return data?.error || null;
 	}
 	return null;
 };
@@ -54,6 +59,10 @@ const getTbError = (error: unknown): string | null => {
 const retryDelay = process.env.VITEST_WORKER_ID ? 0 : 5000;
 const infoRetryDelay = process.env.VITEST_WORKER_ID ? 0 : 2000;
 const MAX_509_RETRIES = 5;
+// Pacing for batch addMagnet: RD allows ~22 requests per 10s.
+// Each hash requires addMagnet + selectFiles (2 calls), so 500ms between hashes
+// keeps us well under the burst budget.
+const BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 500;
 
 export type RdAddResult = 'success' | 'infringing_file' | 'error';
 
@@ -108,7 +117,7 @@ export const handleAddAsMagnetInRd = async (
 			error instanceof Error ? error.message : 'Unknown error'
 		);
 		toast.error(rdError ? `RD error: ${rdError}` : 'Failed to add hash.', magnetToastOptions);
-		if (rdError === 'infringing_file' && !hasRecentRd429s()) return 'infringing_file';
+		if (rdError === 'infringing_file' && !hasRecentRdRateLimits()) return 'infringing_file';
 		return 'error';
 	}
 };
@@ -164,9 +173,10 @@ export const handleAddMultipleTorrentFilesInRd = async (
 	callback?: () => Promise<void>
 ) => {
 	let errorCount = 0;
-	for (const file of files) {
+	for (let i = 0; i < files.length; i++) {
+		if (i > 0) await delay(BATCH_MAGNET_DELAY);
 		try {
-			const id = await addTorrentFile(rdKey, file);
+			const id = await addTorrentFile(rdKey, files[i]);
 			await handleSelectFilesInRd(rdKey, `rd:${id}`);
 		} catch (error) {
 			errorCount++;
@@ -188,9 +198,10 @@ export const handleAddMultipleHashesInRd = async (
 	callback?: () => Promise<void>
 ) => {
 	let errorCount = 0;
-	for (const hash of hashes) {
+	for (let i = 0; i < hashes.length; i++) {
+		if (i > 0) await delay(BATCH_MAGNET_DELAY);
 		try {
-			const id = await addHashAsMagnet(rdKey, hash);
+			const id = await addHashAsMagnet(rdKey, hashes[i]);
 			await handleSelectFilesInRd(rdKey, `rd:${id}`);
 		} catch (error) {
 			errorCount++;
