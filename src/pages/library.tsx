@@ -34,7 +34,6 @@ import { generateHashList } from '@/utils/hashList';
 import { filterLibraryItems } from '@/utils/libraryFilters';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
 import { handleChangeType } from '@/utils/libraryTypeManagement';
-import { localRestore } from '@/utils/localRestore';
 import { normalize } from '@/utils/mediaId';
 import { quickSearchLibrary } from '@/utils/quickSearch';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
@@ -56,11 +55,6 @@ const ITEMS_PER_PAGE = 100;
 interface SortBy {
 	column: 'id' | 'filename' | 'title' | 'bytes' | 'progress' | 'status' | 'added';
 	direction: 'asc' | 'desc';
-}
-
-interface RestoredFile {
-	filename: string;
-	hash: string;
 }
 
 interface RDFileInfo {
@@ -1215,230 +1209,288 @@ function TorrentsPage() {
 	}
 
 	async function wrapLocalRestoreFn(debridService: string) {
-		return await localRestore(async (files: RestoredFile[]) => {
-			const allHashes = new Set(userTorrentsList.map((t) => t.hash));
-			const addMagnet = (hash: string) => {
-				if (rdKey && debridService === 'rd') return handleAddAsMagnetInRd(rdKey, hash);
-				if (adKey && debridService === 'ad')
-					return handleAddAsMagnetInAd(adKey, hash, undefined, true, true);
-				if (tbKey && debridService === 'tb') return handleAddAsMagnetInTb(tbKey, hash);
-			};
+		const allHashes = new Set(userTorrentsList.map((t) => t.hash));
 
-			function wrapAddMagnetFn(hash: string) {
-				return async () => await addMagnet(hash);
-			}
-
-			const processingPromise = new Promise<{ success: number; error: number }>(
-				async (resolve) => {
-					toast.loading('Restoring... do not refresh.', libraryToastOptions);
-					const notAddingCount = files.filter((f) => allHashes.has(f.hash)).length;
-					if (notAddingCount > 0)
-						toast.error(
-							`${notAddingCount} already in your library`,
-							libraryToastOptions
-						);
-
-					// Filter out duplicates
-					const newHashes = files.map((f) => f.hash).filter((h) => !allHashes.has(h));
-
-					if (newHashes.length === 0) {
-						resolve({ success: 0, error: 0 });
-						return;
+		const result = await Modal.fire({
+			title: `Restore to your ${debridService.toUpperCase()} library`,
+			html: `
+				<div class="bg-gray-900 p-4 rounded-lg">
+					<label class="block text-sm text-gray-300 mb-2">Select backup .json file</label>
+					<input
+						type="file"
+						id="restoreFile"
+						accept=".json"
+						class="block w-full text-sm text-gray-300
+							file:mr-4 file:py-2 file:px-4
+							file:rounded file:border-0
+							file:text-sm file:font-medium
+							file:bg-cyan-900 file:text-cyan-100
+							hover:file:bg-cyan-800
+							cursor-pointer
+							border border-gray-700 rounded
+						"
+					/>
+					<div id="restore-stats" class="mt-4 text-sm text-gray-400 hidden">
+						<p>Total hashes: <strong id="restore-total" class="text-gray-200">0</strong></p>
+						<p>Already in library (will be skipped): <strong id="restore-skipped" class="text-yellow-400">0</strong></p>
+						<p>New hashes to restore: <strong id="restore-new" class="text-green-400">0</strong></p>
+					</div>
+					${
+						debridService === 'tb'
+							? `
+					<label class="flex items-center gap-2 text-gray-300 cursor-pointer mt-4">
+						<input type="checkbox" id="tb-cached-only" checked
+							class="w-4 h-4 rounded accent-cyan-500" />
+						Only restore cached (available) items
+					</label>
+					`
+							: ''
 					}
-
-					// Check database for cached availability for RD and TB (AD doesn't have bulk check)
-					let availableHashes: string[] = [];
-					let unavailableHashes: string[] = [];
-
-					if ((rdKey && debridService === 'rd') || (tbKey && debridService === 'tb')) {
-						toast.loading(`Checking database for ${newHashes.length} torrents...`, {
-							id: 'database-check',
-						});
-
+				</div>
+			`,
+			confirmButtonText: 'Restore',
+			showCancelButton: true,
+			didOpen: () => {
+				const fileInput = document.getElementById('restoreFile') as HTMLInputElement;
+				fileInput?.addEventListener('change', () => {
+					const file = fileInput.files?.[0];
+					if (!file) return;
+					const reader = new FileReader();
+					reader.onload = (evt) => {
 						try {
-							if (rdKey && debridService === 'rd') {
-								// Check RD database for cached availability in batches of 100
-								const { checkAvailabilityByHashes } = await import(
-									'@/utils/availability'
-								);
-								const availableSet = new Set<string>();
-
-								for (let i = 0; i < newHashes.length; i += 100) {
-									const batch = newHashes.slice(i, i + 100);
-									const resp = await checkAvailabilityByHashes('', '', batch);
-									if (resp?.available) {
-										resp.available.forEach((t: { hash: string }) =>
-											availableSet.add(t.hash)
-										);
-									}
-								}
-
-								availableHashes = newHashes.filter((h) => availableSet.has(h));
-								unavailableHashes = newHashes.filter((h) => !availableSet.has(h));
-							} else if (tbKey && debridService === 'tb') {
-								// Check TorBox database for cached availability
-								const { checkCachedStatus } = await import('@/services/torbox');
-								const availableSet = new Set<string>();
-
-								// TorBox checks in batches
-								for (let i = 0; i < newHashes.length; i += 100) {
-									const batch = newHashes.slice(i, i + 100);
-									const resp = await checkCachedStatus(
-										{
-											hash: batch,
-											format: 'object',
-										},
-										tbKey
-									);
-									if (resp?.data) {
-										Object.entries(resp.data).forEach(
-											([hash, data]: [string, any]) => {
-												if (data) availableSet.add(hash);
-											}
-										);
-									}
-								}
-
-								availableHashes = newHashes.filter((h) => availableSet.has(h));
-								unavailableHashes = newHashes.filter((h) => !availableSet.has(h));
-							}
-
-							toast.dismiss('database-check');
-							if (availableHashes.length > 0) {
-								toast.success(
-									`${availableHashes.length} cached torrents queued first.`,
-									libraryToastOptions
-								);
-							}
-							if (unavailableHashes.length > 0) {
-								toast(
-									`${unavailableHashes.length} torrents must download before restore.`,
-									libraryToastOptions
-								);
-							}
-						} catch (error) {
-							console.error('Error checking database availability:', error);
-							toast.dismiss('database-check');
-							// If database check fails, treat all as unavailable
-							unavailableHashes = newHashes;
-							availableHashes = [];
+							const files: { hash: string }[] = JSON.parse(
+								evt.target?.result as string
+							);
+							const total = files.length;
+							const skipped = files.filter((f) => allHashes.has(f.hash)).length;
+							const newCount = total - skipped;
+							document.getElementById('restore-stats')?.classList.remove('hidden');
+							document.getElementById('restore-total')!.textContent = String(total);
+							document.getElementById('restore-skipped')!.textContent =
+								String(skipped);
+							document.getElementById('restore-new')!.textContent = String(newCount);
+						} catch {
+							document.getElementById('restore-stats')?.classList.remove('hidden');
+							document.getElementById('restore-total')!.textContent = 'Invalid file';
 						}
-					} else {
-						// For AD or if no database check, treat all as unavailable
-						unavailableHashes = newHashes;
-					}
-
-					if (
-						tbKey &&
-						debridService === 'tb' &&
-						unavailableHashes.length > 0 &&
-						availableHashes.length > 0
-					) {
-						const result = await Modal.fire({
-							title: 'TorBox Restore',
-							html: `
-								<p class="text-gray-300 mb-4">
-									Found <strong>${availableHashes.length}</strong> cached and
-									<strong>${unavailableHashes.length}</strong> uncached torrents.
-								</p>
-								<label class="flex items-center gap-2 text-gray-300 cursor-pointer justify-center">
-									<input type="checkbox" id="tb-cached-only" checked
-										class="w-4 h-4 rounded accent-cyan-500" />
-									Only restore cached items
-								</label>
-							`,
-							confirmButtonText: 'Restore',
-							showCancelButton: true,
-							preConfirm: () => {
-								const checkbox = document.getElementById(
-									'tb-cached-only'
-								) as HTMLInputElement;
-								return { cachedOnly: checkbox?.checked ?? true };
-							},
-						});
-
-						if (!result.isConfirmed) {
-							resolve({ success: 0, error: 0 });
-							return;
-						}
-
-						if (result.value?.cachedOnly) {
-							unavailableHashes = [];
-						}
-					}
-
-					// Process available torrents first (higher concurrency), then unavailable ones
-					const toAddAvailable = availableHashes.map(wrapAddMagnetFn);
-					const toAddUnavailable = unavailableHashes.map(wrapAddMagnetFn);
-
-					let totalCompleted = 0;
-					const totalToAdd = toAddAvailable.length + toAddUnavailable.length;
-
-					// Process available torrents with higher concurrency (4)
-					let availableResults: any[] = [];
-					let availableErrors: any[] = [];
-					if (toAddAvailable.length > 0) {
-						[availableResults, availableErrors] = await runConcurrentFunctions(
-							toAddAvailable,
-							4, // Higher concurrency for cached torrents
-							0,
-							(completed, total, errorCount) => {
-								totalCompleted = completed;
-								const message =
-									errorCount > 0
-										? `Restoring cached torrents ${completed}/${total} (${errorCount} errors)...`
-										: `Restoring cached torrents ${completed}/${total}...`;
-								toast.loading(message, { id: 'restore-progress' });
-							}
-						);
-					}
-
-					// Process unavailable torrents with lower concurrency (1)
-					let unavailableResults: any[] = [];
-					let unavailableErrors: any[] = [];
-					if (toAddUnavailable.length > 0) {
-						[unavailableResults, unavailableErrors] = await runConcurrentFunctions(
-							toAddUnavailable,
-							1, // Lower concurrency for uncached torrents
-							0,
-							(completed, total, errorCount) => {
-								const actualCompleted = totalCompleted + completed;
-								const message =
-									errorCount > 0
-										? `Restoring ${actualCompleted}/${totalToAdd} downloads (${availableErrors.length + errorCount} errors)...`
-										: `Restoring ${actualCompleted}/${totalToAdd} downloads...`;
-								toast.loading(message, { id: 'restore-progress' });
-							}
-						);
-					}
-
-					toast.dismiss('restore-progress');
-					const allResults = [...availableResults, ...unavailableResults];
-					const allErrors = [...availableErrors, ...unavailableErrors];
-
-					if (allResults.length) {
-						await refreshLibrary();
-					}
-					resolve({ success: allResults.length, error: allErrors.length });
+					};
+					reader.readAsText(file, 'UTF-8');
+				});
+			},
+			preConfirm: () => {
+				const fileInput = document.getElementById('restoreFile') as HTMLInputElement;
+				const file = fileInput?.files?.[0];
+				if (!file) {
+					Modal.showValidationMessage('Please select a backup file');
+					return false;
 				}
-			);
-
-			toast.promise(
-				processingPromise,
-				{
-					loading: `Restoring ${files.length} downloads...`,
-					success: ({ success, error }) => {
-						setTimeout(() => location.reload(), 10000);
-						return `Restored ${success}; ${error} failed in ${debridService.toUpperCase()} library. Refreshing in 10s.`;
-					},
-					error: '',
-				},
-				{
-					...libraryToastOptions,
-					duration: 10000,
-				}
-			);
+				return new Promise((resolve) => {
+					const reader = new FileReader();
+					reader.onload = (evt) => {
+						try {
+							const files: { hash: string; filename: string }[] = JSON.parse(
+								evt.target?.result as string
+							);
+							const cachedOnly =
+								debridService === 'tb'
+									? ((
+											document.getElementById(
+												'tb-cached-only'
+											) as HTMLInputElement
+										)?.checked ?? true)
+									: false;
+							resolve({ files, cachedOnly });
+						} catch {
+							resolve(false);
+						}
+					};
+					reader.readAsText(file, 'UTF-8');
+				});
+			},
 		});
+
+		if (!result.isConfirmed || !result.value) return;
+
+		const { files, cachedOnly } = result.value as {
+			files: { hash: string; filename: string }[];
+			cachedOnly: boolean;
+		};
+
+		const addMagnet = (hash: string) => {
+			if (rdKey && debridService === 'rd') return handleAddAsMagnetInRd(rdKey, hash);
+			if (adKey && debridService === 'ad')
+				return handleAddAsMagnetInAd(adKey, hash, undefined, true, true);
+			if (tbKey && debridService === 'tb') return handleAddAsMagnetInTb(tbKey, hash);
+		};
+
+		function wrapAddMagnetFn(hash: string) {
+			return async () => await addMagnet(hash);
+		}
+
+		const processingPromise = new Promise<{ success: number; error: number }>(
+			async (resolve) => {
+				toast.loading('Restoring... do not refresh.', libraryToastOptions);
+
+				const newHashes = files.map((f) => f.hash).filter((h) => !allHashes.has(h));
+
+				if (newHashes.length === 0) {
+					resolve({ success: 0, error: 0 });
+					return;
+				}
+
+				let availableHashes: string[] = [];
+				let unavailableHashes: string[] = [];
+
+				if ((rdKey && debridService === 'rd') || (tbKey && debridService === 'tb')) {
+					toast.loading(`Checking database for ${newHashes.length} torrents...`, {
+						id: 'database-check',
+					});
+
+					try {
+						if (rdKey && debridService === 'rd') {
+							const { checkAvailabilityByHashes } = await import(
+								'@/utils/availability'
+							);
+							const availableSet = new Set<string>();
+
+							for (let i = 0; i < newHashes.length; i += 100) {
+								const batch = newHashes.slice(i, i + 100);
+								const resp = await checkAvailabilityByHashes('', '', batch);
+								if (resp?.available) {
+									resp.available.forEach((t: { hash: string }) =>
+										availableSet.add(t.hash)
+									);
+								}
+							}
+
+							availableHashes = newHashes.filter((h) => availableSet.has(h));
+							unavailableHashes = newHashes.filter((h) => !availableSet.has(h));
+						} else if (tbKey && debridService === 'tb') {
+							const { checkCachedStatus } = await import('@/services/torbox');
+							const availableSet = new Set<string>();
+
+							for (let i = 0; i < newHashes.length; i += 100) {
+								const batch = newHashes.slice(i, i + 100);
+								const resp = await checkCachedStatus(
+									{
+										hash: batch,
+										format: 'object',
+									},
+									tbKey
+								);
+								if (resp?.data) {
+									Object.entries(resp.data).forEach(
+										([hash, data]: [string, any]) => {
+											if (data) availableSet.add(hash);
+										}
+									);
+								}
+							}
+
+							availableHashes = newHashes.filter((h) => availableSet.has(h));
+							unavailableHashes = newHashes.filter((h) => !availableSet.has(h));
+						}
+
+						toast.dismiss('database-check');
+						if (availableHashes.length > 0) {
+							toast.success(
+								`${availableHashes.length} cached torrents queued first.`,
+								libraryToastOptions
+							);
+						}
+						if (unavailableHashes.length > 0) {
+							toast(
+								`${unavailableHashes.length} torrents must download before restore.`,
+								libraryToastOptions
+							);
+						}
+					} catch (error) {
+						console.error('Error checking database availability:', error);
+						toast.dismiss('database-check');
+						unavailableHashes = newHashes;
+						availableHashes = [];
+					}
+				} else {
+					unavailableHashes = newHashes;
+				}
+
+				if (tbKey && debridService === 'tb' && cachedOnly) {
+					unavailableHashes = [];
+				}
+
+				const toAddAvailable = availableHashes.map(wrapAddMagnetFn);
+				const toAddUnavailable = unavailableHashes.map(wrapAddMagnetFn);
+
+				let totalCompleted = 0;
+				const totalToAdd = toAddAvailable.length + toAddUnavailable.length;
+
+				if (totalToAdd === 0) {
+					resolve({ success: 0, error: 0 });
+					return;
+				}
+
+				let availableResults: any[] = [];
+				let availableErrors: any[] = [];
+				if (toAddAvailable.length > 0) {
+					[availableResults, availableErrors] = await runConcurrentFunctions(
+						toAddAvailable,
+						4,
+						0,
+						(completed, total, errorCount) => {
+							totalCompleted = completed;
+							const message =
+								errorCount > 0
+									? `Restoring cached torrents ${completed}/${total} (${errorCount} errors)...`
+									: `Restoring cached torrents ${completed}/${total}...`;
+							toast.loading(message, { id: 'restore-progress' });
+						}
+					);
+				}
+
+				let unavailableResults: any[] = [];
+				let unavailableErrors: any[] = [];
+				if (toAddUnavailable.length > 0) {
+					[unavailableResults, unavailableErrors] = await runConcurrentFunctions(
+						toAddUnavailable,
+						1,
+						0,
+						(completed, total, errorCount) => {
+							const actualCompleted = totalCompleted + completed;
+							const message =
+								errorCount > 0
+									? `Restoring ${actualCompleted}/${totalToAdd} downloads (${availableErrors.length + errorCount} errors)...`
+									: `Restoring ${actualCompleted}/${totalToAdd} downloads...`;
+							toast.loading(message, { id: 'restore-progress' });
+						}
+					);
+				}
+
+				toast.dismiss('restore-progress');
+				const allResults = [...availableResults, ...unavailableResults];
+				const allErrors = [...availableErrors, ...unavailableErrors];
+
+				if (allResults.length) {
+					await refreshLibrary();
+				}
+				resolve({ success: allResults.length, error: allErrors.length });
+			}
+		);
+
+		toast.promise(
+			processingPromise,
+			{
+				loading: `Restoring ${files.length} downloads...`,
+				success: ({ success, error }) => {
+					setTimeout(() => location.reload(), 10000);
+					return `Restored ${success}; ${error} failed in ${debridService.toUpperCase()} library. Refreshing in 10s.`;
+				},
+				error: '',
+			},
+			{
+				...libraryToastOptions,
+				duration: 10000,
+			}
+		);
 	}
 
 	async function handleAddMagnet(debridService: string) {
