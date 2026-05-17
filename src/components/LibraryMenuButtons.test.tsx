@@ -166,8 +166,8 @@ describe('LibraryMenuButtons', () => {
 		render(<LibraryMenuButtons {...defaultProps} />);
 		const links = screen.getAllByRole('link');
 		const hrefs = links.map((l) => l.getAttribute('href'));
-		expect(hrefs).toContain('/library?mediaType=movie&page=1');
-		expect(hrefs).toContain('/library?mediaType=tv&page=1');
-		expect(hrefs).toContain('/library?mediaType=other&page=1');
+		expect(hrefs).toContain('/library?page=1&mediaType=movie');
+		expect(hrefs).toContain('/library?page=1&mediaType=tv');
+		expect(hrefs).toContain('/library?page=1&mediaType=other');
 	});
 });

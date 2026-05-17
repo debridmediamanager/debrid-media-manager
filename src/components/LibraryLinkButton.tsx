@@ -5,6 +5,7 @@ type ButtonVariant = 'orange' | 'yellow' | 'amber' | 'slate' | 'green';
 
 interface LibraryLinkButtonProps {
 	href: string;
+	deactivateHref?: string;
 	variant: ButtonVariant;
 	children: ReactNode;
 	size?: 'xs' | 'sm';
@@ -30,6 +31,7 @@ const activeVariantStyles: Record<ButtonVariant, string> = {
 
 export default function LibraryLinkButton({
 	href,
+	deactivateHref,
 	variant,
 	children,
 	size = 'xs',
@@ -41,7 +43,7 @@ export default function LibraryLinkButton({
 
 	return (
 		<Link
-			href={active ? '/library?page=1' : href}
+			href={active ? (deactivateHref ?? '/library?page=1') : href}
 			className={`mb-1 mr-2 rounded border-2 px-1 ${sizeClasses} ${styles} transition-colors`}
 			onClick={onClick}
 		>

@@ -45,6 +45,17 @@ export default function LibraryMenuButtons({
 }: LibraryMenuButtonsProps) {
 	const hasActiveFilter = !!activeMediaType || !!activeStatus || !!activeService;
 	const multipleServices = [hasRd, hasAd, hasTb].filter(Boolean).length > 1;
+
+	const buildHref = (params: Record<string, string | undefined>) => {
+		const base: Record<string, string> = { page: '1' };
+		if (activeMediaType && !('mediaType' in params)) base.mediaType = activeMediaType;
+		if (activeStatus && !('status' in params)) base.status = activeStatus;
+		if (activeService && !('service' in params)) base.service = activeService;
+		for (const [k, v] of Object.entries(params)) {
+			if (v) base[k] = v;
+		}
+		return `/library?${new URLSearchParams(base).toString()}`;
+	};
 	return (
 		<div className="mb-0 flex overflow-x-auto">
 			<LibraryButton
@@ -68,7 +79,8 @@ export default function LibraryMenuButtons({
 				<ChevronRight className="h-4 w-4 text-indigo-400" />
 			</LibraryButton>
 			<LibraryLinkButton
-				href="/library?mediaType=movie&page=1"
+				href={buildHref({ mediaType: 'movie' })}
+				deactivateHref={buildHref({ mediaType: undefined })}
 				variant="yellow"
 				active={activeMediaType === 'movie'}
 			>
@@ -76,7 +88,8 @@ export default function LibraryMenuButtons({
 				Movies
 			</LibraryLinkButton>
 			<LibraryLinkButton
-				href="/library?mediaType=tv&page=1"
+				href={buildHref({ mediaType: 'tv' })}
+				deactivateHref={buildHref({ mediaType: undefined })}
 				variant="yellow"
 				active={activeMediaType === 'tv'}
 			>
@@ -84,7 +97,8 @@ export default function LibraryMenuButtons({
 				TV&nbsp;shows
 			</LibraryLinkButton>
 			<LibraryLinkButton
-				href="/library?mediaType=other&page=1"
+				href={buildHref({ mediaType: 'other' })}
+				deactivateHref={buildHref({ mediaType: undefined })}
 				variant="yellow"
 				active={activeMediaType === 'other'}
 			>
@@ -93,7 +107,8 @@ export default function LibraryMenuButtons({
 			</LibraryLinkButton>
 			{multipleServices && hasRd && (
 				<LibraryLinkButton
-					href="/library?service=rd&page=1"
+					href={buildHref({ service: 'rd' })}
+					deactivateHref={buildHref({ service: undefined })}
 					variant="green"
 					active={activeService === 'rd'}
 				>
@@ -102,7 +117,8 @@ export default function LibraryMenuButtons({
 			)}
 			{multipleServices && hasAd && (
 				<LibraryLinkButton
-					href="/library?service=ad&page=1"
+					href={buildHref({ service: 'ad' })}
+					deactivateHref={buildHref({ service: undefined })}
 					variant="green"
 					active={activeService === 'ad'}
 				>
@@ -111,7 +127,8 @@ export default function LibraryMenuButtons({
 			)}
 			{multipleServices && hasTb && (
 				<LibraryLinkButton
-					href="/library?service=tb&page=1"
+					href={buildHref({ service: 'tb' })}
+					deactivateHref={buildHref({ service: undefined })}
 					variant="green"
 					active={activeService === 'tb'}
 				>
@@ -120,7 +137,8 @@ export default function LibraryMenuButtons({
 			)}
 			{sameHashSize > 0 && (
 				<LibraryLinkButton
-					href="/library?status=samehash&page=1"
+					href={buildHref({ status: 'samehash' })}
+					deactivateHref={buildHref({ status: undefined })}
 					variant="orange"
 					size="sm"
 					active={activeStatus === 'samehash'}
@@ -131,7 +149,8 @@ export default function LibraryMenuButtons({
 			)}
 			{sameTitleSize > 0 && sameHashSize < sameTitleSize && (
 				<LibraryLinkButton
-					href="/library?status=sametitle&page=1"
+					href={buildHref({ status: 'sametitle' })}
+					deactivateHref={buildHref({ status: undefined })}
 					variant="amber"
 					size="sm"
 					active={activeStatus === 'sametitle'}
@@ -143,7 +162,8 @@ export default function LibraryMenuButtons({
 
 			{selectedTorrentsSize > 0 && (
 				<LibraryLinkButton
-					href="/library?status=selected&page=1"
+					href={buildHref({ status: 'selected' })}
+					deactivateHref={buildHref({ status: undefined })}
 					variant="slate"
 					active={activeStatus === 'selected'}
 				>
@@ -153,7 +173,8 @@ export default function LibraryMenuButtons({
 			)}
 			{uncachedCount > 0 && (
 				<LibraryLinkButton
-					href="/library?status=uncached&page=1"
+					href={buildHref({ status: 'uncached' })}
+					deactivateHref={buildHref({ status: undefined })}
 					variant="slate"
 					active={activeStatus === 'uncached'}
 				>
@@ -164,7 +185,8 @@ export default function LibraryMenuButtons({
 
 			{inProgressCount > 0 && (
 				<LibraryLinkButton
-					href="/library?status=inprogress&page=1"
+					href={buildHref({ status: 'inprogress' })}
+					deactivateHref={buildHref({ status: undefined })}
 					variant="slate"
 					active={activeStatus === 'inprogress'}
 				>
@@ -174,7 +196,8 @@ export default function LibraryMenuButtons({
 			)}
 			{slowCount > 0 && (
 				<LibraryLinkButton
-					href="/library?status=slow&page=1"
+					href={buildHref({ status: 'slow' })}
+					deactivateHref={buildHref({ status: undefined })}
 					variant="slate"
 					active={activeStatus === 'slow'}
 				>
@@ -184,7 +207,8 @@ export default function LibraryMenuButtons({
 			)}
 			{failedCount > 0 && (
 				<LibraryLinkButton
-					href="/library?status=failed&page=1"
+					href={buildHref({ status: 'failed' })}
+					deactivateHref={buildHref({ status: undefined })}
 					variant="slate"
 					active={activeStatus === 'failed'}
 				>
