@@ -31,7 +31,7 @@ import {
 import { extractHashes } from '@/utils/extractHashes';
 import { getRdStatus } from '@/utils/fetchTorrents';
 import { generateHashList } from '@/utils/hashList';
-import { filterLibraryItems } from '@/utils/libraryFilters';
+import { filterLibraryItems, isRdBlockedFilename } from '@/utils/libraryFilters';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
 import { handleChangeType } from '@/utils/libraryTypeManagement';
 import { normalize } from '@/utils/mediaId';
@@ -491,16 +491,24 @@ function TorrentsPage() {
 		slowCount: memoSlowCount,
 		inProgressCount: memoInProgressCount,
 		failedCount: memoFailedCount,
+		rdBlockedCount: memoRdBlockedCount,
 	} = useMemo(() => {
 		let slow = 0,
 			inProgress = 0,
-			failed = 0;
+			failed = 0,
+			rdBlocked = 0;
 		for (const torrent of userTorrentsList) {
 			if (isSlowOrNoLinks(torrent)) slow++;
 			if (isInProgress(torrent)) inProgress++;
 			if (isFailed(torrent)) failed++;
+			if (torrent.id.startsWith('rd:') && isRdBlockedFilename(torrent.filename)) rdBlocked++;
 		}
-		return { slowCount: slow, inProgressCount: inProgress, failedCount: failed };
+		return {
+			slowCount: slow,
+			inProgressCount: inProgress,
+			failedCount: failed,
+			rdBlockedCount: rdBlocked,
+		};
 	}, [userTorrentsList]);
 
 	// filter the list
@@ -1807,6 +1815,7 @@ function TorrentsPage() {
 						inProgressCount={memoInProgressCount}
 						slowCount={memoSlowCount}
 						failedCount={memoFailedCount}
+						rdBlockedCount={memoRdBlockedCount}
 						activeMediaType={mediaType as string | undefined}
 						activeStatus={status as string | undefined}
 						activeService={service as string | undefined}

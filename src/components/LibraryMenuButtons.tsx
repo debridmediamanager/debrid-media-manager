@@ -1,4 +1,13 @@
-import { ChevronLeft, ChevronRight, Eye, Film, FolderOpen, RotateCcw, Tv } from 'lucide-react';
+import {
+	ChevronLeft,
+	ChevronRight,
+	Eye,
+	Film,
+	FolderOpen,
+	RotateCcw,
+	ShieldAlert,
+	Tv,
+} from 'lucide-react';
 import LibraryButton from './LibraryButton';
 import LibraryLinkButton from './LibraryLinkButton';
 
@@ -15,6 +24,7 @@ interface LibraryMenuButtonsProps {
 	inProgressCount: number;
 	slowCount: number;
 	failedCount: number;
+	rdBlockedCount: number;
 	activeMediaType?: string;
 	activeStatus?: string;
 	activeService?: string;
@@ -36,6 +46,7 @@ export default function LibraryMenuButtons({
 	inProgressCount,
 	slowCount,
 	failedCount,
+	rdBlockedCount,
 	activeMediaType,
 	activeStatus,
 	activeService,
@@ -214,6 +225,18 @@ export default function LibraryMenuButtons({
 				>
 					<Eye className="mr-1 inline-block h-4 w-4 text-slate-400" />
 					Failed
+				</LibraryLinkButton>
+			)}
+			{hasRd && rdBlockedCount > 0 && (
+				<LibraryLinkButton
+					href={buildHref({ status: 'rdblocked' })}
+					deactivateHref={buildHref({ status: undefined })}
+					variant="red"
+					size="sm"
+					active={activeStatus === 'rdblocked'}
+				>
+					<ShieldAlert className="mr-1 inline-block h-4 w-4 text-red-400" />
+					RD&nbsp;blocked
 				</LibraryLinkButton>
 			)}
 			{hasActiveFilter && (

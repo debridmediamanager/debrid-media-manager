@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
-type ButtonVariant = 'orange' | 'yellow' | 'amber' | 'slate' | 'green';
+type ButtonVariant = 'orange' | 'yellow' | 'amber' | 'slate' | 'green' | 'red';
 
 interface LibraryLinkButtonProps {
 	href: string;
@@ -19,6 +19,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 	amber: 'border-amber-500 bg-amber-900/30 text-amber-100 hover:bg-amber-800/50',
 	slate: 'border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50',
 	green: 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50',
+	red: 'border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50',
 };
 
 const activeVariantStyles: Record<ButtonVariant, string> = {
@@ -27,6 +28,7 @@ const activeVariantStyles: Record<ButtonVariant, string> = {
 	amber: 'border-amber-400 bg-amber-500/60 text-white ring-1 ring-amber-400/50',
 	slate: 'border-slate-400 bg-slate-500/60 text-white ring-1 ring-slate-400/50',
 	green: 'border-green-400 bg-green-500/60 text-white ring-1 ring-green-400/50',
+	red: 'border-red-400 bg-red-500/60 text-white ring-1 ring-red-400/50',
 };
 
 export default function LibraryLinkButton({

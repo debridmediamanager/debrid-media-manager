@@ -23,6 +23,7 @@ const defaultProps = {
 	inProgressCount: 0,
 	slowCount: 0,
 	failedCount: 0,
+	rdBlockedCount: 0,
 };
 
 function findLinkByText(text: string) {

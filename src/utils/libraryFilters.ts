@@ -2,6 +2,26 @@ import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { normalize } from '@/utils/mediaId';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 
+const RD_BLOCKED_SUBSTRINGS = ['web-dl', 'webrip', 'bdrip', 'hdrip', 'dvdrip'];
+const RD_BLOCKED_DOT_PAIRS: [string, string][] = [
+	['bluray', 'x264'],
+	['hdtv', 'x264'],
+	['hdtv', 'xvid'],
+	['web', 'x264'],
+	['web', 'h264'],
+];
+
+export function isRdBlockedFilename(filename: string): boolean {
+	const lower = filename.toLowerCase();
+	for (const sub of RD_BLOCKED_SUBSTRINGS) {
+		if (lower.includes(sub)) return true;
+	}
+	for (const [source, codec] of RD_BLOCKED_DOT_PAIRS) {
+		if (lower.includes(`${source}.${codec}`)) return true;
+	}
+	return false;
+}
+
 type QueryValue = string | string[] | undefined;
 
 const pickValue = (value: QueryValue) => {
@@ -79,6 +99,13 @@ export const filterLibraryItems = ({
 	if (statusValue === 'selected') {
 		filteredList = filteredList.filter((torrent) => selectedTorrents.has(torrent.id));
 		nextHelpText = 'Torrents that you have selected';
+	}
+	if (statusValue === 'rdblocked') {
+		filteredList = filteredList.filter(
+			(torrent) => torrent.id.startsWith('rd:') && isRdBlockedFilename(torrent.filename)
+		);
+		nextHelpText =
+			"RD torrents with filenames matching Real-Debrid's blocked patterns (web-dl, webrip, bdrip, hdrip, dvdrip, and certain source.codec combos). These may fail to add on Real-Debrid.";
 	}
 	if (statusValue === 'sametitle') {
 		filteredList = filteredList.filter((torrent) => sameTitle.has(normalize(torrent.title)));
