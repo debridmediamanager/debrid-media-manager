@@ -531,12 +531,14 @@ export const handleAddMultipleHashesInTb = async (
 	hashes: string[],
 	callback?: () => Promise<void>
 ) => {
+	let success = 0;
 	let errorCount = 0;
 	let rateLimited = false;
 	for (let i = 0; i < hashes.length; i++) {
 		if (i > 0) await delay(TB_BATCH_MAGNET_DELAY);
 		try {
 			await handleAddAsMagnetInTb(tbKey, hashes[i]);
+			success++;
 		} catch (error) {
 			errorCount++;
 			console.error(
@@ -553,18 +555,15 @@ export const handleAddMultipleHashesInTb = async (
 	}
 	if (callback) await callback();
 	if (rateLimited) {
-		const added = hashes.length - errorCount;
-		if (added > 0) {
+		if (success > 0) {
 			toast(
-				`Added ${added} hash${added === 1 ? '' : 'es'} before rate limit.`,
+				`Added ${success} hash${success === 1 ? '' : 'es'} before rate limit.`,
 				magnetToastOptions
 			);
 		}
 	} else {
 		toast(
-			`Added ${hashes.length - errorCount} ${
-				hashes.length - errorCount === 1 ? 'hash' : 'hashes'
-			} to TorBox.`,
+			`Added ${success} ${success === 1 ? 'hash' : 'hashes'} to TorBox.`,
 			magnetToastOptions
 		);
 	}

@@ -169,12 +169,12 @@ torBoxAxios.interceptors.request.use(async (config: ExtendedAxiosRequestConfig) 
 	const endpointKey = getEndpointKey(config.url);
 	config.__endpointKey = endpointKey;
 
+	await enforceEndpointLimit(endpointKey);
+
 	if (!config.__slotAcquired) {
 		await acquireConcurrencySlot();
 		config.__slotAcquired = true;
 	}
-
-	await enforceEndpointLimit(endpointKey);
 
 	if (config.__isRetryRequest && config.url) {
 		const url = new URL(config.url, 'http://dummy-base.com');

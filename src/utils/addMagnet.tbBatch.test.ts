@@ -149,10 +149,9 @@ describe('TorBox batch magnet pacing', () => {
 
 			await handleAddMultipleHashesInTb('tbkey', ['h1', 'h2', 'h3']);
 
-			// First hash succeeds, second fails with rate limit (errorCount=1),
-			// third is skipped due to break. Report: 3-1=2 hashes before rate limit.
+			// First hash succeeds, second fails with rate limit, third is skipped.
 			expect(toast).toHaveBeenCalledWith(
-				expect.stringContaining('2 hash'),
+				expect.stringContaining('1 hash'),
 				expect.anything()
 			);
 		});
