@@ -267,7 +267,7 @@ const MovieSearch: FunctionComponent = () => {
 
 			try {
 				const hashes = uncachedResults.map((r) => r.hash);
-				const trackerStatsArray = await getMultipleTrackerStats(hashes);
+				const trackerStatsArray = await getMultipleTrackerStats(hashes, imdbid as string);
 
 				if (isMounted.current && trackerStatsArray.length > 0) {
 					setSearchResults((prevResults) => {

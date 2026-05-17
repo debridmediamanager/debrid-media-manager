@@ -12,7 +12,11 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 
 	try {
-		const { hashes } = req.body;
+		const { hashes, imdbId } = req.body;
+
+		if (!imdbId || typeof imdbId !== 'string') {
+			return res.status(400).json({ error: 'Missing or invalid "imdbId" parameter' });
+		}
 
 		// Validate hashes parameter
 		if (!hashes || !Array.isArray(hashes)) {

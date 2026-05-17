@@ -37,20 +37,33 @@ describe('/api/torrents/stats/bulk', () => {
 		expect(res.status).toHaveBeenCalledWith(405);
 	});
 
+	it('validates imdbId parameter', async () => {
+		const req = createMockRequest({ method: 'POST', body: { hashes: ['a'.repeat(40)] } });
+		const res = createMockResponse();
+		await handler(req, res);
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({ error: expect.stringContaining('imdbId') })
+		);
+	});
+
 	it('validates hashes array', async () => {
-		const req = createMockRequest({ method: 'POST', body: {} });
+		const req = createMockRequest({ method: 'POST', body: { imdbId: 'tt1234567' } });
 		const res = createMockResponse();
 		await handler(req, res);
 		expect(res.status).toHaveBeenCalledWith(400);
 
-		const req2 = createMockRequest({ method: 'POST', body: { hashes: [] } });
+		const req2 = createMockRequest({
+			method: 'POST',
+			body: { imdbId: 'tt1234567', hashes: [] },
+		});
 		const res2 = createMockResponse();
 		await handler(req2, res2);
 		expect(res2.status).toHaveBeenCalledWith(400);
 
 		const req3 = createMockRequest({
 			method: 'POST',
-			body: { hashes: new Array(101).fill('a'.repeat(40)) },
+			body: { imdbId: 'tt1234567', hashes: new Array(101).fill('a'.repeat(40)) },
 		});
 		const res3 = createMockResponse();
 		await handler(req3, res3);
@@ -60,7 +73,7 @@ describe('/api/torrents/stats/bulk', () => {
 	it('validates hash format', async () => {
 		const req = createMockRequest({
 			method: 'POST',
-			body: { hashes: ['invalid'] },
+			body: { imdbId: 'tt1234567', hashes: ['invalid'] },
 		});
 		const res = createMockResponse();
 
@@ -75,7 +88,7 @@ describe('/api/torrents/stats/bulk', () => {
 	it('returns formatted tracker stats for valid hashes', async () => {
 		const req = createMockRequest({
 			method: 'POST',
-			body: { hashes: ['a'.repeat(40)] },
+			body: { imdbId: 'tt1234567', hashes: ['a'.repeat(40)] },
 		});
 		const res = createMockResponse();
 
@@ -95,7 +108,7 @@ describe('/api/torrents/stats/bulk', () => {
 		mockGetTrackerStatsByHashes.mockRejectedValue(new Error('db'));
 		const req = createMockRequest({
 			method: 'POST',
-			body: { hashes: ['a'.repeat(40)] },
+			body: { imdbId: 'tt1234567', hashes: ['a'.repeat(40)] },
 		});
 		const res = createMockResponse();
 

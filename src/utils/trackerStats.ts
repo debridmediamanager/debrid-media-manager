@@ -9,7 +9,7 @@ function batchArray<T>(array: T[], batchSize: number): T[][] {
 	return batches;
 }
 
-export async function getMultipleTrackerStats(hashes: string[]): Promise<any[]> {
+export async function getMultipleTrackerStats(hashes: string[], imdbId: string): Promise<any[]> {
 	try {
 		// Batch hashes into groups of 100
 		const batches = batchArray(hashes, 100);
@@ -22,7 +22,7 @@ export async function getMultipleTrackerStats(hashes: string[]): Promise<any[]> 
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({ hashes: batch }),
+				body: JSON.stringify({ hashes: batch, imdbId }),
 			});
 
 			if (!response.ok) {

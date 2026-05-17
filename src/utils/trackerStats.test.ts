@@ -29,7 +29,7 @@ describe('trackerStats utils', () => {
 		fetchMock.mockResolvedValueOnce(firstResponse).mockResolvedValueOnce(secondResponse);
 
 		const hashes = Array.from({ length: 120 }, (_, index) => `hash-${index}`);
-		const results = await getMultipleTrackerStats(hashes);
+		const results = await getMultipleTrackerStats(hashes, 'tt1234567');
 
 		expect(results).toEqual([{ hash: 'hash-0' }, { hash: 'hash-1' }]);
 		expect(fetchMock).toHaveBeenCalledTimes(2);
@@ -44,7 +44,7 @@ describe('trackerStats utils', () => {
 		};
 		fetchMock.mockResolvedValue(errorResponse);
 
-		await expect(getMultipleTrackerStats(['hash-1'])).rejects.toThrow('boom');
+		await expect(getMultipleTrackerStats(['hash-1'], 'tt1234567')).rejects.toThrow('boom');
 		expect(errorResponse.json).toHaveBeenCalled();
 	});
 

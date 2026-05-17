@@ -638,7 +638,7 @@ const TvSearch: FunctionComponent = () => {
 			try {
 				// Bulk fetch existing tracker stats from database (no new scraping)
 				const hashes = uncachedResults.map((r) => r.hash);
-				const trackerStatsArray = await getMultipleTrackerStats(hashes);
+				const trackerStatsArray = await getMultipleTrackerStats(hashes, imdbid as string);
 
 				if (!isMounted.current) return;
 
