@@ -74,6 +74,7 @@ function TorrentsPage() {
 		hash: hashFilter,
 		mediaType,
 		status,
+		service,
 	} = router.query;
 	const [query, setQuery] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
@@ -508,6 +509,7 @@ function TorrentsPage() {
 			tvTitleFilter,
 			hashFilter,
 			mediaType,
+			service,
 			selectedTorrents,
 			sameTitle,
 			sameHash,
@@ -1719,6 +1721,10 @@ function TorrentsPage() {
 						failedCount={memoFailedCount}
 						activeMediaType={mediaType as string | undefined}
 						activeStatus={status as string | undefined}
+						activeService={service as string | undefined}
+						hasRd={!!rdKey}
+						hasAd={!!adKey}
+						hasTb={!!tbKey}
 					/>
 					<LibraryActionButtons
 						onSelectShown={() => selectShown(currentPageData, setSelectedTorrents)}

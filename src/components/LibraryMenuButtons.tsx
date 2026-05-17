@@ -17,6 +17,10 @@ interface LibraryMenuButtonsProps {
 	failedCount: number;
 	activeMediaType?: string;
 	activeStatus?: string;
+	activeService?: string;
+	hasRd?: boolean;
+	hasAd?: boolean;
+	hasTb?: boolean;
 }
 
 export default function LibraryMenuButtons({
@@ -34,8 +38,13 @@ export default function LibraryMenuButtons({
 	failedCount,
 	activeMediaType,
 	activeStatus,
+	activeService,
+	hasRd,
+	hasAd,
+	hasTb,
 }: LibraryMenuButtonsProps) {
-	const hasActiveFilter = !!activeMediaType || !!activeStatus;
+	const hasActiveFilter = !!activeMediaType || !!activeStatus || !!activeService;
+	const multipleServices = [hasRd, hasAd, hasTb].filter(Boolean).length > 1;
 	return (
 		<div className="mb-0 flex overflow-x-auto">
 			<LibraryButton
@@ -82,6 +91,33 @@ export default function LibraryMenuButtons({
 				<FolderOpen className="mr-1 inline-block h-4 w-4 text-orange-400" />
 				Others
 			</LibraryLinkButton>
+			{multipleServices && hasRd && (
+				<LibraryLinkButton
+					href="/library?service=rd&page=1"
+					variant="green"
+					active={activeService === 'rd'}
+				>
+					RD
+				</LibraryLinkButton>
+			)}
+			{multipleServices && hasAd && (
+				<LibraryLinkButton
+					href="/library?service=ad&page=1"
+					variant="green"
+					active={activeService === 'ad'}
+				>
+					AD
+				</LibraryLinkButton>
+			)}
+			{multipleServices && hasTb && (
+				<LibraryLinkButton
+					href="/library?service=tb&page=1"
+					variant="green"
+					active={activeService === 'tb'}
+				>
+					TB
+				</LibraryLinkButton>
+			)}
 			{sameHashSize > 0 && (
 				<LibraryLinkButton
 					href="/library?status=samehash&page=1"

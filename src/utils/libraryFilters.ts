@@ -16,6 +16,7 @@ export interface LibraryFilterOptions {
 	tvTitleFilter?: QueryValue;
 	hashFilter?: QueryValue;
 	mediaType?: QueryValue;
+	service?: QueryValue;
 	selectedTorrents?: Set<string>;
 	sameTitle?: Set<string>;
 	sameHash?: Set<string>;
@@ -35,6 +36,7 @@ export const filterLibraryItems = ({
 	tvTitleFilter,
 	hashFilter,
 	mediaType,
+	service,
 	selectedTorrents = new Set<string>(),
 	sameTitle = new Set<string>(),
 	sameHash = new Set<string>(),
@@ -49,6 +51,7 @@ export const filterLibraryItems = ({
 	const tvTitleValue = pickValue(tvTitleFilter);
 	const hashValue = pickValue(hashFilter);
 	const mediaValue = pickValue(mediaType);
+	const serviceValue = pickValue(service);
 
 	if (statusValue === 'slow') {
 		filteredList = filteredList.filter(isSlowOrNoLinks);
@@ -102,6 +105,15 @@ export const filterLibraryItems = ({
 	if (mediaValue) {
 		filteredList = filteredList.filter((torrent) => mediaValue === torrent.mediaType);
 		nextHelpText = `Torrents shown are detected as ${['movies', 'TV shows', 'non-movie/TV content'][['movie', 'tv', 'other'].indexOf(mediaValue as string)]}.`;
+	}
+	if (serviceValue) {
+		filteredList = filteredList.filter((torrent) => torrent.id.startsWith(`${serviceValue}:`));
+		const serviceNames: Record<string, string> = {
+			rd: 'Real-Debrid',
+			ad: 'AllDebrid',
+			tb: 'TorBox',
+		};
+		nextHelpText = `Showing torrents from ${serviceNames[serviceValue] ?? serviceValue}`;
 	}
 
 	return { list: filteredList, helpText: nextHelpText };
