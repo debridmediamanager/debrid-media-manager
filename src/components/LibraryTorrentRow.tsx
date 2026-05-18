@@ -94,6 +94,8 @@ function TorrentRow({
 		return torrent.serviceStatus; // Fallback to raw status
 	};
 
+	const [castService, setCastService] = useState<'rd' | 'tb' | null>(null);
+
 	// Handler for cast button click
 	const handleCastClick = async (imdbId?: string) => {
 		if (!rdKey || !torrent.id.startsWith('rd:')) return;
@@ -101,6 +103,7 @@ function TorrentRow({
 		const rdId = torrent.id.substring(3);
 		if (!rdId || !torrent.hash) return;
 
+		setCastService('rd');
 		setIsCasting(true);
 		try {
 			const castUrl = `/api/stremio/cast/library/${rdId}:${torrent.hash}?rdToken=${rdKey}${imdbId ? `&imdbId=${imdbId}` : ''}`;
@@ -108,14 +111,41 @@ function TorrentRow({
 			const data = await response.json();
 
 			if (data.status === 'need_imdb_id') {
-				// Show modal for user to search and select IMDB ID
 				setCastTorrentInfo(data.torrentInfo);
 				setShowCastModal(true);
 			} else if (data.status === 'error') {
-				// Show error toast
 				toast.error(data.errorMessage || 'Failed to cast to Stremio');
 			} else if (data.status === 'success') {
-				// Success - open Stremio deep link
+				window.location.href = data.redirectUrl;
+				toast.success('Opening in Stremio...');
+			}
+		} catch (error) {
+			console.error('Cast error:', error);
+			toast.error('Failed to cast to Stremio');
+		} finally {
+			setIsCasting(false);
+		}
+	};
+
+	const handleTbCastClick = async (imdbId?: string) => {
+		if (!tbKey || !torrent.id.startsWith('tb:')) return;
+
+		const tbId = torrent.id.substring(3);
+		if (!tbId || !torrent.hash) return;
+
+		setCastService('tb');
+		setIsCasting(true);
+		try {
+			const castUrl = `/api/stremio-tb/cast/library/${tbId}:${torrent.hash}?apiKey=${tbKey}${imdbId ? `&imdbId=${imdbId}` : ''}`;
+			const response = await fetch(castUrl);
+			const data = await response.json();
+
+			if (data.status === 'need_imdb_id') {
+				setCastTorrentInfo(data.torrentInfo);
+				setShowCastModal(true);
+			} else if (data.status === 'error') {
+				toast.error(data.errorMessage || 'Failed to cast to Stremio');
+			} else if (data.status === 'success') {
 				window.location.href = data.redirectUrl;
 				toast.success('Opening in Stremio...');
 			}
@@ -130,7 +160,11 @@ function TorrentRow({
 	// Handler for IMDB ID selection from modal
 	const handleSelectImdbId = async (imdbId: string) => {
 		setShowCastModal(false);
-		await handleCastClick(imdbId);
+		if (castService === 'tb') {
+			await handleTbCastClick(imdbId);
+		} else {
+			await handleCastClick(imdbId);
+		}
 	};
 
 	// Calculate filter texts
@@ -283,6 +317,19 @@ function TorrentRow({
 							disabled={isCasting}
 						>
 							<Cast className="h-4 w-4 text-green-400" />
+						</button>
+					)}
+					{tbKey && torrent.id.startsWith('tb:') && (
+						<button
+							title="Cast (TB)"
+							className="mb-2 mr-2 cursor-pointer text-cyan-400 disabled:opacity-50"
+							onClick={(e) => {
+								e.stopPropagation();
+								handleTbCastClick();
+							}}
+							disabled={isCasting}
+						>
+							<Cast className="h-4 w-4 text-cyan-400" />
 						</button>
 					)}
 					<button
