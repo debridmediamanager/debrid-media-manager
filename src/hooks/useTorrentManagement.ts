@@ -19,6 +19,21 @@ import { generateTokenAndHash } from '@/utils/token';
 import { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import type { MagnetFile } from '@/services/allDebrid';
+
+function flattenMagnetFiles(files: MagnetFile[], parentPath = ''): MagnetFile[] {
+	const result: MagnetFile[] = [];
+	for (const f of files) {
+		const fullPath = parentPath ? `${parentPath}/${f.n}` : f.n;
+		if (f.e) {
+			result.push(...flattenMagnetFiles(f.e, fullPath));
+		} else {
+			result.push({ n: fullPath, s: f.s, l: f.l });
+		}
+	}
+	return result;
+}
+
 const torrentDB = new UserTorrentDB();
 
 export function useTorrentManagement(
@@ -196,17 +211,17 @@ export function useTorrentManagement(
 						}
 					}
 
+					const flatFiles = flattenMagnetFiles(magnetStatus.files || []);
+
 					// Only submit availability for truly cached torrents (statusCode 4 = Ready)
 					if (magnetStatus.statusCode === 4 && magnetStatus.status === 'Ready') {
-						// Filter and transform files - links are optional, we just need name and size
-						const validFiles =
-							magnetStatus.files
-								?.filter((f) => f.n && f.s !== undefined)
-								.map((f) => ({
-									n: f.n,
-									s: f.s!,
-									l: f.l || '', // Link is optional, use empty string if not available
-								})) || [];
+						const validFiles = flatFiles
+							.filter((f) => f.n && f.s !== undefined)
+							.map((f) => ({
+								n: f.n,
+								s: f.s!,
+								l: f.l || '',
+							}));
 
 						// Only submit if we have valid files (name and size required)
 						if (validFiles.length > 0) {
@@ -247,12 +262,11 @@ export function useTorrentManagement(
 							added: new Date(magnetStatus.uploadDate || Date.now()),
 							mediaType: 'other',
 							links: magnetStatus.links?.map((l) => l.link) || [],
-							selectedFiles:
-								magnetStatus.files?.map((f, idx) => ({
-									filename: f.n,
-									filesize: f.s || 0,
-									link: f.l || '',
-								})) || [],
+							selectedFiles: flatFiles.map((f) => ({
+								filename: f.n,
+								filesize: f.s || 0,
+								link: f.l || '',
+							})),
 							seeders: magnetStatus.seeders || 0,
 							speed: magnetStatus.downloadSpeed || 0,
 							adData: magnetStatus,
