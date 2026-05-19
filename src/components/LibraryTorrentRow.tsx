@@ -94,7 +94,7 @@ function TorrentRow({
 		return torrent.serviceStatus; // Fallback to raw status
 	};
 
-	const [castService, setCastService] = useState<'rd' | 'tb' | null>(null);
+	const [castService, setCastService] = useState<'rd' | 'ad' | 'tb' | null>(null);
 
 	// Handler for cast button click
 	const handleCastClick = async (imdbId?: string) => {
@@ -107,6 +107,36 @@ function TorrentRow({
 		setIsCasting(true);
 		try {
 			const castUrl = `/api/stremio/cast/library/${rdId}:${torrent.hash}?rdToken=${rdKey}${imdbId ? `&imdbId=${imdbId}` : ''}`;
+			const response = await fetch(castUrl);
+			const data = await response.json();
+
+			if (data.status === 'need_imdb_id') {
+				setCastTorrentInfo(data.torrentInfo);
+				setShowCastModal(true);
+			} else if (data.status === 'error') {
+				toast.error(data.errorMessage || 'Failed to cast to Stremio');
+			} else if (data.status === 'success') {
+				window.location.href = data.redirectUrl;
+				toast.success('Opening in Stremio...');
+			}
+		} catch (error) {
+			console.error('Cast error:', error);
+			toast.error('Failed to cast to Stremio');
+		} finally {
+			setIsCasting(false);
+		}
+	};
+
+	const handleAdCastClick = async (imdbId?: string) => {
+		if (!adKey || !torrent.id.startsWith('ad:')) return;
+
+		const adId = torrent.id.substring(3);
+		if (!adId || !torrent.hash) return;
+
+		setCastService('ad');
+		setIsCasting(true);
+		try {
+			const castUrl = `/api/stremio-ad/cast/library/${adId}:${torrent.hash}?apiKey=${adKey}${imdbId ? `&imdbId=${imdbId}` : ''}`;
 			const response = await fetch(castUrl);
 			const data = await response.json();
 
@@ -162,6 +192,8 @@ function TorrentRow({
 		setShowCastModal(false);
 		if (castService === 'tb') {
 			await handleTbCastClick(imdbId);
+		} else if (castService === 'ad') {
+			await handleAdCastClick(imdbId);
 		} else {
 			await handleCastClick(imdbId);
 		}
@@ -317,6 +349,19 @@ function TorrentRow({
 							disabled={isCasting}
 						>
 							<Cast className="h-4 w-4 text-green-400" />
+						</button>
+					)}
+					{adKey && torrent.id.startsWith('ad:') && (
+						<button
+							title="Cast (AD)"
+							className="mb-2 mr-2 cursor-pointer text-purple-400 disabled:opacity-50"
+							onClick={(e) => {
+								e.stopPropagation();
+								handleAdCastClick();
+							}}
+							disabled={isCasting}
+						>
+							<Cast className="h-4 w-4 text-purple-400" />
 						</button>
 					)}
 					{tbKey && torrent.id.startsWith('tb:') && (
