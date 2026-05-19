@@ -87,6 +87,8 @@ export function CastSearchModal({
 		}
 	};
 
+	const directImdbMatch = searchQuery.match(/(tt\d{7,})/)?.[1];
+
 	if (!isOpen) return null;
 
 	return (
@@ -125,12 +127,30 @@ export function CastSearchModal({
 							type="text"
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
-							placeholder="Type to search..."
+							placeholder="Search by title or paste an IMDB ID (tt1234567)..."
 							className="w-full rounded-md border border-gray-700 bg-gray-800 py-2 pl-10 pr-4 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
 							autoFocus
 						/>
 					</div>
 				</div>
+
+				{/* Direct IMDB ID */}
+				{directImdbMatch && (
+					<button
+						onClick={() => onSelectImdbId(directImdbMatch)}
+						className="mb-4 flex w-full items-center gap-3 rounded-md border border-blue-500 bg-blue-900/30 p-3 text-left transition-colors hover:bg-blue-800/50"
+					>
+						<Film className="h-5 w-5 text-blue-400" />
+						<div>
+							<p className="font-semibold text-white">
+								Use IMDB ID: {directImdbMatch}
+							</p>
+							<p className="text-xs text-gray-400">
+								Cast using this IMDB ID directly
+							</p>
+						</div>
+					</button>
+				)}
 
 				{/* Loading State */}
 				{isLoading && (

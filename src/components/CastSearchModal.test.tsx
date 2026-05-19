@@ -67,7 +67,9 @@ describe('CastSearchModal', () => {
 
 	it('initializes search input with cleaned torrent title', () => {
 		render(<CastSearchModal {...defaultProps} />);
-		const input = screen.getByPlaceholderText('Type to search...') as HTMLInputElement;
+		const input = screen.getByPlaceholderText(
+			'Search by title or paste an IMDB ID (tt1234567)...'
+		) as HTMLInputElement;
 		expect(input.value).toContain('Inception');
 		expect(input.value).not.toContain('x264');
 	});
@@ -75,7 +77,9 @@ describe('CastSearchModal', () => {
 	it('shows help text when query is too short', async () => {
 		vi.useRealTimers();
 		render(<CastSearchModal {...defaultProps} />);
-		const input = screen.getByPlaceholderText('Type to search...');
+		const input = screen.getByPlaceholderText(
+			'Search by title or paste an IMDB ID (tt1234567)...'
+		);
 		fireEvent.change(input, { target: { value: 'a' } });
 
 		await waitFor(() => {
@@ -100,7 +104,9 @@ describe('CastSearchModal', () => {
 		(axios.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: mockResults });
 
 		render(<CastSearchModal {...defaultProps} />);
-		const input = screen.getByPlaceholderText('Type to search...');
+		const input = screen.getByPlaceholderText(
+			'Search by title or paste an IMDB ID (tt1234567)...'
+		);
 		fireEvent.change(input, { target: { value: 'Inception' } });
 
 		await waitFor(
@@ -128,7 +134,9 @@ describe('CastSearchModal', () => {
 		(axios.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: mockResults });
 
 		render(<CastSearchModal {...defaultProps} />);
-		const input = screen.getByPlaceholderText('Type to search...');
+		const input = screen.getByPlaceholderText(
+			'Search by title or paste an IMDB ID (tt1234567)...'
+		);
 		fireEvent.change(input, { target: { value: 'Inception' } });
 
 		await waitFor(
@@ -147,7 +155,9 @@ describe('CastSearchModal', () => {
 		(axios.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: [] });
 
 		render(<CastSearchModal {...defaultProps} />);
-		const input = screen.getByPlaceholderText('Type to search...');
+		const input = screen.getByPlaceholderText(
+			'Search by title or paste an IMDB ID (tt1234567)...'
+		);
 		fireEvent.change(input, { target: { value: 'xyznonexistent' } });
 
 		await waitFor(
@@ -165,7 +175,9 @@ describe('CastSearchModal', () => {
 		(axios.get as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('Network error'));
 
 		render(<CastSearchModal {...defaultProps} />);
-		const input = screen.getByPlaceholderText('Type to search...');
+		const input = screen.getByPlaceholderText(
+			'Search by title or paste an IMDB ID (tt1234567)...'
+		);
 		fireEvent.change(input, { target: { value: 'Inception' } });
 
 		await waitFor(
@@ -204,7 +216,9 @@ describe('CastSearchModal', () => {
 		(axios.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: mockResults });
 
 		render(<CastSearchModal {...defaultProps} />);
-		const input = screen.getByPlaceholderText('Type to search...');
+		const input = screen.getByPlaceholderText(
+			'Search by title or paste an IMDB ID (tt1234567)...'
+		);
 		fireEvent.change(input, { target: { value: 'test query' } });
 
 		await waitFor(
@@ -233,7 +247,9 @@ describe('CastSearchModal', () => {
 		(axios.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: mockResults });
 
 		render(<CastSearchModal {...defaultProps} />);
-		const input = screen.getByPlaceholderText('Type to search...');
+		const input = screen.getByPlaceholderText(
+			'Search by title or paste an IMDB ID (tt1234567)...'
+		);
 		fireEvent.change(input, { target: { value: 'Breaking Bad' } });
 
 		await waitFor(
