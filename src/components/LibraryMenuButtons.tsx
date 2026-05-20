@@ -70,7 +70,7 @@ export default function LibraryMenuButtons({
 		return `/library?${new URLSearchParams(base).toString()}`;
 	};
 	return (
-		<div className="mb-0 flex overflow-x-auto">
+		<div className="relative mb-0 flex overflow-x-auto [mask-image:linear-gradient(to_right,black_calc(100%-2rem),transparent)]">
 			<LibraryButton
 				variant="indigo"
 				onClick={onPrevPage}

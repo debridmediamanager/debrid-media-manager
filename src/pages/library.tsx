@@ -1789,6 +1789,17 @@ function TorrentsPage() {
 							Go Home
 						</Link>
 					</div>
+					{cacheError && (
+						<div className="mb-2 flex items-center gap-2 rounded border border-red-500/50 bg-red-900/20 px-3 py-1.5 text-xs text-red-300">
+							<span>Failed to load library: {cacheError}</span>
+							<button
+								onClick={refreshLibrary}
+								className="ml-auto rounded bg-red-800/50 px-2 py-0.5 text-red-200 hover:bg-red-700/50"
+							>
+								Retry
+							</button>
+						</div>
+					)}
 					<div className="mb-2 flex items-center border-b-2 border-gray-600 py-0">
 						<input
 							className="mr-3 w-full appearance-none border-none bg-transparent px-2 py-0.5 text-xs leading-tight text-gray-100 focus:outline-none"
@@ -1868,6 +1879,18 @@ function TorrentsPage() {
 										/>
 									</thead>
 									<tbody>
+										{currentPageData.length === 0 && (
+											<tr>
+												<td
+													colSpan={6}
+													className="py-8 text-center text-sm text-gray-400"
+												>
+													{query || mediaType || status || service
+														? 'No torrents match your filters.'
+														: 'Your library is empty.'}
+												</td>
+											</tr>
+										)}
 										{currentPageData.map((torrent) => (
 											<LibraryTorrentRow
 												key={torrent.id}

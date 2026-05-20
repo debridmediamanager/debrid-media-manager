@@ -1,7 +1,16 @@
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
-type ButtonVariant = 'orange' | 'yellow' | 'amber' | 'slate' | 'green' | 'red';
+type ButtonVariant =
+	| 'orange'
+	| 'yellow'
+	| 'amber'
+	| 'slate'
+	| 'green'
+	| 'red'
+	| 'cyan'
+	| 'teal'
+	| 'indigo';
 
 interface LibraryLinkButtonProps {
 	href: string;
@@ -20,6 +29,9 @@ const variantStyles: Record<ButtonVariant, string> = {
 	slate: 'border-slate-500 bg-slate-900/30 text-slate-100 hover:bg-slate-800/50',
 	green: 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50',
 	red: 'border-red-500 bg-red-900/30 text-red-100 hover:bg-red-800/50',
+	cyan: 'border-cyan-500 bg-cyan-900/30 text-cyan-100 hover:bg-cyan-800/50',
+	teal: 'border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50',
+	indigo: 'border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50',
 };
 
 const activeVariantStyles: Record<ButtonVariant, string> = {
@@ -29,6 +41,9 @@ const activeVariantStyles: Record<ButtonVariant, string> = {
 	slate: 'border-slate-400 bg-slate-500/60 text-white ring-1 ring-slate-400/50',
 	green: 'border-green-400 bg-green-500/60 text-white ring-1 ring-green-400/50',
 	red: 'border-red-400 bg-red-500/60 text-white ring-1 ring-red-400/50',
+	cyan: 'border-cyan-400 bg-cyan-500/60 text-white ring-1 ring-cyan-400/50',
+	teal: 'border-teal-400 bg-teal-500/60 text-white ring-1 ring-teal-400/50',
+	indigo: 'border-indigo-400 bg-indigo-500/60 text-white ring-1 ring-indigo-400/50',
 };
 
 export default function LibraryLinkButton({
