@@ -1819,6 +1819,7 @@ function TorrentsPage() {
 						activeMediaType={mediaType as string | undefined}
 						activeStatus={status as string | undefined}
 						activeService={service as string | undefined}
+						searchQuery={query}
 						hasRd={!!rdKey}
 						hasAd={!!adKey}
 						hasTb={!!tbKey}

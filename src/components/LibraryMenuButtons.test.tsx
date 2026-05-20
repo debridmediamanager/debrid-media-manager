@@ -49,6 +49,11 @@ describe('LibraryMenuButtons', () => {
 		expect(screen.getByText('Reset')).toBeInTheDocument();
 	});
 
+	it('renders Reset button when searchQuery is active', () => {
+		render(<LibraryMenuButtons {...defaultProps} searchQuery="test" />);
+		expect(screen.getByText('Reset')).toBeInTheDocument();
+	});
+
 	it('hides Reset button when no filter is active', () => {
 		render(<LibraryMenuButtons {...defaultProps} />);
 		expect(screen.queryByText('Reset')).not.toBeInTheDocument();
