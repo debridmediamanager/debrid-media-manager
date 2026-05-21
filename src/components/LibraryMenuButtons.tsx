@@ -29,6 +29,7 @@ interface LibraryMenuButtonsProps {
 	activeStatus?: string;
 	activeService?: string;
 	searchQuery?: string;
+	hasUrlFilter?: boolean;
 	hasRd?: boolean;
 	hasAd?: boolean;
 	hasTb?: boolean;
@@ -52,11 +53,13 @@ export default function LibraryMenuButtons({
 	activeStatus,
 	activeService,
 	searchQuery,
+	hasUrlFilter,
 	hasRd,
 	hasAd,
 	hasTb,
 }: LibraryMenuButtonsProps) {
-	const hasActiveFilter = !!activeMediaType || !!activeStatus || !!activeService || !!searchQuery;
+	const hasActiveFilter =
+		!!activeMediaType || !!activeStatus || !!activeService || !!searchQuery || !!hasUrlFilter;
 	const multipleServices = [hasRd, hasAd, hasTb].filter(Boolean).length > 1;
 
 	const buildHref = (params: Record<string, string | undefined>) => {

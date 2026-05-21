@@ -1831,6 +1831,7 @@ function TorrentsPage() {
 						activeStatus={status as string | undefined}
 						activeService={service as string | undefined}
 						searchQuery={query}
+						hasUrlFilter={!!titleFilter || !!tvTitleFilter || !!hashFilter}
 						hasRd={!!rdKey}
 						hasAd={!!adKey}
 						hasTb={!!tbKey}
