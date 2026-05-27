@@ -196,10 +196,8 @@ const TvSearch: FunctionComponent = () => {
 		hashAndProgress,
 		addRd,
 		addAd,
-		addTb,
 		deleteRd,
 		deleteAd,
-		deleteTb,
 		sortByMedian
 	);
 
@@ -1127,27 +1125,6 @@ const TvSearch: FunctionComponent = () => {
 									<>
 										<Search className="mr-1 h-3 w-3 text-orange-500" />
 										Check AD
-									</>
-								)}
-							</b>
-						</button>
-					)}
-					{torboxKey && (
-						<button
-							className="mb-1 mr-2 mt-0 rounded border-2 border-cyan-500 bg-cyan-900/30 p-1 text-xs text-cyan-100 transition-colors hover:bg-cyan-800/50 disabled:cursor-not-allowed disabled:opacity-50"
-							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['TB'])}
-							disabled={isAnyChecking}
-						>
-							<b className="flex items-center justify-center">
-								{isAnyChecking ? (
-									<>
-										<Loader2 className="mr-1 h-3 w-3 animate-spin text-cyan-500" />
-										Checking TB...
-									</>
-								) : (
-									<>
-										<Search className="mr-1 h-3 w-3 text-cyan-500" />
-										Check TB
 									</>
 								)}
 							</b>

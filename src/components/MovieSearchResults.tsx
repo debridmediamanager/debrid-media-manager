@@ -277,7 +277,6 @@ const MovieSearchResults = ({
 				const isCastingAd = castingAdHashes.has(r.hash);
 				const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 				const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
-				const isCheckingTb = isHashServiceChecking(r.hash, 'TB');
 
 				return (
 					<div
@@ -549,25 +548,6 @@ const MovieSearchResults = ({
 											<span className="inline-flex items-center">
 												<SearchIcon className="mr-1 h-3 w-3 text-orange-500" />
 												Check AD
-											</span>
-										)}
-									</button>
-								)}
-								{torboxKey && !r.tbAvailable && (
-									<button
-										className={`haptic-sm inline rounded border-2 border-cyan-500 bg-cyan-900/30 px-1 text-xs text-cyan-100 transition-colors hover:bg-cyan-800/50 ${isCheckingTb ? 'cursor-not-allowed opacity-50' : ''}`}
-										onClick={() => checkServiceAvailability(r, ['TB'])}
-										disabled={isCheckingTb}
-									>
-										{isCheckingTb ? (
-											<>
-												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-												Checking TB...
-											</>
-										) : (
-											<span className="inline-flex items-center">
-												<SearchIcon className="mr-1 h-3 w-3 text-cyan-500" />
-												Check TB
 											</span>
 										)}
 									</button>

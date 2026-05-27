@@ -1,4 +1,5 @@
 import { SearchResult } from '@/services/mediasearch';
+import { checkCachedStatus, TorBoxCachedResponse } from '@/services/torbox';
 import {
 	checkDatabaseAvailabilityAd,
 	checkDatabaseAvailabilityRd,
@@ -65,10 +66,8 @@ export function useAvailabilityCheck(
 	hashAndProgress: Record<string, number>,
 	addRd: (hash: string, isCheckingAvailability: boolean) => Promise<any>,
 	addAd: (hash: string, isCheckingAvailability: boolean) => Promise<any>,
-	addTb: (hash: string, isCheckingAvailability: boolean) => Promise<any>,
 	deleteRd: (hash: string) => Promise<void>,
 	deleteAd: (hash: string) => Promise<void>,
-	deleteTb: (hash: string) => Promise<void>,
 	sortFunction: (searchResults: SearchResult[]) => SearchResult[]
 ) {
 	const [checkingSet, setCheckingSet] = useState<Set<string>>(new Set());
@@ -212,26 +211,20 @@ export function useAvailabilityCheck(
 									isCachedInAD: Boolean(result.adAvailable),
 								}),
 
-						// TorBox availability check
+						// TorBox availability check (read-only, no add/delete)
 						torboxKey && servicesNeedingCheck.includes('TB')
 							? (async () => {
-									let addTbResponse: any;
-									// Check if torrent is in progress
-									if (`tb:${result.hash}` in hashAndProgress) {
-										await deleteTb(result.hash);
-										addTbResponse = await addTb(result.hash, true);
-									} else {
-										addTbResponse = await addTb(result.hash, true);
-										await deleteTb(result.hash);
-									}
-
-									// Check if addTb found it cached
+									const resp = await checkCachedStatus(
+										{ hash: result.hash, format: 'object', list_files: true },
+										torboxKey
+									);
+									const cached = resp.data as TorBoxCachedResponse | null;
+									const entry = cached?.[result.hash];
 									const isCachedInTB =
-										addTbResponse &&
-										addTbResponse.id &&
-										addTbResponse.download_finished;
-
-									return { addTbResponse, isCachedInTB };
+										!!entry &&
+										Array.isArray(entry.files) &&
+										entry.files.length > 0;
+									return { addTbResponse: null, isCachedInTB };
 								})()
 							: Promise.resolve({
 									addTbResponse: null,
@@ -391,10 +384,8 @@ export function useAvailabilityCheck(
 			hashAndProgress,
 			addRd,
 			addAd,
-			addTb,
 			deleteRd,
 			deleteAd,
-			deleteTb,
 			sortFunction,
 			resolveServicesToCheck,
 			isServiceAvailable,
@@ -592,48 +583,46 @@ export function useAvailabilityCheck(
 								)
 							: Promise.resolve([]),
 
-						// TorBox availability checks with concurrency limit
+						// TorBox availability checks (read-only batch via checkcached)
 						services.includes('TB')
-							? processWithConcurrency(
-									tbTargets,
-									async (result: SearchResult) => {
-										try {
-											let addTbResponse: any;
-											if (`tb:${result.hash}` in hashAndProgress) {
-												await deleteTb(result.hash);
-												addTbResponse = await addTb(result.hash, true);
-											} else {
-												addTbResponse = await addTb(result.hash, true);
-												await deleteTb(result.hash);
-											}
-
-											// Check if addTb returned a response and is cached
-											const isCachedInTB =
-												addTbResponse &&
-												addTbResponse.id &&
-												addTbResponse.download_finished;
-
-											if (isCachedInTB) {
-												realtimeAvailable.TB++;
-											}
-
-											return { result, isCachedInTB };
-										} catch (error) {
-											console.error(
-												`Failed TorBox check for ${result.title}:`,
-												error
-											);
-											throw error;
-										} finally {
-											removeChecking(result.hash, ['TB']);
+							? (async () => {
+									const batchSize = 100;
+									const allCached: Record<string, any> = {};
+									for (let i = 0; i < tbTargets.length; i += batchSize) {
+										const batch = tbTargets.slice(i, i + batchSize);
+										const resp = await checkCachedStatus(
+											{
+												hash: batch.map((t) => t.hash),
+												format: 'object',
+												list_files: true,
+											},
+											torboxKey!
+										);
+										if (resp.success && resp.data) {
+											Object.assign(allCached, resp.data as any);
 										}
-									},
-									3,
-									(completed: number, total: number) => {
-										checkProgress.TB = { completed, total };
+										checkProgress.TB = {
+											completed: Math.min(i + batchSize, tbTargets.length),
+											total: tbTargets.length,
+										};
 										updateProgressMessage();
 									}
-								)
+
+									return tbTargets.map((result) => {
+										const entry = allCached[result.hash];
+										const isCachedInTB =
+											!!entry &&
+											Array.isArray(entry.files) &&
+											entry.files.length > 0;
+										if (isCachedInTB) realtimeAvailable.TB++;
+										removeChecking(result.hash, ['TB']);
+										return {
+											item: result,
+											success: true,
+											result: { result, isCachedInTB },
+										};
+									});
+								})()
 							: Promise.resolve([]),
 
 						// Tracker stats checks (only for non-available torrents)
@@ -876,10 +865,8 @@ export function useAvailabilityCheck(
 			hashAndProgress,
 			addRd,
 			addAd,
-			addTb,
 			deleteRd,
 			deleteAd,
-			deleteTb,
 			sortFunction,
 			isAnyChecking,
 			resolveServicesToCheck,

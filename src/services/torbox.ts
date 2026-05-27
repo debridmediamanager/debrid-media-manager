@@ -11,7 +11,7 @@ import {
 	TorBoxUser,
 } from './types';
 
-export type { TorBoxTorrentInfo, TorBoxUser };
+export type { TorBoxCachedResponse, TorBoxTorrentInfo, TorBoxUser };
 
 // Safely access Next.js runtime config in test/non-Next environments
 const fallbackRuntimeConfig = {
