@@ -1,7 +1,7 @@
 import MediaHeader from '@/components/MediaHeader';
 import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
-import { showInfoForRD } from '@/components/showInfo';
+import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/components/showInfo';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
 import { useAvailabilityCheck } from '@/hooks/useAvailabilityCheck';
@@ -713,7 +713,46 @@ const TvSearch: FunctionComponent = () => {
 			speed: 0,
 			seeders: 0,
 		} as TorrentInfoResponse;
-		rdKey && showInfoForRD(player, rdKey!, info, imdbid as string, 'tv', shouldDownloadMagnets);
+		if (rdKey) {
+			showInfoForRD(player, rdKey!, info, imdbid as string, 'tv', shouldDownloadMagnets);
+		} else if (adKey) {
+			showInfoForAD(player, adKey, info, imdbid as string, shouldDownloadMagnets);
+		} else if (torboxKey) {
+			const tbInfo = {
+				id: 0,
+				hash: result.hash,
+				created_at: '',
+				updated_at: '',
+				magnet: '',
+				size: result.fileSize * 1024 * 1024,
+				active: false,
+				auth_id: '',
+				download_state: 'downloaded',
+				seeds: 0,
+				peers: 0,
+				ratio: 0,
+				progress: 100,
+				download_speed: 0,
+				upload_speed: 0,
+				name: result.title,
+				eta: 0,
+				server: 0,
+				torrent_file: false,
+				expires_at: '',
+				download_present: true,
+				download_finished: true,
+				files: result.files
+					.filter((file) => isVideo({ path: file.filename }))
+					.map((file, i) => ({
+						id: i,
+						name: file.filename,
+						size: file.filesize,
+					})),
+				inactive_check: 0,
+				availability: 0,
+			};
+			showInfoForTB(torboxKey, tbInfo, shouldDownloadMagnets);
+		}
 	};
 
 	async function handleCast(hash: string, fileIds: string[]) {

@@ -1,1 +1,1 @@
-export { showInfoForAD, showInfoForRD } from './showInfo/index';
+export { showInfoForAD, showInfoForRD, showInfoForTB } from './showInfo/index';
