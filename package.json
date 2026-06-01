@@ -64,7 +64,7 @@
 		"@types/user-agents": "^1.0.4",
 		"@types/uuid": "^10.0.0",
 		"@vitejs/plugin-react": "^5.0.2",
-		"@vitest/coverage-v8": "^3.2.4",
+		"@vitest/coverage-v8": "^4.1.8",
 		"autoprefixer": "^10.4.21",
 		"cypress": "^15.14.1",
 		"eslint": "^8.49.0",
@@ -85,7 +85,7 @@
 		"tailwindcss": "^3.4.17",
 		"testcontainers": "^11.11.0",
 		"typescript": "^5.8.3",
-		"vitest": "^3.1.1"
+		"vitest": "^4.1.8"
 	},
 	"lint-staged": {
 		"**/*.{js,jsx,ts,tsx}": "eslint --fix",
