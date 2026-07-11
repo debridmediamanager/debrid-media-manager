@@ -61,6 +61,15 @@ export class UnifiedRateLimiter {
 			burstSize: 10,
 		});
 
+		this.configs.set('torrin', {
+			maxRequestsPerMinute: 250,
+			maxConcurrent: 4,
+			retryAttempts: 3,
+			backoffMultiplier: 2,
+			jitterRange: 0.2,
+			burstSize: 10,
+		});
+
 		// Initialize structures for each service
 		for (const service of this.configs.keys()) {
 			this.queues.set(service, []);

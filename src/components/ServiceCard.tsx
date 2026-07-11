@@ -5,7 +5,7 @@ import { Check, X } from 'lucide-react';
 import Modal from '../components/modals/modal';
 
 interface ServiceCardProps {
-	service: 'rd' | 'ad' | 'tb' | 'trakt';
+	service: 'rd' | 'ad' | 'tb' | 'trakt' | 'tr';
 	user: RealDebridUser | AllDebridUser | TraktUser | any | null;
 	onTraktLogin: () => void;
 	onLogout: (prefix: string) => void;
@@ -97,6 +97,23 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
           <p><strong>Joined:</strong> ${new Date(traktUser.user.joined_at).toLocaleDateString()}</p>
           <p><strong>Private:</strong> ${traktUser.user.private ? 'Yes' : 'No'}</p>
           <p><strong>VIP:</strong> ${traktUser.user.vip ? 'Yes' : 'No'}</p>
+        </div>
+      `;
+		} else if (service === 'tr' && user) {
+			const trUser = user as {
+				username?: string;
+				email?: string;
+				premium?: number;
+				expiration?: string;
+			};
+			title = 'Torrin';
+			prefix = 'torrin:';
+			html = `
+        <div class="text-left">
+          <p><strong>Username:</strong> ${trUser.username ?? 'N/A'}</p>
+          <p><strong>Email:</strong> ${trUser.email ?? 'N/A'}</p>
+          <p><strong>Premium:</strong> ${trUser.premium ? 'Yes' : 'No'}</p>
+          ${trUser.expiration ? `<p><strong>Expires:</strong> ${new Date(trUser.expiration).toLocaleDateString()}</p>` : ''}
         </div>
       `;
 		}
@@ -227,6 +244,28 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 				className="haptic w-full rounded border-2 border-red-500 bg-red-900/30 py-1 text-center text-red-100 transition-colors hover:bg-red-800/50"
 			>
 				Trakt Login
+			</button>
+		);
+	}
+
+	if (service === 'tr') {
+		const trUser = user as { username?: string; email?: string } | null;
+		return trUser ? (
+			<button
+				onClick={() => showUserInfo('tr')}
+				className="haptic flex items-center justify-center gap-2 rounded border-2 border-sky-500 bg-sky-900/30 p-1 text-sky-100 transition-colors hover:bg-sky-800/50"
+			>
+				<span className="font-medium">Torrin</span>
+				<span>{(trUser.username || trUser.email || '').split('@')[0]}</span>
+				<Check className="h-4 w-4 text-green-500" />
+			</button>
+		) : (
+			<button
+				type="button"
+				onClick={onTraktLogin}
+				className="haptic w-full rounded border-2 border-sky-500 bg-sky-900/30 py-1 text-center text-sky-100 transition-colors hover:bg-sky-800/50"
+			>
+				Connect Torrin
 			</button>
 		);
 	}

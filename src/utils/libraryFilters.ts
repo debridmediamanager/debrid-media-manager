@@ -122,6 +122,7 @@ export const filterLibraryItems = ({
 			rd: 'Real-Debrid',
 			ad: 'AllDebrid',
 			tb: 'TorBox',
+			tr: 'Torrin',
 		};
 		nextHelpText = `Showing torrents from ${serviceNames[serviceValue] ?? serviceValue}`;
 	}

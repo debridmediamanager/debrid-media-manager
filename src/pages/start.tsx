@@ -5,12 +5,14 @@ import {
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 export default function StartPage() {
 	const router = useRouter();
-	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
+	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox, loginWithTorrin } =
+		useDebridLogin();
 	const [rdToken] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
@@ -111,6 +113,30 @@ export default function StartPage() {
 						rel="noopener noreferrer"
 					>
 						Create an account with Torbox
+					</a>
+				</div>
+
+				{/* Torrin */}
+				<div className="flex flex-row">
+					<button
+						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						onClick={loginWithTorrin}
+					>
+						Login with Torrin
+					</button>
+					<Link
+						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						href="/torrin/library"
+					>
+						Torrin Library
+					</Link>
+					<a
+						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+						href="https://github.com/torrin-app/torrin"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Self-host Torrin
 					</a>
 				</div>
 

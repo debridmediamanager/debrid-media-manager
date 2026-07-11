@@ -230,6 +230,31 @@ model AllDebridCast {
   @@index([imdbId, userId, updatedAt])
 }
 
+model TorrinCast {
+  id        String   @id @default(uuid())
+  imdbId    String
+  userId    String
+  hash      String
+  url       String   @db.Text
+  updatedAt DateTime @updatedAt
+  size      BigInt   @default(0)
+  link      String?  @db.Text
+
+  @@unique([imdbId, userId, hash])
+  @@index([imdbId, userId, updatedAt])
+}
+
+model TorrinCastProfile {
+  userId            String   @id
+  baseUrl           String   @db.Text
+  apiKey            String   @db.Text
+  updatedAt         DateTime @updatedAt
+  movieMaxSize      Float    @default(0)
+  episodeMaxSize    Float    @default(0)
+  otherStreamsLimit Int      @default(5)
+  hideCastOption    Boolean  @default(false)
+}
+
 model AllDebridCastProfile {
   userId            String   @id
   apiKey            String   @db.Text

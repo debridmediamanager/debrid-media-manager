@@ -55,7 +55,9 @@ vi.mock('@/hooks/auth', () => ({
 		loginWithRealDebrid: vi.fn(),
 		loginWithAllDebrid: vi.fn(),
 		loginWithTorbox: vi.fn(),
+		loginWithTorrin: vi.fn(),
 	}),
+	useTorrinCreds: () => [null, null],
 }));
 
 vi.mock('@/hooks/castToken', () => ({

@@ -10,6 +10,7 @@ import {
 	handleDeleteAdTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
+	handleDeleteTrTorrent,
 } from '@/utils/deleteTorrent';
 import { handleShare } from '@/utils/hashList';
 import { normalize } from '@/utils/mediaId';
@@ -43,6 +44,8 @@ interface TorrentRowProps {
 	rdKey: string | null;
 	adKey: string | null;
 	tbKey: string | null;
+	torrinBaseUrl?: string | null;
+	torrinApiKey?: string | null;
 	shouldDownloadMagnets: boolean;
 	hashGrouping: Record<string, number>;
 	titleGrouping: Record<string, number>;
@@ -63,6 +66,8 @@ function TorrentRow({
 	rdKey,
 	adKey,
 	tbKey,
+	torrinBaseUrl,
+	torrinApiKey,
 	shouldDownloadMagnets,
 	hashGrouping,
 	titleGrouping,
@@ -94,7 +99,7 @@ function TorrentRow({
 		return torrent.serviceStatus; // Fallback to raw status
 	};
 
-	const [castService, setCastService] = useState<'rd' | 'ad' | 'tb' | null>(null);
+	const [castService, setCastService] = useState<'rd' | 'ad' | 'tb' | 'tr' | null>(null);
 
 	// Handler for cast button click
 	const handleCastClick = async (imdbId?: string) => {
@@ -187,6 +192,36 @@ function TorrentRow({
 		}
 	};
 
+	const handleTrCastClick = async (imdbId?: string) => {
+		if (!torrinBaseUrl || !torrinApiKey || !torrent.id.startsWith('tr:')) return;
+
+		const trId = torrent.id.substring(3);
+		if (!trId || !torrent.hash) return;
+
+		setCastService('tr');
+		setIsCasting(true);
+		try {
+			const castUrl = `/api/stremio-tr/cast/library/${trId}:${torrent.hash}?baseUrl=${encodeURIComponent(torrinBaseUrl)}&apiKey=${encodeURIComponent(torrinApiKey)}${imdbId ? `&imdbId=${imdbId}` : ''}`;
+			const response = await fetch(castUrl);
+			const data = await response.json();
+
+			if (data.status === 'need_imdb_id') {
+				setCastTorrentInfo(data.torrentInfo);
+				setShowCastModal(true);
+			} else if (data.status === 'error') {
+				toast.error(data.errorMessage || 'Failed to cast to Stremio');
+			} else if (data.status === 'success') {
+				window.location.href = data.redirectUrl;
+				toast.success('Opening in Stremio...');
+			}
+		} catch (error) {
+			console.error('Cast error:', error);
+			toast.error('Failed to cast to Stremio');
+		} finally {
+			setIsCasting(false);
+		}
+	};
+
 	// Handler for IMDB ID selection from modal
 	const handleSelectImdbId = async (imdbId: string) => {
 		setShowCastModal(false);
@@ -194,6 +229,8 @@ function TorrentRow({
 			await handleTbCastClick(imdbId);
 		} else if (castService === 'ad') {
 			await handleAdCastClick(imdbId);
+		} else if (castService === 'tr') {
+			await handleTrCastClick(imdbId);
 		} else {
 			await handleCastClick(imdbId);
 		}
@@ -377,6 +414,19 @@ function TorrentRow({
 							<Cast className="h-4 w-4 text-cyan-400" />
 						</button>
 					)}
+					{torrinBaseUrl && torrinApiKey && torrent.id.startsWith('tr:') && (
+						<button
+							title="Cast (TR)"
+							className="mb-2 mr-2 cursor-pointer text-sky-400 disabled:opacity-50"
+							onClick={(e) => {
+								e.stopPropagation();
+								handleTrCastClick();
+							}}
+							disabled={isCasting}
+						>
+							<Cast className="h-4 w-4 text-sky-400" />
+						</button>
+					)}
 					<button
 						title="Share"
 						className="mb-2 mr-2 cursor-pointer text-indigo-600"
@@ -401,6 +451,13 @@ function TorrentRow({
 							}
 							if (tbKey && torrent.id.startsWith('tb:')) {
 								success = await handleDeleteTbTorrent(tbKey, torrent.id);
+							}
+							if (torrinBaseUrl && torrinApiKey && torrent.id.startsWith('tr:')) {
+								success = await handleDeleteTrTorrent(
+									torrinBaseUrl,
+									torrinApiKey,
+									torrent.id
+								);
 							}
 							if (success) onDelete(torrent.id);
 						}}

@@ -51,6 +51,7 @@ describe('StartPage', () => {
 			loginWithRealDebrid: mockLoginWithRealDebrid,
 			loginWithAllDebrid: mockLoginWithAllDebrid,
 			loginWithTorbox: mockLoginWithTorbox,
+			loginWithTorrin: vi.fn(),
 		});
 
 		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false]);

@@ -6,9 +6,10 @@ import { useCallback, useEffect, useState } from 'react';
 export function useExternalSources(
 	rdKey: string | null,
 	adKey?: string | null,
-	tbKey?: string | null
+	tbKey?: string | null,
+	torrinApiKey?: string | null
 ) {
-	const hasAnyDebridKey = !!(rdKey || adKey || tbKey);
+	const hasAnyDebridKey = !!(rdKey || adKey || tbKey || torrinApiKey);
 	const [mediafusionHash, setMediafusionHash] = useState<string>('');
 
 	// Get or generate MediaFusion hash

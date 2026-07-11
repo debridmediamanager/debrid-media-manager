@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ReportButton from './ReportButton';
+import TorrinResultButton from './TorrinResultButton';
 
 type MovieSearchResultsProps = {
 	filteredResults: SearchResult[];
@@ -28,6 +29,7 @@ type MovieSearchResultsProps = {
 	handleCast: (hash: string) => Promise<void>;
 	handleCastTorBox?: (hash: string) => Promise<void>;
 	handleCastAllDebrid?: (hash: string) => Promise<void>;
+	handleCastTorrin?: (hash: string) => Promise<void>;
 	handleCopyMagnet: (hash: string) => void;
 	checkServiceAvailability: (
 		result: SearchResult,
@@ -56,6 +58,7 @@ const MovieSearchResults = ({
 	handleCast,
 	handleCastTorBox,
 	handleCastAllDebrid,
+	handleCastTorrin,
 	handleCopyMagnet,
 	checkServiceAvailability,
 	addRd,
@@ -71,6 +74,7 @@ const MovieSearchResults = ({
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
 	const [castingTbHashes, setCastingTbHashes] = useState<Set<string>>(new Set());
 	const [castingAdHashes, setCastingAdHashes] = useState<Set<string>>(new Set());
+	const [castingTrHashes, setCastingTrHashes] = useState<Set<string>>(new Set());
 	const [downloadMagnets, setDownloadMagnets] = useState(false);
 
 	useEffect(() => {
@@ -213,6 +217,20 @@ const MovieSearchResults = ({
 		}
 	};
 
+	const handleCastTorrinWithLoading = async (hash: string) => {
+		if (!handleCastTorrin || castingTrHashes.has(hash)) return;
+		setCastingTrHashes((prev) => new Set(prev).add(hash));
+		try {
+			await handleCastTorrin(hash);
+		} finally {
+			setCastingTrHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
 	const handleMagnetAction = (hash: string) => {
 		if (downloadMagnets) {
 			downloadMagnetFile(hash);
@@ -275,6 +293,7 @@ const MovieSearchResults = ({
 				const isCasting = castingHashes.has(r.hash);
 				const isCastingTb = castingTbHashes.has(r.hash);
 				const isCastingAd = castingAdHashes.has(r.hash);
+				const isCastingTr = castingTrHashes.has(r.hash);
 				const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 				const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
 
@@ -450,6 +469,8 @@ const MovieSearchResults = ({
 									</button>
 								)}
 
+								<TorrinResultButton hash={r.hash} available={r.torrinAvailable} />
+
 								{/* Cast (RD) btn - only show if cached on RD */}
 								{rdKey && r.rdAvailable && (
 									<button
@@ -508,6 +529,27 @@ const MovieSearchResults = ({
 											<span className="inline-flex items-center">
 												<Cast className="mr-1 h-3 w-3 text-yellow-400" />
 												Cast (AD)
+											</span>
+										)}
+									</button>
+								)}
+
+								{/* Cast (TR) btn - only show if cached on Torrin */}
+								{handleCastTorrin && r.torrinAvailable && (
+									<button
+										className={`haptic-sm inline rounded border-2 border-sky-500 bg-sky-900/30 px-1 text-xs text-sky-100 transition-colors hover:bg-sky-800/50 ${isCastingTr ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleCastTorrinWithLoading(r.hash)}
+										disabled={isCastingTr}
+									>
+										{isCastingTr ? (
+											<>
+												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+												Casting...
+											</>
+										) : (
+											<span className="inline-flex items-center">
+												<Cast className="mr-1 h-3 w-3 text-sky-400" />
+												Cast (TR)
 											</span>
 										)}
 									</button>

@@ -3,11 +3,17 @@ import MovieSearchResults from '@/components/MovieSearchResults';
 import SearchControls from '@/components/SearchControls';
 import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/components/showInfo';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
+import {
+	useAllDebridApiKey,
+	useRealDebridAccessToken,
+	useTorBoxAccessToken,
+	useTorrinCreds,
+} from '@/hooks/auth';
 import { useAvailabilityCheck } from '@/hooks/useAvailabilityCheck';
 import { useExternalSources } from '@/hooks/useExternalSources';
 import { useMassReport } from '@/hooks/useMassReport';
 import { useTorrentManagement } from '@/hooks/useTorrentManagement';
+import { useTorrinAvailability } from '@/hooks/useTorrinAvailability';
 import { SearchApiResponse, SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
@@ -36,6 +42,7 @@ import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { handleCastMovieTorBox } from '@/utils/torboxCastApiClient';
+import { handleCastMovieTorrin } from '@/utils/torrinCastApiClient';
 import { getMultipleTrackerStats } from '@/utils/trackerStats';
 import { withAuth } from '@/utils/withAuth';
 import { buildYearRegex } from '@/utils/yearFilter';
@@ -144,6 +151,7 @@ const MovieSearch: FunctionComponent = () => {
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const torboxKey = useTorBoxAccessToken();
+	const [torrinBaseUrl, torrinApiKey] = useTorrinCreds();
 
 	// Library sync status - used to prevent auto-availability check while library is still loading
 	const { isFetching: isLibrarySyncing } = useLibraryCache();
@@ -181,7 +189,8 @@ const MovieSearch: FunctionComponent = () => {
 	const { fetchMovieFromExternalSource, getEnabledSources } = useExternalSources(
 		rdKey,
 		adKey,
-		torboxKey
+		torboxKey,
+		torrinApiKey
 	);
 
 	const {
@@ -204,7 +213,15 @@ const MovieSearch: FunctionComponent = () => {
 		sortByBiggest
 	);
 
-	const { handleMassReport } = useMassReport(rdKey, adKey, torboxKey, imdbid as string);
+	useTorrinAvailability(searchResults, setSearchResults);
+
+	const { handleMassReport } = useMassReport(
+		rdKey,
+		adKey,
+		torboxKey,
+		imdbid as string,
+		torrinApiKey
+	);
 
 	// Fetch movie info
 	useEffect(() => {
@@ -741,6 +758,19 @@ const MovieSearch: FunctionComponent = () => {
 		window.open(getStremioDetailUrl(imdbid as string));
 	}
 
+	async function handleCastTorrin(hash: string) {
+		await toast.promise(
+			handleCastMovieTorrin(imdbid as string, torrinBaseUrl!, torrinApiKey!, hash),
+			{
+				loading: 'Starting Torrin cast in Stremio...',
+				success: 'Cast started in Stremio',
+				error: 'Torrin cast failed in Stremio',
+			},
+			castToastOptions
+		);
+		window.open(getStremioDetailUrl(imdbid as string));
+	}
+
 	const getFirstAvailableRdTorrent = () => {
 		return filteredResults.find((r) => r.rdAvailable && !r.noVideos);
 	};
@@ -964,6 +994,9 @@ const MovieSearch: FunctionComponent = () => {
 						handleCast={handleCast}
 						handleCastTorBox={torboxKey ? handleCastTorBox : undefined}
 						handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
+						handleCastTorrin={
+							torrinBaseUrl && torrinApiKey ? handleCastTorrin : undefined
+						}
 						handleCopyMagnet={(hash) =>
 							handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)
 						}

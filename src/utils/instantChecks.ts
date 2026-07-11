@@ -1,6 +1,7 @@
 import { MagnetFile, adInstantCheck } from '@/services/allDebrid';
 import { EnrichedHashlistTorrent, FileData, SearchResult } from '@/services/mediasearch';
 import { checkCachedStatus } from '@/services/torbox';
+import { torrinInstantCheck } from '@/services/torrin';
 import { delay } from '@/utils/delay';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-hot-toast';
@@ -437,6 +438,44 @@ const processTbInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	return instantCount;
 };
 
+const processTrInstantCheck = async <T extends SearchResult | EnrichedHashlistTorrent>(
+	baseUrl: string,
+	apiKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<T[]>>,
+	sortFn?: (results: T[]) => T[]
+): Promise<number> => {
+	let instantCount = 0;
+	const cached = new Set<string>();
+	const funcs = [];
+
+	for (const hashGroup of groupBy(100, hashes)) {
+		funcs.push(async () => {
+			const resp = await torrinInstantCheck(baseUrl, apiKey, hashGroup);
+			for (const h of Object.keys(resp || {})) {
+				cached.add(h.toLowerCase());
+			}
+		});
+	}
+	await runConcurrentFunctions(funcs, 2, 200);
+
+	if (cached.size === 0) return 0;
+
+	setTorrentList((prevSearchResults) => {
+		const newSearchResults = [...prevSearchResults];
+		for (const torrent of newSearchResults) {
+			if (torrent.noVideos) continue;
+			if (cached.has(torrent.hash.toLowerCase())) {
+				torrent.torrinAvailable = true;
+				instantCount += 1;
+			}
+		}
+		return sortFn ? sortFn(newSearchResults) : newSearchResults;
+	});
+
+	return instantCount;
+};
+
 // Wrapper functions
 export const wrapLoading = async function (debrid: string, checkAvailability: Promise<number>) {
 	return await toast.promise(
@@ -495,3 +534,10 @@ export const checkDatabaseAvailabilityTb2 = (
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
 ) => processTbInstantCheck(tbKey, hashes, setTorrentList);
+
+export const checkDatabaseAvailabilityTr2 = (
+	baseUrl: string,
+	apiKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
+) => processTrInstantCheck(baseUrl, apiKey, hashes, setTorrentList);

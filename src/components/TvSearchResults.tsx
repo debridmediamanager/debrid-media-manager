@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ReportButton from './ReportButton';
+import TorrinResultButton from './TorrinResultButton';
 
 type TvSearchResultsProps = {
 	filteredResults: SearchResult[];
@@ -29,6 +30,7 @@ type TvSearchResultsProps = {
 	handleCast: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCastTorBox?: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCastAllDebrid?: (hash: string, files: { filename: string }[]) => Promise<void>;
+	handleCastTorrin?: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCopyMagnet: (hash: string) => void;
 	checkServiceAvailability: (
 		result: SearchResult,
@@ -58,6 +60,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	handleCast,
 	handleCastTorBox,
 	handleCastAllDebrid,
+	handleCastTorrin,
 	handleCopyMagnet,
 	checkServiceAvailability,
 	addRd,
@@ -73,6 +76,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
 	const [castingTbHashes, setCastingTbHashes] = useState<Set<string>>(new Set());
 	const [castingAdHashes, setCastingAdHashes] = useState<Set<string>>(new Set());
+	const [castingTrHashes, setCastingTrHashes] = useState<Set<string>>(new Set());
 	const [downloadMagnets, setDownloadMagnets] = useState(false);
 
 	useEffect(() => {
@@ -187,6 +191,20 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 		}
 	};
 
+	const handleCastTorrinWithLoading = async (hash: string, fileIds: string[]) => {
+		if (!handleCastTorrin || castingTrHashes.has(hash)) return;
+		setCastingTrHashes((prev) => new Set(prev).add(hash));
+		try {
+			await handleCastTorrin(hash, fileIds);
+		} finally {
+			setCastingTrHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
 	const handleMagnetAction = (hash: string) => {
 		if (downloadMagnets) {
 			downloadMagnetFile(hash);
@@ -264,6 +282,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						const isCasting = castingHashes.has(r.hash);
 						const isCastingTb = castingTbHashes.has(r.hash);
 						const isCastingAd = castingAdHashes.has(r.hash);
+						const isCastingTr = castingTrHashes.has(r.hash);
 						const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 						const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
 
@@ -439,6 +458,11 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											</button>
 										)}
 
+										<TorrinResultButton
+											hash={r.hash}
+											available={r.torrinAvailable}
+										/>
+
 										{/* Cast (RD) button - only show if cached on RD */}
 										{rdKey && r.rdAvailable && castableFileIds.length > 0 && (
 											<button
@@ -515,6 +539,34 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 														<>
 															<Cast className="mr-1 inline-block h-3 w-3 text-yellow-400" />
 															Cast (AD)
+														</>
+													)}
+												</button>
+											)}
+
+										{/* Cast (TR) button - only show if cached on Torrin */}
+										{handleCastTorrin &&
+											r.torrinAvailable &&
+											castableFileIds.length > 0 && (
+												<button
+													className={`haptic-sm inline rounded border-2 border-sky-500 bg-sky-900/30 px-1 text-xs text-sky-100 transition-colors hover:bg-sky-800/50 ${isCastingTr ? 'cursor-not-allowed opacity-50' : ''}`}
+													onClick={() =>
+														handleCastTorrinWithLoading(
+															r.hash,
+															castableFileIds
+														)
+													}
+													disabled={isCastingTr}
+												>
+													{isCastingTr ? (
+														<>
+															<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+															Casting...
+														</>
+													) : (
+														<>
+															<Cast className="mr-1 inline-block h-3 w-3 text-sky-400" />
+															Cast (TR)
 														</>
 													)}
 												</button>

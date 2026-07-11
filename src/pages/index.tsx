@@ -25,6 +25,7 @@ function IndexPage() {
 		rdUser,
 		adUser,
 		tbUser,
+		torrinUser,
 		rdError,
 		adError,
 		tbError,
@@ -36,7 +37,8 @@ function IndexPage() {
 		hasTraktAuth,
 		isLoading,
 	} = useCurrentUser();
-	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
+	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox, loginWithTorrin } =
+		useDebridLogin();
 	const [browseTerms] = useState(getTerms(2));
 	const [showElfHostedBanner, setShowElfHostedBanner] = useState(true);
 
@@ -204,6 +206,7 @@ function IndexPage() {
 							rdUser={rdUser}
 							tbUser={tbUser}
 							adUser={!!adUser}
+							torrinConnected={!!torrinUser}
 							isLoading={isLoading}
 						/>
 						<Link
@@ -235,6 +238,12 @@ function IndexPage() {
 								service="tb"
 								user={tbUser}
 								onTraktLogin={loginWithTorbox}
+								onLogout={async (prefix) => await handleLogout(prefix, router)}
+							/>
+							<ServiceCard
+								service="tr"
+								user={torrinUser}
+								onTraktLogin={loginWithTorrin}
 								onLogout={async (prefix) => await handleLogout(prefix, router)}
 							/>
 							<ServiceCard

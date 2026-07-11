@@ -7,11 +7,12 @@ export function useMassReport(
 	rdKey: string | null,
 	adKey: string | null,
 	torboxKey: string | null,
-	imdbId: string
+	imdbId: string,
+	torrinApiKey?: string | null
 ) {
 	const handleMassReport = useCallback(
 		async (type: 'porn' | 'wrong_imdb' | 'wrong_season', filteredResults: SearchResult[]) => {
-			if (!rdKey && !adKey && !torboxKey) {
+			if (!rdKey && !adKey && !torboxKey && !torrinApiKey) {
 				toast.error('Sign in to a debrid service before reporting.');
 				return;
 			}
@@ -34,7 +35,7 @@ export function useMassReport(
 
 			try {
 				// Use the debrid key as userId
-				const userId = rdKey || adKey || torboxKey || '';
+				const userId = rdKey || adKey || torboxKey || torrinApiKey || '';
 
 				// Prepare reports data
 				const reports = filteredResults.map((result) => ({
@@ -74,7 +75,7 @@ export function useMassReport(
 				}, 1500);
 			}
 		},
-		[rdKey, adKey, torboxKey, imdbId]
+		[rdKey, adKey, torboxKey, imdbId, torrinApiKey]
 	);
 
 	return { handleMassReport };

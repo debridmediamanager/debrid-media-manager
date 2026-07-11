@@ -2,7 +2,12 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
+import {
+	useAllDebridApiKey,
+	useRealDebridAccessToken,
+	useTorBoxAccessToken,
+	useTorrinCreds,
+} from '@/hooks/auth';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
 	EnhancedLibraryCacheProvider,
@@ -108,6 +113,7 @@ vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: vi.fn(),
 	useAllDebridApiKey: vi.fn(),
 	useTorBoxAccessToken: vi.fn(),
+	useTorrinCreds: vi.fn(),
 }));
 
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -117,6 +123,7 @@ const wrapper = ({ children }: { children: ReactNode }) => (
 const mockedUseRealDebridAccessToken = vi.mocked(useRealDebridAccessToken);
 const mockedUseAllDebridApiKey = vi.mocked(useAllDebridApiKey);
 const mockedUseTorBoxAccessToken = vi.mocked(useTorBoxAccessToken);
+const mockedUseTorrinCreds = vi.mocked(useTorrinCreds);
 
 describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 	beforeEach(() => {
@@ -130,6 +137,7 @@ describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 		mockedUseRealDebridAccessToken.mockReturnValue([null, false, false]);
 		mockedUseAllDebridApiKey.mockReturnValue(null);
 		mockedUseTorBoxAccessToken.mockReturnValue(null);
+		mockedUseTorrinCreds.mockReturnValue([null, null]);
 	});
 
 	afterEach(() => {});

@@ -4,12 +4,18 @@
  * parallel fetching, and automatic state monitoring
  */
 
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
+import {
+	useAllDebridApiKey,
+	useRealDebridAccessToken,
+	useTorBoxAccessToken,
+	useTorrinCreds,
+} from '@/hooks/auth';
 import { CacheManager, getGlobalCache } from '@/services/cache/CacheManager';
 import { FetchOptions, UnifiedLibraryFetcher } from '@/services/library/UnifiedLibraryFetcher';
 import { UnifiedRateLimiter, getGlobalRateLimiter } from '@/services/rateLimit/UnifiedRateLimiter';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent } from '@/torrent/userTorrent';
+import { packTorrinToken } from '@/utils/torrinToken';
 import {
 	ReactNode,
 	createContext,
@@ -69,6 +75,7 @@ interface LibraryStats {
 	rdItems: number;
 	adItems: number;
 	tbItems: number;
+	trItems: number;
 	lastSync: Date | null;
 	cacheHitRate: number;
 	averageFetchTime: number;
@@ -89,6 +96,7 @@ interface EnhancedLibraryCacheContextType {
 	rdLibrary: UserTorrent[];
 	adLibrary: UserTorrent[];
 	tbLibrary: UserTorrent[];
+	trLibrary: UserTorrent[];
 
 	// Status and stats
 	syncStatus: SyncStatus;
@@ -96,7 +104,7 @@ interface EnhancedLibraryCacheContextType {
 
 	// Actions
 	refreshLibrary: (
-		service?: 'realdebrid' | 'alldebrid' | 'torbox',
+		service?: 'realdebrid' | 'alldebrid' | 'torbox' | 'torrin',
 		force?: boolean
 	) => Promise<void>;
 	refreshAll: (force?: boolean) => Promise<void>;
@@ -135,15 +143,19 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 	const [rdKey, rdLoading] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
+	const [torrinBaseUrl, torrinApiKey] = useTorrinCreds();
+	const trKey =
+		torrinBaseUrl && torrinApiKey ? packTorrinToken(torrinBaseUrl, torrinApiKey) : null;
 
 	// Library state
 	const [libraryItems, setLibraryItems] = useState<UserTorrent[]>([]);
 	const [rdLibrary, setRdLibrary] = useState<UserTorrent[]>([]);
 	const [adLibrary, setAdLibrary] = useState<UserTorrent[]>([]);
 	const [tbLibrary, setTbLibrary] = useState<UserTorrent[]>([]);
+	const [trLibrary, setTrLibrary] = useState<UserTorrent[]>([]);
 
 	// Auth state helper
-	const hasAnyAuth = Boolean(rdKey || adKey || tbKey);
+	const hasAnyAuth = Boolean(rdKey || adKey || tbKey || trKey);
 
 	// Sync status
 	const [syncStatus, setSyncStatus] = useState<SyncStatus>({
@@ -161,6 +173,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		rdItems: 0,
 		adItems: 0,
 		tbItems: 0,
+		trItems: 0,
 		lastSync: null,
 		cacheHitRate: 0,
 		averageFetchTime: 0,
@@ -176,11 +189,13 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		rd: normalizeToken(rdKey),
 		ad: normalizeToken(adKey),
 		tb: normalizeToken(tbKey),
+		tr: normalizeToken(trKey),
 	});
 	const initialRefreshDoneRef = useRef({
 		rd: false,
 		ad: false,
 		tb: false,
+		tr: false,
 	});
 
 	// Update statistics
@@ -188,6 +203,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		const rd = torrents.filter((t) => t.id.startsWith('rd:')).length;
 		const ad = torrents.filter((t) => t.id.startsWith('ad:')).length;
 		const tb = torrents.filter((t) => t.id.startsWith('tb:')).length;
+		const tr = torrents.filter((t) => t.id.startsWith('tr:')).length;
 
 		const cacheHitRate =
 			cacheHitsRef.current.hits + cacheHitsRef.current.misses > 0
@@ -205,6 +221,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			rdItems: rd,
 			adItems: ad,
 			tbItems: tb,
+			trItems: tr,
 			lastSync: prev.lastSync,
 			cacheHitRate: Math.round(cacheHitRate * 100),
 			averageFetchTime: Math.round(avgFetchTime),
@@ -223,14 +240,17 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 				const rd = cachedTorrents.filter((t) => t.id.startsWith('rd:'));
 				const ad = cachedTorrents.filter((t) => t.id.startsWith('ad:'));
 				const tb = cachedTorrents.filter((t) => t.id.startsWith('tb:'));
+				const tr = cachedTorrents.filter((t) => t.id.startsWith('tr:'));
 
 				setRdLibrary(rd);
 				setAdLibrary(ad);
 				setTbLibrary(tb);
+				setTrLibrary(tr);
 
 				initialRefreshDoneRef.current.rd = rd.length > 0;
 				initialRefreshDoneRef.current.ad = ad.length > 0;
 				initialRefreshDoneRef.current.tb = tb.length > 0;
+				initialRefreshDoneRef.current.tr = tr.length > 0;
 
 				updateStats(cachedTorrents);
 
@@ -280,14 +300,20 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		}
 	}, [tbKey]);
 
+	useEffect(() => {
+		if (!trKey) {
+			setTrLibrary([]);
+		}
+	}, [trKey]);
+
 	// Update combined library
 	const updateCombinedLibrary = useCallback(() => {
-		const combined = [...rdLibrary, ...adLibrary, ...tbLibrary];
+		const combined = [...rdLibrary, ...adLibrary, ...tbLibrary, ...trLibrary];
 
 		const shouldLogAndPersist = hasAnyAuth || combined.length > 0;
 		if (shouldLogAndPersist) {
 			console.log(
-				`[LibraryCache] Updating combined library: RD:${rdLibrary.length}, AD:${adLibrary.length}, TB:${tbLibrary.length}, Total:${combined.length}`
+				`[LibraryCache] Updating combined library: RD:${rdLibrary.length}, AD:${adLibrary.length}, TB:${tbLibrary.length}, TR:${trLibrary.length}, Total:${combined.length}`
 			);
 		}
 
@@ -368,22 +394,26 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		}
 
 		updateStats(combined);
-	}, [rdLibrary, adLibrary, tbLibrary, updateStats, hasAnyAuth]);
+	}, [rdLibrary, adLibrary, tbLibrary, trLibrary, updateStats, hasAnyAuth]);
 
 	// Trigger combined library update when any service library changes
 	useEffect(() => {
 		updateCombinedLibrary();
-	}, [rdLibrary, adLibrary, tbLibrary, updateCombinedLibrary]);
+	}, [rdLibrary, adLibrary, tbLibrary, trLibrary, updateCombinedLibrary]);
 
 	// Refresh library for a specific service or all
 	const refreshLibrary = useCallback(
-		async (service?: 'realdebrid' | 'alldebrid' | 'torbox', force: boolean = false) => {
-			type Service = 'realdebrid' | 'alldebrid' | 'torbox';
+		async (
+			service?: 'realdebrid' | 'alldebrid' | 'torbox' | 'torrin',
+			force: boolean = false
+		) => {
+			type Service = 'realdebrid' | 'alldebrid' | 'torbox' | 'torrin';
 			const tokens: Record<Service, string | undefined> = {
 				realdebrid:
 					typeof rdKey === 'string' && rdKey.trim().length > 0 ? rdKey : undefined,
 				alldebrid: typeof adKey === 'string' && adKey.trim().length > 0 ? adKey : undefined,
 				torbox: typeof tbKey === 'string' && tbKey.trim().length > 0 ? tbKey : undefined,
+				torrin: typeof trKey === 'string' && trKey.trim().length > 0 ? trKey : undefined,
 			};
 
 			const runSingle = async (target: Service, token: string | undefined) => {
@@ -458,6 +488,9 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 						case 'torbox':
 							setTbLibrary(torrents);
 							break;
+						case 'torrin':
+							setTrLibrary(torrents);
+							break;
 					}
 
 					setStats((prev) => ({ ...prev, lastSync: syncCompletedAt }));
@@ -485,7 +518,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			};
 
 			if (!service) {
-				const services: Service[] = ['realdebrid', 'alldebrid', 'torbox'];
+				const services: Service[] = ['realdebrid', 'alldebrid', 'torbox', 'torrin'];
 				console.log('[LibraryCache] refreshLibrary multi-service start', {
 					force,
 					services,
@@ -510,7 +543,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			});
 			await runSingle(service, tokens[service]);
 		},
-		[rdKey, adKey, tbKey]
+		[rdKey, adKey, tbKey, trKey]
 	);
 
 	const refreshAll = useCallback(
@@ -522,7 +555,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 
 	const scheduleServiceRefresh = useCallback(
 		async (
-			target: 'realdebrid' | 'alldebrid' | 'torbox',
+			target: 'realdebrid' | 'alldebrid' | 'torbox' | 'torrin',
 			reason: 'tokenChanged' | 'initialEmpty'
 		) => {
 			console.log('[LibraryCache] scheduling service refresh', { target, reason });
@@ -531,7 +564,13 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			} catch (error) {
 				console.error('[LibraryCache] Auto refresh failed', { target, error });
 				initialRefreshDoneRef.current[
-					target === 'realdebrid' ? 'rd' : target === 'alldebrid' ? 'ad' : 'tb'
+					target === 'realdebrid'
+						? 'rd'
+						: target === 'alldebrid'
+							? 'ad'
+							: target === 'torbox'
+								? 'tb'
+								: 'tr'
 				] = false;
 			}
 		},
@@ -675,6 +714,50 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		void scheduleServiceRefresh('torbox', tokenChanged ? 'tokenChanged' : 'initialEmpty');
 	}, [tbKey, tbLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
 
+	useEffect(() => {
+		if (!hasLoadedInitialData) {
+			return;
+		}
+
+		const currentToken = normalizeToken(trKey);
+		const previousToken = previousTokenStateRef.current.tr;
+		const tokenChanged = currentToken !== previousToken;
+		logTokenTransition('Torrin', currentToken, previousToken, {
+			librarySize: trLibrary.length,
+			hasFetched: initialRefreshDoneRef.current.tr,
+		});
+
+		if (!currentToken) {
+			previousTokenStateRef.current.tr = null;
+			initialRefreshDoneRef.current.tr = false;
+			return;
+		}
+
+		if (tokenChanged) {
+			initialRefreshDoneRef.current.tr = false;
+		}
+
+		previousTokenStateRef.current.tr = currentToken;
+
+		const hasFetched = initialRefreshDoneRef.current.tr;
+		const shouldRefresh = tokenChanged || (!hasFetched && trLibrary.length === 0);
+
+		if (!shouldRefresh) {
+			console.log('[LibraryCache] Auto refresh skipped for Torrin', {
+				tokenChanged,
+				hasFetched,
+				librarySize: trLibrary.length,
+			});
+			return;
+		}
+
+		initialRefreshDoneRef.current.tr = true;
+		console.log('[LibraryCache] Auto refresh triggered for Torrin', {
+			reason: tokenChanged ? 'tokenChanged' : 'initialEmpty',
+		});
+		void scheduleServiceRefresh('torrin', tokenChanged ? 'tokenChanged' : 'initialEmpty');
+	}, [trKey, trLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
+
 	// Clear cache
 	const clearCache = async (service?: string) => {
 		if (service) {
@@ -698,6 +781,8 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			setAdLibrary((prev) => upsertTorrentById(prev, torrent));
 		} else if (torrent.id.startsWith('tb:')) {
 			setTbLibrary((prev) => upsertTorrentById(prev, torrent));
+		} else if (torrent.id.startsWith('tr:')) {
+			setTrLibrary((prev) => upsertTorrentById(prev, torrent));
 		}
 	};
 
@@ -713,6 +798,8 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			setAdLibrary((prev) => prev.filter((t) => t.id !== torrentId));
 		} else if (torrentId.startsWith('tb:')) {
 			setTbLibrary((prev) => prev.filter((t) => t.id !== torrentId));
+		} else if (torrentId.startsWith('tr:')) {
+			setTrLibrary((prev) => prev.filter((t) => t.id !== torrentId));
 		}
 	};
 
@@ -725,6 +812,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		const rdIds = torrentIds.filter((id) => id.startsWith('rd:'));
 		const adIds = torrentIds.filter((id) => id.startsWith('ad:'));
 		const tbIds = torrentIds.filter((id) => id.startsWith('tb:'));
+		const trIds = torrentIds.filter((id) => id.startsWith('tr:'));
 		if (rdIds.length > 0) {
 			const rdSet = new Set(rdIds);
 			setRdLibrary((prev) => prev.filter((t) => !rdSet.has(t.id)));
@@ -736,6 +824,10 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		if (tbIds.length > 0) {
 			const tbSet = new Set(tbIds);
 			setTbLibrary((prev) => prev.filter((t) => !tbSet.has(t.id)));
+		}
+		if (trIds.length > 0) {
+			const trSet = new Set(trIds);
+			setTrLibrary((prev) => prev.filter((t) => !trSet.has(t.id)));
 		}
 	};
 
@@ -752,10 +844,14 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			setAdLibrary(updateFn);
 		} else if (torrentId.startsWith('tb:')) {
 			setTbLibrary(updateFn);
+		} else if (torrentId.startsWith('tr:')) {
+			setTrLibrary(updateFn);
 		}
 
 		// Update in database
-		const torrent = [...rdLibrary, ...adLibrary, ...tbLibrary].find((t) => t.id === torrentId);
+		const torrent = [...rdLibrary, ...adLibrary, ...tbLibrary, ...trLibrary].find(
+			(t) => t.id === torrentId
+		);
 		if (torrent) {
 			// No explicit update method; re-add to replace existing
 			torrentDB.add({ ...torrent, ...updates });
@@ -767,6 +863,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		rdLibrary,
 		adLibrary,
 		tbLibrary,
+		trLibrary,
 		syncStatus,
 		stats,
 		refreshLibrary,

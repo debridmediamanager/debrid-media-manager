@@ -124,6 +124,19 @@ describe('/api/stremio/[userid]/meta/other/[id]', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 	});
 
+	it.each(['dmm-ad:1', 'dmm-tb:1', 'dmm-tr:1'])(
+		'skips non-RD id %s so the owning addon handles it',
+		async (id) => {
+			const req = createMockRequest({ query: { userid: 'user', id } });
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(res.json).toHaveBeenCalledWith({ meta: null });
+			expect(mockGetDMMTorrent).not.toHaveBeenCalled();
+		}
+	);
+
 	it('returns upgrade notice for legacy tokens', async () => {
 		mockIsLegacyToken.mockReturnValue(true);
 		const req = createMockRequest({ query: { userid: 'abcde', id: 'dmm:1' } });

@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import { getAllDebridUser } from '../services/allDebrid';
 import { getCurrentUser as getRealDebridUser, getToken } from '../services/realDebrid';
 import { TorBoxUser, getUserData } from '../services/torbox';
+import { getTorrinUser } from '../services/torrin';
 import { TraktUser, getTraktUser } from '../services/trakt';
+import { UserResponse } from '../services/types';
 import { clearRdKeys } from '../utils/clearLocalStorage';
 import { getSafeRedirectPath } from '../utils/router';
 import useLocalStorage from './localStorage';
@@ -236,6 +238,34 @@ const useTorBox = () => {
 	return { user, error, hasAuth: !!token, loading };
 };
 
+const useTorrin = () => {
+	const [user, setUser] = useState<UserResponse | null>(null);
+	const [error, setError] = useState<Error | null>(null);
+	const [loading, setLoading] = useState(false);
+	const [apiKey] = useLocalStorage<string>('torrin:apiKey');
+	const [baseUrl] = useLocalStorage<string>('torrin:baseUrl');
+
+	useEffect(() => {
+		if (!apiKey || !baseUrl) {
+			return;
+		}
+
+		setLoading(true);
+		getTorrinUser(baseUrl, apiKey)
+			.then((u) => {
+				setUser(u);
+				setError(null);
+				setLoading(false);
+			})
+			.catch((e) => {
+				setError(e as Error);
+				setLoading(false);
+			});
+	}, [apiKey, baseUrl]);
+
+	return { user, error, hasAuth: !!apiKey && !!baseUrl, loading };
+};
+
 const useTrakt = () => {
 	const [user, setUser] = useState<TraktUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
@@ -283,11 +313,18 @@ export const useTorBoxAccessToken = () => {
 	return apiKey;
 };
 
+export const useTorrinCreds = (): [string | null, string | null] => {
+	const [baseUrl] = useLocalStorage<string>('torrin:baseUrl');
+	const [apiKey] = useLocalStorage<string>('torrin:apiKey');
+	return [baseUrl, apiKey];
+};
+
 // Main hook that combines all services
 export const useCurrentUser = () => {
 	const rd = useRealDebrid();
 	const ad = useAllDebrid();
 	const tb = useTorBox();
+	const torrin = useTorrin();
 	const trakt = useTrakt();
 
 	return {
@@ -301,6 +338,9 @@ export const useCurrentUser = () => {
 		tbUser: tb.user,
 		tbError: tb.error,
 		hasTBAuth: tb.hasAuth,
+		torrinUser: torrin.user,
+		torrinError: torrin.error,
+		hasTorrinAuth: torrin.hasAuth,
 		traktUser: trakt.user,
 		traktError: trakt.error,
 		hasTraktAuth: trakt.hasAuth,
@@ -332,5 +372,6 @@ export const useDebridLogin = () => {
 		loginWithRealDebrid: () => navigateToLogin('/realdebrid/login'),
 		loginWithAllDebrid: () => navigateToLogin('/alldebrid/login'),
 		loginWithTorbox: () => navigateToLogin('/torbox/login'),
+		loginWithTorrin: () => navigateToLogin('/torrin/login'),
 	};
 };
