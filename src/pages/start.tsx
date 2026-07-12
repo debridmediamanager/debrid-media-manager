@@ -3,6 +3,7 @@ import {
 	useDebridLogin,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
+	useTorrinCreds,
 } from '@/hooks/auth';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -16,14 +17,15 @@ export default function StartPage() {
 	const [rdToken] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
+	const [, torrinKey] = useTorrinCreds();
 
 	// Redirect to index if already logged in
 	useEffect(() => {
-		const isLoggedIn = rdToken || adKey || tbKey;
+		const isLoggedIn = rdToken || adKey || tbKey || torrinKey;
 		if (isLoggedIn) {
 			router.push('/');
 		}
-	}, [rdToken, adKey, tbKey, router]);
+	}, [rdToken, adKey, tbKey, torrinKey, router]);
 
 	return (
 		<div className="flex h-screen flex-col items-center justify-center">

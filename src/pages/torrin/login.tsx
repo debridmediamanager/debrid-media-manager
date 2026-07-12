@@ -9,7 +9,7 @@ export default function TorrinLoginPage() {
 	const router = useRouter();
 	const [, setBaseUrl] = useLocalStorage<string>('torrin:baseUrl');
 	const [, setApiKey] = useLocalStorage<string>('torrin:apiKey');
-	const [inputBaseUrl, setInputBaseUrl] = useState('');
+	const [inputBaseUrl, setInputBaseUrl] = useState('https://torrin.app');
 	const [inputApiKey, setInputApiKey] = useState('');
 	const [error, setError] = useState('');
 
