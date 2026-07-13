@@ -14,9 +14,17 @@ export async function getTorrinDMMLibrary(userid: string, page: number) {
 		return { error: 'Go to DMM and connect your Torrin instance', status: 401 };
 	}
 
-	const results = await getTorrinTorrentsList(profile.baseUrl, profile.apiKey, PAGE_SIZE, page);
+	let results;
+	try {
+		results = await getTorrinTorrentsList(profile.baseUrl, profile.apiKey, PAGE_SIZE, page);
+	} catch (error) {
+		return { error: 'Failed to fetch library from Torrin', status: 502 };
+	}
 	const torrents = results.data;
-	const hasMore = torrents.length === PAGE_SIZE;
+	const hasMore =
+		results.totalCount != null
+			? page * PAGE_SIZE < results.totalCount
+			: torrents.length === PAGE_SIZE;
 
 	return {
 		data: {
@@ -43,7 +51,12 @@ export async function getTorrinDMMTorrent(userid: string, torrentID: string) {
 		return { error: 'Go to DMM and connect your Torrin instance', status: 401 };
 	}
 
-	const torrent = await getTorrinTorrentInfo(profile.baseUrl, profile.apiKey, torrentID);
+	let torrent;
+	try {
+		torrent = await getTorrinTorrentInfo(profile.baseUrl, profile.apiKey, torrentID);
+	} catch (error) {
+		return { error: 'Failed to fetch torrent from Torrin', status: 502 };
+	}
 	if (!torrent) {
 		return { error: 'Torrent not found', status: 404 };
 	}

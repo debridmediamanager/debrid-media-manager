@@ -62,7 +62,7 @@ export default function TorrinLoginPage() {
 							API Key
 						</label>
 						<input
-							type="text"
+							type="password"
 							id="apiKey"
 							value={inputApiKey}
 							onChange={(e) => setInputApiKey(e.target.value)}

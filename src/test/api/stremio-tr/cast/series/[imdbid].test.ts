@@ -2,11 +2,14 @@ import handler from '@/pages/api/stremio-tr/cast/series/[imdbid]';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { mockSaveCast, mockGenerateUserId, mockGetStreamUrl } = vi.hoisted(() => ({
-	mockSaveCast: vi.fn(),
-	mockGenerateUserId: vi.fn(),
-	mockGetStreamUrl: vi.fn(),
-}));
+const { mockSaveCast, mockGenerateUserId, mockGetStreamUrl, mockValidateApiKey } = vi.hoisted(
+	() => ({
+		mockSaveCast: vi.fn(),
+		mockGenerateUserId: vi.fn(),
+		mockGetStreamUrl: vi.fn(),
+		mockValidateApiKey: vi.fn(),
+	})
+);
 
 vi.mock('@/services/repository', () => ({
 	repository: {
@@ -16,6 +19,7 @@ vi.mock('@/services/repository', () => ({
 
 vi.mock('@/utils/torrinCastApiHelpers', () => ({
 	generateTorrinUserId: mockGenerateUserId,
+	validateTorrinApiKey: mockValidateApiKey,
 }));
 
 vi.mock('@/utils/getTorrinStreamUrl', () => ({
@@ -28,6 +32,7 @@ describe('/api/stremio-tr/cast/series/[imdbid]', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockGenerateUserId.mockResolvedValue('tr-user-1');
+		mockValidateApiKey.mockResolvedValue({ valid: true });
 	});
 
 	it('validates required params', async () => {

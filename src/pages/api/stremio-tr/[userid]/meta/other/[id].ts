@@ -24,16 +24,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	const parts = idStr.split(':');
-	if (parts.length < 2) {
+	const torrentId = idStr.slice('dmm-tr:'.length);
+	if (!torrentId) {
 		res.status(400).json({
 			status: 'error',
 			errorMessage: 'Invalid id format. Expected dmm-tr:{torrentId}',
 		});
 		return;
 	}
-
-	const torrentId = parts[1];
 
 	const result = await getTorrinDMMTorrent(userid, torrentId);
 

@@ -30,12 +30,13 @@ export default function FloatingLibraryIndicator() {
 		const hasAd = localStorage.getItem('ad:apiKey');
 		const hasTb = localStorage.getItem('tb:apiKey');
 		const hasTr = localStorage.getItem('torrin:apiKey');
+		const hasTrBaseUrl = localStorage.getItem('torrin:baseUrl');
 		// Only return true if at least one key exists and is not empty
 		return (
 			!!(hasRd && hasRd.trim()) ||
 			!!(hasAd && hasAd.trim()) ||
 			!!(hasTb && hasTb.trim()) ||
-			!!(hasTr && hasTr.trim())
+			!!(hasTr && hasTr.trim() && hasTrBaseUrl && hasTrBaseUrl.trim())
 		);
 	}, []);
 

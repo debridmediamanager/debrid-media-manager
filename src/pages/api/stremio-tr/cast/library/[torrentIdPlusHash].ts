@@ -27,8 +27,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	const [torrentId, hash] = torrentIdPlusHash.split(':');
+	if (!torrentId || !hash) {
+		res.status(400).json({
+			status: 'error',
+			errorMessage: 'Invalid torrentIdPlusHash format. Expected "torrentId:hash"',
+		});
+		return;
+	}
 
-	const tInfo = await getTorrinTorrentInfo(baseUrl, apiKey, torrentId);
+	let tInfo;
+	try {
+		tInfo = await getTorrinTorrentInfo(baseUrl, apiKey, torrentId);
+	} catch (error) {
+		res.status(502).json({
+			status: 'error',
+			errorMessage: 'Failed to fetch torrent info from Torrin',
+			details: error instanceof Error ? error.message : String(error),
+		});
+		return;
+	}
 	const selectedFiles = tInfo.files.filter((f) => f.selected);
 	if (selectedFiles.length !== tInfo.links.length) {
 		res.status(400).json({

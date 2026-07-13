@@ -40,7 +40,7 @@ export const handleCastTvShowTorrin = async (
 			const resp = await axios.get(
 				`/api/stremio-tr/cast/series/${imdbId}?${creds(baseUrl, apiKey)}&hash=${hash}&${fIdParam}`
 			);
-			const errorEpisodes = resp.data.errorEpisodes;
+			const errorEpisodes = resp.data.errorEpisodes ?? [];
 			if (errorEpisodes.length) {
 				toast.error(
 					`Cast failed for ${errorEpisodes[0]}${
@@ -55,6 +55,7 @@ export const handleCastTvShowTorrin = async (
 				);
 			}
 		} catch (error) {
+			console.error('Error casting episodes (Torrin):', error);
 			toast.error(
 				`Failed to cast ${batch.length} episode${batch.length === 1 ? '' : 's'} (Torrin).`,
 				castToastOptions

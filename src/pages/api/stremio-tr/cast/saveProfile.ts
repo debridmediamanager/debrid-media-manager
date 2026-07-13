@@ -23,8 +23,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	if (otherStreamsLimit !== undefined) {
-		const limit = Number(otherStreamsLimit);
-		if (!Number.isInteger(limit) || limit < 0 || limit > 5) {
+		if (
+			typeof otherStreamsLimit !== 'number' ||
+			!Number.isInteger(otherStreamsLimit) ||
+			otherStreamsLimit < 0 ||
+			otherStreamsLimit > 5
+		) {
 			res.status(400).json({
 				status: 'error',
 				errorMessage: 'otherStreamsLimit must be an integer between 0 and 5',

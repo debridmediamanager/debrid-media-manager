@@ -48,6 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			status: 'error',
 			errorMessage: 'Failed to get a streamable file',
 		});
+		return;
 	} catch (e) {
 		console.error(e);
 		const message = e instanceof Error ? e.message : String(e);

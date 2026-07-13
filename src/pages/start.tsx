@@ -17,15 +17,15 @@ export default function StartPage() {
 	const [rdToken] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
-	const [, torrinKey] = useTorrinCreds();
+	const [torrinBaseUrl, torrinKey] = useTorrinCreds();
 
 	// Redirect to index if already logged in
 	useEffect(() => {
-		const isLoggedIn = rdToken || adKey || tbKey || torrinKey;
+		const isLoggedIn = rdToken || adKey || tbKey || (torrinBaseUrl && torrinKey);
 		if (isLoggedIn) {
 			router.push('/');
 		}
-	}, [rdToken, adKey, tbKey, torrinKey, router]);
+	}, [rdToken, adKey, tbKey, torrinBaseUrl, torrinKey, router]);
 
 	return (
 		<div className="flex h-screen flex-col items-center justify-center">

@@ -402,8 +402,38 @@ export class UnifiedLibraryFetcher {
 			return [];
 		}
 
-		const totalCount = Math.min(firstPageResult.totalCount || 0, options.maxItems || Infinity);
 		const pageSize = 1500;
+
+		if (!firstPageResult.totalCount) {
+			const allTorrents: UserTorrent[] = [];
+			let page = 1;
+			while (true) {
+				if (options.signal?.aborted) {
+					throw new Error('Fetch aborted');
+				}
+				const result = await this.rateLimiter.execute('torrin', `tr-page-${page}`, () =>
+					getTorrinTorrentsList(baseUrl, apiKey, pageSize, page)
+				);
+				if (!result.data.length) {
+					break;
+				}
+				const torrents = await this.processTorrinTorrents(result.data);
+				allTorrents.push(...torrents);
+				options.onBatchComplete?.(torrents);
+				options.onProgress?.(allTorrents.length, allTorrents.length);
+				if (result.data.length < pageSize) {
+					break;
+				}
+				if (options.maxItems && allTorrents.length >= options.maxItems) {
+					break;
+				}
+				page++;
+			}
+			await this.cache.set(cacheKey, allTorrents, undefined, 5 * 60 * 1000);
+			return allTorrents;
+		}
+
+		const totalCount = Math.min(firstPageResult.totalCount, options.maxItems || Infinity);
 		const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
 		const concurrency = options.concurrency || 4;
 

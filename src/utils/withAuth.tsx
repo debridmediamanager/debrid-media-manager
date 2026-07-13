@@ -36,7 +36,9 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 		});
 		const [torrinKey] = useState(() => {
 			if (typeof window !== 'undefined') {
-				return localStorage.getItem('torrin:apiKey');
+				return (
+					localStorage.getItem('torrin:apiKey') && localStorage.getItem('torrin:baseUrl')
+				);
 			}
 			return null;
 		});
@@ -79,7 +81,16 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 				}
 				setIsLoading(false);
 			}
-		}, [rdKey, rdLoading, rdIsRefreshing, hasRefreshCredentials, adKey, tbKey, torrinKey, router]);
+		}, [
+			rdKey,
+			rdLoading,
+			rdIsRefreshing,
+			hasRefreshCredentials,
+			adKey,
+			tbKey,
+			torrinKey,
+			router,
+		]);
 
 		// Loading screen state tracking
 		useEffect(() => {

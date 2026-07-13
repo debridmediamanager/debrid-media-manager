@@ -25,9 +25,7 @@ export const getTorrinStreamUrl = async (
 		await selectTorrinFiles(baseUrl, apiKey, id, 'all');
 		const torrentInfo = await getTorrinTorrentInfo(baseUrl, apiKey, id);
 
-		const fileIdx = torrentInfo.files
-			.filter((f) => f.selected)
-			.findIndex((f) => f.id === fileId);
+		const fileIdx = torrentInfo.files.findIndex((f) => f.id === fileId);
 		const link = torrentInfo.links[fileIdx] ?? torrentInfo.links[0];
 
 		const resp = await unrestrictTorrinLink(baseUrl, apiKey, link);
@@ -70,6 +68,9 @@ export const getBiggestFileTorrinStreamUrl = async (
 		await selectTorrinFiles(baseUrl, apiKey, id, 'all');
 		const torrent = await getTorrinTorrentInfo(baseUrl, apiKey, id);
 
+		if (!torrent.files || torrent.files.length === 0) {
+			throw new Error('no files');
+		}
 		const biggestFile = torrent.files.reduce((prev, current) =>
 			prev.bytes > current.bytes ? prev : current
 		);

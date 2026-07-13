@@ -1,6 +1,6 @@
 import { repository as db } from '@/services/repository';
 import { getTorrinStreamUrl } from '@/utils/getTorrinStreamUrl';
-import { generateTorrinUserId } from '@/utils/torrinCastApiHelpers';
+import { generateTorrinUserId, validateTorrinApiKey } from '@/utils/torrinCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -22,6 +22,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		res.status(400).json({
 			status: 'error',
 			errorMessage: 'Missing or invalid "baseUrl", "apiKey", "hash", "imdbid" or "fileIds"',
+		});
+		return;
+	}
+
+	const validation = await validateTorrinApiKey(baseUrl, apiKey);
+	if (!validation.valid) {
+		res.status(401).json({
+			status: 'error',
+			errorMessage: 'Invalid Torrin credentials',
 		});
 		return;
 	}

@@ -1733,16 +1733,18 @@ function TorrentsPage() {
 				}
 			}
 			if (allHashes.length > 0) {
-				try {
-					for (const h of allHashes) {
-						const id = await addTorrinMagnet(torrinBaseUrl, torrinApiKey, h);
-						await selectTorrinFiles(torrinBaseUrl, torrinApiKey, id, 'all');
-					}
-					toast.success(`Added ${allHashes.length} to Torrin.`);
-					await refreshLibrary();
-				} catch (error) {
-					toast.error(`Torrin add failed: ${error}`);
+				const toAdd: AsyncFunction<unknown>[] = allHashes.map((h) => async () => {
+					const id = await addTorrinMagnet(torrinBaseUrl, torrinApiKey, h);
+					await selectTorrinFiles(torrinBaseUrl, torrinApiKey, id, 'all');
+				});
+				const [results, errors] = await runConcurrentFunctions(toAdd, 4, 0);
+				if (results.length > 0) {
+					toast.success(`Added ${results.length} to Torrin.`);
 				}
+				if (errors.length > 0) {
+					toast.error(`Torrin add failed for ${errors.length} of ${allHashes.length}.`);
+				}
+				await refreshLibrary();
 			}
 		}
 	}
