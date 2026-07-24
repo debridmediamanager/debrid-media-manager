@@ -21,7 +21,11 @@ export function useTorrinAvailability(
 		torrinInstantCheck(baseUrl, apiKey, hashes)
 			.then((resp) => {
 				if (cancelled) return;
-				const cached = new Set(Object.keys(resp || {}).map((h) => h.toLowerCase()));
+				const cached = new Set(
+					Object.entries(resp || {})
+						.filter(([, v]) => ((v as any)?.rd?.length ?? 0) > 0)
+						.map(([h]) => h.toLowerCase())
+				);
 				if (cached.size === 0) return;
 				setSearchResults((prev) => {
 					let changed = false;
