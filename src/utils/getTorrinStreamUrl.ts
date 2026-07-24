@@ -84,7 +84,7 @@ export const getBiggestFileTorrinStreamUrl = async (
 
 		streamUrl = resp.download;
 		trLink = resp.link;
-		fileSize = Math.round(resp.filesize / 1024 / 1024);
+		fileSize = Math.round(biggestFile.bytes / 1024 / 1024);
 
 		await deleteTorrinTorrent(baseUrl, apiKey, id);
 	} catch (e) {
