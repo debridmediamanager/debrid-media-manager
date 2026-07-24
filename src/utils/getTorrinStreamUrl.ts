@@ -42,7 +42,7 @@ export const getTorrinStreamUrl = async (
 			episodeNumber = info.episode ?? -1;
 		}
 
-		fileSize = Math.round(resp.filesize / 1024 / 1024);
+		fileSize = Math.round((torrentInfo.files[fileIdx]?.bytes ?? 0) / 1024 / 1024);
 
 		await deleteTorrinTorrent(baseUrl, apiKey, id);
 	} catch (e) {
