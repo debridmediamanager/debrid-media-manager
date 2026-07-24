@@ -732,7 +732,8 @@ function HashlistPage() {
 	async function addTr(hash: string) {
 		try {
 			const instantResp = await torrinInstantCheck(torrinBaseUrl!, torrinApiKey!, [hash]);
-			if (!instantResp?.[hash] && !instantResp?.[hash.toLowerCase()]) {
+			const entry = instantResp?.[hash.toLowerCase()] as any;
+			if (!(entry?.rd?.length > 0)) {
 				toast.error('Torrent not instant in Torrin; skipped.', genericToastOptions);
 				return;
 			}
