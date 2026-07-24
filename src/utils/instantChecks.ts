@@ -452,7 +452,6 @@ const processTrInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	for (const hashGroup of groupBy(100, hashes)) {
 		funcs.push(async () => {
 			const resp = await torrinInstantCheck(baseUrl, apiKey, hashGroup);
-			for (const h of Object.keys(resp || {})) {
 			for (const [h, v] of Object.entries(resp || {})) {
 				if (((v as any)?.rd?.length ?? 0) > 0) cached.add(h.toLowerCase());
 			}
