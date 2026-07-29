@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import dns from 'dns';
 import qs from 'qs';
 import {
 	TorrentInfoResponse,
@@ -16,6 +17,48 @@ import {
 const REQUEST_TIMEOUT = 10000;
 const TORRENT_REQUEST_TIMEOUT = 60000;
 
+function isBlockedAddress(ip: string): boolean {
+	let addr = ip;
+	if (addr.startsWith('::ffff:')) addr = addr.slice(7);
+	const parts = addr.split('.');
+	if (parts.length === 4 && parts.every((p) => /^\d+$/.test(p))) {
+		const [a, b] = parts.map(Number);
+		if (a === 127) return true;
+		if (a === 10) return true;
+		if (a === 172 && b >= 16 && b <= 31) return true;
+		if (a === 192 && b === 168) return true;
+		if (a === 169 && b === 254) return true;
+		if (a === 100 && b >= 64 && b <= 127) return true;
+		return false;
+	}
+	const v6 = addr.toLowerCase();
+	if (v6 === '::1') return true;
+	if (v6.startsWith('fe80')) return true;
+	return false;
+}
+
+function pinnedLookup(
+	hostname: string,
+	options: dns.LookupOptions,
+	callback: (err: NodeJS.ErrnoException | null, address: any, family?: number) => void
+): void {
+	dns.lookup(hostname, { all: true }, (err, addresses) => {
+		if (err) return callback(err, '', 0);
+		if (addresses.length === 0 || addresses.some((a) => isBlockedAddress(a.address))) {
+			return callback(new Error(`blocked host: ${hostname}`), '', 0);
+		}
+		if (options && options.all) {
+			return callback(null, addresses);
+		}
+		callback(null, addresses[0].address, addresses[0].family);
+	});
+}
+
+const guard: Pick<AxiosRequestConfig, 'lookup' | 'maxRedirects'> = {
+	lookup: pinnedLookup as AxiosRequestConfig['lookup'],
+	maxRedirects: 0,
+};
+
 function apiBase(baseUrl: string): string {
 	return baseUrl.replace(/\/+$/, '') + '/rest/1.0';
 }
@@ -32,6 +75,7 @@ export const getTorrinUser = async (baseUrl: string, apiKey: string): Promise<Us
 	const { data } = await axios.get<UserResponse>(`${apiBase(baseUrl)}/user`, {
 		headers: authHeaders(apiKey),
 		timeout: REQUEST_TIMEOUT,
+		...guard,
 	});
 	return data;
 };
@@ -44,7 +88,7 @@ export const getTorrinTorrentsList = async (
 ): Promise<UserTorrentsResult> => {
 	const res = await axios.get<UserTorrentResponse[]>(
 		`${apiBase(baseUrl)}/torrents?page=${page}&limit=${limit}&_fresh=${Date.now()}`,
-		{ headers: authHeaders(apiKey), timeout: TORRENT_REQUEST_TIMEOUT }
+		{ headers: authHeaders(apiKey), timeout: TORRENT_REQUEST_TIMEOUT, ...guard }
 	);
 	const total = res.headers['x-total-count'];
 	const parsed = total ? parseInt(total, 10) : NaN;
@@ -52,6 +96,19 @@ export const getTorrinTorrentsList = async (
 		data: Array.isArray(res.data) ? res.data : [],
 		totalCount: isNaN(parsed) ? null : parsed,
 	};
+};
+
+export const findTorrinTorrentByHash = async (
+	baseUrl: string,
+	apiKey: string,
+	hash: string
+): Promise<UserTorrentResponse | null> => {
+	try {
+		const res = await getTorrinTorrentsList(baseUrl, apiKey, 1000, 1);
+		return res.data.find((t) => t.hash?.toLowerCase() === hash.toLowerCase()) ?? null;
+	} catch {
+		return null;
+	}
 };
 
 export const getTorrinTorrentInfo = async (
@@ -64,6 +121,7 @@ export const getTorrinTorrentInfo = async (
 		{
 			headers: authHeaders(apiKey),
 			timeout: REQUEST_TIMEOUT,
+			...guard,
 		}
 	);
 	return data;
@@ -77,7 +135,7 @@ export const addTorrinMagnet = async (
 	const { data, status } = await axios.post(
 		`${apiBase(baseUrl)}/torrents/addMagnet`,
 		qs.stringify({ magnet: `magnet:?xt=urn:btih:${hash}` }),
-		{ headers: formHeaders(apiKey), timeout: REQUEST_TIMEOUT }
+		{ headers: formHeaders(apiKey), timeout: REQUEST_TIMEOUT, ...guard }
 	);
 	if (status !== 201) throw new Error(`torrin addMagnet failed, status ${status}`);
 	return data.id;
@@ -92,6 +150,7 @@ export const selectTorrinFiles = async (
 	await axios.post(`${apiBase(baseUrl)}/torrents/selectFiles/${id}`, qs.stringify({ files }), {
 		headers: formHeaders(apiKey),
 		timeout: REQUEST_TIMEOUT,
+		...guard,
 	});
 };
 
@@ -103,6 +162,7 @@ export const deleteTorrinTorrent = async (
 	await axios.delete(`${apiBase(baseUrl)}/torrents/delete/${id}`, {
 		headers: authHeaders(apiKey),
 		timeout: REQUEST_TIMEOUT,
+		...guard,
 	});
 };
 
@@ -114,7 +174,7 @@ export const unrestrictTorrinLink = async (
 	const { data } = await axios.post<UnrestrictResponse>(
 		`${apiBase(baseUrl)}/unrestrict/link`,
 		qs.stringify({ link }),
-		{ headers: formHeaders(apiKey), timeout: REQUEST_TIMEOUT }
+		{ headers: formHeaders(apiKey), timeout: REQUEST_TIMEOUT, ...guard }
 	);
 	return data;
 };
@@ -127,7 +187,7 @@ export const torrinInstantCheck = async (
 	if (hashes.length === 0) return {};
 	const { data } = await axios.get(
 		`${apiBase(baseUrl)}/torrents/instantAvailability/${hashes.join('/')}`,
-		{ headers: authHeaders(apiKey), timeout: TORRENT_REQUEST_TIMEOUT }
+		{ headers: authHeaders(apiKey), timeout: TORRENT_REQUEST_TIMEOUT, ...guard }
 	);
 	return data ?? {};
 };

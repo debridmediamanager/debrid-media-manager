@@ -438,7 +438,7 @@ const processTbInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	return instantCount;
 };
 
-const processTrInstantCheck = async <T extends SearchResult | EnrichedHashlistTorrent>(
+export const processTrInstantCheck = async <T extends SearchResult | EnrichedHashlistTorrent>(
 	baseUrl: string,
 	apiKey: string,
 	hashes: string[],

@@ -504,9 +504,10 @@ export class Repository {
 		hash: string,
 		url: string,
 		link: string,
-		fileSize: number
+		fileSize: number,
+		baseUrl: string
 	) {
-		return this.torrinCastService.saveCast(imdbId, userId, hash, url, link, fileSize);
+		return this.torrinCastService.saveCast(imdbId, userId, hash, url, link, fileSize, baseUrl);
 	}
 
 	public fetchTorrinCastedMovies(userId: string) {
@@ -533,8 +534,14 @@ export class Repository {
 		return this.torrinCastService.getUserCastStreams(imdbId, userId, limit);
 	}
 
-	public getTorrinOtherStreams(imdbId: string, userId: string, limit?: number, maxSize?: number) {
-		return this.torrinCastService.getOtherStreams(imdbId, userId, limit, maxSize);
+	public getTorrinOtherStreams(
+		imdbId: string,
+		userId: string,
+		baseUrl: string,
+		limit?: number,
+		maxSize?: number
+	) {
+		return this.torrinCastService.getOtherStreams(imdbId, userId, baseUrl, limit, maxSize);
 	}
 
 	// AllDebrid Cast Service Methods

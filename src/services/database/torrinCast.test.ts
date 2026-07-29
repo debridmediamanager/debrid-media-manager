@@ -71,7 +71,15 @@ describe('TorrinCastService', () => {
 		it('upserts a cast row with the link and size as BigInt', async () => {
 			prismaMock.torrinCast.upsert.mockResolvedValue({});
 
-			await service.saveCast('tt1', 'u1', 'hash', 'https://url', 'https://link', 500);
+			await service.saveCast(
+				'tt1',
+				'u1',
+				'hash',
+				'https://url',
+				'https://link',
+				500,
+				'https://tr.test'
+			);
 
 			expect(prismaMock.torrinCast.upsert).toHaveBeenCalledWith(
 				expect.objectContaining({
@@ -80,6 +88,7 @@ describe('TorrinCastService', () => {
 						link: 'https://link',
 						url: 'https://url',
 						size: BigInt(500),
+						baseUrl: 'https://tr.test',
 					}),
 				})
 			);

@@ -69,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		console.error('Error updating Torrin cast size limits:', error);
 		res.status(500).json({
 			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Unknown error',
+			errorMessage: 'Failed to update size limits',
 		});
 	}
 }

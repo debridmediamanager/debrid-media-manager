@@ -155,7 +155,8 @@ export class TorrinCastService extends DatabaseClient {
 		hash: string,
 		url: string,
 		link: string,
-		fileSize: number
+		fileSize: number,
+		baseUrl: string
 	): Promise<void> {
 		await this.prisma.torrinCast.upsert({
 			where: {
@@ -170,6 +171,7 @@ export class TorrinCastService extends DatabaseClient {
 				link: link,
 				url: url,
 				size: BigInt(fileSize),
+				baseUrl: baseUrl,
 			},
 			create: {
 				imdbId: imdbId,
@@ -178,6 +180,7 @@ export class TorrinCastService extends DatabaseClient {
 				link: link,
 				url: url,
 				size: BigInt(fileSize),
+				baseUrl: baseUrl,
 			},
 		});
 	}
@@ -354,6 +357,7 @@ export class TorrinCastService extends DatabaseClient {
 	public async getOtherStreams(
 		imdbId: string,
 		userId: string,
+		baseUrl: string,
 		limit: number = 5,
 		maxSize?: number
 	): Promise<
@@ -373,6 +377,7 @@ export class TorrinCastService extends DatabaseClient {
 		const otherCastItems = await this.prisma.torrinCast.findMany({
 			where: {
 				imdbId: imdbId,
+				baseUrl: baseUrl,
 				link: {
 					not: null,
 				},

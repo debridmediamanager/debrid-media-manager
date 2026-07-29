@@ -1,6 +1,7 @@
 import { AllDebridUser, RealDebridUser } from '@/hooks/auth';
 import { TraktUser } from '@/services/trakt';
 import { TorBoxUser } from '@/services/types';
+import { escapeHtml } from '@/utils/torrinInfo';
 import { Check, X } from 'lucide-react';
 import Modal from '../components/modals/modal';
 
@@ -110,8 +111,8 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 			prefix = 'torrin:';
 			html = `
         <div class="text-left">
-          <p><strong>Username:</strong> ${trUser.username ?? 'N/A'}</p>
-          <p><strong>Email:</strong> ${trUser.email ?? 'N/A'}</p>
+          <p><strong>Username:</strong> ${escapeHtml(trUser.username ?? 'N/A')}</p>
+          <p><strong>Email:</strong> ${escapeHtml(trUser.email ?? 'N/A')}</p>
           <p><strong>Premium:</strong> ${trUser.premium ? 'Yes' : 'No'}</p>
           ${trUser.expiration ? `<p><strong>Expires:</strong> ${new Date(trUser.expiration).toLocaleDateString()}</p>` : ''}
         </div>

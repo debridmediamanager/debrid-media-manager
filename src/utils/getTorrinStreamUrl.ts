@@ -1,6 +1,7 @@
 import {
 	addTorrinMagnet,
 	deleteTorrinTorrent,
+	findTorrinTorrentByHash,
 	getTorrinTorrentInfo,
 	selectTorrinFiles,
 	unrestrictTorrinLink,
@@ -20,12 +21,21 @@ export const getTorrinStreamUrl = async (
 	let episodeNumber = -1;
 	let fileSize = 0;
 
-	const id = await addTorrinMagnet(baseUrl, apiKey, hash);
+	const existing = await findTorrinTorrentByHash(baseUrl, apiKey, hash);
+	let addedThisCall = false;
+	let id: string;
+	if (existing) {
+		id = existing.id;
+	} else {
+		addedThisCall = true;
+		id = await addTorrinMagnet(baseUrl, apiKey, hash);
+	}
 	try {
 		await selectTorrinFiles(baseUrl, apiKey, id, 'all');
 		const torrentInfo = await getTorrinTorrentInfo(baseUrl, apiKey, id);
 
-		const fileIdx = torrentInfo.files.findIndex((f) => f.id === fileId);
+		const selectedFiles = torrentInfo.files.filter((f) => f.selected);
+		const fileIdx = selectedFiles.findIndex((f) => f.id === fileId);
 		const link = torrentInfo.links[fileIdx] ?? torrentInfo.links[0];
 
 		const resp = await unrestrictTorrinLink(baseUrl, apiKey, link);
@@ -42,12 +52,12 @@ export const getTorrinStreamUrl = async (
 			episodeNumber = info.episode ?? -1;
 		}
 
-		fileSize = Math.round((torrentInfo.files[fileIdx]?.bytes ?? 0) / 1024 / 1024);
+		fileSize = Math.round((selectedFiles[fileIdx]?.bytes ?? 0) / 1024 / 1024);
 
-		await deleteTorrinTorrent(baseUrl, apiKey, id);
+		if (addedThisCall) await deleteTorrinTorrent(baseUrl, apiKey, id);
 	} catch (e) {
 		console.error('error after adding hash', e);
-		await deleteTorrinTorrent(baseUrl, apiKey, id);
+		if (addedThisCall) await deleteTorrinTorrent(baseUrl, apiKey, id).catch(() => undefined);
 		throw e;
 	}
 
@@ -63,7 +73,15 @@ export const getBiggestFileTorrinStreamUrl = async (
 	let trLink = '';
 	let fileSize = 0;
 
-	const id = await addTorrinMagnet(baseUrl, apiKey, hash);
+	const existing = await findTorrinTorrentByHash(baseUrl, apiKey, hash);
+	let addedThisCall = false;
+	let id: string;
+	if (existing) {
+		id = existing.id;
+	} else {
+		addedThisCall = true;
+		id = await addTorrinMagnet(baseUrl, apiKey, hash);
+	}
 	try {
 		await selectTorrinFiles(baseUrl, apiKey, id, 'all');
 		const torrent = await getTorrinTorrentInfo(baseUrl, apiKey, id);
@@ -86,10 +104,10 @@ export const getBiggestFileTorrinStreamUrl = async (
 		trLink = resp.link;
 		fileSize = Math.round(biggestFile.bytes / 1024 / 1024);
 
-		await deleteTorrinTorrent(baseUrl, apiKey, id);
+		if (addedThisCall) await deleteTorrinTorrent(baseUrl, apiKey, id);
 	} catch (e) {
 		console.error('error after adding hash', e);
-		await deleteTorrinTorrent(baseUrl, apiKey, id);
+		if (addedThisCall) await deleteTorrinTorrent(baseUrl, apiKey, id).catch(() => undefined);
 		throw e;
 	}
 

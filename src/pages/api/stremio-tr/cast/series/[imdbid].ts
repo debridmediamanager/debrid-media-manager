@@ -50,7 +50,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 						? `:${seasonNumber}:${episodeNumber}`
 						: ''
 				}`;
-				await db.saveTorrinCast(castKey, userid, hash, streamUrl, trLink, fileSize);
+				await db.saveTorrinCast(
+					castKey,
+					userid,
+					hash,
+					streamUrl,
+					trLink,
+					fileSize,
+					baseUrl
+				);
 			} else if (seasonNumber >= 0 && episodeNumber >= 0) {
 				errorEpisodes.push(`S${seasonNumber}E${episodeNumber}`);
 			} else {

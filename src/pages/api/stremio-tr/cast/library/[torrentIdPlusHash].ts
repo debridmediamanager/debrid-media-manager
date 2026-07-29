@@ -39,10 +39,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	try {
 		tInfo = await getTorrinTorrentInfo(baseUrl, apiKey, torrentId);
 	} catch (error) {
+		console.error(error);
 		res.status(502).json({
 			status: 'error',
 			errorMessage: 'Failed to fetch torrent info from Torrin',
-			details: error instanceof Error ? error.message : String(error),
 		});
 		return;
 	}
@@ -59,10 +59,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	try {
 		userid = await generateTorrinUserId(baseUrl, apiKey);
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({
 			status: 'error',
 			errorMessage: 'Failed to generate user ID from Torrin credentials.',
-			details: error instanceof Error ? error.message : String(error),
 		});
 		return;
 	}
@@ -71,10 +71,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	try {
 		imdbid = (await db.getIMDBIdByHash(hash)) || '';
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({
 			status: 'error',
 			errorMessage: 'Database error: Failed to retrieve IMDB ID from hash',
-			details: error instanceof Error ? error.message : String(error),
 		});
 		return;
 	}
@@ -91,10 +91,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			await db.saveIMDBIdMapping(tInfo.hash, userProvidedImdbId);
 			imdbid = userProvidedImdbId;
 		} catch (error) {
+			console.error(error);
 			res.status(500).json({
 				status: 'error',
 				errorMessage: 'Database error: Failed to save IMDB ID mapping',
-				details: error instanceof Error ? error.message : String(error),
 			});
 			return;
 		}
@@ -122,10 +122,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		try {
 			info = ptt.parse(selectedFile.path.split('/').pop() || '');
 		} catch (error) {
+			console.error(error);
 			res.status(500).json({
 				status: 'error',
 				errorMessage: `Failed to parse filename: ${selectedFile.path}`,
-				details: error instanceof Error ? error.message : String(error),
 			});
 			return;
 		}
@@ -138,13 +138,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				tInfo.hash,
 				selectedFile.path,
 				tInfo.links[i],
-				Math.ceil(selectedFile.bytes / 1024 / 1024)
+				Math.ceil(selectedFile.bytes / 1024 / 1024),
+				baseUrl
 			);
 		} catch (error) {
+			console.error(error);
 			res.status(500).json({
 				status: 'error',
 				errorMessage: 'Database error: Failed to save cast information',
-				details: error instanceof Error ? error.message : String(error),
 			});
 			return;
 		}

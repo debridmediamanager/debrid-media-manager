@@ -116,7 +116,7 @@ describe('API /api/stremio-tr/deletelink', () => {
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getData()).toEqual({
 			status: 'error',
-			errorMessage: 'DB down',
+			errorMessage: 'Failed to delete link',
 		});
 	});
 });

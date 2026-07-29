@@ -132,7 +132,7 @@ describe('API /api/stremio-tr/cast/updateSizeLimits', () => {
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getData()).toEqual({
 			status: 'error',
-			errorMessage: 'Service unavailable',
+			errorMessage: 'Failed to update size limits',
 		});
 	});
 });

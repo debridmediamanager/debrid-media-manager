@@ -1,5 +1,5 @@
 import { SearchResult } from '@/services/mediasearch';
-import { torrinInstantCheck } from '@/services/torrin';
+import { processTrInstantCheck } from '@/utils/instantChecks';
 import { useEffect } from 'react';
 import useLocalStorage from './localStorage';
 
@@ -17,32 +17,6 @@ export function useTorrinAvailability(
 		const hashes = hashKey.split(',').filter(Boolean);
 		if (hashes.length === 0) return;
 
-		let cancelled = false;
-		torrinInstantCheck(baseUrl, apiKey, hashes)
-			.then((resp) => {
-				if (cancelled) return;
-				const cached = new Set(
-					Object.entries(resp || {})
-						.filter(([, v]) => ((v as any)?.rd?.length ?? 0) > 0)
-						.map(([h]) => h.toLowerCase())
-				);
-				if (cached.size === 0) return;
-				setSearchResults((prev) => {
-					let changed = false;
-					const next = prev.map((r) => {
-						if (cached.has(r.hash.toLowerCase()) && !r.torrinAvailable) {
-							changed = true;
-							return { ...r, torrinAvailable: true };
-						}
-						return r;
-					});
-					return changed ? next : prev;
-				});
-			})
-			.catch(() => {});
-
-		return () => {
-			cancelled = true;
-		};
+		processTrInstantCheck(baseUrl, apiKey, hashes, setSearchResults).catch(() => {});
 	}, [baseUrl, apiKey, hashKey, setSearchResults]);
 }

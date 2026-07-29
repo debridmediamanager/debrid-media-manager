@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		console.error('Error fetching Torrin casted links:', error);
 		res.status(500).json({
 			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Unknown error',
+			errorMessage: 'Failed to fetch casted links',
 		});
 	}
 }

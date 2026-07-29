@@ -73,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		console.error('Error saving Torrin cast profile:', error);
 		res.status(500).json({
 			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Unknown error',
+			errorMessage: 'Failed to save cast profile',
 		});
 	}
 }

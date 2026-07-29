@@ -17,9 +17,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const id = await generateTorrinUserId(creds.baseUrl, creds.apiKey);
 		res.status(200).json({ id });
 	} catch (error) {
+		console.error(error);
 		res.status(500).json({
 			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Unknown error',
+			errorMessage: 'Failed to generate user ID',
 		});
 	}
 }

@@ -84,7 +84,7 @@ describe('API /api/stremio-tr/id', () => {
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getData()).toEqual({
 			status: 'error',
-			errorMessage: 'API failure',
+			errorMessage: 'Failed to generate user ID',
 		});
 	});
 
@@ -103,7 +103,7 @@ describe('API /api/stremio-tr/id', () => {
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getData()).toEqual({
 			status: 'error',
-			errorMessage: 'Unknown error',
+			errorMessage: 'Failed to generate user ID',
 		});
 	});
 });

@@ -61,7 +61,8 @@ describe('/api/stremio-tr/cast/movie/[imdbid]', () => {
 			'hashabc',
 			'https://files.example.com/Video.mkv',
 			'https://tr.test/d/link',
-			900
+			900,
+			'https://tr.test'
 		);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
@@ -96,7 +97,7 @@ describe('/api/stremio-tr/cast/movie/[imdbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(500);
 		expect(res.json).toHaveBeenCalledWith({
 			status: 'error',
-			errorMessage: 'tr offline',
+			errorMessage: 'Failed to cast the movie',
 		});
 	});
 });

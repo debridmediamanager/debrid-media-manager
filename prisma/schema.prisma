@@ -239,6 +239,7 @@ model TorrinCast {
   updatedAt DateTime @updatedAt
   size      BigInt   @default(0)
   link      String?  @db.Text
+  baseUrl   String?  @db.Text
 
   @@unique([imdbId, userId, hash])
   @@index([imdbId, userId, updatedAt])

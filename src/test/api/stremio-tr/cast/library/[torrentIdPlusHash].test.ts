@@ -106,7 +106,8 @@ describe('/api/stremio-tr/cast/library/[torrentIdPlusHash]', () => {
 			'hash123',
 			'Movie.2024.mkv',
 			'https://tr/link-1',
-			1
+			1,
+			'https://tr.test'
 		);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(

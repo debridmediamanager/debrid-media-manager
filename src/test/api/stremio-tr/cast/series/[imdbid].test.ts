@@ -72,7 +72,8 @@ describe('/api/stremio-tr/cast/series/[imdbid]', () => {
 			'hash',
 			'https://files.example.com/Video-S01E02.mkv',
 			'https://tr.test/d/link',
-			700
+			700,
+			'https://tr.test'
 		);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({ errorEpisodes: [] });

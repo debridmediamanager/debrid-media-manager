@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import Modal from '../components/modals/modal';
 import { handleDeleteTrTorrent } from './deleteTorrent';
 
-const escapeHtml = (s: string): string =>
+export const escapeHtml = (s: string): string =>
 	s.replace(
 		/[&<>"']/g,
 		(c) =>

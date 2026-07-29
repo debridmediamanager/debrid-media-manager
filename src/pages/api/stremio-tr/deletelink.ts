@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		console.error('Error deleting Torrin casted link:', error);
 		res.status(500).json({
 			status: 'error',
-			errorMessage: error instanceof Error ? error.message : 'Unknown error',
+			errorMessage: 'Failed to delete link',
 		});
 	}
 }

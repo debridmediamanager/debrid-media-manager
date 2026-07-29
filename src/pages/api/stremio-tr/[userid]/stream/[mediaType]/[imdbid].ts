@@ -70,6 +70,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			db.getTorrinOtherStreams(
 				imdbidStr,
 				userid,
+				profile.baseUrl,
 				otherStreamsLimit,
 				maxSize > 0 ? maxSize : undefined
 			),

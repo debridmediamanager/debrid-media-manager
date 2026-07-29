@@ -78,7 +78,13 @@ describe('/api/stremio-tr/[userid]/stream/[mediaType]/[imdbid]', () => {
 		});
 		const res = createMockResponse();
 		await handler(req, res);
-		expect(mockRepository.getTorrinOtherStreams).toHaveBeenCalledWith('tt111', 'user1', 5, 15);
+		expect(mockRepository.getTorrinOtherStreams).toHaveBeenCalledWith(
+			'tt111',
+			'user1',
+			'https://tr.test',
+			5,
+			15
+		);
 	});
 
 	it('uses episodeMaxSize for shows and strips .json', async () => {
@@ -93,6 +99,7 @@ describe('/api/stremio-tr/[userid]/stream/[mediaType]/[imdbid]', () => {
 		expect(mockRepository.getTorrinOtherStreams).toHaveBeenCalledWith(
 			'tt111:1:2',
 			'user1',
+			'https://tr.test',
 			5,
 			3
 		);
@@ -110,6 +117,7 @@ describe('/api/stremio-tr/[userid]/stream/[mediaType]/[imdbid]', () => {
 		expect(mockRepository.getTorrinOtherStreams).toHaveBeenCalledWith(
 			'tt111',
 			'user1',
+			'https://tr.test',
 			5,
 			undefined
 		);

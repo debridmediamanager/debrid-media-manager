@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		if (streamUrl) {
 			const userid = await generateTorrinUserId(baseUrl, apiKey);
-			await db.saveTorrinCast(imdbid, userid, hash, streamUrl, trLink, fileSize);
+			await db.saveTorrinCast(imdbid, userid, hash, streamUrl, trLink, fileSize, baseUrl);
 
 			const filename = streamUrl.split('/').pop() ?? '???';
 			res.status(200).json({
@@ -51,10 +51,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	} catch (e) {
 		console.error(e);
-		const message = e instanceof Error ? e.message : String(e);
 		res.status(500).json({
 			status: 'error',
-			errorMessage: message,
+			errorMessage: 'Failed to cast the movie',
 		});
 	}
 }
