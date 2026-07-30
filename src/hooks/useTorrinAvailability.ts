@@ -17,6 +17,16 @@ export function useTorrinAvailability(
 		const hashes = hashKey.split(',').filter(Boolean);
 		if (hashes.length === 0) return;
 
-		processTrInstantCheck(baseUrl, apiKey, hashes, setSearchResults).catch(() => {});
+		// Ignore a late-finishing check once the base URL, key, or result set changes,
+		// so a stale request can't clobber the current results.
+		let cancelled = false;
+		const guardedSetter: React.Dispatch<React.SetStateAction<SearchResult[]>> = (update) => {
+			if (!cancelled) setSearchResults(update);
+		};
+		processTrInstantCheck(baseUrl, apiKey, hashes, guardedSetter).catch(() => {});
+
+		return () => {
+			cancelled = true;
+		};
 	}, [baseUrl, apiKey, hashKey, setSearchResults]);
 }

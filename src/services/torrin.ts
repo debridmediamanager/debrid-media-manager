@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import dns from 'dns';
+import net from 'net';
 import qs from 'qs';
 import {
 	TorrentInfoResponse,
@@ -32,8 +33,9 @@ function isBlockedAddress(ip: string): boolean {
 		return false;
 	}
 	const v6 = addr.toLowerCase();
-	if (v6 === '::1') return true;
-	if (v6.startsWith('fe80')) return true;
+	if (v6 === '::' || v6 === '::1') return true;
+	if (v6.startsWith('fe80')) return true; // link-local
+	if (v6.startsWith('fc') || v6.startsWith('fd')) return true; // unique-local fc00::/7
 	return false;
 }
 
@@ -60,7 +62,20 @@ const guard: Pick<AxiosRequestConfig, 'lookup' | 'maxRedirects'> = {
 };
 
 function apiBase(baseUrl: string): string {
-	return baseUrl.replace(/\/+$/, '') + '/rest/1.0';
+	const cleaned = baseUrl.replace(/\/+$/, '');
+	let hostname: string;
+	try {
+		hostname = new URL(cleaned).hostname;
+	} catch {
+		throw new Error('invalid torrin base URL');
+	}
+	// IP-literal hosts (e.g. http://127.0.0.1, http://[::1]) never hit the DNS
+	// lookup guard, so reject blocked literals directly here.
+	const bare = hostname.replace(/^\[|\]$/g, '');
+	if (net.isIP(bare) && isBlockedAddress(bare)) {
+		throw new Error(`blocked host: ${bare}`);
+	}
+	return cleaned + '/rest/1.0';
 }
 
 function authHeaders(apiKey: string): Record<string, string> {
@@ -103,12 +118,23 @@ export const findTorrinTorrentByHash = async (
 	apiKey: string,
 	hash: string
 ): Promise<UserTorrentResponse | null> => {
-	try {
-		const res = await getTorrinTorrentsList(baseUrl, apiKey, 1000, 1);
-		return res.data.find((t) => t.hash?.toLowerCase() === hash.toLowerCase()) ?? null;
-	} catch {
-		return null;
+	const target = hash.toLowerCase();
+	const pageSize = 1000;
+	let page = 1;
+	let seen = 0;
+	let total = Infinity;
+	// Page through the whole library. Errors propagate on purpose: a failed lookup
+	// must never be mistaken for "not found", which would add a duplicate torrent.
+	while (seen < total) {
+		const res = await getTorrinTorrentsList(baseUrl, apiKey, pageSize, page);
+		const match = res.data.find((t) => t.hash?.toLowerCase() === target);
+		if (match) return match;
+		if (res.totalCount !== null) total = res.totalCount;
+		seen += res.data.length;
+		if (res.data.length === 0) break;
+		page++;
 	}
+	return null;
 };
 
 export const getTorrinTorrentInfo = async (

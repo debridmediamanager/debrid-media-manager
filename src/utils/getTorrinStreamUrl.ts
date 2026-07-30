@@ -31,12 +31,17 @@ export const getTorrinStreamUrl = async (
 		id = await addTorrinMagnet(baseUrl, apiKey, hash);
 	}
 	try {
-		await selectTorrinFiles(baseUrl, apiKey, id, 'all');
+		// Only (re)select files for a torrent we just added; never overwrite an
+		// existing library torrent's selection state.
+		if (addedThisCall) await selectTorrinFiles(baseUrl, apiKey, id, 'all');
 		const torrentInfo = await getTorrinTorrentInfo(baseUrl, apiKey, id);
 
 		const selectedFiles = torrentInfo.files.filter((f) => f.selected);
 		const fileIdx = selectedFiles.findIndex((f) => f.id === fileId);
-		const link = torrentInfo.links[fileIdx] ?? torrentInfo.links[0];
+		if (fileIdx < 0) {
+			throw new Error(`requested file ${fileId} is not selected in torrent ${id}`);
+		}
+		const link = torrentInfo.links[fileIdx];
 
 		const resp = await unrestrictTorrinLink(baseUrl, apiKey, link);
 		if (!resp.streamable) {
@@ -83,7 +88,7 @@ export const getBiggestFileTorrinStreamUrl = async (
 		id = await addTorrinMagnet(baseUrl, apiKey, hash);
 	}
 	try {
-		await selectTorrinFiles(baseUrl, apiKey, id, 'all');
+		if (addedThisCall) await selectTorrinFiles(baseUrl, apiKey, id, 'all');
 		const torrent = await getTorrinTorrentInfo(baseUrl, apiKey, id);
 
 		if (!torrent.files || torrent.files.length === 0) {
