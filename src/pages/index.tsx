@@ -5,8 +5,10 @@ import { MainActions } from '@/components/MainActions';
 import { SearchBar } from '@/components/SearchBar';
 import { ServiceCard } from '@/components/ServiceCard';
 import { TraktSection } from '@/components/TraktSection';
+import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
 import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/castToken';
+import { useTorBoxCastToken } from '@/hooks/torboxCastToken';
 import { getTerms } from '@/utils/browseTerms';
 import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
@@ -40,7 +42,12 @@ function IndexPage() {
 	const [browseTerms] = useState(getTerms(2));
 	const [showElfHostedBanner, setShowElfHostedBanner] = useState(true);
 
+	// Each of these no-ops without that service's credentials. They also resync the
+	// cast profile, so settings that failed to reach the server heal on any visit
+	// instead of only on the service's own cast page.
 	useCastToken();
+	useAllDebridCastToken();
+	useTorBoxCastToken();
 
 	// Loading state tracking
 	useEffect(() => {
