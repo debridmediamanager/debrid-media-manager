@@ -1,5 +1,6 @@
 import { AlertTriangle, Check, Link2, Settings } from 'lucide-react';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { updateAllDebridSizeLimits } from '../utils/allDebridCastApiClient';
 import {
 	getLocalStorageBoolean,
@@ -163,7 +164,11 @@ export const SettingsSection = () => {
 							streamsLimit !== undefined ? Number(streamsLimit) : undefined,
 						hideCastOption: hideCast,
 					}),
-				}).then(() => {})
+				}).then((res) => {
+					if (!res.ok) {
+						toast.error('Failed to save Real-Debrid cast settings. Please try again.');
+					}
+				})
 			);
 		}
 

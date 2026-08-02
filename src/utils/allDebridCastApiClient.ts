@@ -138,6 +138,7 @@ export const updateAllDebridSizeLimits = async (
 		});
 	} catch (error) {
 		console.error('Error updating AllDebrid size limits:', error);
+		toast.error('Failed to save AllDebrid cast settings. Please try again.');
 	}
 };
 

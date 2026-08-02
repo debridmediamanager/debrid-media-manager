@@ -96,6 +96,7 @@ export const updateTorBoxSizeLimits = async (
 		});
 	} catch (error) {
 		console.error('Error updating TorBox size limits:', error);
+		toast.error('Failed to save TorBox cast settings. Please try again.');
 	}
 };
 

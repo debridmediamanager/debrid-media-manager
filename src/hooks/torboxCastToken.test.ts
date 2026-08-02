@@ -1,3 +1,4 @@
+import { saveTorBoxCastProfile } from '@/utils/torboxCastApiClient';
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useTorBoxCastToken } from './torboxCastToken';
@@ -73,6 +74,45 @@ describe('useTorBoxCastToken', () => {
 		});
 
 		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
+	// Regression: settings saved before the API key decoding fix never reached the
+	// server, and the profile was only pushed when a token was missing, so those
+	// users stayed on the default otherStreamsLimit forever.
+	it('resyncs the profile even when a token already exists', async () => {
+		localStorageMock.mockImplementation((key: string) => {
+			if (key === 'tb:apiKey') return ['test-key', vi.fn()];
+			if (key === 'tb:castToken') return ['existing-token', vi.fn()];
+			return [null, vi.fn()];
+		});
+
+		renderHook(() => useTorBoxCastToken());
+
+		await act(async () => {
+			await new Promise((resolve) => setTimeout(resolve, 0));
+		});
+
+		expect(saveTorBoxCastProfile).toHaveBeenCalledWith('test-key', 100, 100, 100, false);
+	});
+
+	it('saves the profile only once across effect re-runs', async () => {
+		localStorageMock.mockImplementation((key: string) => {
+			if (key === 'tb:apiKey') return ['test-key', vi.fn()];
+			if (key === 'tb:castToken') return ['existing-token', vi.fn()];
+			return [null, vi.fn()];
+		});
+
+		const { rerender } = renderHook(() => useTorBoxCastToken());
+
+		await act(async () => {
+			await new Promise((resolve) => setTimeout(resolve, 0));
+		});
+		rerender();
+		await act(async () => {
+			await new Promise((resolve) => setTimeout(resolve, 0));
+		});
+
+		expect(saveTorBoxCastProfile).toHaveBeenCalledTimes(1);
 	});
 
 	it('fetches token when API key exists but no token', async () => {

@@ -215,11 +215,14 @@ describe('torboxCastApiClient', () => {
 			});
 		});
 
-		it('silently handles errors', async () => {
+		it('surfaces a toast on errors instead of failing silently', async () => {
 			vi.mocked(axios.post).mockRejectedValue(new Error('fail'));
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 			await expect(updateTorBoxSizeLimits('key')).resolves.not.toThrow();
+			expect(toast.error).toHaveBeenCalledWith(
+				'Failed to save TorBox cast settings. Please try again.'
+			);
 
 			consoleSpy.mockRestore();
 		});

@@ -1,5 +1,6 @@
 import { Settings } from 'lucide-react';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { updateAllDebridSizeLimits } from '../utils/allDebridCastApiClient';
 import {
 	getLocalStorageBoolean,
@@ -68,7 +69,7 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 					const clientSecret = JSON.parse(clientSecretRaw);
 					const refreshToken = refreshTokenRaw ? JSON.parse(refreshTokenRaw) : null;
 
-					await fetch('/api/stremio/cast/updateSizeLimits', {
+					const res = await fetch('/api/stremio/cast/updateSizeLimits', {
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({
@@ -83,6 +84,9 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 							hideCastOption: hideCast,
 						}),
 					});
+					if (!res.ok) {
+						toast.error('Failed to save Real-Debrid cast settings. Please try again.');
+					}
 				}
 			} else if (service === 'tb') {
 				const tbApiKey = getLocalStorageString('tb:apiKey');
