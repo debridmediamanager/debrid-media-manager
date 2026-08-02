@@ -9,8 +9,10 @@ const prismaMock = vi.hoisted(() => ({
 	torBoxCast: {
 		findFirst: vi.fn(),
 		findMany: vi.fn(),
+		groupBy: vi.fn(),
 		upsert: vi.fn(),
 		delete: vi.fn(),
+		deleteMany: vi.fn(),
 	},
 }));
 
@@ -112,29 +114,6 @@ describe('TorBoxCastService', () => {
 		});
 	});
 
-	describe('getOtherCastURLs', () => {
-		it('returns casts from other users with size filter', async () => {
-			prismaMock.torBoxCast.findMany.mockResolvedValue([
-				{ url: 'http://tb.com/f1.mkv', link: 'http://tb/1', size: BigInt(5000) },
-			]);
-
-			const results = await service.getOtherCastURLs('tt123', 'u1');
-
-			expect(results).toEqual([
-				{ url: 'http://tb.com/f1.mkv', link: 'http://tb/1', size: 5000 },
-			]);
-			expect(prismaMock.torBoxCast.findMany).toHaveBeenCalledWith(
-				expect.objectContaining({
-					where: expect.objectContaining({
-						userId: { not: 'u1' },
-						size: { gt: 10 },
-					}),
-					take: 2,
-				})
-			);
-		});
-	});
-
 	describe('getCastProfile', () => {
 		it('returns profile when found', async () => {
 			const profile = {
@@ -229,21 +208,27 @@ describe('TorBoxCastService', () => {
 	});
 
 	describe('deleteCastedLink', () => {
-		it('deletes the cast entry', async () => {
-			prismaMock.torBoxCast.delete.mockResolvedValue({});
+		it('deletes the cast entry and reports success', async () => {
+			prismaMock.torBoxCast.deleteMany.mockResolvedValue({ count: 1 });
 
-			await service.deleteCastedLink('tt123', 'u1', 'h1');
+			await expect(service.deleteCastedLink('tt123', 'u1', 'h1')).resolves.toBe(true);
 
-			expect(prismaMock.torBoxCast.delete).toHaveBeenCalledWith({
-				where: { imdbId_userId_hash: { imdbId: 'tt123', userId: 'u1', hash: 'h1' } },
+			expect(prismaMock.torBoxCast.deleteMany).toHaveBeenCalledWith({
+				where: { imdbId: 'tt123', userId: 'u1', hash: 'h1' },
 			});
 		});
 
+		it('reports false when there is no matching link', async () => {
+			prismaMock.torBoxCast.deleteMany.mockResolvedValue({ count: 0 });
+
+			await expect(service.deleteCastedLink('tt123', 'u1', 'h1')).resolves.toBe(false);
+		});
+
 		it('throws with message when delete fails', async () => {
-			prismaMock.torBoxCast.delete.mockRejectedValue(new Error('Record not found'));
+			prismaMock.torBoxCast.deleteMany.mockRejectedValue(new Error('db down'));
 
 			await expect(service.deleteCastedLink('tt123', 'u1', 'h1')).rejects.toThrow(
-				'Failed to delete casted link: Record not found'
+				'Failed to delete casted link: db down'
 			);
 		});
 	});
@@ -314,16 +299,15 @@ describe('TorBoxCastService', () => {
 	describe('getOtherStreams', () => {
 		it('returns streams from other users', async () => {
 			const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-			prismaMock.torBoxCast.findMany.mockResolvedValue([
-				{
-					url: 'http://tb.com/path/Movie.mkv',
-					link: 'http://tb/1',
-					size: BigInt(2048),
-					hash: 'h1',
-					torrentId: null,
-					fileId: null,
-				},
-			]);
+			prismaMock.torBoxCast.groupBy.mockResolvedValue([{ size: BigInt(2048) }]);
+			prismaMock.torBoxCast.findFirst.mockResolvedValue({
+				url: 'http://tb.com/path/Movie.mkv',
+				link: 'http://tb/1',
+				size: BigInt(2048),
+				hash: 'h1',
+				torrentId: null,
+				fileId: null,
+			});
 
 			const result = await service.getOtherStreams('tt123', 'u1', 5);
 
@@ -332,13 +316,35 @@ describe('TorBoxCastService', () => {
 			consoleSpy.mockRestore();
 		});
 
+		it('dedupes by size in SQL and bounds the query with take', async () => {
+			const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+			prismaMock.torBoxCast.groupBy.mockResolvedValue([]);
+
+			await service.getOtherStreams('tt123', 'u1', 3);
+
+			expect(prismaMock.torBoxCast.groupBy).toHaveBeenCalledWith(
+				expect.objectContaining({ by: ['size'], take: 3 })
+			);
+			// `distinct` would force Prisma to drop the SQL LIMIT and read every row
+			expect(prismaMock.torBoxCast.findMany).not.toHaveBeenCalled();
+			consoleSpy.mockRestore();
+		});
+
+		it('returns nothing and issues no query when the limit is zero', async () => {
+			const result = await service.getOtherStreams('tt123', 'u1', 0);
+
+			expect(result).toEqual([]);
+			expect(prismaMock.torBoxCast.groupBy).not.toHaveBeenCalled();
+			expect(prismaMock.torBoxCast.findMany).not.toHaveBeenCalled();
+		});
+
 		it('applies maxSize as MB-based BigInt limit', async () => {
 			const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-			prismaMock.torBoxCast.findMany.mockResolvedValue([]);
+			prismaMock.torBoxCast.groupBy.mockResolvedValue([]);
 
 			await service.getOtherStreams('tt123', 'u1', 5, 5);
 
-			expect(prismaMock.torBoxCast.findMany).toHaveBeenCalledWith(
+			expect(prismaMock.torBoxCast.groupBy).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: expect.objectContaining({
 						size: expect.objectContaining({ lte: BigInt(5120) }),
@@ -350,11 +356,11 @@ describe('TorBoxCastService', () => {
 
 		it('omits maxSize constraint when not provided', async () => {
 			const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-			prismaMock.torBoxCast.findMany.mockResolvedValue([]);
+			prismaMock.torBoxCast.groupBy.mockResolvedValue([]);
 
 			await service.getOtherStreams('tt123', 'u1', 5);
 
-			const callArgs = prismaMock.torBoxCast.findMany.mock.calls[0][0];
+			const callArgs = prismaMock.torBoxCast.groupBy.mock.calls[0][0];
 			expect(callArgs.where.size).not.toHaveProperty('lte');
 			consoleSpy.mockRestore();
 		});

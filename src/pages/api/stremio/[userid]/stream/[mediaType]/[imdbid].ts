@@ -116,7 +116,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			totalStreams: filteredUserCastItems.length + filteredOtherItems.length,
 			uniqueHashes: uniqueHashes.length,
 			snapshotsFound: snapshots.length,
-			hitRate: `${((snapshots.length / uniqueHashes.length) * 100).toFixed(1)}%`,
+			hitRate:
+				uniqueHashes.length > 0
+					? `${((snapshots.length / uniqueHashes.length) * 100).toFixed(1)}%`
+					: 'N/A',
 		});
 
 		for (const item of filteredUserCastItems) {

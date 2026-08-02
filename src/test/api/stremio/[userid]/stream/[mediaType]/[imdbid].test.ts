@@ -22,7 +22,6 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 		vi.clearAllMocks();
 		mockRepository.getCastProfile = vi.fn();
 		mockRepository.getCastURLs = vi.fn();
-		mockRepository.getOtherCastURLs = vi.fn();
 		mockRepository.getUserCastStreams = vi.fn();
 		mockRepository.getOtherStreams = vi.fn();
 		mockRepository.getSnapshotsByHashes = vi.fn();
@@ -74,7 +73,6 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 			mockIsLegacyToken.mockReturnValue(false);
 			mockRepository.getCastProfile = vi.fn();
 			mockRepository.getCastURLs = vi.fn();
-			mockRepository.getOtherCastURLs = vi.fn();
 
 			testCase.setup?.();
 

@@ -9,8 +9,10 @@ const prismaMock = vi.hoisted(() => ({
 	cast: {
 		findFirst: vi.fn(),
 		findMany: vi.fn(),
+		groupBy: vi.fn(),
 		upsert: vi.fn(),
 		delete: vi.fn(),
+		deleteMany: vi.fn(),
 	},
 	available: {
 		findMany: vi.fn(),
@@ -36,7 +38,15 @@ describe('CastService', () => {
 		Object.values(prismaMock.available).forEach((fn) => (fn as Mock).mockReset());
 		Object.values(prismaMock.availableFile).forEach((fn) => (fn as Mock).mockReset());
 		prismaMock.availableFile.findMany.mockResolvedValue([]);
+		prismaMock.cast.groupBy.mockResolvedValue([]);
 	});
+
+	// The other-cast query dedupes by size via groupBy + one lookup per size
+	// (Prisma's `distinct` would drop the SQL LIMIT and read every row).
+	const mockOtherCasts = (rows: { url: string; link: string | null; size: bigint }[]) => {
+		prismaMock.cast.groupBy.mockResolvedValueOnce(rows.map((r) => ({ size: r.size })));
+		rows.forEach((r) => prismaMock.cast.findFirst.mockResolvedValueOnce(r));
+	};
 
 	it('upserts cast profiles', async () => {
 		await service.saveCastProfile('user', 'client', 'secret', 'refresh');
@@ -77,20 +87,13 @@ describe('CastService', () => {
 		expect(await service.getLatestCast('tt', 'user')).toBeNull();
 	});
 
-	it('returns filtered cast URLs for the owner and others', async () => {
+	it('returns filtered cast URLs for the owner', async () => {
 		prismaMock.cast.findMany.mockResolvedValueOnce([
 			{ url: 'url', link: 'link', size: BigInt(100) },
 			{ url: 'url2', link: null, size: BigInt(0) },
 		]);
 		const own = await service.getCastURLs('tt', 'user');
 		expect(own).toEqual([{ url: 'url', link: 'link', size: 100 }]);
-
-		prismaMock.cast.findMany.mockResolvedValueOnce([
-			{ url: 'url', link: 'link', size: BigInt(200) },
-			{ url: 'url2', link: null, size: BigInt(100) },
-		]);
-		const other = await service.getOtherCastURLs('tt', 'user');
-		expect(other).toEqual([{ url: 'url', link: 'link', size: 200 }]);
 	});
 
 	it('reads cast profiles for a user', async () => {
@@ -143,13 +146,17 @@ describe('CastService', () => {
 		]);
 	});
 
-	it('deletes casted links and wraps errors', async () => {
-		await service.deleteCastedLink('tt', 'user', 'hash');
-		expect(prismaMock.cast.delete).toHaveBeenCalledWith({
-			where: { imdbId_userId_hash: { imdbId: 'tt', userId: 'user', hash: 'hash' } },
+	it('deletes casted links, reports misses, and wraps errors', async () => {
+		prismaMock.cast.deleteMany.mockResolvedValueOnce({ count: 1 });
+		await expect(service.deleteCastedLink('tt', 'user', 'hash')).resolves.toBe(true);
+		expect(prismaMock.cast.deleteMany).toHaveBeenCalledWith({
+			where: { imdbId: 'tt', userId: 'user', hash: 'hash' },
 		});
 
-		prismaMock.cast.delete.mockRejectedValue(new Error('db down'));
+		prismaMock.cast.deleteMany.mockResolvedValueOnce({ count: 0 });
+		await expect(service.deleteCastedLink('tt', 'user', 'hash')).resolves.toBe(false);
+
+		prismaMock.cast.deleteMany.mockRejectedValue(new Error('db down'));
 		await expect(service.deleteCastedLink('tt', 'user', 'hash')).rejects.toThrow(
 			'Failed to delete casted link: db down'
 		);
@@ -207,7 +214,7 @@ describe('CastService', () => {
 			},
 		]);
 
-		prismaMock.cast.findMany.mockResolvedValueOnce([
+		mockOtherCasts([
 			{
 				url: 'https://files.dmm.test/othercast.mkv',
 				link: 'https://app.real-debrid.com/d/otherlink',
@@ -245,7 +252,7 @@ describe('CastService', () => {
 
 		expect(otherStreams).toHaveLength(5);
 		expect(prismaMock.available.findMany).not.toHaveBeenCalled();
-		expect(prismaMock.cast.findMany).not.toHaveBeenCalled();
+		expect(prismaMock.cast.groupBy).not.toHaveBeenCalled();
 	});
 
 	it('handles TV show imdbId format in getOtherStreams', async () => {
@@ -258,7 +265,6 @@ describe('CastService', () => {
 		]);
 
 		prismaMock.available.findMany.mockResolvedValueOnce([]);
-		prismaMock.cast.findMany.mockResolvedValueOnce([]);
 
 		const otherStreams = await service.getOtherStreams('tt123:1:1', 'user1', 5);
 
@@ -283,7 +289,6 @@ describe('CastService', () => {
 		]);
 
 		prismaMock.available.findMany.mockResolvedValueOnce([]);
-		prismaMock.cast.findMany.mockResolvedValueOnce([]);
 
 		const otherStreams = await service.getOtherStreams('tt123:1:1', 'user1', 5);
 
@@ -301,7 +306,6 @@ describe('CastService', () => {
 		]);
 
 		prismaMock.available.findMany.mockResolvedValueOnce([]);
-		prismaMock.cast.findMany.mockResolvedValueOnce([]);
 
 		const otherStreams = await service.getOtherStreams('tt123:1:5', 'user1', 5);
 
@@ -312,7 +316,6 @@ describe('CastService', () => {
 	it('filters out season packs from wrong seasons', async () => {
 		prismaMock.availableFile.findMany.mockResolvedValueOnce([]);
 		prismaMock.available.findMany.mockResolvedValueOnce([]);
-		prismaMock.cast.findMany.mockResolvedValueOnce([]);
 
 		const otherStreams = await service.getOtherStreams('tt123:1:5', 'user1', 5);
 
@@ -329,7 +332,6 @@ describe('CastService', () => {
 		]);
 
 		prismaMock.available.findMany.mockResolvedValueOnce([]);
-		prismaMock.cast.findMany.mockResolvedValueOnce([]);
 
 		const otherStreams = await service.getOtherStreams('tt123:1:5', 'user1', 5);
 
@@ -340,7 +342,7 @@ describe('CastService', () => {
 	it('cast items use full imdbId for filtering', async () => {
 		prismaMock.available.findMany.mockResolvedValueOnce([]);
 
-		prismaMock.cast.findMany.mockResolvedValueOnce([
+		mockOtherCasts([
 			{
 				url: 'https://files.dmm.test/Show.S01E01.mkv',
 				link: 'https://app.real-debrid.com/d/right',
@@ -365,7 +367,7 @@ describe('CastService', () => {
 
 		prismaMock.available.findMany.mockResolvedValueOnce([]);
 
-		prismaMock.cast.findMany.mockResolvedValueOnce([
+		mockOtherCasts([
 			{
 				url: 'https://files.dmm.test/Show.Season.1.Episode.5.mkv',
 				link: 'https://app.real-debrid.com/d/season1ep5',
@@ -397,7 +399,6 @@ describe('CastService', () => {
 		]);
 
 		prismaMock.available.findMany.mockResolvedValueOnce([]);
-		prismaMock.cast.findMany.mockResolvedValueOnce([]);
 
 		const otherStreams = await service.getOtherStreams('tt123:1:5', 'user1', 5);
 
@@ -432,8 +433,6 @@ describe('CastService', () => {
 			},
 		]);
 
-		prismaMock.cast.findMany.mockResolvedValueOnce([]);
-
 		const otherStreams = await service.getOtherStreams('tt123', 'user1', 5);
 
 		expect(otherStreams).toHaveLength(0);
@@ -466,7 +465,7 @@ describe('CastService', () => {
 
 		prismaMock.available.findMany.mockResolvedValueOnce([]);
 
-		prismaMock.cast.findMany.mockResolvedValueOnce([
+		mockOtherCasts([
 			{
 				url: 'https://files.dmm.test/large.mkv',
 				link: 'https://app.real-debrid.com/d/largelink',
@@ -493,7 +492,6 @@ describe('CastService', () => {
 		]);
 
 		prismaMock.available.findMany.mockResolvedValueOnce([]);
-		prismaMock.cast.findMany.mockResolvedValueOnce([]);
 
 		const maxSizeGb = 3;
 		const expectedMb = Math.round(maxSizeGb * 1024);
@@ -521,7 +519,6 @@ describe('CastService', () => {
 		]);
 
 		prismaMock.available.findMany.mockResolvedValueOnce([]);
-		prismaMock.cast.findMany.mockResolvedValueOnce([]);
 
 		const otherStreams = await service.getOtherStreams('tt123', 'user1', 5, 0);
 

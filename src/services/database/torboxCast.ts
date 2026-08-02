@@ -5,78 +5,6 @@ interface LatestCast {
 	link: string;
 }
 
-type EpisodeFilters = {
-	season?: number;
-	episode?: number;
-};
-
-type ParsedEpisodeInfo = {
-	season?: number;
-	episode?: number;
-	isSeasonPack?: boolean;
-};
-
-const EPISODE_PATTERNS: Array<{
-	regex: RegExp;
-	seasonIndex: number;
-	episodeIndex: number;
-}> = [
-	{ regex: /s(\d{1,2})e(\d{1,2})/i, seasonIndex: 1, episodeIndex: 2 },
-	{ regex: /(\d{1,2})x(\d{1,2})/i, seasonIndex: 1, episodeIndex: 2 },
-	{
-		regex: /season[^\d]{0,6}(\d{1,2}).*episode[^\d]{0,6}(\d{1,2})/i,
-		seasonIndex: 1,
-		episodeIndex: 2,
-	},
-	{
-		regex: /episode[^\d]{0,6}(\d{1,2}).*season[^\d]{0,6}(\d{1,2})/i,
-		seasonIndex: 2,
-		episodeIndex: 1,
-	},
-];
-
-const SEASON_ONLY_PATTERNS: Array<{ regex: RegExp; captureIndex?: number }> = [
-	{ regex: /season[^\d]{0,6}(\d{1,2})/i, captureIndex: 1 },
-	{ regex: /(^|[^a-z0-9])s(\d{1,2})(?![a-z0-9])/i, captureIndex: 2 },
-];
-
-function parseImdbId(imdbId: string): { baseImdbId: string } & EpisodeFilters {
-	const [baseImdbId, seasonPart, episodePart] = imdbId.split(':');
-	const season = seasonPart ? parseInt(seasonPart, 10) : undefined;
-	const episode = episodePart ? parseInt(episodePart, 10) : undefined;
-	return {
-		baseImdbId,
-		season: Number.isNaN(season) ? undefined : season,
-		episode: Number.isNaN(episode) ? undefined : episode,
-	};
-}
-
-function extractEpisodeInfo(text: string): ParsedEpisodeInfo | null {
-	for (const pattern of EPISODE_PATTERNS) {
-		const match = pattern.regex.exec(text);
-		if (match) {
-			const season = parseInt(match[pattern.seasonIndex], 10);
-			const episode = parseInt(match[pattern.episodeIndex], 10);
-			if (!Number.isNaN(season) && !Number.isNaN(episode)) {
-				return { season, episode };
-			}
-		}
-	}
-
-	for (const pattern of SEASON_ONLY_PATTERNS) {
-		const match = pattern.regex.exec(text);
-		if (match) {
-			const captureIndex = pattern.captureIndex ?? 1;
-			const season = parseInt(match[captureIndex], 10);
-			if (!Number.isNaN(season)) {
-				return { season, isSeasonPack: true };
-			}
-		}
-	}
-
-	return null;
-}
-
 export class TorBoxCastService extends DatabaseClient {
 	public async saveCastProfile(
 		userId: string,
@@ -151,44 +79,6 @@ export class TorBoxCastService extends DatabaseClient {
 			.filter(
 				(item): item is { url: string; link: string; size: bigint } => item.link !== null
 			)
-			.map((item) => ({
-				url: item.url,
-				link: item.link,
-				size: Number(item.size),
-			}));
-	}
-
-	public async getOtherCastURLs(
-		imdbId: string,
-		userId: string
-	): Promise<{ url: string; link: string; size: number }[]> {
-		const castItems = await this.prisma.torBoxCast.findMany({
-			where: {
-				imdbId: imdbId,
-				link: {
-					not: null,
-				},
-				size: {
-					gt: 10,
-				},
-				userId: {
-					not: userId,
-				},
-			},
-			distinct: ['size'],
-			orderBy: {
-				updatedAt: 'desc',
-			},
-			take: 2,
-			select: {
-				url: true,
-				link: true,
-				size: true,
-			},
-		});
-
-		return castItems
-			.filter((item): item is { url: string; link: string; size: bigint } => !!item.link)
 			.map((item) => ({
 				url: item.url,
 				link: item.link,
@@ -331,17 +221,18 @@ export class TorBoxCastService extends DatabaseClient {
 		}));
 	}
 
-	public async deleteCastedLink(imdbId: string, userId: string, hash: string): Promise<void> {
+	// Returns false when there was no matching link, so callers can answer 404
+	// instead of reporting a server error for something that simply isn't there.
+	public async deleteCastedLink(imdbId: string, userId: string, hash: string): Promise<boolean> {
 		try {
-			await this.prisma.torBoxCast.delete({
+			const { count } = await this.prisma.torBoxCast.deleteMany({
 				where: {
-					imdbId_userId_hash: {
-						imdbId,
-						userId,
-						hash,
-					},
+					imdbId,
+					userId,
+					hash,
 				},
 			});
+			return count > 0;
 		} catch (error: any) {
 			throw new Error(`Failed to delete casted link: ${error.message}`);
 		}
@@ -454,42 +345,62 @@ export class TorBoxCastService extends DatabaseClient {
 			fileId: number | null;
 		}[]
 	> {
-		const { baseImdbId, season: seasonFilter, episode: episodeFilter } = parseImdbId(imdbId);
+		if (limit <= 0) {
+			return [];
+		}
+
 		const hasMaxSize = typeof maxSize === 'number' && maxSize > 0;
 		const normalizedMaxSizeMb = hasMaxSize ? Math.round(maxSize * 1024) : undefined;
 		const maxSizeCastLimit =
 			normalizedMaxSizeMb !== undefined ? BigInt(normalizedMaxSizeMb) : undefined;
 
+		const where = {
+			imdbId: imdbId,
+			link: {
+				not: null,
+			},
+			size: {
+				gt: 10,
+				...(maxSizeCastLimit !== undefined && { lte: maxSizeCastLimit }),
+			},
+			userId: {
+				not: userId,
+			},
+		};
+
 		// For TorBox, we only get streams from other TorBox Cast users
 		// (We don't have availability tables for TorBox yet)
-		const otherCastItems = await this.prisma.torBoxCast.findMany({
-			where: {
-				imdbId: imdbId,
-				link: {
-					not: null,
-				},
-				size: {
-					gt: 10,
-					...(maxSizeCastLimit !== undefined && { lte: maxSizeCastLimit }),
-				},
-				userId: {
-					not: userId,
-				},
-			},
-			distinct: ['size'],
+		//
+		// Deduplicate by size in SQL rather than with Prisma's `distinct`: `distinct`
+		// makes Prisma drop the SQL LIMIT and pull every row for the title (hundreds
+		// on popular ones) just to keep `limit` of them. groupBy returns only the
+		// distinct sizes, then one bounded lookup per size fetches the actual rows.
+		const sizeGroups = await this.prisma.torBoxCast.groupBy({
+			by: ['size'],
+			where,
 			orderBy: {
 				size: 'desc',
 			},
-			select: {
-				url: true,
-				link: true,
-				size: true,
-				hash: true,
-				torrentId: true,
-				fileId: true,
-			},
 			take: limit,
 		});
+
+		const otherCastItems = (
+			await Promise.all(
+				sizeGroups.map((group) =>
+					this.prisma.torBoxCast.findFirst({
+						where: { ...where, size: group.size },
+						select: {
+							url: true,
+							link: true,
+							size: true,
+							hash: true,
+							torrentId: true,
+							fileId: true,
+						},
+					})
+				)
+			)
+		).filter((item): item is NonNullable<typeof item> => item !== null);
 
 		const castStreams = otherCastItems
 			.filter(

@@ -5,22 +5,6 @@ interface LatestCast {
 	link: string;
 }
 
-type EpisodeFilters = {
-	season?: number;
-	episode?: number;
-};
-
-function parseImdbId(imdbId: string): { baseImdbId: string } & EpisodeFilters {
-	const [baseImdbId, seasonPart, episodePart] = imdbId.split(':');
-	const season = seasonPart ? parseInt(seasonPart, 10) : undefined;
-	const episode = episodePart ? parseInt(episodePart, 10) : undefined;
-	return {
-		baseImdbId,
-		season: Number.isNaN(season) ? undefined : season,
-		episode: Number.isNaN(episode) ? undefined : episode,
-	};
-}
-
 export class AllDebridCastService extends DatabaseClient {
 	public async saveCastProfile(
 		userId: string,
@@ -98,44 +82,6 @@ export class AllDebridCastService extends DatabaseClient {
 			.filter(
 				(item): item is { url: string; link: string; size: bigint } => item.link !== null
 			)
-			.map((item) => ({
-				url: item.url,
-				link: item.link,
-				size: Number(item.size),
-			}));
-	}
-
-	public async getOtherCastURLs(
-		imdbId: string,
-		userId: string
-	): Promise<{ url: string; link: string; size: number }[]> {
-		const castItems = await this.prisma.allDebridCast.findMany({
-			where: {
-				imdbId: imdbId,
-				link: {
-					not: null,
-				},
-				size: {
-					gt: 10,
-				},
-				userId: {
-					not: userId,
-				},
-			},
-			distinct: ['size'],
-			orderBy: {
-				updatedAt: 'desc',
-			},
-			take: 2,
-			select: {
-				url: true,
-				link: true,
-				size: true,
-			},
-		});
-
-		return castItems
-			.filter((item): item is { url: string; link: string; size: bigint } => !!item.link)
 			.map((item) => ({
 				url: item.url,
 				link: item.link,
@@ -278,17 +224,18 @@ export class AllDebridCastService extends DatabaseClient {
 		}));
 	}
 
-	public async deleteCastedLink(imdbId: string, userId: string, hash: string): Promise<void> {
+	// Returns false when there was no matching link, so callers can answer 404
+	// instead of reporting a server error for something that simply isn't there.
+	public async deleteCastedLink(imdbId: string, userId: string, hash: string): Promise<boolean> {
 		try {
-			await this.prisma.allDebridCast.delete({
+			const { count } = await this.prisma.allDebridCast.deleteMany({
 				where: {
-					imdbId_userId_hash: {
-						imdbId,
-						userId,
-						hash,
-					},
+					imdbId,
+					userId,
+					hash,
 				},
 			});
+			return count > 0;
 		} catch (error: any) {
 			throw new Error(`Failed to delete casted link: ${error.message}`);
 		}
@@ -366,8 +313,16 @@ export class AllDebridCastService extends DatabaseClient {
 
 		return castItems
 			.filter(
-				(item): item is { url: string; link: string; size: bigint; hash: string; magnetId: number | null; fileIndex: number | null } =>
-					item.link !== null
+				(
+					item
+				): item is {
+					url: string;
+					link: string;
+					size: bigint;
+					hash: string;
+					magnetId: number | null;
+					fileIndex: number | null;
+				} => item.link !== null
 			)
 			.map((item) => ({
 				url: item.url,
@@ -396,46 +351,74 @@ export class AllDebridCastService extends DatabaseClient {
 			fileIndex: number | null;
 		}[]
 	> {
-		const { baseImdbId, season: seasonFilter, episode: episodeFilter } = parseImdbId(imdbId);
+		if (limit <= 0) {
+			return [];
+		}
+
 		const hasMaxSize = typeof maxSize === 'number' && maxSize > 0;
 		const normalizedMaxSizeMb = hasMaxSize ? Math.round(maxSize * 1024) : undefined;
 		const maxSizeCastLimit =
 			normalizedMaxSizeMb !== undefined ? BigInt(normalizedMaxSizeMb) : undefined;
 
-		// For AllDebrid, we only get streams from other AllDebrid Cast users
-		const otherCastItems = await this.prisma.allDebridCast.findMany({
-			where: {
-				imdbId: imdbId,
-				link: {
-					not: null,
-				},
-				size: {
-					gt: 10,
-					...(maxSizeCastLimit !== undefined && { lte: maxSizeCastLimit }),
-				},
-				userId: {
-					not: userId,
-				},
+		const where = {
+			imdbId: imdbId,
+			link: {
+				not: null,
 			},
-			distinct: ['size'],
+			size: {
+				gt: 10,
+				...(maxSizeCastLimit !== undefined && { lte: maxSizeCastLimit }),
+			},
+			userId: {
+				not: userId,
+			},
+		};
+
+		// For AllDebrid, we only get streams from other AllDebrid Cast users
+		//
+		// Deduplicate by size in SQL rather than with Prisma's `distinct`: `distinct`
+		// makes Prisma drop the SQL LIMIT and pull every row for the title just to
+		// keep `limit` of them. groupBy returns only the distinct sizes, then one
+		// bounded lookup per size fetches the actual rows.
+		const sizeGroups = await this.prisma.allDebridCast.groupBy({
+			by: ['size'],
+			where,
 			orderBy: {
 				size: 'desc',
-			},
-			select: {
-				url: true,
-				link: true,
-				size: true,
-				hash: true,
-				magnetId: true,
-				fileIndex: true,
 			},
 			take: limit,
 		});
 
+		const otherCastItems = (
+			await Promise.all(
+				sizeGroups.map((group) =>
+					this.prisma.allDebridCast.findFirst({
+						where: { ...where, size: group.size },
+						select: {
+							url: true,
+							link: true,
+							size: true,
+							hash: true,
+							magnetId: true,
+							fileIndex: true,
+						},
+					})
+				)
+			)
+		).filter((item): item is NonNullable<typeof item> => item !== null);
+
 		const castStreams = otherCastItems
 			.filter(
-				(item): item is { url: string; link: string; size: bigint; hash: string; magnetId: number | null; fileIndex: number | null } =>
-					item.link !== null
+				(
+					item
+				): item is {
+					url: string;
+					link: string;
+					size: bigint;
+					hash: string;
+					magnetId: number | null;
+					fileIndex: number | null;
+				} => item.link !== null
 			)
 			.map((item) => ({
 				url: item.url,

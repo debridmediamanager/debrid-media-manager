@@ -104,7 +104,7 @@ describe('API /api/stremio-tb/deletelink', () => {
 	it('deletes link and returns success', async () => {
 		mockHelpers.validateTorBoxApiKey.mockResolvedValue({ valid: true });
 		mockHelpers.generateTorBoxUserId.mockResolvedValue('tb-user-456');
-		mockDb.deleteTorBoxCastedLink.mockResolvedValue(undefined);
+		mockDb.deleteTorBoxCastedLink.mockResolvedValue(true);
 		const req = createMockRequest({
 			method: 'DELETE',
 			body: { apiKey: 'valid-key', imdbId: 'tt123', hash: 'abc' },

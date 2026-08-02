@@ -24,7 +24,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	try {
 		const userId = await generateUserId(token);
-		await db.deleteCastedLink(imdbId, userId, hash);
+		const deleted = await db.deleteCastedLink(imdbId, userId, hash);
+		if (!deleted) {
+			res.status(404).json({ error: 'Link not found' });
+			return;
+		}
 		res.status(200).json({ message: 'Link deleted successfully' });
 	} catch (error) {
 		handleApiError(error, res, `Failed to delete link for ${imdbId}, ${error}`);

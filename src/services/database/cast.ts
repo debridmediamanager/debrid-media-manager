@@ -206,44 +206,6 @@ export class CastService extends DatabaseClient {
 			}));
 	}
 
-	public async getOtherCastURLs(
-		imdbId: string,
-		userId: string
-	): Promise<{ url: string; link: string; size: number }[]> {
-		const castItems = await this.prisma.cast.findMany({
-			where: {
-				imdbId: imdbId,
-				link: {
-					not: null,
-				},
-				size: {
-					gt: 10,
-				},
-				userId: {
-					not: userId,
-				},
-			},
-			distinct: ['size'],
-			orderBy: {
-				updatedAt: 'desc',
-			},
-			take: 2,
-			select: {
-				url: true,
-				link: true,
-				size: true,
-			},
-		});
-
-		return castItems
-			.filter((item): item is { url: string; link: string; size: bigint } => !!item.link)
-			.map((item) => ({
-				url: item.url,
-				link: item.link,
-				size: Number(item.size),
-			}));
-	}
-
 	public async getCastProfile(userId: string): Promise<{
 		clientId: string;
 		clientSecret: string;
@@ -377,17 +339,18 @@ export class CastService extends DatabaseClient {
 		}));
 	}
 
-	public async deleteCastedLink(imdbId: string, userId: string, hash: string): Promise<void> {
+	// Returns false when there was no matching link, so callers can answer 404
+	// instead of reporting a server error for something that simply isn't there.
+	public async deleteCastedLink(imdbId: string, userId: string, hash: string): Promise<boolean> {
 		try {
-			await this.prisma.cast.delete({
+			const { count } = await this.prisma.cast.deleteMany({
 				where: {
-					imdbId_userId_hash: {
-						imdbId,
-						userId,
-						hash,
-					},
+					imdbId,
+					userId,
+					hash,
 				},
 			});
+			return count > 0;
 		} catch (error: any) {
 			throw new Error(`Failed to delete casted link: ${error.message}`);
 		}
@@ -487,8 +450,11 @@ export class CastService extends DatabaseClient {
 			hash: string;
 		}[]
 	> {
+		if (limit <= 0) {
+			return [];
+		}
+
 		const { baseImdbId, season: seasonFilter, episode: episodeFilter } = parseImdbId(imdbId);
-		const episodeFilters: EpisodeFilters = { season: seasonFilter, episode: episodeFilter };
 		const hasEpisodeFilters = episodeFilter !== undefined || seasonFilter !== undefined;
 		const hasMaxSize = typeof maxSize === 'number' && maxSize > 0;
 		const normalizedMaxSizeMb = hasMaxSize ? Math.round(maxSize * 1024) : undefined;
@@ -599,32 +565,49 @@ export class CastService extends DatabaseClient {
 		}
 
 		const remainingLimit = limit - combinedAvailable.length;
-		const otherCastItems = await this.prisma.cast.findMany({
-			where: {
-				imdbId: imdbId,
-				link: {
-					not: null,
-				},
-				size: {
-					gt: 10,
-					...(maxSizeCastLimit !== undefined && { lte: maxSizeCastLimit }),
-				},
-				userId: {
-					not: userId,
-				},
+		const castWhere = {
+			imdbId: imdbId,
+			link: {
+				not: null,
 			},
-			distinct: ['size'],
+			size: {
+				gt: 10,
+				...(maxSizeCastLimit !== undefined && { lte: maxSizeCastLimit }),
+			},
+			userId: {
+				not: userId,
+			},
+		};
+
+		// Deduplicate by size in SQL rather than with Prisma's `distinct`: `distinct`
+		// makes Prisma drop the SQL LIMIT and pull every cast row for the title (over
+		// a thousand on popular ones) just to keep `remainingLimit` of them. groupBy
+		// returns only the distinct sizes, then one bounded lookup per size fetches
+		// the actual rows.
+		const sizeGroups = await this.prisma.cast.groupBy({
+			by: ['size'],
+			where: castWhere,
 			orderBy: {
 				size: 'desc',
 			},
-			select: {
-				url: true,
-				link: true,
-				size: true,
-				hash: true,
-			},
 			take: remainingLimit,
 		});
+
+		const otherCastItems = (
+			await Promise.all(
+				sizeGroups.map((group) =>
+					this.prisma.cast.findFirst({
+						where: { ...castWhere, size: group.size },
+						select: {
+							url: true,
+							link: true,
+							size: true,
+							hash: true,
+						},
+					})
+				)
+			)
+		).filter((item): item is NonNullable<typeof item> => item !== null);
 
 		const castStreams = otherCastItems
 			.filter(

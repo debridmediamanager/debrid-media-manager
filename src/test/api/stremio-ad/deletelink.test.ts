@@ -104,7 +104,7 @@ describe('API /api/stremio-ad/deletelink', () => {
 	it('deletes link and returns success', async () => {
 		mockHelpers.validateAllDebridApiKey.mockResolvedValue({ valid: true });
 		mockHelpers.generateAllDebridUserId.mockResolvedValue('user-123');
-		mockDb.deleteAllDebridCastedLink.mockResolvedValue(undefined);
+		mockDb.deleteAllDebridCastedLink.mockResolvedValue(true);
 		const req = createMockRequest({
 			method: 'DELETE',
 			body: { apiKey: 'valid-key', imdbId: 'tt123', hash: 'abc' },

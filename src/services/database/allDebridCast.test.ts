@@ -9,8 +9,10 @@ const prismaMock = vi.hoisted(() => ({
 	allDebridCast: {
 		findFirst: vi.fn(),
 		findMany: vi.fn(),
+		groupBy: vi.fn(),
 		upsert: vi.fn(),
 		delete: vi.fn(),
+		deleteMany: vi.fn(),
 	},
 }));
 
@@ -116,29 +118,6 @@ describe('AllDebridCastService', () => {
 			expect(results).toEqual([
 				{ url: 'http://a.com/f1.mkv', link: 'http://ad/1', size: 2048 },
 			]);
-		});
-	});
-
-	describe('getOtherCastURLs', () => {
-		it('returns casts from other users', async () => {
-			prismaMock.allDebridCast.findMany.mockResolvedValue([
-				{ url: 'http://a.com/f1.mkv', link: 'http://ad/1', size: BigInt(5000) },
-			]);
-
-			const results = await service.getOtherCastURLs('tt123', 'u1');
-
-			expect(results).toEqual([
-				{ url: 'http://a.com/f1.mkv', link: 'http://ad/1', size: 5000 },
-			]);
-			expect(prismaMock.allDebridCast.findMany).toHaveBeenCalledWith(
-				expect.objectContaining({
-					where: expect.objectContaining({
-						userId: { not: 'u1' },
-						size: { gt: 10 },
-					}),
-					take: 2,
-				})
-			);
 		});
 	});
 
@@ -251,21 +230,27 @@ describe('AllDebridCastService', () => {
 	});
 
 	describe('deleteCastedLink', () => {
-		it('deletes the cast entry', async () => {
-			prismaMock.allDebridCast.delete.mockResolvedValue({});
+		it('deletes the cast entry and reports success', async () => {
+			prismaMock.allDebridCast.deleteMany.mockResolvedValue({ count: 1 });
 
-			await service.deleteCastedLink('tt123', 'u1', 'h1');
+			await expect(service.deleteCastedLink('tt123', 'u1', 'h1')).resolves.toBe(true);
 
-			expect(prismaMock.allDebridCast.delete).toHaveBeenCalledWith({
-				where: { imdbId_userId_hash: { imdbId: 'tt123', userId: 'u1', hash: 'h1' } },
+			expect(prismaMock.allDebridCast.deleteMany).toHaveBeenCalledWith({
+				where: { imdbId: 'tt123', userId: 'u1', hash: 'h1' },
 			});
 		});
 
+		it('reports false when there is no matching link', async () => {
+			prismaMock.allDebridCast.deleteMany.mockResolvedValue({ count: 0 });
+
+			await expect(service.deleteCastedLink('tt123', 'u1', 'h1')).resolves.toBe(false);
+		});
+
 		it('throws with message when delete fails', async () => {
-			prismaMock.allDebridCast.delete.mockRejectedValue(new Error('Record not found'));
+			prismaMock.allDebridCast.deleteMany.mockRejectedValue(new Error('db down'));
 
 			await expect(service.deleteCastedLink('tt123', 'u1', 'h1')).rejects.toThrow(
-				'Failed to delete casted link: Record not found'
+				'Failed to delete casted link: db down'
 			);
 		});
 	});
@@ -338,22 +323,21 @@ describe('AllDebridCastService', () => {
 	describe('getOtherStreams', () => {
 		it('returns streams from other users with size limit', async () => {
 			const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-			prismaMock.allDebridCast.findMany.mockResolvedValue([
-				{
-					url: 'http://a.com/path/Movie.mkv',
-					link: 'http://ad/1',
-					size: BigInt(2048),
-					hash: 'h1',
-					magnetId: null,
-					fileIndex: null,
-				},
-			]);
+			prismaMock.allDebridCast.groupBy.mockResolvedValue([{ size: BigInt(2048) }]);
+			prismaMock.allDebridCast.findFirst.mockResolvedValue({
+				url: 'http://a.com/path/Movie.mkv',
+				link: 'http://ad/1',
+				size: BigInt(2048),
+				hash: 'h1',
+				magnetId: null,
+				fileIndex: null,
+			});
 
 			const result = await service.getOtherStreams('tt123', 'u1', 5, 10);
 
 			expect(result).toHaveLength(1);
 			expect(result[0].filename).toBe('Movie.mkv');
-			expect(prismaMock.allDebridCast.findMany).toHaveBeenCalledWith(
+			expect(prismaMock.allDebridCast.groupBy).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: expect.objectContaining({
 						userId: { not: 'u1' },
@@ -364,13 +348,35 @@ describe('AllDebridCastService', () => {
 			consoleSpy.mockRestore();
 		});
 
+		it('dedupes by size in SQL and bounds the query with take', async () => {
+			const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+			prismaMock.allDebridCast.groupBy.mockResolvedValue([]);
+
+			await service.getOtherStreams('tt123', 'u1', 3);
+
+			expect(prismaMock.allDebridCast.groupBy).toHaveBeenCalledWith(
+				expect.objectContaining({ by: ['size'], take: 3 })
+			);
+			// `distinct` would force Prisma to drop the SQL LIMIT and read every row
+			expect(prismaMock.allDebridCast.findMany).not.toHaveBeenCalled();
+			consoleSpy.mockRestore();
+		});
+
+		it('returns nothing and issues no query when the limit is zero', async () => {
+			const result = await service.getOtherStreams('tt123', 'u1', 0);
+
+			expect(result).toEqual([]);
+			expect(prismaMock.allDebridCast.groupBy).not.toHaveBeenCalled();
+			expect(prismaMock.allDebridCast.findMany).not.toHaveBeenCalled();
+		});
+
 		it('applies maxSize as MB-based BigInt limit', async () => {
 			const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-			prismaMock.allDebridCast.findMany.mockResolvedValue([]);
+			prismaMock.allDebridCast.groupBy.mockResolvedValue([]);
 
 			await service.getOtherStreams('tt123', 'u1', 5, 5);
 
-			expect(prismaMock.allDebridCast.findMany).toHaveBeenCalledWith(
+			expect(prismaMock.allDebridCast.groupBy).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: expect.objectContaining({
 						size: expect.objectContaining({ lte: BigInt(5120) }),

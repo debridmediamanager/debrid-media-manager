@@ -323,10 +323,6 @@ export class Repository {
 		return this.castService.getCastURLs(imdbId, userId);
 	}
 
-	public getOtherCastURLs(imdbId: string, userId: string) {
-		return this.castService.getOtherCastURLs(imdbId, userId);
-	}
-
 	public getCastProfile(userId: string) {
 		return this.castService.getCastProfile(userId);
 	}
@@ -395,10 +391,6 @@ export class Repository {
 
 	public getTorBoxCastURLs(imdbId: string, userId: string) {
 		return this.torboxCastService.getCastURLs(imdbId, userId);
-	}
-
-	public getTorBoxOtherCastURLs(imdbId: string, userId: string) {
-		return this.torboxCastService.getOtherCastURLs(imdbId, userId);
 	}
 
 	public getTorBoxCastProfile(userId: string) {
@@ -480,10 +472,6 @@ export class Repository {
 
 	public getAllDebridCastURLs(imdbId: string, userId: string) {
 		return this.allDebridCastService.getCastURLs(imdbId, userId);
-	}
-
-	public getAllDebridOtherCastURLs(imdbId: string, userId: string) {
-		return this.allDebridCastService.getOtherCastURLs(imdbId, userId);
 	}
 
 	public getAllDebridCastProfile(userId: string) {

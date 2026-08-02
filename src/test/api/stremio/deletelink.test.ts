@@ -59,6 +59,7 @@ describe('/api/stremio/deletelink', () => {
 	});
 
 	it('deletes the casted link when parameters are valid', async () => {
+		mockDeleteCastedLink.mockResolvedValue(true);
 		const req = createMockRequest({
 			method: 'POST',
 			body: { imdbId: 'tt1', hash: 'abc' },
@@ -71,6 +72,20 @@ describe('/api/stremio/deletelink', () => {
 		expect(mockDeleteCastedLink).toHaveBeenCalledWith('tt1', 'user-1', 'abc');
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({ message: 'Link deleted successfully' });
+	});
+
+	it('returns 404 when there is no matching link', async () => {
+		mockDeleteCastedLink.mockResolvedValue(false);
+		const req = createMockRequest({
+			method: 'POST',
+			body: { imdbId: 'tt1', hash: 'abc' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(404);
+		expect(res.json).toHaveBeenCalledWith({ error: 'Link not found' });
 	});
 
 	it('delegates unexpected errors to the API error handler', async () => {

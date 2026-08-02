@@ -44,7 +44,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const userId = await generateAllDebridUserId(apiKey);
 
 		// Delete the casted link
-		await db.deleteAllDebridCastedLink(imdbId, userId, hash);
+		const deleted = await db.deleteAllDebridCastedLink(imdbId, userId, hash);
+		if (!deleted) {
+			res.status(404).json({
+				status: 'error',
+				errorMessage: 'Link not found',
+			});
+			return;
+		}
 
 		res.status(200).json({
 			status: 'success',
