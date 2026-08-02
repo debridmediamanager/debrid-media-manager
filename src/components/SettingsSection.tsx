@@ -23,6 +23,7 @@ import {
 	defaultTorrentsFilter,
 } from '../utils/settings';
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
+import { updateTorrinSizeLimits } from '../utils/torrinCastApiClient';
 
 export const SettingsSection = () => {
 	const [isMagnetHandlerEnabled, setIsMagnetHandlerEnabled] = useState(() =>
@@ -192,6 +193,22 @@ export const SettingsSection = () => {
 			updatePromises.push(
 				updateAllDebridSizeLimits(
 					adApiKey,
+					movieSize !== undefined ? Number(movieSize) : undefined,
+					episodeSize !== undefined ? Number(episodeSize) : undefined,
+					streamsLimit !== undefined ? Number(streamsLimit) : undefined,
+					hideCast
+				)
+			);
+		}
+
+		// Update Torrin cast settings
+		const trBaseUrl = getLocalStorageString('torrin:baseUrl');
+		const trApiKey = getLocalStorageString('torrin:apiKey');
+		if (trBaseUrl && trApiKey) {
+			updatePromises.push(
+				updateTorrinSizeLimits(
+					trBaseUrl,
+					trApiKey,
 					movieSize !== undefined ? Number(movieSize) : undefined,
 					episodeSize !== undefined ? Number(episodeSize) : undefined,
 					streamsLimit !== undefined ? Number(streamsLimit) : undefined,

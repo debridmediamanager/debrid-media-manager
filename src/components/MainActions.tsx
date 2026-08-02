@@ -7,12 +7,19 @@ interface MainActionsProps {
 	rdUser: RealDebridUser | null;
 	tbUser: TorBoxUser | null;
 	adUser: boolean;
+	torrinConnected?: boolean;
 	isLoading: boolean;
 }
 
 const isLocalDev = process.env.NODE_ENV === 'development';
 
-export function MainActions({ rdUser, tbUser, adUser, isLoading }: MainActionsProps) {
+export function MainActions({
+	rdUser,
+	tbUser,
+	adUser,
+	torrinConnected = false,
+	isLoading,
+}: MainActionsProps) {
 	const castButtons = [
 		rdUser && {
 			href: '/stremio',
@@ -40,6 +47,15 @@ export function MainActions({ rdUser, tbUser, adUser, isLoading }: MainActionsPr
 			hoverColor: 'hover:bg-yellow-800/50',
 			textColor: 'text-yellow-100',
 			iconColor: 'text-yellow-400',
+		},
+		torrinConnected && {
+			href: '/stremio-torrin',
+			label: 'Cast for TR',
+			borderColor: 'border-sky-500',
+			bgColor: 'bg-sky-900/30',
+			hoverColor: 'hover:bg-sky-800/50',
+			textColor: 'text-sky-100',
+			iconColor: 'text-sky-400',
 		},
 	].filter(Boolean) as {
 		href: string;

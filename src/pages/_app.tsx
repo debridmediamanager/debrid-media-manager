@@ -66,7 +66,13 @@ export default function App({ Component, pageProps }: AppWithProvidersProps) {
 			router.events.off('routeChangeComplete', handleRouteChangeComplete);
 		};
 	}, [router]);
-	const authRoutes = ['/start', '/realdebrid/login', '/alldebrid/login', '/torbox/login'];
+	const authRoutes = [
+		'/start',
+		'/realdebrid/login',
+		'/alldebrid/login',
+		'/torbox/login',
+		'/torrin/login',
+	];
 	const disableLibraryProvider =
 		authRoutes.includes(router.pathname) || Component.disableLibraryProvider === true;
 	const shouldWrapWithLibraryProvider = !disableLibraryProvider;

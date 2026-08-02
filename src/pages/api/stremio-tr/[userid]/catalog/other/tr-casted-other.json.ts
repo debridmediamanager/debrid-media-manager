@@ -1,0 +1,27 @@
+import { getTorrinDMMLibrary } from '@/utils/torrinCastCatalogHelper';
+import { NextApiRequest, NextApiResponse } from 'next';
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+	res.setHeader('access-control-allow-origin', '*');
+
+	const { userid } = req.query;
+	if (typeof userid !== 'string') {
+		res.status(400).json({
+			status: 'error',
+			errorMessage: 'Invalid "userid" query parameter',
+		});
+		return;
+	}
+
+	if (req.method === 'OPTIONS') {
+		return res.status(200).end();
+	}
+
+	const result = await getTorrinDMMLibrary(userid, 1);
+
+	if ('error' in result) {
+		return res.status(result.status).json({ error: result.error });
+	}
+
+	res.status(result.status).json(result.data);
+}

@@ -16,6 +16,7 @@ import {
 	StreamHealthService,
 	TorBoxCastService,
 	TorrentSnapshotService,
+	TorrinCastService,
 	ZurgKeysService,
 } from './database';
 import { HashSearchParams } from './database/hashSearch';
@@ -31,6 +32,7 @@ export type RepositoryDependencies = Partial<{
 	animeService: AnimeService;
 	castService: CastService;
 	torboxCastService: TorBoxCastService;
+	torrinCastService: TorrinCastService;
 	allDebridCastService: AllDebridCastService;
 	reportService: ReportService;
 	torrentSnapshotService: TorrentSnapshotService;
@@ -51,6 +53,7 @@ export class Repository {
 	private animeService: AnimeService;
 	private castService: CastService;
 	private torboxCastService: TorBoxCastService;
+	private torrinCastService: TorrinCastService;
 	private allDebridCastService: AllDebridCastService;
 	private reportService: ReportService;
 	private torrentSnapshotService: TorrentSnapshotService;
@@ -70,6 +73,7 @@ export class Repository {
 		animeService,
 		castService,
 		torboxCastService,
+		torrinCastService,
 		allDebridCastService,
 		reportService,
 		torrentSnapshotService,
@@ -88,6 +92,7 @@ export class Repository {
 		this.animeService = animeService ?? new AnimeService();
 		this.castService = castService ?? new CastService();
 		this.torboxCastService = torboxCastService ?? new TorBoxCastService();
+		this.torrinCastService = torrinCastService ?? new TorrinCastService();
 		this.allDebridCastService = allDebridCastService ?? new AllDebridCastService();
 		this.reportService = reportService ?? new ReportService();
 		this.torrentSnapshotService = torrentSnapshotService ?? new TorrentSnapshotService();
@@ -111,6 +116,7 @@ export class Repository {
 			this.animeService.disconnect(),
 			this.castService.disconnect(),
 			this.torboxCastService.disconnect(),
+			this.torrinCastService.disconnect(),
 			this.allDebridCastService.disconnect(),
 			this.reportService.disconnect(),
 			this.torrentSnapshotService.disconnect(),
@@ -453,6 +459,89 @@ export class Repository {
 
 	public getTorBoxOtherStreams(imdbId: string, userId: string, limit?: number, maxSize?: number) {
 		return this.torboxCastService.getOtherStreams(imdbId, userId, limit, maxSize);
+	}
+
+	// Torrin Cast Service Methods
+	public saveTorrinCastProfile(
+		userId: string,
+		baseUrl: string,
+		apiKey: string,
+		movieMaxSize?: number,
+		episodeMaxSize?: number,
+		otherStreamsLimit?: number,
+		hideCastOption?: boolean
+	) {
+		return this.torrinCastService.saveCastProfile(
+			userId,
+			baseUrl,
+			apiKey,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption
+		);
+	}
+
+	public getTorrinLatestCast(imdbId: string, userId: string) {
+		return this.torrinCastService.getLatestCast(imdbId, userId);
+	}
+
+	public getTorrinCastURLs(imdbId: string, userId: string) {
+		return this.torrinCastService.getCastURLs(imdbId, userId);
+	}
+
+	public getTorrinOtherCastURLs(imdbId: string, userId: string) {
+		return this.torrinCastService.getOtherCastURLs(imdbId, userId);
+	}
+
+	public getTorrinCastProfile(userId: string) {
+		return this.torrinCastService.getCastProfile(userId);
+	}
+
+	public saveTorrinCast(
+		imdbId: string,
+		userId: string,
+		hash: string,
+		url: string,
+		link: string,
+		fileSize: number,
+		baseUrl: string
+	) {
+		return this.torrinCastService.saveCast(imdbId, userId, hash, url, link, fileSize, baseUrl);
+	}
+
+	public fetchTorrinCastedMovies(userId: string) {
+		return this.torrinCastService.fetchCastedMovies(userId);
+	}
+
+	public fetchTorrinCastedShows(userId: string) {
+		return this.torrinCastService.fetchCastedShows(userId);
+	}
+
+	public fetchAllTorrinCastedLinks(userId: string) {
+		return this.torrinCastService.fetchAllCastedLinks(userId);
+	}
+
+	public deleteTorrinCastedLink(imdbId: string, userId: string, hash: string) {
+		return this.torrinCastService.deleteCastedLink(imdbId, userId, hash);
+	}
+
+	public getAllTorrinUserCasts(userId: string) {
+		return this.torrinCastService.getAllUserCasts(userId);
+	}
+
+	public getTorrinUserCastStreams(imdbId: string, userId: string, limit?: number) {
+		return this.torrinCastService.getUserCastStreams(imdbId, userId, limit);
+	}
+
+	public getTorrinOtherStreams(
+		imdbId: string,
+		userId: string,
+		baseUrl: string,
+		limit?: number,
+		maxSize?: number
+	) {
+		return this.torrinCastService.getOtherStreams(imdbId, userId, baseUrl, limit, maxSize);
 	}
 
 	// AllDebrid Cast Service Methods

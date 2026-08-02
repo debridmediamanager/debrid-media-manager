@@ -9,10 +9,11 @@ import {
 } from '../utils/browserStorage';
 import { defaultEpisodeSize, defaultMovieSize, defaultOtherStreamsLimit } from '../utils/settings';
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
+import { updateTorrinSizeLimits } from '../utils/torrinCastApiClient';
 
 interface CastSettingsPanelProps {
-	service: 'rd' | 'ad' | 'tb';
-	accentColor: 'green' | 'yellow' | 'purple';
+	service: 'rd' | 'ad' | 'tb' | 'tr';
+	accentColor: 'green' | 'yellow' | 'purple' | 'sky';
 }
 
 export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelProps) => {
@@ -44,6 +45,11 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 			border: 'border-purple-500/30',
 			title: 'text-purple-200',
 			icon: 'text-purple-400',
+		},
+		sky: {
+			border: 'border-sky-500/30',
+			title: 'text-sky-200',
+			icon: 'text-sky-400',
 		},
 	};
 
@@ -104,6 +110,19 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 				if (adApiKey) {
 					await updateAllDebridSizeLimits(
 						adApiKey,
+						movieSize !== undefined ? Number(movieSize) : undefined,
+						episodeSize !== undefined ? Number(episodeSize) : undefined,
+						streamsLimit !== undefined ? Number(streamsLimit) : undefined,
+						hideCast
+					);
+				}
+			} else if (service === 'tr') {
+				const trBaseUrl = getLocalStorageString('torrin:baseUrl');
+				const trApiKey = getLocalStorageString('torrin:apiKey');
+				if (trBaseUrl && trApiKey) {
+					await updateTorrinSizeLimits(
+						trBaseUrl,
+						trApiKey,
 						movieSize !== undefined ? Number(movieSize) : undefined,
 						episodeSize !== undefined ? Number(episodeSize) : undefined,
 						streamsLimit !== undefined ? Number(streamsLimit) : undefined,

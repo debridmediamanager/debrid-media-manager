@@ -3,11 +3,17 @@ import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
 import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/components/showInfo';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
+import {
+	useAllDebridApiKey,
+	useRealDebridAccessToken,
+	useTorBoxAccessToken,
+	useTorrinCreds,
+} from '@/hooks/auth';
 import { useAvailabilityCheck } from '@/hooks/useAvailabilityCheck';
 import { useExternalSources } from '@/hooks/useExternalSources';
 import { useMassReport } from '@/hooks/useMassReport';
 import { useTorrentManagement } from '@/hooks/useTorrentManagement';
+import { useTorrinAvailability } from '@/hooks/useTorrinAvailability';
 import { SearchApiResponse, SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
@@ -42,6 +48,7 @@ import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { handleCastTvShowTorBox } from '@/utils/torboxCastApiClient';
+import { handleCastTvShowTorrin } from '@/utils/torrinCastApiClient';
 import { getMultipleTrackerStats } from '@/utils/trackerStats';
 import { withAuth } from '@/utils/withAuth';
 import { AxiosError } from 'axios';
@@ -125,6 +132,7 @@ const TvSearch: FunctionComponent = () => {
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const torboxKey = useTorBoxAccessToken();
+	const [torrinBaseUrl, torrinApiKey] = useTorrinCreds();
 
 	// Library sync status - used to prevent auto-availability check while library is still loading
 	const { isFetching: isLibrarySyncing } = useLibraryCache();
@@ -178,7 +186,8 @@ const TvSearch: FunctionComponent = () => {
 	const { fetchEpisodeFromExternalSource, getEnabledSources } = useExternalSources(
 		rdKey,
 		adKey,
-		torboxKey
+		torboxKey,
+		torrinApiKey
 	);
 
 	const {
@@ -201,7 +210,15 @@ const TvSearch: FunctionComponent = () => {
 		sortByMedian
 	);
 
-	const { handleMassReport } = useMassReport(rdKey, adKey, torboxKey, imdbid as string);
+	useTorrinAvailability(searchResults, setSearchResults);
+
+	const { handleMassReport } = useMassReport(
+		rdKey,
+		adKey,
+		torboxKey,
+		imdbid as string,
+		torrinApiKey
+	);
 
 	const expectedEpisodeCount = useMemo(
 		() =>
@@ -803,6 +820,21 @@ const TvSearch: FunctionComponent = () => {
 		);
 	}
 
+	async function handleCastTorrin(hash: string, fileIds: string[]) {
+		await toast.promise(
+			handleCastTvShowTorrin(imdbid as string, torrinBaseUrl!, torrinApiKey!, hash, fileIds),
+			{
+				loading: `Casting ${fileIds.length} episodes (Torrin)...`,
+				success: 'Casting succeeded.',
+				error: 'Casting failed.',
+			},
+			castToastOptions
+		);
+		window.open(
+			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
+		);
+	}
+
 	// Helper function to find all complete season torrents (RD-available with matching episode count)
 	const getCompleteSeasonTorrents = () => {
 		const minEpisodes = Math.max(1, expectedEpisodeCount - 2);
@@ -1375,6 +1407,7 @@ const TvSearch: FunctionComponent = () => {
 				handleCast={handleCast}
 				handleCastTorBox={torboxKey ? handleCastTorBox : undefined}
 				handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
+				handleCastTorrin={torrinBaseUrl && torrinApiKey ? handleCastTorrin : undefined}
 				handleCopyMagnet={(hash) => handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)}
 				checkServiceAvailability={checkServiceAvailability}
 				addRd={addRd}

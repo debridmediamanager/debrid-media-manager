@@ -14,6 +14,7 @@ import { SearchService } from './search';
 import { StreamHealthService } from './streamHealth';
 import { TorBoxCastService } from './torboxCast';
 import { TorrentSnapshotService } from './torrentSnapshot';
+import { TorrinCastService } from './torrinCast';
 import { ZurgKeysService } from './zurgKeys';
 
 export {
@@ -33,5 +34,6 @@ export {
 	StreamHealthService,
 	TorBoxCastService,
 	TorrentSnapshotService,
+	TorrinCastService,
 	ZurgKeysService,
 };

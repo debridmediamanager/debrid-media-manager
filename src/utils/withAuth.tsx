@@ -34,6 +34,14 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			}
 			return null;
 		});
+		const [torrinKey] = useState(() => {
+			if (typeof window !== 'undefined') {
+				return (
+					localStorage.getItem('torrin:apiKey') && localStorage.getItem('torrin:baseUrl')
+				);
+			}
+			return null;
+		});
 
 		// Check for refresh credentials
 		const [hasRefreshCredentials] = useState(() => {
@@ -56,6 +64,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 				!rdKey &&
 				!adKey &&
 				!tbKey &&
+				!torrinKey &&
 				router.pathname !== START_ROUTE &&
 				!router.pathname.endsWith(LOGIN_ROUTE) &&
 				!rdLoading &&
@@ -72,7 +81,16 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 				}
 				setIsLoading(false);
 			}
-		}, [rdKey, rdLoading, rdIsRefreshing, hasRefreshCredentials, adKey, tbKey, router]);
+		}, [
+			rdKey,
+			rdLoading,
+			rdIsRefreshing,
+			hasRefreshCredentials,
+			adKey,
+			tbKey,
+			torrinKey,
+			router,
+		]);
 
 		// Loading screen state tracking
 		useEffect(() => {

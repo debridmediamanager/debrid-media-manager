@@ -1,6 +1,7 @@
 import { deleteMagnet as deleteAdTorrent } from '@/services/allDebrid';
 import { deleteTorrent as deleteRdTorrent } from '@/services/realDebrid';
 import { deleteTorrent as deleteTbTorrent } from '@/services/torbox';
+import { deleteTorrinTorrent } from '@/services/torrin';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { magnetToastOptions } from './toastOptions';
@@ -84,6 +85,27 @@ export const handleDeleteTbTorrent = async (
 		);
 		const apiError = getErrorMessage(error);
 		toast.error(apiError ? `TorBox error: ${apiError}` : `Failed to delete ${id} in TorBox.`);
+		return false;
+	}
+};
+
+export const handleDeleteTrTorrent = async (
+	baseUrl: string,
+	apiKey: string,
+	id: string,
+	disableToast: boolean = false
+): Promise<boolean> => {
+	try {
+		await deleteTorrinTorrent(baseUrl, apiKey, id.substring(3));
+		if (!disableToast) toast(`Deleted ${id} from Torrin.`, magnetToastOptions);
+		return true;
+	} catch (error) {
+		console.error(
+			'Error deleting Torrin torrent:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		const apiError = getErrorMessage(error);
+		toast.error(apiError ? `Torrin error: ${apiError}` : `Failed to delete ${id} in Torrin.`);
 		return false;
 	}
 };

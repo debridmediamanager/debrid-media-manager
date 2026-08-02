@@ -29,6 +29,7 @@ vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: vi.fn(() => [null, false, false]),
 	useAllDebridApiKey: vi.fn(() => null),
 	useTorBoxAccessToken: vi.fn(() => null),
+	useTorrinCreds: vi.fn(() => [null, null]),
 }));
 
 vi.mock('@/contexts/LibraryCacheContext', () => ({

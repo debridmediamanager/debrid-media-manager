@@ -67,6 +67,7 @@ vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: () => ['rd-token'],
 	useAllDebridApiKey: () => 'ad-token',
 	useTorBoxAccessToken: () => 'tb-token',
+	useTorrinCreds: () => [null, null],
 }));
 
 vi.mock('@/hooks/useExternalSources', () => ({

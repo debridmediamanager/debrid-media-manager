@@ -6,12 +6,15 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
 import { getUserTorrentsList } from '@/services/realDebrid';
 import { getTorrentList } from '@/services/torbox';
+import { getTorrinTorrentsList } from '@/services/torrin';
 import { UserTorrent } from '@/torrent/userTorrent';
 import {
 	convertToAllDebridUserTorrent,
 	convertToTbUserTorrent,
+	convertToTorrinUserTorrent,
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
+import { splitTorrinToken } from '@/utils/torrinToken';
 import { CacheManager, getGlobalCache } from '../cache/CacheManager';
 import { UnifiedRateLimiter, getGlobalRateLimiter } from '../rateLimit/UnifiedRateLimiter';
 
@@ -38,7 +41,7 @@ export class UnifiedLibraryFetcher {
 	 * Fetch library from any service with unified interface
 	 */
 	async fetchLibrary(
-		service: 'realdebrid' | 'alldebrid' | 'torbox',
+		service: 'realdebrid' | 'alldebrid' | 'torbox' | 'torrin',
 		token: string,
 		options: FetchOptions = {}
 	): Promise<UserTorrent[]> {
@@ -75,7 +78,7 @@ export class UnifiedLibraryFetcher {
 	}
 
 	private async performFetch(
-		service: 'realdebrid' | 'alldebrid' | 'torbox',
+		service: 'realdebrid' | 'alldebrid' | 'torbox' | 'torrin',
 		token: string,
 		options: FetchOptions
 	): Promise<UserTorrent[]> {
@@ -86,6 +89,8 @@ export class UnifiedLibraryFetcher {
 				return this.fetchAllDebrid(token, options);
 			case 'torbox':
 				return this.fetchTorbox(token, options);
+			case 'torrin':
+				return this.fetchTorrin(token, options);
 			default:
 				throw new Error(`Unknown service: ${service}`);
 		}
@@ -374,9 +379,103 @@ export class UnifiedLibraryFetcher {
 		return allTorrents;
 	}
 
+	private async fetchTorrin(token: string, options: FetchOptions): Promise<UserTorrent[]> {
+		const { baseUrl, apiKey } = splitTorrinToken(token);
+		if (!baseUrl || !apiKey) {
+			throw new Error('Torrin requires an instance URL and API key');
+		}
+		const cacheKey = `tr:library:${token}`;
+
+		if (!options.forceRefresh) {
+			const cached = await this.cache.get<UserTorrent[]>(cacheKey);
+			if (cached) {
+				return cached;
+			}
+		}
+
+		const firstPageResult = await this.rateLimiter.execute('torrin', 'tr-first-page', () =>
+			getTorrinTorrentsList(baseUrl, apiKey, 1, 1)
+		);
+
+		if (!firstPageResult.data.length) {
+			await this.cache.set(cacheKey, [], undefined, 5 * 60 * 1000);
+			return [];
+		}
+
+		const pageSize = 1500;
+
+		if (!firstPageResult.totalCount) {
+			const allTorrents: UserTorrent[] = [];
+			let page = 1;
+			while (true) {
+				if (options.signal?.aborted) {
+					throw new Error('Fetch aborted');
+				}
+				const result = await this.rateLimiter.execute('torrin', `tr-page-${page}`, () =>
+					getTorrinTorrentsList(baseUrl, apiKey, pageSize, page)
+				);
+				if (!result.data.length) {
+					break;
+				}
+				const torrents = await this.processTorrinTorrents(result.data);
+				allTorrents.push(...torrents);
+				options.onBatchComplete?.(torrents);
+				options.onProgress?.(allTorrents.length, allTorrents.length);
+				if (result.data.length < pageSize) {
+					break;
+				}
+				if (options.maxItems && allTorrents.length >= options.maxItems) {
+					break;
+				}
+				page++;
+			}
+			await this.cache.set(cacheKey, allTorrents, undefined, 5 * 60 * 1000);
+			return allTorrents;
+		}
+
+		const totalCount = Math.min(firstPageResult.totalCount, options.maxItems || Infinity);
+		const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+		const concurrency = options.concurrency || 4;
+
+		options.onProgress?.(0, totalCount);
+
+		const pages: number[] = [];
+		for (let page = 1; page <= totalPages; page++) {
+			pages.push(page);
+		}
+
+		const allTorrents: UserTorrent[] = [];
+		for (let i = 0; i < pages.length; i += concurrency) {
+			if (options.signal?.aborted) {
+				throw new Error('Fetch aborted');
+			}
+			const batch = pages.slice(i, i + concurrency);
+			const batchResults = await Promise.all(
+				batch.map((page) =>
+					this.rateLimiter.execute('torrin', `tr-page-${page}`, () =>
+						getTorrinTorrentsList(baseUrl, apiKey, pageSize, page)
+					)
+				)
+			);
+			for (const result of batchResults) {
+				const torrents = await this.processTorrinTorrents(result.data);
+				allTorrents.push(...torrents);
+				options.onBatchComplete?.(torrents);
+				options.onProgress?.(allTorrents.length, totalCount);
+			}
+		}
+
+		await this.cache.set(cacheKey, allTorrents, undefined, 5 * 60 * 1000);
+		return allTorrents;
+	}
+
 	// Conversion helpers (these would import from existing utils)
 	private async processRealDebridTorrents(data: any[]): Promise<UserTorrent[]> {
 		return data.map((t) => convertToUserTorrent(t));
+	}
+
+	private async processTorrinTorrents(data: any[]): Promise<UserTorrent[]> {
+		return data.map((t) => convertToTorrinUserTorrent(t));
 	}
 
 	private async processAllDebridMagnets(magnets: MagnetStatus[]): Promise<UserTorrent[]> {

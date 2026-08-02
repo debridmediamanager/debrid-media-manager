@@ -1,5 +1,10 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
+import {
+	useAllDebridApiKey,
+	useRealDebridAccessToken,
+	useTorBoxAccessToken,
+	useTorrinCreds,
+} from '@/hooks/auth';
 import { useRelativeTimeLabel } from '@/hooks/useRelativeTimeLabel';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
@@ -13,6 +18,7 @@ export default function FloatingLibraryIndicator() {
 	const [rdToken] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
+	const [torrinBaseUrl, torrinApiKey] = useTorrinCreds();
 	const [mounted, setMounted] = useState(false);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const lastFetchLabel = useRelativeTimeLabel(lastFetchTime, 'Just now');
@@ -23,8 +29,15 @@ export default function FloatingLibraryIndicator() {
 		const hasRd = localStorage.getItem('rd:accessToken');
 		const hasAd = localStorage.getItem('ad:apiKey');
 		const hasTb = localStorage.getItem('tb:apiKey');
+		const hasTr = localStorage.getItem('torrin:apiKey');
+		const hasTrBaseUrl = localStorage.getItem('torrin:baseUrl');
 		// Only return true if at least one key exists and is not empty
-		return !!(hasRd && hasRd.trim()) || !!(hasAd && hasAd.trim()) || !!(hasTb && hasTb.trim());
+		return (
+			!!(hasRd && hasRd.trim()) ||
+			!!(hasAd && hasAd.trim()) ||
+			!!(hasTb && hasTb.trim()) ||
+			!!(hasTr && hasTr.trim() && hasTrBaseUrl && hasTrBaseUrl.trim())
+		);
 	}, []);
 
 	// Handle client-side mounting to avoid hydration mismatch
@@ -39,7 +52,10 @@ export default function FloatingLibraryIndicator() {
 			// Check if any auth-related keys were added or removed
 			if (
 				e.key &&
-				(e.key.startsWith('rd:') || e.key.startsWith('ad:') || e.key.startsWith('tb:'))
+				(e.key.startsWith('rd:') ||
+					e.key.startsWith('ad:') ||
+					e.key.startsWith('tb:') ||
+					e.key.startsWith('torrin:'))
 			) {
 				setIsLoggedIn(checkAuthStatus());
 			}
@@ -67,9 +83,12 @@ export default function FloatingLibraryIndicator() {
 	// Sync with auth hooks when they change - use hooks as source of truth
 	useEffect(() => {
 		const hasValidAuth =
-			!!(rdToken && rdToken.trim()) || !!(adKey && adKey.trim()) || !!(tbKey && tbKey.trim());
+			!!(rdToken && rdToken.trim()) ||
+			!!(adKey && adKey.trim()) ||
+			!!(tbKey && tbKey.trim()) ||
+			!!(torrinBaseUrl && torrinBaseUrl.trim() && torrinApiKey && torrinApiKey.trim());
 		setIsLoggedIn(hasValidAuth);
-	}, [rdToken, adKey, tbKey]);
+	}, [rdToken, adKey, tbKey, torrinBaseUrl, torrinApiKey]);
 
 	const handleRefresh = async () => {
 		await refreshLibrary();

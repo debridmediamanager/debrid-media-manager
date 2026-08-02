@@ -17,6 +17,7 @@ interface LibraryActionButtonsProps {
 	rdKey: string | null;
 	adKey: string | null;
 	tbKey?: string | null;
+	trKey?: string | null;
 	showDedupe: boolean;
 	showHashCombine: boolean;
 }
@@ -37,6 +38,7 @@ export default function LibraryActionButtons({
 	rdKey,
 	adKey,
 	tbKey,
+	trKey,
 	showDedupe,
 	showHashCombine,
 }: LibraryActionButtonsProps) {
@@ -104,6 +106,13 @@ export default function LibraryActionButtons({
 						TB Restore
 					</LibraryButton>
 				</>
+			)}
+
+			{trKey && (
+				<LibraryButton variant="teal" onClick={() => onAddMagnet('tr')}>
+					<Link2 className="mr-1 inline-block h-4 w-4 text-teal-500" />
+					TR&nbsp;Add
+				</LibraryButton>
 			)}
 
 			<LibraryButton variant="indigo" onClick={onLocalBackup}>

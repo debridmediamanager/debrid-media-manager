@@ -1,5 +1,10 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
+import {
+	useAllDebridApiKey,
+	useRealDebridAccessToken,
+	useTorBoxAccessToken,
+	useTorrinCreds,
+} from '@/hooks/auth';
 import { adInstantCheck, getMagnetStatus, uploadMagnet } from '@/services/allDebrid';
 import { EnrichedHashlistTorrent, Hashlist, HashlistTorrent } from '@/services/mediasearch';
 import {
@@ -8,6 +13,12 @@ import {
 	getTorrentList,
 	TorBoxRateLimitError,
 } from '@/services/torbox';
+import {
+	addTorrinMagnet,
+	getTorrinTorrentInfo,
+	selectTorrinFiles,
+	torrinInstantCheck,
+} from '@/services/torrin';
 import { TorBoxTorrentInfo } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { handleAddAsMagnetInRd } from '@/utils/addMagnet';
@@ -16,16 +27,19 @@ import {
 	handleDeleteAdTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
+	handleDeleteTrTorrent,
 } from '@/utils/deleteTorrent';
 import {
 	convertToAllDebridUserTorrent,
 	convertToTbUserTorrent,
+	convertToTorrinUserTorrent,
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
 import {
 	checkDatabaseAvailabilityAd2,
 	checkDatabaseAvailabilityRd2,
 	checkDatabaseAvailabilityTb2,
+	checkDatabaseAvailabilityTr2,
 	wrapLoading,
 } from '@/utils/instantChecks';
 import { getMediaId } from '@/utils/mediaId';
@@ -74,6 +88,7 @@ function HashlistPage() {
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
+	const [torrinBaseUrl, torrinApiKey] = useTorrinCreds();
 	const { addTorrent: addToCache, removeTorrent: removeFromCache } = useLibraryCache();
 
 	const [currentPage, setCurrentPage] = useState(1);
@@ -166,7 +181,7 @@ function HashlistPage() {
 		if (userTorrentsList.length !== 0) return;
 		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey, adKey, tbKey]);
+	}, [rdKey, adKey, tbKey, torrinBaseUrl, torrinApiKey]);
 
 	async function decodeJsonStringFromUrl(): Promise<string> {
 		const hash = window.location.hash;
@@ -240,6 +255,16 @@ function HashlistPage() {
 				wrapLoading(
 					'TB',
 					checkDatabaseAvailabilityTb2(tbKey, hashArr, setUserTorrentsList)
+				);
+			if (torrinBaseUrl && torrinApiKey)
+				wrapLoading(
+					'TR',
+					checkDatabaseAvailabilityTr2(
+						torrinBaseUrl,
+						torrinApiKey,
+						hashArr,
+						setUserTorrentsList
+					)
 				);
 		} catch (error) {
 			console.error('Error fetching user torrents list:', error);
@@ -323,8 +348,10 @@ function HashlistPage() {
 		tmpList = tmpList.filter((t, i, self) => self.findIndex((s) => s.hash === t.hash) === i);
 
 		// Filter for instantly available torrents if enabled and keys are present
-		if (showOnlyAvailable && (rdKey || adKey || tbKey)) {
-			tmpList = tmpList.filter((t) => t.rdAvailable || t.adAvailable || t.tbAvailable);
+		if (showOnlyAvailable && (rdKey || adKey || tbKey || (torrinBaseUrl && torrinApiKey))) {
+			tmpList = tmpList.filter(
+				(t) => t.rdAvailable || t.adAvailable || t.tbAvailable || t.torrinAvailable
+			);
 		}
 
 		if (Object.keys(router.query).length === 0) {
@@ -702,6 +729,52 @@ function HashlistPage() {
 		}
 	}
 
+	async function addTr(hash: string) {
+		try {
+			const instantResp = await torrinInstantCheck(torrinBaseUrl!, torrinApiKey!, [hash]);
+			const entry = instantResp?.[hash.toLowerCase()] as any;
+			if (!(entry?.rd?.length > 0)) {
+				toast.error('Torrent not instant in Torrin; skipped.', genericToastOptions);
+				return;
+			}
+
+			const id = await addTorrinMagnet(torrinBaseUrl!, torrinApiKey!, hash);
+			await selectTorrinFiles(torrinBaseUrl!, torrinApiKey!, id, 'all');
+			const info = await getTorrinTorrentInfo(torrinBaseUrl!, torrinApiKey!, id);
+			const userTorrent = convertToTorrinUserTorrent({
+				id: info.id,
+				filename: info.filename,
+				bytes: info.bytes,
+				status: info.status,
+				added: info.added,
+				links: info.links,
+				hash: info.hash,
+			} as any);
+			await torrentDB.addAll([userTorrent]);
+			addToCache(userTorrent);
+			await fetchHashAndProgress(hash);
+			toast.success('Torrent added to Torrin.', genericToastOptions);
+		} catch (error) {
+			console.error('Error adding magnet to Torrin:', error);
+			toast.error('Failed to add hash to Torrin.', genericToastOptions);
+		}
+	}
+
+	async function deleteTr(hash: string) {
+		const torrents = await torrentDB.getAllByHash(hash);
+		for (const t of torrents) {
+			if (!t.id.startsWith('tr:')) continue;
+			await handleDeleteTrTorrent(torrinBaseUrl!, torrinApiKey!, t.id);
+			await torrentDB.deleteByHash('tr', hash);
+			removeFromCache(t.id);
+			setHashAndProgress((prev) => {
+				const newHashAndProgress = { ...prev };
+				delete newHashAndProgress[`tr:${hash}`];
+				return newHashAndProgress;
+			});
+		}
+	}
+
 	const handlePrevPage = useCallback(() => {
 		setCurrentPage((prev) => prev - 1);
 	}, []);
@@ -835,7 +908,7 @@ function HashlistPage() {
 				>
 					{tvCount} TV Shows
 				</Link>
-				{mounted && (rdKey || adKey || tbKey) && (
+				{mounted && (rdKey || adKey || tbKey || (torrinBaseUrl && torrinApiKey)) && (
 					<button
 						className={`mb-2 mr-2 rounded border-2 ${
 							showOnlyAvailable
@@ -913,7 +986,7 @@ function HashlistPage() {
 					</>
 				)}
 
-				{mounted && (rdKey || adKey || tbKey) && (
+				{mounted && (rdKey || adKey || tbKey || (torrinBaseUrl && torrinApiKey)) && (
 					<span className="text-s mr-2 bg-green-100 px-2.5 py-1 text-green-800">
 						<strong>{userTorrentsList.length - filteredList.length}</strong> hidden
 					</span>
@@ -1109,6 +1182,45 @@ function HashlistPage() {
 												>
 													<Download className="mr-1 inline h-3 w-3" />
 													TB
+												</button>
+											)}
+
+										{mounted &&
+											torrinBaseUrl &&
+											torrinApiKey &&
+											isDownloading('tr', t.hash) && (
+												<button
+													className="ml-2 rounded border-2 border-red-500 bg-red-900/30 px-2 py-1 text-red-100 transition-colors hover:bg-red-800/50"
+													onClick={() => deleteTr(t.hash)}
+												>
+													<X className="mr-1 inline h-3 w-3" />
+													TR ({hashAndProgress[`tr:${t.hash}`] || 0}%)
+												</button>
+											)}
+										{mounted &&
+											torrinBaseUrl &&
+											torrinApiKey &&
+											!t.torrinAvailable &&
+											notInLibrary('tr', t.hash) && (
+												<button
+													className="ml-2 rounded border-2 border-sky-500 bg-sky-900/30 px-2 py-1 text-sky-100 transition-colors hover:bg-sky-800/50"
+													onClick={() => addTr(t.hash)}
+												>
+													<Download className="mr-1 inline h-3 w-3" />
+													TR
+												</button>
+											)}
+										{mounted &&
+											torrinBaseUrl &&
+											torrinApiKey &&
+											t.torrinAvailable &&
+											notInLibrary('tr', t.hash) && (
+												<button
+													className="ml-2 rounded border-2 border-green-500 bg-green-900/30 px-2 py-1 text-green-100 transition-colors hover:bg-green-800/50"
+													onClick={() => addTr(t.hash)}
+												>
+													<Download className="mr-1 inline h-3 w-3" />
+													TR
 												</button>
 											)}
 									</td>

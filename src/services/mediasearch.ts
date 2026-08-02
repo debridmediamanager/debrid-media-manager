@@ -18,6 +18,7 @@ export type SearchResult = {
 	rdAvailable: boolean; // Real Debrid
 	adAvailable: boolean; // AllDebrid
 	tbAvailable: boolean; // Torbox
+	torrinAvailable?: boolean; // Torrin
 	files: FileData[];
 	noVideos: boolean;
 	// for cached results in RD
@@ -54,6 +55,7 @@ export interface EnrichedHashlistTorrent extends HashlistTorrent {
 	rdAvailable: boolean;
 	adAvailable: boolean;
 	tbAvailable: boolean; // TorBox
+	torrinAvailable?: boolean; // Torrin
 	files: FileData[];
 }
 

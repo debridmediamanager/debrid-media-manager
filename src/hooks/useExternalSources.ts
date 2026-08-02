@@ -52,9 +52,10 @@ export function buildCometConfig(rdKey: string): string {
 export function useExternalSources(
 	rdKey: string | null,
 	adKey?: string | null,
-	tbKey?: string | null
+	tbKey?: string | null,
+	torrinApiKey?: string | null
 ) {
-	const hasAnyDebridKey = !!(rdKey || adKey || tbKey);
+	const hasAnyDebridKey = !!(rdKey || adKey || tbKey || torrinApiKey);
 	const [mediafusionHash, setMediafusionHash] = useState<string>('');
 	const cometConfig = useMemo(() => (rdKey ? buildCometConfig(rdKey) : ''), [rdKey]);
 

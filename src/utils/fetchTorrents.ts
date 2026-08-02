@@ -195,6 +195,11 @@ async function processTorrents(torrentData: UserTorrentResponse[]): Promise<User
 	return results.filter((x): x is UserTorrent => x !== null);
 }
 
+export function convertToTorrinUserTorrent(torrentInfo: UserTorrentResponse): UserTorrent {
+	const rd = convertToUserTorrent(torrentInfo);
+	return { ...rd, id: `tr:${torrentInfo.id}` };
+}
+
 export const fetchAllDebrid = async (
 	adKey: string,
 	callback: (torrents: UserTorrent[]) => Promise<void>,

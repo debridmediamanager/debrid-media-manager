@@ -4,9 +4,15 @@ import LibrarySize from '@/components/LibrarySize';
 import LibraryTableHeader from '@/components/LibraryTableHeader';
 import LibraryTorrentRow from '@/components/LibraryTorrentRow';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
+import {
+	useAllDebridApiKey,
+	useRealDebridAccessToken,
+	useTorBoxAccessToken,
+	useTorrinCreds,
+} from '@/hooks/auth';
 import { useRelativeTimeLabel } from '@/hooks/useRelativeTimeLabel';
 import { getTorrentInfo, proxyUnrestrictLink } from '@/services/realDebrid';
+import { addTorrinMagnet, selectTorrinFiles } from '@/services/torrin';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
@@ -27,6 +33,7 @@ import {
 	handleDeleteAdTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
+	handleDeleteTrTorrent,
 } from '@/utils/deleteTorrent';
 import { extractHashes } from '@/utils/extractHashes';
 import { getRdStatus } from '@/utils/fetchTorrents';
@@ -40,6 +47,7 @@ import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { getHashOfTorrent } from '@/utils/torrentFile';
 import { handleShowInfoForAD, handleShowInfoForRD, handleShowInfoForTB } from '@/utils/torrentInfo';
+import { handleShowInfoForTorrin } from '@/utils/torrinInfo';
 import { withAuth } from '@/utils/withAuth';
 import { saveAs } from 'file-saver';
 import { BookOpen } from 'lucide-react';
@@ -120,6 +128,7 @@ function TorrentsPage() {
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
+	const [torrinBaseUrl, torrinApiKey] = useTorrinCreds();
 
 	const [defaultTitleGrouping] = useState<Record<string, number>>(() => ({}));
 	const [movieTitleGrouping] = useState<Record<string, number>>(() => ({}));
@@ -274,9 +283,8 @@ function TorrentsPage() {
 						const magnetUri = hash.startsWith('magnet:?')
 							? hash
 							: `magnet:?xt=urn:btih:${hash}`;
-						const { uploadMagnet, getMagnetStatus } = await import(
-							'@/services/allDebrid'
-						);
+						const { uploadMagnet, getMagnetStatus } =
+							await import('@/services/allDebrid');
 						const resp = await uploadMagnet(adKey, [magnetUri]);
 						if (
 							resp.magnets.length > 0 &&
@@ -762,11 +770,14 @@ function TorrentsPage() {
 				if (tbKey && t.id.startsWith('tb:')) {
 					success = await handleDeleteTbTorrent(tbKey, t.id);
 				}
+				if (torrinBaseUrl && torrinApiKey && t.id.startsWith('tr:')) {
+					success = await handleDeleteTrTorrent(torrinBaseUrl, torrinApiKey, t.id);
+				}
 				if (!success) throw new Error(`Failed to delete ${t.id}`);
 				return t.id;
 			};
 		},
-		[rdKey, adKey, tbKey]
+		[rdKey, adKey, tbKey, torrinBaseUrl, torrinApiKey]
 	);
 
 	const wrapReinsertFn = useCallback(
@@ -1320,9 +1331,8 @@ function TorrentsPage() {
 								try {
 									let cachedCount = 0;
 									if (debridService === 'rd' && rdKey) {
-										const { checkAvailabilityByHashes } = await import(
-											'@/utils/availability'
-										);
+										const { checkAvailabilityByHashes } =
+											await import('@/utils/availability');
 										const availableSet = new Set<string>();
 										for (let i = 0; i < newHashes.length; i += 100) {
 											const batch = newHashes.slice(i, i + 100);
@@ -1339,9 +1349,8 @@ function TorrentsPage() {
 										}
 										cachedCount = availableSet.size;
 									} else if (debridService === 'tb' && tbKey) {
-										const { checkCachedStatus } = await import(
-											'@/services/torbox'
-										);
+										const { checkCachedStatus } =
+											await import('@/services/torbox');
 										const availableSet = new Set<string>();
 										for (let i = 0; i < newHashes.length; i += 100) {
 											const batch = newHashes.slice(i, i + 100);
@@ -1446,9 +1455,8 @@ function TorrentsPage() {
 
 					try {
 						if (rdKey && debridService === 'rd') {
-							const { checkAvailabilityByHashes } = await import(
-								'@/utils/availability'
-							);
+							const { checkAvailabilityByHashes } =
+								await import('@/utils/availability');
 							const availableSet = new Set<string>();
 
 							for (let i = 0; i < newHashes.length; i += 100) {
@@ -1711,6 +1719,34 @@ function TorrentsPage() {
 				handleAddMultipleHashesInTb(tbKey, hashes, async () => await refreshLibrary());
 			}
 		}
+		if (torrinBaseUrl && torrinApiKey && debridService === 'tr') {
+			const allHashes = [...hashes];
+			if (torrentFiles.length > 0) {
+				try {
+					const fileHashes = await Promise.all(
+						torrentFiles.map((file) => getHashOfTorrent(file))
+					);
+					allHashes.push(...(fileHashes.filter((h) => h !== undefined) as string[]));
+				} catch (error) {
+					toast.error(`Hash extraction failed: ${error}`);
+					return;
+				}
+			}
+			if (allHashes.length > 0) {
+				const toAdd: AsyncFunction<unknown>[] = allHashes.map((h) => async () => {
+					const id = await addTorrinMagnet(torrinBaseUrl, torrinApiKey, h);
+					await selectTorrinFiles(torrinBaseUrl, torrinApiKey, id, 'all');
+				});
+				const [results, errors] = await runConcurrentFunctions(toAdd, 4, 0);
+				if (results.length > 0) {
+					toast.success(`Added ${results.length} to Torrin.`);
+				}
+				if (errors.length > 0) {
+					toast.error(`Torrin add failed for ${errors.length} of ${allHashes.length}.`);
+				}
+				await refreshLibrary();
+			}
+		}
 	}
 
 	const hasNoQueryParamsBut = (...params: string[]) =>
@@ -1835,6 +1871,7 @@ function TorrentsPage() {
 						hasRd={!!rdKey}
 						hasAd={!!adKey}
 						hasTb={!!tbKey}
+						hasTr={!!(torrinBaseUrl && torrinApiKey)}
 					/>
 					<LibraryActionButtons
 						onSelectShown={() => selectShown(currentPageData, setSelectedTorrents)}
@@ -1852,6 +1889,7 @@ function TorrentsPage() {
 						rdKey={rdKey}
 						adKey={adKey}
 						tbKey={tbKey}
+						trKey={torrinBaseUrl && torrinApiKey ? torrinApiKey : null}
 						showDedupe={
 							router.query.status === 'sametitle' ||
 							(!!titleFilter && filteredList.length > 1)
@@ -1899,6 +1937,8 @@ function TorrentsPage() {
 												rdKey={rdKey}
 												adKey={adKey}
 												tbKey={tbKey}
+												torrinBaseUrl={torrinBaseUrl}
+												torrinApiKey={torrinApiKey}
 												shouldDownloadMagnets={shouldDownloadMagnets}
 												hashGrouping={hashGrouping}
 												titleGrouping={getTitleGroupings(torrent.mediaType)}
@@ -1979,6 +2019,19 @@ function TorrentsPage() {
 															t,
 															tbKey,
 															setUserTorrentsList,
+															setSelectedTorrents
+														);
+													} else if (
+														t.id.startsWith('tr:') &&
+														torrinBaseUrl &&
+														torrinApiKey
+													) {
+														await handleShowInfoForTorrin(
+															t,
+															torrinBaseUrl,
+															torrinApiKey,
+															setUserTorrentsList,
+															torrentDB,
 															setSelectedTorrents
 														);
 													} else {

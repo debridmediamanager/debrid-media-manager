@@ -3,6 +3,7 @@ import {
 	useDebridLogin,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
+	useTorrinCreds,
 } from '@/hooks/auth';
 import StartPage from '@/pages/start';
 import { fireEvent, render, screen } from '@testing-library/react';
@@ -26,6 +27,7 @@ vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: vi.fn(),
 	useAllDebridApiKey: vi.fn(),
 	useTorBoxAccessToken: vi.fn(),
+	useTorrinCreds: vi.fn(),
 }));
 
 describe('StartPage', () => {
@@ -51,11 +53,13 @@ describe('StartPage', () => {
 			loginWithRealDebrid: mockLoginWithRealDebrid,
 			loginWithAllDebrid: mockLoginWithAllDebrid,
 			loginWithTorbox: mockLoginWithTorbox,
+			loginWithTorrin: vi.fn(),
 		});
 
 		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false]);
 		vi.mocked(useAllDebridApiKey).mockReturnValue(null);
 		vi.mocked(useTorBoxAccessToken).mockReturnValue(null);
+		vi.mocked(useTorrinCreds).mockReturnValue([null, null]);
 	});
 
 	it('should render the start page correctly', () => {
