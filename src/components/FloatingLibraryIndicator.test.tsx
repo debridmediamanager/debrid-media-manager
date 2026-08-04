@@ -91,102 +91,58 @@ describe('FloatingLibraryIndicator', () => {
 		});
 	});
 
+	// These flows are driven by the auth hooks, which useLocalStorage keeps in
+	// step with storage events and the logout helpers. The indicator derives its
+	// visibility from those hook values rather than reading localStorage itself,
+	// so the tests move the hooks and re-render, exactly as production does.
 	describe('Logout behavior', () => {
-		it('should hide immediately when logout event is dispatched', async () => {
-			localStorage.setItem('rd:accessToken', 'test-token');
+		it('hides once the auth hooks report the tokens are gone', async () => {
 			(useRealDebridAccessToken as any).mockReturnValue(['test-token', false, false]);
 
-			const { container } = render(<FloatingLibraryIndicator />);
+			const { container, rerender } = render(<FloatingLibraryIndicator />);
 			expect(screen.getByText('0')).toBeInTheDocument();
 
-			// Dispatch logout event
-			act(() => {
-				window.dispatchEvent(new Event('logout'));
-			});
+			(useRealDebridAccessToken as any).mockReturnValue([null, false, false]);
+			rerender(<FloatingLibraryIndicator />);
 
 			await waitFor(() => {
 				expect(container.firstChild).toBeNull();
 			});
 		});
 
-		it('should hide when localStorage is cleared', async () => {
-			localStorage.setItem('rd:accessToken', 'test-token');
-			(useRealDebridAccessToken as any).mockReturnValue(['test-token', false, false]);
-
-			const { container } = render(<FloatingLibraryIndicator />);
-			expect(screen.getByText('0')).toBeInTheDocument();
-
-			// Clear localStorage and dispatch storage event
-			act(() => {
-				localStorage.removeItem('rd:accessToken');
-				window.dispatchEvent(
-					new StorageEvent('storage', {
-						key: 'rd:accessToken',
-						oldValue: 'test-token',
-						newValue: null,
-					})
-				);
-			});
-
-			await waitFor(() => {
-				expect(container.firstChild).toBeNull();
-			});
-		});
-
-		it('should hide when all auth tokens are removed', async () => {
-			localStorage.setItem('rd:accessToken', 'test-token');
-			localStorage.setItem('ad:apiKey', 'test-key');
-			localStorage.setItem('tb:apiKey', 'test-key');
+		it('hides when every service token is cleared', async () => {
 			(useRealDebridAccessToken as any).mockReturnValue(['test-token', false, false]);
 			(useAllDebridApiKey as any).mockReturnValue('test-key');
 			(useTorBoxAccessToken as any).mockReturnValue('test-key');
 
-			const { container } = render(<FloatingLibraryIndicator />);
+			const { container, rerender } = render(<FloatingLibraryIndicator />);
 			expect(screen.getByText('0')).toBeInTheDocument();
 
-			// Remove all tokens
-			act(() => {
-				localStorage.clear();
-				window.dispatchEvent(new Event('logout'));
-			});
+			(useRealDebridAccessToken as any).mockReturnValue([null, false, false]);
+			(useAllDebridApiKey as any).mockReturnValue(null);
+			(useTorBoxAccessToken as any).mockReturnValue(null);
+			rerender(<FloatingLibraryIndicator />);
 
 			await waitFor(() => {
 				expect(container.firstChild).toBeNull();
 			});
 		});
+
+		it('stays hidden for a token that is only whitespace', () => {
+			(useRealDebridAccessToken as any).mockReturnValue(['   ', false, false]);
+
+			const { container } = render(<FloatingLibraryIndicator />);
+			expect(container.firstChild).toBeNull();
+		});
 	});
 
 	describe('Login behavior', () => {
-		it('should show when login event is dispatched', async () => {
-			const { container } = render(<FloatingLibraryIndicator />);
+		it('shows once the auth hooks report a token', async () => {
+			const { container, rerender } = render(<FloatingLibraryIndicator />);
 			expect(container.firstChild).toBeNull();
 
-			// Add token and dispatch login event
-			act(() => {
-				localStorage.setItem('rd:accessToken', 'test-token');
-				window.dispatchEvent(new Event('login'));
-			});
-
-			await waitFor(() => {
-				expect(screen.getByText('0')).toBeInTheDocument();
-			});
-		});
-
-		it('should show when auth token is added via storage event', async () => {
-			const { container } = render(<FloatingLibraryIndicator />);
-			expect(container.firstChild).toBeNull();
-
-			// Add token via storage event
-			act(() => {
-				localStorage.setItem('rd:accessToken', 'test-token');
-				window.dispatchEvent(
-					new StorageEvent('storage', {
-						key: 'rd:accessToken',
-						oldValue: null,
-						newValue: 'test-token',
-					})
-				);
-			});
+			(useRealDebridAccessToken as any).mockReturnValue(['test-token', false, false]);
+			rerender(<FloatingLibraryIndicator />);
 
 			await waitFor(() => {
 				expect(screen.getByText('0')).toBeInTheDocument();
@@ -314,26 +270,19 @@ describe('FloatingLibraryIndicator', () => {
 		});
 
 		it('should hide only when all services are logged out', async () => {
-			localStorage.setItem('rd:accessToken', 'test-token');
-			localStorage.setItem('ad:apiKey', 'test-key');
 			(useRealDebridAccessToken as any).mockReturnValue(['test-token', false, false]);
 			(useAllDebridApiKey as any).mockReturnValue('test-key');
 
-			const { container } = render(<FloatingLibraryIndicator />);
+			const { container, rerender } = render(<FloatingLibraryIndicator />);
 			expect(screen.getByText('0')).toBeInTheDocument();
 
-			// Remove all tokens
-			act(() => {
-				localStorage.removeItem('rd:accessToken');
-				localStorage.removeItem('ad:apiKey');
-				window.dispatchEvent(
-					new StorageEvent('storage', {
-						key: 'ad:apiKey',
-						oldValue: 'test-key',
-						newValue: null,
-					})
-				);
-			});
+			// one service out, the other still signed in - stays visible
+			(useRealDebridAccessToken as any).mockReturnValue([null, false, false]);
+			rerender(<FloatingLibraryIndicator />);
+			expect(screen.getByText('0')).toBeInTheDocument();
+
+			(useAllDebridApiKey as any).mockReturnValue(null);
+			rerender(<FloatingLibraryIndicator />);
 
 			await waitFor(() => {
 				expect(container.firstChild).toBeNull();

@@ -4,7 +4,7 @@ import { useRelativeTimeLabel } from '@/hooks/useRelativeTimeLabel';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function FloatingLibraryIndicator() {
 	const { libraryItems, isLoading, isFetching, lastFetchTime, error, refreshLibrary } =
@@ -14,65 +14,28 @@ export default function FloatingLibraryIndicator() {
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
 	const [mounted, setMounted] = useState(false);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const lastFetchLabel = useRelativeTimeLabel(lastFetchTime, 'Just now');
-
-	// Check authentication status directly from localStorage
-	const checkAuthStatus = useCallback(() => {
-		if (typeof window === 'undefined') return false;
-		const hasRd = localStorage.getItem('rd:accessToken');
-		const hasAd = localStorage.getItem('ad:apiKey');
-		const hasTb = localStorage.getItem('tb:apiKey');
-		// Only return true if at least one key exists and is not empty
-		return !!(hasRd && hasRd.trim()) || !!(hasAd && hasAd.trim()) || !!(hasTb && hasTb.trim());
-	}, []);
 
 	// Handle client-side mounting to avoid hydration mismatch
 	useEffect(() => {
 		setMounted(true);
-		setIsLoggedIn(checkAuthStatus());
-	}, [checkAuthStatus]);
+	}, []);
 
-	// Listen for storage changes to detect logout/login
-	useEffect(() => {
-		const handleStorageChange = (e: StorageEvent) => {
-			// Check if any auth-related keys were added or removed
-			if (
-				e.key &&
-				(e.key.startsWith('rd:') || e.key.startsWith('ad:') || e.key.startsWith('tb:'))
-			) {
-				setIsLoggedIn(checkAuthStatus());
-			}
-		};
-
-		const handleLogout = () => {
-			setIsLoggedIn(false);
-		};
-
-		const handleLogin = () => {
-			setIsLoggedIn(checkAuthStatus());
-		};
-
-		window.addEventListener('storage', handleStorageChange);
-		window.addEventListener('logout', handleLogout);
-		window.addEventListener('login', handleLogin);
-
-		return () => {
-			window.removeEventListener('storage', handleStorageChange);
-			window.removeEventListener('logout', handleLogout);
-			window.removeEventListener('login', handleLogin);
-		};
-	}, [checkAuthStatus]);
-
-	// Sync with auth hooks when they change - use hooks as source of truth
-	useEffect(() => {
-		const hasValidAuth =
-			!!(rdToken && rdToken.trim()) || !!(adKey && adKey.trim()) || !!(tbKey && tbKey.trim());
-		setIsLoggedIn(hasValidAuth);
-	}, [rdToken, adKey, tbKey]);
+	// Derived, not stored. This used to be state fed by three racing sources -
+	// a localStorage read on mount, storage/login/logout listeners, and an effect
+	// syncing the hooks - where the last one could revive a logged-out session.
+	// useLocalStorage already re-reads on its own events, so the tokens are
+	// reactive and one expression is enough.
+	const isLoggedIn = !!rdToken?.trim() || !!adKey?.trim() || !!tbKey?.trim();
 
 	const handleRefresh = async () => {
-		await refreshLibrary();
+		try {
+			await refreshLibrary();
+		} catch {
+			// refreshLibrary rethrows; the context surfaces the failure through
+			// `error` below, so swallow it here rather than leaving an unhandled
+			// rejection from the click handler
+		}
 	};
 
 	const isStale =
@@ -128,9 +91,9 @@ export default function FloatingLibraryIndicator() {
 				</div>
 				<button
 					onClick={handleRefresh}
-					disabled={isFetching}
+					disabled={isFetching || isLoading}
 					className={`rounded-full p-1.5 transition-all ${
-						isFetching
+						isFetching || isLoading
 							? 'cursor-not-allowed bg-gray-700 text-gray-500'
 							: error
 								? 'bg-red-900/50 text-red-400 hover:bg-red-800/50'
