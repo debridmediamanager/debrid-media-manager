@@ -78,6 +78,23 @@ describe('clearLocalStorage', () => {
 			expect(dispatchEventSpy).toHaveBeenCalledOnce();
 		});
 
+		it('announces each removed key so useLocalStorage stops serving it', () => {
+			localStorageMock.setItem('rd:accessToken', 'token');
+			localStorageMock.setItem('rd:refreshToken', 'refresh');
+
+			clearRdKeys();
+
+			const notified = dispatchEventSpy.mock.calls
+				.map(([event]) => event as Event)
+				.filter((event) => event.type === 'local-storage')
+				.map((event) => (event as CustomEvent).detail?.key);
+			// without these the tokens live on in memory - this path does not reload
+			expect(notified).toEqual(expect.arrayContaining(['rd:accessToken', 'rd:refreshToken']));
+			expect(dispatchEventSpy.mock.calls.some(([e]) => (e as Event).type === 'logout')).toBe(
+				true
+			);
+		});
+
 		it('handles mixed keys correctly', () => {
 			localStorageMock.setItem('rd:', 'value1');
 			localStorageMock.setItem('rd:config', 'value2');

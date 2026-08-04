@@ -7,6 +7,25 @@ type ExpirableValue<T> = {
 
 type SetLocalStorageValue<T> = T | null | ((prevState: T | null) => T | null);
 
+/**
+ * Tell every useLocalStorage instance that `key` changed.
+ *
+ * Native storage events only fire in *other* tabs, so anything that writes to
+ * localStorage outside this hook - logout helpers, the token refresher - has to
+ * announce it, or hooks keep serving the superseded value from memory.
+ */
+export function notifyLocalStorageChange(key: string): void {
+	if (typeof window === 'undefined') return;
+	try {
+		window.dispatchEvent(
+			new StorageEvent('storage', { key, newValue: window.localStorage.getItem(key) })
+		);
+		window.dispatchEvent(new CustomEvent('local-storage', { detail: { key } }));
+	} catch {
+		// Best-effort; ignore if environment blocks constructing StorageEvent
+	}
+}
+
 function useLocalStorage<T>(
 	key: string,
 	defaultValue: T | null = null
@@ -57,24 +76,7 @@ function useLocalStorage<T>(
 		}
 
 		// Notify other hook instances in this tab and across tabs
-		try {
-			const newRawValue = window.localStorage.getItem(key);
-			// Dispatch native storage event (won't normally fire in same tab, so we dispatch manually)
-			window.dispatchEvent(
-				new StorageEvent('storage', {
-					key,
-					newValue: newRawValue,
-				})
-			);
-			// Also dispatch a custom event as a fallback for environments that restrict StorageEvent
-			window.dispatchEvent(
-				new CustomEvent('local-storage', {
-					detail: { key },
-				})
-			);
-		} catch (e) {
-			// Best-effort; ignore if environment blocks constructing StorageEvent
-		}
+		notifyLocalStorageChange(key);
 	};
 
 	// Sync state when localStorage changes (same-tab via custom event or other tabs via storage event)
