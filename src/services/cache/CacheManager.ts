@@ -97,9 +97,7 @@ export class CacheManager {
 			const memEntry = this.memoryCache.get(key);
 			if (memEntry) {
 				const isExpired = Date.now() >= (memEntry.expiresAt || Infinity);
-				console.log(
-					`[Cache] Memory cache hit for ${key}, expired: ${isExpired}, size: ${JSON.stringify(memEntry.data).length} chars`
-				);
+				console.log(`[Cache] Memory cache hit for ${key}, expired: ${isExpired}`);
 
 				if (!isExpired) {
 					// Check etag for validation
@@ -124,9 +122,8 @@ export class CacheManager {
 				const dbEntry = await this.getFromDB(key);
 				if (dbEntry) {
 					const isExpired = Date.now() >= (dbEntry.expiresAt || Infinity);
-					const dataSize = JSON.stringify(dbEntry.data).length;
 					console.log(
-						`[Cache] IndexedDB hit for ${key}, expired: ${isExpired}, size: ${dataSize} chars, expires: ${new Date(dbEntry.expiresAt || 0).toISOString()}`
+						`[Cache] IndexedDB hit for ${key}, expired: ${isExpired}, expires: ${new Date(dbEntry.expiresAt || 0).toISOString()}`
 					);
 
 					if (!isExpired) {
@@ -154,9 +151,7 @@ export class CacheManager {
 			console.log(`[Cache] No cache hit for ${key}, calling fetchFn`);
 			try {
 				const data = await fetchFn();
-				console.log(
-					`[Cache] FetchFn returned data for ${key}, size: ${JSON.stringify(data).length} chars`
-				);
+				console.log(`[Cache] FetchFn returned data for ${key}`);
 				await this.set(key, data, options.etag, options.ttl);
 				return data;
 			} catch (error) {

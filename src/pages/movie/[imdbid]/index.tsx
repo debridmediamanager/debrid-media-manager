@@ -670,7 +670,9 @@ const MovieSearch: FunctionComponent = () => {
 				bytes: file.filesize,
 				selected: 1,
 			}));
-		files.sort();
+		// (a bare files.sort() used to sit here - with no comparator every entry
+		// stringifies to "[object Object]" so it ordered nothing; the info renderer
+		// already sorts by path)
 		const info = {
 			id: '',
 			filename: result.title,

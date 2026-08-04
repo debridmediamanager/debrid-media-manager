@@ -161,8 +161,15 @@ async function getTestMovies(): Promise<TestMovie[]> {
 			return FALLBACK_MOVIES;
 		}
 
-		// Shuffle and return all valid movies (we'll pick from them during testing)
-		const shuffled = validMovies.sort(() => Math.random() - 0.5);
+		// Shuffle and return all valid movies (we'll pick from them during testing).
+		// A `sort(() => Math.random() - 0.5)` comparator is not a uniform shuffle -
+		// it left the sample heavily biased toward the same titles every run - so
+		// this is a Fisher-Yates pass over a copy.
+		const shuffled = [...validMovies];
+		for (let i = shuffled.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+		}
 
 		return shuffled.map((m) => ({
 			imdbId: m.imdb_id,
