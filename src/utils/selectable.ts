@@ -30,12 +30,30 @@ export function isVideo(file: { path: string }) {
 	);
 }
 
-function hasIncreasingSequence(arr: number[]): boolean {
-	if (arr.length < 3) {
+// Years and resolutions sit at the same offset across a movie pack just as
+// readily as episode numbers do, so numbers in these ranges don't count as
+// evidence of an episode run
+const YEAR_LIKE_MIN = 1900;
+const YEAR_LIKE_MAX = 2100;
+
+/**
+ * True when the numbers contain a run of at least three consecutive integers.
+ *
+ * The caller hands this a de-duplicated, ascending list, which is why the old
+ * "is each one bigger than the last" test always passed: sorted distinct numbers
+ * are increasing by definition. That made every group of three numbers at a
+ * shared offset look like episodes - a trilogy's release years, three different
+ * resolutions - so movie packs were filed as TV shows.
+ */
+function hasConsecutiveRun(arr: number[]): boolean {
+	const candidates = arr.filter((n) => n < YEAR_LIKE_MIN || n > YEAR_LIKE_MAX);
+	if (candidates.length < 3) {
 		return false;
 	}
-	for (let i = 0; i < arr.length - 2; i++) {
-		if (arr[i] < arr[i + 1] && arr[i + 1] < arr[i + 2]) {
+	let run = 1;
+	for (let i = 1; i < candidates.length; i++) {
+		run = candidates[i] === candidates[i - 1] + 1 ? run + 1 : 1;
+		if (run >= 3) {
 			return true;
 		}
 	}
@@ -79,7 +97,7 @@ export function checkArithmeticSequenceInFilenames(files: string[]): boolean {
 
 			const numList: number[] = Array.from(numSet.keys());
 			numList.sort((a, b) => a - b);
-			if (hasIncreasingSequence(numList)) {
+			if (hasConsecutiveRun(numList)) {
 				return true;
 			}
 		}
