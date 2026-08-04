@@ -36,8 +36,8 @@ import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librar
 import { handleChangeType } from '@/utils/libraryTypeManagement';
 import { normalize } from '@/utils/mediaId';
 import { quickSearchLibrary } from '@/utils/quickSearch';
-import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
-import { libraryToastOptions, magnetToastOptions, searchToastOptions } from '@/utils/toastOptions';
+import { isFailed, isInProgress, isSlowOrNoLinks, isUncached } from '@/utils/slow';
+import { libraryToastOptions, magnetToastOptions } from '@/utils/toastOptions';
 import { getHashOfTorrent } from '@/utils/torrentFile';
 import { handleShowInfoForAD, handleShowInfoForRD, handleShowInfoForTB } from '@/utils/torrentInfo';
 import { withAuth } from '@/utils/withAuth';
@@ -51,6 +51,15 @@ import { Toaster, toast } from 'react-hot-toast';
 import Modal from '../components/modals/modal';
 
 const ITEMS_PER_PAGE = 100;
+
+const TIPS = [
+	'Tip: You can use hash lists to share your library with others anonymously. Click on the button, wait for the page to finish processing, and share the link to your friends.',
+	'Tip: You can make a local backup of your library by using the "Local backup" button. This will generate a file containing your whole library that you can use to restore your library later.',
+	'Tip: You can restore a local backup by using the "Local restore" button. It will only restore the torrents that are not already in your library.',
+	'Tip: The quick search box will filter the list by filename and id. You can use multiple words or even regex to filter your library. This way, you can select multiple torrents and delete them at once, or share them as a hash list.',
+	'Have you tried clicking on a torrent? You can see the links, the progress, and the status of the torrent. You can also select the files you want to download.',
+	'I don\'t know what to put here, so here\'s a random tip: "The average person walks the equivalent of five times around the world in a lifetime."',
+];
 
 const getValidPage = (page: string | string[] | undefined) => {
 	const rawPage = Array.isArray(page) ? page[0] : page;
@@ -103,15 +112,12 @@ function TorrentsPage() {
 	const lastFetchLabel = useRelativeTimeLabel(lastFetchTime, 'Just now');
 
 	// loading states
-	const [rdSyncing, setRdSyncing] = useState(false);
-	const [adSyncing, setAdSyncing] = useState(false);
 	const [grouping, setGrouping] = useState(false);
 
 	// Use cached items directly instead of duplicating state
 	const userTorrentsList = cachedLibraryItems;
 	const loading = cacheLoading;
 	const setUserTorrentsList = setCachedLibraryItems;
-	const [filteredList, setFilteredList] = useState<UserTorrent[]>([]);
 	const [sortBy, setSortBy] = useState<SortBy>({ column: 'added', direction: 'desc' });
 	const [helpText, setHelpText] = useState('');
 	const [selectedTorrents, setSelectedTorrents] = useState<Set<string>>(() => new Set());
@@ -129,8 +135,6 @@ function TorrentsPage() {
 	const [sameTitle] = useState<Set<string>>(() => new Set());
 	const [sameHash] = useState<Set<string>>(() => new Set());
 
-	const [uncachedRdHashes, setUncachedRdHashes] = useState<Set<string>>(() => new Set());
-	const [uncachedAdIDs, setUncachedAdIDs] = useState<string[]>(() => []);
 	const [shouldDownloadMagnets] = useState(
 		() =>
 			typeof window !== 'undefined' &&
@@ -323,6 +327,40 @@ function TorrentsPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query.addMagnet]);
 
+	const hasNoQueryParamsBut = (...params: string[]) =>
+		Object.keys(router.query).filter((p) => !params.includes(p)).length === 0;
+
+	// filter the list - derived, so turning a page doesn't refilter the whole library
+	const { list: filteredList, helpText: filterHelpText } = useMemo(() => {
+		if (hasNoQueryParamsBut('page')) {
+			return { list: quickSearchLibrary(query, userTorrentsList), helpText: null };
+		}
+		const { list: filteredItems, helpText: nextHelpText } = filterLibraryItems({
+			torrents: userTorrentsList,
+			status,
+			titleFilter,
+			tvTitleFilter,
+			hashFilter,
+			mediaType,
+			service,
+			selectedTorrents,
+			sameTitle,
+			sameHash,
+		});
+		return { list: quickSearchLibrary(query, filteredItems), helpText: nextHelpText };
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		userTorrentsList,
+		query,
+		status,
+		titleFilter,
+		tvTitleFilter,
+		hashFilter,
+		mediaType,
+		service,
+		selectedTorrents,
+	]);
+
 	const maxPages = useMemo(
 		() => Math.max(1, Math.ceil(filteredList.length / ITEMS_PER_PAGE)),
 		[filteredList.length]
@@ -386,24 +424,13 @@ function TorrentsPage() {
 		return () => document.removeEventListener('keydown', handleKeyDown);
 	}, [handlePrevPage, handleNextPage]);
 
-	const triggerFetchLatestRDTorrents = async (customLimit?: number) => {
-		// Use refreshLibrary from cache context instead
-		await refreshLibrary();
-	};
-
-	const triggerFetchLatestADTorrents = async () => {
-		// Use refreshLibrary from cache context instead
-		await refreshLibrary();
-	};
-
-	// No longer needed since we're using cached items directly
-
 	// aggregate metadata
 	useEffect(() => {
 		if (loading) return;
 
 		setGrouping(true);
-		setTotalBytes(0);
+		// accumulated locally - one setState at the end instead of one per torrent
+		let bytes = 0;
 		sameTitle.clear();
 		sameHash.clear();
 
@@ -425,7 +452,7 @@ function TorrentsPage() {
 				hashGrouping[t.hash]++;
 			} else {
 				hashGrouping[t.hash] = 1;
-				setTotalBytes((prev) => prev + t.bytes);
+				bytes += t.bytes;
 			}
 
 			/// group by title
@@ -447,6 +474,7 @@ function TorrentsPage() {
 				}
 			}
 		}
+		setTotalBytes(bytes);
 		setGrouping(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
@@ -458,33 +486,7 @@ function TorrentsPage() {
 		tvGroupingByTitle,
 	]);
 
-	useEffect(() => {
-		if (!adKey || adSyncing) return;
-		const uncachedIDs = userTorrentsList
-			.filter((r) => r.id.startsWith('ad:') && r.serviceStatus === '11')
-			.map((r) => r.id);
-		setUncachedAdIDs(uncachedIDs);
-		uncachedIDs.length &&
-			toast.success(`${uncachedIDs.length} uncached AllDebrid torrents`, searchToastOptions);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [adKey, adSyncing]);
-
-	// set the list you see
-	const tips = [
-		'Tip: You can use hash lists to share your library with others anonymously. Click on the button, wait for the page to finish processing, and share the link to your friends.',
-		'Tip: You can make a local backup of your library by using the "Local backup" button. This will generate a file containing your whole library that you can use to restore your library later.',
-		'Tip: You can restore a local backup by using the "Local restore" button. It will only restore the torrents that are not already in your library.',
-		'Tip: The quick search box will filter the list by filename and id. You can use multiple words or even regex to filter your library. This way, you can select multiple torrents and delete them at once, or share them as a hash list.',
-		'Have you tried clicking on a torrent? You can see the links, the progress, and the status of the torrent. You can also select the files you want to download.',
-		'I don\'t know what to put here, so here\'s a random tip: "The average person walks the equivalent of five times around the world in a lifetime."',
-	];
-	function setHelpTextBasedOnTime() {
-		const date = new Date();
-		const minute = date.getMinutes();
-		const index = minute % tips.length;
-		const randomTip = tips[index];
-		if (helpText !== 'hide') setHelpText(randomTip);
-	}
+	const timeBasedTip = useMemo(() => TIPS[new Date().getMinutes() % TIPS.length], []);
 
 	// Memoize counts to avoid recalculating on every render
 	const {
@@ -492,15 +494,18 @@ function TorrentsPage() {
 		inProgressCount: memoInProgressCount,
 		failedCount: memoFailedCount,
 		rdBlockedCount: memoRdBlockedCount,
+		uncachedCount: memoUncachedCount,
 	} = useMemo(() => {
 		let slow = 0,
 			inProgress = 0,
 			failed = 0,
-			rdBlocked = 0;
+			rdBlocked = 0,
+			uncached = 0;
 		for (const torrent of userTorrentsList) {
 			if (isSlowOrNoLinks(torrent)) slow++;
 			if (isInProgress(torrent)) inProgress++;
 			if (isFailed(torrent)) failed++;
+			if (isUncached(torrent)) uncached++;
 			if (torrent.id.startsWith('rd:') && isRdBlockedFilename(torrent.filename)) rdBlocked++;
 		}
 		return {
@@ -508,37 +513,13 @@ function TorrentsPage() {
 			inProgressCount: inProgress,
 			failedCount: failed,
 			rdBlockedCount: rdBlocked,
+			uncachedCount: uncached,
 		};
 	}, [userTorrentsList]);
 
-	// filter the list
 	useEffect(() => {
-		if (loading || grouping) return;
-		if (hasNoQueryParamsBut('page')) {
-			setFilteredList(quickSearchLibrary(query, userTorrentsList));
-			setHelpTextBasedOnTime();
-			return;
-		}
-		const { list: filteredItems, helpText: nextHelpText } = filterLibraryItems({
-			torrents: userTorrentsList,
-			status,
-			titleFilter,
-			tvTitleFilter,
-			hashFilter,
-			mediaType,
-			service,
-			selectedTorrents,
-			sameTitle,
-			sameHash,
-			uncachedRdHashes,
-			uncachedAdIDs,
-		});
-		setFilteredList(quickSearchLibrary(query, filteredItems));
-		if (nextHelpText && helpText !== 'hide') {
-			setHelpText(nextHelpText);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query, userTorrentsList, loading, grouping, query, currentPage, uncachedRdHashes]);
+		setHelpText(filterHelpText ?? timeBasedTip);
+	}, [filterHelpText, timeBasedTip]);
 
 	function handleSort(column: typeof sortBy.column) {
 		setSortBy({
@@ -1713,9 +1694,6 @@ function TorrentsPage() {
 		}
 	}
 
-	const hasNoQueryParamsBut = (...params: string[]) =>
-		Object.keys(router.query).filter((p) => !params.includes(p)).length === 0;
-
 	const resetFilters = () => {
 		setQuery('');
 		setSortBy({ column: 'added', direction: 'desc' });
@@ -1822,7 +1800,7 @@ function TorrentsPage() {
 						sameHashSize={sameHash.size}
 						sameTitleSize={sameTitle.size}
 						selectedTorrentsSize={selectedTorrents.size}
-						uncachedCount={uncachedAdIDs.length + uncachedRdHashes.size}
+						uncachedCount={memoUncachedCount}
 						inProgressCount={memoInProgressCount}
 						slowCount={memoSlowCount}
 						failedCount={memoFailedCount}

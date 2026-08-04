@@ -19,3 +19,22 @@ export function isInProgress(t: UserTorrent) {
 export function isFailed(t: UserTorrent) {
 	return t.status === UserTorrentStatus.error;
 }
+
+/**
+ * A torrent the debrid service no longer serves.
+ *
+ * This used to be answered by RD's /torrents/instantAvailability, which RD has
+ * since removed - the scan died with it and the filter has been empty ever
+ * since. Both services already tell us locally: RD returns a finished torrent
+ * with an empty links array once it drops the files, and AD reports magnet
+ * status "11". No API call needed.
+ */
+export function isUncached(t: UserTorrent) {
+	if (t.id.startsWith('rd:')) {
+		return t.status === UserTorrentStatus.finished && (t.links?.length ?? 0) === 0;
+	}
+	if (t.id.startsWith('ad:')) {
+		return t.serviceStatus === '11';
+	}
+	return false;
+}

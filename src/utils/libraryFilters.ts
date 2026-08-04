@@ -1,7 +1,7 @@
-import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
+import { UserTorrent } from '@/torrent/userTorrent';
 import { normalize } from '@/utils/mediaId';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
-import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
+import { isFailed, isInProgress, isSlowOrNoLinks, isUncached } from '@/utils/slow';
 
 export { isRdBlockedFilename };
 
@@ -23,8 +23,6 @@ export interface LibraryFilterOptions {
 	selectedTorrents?: Set<string>;
 	sameTitle?: Set<string>;
 	sameHash?: Set<string>;
-	uncachedRdHashes?: Set<string>;
-	uncachedAdIDs?: string[];
 }
 
 export interface LibraryFilterResult {
@@ -43,8 +41,6 @@ export const filterLibraryItems = ({
 	selectedTorrents = new Set<string>(),
 	sameTitle = new Set<string>(),
 	sameHash = new Set<string>(),
-	uncachedRdHashes = new Set<string>(),
-	uncachedAdIDs = [],
 }: LibraryFilterOptions): LibraryFilterResult => {
 	let filteredList = torrents;
 	let nextHelpText: string | null = null;
@@ -70,13 +66,7 @@ export const filterLibraryItems = ({
 		nextHelpText = 'Torrents that have a failure status';
 	}
 	if (statusValue === 'uncached') {
-		filteredList = filteredList.filter(
-			(torrent) =>
-				(torrent.status === UserTorrentStatus.finished &&
-					torrent.id.startsWith('rd:') &&
-					uncachedRdHashes.has(torrent.hash)) ||
-				(torrent.id.startsWith('ad:') && uncachedAdIDs.includes(torrent.id))
-		);
+		filteredList = filteredList.filter(isUncached);
 		nextHelpText = 'Torrents that are no longer cached';
 	}
 	if (statusValue === 'selected') {

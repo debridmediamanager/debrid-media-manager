@@ -1,6 +1,6 @@
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { isFailed, isInProgress, isSlowOrNoLinks } from './slow';
+import { isFailed, isInProgress, isSlowOrNoLinks, isUncached } from './slow';
 
 describe('slow', () => {
 	let originalDateNow: () => number;
@@ -201,5 +201,52 @@ describe('slow', () => {
 
 			expect(isFailed(torrent)).toBe(false);
 		});
+	});
+});
+
+describe('isUncached', () => {
+	const rd = (over: Partial<UserTorrent>) =>
+		({
+			id: 'rd:1',
+			status: UserTorrentStatus.finished,
+			links: ['https://real-debrid.com/d/ABC'],
+			...over,
+		}) as UserTorrent;
+
+	it('flags a finished RD torrent whose links RD has dropped', () => {
+		expect(isUncached(rd({ links: [] }))).toBe(true);
+	});
+
+	it('leaves a finished RD torrent with links alone', () => {
+		expect(isUncached(rd({}))).toBe(false);
+	});
+
+	it('does not flag an RD torrent that is still downloading', () => {
+		expect(isUncached(rd({ status: UserTorrentStatus.downloading, links: [] }))).toBe(false);
+	});
+
+	it('tolerates an RD torrent with no links array at all', () => {
+		expect(isUncached({ id: 'rd:2', status: UserTorrentStatus.finished } as UserTorrent)).toBe(
+			true
+		);
+	});
+
+	it('flags AllDebrid magnet status 11', () => {
+		expect(
+			isUncached({ id: 'ad:1', serviceStatus: '11', links: [] } as unknown as UserTorrent)
+		).toBe(true);
+		expect(
+			isUncached({ id: 'ad:2', serviceStatus: '4', links: [] } as unknown as UserTorrent)
+		).toBe(false);
+	});
+
+	it('never flags TorBox, which reports no equivalent', () => {
+		expect(
+			isUncached({
+				id: 'tb:1',
+				status: UserTorrentStatus.finished,
+				links: [],
+			} as unknown as UserTorrent)
+		).toBe(false);
 	});
 });

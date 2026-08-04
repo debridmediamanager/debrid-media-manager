@@ -7,6 +7,7 @@ vi.mock('@/utils/slow', () => ({
 	isSlowOrNoLinks: (torrent: UserTorrent) => torrent.id === 'slow',
 	isInProgress: (torrent: UserTorrent) => torrent.id === 'progress',
 	isFailed: (torrent: UserTorrent) => torrent.id === 'failed',
+	isUncached: (torrent: UserTorrent) => torrent.id === 'uncached',
 }));
 
 const baseTorrent: UserTorrent = {
@@ -68,6 +69,18 @@ describe('filterLibraryItems', () => {
 
 		expect(list).toEqual([beta]);
 		expect(helpText).toBe('Torrents that you have selected');
+	});
+
+	it('honors the uncached status filter', () => {
+		const dropped = createTorrent({ id: 'uncached', title: 'Dropped' });
+		const healthy = createTorrent({ id: 'healthy', title: 'Healthy' });
+		const { list, helpText } = filterLibraryItems({
+			torrents: [dropped, healthy],
+			status: 'uncached',
+		});
+
+		expect(list).toEqual([dropped]);
+		expect(helpText).toBe('Torrents that are no longer cached');
 	});
 
 	it('matches normalized title filters from router params', () => {
