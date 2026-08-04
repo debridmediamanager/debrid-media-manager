@@ -63,6 +63,20 @@ type MovieInfo = {
 
 const torrentDB = new UserTorrentDB();
 
+const emptyMovieInfo: MovieInfo = {
+	title: '',
+	description: '',
+	poster: '',
+	backdrop: '',
+	year: '',
+	imdb_score: 0,
+	trailer: '',
+	digitalReleaseDate: '',
+	expectedDigitalReleaseDate: '',
+	expectedDigitalReleaseSource: null,
+	digitalReleaseAvailable: false,
+};
+
 // Color scale for video count
 const getColorScale = () => {
 	const scale = [
@@ -83,19 +97,10 @@ const MovieSearch: FunctionComponent = () => {
 	const isMounted = useRef(true);
 	const hasLoadedTrackerStats = useRef(false);
 
-	const [movieInfo, setMovieInfo] = useState<MovieInfo>({
-		title: '',
-		description: '',
-		poster: '',
-		backdrop: '',
-		year: '',
-		imdb_score: 0,
-		trailer: '',
-		digitalReleaseDate: '',
-		expectedDigitalReleaseDate: '',
-		expectedDigitalReleaseSource: null,
-		digitalReleaseAvailable: false,
-	});
+	const [movieInfo, setMovieInfo] = useState<MovieInfo>(emptyMovieInfo);
+	// imdb id movieInfo belongs to - lets the search wait for its own metadata
+	// instead of running against the previously viewed movie's
+	const [infoImdbId, setInfoImdbId] = useState<string | null>(null);
 
 	// Settings
 	const player = getLocalStorageItemOrDefault('settings:player', defaultPlayer);
@@ -209,11 +214,18 @@ const MovieSearch: FunctionComponent = () => {
 	// Fetch movie info
 	useEffect(() => {
 		if (!imdbid) return;
+		const id = imdbid as string;
+
+		// Drop the previous movie's metadata so nothing downstream reads it as if
+		// it belonged to this one
+		setMovieInfo(emptyMovieInfo);
+		setInfoImdbId(null);
 
 		const fetchMovieInfo = async () => {
 			try {
-				const response = await axiosWithRetry.get(`/api/info/movie?imdbid=${imdbid}`);
+				const response = await axiosWithRetry.get(`/api/info/movie?imdbid=${id}`);
 				setMovieInfo(response.data);
+				setInfoImdbId(id);
 			} catch (error) {
 				console.error('Failed to fetch movie info:', error);
 			}
@@ -223,21 +235,22 @@ const MovieSearch: FunctionComponent = () => {
 	}, [imdbid]);
 
 	// Apply year prefilter when movie info loads
-	const hasAppliedYearFilter = useRef(false);
+	const hasAppliedYearFilter = useRef<string | null>(null);
 	useEffect(() => {
-		if (movieYearFilter === 'off' || !movieInfo.year || hasAppliedYearFilter.current) return;
+		if (movieYearFilter === 'off' || !infoImdbId || !movieInfo.year) return;
+		if (hasAppliedYearFilter.current === infoImdbId) return;
 		const yearNum = parseInt(movieInfo.year, 10);
 		if (isNaN(yearNum)) return;
-		hasAppliedYearFilter.current = true;
 		const tolerance = parseInt(movieYearFilter, 10);
 		if (isNaN(tolerance)) return;
+		hasAppliedYearFilter.current = infoImdbId;
 		const yearPattern = buildYearRegex(yearNum, tolerance);
 		setQuery((prev) => (prev ? `${prev} ${yearPattern}` : yearPattern));
-	}, [movieYearFilter, movieInfo.year]);
+	}, [movieYearFilter, movieInfo.year, infoImdbId]);
 
-	// Initialize data
+	// Initialize data - waits for this movie's own info so the search can use its title
 	useEffect(() => {
-		if (!imdbid) return;
+		if (!imdbid || infoImdbId !== imdbid) return;
 
 		const initializeData = async () => {
 			await torrentDB.initializeDB();
@@ -246,7 +259,7 @@ const MovieSearch: FunctionComponent = () => {
 
 		initializeData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [imdbid, fetchHashAndProgress]);
+	}, [imdbid, infoImdbId]);
 
 	useEffect(() => {
 		return () => {
@@ -294,6 +307,8 @@ const MovieSearch: FunctionComponent = () => {
 			}
 		}
 
+		// Runs once per fetch - fetchData clears the flag, so "Show More Results"
+		// pages get their stats too
 		if (
 			searchState === 'loaded' &&
 			searchResults.length > 0 &&
@@ -304,10 +319,13 @@ const MovieSearch: FunctionComponent = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchState]);
 
-	// Reset tracker stats flag when search changes
+	// Reset per-title state when navigating to another movie - the component stays
+	// mounted across client-side routing, so nothing resets on its own
 	useEffect(() => {
-		hasLoadedTrackerStats.current = false;
-		hasAppliedYearFilter.current = false;
+		setQuery(defaultTorrentsFilter);
+		setCurrentPage(0);
+		setHasMoreResults(true);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imdbid]);
 
 	async function fetchData(imdbId: string, page: number = 0) {
@@ -317,16 +335,18 @@ const MovieSearch: FunctionComponent = () => {
 		}
 		setErrorMessage('');
 		setSearchState('loading');
+		// Newly fetched results have no tracker stats yet
+		hasLoadedTrackerStats.current = false;
 
 		let completedSources = 0;
 		let totalSources = 1; // DMM
-		const allSourcesResults: SearchResult[][] = [];
 		let rdAvailableCount = 0;
 		let adAvailableCount = 0;
 		let tbAvailableCount = 0;
 		let pendingAvailabilityChecks = 0;
 		let allSourcesCompleted = false;
 		let finalResultCount = 0;
+		let latestResultCount = 0;
 		let toastShown = false;
 
 		// Helper to check if everything is done and show toast only once
@@ -348,11 +368,24 @@ const MovieSearch: FunctionComponent = () => {
 
 		const titleStartsWithYear = /^\d{4}\b/.test(movieInfo.title);
 
+		// Counted once per source, never per batch of results, so the completion
+		// toast reports the full set rather than whatever had arrived first
+		const markSourceComplete = () => {
+			completedSources++;
+			if (completedSources < totalSources) return;
+			allSourcesCompleted = true;
+			finalResultCount = latestResultCount;
+			// keep the "requested"/"processing" notice if the API returned one
+			setSearchState((prev) =>
+				prev === 'requested' || prev === 'processing' ? prev : 'loaded'
+			);
+			checkAndShowFinalToast();
+		};
+
 		const processSourceResults = async (sourceResults: SearchResult[], sourceName: string) => {
 			if (!isMounted.current) return;
 
 			let hashesToCheck: string[] = [];
-			let resultCount = 0;
 
 			// flushSync ensures the updater runs synchronously so hashesToCheck
 			// is populated before the availability checks below.
@@ -368,16 +401,9 @@ const MovieSearch: FunctionComponent = () => {
 					);
 
 					if (newUniqueResults.length === 0) {
-						completedSources++;
-						if (completedSources === totalSources) {
-							allSourcesCompleted = true;
-							finalResultCount = prevResults.length;
-							setSearchState('loaded');
-						}
+						latestResultCount = prevResults.length;
 						return prevResults;
 					}
-
-					allSourcesResults.push(newUniqueResults);
 
 					const merged = [...prevResults, ...newUniqueResults];
 					const sorted = merged.sort((a, b) => {
@@ -396,15 +422,7 @@ const MovieSearch: FunctionComponent = () => {
 						.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
 						.map((r) => r.hash);
 
-					completedSources++;
-
-					if (completedSources === totalSources) {
-						allSourcesCompleted = true;
-						finalResultCount = sorted.length;
-						setSearchState('loaded');
-					}
-
-					resultCount = sorted.length;
+					latestResultCount = sorted.length;
 					return sorted;
 				});
 			});
@@ -490,19 +508,8 @@ const MovieSearch: FunctionComponent = () => {
 				enabledSources.forEach((source) => {
 					fetchMovieFromExternalSource(imdbId, source)
 						.then((results) => processSourceResults(results, source))
-						.catch((err) => {
-							console.error(`${source} error:`, err);
-							completedSources++;
-							if (completedSources === totalSources) {
-								allSourcesCompleted = true;
-								setSearchResults((prevResults) => {
-									finalResultCount = prevResults.length;
-									setSearchState('loaded');
-									checkAndShowFinalToast();
-									return prevResults;
-								});
-							}
-						});
+						.catch((err) => console.error(`${source} error:`, err))
+						.finally(markSourceComplete);
 				});
 			}
 
@@ -519,6 +526,7 @@ const MovieSearch: FunctionComponent = () => {
 				files: r.files || [],
 			}));
 			await processSourceResults(formattedDmmResults, 'DMM');
+			markSourceComplete();
 		} catch (error) {
 			console.error(
 				'Error fetching torrents:',

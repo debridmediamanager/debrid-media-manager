@@ -116,6 +116,9 @@ const TvSearch: FunctionComponent = () => {
 	);
 
 	const [showInfo, setShowInfo] = useState<ShowInfo | null>(null);
+	// imdb id showInfo belongs to - lets the search wait for its own metadata
+	// instead of running against the previously viewed show's
+	const [infoImdbId, setInfoImdbId] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [searchState, setSearchState] = useState<string>('loading');
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -212,22 +215,23 @@ const TvSearch: FunctionComponent = () => {
 		[seasonNum, showInfo]
 	);
 
+	// Fetch show info - keyed on the show alone so switching seasons reuses it
 	useEffect(() => {
-		if (!imdbid || !seasonNum) return;
+		if (!imdbid) return;
+		const id = imdbid as string;
+
+		// Drop the previous show's metadata so nothing downstream reads it as if
+		// it belonged to this one
+		setShowInfo(null);
+		setInfoImdbId(null);
+		setIsLoading(true);
+		setErrorMessage('');
 
 		const fetchShowInfo = async () => {
 			try {
-				const response = await axiosWithRetry.get(`/api/info/show?imdbid=${imdbid}`);
+				const response = await axiosWithRetry.get(`/api/info/show?imdbid=${id}`);
 				setShowInfo(response.data);
-
-				const requestedSeason = parseInt(seasonNum as string);
-				if (
-					requestedSeason > response.data.season_count ||
-					(requestedSeason === 0 && !response.data.has_specials) ||
-					requestedSeason < 0
-				) {
-					router.push(`/show/${imdbid}/1`);
-				}
+				setInfoImdbId(id);
 			} catch (error) {
 				console.error('Error fetching show info:', error);
 				setErrorMessage('Failed to fetch show information');
@@ -237,39 +241,60 @@ const TvSearch: FunctionComponent = () => {
 		};
 
 		fetchShowInfo();
-	}, [imdbid, seasonNum, router]);
+	}, [imdbid]);
+
+	// Redirect away from seasons this show doesn't have
+	useEffect(() => {
+		if (!showInfo || !seasonNum || infoImdbId !== imdbid) return;
+		const requestedSeason = parseInt(seasonNum as string, 10);
+		if (
+			isNaN(requestedSeason) ||
+			requestedSeason > showInfo.season_count ||
+			(requestedSeason === 0 && !showInfo.has_specials) ||
+			requestedSeason < 0
+		) {
+			router.push(`/show/${imdbid}/1`);
+		}
+	}, [showInfo, infoImdbId, seasonNum, imdbid, router]);
 
 	useEffect(() => {
-		if (!imdbid || !seasonNum || isLoading) return;
+		if (!imdbid || !seasonNum || infoImdbId !== imdbid) return;
+		const parsedSeason = parseInt(seasonNum as string, 10);
+		if (isNaN(parsedSeason)) return;
 
-		// Clear previous results and query input when season changes
+		// Clear previous results and query input when the show or season changes
 		setSearchResults([]);
 		setQuery(storedTorrentsFilter);
+		setCurrentPage(0);
+		setHasMoreResults(true);
 
 		const initializeData = async () => {
 			await torrentDB.initializeDB();
 			await Promise.all([
-				fetchData(imdbid as string, parseInt(seasonNum as string), 0),
+				fetchData(imdbid as string, parsedSeason, 0),
 				fetchHashAndProgress(),
 			]);
 		};
 
 		initializeData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [imdbid, seasonNum, isLoading, storedTorrentsFilter]);
+	}, [imdbid, seasonNum, infoImdbId, storedTorrentsFilter]);
 
-	// Apply season prefilter when season loads
+	// Apply season prefilter when the season loads. Keyed on show + season so it
+	// reapplies when switching to another show at the same season number.
 	const hasAppliedSeasonFilter = useRef<string | null>(null);
 	useEffect(() => {
-		if (!showSeasonFilter || !seasonNum || isLoading) return;
+		if (!showSeasonFilter || !seasonNum || infoImdbId !== imdbid) return;
 		const sn = Array.isArray(seasonNum) ? seasonNum[0] : seasonNum;
-		if (!sn || hasAppliedSeasonFilter.current === sn) return;
+		if (!sn) return;
+		const filterKey = `${infoImdbId}:${sn}`;
+		if (hasAppliedSeasonFilter.current === filterKey) return;
 		const seasonNumParsed = parseInt(sn, 10);
 		if (isNaN(seasonNumParsed)) return;
-		hasAppliedSeasonFilter.current = sn;
+		hasAppliedSeasonFilter.current = filterKey;
 		const seasonPattern = buildSeasonRegex(seasonNumParsed);
 		setQuery((prev) => (prev ? `${prev} ${seasonPattern}` : seasonPattern));
-	}, [showSeasonFilter, seasonNum, isLoading]);
+	}, [showSeasonFilter, seasonNum, infoImdbId, imdbid]);
 
 	useEffect(() => {
 		return () => {
@@ -284,6 +309,8 @@ const TvSearch: FunctionComponent = () => {
 		}
 		setErrorMessage('');
 		setSearchState('loading');
+		// Newly fetched results have no tracker stats yet
+		hasLoadedTrackerStats.current = false;
 
 		// Track completion
 		let completedSources = 0;
@@ -295,6 +322,7 @@ const TvSearch: FunctionComponent = () => {
 		let pendingAvailabilityChecks = 0;
 		let allSourcesCompleted = false;
 		let finalResultCount = 0;
+		let latestResultCount = 0;
 		let toastShown = false;
 
 		// Helper to check if everything is done and show toast only once
@@ -316,6 +344,21 @@ const TvSearch: FunctionComponent = () => {
 
 		const titleStartsWithYear = showInfo ? /^\d{4}\b/.test(showInfo.title) : false;
 
+		// Counted once per source, never per episode batch - an external source
+		// streams in many batches, and counting those overran totalSources and
+		// completed the search while results were still arriving
+		const markSourceComplete = () => {
+			completedSources++;
+			if (completedSources < totalSources) return;
+			allSourcesCompleted = true;
+			finalResultCount = latestResultCount;
+			// keep the "requested"/"processing" notice if the API returned one
+			setSearchState((prev) =>
+				prev === 'requested' || prev === 'processing' ? prev : 'loaded'
+			);
+			checkAndShowFinalToast();
+		};
+
 		// Helper to process results from any source
 		const processSourceResults = async (sourceResults: SearchResult[], sourceName: string) => {
 			if (!isMounted.current) return;
@@ -334,12 +377,7 @@ const TvSearch: FunctionComponent = () => {
 					);
 
 					if (newUniqueResults.length === 0) {
-						completedSources++;
-						if (completedSources === totalSources) {
-							allSourcesCompleted = true;
-							finalResultCount = prevResults.length;
-							setSearchState('loaded');
-						}
+						latestResultCount = prevResults.length;
 						return prevResults;
 					}
 
@@ -360,14 +398,7 @@ const TvSearch: FunctionComponent = () => {
 						.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
 						.map((r) => r.hash);
 
-					completedSources++;
-
-					if (completedSources === totalSources) {
-						allSourcesCompleted = true;
-						finalResultCount = sorted.length;
-						setSearchState('loaded');
-					}
-
+					latestResultCount = sorted.length;
 					return sorted;
 				});
 			});
@@ -466,7 +497,7 @@ const TvSearch: FunctionComponent = () => {
 									if (episodeResults.length > 0) {
 										allEmpty = false;
 										// Send results immediately for progressive display
-										processSourceResults(episodeResults, source);
+										await processSourceResults(episodeResults, source);
 									}
 								}
 
@@ -489,16 +520,7 @@ const TvSearch: FunctionComponent = () => {
 							console.error(`Error fetching ${source}:`, error);
 						} finally {
 							// Source completed
-							completedSources++;
-							if (completedSources === totalSources) {
-								allSourcesCompleted = true;
-								setSearchState('loaded');
-								setSearchResults((prevResults) => {
-									finalResultCount = prevResults.length;
-									checkAndShowFinalToast();
-									return prevResults;
-								});
-							}
+							markSourceComplete();
 						}
 					});
 				}
@@ -508,7 +530,11 @@ const TvSearch: FunctionComponent = () => {
 			const response = await dmmPromise;
 
 			if (response.status !== 200) {
+				// 204 carries a "requested"/"processing" notice and no results, but DMM
+				// still has to count as done or the external sources never complete
 				setSearchState(response.headers.status ?? 'loaded');
+				setHasMoreResults(false);
+				markSourceComplete();
 				return;
 			}
 
@@ -525,6 +551,7 @@ const TvSearch: FunctionComponent = () => {
 				files: r.files || [],
 			}));
 			await processSourceResults(formattedResults, 'DMM');
+			markSourceComplete();
 		} catch (error) {
 			console.error(
 				'Error fetching torrents:',
@@ -669,7 +696,8 @@ const TvSearch: FunctionComponent = () => {
 			}
 		}
 
-		// Only run once when search is loaded and we haven't loaded stats yet
+		// Runs once per fetch - fetchData clears the flag, so "Show More Results"
+		// pages get their stats too
 		if (
 			searchState === 'loaded' &&
 			searchResults.length > 0 &&
@@ -679,11 +707,6 @@ const TvSearch: FunctionComponent = () => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchState]); // Depend on searchState only
-
-	// Reset the tracker stats flag when season changes
-	useEffect(() => {
-		hasLoadedTrackerStats.current = false;
-	}, [imdbid, seasonNum]);
 
 	const handleShowInfo = (result: SearchResult) => {
 		let files = result.files
