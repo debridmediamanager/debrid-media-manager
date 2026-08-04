@@ -1,5 +1,6 @@
 import { recordRdOperationEvent } from '@/lib/observability/rdOperationalStats';
 import { delay as delayWithMessageChannel } from '@/utils/delay';
+import { readRdOAuthCredentials, writeAccessToken } from '@/utils/rdTokenStorage';
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 import qs from 'qs';
@@ -99,6 +100,47 @@ function isValidSHA40Hash(hash: string): boolean {
 interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
 	__isRetryRequest?: boolean;
 	__retryCount?: number;
+	/** set once a 401 on this request has already triggered a token renewal */
+	__didRefreshAuth?: boolean;
+}
+
+let inflightStorageRefresh: Promise<string | null> | null = null;
+let lastRefreshFailureAt = 0;
+// After a failed renewal, let a burst of 401s settle rather than asking again
+// for every single one of them
+const REFRESH_FAILURE_COOLDOWN_MS = 30_000;
+
+/**
+ * Renew the stored access token from the saved OAuth credentials.
+ * Returns null when the user signed in with a plain API token (no credentials
+ * to refresh with) or when the refresh itself fails.
+ */
+async function refreshAccessTokenFromStorage(): Promise<string | null> {
+	const credentials = readRdOAuthCredentials();
+	if (!credentials) return null;
+	if (Date.now() - lastRefreshFailureAt < REFRESH_FAILURE_COOLDOWN_MS) return null;
+	// Several requests can 401 at once - they all wait on the same renewal
+	if (inflightStorageRefresh) return inflightStorageRefresh;
+
+	inflightStorageRefresh = (async () => {
+		try {
+			const { access_token, expires_in } = await getToken(
+				credentials.clientId,
+				credentials.clientSecret,
+				credentials.refreshToken
+			);
+			writeAccessToken(access_token, expires_in);
+			return access_token;
+		} catch (error) {
+			lastRefreshFailureAt = Date.now();
+			console.error('[RD] token refresh after 401 failed', error);
+			return null;
+		} finally {
+			inflightStorageRefresh = null;
+		}
+	})();
+
+	return inflightStorageRefresh;
 }
 
 // Helper function to calculate exponential backoff delay with jitter
@@ -157,13 +199,30 @@ realDebridAxios.interceptors.response.use(
 			originalConfig.__retryCount = 0;
 		}
 
+		const status = error.response?.status;
+
+		// A 401 means the access token died before the scheduler renewed it - most
+		// often because the machine slept through the timer. Renew once and replay;
+		// getToken dedups concurrent callers, so a burst of 401s costs one request.
+		if (status === 401 && !originalConfig.__didRefreshAuth) {
+			originalConfig.__didRefreshAuth = true;
+			const refreshedToken = await refreshAccessTokenFromStorage();
+			if (refreshedToken) {
+				originalConfig.headers = {
+					...originalConfig.headers,
+					Authorization: `Bearer ${refreshedToken}`,
+				} as typeof originalConfig.headers;
+				return realDebridAxios(originalConfig);
+			}
+			return Promise.reject(error);
+		}
+
 		// Check if we've exceeded max retries
 		if (originalConfig.__retryCount >= 7) {
 			return Promise.reject(error);
 		}
 
 		// Retry on 5xx server errors OR 429 rate limit errors
-		const status = error.response?.status;
 		const shouldRetry = (status >= 500 && status < 600) || status === 429;
 
 		if (!shouldRetry) {

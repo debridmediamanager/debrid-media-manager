@@ -5,6 +5,7 @@ import { getCurrentUser as getRealDebridUser, getToken } from '../services/realD
 import { TorBoxUser, getUserData } from '../services/torbox';
 import { TraktUser, getTraktUser } from '../services/trakt';
 import { clearRdKeys } from '../utils/clearLocalStorage';
+import { readStoredAccessToken } from '../utils/rdTokenStorage';
 import { getSafeRedirectPath } from '../utils/router';
 import useLocalStorage from './localStorage';
 
@@ -40,10 +41,29 @@ const initialRealDebridState = {
 	isInitialized: false,
 	isRefreshing: false,
 	subscribers: new Set<() => void>(),
+	/** shared across consumers so concurrent mounts await one auth, not one each */
+	inflight: null as Promise<void> | null,
+	refreshTimer: null as ReturnType<typeof setTimeout> | null,
 };
 
 // Global singleton state for RealDebrid to prevent duplicate calls
 let globalRealDebridState = { ...initialRealDebridState };
+
+// Renew this long before the token actually expires
+const REFRESH_MARGIN_MS = 5 * 60 * 1000;
+// setTimeout is unreliable over very long waits, and a sleeping machine can
+// overshoot it entirely - re-check at least this often
+const MAX_REFRESH_DELAY_MS = 30 * 60 * 1000;
+// Floor, so a token whose whole lifetime is under the margin renews on a sane
+// cadence instead of rescheduling itself with no delay
+const MIN_REFRESH_DELAY_MS = 30 * 1000;
+
+const clearRefreshTimer = () => {
+	if (globalRealDebridState.refreshTimer) {
+		clearTimeout(globalRealDebridState.refreshTimer);
+		globalRealDebridState.refreshTimer = null;
+	}
+};
 
 // Simplified hook that handles RealDebrid auth
 const useRealDebrid = () => {
@@ -80,6 +100,53 @@ const useRealDebrid = () => {
 			return status === 401 || status === 403;
 		};
 
+		/**
+		 * Renew the access token shortly before it expires. Without this the token
+		 * simply lapsed mid-session: the auth effect only depends on the OAuth
+		 * credentials, which never change, so nothing re-ran and every Real-Debrid
+		 * call failed until the page was reloaded.
+		 */
+		const scheduleRefresh = () => {
+			clearRefreshTimer();
+			const stored = readStoredAccessToken();
+			// no expiry recorded (plain API token) - nothing to renew
+			if (!stored?.expiry) return;
+
+			const untilExpiry = stored.expiry - Date.now();
+			// Short-lived tokens can't honour the full margin; renew halfway instead
+			const target =
+				untilExpiry > REFRESH_MARGIN_MS ? untilExpiry - REFRESH_MARGIN_MS : untilExpiry / 2;
+			const delay = Math.min(Math.max(target, MIN_REFRESH_DELAY_MS), MAX_REFRESH_DELAY_MS);
+
+			globalRealDebridState.refreshTimer = setTimeout(async () => {
+				globalRealDebridState.refreshTimer = null;
+				const current = readStoredAccessToken();
+				// still comfortably valid (long sleep, or another tab renewed it)
+				if (current?.expiry && current.expiry - Date.now() > REFRESH_MARGIN_MS) {
+					scheduleRefresh();
+					return;
+				}
+				if (!refreshToken || !clientId || !clientSecret) return;
+				try {
+					const { access_token, expires_in } = await getToken(
+						clientId,
+						clientSecret,
+						refreshToken
+					);
+					setToken(access_token, expires_in);
+					globalRealDebridState.error = null;
+					globalRealDebridState.subscribers.forEach((fn) => fn());
+				} catch (e) {
+					console.error('[Auth] scheduled RealDebrid refresh failed', e);
+					if (isAuthError(e)) {
+						clearRdKeys();
+						return;
+					}
+				}
+				scheduleRefresh();
+			}, delay);
+		};
+
 		const auth = async (attempt = 0): Promise<void> => {
 			// Prevent duplicate initialization globally, but allow retry if no user yet
 			if (globalRealDebridState.isInitialized && globalRealDebridState.user) {
@@ -87,6 +154,14 @@ const useRealDebrid = () => {
 			}
 
 			if (!refreshToken || !clientId || !clientSecret) {
+				// Credentials are gone (logout, or a switch to another account).
+				// The user object outlived them before, so useCurrentUser kept
+				// reporting the previous account until a full reload.
+				clearRefreshTimer();
+				globalRealDebridState.user = null;
+				globalRealDebridState.hasAuth = false;
+				globalRealDebridState.isInitialized = false;
+				globalRealDebridState.error = null;
 				globalRealDebridState.loading = false;
 				globalRealDebridState.subscribers.forEach((fn) => fn());
 				return;
@@ -105,6 +180,7 @@ const useRealDebrid = () => {
 							globalRealDebridState.loading = false;
 							globalRealDebridState.hasAuth = true;
 							globalRealDebridState.subscribers.forEach((fn) => fn());
+							scheduleRefresh();
 						}
 						return;
 					} catch {
@@ -129,6 +205,7 @@ const useRealDebrid = () => {
 					globalRealDebridState.error = null;
 					globalRealDebridState.hasAuth = true;
 					globalRealDebridState.subscribers.forEach((fn) => fn());
+					scheduleRefresh();
 				}
 			} catch (e) {
 				if (isMounted) {
@@ -160,7 +237,18 @@ const useRealDebrid = () => {
 			}
 		};
 
-		auth();
+		// Consumers mount in the same commit, and the isInitialized guard only
+		// closes once `user` is set - i.e. after the first await - so each of them
+		// used to start its own auth. Share the in-flight run instead.
+		if (globalRealDebridState.inflight) {
+			void globalRealDebridState.inflight;
+		} else {
+			const run = auth().finally(() => {
+				globalRealDebridState.inflight = null;
+			});
+			globalRealDebridState.inflight = run;
+			void run;
+		}
 
 		return () => {
 			isMounted = false;
@@ -173,6 +261,7 @@ const useRealDebrid = () => {
 };
 
 export const __resetRealDebridStateForTests = () => {
+	clearRefreshTimer();
 	globalRealDebridState = {
 		...initialRealDebridState,
 		subscribers: new Set(),
@@ -191,17 +280,23 @@ const useAllDebrid = () => {
 			return;
 		}
 
+		let isMounted = true;
 		setLoading(true);
 		getAllDebridUser(token)
 			.then((user) => {
+				if (!isMounted) return;
 				setUser(user as AllDebridUser);
 				setError(null);
 				setLoading(false);
 			})
 			.catch((e) => {
+				if (!isMounted) return;
 				setError(e as Error);
 				setLoading(false);
 			});
+		return () => {
+			isMounted = false;
+		};
 	}, [token]);
 
 	return { user, error, hasAuth: !!token, loading };
@@ -218,9 +313,11 @@ const useTorBox = () => {
 			return;
 		}
 
+		let isMounted = true;
 		setLoading(true);
 		getUserData(token)
 			.then((response) => {
+				if (!isMounted) return;
 				if (response.success) {
 					setUser(response.data);
 					setError(null);
@@ -228,9 +325,13 @@ const useTorBox = () => {
 				setLoading(false);
 			})
 			.catch((e) => {
+				if (!isMounted) return;
 				setError(e as Error);
 				setLoading(false);
 			});
+		return () => {
+			isMounted = false;
+		};
 	}, [token]);
 
 	return { user, error, hasAuth: !!token, loading };
@@ -248,18 +349,24 @@ const useTrakt = () => {
 			return;
 		}
 
+		let isMounted = true;
 		setLoading(true);
 		getTraktUser(token)
 			.then((user) => {
+				if (!isMounted) return;
 				setUser(user);
 				setUserSlug(user.user.ids.slug);
 				setError(null);
 				setLoading(false);
 			})
 			.catch((e) => {
+				if (!isMounted) return;
 				setError(e as Error);
 				setLoading(false);
 			});
+		return () => {
+			isMounted = false;
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [token]);
 

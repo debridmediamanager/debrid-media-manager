@@ -131,6 +131,52 @@ describe('auth hooks', () => {
 		expect(mockGetToken).toHaveBeenCalledTimes(2);
 	});
 
+	it('renews the access token before it expires instead of letting it lapse', async () => {
+		vi.useFakeTimers();
+		// a token minted an hour ago with a 1h life: already past the renewal point
+		window.localStorage.setItem(
+			'rd:accessToken',
+			JSON.stringify({ value: 'aging', expiry: Date.now() + 6 * 60 * 1000 })
+		);
+		setStoredValue('rd:refreshToken', 'refresh');
+		setStoredValue('rd:clientId', 'client');
+		setStoredValue('rd:clientSecret', 'secret');
+		mockGetRealDebridUser.mockResolvedValue({ username: 'rd-user' });
+		mockGetToken.mockResolvedValue({ access_token: 'renewed', expires_in: 3600 });
+
+		renderHook(() => useRealDebridAccessToken());
+		await vi.advanceTimersByTimeAsync(0);
+
+		// the existing token still works, so no renewal yet
+		expect(mockGetToken).not.toHaveBeenCalled();
+
+		// ...until the scheduler reaches the safety margin
+		await vi.advanceTimersByTimeAsync(90 * 1000);
+
+		expect(mockGetToken).toHaveBeenCalledTimes(1);
+		const stored = JSON.parse(window.localStorage.getItem('rd:accessToken') as string);
+		expect(stored.value).toBe('renewed');
+	});
+
+	it('does not spin when the token lifetime is shorter than the refresh margin', async () => {
+		vi.useFakeTimers();
+		setStoredValue('rd:refreshToken', 'refresh');
+		setStoredValue('rd:clientId', 'client');
+		setStoredValue('rd:clientSecret', 'secret');
+		mockGetRealDebridUser.mockResolvedValue({ username: 'rd-user' });
+		// 60s lifetime is well inside the 5 minute margin
+		mockGetToken.mockResolvedValue({ access_token: 'short', expires_in: 60 });
+
+		renderHook(() => useRealDebridAccessToken());
+		await vi.advanceTimersByTimeAsync(0);
+		const afterInitial = mockGetToken.mock.calls.length;
+
+		// a naive "expiry - margin" delay lands on 0 here and renews in a hot loop
+		await vi.advanceTimersByTimeAsync(2 * 60 * 1000);
+
+		expect(mockGetToken.mock.calls.length - afterInitial).toBeLessThanOrEqual(4);
+	});
+
 	it('clears credentials on 401 auth error during token refresh', async () => {
 		const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 		setStoredValue('rd:accessToken', 'stale');
