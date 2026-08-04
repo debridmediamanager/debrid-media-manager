@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { render, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -296,5 +296,63 @@ describe('Show page source completion', () => {
 			String(call[0]).includes('unique torrents found')
 		);
 		expect(searchToasts).toHaveLength(1);
+	});
+
+	it('names every source it is waiting on in the loading indicator', async () => {
+		// hold DMM open so the indicator stays mounted for the assertions
+		let releaseDmm: (value: unknown) => void = () => {};
+		const dmmPending = new Promise((resolve) => {
+			releaseDmm = resolve;
+		});
+		axiosGetMock.mockImplementation((url: string) => {
+			if (url.startsWith('/api/info/show')) {
+				return Promise.resolve({
+					status: 200,
+					data: {
+						title: 'Example Show',
+						description: '',
+						poster: '',
+						backdrop: '',
+						season_count: 1,
+						season_names: ['Season One'],
+						imdb_score: 7.2,
+						season_episode_counts: { 1: 3 },
+					},
+				});
+			}
+			if (url.startsWith('/api/torrents/tv')) {
+				return dmmPending;
+			}
+			return Promise.resolve({ status: 200, data: {} });
+		});
+
+		fetchEpisodeMock.mockImplementation((_imdbId: string, _season: number, episode: number) =>
+			Promise.resolve(episode === 1 ? [externalResult('c', 1)] : [])
+		);
+
+		render(<ShowSeasonPage />);
+
+		const indicator = await screen.findByTestId('search-source-progress');
+		expect(indicator).toHaveTextContent('DMM');
+		expect(indicator).toHaveTextContent('Torrentio');
+		expect(screen.getByTestId('search-source-DMM')).toBeInTheDocument();
+		expect(screen.getByTestId('search-source-torrentio')).toBeInTheDocument();
+
+		// the external source finishes first and reports what it contributed
+		await waitFor(() =>
+			expect(screen.getByTestId('search-source-torrentio')).toHaveAttribute(
+				'title',
+				'Torrentio: 1 unique result'
+			)
+		);
+		// DMM is still outstanding, so the indicator is still up
+		expect(screen.getByTestId('search-source-progress')).toHaveTextContent('Searching 1/2');
+
+		releaseDmm({ status: 200, headers: {}, data: { results: [] } });
+
+		// once every source is done the indicator goes away
+		await waitFor(() =>
+			expect(screen.queryByTestId('search-source-progress')).not.toBeInTheDocument()
+		);
 	});
 });

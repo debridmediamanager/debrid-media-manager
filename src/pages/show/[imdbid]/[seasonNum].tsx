@@ -1,4 +1,5 @@
 import MediaHeader from '@/components/MediaHeader';
+import SearchSourceProgress from '@/components/SearchSourceProgress';
 import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
 import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/components/showInfo';
@@ -30,6 +31,14 @@ import {
 import { quickSearch } from '@/utils/quickSearch';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { sortByMedian } from '@/utils/results';
+import {
+	DMM_SOURCE,
+	SearchSourceStates,
+	SearchSourceStatus,
+	initSourceStates,
+	markSourceResults,
+	markSourceStatus,
+} from '@/utils/searchSources';
 import { buildSeasonRegex } from '@/utils/seasonFilter';
 import { isVideo } from '@/utils/selectable';
 import {
@@ -135,6 +144,7 @@ const TvSearch: FunctionComponent = () => {
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(false);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [hasMoreResults, setHasMoreResults] = useState(true);
+	const [sourceStates, setSourceStates] = useState<SearchSourceStates>({});
 	const [searchCompleteInfo, setSearchCompleteInfo] = useState<{
 		finalResults: number;
 		totalAvailableCount: number;
@@ -312,13 +322,16 @@ const TvSearch: FunctionComponent = () => {
 		// Newly fetched results have no tracker stats yet
 		hasLoadedTrackerStats.current = false;
 
+		// External addons only run on the first page; "Show More Results" is DMM only
+		const enabledSources = page === 0 ? getEnabledSources() : [];
+		setSourceStates(initSourceStates(enabledSources));
+
 		// Track completion
 		let completedSources = 0;
-		let totalSources = 1; // Start with 1 for DMM
+		let totalSources = 1 + enabledSources.length; // DMM + external addons
 		let rdAvailableCount = 0;
 		let adAvailableCount = 0;
 		let tbAvailableCount = 0;
-		let externalSourcesActive = 0;
 		let pendingAvailabilityChecks = 0;
 		let allSourcesCompleted = false;
 		let finalResultCount = 0;
@@ -347,7 +360,8 @@ const TvSearch: FunctionComponent = () => {
 		// Counted once per source, never per episode batch - an external source
 		// streams in many batches, and counting those overran totalSources and
 		// completed the search while results were still arriving
-		const markSourceComplete = () => {
+		const markSourceComplete = (source: string, status: SearchSourceStatus = 'done') => {
+			setSourceStates((prev) => markSourceStatus(prev, source, status));
 			completedSources++;
 			if (completedSources < totalSources) return;
 			allSourcesCompleted = true;
@@ -364,6 +378,7 @@ const TvSearch: FunctionComponent = () => {
 			if (!isMounted.current) return;
 
 			let hashesToCheck: string[] = [];
+			let addedCount = 0;
 
 			flushSync(() => {
 				setSearchResults((prevResults) => {
@@ -398,10 +413,15 @@ const TvSearch: FunctionComponent = () => {
 						.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
 						.map((r) => r.hash);
 
+					addedCount = newUniqueResults.length;
 					latestResultCount = sorted.length;
 					return sorted;
 				});
 			});
+
+			if (addedCount > 0) {
+				setSourceStates((prev) => markSourceResults(prev, sourceName, addedCount));
+			}
 
 			// Fire availability checks outside the state updater
 			if (hashesToCheck.length > 0) {
@@ -464,66 +484,60 @@ const TvSearch: FunctionComponent = () => {
 			);
 
 			// Start external sources if first page
-			if (page === 0) {
+			if (enabledSources.length > 0) {
 				const episodeCount = expectedEpisodeCount || 10;
 
-				// Count external sources
-				const enabledSources = getEnabledSources();
-				totalSources += enabledSources.length;
-				externalSourcesActive = enabledSources.length;
+				// Process each source in parallel
+				enabledSources.forEach(async (source) => {
+					let failed = false;
+					try {
+						let episodeNum = 1;
+						let consecutiveEmpty = 0;
 
-				// Start external fetches
-				if (externalSourcesActive > 0) {
-					// Process each source in parallel
-					enabledSources.forEach(async (source) => {
-						try {
-							let episodeNum = 1;
-							let consecutiveEmpty = 0;
+						// Keep fetching episodes, 2 at a time
+						while (episodeNum <= episodeCount + 10) {
+							// Allow some buffer beyond expected
+							const batch = [episodeNum, episodeNum + 1];
+							const batchPromises = batch.map((ep) =>
+								fetchEpisodeFromExternalSource(imdbId, seasonNum, ep, source)
+							);
 
-							// Keep fetching episodes, 2 at a time
-							while (episodeNum <= episodeCount + 10) {
-								// Allow some buffer beyond expected
-								const batch = [episodeNum, episodeNum + 1];
-								const batchPromises = batch.map((ep) =>
-									fetchEpisodeFromExternalSource(imdbId, seasonNum, ep, source)
-								);
+							const batchResults = await Promise.all(batchPromises);
 
-								const batchResults = await Promise.all(batchPromises);
-
-								// Process each episode's results immediately
-								let allEmpty = true;
-								for (let i = 0; i < batchResults.length; i++) {
-									const episodeResults = batchResults[i];
-									if (episodeResults.length > 0) {
-										allEmpty = false;
-										// Send results immediately for progressive display
-										await processSourceResults(episodeResults, source);
-									}
+							// Process each episode's results immediately
+							let allEmpty = true;
+							for (let i = 0; i < batchResults.length; i++) {
+								const episodeResults = batchResults[i];
+								if (episodeResults.length > 0) {
+									allEmpty = false;
+									// Send results immediately for progressive display
+									await processSourceResults(episodeResults, source);
 								}
-
-								if (allEmpty) {
-									consecutiveEmpty++;
-									// Stop if we get 2 consecutive empty batches (4 episodes)
-									if (consecutiveEmpty >= 2) {
-										break;
-									}
-								} else {
-									consecutiveEmpty = 0;
-								}
-
-								episodeNum += 2;
-
-								// Add a small delay to avoid hammering the API
-								await delay(100);
 							}
-						} catch (error) {
-							console.error(`Error fetching ${source}:`, error);
-						} finally {
-							// Source completed
-							markSourceComplete();
+
+							if (allEmpty) {
+								consecutiveEmpty++;
+								// Stop if we get 2 consecutive empty batches (4 episodes)
+								if (consecutiveEmpty >= 2) {
+									break;
+								}
+							} else {
+								consecutiveEmpty = 0;
+							}
+
+							episodeNum += 2;
+
+							// Add a small delay to avoid hammering the API
+							await delay(100);
 						}
-					});
-				}
+					} catch (error) {
+						console.error(`Error fetching ${source}:`, error);
+						failed = true;
+					} finally {
+						// Source completed
+						markSourceComplete(source, failed ? 'error' : 'done');
+					}
+				});
 			}
 
 			// Process DMM results
@@ -534,7 +548,7 @@ const TvSearch: FunctionComponent = () => {
 				// still has to count as done or the external sources never complete
 				setSearchState(response.headers.status ?? 'loaded');
 				setHasMoreResults(false);
-				markSourceComplete();
+				markSourceComplete(DMM_SOURCE);
 				return;
 			}
 
@@ -550,8 +564,8 @@ const TvSearch: FunctionComponent = () => {
 				noVideos: false,
 				files: r.files || [],
 			}));
-			await processSourceResults(formattedResults, 'DMM');
-			markSourceComplete();
+			await processSourceResults(formattedResults, DMM_SOURCE);
+			markSourceComplete(DMM_SOURCE);
 		} catch (error) {
 			console.error(
 				'Error fetching torrents:',
@@ -567,6 +581,8 @@ const TvSearch: FunctionComponent = () => {
 				);
 				setHasMoreResults(false);
 			}
+			// DMM failed outright - stop showing it as still searching
+			setSourceStates((prev) => markSourceStatus(prev, DMM_SOURCE, 'error'));
 			setSearchState('loaded');
 		}
 	}
@@ -1273,9 +1289,7 @@ const TvSearch: FunctionComponent = () => {
 				trailer={showInfo.trailer}
 			/>
 
-			{searchState === 'loading' && (
-				<div className="flex items-center justify-center bg-black">Loading...</div>
-			)}
+			{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}
 			{searchState === 'requested' && (
 				<div className="relative mt-4 rounded border border-yellow-400 bg-yellow-500 px-4 py-3 text-yellow-900">
 					<strong className="font-bold">Notice:</strong>

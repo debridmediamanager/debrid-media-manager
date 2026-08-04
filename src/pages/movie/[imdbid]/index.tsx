@@ -1,6 +1,7 @@
 import MediaHeader from '@/components/MediaHeader';
 import MovieSearchResults from '@/components/MovieSearchResults';
 import SearchControls from '@/components/SearchControls';
+import SearchSourceProgress from '@/components/SearchSourceProgress';
 import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/components/showInfo';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
@@ -25,6 +26,14 @@ import { formatReleaseDate } from '@/utils/movieReleaseDates';
 import { quickSearch } from '@/utils/quickSearch';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { sortByBiggest } from '@/utils/results';
+import {
+	DMM_SOURCE,
+	SearchSourceStates,
+	SearchSourceStatus,
+	initSourceStates,
+	markSourceResults,
+	markSourceStatus,
+} from '@/utils/searchSources';
 import { isVideo } from '@/utils/selectable';
 import {
 	defaultTorrentsFilter as defaultFilterSetting,
@@ -134,6 +143,7 @@ const MovieSearch: FunctionComponent = () => {
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(false);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [hasMoreResults, setHasMoreResults] = useState(true);
+	const [sourceStates, setSourceStates] = useState<SearchSourceStates>({});
 	const [searchCompleteInfo, setSearchCompleteInfo] = useState<{
 		finalResults: number;
 		totalAvailableCount: number;
@@ -338,8 +348,12 @@ const MovieSearch: FunctionComponent = () => {
 		// Newly fetched results have no tracker stats yet
 		hasLoadedTrackerStats.current = false;
 
+		// External addons only run on the first page; "Show More Results" is DMM only
+		const enabledSources = page === 0 ? getEnabledSources() : [];
+		setSourceStates(initSourceStates(enabledSources));
+
 		let completedSources = 0;
-		let totalSources = 1; // DMM
+		let totalSources = 1 + enabledSources.length; // DMM + external addons
 		let rdAvailableCount = 0;
 		let adAvailableCount = 0;
 		let tbAvailableCount = 0;
@@ -370,7 +384,8 @@ const MovieSearch: FunctionComponent = () => {
 
 		// Counted once per source, never per batch of results, so the completion
 		// toast reports the full set rather than whatever had arrived first
-		const markSourceComplete = () => {
+		const markSourceComplete = (source: string, status: SearchSourceStatus = 'done') => {
+			setSourceStates((prev) => markSourceStatus(prev, source, status));
 			completedSources++;
 			if (completedSources < totalSources) return;
 			allSourcesCompleted = true;
@@ -386,6 +401,7 @@ const MovieSearch: FunctionComponent = () => {
 			if (!isMounted.current) return;
 
 			let hashesToCheck: string[] = [];
+			let addedCount = 0;
 
 			// flushSync ensures the updater runs synchronously so hashesToCheck
 			// is populated before the availability checks below.
@@ -422,10 +438,15 @@ const MovieSearch: FunctionComponent = () => {
 						.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
 						.map((r) => r.hash);
 
+					addedCount = newUniqueResults.length;
 					latestResultCount = sorted.length;
 					return sorted;
 				});
 			});
+
+			if (addedCount > 0) {
+				setSourceStates((prev) => markSourceResults(prev, sourceName, addedCount));
+			}
 
 			// Fire availability checks outside the state updater
 			if (hashesToCheck.length > 0) {
@@ -499,19 +520,18 @@ const MovieSearch: FunctionComponent = () => {
 				return response.data.results || [];
 			})();
 
-			// Check enabled sources and start external fetches
-			if (page === 0) {
-				const enabledSources = getEnabledSources();
-				totalSources += enabledSources.length;
-
-				// Start all external fetches simultaneously
-				enabledSources.forEach((source) => {
-					fetchMovieFromExternalSource(imdbId, source)
-						.then((results) => processSourceResults(results, source))
-						.catch((err) => console.error(`${source} error:`, err))
-						.finally(markSourceComplete);
-				});
-			}
+			// Start all external fetches simultaneously
+			enabledSources.forEach((source) => {
+				fetchMovieFromExternalSource(imdbId, source)
+					.then((results) => processSourceResults(results, source))
+					.then(
+						() => markSourceComplete(source),
+						(err) => {
+							console.error(`${source} error:`, err);
+							markSourceComplete(source, 'error');
+						}
+					);
+			});
 
 			// Process DMM results
 			const dmmResults = await dmmPromise;
@@ -525,8 +545,8 @@ const MovieSearch: FunctionComponent = () => {
 				noVideos: false,
 				files: r.files || [],
 			}));
-			await processSourceResults(formattedDmmResults, 'DMM');
-			markSourceComplete();
+			await processSourceResults(formattedDmmResults, DMM_SOURCE);
+			markSourceComplete(DMM_SOURCE);
 		} catch (error) {
 			console.error(
 				'Error fetching torrents:',
@@ -542,6 +562,8 @@ const MovieSearch: FunctionComponent = () => {
 				);
 				setHasMoreResults(false);
 			}
+			// DMM failed outright - stop showing it as still searching
+			setSourceStates((prev) => markSourceStatus(prev, DMM_SOURCE, 'error'));
 			setSearchState('loaded');
 		}
 	}
@@ -901,9 +923,7 @@ const MovieSearch: FunctionComponent = () => {
 				additionalInfo={movieReleaseInfo}
 			/>
 
-			{searchState === 'loading' && (
-				<div className="flex items-center justify-center bg-black">Loading...</div>
-			)}
+			{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}
 			{searchState === 'requested' && (
 				<div className="relative mt-4 rounded border border-yellow-400 bg-yellow-500 px-4 py-3 text-yellow-900">
 					<strong className="font-bold">Notice:</strong>
