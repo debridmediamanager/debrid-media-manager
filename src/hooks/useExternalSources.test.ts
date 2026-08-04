@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildCometConfig, parseSizeToMb } from './useExternalSources';
+import { EXTERNAL_SOURCE_SETTINGS, buildCometConfig, parseSizeToMb } from './useExternalSources';
 
 describe('parseSizeToMb', () => {
 	it('parses the decimal units addons commonly emit', () => {
@@ -52,5 +52,40 @@ describe('buildCometConfig', () => {
 		expect(config.maxSize).toBe(0);
 		expect(config.cachedOnly).toBe(false);
 		expect(config.removeTrash).toBe(false);
+	});
+});
+
+describe('EXTERNAL_SOURCE_SETTINGS', () => {
+	const torEntries = EXTERNAL_SOURCE_SETTINGS.filter((entry) => entry.source.endsWith('-tor'));
+	const directEntries = EXTERNAL_SOURCE_SETTINGS.filter(
+		(entry) => !entry.source.endsWith('-tor')
+	);
+
+	it('leaves the Tor variants opt-in, matching the settings screen', () => {
+		// these used to be read as `getItem(...) !== 'false'`, so a user who had
+		// never touched the toggles saw them off in settings while every search
+		// still queried them over Tor
+		expect(torEntries).toHaveLength(5);
+		expect(torEntries.every((entry) => entry.defaultEnabled === false)).toBe(true);
+	});
+
+	it('keeps the direct addons on by default', () => {
+		expect(directEntries).toHaveLength(5);
+		expect(directEntries.every((entry) => entry.defaultEnabled === true)).toBe(true);
+	});
+
+	it('uses the same storage keys the settings screen writes', () => {
+		expect(EXTERNAL_SOURCE_SETTINGS.map((entry) => entry.key)).toEqual([
+			'settings:enableTorrentio',
+			'settings:enableComet',
+			'settings:enableMediaFusion',
+			'settings:enablePeerflix',
+			'settings:enableTorrentsDB',
+			'settings:enableTorrentioTor',
+			'settings:enableCometTor',
+			'settings:enableMediaFusionTor',
+			'settings:enablePeerflixTor',
+			'settings:enableTorrentsDBTor',
+		]);
 	});
 });

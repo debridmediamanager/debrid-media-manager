@@ -1,4 +1,5 @@
 import { FileData, SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
+import { getLocalStorageBoolean } from '@/utils/browserStorage';
 import { normalizeHash } from '@/utils/extractHashes';
 import axios from 'axios';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -48,6 +49,40 @@ export function buildCometConfig(rdKey: string): string {
 		})
 	);
 }
+
+export type ExternalSource =
+	| 'torrentio'
+	| 'comet'
+	| 'mediafusion'
+	| 'peerflix'
+	| 'torrentsdb'
+	| 'torrentio-tor'
+	| 'comet-tor'
+	| 'mediafusion-tor'
+	| 'peerflix-tor'
+	| 'torrentsdb-tor';
+
+/**
+ * Single source of truth for which addons a search queries.
+ * `defaultEnabled` must stay in step with the settings screen - the Tor variants
+ * are opt-in there, so they are opt-in here.
+ */
+export const EXTERNAL_SOURCE_SETTINGS: {
+	key: string;
+	source: ExternalSource;
+	defaultEnabled: boolean;
+}[] = [
+	{ key: 'settings:enableTorrentio', source: 'torrentio', defaultEnabled: true },
+	{ key: 'settings:enableComet', source: 'comet', defaultEnabled: true },
+	{ key: 'settings:enableMediaFusion', source: 'mediafusion', defaultEnabled: true },
+	{ key: 'settings:enablePeerflix', source: 'peerflix', defaultEnabled: true },
+	{ key: 'settings:enableTorrentsDB', source: 'torrentsdb', defaultEnabled: true },
+	{ key: 'settings:enableTorrentioTor', source: 'torrentio-tor', defaultEnabled: false },
+	{ key: 'settings:enableCometTor', source: 'comet-tor', defaultEnabled: false },
+	{ key: 'settings:enableMediaFusionTor', source: 'mediafusion-tor', defaultEnabled: false },
+	{ key: 'settings:enablePeerflixTor', source: 'peerflix-tor', defaultEnabled: false },
+	{ key: 'settings:enableTorrentsDBTor', source: 'torrentsdb-tor', defaultEnabled: false },
+];
 
 export function useExternalSources(
 	rdKey: string | null,
@@ -450,50 +485,16 @@ export function useExternalSources(
 	);
 
 	const getEnabledSources = useCallback(() => {
-		const sources: Array<
-			| 'torrentio'
-			| 'comet'
-			| 'mediafusion'
-			| 'peerflix'
-			| 'torrentsdb'
-			| 'torrentio-tor'
-			| 'comet-tor'
-			| 'mediafusion-tor'
-			| 'peerflix-tor'
-			| 'torrentsdb-tor'
-		> = [];
+		const sources: ExternalSource[] = [];
 
-		if (window.localStorage.getItem('settings:enableTorrentio') !== 'false') {
-			sources.push('torrentio');
-		}
-		if (window.localStorage.getItem('settings:enableComet') !== 'false') {
-			sources.push('comet');
-		}
-		if (window.localStorage.getItem('settings:enableMediaFusion') !== 'false') {
-			sources.push('mediafusion');
-		}
-		if (window.localStorage.getItem('settings:enablePeerflix') !== 'false') {
-			sources.push('peerflix');
-		}
-		if (window.localStorage.getItem('settings:enableTorrentsDB') !== 'false') {
-			sources.push('torrentsdb');
-		}
-
-		// Add Tor variants
-		if (window.localStorage.getItem('settings:enableTorrentioTor') !== 'false') {
-			sources.push('torrentio-tor');
-		}
-		if (window.localStorage.getItem('settings:enableCometTor') !== 'false') {
-			sources.push('comet-tor');
-		}
-		if (window.localStorage.getItem('settings:enableMediaFusionTor') !== 'false') {
-			sources.push('mediafusion-tor');
-		}
-		if (window.localStorage.getItem('settings:enablePeerflixTor') !== 'false') {
-			sources.push('peerflix-tor');
-		}
-		if (window.localStorage.getItem('settings:enableTorrentsDBTor') !== 'false') {
-			sources.push('torrentsdb-tor');
+		// Same helper and the same defaults the settings screen uses. These used to
+		// be raw `getItem(...) !== 'false'` checks, which treats "never set" as
+		// enabled - so the five Tor variants, which settings shows as off by
+		// default, were being queried by anyone who had not explicitly toggled them.
+		for (const { key, source, defaultEnabled } of EXTERNAL_SOURCE_SETTINGS) {
+			if (getLocalStorageBoolean(key, defaultEnabled)) {
+				sources.push(source);
+			}
 		}
 
 		return sources;
