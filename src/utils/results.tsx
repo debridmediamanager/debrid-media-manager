@@ -47,8 +47,8 @@ export const btnLabel = (avail: boolean, debridService: string) =>
 export const sortByMedian = (searchResults: SearchResult[]): SearchResult[] => {
 	searchResults.sort((a, b) => {
 		// First compare availability
-		const aAvailable = a.rdAvailable || a.adAvailable;
-		const bAvailable = b.rdAvailable || b.adAvailable;
+		const aAvailable = a.rdAvailable || a.adAvailable || a.tbAvailable;
+		const bAvailable = b.rdAvailable || b.adAvailable || b.tbAvailable;
 		if (aAvailable !== bAvailable) {
 			return bAvailable ? 1 : -1;
 		}
@@ -76,8 +76,8 @@ export const sortByMedian = (searchResults: SearchResult[]): SearchResult[] => {
 export const sortByBiggest = (searchResults: SearchResult[]): SearchResult[] => {
 	searchResults.sort((a, b) => {
 		// First compare availability
-		const aAvailable = a.rdAvailable || a.adAvailable;
-		const bAvailable = b.rdAvailable || b.adAvailable;
+		const aAvailable = a.rdAvailable || a.adAvailable || a.tbAvailable;
+		const bAvailable = b.rdAvailable || b.adAvailable || b.tbAvailable;
 		if (aAvailable !== bAvailable) {
 			return bAvailable ? 1 : -1;
 		}

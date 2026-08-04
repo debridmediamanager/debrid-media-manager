@@ -345,8 +345,8 @@ const TvSearch: FunctionComponent = () => {
 
 					const merged = [...prevResults, ...newUniqueResults];
 					const sorted = merged.sort((a, b) => {
-						const aAvailable = a.rdAvailable || a.adAvailable;
-						const bAvailable = b.rdAvailable || b.adAvailable;
+						const aAvailable = a.rdAvailable || a.adAvailable || a.tbAvailable;
+						const bAvailable = b.rdAvailable || b.adAvailable || b.tbAvailable;
 						if (aAvailable !== bAvailable) {
 							return aAvailable ? -1 : 1;
 						}
