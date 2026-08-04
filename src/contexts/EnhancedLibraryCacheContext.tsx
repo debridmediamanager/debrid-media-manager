@@ -107,6 +107,8 @@ interface EnhancedLibraryCacheContextType {
 	removeTorrent: (torrentId: string) => void;
 	removeTorrents: (torrentIds: string[]) => void;
 	updateTorrent: (torrentId: string, updates: Partial<UserTorrent>) => void;
+	/** swap the whole library in one pass - see the shim in LibraryCacheContext */
+	replaceLibrary: (torrents: UserTorrent[]) => void;
 }
 
 const EnhancedLibraryCacheContext = createContext<EnhancedLibraryCacheContextType | undefined>(
@@ -171,7 +173,15 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 	const fetchTimesRef = useRef<number[]>([]);
 	const cacheHitsRef = useRef({ hits: 0, misses: 0 });
 	const dbSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const libraryItemsRef = useRef<UserTorrent[]>([]);
+	const syncInFlightRef = useRef(0);
 	const lastPersistedSnapshotRef = useRef<Map<string, string>>(new Map());
+	// id -> the object we last stringified and its signature. Callers that change
+	// one torrent keep every other object's identity, so this skips re-serialising
+	// the whole library on each edit.
+	const signatureCacheRef = useRef<Map<string, { ref: UserTorrent; signature: string }>>(
+		new Map()
+	);
 	const previousTokenStateRef = useRef({
 		rd: normalizeToken(rdKey),
 		ad: normalizeToken(adKey),
@@ -292,6 +302,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		}
 
 		setLibraryItems(combined);
+		libraryItemsRef.current = combined;
 
 		if (dbSaveTimerRef.current !== null) {
 			clearTimeout(dbSaveTimerRef.current);
@@ -301,16 +312,24 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		if (shouldLogAndPersist) {
 			const previousSnapshot = lastPersistedSnapshotRef.current;
 			const nextSnapshot = new Map<string, string>();
+			const previousSignatures = signatureCacheRef.current;
+			const nextSignatures = new Map<string, { ref: UserTorrent; signature: string }>();
 			const toUpsert: UserTorrent[] = [];
 			const toRemove: string[] = [];
 
 			for (const torrent of combined) {
-				const signature = buildTorrentSignature(torrent);
+				const cached = previousSignatures.get(torrent.id);
+				const signature =
+					cached && cached.ref === torrent
+						? cached.signature
+						: buildTorrentSignature(torrent);
+				nextSignatures.set(torrent.id, { ref: torrent, signature });
 				nextSnapshot.set(torrent.id, signature);
 				if (previousSnapshot.get(torrent.id) !== signature) {
 					toUpsert.push(torrent);
 				}
 			}
+			signatureCacheRef.current = nextSignatures;
 
 			for (const id of previousSnapshot.keys()) {
 				if (!nextSnapshot.has(id)) {
@@ -399,6 +418,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 					tokenPresent: Boolean(token),
 				});
 
+				syncInFlightRef.current += 1;
 				setSyncStatus({
 					isLoading: false,
 					isSyncing: true,
@@ -476,30 +496,28 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 					toast.error(`Failed to refresh ${target}: ${error.message}`);
 				} finally {
 					console.log(`[LibraryCache] Refresh completed for ${target}`);
-					setSyncStatus((prev) => ({
-						...prev,
-						isSyncing: false,
-						service: null,
-					}));
+					syncInFlightRef.current = Math.max(0, syncInFlightRef.current - 1);
+					// services run concurrently - only the last one out clears the flag
+					if (syncInFlightRef.current === 0) {
+						setSyncStatus((prev) => ({
+							...prev,
+							isSyncing: false,
+							service: null,
+						}));
+					}
 				}
 			};
 
 			if (!service) {
 				const services: Service[] = ['realdebrid', 'alldebrid', 'torbox'];
+				const active = services.filter((target) => Boolean(tokens[target]));
 				console.log('[LibraryCache] refreshLibrary multi-service start', {
 					force,
-					services,
+					services: active,
 				});
-				for (const target of services) {
-					const token = tokens[target];
-					console.log('[LibraryCache] refreshLibrary evaluating service', {
-						target,
-						hasToken: Boolean(token),
-					});
-					if (token) {
-						await runSingle(target, token);
-					}
-				}
+				// Fetched together - these are independent APIs, and running them
+				// one after another made a multi-service user wait for the sum
+				await Promise.all(active.map((target) => runSingle(target, tokens[target])));
 				return;
 			}
 
@@ -739,6 +757,27 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		}
 	};
 
+	/**
+	 * Replace the whole library in a single pass. Callers that hand over a new
+	 * array (a .map() over every torrent, say) used to be fanned out into one
+	 * updateTorrent per item, which is O(n^2) plus one IndexedDB write each.
+	 * The combined-library effect below still diffs and persists exactly what
+	 * changed, so nothing is lost by setting the lists directly.
+	 */
+	const replaceLibrary = useCallback((torrents: UserTorrent[]) => {
+		const rd: UserTorrent[] = [];
+		const ad: UserTorrent[] = [];
+		const tb: UserTorrent[] = [];
+		for (const torrent of torrents) {
+			if (torrent.id.startsWith('rd:')) rd.push(torrent);
+			else if (torrent.id.startsWith('ad:')) ad.push(torrent);
+			else if (torrent.id.startsWith('tb:')) tb.push(torrent);
+		}
+		setRdLibrary(rd);
+		setAdLibrary(ad);
+		setTbLibrary(tb);
+	}, []);
+
 	const updateTorrent = (torrentId: string, updates: Partial<UserTorrent>) => {
 		const updateFn = (prev: UserTorrent[]) =>
 			prev.map((t) => (t.id === torrentId ? { ...t, ...updates } : t));
@@ -754,8 +793,10 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			setTbLibrary(updateFn);
 		}
 
-		// Update in database
-		const torrent = [...rdLibrary, ...adLibrary, ...tbLibrary].find((t) => t.id === torrentId);
+		// Update in database. Read from the latest committed library rather than
+		// rebuilding a throwaway array from render-scoped state, which lost the
+		// first of two updates issued in the same tick.
+		const torrent = libraryItemsRef.current.find((t) => t.id === torrentId);
 		if (torrent) {
 			// No explicit update method; re-add to replace existing
 			torrentDB.add({ ...torrent, ...updates });
@@ -776,6 +817,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		removeTorrent,
 		removeTorrents,
 		updateTorrent,
+		replaceLibrary,
 	};
 
 	return (

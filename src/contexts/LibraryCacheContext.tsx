@@ -69,25 +69,16 @@ export function useLibraryCache(): LibraryCacheContextType {
 		[enhanced.stats.lastSync, persistedLastSync]
 	);
 
+	// Hand the whole list over in one pass. This used to diff by id and call
+	// addTorrent/updateTorrent/removeTorrent per item, so a caller that mapped
+	// over the library to change a single torrent triggered one update - and one
+	// IndexedDB write - for every torrent it owned.
 	const setLibraryItems: React.Dispatch<React.SetStateAction<UserTorrent[]>> = (next) => {
-		const current = enhanced.libraryItems;
 		const desired =
 			typeof next === 'function'
-				? (next as (p: UserTorrent[]) => UserTorrent[])(current)
+				? (next as (p: UserTorrent[]) => UserTorrent[])(enhanced.libraryItems)
 				: next;
-
-		const currentMap = new Map(current.map((t) => [t.id, t] as const));
-		const desiredMap = new Map(desired.map((t) => [t.id, t] as const));
-
-		// Remove items not present anymore
-		for (const id of currentMap.keys()) {
-			if (!desiredMap.has(id)) enhanced.removeTorrent(id);
-		}
-		// Add or update items
-		for (const [id, t] of desiredMap.entries()) {
-			if (!currentMap.has(id)) enhanced.addTorrent(t);
-			else enhanced.updateTorrent(id, t);
-		}
+		enhanced.replaceLibrary(desired);
 	};
 
 	const refreshLibrary = async () => {

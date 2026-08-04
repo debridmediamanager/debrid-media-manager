@@ -6,6 +6,7 @@ const mockRefreshAll = vi.fn();
 const mockAddTorrent = vi.fn();
 const mockRemoveTorrent = vi.fn();
 const mockUpdateTorrent = vi.fn();
+const mockReplaceLibrary = vi.fn();
 
 const enhancedMock = {
 	libraryItems: [],
@@ -35,6 +36,7 @@ const enhancedMock = {
 	addTorrent: mockAddTorrent,
 	removeTorrent: mockRemoveTorrent,
 	updateTorrent: mockUpdateTorrent,
+	replaceLibrary: mockReplaceLibrary,
 };
 
 vi.mock('@/contexts/EnhancedLibraryCacheContext', () => ({
@@ -98,5 +100,59 @@ describe('useLibraryCache last fetch persistence', () => {
 		await waitFor(() => {
 			expect(screen.getByText(nextSync.toISOString())).toBeInTheDocument();
 		});
+	});
+});
+
+function SetterHarness({ onReady }: { onReady: (set: SetLibraryItems) => void }) {
+	const { setLibraryItems } = useLibraryCache();
+	onReady(setLibraryItems);
+	return null;
+}
+
+type SetLibraryItems = ReturnType<typeof useLibraryCache>['setLibraryItems'];
+
+describe('useLibraryCache setLibraryItems', () => {
+	const makeLibrary = (n: number) =>
+		Array.from({ length: n }, (_, i) => ({
+			id: `rd:${i}`,
+			mediaType: 'movie',
+		})) as any[];
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		enhancedMock.libraryItems = makeLibrary(500) as never;
+	});
+
+	it('hands the whole list over once instead of fanning out per torrent', () => {
+		let setLibraryItems: SetLibraryItems = () => {};
+		render(<SetterHarness onReady={(fn) => (setLibraryItems = fn)} />);
+
+		// the shape every caller uses: map over the library to change one torrent
+		act(() => {
+			setLibraryItems((prev) =>
+				prev.map((t) => (t.id === 'rd:7' ? { ...t, mediaType: 'tv' } : t))
+			);
+		});
+
+		expect(mockReplaceLibrary).toHaveBeenCalledTimes(1);
+		expect(mockReplaceLibrary.mock.calls[0][0]).toHaveLength(500);
+		expect(mockReplaceLibrary.mock.calls[0][0][7]).toMatchObject({
+			id: 'rd:7',
+			mediaType: 'tv',
+		});
+		// the old shim issued one of these per torrent - 500 IndexedDB writes
+		expect(mockUpdateTorrent).not.toHaveBeenCalled();
+		expect(mockAddTorrent).not.toHaveBeenCalled();
+		expect(mockRemoveTorrent).not.toHaveBeenCalled();
+	});
+
+	it('accepts a plain array too', () => {
+		let setLibraryItems: SetLibraryItems = () => {};
+		render(<SetterHarness onReady={(fn) => (setLibraryItems = fn)} />);
+
+		act(() => setLibraryItems(makeLibrary(3) as never));
+
+		expect(mockReplaceLibrary).toHaveBeenCalledTimes(1);
+		expect(mockReplaceLibrary.mock.calls[0][0]).toHaveLength(3);
 	});
 });
