@@ -34,27 +34,28 @@ const handler: NextApiHandler = async (req, res) => {
 		const results = await Promise.all(promises);
 		// should contain both results
 		const searchResults = [...(results[0] || []), ...(results[1] || [])];
-		if (searchResults) {
-			let processedResults = flattenAndRemoveDuplicates(
-				searchResults.map((r) => {
-					r.title = r.filename;
-					r.fileSize = r.size_bytes;
-					return r;
-				})
-			);
-			processedResults = sortByFileSize(processedResults);
-			res.status(200).json({ results: processedResults });
+
+		if (searchResults.length === 0) {
+			const isProcessing = await db.keyExists(`processing:${animeId.toString().trim()}`);
+			if (isProcessing) {
+				res.setHeader('status', 'processing').status(204).end();
+				return;
+			}
+
+			await db.saveScrapedResults(`requested:${animeId.toString().trim()}`, []);
+			res.setHeader('status', 'requested').status(204).end();
 			return;
 		}
 
-		const isProcessing = await db.keyExists(`processing:${animeId}`);
-		if (isProcessing) {
-			res.setHeader('status', 'processing').status(204).json(null);
-			return;
-		}
-
-		await db.saveScrapedResults(`requested:${animeId.toString().trim()}`, []);
-		res.setHeader('status', 'requested').status(204).json(null);
+		let processedResults = flattenAndRemoveDuplicates(
+			searchResults.map((r) => {
+				r.title = r.filename;
+				r.fileSize = r.size_bytes;
+				return r;
+			})
+		);
+		processedResults = sortByFileSize(processedResults);
+		res.status(200).json({ results: processedResults });
 	} catch (error: any) {
 		console.error(
 			'Encountered a database issue:',

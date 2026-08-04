@@ -48,44 +48,49 @@ const handler: NextApiHandler = async (req, res) => {
 		const results = await Promise.all(promises);
 		// should contain both results
 		const searchResults = [...(results[0] || []), ...(results[1] || [])];
-		if (searchResults) {
-			try {
-				// Get reported hashes to filter out
-				const reportedHashes = await db.getReportedHashes(imdbId.toString().trim());
 
-				// Filter out reported torrents before any processing
-				const filteredResults = searchResults.filter((torrent) => {
-					if (!torrent.hash) return true; // Keep torrents without hash (shouldn't happen, but safe fallback)
-					const isReported = reportedHashes.includes(torrent.hash);
-					return !isReported;
-				});
+		// An empty page only means "never scraped" when nothing narrowed the query.
+		// Later pages run out by design, and maxSize/onlyTrusted can filter a
+		// well-scraped title down to nothing - neither should queue a scrape.
+		const isUnfilteredFirstPage = pageNum === 0 && maxSizeInGB === 0 && onlyTrusted !== 'true';
 
-				// Process the filtered results
-				let processedResults = flattenAndRemoveDuplicates(filteredResults);
-				processedResults = sortByFileSize(processedResults);
-				res.status(200).json({ results: processedResults });
-				return;
-			} catch (error: any) {
-				console.error(
-					'Error filtering reported hashes:',
-					error instanceof Error ? error.message : 'Unknown error'
-				);
-				// If filtering fails, continue with unfiltered results
-				let processedResults = flattenAndRemoveDuplicates(searchResults);
-				processedResults = sortByFileSize(processedResults);
-				res.status(200).json({ results: processedResults });
+		if (searchResults.length === 0 && isUnfilteredFirstPage) {
+			const isProcessing = await db.keyExists(`processing:${imdbId.toString().trim()}`);
+			if (isProcessing) {
+				res.setHeader('status', 'processing').status(204).end();
 				return;
 			}
-		}
 
-		const isProcessing = await db.keyExists(`processing:${imdbId}`);
-		if (isProcessing) {
-			res.setHeader('status', 'processing').status(204).json(null);
+			await db.saveScrapedResults(`requested:${imdbId.toString().trim()}`, []);
+			res.setHeader('status', 'requested').status(204).end();
 			return;
 		}
 
-		await db.saveScrapedResults(`requested:${imdbId.toString().trim()}`, []);
-		res.setHeader('status', 'requested').status(204).json(null);
+		try {
+			// Get reported hashes to filter out
+			const reportedHashes = await db.getReportedHashes(imdbId.toString().trim());
+
+			// Filter out reported torrents before any processing
+			const filteredResults = searchResults.filter((torrent) => {
+				if (!torrent.hash) return true; // Keep torrents without hash (shouldn't happen, but safe fallback)
+				const isReported = reportedHashes.includes(torrent.hash);
+				return !isReported;
+			});
+
+			// Process the filtered results
+			let processedResults = flattenAndRemoveDuplicates(filteredResults);
+			processedResults = sortByFileSize(processedResults);
+			res.status(200).json({ results: processedResults });
+		} catch (error: any) {
+			console.error(
+				'Error filtering reported hashes:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
+			// If filtering fails, continue with unfiltered results
+			let processedResults = flattenAndRemoveDuplicates(searchResults);
+			processedResults = sortByFileSize(processedResults);
+			res.status(200).json({ results: processedResults });
+		}
 	} catch (error: any) {
 		console.error(
 			'Encountered a database issue:',

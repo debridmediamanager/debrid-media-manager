@@ -83,7 +83,33 @@ describe('/api/torrents/anime', () => {
 		});
 	});
 
-	it('marks requested state when repository throws', async () => {
+	it('marks the anime id as requested when nothing has been scraped', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockKeyExists.mockResolvedValue(false);
+		const req = createMockRequest({ query: baseQuery });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveScrapedResults).toHaveBeenCalledWith('requested:anidb:1', []);
+		expect(res.setHeader).toHaveBeenCalledWith('status', 'requested');
+		expect(res.status).toHaveBeenCalledWith(204);
+	});
+
+	it('reports processing instead of re-requesting an in-flight scrape', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockKeyExists.mockResolvedValue(true);
+		const req = createMockRequest({ query: baseQuery });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.setHeader).toHaveBeenCalledWith('status', 'processing');
+		expect(res.status).toHaveBeenCalledWith(204);
+		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+	});
+
+	it('returns 500 when the repository throws', async () => {
 		mockGetScrapedTrueResults.mockRejectedValue(new Error('db'));
 		const req = createMockRequest({ query: baseQuery });
 		const res = createMockResponse();

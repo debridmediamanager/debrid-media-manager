@@ -124,6 +124,69 @@ describe('/api/torrents/movie', () => {
 		expect(mockGetScrapedResults).not.toHaveBeenCalled();
 	});
 
+	it('marks the imdb id as requested when nothing has been scraped', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetScrapedResults.mockResolvedValue([]);
+		mockKeyExists.mockResolvedValue(false);
+		const req = createMockRequest({ query: baseQuery });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveScrapedResults).toHaveBeenCalledWith('requested:tt1234567', []);
+		expect(res.setHeader).toHaveBeenCalledWith('status', 'requested');
+		expect(res.status).toHaveBeenCalledWith(204);
+		expect(mockGetReportedHashes).not.toHaveBeenCalled();
+	});
+
+	it('reports processing instead of re-requesting an in-flight scrape', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetScrapedResults.mockResolvedValue([]);
+		mockKeyExists.mockResolvedValue(true);
+		const req = createMockRequest({ query: baseQuery });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.setHeader).toHaveBeenCalledWith('status', 'processing');
+		expect(res.status).toHaveBeenCalledWith(204);
+		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+	});
+
+	it('does not queue a scrape when a later page simply runs out', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetScrapedResults.mockResolvedValue([]);
+		const req = createMockRequest({ query: { ...baseQuery, page: '2' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ results: [] });
+	});
+
+	it('does not queue a scrape when filters emptied the results', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetScrapedResults.mockResolvedValue([]);
+		const req = createMockRequest({ query: { ...baseQuery, maxSize: '5' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(200);
+
+		mockSaveScrapedResults.mockClear();
+		const trustedReq = createMockRequest({ query: { ...baseQuery, onlyTrusted: 'true' } });
+		const trustedRes = createMockResponse();
+
+		await handler(trustedReq, trustedRes);
+
+		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+		expect(trustedRes.status).toHaveBeenCalledWith(200);
+	});
+
 	it('returns 500 when the repository throws synchronously', async () => {
 		mockGetScrapedTrueResults.mockRejectedValue(new Error('db down'));
 		const req = createMockRequest({ query: baseQuery });

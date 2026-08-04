@@ -7,6 +7,8 @@ const {
 	mockGetScrapedTrueResults,
 	mockGetScrapedResults,
 	mockGetReportedHashes,
+	mockKeyExists,
+	mockSaveScrapedResults,
 	mockFlatten,
 	mockSort,
 } = vi.hoisted(() => ({
@@ -14,6 +16,8 @@ const {
 	mockGetScrapedTrueResults: vi.fn(),
 	mockGetScrapedResults: vi.fn(),
 	mockGetReportedHashes: vi.fn(),
+	mockKeyExists: vi.fn(),
+	mockSaveScrapedResults: vi.fn(),
 	mockFlatten: vi.fn((items: any[]) => items),
 	mockSort: vi.fn((items: any[]) => items),
 }));
@@ -27,6 +31,8 @@ vi.mock('@/services/repository', () => ({
 		getScrapedTrueResults: mockGetScrapedTrueResults,
 		getScrapedResults: mockGetScrapedResults,
 		getReportedHashes: mockGetReportedHashes,
+		keyExists: mockKeyExists,
+		saveScrapedResults: mockSaveScrapedResults,
 	},
 }));
 
@@ -113,6 +119,60 @@ describe('/api/torrents/tv', () => {
 				{ title: 'Reported', hash: 'hash-2' },
 			],
 		});
+	});
+
+	it('marks the imdb id as requested when the season has never been scraped', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetScrapedResults.mockResolvedValue([]);
+		mockKeyExists.mockResolvedValue(false);
+		const req = createMockRequest({ query: baseQuery });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveScrapedResults).toHaveBeenCalledWith('requested:tt7654321', []);
+		expect(res.setHeader).toHaveBeenCalledWith('status', 'requested');
+		expect(res.status).toHaveBeenCalledWith(204);
+		expect(mockGetReportedHashes).not.toHaveBeenCalled();
+	});
+
+	it('reports processing instead of re-requesting an in-flight scrape', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetScrapedResults.mockResolvedValue([]);
+		mockKeyExists.mockResolvedValue(true);
+		const req = createMockRequest({ query: baseQuery });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.setHeader).toHaveBeenCalledWith('status', 'processing');
+		expect(res.status).toHaveBeenCalledWith(204);
+		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+	});
+
+	it('does not queue a scrape when a later page simply runs out', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetScrapedResults.mockResolvedValue([]);
+		const req = createMockRequest({ query: { ...baseQuery, page: '3' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ results: [] });
+	});
+
+	it('does not queue a scrape when filters emptied the results', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetScrapedResults.mockResolvedValue([]);
+		const req = createMockRequest({ query: { ...baseQuery, maxSize: '5' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(200);
 	});
 
 	it('returns 500 for unexpected repository errors', async () => {
