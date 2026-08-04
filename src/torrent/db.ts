@@ -1,19 +1,14 @@
 import { CachedHash, UserTorrent } from '@/torrent/userTorrent';
 import { IDBPDatabase, openDB } from 'idb';
 
-const backupToWeekNum = 2;
-
-function currentISOWeekNumber(): number {
-	const target = new Date();
-	const dayNumber = (target.getUTCDay() + 6) % 7;
-	target.setUTCDate(target.getUTCDate() - dayNumber + 3);
-	const firstThursday = target.getTime(); // Convert to numeric value
-	target.setUTCMonth(0, 1);
-	if (target.getUTCDay() !== 4) {
-		target.setUTCMonth(0, 1 + ((4 - target.getUTCDay() + 7) % 7));
-	}
-	return 1 + Math.ceil((firstThursday - target.getTime()) / (7 * 24 * 3600 * 1000)); // Use getTime for arithmetic
-}
+// Two torrent stores exist for historical reasons: the table used to be picked
+// by `isoWeek % 2`, which meant every week the app silently switched to the other
+// store - one still holding the library from *two* weeks earlier - and nothing
+// ever migrated or emptied it. Reads and writes now always use the first store;
+// the second is still declared so existing databases keep their schema, and
+// clear() empties both so a logout leaves nothing behind.
+const TORRENT_STORE_COUNT = 2;
+const ACTIVE_TORRENT_STORE = 'torrents-0';
 
 type Store = {
 	name: string;
@@ -33,7 +28,7 @@ function createObjectStores(db: IDBPDatabase, stores: Store[]) {
 
 function listTorrentObjectStores(): Store[] {
 	const stores = [];
-	for (let i = 0; i < backupToWeekNum; i++) {
+	for (let i = 0; i < TORRENT_STORE_COUNT; i++) {
 		stores.push({
 			name: `torrents-${i}`,
 			keyPath: 'id',
@@ -56,7 +51,7 @@ function listMiscObjectStores(): Store[] {
 class UserTorrentDB {
 	private db: IDBPDatabase | null = null;
 	private dbName = 'DMMDB';
-	private torrentsTbl = `torrents-${currentISOWeekNumber() % backupToWeekNum}`;
+	private torrentsTbl = ACTIVE_TORRENT_STORE;
 	private rdHashesTbl = 'cached-hashes';
 
 	public async initializeDB() {
@@ -189,8 +184,13 @@ class UserTorrentDB {
 
 	public async clear() {
 		const db = await this.getDB();
-		// Only clear current week's table
-		await db.clear(this.torrentsTbl);
+		// Every torrent store, not just the active one - the retired week-rotated
+		// store would otherwise keep a copy of the library across a logout
+		for (const name of Array.from(db.objectStoreNames)) {
+			if (name.startsWith('torrents-')) {
+				await db.clear(name);
+			}
+		}
 		// Clear cached hashes table
 		if (db.objectStoreNames.contains(this.rdHashesTbl)) {
 			await db.clear(this.rdHashesTbl);
@@ -222,7 +222,7 @@ class UserTorrentDB {
 			let totalCount = 0;
 
 			// Check all torrent tables
-			for (let i = 0; i < backupToWeekNum; i++) {
+			for (let i = 0; i < TORRENT_STORE_COUNT; i++) {
 				const tableName = `torrents-${i}`;
 				if (db.objectStoreNames.contains(tableName)) {
 					totalCount += await db.count(tableName);
@@ -245,15 +245,13 @@ class UserTorrentDB {
 		const db = await this.getDB();
 		const backupTorrents: UserTorrent[] = [];
 
-		// Get data from non-current week tables
-		const currentWeek = currentISOWeekNumber() % backupToWeekNum;
-		console.log('Current ISO week number:', currentISOWeekNumber());
-		console.log('Current week table index:', currentWeek);
-		console.log('Current week table name:', `torrents-${currentWeek}`);
+		// Anything left in the stores we no longer write to - in practice whatever
+		// the old week-rotated table still holds
+		console.log('Active torrent store:', this.torrentsTbl);
 
-		for (let i = 0; i < backupToWeekNum; i++) {
-			if (i !== currentWeek) {
-				const tableName = `torrents-${i}`;
+		for (let i = 0; i < TORRENT_STORE_COUNT; i++) {
+			const tableName = `torrents-${i}`;
+			if (tableName !== this.torrentsTbl) {
 				console.log(`Checking backup table: ${tableName}`);
 				if (db.objectStoreNames.contains(tableName)) {
 					const torrents = await db.getAll(tableName);
@@ -273,7 +271,7 @@ class UserTorrentDB {
 		const allData: { table: string; torrents: UserTorrent[] }[] = [];
 
 		// Get data from all torrent tables
-		for (let i = 0; i < backupToWeekNum; i++) {
+		for (let i = 0; i < TORRENT_STORE_COUNT; i++) {
 			const tableName = `torrents-${i}`;
 			if (db.objectStoreNames.contains(tableName)) {
 				const torrents = await db.getAll(tableName);

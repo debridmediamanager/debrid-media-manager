@@ -21,6 +21,37 @@ import {
 } from 'react';
 import toast from 'react-hot-toast';
 
+const LAST_SYNC_STORAGE_KEY = 'library:lastSync';
+// Matches the staleness threshold the floating indicator already shows in yellow
+const LIBRARY_STALE_AFTER_MS = 30 * 60 * 1000;
+
+const readPersistedLastSync = (): Date | null => {
+	if (typeof window === 'undefined') return null;
+	const stored = window.localStorage.getItem(LAST_SYNC_STORAGE_KEY);
+	if (!stored) return null;
+	const parsed = new Date(stored);
+	return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+/**
+ * A cached library that nobody refreshes goes stale silently: torrents added or
+ * removed from another device, the debrid site, or Stremio never showed up,
+ * because any cached rows at all satisfied the "already fetched" check.
+ */
+const isCachedLibraryStale = (): boolean => {
+	const lastSync = readPersistedLastSync();
+	if (!lastSync) return true;
+	return Date.now() - lastSync.getTime() > LIBRARY_STALE_AFTER_MS;
+};
+
+const persistLastSync = (when: Date) => {
+	if (typeof window === 'undefined') return;
+	window.localStorage.setItem(LAST_SYNC_STORAGE_KEY, when.toISOString());
+};
+
+const reportDbWriteFailure = (operation: string) => (error: unknown) =>
+	console.error(`[LibraryCache] IndexedDB ${operation} failed`, error);
+
 const torrentSnapshotReplacer = (_key: string, value: unknown) => {
 	if (value instanceof Date) {
 		return value.toISOString();
@@ -481,6 +512,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 					}
 
 					setStats((prev) => ({ ...prev, lastSync: syncCompletedAt }));
+					persistLastSync(syncCompletedAt);
 
 					toast.success(`${target} library refreshed (${torrents.length}).`);
 				} catch (error: any) {
@@ -541,11 +573,14 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 	const scheduleServiceRefresh = useCallback(
 		async (
 			target: 'realdebrid' | 'alldebrid' | 'torbox',
-			reason: 'tokenChanged' | 'initialEmpty'
+			reason: 'tokenChanged' | 'initialEmpty' | 'stale'
 		) => {
 			console.log('[LibraryCache] scheduling service refresh', { target, reason });
 			try {
-				await refreshLibrary(target, true);
+				// A staleness sweep goes through the fetcher's short-lived cache, so
+				// several tabs or mounts waking at once collapse into one fetch. A new
+				// token, or an explicit user refresh, always bypasses it.
+				await refreshLibrary(target, reason !== 'stale');
 			} catch (error) {
 				console.error('[LibraryCache] Auto refresh failed', { target, error });
 				initialRefreshDoneRef.current[
@@ -587,7 +622,8 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		previousTokenStateRef.current.rd = currentToken;
 
 		const hasFetched = initialRefreshDoneRef.current.rd;
-		const shouldRefresh = tokenChanged || (!hasFetched && rdLibrary.length === 0);
+		const shouldRefresh =
+			tokenChanged || (!hasFetched && rdLibrary.length === 0) || isCachedLibraryStale();
 
 		if (!shouldRefresh) {
 			console.log('[LibraryCache] Auto refresh skipped for RealDebrid', {
@@ -599,10 +635,15 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		}
 
 		initialRefreshDoneRef.current.rd = true;
+		const refreshReason = tokenChanged
+			? ('tokenChanged' as const)
+			: hasFetched
+				? ('stale' as const)
+				: ('initialEmpty' as const);
 		console.log('[LibraryCache] Auto refresh triggered for RealDebrid', {
-			reason: tokenChanged ? 'tokenChanged' : 'initialEmpty',
+			reason: refreshReason,
 		});
-		void scheduleServiceRefresh('realdebrid', tokenChanged ? 'tokenChanged' : 'initialEmpty');
+		void scheduleServiceRefresh('realdebrid', refreshReason);
 	}, [rdKey, rdLoading, rdLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
 
 	useEffect(() => {
@@ -631,7 +672,8 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		previousTokenStateRef.current.ad = currentToken;
 
 		const hasFetched = initialRefreshDoneRef.current.ad;
-		const shouldRefresh = tokenChanged || (!hasFetched && adLibrary.length === 0);
+		const shouldRefresh =
+			tokenChanged || (!hasFetched && adLibrary.length === 0) || isCachedLibraryStale();
 
 		if (!shouldRefresh) {
 			console.log('[LibraryCache] Auto refresh skipped for AllDebrid', {
@@ -643,10 +685,15 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		}
 
 		initialRefreshDoneRef.current.ad = true;
+		const refreshReason = tokenChanged
+			? ('tokenChanged' as const)
+			: hasFetched
+				? ('stale' as const)
+				: ('initialEmpty' as const);
 		console.log('[LibraryCache] Auto refresh triggered for AllDebrid', {
-			reason: tokenChanged ? 'tokenChanged' : 'initialEmpty',
+			reason: refreshReason,
 		});
-		void scheduleServiceRefresh('alldebrid', tokenChanged ? 'tokenChanged' : 'initialEmpty');
+		void scheduleServiceRefresh('alldebrid', refreshReason);
 	}, [adKey, adLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
 
 	useEffect(() => {
@@ -675,7 +722,8 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		previousTokenStateRef.current.tb = currentToken;
 
 		const hasFetched = initialRefreshDoneRef.current.tb;
-		const shouldRefresh = tokenChanged || (!hasFetched && tbLibrary.length === 0);
+		const shouldRefresh =
+			tokenChanged || (!hasFetched && tbLibrary.length === 0) || isCachedLibraryStale();
 
 		if (!shouldRefresh) {
 			console.log('[LibraryCache] Auto refresh skipped for TorBox', {
@@ -687,10 +735,15 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		}
 
 		initialRefreshDoneRef.current.tb = true;
+		const refreshReason = tokenChanged
+			? ('tokenChanged' as const)
+			: hasFetched
+				? ('stale' as const)
+				: ('initialEmpty' as const);
 		console.log('[LibraryCache] Auto refresh triggered for TorBox', {
-			reason: tokenChanged ? 'tokenChanged' : 'initialEmpty',
+			reason: refreshReason,
 		});
-		void scheduleServiceRefresh('torbox', tokenChanged ? 'tokenChanged' : 'initialEmpty');
+		void scheduleServiceRefresh('torbox', refreshReason);
 	}, [tbKey, tbLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
 
 	// Clear cache
@@ -707,7 +760,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 	const addTorrent = (torrent: UserTorrent) => {
 		setLibraryItems((prev) => upsertTorrentById(prev, torrent));
 		// Adapt to current DB API
-		torrentDB.add(torrent);
+		torrentDB.add(torrent).catch(reportDbWriteFailure('add'));
 
 		// Add to service-specific library
 		if (torrent.id.startsWith('rd:')) {
@@ -722,7 +775,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 	const removeTorrent = (torrentId: string) => {
 		setLibraryItems((prev) => prev.filter((t) => t.id !== torrentId));
 		// Adapt to current DB API
-		torrentDB.deleteById(torrentId);
+		torrentDB.deleteById(torrentId).catch(reportDbWriteFailure('deleteById'));
 
 		// Remove from service-specific library
 		if (torrentId.startsWith('rd:')) {
@@ -738,7 +791,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		if (torrentIds.length === 0) return;
 		const idSet = new Set(torrentIds);
 		setLibraryItems((prev) => prev.filter((t) => !idSet.has(t.id)));
-		torrentDB.deleteMany(torrentIds);
+		torrentDB.deleteMany(torrentIds).catch(reportDbWriteFailure('deleteMany'));
 
 		const rdIds = torrentIds.filter((id) => id.startsWith('rd:'));
 		const adIds = torrentIds.filter((id) => id.startsWith('ad:'));
@@ -799,7 +852,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		const torrent = libraryItemsRef.current.find((t) => t.id === torrentId);
 		if (torrent) {
 			// No explicit update method; re-add to replace existing
-			torrentDB.add({ ...torrent, ...updates });
+			torrentDB.add({ ...torrent, ...updates }).catch(reportDbWriteFailure('update'));
 		}
 	};
 

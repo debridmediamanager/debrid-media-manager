@@ -360,6 +360,23 @@ describe('UserTorrentDB', () => {
 			expect(all.length).toBe(0);
 		});
 
+		it('clears every torrent store, not just the active one', async () => {
+			await db.add(createMockTorrent());
+			// simulate what the retired week-rotated store left behind
+			const raw = await (db as any).getDB();
+			await raw.put('torrents-1', {
+				...createMockTorrent(),
+				id: 'rd:leftover-from-old-rotation',
+			});
+			expect(await db.isEmpty()).toBe(false);
+
+			await db.clear();
+
+			// a logout must not leave a previous library sitting in the other store
+			expect(await db.isEmpty()).toBe(true);
+			expect(await db.getBackupTableData()).toEqual([]);
+		});
+
 		it('should check if database is empty', async () => {
 			let empty = await db.isEmpty();
 			expect(empty).toBe(true);

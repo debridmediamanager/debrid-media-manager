@@ -120,7 +120,6 @@ export class UnifiedLibraryFetcher {
 
 		if (!firstPageResult.data.length) {
 			console.log(`[Fetcher] No RealDebrid torrents found`);
-			await this.cache.set(cacheKey, [], undefined, 5 * 60 * 1000);
 			return [];
 		}
 
@@ -235,7 +234,6 @@ export class UnifiedLibraryFetcher {
 
 		if (!result.data?.magnets) {
 			console.log('[Fetcher] AllDebrid API returned no magnets');
-			await this.cache.set(cacheKey, [], undefined, 5 * 60 * 1000);
 			console.log('[Fetcher] Cached empty AllDebrid result for 5 minutes');
 			console.log(
 				`[Fetcher] AllDebrid fetch completed in ${Date.now() - adStart}ms - 0 items`

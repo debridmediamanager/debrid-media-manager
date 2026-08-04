@@ -130,6 +130,7 @@ describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 		mockedUseRealDebridAccessToken.mockReturnValue([null, false, false]);
 		mockedUseAllDebridApiKey.mockReturnValue(null);
 		mockedUseTorBoxAccessToken.mockReturnValue(null);
+		window.localStorage.clear();
 	});
 
 	afterEach(() => {});
@@ -383,6 +384,43 @@ describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 		expect(callsFor('torbox')).toBe(tbCallsAfterLogin);
 
 		hook.unmount();
+	});
+
+	it('refetches a cached library once it has gone stale', async () => {
+		// cached rows used to satisfy the "already fetched" check forever, so a
+		// library changed on another device never appeared without a manual refresh
+		window.localStorage.setItem(
+			'library:lastSync',
+			new Date(Date.now() - 90 * 60 * 1000).toISOString()
+		);
+		torrentDbMocks.all.mockResolvedValueOnce([buildTorrent('rd:cached')]);
+		mockedUseRealDebridAccessToken.mockReturnValue(['rd-token', false, false]);
+		fetchLibraryMock.mockResolvedValue([buildTorrent('rd:fresh')] as UserTorrent[]);
+
+		const { result, unmount } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+
+		await waitFor(() => expect(fetchLibraryMock).toHaveBeenCalled());
+		await waitFor(() => expect(result.current.rdLibrary[0]?.id).toBe('rd:fresh'));
+		// a staleness sweep goes through the fetcher cache rather than forcing
+		expect(fetchLibraryMock.mock.calls[0][2]).toMatchObject({ forceRefresh: false });
+
+		unmount();
+	});
+
+	it('leaves a freshly synced library alone', async () => {
+		window.localStorage.setItem('library:lastSync', new Date().toISOString());
+		torrentDbMocks.all.mockResolvedValueOnce([buildTorrent('rd:cached')]);
+		mockedUseRealDebridAccessToken.mockReturnValue(['rd-token', false, false]);
+		fetchLibraryMock.mockResolvedValue([buildTorrent('rd:fresh')] as UserTorrent[]);
+
+		const { result, unmount } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+
+		await waitFor(() => expect(result.current.syncStatus.isLoading).toBe(false));
+		await new Promise((resolve) => setTimeout(resolve, 50));
+		expect(fetchLibraryMock).not.toHaveBeenCalled();
+		expect(result.current.rdLibrary[0]?.id).toBe('rd:cached');
+
+		unmount();
 	});
 
 	it('upserts manually added torrents instead of duplicating service entries', async () => {
