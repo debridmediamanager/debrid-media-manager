@@ -25,6 +25,9 @@ export type SearchResult = {
 	biggestFileSize: number;
 	videoCount: number;
 	imdbId?: string;
+	// a completed TB → RD transfer already exists for this hash (its content is
+	// in RD under a different, rewritten hash), so the "TB → RD" button is redundant
+	tbTransferred?: boolean;
 	// tracker stats (optional)
 	trackerStats?: {
 		seeders: number;

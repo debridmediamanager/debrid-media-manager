@@ -24,20 +24,62 @@ async function parseJsonResponse(response: Response): Promise<any> {
 	return data;
 }
 
+// A transfer for this content already exists (any user), so no job was created.
+export interface DebridUploaderDuplicate {
+	duplicate: 'completed' | 'in_progress';
+	rewrittenHash: string | null;
+	jobId: string;
+}
+
+export function isDuplicateResponse(
+	r: DebridUploaderJob | DebridUploaderDuplicate
+): r is DebridUploaderDuplicate {
+	return 'duplicate' in r;
+}
+
 // Submits a TorBox-cached hash to the debrid uploader service, which rebuilds it
 // as a webseed torrent (de-infringed filenames) and adds it to the user's RD account.
+// Returns a duplicate marker instead when a transfer for this content already exists.
 export async function createDebridUploaderJob(
 	hash: string,
 	imdbId: string,
 	rdKey: string,
 	tbKey: string
-): Promise<DebridUploaderJob> {
+): Promise<DebridUploaderJob | DebridUploaderDuplicate> {
 	const response = await fetch('/api/debrid-uploader/jobs', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ hash, imdbId, rdKey, tbKey }),
 	});
 	return parseJsonResponse(response);
+}
+
+// Marks any search-result rows whose original hash already has a completed
+// transfer with `tbTransferred: true`, so the redundant "TB → RD" button hides.
+export async function markTransferredHashes(
+	hashes: string[],
+	setSearchResults: (updater: (prev: any[]) => any[]) => void
+): Promise<void> {
+	if (hashes.length === 0) return;
+	try {
+		const response = await fetch('/api/debrid-uploader/registered', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ hashes }),
+		});
+		if (!response.ok) return;
+		const data = await response.json();
+		const transferred: Array<{ originalHash: string }> = data?.transferred ?? [];
+		if (transferred.length === 0) return;
+		const transferredSet = new Set(transferred.map((t) => t.originalHash.toLowerCase()));
+		setSearchResults((prev) =>
+			prev.map((r) =>
+				transferredSet.has(r.hash.toLowerCase()) ? { ...r, tbTransferred: true } : r
+			)
+		);
+	} catch {
+		// best-effort — a missed suppression only shows a button that no-ops server-side
+	}
 }
 
 // Movie-vs-show context for a transfer, derived from the page it started on.

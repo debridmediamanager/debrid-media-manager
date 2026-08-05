@@ -17,6 +17,7 @@ import axiosWithRetry from '@/utils/axiosWithRetry';
 import { getLocalStorageBoolean, getLocalStorageItemOrDefault } from '@/utils/browserStorage';
 import { handleCastTvShow } from '@/utils/castApiClient';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
+import { markTransferredHashes } from '@/utils/debridUploader';
 import { delay } from '@/utils/delay';
 import {
 	getColorScale,
@@ -472,6 +473,12 @@ const TvSearch: FunctionComponent = () => {
 						pendingAvailabilityChecks--;
 						checkAndShowFinalToast();
 					});
+				}
+
+				// Suppress the redundant "TB → RD" button on rows already transferred
+				// to RD by any user (content lives in RD under a rewritten hash).
+				if (rdKey && torboxKey) {
+					markTransferredHashes(hashesToCheck, setSearchResults);
 				}
 			}
 

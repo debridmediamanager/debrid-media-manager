@@ -4,6 +4,7 @@ import {
 	AnimeService,
 	AvailabilityService,
 	CastService,
+	DebridUploaderMapService,
 	DmmApiKeysService,
 	HashImdbService,
 	HashSearchService,
@@ -42,6 +43,7 @@ export type RepositoryDependencies = Partial<{
 	historyAggregationService: HistoryAggregationService;
 	rdOperationalService: RdOperationalService;
 	imdbSearchService: ImdbSearchService;
+	debridUploaderMapService: DebridUploaderMapService;
 }>;
 
 export class Repository {
@@ -62,6 +64,7 @@ export class Repository {
 	private historyAggregationService: HistoryAggregationService;
 	private rdOperationalService: RdOperationalService;
 	private imdbSearchService: ImdbSearchService;
+	private debridUploaderMapService: DebridUploaderMapService;
 
 	constructor({
 		availabilityService,
@@ -81,6 +84,7 @@ export class Repository {
 		historyAggregationService,
 		rdOperationalService,
 		imdbSearchService,
+		debridUploaderMapService,
 	}: RepositoryDependencies = {}) {
 		this.availabilityService = availabilityService ?? new AvailabilityService();
 		this.scrapedService = scrapedService ?? new ScrapedService();
@@ -100,6 +104,7 @@ export class Repository {
 			historyAggregationService ?? new HistoryAggregationService();
 		this.rdOperationalService = rdOperationalService ?? new RdOperationalService();
 		this.imdbSearchService = imdbSearchService ?? new ImdbSearchService();
+		this.debridUploaderMapService = debridUploaderMapService ?? new DebridUploaderMapService();
 	}
 
 	// Ensure connection is properly closed when repository is no longer needed
@@ -122,7 +127,39 @@ export class Repository {
 			this.historyAggregationService.disconnect(),
 			this.rdOperationalService.disconnect(),
 			this.imdbSearchService.disconnect(),
+			this.debridUploaderMapService.disconnect(),
 		]);
+	}
+
+	// Debrid Uploader (TB → RD transfer) mapping methods
+	public getDebridTransfer(originalHash: string) {
+		return this.debridUploaderMapService.getTransfer(originalHash);
+	}
+
+	public getDebridTransfers(originalHashes: string[]) {
+		return this.debridUploaderMapService.getTransfers(originalHashes);
+	}
+
+	public recordDebridTransferPending(originalHash: string, jobId: string, imdbId: string) {
+		return this.debridUploaderMapService.recordPending(originalHash, jobId, imdbId);
+	}
+
+	public recordDebridTransferCompleted(
+		originalHash: string,
+		jobId: string,
+		imdbId: string,
+		rewrittenHash: string
+	) {
+		return this.debridUploaderMapService.recordCompleted(
+			originalHash,
+			jobId,
+			imdbId,
+			rewrittenHash
+		);
+	}
+
+	public removeDebridTransfer(originalHash: string) {
+		return this.debridUploaderMapService.removeTransfer(originalHash);
 	}
 
 	// Availability Service Methods

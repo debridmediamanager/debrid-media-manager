@@ -17,6 +17,7 @@ import axiosWithRetry from '@/utils/axiosWithRetry';
 import { getLocalStorageBoolean, getLocalStorageItemOrDefault } from '@/utils/browserStorage';
 import { handleCastMovie } from '@/utils/castApiClient';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
+import { markTransferredHashes } from '@/utils/debridUploader';
 import {
 	checkDatabaseAvailabilityAd,
 	checkDatabaseAvailabilityRd,
@@ -497,6 +498,12 @@ const MovieSearch: FunctionComponent = () => {
 						pendingAvailabilityChecks--;
 						checkAndShowFinalToast();
 					});
+				}
+
+				// Suppress the redundant "TB → RD" button on rows already transferred
+				// to RD by any user (content lives in RD under a rewritten hash).
+				if (rdKey && torboxKey) {
+					markTransferredHashes(hashesToCheck, setSearchResults);
 				}
 			}
 

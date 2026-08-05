@@ -1,5 +1,6 @@
 import {
 	buildTransferRegistration,
+	originalHashFromInput,
 	parseTransferContext,
 	TransferJobFile,
 } from '@/services/debridUploaderRegistration';
@@ -15,12 +16,23 @@ const DEBRID_UPLOADER_URL = process.env.DEBRID_UPLOADER_URL || 'http://138.201.2
 // loop, the Transfers page, or a dedupe re-check — and is idempotent: an
 // already-available hash is skipped.
 async function registerCompletedJob(job: any, mediaType: unknown, seasonNum: unknown) {
+	const rewrittenHash = typeof job?.info_hash === 'string' ? job.info_hash.toLowerCase() : '';
+	if (!/^[a-f0-9]{40}$/.test(rewrittenHash)) return false;
+
+	// Always link the original hash to this completed transfer so any user's send
+	// flow can dedup against it, even if the scraped/availability registration is
+	// skipped (already registered, or no page context to file it under).
+	const originalHash = originalHashFromInput(job.input);
+	if (originalHash && job.imdb_id) {
+		await db
+			.recordDebridTransferCompleted(originalHash, job.id, job.imdb_id, rewrittenHash)
+			.catch((e) => console.error('Recording completed transfer failed (non-fatal):', e));
+	}
+
 	const context = parseTransferContext(mediaType, seasonNum);
 	if (!context) return false;
-	const hash = typeof job?.info_hash === 'string' ? job.info_hash.toLowerCase() : '';
-	if (!/^[a-f0-9]{40}$/.test(hash)) return false;
 
-	const already = await db.checkAvailabilityByHashes([hash]);
+	const already = await db.checkAvailabilityByHashes([rewrittenHash]);
 	if (already.length > 0) return false;
 
 	const filesResponse = await fetch(`${DEBRID_UPLOADER_URL}/jobs/${job.id}/files`, {
@@ -32,7 +44,7 @@ async function registerCompletedJob(job: any, mediaType: unknown, seasonNum: unk
 	if (!Array.isArray(files)) return false;
 
 	const registration = buildTransferRegistration({
-		infoHash: hash,
+		infoHash: rewrittenHash,
 		imdbId: job.imdb_id,
 		name: job.name,
 		files,

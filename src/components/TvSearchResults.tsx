@@ -464,6 +464,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											sendTbToRd &&
 											r.tbAvailable &&
 											!r.rdAvailable &&
+											!r.tbTransferred &&
 											notInLibrary('rd', r.hash) && (
 												<button
 													className={`haptic-sm inline rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isSendingTbToRd ? 'cursor-not-allowed opacity-50' : ''}`}
@@ -482,6 +483,22 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 														</>
 													)}
 												</button>
+											)}
+
+										{/* Already transferred to RD under a rewritten hash - use the Instant RD row */}
+										{rdKey &&
+											torboxKey &&
+											r.tbTransferred &&
+											!r.rdAvailable && (
+												<span
+													className="inline rounded border-2 border-indigo-500/50 bg-indigo-900/20 px-1 text-xs text-indigo-300"
+													title="Already in Real-Debrid via a transfer — use its Instant RD result for this title."
+												>
+													<span className="inline-flex items-center">
+														<Send className="mr-1 h-3 w-3 text-indigo-400" />
+														In RD
+													</span>
+												</span>
 											)}
 
 										{/* Cast (RD) button - only show if cached on RD */}

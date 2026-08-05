@@ -13,6 +13,7 @@ import {
 	createDebridUploaderJob,
 	getDebridUploaderJob,
 	getTrackedDebridUploaderJobs,
+	isDuplicateResponse,
 	trackDebridUploaderJob,
 	transferContextFromPath,
 } from '@/utils/debridUploader';
@@ -379,6 +380,22 @@ export function useTorrentManagement(
 			try {
 				const job = await createDebridUploaderJob(hash, imdbId, rdKey, torboxKey);
 
+				// Cross-user dedup: another user already transferred this content, so
+				// no job was created. Mark the row so the button hides, and point at
+				// the RD-cached result they should redeem instead.
+				if (isDuplicateResponse(job)) {
+					setSearchResults((prev) =>
+						prev.map((r) => (r.hash === hash ? { ...r, tbTransferred: true } : r))
+					);
+					toast(
+						job.duplicate === 'completed'
+							? 'TB → RD: already in RD — use the Instant RD result for this title.'
+							: 'TB → RD: a transfer for this is already in progress.',
+						{ id: toastId }
+					);
+					return;
+				}
+
 				trackDebridUploaderJob({
 					id: job.id,
 					hash,
@@ -444,7 +461,7 @@ export function useTorrentManagement(
 				);
 			}
 		},
-		[rdKey, torboxKey, imdbId, searchResults]
+		[rdKey, torboxKey, imdbId, searchResults, setSearchResults]
 	);
 
 	const deleteRd = useCallback(

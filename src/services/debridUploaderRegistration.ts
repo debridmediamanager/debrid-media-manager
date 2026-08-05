@@ -38,6 +38,13 @@ export interface TransferRegistration {
 	};
 }
 
+/** The original torrent hash a job was submitted with, from its magnet input. */
+export function originalHashFromInput(input: unknown): string | null {
+	if (typeof input !== 'string') return null;
+	const match = input.match(/[a-fA-F0-9]{40}/);
+	return match ? match[0].toLowerCase() : null;
+}
+
 export function parseTransferContext(
 	mediaType: unknown,
 	seasonNum: unknown

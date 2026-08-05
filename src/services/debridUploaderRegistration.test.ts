@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
 	buildTransferRegistration,
+	originalHashFromInput,
 	parseTransferContext,
 	TransferJobFile,
 } from './debridUploaderRegistration';
@@ -23,6 +24,19 @@ const build = (over?: Partial<Parameters<typeof buildTransferRegistration>[0]>) 
 		context: { mediaType: 'movie' },
 		...over,
 	});
+
+describe('originalHashFromInput', () => {
+	it('extracts and lowercases the info hash from a magnet', () => {
+		expect(originalHashFromInput(`magnet:?xt=urn:btih:${HASH.toUpperCase()}&dn=x`)).toBe(HASH);
+	});
+	it('extracts a bare hash', () => {
+		expect(originalHashFromInput(HASH)).toBe(HASH);
+	});
+	it('returns null for non-strings or no hash', () => {
+		expect(originalHashFromInput(undefined)).toBeNull();
+		expect(originalHashFromInput('no hash here')).toBeNull();
+	});
+});
 
 describe('parseTransferContext', () => {
 	it('accepts movie and tv with a season', () => {
