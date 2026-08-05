@@ -1,14 +1,57 @@
+import {
+	buildTransferRegistration,
+	parseTransferContext,
+	TransferJobFile,
+} from '@/services/debridUploaderRegistration';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { repository as db } from '@/services/repository';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const DEBRID_UPLOADER_URL = process.env.DEBRID_UPLOADER_URL || 'http://138.201.246.20:3100';
+
+// When a poll observes a completed job, register the rewritten torrent in DMM's
+// DB (search row + RD availability) so it surfaces as an RD-cached result for
+// everyone. Runs server-side off whichever client happens to poll — the send
+// loop, the Transfers page, or a dedupe re-check — and is idempotent: an
+// already-available hash is skipped.
+async function registerCompletedJob(job: any, mediaType: unknown, seasonNum: unknown) {
+	const context = parseTransferContext(mediaType, seasonNum);
+	if (!context) return false;
+	const hash = typeof job?.info_hash === 'string' ? job.info_hash.toLowerCase() : '';
+	if (!/^[a-f0-9]{40}$/.test(hash)) return false;
+
+	const already = await db.checkAvailabilityByHashes([hash]);
+	if (already.length > 0) return false;
+
+	const filesResponse = await fetch(`${DEBRID_UPLOADER_URL}/jobs/${job.id}/files`, {
+		headers: { Accept: 'application/json' },
+		signal: AbortSignal.timeout(15000),
+	});
+	if (!filesResponse.ok) return false;
+	const files = (await filesResponse.json()) as TransferJobFile[];
+	if (!Array.isArray(files)) return false;
+
+	const registration = buildTransferRegistration({
+		infoHash: hash,
+		imdbId: job.imdb_id,
+		name: job.name,
+		files,
+		context,
+		endedAt: job.completed_at,
+	});
+	if (!registration) return false;
+
+	await db.saveScrapedTrueResults(registration.scrapedKey, [registration.scrapeEntry], true);
+	await db.upsertAvailability(registration.availability);
+	return true;
+}
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET' && req.method !== 'DELETE') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { id } = req.query;
+	const { id, mediaType, seasonNum } = req.query;
 	if (typeof id !== 'string' || !/^[A-Za-z0-9-]{1,64}$/.test(id)) {
 		return res.status(400).json({ error: 'Invalid job id' });
 	}
@@ -20,9 +63,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			signal: AbortSignal.timeout(15000),
 		});
 		const data = await response.json();
+
+		if (req.method === 'GET' && response.ok && data?.status === 'completed') {
+			try {
+				data.dmm_registered = await registerCompletedJob(data, mediaType, seasonNum);
+			} catch (error) {
+				console.error('Debrid uploader registration failed:', error);
+			}
+		}
+
 		return res.status(response.status).json(data);
 	} catch (error) {
-		console.error('Debrid uploader job poll failed:', error);
+		console.error('Debrid uploader job request failed:', error);
 		return res.status(502).json({ error: 'Debrid uploader service unreachable' });
 	}
 }

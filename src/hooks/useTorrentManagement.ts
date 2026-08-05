@@ -14,6 +14,7 @@ import {
 	getDebridUploaderJob,
 	getTrackedDebridUploaderJobs,
 	trackDebridUploaderJob,
+	transferContextFromPath,
 } from '@/utils/debridUploader';
 import {
 	handleDeleteAdTorrent,
@@ -350,6 +351,8 @@ export function useTorrentManagement(
 				return;
 			}
 
+			const transferContext = transferContextFromPath(window.location.pathname);
+
 			// One job per hash: resubmitting burns a TorBox slot and a full
 			// pipeline run for content a previous job already delivered (or is
 			// still delivering). Only a failed or vanished job may be retried.
@@ -357,7 +360,8 @@ export function useTorrentManagement(
 			if (previous) {
 				let previousStatus: string | undefined;
 				try {
-					previousStatus = (await getDebridUploaderJob(previous.id)).status;
+					previousStatus = (await getDebridUploaderJob(previous.id, transferContext))
+						.status;
 				} catch {
 					// job unknown to the service (e.g. wiped server-side) — allow a resubmit
 				}
@@ -394,7 +398,7 @@ export function useTorrentManagement(
 
 					let polled;
 					try {
-						polled = await getDebridUploaderJob(job.id);
+						polled = await getDebridUploaderJob(job.id, transferContext);
 					} catch {
 						continue; // transient poll failure; the job keeps running server-side
 					}

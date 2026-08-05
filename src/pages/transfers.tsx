@@ -5,6 +5,7 @@ import {
 	getTrackedDebridUploaderJobs,
 	isTerminalDebridUploaderStatus,
 	TrackedDebridUploaderJob,
+	transferContextFromPath,
 	untrackDebridUploaderJob,
 } from '@/utils/debridUploader';
 import { CheckCircle2, Home, Loader2, RefreshCw, Send, Trash2, XCircle } from 'lucide-react';
@@ -51,7 +52,15 @@ export default function TransfersPage() {
 		const results = await Promise.all(
 			toPoll.map(async (j): Promise<[string, JobState]> => {
 				try {
-					return [j.id, { job: await getDebridUploaderJob(j.id) }];
+					return [
+						j.id,
+						{
+							job: await getDebridUploaderJob(
+								j.id,
+								transferContextFromPath(j.returnPath)
+							),
+						},
+					];
 				} catch (error) {
 					return [
 						j.id,

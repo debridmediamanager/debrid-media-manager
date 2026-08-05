@@ -40,8 +40,33 @@ export async function createDebridUploaderJob(
 	return parseJsonResponse(response);
 }
 
-export async function getDebridUploaderJob(jobId: string): Promise<DebridUploaderJob> {
-	const response = await fetch(`/api/debrid-uploader/jobs/${encodeURIComponent(jobId)}`);
+// Movie-vs-show context for a transfer, derived from the page it started on.
+// Sent along with status polls so the server knows where to file the completed
+// torrent (movie:<imdb> vs tv:<imdb>:<season>) when it registers it in DMM.
+export interface TransferContext {
+	mediaType: 'movie' | 'tv';
+	seasonNum?: number;
+}
+
+export function transferContextFromPath(path: string | undefined): TransferContext | undefined {
+	if (!path) return undefined;
+	const show = path.match(/^\/show\/tt\d+\/(\d+)/);
+	if (show) return { mediaType: 'tv', seasonNum: parseInt(show[1], 10) };
+	if (/^\/movie\/tt\d+/.test(path)) return { mediaType: 'movie' };
+	return undefined;
+}
+
+export async function getDebridUploaderJob(
+	jobId: string,
+	context?: TransferContext
+): Promise<DebridUploaderJob> {
+	const params = new URLSearchParams();
+	if (context) {
+		params.set('mediaType', context.mediaType);
+		if (context.seasonNum !== undefined) params.set('seasonNum', `${context.seasonNum}`);
+	}
+	const query = params.size > 0 ? `?${params.toString()}` : '';
+	const response = await fetch(`/api/debrid-uploader/jobs/${encodeURIComponent(jobId)}${query}`);
 	return parseJsonResponse(response);
 }
 
