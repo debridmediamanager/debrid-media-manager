@@ -19,7 +19,6 @@ const defaultProps = {
 	sameHashSize: 0,
 	sameTitleSize: 0,
 	selectedTorrentsSize: 0,
-	uncachedCount: 0,
 	inProgressCount: 0,
 	slowCount: 0,
 	failedCount: 0,
@@ -137,11 +136,6 @@ describe('LibraryMenuButtons', () => {
 		expect(findLinkByText('Selected')).toBeNull();
 	});
 
-	it('shows Uncached link when uncachedCount > 0', () => {
-		render(<LibraryMenuButtons {...defaultProps} uncachedCount={2} />);
-		expect(screen.getByText('Uncached')).toBeInTheDocument();
-	});
-
 	it('shows In progress link when inProgressCount > 0', () => {
 		render(<LibraryMenuButtons {...defaultProps} inProgressCount={1} />);
 		expect(findLinkByText('progress')).not.toBeNull();
@@ -162,7 +156,6 @@ describe('LibraryMenuButtons', () => {
 		expect(findLinkByText('hash')).toBeNull();
 		expect(findLinkByText('title')).toBeNull();
 		expect(findLinkByText('Selected')).toBeNull();
-		expect(findLinkByText('Uncached')).toBeNull();
 		expect(findLinkByText('progress')).toBeNull();
 		expect(findLinkByText('seeds')).toBeNull();
 		expect(findLinkByText('Failed')).toBeNull();

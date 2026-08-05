@@ -130,7 +130,6 @@ describe('LibraryMenuButtons', () => {
 				sameHashSize={2}
 				sameTitleSize={3}
 				selectedTorrentsSize={4}
-				uncachedCount={1}
 				inProgressCount={1}
 				slowCount={1}
 				failedCount={1}
@@ -155,7 +154,6 @@ describe('LibraryMenuButtons', () => {
 		expect(screen.getByRole('link', { name: /Same hash/i })).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: /Same title/i })).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: /Selected \(4\)/i })).toBeInTheDocument();
-		expect(screen.getByRole('link', { name: /Uncached/i })).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: /In progress/i })).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: /No seeds/i })).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: /Failed/i })).toBeInTheDocument();
@@ -174,7 +172,6 @@ describe('LibraryMenuButtons', () => {
 				sameHashSize={0}
 				sameTitleSize={0}
 				selectedTorrentsSize={0}
-				uncachedCount={0}
 				inProgressCount={0}
 				slowCount={0}
 				failedCount={0}
@@ -194,7 +191,7 @@ describe('LibraryMenuButtons', () => {
 		expect(screen.queryByText(/Same hash/)).toBeNull();
 		expect(screen.queryByText(/Same title/)).toBeNull();
 		expect(screen.queryByText(/Selected/)).toBeNull();
-		['Uncached', 'In progress', 'No seeds', 'Failed'].forEach((label) => {
+		['In progress', 'No seeds', 'Failed'].forEach((label) => {
 			expect(screen.queryByText(label)).toBeNull();
 		});
 	});

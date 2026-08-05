@@ -20,7 +20,6 @@ interface LibraryMenuButtonsProps {
 	sameHashSize: number;
 	sameTitleSize: number;
 	selectedTorrentsSize: number;
-	uncachedCount: number;
 	inProgressCount: number;
 	slowCount: number;
 	failedCount: number;
@@ -44,7 +43,6 @@ export default function LibraryMenuButtons({
 	sameHashSize,
 	sameTitleSize,
 	selectedTorrentsSize,
-	uncachedCount,
 	inProgressCount,
 	slowCount,
 	failedCount,
@@ -187,18 +185,6 @@ export default function LibraryMenuButtons({
 					Selected ({selectedTorrentsSize})
 				</LibraryLinkButton>
 			)}
-			{uncachedCount > 0 && (
-				<LibraryLinkButton
-					href={buildHref({ status: 'uncached' })}
-					deactivateHref={buildHref({ status: undefined })}
-					variant="slate"
-					active={activeStatus === 'uncached'}
-				>
-					<Eye className="mr-1 inline-block h-4 w-4 text-slate-400" />
-					Uncached
-				</LibraryLinkButton>
-			)}
-
 			{inProgressCount > 0 && (
 				<LibraryLinkButton
 					href={buildHref({ status: 'inprogress' })}

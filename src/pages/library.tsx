@@ -36,7 +36,7 @@ import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librar
 import { handleChangeType } from '@/utils/libraryTypeManagement';
 import { normalize } from '@/utils/mediaId';
 import { quickSearchLibrary } from '@/utils/quickSearch';
-import { isFailed, isInProgress, isSlowOrNoLinks, isUncached } from '@/utils/slow';
+import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions } from '@/utils/toastOptions';
 import { getHashOfTorrent } from '@/utils/torrentFile';
 import { handleShowInfoForAD, handleShowInfoForRD, handleShowInfoForTB } from '@/utils/torrentInfo';
@@ -494,18 +494,15 @@ function TorrentsPage() {
 		inProgressCount: memoInProgressCount,
 		failedCount: memoFailedCount,
 		rdBlockedCount: memoRdBlockedCount,
-		uncachedCount: memoUncachedCount,
 	} = useMemo(() => {
 		let slow = 0,
 			inProgress = 0,
 			failed = 0,
-			rdBlocked = 0,
-			uncached = 0;
+			rdBlocked = 0;
 		for (const torrent of userTorrentsList) {
 			if (isSlowOrNoLinks(torrent)) slow++;
 			if (isInProgress(torrent)) inProgress++;
 			if (isFailed(torrent)) failed++;
-			if (isUncached(torrent)) uncached++;
 			if (torrent.id.startsWith('rd:') && isRdBlockedFilename(torrent.filename)) rdBlocked++;
 		}
 		return {
@@ -513,7 +510,6 @@ function TorrentsPage() {
 			inProgressCount: inProgress,
 			failedCount: failed,
 			rdBlockedCount: rdBlocked,
-			uncachedCount: uncached,
 		};
 	}, [userTorrentsList]);
 
@@ -1800,7 +1796,6 @@ function TorrentsPage() {
 						sameHashSize={sameHash.size}
 						sameTitleSize={sameTitle.size}
 						selectedTorrentsSize={selectedTorrents.size}
-						uncachedCount={memoUncachedCount}
 						inProgressCount={memoInProgressCount}
 						slowCount={memoSlowCount}
 						failedCount={memoFailedCount}
