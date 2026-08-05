@@ -176,6 +176,7 @@ const TvSearch: FunctionComponent = () => {
 		addRd,
 		addAd,
 		addTb,
+		sendTbToRd,
 		deleteRd,
 		deleteAd,
 		deleteTb,
@@ -1417,6 +1418,7 @@ const TvSearch: FunctionComponent = () => {
 				addRd={addRd}
 				addAd={addAd}
 				addTb={addTb}
+				sendTbToRd={sendTbToRd}
 				deleteRd={deleteRd}
 				deleteAd={deleteAd}
 				deleteTb={deleteTb}

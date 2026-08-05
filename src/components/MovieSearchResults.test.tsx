@@ -108,6 +108,57 @@ describe('MovieSearchResults', () => {
 		expect(downloadSpy).toHaveBeenCalledWith('hash1');
 	});
 
+	describe('TB → RD button', () => {
+		const tbCachedResult: SearchResult = {
+			...baseResult,
+			tbAvailable: true,
+			rdAvailable: false,
+		};
+
+		it('shows when logged into both services and the result is TB-cached but not RD-cached', async () => {
+			const sendTbToRd = vi.fn().mockResolvedValue(undefined);
+			renderComponent({
+				torboxKey: 'tb-key',
+				sendTbToRd,
+				filteredResults: [tbCachedResult],
+			});
+
+			await userEvent.click(screen.getByRole('button', { name: /TB → RD/i }));
+			await waitFor(() => expect(sendTbToRd).toHaveBeenCalledWith('hash1'));
+		});
+
+		it('is hidden without a TorBox login', () => {
+			renderComponent({
+				torboxKey: null,
+				sendTbToRd: vi.fn(),
+				filteredResults: [tbCachedResult],
+			});
+
+			expect(screen.queryByRole('button', { name: /TB → RD/i })).toBeNull();
+		});
+
+		it('is hidden when the result is already RD-cached', () => {
+			renderComponent({
+				torboxKey: 'tb-key',
+				sendTbToRd: vi.fn(),
+				filteredResults: [{ ...tbCachedResult, rdAvailable: true }],
+			});
+
+			expect(screen.queryByRole('button', { name: /TB → RD/i })).toBeNull();
+		});
+
+		it('is hidden when the torrent is already in the RD library', () => {
+			renderComponent({
+				torboxKey: 'tb-key',
+				sendTbToRd: vi.fn(),
+				filteredResults: [tbCachedResult],
+				hashAndProgress: { 'rd:hash1': 100 },
+			});
+
+			expect(screen.queryByRole('button', { name: /TB → RD/i })).toBeNull();
+		});
+	});
+
 	describe('size display', () => {
 		it('shows the debrid file size when the source reported none', () => {
 			// Peerflix-style result: filename as title, no size, then RD reports

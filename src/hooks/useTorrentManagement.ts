@@ -1,5 +1,6 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import { SearchResult } from '@/services/mediasearch';
+import { getTorrentInfo } from '@/services/realDebrid';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
@@ -9,6 +10,11 @@ import {
 	handleAddAsMagnetInTb,
 } from '@/utils/addMagnet';
 import { removeAvailability, submitAvailability, submitAvailabilityAd } from '@/utils/availability';
+import {
+	createDebridUploaderJob,
+	getDebridUploaderJob,
+	trackDebridUploaderJob,
+} from '@/utils/debridUploader';
 import {
 	handleDeleteAdTorrent,
 	handleDeleteRdTorrent,
@@ -326,6 +332,101 @@ export function useTorrentManagement(
 		[torboxKey, fetchHashAndProgress, addToCache, searchResults]
 	);
 
+	// Sends a TorBox-cached torrent into the user's RD account via the debrid
+	// uploader service on debrid02, which rewrites the torrent with de-infringed
+	// filenames so RD accepts it. The RD torrent therefore has a different info
+	// hash than the search result, so the availability DB is left untouched and
+	// only the local row is marked RD-available.
+	const sendTbToRd = useCallback(
+		async (hash: string) => {
+			if (!rdKey || !torboxKey) return;
+			if (!/^tt\d+$/.test(imdbId)) {
+				toast.error('TB → RD needs an IMDB id for this title.');
+				return;
+			}
+
+			const toastId = toast.loading('TB → RD: submitting transfer...');
+			try {
+				const job = await createDebridUploaderJob(hash, imdbId, rdKey, torboxKey);
+
+				trackDebridUploaderJob({
+					id: job.id,
+					hash,
+					imdbId,
+					title: searchResults.find((r) => r.hash === hash)?.title,
+					returnPath: window.location.pathname,
+					createdAt: Date.now(),
+				});
+				toast.loading('TB → RD: transfer started — track it on the Transfers page.', {
+					id: toastId,
+				});
+
+				const POLL_MS = 5000;
+				const MAX_POLLS = 2160; // 3 hours
+				for (let i = 0; i < MAX_POLLS; i++) {
+					await new Promise((resolve) => setTimeout(resolve, POLL_MS));
+
+					let polled;
+					try {
+						polled = await getDebridUploaderJob(job.id);
+					} catch {
+						continue; // transient poll failure; the job keeps running server-side
+					}
+
+					if (polled.status === 'completed') {
+						setSearchResults((prev) =>
+							prev.map((r) => (r.hash === hash ? { ...r, rdAvailable: true } : r))
+						);
+
+						// Best-effort: pull the new RD torrent into the local library.
+						if (polled.rd_torrent_id) {
+							try {
+								const info = await getTorrentInfo(rdKey, polled.rd_torrent_id);
+								const userTorrent = convertToUserTorrent(info);
+								await torrentDB.add(userTorrent);
+								addToCache(userTorrent);
+								setHashAndProgress((prev) => ({
+									...prev,
+									[`${userTorrent.id.substring(0, 3)}${userTorrent.hash}`]:
+										userTorrent.progress,
+								}));
+							} catch (error) {
+								console.warn(
+									'[TorrentManagement] sendTbToRd: transfer done but library sync failed',
+									error
+								);
+							}
+						}
+
+						toast.success('TB → RD: added to your Real-Debrid library!', {
+							id: toastId,
+						});
+						return;
+					}
+
+					if (polled.status === 'failed') {
+						toast.error(`TB → RD failed: ${polled.error || 'unknown error'}`, {
+							id: toastId,
+						});
+						return;
+					}
+
+					toast.loading(`TB → RD: ${polled.status_message || polled.status}`, {
+						id: toastId,
+					});
+				}
+
+				toast.error('TB → RD: timed out waiting for the transfer.', { id: toastId });
+			} catch (error) {
+				toast.error(
+					`TB → RD: ${error instanceof Error ? error.message : 'failed to submit'}`,
+					{ id: toastId }
+				);
+			}
+		},
+		[rdKey, torboxKey, imdbId, setSearchResults, addToCache, searchResults]
+	);
+
 	const deleteRd = useCallback(
 		async (hash: string) => {
 			if (!rdKey) return;
@@ -392,6 +493,7 @@ export function useTorrentManagement(
 		addRd,
 		addAd,
 		addTb,
+		sendTbToRd,
 		deleteRd,
 		deleteAd,
 		deleteTb,

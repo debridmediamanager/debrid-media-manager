@@ -10,6 +10,7 @@ import {
 	Link2,
 	Loader2,
 	Search as SearchIcon,
+	Send,
 	X,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -36,6 +37,7 @@ type MovieSearchResultsProps = {
 	addRd: (hash: string) => Promise<void>;
 	addAd: (hash: string) => Promise<void>;
 	addTb: (hash: string) => Promise<void>;
+	sendTbToRd?: (hash: string) => Promise<void>;
 	deleteRd: (hash: string) => Promise<void>;
 	deleteAd: (hash: string) => Promise<void>;
 	deleteTb: (hash: string) => Promise<void>;
@@ -61,6 +63,7 @@ const MovieSearchResults = ({
 	addRd,
 	addAd,
 	addTb,
+	sendTbToRd,
 	deleteRd,
 	deleteAd,
 	deleteTb,
@@ -68,6 +71,7 @@ const MovieSearchResults = ({
 	isHashServiceChecking,
 }: MovieSearchResultsProps) => {
 	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
+	const [sendingTbToRdHashes, setSendingTbToRdHashes] = useState<Set<string>>(new Set());
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
 	const [castingTbHashes, setCastingTbHashes] = useState<Set<string>>(new Set());
 	const [castingAdHashes, setCastingAdHashes] = useState<Set<string>>(new Set());
@@ -164,6 +168,20 @@ const MovieSearchResults = ({
 			await deleteAd(hash);
 		} finally {
 			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
+	const handleSendTbToRd = async (hash: string) => {
+		if (!sendTbToRd || sendingTbToRdHashes.has(hash)) return;
+		setSendingTbToRdHashes((prev) => new Set(prev).add(hash));
+		try {
+			await sendTbToRd(hash);
+		} finally {
+			setSendingTbToRdHashes((prev) => {
 				const newSet = new Set(prev);
 				newSet.delete(hash);
 				return newSet;
@@ -272,6 +290,7 @@ const MovieSearchResults = ({
 				const adColor = btnColor(r.adAvailable, r.noVideos);
 				const tbColor = btnColor(r.tbAvailable, r.noVideos);
 				const isLoading = loadingHashes.has(r.hash);
+				const isSendingTbToRd = sendingTbToRdHashes.has(r.hash);
 				const isCasting = castingHashes.has(r.hash);
 				const isCastingTb = castingTbHashes.has(r.hash);
 				const isCastingAd = castingAdHashes.has(r.hash);
@@ -449,6 +468,32 @@ const MovieSearchResults = ({
 										{isLoading ? 'Adding...' : btnLabel(r.tbAvailable, 'TB')}
 									</button>
 								)}
+
+								{/* TB → RD btn - TorBox-cached but not yet RD-cached, both logins present */}
+								{rdKey &&
+									torboxKey &&
+									sendTbToRd &&
+									r.tbAvailable &&
+									!r.rdAvailable &&
+									notInLibrary('rd', r.hash) && (
+										<button
+											className={`haptic-sm inline rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isSendingTbToRd ? 'cursor-not-allowed opacity-50' : ''}`}
+											onClick={() => handleSendTbToRd(r.hash)}
+											disabled={isSendingTbToRd}
+										>
+											{isSendingTbToRd ? (
+												<>
+													<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+													Sending...
+												</>
+											) : (
+												<span className="inline-flex items-center">
+													<Send className="mr-1 h-3 w-3 text-indigo-400" />
+													TB → RD
+												</span>
+											)}
+										</button>
+									)}
 
 								{/* Cast (RD) btn - only show if cached on RD */}
 								{rdKey && r.rdAvailable && (
