@@ -1,6 +1,6 @@
 import { RealDebridUser } from '@/hooks/auth';
 import { TorBoxUser } from '@/services/types';
-import { BookOpen, Music2, Rocket, Sparkles } from 'lucide-react';
+import { BookOpen, Music2, Rocket, Send, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
 interface MainActionsProps {
@@ -100,6 +100,17 @@ export function MainActions({ rdUser, tbUser, adUser, isLoading }: MainActionsPr
 						</Link>
 					))}
 				</div>
+			)}
+
+			{/* TB → RD transfer jobs - needs both services connected */}
+			{rdUser && tbUser && (
+				<Link
+					href="/transfers"
+					className="haptic flex w-full items-center justify-center rounded border-2 border-indigo-500 bg-indigo-900/30 p-3 text-center text-sm text-indigo-100 transition-colors hover:bg-indigo-800/50"
+				>
+					<Send className="mr-2 inline-block h-4 w-4 text-indigo-400" />
+					TB → RD Transfers
+				</Link>
 			)}
 
 			{/* Is RD Down - full width */}
