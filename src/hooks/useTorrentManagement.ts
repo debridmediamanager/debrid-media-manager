@@ -1,6 +1,5 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import { SearchResult } from '@/services/mediasearch';
-import { getTorrentInfo } from '@/services/realDebrid';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
@@ -13,6 +12,7 @@ import { removeAvailability, submitAvailability, submitAvailabilityAd } from '@/
 import {
 	createDebridUploaderJob,
 	getDebridUploaderJob,
+	getTrackedDebridUploaderJobs,
 	trackDebridUploaderJob,
 } from '@/utils/debridUploader';
 import {
@@ -335,14 +335,40 @@ export function useTorrentManagement(
 	// Sends a TorBox-cached torrent into the user's RD account via the debrid
 	// uploader service on debrid02, which rewrites the torrent with de-infringed
 	// filenames so RD accepts it. The RD torrent therefore has a different info
-	// hash than the search result, so the availability DB is left untouched and
-	// only the local row is marked RD-available.
+	// hash than the search result — the original hash is never RD-cached, so
+	// neither the row nor the availability DB is marked; the Transfers page is
+	// where the job (and the resulting RD library entry) shows up.
+	//
+	// The loading state resolves as soon as RD's own download is underway
+	// ('uploading' in the service's pipeline): from there the transfer no longer
+	// needs the browser, so holding a spinner for the whole RD pull is noise.
 	const sendTbToRd = useCallback(
 		async (hash: string) => {
 			if (!rdKey || !torboxKey) return;
 			if (!/^tt\d+$/.test(imdbId)) {
 				toast.error('TB → RD needs an IMDB id for this title.');
 				return;
+			}
+
+			// One job per hash: resubmitting burns a TorBox slot and a full
+			// pipeline run for content a previous job already delivered (or is
+			// still delivering). Only a failed or vanished job may be retried.
+			const previous = getTrackedDebridUploaderJobs().find((j) => j.hash === hash);
+			if (previous) {
+				let previousStatus: string | undefined;
+				try {
+					previousStatus = (await getDebridUploaderJob(previous.id)).status;
+				} catch {
+					// job unknown to the service (e.g. wiped server-side) — allow a resubmit
+				}
+				if (previousStatus && previousStatus !== 'failed') {
+					toast(
+						previousStatus === 'completed'
+							? 'TB → RD: already transferred — check your RD library.'
+							: 'TB → RD: transfer already in progress — see the Transfers page.'
+					);
+					return;
+				}
 			}
 
 			const toastId = toast.loading('TB → RD: submitting transfer...');
@@ -362,7 +388,7 @@ export function useTorrentManagement(
 				});
 
 				const POLL_MS = 5000;
-				const MAX_POLLS = 2160; // 3 hours
+				const MAX_POLLS = 360; // 30 min for the TorBox half; RD's pull isn't waited on
 				for (let i = 0; i < MAX_POLLS; i++) {
 					await new Promise((resolve) => setTimeout(resolve, POLL_MS));
 
@@ -374,33 +400,10 @@ export function useTorrentManagement(
 					}
 
 					if (polled.status === 'completed') {
-						setSearchResults((prev) =>
-							prev.map((r) => (r.hash === hash ? { ...r, rdAvailable: true } : r))
+						toast.success(
+							'TB → RD: done! The torrent is in your Real-Debrid library.',
+							{ id: toastId }
 						);
-
-						// Best-effort: pull the new RD torrent into the local library.
-						if (polled.rd_torrent_id) {
-							try {
-								const info = await getTorrentInfo(rdKey, polled.rd_torrent_id);
-								const userTorrent = convertToUserTorrent(info);
-								await torrentDB.add(userTorrent);
-								addToCache(userTorrent);
-								setHashAndProgress((prev) => ({
-									...prev,
-									[`${userTorrent.id.substring(0, 3)}${userTorrent.hash}`]:
-										userTorrent.progress,
-								}));
-							} catch (error) {
-								console.warn(
-									'[TorrentManagement] sendTbToRd: transfer done but library sync failed',
-									error
-								);
-							}
-						}
-
-						toast.success('TB → RD: added to your Real-Debrid library!', {
-							id: toastId,
-						});
 						return;
 					}
 
@@ -411,12 +414,25 @@ export function useTorrentManagement(
 						return;
 					}
 
+					// RD is downloading from the webseed — the hand-off succeeded and
+					// the rest happens server-side, so release the button.
+					if (polled.status === 'uploading') {
+						toast.success(
+							'TB → RD: Real-Debrid download underway — follow it on the Transfers page.',
+							{ id: toastId }
+						);
+						return;
+					}
+
 					toast.loading(`TB → RD: ${polled.status_message || polled.status}`, {
 						id: toastId,
 					});
 				}
 
-				toast.error('TB → RD: timed out waiting for the transfer.', { id: toastId });
+				toast.error(
+					'TB → RD: still not handed to RD after 30 min — check the Transfers page.',
+					{ id: toastId }
+				);
 			} catch (error) {
 				toast.error(
 					`TB → RD: ${error instanceof Error ? error.message : 'failed to submit'}`,
@@ -424,7 +440,7 @@ export function useTorrentManagement(
 				);
 			}
 		},
-		[rdKey, torboxKey, imdbId, setSearchResults, addToCache, searchResults]
+		[rdKey, torboxKey, imdbId, searchResults]
 	);
 
 	const deleteRd = useCallback(
