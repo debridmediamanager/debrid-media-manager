@@ -384,13 +384,13 @@ export function useTorrentManagement(
 
 			const toastId = toast.loading('TB → RD: submitting transfer...');
 			try {
-				const job = await createDebridUploaderJob(
+				const job = await createDebridUploaderJob({
 					hash,
 					imdbId,
 					rdKey,
-					torboxKey,
-					sizeBytes
-				);
+					tbKey: torboxKey,
+					sizeBytes,
+				});
 
 				// Cross-user dedup: another user already transferred this content, so
 				// no job was created. Mark the row so the button hides, and point at

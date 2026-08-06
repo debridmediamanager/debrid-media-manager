@@ -41,7 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { hash, imdbId, rdKey, tbKey, sizeBytes } = req.body ?? {};
+	const { hash, imdbId, rdKey, tbKey, adKey, sizeBytes } = req.body ?? {};
 
 	if (typeof hash !== 'string' || !/^[a-fA-F0-9]{40}$/.test(hash)) {
 		return res.status(400).json({ error: 'hash must be a 40-char hex info hash' });
@@ -52,8 +52,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (typeof rdKey !== 'string' || !rdKey) {
 		return res.status(400).json({ error: 'rdKey is required' });
 	}
-	if (typeof tbKey !== 'string' || !tbKey) {
-		return res.status(400).json({ error: 'tbKey is required' });
+	// At least one source key: TorBox and/or AllDebrid. The debrid service uses
+	// whichever it finds the hash cached on.
+	const tbSource = typeof tbKey === 'string' && tbKey ? tbKey : undefined;
+	const adSource = typeof adKey === 'string' && adKey ? adKey : undefined;
+	if (!tbSource && !adSource) {
+		return res.status(400).json({ error: 'a tbKey or adKey source is required' });
 	}
 
 	const originalHash = hash.toLowerCase();
@@ -77,7 +81,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		input: `magnet:?xt=urn:btih:${originalHash}`,
 		imdb_id: imdbId,
 		rd_api_key: rdKey,
-		tb_api_key: tbKey,
+		...(tbSource ? { tb_api_key: tbSource } : {}),
+		...(adSource ? { ad_api_key: adSource } : {}),
 	});
 
 	// Route by size so a big torrent never lands on an underpowered, capped host.

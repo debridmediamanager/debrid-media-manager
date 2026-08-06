@@ -1,3 +1,5 @@
+import { toast } from 'react-hot-toast';
+
 export type DebridUploaderJobStatus =
 	| 'pending'
 	| 'downloading'
@@ -37,23 +39,150 @@ export function isDuplicateResponse(
 	return 'duplicate' in r;
 }
 
-// Submits a TorBox-cached hash to the debrid uploader service, which rebuilds it
-// as a webseed torrent (de-infringed filenames) and adds it to the user's RD account.
-// Returns a duplicate marker instead when a transfer for this content already exists.
-// sizeBytes (when known) lets the server keep big torrents off underpowered hosts.
+export interface CreateDebridJobParams {
+	hash: string;
+	imdbId: string;
+	rdKey: string;
+	// At least one source key. TorBox-held content uses tbKey; AllDebrid-held
+	// uses adKey. The debrid service picks the source it finds the hash cached on.
+	tbKey?: string;
+	adKey?: string;
+	sizeBytes?: number;
+}
+
+// Submits a cached hash to the debrid uploader service, which rebuilds it as a
+// webseed torrent (de-infringed filenames) and adds it to the user's RD account,
+// sourcing the bytes from TorBox or AllDebrid. Returns a duplicate marker instead
+// when a transfer for this content already exists. sizeBytes (when known) lets
+// the server keep big torrents off underpowered hosts.
 export async function createDebridUploaderJob(
-	hash: string,
-	imdbId: string,
-	rdKey: string,
-	tbKey: string,
-	sizeBytes?: number
+	params: CreateDebridJobParams
 ): Promise<DebridUploaderJob | DebridUploaderDuplicate> {
 	const response = await fetch('/api/debrid-uploader/jobs', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ hash, imdbId, rdKey, tbKey, sizeBytes }),
+		body: JSON.stringify(params),
 	});
 	return parseJsonResponse(response);
+}
+
+export type TransferOutcome =
+	| 'started'
+	| 'completed'
+	| 'duplicate'
+	| 'failed'
+	| 'timeout'
+	| 'error';
+
+// Self-contained "send this to RD" flow (submit → dedup → track → poll → toast),
+// for callers without the search page's per-row state — currently the library
+// page. It polls with no movie/tv context, so a manually-picked imdb never drives
+// the global search-result registration; the content still lands in the user's RD
+// and the transfer is tracked and deduped. Toasts are labelled "Send to RD".
+export async function runDebridTransferToRd(params: {
+	hash: string;
+	imdbId: string;
+	rdKey: string;
+	tbKey?: string;
+	adKey?: string;
+	sizeBytes?: number;
+	title?: string;
+	returnPath?: string;
+}): Promise<TransferOutcome> {
+	const { hash, imdbId, rdKey, tbKey, adKey, sizeBytes, title, returnPath } = params;
+
+	// One job per hash: skip if this browser already has a live/completed one.
+	const previous = getTrackedDebridUploaderJobs().find((j) => j.hash === hash);
+	if (previous) {
+		let previousStatus: string | undefined;
+		try {
+			previousStatus = (await getDebridUploaderJob(previous.id)).status;
+		} catch {
+			// job unknown to the service — allow a resubmit
+		}
+		if (previousStatus && previousStatus !== 'failed') {
+			toast(
+				previousStatus === 'completed'
+					? 'Send to RD: already transferred — check your RD library.'
+					: 'Send to RD: transfer already in progress — see the Transfers page.'
+			);
+			return 'duplicate';
+		}
+	}
+
+	const toastId = toast.loading('Send to RD: submitting transfer...');
+	try {
+		const job = await createDebridUploaderJob({ hash, imdbId, rdKey, tbKey, adKey, sizeBytes });
+
+		if (isDuplicateResponse(job)) {
+			toast(
+				job.duplicate === 'completed'
+					? 'Send to RD: already in RD — use the Instant RD result for this title.'
+					: 'Send to RD: a transfer for this is already in progress.',
+				{ id: toastId }
+			);
+			return 'duplicate';
+		}
+
+		trackDebridUploaderJob({
+			id: job.id,
+			hash,
+			imdbId,
+			title,
+			returnPath,
+			createdAt: Date.now(),
+		});
+		toast.loading('Send to RD: transfer started — track it on the Transfers page.', {
+			id: toastId,
+		});
+
+		const POLL_MS = 5000;
+		const MAX_POLLS = 360; // 30 min for the source half; RD's pull isn't waited on
+		for (let i = 0; i < MAX_POLLS; i++) {
+			await new Promise((resolve) => setTimeout(resolve, POLL_MS));
+
+			let polled;
+			try {
+				polled = await getDebridUploaderJob(job.id);
+			} catch {
+				continue; // transient poll failure; the job keeps running server-side
+			}
+
+			if (polled.status === 'completed') {
+				toast.success('Send to RD: done! It is in your Real-Debrid library.', {
+					id: toastId,
+				});
+				return 'completed';
+			}
+			if (polled.status === 'failed') {
+				toast.error(`Send to RD failed: ${polled.error || 'unknown error'}`, {
+					id: toastId,
+				});
+				return 'failed';
+			}
+			if (polled.status === 'uploading') {
+				toast.success(
+					'Send to RD: Real-Debrid download underway — follow it on the Transfers page.',
+					{ id: toastId }
+				);
+				return 'started';
+			}
+
+			toast.loading(`Send to RD: ${polled.status_message || polled.status}`, {
+				id: toastId,
+			});
+		}
+
+		toast.error('Send to RD: still not handed to RD after 30 min — check the Transfers page.', {
+			id: toastId,
+		});
+		return 'timeout';
+	} catch (error) {
+		toast.error(`Send to RD: ${error instanceof Error ? error.message : 'failed to submit'}`, {
+			id: toastId,
+		});
+		return 'error';
+	}
 }
 
 // Marks any search-result rows whose original hash already has a completed

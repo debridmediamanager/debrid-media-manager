@@ -6,6 +6,7 @@ import {
 } from '@/utils/addMagnet';
 import { getAllDebridStatusText } from '@/utils/allDebridStatus';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
+import { runDebridTransferToRd } from '@/utils/debridUploader';
 import {
 	handleDeleteAdTorrent,
 	handleDeleteRdTorrent,
@@ -24,8 +25,10 @@ import {
 	FolderOpen,
 	Leaf,
 	Link2,
+	Loader2,
 	Plus,
 	RefreshCw,
+	Send,
 	Share2,
 	Trash2,
 	Tv,
@@ -35,6 +38,7 @@ import { useRouter } from 'next/router';
 import { memo, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { CastSearchModal } from './CastSearchModal';
+import ImdbPickerModal, { ImdbPick } from './ImdbPickerModal';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
 
@@ -81,6 +85,38 @@ function TorrentRow({
 	const [showCastModal, setShowCastModal] = useState(false);
 	const [castTorrentInfo, setCastTorrentInfo] = useState<any>(null);
 	const [isCasting, setIsCasting] = useState(false);
+	const [showSendModal, setShowSendModal] = useState(false);
+	const [isSendingToRd, setIsSendingToRd] = useState(false);
+
+	// A TorBox/AllDebrid library torrent can be pushed into RD, but library
+	// torrents carry no imdb id, so the user picks the title first. The matching
+	// source key must be present (it is, since the torrent lives in that service).
+	const isTbTorrent = torrent.id.startsWith('tb:');
+	const isAdTorrent = torrent.id.startsWith('ad:');
+	const canSendToRd =
+		!!rdKey &&
+		/^[a-fA-F0-9]{40}$/.test(torrent.hash) &&
+		((isTbTorrent && !!tbKey) || (isAdTorrent && !!adKey));
+
+	const handleSendPick = async (pick: ImdbPick) => {
+		setShowSendModal(false);
+		if (!rdKey || isSendingToRd) return;
+		setIsSendingToRd(true);
+		try {
+			await runDebridTransferToRd({
+				hash: torrent.hash,
+				imdbId: pick.imdbId,
+				rdKey,
+				tbKey: isTbTorrent ? (tbKey ?? undefined) : undefined,
+				adKey: isAdTorrent ? (adKey ?? undefined) : undefined,
+				sizeBytes: torrent.bytes,
+				title: torrent.title || torrent.filename,
+				returnPath: '/library',
+			});
+		} finally {
+			setIsSendingToRd(false);
+		}
+	};
 
 	// Helper function to get user-friendly status text for any service
 	const getStatusText = (torrent: UserTorrent): string => {
@@ -377,6 +413,23 @@ function TorrentRow({
 							<Cast className="h-4 w-4 text-cyan-400" />
 						</button>
 					)}
+					{canSendToRd && (
+						<button
+							title="Send to Real-Debrid"
+							className="mb-2 mr-2 cursor-pointer text-indigo-400 disabled:opacity-50"
+							onClick={(e) => {
+								e.stopPropagation();
+								setShowSendModal(true);
+							}}
+							disabled={isSendingToRd}
+						>
+							{isSendingToRd ? (
+								<Loader2 className="h-4 w-4 animate-spin text-indigo-400" />
+							) : (
+								<Send className="h-4 w-4 text-indigo-400" />
+							)}
+						</button>
+					)}
 					<button
 						title="Share"
 						className="mb-2 mr-2 cursor-pointer text-indigo-600"
@@ -462,6 +515,16 @@ function TorrentRow({
 					onClose={() => setShowCastModal(false)}
 					torrentInfo={castTorrentInfo}
 					onSelectImdbId={handleSelectImdbId}
+				/>
+			)}
+			{/* Send-to-RD imdb picker */}
+			{showSendModal && (
+				<ImdbPickerModal
+					open={showSendModal}
+					initialQuery={torrent.title || torrent.filename}
+					subtitle={torrent.filename}
+					onPick={handleSendPick}
+					onClose={() => setShowSendModal(false)}
 				/>
 			)}
 		</>
