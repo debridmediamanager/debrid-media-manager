@@ -61,6 +61,36 @@ describe('orderedServersForNewJob', () => {
 		process.env.DEBRID_UPLOADER_URLS = `${S1},${S2}`;
 		expect(orderedServersForNewJob().sort()).toEqual([S1, S2].sort());
 	});
+
+	describe('size caps', () => {
+		const GB = 1024 ** 3;
+
+		it('parses a ;maxGb cap without polluting the plain URL list', () => {
+			process.env.DEBRID_UPLOADER_URLS = `${S1};maxGb=10,${S2}`;
+			expect(getDebridUploaderServers()).toEqual([S1, S2]);
+			expect(isAllowedServer(S1)).toBe(true);
+		});
+
+		it('keeps a job under the cap eligible for the capped server', () => {
+			process.env.DEBRID_UPLOADER_URLS = `${S1};maxGb=10`;
+			expect(orderedServersForNewJob(5 * GB)).toEqual([S1]);
+		});
+
+		it('excludes the capped server for an over-cap job, routing only to the uncapped one', () => {
+			process.env.DEBRID_UPLOADER_URLS = `${S1};maxGb=10,${S2}`;
+			expect(orderedServersForNewJob(40 * GB)).toEqual([S2]);
+		});
+
+		it('skips capped servers when the size is unknown', () => {
+			process.env.DEBRID_UPLOADER_URLS = `${S1};maxGb=10,${S2}`;
+			expect(orderedServersForNewJob(undefined)).toEqual([S2]);
+		});
+
+		it('falls back to the full pool when nothing is eligible', () => {
+			process.env.DEBRID_UPLOADER_URLS = `${S1};maxGb=10`;
+			expect(orderedServersForNewJob(40 * GB)).toEqual([S1]);
+		});
+	});
 });
 
 describe('resolveJobServer', () => {

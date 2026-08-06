@@ -41,7 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { hash, imdbId, rdKey, tbKey } = req.body ?? {};
+	const { hash, imdbId, rdKey, tbKey, sizeBytes } = req.body ?? {};
 
 	if (typeof hash !== 'string' || !/^[a-fA-F0-9]{40}$/.test(hash)) {
 		return res.status(400).json({ error: 'hash must be a 40-char hex info hash' });
@@ -80,10 +80,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		tb_api_key: tbKey,
 	});
 
+	// Route by size so a big torrent never lands on an underpowered, capped host.
+	const jobSize = typeof sizeBytes === 'number' && sizeBytes > 0 ? sizeBytes : undefined;
+
 	// Try the round-robin-chosen server first; on a network failure fall through
 	// to the others. A non-network error (e.g. 400) is deterministic, so return it.
 	let lastNetworkError = false;
-	for (const server of orderedServersForNewJob()) {
+	for (const server of orderedServersForNewJob(jobSize)) {
 		let response: Response;
 		try {
 			response = await fetch(`${server}/jobs`, {
@@ -112,11 +115,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(response.status).json(data);
 	}
 
-	return res
-		.status(502)
-		.json({
-			error: lastNetworkError ? 'All debrid uploader servers unreachable' : 'no server',
-		});
+	return res.status(502).json({
+		error: lastNetworkError ? 'All debrid uploader servers unreachable' : 'no server',
+	});
 }
 
 export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.default);

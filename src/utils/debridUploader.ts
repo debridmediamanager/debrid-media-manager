@@ -40,16 +40,18 @@ export function isDuplicateResponse(
 // Submits a TorBox-cached hash to the debrid uploader service, which rebuilds it
 // as a webseed torrent (de-infringed filenames) and adds it to the user's RD account.
 // Returns a duplicate marker instead when a transfer for this content already exists.
+// sizeBytes (when known) lets the server keep big torrents off underpowered hosts.
 export async function createDebridUploaderJob(
 	hash: string,
 	imdbId: string,
 	rdKey: string,
-	tbKey: string
+	tbKey: string,
+	sizeBytes?: number
 ): Promise<DebridUploaderJob | DebridUploaderDuplicate> {
 	const response = await fetch('/api/debrid-uploader/jobs', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ hash, imdbId, rdKey, tbKey }),
+		body: JSON.stringify({ hash, imdbId, rdKey, tbKey, sizeBytes }),
 	});
 	return parseJsonResponse(response);
 }

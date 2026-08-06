@@ -376,9 +376,21 @@ export function useTorrentManagement(
 				}
 			}
 
+			// Size (in bytes) lets the server keep big torrents off weak hosts. The
+			// biggest single file is the "remux" signal; sizes on the row are in MB.
+			const row = searchResults.find((r) => r.hash === hash);
+			const sizeMb = row?.biggestFileSize || row?.fileSize || 0;
+			const sizeBytes = sizeMb > 0 ? Math.round(sizeMb * 1024 * 1024) : undefined;
+
 			const toastId = toast.loading('TB → RD: submitting transfer...');
 			try {
-				const job = await createDebridUploaderJob(hash, imdbId, rdKey, torboxKey);
+				const job = await createDebridUploaderJob(
+					hash,
+					imdbId,
+					rdKey,
+					torboxKey,
+					sizeBytes
+				);
 
 				// Cross-user dedup: another user already transferred this content, so
 				// no job was created. Mark the row so the button hides, and point at
@@ -400,7 +412,7 @@ export function useTorrentManagement(
 					id: job.id,
 					hash,
 					imdbId,
-					title: searchResults.find((r) => r.hash === hash)?.title,
+					title: row?.title,
 					returnPath: window.location.pathname,
 					createdAt: Date.now(),
 				});
