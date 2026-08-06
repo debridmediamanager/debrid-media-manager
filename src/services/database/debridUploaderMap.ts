@@ -25,6 +25,10 @@ export interface DebridTransferRecord {
 const KEY_PREFIX = 'tbrd:';
 const keyFor = (originalHash: string) => `${KEY_PREFIX}${originalHash.toLowerCase()}`;
 
+// A job lives on exactly one server (the one that created it), keyed by job id.
+const JOB_KEY_PREFIX = 'tbjob:';
+const jobKeyFor = (jobId: string) => `${JOB_KEY_PREFIX}${jobId}`;
+
 export class DebridUploaderMapService extends DatabaseClient {
 	async getTransfer(originalHash: string): Promise<DebridTransferRecord | null> {
 		const row = await this.prisma.cache.findUnique({ where: { key: keyFor(originalHash) } });
@@ -81,5 +85,20 @@ export class DebridUploaderMapService extends DatabaseClient {
 		await this.prisma.cache
 			.delete({ where: { key: keyFor(originalHash) } })
 			.catch(() => undefined);
+	}
+
+	// job → owning server, so polls/deletes/file-fetches reach the right host.
+	async recordJobServer(jobId: string, serverUrl: string): Promise<void> {
+		const value = { serverUrl, updatedAt: Date.now() } as unknown as object;
+		await this.prisma.cache.upsert({
+			where: { key: jobKeyFor(jobId) },
+			update: { value } as any,
+			create: { key: jobKeyFor(jobId), value } as any,
+		});
+	}
+
+	async getJobServer(jobId: string): Promise<string | null> {
+		const row = await this.prisma.cache.findUnique({ where: { key: jobKeyFor(jobId) } });
+		return row ? ((row.value as any)?.serverUrl ?? null) : null;
 	}
 }

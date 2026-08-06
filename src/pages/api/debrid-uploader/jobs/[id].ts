@@ -4,18 +4,22 @@ import {
 	parseTransferContext,
 	TransferJobFile,
 } from '@/services/debridUploaderRegistration';
+import { resolveJobServer } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import type { NextApiRequest, NextApiResponse } from 'next';
-
-const DEBRID_UPLOADER_URL = process.env.DEBRID_UPLOADER_URL || 'http://138.201.246.20:3100';
 
 // When a poll observes a completed job, register the rewritten torrent in DMM's
 // DB (search row + RD availability) so it surfaces as an RD-cached result for
 // everyone. Runs server-side off whichever client happens to poll — the send
 // loop, the Transfers page, or a dedupe re-check — and is idempotent: an
-// already-available hash is skipped.
-async function registerCompletedJob(job: any, mediaType: unknown, seasonNum: unknown) {
+// already-available hash is skipped. `server` is the host that owns this job.
+async function registerCompletedJob(
+	job: any,
+	mediaType: unknown,
+	seasonNum: unknown,
+	server: string
+) {
 	const rewrittenHash = typeof job?.info_hash === 'string' ? job.info_hash.toLowerCase() : '';
 	if (!/^[a-f0-9]{40}$/.test(rewrittenHash)) return false;
 
@@ -35,7 +39,7 @@ async function registerCompletedJob(job: any, mediaType: unknown, seasonNum: unk
 	const already = await db.checkAvailabilityByHashes([rewrittenHash]);
 	if (already.length > 0) return false;
 
-	const filesResponse = await fetch(`${DEBRID_UPLOADER_URL}/jobs/${job.id}/files`, {
+	const filesResponse = await fetch(`${server}/jobs/${job.id}/files`, {
 		headers: { Accept: 'application/json' },
 		signal: AbortSignal.timeout(15000),
 	});
@@ -68,8 +72,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(400).json({ error: 'Invalid job id' });
 	}
 
+	// A job lives only on the server that created it, so route to that host.
+	const server = await resolveJobServer(id, (j) => db.getDebridJobServer(j));
+	if (!server) {
+		return res.status(502).json({ error: 'Debrid uploader service unreachable' });
+	}
+
 	try {
-		const response = await fetch(`${DEBRID_UPLOADER_URL}/jobs/${id}`, {
+		const response = await fetch(`${server}/jobs/${id}`, {
 			method: req.method,
 			headers: { Accept: 'application/json' },
 			signal: AbortSignal.timeout(15000),
@@ -78,7 +88,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		if (req.method === 'GET' && response.ok && data?.status === 'completed') {
 			try {
-				data.dmm_registered = await registerCompletedJob(data, mediaType, seasonNum);
+				data.dmm_registered = await registerCompletedJob(
+					data,
+					mediaType,
+					seasonNum,
+					server
+				);
 			} catch (error) {
 				console.error('Debrid uploader registration failed:', error);
 			}

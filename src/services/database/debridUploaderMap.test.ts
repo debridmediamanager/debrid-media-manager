@@ -89,4 +89,20 @@ describe('DebridUploaderMapService', () => {
 		prisma.cache.delete.mockRejectedValue(new Error('not found'));
 		await expect(service.removeTransfer(HASH)).resolves.toBeUndefined();
 	});
+
+	it('records and reads a job → server mapping under a tbjob: key', async () => {
+		await service.recordJobServer('job-9', 'http://s1:3100');
+		const call = prisma.cache.upsert.mock.calls[0][0];
+		expect(call.where.key).toBe('tbjob:job-9');
+		expect(call.create.value.serverUrl).toBe('http://s1:3100');
+
+		prisma.cache.findUnique.mockResolvedValue({ value: { serverUrl: 'http://s1:3100' } });
+		expect(await service.getJobServer('job-9')).toBe('http://s1:3100');
+		expect(prisma.cache.findUnique).toHaveBeenCalledWith({ where: { key: 'tbjob:job-9' } });
+	});
+
+	it('returns null when a job has no recorded server', async () => {
+		prisma.cache.findUnique.mockResolvedValue(null);
+		expect(await service.getJobServer('unknown')).toBeNull();
+	});
 });

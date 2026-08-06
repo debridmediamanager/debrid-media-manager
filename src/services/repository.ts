@@ -162,6 +162,14 @@ export class Repository {
 		return this.debridUploaderMapService.removeTransfer(originalHash);
 	}
 
+	public recordDebridJobServer(jobId: string, serverUrl: string) {
+		return this.debridUploaderMapService.recordJobServer(jobId, serverUrl);
+	}
+
+	public getDebridJobServer(jobId: string) {
+		return this.debridUploaderMapService.getJobServer(jobId);
+	}
+
 	// Availability Service Methods
 	public getIMDBIdByHash(hash: string) {
 		return this.availabilityService.getIMDBIdByHash(hash);
