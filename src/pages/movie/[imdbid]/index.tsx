@@ -183,6 +183,7 @@ const MovieSearch: FunctionComponent = () => {
 		addAd,
 		addTb,
 		sendTbToRd,
+		sendAdToRd,
 		deleteRd,
 		deleteAd,
 		deleteTb,
@@ -583,10 +584,17 @@ const MovieSearch: FunctionComponent = () => {
 		}
 		let results = quickSearch(query, searchResults);
 		if (hideRdBlockedTorrents) {
-			results = results.filter((r) => !isRdBlockedFilename(r.title));
+			// Keep an RD-blocked row when it can still reach RD through a TB/AD
+			// transfer (which de-infringes the name) — that's where the block matters
+			// least and the Send-to-RD button is the whole point.
+			const transferableToRd = (r: SearchResult) =>
+				!!rdKey &&
+				!r.rdAvailable &&
+				((!!torboxKey && r.tbAvailable) || (!!adKey && r.adAvailable) || !!r.tbTransferred);
+			results = results.filter((r) => !isRdBlockedFilename(r.title) || transferableToRd(r));
 		}
 		return results;
-	}, [query, searchResults, hideRdBlockedTorrents]);
+	}, [query, searchResults, hideRdBlockedTorrents, rdKey, torboxKey, adKey]);
 
 	const totalUncachedCount = useMemo(() => {
 		return filteredResults.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
@@ -1010,6 +1018,7 @@ const MovieSearch: FunctionComponent = () => {
 						addAd={addAd}
 						addTb={addTb}
 						sendTbToRd={sendTbToRd}
+						sendAdToRd={sendAdToRd}
 						deleteRd={deleteRd}
 						deleteAd={deleteAd}
 						deleteTb={deleteTb}

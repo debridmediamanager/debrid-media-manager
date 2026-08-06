@@ -157,6 +157,60 @@ describe('MovieSearchResults', () => {
 
 			expect(screen.queryByRole('button', { name: /TB → RD/i })).toBeNull();
 		});
+
+		it('still shows on an RD-blocked (infringing) name — the transfer de-infringes it', async () => {
+			const sendTbToRd = vi.fn().mockResolvedValue(undefined);
+			renderComponent({
+				torboxKey: 'tb-key',
+				sendTbToRd,
+				filteredResults: [
+					{ ...tbCachedResult, title: 'Some.Movie.2024.1080p.WEB-DL.x264-GRP' },
+				],
+			});
+
+			await userEvent.click(screen.getByRole('button', { name: /TB → RD/i }));
+			await waitFor(() => expect(sendTbToRd).toHaveBeenCalledWith('hash1'));
+		});
+	});
+
+	describe('AD → RD button', () => {
+		const adCachedResult: SearchResult = {
+			...baseResult,
+			adAvailable: true,
+			rdAvailable: false,
+		};
+
+		it('shows when logged into RD + AD and the result is AD-cached but not RD-cached', async () => {
+			const sendAdToRd = vi.fn().mockResolvedValue(undefined);
+			renderComponent({
+				adKey: 'ad-key',
+				sendAdToRd,
+				filteredResults: [adCachedResult],
+			});
+
+			await userEvent.click(screen.getByRole('button', { name: /AD → RD/i }));
+			await waitFor(() => expect(sendAdToRd).toHaveBeenCalledWith('hash1'));
+		});
+
+		it('is hidden without an AllDebrid login', () => {
+			renderComponent({
+				adKey: null,
+				sendAdToRd: vi.fn(),
+				filteredResults: [adCachedResult],
+			});
+
+			expect(screen.queryByRole('button', { name: /AD → RD/i })).toBeNull();
+		});
+
+		it('is hidden when the result is already RD-cached', () => {
+			renderComponent({
+				adKey: 'ad-key',
+				sendAdToRd: vi.fn(),
+				filteredResults: [{ ...adCachedResult, rdAvailable: true }],
+			});
+
+			expect(screen.queryByRole('button', { name: /AD → RD/i })).toBeNull();
+		});
 	});
 
 	describe('size display', () => {

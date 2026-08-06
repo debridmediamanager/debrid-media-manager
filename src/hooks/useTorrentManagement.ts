@@ -334,27 +334,30 @@ export function useTorrentManagement(
 		[torboxKey, fetchHashAndProgress, addToCache, searchResults]
 	);
 
-	// Sends a TorBox-cached torrent into the user's RD account via the debrid
-	// uploader service on debrid02, which rewrites the torrent with de-infringed
-	// filenames so RD accepts it. The RD torrent therefore has a different info
-	// hash than the search result — the original hash is never RD-cached, so
-	// neither the row nor the availability DB is marked; the Transfers page is
-	// where the job (and the resulting RD library entry) shows up.
+	// Sends a cached search-result torrent into the user's RD account via the
+	// debrid uploader service, which rewrites the torrent with de-infringed
+	// filenames so RD accepts it — which is why this works even on RD-blocked
+	// names. `service` picks the source (TorBox or AllDebrid). The RD torrent gets
+	// a different info hash than the search result, so the original hash is never
+	// RD-cached and neither the row nor the availability DB is marked here; the
+	// Transfers page (and the server-side registration) is where it surfaces.
 	//
 	// The loading state resolves as soon as RD's own download is underway
 	// ('uploading' in the service's pipeline): from there the transfer no longer
 	// needs the browser, so holding a spinner for the whole RD pull is noise.
-	const sendTbToRd = useCallback(
-		async (hash: string) => {
-			if (!rdKey || !torboxKey) return;
+	const sendToRd = useCallback(
+		async (hash: string, service: 'tb' | 'ad') => {
+			const sourceKey = service === 'tb' ? torboxKey : adKey;
+			const label = service === 'tb' ? 'TB → RD' : 'AD → RD';
+			if (!rdKey || !sourceKey) return;
 			if (!/^tt\d+$/.test(imdbId)) {
-				toast.error('TB → RD needs an IMDB id for this title.');
+				toast.error(`${label} needs an IMDB id for this title.`);
 				return;
 			}
 
 			const transferContext = transferContextFromPath(window.location.pathname);
 
-			// One job per hash: resubmitting burns a TorBox slot and a full
+			// One job per hash: resubmitting burns a source slot and a full
 			// pipeline run for content a previous job already delivered (or is
 			// still delivering). Only a failed or vanished job may be retried.
 			const previous = getTrackedDebridUploaderJobs().find((j) => j.hash === hash);
@@ -369,8 +372,8 @@ export function useTorrentManagement(
 				if (previousStatus && previousStatus !== 'failed') {
 					toast(
 						previousStatus === 'completed'
-							? 'TB → RD: already transferred — check your RD library.'
-							: 'TB → RD: transfer already in progress — see the Transfers page.'
+							? `${label}: already transferred — check your RD library.`
+							: `${label}: transfer already in progress — see the Transfers page.`
 					);
 					return;
 				}
@@ -382,13 +385,14 @@ export function useTorrentManagement(
 			const sizeMb = row?.biggestFileSize || row?.fileSize || 0;
 			const sizeBytes = sizeMb > 0 ? Math.round(sizeMb * 1024 * 1024) : undefined;
 
-			const toastId = toast.loading('TB → RD: submitting transfer...');
+			const toastId = toast.loading(`${label}: submitting transfer...`);
 			try {
 				const job = await createDebridUploaderJob({
 					hash,
 					imdbId,
 					rdKey,
-					tbKey: torboxKey,
+					tbKey: service === 'tb' ? (torboxKey ?? undefined) : undefined,
+					adKey: service === 'ad' ? (adKey ?? undefined) : undefined,
 					sizeBytes,
 				});
 
@@ -401,8 +405,8 @@ export function useTorrentManagement(
 					);
 					toast(
 						job.duplicate === 'completed'
-							? 'TB → RD: already in RD — use the Instant RD result for this title.'
-							: 'TB → RD: a transfer for this is already in progress.',
+							? `${label}: already in RD — use the Instant RD result for this title.`
+							: `${label}: a transfer for this is already in progress.`,
 						{ id: toastId }
 					);
 					return;
@@ -416,12 +420,12 @@ export function useTorrentManagement(
 					returnPath: window.location.pathname,
 					createdAt: Date.now(),
 				});
-				toast.loading('TB → RD: transfer started — track it on the Transfers page.', {
+				toast.loading(`${label}: transfer started — track it on the Transfers page.`, {
 					id: toastId,
 				});
 
 				const POLL_MS = 5000;
-				const MAX_POLLS = 360; // 30 min for the TorBox half; RD's pull isn't waited on
+				const MAX_POLLS = 360; // 30 min for the source half; RD's pull isn't waited on
 				for (let i = 0; i < MAX_POLLS; i++) {
 					await new Promise((resolve) => setTimeout(resolve, POLL_MS));
 
@@ -434,14 +438,16 @@ export function useTorrentManagement(
 
 					if (polled.status === 'completed') {
 						toast.success(
-							'TB → RD: done! The torrent is in your Real-Debrid library.',
-							{ id: toastId }
+							`${label}: done! The torrent is in your Real-Debrid library.`,
+							{
+								id: toastId,
+							}
 						);
 						return;
 					}
 
 					if (polled.status === 'failed') {
-						toast.error(`TB → RD failed: ${polled.error || 'unknown error'}`, {
+						toast.error(`${label} failed: ${polled.error || 'unknown error'}`, {
 							id: toastId,
 						});
 						return;
@@ -451,30 +457,33 @@ export function useTorrentManagement(
 					// the rest happens server-side, so release the button.
 					if (polled.status === 'uploading') {
 						toast.success(
-							'TB → RD: Real-Debrid download underway — follow it on the Transfers page.',
+							`${label}: Real-Debrid download underway — follow it on the Transfers page.`,
 							{ id: toastId }
 						);
 						return;
 					}
 
-					toast.loading(`TB → RD: ${polled.status_message || polled.status}`, {
+					toast.loading(`${label}: ${polled.status_message || polled.status}`, {
 						id: toastId,
 					});
 				}
 
 				toast.error(
-					'TB → RD: still not handed to RD after 30 min — check the Transfers page.',
+					`${label}: still not handed to RD after 30 min — check the Transfers page.`,
 					{ id: toastId }
 				);
 			} catch (error) {
 				toast.error(
-					`TB → RD: ${error instanceof Error ? error.message : 'failed to submit'}`,
+					`${label}: ${error instanceof Error ? error.message : 'failed to submit'}`,
 					{ id: toastId }
 				);
 			}
 		},
-		[rdKey, torboxKey, imdbId, searchResults, setSearchResults]
+		[rdKey, torboxKey, adKey, imdbId, searchResults, setSearchResults]
 	);
+
+	const sendTbToRd = useCallback((hash: string) => sendToRd(hash, 'tb'), [sendToRd]);
+	const sendAdToRd = useCallback((hash: string) => sendToRd(hash, 'ad'), [sendToRd]);
 
 	const deleteRd = useCallback(
 		async (hash: string) => {
@@ -543,6 +552,7 @@ export function useTorrentManagement(
 		addAd,
 		addTb,
 		sendTbToRd,
+		sendAdToRd,
 		deleteRd,
 		deleteAd,
 		deleteTb,

@@ -38,6 +38,7 @@ type MovieSearchResultsProps = {
 	addAd: (hash: string) => Promise<void>;
 	addTb: (hash: string) => Promise<void>;
 	sendTbToRd?: (hash: string) => Promise<void>;
+	sendAdToRd?: (hash: string) => Promise<void>;
 	deleteRd: (hash: string) => Promise<void>;
 	deleteAd: (hash: string) => Promise<void>;
 	deleteTb: (hash: string) => Promise<void>;
@@ -64,6 +65,7 @@ const MovieSearchResults = ({
 	addAd,
 	addTb,
 	sendTbToRd,
+	sendAdToRd,
 	deleteRd,
 	deleteAd,
 	deleteTb,
@@ -71,7 +73,7 @@ const MovieSearchResults = ({
 	isHashServiceChecking,
 }: MovieSearchResultsProps) => {
 	const [loadingHashes, setLoadingHashes] = useState<Set<string>>(new Set());
-	const [sendingTbToRdHashes, setSendingTbToRdHashes] = useState<Set<string>>(new Set());
+	const [sendingToRdHashes, setSendingToRdHashes] = useState<Set<string>>(new Set());
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
 	const [castingTbHashes, setCastingTbHashes] = useState<Set<string>>(new Set());
 	const [castingAdHashes, setCastingAdHashes] = useState<Set<string>>(new Set());
@@ -175,19 +177,21 @@ const MovieSearchResults = ({
 		}
 	};
 
-	const handleSendTbToRd = async (hash: string) => {
-		if (!sendTbToRd || sendingTbToRdHashes.has(hash)) return;
-		setSendingTbToRdHashes((prev) => new Set(prev).add(hash));
+	const runSendToRd = async (hash: string, fn?: (hash: string) => Promise<void>) => {
+		if (!fn || sendingToRdHashes.has(hash)) return;
+		setSendingToRdHashes((prev) => new Set(prev).add(hash));
 		try {
-			await sendTbToRd(hash);
+			await fn(hash);
 		} finally {
-			setSendingTbToRdHashes((prev) => {
+			setSendingToRdHashes((prev) => {
 				const newSet = new Set(prev);
 				newSet.delete(hash);
 				return newSet;
 			});
 		}
 	};
+	const handleSendTbToRd = (hash: string) => runSendToRd(hash, sendTbToRd);
+	const handleSendAdToRd = (hash: string) => runSendToRd(hash, sendAdToRd);
 
 	const handleCastWithLoading = async (hash: string) => {
 		if (castingHashes.has(hash)) return;
@@ -290,7 +294,7 @@ const MovieSearchResults = ({
 				const adColor = btnColor(r.adAvailable, r.noVideos);
 				const tbColor = btnColor(r.tbAvailable, r.noVideos);
 				const isLoading = loadingHashes.has(r.hash);
-				const isSendingTbToRd = sendingTbToRdHashes.has(r.hash);
+				const isSendingToRd = sendingToRdHashes.has(r.hash);
 				const isCasting = castingHashes.has(r.hash);
 				const isCastingTb = castingTbHashes.has(r.hash);
 				const isCastingAd = castingAdHashes.has(r.hash);
@@ -469,7 +473,8 @@ const MovieSearchResults = ({
 									</button>
 								)}
 
-								{/* TB → RD btn - TorBox-cached but not yet RD-cached, both logins present */}
+								{/* TB → RD btn - TorBox-cached but not yet RD-cached, both logins present.
+								    Shown even on RD-blocked names: the transfer de-infringes them. */}
 								{rdKey &&
 									torboxKey &&
 									sendTbToRd &&
@@ -478,11 +483,11 @@ const MovieSearchResults = ({
 									!r.tbTransferred &&
 									notInLibrary('rd', r.hash) && (
 										<button
-											className={`haptic-sm inline rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isSendingTbToRd ? 'cursor-not-allowed opacity-50' : ''}`}
+											className={`haptic-sm inline rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isSendingToRd ? 'cursor-not-allowed opacity-50' : ''}`}
 											onClick={() => handleSendTbToRd(r.hash)}
-											disabled={isSendingTbToRd}
+											disabled={isSendingToRd}
 										>
-											{isSendingTbToRd ? (
+											{isSendingToRd ? (
 												<>
 													<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
 													Sending...
@@ -496,18 +501,49 @@ const MovieSearchResults = ({
 										</button>
 									)}
 
+								{/* AD → RD btn - AllDebrid-cached but not yet RD-cached, both logins present.
+								    Shown even on RD-blocked names: the transfer de-infringes them. */}
+								{rdKey &&
+									adKey &&
+									sendAdToRd &&
+									r.adAvailable &&
+									!r.rdAvailable &&
+									!r.tbTransferred &&
+									notInLibrary('rd', r.hash) && (
+										<button
+											className={`haptic-sm inline rounded border-2 border-amber-500 bg-amber-900/30 px-1 text-xs text-amber-100 transition-colors hover:bg-amber-800/50 ${isSendingToRd ? 'cursor-not-allowed opacity-50' : ''}`}
+											onClick={() => handleSendAdToRd(r.hash)}
+											disabled={isSendingToRd}
+										>
+											{isSendingToRd ? (
+												<>
+													<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+													Sending...
+												</>
+											) : (
+												<span className="inline-flex items-center">
+													<Send className="mr-1 h-3 w-3 text-amber-400" />
+													AD → RD
+												</span>
+											)}
+										</button>
+									)}
+
 								{/* Already transferred to RD under a rewritten hash - use the Instant RD row */}
-								{rdKey && torboxKey && r.tbTransferred && !r.rdAvailable && (
-									<span
-										className="inline rounded border-2 border-indigo-500/50 bg-indigo-900/20 px-1 text-xs text-indigo-300"
-										title="Already in Real-Debrid via a transfer — use its Instant RD result for this title."
-									>
-										<span className="inline-flex items-center">
-											<Send className="mr-1 h-3 w-3 text-indigo-400" />
-											In RD
+								{rdKey &&
+									(torboxKey || adKey) &&
+									r.tbTransferred &&
+									!r.rdAvailable && (
+										<span
+											className="inline rounded border-2 border-indigo-500/50 bg-indigo-900/20 px-1 text-xs text-indigo-300"
+											title="Already in Real-Debrid via a transfer — use its Instant RD result for this title."
+										>
+											<span className="inline-flex items-center">
+												<Send className="mr-1 h-3 w-3 text-indigo-400" />
+												In RD
+											</span>
 										</span>
-									</span>
-								)}
+									)}
 
 								{/* Cast (RD) btn - only show if cached on RD */}
 								{rdKey && r.rdAvailable && (
