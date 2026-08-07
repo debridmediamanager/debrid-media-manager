@@ -26,8 +26,9 @@ describe('getDebridUploaderServers', () => {
 		expect(getDebridUploaderServers()).toEqual([S2]);
 	});
 
-	it('defaults to debrid02 when nothing is set', () => {
-		expect(getDebridUploaderServers()).toEqual(['http://138.201.246.20:3100']);
+	it('defaults to debrid02 over Tailscale when nothing is set', () => {
+		// Never the public IP: that vhost serves only /webseed/* and 404s /jobs.
+		expect(getDebridUploaderServers()).toEqual(['http://100.122.58.7:3100']);
 	});
 
 	it('prefers the pool var over the single var', () => {

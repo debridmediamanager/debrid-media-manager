@@ -12,7 +12,14 @@
 // A job larger than a server's cap is never routed there — rewriteTorrent is
 // synchronous, so one big torrent stalls a single-core host and its webseed
 // serving. Uncapped servers take any size.
-const DEFAULT_SERVER = 'http://138.201.246.20:3100';
+//
+// These must be Tailscale addresses, not the servers' public IPs. Caddy on each
+// debrid host exposes only /webseed/* on the public :3100 and 404s everything
+// else, because POST /jobs and DELETE /jobs/:id are unauthenticated and spend
+// the operator's RD/TorBox quota. The management API this file talks to lives
+// on the Tailscale :3100 vhost. A public IP here makes every job submission
+// fail with a bare 404.
+const DEFAULT_SERVER = 'http://100.122.58.7:3100'; // debrid02 over Tailscale
 
 export interface DebridServerConfig {
 	url: string;
