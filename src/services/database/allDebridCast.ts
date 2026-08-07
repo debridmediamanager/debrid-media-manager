@@ -38,6 +38,34 @@ export class AllDebridCastService extends DatabaseClient {
 		});
 	}
 
+	/**
+	 * Settings-only update for a profile that already exists, keyed by the cast
+	 * user id the client already holds. Never touches apiKey, so callers do not
+	 * need the key in hand and no AllDebrid call is required to resync settings.
+	 *
+	 * Returns false when there is no such profile, so callers can answer 404 and
+	 * let the client fall back to a full save.
+	 */
+	public async updateCastSettings(
+		userId: string,
+		movieMaxSize?: number,
+		episodeMaxSize?: number,
+		otherStreamsLimit?: number,
+		hideCastOption?: boolean
+	): Promise<boolean> {
+		const { count } = await this.prisma.allDebridCastProfile.updateMany({
+			where: { userId },
+			data: {
+				...(movieMaxSize !== undefined && { movieMaxSize }),
+				...(episodeMaxSize !== undefined && { episodeMaxSize }),
+				...(otherStreamsLimit !== undefined && { otherStreamsLimit }),
+				...(hideCastOption !== undefined && { hideCastOption }),
+				updatedAt: new Date(),
+			},
+		});
+		return count > 0;
+	}
+
 	public async getLatestCast(imdbId: string, userId: string): Promise<LatestCast | null> {
 		const castItem = await this.prisma.allDebridCast.findFirst({
 			where: {
