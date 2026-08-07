@@ -34,6 +34,10 @@ export interface Nzb2rdDuplicate {
 	duplicate: 'completed' | 'in_progress';
 	infoHash: string | null;
 	jobId: string;
+	/** completed: whether the cached torrent was added to this caller's account. */
+	added?: boolean;
+	/** in_progress: this caller is queued to receive it when the job lands. */
+	queued?: boolean;
 }
 
 export function isNzb2rdDuplicate(r: Nzb2rdJob | Nzb2rdDuplicate): r is Nzb2rdDuplicate {

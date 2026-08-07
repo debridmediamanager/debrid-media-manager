@@ -3,7 +3,7 @@ import {
 	parseTransferContext,
 	TransferJobFile,
 } from '@/services/debridUploaderRegistration';
-import { getNzb2rdUrl, isValidImdbId } from '@/services/nzb2rd';
+import { addHashToRdAccount, getNzb2rdUrl, isValidImdbId } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -41,6 +41,29 @@ async function registerCompletedJob(
 				typeof job.name === 'string' ? job.name : undefined
 			)
 			.catch((e) => console.error('Recording completed nzb2rd transfer failed:', e));
+	}
+
+	// Hand the finished torrent to everyone who asked for this release while it
+	// was still being fetched. Their submission was deduped into this one job, so
+	// without this they would have paid the wait and received nothing. RD has the
+	// content cached by now, so each add resolves instantly.
+	if (releaseId) {
+		const waiters = await db.takeNzb2rdWaiters(releaseId).catch((e) => {
+			console.error('Reading nzb2rd waiters failed:', e);
+			return [];
+		});
+		for (const waiter of waiters) {
+			try {
+				await addHashToRdAccount(waiter.rdKey, infoHash);
+			} catch (error) {
+				// One account failing must not deny the rest; the key is spent either
+				// way, so never log it.
+				console.error(`Adding nzb2rd result to a waiting RD account failed:`, error);
+			}
+		}
+		if (waiters.length > 0) {
+			console.log(`[nzb2rd] job=${job.id} delivered to ${waiters.length} waiting account(s)`);
+		}
 	}
 
 	const context = parseTransferContext(mediaType, seasonNum);

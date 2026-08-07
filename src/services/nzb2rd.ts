@@ -12,6 +12,9 @@
 //     public vhost forwards only /webseed/*, so the management API answers on
 //     the Tailscale address alone — same arrangement as the debrid uploader.
 
+import { isVideo } from '@/utils/selectable';
+import { addHashAsMagnet, getTorrentInfo, selectFiles } from './realDebrid';
+
 const DEFAULT_NZB2RD_URL = 'http://100.90.231.66:3200'; // dmm over Tailscale
 const DEFAULT_NEWZNAB_URL = 'https://drunkenslug.com/api';
 
@@ -150,6 +153,31 @@ export interface Nzb2rdJob {
 	status: string;
 	name?: string | null;
 	error?: string | null;
+}
+
+/**
+ * Put an already-built torrent into someone's Real-Debrid account by hash.
+ *
+ * Only worth calling once the job that produced it has finished: at that point
+ * RD holds the content, so the add resolves out of its cache instead of looking
+ * for seeders — which matters, because an nzb2rd torrent is webseed-only and has
+ * no announce or DHT presence to fall back on.
+ *
+ * `bare` throughout: this runs server-side, so it talks to RD directly rather
+ * than through the browser's CORS proxy.
+ */
+export async function addHashToRdAccount(rdKey: string, hash: string): Promise<string> {
+	const id = await addHashAsMagnet(rdKey, hash, true);
+	const info = await getTorrentInfo(rdKey, id, true);
+
+	// Mirrors handleSelectFilesInRd: videos if there are any, otherwise everything.
+	let selected = info.files.filter(isVideo).map((file: { id: number }) => `${file.id}`);
+	if (selected.length === 0) {
+		selected = info.files.map((file: { id: number }) => `${file.id}`);
+	}
+	if (selected.length > 0) await selectFiles(rdKey, id, selected, true);
+
+	return id;
 }
 
 /**

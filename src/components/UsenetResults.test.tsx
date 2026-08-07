@@ -305,7 +305,7 @@ describe('UsenetResults', () => {
 		});
 	});
 
-	it('does not track a duplicate, and flips the row to its shared state', async () => {
+	it('reports an already-finished release as added to your own library', async () => {
 		const fetchMock = mockSearch();
 		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
 		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
@@ -313,13 +313,44 @@ describe('UsenetResults', () => {
 
 		fetchMock.mockResolvedValueOnce({
 			ok: true,
-			json: async () => ({ duplicate: 'completed', infoHash: 'h', jobId: 'j' }),
+			json: async () => ({ duplicate: 'completed', infoHash: 'h', jobId: 'j', added: true }),
 		});
 		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
 
 		expect(await screen.findByRole('button', { name: /in rd/i })).toBeDisabled();
+		await waitFor(() =>
+			expect(toastSuccess).toHaveBeenCalledWith(
+				expect.stringContaining('added to your Real-Debrid library'),
+				expect.anything()
+			)
+		);
+		// nothing to follow: it is already done
 		expect(localStorage.getItem('nzb2rd:jobs')).toBeNull();
-		expect(toastSuccess).not.toHaveBeenCalled();
+	});
+
+	// Otherwise this browser has no way to learn the job finished, and the
+	// completion path is what puts the content in *this* user's account.
+	it("follows someone else's in-flight job so the result reaches this account", async () => {
+		const fetchMock = mockSearch();
+		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
+		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
+		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
+
+		fetchMock.mockResolvedValueOnce({
+			ok: true,
+			json: async () => ({
+				duplicate: 'in_progress',
+				infoHash: null,
+				jobId: 'job-A',
+				queued: true,
+			}),
+		});
+		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
+
+		expect(await screen.findByRole('button', { name: /running/i })).toBeDisabled();
+		const tracked = JSON.parse(localStorage.getItem('nzb2rd:jobs') ?? '[]');
+		expect(tracked).toHaveLength(1);
+		expect(tracked[0]).toMatchObject({ id: 'job-A', releaseId: 'b' });
 	});
 
 	it('says so when the indexer has nothing', async () => {

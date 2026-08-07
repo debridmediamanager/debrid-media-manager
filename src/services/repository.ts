@@ -214,6 +214,19 @@ export class Repository {
 		return this.nzb2rdMapService.removeTransfer(releaseId);
 	}
 
+	// Users parked on someone else's in-flight job, to be given the content when it lands
+	public addNzb2rdWaiter(releaseId: string, rdKey: string, imdbId: string) {
+		return this.nzb2rdMapService.addWaiter(releaseId, rdKey, imdbId);
+	}
+
+	public takeNzb2rdWaiters(releaseId: string) {
+		return this.nzb2rdMapService.takeWaiters(releaseId);
+	}
+
+	public getNzb2rdWaiters(releaseId: string) {
+		return this.nzb2rdMapService.getWaiters(releaseId);
+	}
+
 	// Newznab search cache, so one indexer call serves a title for a whole TTL
 	public getCachedNzbSearch(imdbId: string, seasonNum?: number) {
 		return this.nzbSearchCacheService.get(imdbId, seasonNum);
@@ -561,6 +574,22 @@ export class Repository {
 		return this.allDebridCastService.saveCastProfile(
 			userId,
 			apiKey,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption
+		);
+	}
+
+	public updateAllDebridCastSettings(
+		userId: string,
+		movieMaxSize?: number,
+		episodeMaxSize?: number,
+		otherStreamsLimit?: number,
+		hideCastOption?: boolean
+	) {
+		return this.allDebridCastService.updateCastSettings(
+			userId,
 			movieMaxSize,
 			episodeMaxSize,
 			otherStreamsLimit,

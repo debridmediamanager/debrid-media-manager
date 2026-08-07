@@ -145,6 +145,9 @@ const UsenetResults = ({ imdbId, seasonNum, rdKey }: UsenetResultsProps) => {
 		[results, sortKey, sortDir]
 	);
 
+	const returnPath = () =>
+		seasonNum !== undefined ? `/show/${imdbId}/${seasonNum}` : `/movie/${imdbId}`;
+
 	const send = async (result: UsenetResult) => {
 		if (!rdKey) {
 			toast.error('Log in with Real-Debrid to send Usenet releases', { duration: 5000 });
@@ -168,11 +171,32 @@ const UsenetResults = ({ imdbId, seasonNum, rdKey }: UsenetResultsProps) => {
 						job.duplicate === 'completed' ? 'completed' : 'pending'
 					)
 				);
+
+				if (job.duplicate === 'completed') {
+					toast.success(
+						job.added
+							? 'Already fetched — added to your Real-Debrid library.'
+							: 'Already fetched, but adding it to your library failed. Try the cached result above.',
+						{ duration: 6000 }
+					);
+					return;
+				}
+
+				// Someone else is already fetching this. Follow their job rather than
+				// starting a second one: the completion path adds the finished torrent
+				// to this account too, and until then it belongs on the Transfers page
+				// — which is where the toast sends people.
+				trackNzb2rdJob({
+					id: job.jobId,
+					releaseId: result.id,
+					imdbId,
+					title: result.title,
+					returnPath: returnPath(),
+					createdAt: Date.now(),
+				});
 				toast(
-					job.duplicate === 'completed'
-						? 'Already fetched — it is in Real-Debrid, use the cached result above.'
-						: 'A transfer for this release is already running — see the Transfers page.',
-					{ duration: 6000 }
+					'Already being fetched for someone else — you will get it too once it lands. Follow it on the Transfers page.',
+					{ duration: 7000 }
 				);
 				return;
 			}
@@ -184,8 +208,7 @@ const UsenetResults = ({ imdbId, seasonNum, rdKey }: UsenetResultsProps) => {
 				releaseId: result.id,
 				imdbId,
 				title: result.title,
-				returnPath:
-					seasonNum !== undefined ? `/show/${imdbId}/${seasonNum}` : `/movie/${imdbId}`,
+				returnPath: returnPath(),
 				createdAt: Date.now(),
 			});
 			setSentIds((prev) => new Set(prev).add(result.id));

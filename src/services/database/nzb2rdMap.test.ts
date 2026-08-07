@@ -93,3 +93,98 @@ describe('Nzb2rdMapService', () => {
 		await expect(service.removeTransfer(RELEASE)).resolves.toBeUndefined();
 	});
 });
+
+describe('Nzb2rdMapService waiters', () => {
+	let service: Nzb2rdMapService;
+	let prisma: any;
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		service = new Nzb2rdMapService();
+		prisma = (service as any).prisma;
+	});
+
+	const withWaiters = (waiters: unknown[]) => ({
+		key: 'nzbwait:abc123def',
+		value: { waiters },
+	});
+
+	it('queues a waiter under its own key, apart from the transfer record', async () => {
+		prisma.cache.findUnique.mockResolvedValue(null);
+
+		await service.addWaiter(RELEASE, 'rd-key-b', 'tt1418646');
+
+		const call = prisma.cache.upsert.mock.calls[0][0];
+		expect(call.where).toEqual({ key: 'nzbwait:abc123def' });
+		expect(call.create.value.waiters).toHaveLength(1);
+		expect(call.create.value.waiters[0]).toMatchObject({
+			rdKey: 'rd-key-b',
+			imdbId: 'tt1418646',
+		});
+	});
+
+	it('appends a second account without dropping the first', async () => {
+		prisma.cache.findUnique.mockResolvedValue(
+			withWaiters([{ rdKey: 'rd-key-b', imdbId: 'tt1', queuedAt: 1 }])
+		);
+
+		await service.addWaiter(RELEASE, 'rd-key-c', 'tt1418646');
+
+		const value = prisma.cache.upsert.mock.calls[0][0].create.value;
+		expect(value.waiters.map((w: any) => w.rdKey)).toEqual(['rd-key-b', 'rd-key-c']);
+	});
+
+	it('does not queue the same account twice', async () => {
+		prisma.cache.findUnique.mockResolvedValue(
+			withWaiters([{ rdKey: 'rd-key-b', imdbId: 'tt1', queuedAt: 1 }])
+		);
+
+		await service.addWaiter(RELEASE, 'rd-key-b', 'tt1418646');
+
+		expect(prisma.cache.upsert).not.toHaveBeenCalled();
+	});
+
+	it('caps the list so a popular release cannot grow one row without limit', async () => {
+		const many = Array.from({ length: Nzb2rdMapService.MAX_WAITERS }, (_, i) => ({
+			rdKey: `k${i}`,
+			imdbId: 'tt1',
+			queuedAt: i,
+		}));
+		prisma.cache.findUnique.mockResolvedValue(withWaiters(many));
+
+		await service.addWaiter(RELEASE, 'newcomer', 'tt1418646');
+
+		const value = prisma.cache.upsert.mock.calls[0][0].create.value;
+		expect(value.waiters).toHaveLength(Nzb2rdMapService.MAX_WAITERS);
+		expect(value.waiters.at(-1).rdKey).toBe('newcomer');
+		expect(value.waiters[0].rdKey).toBe('k1'); // oldest dropped
+	});
+
+	// Delivery must be once-only: a second poll landing at the same moment would
+	// otherwise add the same torrent to the same account twice.
+	it('takeWaiters returns the list and clears it', async () => {
+		prisma.cache.findUnique.mockResolvedValue(
+			withWaiters([{ rdKey: 'rd-key-b', imdbId: 'tt1', queuedAt: 1 }])
+		);
+
+		const taken = await service.takeWaiters(RELEASE);
+
+		expect(taken).toHaveLength(1);
+		expect(prisma.cache.delete).toHaveBeenCalledWith({ where: { key: 'nzbwait:abc123def' } });
+	});
+
+	it('takeWaiters does not delete when there was nothing queued', async () => {
+		prisma.cache.findUnique.mockResolvedValue(null);
+
+		expect(await service.takeWaiters(RELEASE)).toEqual([]);
+		expect(prisma.cache.delete).not.toHaveBeenCalled();
+	});
+
+	it('cancelling a transfer also drops anyone waiting on it', async () => {
+		prisma.cache.findUnique.mockResolvedValue(null);
+		await service.removeTransfer(RELEASE);
+
+		const keys = prisma.cache.delete.mock.calls.map((c: any[]) => c[0].where.key);
+		expect(keys).toEqual(['nzbrd:abc123def', 'nzbwait:abc123def']);
+	});
+});

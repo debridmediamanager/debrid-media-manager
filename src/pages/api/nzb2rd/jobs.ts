@@ -1,4 +1,10 @@
-import { fetchNzb, getNzb2rdUrl, isValidImdbId, submitNzb } from '@/services/nzb2rd';
+import {
+	addHashToRdAccount,
+	fetchNzb,
+	getNzb2rdUrl,
+	isValidImdbId,
+	submitNzb,
+} from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -64,10 +70,34 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	try {
 		const existing = await db.getNzb2rdTransfer(id);
 		if (existing && (await isTransferStillValid(existing))) {
+			// Already finished: RD has the content cached, so put it straight into
+			// this caller's account instead of sending them off to find it.
+			if (existing.status === 'completed' && existing.infoHash) {
+				let added = false;
+				try {
+					await addHashToRdAccount(rdKey, existing.infoHash);
+					added = true;
+				} catch (error) {
+					console.error('Adding a completed nzb2rd transfer to RD failed:', error);
+				}
+				return res.status(200).json({
+					duplicate: 'completed',
+					infoHash: existing.infoHash,
+					jobId: existing.jobId,
+					added,
+				});
+			}
+
+			// Still running: park this caller so the completion path hands them the
+			// torrent too, rather than letting one user's fetch benefit only them.
+			await db
+				.addNzb2rdWaiter(id, rdKey, imdbId)
+				.catch((e) => console.error('Queueing nzb2rd waiter failed:', e));
 			return res.status(200).json({
-				duplicate: existing.status === 'completed' ? 'completed' : 'in_progress',
-				infoHash: existing.infoHash ?? null,
+				duplicate: 'in_progress',
+				infoHash: null,
 				jobId: existing.jobId,
+				queued: true,
 			});
 		}
 	} catch (error) {

@@ -31,6 +31,17 @@ export interface Nzb2rdTransferRecord {
 const KEY_PREFIX = 'nzbrd:';
 const keyFor = (releaseId: string) => `${KEY_PREFIX}${releaseId.toLowerCase()}`;
 
+/** Users waiting on someone else's in-flight job for this release. */
+const WAIT_PREFIX = 'nzbwait:';
+const waitKeyFor = (releaseId: string) => `${WAIT_PREFIX}${releaseId.toLowerCase()}`;
+
+export interface Nzb2rdWaiter {
+	/** Real-Debrid access token, held only until the job completes. */
+	rdKey: string;
+	imdbId: string;
+	queuedAt: number;
+}
+
 export class Nzb2rdMapService extends DatabaseClient {
 	async getTransfer(releaseId: string): Promise<Nzb2rdTransferRecord | null> {
 		const row = await this.prisma.cache.findUnique({ where: { key: keyFor(releaseId) } });
@@ -95,5 +106,70 @@ export class Nzb2rdMapService extends DatabaseClient {
 		await this.prisma.cache
 			.delete({ where: { key: keyFor(releaseId) } })
 			.catch(() => undefined);
+		await this.clearWaiters(releaseId);
+	}
+
+	// --- waiters -------------------------------------------------------------
+	//
+	// A second user asking for a release that is already being fetched must not
+	// start a duplicate Usenet download, but they should still end up with the
+	// content. So they are parked here, and the completion path adds the finished
+	// torrent to each of their accounts — cheap, because by then Real-Debrid has
+	// it cached and the add resolves instantly.
+	//
+	// Their access token is what makes that possible, so it lives here until the
+	// job finishes and is deleted the moment it is used. Kept under a separate
+	// key so the transfer record's own writes can never clobber the list.
+
+	/** Bounded so a popular release cannot grow one row without limit. */
+	static readonly MAX_WAITERS = 50;
+
+	async addWaiter(releaseId: string, rdKey: string, imdbId: string): Promise<void> {
+		const key = waitKeyFor(releaseId);
+		try {
+			const existing = await this.getWaiters(releaseId);
+			// One entry per account: re-asking should not queue a second add.
+			if (existing.some((w) => w.rdKey === rdKey)) return;
+			const waiters = [...existing, { rdKey, imdbId, queuedAt: Date.now() }].slice(
+				-Nzb2rdMapService.MAX_WAITERS
+			);
+			const value = { waiters } as unknown as object;
+			await this.prisma.cache.upsert({
+				where: { key },
+				update: { value } as any,
+				create: { key, value } as any,
+			});
+		} catch (error) {
+			console.error('Error queueing nzb2rd waiter:', error);
+		}
+	}
+
+	async getWaiters(releaseId: string): Promise<Nzb2rdWaiter[]> {
+		try {
+			const row = await this.prisma.cache.findUnique({
+				where: { key: waitKeyFor(releaseId) },
+			});
+			const value = row?.value as unknown as { waiters?: unknown } | undefined;
+			return Array.isArray(value?.waiters) ? (value!.waiters as Nzb2rdWaiter[]) : [];
+		} catch (error) {
+			console.error('Error reading nzb2rd waiters:', error);
+			return [];
+		}
+	}
+
+	async clearWaiters(releaseId: string): Promise<void> {
+		await this.prisma.cache
+			.delete({ where: { key: waitKeyFor(releaseId) } })
+			.catch(() => undefined);
+	}
+
+	/**
+	 * Read the waiters and drop them in one step, so a second poll landing at the
+	 * same moment cannot add the same torrent to the same account twice.
+	 */
+	async takeWaiters(releaseId: string): Promise<Nzb2rdWaiter[]> {
+		const waiters = await this.getWaiters(releaseId);
+		if (waiters.length > 0) await this.clearWaiters(releaseId);
+		return waiters;
 	}
 }
