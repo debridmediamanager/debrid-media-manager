@@ -8,6 +8,7 @@ import { HashImdbService } from './hashImdb';
 import { HashSearchService } from './hashSearch';
 import { HistoryAggregationService } from './historyAggregation';
 import { ImdbSearchService } from './imdbSearch';
+import { Nzb2rdMapService } from './nzb2rdMap';
 import { RdOperationalService } from './rdOperational';
 import { ReportService } from './report';
 import { ScrapedService } from './scraped';
@@ -28,6 +29,7 @@ export {
 	HashSearchService,
 	HistoryAggregationService,
 	ImdbSearchService,
+	Nzb2rdMapService,
 	RdOperationalService,
 	ReportService,
 	ScrapedService,

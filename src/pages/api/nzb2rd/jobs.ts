@@ -1,0 +1,112 @@
+import { fetchNzb, getNzb2rdUrl, isValidImdbId, submitNzb } from '@/services/nzb2rd';
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { repository as db } from '@/services/repository';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+// Windows-illegal characters plus path separators; nzb2rd writes this straight
+// to disk as the job's NZB filename.
+function safeNzbName(title: string): string {
+	const cleaned = title.replace(/[/\\?%*:|"<>\x00-\x1f]/g, '').trim();
+	const base = (cleaned || 'release').slice(0, 200);
+	return base.toLowerCase().endsWith('.nzb') ? base : `${base}.nzb`;
+}
+
+// Is a recorded transfer still worth blocking a fresh submission? A completed
+// one counts only while its torrent is still RD-cached (a pruned one should be
+// re-fetchable); a pending one only while its job is still alive.
+async function isTransferStillValid(record: {
+	status: string;
+	jobId: string;
+	infoHash?: string;
+}): Promise<boolean> {
+	if (record.status === 'completed') {
+		if (!record.infoHash) return false;
+		const available = await db.checkAvailabilityByHashes([record.infoHash]);
+		return available.length > 0;
+	}
+	try {
+		const res = await fetch(`${getNzb2rdUrl()}/jobs/${encodeURIComponent(record.jobId)}`, {
+			headers: { Accept: 'application/json' },
+			signal: AbortSignal.timeout(10000),
+		});
+		if (res.status === 404) return false;
+		const job = await res.json();
+		return job?.status !== 'failed';
+	} catch {
+		return false; // can't confirm it's alive — let the resubmit through
+	}
+}
+
+// Send one Usenet release to nzb2rd, which fetches it off Usenet, rebuilds it
+// as a webseed torrent and adds it to the caller's Real-Debrid account. The NZB
+// is downloaded here rather than in the browser so the indexer key stays server
+// side.
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+	if (req.method !== 'POST') {
+		return res.status(405).json({ error: 'Method not allowed' });
+	}
+
+	const { id, title, imdbId, rdKey } = req.body ?? {};
+
+	if (typeof id !== 'string' || !/^[A-Za-z0-9._-]{1,128}$/.test(id)) {
+		return res.status(400).json({ error: 'id must be an indexer result id' });
+	}
+	if (!isValidImdbId(imdbId)) {
+		return res.status(400).json({ error: 'imdbId is required (format: tt1234567)' });
+	}
+	if (typeof rdKey !== 'string' || !rdKey) {
+		return res.status(400).json({ error: 'rdKey is required' });
+	}
+
+	// Cross-user / cross-device dedup: a Usenet fetch is expensive (indexer grab
+	// quota + block-account bytes), so never run the same release twice while an
+	// earlier transfer is still good.
+	try {
+		const existing = await db.getNzb2rdTransfer(id);
+		if (existing && (await isTransferStillValid(existing))) {
+			return res.status(200).json({
+				duplicate: existing.status === 'completed' ? 'completed' : 'in_progress',
+				infoHash: existing.infoHash ?? null,
+				jobId: existing.jobId,
+			});
+		}
+	} catch (error) {
+		console.error('nzb2rd transfer dedup check failed (continuing):', error);
+	}
+
+	let nzbText: string;
+	try {
+		nzbText = await fetchNzb(id);
+	} catch (error) {
+		console.error('NZB download failed:', error);
+		return res.status(502).json({ error: 'Could not download the NZB from the indexer' });
+	}
+	if (!nzbText.trim()) {
+		return res.status(502).json({ error: 'The indexer returned an empty NZB' });
+	}
+
+	try {
+		const { status, data } = await submitNzb({
+			nzbText,
+			nzbName: safeNzbName(typeof title === 'string' ? title : id),
+			imdbId,
+			rdKey,
+		});
+		if (status < 300 && data?.id) {
+			await db
+				.recordNzb2rdTransferPending(
+					id,
+					data.id,
+					imdbId,
+					typeof title === 'string' ? title : undefined
+				)
+				.catch((e) => console.error('Recording pending nzb2rd transfer failed:', e));
+		}
+		return res.status(status).json(data);
+	} catch (error) {
+		console.error('nzb2rd submission failed:', error);
+		return res.status(502).json({ error: 'nzb2rd service unreachable' });
+	}
+}
+
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.default);

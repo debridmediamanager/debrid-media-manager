@@ -10,6 +10,7 @@ import {
 	HashSearchService,
 	HistoryAggregationService,
 	ImdbSearchService,
+	Nzb2rdMapService,
 	RdOperationalService,
 	ReportService,
 	ScrapedService,
@@ -44,6 +45,7 @@ export type RepositoryDependencies = Partial<{
 	rdOperationalService: RdOperationalService;
 	imdbSearchService: ImdbSearchService;
 	debridUploaderMapService: DebridUploaderMapService;
+	nzb2rdMapService: Nzb2rdMapService;
 }>;
 
 export class Repository {
@@ -65,6 +67,7 @@ export class Repository {
 	private rdOperationalService: RdOperationalService;
 	private imdbSearchService: ImdbSearchService;
 	private debridUploaderMapService: DebridUploaderMapService;
+	private nzb2rdMapService: Nzb2rdMapService;
 
 	constructor({
 		availabilityService,
@@ -85,6 +88,7 @@ export class Repository {
 		rdOperationalService,
 		imdbSearchService,
 		debridUploaderMapService,
+		nzb2rdMapService,
 	}: RepositoryDependencies = {}) {
 		this.availabilityService = availabilityService ?? new AvailabilityService();
 		this.scrapedService = scrapedService ?? new ScrapedService();
@@ -105,6 +109,7 @@ export class Repository {
 		this.rdOperationalService = rdOperationalService ?? new RdOperationalService();
 		this.imdbSearchService = imdbSearchService ?? new ImdbSearchService();
 		this.debridUploaderMapService = debridUploaderMapService ?? new DebridUploaderMapService();
+		this.nzb2rdMapService = nzb2rdMapService ?? new Nzb2rdMapService();
 	}
 
 	// Ensure connection is properly closed when repository is no longer needed
@@ -128,6 +133,7 @@ export class Repository {
 			this.rdOperationalService.disconnect(),
 			this.imdbSearchService.disconnect(),
 			this.debridUploaderMapService.disconnect(),
+			this.nzb2rdMapService.disconnect(),
 		]);
 	}
 
@@ -168,6 +174,38 @@ export class Repository {
 
 	public getDebridJobServer(jobId: string) {
 		return this.debridUploaderMapService.getJobServer(jobId);
+	}
+
+	// nzb2rd (Usenet → RD transfer) mapping methods, keyed by indexer release id
+	public getNzb2rdTransfer(releaseId: string) {
+		return this.nzb2rdMapService.getTransfer(releaseId);
+	}
+
+	public getNzb2rdTransfers(releaseIds: string[]) {
+		return this.nzb2rdMapService.getTransfers(releaseIds);
+	}
+
+	public recordNzb2rdTransferPending(
+		releaseId: string,
+		jobId: string,
+		imdbId: string,
+		title?: string
+	) {
+		return this.nzb2rdMapService.recordPending(releaseId, jobId, imdbId, title);
+	}
+
+	public recordNzb2rdTransferCompleted(
+		releaseId: string,
+		jobId: string,
+		imdbId: string,
+		infoHash: string,
+		title?: string
+	) {
+		return this.nzb2rdMapService.recordCompleted(releaseId, jobId, imdbId, infoHash, title);
+	}
+
+	public removeNzb2rdTransfer(releaseId: string) {
+		return this.nzb2rdMapService.removeTransfer(releaseId);
 	}
 
 	// Availability Service Methods

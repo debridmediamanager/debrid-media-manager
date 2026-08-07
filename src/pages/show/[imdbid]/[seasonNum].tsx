@@ -2,6 +2,7 @@ import MediaHeader from '@/components/MediaHeader';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
 import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
+import UsenetResults from '@/components/UsenetResults';
 import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/components/showInfo';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
@@ -1413,6 +1414,8 @@ const TvSearch: FunctionComponent = () => {
 					</span>
 				))}
 			</div>
+
+			<UsenetResults imdbId={imdbId} seasonNum={selectedSeason} rdKey={rdKey} />
 
 			<TvSearchResults
 				filteredResults={filteredResults}
