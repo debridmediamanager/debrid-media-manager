@@ -1,10 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+	buildPackQueries,
 	buildSearchUrl,
+	buildTextSearchUrl,
 	fetchNzb,
+	isSeasonPack,
 	isValidImdbId,
+	looksLikeEpisode,
 	parseNewznabItem,
 	parseNewznabResponse,
+	searchSeasonPacks,
 	searchUsenet,
 	submitNzb,
 } from './nzb2rd';
@@ -218,5 +223,179 @@ describe('submitNzb', () => {
 			rdKey: 'k',
 		});
 		expect(result.status).toBe(400);
+	});
+});
+
+describe('looksLikeEpisode', () => {
+	// Every one of these forms is real indexer output. The spaced and EP variants
+	// are the ones that would otherwise be mistaken for whole-season releases.
+	it.each([
+		'Game.of.Thrones.S02E08.The.Prince.of.Winterfell.1080p',
+		'Game of Thrones S02 EP09.mkv',
+		'Game_of_Thrones_S02_E10_BluRay_720p',
+		'Some.Show.2x09.HDTV',
+		'Some Show Episode 4 1080p',
+	])('treats %s as an episode', (title) => {
+		expect(looksLikeEpisode(title)).toBe(true);
+	});
+
+	it.each([
+		'Game.of.Thrones.S02.2160p.MAX.WEB-DL.TrueHD.7.1.Atmos.DV.HDR.H.265',
+		'Breaking.Bad.S03.1080p.NF.WEB-DL.EAC3.SDR.H265',
+		'The.Wire.S01.1080p.BluRay.H264-GERUDO',
+	])('does not treat %s as an episode', (title) => {
+		expect(looksLikeEpisode(title)).toBe(false);
+	});
+});
+
+describe('isSeasonPack', () => {
+	it('accepts both the S0N and Season N spellings', () => {
+		expect(isSeasonPack('The.Wire.S01.1080p.BluRay', 1)).toBe(true);
+		expect(isSeasonPack('The Wire Season 1 1080p', 1)).toBe(true);
+	});
+
+	it('rejects a pack for a different season', () => {
+		expect(isSeasonPack('The.Wire.S02.1080p.BluRay', 1)).toBe(false);
+	});
+
+	it('rejects single episodes even when they name the season', () => {
+		expect(isSeasonPack('Game of Thrones S02 EP09.mkv', 2)).toBe(false);
+		expect(isSeasonPack('Game.of.Thrones.S02E08.1080p', 2)).toBe(false);
+	});
+});
+
+describe('buildPackQueries', () => {
+	it('asks three ways, because each finds packs the others miss', () => {
+		expect(buildPackQueries('Game of Thrones', 2)).toEqual([
+			'Game of Thrones S02',
+			'Game of Thrones S02 COMPLETE',
+			'Game of Thrones Season 2',
+		]);
+	});
+
+	it('zero-pads the season in the S0N form only', () => {
+		expect(buildPackQueries('Show', 10)).toEqual([
+			'Show S10',
+			'Show S10 COMPLETE',
+			'Show Season 10',
+		]);
+	});
+});
+
+describe('buildTextSearchUrl', () => {
+	it('is a TV-category free-text search', () => {
+		const url = new URL(buildTextSearchUrl('Game of Thrones S02'));
+		expect(url.searchParams.get('t')).toBe('search');
+		expect(url.searchParams.get('cat')).toBe('5000');
+		expect(url.searchParams.get('q')).toBe('Game of Thrones S02');
+	});
+});
+
+describe('searchSeasonPacks', () => {
+	const item = (id: string, title: string) => ({
+		title,
+		guid: id,
+		'newznab:attr': [{ _name: 'size', _value: '100' }],
+	});
+
+	it('unions the three phrasings and drops episodes', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi
+				.fn()
+				.mockResolvedValueOnce({
+					ok: true,
+					json: async () => ({ item: [item('a', 'Show.S02.2160p.WEB-DL')] }),
+				})
+				.mockResolvedValueOnce({
+					ok: true,
+					json: async () => ({ item: [item('b', 'Show.S02.COMPLETE.BluRay')] }),
+				})
+				.mockResolvedValueOnce({
+					ok: true,
+					json: async () => ({
+						item: [item('a', 'Show.S02.2160p.WEB-DL'), item('c', 'Show S02 EP03')],
+					}),
+				})
+		);
+
+		const packs = await searchSeasonPacks('Show', 2);
+
+		expect(packs.map((p) => p.id).sort()).toEqual(['a', 'b']); // 'a' deduped, episode dropped
+		expect(packs.every((p) => p.isPack)).toBe(true);
+	});
+
+	it('skips a phrasing that fails rather than losing the others', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi
+				.fn()
+				.mockRejectedValueOnce(new Error('429'))
+				.mockResolvedValue({
+					ok: true,
+					json: async () => ({ item: [item('b', 'Show.S02.COMPLETE.BluRay')] }),
+				})
+		);
+
+		const packs = await searchSeasonPacks('Show', 2);
+		expect(packs).toHaveLength(1);
+	});
+});
+
+describe('searchUsenet with a show title', () => {
+	it('puts packs ahead of the episode list', async () => {
+		const fetchMock = vi
+			.fn()
+			// tvsearch (episodes)
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () => ({
+					item: [
+						{
+							title: 'Show.S02E01.1080p',
+							guid: 'ep1',
+							'newznab:attr': [{ _name: 'size', _value: '10' }],
+						},
+					],
+				}),
+			})
+			// the three pack phrasings
+			.mockResolvedValue({
+				ok: true,
+				json: async () => ({
+					item: [
+						{
+							title: 'Show.S02.COMPLETE.1080p',
+							guid: 'pack1',
+							'newznab:attr': [{ _name: 'size', _value: '99' }],
+						},
+					],
+				}),
+			});
+		vi.stubGlobal('fetch', fetchMock);
+
+		const results = await searchUsenet({ imdbId: 'tt0944947', seasonNum: 2, title: 'Show' });
+
+		expect(results.map((r) => r.id)).toEqual(['pack1', 'ep1']);
+		expect(results[0].isPack).toBe(true);
+		expect(fetchMock).toHaveBeenCalledTimes(4); // 1 tvsearch + 3 pack queries
+	});
+
+	it('does not run pack queries for a movie', async () => {
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ item: [] }) });
+		vi.stubGlobal('fetch', fetchMock);
+
+		await searchUsenet({ imdbId: 'tt1418646' });
+
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+	});
+
+	it('does not run pack queries for a season with no title to ask by', async () => {
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ item: [] }) });
+		vi.stubGlobal('fetch', fetchMock);
+
+		await searchUsenet({ imdbId: 'tt0944947', seasonNum: 2 });
+
+		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
 });

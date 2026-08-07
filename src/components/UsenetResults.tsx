@@ -16,6 +16,8 @@ type UsenetResultsProps = {
 	imdbId: string;
 	/** Present for a show season, absent for a movie. */
 	seasonNum?: number;
+	/** Show title, so whole-season packs can be looked up by name. */
+	title?: string;
 	rdKey: string | null;
 };
 
@@ -86,7 +88,7 @@ export function buttonState(
 // is cached anywhere, so there is no availability to check and no reason to load
 // it for every visitor. The section stays collapsed until asked for, and fetches
 // once — the indexer bills a daily API-call quota.
-const UsenetResults = ({ imdbId, seasonNum, rdKey }: UsenetResultsProps) => {
+const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [results, setResults] = useState<UsenetResult[] | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -105,6 +107,7 @@ const UsenetResults = ({ imdbId, seasonNum, rdKey }: UsenetResultsProps) => {
 		try {
 			const params = new URLSearchParams({ imdbId });
 			if (seasonNum !== undefined) params.set('seasonNum', String(seasonNum));
+			if (seasonNum !== undefined && title) params.set('title', title);
 			const response = await fetch(`/api/nzb2rd/search?${params}`);
 			const data = await response.json().catch(() => null);
 			if (!response.ok) throw new Error(data?.error || `Search failed (${response.status})`);
@@ -122,7 +125,7 @@ const UsenetResults = ({ imdbId, seasonNum, rdKey }: UsenetResultsProps) => {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [imdbId, seasonNum]);
+	}, [imdbId, seasonNum, title]);
 
 	const toggle = () => {
 		const opening = !isOpen;
@@ -314,6 +317,11 @@ const UsenetResults = ({ imdbId, seasonNum, rdKey }: UsenetResultsProps) => {
 												className="border-t border-gray-700/60 align-top"
 											>
 												<td className="break-all px-2 py-2 text-gray-100">
+													{result.isPack && (
+														<span className="mr-2 whitespace-nowrap rounded border border-amber-500 bg-amber-900/30 px-1.5 py-0.5 text-xs text-amber-100">
+															Season pack
+														</span>
+													)}
 													{result.title}
 												</td>
 												<td className="whitespace-nowrap px-2 py-2 text-gray-300">

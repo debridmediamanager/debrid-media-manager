@@ -1415,7 +1415,12 @@ const TvSearch: FunctionComponent = () => {
 				))}
 			</div>
 
-			<UsenetResults imdbId={imdbId} seasonNum={selectedSeason} rdKey={rdKey} />
+			<UsenetResults
+				imdbId={imdbId}
+				seasonNum={selectedSeason}
+				title={showInfo.title}
+				rdKey={rdKey}
+			/>
 
 			<TvSearchResults
 				filteredResults={filteredResults}

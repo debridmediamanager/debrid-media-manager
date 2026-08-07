@@ -16,7 +16,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { imdbId, seasonNum } = req.query;
+	const { imdbId, seasonNum, title } = req.query;
 	if (!isValidImdbId(imdbId)) {
 		return res.status(400).json({ error: 'imdbId is required (format: tt1234567)' });
 	}
@@ -41,13 +41,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return null;
 	});
 
+	// Only used to find season packs by name; bounded so it cannot be abused as a
+	// free-text passthrough to the indexer.
+	const showTitle =
+		typeof title === 'string' && title.trim() ? title.trim().slice(0, 120) : undefined;
+
 	if (cached?.isFresh) {
 		res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
 		return res.status(200).json({ results: cached.results, cached: true });
 	}
 
 	try {
-		const results = await searchUsenet({ imdbId, seasonNum: season });
+		const results = await searchUsenet({ imdbId, seasonNum: season, title: showTitle });
 		await db.setCachedNzbSearch(imdbId, season, results);
 		res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
 		return res.status(200).json({ results, cached: false });
