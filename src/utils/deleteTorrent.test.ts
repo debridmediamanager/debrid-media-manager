@@ -1,6 +1,6 @@
 import { deleteMagnet as deleteAdTorrent } from '@/services/allDebrid';
 import { deleteTorrent as deleteRdTorrent } from '@/services/realDebrid';
-import { deleteTorrent as deleteTbTorrent } from '@/services/torbox';
+import { deleteTorrent as deleteTbTorrent, deleteWebDownload } from '@/services/torbox';
 import toast from 'react-hot-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -222,6 +222,28 @@ describe('deleteTorrent utilities', () => {
 			expect(deleteTbTorrent).toHaveBeenCalledWith(tbKey, 456789);
 			expect(toast.error).toHaveBeenCalledWith('TorBox error: Connection failed');
 			expect(toast).not.toHaveBeenCalled();
+		});
+
+		it('should delete a web download through the webdl endpoint', async () => {
+			vi.mocked(deleteWebDownload).mockResolvedValue({} as any);
+
+			await handleDeleteTbTorrent(tbKey, 'tb:w456789');
+
+			expect(deleteWebDownload).toHaveBeenCalledWith(tbKey, 456789);
+			expect(deleteTbTorrent).not.toHaveBeenCalled();
+			expect(toast).toHaveBeenCalledWith(
+				'Deleted tb:w456789 from TorBox.',
+				expect.any(Object)
+			);
+		});
+
+		it('should report web download delete failures', async () => {
+			vi.mocked(deleteWebDownload).mockRejectedValue(new Error('Connection failed'));
+
+			const result = await handleDeleteTbTorrent(tbKey, 'tb:w1');
+
+			expect(result).toBe(false);
+			expect(toast.error).toHaveBeenCalledWith('TorBox error: Connection failed');
 		});
 
 		it('should correctly parse integer IDs', async () => {

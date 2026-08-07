@@ -18,6 +18,7 @@ import { getRealDebridStatusText } from '@/utils/realDebridStatus';
 import { torrentPrefix } from '@/utils/results';
 import { shortenNumber } from '@/utils/speed';
 import { getTorBoxStatusText } from '@/utils/torBoxStatus';
+import { isWebDownloadRowId } from '@/utils/torboxWebDownload';
 import {
 	Cast,
 	Check,
@@ -93,6 +94,9 @@ function TorrentRow({
 	// source key must be present (it is, since the torrent lives in that service).
 	const isTbTorrent = torrent.id.startsWith('tb:');
 	const isAdTorrent = torrent.id.startsWith('ad:');
+	// A TorBox web download has no magnet, no swarm and no shareable infohash,
+	// so the actions built on those are meaningless for it.
+	const isTbWebDownload = isWebDownloadRowId(torrent.id);
 	const canSendToRd =
 		!!rdKey &&
 		/^[a-fA-F0-9]{40}$/.test(torrent.hash) &&
@@ -430,16 +434,18 @@ function TorrentRow({
 							)}
 						</button>
 					)}
-					<button
-						title="Share"
-						className="mb-2 mr-2 cursor-pointer text-indigo-600"
-						onClick={async (e) => {
-							e.stopPropagation();
-							router.push(await handleShare(torrent));
-						}}
-					>
-						<Share2 className="h-4 w-4 text-indigo-500" />
-					</button>
+					{!isTbWebDownload && (
+						<button
+							title="Share"
+							className="mb-2 mr-2 cursor-pointer text-indigo-600"
+							onClick={async (e) => {
+								e.stopPropagation();
+								router.push(await handleShare(torrent));
+							}}
+						>
+							<Share2 className="h-4 w-4 text-indigo-500" />
+						</button>
+					)}
 					<button
 						title="Delete"
 						className="mb-2 mr-2 cursor-pointer text-red-500"
@@ -460,52 +466,59 @@ function TorrentRow({
 					>
 						<Trash2 className="h-4 w-4 text-red-500" />
 					</button>
-					<button
-						title="Copy magnet url"
-						className="mb-2 mr-2 cursor-pointer text-pink-500"
-						onClick={(e) => {
-							e.stopPropagation();
-							void handleCopyOrDownloadMagnet(torrent.hash, shouldDownloadMagnets);
-						}}
-					>
-						<Link2 className="h-4 w-4 text-teal-500" />
-					</button>
-					<button
-						title="Reinsert"
-						className="mb-2 mr-2 cursor-pointer text-green-500"
-						onClick={async (e) => {
-							e.stopPropagation();
-							try {
-								if (rdKey && torrent.id.startsWith('rd:')) {
-									// The function now handles fetching info and preserving selection internally
-									await handleReinsertTorrentinRd(rdKey, torrent, true);
-									onDelete(torrent.id);
-									// Trigger library refresh to fetch the newly reinserted torrent
-									if (onRefreshLibrary) {
-										await onRefreshLibrary();
+					{!isTbWebDownload && (
+						<button
+							title="Copy magnet url"
+							className="mb-2 mr-2 cursor-pointer text-pink-500"
+							onClick={(e) => {
+								e.stopPropagation();
+								void handleCopyOrDownloadMagnet(
+									torrent.hash,
+									shouldDownloadMagnets
+								);
+							}}
+						>
+							<Link2 className="h-4 w-4 text-teal-500" />
+						</button>
+					)}
+					{!isTbWebDownload && (
+						<button
+							title="Reinsert"
+							className="mb-2 mr-2 cursor-pointer text-green-500"
+							onClick={async (e) => {
+								e.stopPropagation();
+								try {
+									if (rdKey && torrent.id.startsWith('rd:')) {
+										// The function now handles fetching info and preserving selection internally
+										await handleReinsertTorrentinRd(rdKey, torrent, true);
+										onDelete(torrent.id);
+										// Trigger library refresh to fetch the newly reinserted torrent
+										if (onRefreshLibrary) {
+											await onRefreshLibrary();
+										}
 									}
-								}
-								if (adKey && torrent.id.startsWith('ad:')) {
-									await handleRestartTorrent(adKey, torrent.id);
-									// AllDebrid might also need refresh
-									if (onRefreshLibrary) {
-										await onRefreshLibrary();
+									if (adKey && torrent.id.startsWith('ad:')) {
+										await handleRestartTorrent(adKey, torrent.id);
+										// AllDebrid might also need refresh
+										if (onRefreshLibrary) {
+											await onRefreshLibrary();
+										}
 									}
-								}
-								if (tbKey && torrent.id.startsWith('tb:')) {
-									await handleRestartTbTorrent(tbKey, torrent.id);
-									// TorBox might also need refresh
-									if (onRefreshLibrary) {
-										await onRefreshLibrary();
+									if (tbKey && torrent.id.startsWith('tb:')) {
+										await handleRestartTbTorrent(tbKey, torrent.id);
+										// TorBox might also need refresh
+										if (onRefreshLibrary) {
+											await onRefreshLibrary();
+										}
 									}
+								} catch (error) {
+									console.error(error);
 								}
-							} catch (error) {
-								console.error(error);
-							}
-						}}
-					>
-						<RefreshCw className="h-4 w-4 text-green-500" />
-					</button>
+							}}
+						>
+							<RefreshCw className="h-4 w-4 text-green-500" />
+						</button>
+					)}
 				</td>
 			</tr>
 			{/* Cast Search Modal */}

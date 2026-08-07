@@ -5,11 +5,12 @@
 
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
 import { getUserTorrentsList } from '@/services/realDebrid';
-import { getTorrentList } from '@/services/torbox';
+import { getTorrentList, getWebDownloadList } from '@/services/torbox';
 import { UserTorrent } from '@/torrent/userTorrent';
 import {
 	convertToAllDebridUserTorrent,
 	convertToTbUserTorrent,
+	convertToTbWebDownloadUserTorrent,
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
 import { CacheManager, getGlobalCache } from '../cache/CacheManager';
@@ -360,6 +361,17 @@ export class UnifiedLibraryFetcher {
 			hasMore = torrentsData.length === pageSize;
 		}
 
+		// Web downloads are a second, separately paginated list on the same
+		// account. Losing them must not cost the user their torrents, so a
+		// failure here is logged and the torrents are returned regardless.
+		try {
+			allTorrents.push(
+				...(await this.fetchTorboxWebDownloads(token, options, allTorrents.length))
+			);
+		} catch (error) {
+			console.error('[Fetcher] Torbox web downloads failed', error);
+		}
+
 		// Cache the results
 		const cacheStart = Date.now();
 		console.log(`[Fetcher] Caching Torbox results (${allTorrents.length} items)`);
@@ -370,6 +382,65 @@ export class UnifiedLibraryFetcher {
 		);
 
 		return allTorrents;
+	}
+
+	/**
+	 * Fetch the account's TorBox web downloads — direct/hoster links TorBox
+	 * downloaded on the user's behalf, which the library shows alongside torrents.
+	 */
+	private async fetchTorboxWebDownloads(
+		token: string,
+		options: FetchOptions,
+		alreadyFetched: number
+	): Promise<UserTorrent[]> {
+		const pageSize = 100;
+		const webDownloads: UserTorrent[] = [];
+		let offset = 0;
+		let hasMore = true;
+		let loop = 0;
+
+		while (
+			hasMore &&
+			(!options.maxItems || alreadyFetched + webDownloads.length < options.maxItems)
+		) {
+			if (options.signal?.aborted) {
+				throw new Error('Fetch aborted');
+			}
+
+			console.log('[Fetcher] Torbox requesting web download page', {
+				offset,
+				pageSize,
+				iteration: ++loop,
+			});
+			const result = await this.rateLimiter.execute('torbox', `tb-webdl-${offset}`, () =>
+				getWebDownloadList(token, {
+					bypass_cache: true,
+					offset,
+					limit: pageSize,
+				})
+			);
+
+			if (!result.success || !result.data) {
+				hasMore = false;
+				break;
+			}
+
+			const page = Array.isArray(result.data) ? result.data : [result.data];
+			if (page.length === 0) {
+				hasMore = false;
+				break;
+			}
+
+			const converted = page.map((w) => convertToTbWebDownloadUserTorrent(w));
+			webDownloads.push(...converted);
+			options.onBatchComplete?.(converted);
+
+			offset += pageSize;
+			hasMore = page.length === pageSize;
+		}
+
+		console.log(`[Fetcher] Torbox web downloads fetched - ${webDownloads.length} items`);
+		return webDownloads;
 	}
 
 	// Conversion helpers (these would import from existing utils)

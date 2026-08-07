@@ -1,9 +1,10 @@
 import { deleteMagnet as deleteAdTorrent } from '@/services/allDebrid';
 import { deleteTorrent as deleteRdTorrent } from '@/services/realDebrid';
-import { deleteTorrent as deleteTbTorrent } from '@/services/torbox';
+import { deleteTorrent as deleteTbTorrent, deleteWebDownload } from '@/services/torbox';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { magnetToastOptions } from './toastOptions';
+import { isWebDownloadRowId, parseTorBoxRowId } from './torboxWebDownload';
 
 // Extract error message from any error type
 // API-level errors are thrown as plain Error by service functions,
@@ -74,7 +75,11 @@ export const handleDeleteTbTorrent = async (
 	disableToast: boolean = false
 ): Promise<boolean> => {
 	try {
-		await deleteTbTorrent(tbKey, parseInt(id.substring(3)));
+		if (isWebDownloadRowId(id)) {
+			await deleteWebDownload(tbKey, parseTorBoxRowId(id));
+		} else {
+			await deleteTbTorrent(tbKey, parseTorBoxRowId(id));
+		}
 		if (!disableToast) toast(`Deleted ${id} from TorBox.`, magnetToastOptions);
 		return true;
 	} catch (error) {

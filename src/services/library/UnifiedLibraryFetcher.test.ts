@@ -1,9 +1,10 @@
 import { getMagnetStatus } from '@/services/allDebrid';
 import { getUserTorrentsList } from '@/services/realDebrid';
-import { getTorrentList } from '@/services/torbox';
+import { getTorrentList, getWebDownloadList } from '@/services/torbox';
 import {
 	convertToAllDebridUserTorrent,
 	convertToTbUserTorrent,
+	convertToTbWebDownloadUserTorrent,
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -37,6 +38,7 @@ vi.mock('@/services/allDebrid', () => ({
 
 vi.mock('@/services/torbox', () => ({
 	getTorrentList: vi.fn(),
+	getWebDownloadList: vi.fn(),
 }));
 
 vi.mock('@/utils/fetchTorrents', () => ({
@@ -45,14 +47,19 @@ vi.mock('@/utils/fetchTorrents', () => ({
 		(data: any) => ({ id: `ad:${data.id ?? 'unknown'}` }) as any
 	),
 	convertToTbUserTorrent: vi.fn((data: any) => ({ id: `tb:${data.id ?? 'unknown'}` }) as any),
+	convertToTbWebDownloadUserTorrent: vi.fn(
+		(data: any) => ({ id: `tb:w${data.id ?? 'unknown'}` }) as any
+	),
 }));
 
 const mockGetUserTorrentsList = vi.mocked(getUserTorrentsList);
 const mockGetMagnetStatus = vi.mocked(getMagnetStatus);
 const mockGetTorrentList = vi.mocked(getTorrentList);
+const mockGetWebDownloadList = vi.mocked(getWebDownloadList);
 const mockConvertToUserTorrent = vi.mocked(convertToUserTorrent);
 const mockConvertToAllDebridUserTorrent = vi.mocked(convertToAllDebridUserTorrent);
 const mockConvertToTbUserTorrent = vi.mocked(convertToTbUserTorrent);
+const mockConvertToTbWebDownloadUserTorrent = vi.mocked(convertToTbWebDownloadUserTorrent);
 
 describe('UnifiedLibraryFetcher', () => {
 	const createFetcher = () => {
@@ -161,6 +168,7 @@ describe('UnifiedLibraryFetcher', () => {
 		mockGetTorrentList
 			.mockResolvedValueOnce({ success: true, data: [{ id: 'tb1' }] } as any)
 			.mockResolvedValueOnce({ success: true, data: [] } as any);
+		mockGetWebDownloadList.mockResolvedValue({ success: true, data: [] } as any);
 
 		const result = await fetcher.fetchLibrary('torbox', 'tb-token', { maxItems: 150 });
 
@@ -175,6 +183,50 @@ describe('UnifiedLibraryFetcher', () => {
 			5 * 60 * 1000
 		);
 		expect(result).toEqual([{ id: 'tb:tb1' }]);
+	});
+
+	it('appends Torbox web downloads to the library', async () => {
+		const { fetcher, cache } = createFetcher();
+		mockGetTorrentList.mockReset();
+		mockGetWebDownloadList.mockReset();
+		cache.get.mockResolvedValueOnce(null);
+		mockGetTorrentList.mockResolvedValueOnce({ success: true, data: [{ id: 'tb1' }] } as any);
+		mockGetWebDownloadList.mockResolvedValueOnce({
+			success: true,
+			data: [{ id: 77 }],
+		} as any);
+
+		const result = await fetcher.fetchLibrary('torbox', 'tb-token', { maxItems: 150 });
+
+		expect(mockConvertToTbWebDownloadUserTorrent).toHaveBeenCalledWith(
+			expect.objectContaining({ id: 77 })
+		);
+		expect(result).toEqual([{ id: 'tb:tb1' }, { id: 'tb:w77' }]);
+	});
+
+	it('keeps Torbox torrents when the web download list fails', async () => {
+		const { fetcher, cache } = createFetcher();
+		mockGetTorrentList.mockReset();
+		mockGetWebDownloadList.mockReset();
+		cache.get.mockResolvedValueOnce(null);
+		mockGetTorrentList.mockResolvedValueOnce({ success: true, data: [{ id: 'tb1' }] } as any);
+		mockGetWebDownloadList.mockRejectedValueOnce(new Error('webdl down'));
+
+		const result = await fetcher.fetchLibrary('torbox', 'tb-token', { maxItems: 150 });
+
+		expect(result).toEqual([{ id: 'tb:tb1' }]);
+	});
+
+	it('does not fetch web downloads once maxItems is already reached', async () => {
+		const { fetcher, cache } = createFetcher();
+		mockGetTorrentList.mockReset();
+		mockGetWebDownloadList.mockReset();
+		cache.get.mockResolvedValueOnce(null);
+		mockGetTorrentList.mockResolvedValueOnce({ success: true, data: [{ id: 'tb1' }] } as any);
+
+		await fetcher.fetchLibrary('torbox', 'tb-token', { maxItems: 1 });
+
+		expect(mockGetWebDownloadList).not.toHaveBeenCalled();
 	});
 
 	it('clears cache for a specific service key when provided', async () => {

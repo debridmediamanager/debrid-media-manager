@@ -1,13 +1,14 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
 import { getUserTorrentsList } from '@/services/realDebrid';
-import { getTorrentList } from '@/services/torbox';
-import { TorBoxTorrentInfo, UserTorrentResponse } from '@/services/types';
+import { getTorrentList, getWebDownloadList } from '@/services/torbox';
+import { TorBoxTorrentInfo, TorBoxWebDownload, UserTorrentResponse } from '@/services/types';
 import { UserTorrentStatus } from '@/torrent/userTorrent';
 import { ParsedFilename } from '@ctrl/video-filename-parser';
 import toast from 'react-hot-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	convertToTbUserTorrent,
+	convertToTbWebDownloadUserTorrent,
 	convertToUserTorrent,
 	fetchAllDebrid,
 	fetchRealDebrid,
@@ -956,6 +957,107 @@ describe('fetchTorrents utilities', () => {
 			expect(callback).toHaveBeenCalled();
 			const torrents = callback.mock.calls[0][0];
 			expect(torrents).toHaveLength(5);
+		});
+
+		describe('web downloads', () => {
+			const webDownload: TorBoxWebDownload = {
+				id: 77,
+				name: 'Direct Movie.mkv',
+				size: 2000000,
+				progress: 100,
+				download_state: 'completed',
+				download_finished: true,
+				download_speed: 0,
+				created_at: '2024-01-01T00:00:00Z',
+				hash: 'd'.repeat(32),
+				files: [{ id: 0, name: 'Direct Movie.mkv', size: 2000000 }],
+			} as any;
+
+			it('merges web downloads into the library under a tb:w id', async () => {
+				const callback = vi.fn();
+				vi.mocked(getTorrentList).mockResolvedValue({ success: true, data: [] } as any);
+				vi.mocked(getWebDownloadList).mockResolvedValue({
+					success: true,
+					data: [webDownload],
+				} as any);
+
+				await fetchTorBox('test-tb-key', callback);
+
+				const torrents = callback.mock.calls[0][0];
+				expect(torrents).toHaveLength(1);
+				expect(torrents[0].id).toBe('tb:w77');
+				expect(torrents[0].filename).toBe('Direct Movie.mkv');
+				expect(torrents[0].status).toBe(UserTorrentStatus.finished);
+				expect(torrents[0].seeders).toBe(0);
+			});
+
+			it('still returns torrents when the web download list fails', async () => {
+				const callback = vi.fn();
+				vi.mocked(getTorrentList).mockResolvedValue({
+					success: true,
+					data: [
+						{
+							id: 1,
+							name: 'Movie.mkv',
+							size: 1,
+							progress: 100,
+							download_state: 'finished',
+							seeds: 1,
+							download_speed: 0,
+							created_at: '2024-01-01T00:00:00Z',
+							hash: 'hash',
+							files: [],
+						},
+					],
+				} as any);
+				vi.mocked(getWebDownloadList).mockRejectedValue(new Error('webdl down'));
+
+				await fetchTorBox('test-tb-key', callback);
+
+				const torrents = callback.mock.calls[0][0];
+				expect(torrents).toHaveLength(1);
+				expect(torrents[0].id).toBe('tb:1');
+				expect(toast.error).not.toHaveBeenCalled();
+			});
+
+			it('applies the custom limit to web downloads too', async () => {
+				const callback = vi.fn();
+				vi.mocked(getTorrentList).mockResolvedValue({ success: true, data: [] } as any);
+				vi.mocked(getWebDownloadList).mockResolvedValue({
+					success: true,
+					data: Array.from({ length: 10 }, (_, i) => ({
+						...webDownload,
+						id: i + 1,
+						hash: `${i}`.padStart(32, 'a'),
+					})),
+				} as any);
+
+				await fetchTorBox('test-tb-key', callback, 3);
+
+				expect(callback.mock.calls[0][0]).toHaveLength(3);
+			});
+		});
+	});
+
+	describe('convertToTbWebDownloadUserTorrent', () => {
+		it('pads the missing swarm fields so library display code is unchanged', () => {
+			const result = convertToTbWebDownloadUserTorrent({
+				id: 5,
+				name: 'Some Movie 2021.mkv',
+				size: 100,
+				progress: 50,
+				download_state: 'downloading',
+				download_finished: false,
+				download_speed: 10,
+				created_at: '2024-01-01T00:00:00Z',
+				hash: 'a'.repeat(32),
+				files: [{ id: 0, name: 'Some Movie 2021.mkv', size: 100 }],
+			} as any);
+
+			expect(result.id).toBe('tb:w5');
+			expect(result.seeders).toBe(0);
+			expect(result.status).toBe(UserTorrentStatus.downloading);
+			expect(result.tbData).toMatchObject({ seeds: 0, peers: 0, magnet: '' });
 		});
 	});
 });

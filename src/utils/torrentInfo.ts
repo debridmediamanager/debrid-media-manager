@@ -13,6 +13,7 @@ import { handleDeleteRdTorrent } from './deleteTorrent';
 import { getRdStatus } from './fetchTorrents';
 import { fetchLatestRDTorrents } from './libraryFetching';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
+import { isWebDownloadRowId } from './torboxWebDownload';
 
 export async function handleShowInfoForRD(
 	t: UserTorrent,
@@ -254,5 +255,5 @@ export async function handleShowInfoForTB(
 		Modal.close();
 	};
 
-	void showInfoForTB(tbKey, t.tbData, undefined, { onDeleteTb });
+	void showInfoForTB(tbKey, t.tbData, undefined, { onDeleteTb }, isWebDownloadRowId(t.id));
 }

@@ -1,7 +1,7 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
 import { getUserTorrentsList } from '@/services/realDebrid';
-import { getTorrentList } from '@/services/torbox';
-import { TorBoxTorrentInfo, UserTorrentResponse } from '@/services/types';
+import { getTorrentList, getWebDownloadList } from '@/services/torbox';
+import { TorBoxTorrentInfo, TorBoxWebDownload, UserTorrentResponse } from '@/services/types';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { delay } from '@/utils/delay';
 import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
@@ -12,6 +12,7 @@ import { getMediaId } from './mediaId';
 import { getTypeByNameAndFileCount } from './mediaType';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
 import { genericToastOptions } from './toastOptions';
+import { toWebDownloadRowId } from './torboxWebDownload';
 
 // Extract error message from any error type
 const getErrorMessage = (error: unknown): string | null => {
@@ -384,7 +385,25 @@ export const getRdStatus = (torrentInfo: UserTorrentResponse): UserTorrentStatus
 	return status;
 };
 
-export const convertToTbUserTorrent = (info: TorBoxTorrentInfo): UserTorrent => {
+// A web download carries every field the library reads off a torrent except the
+// swarm ones, so it is padded out here rather than threaded through every
+// display helper as a second shape.
+const webDownloadAsTorrentInfo = (info: TorBoxWebDownload): TorBoxTorrentInfo => ({
+	...info,
+	magnet: '',
+	seeds: 0,
+	peers: 0,
+	ratio: 0,
+	upload_speed: info.upload_speed ?? 0,
+	torrent_file: false,
+	inactive_check: info.inactive_check ?? 0,
+	availability: info.availability ?? 0,
+});
+
+const buildTbUserTorrent = (
+	info: TorBoxTorrentInfo | TorBoxWebDownload,
+	isWebDownload: boolean
+): UserTorrent => {
 	let mediaType: UserTorrent['mediaType'] = getTypeByNameAndFileCount(info.name);
 	const serviceStatus = info.download_state;
 	let status: UserTorrentStatus;
@@ -484,9 +503,9 @@ export const convertToTbUserTorrent = (info: TorBoxTorrentInfo): UserTorrent => 
 	const infoForMediaId = parsedInfo ?? info.name;
 
 	return {
-		id: `tb:${info.id}`,
+		id: isWebDownload ? toWebDownloadRowId(info.id) : `tb:${info.id}`,
 		links: selectedFiles.map((f) => f.link).filter(Boolean),
-		seeders: info.seeds,
+		seeders: 'seeds' in info ? info.seeds : 0,
 		speed: info.download_speed,
 		title: getMediaId(infoForMediaId, mediaType, false) || info.name,
 		selectedFiles,
@@ -499,9 +518,17 @@ export const convertToTbUserTorrent = (info: TorBoxTorrentInfo): UserTorrent => 
 		hash: info.hash,
 		mediaType,
 		info: parsedInfo,
-		tbData: info,
+		tbData: isWebDownload
+			? webDownloadAsTorrentInfo(info as TorBoxWebDownload)
+			: (info as TorBoxTorrentInfo),
 	};
 };
+
+export const convertToTbUserTorrent = (info: TorBoxTorrentInfo): UserTorrent =>
+	buildTbUserTorrent(info, false);
+
+export const convertToTbWebDownloadUserTorrent = (info: TorBoxWebDownload): UserTorrent =>
+	buildTbUserTorrent(info, true);
 
 const getAdStatus = (magnetInfo: MagnetStatus): [UserTorrentStatus, number] => {
 	let status: UserTorrentStatus;
@@ -529,6 +556,25 @@ const getAdStatus = (magnetInfo: MagnetStatus): [UserTorrentStatus, number] => {
 	return [status, progress];
 };
 
+// TorBox returns a bare object instead of an array when a single id is asked for
+const asTorBoxList = <T>(data: T[] | T | null | undefined): T[] =>
+	!data ? [] : Array.isArray(data) ? data : [data];
+
+// Web downloads sit in a list of their own. Losing them must not cost the user
+// their torrents, so a failure here degrades to an empty list.
+const fetchTorBoxWebDownloadList = async (tbKey: string): Promise<TorBoxWebDownload[]> => {
+	try {
+		const response = await getWebDownloadList(tbKey);
+		if (!response?.success) return [];
+		return asTorBoxList(response.data);
+	} catch (error) {
+		console.error('[TorBoxFetch] webDownloadsError', {
+			error: getErrorMessage(error) ?? error,
+		});
+		return [];
+	}
+};
+
 export const fetchTorBox = async (
 	tbKey: string,
 	callback: (torrents: UserTorrent[]) => Promise<void>,
@@ -539,32 +585,28 @@ export const fetchTorBox = async (
 		customLimit: customLimit ?? null,
 	});
 	try {
-		// Get all torrents from TorBox
+		// Get all torrents and web downloads from TorBox
 		const apiStart = Date.now();
-		const response = await getTorrentList(tbKey);
+		const [response, webDownloadInfos] = await Promise.all([
+			getTorrentList(tbKey),
+			fetchTorBoxWebDownloadList(tbKey),
+		]);
 		console.log('[TorBoxFetch] apiSuccess', {
 			success: response.success,
 			elapsedMs: Date.now() - apiStart,
 			dataShape: Array.isArray(response.data) ? 'array' : response.data ? 'object' : 'empty',
+			webDownloads: webDownloadInfos.length,
 		});
 
-		if (!response.success || !response.data) {
-			console.log('[TorBoxFetch] noData', {
-				success: response.success,
-			});
-			await callback([]);
-			console.log('[TorBoxFetch] end', {
-				elapsedMs: Date.now() - startedAt,
-				returned: 0,
-			});
-			return;
-		}
+		const torrentInfos = response.success ? asTorBoxList(response.data) : [];
 
-		// Handle both single torrent and array responses
-		const torrentInfos = Array.isArray(response.data) ? response.data : [response.data];
-
-		if (!torrentInfos.length) {
-			console.log('[TorBoxFetch] emptyList');
+		if (!torrentInfos.length && !webDownloadInfos.length) {
+			console.log(
+				response.success && response.data
+					? '[TorBoxFetch] emptyList'
+					: '[TorBoxFetch] noData',
+				{ success: response.success }
+			);
 			await callback([]);
 			console.log('[TorBoxFetch] end', {
 				elapsedMs: Date.now() - startedAt,
@@ -575,13 +617,20 @@ export const fetchTorBox = async (
 
 		// Apply custom limit if specified
 		const limitedTorrents = customLimit ? torrentInfos.slice(0, customLimit) : torrentInfos;
+		const limitedWebDownloads = customLimit
+			? webDownloadInfos.slice(0, customLimit)
+			: webDownloadInfos;
 
 		// Process the torrents
-		const torrents = await processTorBoxTorrents(limitedTorrents);
+		const torrents = [
+			...(await processTorBoxTorrents(limitedTorrents)),
+			...limitedWebDownloads.map(convertToTbWebDownloadUserTorrent),
+		];
 		await callback(torrents);
 		console.log('[TorBoxFetch] end', {
 			elapsedMs: Date.now() - startedAt,
 			returned: torrents.length,
+			webDownloads: limitedWebDownloads.length,
 			customLimit: customLimit ?? null,
 		});
 	} catch (error) {
@@ -600,5 +649,5 @@ export const fetchTorBox = async (
 };
 
 async function processTorBoxTorrents(torrentInfos: TorBoxTorrentInfo[]): Promise<UserTorrent[]> {
-	return Promise.all(torrentInfos.map(convertToTbUserTorrent));
+	return Promise.all(torrentInfos.map((info) => convertToTbUserTorrent(info)));
 }

@@ -1,5 +1,5 @@
 import { addHashAsMagnet, proxyUnrestrictLink, selectFiles } from '@/services/realDebrid';
-import { requestDownloadLink } from '@/services/torbox';
+import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
 import { TorBoxTorrentInfo } from '@/services/types';
 import { handleRestartTorrent } from '@/utils/addMagnet';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
@@ -9,6 +9,7 @@ import {
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
 import { magnetToastOptions } from '@/utils/toastOptions';
+import { toWebDownloadRowId } from '@/utils/torboxWebDownload';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { handleShare } from '../../utils/hashList';
@@ -959,12 +960,16 @@ export const showInfoForTB = async (
 	shouldDownloadMagnets?: boolean,
 	handlers: {
 		onDeleteTb?: (tbKey: string, id: string) => Promise<void>;
-	} = {}
+	} = {},
+	// A web download has no magnet and no shareable infohash, and its links come
+	// from TorBox's separate webdl endpoint.
+	isWebDownload = false
 ): Promise<void> => {
 	Modal.showLoading();
-	const mediaInfo = await fetchMediaInfo(info.hash);
+	const rowId = isWebDownload ? toWebDownloadRowId(info.id) : `tb:${info.id}`;
+	const mediaInfo = isWebDownload ? null : await fetchMediaInfo(info.hash);
 	const torrent = {
-		id: `tb:${info.id}`,
+		id: rowId,
 		hash: info.hash,
 		filename: info.name,
 		bytes: info.size,
@@ -974,9 +979,9 @@ export const showInfoForTB = async (
 
 	const libraryActions = `
         <div class="mb-3 flex justify-center items-center flex-wrap">
-            ${renderButton('share', { link: `${await handleShare(torrent)}` })}
+            ${isWebDownload ? '' : renderButton('share', { link: `${await handleShare(torrent)}` })}
             ${renderButton('delete', { id: 'btn-delete-tb' })}
-            ${renderButton('magnet', { id: 'btn-magnet-copy', text: shouldDownloadMagnets ? 'Download' : 'Copy' })}
+            ${isWebDownload ? '' : renderButton('magnet', { id: 'btn-magnet-copy', text: shouldDownloadMagnets ? 'Download' : 'Copy' })}
             ${info.files?.length ? renderButton('exportLinks', { id: 'btn-export-links' }) : ''}
         </div>`;
 
@@ -989,12 +994,13 @@ export const showInfoForTB = async (
 	const infoRows = [
 		{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
 		{ label: 'ID', value: info.id },
+		...(isWebDownload ? [{ label: 'Source', value: 'Web download' }] : []),
 		{ label: 'Status', value: statusLabel },
 		...(info.download_state === 'downloading'
 			? [
 					{ label: 'Progress', value: info.progress.toFixed(2) + '%' },
 					{ label: 'Speed', value: (info.download_speed / 1024).toFixed(2) + ' KB/s' },
-					{ label: 'Seeds', value: info.seeds },
+					...(isWebDownload ? [] : [{ label: 'Seeds', value: info.seeds }]),
 				]
 			: []),
 		{
@@ -1055,19 +1061,19 @@ export const showInfoForTB = async (
 			deleteBtn?.addEventListener('click', async () => {
 				logAction('delete clicked (TB)', {
 					usingHandler: Boolean(handlers.onDeleteTb),
-					id: `tb:${info.id}`,
+					id: rowId,
 				});
 				try {
 					if (handlers.onDeleteTb) {
-						await handlers.onDeleteTb(tbKey, `tb:${info.id}`);
+						await handlers.onDeleteTb(tbKey, rowId);
 					} else {
-						await handleDeleteTbTorrent(tbKey, `tb:${info.id}`);
+						await handleDeleteTbTorrent(tbKey, rowId);
 					}
-					logAction('delete completed (TB)', { id: `tb:${info.id}` });
+					logAction('delete completed (TB)', { id: rowId });
 					Modal.close();
 				} catch (error) {
 					logAction('delete failed (TB)', {
-						id: `tb:${info.id}`,
+						id: rowId,
 						error: error instanceof Error ? error.message : String(error),
 					});
 				}
@@ -1090,10 +1096,15 @@ export const showInfoForTB = async (
 					const lines: string[] = [];
 					for (const file of files) {
 						try {
-							const resp = await requestDownloadLink(tbKey, {
-								torrent_id: info.id,
-								file_id: file.id,
-							});
+							const resp = isWebDownload
+								? await requestWebDownloadLink(tbKey, {
+										web_id: info.id,
+										file_id: file.id,
+									})
+								: await requestDownloadLink(tbKey, {
+										torrent_id: info.id,
+										file_id: file.id,
+									});
 							if (resp.data) lines.push(resp.data);
 						} catch (e) {
 							console.error('Failed to get link for file', file.name, e);
