@@ -3,14 +3,14 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../utils/allDebridCastApiClient', () => ({
-	updateAllDebridSizeLimits: vi.fn().mockResolvedValue(undefined),
+	syncAllDebridCastSettings: vi.fn().mockResolvedValue('cast-token'),
 }));
 
 vi.mock('../utils/torboxCastApiClient', () => ({
 	updateTorBoxSizeLimits: vi.fn().mockResolvedValue(undefined),
 }));
 
-import { updateAllDebridSizeLimits } from '../utils/allDebridCastApiClient';
+import { syncAllDebridCastSettings } from '../utils/allDebridCastApiClient';
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
 import { SettingsSection } from './SettingsSection';
 
@@ -286,7 +286,28 @@ describe('SettingsSection', () => {
 		);
 	});
 
-	it('updates AllDebrid cast profile using decoded api key from /settings', async () => {
+	it('updates AllDebrid cast profile via the cast token from /settings', async () => {
+		localStorage.setItem('ad:apiKey', JSON.stringify('ad-key'));
+		localStorage.setItem('ad:castToken', JSON.stringify('cast-token'));
+
+		render(<SettingsSection />);
+		const user = userEvent.setup();
+
+		const hideCastContainer = screen
+			.getByText('Hide "Cast a file inside a torrent" option')
+			.closest('div')!;
+		const hideCastCheckbox = within(hideCastContainer).getByRole('checkbox');
+		await user.click(hideCastCheckbox);
+
+		expect(syncAllDebridCastSettings).toHaveBeenCalledWith('cast-token', 'ad-key', {
+			movieMaxSize: undefined,
+			episodeMaxSize: undefined,
+			otherStreamsLimit: undefined,
+			hideCastOption: true,
+		});
+	});
+
+	it('leaves AllDebrid alone when the member never enrolled in cast', async () => {
 		localStorage.setItem('ad:apiKey', JSON.stringify('ad-key'));
 
 		render(<SettingsSection />);
@@ -298,12 +319,6 @@ describe('SettingsSection', () => {
 		const hideCastCheckbox = within(hideCastContainer).getByRole('checkbox');
 		await user.click(hideCastCheckbox);
 
-		expect(updateAllDebridSizeLimits).toHaveBeenCalledWith(
-			'ad-key',
-			undefined,
-			undefined,
-			undefined,
-			true
-		);
+		expect(syncAllDebridCastSettings).not.toHaveBeenCalled();
 	});
 });

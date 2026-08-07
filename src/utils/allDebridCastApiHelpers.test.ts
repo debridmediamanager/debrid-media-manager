@@ -12,6 +12,7 @@ import {
 	encryptApiKey,
 	generateAllDebridUserId,
 	handleApiError,
+	resolveAllDebridUser,
 	validateAllDebridApiKey,
 	validateApiKey,
 	validateMethod,
@@ -53,10 +54,11 @@ describe('allDebridCastApiHelpers', () => {
 	});
 
 	describe('validateApiKey', () => {
-		it('returns apiKey from query', () => {
+		it('ignores the query string, which access logs would capture', () => {
 			const req = createMockRequest({ query: { apiKey: 'my-key' } });
 			const res = createMockResponse();
-			expect(validateApiKey(req, res)).toBe('my-key');
+			expect(validateApiKey(req, res)).toBeNull();
+			expect(res._getStatusCode()).toBe(401);
 		});
 
 		it('returns apiKey from body', () => {
@@ -73,9 +75,49 @@ describe('allDebridCastApiHelpers', () => {
 		});
 
 		it('returns null for non-string apiKey', () => {
-			const req = createMockRequest({ query: { apiKey: ['a', 'b'] as any } });
+			const req = createMockRequest({ body: { apiKey: ['a', 'b'] as any } });
 			const res = createMockResponse();
 			expect(validateApiKey(req, res)).toBeNull();
+		});
+	});
+
+	describe('resolveAllDebridUser', () => {
+		it('derives the user id from a single AllDebrid call', async () => {
+			vi.mocked(getAllDebridUser).mockResolvedValue({
+				username: 'aduser1',
+				isPremium: true,
+			} as any);
+
+			const result = await resolveAllDebridUser('key');
+			const expectedId = await generateAllDebridUserId('key');
+
+			expect(result).toEqual({
+				valid: true,
+				userId: expectedId,
+				username: 'aduser1',
+				isPremium: true,
+			});
+			// One for resolve, one for the generateAllDebridUserId comparison above
+			expect(getAllDebridUser).toHaveBeenCalledTimes(2);
+		});
+
+		it('reports invalid when AllDebrid rejects the key', async () => {
+			vi.mocked(getAllDebridUser).mockRejectedValue(new Error('bad key'));
+
+			expect(await resolveAllDebridUser('key')).toEqual({ valid: false });
+		});
+
+		it('reports invalid when no username comes back', async () => {
+			vi.mocked(getAllDebridUser).mockResolvedValue({} as any);
+
+			expect(await resolveAllDebridUser('key')).toEqual({ valid: false });
+		});
+
+		it('throws on a missing salt rather than blaming the key', async () => {
+			delete process.env.DMMCAST_SALT;
+			vi.mocked(getAllDebridUser).mockResolvedValue({ username: 'aduser1' } as any);
+
+			await expect(resolveAllDebridUser('key')).rejects.toThrow('DMMCAST_SALT');
 		});
 	});
 

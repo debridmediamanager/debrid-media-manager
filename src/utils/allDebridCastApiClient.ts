@@ -101,50 +101,78 @@ export const handleCastTvShowAllDebrid = async (
 	toast.success(`Finished casting all episodes to Stremio (AllDebrid).`, castToastOptions);
 };
 
+export interface AllDebridCastSettings {
+	movieMaxSize?: number;
+	episodeMaxSize?: number;
+	otherStreamsLimit?: number;
+	hideCastOption?: boolean;
+}
+
+const settingsBody = (settings: AllDebridCastSettings) => ({
+	...(settings.movieMaxSize !== undefined && { movieMaxSize: settings.movieMaxSize }),
+	...(settings.episodeMaxSize !== undefined && { episodeMaxSize: settings.episodeMaxSize }),
+	...(settings.otherStreamsLimit !== undefined && {
+		otherStreamsLimit: settings.otherStreamsLimit,
+	}),
+	...(settings.hideCastOption !== undefined && { hideCastOption: settings.hideCastOption }),
+});
+
+/**
+ * Enrols the account in DMM Cast and returns its cast token.
+ *
+ * Costs one AllDebrid call, so only call this when the member is actually
+ * opting into cast or has rotated their key — see syncAllDebridCastSettings
+ * for the routine path.
+ */
 export const saveAllDebridCastProfile = async (
 	apiKey: string,
-	movieMaxSize?: number,
-	episodeMaxSize?: number,
-	otherStreamsLimit?: number,
-	hideCastOption?: boolean
-) => {
+	settings: AllDebridCastSettings = {}
+): Promise<string | null> => {
 	try {
-		await axios.post(`/api/stremio-ad/cast/saveProfile`, {
+		const resp = await axios.post(`/api/stremio-ad/cast/saveProfile`, {
 			apiKey,
-			...(movieMaxSize !== undefined && { movieMaxSize }),
-			...(episodeMaxSize !== undefined && { episodeMaxSize }),
-			...(otherStreamsLimit !== undefined && { otherStreamsLimit }),
-			...(hideCastOption !== undefined && { hideCastOption }),
+			...settingsBody(settings),
 		});
+		return resp.data?.profile?.userId ?? null;
 	} catch (error) {
 		console.error('Error saving AllDebrid cast profile:', error);
+		return null;
 	}
 };
 
-export const updateAllDebridSizeLimits = async (
+/**
+ * Pushes cast settings using the token the client already holds, which needs no
+ * AllDebrid call at all. Only a profile that has gone missing server-side (404)
+ * falls back to the key, since nothing else can recreate it.
+ */
+export const syncAllDebridCastSettings = async (
+	castToken: string | null | undefined,
 	apiKey: string,
-	movieMaxSize?: number,
-	episodeMaxSize?: number,
-	otherStreamsLimit?: number,
-	hideCastOption?: boolean
-) => {
-	try {
-		await axios.post(`/api/stremio-ad/cast/updateSizeLimits`, {
-			apiKey,
-			movieMaxSize,
-			episodeMaxSize,
-			otherStreamsLimit,
-			hideCastOption,
-		});
-	} catch (error) {
-		console.error('Error updating AllDebrid size limits:', error);
-		toast.error('Failed to save AllDebrid cast settings. Please try again.');
+	settings: AllDebridCastSettings
+): Promise<string | null> => {
+	if (castToken) {
+		try {
+			await axios.post(`/api/stremio-ad/cast/updateSizeLimits`, {
+				castToken,
+				...settingsBody(settings),
+			});
+			return castToken;
+		} catch (error: any) {
+			if (error?.response?.status !== 404) {
+				console.error('Error updating AllDebrid cast settings:', error);
+				toast.error('Failed to save AllDebrid cast settings. Please try again.');
+				return null;
+			}
+			// Profile is gone; recreating it from the key is the only way back.
+		}
 	}
+
+	return saveAllDebridCastProfile(apiKey, settings);
 };
 
 export const fetchAllDebridCastedLinks = async (apiKey: string) => {
 	try {
-		const resp = await axios.get(`/api/stremio-ad/links?apiKey=${apiKey}`);
+		const resp = await axios.post(`/api/stremio-ad/links`, { apiKey });
 		return resp.data.links || [];
 	} catch (error) {
 		console.error('Error fetching AllDebrid casted links:', error);

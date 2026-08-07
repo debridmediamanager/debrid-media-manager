@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 export function StremioAllDebridPage() {
-	const dmmCastToken = useAllDebridCastToken();
+	const dmmCastToken = useAllDebridCastToken({ enroll: true });
 	const [hasAllDebridCredentials] = useState(() => {
 		if (typeof window !== 'undefined') {
 			const apiKey = localStorage.getItem('ad:apiKey');

@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockHelpers = vi.hoisted(() => ({
-	validateAllDebridApiKey: vi.fn(),
-	generateAllDebridUserId: vi.fn(),
+	resolveAllDebridUser: vi.fn(),
 }));
 
 const mockDb = vi.hoisted(() => ({
@@ -21,7 +20,7 @@ beforeEach(() => {
 
 describe('API /api/stremio-ad/links', () => {
 	it('sets CORS header', async () => {
-		const req = createMockRequest({ method: 'POST' });
+		const req = createMockRequest({ method: 'POST', body: {} });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -29,18 +28,28 @@ describe('API /api/stremio-ad/links', () => {
 		expect(res.setHeader).toHaveBeenCalledWith('access-control-allow-origin', '*');
 	});
 
-	it('returns 405 for non-GET methods', async () => {
-		const req = createMockRequest({ method: 'POST' });
+	it('marks the response uncacheable so no proxy retains it', async () => {
+		const req = createMockRequest({ method: 'POST', body: {} });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(res.setHeader).toHaveBeenCalledWith('Allow', ['GET']);
+		expect(res.setHeader).toHaveBeenCalledWith('Cache-Control', 'no-store, private');
+	});
+
+	it('rejects GET so the api key cannot ride in the query string', async () => {
+		const req = createMockRequest({ method: 'GET', query: { apiKey: 'leaky' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.setHeader).toHaveBeenCalledWith('Allow', ['POST']);
 		expect(res._getStatusCode()).toBe(405);
+		expect(mockHelpers.resolveAllDebridUser).not.toHaveBeenCalled();
 	});
 
 	it('returns 400 when apiKey is missing', async () => {
-		const req = createMockRequest({ method: 'GET', query: {} });
+		const req = createMockRequest({ method: 'POST', body: {} });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -48,12 +57,12 @@ describe('API /api/stremio-ad/links', () => {
 		expect(res._getStatusCode()).toBe(400);
 		expect(res._getData()).toEqual({
 			status: 'error',
-			errorMessage: 'Missing or invalid "apiKey" query parameter',
+			errorMessage: 'Missing or invalid "apiKey" in request body',
 		});
 	});
 
 	it('returns 400 when apiKey is not a string', async () => {
-		const req = createMockRequest({ method: 'GET', query: { apiKey: ['a', 'b'] } });
+		const req = createMockRequest({ method: 'POST', body: { apiKey: ['a', 'b'] } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -62,8 +71,8 @@ describe('API /api/stremio-ad/links', () => {
 	});
 
 	it('returns 401 when API key is invalid', async () => {
-		mockHelpers.validateAllDebridApiKey.mockResolvedValue({ valid: false });
-		const req = createMockRequest({ method: 'GET', query: { apiKey: 'bad-key' } });
+		mockHelpers.resolveAllDebridUser.mockResolvedValue({ valid: false });
+		const req = createMockRequest({ method: 'POST', body: { apiKey: 'bad-key' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -75,17 +84,17 @@ describe('API /api/stremio-ad/links', () => {
 		});
 	});
 
-	it('returns links on success', async () => {
+	it('returns links after a single AllDebrid call', async () => {
 		const links = [{ id: 1, url: 'http://example.com' }];
-		mockHelpers.validateAllDebridApiKey.mockResolvedValue({ valid: true });
-		mockHelpers.generateAllDebridUserId.mockResolvedValue('user-123');
+		mockHelpers.resolveAllDebridUser.mockResolvedValue({ valid: true, userId: 'user-123' });
 		mockDb.fetchAllAllDebridCastedLinks.mockResolvedValue(links);
-		const req = createMockRequest({ method: 'GET', query: { apiKey: 'valid-key' } });
+		const req = createMockRequest({ method: 'POST', body: { apiKey: 'valid-key' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(mockHelpers.generateAllDebridUserId).toHaveBeenCalledWith('valid-key');
+		expect(mockHelpers.resolveAllDebridUser).toHaveBeenCalledTimes(1);
+		expect(mockHelpers.resolveAllDebridUser).toHaveBeenCalledWith('valid-key');
 		expect(mockDb.fetchAllAllDebridCastedLinks).toHaveBeenCalledWith('user-123');
 		expect(res._getStatusCode()).toBe(200);
 		expect(res._getData()).toEqual({ status: 'success', links });
@@ -93,8 +102,8 @@ describe('API /api/stremio-ad/links', () => {
 
 	it('returns 500 on error', async () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		mockHelpers.validateAllDebridApiKey.mockRejectedValue(new Error('DB down'));
-		const req = createMockRequest({ method: 'GET', query: { apiKey: 'valid-key' } });
+		mockHelpers.resolveAllDebridUser.mockRejectedValue(new Error('DB down'));
+		const req = createMockRequest({ method: 'POST', body: { apiKey: 'valid-key' } });
 		const res = createMockResponse();
 
 		await handler(req, res);

@@ -1,7 +1,7 @@
 import { AlertTriangle, Check, Link2, Settings } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { updateAllDebridSizeLimits } from '../utils/allDebridCastApiClient';
+import { syncAllDebridCastSettings } from '../utils/allDebridCastApiClient';
 import {
 	getLocalStorageBoolean,
 	getLocalStorageItemOrDefault,
@@ -186,17 +186,20 @@ export const SettingsSection = () => {
 			);
 		}
 
-		// Update AllDebrid cast settings
+		// Update AllDebrid cast settings. Gated on the cast token like Real-Debrid
+		// above: without one there is no profile to update, and the key-based call
+		// would make AllDebrid flag our server as an unfamiliar IP for nothing.
 		const adApiKey = getLocalStorageString('ad:apiKey');
-		if (adApiKey) {
+		const adCastToken = getLocalStorageString('ad:castToken');
+		if (adApiKey && adCastToken) {
 			updatePromises.push(
-				updateAllDebridSizeLimits(
-					adApiKey,
-					movieSize !== undefined ? Number(movieSize) : undefined,
-					episodeSize !== undefined ? Number(episodeSize) : undefined,
-					streamsLimit !== undefined ? Number(streamsLimit) : undefined,
-					hideCast
-				)
+				syncAllDebridCastSettings(adCastToken, adApiKey, {
+					movieMaxSize: movieSize !== undefined ? Number(movieSize) : undefined,
+					episodeMaxSize: episodeSize !== undefined ? Number(episodeSize) : undefined,
+					otherStreamsLimit:
+						streamsLimit !== undefined ? Number(streamsLimit) : undefined,
+					hideCastOption: hideCast,
+				}).then(() => undefined)
 			);
 		}
 

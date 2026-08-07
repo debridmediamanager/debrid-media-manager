@@ -15,13 +15,63 @@ export const validateMethod = (
 	return true;
 };
 
+// Read from the body only. The key used to be accepted from the query string,
+// which wrote it verbatim into nginx and Cloudflare access logs.
 export const validateApiKey = (req: NextApiRequest, res: NextApiResponse): string | null => {
-	const apiKey = req.query.apiKey || req.body.apiKey;
+	const apiKey = req.body?.apiKey;
 	if (!apiKey || typeof apiKey !== 'string') {
 		res.status(401).json({ error: 'Invalid or missing API key' });
 		return null;
 	}
 	return apiKey;
+};
+
+const deriveUserId = (username: string): string => {
+	const salt = process.env.DMMCAST_SALT;
+	if (!salt) {
+		throw new Error('DMMCAST_SALT environment variable is not set');
+	}
+
+	// Prefixed with 'alldebrid:' to ensure different IDs from RD/TB
+	const hmac = crypto
+		.createHmac('sha256', salt)
+		.update(`alldebrid:${username}`)
+		.digest('base64url'); // base64url is URL-safe (no +, /, or =)
+
+	// Return 12 characters for collision resistance
+	return hmac.slice(0, 12);
+};
+
+/**
+ * One AllDebrid round trip for both the validity check and the user id.
+ *
+ * Callers used to run validateAllDebridApiKey and generateAllDebridUserId back
+ * to back, which hit /v4.1/user twice per request from our server. AllDebrid
+ * emails users about unfamiliar IPs using their key, so every duplicate call
+ * was another alert naming dmm-01.
+ */
+export const resolveAllDebridUser = async (
+	apiKey: string
+): Promise<{ valid: boolean; userId?: string; username?: string; isPremium?: boolean }> => {
+	let userData;
+	try {
+		userData = await getAllDebridUser(apiKey);
+	} catch {
+		return { valid: false };
+	}
+
+	if (!userData?.username) {
+		return { valid: false };
+	}
+
+	// Deliberately outside the catch: a missing salt is our misconfiguration and
+	// should surface as a 500, not as "invalid AllDebrid API key".
+	return {
+		valid: true,
+		userId: deriveUserId(userData.username),
+		username: userData.username,
+		isPremium: userData.isPremium,
+	};
 };
 
 export const generateAllDebridUserId = async (apiKey: string): Promise<string> => {
@@ -31,21 +81,7 @@ export const generateAllDebridUserId = async (apiKey: string): Promise<string> =
 			throw new Error('Invalid AllDebrid API key or username not available');
 		}
 
-		const username = userData.username;
-
-		const salt = process.env.DMMCAST_SALT;
-		if (!salt) {
-			throw new Error('DMMCAST_SALT environment variable is not set');
-		}
-
-		// Prefixed with 'alldebrid:' to ensure different IDs from RD/TB
-		const hmac = crypto
-			.createHmac('sha256', salt)
-			.update(`alldebrid:${username}`)
-			.digest('base64url'); // base64url is URL-safe (no +, /, or =)
-
-		// Return 12 characters for collision resistance
-		return hmac.slice(0, 12);
+		return deriveUserId(userData.username);
 	} catch (error) {
 		throw new Error('Failed to generate AllDebrid user ID');
 	}

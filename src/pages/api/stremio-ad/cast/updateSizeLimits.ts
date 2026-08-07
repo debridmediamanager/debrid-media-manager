@@ -1,9 +1,21 @@
 import { repository as db } from '@/services/repository';
-import { generateAllDebridUserId, validateAllDebridApiKey } from '@/utils/allDebridCastApiHelpers';
+import { resolveAllDebridUser } from '@/utils/allDebridCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+/**
+ * Updates cast settings for an AllDebrid profile.
+ *
+ * Two ways in:
+ *   - `castToken`: settings-only update of a profile that already exists. Costs
+ *     no AllDebrid call, so routine resyncs never make AllDebrid see our server
+ *     using the member's key. 404s if the profile is gone, letting the client
+ *     fall back to the `apiKey` path.
+ *   - `apiKey`: full upsert that also refreshes the stored key. One AllDebrid
+ *     call. Only needed on enrolment or after the member rotates their key.
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
+	res.setHeader('Cache-Control', 'no-store, private');
 
 	if (req.method !== 'POST') {
 		res.setHeader('Allow', ['POST']);
@@ -11,12 +23,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	const { apiKey, movieMaxSize, episodeMaxSize, otherStreamsLimit, hideCastOption } = req.body;
+	const { apiKey, castToken, movieMaxSize, episodeMaxSize, otherStreamsLimit, hideCastOption } =
+		req.body;
 
-	if (!apiKey || typeof apiKey !== 'string') {
+	const hasCastToken = typeof castToken === 'string' && castToken.length > 0;
+
+	if (!hasCastToken && (!apiKey || typeof apiKey !== 'string')) {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Missing or invalid "apiKey" in request body',
+			errorMessage: 'Missing or invalid "castToken" or "apiKey" in request body',
 		});
 		return;
 	}
@@ -32,10 +47,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 	}
 
+	const movie = typeof movieMaxSize === 'number' ? movieMaxSize : undefined;
+	const episode = typeof episodeMaxSize === 'number' ? episodeMaxSize : undefined;
+	const streams = typeof otherStreamsLimit === 'number' ? otherStreamsLimit : undefined;
+	const hideCast = hideCastOption !== undefined ? Boolean(hideCastOption) : undefined;
+
 	try {
-		// Validate the API key
-		const validation = await validateAllDebridApiKey(apiKey);
-		if (!validation.valid) {
+		if (hasCastToken) {
+			const updated = await db.updateAllDebridCastSettings(
+				castToken,
+				movie,
+				episode,
+				streams,
+				hideCast
+			);
+
+			if (!updated) {
+				res.status(404).json({
+					status: 'error',
+					errorMessage: 'No AllDebrid cast profile for that token',
+				});
+				return;
+			}
+
+			res.status(200).json({ status: 'success', profile: { userId: castToken } });
+			return;
+		}
+
+		// Validates the key and derives the user id in a single AllDebrid call
+		const { valid, userId } = await resolveAllDebridUser(apiKey);
+		if (!valid || !userId) {
 			res.status(401).json({
 				status: 'error',
 				errorMessage: 'Invalid AllDebrid API key',
@@ -43,17 +84,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return;
 		}
 
-		// Generate user ID
-		const userId = await generateAllDebridUserId(apiKey);
-
-		// Update the profile with size limits
 		const profile = await db.saveAllDebridCastProfile(
 			userId,
 			apiKey,
-			typeof movieMaxSize === 'number' ? movieMaxSize : undefined,
-			typeof episodeMaxSize === 'number' ? episodeMaxSize : undefined,
-			typeof otherStreamsLimit === 'number' ? otherStreamsLimit : undefined,
-			hideCastOption !== undefined ? Boolean(hideCastOption) : undefined
+			movie,
+			episode,
+			streams,
+			hideCast
 		);
 
 		res.status(200).json({

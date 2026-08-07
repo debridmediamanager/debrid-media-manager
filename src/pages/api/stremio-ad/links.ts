@@ -1,39 +1,39 @@
 import { repository as db } from '@/services/repository';
-import { generateAllDebridUserId, validateAllDebridApiKey } from '@/utils/allDebridCastApiHelpers';
+import { resolveAllDebridUser } from '@/utils/allDebridCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+// POST, not GET: the API key travels in the body so it never reaches an access
+// log or a proxy cache key.
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
+	res.setHeader('Cache-Control', 'no-store, private');
 
-	if (req.method !== 'GET') {
-		res.setHeader('Allow', ['GET']);
+	if (req.method !== 'POST') {
+		res.setHeader('Allow', ['POST']);
 		res.status(405).end(`Method ${req.method} Not Allowed`);
 		return;
 	}
 
-	const { apiKey } = req.query;
+	const { apiKey } = req.body ?? {};
 
 	if (!apiKey || typeof apiKey !== 'string') {
 		res.status(400).json({
 			status: 'error',
-			errorMessage: 'Missing or invalid "apiKey" query parameter',
+			errorMessage: 'Missing or invalid "apiKey" in request body',
 		});
 		return;
 	}
 
 	try {
-		// Validate the API key
-		const validation = await validateAllDebridApiKey(apiKey);
-		if (!validation.valid) {
+		// Validates the key and derives the user id in a single AllDebrid call
+		const { valid, userId } = await resolveAllDebridUser(apiKey);
+		if (!valid || !userId) {
 			res.status(401).json({
 				status: 'error',
 				errorMessage: 'Invalid AllDebrid API key',
 			});
 			return;
 		}
-
-		// Generate user ID
-		const userId = await generateAllDebridUserId(apiKey);
 
 		// Fetch all casted links
 		const links = await db.fetchAllAllDebridCastedLinks(userId);

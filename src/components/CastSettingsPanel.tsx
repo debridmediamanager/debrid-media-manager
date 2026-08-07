@@ -1,7 +1,7 @@
 import { Settings } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { updateAllDebridSizeLimits } from '../utils/allDebridCastApiClient';
+import { syncAllDebridCastSettings } from '../utils/allDebridCastApiClient';
 import {
 	getLocalStorageBoolean,
 	getLocalStorageItemOrDefault,
@@ -102,12 +102,20 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 			} else if (service === 'ad') {
 				const adApiKey = getLocalStorageString('ad:apiKey');
 				if (adApiKey) {
-					await updateAllDebridSizeLimits(
+					// Prefers the cast token, so changing a setting costs no
+					// AllDebrid call; the key is only the fallback for a profile
+					// that no longer exists server-side.
+					await syncAllDebridCastSettings(
+						getLocalStorageString('ad:castToken'),
 						adApiKey,
-						movieSize !== undefined ? Number(movieSize) : undefined,
-						episodeSize !== undefined ? Number(episodeSize) : undefined,
-						streamsLimit !== undefined ? Number(streamsLimit) : undefined,
-						hideCast
+						{
+							movieMaxSize: movieSize !== undefined ? Number(movieSize) : undefined,
+							episodeMaxSize:
+								episodeSize !== undefined ? Number(episodeSize) : undefined,
+							otherStreamsLimit:
+								streamsLimit !== undefined ? Number(streamsLimit) : undefined,
+							hideCastOption: hideCast,
+						}
 					);
 				}
 			}

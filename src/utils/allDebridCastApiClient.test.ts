@@ -25,7 +25,7 @@ import {
 	handleCastMovieAllDebrid,
 	handleCastTvShowAllDebrid,
 	saveAllDebridCastProfile,
-	updateAllDebridSizeLimits,
+	syncAllDebridCastSettings,
 } from './allDebridCastApiClient';
 import {
 	findVideoByName,
@@ -187,10 +187,15 @@ describe('allDebridCastApiClient', () => {
 	});
 
 	describe('saveAllDebridCastProfile', () => {
-		it('posts profile data', async () => {
-			vi.mocked(axios.post).mockResolvedValue({ data: {} });
+		it('posts profile data and returns the cast token', async () => {
+			vi.mocked(axios.post).mockResolvedValue({ data: { profile: { userId: 'cast-1' } } });
 
-			await saveAllDebridCastProfile('key', 5000, 2000, 10, false);
+			const token = await saveAllDebridCastProfile('key', {
+				movieMaxSize: 5000,
+				episodeMaxSize: 2000,
+				otherStreamsLimit: 10,
+				hideCastOption: false,
+			});
 
 			expect(axios.post).toHaveBeenCalledWith('/api/stremio-ad/cast/saveProfile', {
 				apiKey: 'key',
@@ -199,6 +204,7 @@ describe('allDebridCastApiClient', () => {
 				otherStreamsLimit: 10,
 				hideCastOption: false,
 			});
+			expect(token).toBe('cast-1');
 		});
 
 		it('omits undefined optional fields', async () => {
@@ -215,32 +221,66 @@ describe('allDebridCastApiClient', () => {
 			vi.mocked(axios.post).mockRejectedValue(new Error('fail'));
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-			await expect(saveAllDebridCastProfile('key')).resolves.not.toThrow();
+			await expect(saveAllDebridCastProfile('key')).resolves.toBeNull();
 
 			consoleSpy.mockRestore();
 		});
 	});
 
-	describe('updateAllDebridSizeLimits', () => {
-		it('posts size limit data', async () => {
+	describe('syncAllDebridCastSettings', () => {
+		it('uses the cast token and never sends the api key', async () => {
 			vi.mocked(axios.post).mockResolvedValue({ data: {} });
 
-			await updateAllDebridSizeLimits('key', 3000, 1000, 5, true);
-
-			expect(axios.post).toHaveBeenCalledWith('/api/stremio-ad/cast/updateSizeLimits', {
-				apiKey: 'key',
+			const token = await syncAllDebridCastSettings('cast-1', 'key', {
 				movieMaxSize: 3000,
 				episodeMaxSize: 1000,
 				otherStreamsLimit: 5,
 				hideCastOption: true,
 			});
+
+			expect(axios.post).toHaveBeenCalledTimes(1);
+			expect(axios.post).toHaveBeenCalledWith('/api/stremio-ad/cast/updateSizeLimits', {
+				castToken: 'cast-1',
+				movieMaxSize: 3000,
+				episodeMaxSize: 1000,
+				otherStreamsLimit: 5,
+				hideCastOption: true,
+			});
+			expect(token).toBe('cast-1');
 		});
 
-		it('surfaces a toast on errors instead of failing silently', async () => {
-			vi.mocked(axios.post).mockRejectedValue(new Error('fail'));
+		it('falls back to the api key when the profile is gone', async () => {
+			vi.mocked(axios.post)
+				.mockRejectedValueOnce({ response: { status: 404 } })
+				.mockResolvedValueOnce({ data: { profile: { userId: 'cast-2' } } });
+
+			const token = await syncAllDebridCastSettings('stale', 'key', { hideCastOption: true });
+
+			expect(axios.post).toHaveBeenNthCalledWith(2, '/api/stremio-ad/cast/saveProfile', {
+				apiKey: 'key',
+				hideCastOption: true,
+			});
+			expect(token).toBe('cast-2');
+		});
+
+		it('enrols with the api key when there is no token yet', async () => {
+			vi.mocked(axios.post).mockResolvedValue({ data: { profile: { userId: 'cast-3' } } });
+
+			const token = await syncAllDebridCastSettings(null, 'key', {});
+
+			expect(axios.post).toHaveBeenCalledTimes(1);
+			expect(axios.post).toHaveBeenCalledWith('/api/stremio-ad/cast/saveProfile', {
+				apiKey: 'key',
+			});
+			expect(token).toBe('cast-3');
+		});
+
+		it('surfaces a toast on non-404 errors instead of falling back', async () => {
+			vi.mocked(axios.post).mockRejectedValue({ response: { status: 500 } });
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-			await expect(updateAllDebridSizeLimits('key')).resolves.not.toThrow();
+			await expect(syncAllDebridCastSettings('cast-1', 'key', {})).resolves.toBeNull();
+			expect(axios.post).toHaveBeenCalledTimes(1);
 			expect(toast.error).toHaveBeenCalledWith(
 				'Failed to save AllDebrid cast settings. Please try again.'
 			);
@@ -250,19 +290,19 @@ describe('allDebridCastApiClient', () => {
 	});
 
 	describe('fetchAllDebridCastedLinks', () => {
-		it('returns links array', async () => {
-			vi.mocked(axios.get).mockResolvedValue({
+		it('returns links array without putting the key in the url', async () => {
+			vi.mocked(axios.post).mockResolvedValue({
 				data: { links: [{ id: 1 }, { id: 2 }] },
 			});
 
 			const result = await fetchAllDebridCastedLinks('key');
 
-			expect(axios.get).toHaveBeenCalledWith('/api/stremio-ad/links?apiKey=key');
+			expect(axios.post).toHaveBeenCalledWith('/api/stremio-ad/links', { apiKey: 'key' });
 			expect(result).toEqual([{ id: 1 }, { id: 2 }]);
 		});
 
 		it('returns empty array on error', async () => {
-			vi.mocked(axios.get).mockRejectedValue(new Error('fail'));
+			vi.mocked(axios.post).mockRejectedValue(new Error('fail'));
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 			const result = await fetchAllDebridCastedLinks('key');
@@ -272,7 +312,7 @@ describe('allDebridCastApiClient', () => {
 		});
 
 		it('returns empty array when links is missing', async () => {
-			vi.mocked(axios.get).mockResolvedValue({ data: {} });
+			vi.mocked(axios.post).mockResolvedValue({ data: {} });
 
 			const result = await fetchAllDebridCastedLinks('key');
 

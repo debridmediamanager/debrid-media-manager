@@ -37,7 +37,7 @@ interface MediaMetadata {
 
 export function AllDebridManagePage() {
 	const [apiKey] = useLocalStorage<string>('ad:apiKey');
-	useAllDebridCastToken();
+	useAllDebridCastToken({ enroll: true });
 	const [groupedLinks, setGroupedLinks] = useState<GroupedLinks>({});
 	const [loading, setLoading] = useState(true);
 	const [selectedLinks, setSelectedLinks] = useState<Set<string>>(new Set());

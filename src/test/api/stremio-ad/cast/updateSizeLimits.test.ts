@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockHelpers = vi.hoisted(() => ({
-	validateAllDebridApiKey: vi.fn(),
-	generateAllDebridUserId: vi.fn(),
+	resolveAllDebridUser: vi.fn(),
 }));
 
 const mockDb = vi.hoisted(() => ({
 	saveAllDebridCastProfile: vi.fn(),
+	updateAllDebridCastSettings: vi.fn(),
 }));
 
 vi.mock('@/utils/allDebridCastApiHelpers', () => mockHelpers);
@@ -47,7 +47,7 @@ describe('API /api/stremio-ad/cast/updateSizeLimits', () => {
 		expect(res._getStatusCode()).toBe(405);
 	});
 
-	it('returns 400 when apiKey is missing', async () => {
+	it('returns 400 when neither castToken nor apiKey is given', async () => {
 		const req = createMockRequest({ method: 'POST', body: {} });
 		const res = createMockResponse();
 
@@ -56,7 +56,7 @@ describe('API /api/stremio-ad/cast/updateSizeLimits', () => {
 		expect(res._getStatusCode()).toBe(400);
 		expect(res._getData()).toEqual({
 			status: 'error',
-			errorMessage: 'Missing or invalid "apiKey" in request body',
+			errorMessage: 'Missing or invalid "castToken" or "apiKey" in request body',
 		});
 	});
 
@@ -105,7 +105,7 @@ describe('API /api/stremio-ad/cast/updateSizeLimits', () => {
 	});
 
 	it('returns 401 when API key is invalid', async () => {
-		mockHelpers.validateAllDebridApiKey.mockResolvedValue({ valid: false });
+		mockHelpers.resolveAllDebridUser.mockResolvedValue({ valid: false });
 		const req = createMockRequest({
 			method: 'POST',
 			body: { apiKey: 'bad-key' },
@@ -122,8 +122,7 @@ describe('API /api/stremio-ad/cast/updateSizeLimits', () => {
 	});
 
 	it('saves profile and returns success', async () => {
-		mockHelpers.validateAllDebridApiKey.mockResolvedValue({ valid: true });
-		mockHelpers.generateAllDebridUserId.mockResolvedValue('user-123');
+		mockHelpers.resolveAllDebridUser.mockResolvedValue({ valid: true, userId: 'user-123' });
 		mockDb.saveAllDebridCastProfile.mockResolvedValue(validProfile);
 		const req = createMockRequest({
 			method: 'POST',
@@ -155,8 +154,7 @@ describe('API /api/stremio-ad/cast/updateSizeLimits', () => {
 	});
 
 	it('accepts otherStreamsLimit of 0', async () => {
-		mockHelpers.validateAllDebridApiKey.mockResolvedValue({ valid: true });
-		mockHelpers.generateAllDebridUserId.mockResolvedValue('user-123');
+		mockHelpers.resolveAllDebridUser.mockResolvedValue({ valid: true, userId: 'user-123' });
 		mockDb.saveAllDebridCastProfile.mockResolvedValue({
 			...validProfile,
 			otherStreamsLimit: 0,
@@ -172,9 +170,83 @@ describe('API /api/stremio-ad/cast/updateSizeLimits', () => {
 		expect(res._getStatusCode()).toBe(200);
 	});
 
+	describe('castToken path', () => {
+		it('updates settings without ever calling AllDebrid', async () => {
+			mockDb.updateAllDebridCastSettings.mockResolvedValue(true);
+			const req = createMockRequest({
+				method: 'POST',
+				body: {
+					castToken: 'cast-1',
+					movieMaxSize: 5000,
+					episodeMaxSize: 2000,
+					otherStreamsLimit: 3,
+					hideCastOption: true,
+				},
+			});
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(mockHelpers.resolveAllDebridUser).not.toHaveBeenCalled();
+			expect(mockDb.saveAllDebridCastProfile).not.toHaveBeenCalled();
+			expect(mockDb.updateAllDebridCastSettings).toHaveBeenCalledWith(
+				'cast-1',
+				5000,
+				2000,
+				3,
+				true
+			);
+			expect(res._getStatusCode()).toBe(200);
+		});
+
+		it('prefers the token even when an apiKey is also supplied', async () => {
+			mockDb.updateAllDebridCastSettings.mockResolvedValue(true);
+			const req = createMockRequest({
+				method: 'POST',
+				body: { castToken: 'cast-1', apiKey: 'key', hideCastOption: true },
+			});
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(mockHelpers.resolveAllDebridUser).not.toHaveBeenCalled();
+			expect(res._getStatusCode()).toBe(200);
+		});
+
+		it('404s when the profile is gone so the client can fall back', async () => {
+			mockDb.updateAllDebridCastSettings.mockResolvedValue(false);
+			const req = createMockRequest({
+				method: 'POST',
+				body: { castToken: 'stale', hideCastOption: true },
+			});
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(res._getStatusCode()).toBe(404);
+			expect(res._getData()).toEqual({
+				status: 'error',
+				errorMessage: 'No AllDebrid cast profile for that token',
+			});
+		});
+
+		it('still validates otherStreamsLimit', async () => {
+			const req = createMockRequest({
+				method: 'POST',
+				body: { castToken: 'cast-1', otherStreamsLimit: 9 },
+			});
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(res._getStatusCode()).toBe(400);
+			expect(mockDb.updateAllDebridCastSettings).not.toHaveBeenCalled();
+		});
+	});
+
 	it('returns 500 on error', async () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		mockHelpers.validateAllDebridApiKey.mockRejectedValue(new Error('Service unavailable'));
+		mockHelpers.resolveAllDebridUser.mockRejectedValue(new Error('Service unavailable'));
 		const req = createMockRequest({
 			method: 'POST',
 			body: { apiKey: 'valid-key' },

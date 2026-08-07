@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../utils/allDebridCastApiClient', () => ({
-	updateAllDebridSizeLimits: vi.fn().mockResolvedValue(undefined),
+	syncAllDebridCastSettings: vi.fn().mockResolvedValue('cast-token'),
 }));
 
 vi.mock('../utils/torboxCastApiClient', () => ({
@@ -30,7 +30,7 @@ vi.mock('../utils/settings', () => ({
 	defaultOtherStreamsLimit: '5',
 }));
 
-import { updateAllDebridSizeLimits } from '../utils/allDebridCastApiClient';
+import { syncAllDebridCastSettings } from '../utils/allDebridCastApiClient';
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
 import { CastSettingsPanel } from './CastSettingsPanel';
 
@@ -136,21 +136,21 @@ describe('CastSettingsPanel', () => {
 		});
 	});
 
-	it('calls updateAllDebridSizeLimits for ad service', async () => {
+	it('syncs ad settings through the cast token, not the api key', async () => {
 		mockLocalStorage['ad:apiKey'] = '"ad-key"';
+		mockLocalStorage['ad:castToken'] = '"cast-token"';
 
 		render(<CastSettingsPanel service="ad" accentColor="yellow" />);
 		const selects = screen.getAllByRole('combobox');
 		fireEvent.change(selects[0], { target: { value: '3' } });
 
 		await waitFor(() => {
-			expect(updateAllDebridSizeLimits).toHaveBeenCalledWith(
-				'ad-key',
-				3,
-				undefined,
-				undefined,
-				undefined
-			);
+			expect(syncAllDebridCastSettings).toHaveBeenCalledWith('cast-token', 'ad-key', {
+				movieMaxSize: 3,
+				episodeMaxSize: undefined,
+				otherStreamsLimit: undefined,
+				hideCastOption: undefined,
+			});
 		});
 	});
 
@@ -189,6 +189,6 @@ describe('CastSettingsPanel', () => {
 		fireEvent.change(selects[0], { target: { value: '15' } });
 
 		await new Promise((r) => setTimeout(r, 50));
-		expect(updateAllDebridSizeLimits).not.toHaveBeenCalled();
+		expect(syncAllDebridCastSettings).not.toHaveBeenCalled();
 	});
 });

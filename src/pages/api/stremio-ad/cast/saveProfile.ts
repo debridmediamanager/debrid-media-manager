@@ -1,9 +1,10 @@
 import { repository as db } from '@/services/repository';
-import { generateAllDebridUserId, validateAllDebridApiKey } from '@/utils/allDebridCastApiHelpers';
+import { resolveAllDebridUser } from '@/utils/allDebridCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
+	res.setHeader('Cache-Control', 'no-store, private');
 
 	if (req.method !== 'POST') {
 		res.setHeader('Allow', ['POST']);
@@ -33,18 +34,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		// Validate the API key
-		const validation = await validateAllDebridApiKey(apiKey);
-		if (!validation.valid) {
+		// Validates the key and derives the user id in a single AllDebrid call
+		const { valid, userId } = await resolveAllDebridUser(apiKey);
+		if (!valid || !userId) {
 			res.status(401).json({
 				status: 'error',
 				errorMessage: 'Invalid AllDebrid API key',
 			});
 			return;
 		}
-
-		// Generate user ID
-		const userId = await generateAllDebridUserId(apiKey);
 
 		// Save the profile with settings
 		const profile = await db.saveAllDebridCastProfile(

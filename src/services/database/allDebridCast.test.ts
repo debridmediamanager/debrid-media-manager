@@ -5,6 +5,7 @@ const prismaMock = vi.hoisted(() => ({
 	allDebridCastProfile: {
 		upsert: vi.fn(),
 		findUnique: vi.fn(),
+		updateMany: vi.fn(),
 	},
 	allDebridCast: {
 		findFirst: vi.fn(),
@@ -29,6 +30,45 @@ describe('AllDebridCastService', () => {
 		service = new AllDebridCastService();
 		Object.values(prismaMock.allDebridCastProfile).forEach((fn) => (fn as Mock).mockReset());
 		Object.values(prismaMock.allDebridCast).forEach((fn) => (fn as Mock).mockReset());
+	});
+
+	describe('updateCastSettings', () => {
+		it('updates settings without touching the stored api key', async () => {
+			prismaMock.allDebridCastProfile.updateMany.mockResolvedValue({ count: 1 });
+
+			const updated = await service.updateCastSettings('u1', 10, 5, 3, true);
+
+			expect(updated).toBe(true);
+			const call = prismaMock.allDebridCastProfile.updateMany.mock.calls[0][0];
+			expect(call.where).toEqual({ userId: 'u1' });
+			expect(call.data).toEqual(
+				expect.objectContaining({
+					movieMaxSize: 10,
+					episodeMaxSize: 5,
+					otherStreamsLimit: 3,
+					hideCastOption: true,
+				})
+			);
+			expect(call.data).not.toHaveProperty('apiKey');
+		});
+
+		it('omits fields that were not supplied', async () => {
+			prismaMock.allDebridCastProfile.updateMany.mockResolvedValue({ count: 1 });
+
+			await service.updateCastSettings('u1', undefined, undefined, undefined, true);
+
+			const call = prismaMock.allDebridCastProfile.updateMany.mock.calls[0][0];
+			expect(call.data).not.toHaveProperty('movieMaxSize');
+			expect(call.data).not.toHaveProperty('episodeMaxSize');
+			expect(call.data).not.toHaveProperty('otherStreamsLimit');
+			expect(call.data.hideCastOption).toBe(true);
+		});
+
+		it('reports false when there is no such profile', async () => {
+			prismaMock.allDebridCastProfile.updateMany.mockResolvedValue({ count: 0 });
+
+			expect(await service.updateCastSettings('missing', 1)).toBe(false);
+		});
 	});
 
 	describe('saveCastProfile', () => {
