@@ -31,6 +31,18 @@ export function extractHashes(hashesStr: string): string[] {
 	return Array.from(results);
 }
 
+// Direct/hoster download links, one per line or whitespace separated. Magnets
+// are left out on purpose: those belong to the torrent path, not the web
+// download one.
+export function extractDownloadLinks(linksStr: string): string[] {
+	const results = new Set<string>();
+	for (const token of linksStr.split(/\s+/)) {
+		const link = token.trim().replace(/[.,;]+$/, '');
+		if (/^https?:\/\/\S+$/i.test(link)) results.add(link);
+	}
+	return Array.from(results);
+}
+
 export function extractMagnets(hashesStr: string): string[] {
 	// Extract existing magnets or convert hashes to magnets
 	const magnetMatches = hashesStr.match(/magnet:\?[^\s"']*/gi);

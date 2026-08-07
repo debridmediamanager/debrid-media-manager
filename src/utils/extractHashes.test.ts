@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
 	SHA1_REGEX,
+	extractDownloadLinks,
 	extractHashes,
 	extractMagnets,
 	isValidHash,
@@ -47,5 +48,33 @@ describe('extractHashes utils', () => {
 		expect(extractMagnets(`foo ${magnet} bar`)).toEqual([magnet]);
 		// When only hashes provided, convert them to magnets
 		expect(extractMagnets(`hashes: ${hash}`)).toEqual([magnet]);
+	});
+
+	describe('extractDownloadLinks', () => {
+		it('extracts unique http(s) links across lines and spaces', () => {
+			const input = [
+				'https://example.com/movie.mkv',
+				'http://host.tld/path/file%20name.mp4 https://example.com/movie.mkv',
+			].join('\n');
+
+			expect(extractDownloadLinks(input)).toEqual([
+				'https://example.com/movie.mkv',
+				'http://host.tld/path/file%20name.mp4',
+			]);
+		});
+
+		it('strips trailing punctuation left over from pasted prose', () => {
+			expect(extractDownloadLinks('grab https://example.com/movie.mkv, then play')).toEqual([
+				'https://example.com/movie.mkv',
+			]);
+		});
+
+		it('ignores magnets and other non-http tokens', () => {
+			const hash = 'abcdef0123456789abcdef0123456789abcdef01';
+			expect(
+				extractDownloadLinks(`magnet:?xt=urn:btih:${hash} ftp://host/file ${hash}`)
+			).toEqual([]);
+			expect(extractDownloadLinks('   ')).toEqual([]);
+		});
 	});
 });

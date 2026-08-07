@@ -20,18 +20,21 @@ import {
 import {
 	controlTorrent,
 	createTorrent,
+	createWebDownload,
 	getTorrentList,
+	getWebDownloadList,
 	TorBoxRateLimitError,
 } from '@/services/torbox';
-import { TorBoxTorrentInfo, TorrentInfoResponse } from '@/services/types';
+import { TorBoxTorrentInfo, TorBoxWebDownload, TorrentInfoResponse } from '@/services/types';
 import { UserTorrent } from '@/torrent/userTorrent';
 import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { handleDeleteRdTorrent } from './deleteTorrent';
-import { convertToTbUserTorrent } from './fetchTorrents';
+import { convertToTbUserTorrent, convertToTbWebDownloadUserTorrent } from './fetchTorrents';
 import { isVideo } from './selectable';
 import { magnetToastOptions } from './toastOptions';
+import { isWebDownloadRowId, parseTorBoxRowId } from './torboxWebDownload';
 
 // Extract error message from API response based on service type
 // RD: { error: "message" } or { error: "code", error_code: 34|35 }
@@ -462,9 +465,14 @@ export const handleRestartTorrent = async (adKey: string, id: string) => {
 };
 
 export const handleRestartTbTorrent = async (tbKey: string, id: string) => {
+	// Reannounce is a swarm operation; a web download has no swarm to rejoin.
+	if (isWebDownloadRowId(id)) {
+		toast('Web downloads cannot be reannounced.', magnetToastOptions);
+		return;
+	}
 	try {
 		await controlTorrent(tbKey, {
-			torrent_id: parseInt(id.substring(3)),
+			torrent_id: parseTorBoxRowId(id),
 			operation: 'reannounce',
 		});
 		toast.success(`Torrent reannounced (${id}).`, magnetToastOptions);
@@ -616,6 +624,84 @@ export const handleAddMultipleTorrentFilesInTb = async (
 		toast(
 			`Added ${success} torrent file${success === 1 ? '' : 's'} to TorBox` +
 				(errors ? ` (${errors} failed)` : ''),
+			magnetToastOptions
+		);
+	}
+};
+
+// Direct/hoster links TorBox downloads on the user's behalf — the way to get
+// media into the library when it was never released as a torrent.
+export const handleAddWebDownloadInTb = async (
+	tbKey: string,
+	link: string,
+	callback?: (torrent: UserTorrent) => Promise<void>
+) => {
+	try {
+		const response = await createWebDownload(tbKey, { link });
+		const id = response.data?.webdownload_id ?? response.data?.queued_id;
+		if (!id) {
+			toast.error('Web download added without an ID.', magnetToastOptions);
+			return;
+		}
+		if (callback) {
+			const listResp = await getWebDownloadList(tbKey, { id });
+			const info = (
+				Array.isArray(listResp.data) ? listResp.data[0] : listResp.data
+			) as TorBoxWebDownload;
+			if (info) await callback(convertToTbWebDownloadUserTorrent(info));
+		}
+		toast.success('Web download added.', magnetToastOptions);
+	} catch (error) {
+		console.error(
+			'Error adding web download:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		if (error instanceof TorBoxRateLimitError) {
+			toast.error(
+				'TorBox rate limit exceeded. Please wait and try again.',
+				magnetToastOptions
+			);
+		} else {
+			const tbError = getTbError(error);
+			toast.error(
+				tbError ? `TorBox error: ${tbError}` : 'Failed to add web download.',
+				magnetToastOptions
+			);
+		}
+		throw error;
+	}
+};
+
+export const handleAddMultipleWebDownloadsInTb = async (
+	tbKey: string,
+	links: string[],
+	callback?: () => Promise<void>
+) => {
+	let success = 0;
+	let rateLimited = false;
+	for (let i = 0; i < links.length; i++) {
+		if (i > 0) await delay(TB_BATCH_MAGNET_DELAY);
+		try {
+			await handleAddWebDownloadInTb(tbKey, links[i]);
+			success++;
+		} catch (error) {
+			if (error instanceof TorBoxRateLimitError) {
+				rateLimited = true;
+				break; // Stop processing if rate limited
+			}
+		}
+	}
+	if (callback) await callback();
+	if (rateLimited) {
+		if (success > 0) {
+			toast(
+				`Added ${success} web download${success === 1 ? '' : 's'} before rate limit.`,
+				magnetToastOptions
+			);
+		}
+	} else {
+		toast(
+			`Added ${success} web download${success === 1 ? '' : 's'} to TorBox.`,
 			magnetToastOptions
 		);
 	}
