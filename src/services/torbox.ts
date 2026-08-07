@@ -5,13 +5,15 @@ import {
 	TorBoxCachedItem,
 	TorBoxCachedResponse,
 	TorBoxCreateTorrentResponse,
+	TorBoxCreateWebDownloadResponse,
 	TorBoxResponse,
 	TorBoxTorrentInfo,
 	TorBoxTorrentMetadata,
 	TorBoxUser,
+	TorBoxWebDownload,
 } from './types';
 
-export type { TorBoxCachedResponse, TorBoxTorrentInfo, TorBoxUser };
+export type { TorBoxCachedResponse, TorBoxTorrentInfo, TorBoxUser, TorBoxWebDownload };
 
 // Safely access Next.js runtime config in test/non-Next environments
 const fallbackRuntimeConfig = {
@@ -37,6 +39,7 @@ const API_VERSION = 'v1';
 const ENDPOINT_LIMITS: Record<string, number> = {
 	requestdl: 80,
 	createtorrent: 50,
+	createwebdownload: 50,
 	default: 250,
 };
 
@@ -61,6 +64,7 @@ function getEndpointKey(url?: string): string {
 	if (!url) return 'default';
 	if (url.includes('/requestdl')) return 'requestdl';
 	if (url.includes('/createtorrent')) return 'createtorrent';
+	if (url.includes('/createwebdownload')) return 'createwebdownload';
 	return 'default';
 }
 
@@ -475,6 +479,126 @@ export const getTorrentInfo = async (params: {
 		console.error('Error getting torrent info:', error.message);
 		throw error;
 	}
+};
+
+// ==================== Web Downloads API ====================
+//
+// Web downloads are direct/hoster links TorBox fetches on the user's behalf.
+// They live in a separate namespace from torrents: their own list, their own
+// download-link endpoint, and their own ids (which overlap torrent ids, hence
+// the `tb:w` prefix DMM gives them in the library).
+
+export const createWebDownload = async (
+	accessToken: string,
+	params: {
+		link: string;
+		password?: string;
+		name?: string;
+		as_queued?: boolean;
+		add_only_if_cached?: boolean;
+	}
+): Promise<TorBoxResponse<TorBoxCreateWebDownloadResponse>> => {
+	const formData = new FormData();
+	formData.append('link', params.link);
+	if (params.password) formData.append('password', params.password);
+	if (params.name) formData.append('name', params.name);
+	if (params.as_queued !== undefined) formData.append('as_queued', String(params.as_queued));
+	if (params.add_only_if_cached !== undefined)
+		formData.append('add_only_if_cached', String(params.add_only_if_cached));
+
+	const response = await torBoxAxios.post<TorBoxResponse<TorBoxCreateWebDownloadResponse>>(
+		`${getTorBoxBaseUrl()}/${API_VERSION}/api/webdl/createwebdownload`,
+		formData,
+		getAxiosConfig(accessToken)
+	);
+	return response.data;
+};
+
+export const getWebDownloadList = async (
+	accessToken: string,
+	params?: {
+		bypass_cache?: boolean;
+		id?: number;
+		offset?: number;
+		limit?: number;
+	}
+): Promise<TorBoxResponse<TorBoxWebDownload[] | TorBoxWebDownload>> => {
+	const requestMeta = {
+		hasId: Boolean(params?.id),
+		offset: params?.offset ?? 0,
+		limit: params?.limit ?? 'default',
+	};
+	const requestStartedAt = Date.now();
+	console.log('[TorboxAPI] getWebDownloadList start', requestMeta);
+
+	const queryParams = {
+		...params,
+		bypass_cache: true, // Always fetch fresh uncached results
+		_fresh: Date.now(),
+	};
+
+	const response = await torBoxAxios.get<TorBoxResponse<TorBoxWebDownload[] | TorBoxWebDownload>>(
+		`${getTorBoxBaseUrl()}/${API_VERSION}/api/webdl/mylist`,
+		{ params: queryParams, ...getAxiosConfig(accessToken) }
+	);
+	const result = response.data;
+	const itemCount = Array.isArray(result.data) ? result.data.length : result.data ? 1 : 0;
+	console.log('[TorboxAPI] getWebDownloadList success', {
+		...requestMeta,
+		success: result.success,
+		itemCount,
+		elapsedMs: Date.now() - requestStartedAt,
+	});
+	return result;
+};
+
+export const controlWebDownload = async (
+	accessToken: string,
+	params: {
+		webdl_id?: number;
+		operation: 'delete' | 'pause' | 'resume';
+		all?: boolean;
+	}
+): Promise<TorBoxResponse<null>> => {
+	const response = await torBoxAxios.post<TorBoxResponse<null>>(
+		`${getTorBoxBaseUrl()}/${API_VERSION}/api/webdl/controlwebdownload`,
+		params,
+		getAxiosConfig(accessToken)
+	);
+	return response.data;
+};
+
+export const deleteWebDownload = async (
+	accessToken: string,
+	webdl_id: number
+): Promise<TorBoxResponse<null>> => {
+	return controlWebDownload(accessToken, { webdl_id, operation: 'delete' });
+};
+
+export const requestWebDownloadLink = async (
+	accessToken: string,
+	params: {
+		web_id: number;
+		file_id?: number;
+		zip_link?: boolean;
+		user_ip?: string;
+		redirect?: boolean;
+	},
+	options?: { skipRetry?: boolean; timeout?: number }
+): Promise<TorBoxResponse<string>> => {
+	const response = await torBoxAxios.get<TorBoxResponse<string>>(
+		`${getTorBoxBaseUrl()}/${API_VERSION}/api/webdl/requestdl`,
+		{
+			params: {
+				token: accessToken,
+				...params,
+			},
+			...getAxiosConfig(accessToken),
+			...(options?.timeout && { timeout: options.timeout }),
+			...(options?.skipRetry && { __skipRetry: true }),
+		} as any
+	);
+	return response.data;
 };
 
 // ==================== User API ====================

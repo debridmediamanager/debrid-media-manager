@@ -243,3 +243,37 @@ export interface TorBoxUsenetDownload {
 	download_finished: boolean;
 	files: TorBoxFile[] | null;
 }
+
+// A "web download" is a direct/hoster link TorBox downloads on the user's
+// behalf. It mirrors TorBoxTorrentInfo apart from the swarm fields, and its
+// `hash` is an md5 of the source link rather than a bittorrent infohash.
+export interface TorBoxWebDownload {
+	id: number;
+	hash: string;
+	created_at: string;
+	updated_at: string;
+	name: string;
+	size: number;
+	active: boolean;
+	auth_id: string;
+	download_state: string;
+	progress: number;
+	download_speed: number;
+	upload_speed?: number;
+	eta: number;
+	server: number;
+	error?: string | null;
+	expires_at: string;
+	download_present: boolean;
+	download_finished: boolean;
+	files: TorBoxFile[] | null;
+	inactive_check?: number;
+	availability?: number;
+}
+
+export interface TorBoxCreateWebDownloadResponse {
+	webdownload_id?: number;
+	queued_id?: number;
+	auth_id?: string;
+	hash?: string;
+}
