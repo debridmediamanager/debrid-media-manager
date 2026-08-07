@@ -98,4 +98,30 @@ describe('MainActions', () => {
 
 		expect(screen.queryByRole('link', { name: /cast for/i })).toBeNull();
 	});
+
+	// Usenet → RD transfers need no TorBox account, so gating this link on
+	// RD *and* TB hid the Transfers page from everyone who only has RD — including
+	// the users the send toast tells to go and watch their job there.
+	it('links to Transfers for an RD user with no TorBox account', () => {
+		render(<MainActions rdUser={baseRdUser} tbUser={null} adUser={false} isLoading={false} />);
+
+		const link = screen.getByRole('link', { name: /transfers/i });
+		expect(link.getAttribute('href')).toBe('/transfers');
+	});
+
+	it('still links to Transfers when both RD and TB are connected', () => {
+		render(
+			<MainActions rdUser={baseRdUser} tbUser={baseTbUser} adUser={false} isLoading={false} />
+		);
+
+		expect(screen.getByRole('link', { name: /transfers/i }).getAttribute('href')).toBe(
+			'/transfers'
+		);
+	});
+
+	it('hides Transfers without Real-Debrid, since every transfer lands there', () => {
+		render(<MainActions rdUser={null} tbUser={baseTbUser} adUser={false} isLoading={false} />);
+
+		expect(screen.queryByRole('link', { name: /transfers/i })).toBeNull();
+	});
 });
