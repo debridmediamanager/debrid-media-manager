@@ -75,6 +75,53 @@ describe('/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]', () => {
 			fileId: 2,
 		};
 
+		it('drops other users web downloads, which this key cannot resolve', async () => {
+			setupProfile();
+			const otherWebDownload = {
+				...otherStream,
+				// md5 hash — a TorBox web download, private to its own account
+				hash: 'd41d8cd98f00b204e9800998ecf8427e',
+				url: 'https://files.dmm.test/TheirWebDownload.mkv',
+			};
+			mockRepository.getTorBoxUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getTorBoxOtherStreams = vi
+				.fn()
+				.mockResolvedValue([otherStream, otherWebDownload]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			const payload = (res.json as Mock).mock.calls[0][0];
+			const urls = payload.streams.filter((s: any) => s.url).map((s: any) => s.url);
+			expect(urls).toHaveLength(1);
+			expect(urls[0]).toContain('/play/200:2');
+		});
+
+		it('keeps a users own web download cast', async () => {
+			setupProfile();
+			mockRepository.getTorBoxUserCastStreams = vi.fn().mockResolvedValue([
+				{
+					...userStream,
+					hash: 'd41d8cd98f00b204e9800998ecf8427e',
+				},
+			]);
+			mockRepository.getTorBoxOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			const res = createMockResponse();
+			await handler(req, res);
+
+			const payload = (res.json as Mock).mock.calls[0][0];
+			const urls = payload.streams.filter((s: any) => s.url).map((s: any) => s.url);
+			expect(urls).toHaveLength(1);
+			expect(urls[0]).toContain('h=d41d8cd98f00b204e9800998ecf8427e');
+		});
+
 		it('otherStreamsLimit does not affect user cast streams', async () => {
 			setupProfile({ otherStreamsLimit: 0 });
 			mockRepository.getTorBoxUserCastStreams = vi.fn().mockResolvedValue([userStream]);

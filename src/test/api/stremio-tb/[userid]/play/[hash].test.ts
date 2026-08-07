@@ -1,10 +1,11 @@
 import handler from '@/pages/api/stremio-tb/[userid]/play/[hash]';
 import { repository } from '@/services/repository';
-import { requestDownloadLink } from '@/services/torbox';
+import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import {
 	getBiggestFileTorBoxStreamUrl,
 	getFileByNameTorBoxStreamUrl,
+	getWebDownloadStreamUrlByHash,
 } from '@/utils/getTorBoxStreamUrl';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -14,8 +15,13 @@ vi.mock('@/utils/getTorBoxStreamUrl');
 
 const mockRepository = vi.mocked(repository);
 const mockRequestDownloadLink = vi.mocked(requestDownloadLink);
+const mockRequestWebDownloadLink = vi.mocked(requestWebDownloadLink);
 const mockGetBiggestFile = vi.mocked(getBiggestFileTorBoxStreamUrl);
 const mockGetFileByName = vi.mocked(getFileByNameTorBoxStreamUrl);
+const mockGetWebDownloadByHash = vi.mocked(getWebDownloadStreamUrlByHash);
+
+// TorBox hashes web downloads with md5, torrents with sha1
+const WEB_DOWNLOAD_HASH = 'd41d8cd98f00b204e9800998ecf8427e';
 
 describe('/api/stremio-tb/[userid]/play/[hash]', () => {
 	let res: ReturnType<typeof createMockResponse>;
@@ -168,5 +174,74 @@ describe('/api/stremio-tb/[userid]/play/[hash]', () => {
 		});
 		await handler(req, res);
 		expect(res.status).toHaveBeenCalledWith(500);
+	});
+
+	describe('web downloads', () => {
+		it('resolves webId:fileId through the webdl endpoint', async () => {
+			mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+			mockRequestWebDownloadLink.mockResolvedValue({
+				success: true,
+				data: 'https://stream.test/webdl.mkv',
+			} as any);
+			const req = createMockRequest({
+				query: { userid: 'user1', hash: '77:0', h: WEB_DOWNLOAD_HASH },
+			});
+			await handler(req, res);
+			expect(mockRequestWebDownloadLink).toHaveBeenCalledWith(
+				'key',
+				{ web_id: 77, file_id: 0 },
+				{ skipRetry: true, timeout: 8000 }
+			);
+			expect(mockRequestDownloadLink).not.toHaveBeenCalled();
+			expect(res.redirect).toHaveBeenCalledWith('https://stream.test/webdl.mkv');
+		});
+
+		it('falls back to the web download hash lookup when the direct call fails', async () => {
+			mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+			mockRequestWebDownloadLink.mockRejectedValue(new Error('stale id'));
+			mockGetWebDownloadByHash.mockResolvedValue('https://stream.test/webdl-fallback.mkv');
+			const req = createMockRequest({
+				query: {
+					userid: 'user1',
+					hash: '77:0',
+					h: WEB_DOWNLOAD_HASH,
+					file: 'episode.mkv',
+				},
+			});
+			await handler(req, res);
+			expect(mockGetWebDownloadByHash).toHaveBeenCalledWith(
+				'key',
+				WEB_DOWNLOAD_HASH,
+				'episode.mkv'
+			);
+			expect(mockGetFileByName).not.toHaveBeenCalled();
+			expect(res.redirect).toHaveBeenCalledWith('https://stream.test/webdl-fallback.mkv');
+		});
+
+		it('resolves a bare web download hash', async () => {
+			mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+			mockGetWebDownloadByHash.mockResolvedValue('https://stream.test/webdl-legacy.mkv');
+			const req = createMockRequest({
+				query: { userid: 'user1', hash: WEB_DOWNLOAD_HASH },
+			});
+			await handler(req, res);
+			expect(mockGetWebDownloadByHash).toHaveBeenCalledWith(
+				'key',
+				WEB_DOWNLOAD_HASH,
+				undefined
+			);
+			expect(mockGetBiggestFile).not.toHaveBeenCalled();
+			expect(res.redirect).toHaveBeenCalledWith('https://stream.test/webdl-legacy.mkv');
+		});
+
+		it('returns 500 when the web download cannot be resolved', async () => {
+			mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+			mockGetWebDownloadByHash.mockRejectedValue(new Error('Web download not found'));
+			const req = createMockRequest({
+				query: { userid: 'user1', hash: WEB_DOWNLOAD_HASH },
+			});
+			await handler(req, res);
+			expect(res.status).toHaveBeenCalledWith(500);
+		});
 	});
 });

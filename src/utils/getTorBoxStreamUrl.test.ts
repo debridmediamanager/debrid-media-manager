@@ -5,7 +5,9 @@ vi.mock('@/services/torbox', () => ({
 	createTorrent: vi.fn(),
 	deleteTorrent: vi.fn(),
 	getTorrentList: vi.fn(),
+	getWebDownloadList: vi.fn(),
 	requestDownloadLink: vi.fn(),
+	requestWebDownloadLink: vi.fn(),
 }));
 
 vi.mock('@/utils/delay', () => ({
@@ -17,20 +19,25 @@ import {
 	createTorrent,
 	deleteTorrent,
 	getTorrentList,
+	getWebDownloadList,
 	requestDownloadLink,
+	requestWebDownloadLink,
 } from '@/services/torbox';
 import {
 	getBiggestFileTorBoxStreamUrl,
 	getFileByNameTorBoxStreamUrl,
 	getTorBoxStreamUrl,
 	getTorBoxStreamUrlKeepTorrent,
+	getWebDownloadStreamUrlByHash,
 } from './getTorBoxStreamUrl';
 
 const mockCheckCached = vi.mocked(checkCachedStatus);
 const mockCreateTorrent = vi.mocked(createTorrent);
 const mockDeleteTorrent = vi.mocked(deleteTorrent);
 const mockGetTorrentList = vi.mocked(getTorrentList);
+const mockGetWebDownloadList = vi.mocked(getWebDownloadList);
 const mockRequestDownloadLink = vi.mocked(requestDownloadLink);
+const mockRequestWebDownloadLink = vi.mocked(requestWebDownloadLink);
 
 const API_KEY = 'test-api-key';
 const HASH = 'abc123hash';
@@ -249,5 +256,95 @@ describe('getTorBoxStreamUrlKeepTorrent', () => {
 		);
 
 		expect(mockDeleteTorrent).not.toHaveBeenCalled();
+	});
+});
+
+describe('getWebDownloadStreamUrlByHash', () => {
+	const WEB_HASH = 'd41d8cd98f00b204e9800998ecf8427e';
+
+	const makeWebDownload = (files: any[]) => ({
+		id: 77,
+		hash: WEB_HASH,
+		name: 'Direct Movie.mkv',
+		files,
+	});
+
+	it('resolves the biggest file when no filename is given', async () => {
+		mockGetWebDownloadList.mockResolvedValue({
+			success: true,
+			data: [
+				makeWebDownload([
+					{ id: 0, name: 'sample.mkv', size: 10 },
+					{ id: 1, name: 'Direct Movie.mkv', size: 1000 },
+				]),
+			],
+		} as any);
+		mockRequestWebDownloadLink.mockResolvedValue({
+			success: true,
+			data: 'https://stream.test/webdl.mkv',
+		} as any);
+
+		await expect(getWebDownloadStreamUrlByHash(API_KEY, WEB_HASH)).resolves.toBe(
+			'https://stream.test/webdl.mkv'
+		);
+		expect(mockRequestWebDownloadLink).toHaveBeenCalledWith(API_KEY, {
+			web_id: 77,
+			file_id: 1,
+		});
+	});
+
+	it('matches a file by name, case-insensitively and ignoring folders', async () => {
+		mockGetWebDownloadList.mockResolvedValue({
+			success: true,
+			data: [
+				makeWebDownload([
+					{ id: 0, name: 'Show/Show.S01E01.mkv', size: 10 },
+					{ id: 1, name: 'Show/Show.S01E02.mkv', size: 1000 },
+				]),
+			],
+		} as any);
+		mockRequestWebDownloadLink.mockResolvedValue({
+			success: true,
+			data: 'https://stream.test/ep01.mkv',
+		} as any);
+
+		await expect(
+			getWebDownloadStreamUrlByHash(API_KEY, WEB_HASH.toUpperCase(), 'show.s01e01.mkv')
+		).resolves.toBe('https://stream.test/ep01.mkv');
+		expect(mockRequestWebDownloadLink).toHaveBeenCalledWith(API_KEY, {
+			web_id: 77,
+			file_id: 0,
+		});
+	});
+
+	it('throws when the web download is not in the account', async () => {
+		mockGetWebDownloadList.mockResolvedValue({ success: true, data: [] } as any);
+
+		await expect(getWebDownloadStreamUrlByHash(API_KEY, WEB_HASH)).rejects.toThrow(
+			'Web download not found on TorBox'
+		);
+	});
+
+	it('throws when the web download has no files yet', async () => {
+		mockGetWebDownloadList.mockResolvedValue({
+			success: true,
+			data: [makeWebDownload([])],
+		} as any);
+
+		await expect(getWebDownloadStreamUrlByHash(API_KEY, WEB_HASH)).rejects.toThrow(
+			'No files in web download'
+		);
+	});
+
+	it('throws when TorBox returns no link', async () => {
+		mockGetWebDownloadList.mockResolvedValue({
+			success: true,
+			data: [makeWebDownload([{ id: 0, name: 'Direct Movie.mkv', size: 10 }])],
+		} as any);
+		mockRequestWebDownloadLink.mockResolvedValue({ success: false, data: null } as any);
+
+		await expect(getWebDownloadStreamUrlByHash(API_KEY, WEB_HASH)).rejects.toThrow(
+			'Failed to get download link'
+		);
 	});
 });

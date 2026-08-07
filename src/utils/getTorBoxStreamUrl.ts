@@ -3,9 +3,11 @@ import {
 	createTorrent,
 	deleteTorrent,
 	getTorrentList,
+	getWebDownloadList,
 	requestDownloadLink,
+	requestWebDownloadLink,
 } from '@/services/torbox';
-import { TorBoxTorrentInfo } from '@/services/types';
+import { TorBoxFile, TorBoxTorrentInfo } from '@/services/types';
 import { delay } from '@/utils/delay';
 import ptt from 'parse-torrent-title';
 
@@ -462,4 +464,61 @@ export const getTorBoxStreamUrlKeepTorrent = async (
 	}
 
 	return [streamUrl, seasonNumber, episodeNumber, fileSize, torrentId, fileId, filename];
+};
+
+const matchFileByName = (files: TorBoxFile[], targetFilename: string): TorBoxFile | undefined => {
+	const shortNameOf = (f: TorBoxFile) => {
+		const name = f.name || f.short_name || '';
+		return { name, shortName: name.split('/').pop() || name };
+	};
+	const exact = files.find((f) => {
+		const { name, shortName } = shortNameOf(f);
+		return shortName === targetFilename || name === targetFilename;
+	});
+	if (exact) return exact;
+
+	const lowerTarget = targetFilename.toLowerCase();
+	return files.find((f) => {
+		const { name, shortName } = shortNameOf(f);
+		return shortName.toLowerCase() === lowerTarget || name.toLowerCase() === lowerTarget;
+	});
+};
+
+// Web downloads can't be re-added from a hash the way a torrent can — they only
+// exist in the account that created them — so this resolves against the user's
+// own list and fails if it isn't there.
+export const getWebDownloadStreamUrlByHash = async (
+	apiKey: string,
+	hash: string,
+	targetFilename?: string
+): Promise<string> => {
+	const list = await getWebDownloadList(apiKey, { limit: 1000 });
+	if (!list.success || !list.data) {
+		throw new Error('Failed to list TorBox web downloads');
+	}
+
+	const items = Array.isArray(list.data) ? list.data : [list.data];
+	const item = items.find((w) => w.hash?.toLowerCase() === hash.toLowerCase());
+	if (!item) {
+		throw new Error('Web download not found on TorBox');
+	}
+
+	const files = item.files ?? [];
+	if (files.length === 0) {
+		throw new Error('No files in web download');
+	}
+
+	const file =
+		(targetFilename ? matchFileByName(files, targetFilename) : undefined) ??
+		files.reduce((prev, current) => ((prev.size || 0) > (current.size || 0) ? prev : current));
+
+	const downloadResult = await requestWebDownloadLink(apiKey, {
+		web_id: item.id,
+		file_id: file.id,
+	});
+	if (!downloadResult.success || !downloadResult.data) {
+		throw new Error('Failed to get download link');
+	}
+
+	return downloadResult.data;
 };

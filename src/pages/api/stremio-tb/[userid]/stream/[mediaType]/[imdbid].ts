@@ -5,6 +5,7 @@ import {
 	formatStremioStreamTitle,
 	generateStreamName,
 } from '@/utils/streamMetadata';
+import { isWebDownloadHash } from '@/utils/torboxWebDownload';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // lists all available streams for a movie or show (TorBox version)
@@ -70,7 +71,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const otherStreamsLimit = Math.max(0, Math.min(5, rawLimit));
 
 		// get urls from db
-		const [userCastItems, otherItems] = await Promise.all([
+		const [userCastItems, allOtherItems] = await Promise.all([
 			db.getTorBoxUserCastStreams(imdbidStr, userid, 5),
 			db.getTorBoxOtherStreams(
 				imdbidStr,
@@ -79,6 +80,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				maxSize > 0 ? maxSize : undefined
 			),
 		]);
+
+		// Another user's web download can't be resolved with this user's key —
+		// it only exists inside the account that created it — so it is dropped
+		// rather than offered as a stream that would 500 on play.
+		const otherItems = allOtherItems.filter((item) => !isWebDownloadHash(item.hash));
 
 		const allHashes = [
 			...userCastItems.map((item) => item.hash),

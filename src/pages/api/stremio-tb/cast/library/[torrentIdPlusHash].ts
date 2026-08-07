@@ -1,9 +1,15 @@
 import { repository as db } from '@/services/repository';
-import { getTorrentList, requestDownloadLink } from '@/services/torbox';
-import { TorBoxTorrentInfo } from '@/services/types';
+import {
+	getTorrentList,
+	getWebDownloadList,
+	requestDownloadLink,
+	requestWebDownloadLink,
+} from '@/services/torbox';
+import { TorBoxTorrentInfo, TorBoxWebDownload } from '@/services/types';
 import { isVideo } from '@/utils/selectable';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { generateTorBoxUserId } from '@/utils/torboxCastApiHelpers';
+import { parseTorBoxCastTarget } from '@/utils/torboxWebDownload';
 import { NextApiRequest, NextApiResponse } from 'next';
 import ptt from 'parse-torrent-title';
 
@@ -28,18 +34,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
+	// `w`-prefixed ids name a web download, which lives in a separate TorBox list
 	const [torrentIdStr, hash] = torrentIdPlusHash.split(':');
-	const torrentId = parseInt(torrentIdStr, 10);
-	if (isNaN(torrentId)) {
+	const target = parseTorBoxCastTarget(torrentIdStr);
+	if (!target) {
 		res.status(400).json({
 			status: 'error',
 			errorMessage: 'Invalid torrent ID',
 		});
 		return;
 	}
+	const { id: torrentId, isWebDownload } = target;
 
 	try {
-		const result = await getTorrentList(apiKey, { id: torrentId });
+		const result = isWebDownload
+			? await getWebDownloadList(apiKey, { id: torrentId })
+			: await getTorrentList(apiKey, { id: torrentId });
 		if (!result.success || !result.data) {
 			res.status(400).json({
 				status: 'error',
@@ -48,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return;
 		}
 
-		const torrent: TorBoxTorrentInfo = Array.isArray(result.data)
+		const torrent: TorBoxTorrentInfo | TorBoxWebDownload = Array.isArray(result.data)
 			? result.data[0]
 			: result.data;
 
@@ -134,10 +144,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		for (const file of videoFiles) {
-			const downloadResult = await requestDownloadLink(apiKey, {
-				torrent_id: torrentId,
-				file_id: file.id,
-			});
+			const downloadResult = isWebDownload
+				? await requestWebDownloadLink(apiKey, {
+						web_id: torrentId,
+						file_id: file.id,
+					})
+				: await requestDownloadLink(apiKey, {
+						torrent_id: torrentId,
+						file_id: file.id,
+					});
 
 			if (!downloadResult.success || !downloadResult.data) {
 				console.error(`Failed to get download link for file ${file.id}`);

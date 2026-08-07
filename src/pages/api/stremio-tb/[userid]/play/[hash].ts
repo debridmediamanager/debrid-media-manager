@@ -1,9 +1,11 @@
 import { repository as db } from '@/services/repository';
-import { requestDownloadLink } from '@/services/torbox';
+import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
 import {
 	getBiggestFileTorBoxStreamUrl,
 	getFileByNameTorBoxStreamUrl,
+	getWebDownloadStreamUrlByHash,
 } from '@/utils/getTorBoxStreamUrl';
+import { isWebDownloadHash } from '@/utils/torboxWebDownload';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // Play a TorBox file from an existing torrent
@@ -44,6 +46,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const apiKey = profile.apiKey;
 	const filename = typeof file === 'string' ? file : undefined;
 
+	// TorBox hashes web downloads with md5 and torrents with sha1, which is what
+	// tells the two apart here: a web download resolves through the webdl
+	// endpoints, and can only be served from the account that created it.
+	const isWebDownload = isWebDownloadHash(
+		typeof fallbackHash === 'string' && fallbackHash ? fallbackHash : hash
+	);
+
 	try {
 		let streamUrl: string | undefined;
 
@@ -74,11 +83,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// when torrentId belongs to a different user) falls back to the hash
 			// path immediately instead of stalling on ~2min of exponential backoff.
 			try {
-				const downloadResult = await requestDownloadLink(
-					apiKey,
-					{ torrent_id: torrentId, file_id: fileId },
-					{ skipRetry: true, timeout: 8000 }
-				);
+				const downloadResult = isWebDownload
+					? await requestWebDownloadLink(
+							apiKey,
+							{ web_id: torrentId, file_id: fileId },
+							{ skipRetry: true, timeout: 8000 }
+						)
+					: await requestDownloadLink(
+							apiKey,
+							{ torrent_id: torrentId, file_id: fileId },
+							{ skipRetry: true, timeout: 8000 }
+						);
 
 				if (downloadResult.success && downloadResult.data) {
 					streamUrl = downloadResult.data;
@@ -92,7 +107,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 			// If direct lookup failed and we have a fallback hash, use it
 			if (!streamUrl && typeof fallbackHash === 'string') {
-				if (filename) {
+				if (isWebDownload) {
+					streamUrl = await getWebDownloadStreamUrlByHash(apiKey, fallbackHash, filename);
+				} else if (filename) {
 					const [url] = await getFileByNameTorBoxStreamUrl(
 						apiKey,
 						fallbackHash,
@@ -107,6 +124,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 			if (!streamUrl) {
 				throw new Error('Failed to get download link');
+			}
+		} else if (isWebDownload) {
+			// Legacy format: web download hash
+			streamUrl = await getWebDownloadStreamUrlByHash(apiKey, hash, filename);
+			if (!streamUrl) {
+				throw new Error('Failed to get stream URL for web download');
 			}
 		} else {
 			// Legacy format: torrent hash
