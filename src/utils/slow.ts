@@ -1,6 +1,11 @@
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
+import { isWebDownloadRowId } from '@/utils/torboxWebDownload';
 
 export function isSlowOrNoLinks(t: UserTorrent) {
+	// A web download has no swarm, so its seeder count is always 0 - judging it
+	// by that would file every slow-but-healthy one under "delete these".
+	if (isWebDownloadRowId(t.id)) return false;
+
 	const oldTorrentAge = 1200000; // 20 mins in milliseconds
 	const addedDate = new Date(t.added);
 	const now = Date.now();

@@ -38,6 +38,32 @@ describe('slow', () => {
 			expect(isSlowOrNoLinks(torrent)).toBe(true);
 		});
 
+		it('never flags a TorBox web download, which has no swarm to seed it', () => {
+			const now = new Date('2024-01-01T12:00:00');
+			Date.now = vi.fn(() => now.getTime());
+
+			const webDownload = {
+				id: 'tb:w77',
+				filename: 'test.mkv',
+				title: 'test',
+				hash: 'd41d8cd98f00b204e9800998ecf8427e',
+				bytes: 1000000,
+				progress: 50,
+				status: UserTorrentStatus.downloading,
+				serviceStatus: 'downloading',
+				added: new Date('2024-01-01T11:30:00'), // old enough to trip the check
+				mediaType: 'other' as const,
+				links: [],
+				selectedFiles: [],
+				seeders: 0,
+				speed: 0,
+			};
+
+			expect(isSlowOrNoLinks(webDownload)).toBe(false);
+			// the same row as a torrent still counts as slow
+			expect(isSlowOrNoLinks({ ...webDownload, id: 'tb:77' })).toBe(true);
+		});
+
 		it('returns false for recent downloading torrents with no seeders', () => {
 			const now = new Date('2024-01-01T12:00:00');
 			Date.now = vi.fn(() => now.getTime());

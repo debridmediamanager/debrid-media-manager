@@ -31,7 +31,7 @@ import {
 } from '@/utils/deleteTorrent';
 import { extractDownloadLinks, extractHashes } from '@/utils/extractHashes';
 import { getRdStatus } from '@/utils/fetchTorrents';
-import { generateHashList } from '@/utils/hashList';
+import { generateHashList, shareableTorrents } from '@/utils/hashList';
 import { filterLibraryItems, isRdBlockedFilename } from '@/utils/libraryFilters';
 import { handleSelectTorrent, resetSelection, selectShown } from '@/utils/librarySelection';
 import { handleChangeType } from '@/utils/libraryTypeManagement';
@@ -1123,7 +1123,18 @@ function TorrentsPage() {
 
 		toast('Creating local backup...', libraryToastOptions);
 		try {
-			const hashList = listToBackup.map((t) => ({
+			// Restore re-adds each entry as a magnet, which a web download's md5
+			// can never be. Its source link isn't recoverable from TorBox either,
+			// so there is nothing to back up.
+			const backupable = shareableTorrents(listToBackup);
+			const skipped = listToBackup.length - backupable.length;
+			if (skipped > 0) {
+				toast(
+					`Skipping ${skipped} web download${skipped === 1 ? '' : 's'} — they cannot be restored from a hash.`,
+					libraryToastOptions
+				);
+			}
+			const hashList = backupable.map((t) => ({
 				filename: t.filename,
 				hash: t.hash,
 			}));

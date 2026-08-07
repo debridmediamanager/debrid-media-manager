@@ -95,6 +95,52 @@ describe('hashList utils', () => {
 			expect(window.open).toHaveBeenCalledWith(shortUrl);
 		});
 
+		it('leaves TorBox web downloads out of the shared list', async () => {
+			const webDownload: UserTorrent = {
+				...mockTorrent,
+				id: 'tb:w77',
+				filename: 'web-download.mkv',
+				hash: 'd41d8cd98f00b204e9800998ecf8427e',
+			};
+			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('compressed-data');
+			vi.mocked(createShortUrl).mockResolvedValue('https://short.url/abc123');
+
+			await generateHashList('Mixed', [mockTorrent, webDownload]);
+
+			expect(lzString.compressToEncodedURIComponent).toHaveBeenCalledWith(
+				JSON.stringify({
+					title: 'Mixed',
+					torrents: [
+						{
+							filename: mockTorrent.filename,
+							hash: mockTorrent.hash,
+							bytes: mockTorrent.bytes,
+						},
+					],
+				})
+			);
+			expect(toast).toHaveBeenCalledWith(
+				'Skipping 1 web download — they cannot be shared as hashes.',
+				expect.anything()
+			);
+		});
+
+		it('refuses to build a list made only of web downloads', async () => {
+			const webDownload: UserTorrent = {
+				...mockTorrent,
+				id: 'tb:w77',
+				hash: 'd41d8cd98f00b204e9800998ecf8427e',
+			};
+
+			await generateHashList('Only web', [webDownload]);
+
+			expect(createShortUrl).not.toHaveBeenCalled();
+			expect(toast.error).toHaveBeenCalledWith(
+				'Nothing to share — that list is only web downloads.',
+				expect.anything()
+			);
+		});
+
 		it('should handle empty torrent list', async () => {
 			const title = 'Empty Collection';
 			const filteredList: UserTorrent[] = [];
