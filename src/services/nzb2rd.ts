@@ -128,23 +128,49 @@ export interface SearchUsenetParams {
 	seasonNum?: number;
 	/** Show title. Only used to look for season packs, which are found by name. */
 	title?: string;
+	/** TVDB series id, when one could be resolved. Shows only — see below. */
+	tvdbId?: number;
 	limit?: number;
 }
 
-/** The indexer wants the bare digits, unlike everywhere else in this codebase. */
-export function buildSearchUrl({ imdbId, seasonNum, limit = 100 }: SearchUsenetParams): string {
+/**
+ * The indexer wants the bare digits, unlike everywhere else in this codebase.
+ *
+ * A season goes out keyed on the TVDB id whenever one is known, because the
+ * indexer matches TV releases against TVDB: every item comes back carrying a
+ * `tvdbid` attribute and no imdb one, and the imdb↔tvdb mapping lags for weeks
+ * on a newly premiered show. Measured over the 14 most popular shows that
+ * premiered in the three months to 2026-08-08, all of them mid-season: `imdbid`
+ * returned nothing for every single one, while `tvdbid` returned 49–100 results
+ * for the same seasons. Long-running shows return identical counts either way,
+ * so TVDB is never the worse key.
+ *
+ * Only ever one id — sending both was not measured across enough titles to know
+ * whether the indexer ORs or ANDs them. Movies stay on IMDb: `t=movie` takes no
+ * other id (`caps` lists `q,imdbid`), and their mapping is not affected.
+ */
+export function buildSearchUrl({
+	imdbId,
+	seasonNum,
+	tvdbId,
+	limit = 100,
+}: SearchUsenetParams): string {
 	const params = new URLSearchParams({
 		apikey: getNewznabApiKey(),
 		o: 'json',
 		extended: '1',
 		limit: String(limit),
-		imdbid: imdbId.replace(/^tt/, ''),
 	});
 	if (seasonNum !== undefined) {
 		params.set('t', 'tvsearch');
 		params.set('season', String(seasonNum));
 	} else {
 		params.set('t', 'movie');
+	}
+	if (seasonNum !== undefined && tvdbId !== undefined) {
+		params.set('tvdbid', String(tvdbId));
+	} else {
+		params.set('imdbid', imdbId.replace(/^tt/, ''));
 	}
 	return `${getNewznabUrl()}?${params}`;
 }

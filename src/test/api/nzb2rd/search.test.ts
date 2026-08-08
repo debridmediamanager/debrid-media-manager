@@ -1,10 +1,12 @@
 import handler from '@/pages/api/nzb2rd/search';
 import { searchUsenet } from '@/services/nzb2rd';
 import { repository } from '@/services/repository';
+import { resolveTvdbId } from '@/services/tvdbLookup';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/services/tvdbLookup', () => ({ resolveTvdbId: vi.fn() }));
 vi.mock('@/services/nzb2rd', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('@/services/nzb2rd')>();
 	return { ...actual, searchUsenet: vi.fn(), getNewznabApiKey: () => 'test-key' };
@@ -12,6 +14,7 @@ vi.mock('@/services/nzb2rd', async (importOriginal) => {
 
 const mockRepository = vi.mocked(repository);
 const mockSearch = vi.mocked(searchUsenet);
+const mockResolveTvdbId = vi.mocked(resolveTvdbId);
 
 const RESULTS = [{ id: 'a', title: 'Some.Release.1080p', size: 100 }];
 const CACHED = [{ id: 'b', title: 'Cached.Release.1080p', size: 200 }];
@@ -27,6 +30,7 @@ beforeEach(() => {
 	vi.clearAllMocks();
 	mockRepository.getCachedNzbSearch = vi.fn().mockResolvedValue(null);
 	mockRepository.setCachedNzbSearch = vi.fn().mockResolvedValue(undefined);
+	mockResolveTvdbId.mockResolvedValue(undefined);
 });
 
 describe('GET /api/nzb2rd/search caching', () => {
@@ -114,5 +118,62 @@ describe('GET /api/nzb2rd/search caching', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(mockSearch).not.toHaveBeenCalled();
 		expect(mockRepository.getCachedNzbSearch).not.toHaveBeenCalled();
+	});
+});
+
+describe('GET /api/nzb2rd/search TVDB keying', () => {
+	// Without this the episode query goes out on the IMDb id, which the indexer
+	// cannot match for a show that premiered recently — the season comes back
+	// empty even though the releases are there.
+	it('resolves a TVDB id for a season and hands it to the search', async () => {
+		mockResolveTvdbId.mockResolvedValue(465664);
+		mockSearch.mockResolvedValue(RESULTS);
+
+		await run({ imdbId: 'tt27497393', seasonNum: '1', title: 'Stuart Fails' });
+
+		expect(mockResolveTvdbId).toHaveBeenCalledWith('tt27497393');
+		expect(mockSearch).toHaveBeenCalledWith({
+			imdbId: 'tt27497393',
+			seasonNum: 1,
+			title: 'Stuart Fails',
+			tvdbId: 465664,
+		});
+	});
+
+	it('does not look one up for a movie', async () => {
+		mockSearch.mockResolvedValue(RESULTS);
+
+		await run({ imdbId: 'tt1418646' });
+
+		expect(mockResolveTvdbId).not.toHaveBeenCalled();
+		expect(mockSearch).toHaveBeenCalledWith({
+			imdbId: 'tt1418646',
+			seasonNum: undefined,
+			title: undefined,
+			tvdbId: undefined,
+		});
+	});
+
+	it('searches on the imdb id anyway when no TVDB id can be resolved', async () => {
+		mockResolveTvdbId.mockResolvedValue(undefined);
+		mockSearch.mockResolvedValue(RESULTS);
+
+		const res = await run({ imdbId: 'tt0944947', seasonNum: '2', title: 'Show' });
+
+		expect(mockSearch).toHaveBeenCalledWith(
+			expect.objectContaining({ imdbId: 'tt0944947', tvdbId: undefined })
+		);
+		expect(res.status).toHaveBeenCalledWith(200);
+	});
+
+	it('serves a fresh cache entry without paying for the lookup', async () => {
+		mockRepository.getCachedNzbSearch = vi
+			.fn()
+			.mockResolvedValue({ results: CACHED, updatedAt: new Date(), isFresh: true });
+
+		await run({ imdbId: 'tt27497393', seasonNum: '1', title: 'Stuart Fails' });
+
+		expect(mockResolveTvdbId).not.toHaveBeenCalled();
+		expect(mockSearch).not.toHaveBeenCalled();
 	});
 });

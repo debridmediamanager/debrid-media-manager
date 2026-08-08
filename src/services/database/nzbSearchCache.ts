@@ -11,7 +11,7 @@ import { DatabaseClient } from './client';
  * floor under that: one call per title per TTL, for every visitor and every
  * instance in the swarm.
  *
- * Stored in the generic `Cache` KV table under an `nzbsearch:` prefix, so this
+ * Stored in the generic `Cache` KV table under an `nzbsearch:v2:` prefix, so this
  * needs no migration — the schema is shared with btdig-scraper and gatekeeper
  * via sync-prisma-schemas.sh, and a new model would have to land in all three.
  *
@@ -20,7 +20,28 @@ import { DatabaseClient } from './client';
  */
 export const NZB_SEARCH_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
-const KEY_PREFIX = 'nzbsearch:';
+/**
+ * An empty result ages out far sooner than a real one.
+ *
+ * Nothing found is rarely a durable fact: a show mid-season gains releases every
+ * week, and the indexer's imdb↔tvdb mapping for a new title gets backfilled days
+ * after the premiere. Holding "no results" for the full week outlasts the reason
+ * it was empty, and the page keeps saying so long after the search would work.
+ * An hour still puts a hard cap on indexer calls per title — which is what the
+ * cache is for — while letting a title recover the same day.
+ */
+export const NZB_SEARCH_EMPTY_TTL_MS = 60 * 60 * 1000; // 1 hour
+
+/**
+ * Bump when a change alters what a search *returns*, as opposed to how long an
+ * answer keeps. Entries written by the previous code are then unreachable rather
+ * than merely old, so the change lands on deploy instead of trickling in over a
+ * week as the TTL expires.
+ *
+ * v2: seasons are keyed on the TVDB id (see buildSearchUrl). Everything written
+ * before it holds a season's packs and none of its episodes.
+ */
+const KEY_PREFIX = 'nzbsearch:v2:';
 
 export function nzbSearchCacheKey(imdbId: string, seasonNum?: number): string {
 	const base = `${KEY_PREFIX}${imdbId.toLowerCase()}`;
@@ -47,7 +68,8 @@ export class NzbSearchCacheService extends DatabaseClient {
 	async get(
 		imdbId: string,
 		seasonNum?: number,
-		ttlMs: number = NZB_SEARCH_TTL_MS
+		ttlMs: number = NZB_SEARCH_TTL_MS,
+		emptyTtlMs: number = NZB_SEARCH_EMPTY_TTL_MS
 	): Promise<CachedNzbSearch | null> {
 		try {
 			const row = await this.prisma.cache.findUnique({
@@ -58,10 +80,11 @@ export class NzbSearchCacheService extends DatabaseClient {
 			const value = row.value as unknown as { results?: unknown };
 			if (!Array.isArray(value?.results)) return null;
 
+			const results = value.results as UsenetResult[];
 			return {
-				results: value.results as UsenetResult[],
+				results,
 				updatedAt: row.updatedAt,
-				isFresh: isFresh(row.updatedAt, ttlMs),
+				isFresh: isFresh(row.updatedAt, results.length === 0 ? emptyTtlMs : ttlMs),
 			};
 		} catch (error) {
 			console.error('Error reading Usenet search cache:', error);

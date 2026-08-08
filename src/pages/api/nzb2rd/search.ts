@@ -1,6 +1,7 @@
 import { getNewznabApiKey, isValidImdbId, searchUsenet } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { resolveTvdbId } from '@/services/tvdbLookup';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 // Usenet results for one movie or show season. The server-side hop exists to
@@ -51,8 +52,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(200).json({ results: cached.results, cached: true });
 	}
 
+	// Keyed on TVDB for shows, since that is what the indexer matches TV releases
+	// against — see buildSearchUrl. Resolved here rather than taken from the
+	// browser, and free in practice: the show page has already warmed the same
+	// MDBList lookup through /api/info/show.
+	const tvdbId = season === undefined ? undefined : await resolveTvdbId(imdbId);
+
 	try {
-		const results = await searchUsenet({ imdbId, seasonNum: season, title: showTitle });
+		const results = await searchUsenet({
+			imdbId,
+			seasonNum: season,
+			title: showTitle,
+			tvdbId,
+		});
 		await db.setCachedNzbSearch(imdbId, season, results);
 		res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
 		return res.status(200).json({ results, cached: false });

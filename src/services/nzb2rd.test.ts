@@ -57,6 +57,37 @@ describe('buildSearchUrl', () => {
 		expect(url.searchParams.get('t')).toBe('tvsearch');
 		expect(url.searchParams.get('season')).toBe('0');
 	});
+
+	// The indexer matches TV against TVDB and its imdb mapping lags weeks behind a
+	// premiere, so an imdbid-keyed season search returns nothing at all for a show
+	// that is currently airing. Keying on TVDB is what makes those seasons findable.
+	it('keys a season on the TVDB id when one is known, and drops imdbid', () => {
+		const url = new URL(buildSearchUrl({ imdbId: 'tt27497393', seasonNum: 1, tvdbId: 465664 }));
+		expect(url.searchParams.get('t')).toBe('tvsearch');
+		expect(url.searchParams.get('tvdbid')).toBe('465664');
+		expect(url.searchParams.get('season')).toBe('1');
+		expect(url.searchParams.get('imdbid')).toBeNull();
+	});
+
+	it('falls back to imdbid when no TVDB id could be resolved', () => {
+		const url = new URL(buildSearchUrl({ imdbId: 'tt0944947', seasonNum: 3 }));
+		expect(url.searchParams.get('imdbid')).toBe('0944947');
+		expect(url.searchParams.get('tvdbid')).toBeNull();
+	});
+
+	it('keeps season 0 on the TVDB id too', () => {
+		const url = new URL(buildSearchUrl({ imdbId: 'tt0944947', seasonNum: 0, tvdbId: 121361 }));
+		expect(url.searchParams.get('tvdbid')).toBe('121361');
+		expect(url.searchParams.get('imdbid')).toBeNull();
+	});
+
+	// t=movie takes no other id — caps lists q,imdbid.
+	it('ignores a TVDB id for a movie', () => {
+		const url = new URL(buildSearchUrl({ imdbId: 'tt1418646', tvdbId: 465664 }));
+		expect(url.searchParams.get('t')).toBe('movie');
+		expect(url.searchParams.get('imdbid')).toBe('1418646');
+		expect(url.searchParams.get('tvdbid')).toBeNull();
+	});
 });
 
 describe('parseNewznabItem', () => {
@@ -397,5 +428,22 @@ describe('searchUsenet with a show title', () => {
 		await searchUsenet({ imdbId: 'tt0944947', seasonNum: 2 });
 
 		expect(fetchMock).toHaveBeenCalledTimes(1);
+	});
+
+	// The pack queries are by name and unaffected; it is the episode query that
+	// has to carry the TVDB id, since that is the one keyed on an id at all.
+	it('sends the TVDB id on the episode query and leaves the pack queries alone', async () => {
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ item: [] }) });
+		vi.stubGlobal('fetch', fetchMock);
+
+		await searchUsenet({ imdbId: 'tt27497393', seasonNum: 1, title: 'Show', tvdbId: 465664 });
+
+		const [episodeUrl, ...packUrls] = fetchMock.mock.calls.map(
+			(call: unknown[]) => new URL(call[0] as string)
+		);
+		expect(episodeUrl.searchParams.get('tvdbid')).toBe('465664');
+		expect(episodeUrl.searchParams.get('imdbid')).toBeNull();
+		expect(packUrls).toHaveLength(3);
+		expect(packUrls.every((url) => url.searchParams.get('t') === 'search')).toBe(true);
 	});
 });
