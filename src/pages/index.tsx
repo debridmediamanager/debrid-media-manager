@@ -14,7 +14,7 @@ import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
-import { Megaphone, Settings, Star, X } from 'lucide-react';
+import { Megaphone, Settings } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -40,7 +40,6 @@ function IndexPage() {
 	} = useCurrentUser();
 	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
 	const [browseTerms] = useState(getTerms(2));
-	const [showElfHostedBanner, setShowElfHostedBanner] = useState(true);
 
 	// Each of these no-ops without that service's credentials. They also resync the
 	// cast profile, so settings that failed to reach the server heal on any visit
@@ -109,14 +108,6 @@ function IndexPage() {
 		}
 	}, [rdUser, router]);
 
-	// Check if ElfHosted banner should be hidden
-	useEffect(() => {
-		const hideElfHostedBanner = localStorage.getItem('hideElfHostedBanner');
-		if (hideElfHostedBanner === 'true') {
-			setShowElfHostedBanner(false);
-		}
-	}, []);
-
 	const loginWithTrakt = async () => {
 		const authUrl = `/api/trakt/auth?redirect=${window.location.origin}`;
 		router.push(authUrl);
@@ -132,11 +123,6 @@ function IndexPage() {
 		// Dispatch logout event to update UI immediately
 		window.dispatchEvent(new Event('logout'));
 		window.location.reload();
-	};
-
-	const handleHideElfHostedBanner = () => {
-		localStorage.setItem('hideElfHostedBanner', 'true');
-		setShowElfHostedBanner(false);
 	};
 
 	const actionButtonGroupClasses = 'grid w-full max-w-md gap-3 sm:grid-cols-2 md:grid-cols-3';
@@ -171,40 +157,6 @@ function IndexPage() {
 					<div className="mb-4 w-full max-w-md">
 						<SearchBar />
 					</div>
-
-					{/* ElfHosted Promo Banner - Compact Version */}
-					{showElfHostedBanner && (
-						<div className="mb-2 w-full max-w-md rounded-md border border-blue-500 bg-blue-900/30 p-1.5 text-xs shadow-sm">
-							<div className="flex justify-between">
-								<div className="flex-1">
-									<span className="inline-flex items-center text-yellow-300">
-										<Star className="mr-1 inline-block h-3 w-3 text-yellow-400" />
-										Sponsor:
-									</span>{' '}
-									<a
-										className="font-medium text-blue-300 underline hover:text-blue-200"
-										href="https://store.elfhosted.com/product-category/streaming-bundles/"
-										target="_blank"
-									>
-										<b>ElfHosted</b>
-									</a>{' '}
-									- Self-hosting too stressful? Try ElfHosted&apos;s turn-key
-									streaming stack including Zurg, Plex, Seerrbridge, Radarr/Sonarr
-									& more!{' '}
-									<span className="whitespace-nowrap">
-										7-day trial available.
-									</span>
-								</div>
-								<button
-									onClick={handleHideElfHostedBanner}
-									className="ml-1 text-gray-400 hover:text-gray-200"
-									title="Hide banner"
-								>
-									<X className="h-4 w-4" />
-								</button>
-							</div>
-						</div>
-					)}
 
 					<div className="flex w-full max-w-md flex-col items-center gap-6">
 						<MainActions
