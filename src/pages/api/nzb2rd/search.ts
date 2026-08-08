@@ -1,17 +1,20 @@
-import { getNewznabApiKey, isValidImdbId, searchUsenet } from '@/services/nzb2rd';
+import { getIndexers, isValidImdbId, searchUsenet } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { resolveTvdbId } from '@/services/tvdbLookup';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-// Usenet results for one movie or show season. The server-side hop exists to
-// keep the indexer API key out of the browser — see the note in services/nzb2rd.
+// Usenet results for one movie or show season, merged across every configured
+// indexer. The server-side hop exists to keep the indexer API keys out of the
+// browser — see the note in services/nzb2rd.
 //
-// Results are cached in the DB for a week (see NZB_SEARCH_TTL_MS). The indexer
+// Results are cached in the DB for a week (see NZB_SEARCH_TTL_MS). Each indexer
 // meters API calls against one shared account and this runs on every media page
 // of a public site, so an HTTP cache hint is not enough on its own: an edge miss
 // would still spend a call. The DB cache is shared by all four swarm instances
-// and survives restarts and cache purges.
+// and survives restarts and cache purges — which matters more with two indexers,
+// since a season miss now costs 8 calls (2 indexers x 1 episode + 3 pack queries)
+// rather than 4.
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
 		return res.status(405).json({ error: 'Method not allowed' });
@@ -31,7 +34,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		season = parsed;
 	}
 
-	if (!getNewznabApiKey()) {
+	if (getIndexers().length === 0) {
 		return res.status(503).json({ error: 'Usenet indexer is not configured' });
 	}
 

@@ -40,8 +40,13 @@ export const NZB_SEARCH_EMPTY_TTL_MS = 60 * 60 * 1000; // 1 hour
  *
  * v2: seasons are keyed on the TVDB id (see buildSearchUrl). Everything written
  * before it holds a season's packs and none of its episodes.
+ *
+ * v3: results are merged across indexers and their ids are indexer-qualified
+ * (`ds:abc123`). A v2 entry holds bare ids and DrunkenSlug-only results, so
+ * serving one would both hide altHUB for a week and hand unqualified ids to a
+ * two-indexer `fetchNzb`.
  */
-const KEY_PREFIX = 'nzbsearch:v2:';
+const KEY_PREFIX = 'nzbsearch:v3:';
 
 export function nzbSearchCacheKey(imdbId: string, seasonNum?: number): string {
 	const base = `${KEY_PREFIX}${imdbId.toLowerCase()}`;

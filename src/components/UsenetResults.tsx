@@ -322,6 +322,11 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 															Season pack
 														</span>
 													)}
+													{result.indexer && (
+														<span className="mr-2 whitespace-nowrap rounded border border-gray-600 bg-gray-800 px-1.5 py-0.5 text-xs text-gray-400">
+															{result.indexer}
+														</span>
+													)}
 													{result.title}
 												</td>
 												<td className="whitespace-nowrap px-2 py-2 text-gray-300">

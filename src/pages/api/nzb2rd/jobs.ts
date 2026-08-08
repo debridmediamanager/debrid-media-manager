@@ -54,7 +54,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	const { id, title, imdbId, rdKey } = req.body ?? {};
 
-	if (typeof id !== 'string' || !/^[A-Za-z0-9._-]{1,128}$/.test(id)) {
+	// The colon separates the indexer prefix from the native id (`ds:abc123`).
+	if (typeof id !== 'string' || !/^[A-Za-z0-9._:-]{1,128}$/.test(id)) {
 		return res.status(400).json({ error: 'id must be an indexer result id' });
 	}
 	if (!isValidImdbId(imdbId)) {

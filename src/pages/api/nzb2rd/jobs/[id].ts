@@ -100,7 +100,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(400).json({ error: 'Invalid job id' });
 	}
 	const release =
-		typeof releaseId === 'string' && /^[A-Za-z0-9._-]{1,128}$/.test(releaseId)
+		typeof releaseId === 'string' && /^[A-Za-z0-9._:-]{1,128}$/.test(releaseId)
 			? releaseId
 			: undefined;
 

@@ -9,7 +9,18 @@ vi.mock('@/services/repository');
 vi.mock('@/services/tvdbLookup', () => ({ resolveTvdbId: vi.fn() }));
 vi.mock('@/services/nzb2rd', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('@/services/nzb2rd')>();
-	return { ...actual, searchUsenet: vi.fn(), getNewznabApiKey: () => 'test-key' };
+	return {
+		...actual,
+		searchUsenet: vi.fn(),
+		getIndexers: () => [
+			{
+				prefix: 'ds',
+				name: 'DrunkenSlug',
+				url: 'https://indexer.test/api',
+				apiKey: 'test-key',
+			},
+		],
+	};
 });
 
 const mockRepository = vi.mocked(repository);

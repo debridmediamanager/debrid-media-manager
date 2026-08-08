@@ -25,25 +25,27 @@ const ago = (ms: number) => new Date(NOW - ms);
 
 describe('nzbSearchCacheKey', () => {
 	it('separates a movie from a season of a show', () => {
-		expect(nzbSearchCacheKey('tt1418646')).toBe('nzbsearch:v2:tt1418646');
-		expect(nzbSearchCacheKey('tt0944947', 2)).toBe('nzbsearch:v2:tt0944947:s2');
+		expect(nzbSearchCacheKey('tt1418646')).toBe('nzbsearch:v3:tt1418646');
+		expect(nzbSearchCacheKey('tt0944947', 2)).toBe('nzbsearch:v3:tt0944947:s2');
 	});
 
 	it('keeps season 0 distinct from no season at all', () => {
-		expect(nzbSearchCacheKey('tt0944947', 0)).toBe('nzbsearch:v2:tt0944947:s0');
+		expect(nzbSearchCacheKey('tt0944947', 0)).toBe('nzbsearch:v3:tt0944947:s0');
 		expect(nzbSearchCacheKey('tt0944947', 0)).not.toBe(nzbSearchCacheKey('tt0944947'));
 	});
 
 	it('lowercases so casing cannot split one title across two entries', () => {
-		expect(nzbSearchCacheKey('TT1418646')).toBe('nzbsearch:v2:tt1418646');
+		expect(nzbSearchCacheKey('TT1418646')).toBe('nzbsearch:v3:tt1418646');
 	});
 
-	// Entries written before seasons were keyed on the TVDB id hold a season's
-	// packs and none of its episodes. Reading one back would serve exactly the bug
-	// the fix removes, for as long as its week-long TTL has left to run.
-	it('cannot read an entry written by the previous version', () => {
+	// Every earlier version holds results the current code would serve wrongly:
+	// pre-v2 entries have a season's packs and none of its episodes, and v2
+	// entries have DrunkenSlug-only results under bare, unqualified ids. Reading
+	// either back reintroduces the bug for the rest of its week-long TTL.
+	it('cannot read an entry written by any previous version', () => {
 		expect(nzbSearchCacheKey('tt27497393', 1)).not.toBe('nzbsearch:tt27497393:s1');
-		expect(nzbSearchCacheKey('tt27497393', 1).startsWith('nzbsearch:v2:')).toBe(true);
+		expect(nzbSearchCacheKey('tt27497393', 1)).not.toBe('nzbsearch:v2:tt27497393:s1');
+		expect(nzbSearchCacheKey('tt27497393', 1).startsWith('nzbsearch:v3:')).toBe(true);
 	});
 });
 
@@ -69,14 +71,14 @@ describe('NzbSearchCacheService', () => {
 
 	it('returns a recent entry as fresh', async () => {
 		prisma.cache.findUnique.mockResolvedValue({
-			key: 'nzbsearch:v2:tt1418646',
+			key: 'nzbsearch:v3:tt1418646',
 			value: { results: RESULTS },
 			updatedAt: new Date(Date.now() - 1000),
 		});
 
 		const hit = await service.get('tt1418646');
 		expect(prisma.cache.findUnique).toHaveBeenCalledWith({
-			where: { key: 'nzbsearch:v2:tt1418646' },
+			where: { key: 'nzbsearch:v3:tt1418646' },
 		});
 		expect(hit?.isFresh).toBe(true);
 		expect(hit?.results).toEqual(RESULTS);
@@ -84,7 +86,7 @@ describe('NzbSearchCacheService', () => {
 
 	it('still returns an expired entry, marked stale, so it can be a fallback', async () => {
 		prisma.cache.findUnique.mockResolvedValue({
-			key: 'nzbsearch:v2:tt1418646',
+			key: 'nzbsearch:v3:tt1418646',
 			value: { results: RESULTS },
 			updatedAt: new Date(Date.now() - NZB_SEARCH_TTL_MS - 60_000),
 		});
@@ -99,7 +101,7 @@ describe('NzbSearchCacheService', () => {
 		expect(await service.get('tt1418646')).toBeNull();
 
 		prisma.cache.findUnique.mockResolvedValue({
-			key: 'nzbsearch:v2:tt1418646',
+			key: 'nzbsearch:v3:tt1418646',
 			value: { nonsense: true },
 			updatedAt: new Date(),
 		});
@@ -114,7 +116,7 @@ describe('NzbSearchCacheService', () => {
 	it('upserts under the season-scoped key', async () => {
 		await service.set('tt0944947', 3, RESULTS);
 		const call = prisma.cache.upsert.mock.calls[0][0];
-		expect(call.where).toEqual({ key: 'nzbsearch:v2:tt0944947:s3' });
+		expect(call.where).toEqual({ key: 'nzbsearch:v3:tt0944947:s3' });
 		expect(call.create.value).toEqual({ results: RESULTS });
 	});
 
@@ -129,7 +131,7 @@ describe('NzbSearchCacheService', () => {
 	// search would have worked.
 	describe('empty results age out early', () => {
 		const emptyRow = (ageMs: number) => ({
-			key: 'nzbsearch:v2:tt27497393:s1',
+			key: 'nzbsearch:v3:tt27497393:s1',
 			value: { results: [] },
 			updatedAt: new Date(Date.now() - ageMs),
 		});
@@ -149,7 +151,7 @@ describe('NzbSearchCacheService', () => {
 
 			const age = NZB_SEARCH_EMPTY_TTL_MS + 60_000;
 			prisma.cache.findUnique.mockResolvedValue({
-				key: 'nzbsearch:v2:tt27497393:s1',
+				key: 'nzbsearch:v3:tt27497393:s1',
 				value: { results: RESULTS },
 				updatedAt: new Date(Date.now() - age),
 			});

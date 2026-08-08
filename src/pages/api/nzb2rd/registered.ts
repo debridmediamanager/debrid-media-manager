@@ -21,7 +21,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	const valid = ids.filter(
-		(id: unknown): id is string => typeof id === 'string' && /^[A-Za-z0-9._-]{1,128}$/.test(id)
+		(id: unknown): id is string => typeof id === 'string' && /^[A-Za-z0-9._:-]{1,128}$/.test(id)
 	);
 	if (valid.length === 0) {
 		return res.status(200).json({ transfers: [] });
