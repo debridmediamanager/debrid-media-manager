@@ -333,8 +333,23 @@ async function fetchResults(url: string, indexer: Indexer): Promise<UsenetResult
 		signal: AbortSignal.timeout(20000),
 	});
 	if (!response.ok) throw new Error(`${indexer.name} returned ${response.status}`);
+
+	// altHUB answers a bad key with `<error code="100" …/>` and HTTP 200, ignoring
+	// `o=json` entirely. The raw parse failure reads as an unexpected `<`, which
+	// looks like a transport fault rather than a credential problem — so say what
+	// it actually means, since a wrong key would otherwise present as this
+	// indexer being permanently unreachable.
+	let payload: unknown;
+	try {
+		payload = await response.json();
+	} catch {
+		throw new Error(
+			`${indexer.name} returned a non-JSON body — usually a Newznab <error> envelope, so check its API key`
+		);
+	}
+
 	// Qualify here: this is the only layer that knows which server answered.
-	return parseNewznabResponse(await response.json()).map((result) => ({
+	return parseNewznabResponse(payload).map((result) => ({
 		...result,
 		id: qualifyReleaseId(indexer.prefix, result.id),
 		indexer: indexer.name,
@@ -413,6 +428,21 @@ export async function searchUsenet(params: SearchUsenetParams): Promise<UsenetRe
 }
 
 /**
+ * Newznab's error envelope, which altHUB returns with **HTTP 200** — a bad key
+ * is `<error code="100" description="Incorrect user credentials"/>` and a dead
+ * release id is `<error code="300" description="No such item"/>`, both 200.
+ *
+ * So status alone cannot be trusted here. Without this check `fetchNzb` returns
+ * the error document as if it were an NZB, and the caller cheerfully posts it to
+ * nzb2rd: the submission fails there instead, reported as a broken NZB rather
+ * than "the indexer no longer has this release".
+ */
+export function newznabError(body: string): string | null {
+	const match = body.slice(0, 400).match(/<error\s[^>]*code="(\d+)"[^>]*description="([^"]*)"/);
+	return match ? `${match[2]} (code ${match[1]})` : null;
+}
+
+/**
  * Download one NZB by qualified release id. Returns the raw XML.
  *
  * altHUB answers `t=get` with a 302 to its own `/getnzb` path; `fetch` follows
@@ -430,7 +460,10 @@ export async function fetchNzb(id: string): Promise<string> {
 		signal: AbortSignal.timeout(30000),
 	});
 	if (!response.ok) throw new Error(`NZB download returned ${response.status}`);
-	return response.text();
+	const body = await response.text();
+	const failed = newznabError(body);
+	if (failed) throw new Error(`${target.indexer.name} refused the NZB: ${failed}`);
+	return body;
 }
 
 export interface Nzb2rdJob {

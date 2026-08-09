@@ -9,6 +9,7 @@ import {
 	isSeasonPack,
 	isValidImdbId,
 	looksLikeEpisode,
+	newznabError,
 	parseNewznabItem,
 	parseNewznabResponse,
 	parseReleaseId,
@@ -656,5 +657,76 @@ describe('searchUsenet across indexers', () => {
 
 		// 2 indexers x (1 episode query + 3 pack phrasings)
 		expect(fetchMock).toHaveBeenCalledTimes(8);
+	});
+});
+
+// altHUB reports failure in the body with HTTP 200 and ignores `o=json` while
+// doing it: a bad key is `<error code="100">`, a dead release id `<error
+// code="300">`. Status checks alone therefore pass an error document straight
+// through — as an NZB, in fetchNzb's case, which the caller then posts to nzb2rd.
+describe('newznab error envelopes returned with HTTP 200', () => {
+	let errors: string[] = [];
+	beforeEach(() => {
+		errors = [];
+		vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+			errors.push(args.map(String).join(' '));
+		});
+	});
+
+	const BAD_KEY =
+		'<?xml version="1.0" encoding="UTF-8"?>\n<error code="100" description="Incorrect user credentials"/>';
+	const NO_ITEM =
+		'<?xml version="1.0" encoding="UTF-8"?>\n<error code="300" description="No such item"/>';
+
+	it('recognises the envelope and ignores ordinary bodies', () => {
+		expect(newznabError(BAD_KEY)).toBe('Incorrect user credentials (code 100)');
+		expect(newznabError(NO_ITEM)).toBe('No such item (code 300)');
+		expect(newznabError('{"item":[]}')).toBeNull();
+		expect(newznabError('<?xml version="1.0"?><nzb><file /></nzb>')).toBeNull();
+	});
+
+	it('refuses to hand an error document back as an NZB', async () => {
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, text: async () => NO_ITEM }));
+		await expect(fetchNzb('ds:gone')).rejects.toThrow('No such item');
+	});
+
+	// The XML arrives where JSON was asked for, so the parse is what fails. The
+	// message has to point at the key rather than at "unexpected token <".
+	it('blames the api key when the search body is not JSON', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({
+				ok: true,
+				json: async () => {
+					throw new SyntaxError("Unexpected token '<'");
+				},
+			})
+		);
+		await expect(searchUsenet({ imdbId: 'tt1418646' })).rejects.toThrow(
+			'no indexer could be reached'
+		);
+		expect(errors.some((line) => /check its API key/.test(line))).toBe(true);
+	});
+
+	it('still parses a healthy JSON body', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({
+				ok: true,
+				json: async () => ({
+					channel: {
+						item: [
+							{
+								title: 'A',
+								guid: 'x',
+								attr: [{ '@attributes': { name: 'size', value: '5' } }],
+							},
+						],
+					},
+				}),
+			})
+		);
+		const results = await searchUsenet({ imdbId: 'tt1418646' });
+		expect(results).toEqual([{ id: 'ds:x', title: 'A', size: 5, indexer: 'DrunkenSlug' }]);
 	});
 });
