@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { isTerminal, toEntries } from './transfers';
+import {
+	isTerminal,
+	ORIGIN_LABELS,
+	ORIGIN_STYLES,
+	originOf,
+	toEntries,
+	TransferOrigin,
+} from './transfers';
 
 const debridJob = {
 	id: 'd1',
@@ -51,6 +58,40 @@ describe('isTerminal', () => {
 	it("keeps polling nzb2rd's own stages, which the TB → RD flow never reports", () => {
 		for (const status of ['probing', 'fetching', 'unpacking', 'hashing']) {
 			expect(isTerminal('nzb2rd', status)).toBe(false);
+		}
+	});
+});
+
+describe('originOf', () => {
+	it('names the provider a debrid job actually used', () => {
+		// The row used to say "TB → RD" whatever served it, which was wrong for
+		// every AllDebrid transfer — and dmm sends both keys, so those are real.
+		expect(originOf('debrid', 'torbox')).toBe('torbox');
+		expect(originOf('debrid', 'alldebrid')).toBe('alldebrid');
+		expect(originOf('debrid', 'qbit')).toBe('qbit');
+	});
+
+	it('says Cache while the service has not picked one yet', () => {
+		// A job is queued or still probing: the answer is genuinely unknown, and
+		// naming either provider would be a guess the user would act on.
+		expect(originOf('debrid', null)).toBe('cache');
+		expect(originOf('debrid', undefined)).toBe('cache');
+	});
+
+	it('ignores a source it does not recognise rather than rendering it raw', () => {
+		expect(originOf('debrid', 'premiumize')).toBe('cache');
+		expect(originOf('debrid', '')).toBe('cache');
+	});
+
+	it('always calls an nzb2rd job Usenet, whatever the field says', () => {
+		expect(originOf('nzb2rd', undefined)).toBe('usenet');
+		expect(originOf('nzb2rd', 'torbox')).toBe('usenet');
+	});
+
+	it('gives every origin a label and a chip style', () => {
+		for (const origin of Object.keys(ORIGIN_LABELS) as TransferOrigin[]) {
+			expect(ORIGIN_LABELS[origin]).toBeTruthy();
+			expect(ORIGIN_STYLES[origin]).toBeTruthy();
 		}
 	});
 });

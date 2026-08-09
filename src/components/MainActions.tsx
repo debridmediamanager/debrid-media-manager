@@ -102,10 +102,11 @@ export function MainActions({ rdUser, tbUser, adUser, isLoading }: MainActionsPr
 				</div>
 			)}
 
-			{/* Transfer jobs. Gated on RD alone, not RD+TB: both kinds land in Real-
-			    Debrid, but only the TB → RD kind sources from TorBox. Usenet transfers
-			    need no TorBox account, so requiring one here hid the page from the
-			    very users the toast tells to come and watch their job. */}
+			{/* Transfer jobs. Gated on RD alone, not RD+TB: every kind lands in Real-
+			    Debrid, but only the cache kind sources from TorBox — and even that
+			    one falls back to AllDebrid. Usenet transfers need neither account, so
+			    requiring TorBox here hid the page from the very users the toast tells
+			    to come and watch their job. */}
 			{rdUser && (
 				<Link
 					href="/transfers"

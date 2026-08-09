@@ -19,6 +19,11 @@ export interface DebridUploaderJob {
 	name?: string | null;
 	/** Place in line, sent only while the job is still waiting to start. */
 	queue?: QueuePlace | null;
+	/**
+	 * Which cached provider served this job — `torbox`, `alldebrid` or `qbit`.
+	 * Null until the service commits to one, since it tries them in turn.
+	 */
+	source?: string | null;
 }
 
 async function parseJsonResponse(response: Response): Promise<any> {

@@ -16,8 +16,9 @@ import {
 import { describeTransfer, PHASE_STYLES } from '@/utils/transferPhase';
 import {
 	isTerminal,
-	SOURCE_LABELS,
-	SOURCE_STYLES,
+	ORIGIN_LABELS,
+	ORIGIN_STYLES,
+	originOf,
 	toEntries,
 	TransferEntry,
 } from '@/utils/transfers';
@@ -145,11 +146,14 @@ export default function TransfersPage() {
 				</div>
 
 				<p className="mb-4 text-xs text-gray-400">
-					Transfers put content into your Real-Debrid library — either from a
-					TorBox/AllDebrid cache (<span className="text-indigo-300">TB → RD</span>) or off
-					Usenet (<span className="text-amber-300">Usenet</span>). Jobs keep running on
-					the server even if you close this page; the list below is remembered by this
-					browser. Active jobs refresh every {POLL_MS / 1000}s.
+					Transfers put content into your Real-Debrid library, sourced from{' '}
+					<span className="text-indigo-300">TorBox</span>,{' '}
+					<span className="text-sky-300">AllDebrid</span> or{' '}
+					<span className="text-amber-300">Usenet</span>. The first tag on each row is
+					where its bytes came from — a TorBox/AllDebrid transfer shows{' '}
+					<span className="text-slate-300">Cache</span> until the service settles on one.
+					Jobs keep running on the server even if you close this page; the list below is
+					remembered by this browser. Active jobs refresh every {POLL_MS / 1000}s.
 				</p>
 
 				{tracked.length === 0 ? (
@@ -166,6 +170,10 @@ export default function TransfersPage() {
 							const progress = describeTransfer(t.source, job);
 							const terminal = job && isTerminal(t.source, job.status);
 							const chipStyle = PHASE_STYLES[progress.phase];
+							const origin = originOf(
+								t.source,
+								(job as DebridUploaderJob | undefined)?.source
+							);
 
 							return (
 								<div
@@ -179,9 +187,14 @@ export default function TransfersPage() {
 											</h2>
 											<div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-400">
 												<span
-													className={`inline-flex items-center rounded border-2 px-1.5 py-0.5 font-medium ${SOURCE_STYLES[t.source]}`}
+													className={`inline-flex items-center rounded border-2 px-1.5 py-0.5 font-medium ${ORIGIN_STYLES[origin]}`}
+													title={
+														origin === 'cache'
+															? 'Waiting on the service to pick TorBox or AllDebrid'
+															: `Sourced from ${ORIGIN_LABELS[origin]}`
+													}
 												>
-													{SOURCE_LABELS[t.source]}
+													{ORIGIN_LABELS[origin]}
 												</span>
 												<span
 													className={`inline-flex items-center rounded border-2 px-1.5 py-0.5 font-medium ${chipStyle}`}
