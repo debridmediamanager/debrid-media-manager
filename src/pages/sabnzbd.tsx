@@ -321,12 +321,12 @@ export default function SabnzbdSetupPage() {
 						<ul className="ml-4 mt-2 list-disc space-y-1">
 							<li>
 								<a
-									href="https://github.com/debridmediamanager/zurg-testing"
+									href="https://github.com/debridmediamanager/zurg-public"
 									target="_blank"
 									rel="noopener noreferrer"
 									className="underline decoration-dotted"
 								>
-									zurg-testing
+									zurg-public
 								</a>{' '}
 								— the public release, free for anyone. Start here.
 							</li>

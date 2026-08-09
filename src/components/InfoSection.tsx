@@ -50,7 +50,7 @@ export function InfoSection() {
 					<Sparkles className="mr-1 inline-block h-3 w-3 text-yellow-400" />
 					<a
 						className="text-blue-300 underline hover:text-blue-200"
-						href="https://github.com/debridmediamanager/zurg-testing"
+						href="https://github.com/debridmediamanager/zurg-public"
 						target="_blank"
 					>
 						<b>zurg</b>
