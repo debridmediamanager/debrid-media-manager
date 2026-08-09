@@ -308,6 +308,50 @@ export default function SabnzbdSetupPage() {
 							works; there is just nothing for it to import.
 						</p>
 					)}
+
+					<div className="mt-4 rounded border-2 border-gray-600/50 p-3 text-xs text-gray-300">
+						<div className="mb-1 font-semibold text-gray-200">
+							No mount yet? You need zurg.
+						</div>
+						<p>
+							zurg exposes your Real-Debrid library as a filesystem, which is what
+							gives this a path to import from — and what Plex, Jellyfin, Emby and
+							Infuse read.
+						</p>
+						<ul className="ml-4 mt-2 list-disc space-y-1">
+							<li>
+								<a
+									href="https://github.com/debridmediamanager/zurg-testing"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="underline decoration-dotted"
+								>
+									zurg-testing
+								</a>{' '}
+								— the public release, free for anyone. Start here.
+							</li>
+							<li>
+								<a
+									href="https://github.com/debridmediamanager/zurg"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="underline decoration-dotted"
+								>
+									zurg nightly builds
+								</a>{' '}
+								— the repo is private; access comes with a{' '}
+								<a
+									href="https://www.patreon.com/debridmediamanager"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="underline decoration-dotted"
+								>
+									Patreon subscription
+								</a>
+								.
+							</li>
+						</ul>
+					</div>
 				</Card>
 
 				<Card title="3. Paste this into Radarr / Sonarr">
