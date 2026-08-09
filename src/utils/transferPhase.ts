@@ -1,0 +1,218 @@
+// One user-facing vocabulary for both transfer kinds.
+//
+// The two services name their stages after their own internals, and the words
+// do not line up: `debrid`'s `downloading` moves no payload bytes at all (it
+// probes the cache, creates the provider torrent and registers the webseed —
+// the bytes only move later, when RD pulls through the proxy), while nzb2rd's
+// `hashing`/`fetching` is the stage that genuinely drags the whole release over
+// the wire. And on both, `uploading` means *Real-Debrid downloading from us*,
+// which reads backwards to anyone watching their own transfer.
+//
+// So the enums are mapped here rather than renamed: they are pinned by SQLite
+// CHECK constraints, resume-on-boot and nzb2rd's SABnzbd mapping, and a rename
+// would strand rows already in flight. nzb2rd's `sabStatusOf` already does this
+// same translation for Radarr/Sonarr; this is the same idea for the Transfers
+// page.
+
+export type TransferSource = 'debrid' | 'nzb2rd';
+
+export type TransferPhase =
+	| 'queued'
+	| 'checking'
+	| 'downloading'
+	| 'extracting'
+	| 'preparing'
+	| 'handoff'
+	| 'importing'
+	| 'completed'
+	| 'failed'
+	| 'unknown';
+
+export const PHASE_LABELS: Record<TransferPhase, string> = {
+	queued: 'Queued',
+	checking: 'Checking release',
+	downloading: 'Downloading',
+	extracting: 'Extracting',
+	preparing: 'Preparing torrent',
+	handoff: 'Sending to Real-Debrid',
+	// `uploading` on both services means RD is pulling the bytes *from us*, so
+	// from the user's side this is Real-Debrid doing the downloading.
+	importing: 'Real-Debrid downloading',
+	completed: 'Done',
+	failed: 'Failed',
+	unknown: 'Unknown',
+};
+
+export const PHASE_STYLES: Record<TransferPhase, string> = {
+	queued: 'border-gray-500 bg-gray-900/30 text-gray-100',
+	checking: 'border-cyan-500 bg-cyan-900/30 text-cyan-100',
+	downloading: 'border-blue-500 bg-blue-900/30 text-blue-100',
+	extracting: 'border-amber-500 bg-amber-900/30 text-amber-100',
+	preparing: 'border-amber-500 bg-amber-900/30 text-amber-100',
+	handoff: 'border-violet-500 bg-violet-900/30 text-violet-100',
+	importing: 'border-purple-500 bg-purple-900/30 text-purple-100',
+	completed: 'border-green-500 bg-green-900/30 text-green-100',
+	failed: 'border-red-500 bg-red-900/30 text-red-100',
+	unknown: 'border-gray-500 bg-gray-900/30 text-gray-400',
+};
+
+/**
+ * One rung of a source's ladder. `from`/`to` are the share of the overall bar
+ * this rung owns, weighted by measured wall clock rather than spread evenly:
+ * on a Usenet job the Usenet pass and RD's pull are ~70-80s and ~107-128s of a
+ * ~230s job, and on a TB → RD job everything before RD's pull is seconds.
+ *
+ * Two rungs may share a `step`: nzb2rd's `unpacking` only happens on the staged
+ * fallback, so counting it as its own step would make the total change route by
+ * route ("step 3 of 5" becoming "step 4 of 6" mid-transfer).
+ */
+interface Rung {
+	statuses: readonly string[];
+	phase: TransferPhase;
+	step: number;
+	from: number;
+	to: number;
+}
+
+const LADDERS: Record<TransferSource, readonly Rung[]> = {
+	debrid: [
+		{ statuses: ['pending'], phase: 'queued', step: 1, from: 0, to: 3 },
+		// Not a download: cache probe, provider torrent, rewritten .torrent.
+		{ statuses: ['downloading'], phase: 'preparing', step: 2, from: 3, to: 15 },
+		{ statuses: ['preparing'], phase: 'handoff', step: 3, from: 15, to: 25 },
+		{ statuses: ['uploading'], phase: 'importing', step: 4, from: 25, to: 100 },
+	],
+	nzb2rd: [
+		{ statuses: ['pending'], phase: 'queued', step: 1, from: 0, to: 2 },
+		{ statuses: ['probing'], phase: 'checking', step: 2, from: 2, to: 8 },
+		// `hashing` (streamed, the default) and `fetching` (staged fallback) are
+		// the same thing to a user: the release coming off Usenet.
+		{ statuses: ['hashing', 'fetching'], phase: 'downloading', step: 3, from: 8, to: 48 },
+		{ statuses: ['unpacking'], phase: 'extracting', step: 3, from: 48, to: 52 },
+		{ statuses: ['preparing'], phase: 'handoff', step: 4, from: 52, to: 58 },
+		{ statuses: ['uploading'], phase: 'importing', step: 5, from: 58, to: 100 },
+	],
+};
+
+export const TOTAL_STEPS: Record<TransferSource, number> = {
+	debrid: 4,
+	nzb2rd: 5,
+};
+
+/** The job fields progress can be read from, whichever service produced them. */
+export interface ProgressFields {
+	status?: string;
+	status_message?: string | null;
+	total_bytes?: number | null;
+	done_bytes?: number | null;
+}
+
+/**
+ * Real-Debrid's own percentage, which both services format identically into
+ * `status_message` while RD pulls: `RD: downloading 42% @ 11.6 MB/s`. This is
+ * the only progress signal `debrid` produces at all, and it covers the phase
+ * that is most of a TB → RD job's wall clock.
+ *
+ * The `RD:` prefix is required so an unrelated message carrying a percentage
+ * cannot be read as RD progress.
+ */
+export function rdPercentFromMessage(message: string | null | undefined): number | null {
+	if (!message || !message.startsWith('RD:')) return null;
+	const match = /\s(\d+(?:\.\d+)?)%/.exec(message);
+	if (!match) return null;
+	return Math.min(Math.max(parseFloat(match[1]), 0), 100);
+}
+
+/**
+ * How far through its own rung the job is, 0-1. Only two rungs can answer:
+ * nzb2rd counts bytes through the Usenet pass, and both services report RD's
+ * percentage while it pulls. Everywhere else the bar sits at the rung's floor
+ * and moves when the stage does — which is honest, since nothing finer exists.
+ */
+function fractionWithin(rung: Rung, job: ProgressFields): number {
+	if (rung.phase === 'importing') {
+		const rd = rdPercentFromMessage(job.status_message);
+		return rd === null ? 0 : rd / 100;
+	}
+	if (rung.phase === 'downloading') {
+		const total = job.total_bytes ?? 0;
+		const done = job.done_bytes ?? 0;
+		if (total <= 0) return 0;
+		return Math.min(done / total, 1);
+	}
+	return 0;
+}
+
+export interface TransferProgress {
+	phase: TransferPhase;
+	/** What to show the user; never a raw service enum. */
+	label: string;
+	/** 1-based position on this source's ladder, or null once terminal. */
+	step: number | null;
+	totalSteps: number;
+	/** 0-100, or null when there is nothing meaningful to draw. */
+	percent: number | null;
+	terminal: boolean;
+}
+
+/**
+ * Translate a job into the shared vocabulary, with a step count and a bar.
+ * `job` is undefined until the first poll lands, and an unrecognised status
+ * (a service shipping a new stage before DMM knows about it) degrades to
+ * `unknown` rather than throwing.
+ */
+export function describeTransfer(
+	source: TransferSource,
+	job: ProgressFields | undefined
+): TransferProgress {
+	const totalSteps = TOTAL_STEPS[source];
+	const status = job?.status;
+
+	if (status === 'completed') {
+		return {
+			phase: 'completed',
+			label: PHASE_LABELS.completed,
+			step: null,
+			totalSteps,
+			percent: 100,
+			terminal: true,
+		};
+	}
+	if (status === 'failed') {
+		return {
+			phase: 'failed',
+			label: PHASE_LABELS.failed,
+			step: null,
+			totalSteps,
+			percent: null,
+			terminal: true,
+		};
+	}
+
+	const rung = LADDERS[source].find((r) => r.statuses.includes(status ?? ''));
+	if (!rung) {
+		return {
+			phase: 'unknown',
+			label: PHASE_LABELS.unknown,
+			step: null,
+			totalSteps,
+			percent: null,
+			terminal: false,
+		};
+	}
+
+	const span = rung.to - rung.from;
+	return {
+		phase: rung.phase,
+		label: PHASE_LABELS[rung.phase],
+		step: rung.step,
+		totalSteps,
+		percent: Math.round(rung.from + span * fractionWithin(rung, job ?? {})),
+		terminal: false,
+	};
+}
+
+/** The friendly label alone, for toasts that used to print the raw enum. */
+export function phaseLabelOf(source: TransferSource, status: string | undefined): string {
+	return describeTransfer(source, { status }).label;
+}

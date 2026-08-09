@@ -24,6 +24,7 @@ import {
 } from '@/utils/deleteTorrent';
 import { convertToUserTorrent } from '@/utils/fetchTorrents';
 import { generateTokenAndHash } from '@/utils/token';
+import { phaseLabelOf } from '@/utils/transferPhase';
 import { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -463,9 +464,10 @@ export function useTorrentManagement(
 						return;
 					}
 
-					toast.loading(`${label}: ${polled.status_message || polled.status}`, {
-						id: toastId,
-					});
+					toast.loading(
+						`${label}: ${polled.status_message || phaseLabelOf('debrid', polled.status)}`,
+						{ id: toastId }
+					);
 				}
 
 				toast.error(

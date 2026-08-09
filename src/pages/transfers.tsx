@@ -13,6 +13,7 @@ import {
 	Nzb2rdJob,
 	untrackNzb2rdJob,
 } from '@/utils/nzb2rd';
+import { describeTransfer, PHASE_STYLES } from '@/utils/transferPhase';
 import {
 	isTerminal,
 	SOURCE_LABELS,
@@ -27,21 +28,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 
 const POLL_MS = 5000;
-
-const STATUS_STYLES: Record<string, string> = {
-	pending: 'border-gray-500 bg-gray-900/30 text-gray-100',
-	downloading: 'border-blue-500 bg-blue-900/30 text-blue-100',
-	// nzb2rd's own stages, which have no TB → RD equivalent
-	probing: 'border-blue-500 bg-blue-900/30 text-blue-100',
-	fetching: 'border-blue-500 bg-blue-900/30 text-blue-100',
-	unpacking: 'border-yellow-500 bg-yellow-900/30 text-yellow-100',
-	hashing: 'border-yellow-500 bg-yellow-900/30 text-yellow-100',
-	preparing: 'border-yellow-500 bg-yellow-900/30 text-yellow-100',
-	uploading: 'border-purple-500 bg-purple-900/30 text-purple-100',
-	completed: 'border-green-500 bg-green-900/30 text-green-100',
-	failed: 'border-red-500 bg-red-900/30 text-red-100',
-	unknown: 'border-gray-500 bg-gray-900/30 text-gray-400',
-};
 
 type JobState = { job?: DebridUploaderJob | Nzb2rdJob; errorText?: string };
 
@@ -177,9 +163,9 @@ export default function TransfersPage() {
 						{tracked.map((t) => {
 							const state = states[t.id];
 							const job = state?.job;
-							const status = job?.status ?? 'unknown';
+							const progress = describeTransfer(t.source, job);
 							const terminal = job && isTerminal(t.source, job.status);
-							const chipStyle = STATUS_STYLES[status] ?? STATUS_STYLES.unknown;
+							const chipStyle = PHASE_STYLES[progress.phase];
 
 							return (
 								<div
@@ -200,16 +186,16 @@ export default function TransfersPage() {
 												<span
 													className={`inline-flex items-center rounded border-2 px-1.5 py-0.5 font-medium ${chipStyle}`}
 												>
-													{status === 'completed' && (
+													{progress.phase === 'completed' && (
 														<CheckCircle2 className="mr-1 h-3 w-3" />
 													)}
-													{status === 'failed' && (
+													{progress.phase === 'failed' && (
 														<XCircle className="mr-1 h-3 w-3" />
 													)}
 													{job && !terminal && (
 														<Loader2 className="mr-1 h-3 w-3 animate-spin" />
 													)}
-													{status}
+													{progress.label}
 												</span>
 												{t.returnPath && (
 													<Link
@@ -223,6 +209,39 @@ export default function TransfersPage() {
 													{new Date(t.createdAt).toLocaleString()}
 												</span>
 											</div>
+											{progress.percent !== null && (
+												<div className="mt-2">
+													<div className="mb-1 flex items-center justify-between text-[11px] text-gray-400">
+														<span>
+															{progress.step !== null
+																? `Step ${progress.step} of ${progress.totalSteps} — ${progress.label}`
+																: progress.label}
+														</span>
+														<span className="tabular-nums">
+															{progress.percent}%
+														</span>
+													</div>
+													<div
+														className="h-1.5 w-full overflow-hidden rounded bg-gray-700"
+														role="progressbar"
+														aria-valuenow={progress.percent}
+														aria-valuemin={0}
+														aria-valuemax={100}
+														aria-label={progress.label}
+													>
+														<div
+															className={`h-full rounded transition-all duration-500 ${
+																progress.phase === 'completed'
+																	? 'bg-green-500'
+																	: 'bg-indigo-500'
+															}`}
+															style={{
+																width: `${progress.percent}%`,
+															}}
+														/>
+													</div>
+												</div>
+											)}
 											{job?.status_message && !terminal && (
 												<div className="mt-1 text-xs text-gray-300">
 													{job.status_message}

@@ -1,10 +1,14 @@
 import { isTerminalDebridUploaderStatus, TrackedDebridUploaderJob } from './debridUploader';
 import { getTrackedNzb2rdJobs, isTerminalNzb2rdStatus } from './nzb2rd';
+import type { TransferSource } from './transferPhase';
 
 // Both transfer kinds land content in Real-Debrid and are followed the same way,
 // so they share one list. They differ only in where the bytes come from (a
 // TorBox/AllDebrid cache vs Usenet) and which service owns the job.
-export type TransferSource = 'debrid' | 'nzb2rd';
+//
+// The source enums are translated into one user-facing vocabulary in
+// `transferPhase.ts`, which is where the two services' stage names are lined up.
+export type { TransferSource };
 
 export const SOURCE_LABELS: Record<TransferSource, string> = {
 	debrid: 'TB → RD',
