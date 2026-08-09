@@ -79,3 +79,35 @@ export function sabMode(reqUrl: string | undefined): string {
 	const mode = new URLSearchParams(query).get('mode') ?? '';
 	return /^[a-z_]{1,32}$/.test(mode) ? mode : '-';
 }
+
+/**
+ * Whether a mount root has to travel in *arr's **Username** field rather than
+ * its URL Base — which is the setup question users get wrong.
+ *
+ * nzb2rd reads the URL-Base form straight off the raw request path and never
+ * percent-decodes it, so `/mnt/my mount` arrives as `/mnt/my%20mount` and every
+ * import path it then reports is wrong. A Windows root cannot survive in a URL
+ * path at all. `ma_username` is a query parameter, so it decodes normally and
+ * both cases work there.
+ */
+export function needsUsernameSlot(mountRoot: string): boolean {
+	const value = mountRoot.trim();
+	if (!value) return false;
+	return /^[A-Za-z]:[\\/]/.test(value) || value.includes('\\') || /[\s%?#]/.test(value);
+}
+
+/**
+ * The value to paste into *arr's "URL Base" for a given zurg/rclone mount root.
+ *
+ * The mount root rides in the URL because that is the only field SABnzbd offers
+ * that nzb2rd can read as a path — see `sabTargetPath`. A root that cannot make
+ * the trip yields the bare prefix, and the caller sends it via the Username
+ * field instead.
+ */
+export function sabUrlBase(mountRoot: string): string {
+	const base = SAB_PREFIX.replace(/^\//, '');
+	const value = mountRoot.trim();
+	if (!value || needsUsernameSlot(value)) return base;
+	const cleaned = value.replace(/^\/+/, '').replace(/\/+$/, '');
+	return cleaned ? `${base}/${cleaned}` : base;
+}

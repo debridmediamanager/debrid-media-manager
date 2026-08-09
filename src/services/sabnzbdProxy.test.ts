@@ -1,4 +1,11 @@
-import { SAB_PREFIX, sabError, sabMode, sabTargetPath } from '@/services/sabnzbdProxy';
+import {
+	needsUsernameSlot,
+	SAB_PREFIX,
+	sabError,
+	sabMode,
+	sabTargetPath,
+	sabUrlBase,
+} from '@/services/sabnzbdProxy';
 import { describe, expect, it } from 'vitest';
 
 describe('sabTargetPath', () => {
@@ -68,5 +75,39 @@ describe('sabError', () => {
 			status: false,
 			error: 'nzb2rd is unreachable',
 		});
+	});
+});
+
+describe('sabUrlBase', () => {
+	it('puts the mount root in the URL Base', () => {
+		expect(sabUrlBase('/mnt/zurg/__all__')).toBe('api/sabnzbd/mnt/zurg/__all__');
+		expect(sabUrlBase('mnt/zurg/__all__')).toBe('api/sabnzbd/mnt/zurg/__all__');
+		expect(sabUrlBase('/data/media/')).toBe('api/sabnzbd/data/media');
+	});
+
+	it('falls back to the bare prefix when there is no mount root', () => {
+		expect(sabUrlBase('')).toBe('api/sabnzbd');
+		expect(sabUrlBase('   ')).toBe('api/sabnzbd');
+		expect(sabUrlBase('/')).toBe('api/sabnzbd');
+	});
+
+	// nzb2rd reads this form off the raw path and never decodes it, so a root
+	// that needs encoding would produce a wrong import path rather than fail.
+	it('keeps a root that cannot survive a URL out of the URL Base', () => {
+		expect(sabUrlBase('D:\\zurg')).toBe('api/sabnzbd');
+		expect(sabUrlBase('/mnt/my mount')).toBe('api/sabnzbd');
+	});
+});
+
+describe('needsUsernameSlot', () => {
+	it.each([['D:\\zurg'], ['C:/media'], ['\\\\nas\\share'], ['/mnt/my mount'], ['/mnt/100%']])(
+		'sends %s via ma_username',
+		(value) => {
+			expect(needsUsernameSlot(value)).toBe(true);
+		}
+	);
+
+	it.each([['/mnt/zurg/__all__'], ['/data/media'], ['']])('leaves %s in the path', (value) => {
+		expect(needsUsernameSlot(value)).toBe(false);
 	});
 });
