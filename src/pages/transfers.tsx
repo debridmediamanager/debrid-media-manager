@@ -216,6 +216,12 @@ export default function TransfersPage() {
 															{progress.step !== null
 																? `Step ${progress.step} of ${progress.totalSteps} — ${progress.label}`
 																: progress.label}
+															{progress.detail && (
+																<span className="text-indigo-300">
+																	{' · '}
+																	{progress.detail}
+																</span>
+															)}
 														</span>
 														<span className="tabular-nums">
 															{progress.percent}%

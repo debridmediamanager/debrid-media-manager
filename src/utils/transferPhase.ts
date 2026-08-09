@@ -99,12 +99,23 @@ export const TOTAL_STEPS: Record<TransferSource, number> = {
 	nzb2rd: 5,
 };
 
+/**
+ * A waiting job's place in line, as both services report it. Present only
+ * while the job is still queued, so its absence is not "position unknown" —
+ * it means the job is no longer waiting.
+ */
+export interface QueuePlace {
+	position: number;
+	waiting: number;
+}
+
 /** The job fields progress can be read from, whichever service produced them. */
 export interface ProgressFields {
 	status?: string;
 	status_message?: string | null;
 	total_bytes?: number | null;
 	done_bytes?: number | null;
+	queue?: QueuePlace | null;
 }
 
 /**
@@ -140,13 +151,48 @@ function fractionWithin(rung: Rung, job: ProgressFields): number {
 		if (total <= 0) return 0;
 		return Math.min(done / total, 1);
 	}
+	if (rung.phase === 'queued' && job.queue) {
+		// Advancing up the line is the only progress a queued job makes, so the
+		// bar creeps across the (deliberately narrow) queued rung as it does.
+		const { position, waiting } = job.queue;
+		if (waiting <= 1) return 1;
+		return Math.min(Math.max((waiting - position) / (waiting - 1), 0), 1);
+	}
 	return 0;
+}
+
+/** 1st, 2nd, 3rd, 4th … 11th, 12th, 13th. */
+function ordinal(n: number): string {
+	const tens = n % 100;
+	if (tens >= 11 && tens <= 13) return `${n}th`;
+	switch (n % 10) {
+		case 1:
+			return `${n}st`;
+		case 2:
+			return `${n}nd`;
+		case 3:
+			return `${n}rd`;
+		default:
+			return `${n}th`;
+	}
+}
+
+/**
+ * How the wait is worded. "Next in line" beats "1st of 1 in line", and the
+ * total is what tells someone whether their place is good news or bad.
+ */
+export function queueDetail(place: QueuePlace | null | undefined): string | undefined {
+	if (!place || place.position < 1 || place.waiting < 1) return undefined;
+	if (place.position === 1) return 'next in line';
+	return `${ordinal(place.position)} of ${place.waiting} in line`;
 }
 
 export interface TransferProgress {
 	phase: TransferPhase;
 	/** What to show the user; never a raw service enum. */
 	label: string;
+	/** Extra wording for the phase, e.g. the place in line while queued. */
+	detail?: string;
 	/** 1-based position on this source's ladder, or null once terminal. */
 	step: number | null;
 	totalSteps: number;
@@ -205,6 +251,7 @@ export function describeTransfer(
 	return {
 		phase: rung.phase,
 		label: PHASE_LABELS[rung.phase],
+		detail: rung.phase === 'queued' ? queueDetail(job?.queue) : undefined,
 		step: rung.step,
 		totalSteps,
 		percent: Math.round(rung.from + span * fractionWithin(rung, job ?? {})),

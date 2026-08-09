@@ -1,4 +1,5 @@
 import { TransferContext } from './debridUploader';
+import { QueuePlace } from './transferPhase';
 
 // Client side of the Usenet → RD flow. Mirrors utils/debridUploader so both
 // transfer kinds behave the same on the Transfers page: the service has no
@@ -31,6 +32,8 @@ export interface Nzb2rdJob {
 	// only a progress fraction *within* the current stage, never overall.
 	total_bytes?: number | null;
 	done_bytes?: number | null;
+	/** Place in line, sent only while the job is still waiting to start. */
+	queue?: QueuePlace | null;
 	/** Set by the status route when it files the finished torrent in DMM's DB. */
 	dmm_registered?: boolean;
 }

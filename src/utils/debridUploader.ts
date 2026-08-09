@@ -1,5 +1,5 @@
 import { toast } from 'react-hot-toast';
-import { phaseLabelOf } from './transferPhase';
+import { phaseLabelOf, QueuePlace } from './transferPhase';
 
 export type DebridUploaderJobStatus =
 	| 'pending'
@@ -17,6 +17,8 @@ export interface DebridUploaderJob {
 	rd_torrent_id?: string | null;
 	info_hash?: string | null;
 	name?: string | null;
+	/** Place in line, sent only while the job is still waiting to start. */
+	queue?: QueuePlace | null;
 }
 
 async function parseJsonResponse(response: Response): Promise<any> {

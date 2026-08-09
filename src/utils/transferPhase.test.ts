@@ -6,6 +6,7 @@ import {
 	PHASE_LABELS,
 	PHASE_STYLES,
 	phaseLabelOf,
+	queueDetail,
 	rdPercentFromMessage,
 	TOTAL_STEPS,
 } from './transferPhase';
@@ -218,5 +219,91 @@ describe('rdPercentFromMessage', () => {
 
 	it('clamps a nonsense figure into range', () => {
 		expect(rdPercentFromMessage('RD: downloading 140% @ 1.0 MB/s')).toBe(100);
+	});
+});
+
+describe('queueDetail', () => {
+	it('words the front of the line plainly', () => {
+		expect(queueDetail({ position: 1, waiting: 1 })).toBe('next in line');
+		expect(queueDetail({ position: 1, waiting: 9 })).toBe('next in line');
+	});
+
+	it('gives the place and the depth, so the wait is legible', () => {
+		expect(queueDetail({ position: 2, waiting: 7 })).toBe('2nd of 7 in line');
+		expect(queueDetail({ position: 3, waiting: 7 })).toBe('3rd of 7 in line');
+		expect(queueDetail({ position: 4, waiting: 7 })).toBe('4th of 7 in line');
+	});
+
+	it('gets the teens right', () => {
+		expect(queueDetail({ position: 11, waiting: 30 })).toBe('11th of 30 in line');
+		expect(queueDetail({ position: 12, waiting: 30 })).toBe('12th of 30 in line');
+		expect(queueDetail({ position: 13, waiting: 30 })).toBe('13th of 30 in line');
+		expect(queueDetail({ position: 21, waiting: 30 })).toBe('21st of 30 in line');
+		expect(queueDetail({ position: 22, waiting: 30 })).toBe('22nd of 30 in line');
+		expect(queueDetail({ position: 23, waiting: 30 })).toBe('23rd of 30 in line');
+	});
+
+	it('says nothing when there is no place to report', () => {
+		expect(queueDetail(undefined)).toBeUndefined();
+		expect(queueDetail(null)).toBeUndefined();
+		expect(queueDetail({ position: 0, waiting: 3 })).toBeUndefined();
+		expect(queueDetail({ position: 1, waiting: 0 })).toBeUndefined();
+	});
+});
+
+describe('a queued job’s place in line', () => {
+	it('is shown on both sources', () => {
+		for (const source of ['debrid', 'nzb2rd'] as const) {
+			const p = describeTransfer(source, {
+				status: 'pending',
+				queue: { position: 3, waiting: 7 },
+			});
+			expect(p.label).toBe('Queued');
+			expect(p.detail).toBe('3rd of 7 in line');
+		}
+	});
+
+	// The services omit `queue` once a job starts, and older builds never send
+	// it at all — neither may break the row.
+	it('is simply absent when the service does not report one', () => {
+		expect(describeTransfer('nzb2rd', { status: 'pending' }).detail).toBeUndefined();
+		expect(describeTransfer('nzb2rd', { status: 'hashing' }).detail).toBeUndefined();
+	});
+
+	it('creeps the bar forward as the job advances up the line', () => {
+		const back = describeTransfer('nzb2rd', {
+			status: 'pending',
+			queue: { position: 10, waiting: 10 },
+		});
+		const middle = describeTransfer('nzb2rd', {
+			status: 'pending',
+			queue: { position: 5, waiting: 10 },
+		});
+		const front = describeTransfer('nzb2rd', {
+			status: 'pending',
+			queue: { position: 1, waiting: 10 },
+		});
+
+		expect(back.percent).toBe(0);
+		expect(middle.percent).toBeGreaterThan(back.percent as number);
+		expect(front.percent).toBeGreaterThan(middle.percent as number);
+		// Still inside the queued rung — waiting is not progress through the work.
+		expect(front.percent).toBeLessThanOrEqual(2);
+	});
+
+	it('treats a queue of one as being at the front', () => {
+		const p = describeTransfer('debrid', {
+			status: 'pending',
+			queue: { position: 1, waiting: 1 },
+		});
+		expect(p.percent).toBe(3);
+	});
+
+	it('never leaves the queued rung on a nonsense place', () => {
+		const p = describeTransfer('nzb2rd', {
+			status: 'pending',
+			queue: { position: 99, waiting: 3 },
+		});
+		expect(p.percent).toBe(0);
 	});
 });
