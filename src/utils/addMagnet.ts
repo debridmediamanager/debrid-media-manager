@@ -75,7 +75,8 @@ export const handleAddAsMagnetInRd = async (
 	hash: string,
 	callback?: (info: TorrentInfoResponse) => Promise<void>,
 	deleteIfNotInstant: boolean = false,
-	retryCount: number = 0
+	retryCount: number = 0,
+	silent: boolean = false
 ): Promise<RdAddResult> => {
 	try {
 		const id = await addHashAsMagnet(rdKey, hash);
@@ -89,38 +90,52 @@ export const handleAddAsMagnetInRd = async (
 			}
 		}
 		if (response.status === 'downloaded') {
-			toast.success('Torrent added.', magnetToastOptions);
+			if (!silent) toast.success('Torrent added.', magnetToastOptions);
 			if (callback) await callback(response);
 		} else if (deleteIfNotInstant) {
 			await handleDeleteRdTorrent(rdKey, `rd:${id}`, true);
-			toast.error(`Torrent not instant; removed.`, magnetToastOptions);
+			if (!silent) toast.error(`Torrent not instant; removed.`, magnetToastOptions);
 		} else {
-			toast.error(`Torrent added with status ${response.status}.`, magnetToastOptions);
+			if (!silent)
+				toast.error(`Torrent added with status ${response.status}.`, magnetToastOptions);
 			if (callback) await callback(response);
 		}
 		return 'success';
 	} catch (error: unknown) {
 		if (error instanceof AxiosError && error.response?.status === 509) {
 			if (retryCount >= MAX_509_RETRIES) {
-				toast.error(
-					'RD slots full. Please free up a slot and try again.',
-					magnetToastOptions
-				);
+				if (!silent)
+					toast.error(
+						'RD slots full. Please free up a slot and try again.',
+						magnetToastOptions
+					);
 				return 'error';
 			}
-			toast.error(`RD slots full. Retrying in 5s... (${retryCount + 1}/${MAX_509_RETRIES})`, {
-				...magnetToastOptions,
-				duration: 5000,
-			});
+			if (!silent)
+				toast.error(
+					`RD slots full. Retrying in 5s... (${retryCount + 1}/${MAX_509_RETRIES})`,
+					{ ...magnetToastOptions, duration: 5000 }
+				);
 			await delay(retryDelay);
-			return handleAddAsMagnetInRd(rdKey, hash, callback, deleteIfNotInstant, retryCount + 1);
+			return handleAddAsMagnetInRd(
+				rdKey,
+				hash,
+				callback,
+				deleteIfNotInstant,
+				retryCount + 1,
+				silent
+			);
 		}
 		const rdError = getRdError(error);
 		console.error(
 			'Error adding hash:',
 			error instanceof Error ? error.message : 'Unknown error'
 		);
-		toast.error(rdError ? `RD error: ${rdError}` : 'Failed to add hash.', magnetToastOptions);
+		if (!silent)
+			toast.error(
+				rdError ? `RD error: ${rdError}` : 'Failed to add hash.',
+				magnetToastOptions
+			);
 		if (rdError === 'infringing_file' && !hasRecentRdRateLimits()) return 'infringing_file';
 		return 'error';
 	}
@@ -320,7 +335,8 @@ export const handleAddAsMagnetInAd = async (
 	hash: string,
 	callback?: (magnetStatus: MagnetStatus | null) => Promise<void>,
 	deleteIfNotInstant: boolean = false,
-	keepInLibrary: boolean = false
+	keepInLibrary: boolean = false,
+	silent: boolean = false
 ) => {
 	try {
 		// Step 1: Upload magnet and check if it's instant
@@ -339,11 +355,12 @@ export const handleAddAsMagnetInAd = async (
 			const isNotAvailableError = notAvailableErrors.some((msg) => errorMsg.includes(msg));
 
 			if (isNotAvailableError) {
-				// Treat as not instant/not cached
-				if (deleteIfNotInstant) {
-					toast.error('Torrent not available (no peers).', magnetToastOptions);
-				} else {
-					toast.error('Torrent not cached in AllDebrid.', magnetToastOptions);
+				if (!silent) {
+					if (deleteIfNotInstant) {
+						toast.error('Torrent not available (no peers).', magnetToastOptions);
+					} else {
+						toast.error('Torrent not cached in AllDebrid.', magnetToastOptions);
+					}
 				}
 
 				if (callback) await callback(null);
@@ -365,16 +382,17 @@ export const handleAddAsMagnetInAd = async (
 			if (deleteIfNotInstant) {
 				// Availability check mode - delete and notify
 				await deleteMagnetAd(adKey, upload.id);
-				toast.error('Torrent not instant; removed.', magnetToastOptions);
+				if (!silent) toast.error('Torrent not instant; removed.', magnetToastOptions);
 				if (callback) await callback(null);
 				return;
 			}
 
 			// User wants to download - keep magnet in AD for peer downloading
-			toast.success(
-				'Torrent added (not cached, downloading from peers).',
-				magnetToastOptions
-			);
+			if (!silent)
+				toast.success(
+					'Torrent added (not cached, downloading from peers).',
+					magnetToastOptions
+				);
 			if (callback) await callback(null);
 			return;
 		}
@@ -392,7 +410,6 @@ export const handleAddAsMagnetInAd = async (
 				}
 			} catch (error) {
 				console.error('Error fetching magnet files:', error);
-				// Continue without files rather than failing completely
 			}
 		}
 
@@ -402,31 +419,28 @@ export const handleAddAsMagnetInAd = async (
 		}
 
 		// Step 5: Delete from AllDebrid after storing availability data (only for service checks)
-		// When keepInLibrary is true, we want to keep the torrent for actual download
 		if (!keepInLibrary) {
-			// We only need the metadata, not the actual download
-			// Make this non-fatal - if delete fails, we still got the availability data
 			try {
-				// Small delay to avoid race conditions with AllDebrid's API
 				await delay(1000);
 				await deleteMagnetAd(adKey, upload.id);
 			} catch (deleteError) {
 				console.warn('Failed to delete magnet from AllDebrid (non-fatal):', deleteError);
-				// Continue - the availability data was already stored successfully
 			}
 		}
 
-		if (keepInLibrary) {
-			toast.success('Torrent added to library.', magnetToastOptions);
-		} else {
-			toast.success('Torrent cached and available.', magnetToastOptions);
+		if (!silent) {
+			if (keepInLibrary) {
+				toast.success('Torrent added to library.', magnetToastOptions);
+			} else {
+				toast.success('Torrent cached and available.', magnetToastOptions);
+			}
 		}
 	} catch (error) {
 		console.error(
 			'Error adding hash to AllDebrid:',
 			error instanceof Error ? error.message : 'Unknown error'
 		);
-		toast.error('Failed to add hash. Try again.');
+		if (!silent) toast.error('Failed to add hash. Try again.');
 		throw error;
 	}
 };

@@ -221,6 +221,8 @@ describe('useTorrentManagement', () => {
 			'rd-key',
 			'hash-1',
 			expect.any(Function),
+			false,
+			0,
 			false
 		);
 		expect(mockSubmitAvailability).toHaveBeenCalledWith(
@@ -261,7 +263,9 @@ describe('useTorrentManagement', () => {
 			'rd-key',
 			'hash-1',
 			expect.any(Function),
-			true
+			true,
+			0,
+			false
 		);
 		expect(returnValue).toBe(true);
 		expect(mockSubmitAvailability).toHaveBeenCalled();
@@ -314,7 +318,8 @@ describe('useTorrentManagement', () => {
 			'hash-ad',
 			expect.any(Function), // callback
 			false, // deleteIfNotInstant (isCheckingAvailability)
-			true // keepInLibrary (!isCheckingAvailability)
+			true, // keepInLibrary (!isCheckingAvailability)
+			false // silent
 		);
 		// Torrent is added directly in the callback via torrentDB.add
 		expect(mockDb.add).toHaveBeenCalled();

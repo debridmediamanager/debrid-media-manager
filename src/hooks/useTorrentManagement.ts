@@ -134,7 +134,9 @@ export function useTorrentManagement(
 
 					await fetchHashAndProgress(hash);
 				},
-				deleteIfNotInstant
+				deleteIfNotInstant,
+				0,
+				isCheckingAvailability
 			);
 
 			// Clean up false positives: when the torrent wasn't instant (deleteIfNotInstant)
@@ -299,7 +301,8 @@ export function useTorrentManagement(
 					}
 				},
 				isCheckingAvailability, // deleteIfNotInstant parameter
-				!isCheckingAvailability // keepInLibrary parameter - keep if not checking service
+				!isCheckingAvailability, // keepInLibrary parameter - keep if not checking service
+				isCheckingAvailability // silent parameter - suppress toasts during checks
 			);
 
 			console.log('[TorrentManagement] addAd end', { hash });

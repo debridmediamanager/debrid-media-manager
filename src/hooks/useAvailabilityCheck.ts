@@ -137,13 +137,25 @@ export function useAvailabilityCheck(
 			const alreadyAvailableServices = services.filter((service) =>
 				isServiceAvailable(service, result)
 			);
+			const alreadyCheckingServices = services.filter(
+				(service) =>
+					!isServiceAvailable(service, result) &&
+					checkingSet.has(checkingKey(result.hash, service))
+			);
 			const servicesNeedingCheck = services.filter(
-				(service) => !alreadyAvailableServices.includes(service)
+				(service) =>
+					!isServiceAvailable(service, result) &&
+					!checkingSet.has(checkingKey(result.hash, service))
 			);
 
 			if (servicesNeedingCheck.length === 0) {
-				const cachedLabel = formatServicesLabel(alreadyAvailableServices);
-				toast.success(`Already cached in ${cachedLabel}.`);
+				if (alreadyAvailableServices.length > 0) {
+					toast.success(
+						`Already cached in ${formatServicesLabel(alreadyAvailableServices)}.`
+					);
+				} else if (alreadyCheckingServices.length > 0) {
+					toast('Check already in progress for this torrent.');
+				}
 				return;
 			}
 
@@ -162,16 +174,12 @@ export function useAvailabilityCheck(
 						rdKey && servicesNeedingCheck.includes('RD')
 							? (async () => {
 									let addRdResponse: any;
-									// Check if torrent is in progress
 									if (`rd:${result.hash}` in hashAndProgress) {
 										await deleteRd(result.hash);
-										addRdResponse = await addRd(result.hash, true);
-									} else {
-										addRdResponse = await addRd(result.hash, true);
-										await deleteRd(result.hash);
 									}
+									addRdResponse = await addRd(result.hash, true);
+									await deleteRd(result.hash);
 
-									// Check if addRd found it cached (returns response with ID)
 									const isCachedInRD =
 										addRdResponse &&
 										addRdResponse.id &&
@@ -189,14 +197,11 @@ export function useAvailabilityCheck(
 						adKey && servicesNeedingCheck.includes('AD')
 							? (async () => {
 									let addAdResponse: any;
-									// Check if torrent is in progress
 									if (`ad:${result.hash}` in hashAndProgress) {
 										await deleteAd(result.hash);
-										addAdResponse = await addAd(result.hash, true);
-									} else {
-										addAdResponse = await addAd(result.hash, true);
-										await deleteAd(result.hash);
 									}
+									addAdResponse = await addAd(result.hash, true);
+									await deleteAd(result.hash);
 
 									// Check if addAd found it cached
 									const isCachedInAD =
@@ -392,6 +397,7 @@ export function useAvailabilityCheck(
 			isServiceAvailable,
 			addChecking,
 			removeChecking,
+			checkingSet,
 		]
 	);
 
@@ -504,13 +510,10 @@ export function useAvailabilityCheck(
 											let addRdResponse: any;
 											if (`rd:${result.hash}` in hashAndProgress) {
 												await deleteRd(result.hash);
-												addRdResponse = await addRd(result.hash, true);
-											} else {
-												addRdResponse = await addRd(result.hash, true);
-												await deleteRd(result.hash);
 											}
+											addRdResponse = await addRd(result.hash, true);
+											await deleteRd(result.hash);
 
-											// Check if addRd returned a response with an ID AND is truly available
 											const isCachedInRD =
 												addRdResponse &&
 												addRdResponse.id &&
@@ -549,11 +552,9 @@ export function useAvailabilityCheck(
 											let addAdResponse: any;
 											if (`ad:${result.hash}` in hashAndProgress) {
 												await deleteAd(result.hash);
-												addAdResponse = await addAd(result.hash, true);
-											} else {
-												addAdResponse = await addAd(result.hash, true);
-												await deleteAd(result.hash);
 											}
+											addAdResponse = await addAd(result.hash, true);
+											await deleteAd(result.hash);
 
 											// Check if addAd returned a response and is cached
 											const isCachedInAD =
