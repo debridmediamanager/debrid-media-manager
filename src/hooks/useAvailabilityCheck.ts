@@ -150,7 +150,8 @@ export function useAvailabilityCheck(
 			addChecking(result.hash, servicesNeedingCheck);
 
 			const toastId = toast.loading(
-				`Checking availability (${formatServicesLabel(servicesNeedingCheck)})...`
+				`Checking availability (${formatServicesLabel(servicesNeedingCheck)})...`,
+				{ duration: 30000 }
 			);
 
 			try {
@@ -437,7 +438,8 @@ export function useAvailabilityCheck(
 
 			const servicesLabel = formatServicesLabel(services);
 			let progressToast: string | null = toast.loading(
-				`Starting ${servicesLabel} check for ${torrentsToCheck.length} torrents...`
+				`Starting ${servicesLabel} check for ${torrentsToCheck.length} torrents...`,
+				{ duration: 30000 }
 			);
 
 			const rdTargets = services.includes('RD')
@@ -486,7 +488,7 @@ export function useAvailabilityCheck(
 				}
 
 				if (progressToast && isMounted.current && parts.length > 0) {
-					toast.loading(parts.join(' | '), { id: progressToast });
+					toast.loading(parts.join(' | '), { id: progressToast, duration: 30000 });
 				}
 			};
 
