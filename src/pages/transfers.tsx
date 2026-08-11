@@ -1,8 +1,11 @@
+import { useRealDebridAccessToken } from '@/hooks/auth';
 import {
+	addTransferToRd,
 	DebridUploaderJob,
 	deleteDebridUploaderJob,
 	getDebridUploaderJob,
 	getTrackedDebridUploaderJobs,
+	needsRdHandoff,
 	transferContextFromPath,
 	untrackDebridUploaderJob,
 } from '@/utils/debridUploader';
@@ -36,42 +39,73 @@ export default function TransfersPage() {
 	const [tracked, setTracked] = useState<TransferEntry[]>([]);
 	const [states, setStates] = useState<Record<string, JobState>>({});
 	const [isRefreshing, setIsRefreshing] = useState(false);
+	const [rdKey] = useRealDebridAccessToken();
 	// read inside the poll timer without re-arming it on every status change
 	const statesRef = useRef(states);
 	statesRef.current = states;
+	// jobs whose RD handoff is running, so the 5s poll can't start a second one
+	const handingOffRef = useRef(new Set<string>());
+	const rdKeyRef = useRef(rdKey);
+	rdKeyRef.current = rdKey;
 
 	useEffect(() => {
 		setTracked(toEntries(getTrackedDebridUploaderJobs(), getTrackedNzb2rdJobs()));
 	}, []);
 
-	const refresh = useCallback(async (jobs: TransferEntry[], onlyActive: boolean) => {
-		const toPoll = onlyActive
-			? jobs.filter((j) => {
-					const status = statesRef.current[j.id]?.job?.status;
-					return !status || !isTerminal(j.source, status);
-				})
-			: jobs;
-		if (toPoll.length === 0) return;
+	// A transfer this browser joined rather than started belongs to the RD account
+	// that created the job, so nothing puts it in *this* user's RD until a client
+	// does. The send flow does it when the page that started it is still open;
+	// this is the same handoff for everyone who navigated away meanwhile.
+	const handOffToRd = useCallback(async (jobId: string, job: DebridUploaderJob) => {
+		const key = rdKeyRef.current;
+		if (!key || job.status !== 'completed' || !job.info_hash) return;
+		if (handingOffRef.current.has(jobId)) return;
+		const entry = getTrackedDebridUploaderJobs().find((j) => j.id === jobId);
+		if (!needsRdHandoff(entry)) return;
 
-		const results = await Promise.all(
-			toPoll.map(async (j): Promise<[string, JobState]> => {
-				try {
-					const context = transferContextFromPath(j.returnPath);
-					const job =
-						j.source === 'nzb2rd'
-							? await getNzb2rdJob(j.id, context, j.releaseId)
-							: await getDebridUploaderJob(j.id, context);
-					return [j.id, { job }];
-				} catch (error) {
-					return [
-						j.id,
-						{ errorText: error instanceof Error ? error.message : 'unreachable' },
-					];
-				}
-			})
-		);
-		setStates((prev) => ({ ...prev, ...Object.fromEntries(results) }));
+		handingOffRef.current.add(jobId);
+		try {
+			if (await addTransferToRd(key, job.info_hash, jobId)) {
+				toast.success(`${entry?.title || 'Transfer'} added to your Real-Debrid library!`);
+			}
+		} finally {
+			handingOffRef.current.delete(jobId);
+		}
 	}, []);
+
+	const refresh = useCallback(
+		async (jobs: TransferEntry[], onlyActive: boolean) => {
+			const toPoll = onlyActive
+				? jobs.filter((j) => {
+						const status = statesRef.current[j.id]?.job?.status;
+						return !status || !isTerminal(j.source, status);
+					})
+				: jobs;
+			if (toPoll.length === 0) return;
+
+			const results = await Promise.all(
+				toPoll.map(async (j): Promise<[string, JobState]> => {
+					try {
+						const context = transferContextFromPath(j.returnPath);
+						if (j.source === 'nzb2rd') {
+							return [j.id, { job: await getNzb2rdJob(j.id, context, j.releaseId) }];
+						}
+						const job = await getDebridUploaderJob(j.id, context);
+						// not awaited: the row's status shouldn't wait on RD
+						void handOffToRd(j.id, job);
+						return [j.id, { job }];
+					} catch (error) {
+						return [
+							j.id,
+							{ errorText: error instanceof Error ? error.message : 'unreachable' },
+						];
+					}
+				})
+			);
+			setStates((prev) => ({ ...prev, ...Object.fromEntries(results) }));
+		},
+		[handOffToRd]
+	);
 
 	// initial fetch + steady polling of non-terminal jobs
 	useEffect(() => {

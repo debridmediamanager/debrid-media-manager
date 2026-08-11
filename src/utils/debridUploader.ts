@@ -84,6 +84,100 @@ export type TransferOutcome =
 	| 'timeout'
 	| 'error';
 
+// A finished transfer lands in the RD account of whoever's key created the job,
+// so joining somebody else's transfer only puts the content in *this* user's RD
+// once the client adds the rewritten hash itself.
+//
+// `rdAdded` is the repeat-click guard; `adopted === false` marks a job this
+// browser created, which the service already handed to this user's RD. An entry
+// from before these flags existed can't be attributed, so it is handed over —
+// delivering the content the user just asked for beats sparing them the
+// duplicate RD entry that a second addMagnet creates.
+export function needsRdHandoff(tracked: TrackedDebridUploaderJob | undefined): boolean {
+	if (!tracked || tracked.rdAdded) return false;
+	return tracked.adopted !== false;
+}
+
+// Adds a finished transfer's rewritten torrent to this user's RD account and
+// records that it landed, so a later click (or the Transfers page) doesn't add
+// a second copy.
+export async function addTransferToRd(
+	rdKey: string,
+	infoHash: string,
+	jobId?: string
+): Promise<boolean> {
+	try {
+		const torrentId = await addHashAsMagnet(rdKey, infoHash, true);
+		await selectFiles(rdKey, torrentId, ['all'], true);
+		if (jobId) updateTrackedDebridUploaderJob(jobId, { rdAdded: true });
+		return true;
+	} catch (error) {
+		console.error('Failed to add completed transfer to RD:', error);
+		return false;
+	}
+}
+
+/**
+ * The transfer this browser already tracks for `hash`, when it is still worth
+ * joining. Dedup is on the magnet alone — TB → RD and AD → RD on the same hash
+ * produce the same content whichever provider ends up sourcing the bytes — so
+ * which button was clicked never enters into it.
+ *
+ * Null means there is nothing to join (no entry, or the job failed or vanished
+ * server-side), which lets a fresh submission through.
+ */
+export async function findJoinableTransfer(
+	hash: string,
+	context?: TransferContext
+): Promise<{ tracked: TrackedDebridUploaderJob; job: DebridUploaderJob } | null> {
+	const tracked = getTrackedDebridUploaderJobs().find(
+		(j) => j.hash.toLowerCase() === hash.toLowerCase()
+	);
+	if (!tracked) return null;
+	try {
+		const job = await getDebridUploaderJob(tracked.id, context);
+		return job.status === 'failed' ? null : { tracked, job };
+	} catch {
+		return null; // unknown to the service (e.g. wiped server-side) — allow a resubmit
+	}
+}
+
+/**
+ * Ends a transfer that has reached `completed`: hands the rewritten torrent to
+ * this user's RD when that is still owed, and reports it on the caller's toast.
+ * Shared by every send flow so a finished transfer settles the same way
+ * wherever it was started.
+ */
+export async function settleCompletedTransfer(params: {
+	rdKey: string;
+	jobId: string;
+	infoHash?: string | null;
+	needsHandoff: boolean;
+	label: string;
+	toastId?: string;
+}): Promise<TransferOutcome> {
+	const { rdKey, jobId, infoHash, needsHandoff, label, toastId } = params;
+
+	if (!needsHandoff) {
+		toast.success(`${label}: done! It is in your Real-Debrid library.`, { id: toastId });
+		return 'completed';
+	}
+	if (!infoHash) {
+		toast.error(`${label}: transfer finished but its torrent hash is missing — try again.`, {
+			id: toastId,
+		});
+		return 'duplicate';
+	}
+	if (await addTransferToRd(rdKey, infoHash, jobId)) {
+		toast.success(`${label}: added to your Real-Debrid library!`, { id: toastId });
+		return 'completed';
+	}
+	toast.error(`${label}: transfer finished but Real-Debrid rejected it — try again.`, {
+		id: toastId,
+	});
+	return 'duplicate';
+}
+
 // Self-contained "send this to RD" flow (submit → dedup → track → poll → toast),
 // for callers without the search page's per-row state — currently the library
 // page. It polls with no movie/tv context, so a manually-picked imdb never drives
@@ -100,76 +194,102 @@ export async function runDebridTransferToRd(params: {
 	returnPath?: string;
 }): Promise<TransferOutcome> {
 	const { hash, imdbId, rdKey, tbKey, adKey, sizeBytes, title, returnPath } = params;
-
-	// One job per hash: skip if this browser already has a live/completed one.
-	const previous = getTrackedDebridUploaderJobs().find((j) => j.hash === hash);
-	if (previous) {
-		let previousStatus: string | undefined;
-		try {
-			previousStatus = (await getDebridUploaderJob(previous.id)).status;
-		} catch {
-			// job unknown to the service — allow a resubmit
-		}
-		if (previousStatus && previousStatus !== 'failed') {
-			toast(
-				previousStatus === 'completed'
-					? 'Send to RD: already transferred — check your RD library.'
-					: 'Send to RD: transfer already in progress — see the Transfers page.'
-			);
-			return 'duplicate';
-		}
-	}
+	const label = 'Send to RD';
 
 	const toastId = toast.loading('Send to RD: submitting transfer...', { duration: 30000 });
 	try {
-		const job = await createDebridUploaderJob({ hash, imdbId, rdKey, tbKey, adKey, sizeBytes });
-
 		let jobId: string;
-		let isExistingJob = false;
+		// Whether the finished torrent still has to be put into this user's RD.
+		let rdHandoff: boolean;
 
-		if (isDuplicateResponse(job)) {
-			jobId = job.jobId;
-			isExistingJob = true;
+		// One transfer per magnet: a second job for content a previous one already
+		// delivered (or is still delivering) burns a source slot and a full
+		// pipeline run for nothing. So an existing transfer is joined, never
+		// resubmitted — and joining it still ends with the content in this user's
+		// RD, which a bare "already transferred" toast never did.
+		const joinable = await findJoinableTransfer(hash);
+		if (joinable) {
+			jobId = joinable.tracked.id;
+			rdHandoff = needsRdHandoff(joinable.tracked);
 
-			trackDebridUploaderJob({
-				id: job.jobId,
-				hash,
-				imdbId,
-				title,
-				returnPath,
-				createdAt: Date.now(),
-			});
-
-			if (job.duplicate === 'completed') {
-				toast.success(
-					job.addedToRd
-						? 'Send to RD: added to your RD library!'
-						: 'Send to RD: already in RD — use the Instant RD result for this title.',
-					{ id: toastId }
-				);
-				return job.addedToRd ? 'completed' : 'duplicate';
+			if (joinable.job.status === 'completed') {
+				return await settleCompletedTransfer({
+					rdKey,
+					jobId,
+					infoHash: joinable.job.info_hash,
+					needsHandoff: rdHandoff,
+					label,
+					toastId,
+				});
 			}
-
-			// in_progress: fall through to poll and add to RD on completion
-			toast.loading('Send to RD: transfer in progress — waiting for completion...', {
+			toast.loading('Send to RD: transfer already in progress — waiting for completion...', {
 				id: toastId,
 				duration: 30000,
 			});
 		} else {
-			jobId = job.id;
-
-			trackDebridUploaderJob({
-				id: job.id,
+			const job = await createDebridUploaderJob({
 				hash,
 				imdbId,
-				title,
-				returnPath,
-				createdAt: Date.now(),
+				rdKey,
+				tbKey,
+				adKey,
+				sizeBytes,
 			});
-			toast.loading('Send to RD: transfer started — track it on the Transfers page.', {
-				id: toastId,
-				duration: 30000,
-			});
+
+			if (isDuplicateResponse(job)) {
+				jobId = job.jobId;
+				rdHandoff = true;
+
+				trackDebridUploaderJob({
+					id: job.jobId,
+					hash,
+					imdbId,
+					title,
+					returnPath,
+					createdAt: Date.now(),
+					adopted: true,
+				});
+
+				if (job.duplicate === 'completed') {
+					// The server adds a finished duplicate to the caller's RD itself;
+					// retry from here when that leg failed.
+					if (job.addedToRd) {
+						updateTrackedDebridUploaderJob(job.jobId, { rdAdded: true });
+					}
+					return await settleCompletedTransfer({
+						rdKey,
+						jobId,
+						infoHash: job.rewrittenHash,
+						needsHandoff: !job.addedToRd,
+						label,
+						toastId,
+					});
+				}
+
+				// in_progress: fall through to poll and add to RD on completion
+				toast.loading('Send to RD: transfer in progress — waiting for completion...', {
+					id: toastId,
+					duration: 30000,
+				});
+			} else {
+				jobId = job.id;
+				// Created with this user's RD key, so the service does the handoff.
+				rdHandoff = false;
+
+				trackDebridUploaderJob({
+					id: job.id,
+					hash,
+					imdbId,
+					title,
+					returnPath,
+					createdAt: Date.now(),
+					adopted: false,
+				});
+				toast.loading('Send to RD: transfer started — track it on the Transfers page.', {
+					id: toastId,
+					duration: 30000,
+				});
+			}
 		}
 
 		const POLL_MS = 5000;
@@ -185,18 +305,14 @@ export async function runDebridTransferToRd(params: {
 			}
 
 			if (polled.status === 'completed') {
-				if (isExistingJob && polled.info_hash && rdKey) {
-					try {
-						const torrentId = await addHashAsMagnet(rdKey, polled.info_hash, true);
-						await selectFiles(rdKey, torrentId, ['all'], true);
-					} catch (e) {
-						console.error('Failed to add completed transfer to RD:', e);
-					}
-				}
-				toast.success('Send to RD: done! It is in your Real-Debrid library.', {
-					id: toastId,
+				return await settleCompletedTransfer({
+					rdKey,
+					jobId,
+					infoHash: polled.info_hash,
+					needsHandoff: rdHandoff,
+					label,
+					toastId,
 				});
-				return 'completed';
 			}
 			if (polled.status === 'failed') {
 				toast.error(`Send to RD failed: ${polled.error || 'unknown error'}`, {
@@ -205,7 +321,7 @@ export async function runDebridTransferToRd(params: {
 				return 'failed';
 			}
 			if (polled.status === 'uploading') {
-				if (isExistingJob) {
+				if (rdHandoff) {
 					toast.loading(
 						'Send to RD: Real-Debrid download underway — waiting for completion...',
 						{ id: toastId, duration: 30000 }
@@ -312,6 +428,16 @@ export interface TrackedDebridUploaderJob {
 	// content page the transfer was started from, e.g. /movie/tt123 or /show/tt123/1
 	returnPath?: string;
 	createdAt: number;
+	/**
+	 * False when this browser created the job — the service was handed this
+	 * user's RD key and delivers the result itself. True when it joined a
+	 * transfer somebody else had already started, which the client has to add to
+	 * this user's RD once it completes. Absent on entries tracked before the
+	 * distinction existed; see `needsRdHandoff`.
+	 */
+	adopted?: boolean;
+	/** Set once the finished torrent has been added to this user's RD account. */
+	rdAdded?: boolean;
 }
 
 const TRACKED_JOBS_KEY = 'debridUploader:jobs';
@@ -334,6 +460,20 @@ export function trackDebridUploaderJob(job: TrackedDebridUploaderJob): void {
 		0,
 		MAX_TRACKED_JOBS
 	);
+	window.localStorage.setItem(TRACKED_JOBS_KEY, JSON.stringify(jobs));
+}
+
+// Patches a tracked entry in place, keeping its position in the Transfers list
+// (unlike trackDebridUploaderJob, which moves the entry to the front).
+export function updateTrackedDebridUploaderJob(
+	jobId: string,
+	patch: Partial<TrackedDebridUploaderJob>
+): void {
+	if (typeof window === 'undefined') return;
+	const jobs = getTrackedDebridUploaderJobs();
+	const index = jobs.findIndex((j) => j.id === jobId);
+	if (index === -1) return;
+	jobs[index] = { ...jobs[index], ...patch };
 	window.localStorage.setItem(TRACKED_JOBS_KEY, JSON.stringify(jobs));
 }
 
