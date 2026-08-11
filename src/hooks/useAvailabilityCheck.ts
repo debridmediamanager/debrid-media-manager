@@ -261,6 +261,18 @@ export function useAvailabilityCheck(
 				let isCachedInRD = Boolean(result.rdAvailable);
 				if (rdCheckResult.status === 'fulfilled') {
 					isCachedInRD = rdCheckResult.value.isCachedInRD;
+					if (!isCachedInRD && result.tbTransferred) {
+						fetch('/api/debrid-uploader/unregister', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({ hash: result.hash }),
+						}).catch(() => {});
+						setSearchResults((prev) =>
+							prev.map((r) =>
+								r.hash === result.hash ? { ...r, tbTransferred: false } : r
+							)
+						);
+					}
 				} else if (rdKey && servicesNeedingCheck.includes('RD')) {
 					console.error('RD availability check failed:', rdCheckResult.reason);
 				}
@@ -760,6 +772,26 @@ export function useAvailabilityCheck(
 
 					if (Object.keys(positiveAvailability).length > 0) {
 						markAvailableServices(setSearchResults, sortFunction, positiveAvailability);
+					}
+
+					// Clear stale transfer badges for hashes RD says are not cached
+					const staleTransferHashes = rdCheckResults
+						.filter((r) => r.success && !r.result?.isCachedInRD && r.item.tbTransferred)
+						.map((r) => r.item.hash);
+					if (staleTransferHashes.length > 0) {
+						const staleSet = new Set(staleTransferHashes);
+						setSearchResults((prev) =>
+							prev.map((r) =>
+								staleSet.has(r.hash) ? { ...r, tbTransferred: false } : r
+							)
+						);
+						for (const hash of staleTransferHashes) {
+							fetch('/api/debrid-uploader/unregister', {
+								method: 'POST',
+								headers: { 'Content-Type': 'application/json' },
+								body: JSON.stringify({ hash }),
+							}).catch(() => {});
+						}
 					}
 
 					// Update RD database cache
