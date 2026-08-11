@@ -1,5 +1,6 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import { SearchResult } from '@/services/mediasearch';
+import { addHashAsMagnet, selectFiles } from '@/services/realDebrid';
 import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
@@ -397,15 +398,18 @@ export function useTorrentManagement(
 					hash,
 					imdbId,
 					rdKey,
-					tbKey: service === 'tb' ? (torboxKey ?? undefined) : undefined,
-					adKey: service === 'ad' ? (adKey ?? undefined) : undefined,
+					tbKey: torboxKey ?? undefined,
+					adKey: adKey ?? undefined,
 					sizeBytes,
 				});
 
-				// Cross-user dedup: another user already transferred this content, so
-				// no job was created. Mark the row so the button hides, and point at
-				// the RD-cached result they should redeem instead.
+				let jobId: string;
+				let isExistingJob = false;
+
 				if (isDuplicateResponse(job)) {
+					jobId = job.jobId;
+					isExistingJob = true;
+
 					trackDebridUploaderJob({
 						id: job.jobId,
 						hash,
@@ -417,27 +421,38 @@ export function useTorrentManagement(
 					setSearchResults((prev) =>
 						prev.map((r) => (r.hash === hash ? { ...r, tbTransferred: true } : r))
 					);
-					toast(
-						job.duplicate === 'completed'
-							? `${label}: already in RD — use the Instant RD result for this title.`
-							: `${label}: a transfer for this is already in progress — see the Transfers page.`,
-						{ id: toastId }
-					);
-					return;
-				}
 
-				trackDebridUploaderJob({
-					id: job.id,
-					hash,
-					imdbId,
-					title: row?.title,
-					returnPath: window.location.pathname,
-					createdAt: Date.now(),
-				});
-				toast.loading(`${label}: transfer started — track it on the Transfers page.`, {
-					id: toastId,
-					duration: 30000,
-				});
+					if (job.duplicate === 'completed') {
+						toast.success(
+							job.addedToRd
+								? `${label}: added to your RD library!`
+								: `${label}: already in RD — use the Instant RD result for this title.`,
+							{ id: toastId }
+						);
+						return;
+					}
+
+					// in_progress: fall through to poll and add to RD on completion
+					toast.loading(`${label}: transfer in progress — waiting for completion...`, {
+						id: toastId,
+						duration: 30000,
+					});
+				} else {
+					jobId = job.id;
+
+					trackDebridUploaderJob({
+						id: job.id,
+						hash,
+						imdbId,
+						title: row?.title,
+						returnPath: window.location.pathname,
+						createdAt: Date.now(),
+					});
+					toast.loading(`${label}: transfer started — track it on the Transfers page.`, {
+						id: toastId,
+						duration: 30000,
+					});
+				}
 
 				const POLL_MS = 5000;
 				const MAX_POLLS = 360; // 30 min for the source half; RD's pull isn't waited on
@@ -446,17 +461,27 @@ export function useTorrentManagement(
 
 					let polled;
 					try {
-						polled = await getDebridUploaderJob(job.id, transferContext);
+						polled = await getDebridUploaderJob(jobId, transferContext);
 					} catch {
 						continue; // transient poll failure; the job keeps running server-side
 					}
 
 					if (polled.status === 'completed') {
+						if (isExistingJob && polled.info_hash && rdKey) {
+							try {
+								const torrentId = await addHashAsMagnet(
+									rdKey,
+									polled.info_hash,
+									true
+								);
+								await selectFiles(rdKey, torrentId, ['all'], true);
+							} catch (e) {
+								console.error('Failed to add completed transfer to RD:', e);
+							}
+						}
 						toast.success(
 							`${label}: done! The torrent is in your Real-Debrid library.`,
-							{
-								id: toastId,
-							}
+							{ id: toastId }
 						);
 						return;
 					}
@@ -468,9 +493,15 @@ export function useTorrentManagement(
 						return;
 					}
 
-					// RD is downloading from the webseed — the hand-off succeeded and
-					// the rest happens server-side, so release the button.
 					if (polled.status === 'uploading') {
+						if (isExistingJob) {
+							// Keep polling — we need the completed status to get info_hash
+							toast.loading(
+								`${label}: Real-Debrid download underway — waiting for completion...`,
+								{ id: toastId, duration: 30000 }
+							);
+							continue;
+						}
 						toast.success(
 							`${label}: Real-Debrid download underway — follow it on the Transfers page.`,
 							{ id: toastId }

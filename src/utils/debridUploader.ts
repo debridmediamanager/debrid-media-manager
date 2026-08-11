@@ -1,3 +1,4 @@
+import { addHashAsMagnet, selectFiles } from '@/services/realDebrid';
 import { toast } from 'react-hot-toast';
 import { phaseLabelOf, QueuePlace } from './transferPhase';
 
@@ -39,6 +40,7 @@ export interface DebridUploaderDuplicate {
 	duplicate: 'completed' | 'in_progress';
 	rewrittenHash: string | null;
 	jobId: string;
+	addedToRd?: boolean;
 }
 
 export function isDuplicateResponse(
@@ -122,7 +124,13 @@ export async function runDebridTransferToRd(params: {
 	try {
 		const job = await createDebridUploaderJob({ hash, imdbId, rdKey, tbKey, adKey, sizeBytes });
 
+		let jobId: string;
+		let isExistingJob = false;
+
 		if (isDuplicateResponse(job)) {
+			jobId = job.jobId;
+			isExistingJob = true;
+
 			trackDebridUploaderJob({
 				id: job.jobId,
 				hash,
@@ -131,27 +139,38 @@ export async function runDebridTransferToRd(params: {
 				returnPath,
 				createdAt: Date.now(),
 			});
-			toast(
-				job.duplicate === 'completed'
-					? 'Send to RD: already in RD — use the Instant RD result for this title.'
-					: 'Send to RD: a transfer for this is already in progress — see the Transfers page.',
-				{ id: toastId }
-			);
-			return 'duplicate';
-		}
 
-		trackDebridUploaderJob({
-			id: job.id,
-			hash,
-			imdbId,
-			title,
-			returnPath,
-			createdAt: Date.now(),
-		});
-		toast.loading('Send to RD: transfer started — track it on the Transfers page.', {
-			id: toastId,
-			duration: 30000,
-		});
+			if (job.duplicate === 'completed') {
+				toast.success(
+					job.addedToRd
+						? 'Send to RD: added to your RD library!'
+						: 'Send to RD: already in RD — use the Instant RD result for this title.',
+					{ id: toastId }
+				);
+				return job.addedToRd ? 'completed' : 'duplicate';
+			}
+
+			// in_progress: fall through to poll and add to RD on completion
+			toast.loading('Send to RD: transfer in progress — waiting for completion...', {
+				id: toastId,
+				duration: 30000,
+			});
+		} else {
+			jobId = job.id;
+
+			trackDebridUploaderJob({
+				id: job.id,
+				hash,
+				imdbId,
+				title,
+				returnPath,
+				createdAt: Date.now(),
+			});
+			toast.loading('Send to RD: transfer started — track it on the Transfers page.', {
+				id: toastId,
+				duration: 30000,
+			});
+		}
 
 		const POLL_MS = 5000;
 		const MAX_POLLS = 360; // 30 min for the source half; RD's pull isn't waited on
@@ -160,12 +179,20 @@ export async function runDebridTransferToRd(params: {
 
 			let polled;
 			try {
-				polled = await getDebridUploaderJob(job.id);
+				polled = await getDebridUploaderJob(jobId);
 			} catch {
 				continue; // transient poll failure; the job keeps running server-side
 			}
 
 			if (polled.status === 'completed') {
+				if (isExistingJob && polled.info_hash && rdKey) {
+					try {
+						const torrentId = await addHashAsMagnet(rdKey, polled.info_hash, true);
+						await selectFiles(rdKey, torrentId, ['all'], true);
+					} catch (e) {
+						console.error('Failed to add completed transfer to RD:', e);
+					}
+				}
 				toast.success('Send to RD: done! It is in your Real-Debrid library.', {
 					id: toastId,
 				});
@@ -178,6 +205,13 @@ export async function runDebridTransferToRd(params: {
 				return 'failed';
 			}
 			if (polled.status === 'uploading') {
+				if (isExistingJob) {
+					toast.loading(
+						'Send to RD: Real-Debrid download underway — waiting for completion...',
+						{ id: toastId, duration: 30000 }
+					);
+					continue;
+				}
 				toast.success(
 					'Send to RD: Real-Debrid download underway — follow it on the Transfers page.',
 					{ id: toastId }

@@ -18,6 +18,13 @@ vi.mock('react-hot-toast', () => ({
 	}),
 }));
 
+const mockAddHashAsMagnet = vi.fn().mockResolvedValue('rd-torrent-id');
+const mockSelectFiles = vi.fn().mockResolvedValue(undefined);
+vi.mock('@/services/realDebrid', () => ({
+	addHashAsMagnet: (...args: any[]) => mockAddHashAsMagnet(...args),
+	selectFiles: (...args: any[]) => mockSelectFiles(...args),
+}));
+
 const makeJob = (id: string): TrackedDebridUploaderJob => ({
 	id,
 	hash: 'a'.repeat(40),
@@ -146,11 +153,14 @@ describe('createDebridUploaderJob', () => {
 });
 
 describe('runDebridTransferToRd', () => {
-	it('tracks a duplicate job so it appears on the Transfers page', async () => {
+	it('polls an in-progress duplicate and adds to RD on completion', async () => {
+		vi.useFakeTimers();
 		const hash = 'c'.repeat(40);
-		vi.stubGlobal(
-			'fetch',
-			vi.fn().mockResolvedValue({
+		const rewrittenHash = 'f'.repeat(40);
+		const fetchMock = vi
+			.fn()
+			// First call: createDebridUploaderJob → in_progress duplicate
+			.mockResolvedValueOnce({
 				ok: true,
 				json: async () => ({
 					duplicate: 'in_progress',
@@ -158,9 +168,18 @@ describe('runDebridTransferToRd', () => {
 					jobId: 'dup-job-1',
 				}),
 			})
-		);
+			// Second call: poll → completed with info_hash
+			.mockResolvedValueOnce({
+				ok: true,
+				json: async () => ({
+					id: 'dup-job-1',
+					status: 'completed',
+					info_hash: rewrittenHash,
+				}),
+			});
+		vi.stubGlobal('fetch', fetchMock);
 
-		const outcome = await runDebridTransferToRd({
+		const promise = runDebridTransferToRd({
 			hash,
 			imdbId: 'tt1234567',
 			rdKey: 'rdkey',
@@ -169,14 +188,20 @@ describe('runDebridTransferToRd', () => {
 			returnPath: '/movie/tt1234567',
 		});
 
-		expect(outcome).toBe('duplicate');
+		await vi.advanceTimersByTimeAsync(5000);
+		const outcome = await promise;
+
+		expect(outcome).toBe('completed');
 		const tracked = getTrackedDebridUploaderJobs();
 		expect(tracked).toHaveLength(1);
 		expect(tracked[0].id).toBe('dup-job-1');
 		expect(tracked[0].hash).toBe(hash);
+		expect(mockAddHashAsMagnet).toHaveBeenCalledWith('rdkey', rewrittenHash, true);
+		expect(mockSelectFiles).toHaveBeenCalledWith('rdkey', 'rd-torrent-id', ['all'], true);
+		vi.useRealTimers();
 	});
 
-	it('tracks a completed duplicate too', async () => {
+	it('tracks a completed duplicate and returns addedToRd status', async () => {
 		const hash = 'd'.repeat(40);
 		vi.stubGlobal(
 			'fetch',
@@ -186,19 +211,46 @@ describe('runDebridTransferToRd', () => {
 					duplicate: 'completed',
 					rewrittenHash: 'e'.repeat(40),
 					jobId: 'dup-job-2',
+					addedToRd: true,
 				}),
 			})
 		);
 
-		await runDebridTransferToRd({
+		const outcome = await runDebridTransferToRd({
 			hash,
 			imdbId: 'tt9999999',
 			rdKey: 'rdkey',
 			adKey: 'adkey',
 		});
 
+		expect(outcome).toBe('completed');
 		const tracked = getTrackedDebridUploaderJobs();
 		expect(tracked).toHaveLength(1);
 		expect(tracked[0].id).toBe('dup-job-2');
+	});
+
+	it('returns duplicate when server could not add to RD', async () => {
+		const hash = 'd'.repeat(40);
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({
+				ok: true,
+				json: async () => ({
+					duplicate: 'completed',
+					rewrittenHash: 'e'.repeat(40),
+					jobId: 'dup-job-3',
+					addedToRd: false,
+				}),
+			})
+		);
+
+		const outcome = await runDebridTransferToRd({
+			hash,
+			imdbId: 'tt9999999',
+			rdKey: 'rdkey',
+			adKey: 'adkey',
+		});
+
+		expect(outcome).toBe('duplicate');
 	});
 });

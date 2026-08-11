@@ -36,6 +36,36 @@ async function isTransferStillValid(record: {
 	}
 }
 
+// Add a completed rewritten torrent to the requesting user's RD account.
+// The content is RD-cached (another user's job completed it), so this is instant.
+async function addRewrittenToUserRd(rdKey: string, rewrittenHash: string): Promise<boolean> {
+	try {
+		const addRes = await fetch('https://app.real-debrid.com/rest/1.0/torrents/addMagnet', {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${rdKey}`,
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: `magnet=${encodeURIComponent(`magnet:?xt=urn:btih:${rewrittenHash}`)}`,
+			signal: AbortSignal.timeout(15000),
+		});
+		if (addRes.status !== 201) return false;
+		const { id } = await addRes.json();
+		await fetch(`https://app.real-debrid.com/rest/1.0/torrents/selectFiles/${id}`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${rdKey}`,
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: 'files=all',
+			signal: AbortSignal.timeout(15000),
+		});
+		return true;
+	} catch {
+		return false;
+	}
+}
+
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' });
@@ -64,13 +94,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	// Cross-user / cross-device dedup: the localStorage guard only knows this
 	// browser's jobs, so the authoritative "already transferred?" check lives here.
+	// When a completed duplicate exists, also add the content to the requesting
+	// user's RD account — another user's job put it there, so it's RD-cached and
+	// the addMagnet is instant.
 	try {
 		const existing = await db.getDebridTransfer(originalHash);
 		if (existing && (await isTransferStillValid(existing))) {
+			let addedToRd = false;
+			if (existing.status === 'completed' && existing.rewrittenHash) {
+				addedToRd = await addRewrittenToUserRd(rdKey, existing.rewrittenHash);
+			}
 			return res.status(200).json({
 				duplicate: existing.status === 'completed' ? 'completed' : 'in_progress',
 				rewrittenHash: existing.rewrittenHash ?? null,
 				jobId: existing.jobId,
+				addedToRd,
 			});
 		}
 	} catch (error) {
