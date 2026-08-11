@@ -123,10 +123,18 @@ export async function runDebridTransferToRd(params: {
 		const job = await createDebridUploaderJob({ hash, imdbId, rdKey, tbKey, adKey, sizeBytes });
 
 		if (isDuplicateResponse(job)) {
+			trackDebridUploaderJob({
+				id: job.jobId,
+				hash,
+				imdbId,
+				title,
+				returnPath,
+				createdAt: Date.now(),
+			});
 			toast(
 				job.duplicate === 'completed'
 					? 'Send to RD: already in RD — use the Instant RD result for this title.'
-					: 'Send to RD: a transfer for this is already in progress.',
+					: 'Send to RD: a transfer for this is already in progress — see the Transfers page.',
 				{ id: toastId }
 			);
 			return 'duplicate';

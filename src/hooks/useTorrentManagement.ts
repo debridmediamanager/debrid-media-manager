@@ -401,13 +401,21 @@ export function useTorrentManagement(
 				// no job was created. Mark the row so the button hides, and point at
 				// the RD-cached result they should redeem instead.
 				if (isDuplicateResponse(job)) {
+					trackDebridUploaderJob({
+						id: job.jobId,
+						hash,
+						imdbId,
+						title: row?.title,
+						returnPath: window.location.pathname,
+						createdAt: Date.now(),
+					});
 					setSearchResults((prev) =>
 						prev.map((r) => (r.hash === hash ? { ...r, tbTransferred: true } : r))
 					);
 					toast(
 						job.duplicate === 'completed'
 							? `${label}: already in RD — use the Instant RD result for this title.`
-							: `${label}: a transfer for this is already in progress.`,
+							: `${label}: a transfer for this is already in progress — see the Transfers page.`,
 						{ id: toastId }
 					);
 					return;
