@@ -386,7 +386,9 @@ export function useTorrentManagement(
 			const sizeMb = row?.biggestFileSize || row?.fileSize || 0;
 			const sizeBytes = sizeMb > 0 ? Math.round(sizeMb * 1024 * 1024) : undefined;
 
-			const toastId = toast.loading(`${label}: submitting transfer...`);
+			const toastId = toast.loading(`${label}: submitting transfer...`, {
+				duration: 30000,
+			});
 			try {
 				const job = await createDebridUploaderJob({
 					hash,
@@ -431,6 +433,7 @@ export function useTorrentManagement(
 				});
 				toast.loading(`${label}: transfer started — track it on the Transfers page.`, {
 					id: toastId,
+					duration: 30000,
 				});
 
 				const POLL_MS = 5000;
@@ -474,7 +477,7 @@ export function useTorrentManagement(
 
 					toast.loading(
 						`${label}: ${polled.status_message || phaseLabelOf('debrid', polled.status)}`,
-						{ id: toastId }
+						{ id: toastId, duration: 30000 }
 					);
 				}
 
