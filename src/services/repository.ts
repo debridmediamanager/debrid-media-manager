@@ -304,6 +304,10 @@ export class Repository {
 		return this.availabilityService.checkAvailabilityAd(imdbId, hashes);
 	}
 
+	public checkAvailabilityAdByHashes(hashes: string[]) {
+		return this.availabilityService.checkAvailabilityAdByHashes(hashes);
+	}
+
 	public removeAvailabilityAd(hash: string) {
 		return this.availabilityService.removeAvailabilityAd(hash);
 	}

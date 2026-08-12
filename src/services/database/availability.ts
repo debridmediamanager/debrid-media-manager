@@ -501,6 +501,47 @@ export class AvailabilityService extends DatabaseClient {
 		}));
 	}
 
+	// Hash-only counterpart to checkAvailabilityAd, for callers with no IMDb ID
+	// to scope by (the hashlist page). `hash` is unique on availableAd, so
+	// dropping the imdbId filter cannot widen a row into several.
+	public async checkAvailabilityAdByHashes(hashes: string[]): Promise<
+		Array<{
+			hash: string;
+			files: Array<{
+				file_id: number;
+				path: string;
+				bytes: number;
+			}>;
+		}>
+	> {
+		const availableHashes = await this.prisma.availableAd.findMany({
+			where: {
+				hash: { in: hashes.map((h) => h.toLowerCase()) }, // AllDebrid returns lowercase
+				status: 'Ready', // AllDebrid uses "Ready" not "downloaded"
+				statusCode: 4, // Extra verification
+			},
+			select: {
+				hash: true,
+				files: {
+					select: {
+						file_id: true,
+						path: true,
+						bytes: true,
+					},
+				},
+			},
+		});
+
+		return availableHashes.map((record) => ({
+			hash: record.hash,
+			files: record.files.map((file) => ({
+				file_id: file.file_id,
+				path: file.path,
+				bytes: Number(file.bytes),
+			})),
+		}));
+	}
+
 	public async removeAvailabilityAd(hash: string): Promise<void> {
 		await this.prisma.availableAd.delete({
 			where: { hash: hash.toLowerCase() },

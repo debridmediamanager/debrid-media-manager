@@ -265,21 +265,6 @@ interface MagnetRestartData {
 	}>;
 }
 
-interface MagnetInstantData {
-	data: {
-		magnets: Array<{
-			magnet: string;
-			hash: string;
-			instant: boolean;
-			files?: MagnetFile[];
-			error?: {
-				code: string;
-				message: string;
-			};
-		}>;
-	};
-}
-
 // Response type to maintain backward compatibility
 interface MagnetStatusResponse {
 	status: string;
@@ -620,24 +605,11 @@ export const restartMagnet = async (apikey: string, id: string): Promise<MagnetR
 	}
 };
 
-// Note: /v4.1/magnet/instant is not documented in the official API; this may be a custom or undocumented endpoint
-export const adInstantCheck = async (
-	apikey: string,
-	hashes: string[]
-): Promise<MagnetInstantData> => {
-	const endpoint = `${config.allDebridHostname}/v4.1/magnet/instant`;
-	try {
-		const response = await allDebridAxios.get<MagnetInstantData>(endpoint, {
-			headers: { Authorization: `Bearer ${apikey}` },
-			params: { magnets: hashes },
-		});
-
-		return response.data;
-	} catch (error: any) {
-		console.error('Error fetching magnet availability:', error.message);
-		throw error;
-	}
-};
+// There is no non-mutating cache probe left in AllDebrid's API: /magnet/instant
+// was withdrawn (it answers 404) and v4 /magnet/status is discontinued. The
+// upload itself reports `ready`, so uploadMagnet doubles as the probe — see
+// isAdMagnetInstant — but a miss has to be deleted again afterwards because
+// uploading put it in the user's account.
 
 // ====================================================================
 // Availability Checking Functions (Simplified for availability checks)

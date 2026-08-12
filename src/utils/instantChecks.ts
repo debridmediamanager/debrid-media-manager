@@ -1,10 +1,14 @@
-import { MagnetFile, adInstantCheck } from '@/services/allDebrid';
 import { EnrichedHashlistTorrent, FileData, SearchResult } from '@/services/mediasearch';
 import { checkCachedStatus } from '@/services/torbox';
 import { delay } from '@/utils/delay';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-hot-toast';
-import { checkAvailability, checkAvailabilityAd, checkAvailabilityByHashes } from './availability';
+import {
+	checkAvailability,
+	checkAvailabilityAd,
+	checkAvailabilityAdByHashes,
+	checkAvailabilityByHashes,
+} from './availability';
 import { runConcurrentFunctions } from './batch';
 import { groupBy } from './groupBy';
 import { isVideo } from './selectable';
@@ -222,70 +226,63 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 };
 
 // Generic AD instant check function
-const processAdInstantCheck = async <T extends SearchResult | EnrichedHashlistTorrent>(
-	adKey: string,
+// Database-backed AD check with no IMDb ID constraint, for the hashlist page.
+//
+// This used to call AllDebrid's /magnet/instant directly, but that endpoint was
+// removed (it answers 404), and the only remaining way to probe AD's cache is to
+// upload the magnet — which mutates the user's account. So availability here
+// comes from DMM's own cache, exactly as the RD path does.
+const processAdInstantCheckDbByHashes = async <T extends SearchResult | EnrichedHashlistTorrent>(
+	dmmProblemKey: string,
+	solution: string,
 	hashes: string[],
+	batchSize: number,
 	setTorrentList: Dispatch<SetStateAction<T[]>>,
 	sortFn?: (results: T[]) => T[]
 ): Promise<number> => {
 	let instantCount = 0;
-	const allMagnets: any[] = [];
+	const allAvailable: {
+		hash: string;
+		files: { file_id: number; path: string; bytes: number }[];
+	}[] = [];
 	const funcs = [];
 
-	const checkVideoInFiles = (files: MagnetFile[]): boolean => {
-		return files.reduce((noVideo: boolean, curr: MagnetFile) => {
-			if (!noVideo) return false;
-			if (!curr.n) return false;
-			if (curr.e) return checkVideoInFiles(curr.e);
-			return !isVideo({ path: curr.n });
-		}, true);
-	};
-
-	for (const hashGroup of groupBy(100, hashes)) {
+	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
-			const resp = await adInstantCheck(adKey, hashGroup);
-			allMagnets.push(...resp.data.magnets);
+			const resp = await checkAvailabilityAdByHashes(dmmProblemKey, solution, hashGroup);
+			allAvailable.push(...resp.available);
 		});
 	}
 	await runConcurrentFunctions(funcs, 4, 0);
 
-	if (allMagnets.length === 0) return 0;
+	if (allAvailable.length === 0) return 0;
 
-	const magnetMap = new Map(allMagnets.map((m) => [m.hash, m]));
+	const availableMap = new Map(allAvailable.map((t) => [t.hash.toLowerCase(), t]));
 
 	setTorrentList((prevSearchResults) => {
 		const newSearchResults = [...prevSearchResults];
 		for (const torrent of newSearchResults) {
-			const magnetData = magnetMap.get(torrent.hash);
-			if (!magnetData || torrent.noVideos || !magnetData.files) continue;
+			if (torrent.noVideos) continue;
+			const availableTorrent = availableMap.get(torrent.hash.toLowerCase());
+			if (!availableTorrent) continue;
 
-			let idx = 0;
-			torrent.files = magnetData.files
-				.map((file: any) => {
-					if (file.e && file.e.length > 0) {
-						return file.e.map((f: any) => ({
-							fileId: idx++,
-							filename: f.n,
-							filesize: f.s,
-						}));
-					}
-					return {
-						fileId: idx++,
-						filename: file.n,
-						filesize: file.s,
-					};
+			torrent.files = availableTorrent.files.map(
+				(file: { file_id: number; path: string; bytes: number }) => ({
+					fileId: file.file_id,
+					filename: file.path,
+					filesize: file.bytes,
 				})
-				.flat();
+			);
 
 			if ('medianFileSize' in torrent) {
 				const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
 				const stats = calculateFileStats(videoFiles);
 				Object.assign(torrent, stats);
-				backfillMissingFileSize(torrent, torrent.files);
 			}
+			backfillMissingFileSize(torrent, torrent.files);
 
-			torrent.noVideos = checkVideoInFiles(magnetData.files);
-			if (!torrent.noVideos && magnetData.instant) {
+			torrent.noVideos = !torrent.files.some((file) => isVideo({ path: file.filename }));
+			if (!torrent.noVideos) {
 				torrent.adAvailable = true;
 				instantCount += 1;
 			} else {
@@ -500,10 +497,11 @@ export const checkDatabaseAvailabilityAd = (
 ) => processAdInstantCheckDb(dmmProblemKey, solution, imdbId, hashes, 100, setTorrentList, sortFn);
 
 export const checkDatabaseAvailabilityAd2 = (
-	adKey: string,
+	dmmProblemKey: string,
+	solution: string,
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
-) => processAdInstantCheck(adKey, hashes, setTorrentList);
+) => processAdInstantCheckDbByHashes(dmmProblemKey, solution, hashes, 100, setTorrentList);
 
 export const checkDatabaseAvailabilityTb = (
 	tbKey: string,

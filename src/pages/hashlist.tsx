@@ -1,6 +1,6 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
-import { adInstantCheck, getMagnetStatus, uploadMagnet } from '@/services/allDebrid';
+import { deleteMagnetAd, getMagnetStatus, uploadMagnet } from '@/services/allDebrid';
 import { EnrichedHashlistTorrent, Hashlist, HashlistTorrent } from '@/services/mediasearch';
 import {
 	checkCachedStatus,
@@ -231,11 +231,18 @@ function HashlistPage() {
 					)
 				);
 			}
-			if (adKey)
+			if (adKey) {
+				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
 				wrapLoading(
 					'AD',
-					checkDatabaseAvailabilityAd2(adKey, hashArr, setUserTorrentsList)
+					checkDatabaseAvailabilityAd2(
+						tokenWithTimestamp,
+						tokenHash,
+						hashArr,
+						setUserTorrentsList
+					)
 				);
+			}
 			if (tbKey)
 				wrapLoading(
 					'TB',
@@ -583,19 +590,20 @@ function HashlistPage() {
 
 	async function addAd(hash: string) {
 		try {
-			// Check if instant first
-			const instantResp = await adInstantCheck(adKey!, [hash]);
-			const magnetInfo = instantResp.data?.magnets?.[0];
-			if (!magnetInfo?.instant) {
-				toast.error('Torrent not instant in AD; skipped.', genericToastOptions);
-				return;
-			}
-
-			// Add the magnet
+			// AllDebrid removed /magnet/instant, so the upload *is* the cache
+			// probe: `ready` tells us whether it was already cached, and a miss
+			// has to be deleted again because uploading added it to the account.
 			const magnetUri = hash.startsWith('magnet:?') ? hash : `magnet:?xt=urn:btih:${hash}`;
 			const resp = await uploadMagnet(adKey!, [magnetUri]);
 			if (resp.magnets.length === 0 || resp.magnets[0].error) {
 				toast.error('Failed to add hash to AD.', genericToastOptions);
+				return;
+			}
+			if (!resp.magnets[0].ready) {
+				if (resp.magnets[0].id) {
+					await deleteMagnetAd(adKey!, resp.magnets[0].id).catch(() => {});
+				}
+				toast.error('Torrent not instant in AD; skipped.', genericToastOptions);
 				return;
 			}
 			if (resp.magnets[0].id) {

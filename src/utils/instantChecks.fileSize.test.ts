@@ -1,7 +1,10 @@
-import { adInstantCheck } from '@/services/allDebrid';
 import { checkCachedStatus } from '@/services/torbox';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { checkAvailability, checkAvailabilityAd } from './availability';
+import {
+	checkAvailability,
+	checkAvailabilityAd,
+	checkAvailabilityAdByHashes,
+} from './availability';
 import {
 	checkDatabaseAvailabilityAd,
 	checkDatabaseAvailabilityAd2,
@@ -17,10 +20,7 @@ vi.mock('./availability', () => ({
 	checkAvailabilityByHashes: vi.fn(),
 	checkAvailability: vi.fn(),
 	checkAvailabilityAd: vi.fn(),
-}));
-
-vi.mock('@/services/allDebrid', () => ({
-	adInstantCheck: vi.fn(),
+	checkAvailabilityAdByHashes: vi.fn(),
 }));
 
 vi.mock('@/services/torbox', () => ({
@@ -42,7 +42,7 @@ vi.mock('@/utils/selectable', () => ({
 
 const mockCheckAvailability = vi.mocked(checkAvailability);
 const mockCheckAvailabilityAd = vi.mocked(checkAvailabilityAd);
-const mockAdInstantCheck = vi.mocked(adInstantCheck);
+const mockCheckAvailabilityAdByHashes = vi.mocked(checkAvailabilityAdByHashes);
 const mockCheckCachedStatus = vi.mocked(checkCachedStatus);
 
 const createStateHarness = <T extends { hash: string }>(initial: T[]) => {
@@ -192,16 +192,13 @@ describe('missing fileSize backfill', () => {
 	});
 
 	it('does not invent a fileSize on hashlist torrents', async () => {
-		mockAdInstantCheck.mockResolvedValue({
-			data: {
-				magnets: [
-					{
-						hash: 'hash-hashlist',
-						instant: true,
-						files: [{ n: 'Movie.mkv', s: 8 * MB }],
-					},
-				],
-			},
+		mockCheckAvailabilityAdByHashes.mockResolvedValue({
+			available: [
+				{
+					hash: 'hash-hashlist',
+					files: [{ file_id: 0, path: 'Movie.mkv', bytes: 8 * MB }],
+				},
+			],
 		} as any);
 		const { setter, getState } = createStateHarness([
 			{
@@ -213,7 +210,7 @@ describe('missing fileSize backfill', () => {
 			},
 		] as any[]);
 
-		await checkDatabaseAvailabilityAd2('ad-key', ['hash-hashlist'], setter);
+		await checkDatabaseAvailabilityAd2('problem', 'solution', ['hash-hashlist'], setter);
 
 		expect(getState()[0].adAvailable).toBe(true);
 		expect(getState()[0]).not.toHaveProperty('fileSize');

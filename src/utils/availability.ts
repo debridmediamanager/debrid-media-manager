@@ -249,3 +249,47 @@ export async function checkAvailabilityAd(
 		throw error;
 	}
 }
+
+export async function checkAvailabilityAdByHashes(
+	dmmProblemKey: string,
+	solution: string,
+	hashes: string[]
+) {
+	try {
+		// Filter out invalid hashes proactively to avoid API 400s
+		const validHashes = (hashes || []).filter(isValidHash);
+		if (validHashes.length === 0) {
+			return { available: [] } as any;
+		}
+
+		const response = await fetch('/api/availability/ad/check2', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				hashes: validHashes,
+				dmmProblemKey,
+				solution,
+			}),
+		});
+
+		if (!response.ok) {
+			let error: any = {};
+			try {
+				error = await response.json();
+			} catch {}
+			const detail = error.hash ? ` (invalid: ${error.hash})` : '';
+			throw new Error(
+				error.error ||
+					error.errorMessage ||
+					`Failed to check AllDebrid availability by hashes${detail}`
+			);
+		}
+
+		return await response.json();
+	} catch (error) {
+		console.error('Error checking AllDebrid availability by hashes:', error);
+		throw error;
+	}
+}

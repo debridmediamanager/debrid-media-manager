@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-	adInstantCheck,
 	checkPin,
 	deleteMagnet,
 	getAllDebridUser,
@@ -131,7 +130,7 @@ describe('AllDebrid service helpers', () => {
 		await getMagnetFiles('token', [1]);
 	});
 
-	it('deletes, restarts magnets, and fetches instant availability', async () => {
+	it('deletes and restarts magnets', async () => {
 		postMock.mockResolvedValueOnce({
 			data: { status: 'success', data: { message: 'ok' } },
 		});
@@ -143,9 +142,5 @@ describe('AllDebrid service helpers', () => {
 		});
 		const restartResp = await restartMagnet('token', '1');
 		expect(restartResp.magnets?.[0].magnet).toBe('m1');
-
-		getMock.mockResolvedValueOnce({ data: { data: { magnets: [] } } });
-		const instant = await adInstantCheck('token', ['hash']);
-		expect(instant.data.magnets).toEqual([]);
 	});
 });

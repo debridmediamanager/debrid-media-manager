@@ -1,7 +1,11 @@
-import { adInstantCheck } from '@/services/allDebrid';
 import { checkCachedStatus } from '@/services/torbox';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { checkAvailability, checkAvailabilityAd, checkAvailabilityByHashes } from './availability';
+import {
+	checkAvailability,
+	checkAvailabilityAd,
+	checkAvailabilityAdByHashes,
+	checkAvailabilityByHashes,
+} from './availability';
 import {
 	checkDatabaseAvailabilityAd,
 	checkDatabaseAvailabilityAd2,
@@ -16,10 +20,7 @@ vi.mock('./availability', () => ({
 	checkAvailabilityByHashes: vi.fn(),
 	checkAvailability: vi.fn(),
 	checkAvailabilityAd: vi.fn(),
-}));
-
-vi.mock('@/services/allDebrid', () => ({
-	adInstantCheck: vi.fn(),
+	checkAvailabilityAdByHashes: vi.fn(),
 }));
 
 vi.mock('@/services/torbox', () => ({
@@ -48,7 +49,7 @@ vi.mock('@/utils/selectable', () => ({
 const mockCheckAvailabilityByHashes = vi.mocked(checkAvailabilityByHashes);
 const mockCheckAvailability = vi.mocked(checkAvailability);
 const mockCheckAvailabilityAd = vi.mocked(checkAvailabilityAd);
-const mockAdInstantCheck = vi.mocked(adInstantCheck);
+const mockCheckAvailabilityAdByHashes = vi.mocked(checkAvailabilityAdByHashes);
 const mockCheckCachedStatus = vi.mocked(checkCachedStatus);
 
 const createStateHarness = <T extends { hash: string }>(initial: T[]) => {
@@ -99,17 +100,14 @@ describe('instantChecks utilities', () => {
 		expect(getState()[0].files).toHaveLength(1);
 	});
 
-	it('marks AD torrents as available when magnets indicate instant status', async () => {
-		mockAdInstantCheck.mockResolvedValue({
-			data: {
-				magnets: [
-					{
-						hash: 'hash-ad',
-						instant: true,
-						files: [{ n: 'Episode.mkv', s: 1024 }],
-					},
-				],
-			},
+	it('marks AD torrents as available from the hash-only database check', async () => {
+		mockCheckAvailabilityAdByHashes.mockResolvedValue({
+			available: [
+				{
+					hash: 'hash-ad',
+					files: [{ file_id: 3, path: 'Episode.mkv', bytes: 1024 }],
+				},
+			],
 		} as any);
 		const { setter, getState } = createStateHarness([
 			{
@@ -120,11 +118,37 @@ describe('instantChecks utilities', () => {
 			},
 		] as any[]);
 
-		const hits = await checkDatabaseAvailabilityAd2('ad-key', ['hash-ad'], setter);
+		const hits = await checkDatabaseAvailabilityAd2('problem', 'solution', ['hash-ad'], setter);
 
 		expect(hits).toBe(1);
 		expect(getState()[0].adAvailable).toBe(true);
-		expect(getState()[0].files[0]).toMatchObject({ filename: 'Episode.mkv' });
+		expect(getState()[0].files[0]).toMatchObject({ fileId: 3, filename: 'Episode.mkv' });
+	});
+
+	// AllDebrid reports hashes lowercase while hashlists carry them uppercase,
+	// so a case-sensitive join would silently mark everything unavailable.
+	it('matches AD availability regardless of hash case', async () => {
+		mockCheckAvailabilityAdByHashes.mockResolvedValue({
+			available: [
+				{
+					hash: 'abcdef',
+					files: [{ file_id: 1, path: 'Episode.mkv', bytes: 1024 }],
+				},
+			],
+		} as any);
+		const { setter, getState } = createStateHarness([
+			{
+				hash: 'ABCDEF',
+				noVideos: false,
+				adAvailable: false,
+				files: [],
+			},
+		] as any[]);
+
+		const hits = await checkDatabaseAvailabilityAd2('problem', 'solution', ['ABCDEF'], setter);
+
+		expect(hits).toBe(1);
+		expect(getState()[0].adAvailable).toBe(true);
 	});
 
 	it('marks TB torrents as available when cached data exists', async () => {
