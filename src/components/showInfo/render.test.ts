@@ -115,8 +115,20 @@ describe('renderTorrentInfoTB', () => {
 		expect(html).not.toContain('value="Show/readme.txt"');
 	});
 
-	// Web downloads have no infohash to re-resolve from, so the caller passes
-	// none and no watch button may be produced.
+	// A web download is not a torrent — it resolves through TorBox's separate
+	// webdl namespace, so it must not be sent to the torrent path.
+	it('routes a web download through tbw', () => {
+		const html = renderTorrentInfoTB(files, {
+			tbKey: 'tb-key',
+			app: 'windows/vlc',
+			hash: 'wd-hash',
+			isWebDownload: true,
+		});
+
+		expect(html).toContain('name="service" value="tbw"');
+		expect(html).not.toContain('name="service" value="tb"');
+	});
+
 	it('offers no watch button without a hash', () => {
 		const html = renderTorrentInfoTB(files, { tbKey: 'tb-key', app: 'windows/vlc' });
 

@@ -522,3 +522,33 @@ export const getWebDownloadStreamUrlByHash = async (
 
 	return downloadResult.data;
 };
+
+// Resolve a torrent the user already holds, without consulting TorBox's global
+// cache first.
+//
+// The cached helpers above bail out with "Torrent not cached on TorBox" before
+// they ever look at the account, which is right for a search result but wrong
+// for a library entry: the library row can outlive its entry in the shared
+// cache, and the file is still sitting there ready to stream. Returns '' when
+// the hash is not in the user's list, so callers can fall through.
+export const getOwnedTorBoxStreamUrl = async (
+	apiKey: string,
+	hash: string,
+	targetFilename?: string
+): Promise<string> => {
+	const torrent = await findUserTorrentByHash(apiKey, hash);
+	const files = torrent?.files ?? [];
+	if (!torrent || files.length === 0) return '';
+
+	const file =
+		(targetFilename ? matchFileByName(files, targetFilename) : undefined) ??
+		files.reduce((prev, current) => ((prev.size || 0) > (current.size || 0) ? prev : current));
+
+	const downloadResult = await requestDownloadLink(apiKey, {
+		torrent_id: torrent.id,
+		file_id: file.id,
+	});
+	if (!downloadResult.success || !downloadResult.data) return '';
+
+	return downloadResult.data;
+};

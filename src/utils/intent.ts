@@ -6,12 +6,19 @@ import {
 	unrestrictLink,
 } from '@/services/realDebrid';
 import { handleSelectFilesInRd } from './addMagnet';
-import { getBiggestFileTorBoxStreamUrl, getFileByNameTorBoxStreamUrl } from './getTorBoxStreamUrl';
+import {
+	getBiggestFileTorBoxStreamUrl,
+	getFileByNameTorBoxStreamUrl,
+	getOwnedTorBoxStreamUrl,
+	getWebDownloadStreamUrlByHash,
+} from './getTorBoxStreamUrl';
 
-export type WatchService = 'rd' | 'ad' | 'tb';
+// 'tbw' is a TorBox web download, which lives in its own namespace with its own
+// list and its own download-link endpoint — it cannot be resolved as a torrent.
+export type WatchService = 'rd' | 'ad' | 'tb' | 'tbw';
 
 export const isWatchService = (value: unknown): value is WatchService =>
-	value === 'rd' || value === 'ad' || value === 'tb';
+	value === 'rd' || value === 'ad' || value === 'tb' || value === 'tbw';
 
 const basename = (path: string) => path.split('/').pop() || path;
 
@@ -91,24 +98,61 @@ const getTbInstantIntent = async (
 ): Promise<{ intent?: string; error?: string }> => {
 	try {
 		let streamUrl = '';
-		if (fileName) {
-			try {
-				[streamUrl] = await getFileByNameTorBoxStreamUrl(tbKey, hash, basename(fileName));
-			} catch {
-				// The name came from a different service's file listing, so fall
-				// back to the biggest file rather than failing the whole watch.
-				streamUrl = '';
+		let cachedPathError: unknown;
+		try {
+			if (fileName) {
+				try {
+					[streamUrl] = await getFileByNameTorBoxStreamUrl(
+						tbKey,
+						hash,
+						basename(fileName)
+					);
+				} catch {
+					// The name came from a different service's file listing, so
+					// fall back to the biggest file rather than failing outright.
+					streamUrl = '';
+				}
 			}
+			if (!streamUrl) {
+				[streamUrl] = await getBiggestFileTorBoxStreamUrl(tbKey, hash);
+			}
+		} catch (e) {
+			// Both cached lookups check TorBox's global cache before the user's
+			// own list, so a library entry whose cache entry has aged out lands
+			// here even though the file is still streamable.
+			cachedPathError = e;
+		}
+
+		if (!streamUrl) {
+			streamUrl = await getOwnedTorBoxStreamUrl(tbKey, hash, fileName);
 		}
 		if (!streamUrl) {
-			[streamUrl] = await getBiggestFileTorBoxStreamUrl(tbKey, hash);
-		}
-		if (!streamUrl) {
+			if (cachedPathError) throw cachedPathError;
 			return { error: `No TorBox stream URL found for ${hash}` };
 		}
 		return { intent: buildPlayerIntent(os, player, streamUrl, streamUrl) };
 	} catch (e: any) {
 		return { error: `Failed to get TorBox stream: ${e.message || e}` };
+	}
+};
+
+// TorBox web downloads only exist in the account that created them, so there is
+// no cache to consult and nothing to re-add from a hash.
+const getTbWebDownloadIntent = async (
+	tbKey: string,
+	hash: string,
+	os: string,
+	player: string,
+	fileName?: string
+): Promise<{ intent?: string; error?: string }> => {
+	try {
+		const streamUrl = await getWebDownloadStreamUrlByHash(tbKey, hash, fileName);
+		if (!streamUrl) {
+			return { error: `No TorBox web download stream URL found for ${hash}` };
+		}
+		return { intent: buildPlayerIntent(os, player, streamUrl, streamUrl) };
+	} catch (e: any) {
+		return { error: `Failed to get TorBox web download stream: ${e.message || e}` };
 	}
 };
 
@@ -173,6 +217,9 @@ export const getInstantIntent = async (
 	if (service === 'tb') {
 		return getTbInstantIntent(key, hash, os, player, fileName);
 	}
+	if (service === 'tbw') {
+		return getTbWebDownloadIntent(key, hash, os, player, fileName);
+	}
 	if (service === 'ad') {
 		return {
 			error: 'AllDebrid magnets must be prepared in the browser; call /api/watch with a link',
@@ -197,7 +244,7 @@ export const getIntent = async (
 	player: string,
 	service: WatchService = 'rd'
 ): Promise<{ intent?: string; error?: string }> => {
-	if (service === 'tb') {
+	if (service === 'tb' || service === 'tbw') {
 		return { error: 'TorBox links are resolved by hash; call /api/watch/instant instead' };
 	}
 	if (service === 'ad') {

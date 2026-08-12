@@ -9,6 +9,8 @@ const mocks = vi.hoisted(() => ({
 	handleSelectFilesInRd: vi.fn(),
 	getBiggestFileTorBoxStreamUrl: vi.fn(),
 	getFileByNameTorBoxStreamUrl: vi.fn(),
+	getOwnedTorBoxStreamUrl: vi.fn(),
+	getWebDownloadStreamUrlByHash: vi.fn(),
 }));
 
 vi.mock('@/services/allDebrid', () => ({ unlockLink: mocks.unlockLink }));
@@ -22,6 +24,8 @@ vi.mock('./addMagnet', () => ({ handleSelectFilesInRd: mocks.handleSelectFilesIn
 vi.mock('./getTorBoxStreamUrl', () => ({
 	getBiggestFileTorBoxStreamUrl: mocks.getBiggestFileTorBoxStreamUrl,
 	getFileByNameTorBoxStreamUrl: mocks.getFileByNameTorBoxStreamUrl,
+	getOwnedTorBoxStreamUrl: mocks.getOwnedTorBoxStreamUrl,
+	getWebDownloadStreamUrlByHash: mocks.getWebDownloadStreamUrlByHash,
 }));
 
 import {
@@ -34,6 +38,9 @@ import {
 
 beforeEach(() => {
 	vi.clearAllMocks();
+	// Default: the hash is not in the user's TorBox library, so the cached path
+	// is the one under test unless a case says otherwise.
+	mocks.getOwnedTorBoxStreamUrl.mockResolvedValue('');
 });
 
 describe('buildPlayerIntent', () => {
@@ -110,6 +117,7 @@ describe('isWatchService', () => {
 		expect(isWatchService('rd')).toBe(true);
 		expect(isWatchService('ad')).toBe(true);
 		expect(isWatchService('tb')).toBe(true);
+		expect(isWatchService('tbw')).toBe(true);
 		expect(isWatchService('bogus')).toBe(false);
 		expect(isWatchService(undefined)).toBe(false);
 	});
@@ -229,6 +237,75 @@ describe('getInstantIntent', () => {
 
 		expect(result.error).toContain('Torrent not cached');
 		expect(result.intent).toBeUndefined();
+	});
+
+	// A library row can outlive its entry in TorBox's shared cache, and both
+	// cached helpers bail out on that before ever looking at the account.
+	it('falls back to the user library when TorBox says the hash is not cached', async () => {
+		mocks.getBiggestFileTorBoxStreamUrl.mockRejectedValue(
+			new Error('Torrent not cached on TorBox')
+		);
+		mocks.getOwnedTorBoxStreamUrl.mockResolvedValue('https://tb/owned.mkv');
+
+		const result = await getInstantIntent(
+			'tb-key',
+			'hash',
+			0,
+			'1.2.3.4',
+			'windows',
+			'vlc',
+			'tb',
+			'Episode.mkv'
+		);
+
+		expect(mocks.getOwnedTorBoxStreamUrl).toHaveBeenCalledWith('tb-key', 'hash', 'Episode.mkv');
+		expect(result.intent).toBe('vlc://https://tb/owned.mkv');
+	});
+
+	it('keeps the cached error when the hash is not owned either', async () => {
+		mocks.getBiggestFileTorBoxStreamUrl.mockRejectedValue(
+			new Error('Torrent not cached on TorBox')
+		);
+		mocks.getOwnedTorBoxStreamUrl.mockResolvedValue('');
+
+		const result = await getInstantIntent('tb-key', 'h', 0, '1.2.3.4', 'windows', 'vlc', 'tb');
+
+		expect(result.error).toContain('Torrent not cached on TorBox');
+	});
+
+	// Web downloads live in TorBox's separate webdl namespace: no cache to
+	// consult, and nothing to re-add from a hash.
+	it('resolves a TorBox web download through the webdl namespace', async () => {
+		mocks.getWebDownloadStreamUrlByHash.mockResolvedValue('https://tb/webdl.mkv');
+
+		const result = await getInstantIntent(
+			'tb-key',
+			'wd-hash',
+			0,
+			'1.2.3.4',
+			'windows',
+			'vlc',
+			'tbw',
+			'Movie.mkv'
+		);
+
+		expect(mocks.getWebDownloadStreamUrlByHash).toHaveBeenCalledWith(
+			'tb-key',
+			'wd-hash',
+			'Movie.mkv'
+		);
+		expect(mocks.getBiggestFileTorBoxStreamUrl).not.toHaveBeenCalled();
+		expect(result.intent).toBe('vlc://https://tb/webdl.mkv');
+	});
+
+	it('reports a web download that is not in the account', async () => {
+		mocks.getWebDownloadStreamUrlByHash.mockRejectedValue(
+			new Error('Web download not found on TorBox')
+		);
+
+		const result = await getInstantIntent('tb-key', 'h', 0, '1.2.3.4', 'windows', 'vlc', 'tbw');
+
+		expect(result.error).toContain('Web download not found');
 	});
 
 	// AllDebrid refuses magnet/upload from datacenter IPs, so this route cannot

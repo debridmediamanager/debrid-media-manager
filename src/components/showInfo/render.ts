@@ -147,9 +147,9 @@ export const renderTorrentInfo = (
 
 export const renderTorrentInfoTB = (
 	files: TorBoxFile[],
-	// Web downloads have no infohash to re-resolve from, so they get no watch
-	// button — everything else can be resolved server-side by hash + filename.
-	options: { tbKey?: string; app?: string; hash?: string } = {}
+	// A web download is not a torrent: it lives in TorBox's separate webdl
+	// namespace, so it resolves through 'tbw' rather than 'tb'.
+	options: { tbKey?: string; app?: string; hash?: string; isWebDownload?: boolean } = {}
 ) => {
 	const sorted = [...files].sort((a, b) => a.name.localeCompare(b.name));
 	const filesList = sorted.map((file) => {
@@ -160,7 +160,7 @@ export const renderTorrentInfoTB = (
 				renderButton('watch', {
 					link: `/api/watch/instant/${options.app}`,
 					linkParams: [
-						{ name: 'service', value: 'tb' },
+						{ name: 'service', value: options.isWebDownload ? 'tbw' : 'tb' },
 						{ name: 'token', value: options.tbKey },
 						{ name: 'hash', value: options.hash },
 						{ name: 'fileName', value: file.name },

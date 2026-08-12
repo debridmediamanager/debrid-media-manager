@@ -21,6 +21,7 @@ export const WATCH_SERVICE_LABEL: Record<WatchService, string> = {
 	rd: 'Real-Debrid',
 	ad: 'AllDebrid',
 	tb: 'TorBox',
+	tbw: 'TorBox',
 };
 
 /**
@@ -43,6 +44,8 @@ export const pickWatchService = (
 export const watchKeyFor = (service: WatchService, keys: WatchKeys): string | null => {
 	if (service === 'rd') return keys.rdKey ?? null;
 	if (service === 'ad') return keys.adKey ?? null;
+	// 'tb' and 'tbw' are both TorBox, differing only in which namespace the
+	// server resolves the hash against.
 	return keys.torboxKey ?? null;
 };
 

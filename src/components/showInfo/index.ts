@@ -1023,7 +1023,8 @@ export const showInfoForTB = async (
                     ${renderTorrentInfoTB(files, {
 						tbKey,
 						app,
-						hash: isWebDownload ? undefined : info.hash,
+						hash: info.hash,
+						isWebDownload,
 					})}
                 </tbody>
             </table>
