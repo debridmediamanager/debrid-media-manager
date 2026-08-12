@@ -1,7 +1,7 @@
 import handler from '@/pages/api/watch/[os]/[player]';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import { getClientIpFromRequest } from '@/utils/clientIp';
-import { getIntent } from '@/utils/intent';
+import { getIntent, isWatchService } from '@/utils/intent';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/utils/intent');
@@ -9,6 +9,7 @@ vi.mock('@/utils/clientIp');
 
 const mockedGetIntent = vi.mocked(getIntent);
 const mockedGetClientIp = vi.mocked(getClientIpFromRequest);
+const mockedIsWatchService = vi.mocked(isWatchService);
 
 describe('/api/watch/[os]/[player]', () => {
 	let res: MockResponse;
@@ -17,6 +18,10 @@ describe('/api/watch/[os]/[player]', () => {
 		vi.clearAllMocks();
 		res = createMockResponse();
 		mockedGetClientIp.mockReturnValue('192.168.1.1');
+		// The module under test is auto-mocked, so restore the real type guard.
+		mockedIsWatchService.mockImplementation(
+			(v: unknown): v is 'rd' | 'ad' | 'tb' => v === 'rd' || v === 'ad' || v === 'tb'
+		);
 	});
 
 	it('redirects 307 when intent is found', async () => {
@@ -67,7 +72,56 @@ describe('/api/watch/[os]/[player]', () => {
 			'https://rd.link/abc',
 			'192.168.1.1',
 			'android',
-			'mpv'
+			'mpv',
+			'rd'
+		);
+	});
+
+	it('forwards the AllDebrid service so the link is unlocked, not unrestricted', async () => {
+		mockedGetIntent.mockResolvedValueOnce({ intent: 'infuse://ad-stream' });
+		const req = createMockRequest({
+			query: {
+				os: 'ios',
+				player: 'infuse',
+				token: 'ad-key',
+				link: 'https://alldebrid.com/f/abc',
+				service: 'ad',
+			},
+		});
+
+		await handler(req, res);
+
+		expect(mockedGetIntent).toHaveBeenCalledWith(
+			'ad-key',
+			'https://alldebrid.com/f/abc',
+			'192.168.1.1',
+			'ios',
+			'infuse',
+			'ad'
+		);
+	});
+
+	it('falls back to Real-Debrid when the service param is not recognised', async () => {
+		mockedGetIntent.mockResolvedValueOnce({ intent: 'intent-url' });
+		const req = createMockRequest({
+			query: {
+				os: 'ios',
+				player: 'infuse',
+				token: 'tok',
+				link: 'https://link',
+				service: 'bogus',
+			},
+		});
+
+		await handler(req, res);
+
+		expect(mockedGetIntent).toHaveBeenCalledWith(
+			'tok',
+			'https://link',
+			'192.168.1.1',
+			'ios',
+			'infuse',
+			'rd'
 		);
 	});
 
@@ -86,7 +140,8 @@ describe('/api/watch/[os]/[player]', () => {
 			'https://link',
 			'10.0.0.5',
 			'linux',
-			'vlc'
+			'vlc',
+			'rd'
 		);
 	});
 });

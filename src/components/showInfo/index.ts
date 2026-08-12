@@ -762,7 +762,7 @@ export const showInfoForAD = async (
         <div class="overflow-x-auto" style="max-width: 100%;">
             <table class="table-auto">
                 <tbody>
-                    ${renderTorrentInfo(info, false, '', app, imdbId)}
+                    ${renderTorrentInfo(info, false, adKey, app, imdbId)}
                 </tbody>
             </table>
         </div>
@@ -955,6 +955,7 @@ export const showInfoForAD = async (
 };
 
 export const showInfoForTB = async (
+	app: string,
 	tbKey: string,
 	info: TorBoxTorrentInfo,
 	shouldDownloadMagnets?: boolean,
@@ -1019,7 +1020,11 @@ export const showInfoForTB = async (
         <div class="overflow-x-auto" style="max-width: 100%;">
             <table class="table-auto">
                 <tbody>
-                    ${renderTorrentInfoTB(files)}
+                    ${renderTorrentInfoTB(files, {
+						tbKey,
+						app,
+						hash: isWebDownload ? undefined : info.hash,
+					})}
                 </tbody>
             </table>
         </div>

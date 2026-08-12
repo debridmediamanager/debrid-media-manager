@@ -255,5 +255,13 @@ export async function handleShowInfoForTB(
 		Modal.close();
 	};
 
-	void showInfoForTB(tbKey, t.tbData, undefined, { onDeleteTb }, isWebDownloadRowId(t.id));
+	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
+	void showInfoForTB(
+		player,
+		tbKey,
+		t.tbData,
+		undefined,
+		{ onDeleteTb },
+		isWebDownloadRowId(t.id)
+	);
 }

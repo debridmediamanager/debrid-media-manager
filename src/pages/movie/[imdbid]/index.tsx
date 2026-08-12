@@ -48,6 +48,12 @@ import { castToastOptions, searchToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { handleCastMovieTorBox } from '@/utils/torboxCastApiClient';
 import { getMultipleTrackerStats } from '@/utils/trackerStats';
+import {
+	WATCH_SERVICE_LABEL,
+	getBiggestVideoFile,
+	openWatch,
+	pickWatchService,
+} from '@/utils/watchService';
 import { withAuth } from '@/utils/withAuth';
 import { buildYearRegex } from '@/utils/yearFilter';
 import { Cast, CloudOff, Eye as EyeIcon, Loader2, Search, Sparkles, Zap } from 'lucide-react';
@@ -142,6 +148,7 @@ const MovieSearch: FunctionComponent = () => {
 	const [errorMessage, setErrorMessage] = useState('');
 	const [query, setQuery] = useState(defaultTorrentsFilter);
 	const [descLimit, setDescLimit] = useState(100);
+	const [isWatching, setIsWatching] = useState(false);
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(false);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [hasMoreResults, setHasMoreResults] = useState(true);
@@ -747,7 +754,7 @@ const MovieSearch: FunctionComponent = () => {
 				inactive_check: 0,
 				availability: 0,
 			};
-			showInfoForTB(torboxKey, tbInfo, shouldDownloadMagnets);
+			showInfoForTB(player, torboxKey, tbInfo, shouldDownloadMagnets);
 		}
 	};
 
@@ -794,124 +801,159 @@ const MovieSearch: FunctionComponent = () => {
 		return filteredResults.find((r) => r.rdAvailable && !r.noVideos);
 	};
 
-	const getBiggestFileId = (result: SearchResult) => {
-		if (!result.files || !result.files.length) return '';
-		const biggestFile = result.files
-			.filter((f) => isVideo({ path: f.filename }))
-			.sort((a, b) => b.filesize - a.filesize)[0];
-		return biggestFile?.fileId ?? '';
+	// Unlike "Instant RD" and "Cast (RD)", Watch works with whichever service has
+	// the torrent cached, so it gets its own pick rather than reusing the RD one.
+	const getFirstWatchableTorrent = () =>
+		filteredResults.find(
+			(r) => !r.noVideos && pickWatchService(r, { rdKey, adKey, torboxKey }) !== null
+		);
+
+	const handleWatchFirst = async () => {
+		const result = getFirstWatchableTorrent();
+		if (!result) return;
+		const service = pickWatchService(result, { rdKey, adKey, torboxKey });
+		if (!service) return;
+		const biggest = getBiggestVideoFile(result);
+		setIsWatching(true);
+		try {
+			await openWatch({
+				service,
+				player,
+				hash: result.hash,
+				keys: { rdKey, adKey, torboxKey },
+				fileName: biggest?.filename,
+				fileId: biggest?.fileId,
+				adInLibrary: `ad:${result.hash}` in hashAndProgress,
+			});
+		} finally {
+			setIsWatching(false);
+		}
 	};
 
-	const handleActionButtons = () => (
-		<>
-			{(rdKey || adKey || torboxKey) && (
-				<>
-					{rdKey && (
-						<button
-							className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
-							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['RD'])}
-							disabled={isAnyChecking}
-						>
-							<b className="flex items-center justify-center">
-								{isAnyChecking ? (
-									<>
-										<Loader2 className="mr-1 h-3 w-3 animate-spin text-yellow-500" />
-										Checking RD...
-									</>
-								) : (
-									<>
-										<Search className="mr-1 h-3 w-3 text-yellow-500" />
-										Check RD
-									</>
-								)}
-							</b>
-						</button>
-					)}
-					{adKey && (
-						<button
-							className="mb-1 mr-2 mt-0 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
-							onClick={() => checkServiceAvailabilityBulk(filteredResults, ['AD'])}
-							disabled={isAnyChecking}
-						>
-							<b className="flex items-center justify-center">
-								{isAnyChecking ? (
-									<>
-										<Loader2 className="mr-1 h-3 w-3 animate-spin text-orange-500" />
-										Checking AD...
-									</>
-								) : (
-									<>
-										<Search className="mr-1 h-3 w-3 text-orange-500" />
-										Check AD
-									</>
-								)}
-							</b>
-						</button>
-					)}
-					{getFirstAvailableRdTorrent() && (
-						<>
+	const handleActionButtons = () => {
+		const firstWatchable = getFirstWatchableTorrent();
+		const watchableService = firstWatchable
+			? pickWatchService(firstWatchable, { rdKey, adKey, torboxKey })
+			: null;
+		return (
+			<>
+				{(rdKey || adKey || torboxKey) && (
+					<>
+						{rdKey && (
 							<button
-								className="mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
-								onClick={() => {
-									const firstAvailable = getFirstAvailableRdTorrent()!;
-									if (`rd:${firstAvailable.hash}` in hashAndProgress) {
-										toast.success('Already in your Real-Debrid library');
-										return;
-									}
-									addRd(firstAvailable.hash);
-								}}
+								className="mb-1 mr-2 mt-0 rounded border-2 border-yellow-500 bg-yellow-900/30 p-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+								onClick={() =>
+									checkServiceAvailabilityBulk(filteredResults, ['RD'])
+								}
+								disabled={isAnyChecking}
 							>
 								<b className="flex items-center justify-center">
-									<Zap className="mr-1 h-3 w-3 text-yellow-500" />
-									Instant RD
+									{isAnyChecking ? (
+										<>
+											<Loader2 className="mr-1 h-3 w-3 animate-spin text-yellow-500" />
+											Checking RD...
+										</>
+									) : (
+										<>
+											<Search className="mr-1 h-3 w-3 text-yellow-500" />
+											Check RD
+										</>
+									)}
 								</b>
 							</button>
+						)}
+						{adKey && (
 							<button
-								className="mb-1 mr-2 mt-0 rounded border-2 border-teal-500 bg-teal-900/30 p-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50"
+								className="mb-1 mr-2 mt-0 rounded border-2 border-orange-500 bg-orange-900/30 p-1 text-xs text-orange-100 transition-colors hover:bg-orange-800/50 disabled:cursor-not-allowed disabled:opacity-50"
 								onClick={() =>
-									window.open(
-										`/api/watch/instant/${player}?token=${rdKey}&hash=${getFirstAvailableRdTorrent()!.hash}&fileId=${getBiggestFileId(getFirstAvailableRdTorrent()!)}`
-									)
+									checkServiceAvailabilityBulk(filteredResults, ['AD'])
 								}
+								disabled={isAnyChecking}
 							>
 								<b className="flex items-center justify-center">
-									<EyeIcon className="mr-1 h-3 w-3 text-teal-500" />
+									{isAnyChecking ? (
+										<>
+											<Loader2 className="mr-1 h-3 w-3 animate-spin text-orange-500" />
+											Checking AD...
+										</>
+									) : (
+										<>
+											<Search className="mr-1 h-3 w-3 text-orange-500" />
+											Check AD
+										</>
+									)}
+								</b>
+							</button>
+						)}
+						{getFirstAvailableRdTorrent() && (
+							<>
+								<button
+									className="mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
+									onClick={() => {
+										const firstAvailable = getFirstAvailableRdTorrent()!;
+										if (`rd:${firstAvailable.hash}` in hashAndProgress) {
+											toast.success('Already in your Real-Debrid library');
+											return;
+										}
+										addRd(firstAvailable.hash);
+									}}
+								>
+									<b className="flex items-center justify-center">
+										<Zap className="mr-1 h-3 w-3 text-yellow-500" />
+										Instant RD
+									</b>
+								</button>
+								<button
+									className="mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
+									onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash)}
+								>
+									<b className="flex items-center justify-center">
+										<Cast className="mr-1 h-3 w-3 text-green-400" />
+										Cast (RD)
+									</b>
+								</button>
+							</>
+						)}
+						{watchableService && player && (
+							<button
+								className="mb-1 mr-2 mt-0 rounded border-2 border-teal-500 bg-teal-900/30 p-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+								title={`Watch via ${WATCH_SERVICE_LABEL[watchableService]}`}
+								onClick={handleWatchFirst}
+								disabled={isWatching}
+							>
+								<b className="flex items-center justify-center">
+									{isWatching ? (
+										<Loader2 className="mr-1 h-3 w-3 animate-spin text-teal-500" />
+									) : (
+										<EyeIcon className="mr-1 h-3 w-3 text-teal-500" />
+									)}
 									Watch
 								</b>
 							</button>
-							<button
-								className="mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
-								onClick={() => handleCast(getFirstAvailableRdTorrent()!.hash)}
-							>
-								<b className="flex items-center justify-center">
-									<Cast className="mr-1 h-3 w-3 text-green-400" />
-									Cast (RD)
-								</b>
-							</button>
-						</>
-					)}
-				</>
-			)}
-			<button
-				className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
-				onClick={() => window.open(getStremioDetailUrl(imdbid as string))}
-			>
-				<b className="flex items-center justify-center">
-					<Sparkles className="mr-1 h-3 w-3 text-purple-500" />
-					Stremio
-				</b>
-			</button>
-			{onlyShowCached && totalUncachedCount > 0 && (
+						)}
+					</>
+				)}
 				<button
-					className="mb-1 mr-2 mt-0 rounded border-2 border-blue-500 bg-blue-900/30 p-1 text-xs text-blue-100 transition-colors hover:bg-blue-800/50"
-					onClick={() => setOnlyShowCached(false)}
+					className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
+					onClick={() => window.open(getStremioDetailUrl(imdbid as string))}
 				>
-					<CloudOff className="mr-1 h-3 w-3 text-blue-500" />
-					Show {totalUncachedCount} uncached
+					<b className="flex items-center justify-center">
+						<Sparkles className="mr-1 h-3 w-3 text-purple-500" />
+						Stremio
+					</b>
 				</button>
-			)}
-		</>
-	);
+				{onlyShowCached && totalUncachedCount > 0 && (
+					<button
+						className="mb-1 mr-2 mt-0 rounded border-2 border-blue-500 bg-blue-900/30 p-1 text-xs text-blue-100 transition-colors hover:bg-blue-800/50"
+						onClick={() => setOnlyShowCached(false)}
+					>
+						<CloudOff className="mr-1 h-3 w-3 text-blue-500" />
+						Show {totalUncachedCount} uncached
+					</button>
+				)}
+			</>
+		);
+	};
 
 	if (!movieInfo.title) {
 		return <div>Loading...</div>;

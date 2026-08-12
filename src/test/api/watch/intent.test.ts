@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const intentMocks = vi.hoisted(() => ({
 	getIntent: vi.fn(),
 	getInstantIntent: vi.fn(),
+	isWatchService: (v: unknown) => v === 'rd' || v === 'ad' || v === 'tb',
 }));
 
 vi.mock('@/utils/intent', () => intentMocks);
@@ -42,7 +43,8 @@ describe('API watch intents', () => {
 			'link',
 			'3.3.3.3',
 			'ios',
-			'infuse'
+			'infuse',
+			'rd'
 		);
 		expect(res.redirect).toHaveBeenCalledWith(307, 'app://play');
 	});

@@ -807,7 +807,7 @@ const TvSearch: FunctionComponent = () => {
 				inactive_check: 0,
 				availability: 0,
 			};
-			showInfoForTB(torboxKey, tbInfo, shouldDownloadMagnets);
+			showInfoForTB(player, torboxKey, tbInfo, shouldDownloadMagnets);
 		}
 	};
 

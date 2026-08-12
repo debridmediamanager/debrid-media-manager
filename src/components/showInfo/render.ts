@@ -7,7 +7,9 @@ import { getEpisodeInfo } from './utils';
 export const renderTorrentInfo = (
 	info: any,
 	isRd: boolean,
-	rdKey: string,
+	// The API key of whichever service owns this torrent — RD's when `isRd`,
+	// AllDebrid's otherwise. Both branches use it to authenticate the watch link.
+	serviceKey: string,
 	app?: string,
 	imdbId?: string,
 	mediaType?: 'movie' | 'tv'
@@ -43,9 +45,14 @@ export const renderTorrentInfo = (
 							renderButton('watch', {
 								link: `/api/watch/instant/${app}`,
 								linkParams: [
-									{ name: 'token', value: rdKey },
+									{ name: 'service', value: 'rd' },
+									{ name: 'token', value: serviceKey },
 									{ name: 'hash', value: info.hash },
 									{ name: 'fileId', value: String(file.id) },
+									// Sent alongside fileId because a fake info object is
+									// built from search results, whose file ids may have
+									// come from a different service's availability check.
+									{ name: 'fileName', value: file.path },
 								],
 								text: 'Watch',
 							})
@@ -55,7 +62,8 @@ export const renderTorrentInfo = (
 							renderButton('watch', {
 								link: `/api/watch/${app}`,
 								linkParams: [
-									{ name: 'token', value: rdKey },
+									{ name: 'service', value: 'rd' },
+									{ name: 'token', value: serviceKey },
 									{ name: 'hash', value: info.hash },
 									{ name: 'link', value: fileLink },
 								],
@@ -66,7 +74,7 @@ export const renderTorrentInfo = (
 
 					const { isTvEpisode } = getEpisodeInfo(file.path, mediaType);
 					if (
-						rdKey &&
+						serviceKey &&
 						imdbId &&
 						(mediaType === 'movie' || (mediaType === 'tv' && isTvEpisode))
 					) {
@@ -74,7 +82,7 @@ export const renderTorrentInfo = (
 							renderButton('cast', {
 								link: `/api/stremio/cast/${imdbId}`,
 								linkParams: [
-									{ name: 'token', value: rdKey },
+									{ name: 'token', value: serviceKey },
 									{ name: 'hash', value: info.hash },
 									{ name: 'fileId', value: String(file.id) },
 									{ name: 'mediaType', value: mediaType },
@@ -101,6 +109,7 @@ export const renderTorrentInfo = (
 		const adInfo = info;
 		adInfo.links.sort((a: MagnetLink, b: MagnetLink) => a.filename.localeCompare(b.filename));
 		const filesList = adInfo.links.map((file: MagnetLink) => {
+			const isPlayable = Boolean(isVideo({ path: file.filename }));
 			const actions = [
 				renderButton('download', {
 					link: 'https://alldebrid.com/service/',
@@ -108,11 +117,27 @@ export const renderTorrentInfo = (
 					text: 'DL',
 				}),
 			];
+			// The row already holds an alldebrid.com/f/ link, so the server only has
+			// to unlock it — no magnet upload, which AllDebrid refuses from
+			// datacenter IPs anyway.
+			if (isPlayable && app && serviceKey) {
+				actions.push(
+					renderButton('watch', {
+						link: `/api/watch/${app}`,
+						linkParams: [
+							{ name: 'service', value: 'ad' },
+							{ name: 'token', value: serviceKey },
+							{ name: 'link', value: file.link },
+						],
+						text: 'Watch',
+					})
+				);
+			}
 			return renderFileRow({
 				id: 0,
 				path: file.filename,
 				size: file.size,
-				isPlayable: Boolean(isVideo({ path: file.filename })),
+				isPlayable,
 				actions,
 			});
 		});
@@ -120,15 +145,36 @@ export const renderTorrentInfo = (
 	}
 };
 
-export const renderTorrentInfoTB = (files: TorBoxFile[]) => {
+export const renderTorrentInfoTB = (
+	files: TorBoxFile[],
+	// Web downloads have no infohash to re-resolve from, so they get no watch
+	// button — everything else can be resolved server-side by hash + filename.
+	options: { tbKey?: string; app?: string; hash?: string } = {}
+) => {
 	const sorted = [...files].sort((a, b) => a.name.localeCompare(b.name));
 	const filesList = sorted.map((file) => {
+		const isPlayable = Boolean(isVideo({ path: file.name }));
+		const actions: string[] = [];
+		if (isPlayable && options.app && options.tbKey && options.hash) {
+			actions.push(
+				renderButton('watch', {
+					link: `/api/watch/instant/${options.app}`,
+					linkParams: [
+						{ name: 'service', value: 'tb' },
+						{ name: 'token', value: options.tbKey },
+						{ name: 'hash', value: options.hash },
+						{ name: 'fileName', value: file.name },
+					],
+					text: 'Watch',
+				})
+			);
+		}
 		return renderFileRow({
 			id: file.id,
 			path: file.name,
 			size: file.size,
-			isPlayable: Boolean(isVideo({ path: file.name })),
-			actions: [],
+			isPlayable,
+			actions,
 		});
 	});
 	return filesList.join('');

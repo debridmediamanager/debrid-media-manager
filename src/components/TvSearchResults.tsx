@@ -4,6 +4,12 @@ import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { getEpisodeCountClass, getEpisodeCountLabel } from '@/utils/episodeUtils';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize, totalFileSize } from '@/utils/results';
 import {
+	getBiggestVideoFile,
+	openWatch,
+	pickWatchService,
+	WATCH_SERVICE_LABEL,
+} from '@/utils/watchService';
+import {
 	Cast,
 	Eye as EyeIcon,
 	Folder,
@@ -79,6 +85,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
 	const [castingTbHashes, setCastingTbHashes] = useState<Set<string>>(new Set());
 	const [castingAdHashes, setCastingAdHashes] = useState<Set<string>>(new Set());
+	const [watchingHashes, setWatchingHashes] = useState<Set<string>>(new Set());
 	const [downloadMagnets, setDownloadMagnets] = useState(false);
 
 	useEffect(() => {
@@ -233,12 +240,28 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 		</span>
 	);
 
-	const getBiggestFileId = (result: SearchResult) => {
-		if (!result.files || !result.files.length) return '';
-		const biggestFile = result.files
-			.filter((f) => f.filename.match(/\.(mkv|mp4|avi)$/i))
-			.sort((a, b) => b.filesize - a.filesize)[0];
-		return biggestFile?.fileId ?? '';
+	const handleWatch = async (result: SearchResult) => {
+		const service = pickWatchService(result, { rdKey, adKey, torboxKey });
+		if (!service) return;
+		const biggest = getBiggestVideoFile(result);
+		setWatchingHashes((prev) => new Set(prev).add(result.hash));
+		try {
+			await openWatch({
+				service,
+				player,
+				hash: result.hash,
+				keys: { rdKey, adKey, torboxKey },
+				fileName: biggest?.filename,
+				fileId: biggest?.fileId,
+				adInLibrary: inLibrary('ad', result.hash),
+			});
+		} finally {
+			setWatchingHashes((prev) => {
+				const next = new Set(prev);
+				next.delete(result.hash);
+				return next;
+			});
+		}
 	};
 
 	return (
@@ -289,6 +312,8 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						const isCastingAd = castingAdHashes.has(r.hash);
 						const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 						const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
+						const watchService = pickWatchService(r, { rdKey, adKey, torboxKey });
+						const isWatching = watchingHashes.has(r.hash);
 
 						return (
 							<div
@@ -439,17 +464,19 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												)}
 											</button>
 										)}
-										{rdKey && player && r.rdAvailable && (
+										{watchService && player && (
 											<button
-												className="haptic-sm inline rounded border-2 border-teal-500 bg-teal-900/30 px-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50"
-												onClick={() =>
-													window.open(
-														`/api/watch/instant/${player}?token=${rdKey}&hash=${r.hash}&fileId=${getBiggestFileId(r)}`
-													)
-												}
+												className={`haptic-sm inline rounded border-2 border-teal-500 bg-teal-900/30 px-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50 ${isWatching ? 'cursor-not-allowed opacity-50' : ''}`}
+												title={`Watch via ${WATCH_SERVICE_LABEL[watchService]}`}
+												onClick={() => handleWatch(r)}
+												disabled={isWatching}
 											>
 												<>
-													<EyeIcon className="mr-1 inline-block h-3 w-3 text-teal-400" />
+													{isWatching ? (
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+													) : (
+														<EyeIcon className="mr-1 inline-block h-3 w-3 text-teal-400" />
+													)}
 													Watch
 												</>
 											</button>

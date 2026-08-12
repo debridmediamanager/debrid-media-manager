@@ -2,7 +2,12 @@ import type { DebridService } from '@/hooks/useAvailabilityCheck';
 import { SearchResult } from '@/services/mediasearch';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize, totalFileSize } from '@/utils/results';
-import { isVideo } from '@/utils/selectable';
+import {
+	getBiggestVideoFile,
+	openWatch,
+	pickWatchService,
+	WATCH_SERVICE_LABEL,
+} from '@/utils/watchService';
 import {
 	Cast,
 	Eye as EyeIcon,
@@ -77,6 +82,7 @@ const MovieSearchResults = ({
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
 	const [castingTbHashes, setCastingTbHashes] = useState<Set<string>>(new Set());
 	const [castingAdHashes, setCastingAdHashes] = useState<Set<string>>(new Set());
+	const [watchingHashes, setWatchingHashes] = useState<Set<string>>(new Set());
 	const [downloadMagnets, setDownloadMagnets] = useState(false);
 
 	useEffect(() => {
@@ -243,12 +249,28 @@ const MovieSearchResults = ({
 		}
 	};
 
-	const getBiggestFileId = (result: SearchResult) => {
-		if (!result.files || !result.files.length) return '';
-		const biggestFile = result.files
-			.filter((f) => isVideo({ path: f.filename }))
-			.sort((a, b) => b.filesize - a.filesize)[0];
-		return biggestFile?.fileId ?? '';
+	const handleWatch = async (result: SearchResult) => {
+		const service = pickWatchService(result, { rdKey, adKey, torboxKey });
+		if (!service) return;
+		const biggest = getBiggestVideoFile(result);
+		setWatchingHashes((prev) => new Set(prev).add(result.hash));
+		try {
+			await openWatch({
+				service,
+				player,
+				hash: result.hash,
+				keys: { rdKey, adKey, torboxKey },
+				fileName: biggest?.filename,
+				fileId: biggest?.fileId,
+				adInLibrary: inLibrary('ad', result.hash),
+			});
+		} finally {
+			setWatchingHashes((prev) => {
+				const next = new Set(prev);
+				next.delete(result.hash);
+				return next;
+			});
+		}
 	};
 
 	const getMovieCountLabel = (videoCount: number) => {
@@ -297,6 +319,8 @@ const MovieSearchResults = ({
 				const isSendingToRd = sendingToRdHashes.has(r.hash);
 				const isCasting = castingHashes.has(r.hash);
 				const isCastingTb = castingTbHashes.has(r.hash);
+				const watchService = pickWatchService(r, { rdKey, adKey, torboxKey });
+				const isWatching = watchingHashes.has(r.hash);
 				const isCastingAd = castingAdHashes.has(r.hash);
 				const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 				const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
@@ -460,24 +484,22 @@ const MovieSearchResults = ({
 										)}
 									</button>
 								)}
-								{(r.rdAvailable || r.adAvailable || r.tbAvailable) && (
-									<>
-										{r.rdAvailable && player && (
-											<button
-												className="haptic-sm inline rounded border-2 border-teal-500 bg-teal-900/30 px-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50"
-												onClick={() =>
-													window.open(
-														`/api/watch/instant/${player}?token=${rdKey}&hash=${r.hash}&fileId=${getBiggestFileId(r)}`
-													)
-												}
-											>
-												<span className="inline-flex items-center">
-													<EyeIcon className="mr-1 h-3 w-3 text-teal-500" />
-													Watch
-												</span>
-											</button>
-										)}
-									</>
+								{watchService && player && (
+									<button
+										className={`haptic-sm inline rounded border-2 border-teal-500 bg-teal-900/30 px-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50 ${isWatching ? 'cursor-not-allowed opacity-50' : ''}`}
+										title={`Watch via ${WATCH_SERVICE_LABEL[watchService]}`}
+										onClick={() => handleWatch(r)}
+										disabled={isWatching}
+									>
+										<span className="inline-flex items-center">
+											{isWatching ? (
+												<Loader2 className="mr-1 h-3 w-3 animate-spin" />
+											) : (
+												<EyeIcon className="mr-1 h-3 w-3 text-teal-500" />
+											)}
+											Watch
+										</span>
+									</button>
 								)}
 
 								{/* — AD — */}

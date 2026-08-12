@@ -1,17 +1,18 @@
 import { getClientIpFromRequest } from '@/utils/clientIp';
-import { getIntent } from '@/utils/intent';
+import { getIntent, isWatchService } from '@/utils/intent';
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-	const { os, player, token, link } = req.query;
-	const rdKey = token as string;
+	const { os, player, token, link, service } = req.query;
+	const key = token as string;
 	const ipAddress = getClientIpFromRequest(req);
 	const result = await getIntent(
-		rdKey,
+		key,
 		link as string,
 		ipAddress,
 		os as string,
-		player as string
+		player as string,
+		isWatchService(service) ? service : 'rd'
 	);
 	if (result.intent) {
 		res.redirect(307, result.intent);
