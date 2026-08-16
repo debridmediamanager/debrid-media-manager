@@ -17,8 +17,6 @@ import {
 	needsRdHandoff,
 	settleCompletedTransfer,
 	trackDebridUploaderJob,
-	TRANSFER_STEP_TOAST_MS,
-	TRANSFER_TOAST_MS,
 	transferContextFromPath,
 	updateTrackedDebridUploaderJob,
 } from '@/utils/debridUploader';
@@ -29,6 +27,7 @@ import {
 } from '@/utils/deleteTorrent';
 import { convertToUserTorrent } from '@/utils/fetchTorrents';
 import { generateTokenAndHash } from '@/utils/token';
+import { TRANSFER_LABELS, TRANSFER_STEP_TOAST_MS, TRANSFER_TOAST_MS } from '@/utils/transferPhase';
 import { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -356,7 +355,7 @@ export function useTorrentManagement(
 	const sendToRd = useCallback(
 		async (hash: string, service: 'tb' | 'ad') => {
 			const sourceKey = service === 'tb' ? torboxKey : adKey;
-			const label = service === 'tb' ? 'TB → RD' : 'AD → RD';
+			const label = service === 'tb' ? TRANSFER_LABELS.tb : TRANSFER_LABELS.ad;
 			if (!rdKey || !sourceKey) return;
 			if (!/^tt\d+$/.test(imdbId)) {
 				toast.error(`${label} needs an IMDB id for this title.`);

@@ -1,6 +1,13 @@
 import { addHashAsMagnet, selectFiles } from '@/services/realDebrid';
 import { toast } from 'react-hot-toast';
-import { phaseLabelOf, QueuePlace } from './transferPhase';
+import {
+	phaseLabelOf,
+	QueuePlace,
+	toastRdUnderway,
+	TRANSFER_LABELS,
+	TRANSFER_STEP_TOAST_MS,
+	TRANSFER_TOAST_MS,
+} from './transferPhase';
 
 export type DebridUploaderJobStatus =
 	| 'pending'
@@ -140,30 +147,6 @@ export async function findJoinableTransfer(
 	} catch {
 		return null; // unknown to the service (e.g. wiped server-side) — allow a resubmit
 	}
-}
-
-/**
- * How long a settled transfer toast stays up. Every send flow reaches a final
- * wording rather than holding a spinner for the length of an RD download, so
- * the toast has to clear itself — otherwise a page left open collects one stuck
- * notification per transfer.
- */
-export const TRANSFER_TOAST_MS = 8000;
-
-/** How long an unsettled step's toast lingers if the poll loop stops feeding it. */
-export const TRANSFER_STEP_TOAST_MS = 30000;
-
-/**
- * Where every transfer ends. Once the job reaches `uploading`, Real-Debrid is
- * pulling the bytes and nothing further needs this browser — so all three send
- * buttons say the same thing here, whether the transfer was started by this
- * user or joined from somebody else's.
- */
-export function toastRdUnderway(label: string, toastId?: string): void {
-	toast.success(`${label}: Real-Debrid download underway — follow it on the Transfers page.`, {
-		id: toastId,
-		duration: TRANSFER_TOAST_MS,
-	});
 }
 
 /**
@@ -336,9 +319,9 @@ export async function runDebridTransferToRd(params: {
 	returnPath?: string;
 }): Promise<TransferOutcome> {
 	const { hash, imdbId, rdKey, tbKey, adKey, sizeBytes, title, returnPath } = params;
-	const label = 'Send to RD';
+	const label = TRANSFER_LABELS.send;
 
-	const toastId = toast.loading('Send to RD: submitting transfer...', {
+	const toastId = toast.loading(`${label}: submitting transfer...`, {
 		duration: TRANSFER_STEP_TOAST_MS,
 	});
 	try {
@@ -366,7 +349,7 @@ export async function runDebridTransferToRd(params: {
 					toastId,
 				});
 			}
-			toast.loading('Send to RD: transfer already in progress — waiting for completion...', {
+			toast.loading(`${label}: transfer already in progress — waiting for completion...`, {
 				id: toastId,
 				duration: TRANSFER_STEP_TOAST_MS,
 			});
@@ -411,7 +394,7 @@ export async function runDebridTransferToRd(params: {
 				}
 
 				// in_progress: fall through to poll and add to RD on completion
-				toast.loading('Send to RD: transfer in progress — waiting for completion...', {
+				toast.loading(`${label}: transfer in progress — waiting for completion...`, {
 					id: toastId,
 					duration: TRANSFER_STEP_TOAST_MS,
 				});
@@ -429,7 +412,7 @@ export async function runDebridTransferToRd(params: {
 					createdAt: Date.now(),
 					adopted: false,
 				});
-				toast.loading('Send to RD: transfer started — track it on the Transfers page.', {
+				toast.loading(`${label}: transfer started — track it on the Transfers page.`, {
 					id: toastId,
 					duration: TRANSFER_STEP_TOAST_MS,
 				});
@@ -438,7 +421,7 @@ export async function runDebridTransferToRd(params: {
 
 		return await followTransferToRd({ jobId, rdKey, label, toastId, rdHandoff });
 	} catch (error) {
-		toast.error(`Send to RD: ${error instanceof Error ? error.message : 'failed to submit'}`, {
+		toast.error(`${label}: ${error instanceof Error ? error.message : 'failed to submit'}`, {
 			id: toastId,
 			duration: TRANSFER_TOAST_MS,
 		});

@@ -7,13 +7,12 @@ import {
 	isTerminalDebridUploaderStatus,
 	needsRdHandoff,
 	runDebridTransferToRd,
-	toastRdUnderway,
 	trackDebridUploaderJob,
 	TrackedDebridUploaderJob,
-	TRANSFER_TOAST_MS,
 	untrackDebridUploaderJob,
 	updateTrackedDebridUploaderJob,
 } from './debridUploader';
+import { toastRdUnderway, TRANSFER_TOAST_MS } from './transferPhase';
 
 vi.mock('react-hot-toast', () => ({
 	toast: Object.assign(vi.fn(), {

@@ -1,8 +1,10 @@
+import { toast } from 'react-hot-toast';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	createNzb2rdJob,
 	deleteNzb2rdJob,
 	fetchNzb2rdTransfers,
+	followNzb2rdTransfer,
 	getNzb2rdJob,
 	getTrackedNzb2rdJobs,
 	isNzb2rdDuplicate,
@@ -11,6 +13,15 @@ import {
 	trackNzb2rdJob,
 	untrackNzb2rdJob,
 } from './nzb2rd';
+import { TRANSFER_TOAST_MS } from './transferPhase';
+
+vi.mock('react-hot-toast', () => ({
+	toast: Object.assign(vi.fn(), {
+		loading: vi.fn(() => 'toast-id'),
+		success: vi.fn(),
+		error: vi.fn(),
+	}),
+}));
 
 const makeJob = (id: string): TrackedNzb2rdJob => ({
 	id,
@@ -188,5 +199,97 @@ describe('fetchNzb2rdTransfers', () => {
 		vi.stubGlobal('fetch', fetchMock);
 		expect(await fetchNzb2rdTransfers([])).toEqual([]);
 		expect(fetchMock).not.toHaveBeenCalled();
+	});
+});
+
+// A Usenet transfer is the same thing to the user as a TorBox one — bytes on
+// their way into Real-Debrid — so it has to end on the same sentence and then
+// get out of the way. It used to say "Sent to nzb2rd" once at submit and never
+// mention the four minutes of Usenet work that followed.
+describe('followNzb2rdTransfer', () => {
+	const poll = () => followNzb2rdTransfer({ jobId: 'job-1', toastId: 'toast-id' });
+
+	const respond = (...jobs: object[]) => {
+		const fetchMock = vi.fn();
+		for (const job of jobs) {
+			fetchMock.mockResolvedValueOnce({ ok: true, json: async () => job });
+		}
+		vi.stubGlobal('fetch', fetchMock);
+		return fetchMock;
+	};
+
+	it('walks the phases and settles where every other transfer does', async () => {
+		vi.useFakeTimers();
+		respond(
+			{ id: 'job-1', status: 'hashing' },
+			{ id: 'job-1', status: 'uploading', status_message: 'RD: downloading 42% @ 11.6 MB/s' }
+		);
+
+		const promise = poll();
+		await vi.advanceTimersByTimeAsync(10000);
+		await promise;
+
+		expect(toast.loading).toHaveBeenCalledWith('Usenet → RD: Downloading', {
+			id: 'toast-id',
+			duration: 30000,
+		});
+		expect(toast.success).toHaveBeenCalledWith(
+			'Usenet → RD: Real-Debrid download underway — follow it on the Transfers page.',
+			{ id: 'toast-id', duration: TRANSFER_TOAST_MS }
+		);
+		vi.useRealTimers();
+	});
+
+	it('says so when the job finishes outright', async () => {
+		vi.useFakeTimers();
+		respond({ id: 'job-1', status: 'completed' });
+
+		const promise = poll();
+		await vi.advanceTimersByTimeAsync(5000);
+		await promise;
+
+		expect(toast.success).toHaveBeenCalledWith(
+			'Usenet → RD: done! It is in your Real-Debrid library.',
+			{ id: 'toast-id', duration: TRANSFER_TOAST_MS }
+		);
+		vi.useRealTimers();
+	});
+
+	it('reports a failure on the same toast', async () => {
+		vi.useFakeTimers();
+		respond({ id: 'job-1', status: 'failed', error: 'article missing' });
+
+		const promise = poll();
+		await vi.advanceTimersByTimeAsync(5000);
+		await promise;
+
+		expect(toast.error).toHaveBeenCalledWith('Usenet → RD failed: article missing', {
+			id: 'toast-id',
+			duration: TRANSFER_TOAST_MS,
+		});
+		vi.useRealTimers();
+	});
+
+	// A dropped poll is not a dead job — the fetch keeps running server-side.
+	it('rides out a poll that fails', async () => {
+		vi.useFakeTimers();
+		const fetchMock = vi
+			.fn()
+			.mockRejectedValueOnce(new Error('offline'))
+			.mockResolvedValue({
+				ok: true,
+				json: async () => ({ id: 'job-1', status: 'uploading' }),
+			});
+		vi.stubGlobal('fetch', fetchMock);
+
+		const promise = poll();
+		await vi.advanceTimersByTimeAsync(10000);
+		await promise;
+
+		expect(toast.success).toHaveBeenCalledWith(
+			'Usenet → RD: Real-Debrid download underway — follow it on the Transfers page.',
+			{ id: 'toast-id', duration: TRANSFER_TOAST_MS }
+		);
+		vi.useRealTimers();
 	});
 });

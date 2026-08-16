@@ -1,3 +1,5 @@
+import { toast } from 'react-hot-toast';
+
 // One user-facing vocabulary for both transfer kinds.
 //
 // The two services name their stages after their own internals, and the words
@@ -15,6 +17,39 @@
 // page.
 
 export type TransferSource = 'debrid' | 'nzb2rd';
+
+/**
+ * How long a settled transfer toast stays up. Every send flow reaches a final
+ * wording rather than holding a spinner for the length of an RD download, so
+ * the toast has to clear itself — otherwise a page left open collects one stuck
+ * notification per transfer.
+ */
+export const TRANSFER_TOAST_MS = 8000;
+
+/** How long an unsettled step's toast lingers if the poll loop stops feeding it. */
+export const TRANSFER_STEP_TOAST_MS = 30000;
+
+/** How the toast on a transfer names its source, in one `X → RD` shape. */
+export const TRANSFER_LABELS = {
+	tb: 'TB → RD',
+	ad: 'AD → RD',
+	usenet: 'Usenet → RD',
+	/** The library page's send button, which doesn't know its source yet. */
+	send: 'Send to RD',
+} as const;
+
+/**
+ * Where every transfer ends, whatever supplied the bytes. Once a job reaches
+ * `uploading`, Real-Debrid is pulling them and nothing after that needs the
+ * browser — so a TorBox, AllDebrid and Usenet transfer all say this and then
+ * get out of the way.
+ */
+export function toastRdUnderway(label: string, toastId?: string): void {
+	toast.success(`${label}: Real-Debrid download underway — follow it on the Transfers page.`, {
+		id: toastId,
+		duration: TRANSFER_TOAST_MS,
+	});
+}
 
 export type TransferPhase =
 	| 'queued'

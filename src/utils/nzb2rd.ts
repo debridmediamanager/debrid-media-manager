@@ -1,5 +1,13 @@
+import { toast } from 'react-hot-toast';
 import { TransferContext } from './debridUploader';
-import { QueuePlace } from './transferPhase';
+import {
+	phaseLabelOf,
+	QueuePlace,
+	toastRdUnderway,
+	TRANSFER_LABELS,
+	TRANSFER_STEP_TOAST_MS,
+	TRANSFER_TOAST_MS,
+} from './transferPhase';
 
 // Client side of the Usenet → RD flow. Mirrors utils/debridUploader so both
 // transfer kinds behave the same on the Transfers page: the service has no
@@ -102,6 +110,76 @@ export async function deleteNzb2rdJob(jobId: string, releaseId?: string): Promis
 		{ method: 'DELETE' }
 	);
 	await parseJsonResponse(response);
+}
+
+const POLL_MS = 5000;
+const MAX_POLLS = 360; // 30 min of Usenet work; RD's own pull isn't waited on
+
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Follows a Usenet transfer to the same place a TorBox or AllDebrid one stops:
+ * `uploading`, where RD is pulling the bytes out of the webseed. Until then the
+ * toast walks the phases — the Usenet pass is minutes of real work, and a lone
+ * "sent" said at submit time leaves it looking like nothing is happening.
+ *
+ * Nothing is owed to this user's RD afterwards: nzb2rd queues every caller's key
+ * against the job and delivers to all of them itself, which is why a joined
+ * Usenet transfer needs no client-side handoff the way a joined TB/AD one does.
+ *
+ * Runs detached from the click that started it — the row says "Sent" as soon as
+ * the job exists, and a Usenet fetch is far too long to hold a button on.
+ */
+export async function followNzb2rdTransfer(params: {
+	jobId: string;
+	toastId?: string;
+	context?: TransferContext;
+	releaseId?: string;
+}): Promise<void> {
+	const { jobId, toastId, context, releaseId } = params;
+	const label = TRANSFER_LABELS.usenet;
+
+	for (let poll = 0; poll < MAX_POLLS; poll++) {
+		await wait(POLL_MS);
+
+		let job;
+		try {
+			job = await getNzb2rdJob(jobId, context, releaseId);
+		} catch {
+			continue; // transient poll failure; the job keeps running server-side
+		}
+
+		if (job.status === 'completed') {
+			toast.success(`${label}: done! It is in your Real-Debrid library.`, {
+				id: toastId,
+				duration: TRANSFER_TOAST_MS,
+			});
+			return;
+		}
+		if (job.status === 'failed') {
+			toast.error(`${label} failed: ${job.error || 'unknown error'}`, {
+				id: toastId,
+				duration: TRANSFER_TOAST_MS,
+			});
+			return;
+		}
+		if (job.status === 'uploading') {
+			toastRdUnderway(label, toastId);
+			return;
+		}
+
+		toast.loading(`${label}: ${job.status_message || phaseLabelOf('nzb2rd', job.status)}`, {
+			id: toastId,
+			duration: TRANSFER_STEP_TOAST_MS,
+		});
+	}
+
+	// Not a failure the way it would be for a cached transfer: a big release can
+	// genuinely spend this long coming off Usenet before RD is handed anything.
+	toast(`${label}: still fetching after 30 min — follow it on the Transfers page.`, {
+		id: toastId,
+		duration: TRANSFER_TOAST_MS,
+	});
 }
 
 export interface TrackedNzb2rdJob {

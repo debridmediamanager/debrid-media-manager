@@ -6,13 +6,19 @@ import UsenetResults, { buttonState, formatSize, sortResults } from './UsenetRes
 
 const toastSuccess = vi.fn();
 const toastError = vi.fn();
+const toastLoading = vi.fn((..._args: unknown[]) => 'toast-id');
 vi.mock('react-hot-toast', () => ({
 	__esModule: true,
 	default: {
 		success: (...args: unknown[]) => toastSuccess(...args),
 		error: (...args: unknown[]) => toastError(...args),
+		loading: (...args: unknown[]) => toastLoading(...args),
 	},
 }));
+
+// A Usenet send is the same transfer as a TB → RD one from the user's side, so
+// it wears the same `X → RD` prefix and rides one toast from submit onwards.
+const USENET = 'Usenet → RD';
 
 const RESULTS: UsenetResult[] = [
 	{ id: 'a', title: 'Bravo.Release.1080p', size: 3 * 1024 ** 3 },
@@ -194,7 +200,12 @@ describe('UsenetResults', () => {
 		});
 		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
 
-		await waitFor(() => expect(toastSuccess).toHaveBeenCalled());
+		await waitFor(() =>
+			expect(toastLoading).toHaveBeenCalledWith(
+				`${USENET}: transfer started — track it on the Transfers page.`,
+				expect.objectContaining({ id: 'toast-id' })
+			)
+		);
 		expect(fetchMock).toHaveBeenCalledWith('/api/nzb2rd/jobs', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
@@ -222,7 +233,10 @@ describe('UsenetResults', () => {
 		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
 
 		await waitFor(() =>
-			expect(toastError).toHaveBeenCalledWith('nzb2rd service unreachable', expect.anything())
+			expect(toastError).toHaveBeenCalledWith(
+				`${USENET}: nzb2rd service unreachable`,
+				expect.anything()
+			)
 		);
 		expect(screen.getAllByRole('button', { name: /^send$/i })[0]).toBeEnabled();
 	});
@@ -294,7 +308,7 @@ describe('UsenetResults', () => {
 			json: async () => ({ id: 'job-1', status: 'pending' }),
 		});
 		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
-		await waitFor(() => expect(toastSuccess).toHaveBeenCalled());
+		await waitFor(() => expect(toastLoading).toHaveBeenCalled());
 
 		const tracked = JSON.parse(localStorage.getItem('nzb2rd:jobs') ?? '[]');
 		expect(tracked).toHaveLength(1);
@@ -321,7 +335,7 @@ describe('UsenetResults', () => {
 		expect(await screen.findByRole('button', { name: /in rd/i })).toBeDisabled();
 		await waitFor(() =>
 			expect(toastSuccess).toHaveBeenCalledWith(
-				expect.stringContaining('added to your Real-Debrid library'),
+				`${USENET}: already fetched — it is in your Real-Debrid library.`,
 				expect.anything()
 			)
 		);

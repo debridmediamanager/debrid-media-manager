@@ -1,10 +1,13 @@
 import { UsenetResult } from '@/services/nzb2rd';
+import { transferContextFromPath } from '@/utils/debridUploader';
 import {
 	createNzb2rdJob,
 	fetchNzb2rdTransfers,
+	followNzb2rdTransfer,
 	isNzb2rdDuplicate,
 	trackNzb2rdJob,
 } from '@/utils/nzb2rd';
+import { TRANSFER_LABELS, TRANSFER_STEP_TOAST_MS, TRANSFER_TOAST_MS } from '@/utils/transferPhase';
 import { Check, ChevronDown, ChevronRight, Loader2, Send } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -151,6 +154,8 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 	const returnPath = () =>
 		seasonNum !== undefined ? `/show/${imdbId}/${seasonNum}` : `/movie/${imdbId}`;
 
+	const label = TRANSFER_LABELS.usenet;
+
 	const send = async (result: UsenetResult) => {
 		if (!rdKey) {
 			toast.error('Log in with Real-Debrid to send Usenet releases', { duration: 5000 });
@@ -159,6 +164,20 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 		if (sendingIds.has(result.id) || sentIds.has(result.id)) return;
 
 		setSendingIds((prev) => new Set(prev).add(result.id));
+		// One toast per transfer, carried from submit to the point RD takes over,
+		// exactly as a TorBox or AllDebrid send does. `followNzb2rdTransfer` runs
+		// detached: the row is "Sent" the moment the job exists, and the Usenet
+		// pass that follows is minutes long.
+		const toastId = toast.loading(`${label}: submitting transfer...`, {
+			duration: TRANSFER_STEP_TOAST_MS,
+		});
+		const follow = (jobId: string) =>
+			void followNzb2rdTransfer({
+				jobId,
+				toastId,
+				context: transferContextFromPath(returnPath()),
+				releaseId: result.id,
+			});
 		try {
 			const job = await createNzb2rdJob({
 				id: result.id,
@@ -178,17 +197,16 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 				if (job.duplicate === 'completed') {
 					toast.success(
 						job.added
-							? 'Already fetched — added to your Real-Debrid library.'
-							: 'Already fetched, but adding it to your library failed. Try the cached result above.',
-						{ duration: 6000 }
+							? `${label}: already fetched — it is in your Real-Debrid library.`
+							: `${label}: already fetched, but adding it to your library failed. Try the cached result above.`,
+						{ id: toastId, duration: TRANSFER_TOAST_MS }
 					);
 					return;
 				}
 
 				// Someone else is already fetching this. Follow their job rather than
-				// starting a second one: the completion path adds the finished torrent
-				// to this account too, and until then it belongs on the Transfers page
-				// — which is where the toast sends people.
+				// starting a second one: nzb2rd queues this account's key against it
+				// too, so the same toast can see it through to RD.
 				trackNzb2rdJob({
 					id: job.jobId,
 					releaseId: result.id,
@@ -197,10 +215,14 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 					returnPath: returnPath(),
 					createdAt: Date.now(),
 				});
-				toast(
-					'Already being fetched for someone else — you will get it too once it lands. Follow it on the Transfers page.',
-					{ duration: 7000 }
+				toast.loading(
+					`${label}: already being fetched for someone else — you get it too.`,
+					{
+						id: toastId,
+						duration: TRANSFER_STEP_TOAST_MS,
+					}
 				);
+				follow(job.jobId);
 				return;
 			}
 
@@ -215,9 +237,16 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 				createdAt: Date.now(),
 			});
 			setSentIds((prev) => new Set(prev).add(result.id));
-			toast.success('Sent to nzb2rd — follow it on the Transfers page.', { duration: 6000 });
+			toast.loading(`${label}: transfer started — track it on the Transfers page.`, {
+				id: toastId,
+				duration: TRANSFER_STEP_TOAST_MS,
+			});
+			follow(job.id);
 		} catch (e) {
-			toast.error(e instanceof Error ? e.message : 'Send failed', { duration: 6000 });
+			toast.error(`${label}: ${e instanceof Error ? e.message : 'send failed'}`, {
+				id: toastId,
+				duration: TRANSFER_TOAST_MS,
+			});
 		} finally {
 			setSendingIds((prev) => {
 				const next = new Set(prev);
