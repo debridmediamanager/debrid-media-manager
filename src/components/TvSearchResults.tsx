@@ -464,24 +464,6 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												)}
 											</button>
 										)}
-										{watchService && player && (
-											<button
-												className={`haptic-sm inline rounded border-2 border-teal-500 bg-teal-900/30 px-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50 ${isWatching ? 'cursor-not-allowed opacity-50' : ''}`}
-												title={`Watch via ${WATCH_SERVICE_LABEL[watchService]}`}
-												onClick={() => handleWatch(r)}
-												disabled={isWatching}
-											>
-												<>
-													{isWatching ? (
-														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-													) : (
-														<EyeIcon className="mr-1 inline-block h-3 w-3 text-teal-400" />
-													)}
-													Watch
-												</>
-											</button>
-										)}
-
 										{/* — AD — */}
 										{adKey && inLibrary('ad', r.hash) && (
 											<button
@@ -680,6 +662,33 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													)}
 												</button>
 											)}
+
+										{/* — Separator: everything above belongs to one service, everything below does not — */}
+										{(rdKey || adKey || torboxKey) && (
+											<span
+												data-action-separator="true"
+												aria-hidden="true"
+												className="mx-1 inline-block h-3 w-px translate-y-0.5 bg-gray-600 align-middle"
+											/>
+										)}
+
+										{watchService && player && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-teal-500 bg-teal-900/30 px-1 text-xs text-teal-100 transition-colors hover:bg-teal-800/50 ${isWatching ? 'cursor-not-allowed opacity-50' : ''}`}
+												title={`Watch via ${WATCH_SERVICE_LABEL[watchService]}`}
+												onClick={() => handleWatch(r)}
+												disabled={isWatching}
+											>
+												<>
+													{isWatching ? (
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+													) : (
+														<EyeIcon className="mr-1 inline-block h-3 w-3 text-teal-400" />
+													)}
+													Watch
+												</>
+											</button>
+										)}
 
 										{/* — Generic — */}
 										<button

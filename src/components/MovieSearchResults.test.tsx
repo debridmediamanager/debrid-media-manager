@@ -261,4 +261,84 @@ describe('MovieSearchResults', () => {
 			expect(screen.getByText(/Total: 0\.00 GB/)).toBeTruthy();
 		});
 	});
+
+	// The action row reads left to right as "what each service can do", then the
+	// things that are not tied to a service. Watch used to sit inside the RD
+	// group, which made it look like an RD action when it picks its own service.
+	describe('action row grouping', () => {
+		const everywhere = {
+			...baseResult,
+			rdAvailable: false,
+			adAvailable: true,
+			tbAvailable: true,
+		};
+
+		const labelsInOrder = (container: HTMLElement) =>
+			Array.from(container.querySelectorAll('button')).map((b) =>
+				(b.textContent || '').replace(/\s+/g, ' ').trim()
+			);
+
+		const indexOfLabel = (labels: string[], needle: string) =>
+			labels.findIndex((l) => l.includes(needle));
+
+		it('orders provider buttons RD then AD then TB, ahead of the shared actions', () => {
+			const { container } = renderComponent({
+				rdKey: 'rd-key',
+				adKey: 'ad-key',
+				torboxKey: 'tb-key',
+				player: 'windows/vlc',
+				filteredResults: [everywhere],
+				sendAdToRd: vi.fn(),
+				sendTbToRd: vi.fn(),
+				handleCastAllDebrid: vi.fn(),
+				handleCastTorBox: vi.fn(),
+			});
+
+			const labels = labelsInOrder(container);
+			const rd = indexOfLabel(labels, 'Check RD');
+			const ad = indexOfLabel(labels, 'Instant AD');
+			const adToRd = indexOfLabel(labels, 'AD \u2192 RD');
+			const tb = indexOfLabel(labels, 'Instant TB');
+			const tbToRd = indexOfLabel(labels, 'TB \u2192 RD');
+			const watch = indexOfLabel(labels, 'Watch');
+			const copy = indexOfLabel(labels, 'Copy');
+
+			expect([rd, ad, adToRd, tb, tbToRd, watch, copy].every((i) => i >= 0)).toBe(true);
+			// RD group, then AD group, then TB group
+			expect(rd).toBeLessThan(ad);
+			expect(adToRd).toBeLessThan(tb);
+			expect(tb).toBeLessThan(watch);
+			expect(tbToRd).toBeLessThan(watch);
+			// then the service-agnostic tail
+			expect(watch).toBeLessThan(copy);
+		});
+
+		it('draws a separator between the provider group and the shared actions', () => {
+			const { container } = renderComponent({
+				rdKey: 'rd-key',
+				adKey: 'ad-key',
+				torboxKey: 'tb-key',
+				player: 'windows/vlc',
+				filteredResults: [everywhere],
+				sendAdToRd: vi.fn(),
+				sendTbToRd: vi.fn(),
+				handleCastAllDebrid: vi.fn(),
+				handleCastTorBox: vi.fn(),
+			});
+
+			expect(container.querySelector('[data-action-separator]')).not.toBeNull();
+		});
+
+		it('leaves the separator out when no service button is shown', () => {
+			const { container } = renderComponent({
+				rdKey: null,
+				adKey: null,
+				torboxKey: null,
+				player: 'windows/vlc',
+				filteredResults: [everywhere],
+			});
+
+			expect(container.querySelector('[data-action-separator]')).toBeNull();
+		});
+	});
 });
