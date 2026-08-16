@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import { ScrapedService } from './scraped';
+import { FAN_OUT_PAGE_LIMIT, ScrapedService } from './scraped';
 
 const prismaMock = vi.hoisted(() => ({
 	scrapedTrue: {
@@ -15,6 +15,9 @@ const prismaMock = vi.hoisted(() => ({
 		update: vi.fn(),
 		create: vi.fn(),
 		deleteMany: vi.fn(),
+	},
+	hashPageCount: {
+		findMany: vi.fn(),
 	},
 	$queryRaw: vi.fn(),
 }));
@@ -53,6 +56,9 @@ describe('ScrapedService', () => {
 		Object.values(prismaMock.scrapedTrue).forEach((fn) => (fn as Mock).mockReset());
 		Object.values(prismaMock.scraped).forEach((fn) => (fn as Mock).mockReset());
 		(prismaMock.$queryRaw as Mock).mockReset();
+		(prismaMock.hashPageCount.findMany as Mock).mockReset();
+		// Default: nothing is known to be over-shared, so saves pass through.
+		(prismaMock.hashPageCount.findMany as Mock).mockResolvedValue([]);
 		flattenAndRemoveDuplicatesMock.mockClear();
 		sortByFileSizeMock.mockClear();
 	});
@@ -147,6 +153,42 @@ describe('ScrapedService', () => {
 
 		prismaMock.scraped.findUnique.mockResolvedValue(null);
 		await service.saveScrapedResults('key', [{ hash: emptySha1 }, { hash: HASH_TWO }] as any);
+		expect(prismaMock.scraped.create).toHaveBeenCalledWith({
+			data: { key: 'key', value: [{ hash: HASH_TWO }] },
+		});
+	});
+
+	it('drops hashes already spread across too many pages', async () => {
+		const fannedOut = 'd'.repeat(40);
+		(prismaMock.hashPageCount.findMany as Mock).mockResolvedValue([
+			{ hash: fannedOut, pageCount: FAN_OUT_PAGE_LIMIT + 1 },
+			{ hash: HASH_ONE, pageCount: FAN_OUT_PAGE_LIMIT },
+		]);
+		prismaMock.scrapedTrue.findUnique.mockResolvedValue(null);
+
+		await service.saveScrapedTrueResults('key', [
+			{ hash: HASH_ONE },
+			{ hash: fannedOut },
+			{ hash: HASH_TWO },
+		] as any);
+
+		// HASH_ONE sits exactly at the limit and HASH_TWO is unknown to the
+		// table, so only the one past the limit is dropped.
+		expect(prismaMock.scrapedTrue.create).toHaveBeenCalledWith({
+			data: { key: 'key', value: [{ hash: HASH_ONE }, { hash: HASH_TWO }] },
+		});
+	});
+
+	it('matches over-shared hashes regardless of case', async () => {
+		// HashPageCount.hash collates case-insensitively, so a stored row can come
+		// back in different case than the incoming result.
+		(prismaMock.hashPageCount.findMany as Mock).mockResolvedValue([
+			{ hash: 'C'.repeat(40), pageCount: 900 },
+		]);
+		prismaMock.scraped.findUnique.mockResolvedValue(null);
+
+		await service.saveScrapedResults('key', [{ hash: HASH_NEW }, { hash: HASH_TWO }] as any);
+
 		expect(prismaMock.scraped.create).toHaveBeenCalledWith({
 			data: { key: 'key', value: [{ hash: HASH_TWO }] },
 		});

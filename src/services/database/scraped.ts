@@ -15,7 +15,43 @@ import { DatabaseClient } from './client';
 const usableResults = (value: ScrapeSearchResult[]): ScrapeSearchResult[] =>
 	value.filter((r) => isUsableHash(r?.hash));
 
+/**
+ * A hash sitting on more media pages than this is matcher failure, not a
+ * collection. Measured over the whole corpus: 99.0% of hashes are on 5 pages or
+ * fewer and 99.7% on 10 or fewer, while the worst offenders reach several
+ * thousand. 25 leaves ordinary packs and double features well clear.
+ */
+export const FAN_OUT_PAGE_LIMIT = 25;
+
 export class ScrapedService extends DatabaseClient {
+	/**
+	 * Drops results whose hash is already spread across more pages than any real
+	 * torrent could belong to. The counts come from HashPageCount, refreshed
+	 * periodically rather than maintained per write - a hash drifting past the
+	 * limit is caught on the next refresh, and a missing row simply means the
+	 * hash is new and allowed.
+	 */
+	private async withoutFannedOutHashes(
+		value: ScrapeSearchResult[]
+	): Promise<ScrapeSearchResult[]> {
+		if (value.length === 0) return value;
+
+		const counts = await this.prisma.hashPageCount.findMany({
+			where: { hash: { in: value.map((r) => r.hash) } },
+			select: { hash: true, pageCount: true },
+		});
+
+		// The hash column collates case-insensitively, so what comes back can
+		// differ in case from what went in.
+		const overLimit = new Set(
+			counts.filter((c) => c.pageCount > FAN_OUT_PAGE_LIMIT).map((c) => c.hash.toLowerCase())
+		);
+		if (overLimit.size === 0) return value;
+
+		const kept = value.filter((r) => !overLimit.has(r.hash.toLowerCase()));
+		console.log(`🚧 Dropped ${value.length - kept.length} over-shared results`);
+		return kept;
+	}
 	public async getScrapedTrueResults<T>(
 		key: string,
 		maxSizeGB?: number,
@@ -145,7 +181,7 @@ export class ScrapedService extends DatabaseClient {
 		updateUpdatedAt: boolean = true,
 		replaceOldScrape: boolean = false
 	) {
-		value = usableResults(value);
+		value = await this.withoutFannedOutHashes(usableResults(value));
 		// Fetch the existing record
 		const existingRecord: Scraped | null = await this.prisma.scrapedTrue.findUnique({
 			where: { key },
@@ -191,7 +227,7 @@ export class ScrapedService extends DatabaseClient {
 		updateUpdatedAt: boolean = true,
 		replaceOldScrape: boolean = false
 	) {
-		value = usableResults(value);
+		value = await this.withoutFannedOutHashes(usableResults(value));
 		// Fetch the existing record
 		const existingRecord: Scraped | null = await this.prisma.scraped.findUnique({
 			where: { key },

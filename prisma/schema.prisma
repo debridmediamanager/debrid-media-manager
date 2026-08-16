@@ -414,6 +414,14 @@ model HashImdb {
   @@index([imdbId])
 }
 
+model HashPageCount {
+  hash      String   @id @db.VarChar(40)
+  pageCount Int
+  updatedAt DateTime
+
+  @@index([pageCount])
+}
+
 model MdblistCache {
   id        String   @id
   type      String
