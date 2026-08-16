@@ -318,6 +318,7 @@ export function useExternalSources(
 				noVideos: false,
 				medianFileSize: fileSize,
 				biggestFileSize: fileSize,
+				meanFileSize: fileSize,
 				videoCount: 1,
 				imdbId: '',
 			};

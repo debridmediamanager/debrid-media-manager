@@ -33,7 +33,7 @@ import {
 } from '@/utils/instantChecks';
 import { quickSearch } from '@/utils/quickSearch';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
-import { sortByMedian } from '@/utils/results';
+import { sortByMean } from '@/utils/results';
 import {
 	DMM_SOURCE,
 	SearchSourceStates,
@@ -216,7 +216,7 @@ const TvSearch: FunctionComponent = () => {
 		addAd,
 		deleteRd,
 		deleteAd,
-		sortByMedian
+		sortByMean
 	);
 
 	const { handleMassReport } = useMassReport(rdKey, adKey, torboxKey, imdbid as string);
@@ -401,18 +401,9 @@ const TvSearch: FunctionComponent = () => {
 						return prevResults;
 					}
 
-					const merged = [...prevResults, ...newUniqueResults];
-					const sorted = merged.sort((a, b) => {
-						const aAvailable = a.rdAvailable || a.adAvailable || a.tbAvailable;
-						const bAvailable = b.rdAvailable || b.adAvailable || b.tbAvailable;
-						if (aAvailable !== bAvailable) {
-							return aAvailable ? -1 : 1;
-						}
-						if (a.fileSize !== b.fileSize) {
-							return b.fileSize - a.fileSize;
-						}
-						return a.hash.localeCompare(b.hash);
-					});
+					// Same ordering the availability checks re-apply as they land, so
+					// rows do not jump between two different sorts
+					const sorted = sortByMean([...prevResults, ...newUniqueResults]);
 
 					hashesToCheck = newUniqueResults
 						.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
@@ -439,7 +430,7 @@ const TvSearch: FunctionComponent = () => {
 							imdbId,
 							hashesToCheck,
 							setSearchResults,
-							sortByMedian
+							sortByMean
 						);
 						rdAvailableCount += count;
 						pendingAvailabilityChecks--;
@@ -456,7 +447,7 @@ const TvSearch: FunctionComponent = () => {
 							imdbId,
 							hashesToCheck,
 							setSearchResults,
-							sortByMedian
+							sortByMean
 						);
 						adAvailableCount += count;
 						pendingAvailabilityChecks--;
@@ -470,7 +461,7 @@ const TvSearch: FunctionComponent = () => {
 						torboxKey,
 						hashesToCheck,
 						setSearchResults,
-						sortByMedian
+						sortByMean
 					).then((count) => {
 						tbAvailableCount += count;
 						pendingAvailabilityChecks--;

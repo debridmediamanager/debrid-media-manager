@@ -432,18 +432,9 @@ const MovieSearch: FunctionComponent = () => {
 						return prevResults;
 					}
 
-					const merged = [...prevResults, ...newUniqueResults];
-					const sorted = merged.sort((a, b) => {
-						const aAvailable = a.rdAvailable || a.adAvailable || a.tbAvailable;
-						const bAvailable = b.rdAvailable || b.adAvailable || b.tbAvailable;
-						if (aAvailable !== bAvailable) {
-							return aAvailable ? -1 : 1;
-						}
-						if (a.fileSize !== b.fileSize) {
-							return b.fileSize - a.fileSize;
-						}
-						return a.hash.localeCompare(b.hash);
-					});
+					// Same ordering the availability checks re-apply as they land, so
+					// rows do not jump between two different sorts
+					const sorted = sortByBiggest([...prevResults, ...newUniqueResults]);
 
 					hashesToCheck = newUniqueResults
 						.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)

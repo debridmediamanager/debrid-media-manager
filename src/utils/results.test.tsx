@@ -7,7 +7,7 @@ import {
 	btnLabel,
 	fileSize,
 	sortByBiggest,
-	sortByMedian,
+	sortByMean,
 	torrentPrefix,
 	totalFileSize,
 } from './results';
@@ -164,292 +164,256 @@ describe('results utils', () => {
 		});
 	});
 
-	describe('sortByMedian', () => {
-		it('sorts available torrents before unavailable ones', () => {
-			const results: SearchResult[] = [
-				{
-					hash: 'hash1',
-					title: 'Test 1',
-					rdAvailable: false,
-					adAvailable: false,
-					videoCount: 0,
-					medianFileSize: 100,
-					fileSize: 1000,
-				} as SearchResult,
-				{
-					hash: 'hash2',
-					title: 'Test 2',
-					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 0,
-					medianFileSize: 50,
-					fileSize: 500,
-				} as SearchResult,
+	// Sorting spec: cached rows first, then uncached, always biggest to smallest.
+	// Cached rows rank on the biggest video file (movies) or the mean video file
+	// (shows); uncached rows rank on the total torrent size in both.
+	const searchResult = (overrides: Partial<SearchResult>): SearchResult =>
+		({
+			hash: 'hash',
+			title: 'Title',
+			fileSize: 0,
+			rdAvailable: false,
+			adAvailable: false,
+			tbAvailable: false,
+			files: [],
+			noVideos: false,
+			medianFileSize: 0,
+			biggestFileSize: 0,
+			videoCount: 0,
+			...overrides,
+		}) as SearchResult;
+
+	describe('sortByMean', () => {
+		it('sorts available torrents before unavailable ones, however big', () => {
+			const results = [
+				searchResult({ hash: 'uncached', fileSize: 100_000, videoCount: 10 }),
+				searchResult({ hash: 'cached', rdAvailable: true, fileSize: 500, videoCount: 10 }),
 			];
 
-			const sorted = sortByMedian(results);
-			expect(sorted[0].rdAvailable).toBe(true);
+			expect(sortByMean(results).map((r) => r.hash)).toEqual(['cached', 'uncached']);
 		});
 
-		it('sorts by median file size for multi-file torrents', () => {
-			const results: SearchResult[] = [
-				{
-					hash: 'hash1',
-					title: 'Test 1',
+		it('ranks available torrents by mean video size, not by total', () => {
+			const results = [
+				// bigger pack, but 20 episodes - the smaller mean
+				searchResult({
+					hash: 'big-pack',
 					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 5,
-					medianFileSize: 100,
-					fileSize: 1000,
-				} as SearchResult,
-				{
-					hash: 'hash2',
-					title: 'Test 2',
-					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 5,
-					medianFileSize: 200,
-					fileSize: 2000,
-				} as SearchResult,
+					fileSize: 40_000,
+					videoCount: 20,
+					meanFileSize: 2_000,
+				}),
+				searchResult({
+					hash: 'small-pack',
+					tbAvailable: true,
+					fileSize: 30_000,
+					videoCount: 10,
+					meanFileSize: 3_000,
+				}),
 			];
 
-			const sorted = sortByMedian(results);
-			expect(sorted[0].medianFileSize).toBe(200);
+			expect(sortByMean(results).map((r) => r.hash)).toEqual(['small-pack', 'big-pack']);
 		});
 
-		it('uses fileSize for single file torrents', () => {
-			const results: SearchResult[] = [
-				{
-					hash: 'hash1',
-					title: 'Test 1',
-					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 0,
-					medianFileSize: 100,
-					fileSize: 1024,
-				} as SearchResult,
-				{
-					hash: 'hash2',
-					title: 'Test 2',
-					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 0,
-					medianFileSize: 200,
-					fileSize: 2048,
-				} as SearchResult,
+		it('falls back to total over video count when no check has run yet', () => {
+			const results = [
+				searchResult({ hash: 'ten', adAvailable: true, fileSize: 10_000, videoCount: 10 }),
+				searchResult({ hash: 'two', adAvailable: true, fileSize: 4_000, videoCount: 2 }),
 			];
 
-			const sorted = sortByMedian(results);
-			expect(sorted[0].fileSize).toBe(2048);
+			expect(sortByMean(results).map((r) => r.hash)).toEqual(['two', 'ten']);
+		});
+
+		it('ranks unavailable torrents by total size, ignoring per-file stats', () => {
+			const results = [
+				searchResult({
+					hash: 'small-total',
+					fileSize: 5_000,
+					videoCount: 1,
+					meanFileSize: 5_000,
+				}),
+				searchResult({
+					hash: 'big-total',
+					fileSize: 50_000,
+					videoCount: 20,
+					meanFileSize: 2_500,
+				}),
+			];
+
+			expect(sortByMean(results).map((r) => r.hash)).toEqual(['big-total', 'small-total']);
 		});
 
 		it('sorts by video count when sizes are equal', () => {
-			const results: SearchResult[] = [
-				{
-					hash: 'hash1',
-					title: 'Test 1',
+			const results = [
+				searchResult({ hash: 'ten', rdAvailable: true, fileSize: 1_000, videoCount: 10 }),
+				searchResult({
+					hash: 'twenty',
 					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 10,
-					medianFileSize: 100,
-					fileSize: 1000,
-				} as SearchResult,
-				{
-					hash: 'hash2',
-					title: 'Test 2',
-					rdAvailable: true,
-					adAvailable: false,
+					fileSize: 2_000,
 					videoCount: 20,
-					medianFileSize: 100,
-					fileSize: 1000,
-				} as SearchResult,
+				}),
 			];
 
-			const sorted = sortByMedian(results);
-			expect(sorted[0].videoCount).toBe(20);
+			expect(sortByMean(results)[0].videoCount).toBe(20);
 		});
 
 		it('sorts alphabetically when all other factors are equal', () => {
-			const results: SearchResult[] = [
-				{
-					hash: 'hash1',
+			const results = [
+				searchResult({
 					title: 'Zebra',
 					rdAvailable: true,
-					adAvailable: false,
+					fileSize: 1_000,
 					videoCount: 10,
-					medianFileSize: 100,
-					fileSize: 1000,
-				} as SearchResult,
-				{
-					hash: 'hash2',
+				}),
+				searchResult({
 					title: 'Apple',
 					rdAvailable: true,
-					adAvailable: false,
+					fileSize: 1_000,
 					videoCount: 10,
-					medianFileSize: 100,
-					fileSize: 1000,
-				} as SearchResult,
+				}),
 			];
 
-			const sorted = sortByMedian(results);
-			expect(sorted[0].title).toBe('Apple');
+			expect(sortByMean(results)[0].title).toBe('Apple');
 		});
 
 		it('handles empty titles', () => {
-			const results: SearchResult[] = [
-				{
-					hash: 'hash1',
-					title: '',
-					rdAvailable: true,
-					adAvailable: false,
-					tbAvailable: false,
-					videoCount: 10,
-					medianFileSize: 100,
-					fileSize: 1000,
-					files: [],
-					noVideos: false,
-					biggestFileSize: 100,
-				} as SearchResult,
-				{
-					hash: 'hash2',
-					title: 'Test',
-					rdAvailable: true,
-					adAvailable: false,
-					tbAvailable: false,
-					videoCount: 10,
-					medianFileSize: 100,
-					fileSize: 1000,
-					files: [],
-					noVideos: false,
-					biggestFileSize: 100,
-				} as SearchResult,
+			const results = [
+				searchResult({ title: '', rdAvailable: true, fileSize: 1_000, videoCount: 10 }),
+				searchResult({ title: 'Test', rdAvailable: true, fileSize: 1_000, videoCount: 10 }),
 			];
 
-			const sorted = sortByMedian(results);
 			// Empty title is sorted first
-			expect(sorted[0].title).toBe('');
+			expect(sortByMean(results)[0].title).toBe('');
+		});
+
+		it('orders a mixed list biggest to smallest within each group', () => {
+			const results = [
+				searchResult({ hash: 'uncached-small', fileSize: 1_000 }),
+				searchResult({
+					hash: 'cached-small',
+					rdAvailable: true,
+					fileSize: 2_000,
+					videoCount: 2,
+					meanFileSize: 1_000,
+				}),
+				searchResult({ hash: 'uncached-big', fileSize: 90_000 }),
+				searchResult({
+					hash: 'cached-big',
+					tbAvailable: true,
+					fileSize: 8_000,
+					videoCount: 2,
+					meanFileSize: 4_000,
+				}),
+			];
+
+			expect(sortByMean(results).map((r) => r.hash)).toEqual([
+				'cached-big',
+				'cached-small',
+				'uncached-big',
+				'uncached-small',
+			]);
 		});
 	});
 
 	describe('sortByBiggest', () => {
-		it('sorts available torrents before unavailable ones', () => {
-			const results: SearchResult[] = [
-				{
-					hash: 'hash1',
-					rdAvailable: false,
-					adAvailable: false,
-					videoCount: 0,
-					biggestFileSize: 100,
-					fileSize: 1000,
-				} as SearchResult,
-				{
-					hash: 'hash2',
-					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 0,
-					biggestFileSize: 50,
-					fileSize: 500,
-				} as SearchResult,
+		it('sorts available torrents before unavailable ones, however big', () => {
+			const results = [
+				searchResult({ hash: 'uncached', fileSize: 100_000, biggestFileSize: 100_000 }),
+				searchResult({ hash: 'cached', rdAvailable: true, biggestFileSize: 500 }),
 			];
 
-			const sorted = sortByBiggest(results);
-			expect(sorted[0].rdAvailable).toBe(true);
+			expect(sortByBiggest(results).map((r) => r.hash)).toEqual(['cached', 'uncached']);
 		});
 
-		it('sorts by biggest file size for multi-file torrents', () => {
-			const results: SearchResult[] = [
-				{
-					hash: 'hash1',
+		it('ranks available torrents by biggest video file, not by total', () => {
+			const results = [
+				// bigger torrent overall, but its biggest single file is smaller
+				searchResult({
+					hash: 'many-files',
 					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 5,
-					biggestFileSize: 100,
-					fileSize: 1000,
-				} as SearchResult,
-				{
-					hash: 'hash2',
-					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 5,
-					biggestFileSize: 200,
-					fileSize: 2000,
-				} as SearchResult,
+					fileSize: 40_000,
+					videoCount: 8,
+					biggestFileSize: 6_000,
+				}),
+				searchResult({
+					hash: 'one-file',
+					adAvailable: true,
+					fileSize: 20_000,
+					videoCount: 1,
+					biggestFileSize: 20_000,
+				}),
 			];
 
-			const sorted = sortByBiggest(results);
-			expect(sorted[0].biggestFileSize).toBe(200);
+			expect(sortByBiggest(results).map((r) => r.hash)).toEqual(['one-file', 'many-files']);
 		});
 
-		it('uses fileSize for single file torrents', () => {
-			const results: SearchResult[] = [
-				{
-					hash: 'hash1',
+		it('compares single-file and multi-file torrents in the same unit', () => {
+			const results = [
+				searchResult({
+					hash: 'multi',
 					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 0,
-					biggestFileSize: 100,
-					fileSize: 1000,
-				} as SearchResult,
-				{
-					hash: 'hash2',
+					fileSize: 9_000,
+					videoCount: 5,
+					biggestFileSize: 2_000,
+				}),
+				searchResult({
+					hash: 'single',
 					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 0,
-					biggestFileSize: 200,
-					fileSize: 2000,
-				} as SearchResult,
+					fileSize: 5_000,
+					videoCount: 1,
+					biggestFileSize: 5_000,
+				}),
 			];
 
-			const sorted = sortByBiggest(results);
-			expect(sorted[0].fileSize).toBe(2000);
+			expect(sortByBiggest(results).map((r) => r.hash)).toEqual(['single', 'multi']);
+		});
+
+		it('falls back to the total when no check has run yet', () => {
+			const results = [
+				searchResult({ hash: 'small', rdAvailable: true, fileSize: 1_000 }),
+				searchResult({ hash: 'big', rdAvailable: true, fileSize: 2_000 }),
+			];
+
+			expect(sortByBiggest(results).map((r) => r.hash)).toEqual(['big', 'small']);
+		});
+
+		it('ranks unavailable torrents by total size, ignoring per-file stats', () => {
+			const results = [
+				searchResult({ hash: 'small-total', fileSize: 9_000, biggestFileSize: 9_000 }),
+				searchResult({
+					hash: 'big-total',
+					fileSize: 60_000,
+					videoCount: 10,
+					biggestFileSize: 6_500,
+				}),
+			];
+
+			expect(sortByBiggest(results).map((r) => r.hash)).toEqual(['big-total', 'small-total']);
 		});
 
 		it('sorts by hash alphabetically when sizes are equal', () => {
-			const results: SearchResult[] = [
-				{
-					hash: 'zebra',
-					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 0,
-					biggestFileSize: 100,
-					fileSize: 1000,
-				} as SearchResult,
-				{
-					hash: 'apple',
-					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 0,
-					biggestFileSize: 100,
-					fileSize: 1000,
-				} as SearchResult,
+			const results = [
+				searchResult({ hash: 'zebra', rdAvailable: true, biggestFileSize: 100 }),
+				searchResult({ hash: 'apple', rdAvailable: true, biggestFileSize: 100 }),
 			];
 
-			const sorted = sortByBiggest(results);
-			expect(sorted[0].hash).toBe('apple');
+			expect(sortByBiggest(results)[0].hash).toBe('apple');
 		});
 
-		it('correctly multiplies biggest file size by 1_000_000', () => {
-			const results: SearchResult[] = [
-				{
-					hash: 'hash1',
-					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 5,
-					biggestFileSize: 2, // 2MB = 2_000_000 bytes
-					fileSize: 10000000,
-				} as SearchResult,
-				{
-					hash: 'hash2',
-					rdAvailable: true,
-					adAvailable: false,
-					videoCount: 5,
-					biggestFileSize: 3, // 3MB = 3_000_000 bytes
-					fileSize: 15000000,
-				} as SearchResult,
+		it('orders a mixed list biggest to smallest within each group', () => {
+			const results = [
+				searchResult({ hash: 'uncached-small', fileSize: 1_000 }),
+				searchResult({ hash: 'cached-small', rdAvailable: true, biggestFileSize: 2_000 }),
+				searchResult({ hash: 'uncached-big', fileSize: 90_000 }),
+				searchResult({ hash: 'cached-big', tbAvailable: true, biggestFileSize: 8_000 }),
 			];
 
-			const sorted = sortByBiggest(results);
-			expect(sorted[0].biggestFileSize).toBe(3);
+			expect(sortByBiggest(results).map((r) => r.hash)).toEqual([
+				'cached-big',
+				'cached-small',
+				'uncached-big',
+				'uncached-small',
+			]);
 		});
 	});
 });

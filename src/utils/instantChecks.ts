@@ -24,6 +24,9 @@ const calculateFileStats = (videoFiles: FileData[]) => {
 				? sortedFileSizes[mid]
 				: (sortedFileSizes[mid - 1] + sortedFileSizes[mid]) / 2,
 		biggestFileSize: sortedFileSizes[sortedFileSizes.length - 1],
+		meanFileSize: sortedFileSizes.length
+			? sortedFileSizes.reduce((acc, size) => acc + size, 0) / sortedFileSizes.length
+			: 0,
 		videoCount: videoFiles.length,
 	};
 };

@@ -215,4 +215,46 @@ describe('missing fileSize backfill', () => {
 		expect(getState()[0].adAvailable).toBe(true);
 		expect(getState()[0]).not.toHaveProperty('fileSize');
 	});
+
+	// The show page ranks cached rows on the mean, so it has to be the mean of the
+	// video files - distinct from both the median and the biggest
+	it('records the mean of the video files, ignoring non-video ones', async () => {
+		mockCheckAvailability.mockResolvedValue({
+			available: [
+				{
+					hash: 'hash-mean',
+					files: [
+						{ file_id: 1, path: 'Episode.1.mkv', bytes: 6 * MB },
+						{ file_id: 2, path: 'Episode.2.mkv', bytes: 10 * MB },
+						{ file_id: 3, path: 'Episode.3.mkv', bytes: 20 * MB },
+						{ file_id: 4, path: 'Subs.srt', bytes: 60 * MB },
+					],
+				},
+			],
+		} as any);
+		const { setter, getState } = createStateHarness([
+			{
+				hash: 'hash-mean',
+				noVideos: false,
+				rdAvailable: false,
+				files: [],
+				fileSize: 96,
+				medianFileSize: 0,
+				biggestFileSize: 0,
+			},
+		] as any[]);
+
+		await checkDatabaseAvailabilityRd(
+			'problem',
+			'solution',
+			'tt1234567',
+			['hash-mean'],
+			setter,
+			identity
+		);
+
+		expect(getState()[0].meanFileSize).toBe(12);
+		expect(getState()[0].medianFileSize).toBe(10);
+		expect(getState()[0].biggestFileSize).toBe(20);
+	});
 });

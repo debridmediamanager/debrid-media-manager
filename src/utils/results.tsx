@@ -44,23 +44,54 @@ export const btnIcon = (avail: boolean) =>
 export const btnLabel = (avail: boolean, debridService: string) =>
 	avail ? <b>Instant {debridService}</b> : `DL with ${debridService}`;
 
-export const sortByMedian = (searchResults: SearchResult[]): SearchResult[] => {
+export const isAvailable = (result: SearchResult) =>
+	!!(result.rdAvailable || result.adAvailable || result.tbAvailable);
+
+/**
+ * Biggest video file, in MB. Only a debrid availability check knows the per-file
+ * breakdown, so an unchecked row falls back to the torrent total.
+ */
+const biggestVideoSize = (result: SearchResult) =>
+	result.biggestFileSize > 0 ? result.biggestFileSize : totalFileSize(result);
+
+/**
+ * Average video file, in MB - the per-episode size a season pack works out to.
+ * Uses the mean of the actual video files when an availability check has filled
+ * them in, and divides the total by the video count otherwise.
+ */
+const meanVideoSize = (result: SearchResult) => {
+	if (result.meanFileSize && result.meanFileSize > 0) return result.meanFileSize;
+	const total = totalFileSize(result);
+	return result.videoCount > 0 ? total / result.videoCount : total;
+};
+
+/**
+ * Cached rows come first, then uncached, both biggest to smallest.
+ *
+ * The two groups rank on different measures on purpose: a cached row is one the
+ * user can play right now, so it ranks on the size of what they would actually
+ * watch (the biggest file for a movie, the average episode for a season). An
+ * uncached row has no per-file breakdown to rank on, so it ranks on the total.
+ */
+const compareBySize = (
+	a: SearchResult,
+	b: SearchResult,
+	cachedSize: (result: SearchResult) => number
+) => {
+	const aAvailable = isAvailable(a);
+	const bAvailable = isAvailable(b);
+	if (aAvailable !== bAvailable) return aAvailable ? -1 : 1;
+
+	const sizeOf = aAvailable ? cachedSize : totalFileSize;
+	return sizeOf(b) - sizeOf(a);
+};
+
+export const sortByMean = (searchResults: SearchResult[]): SearchResult[] => {
 	searchResults.sort((a, b) => {
-		// First compare availability
-		const aAvailable = a.rdAvailable || a.adAvailable || a.tbAvailable;
-		const bAvailable = b.rdAvailable || b.adAvailable || b.tbAvailable;
-		if (aAvailable !== bAvailable) {
-			return bAvailable ? 1 : -1;
-		}
+		const bySize = compareBySize(a, b, meanVideoSize);
+		if (bySize !== 0) return bySize;
 
-		// Sort by medianFileSize
-		const aSort = a.videoCount > 0 ? a.medianFileSize : a.fileSize / 1024;
-		const bSort = b.videoCount > 0 ? b.medianFileSize : b.fileSize / 1024;
-		if (aSort !== bSort) {
-			return bSort - aSort;
-		}
-
-		// If median sizes are equal, sort by video count
+		// If sizes are equal, sort by video count
 		if (a.videoCount !== b.videoCount) {
 			return b.videoCount - a.videoCount;
 		}
@@ -75,19 +106,8 @@ export const sortByMedian = (searchResults: SearchResult[]): SearchResult[] => {
 
 export const sortByBiggest = (searchResults: SearchResult[]): SearchResult[] => {
 	searchResults.sort((a, b) => {
-		// First compare availability
-		const aAvailable = a.rdAvailable || a.adAvailable || a.tbAvailable;
-		const bAvailable = b.rdAvailable || b.adAvailable || b.tbAvailable;
-		if (aAvailable !== bAvailable) {
-			return bAvailable ? 1 : -1;
-		}
-
-		// If both have same availability, then sort by size
-		const aSort = a.videoCount > 0 ? a.biggestFileSize * 1_000_000 : a.fileSize;
-		const bSort = b.videoCount > 0 ? b.biggestFileSize * 1_000_000 : b.fileSize;
-		if (aSort !== bSort) {
-			return bSort - aSort;
-		}
+		const bySize = compareBySize(a, b, biggestVideoSize);
+		if (bySize !== 0) return bySize;
 
 		// Third priority: hash (alphabetically)
 		return a.hash.localeCompare(b.hash);

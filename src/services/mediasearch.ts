@@ -23,6 +23,8 @@ export type SearchResult = {
 	// for cached results in RD
 	medianFileSize: number;
 	biggestFileSize: number;
+	// mean of the video files - only known once an availability check has run
+	meanFileSize?: number;
 	videoCount: number;
 	imdbId?: string;
 	// a completed TB → RD transfer already exists for this hash (its content is
