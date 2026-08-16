@@ -665,10 +665,9 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 
 										{/* — Separator: everything above belongs to one service, everything below does not — */}
 										{(rdKey || adKey || torboxKey) && (
-											<span
+											<hr
 												data-action-separator="true"
-												aria-hidden="true"
-												className="mx-1 inline-block h-3 w-px translate-y-0.5 bg-gray-600 align-middle"
+												className="my-1 border-gray-600"
 											/>
 										)}
 
