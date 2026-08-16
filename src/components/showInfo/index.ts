@@ -20,6 +20,7 @@ import { renderTorrentInfo, renderTorrentInfoTB } from './render';
 import { icons } from './styles';
 import { ApiTorrentFile, MagnetLink } from './types';
 import { buildSearchQueryFromFilename, fetchMediaInfo, getStreamInfo } from './utils';
+import { bindWatchButtons } from './watchButtons';
 
 // RD: { error: "infringing_file", error_code: 35 }
 const getRdError = (error: unknown): string | null => {
@@ -234,6 +235,12 @@ export const showInfoForRD = async (
 			const logAction = (event: string, data: Record<string, unknown> = {}) => {
 				console.log('[torrentModal]', event, data);
 			};
+			bindWatchButtons({
+				service: 'rd',
+				hash: info.hash,
+				player: app ?? '',
+				keys: { rdKey },
+			});
 			// Selection helpers
 			const checkboxes = () =>
 				Array.from(document.querySelectorAll<HTMLInputElement>('.file-selector'));
@@ -731,7 +738,10 @@ export const showInfoForAD = async (
 	};
 
 	const downloadAllLink = `https://alldebrid.com/service/?url=${info.links.map((l: MagnetLink) => encodeURIComponent(l.link)).join('%0D%0A')}`;
-	const libraryActions = `
+	// A fake magnet is assembled from a search result: it has no AllDebrid id to
+	// delete or reinsert, and no links to export.
+	const libraryActions = !info.fake
+		? `
         <div class="mb-3 flex justify-center items-center flex-wrap">
             ${renderButton('share', { link: `${await handleShare(torrent)}` })}
             ${renderButton('delete', { id: 'btn-delete-ad' })}
@@ -740,18 +750,26 @@ export const showInfoForAD = async (
 	            ${info.links.length > 1 ? renderButton('downloadAll', { link: `${downloadAllLink}`, id: 'btn-download-all-ad' }) : ''}
             ${info.links.length > 0 ? renderButton('exportLinks', { id: 'btn-export-links' }) : ''}
             ${info.links.length > 0 ? renderButton('generateStrm', { id: 'btn-generate-strm' }) : ''}
-        </div>`;
+        </div>`
+		: '';
 
-	const allInfoRows = [
-		{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
-		{ label: 'ID', value: info.id },
-		{ label: 'Status', value: `${info.status} (code: ${info.statusCode})` },
-		{
-			label: 'Added',
-			value: new Date(info.uploadDate * 1000).toLocaleString(undefined, { timeZone: 'UTC' }),
-		},
-		...getStreamInfo(mediaInfo),
-	];
+	const allInfoRows = info.fake
+		? [
+				{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
+				...getStreamInfo(mediaInfo),
+			]
+		: [
+				{ label: 'Size', value: (info.size / 1024 ** 3).toFixed(2) + ' GB' },
+				{ label: 'ID', value: info.id },
+				{ label: 'Status', value: `${info.status} (code: ${info.statusCode})` },
+				{
+					label: 'Added',
+					value: new Date(info.uploadDate * 1000).toLocaleString(undefined, {
+						timeZone: 'UTC',
+					}),
+				},
+				...getStreamInfo(mediaInfo),
+			];
 
 	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${info.filename}</h1>
     ${libraryActions}
@@ -785,6 +803,15 @@ export const showInfoForAD = async (
 			const logAction = (event: string, data: Record<string, unknown> = {}) => {
 				console.log('[torrentModal]', event, data);
 			};
+			bindWatchButtons({
+				service: 'ad',
+				hash: info.hash,
+				player: app ?? '',
+				keys: { adKey },
+				// A magnet already in the user's library must survive the watch;
+				// only one prepared for a search result gets cleaned up again.
+				adInLibrary: !info.fake,
+			});
 			const magnetBtn = document.getElementById('btn-magnet-copy');
 			logAction('binding magnet button (AD)', {
 				exists: Boolean(magnetBtn),
@@ -1024,7 +1051,6 @@ export const showInfoForTB = async (
 						tbKey,
 						app,
 						hash: info.hash,
-						isWebDownload,
 					})}
                 </tbody>
             </table>
@@ -1048,6 +1074,12 @@ export const showInfoForTB = async (
 			const logAction = (event: string, data: Record<string, unknown> = {}) => {
 				console.log('[torrentModal]', event, data);
 			};
+			bindWatchButtons({
+				service: isWebDownload ? 'tbw' : 'tb',
+				hash: info.hash,
+				player: app ?? '',
+				keys: { torboxKey: tbKey },
+			});
 			const magnetBtn = document.getElementById('btn-magnet-copy');
 			logAction('binding magnet button (TB)', {
 				exists: Boolean(magnetBtn),

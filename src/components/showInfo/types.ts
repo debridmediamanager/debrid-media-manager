@@ -41,6 +41,9 @@ export interface ActionButtonProps {
 	linkParam?: HiddenField;
 	linkParams?: HiddenField[];
 	id?: string; // optional id for event binding instead of inline onclick
+	// Rendered as data-* attributes. Watch buttons carry their per-file details
+	// this way so one delegated handler can serve every row.
+	data?: Record<string, string>;
 }
 
 export interface LibraryActionButtonProps {

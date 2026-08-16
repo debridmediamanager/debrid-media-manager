@@ -20,6 +20,26 @@ const FILE_ACTION_TYPES = new Set<keyof typeof buttonStyles>([
 	'searchAgain',
 ]);
 
+/**
+ * Every attribute here is built by string concatenation, and release filenames
+ * legitimately contain quotes and angle brackets - one unescaped name truncates
+ * the tag and takes the rest of the row with it.
+ */
+export const escapeAttr = (value: string): string =>
+	String(value)
+		.replace(/&/g, '&amp;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;');
+
+const renderDataAttrs = (data?: Record<string, string>) =>
+	data
+		? Object.entries(data)
+				.map(([name, value]) => ` data-${name}="${escapeAttr(value)}"`)
+				.join('')
+		: '';
+
 const BASE_BUTTON_CLASSES =
 	'haptic-sm inline-flex items-center gap-1 rounded transition-colors cursor-pointer';
 const BUTTON_SIZE_CLASSES = {
@@ -56,7 +76,10 @@ export const renderButton = (
 			...(props.linkParam ? [props.linkParam] : []),
 		];
 		const hiddenInputs = paramList
-			.map((param) => `<input type="hidden" name="${param.name}" value="${param.value}" />`)
+			.map(
+				(param) =>
+					`<input type="hidden" name="${param.name}" value="${escapeAttr(param.value)}" />`
+			)
 			.join('');
 		return `<form action="${props.link}" method="get" target="_blank" class="inline-block">
 	            ${hiddenInputs}
@@ -69,8 +92,9 @@ export const renderButton = (
 	// Support both legacy inline onClick (if still passed) and id for external binding
 	const onClickAttr = 'onClick' in props && props.onClick ? ` onclick="${props.onClick}"` : '';
 	const idAttr = 'id' in props && (props as any).id ? ` id="${(props as any).id}"` : '';
+	const dataAttrs = renderDataAttrs('data' in props ? props.data : undefined);
 
-	return `<button type="button" class="${buttonClasses}"${idAttr}${onClickAttr}>${iconMarkup}${
+	return `<button type="button" class="${buttonClasses}"${idAttr}${onClickAttr}${dataAttrs}>${iconMarkup}${
 		'text' in props ? props.text || defaultLabel : defaultLabel
 	}</button>`;
 };
@@ -85,7 +109,7 @@ export const renderFileRow = (file: FileRowProps, showCheckbox: boolean = false)
                 id="${checkboxId}"
                 class="file-selector"
                 data-file-id="${file.id}"
-                data-file-path="${file.path}"
+                data-file-path="${escapeAttr(file.path)}"
 				${file.isSelected ? 'checked' : ''}
             />
         </td>
@@ -100,7 +124,7 @@ export const renderFileRow = (file: FileRowProps, showCheckbox: boolean = false)
             </td>
             <td class="whitespace-nowrap">
         ${showCheckbox ? `<label for="${checkboxId}" class="cursor-pointer">` : ''}
-                <span class="text-blue-300">${file.path}</span>
+                <span class="text-blue-300">${escapeAttr(file.path)}</span>
                 <span class="text-gray-300 ml-2">${size.toFixed(2)} ${unit}</span>
         ${showCheckbox ? '</label>' : ''}
             </td>

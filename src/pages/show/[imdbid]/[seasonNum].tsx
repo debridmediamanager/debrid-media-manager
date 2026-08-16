@@ -4,7 +4,6 @@ import SearchSourceProgress from '@/components/SearchSourceProgress';
 import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
 import UsenetResults from '@/components/UsenetResults';
-import { showInfoForAD, showInfoForRD, showInfoForTB } from '@/components/showInfo';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
 import { useAvailabilityCheck } from '@/hooks/useAvailabilityCheck';
@@ -12,7 +11,6 @@ import { useExternalSources } from '@/hooks/useExternalSources';
 import { useMassReport } from '@/hooks/useMassReport';
 import { useTorrentManagement } from '@/hooks/useTorrentManagement';
 import { SearchApiResponse, SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
-import { TorrentInfoResponse } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import { handleCastTvShowAllDebrid } from '@/utils/allDebridCastApiClient';
 import axiosWithRetry from '@/utils/axiosWithRetry';
@@ -34,6 +32,7 @@ import {
 import { quickSearch } from '@/utils/quickSearch';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { sortByMean } from '@/utils/results';
+import { showInfoForSearchResult } from '@/utils/searchResultInfo';
 import {
 	DMM_SOURCE,
 	SearchSourceStates,
@@ -43,7 +42,6 @@ import {
 	markSourceStatus,
 } from '@/utils/searchSources';
 import { buildSeasonRegex } from '@/utils/seasonFilter';
-import { isVideo } from '@/utils/selectable';
 import {
 	defaultEpisodeSize,
 	defaultTorrentsFilter as defaultFilterSetting,
@@ -734,73 +732,14 @@ const TvSearch: FunctionComponent = () => {
 	}, [searchState]); // Depend on searchState only
 
 	const handleShowInfo = (result: SearchResult) => {
-		let files = result.files
-			.filter((file) => isVideo({ path: file.filename }))
-			.map((file) => ({
-				id: file.fileId,
-				path: file.filename,
-				bytes: file.filesize,
-				selected: 1,
-			}));
-		const info = {
-			id: '',
-			filename: result.title,
-			original_filename: result.title,
-			hash: result.hash,
-			bytes: result.fileSize * 1024 * 1024,
-			original_bytes: result.fileSize,
-			progress: 100,
-			files,
-			links: [],
-			fake: true,
-			host: '',
-			split: 0,
-			status: 'downloaded',
-			added: '',
-			ended: '',
-			speed: 0,
-			seeders: 0,
-		} as TorrentInfoResponse;
-		if (rdKey) {
-			showInfoForRD(player, rdKey!, info, imdbid as string, 'tv', shouldDownloadMagnets);
-		} else if (adKey) {
-			showInfoForAD(player, adKey, info, imdbid as string, shouldDownloadMagnets);
-		} else if (torboxKey) {
-			const tbInfo = {
-				id: 0,
-				hash: result.hash,
-				created_at: '',
-				updated_at: '',
-				magnet: '',
-				size: result.fileSize * 1024 * 1024,
-				active: false,
-				auth_id: '',
-				download_state: 'downloaded',
-				seeds: 0,
-				peers: 0,
-				ratio: 0,
-				progress: 100,
-				download_speed: 0,
-				upload_speed: 0,
-				name: result.title,
-				eta: 0,
-				server: 0,
-				torrent_file: false,
-				expires_at: '',
-				download_present: true,
-				download_finished: true,
-				files: result.files
-					.filter((file) => isVideo({ path: file.filename }))
-					.map((file, i) => ({
-						id: i,
-						name: file.filename,
-						size: file.filesize,
-					})),
-				inactive_check: 0,
-				availability: 0,
-			};
-			showInfoForTB(player, torboxKey, tbInfo, shouldDownloadMagnets);
-		}
+		showInfoForSearchResult({
+			result,
+			keys: { rdKey, adKey, torboxKey },
+			player,
+			imdbId: imdbid as string,
+			mediaType: 'tv',
+			shouldDownloadMagnets,
+		});
 	};
 
 	async function handleCast(hash: string, fileIds: string[]) {

@@ -5,6 +5,7 @@ const mocks = vi.hoisted(() => ({
 	modalShowLoadingMock: vi.fn(),
 	axiosGetMock: vi.fn(),
 	handleShareMock: vi.fn(),
+	bindWatchButtonsMock: vi.fn(),
 }));
 
 vi.mock('../modals/modal', () => ({
@@ -48,6 +49,12 @@ vi.mock('../../utils/hashList', () => ({
 vi.mock('./render', () => ({
 	__esModule: true,
 	renderTorrentInfo: vi.fn(() => '<tr></tr>'),
+	renderTorrentInfoTB: vi.fn(() => '<tr></tr>'),
+}));
+
+vi.mock('./watchButtons', () => ({
+	__esModule: true,
+	bindWatchButtons: mocks.bindWatchButtonsMock,
 }));
 
 vi.mock('./utils', async () => {
@@ -61,7 +68,7 @@ vi.mock('./utils', async () => {
 });
 
 import Modal from '../modals/modal';
-import { showInfoForAD, showInfoForRD } from './index';
+import { showInfoForAD, showInfoForRD, showInfoForTB } from './index';
 
 beforeEach(() => {
 	vi.clearAllMocks();
@@ -340,5 +347,117 @@ describe('torrent info modal buttons', () => {
 		const options = mocks.modalFireMock.mock.calls[0][0];
 		expect(options.showCancelButton).toBe(false);
 		expect(options.showConfirmButton).toBe(false);
+	});
+});
+
+describe('watch button binding', () => {
+	const adInfo = {
+		id: 'ad-1',
+		hash: 'hash-ad',
+		filename: 'Example.mkv',
+		size: 1024,
+		status: 'Ready',
+		statusCode: 4,
+		uploadDate: 1700000000,
+		links: [{ filename: 'Example.mkv', link: 'https://alldebrid.com/f/abc', size: 1024 }],
+	};
+
+	const tbInfo = {
+		id: 7,
+		hash: 'hash-tb',
+		name: 'Example.mkv',
+		size: 1024,
+		download_state: 'downloaded',
+		download_finished: true,
+		download_present: true,
+		progress: 1,
+		created_at: new Date().toISOString(),
+		files: [{ id: 1, name: 'Example.mkv', size: 1024 }],
+	} as any;
+
+	const openModal = async (fire: () => Promise<void>) => {
+		await fire();
+		const options = mocks.modalFireMock.mock.calls[0][0];
+		document.body.innerHTML = options.html as string;
+		options.didOpen?.();
+		return mocks.bindWatchButtonsMock.mock.calls[0][0];
+	};
+
+	it('binds Real-Debrid rows to the account that owns them', async () => {
+		const bound = await openModal(() =>
+			showInfoForRD(
+				'windows/vlc',
+				'rd-key',
+				{
+					id: 1,
+					hash: 'hash-rd',
+					filename: 'Example.mkv',
+					bytes: 1024,
+					original_filename: 'Example.mkv',
+					original_bytes: 1024,
+					progress: 100,
+					speed: 0,
+					seeders: 0,
+					status: 'downloaded',
+					fake: false,
+					links: ['https://rd/link'],
+					files: [{ id: 1, selected: 1, path: 'Example.mkv', bytes: 1024 }],
+					added: new Date().toISOString(),
+				},
+				'tt1',
+				'movie',
+				false
+			)
+		);
+
+		expect(bound).toMatchObject({
+			service: 'rd',
+			hash: 'hash-rd',
+			player: 'windows/vlc',
+			keys: { rdKey: 'rd-key' },
+		});
+	});
+
+	// A library magnet must survive being watched; only one prepared for a search
+	// result gets removed again.
+	it('keeps an AllDebrid library magnet out of the cleanup path', async () => {
+		const bound = await openModal(() => showInfoForAD('windows/vlc', 'ad-key', adInfo));
+
+		expect(bound).toMatchObject({ service: 'ad', adInLibrary: true });
+	});
+
+	it('cleans up an AllDebrid magnet prepared for a search result', async () => {
+		const bound = await openModal(() =>
+			showInfoForAD('windows/vlc', 'ad-key', { ...adInfo, fake: true })
+		);
+
+		expect(bound).toMatchObject({ service: 'ad', adInLibrary: false });
+	});
+
+	// A search result has no AllDebrid id to delete or reinsert, and no links to
+	// export - the modal used to render those buttons anyway.
+	it('leaves the library actions out of a fake AllDebrid modal', async () => {
+		await showInfoForAD('windows/vlc', 'ad-key', { ...adInfo, fake: true });
+
+		const html = mocks.modalFireMock.mock.calls[0][0].html as string;
+		expect(html).not.toContain('btn-delete-ad');
+		expect(html).not.toContain('btn-restart-ad');
+		expect(html).not.toContain('Invalid Date');
+	});
+
+	it('binds a TorBox torrent to the torrent namespace', async () => {
+		const bound = await openModal(() => showInfoForTB('windows/vlc', 'tb-key', tbInfo, false));
+
+		expect(bound).toMatchObject({ service: 'tb', keys: { torboxKey: 'tb-key' } });
+	});
+
+	// A web download is not a torrent - it lives in TorBox's separate webdl
+	// namespace and cannot be resolved as one.
+	it('binds a TorBox web download to the webdl namespace', async () => {
+		const bound = await openModal(() =>
+			showInfoForTB('windows/vlc', 'tb-key', tbInfo, false, {}, true)
+		);
+
+		expect(bound).toMatchObject({ service: 'tbw' });
 	});
 });
