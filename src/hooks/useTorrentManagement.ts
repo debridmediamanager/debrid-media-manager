@@ -12,11 +12,13 @@ import { removeAvailability, submitAvailability, submitAvailabilityAd } from '@/
 import {
 	createDebridUploaderJob,
 	findJoinableTransfer,
-	getDebridUploaderJob,
+	followTransferToRd,
 	isDuplicateResponse,
 	needsRdHandoff,
 	settleCompletedTransfer,
 	trackDebridUploaderJob,
+	TRANSFER_STEP_TOAST_MS,
+	TRANSFER_TOAST_MS,
 	transferContextFromPath,
 	updateTrackedDebridUploaderJob,
 } from '@/utils/debridUploader';
@@ -27,7 +29,6 @@ import {
 } from '@/utils/deleteTorrent';
 import { convertToUserTorrent } from '@/utils/fetchTorrents';
 import { generateTokenAndHash } from '@/utils/token';
-import { phaseLabelOf } from '@/utils/transferPhase';
 import { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -371,7 +372,7 @@ export function useTorrentManagement(
 			const sizeBytes = sizeMb > 0 ? Math.round(sizeMb * 1024 * 1024) : undefined;
 
 			const toastId = toast.loading(`${label}: submitting transfer...`, {
-				duration: 30000,
+				duration: TRANSFER_STEP_TOAST_MS,
 			});
 			try {
 				let jobId: string;
@@ -403,7 +404,7 @@ export function useTorrentManagement(
 					}
 					toast.loading(
 						`${label}: transfer already in progress — waiting for completion...`,
-						{ id: toastId, duration: 30000 }
+						{ id: toastId, duration: TRANSFER_STEP_TOAST_MS }
 					);
 				} else {
 					const job = await createDebridUploaderJob({
@@ -454,7 +455,7 @@ export function useTorrentManagement(
 							`${label}: transfer in progress — waiting for completion...`,
 							{
 								id: toastId,
-								duration: 30000,
+								duration: TRANSFER_STEP_TOAST_MS,
 							}
 						);
 					} else {
@@ -473,72 +474,23 @@ export function useTorrentManagement(
 						});
 						toast.loading(
 							`${label}: transfer started — track it on the Transfers page.`,
-							{ id: toastId, duration: 30000 }
+							{ id: toastId, duration: TRANSFER_STEP_TOAST_MS }
 						);
 					}
 				}
 
-				const POLL_MS = 5000;
-				const MAX_POLLS = 360; // 30 min for the source half; RD's pull isn't waited on
-				for (let i = 0; i < MAX_POLLS; i++) {
-					await new Promise((resolve) => setTimeout(resolve, POLL_MS));
-
-					let polled;
-					try {
-						polled = await getDebridUploaderJob(jobId, transferContext);
-					} catch {
-						continue; // transient poll failure; the job keeps running server-side
-					}
-
-					if (polled.status === 'completed') {
-						await settleCompletedTransfer({
-							rdKey,
-							jobId,
-							infoHash: polled.info_hash,
-							needsHandoff: rdHandoff,
-							label,
-							toastId,
-						});
-						return;
-					}
-
-					if (polled.status === 'failed') {
-						toast.error(`${label} failed: ${polled.error || 'unknown error'}`, {
-							id: toastId,
-						});
-						return;
-					}
-
-					if (polled.status === 'uploading') {
-						if (rdHandoff) {
-							// Keep polling — we need the completed status to get info_hash
-							toast.loading(
-								`${label}: Real-Debrid download underway — waiting for completion...`,
-								{ id: toastId, duration: 30000 }
-							);
-							continue;
-						}
-						toast.success(
-							`${label}: Real-Debrid download underway — follow it on the Transfers page.`,
-							{ id: toastId }
-						);
-						return;
-					}
-
-					toast.loading(
-						`${label}: ${polled.status_message || phaseLabelOf('debrid', polled.status)}`,
-						{ id: toastId, duration: 30000 }
-					);
-				}
-
-				toast.error(
-					`${label}: still not handed to RD after 30 min — check the Transfers page.`,
-					{ id: toastId }
-				);
+				await followTransferToRd({
+					jobId,
+					rdKey,
+					label,
+					toastId,
+					rdHandoff,
+					context: transferContext,
+				});
 			} catch (error) {
 				toast.error(
 					`${label}: ${error instanceof Error ? error.message : 'failed to submit'}`,
-					{ id: toastId }
+					{ id: toastId, duration: TRANSFER_TOAST_MS }
 				);
 			}
 		},

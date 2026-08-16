@@ -1,3 +1,4 @@
+import { toast } from 'react-hot-toast';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	createDebridUploaderJob,
@@ -6,8 +7,10 @@ import {
 	isTerminalDebridUploaderStatus,
 	needsRdHandoff,
 	runDebridTransferToRd,
+	toastRdUnderway,
 	trackDebridUploaderJob,
 	TrackedDebridUploaderJob,
+	TRANSFER_TOAST_MS,
 	untrackDebridUploaderJob,
 	updateTrackedDebridUploaderJob,
 } from './debridUploader';
@@ -468,6 +471,137 @@ describe('runDebridTransferToRd joining a transfer this browser already tracks',
 		expect(postedJobs(fetchMock)).toHaveLength(1);
 		promise.catch(() => undefined);
 		vi.useRealTimers();
+	});
+});
+
+// Every send flow has to end on the same sentence, because from `uploading` on
+// there is nothing left for the browser to say: RD is pulling the bytes and the
+// Transfers page has the rest. A joined transfer used to stop short of it — it
+// held a spinner (and the row's button) through RD's whole download waiting for
+// the hash it still owed this user's RD, and on a slow release ended on a
+// "still not handed to RD after 30 min" error for a transfer handed over fine.
+describe('runDebridTransferToRd settling once Real-Debrid is pulling', () => {
+	const hash = 'a'.repeat(40);
+	const rewrittenHash = 'b'.repeat(40);
+	const UNDERWAY = 'Send to RD: Real-Debrid download underway — follow it on the Transfers page.';
+
+	const trackJoinable = () =>
+		trackDebridUploaderJob({
+			id: 'existing-job',
+			hash,
+			imdbId: 'tt1234567',
+			title: 'Tracked Movie',
+			createdAt: 1700000000000,
+			adopted: true,
+		});
+
+	const run = () =>
+		runDebridTransferToRd({ hash, imdbId: 'tt1234567', rdKey: 'rdkey', adKey: 'adkey' });
+
+	it('settles a joined transfer on the shared toast instead of waiting out RD', async () => {
+		vi.useFakeTimers();
+		trackJoinable();
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({
+				ok: true,
+				json: async () => ({ id: 'existing-job', status: 'uploading' }),
+			})
+		);
+
+		const promise = run();
+		await vi.advanceTimersByTimeAsync(5000);
+
+		expect(await promise).toBe('started');
+		// The explicit duration is the point: without one the toast inherits the
+		// 30s the loading toast carried, so a finished transfer sits on screen.
+		expect(toast.success).toHaveBeenCalledWith(UNDERWAY, {
+			id: 'toast-id',
+			duration: TRANSFER_TOAST_MS,
+		});
+		vi.useRealTimers();
+	});
+
+	it('settles a transfer this browser started on the same toast', async () => {
+		vi.useFakeTimers();
+		vi.stubGlobal(
+			'fetch',
+			vi
+				.fn()
+				.mockResolvedValueOnce({
+					ok: true,
+					json: async () => ({ id: 'new-job', status: 'pending' }),
+				})
+				.mockResolvedValue({
+					ok: true,
+					json: async () => ({ id: 'new-job', status: 'uploading' }),
+				})
+		);
+
+		const promise = run();
+		await vi.advanceTimersByTimeAsync(5000);
+
+		expect(await promise).toBe('started');
+		expect(toast.success).toHaveBeenCalledWith(UNDERWAY, {
+			id: 'toast-id',
+			duration: TRANSFER_TOAST_MS,
+		});
+		// The service was handed this user's RD key, so nothing is owed.
+		expect(mockAddHashAsMagnet).not.toHaveBeenCalled();
+		vi.useRealTimers();
+	});
+
+	// Letting go of the toast must not let go of the handoff: a joined transfer
+	// lands in the RD account that created it, and only the finished job carries
+	// the rewritten hash this user's RD needs.
+	it('hands a joined transfer over in the background after its toast settles', async () => {
+		vi.useFakeTimers();
+		trackJoinable();
+		vi.stubGlobal(
+			'fetch',
+			vi
+				.fn()
+				.mockResolvedValueOnce({
+					ok: true,
+					json: async () => ({ id: 'existing-job', status: 'downloading' }),
+				})
+				.mockResolvedValueOnce({
+					ok: true,
+					json: async () => ({ id: 'existing-job', status: 'uploading' }),
+				})
+				.mockResolvedValue({
+					ok: true,
+					json: async () => ({
+						id: 'existing-job',
+						status: 'completed',
+						info_hash: rewrittenHash,
+					}),
+				})
+		);
+
+		const promise = run();
+		await vi.advanceTimersByTimeAsync(5000);
+		expect(await promise).toBe('started');
+		expect(mockAddHashAsMagnet).not.toHaveBeenCalled();
+
+		await vi.advanceTimersByTimeAsync(5000);
+		expect(mockAddHashAsMagnet).toHaveBeenCalledWith('rdkey', rewrittenHash, true);
+		expect(getTrackedDebridUploaderJobs()[0].rdAdded).toBe(true);
+		vi.useRealTimers();
+	});
+});
+
+describe('toastRdUnderway', () => {
+	it('words the end of a transfer the same whatever sourced it', () => {
+		toastRdUnderway('TB → RD', 'a');
+		toastRdUnderway('AD → RD', 'b');
+		toastRdUnderway('Send to RD', 'c');
+
+		expect((toast.success as any).mock.calls.map(([message]: string[]) => message)).toEqual([
+			'TB → RD: Real-Debrid download underway — follow it on the Transfers page.',
+			'AD → RD: Real-Debrid download underway — follow it on the Transfers page.',
+			'Send to RD: Real-Debrid download underway — follow it on the Transfers page.',
+		]);
 	});
 });
 
