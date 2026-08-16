@@ -1,3 +1,4 @@
+import AvailabilityTokens from '@/components/AvailabilityTokens';
 import SearchTokens from '@/components/SearchTokens';
 import { RotateCcw, Search } from 'lucide-react';
 import React from 'react';
@@ -9,6 +10,8 @@ interface SearchControlsProps {
 	totalCount: number;
 	showMassReportButtons: boolean;
 	rdKey: string | null;
+	adKey?: string | null;
+	torboxKey?: string | null;
 	onMassReport: (type: 'porn' | 'wrong_imdb' | 'wrong_season') => void;
 	mediaType: 'movie' | 'tv';
 	title: string;
@@ -26,6 +29,8 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 	totalCount,
 	showMassReportButtons,
 	rdKey,
+	adKey,
+	torboxKey,
 	onMassReport,
 	mediaType,
 	title,
@@ -88,6 +93,13 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 			</div>
 
 			<div className="mb-2 flex items-center gap-2 overflow-x-auto p-2">
+				<AvailabilityTokens
+					query={query}
+					onQueryChange={onQueryChange}
+					rdKey={rdKey}
+					adKey={adKey}
+					torboxKey={torboxKey}
+				/>
 				<SearchTokens
 					title={title}
 					year={year}

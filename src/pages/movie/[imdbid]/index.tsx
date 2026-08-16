@@ -1020,6 +1020,8 @@ const MovieSearch: FunctionComponent = () => {
 				totalCount={filteredResults.length}
 				showMassReportButtons={showMassReportButtons}
 				rdKey={rdKey}
+				adKey={adKey}
+				torboxKey={torboxKey}
 				onMassReport={(type) => handleMassReport(type, filteredResults)}
 				mediaType="movie"
 				title={movieInfo.title}

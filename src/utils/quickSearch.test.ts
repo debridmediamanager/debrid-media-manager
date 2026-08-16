@@ -38,4 +38,43 @@ describe('quickSearch', () => {
 		expect(quickSearch('Movie -Another', data).length).toBe(1);
 		expect(quickSearch('(', data).length).toBe(0);
 	});
+
+	describe('availability filters', () => {
+		const availability: any[] = [
+			{ title: 'Cached in RD', hash: 'a1', rdAvailable: true },
+			{ title: 'Cached in AD', hash: 'a2', adAvailable: true },
+			{ title: 'Cached in TB', hash: 'a3', tbAvailable: true },
+			{ title: 'Cached in RD and TB', hash: 'a4', rdAvailable: true, tbAvailable: true },
+			{ title: 'Not cached anywhere', hash: 'a5' },
+		];
+
+		it('filters by a single service', () => {
+			expect(quickSearch('is:rd', availability).map((r) => r.hash)).toEqual(['a1', 'a4']);
+			expect(quickSearch('is:ad', availability).map((r) => r.hash)).toEqual(['a2']);
+			expect(quickSearch('is:tb', availability).map((r) => r.hash)).toEqual(['a3', 'a4']);
+		});
+
+		it('filters by cached in any service and by uncached', () => {
+			expect(quickSearch('is:cached', availability).map((r) => r.hash)).toEqual([
+				'a1',
+				'a2',
+				'a3',
+				'a4',
+			]);
+			expect(quickSearch('is:uncached', availability).map((r) => r.hash)).toEqual(['a5']);
+		});
+
+		it('combines with other terms and supports exclusion', () => {
+			expect(quickSearch('is:rd tb', availability).map((r) => r.hash)).toEqual(['a4']);
+			expect(quickSearch('-is:rd', availability).map((r) => r.hash)).toEqual([
+				'a2',
+				'a3',
+				'a5',
+			]);
+		});
+
+		it('matches nothing for an unknown service', () => {
+			expect(quickSearch('is:pm', availability).length).toBe(0);
+		});
+	});
 });

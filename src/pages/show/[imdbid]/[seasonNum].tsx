@@ -1,3 +1,4 @@
+import AvailabilityTokens from '@/components/AvailabilityTokens';
 import MediaHeader from '@/components/MediaHeader';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
 import SearchTokens from '@/components/SearchTokens';
@@ -1387,6 +1388,13 @@ const TvSearch: FunctionComponent = () => {
 			</div>
 
 			<div className="mb-2 flex items-center gap-2 overflow-x-auto p-2">
+				<AvailabilityTokens
+					query={query}
+					onQueryChange={setQuery}
+					rdKey={rdKey}
+					adKey={adKey}
+					torboxKey={torboxKey}
+				/>
 				<SearchTokens
 					title={showInfo.title}
 					year={seasonNum as string}

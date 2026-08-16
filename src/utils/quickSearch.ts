@@ -61,6 +61,35 @@ export function quickSearch(query: string, unfiltered: SearchResult[]) {
 				return false;
 			}
 
+			// Handle debrid availability queries (is:rd, is:ad, is:tb, is:cached, is:uncached)
+			if (q.startsWith('is:')) {
+				const value = q.substring(3);
+				const anyAvailable = !!(t.rdAvailable || t.adAvailable || t.tbAvailable);
+
+				let available: boolean;
+				switch (value) {
+					case 'rd':
+						available = !!t.rdAvailable;
+						break;
+					case 'ad':
+						available = !!t.adAvailable;
+						break;
+					case 'tb':
+						available = !!t.tbAvailable;
+						break;
+					case 'cached':
+						available = anyAvailable;
+						break;
+					case 'uncached':
+						available = !anyAvailable;
+						break;
+					default:
+						return false;
+				}
+
+				return isExclusion ? !available : available;
+			}
+
 			// Regular title/hash search
 			try {
 				const matches = new RegExp(q, 'i').test(t.title) || t.hash === q;
