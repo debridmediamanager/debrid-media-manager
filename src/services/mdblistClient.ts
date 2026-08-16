@@ -2,10 +2,26 @@ import axios from 'axios';
 import { getMdblistCacheService } from './database/mdblistCache';
 import { MList, MMovie, MSearchResponse, MShow } from './mdblist';
 
+const ONE_HOUR = 3600000;
+const ONE_DAY = 86400000;
+
+// Shows already expired after 7 days; movies were served from the first fetch
+// forever, which froze pre-release placeholder synopses and teaser posters in
+// place indefinitely. Lists are curated collections that gain items over time.
+const CACHE_TTL = {
+	MOVIE: 30 * ONE_DAY,
+	SHOW: 7 * ONE_DAY,
+	LIST: ONE_DAY,
+};
+
 export class MDBListClient {
 	private apiKey: string;
 	private baseUrl = 'https://mdblist.com/api';
 	private cache = getMdblistCacheService();
+
+	private isFresh(updatedAt: Date, maxAge: number): boolean {
+		return Date.now() - updatedAt.getTime() < maxAge;
+	}
 
 	constructor(apiKey: string) {
 		this.apiKey = apiKey;
@@ -20,8 +36,7 @@ export class MDBListClient {
 
 		// Check cache first (with 1 hour expiration for search results)
 		const cached = await this.cache.getWithMetadata(cacheKey);
-		const ONE_HOUR = 3600000;
-		if (cached && Date.now() - cached.updatedAt.getTime() < ONE_HOUR) {
+		if (cached && this.isFresh(cached.updatedAt, ONE_HOUR)) {
 			console.log(`[MDBList] Using cached search results for: ${cacheKey}`);
 			return cached.data;
 		}
@@ -51,20 +66,19 @@ export class MDBListClient {
 	 * Get info for a movie or show by IMDB ID
 	 */
 	async getInfoByImdbId(imdbId: string): Promise<MMovie | MShow> {
-		const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
-
 		const cached = await this.cache.getWithMetadata(imdbId);
 		if (cached) {
 			const isShow = cached.data.type === 'show';
+			const maxAge = isShow ? CACHE_TTL.SHOW : CACHE_TTL.MOVIE;
 			const cacheAge = Date.now() - cached.updatedAt.getTime();
 
-			if (!isShow || cacheAge < SEVEN_DAYS) {
+			if (this.isFresh(cached.updatedAt, maxAge)) {
 				console.log(`[MDBList] Using cached data for IMDB ID: ${imdbId}`);
 				return cached.data;
 			}
 
 			console.log(
-				`[MDBList] Cache expired for show ${imdbId} (age: ${Math.floor(cacheAge / 86400000)} days), refetching`
+				`[MDBList] Cache expired for ${isShow ? 'show' : 'movie'} ${imdbId} (age: ${Math.floor(cacheAge / ONE_DAY)} days), refetching`
 			);
 		}
 
@@ -72,7 +86,18 @@ export class MDBListClient {
 		url.searchParams.append('apikey', this.apiKey);
 		url.searchParams.append('i', imdbId);
 
-		const response = (await axios.get(url.toString())).data;
+		let response;
+		try {
+			response = (await axios.get(url.toString())).data;
+		} catch (error) {
+			// An expired row is still better than none — callers render a failed
+			// lookup as "Unknown", which is a worse page than slightly old metadata.
+			if (cached) {
+				console.error(`[MDBList] Refetch failed for ${imdbId}, serving stale cache`, error);
+				return cached.data;
+			}
+			throw error;
+		}
 
 		const type = response.type === 'movie' ? 'movie' : 'show';
 		await this.cache.set(imdbId, type, response);
@@ -88,17 +113,32 @@ export class MDBListClient {
 		const cacheKey = `tmdb_${tmdbId}`;
 
 		// Check cache first
-		const cached = await this.cache.get(cacheKey);
+		const cached = await this.cache.getWithMetadata(cacheKey);
 		if (cached) {
-			console.log(`[MDBList] Using cached data for TMDB ID: ${tmdbId}`);
-			return cached;
+			const maxAge = cached.data.type === 'show' ? CACHE_TTL.SHOW : CACHE_TTL.MOVIE;
+			if (this.isFresh(cached.updatedAt, maxAge)) {
+				console.log(`[MDBList] Using cached data for TMDB ID: ${tmdbId}`);
+				return cached.data;
+			}
 		}
 
 		const url = new URL(this.baseUrl);
 		url.searchParams.append('apikey', this.apiKey);
 		url.searchParams.append('tm', tmdbId.toString());
 
-		const response = (await axios.get(url.toString())).data;
+		let response;
+		try {
+			response = (await axios.get(url.toString())).data;
+		} catch (error) {
+			if (cached) {
+				console.error(
+					`[MDBList] Refetch failed for TMDB ${tmdbId}, serving stale cache`,
+					error
+				);
+				return cached.data;
+			}
+			throw error;
+		}
 
 		// Determine type and cache accordingly
 		const type = response.type === 'movie' ? 'movie' : 'show';
@@ -121,17 +161,29 @@ export class MDBListClient {
 		const cacheKey = `list_search_${term}`;
 
 		// Check cache first
-		const cached = await this.cache.getCachedList(cacheKey);
-		if (cached) {
+		const cached = await this.cache.getWithMetadata(cacheKey);
+		if (cached && this.isFresh(cached.updatedAt, CACHE_TTL.LIST)) {
 			console.log(`[MDBList] Using cached list search results for: ${term}`);
-			return cached;
+			return cached.data;
 		}
 
 		const url = new URL(`${this.baseUrl}/lists/search`);
 		url.searchParams.append('apikey', this.apiKey);
 		url.searchParams.append('s', term);
 
-		const response = (await axios.get(url.toString())).data;
+		let response;
+		try {
+			response = (await axios.get(url.toString())).data;
+		} catch (error) {
+			if (cached) {
+				console.error(
+					`[MDBList] Refetch failed for list search ${term}, serving stale`,
+					error
+				);
+				return cached.data;
+			}
+			throw error;
+		}
 
 		// Cache the response
 		await this.cache.cacheList(cacheKey, response);
@@ -147,16 +199,25 @@ export class MDBListClient {
 		const cacheKey = `list_items_${listId}`;
 
 		// Check cache first
-		const cached = await this.cache.getCachedList(cacheKey);
-		if (cached) {
+		const cached = await this.cache.getWithMetadata(cacheKey);
+		if (cached && this.isFresh(cached.updatedAt, CACHE_TTL.LIST)) {
 			console.log(`[MDBList] Using cached list items for ID: ${listId}`);
-			return cached;
+			return cached.data;
 		}
 
 		const url = new URL(`${this.baseUrl}/lists/${listId}/items`);
 		url.searchParams.append('apikey', this.apiKey);
 
-		const response = (await axios.get(url.toString())).data;
+		let response;
+		try {
+			response = (await axios.get(url.toString())).data;
+		} catch (error) {
+			if (cached) {
+				console.error(`[MDBList] Refetch failed for list ${listId}, serving stale`, error);
+				return cached.data;
+			}
+			throw error;
+		}
 
 		// Cache the response
 		await this.cache.cacheList(cacheKey, response);
@@ -173,8 +234,7 @@ export class MDBListClient {
 
 		// Check cache first (with 24 hour expiration for top lists)
 		const cached = await this.cache.getWithMetadata(cacheKey);
-		const ONE_DAY = 86400000;
-		if (cached && Date.now() - cached.updatedAt.getTime() < ONE_DAY) {
+		if (cached && this.isFresh(cached.updatedAt, ONE_DAY)) {
 			console.log(`[MDBList] Using cached top lists`);
 			return cached.data;
 		}

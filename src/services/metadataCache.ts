@@ -22,6 +22,11 @@ export class MetadataCacheService {
 		EPISODE_SCHEDULE: 43200000, // 12 hours
 		// TV series metadata can change as new seasons are added
 		TV_SERIES: 604800000, // 7 days
+		// Movie metadata looks static, but a row is written the first time anyone
+		// opens the page — which for anticipated titles is months before release,
+		// when the synopsis is a placeholder and the poster is a teaser. Without an
+		// expiry that pre-release snapshot is served forever.
+		MOVIE: 2592000000, // 30 days
 	};
 
 	/**
@@ -56,10 +61,31 @@ export class MetadataCacheService {
 
 		// Fetch from API
 		console.log(`[MetadataCache] Fetching ${cacheType} data from: ${url}`);
-		const response = await axios.get(url, config || {});
-		const data = response?.data;
+		let data: T | undefined;
+		try {
+			const response = await axios.get(url, config || {});
+			data = response?.data;
+		} catch (error) {
+			// Now that these entries expire, an upstream outage would otherwise turn a
+			// merely stale row into no row at all — and callers render that as "Unknown".
+			// Serving the expired copy is strictly better than serving nothing.
+			if (cached) {
+				console.error(
+					`[MetadataCache] Refetch failed for ${cacheKey}, serving stale ${cacheType}`,
+					error
+				);
+				return cached.data as T;
+			}
+			throw error;
+		}
 
 		if (data === undefined) {
+			if (cached) {
+				console.error(
+					`[MetadataCache] Empty response for ${cacheKey}, serving stale ${cacheType}`
+				);
+				return cached.data as T;
+			}
 			throw new Error(`Failed to fetch ${cacheType} data from: ${url}`);
 		}
 
@@ -84,7 +110,13 @@ export class MetadataCacheService {
 	async getCinemetaMovie(imdbId: string, config?: AxiosRequestConfig): Promise<any> {
 		const url = `https://v3-cinemeta.strem.io/meta/movie/${imdbId}.json`;
 		const cacheKey = `cinemeta_movie_${imdbId}`;
-		return this.fetchWithCache(url, cacheKey, 'cinemeta_movie', config);
+		return this.fetchWithCache(
+			url,
+			cacheKey,
+			'cinemeta_movie',
+			config,
+			this.CACHE_DURATIONS.MOVIE
+		);
 	}
 
 	/**
@@ -163,7 +195,13 @@ export class MetadataCacheService {
 
 		const url = `https://www.omdbapi.com/?i=${imdbId}&apikey=${omdbKey}`;
 		const cacheKey = `omdb_info_${imdbId}`;
-		return this.fetchWithCache(url, cacheKey, 'omdb_info');
+		return this.fetchWithCache(
+			url,
+			cacheKey,
+			'omdb_info',
+			undefined,
+			this.CACHE_DURATIONS.MOVIE
+		);
 	}
 
 	/**
@@ -177,7 +215,15 @@ export class MetadataCacheService {
 
 		const url = `https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`;
 		const cacheKey = `tmdb_find_${imdbId}`;
-		return this.fetchWithCache(url, cacheKey, 'tmdb_find');
+		// Callers read vote_count off this to decide movie-vs-show, and a title that
+		// has no votes yet gains them later, so this cannot be cached permanently.
+		return this.fetchWithCache(
+			url,
+			cacheKey,
+			'tmdb_find',
+			undefined,
+			this.CACHE_DURATIONS.MOVIE
+		);
 	}
 
 	/**
@@ -191,7 +237,13 @@ export class MetadataCacheService {
 
 		const url = `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${tmdbKey}`;
 		const cacheKey = `tmdb_movie_${tmdbId}`;
-		return this.fetchWithCache(url, cacheKey, 'tmdb_movie');
+		return this.fetchWithCache(
+			url,
+			cacheKey,
+			'tmdb_movie',
+			undefined,
+			this.CACHE_DURATIONS.MOVIE
+		);
 	}
 
 	/**
@@ -205,7 +257,13 @@ export class MetadataCacheService {
 
 		const url = `https://api.themoviedb.org/3/tv/${tmdbId}?api_key=${tmdbKey}`;
 		const cacheKey = `tmdb_tv_${tmdbId}`;
-		return this.fetchWithCache(url, cacheKey, 'tmdb_tv');
+		return this.fetchWithCache(
+			url,
+			cacheKey,
+			'tmdb_tv',
+			undefined,
+			this.CACHE_DURATIONS.TV_SERIES
+		);
 	}
 
 	async getTmdbExternalIds(tmdbId: string | number, mediaType: 'movie' | 'tv'): Promise<any> {
@@ -216,6 +274,8 @@ export class MetadataCacheService {
 
 		const url = `https://api.themoviedb.org/3/${mediaType}/${tmdbId}/external_ids?api_key=${tmdbKey}`;
 		const cacheKey = `tmdb_external_ids_${mediaType}_${tmdbId}`;
+		// Deliberately permanent: this is an id-to-id mapping, not descriptive
+		// metadata, so it does not go stale the way titles and posters do.
 		return this.fetchWithCache(url, cacheKey, 'tmdb_external_ids');
 	}
 

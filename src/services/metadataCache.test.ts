@@ -74,6 +74,42 @@ describe('MetadataCacheService fetchWithCache', () => {
 		expect(cacheFactory.current.set).toHaveBeenCalledWith('key', 'type', { fresh: true });
 	});
 
+	it('serves the expired entry when the refetch fails', async () => {
+		const stale = { data: { cached: 'stale' }, updatedAt: new Date(Date.now() - 10000) };
+		cacheFactory.current = buildCache();
+		cacheFactory.current.getWithMetadata.mockResolvedValue(stale);
+		axiosMocks.get.mockRejectedValue(new Error('upstream down'));
+
+		const service = new MetadataCacheService();
+		const result = await service.fetchWithCache('url', 'key', 'type', undefined, 1000);
+
+		expect(result).toEqual(stale.data);
+		expect(cacheFactory.current.set).not.toHaveBeenCalled();
+	});
+
+	it('serves the expired entry when the response body is empty', async () => {
+		const stale = { data: { cached: 'stale' }, updatedAt: new Date(Date.now() - 10000) };
+		cacheFactory.current = buildCache();
+		cacheFactory.current.getWithMetadata.mockResolvedValue(stale);
+		axiosMocks.get.mockResolvedValue({ data: undefined });
+
+		const service = new MetadataCacheService();
+		const result = await service.fetchWithCache('url', 'key', 'type', undefined, 1000);
+
+		expect(result).toEqual(stale.data);
+	});
+
+	it('rethrows when the refetch fails and nothing is cached', async () => {
+		cacheFactory.current = buildCache();
+		cacheFactory.current.getWithMetadata.mockResolvedValue(null);
+		axiosMocks.get.mockRejectedValue(new Error('upstream down'));
+
+		const service = new MetadataCacheService();
+		await expect(service.fetchWithCache('url', 'key', 'type', undefined, 1000)).rejects.toThrow(
+			'upstream down'
+		);
+	});
+
 	it('continues even if cache.set throws', async () => {
 		cacheFactory.current = buildCache();
 		cacheFactory.current.getWithMetadata.mockResolvedValue(null);
@@ -138,13 +174,25 @@ describe('MetadataCacheService API helpers', () => {
 		await service.searchCinemetaSeries('query');
 		await service.searchOmdb('title', 2020, 'movie');
 		await service.getTraktPopular('shows', 'drama', 5);
+		await service.getTmdbMovieInfo(27205);
+		await service.getTmdbTvInfo(1396);
+		await service.getTmdbExternalIds(27205, 'movie');
 
-		const [movieCall, seriesCall, omdbCall, traktCall] = spy.mock.calls;
+		const [
+			movieCall,
+			seriesCall,
+			omdbCall,
+			traktCall,
+			tmdbMovieCall,
+			tmdbTvCall,
+			externalIdsCall,
+		] = spy.mock.calls;
 		expect(movieCall).toEqual([
 			'https://v3-cinemeta.strem.io/meta/movie/tt123.json',
 			'cinemeta_movie_tt123',
 			'cinemeta_movie',
 			undefined,
+			2592000000, // 30 days — never cache a movie permanently, see MOVIE duration
 		]);
 		expect(seriesCall[0]).toBe(
 			'https://v3-cinemeta.strem.io/catalog/series/top/search=query.json'
@@ -169,6 +217,16 @@ describe('MetadataCacheService API helpers', () => {
 			})
 		);
 		expect(traktCall[4]).toBe(21600000);
+
+		// TMDB titles and posters get revised upstream, so neither may be permanent.
+		expect(tmdbMovieCall[2]).toBe('tmdb_movie');
+		expect(tmdbMovieCall[4]).toBe(2592000000);
+		expect(tmdbTvCall[2]).toBe('tmdb_tv');
+		expect(tmdbTvCall[4]).toBe(604800000);
+
+		// External ids are an immutable mapping and stay permanent on purpose.
+		expect(externalIdsCall[2]).toBe('tmdb_external_ids');
+		expect(externalIdsCall[4]).toBeUndefined();
 	});
 
 	it('getMetadataCache returns a singleton instance', () => {

@@ -87,23 +87,51 @@ describe('MDBListClient cache expiration for TV shows', () => {
 		expect(result).toEqual(cachedData);
 	});
 
-	it('always uses cached movie data regardless of age', async () => {
+	it('refetches movie data when cache is older than 30 days', async () => {
 		const client = new MDBListClient('test-api-key');
 		const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
 
-		const cachedData = {
+		mockCache.getWithMetadata.mockResolvedValue({
+			data: {
+				type: 'movie',
+				title: 'Old Movie Data',
+			},
+			updatedAt: oneYearAgo,
+		});
+
+		const freshData = {
 			type: 'movie',
-			title: 'Old Movie Data',
+			title: 'Fresh Movie Data',
 		};
 
-		mockCache.getWithMetadata.mockResolvedValue({
-			data: cachedData,
-			updatedAt: oneYearAgo,
+		vi.mocked(axios.get).mockResolvedValue({
+			data: freshData,
 		});
 
 		const result = await client.getInfoByImdbId('tt99999');
 
 		expect(mockCache.getWithMetadata).toHaveBeenCalledWith('tt99999');
+		expect(axios.get).toHaveBeenCalled();
+		expect(mockCache.set).toHaveBeenCalledWith('tt99999', 'movie', freshData);
+		expect(result).toEqual(freshData);
+	});
+
+	it('uses cached movie data when cache is less than 30 days old', async () => {
+		const client = new MDBListClient('test-api-key');
+		const tenDaysAgo = new Date(Date.now() - 10 * 24 * 60 * 60 * 1000);
+
+		const cachedData = {
+			type: 'movie',
+			title: 'Recent Movie Data',
+		};
+
+		mockCache.getWithMetadata.mockResolvedValue({
+			data: cachedData,
+			updatedAt: tenDaysAgo,
+		});
+
+		const result = await client.getInfoByImdbId('tt99999');
+
 		expect(axios.get).not.toHaveBeenCalled();
 		expect(result).toEqual(cachedData);
 	});
