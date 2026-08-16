@@ -41,6 +41,27 @@ export const pickWatchService = (
 	return null;
 };
 
+/**
+ * Which service's info modal a search result should open.
+ *
+ * The modal's Watch rows inherit the service the modal was opened for, so this
+ * has to agree with `pickWatchService` or those rows target a service that does
+ * not hold the torrent. When nothing is cached anywhere there is no watchable
+ * service to agree with, and the modal is still the file list and the
+ * add-to-library surface, so it falls back to whichever key exists.
+ */
+export const pickInfoService = (
+	result: Pick<SearchResult, 'rdAvailable' | 'adAvailable' | 'tbAvailable'>,
+	keys: WatchKeys
+): WatchService | null => {
+	const watchable = pickWatchService(result, keys);
+	if (watchable) return watchable;
+	if (keys.rdKey) return 'rd';
+	if (keys.adKey) return 'ad';
+	if (keys.torboxKey) return 'tb';
+	return null;
+};
+
 export const watchKeyFor = (service: WatchService, keys: WatchKeys): string | null => {
 	if (service === 'rd') return keys.rdKey ?? null;
 	if (service === 'ad') return keys.adKey ?? null;
@@ -95,6 +116,41 @@ export const buildLinkWatchUrl = (params: {
 	});
 
 /**
+ * Asks the server for the player intent.
+ *
+ * The two GET routes take the debrid key in the query string, which puts it in
+ * the address bar of the tab that opens and in every access log on the way. This
+ * posts it in a body instead and navigates to the intent the server hands back.
+ */
+export const resolveWatchIntent = async (params: {
+	service: WatchService;
+	player: string;
+	token: string;
+	hash?: string;
+	fileName?: string;
+	fileId?: number | string;
+	link?: string;
+}): Promise<string> => {
+	const response = await fetch(`/api/watch/resolve/${params.player}`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			service: params.service,
+			token: params.token,
+			hash: params.hash,
+			fileName: params.fileName,
+			fileId: params.fileId === undefined ? undefined : String(params.fileId),
+			link: params.link,
+		}),
+	});
+	const data = await response.json().catch(() => ({}) as { intent?: string; error?: string });
+	if (!response.ok || !data.intent) {
+		throw new Error(data.error || `Watch request failed (${response.status})`);
+	}
+	return data.intent;
+};
+
+/**
  * Resolves an AllDebrid magnet in the browser and returns the file link.
  *
  * AllDebrid refuses `magnet/upload` from datacenter IPs (NO_SERVER), so this
@@ -125,6 +181,14 @@ export type OpenWatchOptions = {
 	keys: WatchKeys;
 	fileName?: string;
 	fileId?: number | string;
+	/**
+	 * An already-resolved service link for this file, which a library torrent's
+	 * row has and a search result does not. With it, RD unrestricts the link it
+	 * was given; without it, RD re-adds the hash as a magnet — and RD stalls on
+	 * content the account already holds, so the link is what keeps watching a
+	 * library torrent working.
+	 */
+	link?: string;
 	/** AD only: skip cleanup because the magnet is the user's own library entry. */
 	adInLibrary?: boolean;
 };
@@ -132,10 +196,10 @@ export type OpenWatchOptions = {
 /**
  * Opens the chosen player for a torrent.
  *
- * RD and TB resolve entirely inside the API route, so the tab is opened
- * straight at it. AD has to do its magnet prep here first, which means the tab
- * must be opened synchronously on the click and navigated afterwards — opening
- * it after the await is what popup blockers reject.
+ * The tab is opened synchronously on the click and navigated once the server
+ * answers — opening it after the await is what popup blockers reject. AllDebrid
+ * needs its magnet prepared here first, in the browser, because AllDebrid
+ * refuses `magnet/upload` from a datacenter IP.
  */
 export const openWatch = async (opts: OpenWatchOptions): Promise<void> => {
 	const { service, player, hash, keys, fileName, fileId } = opts;
@@ -145,23 +209,30 @@ export const openWatch = async (opts: OpenWatchOptions): Promise<void> => {
 		return;
 	}
 
-	if (service !== 'ad') {
-		window.open(buildInstantWatchUrl({ service, player, token, hash, fileName, fileId }));
-		return;
-	}
-
 	const tab = window.open('', '_blank');
 	try {
-		const link = await resolveAdLink(token, hash, fileName, Boolean(opts.adInLibrary));
-		const url = buildLinkWatchUrl({ service, player, token, link });
+		const link =
+			opts.link ||
+			(service === 'ad'
+				? await resolveAdLink(token, hash, fileName, Boolean(opts.adInLibrary))
+				: undefined);
+		const intent = await resolveWatchIntent({
+			service,
+			player,
+			token,
+			hash,
+			fileName,
+			fileId,
+			link,
+		});
 		if (tab) {
-			tab.location.href = url;
+			tab.location.href = intent;
 		} else {
-			window.location.href = url;
+			window.location.href = intent;
 		}
 	} catch (error: any) {
 		tab?.close();
 		const message = error instanceof Error ? error.message : String(error);
-		toast.error(`AllDebrid watch failed: ${message}`);
+		toast.error(`${WATCH_SERVICE_LABEL[service]} watch failed: ${message}`);
 	}
 };

@@ -150,13 +150,31 @@ describe('buildLinkWatchUrl', () => {
 
 describe('openWatch', () => {
 	const originalOpen = window.open;
+	const originalFetch = global.fetch;
+	let fetchMock: ReturnType<typeof vi.fn>;
+
+	const lastRequest = () => {
+		const [url, init] = fetchMock.mock.calls[fetchMock.mock.calls.length - 1] as [string, any];
+		return { url, init, body: JSON.parse(init.body) };
+	};
+
+	beforeEach(() => {
+		fetchMock = vi.fn().mockResolvedValue({
+			ok: true,
+			status: 200,
+			json: async () => ({ intent: 'vlc://stream' }),
+		});
+		global.fetch = fetchMock as any;
+	});
 
 	afterEach(() => {
 		window.open = originalOpen;
+		global.fetch = originalFetch;
 	});
 
-	it('opens the instant route directly for RD', async () => {
-		const open = vi.fn();
+	it('resolves RD by hash without touching AllDebrid', async () => {
+		const tab: any = { location: { href: '' }, close: vi.fn() };
+		const open = vi.fn(() => tab);
 		window.open = open as any;
 
 		await openWatch({
@@ -167,11 +185,60 @@ describe('openWatch', () => {
 			fileName: 'Feature.mkv',
 		});
 
-		expect(open).toHaveBeenCalledTimes(1);
-		const url = open.mock.calls[0][0] as string;
-		expect(url).toContain('/api/watch/instant/windows/vlc?');
-		expect(new URLSearchParams(url.split('?')[1]).get('service')).toBe('rd');
+		const { url, init, body } = lastRequest();
+		expect(url).toBe('/api/watch/resolve/windows/vlc');
+		expect(init.method).toBe('POST');
+		expect(body).toMatchObject({ service: 'rd', hash: 'abc', fileName: 'Feature.mkv' });
+		expect(tab.location.href).toBe('vlc://stream');
 		expect(mocks.prepareMagnetForCast).not.toHaveBeenCalled();
+	});
+
+	// The key used to travel as a query parameter, which put it in the address
+	// bar of the tab that opened and in every access log on the way.
+	it('keeps the debrid key out of the request URL', async () => {
+		window.open = vi.fn(() => ({ location: { href: '' }, close: vi.fn() })) as any;
+
+		await openWatch({
+			service: 'rd',
+			player: 'windows/vlc',
+			hash: 'abc',
+			keys: { rdKey: 'rd-key' },
+		});
+
+		const { url, body } = lastRequest();
+		expect(url).not.toContain('rd-key');
+		expect(body.token).toBe('rd-key');
+	});
+
+	// A library row already holds the resolved link. Re-adding the hash would
+	// make RD stall on content the account already has.
+	it('uses a link the caller already holds instead of the hash', async () => {
+		window.open = vi.fn(() => ({ location: { href: '' }, close: vi.fn() })) as any;
+
+		await openWatch({
+			service: 'rd',
+			player: 'windows/vlc',
+			hash: 'abc',
+			keys: { rdKey: 'rd-key' },
+			link: 'https://real-debrid.com/d/XYZ',
+		});
+
+		expect(lastRequest().body.link).toBe('https://real-debrid.com/d/XYZ');
+	});
+
+	it('does not re-upload an AD magnet when the row has a link', async () => {
+		window.open = vi.fn(() => ({ location: { href: '' }, close: vi.fn() })) as any;
+
+		await openWatch({
+			service: 'ad',
+			player: 'ios/infuse',
+			hash: 'abc',
+			keys: { adKey: 'ad-key' },
+			link: 'https://alldebrid.com/f/known',
+		});
+
+		expect(mocks.prepareMagnetForCast).not.toHaveBeenCalled();
+		expect(lastRequest().body.link).toBe('https://alldebrid.com/f/known');
 	});
 
 	// The AD magnet prep is async, so the tab has to be opened synchronously on
@@ -193,10 +260,30 @@ describe('openWatch', () => {
 		});
 
 		expect(open).toHaveBeenCalledWith('', '_blank');
-		expect(tab.location.href).toContain('/api/watch/ios/infuse?');
-		const params = new URLSearchParams(tab.location.href.split('?')[1]);
-		expect(params.get('service')).toBe('ad');
-		expect(params.get('link')).toBe('https://alldebrid.com/f/xyz');
+		const { body } = lastRequest();
+		expect(body.service).toBe('ad');
+		expect(body.link).toBe('https://alldebrid.com/f/xyz');
+		expect(tab.location.href).toBe('vlc://stream');
+	});
+
+	it('closes the tab and reports when the server has no intent', async () => {
+		const tab: any = { location: { href: '' }, close: vi.fn() };
+		window.open = vi.fn(() => tab) as any;
+		fetchMock.mockResolvedValue({
+			ok: false,
+			status: 500,
+			json: async () => ({ error: "Torrent status is 'queued'" }),
+		});
+
+		await openWatch({
+			service: 'rd',
+			player: 'windows/vlc',
+			hash: 'abc',
+			keys: { rdKey: 'rd-key' },
+		});
+
+		expect(tab.close).toHaveBeenCalled();
+		expect(mocks.toastError).toHaveBeenCalledWith(expect.stringContaining('queued'));
 	});
 
 	// Uploading is AllDebrid's only cache probe, so it leaves the magnet in the
@@ -249,9 +336,7 @@ describe('openWatch', () => {
 			fileName: 'Not.In.Magnet.mkv',
 		});
 
-		expect(new URLSearchParams(tab.location.href.split('?')[1]).get('link')).toBe(
-			'https://alldebrid.com/f/biggest'
-		);
+		expect(lastRequest().body.link).toBe('https://alldebrid.com/f/biggest');
 	});
 
 	it('closes the blank tab and reports when AD prep fails', async () => {
