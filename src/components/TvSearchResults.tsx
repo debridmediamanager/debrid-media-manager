@@ -22,6 +22,11 @@ import {
 import { useEffect, useState } from 'react';
 import ReportButton from './ReportButton';
 
+// A rule between two action groups. Only rendered when the groups on both
+// sides of it actually produced buttons, so a single-service user never sees
+// a stray line.
+const ActionSeparator = () => <hr data-action-separator="true" className="my-1 border-gray-600" />;
+
 type TvSearchResultsProps = {
 	filteredResults: SearchResult[];
 	expectedEpisodeCount: number;
@@ -464,6 +469,8 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												)}
 											</button>
 										)}
+										{rdKey && adKey && <ActionSeparator />}
+
 										{/* — AD — */}
 										{adKey && inLibrary('ad', r.hash) && (
 											<button
@@ -573,6 +580,8 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											</button>
 										)}
 
+										{(rdKey || adKey) && torboxKey && <ActionSeparator />}
+
 										{/* — TB — */}
 										{torboxKey && inLibrary('tb', r.hash) && (
 											<button
@@ -664,12 +673,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											)}
 
 										{/* — Separator: everything above belongs to one service, everything below does not — */}
-										{(rdKey || adKey || torboxKey) && (
-											<hr
-												data-action-separator="true"
-												className="my-1 border-gray-600"
-											/>
-										)}
+										{(rdKey || adKey || torboxKey) && <ActionSeparator />}
 
 										{watchService && player && (
 											<button

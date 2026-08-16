@@ -329,6 +329,72 @@ describe('MovieSearchResults', () => {
 			expect(container.querySelector('[data-action-separator]')).not.toBeNull();
 		});
 
+		// A rule only earns its place between two groups that both rendered
+		// something - otherwise a user with one service gets a stray line.
+		it('rules off each service group when the neighbouring group exists', () => {
+			const { container } = renderComponent({
+				rdKey: 'rd-key',
+				adKey: 'ad-key',
+				torboxKey: 'tb-key',
+				player: 'windows/vlc',
+				filteredResults: [everywhere],
+				sendAdToRd: vi.fn(),
+				sendTbToRd: vi.fn(),
+				handleCastAllDebrid: vi.fn(),
+				handleCastTorBox: vi.fn(),
+			});
+
+			expect(container.querySelectorAll('[data-action-separator]')).toHaveLength(3);
+
+			const row = container.querySelector('[data-action-separator]')!.parentElement!;
+			const kinds = Array.from(row.children).map((e) =>
+				e.hasAttribute('data-action-separator')
+					? 'hr'
+					: (e.textContent || '').replace(/\s+/g, ' ').trim()
+			);
+			const ruleAt = kinds.reduce<number[]>(
+				(acc, k, i) => (k === 'hr' ? [...acc, i] : acc),
+				[]
+			);
+
+			// never leading, never trailing, never two in a row
+			expect(ruleAt[0]).toBeGreaterThan(0);
+			expect(ruleAt[ruleAt.length - 1]).toBeLessThan(kinds.length - 1);
+			expect(ruleAt.some((i) => kinds[i + 1] === 'hr')).toBe(false);
+
+			// each rule lands on a service boundary
+			expect(kinds[ruleAt[0] + 1]).toContain('AD');
+			expect(kinds[ruleAt[1] + 1]).toContain('TB');
+			expect(kinds[ruleAt[2] + 1]).toContain('Watch');
+		});
+
+		it('draws only the shared-actions rule when one service is logged in', () => {
+			const { container } = renderComponent({
+				rdKey: 'rd-key',
+				adKey: null,
+				torboxKey: null,
+				player: 'windows/vlc',
+				filteredResults: [everywhere],
+			});
+
+			expect(container.querySelectorAll('[data-action-separator]')).toHaveLength(1);
+		});
+
+		it('skips the rule for a service that is not logged in', () => {
+			const { container } = renderComponent({
+				rdKey: 'rd-key',
+				adKey: null,
+				torboxKey: 'tb-key',
+				player: 'windows/vlc',
+				filteredResults: [everywhere],
+				sendTbToRd: vi.fn(),
+				handleCastTorBox: vi.fn(),
+			});
+
+			// RD | TB | shared - no phantom rule where AllDebrid would have been
+			expect(container.querySelectorAll('[data-action-separator]')).toHaveLength(2);
+		});
+
 		it('leaves the separator out when no service button is shown', () => {
 			const { container } = renderComponent({
 				rdKey: null,
