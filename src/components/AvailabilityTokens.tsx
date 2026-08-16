@@ -9,6 +9,29 @@ interface AvailabilityTokensProps {
 	torboxKey?: string | null;
 }
 
+// Service colours match the library's torrent prefix badges (see utils/results.tsx):
+// RD green, AD amber, TB indigo. Written out in full because Tailwind only keeps
+// class names it can find as literals.
+const SERVICE_STYLES = {
+	rd: {
+		active: 'border-[#b5d496] bg-[#b5d496] text-black',
+		idle: 'border-[#b5d496] bg-[#b5d496]/10 text-[#b5d496] hover:bg-[#b5d496]/25',
+	},
+	ad: {
+		active: 'border-[#fbc730] bg-[#fbc730] text-black',
+		idle: 'border-[#fbc730] bg-[#fbc730]/10 text-[#fbc730] hover:bg-[#fbc730]/25',
+	},
+	tb: {
+		active: 'border-[#4f46e5] bg-[#4f46e5] text-white',
+		idle: 'border-[#4f46e5] bg-[#4f46e5]/20 text-[#a5b4fc] hover:bg-[#4f46e5]/40',
+	},
+	// "any" is not a service, so it stays neutral rather than borrowing a colour
+	any: {
+		active: 'border-gray-300 bg-gray-200 text-black',
+		idle: 'border-gray-500 bg-gray-700/40 text-gray-200 hover:bg-gray-600/50',
+	},
+} as const;
+
 const AvailabilityTokens: FC<AvailabilityTokensProps> = ({
 	query,
 	onQueryChange,
@@ -23,13 +46,21 @@ const AvailabilityTokens: FC<AvailabilityTokensProps> = ({
 			token: 'is:rd',
 			label: 'RD',
 			title: 'Show only results cached in Real-Debrid',
+			style: SERVICE_STYLES.rd,
 			key: rdKey,
 		},
-		{ token: 'is:ad', label: 'AD', title: 'Show only results cached in AllDebrid', key: adKey },
+		{
+			token: 'is:ad',
+			label: 'AD',
+			title: 'Show only results cached in AllDebrid',
+			style: SERVICE_STYLES.ad,
+			key: adKey,
+		},
 		{
 			token: 'is:tb',
 			label: 'TB',
 			title: 'Show only results cached in TorBox',
+			style: SERVICE_STYLES.tb,
 			key: torboxKey,
 		},
 	].filter((service) => !!service.key);
@@ -44,6 +75,7 @@ const AvailabilityTokens: FC<AvailabilityTokensProps> = ({
 						token: 'is:cached',
 						label: 'Any',
 						title: 'Show only results cached in any of your debrid services',
+						style: SERVICE_STYLES.any,
 						key: 'any',
 					},
 				]
@@ -51,7 +83,7 @@ const AvailabilityTokens: FC<AvailabilityTokensProps> = ({
 
 	return (
 		<div className="flex flex-row flex-wrap gap-1">
-			{tokens.map(({ token, label, title }) => {
+			{tokens.map(({ token, label, title, style }) => {
 				const isActive = hasAvailabilityToken(query, token);
 				return (
 					<span
@@ -60,9 +92,7 @@ const AvailabilityTokens: FC<AvailabilityTokensProps> = ({
 						title={title}
 						aria-pressed={isActive}
 						className={`cursor-pointer whitespace-nowrap rounded border px-2 py-0.5 text-xs transition-colors ${
-							isActive
-								? 'border-green-400 bg-green-600 text-white'
-								: 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50'
+							isActive ? style.active : style.idle
 						}`}
 					>
 						{label} ✓

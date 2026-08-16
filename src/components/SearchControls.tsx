@@ -93,13 +93,6 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 			</div>
 
 			<div className="mb-2 flex items-center gap-2 overflow-x-auto p-2">
-				<AvailabilityTokens
-					query={query}
-					onQueryChange={onQueryChange}
-					rdKey={rdKey}
-					adKey={adKey}
-					torboxKey={torboxKey}
-				/>
 				<SearchTokens
 					title={title}
 					year={year}
@@ -135,6 +128,13 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 						{token.label}
 					</span>
 				))}
+				<AvailabilityTokens
+					query={query}
+					onQueryChange={onQueryChange}
+					rdKey={rdKey}
+					adKey={adKey}
+					torboxKey={torboxKey}
+				/>
 			</div>
 		</>
 	);

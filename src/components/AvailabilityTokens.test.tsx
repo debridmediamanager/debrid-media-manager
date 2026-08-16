@@ -60,6 +60,24 @@ describe('AvailabilityTokens', () => {
 		expect(onQueryChange).toHaveBeenCalledWith('1080p');
 	});
 
+	it('colours each pill with its service colour', () => {
+		render(
+			<AvailabilityTokens
+				query="is:rd"
+				onQueryChange={onQueryChange}
+				rdKey="rd-key"
+				adKey="ad-key"
+				torboxKey="tb-key"
+			/>
+		);
+
+		// RD green, AD amber, TB indigo - same coding as the torrent prefix badges
+		expect(screen.getByText('RD ✓').className).toContain('bg-[#b5d496]');
+		expect(screen.getByText('AD ✓').className).toContain('[#fbc730]');
+		expect(screen.getByText('TB ✓').className).toContain('[#4f46e5]');
+		expect(screen.getByText('Any ✓').className).toContain('gray');
+	});
+
 	it('replaces an active token when another service is picked', () => {
 		render(
 			<AvailabilityTokens

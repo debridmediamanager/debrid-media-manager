@@ -89,4 +89,21 @@ describe('SearchControls', () => {
 		fireEvent.click(screen.getByText(/High quality/i));
 		expect(onQueryChange).toHaveBeenCalledWith('source:hdr videos:5');
 	});
+
+	it('puts the availability filters last in the token row', () => {
+		const { container } = render(
+			<SearchControls
+				{...defaultProps}
+				rdKey="rd-key"
+				torboxKey="tb-key"
+				colorScales={[{ threshold: 5, color: 'red-500', label: 'Single' }]}
+				getQueryForScale={(threshold: number) => `videos:${threshold}`}
+				extraTokens={[{ label: 'Quality releases', query: 'remux' }]}
+			/>
+		);
+
+		const row = container.querySelectorAll('div.overflow-x-auto > *');
+		const labels = Array.from(row).map((el) => el.textContent);
+		expect(labels).toEqual(['Token', 'Single', 'Quality releases', 'RD ✓TB ✓Any ✓']);
+	});
 });
