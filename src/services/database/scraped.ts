@@ -16,10 +16,17 @@ const usableResults = (value: ScrapeSearchResult[]): ScrapeSearchResult[] =>
 	value.filter((r) => isUsableHash(r?.hash));
 
 /**
- * A hash sitting on more media pages than this is matcher failure, not a
- * collection. Measured over the whole corpus: 99.0% of hashes are on 5 pages or
- * fewer and 99.7% on 10 or fewer, while the worst offenders reach several
- * thousand. 25 leaves ordinary packs and double features well clear.
+ * A hash spread across more distinct titles than this is matcher failure, not a
+ * collection.
+ *
+ * The unit is titles, not page keys. TV keys carry a season (`tv:ttX:12`), so a
+ * complete-series pack legitimately appears on every season page of its show -
+ * counting page keys reported a 38-season run as 38-fold fan-out and a cleanup
+ * built on that would have emptied hundreds of populated season pages.
+ *
+ * Measured over the whole corpus on the collapsed unit: 99.1% of hashes touch 5
+ * titles or fewer and 99.7% touch 10 or fewer, while the worst reaches 14,503.
+ * 25 leaves ordinary packs, double features and long-running shows well clear.
  */
 export const FAN_OUT_PAGE_LIMIT = 25;
 

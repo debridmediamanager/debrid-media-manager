@@ -25,6 +25,12 @@ import sys
 USABLE = re.compile(r"^[a-f0-9]{40}$")
 DEGENERATE = {"da39a3ee5e6b4b0d3255bfef95601890afd80709", "0" * 40}
 
+# TV keys are `tv:ttNNNNNNN:<season>`, so a complete-series pack legitimately
+# appears on every season page of its show - a 38-season show would look like 38
+# pages of fan-out when it is one title. Counting shows rather than season pages
+# is what separates a real pack from a hash smeared across unrelated titles.
+TV_SEASON = re.compile(r"^(tv:[^:]+):\d+$")
+
 BATCH = 2000
 
 if len(sys.argv) < 2:
@@ -52,6 +58,8 @@ for line in sys.stdin:
     if not isinstance(arr, list):
         continue
     rows += 1
+    season = TV_SEASON.match(key)
+    title_key = season.group(1) if season else key
     for e in arr:
         if not isinstance(e, dict):
             continue
@@ -61,7 +69,7 @@ for line in sys.stdin:
         if not USABLE.match(h) or h in DEGENERATE:
             skipped += 1
             continue
-        pages[h].add(key)
+        pages[h].add(title_key)
         entries += 1
 
 out = sys.stdout
