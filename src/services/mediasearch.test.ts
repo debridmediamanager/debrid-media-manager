@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+	decodeTitle,
 	flattenAndRemoveDuplicates,
 	hasSubstantialTitle,
 	ScrapeSearchResult,
@@ -23,6 +24,64 @@ describe('mediasearch service', () => {
 			expect(result[0].title).toBe('Movie 1');
 			expect(result[1].title).toBe('Movie 2');
 			expect(result[2].title).toBe('Movie 3');
+		});
+
+		it('decodes html entities left in scraped titles', () => {
+			// All taken from the corpus: 253209 stored titles carry raw entities
+			// because most adapters never decode them.
+			expect(decodeTitle('Grandma&#039;s Boy 2006 br 10bit ddp hevc-d3g')).toBe(
+				"Grandma's Boy 2006 br 10bit ddp hevc-d3g"
+			);
+			expect(decodeTitle('Die.Nibelungen.Teil.1&amp;2-Fritz.Lang-1924')).toBe(
+				'Die.Nibelungen.Teil.1&2-Fritz.Lang-1924'
+			);
+			expect(decodeTitle('El barco &#8211; 3&#215;07')).toBe('El barco – 3×07');
+			// Double-encoded values occur too (&amp;amp; for a single ampersand).
+			expect(decodeTitle('The Desert Rats (1953) War-Drama-B&amp;amp;W-mp4')).toBe(
+				'The Desert Rats (1953) War-Drama-B&W-mp4'
+			);
+		});
+
+		it('strips leaked markup without touching angle brackets in real titles', () => {
+			expect(
+				decodeTitle(
+					'A Charlie Brown Christmas 1965 720p BluRay DD5 1 x264-PriMeHD</div><br>'
+				)
+			).toBe('A Charlie Brown Christmas 1965 720p BluRay DD5 1 x264-PriMeHD');
+
+			// A download button captured into the title field, and truncated so the
+			// tag is never closed.
+			const leaked = decodeTitle(
+				'CINDERELLA DIAMOND BLURAY AND DVD(1).torrent"><i class="fa fa-download dlBtn" title="Download" alt="'
+			);
+			expect(leaked).toContain('CINDERELLA DIAMOND BLURAY AND DVD(1).torrent');
+			expect(leaked).not.toContain('fa-download');
+			expect(leaked).not.toContain('class=');
+
+			// These are real titles, not markup - a naive <[^>]+> strip destroys them.
+			expect(decodeTitle('ITZY THE 1ST WORLD TOUR <CHECKMATE> in JAPAN 2023 1080i')).toBe(
+				'ITZY THE 1ST WORLD TOUR <CHECKMATE> in JAPAN 2023 1080i'
+			);
+			expect(decodeTitle("Adieu l'ami (1968) BDRemux 1080p DTS EN FR <DVDrip>")).toBe(
+				"Adieu l'ami (1968) BDRemux 1080p DTS EN FR <DVDrip>"
+			);
+			expect(decodeTitle('The Gore Gore Girls 1972 DVD RIP <---ANT#RAX--->')).toBe(
+				'The Gore Gore Girls 1972 DVD RIP <---ANT#RAX--->'
+			);
+		});
+
+		it('leaves ordinary titles untouched', () => {
+			const plain = 'Mad.Max.Fury.Road.2015.2160p.BluRay.x265.10bit.SDR-SWTYBLZ';
+			expect(decodeTitle(plain)).toBe(plain);
+			// Unknown named entities are left alone rather than guessed at.
+			expect(decodeTitle('Rumo &Atilde; Felicidade')).toBe('Rumo &Atilde; Felicidade');
+		});
+
+		it('normalises titles as it flattens', () => {
+			const input: ScrapeSearchResult[][] = [
+				[{ title: 'Grandma&#039;s Boy', fileSize: 1000, hash: 'a'.repeat(40) }],
+			];
+			expect(flattenAndRemoveDuplicates(input)[0].title).toBe("Grandma's Boy");
 		});
 
 		it('drops degenerate hashes that are still well-formed hex', () => {

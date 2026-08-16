@@ -65,6 +65,69 @@ export interface EnrichedHashlistTorrent extends HashlistTorrent {
 export type ScrapeSearchResult = Pick<SearchResult, 'title' | 'fileSize' | 'hash'>;
 
 /**
+ * Only real HTML tag names are stripped, never a bare `<...>` run. Release
+ * titles legitimately contain angle brackets - `<CHECKMATE>`, `<DVDrip>`,
+ * `<---ANT#RAX--->` are all genuine - and a naive /<[^>]+>/ strip destroys them.
+ */
+const HTML_TAG_NAMES =
+	'a|b|i|u|p|br|hr|em|div|span|img|td|tr|th|table|tbody|thead|strong|small|font|ul|ol|li|h[1-6]|center|code|pre|script|style|iframe|button|label';
+const HTML_TAG = new RegExp(`<\\/?(?:${HTML_TAG_NAMES})\\b[^>]*>`, 'gi');
+// Markup that got cut off mid-tag, e.g. a title truncated inside a download button.
+const HTML_TAG_UNCLOSED = new RegExp(`<\\/?(?:${HTML_TAG_NAMES})\\b[^>]*$`, 'i');
+
+/** Only entities actually seen in the corpus; anything else is left verbatim. */
+const NAMED_ENTITIES: Record<string, string> = {
+	amp: '&',
+	lt: '<',
+	gt: '>',
+	quot: '"',
+	apos: "'",
+	nbsp: ' ',
+	ndash: '–',
+	mdash: '—',
+	hellip: '…',
+	times: '×',
+};
+
+const decodeEntitiesOnce = (value: string): string =>
+	value.replace(/&(#x[0-9a-f]+|#\d+|[a-z][a-z0-9]*);/gi, (match, body: string) => {
+		if (body[0] === '#') {
+			const codePoint =
+				body[1] === 'x' || body[1] === 'X'
+					? parseInt(body.slice(2), 16)
+					: parseInt(body.slice(1), 10);
+			if (!Number.isFinite(codePoint) || codePoint <= 0 || codePoint > 0x10ffff) return match;
+			try {
+				return String.fromCodePoint(codePoint);
+			} catch {
+				return match;
+			}
+		}
+		const named = NAMED_ENTITIES[body.toLowerCase()];
+		return named === undefined ? match : named;
+	});
+
+/**
+ * Scraped titles arrive however the source site rendered them. Most adapters
+ * never decode, so 253209 stored titles carry raw entities - `Grandma&#039;s
+ * Boy` - and a smaller set carry leaked markup where a selector swallowed the
+ * surrounding HTML. Both break matching and display, and entity variants of one
+ * title read as two different titles when comparing releases.
+ */
+export const decodeTitle = (title: string): string => {
+	if (!title) return title;
+	let out = title.replace(HTML_TAG, '').replace(HTML_TAG_UNCLOSED, '');
+	// Double-encoded values (`&amp;amp;`) occur; the bound stops a title that
+	// legitimately reads "&amp;" from being decoded forever.
+	for (let pass = 0; pass < 3; pass++) {
+		const next = decodeEntitiesOnce(out);
+		if (next === out) break;
+		out = next;
+	}
+	return out.replace(/\s+/g, ' ').trim();
+};
+
+/**
  * Hashes that are well-formed hex but can never name a torrent. The sha1 of the
  * empty string is what a scraper produces when a listing carries no magnet at
  * all, and it passed the format check happily - it was stored as the hash of
@@ -83,7 +146,15 @@ export const flattenAndRemoveDuplicates = (arr: ScrapeSearchResult[][]): ScrapeS
 			unique.set(item.hash, item);
 		}
 	});
-	return Array.from(unique.values()).filter((r) => isUsableHash(r.hash));
+	// Titles are normalised here rather than in each adapter: this runs on the
+	// read path too, so the entity-encoded rows already in the table are cleaned
+	// up for callers without waiting on a backfill.
+	return Array.from(unique.values())
+		.filter((r) => isUsableHash(r.hash))
+		.map((r) => {
+			const title = decodeTitle(r.title);
+			return title === r.title ? r : { ...r, title };
+		});
 };
 
 export const sortByFileSize = (results: ScrapeSearchResult[]): ScrapeSearchResult[] => {

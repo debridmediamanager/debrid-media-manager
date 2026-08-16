@@ -194,6 +194,20 @@ describe('ScrapedService', () => {
 		});
 	});
 
+	it('decodes entity-encoded titles on the direct write paths', async () => {
+		// The create and replace branches skip flattenAndRemoveDuplicates, so
+		// without this they would keep storing raw entities.
+		prismaMock.scraped.findUnique.mockResolvedValue(null);
+
+		await service.saveScrapedResults('key', [
+			{ hash: HASH_ONE, title: 'Grandma&#039;s Boy', fileSize: 1 },
+		] as any);
+
+		expect(prismaMock.scraped.create).toHaveBeenCalledWith({
+			data: { key: 'key', value: [{ hash: HASH_ONE, title: "Grandma's Boy", fileSize: 1 }] },
+		});
+	});
+
 	it('checks key existence and age computations', async () => {
 		prismaMock.scraped.findFirst.mockResolvedValueOnce({ key: 'key' });
 		expect(await service.keyExists('key')).toBe(true);

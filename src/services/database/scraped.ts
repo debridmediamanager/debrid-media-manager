@@ -1,6 +1,7 @@
 import { Prisma, Scraped } from '@prisma/client';
 import {
 	ScrapeSearchResult,
+	decodeTitle,
 	flattenAndRemoveDuplicates,
 	isUsableHash,
 	sortByFileSize,
@@ -10,10 +11,16 @@ import { DatabaseClient } from './client';
 /**
  * The append branch below launders results through flattenAndRemoveDuplicates,
  * but the replace and create branches write what they are handed. Both save
- * paths sanitise up front so no branch can be the one that lets a hash in.
+ * paths sanitise up front so no branch can be the one that lets a bad hash or an
+ * entity-encoded title in.
  */
 const usableResults = (value: ScrapeSearchResult[]): ScrapeSearchResult[] =>
-	value.filter((r) => isUsableHash(r?.hash));
+	value
+		.filter((r) => isUsableHash(r?.hash))
+		.map((r) => {
+			const title = decodeTitle(r.title);
+			return title === r.title ? r : { ...r, title };
+		});
 
 /**
  * A hash spread across more distinct titles than this is matcher failure, not a
