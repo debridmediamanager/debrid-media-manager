@@ -25,6 +25,23 @@ describe('mediasearch service', () => {
 			expect(result[2].title).toBe('Movie 3');
 		});
 
+		it('drops degenerate hashes that are still well-formed hex', () => {
+			// sha1 of the empty string. Scrapers emit it for rows that carry no
+			// magnet at all, and it was stored as a torrent hash on 2110 pages.
+			const emptySha1 = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
+			const input: ScrapeSearchResult[][] = [
+				[
+					{ title: 'Real Movie', fileSize: 1000, hash: 'a'.repeat(40) },
+					{ title: 'No magnet at all', fileSize: 2000, hash: emptySha1 },
+					{ title: 'All zeroes', fileSize: 3000, hash: '0'.repeat(40) },
+				],
+			];
+
+			const result = flattenAndRemoveDuplicates(input);
+
+			expect(result.map((r) => r.hash)).toEqual(['a'.repeat(40)]);
+		});
+
 		it('removes duplicate hashes keeping first occurrence', () => {
 			const duplicateHash = 'a'.repeat(40);
 			const input: ScrapeSearchResult[][] = [

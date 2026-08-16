@@ -1,6 +1,19 @@
 import { Prisma, Scraped } from '@prisma/client';
-import { ScrapeSearchResult, flattenAndRemoveDuplicates, sortByFileSize } from '../mediasearch';
+import {
+	ScrapeSearchResult,
+	flattenAndRemoveDuplicates,
+	isUsableHash,
+	sortByFileSize,
+} from '../mediasearch';
 import { DatabaseClient } from './client';
+
+/**
+ * The append branch below launders results through flattenAndRemoveDuplicates,
+ * but the replace and create branches write what they are handed. Both save
+ * paths sanitise up front so no branch can be the one that lets a hash in.
+ */
+const usableResults = (value: ScrapeSearchResult[]): ScrapeSearchResult[] =>
+	value.filter((r) => isUsableHash(r?.hash));
 
 export class ScrapedService extends DatabaseClient {
 	public async getScrapedTrueResults<T>(
@@ -132,6 +145,7 @@ export class ScrapedService extends DatabaseClient {
 		updateUpdatedAt: boolean = true,
 		replaceOldScrape: boolean = false
 	) {
+		value = usableResults(value);
 		// Fetch the existing record
 		const existingRecord: Scraped | null = await this.prisma.scrapedTrue.findUnique({
 			where: { key },
@@ -177,6 +191,7 @@ export class ScrapedService extends DatabaseClient {
 		updateUpdatedAt: boolean = true,
 		replaceOldScrape: boolean = false
 	) {
+		value = usableResults(value);
 		// Fetch the existing record
 		const existingRecord: Scraped | null = await this.prisma.scraped.findUnique({
 			where: { key },

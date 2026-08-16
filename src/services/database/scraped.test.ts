@@ -30,10 +30,20 @@ vi.mock('./client', () => ({
 	},
 }));
 
-vi.mock('../mediasearch', () => ({
+// Partial mock: only the two helpers below are stubbed, so genuinely pure
+// helpers like isUsableHash keep their real behaviour and a new export here
+// does not break every test in this file.
+vi.mock('../mediasearch', async (importOriginal) => ({
+	...(await importOriginal<typeof import('../mediasearch')>()),
 	flattenAndRemoveDuplicates: flattenAndRemoveDuplicatesMock,
 	sortByFileSize: sortByFileSizeMock,
 }));
+
+// Both save paths now drop entries whose hash could never name a torrent, so
+// these fixtures have to look like real infohashes rather than placeholders.
+const HASH_ONE = 'a'.repeat(40);
+const HASH_TWO = 'b'.repeat(40);
+const HASH_NEW = 'c'.repeat(40);
 
 describe('ScrapedService', () => {
 	let service: ScrapedService;
@@ -65,53 +75,81 @@ describe('ScrapedService', () => {
 
 	it('merges and sorts scrapedTrue results when updating without replacement', async () => {
 		const existing = {
-			value: [{ hash: 'one' }],
+			value: [{ hash: HASH_ONE }],
 			updatedAt: new Date('2024-01-01'),
 		};
 		prismaMock.scrapedTrue.findUnique.mockResolvedValue(existing);
-		flattenAndRemoveDuplicatesMock.mockReturnValue([[{ hash: 'one' }, { hash: 'two' }]]);
-		sortByFileSizeMock.mockReturnValue([{ hash: 'one' }, { hash: 'two' }]);
+		flattenAndRemoveDuplicatesMock.mockReturnValue([[{ hash: HASH_ONE }, { hash: HASH_TWO }]]);
+		sortByFileSizeMock.mockReturnValue([{ hash: HASH_ONE }, { hash: HASH_TWO }]);
 
-		await service.saveScrapedTrueResults('key', [{ hash: 'two' }] as any);
+		await service.saveScrapedTrueResults('key', [{ hash: HASH_TWO }] as any);
 
 		expect(prismaMock.scrapedTrue.update).toHaveBeenCalled();
 		const updateArgs = prismaMock.scrapedTrue.update.mock.calls[0][0];
-		expect(updateArgs.data.value).toEqual([{ hash: 'one' }, { hash: 'two' }]);
+		expect(updateArgs.data.value).toEqual([{ hash: HASH_ONE }, { hash: HASH_TWO }]);
 	});
 
 	it('replaces scrapedTrue values when flag is set', async () => {
 		prismaMock.scrapedTrue.findUnique.mockResolvedValue({
-			value: [{ hash: 'one' }],
+			value: [{ hash: HASH_ONE }],
 			updatedAt: new Date('2024-01-01'),
 		});
 
-		await service.saveScrapedTrueResults('key', [{ hash: 'new' }] as any, true, true);
+		await service.saveScrapedTrueResults('key', [{ hash: HASH_NEW }] as any, true, true);
 
 		expect(prismaMock.scrapedTrue.update).toHaveBeenCalledWith({
 			where: { key: 'key' },
-			data: expect.objectContaining({ value: [{ hash: 'new' }] }),
+			data: expect.objectContaining({ value: [{ hash: HASH_NEW }] }),
 		});
 	});
 
 	it('creates scrapedTrue rows when none exist', async () => {
 		prismaMock.scrapedTrue.findUnique.mockResolvedValue(null);
 
-		await service.saveScrapedTrueResults('key', [{ hash: 'one' }] as any);
+		await service.saveScrapedTrueResults('key', [{ hash: HASH_ONE }] as any);
 		expect(prismaMock.scrapedTrue.create).toHaveBeenCalledWith({
-			data: { key: 'key', value: [{ hash: 'one' }] },
+			data: { key: 'key', value: [{ hash: HASH_ONE }] },
 		});
 	});
 
 	it('persists scraped results using the same flows', async () => {
 		prismaMock.scraped.findUnique.mockResolvedValue({
-			value: [{ hash: 'one' }],
+			value: [{ hash: HASH_ONE }],
 			updatedAt: new Date('2024-01-01'),
 		});
-		flattenAndRemoveDuplicatesMock.mockReturnValue([[{ hash: 'one' }]]);
-		sortByFileSizeMock.mockReturnValue([{ hash: 'one' }]);
+		flattenAndRemoveDuplicatesMock.mockReturnValue([[{ hash: HASH_ONE }]]);
+		sortByFileSizeMock.mockReturnValue([{ hash: HASH_ONE }]);
 
-		await service.saveScrapedResults('key', [{ hash: 'one' }] as any, false, true);
+		await service.saveScrapedResults('key', [{ hash: HASH_ONE }] as any, false, true);
 		expect(prismaMock.scraped.update).toHaveBeenCalled();
+	});
+
+	it('drops unusable hashes on the replace and create paths', async () => {
+		// These two branches write what they are handed instead of going through
+		// flattenAndRemoveDuplicates, so they were the way sha1("") reached the
+		// table on 2110 pages.
+		const emptySha1 = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
+
+		prismaMock.scrapedTrue.findUnique.mockResolvedValue({
+			value: [{ hash: HASH_ONE }],
+			updatedAt: new Date('2024-01-01'),
+		});
+		await service.saveScrapedTrueResults(
+			'key',
+			[{ hash: HASH_NEW }, { hash: emptySha1 }, { hash: 'not-a-hash' }] as any,
+			true,
+			true
+		);
+		expect(prismaMock.scrapedTrue.update).toHaveBeenCalledWith({
+			where: { key: 'key' },
+			data: expect.objectContaining({ value: [{ hash: HASH_NEW }] }),
+		});
+
+		prismaMock.scraped.findUnique.mockResolvedValue(null);
+		await service.saveScrapedResults('key', [{ hash: emptySha1 }, { hash: HASH_TWO }] as any);
+		expect(prismaMock.scraped.create).toHaveBeenCalledWith({
+			data: { key: 'key', value: [{ hash: HASH_TWO }] },
+		});
 	});
 
 	it('checks key existence and age computations', async () => {

@@ -64,6 +64,17 @@ export interface EnrichedHashlistTorrent extends HashlistTorrent {
 
 export type ScrapeSearchResult = Pick<SearchResult, 'title' | 'fileSize' | 'hash'>;
 
+/**
+ * Hashes that are well-formed hex but can never name a torrent. The sha1 of the
+ * empty string is what a scraper produces when a listing carries no magnet at
+ * all, and it passed the format check happily - it was stored as the hash of
+ * 2110 distinct pages, every one of them a dead result.
+ */
+const DEGENERATE_HASHES = new Set(['da39a3ee5e6b4b0d3255bfef95601890afd80709', '0'.repeat(40)]);
+
+export const isUsableHash = (hash: string | undefined | null): boolean =>
+	!!hash && /^[a-f0-9]{40}$/.test(hash) && !DEGENERATE_HASHES.has(hash);
+
 export const flattenAndRemoveDuplicates = (arr: ScrapeSearchResult[][]): ScrapeSearchResult[] => {
 	const flattened = arr.reduce((acc, val) => acc.concat(val), []);
 	const unique = new Map<string, ScrapeSearchResult>();
@@ -72,7 +83,7 @@ export const flattenAndRemoveDuplicates = (arr: ScrapeSearchResult[][]): ScrapeS
 			unique.set(item.hash, item);
 		}
 	});
-	return Array.from(unique.values()).filter((r) => r.hash.match(/^[a-f0-9]{40}$/));
+	return Array.from(unique.values()).filter((r) => isUsableHash(r.hash));
 };
 
 export const sortByFileSize = (results: ScrapeSearchResult[]): ScrapeSearchResult[] => {
