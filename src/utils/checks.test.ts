@@ -68,6 +68,56 @@ describe('checks utilities', () => {
 		expect(meetsTitleConditions('Galaxy Quest', ['1999'], 'BluRay')).toBe(false);
 	});
 
+	it('meetsTitleConditions rejects a same-titled release from another year', () => {
+		// A real poisoned record: the Apex (2021) release name was attached to Mad
+		// Max's infohash and surfaced on Apex (2026) and Apex (2021) alike. The
+		// titles are identical, so the year is the only thing that separates them.
+		const apex2021 = 'Apex.2021.2160p.WEB-DL.x265.10bit.SDR.DD5.1-NOGRP';
+		expect(meetsTitleConditions('apex', ['2026'], apex2021)).toBe(false);
+		expect(meetsTitleConditions('apex', ['2021'], apex2021)).toBe(true);
+	});
+
+	it('meetsTitleConditions enforces the year for close title matches', () => {
+		// The Levenshtein short-circuit used to return before the year was ever
+		// consulted, so any same-named film from any year matched.
+		expect(
+			meetsTitleConditions('galaxy quest', ['1999'], 'Galaxy Quest 2017 1080p BluRay')
+		).toBe(false);
+		expect(
+			meetsTitleConditions('galaxy quest', ['2026'], 'Galaxy Quest 1999 1080p BluRay')
+		).toBe(false);
+	});
+
+	it('meetsTitleConditions matches years the regex used to skip', () => {
+		// 2006-2009, 2016-2019 and 2026+ fell outside the old year pattern, which
+		// made the check silently vacuous for them - including the current year.
+		for (const year of ['2006', '2009', '2016', '2019', '2026', '2027']) {
+			expect(meetsTitleConditions('galaxy quest', [year], `Galaxy Quest ${year} 1080p`)).toBe(
+				true
+			);
+			expect(
+				meetsTitleConditions('galaxy quest', ['1999'], `Galaxy Quest ${year} 1080p`)
+			).toBe(false);
+		}
+	});
+
+	it('meetsTitleConditions keeps the one-year tolerance', () => {
+		// Scene years drift a year either side of the metadata year; that slack is
+		// deliberate and must survive the stricter gate.
+		expect(meetsTitleConditions('galaxy quest', ['1999'], 'Galaxy Quest 2000 1080p')).toBe(
+			true
+		);
+		expect(meetsTitleConditions('galaxy quest', ['1999'], 'Galaxy Quest 1998 1080p')).toBe(
+			true
+		);
+	});
+
+	it('meetsTitleConditions still accepts a release with no year at all', () => {
+		expect(meetsTitleConditions('galaxy quest', ['1999'], 'Galaxy Quest 1080p BluRay')).toBe(
+			true
+		);
+	});
+
 	it('collects movie metadata variants from ratings sources', () => {
 		const movieMeta = grabMovieMetadata(
 			'tt10872600',

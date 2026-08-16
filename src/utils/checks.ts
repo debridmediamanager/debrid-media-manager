@@ -323,6 +323,26 @@ export function meetsTitleConditions(
 	testTitle = testTitle.replace(/^www\.\w+\.(com|net|org)\s*-\s*/i, '');
 	testTitle = testTitle.replace(/^\[[^\]]+\]\s*/i, '');
 	const information = ptt.parse(testTitle);
+
+	// The group is stripped first so a digit run inside a release group name is
+	// never read as the release year.
+	if (information.group) {
+		testTitle = testTitle.replace(information.group, '');
+	}
+
+	// The year gates every branch below, not just the last one. Two films can
+	// share a title exactly - Apex (2021) and Apex (2026) - and then the year is
+	// the only thing telling them apart. Returning early on title similarity put
+	// one film's releases on the other's page.
+	if (
+		!matchesYear(
+			testTitle,
+			years.map((year) => parseInt(year, 10))
+		)
+	) {
+		return false;
+	}
+
 	const ratio =
 		1 -
 		levenshtein(targetTitle, information.title) /
@@ -334,14 +354,7 @@ export function meetsTitleConditions(
 	if (testTitleNoSpecial.length > 0 && targetTitleNoSpecial.includes(testTitleNoSpecial))
 		return true;
 
-	if (information.group) {
-		testTitle = testTitle.replace(information.group, '');
-	}
-	const yearOk = matchesYear(
-		testTitle,
-		years.map((year) => parseInt(year, 10))
-	);
-	return matchesTitle(targetTitle, years, testTitle) && yearOk;
+	return matchesTitle(targetTitle, years, testTitle);
 }
 
 export function grabMovieMetadata(imdbId: string, tmdbData: any, mdbData: any) {
@@ -676,7 +689,12 @@ function filenameHasGivenYear(test: string, years: string[]) {
 }
 
 function matchesYear(test: string, targetYears: number[]): boolean {
-	const yearRegex = /\b(?:189\d|19\d\d|20[012][0-5])\b/g;
+	// The old pattern was 189\d|19\d\d|20[012][0-5], which silently skipped
+	// 2006-2009, 2016-2019 and everything from 2026 on. A year it cannot see is a
+	// year it cannot reject, so the check went vacuous for the current year.
+	// Resolutions are safe: \b fails against the trailing letter in "2160p", and
+	// "1920x1080" is excluded both by \b and by the 1920 filter below.
+	const yearRegex = /\b(?:18\d\d|19\d\d|20\d\d)\b/g;
 	const yearsFromTest = [...test.matchAll(yearRegex)]
 		.map((m) => parseInt(m[0], 10))
 		.filter((y) => y !== 1920);
