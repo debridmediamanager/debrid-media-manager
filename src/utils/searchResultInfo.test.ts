@@ -93,6 +93,27 @@ describe('showInfoForSearchResult', () => {
 		expect(info.fake).toBe(true);
 	});
 
+	// Without this the modal's Watch row deletes a magnet the user already owns:
+	// the AllDebrid upload dedupes onto the existing one, then cleans it up.
+	it('tells the AllDebrid modal when the magnet is already in the library', () => {
+		showInfoForSearchResult({
+			result: result({ adAvailable: true }),
+			keys: { adKey: 'ad' },
+			player: 'windows/vlc',
+			imdbId: 'tt1',
+			mediaType: 'movie',
+			adInLibrary: true,
+		});
+
+		expect(mocks.showInfoForAD.mock.calls[0][2].adInLibrary).toBe(true);
+	});
+
+	it('defaults to cleaning up a magnet the user does not have', () => {
+		open({ adAvailable: true }, { adKey: 'ad' });
+
+		expect(mocks.showInfoForAD.mock.calls[0][2].adInLibrary).toBe(false);
+	});
+
 	it('keeps non-video files out of every modal', () => {
 		open({ rdAvailable: true }, { rdKey: 'rd' });
 		expect(mocks.showInfoForRD.mock.calls[0][2].files).toHaveLength(1);

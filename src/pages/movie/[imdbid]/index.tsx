@@ -682,6 +682,7 @@ const MovieSearch: FunctionComponent = () => {
 			imdbId: imdbid as string,
 			mediaType: 'movie',
 			shouldDownloadMagnets,
+			adInLibrary: `ad:${result.hash}` in hashAndProgress,
 		});
 	};
 

@@ -809,8 +809,10 @@ export const showInfoForAD = async (
 				player: app ?? '',
 				keys: { adKey },
 				// A magnet already in the user's library must survive the watch;
-				// only one prepared for a search result gets cleaned up again.
-				adInLibrary: !info.fake,
+				// only one prepared for a search result gets cleaned up again. A
+				// search result can be in the library too - the upload dedupes onto
+				// it - so the caller's own check has to be honoured here.
+				adInLibrary: !info.fake || Boolean(info.adInLibrary),
 			});
 			const magnetBtn = document.getElementById('btn-magnet-copy');
 			logAction('binding magnet button (AD)', {

@@ -739,6 +739,7 @@ const TvSearch: FunctionComponent = () => {
 			imdbId: imdbid as string,
 			mediaType: 'tv',
 			shouldDownloadMagnets,
+			adInLibrary: `ad:${result.hash}` in hashAndProgress,
 		});
 	};
 

@@ -434,6 +434,16 @@ describe('watch button binding', () => {
 		expect(bound).toMatchObject({ service: 'ad', adInLibrary: false });
 	});
 
+	// The upload dedupes onto whatever the account already holds, so cleaning up
+	// after a search result would delete the user's own magnet.
+	it('spares a search result the user already has in their AllDebrid library', async () => {
+		const bound = await openModal(() =>
+			showInfoForAD('windows/vlc', 'ad-key', { ...adInfo, fake: true, adInLibrary: true })
+		);
+
+		expect(bound).toMatchObject({ service: 'ad', adInLibrary: true });
+	});
+
 	// A search result has no AllDebrid id to delete or reinsert, and no links to
 	// export - the modal used to render those buttons anyway.
 	it('leaves the library actions out of a fake AllDebrid modal', async () => {

@@ -53,7 +53,7 @@ const buildRdInfo = (result: SearchResult): TorrentInfoResponse =>
  * `magnet/upload`, which AllDebrid refuses from a datacenter IP; the Watch rows
  * do that upload in the browser when they are clicked.
  */
-const buildAdInfo = (result: SearchResult) => ({
+const buildAdInfo = (result: SearchResult, adInLibrary: boolean) => ({
 	id: '',
 	hash: result.hash,
 	filename: result.title,
@@ -62,6 +62,10 @@ const buildAdInfo = (result: SearchResult) => ({
 	statusCode: 4,
 	uploadDate: Math.floor(Date.now() / 1000),
 	fake: true,
+	// The browser-side upload dedupes onto whatever the account already holds, so
+	// cleaning up afterwards would delete the user's own magnet. Same check the
+	// Watch button on the result card makes.
+	adInLibrary,
 	links: videoFiles(result).map((file) => ({
 		filename: file.filename,
 		size: file.filesize,
@@ -109,6 +113,8 @@ export const showInfoForSearchResult = (opts: {
 	imdbId: string;
 	mediaType: 'movie' | 'tv';
 	shouldDownloadMagnets?: boolean;
+	/** Whether this hash is already a magnet in the user's AllDebrid library. */
+	adInLibrary?: boolean;
 }): void => {
 	const { result, keys, player, imdbId, mediaType, shouldDownloadMagnets } = opts;
 	const service = pickInfoService(result, keys);
@@ -125,7 +131,13 @@ export const showInfoForSearchResult = (opts: {
 		return;
 	}
 	if (service === 'ad' && keys.adKey) {
-		void showInfoForAD(player, keys.adKey, buildAdInfo(result), imdbId, shouldDownloadMagnets);
+		void showInfoForAD(
+			player,
+			keys.adKey,
+			buildAdInfo(result, Boolean(opts.adInLibrary)),
+			imdbId,
+			shouldDownloadMagnets
+		);
 		return;
 	}
 	if (service === 'tb' && keys.torboxKey) {
