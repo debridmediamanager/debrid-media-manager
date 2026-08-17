@@ -2,6 +2,7 @@ import {
 	addHashToRdAccount,
 	fetchNzb,
 	getNzb2rdUrl,
+	isCompleteOAuth,
 	isValidImdbId,
 	submitNzb,
 } from '@/services/nzb2rd';
@@ -52,7 +53,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { id, title, imdbId, rdKey } = req.body ?? {};
+	const { id, title, imdbId, rdKey, oauth } = req.body ?? {};
 
 	// The colon separates the indexer prefix from the native id (`ds:abc123`).
 	if (typeof id !== 'string' || !/^[A-Za-z0-9._:-]{1,128}$/.test(id)) {
@@ -91,8 +92,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 			// Still running: park this caller so the completion path hands them the
 			// torrent too, rather than letting one user's fetch benefit only them.
+			// The credentials ride along for the same reason they go to nzb2rd: this
+			// list is drained when the job completes, which is days later, and by
+			// then `rdKey` has expired and the delivery silently fails.
 			await db
-				.addNzb2rdWaiter(id, rdKey, imdbId)
+				.addNzb2rdWaiter(id, rdKey, imdbId, isCompleteOAuth(oauth) ? oauth : null)
 				.catch((e) => console.error('Queueing nzb2rd waiter failed:', e));
 			return res.status(200).json({
 				duplicate: 'in_progress',
@@ -122,6 +126,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			nzbName: safeNzbName(typeof title === 'string' ? title : id),
 			imdbId,
 			rdKey,
+			// Forwarded so nzb2rd can mint its own token when the job finally runs.
+			// `rdKey` expires 24h after login and that queue is days deep, which is
+			// what produced the `401 bad_token` failures on the Transfers page.
+			oauth: isCompleteOAuth(oauth) ? oauth : null,
 		});
 		if (status < 300 && data?.id) {
 			await db

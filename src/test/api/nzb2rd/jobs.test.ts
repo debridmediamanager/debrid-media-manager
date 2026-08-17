@@ -63,7 +63,12 @@ describe('POST /api/nzb2rd/jobs — user B asks for a release user A is already 
 	it('queues B against A/s job instead of starting a second Usenet fetch', async () => {
 		const res = await run();
 
-		expect(mockRepo.addNzb2rdWaiter).toHaveBeenCalledWith('release-1', 'rd-key-b', 'tt1418646');
+		expect(mockRepo.addNzb2rdWaiter).toHaveBeenCalledWith(
+			'release-1',
+			'rd-key-b',
+			'tt1418646',
+			null
+		);
 		expect(res.json).toHaveBeenCalledWith({
 			duplicate: 'in_progress',
 			infoHash: null,
@@ -73,6 +78,21 @@ describe('POST /api/nzb2rd/jobs — user B asks for a release user A is already 
 		// the expensive half never runs
 		expect(mockFetchNzb).not.toHaveBeenCalled();
 		expect(mockSubmit).not.toHaveBeenCalled();
+	});
+
+	// The waiter list is drained when A's job completes, days later, by which
+	// time B's access token has expired — so the credentials have to be parked
+	// with them or the delivery fails silently.
+	it('parks B/s refreshable credentials alongside their token', async () => {
+		const oauth = { clientId: 'CID', clientSecret: 'CSEC', refreshToken: 'CREF' };
+		await run({ oauth });
+
+		expect(mockRepo.addNzb2rdWaiter).toHaveBeenCalledWith(
+			'release-1',
+			'rd-key-b',
+			'tt1418646',
+			oauth
+		);
 	});
 
 	it('does not charge B an RD add while the job is still running', async () => {
@@ -141,6 +161,23 @@ describe('POST /api/nzb2rd/jobs — nothing recorded yet', () => {
 		);
 		expect(res.status).toHaveBeenCalledWith(201);
 		expect(mockRepo.addNzb2rdWaiter).not.toHaveBeenCalled();
+	});
+
+	// Without these nzb2rd only has the 24h access token, and its queue is days
+	// deep — the job is then guaranteed to reach the RD hand-off with a dead
+	// credential and fail as `401 bad_token`.
+	it('forwards the refreshable credentials to nzb2rd', async () => {
+		const oauth = { clientId: 'CID', clientSecret: 'CSEC', refreshToken: 'CREF' };
+		await run({ oauth });
+
+		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ oauth }));
+	});
+
+	// A partial triple cannot mint anything, so it must not be stored downstream.
+	it('forwards null rather than an unusable partial triple', async () => {
+		await run({ oauth: { clientId: 'CID', refreshToken: 'CREF' } });
+
+		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ oauth: null }));
 	});
 
 	it('rejects a missing RD key before spending anything', async () => {

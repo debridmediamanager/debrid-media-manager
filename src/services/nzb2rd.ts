@@ -498,20 +498,52 @@ export async function addHashToRdAccount(rdKey: string, hash: string): Promise<s
 	return id;
 }
 
+/** Long-lived Real-Debrid OAuth credentials, as `rdTokenStorage` holds them. */
+export interface RdOAuthCredentials {
+	clientId: string;
+	clientSecret: string;
+	refreshToken: string;
+}
+
+/** All three present? A partial triple cannot mint anything, so it is not sent. */
+export function isCompleteOAuth(value: unknown): value is RdOAuthCredentials {
+	const creds = value as Partial<RdOAuthCredentials> | null | undefined;
+	return [creds?.clientId, creds?.clientSecret, creds?.refreshToken].every(
+		(part) => typeof part === 'string' && part.length > 0
+	);
+}
+
 /**
  * Hand an NZB to nzb2rd. `rdKey` is per-job, so the release lands in the
  * submitter's own Real-Debrid account rather than the operator's.
+ *
+ * **`rdKey` alone is not enough, and this was the top cause of failed Usenet
+ * transfers.** It is an OAuth access token, which Real-Debrid expires 24 hours
+ * after it is minted, while nzb2rd queues jobs for days — so it was alive here
+ * and dead at the hand-off, which surfaced on the Transfers page as
+ * `RD addTorrent failed: 401 bad_token` (measured 2026-08-17: 1298 of 1952
+ * failures, none of them under an hour of queue wait).
+ *
+ * The OAuth triple does not expire, so nzb2rd refreshes the token itself when it
+ * finally runs. Optional: omitting it leaves the service on the stored token,
+ * which is the old behaviour rather than a new failure.
  */
 export async function submitNzb(args: {
 	nzbText: string;
 	nzbName: string;
 	imdbId: string;
 	rdKey: string;
+	oauth?: RdOAuthCredentials | null;
 }): Promise<{ status: number; data: any }> {
 	const form = new FormData();
 	form.append('nzb', new Blob([args.nzbText], { type: 'application/x-nzb' }), args.nzbName);
 	form.append('imdb_id', args.imdbId);
 	form.append('rd_api_key', args.rdKey);
+	if (isCompleteOAuth(args.oauth)) {
+		form.append('rd_client_id', args.oauth.clientId);
+		form.append('rd_client_secret', args.oauth.clientSecret);
+		form.append('rd_refresh_token', args.oauth.refreshToken);
+	}
 
 	const response = await fetch(`${getNzb2rdUrl()}/jobs`, {
 		method: 'POST',

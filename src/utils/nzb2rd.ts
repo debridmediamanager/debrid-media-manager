@@ -69,11 +69,26 @@ async function parseJsonResponse(response: Response): Promise<any> {
 	return data;
 }
 
+/**
+ * Send the release, and the credentials nzb2rd needs to still be able to reach
+ * Real-Debrid when it eventually runs.
+ *
+ * `rdKey` alone is not enough and this was a live bug: it is an OAuth *access
+ * token*, which RD expires 24 hours after it is minted, while nzb2rd's queue is
+ * routinely days deep. Measured 2026-08-17, 1298 of its 1952 failures were
+ * `401 bad_token` at the hand-off, none of them under an hour of queue wait —
+ * the token was alive at submit and dead by the time the job reached the front.
+ *
+ * The OAuth triple does not expire, so nzb2rd mints its own token at the moment
+ * it calls RD. It is optional: without it the service falls back to the token,
+ * which is exactly the old behaviour.
+ */
 export async function createNzb2rdJob(params: {
 	id: string;
 	title: string;
 	imdbId: string;
 	rdKey: string;
+	oauth?: { clientId: string; clientSecret: string; refreshToken: string } | null;
 }): Promise<Nzb2rdJob | Nzb2rdDuplicate> {
 	const response = await fetch('/api/nzb2rd/jobs', {
 		method: 'POST',

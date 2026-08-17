@@ -36,8 +36,18 @@ const WAIT_PREFIX = 'nzbwait:';
 const waitKeyFor = (releaseId: string) => `${WAIT_PREFIX}${releaseId.toLowerCase()}`;
 
 export interface Nzb2rdWaiter {
-	/** Real-Debrid access token, held only until the job completes. */
+	/**
+	 * Real-Debrid access token, held only until the job completes.
+	 *
+	 * On its own this is not enough to deliver with: RD expires it 24 hours after
+	 * login and the job being waited on routinely takes days, so by the time
+	 * `takeWaiters` runs it is usually dead — and the delivery failure is caught
+	 * and logged, so the waiter silently receives nothing. Kept as the fallback
+	 * for entries queued before `oauth` existed.
+	 */
 	rdKey: string;
+	/** Long-lived credentials, so delivery can mint a token that actually works. */
+	oauth?: { clientId: string; clientSecret: string; refreshToken: string } | null;
 	imdbId: string;
 	queuedAt: number;
 }
@@ -124,15 +134,21 @@ export class Nzb2rdMapService extends DatabaseClient {
 	/** Bounded so a popular release cannot grow one row without limit. */
 	static readonly MAX_WAITERS = 50;
 
-	async addWaiter(releaseId: string, rdKey: string, imdbId: string): Promise<void> {
+	async addWaiter(
+		releaseId: string,
+		rdKey: string,
+		imdbId: string,
+		oauth?: Nzb2rdWaiter['oauth']
+	): Promise<void> {
 		const key = waitKeyFor(releaseId);
 		try {
 			const existing = await this.getWaiters(releaseId);
 			// One entry per account: re-asking should not queue a second add.
 			if (existing.some((w) => w.rdKey === rdKey)) return;
-			const waiters = [...existing, { rdKey, imdbId, queuedAt: Date.now() }].slice(
-				-Nzb2rdMapService.MAX_WAITERS
-			);
+			const waiters = [
+				...existing,
+				{ rdKey, oauth: oauth ?? null, imdbId, queuedAt: Date.now() },
+			].slice(-Nzb2rdMapService.MAX_WAITERS);
 			const value = { waiters } as unknown as object;
 			await this.prisma.cache.upsert({
 				where: { key },

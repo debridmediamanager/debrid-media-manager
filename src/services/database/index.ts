@@ -41,3 +41,5 @@ export {
 	TorrentSnapshotService,
 	ZurgKeysService,
 };
+
+export type { Nzb2rdWaiter } from './nzb2rdMap';

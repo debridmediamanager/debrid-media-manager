@@ -11,6 +11,7 @@ import {
 	HistoryAggregationService,
 	ImdbSearchService,
 	Nzb2rdMapService,
+	type Nzb2rdWaiter,
 	NzbSearchCacheService,
 	RdOperationalService,
 	ReportService,
@@ -215,8 +216,13 @@ export class Repository {
 	}
 
 	// Users parked on someone else's in-flight job, to be given the content when it lands
-	public addNzb2rdWaiter(releaseId: string, rdKey: string, imdbId: string) {
-		return this.nzb2rdMapService.addWaiter(releaseId, rdKey, imdbId);
+	public addNzb2rdWaiter(
+		releaseId: string,
+		rdKey: string,
+		imdbId: string,
+		oauth?: Nzb2rdWaiter['oauth']
+	) {
+		return this.nzb2rdMapService.addWaiter(releaseId, rdKey, imdbId, oauth);
 	}
 
 	public takeNzb2rdWaiters(releaseId: string) {

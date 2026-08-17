@@ -214,9 +214,43 @@ describe('UsenetResults', () => {
 				title: 'Alpha.Release.2160p',
 				imdbId: 'tt1418646',
 				rdKey: 'rd-key',
+				// Null here because this test's localStorage holds no OAuth triple.
+				// When one is present it rides along, so a job that waits days in
+				// nzb2rd's queue can refresh the token rather than presenting the
+				// expired one and failing as `401 bad_token`.
+				oauth: null,
 			}),
 		});
 		expect(await screen.findByRole('button', { name: /sent/i })).toBeDisabled();
+	});
+
+	// The `401 bad_token` fix, from the browser end: an access token that dies
+	// 24h after login is useless to a job that waits days in nzb2rd's queue, so
+	// the long-lived triple has to travel with it.
+	it('sends the stored OAuth credentials alongside the access token', async () => {
+		localStorage.setItem('rd:clientId', JSON.stringify('CID'));
+		localStorage.setItem('rd:clientSecret', JSON.stringify('CSEC'));
+		localStorage.setItem('rd:refreshToken', JSON.stringify('CREF'));
+
+		const fetchMock = mockSearch();
+		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
+		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
+		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
+
+		fetchMock.mockResolvedValueOnce({
+			ok: true,
+			json: async () => ({ id: 'job-1', status: 'pending' }),
+		});
+		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
+
+		await waitFor(() => {
+			const send = fetchMock.mock.calls.find((call) => call[0] === '/api/nzb2rd/jobs');
+			expect(JSON.parse(send?.[1].body).oauth).toEqual({
+				clientId: 'CID',
+				clientSecret: 'CSEC',
+				refreshToken: 'CREF',
+			});
+		});
 	});
 
 	it('surfaces a send failure and leaves the row re-sendable', async () => {

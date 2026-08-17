@@ -6,6 +6,7 @@ import {
 	dedupeResults,
 	fetchNzb,
 	getIndexers,
+	isCompleteOAuth,
 	isSeasonPack,
 	isValidImdbId,
 	looksLikeEpisode,
@@ -251,6 +252,58 @@ describe('submitNzb', () => {
 		expect((form.get('nzb') as File).name).toBe('release.nzb');
 	});
 
+	// The fix for `RD addTorrent failed: 401 bad_token`. `rdKey` is an OAuth
+	// access token that RD expires 24h after login, and nzb2rd's queue is days
+	// deep — so without something refreshable the job is guaranteed to reach the
+	// hand-off with a dead credential.
+	it('sends the long-lived OAuth credentials so a queued job can refresh its token', async () => {
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValue({ status: 201, json: async () => ({ id: 'job-1' }) });
+		vi.stubGlobal('fetch', fetchMock);
+
+		await submitNzb({
+			nzbText: '<nzb></nzb>',
+			nzbName: 'release.nzb',
+			imdbId: 'tt1418646',
+			rdKey: 'user-rd-key',
+			oauth: { clientId: 'CID', clientSecret: 'CSEC', refreshToken: 'CREF' },
+		});
+
+		const form = fetchMock.mock.calls[0][1].body as FormData;
+		expect(form.get('rd_client_id')).toBe('CID');
+		expect(form.get('rd_client_secret')).toBe('CSEC');
+		expect(form.get('rd_refresh_token')).toBe('CREF');
+		// Still sent: it is what nzb2rd falls back to if RD cannot be reached.
+		expect(form.get('rd_api_key')).toBe('user-rd-key');
+	});
+
+	// A partial triple cannot mint anything, so sending it would only put a
+	// secret on the wire and in nzb2rd's database for no benefit.
+	it.each([
+		['none', undefined],
+		['null', null],
+		['partial', { clientId: 'CID', clientSecret: '', refreshToken: 'CREF' }],
+	])('omits the OAuth fields entirely when they are %s', async (_label, oauth) => {
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValue({ status: 201, json: async () => ({ id: 'job-1' }) });
+		vi.stubGlobal('fetch', fetchMock);
+
+		await submitNzb({
+			nzbText: '<nzb></nzb>',
+			nzbName: 'release.nzb',
+			imdbId: 'tt1418646',
+			rdKey: 'user-rd-key',
+			oauth: oauth as never,
+		});
+
+		const form = fetchMock.mock.calls[0][1].body as FormData;
+		expect(form.get('rd_client_id')).toBeNull();
+		expect(form.get('rd_client_secret')).toBeNull();
+		expect(form.get('rd_refresh_token')).toBeNull();
+	});
+
 	it('passes a non-2xx status through instead of throwing', async () => {
 		vi.stubGlobal(
 			'fetch',
@@ -263,6 +316,17 @@ describe('submitNzb', () => {
 			rdKey: 'k',
 		});
 		expect(result.status).toBe(400);
+	});
+});
+
+describe('isCompleteOAuth', () => {
+	it('accepts a complete triple and rejects anything less', () => {
+		const full = { clientId: 'a', clientSecret: 'b', refreshToken: 'c' };
+		expect(isCompleteOAuth(full)).toBe(true);
+		expect(isCompleteOAuth({ ...full, refreshToken: '' })).toBe(false);
+		expect(isCompleteOAuth({ clientId: 'a' })).toBe(false);
+		expect(isCompleteOAuth(null)).toBe(false);
+		expect(isCompleteOAuth(undefined)).toBe(false);
 	});
 });
 

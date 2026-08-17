@@ -1,3 +1,4 @@
+import type { Nzb2rdWaiter } from '@/services/database';
 import {
 	buildTransferRegistration,
 	parseTransferContext,
@@ -5,6 +6,7 @@ import {
 } from '@/services/debridUploaderRegistration';
 import { addHashToRdAccount, getNzb2rdUrl, isValidImdbId } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { getToken } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -19,6 +21,35 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // built info_hash, the de-infringed name, and files as {name, size, rd_link} —
 // which is the exact shape buildTransferRegistration consumes, so the TB → RD
 // registration logic is reused verbatim rather than duplicated.
+/**
+ * The token to deliver a finished release with.
+ *
+ * A waiter's stored `rdKey` is an OAuth access token that Real-Debrid expires 24
+ * hours after login, and this list is drained only when the job it waits on
+ * completes — days later, by design. So the stored token is normally dead, the
+ * add throws, and the catch above turns that into a log line nobody reads: the
+ * user waited and received nothing. Minting from the long-lived credentials
+ * fixes it; falling back to the stored token keeps entries queued before those
+ * were recorded working exactly as well as they did.
+ */
+async function deliveryKeyFor(waiter: Nzb2rdWaiter): Promise<string> {
+	if (!waiter.oauth) return waiter.rdKey;
+	try {
+		const { access_token } = await getToken(
+			waiter.oauth.clientId,
+			waiter.oauth.clientSecret,
+			waiter.oauth.refreshToken,
+			true
+		);
+		return access_token || waiter.rdKey;
+	} catch (error) {
+		// Signed out, revoked, or RD is down. The stored token is very likely dead
+		// too, but trying it costs one call and is the only remaining chance.
+		console.error('Refreshing a waiting RD account token failed:', error);
+		return waiter.rdKey;
+	}
+}
+
 async function registerCompletedJob(
 	job: any,
 	mediaType: unknown,
@@ -54,7 +85,7 @@ async function registerCompletedJob(
 		});
 		for (const waiter of waiters) {
 			try {
-				await addHashToRdAccount(waiter.rdKey, infoHash);
+				await addHashToRdAccount(await deliveryKeyFor(waiter), infoHash);
 			} catch (error) {
 				// One account failing must not deny the rest; the key is spent either
 				// way, so never log it.
