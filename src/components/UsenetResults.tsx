@@ -281,7 +281,11 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 				) : (
 					<ChevronRight className="h-4 w-4 shrink-0" />
 				)}
-				<span>Usenet</span>
+				{/* The hyphen is a break opportunity, so a narrow screen would otherwise
+				    split the service name across two lines as "Real-" / "Debrid". */}
+				<span>
+					Send NZBs from Usenet to <span className="whitespace-nowrap">Real-Debrid</span>
+				</span>
 				{results !== null && (
 					<span className="text-sm text-gray-400">({results.length})</span>
 				)}
