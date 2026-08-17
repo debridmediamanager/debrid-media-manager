@@ -41,7 +41,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				throw new Error(`no token found`);
 			}
 		} catch (error) {
-			console.error(error);
+			// Only the message. `console.error(err)` on an AxiosError expands the
+			// whole object, and `config.data` here is the OAuth POST body — so the
+			// bare form wrote clientId, clientSecret *and* the refresh token into
+			// the container logs every time Real-Debrid refused a refresh.
+			// Interpolating into a string is safe: AxiosError.toString() is just
+			// "Request failed with status code 400".
+			console.error(
+				'Failed to get a Real-Debrid token for a cast profile:',
+				error instanceof Error ? error.message : String(error)
+			);
 			res.status(500).json({ error: `Failed to get Real-Debrid token: ${error}` });
 			return;
 		}
@@ -59,7 +68,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			hideCastOption !== undefined ? Boolean(hideCastOption) : undefined
 		);
 
-		return res.status(200).json(profile);
+		// Whitelisted, matching the TorBox and AllDebrid cast endpoints. The raw
+		// Prisma row carries clientId/clientSecret/refreshToken, and returning it
+		// echoed the caller's long-lived Real-Debrid credentials back over the
+		// wire for no reason — nothing client-side reads this body beyond `res.ok`.
+		return res.status(200).json({
+			userId: profile.userId,
+			movieMaxSize: profile.movieMaxSize,
+			episodeMaxSize: profile.episodeMaxSize,
+			otherStreamsLimit: profile.otherStreamsLimit,
+			hideCastOption: profile.hideCastOption,
+		});
 	} catch (error) {
 		console.error('Error saving cast profile:', error);
 		return res.status(500).json({ error: `Internal Server Error: ${error}` });

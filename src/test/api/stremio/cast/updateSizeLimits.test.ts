@@ -308,4 +308,50 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 
 		expect(res.status).toHaveBeenCalledWith(500);
 	});
+
+	// The raw Prisma row carries the caller's long-lived Real-Debrid credentials.
+	// Returning it echoed them straight back; the response is whitelisted now.
+	it('never echoes the stored credentials back in the response', async () => {
+		req.body = { clientId: 'LEAK_CLIENT', clientSecret: 'LEAK_SECRET', movieMaxSize: 15 };
+
+		vi.spyOn(rdModule, 'getToken').mockResolvedValue(tokenResponse);
+		vi.spyOn(castHelpersModule, 'generateUserId').mockResolvedValue('user123');
+		vi.spyOn(repoModule.repository, 'saveCastProfile').mockResolvedValue({
+			userId: 'user123',
+			clientId: 'LEAK_CLIENT',
+			clientSecret: 'LEAK_SECRET',
+			refreshToken: 'LEAK_REFRESH',
+			movieMaxSize: 15,
+			episodeMaxSize: 0,
+			otherStreamsLimit: 5,
+			hideCastOption: false,
+			updatedAt: new Date(),
+		});
+
+		await handler(req as NextApiRequest, res as NextApiResponse);
+
+		const body = JSON.stringify((res.json as ReturnType<typeof vi.fn>).mock.calls[0][0]);
+		expect(body).not.toContain('LEAK_SECRET');
+		expect(body).not.toContain('LEAK_REFRESH');
+	});
+
+	// Expanding an AxiosError prints `config.data` — the OAuth POST body, which
+	// carries clientSecret and the refresh token. That went to the container logs.
+	it('does not log the credentials when the token fetch fails', async () => {
+		req.body = { clientId: 'LEAK_CLIENT', clientSecret: 'LEAK_SECRET' };
+
+		const axiosLike = Object.assign(new Error('Request failed with status code 400'), {
+			isAxiosError: true,
+			config: { data: 'client_secret=LEAK_SECRET&code=LEAK_REFRESH' },
+		});
+		vi.spyOn(rdModule, 'getToken').mockRejectedValue(axiosLike);
+		const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		await handler(req as NextApiRequest, res as NextApiResponse);
+
+		const logged = spy.mock.calls.map((c) => JSON.stringify(c)).join(' ');
+		expect(logged).not.toContain('LEAK_SECRET');
+		expect(logged).not.toContain('LEAK_REFRESH');
+		spy.mockRestore();
+	});
 });

@@ -27,7 +27,17 @@ describe('/api/stremio/cast/saveProfile', () => {
 		vi.clearAllMocks();
 		mockGetToken.mockResolvedValue({ access_token: 'rd-token' });
 		mockGenerateUserId.mockResolvedValue('user-1');
-		mockSaveCastProfile.mockResolvedValue({ ok: true });
+		// The shape Prisma actually returns: the whole row, credentials included.
+		mockSaveCastProfile.mockResolvedValue({
+			userId: 'user-1',
+			clientId: 'LEAK_CLIENT',
+			clientSecret: 'LEAK_SECRET',
+			refreshToken: 'LEAK_REFRESH',
+			movieMaxSize: 10,
+			episodeMaxSize: 3,
+			otherStreamsLimit: 5,
+			hideCastOption: false,
+		});
 	});
 
 	it('rejects non-POST methods', async () => {
@@ -72,7 +82,61 @@ describe('/api/stremio/cast/saveProfile', () => {
 			undefined
 		);
 		expect(res.status).toHaveBeenCalledWith(200);
-		expect(res.json).toHaveBeenCalledWith({ ok: true });
+		expect(res.json).toHaveBeenCalledWith({
+			userId: 'user-1',
+			movieMaxSize: 10,
+			episodeMaxSize: 3,
+			otherStreamsLimit: 5,
+			hideCastOption: false,
+		});
+	});
+
+	// The raw Prisma row carries the caller's long-lived Real-Debrid credentials,
+	// and returning it echoed them straight back over the wire. Whitelisted now,
+	// matching the TorBox and AllDebrid cast endpoints.
+	it('never echoes the stored credentials back in the response', async () => {
+		const req = createMockRequest({
+			method: 'POST',
+			body: { clientId: 'id', clientSecret: 'secret', refreshToken: 'refresh' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		const body = JSON.stringify(
+			(res.json as unknown as ReturnType<typeof vi.fn>).mock.calls[0][0]
+		);
+		for (const secret of ['LEAK_SECRET', 'LEAK_REFRESH', 'LEAK_CLIENT']) {
+			expect(body).not.toContain(secret);
+		}
+		expect(body).not.toContain('clientSecret');
+		expect(body).not.toContain('refreshToken');
+	});
+
+	// `console.error(err)` on an AxiosError expands the whole object, and
+	// `config.data` is the OAuth POST body — so the bare form wrote clientId,
+	// clientSecret and the refresh token into the container logs on every
+	// refused refresh.
+	it('does not log the credentials when the token fetch fails', async () => {
+		const axiosLike = Object.assign(new Error('Request failed with status code 400'), {
+			isAxiosError: true,
+			config: {
+				data: 'client_id=LEAK_CLIENT&client_secret=LEAK_SECRET&code=LEAK_REFRESH',
+			},
+		});
+		mockGetToken.mockRejectedValue(axiosLike);
+		const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		const req = createMockRequest({
+			method: 'POST',
+			body: { clientId: 'LEAK_CLIENT', clientSecret: 'LEAK_SECRET' },
+		});
+		await handler(req, createMockResponse());
+
+		const logged = spy.mock.calls.map((c) => JSON.stringify(c)).join(' ');
+		expect(logged).not.toContain('LEAK_SECRET');
+		expect(logged).not.toContain('LEAK_REFRESH');
+		spy.mockRestore();
 	});
 
 	it('saves the profile with settings when provided', async () => {

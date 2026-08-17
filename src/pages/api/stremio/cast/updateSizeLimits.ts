@@ -52,7 +52,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				throw new Error(`no token found`);
 			}
 		} catch (error) {
-			console.error(error);
+			// Message only — see the same catch in `saveProfile.ts`. Expanding an
+			// AxiosError prints `config.data`, which here is the OAuth POST body
+			// carrying the caller's clientSecret and refresh token.
+			console.error(
+				'Failed to get a Real-Debrid token while updating size limits:',
+				error instanceof Error ? error.message : String(error)
+			);
 			res.status(500).json({ error: `Failed to get Real-Debrid token: ${error}` });
 			return;
 		}
@@ -70,7 +76,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			hideCastOption !== undefined ? Boolean(hideCastOption) : undefined
 		);
 
-		return res.status(200).json(profile);
+		// Whitelisted — the raw row carries the credentials. See `saveProfile.ts`.
+		return res.status(200).json({
+			userId: profile.userId,
+			movieMaxSize: profile.movieMaxSize,
+			episodeMaxSize: profile.episodeMaxSize,
+			otherStreamsLimit: profile.otherStreamsLimit,
+			hideCastOption: profile.hideCastOption,
+		});
 	} catch (error) {
 		console.error('Error updating size limits:', error);
 		return res.status(500).json({ error: `Internal Server Error: ${error}` });
