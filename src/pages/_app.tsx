@@ -1,3 +1,4 @@
+import CanaryLinks from '@/components/CanaryLinks';
 import FloatingLibraryIndicator from '@/components/FloatingLibraryIndicator';
 import { ModalProvider } from '@/components/modals/ModalContext';
 import { LibraryCacheProvider } from '@/contexts/LibraryCacheContext';
@@ -84,6 +85,7 @@ export default function App({ Component, pageProps }: AppWithProvidersProps) {
 			</Head>
 			<Component {...pageProps} />
 			{shouldWrapWithLibraryProvider && <FloatingLibraryIndicator />}
+			<CanaryLinks />
 		</>
 	);
 

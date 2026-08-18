@@ -1,6 +1,0 @@
-# Debrid Media Manager
-User-agent: *
-Disallow: /api/
-Allow: /
-
-Sitemap: https://debridmediamanager.com/sitemap.xml
