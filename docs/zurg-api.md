@@ -120,6 +120,12 @@ Content-Type: application/json
 
 ---
 
+### Search Torrents by IMDB ID
+
+`POST /api/zurg/search-torrents` returns multiple matching releases. The optional `quality` value accepts `best`, `4k`, `1080p`, `720p`, or `smallest`. `smallest` sorts matching releases by file size ascending before applying `limit`; the other values retain descending file-size ordering.
+
+The default remains `best`, so existing clients are unchanged.
+
 ### Get Hashes by IMDB ID
 
 Search for torrent hashes by IMDB ID with advanced filtering.
