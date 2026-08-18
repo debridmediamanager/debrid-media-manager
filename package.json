@@ -37,7 +37,7 @@
 		"next": "^15.5.15",
 		"next-pwa": "^5.6.0",
 		"parse-torrent-title": "github:TorBox-App/parse-torrent-title",
-		"qs": "^6.15.0",
+		"qs": "^6.15.2",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"react-hot-toast": "^2.5.2",
