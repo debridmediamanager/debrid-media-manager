@@ -122,9 +122,76 @@ Content-Type: application/json
 
 ### Search Torrents by IMDB ID
 
-`POST /api/zurg/search-torrents` returns multiple matching releases. The optional `quality` value accepts `best`, `4k`, `1080p`, `720p`, or `smallest`. `smallest` sorts matching releases by file size ascending before applying `limit`; the other values retain descending file-size ordering.
+Searches available releases for a movie or TV series. This is the endpoint used by Zurg's Plex Watchlist bridge.
 
-The default remains `best`, so existing clients are unchanged.
+**Endpoint**: `POST /api/zurg/search-torrents`
+
+**Authentication**: Requires a valid API key in the `x-api-key` header.
+
+**Request headers:**
+
+```
+x-api-key: <your-api-key>
+Content-Type: application/json
+```
+
+**Request body:**
+
+```json
+{
+	"imdbId": "tt1234567",
+	"limit": 10,
+	"maxSize": 50,
+	"mediaType": "movie",
+	"quality": "4k"
+}
+```
+
+- `imdbId` is required and must match `tt\d+`.
+- `mediaType` is required and must be `movie` or `tv`.
+- `limit` is optional, defaults to 20, and is capped at 100.
+- `maxSize` is optional and limits results by size in GB.
+- `quality` is optional and accepts `best`, `4k`, `1080p`, `720p`, or `smallest`; invalid or omitted values fall back to `best`.
+- `best`, `4k`, `1080p`, and `720p` retain descending file-size ordering. `smallest` sorts matching releases by ascending file size before applying `limit`.
+
+Movie response:
+
+```json
+{
+	"count": 1,
+	"mediaType": "movie",
+	"results": [
+		{
+			"hash": "40-character-torrent-hash",
+			"title": "Movie.2025.2160p.WEB-DL...",
+			"fileSize": 12345678900
+		}
+	]
+}
+```
+
+TV responses include one result list per detected season:
+
+```json
+{
+	"count": 1,
+	"mediaType": "tv",
+	"seasonCount": 3,
+	"seasons": {
+		"1": [
+			{
+				"hash": "40-character-torrent-hash",
+				"title": "Show.S01.1080p.WEB-DL...",
+				"fileSize": 12345678900
+			}
+		]
+	}
+}
+```
+
+The endpoint removes duplicates, excludes reported hashes, checks availability, applies the resolution filter and ordering, then applies the result limit. Release-profile regex filtering is intentionally not part of this API; Zurg applies its `quality_releases` and `custom_regex` filters locally.
+
+**Errors:** `401` for a missing or invalid API key, `400` for an invalid IMDB ID or media type, `405` for a non-POST request, and `500` for an internal search failure.
 
 ### Get Hashes by IMDB ID
 
