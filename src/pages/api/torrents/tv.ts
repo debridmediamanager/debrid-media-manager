@@ -1,6 +1,7 @@
 import { flattenAndRemoveDuplicates, sortByFileSize } from '@/services/mediasearch';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { checkCanary, respondAsNeverScraped } from '@/utils/canaryGuard';
 import { validateTokenWithHash } from '@/utils/token';
 import { NextApiHandler } from 'next';
 
@@ -23,6 +24,14 @@ const handler: NextApiHandler = async (req, res) => {
 
 	if (!imdbId || !(typeof imdbId === 'string')) {
 		res.status(400).json({ errorMessage: 'Missing "imdbId" query parameter' });
+		return;
+	}
+
+	// Impossible titles: no browser session can produce these ids, so a hit is
+	// proof of enumeration rather than a signal to weigh. Answer exactly as a
+	// never-scraped title does and, crucially, do not queue a scrape for it.
+	if (await checkCanary(req, imdbId)) {
+		respondAsNeverScraped(res);
 		return;
 	}
 	if (!seasonNum || !(typeof seasonNum === 'string')) {

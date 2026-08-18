@@ -16,7 +16,7 @@ const nextConfig = {
 	},
 	async rewrites() {
 		return {
-			beforeFiles: [],
+			beforeFiles: [{ source: '/sitemap.xml', destination: '/api/sitemap' }],
 			afterFiles: [{ source: '/anticors', destination: '/api/anticors' }],
 			fallback: [
 				{

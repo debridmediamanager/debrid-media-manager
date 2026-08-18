@@ -1,5 +1,6 @@
 import handler from '@/pages/api/torrents/tv';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { TRAP_POOL } from '@/utils/canary';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
@@ -9,6 +10,7 @@ const {
 	mockGetReportedHashes,
 	mockKeyExists,
 	mockSaveScrapedResults,
+	mockRecordCanary,
 	mockFlatten,
 	mockSort,
 } = vi.hoisted(() => ({
@@ -18,6 +20,7 @@ const {
 	mockGetReportedHashes: vi.fn(),
 	mockKeyExists: vi.fn(),
 	mockSaveScrapedResults: vi.fn(),
+	mockRecordCanary: vi.fn(),
 	mockFlatten: vi.fn((items: any[]) => items),
 	mockSort: vi.fn((items: any[]) => items),
 }));
@@ -39,6 +42,10 @@ vi.mock('@/services/repository', () => ({
 vi.mock('@/services/mediasearch', () => ({
 	flattenAndRemoveDuplicates: mockFlatten,
 	sortByFileSize: mockSort,
+}));
+
+vi.mock('@/services/canary/canaryStore', () => ({
+	getCanaryStore: () => ({ record: mockRecordCanary }),
 }));
 
 describe('/api/torrents/tv', () => {
@@ -184,5 +191,48 @@ describe('/api/torrents/tv', () => {
 
 		expect(res.status).toHaveBeenCalledWith(500);
 		expect(res.json).toHaveBeenCalledWith({ errorMessage: 'An internal error occurred' });
+	});
+
+	describe('impossible titles', () => {
+		const trap = TRAP_POOL[1];
+
+		beforeEach(() => {
+			vi.spyOn(console, 'warn').mockImplementation(() => {});
+		});
+
+		it('never queues a scrape for a canary id', async () => {
+			const req = createMockRequest({ query: { ...baseQuery, imdbId: trap } });
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+			expect(mockGetScrapedTrueResults).not.toHaveBeenCalled();
+			expect(res.setHeader).toHaveBeenCalledWith('status', 'requested');
+			expect(res.status).toHaveBeenCalledWith(204);
+		});
+
+		it('records the hit against the caller', async () => {
+			const req = createMockRequest({
+				query: { ...baseQuery, imdbId: trap },
+				headers: { 'cf-connecting-ip': '203.0.113.8' },
+				url: '/api/torrents/tv',
+			});
+
+			await handler(req, createMockResponse());
+
+			expect(mockRecordCanary).toHaveBeenCalledWith('203.0.113.8', {
+				imdbId: trap,
+				kind: 'trap',
+				path: '/api/torrents/tv',
+			});
+		});
+
+		it('leaves ordinary ids on the normal path', async () => {
+			await handler(createMockRequest({ query: baseQuery }), createMockResponse());
+
+			expect(mockRecordCanary).not.toHaveBeenCalled();
+			expect(mockGetScrapedTrueResults).toHaveBeenCalled();
+		});
 	});
 });
