@@ -134,7 +134,8 @@ export default function TransfersPage() {
 	const handleCancel = async (entry: TransferEntry) => {
 		if (!window.confirm('Cancel this transfer? The job will be stopped and deleted.')) return;
 		try {
-			if (entry.source === 'nzb2rd') await deleteNzb2rdJob(entry.id, entry.releaseId);
+			if (entry.source === 'nzb2rd')
+				await deleteNzb2rdJob(entry.id, entry.releaseId, rdKey ?? undefined);
 			else await deleteDebridUploaderJob(entry.id);
 			removeFromList(entry);
 			toast.success('Transfer cancelled.');

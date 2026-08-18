@@ -119,10 +119,23 @@ export async function getNzb2rdJob(
 	return parseJsonResponse(response);
 }
 
-export async function deleteNzb2rdJob(jobId: string, releaseId?: string): Promise<void> {
+/**
+ * Cancel a transfer.
+ *
+ * `rdKey` is proof of ownership, not a convenience: nzb2rd's `DELETE /jobs/:id`
+ * used to delete on a job id alone, so anyone who learned an id could cancel a
+ * stranger's transfer. It now requires a key that resolves to the job's owner,
+ * and a caller that sends none is refused. Passed as a **header** rather than a
+ * query param so it stays out of nginx's and Caddy's request logs.
+ */
+export async function deleteNzb2rdJob(
+	jobId: string,
+	releaseId?: string,
+	rdKey?: string
+): Promise<void> {
 	const response = await fetch(
 		`/api/nzb2rd/jobs/${encodeURIComponent(jobId)}${jobQuery(undefined, releaseId)}`,
-		{ method: 'DELETE' }
+		{ method: 'DELETE', headers: rdKey ? { 'x-rd-api-key': rdKey } : undefined }
 	);
 	await parseJsonResponse(response);
 }

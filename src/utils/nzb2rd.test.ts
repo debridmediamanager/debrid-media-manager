@@ -171,7 +171,34 @@ describe('deleteNzb2rdJob', () => {
 
 		expect(fetchMock).toHaveBeenCalledWith('/api/nzb2rd/jobs/job-1?releaseId=rel-1', {
 			method: 'DELETE',
+			headers: undefined,
 		});
+	});
+
+	// nzb2rd's DELETE used to authorize on nothing, so any id could cancel any
+	// stranger's transfer. It now demands a key that resolves to the job's
+	// owner; if this stops being sent, every cancel silently starts 404ing.
+	it('sends the RD key as proof of ownership', async () => {
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ok: true }) });
+		vi.stubGlobal('fetch', fetchMock);
+
+		await deleteNzb2rdJob('job-1', 'rel-1', 'RDKEY123');
+
+		expect(fetchMock).toHaveBeenCalledWith('/api/nzb2rd/jobs/job-1?releaseId=rel-1', {
+			method: 'DELETE',
+			headers: { 'x-rd-api-key': 'RDKEY123' },
+		});
+	});
+
+	// A key in the query string lands in nginx and Caddy access logs; dmm
+	// already has a live leak of exactly that shape.
+	it('keeps the key out of the URL', async () => {
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ok: true }) });
+		vi.stubGlobal('fetch', fetchMock);
+
+		await deleteNzb2rdJob('job-1', 'rel-1', 'RDKEY123');
+
+		expect(fetchMock.mock.calls[0][0]).not.toContain('RDKEY123');
 	});
 });
 

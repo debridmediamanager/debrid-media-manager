@@ -136,9 +136,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			: undefined;
 
 	try {
+		// The caller's RD key is forwarded, never interpreted: nzb2rd authorizes
+		// the delete against the job's owner, and this route has no idea who owns
+		// what. Without it a cancel is refused there, which is the point — this
+		// endpoint is public and used to forward any id straight through.
+		const rdKey = req.headers['x-rd-api-key'];
+		const headers: Record<string, string> = { Accept: 'application/json' };
+		if (typeof rdKey === 'string' && rdKey) headers['x-rd-api-key'] = rdKey;
+
 		const response = await fetch(`${getNzb2rdUrl()}/jobs/${encodeURIComponent(id)}`, {
 			method: req.method,
-			headers: { Accept: 'application/json' },
+			headers,
 			signal: AbortSignal.timeout(15000),
 		});
 		const data = await response.json().catch(() => ({}));
