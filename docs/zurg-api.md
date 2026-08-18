@@ -120,6 +120,32 @@ Content-Type: application/json
 
 ---
 
+### Search Torrents by IMDB ID
+
+Search available torrent releases by IMDB ID. The endpoint returns multiple results, sorted by file size descending by default.
+
+**Endpoint**: `POST /api/zurg/search-torrents`
+
+**Request body:**
+
+```json
+{
+	"imdbId": "tt1234567",
+	"limit": 20,
+	"mediaType": "movie",
+	"quality": "best",
+	"releaseProfile": "any"
+}
+```
+
+`quality` accepts `best`, `4k`, `1080p`, `720p`, or `smallest`. `smallest` sorts the matching releases by file size ascending; all other values sort descending. `releaseProfile` accepts `any` or `quality_releases`. The latter applies DMM's Quality releases pattern server-side:
+
+```text
+web.?dl|web.?rip|blu.?ray|remux|dovi|hdr10|2160p
+```
+
+Both new options are optional. Omitting them preserves the existing behavior.
+
 ### Get Hashes by IMDB ID
 
 Search for torrent hashes by IMDB ID with advanced filtering.
