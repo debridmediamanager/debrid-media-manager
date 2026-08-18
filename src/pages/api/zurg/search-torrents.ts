@@ -4,23 +4,33 @@ import { ScrapeSearchResult, flattenAndRemoveDuplicates } from '@/services/media
 import { getMetadataCache } from '@/services/metadataCache';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
-import {
-	filterZurgResults,
-	sortZurgResults,
-	type ZurgQuality,
-	type ZurgReleaseProfile,
-} from '@/services/zurgSearchFilters';
 import { NextApiHandler } from 'next';
 import UserAgent from 'user-agents';
 import { validateDmmApiKeyHeader } from './auth';
+
+type Quality = '4k' | '1080p' | '720p' | 'best';
+
+const QUALITY_PATTERNS: Record<string, RegExp> = {
+	'4k': /2160p/i,
+	'1080p': /1080p/i,
+	'720p': /720p/i,
+};
+
+function filterByQuality(results: ScrapeSearchResult[], quality: Quality): ScrapeSearchResult[] {
+	if (quality === 'best') return results;
+
+	const pattern = QUALITY_PATTERNS[quality];
+	if (!pattern) return results;
+
+	return results.filter((t) => pattern.test(t.title));
+}
 
 async function searchTorrentsForKey(
 	key: string,
 	imdbId: string,
 	maxSizeGB: number,
 	limit: number,
-	quality: ZurgQuality,
-	releaseProfile: ZurgReleaseProfile
+	quality: Quality
 ): Promise<ScrapeSearchResult[]> {
 	const [trustedResults, untrustedResults] = await Promise.all([
 		db.getScrapedTrueResults<ScrapeSearchResult[]>(key, maxSizeGB),
@@ -40,8 +50,8 @@ async function searchTorrentsForKey(
 	const availableSet = new Set(availableRecords.map((r) => r.hash));
 	processed = processed.filter((t) => availableSet.has(t.hash));
 
-	processed = filterZurgResults(processed, quality, releaseProfile);
-	processed = sortZurgResults(processed, quality);
+	processed = filterByQuality(processed, quality);
+	processed.sort((a, b) => b.fileSize - a.fileSize);
 
 	return processed.slice(0, limit);
 }
@@ -85,7 +95,7 @@ const handler: NextApiHandler = async (req, res) => {
 
 	if (!(await validateDmmApiKeyHeader(req, res))) return;
 
-	const { imdbId, mediaType, maxSize, limit, quality, releaseProfile } = req.body;
+	const { imdbId, mediaType, maxSize, limit, quality } = req.body;
 
 	if (!imdbId || typeof imdbId !== 'string' || !/^tt\d+$/.test(imdbId)) {
 		return res.status(400).json({ error: 'Invalid IMDB ID format. Expected: ttXXXXXXX' });
@@ -95,12 +105,8 @@ const handler: NextApiHandler = async (req, res) => {
 		return res.status(400).json({ error: 'mediaType must be "movie" or "tv"' });
 	}
 
-	const validQualities: ZurgQuality[] = ['4k', '1080p', '720p', 'best', 'smallest'];
-	const qualityParam: ZurgQuality =
-		quality && validQualities.includes(quality) ? quality : 'best';
-	const validReleaseProfiles: ZurgReleaseProfile[] = ['any', 'quality_releases'];
-	const releaseProfileParam: ZurgReleaseProfile =
-		releaseProfile && validReleaseProfiles.includes(releaseProfile) ? releaseProfile : 'any';
+	const validQualities: Quality[] = ['4k', '1080p', '720p', 'best'];
+	const qualityParam: Quality = quality && validQualities.includes(quality) ? quality : 'best';
 
 	const maxSizeGB = maxSize && typeof maxSize === 'number' && maxSize > 0 ? maxSize : 0;
 	const resultLimit =
@@ -113,8 +119,7 @@ const handler: NextApiHandler = async (req, res) => {
 				imdbId,
 				maxSizeGB,
 				resultLimit,
-				qualityParam,
-				releaseProfileParam
+				qualityParam
 			);
 
 			return res.status(200).json({
@@ -132,8 +137,7 @@ const handler: NextApiHandler = async (req, res) => {
 				imdbId,
 				maxSizeGB,
 				resultLimit,
-				qualityParam,
-				releaseProfileParam
+				qualityParam
 			)
 		);
 
