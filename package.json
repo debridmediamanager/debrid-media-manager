@@ -80,7 +80,7 @@
 		"prettier-plugin-organize-imports": "^4.1.0",
 		"prettier-plugin-sort-json": "^4.1.1",
 		"prettier-plugin-tailwindcss": "^0.6.11",
-		"prisma": "^6.5.0",
+		"prisma": "^6.19.3",
 		"supertest": "^7.1.4",
 		"tailwindcss": "^3.4.17",
 		"testcontainers": "^11.11.0",
