@@ -17,6 +17,7 @@ import { SearchService } from './search';
 import { StreamHealthService } from './streamHealth';
 import { TorBoxCastService } from './torboxCast';
 import { TorrentSnapshotService } from './torrentSnapshot';
+import { TransferMetaService } from './transferMeta';
 import { ZurgKeysService } from './zurgKeys';
 
 export {
@@ -39,7 +40,9 @@ export {
 	StreamHealthService,
 	TorBoxCastService,
 	TorrentSnapshotService,
+	TransferMetaService,
 	ZurgKeysService,
 };
 
 export type { Nzb2rdWaiter } from './nzb2rdMap';
+export type { TransferMetaRecord, TransferMetaSource } from './transferMeta';

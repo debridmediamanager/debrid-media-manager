@@ -1,6 +1,7 @@
 import { orderedServersForNewJob, resolveJobServer } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { safeReturnPath } from '@/utils/transferContext';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 // The debrid uploader service speaks plain HTTP with no CORS, so the browser can
@@ -71,7 +72,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { hash, imdbId, rdKey, tbKey, adKey, sizeBytes } = req.body ?? {};
+	const { hash, imdbId, rdKey, tbKey, adKey, sizeBytes, title, returnPath } = req.body ?? {};
 
 	if (typeof hash !== 'string' || !/^[a-fA-F0-9]{40}$/.test(hash)) {
 		return res.status(400).json({ error: 'hash must be a 40-char hex info hash' });
@@ -153,6 +154,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				db
 					.recordDebridJobServer(data.id, server)
 					.catch((e) => console.error('Recording job server failed:', e)),
+				// The page this was started from, so the Transfers page can label the
+				// row and link back to the content from any device. The uploader
+				// service records neither, and this used to live in localStorage.
+				db
+					.recordTransferMeta({
+						source: 'debrid',
+						jobId: data.id,
+						imdbId,
+						title: typeof title === 'string' ? title : undefined,
+						returnPath: safeReturnPath(returnPath),
+					})
+					.catch((e) => console.error('Recording transfer context failed:', e)),
 			]);
 		}
 		return res.status(response.status).json(data);

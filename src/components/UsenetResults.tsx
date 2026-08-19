@@ -189,6 +189,7 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 				// in nzb2rd's queue for days; these do not expire, so the service can
 				// mint a live token when it actually reaches Real-Debrid.
 				oauth: readRdOAuthCredentials(),
+				returnPath: returnPath(),
 			});
 
 			if (isNzb2rdDuplicate(job)) {

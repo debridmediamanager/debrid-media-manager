@@ -89,6 +89,12 @@ export async function createNzb2rdJob(params: {
 	imdbId: string;
 	rdKey: string;
 	oauth?: { clientId: string; clientSecret: string; refreshToken: string } | null;
+	/**
+	 * The page this was started from, stored server-side against the job id. The
+	 * Transfers page is server-driven now and nzb2rd records no such thing, so
+	 * without it a row links nowhere — on every device, not just a new one.
+	 */
+	returnPath?: string;
 }): Promise<Nzb2rdJob | Nzb2rdDuplicate> {
 	const response = await fetch('/api/nzb2rd/jobs', {
 		method: 'POST',

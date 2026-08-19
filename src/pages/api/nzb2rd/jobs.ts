@@ -8,6 +8,7 @@ import {
 } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { safeReturnPath } from '@/utils/transferContext';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 // Windows-illegal characters plus path separators; nzb2rd writes this straight
@@ -53,7 +54,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { id, title, imdbId, rdKey, oauth } = req.body ?? {};
+	const { id, title, imdbId, rdKey, oauth, returnPath } = req.body ?? {};
 
 	// The colon separates the indexer prefix from the native id (`ds:abc123`).
 	if (typeof id !== 'string' || !/^[A-Za-z0-9._:-]{1,128}$/.test(id)) {
@@ -132,14 +133,28 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			oauth: isCompleteOAuth(oauth) ? oauth : null,
 		});
 		if (status < 300 && data?.id) {
-			await db
-				.recordNzb2rdTransferPending(
-					id,
-					data.id,
-					imdbId,
-					typeof title === 'string' ? title : undefined
-				)
-				.catch((e) => console.error('Recording pending nzb2rd transfer failed:', e));
+			await Promise.all([
+				db
+					.recordNzb2rdTransferPending(
+						id,
+						data.id,
+						imdbId,
+						typeof title === 'string' ? title : undefined
+					)
+					.catch((e) => console.error('Recording pending nzb2rd transfer failed:', e)),
+				// Keyed by job id, unlike the record above: the Transfers page knows a
+				// job, and the release id it is keyed by cannot be looked up from one.
+				db
+					.recordTransferMeta({
+						source: 'nzb2rd',
+						jobId: data.id,
+						imdbId,
+						title: typeof title === 'string' ? title : undefined,
+						returnPath: safeReturnPath(returnPath),
+						releaseId: id,
+					})
+					.catch((e) => console.error('Recording transfer context failed:', e)),
+			]);
 		}
 		return res.status(status).json(data);
 	} catch (error) {

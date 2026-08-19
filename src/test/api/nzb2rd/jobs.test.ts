@@ -40,6 +40,7 @@ beforeEach(() => {
 	vi.clearAllMocks();
 	mockRepo.getNzb2rdTransfer = vi.fn().mockResolvedValue(null);
 	mockRepo.recordNzb2rdTransferPending = vi.fn().mockResolvedValue(undefined);
+	mockRepo.recordTransferMeta = vi.fn().mockResolvedValue(undefined);
 	mockRepo.addNzb2rdWaiter = vi.fn().mockResolvedValue(undefined);
 	mockRepo.checkAvailabilityByHashes = vi.fn().mockResolvedValue([{ hash: HASH }]);
 	mockFetchNzb.mockResolvedValue('<nzb></nzb>');
@@ -161,6 +162,32 @@ describe('POST /api/nzb2rd/jobs — nothing recorded yet', () => {
 		);
 		expect(res.status).toHaveBeenCalledWith(201);
 		expect(mockRepo.addNzb2rdWaiter).not.toHaveBeenCalled();
+	});
+
+	it('records the page context under the job id, so the Transfers page can label it', async () => {
+		// Keyed by job id rather than release id: the Transfers page knows a job,
+		// and the release id the record above is keyed by cannot be looked up
+		// from one.
+		await run({ returnPath: '/show/tt1418646/2' });
+
+		expect(mockRepo.recordTransferMeta).toHaveBeenCalledWith({
+			source: 'nzb2rd',
+			jobId: 'job-1',
+			imdbId: 'tt1418646',
+			title: 'Some.Release.1080p',
+			returnPath: '/show/tt1418646/2',
+			releaseId: 'release-1',
+		});
+	});
+
+	it('drops a returnPath that is not a DMM content page', async () => {
+		// It is rendered as a link on the Transfers page and comes from the
+		// caller, so only the two shapes DMM actually produces are stored.
+		await run({ returnPath: 'https://evil.example/steal' });
+
+		expect(mockRepo.recordTransferMeta).toHaveBeenCalledWith(
+			expect.objectContaining({ returnPath: undefined })
+		);
 	});
 
 	// Without these nzb2rd only has the 24h access token, and its queue is days

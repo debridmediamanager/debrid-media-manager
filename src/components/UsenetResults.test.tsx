@@ -219,6 +219,10 @@ describe('UsenetResults', () => {
 				// nzb2rd's queue can refresh the token rather than presenting the
 				// expired one and failing as `401 bad_token`.
 				oauth: null,
+				// The page this was started from. Stored server-side against the job
+				// id, because the Transfers page is server-driven and nzb2rd records
+				// nothing that could link a row back to the content.
+				returnPath: '/movie/tt1418646',
 			}),
 		});
 		expect(await screen.findByRole('button', { name: /sent/i })).toBeDisabled();

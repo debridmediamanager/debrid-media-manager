@@ -20,6 +20,9 @@ import {
 	StreamHealthService,
 	TorBoxCastService,
 	TorrentSnapshotService,
+	type TransferMetaRecord,
+	TransferMetaService,
+	type TransferMetaSource,
 	ZurgKeysService,
 } from './database';
 import { HashSearchParams } from './database/hashSearch';
@@ -49,6 +52,7 @@ export type RepositoryDependencies = Partial<{
 	debridUploaderMapService: DebridUploaderMapService;
 	nzb2rdMapService: Nzb2rdMapService;
 	nzbSearchCacheService: NzbSearchCacheService;
+	transferMetaService: TransferMetaService;
 }>;
 
 export class Repository {
@@ -72,6 +76,7 @@ export class Repository {
 	private debridUploaderMapService: DebridUploaderMapService;
 	private nzb2rdMapService: Nzb2rdMapService;
 	private nzbSearchCacheService: NzbSearchCacheService;
+	private transferMetaService: TransferMetaService;
 
 	constructor({
 		availabilityService,
@@ -94,6 +99,7 @@ export class Repository {
 		debridUploaderMapService,
 		nzb2rdMapService,
 		nzbSearchCacheService,
+		transferMetaService,
 	}: RepositoryDependencies = {}) {
 		this.availabilityService = availabilityService ?? new AvailabilityService();
 		this.scrapedService = scrapedService ?? new ScrapedService();
@@ -116,6 +122,7 @@ export class Repository {
 		this.debridUploaderMapService = debridUploaderMapService ?? new DebridUploaderMapService();
 		this.nzb2rdMapService = nzb2rdMapService ?? new Nzb2rdMapService();
 		this.nzbSearchCacheService = nzbSearchCacheService ?? new NzbSearchCacheService();
+		this.transferMetaService = transferMetaService ?? new TransferMetaService();
 	}
 
 	// Ensure connection is properly closed when repository is no longer needed
@@ -141,6 +148,7 @@ export class Repository {
 			this.debridUploaderMapService.disconnect(),
 			this.nzb2rdMapService.disconnect(),
 			this.nzbSearchCacheService.disconnect(),
+			this.transferMetaService.disconnect(),
 		]);
 	}
 
@@ -231,6 +239,16 @@ export class Repository {
 
 	public getNzb2rdWaiters(releaseId: string) {
 		return this.nzb2rdMapService.getWaiters(releaseId);
+	}
+
+	// Page context for a transfer — the DMM title and the content page it started
+	// from — which neither uploader service stores and localStorage used to hold.
+	public recordTransferMeta(meta: Omit<TransferMetaRecord, 'updatedAt'>) {
+		return this.transferMetaService.record(meta);
+	}
+
+	public getTransferMeta(jobs: { source: TransferMetaSource; jobId: string }[]) {
+		return this.transferMetaService.getMany(jobs);
 	}
 
 	// Newznab search cache, so one indexer call serves a title for a whole TTL
