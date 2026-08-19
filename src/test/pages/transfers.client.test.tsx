@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockRouter = {
@@ -34,21 +34,89 @@ import { getTrackedDebridUploaderJobs, trackDebridUploaderJob } from '@/utils/de
 const HASH = 'a'.repeat(40);
 const REWRITTEN = 'b'.repeat(40);
 
-const completedJobResponse = () => ({
+const row = (over: Record<string, unknown> = {}) => ({
+	source: 'debrid',
+	id: 'job-1',
+	status: 'completed',
+	createdAt: 1700000000000,
+	info_hash: REWRITTEN,
+	name: 'Tracked Movie',
+	...over,
+});
+
+const listResponse = (transfers: unknown[], degraded: string[] = []) => ({
 	ok: true,
 	status: 200,
-	json: async () => ({
-		id: 'job-1',
-		status: 'completed',
-		info_hash: REWRITTEN,
-		name: 'Tracked Movie',
-	}),
+	json: async () => ({ transfers, degraded }),
 });
 
 beforeEach(() => {
 	localStorage.clear();
 	vi.clearAllMocks();
-	vi.stubGlobal('fetch', vi.fn().mockResolvedValue(completedJobResponse()));
+	vi.stubGlobal('fetch', vi.fn().mockResolvedValue(listResponse([row()])));
+});
+
+// The whole point of the change: the list is the account's, fetched in one
+// request, rather than a per-browser list polled one job at a time.
+describe('Transfers page listing', () => {
+	it('renders from one /api/transfers call, with the key as a header', async () => {
+		render(<TransfersPage />);
+
+		await waitFor(() => expect(screen.getByText('Tracked Movie')).toBeInTheDocument());
+		expect(fetch).toHaveBeenCalledTimes(1);
+		expect(fetch).toHaveBeenCalledWith('/api/transfers', {
+			headers: { 'x-rd-api-key': 'test-rd-key' },
+		});
+		// Never the query string: nginx logs the request line, and this is polled
+		// every five seconds per open tab.
+		expect((fetch as any).mock.calls[0][0]).not.toContain('test-rd-key');
+	});
+
+	it('shows a transfer this browser never started', async () => {
+		// An *arr job pushed into nzb2rd, or one started on another device. There
+		// is no localStorage entry for it, and it still belongs on the page.
+		vi.mocked(fetch as any).mockResolvedValue(
+			listResponse([row({ source: 'nzb2rd', id: 'job-arr', name: 'Someone Elses Release' })])
+		);
+
+		render(<TransfersPage />);
+
+		await waitFor(() => expect(screen.getByText('Someone Elses Release')).toBeInTheDocument());
+	});
+
+	it('prefers the stored DMM title over the raw release name', async () => {
+		vi.mocked(fetch as any).mockResolvedValue(
+			listResponse([row({ title: 'The Nice Title', name: 'raw.release.2160p.x265' })])
+		);
+
+		render(<TransfersPage />);
+
+		await waitFor(() => expect(screen.getByText('The Nice Title')).toBeInTheDocument());
+	});
+
+	it('warns when a service is unreachable rather than just showing a shorter list', async () => {
+		// Silently dropping those rows reads as "that transfer is gone", which is
+		// the most alarming thing this page can say by accident.
+		vi.mocked(fetch as any).mockResolvedValue(listResponse([], ['nzb2rd']));
+
+		render(<TransfersPage />);
+
+		await waitFor(() => expect(screen.getByText(/may be incomplete/i)).toBeInTheDocument());
+	});
+
+	it('reports a failed listing instead of rendering an empty page', async () => {
+		vi.mocked(fetch as any).mockResolvedValue({
+			ok: false,
+			status: 502,
+			json: async () => ({ error: 'Could not reach the transfer services' }),
+		});
+
+		render(<TransfersPage />);
+
+		await waitFor(() =>
+			expect(screen.getByText(/Could not load your transfers/i)).toBeInTheDocument()
+		);
+	});
 });
 
 // A transfer started by somebody else finishes in *their* RD account. The send
@@ -99,6 +167,17 @@ describe('Transfers page RD handoff', () => {
 			rdAdded: true,
 		});
 
+		render(<TransfersPage />);
+
+		await waitFor(() => expect(fetch).toHaveBeenCalled());
+		expect(mockAddHashAsMagnet).not.toHaveBeenCalled();
+	});
+
+	it('never hands over a transfer with no local entry', async () => {
+		// The list now carries jobs this browser never saw. `adopted`/`rdAdded`
+		// describe what *this* browser did, so a row with no entry was submitted
+		// elsewhere and the service already delivered it to its own submitter —
+		// adding it here would put a duplicate in the user's RD account.
 		render(<TransfersPage />);
 
 		await waitFor(() => expect(fetch).toHaveBeenCalled());

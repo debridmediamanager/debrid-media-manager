@@ -1,31 +1,15 @@
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import {
 	addTransferToRd,
-	DebridUploaderJob,
 	deleteDebridUploaderJob,
-	getDebridUploaderJob,
 	getTrackedDebridUploaderJobs,
 	needsRdHandoff,
-	transferContextFromPath,
-	untrackDebridUploaderJob,
 } from '@/utils/debridUploader';
-import {
-	deleteNzb2rdJob,
-	getNzb2rdJob,
-	getTrackedNzb2rdJobs,
-	Nzb2rdJob,
-	untrackNzb2rdJob,
-} from '@/utils/nzb2rd';
+import { deleteNzb2rdJob } from '@/utils/nzb2rd';
 import { describeTransfer, PHASE_STYLES } from '@/utils/transferPhase';
-import {
-	isTerminal,
-	ORIGIN_LABELS,
-	ORIGIN_STYLES,
-	originOf,
-	toEntries,
-	TransferEntry,
-} from '@/utils/transfers';
-import { CheckCircle2, Home, Loader2, RefreshCw, Send, Trash2, XCircle } from 'lucide-react';
+import { isTerminal, ORIGIN_LABELS, ORIGIN_STYLES, originOf, TransferRow } from '@/utils/transfers';
+import { fetchTransfers } from '@/utils/transfersApi';
+import { AlertTriangle, CheckCircle2, Home, Loader2, RefreshCw, Send, XCircle } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -33,111 +17,93 @@ import { toast, Toaster } from 'react-hot-toast';
 
 const POLL_MS = 5000;
 
-type JobState = { job?: DebridUploaderJob | Nzb2rdJob; errorText?: string };
-
 export default function TransfersPage() {
-	const [tracked, setTracked] = useState<TransferEntry[]>([]);
-	const [states, setStates] = useState<Record<string, JobState>>({});
+	const [transfers, setTransfers] = useState<TransferRow[]>([]);
+	const [degraded, setDegraded] = useState<string[]>([]);
+	const [errorText, setErrorText] = useState<string | null>(null);
+	const [loaded, setLoaded] = useState(false);
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [rdKey] = useRealDebridAccessToken();
-	// read inside the poll timer without re-arming it on every status change
-	const statesRef = useRef(states);
-	statesRef.current = states;
 	// jobs whose RD handoff is running, so the 5s poll can't start a second one
 	const handingOffRef = useRef(new Set<string>());
 	const rdKeyRef = useRef(rdKey);
 	rdKeyRef.current = rdKey;
 
-	useEffect(() => {
-		setTracked(toEntries(getTrackedDebridUploaderJobs(), getTrackedNzb2rdJobs()));
-	}, []);
-
 	// A transfer this browser joined rather than started belongs to the RD account
 	// that created the job, so nothing puts it in *this* user's RD until a client
 	// does. The send flow does it when the page that started it is still open;
 	// this is the same handoff for everyone who navigated away meanwhile.
-	const handOffToRd = useCallback(async (jobId: string, job: DebridUploaderJob) => {
+	//
+	// **The one thing still read from localStorage, and it belongs there.** The
+	// list itself is server-owned now, but `adopted`/`rdAdded` record what *this
+	// browser* did — whether it created the job, and whether it has already added
+	// the result — which is genuinely per-browser state and has no meaning on the
+	// account. A job with no local entry is left alone: it was started elsewhere,
+	// so its own submitter's RD key is what the service delivered to.
+	const handOffToRd = useCallback(async (row: TransferRow) => {
 		const key = rdKeyRef.current;
-		if (!key || job.status !== 'completed' || !job.info_hash) return;
-		if (handingOffRef.current.has(jobId)) return;
-		const entry = getTrackedDebridUploaderJobs().find((j) => j.id === jobId);
-		if (!needsRdHandoff(entry)) return;
+		if (!key || row.source !== 'debrid' || row.status !== 'completed' || !row.info_hash) return;
+		if (handingOffRef.current.has(row.id)) return;
+		const entry = getTrackedDebridUploaderJobs().find((j) => j.id === row.id);
+		if (!entry || !needsRdHandoff(entry)) return;
 
-		handingOffRef.current.add(jobId);
+		handingOffRef.current.add(row.id);
 		try {
-			if (await addTransferToRd(key, job.info_hash, jobId)) {
-				toast.success(`${entry?.title || 'Transfer'} added to your Real-Debrid library!`);
+			if (await addTransferToRd(key, row.info_hash, row.id)) {
+				toast.success(
+					`${entry.title || row.title || 'Transfer'} added to your Real-Debrid library!`
+				);
 			}
 		} finally {
-			handingOffRef.current.delete(jobId);
+			handingOffRef.current.delete(row.id);
 		}
 	}, []);
 
-	const refresh = useCallback(
-		async (jobs: TransferEntry[], onlyActive: boolean) => {
-			const toPoll = onlyActive
-				? jobs.filter((j) => {
-						const status = statesRef.current[j.id]?.job?.status;
-						return !status || !isTerminal(j.source, status);
-					})
-				: jobs;
-			if (toPoll.length === 0) return;
+	const refresh = useCallback(async () => {
+		const key = rdKeyRef.current;
+		if (!key) return;
+		try {
+			const { transfers: rows, degraded: down } = await fetchTransfers(key);
+			setTransfers(rows);
+			setDegraded(down);
+			setErrorText(null);
+			// not awaited: a row's status shouldn't wait on RD
+			for (const row of rows) void handOffToRd(row);
+		} catch (error) {
+			setErrorText(error instanceof Error ? error.message : 'unreachable');
+		} finally {
+			setLoaded(true);
+		}
+	}, [handOffToRd]);
 
-			const results = await Promise.all(
-				toPoll.map(async (j): Promise<[string, JobState]> => {
-					try {
-						const context = transferContextFromPath(j.returnPath);
-						if (j.source === 'nzb2rd') {
-							return [j.id, { job: await getNzb2rdJob(j.id, context, j.releaseId) }];
-						}
-						const job = await getDebridUploaderJob(j.id, context);
-						// not awaited: the row's status shouldn't wait on RD
-						void handOffToRd(j.id, job);
-						return [j.id, { job }];
-					} catch (error) {
-						return [
-							j.id,
-							{ errorText: error instanceof Error ? error.message : 'unreachable' },
-						];
-					}
-				})
-			);
-			setStates((prev) => ({ ...prev, ...Object.fromEntries(results) }));
-		},
-		[handOffToRd]
-	);
-
-	// initial fetch + steady polling of non-terminal jobs
+	// One request per tick for the whole list, rather than one per tracked job.
 	useEffect(() => {
-		if (tracked.length === 0) return;
-		refresh(tracked, false);
-		const interval = setInterval(() => refresh(tracked, true), POLL_MS);
+		if (!rdKey) return;
+		refresh();
+		const interval = setInterval(refresh, POLL_MS);
 		return () => clearInterval(interval);
-	}, [tracked, refresh]);
+	}, [rdKey, refresh]);
 
 	const handleRefreshAll = async () => {
 		if (isRefreshing) return;
 		setIsRefreshing(true);
 		try {
-			await refresh(tracked, false);
+			await refresh();
 		} finally {
 			setIsRefreshing(false);
 		}
 	};
 
-	const removeFromList = (entry: TransferEntry) => {
-		if (entry.source === 'nzb2rd') untrackNzb2rdJob(entry.id);
-		else untrackDebridUploaderJob(entry.id);
-		setTracked((prev) => prev.filter((j) => j.id !== entry.id));
-	};
-
-	const handleCancel = async (entry: TransferEntry) => {
+	// Cancelling is the only way a row leaves the list now. There is deliberately
+	// no "remove from list": the list is the account's, so a row hidden here would
+	// reappear on the next 5s poll.
+	const handleCancel = async (row: TransferRow) => {
 		if (!window.confirm('Cancel this transfer? The job will be stopped and deleted.')) return;
 		try {
-			if (entry.source === 'nzb2rd')
-				await deleteNzb2rdJob(entry.id, entry.releaseId, rdKey ?? undefined);
-			else await deleteDebridUploaderJob(entry.id);
-			removeFromList(entry);
+			if (row.source === 'nzb2rd')
+				await deleteNzb2rdJob(row.id, row.releaseId, rdKey ?? undefined);
+			else await deleteDebridUploaderJob(row.id);
+			setTransfers((prev) => prev.filter((t) => t.id !== row.id));
 			toast.success('Transfer cancelled.');
 		} catch (error) {
 			toast.error(
@@ -162,8 +128,8 @@ export default function TransfersPage() {
 					<div className="flex items-center gap-2">
 						<button
 							onClick={handleRefreshAll}
-							disabled={isRefreshing || tracked.length === 0}
-							className={`haptic-sm rounded border-2 border-indigo-500 bg-indigo-900/30 p-2 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isRefreshing || tracked.length === 0 ? 'cursor-not-allowed opacity-50' : ''}`}
+							disabled={isRefreshing || !rdKey}
+							className={`haptic-sm rounded border-2 border-indigo-500 bg-indigo-900/30 p-2 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isRefreshing || !rdKey ? 'cursor-not-allowed opacity-50' : ''}`}
 							title="Refresh all"
 						>
 							<RefreshCw
@@ -187,11 +153,39 @@ export default function TransfersPage() {
 					<span className="text-amber-300">Usenet</span>. The first tag on each row is
 					where its bytes came from — a TorBox/AllDebrid transfer shows{' '}
 					<span className="text-slate-300">Cache</span> until the service settles on one.
-					Jobs keep running on the server even if you close this page; the list below is
-					remembered by this browser. Active jobs refresh every {POLL_MS / 1000}s.
+					Every transfer on your Real-Debrid account is listed here, whichever device
+					started it. Active jobs refresh every {POLL_MS / 1000}s.
 				</p>
 
-				{tracked.length === 0 ? (
+				{degraded.length > 0 && (
+					<div className="mb-3 flex items-start gap-2 rounded border-2 border-yellow-600 bg-yellow-900/20 p-3 text-xs text-yellow-200">
+						<AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+						<span>
+							{degraded.length === 1
+								? 'One transfer service is'
+								: 'Some transfer services are'}{' '}
+							unreachable, so this list may be incomplete. Nothing has been lost —
+							those jobs keep running.
+						</span>
+					</div>
+				)}
+
+				{errorText && (
+					<div className="mb-3 rounded border-2 border-red-600 bg-red-900/20 p-3 text-xs text-red-200">
+						Could not load your transfers: {errorText}
+					</div>
+				)}
+
+				{!rdKey ? (
+					<div className="rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-center text-sm text-gray-300">
+						Sign in with Real-Debrid to see your transfers.
+					</div>
+				) : !loaded ? (
+					<div className="flex items-center justify-center gap-2 rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-sm text-gray-300">
+						<Loader2 className="h-4 w-4 animate-spin" />
+						Loading your transfers...
+					</div>
+				) : transfers.length === 0 ? (
 					<div className="rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-center text-sm text-gray-300">
 						No transfers yet. Start one from any TorBox-cached search result with the
 						&quot;TB → RD&quot; button, or from the Usenet section on a movie or show
@@ -199,26 +193,21 @@ export default function TransfersPage() {
 					</div>
 				) : (
 					<div className="space-y-2">
-						{tracked.map((t) => {
-							const state = states[t.id];
-							const job = state?.job;
-							const progress = describeTransfer(t.source, job);
-							const terminal = job && isTerminal(t.source, job.status);
+						{transfers.map((t) => {
+							const progress = describeTransfer(t.source, t);
+							const terminal = isTerminal(t.source, t.status);
 							const chipStyle = PHASE_STYLES[progress.phase];
-							const origin = originOf(
-								t.source,
-								(job as DebridUploaderJob | undefined)?.source
-							);
+							const origin = originOf(t.source, t.jobSource);
 
 							return (
 								<div
-									key={t.id}
+									key={`${t.source}:${t.id}`}
 									className="rounded-lg border-2 border-gray-700 bg-gray-800/30 p-3"
 								>
 									<div className="flex items-start justify-between gap-2">
 										<div className="min-w-0 flex-1">
 											<h2 className="truncate text-sm font-bold text-white">
-												{job?.name || t.title || t.id}
+												{t.title || t.name || t.id}
 											</h2>
 											<div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-400">
 												<span
@@ -240,7 +229,7 @@ export default function TransfersPage() {
 													{progress.phase === 'failed' && (
 														<XCircle className="mr-1 h-3 w-3" />
 													)}
-													{job && !terminal && (
+													{!terminal && (
 														<Loader2 className="mr-1 h-3 w-3 animate-spin" />
 													)}
 													{progress.label}
@@ -296,38 +285,25 @@ export default function TransfersPage() {
 													</div>
 												</div>
 											)}
-											{job?.status_message && !terminal && (
+											{t.status_message && !terminal && (
 												<div className="mt-1 text-xs text-gray-300">
-													{job.status_message}
+													{t.status_message}
 												</div>
 											)}
-											{job?.status === 'failed' && job.error && (
+											{t.status === 'failed' && t.error && (
 												<div className="mt-1 break-words text-xs text-red-300">
-													{job.error}
-												</div>
-											)}
-											{state?.errorText && !job && (
-												<div className="mt-1 text-xs text-yellow-300">
-													Status unavailable: {state.errorText}
+													{t.error}
 												</div>
 											)}
 										</div>
 										<div className="flex shrink-0 items-center gap-1">
-											{job && !terminal ? (
+											{!terminal && (
 												<button
 													onClick={() => handleCancel(t)}
 													className="haptic-sm rounded border-2 border-red-500 bg-red-900/30 p-1.5 text-red-100 transition-colors hover:bg-red-800/50"
 													title="Cancel transfer"
 												>
 													<XCircle className="h-4 w-4" />
-												</button>
-											) : (
-												<button
-													onClick={() => removeFromList(t)}
-													className="haptic-sm rounded border-2 border-gray-500 bg-gray-800/30 p-1.5 text-gray-100 transition-colors hover:bg-gray-700/50"
-													title="Remove from list"
-												>
-													<Trash2 className="h-4 w-4" />
 												</button>
 											)}
 										</div>

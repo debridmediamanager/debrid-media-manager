@@ -1,6 +1,6 @@
 import { isTerminalDebridUploaderStatus, TrackedDebridUploaderJob } from './debridUploader';
 import { getTrackedNzb2rdJobs, isTerminalNzb2rdStatus } from './nzb2rd';
-import type { TransferSource } from './transferPhase';
+import type { QueuePlace, TransferSource } from './transferPhase';
 
 // Both transfer kinds land content in Real-Debrid and are followed the same way,
 // so they share one list. They differ only in where the bytes come from (a
@@ -46,6 +46,56 @@ export function originOf(source: TransferSource, jobSource?: string | null): Tra
 		return jobSource;
 	}
 	return 'cache';
+}
+
+/**
+ * One row as `GET /api/transfers` returns it: a job's own state from whichever
+ * service runs it, flattened together with the page context DMM stored when the
+ * transfer was started.
+ *
+ * Flat rather than `{entry, job}` because the two halves used to come from two
+ * places — a localStorage entry and a per-job poll — and nothing downstream ever
+ * cared which was which. `describeTransfer` reads the progress fields straight
+ * off this shape.
+ *
+ * Everything below `status` is optional because a transfer submitted outside DMM
+ * — an *arr pushing into nzb2rd's SABnzbd API, or the Discord `rd-uploader` —
+ * has no stored context, and still belongs on the page.
+ */
+export interface TransferRow {
+	source: TransferSource;
+	id: string;
+	status: string;
+	/** Epoch ms, parsed from the service's UTC `created_at`. */
+	createdAt: number;
+
+	name?: string | null;
+	status_message?: string | null;
+	error?: string | null;
+	info_hash?: string | null;
+	total_bytes?: number | null;
+	done_bytes?: number | null;
+	queue?: QueuePlace | null;
+	/** `debrid` only: which cached provider served it — torbox, alldebrid, qbit. */
+	jobSource?: string | null;
+
+	/** From DMM's own record of where the transfer was started. */
+	imdbId?: string;
+	title?: string;
+	returnPath?: string;
+	/** nzb2rd only: the indexer release id, needed by a cancel. */
+	releaseId?: string;
+}
+
+/** What `GET /api/transfers` answers with. */
+export interface TransfersResponse {
+	transfers: TransferRow[];
+	/**
+	 * Services that did not answer. Surfaced rather than swallowed: a dead host
+	 * would otherwise just shorten the list, which reads as "that transfer is
+	 * gone" — the single most alarming thing this page can say by accident.
+	 */
+	degraded: string[];
 }
 
 /** One row of the list, whichever service produced it. */
