@@ -1,5 +1,6 @@
 import { addHashAsMagnet, selectFiles } from '@/services/realDebrid';
 import { toast } from 'react-hot-toast';
+import { type TransferContext, transferContextFromPath } from './transferContext';
 import {
 	phaseLabelOf,
 	QueuePlace,
@@ -65,6 +66,14 @@ export interface CreateDebridJobParams {
 	tbKey?: string;
 	adKey?: string;
 	sizeBytes?: number;
+	/**
+	 * The DMM title and the page this was started from. Stored server-side against
+	 * the job id, because the Transfers page is server-driven now and neither
+	 * uploader service records either — so without these a row shows a raw release
+	 * name and links nowhere, on every device including this one.
+	 */
+	title?: string;
+	returnPath?: string;
 }
 
 // Submits a cached hash to the debrid uploader service, which rebuilds it as a
@@ -361,6 +370,8 @@ export async function runDebridTransferToRd(params: {
 				tbKey,
 				adKey,
 				sizeBytes,
+				title,
+				returnPath,
 			});
 
 			if (isDuplicateResponse(job)) {
@@ -457,21 +468,9 @@ export async function markTransferredHashes(
 	}
 }
 
-// Movie-vs-show context for a transfer, derived from the page it started on.
-// Sent along with status polls so the server knows where to file the completed
-// torrent (movie:<imdb> vs tv:<imdb>:<season>) when it registers it in DMM.
-export interface TransferContext {
-	mediaType: 'movie' | 'tv';
-	seasonNum?: number;
-}
-
-export function transferContextFromPath(path: string | undefined): TransferContext | undefined {
-	if (!path) return undefined;
-	const show = path.match(/^\/show\/tt\d+\/(\d+)/);
-	if (show) return { mediaType: 'tv', seasonNum: parseInt(show[1], 10) };
-	if (/^\/movie\/tt\d+/.test(path)) return { mediaType: 'movie' };
-	return undefined;
-}
+// Re-exported from `./transferContext`, which owns them now: the server needs
+// the same parser, and this module pulls in `react-hot-toast` at the top level.
+export { transferContextFromPath, type TransferContext };
 
 export async function getDebridUploaderJob(
 	jobId: string,
