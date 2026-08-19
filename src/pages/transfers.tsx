@@ -78,7 +78,13 @@ export default function TransfersPage() {
 
 	// One request per tick for the whole list, rather than one per tracked job.
 	useEffect(() => {
-		if (!rdKey) return;
+		// `loaded` is what every branch below keys on, so it has to become true
+		// even with no key — otherwise a signed-out visitor sits on the spinner
+		// forever, since `refresh` (which sets it) returns early.
+		if (!rdKey) {
+			setLoaded(true);
+			return;
+		}
 		refresh();
 		const interval = setInterval(refresh, POLL_MS);
 		return () => clearInterval(interval);
@@ -128,8 +134,8 @@ export default function TransfersPage() {
 					<div className="flex items-center gap-2">
 						<button
 							onClick={handleRefreshAll}
-							disabled={isRefreshing || !rdKey}
-							className={`haptic-sm rounded border-2 border-indigo-500 bg-indigo-900/30 p-2 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isRefreshing || !rdKey ? 'cursor-not-allowed opacity-50' : ''}`}
+							disabled={isRefreshing || !loaded || !rdKey}
+							className={`haptic-sm rounded border-2 border-indigo-500 bg-indigo-900/30 p-2 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isRefreshing || !loaded || !rdKey ? 'cursor-not-allowed opacity-50' : ''}`}
 							title="Refresh all"
 						>
 							<RefreshCw
@@ -176,14 +182,23 @@ export default function TransfersPage() {
 					</div>
 				)}
 
-				{!rdKey ? (
-					<div className="rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-center text-sm text-gray-300">
-						Sign in with Real-Debrid to see your transfers.
-					</div>
-				) : !loaded ? (
+				{/*
+				 * `loaded` is tested **before** `rdKey`, and the order is load-bearing.
+				 * The server cannot read localStorage, so it always renders with no
+				 * key; the client's `useLocalStorage` reads it synchronously and has
+				 * one on its very first paint. Branching on `rdKey` first therefore
+				 * produces different markup on the two sides and React fails
+				 * hydration. `loaded` starts false in both, so this branch is
+				 * identical everywhere until an effect has run.
+				 */}
+				{!loaded ? (
 					<div className="flex items-center justify-center gap-2 rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-sm text-gray-300">
 						<Loader2 className="h-4 w-4 animate-spin" />
 						Loading your transfers...
+					</div>
+				) : !rdKey ? (
+					<div className="rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-center text-sm text-gray-300">
+						Sign in with Real-Debrid to see your transfers.
 					</div>
 				) : transfers.length === 0 ? (
 					<div className="rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-center text-sm text-gray-300">

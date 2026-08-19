@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import { renderToString } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockRouter = {
@@ -15,9 +16,12 @@ vi.mock('next/router', () => ({
 	useRouter: () => mockRouter,
 }));
 
+// Mutable so one test can render the page the way the *server* sees it — with no
+// key, because localStorage does not exist there.
+let currentRdKey: string | null = 'test-rd-key';
 vi.mock('@/hooks/auth', () => ({
 	__esModule: true,
-	useRealDebridAccessToken: () => ['test-rd-key', false, false],
+	useRealDebridAccessToken: () => [currentRdKey, false, false],
 }));
 
 const mockAddHashAsMagnet = vi.fn().mockResolvedValue('rd-torrent-id');
@@ -53,7 +57,36 @@ const listResponse = (transfers: unknown[], degraded: string[] = []) => ({
 beforeEach(() => {
 	localStorage.clear();
 	vi.clearAllMocks();
+	currentRdKey = 'test-rd-key';
 	vi.stubGlobal('fetch', vi.fn().mockResolvedValue(listResponse([row()])));
+});
+
+describe('Transfers page hydration', () => {
+	it('renders identical markup with and without a key, before anything loads', () => {
+		// The server cannot read localStorage, so it always renders with rdKey
+		// null, while the client's `useLocalStorage` reads it synchronously and
+		// has one on its very first paint. If the page branches on `rdKey` before
+		// it has loaded, those two markups differ and React fails hydration —
+		// which is exactly what happened: the signed-out prompt on one side, the
+		// spinner on the other, and a different `disabled` on the refresh button.
+		currentRdKey = null;
+		const asServer = renderToString(<TransfersPage />);
+		currentRdKey = 'test-rd-key';
+		const asClient = renderToString(<TransfersPage />);
+
+		expect(asClient).toEqual(asServer);
+		expect(asServer).toContain('Loading your transfers');
+	});
+
+	it('stops loading for a signed-out visitor instead of spinning forever', () => {
+		// `loaded` gates every branch now, and only `refresh` sets it — which
+		// returns early with no key. Without the explicit set, a signed-out
+		// visitor never leaves the spinner.
+		currentRdKey = null;
+		render(<TransfersPage />);
+
+		expect(screen.getByText(/Sign in with Real-Debrid/i)).toBeInTheDocument();
+	});
 });
 
 // The whole point of the change: the list is the account's, fetched in one
