@@ -1,6 +1,7 @@
 import { MusicAlbum, MusicTrack } from '@/pages/api/music/library';
 import { ChevronLeft, Disc3, Download, ListEnd, Loader2, Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import DownloadAlbumModal from './DownloadAlbumModal';
 import TrackListItem from './TrackListItem';
 import { PlayerState, QueuedTrack } from './types';
 import { formatSize } from './utils';
@@ -36,6 +37,7 @@ export default function AlbumDetailView({
 }: AlbumDetailViewProps) {
 	const [coverUrl, setCoverUrl] = useState(album.coverUrl);
 	const [isDownloadingAlbum, setIsDownloadingAlbum] = useState(false);
+	const [showDownloadConfirm, setShowDownloadConfirm] = useState(false);
 
 	useEffect(() => {
 		setCoverUrl(album.coverUrl);
@@ -74,8 +76,11 @@ export default function AlbumDetailView({
 		};
 	}, [album, coverUrl, onCoverLoaded]);
 
+	// The browser gates a burst of downloads behind a "download multiple files"
+	// prompt, so warn before starting instead of silently saving only track one.
 	const handleAlbumDownload = async () => {
 		if (isDownloadingAlbum) return;
+		setShowDownloadConfirm(false);
 		setIsDownloadingAlbum(true);
 		try {
 			await onDownloadAlbum(album);
@@ -163,7 +168,7 @@ export default function AlbumDetailView({
 							</button>
 							<button
 								type="button"
-								onClick={handleAlbumDownload}
+								onClick={() => setShowDownloadConfirm(true)}
 								disabled={isDownloadingAlbum}
 								className="flex items-center gap-2 rounded-full border border-gray-600 bg-white/5 px-6 py-3.5 font-bold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/30 hover:bg-white/10 active:scale-95 disabled:cursor-wait disabled:opacity-70"
 							>
@@ -214,6 +219,14 @@ export default function AlbumDetailView({
 					</div>
 				</div>
 			</div>
+
+			{showDownloadConfirm && (
+				<DownloadAlbumModal
+					album={album}
+					onConfirm={handleAlbumDownload}
+					onClose={() => setShowDownloadConfirm(false)}
+				/>
+			)}
 		</div>
 	);
 }

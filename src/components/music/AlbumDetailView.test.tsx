@@ -99,11 +99,33 @@ describe('AlbumDetailView', () => {
 		expect(props.onAddToQueue).toHaveBeenCalledWith(props.album);
 	});
 
-	it('calls onDownloadAlbum when Download Album clicked', async () => {
+	it('opens the confirmation dialog instead of downloading when Download Album clicked', async () => {
 		const props = defaultProps();
 		render(<AlbumDetailView {...props} />);
 		await userEvent.setup().click(screen.getByText('Download Album'));
+		expect(screen.getByRole('dialog')).toBeInTheDocument();
+		expect(screen.getByText('Download this album?')).toBeInTheDocument();
+		expect(props.onDownloadAlbum).not.toHaveBeenCalled();
+	});
+
+	it('calls onDownloadAlbum only after the dialog is confirmed', async () => {
+		const props = defaultProps();
+		const user = userEvent.setup();
+		render(<AlbumDetailView {...props} />);
+		await user.click(screen.getByText('Download Album'));
+		await user.click(screen.getByRole('button', { name: 'Download 2 tracks' }));
 		expect(props.onDownloadAlbum).toHaveBeenCalledWith(props.album);
+		expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+	});
+
+	it('does not download when the dialog is cancelled', async () => {
+		const props = defaultProps();
+		const user = userEvent.setup();
+		render(<AlbumDetailView {...props} />);
+		await user.click(screen.getByText('Download Album'));
+		await user.click(screen.getByRole('button', { name: 'Cancel' }));
+		expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+		expect(props.onDownloadAlbum).not.toHaveBeenCalled();
 	});
 
 	it('does not show Play Next button when hasQueue is false', () => {
