@@ -24,6 +24,8 @@ vi.mock('./database/mdblistCache', () => ({
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const daysAgo = (days: number) => new Date(Date.now() - days * DAY_MS);
+const hoursAgo = (hours: number) => new Date(Date.now() - hours * 60 * 60 * 1000);
+const minutesAgo = (minutes: number) => new Date(Date.now() - minutes * 60 * 1000);
 
 describe('MDBListClient', () => {
 	let client: MDBListClient;
@@ -180,6 +182,70 @@ describe('MDBListClient', () => {
 
 			expect(axios.get).not.toHaveBeenCalled();
 		});
+
+		// mdblist answers a miss, a bad key and a rate limit with HTTP 200 and a
+		// {"response": false, "error": "..."} body, so axios never throws and the
+		// error landed in the cache as if it were the title — typed 'show', which
+		// bought it the 7 day expiry. tt43740196 ("A Beautiful Obsession") was
+		// opened the day it premiered, before mdblist had indexed it, and the page
+		// then rendered "Unknown" for a week even though mdblist had the show
+		// hours later. A miss must expire in an hour, not in seven days.
+		it('refetches an error body cached more than an hour ago', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue({
+				data: { response: false, error: 'Not Found' },
+				updatedAt: hoursAgo(2),
+			});
+			vi.mocked(axios.get).mockResolvedValue({
+				data: { imdbid: 'tt43740196', type: 'show', title: 'A Beautiful Obsession' },
+			});
+
+			const result = await client.getInfoByImdbId('tt43740196');
+
+			expect(axios.get).toHaveBeenCalled();
+			expect((result as any).title).toBe('A Beautiful Obsession');
+		});
+
+		it('serves an error body from cache while it is under an hour old', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue({
+				data: { response: false, error: 'Not Found' },
+				updatedAt: minutesAgo(30),
+			});
+
+			await client.getInfoByImdbId('tt43740196');
+
+			expect(axios.get).not.toHaveBeenCalled();
+		});
+
+		it('types a cached error row as an error, not as a show', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue(null);
+			vi.mocked(axios.get).mockResolvedValue({
+				data: { response: false, error: 'Not Found' },
+			});
+
+			await client.getInfoByImdbId('tt43740196');
+
+			expect(cacheStub.set).toHaveBeenCalledWith(
+				'tt43740196',
+				'error',
+				expect.objectContaining({ error: 'Not Found' })
+			);
+		});
+
+		// The legacy host spells the rate limit as a string "False", and it fires
+		// against ids mdblist definitely knows — so an error must never overwrite a
+		// row that already holds a real title.
+		it('keeps the stale title when the refetch returns a rate limit body', async () => {
+			const stale = { imdbid: 'tt0903747', type: 'show', title: 'Breaking Bad' };
+			cacheStub.getWithMetadata.mockResolvedValue({ data: stale, updatedAt: daysAgo(8) });
+			vi.mocked(axios.get).mockResolvedValue({
+				data: { response: 'False', error: 'Invalid API key or Rate Limiter Reached!' },
+			});
+
+			const result = await client.getInfoByImdbId('tt0903747');
+
+			expect(result).toEqual(stale);
+			expect(cacheStub.set).not.toHaveBeenCalled();
+		});
 	});
 
 	describe('getInfoByTmdbId', () => {
@@ -231,6 +297,39 @@ describe('MDBListClient', () => {
 
 			expect(axios.get).toHaveBeenCalled();
 			expect((result as any).title).toBe('Corrected Title');
+		});
+
+		// Same 200-with-an-error-body trap as the IMDB path, and worse here: this
+		// one writes the payload a second time under `response.imdbid`.
+		it('does not cache an error body as a show', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue(null);
+			vi.mocked(axios.get).mockResolvedValue({
+				data: { response: false, error: 'Not Found' },
+			});
+
+			await client.getInfoByTmdbId(331946);
+
+			expect(cacheStub.set).toHaveBeenCalledTimes(1);
+			expect(cacheStub.set).toHaveBeenCalledWith(
+				'tmdb_331946',
+				'error',
+				expect.objectContaining({ error: 'Not Found' })
+			);
+		});
+
+		it('refetches a TMDB-keyed error row after an hour', async () => {
+			cacheStub.getWithMetadata.mockResolvedValue({
+				data: { response: false, error: 'Not Found' },
+				updatedAt: hoursAgo(2),
+			});
+			vi.mocked(axios.get).mockResolvedValue({
+				data: { tmdbid: 331946, type: 'show', title: 'A Beautiful Obsession' },
+			});
+
+			const result = await client.getInfoByTmdbId(331946);
+
+			expect(axios.get).toHaveBeenCalled();
+			expect((result as any).title).toBe('A Beautiful Obsession');
 		});
 	});
 

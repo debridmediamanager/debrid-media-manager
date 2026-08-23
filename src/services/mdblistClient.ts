@@ -8,11 +8,23 @@ const ONE_DAY = 86400000;
 // Shows already expired after 7 days; movies were served from the first fetch
 // forever, which froze pre-release placeholder synopses and teaser posters in
 // place indefinitely. Lists are curated collections that gain items over time.
+// A failed lookup is not data: an id mdblist does not know today it may well
+// know tomorrow, so a miss expires in an hour rather than in a show's 7 days.
 const CACHE_TTL = {
 	MOVIE: 30 * ONE_DAY,
 	SHOW: 7 * ONE_DAY,
 	LIST: ONE_DAY,
+	ERROR: ONE_HOUR,
 };
+
+// mdblist reports a miss, a bad key and a rate limit as HTTP 200 with a body of
+// {"response": false, "error": "..."} — the legacy host spells the flag as the
+// string "False" — so axios resolves and the error reaches the cache looking
+// like a title. A real title carries no `response` field at all.
+export function isMdblistError(data: any): boolean {
+	if (!data || typeof data !== 'object') return true;
+	return data.response === false || data.response === 'False';
+}
 
 export class MDBListClient {
 	private apiKey: string;
@@ -67,9 +79,15 @@ export class MDBListClient {
 	 */
 	async getInfoByImdbId(imdbId: string): Promise<MMovie | MShow> {
 		const cached = await this.cache.getWithMetadata(imdbId);
+		const cachedIsError = cached ? isMdblistError(cached.data) : false;
 		if (cached) {
 			const isShow = cached.data.type === 'show';
-			const maxAge = isShow ? CACHE_TTL.SHOW : CACHE_TTL.MOVIE;
+			const kind = cachedIsError ? 'error' : isShow ? 'show' : 'movie';
+			const maxAge = cachedIsError
+				? CACHE_TTL.ERROR
+				: isShow
+					? CACHE_TTL.SHOW
+					: CACHE_TTL.MOVIE;
 			const cacheAge = Date.now() - cached.updatedAt.getTime();
 
 			if (this.isFresh(cached.updatedAt, maxAge)) {
@@ -78,7 +96,7 @@ export class MDBListClient {
 			}
 
 			console.log(
-				`[MDBList] Cache expired for ${isShow ? 'show' : 'movie'} ${imdbId} (age: ${Math.floor(cacheAge / ONE_DAY)} days), refetching`
+				`[MDBList] Cache expired for ${kind} ${imdbId} (age: ${Math.floor(cacheAge / ONE_DAY)} days), refetching`
 			);
 		}
 
@@ -99,6 +117,20 @@ export class MDBListClient {
 			throw error;
 		}
 
+		if (isMdblistError(response)) {
+			// A rate limit fires against ids mdblist knows perfectly well, so it
+			// must never demote a row that already holds a real title.
+			if (cached && !cachedIsError) {
+				console.error(
+					`[MDBList] Error body for ${imdbId} (${response?.error}), serving stale cache`
+				);
+				return cached.data;
+			}
+			await this.cache.set(imdbId, 'error', response);
+			console.log(`[MDBList] Cached error for IMDB ID: ${imdbId} (${response?.error})`);
+			return response;
+		}
+
 		const type = response.type === 'movie' ? 'movie' : 'show';
 		await this.cache.set(imdbId, type, response);
 		console.log(`[MDBList] Cached ${type} data for IMDB ID: ${imdbId}`);
@@ -114,8 +146,13 @@ export class MDBListClient {
 
 		// Check cache first
 		const cached = await this.cache.getWithMetadata(cacheKey);
+		const cachedIsError = cached ? isMdblistError(cached.data) : false;
 		if (cached) {
-			const maxAge = cached.data.type === 'show' ? CACHE_TTL.SHOW : CACHE_TTL.MOVIE;
+			const maxAge = cachedIsError
+				? CACHE_TTL.ERROR
+				: cached.data.type === 'show'
+					? CACHE_TTL.SHOW
+					: CACHE_TTL.MOVIE;
 			if (this.isFresh(cached.updatedAt, maxAge)) {
 				console.log(`[MDBList] Using cached data for TMDB ID: ${tmdbId}`);
 				return cached.data;
@@ -138,6 +175,18 @@ export class MDBListClient {
 				return cached.data;
 			}
 			throw error;
+		}
+
+		if (isMdblistError(response)) {
+			if (cached && !cachedIsError) {
+				console.error(
+					`[MDBList] Error body for TMDB ${tmdbId} (${response?.error}), serving stale cache`
+				);
+				return cached.data;
+			}
+			await this.cache.set(cacheKey, 'error', response);
+			console.log(`[MDBList] Cached error for TMDB ID: ${tmdbId} (${response?.error})`);
+			return response;
 		}
 
 		// Determine type and cache accordingly
