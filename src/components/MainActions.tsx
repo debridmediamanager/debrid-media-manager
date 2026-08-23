@@ -126,6 +126,16 @@ export function MainActions({ rdUser, tbUser, adUser, isLoading }: MainActionsPr
 					Is Real-Debrid down or just me?
 				</Link>
 			)}
+
+			{/* Is TorBox Down - full width */}
+			{tbUser && (
+				<Link
+					href="/is-torbox-down-or-just-me"
+					className="haptic flex w-full items-center justify-center rounded border-2 border-[#4f46e5] bg-indigo-900/30 p-3 text-center text-sm text-indigo-100 transition-colors hover:bg-indigo-800/40"
+				>
+					Is TorBox down or just me?
+				</Link>
+			)}
 		</div>
 	);
 }
