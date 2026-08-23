@@ -15,6 +15,12 @@ vi.mock('./ReportButton', () => ({
 	default: () => <div data-testid="report-button" />,
 }));
 
+const openWatchSpy = vi.fn();
+vi.mock('@/utils/watchService', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/utils/watchService')>();
+	return { ...actual, openWatch: (...args: any[]) => openWatchSpy(...args) };
+});
+
 const baseTvResult: SearchResult = {
 	title: 'Sample Show',
 	fileSize: 1024 * 20,
@@ -247,6 +253,26 @@ describe('TvSearchResults', () => {
 			});
 
 			expect(container.querySelector('[data-action-separator]')).toBeNull();
+		});
+	});
+
+	describe('Premiumize watch', () => {
+		it('hands the Premiumize key to openWatch for a PM-cached result', async () => {
+			openWatchSpy.mockClear();
+			renderTv({
+				rdKey: null,
+				premiumizeKey: 'pm-key',
+				player: 'windows/vlc',
+				filteredResults: [{ ...baseTvResult, rdAvailable: false, pmAvailable: true }],
+			});
+
+			await userEvent.click(screen.getByTitle('Watch via Premiumize'));
+
+			await waitFor(() => expect(openWatchSpy).toHaveBeenCalledTimes(1));
+			expect(openWatchSpy.mock.calls[0][0]).toMatchObject({
+				service: 'pm',
+				keys: expect.objectContaining({ premiumizeKey: 'pm-key' }),
+			});
 		});
 	});
 });

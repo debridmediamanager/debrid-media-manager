@@ -15,6 +15,12 @@ vi.mock('./ReportButton', () => ({
 	default: () => <div data-testid="report-button" />,
 }));
 
+const openWatchSpy = vi.fn();
+vi.mock('@/utils/watchService', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/utils/watchService')>();
+	return { ...actual, openWatch: (...args: any[]) => openWatchSpy(...args) };
+});
+
 const baseResult: SearchResult = {
 	title: 'Sample Movie',
 	fileSize: 1024 * 10,
@@ -411,6 +417,39 @@ describe('MovieSearchResults', () => {
 			});
 
 			expect(container.querySelector('[data-action-separator]')).toBeNull();
+		});
+	});
+
+	describe('Premiumize watch', () => {
+		it('hands the Premiumize key to openWatch for a PM-cached result', async () => {
+			// The render-time and click-time service picks are two separate calls;
+			// leaving the key out of the second silently does nothing on click.
+			openWatchSpy.mockClear();
+			renderComponent({
+				rdKey: null,
+				premiumizeKey: 'pm-key',
+				player: 'windows/vlc',
+				filteredResults: [{ ...baseResult, rdAvailable: false, pmAvailable: true }],
+			});
+
+			await userEvent.click(screen.getByTitle('Watch via Premiumize'));
+
+			await waitFor(() => expect(openWatchSpy).toHaveBeenCalledTimes(1));
+			expect(openWatchSpy.mock.calls[0][0]).toMatchObject({
+				service: 'pm',
+				keys: expect.objectContaining({ premiumizeKey: 'pm-key' }),
+			});
+		});
+
+		it('offers no watch button when the user has no Premiumize key', () => {
+			renderComponent({
+				rdKey: null,
+				premiumizeKey: null,
+				player: 'windows/vlc',
+				filteredResults: [{ ...baseResult, rdAvailable: false, pmAvailable: true }],
+			});
+
+			expect(screen.queryByTitle('Watch via Premiumize')).toBeNull();
 		});
 	});
 });

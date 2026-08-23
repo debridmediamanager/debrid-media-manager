@@ -287,7 +287,7 @@ const MovieSearchResults = ({
 	};
 
 	const handleWatch = async (result: SearchResult) => {
-		const service = pickWatchService(result, { rdKey, adKey, torboxKey });
+		const service = pickWatchService(result, { rdKey, adKey, torboxKey, premiumizeKey });
 		if (!service) return;
 		const biggest = getBiggestVideoFile(result);
 		setWatchingHashes((prev) => new Set(prev).add(result.hash));
@@ -296,7 +296,7 @@ const MovieSearchResults = ({
 				service,
 				player,
 				hash: result.hash,
-				keys: { rdKey, adKey, torboxKey },
+				keys: { rdKey, adKey, torboxKey, premiumizeKey },
 				fileName: biggest?.filename,
 				fileId: biggest?.fileId,
 				adInLibrary: inLibrary('ad', result.hash),
