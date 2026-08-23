@@ -61,10 +61,15 @@ export function quickSearch(query: string, unfiltered: SearchResult[]) {
 				return false;
 			}
 
-			// Handle debrid availability queries (is:rd, is:ad, is:tb, is:cached, is:uncached)
+			// Handle debrid availability queries (is:rd, is:ad, is:tb, is:pm, is:cached, is:uncached)
 			if (q.startsWith('is:')) {
 				const value = q.substring(3);
-				const anyAvailable = !!(t.rdAvailable || t.adAvailable || t.tbAvailable);
+				const anyAvailable = !!(
+					t.rdAvailable ||
+					t.adAvailable ||
+					t.tbAvailable ||
+					t.pmAvailable
+				);
 
 				let available: boolean;
 				switch (value) {
@@ -76,6 +81,9 @@ export function quickSearch(query: string, unfiltered: SearchResult[]) {
 						break;
 					case 'tb':
 						available = !!t.tbAvailable;
+						break;
+					case 'pm':
+						available = !!t.pmAvailable;
 						break;
 					case 'cached':
 						available = anyAvailable;

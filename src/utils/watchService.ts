@@ -15,6 +15,7 @@ export type WatchKeys = {
 	rdKey?: string | null;
 	adKey?: string | null;
 	torboxKey?: string | null;
+	premiumizeKey?: string | null;
 };
 
 export const WATCH_SERVICE_LABEL: Record<WatchService, string> = {
@@ -22,22 +23,27 @@ export const WATCH_SERVICE_LABEL: Record<WatchService, string> = {
 	ad: 'AllDebrid',
 	tb: 'TorBox',
 	tbw: 'TorBox',
+	pm: 'Premiumize',
 };
 
 /**
  * Which service should serve this stream.
  *
- * Preference order is RD > AD > TB: RD resolves in one server round-trip, AD
- * needs a browser-side magnet upload first, and TB has to add the torrent to
- * the account before it can hand out a link.
+ * Preference order is RD > AD > TB > PM. RD resolves in one server round-trip,
+ * AD needs a browser-side magnet upload first, and TB has to add the torrent to
+ * the account before it can hand out a link. Premiumize is the cheapest of the
+ * four in isolation - one stateless call, nothing written to the account - but
+ * it sits last so that adding a Premiumize key never silently takes playback
+ * away from the service a user already had.
  */
 export const pickWatchService = (
-	result: Pick<SearchResult, 'rdAvailable' | 'adAvailable' | 'tbAvailable'>,
+	result: Pick<SearchResult, 'rdAvailable' | 'adAvailable' | 'tbAvailable' | 'pmAvailable'>,
 	keys: WatchKeys
 ): WatchService | null => {
 	if (keys.rdKey && result.rdAvailable) return 'rd';
 	if (keys.adKey && result.adAvailable) return 'ad';
 	if (keys.torboxKey && result.tbAvailable) return 'tb';
+	if (keys.premiumizeKey && result.pmAvailable) return 'pm';
 	return null;
 };
 
@@ -51,7 +57,7 @@ export const pickWatchService = (
  * add-to-library surface, so it falls back to whichever key exists.
  */
 export const pickInfoService = (
-	result: Pick<SearchResult, 'rdAvailable' | 'adAvailable' | 'tbAvailable'>,
+	result: Pick<SearchResult, 'rdAvailable' | 'adAvailable' | 'tbAvailable' | 'pmAvailable'>,
 	keys: WatchKeys
 ): WatchService | null => {
 	const watchable = pickWatchService(result, keys);
@@ -59,12 +65,14 @@ export const pickInfoService = (
 	if (keys.rdKey) return 'rd';
 	if (keys.adKey) return 'ad';
 	if (keys.torboxKey) return 'tb';
+	if (keys.premiumizeKey) return 'pm';
 	return null;
 };
 
 export const watchKeyFor = (service: WatchService, keys: WatchKeys): string | null => {
 	if (service === 'rd') return keys.rdKey ?? null;
 	if (service === 'ad') return keys.adKey ?? null;
+	if (service === 'pm') return keys.premiumizeKey ?? null;
 	// 'tb' and 'tbw' are both TorBox, differing only in which namespace the
 	// server resolves the hash against.
 	return keys.torboxKey ?? null;

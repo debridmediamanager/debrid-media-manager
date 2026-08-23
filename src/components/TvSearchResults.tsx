@@ -35,6 +35,7 @@ type TvSearchResultsProps = {
 	rdKey: string | null;
 	adKey: string | null;
 	torboxKey?: string | null;
+	premiumizeKey?: string | null;
 	player: string;
 	hashAndProgress: Record<string, number>;
 	handleShowInfo: (result: SearchResult) => void;
@@ -49,11 +50,13 @@ type TvSearchResultsProps = {
 	addRd: (hash: string) => Promise<void>;
 	addAd: (hash: string) => Promise<void>;
 	addTb: (hash: string) => Promise<void>;
+	addPm: (hash: string) => Promise<void>;
 	sendTbToRd?: (hash: string) => Promise<void>;
 	sendAdToRd?: (hash: string) => Promise<void>;
 	deleteRd: (hash: string) => Promise<void>;
 	deleteAd: (hash: string) => Promise<void>;
 	deleteTb: (hash: string) => Promise<void>;
+	deletePm: (hash: string) => Promise<void>;
 	imdbId?: string;
 	isHashServiceChecking: (hash: string, service: DebridService) => boolean;
 };
@@ -66,6 +69,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	rdKey,
 	adKey,
 	torboxKey,
+	premiumizeKey,
 	player,
 	hashAndProgress,
 	handleShowInfo,
@@ -77,11 +81,13 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	addRd,
 	addAd,
 	addTb,
+	addPm,
 	sendTbToRd,
 	sendAdToRd,
 	deleteRd,
 	deleteAd,
 	deleteTb,
+	deletePm,
 	imdbId,
 	isHashServiceChecking,
 }) => {
@@ -246,7 +252,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	);
 
 	const handleWatch = async (result: SearchResult) => {
-		const service = pickWatchService(result, { rdKey, adKey, torboxKey });
+		const service = pickWatchService(result, { rdKey, adKey, torboxKey, premiumizeKey });
 		if (!service) return;
 		const biggest = getBiggestVideoFile(result);
 		setWatchingHashes((prev) => new Set(prev).add(result.hash));
@@ -255,7 +261,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 				service,
 				player,
 				hash: result.hash,
-				keys: { rdKey, adKey, torboxKey },
+				keys: { rdKey, adKey, torboxKey, premiumizeKey },
 				fileName: biggest?.filename,
 				fileId: biggest?.fileId,
 				adInLibrary: inLibrary('ad', result.hash),
@@ -276,11 +282,13 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						const downloaded =
 							isDownloaded('rd', r.hash) ||
 							isDownloaded('ad', r.hash) ||
-							isDownloaded('tb', r.hash);
+							isDownloaded('tb', r.hash) ||
+							isDownloaded('pm', r.hash);
 						const downloading =
 							isDownloading('rd', r.hash) ||
 							isDownloading('ad', r.hash) ||
-							isDownloading('tb', r.hash);
+							isDownloading('tb', r.hash) ||
+							isDownloading('pm', r.hash);
 						const inYourLibrary = downloaded || downloading;
 
 						if (
@@ -288,6 +296,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 							!r.rdAvailable &&
 							!r.adAvailable &&
 							!r.tbAvailable &&
+							!r.pmAvailable &&
 							!inYourLibrary
 						)
 							return null;
@@ -317,13 +326,19 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						const isCastingAd = castingAdHashes.has(r.hash);
 						const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 						const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
-						const watchService = pickWatchService(r, { rdKey, adKey, torboxKey });
+						const isCheckingPm = isHashServiceChecking(r.hash, 'PM');
+						const watchService = pickWatchService(r, {
+							rdKey,
+							adKey,
+							torboxKey,
+							premiumizeKey,
+						});
 						const isWatching = watchingHashes.has(r.hash);
 
 						return (
 							<div
 								key={i}
-								className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable || r.tbAvailable)} overflow-hidden rounded-lg bg-opacity-30 shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
+								className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable)} overflow-hidden rounded-lg bg-opacity-30 shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
 							>
 								<div className="space-y-2 p-1">
 									<h2 className="line-clamp-2 overflow-hidden text-ellipsis break-words text-sm font-bold leading-tight">
@@ -343,6 +358,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													!r.rdAvailable &&
 													!r.adAvailable &&
 													!r.tbAvailable &&
+													!r.pmAvailable &&
 													(r.trackerStats.seeders > 0 ? (
 														<span className="text-green-400">
 															{' '}
@@ -363,6 +379,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												!r.rdAvailable &&
 												!r.adAvailable &&
 												!r.tbAvailable &&
+												!r.pmAvailable &&
 												(r.trackerStats.hasActivity ? (
 													<span className="text-green-400">
 														{' '}
@@ -672,8 +689,71 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												</button>
 											)}
 
+										{(rdKey || adKey || torboxKey) && premiumizeKey && (
+											<ActionSeparator />
+										)}
+
+										{/* — PM — */}
+										{premiumizeKey && inLibrary('pm', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => deletePm(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<span className="inline-block animate-spin">
+														⌛
+													</span>
+												) : (
+													<X className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading
+													? 'Removing...'
+													: `PM (${hashAndProgress[`pm:${r.hash}`] + '%'})`}
+											</button>
+										)}
+										{premiumizeKey && notInLibrary('pm', r.hash) && (
+											<button
+												className={`border-2 border-${btnColor(r.pmAvailable, r.noVideos)}-500 bg-${btnColor(r.pmAvailable, r.noVideos)}-900/30 text-${btnColor(r.pmAvailable, r.noVideos)}-100 hover:bg-${btnColor(r.pmAvailable, r.noVideos)}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => addPm(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<span className="inline-block animate-spin">
+														⌛
+													</span>
+												) : (
+													btnIcon(r.pmAvailable)
+												)}
+												{isLoading
+													? 'Adding...'
+													: btnLabel(r.pmAvailable, 'PM')}
+											</button>
+										)}
+										{premiumizeKey && !r.pmAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-1 text-xs text-red-100 transition-colors hover:bg-[#aa0000]/50 ${isCheckingPm ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => checkServiceAvailability(r, ['PM'])}
+												disabled={isCheckingPm}
+											>
+												{isCheckingPm ? (
+													<>
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Checking PM...
+													</>
+												) : (
+													<>
+														<SearchIcon className="mr-1 inline-block h-3 w-3 text-red-400" />
+														Check PM
+													</>
+												)}
+											</button>
+										)}
+
 										{/* — Separator: everything above belongs to one service, everything below does not — */}
-										{(rdKey || adKey || torboxKey) && <ActionSeparator />}
+										{(rdKey || adKey || torboxKey || premiumizeKey) && (
+											<ActionSeparator />
+										)}
 
 										{watchService && player && (
 											<button

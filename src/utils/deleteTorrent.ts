@@ -1,8 +1,14 @@
 import { deleteMagnet as deleteAdTorrent } from '@/services/allDebrid';
+import {
+	deletePremiumizeFolder,
+	deletePremiumizeItem,
+	deletePremiumizeTransfer,
+} from '@/services/premiumize';
 import { deleteTorrent as deleteRdTorrent } from '@/services/realDebrid';
 import { deleteTorrent as deleteTbTorrent, deleteWebDownload } from '@/services/torbox';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
+import { parsePremiumizeRowId } from './premiumizeRow';
 import { magnetToastOptions } from './toastOptions';
 import { isWebDownloadRowId, parseTorBoxRowId } from './torboxWebDownload';
 
@@ -89,6 +95,44 @@ export const handleDeleteTbTorrent = async (
 		);
 		const apiError = getErrorMessage(error);
 		toast.error(apiError ? `TorBox error: ${apiError}` : `Failed to delete ${id} in TorBox.`);
+		return false;
+	}
+};
+
+/**
+ * Removes a Premiumize row and the content behind it.
+ *
+ * `transfer/delete` deletes the transfer's **files** as well as its record -
+ * that is not what the vendor documentation says ("Deletes a transfer record")
+ * but it is what it does, and it is exactly what "remove from my library" means.
+ * `transfer/clearfinished` is the call that only tidies the list, and it is
+ * deliberately not used here.
+ */
+export const handleDeletePmTorrent = async (
+	pmKey: string,
+	id: string,
+	disableToast: boolean = false
+): Promise<boolean> => {
+	const row = parsePremiumizeRowId(id);
+	if (!row) {
+		toast.error(`Unrecognised Premiumize row ${id}.`);
+		return false;
+	}
+	try {
+		if (row.kind === 'transfer') await deletePremiumizeTransfer(pmKey, row.id);
+		else if (row.kind === 'folder') await deletePremiumizeFolder(pmKey, row.id);
+		else await deletePremiumizeItem(pmKey, row.id);
+		if (!disableToast) toast(`Deleted ${id} from Premiumize.`, magnetToastOptions);
+		return true;
+	} catch (error) {
+		console.error(
+			'Error deleting Premiumize item:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		const apiError = getErrorMessage(error);
+		toast.error(
+			apiError ? `Premiumize error: ${apiError}` : `Failed to delete ${id} in Premiumize.`
+		);
 		return false;
 	}
 };

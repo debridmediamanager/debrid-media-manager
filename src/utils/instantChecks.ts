@@ -1,4 +1,5 @@
 import { EnrichedHashlistTorrent, FileData, SearchResult } from '@/services/mediasearch';
+import { checkPremiumizeCache } from '@/services/premiumize';
 import { checkCachedStatus } from '@/services/torbox';
 import { delay } from '@/utils/delay';
 import { Dispatch, SetStateAction } from 'react';
@@ -459,6 +460,56 @@ const processTbInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	return instantCount;
 };
 
+/**
+ * Premiumize instant check.
+ *
+ * Unlike the other three this is a single request for the whole batch - 1,000
+ * hashes in one POST, non-destructive, nothing added to the account - so there
+ * is no per-hash concurrency to manage here.
+ *
+ * What it cannot do is fill in `files`. `cache/check` reports one filename and
+ * one total size per hash and no file listing at all, so the video count, the
+ * median file size and `noVideos` stay at whatever another service worked out.
+ * The per-file breakdown for Premiumize comes from `transfer/directdl`, which
+ * costs a request per hash and is only worth spending when the user opens a
+ * torrent or plays it.
+ */
+const processPmInstantCheck = async <T extends SearchResult | EnrichedHashlistTorrent>(
+	pmKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<T[]>>,
+	sortFn?: (results: T[]) => T[]
+): Promise<number> => {
+	const results = await checkPremiumizeCache(pmKey, hashes);
+	const cached = new Map(
+		results.filter((r) => r.cached).map((r) => [r.hash.toLowerCase(), r] as const)
+	);
+	if (cached.size === 0) return 0;
+
+	let instantCount = 0;
+	setTorrentList((prevSearchResults) => {
+		const newSearchResults = [...prevSearchResults];
+		for (const torrent of newSearchResults) {
+			if (torrent.noVideos) continue;
+			const hit = cached.get(torrent.hash.toLowerCase());
+			if (!hit) continue;
+
+			torrent.pmAvailable = true;
+			instantCount += 1;
+
+			// Scraped rows and external addons often report no size at all; the
+			// cache probe knows the real total even though it lists no files.
+			if ('medianFileSize' in torrent && hit.filesize) {
+				const result = torrent as SearchResult;
+				if (result.fileSize <= 0) result.fileSize = hit.filesize / 1024 / 1024;
+			}
+		}
+		return sortFn ? sortFn(newSearchResults) : newSearchResults;
+	});
+
+	return instantCount;
+};
+
 // Wrapper functions
 export const wrapLoading = async function (debrid: string, checkAvailability: Promise<number>) {
 	return await toast.promise(
@@ -518,3 +569,16 @@ export const checkDatabaseAvailabilityTb2 = (
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
 ) => processTbInstantCheck(tbKey, hashes, setTorrentList);
+
+export const checkAvailabilityPm = (
+	pmKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
+	sortFn: (searchResults: SearchResult[]) => SearchResult[]
+) => processPmInstantCheck(pmKey, hashes, setTorrentList, sortFn);
+
+export const checkAvailabilityPm2 = (
+	pmKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
+) => processPmInstantCheck(pmKey, hashes, setTorrentList);

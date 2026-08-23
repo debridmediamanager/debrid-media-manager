@@ -10,6 +10,13 @@ import {
 	uploadMagnetAd,
 } from '@/services/allDebrid';
 import {
+	createPremiumizeTransfer,
+	listPremiumizeFolder,
+	listPremiumizeTransfers,
+	PremiumizeError,
+	toMagnetUri,
+} from '@/services/premiumize';
+import {
 	addHashAsMagnet,
 	addTorrentFile,
 	getTorrentInfo,
@@ -31,7 +38,12 @@ import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { handleDeleteRdTorrent } from './deleteTorrent';
-import { convertToTbUserTorrent, convertToTbWebDownloadUserTorrent } from './fetchTorrents';
+import {
+	buildPremiumizeRowSources,
+	convertToPremiumizeUserTorrent,
+	convertToTbUserTorrent,
+	convertToTbWebDownloadUserTorrent,
+} from './fetchTorrents';
 import { isVideo } from './selectable';
 import { magnetToastOptions } from './toastOptions';
 import { isWebDownloadRowId, parseTorBoxRowId } from './torboxWebDownload';
@@ -719,4 +731,96 @@ export const handleAddMultipleWebDownloadsInTb = async (
 			magnetToastOptions
 		);
 	}
+};
+
+const PM_BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 250;
+
+/**
+ * Adds a magnet to Premiumize's cloud.
+ *
+ * Cached content finishes immediately - there is no queue wait - so the transfer
+ * is read back straight away to build the library row. Re-adding a hash that is
+ * already in the transfer list returns the existing id and creates nothing,
+ * which is where Premiumize differs from Real-Debrid: no duplicate to clean up.
+ */
+export const handleAddAsMagnetInPm = async (
+	pmKey: string,
+	hash: string,
+	callback?: (torrent: UserTorrent) => Promise<void>,
+	silent: boolean = false
+) => {
+	try {
+		const created = await createPremiumizeTransfer(pmKey, toMagnetUri(hash));
+		if (!created.id) {
+			if (!silent) toast.error('Transfer added without an ID.', magnetToastOptions);
+			return;
+		}
+
+		if (callback) {
+			const [transfers, root] = await Promise.all([
+				listPremiumizeTransfers(pmKey),
+				listPremiumizeFolder(pmKey),
+			]);
+			const transfer = transfers.find((t) => t.id === created.id);
+			if (transfer) {
+				// Files come from the transfer's own folder rather than
+				// `item/listall`, which would pull the whole account back for one
+				// add.
+				const folder = transfer.folder_id
+					? await listPremiumizeFolder(pmKey, transfer.folder_id).catch(() => null)
+					: null;
+				const files = (folder?.content ?? [])
+					.filter((entry) => entry.type === 'file')
+					.map((entry) => ({
+						id: entry.id,
+						name: entry.name,
+						created_at: entry.created_at ?? 0,
+						size: entry.size ?? 0,
+						path: `${transfer.name}/${entry.name}`,
+					}));
+				const [source] = buildPremiumizeRowSources([transfer], root.content ?? [], files);
+				await callback(convertToPremiumizeUserTorrent(source, hash.toLowerCase()));
+			}
+		}
+
+		if (!silent) toast.success('Transfer added.', magnetToastOptions);
+	} catch (error) {
+		console.error(
+			'Error adding transfer to Premiumize:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		if (!silent) {
+			const message = error instanceof PremiumizeError ? error.message : null;
+			toast.error(
+				message ? `Premiumize error: ${message}` : 'Failed to add transfer.',
+				magnetToastOptions
+			);
+		}
+		throw error;
+	}
+};
+
+export const handleAddMultipleHashesInPm = async (
+	pmKey: string,
+	hashes: string[],
+	callback?: () => Promise<void>
+) => {
+	let success = 0;
+	for (let i = 0; i < hashes.length; i++) {
+		if (i > 0) await delay(PM_BATCH_MAGNET_DELAY);
+		try {
+			await handleAddAsMagnetInPm(pmKey, hashes[i], undefined, true);
+			success++;
+		} catch (error) {
+			console.error(
+				'Error adding hash in Premiumize:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
+		}
+	}
+	if (callback) await callback();
+	toast(
+		`Added ${success} ${success === 1 ? 'hash' : 'hashes'} to Premiumize.`,
+		magnetToastOptions
+	);
 };

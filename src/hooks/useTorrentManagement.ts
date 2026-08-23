@@ -5,6 +5,7 @@ import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
 	handleAddAsMagnetInAd,
+	handleAddAsMagnetInPm,
 	handleAddAsMagnetInRd,
 	handleAddAsMagnetInTb,
 } from '@/utils/addMagnet';
@@ -22,6 +23,7 @@ import {
 } from '@/utils/debridUploader';
 import {
 	handleDeleteAdTorrent,
+	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
@@ -52,6 +54,7 @@ export function useTorrentManagement(
 	rdKey: string | null,
 	adKey: string | null,
 	torboxKey: string | null,
+	premiumizeKey: string | null,
 	imdbId: string,
 	searchResults: SearchResult[],
 	setSearchResults: React.Dispatch<React.SetStateAction<SearchResult[]>>
@@ -341,6 +344,25 @@ export function useTorrentManagement(
 		[torboxKey, fetchHashAndProgress, addToCache, searchResults]
 	);
 
+	const addPm = useCallback(
+		async (hash: string) => {
+			if (!premiumizeKey) return;
+
+			await handleAddAsMagnetInPm(premiumizeKey, hash, async (userTorrent: UserTorrent) => {
+				await torrentDB.add(userTorrent);
+				addToCache(userTorrent);
+
+				setHashAndProgress((prev) => ({
+					...prev,
+					[`${userTorrent.id.substring(0, 3)}${userTorrent.hash}`]: userTorrent.progress,
+				}));
+
+				await fetchHashAndProgress();
+			});
+		},
+		[premiumizeKey, fetchHashAndProgress, addToCache]
+	);
+
 	// Sends a cached search-result torrent into the user's RD account via the
 	// debrid uploader service, which rewrites the torrent with de-infringed
 	// filenames so RD accepts it — which is why this works even on RD-blocked
@@ -559,16 +581,38 @@ export function useTorrentManagement(
 		[torboxKey, removeFromCache]
 	);
 
+	const deletePm = useCallback(
+		async (hash: string) => {
+			if (!premiumizeKey) return;
+
+			const torrents = await torrentDB.getAllByHash(hash);
+			for (const t of torrents) {
+				if (!t.id.startsWith('pm:')) continue;
+				await handleDeletePmTorrent(premiumizeKey, t.id);
+				await torrentDB.deleteByHash('pm', hash);
+				removeFromCache(t.id);
+				setHashAndProgress((prev) => {
+					const newHashAndProgress = { ...prev };
+					delete newHashAndProgress[`pm:${hash}`];
+					return newHashAndProgress;
+				});
+			}
+		},
+		[premiumizeKey, removeFromCache]
+	);
+
 	return {
 		hashAndProgress,
 		fetchHashAndProgress,
 		addRd,
 		addAd,
 		addTb,
+		addPm,
 		sendTbToRd,
 		sendAdToRd,
 		deleteRd,
 		deleteAd,
 		deleteTb,
+		deletePm,
 	};
 }

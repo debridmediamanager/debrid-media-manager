@@ -1,7 +1,14 @@
 // Search tokens that filter results by debrid availability. They are mutually
 // exclusive: quickSearch ANDs every term, so "is:rd is:tb" would mean "cached in
 // both", which is never what a click on a second service button intends.
-export const AVAILABILITY_TOKENS = ['is:rd', 'is:ad', 'is:tb', 'is:cached', 'is:uncached'] as const;
+export const AVAILABILITY_TOKENS = [
+	'is:rd',
+	'is:ad',
+	'is:tb',
+	'is:pm',
+	'is:cached',
+	'is:uncached',
+] as const;
 
 export type AvailabilityToken = (typeof AVAILABILITY_TOKENS)[number];
 

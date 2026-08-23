@@ -11,9 +11,13 @@ const mocks = vi.hoisted(() => ({
 	getFileByNameTorBoxStreamUrl: vi.fn(),
 	getOwnedTorBoxStreamUrl: vi.fn(),
 	getWebDownloadStreamUrlByHash: vi.fn(),
+	directDownloadPremiumize: vi.fn(),
 }));
 
 vi.mock('@/services/allDebrid', () => ({ unlockLink: mocks.unlockLink }));
+vi.mock('@/services/premiumize', () => ({
+	directDownloadPremiumize: mocks.directDownloadPremiumize,
+}));
 vi.mock('@/services/realDebrid', () => ({
 	addHashAsMagnet: mocks.addHashAsMagnet,
 	deleteTorrent: mocks.deleteTorrent,
@@ -378,5 +382,90 @@ describe('getIntent', () => {
 		const result = await getIntent('tb-key', 'link', '1.2.3.4', 'windows', 'vlc', 'tb');
 
 		expect(result.error).toContain('instant');
+	});
+});
+
+describe('Premiumize intents', () => {
+	const files = [
+		{
+			path: 'BBB/poster.jpg',
+			size: 310380,
+			link: `https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/poster.jpg`,
+			stream_link: null,
+		},
+		{
+			path: 'BBB/Big Buck Bunny.mp4',
+			size: 276134947,
+			link: `https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/BBB.mp4`,
+			stream_link: `https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/BBB-stream.mp4`,
+		},
+	];
+
+	it('picks the biggest file, never content[0]', async () => {
+		// content[0] for a torrent is whatever sorts first - a 310 KB poster in
+		// the reference case - so a first-file fallback hands the user a JPEG.
+		mocks.directDownloadPremiumize.mockResolvedValue(files);
+
+		const { intent } = await getInstantIntent('pm-key', 'hash', 0, '1.2.3.4', 'web', 'x', 'pm');
+
+		expect(intent).toBe(
+			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/BBB-stream.mp4`
+		);
+	});
+
+	it('prefers the named file when the caller knows which one it wants', async () => {
+		mocks.directDownloadPremiumize.mockResolvedValue(files);
+
+		const { intent } = await getInstantIntent(
+			'pm-key',
+			'hash',
+			0,
+			'1.2.3.4',
+			'web',
+			'x',
+			'pm',
+			'poster.jpg'
+		);
+
+		expect(intent).toBe(
+			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/poster.jpg`
+		);
+	});
+
+	it('reports an empty resolution rather than handing back nothing', async () => {
+		mocks.directDownloadPremiumize.mockResolvedValue([]);
+
+		const { error } = await getInstantIntent('pm-key', 'h', 0, '1.2.3.4', 'web', 'x', 'pm');
+
+		expect(error).toMatch(/No Premiumize files/);
+	});
+
+	it('surfaces a cache miss as an error, not a crash', async () => {
+		mocks.directDownloadPremiumize.mockRejectedValue(new Error('Error downloading this file.'));
+
+		const { error } = await getInstantIntent('pm-key', 'h', 0, '1.2.3.4', 'web', 'x', 'pm');
+
+		expect(error).toMatch(/Error downloading this file/);
+	});
+
+	it('treats a Premiumize link as already playable - there is nothing to unrestrict', async () => {
+		const { intent } = await getIntent(
+			'pm-key',
+			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/BBB.mp4`,
+			'1.2.3.4',
+			'web',
+			'x',
+			'pm'
+		);
+
+		expect(intent).toBe(
+			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/BBB.mp4`
+		);
+		expect(mocks.unrestrictLink).not.toHaveBeenCalled();
+		expect(mocks.unlockLink).not.toHaveBeenCalled();
+	});
+
+	it('recognises pm as a watch service', () => {
+		expect(isWatchService('pm')).toBe(true);
 	});
 });

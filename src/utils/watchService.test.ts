@@ -34,6 +34,7 @@ const cached = (over: Partial<Record<string, boolean>> = {}) => ({
 	rdAvailable: false,
 	adAvailable: false,
 	tbAvailable: false,
+	pmAvailable: false,
 	...over,
 });
 
@@ -365,5 +366,27 @@ describe('openWatch', () => {
 
 		expect(open).not.toHaveBeenCalled();
 		expect(mocks.toastError).toHaveBeenCalledWith(expect.stringContaining('TorBox'));
+	});
+});
+
+describe('Premiumize in the watch order', () => {
+	it('serves a stream when Premiumize is the only service that has it', () => {
+		expect(pickWatchService(cached({ pmAvailable: true }), { premiumizeKey: 'pm' })).toBe('pm');
+	});
+
+	it('never takes playback away from a service the user already had', () => {
+		const keys = { rdKey: 'rd', adKey: 'ad', torboxKey: 'tb', premiumizeKey: 'pm' };
+		expect(pickWatchService(cached({ rdAvailable: true, pmAvailable: true }), keys)).toBe('rd');
+		expect(pickWatchService(cached({ adAvailable: true, pmAvailable: true }), keys)).toBe('ad');
+		expect(pickWatchService(cached({ tbAvailable: true, pmAvailable: true }), keys)).toBe('tb');
+	});
+
+	it('ignores a cached Premiumize result when the user has no Premiumize key', () => {
+		expect(pickWatchService(cached({ pmAvailable: true }), { rdKey: 'rd' })).toBeNull();
+	});
+
+	it('hands the Premiumize key to the pm service', () => {
+		expect(watchKeyFor('pm', { rdKey: 'rd', premiumizeKey: 'pm' })).toBe('pm');
+		expect(watchKeyFor('pm', { rdKey: 'rd' })).toBeNull();
 	});
 });

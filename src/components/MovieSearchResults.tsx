@@ -33,6 +33,7 @@ type MovieSearchResultsProps = {
 	rdKey: string | null;
 	adKey: string | null;
 	torboxKey: string | null;
+	premiumizeKey: string | null;
 	player: string;
 	hashAndProgress: Record<string, number>;
 	handleShowInfo: (result: SearchResult) => void;
@@ -47,11 +48,13 @@ type MovieSearchResultsProps = {
 	addRd: (hash: string) => Promise<void>;
 	addAd: (hash: string) => Promise<void>;
 	addTb: (hash: string) => Promise<void>;
+	addPm: (hash: string) => Promise<void>;
 	sendTbToRd?: (hash: string) => Promise<void>;
 	sendAdToRd?: (hash: string) => Promise<void>;
 	deleteRd: (hash: string) => Promise<void>;
 	deleteAd: (hash: string) => Promise<void>;
 	deleteTb: (hash: string) => Promise<void>;
+	deletePm: (hash: string) => Promise<void>;
 	imdbId?: string;
 	isHashServiceChecking: (hash: string, service: DebridService) => boolean;
 };
@@ -63,6 +66,7 @@ const MovieSearchResults = ({
 	rdKey,
 	adKey,
 	torboxKey,
+	premiumizeKey,
 	player,
 	hashAndProgress,
 	handleShowInfo,
@@ -74,11 +78,13 @@ const MovieSearchResults = ({
 	addRd,
 	addAd,
 	addTb,
+	addPm,
 	sendTbToRd,
 	sendAdToRd,
 	deleteRd,
 	deleteAd,
 	deleteTb,
+	deletePm,
 	imdbId,
 	isHashServiceChecking,
 }: MovieSearchResultsProps) => {
@@ -165,6 +171,32 @@ const MovieSearchResults = ({
 		setLoadingHashes((prev) => new Set(prev).add(hash));
 		try {
 			await deleteTb(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+	const handleAddPm = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await addPm(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+	const handleDeletePm = async (hash: string) => {
+		if (loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await deletePm(hash);
 		} finally {
 			setLoadingHashes((prev) => {
 				const newSet = new Set(prev);
@@ -295,11 +327,13 @@ const MovieSearchResults = ({
 				const downloaded =
 					isDownloaded('rd', r.hash) ||
 					isDownloaded('ad', r.hash) ||
-					isDownloaded('tb', r.hash);
+					isDownloaded('tb', r.hash) ||
+					isDownloaded('pm', r.hash);
 				const downloading =
 					isDownloading('rd', r.hash) ||
 					isDownloading('ad', r.hash) ||
-					isDownloading('tb', r.hash);
+					isDownloading('tb', r.hash) ||
+					isDownloading('pm', r.hash);
 				const inYourLibrary = downloaded || downloading;
 
 				if (
@@ -307,6 +341,7 @@ const MovieSearchResults = ({
 					!r.rdAvailable &&
 					!r.adAvailable &&
 					!r.tbAvailable &&
+					!r.pmAvailable &&
 					!inYourLibrary
 				)
 					return null;
@@ -320,20 +355,27 @@ const MovieSearchResults = ({
 				const rdColor = btnColor(r.rdAvailable, r.noVideos);
 				const adColor = btnColor(r.adAvailable, r.noVideos);
 				const tbColor = btnColor(r.tbAvailable, r.noVideos);
+				const pmColor = btnColor(r.pmAvailable, r.noVideos);
 				const isLoading = loadingHashes.has(r.hash);
 				const isSendingToRd = sendingToRdHashes.has(r.hash);
 				const isCasting = castingHashes.has(r.hash);
 				const isCastingTb = castingTbHashes.has(r.hash);
-				const watchService = pickWatchService(r, { rdKey, adKey, torboxKey });
+				const watchService = pickWatchService(r, {
+					rdKey,
+					adKey,
+					torboxKey,
+					premiumizeKey,
+				});
 				const isWatching = watchingHashes.has(r.hash);
 				const isCastingAd = castingAdHashes.has(r.hash);
 				const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 				const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
+				const isCheckingPm = isHashServiceChecking(r.hash, 'PM');
 
 				return (
 					<div
 						key={i}
-						className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable || r.tbAvailable)} overflow-hidden rounded-lg bg-opacity-30 shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
+						className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getMovieCountClass(r.videoCount, r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable)} overflow-hidden rounded-lg bg-opacity-30 shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
 					>
 						<div className="space-y-2 p-1">
 							<h2 className="line-clamp-2 overflow-hidden text-ellipsis break-words text-sm font-bold leading-tight">
@@ -357,6 +399,7 @@ const MovieSearchResults = ({
 												!r.rdAvailable &&
 												!r.adAvailable &&
 												!r.tbAvailable &&
+												!r.pmAvailable &&
 												(r.trackerStats.seeders > 0 ? (
 													<span className="text-green-400">
 														{' '}
@@ -376,6 +419,7 @@ const MovieSearchResults = ({
 												!r.rdAvailable &&
 												!r.adAvailable &&
 												!r.tbAvailable &&
+												!r.pmAvailable &&
 												(r.trackerStats.seeders > 0 ? (
 													<span className="text-green-400">
 														{' '}
@@ -397,6 +441,7 @@ const MovieSearchResults = ({
 										!r.rdAvailable &&
 										!r.adAvailable &&
 										!r.tbAvailable &&
+										!r.pmAvailable &&
 										(r.trackerStats.seeders > 0 ? (
 											<span className="text-green-400"> • Has seeders</span>
 										) : (
@@ -664,8 +709,65 @@ const MovieSearchResults = ({
 									</button>
 								)}
 
+								{(rdKey || adKey || torboxKey) && premiumizeKey && (
+									<ActionSeparator />
+								)}
+
+								{/* — PM — */}
+								{premiumizeKey && inLibrary('pm', r.hash) && (
+									<button
+										className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleDeletePm(r.hash)}
+										disabled={isLoading}
+									>
+										{isLoading ? (
+											<Loader2 className="inline-block h-3 w-3 animate-spin" />
+										) : (
+											<X className="mr-2 inline h-3 w-3" />
+										)}
+										{isLoading
+											? 'Removing...'
+											: `PM (${hashAndProgress[`pm:${r.hash}`] + '%'})`}
+									</button>
+								)}
+								{premiumizeKey && notInLibrary('pm', r.hash) && (
+									<button
+										className={`border-2 border-${pmColor}-500 bg-${pmColor}-900/30 text-${pmColor}-100 hover:bg-${pmColor}-800/50 haptic-sm inline rounded px-1 text-xs transition-colors ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleAddPm(r.hash)}
+										disabled={isLoading}
+									>
+										{isLoading ? (
+											<Loader2 className="inline-block h-3 w-3 animate-spin" />
+										) : (
+											btnIcon(r.pmAvailable)
+										)}
+										{isLoading ? 'Adding...' : btnLabel(r.pmAvailable, 'PM')}
+									</button>
+								)}
+								{premiumizeKey && !r.pmAvailable && (
+									<button
+										className={`haptic-sm inline rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-1 text-xs text-red-100 transition-colors hover:bg-[#aa0000]/50 ${isCheckingPm ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => checkServiceAvailability(r, ['PM'])}
+										disabled={isCheckingPm}
+									>
+										{isCheckingPm ? (
+											<>
+												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+												Checking PM...
+											</>
+										) : (
+											<span className="inline-flex items-center">
+												<SearchIcon className="mr-1 h-3 w-3 text-red-400" />
+												Check PM
+											</span>
+										)}
+									</button>
+								)}
+
 								{/* — Separator: everything above belongs to one service, everything below does not — */}
-								{(rdKey || adKey || torboxKey) && <ActionSeparator />}
+								{(rdKey || adKey || torboxKey || premiumizeKey) && (
+									<ActionSeparator />
+								)}
 
 								{watchService && player && (
 									<button

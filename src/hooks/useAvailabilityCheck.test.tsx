@@ -80,6 +80,7 @@ const createSearchResult = (overrides: Partial<SearchResult> = {}): SearchResult
 	rdAvailable: overrides.rdAvailable ?? false,
 	adAvailable: overrides.adAvailable ?? false,
 	tbAvailable: overrides.tbAvailable ?? false,
+	pmAvailable: false,
 	files: overrides.files ?? [],
 	noVideos: overrides.noVideos ?? false,
 	medianFileSize: overrides.medianFileSize ?? 1024,
@@ -199,6 +200,7 @@ describe('useAvailabilityCheck', () => {
 			rdKey?: string | null;
 			adKey?: string | null;
 			torboxKey?: string | null;
+			premiumizeKey?: string | null;
 			hashAndProgress?: Record<string, number>;
 		} = {}
 	) =>
@@ -207,6 +209,7 @@ describe('useAvailabilityCheck', () => {
 				overrides.rdKey !== undefined ? overrides.rdKey : 'rd-key',
 				overrides.adKey !== undefined ? overrides.adKey : 'ad-key',
 				overrides.torboxKey !== undefined ? overrides.torboxKey : 'tb-key',
+				overrides.premiumizeKey !== undefined ? overrides.premiumizeKey : null,
 				'tt123',
 				searchResults,
 				setSearchResults,
@@ -279,6 +282,7 @@ describe('useAvailabilityCheck', () => {
 				useAvailabilityCheck(
 					null,
 					'ad-key',
+					null,
 					null,
 					'tt123',
 					searchResults,

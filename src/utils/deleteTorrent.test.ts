@@ -1,10 +1,16 @@
 import { deleteMagnet as deleteAdTorrent } from '@/services/allDebrid';
+import {
+	deletePremiumizeFolder,
+	deletePremiumizeItem,
+	deletePremiumizeTransfer,
+} from '@/services/premiumize';
 import { deleteTorrent as deleteRdTorrent } from '@/services/realDebrid';
 import { deleteTorrent as deleteTbTorrent, deleteWebDownload } from '@/services/torbox';
 import toast from 'react-hot-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	handleDeleteAdTorrent,
+	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from './deleteTorrent';
@@ -13,6 +19,7 @@ import {
 vi.mock('@/services/allDebrid');
 vi.mock('@/services/realDebrid');
 vi.mock('@/services/torbox');
+vi.mock('@/services/premiumize');
 vi.mock('react-hot-toast', () => {
 	const fn: any = vi.fn((message: string) => {});
 	fn.error = vi.fn();
@@ -373,6 +380,64 @@ describe('deleteTorrent utilities', () => {
 			expect(consoleSpy).toHaveBeenCalledWith('Error deleting TB torrent:', 'Unknown error');
 
 			consoleSpy.mockRestore();
+		});
+	});
+
+	describe('handleDeletePmTorrent', () => {
+		const pmKey = 'test-pm-key';
+
+		it('removes a transfer with transfer/delete, which takes the files with it', async () => {
+			// The vendor docs call this "deletes a transfer record"; it deletes the
+			// folder and every file in it, which is what a library delete means.
+			vi.mocked(deletePremiumizeTransfer).mockResolvedValue({ status: 'success' } as any);
+
+			const ok = await handleDeletePmTorrent(pmKey, 'pm:tC_c5ShzmbWdwiIc-KMP_5A');
+
+			expect(ok).toBe(true);
+			expect(deletePremiumizeTransfer).toHaveBeenCalledWith(pmKey, 'C_c5ShzmbWdwiIc-KMP_5A');
+			expect(deletePremiumizeFolder).not.toHaveBeenCalled();
+			expect(toast).toHaveBeenCalledWith(
+				'Deleted pm:tC_c5ShzmbWdwiIc-KMP_5A from Premiumize.',
+				expect.any(Object)
+			);
+		});
+
+		it('removes an orphaned folder with folder/delete', async () => {
+			vi.mocked(deletePremiumizeFolder).mockResolvedValue({ status: 'success' } as any);
+
+			const ok = await handleDeletePmTorrent(pmKey, 'pm:fhp92DFAmxWqvNFC_IzGbWw', true);
+
+			expect(ok).toBe(true);
+			expect(deletePremiumizeFolder).toHaveBeenCalledWith(pmKey, 'hp92DFAmxWqvNFC_IzGbWw');
+			expect(deletePremiumizeTransfer).not.toHaveBeenCalled();
+			expect(toast).not.toHaveBeenCalled();
+		});
+
+		it('removes a root-level file with item/delete', async () => {
+			vi.mocked(deletePremiumizeItem).mockResolvedValue({ status: 'success' } as any);
+
+			expect(await handleDeletePmTorrent(pmKey, 'pm:ir9Bo9rCOTW-7oKerVCl0XQ')).toBe(true);
+			expect(deletePremiumizeItem).toHaveBeenCalledWith(pmKey, 'r9Bo9rCOTW-7oKerVCl0XQ');
+		});
+
+		it('refuses an unrecognised row instead of guessing which endpoint to call', async () => {
+			const ok = await handleDeletePmTorrent(pmKey, 'pm:whatever');
+
+			expect(ok).toBe(false);
+			expect(deletePremiumizeTransfer).not.toHaveBeenCalled();
+			expect(deletePremiumizeFolder).not.toHaveBeenCalled();
+			expect(deletePremiumizeItem).not.toHaveBeenCalled();
+		});
+
+		it('reports a failure without throwing', async () => {
+			vi.mocked(deletePremiumizeTransfer).mockRejectedValue(
+				new Error('An unknown error occurred.')
+			);
+
+			expect(await handleDeletePmTorrent(pmKey, 'pm:tabc')).toBe(false);
+			expect(toast.error).toHaveBeenCalledWith(
+				'Premiumize error: An unknown error occurred.'
+			);
 		});
 	});
 });

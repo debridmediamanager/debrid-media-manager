@@ -24,10 +24,11 @@ const {
 		routerQuery: { imdbid: 'tt1111111' } as { imdbid: string },
 		torrentUrls: [] as string[],
 		// Mutable so a test can hand the page a different combination of keys
-		authKeys: { rd: 'rd-token', ad: null, tb: null } as {
+		authKeys: { rd: 'rd-token', ad: null, tb: null, pm: null } as {
 			rd: string | null;
 			ad: string | null;
 			tb: string | null;
+			pm: string | null;
 		},
 		torrentResults: [] as any[],
 		searchResultsProps: { current: null as any },
@@ -79,6 +80,7 @@ vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: () => [authKeys.rd],
 	useAllDebridApiKey: () => authKeys.ad,
 	useTorBoxAccessToken: () => authKeys.tb,
+	usePremiumizeApiKey: () => authKeys.pm,
 }));
 
 vi.mock('@/hooks/useExternalSources', () => ({
@@ -202,6 +204,7 @@ describe('Movie search page across client-side navigation', () => {
 		authKeys.rd = 'rd-token';
 		authKeys.ad = null;
 		authKeys.tb = null;
+		authKeys.pm = null;
 
 		axiosGetMock.mockImplementation((url: string) => {
 			const infoMatch = url.match(/\/api\/info\/movie\?imdbid=(tt\d+)/);

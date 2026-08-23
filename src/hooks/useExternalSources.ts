@@ -314,6 +314,7 @@ export function useExternalSources(
 				rdAvailable: false,
 				adAvailable: false,
 				tbAvailable: false,
+				pmAvailable: false,
 				files: files,
 				noVideos: false,
 				medianFileSize: fileSize,

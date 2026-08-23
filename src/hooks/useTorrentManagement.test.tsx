@@ -129,6 +129,7 @@ const createSearchResult = (overrides: Partial<any> = {}) => ({
 	videoCount: 1,
 	rdAvailable: false,
 	tbAvailable: false,
+	pmAvailable: false,
 	adAvailable: false,
 	noVideos: false,
 	files: [],
@@ -204,6 +205,7 @@ describe('useTorrentManagement', () => {
 				'rd-key',
 				'ad-key',
 				'tb-key',
+				'pm-key',
 				'tt123',
 				currentResults,
 				setSearchResults

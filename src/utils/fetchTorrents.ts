@@ -1,4 +1,13 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
+import {
+	listAllPremiumizeItems,
+	listPremiumizeFolder,
+	listPremiumizeTransfers,
+	resolvePremiumizeTransferHashes,
+	type PremiumizeFolderEntry,
+	type PremiumizeItem,
+	type PremiumizeTransfer,
+} from '@/services/premiumize';
 import { getUserTorrentsList } from '@/services/realDebrid';
 import { getTorrentList, getWebDownloadList } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorBoxWebDownload, UserTorrentResponse } from '@/services/types';
@@ -10,6 +19,7 @@ import { every, some } from 'lodash';
 import toast from 'react-hot-toast';
 import { getMediaId } from './mediaId';
 import { getTypeByNameAndFileCount } from './mediaType';
+import { toPremiumizeRowId, type PremiumizeRowKind } from './premiumizeRow';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
 import { genericToastOptions } from './toastOptions';
 import { toWebDownloadRowId } from './torboxWebDownload';
@@ -651,3 +661,265 @@ export const fetchTorBox = async (
 async function processTorBoxTorrents(torrentInfos: TorBoxTorrentInfo[]): Promise<UserTorrent[]> {
 	return Promise.all(torrentInfos.map((info) => convertToTbUserTorrent(info)));
 }
+
+// ==================== Premiumize ====================
+
+/**
+ * Premiumize reports a transfer's status but never its info hash, its size or
+ * its files, and it reports the cloud's files but never which transfer produced
+ * them. A library row needs both halves, so they are joined here: the transfer
+ * carries status and progress, the cloud carries bytes and file names, and the
+ * folder name is the only key between them.
+ */
+type PremiumizeRowSource = {
+	kind: PremiumizeRowKind;
+	id: string;
+	name: string;
+	/** Files from `item/listall`, already narrowed to this row. */
+	files: PremiumizeItem[];
+	transfer?: PremiumizeTransfer;
+};
+
+const PM_STATUS: Record<string, UserTorrentStatus> = {
+	queued: UserTorrentStatus.waiting,
+	running: UserTorrentStatus.downloading,
+	finished: UserTorrentStatus.finished,
+	seeding: UserTorrentStatus.finished,
+	error: UserTorrentStatus.error,
+};
+
+/**
+ * `progress` and `message` are documented as 1.0 and "" on a finished transfer
+ * and are `null` in production, so `progress * 100` renders NaN unless it is
+ * coalesced. A row with no transfer behind it is content already sitting in the
+ * cloud, which is finished by definition.
+ */
+const getPmProgress = (transfer?: PremiumizeTransfer): [UserTorrentStatus, number] => {
+	if (!transfer) return [UserTorrentStatus.finished, 100];
+	const status = PM_STATUS[transfer.status] ?? UserTorrentStatus.error;
+	if (status === UserTorrentStatus.finished) return [status, 100];
+	return [status, Math.round((transfer.progress ?? 0) * 100)];
+};
+
+export function convertToPremiumizeUserTorrent(
+	source: PremiumizeRowSource,
+	hash: string
+): UserTorrent {
+	const filenames = source.files.map((file) => file.name);
+	const torrentAndFiles = [source.name, ...filenames];
+	const hasEpisodes = checkArithmeticSequenceInFilenames(filenames);
+	const noPlayableFiles =
+		filenames.length > 0 && every(torrentAndFiles, (f) => !isVideo({ path: f }));
+
+	let mediaType: UserTorrent['mediaType'] = getTypeByNameAndFileCount(source.name);
+	if (noPlayableFiles) {
+		mediaType = 'other';
+	} else if (
+		hasEpisodes ||
+		some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
+		some(torrentAndFiles, (f) => /season.?\d+/i.test(f)) ||
+		some(torrentAndFiles, (f) => /episodes?\s?\d+/i.test(f))
+	) {
+		mediaType = 'tv';
+	}
+
+	let info: ParsedFilename | undefined;
+	if (mediaType !== 'other') {
+		try {
+			info =
+				mediaType === 'movie'
+					? filenameParse(source.name)
+					: filenameParse(source.name, true);
+		} catch {
+			info = undefined;
+		}
+	}
+	if (info && (!info.title || !/\w/.test(info.title))) info = undefined;
+
+	const [status, progress] = getPmProgress(source.transfer);
+	const bytes = source.files.reduce((total, file) => total + (file.size || 0), 0);
+	// Premiumize stamps no time on a transfer, so the earliest file is the only
+	// record of when the content arrived.
+	const createdAt = source.files.reduce(
+		(earliest, file) =>
+			file.created_at && file.created_at < earliest ? file.created_at : earliest,
+		Number.MAX_SAFE_INTEGER
+	);
+
+	return {
+		id: toPremiumizeRowId(source.kind, source.id),
+		filename: source.name,
+		title: getMediaId(info ?? source.name, mediaType, false) || source.name,
+		hash,
+		bytes,
+		progress,
+		status,
+		serviceStatus: source.transfer?.status ?? 'stored',
+		added: createdAt === Number.MAX_SAFE_INTEGER ? new Date() : new Date(createdAt * 1000),
+		mediaType,
+		info,
+		// Premiumize links expire and cost nothing to re-mint, so none are stored;
+		// playback resolves from the file id (or the hash) on demand.
+		links: [],
+		selectedFiles: source.files.map((file) => ({
+			fileId: file.id,
+			filename: file.name,
+			filesize: file.size,
+			link: '',
+		})),
+		seeders: 0,
+		speed: 0,
+	};
+}
+
+/** Files in `item/listall` are addressed by path; a row owns everything under its folder. */
+const groupPremiumizeItemsByTopFolder = (items: PremiumizeItem[]) => {
+	const byFolder = new Map<string, PremiumizeItem[]>();
+	const rootFiles = new Map<string, PremiumizeItem>();
+	for (const item of items) {
+		const separator = item.path?.indexOf('/') ?? -1;
+		if (separator < 0) {
+			rootFiles.set(item.id, item);
+			continue;
+		}
+		const folder = item.path.slice(0, separator);
+		const bucket = byFolder.get(folder);
+		if (bucket) bucket.push(item);
+		else byFolder.set(folder, [item]);
+	}
+	return { byFolder, rootFiles };
+};
+
+export function buildPremiumizeRowSources(
+	transfers: PremiumizeTransfer[],
+	rootContent: PremiumizeFolderEntry[],
+	items: PremiumizeItem[]
+): PremiumizeRowSource[] {
+	const { byFolder, rootFiles } = groupPremiumizeItemsByTopFolder(items);
+	const folderNameById = new Map(
+		rootContent
+			.filter((entry) => entry.type === 'folder')
+			.map((entry) => [entry.id, entry.name])
+	);
+
+	const claimedFolders = new Set<string>();
+	const claimedFiles = new Set<string>();
+	const sources: PremiumizeRowSource[] = [];
+
+	for (const transfer of transfers) {
+		if (transfer.folder_id) {
+			claimedFolders.add(transfer.folder_id);
+			const name = folderNameById.get(transfer.folder_id) ?? transfer.name;
+			sources.push({
+				kind: 'transfer',
+				id: transfer.id,
+				name,
+				files: byFolder.get(name) ?? [],
+				transfer,
+			});
+			continue;
+		}
+		if (transfer.file_id) {
+			claimedFiles.add(transfer.file_id);
+			const file = rootFiles.get(transfer.file_id);
+			sources.push({
+				kind: 'transfer',
+				id: transfer.id,
+				name: file?.name ?? transfer.name,
+				files: file ? [file] : [],
+				transfer,
+			});
+			continue;
+		}
+		// Still queued, errored, or routed to an external cloud: both ids are
+		// null, which is not an error condition and must still show as a row.
+		sources.push({
+			kind: 'transfer',
+			id: transfer.id,
+			name: transfer.name,
+			files: [],
+			transfer,
+		});
+	}
+
+	// Content whose transfer record is gone - `transfer/clearfinished` removes
+	// records and leaves the files - would otherwise be invisible in DMM.
+	for (const entry of rootContent) {
+		if (entry.type === 'folder') {
+			if (claimedFolders.has(entry.id)) continue;
+			sources.push({
+				kind: 'folder',
+				id: entry.id,
+				name: entry.name,
+				files: byFolder.get(entry.name) ?? [],
+			});
+		} else {
+			if (claimedFiles.has(entry.id)) continue;
+			const file = rootFiles.get(entry.id);
+			sources.push({
+				kind: 'file',
+				id: entry.id,
+				name: entry.name,
+				files: file ? [file] : [],
+			});
+		}
+	}
+
+	return sources;
+}
+
+export const fetchPremiumize = async (
+	pmKey: string,
+	callback: (torrents: UserTorrent[]) => Promise<void>,
+	customLimit?: number
+) => {
+	const startedAt = Date.now();
+	console.log('[PremiumizeFetch] start', { customLimit: customLimit ?? null });
+	try {
+		// Three calls for the whole library, whatever its size: the transfer
+		// queue, the root listing and every file in the account.
+		const [transfers, root, items] = await Promise.all([
+			listPremiumizeTransfers(pmKey),
+			listPremiumizeFolder(pmKey),
+			listAllPremiumizeItems(pmKey),
+		]);
+
+		const sources = buildPremiumizeRowSources(transfers, root.content ?? [], items);
+		const limited = customLimit ? sources.slice(0, customLimit) : sources;
+
+		if (limited.length === 0) {
+			await callback([]);
+			console.log('[PremiumizeFetch] end', {
+				elapsedMs: Date.now() - startedAt,
+				returned: 0,
+			});
+			return;
+		}
+
+		// Only a live transfer can give up its info hash, and only through the
+		// `job/src` redirect - one request each, which is why it is done for the
+		// transfer rows alone and never for the whole cloud.
+		const hashes = await resolvePremiumizeTransferHashes(
+			pmKey,
+			limited.filter((source) => source.kind === 'transfer').map((source) => source.id)
+		);
+
+		const torrents = limited.map((source) =>
+			convertToPremiumizeUserTorrent(source, hashes[source.id] ?? '')
+		);
+		await callback(torrents);
+		console.log('[PremiumizeFetch] end', {
+			elapsedMs: Date.now() - startedAt,
+			returned: torrents.length,
+			withHash: Object.keys(hashes).length,
+		});
+	} catch (error) {
+		await callback([]);
+		const apiError = getErrorMessage(error);
+		toast.error(
+			apiError ? `Premiumize error: ${apiError}` : 'Failed to fetch Premiumize transfers.',
+			genericToastOptions
+		);
+		console.error('[PremiumizeFetch] error', { elapsedMs: Date.now() - startedAt, error });
+	}
+};

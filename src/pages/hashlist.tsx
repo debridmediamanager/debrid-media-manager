@@ -205,6 +205,7 @@ function HashlistPage() {
 						rdAvailable: false,
 						adAvailable: false,
 						tbAvailable: false,
+						pmAvailable: false,
 						noVideos: false,
 						files: [],
 						...torrent,

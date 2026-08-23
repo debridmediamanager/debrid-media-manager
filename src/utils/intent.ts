@@ -1,4 +1,5 @@
 import { unlockLink } from '@/services/allDebrid';
+import { directDownloadPremiumize } from '@/services/premiumize';
 import {
 	addHashAsMagnet,
 	deleteTorrent,
@@ -15,10 +16,10 @@ import {
 
 // 'tbw' is a TorBox web download, which lives in its own namespace with its own
 // list and its own download-link endpoint — it cannot be resolved as a torrent.
-export type WatchService = 'rd' | 'ad' | 'tb' | 'tbw';
+export type WatchService = 'rd' | 'ad' | 'tb' | 'tbw' | 'pm';
 
 export const isWatchService = (value: unknown): value is WatchService =>
-	value === 'rd' || value === 'ad' || value === 'tb' || value === 'tbw';
+	value === 'rd' || value === 'ad' || value === 'tb' || value === 'tbw' || value === 'pm';
 
 const basename = (path: string) => path.split('/').pop() || path;
 
@@ -156,6 +157,44 @@ const getTbWebDownloadIntent = async (
 	}
 };
 
+/**
+ * Premiumize resolves a hash to a playable URL in one stateless call: nothing is
+ * added to the account, nothing has to be cleaned up afterwards, and the CDN
+ * link it hands back needs no authentication and is not IP-bound. That makes it
+ * the only one of the four that can be resolved entirely server-side without
+ * touching the user's library.
+ */
+const getPmInstantIntent = async (
+	pmKey: string,
+	hash: string,
+	os: string,
+	player: string,
+	fileName?: string
+): Promise<{ intent?: string; error?: string }> => {
+	try {
+		const files = await directDownloadPremiumize(pmKey, hash);
+		if (files.length === 0) {
+			return { error: `No Premiumize files found for ${hash}` };
+		}
+
+		const target = basename(fileName || '').toLowerCase();
+		const byName = target
+			? files.find((file) => basename(file.path).toLowerCase() === target)
+			: undefined;
+		// `content` is ordered by Premiumize, and content[0] for a torrent is
+		// whatever sorts first — a poster JPEG in the reference case — so the
+		// fallback has to be the biggest file, never the first.
+		const biggest = files.reduce((best, file) =>
+			(file.size ?? 0) > (best.size ?? 0) ? file : best
+		);
+		const picked = byName ?? biggest;
+		const streamUrl = picked.stream_link || picked.link;
+		return { intent: buildPlayerIntent(os, player, streamUrl, streamUrl) };
+	} catch (e: any) {
+		return { error: `Failed to get Premiumize stream: ${e.message || e}` };
+	}
+};
+
 const getRdInstantIntent = async (
 	rdKey: string,
 	hash: string,
@@ -220,6 +259,9 @@ export const getInstantIntent = async (
 	if (service === 'tbw') {
 		return getTbWebDownloadIntent(key, hash, os, player, fileName);
 	}
+	if (service === 'pm') {
+		return getPmInstantIntent(key, hash, os, player, fileName);
+	}
 	if (service === 'ad') {
 		return {
 			error: 'AllDebrid magnets must be prepared in the browser; call /api/watch with a link',
@@ -246,6 +288,11 @@ export const getIntent = async (
 ): Promise<{ intent?: string; error?: string }> => {
 	if (service === 'tb' || service === 'tbw') {
 		return { error: 'TorBox links are resolved by hash; call /api/watch/instant instead' };
+	}
+	if (service === 'pm') {
+		// A Premiumize CDN link is already the playable URL: no auth, no
+		// redemption step, and Range works. There is nothing to unrestrict.
+		return { intent: buildPlayerIntent(os, player, link, link) };
 	}
 	if (service === 'ad') {
 		try {

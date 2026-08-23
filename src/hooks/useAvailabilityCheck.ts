@@ -1,4 +1,5 @@
 import { SearchResult } from '@/services/mediasearch';
+import { CACHE_CHECK_CHUNK_SIZE, checkPremiumizeCache } from '@/services/premiumize';
 import { checkCachedStatus, TorBoxCachedResponse } from '@/services/torbox';
 import {
 	checkDatabaseAvailabilityAd,
@@ -11,7 +12,7 @@ import { getCachedTrackerStats, shouldIncludeTrackerStats } from '@/utils/tracke
 import { useCallback, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
-export type DebridService = 'RD' | 'AD' | 'TB';
+export type DebridService = 'RD' | 'AD' | 'TB' | 'PM';
 
 const formatServicesLabel = (services: DebridService[]) =>
 	services.length ? services.join(' / ') : 'services';
@@ -32,11 +33,14 @@ const markAvailableServices = (
 				result.adAvailable || Boolean(availableHashesByService.AD?.has(result.hash));
 			const tbAvailable =
 				result.tbAvailable || Boolean(availableHashesByService.TB?.has(result.hash));
+			const pmAvailable =
+				result.pmAvailable || Boolean(availableHashesByService.PM?.has(result.hash));
 
 			if (
 				rdAvailable === result.rdAvailable &&
 				adAvailable === result.adAvailable &&
-				tbAvailable === result.tbAvailable
+				tbAvailable === result.tbAvailable &&
+				pmAvailable === result.pmAvailable
 			) {
 				return result;
 			}
@@ -47,6 +51,7 @@ const markAvailableServices = (
 				rdAvailable,
 				adAvailable,
 				tbAvailable,
+				pmAvailable,
 			};
 			delete updated.trackerStats;
 			return updated;
@@ -60,6 +65,7 @@ export function useAvailabilityCheck(
 	rdKey: string | null,
 	adKey: string | null,
 	torboxKey: string | null,
+	premiumizeKey: string | null,
 	imdbId: string,
 	searchResults: SearchResult[],
 	setSearchResults: React.Dispatch<React.SetStateAction<SearchResult[]>>,
@@ -101,6 +107,7 @@ export function useAvailabilityCheck(
 			if (rdKey) available.push('RD');
 			if (adKey) available.push('AD');
 			if (torboxKey) available.push('TB');
+			if (premiumizeKey) available.push('PM');
 
 			if (!requested || requested.length === 0) {
 				return available;
@@ -109,7 +116,7 @@ export function useAvailabilityCheck(
 			const requestedSet = new Set(requested);
 			return available.filter((service) => requestedSet.has(service));
 		},
-		[rdKey, adKey, torboxKey]
+		[rdKey, adKey, torboxKey, premiumizeKey]
 	);
 
 	const isServiceAvailable = useCallback((service: DebridService, result: SearchResult) => {
@@ -120,6 +127,8 @@ export function useAvailabilityCheck(
 				return Boolean(result.adAvailable);
 			case 'TB':
 				return Boolean(result.tbAvailable);
+			case 'PM':
+				return Boolean(result.pmAvailable);
 			default:
 				return false;
 		}
@@ -168,94 +177,110 @@ export function useAvailabilityCheck(
 
 			try {
 				// Run checks in parallel for RD, AD, and TorBox
-				const [rdCheckResult, adCheckResult, tbCheckResult, trackerStatsResult] =
-					await Promise.allSettled([
-						// RD availability check
-						rdKey && servicesNeedingCheck.includes('RD')
-							? (async () => {
-									let addRdResponse: any;
-									if (`rd:${result.hash}` in hashAndProgress) {
-										await deleteRd(result.hash);
-									}
-									addRdResponse = await addRd(result.hash, true);
+				const [
+					rdCheckResult,
+					adCheckResult,
+					tbCheckResult,
+					pmCheckResult,
+					trackerStatsResult,
+				] = await Promise.allSettled([
+					// RD availability check
+					rdKey && servicesNeedingCheck.includes('RD')
+						? (async () => {
+								let addRdResponse: any;
+								if (`rd:${result.hash}` in hashAndProgress) {
 									await deleteRd(result.hash);
+								}
+								addRdResponse = await addRd(result.hash, true);
+								await deleteRd(result.hash);
 
-									const isCachedInRD =
-										addRdResponse &&
-										addRdResponse.id &&
-										addRdResponse.status === 'downloaded' &&
-										addRdResponse.progress === 100;
+								const isCachedInRD =
+									addRdResponse &&
+									addRdResponse.id &&
+									addRdResponse.status === 'downloaded' &&
+									addRdResponse.progress === 100;
 
-									return { addRdResponse, isCachedInRD };
-								})()
-							: Promise.resolve({
-									addRdResponse: null,
-									isCachedInRD: Boolean(result.rdAvailable),
-								}),
+								return { addRdResponse, isCachedInRD };
+							})()
+						: Promise.resolve({
+								addRdResponse: null,
+								isCachedInRD: Boolean(result.rdAvailable),
+							}),
 
-						// AD availability check
-						adKey && servicesNeedingCheck.includes('AD')
-							? (async () => {
-									let addAdResponse: any;
-									if (`ad:${result.hash}` in hashAndProgress) {
-										await deleteAd(result.hash);
-									}
-									addAdResponse = await addAd(result.hash, true);
+					// AD availability check
+					adKey && servicesNeedingCheck.includes('AD')
+						? (async () => {
+								let addAdResponse: any;
+								if (`ad:${result.hash}` in hashAndProgress) {
 									await deleteAd(result.hash);
+								}
+								addAdResponse = await addAd(result.hash, true);
+								await deleteAd(result.hash);
 
-									// Check if addAd found it cached
-									const isCachedInAD =
-										addAdResponse &&
-										addAdResponse.id &&
-										addAdResponse.statusCode === 4 &&
-										addAdResponse.status === 'Ready';
+								// Check if addAd found it cached
+								const isCachedInAD =
+									addAdResponse &&
+									addAdResponse.id &&
+									addAdResponse.statusCode === 4 &&
+									addAdResponse.status === 'Ready';
 
-									return { addAdResponse, isCachedInAD };
-								})()
-							: Promise.resolve({
-									addAdResponse: null,
-									isCachedInAD: Boolean(result.adAvailable),
-								}),
+								return { addAdResponse, isCachedInAD };
+							})()
+						: Promise.resolve({
+								addAdResponse: null,
+								isCachedInAD: Boolean(result.adAvailable),
+							}),
 
-						// TorBox availability check (read-only, no add/delete)
-						torboxKey && servicesNeedingCheck.includes('TB')
-							? (async () => {
-									const resp = await checkCachedStatus(
-										{ hash: result.hash, format: 'object', list_files: true },
-										torboxKey
-									);
-									const cached = resp.data as TorBoxCachedResponse | null;
-									const entry = cached?.[result.hash];
-									const isCachedInTB =
-										!!entry &&
-										Array.isArray(entry.files) &&
-										entry.files.length > 0;
-									return { addTbResponse: null, isCachedInTB };
-								})()
-							: Promise.resolve({
-									addTbResponse: null,
-									isCachedInTB: Boolean(result.tbAvailable),
-								}),
+					// TorBox availability check (read-only, no add/delete)
+					torboxKey && servicesNeedingCheck.includes('TB')
+						? (async () => {
+								const resp = await checkCachedStatus(
+									{ hash: result.hash, format: 'object', list_files: true },
+									torboxKey
+								);
+								const cached = resp.data as TorBoxCachedResponse | null;
+								const entry = cached?.[result.hash];
+								const isCachedInTB =
+									!!entry && Array.isArray(entry.files) && entry.files.length > 0;
+								return { addTbResponse: null, isCachedInTB };
+							})()
+						: Promise.resolve({
+								addTbResponse: null,
+								isCachedInTB: Boolean(result.tbAvailable),
+							}),
 
-						// Tracker stats check (only if enabled and not already available)
-						(async () => {
-							if (
-								!shouldIncludeTrackerStats() ||
-								result.rdAvailable ||
-								result.adAvailable ||
-								result.tbAvailable
-							) {
-								return null;
-							}
+					// Premiumize availability check (read-only, nothing added
+					// to the account - unlike AllDebrid, where the probe is
+					// the upload)
+					premiumizeKey && servicesNeedingCheck.includes('PM')
+						? (async () => {
+								const [probe] = await checkPremiumizeCache(premiumizeKey, [
+									result.hash,
+								]);
+								return { isCachedInPM: Boolean(probe?.cached) };
+							})()
+						: Promise.resolve({ isCachedInPM: Boolean(result.pmAvailable) }),
 
-							// For single torrent checks, force refresh if it was previously dead
-							const currentStats = result.trackerStats;
-							const forceRefresh = currentStats && currentStats.seeders === 0;
+					// Tracker stats check (only if enabled and not already available)
+					(async () => {
+						if (
+							!shouldIncludeTrackerStats() ||
+							result.rdAvailable ||
+							result.adAvailable ||
+							result.tbAvailable ||
+							result.pmAvailable
+						) {
+							return null;
+						}
 
-							// Use cached stats if fresh, otherwise scrape new ones
-							return await getCachedTrackerStats(result.hash, 24, forceRefresh);
-						})(),
-					]);
+						// For single torrent checks, force refresh if it was previously dead
+						const currentStats = result.trackerStats;
+						const forceRefresh = currentStats && currentStats.seeders === 0;
+
+						// Use cached stats if fresh, otherwise scrape new ones
+						return await getCachedTrackerStats(result.hash, 24, forceRefresh);
+					})(),
+				]);
 
 				// Process RD check result
 				let isCachedInRD = Boolean(result.rdAvailable);
@@ -293,10 +318,19 @@ export function useAvailabilityCheck(
 					console.error('TorBox availability check failed:', tbCheckResult.reason);
 				}
 
+				// Process Premiumize check result
+				let isCachedInPM = Boolean(result.pmAvailable);
+				if (pmCheckResult.status === 'fulfilled') {
+					isCachedInPM = pmCheckResult.value.isCachedInPM;
+				} else if (premiumizeKey && servicesNeedingCheck.includes('PM')) {
+					console.error('Premiumize availability check failed:', pmCheckResult.reason);
+				}
+
 				const positiveAvailability: Partial<Record<DebridService, Set<string>>> = {};
 				if (isCachedInRD) positiveAvailability.RD = new Set([result.hash]);
 				if (isCachedInAD) positiveAvailability.AD = new Set([result.hash]);
 				if (isCachedInTB) positiveAvailability.TB = new Set([result.hash]);
+				if (isCachedInPM) positiveAvailability.PM = new Set([result.hash]);
 
 				if (Object.keys(positiveAvailability).length > 0 && isMounted.current) {
 					markAvailableServices(setSearchResults, sortFunction, positiveAvailability);
@@ -308,7 +342,8 @@ export function useAvailabilityCheck(
 					trackerStatsResult.value &&
 					!isCachedInRD &&
 					!isCachedInAD &&
-					!isCachedInTB
+					!isCachedInTB &&
+					!isCachedInPM
 				) {
 					const trackerStats = trackerStatsResult.value;
 
@@ -334,7 +369,8 @@ export function useAvailabilityCheck(
 					trackerStatsResult.status === 'rejected' &&
 					!isCachedInRD &&
 					!isCachedInAD &&
-					!isCachedInTB
+					!isCachedInTB &&
+					!isCachedInPM
 				) {
 					console.error('Failed to get tracker stats:', trackerStatsResult.reason);
 				}
@@ -397,6 +433,7 @@ export function useAvailabilityCheck(
 			rdKey,
 			adKey,
 			torboxKey,
+			premiumizeKey,
 			searchResults,
 			setSearchResults,
 			hashAndProgress,
@@ -469,11 +506,15 @@ export function useAvailabilityCheck(
 			const tbTargets = services.includes('TB')
 				? torrentsToCheck.filter((r) => !r.tbAvailable)
 				: [];
+			const pmTargets = services.includes('PM')
+				? torrentsToCheck.filter((r) => !r.pmAvailable)
+				: [];
 
 			const checkProgress: Record<DebridService, { completed: number; total: number }> = {
 				RD: { completed: 0, total: rdTargets.length },
 				AD: { completed: 0, total: adTargets.length },
 				TB: { completed: 0, total: tbTargets.length },
+				PM: { completed: 0, total: pmTargets.length },
 			};
 			let statsProgress = { completed: 0, total: 0 };
 			let torrentsWithSeeds = 0;
@@ -481,6 +522,7 @@ export function useAvailabilityCheck(
 				RD: 0,
 				AD: 0,
 				TB: 0,
+				PM: 0,
 			};
 
 			const updateProgressMessage = () => {
@@ -511,197 +553,240 @@ export function useAvailabilityCheck(
 			};
 
 			try {
-				const [rdCheckResults, adCheckResults, tbCheckResults, trackerStatsResults] =
-					await Promise.all([
-						// RD availability checks with concurrency limit
-						services.includes('RD')
-							? processWithConcurrency(
-									rdTargets,
-									async (result: SearchResult) => {
-										try {
-											let addRdResponse: any;
-											if (`rd:${result.hash}` in hashAndProgress) {
-												await deleteRd(result.hash);
-											}
-											addRdResponse = await addRd(result.hash, true);
-											await deleteRd(result.hash);
-
-											const isCachedInRD =
-												addRdResponse &&
-												addRdResponse.id &&
-												addRdResponse.status === 'downloaded' &&
-												addRdResponse.progress === 100;
-
-											if (isCachedInRD) {
-												realtimeAvailable.RD++;
-											}
-
-											return { result, isCachedInRD };
-										} catch (error) {
-											console.error(
-												`Failed RD check for ${result.title}:`,
-												error
-											);
-											throw error;
-										} finally {
-											removeChecking(result.hash, ['RD']);
-										}
-									},
-									3,
-									(completed: number, total: number) => {
-										checkProgress.RD = { completed, total };
-										updateProgressMessage();
-									}
-								)
-							: Promise.resolve([]),
-
-						// AD availability checks with concurrency limit
-						services.includes('AD')
-							? processWithConcurrency(
-									adTargets,
-									async (result: SearchResult) => {
-										try {
-											let addAdResponse: any;
-											if (`ad:${result.hash}` in hashAndProgress) {
-												await deleteAd(result.hash);
-											}
-											addAdResponse = await addAd(result.hash, true);
-											await deleteAd(result.hash);
-
-											// Check if addAd returned a response and is cached
-											const isCachedInAD =
-												addAdResponse &&
-												addAdResponse.id &&
-												addAdResponse.statusCode === 4 &&
-												addAdResponse.status === 'Ready';
-
-											if (isCachedInAD) {
-												realtimeAvailable.AD++;
-											}
-
-											return { result, isCachedInAD };
-										} catch (error) {
-											console.error(
-												`Failed AD check for ${result.title}:`,
-												error
-											);
-											throw error;
-										} finally {
-											removeChecking(result.hash, ['AD']);
-										}
-									},
-									3,
-									(completed: number, total: number) => {
-										checkProgress.AD = { completed, total };
-										updateProgressMessage();
-									}
-								)
-							: Promise.resolve([]),
-
-						// TorBox availability checks (read-only batch via checkcached)
-						services.includes('TB')
-							? (async () => {
-									const batchSize = 100;
-									const allCached: Record<string, any> = {};
-									for (let i = 0; i < tbTargets.length; i += batchSize) {
-										const batch = tbTargets.slice(i, i + batchSize);
-										const resp = await checkCachedStatus(
-											{
-												hash: batch.map((t) => t.hash),
-												format: 'object',
-												list_files: true,
-											},
-											torboxKey!
-										);
-										if (resp.success && resp.data) {
-											Object.assign(allCached, resp.data as any);
-										}
-										checkProgress.TB = {
-											completed: Math.min(i + batchSize, tbTargets.length),
-											total: tbTargets.length,
-										};
-										updateProgressMessage();
-									}
-
-									return tbTargets.map((result) => {
-										const entry = allCached[result.hash];
-										const isCachedInTB =
-											!!entry &&
-											Array.isArray(entry.files) &&
-											entry.files.length > 0;
-										if (isCachedInTB) realtimeAvailable.TB++;
-										removeChecking(result.hash, ['TB']);
-										return {
-											item: result,
-											success: true,
-											result: { result, isCachedInTB },
-										};
-									});
-								})()
-							: Promise.resolve([]),
-
-						// Tracker stats checks (only for non-available torrents)
-						(async () => {
-							if (!shouldIncludeTrackerStats()) {
-								return [];
-							}
-
-							// Filter out torrents that are already available in any service
-							const torrentsNeedingStats = torrentsToCheck.filter(
-								(t) => !t.rdAvailable && !t.adAvailable && !t.tbAvailable
-							);
-
-							if (torrentsNeedingStats.length === 0) {
-								return [];
-							}
-
-							statsProgress.total = torrentsNeedingStats.length;
-							updateProgressMessage();
-
-							return processWithConcurrency(
-								torrentsNeedingStats,
+				const [
+					rdCheckResults,
+					adCheckResults,
+					tbCheckResults,
+					pmCheckResults,
+					trackerStatsResults,
+				] = await Promise.all([
+					// RD availability checks with concurrency limit
+					services.includes('RD')
+						? processWithConcurrency(
+								rdTargets,
 								async (result: SearchResult) => {
 									try {
-										// For bulk checks, use 72-hour cache to reduce load
-										const trackerStats = await getCachedTrackerStats(
-											result.hash,
-											72,
-											false
-										);
-										if (trackerStats) {
-											result.trackerStats = {
-												seeders: trackerStats.seeders,
-												leechers: trackerStats.leechers,
-												downloads: trackerStats.downloads,
-												hasActivity:
-													trackerStats.seeders >= 1 &&
-													trackerStats.leechers +
-														trackerStats.downloads >=
-														1,
-											};
-
-											// Count torrents with seeds
-											if (trackerStats.seeders > 0) {
-												torrentsWithSeeds++;
-											}
+										let addRdResponse: any;
+										if (`rd:${result.hash}` in hashAndProgress) {
+											await deleteRd(result.hash);
 										}
-										return { result, trackerStats };
+										addRdResponse = await addRd(result.hash, true);
+										await deleteRd(result.hash);
+
+										const isCachedInRD =
+											addRdResponse &&
+											addRdResponse.id &&
+											addRdResponse.status === 'downloaded' &&
+											addRdResponse.progress === 100;
+
+										if (isCachedInRD) {
+											realtimeAvailable.RD++;
+										}
+
+										return { result, isCachedInRD };
 									} catch (error) {
 										console.error(
-											`Failed to get tracker stats for ${result.title}:`,
+											`Failed RD check for ${result.title}:`,
 											error
 										);
-										return { result, trackerStats: null };
+										throw error;
+									} finally {
+										removeChecking(result.hash, ['RD']);
 									}
 								},
-								5, // Higher concurrency for tracker stats since they're lighter
+								3,
 								(completed: number, total: number) => {
-									statsProgress = { completed, total };
+									checkProgress.RD = { completed, total };
 									updateProgressMessage();
 								}
-							);
-						})(),
-					]);
+							)
+						: Promise.resolve([]),
+
+					// AD availability checks with concurrency limit
+					services.includes('AD')
+						? processWithConcurrency(
+								adTargets,
+								async (result: SearchResult) => {
+									try {
+										let addAdResponse: any;
+										if (`ad:${result.hash}` in hashAndProgress) {
+											await deleteAd(result.hash);
+										}
+										addAdResponse = await addAd(result.hash, true);
+										await deleteAd(result.hash);
+
+										// Check if addAd returned a response and is cached
+										const isCachedInAD =
+											addAdResponse &&
+											addAdResponse.id &&
+											addAdResponse.statusCode === 4 &&
+											addAdResponse.status === 'Ready';
+
+										if (isCachedInAD) {
+											realtimeAvailable.AD++;
+										}
+
+										return { result, isCachedInAD };
+									} catch (error) {
+										console.error(
+											`Failed AD check for ${result.title}:`,
+											error
+										);
+										throw error;
+									} finally {
+										removeChecking(result.hash, ['AD']);
+									}
+								},
+								3,
+								(completed: number, total: number) => {
+									checkProgress.AD = { completed, total };
+									updateProgressMessage();
+								}
+							)
+						: Promise.resolve([]),
+
+					// TorBox availability checks (read-only batch via checkcached)
+					services.includes('TB')
+						? (async () => {
+								const batchSize = 100;
+								const allCached: Record<string, any> = {};
+								for (let i = 0; i < tbTargets.length; i += batchSize) {
+									const batch = tbTargets.slice(i, i + batchSize);
+									const resp = await checkCachedStatus(
+										{
+											hash: batch.map((t) => t.hash),
+											format: 'object',
+											list_files: true,
+										},
+										torboxKey!
+									);
+									if (resp.success && resp.data) {
+										Object.assign(allCached, resp.data as any);
+									}
+									checkProgress.TB = {
+										completed: Math.min(i + batchSize, tbTargets.length),
+										total: tbTargets.length,
+									};
+									updateProgressMessage();
+								}
+
+								return tbTargets.map((result) => {
+									const entry = allCached[result.hash];
+									const isCachedInTB =
+										!!entry &&
+										Array.isArray(entry.files) &&
+										entry.files.length > 0;
+									if (isCachedInTB) realtimeAvailable.TB++;
+									removeChecking(result.hash, ['TB']);
+									return {
+										item: result,
+										success: true,
+										result: { result, isCachedInTB },
+									};
+								});
+							})()
+						: Promise.resolve([]),
+
+					// Premiumize availability checks. One POST answers up to
+					// 1,000 hashes and adds nothing to the account, so this is
+					// the cheapest of the four by an order of magnitude - a
+					// whole page of results is usually a single request.
+					services.includes('PM')
+						? (async () => {
+								const cached = new Set<string>();
+								for (let i = 0; i < pmTargets.length; i += CACHE_CHECK_CHUNK_SIZE) {
+									const batch = pmTargets.slice(i, i + CACHE_CHECK_CHUNK_SIZE);
+									const probes = await checkPremiumizeCache(
+										premiumizeKey!,
+										batch.map((t) => t.hash)
+									);
+									for (const probe of probes) {
+										if (probe.cached) cached.add(probe.hash.toLowerCase());
+									}
+									checkProgress.PM = {
+										completed: Math.min(
+											i + CACHE_CHECK_CHUNK_SIZE,
+											pmTargets.length
+										),
+										total: pmTargets.length,
+									};
+									updateProgressMessage();
+								}
+
+								return pmTargets.map((result) => {
+									const isCachedInPM = cached.has(result.hash.toLowerCase());
+									if (isCachedInPM) realtimeAvailable.PM++;
+									removeChecking(result.hash, ['PM']);
+									return {
+										item: result,
+										success: true,
+										result: { result, isCachedInPM },
+									};
+								});
+							})()
+						: Promise.resolve([]),
+
+					// Tracker stats checks (only for non-available torrents)
+					(async () => {
+						if (!shouldIncludeTrackerStats()) {
+							return [];
+						}
+
+						// Filter out torrents that are already available in any service
+						const torrentsNeedingStats = torrentsToCheck.filter(
+							(t) =>
+								!t.rdAvailable && !t.adAvailable && !t.tbAvailable && !t.pmAvailable
+						);
+
+						if (torrentsNeedingStats.length === 0) {
+							return [];
+						}
+
+						statsProgress.total = torrentsNeedingStats.length;
+						updateProgressMessage();
+
+						return processWithConcurrency(
+							torrentsNeedingStats,
+							async (result: SearchResult) => {
+								try {
+									// For bulk checks, use 72-hour cache to reduce load
+									const trackerStats = await getCachedTrackerStats(
+										result.hash,
+										72,
+										false
+									);
+									if (trackerStats) {
+										result.trackerStats = {
+											seeders: trackerStats.seeders,
+											leechers: trackerStats.leechers,
+											downloads: trackerStats.downloads,
+											hasActivity:
+												trackerStats.seeders >= 1 &&
+												trackerStats.leechers + trackerStats.downloads >= 1,
+										};
+
+										// Count torrents with seeds
+										if (trackerStats.seeders > 0) {
+											torrentsWithSeeds++;
+										}
+									}
+									return { result, trackerStats };
+								} catch (error) {
+									console.error(
+										`Failed to get tracker stats for ${result.title}:`,
+										error
+									);
+									return { result, trackerStats: null };
+								}
+							},
+							5, // Higher concurrency for tracker stats since they're lighter
+							(completed: number, total: number) => {
+								statsProgress = { completed, total };
+								updateProgressMessage();
+							}
+						);
+					})(),
+				]);
 
 				// Filter out tracker stats for torrents that turned out to be cached
 				const cachedHashes = new Set([
@@ -713,6 +798,9 @@ export function useAvailabilityCheck(
 						.map((r) => r.item.hash),
 					...tbCheckResults
 						.filter((r) => r.success && r.result?.isCachedInTB)
+						.map((r) => r.item.hash),
+					...pmCheckResults
+						.filter((r) => r.success && r.result?.isCachedInPM)
 						.map((r) => r.item.hash),
 				]);
 
@@ -730,7 +818,12 @@ export function useAvailabilityCheck(
 					}
 				});
 
-				const allResults = [...rdCheckResults, ...adCheckResults, ...tbCheckResults];
+				const allResults = [
+					...rdCheckResults,
+					...adCheckResults,
+					...tbCheckResults,
+					...pmCheckResults,
+				];
 				const succeeded = allResults.filter((r) => r.success);
 				const failed = allResults.filter((r) => !r.success);
 
@@ -742,6 +835,7 @@ export function useAvailabilityCheck(
 					RD: 0,
 					AD: 0,
 					TB: 0,
+					PM: 0,
 				};
 
 				// Update database cache and get final count
@@ -755,6 +849,9 @@ export function useAvailabilityCheck(
 					const tbSuccessfulHashes = tbCheckResults
 						.filter((r) => r.success && r.result?.isCachedInTB)
 						.map((r) => r.item.hash);
+					const pmSuccessfulHashes = pmCheckResults
+						.filter((r) => r.success && r.result?.isCachedInPM)
+						.map((r) => r.item.hash);
 
 					const positiveAvailability: Partial<Record<DebridService, Set<string>>> = {};
 					if (rdSuccessfulHashes.length > 0) {
@@ -764,6 +861,10 @@ export function useAvailabilityCheck(
 					if (adSuccessfulHashes.length > 0) {
 						positiveAvailability.AD = new Set(adSuccessfulHashes);
 						availableByService.AD = adSuccessfulHashes.length;
+					}
+					if (pmSuccessfulHashes.length > 0) {
+						positiveAvailability.PM = new Set(pmSuccessfulHashes);
+						availableByService.PM = pmSuccessfulHashes.length;
 					}
 					if (tbSuccessfulHashes.length > 0) {
 						positiveAvailability.TB = new Set(tbSuccessfulHashes);
@@ -896,6 +997,7 @@ export function useAvailabilityCheck(
 			rdKey,
 			adKey,
 			torboxKey,
+			premiumizeKey,
 			setSearchResults,
 			hashAndProgress,
 			addRd,

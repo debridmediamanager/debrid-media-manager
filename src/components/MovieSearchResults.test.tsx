@@ -22,6 +22,7 @@ const baseResult: SearchResult = {
 	rdAvailable: false,
 	adAvailable: false,
 	tbAvailable: false,
+	pmAvailable: false,
 	files: [{ fileId: 1, filename: 'Sample.mkv', filesize: 1024 * 10 }],
 	noVideos: false,
 	medianFileSize: 10,
@@ -38,6 +39,7 @@ const renderComponent = (override?: Partial<React.ComponentProps<typeof MovieSea
 		rdKey: 'rd-key',
 		adKey: null,
 		torboxKey: null,
+		premiumizeKey: null,
 		player: '',
 		hashAndProgress: {},
 		handleShowInfo: vi.fn(),
@@ -47,9 +49,11 @@ const renderComponent = (override?: Partial<React.ComponentProps<typeof MovieSea
 		addRd: vi.fn().mockResolvedValue(undefined),
 		addAd: vi.fn().mockResolvedValue(undefined),
 		addTb: vi.fn().mockResolvedValue(undefined),
+		addPm: vi.fn().mockResolvedValue(undefined),
 		deleteRd: vi.fn().mockResolvedValue(undefined),
 		deleteAd: vi.fn().mockResolvedValue(undefined),
 		deleteTb: vi.fn().mockResolvedValue(undefined),
+		deletePm: vi.fn().mockResolvedValue(undefined),
 		imdbId: 'tt123',
 		isHashServiceChecking: () => false,
 		...override,
@@ -112,6 +116,7 @@ describe('MovieSearchResults', () => {
 		const tbCachedResult: SearchResult = {
 			...baseResult,
 			tbAvailable: true,
+			pmAvailable: false,
 			rdAvailable: false,
 		};
 
@@ -271,6 +276,7 @@ describe('MovieSearchResults', () => {
 			rdAvailable: false,
 			adAvailable: true,
 			tbAvailable: true,
+			pmAvailable: false,
 		};
 
 		const labelsInOrder = (container: HTMLElement) =>

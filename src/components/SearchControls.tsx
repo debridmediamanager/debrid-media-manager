@@ -12,6 +12,7 @@ interface SearchControlsProps {
 	rdKey: string | null;
 	adKey?: string | null;
 	torboxKey?: string | null;
+	premiumizeKey?: string | null;
 	onMassReport: (type: 'porn' | 'wrong_imdb' | 'wrong_season') => void;
 	mediaType: 'movie' | 'tv';
 	title: string;
@@ -31,6 +32,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 	rdKey,
 	adKey,
 	torboxKey,
+	premiumizeKey,
 	onMassReport,
 	mediaType,
 	title,
@@ -134,6 +136,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 					rdKey={rdKey}
 					adKey={adKey}
 					torboxKey={torboxKey}
+					premiumizeKey={premiumizeKey}
 				/>
 			</div>
 		</>

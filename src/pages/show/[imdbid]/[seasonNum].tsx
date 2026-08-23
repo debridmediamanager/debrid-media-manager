@@ -5,7 +5,12 @@ import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
 import UsenetResults from '@/components/UsenetResults';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
+import {
+	useAllDebridApiKey,
+	usePremiumizeApiKey,
+	useRealDebridAccessToken,
+	useTorBoxAccessToken,
+} from '@/hooks/auth';
 import { useAvailabilityCheck } from '@/hooks/useAvailabilityCheck';
 import { useExternalSources } from '@/hooks/useExternalSources';
 import { useMassReport } from '@/hooks/useMassReport';
@@ -25,6 +30,7 @@ import {
 	getQueryForEpisodeCount,
 } from '@/utils/episodeUtils';
 import {
+	checkAvailabilityPm,
 	checkDatabaseAvailabilityAd,
 	checkDatabaseAvailabilityRd,
 	checkDatabaseAvailabilityTb,
@@ -138,6 +144,7 @@ const TvSearch: FunctionComponent = () => {
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const torboxKey = useTorBoxAccessToken();
+	const premiumizeKey = usePremiumizeApiKey();
 
 	// Library sync status - used to prevent auto-availability check while library is still loading
 	const { isFetching: isLibrarySyncing } = useLibraryCache();
@@ -152,6 +159,7 @@ const TvSearch: FunctionComponent = () => {
 		rdAvailableCount?: number;
 		adAvailableCount?: number;
 		tbAvailableCount?: number;
+		pmAvailableCount?: number;
 		allSourcesCompleted: boolean;
 		pendingAvailabilityChecks: number;
 		isAvailabilityOnly?: boolean;
@@ -177,15 +185,18 @@ const TvSearch: FunctionComponent = () => {
 		addRd,
 		addAd,
 		addTb,
+		addPm,
 		sendTbToRd,
 		sendAdToRd,
 		deleteRd,
 		deleteAd,
 		deleteTb,
+		deletePm,
 	} = useTorrentManagement(
 		rdKey,
 		adKey,
 		torboxKey,
+		premiumizeKey,
 		imdbid as string,
 		searchResults,
 		setSearchResults
@@ -206,6 +217,7 @@ const TvSearch: FunctionComponent = () => {
 		rdKey,
 		adKey,
 		torboxKey,
+		premiumizeKey,
 		imdbid as string,
 		searchResults,
 		setSearchResults,
@@ -335,6 +347,7 @@ const TvSearch: FunctionComponent = () => {
 		let rdAvailableCount = 0;
 		let adAvailableCount = 0;
 		let tbAvailableCount = 0;
+		let pmAvailableCount = 0;
 		let pendingAvailabilityChecks = 0;
 		let allSourcesCompleted = false;
 		let finalResultCount = 0;
@@ -349,10 +362,12 @@ const TvSearch: FunctionComponent = () => {
 			toastShown = true;
 			setSearchCompleteInfo({
 				finalResults: finalResultCount,
-				totalAvailableCount: rdAvailableCount + adAvailableCount + tbAvailableCount,
+				totalAvailableCount:
+					rdAvailableCount + adAvailableCount + tbAvailableCount + pmAvailableCount,
 				rdAvailableCount,
 				adAvailableCount,
 				tbAvailableCount,
+				pmAvailableCount,
 				allSourcesCompleted: true,
 				pendingAvailabilityChecks: 0,
 			});
@@ -404,7 +419,10 @@ const TvSearch: FunctionComponent = () => {
 					const sorted = sortByMean([...prevResults, ...newUniqueResults]);
 
 					hashesToCheck = newUniqueResults
-						.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
+						.filter(
+							(r) =>
+								!r.rdAvailable && !r.adAvailable && !r.tbAvailable && !r.pmAvailable
+						)
 						.map((r) => r.hash);
 
 					addedCount = newUniqueResults.length;
@@ -448,6 +466,22 @@ const TvSearch: FunctionComponent = () => {
 							sortByMean
 						);
 						adAvailableCount += count;
+						pendingAvailabilityChecks--;
+						checkAndShowFinalToast();
+					});
+				}
+
+				if (premiumizeKey) {
+					pendingAvailabilityChecks++;
+					// One request for the whole batch, and nothing is added to the
+					// account - the cheapest availability check of the four.
+					checkAvailabilityPm(
+						premiumizeKey,
+						hashesToCheck,
+						setSearchResults,
+						sortByMean
+					).then((count) => {
+						pmAvailableCount += count;
 						pendingAvailabilityChecks--;
 						checkAndShowFinalToast();
 					});
@@ -561,6 +595,7 @@ const TvSearch: FunctionComponent = () => {
 				rdAvailable: false,
 				adAvailable: false,
 				tbAvailable: false,
+				pmAvailable: false,
 				noVideos: false,
 				files: r.files || [],
 			}));
@@ -621,6 +656,7 @@ const TvSearch: FunctionComponent = () => {
 			rdAvailableCount,
 			adAvailableCount,
 			tbAvailableCount,
+			pmAvailableCount,
 			allSourcesCompleted,
 			pendingAvailabilityChecks,
 			isAvailabilityOnly,
@@ -645,6 +681,8 @@ const TvSearch: FunctionComponent = () => {
 				servicesWithCache.push(`AD: ${adAvailableCount}`);
 			if (torboxKey && (tbAvailableCount ?? 0) > 0)
 				servicesWithCache.push(`TB: ${tbAvailableCount}`);
+			if (premiumizeKey && (pmAvailableCount ?? 0) > 0)
+				servicesWithCache.push(`PM: ${pmAvailableCount}`);
 
 			// Show toast for cached torrents if any found
 			if (totalAvailableCount > 0) {
@@ -663,6 +701,7 @@ const TvSearch: FunctionComponent = () => {
 		rdKey,
 		adKey,
 		torboxKey,
+		premiumizeKey,
 		isAnyChecking,
 		isLibrarySyncing,
 		checkServiceAvailabilityBulk,
@@ -1369,6 +1408,7 @@ const TvSearch: FunctionComponent = () => {
 				rdKey={rdKey}
 				adKey={adKey}
 				torboxKey={torboxKey}
+				premiumizeKey={premiumizeKey}
 				player={player}
 				hashAndProgress={hashAndProgress}
 				handleShowInfo={handleShowInfo}
@@ -1380,11 +1420,13 @@ const TvSearch: FunctionComponent = () => {
 				addRd={addRd}
 				addAd={addAd}
 				addTb={addTb}
+				addPm={addPm}
 				sendTbToRd={sendTbToRd}
 				sendAdToRd={sendAdToRd}
 				deleteRd={deleteRd}
 				deleteAd={deleteAd}
 				deleteTb={deleteTb}
+				deletePm={deletePm}
 				imdbId={imdbid as string}
 				isHashServiceChecking={isHashServiceChecking}
 			/>
