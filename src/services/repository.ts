@@ -19,6 +19,7 @@ import {
 	SearchService,
 	StreamHealthService,
 	TorBoxCastService,
+	TorBoxHealthService,
 	TorrentSnapshotService,
 	type TransferMetaRecord,
 	TransferMetaService,
@@ -28,6 +29,7 @@ import {
 import { HashSearchParams } from './database/hashSearch';
 import { RealDebridOperation } from './database/rdOperational';
 import { StreamServerStatus, TorrentioUrlCheckResult } from './database/streamHealth';
+import { TorBoxAuthState, TorBoxCdnNodeStatus } from './database/torboxHealth';
 import { ScrapeSearchResult } from './mediasearch';
 import { TorrentInfoResponse } from './types';
 
@@ -38,6 +40,7 @@ export type RepositoryDependencies = Partial<{
 	animeService: AnimeService;
 	castService: CastService;
 	torboxCastService: TorBoxCastService;
+	torboxHealthService: TorBoxHealthService;
 	allDebridCastService: AllDebridCastService;
 	reportService: ReportService;
 	torrentSnapshotService: TorrentSnapshotService;
@@ -62,6 +65,7 @@ export class Repository {
 	private animeService: AnimeService;
 	private castService: CastService;
 	private torboxCastService: TorBoxCastService;
+	private torboxHealthService: TorBoxHealthService;
 	private allDebridCastService: AllDebridCastService;
 	private reportService: ReportService;
 	private torrentSnapshotService: TorrentSnapshotService;
@@ -85,6 +89,7 @@ export class Repository {
 		animeService,
 		castService,
 		torboxCastService,
+		torboxHealthService,
 		allDebridCastService,
 		reportService,
 		torrentSnapshotService,
@@ -107,6 +112,7 @@ export class Repository {
 		this.animeService = animeService ?? new AnimeService();
 		this.castService = castService ?? new CastService();
 		this.torboxCastService = torboxCastService ?? new TorBoxCastService();
+		this.torboxHealthService = torboxHealthService ?? new TorBoxHealthService();
 		this.allDebridCastService = allDebridCastService ?? new AllDebridCastService();
 		this.reportService = reportService ?? new ReportService();
 		this.torrentSnapshotService = torrentSnapshotService ?? new TorrentSnapshotService();
@@ -134,6 +140,7 @@ export class Repository {
 			this.animeService.disconnect(),
 			this.castService.disconnect(),
 			this.torboxCastService.disconnect(),
+			this.torboxHealthService.disconnect(),
 			this.allDebridCastService.disconnect(),
 			this.reportService.disconnect(),
 			this.torrentSnapshotService.disconnect(),
@@ -919,6 +926,68 @@ export class Repository {
 
 	public runDailyRollup(targetDate?: Date) {
 		return this.historyAggregationService.runDailyRollup(targetDate);
+	}
+
+	// TorBox Health Service Methods
+	public upsertTorBoxCdnResults(results: TorBoxCdnNodeStatus[]) {
+		return this.torboxHealthService.upsertCdnResults(results);
+	}
+
+	public deleteDeprecatedTorBoxNodes(validHosts: string[]) {
+		return this.torboxHealthService.deleteDeprecatedNodes(validHosts);
+	}
+
+	public getAllTorBoxCdnStatuses() {
+		return this.torboxHealthService.getAllCdnStatuses();
+	}
+
+	public getTorBoxCdnMetrics() {
+		return this.torboxHealthService.getCdnMetrics();
+	}
+
+	public recordTorBoxCheckResult(result: {
+		apiOk: boolean;
+		apiLatencyMs: number | null;
+		apiDetail: string | null;
+		authState: TorBoxAuthState;
+		authError: string | null;
+		totalNodes: number;
+		workingNodes: number;
+	}) {
+		return this.torboxHealthService.recordCheckResult(result);
+	}
+
+	public getRecentTorBoxChecks(limit?: number) {
+		return this.torboxHealthService.getRecentChecks(limit);
+	}
+
+	public recordTorBoxHealthSnapshot(data: {
+		totalNodes: number;
+		workingNodes: number;
+		apiOk: boolean;
+		avgLatencyMs: number | null;
+		minLatencyMs: number | null;
+		maxLatencyMs: number | null;
+		fastestNode: string | null;
+		failedNodes: string[];
+	}) {
+		return this.torboxHealthService.recordHealthSnapshot(data);
+	}
+
+	public getTorBoxHourlyHistory(hoursBack?: number) {
+		return this.torboxHealthService.getHourlyHistory(hoursBack);
+	}
+
+	public getTorBoxDailyHistory(daysBack?: number) {
+		return this.torboxHealthService.getDailyHistory(daysBack);
+	}
+
+	public rollupTorBoxDaily(targetDate?: Date) {
+		return this.torboxHealthService.rollupDaily(targetDate);
+	}
+
+	public cleanupOldTorBoxData() {
+		return this.torboxHealthService.cleanupOldData();
 	}
 
 	// RD Operational Service Methods

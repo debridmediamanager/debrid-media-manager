@@ -590,6 +590,68 @@ model ServerReliabilityDaily {
   @@index([reliability])
 }
 
+model TorBoxCdnHealth {
+  host      String   @id @db.VarChar(191)
+  region    String   @db.VarChar(32)
+  name      String   @db.VarChar(64)
+  status    Int?
+  latencyMs Float?
+  ok        Boolean
+  error     String?  @db.Text
+  checkedAt DateTime
+
+  @@index([ok])
+  @@index([region])
+}
+
+model TorBoxCheckResult {
+  id           Int      @id @default(autoincrement())
+  apiOk        Boolean
+  apiLatencyMs Float?
+  apiDetail    String?  @db.Text
+  authState    String   @db.VarChar(16)
+  authError    String?  @db.Text
+  totalNodes   Int      @default(0)
+  workingNodes Int      @default(0)
+  checkedAt    DateTime @default(now())
+
+  @@index([checkedAt])
+}
+
+model TorBoxHealthHourly {
+  id              Int      @id @default(autoincrement())
+  hour            DateTime @unique
+  totalNodes      Int
+  workingNodes    Int
+  workingRate     Float
+  apiSuccessCount Int      @default(0)
+  apiTotalCount   Int      @default(0)
+  apiSuccessRate  Float    @default(0)
+  avgLatencyMs    Float?
+  minLatencyMs    Float?
+  maxLatencyMs    Float?
+  fastestNode     String?  @db.VarChar(191)
+  checksInHour    Int      @default(1)
+  failedNodes     Json
+  createdAt       DateTime @default(now())
+
+  @@index([hour])
+}
+
+model TorBoxHealthDaily {
+  id                Int      @id @default(autoincrement())
+  date              DateTime @unique
+  avgWorkingRate    Float
+  minWorkingRate    Float
+  maxWorkingRate    Float
+  avgApiSuccessRate Float    @default(0)
+  avgLatencyMs      Float?
+  checksCount       Int
+  createdAt         DateTime @default(now())
+
+  @@index([date])
+}
+
 model ImdbTitleBasics {
   tconst         String   @id @map("tconst") @db.VarChar(12)
   titleType      String   @map("title_type") @db.VarChar(20)

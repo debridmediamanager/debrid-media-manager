@@ -16,6 +16,7 @@ import { ScrapedService } from './scraped';
 import { SearchService } from './search';
 import { StreamHealthService } from './streamHealth';
 import { TorBoxCastService } from './torboxCast';
+import { TorBoxHealthService } from './torboxHealth';
 import { TorrentSnapshotService } from './torrentSnapshot';
 import { TransferMetaService } from './transferMeta';
 import { ZurgKeysService } from './zurgKeys';
@@ -39,10 +40,19 @@ export {
 	SearchService,
 	StreamHealthService,
 	TorBoxCastService,
+	TorBoxHealthService,
 	TorrentSnapshotService,
 	TransferMetaService,
 	ZurgKeysService,
 };
 
 export type { Nzb2rdWaiter } from './nzb2rdMap';
+export type {
+	TorBoxAuthState,
+	TorBoxCdnMetrics,
+	TorBoxCdnNodeStatus,
+	TorBoxCheckResultData,
+	TorBoxDailyData,
+	TorBoxHourlyData,
+} from './torboxHealth';
 export type { TransferMetaRecord, TransferMetaSource } from './transferMeta';
