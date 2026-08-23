@@ -1,5 +1,6 @@
 import { useConnectivity } from '@/hooks/useConnectivity';
 import type { TorBoxObservabilityStats } from '@/lib/observability/getTorBoxObservabilityStats';
+import { TORBOX_REFERRAL_URL } from '@/utils/referrals';
 import type { LucideIcon } from 'lucide-react';
 import {
 	Activity,
@@ -632,6 +633,17 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 									</Link>
 								</div>
 								<p className="pt-2">
+									No TorBox account yet?{' '}
+									<a
+										href={TORBOX_REFERRAL_URL}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="font-semibold text-[#818cf8] hover:text-indigo-300"
+									>
+										Sign up for TorBox
+									</a>
+								</p>
+								<p>
 									Real-Debrid user?{' '}
 									<Link
 										href="/is-real-debrid-down-or-just-me"

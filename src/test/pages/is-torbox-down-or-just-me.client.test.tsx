@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { TorBoxObservabilityStats } from '@/lib/observability/getTorBoxObservabilityStats';
 import TorBoxStatusPage from '@/pages/is-torbox-down-or-just-me';
+import { TORBOX_REFERRAL_URL } from '@/utils/referrals';
 
 vi.mock('@/components/observability/TorBoxHistoryCharts', () => ({
 	TorBoxHistoryCharts: () => <div data-testid="torbox-history-charts" />,
@@ -259,6 +260,18 @@ describe('TorBoxStatusPage', () => {
 		await waitFor(() => expect(getByTestId('stale-banner')).toBeInTheDocument());
 		expect(getByTestId('status-answer')).toHaveTextContent('Operational');
 		expect(getByTestId('stale-banner')).toHaveTextContent('Could not reach the status API');
+	});
+
+	// The referral id is what makes the sign-up link earn anything, so assert the
+	// whole URL rather than just that some link exists.
+	it('links to TorBox sign-up with the referral id', async () => {
+		const { findByText } = render(<TorBoxStatusPage />);
+
+		const link = await findByText('Sign up for TorBox');
+		expect(link).toHaveAttribute('href', TORBOX_REFERRAL_URL);
+		expect(TORBOX_REFERRAL_URL).toContain('referral=74ffa560-7381-4a18-adb1-cef97378c670');
+		expect(link).toHaveAttribute('target', '_blank');
+		expect(link).toHaveAttribute('rel', 'noopener noreferrer');
 	});
 
 	it('ignores a payload that is not TorBox stats', async () => {
