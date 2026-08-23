@@ -22,6 +22,7 @@ describe('AvailabilityTokens', () => {
 		expect(screen.getByText('RD ✓')).toBeInTheDocument();
 		expect(screen.queryByText('AD ✓')).not.toBeInTheDocument();
 		expect(screen.queryByText('TB ✓')).not.toBeInTheDocument();
+		expect(screen.queryByText('PM ✓')).not.toBeInTheDocument();
 		expect(screen.queryByText('Any ✓')).not.toBeInTheDocument();
 	});
 
@@ -71,7 +72,7 @@ describe('AvailabilityTokens', () => {
 			/>
 		);
 
-		// RD green, AD amber, TB indigo - same coding as the torrent prefix badges
+		// RD green, AD amber, TB indigo, PM dark red - same coding as the badges
 		expect(screen.getByText('RD ✓').className).toContain('bg-[#b5d496]');
 		expect(screen.getByText('AD ✓').className).toContain('[#fbc730]');
 		expect(screen.getByText('TB ✓').className).toContain('[#4f46e5]');
@@ -90,5 +91,34 @@ describe('AvailabilityTokens', () => {
 
 		fireEvent.click(screen.getByText('AD ✓'));
 		expect(onQueryChange).toHaveBeenCalledWith('1080p is:ad');
+	});
+
+	it('offers a Premiumize pill only once a Premiumize key exists', () => {
+		const { rerender } = render(
+			<AvailabilityTokens query="" onQueryChange={onQueryChange} rdKey="rd-key" />
+		);
+		expect(screen.queryByText('PM ✓')).not.toBeInTheDocument();
+
+		rerender(
+			<AvailabilityTokens
+				query=""
+				onQueryChange={onQueryChange}
+				rdKey="rd-key"
+				premiumizeKey="pm-key"
+			/>
+		);
+
+		fireEvent.click(screen.getByText('PM ✓'));
+		expect(onQueryChange).toHaveBeenCalledWith('is:pm');
+		expect(screen.getByText('PM ✓').className).toContain('[#aa0000]');
+	});
+
+	it('shows only Premiumize for a Premiumize-only user, with no "Any"', () => {
+		render(
+			<AvailabilityTokens query="" onQueryChange={onQueryChange} premiumizeKey="pm-key" />
+		);
+
+		expect(screen.getByText('PM ✓')).toBeInTheDocument();
+		expect(screen.queryByText('Any ✓')).not.toBeInTheDocument();
 	});
 });

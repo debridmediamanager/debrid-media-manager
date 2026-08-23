@@ -302,7 +302,12 @@ const MovieSearch: FunctionComponent = () => {
 	useEffect(() => {
 		async function loadCachedTrackerStats() {
 			const uncachedResults = searchResults.filter(
-				(r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable && !r.trackerStats
+				(r) =>
+					!r.rdAvailable &&
+					!r.adAvailable &&
+					!r.tbAvailable &&
+					!r.pmAvailable &&
+					!r.trackerStats
 			);
 
 			if (uncachedResults.length === 0) return;
@@ -629,8 +634,9 @@ const MovieSearch: FunctionComponent = () => {
 	}, [query, searchResults, hideRdBlockedTorrents, rdKey, torboxKey, adKey]);
 
 	const totalUncachedCount = useMemo(() => {
-		return filteredResults.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
-			.length;
+		return filteredResults.filter(
+			(r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable && !r.pmAvailable
+		).length;
 	}, [filteredResults]);
 
 	const movieReleaseInfo = useMemo(() => {
@@ -981,8 +987,9 @@ const MovieSearch: FunctionComponent = () => {
 				query={query}
 				onQueryChange={setQuery}
 				filteredCount={
-					filteredResults.filter((r) => r.rdAvailable || r.adAvailable || r.tbAvailable)
-						.length
+					filteredResults.filter(
+						(r) => r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable
+					).length
 				}
 				totalCount={filteredResults.length}
 				showMassReportButtons={showMassReportButtons}

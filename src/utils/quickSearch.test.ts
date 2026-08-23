@@ -46,12 +46,14 @@ describe('quickSearch', () => {
 			{ title: 'Cached in TB', hash: 'a3', tbAvailable: true },
 			{ title: 'Cached in RD and TB', hash: 'a4', rdAvailable: true, tbAvailable: true },
 			{ title: 'Not cached anywhere', hash: 'a5' },
+			{ title: 'Cached in PM', hash: 'a6', pmAvailable: true },
 		];
 
 		it('filters by a single service', () => {
 			expect(quickSearch('is:rd', availability).map((r) => r.hash)).toEqual(['a1', 'a4']);
 			expect(quickSearch('is:ad', availability).map((r) => r.hash)).toEqual(['a2']);
 			expect(quickSearch('is:tb', availability).map((r) => r.hash)).toEqual(['a3', 'a4']);
+			expect(quickSearch('is:pm', availability).map((r) => r.hash)).toEqual(['a6']);
 		});
 
 		it('filters by cached in any service and by uncached', () => {
@@ -60,6 +62,7 @@ describe('quickSearch', () => {
 				'a2',
 				'a3',
 				'a4',
+				'a6',
 			]);
 			expect(quickSearch('is:uncached', availability).map((r) => r.hash)).toEqual(['a5']);
 		});
@@ -70,11 +73,12 @@ describe('quickSearch', () => {
 				'a2',
 				'a3',
 				'a5',
+				'a6',
 			]);
 		});
 
 		it('matches nothing for an unknown service', () => {
-			expect(quickSearch('is:pm', availability).length).toBe(0);
+			expect(quickSearch('is:xx', availability).length).toBe(0);
 		});
 	});
 });

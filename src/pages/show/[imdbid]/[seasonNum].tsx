@@ -642,8 +642,9 @@ const TvSearch: FunctionComponent = () => {
 	}, [query, searchResults, hideRdBlockedTorrents, rdKey, torboxKey, adKey]);
 
 	const totalUncachedCount = useMemo(() => {
-		return filteredResults.filter((r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable)
-			.length;
+		return filteredResults.filter(
+			(r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable && !r.pmAvailable
+		).length;
 	}, [filteredResults]);
 
 	// Handle toast notifications when search completes
@@ -715,7 +716,12 @@ const TvSearch: FunctionComponent = () => {
 		async function loadCachedTrackerStats() {
 			// Find uncached results that don't have tracker stats yet
 			const uncachedResults = searchResults.filter(
-				(r) => !r.rdAvailable && !r.adAvailable && !r.tbAvailable && !r.trackerStats
+				(r) =>
+					!r.rdAvailable &&
+					!r.adAvailable &&
+					!r.tbAvailable &&
+					!r.pmAvailable &&
+					!r.trackerStats
 			);
 
 			if (uncachedResults.length === 0) {
@@ -1325,7 +1331,7 @@ const TvSearch: FunctionComponent = () => {
 				<span className="text-xs text-gray-400">
 					{
 						filteredResults.filter(
-							(r) => r.rdAvailable || r.adAvailable || r.tbAvailable
+							(r) => r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable
 						).length
 					}
 					/{filteredResults.length}
@@ -1390,6 +1396,7 @@ const TvSearch: FunctionComponent = () => {
 					rdKey={rdKey}
 					adKey={adKey}
 					torboxKey={torboxKey}
+					premiumizeKey={premiumizeKey}
 				/>
 			</div>
 
