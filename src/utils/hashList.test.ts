@@ -63,6 +63,35 @@ describe('hashList utils', () => {
 	});
 
 	describe('generateHashList', () => {
+		it('leaves out a Premiumize row that has no info hash', async () => {
+			// transfer/list never reports a hash, and job/src cannot recover one
+			// once the transfer record is gone - so these rows would be shared as
+			// an empty hash that resolves to nothing anywhere.
+			const premiumizeOrphan: UserTorrent = {
+				...mockTorrent,
+				id: 'pm:fhp92DFAmxWqvNFC_IzGbWw',
+				filename: 'Old Folder',
+				hash: '',
+			};
+			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('compressed-data');
+			vi.mocked(createShortUrl).mockResolvedValue('https://short.url/abc123');
+
+			await generateHashList('Mixed', [mockTorrent, premiumizeOrphan]);
+
+			expect(lzString.compressToEncodedURIComponent).toHaveBeenCalledWith(
+				JSON.stringify({
+					title: 'Mixed',
+					torrents: [
+						{
+							filename: mockTorrent.filename,
+							hash: mockTorrent.hash,
+							bytes: mockTorrent.bytes,
+						},
+					],
+				})
+			);
+		});
+
 		it('should generate hash list successfully', async () => {
 			const title = 'Test Collection';
 			const filteredList = [mockTorrent];
@@ -120,7 +149,7 @@ describe('hashList utils', () => {
 				})
 			);
 			expect(toast).toHaveBeenCalledWith(
-				'Skipping 1 web download — they cannot be shared as hashes.',
+				'Skipping 1 item with no info hash — they cannot be shared.',
 				expect.anything()
 			);
 		});
@@ -136,7 +165,7 @@ describe('hashList utils', () => {
 
 			expect(createShortUrl).not.toHaveBeenCalled();
 			expect(toast.error).toHaveBeenCalledWith(
-				'Nothing to share — that list is only web downloads.',
+				'Nothing to share — none of those have an info hash.',
 				expect.anything()
 			);
 		});

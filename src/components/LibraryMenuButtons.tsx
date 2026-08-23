@@ -32,6 +32,7 @@ interface LibraryMenuButtonsProps {
 	hasRd?: boolean;
 	hasAd?: boolean;
 	hasTb?: boolean;
+	hasPm?: boolean;
 }
 
 export default function LibraryMenuButtons({
@@ -55,10 +56,11 @@ export default function LibraryMenuButtons({
 	hasRd,
 	hasAd,
 	hasTb,
+	hasPm,
 }: LibraryMenuButtonsProps) {
 	const hasActiveFilter =
 		!!activeMediaType || !!activeStatus || !!activeService || !!searchQuery || !!hasUrlFilter;
-	const multipleServices = [hasRd, hasAd, hasTb].filter(Boolean).length > 1;
+	const multipleServices = [hasRd, hasAd, hasTb, hasPm].filter(Boolean).length > 1;
 
 	const buildHref = (params: Record<string, string | undefined>) => {
 		const base: Record<string, string> = { page: '1' };
@@ -147,6 +149,16 @@ export default function LibraryMenuButtons({
 					active={activeService === 'tb'}
 				>
 					TB
+				</LibraryLinkButton>
+			)}
+			{multipleServices && hasPm && (
+				<LibraryLinkButton
+					href={buildHref({ service: 'pm' })}
+					deactivateHref={buildHref({ service: undefined })}
+					variant="green"
+					active={activeService === 'pm'}
+				>
+					PM
 				</LibraryLinkButton>
 			)}
 			{sameHashSize > 0 && (

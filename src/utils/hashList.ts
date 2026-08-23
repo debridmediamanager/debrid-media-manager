@@ -5,25 +5,29 @@ import toast from 'react-hot-toast';
 import { libraryToastOptions } from './toastOptions';
 import { isWebDownloadRowId } from './torboxWebDownload';
 
-// A hash list is a list of infohashes anyone can re-add. A TorBox web download
-// has an md5 of its source link instead, which nobody can add anywhere, so it
-// is left out rather than shared as a hash that resolves to nothing.
+// A hash list is a list of infohashes anyone can re-add. Two kinds of row have
+// no infohash to share: a TorBox web download carries an md5 of its source link,
+// and a Premiumize row carries nothing at all unless its transfer is still live
+// (`transfer/list` does not report a hash, and `job/src` only answers for a
+// transfer that still exists). Both are left out rather than shared as a hash
+// that resolves to nothing - and an empty hash would otherwise collapse every
+// such row into one "same hash" group.
 export const shareableTorrents = (list: UserTorrent[]) =>
-	list.filter((t) => !isWebDownloadRowId(t.id));
+	list.filter((t) => !isWebDownloadRowId(t.id) && !!t.hash);
 
 export async function generateHashList(title: string, filteredList: UserTorrent[]) {
 	const shareable = shareableTorrents(filteredList);
 	const skipped = filteredList.length - shareable.length;
 	if (skipped > 0) {
 		toast(
-			`Skipping ${skipped} web download${skipped === 1 ? '' : 's'} — they cannot be shared as hashes.`,
+			`Skipping ${skipped} item${skipped === 1 ? '' : 's'} with no info hash — they cannot be shared.`,
 			libraryToastOptions
 		);
 	}
-	// Only bail when web downloads were all there was; an empty list still
+	// Only bail when hash-less rows were all there was; an empty list still
 	// produces an (empty) hash list, as it always has
 	if (shareable.length === 0 && skipped > 0) {
-		toast.error('Nothing to share — that list is only web downloads.', libraryToastOptions);
+		toast.error('Nothing to share — none of those have an info hash.', libraryToastOptions);
 		return;
 	}
 

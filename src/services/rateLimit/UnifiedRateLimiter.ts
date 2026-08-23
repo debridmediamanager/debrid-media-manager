@@ -61,6 +61,19 @@ export class UnifiedRateLimiter {
 			burstSize: 10,
 		});
 
+		// Premiumize showed no throttling at 640 requests/second and publishes no
+		// limits or headers at all. That reads as a limiter that is off rather
+		// than absent, so this stays conservative - and the library only needs
+		// three calls anyway.
+		this.configs.set('premiumize', {
+			maxRequestsPerMinute: 300,
+			maxConcurrent: 5,
+			retryAttempts: 3,
+			backoffMultiplier: 2,
+			jitterRange: 0.2,
+			burstSize: 15,
+		});
+
 		// Initialize structures for each service
 		for (const service of this.configs.keys()) {
 			this.queues.set(service, []);

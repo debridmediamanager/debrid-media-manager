@@ -163,3 +163,51 @@ export const renderTorrentInfoTB = (
 	});
 	return filesList.join('');
 };
+
+export interface PremiumizeFileRow {
+	/** Premiumize file id - the handle `item/details` mints a fresh link from. */
+	fileId: string;
+	filename: string;
+	filesize: number;
+}
+
+/**
+ * File rows for a Premiumize library item.
+ *
+ * "Watch" needs the info hash, because it resolves through `transfer/directdl` -
+ * and a Premiumize row only has a hash while its transfer is still in the list.
+ * "DL" works either way: it mints a link from the file id, which every row has.
+ */
+export const renderTorrentInfoPM = (
+	files: PremiumizeFileRow[],
+	options: { canWatch?: boolean } = {}
+) => {
+	const sorted = [...files].sort((a, b) => a.filename.localeCompare(b.filename));
+	return sorted
+		.map((file) => {
+			const isPlayable = Boolean(isVideo({ path: file.filename }));
+			const actions: string[] = [];
+			if (isPlayable && options.canWatch) {
+				actions.push(
+					renderButton('watch', {
+						text: 'Watch',
+						data: { watch: '1', 'watch-file-name': file.filename },
+					})
+				);
+			}
+			actions.push(
+				renderButton('download', {
+					text: 'DL',
+					data: { 'pm-file-id': file.fileId, 'pm-file-name': file.filename },
+				})
+			);
+			return renderFileRow({
+				id: 0,
+				path: file.filename,
+				size: file.filesize,
+				isPlayable,
+				actions,
+			});
+		})
+		.join('');
+};

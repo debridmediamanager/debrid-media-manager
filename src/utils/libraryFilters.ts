@@ -112,6 +112,7 @@ export const filterLibraryItems = ({
 			rd: 'Real-Debrid',
 			ad: 'AllDebrid',
 			tb: 'TorBox',
+			pm: 'Premiumize',
 		};
 		nextHelpText = `Showing torrents from ${serviceNames[serviceValue] ?? serviceValue}`;
 	}

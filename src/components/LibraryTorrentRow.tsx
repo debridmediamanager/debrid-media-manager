@@ -9,11 +9,13 @@ import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { runDebridTransferToRd } from '@/utils/debridUploader';
 import {
 	handleDeleteAdTorrent,
+	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
 import { handleShare } from '@/utils/hashList';
 import { normalize } from '@/utils/mediaId';
+import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
 import { getRealDebridStatusText } from '@/utils/realDebridStatus';
 import { torrentPrefix } from '@/utils/results';
 import { shortenNumber } from '@/utils/speed';
@@ -48,6 +50,7 @@ interface TorrentRowProps {
 	rdKey: string | null;
 	adKey: string | null;
 	tbKey: string | null;
+	pmKey: string | null;
 	shouldDownloadMagnets: boolean;
 	hashGrouping: Record<string, number>;
 	titleGrouping: Record<string, number>;
@@ -68,6 +71,7 @@ function TorrentRow({
 	rdKey,
 	adKey,
 	tbKey,
+	pmKey,
 	shouldDownloadMagnets,
 	hashGrouping,
 	titleGrouping,
@@ -97,6 +101,10 @@ function TorrentRow({
 	// A TorBox web download has no magnet, no swarm and no shareable infohash,
 	// so the actions built on those are meaningless for it.
 	const isTbWebDownload = isWebDownloadRowId(torrent.id);
+	// Premiumize reports no info hash for a transfer, and none at all for content
+	// whose transfer record is gone, so magnet-shaped actions have nothing to work
+	// with on those rows.
+	const hasInfoHash = /^[a-fA-F0-9]{40}$/.test(torrent.hash);
 	const canSendToRd =
 		!!rdKey &&
 		/^[a-fA-F0-9]{40}$/.test(torrent.hash) &&
@@ -130,6 +138,8 @@ function TorrentRow({
 			return getAllDebridStatusText(torrent.serviceStatus);
 		} else if (torrent.id.startsWith('tb:')) {
 			return getTorBoxStatusText(torrent.serviceStatus);
+		} else if (torrent.id.startsWith('pm:')) {
+			return getPremiumizeStatusText(torrent.serviceStatus);
 		}
 		return torrent.serviceStatus; // Fallback to raw status
 	};
@@ -340,7 +350,8 @@ function TorrentRow({
 							<br />
 						</>
 					)}
-					{[rdKey, adKey, tbKey].filter(Boolean).length > 1 && torrentPrefix(torrent.id)}{' '}
+					{[rdKey, adKey, tbKey, pmKey].filter(Boolean).length > 1 &&
+						torrentPrefix(torrent.id)}{' '}
 					{torrent.filename === torrent.hash ? 'Magnet' : torrent.filename}
 					{torrent.filename === torrent.hash ||
 					torrent.filename === 'Magnet' ||
@@ -434,7 +445,7 @@ function TorrentRow({
 							)}
 						</button>
 					)}
-					{!isTbWebDownload && (
+					{!isTbWebDownload && hasInfoHash && (
 						<button
 							title="Share"
 							className="mb-2 mr-2 cursor-pointer text-indigo-600"
@@ -461,12 +472,15 @@ function TorrentRow({
 							if (tbKey && torrent.id.startsWith('tb:')) {
 								success = await handleDeleteTbTorrent(tbKey, torrent.id);
 							}
+							if (pmKey && torrent.id.startsWith('pm:')) {
+								success = await handleDeletePmTorrent(pmKey, torrent.id);
+							}
 							if (success) onDelete(torrent.id);
 						}}
 					>
 						<Trash2 className="h-4 w-4 text-red-500" />
 					</button>
-					{!isTbWebDownload && (
+					{!isTbWebDownload && hasInfoHash && (
 						<button
 							title="Copy magnet url"
 							className="mb-2 mr-2 cursor-pointer text-pink-500"

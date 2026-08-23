@@ -4,16 +4,23 @@ import LibrarySize from '@/components/LibrarySize';
 import LibraryTableHeader from '@/components/LibraryTableHeader';
 import LibraryTorrentRow from '@/components/LibraryTorrentRow';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
+import {
+	useAllDebridApiKey,
+	usePremiumizeApiKey,
+	useRealDebridAccessToken,
+	useTorBoxAccessToken,
+} from '@/hooks/auth';
 import { useRelativeTimeLabel } from '@/hooks/useRelativeTimeLabel';
 import { getTorrentInfo, proxyUnrestrictLink } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
 	handleAddAsMagnetInAd,
+	handleAddAsMagnetInPm,
 	handleAddAsMagnetInRd,
 	handleAddAsMagnetInTb,
 	handleAddMultipleHashesInAd,
+	handleAddMultipleHashesInPm,
 	handleAddMultipleHashesInRd,
 	handleAddMultipleHashesInTb,
 	handleAddMultipleTorrentFilesInRd,
@@ -26,6 +33,7 @@ import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
 import {
 	handleDeleteAdTorrent,
+	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
@@ -40,7 +48,12 @@ import { quickSearchLibrary } from '@/utils/quickSearch';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions } from '@/utils/toastOptions';
 import { getHashOfTorrent } from '@/utils/torrentFile';
-import { handleShowInfoForAD, handleShowInfoForRD, handleShowInfoForTB } from '@/utils/torrentInfo';
+import {
+	handleShowInfoForAD,
+	handleShowInfoForPM,
+	handleShowInfoForRD,
+	handleShowInfoForTB,
+} from '@/utils/torrentInfo';
 import { withAuth } from '@/utils/withAuth';
 import { saveAs } from 'file-saver';
 import { BookOpen } from 'lucide-react';
@@ -127,6 +140,7 @@ function TorrentsPage() {
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
+	const pmKey = usePremiumizeApiKey();
 
 	const [defaultTitleGrouping] = useState<Record<string, number>>(() => ({}));
 	const [movieTitleGrouping] = useState<Record<string, number>>(() => ({}));
@@ -321,6 +335,20 @@ function TorrentsPage() {
 			);
 		}
 
+		if (pmKey) {
+			promises.push(
+				(async () => {
+					try {
+						await handleAddAsMagnetInPm(pmKey, hash, async (userTorrent) => {
+							addTorrent(userTorrent);
+						});
+					} catch (error) {
+						console.error('Error adding magnet to Premiumize:', error);
+					}
+				})()
+			);
+		}
+
 		Promise.all(promises).then(() => {
 			processingHashRef.current = null;
 		});
@@ -447,8 +475,13 @@ function TorrentsPage() {
 		for (const t of userTorrentsList) {
 			if (/^Magnet/.test(t.title)) continue;
 
-			// group by hash
-			if (t.hash in hashGrouping) {
+			// group by hash. A Premiumize row often has no info hash at all -
+			// `transfer/list` never reports one - and grouping on the empty string
+			// would fold every such row into one "same hash" set and count only the
+			// first one's bytes.
+			if (!t.hash) {
+				bytes += t.bytes;
+			} else if (t.hash in hashGrouping) {
 				if (hashGrouping[t.hash] === 1) sameHash.add(t.hash);
 				hashGrouping[t.hash]++;
 			} else {
@@ -740,11 +773,14 @@ function TorrentsPage() {
 				if (tbKey && t.id.startsWith('tb:')) {
 					success = await handleDeleteTbTorrent(tbKey, t.id);
 				}
+				if (pmKey && t.id.startsWith('pm:')) {
+					success = await handleDeletePmTorrent(pmKey, t.id);
+				}
 				if (!success) throw new Error(`Failed to delete ${t.id}`);
 				return t.id;
 			};
 		},
-		[rdKey, adKey, tbKey]
+		[rdKey, adKey, tbKey, pmKey]
 	);
 
 	const wrapReinsertFn = useCallback(
@@ -1408,6 +1444,8 @@ function TorrentsPage() {
 			if (adKey && debridService === 'ad')
 				return handleAddAsMagnetInAd(adKey, hash, undefined, true, true);
 			if (tbKey && debridService === 'tb') return handleAddAsMagnetInTb(tbKey, hash);
+			if (pmKey && debridService === 'pm')
+				return handleAddAsMagnetInPm(pmKey, hash, undefined, true);
 		};
 
 		function wrapAddMagnetFn(hash: string) {
@@ -1749,6 +1787,25 @@ function TorrentsPage() {
 				);
 			}
 		}
+		if (pmKey && debridService === 'pm') {
+			// Premiumize takes a magnet or any HTTP URL through the same endpoint,
+			// so a .torrent file is the one shape it has no route for.
+			const allHashes = [...hashes];
+			if (torrentFiles.length > 0) {
+				try {
+					const fileHashes = await Promise.all(
+						torrentFiles.map((file) => getHashOfTorrent(file))
+					);
+					allHashes.push(...(fileHashes.filter((h) => h !== undefined) as string[]));
+				} catch (error) {
+					toast.error(`Hash extraction failed: ${error}`);
+					return;
+				}
+			}
+			if (allHashes.length > 0) {
+				handleAddMultipleHashesInPm(pmKey, allHashes, async () => await refreshLibrary());
+			}
+		}
 	}
 
 	const resetFilters = () => {
@@ -1869,6 +1926,7 @@ function TorrentsPage() {
 						hasRd={!!rdKey}
 						hasAd={!!adKey}
 						hasTb={!!tbKey}
+						hasPm={!!pmKey}
 					/>
 					<LibraryActionButtons
 						onSelectShown={() => selectShown(currentPageData, setSelectedTorrents)}
@@ -1886,6 +1944,7 @@ function TorrentsPage() {
 						rdKey={rdKey}
 						adKey={adKey}
 						tbKey={tbKey}
+						pmKey={pmKey}
 						showDedupe={
 							router.query.status === 'sametitle' ||
 							(!!titleFilter && filteredList.length > 1)
@@ -1933,6 +1992,7 @@ function TorrentsPage() {
 												rdKey={rdKey}
 												adKey={adKey}
 												tbKey={tbKey}
+												pmKey={pmKey}
 												shouldDownloadMagnets={shouldDownloadMagnets}
 												hashGrouping={hashGrouping}
 												titleGrouping={getTitleGroupings(torrent.mediaType)}
@@ -2014,6 +2074,14 @@ function TorrentsPage() {
 															tbKey,
 															setUserTorrentsList,
 															setSelectedTorrents
+														);
+													} else if (t.id.startsWith('pm:') && pmKey) {
+														await handleShowInfoForPM(
+															t,
+															pmKey,
+															setUserTorrentsList,
+															setSelectedTorrents,
+															shouldDownloadMagnets
 														);
 													} else {
 														console.error(

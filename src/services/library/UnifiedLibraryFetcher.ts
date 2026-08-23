@@ -12,9 +12,12 @@ import {
 	convertToTbUserTorrent,
 	convertToTbWebDownloadUserTorrent,
 	convertToUserTorrent,
+	fetchPremiumize,
 } from '@/utils/fetchTorrents';
 import { CacheManager, getGlobalCache } from '../cache/CacheManager';
 import { UnifiedRateLimiter, getGlobalRateLimiter } from '../rateLimit/UnifiedRateLimiter';
+
+export type LibraryService = 'realdebrid' | 'alldebrid' | 'torbox' | 'premiumize';
 
 export interface FetchOptions {
 	forceRefresh?: boolean;
@@ -39,7 +42,7 @@ export class UnifiedLibraryFetcher {
 	 * Fetch library from any service with unified interface
 	 */
 	async fetchLibrary(
-		service: 'realdebrid' | 'alldebrid' | 'torbox',
+		service: LibraryService,
 		token: string,
 		options: FetchOptions = {}
 	): Promise<UserTorrent[]> {
@@ -76,7 +79,7 @@ export class UnifiedLibraryFetcher {
 	}
 
 	private async performFetch(
-		service: 'realdebrid' | 'alldebrid' | 'torbox',
+		service: LibraryService,
 		token: string,
 		options: FetchOptions
 	): Promise<UserTorrent[]> {
@@ -87,9 +90,46 @@ export class UnifiedLibraryFetcher {
 				return this.fetchAllDebrid(token, options);
 			case 'torbox':
 				return this.fetchTorbox(token, options);
+			case 'premiumize':
+				return this.fetchPremiumizeLibrary(token, options);
 			default:
 				throw new Error(`Unknown service: ${service}`);
 		}
+	}
+
+	/**
+	 * Premiumize needs no pagination and no per-item fan-out: three calls return
+	 * the transfer queue, the root listing and every file in the account, and
+	 * `fetchPremiumize` joins them. The only per-item cost is the `job/src` hash
+	 * lookup, which runs for live transfers alone.
+	 */
+	private async fetchPremiumizeLibrary(
+		token: string,
+		options: FetchOptions
+	): Promise<UserTorrent[]> {
+		const cacheKey = `pm:library:${token}`;
+		if (!options.forceRefresh) {
+			const cached = await this.cache.get<UserTorrent[]>(cacheKey);
+			if (cached) return cached;
+		}
+
+		let torrents: UserTorrent[] = [];
+		await this.rateLimiter.execute('premiumize', 'pm-library', async () => {
+			await fetchPremiumize(
+				token,
+				async (fetched) => {
+					torrents = fetched;
+				},
+				options.maxItems
+			);
+		});
+
+		options.onProgress?.(torrents.length, torrents.length);
+		options.onBatchComplete?.(torrents);
+		// Same short TTL the other services use, so a staleness sweep collapses
+		// several tabs into one fetch.
+		await this.cache.set(cacheKey, torrents, undefined, 5 * 60 * 1000);
+		return torrents;
 	}
 
 	/**

@@ -1,5 +1,10 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
+import {
+	useAllDebridApiKey,
+	usePremiumizeApiKey,
+	useRealDebridAccessToken,
+	useTorBoxAccessToken,
+} from '@/hooks/auth';
 import { useRelativeTimeLabel } from '@/hooks/useRelativeTimeLabel';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
@@ -13,6 +18,7 @@ export default function FloatingLibraryIndicator() {
 	const [rdToken] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
+	const pmKey = usePremiumizeApiKey();
 	const [mounted, setMounted] = useState(false);
 	const lastFetchLabel = useRelativeTimeLabel(lastFetchTime, 'Just now');
 
@@ -26,7 +32,7 @@ export default function FloatingLibraryIndicator() {
 	// syncing the hooks - where the last one could revive a logged-out session.
 	// useLocalStorage already re-reads on its own events, so the tokens are
 	// reactive and one expression is enough.
-	const isLoggedIn = !!rdToken?.trim() || !!adKey?.trim() || !!tbKey?.trim();
+	const isLoggedIn = !!rdToken?.trim() || !!adKey?.trim() || !!tbKey?.trim() || !!pmKey?.trim();
 
 	const handleRefresh = async () => {
 		try {

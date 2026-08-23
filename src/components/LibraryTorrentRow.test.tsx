@@ -6,6 +6,7 @@ import {
 } from '@/utils/addMagnet';
 import {
 	handleDeleteAdTorrent,
+	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
@@ -49,6 +50,9 @@ const mockHandleDeleteTbTorrent = handleDeleteTbTorrent as MockedFunction<
 const mockHandleRestartTbTorrent = handleRestartTbTorrent as MockedFunction<
 	typeof handleRestartTbTorrent
 >;
+const mockHandleDeletePmTorrent = handleDeletePmTorrent as MockedFunction<
+	typeof handleDeletePmTorrent
+>;
 
 describe('LibraryTorrentRow Reinsert Functionality', () => {
 	const mockRouter = {
@@ -78,6 +82,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 		rdKey: 'test-rd-key',
 		adKey: null,
 		tbKey: null,
+		pmKey: null,
 		shouldDownloadMagnets: false,
 		hashGrouping: {},
 		titleGrouping: {},
@@ -452,6 +457,68 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			await waitFor(() => {
 				expect(mockHandleRestartTorrent).not.toHaveBeenCalled();
 			});
+		});
+	});
+
+	describe('Premiumize rows', () => {
+		const pmProps = (over: Partial<UserTorrent> = {}) => ({
+			...defaultProps,
+			rdKey: null,
+			pmKey: 'test-pm-key',
+			torrent: {
+				...mockTorrent,
+				id: 'pm:tC_c5ShzmbWdwiIc-KMP_5A',
+				hash: 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c',
+				serviceStatus: 'finished',
+				...over,
+			},
+		});
+
+		it('deletes through the Premiumize path, not another service', async () => {
+			mockHandleDeletePmTorrent.mockResolvedValueOnce(true);
+			const onDelete = vi.fn();
+
+			const { container } = render(<LibraryTorrentRow {...pmProps()} onDelete={onDelete} />);
+			fireEvent.click(container.querySelector('button[title="Delete"]')!);
+
+			await waitFor(() =>
+				expect(mockHandleDeletePmTorrent).toHaveBeenCalledWith(
+					'test-pm-key',
+					'pm:tC_c5ShzmbWdwiIc-KMP_5A'
+				)
+			);
+			expect(mockHandleDeleteRdTorrent).not.toHaveBeenCalled();
+			expect(mockHandleDeleteTbTorrent).not.toHaveBeenCalled();
+			expect(onDelete).toHaveBeenCalledWith('pm:tC_c5ShzmbWdwiIc-KMP_5A');
+		});
+
+		it('offers magnet actions while the transfer still reports a hash', () => {
+			const { container } = render(<LibraryTorrentRow {...pmProps()} />);
+
+			expect(container.querySelector('button[title="Share"]')).toBeInTheDocument();
+			expect(container.querySelector('button[title="Copy magnet url"]')).toBeInTheDocument();
+		});
+
+		it('hides magnet actions on cloud content with no hash left', () => {
+			// transfer/clearfinished leaves the files and takes the record, and
+			// with it the only route to the info hash.
+			const { container } = render(
+				<LibraryTorrentRow {...pmProps({ id: 'pm:fhp92DFAmxWqvNFC_IzGbWw', hash: '' })} />
+			);
+
+			expect(container.querySelector('button[title="Share"]')).not.toBeInTheDocument();
+			expect(
+				container.querySelector('button[title="Copy magnet url"]')
+			).not.toBeInTheDocument();
+			expect(container.querySelector('button[title="Delete"]')).toBeInTheDocument();
+		});
+
+		it('shows a Premiumize status in words', () => {
+			const { container } = render(
+				<LibraryTorrentRow {...pmProps({ serviceStatus: 'stored' })} />
+			);
+
+			expect(container.textContent).toContain('In cloud');
 		});
 	});
 });

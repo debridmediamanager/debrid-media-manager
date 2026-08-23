@@ -1,3 +1,4 @@
+import { getPremiumizeItemDetails } from '@/services/premiumize';
 import { addHashAsMagnet, proxyUnrestrictLink, selectFiles } from '@/services/realDebrid';
 import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
 import { TorBoxTorrentInfo } from '@/services/types';
@@ -5,9 +6,11 @@ import { handleRestartTorrent } from '@/utils/addMagnet';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import {
 	handleDeleteAdTorrent,
+	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
+import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
 import { magnetToastOptions } from '@/utils/toastOptions';
 import { toWebDownloadRowId } from '@/utils/torboxWebDownload';
 import { AxiosError } from 'axios';
@@ -16,7 +19,8 @@ import { handleShare } from '../../utils/hashList';
 import { isVideo } from '../../utils/selectable';
 import Modal from '../modals/modal';
 import { renderButton, renderInfoTable } from './components';
-import { renderTorrentInfo, renderTorrentInfoTB } from './render';
+import type { PremiumizeFileRow } from './render';
+import { renderTorrentInfo, renderTorrentInfoPM, renderTorrentInfoTB } from './render';
 import { icons } from './styles';
 import { ApiTorrentFile, MagnetLink } from './types';
 import { buildSearchQueryFromFilename, fetchMediaInfo, getStreamInfo } from './utils';
@@ -1174,6 +1178,180 @@ export const showInfoForTB = async (
 					toast.error('Failed to export download links.', magnetToastOptions);
 				} finally {
 					toast.dismiss(toastId);
+				}
+			});
+		},
+	});
+};
+
+/**
+ * Info modal for a Premiumize library item.
+ *
+ * Premiumize links expire and cost nothing to re-mint, so none are stored on the
+ * row: every per-file link here is resolved on the click that needs it. That
+ * also makes this the one modal that works for content whose transfer record is
+ * gone, because `item/details` is keyed on the file id rather than the hash.
+ */
+export const showInfoForPM = async (
+	app: string,
+	pmKey: string,
+	torrent: {
+		id: string;
+		hash: string;
+		filename: string;
+		title: string;
+		bytes: number;
+		serviceStatus: string;
+		progress: number;
+		added: Date;
+		selectedFiles: any[];
+	},
+	shouldDownloadMagnets?: boolean,
+	handlers: { onDeletePm?: (pmKey: string, id: string) => Promise<void> } = {}
+): Promise<void> => {
+	// A row whose transfer has been cleared has no info hash at all, so the
+	// magnet-shaped actions have nothing to act on.
+	const hasInfoHash = /^[a-fA-F0-9]{40}$/.test(torrent.hash);
+	const files: PremiumizeFileRow[] = (torrent.selectedFiles ?? [])
+		.filter((file) => typeof file?.fileId === 'string')
+		.map((file) => ({
+			fileId: file.fileId as string,
+			filename: file.filename as string,
+			filesize: Number(file.filesize) || 0,
+		}));
+
+	const libraryActions = `
+        <div class="mb-3 flex justify-center items-center flex-wrap">
+            ${hasInfoHash ? renderButton('share', { link: `${await handleShare(torrent)}` }) : ''}
+            ${renderButton('delete', { id: 'btn-delete-pm' })}
+            ${hasInfoHash ? renderButton('magnet', { id: 'btn-magnet-copy', text: shouldDownloadMagnets ? 'Download' : 'Copy' }) : ''}
+            ${files.length ? renderButton('exportLinks', { id: 'btn-export-links' }) : ''}
+        </div>`;
+
+	const infoRows = [
+		{ label: 'Size', value: (torrent.bytes / 1024 ** 3).toFixed(2) + ' GB' },
+		{ label: 'ID', value: torrent.id },
+		{ label: 'Status', value: getPremiumizeStatusText(torrent.serviceStatus) },
+		...(torrent.progress < 100 ? [{ label: 'Progress', value: torrent.progress + '%' }] : []),
+		...(hasInfoHash ? [] : [{ label: 'Info hash', value: 'not reported by Premiumize' }]),
+		{
+			label: 'Added',
+			value: new Date(torrent.added).toLocaleString(undefined, { timeZone: 'UTC' }),
+		},
+	];
+
+	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${torrent.filename}</h1>
+    ${libraryActions}
+    <div class="text-sm text-gray-200">
+        ${renderInfoTable(infoRows)}
+    </div>
+    <div class="text-sm max-h-60 mb-2 text-left p-1 bg-gray-900">
+        <div class="overflow-x-auto" style="max-width: 100%;">
+            <table class="table-auto">
+                <tbody>
+                    ${renderTorrentInfoPM(files, { canWatch: Boolean(app) && hasInfoHash })}
+                </tbody>
+            </table>
+        </div>
+    </div>`;
+
+	await Modal.fire({
+		html,
+		showConfirmButton: false,
+		showCancelButton: false,
+		customClass: {
+			htmlContainer: '!mx-1',
+			popup: '!bg-gray-900 !text-gray-100 !px-4 !py-3',
+			confirmButton: 'haptic',
+			cancelButton: 'haptic',
+		},
+		width: '800px',
+		showCloseButton: true,
+		inputAutoFocus: true,
+		didOpen: () => {
+			bindWatchButtons({
+				service: 'pm',
+				hash: torrent.hash,
+				player: app ?? '',
+				keys: { premiumizeKey: pmKey },
+			});
+
+			document
+				.querySelectorAll<HTMLButtonElement>('button[data-pm-file-id]')
+				.forEach((button) => {
+					button.addEventListener('click', async () => {
+						if (button.disabled) return;
+						button.disabled = true;
+						try {
+							const details = await getPremiumizeItemDetails(
+								pmKey,
+								button.dataset.pmFileId!
+							);
+							const link = details.stream_link || details.link;
+							if (!link) {
+								toast.error('Premiumize returned no link.', magnetToastOptions);
+								return;
+							}
+							window.open(link, '_blank');
+						} catch (error) {
+							toast.error(
+								`Premiumize error: ${error instanceof Error ? error.message : 'link failed'}`,
+								magnetToastOptions
+							);
+						} finally {
+							button.disabled = false;
+						}
+					});
+				});
+
+			document.getElementById('btn-magnet-copy')?.addEventListener('click', () => {
+				void handleCopyOrDownloadMagnet(torrent.hash, shouldDownloadMagnets);
+			});
+
+			document.getElementById('btn-delete-pm')?.addEventListener('click', async () => {
+				try {
+					if (handlers.onDeletePm) await handlers.onDeletePm(pmKey, torrent.id);
+					else await handleDeletePmTorrent(pmKey, torrent.id);
+					Modal.close();
+				} catch (error) {
+					console.error('[torrentModal] delete failed (PM)', error);
+				}
+			});
+
+			document.getElementById('btn-export-links')?.addEventListener('click', async () => {
+				const toastId = toast.loading('Fetching download links...', magnetToastOptions);
+				try {
+					const lines: string[] = [];
+					for (const file of files) {
+						try {
+							const details = await getPremiumizeItemDetails(pmKey, file.fileId);
+							if (details.link) lines.push(details.link);
+						} catch (error) {
+							console.error('Failed to get link for file', file.filename, error);
+						}
+					}
+					if (!lines.length) {
+						toast.error('Failed to fetch download links.', {
+							...magnetToastOptions,
+							id: toastId,
+						});
+						return;
+					}
+					const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+					const a = document.createElement('a');
+					a.href = URL.createObjectURL(blob);
+					a.download = `${torrent.filename}.txt`;
+					a.click();
+					URL.revokeObjectURL(a.href);
+					toast.success('Download links exported.', {
+						...magnetToastOptions,
+						id: toastId,
+					});
+				} catch (error) {
+					toast.error('Failed to export download links.', {
+						...magnetToastOptions,
+						id: toastId,
+					});
 				}
 			});
 		},
