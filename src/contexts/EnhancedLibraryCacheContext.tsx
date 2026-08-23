@@ -6,7 +6,7 @@
 
 import {
 	useAllDebridApiKey,
-	usePremiumizeApiKey,
+	usePremiumizeCredential,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -176,7 +176,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 	const [rdKey, rdLoading] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
-	const pmKey = usePremiumizeApiKey();
+	const pmKey = usePremiumizeCredential();
 
 	// Library state
 	const [libraryItems, setLibraryItems] = useState<UserTorrent[]>([]);

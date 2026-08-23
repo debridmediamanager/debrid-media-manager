@@ -1,7 +1,7 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import {
 	useAllDebridApiKey,
-	usePremiumizeApiKey,
+	usePremiumizeCredential,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -18,7 +18,7 @@ export default function FloatingLibraryIndicator() {
 	const [rdToken] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
-	const pmKey = usePremiumizeApiKey();
+	const pmKey = usePremiumizeCredential();
 	const [mounted, setMounted] = useState(false);
 	const lastFetchLabel = useRelativeTimeLabel(lastFetchTime, 'Just now');
 

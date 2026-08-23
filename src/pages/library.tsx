@@ -6,7 +6,7 @@ import LibraryTorrentRow from '@/components/LibraryTorrentRow';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import {
 	useAllDebridApiKey,
-	usePremiumizeApiKey,
+	usePremiumizeCredential,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -140,7 +140,7 @@ function TorrentsPage() {
 	const [rdKey] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
-	const pmKey = usePremiumizeApiKey();
+	const pmKey = usePremiumizeCredential();
 
 	const [defaultTitleGrouping] = useState<Record<string, number>>(() => ({}));
 	const [movieTitleGrouping] = useState<Record<string, number>>(() => ({}));

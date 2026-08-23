@@ -1,7 +1,7 @@
 import {
 	useAllDebridApiKey,
 	useDebridLogin,
-	usePremiumizeApiKey,
+	usePremiumizeCredential,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -27,7 +27,7 @@ vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: vi.fn(),
 	useAllDebridApiKey: vi.fn(),
 	useTorBoxAccessToken: vi.fn(),
-	usePremiumizeApiKey: vi.fn(),
+	usePremiumizeCredential: vi.fn(),
 }));
 
 describe('StartPage', () => {
@@ -61,7 +61,7 @@ describe('StartPage', () => {
 		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false]);
 		vi.mocked(useAllDebridApiKey).mockReturnValue(null);
 		vi.mocked(useTorBoxAccessToken).mockReturnValue(null);
-		vi.mocked(usePremiumizeApiKey).mockReturnValue(null);
+		vi.mocked(usePremiumizeCredential).mockReturnValue(null);
 	});
 
 	it('should render the start page correctly', () => {
@@ -150,7 +150,7 @@ describe('StartPage', () => {
 	});
 
 	it('should redirect to home when user is logged in with Premiumize', () => {
-		vi.mocked(usePremiumizeApiKey).mockReturnValue('pm-key');
+		vi.mocked(usePremiumizeCredential).mockReturnValue('pm-key');
 
 		render(<StartPage />);
 

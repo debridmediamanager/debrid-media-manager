@@ -80,7 +80,7 @@ vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: () => [authKeys.rd],
 	useAllDebridApiKey: () => authKeys.ad,
 	useTorBoxAccessToken: () => authKeys.tb,
-	usePremiumizeApiKey: () => authKeys.pm,
+	usePremiumizeCredential: () => authKeys.pm,
 }));
 
 vi.mock('@/hooks/useExternalSources', () => ({

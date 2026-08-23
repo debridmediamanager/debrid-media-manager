@@ -36,7 +36,8 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 		});
 		const [pmKey] = useState(() => {
 			if (typeof window !== 'undefined') {
-				return localStorage.getItem('pm:apiKey');
+				// Either credential counts as being signed in to Premiumize
+				return localStorage.getItem('pm:accessToken') || localStorage.getItem('pm:apiKey');
 			}
 			return null;
 		});

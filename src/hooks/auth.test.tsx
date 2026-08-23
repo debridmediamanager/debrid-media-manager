@@ -271,4 +271,38 @@ describe('usePremiumize via useCurrentUser', () => {
 		await waitFor(() => expect(result.current.pmError).not.toBeNull());
 		expect(result.current.pmUser).toBeNull();
 	});
+
+	it('prefers the OAuth token over a pasted key - it is the narrower credential', async () => {
+		// Only the API key opens WebDAV and Usenet; the OAuth token does not.
+		setStoredValue('pm:apiKey', 'pasted-key');
+		setStoredValue('pm:accessToken', 'oauth-token');
+		mockGetPremiumizeAccountInfo.mockResolvedValue({
+			customer_id: '704233992',
+			premium_until: 1789862400,
+			limit_used: 0,
+			space_used: 0,
+			booster_points: 0,
+		});
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.pmUser).not.toBeNull());
+		expect(mockGetPremiumizeAccountInfo).toHaveBeenCalledWith('oauth-token');
+	});
+
+	it('falls back to the pasted key when there is no token', async () => {
+		setStoredValue('pm:apiKey', 'pasted-key');
+		mockGetPremiumizeAccountInfo.mockResolvedValue({
+			customer_id: '704233992',
+			premium_until: 1789862400,
+			limit_used: 0,
+			space_used: 0,
+			booster_points: 0,
+		});
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.pmUser).not.toBeNull());
+		expect(mockGetPremiumizeAccountInfo).toHaveBeenCalledWith('pasted-key');
+	});
 });

@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
 	useAllDebridApiKey,
-	usePremiumizeApiKey,
+	usePremiumizeCredential,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -113,7 +113,7 @@ vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: vi.fn(),
 	useAllDebridApiKey: vi.fn(),
 	useTorBoxAccessToken: vi.fn(),
-	usePremiumizeApiKey: vi.fn(),
+	usePremiumizeCredential: vi.fn(),
 }));
 
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -123,7 +123,7 @@ const wrapper = ({ children }: { children: ReactNode }) => (
 const mockedUseRealDebridAccessToken = vi.mocked(useRealDebridAccessToken);
 const mockedUseAllDebridApiKey = vi.mocked(useAllDebridApiKey);
 const mockedUseTorBoxAccessToken = vi.mocked(useTorBoxAccessToken);
-const mockedUsePremiumizeApiKey = vi.mocked(usePremiumizeApiKey);
+const mockedUsePremiumizeApiKey = vi.mocked(usePremiumizeCredential);
 
 describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 	beforeEach(() => {

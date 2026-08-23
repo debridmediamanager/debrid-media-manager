@@ -350,7 +350,7 @@ const usePremiumize = () => {
 	const [user, setUser] = useState<PremiumizeUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
 	const [loading, setLoading] = useState(false);
-	const [token] = useLocalStorage<string>('pm:apiKey');
+	const token = usePremiumizeCredential();
 
 	useEffect(() => {
 		if (!token) {
@@ -432,9 +432,22 @@ export const useTorBoxAccessToken = () => {
 	return apiKey;
 };
 
-export const usePremiumizeApiKey = () => {
+/**
+ * The credential to put in a Premiumize `Authorization: Bearer` header.
+ *
+ * Either an OAuth access token (`pm:accessToken`, from the device-code login) or
+ * a manually pasted API key (`pm:apiKey`). They are **not** interchangeable
+ * beyond that header, which is why they are stored apart: the API key is also
+ * the user's WebDAV and Usenet password, and the OAuth token is not (verified -
+ * WebDAV answers 401 for a token and 207 for a key). Anything that ever needs
+ * WebDAV credentials must read `pm:apiKey` specifically, never this.
+ *
+ * The token wins when both exist, because it is the narrower credential.
+ */
+export const usePremiumizeCredential = () => {
+	const [accessToken] = useLocalStorage<string>('pm:accessToken');
 	const [apiKey] = useLocalStorage<string>('pm:apiKey');
-	return apiKey;
+	return accessToken || apiKey;
 };
 
 // Main hook that combines all services

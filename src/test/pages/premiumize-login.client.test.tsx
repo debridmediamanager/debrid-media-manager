@@ -11,11 +11,27 @@ vi.mock('next/head', () => ({
 	default: ({ children }: { children: ReactNode }) => <>{children}</>,
 }));
 
-const setApiKey = vi.fn();
+const setStored: Record<string, ReturnType<typeof vi.fn>> = {
+	'pm:apiKey': vi.fn(),
+	'pm:accessToken': vi.fn(),
+};
 vi.mock('@/hooks/localStorage', () => ({
 	__esModule: true,
-	default: () => [null, setApiKey],
+	default: (key: string) => [null, setStored[key] ?? vi.fn()],
 }));
+
+const requestPremiumizeDeviceCode = vi.fn();
+const pollPremiumizeDeviceToken = vi.fn();
+vi.mock('@/services/premiumizeOAuth', async () => {
+	const actual = await vi.importActual<typeof import('@/services/premiumizeOAuth')>(
+		'@/services/premiumizeOAuth'
+	);
+	return {
+		...actual,
+		requestPremiumizeDeviceCode: () => requestPremiumizeDeviceCode(),
+		pollPremiumizeDeviceToken: (...a: unknown[]) => pollPremiumizeDeviceToken(...a),
+	};
+});
 
 const getPremiumizeAccountInfo = vi.fn();
 vi.mock('@/services/premiumize', async () => {
@@ -36,8 +52,14 @@ const submit = (key = 'ukf695qc73cqny3q') => {
 	fireEvent.click(screen.getByRole('button', { name: 'Save API Key' }));
 };
 
+const setApiKey = setStored['pm:apiKey'];
+const setAccessToken = setStored['pm:accessToken'];
+
 beforeEach(() => {
 	setApiKey.mockReset();
+	setAccessToken.mockReset();
+	requestPremiumizeDeviceCode.mockReset();
+	pollPremiumizeDeviceToken.mockReset();
 	getPremiumizeAccountInfo.mockReset();
 	replace.mockReset();
 	vi.mocked(useRouter).mockReturnValue({ replace, query: {} } as any);
@@ -115,5 +137,84 @@ describe('PremiumizeLoginPage', () => {
 		submit();
 
 		await waitFor(() => expect(screen.getByText(/socket hang up/)).toBeInTheDocument());
+	});
+
+	describe('device-code sign-in', () => {
+		const deviceCode = {
+			verification_uri: 'https://www.premiumize.me/device',
+			user_code: 'uwu3-67m4',
+			device_code: 'dc123',
+			expires_in: 600,
+			interval: 0,
+		};
+
+		it('shows the user code and where to enter it', async () => {
+			requestPremiumizeDeviceCode.mockResolvedValue(deviceCode);
+			pollPremiumizeDeviceToken.mockResolvedValue(null);
+
+			render(<PremiumizeLoginPage />);
+			fireEvent.click(screen.getByRole('button', { name: /Sign in with Premiumize/ }));
+
+			await waitFor(() =>
+				expect(screen.getByTestId('pm-user-code')).toHaveTextContent('uwu3-67m4')
+			);
+			expect(screen.getByRole('link')).toHaveAttribute(
+				'href',
+				'https://www.premiumize.me/device'
+			);
+		});
+
+		it('stores the token under pm:accessToken, never pm:apiKey', async () => {
+			// The two are not interchangeable: only the API key opens WebDAV.
+			requestPremiumizeDeviceCode.mockResolvedValue(deviceCode);
+			pollPremiumizeDeviceToken.mockResolvedValue({
+				access_token: 'oauth-tok',
+				token_type: 'bearer',
+				expires_in: 315360000,
+				scope: 'full',
+			});
+
+			render(<PremiumizeLoginPage />);
+			fireEvent.click(screen.getByRole('button', { name: /Sign in with Premiumize/ }));
+
+			await waitFor(() => expect(setAccessToken).toHaveBeenCalledWith('oauth-tok'));
+			expect(setApiKey).not.toHaveBeenCalled();
+			expect(replace).toHaveBeenCalledWith('/');
+		});
+
+		it('keeps polling while the user has not approved yet', async () => {
+			requestPremiumizeDeviceCode.mockResolvedValue(deviceCode);
+			pollPremiumizeDeviceToken
+				.mockResolvedValueOnce(null)
+				.mockResolvedValueOnce(null)
+				.mockResolvedValueOnce({ access_token: 'tok', token_type: 'bearer' });
+
+			render(<PremiumizeLoginPage />);
+			fireEvent.click(screen.getByRole('button', { name: /Sign in with Premiumize/ }));
+
+			await waitFor(() => expect(setAccessToken).toHaveBeenCalledWith('tok'));
+			expect(pollPremiumizeDeviceToken).toHaveBeenCalledTimes(3);
+		});
+
+		it('says so plainly when the user declines on Premiumize', async () => {
+			requestPremiumizeDeviceCode.mockResolvedValue(deviceCode);
+			pollPremiumizeDeviceToken.mockRejectedValue(
+				Object.assign(new Error('denied'), { error: 'access_denied' })
+			);
+
+			render(<PremiumizeLoginPage />);
+			fireEvent.click(screen.getByRole('button', { name: /Sign in with Premiumize/ }));
+
+			await waitFor(() => expect(screen.getByText(/You declined/)).toBeInTheDocument());
+			expect(setAccessToken).not.toHaveBeenCalled();
+		});
+
+		it('still offers the paste-a-key path alongside it', () => {
+			render(<PremiumizeLoginPage />);
+			expect(screen.getByLabelText('API Key')).toBeInTheDocument();
+			expect(
+				screen.getByRole('button', { name: /Sign in with Premiumize/ })
+			).toBeInTheDocument();
+		});
 	});
 });
