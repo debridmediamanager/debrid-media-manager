@@ -308,6 +308,86 @@ describe('useTorrentManagement', () => {
 		expect(updatedResult?.rdAvailable).toBe(false);
 	});
 
+	// RD answers `451 infringing_file` both for a blocked filename and as a
+	// throttle penalty mid-burst, and the throttle form shows up long before it
+	// ever escalates to 429. Deleting the availability row on the raw status
+	// evicted 285 hashes in one day that RD then downloaded to 100% once the
+	// burst subsided — and the row is shared, so one user's burst cost everyone.
+	describe('RD infringing_file', () => {
+		beforeEach(() => {
+			// A 451 throws inside handleAddAsMagnetInRd, so the callback never
+			// runs and torrentInfo stays null.
+			mockHandleAddAsMagnetInRd.mockResolvedValue('infringing_file');
+		});
+
+		it('keeps availability when the name is not one RD blocks', async () => {
+			currentResults = [
+				createSearchResult({
+					rdAvailable: true,
+					title: 'Would.I.Lie.To.You.S19E10.1080p.HEVC.x265-MeGusta',
+				}),
+			];
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.addRd('hash-1');
+			});
+
+			expect(mockRemoveAvailability).not.toHaveBeenCalled();
+		});
+
+		it('keeps availability mid-sweep, where deleteIfNotInstant is set', async () => {
+			currentResults = [
+				createSearchResult({
+					rdAvailable: true,
+					title: 'Would.I.Lie.To.You.S19E10.1080p.HDTV.H264-FTP',
+				}),
+			];
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.addRd('hash-1', false, true);
+			});
+
+			// A failed add is not evidence the torrent was slow to cache.
+			expect(mockRemoveAvailability).not.toHaveBeenCalled();
+		});
+
+		it('removes availability when the name is one RD blocks', async () => {
+			currentResults = [
+				createSearchResult({
+					rdAvailable: true,
+					title: 'Movie.2019.1080p.WEB-DL.DDP5.1.H.264-GROUP',
+				}),
+			];
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.addRd('hash-1');
+			});
+
+			expect(mockRemoveAvailability).toHaveBeenCalledWith(
+				'token-ts',
+				'token-hash',
+				'hash-1',
+				'RD infringing_file'
+			);
+			const updatedResult = currentResults.find((r: any) => r.hash === 'hash-1');
+			expect(updatedResult?.rdAvailable).toBe(false);
+		});
+
+		it('keeps availability when the title is unknown', async () => {
+			currentResults = [createSearchResult({ rdAvailable: true, hash: 'hash-other' })];
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.addRd('hash-1');
+			});
+
+			expect(mockRemoveAvailability).not.toHaveBeenCalled();
+		});
+	});
+
 	it('adds AD torrents via handleAddAsMagnetInAd', async () => {
 		const { result } = renderManagementHook();
 
