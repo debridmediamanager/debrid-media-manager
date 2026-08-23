@@ -121,7 +121,7 @@ describe('HashlistPage', () => {
 		const HashlistPage = (await import('@/pages/hashlist')).default;
 		render(<HashlistPage />);
 
-		expect(screen.getByText('Login to RD/AD/TB to download')).toBeInTheDocument();
+		expect(screen.getByText('Login to RD/AD/TB/PM to download')).toBeInTheDocument();
 	});
 
 	it('should render pagination controls', async () => {
