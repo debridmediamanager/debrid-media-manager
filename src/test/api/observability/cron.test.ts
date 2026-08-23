@@ -8,14 +8,20 @@ const torrentioMocks = vi.hoisted(() => ({
 	runTorrentioHealthCheckNow: vi.fn(),
 }));
 
+const torboxMocks = vi.hoisted(() => ({
+	runTorBoxHealthCheckNow: vi.fn(),
+}));
+
 const repositoryMocks = vi.hoisted(() => ({
 	repository: {
 		runDailyRollup: vi.fn(),
+		rollupTorBoxDaily: vi.fn(),
 	},
 }));
 
 vi.mock('@/lib/observability/streamServersHealth', () => healthMocks);
 vi.mock('@/lib/observability/torrentioHealth', () => torrentioMocks);
+vi.mock('@/lib/observability/torboxHealth', () => torboxMocks);
 vi.mock('@/services/repository', () => repositoryMocks);
 
 import handler from '@/pages/api/observability/cron';

@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { runHealthCheckNow } from '@/lib/observability/streamServersHealth';
+import { runTorBoxHealthCheckNow } from '@/lib/observability/torboxHealth';
 import { runTorrentioHealthCheckNow } from '@/lib/observability/torrentioHealth';
 import { repository } from '@/services/repository';
 
@@ -16,10 +17,14 @@ interface CronResponse {
 	torrentioHealth?: {
 		checked: boolean;
 	};
+	torboxHealth?: {
+		checked: boolean;
+	};
 	dailyRollup?: {
 		streamDailyRolled: boolean;
 		rdDailyRolled: boolean;
 		torrentioDailyRolled: boolean;
+		torboxDailyRolled: boolean;
 	};
 	error?: string;
 }
@@ -46,16 +51,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 	}
 
 	try {
-		// Run stream health check and Torrentio health check in parallel
+		// Run the Real-Debrid, Torrentio and TorBox health checks in parallel.
+		// They touch unrelated upstreams, so a slow one never delays the others.
 		const [streamMetrics] = await Promise.all([
 			runHealthCheckNow(),
 			runTorrentioHealthCheckNow(),
+			runTorBoxHealthCheckNow(),
 		]);
 
 		// Roll up yesterday's hourly data into daily aggregates (idempotent)
 		let dailyRollup: CronResponse['dailyRollup'];
 		try {
-			dailyRollup = await repository.runDailyRollup();
+			const rollup = await repository.runDailyRollup();
+			// TorBox keeps its own tables, so it rolls up alongside rather than
+			// inside the Real-Debrid aggregation service.
+			const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+			const torboxDailyRolled = await repository.rollupTorBoxDaily(yesterday);
+			dailyRollup = { ...rollup, torboxDailyRolled };
 		} catch (e) {
 			console.error('[Cron] Daily rollup failed:', e);
 		}
@@ -72,6 +84,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 					}
 				: undefined,
 			torrentioHealth: {
+				checked: true,
+			},
+			torboxHealth: {
 				checked: true,
 			},
 			dailyRollup,

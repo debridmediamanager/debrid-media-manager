@@ -9,6 +9,8 @@ const mockRepository = vi.hoisted(() => ({
 		getRdDailyHistory: vi.fn(),
 		getTorrentioHourlyHistory: vi.fn(),
 		getTorrentioDailyHistory: vi.fn(),
+		getTorBoxHourlyHistory: vi.fn(),
+		getTorBoxDailyHistory: vi.fn(),
 	},
 }));
 
@@ -276,6 +278,58 @@ describe('/api/observability/history', () => {
 		expect(mockRepository.repository.getTorrentioHourlyHistory).toHaveBeenCalledWith(2160);
 		expect(res.json).toHaveBeenCalledWith({
 			type: 'torrentio',
+			granularity: 'hourly',
+			range: '30d',
+			data: mockHourly,
+		});
+	});
+
+	it('returns hourly torbox data for 24h range', async () => {
+		const mockData = [{ hour: '2026-08-23T00:00:00Z', workingRate: 1 }];
+		mockRepository.repository.getTorBoxHourlyHistory.mockResolvedValue(mockData);
+		const req = createMockRequest({ method: 'GET', query: { type: 'torbox' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockRepository.repository.getTorBoxHourlyHistory).toHaveBeenCalledWith(24);
+		expect(res.json).toHaveBeenCalledWith({
+			type: 'torbox',
+			granularity: 'hourly',
+			range: '24h',
+			data: mockData,
+		});
+	});
+
+	it('returns daily torbox data for 90d range', async () => {
+		const mockData = [{ date: '2026-08-22', avgWorkingRate: 0.98 }];
+		mockRepository.repository.getTorBoxDailyHistory.mockResolvedValue(mockData);
+		const req = createMockRequest({ method: 'GET', query: { type: 'torbox', range: '90d' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockRepository.repository.getTorBoxDailyHistory).toHaveBeenCalledWith(90);
+		expect(res.json).toHaveBeenCalledWith({
+			type: 'torbox',
+			granularity: 'daily',
+			range: '90d',
+			data: mockData,
+		});
+	});
+
+	it('falls back to hourly when daily rollup is empty for torbox', async () => {
+		const mockHourly = [{ hour: '2026-08-23T00:00:00Z', workingRate: 1 }];
+		mockRepository.repository.getTorBoxDailyHistory.mockResolvedValue([]);
+		mockRepository.repository.getTorBoxHourlyHistory.mockResolvedValue(mockHourly);
+		const req = createMockRequest({ method: 'GET', query: { type: 'torbox', range: '30d' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockRepository.repository.getTorBoxHourlyHistory).toHaveBeenCalledWith(2160);
+		expect(res.json).toHaveBeenCalledWith({
+			type: 'torbox',
 			granularity: 'hourly',
 			range: '30d',
 			data: mockHourly,

@@ -4,6 +4,8 @@ const mockRepository = vi.hoisted(() => ({
 	repository: {
 		runDailyRollup: vi.fn(),
 		cleanupOldHistoryData: vi.fn(),
+		rollupTorBoxDaily: vi.fn(),
+		cleanupOldTorBoxData: vi.fn(),
 	},
 }));
 

@@ -28,11 +28,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		if (action === 'daily' || action === 'all') {
 			const dailyResult = await repository.runDailyRollup();
 			results.dailyRollup = dailyResult;
+			results.torboxDailyRollup = await repository.rollupTorBoxDaily(
+				new Date(Date.now() - 24 * 60 * 60 * 1000)
+			);
 		}
 
 		if (action === 'cleanup' || action === 'all') {
 			const cleanupResult = await repository.cleanupOldHistoryData();
 			results.cleanup = cleanupResult;
+			results.torboxCleanup = await repository.cleanupOldTorBoxData();
 		}
 
 		return res.status(200).json({
