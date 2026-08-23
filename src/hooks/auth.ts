@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { getAllDebridUser } from '../services/allDebrid';
+import { getPremiumizeAccountInfo, type PremiumizeAccountInfo } from '../services/premiumize';
 import { getCurrentUser as getRealDebridUser, getToken } from '../services/realDebrid';
 import { TorBoxUser, getUserData } from '../services/torbox';
 import { TraktUser, getTraktUser } from '../services/trakt';
@@ -20,6 +21,14 @@ export interface RealDebridUser {
 	premium: number;
 	expiration: string;
 }
+
+/**
+ * Premiumize has no profile endpoint - `account/info` is all there is, and it
+ * carries no username or email. `customer_id` is the only identifier, and it is
+ * also half of the WebDAV/NNTP credential pair, so it is shown but never
+ * treated as a secret (it is embedded in every CDN link the account mints).
+ */
+export type PremiumizeUser = PremiumizeAccountInfo;
 
 export interface AllDebridUser {
 	username: string;
@@ -337,6 +346,39 @@ const useTorBox = () => {
 	return { user, error, hasAuth: !!token, loading };
 };
 
+const usePremiumize = () => {
+	const [user, setUser] = useState<PremiumizeUser | null>(null);
+	const [error, setError] = useState<Error | null>(null);
+	const [loading, setLoading] = useState(false);
+	const [token] = useLocalStorage<string>('pm:apiKey');
+
+	useEffect(() => {
+		if (!token) {
+			return;
+		}
+
+		let isMounted = true;
+		setLoading(true);
+		getPremiumizeAccountInfo(token)
+			.then((info) => {
+				if (!isMounted) return;
+				setUser(info);
+				setError(null);
+				setLoading(false);
+			})
+			.catch((e) => {
+				if (!isMounted) return;
+				setError(e as Error);
+				setLoading(false);
+			});
+		return () => {
+			isMounted = false;
+		};
+	}, [token]);
+
+	return { user, error, hasAuth: !!token, loading };
+};
+
 const useTrakt = () => {
 	const [user, setUser] = useState<TraktUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
@@ -390,11 +432,17 @@ export const useTorBoxAccessToken = () => {
 	return apiKey;
 };
 
+export const usePremiumizeApiKey = () => {
+	const [apiKey] = useLocalStorage<string>('pm:apiKey');
+	return apiKey;
+};
+
 // Main hook that combines all services
 export const useCurrentUser = () => {
 	const rd = useRealDebrid();
 	const ad = useAllDebrid();
 	const tb = useTorBox();
+	const pm = usePremiumize();
 	const trakt = useTrakt();
 
 	return {
@@ -408,6 +456,9 @@ export const useCurrentUser = () => {
 		tbUser: tb.user,
 		tbError: tb.error,
 		hasTBAuth: tb.hasAuth,
+		pmUser: pm.user,
+		pmError: pm.error,
+		hasPMAuth: pm.hasAuth,
 		traktUser: trakt.user,
 		traktError: trakt.error,
 		hasTraktAuth: trakt.hasAuth,
@@ -439,5 +490,6 @@ export const useDebridLogin = () => {
 		loginWithRealDebrid: () => navigateToLogin('/realdebrid/login'),
 		loginWithAllDebrid: () => navigateToLogin('/alldebrid/login'),
 		loginWithTorbox: () => navigateToLogin('/torbox/login'),
+		loginWithPremiumize: () => navigateToLogin('/premiumize/login'),
 	};
 };

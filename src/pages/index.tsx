@@ -27,18 +27,22 @@ function IndexPage() {
 		rdUser,
 		adUser,
 		tbUser,
+		pmUser,
 		rdError,
 		adError,
 		tbError,
+		pmError,
 		traktUser,
 		traktError,
 		hasRDAuth,
 		hasADAuth,
 		hasTBAuth,
+		hasPMAuth,
 		hasTraktAuth,
 		isLoading,
 	} = useCurrentUser();
-	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
+	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox, loginWithPremiumize } =
+		useDebridLogin();
 	const [browseTerms] = useState(getTerms(2));
 
 	// Each of these no-ops without that service's credentials. They also resync the
@@ -80,6 +84,9 @@ function IndexPage() {
 		if (tbError) {
 			toast.error('Torbox profile failed. Verify the API key in Settings.');
 		}
+		if (pmError) {
+			toast.error('Premiumize profile failed. Verify the API key in Settings.');
+		}
 		if (traktError) {
 			toast.error('Trakt profile fetch failed.');
 		}
@@ -96,7 +103,7 @@ function IndexPage() {
 				toast('Local DB still open. Refresh and retry.', genericToastOptions);
 			};
 		}
-	}, [rdError, adError, tbError, traktError]);
+	}, [rdError, adError, tbError, pmError, traktError]);
 
 	useEffect(() => {
 		if (rdUser) {
@@ -141,6 +148,7 @@ function IndexPage() {
 			(rdUser || !hasRDAuth) &&
 			(adUser || !hasADAuth) &&
 			(tbUser || !hasTBAuth) &&
+			(pmUser || !hasPMAuth) &&
 			(traktUser || !hasTraktAuth) ? (
 				<>
 					<h1 className="mb-2 flex items-center justify-center text-xl font-bold text-white">
@@ -194,6 +202,12 @@ function IndexPage() {
 								service="tb"
 								user={tbUser}
 								onTraktLogin={loginWithTorbox}
+								onLogout={async (prefix) => await handleLogout(prefix, router)}
+							/>
+							<ServiceCard
+								service="pm"
+								user={pmUser}
+								onTraktLogin={loginWithPremiumize}
 								onLogout={async (prefix) => await handleLogout(prefix, router)}
 							/>
 							<ServiceCard

@@ -53,6 +53,14 @@ const baseTbUser = {
 	user_referral: 'ref123',
 } as any;
 
+const basePmUser = {
+	customer_id: '704233992',
+	premium_until: Math.floor(Date.now() / 1000) + 86400,
+	limit_used: 0.0381,
+	space_used: 276445467,
+	booster_points: 0,
+} as any;
+
 const baseTraktUser = {
 	user: {
 		username: 'trakt-user',
@@ -118,12 +126,44 @@ describe('ServiceCard', () => {
 		expect(screen.getByRole('button', { name: /Trakt/ })).toHaveTextContent('trakt-user');
 	});
 
+	it('identifies Premiumize by customer id, the only identifier it exposes', () => {
+		render(
+			<ServiceCard service="pm" user={basePmUser} onTraktLogin={vi.fn()} onLogout={vi.fn()} />
+		);
+
+		expect(screen.getByRole('button', { name: /Premiumize/ })).toHaveTextContent('704233992');
+	});
+
+	it('reports Premiumize fair use in points of a 1000-point pool', async () => {
+		const onLogout = vi.fn();
+		fireMock
+			.mockResolvedValueOnce({ isDismissed: true, dismiss: dismissReasons.cancel })
+			.mockResolvedValueOnce({ isConfirmed: true });
+
+		render(
+			<ServiceCard
+				service="pm"
+				user={basePmUser}
+				onTraktLogin={vi.fn()}
+				onLogout={onLogout}
+			/>
+		);
+
+		await userEvent.click(screen.getByRole('button', { name: /Premiumize/ }));
+
+		await waitFor(() => expect(fireMock).toHaveBeenCalledTimes(2));
+		expect(fireMock.mock.calls[0][0].title).toBe('Premiumize');
+		expect(fireMock.mock.calls[0][0].html).toContain('38.1 of 1000 points');
+		expect(onLogout).toHaveBeenCalledWith('pm:');
+	});
+
 	it('presents login buttons when accounts are missing', async () => {
 		const onLogin = vi.fn();
 		render(
 			<div className="space-y-2">
 				<ServiceCard service="rd" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
 				<ServiceCard service="tb" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
+				<ServiceCard service="pm" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
 				<ServiceCard
 					service="trakt"
 					user={null}
@@ -134,10 +174,10 @@ describe('ServiceCard', () => {
 		);
 
 		const loginButtons = screen.getAllByRole('button', { name: /Login/ });
-		expect(loginButtons).toHaveLength(3);
-		await userEvent.click(loginButtons[0]);
-		await userEvent.click(loginButtons[1]);
-		await userEvent.click(loginButtons[2]);
-		expect(onLogin).toHaveBeenCalledTimes(3);
+		expect(loginButtons).toHaveLength(4);
+		for (const button of loginButtons) {
+			await userEvent.click(button);
+		}
+		expect(onLogin).toHaveBeenCalledTimes(4);
 	});
 });

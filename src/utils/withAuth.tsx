@@ -34,6 +34,12 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			}
 			return null;
 		});
+		const [pmKey] = useState(() => {
+			if (typeof window !== 'undefined') {
+				return localStorage.getItem('pm:apiKey');
+			}
+			return null;
+		});
 
 		// Check for refresh credentials
 		const [hasRefreshCredentials] = useState(() => {
@@ -56,6 +62,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 				!rdKey &&
 				!adKey &&
 				!tbKey &&
+				!pmKey &&
 				router.pathname !== START_ROUTE &&
 				!router.pathname.endsWith(LOGIN_ROUTE) &&
 				!rdLoading &&
@@ -72,7 +79,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 				}
 				setIsLoading(false);
 			}
-		}, [rdKey, rdLoading, rdIsRefreshing, hasRefreshCredentials, adKey, tbKey, router]);
+		}, [rdKey, rdLoading, rdIsRefreshing, hasRefreshCredentials, adKey, tbKey, pmKey, router]);
 
 		// Loading screen state tracking
 		useEffect(() => {

@@ -7,12 +7,14 @@ const {
 	mockGetToken,
 	mockGetAllDebridUser,
 	mockGetTorboxUser,
+	mockGetPremiumizeAccountInfo,
 	mockGetTraktUser,
 } = vi.hoisted(() => ({
 	mockGetRealDebridUser: vi.fn(),
 	mockGetToken: vi.fn(),
 	mockGetAllDebridUser: vi.fn(),
 	mockGetTorboxUser: vi.fn(),
+	mockGetPremiumizeAccountInfo: vi.fn(),
 	mockGetTraktUser: vi.fn(),
 }));
 
@@ -27,6 +29,10 @@ vi.mock('../services/allDebrid', () => ({
 
 vi.mock('../services/torbox', () => ({
 	getUserData: mockGetTorboxUser,
+}));
+
+vi.mock('../services/premiumize', () => ({
+	getPremiumizeAccountInfo: mockGetPremiumizeAccountInfo,
 }));
 
 vi.mock('../services/trakt', () => ({
@@ -221,5 +227,48 @@ describe('auth hooks', () => {
 		await waitFor(() => expect(result2.current[1]).toBe(false));
 		expect(result2.current[0]).toBe('new-token');
 		expect(mockGetRealDebridUser).toHaveBeenCalledWith('new-token');
+	});
+});
+
+describe('usePremiumize via useCurrentUser', () => {
+	beforeEach(() => {
+		window.localStorage.clear();
+		__resetRealDebridStateForTests();
+		vi.clearAllMocks();
+	});
+
+	it('loads the account once a key is stored', async () => {
+		setStoredValue('pm:apiKey', 'pm-key');
+		mockGetPremiumizeAccountInfo.mockResolvedValue({
+			customer_id: '704233992',
+			premium_until: 1789862400,
+			limit_used: 0.004,
+			space_used: 0,
+			booster_points: 0,
+		});
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.pmUser).not.toBeNull());
+		expect(result.current.hasPMAuth).toBe(true);
+		expect(result.current.pmUser?.customer_id).toBe('704233992');
+		expect(mockGetPremiumizeAccountInfo).toHaveBeenCalledWith('pm-key');
+	});
+
+	it('does not call Premiumize without a key', async () => {
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.hasPMAuth).toBe(false));
+		expect(mockGetPremiumizeAccountInfo).not.toHaveBeenCalled();
+	});
+
+	it('keeps the error rather than the user when the key is refused', async () => {
+		setStoredValue('pm:apiKey', 'bad-key');
+		mockGetPremiumizeAccountInfo.mockRejectedValue(new Error('Not logged in.'));
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.pmError).not.toBeNull());
+		expect(result.current.pmUser).toBeNull();
 	});
 });

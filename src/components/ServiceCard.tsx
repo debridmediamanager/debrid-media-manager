@@ -1,11 +1,12 @@
-import { AllDebridUser, RealDebridUser } from '@/hooks/auth';
+import { AllDebridUser, PremiumizeUser, RealDebridUser } from '@/hooks/auth';
+import { isPremiumizePremium } from '@/services/premiumize';
 import { TraktUser } from '@/services/trakt';
 import { TorBoxUser } from '@/services/types';
 import { Check, X } from 'lucide-react';
 import Modal from '../components/modals/modal';
 
 interface ServiceCardProps {
-	service: 'rd' | 'ad' | 'tb' | 'trakt';
+	service: 'rd' | 'ad' | 'tb' | 'pm' | 'trakt';
 	user: RealDebridUser | AllDebridUser | TraktUser | any | null;
 	onTraktLogin: () => void;
 	onLogout: (prefix: string) => void;
@@ -85,6 +86,28 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 					: ''
 			}
           ${tbUser.user_referral ? `<p><strong>Referral Code:</strong> ${tbUser.user_referral}</p>` : ''}
+        </div>
+      `;
+		} else if (service === 'pm' && user && 'customer_id' in user) {
+			const pmUser = user as PremiumizeUser;
+			title = 'Premiumize';
+			prefix = 'pm:';
+			// limit_used is the fraction of a rolling 1000-point pool, and one
+			// point is exactly one GiB - not one GB, which understates spend by 7%.
+			const pointsUsed = pmUser.limit_used * 1000;
+			html = `
+        <div class="text-left">
+          <p><strong>Customer ID:</strong> ${pmUser.customer_id}</p>
+          <p><strong>Premium Until:</strong> ${
+				pmUser.premium_until
+					? new Date(pmUser.premium_until * 1000).toLocaleDateString()
+					: 'Free account'
+			}</p>
+          <p><strong>Fair use:</strong> ${pointsUsed.toFixed(1)} of 1000 points (${(
+				pmUser.limit_used * 100
+			).toFixed(2)}%)</p>
+          <p><strong>Cloud storage used:</strong> ${formatBytes(pmUser.space_used)} of 1 TB</p>
+          <p><strong>Booster points:</strong> ${pmUser.booster_points}</p>
         </div>
       `;
 		} else if (service === 'trakt' && user && 'user' in user) {
@@ -206,6 +229,34 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 				className="haptic w-full rounded border-2 border-purple-500 bg-purple-900/30 py-1 text-center text-purple-100 transition-colors hover:bg-purple-800/50"
 			>
 				Torbox Login
+			</button>
+		);
+	}
+
+	if (service === 'pm') {
+		const pmUser = user as PremiumizeUser | null;
+		// Premiumize's own icon colour, so the badge cannot be mistaken for
+		// Real-Debrid green, AllDebrid amber or TorBox indigo.
+		return pmUser ? (
+			<button
+				onClick={() => showUserInfo('pm')}
+				className="haptic flex items-center justify-center gap-2 rounded border-2 border-[#aa0000] bg-[#aa0000]/30 p-1 text-red-100 transition-colors hover:bg-[#aa0000]/50"
+			>
+				<span className="font-medium">Premiumize</span>
+				<span>{pmUser.customer_id}</span>
+				{isPremiumizePremium(pmUser) ? (
+					<Check className="h-4 w-4 text-green-500" />
+				) : (
+					<X className="h-4 w-4 text-red-500" />
+				)}
+			</button>
+		) : (
+			<button
+				type="button"
+				onClick={onTraktLogin}
+				className="haptic w-full rounded border-2 border-[#aa0000] bg-[#aa0000]/30 py-1 text-center text-red-100 transition-colors hover:bg-[#aa0000]/50"
+			>
+				Premiumize Login
 			</button>
 		);
 	}

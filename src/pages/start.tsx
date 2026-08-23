@@ -1,6 +1,7 @@
 import {
 	useAllDebridApiKey,
 	useDebridLogin,
+	usePremiumizeApiKey,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -11,18 +12,20 @@ import { useEffect } from 'react';
 
 export default function StartPage() {
 	const router = useRouter();
-	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox } = useDebridLogin();
+	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox, loginWithPremiumize } =
+		useDebridLogin();
 	const [rdToken] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
+	const pmKey = usePremiumizeApiKey();
 
 	// Redirect to index if already logged in
 	useEffect(() => {
-		const isLoggedIn = rdToken || adKey || tbKey;
+		const isLoggedIn = rdToken || adKey || tbKey || pmKey;
 		if (isLoggedIn) {
 			router.push('/');
 		}
-	}, [rdToken, adKey, tbKey, router]);
+	}, [rdToken, adKey, tbKey, pmKey, router]);
 
 	return (
 		<div className="flex h-screen flex-col items-center justify-center">
@@ -112,6 +115,24 @@ export default function StartPage() {
 						rel="noopener noreferrer"
 					>
 						Create an account with Torbox
+					</a>
+				</div>
+
+				{/* Premiumize */}
+				<div className="flex flex-row">
+					<button
+						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						onClick={loginWithPremiumize}
+					>
+						Login with Premiumize
+					</button>
+					<a
+						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+						href="https://www.premiumize.me/"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Create an account with Premiumize
 					</a>
 				</div>
 

@@ -1,6 +1,7 @@
 import {
 	useAllDebridApiKey,
 	useDebridLogin,
+	usePremiumizeApiKey,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -26,6 +27,7 @@ vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: vi.fn(),
 	useAllDebridApiKey: vi.fn(),
 	useTorBoxAccessToken: vi.fn(),
+	usePremiumizeApiKey: vi.fn(),
 }));
 
 describe('StartPage', () => {
@@ -33,12 +35,14 @@ describe('StartPage', () => {
 	let mockLoginWithRealDebrid: any;
 	let mockLoginWithAllDebrid: any;
 	let mockLoginWithTorbox: any;
+	let mockLoginWithPremiumize: any;
 
 	beforeEach(() => {
 		mockPush = vi.fn();
 		mockLoginWithRealDebrid = vi.fn();
 		mockLoginWithAllDebrid = vi.fn();
 		mockLoginWithTorbox = vi.fn();
+		mockLoginWithPremiumize = vi.fn();
 
 		vi.mocked(useRouter).mockReturnValue({
 			push: mockPush,
@@ -51,11 +55,13 @@ describe('StartPage', () => {
 			loginWithRealDebrid: mockLoginWithRealDebrid,
 			loginWithAllDebrid: mockLoginWithAllDebrid,
 			loginWithTorbox: mockLoginWithTorbox,
+			loginWithPremiumize: mockLoginWithPremiumize,
 		});
 
 		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false]);
 		vi.mocked(useAllDebridApiKey).mockReturnValue(null);
 		vi.mocked(useTorBoxAccessToken).mockReturnValue(null);
+		vi.mocked(usePremiumizeApiKey).mockReturnValue(null);
 	});
 
 	it('should render the start page correctly', () => {
@@ -78,6 +84,7 @@ describe('StartPage', () => {
 		expect(screen.getByText('Login with Real Debrid')).toBeInTheDocument();
 		expect(screen.getByText('Login with AllDebrid')).toBeInTheDocument();
 		expect(screen.getByText('Login with Torbox')).toBeInTheDocument();
+		expect(screen.getByText('Login with Premiumize')).toBeInTheDocument();
 	});
 
 	it('should render account creation links', () => {
@@ -86,6 +93,7 @@ describe('StartPage', () => {
 		expect(screen.getByText('Create an account with RealDebrid')).toBeInTheDocument();
 		expect(screen.getByText('Create an account with AllDebrid')).toBeInTheDocument();
 		expect(screen.getByText('Create an account with Torbox')).toBeInTheDocument();
+		expect(screen.getByText('Create an account with Premiumize')).toBeInTheDocument();
 	});
 
 	it('should render data storage policy', () => {
@@ -112,6 +120,9 @@ describe('StartPage', () => {
 
 		fireEvent.click(screen.getByText('Login with Torbox'));
 		expect(mockLoginWithTorbox).toHaveBeenCalledTimes(1);
+
+		fireEvent.click(screen.getByText('Login with Premiumize'));
+		expect(mockLoginWithPremiumize).toHaveBeenCalledTimes(1);
 	});
 
 	it('should redirect to home when user is logged in with Real-Debrid', () => {
@@ -132,6 +143,14 @@ describe('StartPage', () => {
 
 	it('should redirect to home when user is logged in with TorBox', () => {
 		vi.mocked(useTorBoxAccessToken).mockReturnValue('tb-token');
+
+		render(<StartPage />);
+
+		expect(mockPush).toHaveBeenCalledWith('/');
+	});
+
+	it('should redirect to home when user is logged in with Premiumize', () => {
+		vi.mocked(usePremiumizeApiKey).mockReturnValue('pm-key');
 
 		render(<StartPage />);
 
