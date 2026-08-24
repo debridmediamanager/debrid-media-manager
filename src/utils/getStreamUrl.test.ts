@@ -86,7 +86,8 @@ describe('getStreamUrl', () => {
 					{ id: 1, path: 'movie-1.mp4', selected: 1, bytes: 1024000000 },
 					{ id: 2, path: 'movie-2.mp4', selected: 0, bytes: 500000000 },
 				],
-				links: ['link1', 'link2'],
+				// One link per *selected* file, which is what RD returns.
+				links: ['link1'],
 			})
 		);
 		vi.mocked(unrestrictLink).mockResolvedValue(
@@ -157,7 +158,7 @@ describe('getStreamUrl', () => {
 		expect(ptt.parse).toHaveBeenCalledWith('Show.S01E02.1080p.mp4');
 	});
 
-	it('should handle fallback to first link when file ID not found', async () => {
+	it('refuses to cast when the requested file is not among the selected ones', async () => {
 		vi.mocked(addHashAsMagnet).mockResolvedValue(mockTorrentId);
 		vi.mocked(handleSelectFilesInRd).mockResolvedValue(undefined);
 		vi.mocked(getTorrentInfo).mockResolvedValue(
@@ -180,16 +181,13 @@ describe('getStreamUrl', () => {
 		);
 		vi.mocked(deleteTorrent).mockResolvedValue(undefined);
 
-		// Request file ID 5 (doesn't exist), should fall back to first link
-		const result = await getStreamUrl(mockRdKey, mockHash, 5, mockIpAddress, 'movie');
-
-		expect(result).toEqual([
-			'https://stream.example.com/movie.mp4',
-			'https://download.example.com/movie.mp4',
-			-1,
-			-1,
-			954, // 1000000000 / 1024 / 1024 rounded
-		]);
+		// File id 5 is not in the selected set. Falling back to links[0] would
+		// silently cast movie-main.mp4 in its place - a wrong file, not an error.
+		await expect(getStreamUrl(mockRdKey, mockHash, 5, mockIpAddress, 'movie')).rejects.toThrow(
+			'file_not_selected'
+		);
+		expect(unrestrictLink).not.toHaveBeenCalled();
+		expect(deleteTorrent).toHaveBeenCalledWith(mockRdKey, mockTorrentId, false);
 	});
 
 	it('should handle non-streamable links', async () => {
@@ -331,7 +329,8 @@ describe('getBiggestFileStreamUrl', () => {
 					{ id: 2, path: 'file-2.mkv', selected: 1, bytes: 2000000000 }, // Biggest
 					{ id: 3, path: 'file-3.mkv', selected: 0, bytes: 1000000000 },
 				],
-				links: ['link1', 'link2', 'link3'],
+				// One link per *selected* file, which is what RD returns.
+				links: ['link1', 'link2'],
 			})
 		);
 		vi.mocked(unrestrictLink).mockResolvedValue(
@@ -352,6 +351,7 @@ describe('getBiggestFileStreamUrl', () => {
 			1907, // 2000000000 / 1024 / 1024 rounded
 		]);
 		expect(addHashAsMagnet).toHaveBeenCalledWith(mockRdKey, mockHash, false);
+		expect(unrestrictLink).toHaveBeenCalledWith(mockRdKey, 'link2', mockIpAddress, false);
 		expect(deleteTorrent).toHaveBeenCalledWith(mockRdKey, mockTorrentId, false);
 	});
 
@@ -398,7 +398,7 @@ describe('getBiggestFileStreamUrl', () => {
 		expect(deleteTorrent).toHaveBeenCalledWith(mockRdKey, mockTorrentId, false);
 	});
 
-	it('should handle fallback to first link when biggest file index is invalid', async () => {
+	it('refuses to cast when RD returns fewer links than selected files', async () => {
 		vi.mocked(addHashAsMagnet).mockResolvedValue(mockTorrentId);
 		vi.mocked(handleSelectFilesInRd).mockResolvedValue(undefined);
 		vi.mocked(getTorrentInfo).mockResolvedValue(
@@ -411,22 +411,75 @@ describe('getBiggestFileStreamUrl', () => {
 				links: ['link1'], // Only one link, but biggest file is at index 0
 			})
 		);
+		vi.mocked(deleteTorrent).mockResolvedValue(undefined);
+
+		await expect(getBiggestFileStreamUrl(mockRdKey, mockHash, mockIpAddress)).rejects.toThrow(
+			'link count mismatch'
+		);
+		expect(unrestrictLink).not.toHaveBeenCalled();
+	});
+
+	// Regression: `links` is selected-files-only, so indexing it with a position
+	// taken from the full `files` array casts a different file. Measured against
+	// the live RD library on 2026-08-24 - 3 of 55 multi-file torrents mis-indexed,
+	// and every one of them fell through the old `?? links[0]` onto a wrong file.
+	it('pairs the biggest file with its own link when non-video files are deselected', async () => {
+		vi.mocked(addHashAsMagnet).mockResolvedValue(mockTorrentId);
+		vi.mocked(handleSelectFilesInRd).mockResolvedValue(undefined);
+		vi.mocked(getTorrentInfo).mockResolvedValue(
+			createTorrentInfo({
+				id: mockTorrentId,
+				files: [
+					{ id: 1, path: 'sample.mkv', selected: 1, bytes: 50000000 },
+					{ id: 2, path: 'movie.nfo', selected: 0, bytes: 2000 },
+					{ id: 3, path: 'subs.srt', selected: 0, bytes: 40000 },
+					{ id: 4, path: 'movie.mkv', selected: 1, bytes: 8000000000 },
+				],
+				links: ['link-sample', 'link-movie'],
+			})
+		);
 		vi.mocked(unrestrictLink).mockResolvedValue(
 			createUnrestrictResponse({
-				download: 'https://stream.example.com/fallback.mp4',
-				link: 'https://download.example.com/fallback.mp4',
-				filename: 'fallback.mp4',
-				filesize: 2000000000,
+				download: 'https://stream.example.com/movie.mkv',
+				link: 'https://download.example.com/movie.mkv',
+				filename: 'movie.mkv',
+				filesize: 8000000000,
 			})
 		);
 		vi.mocked(deleteTorrent).mockResolvedValue(undefined);
 
-		const result = await getBiggestFileStreamUrl(mockRdKey, mockHash, mockIpAddress);
+		await getBiggestFileStreamUrl(mockRdKey, mockHash, mockIpAddress);
 
-		expect(result).toEqual([
-			'https://stream.example.com/fallback.mp4',
-			'https://download.example.com/fallback.mp4',
-			1907,
-		]);
+		// The old code took findIndex over `files` (3), overran `links`, and fell
+		// back to links[0] - casting the sample instead of the movie.
+		expect(unrestrictLink).toHaveBeenCalledWith(mockRdKey, 'link-movie', mockIpAddress, false);
+	});
+
+	it('never picks a deselected file even when it is the biggest in the torrent', async () => {
+		vi.mocked(addHashAsMagnet).mockResolvedValue(mockTorrentId);
+		vi.mocked(handleSelectFilesInRd).mockResolvedValue(undefined);
+		vi.mocked(getTorrentInfo).mockResolvedValue(
+			createTorrentInfo({
+				id: mockTorrentId,
+				files: [
+					{ id: 1, path: 'movie.mkv', selected: 1, bytes: 8000000000 },
+					{ id: 2, path: 'extras.iso', selected: 0, bytes: 20000000000 },
+				],
+				links: ['link-movie'],
+			})
+		);
+		vi.mocked(unrestrictLink).mockResolvedValue(
+			createUnrestrictResponse({
+				download: 'https://stream.example.com/movie.mkv',
+				link: 'https://download.example.com/movie.mkv',
+				filename: 'movie.mkv',
+				filesize: 8000000000,
+			})
+		);
+		vi.mocked(deleteTorrent).mockResolvedValue(undefined);
+
+		await getBiggestFileStreamUrl(mockRdKey, mockHash, mockIpAddress);
+
+		expect(unrestrictLink).toHaveBeenCalledWith(mockRdKey, 'link-movie', mockIpAddress, false);
 	});
 });

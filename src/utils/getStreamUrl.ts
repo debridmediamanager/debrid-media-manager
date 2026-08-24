@@ -7,6 +7,34 @@ import {
 import ptt from 'parse-torrent-title';
 import { handleSelectFilesInRd } from './addMagnet';
 
+// `torrentInfo.links` covers the *selected* files only, one link per selected
+// file in the same order, while `torrentInfo.files` lists every file in the
+// torrent. Indexing `links` with a position from `files` therefore silently
+// hands back a different file's link whenever anything went unselected — and
+// `handleSelectFilesInRd` deselects every non-video file, so that is the normal
+// case. Both callers below go through here so the pairing is done once.
+const pickLink = (
+	torrentInfo: { files: { id: number; bytes: number; selected: number }[]; links: string[] },
+	choose: (selected: { id: number; bytes: number; selected: number }[]) => number
+): string => {
+	const selected = torrentInfo.files.filter((f) => f.selected);
+	if (selected.length === 0) {
+		throw new Error('no_selected_files');
+	}
+	// RD returns exactly one link per selected file. When it does not, the two
+	// arrays cannot be paired at all, and guessing casts the wrong file.
+	if (selected.length !== torrentInfo.links.length) {
+		throw new Error(
+			`link count mismatch: ${selected.length} selected files, ${torrentInfo.links.length} links`
+		);
+	}
+	const idx = choose(selected);
+	if (idx < 0) {
+		throw new Error('file_not_selected');
+	}
+	return torrentInfo.links[idx];
+};
+
 export const getStreamUrl = async (
 	rdKey: string,
 	hash: string,
@@ -24,12 +52,10 @@ export const getStreamUrl = async (
 		try {
 			await handleSelectFilesInRd(rdKey, `rd:${id}`, false);
 			const torrentInfo = await getTorrentInfo(rdKey, id, false);
-			let link = '';
 
-			const fileIdx = torrentInfo.files
-				.filter((f) => f.selected)
-				.findIndex((f) => f.id === fileId);
-			link = torrentInfo.links[fileIdx] ?? torrentInfo.links[0];
+			const link = pickLink(torrentInfo, (selected) =>
+				selected.findIndex((f) => f.id === fileId)
+			);
 
 			const resp = await unrestrictLink(rdKey, link, ipAddress, false);
 			if (!resp.streamable) {
@@ -72,13 +98,13 @@ export const getBiggestFileStreamUrl = async (
 		try {
 			await handleSelectFilesInRd(rdKey, `rd:${id}`, false);
 			const torrent = await getTorrentInfo(rdKey, id, false);
-			let link = '';
 
-			const biggestFile = torrent.files.reduce((prev, current) => {
-				return prev.bytes > current.bytes ? prev : current;
+			const link = pickLink(torrent, (selected) => {
+				const biggest = selected.reduce((prev, current) =>
+					prev.bytes > current.bytes ? prev : current
+				);
+				return selected.findIndex((f) => f.id === biggest.id);
 			});
-			const biggestFileIdx = torrent.files.findIndex((f) => f.id === biggestFile.id);
-			link = torrent.links[biggestFileIdx] ?? torrent.links[0];
 
 			const resp = await unrestrictLink(rdKey, link, ipAddress, false);
 			if (!resp.streamable) {
