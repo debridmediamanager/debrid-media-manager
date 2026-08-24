@@ -18,6 +18,7 @@ import { SearchService } from './search';
 import { StreamHealthService } from './streamHealth';
 import { TorBoxCastService } from './torboxCast';
 import { TorBoxHealthService } from './torboxHealth';
+import { TorBoxOperationalService } from './torboxOperational';
 import { TorrentSnapshotService } from './torrentSnapshot';
 import { TransferMetaService } from './transferMeta';
 import { ZurgKeysService } from './zurgKeys';
@@ -43,6 +44,7 @@ export {
 	StreamHealthService,
 	TorBoxCastService,
 	TorBoxHealthService,
+	TorBoxOperationalService,
 	TorrentSnapshotService,
 	TransferMetaService,
 	ZurgKeysService,

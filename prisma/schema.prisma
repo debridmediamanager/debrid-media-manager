@@ -890,3 +890,37 @@ model TempAuthData {
   @@index([expiresAt])
   @@index([token])
 }
+
+model TorBoxOperationalHourly {
+  id           Int      @id @default(autoincrement())
+  hour         DateTime
+  operation    String
+  totalCount   Int      @default(0)
+  successCount Int      @default(0)
+  failureCount Int      @default(0)
+  otherCount   Int      @default(0)
+  successRate  Float    @default(0)
+  createdAt    DateTime @default(now())
+
+  @@unique([hour, operation])
+  @@index([hour])
+  @@index([operation, hour])
+}
+
+model TorBoxOperationalDaily {
+  id             Int      @id @default(autoincrement())
+  date           DateTime
+  operation      String
+  totalCount     Int
+  successCount   Int
+  failureCount   Int
+  avgSuccessRate Float
+  minSuccessRate Float
+  maxSuccessRate Float
+  peakHour       Int?
+  createdAt      DateTime @default(now())
+
+  @@unique([date, operation])
+  @@index([date])
+  @@index([operation, date])
+}
