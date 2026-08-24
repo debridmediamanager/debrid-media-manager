@@ -32,6 +32,7 @@ import { formatReleaseDate } from '@/utils/movieReleaseDates';
 import { quickSearch } from '@/utils/quickSearch';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { sortByBiggest } from '@/utils/results';
+import { searchStateFromStatusHeader } from '@/utils/searchNotice';
 import { showInfoForSearchResult } from '@/utils/searchResultInfo';
 import {
 	DMM_SOURCE,
@@ -419,10 +420,8 @@ const MovieSearch: FunctionComponent = () => {
 			if (completedSources < totalSources) return;
 			allSourcesCompleted = true;
 			finalResultCount = latestResultCount;
-			// keep the "requested"/"processing" notice if the API returned one
-			setSearchState((prev) =>
-				prev === 'requested' || prev === 'processing' ? prev : 'loaded'
-			);
+			// keep the "processing" notice if the API returned one
+			setSearchState((prev) => (prev === 'processing' ? prev : 'loaded'));
 			checkAndShowFinalToast();
 		};
 
@@ -558,7 +557,7 @@ const MovieSearch: FunctionComponent = () => {
 				const response = await axiosWithRetry.get<SearchApiResponse>(endpoint);
 
 				if (response.status !== 200) {
-					setSearchState(response.headers.status ?? 'loaded');
+					setSearchState(searchStateFromStatusHeader(response.headers.status));
 					return [];
 				}
 
@@ -958,15 +957,6 @@ const MovieSearch: FunctionComponent = () => {
 			/>
 
 			{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}
-			{searchState === 'requested' && (
-				<div className="relative mt-4 rounded border border-yellow-400 bg-yellow-500 px-4 py-3 text-yellow-900">
-					<strong className="font-bold">Notice:</strong>
-					<span className="block sm:inline">
-						{' '}
-						The request has been received. This might take at least 5 minutes.
-					</span>
-				</div>
-			)}
 			{searchState === 'processing' && (
 				<div className="relative mt-4 rounded border border-blue-400 bg-blue-700 px-4 py-3 text-blue-100">
 					<strong className="font-bold">Notice:</strong>
