@@ -65,6 +65,39 @@ async function findUserTorrentByHash(
 	}
 }
 
+/**
+ * What to do with a torrent this call had to add.
+ *
+ * Resolving someone else's cast means adding their torrent to the *viewer's*
+ * account - a TorBox torrent id only resolves inside the account that created
+ * it, so there is no other way to mint a link. The viewer never asked for that
+ * torrent, so the play path releases it again once the link exists.
+ *
+ * Deleting does not disturb playback. Measured 2026-08-24: a range request
+ * opened before the delete kept streaming for 44 s afterwards and read its
+ * whole 50 MiB range, a fresh seek on the same link answered 206, and
+ * `requestdl` on the deleted id still minted a working link. The grant outlives
+ * the library entry.
+ *
+ * Cast time is the opposite case and keeps the torrent: the caster chose this
+ * content, and the stored `torrentId` is what makes their own playback a single
+ * API call instead of an add-and-mint round trip.
+ */
+export interface TorBoxAddPolicy {
+	/** Delete the torrent again if this call is what added it. */
+	releaseIfAdded?: boolean;
+}
+
+const releaseIfAdded = async (
+	apiKey: string,
+	policy: TorBoxAddPolicy | undefined,
+	addedThisCall: boolean,
+	torrentId: number
+) => {
+	if (!policy?.releaseIfAdded || !addedThisCall || !torrentId) return;
+	await deleteTorrent(apiKey, torrentId).catch(() => undefined);
+};
+
 export const getTorBoxStreamUrl = async (
 	apiKey: string,
 	hash: string,
@@ -169,7 +202,8 @@ export const getTorBoxStreamUrl = async (
 export const getFileByNameTorBoxStreamUrl = async (
 	apiKey: string,
 	hash: string,
-	targetFilename: string
+	targetFilename: string,
+	policy?: TorBoxAddPolicy
 ): Promise<[string, number, number, number, string]> => {
 	let streamUrl = '';
 	let fileSize = 0;
@@ -267,6 +301,8 @@ export const getFileByNameTorBoxStreamUrl = async (
 
 			streamUrl = downloadResult.data;
 			fileSize = Math.round((matchedFile.size || 0) / 1024 / 1024);
+
+			await releaseIfAdded(apiKey, policy, addedThisCall, torrentId);
 		} catch (e) {
 			if (addedThisCall && torrentId) {
 				await deleteTorrent(apiKey, torrentId).catch(() => undefined);
@@ -282,7 +318,8 @@ export const getFileByNameTorBoxStreamUrl = async (
 
 export const getBiggestFileTorBoxStreamUrl = async (
 	apiKey: string,
-	hash: string
+	hash: string,
+	policy?: TorBoxAddPolicy
 ): Promise<[string, number, number, number, string]> => {
 	let streamUrl = '';
 	let fileSize = 0;
@@ -360,6 +397,8 @@ export const getBiggestFileTorBoxStreamUrl = async (
 
 			streamUrl = downloadResult.data;
 			fileSize = Math.round((biggestFile.size || 0) / 1024 / 1024);
+
+			await releaseIfAdded(apiKey, policy, addedThisCall, torrentId);
 		} catch (e) {
 			if (addedThisCall && torrentId) {
 				await deleteTorrent(apiKey, torrentId).catch(() => undefined);

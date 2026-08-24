@@ -191,10 +191,13 @@ describe('getInstantIntent', () => {
 			'dir/Episode.mkv'
 		);
 
+		// Watch adds and releases around a single play, the way the Real-Debrid
+		// path already does.
 		expect(mocks.getFileByNameTorBoxStreamUrl).toHaveBeenCalledWith(
 			'tb-key',
 			'hash',
-			'Episode.mkv'
+			'Episode.mkv',
+			{ releaseIfAdded: true }
 		);
 		expect(result.intent).toBe('omniplayer://weblink?url=https://tb/stream.mkv');
 	});
@@ -222,7 +225,9 @@ describe('getInstantIntent', () => {
 			'Wrong.mkv'
 		);
 
-		expect(mocks.getBiggestFileTorBoxStreamUrl).toHaveBeenCalledWith('tb-key', 'hash');
+		expect(mocks.getBiggestFileTorBoxStreamUrl).toHaveBeenCalledWith('tb-key', 'hash', {
+			releaseIfAdded: true,
+		});
 		expect(result.intent).toBe('vlc://https://tb/biggest.mkv');
 	});
 

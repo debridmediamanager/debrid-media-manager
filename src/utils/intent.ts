@@ -100,13 +100,18 @@ const getTbInstantIntent = async (
 	try {
 		let streamUrl = '';
 		let cachedPathError: unknown;
+		// Watch is "play this now", not "add this to my library" - the Real-Debrid
+		// path already adds and deletes around a single play, and this matches it.
+		// The minted link outlives the library entry, so nothing is lost.
+		const release = { releaseIfAdded: true };
 		try {
 			if (fileName) {
 				try {
 					[streamUrl] = await getFileByNameTorBoxStreamUrl(
 						tbKey,
 						hash,
-						basename(fileName)
+						basename(fileName),
+						release
 					);
 				} catch {
 					// The name came from a different service's file listing, so
@@ -115,7 +120,7 @@ const getTbInstantIntent = async (
 				}
 			}
 			if (!streamUrl) {
-				[streamUrl] = await getBiggestFileTorBoxStreamUrl(tbKey, hash);
+				[streamUrl] = await getBiggestFileTorBoxStreamUrl(tbKey, hash, release);
 			}
 		} catch (e) {
 			// Both cached lookups check TorBox's global cache before the user's

@@ -240,6 +240,89 @@ describe('getBiggestFileTorBoxStreamUrl', () => {
 	});
 });
 
+// A viewer resolving someone else's cast has to add that torrent to their own
+// account - a TorBox torrent id only resolves inside the account that created
+// it. They never asked for it, so the play and watch paths hand it back.
+//
+// Safe to do: measured 2026-08-24, a range request opened before the delete kept
+// streaming for 44 s afterwards and completed its whole 50 MiB range, and a
+// fresh seek on the same link still answered 206.
+describe('releaseIfAdded', () => {
+	it('deletes a torrent this call added, once the link exists', async () => {
+		setupCached();
+		setupNoExistingTorrent();
+		setupCreateTorrent(77);
+		mockGetTorrentList
+			.mockResolvedValueOnce({ success: true, data: [] } as any)
+			.mockResolvedValue({ success: true, data: [makeTorrent({ id: 77 })] } as any);
+		setupDownloadLink('https://torbox.app/download/foreign');
+
+		const [url] = await getBiggestFileTorBoxStreamUrl(API_KEY, HASH, { releaseIfAdded: true });
+
+		expect(url).toBe('https://torbox.app/download/foreign');
+		// The link is minted before the torrent goes away
+		expect(mockRequestDownloadLink).toHaveBeenCalled();
+		expect(mockDeleteTorrent).toHaveBeenCalledWith(API_KEY, 77);
+	});
+
+	it('leaves a torrent the viewer already had alone', async () => {
+		setupCached();
+		setupExistingTorrent();
+		setupDownloadLink();
+
+		await getBiggestFileTorBoxStreamUrl(API_KEY, HASH, { releaseIfAdded: true });
+
+		expect(mockCreateTorrent).not.toHaveBeenCalled();
+		expect(mockDeleteTorrent).not.toHaveBeenCalled();
+	});
+
+	it('keeps what it added when no policy is given, which is what casting wants', async () => {
+		setupCached();
+		setupNoExistingTorrent();
+		setupCreateTorrent(77);
+		mockGetTorrentList
+			.mockResolvedValueOnce({ success: true, data: [] } as any)
+			.mockResolvedValue({ success: true, data: [makeTorrent({ id: 77 })] } as any);
+		setupDownloadLink();
+
+		await getBiggestFileTorBoxStreamUrl(API_KEY, HASH);
+
+		expect(mockDeleteTorrent).not.toHaveBeenCalled();
+	});
+
+	it('releases from the by-name lookup too', async () => {
+		setupCached();
+		setupNoExistingTorrent();
+		setupCreateTorrent(77);
+		mockGetTorrentList
+			.mockResolvedValueOnce({ success: true, data: [] } as any)
+			.mockResolvedValue({ success: true, data: [makeTorrent({ id: 77 })] } as any);
+		setupDownloadLink();
+
+		await getFileByNameTorBoxStreamUrl(API_KEY, HASH, 'Movie.S01E03.mkv', {
+			releaseIfAdded: true,
+		});
+
+		expect(mockDeleteTorrent).toHaveBeenCalledWith(API_KEY, 77);
+	});
+
+	it('still cleans up on failure, and only once', async () => {
+		setupCached();
+		setupNoExistingTorrent();
+		setupCreateTorrent(77);
+		mockGetTorrentList
+			.mockResolvedValueOnce({ success: true, data: [] } as any)
+			.mockResolvedValue({ success: true, data: [makeTorrent({ id: 77 })] } as any);
+		mockRequestDownloadLink.mockResolvedValue({ success: false } as any);
+
+		await expect(
+			getBiggestFileTorBoxStreamUrl(API_KEY, HASH, { releaseIfAdded: true })
+		).rejects.toThrow();
+
+		expect(mockDeleteTorrent).toHaveBeenCalledTimes(1);
+	});
+});
+
 describe('getTorBoxStreamUrlKeepTorrent', () => {
 	it('does not delete torrent on error', async () => {
 		setupCached();

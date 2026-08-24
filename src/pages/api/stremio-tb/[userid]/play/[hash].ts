@@ -118,7 +118,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				);
 			}
 
-			// If direct lookup failed and we have a fallback hash, use it
+			// If direct lookup failed and we have a fallback hash, use it.
+			//
+			// Reaching here means the torrent is not this viewer's, so resolving
+			// it has to add it to their account first. `releaseIfAdded` hands it
+			// straight back: they never asked for it, and the minted link keeps
+			// working without it - an in-flight read survives the delete and a
+			// later seek still answers 206.
 			if (!streamUrl && typeof fallbackHash === 'string') {
 				if (isWebDownload) {
 					streamUrl = await getWebDownloadStreamUrlByHash(apiKey, fallbackHash, filename);
@@ -126,11 +132,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					const [url] = await getFileByNameTorBoxStreamUrl(
 						apiKey,
 						fallbackHash,
-						filename
+						filename,
+						{
+							releaseIfAdded: true,
+						}
 					);
 					streamUrl = url;
 				} else {
-					const [url] = await getBiggestFileTorBoxStreamUrl(apiKey, fallbackHash);
+					const [url] = await getBiggestFileTorBoxStreamUrl(apiKey, fallbackHash, {
+						releaseIfAdded: true,
+					});
 					streamUrl = url;
 				}
 			}
@@ -145,17 +156,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				throw new Error('Failed to get stream URL for web download');
 			}
 		} else {
-			// Legacy format: torrent hash
+			// Legacy format: torrent hash. Same reasoning as the fallback above -
+			// this is a play, so anything added to serve it is handed back.
 			if (filename) {
 				// Match by filename (for TV episodes from season packs)
-				const [url] = await getFileByNameTorBoxStreamUrl(apiKey, hash, filename);
+				const [url] = await getFileByNameTorBoxStreamUrl(apiKey, hash, filename, {
+					releaseIfAdded: true,
+				});
 				if (!url) {
 					throw new Error(`Failed to find file "${filename}" in torrent`);
 				}
 				streamUrl = url;
 			} else {
 				// No filename provided - use biggest file (for movies)
-				const [url] = await getBiggestFileTorBoxStreamUrl(apiKey, hash);
+				const [url] = await getBiggestFileTorBoxStreamUrl(apiKey, hash, {
+					releaseIfAdded: true,
+				});
 				if (!url) {
 					throw new Error('Failed to get stream URL for torrent');
 				}
