@@ -80,6 +80,72 @@ describe('/api/stremio-tb/cast/library/[torrentIdPlusHash]', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 	});
 
+	// Regression: TorBoxCast is unique on (imdbId, userId, hash), so every video
+	// file without a season/episode used to be written to the bare imdb id and
+	// overwrite the one before it - a movie with extras kept whichever file came
+	// last, and each of the discarded writes still spent a `requestdl` call.
+	it('writes one row for a movie shipped with extras, and it is the feature', async () => {
+		mockGetTorrentList.mockResolvedValue({
+			success: true,
+			data: {
+				id: 42,
+				hash: TORRENT_HASH,
+				name: 'Some Movie 2021',
+				files: [
+					{ id: 3, name: 'Trailer.mkv', size: 200 },
+					{ id: 7, name: 'Some Movie 2021.mkv', size: 90000 },
+					{ id: 9, name: 'Behind.The.Scenes.mkv', size: 800 },
+				],
+			},
+		} as any);
+		mockRequestDownloadLink.mockResolvedValue({ success: true, data: 'https://tb/dl' } as any);
+
+		const req = createMockRequest({
+			query: { torrentIdPlusHash: `42:${TORRENT_HASH}`, apiKey: 'key' },
+		});
+		await handler(req, res);
+
+		expect(mockRequestDownloadLink).toHaveBeenCalledTimes(1);
+		expect(mockRepository.saveTorBoxCast).toHaveBeenCalledTimes(1);
+		expect(mockRepository.saveTorBoxCast).toHaveBeenCalledWith(
+			'tt1234567',
+			'user1',
+			TORRENT_HASH,
+			'Some Movie 2021.mkv',
+			'https://tb/dl',
+			expect.any(Number),
+			42,
+			7
+		);
+	});
+
+	it('reports the files it could not get a link for instead of dropping them', async () => {
+		mockGetTorrentList.mockResolvedValue({
+			success: true,
+			data: {
+				id: 42,
+				hash: TORRENT_HASH,
+				name: 'Some Show',
+				files: [
+					{ id: 1, name: 'Show.S01E01.mkv', size: 100 },
+					{ id: 2, name: 'Show.S01E02.mkv', size: 100 },
+				],
+			},
+		} as any);
+		mockRequestDownloadLink
+			.mockResolvedValueOnce({ success: true, data: 'https://tb/dl' } as any)
+			.mockResolvedValueOnce({ success: false } as any);
+
+		const req = createMockRequest({
+			query: { torrentIdPlusHash: `42:${TORRENT_HASH}`, apiKey: 'key' },
+		});
+		await handler(req, res);
+
+		const payload = res._getData() as any;
+		expect(payload.status).toBe('success');
+		expect(payload.failedFiles).toEqual(['Show.S01E02.mkv']);
+	});
+
 	it('casts a web download through the webdl endpoints', async () => {
 		mockGetWebDownloadList.mockResolvedValue({
 			success: true,

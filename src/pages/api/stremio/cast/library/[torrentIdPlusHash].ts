@@ -1,9 +1,9 @@
 import { getTorrentInfo } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { planLibraryCast } from '@/utils/castLibraryPlan';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { NextApiRequest, NextApiResponse } from 'next';
-import ptt from 'parse-torrent-title';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
@@ -114,33 +114,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	// Step 3: Process files with IMDB ID
-	for (let i = 0; i < selectedFiles.length; i++) {
-		const selectedFile = selectedFiles[i];
+	// `links[i]` pairs with `selectedFiles[i]`, so the index has to be carried
+	// through the planner rather than recomputed from the file.
+	const plan = planLibraryCast(
+		imdbid,
+		selectedFiles.map((file, index) => ({ file, index })),
+		({ file }) => ({ filename: file.path, size: file.bytes })
+	);
 
-		// Parse filename to extract season/episode info
-		let info;
+	for (const { file: entry, stremioKey } of plan) {
 		try {
-			info = ptt.parse(selectedFile.path.split('/').pop() || '');
-		} catch (error) {
-			console.error(`Failed to parse filename "${selectedFile.path}":`, error);
-			res.status(500).json({
-				status: 'error',
-				errorMessage: `Failed to parse filename: ${selectedFile.path}`,
-				details: error instanceof Error ? error.message : String(error),
-			});
-			return;
-		}
-
-		// Save cast information to database
-		try {
-			const stremioKey = `${imdbid}${info.season && info.episode ? `:${info.season}:${info.episode}` : ''}`;
 			await db.saveCast(
 				stremioKey,
 				userid,
 				tInfo.hash,
-				selectedFile.path,
-				tInfo.links[i],
-				Math.ceil(selectedFile.bytes / 1024 / 1024)
+				entry.file.path,
+				tInfo.links[entry.index],
+				Math.ceil(entry.file.bytes / 1024 / 1024)
 			);
 		} catch (error) {
 			console.error('Failed to save cast information to database:', error);
@@ -153,10 +143,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 	}
 
-	// Determine season/episode from first file for redirect
-	const firstFileInfo = ptt.parse(selectedFiles[0].path.split('/').pop() || '');
-	const season = firstFileInfo.season ? String(firstFileInfo.season) : '';
-	const episode = firstFileInfo.episode ? String(firstFileInfo.episode) : '';
+	// Determine season/episode from the first cast row for redirect
+	const season = plan[0]?.season != null ? String(plan[0].season) : '';
+	const episode = plan[0]?.episode != null ? String(plan[0].episode) : '';
 
 	// Prepare redirect URL
 	let redirectUrl = getStremioDetailUrl(imdbid);

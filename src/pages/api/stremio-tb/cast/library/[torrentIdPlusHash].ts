@@ -6,12 +6,17 @@ import {
 	requestWebDownloadLink,
 } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorBoxWebDownload } from '@/services/types';
+import { planLibraryCast } from '@/utils/castLibraryPlan';
+import { delay } from '@/utils/delay';
 import { isVideo } from '@/utils/selectable';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { generateTorBoxUserId } from '@/utils/torboxCastApiHelpers';
 import { parseTorBoxCastTarget } from '@/utils/torboxWebDownload';
 import { NextApiRequest, NextApiResponse } from 'next';
-import ptt from 'parse-torrent-title';
+
+// `requestdl` starts refusing at roughly 100 calls, well below the rest of the
+// TorBox API's ceiling.
+const REQUESTDL_SPACING_MS = 250;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
@@ -143,7 +148,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return;
 		}
 
-		for (const file of videoFiles) {
+		const failedFiles: string[] = [];
+		const plan = planLibraryCast(imdbid, videoFiles, (file) => ({
+			filename: file.name || file.short_name || '',
+			size: file.size || 0,
+		}));
+
+		for (let i = 0; i < plan.length; i++) {
+			const { file, stremioKey } = plan[i];
+			// `requestdl` has a much lower rate ceiling than the rest of the
+			// TorBox API - around 100 calls before it starts answering 429 - and a
+			// full season pack walks straight into it. Space the calls out.
+			if (i > 0) {
+				await delay(REQUESTDL_SPACING_MS);
+			}
+
 			const downloadResult = isWebDownload
 				? await requestWebDownloadLink(apiKey, {
 						web_id: torrentId,
@@ -156,13 +175,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 			if (!downloadResult.success || !downloadResult.data) {
 				console.error(`Failed to get download link for file ${file.id}`);
+				failedFiles.push(file.name || file.short_name || String(file.id));
 				continue;
 			}
 
 			const streamUrl = downloadResult.data;
 			const filename = (file.name || file.short_name || '').split('/').pop() || 'Unknown';
-			const info = ptt.parse(filename);
-			const stremioKey = `${imdbid}${info.season && info.episode ? `:${info.season}:${info.episode}` : ''}`;
 			const fileSize = Math.round((file.size || 0) / 1024 / 1024);
 
 			await db.saveTorBoxCast(
@@ -177,11 +195,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			);
 		}
 
-		const firstFileInfo = ptt.parse(
-			(videoFiles[0].name || videoFiles[0].short_name || '').split('/').pop() || ''
-		);
-		const season = firstFileInfo.season ? String(firstFileInfo.season) : '';
-		const episode = firstFileInfo.episode ? String(firstFileInfo.episode) : '';
+		const season = plan[0]?.season != null ? String(plan[0].season) : '';
+		const episode = plan[0]?.episode != null ? String(plan[0].episode) : '';
 
 		let redirectUrl = getStremioDetailUrl(imdbid);
 		let mediaType = 'movie';
@@ -198,6 +213,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			mediaType,
 			season: season || undefined,
 			episode: episode || undefined,
+			// Dropping files silently reads as "everything was cast"
+			failedFiles: failedFiles.length > 0 ? failedFiles : undefined,
 		});
 	} catch (error) {
 		console.error('TorBox library cast error:', error);

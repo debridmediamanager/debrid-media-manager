@@ -107,13 +107,17 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 		await handler(req, res);
 
 		expect(mockGetTorrentInfo).toHaveBeenCalledWith('token', '1', true);
+		// Neither file parses to a season/episode, so both used to be written to
+		// the bare imdb id - the same unique key - and the second overwrote the
+		// first. Only the biggest is kept now, and it keeps its own link.
+		expect(mockDbSaveCast).toHaveBeenCalledTimes(1);
 		expect(mockDbSaveCast).toHaveBeenCalledWith(
 			'tt1234567',
 			'user-1',
 			'hash123',
-			'Movie.2024.mkv',
-			'https://rd/link-1',
-			1
+			'EpisodeTitle.mkv',
+			'https://rd/link-2',
+			2
 		);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
@@ -124,6 +128,68 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 			season: undefined,
 			episode: undefined,
 		});
+	});
+
+	it('gives every episode its own key and its own link', async () => {
+		mockGetTorrentInfo.mockResolvedValue(
+			makeTorrentInfo({
+				files: [
+					{ id: 1, path: 'Show.S01E01.mkv', bytes: 1048576, selected: true },
+					{ id: 2, path: 'Show.S01E02.mkv', bytes: 2097152, selected: true },
+				],
+				links: ['https://rd/link-1', 'https://rd/link-2'],
+			})
+		);
+
+		const req = createMockRequest({ query: { rdToken: 'token', torrentIdPlusHash: '1:hash' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockDbSaveCast).toHaveBeenCalledTimes(2);
+		expect(mockDbSaveCast).toHaveBeenNthCalledWith(
+			1,
+			'tt1234567:1:1',
+			'user-1',
+			'hash123',
+			'Show.S01E01.mkv',
+			'https://rd/link-1',
+			1
+		);
+		expect(mockDbSaveCast).toHaveBeenNthCalledWith(
+			2,
+			'tt1234567:1:2',
+			'user-1',
+			'hash123',
+			'Show.S01E02.mkv',
+			'https://rd/link-2',
+			2
+		);
+	});
+
+	// `info.season && info.episode` read season 0 as absent, dropping specials
+	// onto the movie key together with every other unparsed file.
+	it('keeps a special numbered from zero on its own key', async () => {
+		mockGetTorrentInfo.mockResolvedValue(
+			makeTorrentInfo({
+				files: [{ id: 1, path: 'Show.S00E01.mkv', bytes: 1048576, selected: true }],
+				links: ['https://rd/link-1'],
+			})
+		);
+
+		const req = createMockRequest({ query: { rdToken: 'token', torrentIdPlusHash: '1:hash' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockDbSaveCast).toHaveBeenCalledWith(
+			'tt1234567:0:1',
+			'user-1',
+			'hash123',
+			'Show.S00E01.mkv',
+			'https://rd/link-1',
+			1
+		);
 	});
 
 	it('returns need_imdb_id when imdb id is not in database and not provided', async () => {
@@ -160,13 +226,14 @@ describe('/api/stremio/cast/library/[torrentIdPlusHash]', () => {
 		await handler(req, res);
 
 		expect(mockDbSaveIMDBIdMapping).toHaveBeenCalledWith('hash123', 'tt7654321');
+		expect(mockDbSaveCast).toHaveBeenCalledTimes(1);
 		expect(mockDbSaveCast).toHaveBeenCalledWith(
 			'tt7654321',
 			'user-1',
 			'hash123',
-			'Movie.2024.mkv',
-			'https://rd/link-1',
-			1
+			'EpisodeTitle.mkv',
+			'https://rd/link-2',
+			2
 		);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({

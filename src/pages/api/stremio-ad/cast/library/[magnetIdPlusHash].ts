@@ -2,9 +2,9 @@ import { getMagnetFiles, getMagnetStatusAd, isAdStatusReady } from '@/services/a
 import { repository as db } from '@/services/repository';
 import { generateAllDebridUserId } from '@/utils/allDebridCastApiHelpers';
 import { selectSortedVideos } from '@/utils/allDebridCastClientPipeline';
+import { planLibraryCast } from '@/utils/castLibraryPlan';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { NextApiRequest, NextApiResponse } from 'next';
-import ptt from 'parse-torrent-title';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
@@ -130,28 +130,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return;
 		}
 
-		for (let i = 0; i < videoFiles.length; i++) {
-			const file = videoFiles[i];
-			const filename = file.path.split('/').pop() || 'Unknown';
-			const info = ptt.parse(filename);
-			const stremioKey = `${imdbid}${info.season && info.episode ? `:${info.season}:${info.episode}` : ''}`;
-			const fileSize = Math.round(file.size / 1024 / 1024);
+		// `fileIndex` is the position in `videoFiles`, which is the order the play
+		// endpoint reconstructs, so it has to survive the planner's filtering.
+		const plan = planLibraryCast(
+			imdbid,
+			videoFiles.map((file, index) => ({ file, index })),
+			({ file }) => ({ filename: file.path, size: file.size })
+		);
+
+		for (const { file: entry, stremioKey } of plan) {
+			const filename = entry.file.path.split('/').pop() || 'Unknown';
+			const fileSize = Math.round(entry.file.size / 1024 / 1024);
 
 			await db.saveAllDebridCast(
 				stremioKey,
 				userid,
 				magnetHash,
 				filename,
-				file.link,
+				entry.file.link,
 				fileSize,
 				magnetId,
-				i
+				entry.index
 			);
 		}
 
-		const firstFileInfo = ptt.parse(videoFiles[0].path.split('/').pop() || '');
-		const season = firstFileInfo.season ? String(firstFileInfo.season) : '';
-		const episode = firstFileInfo.episode ? String(firstFileInfo.episode) : '';
+		const season = plan[0]?.season != null ? String(plan[0].season) : '';
+		const episode = plan[0]?.episode != null ? String(plan[0].episode) : '';
 
 		let redirectUrl = getStremioDetailUrl(imdbid);
 		let mediaType = 'movie';
