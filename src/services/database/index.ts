@@ -10,6 +10,7 @@ import { HistoryAggregationService } from './historyAggregation';
 import { ImdbSearchService } from './imdbSearch';
 import { Nzb2rdMapService } from './nzb2rdMap';
 import { NzbSearchCacheService } from './nzbSearchCache';
+import { PremiumizeCastService } from './premiumizeCast';
 import { RdOperationalService } from './rdOperational';
 import { ReportService } from './report';
 import { ScrapedService } from './scraped';
@@ -34,6 +35,7 @@ export {
 	ImdbSearchService,
 	Nzb2rdMapService,
 	NzbSearchCacheService,
+	PremiumizeCastService,
 	RdOperationalService,
 	ReportService,
 	ScrapedService,

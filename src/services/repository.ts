@@ -13,6 +13,7 @@ import {
 	Nzb2rdMapService,
 	type Nzb2rdWaiter,
 	NzbSearchCacheService,
+	PremiumizeCastService,
 	RdOperationalService,
 	ReportService,
 	ScrapedService,
@@ -42,6 +43,7 @@ export type RepositoryDependencies = Partial<{
 	torboxCastService: TorBoxCastService;
 	torboxHealthService: TorBoxHealthService;
 	allDebridCastService: AllDebridCastService;
+	premiumizeCastService: PremiumizeCastService;
 	reportService: ReportService;
 	torrentSnapshotService: TorrentSnapshotService;
 	hashImdbService: HashImdbService;
@@ -67,6 +69,7 @@ export class Repository {
 	private torboxCastService: TorBoxCastService;
 	private torboxHealthService: TorBoxHealthService;
 	private allDebridCastService: AllDebridCastService;
+	private premiumizeCastService: PremiumizeCastService;
 	private reportService: ReportService;
 	private torrentSnapshotService: TorrentSnapshotService;
 	private hashImdbService: HashImdbService;
@@ -91,6 +94,7 @@ export class Repository {
 		torboxCastService,
 		torboxHealthService,
 		allDebridCastService,
+		premiumizeCastService,
 		reportService,
 		torrentSnapshotService,
 		hashImdbService,
@@ -114,6 +118,7 @@ export class Repository {
 		this.torboxCastService = torboxCastService ?? new TorBoxCastService();
 		this.torboxHealthService = torboxHealthService ?? new TorBoxHealthService();
 		this.allDebridCastService = allDebridCastService ?? new AllDebridCastService();
+		this.premiumizeCastService = premiumizeCastService ?? new PremiumizeCastService();
 		this.reportService = reportService ?? new ReportService();
 		this.torrentSnapshotService = torrentSnapshotService ?? new TorrentSnapshotService();
 		this.hashImdbService = hashImdbService ?? new HashImdbService();
@@ -692,6 +697,85 @@ export class Repository {
 
 	public getAllAllDebridUserCasts(userId: string) {
 		return this.allDebridCastService.getAllUserCasts(userId);
+	}
+
+	// Premiumize Cast Methods
+	public savePremiumizeCastProfile(
+		userId: string,
+		apiKey: string,
+		movieMaxSize?: number,
+		episodeMaxSize?: number,
+		otherStreamsLimit?: number,
+		hideCastOption?: boolean
+	) {
+		return this.premiumizeCastService.saveCastProfile(
+			userId,
+			apiKey,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption
+		);
+	}
+
+	public updatePremiumizeCastSettings(
+		userId: string,
+		movieMaxSize?: number,
+		episodeMaxSize?: number,
+		otherStreamsLimit?: number,
+		hideCastOption?: boolean
+	) {
+		return this.premiumizeCastService.updateCastSettings(
+			userId,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption
+		);
+	}
+
+	public getPremiumizeCastProfile(userId: string) {
+		return this.premiumizeCastService.getCastProfile(userId);
+	}
+
+	public savePremiumizeCast(
+		imdbId: string,
+		userId: string,
+		hash: string,
+		filename: string,
+		fileSize: number,
+		path?: string
+	) {
+		return this.premiumizeCastService.saveCast(imdbId, userId, hash, filename, fileSize, path);
+	}
+
+	public fetchPremiumizeCastedMovies(userId: string) {
+		return this.premiumizeCastService.fetchCastedMovies(userId);
+	}
+
+	public fetchPremiumizeCastedShows(userId: string) {
+		return this.premiumizeCastService.fetchCastedShows(userId);
+	}
+
+	public fetchAllPremiumizeCastedLinks(userId: string) {
+		return this.premiumizeCastService.fetchAllCastedLinks(userId);
+	}
+
+	public deletePremiumizeCastedLink(imdbId: string, userId: string, hash: string) {
+		return this.premiumizeCastService.deleteCastedLink(imdbId, userId, hash);
+	}
+
+	public getPremiumizeUserCastStreams(imdbId: string, userId: string, limit?: number) {
+		return this.premiumizeCastService.getUserCastStreams(imdbId, userId, limit);
+	}
+
+	public getPremiumizeOtherStreams(
+		imdbId: string,
+		userId: string,
+		limit?: number,
+		maxSize?: number
+	) {
+		return this.premiumizeCastService.getOtherStreams(imdbId, userId, limit, maxSize);
 	}
 
 	public getAllDebridCastLink(magnetId: number, fileIndex: number) {

@@ -29,6 +29,7 @@ import {
 	checkDatabaseAvailabilityTb,
 } from '@/utils/instantChecks';
 import { formatReleaseDate } from '@/utils/movieReleaseDates';
+import { handleCastMoviePremiumize } from '@/utils/premiumizeCastApiClient';
 import { quickSearch } from '@/utils/quickSearch';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { sortByBiggest } from '@/utils/results';
@@ -769,6 +770,19 @@ const MovieSearch: FunctionComponent = () => {
 		window.open(getStremioDetailUrl(imdbid as string));
 	}
 
+	async function handleCastPremiumize(hash: string) {
+		await toast.promise(
+			handleCastMoviePremiumize(imdbid as string, premiumizeKey!, hash),
+			{
+				loading: 'Starting Premiumize cast in Stremio...',
+				success: 'Cast started in Stremio',
+				error: 'Premiumize cast failed in Stremio',
+			},
+			castToastOptions
+		);
+		window.open(getStremioDetailUrl(imdbid as string));
+	}
+
 	const getFirstAvailableRdTorrent = () => {
 		return filteredResults.find((r) => r.rdAvailable && !r.noVideos);
 	};
@@ -1023,6 +1037,7 @@ const MovieSearch: FunctionComponent = () => {
 						handleCast={handleCast}
 						handleCastTorBox={torboxKey ? handleCastTorBox : undefined}
 						handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
+						handleCastPremiumize={premiumizeKey ? handleCastPremiumize : undefined}
 						handleCopyMagnet={(hash) =>
 							handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)
 						}

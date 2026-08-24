@@ -38,7 +38,15 @@ describe('MainActions', () => {
 	};
 
 	it('always renders library and hash list links', () => {
-		render(<MainActions rdUser={null} tbUser={null} adUser={false} isLoading={false} />);
+		render(
+			<MainActions
+				rdUser={null}
+				tbUser={null}
+				adUser={false}
+				pmUser={false}
+				isLoading={false}
+			/>
+		);
 
 		const libraryLink = screen.getByRole('link', { name: /library/i });
 		expect(libraryLink.getAttribute('href')).toBe('/library');
@@ -49,29 +57,74 @@ describe('MainActions', () => {
 	});
 
 	it('shows RD cast action when only RD user is authenticated', () => {
-		render(<MainActions rdUser={baseRdUser} tbUser={null} adUser={false} isLoading={false} />);
+		render(
+			<MainActions
+				rdUser={baseRdUser}
+				tbUser={null}
+				adUser={false}
+				pmUser={false}
+				isLoading={false}
+			/>
+		);
 
 		const castLink = screen.getByRole('link', { name: /cast for rd/i });
 		expect(castLink.getAttribute('href')).toBe('/stremio');
 	});
 
 	it('shows TB cast action when only TB user is authenticated', () => {
-		render(<MainActions rdUser={null} tbUser={baseTbUser} adUser={false} isLoading={false} />);
+		render(
+			<MainActions
+				rdUser={null}
+				tbUser={baseTbUser}
+				adUser={false}
+				pmUser={false}
+				isLoading={false}
+			/>
+		);
 
 		const castLink = screen.getByRole('link', { name: /cast for tb/i });
 		expect(castLink.getAttribute('href')).toBe('/stremio-torbox');
 	});
 
 	it('shows AD cast action when only AD user is authenticated', () => {
-		render(<MainActions rdUser={null} tbUser={null} adUser={true} isLoading={false} />);
+		render(
+			<MainActions
+				rdUser={null}
+				tbUser={null}
+				adUser={true}
+				pmUser={false}
+				isLoading={false}
+			/>
+		);
 
 		const castLink = screen.getByRole('link', { name: /cast for ad/i });
 		expect(castLink.getAttribute('href')).toBe('/stremio-alldebrid');
 	});
 
+	it('shows PM cast action when only PM user is authenticated', () => {
+		render(
+			<MainActions
+				rdUser={null}
+				tbUser={null}
+				adUser={false}
+				pmUser={true}
+				isLoading={false}
+			/>
+		);
+
+		const castLink = screen.getByRole('link', { name: /cast for pm/i });
+		expect(castLink.getAttribute('href')).toBe('/stremio-premiumize');
+	});
+
 	it('shows both RD and TB cast actions when both users are authenticated', () => {
 		render(
-			<MainActions rdUser={baseRdUser} tbUser={baseTbUser} adUser={false} isLoading={false} />
+			<MainActions
+				rdUser={baseRdUser}
+				tbUser={baseTbUser}
+				adUser={false}
+				pmUser={false}
+				isLoading={false}
+			/>
 		);
 
 		const rdLink = screen.getByRole('link', { name: /cast for rd/i });
@@ -82,7 +135,13 @@ describe('MainActions', () => {
 
 	it('shows all three cast actions when all users are authenticated', () => {
 		render(
-			<MainActions rdUser={baseRdUser} tbUser={baseTbUser} adUser={true} isLoading={false} />
+			<MainActions
+				rdUser={baseRdUser}
+				tbUser={baseTbUser}
+				adUser={true}
+				pmUser={false}
+				isLoading={false}
+			/>
 		);
 
 		const rdLink = screen.getByRole('link', { name: /cast for rd/i });
@@ -94,7 +153,15 @@ describe('MainActions', () => {
 	});
 
 	it('hides cast actions when no user is authenticated', () => {
-		render(<MainActions rdUser={null} tbUser={null} adUser={false} isLoading={false} />);
+		render(
+			<MainActions
+				rdUser={null}
+				tbUser={null}
+				adUser={false}
+				pmUser={false}
+				isLoading={false}
+			/>
+		);
 
 		expect(screen.queryByRole('link', { name: /cast for/i })).toBeNull();
 	});
@@ -103,7 +170,15 @@ describe('MainActions', () => {
 	// RD *and* TB hid the Transfers page from everyone who only has RD — including
 	// the users the send toast tells to go and watch their job there.
 	it('links to Transfers for an RD user with no TorBox account', () => {
-		render(<MainActions rdUser={baseRdUser} tbUser={null} adUser={false} isLoading={false} />);
+		render(
+			<MainActions
+				rdUser={baseRdUser}
+				tbUser={null}
+				adUser={false}
+				pmUser={false}
+				isLoading={false}
+			/>
+		);
 
 		const link = screen.getByRole('link', { name: /transfers/i });
 		expect(link.getAttribute('href')).toBe('/transfers');
@@ -111,7 +186,13 @@ describe('MainActions', () => {
 
 	it('still links to Transfers when both RD and TB are connected', () => {
 		render(
-			<MainActions rdUser={baseRdUser} tbUser={baseTbUser} adUser={false} isLoading={false} />
+			<MainActions
+				rdUser={baseRdUser}
+				tbUser={baseTbUser}
+				adUser={false}
+				pmUser={false}
+				isLoading={false}
+			/>
 		);
 
 		expect(screen.getByRole('link', { name: /transfers/i }).getAttribute('href')).toBe(
@@ -120,7 +201,15 @@ describe('MainActions', () => {
 	});
 
 	it('hides Transfers without Real-Debrid, since every transfer lands there', () => {
-		render(<MainActions rdUser={null} tbUser={baseTbUser} adUser={false} isLoading={false} />);
+		render(
+			<MainActions
+				rdUser={null}
+				tbUser={baseTbUser}
+				adUser={false}
+				pmUser={false}
+				isLoading={false}
+			/>
+		);
 
 		expect(screen.queryByRole('link', { name: /transfers/i })).toBeNull();
 	});

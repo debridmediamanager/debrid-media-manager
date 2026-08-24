@@ -7,12 +7,13 @@ interface MainActionsProps {
 	rdUser: RealDebridUser | null;
 	tbUser: TorBoxUser | null;
 	adUser: boolean;
+	pmUser: boolean;
 	isLoading: boolean;
 }
 
 const isLocalDev = process.env.NODE_ENV === 'development';
 
-export function MainActions({ rdUser, tbUser, adUser, isLoading }: MainActionsProps) {
+export function MainActions({ rdUser, tbUser, adUser, pmUser, isLoading }: MainActionsProps) {
 	const castButtons = [
 		rdUser && {
 			href: '/stremio',
@@ -41,6 +42,15 @@ export function MainActions({ rdUser, tbUser, adUser, isLoading }: MainActionsPr
 			textColor: 'text-yellow-100',
 			iconColor: 'text-yellow-400',
 		},
+		pmUser && {
+			href: '/stremio-premiumize',
+			label: 'Cast for PM',
+			borderColor: 'border-red-500',
+			bgColor: 'bg-red-900/30',
+			hoverColor: 'hover:bg-red-800/50',
+			textColor: 'text-red-100',
+			iconColor: 'text-red-400',
+		},
 	].filter(Boolean) as {
 		href: string;
 		label: string;
@@ -56,7 +66,9 @@ export function MainActions({ rdUser, tbUser, adUser, isLoading }: MainActionsPr
 			? 'grid-cols-1'
 			: castButtons.length === 2
 				? 'grid-cols-2'
-				: 'grid-cols-3';
+				: castButtons.length === 3
+					? 'grid-cols-3'
+					: 'grid-cols-4';
 
 	return (
 		<div className="flex w-full flex-col gap-3">

@@ -42,6 +42,7 @@ type TvSearchResultsProps = {
 	handleCast: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCastTorBox?: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCastAllDebrid?: (hash: string, files: { filename: string }[]) => Promise<void>;
+	handleCastPremiumize?: (hash: string, files: { filename: string }[]) => Promise<void>;
 	handleCopyMagnet: (hash: string) => void;
 	checkServiceAvailability: (
 		result: SearchResult,
@@ -76,6 +77,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	handleCast,
 	handleCastTorBox,
 	handleCastAllDebrid,
+	handleCastPremiumize,
 	handleCopyMagnet,
 	checkServiceAvailability,
 	addRd,
@@ -96,6 +98,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	const [castingHashes, setCastingHashes] = useState<Set<string>>(new Set());
 	const [castingTbHashes, setCastingTbHashes] = useState<Set<string>>(new Set());
 	const [castingAdHashes, setCastingAdHashes] = useState<Set<string>>(new Set());
+	const [castingPmHashes, setCastingPmHashes] = useState<Set<string>>(new Set());
 	const [watchingHashes, setWatchingHashes] = useState<Set<string>>(new Set());
 	const [downloadMagnets, setDownloadMagnets] = useState(false);
 
@@ -227,6 +230,20 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 		}
 	};
 
+	const handleCastPremiumizeWithLoading = async (hash: string, files: { filename: string }[]) => {
+		if (!handleCastPremiumize || castingPmHashes.has(hash)) return;
+		setCastingPmHashes((prev) => new Set(prev).add(hash));
+		try {
+			await handleCastPremiumize(hash, files);
+		} finally {
+			setCastingPmHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
 	const handleMagnetAction = (hash: string) => {
 		if (downloadMagnets) {
 			downloadMagnetFile(hash);
@@ -336,6 +353,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						const isCasting = castingHashes.has(r.hash);
 						const isCastingTb = castingTbHashes.has(r.hash);
 						const isCastingAd = castingAdHashes.has(r.hash);
+						const isCastingPm = castingPmHashes.has(r.hash);
 						const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 						const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
 						const isCheckingPm = isHashServiceChecking(r.hash, 'PM');
@@ -742,6 +760,33 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													: btnLabel(r.pmAvailable, 'PM')}
 											</button>
 										)}
+										{premiumizeKey &&
+											handleCastPremiumize &&
+											r.pmAvailable &&
+											castableAdFiles.length > 0 && (
+												<button
+													className={`haptic-sm inline rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-1 text-xs text-red-100 transition-colors hover:bg-[#aa0000]/50 ${isCastingPm ? 'cursor-not-allowed opacity-50' : ''}`}
+													onClick={() =>
+														handleCastPremiumizeWithLoading(
+															r.hash,
+															castableAdFiles
+														)
+													}
+													disabled={isCastingPm}
+												>
+													{isCastingPm ? (
+														<>
+															<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+															Casting...
+														</>
+													) : (
+														<>
+															<Cast className="mr-1 inline-block h-3 w-3 text-red-400" />
+															Cast (PM)
+														</>
+													)}
+												</button>
+											)}
 										{premiumizeKey && !r.pmAvailable && (
 											<button
 												className={`haptic-sm inline rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-1 text-xs text-red-100 transition-colors hover:bg-[#aa0000]/50 ${isCheckingPm ? 'cursor-not-allowed opacity-50' : ''}`}

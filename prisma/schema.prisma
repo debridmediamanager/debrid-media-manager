@@ -230,6 +230,39 @@ model AllDebridCast {
   @@index([imdbId, userId, updatedAt])
 }
 
+// Premiumize casts store a hash and a file path, never a link.
+//
+// `transfer/directdl` turns a cached hash into signed CDN links in one stateless
+// call - nothing lands in transfers, folders or storage - so every viewer
+// resolves the hash with their own key at play time. That also matters for
+// billing: Premiumize charges the *minting* account's fair-use pool, so a link
+// minted by the caster and handed to a viewer would spend the caster's quota.
+// There is nothing here that can rot, and nothing to re-mint into the row.
+model PremiumizeCast {
+  id        String   @id @default(uuid())
+  imdbId    String
+  userId    String
+  hash      String
+  url       String   @db.Text
+  updatedAt DateTime @updatedAt
+  size      BigInt   @default(0)
+  // The `path` directdl reports for this file, which is how play finds it again
+  path      String?  @db.Text
+
+  @@unique([imdbId, userId, hash])
+  @@index([imdbId, userId, updatedAt])
+}
+
+model PremiumizeCastProfile {
+  userId            String   @id
+  apiKey            String   @db.Text
+  updatedAt         DateTime @updatedAt
+  movieMaxSize      Float    @default(0)
+  episodeMaxSize    Float    @default(0)
+  otherStreamsLimit Int      @default(5)
+  hideCastOption    Boolean  @default(false)
+}
+
 model AllDebridCastProfile {
   userId            String   @id
   apiKey            String   @db.Text

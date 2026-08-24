@@ -7,12 +7,16 @@ import {
 	getLocalStorageItemOrDefault,
 	getLocalStorageString,
 } from '../utils/browserStorage';
+import {
+	savePremiumizeCastProfile,
+	updatePremiumizeCastSettings,
+} from '../utils/premiumizeCastApiClient';
 import { defaultEpisodeSize, defaultMovieSize, defaultOtherStreamsLimit } from '../utils/settings';
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
 
 interface CastSettingsPanelProps {
-	service: 'rd' | 'ad' | 'tb';
-	accentColor: 'green' | 'yellow' | 'purple';
+	service: 'rd' | 'ad' | 'tb' | 'pm';
+	accentColor: 'green' | 'yellow' | 'purple' | 'red';
 }
 
 export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelProps) => {
@@ -44,6 +48,11 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 			border: 'border-purple-500/30',
 			title: 'text-purple-200',
 			icon: 'text-purple-400',
+		},
+		red: {
+			border: 'border-red-500/30',
+			title: 'text-red-200',
+			icon: 'text-red-400',
 		},
 	};
 
@@ -98,6 +107,26 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 						streamsLimit !== undefined ? Number(streamsLimit) : undefined,
 						hideCast
 					);
+				}
+			} else if (service === 'pm') {
+				// Prefers the cast token, so changing a setting costs no
+				// Premiumize call; the key is only the fallback for a profile
+				// that no longer exists server-side.
+				const pmCastToken = getLocalStorageString('pm:castToken');
+				const settings = {
+					movieMaxSize: movieSize !== undefined ? Number(movieSize) : undefined,
+					episodeMaxSize: episodeSize !== undefined ? Number(episodeSize) : undefined,
+					otherStreamsLimit:
+						streamsLimit !== undefined ? Number(streamsLimit) : undefined,
+					hideCastOption: hideCast,
+				};
+				const saved =
+					pmCastToken && (await updatePremiumizeCastSettings(pmCastToken, settings));
+				if (!saved) {
+					const pmKey =
+						getLocalStorageString('pm:accessToken') ||
+						getLocalStorageString('pm:apiKey');
+					if (pmKey) await savePremiumizeCastProfile(pmKey, settings);
 				}
 			} else if (service === 'ad') {
 				const adApiKey = getLocalStorageString('ad:apiKey');

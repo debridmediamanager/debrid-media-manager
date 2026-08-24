@@ -35,6 +35,7 @@ import {
 	checkDatabaseAvailabilityRd,
 	checkDatabaseAvailabilityTb,
 } from '@/utils/instantChecks';
+import { handleCastTvShowPremiumize } from '@/utils/premiumizeCastApiClient';
 import { quickSearch } from '@/utils/quickSearch';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
 import { sortByMean } from '@/utils/results';
@@ -835,6 +836,22 @@ const TvSearch: FunctionComponent = () => {
 		);
 	}
 
+	async function handleCastPremiumize(hash: string, files: { filename: string }[]) {
+		await toast.promise(
+			handleCastTvShowPremiumize(imdbid as string, premiumizeKey!, hash, files),
+			{
+				loading: `Casting ${files.length} episodes (Premiumize)...`,
+				success: 'Casting succeeded.',
+				error: 'Casting failed.',
+			},
+			castToastOptions
+		);
+		// open stremio after casting
+		window.open(
+			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
+		);
+	}
+
 	// Helper function to find all complete season torrents (RD-available with matching episode count)
 	const getCompleteSeasonTorrents = () => {
 		const minEpisodes = Math.max(1, expectedEpisodeCount - 2);
@@ -1412,6 +1429,7 @@ const TvSearch: FunctionComponent = () => {
 				handleCast={handleCast}
 				handleCastTorBox={torboxKey ? handleCastTorBox : undefined}
 				handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
+				handleCastPremiumize={premiumizeKey ? handleCastPremiumize : undefined}
 				handleCopyMagnet={(hash) => handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)}
 				checkServiceAvailability={checkServiceAvailability}
 				addRd={addRd}
