@@ -6,6 +6,8 @@ const mockRepository = vi.hoisted(() => ({
 		cleanupOldHistoryData: vi.fn(),
 		rollupTorBoxDaily: vi.fn(),
 		cleanupOldTorBoxData: vi.fn(),
+		rollupTorBoxOperationalDaily: vi.fn(),
+		cleanupOldTorBoxOperationalData: vi.fn(),
 	},
 }));
 
@@ -92,6 +94,28 @@ describe('/api/observability/aggregate', () => {
 		expect(data.action).toBe('daily');
 		expect(data.results.dailyRollup).toEqual({ rows: 5 });
 		expect(data.timestamp).toBeDefined();
+	});
+
+	// The user-traffic tables have their own retention, so the same job has to
+	// sweep them or they grow without bound.
+	it('rolls up and cleans the TorBox user-traffic tables too', async () => {
+		mockRepository.repository.runDailyRollup.mockResolvedValue({});
+		mockRepository.repository.cleanupOldHistoryData.mockResolvedValue({});
+		mockRepository.repository.rollupTorBoxDaily.mockResolvedValue(true);
+		mockRepository.repository.rollupTorBoxOperationalDaily.mockResolvedValue(true);
+		mockRepository.repository.cleanupOldTorBoxData.mockResolvedValue({});
+		mockRepository.repository.cleanupOldTorBoxOperationalData.mockResolvedValue({
+			hourlyDeleted: 3,
+			dailyDeleted: 1,
+		});
+
+		const req = createMockRequest({ method: 'POST', query: { action: 'all' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockRepository.repository.rollupTorBoxOperationalDaily).toHaveBeenCalled();
+		expect(mockRepository.repository.cleanupOldTorBoxOperationalData).toHaveBeenCalled();
 	});
 
 	it('runs cleanup action', async () => {

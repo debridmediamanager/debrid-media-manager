@@ -20,6 +20,11 @@ vi.mock('@/services/repository', () => ({
 			dailyDeleted: 0,
 			checkResultsDeleted: 0,
 		}),
+		rollupTorBoxOperationalDaily: vi.fn().mockResolvedValue(true),
+		cleanupOldTorBoxOperationalData: vi.fn().mockResolvedValue({
+			hourlyDeleted: 0,
+			dailyDeleted: 0,
+		}),
 	},
 }));
 

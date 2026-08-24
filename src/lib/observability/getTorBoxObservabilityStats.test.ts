@@ -7,6 +7,7 @@ vi.mock('@/services/repository', () => ({
 		getTorBoxCdnMetrics: vi.fn(),
 		getAllTorBoxCdnStatuses: vi.fn(),
 		getRecentTorBoxChecks: vi.fn(),
+		getTorBoxOperationalStats: vi.fn(),
 	},
 }));
 
@@ -26,6 +27,16 @@ const EMPTY_METRICS = {
 	avgLatencyMs: null,
 	fastestNode: null,
 	failedNodes: [],
+};
+
+const EMPTY_TB_API = {
+	totalCount: 0,
+	successCount: 0,
+	failureCount: 0,
+	successRate: 0,
+	isDown: false,
+	byOperation: {} as any,
+	lastHour: null,
 };
 
 function status(overrides: Record<string, unknown> = {}) {
@@ -62,6 +73,7 @@ describe('getTorBoxObservabilityStats', () => {
 		vi.mocked(repository.getTorBoxCdnMetrics).mockResolvedValue({ ...EMPTY_METRICS });
 		vi.mocked(repository.getAllTorBoxCdnStatuses).mockResolvedValue([]);
 		vi.mocked(repository.getRecentTorBoxChecks).mockResolvedValue([]);
+		vi.mocked(repository.getTorBoxOperationalStats).mockResolvedValue(EMPTY_TB_API);
 		vi.mocked(fetchServiceStats).mockResolvedValue({ totalUsers: 1, totalServers: 2 });
 	});
 
@@ -73,6 +85,30 @@ describe('getTorBoxObservabilityStats', () => {
 		expect(stats.api.successRate).toBeNull();
 		expect(stats.auth.state).toBe('skipped');
 		expect(stats.lastChecked).toBeNull();
+	});
+
+	// The user-traffic counters are what make this page the TorBox counterpart
+	// of /is-real-debrid-down-or-just-me rather than a pure synthetic prober.
+	it('carries the user API stats through untouched', async () => {
+		const tbApi = {
+			...EMPTY_TB_API,
+			totalCount: 120,
+			successCount: 118,
+			failureCount: 2,
+			successRate: 118 / 120,
+			lastHour: new Date('2026-08-25T11:00:00Z'),
+		};
+		vi.mocked(repository.getTorBoxOperationalStats).mockResolvedValue(tbApi);
+
+		const stats = await getTorBoxObservabilityStats();
+
+		expect(stats.tbApi).toEqual(tbApi);
+	});
+
+	it('asks for the last hour of user traffic, matching the card label', async () => {
+		await getTorBoxObservabilityStats();
+
+		expect(repository.getTorBoxOperationalStats).toHaveBeenCalledWith(1);
 	});
 
 	it('sorts nodes with working ones first, fastest first', async () => {

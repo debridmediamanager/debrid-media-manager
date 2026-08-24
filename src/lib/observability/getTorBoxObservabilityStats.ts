@@ -1,4 +1,5 @@
 import type { TorBoxAuthState } from '@/services/database/torboxHealth';
+import type { TorBoxOverallStats } from '@/services/database/torboxOperational';
 import { repository } from '@/services/repository';
 
 import { fetchServiceStats, isTorBoxHealthCheckInProgress } from './torboxHealth';
@@ -58,6 +59,12 @@ export interface TorBoxObservabilityStats {
 	cdn: TorBoxCdnMetricsSummary;
 	api: TorBoxApiSummary;
 	auth: TorBoxAuthSummary;
+	/**
+	 * What TorBox actually returned to DMM users over the last hour, counted
+	 * from their own API calls rather than from a synthetic probe. Null only
+	 * if the query itself failed.
+	 */
+	tbApi: TorBoxOverallStats | null;
 	service: TorBoxServiceSummary | null;
 	/**
 	 * When the stored data was last refreshed by the cron, in epoch millis.
@@ -77,10 +84,11 @@ const RECENT_CHECK_LIMIT = 12;
  * `null` rather than failing the response.
  */
 export async function getTorBoxObservabilityStats(): Promise<TorBoxObservabilityStats> {
-	const [cdnMetrics, cdnStatuses, recentChecks, service] = await Promise.all([
+	const [cdnMetrics, cdnStatuses, recentChecks, tbApi, service] = await Promise.all([
 		repository.getTorBoxCdnMetrics(),
 		repository.getAllTorBoxCdnStatuses(),
 		repository.getRecentTorBoxChecks(RECENT_CHECK_LIMIT),
+		repository.getTorBoxOperationalStats(1),
 		fetchServiceStats().catch(() => null),
 	]);
 
@@ -140,6 +148,7 @@ export async function getTorBoxObservabilityStats(): Promise<TorBoxObservability
 			state: latest?.authState ?? 'skipped',
 			error: latest?.authError ?? null,
 		},
+		tbApi,
 		service,
 		lastChecked,
 	};

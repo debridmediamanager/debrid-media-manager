@@ -16,6 +16,7 @@ const repositoryMocks = vi.hoisted(() => ({
 	repository: {
 		runDailyRollup: vi.fn(),
 		rollupTorBoxDaily: vi.fn(),
+		rollupTorBoxOperationalDaily: vi.fn(),
 	},
 }));
 
@@ -190,6 +191,8 @@ describe('API /api/observability/cron', () => {
 			rdDailyRolled: false,
 			torrentioDailyRolled: true,
 		});
+		repositoryMocks.repository.rollupTorBoxDaily.mockResolvedValue(true);
+		repositoryMocks.repository.rollupTorBoxOperationalDaily.mockResolvedValue(true);
 
 		const req = createMockRequest({ method: 'POST' });
 		const res = createMockResponse();
@@ -201,6 +204,8 @@ describe('API /api/observability/cron', () => {
 			streamDailyRolled: true,
 			rdDailyRolled: false,
 			torrentioDailyRolled: true,
+			torboxDailyRolled: true,
+			torboxApiDailyRolled: true,
 		});
 	});
 

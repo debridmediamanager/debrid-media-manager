@@ -11,6 +11,8 @@ const mockRepository = vi.hoisted(() => ({
 		getTorrentioDailyHistory: vi.fn(),
 		getTorBoxHourlyHistory: vi.fn(),
 		getTorBoxDailyHistory: vi.fn(),
+		getTorBoxOperationalHourlyHistory: vi.fn(),
+		getTorBoxOperationalDailyHistory: vi.fn(),
 	},
 }));
 
@@ -330,6 +332,68 @@ describe('/api/observability/history', () => {
 		expect(mockRepository.repository.getTorBoxHourlyHistory).toHaveBeenCalledWith(2160);
 		expect(res.json).toHaveBeenCalledWith({
 			type: 'torbox',
+			granularity: 'hourly',
+			range: '30d',
+			data: mockHourly,
+		});
+	});
+
+	it('returns hourly torbox-api data for 24h range', async () => {
+		const mockData = [{ hour: '2026-08-25T00:00:00Z', totalCount: 40, successRate: 0.975 }];
+		mockRepository.repository.getTorBoxOperationalHourlyHistory.mockResolvedValue(mockData);
+		const req = createMockRequest({ method: 'GET', query: { type: 'torbox-api' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockRepository.repository.getTorBoxOperationalHourlyHistory).toHaveBeenCalledWith(
+			24
+		);
+		expect(res.json).toHaveBeenCalledWith({
+			type: 'torbox-api',
+			granularity: 'hourly',
+			range: '24h',
+			data: mockData,
+		});
+	});
+
+	it('returns daily torbox-api data for 90d range', async () => {
+		const mockData = [{ date: '2026-08-24', totalCount: 900, avgSuccessRate: 0.99 }];
+		mockRepository.repository.getTorBoxOperationalDailyHistory.mockResolvedValue(mockData);
+		const req = createMockRequest({
+			method: 'GET',
+			query: { type: 'torbox-api', range: '90d' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockRepository.repository.getTorBoxOperationalDailyHistory).toHaveBeenCalledWith(90);
+		expect(res.json).toHaveBeenCalledWith({
+			type: 'torbox-api',
+			granularity: 'daily',
+			range: '90d',
+			data: mockData,
+		});
+	});
+
+	it('falls back to hourly when daily rollup is empty for torbox-api', async () => {
+		const mockHourly = [{ hour: '2026-08-25T00:00:00Z', totalCount: 40, successRate: 1 }];
+		mockRepository.repository.getTorBoxOperationalDailyHistory.mockResolvedValue([]);
+		mockRepository.repository.getTorBoxOperationalHourlyHistory.mockResolvedValue(mockHourly);
+		const req = createMockRequest({
+			method: 'GET',
+			query: { type: 'torbox-api', range: '30d' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockRepository.repository.getTorBoxOperationalHourlyHistory).toHaveBeenCalledWith(
+			2160
+		);
+		expect(res.json).toHaveBeenCalledWith({
+			type: 'torbox-api',
 			granularity: 'hourly',
 			range: '30d',
 			data: mockHourly,
