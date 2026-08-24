@@ -65,7 +65,12 @@ export const getStreamUrl = async (
 			streamUrl = resp.download;
 			rdLink = resp.link;
 
-			if (mediaType === 'tv') {
+			// Anything that is not a movie is episodic and needs its season and
+			// episode parsed, or the cast key collapses onto the bare title id.
+			// This used to test `=== 'tv'`, so the anime route - which passes
+			// 'anime' - never parsed anything and wrote every episode of a batch
+			// to the same key, one overwriting the next.
+			if (mediaType !== 'movie') {
 				const info = ptt.parse(resp.filename.split('/').pop() || '');
 				seasonNumber = info.season ?? -1;
 				episodeNumber = info.episode ?? -1;

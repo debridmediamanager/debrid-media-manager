@@ -190,6 +190,38 @@ describe('getStreamUrl', () => {
 		expect(deleteTorrent).toHaveBeenCalledWith(mockRdKey, mockTorrentId, false);
 	});
 
+	// Regression: this used to test `mediaType === 'tv'`, so the anime cast route
+	// - which passes 'anime' - never parsed anything. Every episode of a batch
+	// then got the bare anidb id as its key and overwrote the one before it,
+	// leaving a single row filed as a movie.
+	it('parses season and episode for a non-tv episodic media type', async () => {
+		vi.mocked(addHashAsMagnet).mockResolvedValue(mockTorrentId);
+		vi.mocked(handleSelectFilesInRd).mockResolvedValue(undefined);
+		vi.mocked(getTorrentInfo).mockResolvedValue(
+			createTorrentInfo({
+				id: mockTorrentId,
+				files: [{ id: 1, path: 'Anime.S01E07.mkv', selected: 1, bytes: 1000 }],
+				links: ['link1'],
+			})
+		);
+		vi.mocked(unrestrictLink).mockResolvedValue(
+			createUnrestrictResponse({ filename: 'Anime.S01E07.mkv', filesize: 1000 })
+		);
+		vi.mocked(deleteTorrent).mockResolvedValue(undefined);
+		vi.mocked(ptt.parse).mockReturnValue({ season: 1, episode: 7 } as any);
+
+		const [, , season, episode] = await getStreamUrl(
+			mockRdKey,
+			mockHash,
+			1,
+			mockIpAddress,
+			'anime'
+		);
+
+		expect(ptt.parse).toHaveBeenCalledWith('Anime.S01E07.mkv');
+		expect([season, episode]).toEqual([1, 7]);
+	});
+
 	it('should handle non-streamable links', async () => {
 		vi.mocked(addHashAsMagnet).mockResolvedValue(mockTorrentId);
 		vi.mocked(handleSelectFilesInRd).mockResolvedValue(undefined);

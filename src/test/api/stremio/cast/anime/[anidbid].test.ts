@@ -90,6 +90,31 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 		expect(res.json).toHaveBeenCalledWith({ errorEpisodes: [] });
 	});
 
+	// The bare anidb id is the *movie* key, and Cast is unique on
+	// (imdbId, userId, hash) - so an episode written there overwrites whatever
+	// this torrent already cast, one file at a time, leaving one row.
+	it('records an error instead of writing an unparsed episode to the bare id', async () => {
+		mockGetStreamUrl.mockResolvedValue([
+			'https://stream/video.mkv',
+			'https://rd/link',
+			-1,
+			-1,
+			700,
+		]);
+		const req = createMockRequest({
+			query: { anidbid: 'anidb1', token: 'tok', hash: 'hash', fileIds: ['101'] },
+			headers: { 'x-real-ip': '127.0.0.1' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveCast).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith({
+			errorEpisodes: ['fileId:101 (no episode number in filename)'],
+		});
+	});
+
 	it('accepts token via Authorization Bearer header instead of query', async () => {
 		const req = createMockRequest({
 			query: { anidbid: 'anidb1', hash: 'hash', fileIds: ['101'] },

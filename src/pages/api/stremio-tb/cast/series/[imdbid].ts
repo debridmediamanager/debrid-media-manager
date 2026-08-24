@@ -40,12 +40,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				const [streamUrl, seasonNumber, episodeNumber, fileSize, torrentId, , filename] =
 					await getTorBoxStreamUrlKeepTorrent(apiKey, hash, fileId, 'series');
 
+				// The bare imdb id is the movie key and TorBoxCast is unique on
+				// (imdbId, userId, hash), so an unparsed episode overwrites
+				// whatever this torrent cast before it.
+				if (streamUrl && (seasonNumber < 0 || episodeNumber < 0)) {
+					errorEpisodes.push(`File ${fileId} (no episode number in filename)`);
+					continue;
+				}
+
 				if (streamUrl) {
-					// Build imdbId with season:episode suffix
-					let episodeImdbId = imdbid;
-					if (seasonNumber >= 0 && episodeNumber >= 0) {
-						episodeImdbId = `${imdbid}:${seasonNumber}:${episodeNumber}`;
-					}
+					const episodeImdbId = `${imdbid}:${seasonNumber}:${episodeNumber}`;
 
 					await db.saveTorBoxCast(
 						episodeImdbId,

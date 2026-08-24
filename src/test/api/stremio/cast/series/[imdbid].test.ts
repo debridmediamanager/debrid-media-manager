@@ -75,6 +75,30 @@ describe('/api/stremio/cast/series/[imdbid]', () => {
 		expect(res.json).toHaveBeenCalledWith({ errorEpisodes: [] });
 	});
 
+	// See the anime route: the bare imdb id is the movie key, so an episode
+	// written there overwrites whatever else this torrent cast under it.
+	it('records an error instead of writing an unparsed episode to the bare id', async () => {
+		mockGetStreamUrl.mockResolvedValue([
+			'https://files.example.com/Unnamed.mkv',
+			'https://rd.example.com/link',
+			-1,
+			-1,
+			700,
+		]);
+		const req = createMockRequest({
+			query: { imdbid: 'tt999', token: 'token', hash: 'hash', fileIds: '101' },
+			headers: { 'x-real-ip': '1.1.1.1' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockSaveCast).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith({
+			errorEpisodes: ['fileId:101 (no episode number in filename)'],
+		});
+	});
+
 	it('accepts token via Authorization Bearer header instead of query', async () => {
 		mockGetStreamUrl.mockResolvedValue([
 			'https://files.example.com/Video-S01E01.mkv',

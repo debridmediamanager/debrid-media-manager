@@ -44,19 +44,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				'anime'
 			);
 
-			if (streamUrl) {
-				const castKey = `${anidbid}${
-					seasonNumber >= 0 && episodeNumber >= 0
-						? `:${seasonNumber}:${episodeNumber}`
-						: ''
-				}`;
+			// See the same guard in cast/series: the bare id is the movie key, so
+			// an unparsed episode overwrites whatever was cast before it.
+			if (streamUrl && seasonNumber >= 0 && episodeNumber >= 0) {
+				const castKey = `${anidbid}:${seasonNumber}:${episodeNumber}`;
 				await db.saveCast(castKey, userid, hash, streamUrl, rdLink, fileSize);
+			} else if (streamUrl) {
+				errorEpisodes.push(`fileId:${fileId} (no episode number in filename)`);
+			} else if (seasonNumber >= 0 && episodeNumber >= 0) {
+				errorEpisodes.push(`S${seasonNumber}E${episodeNumber}`);
 			} else {
-				if (seasonNumber >= 0 && episodeNumber >= 0) {
-					errorEpisodes.push(`S${seasonNumber}E${episodeNumber}`);
-				} else {
-					errorEpisodes.push(`fileId:${fileId}`);
-				}
+				errorEpisodes.push(`fileId:${fileId}`);
 			}
 		} catch (e) {
 			console.error(e);

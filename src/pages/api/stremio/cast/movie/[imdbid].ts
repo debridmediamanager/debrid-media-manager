@@ -46,6 +46,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			});
 			return;
 		}
+
+		// Falling out of the `if` used to end the handler without answering at
+		// all, leaving the request open until something upstream timed it out.
+		res.status(500).json({
+			status: 'error',
+			errorMessage: 'Failed to cast, no streamUrl',
+		});
 	} catch (e) {
 		console.error(e);
 		const message = e instanceof Error ? e.message : String(e);

@@ -101,6 +101,29 @@ describe('/api/stremio/cast/movie/[imdbid]', () => {
 		});
 	});
 
+	// Regression: an empty stream url fell straight out of the `if` with no
+	// `else` and no fall-through response, so the handler returned without ever
+	// answering and the request hung until something upstream timed it out.
+	it('answers instead of hanging when no stream url comes back', async () => {
+		mockGenerateUserId.mockResolvedValue('user-1');
+		mockGetBiggestFileStreamUrl.mockResolvedValue(['', '', 0]);
+
+		const req = createMockRequest({
+			query: { imdbid: 'tt123', token: 'token', hash: 'hash' },
+			headers: { 'x-real-ip': '1.1.1.1' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(500);
+		expect(res.json).toHaveBeenCalledWith({
+			status: 'error',
+			errorMessage: 'Failed to cast, no streamUrl',
+		});
+		expect(mockSaveCast).not.toHaveBeenCalled();
+	});
+
 	it('accepts token via Authorization Bearer header instead of query', async () => {
 		mockGenerateUserId.mockResolvedValue('user-1');
 		mockGetBiggestFileStreamUrl.mockResolvedValue([

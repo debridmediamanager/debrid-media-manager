@@ -41,6 +41,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			mediaType
 		);
 
+		if (streamUrl && mediaType !== 'movie' && (seasonNumber < 0 || episodeNumber < 0)) {
+			// The bare imdb id is the movie key. Writing an episode there would
+			// overwrite whatever else this torrent already cast under it.
+			res.status(422).json({
+				status: 'error',
+				errorMessage: 'Could not read a season and episode from the filename',
+			});
+			return;
+		}
+
 		if (streamUrl) {
 			let redirectUrl = getStremioDetailUrl(imdbid);
 			let message = 'You can now stream the movie in Stremio';

@@ -44,19 +44,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				'tv'
 			);
 
-			if (streamUrl) {
-				const castKey = `${imdbid}${
-					seasonNumber >= 0 && episodeNumber >= 0
-						? `:${seasonNumber}:${episodeNumber}`
-						: ''
-				}`;
+			// Without a season and episode there is no key to file this under: the
+			// bare imdb id is the *movie* key, and the cast table is unique on
+			// (imdbId, userId, hash), so every unparsed episode of a pack landed
+			// on the same row and overwrote the one before it.
+			if (streamUrl && seasonNumber >= 0 && episodeNumber >= 0) {
+				const castKey = `${imdbid}:${seasonNumber}:${episodeNumber}`;
 				await db.saveCast(castKey, userid, hash, streamUrl, rdLink, fileSize);
+			} else if (streamUrl) {
+				errorEpisodes.push(`fileId:${fileId} (no episode number in filename)`);
+			} else if (seasonNumber >= 0 && episodeNumber >= 0) {
+				errorEpisodes.push(`S${seasonNumber}E${episodeNumber}`);
 			} else {
-				if (seasonNumber >= 0 && episodeNumber >= 0) {
-					errorEpisodes.push(`S${seasonNumber}E${episodeNumber}`);
-				} else {
-					errorEpisodes.push(`fileId:${fileId}`);
-				}
+				errorEpisodes.push(`fileId:${fileId}`);
 			}
 		} catch (e) {
 			console.error(e);
