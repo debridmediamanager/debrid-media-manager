@@ -299,6 +299,31 @@ export class AllDebridCastService extends DatabaseClient {
 		}));
 	}
 
+	/**
+	 * The `/f/` link stored for a cast, looked up by the (magnetId, fileIndex)
+	 * pair the play URL carries.
+	 *
+	 * A magnet id only means something inside the account that created it -
+	 * AllDebrid answers `MAGNET_INVALID_ID` for anyone else - so resolving a cast
+	 * through the id can only ever work for its own caster, and stops working
+	 * for them too once they delete the magnet. The `/f/` token is the opposite:
+	 * any premium key can unlock it, and it outlives the magnet entry. AllDebrid
+	 * allocates magnet ids from a global counter, so the pair identifies one
+	 * file regardless of which user's row we find it on.
+	 */
+	public async getCastLink(magnetId: number, fileIndex: number): Promise<string | null> {
+		const cast = await this.prisma.allDebridCast.findFirst({
+			where: {
+				magnetId,
+				fileIndex,
+				link: { not: null },
+			},
+			orderBy: { updatedAt: 'desc' },
+			select: { link: true },
+		});
+		return cast?.link ?? null;
+	}
+
 	public async getUserCastStreams(
 		imdbId: string,
 		userId: string,

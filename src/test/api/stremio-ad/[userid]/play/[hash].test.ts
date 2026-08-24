@@ -18,6 +18,8 @@ describe('/api/stremio-ad/[userid]/play/[hash]', () => {
 		vi.clearAllMocks();
 		res = createMockResponse();
 		mockRepository.getAllDebridCastProfile = vi.fn();
+		// Default: no stored link, so the existing cases exercise the magnet path
+		mockRepository.getAllDebridCastLink = vi.fn().mockResolvedValue(null);
 	});
 
 	it('sets CORS header', async () => {
@@ -105,6 +107,65 @@ describe('/api/stremio-ad/[userid]/play/[hash]', () => {
 		const req = createMockRequest({ query: { userid: 'user1', hash: '123:5' } });
 		await handler(req, res);
 		expect(res.status).toHaveBeenCalledWith(500);
+	});
+
+	// Regression: a magnet id only resolves inside the account that created it,
+	// so resolving a cast through it answers MAGNET_INVALID_ID for every other
+	// user - which is every "other" stream the catalog offers. Verified live on
+	// 2026-08-24: magnet 703615843 with a second premium key returned
+	// MAGNET_INVALID_ID, while `link/unlock` on that same row's stored `/f/`
+	// link returned a working CDN URL.
+	it('unlocks the stored /f/ link without touching the magnet', async () => {
+		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+		mockRepository.getAllDebridCastLink = vi
+			.fn()
+			.mockResolvedValue('https://alldebrid.com/f/token');
+		mockUnlockLink.mockResolvedValue({ link: 'https://stream.test/video.mkv' } as any);
+
+		const req = createMockRequest({ query: { userid: 'user1', hash: '123:0' } });
+		await handler(req, res);
+
+		expect(mockRepository.getAllDebridCastLink).toHaveBeenCalledWith(123, 0);
+		expect(mockUnlockLink).toHaveBeenCalledWith('key', 'https://alldebrid.com/f/token');
+		expect(mockGetMagnetFiles).not.toHaveBeenCalled();
+		expect(res.redirect).toHaveBeenCalledWith('https://stream.test/video.mkv');
+	});
+
+	it('plays a cast whose magnet the viewer does not own', async () => {
+		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+		mockRepository.getAllDebridCastLink = vi
+			.fn()
+			.mockResolvedValue('https://alldebrid.com/f/token');
+		// Someone else's magnet id - AllDebrid refuses it for this key
+		mockGetMagnetFiles.mockResolvedValue({
+			magnets: [{ error: { code: 'MAGNET_INVALID_ID', message: 'invalid' } }],
+		} as any);
+		mockUnlockLink.mockResolvedValue({ link: 'https://stream.test/video.mkv' } as any);
+
+		const req = createMockRequest({ query: { userid: 'user1', hash: '703615843:0' } });
+		await handler(req, res);
+
+		expect(res.redirect).toHaveBeenCalledWith('https://stream.test/video.mkv');
+		expect(res.status).not.toHaveBeenCalledWith(500);
+	});
+
+	it('falls back to the magnet when the stored link no longer unlocks', async () => {
+		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+		mockRepository.getAllDebridCastLink = vi
+			.fn()
+			.mockResolvedValue('https://alldebrid.com/f/stale');
+		mockGetMagnetFiles.mockResolvedValue({
+			magnets: [{ files: [{ n: 'movie.mkv', s: 1000, l: 'https://alldebrid.com/f/fresh' }] }],
+		} as any);
+		mockUnlockLink
+			.mockRejectedValueOnce(new Error('LINK_DOWN'))
+			.mockResolvedValueOnce({ link: 'https://stream.test/video.mkv' } as any);
+
+		const req = createMockRequest({ query: { userid: 'user1', hash: '123:0' } });
+		await handler(req, res);
+
+		expect(mockUnlockLink).toHaveBeenNthCalledWith(2, 'key', 'https://alldebrid.com/f/fresh');
+		expect(res.redirect).toHaveBeenCalledWith('https://stream.test/video.mkv');
 	});
 
 	it('returns 500 on error', async () => {

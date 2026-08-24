@@ -686,6 +686,10 @@ export class Repository {
 		return this.allDebridCastService.getAllUserCasts(userId);
 	}
 
+	public getAllDebridCastLink(magnetId: number, fileIndex: number) {
+		return this.allDebridCastService.getCastLink(magnetId, fileIndex);
+	}
+
 	public getAllDebridUserCastStreams(imdbId: string, userId: string, limit?: number) {
 		return this.allDebridCastService.getUserCastStreams(imdbId, userId, limit);
 	}

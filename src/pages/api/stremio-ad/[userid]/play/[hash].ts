@@ -28,6 +28,50 @@ function flattenFiles(files: MagnetFile[], parentPath: string = ''): FlatFile[] 
 	return result;
 }
 
+// Resolves the cast through the magnet the caster added.
+//
+// This only works for the caster themselves: a magnet id means nothing outside
+// the account that created it, and it stops meaning anything to that account
+// once the magnet is deleted. Kept as a fallback for rows saved before the
+// `/f/` link was stored.
+async function linkFromMagnet(
+	apiKey: string,
+	magnetId: number,
+	fileIndex: number
+): Promise<string> {
+	const filesResult = await getMagnetFiles(apiKey, [magnetId]);
+	const magnetFiles = filesResult.magnets?.[0];
+
+	if (!magnetFiles) {
+		throw new Error('Magnet not found');
+	}
+
+	if (magnetFiles.error) {
+		throw new Error(magnetFiles.error.message);
+	}
+
+	// Flatten files and filter for video files (same as catalog helper)
+	const flatFiles = flattenFiles(magnetFiles.files || []);
+	const videoExtensions = ['.mkv', '.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.m4v'];
+	const videoFiles = flatFiles.filter((f) => {
+		const filename = f.path.split('/').pop()?.toLowerCase() || '';
+		return videoExtensions.some((ext) => filename.endsWith(ext));
+	});
+
+	// Sort videos by title (same order as catalog helper)
+	videoFiles.sort((a, b) => {
+		const aName = a.path.split('/').pop() || '';
+		const bName = b.path.split('/').pop() || '';
+		return aName.localeCompare(bName);
+	});
+
+	if (fileIndex < 0 || fileIndex >= videoFiles.length) {
+		throw new Error(`File index ${fileIndex} out of range (0-${videoFiles.length - 1})`);
+	}
+
+	return videoFiles[fileIndex].link;
+}
+
 // Play an AllDebrid file from an existing magnet
 // Format: magnetId:fileIndex (e.g., "123456:0")
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -83,42 +127,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const apiKey = profile.apiKey;
 
 	try {
-		// Get files with download links from the existing magnet
-		const filesResult = await getMagnetFiles(apiKey, [magnetId]);
-		const magnetFiles = filesResult.magnets?.[0];
-
-		if (!magnetFiles) {
-			throw new Error('Magnet not found');
+		// The stored `/f/` link first: any premium key can unlock it and it
+		// outlives the magnet it came from, so it is the only form that works
+		// for a stream cast by someone else - which is every "other" stream the
+		// catalog offers. Resolving through the magnet id instead answers
+		// MAGNET_INVALID_ID for anyone but the caster.
+		let link = await db.getAllDebridCastLink(magnetId, fileIndex);
+		if (!link) {
+			link = await linkFromMagnet(apiKey, magnetId, fileIndex);
 		}
 
-		if (magnetFiles.error) {
-			throw new Error(magnetFiles.error.message);
+		let streamUrl: string;
+		try {
+			streamUrl = (await unlockLink(apiKey, link)).link;
+		} catch (unlockError) {
+			// A stored link can rot (the content was removed upstream). Fall back
+			// to the magnet, which still works when the caster is the viewer.
+			console.log(
+				'[AllDebrid Play] Stored link failed, trying the magnet:',
+				unlockError instanceof Error ? unlockError.message : 'Unknown error'
+			);
+			const fresh = await linkFromMagnet(apiKey, magnetId, fileIndex);
+			streamUrl = (await unlockLink(apiKey, fresh)).link;
 		}
-
-		// Flatten files and filter for video files (same as catalog helper)
-		const flatFiles = flattenFiles(magnetFiles.files || []);
-		const videoExtensions = ['.mkv', '.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.m4v'];
-		const videoFiles = flatFiles.filter((f) => {
-			const filename = f.path.split('/').pop()?.toLowerCase() || '';
-			return videoExtensions.some((ext) => filename.endsWith(ext));
-		});
-
-		// Sort videos by title (same order as catalog helper)
-		videoFiles.sort((a, b) => {
-			const aName = a.path.split('/').pop() || '';
-			const bName = b.path.split('/').pop() || '';
-			return aName.localeCompare(bName);
-		});
-
-		if (fileIndex < 0 || fileIndex >= videoFiles.length) {
-			throw new Error(`File index ${fileIndex} out of range (0-${videoFiles.length - 1})`);
-		}
-
-		const selectedFile = videoFiles[fileIndex];
-
-		// Unlock the AllDebrid link to get the actual download URL
-		const unlocked = await unlockLink(apiKey, selectedFile.link);
-		const streamUrl = unlocked.link;
 
 		// Redirect to the download URL
 		res.redirect(streamUrl);
