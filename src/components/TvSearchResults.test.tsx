@@ -30,6 +30,7 @@ const baseTvResult: SearchResult = {
 	tbAvailable: false,
 	pmAvailable: false,
 	files: [{ fileId: 1, filename: 'Sample.S01E01.1080p.mkv', filesize: 1024 * 10 }],
+	rdFiles: [{ fileId: 1, filename: 'Sample.S01E01.1080p.mkv', filesize: 1024 * 10 }],
 	noVideos: false,
 	medianFileSize: 10,
 	biggestFileSize: 12,
@@ -87,6 +88,53 @@ describe('TvSearchResults', () => {
 		const castButton = await screen.findByRole('button', { name: /Cast \(RD\)/i });
 		await userEvent.click(castButton);
 		await waitFor(() => expect(props.handleCast).toHaveBeenCalledWith('tv-hash', ['1']));
+	});
+
+	// Regression: the four availability checks run concurrently and each
+	// overwrites `files`, so reading the ids off `files` casts with whichever
+	// provider answered last. RD file ids and TorBox file ids are different
+	// numbering systems - sending one to the other picks a different episode.
+	it('casts RD with RD file ids even when a TorBox check overwrote files', async () => {
+		const contaminated: SearchResult = {
+			...baseTvResult,
+			tbAvailable: true,
+			// TorBox answered last, so `files` carries TorBox's numbering
+			files: [{ fileId: 8, filename: 'Sample.S01E01.1080p.mkv', filesize: 1024 * 10 }],
+			rdFiles: [{ fileId: 1, filename: 'Sample.S01E01.1080p.mkv', filesize: 1024 * 10 }],
+			tbFiles: [{ fileId: 8, filename: 'Sample.S01E01.1080p.mkv', filesize: 1024 * 10 }],
+		};
+		const { props } = renderTv({ filteredResults: [contaminated], torboxKey: 'tb' });
+
+		await userEvent.click(await screen.findByRole('button', { name: /Cast \(RD\)/i }));
+		await waitFor(() => expect(props.handleCast).toHaveBeenCalledWith('tv-hash', ['1']));
+	});
+
+	it('casts TorBox with TorBox file ids even when an RD check overwrote files', async () => {
+		const contaminated: SearchResult = {
+			...baseTvResult,
+			tbAvailable: true,
+			// RD answered last, so `files` carries RD's numbering
+			files: [{ fileId: 1, filename: 'Sample.S01E01.1080p.mkv', filesize: 1024 * 10 }],
+			rdFiles: [{ fileId: 1, filename: 'Sample.S01E01.1080p.mkv', filesize: 1024 * 10 }],
+			tbFiles: [{ fileId: 8, filename: 'Sample.S01E01.1080p.mkv', filesize: 1024 * 10 }],
+		};
+		const handleCastTorBox = vi.fn().mockResolvedValue(undefined);
+		renderTv({ filteredResults: [contaminated], torboxKey: 'tb', handleCastTorBox });
+
+		await userEvent.click(await screen.findByRole('button', { name: /Cast \(TB\)/i }));
+		await waitFor(() => expect(handleCastTorBox).toHaveBeenCalledWith('tv-hash', ['8']));
+	});
+
+	// No trustworthy ids means no cast button - offering one would cast a guess.
+	it('hides the TorBox cast button when no TorBox file ids are known', () => {
+		const noTbIds: SearchResult = { ...baseTvResult, tbAvailable: true, tbFiles: undefined };
+		renderTv({
+			filteredResults: [noTbIds],
+			torboxKey: 'tb',
+			handleCastTorBox: vi.fn().mockResolvedValue(undefined),
+		});
+
+		expect(screen.queryByRole('button', { name: /Cast \(TB\)/i })).toBeNull();
 	});
 
 	it('checks availability for uncached torrents', async () => {

@@ -1,5 +1,5 @@
 import type { DebridService } from '@/hooks/useAvailabilityCheck';
-import { SearchResult } from '@/services/mediasearch';
+import { FileData, SearchResult } from '@/services/mediasearch';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { getEpisodeCountClass, getEpisodeCountLabel } from '@/utils/episodeUtils';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize, totalFileSize } from '@/utils/results';
@@ -311,10 +311,22 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						const adColor = btnColor(r.adAvailable, r.noVideos);
 						let epRegex1 = /S(\d+)\s?E(\d+)/i;
 						let epRegex2 = /[^\d](\d{1,2})x(\d{1,2})[^\d]/i;
-						const castableFiles = r.files.filter(
-							(f) => f.filename.match(epRegex1) || f.filename.match(epRegex2)
+						const episodeFilesOf = (files: FileData[] | undefined) =>
+							(files ?? []).filter(
+								(f) => f.filename.match(epRegex1) || f.filename.match(epRegex2)
+							);
+						const castableFiles = episodeFilesOf(r.files);
+						// `r.files` holds whichever availability check answered last, and
+						// the four run concurrently. RD file ids and TorBox file ids are
+						// different numbering systems, so each cast button reads its own
+						// provider's array - see the same reasoning in `pickRdLink`.
+						const castableRdFileIds = episodeFilesOf(r.rdFiles).map(
+							(f) => `${f.fileId}`
 						);
-						const castableFileIds = castableFiles.map((f) => `${f.fileId}`);
+						const castableTbFileIds = episodeFilesOf(r.tbFiles).map(
+							(f) => `${f.fileId}`
+						);
+						// AllDebrid casts by filename, so it is unaffected by the above.
 						const castableAdFiles = castableFiles.map((f) => ({
 							filename: f.filename.split('/').pop() || f.filename,
 						}));
@@ -446,11 +458,11 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													</span>
 												</span>
 											)}
-										{rdKey && r.rdAvailable && castableFileIds.length > 0 && (
+										{rdKey && r.rdAvailable && castableRdFileIds.length > 0 && (
 											<button
 												className={`haptic-sm inline rounded border-2 border-green-500 bg-green-900/30 px-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 ${isCasting ? 'cursor-not-allowed opacity-50' : ''}`}
 												onClick={() =>
-													handleCastWithLoading(r.hash, castableFileIds)
+													handleCastWithLoading(r.hash, castableRdFileIds)
 												}
 												disabled={isCasting}
 											>
@@ -664,13 +676,13 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 										{torboxKey &&
 											handleCastTorBox &&
 											r.tbAvailable &&
-											castableFileIds.length > 0 && (
+											castableTbFileIds.length > 0 && (
 												<button
 													className={`haptic-sm inline rounded border-2 border-purple-500 bg-purple-900/30 px-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50 ${isCastingTb ? 'cursor-not-allowed opacity-50' : ''}`}
 													onClick={() =>
 														handleCastTorBoxWithLoading(
 															r.hash,
-															castableFileIds
+															castableTbFileIds
 														)
 													}
 													disabled={isCastingTb}

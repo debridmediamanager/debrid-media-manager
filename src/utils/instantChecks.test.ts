@@ -106,6 +106,8 @@ describe('instantChecks utilities', () => {
 		expect(instantHits).toBe(1);
 		expect(getState()[0].rdAvailable).toBe(true);
 		expect(getState()[0].files).toHaveLength(1);
+		// RD's own ids are kept apart so a later TorBox check cannot replace them
+		expect(getState()[0].rdFiles).toEqual(getState()[0].files);
 	});
 
 	it('marks AD torrents as available from the hash-only database check', async () => {
@@ -182,6 +184,93 @@ describe('instantChecks utilities', () => {
 		expect(hits).toBe(1);
 		expect(getState()[0].tbAvailable).toBe(true);
 		expect(getState()[0].files[0]).toMatchObject({ filename: 'Show.mkv' });
+	});
+
+	// Regression: TorBox file ids are not the listing order. Measured 2026-08-24
+	// against four real season packs, 50 of 52 files resolved to a *different*
+	// file when the array position was sent back as the id - so casting an
+	// episode saved the wrong one, under the wrong episode key, with no error.
+	it('keeps the file id TorBox reports rather than the array position', async () => {
+		mockCheckCachedStatus.mockResolvedValue({
+			success: true,
+			data: {
+				'hash-tb': {
+					files: [
+						{ id: 8, name: 'Show.S01E01.mkv', size: 2048 },
+						{ id: 12, name: 'Show.S01E02.mkv', size: 2048 },
+						{ id: 0, name: 'RARBG.txt', size: 30 },
+					],
+				},
+			},
+		} as any);
+		const { setter, getState } = createStateHarness([
+			{ hash: 'hash-tb', noVideos: false, tbAvailable: false, files: [] },
+		] as any[]);
+
+		await checkDatabaseAvailabilityTb2('tb-key', ['hash-tb'], setter);
+
+		expect(getState()[0].files.map((f: any) => f.fileId)).toEqual([8, 12, 0]);
+		expect(getState()[0].tbFiles.map((f: any) => f.fileId)).toEqual([8, 12, 0]);
+	});
+
+	it('falls back to the array position only when TorBox omits the id', async () => {
+		mockCheckCachedStatus.mockResolvedValue({
+			success: true,
+			data: {
+				'hash-tb': {
+					files: [
+						{ name: 'Show.S01E01.mkv', size: 2048 },
+						{ name: 'Show.S01E02.mkv', size: 2048 },
+					],
+				},
+			},
+		} as any);
+		const { setter, getState } = createStateHarness([
+			{ hash: 'hash-tb', noVideos: false, tbAvailable: false, files: [] },
+		] as any[]);
+
+		await checkDatabaseAvailabilityTb2('tb-key', ['hash-tb'], setter);
+
+		expect(getState()[0].files.map((f: any) => f.fileId)).toEqual([0, 1]);
+	});
+
+	// The four availability checks run concurrently and each overwrites `files`,
+	// so a cast button that reads `files` casts with whichever provider's
+	// numbering happened to land last.
+	it('does not let a TorBox check clobber the RD file ids', async () => {
+		mockCheckCachedStatus.mockResolvedValue({
+			success: true,
+			data: {
+				'hash-both': {
+					files: [
+						{ id: 8, name: 'Show.S01E01.mkv', size: 2048 },
+						{ id: 12, name: 'Show.S01E02.mkv', size: 2048 },
+					],
+				},
+			},
+		} as any);
+		const rdFiles = [
+			{ fileId: 1, filename: 'Show.S01E01.mkv', filesize: 2048 },
+			{ fileId: 2, filename: 'Show.S01E02.mkv', filesize: 2048 },
+		];
+		const { setter, getState } = createStateHarness([
+			{
+				hash: 'hash-both',
+				noVideos: false,
+				rdAvailable: true,
+				tbAvailable: false,
+				files: [...rdFiles],
+				rdFiles,
+			},
+		] as any[]);
+
+		// TorBox answering second overwrites `files` - expected, and fine for
+		// display, which is exactly why the ids have to live somewhere else.
+		await checkDatabaseAvailabilityTb2('tb-key', ['hash-both'], setter);
+
+		expect(getState()[0].files.map((f: any) => f.fileId)).toEqual([8, 12]);
+		expect(getState()[0].rdFiles.map((f: any) => f.fileId)).toEqual([1, 2]);
+		expect(getState()[0].tbFiles.map((f: any) => f.fileId)).toEqual([8, 12]);
 	});
 
 	it('wrapLoading proxies toast.promise to surface async results', async () => {

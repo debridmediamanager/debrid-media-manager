@@ -20,6 +20,13 @@ export type SearchResult = {
 	tbAvailable: boolean; // Torbox
 	pmAvailable: boolean; // Premiumize
 	files: FileData[];
+	// `files` is whichever availability check answered last - the four run
+	// concurrently and each overwrites it. Filenames and sizes agree across
+	// services, but `fileId` does not: RD numbers files per torrent, TorBox has
+	// its own ids that are not in listing order. Anything that sends an id back
+	// to a provider (casting an episode) must read that provider's own array.
+	rdFiles?: FileData[];
+	tbFiles?: FileData[];
 	noVideos: boolean;
 	// for cached results in RD
 	medianFileSize: number;
@@ -62,6 +69,8 @@ export interface EnrichedHashlistTorrent extends HashlistTorrent {
 	tbAvailable: boolean; // TorBox
 	pmAvailable: boolean; // Premiumize
 	files: FileData[];
+	rdFiles?: FileData[];
+	tbFiles?: FileData[];
 }
 
 export type ScrapeSearchResult = Pick<SearchResult, 'title' | 'fileSize' | 'hash'>;
