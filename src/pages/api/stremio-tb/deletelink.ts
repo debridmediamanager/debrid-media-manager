@@ -1,5 +1,5 @@
 import { repository as db } from '@/services/repository';
-import { generateTorBoxUserId, validateTorBoxApiKey } from '@/utils/torboxCastApiHelpers';
+import { resolveTorBoxUser } from '@/utils/torboxCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -30,18 +30,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		// Validate the API key
-		const validation = await validateTorBoxApiKey(apiKey);
-		if (!validation.valid) {
+		// One /user/me call answers both "is this key good" and "what is the id"
+		const { valid, userId } = await resolveTorBoxUser(apiKey);
+		if (!valid || !userId) {
 			res.status(401).json({
 				status: 'error',
 				errorMessage: 'Invalid TorBox API key',
 			});
 			return;
 		}
-
-		// Generate user ID
-		const userId = await generateTorBoxUserId(apiKey);
 
 		// Delete the casted link
 		const deleted = await db.deleteTorBoxCastedLink(imdbId, userId, hash);

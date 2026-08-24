@@ -113,9 +113,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	} catch (error) {
 		console.error('[meta/other/id] Exception caught:', error);
 		res.status(500).json({
+			// No stack: this is an addon endpoint any Stremio client can reach.
 			error: 'Internal server error',
 			message: error instanceof Error ? error.message : 'Unknown error',
-			stack: error instanceof Error ? error.stack : undefined,
 		});
 		return;
 	}

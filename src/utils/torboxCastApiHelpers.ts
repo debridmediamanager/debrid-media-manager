@@ -24,6 +24,19 @@ export const validateApiKey = (req: NextApiRequest, res: NextApiResponse): strin
 	return apiKey;
 };
 
+const deriveUserId = (email: string): string => {
+	const salt = process.env.DMMCAST_SALT;
+	if (!salt) {
+		throw new Error('DMMCAST_SALT environment variable is not set');
+	}
+
+	// Prefixed with 'torbox:' to ensure different IDs from RD
+	const hmac = crypto.createHmac('sha256', salt).update(`torbox:${email}`).digest('base64url'); // base64url is URL-safe (no +, /, or =)
+
+	// Return 12 characters for collision resistance
+	return hmac.slice(0, 12);
+};
+
 export const generateTorBoxUserId = async (apiKey: string): Promise<string> => {
 	try {
 		const userData = await getUserData(apiKey);
@@ -31,21 +44,7 @@ export const generateTorBoxUserId = async (apiKey: string): Promise<string> => {
 			throw new Error('Invalid TorBox API key or email not available');
 		}
 
-		const email = userData.data.email;
-
-		const salt = process.env.DMMCAST_SALT;
-		if (!salt) {
-			throw new Error('DMMCAST_SALT environment variable is not set');
-		}
-
-		// Prefixed with 'torbox:' to ensure different IDs from RD
-		const hmac = crypto
-			.createHmac('sha256', salt)
-			.update(`torbox:${email}`)
-			.digest('base64url'); // base64url is URL-safe (no +, /, or =)
-
-		// Return 12 characters for collision resistance
-		return hmac.slice(0, 12);
+		return deriveUserId(userData.data.email);
 	} catch (error) {
 		throw new Error('Failed to generate TorBox user ID');
 	}
@@ -54,15 +53,34 @@ export const generateTorBoxUserId = async (apiKey: string): Promise<string> => {
 export const validateTorBoxApiKey = async (
 	apiKey: string
 ): Promise<{ valid: boolean; email?: string }> => {
+	const { valid, email } = await resolveTorBoxUser(apiKey);
+	return email ? { valid, email } : { valid };
+};
+
+/**
+ * One TorBox round trip for both the validity check and the user id.
+ *
+ * Callers used to run `validateTorBoxApiKey` and `generateTorBoxUserId` back to
+ * back, which spent two `/user/me` calls per request against an API whose rate
+ * limits are per-key. Same shape as `resolveAllDebridUser`.
+ */
+export const resolveTorBoxUser = async (
+	apiKey: string
+): Promise<{ valid: boolean; userId?: string; email?: string }> => {
+	let userData;
 	try {
-		const userData = await getUserData(apiKey);
-		if (userData.success && userData.data?.email) {
-			return { valid: true, email: userData.data.email };
-		}
-		return { valid: false };
+		userData = await getUserData(apiKey);
 	} catch {
 		return { valid: false };
 	}
+
+	if (!userData.success || !userData.data?.email) {
+		return { valid: false };
+	}
+
+	// Deliberately outside the catch: a missing salt is our misconfiguration and
+	// should surface as a 500, not as "invalid TorBox API key".
+	return { valid: true, userId: deriveUserId(userData.data.email), email: userData.data.email };
 };
 
 export const handleApiError = (error: any, res: NextApiResponse, customMessage?: string) => {

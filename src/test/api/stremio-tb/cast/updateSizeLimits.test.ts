@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockHelpers = vi.hoisted(() => ({
-	validateTorBoxApiKey: vi.fn(),
-	generateTorBoxUserId: vi.fn(),
+	resolveTorBoxUser: vi.fn(),
 }));
 
 const mockDb = vi.hoisted(() => ({
@@ -105,7 +104,7 @@ describe('API /api/stremio-tb/cast/updateSizeLimits', () => {
 	});
 
 	it('returns 401 when API key is invalid', async () => {
-		mockHelpers.validateTorBoxApiKey.mockResolvedValue({ valid: false });
+		mockHelpers.resolveTorBoxUser.mockResolvedValue({ valid: false });
 		const req = createMockRequest({
 			method: 'POST',
 			body: { apiKey: 'bad-key' },
@@ -122,8 +121,7 @@ describe('API /api/stremio-tb/cast/updateSizeLimits', () => {
 	});
 
 	it('saves profile and returns success', async () => {
-		mockHelpers.validateTorBoxApiKey.mockResolvedValue({ valid: true });
-		mockHelpers.generateTorBoxUserId.mockResolvedValue('tb-user-456');
+		mockHelpers.resolveTorBoxUser.mockResolvedValue({ valid: true, userId: 'tb-user-456' });
 		mockDb.saveTorBoxCastProfile.mockResolvedValue(validProfile);
 		const req = createMockRequest({
 			method: 'POST',
@@ -155,8 +153,7 @@ describe('API /api/stremio-tb/cast/updateSizeLimits', () => {
 	});
 
 	it('accepts otherStreamsLimit of 0', async () => {
-		mockHelpers.validateTorBoxApiKey.mockResolvedValue({ valid: true });
-		mockHelpers.generateTorBoxUserId.mockResolvedValue('tb-user-456');
+		mockHelpers.resolveTorBoxUser.mockResolvedValue({ valid: true, userId: 'tb-user-456' });
 		mockDb.saveTorBoxCastProfile.mockResolvedValue({ ...validProfile, otherStreamsLimit: 0 });
 		const req = createMockRequest({
 			method: 'POST',
@@ -171,7 +168,7 @@ describe('API /api/stremio-tb/cast/updateSizeLimits', () => {
 
 	it('returns 500 on error', async () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		mockHelpers.validateTorBoxApiKey.mockRejectedValue(new Error('Service unavailable'));
+		mockHelpers.resolveTorBoxUser.mockRejectedValue(new Error('Service unavailable'));
 		const req = createMockRequest({
 			method: 'POST',
 			body: { apiKey: 'valid-key' },

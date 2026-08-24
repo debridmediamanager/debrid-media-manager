@@ -161,6 +161,10 @@ export class CastService extends DatabaseClient {
 			where: {
 				imdbId: imdbId,
 				userId: userId,
+				// Unbounded, this happily handed back links minted in 2024
+				updatedAt: {
+					gt: rdLinkCutoff(),
+				},
 			},
 			orderBy: {
 				updatedAt: 'desc',

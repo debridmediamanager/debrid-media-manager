@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockHelpers = vi.hoisted(() => ({
-	validateTorBoxApiKey: vi.fn(),
-	generateTorBoxUserId: vi.fn(),
+	resolveTorBoxUser: vi.fn(),
 }));
 
 const mockDb = vi.hoisted(() => ({
@@ -62,7 +61,7 @@ describe('API /api/stremio-tb/links', () => {
 	});
 
 	it('returns 401 when API key is invalid', async () => {
-		mockHelpers.validateTorBoxApiKey.mockResolvedValue({ valid: false });
+		mockHelpers.resolveTorBoxUser.mockResolvedValue({ valid: false });
 		const req = createMockRequest({ method: 'GET', query: { apiKey: 'bad-key' } });
 		const res = createMockResponse();
 
@@ -77,15 +76,16 @@ describe('API /api/stremio-tb/links', () => {
 
 	it('returns links on success', async () => {
 		const links = [{ id: 1, url: 'http://example.com' }];
-		mockHelpers.validateTorBoxApiKey.mockResolvedValue({ valid: true });
-		mockHelpers.generateTorBoxUserId.mockResolvedValue('tb-user-456');
+		mockHelpers.resolveTorBoxUser.mockResolvedValue({ valid: true, userId: 'tb-user-456' });
 		mockDb.fetchAllTorBoxCastedLinks.mockResolvedValue(links);
 		const req = createMockRequest({ method: 'GET', query: { apiKey: 'valid-key' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(mockHelpers.generateTorBoxUserId).toHaveBeenCalledWith('valid-key');
+		expect(mockHelpers.resolveTorBoxUser).toHaveBeenCalledWith('valid-key');
+		// One /user/me round trip, not two
+		expect(mockHelpers.resolveTorBoxUser).toHaveBeenCalledTimes(1);
 		expect(mockDb.fetchAllTorBoxCastedLinks).toHaveBeenCalledWith('tb-user-456');
 		expect(res._getStatusCode()).toBe(200);
 		expect(res._getData()).toEqual({ status: 'success', links });
@@ -93,7 +93,7 @@ describe('API /api/stremio-tb/links', () => {
 
 	it('returns 500 on error', async () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		mockHelpers.validateTorBoxApiKey.mockRejectedValue(new Error('DB down'));
+		mockHelpers.resolveTorBoxUser.mockRejectedValue(new Error('DB down'));
 		const req = createMockRequest({ method: 'GET', query: { apiKey: 'valid-key' } });
 		const res = createMockResponse();
 

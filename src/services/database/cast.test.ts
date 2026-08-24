@@ -213,10 +213,11 @@ describe('CastService', () => {
 		await service.getOtherStreams('tt123', 'user-1', 5);
 		const after = Date.now();
 
+		// The cutoff is `Date.now() - RD_LINK_MAX_AGE_MS` computed somewhere inside
+		// the call, so it lands in [before, after] shifted back by the window.
 		const withinWindow = (cutoff: Date) => {
-			const age = before - cutoff.getTime();
-			expect(age).toBeGreaterThanOrEqual(RD_LINK_MAX_AGE_MS);
-			expect(age).toBeLessThanOrEqual(RD_LINK_MAX_AGE_MS + (after - before) + 1000);
+			expect(cutoff.getTime()).toBeGreaterThanOrEqual(before - RD_LINK_MAX_AGE_MS);
+			expect(cutoff.getTime()).toBeLessThanOrEqual(after - RD_LINK_MAX_AGE_MS);
 		};
 
 		withinWindow(
@@ -233,7 +234,8 @@ describe('CastService', () => {
 		await service.getUserCastStreams('tt123', 'user-1', 5);
 
 		const cutoff: Date = prismaMock.cast.findMany.mock.calls[0][0].where.updatedAt.gt;
-		expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(RD_LINK_MAX_AGE_MS);
+		expect(cutoff.getTime()).toBeGreaterThanOrEqual(before - RD_LINK_MAX_AGE_MS);
+		expect(cutoff.getTime()).toBeLessThanOrEqual(Date.now() - RD_LINK_MAX_AGE_MS);
 	});
 
 	it('drops every cast row pointing at a link RD says is gone', async () => {

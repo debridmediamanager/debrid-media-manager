@@ -2,15 +2,13 @@ import handler from '@/pages/api/stremio-tb/cast/saveProfile';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { mockValidateApiKey, mockGenerateUserId, mockSaveCastProfile } = vi.hoisted(() => ({
-	mockValidateApiKey: vi.fn(),
-	mockGenerateUserId: vi.fn(),
+const { mockResolveUser, mockSaveCastProfile } = vi.hoisted(() => ({
+	mockResolveUser: vi.fn(),
 	mockSaveCastProfile: vi.fn(),
 }));
 
 vi.mock('@/utils/torboxCastApiHelpers', () => ({
-	validateTorBoxApiKey: mockValidateApiKey,
-	generateTorBoxUserId: mockGenerateUserId,
+	resolveTorBoxUser: mockResolveUser,
 }));
 
 vi.mock('@/services/repository', () => ({
@@ -22,8 +20,7 @@ vi.mock('@/services/repository', () => ({
 describe('/api/stremio-tb/cast/saveProfile', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockValidateApiKey.mockResolvedValue({ valid: true });
-		mockGenerateUserId.mockResolvedValue('tb-user-1');
+		mockResolveUser.mockResolvedValue({ valid: true, userId: 'tb-user-1' });
 		mockSaveCastProfile.mockResolvedValue({
 			userId: 'tb-user-1',
 			movieMaxSize: 0,
@@ -52,7 +49,7 @@ describe('/api/stremio-tb/cast/saveProfile', () => {
 	});
 
 	it('rejects invalid API key', async () => {
-		mockValidateApiKey.mockResolvedValue({ valid: false });
+		mockResolveUser.mockResolvedValue({ valid: false });
 		const req = createMockRequest({ method: 'POST', body: { apiKey: 'bad' } });
 		const res = createMockResponse();
 

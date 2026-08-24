@@ -44,9 +44,12 @@ describe('/api/stremio/[userid]/watch/[imdbid]/[pingpong]', () => {
 
 		await handler(req, res);
 
+		// No token on the play URL: the play route resolves the user's own stored
+		// credentials and never read one, so passing it just put an RD token in
+		// the address bar and in every access log on the way.
 		expect(res.redirect).toHaveBeenCalledWith(
 			302,
-			'https://dmm.test/api/stremio/user/play/m/d/abc123?token=tok'
+			'https://dmm.test/api/stremio/user/play/m/d/abc123'
 		);
 	});
 
@@ -79,7 +82,23 @@ describe('/api/stremio/[userid]/watch/[imdbid]/[pingpong]', () => {
 
 		expect(res.redirect).toHaveBeenCalledWith(
 			302,
-			'https://dmm.test/api/stremio/user/watch/tt1/pong?token=tok'
+			'https://dmm.test/api/stremio/user/watch/tt1/pong?hop=1'
 		);
+	});
+
+	// Regression: with nothing cast, this slept 3s and redirected to itself with
+	// ping/pong flipped, forever - the only thing that ended it was the browser's
+	// redirect cap, after ~20 hops of held server time per click.
+	it('gives up once the hop budget is spent', async () => {
+		mockGetLatestCast.mockResolvedValue(null);
+		const req = createMockRequest({
+			query: { userid: 'user', imdbid: 'tt1', pingpong: 'ping', hop: '20' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.redirect).not.toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(404);
 	});
 });

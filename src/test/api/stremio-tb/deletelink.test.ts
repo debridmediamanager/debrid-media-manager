@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockHelpers = vi.hoisted(() => ({
-	validateTorBoxApiKey: vi.fn(),
-	generateTorBoxUserId: vi.fn(),
+	resolveTorBoxUser: vi.fn(),
 }));
 
 const mockDb = vi.hoisted(() => ({
@@ -85,7 +84,7 @@ describe('API /api/stremio-tb/deletelink', () => {
 	});
 
 	it('returns 401 when API key is invalid', async () => {
-		mockHelpers.validateTorBoxApiKey.mockResolvedValue({ valid: false });
+		mockHelpers.resolveTorBoxUser.mockResolvedValue({ valid: false });
 		const req = createMockRequest({
 			method: 'DELETE',
 			body: { apiKey: 'bad-key', imdbId: 'tt123', hash: 'abc' },
@@ -102,8 +101,7 @@ describe('API /api/stremio-tb/deletelink', () => {
 	});
 
 	it('deletes link and returns success', async () => {
-		mockHelpers.validateTorBoxApiKey.mockResolvedValue({ valid: true });
-		mockHelpers.generateTorBoxUserId.mockResolvedValue('tb-user-456');
+		mockHelpers.resolveTorBoxUser.mockResolvedValue({ valid: true, userId: 'tb-user-456' });
 		mockDb.deleteTorBoxCastedLink.mockResolvedValue(true);
 		const req = createMockRequest({
 			method: 'DELETE',
@@ -123,7 +121,7 @@ describe('API /api/stremio-tb/deletelink', () => {
 
 	it('returns 500 on error', async () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		mockHelpers.validateTorBoxApiKey.mockRejectedValue(new Error('Connection lost'));
+		mockHelpers.resolveTorBoxUser.mockRejectedValue(new Error('Connection lost'));
 		const req = createMockRequest({
 			method: 'DELETE',
 			body: { apiKey: 'valid-key', imdbId: 'tt123', hash: 'abc' },

@@ -12,6 +12,7 @@ import {
 	encryptApiKey,
 	generateTorBoxUserId,
 	handleApiError,
+	resolveTorBoxUser,
 	validateApiKey,
 	validateMethod,
 	validateTorBoxApiKey,
@@ -205,6 +206,34 @@ describe('torboxCastApiHelpers', () => {
 		it('roundtrips correctly', () => {
 			const key = 'tb-key-456';
 			expect(decryptApiKey(encryptApiKey(key))).toBe(key);
+		});
+	});
+
+	// Callers used to run validateTorBoxApiKey and generateTorBoxUserId back to
+	// back, spending two /user/me calls per request against per-key rate limits.
+	describe('resolveTorBoxUser', () => {
+		it('answers both questions in one round trip', async () => {
+			vi.mocked(getUserData).mockResolvedValue({
+				success: true,
+				data: { email: 'a@b.c' },
+			} as any);
+
+			const result = await resolveTorBoxUser('key');
+
+			expect(result.valid).toBe(true);
+			expect(result.email).toBe('a@b.c');
+			expect(result.userId).toHaveLength(12);
+			expect(vi.mocked(getUserData)).toHaveBeenCalledTimes(1);
+		});
+
+		it('reports an unusable key without a user id', async () => {
+			vi.mocked(getUserData).mockResolvedValue({ success: false } as any);
+			expect(await resolveTorBoxUser('key')).toEqual({ valid: false });
+		});
+
+		it('reports a thrown lookup as an invalid key', async () => {
+			vi.mocked(getUserData).mockRejectedValue(new Error('network'));
+			expect(await resolveTorBoxUser('key')).toEqual({ valid: false });
 		});
 	});
 });
