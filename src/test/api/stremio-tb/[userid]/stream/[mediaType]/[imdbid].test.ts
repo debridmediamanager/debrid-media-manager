@@ -367,4 +367,49 @@ describe('/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]', () => {
 			expect(payload.streams).toHaveLength(3);
 		});
 	});
+
+	// A TorBox torrent id only resolves inside the account that created it, so
+	// the play route needs to know whose row it is handing over.
+	it("marks the caster's own streams so play can use the torrent id", async () => {
+		mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({
+			movieMaxSize: 0,
+			episodeMaxSize: 0,
+			otherStreamsLimit: 5,
+		});
+		mockRepository.getTorBoxUserCastStreams = vi
+			.fn()
+			.mockResolvedValue([
+				{
+					url: 'Mine.mkv',
+					filename: 'Mine.mkv',
+					size: 100,
+					hash: 'a'.repeat(40),
+					torrentId: 1,
+					fileId: 2,
+				},
+			]);
+		mockRepository.getTorBoxOtherStreams = vi
+			.fn()
+			.mockResolvedValue([
+				{
+					url: 'Theirs.mkv',
+					filename: 'Theirs.mkv',
+					size: 100,
+					hash: 'b'.repeat(40),
+					torrentId: 3,
+					fileId: 4,
+				},
+			]);
+		mockRepository.getSnapshotsByHashes = vi.fn().mockResolvedValue([]);
+
+		const req = createMockRequest({
+			query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt123' },
+		});
+		const res = createMockResponse();
+		await handler(req, res);
+
+		const urls = (res._getData() as any).streams.map((s: any) => s.url).filter(Boolean);
+		expect(urls.find((u: string) => u.includes('/1:2'))).toContain('own=1');
+		expect(urls.find((u: string) => u.includes('/3:4'))).not.toContain('own=1');
+	});
 });

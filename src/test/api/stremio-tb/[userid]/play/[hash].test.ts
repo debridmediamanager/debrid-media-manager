@@ -244,4 +244,54 @@ describe('/api/stremio-tb/[userid]/play/[hash]', () => {
 			expect(res.status).toHaveBeenCalledWith(500);
 		});
 	});
+
+	// Regression: a TorBox torrent id only resolves inside the account that
+	// created it - three of three foreign ids answered 500 DATABASE_ERROR when
+	// probed on 2026-08-24 - so for someone else's cast the direct lookup is a
+	// guaranteed round trip into a wall before the hash fallback runs.
+	it("goes straight to the hash for a cast that is not the viewer's own", async () => {
+		mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+		vi.mocked(getFileByNameTorBoxStreamUrl).mockResolvedValue([
+			'https://tb/dl',
+			1,
+			2,
+			3,
+			'Show.S01E01.mkv',
+		] as any);
+
+		const req = createMockRequest({
+			query: {
+				userid: 'user1',
+				hash: '999:0',
+				h: 'fbadffe5476df0674dbec75e81426895e40b6427',
+				file: 'Show.S01E01.mkv',
+			},
+		});
+		await handler(req, res);
+
+		expect(requestDownloadLink).not.toHaveBeenCalled();
+		expect(res.redirect).toHaveBeenCalledWith('https://tb/dl');
+	});
+
+	it("still tries the direct lookup for the caster's own row", async () => {
+		mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+		vi.mocked(requestDownloadLink).mockResolvedValue({
+			success: true,
+			data: 'https://tb/direct',
+		} as any);
+
+		const req = createMockRequest({
+			query: {
+				userid: 'user1',
+				hash: '999:0',
+				h: 'fbadffe5476df0674dbec75e81426895e40b6427',
+				file: 'Show.S01E01.mkv',
+				own: '1',
+			},
+		});
+		await handler(req, res);
+
+		expect(requestDownloadLink).toHaveBeenCalled();
+		expect(res.redirect).toHaveBeenCalledWith('https://tb/direct');
+	});
 });

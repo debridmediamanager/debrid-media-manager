@@ -8,6 +8,31 @@ import {
 import { isWebDownloadHash } from '@/utils/torboxWebDownload';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+// A TorBox torrent id only resolves inside the account that created it -
+// `requestdl` answers 500 DATABASE_ERROR for anyone else (verified 2026-08-24 on
+// three real rows). Marking the caster's own rows lets the play route skip a
+// direct lookup that cannot succeed and go straight to the hash, which re-adds
+// the (still cached) torrent to the viewer's own account.
+const buildPlayUrl = (
+	userid: string,
+	item: {
+		hash: string;
+		filename?: string | null;
+		torrentId: number | null;
+		fileId: number | null;
+	},
+	isOwnCast: boolean
+) => {
+	const encodedFilename = encodeURIComponent(item.filename ?? '');
+	if (item.torrentId != null && item.fileId != null) {
+		// hash + filename ride along as the fallback for a torrent the caster has
+		// since deleted from TorBox.
+		return `${process.env.DMM_ORIGIN}/api/stremio-tb/${userid}/play/${item.torrentId}:${item.fileId}?h=${item.hash}&file=${encodedFilename}${isOwnCast ? '&own=1' : ''}`;
+	}
+	// Legacy rows: use the hash with the filename to match the correct file
+	return `${process.env.DMM_ORIGIN}/api/stremio-tb/${userid}/play/${item.hash}?file=${encodedFilename}`;
+};
+
 // lists all available streams for a movie or show (TorBox version)
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
@@ -118,20 +143,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			const name = generateStreamName(item.size, metadata);
 
 			// Build play URL with fallback parameters for when torrent IDs become stale
-			const encodedFilename = encodeURIComponent(item.filename ?? '');
-			let playUrl: string;
-			if (item.torrentId != null && item.fileId != null) {
-				// Include hash+filename as fallback in case torrent was deleted from TorBox
-				playUrl = `${process.env.DMM_ORIGIN}/api/stremio-tb/${userid}/play/${item.torrentId}:${item.fileId}?h=${item.hash}&file=${encodedFilename}`;
-			} else {
-				// Legacy: use hash with filename to match the correct file
-				playUrl = `${process.env.DMM_ORIGIN}/api/stremio-tb/${userid}/play/${item.hash}?file=${encodedFilename}`;
-			}
-
 			streams.push({
 				name,
 				title,
-				url: playUrl,
+				url: buildPlayUrl(userid, item, true),
 				behaviorHints: {
 					bingeGroup: `dmm-tb:${imdbidStr}:yours`,
 				},
@@ -152,20 +167,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			const name = generateStreamName(item.size, metadata);
 
 			// Build play URL with fallback parameters for when torrent IDs become stale
-			const encodedFilename = encodeURIComponent(item.filename ?? '');
-			let playUrl: string;
-			if (item.torrentId != null && item.fileId != null) {
-				// Include hash+filename as fallback in case torrent was deleted from TorBox
-				playUrl = `${process.env.DMM_ORIGIN}/api/stremio-tb/${userid}/play/${item.torrentId}:${item.fileId}?h=${item.hash}&file=${encodedFilename}`;
-			} else {
-				// Legacy: use hash with filename to match the correct file
-				playUrl = `${process.env.DMM_ORIGIN}/api/stremio-tb/${userid}/play/${item.hash}?file=${encodedFilename}`;
-			}
-
 			streams.push({
 				name,
 				title,
-				url: playUrl,
+				url: buildPlayUrl(userid, item, false),
 				behaviorHints: {
 					bingeGroup: `dmm-tb:${imdbidStr}:other:${i + 1}`,
 				},

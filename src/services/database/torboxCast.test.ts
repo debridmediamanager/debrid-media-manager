@@ -365,4 +365,28 @@ describe('TorBoxCastService', () => {
 			consoleSpy.mockRestore();
 		});
 	});
+
+	// Regression: TorBox's download URL carries the account's raw API key as a
+	// query parameter, and the cast row kept it verbatim - 114,689 of 114,689
+	// rows on 2026-08-24 held a second plaintext copy of a user's key. Nothing
+	// reads the column back.
+	it('does not store the API key TorBox puts in the download URL', async () => {
+		await service.saveCast(
+			'tt123',
+			'user-1',
+			'hash',
+			'Movie.mkv',
+			'https://nexus.tb-cdn.st/dld/abc-123?token=00000000-0000-4000-8000-000000000000',
+			700,
+			42,
+			7
+		);
+
+		const call = prismaMock.torBoxCast.upsert.mock.calls[0][0];
+		expect(call.create.link).toBe('https://nexus.tb-cdn.st/dld/abc-123');
+		expect(call.update.link).toBe('https://nexus.tb-cdn.st/dld/abc-123');
+		expect(
+			JSON.stringify(call, (_k, v) => (typeof v === 'bigint' ? String(v) : v))
+		).not.toContain('00000000-0000-4000');
+	});
 });

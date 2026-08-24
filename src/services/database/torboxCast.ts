@@ -1,3 +1,4 @@
+import { stripTorBoxToken } from '@/utils/torboxLinkSecret';
 import { DatabaseClient } from './client';
 
 interface LatestCast {
@@ -116,6 +117,12 @@ export class TorBoxCastService extends DatabaseClient {
 		torrentId?: number,
 		fileId?: number
 	): Promise<void> {
+		// The URL TorBox hands back carries the caller's raw API key as a query
+		// parameter. Nothing reads the column back - playback re-mints from
+		// torrentId/fileId, and the listing never selects it - so the key does
+		// not need storing.
+		const link = stripTorBoxToken(tbLink);
+
 		await this.prisma.torBoxCast.upsert({
 			where: {
 				imdbId_userId_hash: {
@@ -126,7 +133,7 @@ export class TorBoxCastService extends DatabaseClient {
 			},
 			update: {
 				imdbId: imdbId,
-				link: tbLink,
+				link,
 				url: url,
 				size: BigInt(fileSize),
 				torrentId: torrentId,
@@ -136,7 +143,7 @@ export class TorBoxCastService extends DatabaseClient {
 				imdbId: imdbId,
 				userId: userId,
 				hash: hash,
-				link: tbLink,
+				link,
 				url: url,
 				size: BigInt(fileSize),
 				torrentId: torrentId,
