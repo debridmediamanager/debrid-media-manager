@@ -6,9 +6,10 @@ import { castToastOptions } from './toastOptions';
 
 export const handleCastMovieTorBox = async (imdbId: string, apiKey: string, hash: string) => {
 	try {
-		const resp = await axios.get(
-			`/api/stremio-tb/cast/movie/${imdbId}?apiKey=${apiKey}&hash=${hash}`
-		);
+		// See castApiClient: the key belongs in the header, not the access logs.
+		const resp = await axios.get(`/api/stremio-tb/cast/movie/${imdbId}?hash=${hash}`, {
+			headers: { Authorization: `Bearer ${apiKey}` },
+		});
 		toast(`Casted ${resp.data.filename} to Stremio (TorBox).`, castToastOptions);
 	} catch (error: any) {
 		const errorMessage =
@@ -29,7 +30,8 @@ export const handleCastTvShowTorBox = async (
 		try {
 			const fIdParam = batch.map((id) => `fileIds=${id}`).join('&');
 			const resp = await axios.get(
-				`/api/stremio-tb/cast/series/${imdbId}?apiKey=${apiKey}&hash=${hash}&${fIdParam}`
+				`/api/stremio-tb/cast/series/${imdbId}?hash=${hash}&${fIdParam}`,
+				{ headers: { Authorization: `Bearer ${apiKey}` } }
 			);
 			const errorEpisodes = resp.data.errorEpisodes;
 			if (errorEpisodes.length) {
@@ -102,7 +104,9 @@ export const updateTorBoxSizeLimits = async (
 
 export const fetchTorBoxCastedLinks = async (apiKey: string) => {
 	try {
-		const resp = await axios.get(`/api/stremio-tb/links?apiKey=${apiKey}`);
+		const resp = await axios.get('/api/stremio-tb/links', {
+			headers: { Authorization: `Bearer ${apiKey}` },
+		});
 		return resp.data.links || [];
 	} catch (error) {
 		console.error('Error fetching TorBox casted links:', error);

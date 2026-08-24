@@ -21,7 +21,10 @@ describe('castApiClient', () => {
 			await handleCastMovie('tt1234567', 'test-rd-key', 'test-hash');
 
 			expect(axios.get).toHaveBeenCalledWith(
-				'/api/stremio/cast/movie/tt1234567?token=test-rd-key&hash=test-hash'
+				'/api/stremio/cast/movie/tt1234567?hash=test-hash',
+				// The key rides in the header - a query parameter is written verbatim
+				// into every access log on the way.
+				{ headers: { Authorization: 'Bearer test-rd-key' } }
 			);
 			expect(toast).toHaveBeenCalledWith(
 				'Casted Test Movie.mp4 to Stremio.',

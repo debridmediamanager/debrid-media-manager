@@ -62,7 +62,14 @@ export function AllDebridManagePage() {
 			}
 
 			try {
-				const response = await fetch(`/api/stremio-ad/links?apiKey=${apiKey}`);
+				// The endpoint is POST-only and reads the key from the body, so it
+				// never lands in an access log. This page was still calling it
+				// with GET and a query string, which only ever answered 405.
+				const response = await fetch('/api/stremio-ad/links', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ apiKey }),
+				});
 				if (!response.ok) throw new Error('Failed to fetch links');
 				const data = await response.json();
 				const links = data.links || [];

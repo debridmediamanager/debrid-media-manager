@@ -3,15 +3,17 @@ import { repository as db } from '@/services/repository';
 import { generateAllDebridUserId } from '@/utils/allDebridCastApiHelpers';
 import { selectSortedVideos } from '@/utils/allDebridCastClientPipeline';
 import { planLibraryCast } from '@/utils/castLibraryPlan';
+import { readProviderKey } from '@/utils/providerKeyHeader';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
 
-	const { magnetIdPlusHash, apiKey, imdbId: userProvidedImdbId } = req.query;
+	const { magnetIdPlusHash, imdbId: userProvidedImdbId } = req.query;
+	const apiKey = readProviderKey(req, ['apiKey']);
 
-	if (!apiKey || typeof apiKey !== 'string') {
+	if (!apiKey) {
 		res.status(400).json({
 			status: 'error',
 			errorMessage: 'Missing or invalid AllDebrid API key',

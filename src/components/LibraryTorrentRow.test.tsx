@@ -360,9 +360,14 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			render(<LibraryTorrentRow {...defaultProps} />);
 			const castButton = screen.getByTitle('Cast (RD)');
 			fireEvent.click(castButton);
-			const expectedUrl = `/api/stremio/cast/library/${mockTorrent.id.substring(3)}:${mockTorrent.hash}?rdToken=${defaultProps.rdKey}`;
+			const expectedUrl = `/api/stremio/cast/library/${mockTorrent.id.substring(3)}:${mockTorrent.hash}`;
 			await waitFor(() => {
-				expect(fetchSpy).toHaveBeenCalledWith(expectedUrl);
+				// The key rides in the header: a query parameter is written
+				// verbatim into every access log on the way, and an RD apitoken
+				// key never expires.
+				expect(fetchSpy).toHaveBeenCalledWith(expectedUrl, {
+					headers: { Authorization: `Bearer ${defaultProps.rdKey}` },
+				});
 			});
 			fetchSpy.mockRestore();
 		});

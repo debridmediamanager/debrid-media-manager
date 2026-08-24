@@ -62,7 +62,9 @@ export function TorBoxManagePage() {
 			}
 
 			try {
-				const response = await fetch(`/api/stremio-tb/links?apiKey=${apiKey}`);
+				const response = await fetch('/api/stremio-tb/links', {
+					headers: { Authorization: `Bearer ${apiKey}` },
+				});
 				if (!response.ok) throw new Error('Failed to fetch links');
 				const data = await response.json();
 				const links = data.links || [];

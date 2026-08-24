@@ -1,5 +1,6 @@
 import { repository as db } from '@/services/repository';
 import { getBiggestFileTorBoxStreamUrl } from '@/utils/getTorBoxStreamUrl';
+import { readProviderKey } from '@/utils/providerKeyHeader';
 import { generateTorBoxUserId } from '@/utils/torboxCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -7,7 +8,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
 
-	const { imdbid, apiKey, hash } = req.query;
+	const { imdbid, hash } = req.query;
+	const apiKey = readProviderKey(req, ['apiKey']);
 	if (!apiKey || !hash) {
 		res.status(400).json({
 			status: 'error',
@@ -15,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		});
 		return;
 	}
-	if (typeof imdbid !== 'string' || typeof apiKey !== 'string' || typeof hash !== 'string') {
+	if (typeof imdbid !== 'string' || typeof hash !== 'string') {
 		res.status(400).json({
 			status: 'error',
 			errorMessage: 'Invalid "apiKey" or "hash" query parameter',

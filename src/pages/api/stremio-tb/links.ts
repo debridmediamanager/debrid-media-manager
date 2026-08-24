@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { readProviderKey } from '@/utils/providerKeyHeader';
 import { resolveTorBoxUser } from '@/utils/torboxCastApiHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -11,9 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	const { apiKey } = req.query;
+	const apiKey = readProviderKey(req, ['apiKey']);
 
-	if (!apiKey || typeof apiKey !== 'string') {
+	if (!apiKey) {
 		res.status(400).json({
 			status: 'error',
 			errorMessage: 'Missing or invalid "apiKey" query parameter',

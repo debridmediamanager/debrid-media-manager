@@ -6,9 +6,12 @@ import { castToastOptions } from './toastOptions';
 
 export const handleCastMovie = async (imdbId: string, rdKey: string, hash: string) => {
 	try {
-		const resp = await axios.get(
-			`/api/stremio/cast/movie/${imdbId}?token=${rdKey}&hash=${hash}`
-		);
+		// The key goes in the header, not the query string: a query parameter is
+		// written verbatim into every access log on the way, and an RD apitoken
+		// never expires.
+		const resp = await axios.get(`/api/stremio/cast/movie/${imdbId}?hash=${hash}`, {
+			headers: { Authorization: `Bearer ${rdKey}` },
+		});
 		toast(`Casted ${resp.data.filename} to Stremio.`, castToastOptions);
 	} catch (error: any) {
 		const errorMessage =
@@ -29,7 +32,8 @@ export const handleCastTvShow = async (
 		try {
 			const fIdParam = batch.map((id) => `fileIds=${id}`).join('&');
 			const resp = await axios.get(
-				`/api/stremio/cast/series/${imdbId}?token=${rdKey}&hash=${hash}&${fIdParam}`
+				`/api/stremio/cast/series/${imdbId}?hash=${hash}&${fIdParam}`,
+				{ headers: { Authorization: `Bearer ${rdKey}` } }
 			);
 			const errorEpisodes = resp.data.errorEpisodes;
 			if (errorEpisodes.length) {

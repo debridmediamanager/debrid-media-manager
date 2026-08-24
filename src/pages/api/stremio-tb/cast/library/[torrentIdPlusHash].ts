@@ -8,6 +8,7 @@ import {
 import { TorBoxTorrentInfo, TorBoxWebDownload } from '@/services/types';
 import { planLibraryCast } from '@/utils/castLibraryPlan';
 import { delay } from '@/utils/delay';
+import { readProviderKey } from '@/utils/providerKeyHeader';
 import { isVideo } from '@/utils/selectable';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { generateTorBoxUserId } from '@/utils/torboxCastApiHelpers';
@@ -21,9 +22,10 @@ const REQUESTDL_SPACING_MS = 250;
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
 
-	const { torrentIdPlusHash, apiKey, imdbId: userProvidedImdbId } = req.query;
+	const { torrentIdPlusHash, imdbId: userProvidedImdbId } = req.query;
+	const apiKey = readProviderKey(req, ['apiKey']);
 
-	if (!apiKey || typeof apiKey !== 'string') {
+	if (!apiKey) {
 		res.status(400).json({
 			status: 'error',
 			errorMessage: 'Missing or invalid TorBox API key',

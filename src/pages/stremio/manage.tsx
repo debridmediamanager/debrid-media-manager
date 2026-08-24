@@ -62,7 +62,9 @@ export function ManagePage() {
 			}
 
 			try {
-				const response = await fetch(`/api/stremio/links?token=${rdKey}`);
+				const response = await fetch('/api/stremio/links', {
+					headers: { Authorization: `Bearer ${rdKey}` },
+				});
 				if (!response.ok) throw new Error('Failed to fetch links');
 				const links = await response.json();
 

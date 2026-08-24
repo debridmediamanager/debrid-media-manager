@@ -2,15 +2,17 @@ import { getTorrentInfo } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { planLibraryCast } from '@/utils/castLibraryPlan';
+import { readProviderKey } from '@/utils/providerKeyHeader';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	res.setHeader('access-control-allow-origin', '*');
 
-	const { torrentIdPlusHash, rdToken, imdbId: userProvidedImdbId } = req.query;
+	const { torrentIdPlusHash, imdbId: userProvidedImdbId } = req.query;
+	const rdToken = readProviderKey(req, ['rdToken', 'token']);
 
-	if (!rdToken || typeof rdToken !== 'string') {
+	if (!rdToken) {
 		res.status(400).json({
 			status: 'error',
 			errorMessage: 'Missing or invalid RD token',

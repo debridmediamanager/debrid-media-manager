@@ -156,8 +156,11 @@ function TorrentRow({
 		setCastService('rd');
 		setIsCasting(true);
 		try {
-			const castUrl = `/api/stremio/cast/library/${rdId}:${torrent.hash}?rdToken=${rdKey}${imdbId ? `&imdbId=${imdbId}` : ''}`;
-			const response = await fetch(castUrl);
+			// Key in the header, not the query string - see castApiClient.
+			const castUrl = `/api/stremio/cast/library/${rdId}:${torrent.hash}${imdbId ? `?imdbId=${imdbId}` : ''}`;
+			const response = await fetch(castUrl, {
+				headers: { Authorization: `Bearer ${rdKey}` },
+			});
 			const data = await response.json();
 
 			if (data.status === 'need_imdb_id') {
@@ -186,8 +189,10 @@ function TorrentRow({
 		setCastService('ad');
 		setIsCasting(true);
 		try {
-			const castUrl = `/api/stremio-ad/cast/library/${adId}:${torrent.hash}?apiKey=${adKey}${imdbId ? `&imdbId=${imdbId}` : ''}`;
-			const response = await fetch(castUrl);
+			const castUrl = `/api/stremio-ad/cast/library/${adId}:${torrent.hash}${imdbId ? `?imdbId=${imdbId}` : ''}`;
+			const response = await fetch(castUrl, {
+				headers: { Authorization: `Bearer ${adKey}` },
+			});
 			const data = await response.json();
 
 			if (data.status === 'need_imdb_id') {
@@ -216,8 +221,10 @@ function TorrentRow({
 		setCastService('tb');
 		setIsCasting(true);
 		try {
-			const castUrl = `/api/stremio-tb/cast/library/${tbId}:${torrent.hash}?apiKey=${tbKey}${imdbId ? `&imdbId=${imdbId}` : ''}`;
-			const response = await fetch(castUrl);
+			const castUrl = `/api/stremio-tb/cast/library/${tbId}:${torrent.hash}${imdbId ? `?imdbId=${imdbId}` : ''}`;
+			const response = await fetch(castUrl, {
+				headers: { Authorization: `Bearer ${tbKey}` },
+			});
 			const data = await response.json();
 
 			if (data.status === 'need_imdb_id') {

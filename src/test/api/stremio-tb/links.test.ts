@@ -105,4 +105,22 @@ describe('API /api/stremio-tb/links', () => {
 			errorMessage: 'DB down',
 		});
 	});
+
+	// Regression: the key used to travel as a query parameter, which writes it
+	// verbatim into every access log on the way.
+	it('accepts the key from the Authorization header', async () => {
+		mockHelpers.resolveTorBoxUser.mockResolvedValue({ valid: true, userId: 'tb-user-456' });
+		mockDb.fetchAllTorBoxCastedLinks.mockResolvedValue([]);
+
+		const req = createMockRequest({
+			method: 'GET',
+			headers: { authorization: 'Bearer header-key' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockHelpers.resolveTorBoxUser).toHaveBeenCalledWith('header-key');
+		expect(res.status).toHaveBeenCalledWith(200);
+	});
 });

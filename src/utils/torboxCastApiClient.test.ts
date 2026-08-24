@@ -46,7 +46,9 @@ describe('torboxCastApiClient', () => {
 			await handleCastMovieTorBox('tt123', 'key', 'hash');
 
 			expect(axios.get).toHaveBeenCalledWith(
-				'/api/stremio-tb/cast/movie/tt123?apiKey=key&hash=hash'
+				'/api/stremio-tb/cast/movie/tt123?hash=hash',
+				// The key rides in the header, not the access logs
+				{ headers: { Authorization: 'Bearer key' } }
 			);
 			expect(toast).toHaveBeenCalledWith(
 				'Casted Movie.mkv to Stremio (TorBox).',
@@ -160,7 +162,8 @@ describe('torboxCastApiClient', () => {
 			await handleCastTvShowTorBox('tt123', 'key', 'hash', ['10', '20']);
 
 			expect(axios.get).toHaveBeenCalledWith(
-				'/api/stremio-tb/cast/series/tt123?apiKey=key&hash=hash&fileIds=10&fileIds=20'
+				'/api/stremio-tb/cast/series/tt123?hash=hash&fileIds=10&fileIds=20',
+				{ headers: { Authorization: 'Bearer key' } }
 			);
 		});
 	});
@@ -236,7 +239,9 @@ describe('torboxCastApiClient', () => {
 
 			const result = await fetchTorBoxCastedLinks('key');
 
-			expect(axios.get).toHaveBeenCalledWith('/api/stremio-tb/links?apiKey=key');
+			expect(axios.get).toHaveBeenCalledWith('/api/stremio-tb/links', {
+				headers: { Authorization: 'Bearer key' },
+			});
 			expect(result).toEqual([{ id: 1 }]);
 		});
 
