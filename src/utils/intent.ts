@@ -37,9 +37,14 @@ export const buildPlayerIntent = (
 	fallbackUrl: string
 ): string => {
 	if (os === 'android') {
-		return `intent://${downloadUrl.replace('https://', '')}#Intent;type=video/any;scheme=https${
-			player !== 'chooser' ? ';package=' + player : ''
-		};end`;
+		// Without a fallback, an intent Chrome declines to launch — the package
+		// is not installed, or the navigation did not carry a user gesture —
+		// goes nowhere at all and leaves the tab blank. The fallback turns that
+		// dead end into the stream itself, playing in the browser.
+		const parts = ['type=video/any', 'scheme=https'];
+		if (player !== 'chooser') parts.push(`package=${player}`);
+		parts.push(`S.browser_fallback_url=${encodeURIComponent(fallbackUrl)}`);
+		return `intent://${downloadUrl.replace('https://', '')}#Intent;${parts.join(';')};end`;
 	}
 	if (os === 'ios' || os === 'mac') {
 		return `${player}://${downloadUrl.replace('https://', '')}`;

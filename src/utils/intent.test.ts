@@ -52,11 +52,40 @@ describe('buildPlayerIntent', () => {
 
 	it('builds an android intent, naming the package unless the chooser is wanted', () => {
 		expect(buildPlayerIntent('android', 'com.brouken.player', url, 'fallback')).toBe(
-			'intent://cdn.example.com/movie.mkv#Intent;type=video/any;scheme=https;package=com.brouken.player;end'
+			'intent://cdn.example.com/movie.mkv#Intent;type=video/any;scheme=https;package=com.brouken.player;S.browser_fallback_url=fallback;end'
 		);
 		expect(buildPlayerIntent('android', 'chooser', url, 'fallback')).toBe(
-			'intent://cdn.example.com/movie.mkv#Intent;type=video/any;scheme=https;end'
+			'intent://cdn.example.com/movie.mkv#Intent;type=video/any;scheme=https;S.browser_fallback_url=fallback;end'
 		);
+	});
+
+	// An intent Chrome declines to launch used to go nowhere and leave the tab
+	// blank. With a fallback it lands on the stream instead.
+	it('gives android somewhere to land when the player will not open', () => {
+		expect(
+			buildPlayerIntent(
+				'android',
+				'org.videolan.vlc',
+				url,
+				'https://real-debrid.com/streaming-1'
+			)
+		).toContain(
+			`S.browser_fallback_url=${encodeURIComponent('https://real-debrid.com/streaming-1')}`
+		);
+	});
+
+	// `;` ends an intent field, so a raw fallback URL containing one would cut
+	// the intent short and take `end` with it.
+	it('encodes a fallback URL so it cannot break out of the intent', () => {
+		const intent = buildPlayerIntent('android', 'chooser', url, 'https://x.test/a;b?c=1&d=2');
+
+		expect(intent).toContain(
+			'S.browser_fallback_url=https%3A%2F%2Fx.test%2Fa%3Bb%3Fc%3D1%26d%3D2'
+		);
+		expect(intent.endsWith(';end')).toBe(true);
+		expect(
+			intent.split(';').filter((part) => part.startsWith('S.browser_fallback_url'))
+		).toHaveLength(1);
 	});
 
 	it.each([
