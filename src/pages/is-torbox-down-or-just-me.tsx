@@ -12,6 +12,7 @@ import {
 	Loader2,
 	RefreshCw,
 	Server,
+	Users,
 	WifiOff,
 } from 'lucide-react';
 import type { NextPage } from 'next';
@@ -148,7 +149,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 	const pageTitle = 'Is TorBox Down Or Just Me?';
 	const canonicalUrl = 'https://debridmediamanager.com/is-torbox-down-or-just-me';
 	const defaultDescription =
-		'Live TorBox availability dashboard: API health plus a per-region check that every TorBox CDN node is actually serving bytes.';
+		'Live TorBox availability dashboard: real DMM-user API success rates, plus a per-region check that every TorBox CDN node is actually serving bytes.';
 
 	if (loading || !stats) {
 		return (
@@ -168,8 +169,13 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 		);
 	}
 
-	const { cdn, api, auth, service } = stats;
+	const { cdn, api, auth, service, tbApi } = stats;
 	const cdnPct = cdn.total > 0 ? Math.round(cdn.rate * 100) : null;
+
+	// What TorBox returned to real DMM users in the last hour. Only 5xx counts
+	// as a failure, so a user's own bad key never drags this down.
+	const tbApiPct = tbApi && tbApi.totalCount > 0 ? Math.round(tbApi.successRate * 100) : null;
+	const tbApiConsidered = tbApi ? tbApi.successCount + tbApi.failureCount : 0;
 	const workingNodes = cdn.nodes.filter((node) => node.ok);
 	const failedNodes = cdn.nodes.filter((node) => !node.ok);
 
@@ -335,9 +341,9 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 						</h1>
 
 						<p className="max-w-2xl text-lg text-slate-400">
-							{currentStatus.description}. Every check on this page runs against
+							{currentStatus.description}. The verdict above is drawn only from
 							TorBox&apos;s public endpoints, so it reflects the service rather than
-							one account.
+							any one account.
 						</p>
 
 						<div className="flex flex-wrap items-center justify-center gap-4 text-xs font-medium text-slate-500">
@@ -384,7 +390,10 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 									</a>{' '}
 									and ask each advertised CDN node for the first byte of its test
 									file. A node only passes on an HTTP 206 - reaching the API
-									proves nothing about whether TorBox will serve data.
+									proves nothing about whether TorBox will serve data. Alongside
+									those probes we count what TorBox actually returned to real DMM
+									users&apos; own API calls, so an outage shows up in traffic
+									nobody had to synthesise.
 								</p>
 							</div>
 
@@ -550,6 +559,91 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 										</div>
 									</div>
 								)}
+							</div>
+						</div>
+
+						<div
+							data-testid="tb-api-card"
+							className="rounded-xl border border-white/10 bg-white/5 p-6"
+						>
+							<h3 className="flex items-center gap-2 text-sm font-medium text-slate-300">
+								<Users className="h-4 w-4" />
+								User API Success Rate (1h)
+							</h3>
+							<div className="mt-4">
+								<div className="flex items-baseline gap-2">
+									<span
+										data-testid="tb-api-rate"
+										className={`text-3xl font-bold ${
+											tbApiPct === null
+												? 'text-slate-400'
+												: tbApiPct >= 95
+													? 'text-emerald-400'
+													: tbApiPct >= 80
+														? 'text-amber-400'
+														: 'text-rose-500'
+										}`}
+									>
+										{tbApiPct !== null ? `${tbApiPct}%` : '—'}
+									</span>
+									<span className="text-sm text-slate-500">
+										{tbApiConsidered > 0
+											? `${tbApi?.successCount ?? 0} of ${tbApiConsidered}`
+											: 'no data yet'}
+									</span>
+								</div>
+								{tbApi && tbApi.totalCount > 0 && (
+									<div className="mt-3 space-y-2">
+										<div className="text-xs font-medium text-slate-500">
+											By operation
+										</div>
+										{Object.values(tbApi.byOperation)
+											.filter((op) => op.totalCount > 0)
+											.sort((a, b) => b.totalCount - a.totalCount)
+											.map((op) => {
+												const pct = Math.round(op.successRate * 100);
+												const [method, path] = op.operation.split(' ');
+												return (
+													<div
+														key={op.operation}
+														className="flex items-center justify-between gap-2 text-xs"
+													>
+														<span
+															className="truncate text-slate-400"
+															title={op.operation}
+														>
+															<span className="text-slate-600">
+																{method}
+															</span>{' '}
+															{path}
+														</span>
+														<div className="flex items-center gap-2">
+															{op.failureCount > 0 && (
+																<span className="text-rose-400">
+																	{op.failureCount} err
+																</span>
+															)}
+															<span
+																className={
+																	pct >= 95
+																		? 'text-emerald-400'
+																		: pct >= 80
+																			? 'text-amber-400'
+																			: 'text-rose-400'
+																}
+															>
+																{pct}%
+															</span>
+														</div>
+													</div>
+												);
+											})}
+									</div>
+								)}
+								<p className="mt-3 text-xs text-slate-500">
+									Counted from real DMM users&apos; own TorBox calls. Only server
+									errors count against TorBox.
+								</p>
 							</div>
 						</div>
 

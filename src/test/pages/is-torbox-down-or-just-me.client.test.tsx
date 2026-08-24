@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { TorBoxObservabilityStats } from '@/lib/observability/getTorBoxObservabilityStats';
 import TorBoxStatusPage from '@/pages/is-torbox-down-or-just-me';
+import type { TorBoxOverallStats } from '@/services/database/torboxOperational';
 import { TORBOX_REFERRAL_URL } from '@/utils/referrals';
 
 vi.mock('@/components/observability/TorBoxHistoryCharts', () => ({
@@ -10,6 +11,36 @@ vi.mock('@/components/observability/TorBoxHistoryCharts', () => ({
 }));
 
 const NOW = new Date('2026-08-23T12:00:00Z').getTime();
+
+function buildTbApiStats(overrides: Partial<TorBoxOverallStats> = {}): TorBoxOverallStats {
+	const byOperation = {
+		'GET /torrents/mylist': {
+			operation: 'GET /torrents/mylist' as const,
+			totalCount: 80,
+			successCount: 78,
+			failureCount: 2,
+			successRate: 78 / 80,
+		},
+		'GET /torrents/checkcached': {
+			operation: 'GET /torrents/checkcached' as const,
+			totalCount: 20,
+			successCount: 20,
+			failureCount: 0,
+			successRate: 1,
+		},
+	} as TorBoxOverallStats['byOperation'];
+
+	return {
+		totalCount: 100,
+		successCount: 98,
+		failureCount: 2,
+		successRate: 0.98,
+		isDown: false,
+		byOperation,
+		lastHour: new Date(NOW),
+		...overrides,
+	};
+}
 
 function buildStats(overrides: Partial<TorBoxObservabilityStats> = {}): TorBoxObservabilityStats {
 	return {
@@ -61,6 +92,7 @@ function buildStats(overrides: Partial<TorBoxObservabilityStats> = {}): TorBoxOb
 			],
 		},
 		auth: { state: 'ok', error: null },
+		tbApi: buildTbApiStats(),
 		service: { totalUsers: 944281, totalServers: 212 },
 		lastChecked: NOW - 60_000,
 		...overrides,
@@ -104,6 +136,85 @@ describe('TorBoxStatusPage', () => {
 		expect(getByTestId('cdn-card')).toHaveTextContent('2/2 regions');
 		expect(getByTestId('api-card')).toHaveTextContent('Up');
 		expect(getByTestId('service-card')).toHaveTextContent('212');
+	});
+
+	// This card is the whole point of the page mirroring /is-real-debrid-down-or-just-me:
+	// what TorBox returned to real users, not to a synthetic prober.
+	describe('user API success rate', () => {
+		it('reports the rate measured from real DMM users', async () => {
+			const { getByTestId } = render(<TorBoxStatusPage />);
+
+			await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
+			expect(getByTestId('tb-api-rate')).toHaveTextContent('98%');
+			expect(getByTestId('tb-api-card')).toHaveTextContent('98 of 100');
+		});
+
+		it('breaks the rate down per operation, busiest first', async () => {
+			const { getByTestId } = render(<TorBoxStatusPage />);
+
+			await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
+			const card = getByTestId('tb-api-card');
+			expect(card).toHaveTextContent('/torrents/mylist');
+			expect(card).toHaveTextContent('/torrents/checkcached');
+			expect(card).toHaveTextContent('2 err');
+
+			const rendered = card.textContent ?? '';
+			expect(rendered.indexOf('/torrents/mylist')).toBeLessThan(
+				rendered.indexOf('/torrents/checkcached')
+			);
+		});
+
+		it('shows a placeholder before any user traffic has been recorded', async () => {
+			setMockFetch(
+				buildStats({
+					tbApi: buildTbApiStats({
+						totalCount: 0,
+						successCount: 0,
+						failureCount: 0,
+						successRate: 0,
+						byOperation: {} as TorBoxOverallStats['byOperation'],
+					}),
+				})
+			);
+
+			const { getByTestId } = render(<TorBoxStatusPage />);
+
+			await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
+			expect(getByTestId('tb-api-rate')).toHaveTextContent('—');
+			expect(getByTestId('tb-api-card')).toHaveTextContent('no data yet');
+		});
+
+		it('renders when the payload carries no user traffic section at all', async () => {
+			setMockFetch(buildStats({ tbApi: null }));
+
+			const { getByTestId } = render(<TorBoxStatusPage />);
+
+			await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
+			expect(getByTestId('tb-api-rate')).toHaveTextContent('—');
+		});
+
+		// A wave of user 5xx must not silently flip the headline verdict: that
+		// stays derived from the unauthenticated probes, as on the RD page.
+		it('does not let user traffic drive the headline verdict', async () => {
+			setMockFetch(
+				buildStats({
+					tbApi: buildTbApiStats({
+						totalCount: 100,
+						successCount: 10,
+						failureCount: 90,
+						successRate: 0.1,
+						isDown: true,
+					}),
+				})
+			);
+
+			const { getByTestId } = render(<TorBoxStatusPage />);
+
+			await waitFor(() =>
+				expect(getByTestId('status-answer')).toHaveTextContent('Operational')
+			);
+			expect(getByTestId('tb-api-rate')).toHaveTextContent('10%');
+		});
 	});
 
 	it('labels regions with readable names', async () => {

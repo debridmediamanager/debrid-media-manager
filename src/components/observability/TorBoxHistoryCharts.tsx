@@ -31,6 +31,24 @@ interface TorBoxDailyData {
 	checksCount: number;
 }
 
+interface TorBoxApiHourlyData {
+	hour: string;
+	totalCount: number;
+	successCount: number;
+	failureCount: number;
+	successRate: number;
+}
+
+interface TorBoxApiDailyData {
+	date: string;
+	totalCount: number;
+	successCount: number;
+	failureCount: number;
+	avgSuccessRate: number;
+	minSuccessRate: number;
+	maxSuccessRate: number;
+}
+
 interface HistoryResponse<T> {
 	type: string;
 	granularity?: string;
@@ -43,6 +61,7 @@ const FIXED_LOCALE = 'en-US';
 // TorBox indigo, per the service colour coding in CLAUDE.md.
 const TORBOX_INDIGO = '#4f46e5';
 const LATENCY_SKY = '#38bdf8';
+const USER_API_SKY = '#0ea5e9';
 
 // Ensure UTC timestamps are parsed correctly (append Z if missing timezone)
 function parseUtcDate(dateStr: string): Date {
@@ -86,9 +105,18 @@ interface ChartPoint {
 	avgLatencyMs: number | null;
 }
 
+interface UserApiChartPoint {
+	time: string;
+	successRate: number;
+	totalCount: number;
+}
+
 export function TorBoxHistoryCharts() {
 	const [range, setRange] = useState<HistoryRange>('24h');
 	const [data, setData] = useState<(TorBoxHourlyData | TorBoxDailyData)[]>([]);
+	const [userApiData, setUserApiData] = useState<(TorBoxApiHourlyData | TorBoxApiDailyData)[]>(
+		[]
+	);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [granularity, setGranularity] = useState<'hourly' | 'daily'>('hourly');
@@ -105,9 +133,10 @@ export function TorBoxHistoryCharts() {
 						? window.location.origin
 						: 'http://localhost:3000';
 
-				const response = await fetch(
-					`${origin}/api/observability/history?type=torbox&range=${range}`
-				);
+				const [response, userApiResponse] = await Promise.all([
+					fetch(`${origin}/api/observability/history?type=torbox&range=${range}`),
+					fetch(`${origin}/api/observability/history?type=torbox-api&range=${range}`),
+				]);
 
 				if (!response.ok) {
 					throw new Error('Failed to fetch TorBox history data');
@@ -120,6 +149,16 @@ export function TorBoxHistoryCharts() {
 				if (!isActive()) return;
 				setData(json.data ?? []);
 				setGranularity((json.granularity as 'hourly' | 'daily') ?? 'hourly');
+
+				// The user-traffic series is additive: if it fails, the synthetic
+				// charts still render rather than the whole section erroring out.
+				if (userApiResponse.ok) {
+					const userApiJson = (await userApiResponse.json()) as HistoryResponse<
+						TorBoxApiHourlyData | TorBoxApiDailyData
+					>;
+					if (!isActive()) return;
+					setUserApiData(userApiJson.data ?? []);
+				}
 			} catch (err) {
 				if (!isActive()) return;
 				console.error('Failed to fetch TorBox history:', err);
@@ -164,6 +203,14 @@ export function TorBoxHistoryCharts() {
 		.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
 
 	const latencyData = chartData.filter((point) => point.avgLatencyMs !== null);
+
+	const userApiChartData: UserApiChartPoint[] = (userApiData ?? [])
+		.map((item) => ({
+			time: 'hour' in item ? item.hour : item.date,
+			successRate: 'avgSuccessRate' in item ? item.avgSuccessRate : item.successRate,
+			totalCount: item.totalCount,
+		}))
+		.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
 
 	const rangeOptions: { value: HistoryRange; label: string }[] = [
 		{ value: '24h', label: '24 Hours' },
@@ -258,7 +305,7 @@ export function TorBoxHistoryCharts() {
 				</div>
 			</div>
 
-			{chartData.length === 0 ? (
+			{chartData.length === 0 && userApiChartData.length === 0 ? (
 				<div className="flex h-64 items-center justify-center">
 					<div className="text-center text-slate-400">
 						<BarChart3 className="mx-auto h-12 w-12 text-slate-600" />
@@ -270,127 +317,211 @@ export function TorBoxHistoryCharts() {
 				</div>
 			) : (
 				<div className="space-y-6">
-					<div
-						data-testid="torbox-cdn-chart"
-						className="rounded-xl border border-white/10 bg-black/20 p-4"
-					>
-						<h3 className="mb-4 text-sm font-medium text-slate-200">
-							CDN Nodes Serving Bytes
-						</h3>
-						<ResponsiveContainer width="100%" height={200}>
-							<AreaChart data={chartData}>
-								<defs>
-									<linearGradient
-										id="torboxCdnGradient"
-										x1="0"
-										y1="0"
-										x2="0"
-										y2="1"
-									>
-										<stop
-											offset="5%"
-											stopColor={TORBOX_INDIGO}
-											stopOpacity={0.4}
-										/>
-										<stop
-											offset="95%"
-											stopColor={TORBOX_INDIGO}
-											stopOpacity={0}
-										/>
-									</linearGradient>
-								</defs>
-								<CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-								<XAxis
-									dataKey="time"
-									{...axisProps}
-									interval="preserveStartEnd"
-									minTickGap={40}
-									tickFormatter={formatTickLabel}
-								/>
-								<YAxis
-									{...axisProps}
-									tickFormatter={(v) => formatPercent(v)}
-									domain={[0, 1]}
-								/>
-								<Tooltip
-									{...tooltipProps}
-									labelFormatter={(_, payload) =>
-										payload && payload.length > 0
-											? formatTooltipLabel(payload[0].payload.time)
-											: ''
-									}
-									formatter={(value) => [
-										formatPercent(value as number),
-										'Nodes serving',
-									]}
-								/>
-								<Area
-									type="monotone"
-									dataKey="workingRate"
-									stroke={TORBOX_INDIGO}
-									fill="url(#torboxCdnGradient)"
-									strokeWidth={2}
-								/>
-							</AreaChart>
-						</ResponsiveContainer>
-					</div>
+					{chartData.length > 0 && (
+						<div
+							data-testid="torbox-cdn-chart"
+							className="rounded-xl border border-white/10 bg-black/20 p-4"
+						>
+							<h3 className="mb-4 text-sm font-medium text-slate-200">
+								CDN Nodes Serving Bytes
+							</h3>
+							<ResponsiveContainer width="100%" height={200}>
+								<AreaChart data={chartData}>
+									<defs>
+										<linearGradient
+											id="torboxCdnGradient"
+											x1="0"
+											y1="0"
+											x2="0"
+											y2="1"
+										>
+											<stop
+												offset="5%"
+												stopColor={TORBOX_INDIGO}
+												stopOpacity={0.4}
+											/>
+											<stop
+												offset="95%"
+												stopColor={TORBOX_INDIGO}
+												stopOpacity={0}
+											/>
+										</linearGradient>
+									</defs>
+									<CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+									<XAxis
+										dataKey="time"
+										{...axisProps}
+										interval="preserveStartEnd"
+										minTickGap={40}
+										tickFormatter={formatTickLabel}
+									/>
+									<YAxis
+										{...axisProps}
+										tickFormatter={(v) => formatPercent(v)}
+										domain={[0, 1]}
+									/>
+									<Tooltip
+										{...tooltipProps}
+										labelFormatter={(_, payload) =>
+											payload && payload.length > 0
+												? formatTooltipLabel(payload[0].payload.time)
+												: ''
+										}
+										formatter={(value) => [
+											formatPercent(value as number),
+											'Nodes serving',
+										]}
+									/>
+									<Area
+										type="monotone"
+										dataKey="workingRate"
+										stroke={TORBOX_INDIGO}
+										fill="url(#torboxCdnGradient)"
+										strokeWidth={2}
+									/>
+								</AreaChart>
+							</ResponsiveContainer>
+						</div>
+					)}
 
-					<div
-						data-testid="torbox-api-chart"
-						className="rounded-xl border border-white/10 bg-black/20 p-4"
-					>
-						<h3 className="mb-4 text-sm font-medium text-slate-200">
-							API Availability
-						</h3>
-						<ResponsiveContainer width="100%" height={200}>
-							<AreaChart data={chartData}>
-								<defs>
-									<linearGradient
-										id="torboxApiGradient"
-										x1="0"
-										y1="0"
-										x2="0"
-										y2="1"
-									>
-										<stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-										<stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-									</linearGradient>
-								</defs>
-								<CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-								<XAxis
-									dataKey="time"
-									{...axisProps}
-									interval="preserveStartEnd"
-									minTickGap={40}
-									tickFormatter={formatTickLabel}
-								/>
-								<YAxis
-									{...axisProps}
-									tickFormatter={(v) => formatPercent(v)}
-									domain={[0, 1]}
-								/>
-								<Tooltip
-									{...tooltipProps}
-									labelFormatter={(_, payload) =>
-										payload && payload.length > 0
-											? formatTooltipLabel(payload[0].payload.time)
-											: ''
-									}
-									formatter={(value) => [
-										formatPercent(value as number),
-										'API up',
-									]}
-								/>
-								<Area
-									type="monotone"
-									dataKey="apiSuccessRate"
-									stroke="#10b981"
-									fill="url(#torboxApiGradient)"
-									strokeWidth={2}
-								/>
-							</AreaChart>
-						</ResponsiveContainer>
-					</div>
+					{userApiChartData.length > 0 && (
+						<div
+							data-testid="torbox-user-api-chart"
+							className="rounded-xl border border-white/10 bg-black/20 p-4"
+						>
+							<h3 className="text-sm font-medium text-slate-200">
+								User API Success Rate
+							</h3>
+							<p className="mb-4 mt-1 text-xs text-slate-500">
+								Measured from real DMM users&apos; own TorBox API calls
+							</p>
+							<ResponsiveContainer width="100%" height={200}>
+								<AreaChart data={userApiChartData}>
+									<defs>
+										<linearGradient
+											id="torboxUserApiGradient"
+											x1="0"
+											y1="0"
+											x2="0"
+											y2="1"
+										>
+											<stop
+												offset="5%"
+												stopColor={USER_API_SKY}
+												stopOpacity={0.3}
+											/>
+											<stop
+												offset="95%"
+												stopColor={USER_API_SKY}
+												stopOpacity={0}
+											/>
+										</linearGradient>
+									</defs>
+									<CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+									<XAxis
+										dataKey="time"
+										{...axisProps}
+										interval="preserveStartEnd"
+										minTickGap={40}
+										tickFormatter={formatTickLabel}
+									/>
+									<YAxis
+										{...axisProps}
+										tickFormatter={(v) => formatPercent(v)}
+										domain={[0, 1]}
+									/>
+									<Tooltip
+										{...tooltipProps}
+										labelFormatter={(_, payload) =>
+											payload && payload.length > 0
+												? formatTooltipLabel(payload[0].payload.time)
+												: ''
+										}
+										formatter={(value, _name, entry) => [
+											`${formatPercent(value as number)} of ${(
+												entry?.payload?.totalCount ?? 0
+											).toLocaleString(FIXED_LOCALE)} calls`,
+											'Success rate',
+										]}
+									/>
+									<Area
+										type="monotone"
+										dataKey="successRate"
+										stroke={USER_API_SKY}
+										fill="url(#torboxUserApiGradient)"
+										strokeWidth={2}
+									/>
+								</AreaChart>
+							</ResponsiveContainer>
+						</div>
+					)}
+
+					{chartData.length > 0 && (
+						<div
+							data-testid="torbox-api-chart"
+							className="rounded-xl border border-white/10 bg-black/20 p-4"
+						>
+							<h3 className="mb-4 text-sm font-medium text-slate-200">
+								API Availability
+							</h3>
+							<ResponsiveContainer width="100%" height={200}>
+								<AreaChart data={chartData}>
+									<defs>
+										<linearGradient
+											id="torboxApiGradient"
+											x1="0"
+											y1="0"
+											x2="0"
+											y2="1"
+										>
+											<stop
+												offset="5%"
+												stopColor="#10b981"
+												stopOpacity={0.3}
+											/>
+											<stop
+												offset="95%"
+												stopColor="#10b981"
+												stopOpacity={0}
+											/>
+										</linearGradient>
+									</defs>
+									<CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+									<XAxis
+										dataKey="time"
+										{...axisProps}
+										interval="preserveStartEnd"
+										minTickGap={40}
+										tickFormatter={formatTickLabel}
+									/>
+									<YAxis
+										{...axisProps}
+										tickFormatter={(v) => formatPercent(v)}
+										domain={[0, 1]}
+									/>
+									<Tooltip
+										{...tooltipProps}
+										labelFormatter={(_, payload) =>
+											payload && payload.length > 0
+												? formatTooltipLabel(payload[0].payload.time)
+												: ''
+										}
+										formatter={(value) => [
+											formatPercent(value as number),
+											'API up',
+										]}
+									/>
+									<Area
+										type="monotone"
+										dataKey="apiSuccessRate"
+										stroke="#10b981"
+										fill="url(#torboxApiGradient)"
+										strokeWidth={2}
+									/>
+								</AreaChart>
+							</ResponsiveContainer>
+						</div>
+					)}
 
 					{latencyData.length > 0 && (
 						<div
