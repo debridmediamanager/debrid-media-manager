@@ -2,6 +2,10 @@ import {
 	recordRdOperationEvent,
 	resolveRealDebridOperation,
 } from '@/lib/observability/rdOperationalStats';
+import {
+	recordTorBoxOperationEvent,
+	resolveTorBoxOperation,
+} from '@/lib/observability/torboxOperationalStats';
 
 import { randomUUID } from 'crypto';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
@@ -26,6 +30,7 @@ const ALLOWED_HOSTS = [
 const HEADERS_TO_PROXY = ['authorization', 'content-type'] as const;
 
 const TEXTUAL_RESPONSE_HINTS = ['application/json', 'text/', 'application/xml'];
+const TEXTUAL_REQUEST_HINTS = ['text/', 'application/xml', 'application/x-www-form-urlencoded'];
 
 type HeadersToProxy = (typeof HEADERS_TO_PROXY)[number];
 
@@ -111,10 +116,10 @@ async function readRequestBody(
 		}
 	}
 
-	if (
-		normalizedType.includes('application/x-bittorrent') ||
-		normalizedType.includes('application/octet-stream')
-	) {
+	// Anything not positively identified as text is forwarded byte-for-byte.
+	// multipart/form-data lands here: TorBox's createtorrent posts a .torrent
+	// file inside a multipart body, and utf-8 round-tripping corrupts it.
+	if (!TEXTUAL_REQUEST_HINTS.some((hint) => normalizedType.includes(hint))) {
 		return buffer;
 	}
 
@@ -136,6 +141,28 @@ async function buildResponseBody(
 
 	const arrayBuffer = await response.arrayBuffer();
 	return Buffer.from(arrayBuffer);
+}
+
+const RD_HOSTS = ['app.real-debrid.com', 'api.real-debrid.com'];
+
+// The proxy is the only place browser-side debrid traffic is observable, so it
+// is what the `/is-*-down-or-just-me` pages count. Recording is keyed on the
+// upstream host: whichever service the call was actually for.
+function recordProxiedOperation(method: string | undefined, targetUrl: URL, status: number): void {
+	if (RD_HOSTS.includes(targetUrl.hostname)) {
+		const operation = resolveRealDebridOperation(method, targetUrl.pathname);
+		if (operation) {
+			recordRdOperationEvent(operation, status);
+		}
+		return;
+	}
+
+	if (targetUrl.hostname === 'api.torbox.app') {
+		const operation = resolveTorBoxOperation(method, targetUrl.pathname);
+		if (operation) {
+			recordTorBoxOperationEvent(operation, status);
+		}
+	}
 }
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -211,28 +238,13 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 		res.status(upstreamResponse.status);
 		res.send(responseBody);
 
-		// Record tracked Real-Debrid operations
-		const operation = resolveRealDebridOperation(req.method, parsedProxyUrl.pathname);
-		if (
-			operation &&
-			(parsedProxyUrl.hostname === 'app.real-debrid.com' ||
-				parsedProxyUrl.hostname === 'api.real-debrid.com')
-		) {
-			recordRdOperationEvent(operation, upstreamResponse.status);
-		}
+		recordProxiedOperation(req.method, parsedProxyUrl, upstreamResponse.status);
 	} catch (error) {
 		const message = error instanceof Error ? error.message : 'Unknown error';
 
-		// Record failure for RD operations
+		// A proxy-side failure is still a failed call from the user's side.
 		try {
-			const operation = resolveRealDebridOperation(req.method, parsedProxyUrl.pathname);
-			if (
-				operation &&
-				(parsedProxyUrl.hostname === 'app.real-debrid.com' ||
-					parsedProxyUrl.hostname === 'api.real-debrid.com')
-			) {
-				recordRdOperationEvent(operation, 500);
-			}
+			recordProxiedOperation(req.method, parsedProxyUrl, 500);
 		} catch {}
 
 		res.status(500).send(`Error fetching the proxy URL: ${message}`);
@@ -242,6 +254,10 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 export const config = {
 	api: {
 		bodyParser: false,
+		// This is a pass-through proxy, so the 4MB default does not apply: a
+		// TorBox or Real-Debrid library listing can legitimately exceed it and
+		// must not be warned about or capped on the way back.
+		responseLimit: false,
 	},
 };
 

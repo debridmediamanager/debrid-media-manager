@@ -1,3 +1,7 @@
+import {
+	recordTorBoxOperationEvent,
+	resolveTorBoxOperation,
+} from '@/lib/observability/torboxOperationalStats';
 import { delay as delayWithMessageChannel } from '@/utils/delay';
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
@@ -18,6 +22,7 @@ export type { TorBoxCachedResponse, TorBoxTorrentInfo, TorBoxUser, TorBoxWebDown
 // Safely access Next.js runtime config in test/non-Next environments
 const fallbackRuntimeConfig = {
 	proxy: '',
+	authProxy: '',
 	torboxHostname: 'https://api.torbox.app',
 };
 
@@ -149,19 +154,59 @@ function parseRetryAfterMs(error: any): number | undefined {
 }
 
 function getProxyUrl(baseUrl: string): string {
-	return baseUrl;
+	return baseUrl.replace('#num#', Math.floor(Math.random() * 1000).toString());
 }
 
 // Get the base URL for TorBox API (with or without proxy)
 // Server-side calls bypass the proxy (the CF Worker rejects them with 403);
-// client-side calls go through the proxy to avoid CORS.
-function getTorBoxBaseUrl(): string {
+// client-side calls go through a proxy to avoid CORS.
+//
+// Browser traffic goes through our own anticors (authProxy) rather than the
+// Cloudflare Worker, because that is the only hop we can observe: it is where
+// `/is-torbox-down-or-just-me` counts what real users' TorBox calls actually
+// returned. The Worker stays the path for `credentialInQuery` callers -
+// requestdl puts the raw API key in `?token=`, and routing those through our
+// own nginx would write user API keys into its access log.
+function getTorBoxBaseUrl(options?: { credentialInQuery?: boolean }): string {
 	const torboxHost = config.torboxHostname || BASE_URL;
 	const isServer = typeof window === 'undefined';
-	if (config.proxy && !isServer) {
-		return `${getProxyUrl(config.proxy)}${torboxHost}`;
+	if (isServer) {
+		return torboxHost;
+	}
+	const proxy = options?.credentialInQuery ? config.proxy : config.authProxy || config.proxy;
+	if (proxy) {
+		return `${getProxyUrl(proxy)}${torboxHost}`;
 	}
 	return torboxHost;
+}
+
+// Resolves which monitored TorBox operation a request represents, so the status
+// page can report what real DMM users' calls returned. Requests routed through
+// an anticors proxy carry the real target in `?url=`, so unwrap that first.
+function resolveOperationFromConfig(cfg: {
+	method?: string;
+	url?: string;
+}): ReturnType<typeof resolveTorBoxOperation> {
+	if (!cfg.url) return null;
+	try {
+		const parsed = new URL(cfg.url, BASE_URL);
+		const proxied = parsed.searchParams.get('url');
+		const pathname = proxied ? new URL(proxied).pathname : parsed.pathname;
+		return resolveTorBoxOperation(cfg.method, pathname);
+	} catch {
+		return null;
+	}
+}
+
+// Records the terminal outcome of a request. Called only where the interceptor
+// settles - never on a path that is about to retry, so one logical call counts
+// once, matching how realDebrid.ts records at its call sites.
+function recordOutcome(cfg: { method?: string; url?: string } | undefined, status: number): void {
+	if (!cfg) return;
+	const operation = resolveOperationFromConfig(cfg);
+	if (operation) {
+		recordTorBoxOperationEvent(operation, status);
+	}
 }
 
 // Create a global axios instance for TorBox API requests
@@ -196,6 +241,7 @@ torBoxAxios.interceptors.response.use(
 			releaseConcurrencySlot();
 			cfg.__slotAcquired = false;
 		}
+		recordOutcome(cfg, response.status);
 		return response;
 	},
 	async (error) => {
@@ -214,6 +260,7 @@ torBoxAxios.interceptors.response.use(
 
 		if (originalConfig.__skipRetry) {
 			releaseSlot();
+			recordOutcome(originalConfig, error.response?.status ?? 500);
 			return Promise.reject(error);
 		}
 
@@ -227,6 +274,7 @@ torBoxAxios.interceptors.response.use(
 
 		if (originalConfig.__retryCount >= maxRetries) {
 			releaseSlot();
+			recordOutcome(originalConfig, status ?? 500);
 			if (is429) return Promise.reject(new TorBoxRateLimitError());
 			return Promise.reject(error);
 		}
@@ -234,6 +282,9 @@ torBoxAxios.interceptors.response.use(
 		const shouldRetry = (status >= 500 && status < 600) || is429;
 		if (!shouldRetry) {
 			releaseSlot();
+			// No response at all (DNS failure, timeout, connection reset) is a
+			// failed call as far as a user is concerned, so it counts as 5xx.
+			recordOutcome(originalConfig, status ?? 500);
 			return Promise.reject(error);
 		}
 
@@ -379,7 +430,7 @@ export const requestDownloadLink = async (
 	options?: { skipRetry?: boolean; timeout?: number }
 ): Promise<TorBoxResponse<string>> => {
 	const response = await torBoxAxios.get<TorBoxResponse<string>>(
-		`${getTorBoxBaseUrl()}/${API_VERSION}/api/torrents/requestdl`,
+		`${getTorBoxBaseUrl({ credentialInQuery: true })}/${API_VERSION}/api/torrents/requestdl`,
 		{
 			params: {
 				token: accessToken,
@@ -587,7 +638,7 @@ export const requestWebDownloadLink = async (
 	options?: { skipRetry?: boolean; timeout?: number }
 ): Promise<TorBoxResponse<string>> => {
 	const response = await torBoxAxios.get<TorBoxResponse<string>>(
-		`${getTorBoxBaseUrl()}/${API_VERSION}/api/webdl/requestdl`,
+		`${getTorBoxBaseUrl({ credentialInQuery: true })}/${API_VERSION}/api/webdl/requestdl`,
 		{
 			params: {
 				token: accessToken,
