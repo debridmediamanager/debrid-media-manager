@@ -159,6 +159,23 @@ describe('openWatch', () => {
 		return { url, init, body: JSON.parse(init.body) };
 	};
 
+	// A stand-in for the opened tab that records what was written into it, so a
+	// test can tell "the tab shows a Play link" from "the tab was navigated".
+	const fakeTab = () => {
+		const writes: string[] = [];
+		return {
+			location: { href: '' },
+			close: vi.fn(),
+			document: {
+				open: vi.fn(),
+				write: (html: string) => writes.push(html),
+				close: vi.fn(),
+			},
+			shown: () => writes[writes.length - 1] ?? '',
+			renders: () => writes.length,
+		} as any;
+	};
+
 	beforeEach(() => {
 		fetchMock = vi.fn().mockResolvedValue({
 			ok: true,
@@ -267,8 +284,11 @@ describe('openWatch', () => {
 		expect(tab.location.href).toBe('vlc://stream');
 	});
 
-	it('closes the tab and reports when the server has no intent', async () => {
-		const tab: any = { location: { href: '' }, close: vi.fn() };
+	// The tab used to be closed and the failure reported only by a toast in the
+	// opener — which is a background tab by then, so on a phone or a TV box the
+	// user watched the tab vanish and was told nothing.
+	it('reports a missing intent in the tab, not just in the opener', async () => {
+		const tab = fakeTab();
 		window.open = vi.fn(() => tab) as any;
 		fetchMock.mockResolvedValue({
 			ok: false,
@@ -283,7 +303,8 @@ describe('openWatch', () => {
 			keys: { rdKey: 'rd-key' },
 		});
 
-		expect(tab.close).toHaveBeenCalled();
+		expect(tab.shown()).toContain('queued');
+		expect(tab.close).not.toHaveBeenCalled();
 		expect(mocks.toastError).toHaveBeenCalledWith(expect.stringContaining('queued'));
 	});
 
@@ -340,8 +361,8 @@ describe('openWatch', () => {
 		expect(lastRequest().body.link).toBe('https://alldebrid.com/f/biggest');
 	});
 
-	it('closes the blank tab and reports when AD prep fails', async () => {
-		const tab: any = { location: { href: '' }, close: vi.fn() };
+	it('shows the tab why AD prep failed', async () => {
+		const tab = fakeTab();
 		window.open = vi.fn(() => tab) as any;
 		mocks.prepareMagnetForCast.mockRejectedValue(new Error('No video files in magnet'));
 
@@ -352,10 +373,104 @@ describe('openWatch', () => {
 			keys: { adKey: 'ad-key' },
 		});
 
-		expect(tab.close).toHaveBeenCalled();
+		expect(tab.shown()).toContain('No video files in magnet');
 		expect(mocks.toastError).toHaveBeenCalledWith(
 			expect.stringContaining('No video files in magnet')
 		);
+	});
+
+	// The bug this pins: the tab was opened blank and then navigated by assigning
+	// `intent://…` to its location. Android Chrome blocks a scripted jump to an
+	// app, so the tab stayed on about:blank and no player ever opened. The tap on
+	// a real link is what carries the gesture Chrome demands.
+	it('hands an android intent to a Play link instead of navigating the tab', async () => {
+		const tab = fakeTab();
+		window.open = vi.fn(() => tab) as any;
+		fetchMock.mockResolvedValue({
+			ok: true,
+			status: 200,
+			json: async () => ({ intent: 'intent://cdn/movie.mkv#Intent;end' }),
+		});
+
+		await openWatch({
+			service: 'rd',
+			player: 'android/org.videolan.vlc',
+			hash: 'abc',
+			keys: { rdKey: 'rd-key' },
+		});
+
+		expect(tab.location.href).toBe('');
+		expect(tab.shown()).toContain('href="intent://cdn/movie.mkv#Intent;end"');
+	});
+
+	// Nothing blocks the scripted navigation off Android, so those users keep the
+	// zero-press path they have always had — with the link there to press if the
+	// player does not come up.
+	it('still navigates the tab itself for a non-android player', async () => {
+		const tab = fakeTab();
+		window.open = vi.fn(() => tab) as any;
+
+		await openWatch({
+			service: 'rd',
+			player: 'windows/vlc',
+			hash: 'abc',
+			keys: { rdKey: 'rd-key' },
+		});
+
+		expect(tab.location.href).toBe('vlc://stream');
+		expect(tab.shown()).toContain('href="vlc://stream"');
+	});
+
+	// RD's resolve is five sequential API calls, so the tab is on screen for
+	// seconds before an intent exists. It said nothing at all before.
+	it('tells the tab it is working before the intent arrives', async () => {
+		const tab = fakeTab();
+		window.open = vi.fn(() => tab) as any;
+		let resolveIntent: (value: any) => void = () => {};
+		fetchMock.mockReturnValue(
+			new Promise((resolve) => {
+				resolveIntent = resolve;
+			})
+		);
+
+		const watching = openWatch({
+			service: 'rd',
+			player: 'android/org.videolan.vlc',
+			hash: 'abc',
+			keys: { rdKey: 'rd-key' },
+		});
+
+		expect(tab.shown()).toContain('Real-Debrid');
+		expect(tab.shown()).not.toContain('Play');
+		resolveIntent({
+			ok: true,
+			status: 200,
+			json: async () => ({ intent: 'intent://x#Intent;end' }),
+		});
+		await watching;
+		expect(tab.shown()).toContain('Play');
+	});
+
+	// A closed tab throws on `document`, and a watch that resolved must not be
+	// turned into a failure by the tab it can no longer draw into.
+	it('survives the user closing the tab mid-resolve', async () => {
+		const tab: any = {
+			location: { href: '' },
+			close: vi.fn(),
+			get document(): Document {
+				throw new Error('window is closed');
+			},
+		};
+		window.open = vi.fn(() => tab) as any;
+
+		await openWatch({
+			service: 'rd',
+			player: 'windows/vlc',
+			hash: 'abc',
+			keys: { rdKey: 'rd-key' },
+		});
+
+		expect(mocks.toastError).not.toHaveBeenCalled();
 	});
 
 	it('reports a missing key instead of opening anything', async () => {

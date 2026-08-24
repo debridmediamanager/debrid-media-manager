@@ -8,6 +8,7 @@ import {
 	pickBiggestVideo,
 	prepareMagnetForCast,
 } from './allDebridCastClientPipeline';
+import { renderWatchTab } from './watchTab';
 
 export type { WatchService };
 
@@ -201,23 +202,32 @@ export type OpenWatchOptions = {
 	adInLibrary?: boolean;
 };
 
+// `player` is "<os>/<package>", and the os half decides whether the intent can
+// be navigated to by script at all.
+const osOf = (player: string) => player.split('/')[0];
+
 /**
  * Opens the chosen player for a torrent.
  *
- * The tab is opened synchronously on the click and navigated once the server
- * answers — opening it after the await is what popup blockers reject. AllDebrid
- * needs its magnet prepared here first, in the browser, because AllDebrid
- * refuses `magnet/upload` from a datacenter IP.
+ * The tab is opened synchronously on the click and filled in once the server
+ * answers — opening it after the await is what popup blockers reject. It is
+ * handed a Play link rather than navigated straight at the player: Android
+ * Chrome blocks a scripted jump to `intent://`, which left the tab sitting on
+ * about:blank forever. See `watchTab` for the whole rule. AllDebrid needs its
+ * magnet prepared here first, in the browser, because AllDebrid refuses
+ * `magnet/upload` from a datacenter IP.
  */
 export const openWatch = async (opts: OpenWatchOptions): Promise<void> => {
 	const { service, player, hash, keys, fileName, fileId } = opts;
+	const label = WATCH_SERVICE_LABEL[service];
 	const token = watchKeyFor(service, keys);
 	if (!token) {
-		toast.error(`No ${WATCH_SERVICE_LABEL[service]} key configured.`);
+		toast.error(`No ${label} key configured.`);
 		return;
 	}
 
 	const tab = window.open('', '_blank');
+	renderWatchTab(tab, { status: 'resolving', label });
 	try {
 		const link =
 			opts.link ||
@@ -233,14 +243,24 @@ export const openWatch = async (opts: OpenWatchOptions): Promise<void> => {
 			fileId,
 			link,
 		});
-		if (tab) {
-			tab.location.href = intent;
-		} else {
+		if (!tab) {
 			window.location.href = intent;
+			return;
+		}
+		renderWatchTab(tab, { status: 'ready', label, intent });
+		// Elsewhere a scripted navigation still launches the player, so keep the
+		// press-nothing path those users have always had. On Android it is worse
+		// than useless: Chrome refuses the launch and spends the intent's
+		// fallback URL doing it, dropping the user on a raw stream in the browser
+		// instead of the player they chose. There, the tap is the only attempt.
+		if (osOf(player) !== 'android') {
+			tab.location.href = intent;
 		}
 	} catch (error: any) {
-		tab?.close();
 		const message = error instanceof Error ? error.message : String(error);
-		toast.error(`${WATCH_SERVICE_LABEL[service]} watch failed: ${message}`);
+		// Once the watch tab has focus the opener is a background tab, so a toast
+		// there is invisible on a phone or a TV box — the tab has to say it too.
+		renderWatchTab(tab, { status: 'error', label, message });
+		toast.error(`${label} watch failed: ${message}`);
 	}
 };
