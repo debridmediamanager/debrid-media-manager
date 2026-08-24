@@ -1,3 +1,4 @@
+import { rdLinkCutoff } from '@/utils/rdLinkRot';
 import { DatabaseClient } from './client';
 
 interface LatestCast {
@@ -386,6 +387,21 @@ export class CastService extends DatabaseClient {
 		}));
 	}
 
+	/**
+	 * Drops the cast rows pointing at a link that RD says is gone.
+	 *
+	 * Stored links are the 16-char form or the 13-char truncation of it, and the
+	 * play route only ever knows the 13-char prefix, so the match is by prefix.
+	 * Every user who cast the same file holds their own row for it, and the link
+	 * is dead for all of them, so this is not scoped to one user.
+	 */
+	public async deleteCastsByLinkPrefix(linkPrefix: string): Promise<number> {
+		const { count } = await this.prisma.cast.deleteMany({
+			where: { link: { startsWith: linkPrefix } },
+		});
+		return count;
+	}
+
 	public async getUserCastStreams(
 		imdbId: string,
 		userId: string,
@@ -407,7 +423,7 @@ export class CastService extends DatabaseClient {
 					not: null,
 				},
 				updatedAt: {
-					gt: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000),
+					gt: rdLinkCutoff(),
 				},
 			},
 			orderBy: {
@@ -465,11 +481,19 @@ export class CastService extends DatabaseClient {
 		const maxSizeCastLimit =
 			normalizedMaxSizeMb !== undefined ? BigInt(normalizedMaxSizeMb) : undefined;
 
+		// RD links rot, and nothing here was ever bounded by age: the stream list
+		// was happily offering links minted in 2024. `Available` rows are rewritten
+		// with fresh links every time the hash is re-registered, so `updatedAt` is
+		// a real freshness signal - and `orderBy: bytes desc` below actively
+		// prefers the biggest file, which is often the stalest un-refreshed remux.
+		const linkCutoff = rdLinkCutoff();
+
 		const availableFileResults = await this.prisma.availableFile.findMany({
 			where: {
 				available: {
 					imdbId: baseImdbId,
 					status: 'downloaded',
+					updatedAt: { gt: linkCutoff },
 				},
 				...(maxSizeBytes !== undefined && { bytes: { lte: maxSizeBytes } }),
 				...(seasonFilter !== undefined && { season: seasonFilter }),
@@ -508,6 +532,7 @@ export class CastService extends DatabaseClient {
 			where: {
 				imdbId: baseImdbId,
 				status: 'downloaded',
+				updatedAt: { gt: linkCutoff },
 				...(maxSizeBytes !== undefined && { bytes: { lte: maxSizeBytes } }),
 				...(seasonFilter !== undefined && { season: seasonFilter }),
 				...(episodeFilter !== undefined && { episode: episodeFilter }),
@@ -569,6 +594,12 @@ export class CastService extends DatabaseClient {
 			imdbId: imdbId,
 			link: {
 				not: null,
+			},
+			// Same bound `getUserCastStreams` has always had. Without it, 95% of
+			// the cast pool (2.1M of 2.2M rows on 2026-08-24) was older than the
+			// point where most links have already stopped unrestricting.
+			updatedAt: {
+				gt: linkCutoff,
 			},
 			size: {
 				gt: 10,

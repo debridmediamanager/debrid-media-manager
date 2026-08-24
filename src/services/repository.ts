@@ -317,6 +317,14 @@ export class Repository {
 		return this.availabilityService.getHashByLink(link);
 	}
 
+	public removeAvailableFileByLinkPrefix(linkPrefix: string) {
+		return this.availabilityService.removeAvailableFileByLinkPrefix(linkPrefix);
+	}
+
+	public deleteCastsByLinkPrefix(linkPrefix: string) {
+		return this.castService.deleteCastsByLinkPrefix(linkPrefix);
+	}
+
 	// AllDebrid Availability Service Methods
 	public upsertAvailabilityAd(data: {
 		hash: string;

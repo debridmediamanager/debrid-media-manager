@@ -1,3 +1,4 @@
+import { RD_LINK_MAX_AGE_MS } from '@/utils/rdLinkRot';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { CastService } from './cast';
 
@@ -195,6 +196,59 @@ describe('CastService', () => {
 			link: 'https://app.real-debrid.com/d/cast1link',
 			size: 2048,
 			filename: 'cast1.mkv',
+		});
+	});
+
+	// Regression: nothing here was bounded by age, so the stream list happily
+	// offered links minted in 2024. Measured 2026-08-24: 2.1M of the 2.2M stored
+	// cast rows were older than the point where most links stop unrestricting,
+	// and `orderBy: bytes desc` actively prefers the biggest file, which is
+	// often the stalest un-refreshed remux.
+	it('will not offer a link older than the rot window', async () => {
+		prismaMock.availableFile.findMany.mockResolvedValue([]);
+		prismaMock.available.findMany.mockResolvedValue([]);
+		mockOtherCasts([]);
+
+		const before = Date.now();
+		await service.getOtherStreams('tt123', 'user-1', 5);
+		const after = Date.now();
+
+		const withinWindow = (cutoff: Date) => {
+			const age = before - cutoff.getTime();
+			expect(age).toBeGreaterThanOrEqual(RD_LINK_MAX_AGE_MS);
+			expect(age).toBeLessThanOrEqual(RD_LINK_MAX_AGE_MS + (after - before) + 1000);
+		};
+
+		withinWindow(
+			prismaMock.availableFile.findMany.mock.calls[0][0].where.available.updatedAt.gt
+		);
+		withinWindow(prismaMock.available.findMany.mock.calls[0][0].where.updatedAt.gt);
+		withinWindow(prismaMock.cast.groupBy.mock.calls[0][0].where.updatedAt.gt);
+	});
+
+	it('bounds the owner cast stream query by the same window', async () => {
+		prismaMock.cast.findMany.mockResolvedValue([]);
+
+		const before = Date.now();
+		await service.getUserCastStreams('tt123', 'user-1', 5);
+
+		const cutoff: Date = prismaMock.cast.findMany.mock.calls[0][0].where.updatedAt.gt;
+		expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(RD_LINK_MAX_AGE_MS);
+	});
+
+	it('drops every cast row pointing at a link RD says is gone', async () => {
+		prismaMock.cast.deleteMany.mockResolvedValue({ count: 3 });
+
+		const removed = await service.deleteCastsByLinkPrefix(
+			'https://real-debrid.com/d/abcdef1234567'
+		);
+
+		expect(removed).toBe(3);
+		// Prefix, because rows hold the 16-char form while a play request only
+		// ever carries the 13-char truncation - and the link is dead for every
+		// user who cast it, not just the one who noticed.
+		expect(prismaMock.cast.deleteMany).toHaveBeenCalledWith({
+			where: { link: { startsWith: 'https://real-debrid.com/d/abcdef1234567' } },
 		});
 	});
 

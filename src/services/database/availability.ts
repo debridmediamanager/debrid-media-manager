@@ -361,9 +361,28 @@ export class AvailabilityService extends DatabaseClient {
 		});
 	}
 
+	/**
+	 * Removes the one file whose link RD says is gone.
+	 *
+	 * This used to delete the whole `Available` row, cascading every file in the
+	 * torrent, for every user, on a single failed unrestrict - and the caller had
+	 * no way to tell a dead link from RD's unrestrict throttle. One file's link
+	 * rotting says nothing about its siblings, so only that row goes.
+	 *
+	 * Matched by prefix: links are stored in the 16-char form but a play request
+	 * only ever carries the 13-char truncation, which is why the old exact-match
+	 * lookup found nothing - 3,938,603 of 3,939,554 rows are the long form.
+	 */
+	public async removeAvailableFileByLinkPrefix(linkPrefix: string): Promise<number> {
+		const { count } = await this.prisma.availableFile.deleteMany({
+			where: { link: { startsWith: linkPrefix } },
+		});
+		return count;
+	}
+
 	public async getHashByLink(link: string): Promise<string | null> {
-		const file = await this.prisma.availableFile.findUnique({
-			where: { link },
+		const file = await this.prisma.availableFile.findFirst({
+			where: { link: { startsWith: link } },
 			select: { hash: true },
 		});
 		return file?.hash || null;

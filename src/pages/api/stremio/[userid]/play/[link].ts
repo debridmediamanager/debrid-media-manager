@@ -1,6 +1,7 @@
 import { RdTokenExpiredError, getToken, unrestrictLink } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 import { getClientIpFromRequest } from '@/utils/clientIp';
+import { isDeadRdLink, rdErrorOf } from '@/utils/rdLinkRot';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // Unrestrict and play a link
@@ -64,37 +65,49 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	const rdLink = `https://real-debrid.com/d/${link.substring(0, 13)}`;
 
+	// Only ever called for an error RD has told us is permanent - see
+	// `isDeadRdLink`. Stops the same dead stream being offered again tomorrow.
+	const forgetLink = async (reason: string) => {
+		try {
+			const [files, casts] = await Promise.all([
+				db.removeAvailableFileByLinkPrefix(rdLink),
+				db.deleteCastsByLinkPrefix(rdLink),
+			]);
+			if (files > 0 || casts > 0) {
+				console.log(
+					`Dropped ${files} available file(s) and ${casts} cast(s) for ${rdLink}: ${reason}`
+				);
+			}
+		} catch (cleanupError) {
+			console.error(
+				'Failed to drop a dead link:',
+				cleanupError instanceof Error ? cleanupError.message : 'Unknown error'
+			);
+		}
+	};
+
 	try {
 		const ipAddress = getClientIpFromRequest(req);
 		const unrestrict = await unrestrictLink(response.access_token, rdLink, ipAddress, true);
 		if (!unrestrict) {
 			console.error('Failed to unrestrict link:', rdLink);
-
-			const hash = await db.getHashByLink(rdLink);
-			if (hash) {
-				console.log(
-					`Removing availability for hash ${hash} due to unrestrict failure for link ${rdLink}`
-				);
-				await db.removeAvailability(hash);
-			}
-
 			res.status(500).json({ error: 'Failed to unrestrict link' });
 			return;
 		}
 
 		res.redirect(unrestrict.download);
 	} catch (error: any) {
+		const rdError = rdErrorOf(error);
 		console.error(
 			'Failed to play link:',
 			error instanceof Error ? error.message : 'Unknown error'
 		);
 
-		const hash = await db.getHashByLink(rdLink);
-		if (hash) {
-			console.log(
-				`Removing availability for hash ${hash} due to error playing link ${rdLink}`
-			);
-			await db.removeAvailability(hash);
+		// A throttled unrestrict (error 34) and a 5xx both look like this and
+		// mean nothing about the link. Only RD saying the link or the content is
+		// gone earns a delete.
+		if (isDeadRdLink(error)) {
+			await forgetLink(rdError ?? 'unknown');
 		}
 
 		res.status(500).json({ error: 'Failed to play link' });
