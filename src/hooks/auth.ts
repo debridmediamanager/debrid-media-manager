@@ -330,6 +330,13 @@ const useTorBox = () => {
 				if (response.success) {
 					setUser(response.data);
 					setError(null);
+				} else {
+					// TorBox answers a rejected key with HTTP 200 and
+					// success:false, so this never reaches the catch. Leaving it
+					// unset left the hook neither loaded nor errored - a state
+					// the home page could not tell from "still loading".
+					setUser(null);
+					setError(new Error(response.detail || 'TorBox profile unavailable'));
 				}
 				setLoading(false);
 			})

@@ -10,9 +10,19 @@ interface ServiceCardProps {
 	user: RealDebridUser | AllDebridUser | TraktUser | any | null;
 	onTraktLogin: () => void;
 	onLogout: (prefix: string) => void;
+	/** The provider answered, but with a failure - see the note on the branch below. */
+	error?: Error | null;
 }
 
-export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCardProps) {
+const SERVICE_LABELS: Record<ServiceCardProps['service'], string> = {
+	rd: 'Real-Debrid',
+	ad: 'AllDebrid',
+	tb: 'TorBox',
+	pm: 'Premiumize',
+	trakt: 'Trakt',
+};
+
+export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: ServiceCardProps) {
 	const formatBytes = (bytes: number) => {
 		const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
 		if (bytes === 0) return '0 B';
@@ -151,6 +161,21 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout }: ServiceCa
 			}
 		});
 	};
+
+	// Without this a provider whose profile call failed falls through to its
+	// own `user ? connected : login` branch and renders the login button - so a
+	// signed-in user is told to sign in, with no hint that anything went wrong.
+	if (error) {
+		return (
+			<button
+				type="button"
+				onClick={() => window.location.reload()}
+				className="haptic w-full rounded border-2 border-red-500 bg-red-900/30 py-1 text-center text-red-100 transition-colors hover:bg-red-800/50"
+			>
+				{SERVICE_LABELS[service]} did not load &mdash; tap to retry
+			</button>
+		);
+	}
 
 	if (service === 'rd') {
 		const rdUser = user as RealDebridUser | null;

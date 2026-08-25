@@ -306,3 +306,34 @@ describe('usePremiumize via useCurrentUser', () => {
 		expect(mockGetPremiumizeAccountInfo).toHaveBeenCalledWith('pasted-key');
 	});
 });
+
+describe('useTorBox via useCurrentUser', () => {
+	// TorBox answers a rejected key with HTTP 200 and success:false, so nothing
+	// throws. The hook used to set neither user nor error, leaving a terminal
+	// state the home page could not tell apart from "still loading" - which is
+	// what left it on "Debrid Media Manager is loading..." indefinitely.
+	it('reports a TorBox success:false answer as an error', async () => {
+		setStoredValue('tb:apiKey', 'tb-key');
+		mockGetTorboxUser.mockResolvedValue({
+			success: false,
+			detail: 'Invalid API key.',
+			data: null,
+		});
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.tbError).toBeInstanceOf(Error));
+		expect(result.current.tbError?.message).toBe('Invalid API key.');
+		expect(result.current.tbUser).toBeNull();
+	});
+
+	it('keeps a successful TorBox answer free of errors', async () => {
+		setStoredValue('tb:apiKey', 'tb-key');
+		mockGetTorboxUser.mockResolvedValue({ success: true, data: { id: 1 } });
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.tbUser).toEqual({ id: 1 }));
+		expect(result.current.tbError).toBeNull();
+	});
+});

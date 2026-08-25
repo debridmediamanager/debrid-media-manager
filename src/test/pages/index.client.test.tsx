@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -123,6 +123,9 @@ vi.mock('next/router', () => ({
 vi.mock('react-hot-toast', () => ({
 	__esModule: true,
 	default: toastMock,
+	// The page imports the named `toast` too, and reaches for it as soon as any
+	// provider reports an error - which no test exercised before.
+	toast: toastMock,
 	Toaster: () => null,
 }));
 
@@ -132,6 +135,72 @@ describe('IndexPage', () => {
 	beforeEach(() => {
 		currentUserMock.mockReset();
 		checkPremiumStatusMock.mockClear();
+	});
+
+	const settledFixture = {
+		rdUser: null,
+		rdError: null,
+		hasRDAuth: false,
+		rdIsRefreshing: false,
+		adUser: null,
+		adError: null,
+		hasADAuth: false,
+		tbUser: null,
+		tbError: null,
+		hasTBAuth: false,
+		pmUser: null,
+		pmError: null,
+		hasPMAuth: false,
+		traktUser: null,
+		traktError: null,
+		hasTraktAuth: false,
+		isLoading: false,
+	};
+
+	// The bug behind "Debrid Media Manager is loading..." forever: the page used
+	// to wait for every configured provider to SUCCEED, so a provider that had
+	// failed was indistinguishable from one still in flight and nothing ever
+	// retried. A settled provider is one that answered either way.
+	it('renders the page when a configured provider failed to load', () => {
+		currentUserMock.mockReturnValue({
+			...settledFixture,
+			hasTBAuth: true,
+			tbError: new Error('TorBox profile unavailable'),
+		});
+
+		render(<IndexPage />);
+
+		expect(screen.getByTestId('main-actions')).toBeInTheDocument();
+		expect(screen.queryByText(/Debrid Media Manager is loading/i)).not.toBeInTheDocument();
+	});
+
+	it('still waits while a configured provider is genuinely in flight', () => {
+		currentUserMock.mockReturnValue({ ...settledFixture, hasTBAuth: true });
+
+		render(<IndexPage />);
+
+		expect(screen.getByText(/Debrid Media Manager is loading/i)).toBeInTheDocument();
+	});
+
+	// Settling depends on a promise resolving, and the incident that produced
+	// this bug was a profile call parked behind a 5-minute rate-limit pause.
+	// The wait has to be bounded or "settled" is just a slower way to hang.
+	it('renders anyway once the wait is exhausted', () => {
+		vi.useFakeTimers();
+		try {
+			currentUserMock.mockReturnValue({ ...settledFixture, hasTBAuth: true });
+
+			render(<IndexPage />);
+			expect(screen.getByText(/Debrid Media Manager is loading/i)).toBeInTheDocument();
+
+			act(() => {
+				vi.advanceTimersByTime(5000);
+			});
+
+			expect(screen.getByTestId('main-actions')).toBeInTheDocument();
+		} finally {
+			vi.useRealTimers();
+		}
 	});
 
 	it('shows the MainActions component when an RD user is present', () => {
@@ -251,7 +320,8 @@ describe('IndexPage', () => {
 			hasADAuth: false,
 			tbUser: null,
 			tbError: null,
-			hasTBAuth: false,
+			// pending, not absent: this is the state the loading screen is for
+			hasTBAuth: true,
 			traktUser: null,
 			traktError: null,
 			hasTraktAuth: false,

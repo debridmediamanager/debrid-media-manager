@@ -21,6 +21,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 
+const PROFILE_WAIT_MS = 5000;
+
 function IndexPage() {
 	const router = useRouter();
 	const {
@@ -44,6 +46,28 @@ function IndexPage() {
 	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox, loginWithPremiumize } =
 		useDebridLogin();
 	const [browseTerms] = useState(getTerms(2));
+
+	// A provider has settled once it has answered - either a profile or an
+	// error. The page used to wait for every configured provider to *succeed*,
+	// which made a failed provider indistinguishable from one still in flight;
+	// since nothing retries, that wait never ended and the page sat on
+	// "Debrid Media Manager is loading..." for good.
+	const servicesSettled =
+		(!hasRDAuth || !!rdUser || !!rdError) &&
+		(!hasADAuth || !!adUser || !!adError) &&
+		(!hasTBAuth || !!tbUser || !!tbError) &&
+		(!hasPMAuth || !!pmUser || !!pmError) &&
+		(!hasTraktAuth || !!traktUser || !!traktError);
+
+	// Settling still depends on a promise resolving, and a provider can park one
+	// for minutes - TorBox answers a 429 by pausing every one of its calls for
+	// five. Bound the wait: a profile that never arrives degrades to that one
+	// service looking disconnected, which beats a page that never appears.
+	const [profileWaitElapsed, setProfileWaitElapsed] = useState(false);
+	useEffect(() => {
+		const timer = setTimeout(() => setProfileWaitElapsed(true), PROFILE_WAIT_MS);
+		return () => clearTimeout(timer);
+	}, []);
 
 	// Each of these no-ops without that service's credentials. They also resync the
 	// cast profile, so settings that failed to reach the server heal on any visit
@@ -144,12 +168,7 @@ function IndexPage() {
 			</Head>
 			<Logo />
 			<Toaster position="bottom-right" />
-			{!isLoading &&
-			(rdUser || !hasRDAuth) &&
-			(adUser || !hasADAuth) &&
-			(tbUser || !hasTBAuth) &&
-			(pmUser || !hasPMAuth) &&
-			(traktUser || !hasTraktAuth) ? (
+			{servicesSettled || profileWaitElapsed ? (
 				<>
 					<h1 className="mb-2 flex items-center justify-center text-xl font-bold text-white">
 						Debrid Media Manager{' '}
@@ -189,30 +208,35 @@ function IndexPage() {
 						<div className="grid w-full grid-cols-1 gap-3">
 							<ServiceCard
 								service="rd"
+								error={rdError}
 								user={rdUser}
 								onTraktLogin={loginWithRealDebrid}
 								onLogout={async (prefix) => await handleLogout(prefix, router)}
 							/>
 							<ServiceCard
 								service="ad"
+								error={adError}
 								user={adUser}
 								onTraktLogin={loginWithAllDebrid}
 								onLogout={async (prefix) => await handleLogout(prefix, router)}
 							/>
 							<ServiceCard
 								service="tb"
+								error={tbError}
 								user={tbUser}
 								onTraktLogin={loginWithTorbox}
 								onLogout={async (prefix) => await handleLogout(prefix, router)}
 							/>
 							<ServiceCard
 								service="pm"
+								error={pmError}
 								user={pmUser}
 								onTraktLogin={loginWithPremiumize}
 								onLogout={async (prefix) => await handleLogout(prefix, router)}
 							/>
 							<ServiceCard
 								service="trakt"
+								error={traktError}
 								user={traktUser}
 								onTraktLogin={loginWithTrakt}
 								onLogout={async (prefix) => await handleLogout(prefix, router)}
