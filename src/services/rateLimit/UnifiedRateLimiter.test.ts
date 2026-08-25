@@ -1,3 +1,4 @@
+import { TorBoxRateLimitError } from '@/services/torbox';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { UnifiedRateLimiter, getGlobalRateLimiter } from './UnifiedRateLimiter';
 
@@ -5,6 +6,56 @@ describe('UnifiedRateLimiter', () => {
 	afterEach(() => {
 		vi.useRealTimers();
 		vi.restoreAllMocks();
+	});
+
+	// The service clients run their own retry ladders. When one of them gives up
+	// and throws a typed error, retrying out here just multiplies the ladder:
+	// a TorBox 429 already cost 4 attempts across up to 15 minutes of 5-minute
+	// pauses, and a further 3 rounds stretched that to roughly an hour. The
+	// error carries no `response`, so the "network errors are retryable" branch
+	// used to claim it.
+	it('does not retry an error a lower layer already gave up on', async () => {
+		const limiter = new UnifiedRateLimiter();
+		limiter.updateConfig('torbox', {
+			maxRequestsPerMinute: 60000,
+			maxConcurrent: 1,
+			retryAttempts: 3,
+			backoffMultiplier: 1,
+			jitterRange: 0,
+			burstSize: 10,
+		});
+
+		const attempt = vi.fn(async () => {
+			throw new TorBoxRateLimitError();
+		});
+
+		await expect(limiter.execute('torbox', 'tb-page-0', attempt)).rejects.toBeInstanceOf(
+			TorBoxRateLimitError
+		);
+		expect(attempt).toHaveBeenCalledTimes(1);
+	});
+
+	// A genuine network error still has no `response` and must stay retryable -
+	// that is the case the branch was written for.
+	it('still retries a genuine network error', async () => {
+		const limiter = new UnifiedRateLimiter();
+		limiter.updateConfig('torbox', {
+			maxRequestsPerMinute: 60000,
+			maxConcurrent: 1,
+			retryAttempts: 2,
+			backoffMultiplier: 1,
+			jitterRange: 0,
+			burstSize: 10,
+		});
+
+		const attempt = vi.fn(async () => {
+			throw new Error('socket hang up');
+		});
+
+		await expect(limiter.execute('torbox', 'tb-page-0', attempt)).rejects.toThrow(
+			'socket hang up'
+		);
+		expect(attempt).toHaveBeenCalledTimes(3);
 	});
 
 	it('prioritizes higher priority requests', async () => {

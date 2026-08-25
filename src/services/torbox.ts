@@ -58,6 +58,12 @@ const concurrencyWaiters: Array<() => void> = [];
 
 // Custom error class for rate limiting
 export class TorBoxRateLimitError extends Error {
+	/**
+	 * Thrown only once this client's own retry ladder is spent, so an outer
+	 * layer must not run it again - see UnifiedRateLimiter.isRetryableError.
+	 */
+	readonly retryable = false;
+
 	constructor(message: string = 'TorBox API rate limit exceeded. Please wait and try again.') {
 		super(message);
 		this.name = 'TorBoxRateLimitError';

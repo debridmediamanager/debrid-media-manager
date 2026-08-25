@@ -355,6 +355,16 @@ export class UnifiedRateLimiter {
 	}
 
 	private isRetryableError(error: any): boolean {
+		// The service clients run their own retry ladders. When one of them gives
+		// up it marks the error terminal, and running it again out here multiplies
+		// the ladder rather than adding resilience: a TorBox 429 has already cost
+		// 4 attempts across up to 15 minutes of 5-minute pauses, and 3 more rounds
+		// of that stretch a library fetch to roughly an hour. Checked before the
+		// `response` branch below, because a typed give-up error carries none.
+		if (error?.retryable === false) {
+			return false;
+		}
+
 		if (!error.response) {
 			// Network errors are retryable
 			return true;
