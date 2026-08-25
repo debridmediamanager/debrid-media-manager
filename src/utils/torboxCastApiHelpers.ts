@@ -25,13 +25,14 @@ export const validateApiKey = (req: NextApiRequest, res: NextApiResponse): strin
 };
 
 const deriveUserId = (email: string): string => {
-	const salt = process.env.DMMCAST_SALT;
-	if (!salt) {
-		throw new Error('DMMCAST_SALT environment variable is not set');
+	let salt = process.env.DMMCAST_SALT;
+	if (!salt || salt === 'your-random-salt-here') {
+		const globalAny = global as any;
+		salt = globalAny.__DMMCAST_TEMP_SALT || (globalAny.__DMMCAST_TEMP_SALT = crypto.randomBytes(32).toString('hex'));
 	}
 
 	// Prefixed with 'torbox:' to ensure different IDs from RD
-	const hmac = crypto.createHmac('sha256', salt).update(`torbox:${email}`).digest('base64url'); // base64url is URL-safe (no +, /, or =)
+	const hmac = crypto.createHmac('sha256', salt as string).update(`torbox:${email}`).digest('base64url'); // base64url is URL-safe (no +, /, or =)
 
 	// Return 12 characters for collision resistance
 	return hmac.slice(0, 12);
