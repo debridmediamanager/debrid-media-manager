@@ -1,11 +1,4 @@
-import {
-	recordRdOperationEvent,
-	resolveRealDebridOperation,
-} from '@/lib/observability/rdOperationalStats';
-import {
-	recordTorBoxOperationEvent,
-	resolveTorBoxOperation,
-} from '@/lib/observability/torboxOperationalStats';
+import { recordProxiedOperation } from '@/lib/observability/recordProxiedOperation';
 
 import { randomUUID } from 'crypto';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
@@ -143,28 +136,6 @@ async function buildResponseBody(
 	return Buffer.from(arrayBuffer);
 }
 
-const RD_HOSTS = ['app.real-debrid.com', 'api.real-debrid.com'];
-
-// The proxy is the only place browser-side debrid traffic is observable, so it
-// is what the `/is-*-down-or-just-me` pages count. Recording is keyed on the
-// upstream host: whichever service the call was actually for.
-function recordProxiedOperation(method: string | undefined, targetUrl: URL, status: number): void {
-	if (RD_HOSTS.includes(targetUrl.hostname)) {
-		const operation = resolveRealDebridOperation(method, targetUrl.pathname);
-		if (operation) {
-			recordRdOperationEvent(operation, status);
-		}
-		return;
-	}
-
-	if (targetUrl.hostname === 'api.torbox.app') {
-		const operation = resolveTorBoxOperation(method, targetUrl.pathname);
-		if (operation) {
-			recordTorBoxOperationEvent(operation, status);
-		}
-	}
-}
-
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 	const origin = getOrigin(req);
 	applyCorsHeaders(res, origin);
@@ -238,13 +209,23 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 		res.status(upstreamResponse.status);
 		res.send(responseBody);
 
-		recordProxiedOperation(req.method, parsedProxyUrl, upstreamResponse.status);
+		recordProxiedOperation(
+			parsedProxyUrl.hostname,
+			req.method,
+			parsedProxyUrl.pathname,
+			upstreamResponse.status
+		);
 	} catch (error) {
 		const message = error instanceof Error ? error.message : 'Unknown error';
 
 		// A proxy-side failure is still a failed call from the user's side.
 		try {
-			recordProxiedOperation(req.method, parsedProxyUrl, 500);
+			recordProxiedOperation(
+				parsedProxyUrl.hostname,
+				req.method,
+				parsedProxyUrl.pathname,
+				500
+			);
 		} catch {}
 
 		res.status(500).send(`Error fetching the proxy URL: ${message}`);
