@@ -21,20 +21,13 @@
 //
 // Health checks are triggered by the cron endpoint, not an in-memory scheduler.
 
-import type { TorBoxAuthState, TorBoxCdnNodeStatus } from '@/services/database/torboxHealth';
+import type { TorBoxCdnNodeStatus } from '@/services/database/torboxHealth';
 import { repository } from '@/services/repository';
 
 const API_BASE = 'https://api.torbox.app';
 const API_VERSION = 'v1';
 const API_TIMEOUT_MS = 10000;
 const NODE_TIMEOUT_MS = 8000;
-
-// Big Buck Bunny - public domain, and checkcached is a genuinely
-// non-destructive probe: it adds nothing to the account. The probe passes on
-// the endpoint answering, not on the hash being cached; TorBox returns
-// `success:true` with an empty `data` for a miss, so a cache eviction here
-// never turns into a false outage.
-const CACHE_PROBE_HASH = 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c';
 
 let checkInProgress = false;
 
@@ -55,17 +48,6 @@ export interface TorBoxCdnNode {
 	region: string;
 	name: string;
 	url: string;
-}
-
-export interface TorBoxAuthResult {
-	state: TorBoxAuthState;
-	error: string | null;
-	/**
-	 * TorBox can carry a `cooldown_until` far into the future while every
-	 * endpoint still answers normally - see CLAUDE.md. It is reported for
-	 * context and deliberately does not affect `state`.
-	 */
-	cooldownUntil: string | null;
 }
 
 interface TorBoxEnvelope<T> {
@@ -293,55 +275,6 @@ export async function testCdnNode(node: TorBoxCdnNode): Promise<TorBoxCdnNodeSta
 }
 
 /**
- * Exercises the authenticated surface with the operator's key: identity first,
- * then a cache lookup. Returns `skipped` when no key is configured - that is a
- * supported deployment, not a failure.
- */
-export async function checkAuthenticatedApi(apiKey: string | undefined): Promise<TorBoxAuthResult> {
-	if (!apiKey) {
-		return { state: 'skipped', error: null, cooldownUntil: null };
-	}
-
-	const headers = { Authorization: `Bearer ${apiKey}` };
-
-	const me = await readEnvelope<{ cooldown_until?: string | null }>(
-		`${API_BASE}/${API_VERSION}/api/user/me?settings=false`,
-		{ method: 'GET', headers },
-		API_TIMEOUT_MS
-	);
-
-	if (!me.ok) {
-		// A rotated or revoked key answers AUTH_ERROR on every endpoint. That is
-		// a credential problem on our side and must not read as a TorBox outage.
-		const isAuthError = /AUTH_ERROR|HTTP 401|HTTP 403/i.test(me.error);
-		return {
-			state: isAuthError ? 'credentials' : 'failed',
-			error: me.error,
-			cooldownUntil: null,
-		};
-	}
-
-	const cooldownUntil = me.envelope.data?.cooldown_until ?? null;
-
-	const cached = await readEnvelope<unknown>(
-		`${API_BASE}/${API_VERSION}/api/torrents/checkcached?hash=${CACHE_PROBE_HASH}&format=object&list_files=false`,
-		{ method: 'GET', headers },
-		API_TIMEOUT_MS
-	);
-
-	if (!cached.ok) {
-		const isAuthError = /AUTH_ERROR|HTTP 401|HTTP 403/i.test(cached.error);
-		return {
-			state: isAuthError ? 'credentials' : 'failed',
-			error: cached.error,
-			cooldownUntil,
-		};
-	}
-
-	return { state: 'ok', error: null, cooldownUntil };
-}
-
-/**
  * Runs one full check and persists it.
  */
 async function executeCheck(): Promise<void> {
@@ -356,8 +289,6 @@ async function executeCheck(): Promise<void> {
 
 		const statuses =
 			nodes.length > 0 ? await Promise.all(nodes.map((node) => testCdnNode(node))) : [];
-
-		const auth = await checkAuthenticatedApi(process.env.TORBOX_KEY);
 
 		// Node discovery failing must not wipe the table - the previous run's
 		// statuses are better than nothing, and an empty table would read as a
@@ -384,8 +315,6 @@ async function executeCheck(): Promise<void> {
 			apiOk: api.ok,
 			apiLatencyMs: api.latencyMs,
 			apiDetail: api.detail ?? api.error,
-			authState: auth.state,
-			authError: auth.error,
 			totalNodes: statuses.length,
 			workingNodes: working.length,
 		});
@@ -408,7 +337,7 @@ async function executeCheck(): Promise<void> {
 
 		console.log(
 			`[TorBoxHealth] Check complete: API ${api.ok ? 'up' : 'down'}, ` +
-				`${working.length}/${statuses.length} CDN nodes, auth ${auth.state}`
+				`${working.length}/${statuses.length} CDN nodes`
 		);
 	} catch (error) {
 		console.error('[TorBoxHealth] Check failed:', error);
@@ -434,5 +363,4 @@ export const __testing = {
 	},
 	executeCheck,
 	API_BASE,
-	CACHE_PROBE_HASH,
 };

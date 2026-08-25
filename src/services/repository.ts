@@ -31,7 +31,7 @@ import {
 import { HashSearchParams } from './database/hashSearch';
 import { RealDebridOperation } from './database/rdOperational';
 import { StreamServerStatus, TorrentioUrlCheckResult } from './database/streamHealth';
-import { TorBoxAuthState, TorBoxCdnNodeStatus } from './database/torboxHealth';
+import { TorBoxCdnNodeStatus } from './database/torboxHealth';
 import { TorBoxOperation } from './database/torboxOperational';
 import { ScrapeSearchResult } from './mediasearch';
 import { TorrentInfoResponse } from './types';
@@ -1052,8 +1052,6 @@ export class Repository {
 		apiOk: boolean;
 		apiLatencyMs: number | null;
 		apiDetail: string | null;
-		authState: TorBoxAuthState;
-		authError: string | null;
 		totalNodes: number;
 		workingNodes: number;
 	}) {

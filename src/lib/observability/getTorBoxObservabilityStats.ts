@@ -1,4 +1,3 @@
-import type { TorBoxAuthState } from '@/services/database/torboxHealth';
 import type { TorBoxOverallStats } from '@/services/database/torboxOperational';
 import { repository } from '@/services/repository';
 
@@ -28,8 +27,6 @@ export interface TorBoxApiCheckSummary {
 	apiOk: boolean;
 	apiLatencyMs: number | null;
 	apiDetail: string | null;
-	authState: TorBoxAuthState;
-	authError: string | null;
 	totalNodes: number;
 	workingNodes: number;
 	checkedAt: number;
@@ -45,11 +42,6 @@ export interface TorBoxApiSummary {
 	recentChecks: TorBoxApiCheckSummary[];
 }
 
-export interface TorBoxAuthSummary {
-	state: TorBoxAuthState;
-	error: string | null;
-}
-
 export interface TorBoxServiceSummary {
 	totalUsers: number | null;
 	totalServers: number | null;
@@ -58,7 +50,6 @@ export interface TorBoxServiceSummary {
 export interface TorBoxObservabilityStats {
 	cdn: TorBoxCdnMetricsSummary;
 	api: TorBoxApiSummary;
-	auth: TorBoxAuthSummary;
 	/**
 	 * What TorBox actually returned to DMM users over the last hour, counted
 	 * from their own API calls rather than from a synthetic probe. Null only
@@ -110,8 +101,6 @@ export async function getTorBoxObservabilityStats(): Promise<TorBoxObservability
 		apiOk: check.apiOk,
 		apiLatencyMs: check.apiLatencyMs,
 		apiDetail: check.apiDetail,
-		authState: check.authState,
-		authError: check.authError,
 		totalNodes: check.totalNodes,
 		workingNodes: check.workingNodes,
 		checkedAt: check.checkedAt.getTime(),
@@ -143,10 +132,6 @@ export async function getTorBoxObservabilityStats(): Promise<TorBoxObservability
 			totalCount: apiChecks.length,
 			successRate: apiChecks.length > 0 ? apiSuccessCount / apiChecks.length : null,
 			recentChecks: apiChecks,
-		},
-		auth: {
-			state: latest?.authState ?? 'skipped',
-			error: latest?.authError ?? null,
 		},
 		tbApi,
 		service,

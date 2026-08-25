@@ -298,8 +298,8 @@ describe('TorBoxHealthService', () => {
 					apiOk: true,
 					apiLatencyMs: 42,
 					apiDetail: 'API is running.',
-					authState: 'credentials',
-					authError: 'AUTH_ERROR',
+					authState: 'skipped',
+					authError: null,
 					totalNodes: 17,
 					workingNodes: 17,
 					checkedAt: new Date('2026-08-23T10:00:00Z'),
@@ -309,8 +309,9 @@ describe('TorBoxHealthService', () => {
 			const checks = await service.getRecentChecks(5);
 
 			expect(checks).toHaveLength(1);
-			expect(checks[0].authState).toBe('credentials');
 			expect(checks[0].workingNodes).toBe(17);
+			// The auth columns still exist on the table but are no longer surfaced.
+			expect(checks[0]).not.toHaveProperty('authState');
 		});
 
 		it('degrades to an empty list on a database error', async () => {

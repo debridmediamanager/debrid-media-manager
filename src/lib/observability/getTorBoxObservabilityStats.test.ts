@@ -58,8 +58,6 @@ function check(overrides: Record<string, unknown> = {}) {
 		apiOk: true,
 		apiLatencyMs: 42,
 		apiDetail: 'API is running.',
-		authState: 'ok' as const,
-		authError: null,
 		totalNodes: 2,
 		workingNodes: 2,
 		checkedAt: new Date('2026-08-23T10:00:00Z'),
@@ -83,7 +81,6 @@ describe('getTorBoxObservabilityStats', () => {
 		expect(stats.cdn.total).toBe(0);
 		expect(stats.api.ok).toBeNull();
 		expect(stats.api.successRate).toBeNull();
-		expect(stats.auth.state).toBe('skipped');
 		expect(stats.lastChecked).toBeNull();
 	});
 
@@ -137,16 +134,6 @@ describe('getTorBoxObservabilityStats', () => {
 		expect(stats.api.successCount).toBe(2);
 		expect(stats.api.totalCount).toBe(3);
 		expect(stats.api.successRate).toBeCloseTo(2 / 3);
-	});
-
-	it('surfaces the latest auth state', async () => {
-		vi.mocked(repository.getRecentTorBoxChecks).mockResolvedValue([
-			check({ authState: 'credentials', authError: 'AUTH_ERROR: Bad key' }),
-		]);
-
-		const stats = await getTorBoxObservabilityStats();
-
-		expect(stats.auth).toEqual({ state: 'credentials', error: 'AUTH_ERROR: Bad key' });
 	});
 
 	// The page renders this timestamp instead of its own fetch time, so a

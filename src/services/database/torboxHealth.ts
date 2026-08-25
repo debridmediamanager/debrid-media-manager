@@ -4,17 +4,6 @@ import { DatabaseClient } from './client';
 const HOURLY_RETENTION_DAYS = 90;
 const DAILY_RETENTION_DAYS = 90;
 
-/**
- * Whether the authenticated TorBox surface was exercised, and how it went.
- *
- * `skipped` is not a failure: the page is designed to work with no TorBox
- * credentials at all, and the authenticated probe is purely supplementary.
- * `credentials` means TorBox answered but refused the key (AUTH_ERROR) - per
- * the notes in CLAUDE.md a rotated key is the real abuse signal, and it says
- * nothing about whether TorBox is up for anyone else.
- */
-export type TorBoxAuthState = 'ok' | 'failed' | 'credentials' | 'skipped';
-
 export interface TorBoxCdnNodeStatus {
 	host: string;
 	region: string;
@@ -40,8 +29,6 @@ export interface TorBoxCheckResultData {
 	apiOk: boolean;
 	apiLatencyMs: number | null;
 	apiDetail: string | null;
-	authState: TorBoxAuthState;
-	authError: string | null;
 	totalNodes: number;
 	workingNodes: number;
 	checkedAt: Date;
@@ -215,8 +202,10 @@ export class TorBoxHealthService extends DatabaseClient {
 					apiOk: result.apiOk,
 					apiLatencyMs: result.apiLatencyMs,
 					apiDetail: result.apiDetail,
-					authState: result.authState,
-					authError: result.authError,
+					// The authenticated probe was removed; these columns are
+					// NOT NULL and kept only so historical rows stay readable.
+					authState: 'skipped',
+					authError: null,
 					totalNodes: result.totalNodes,
 					workingNodes: result.workingNodes,
 				},
@@ -238,8 +227,6 @@ export class TorBoxHealthService extends DatabaseClient {
 				apiOk: r.apiOk,
 				apiLatencyMs: r.apiLatencyMs,
 				apiDetail: r.apiDetail,
-				authState: r.authState as TorBoxAuthState,
-				authError: r.authError,
 				totalNodes: r.totalNodes,
 				workingNodes: r.workingNodes,
 				checkedAt: r.checkedAt,

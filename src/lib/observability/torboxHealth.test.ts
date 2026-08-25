@@ -2,7 +2,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
 	__testing,
-	checkAuthenticatedApi,
 	fetchCdnNodes,
 	fetchServiceStats,
 	isTorBoxHealthCheckInProgress,
@@ -68,7 +67,6 @@ describe('torboxHealth', () => {
 		__testing.reset();
 		vi.restoreAllMocks();
 		vi.clearAllMocks();
-		delete process.env.TORBOX_KEY;
 	});
 
 	afterEach(() => {
@@ -265,95 +263,6 @@ describe('torboxHealth', () => {
 		});
 	});
 
-	describe('checkAuthenticatedApi', () => {
-		it('skips cleanly with no key configured', async () => {
-			const fetchSpy = vi.fn();
-			vi.stubGlobal('fetch', fetchSpy);
-
-			await expect(checkAuthenticatedApi(undefined)).resolves.toEqual({
-				state: 'skipped',
-				error: null,
-				cooldownUntil: null,
-			});
-			expect(fetchSpy).not.toHaveBeenCalled();
-		});
-
-		it('passes when both endpoints answer', async () => {
-			vi.stubGlobal(
-				'fetch',
-				vi
-					.fn()
-					.mockResolvedValueOnce(
-						jsonResponse(200, { success: true, data: { cooldown_until: null } })
-					)
-					.mockResolvedValueOnce(jsonResponse(200, { success: true, data: {} }))
-			);
-
-			await expect(checkAuthenticatedApi('key')).resolves.toEqual({
-				state: 'ok',
-				error: null,
-				cooldownUntil: null,
-			});
-		});
-
-		// A rotated key is the real TorBox abuse signal. It says nothing about
-		// whether TorBox is up for anyone else, so it must not read as an outage.
-		it('classifies AUTH_ERROR as a credentials problem, not a failure', async () => {
-			vi.stubGlobal(
-				'fetch',
-				vi.fn().mockResolvedValue(
-					jsonResponse(200, {
-						success: false,
-						error: 'AUTH_ERROR',
-						detail: 'Bad key',
-					})
-				)
-			);
-
-			const result = await checkAuthenticatedApi('rotated-key');
-
-			expect(result.state).toBe('credentials');
-			expect(result.error).toContain('AUTH_ERROR');
-		});
-
-		// cooldown_until can sit 24h out while every endpoint keeps answering.
-		it('reports a live cooldown without failing the check', async () => {
-			vi.stubGlobal(
-				'fetch',
-				vi
-					.fn()
-					.mockResolvedValueOnce(
-						jsonResponse(200, {
-							success: true,
-							data: { cooldown_until: '2026-08-23T20:33:20Z' },
-						})
-					)
-					.mockResolvedValueOnce(jsonResponse(200, { success: true, data: {} }))
-			);
-
-			const result = await checkAuthenticatedApi('key');
-
-			expect(result.state).toBe('ok');
-			expect(result.cooldownUntil).toBe('2026-08-23T20:33:20Z');
-		});
-
-		it('marks a non-auth failure as failed', async () => {
-			vi.stubGlobal(
-				'fetch',
-				vi
-					.fn()
-					.mockResolvedValueOnce(jsonResponse(200, { success: true, data: {} }))
-					.mockResolvedValueOnce(
-						jsonResponse(500, { success: false, error: 'DATABASE_ERROR' })
-					)
-			);
-
-			const result = await checkAuthenticatedApi('key');
-
-			expect(result.state).toBe('failed');
-		});
-	});
-
 	describe('executeCheck', () => {
 		it('stores node statuses and a check result', async () => {
 			const fetchMock = vi.fn(async (input: unknown) => {
@@ -378,7 +287,6 @@ describe('torboxHealth', () => {
 			expect(repository.recordTorBoxCheckResult).toHaveBeenCalledWith(
 				expect.objectContaining({
 					apiOk: true,
-					authState: 'skipped',
 					totalNodes: 2,
 					workingNodes: 2,
 				})
@@ -386,6 +294,35 @@ describe('torboxHealth', () => {
 			expect(repository.recordTorBoxHealthSnapshot).toHaveBeenCalledWith(
 				expect.objectContaining({ totalNodes: 2, workingNodes: 2, apiOk: true })
 			);
+		});
+
+		// The authenticated probe was removed deliberately: it spent the
+		// operator's TorBox key every 5 minutes and never affected the verdict.
+		// Nothing in a health check may touch an authenticated endpoint.
+		it('never calls an authenticated endpoint', async () => {
+			const fetchMock = vi.fn(async (input: unknown, _init?: unknown) => {
+				const url = String(input);
+				if (url.endsWith('/')) {
+					return jsonResponse(200, { success: true, detail: 'API is running.' });
+				}
+				if (url.includes('speedtest')) {
+					return jsonResponse(200, SPEEDTEST_BODY);
+				}
+				return rangeResponse(206);
+			});
+			vi.stubGlobal('fetch', fetchMock);
+
+			await __testing.executeCheck();
+
+			const urls = fetchMock.mock.calls.map((call) => String(call[0]));
+			expect(urls.some((u) => u.includes('/user/me'))).toBe(false);
+			expect(urls.some((u) => u.includes('checkcached'))).toBe(false);
+
+			const sentAuthHeader = fetchMock.mock.calls.some((call) => {
+				const init = call[1] as { headers?: Record<string, string> } | undefined;
+				return Boolean(init?.headers?.Authorization);
+			});
+			expect(sentAuthHeader).toBe(false);
 		});
 
 		// Losing the node list must not wipe the table: an empty table would

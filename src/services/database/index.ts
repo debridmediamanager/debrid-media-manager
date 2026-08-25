@@ -52,7 +52,6 @@ export {
 
 export type { Nzb2rdWaiter } from './nzb2rdMap';
 export type {
-	TorBoxAuthState,
 	TorBoxCdnMetrics,
 	TorBoxCdnNodeStatus,
 	TorBoxCheckResultData,
