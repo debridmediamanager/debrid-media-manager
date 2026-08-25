@@ -7,10 +7,8 @@ import {
 	AlertTriangle,
 	CheckCircle2,
 	Clock,
-	Globe,
 	Loader2,
 	RefreshCw,
-	Server,
 	Users,
 	WifiOff,
 } from 'lucide-react';
@@ -31,34 +29,22 @@ const TorBoxHistoryCharts = dynamic(
 
 const FIXED_LOCALE = 'en-US';
 const REFRESH_INTERVAL_MS = 60_000;
-// The cron runs every 5 minutes. Three missed runs is a stalled collector, not
-// jitter, and the page says so rather than presenting old numbers as current.
-const STALE_AFTER_MS = 15 * 60 * 1000;
 
-// Human names for the region codes TorBox returns from /api/speedtest.
-const REGION_NAMES: Record<string, string> = {
-	ceur: 'Central Europe',
-	weur: 'Western Europe',
-	neur: 'Northern Europe',
-	seur: 'Southern Europe',
-	nord: 'Nordics',
-	slav: 'Eastern Europe',
-	enam: 'Eastern North America',
-	cnam: 'Central North America',
-	wnam: 'Western North America',
-	snam: 'Southern North America',
-	latm: 'Latin America',
-	apac: 'Asia-Pacific',
-	japn: 'Japan',
-	indi: 'India',
-	zafr: 'Southern Africa',
-	hare: 'Anycast (Bunny)',
-	erth: 'Anycast (Cloudflare)',
-};
+// Verdict bands, shared by the headline and the success-rate card so the two can
+// never contradict each other. `down` matches TorBoxOverallStats.isDown.
+const UP_THRESHOLD = 0.95;
+const DOWN_THRESHOLD = 0.5;
 
-function regionLabel(region: string): string {
-	return REGION_NAMES[region] ?? region.toUpperCase();
-}
+// Below this many counted calls the window says nothing: a handful of requests
+// at 4am can read 0% off two unlucky failures. The synthetic probe this page
+// used to run had a fixed 12-samples-an-hour floor; real traffic does not, so
+// the floor has to be explicit.
+const MIN_SAMPLE = 20;
+
+// Counters are bucketed by hour, so a bucket start can legitimately be nearly an
+// hour old while traffic is flowing. Two hours means a whole bucket went by with
+// no TorBox call recorded at all - that is a stalled pipeline, not a quiet spell.
+const STALE_AFTER_MS = 2 * 60 * 60 * 1000;
 
 function formatDateTime(timestamp: number): string {
 	return new Date(timestamp).toLocaleString(FIXED_LOCALE, {
@@ -84,13 +70,20 @@ function formatCount(value: number): string {
 	return value.toLocaleString(FIXED_LOCALE);
 }
 
+function rateColorClass(rate: number | null): string {
+	if (rate === null) return 'text-slate-400';
+	if (rate >= UP_THRESHOLD) return 'text-emerald-400';
+	if (rate >= DOWN_THRESHOLD) return 'text-amber-400';
+	return 'text-rose-500';
+}
+
 type StatusState = 'idle' | 'up' | 'degraded' | 'down';
 
 function isTorBoxObservabilityPayload(value: unknown): value is TorBoxObservabilityStats {
 	if (!value || typeof value !== 'object') return false;
 	const candidate = value as Record<string, unknown>;
-	if (!candidate.cdn || typeof candidate.cdn !== 'object') return false;
-	if (!candidate.api || typeof candidate.api !== 'object') return false;
+	if (typeof candidate.windowHours !== 'number') return false;
+	if (candidate.tbApi !== null && typeof candidate.tbApi !== 'object') return false;
 	return true;
 }
 
@@ -98,6 +91,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 	const [stats, setStats] = useState<TorBoxObservabilityStats | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [fetchFailed, setFetchFailed] = useState(false);
+	const [loadedAt, setLoadedAt] = useState<number | null>(null);
 	const [now, setNow] = useState<number>(() => Date.now());
 	const isOnline = useConnectivity();
 
@@ -123,6 +117,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 
 			setStats(payload);
 			setFetchFailed(false);
+			setLoadedAt(Date.now());
 		} catch (error) {
 			console.error('Failed to fetch TorBox stats', error);
 			setFetchFailed(true);
@@ -138,8 +133,8 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 		return () => clearInterval(interval);
 	}, []);
 
-	// Keeps the "x minutes ago" label honest between fetches, so a stalled
-	// collector visibly ages instead of freezing at its last value.
+	// Keeps the "x minutes ago" label honest between fetches, so a stalled feed
+	// visibly ages instead of freezing at its last value.
 	useEffect(() => {
 		const tick = setInterval(() => setNow(Date.now()), 30_000);
 		return () => clearInterval(tick);
@@ -148,7 +143,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 	const pageTitle = 'Is TorBox Down Or Just Me?';
 	const canonicalUrl = 'https://debridmediamanager.com/is-torbox-down-or-just-me';
 	const defaultDescription =
-		'Live TorBox availability dashboard: real DMM-user API success rates, plus a per-region check that every TorBox CDN node is actually serving bytes.';
+		'Live TorBox availability, measured from what TorBox actually returns to real Debrid Media Manager users rather than from a synthetic probe.';
 
 	if (loading || !stats) {
 		return (
@@ -168,30 +163,33 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 		);
 	}
 
-	const { cdn, api, service, tbApi } = stats;
-	const cdnPct = cdn.total > 0 ? Math.round(cdn.rate * 100) : null;
+	const { tbApi, windowHours } = stats;
+	const windowLabel = `${windowHours}h`;
 
-	// What TorBox returned to real DMM users in the last hour. Only 5xx counts
-	// as a failure, so a user's own bad key never drags this down.
-	const tbApiPct = tbApi && tbApi.totalCount > 0 ? Math.round(tbApi.successRate * 100) : null;
-	const tbApiConsidered = tbApi ? tbApi.successCount + tbApi.failureCount : 0;
-	const workingNodes = cdn.nodes.filter((node) => node.ok);
-	const failedNodes = cdn.nodes.filter((node) => !node.ok);
+	// Only 2xx and 5xx are counted. A 4xx is the caller's key or request, and
+	// TorBox answers a rejected key with HTTP 200 success:false anyway, so
+	// neither says anything about whether TorBox is up.
+	const considered = tbApi ? tbApi.successCount + tbApi.failureCount : 0;
+	const rate = tbApi && considered > 0 ? tbApi.successRate : null;
+	const ratePct = rate !== null ? Math.round(rate * 100) : null;
+	const hasEnough = considered >= MIN_SAMPLE;
+	const uncounted = tbApi ? Math.max(0, tbApi.totalCount - considered) : 0;
 
 	const lastChecked = stats.lastChecked;
 	const isStale = lastChecked !== null && now - lastChecked > STALE_AFTER_MS;
-	const hasData = cdn.total > 0 || api.totalCount > 0;
 
-	// The verdict is derived only from unauthenticated signals - the API root
-	// and the CDN nodes. A rejected API key says something about our key, not
-	// about TorBox, so it is reported separately and never counted here.
-	const state: StatusState = !hasData
-		? 'idle'
-		: api.ok === false || (cdnPct !== null && cdnPct < 50)
-			? 'down'
-			: cdnPct !== null && cdnPct < 90
-				? 'degraded'
-				: 'up';
+	// The verdict is real user traffic and nothing else. DMM issues no requests
+	// of its own to TorBox: a probe from one datacentre IP measures that IP's
+	// rate-limit standing, and TorBox 429s it often enough to read as an outage
+	// while thousands of user calls are succeeding.
+	const state: StatusState =
+		!hasEnough || rate === null
+			? 'idle'
+			: rate >= UP_THRESHOLD
+				? 'up'
+				: rate >= DOWN_THRESHOLD
+					? 'degraded'
+					: 'down';
 
 	const statusMeta: Record<
 		StatusState,
@@ -208,9 +206,9 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 		}
 	> = {
 		idle: {
-			label: 'Waiting for data',
+			label: 'Not Enough Traffic To Say',
 			badge: 'Collecting data',
-			description: 'Collecting initial samples...',
+			description: `Fewer than ${MIN_SAMPLE} DMM user calls to TorBox in the last ${windowLabel}`,
 			colorClass: 'text-slate-400',
 			bgColorClass: 'bg-slate-500/10',
 			borderColorClass: 'border-slate-500/20',
@@ -221,7 +219,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 		up: {
 			label: 'TorBox is Operational',
 			badge: 'Operational',
-			description: 'API responding and CDN nodes serving bytes',
+			description: 'TorBox is answering DMM users normally',
 			colorClass: 'text-emerald-400',
 			bgColorClass: 'bg-emerald-500/10',
 			borderColorClass: 'border-emerald-500/20',
@@ -232,7 +230,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 		degraded: {
 			label: 'TorBox is Partially Degraded',
 			badge: 'Partial Outage',
-			description: 'Some regions are not serving bytes',
+			description: 'Some DMM user calls are coming back as server errors',
 			colorClass: 'text-amber-400',
 			bgColorClass: 'bg-amber-500/10',
 			borderColorClass: 'border-amber-500/20',
@@ -243,7 +241,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 		down: {
 			label: 'TorBox is Down',
 			badge: 'Major Outage',
-			description: 'API or CDN nodes not responding',
+			description: 'Most DMM user calls are failing with server errors',
 			colorClass: 'text-rose-500',
 			bgColorClass: 'bg-rose-500/10',
 			borderColorClass: 'border-rose-500/20',
@@ -283,7 +281,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 							<span>
 								{fetchFailed
 									? 'Could not reach the status API just now - showing the last result we have.'
-									: `These checks stopped updating ${lastChecked !== null ? formatRelative(lastChecked, now) : ''}. Treat the readings below as stale.`}
+									: `No TorBox call has been recorded since ${lastChecked !== null ? formatRelative(lastChecked, now) : ''}. Treat the readings below as stale.`}
 							</span>
 						</div>
 					</div>
@@ -312,18 +310,18 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 						</h1>
 
 						<p className="max-w-2xl text-lg text-slate-400">
-							{currentStatus.description}. The verdict above is drawn only from
-							TorBox&apos;s public endpoints, so it reflects the service rather than
-							any one account.
+							{currentStatus.description}. The verdict is counted from real DMM
+							users&apos; own TorBox calls across many accounts, so it reflects the
+							service rather than any one key.
 						</p>
 
 						<div className="flex flex-wrap items-center justify-center gap-4 text-xs font-medium text-slate-500">
 							<div className="flex items-center gap-1.5">
 								<Clock className="h-3.5 w-3.5" />
 								<span data-testid="status-freshness">
-									{lastChecked !== null
-										? `Checked ${formatRelative(lastChecked, now)} (${formatDateTime(lastChecked)})`
-										: 'No check recorded yet'}
+									{loadedAt !== null
+										? `Updated ${formatRelative(loadedAt, now)} (${formatDateTime(loadedAt)})`
+										: 'Not loaded yet'}
 								</span>
 							</div>
 							<button
@@ -350,7 +348,8 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 										Debrid Media Manager
 									</a>
 									, a free, open source dashboard for Real-Debrid, AllDebrid and
-									TorBox. Every 5 minutes we ping the{' '}
+									TorBox. We send TorBox no traffic of our own. Every number here
+									is counted from what the{' '}
 									<a
 										className="font-semibold text-sky-300 hover:text-white"
 										href="https://api-docs.torbox.app/"
@@ -359,12 +358,10 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 									>
 										TorBox API
 									</a>{' '}
-									and ask each advertised CDN node for the first byte of its test
-									file. A node only passes on an HTTP 206 - reaching the API
-									proves nothing about whether TorBox will serve data. Alongside
-									those probes we count what TorBox actually returned to real DMM
-									users&apos; own API calls, so an outage shows up in traffic
-									nobody had to synthesise.
+									returned to real DMM users, across many accounts and many
+									networks, as they browsed their libraries. Only a 5xx counts
+									against TorBox - a rejected key is the caller&apos;s problem,
+									not an outage.
 								</p>
 							</div>
 
@@ -394,172 +391,24 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 
 					<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 						<div
-							data-testid="cdn-card"
+							data-testid="tb-api-card"
 							className="rounded-xl border border-white/10 bg-white/5 p-6 lg:col-span-2"
 						>
 							<h3 className="flex items-center gap-2 text-sm font-medium text-slate-300">
-								<Server className="h-4 w-4" />
-								CDN Nodes Serving Bytes
-							</h3>
-							<div className="mt-4">
-								<div className="flex items-baseline gap-2">
-									<span
-										className={`text-3xl font-bold ${
-											cdnPct === null
-												? 'text-slate-400'
-												: cdn.rate >= 0.9
-													? 'text-emerald-400'
-													: cdn.rate >= 0.5
-														? 'text-amber-400'
-														: 'text-rose-500'
-										}`}
-									>
-										{cdnPct !== null ? `${cdnPct}%` : '—'}
-									</span>
-									<span className="text-sm text-slate-500">
-										{cdn.total > 0
-											? `${cdn.working}/${cdn.total} regions`
-											: 'no data yet'}
-									</span>
-								</div>
-
-								{workingNodes.length > 0 && (
-									<div className="mt-3 space-y-1.5">
-										<div className="text-xs font-medium text-emerald-400">
-											Serving ({workingNodes.length})
-										</div>
-										<div className="flex flex-wrap gap-1">
-											{workingNodes.map((node) => (
-												<span
-													key={node.host}
-													className="rounded bg-emerald-500/20 px-1.5 py-0.5 text-xs text-emerald-400"
-													title={`${node.name} · ${node.host}`}
-												>
-													{regionLabel(node.region)}
-													{node.latencyMs !== null && (
-														<span className="ml-1 text-emerald-500/70">
-															{Math.round(node.latencyMs)}ms
-														</span>
-													)}
-												</span>
-											))}
-										</div>
-									</div>
-								)}
-
-								{failedNodes.length > 0 && (
-									<div className="mt-3 space-y-1.5">
-										<div className="text-xs font-medium text-rose-400">
-											Not serving ({failedNodes.length})
-										</div>
-										<div className="flex flex-wrap gap-1">
-											{failedNodes.map((node) => (
-												<span
-													key={node.host}
-													className="rounded bg-rose-500/20 px-1.5 py-0.5 text-xs text-rose-400"
-													title={`${node.host}${node.error ? ` · ${node.error}` : ''}`}
-												>
-													{regionLabel(node.region)}
-												</span>
-											))}
-										</div>
-									</div>
-								)}
-
-								{cdn.total > 0 && (
-									<div className="mt-3 text-xs text-slate-500">
-										Range request for the first byte of each region&apos;s test
-										file. Latencies measured from Germany
-										{cdn.avgLatencyMs !== null &&
-											`, ${Math.round(cdn.avgLatencyMs)}ms average`}
-										.
-									</div>
-								)}
-							</div>
-						</div>
-
-						<div
-							data-testid="api-card"
-							className="rounded-xl border border-white/10 bg-white/5 p-6"
-						>
-							<h3 className="flex items-center gap-2 text-sm font-medium text-slate-300">
-								<Activity className="h-4 w-4" />
-								TorBox API
-							</h3>
-							<div className="mt-4">
-								<div className="flex items-baseline gap-2">
-									<span
-										className={`text-3xl font-bold ${
-											api.ok === null
-												? 'text-slate-400'
-												: api.ok
-													? 'text-emerald-400'
-													: 'text-rose-500'
-										}`}
-									>
-										{api.ok === null ? '—' : api.ok ? 'Up' : 'Down'}
-									</span>
-									<span className="text-sm text-slate-500">
-										{api.latencyMs !== null
-											? `${Math.round(api.latencyMs)}ms`
-											: 'no data yet'}
-									</span>
-								</div>
-
-								{api.detail && (
-									<p className="mt-2 text-xs text-slate-400">{api.detail}</p>
-								)}
-
-								{api.totalCount > 0 && (
-									<div className="mt-3 space-y-1.5">
-										<div className="text-xs font-medium text-slate-500">
-											Last {api.totalCount} checks
-											{api.successRate !== null &&
-												` · ${Math.round(api.successRate * 100)}% up`}
-										</div>
-										<div className="flex flex-wrap gap-1">
-											{[...api.recentChecks].reverse().map((check) => (
-												<span
-													key={check.checkedAt}
-													className={`h-2.5 w-2.5 rounded-sm ${check.apiOk ? 'bg-emerald-500' : 'bg-rose-500'}`}
-													title={`${formatDateTime(check.checkedAt)} · ${
-														check.apiOk ? 'up' : 'down'
-													}${check.apiLatencyMs !== null ? ` · ${Math.round(check.apiLatencyMs)}ms` : ''}`}
-												/>
-											))}
-										</div>
-									</div>
-								)}
-							</div>
-						</div>
-
-						<div
-							data-testid="tb-api-card"
-							className="rounded-xl border border-white/10 bg-white/5 p-6"
-						>
-							<h3 className="flex items-center gap-2 text-sm font-medium text-slate-300">
 								<Users className="h-4 w-4" />
-								User API Success Rate (1h)
+								User API Success Rate ({windowLabel})
 							</h3>
 							<div className="mt-4">
 								<div className="flex items-baseline gap-2">
 									<span
 										data-testid="tb-api-rate"
-										className={`text-3xl font-bold ${
-											tbApiPct === null
-												? 'text-slate-400'
-												: tbApiPct >= 95
-													? 'text-emerald-400'
-													: tbApiPct >= 80
-														? 'text-amber-400'
-														: 'text-rose-500'
-										}`}
+										className={`text-3xl font-bold ${rateColorClass(rate)}`}
 									>
-										{tbApiPct !== null ? `${tbApiPct}%` : '—'}
+										{ratePct !== null ? `${ratePct}%` : '—'}
 									</span>
 									<span className="text-sm text-slate-500">
-										{tbApiConsidered > 0
-											? `${tbApi?.successCount ?? 0} of ${tbApiConsidered}`
+										{considered > 0
+											? `${formatCount(tbApi?.successCount ?? 0)} of ${formatCount(considered)}`
 											: 'no data yet'}
 									</span>
 								</div>
@@ -591,19 +440,23 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 														<div className="flex items-center gap-2">
 															{op.failureCount > 0 && (
 																<span className="text-rose-400">
-																	{op.failureCount} err
+																	{formatCount(op.failureCount)}{' '}
+																	err
 																</span>
 															)}
 															<span
-																className={
-																	pct >= 95
-																		? 'text-emerald-400'
-																		: pct >= 80
-																			? 'text-amber-400'
-																			: 'text-rose-400'
-																}
+																className={rateColorClass(
+																	op.successCount +
+																		op.failureCount >
+																		0
+																		? op.successRate
+																		: null
+																)}
 															>
-																{pct}%
+																{op.successCount + op.failureCount >
+																0
+																	? `${pct}%`
+																	: '—'}
 															</span>
 														</div>
 													</div>
@@ -611,52 +464,87 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 											})}
 									</div>
 								)}
-								<p className="mt-3 text-xs text-slate-500">
-									Counted from real DMM users&apos; own TorBox calls. Only server
-									errors count against TorBox.
-								</p>
 							</div>
 						</div>
 
 						<div
-							data-testid="service-card"
+							data-testid="volume-card"
 							className="rounded-xl border border-white/10 bg-white/5 p-6"
 						>
 							<h3 className="flex items-center gap-2 text-sm font-medium text-slate-300">
-								<Globe className="h-4 w-4" />
-								Service Scale
+								<Activity className="h-4 w-4" />
+								Sample Size
 							</h3>
 							<div className="mt-4 space-y-3">
 								<div>
 									<div className="text-3xl font-bold text-white">
-										{service?.totalServers != null
-											? formatCount(service.totalServers)
-											: '—'}
+										{formatCount(considered)}
 									</div>
-									<div className="text-xs text-slate-500">servers online</div>
-								</div>
-								<div>
-									<div className="text-xl font-semibold text-slate-200">
-										{service?.totalUsers != null
-											? formatCount(service.totalUsers)
-											: '—'}
+									<div className="text-xs text-slate-500">
+										calls counted in the last {windowLabel}
 									</div>
-									<div className="text-xs text-slate-500">registered users</div>
 								</div>
-								<p className="text-xs text-slate-500">
-									Reported live by TorBox&apos;s public stats endpoint.
-								</p>
+								{tbApi && tbApi.failureCount > 0 && (
+									<div>
+										<div className="text-xl font-semibold text-rose-400">
+											{formatCount(tbApi.failureCount)}
+										</div>
+										<div className="text-xs text-slate-500">
+											server errors (5xx)
+										</div>
+									</div>
+								)}
+								{uncounted > 0 && (
+									<div>
+										<div className="text-xl font-semibold text-slate-300">
+											{formatCount(uncounted)}
+										</div>
+										<div className="text-xs text-slate-500">
+											excluded - 4xx answers about the caller&apos;s own key
+											or request, not about TorBox
+										</div>
+									</div>
+								)}
+								{!hasEnough && (
+									<p className="text-xs text-amber-400">
+										Below the {MIN_SAMPLE}-call floor needed to call it either
+										way.
+									</p>
+								)}
 							</div>
 						</div>
 
-						<div className="rounded-xl border border-white/10 bg-white/5 p-6">
-							<h3 className="text-sm font-medium text-slate-300">Using TorBox?</h3>
-							<div className="mt-3 space-y-2 text-xs text-slate-400">
-								<p>
-									DMM manages your TorBox library, searches for content and casts
-									it to Stremio.
-								</p>
-								<div className="flex flex-wrap gap-2 pt-1">
+						<div className="rounded-xl border border-white/10 bg-white/5 p-6 md:col-span-2 lg:col-span-3">
+							<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+								<div className="text-xs text-slate-400">
+									<h3 className="text-sm font-medium text-slate-300">
+										Using TorBox?
+									</h3>
+									<p className="mt-1">
+										DMM manages your TorBox library, searches for content and
+										casts it to Stremio.
+									</p>
+									<p className="mt-2">
+										No TorBox account yet?{' '}
+										<a
+											href={TORBOX_REFERRAL_URL}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="font-semibold text-[#818cf8] hover:text-indigo-300"
+										>
+											Sign up for TorBox
+										</a>
+										<span className="px-2 text-slate-600">·</span>
+										Real-Debrid user?{' '}
+										<Link
+											href="/is-real-debrid-down-or-just-me"
+											className="font-semibold text-sky-400 hover:text-sky-300"
+										>
+											Check Real-Debrid status
+										</Link>
+									</p>
+								</div>
+								<div className="flex flex-shrink-0 flex-wrap gap-2">
 									<Link
 										href="/torbox/login"
 										className="rounded bg-[#4f46e5] px-2.5 py-1 text-xs font-semibold text-white hover:bg-indigo-500"
@@ -670,26 +558,6 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 										Stremio addon
 									</Link>
 								</div>
-								<p className="pt-2">
-									No TorBox account yet?{' '}
-									<a
-										href={TORBOX_REFERRAL_URL}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="font-semibold text-[#818cf8] hover:text-indigo-300"
-									>
-										Sign up for TorBox
-									</a>
-								</p>
-								<p>
-									Real-Debrid user?{' '}
-									<Link
-										href="/is-real-debrid-down-or-just-me"
-										className="font-semibold text-sky-400 hover:text-sky-300"
-									>
-										Check Real-Debrid status
-									</Link>
-								</p>
 							</div>
 						</div>
 					</div>

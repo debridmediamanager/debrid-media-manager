@@ -14,12 +14,6 @@ vi.mock('@/services/repository', () => ({
 			streamDailyDeleted: 0,
 			serverReliabilityDeleted: 0,
 		}),
-		rollupTorBoxDaily: vi.fn().mockResolvedValue(true),
-		cleanupOldTorBoxData: vi.fn().mockResolvedValue({
-			hourlyDeleted: 0,
-			dailyDeleted: 0,
-			checkResultsDeleted: 0,
-		}),
 		rollupTorBoxOperationalDaily: vi.fn().mockResolvedValue(true),
 		cleanupOldTorBoxOperationalData: vi.fn().mockResolvedValue({
 			hourlyDeleted: 0,

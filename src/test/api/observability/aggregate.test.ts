@@ -4,8 +4,6 @@ const mockRepository = vi.hoisted(() => ({
 	repository: {
 		runDailyRollup: vi.fn(),
 		cleanupOldHistoryData: vi.fn(),
-		rollupTorBoxDaily: vi.fn(),
-		cleanupOldTorBoxData: vi.fn(),
 		rollupTorBoxOperationalDaily: vi.fn(),
 		cleanupOldTorBoxOperationalData: vi.fn(),
 	},
@@ -101,9 +99,7 @@ describe('/api/observability/aggregate', () => {
 	it('rolls up and cleans the TorBox user-traffic tables too', async () => {
 		mockRepository.repository.runDailyRollup.mockResolvedValue({});
 		mockRepository.repository.cleanupOldHistoryData.mockResolvedValue({});
-		mockRepository.repository.rollupTorBoxDaily.mockResolvedValue(true);
 		mockRepository.repository.rollupTorBoxOperationalDaily.mockResolvedValue(true);
-		mockRepository.repository.cleanupOldTorBoxData.mockResolvedValue({});
 		mockRepository.repository.cleanupOldTorBoxOperationalData.mockResolvedValue({
 			hourlyDeleted: 3,
 			dailyDeleted: 1,

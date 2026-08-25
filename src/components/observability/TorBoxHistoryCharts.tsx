@@ -12,25 +12,6 @@ import {
 
 type HistoryRange = '24h' | '7d' | '30d' | '90d';
 
-interface TorBoxHourlyData {
-	hour: string;
-	totalNodes: number;
-	workingNodes: number;
-	workingRate: number;
-	apiSuccessRate: number;
-	avgLatencyMs: number | null;
-}
-
-interface TorBoxDailyData {
-	date: string;
-	avgWorkingRate: number;
-	minWorkingRate: number;
-	maxWorkingRate: number;
-	avgApiSuccessRate: number;
-	avgLatencyMs: number | null;
-	checksCount: number;
-}
-
 interface TorBoxApiHourlyData {
 	hour: string;
 	totalCount: number;
@@ -60,7 +41,6 @@ const FIXED_LOCALE = 'en-US';
 
 // TorBox indigo, per the service colour coding in CLAUDE.md.
 const TORBOX_INDIGO = '#4f46e5';
-const LATENCY_SKY = '#38bdf8';
 const USER_API_SKY = '#0ea5e9';
 
 // Ensure UTC timestamps are parsed correctly (append Z if missing timezone)
@@ -98,21 +78,19 @@ function formatPercent(value: number): string {
 	return `${Math.round(value * 100)}%`;
 }
 
-interface ChartPoint {
-	time: string;
-	workingRate: number;
-	avgLatencyMs: number | null;
+function formatCount(value: number): string {
+	return value.toLocaleString(FIXED_LOCALE);
 }
 
 interface UserApiChartPoint {
 	time: string;
 	successRate: number;
 	totalCount: number;
+	failureCount: number;
 }
 
 export function TorBoxHistoryCharts() {
 	const [range, setRange] = useState<HistoryRange>('24h');
-	const [data, setData] = useState<(TorBoxHourlyData | TorBoxDailyData)[]>([]);
 	const [userApiData, setUserApiData] = useState<(TorBoxApiHourlyData | TorBoxApiDailyData)[]>(
 		[]
 	);
@@ -132,32 +110,21 @@ export function TorBoxHistoryCharts() {
 						? window.location.origin
 						: 'http://localhost:3000';
 
-				const [response, userApiResponse] = await Promise.all([
-					fetch(`${origin}/api/observability/history?type=torbox&range=${range}`),
-					fetch(`${origin}/api/observability/history?type=torbox-api&range=${range}`),
-				]);
+				const response = await fetch(
+					`${origin}/api/observability/history?type=torbox-api&range=${range}`
+				);
 
 				if (!response.ok) {
 					throw new Error('Failed to fetch TorBox history data');
 				}
 
 				const json = (await response.json()) as HistoryResponse<
-					TorBoxHourlyData | TorBoxDailyData
+					TorBoxApiHourlyData | TorBoxApiDailyData
 				>;
 
 				if (!isActive()) return;
-				setData(json.data ?? []);
+				setUserApiData(json.data ?? []);
 				setGranularity((json.granularity as 'hourly' | 'daily') ?? 'hourly');
-
-				// The user-traffic series is additive: if it fails, the synthetic
-				// charts still render rather than the whole section erroring out.
-				if (userApiResponse.ok) {
-					const userApiJson = (await userApiResponse.json()) as HistoryResponse<
-						TorBoxApiHourlyData | TorBoxApiDailyData
-					>;
-					if (!isActive()) return;
-					setUserApiData(userApiJson.data ?? []);
-				}
 			} catch (err) {
 				if (!isActive()) return;
 				console.error('Failed to fetch TorBox history:', err);
@@ -191,21 +158,12 @@ export function TorBoxHistoryCharts() {
 		return isMultiDay ? formatDateAndTime(time) : formatShortTime(time);
 	}
 
-	const chartData: ChartPoint[] = (data ?? [])
-		.map((item) => ({
-			time: 'hour' in item ? item.hour : item.date,
-			workingRate: 'avgWorkingRate' in item ? item.avgWorkingRate : item.workingRate,
-			avgLatencyMs: item.avgLatencyMs,
-		}))
-		.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
-
-	const latencyData = chartData.filter((point) => point.avgLatencyMs !== null);
-
 	const userApiChartData: UserApiChartPoint[] = (userApiData ?? [])
 		.map((item) => ({
 			time: 'hour' in item ? item.hour : item.date,
 			successRate: 'avgSuccessRate' in item ? item.avgSuccessRate : item.successRate,
 			totalCount: item.totalCount,
+			failureCount: item.failureCount,
 		}))
 		.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
 
@@ -302,222 +260,153 @@ export function TorBoxHistoryCharts() {
 				</div>
 			</div>
 
-			{chartData.length === 0 && userApiChartData.length === 0 ? (
+			{userApiChartData.length === 0 ? (
 				<div className="flex h-64 items-center justify-center">
 					<div className="text-center text-slate-400">
 						<BarChart3 className="mx-auto h-12 w-12 text-slate-600" />
 						<p className="mt-3">No historical data available yet</p>
 						<p className="mt-1 text-xs text-slate-500">
-							Data appears after the first health check runs
+							Data appears once DMM users start calling TorBox
 						</p>
 					</div>
 				</div>
 			) : (
 				<div className="space-y-6">
-					{chartData.length > 0 && (
-						<div
-							data-testid="torbox-cdn-chart"
-							className="rounded-xl border border-white/10 bg-black/20 p-4"
-						>
-							<h3 className="mb-4 text-sm font-medium text-slate-200">
-								CDN Nodes Serving Bytes
-							</h3>
-							<ResponsiveContainer width="100%" height={200}>
-								<AreaChart data={chartData}>
-									<defs>
-										<linearGradient
-											id="torboxCdnGradient"
-											x1="0"
-											y1="0"
-											x2="0"
-											y2="1"
-										>
-											<stop
-												offset="5%"
-												stopColor={TORBOX_INDIGO}
-												stopOpacity={0.4}
-											/>
-											<stop
-												offset="95%"
-												stopColor={TORBOX_INDIGO}
-												stopOpacity={0}
-											/>
-										</linearGradient>
-									</defs>
-									<CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-									<XAxis
-										dataKey="time"
-										{...axisProps}
-										interval="preserveStartEnd"
-										minTickGap={40}
-										tickFormatter={formatTickLabel}
-									/>
-									<YAxis
-										{...axisProps}
-										tickFormatter={(v) => formatPercent(v)}
-										domain={[0, 1]}
-									/>
-									<Tooltip
-										{...tooltipProps}
-										labelFormatter={(_, payload) =>
-											payload && payload.length > 0
-												? formatTooltipLabel(payload[0].payload.time)
-												: ''
-										}
-										formatter={(value) => [
-											formatPercent(value as number),
-											'Nodes serving',
-										]}
-									/>
-									<Area
-										type="monotone"
-										dataKey="workingRate"
-										stroke={TORBOX_INDIGO}
-										fill="url(#torboxCdnGradient)"
-										strokeWidth={2}
-									/>
-								</AreaChart>
-							</ResponsiveContainer>
-						</div>
-					)}
+					<div
+						data-testid="torbox-user-api-chart"
+						className="rounded-xl border border-white/10 bg-black/20 p-4"
+					>
+						<h3 className="mb-4 text-sm font-medium text-slate-200">
+							User API Success Rate
+						</h3>
+						<ResponsiveContainer width="100%" height={200}>
+							<AreaChart data={userApiChartData}>
+								<defs>
+									<linearGradient
+										id="torboxUserApiGradient"
+										x1="0"
+										y1="0"
+										x2="0"
+										y2="1"
+									>
+										<stop
+											offset="5%"
+											stopColor={USER_API_SKY}
+											stopOpacity={0.3}
+										/>
+										<stop
+											offset="95%"
+											stopColor={USER_API_SKY}
+											stopOpacity={0}
+										/>
+									</linearGradient>
+								</defs>
+								<CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+								<XAxis
+									dataKey="time"
+									{...axisProps}
+									interval="preserveStartEnd"
+									minTickGap={40}
+									tickFormatter={formatTickLabel}
+								/>
+								<YAxis
+									{...axisProps}
+									tickFormatter={(v) => formatPercent(v)}
+									domain={[0, 1]}
+								/>
+								<Tooltip
+									{...tooltipProps}
+									labelFormatter={(_, payload) =>
+										payload && payload.length > 0
+											? formatTooltipLabel(payload[0].payload.time)
+											: ''
+									}
+									formatter={(value, _name, entry) => [
+										`${formatPercent(value as number)} of ${formatCount(
+											entry?.payload?.totalCount ?? 0
+										)} calls`,
+										'Success rate',
+									]}
+								/>
+								<Area
+									type="monotone"
+									dataKey="successRate"
+									stroke={USER_API_SKY}
+									fill="url(#torboxUserApiGradient)"
+									strokeWidth={2}
+								/>
+							</AreaChart>
+						</ResponsiveContainer>
+					</div>
 
-					{userApiChartData.length > 0 && (
-						<div
-							data-testid="torbox-user-api-chart"
-							className="rounded-xl border border-white/10 bg-black/20 p-4"
-						>
-							<h3 className="text-sm font-medium text-slate-200">
-								User API Success Rate
-							</h3>
-							<p className="mb-4 mt-1 text-xs text-slate-500">
-								Measured from real DMM users&apos; own TorBox API calls
-							</p>
-							<ResponsiveContainer width="100%" height={200}>
-								<AreaChart data={userApiChartData}>
-									<defs>
-										<linearGradient
-											id="torboxUserApiGradient"
-											x1="0"
-											y1="0"
-											x2="0"
-											y2="1"
-										>
-											<stop
-												offset="5%"
-												stopColor={USER_API_SKY}
-												stopOpacity={0.3}
-											/>
-											<stop
-												offset="95%"
-												stopColor={USER_API_SKY}
-												stopOpacity={0}
-											/>
-										</linearGradient>
-									</defs>
-									<CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-									<XAxis
-										dataKey="time"
-										{...axisProps}
-										interval="preserveStartEnd"
-										minTickGap={40}
-										tickFormatter={formatTickLabel}
-									/>
-									<YAxis
-										{...axisProps}
-										tickFormatter={(v) => formatPercent(v)}
-										domain={[0, 1]}
-									/>
-									<Tooltip
-										{...tooltipProps}
-										labelFormatter={(_, payload) =>
-											payload && payload.length > 0
-												? formatTooltipLabel(payload[0].payload.time)
-												: ''
-										}
-										formatter={(value, _name, entry) => [
-											`${formatPercent(value as number)} of ${(
-												entry?.payload?.totalCount ?? 0
-											).toLocaleString(FIXED_LOCALE)} calls`,
-											'Success rate',
-										]}
-									/>
-									<Area
-										type="monotone"
-										dataKey="successRate"
-										stroke={USER_API_SKY}
-										fill="url(#torboxUserApiGradient)"
-										strokeWidth={2}
-									/>
-								</AreaChart>
-							</ResponsiveContainer>
-						</div>
-					)}
-
-					{latencyData.length > 0 && (
-						<div
-							data-testid="torbox-latency-chart"
-							className="rounded-xl border border-white/10 bg-black/20 p-4"
-						>
-							<h3 className="mb-4 text-sm font-medium text-slate-200">
-								Average CDN Latency
-							</h3>
-							<ResponsiveContainer width="100%" height={200}>
-								<AreaChart data={latencyData}>
-									<defs>
-										<linearGradient
-											id="torboxLatencyGradient"
-											x1="0"
-											y1="0"
-											x2="0"
-											y2="1"
-										>
-											<stop
-												offset="5%"
-												stopColor={LATENCY_SKY}
-												stopOpacity={0.3}
-											/>
-											<stop
-												offset="95%"
-												stopColor={LATENCY_SKY}
-												stopOpacity={0}
-											/>
-										</linearGradient>
-									</defs>
-									<CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-									<XAxis
-										dataKey="time"
-										{...axisProps}
-										interval="preserveStartEnd"
-										minTickGap={40}
-										tickFormatter={formatTickLabel}
-									/>
-									<YAxis
-										{...axisProps}
-										tickFormatter={(v) => `${Math.round(v as number)}ms`}
-									/>
-									<Tooltip
-										{...tooltipProps}
-										labelFormatter={(_, payload) =>
-											payload && payload.length > 0
-												? formatTooltipLabel(payload[0].payload.time)
-												: ''
-										}
-										formatter={(value) => [
-											`${Math.round(value as number)}ms`,
-											'Avg latency',
-										]}
-									/>
-									<Area
-										type="monotone"
-										dataKey="avgLatencyMs"
-										stroke={LATENCY_SKY}
-										fill="url(#torboxLatencyGradient)"
-										strokeWidth={2}
-									/>
-								</AreaChart>
-							</ResponsiveContainer>
-						</div>
-					)}
+					{/*
+					  Volume sits next to the rate because the rate alone is
+					  unreadable without it: a quiet hour can swing to 0% on a
+					  handful of calls, which is a sample-size artefact rather
+					  than an outage.
+					*/}
+					<div
+						data-testid="torbox-volume-chart"
+						className="rounded-xl border border-white/10 bg-black/20 p-4"
+					>
+						<h3 className="mb-4 text-sm font-medium text-slate-200">
+							TorBox Calls by DMM Users
+						</h3>
+						<ResponsiveContainer width="100%" height={200}>
+							<AreaChart data={userApiChartData}>
+								<defs>
+									<linearGradient
+										id="torboxVolumeGradient"
+										x1="0"
+										y1="0"
+										x2="0"
+										y2="1"
+									>
+										<stop
+											offset="5%"
+											stopColor={TORBOX_INDIGO}
+											stopOpacity={0.3}
+										/>
+										<stop
+											offset="95%"
+											stopColor={TORBOX_INDIGO}
+											stopOpacity={0}
+										/>
+									</linearGradient>
+								</defs>
+								<CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+								<XAxis
+									dataKey="time"
+									{...axisProps}
+									interval="preserveStartEnd"
+									minTickGap={40}
+									tickFormatter={formatTickLabel}
+								/>
+								<YAxis {...axisProps} tickFormatter={(v) => formatCount(v)} />
+								<Tooltip
+									{...tooltipProps}
+									labelFormatter={(_, payload) =>
+										payload && payload.length > 0
+											? formatTooltipLabel(payload[0].payload.time)
+											: ''
+									}
+									formatter={(value, _name, entry) => [
+										`${formatCount(value as number)} calls, ${formatCount(
+											entry?.payload?.failureCount ?? 0
+										)} server errors`,
+										'Volume',
+									]}
+								/>
+								<Area
+									type="monotone"
+									dataKey="totalCount"
+									stroke={TORBOX_INDIGO}
+									fill="url(#torboxVolumeGradient)"
+									strokeWidth={2}
+								/>
+							</AreaChart>
+						</ResponsiveContainer>
+					</div>
 				</div>
 			)}
 		</section>

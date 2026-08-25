@@ -44,53 +44,8 @@ function buildTbApiStats(overrides: Partial<TorBoxOverallStats> = {}): TorBoxOve
 
 function buildStats(overrides: Partial<TorBoxObservabilityStats> = {}): TorBoxObservabilityStats {
 	return {
-		cdn: {
-			total: 2,
-			working: 2,
-			rate: 1,
-			lastChecked: NOW - 60_000,
-			avgLatencyMs: 150,
-			fastestNode: 'nexus-067.ceur.tb-cdn.st',
-			inProgress: false,
-			nodes: [
-				{
-					host: 'nexus-067.ceur.tb-cdn.st',
-					region: 'ceur',
-					name: 'nexus-067',
-					latencyMs: 100,
-					ok: true,
-					error: null,
-				},
-				{
-					host: 'nexus-115.japn.tb-cdn.pw',
-					region: 'japn',
-					name: 'nexus-115',
-					latencyMs: 200,
-					ok: true,
-					error: null,
-				},
-			],
-		},
-		api: {
-			ok: true,
-			latencyMs: 42,
-			detail: 'API is running.',
-			successCount: 3,
-			totalCount: 3,
-			successRate: 1,
-			recentChecks: [
-				{
-					apiOk: true,
-					apiLatencyMs: 42,
-					apiDetail: 'API is running.',
-					totalNodes: 2,
-					workingNodes: 2,
-					checkedAt: NOW - 60_000,
-				},
-			],
-		},
 		tbApi: buildTbApiStats(),
-		service: { totalUsers: 944281, totalServers: 212 },
+		windowHours: 2,
 		lastChecked: NOW - 60_000,
 		...overrides,
 	};
@@ -125,18 +80,45 @@ describe('TorBoxStatusPage', () => {
 		}
 	});
 
-	it('renders the operational verdict with every card', async () => {
+	it('renders the operational verdict from real user traffic', async () => {
 		const { getByTestId } = render(<TorBoxStatusPage />);
 
 		await waitFor(() => expect(getByTestId('status-answer')).toHaveTextContent('Operational'));
-		expect(getByTestId('cdn-card')).toHaveTextContent('100%');
-		expect(getByTestId('cdn-card')).toHaveTextContent('2/2 regions');
-		expect(getByTestId('api-card')).toHaveTextContent('Up');
-		expect(getByTestId('service-card')).toHaveTextContent('212');
+		expect(getByTestId('tb-api-rate')).toHaveTextContent('98%');
+		expect(getByTestId('volume-card')).toHaveTextContent('100');
 	});
 
-	// This card is the whole point of the page mirroring /is-real-debrid-down-or-just-me:
-	// what TorBox returned to real users, not to a synthetic prober.
+	// The page used to run its own probe of api.torbox.app and let it decide the
+	// verdict. TorBox rate-limits that single datacentre IP - measured 2026-08-25
+	// at 5/12 pings answering HTTP 429 while real users were at 96% - so the page
+	// announced a major outage that no user was experiencing.
+	describe('no synthetic probing', () => {
+		it('renders no card fed by a probe of our own', async () => {
+			const { queryByTestId, getByTestId } = render(<TorBoxStatusPage />);
+
+			await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
+			expect(queryByTestId('cdn-card')).toBeNull();
+			expect(queryByTestId('api-card')).toBeNull();
+			expect(queryByTestId('service-card')).toBeNull();
+			expect(queryByTestId('auth-card')).toBeNull();
+		});
+
+		it('asks only the DMM observability endpoint, never TorBox', async () => {
+			render(<TorBoxStatusPage />);
+
+			await waitFor(() => expect(globalWithFetch.fetch).toHaveBeenCalled());
+			const urls = vi
+				.mocked(globalWithFetch.fetch as unknown as ReturnType<typeof vi.fn>)
+				.mock.calls.map((call) => String(call[0]));
+			expect(urls.length).toBeGreaterThan(0);
+			for (const url of urls) {
+				expect(url).toContain('/api/observability/torbox');
+				expect(url).not.toContain('torbox.app');
+				expect(url).not.toContain('tb-cdn');
+			}
+		});
+	});
+
 	describe('user API success rate', () => {
 		it('reports the rate measured from real DMM users', async () => {
 			const { getByTestId } = render(<TorBoxStatusPage />);
@@ -144,6 +126,15 @@ describe('TorBoxStatusPage', () => {
 			await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
 			expect(getByTestId('tb-api-rate')).toHaveTextContent('98%');
 			expect(getByTestId('tb-api-card')).toHaveTextContent('98 of 100');
+		});
+
+		it('labels the card with the window the server actually used', async () => {
+			setMockFetch(buildStats({ windowHours: 2 }));
+
+			const { getByTestId } = render(<TorBoxStatusPage />);
+
+			await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
+			expect(getByTestId('tb-api-card')).toHaveTextContent('User API Success Rate (2h)');
 		});
 
 		it('breaks the rate down per operation, busiest first', async () => {
@@ -188,11 +179,53 @@ describe('TorBoxStatusPage', () => {
 
 			await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
 			expect(getByTestId('tb-api-rate')).toHaveTextContent('—');
+			expect(getByTestId('status-answer')).toHaveTextContent('Collecting data');
 		});
 
-		// A wave of user 5xx must not silently flip the headline verdict: that
-		// stays derived from the unauthenticated probes, as on the RD page.
-		it('does not let user traffic drive the headline verdict', async () => {
+		// Only 2xx and 5xx are counted. The gap between the two totals is 4xx -
+		// a caller's own bad key, which says nothing about whether TorBox is up.
+		it('excludes 4xx answers from the denominator and says so', async () => {
+			setMockFetch(
+				buildStats({
+					tbApi: buildTbApiStats({
+						totalCount: 500,
+						successCount: 98,
+						failureCount: 2,
+						successRate: 0.98,
+					}),
+				})
+			);
+
+			const { getByTestId } = render(<TorBoxStatusPage />);
+
+			await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
+			expect(getByTestId('tb-api-card')).toHaveTextContent('98 of 100');
+			expect(getByTestId('volume-card')).toHaveTextContent('400');
+			expect(getByTestId('volume-card')).toHaveTextContent('excluded');
+		});
+	});
+
+	describe('the verdict', () => {
+		it('calls a run of user 5xx degraded', async () => {
+			setMockFetch(
+				buildStats({
+					tbApi: buildTbApiStats({
+						totalCount: 100,
+						successCount: 70,
+						failureCount: 30,
+						successRate: 0.7,
+					}),
+				})
+			);
+
+			const { getByTestId } = render(<TorBoxStatusPage />);
+
+			await waitFor(() =>
+				expect(getByTestId('status-answer')).toHaveTextContent('Partial Outage')
+			);
+		});
+
+		it('calls it down when most user calls fail', async () => {
 			setMockFetch(
 				buildStats({
 					tbApi: buildTbApiStats({
@@ -208,140 +241,66 @@ describe('TorBoxStatusPage', () => {
 			const { getByTestId } = render(<TorBoxStatusPage />);
 
 			await waitFor(() =>
-				expect(getByTestId('status-answer')).toHaveTextContent('Operational')
+				expect(getByTestId('status-answer')).toHaveTextContent('Major Outage')
 			);
 			expect(getByTestId('tb-api-rate')).toHaveTextContent('10%');
 		});
+
+		// Without a fixed-cadence probe there is no sample-size floor of its own,
+		// so a quiet night could otherwise read as a total outage off two calls.
+		it('refuses to call it either way on too small a sample', async () => {
+			setMockFetch(
+				buildStats({
+					tbApi: buildTbApiStats({
+						totalCount: 2,
+						successCount: 0,
+						failureCount: 2,
+						successRate: 0,
+						isDown: true,
+					}),
+				})
+			);
+
+			const { getByTestId } = render(<TorBoxStatusPage />);
+
+			await waitFor(() =>
+				expect(getByTestId('status-answer')).toHaveTextContent('Collecting data')
+			);
+			expect(getByTestId('volume-card')).toHaveTextContent('floor');
+		});
 	});
 
-	it('labels regions with readable names', async () => {
-		const { getByTestId } = render(<TorBoxStatusPage />);
+	describe('freshness', () => {
+		// Counters are bucketed by the hour, so a bucket start is routinely tens
+		// of minutes old while traffic is flowing. Warning at 15m would fire
+		// almost permanently.
+		it('does not warn while an hour bucket is merely mid-flight', async () => {
+			setMockFetch(buildStats({ lastChecked: NOW - 50 * 60 * 1000 }));
 
-		await waitFor(() => expect(getByTestId('cdn-card')).toBeInTheDocument());
-		expect(getByTestId('cdn-card')).toHaveTextContent('Central Europe');
-		expect(getByTestId('cdn-card')).toHaveTextContent('Japan');
-	});
+			const { queryByTestId, getByTestId } = render(<TorBoxStatusPage />);
 
-	it('calls a partial CDN outage degraded, not down', async () => {
-		const stats = buildStats();
-		stats.cdn = {
-			...stats.cdn,
-			total: 4,
-			working: 3,
-			rate: 0.75,
-			nodes: [
-				...stats.cdn.nodes,
-				{
-					host: 'nexus-999.apac.tb-cdn.pw',
-					region: 'apac',
-					name: 'nexus-999',
-					latencyMs: 300,
-					ok: true,
-					error: null,
-				},
-				{
-					host: 'nexus-888.indi.tb-cdn.pw',
-					region: 'indi',
-					name: 'nexus-888',
-					latencyMs: null,
-					ok: false,
-					error: 'Timeout',
-				},
-			],
-		};
-		setMockFetch(stats);
+			await waitFor(() => expect(getByTestId('status-freshness')).toBeInTheDocument());
+			expect(queryByTestId('stale-banner')).toBeNull();
+		});
 
-		const { getByTestId } = render(<TorBoxStatusPage />);
+		it('warns once a whole bucket has gone by with no recorded call', async () => {
+			setMockFetch(buildStats({ lastChecked: NOW - 3 * 60 * 60 * 1000 }));
 
-		await waitFor(() =>
-			expect(getByTestId('status-answer')).toHaveTextContent('Partial Outage')
-		);
-		expect(getByTestId('cdn-card')).toHaveTextContent('Not serving (1)');
-		expect(getByTestId('cdn-card')).toHaveTextContent('India');
-	});
+			const { getByTestId } = render(<TorBoxStatusPage />);
 
-	it('calls it down when most regions stop serving bytes', async () => {
-		const stats = buildStats();
-		stats.cdn = { ...stats.cdn, total: 4, working: 1, rate: 0.25 };
-		setMockFetch(stats);
+			await waitFor(() => expect(getByTestId('stale-banner')).toBeInTheDocument());
+			expect(getByTestId('stale-banner')).toHaveTextContent(
+				'No TorBox call has been recorded'
+			);
+		});
 
-		const { getByTestId } = render(<TorBoxStatusPage />);
+		it('reports its own load time rather than a stored check time', async () => {
+			const { getByTestId } = render(<TorBoxStatusPage />);
 
-		await waitFor(() => expect(getByTestId('status-answer')).toHaveTextContent('Major Outage'));
-	});
-
-	it('calls it down when the API root stops answering', async () => {
-		const stats = buildStats();
-		stats.api = { ...stats.api, ok: false, detail: 'ECONNREFUSED', latencyMs: null };
-		setMockFetch(stats);
-
-		const { getByTestId } = render(<TorBoxStatusPage />);
-
-		await waitFor(() => expect(getByTestId('status-answer')).toHaveTextContent('Major Outage'));
-		expect(getByTestId('api-card')).toHaveTextContent('Down');
-	});
-
-	// The authenticated panel was removed: it reported on our own monitoring key
-	// rather than on TorBox, and never affected the verdict.
-	it('no longer renders an authenticated-API panel', async () => {
-		const { queryByTestId, getByTestId } = render(<TorBoxStatusPage />);
-
-		await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
-		expect(queryByTestId('auth-card')).toBeNull();
-		expect(queryByTestId('auth-state')).toBeNull();
-	});
-
-	it('shows a waiting state before any check has run', async () => {
-		setMockFetch(
-			buildStats({
-				cdn: {
-					total: 0,
-					working: 0,
-					rate: 0,
-					lastChecked: null,
-					avgLatencyMs: null,
-					fastestNode: null,
-					inProgress: false,
-					nodes: [],
-				},
-				api: {
-					ok: null,
-					latencyMs: null,
-					detail: null,
-					successCount: 0,
-					totalCount: 0,
-					successRate: null,
-					recentChecks: [],
-				},
-				lastChecked: null,
-			})
-		);
-
-		const { getByTestId } = render(<TorBoxStatusPage />);
-
-		await waitFor(() =>
-			expect(getByTestId('status-answer')).toHaveTextContent('Collecting data')
-		);
-		expect(getByTestId('status-freshness')).toHaveTextContent('No check recorded yet');
-	});
-
-	// The freshness label comes from the stored check time, so a stalled cron is
-	// visible instead of being masked by the browser's own fetch clock.
-	it('warns when the stored checks have gone stale', async () => {
-		setMockFetch(buildStats({ lastChecked: NOW - 45 * 60 * 1000 }));
-
-		const { getByTestId } = render(<TorBoxStatusPage />);
-
-		await waitFor(() => expect(getByTestId('stale-banner')).toBeInTheDocument());
-		expect(getByTestId('stale-banner')).toHaveTextContent('stopped updating 45m ago');
-		expect(getByTestId('status-freshness')).toHaveTextContent('Checked 45m ago');
-	});
-
-	it('does not warn while checks are current', async () => {
-		const { queryByTestId, getByTestId } = render(<TorBoxStatusPage />);
-
-		await waitFor(() => expect(getByTestId('status-freshness')).toBeInTheDocument());
-		expect(queryByTestId('stale-banner')).toBeNull();
+			await waitFor(() =>
+				expect(getByTestId('status-freshness')).toHaveTextContent('Updated')
+			);
+		});
 	});
 
 	it('keeps the last good payload when a refresh fails', async () => {

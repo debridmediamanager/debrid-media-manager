@@ -1,145 +1,44 @@
 import type { TorBoxOverallStats } from '@/services/database/torboxOperational';
 import { repository } from '@/services/repository';
 
-import { fetchServiceStats, isTorBoxHealthCheckInProgress } from './torboxHealth';
-
-export interface TorBoxCdnNodeSummary {
-	host: string;
-	region: string;
-	name: string;
-	latencyMs: number | null;
-	ok: boolean;
-	error: string | null;
-}
-
-export interface TorBoxCdnMetricsSummary {
-	total: number;
-	working: number;
-	rate: number;
-	lastChecked: number | null;
-	avgLatencyMs: number | null;
-	fastestNode: string | null;
-	nodes: TorBoxCdnNodeSummary[];
-	inProgress: boolean;
-}
-
-export interface TorBoxApiCheckSummary {
-	apiOk: boolean;
-	apiLatencyMs: number | null;
-	apiDetail: string | null;
-	totalNodes: number;
-	workingNodes: number;
-	checkedAt: number;
-}
-
-export interface TorBoxApiSummary {
-	ok: boolean | null;
-	latencyMs: number | null;
-	detail: string | null;
-	successCount: number;
-	totalCount: number;
-	successRate: number | null;
-	recentChecks: TorBoxApiCheckSummary[];
-}
-
-export interface TorBoxServiceSummary {
-	totalUsers: number | null;
-	totalServers: number | null;
-}
+/**
+ * How far back the user-traffic window reaches, in whole hours.
+ *
+ * Counters are bucketed by hour, and `getStats(n)` keeps buckets whose start is
+ * within the last n hours - so a 1-hour window collapses to "the current bucket
+ * only", which at :01 past the hour is a minute of traffic. The page verdict
+ * rides on this number now, so the window is 2 hours: always one complete
+ * bucket plus the partial current one, never a near-empty sample.
+ */
+export const USER_TRAFFIC_WINDOW_HOURS = 2;
 
 export interface TorBoxObservabilityStats {
-	cdn: TorBoxCdnMetricsSummary;
-	api: TorBoxApiSummary;
 	/**
-	 * What TorBox actually returned to DMM users over the last hour, counted
-	 * from their own API calls rather than from a synthetic probe. Null only
-	 * if the query itself failed.
+	 * What TorBox actually returned to DMM users over the window, counted from
+	 * their own API calls. DMM issues no requests of its own to TorBox - a
+	 * synthetic probe measures one datacentre IP's rate-limit standing, not the
+	 * service, and TorBox 429s it often enough to read as a false outage.
+	 * Null only if the query itself failed.
 	 */
 	tbApi: TorBoxOverallStats | null;
-	service: TorBoxServiceSummary | null;
+	/** Hours covered by `tbApi`, so the page can label its own window. */
+	windowHours: number;
 	/**
-	 * When the stored data was last refreshed by the cron, in epoch millis.
-	 * The page renders this rather than its own fetch time, so a stalled cron
-	 * shows as stale instead of silently looking fresh.
+	 * Start of the most recent hour bucket that has rows, in epoch millis.
+	 * Null when no TorBox traffic has been recorded in the window at all.
 	 */
 	lastChecked: number | null;
 }
 
-const RECENT_CHECK_LIMIT = 12;
-
 /**
- * Assembles the TorBox status payload from stored check results.
- *
- * The public `/v1/api/stats` call is the one live request made per page load -
- * it is unauthenticated, cheap, and purely contextual, so a failure degrades to
- * `null` rather than failing the response.
+ * Assembles the TorBox status payload purely from recorded user traffic.
  */
 export async function getTorBoxObservabilityStats(): Promise<TorBoxObservabilityStats> {
-	const [cdnMetrics, cdnStatuses, recentChecks, tbApi, service] = await Promise.all([
-		repository.getTorBoxCdnMetrics(),
-		repository.getAllTorBoxCdnStatuses(),
-		repository.getRecentTorBoxChecks(RECENT_CHECK_LIMIT),
-		repository.getTorBoxOperationalStats(1),
-		fetchServiceStats().catch(() => null),
-	]);
-
-	const nodes: TorBoxCdnNodeSummary[] = cdnStatuses
-		.map((status) => ({
-			host: status.host,
-			region: status.region,
-			name: status.name,
-			latencyMs: status.latencyMs,
-			ok: status.ok,
-			error: status.error,
-		}))
-		.sort((a, b) => {
-			if (a.ok !== b.ok) return a.ok ? -1 : 1;
-			return (a.latencyMs ?? Infinity) - (b.latencyMs ?? Infinity);
-		});
-
-	const apiChecks: TorBoxApiCheckSummary[] = recentChecks.map((check) => ({
-		apiOk: check.apiOk,
-		apiLatencyMs: check.apiLatencyMs,
-		apiDetail: check.apiDetail,
-		totalNodes: check.totalNodes,
-		workingNodes: check.workingNodes,
-		checkedAt: check.checkedAt.getTime(),
-	}));
-
-	const latest = apiChecks[0] ?? null;
-	const apiSuccessCount = apiChecks.filter((c) => c.apiOk).length;
-
-	// The freshest of the two clocks: a check row is written on every run, even
-	// one where node discovery failed and the CDN table was left untouched.
-	const lastChecked = maxOrNull([cdnMetrics.lastChecked, latest?.checkedAt ?? null]);
+	const tbApi = await repository.getTorBoxOperationalStats(USER_TRAFFIC_WINDOW_HOURS);
 
 	return {
-		cdn: {
-			total: cdnMetrics.total,
-			working: cdnMetrics.working,
-			rate: cdnMetrics.rate,
-			lastChecked: cdnMetrics.lastChecked,
-			avgLatencyMs: cdnMetrics.avgLatencyMs,
-			fastestNode: cdnMetrics.fastestNode,
-			nodes,
-			inProgress: isTorBoxHealthCheckInProgress(),
-		},
-		api: {
-			ok: latest ? latest.apiOk : null,
-			latencyMs: latest?.apiLatencyMs ?? null,
-			detail: latest?.apiDetail ?? null,
-			successCount: apiSuccessCount,
-			totalCount: apiChecks.length,
-			successRate: apiChecks.length > 0 ? apiSuccessCount / apiChecks.length : null,
-			recentChecks: apiChecks,
-		},
 		tbApi,
-		service,
-		lastChecked,
+		windowHours: USER_TRAFFIC_WINDOW_HOURS,
+		lastChecked: tbApi?.lastHour ? new Date(tbApi.lastHour).getTime() : null,
 	};
-}
-
-function maxOrNull(values: Array<number | null>): number | null {
-	const defined = values.filter((v): v is number => v !== null);
-	return defined.length > 0 ? Math.max(...defined) : null;
 }

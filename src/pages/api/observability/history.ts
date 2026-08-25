@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { repository } from '@/services/repository';
 
 export type HistoryRange = '24h' | '7d' | '30d' | '90d';
-export type HistoryType = 'stream' | 'servers' | 'rd' | 'torrentio' | 'torbox' | 'torbox-api';
+export type HistoryType = 'stream' | 'servers' | 'rd' | 'torrentio' | 'torbox-api';
 
 interface HistoryQuery {
 	type?: HistoryType;
@@ -142,35 +142,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				const data = await repository.getTorrentioHourlyHistory(hoursBack!);
 				return res.status(200).json({
 					type: 'torrentio',
-					granularity: 'hourly',
-					range,
-					data,
-				});
-			}
-
-			case 'torbox': {
-				if (useDaily) {
-					const dailyData = await repository.getTorBoxDailyHistory(daysBack);
-					if (dailyData.length > 0) {
-						return res.status(200).json({
-							type: 'torbox',
-							granularity: 'daily',
-							range,
-							data: dailyData,
-						});
-					}
-					// Fall back to hourly until the first daily rollup has run.
-					const hourlyData = await repository.getTorBoxHourlyHistory(MAX_HOURLY_HOURS);
-					return res.status(200).json({
-						type: 'torbox',
-						granularity: 'hourly',
-						range,
-						data: hourlyData,
-					});
-				}
-				const data = await repository.getTorBoxHourlyHistory(hoursBack!);
-				return res.status(200).json({
-					type: 'torbox',
 					granularity: 'hourly',
 					range,
 					data,

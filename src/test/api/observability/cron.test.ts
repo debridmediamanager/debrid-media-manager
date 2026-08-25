@@ -8,21 +8,15 @@ const torrentioMocks = vi.hoisted(() => ({
 	runTorrentioHealthCheckNow: vi.fn(),
 }));
 
-const torboxMocks = vi.hoisted(() => ({
-	runTorBoxHealthCheckNow: vi.fn(),
-}));
-
 const repositoryMocks = vi.hoisted(() => ({
 	repository: {
 		runDailyRollup: vi.fn(),
-		rollupTorBoxDaily: vi.fn(),
 		rollupTorBoxOperationalDaily: vi.fn(),
 	},
 }));
 
 vi.mock('@/lib/observability/streamServersHealth', () => healthMocks);
 vi.mock('@/lib/observability/torrentioHealth', () => torrentioMocks);
-vi.mock('@/lib/observability/torboxHealth', () => torboxMocks);
 vi.mock('@/services/repository', () => repositoryMocks);
 
 import handler from '@/pages/api/observability/cron';
@@ -191,7 +185,6 @@ describe('API /api/observability/cron', () => {
 			rdDailyRolled: false,
 			torrentioDailyRolled: true,
 		});
-		repositoryMocks.repository.rollupTorBoxDaily.mockResolvedValue(true);
 		repositoryMocks.repository.rollupTorBoxOperationalDaily.mockResolvedValue(true);
 
 		const req = createMockRequest({ method: 'POST' });
@@ -204,7 +197,6 @@ describe('API /api/observability/cron', () => {
 			streamDailyRolled: true,
 			rdDailyRolled: false,
 			torrentioDailyRolled: true,
-			torboxDailyRolled: true,
 			torboxApiDailyRolled: true,
 		});
 	});

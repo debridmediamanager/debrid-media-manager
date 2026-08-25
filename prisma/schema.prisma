@@ -623,6 +623,17 @@ model ServerReliabilityDaily {
   @@index([reliability])
 }
 
+// The four TorBoxCdnHealth / TorBoxCheckResult / TorBoxHealthHourly /
+// TorBoxHealthDaily models below are RETAINED BUT UNUSED. They held the results
+// of a synthetic probe DMM ran against api.torbox.app and the TorBox CDN nodes
+// every 5 minutes; that probe was removed because TorBox rate-limits a single
+// datacentre IP - measured 2026-08-25 at 5 of 12 pings answering HTTP 429 while
+// real users were succeeding at 96% - so the probe reported outages nobody was
+// having. TorBox availability is now counted from real user traffic in
+// TorBoxOperationalHourly / TorBoxOperationalDaily instead.
+//
+// No code reads or writes these four. The rows are kept so the history is not
+// destroyed; drop them in a migration once you are sure nothing wants it back.
 model TorBoxCdnHealth {
   host      String   @id @db.VarChar(191)
   region    String   @db.VarChar(32)
