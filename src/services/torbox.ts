@@ -22,7 +22,6 @@ export type { TorBoxCachedResponse, TorBoxTorrentInfo, TorBoxUser, TorBoxWebDown
 // Safely access Next.js runtime config in test/non-Next environments
 const fallbackRuntimeConfig = {
 	proxy: '',
-	authProxy: '',
 	torboxHostname: 'https://api.torbox.app',
 };
 
@@ -159,23 +158,26 @@ function getProxyUrl(baseUrl: string): string {
 
 // Get the base URL for TorBox API (with or without proxy)
 // Server-side calls bypass the proxy (the CF Worker rejects them with 403);
-// client-side calls go through a proxy to avoid CORS.
+// client-side calls go through the Cloudflare Worker to avoid CORS.
 //
-// Browser traffic goes through our own anticors (authProxy) rather than the
-// Cloudflare Worker, because that is the only hop we can observe: it is where
-// `/is-torbox-down-or-just-me` counts what real users' TorBox calls actually
-// returned. The Worker stays the path for `credentialInQuery` callers -
-// requestdl puts the raw API key in `?token=`, and routing those through our
-// own nginx would write user API keys into its access log.
-function getTorBoxBaseUrl(options?: { credentialInQuery?: boolean }): string {
+// Browser traffic must NOT go through our own anticors (`authProxy`). That
+// hostname is wildcard DNS onto the single dmm-01 host, so it pools every
+// user's TorBox calls into one per-IP rate-limit bucket - TorBox began 429ing
+// 7 minutes after we tried it on 2026-08-24 and throttled ~20% of all calls
+// until it was reverted. The Worker egresses from Cloudflare's pool instead,
+// which is what keeps each user in their own bucket. It is also the only safe
+// path for requestdl, which puts the raw API key in `?token=`: our own nginx
+// logs query strings, the Worker does not.
+//
+// Observing this traffic is the Worker's job, not a reason to re-route it.
+function getTorBoxBaseUrl(): string {
 	const torboxHost = config.torboxHostname || BASE_URL;
 	const isServer = typeof window === 'undefined';
 	if (isServer) {
 		return torboxHost;
 	}
-	const proxy = options?.credentialInQuery ? config.proxy : config.authProxy || config.proxy;
-	if (proxy) {
-		return `${getProxyUrl(proxy)}${torboxHost}`;
+	if (config.proxy) {
+		return `${getProxyUrl(config.proxy)}${torboxHost}`;
 	}
 	return torboxHost;
 }
@@ -430,7 +432,7 @@ export const requestDownloadLink = async (
 	options?: { skipRetry?: boolean; timeout?: number }
 ): Promise<TorBoxResponse<string>> => {
 	const response = await torBoxAxios.get<TorBoxResponse<string>>(
-		`${getTorBoxBaseUrl({ credentialInQuery: true })}/${API_VERSION}/api/torrents/requestdl`,
+		`${getTorBoxBaseUrl()}/${API_VERSION}/api/torrents/requestdl`,
 		{
 			params: {
 				token: accessToken,
@@ -638,7 +640,7 @@ export const requestWebDownloadLink = async (
 	options?: { skipRetry?: boolean; timeout?: number }
 ): Promise<TorBoxResponse<string>> => {
 	const response = await torBoxAxios.get<TorBoxResponse<string>>(
-		`${getTorBoxBaseUrl({ credentialInQuery: true })}/${API_VERSION}/api/webdl/requestdl`,
+		`${getTorBoxBaseUrl()}/${API_VERSION}/api/webdl/requestdl`,
 		{
 			params: {
 				token: accessToken,

@@ -52,7 +52,7 @@ vi.mock('@/utils/delay', () => ({
 	delay: vi.fn(() => Promise.resolve()),
 }));
 
-import { getTorrentList, requestDownloadLink } from './torbox';
+import { getTorrentList, getUserData, requestDownloadLink } from './torbox';
 
 const TB = 'https://api.torbox.test';
 
@@ -64,19 +64,34 @@ beforeEach(() => {
 });
 
 describe('TorBox browser proxy routing', () => {
-	// The self-hosted anticors is the only hop DMM can observe, which is what
-	// /is-torbox-down-or-just-me counts. The Cloudflare Worker records nothing.
-	it('routes an ordinary browser call through the self-hosted anticors', async () => {
+	// Browser traffic must egress from the Cloudflare Worker's IP pool, never
+	// from our own anticors. `*.cors.debridmediamanager.com` resolves to the one
+	// dmm-01 host, so routing every user's TorBox calls through it pooled the
+	// whole user base into a single per-IP rate-limit bucket. TorBox started
+	// 429ing 7 minutes after that shipped on 2026-08-24 and kept throttling ~20%
+	// of all calls (27% of `/user/me`), which wedged the home page for 330 of 549
+	// users: `index.tsx` renders nothing until every provider profile resolves,
+	// and a 429 parks `getUserData` behind a 5-minute pause for 3 retries.
+	it('routes an ordinary browser call through the Cloudflare Worker', async () => {
 		await getTorrentList('token');
 
 		const url = mocks.getMock.mock.calls[0][0] as string;
-		expect(url).toMatch(/^https:\/\/\d+\.cors\.example\/api\/anticors\?url=/);
 		expect(url).toContain(`${TB}/v1/api/torrents/mylist`);
+		expect(url).toMatch(/^https:\/\/anticors\.example\/anticors\?url=/);
 	});
 
-	// requestdl puts the raw API key in `?token=`. Routing it through our own
-	// nginx would write user API keys into its access log, so it stays on the
-	// Worker even though that costs us the measurement.
+	// The profile call is the one that gates the home page, so it is the one a
+	// shared rate-limit bucket hurts most.
+	it('keeps the profile call off our own single-IP anticors', async () => {
+		await getUserData('token');
+
+		const url = mocks.getMock.mock.calls[0][0] as string;
+		expect(url).toContain(`${TB}/v1/api/user/me`);
+		expect(url).not.toMatch(/\d+\.cors\.example/);
+	});
+
+	// requestdl puts the raw API key in `?token=`. Our own nginx logs query
+	// strings, so these must stay off it regardless of what else changes.
 	it('keeps requestdl on the Cloudflare Worker proxy', async () => {
 		mocks.getMock.mockResolvedValue({ data: { success: true, data: 'link' }, status: 200 });
 
@@ -84,7 +99,7 @@ describe('TorBox browser proxy routing', () => {
 
 		const url = mocks.getMock.mock.calls[0][0] as string;
 		expect(url).toBe(`https://anticors.example/anticors?url=${TB}/v1/api/torrents/requestdl`);
-		expect(url).not.toMatch(/^https:\/\/\d+\.cors\.example/);
+		expect(url).not.toMatch(/\d+\.cors\.example/);
 	});
 
 	it('keeps webdl requestdl on the Cloudflare Worker proxy too', async () => {
