@@ -1,4 +1,4 @@
-import { render, waitFor, within } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { TorBoxObservabilityStats } from '@/lib/observability/getTorBoxObservabilityStats';
@@ -83,15 +83,12 @@ function buildStats(overrides: Partial<TorBoxObservabilityStats> = {}): TorBoxOb
 					apiOk: true,
 					apiLatencyMs: 42,
 					apiDetail: 'API is running.',
-					authState: 'ok',
-					authError: null,
 					totalNodes: 2,
 					workingNodes: 2,
 					checkedAt: NOW - 60_000,
 				},
 			],
 		},
-		auth: { state: 'ok', error: null },
 		tbApi: buildTbApiStats(),
 		service: { totalUsers: 944281, totalServers: 212 },
 		lastChecked: NOW - 60_000,
@@ -284,28 +281,14 @@ describe('TorBoxStatusPage', () => {
 		expect(getByTestId('api-card')).toHaveTextContent('Down');
 	});
 
-	// A rejected key is a problem with our monitoring credentials. It must never
-	// tell every visitor that TorBox is down.
-	it('keeps the verdict operational when only our API key is rejected', async () => {
-		const stats = buildStats({
-			auth: { state: 'credentials', error: 'AUTH_ERROR: Bad key' },
-		});
-		setMockFetch(stats);
+	// The authenticated panel was removed: it reported on our own monitoring key
+	// rather than on TorBox, and never affected the verdict.
+	it('no longer renders an authenticated-API panel', async () => {
+		const { queryByTestId, getByTestId } = render(<TorBoxStatusPage />);
 
-		const { getByTestId } = render(<TorBoxStatusPage />);
-
-		await waitFor(() => expect(getByTestId('status-answer')).toHaveTextContent('Operational'));
-		const authCard = getByTestId('auth-card');
-		expect(within(authCard).getByTestId('auth-state')).toHaveTextContent('Key rejected');
-		expect(authCard).toHaveTextContent('not a TorBox outage');
-	});
-
-	it('reports an unmeasured authenticated surface without alarm', async () => {
-		setMockFetch(buildStats({ auth: { state: 'skipped', error: null } }));
-
-		const { getByTestId } = render(<TorBoxStatusPage />);
-
-		await waitFor(() => expect(getByTestId('auth-state')).toHaveTextContent('Not measured'));
+		await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
+		expect(queryByTestId('auth-card')).toBeNull();
+		expect(queryByTestId('auth-state')).toBeNull();
 	});
 
 	it('shows a waiting state before any check has run', async () => {

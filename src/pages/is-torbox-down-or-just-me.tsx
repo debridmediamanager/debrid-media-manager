@@ -8,7 +8,6 @@ import {
 	CheckCircle2,
 	Clock,
 	Globe,
-	KeyRound,
 	Loader2,
 	RefreshCw,
 	Server,
@@ -169,7 +168,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 		);
 	}
 
-	const { cdn, api, auth, service, tbApi } = stats;
+	const { cdn, api, service, tbApi } = stats;
 	const cdnPct = cdn.total > 0 ? Math.round(cdn.rate * 100) : null;
 
 	// What TorBox returned to real DMM users in the last hour. Only 5xx counts
@@ -255,34 +254,6 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 	};
 
 	const currentStatus = statusMeta[state];
-
-	const authMeta: Record<
-		typeof auth.state,
-		{ label: string; detail: string; colorClass: string }
-	> = {
-		ok: {
-			label: 'Working',
-			detail: 'user/me and checkcached both answered',
-			colorClass: 'text-emerald-400',
-		},
-		credentials: {
-			label: 'Key rejected',
-			detail: 'TorBox answered but refused our API key - not a TorBox outage',
-			colorClass: 'text-amber-400',
-		},
-		failed: {
-			label: 'Failing',
-			detail: 'An authenticated endpoint did not answer correctly',
-			colorClass: 'text-rose-400',
-		},
-		skipped: {
-			label: 'Not measured',
-			detail: 'No monitoring key configured - public checks above are unaffected',
-			colorClass: 'text-slate-400',
-		},
-	};
-
-	const currentAuth = authMeta[auth.state];
 
 	return (
 		<>
@@ -643,33 +614,6 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 								<p className="mt-3 text-xs text-slate-500">
 									Counted from real DMM users&apos; own TorBox calls. Only server
 									errors count against TorBox.
-								</p>
-							</div>
-						</div>
-
-						<div
-							data-testid="auth-card"
-							className="rounded-xl border border-white/10 bg-white/5 p-6"
-						>
-							<h3 className="flex items-center gap-2 text-sm font-medium text-slate-300">
-								<KeyRound className="h-4 w-4" />
-								Authenticated API
-							</h3>
-							<div className="mt-4">
-								<div
-									className={`text-2xl font-bold ${currentAuth.colorClass}`}
-									data-testid="auth-state"
-								>
-									{currentAuth.label}
-								</div>
-								<p className="mt-2 text-xs text-slate-400">{currentAuth.detail}</p>
-								{auth.error && (
-									<p className="mt-2 break-words rounded bg-black/40 p-2 text-xs text-slate-400">
-										{auth.error}
-									</p>
-								)}
-								<p className="mt-3 text-xs text-slate-500">
-									Measured with our own key. It never affects the verdict above.
 								</p>
 							</div>
 						</div>

@@ -101,7 +101,6 @@ function formatPercent(value: number): string {
 interface ChartPoint {
 	time: string;
 	workingRate: number;
-	apiSuccessRate: number;
 	avgLatencyMs: number | null;
 }
 
@@ -196,8 +195,6 @@ export function TorBoxHistoryCharts() {
 		.map((item) => ({
 			time: 'hour' in item ? item.hour : item.date,
 			workingRate: 'avgWorkingRate' in item ? item.avgWorkingRate : item.workingRate,
-			apiSuccessRate:
-				'avgApiSuccessRate' in item ? item.avgApiSuccessRate : item.apiSuccessRate,
 			avgLatencyMs: item.avgLatencyMs,
 		}))
 		.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
@@ -449,73 +446,6 @@ export function TorBoxHistoryCharts() {
 										dataKey="successRate"
 										stroke={USER_API_SKY}
 										fill="url(#torboxUserApiGradient)"
-										strokeWidth={2}
-									/>
-								</AreaChart>
-							</ResponsiveContainer>
-						</div>
-					)}
-
-					{chartData.length > 0 && (
-						<div
-							data-testid="torbox-api-chart"
-							className="rounded-xl border border-white/10 bg-black/20 p-4"
-						>
-							<h3 className="mb-4 text-sm font-medium text-slate-200">
-								API Availability
-							</h3>
-							<ResponsiveContainer width="100%" height={200}>
-								<AreaChart data={chartData}>
-									<defs>
-										<linearGradient
-											id="torboxApiGradient"
-											x1="0"
-											y1="0"
-											x2="0"
-											y2="1"
-										>
-											<stop
-												offset="5%"
-												stopColor="#10b981"
-												stopOpacity={0.3}
-											/>
-											<stop
-												offset="95%"
-												stopColor="#10b981"
-												stopOpacity={0}
-											/>
-										</linearGradient>
-									</defs>
-									<CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-									<XAxis
-										dataKey="time"
-										{...axisProps}
-										interval="preserveStartEnd"
-										minTickGap={40}
-										tickFormatter={formatTickLabel}
-									/>
-									<YAxis
-										{...axisProps}
-										tickFormatter={(v) => formatPercent(v)}
-										domain={[0, 1]}
-									/>
-									<Tooltip
-										{...tooltipProps}
-										labelFormatter={(_, payload) =>
-											payload && payload.length > 0
-												? formatTooltipLabel(payload[0].payload.time)
-												: ''
-										}
-										formatter={(value) => [
-											formatPercent(value as number),
-											'API up',
-										]}
-									/>
-									<Area
-										type="monotone"
-										dataKey="apiSuccessRate"
-										stroke="#10b981"
-										fill="url(#torboxApiGradient)"
 										strokeWidth={2}
 									/>
 								</AreaChart>
