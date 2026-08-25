@@ -202,6 +202,63 @@ describe('TorBox operation recording', () => {
 		expect(mocks.recordTorBoxOperation).toHaveBeenCalledWith('GET /torrents/mylist', 500);
 	});
 
+	// TorBox dresses application answers as HTTP 500 with its own envelope:
+	// `DATABASE_ERROR` for a torrent id that is not in the account, and
+	// `DOWNLOAD_SERVER_ERROR` for a control operation it will not carry out.
+	// Neither resolves on retry, and retrying a delete is what manufactures the
+	// first one - the delete lands, the response is lost, and the retry finds
+	// the torrent already gone. Measured 2026-08-25: `POST /torrents/
+	// controltorrent` was 74% 5xx over an hour, each failure spending 8
+	// requests across ~6 minutes of backoff before the click reported failure.
+	it('does not retry a 5xx that carries a TorBox application envelope', async () => {
+		await expect(
+			reject(`${TB}/v1/api/torrents/controltorrent`, 'post', {
+				response: { status: 500, data: { success: false, detail: 'DATABASE_ERROR' } },
+			})
+		).rejects.toBeDefined();
+
+		expect(mocks.requestMock).not.toHaveBeenCalled();
+		expect(mocks.recordTorBoxOperation).toHaveBeenCalledTimes(1);
+		expect(mocks.recordTorBoxOperation).toHaveBeenCalledWith(
+			'POST /torrents/controltorrent',
+			500
+		);
+	});
+
+	// An edge 5xx has no envelope - TorBox never answered at all - so it stays
+	// retryable, which is the case the ladder was built for.
+	it('still retries a 5xx with no TorBox envelope', async () => {
+		mocks.requestMock.mockResolvedValue({ data: { success: true }, status: 200 });
+
+		await reject(`${TB}/v1/api/torrents/mylist`, 'get', { response: { status: 502 } });
+
+		expect(mocks.requestMock).toHaveBeenCalled();
+		expect(mocks.recordTorBoxOperation).not.toHaveBeenCalled();
+	});
+
+	it('still retries a 5xx whose body is not a failed envelope', async () => {
+		mocks.requestMock.mockResolvedValue({ data: { success: true }, status: 200 });
+
+		await reject(`${TB}/v1/api/torrents/mylist`, 'get', {
+			response: { status: 500, data: 'Bad Gateway' },
+		});
+
+		expect(mocks.requestMock).toHaveBeenCalled();
+		expect(mocks.recordTorBoxOperation).not.toHaveBeenCalled();
+	});
+
+	// A 429 is genuine backpressure and keeps its own (shorter) ladder even
+	// though TorBox sends an envelope with it.
+	it('still retries a 429 that carries an envelope', async () => {
+		mocks.requestMock.mockResolvedValue({ data: { success: true }, status: 200 });
+
+		await reject(`${TB}/v1/api/user/me`, 'get', {
+			response: { status: 429, data: { success: false, detail: 'RATE_LIMITED' } },
+		});
+
+		expect(mocks.requestMock).toHaveBeenCalled();
+	});
+
 	it('survives an error with no config at all', async () => {
 		await expect(mocks.onResponseError!({ message: 'boom' })).rejects.toBeDefined();
 

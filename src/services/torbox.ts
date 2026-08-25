@@ -281,6 +281,24 @@ torBoxAxios.interceptors.response.use(
 			return Promise.reject(error);
 		}
 
+		// TorBox answers application conditions with an HTTP 5xx carrying its own
+		// envelope: DATABASE_ERROR when the torrent id is not in the account, and
+		// DOWNLOAD_SERVER_ERROR when it will not carry out a control operation.
+		// Neither clears on retry - and retrying a mutation is what manufactures
+		// the first one, because the delete lands, the response is lost, and the
+		// retry finds the torrent already gone. realDebrid.ts skips retries on RD's
+		// equivalent (a 503 carrying an error_code) for the same reason.
+		//
+		// An edge 5xx has no envelope - TorBox never answered - and stays
+		// retryable, which is the case the ladder was built for.
+		const isApplicationError =
+			status >= 500 && status < 600 && error.response?.data?.success === false;
+		if (isApplicationError) {
+			releaseSlot();
+			recordOutcome(originalConfig, status);
+			return Promise.reject(error);
+		}
+
 		const shouldRetry = (status >= 500 && status < 600) || is429;
 		if (!shouldRetry) {
 			releaseSlot();
@@ -361,7 +379,8 @@ export const controlTorrent = async (
 	accessToken: string,
 	params: {
 		torrent_id?: number;
-		operation: 'reannounce' | 'delete' | 'resume' | 'pause';
+		// TorBox's own set; sending `pause` earns a 400 INVALID_OPTION
+		operation: 'reannounce' | 'delete' | 'resume' | 'stop_seeding';
 		all?: boolean;
 	}
 ): Promise<TorBoxResponse<null>> => {
@@ -609,7 +628,9 @@ export const controlWebDownload = async (
 	accessToken: string,
 	params: {
 		webdl_id?: number;
-		operation: 'delete' | 'pause' | 'resume';
+		// TorBox accepts only `delete` here - `pause` and `resume` are 400
+		// INVALID_OPTION, unlike the torrent endpoint's wider set
+		operation: 'delete';
 		all?: boolean;
 	}
 ): Promise<TorBoxResponse<null>> => {

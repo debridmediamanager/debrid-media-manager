@@ -70,10 +70,10 @@ describe('torbox service helpers', () => {
 	});
 
 	it('controls and deletes torrents through helper', async () => {
-		await controlTorrent('token', { operation: 'pause', torrent_id: 5 });
+		await controlTorrent('token', { operation: 'stop_seeding', torrent_id: 5 });
 		expect(axiosInstance.post).toHaveBeenCalledWith(
 			expect.stringContaining('/controltorrent'),
-			expect.objectContaining({ operation: 'pause', torrent_id: 5 }),
+			expect.objectContaining({ operation: 'stop_seeding', torrent_id: 5 }),
 			expect.objectContaining({
 				headers: expect.objectContaining({ Authorization: 'Bearer token' }),
 			})
