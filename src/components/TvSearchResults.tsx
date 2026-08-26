@@ -42,7 +42,7 @@ type TvSearchResultsProps = {
 	handleCast: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCastTorBox?: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCastAllDebrid?: (hash: string, files: { filename: string }[]) => Promise<void>;
-	handleCastPremiumize?: (hash: string, files: { filename: string }[]) => Promise<void>;
+	handleCastPremiumize?: (hash: string) => Promise<void>;
 	handleCopyMagnet: (hash: string) => void;
 	checkServiceAvailability: (
 		result: SearchResult,
@@ -230,11 +230,11 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 		}
 	};
 
-	const handleCastPremiumizeWithLoading = async (hash: string, files: { filename: string }[]) => {
+	const handleCastPremiumizeWithLoading = async (hash: string) => {
 		if (!handleCastPremiumize || castingPmHashes.has(hash)) return;
 		setCastingPmHashes((prev) => new Set(prev).add(hash));
 		try {
-			await handleCastPremiumize(hash, files);
+			await handleCastPremiumize(hash);
 		} finally {
 			setCastingPmHashes((prev) => {
 				const newSet = new Set(prev);
@@ -760,33 +760,30 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													: btnLabel(r.pmAvailable, 'PM')}
 											</button>
 										)}
-										{premiumizeKey &&
-											handleCastPremiumize &&
-											r.pmAvailable &&
-											castableAdFiles.length > 0 && (
-												<button
-													className={`haptic-sm inline rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-1 text-xs text-red-100 transition-colors hover:bg-[#aa0000]/50 ${isCastingPm ? 'cursor-not-allowed opacity-50' : ''}`}
-													onClick={() =>
-														handleCastPremiumizeWithLoading(
-															r.hash,
-															castableAdFiles
-														)
-													}
-													disabled={isCastingPm}
-												>
-													{isCastingPm ? (
-														<>
-															<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-															Casting...
-														</>
-													) : (
-														<>
-															<Cast className="mr-1 inline-block h-3 w-3 text-red-400" />
-															Cast (PM)
-														</>
-													)}
-												</button>
-											)}
+										{/* No `castableAdFiles` gate: Premiumize's cache probe
+										    returns no file listing, so this browser may know of
+										    no episodes at all. The server resolves them. */}
+										{premiumizeKey && handleCastPremiumize && r.pmAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-1 text-xs text-red-100 transition-colors hover:bg-[#aa0000]/50 ${isCastingPm ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() =>
+													handleCastPremiumizeWithLoading(r.hash)
+												}
+												disabled={isCastingPm}
+											>
+												{isCastingPm ? (
+													<>
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Casting...
+													</>
+												) : (
+													<>
+														<Cast className="mr-1 inline-block h-3 w-3 text-red-400" />
+														Cast (PM)
+													</>
+												)}
+											</button>
+										)}
 										{premiumizeKey && !r.pmAvailable && (
 											<button
 												className={`haptic-sm inline rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-1 text-xs text-red-100 transition-colors hover:bg-[#aa0000]/50 ${isCheckingPm ? 'cursor-not-allowed opacity-50' : ''}`}

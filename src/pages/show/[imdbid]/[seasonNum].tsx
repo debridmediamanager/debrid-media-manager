@@ -836,11 +836,13 @@ const TvSearch: FunctionComponent = () => {
 		);
 	}
 
-	async function handleCastPremiumize(hash: string, files: { filename: string }[]) {
+	async function handleCastPremiumize(hash: string) {
 		await toast.promise(
-			handleCastTvShowPremiumize(imdbid as string, premiumizeKey!, hash, files),
+			// No file list goes over: Premiumize's cache probe reports no files,
+			// so the server resolves the release and casts every episode in it.
+			handleCastTvShowPremiumize(imdbid as string, premiumizeKey!, hash),
 			{
-				loading: `Casting ${files.length} episodes (Premiumize)...`,
+				loading: 'Casting episodes (Premiumize)...',
 				success: 'Casting succeeded.',
 				error: 'Casting failed.',
 			},

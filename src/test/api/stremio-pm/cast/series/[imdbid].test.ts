@@ -100,8 +100,59 @@ describe('/api/stremio-pm/cast/series/[imdbid]', () => {
 		expect((res._getData() as any).status).toBe('partial');
 	});
 
-	it('validates the request body', async () => {
+	// `cache/check` reports no file listing, so a browser holding only a
+	// Premiumize key cannot name the episodes it wants. The `directdl` above is
+	// the listing, so an absent `filenames` means "every episode in here".
+	it('casts every episode in the release when the client names none', async () => {
+		mockDirectDl.mockResolvedValue([
+			episode('Show.S01E01.mkv'),
+			episode('Show.S01E02.mkv'),
+		] as any);
+
 		await handler(post({ hash: HASH }), res);
+
+		expect(mockDirectDl).toHaveBeenCalledTimes(1);
+		expect(mockRepository.savePremiumizeCast).toHaveBeenCalledTimes(2);
+		expect(mockRepository.savePremiumizeCast).toHaveBeenCalledWith(
+			'tt999:1:1',
+			'pm-user-1',
+			HASH,
+			'Show.S01E01.mkv',
+			expect.any(Number),
+			'Show.S01/Show.S01E01.mkv'
+		);
+		expect(res._getData() as any).toMatchObject({ status: 'success', casted: 2 });
+	});
+
+	// Extras and samples are not failures when we picked the files ourselves -
+	// reporting them would turn every successful season cast into a red toast.
+	it('passes over a non-episode file without calling it an error', async () => {
+		mockDirectDl.mockResolvedValue([
+			episode('Show.S01E01.mkv'),
+			episode('Show.Behind.The.Scenes.mkv'),
+		] as any);
+
+		await handler(post({ hash: HASH }), res);
+
+		expect(mockRepository.savePremiumizeCast).toHaveBeenCalledTimes(1);
+		expect(res._getData() as any).toMatchObject({
+			status: 'success',
+			casted: 1,
+			errorEpisodes: [],
+		});
+	});
+
+	it('reports a release that holds no episodes at all', async () => {
+		mockDirectDl.mockResolvedValue([episode('Some.Movie.2024.mkv')] as any);
+
+		await handler(post({ hash: HASH }), res);
+
+		expect(mockRepository.savePremiumizeCast).not.toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(404);
+	});
+
+	it('validates the request body', async () => {
+		await handler(post({}), res);
 		expect(res.status).toHaveBeenCalledWith(400);
 	});
 });

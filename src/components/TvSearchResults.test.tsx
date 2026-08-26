@@ -323,4 +323,45 @@ describe('TvSearchResults', () => {
 			});
 		});
 	});
+
+	describe('Premiumize cast', () => {
+		// Premiumize's `cache/check` is the only availability probe that returns
+		// no file listing, so a browser holding only a PM key never learns the
+		// episode filenames. Gating the button on a client-side listing is what
+		// made Cast (PM) a movies-only button.
+		it('offers Cast (PM) for a PM-cached show with no file listing', async () => {
+			const handleCastPremiumize = vi.fn().mockResolvedValue(undefined);
+			renderTv({
+				rdKey: null,
+				premiumizeKey: 'pm-key',
+				handleCastPremiumize,
+				filteredResults: [
+					{
+						...baseTvResult,
+						rdAvailable: false,
+						pmAvailable: true,
+						files: [],
+						rdFiles: undefined,
+					},
+				],
+			});
+
+			await userEvent.click(screen.getByText('Cast (PM)'));
+
+			await waitFor(() => expect(handleCastPremiumize).toHaveBeenCalledTimes(1));
+			// The hash is all the server needs - it resolves the episodes itself.
+			expect(handleCastPremiumize).toHaveBeenCalledWith('tv-hash');
+		});
+
+		it('does not offer Cast (PM) for a show that is not cached in Premiumize', () => {
+			renderTv({
+				rdKey: null,
+				premiumizeKey: 'pm-key',
+				handleCastPremiumize: vi.fn(),
+				filteredResults: [{ ...baseTvResult, rdAvailable: false, pmAvailable: false }],
+			});
+
+			expect(screen.queryByText('Cast (PM)')).toBeNull();
+		});
+	});
 });

@@ -1,11 +1,6 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { groupBy } from './groupBy';
 import { castToastOptions } from './toastOptions';
-
-export interface CastablePmFile {
-	filename: string;
-}
 
 const errorTextOf = (error: any) =>
 	error?.response?.data?.errorMessage ||
@@ -25,46 +20,36 @@ export const handleCastMoviePremiumize = async (imdbId: string, apiKey: string, 
 	}
 };
 
-export const handleCastTvShowPremiumize = async (
-	imdbId: string,
-	apiKey: string,
-	hash: string,
-	files: CastablePmFile[]
-) => {
-	// Premiumize has no per-file id, so episodes are addressed by filename. That
-	// is also the only addressing that cannot drift: a positional index is what
-	// makes the other providers cast the wrong episode.
-	const batches = groupBy(5, files).map((batch) => async () => {
-		try {
-			const resp = await axios.post(
-				`/api/stremio-pm/cast/series/${imdbId}`,
-				{ hash, filenames: batch.map((f) => f.filename) },
-				{ headers: { Authorization: `Bearer ${apiKey}` } }
-			);
-			const errorEpisodes: string[] = resp.data?.errorEpisodes ?? [];
-			if (errorEpisodes.length) {
-				toast.error(
-					`Cast failed for ${errorEpisodes[0]}${
-						errorEpisodes.length > 1 ? ` and ${errorEpisodes.length - 1} more` : ''
-					} (Premiumize).`,
-					castToastOptions
-				);
-			} else {
-				toast.success(
-					`Casted ${batch.length} episode${batch.length === 1 ? '' : 's'} to Stremio (Premiumize).`,
-					castToastOptions
-				);
-			}
-		} catch (error) {
+export const handleCastTvShowPremiumize = async (imdbId: string, apiKey: string, hash: string) => {
+	// Only the hash goes over: Premiumize's cache probe returns no file listing,
+	// so the browser has no episode filenames to send. The server resolves the
+	// release with one `directdl` and casts every episode in it - which is also
+	// one API call where naming the episodes cost one per batch.
+	try {
+		const resp = await axios.post(
+			`/api/stremio-pm/cast/series/${imdbId}`,
+			{ hash },
+			{ headers: { Authorization: `Bearer ${apiKey}` } }
+		);
+		const errorEpisodes: string[] = resp.data?.errorEpisodes ?? [];
+		if (errorEpisodes.length) {
 			toast.error(
-				`Failed to cast ${batch.length} episode${batch.length === 1 ? '' : 's'} (Premiumize).`,
+				`Cast failed for ${errorEpisodes[0]}${
+					errorEpisodes.length > 1 ? ` and ${errorEpisodes.length - 1} more` : ''
+				} (Premiumize).`,
 				castToastOptions
 			);
 		}
-	});
-
-	for (const run of batches) await run();
-	toast.success(`Finished casting all episodes to Stremio (Premiumize).`, castToastOptions);
+		const casted: number = resp.data?.casted ?? 0;
+		toast.success(
+			`Casted ${casted} episode${casted === 1 ? '' : 's'} to Stremio (Premiumize).`,
+			castToastOptions
+		);
+	} catch (error: any) {
+		const errorMessage = errorTextOf(error);
+		console.error('Error casting series (Premiumize):', errorMessage);
+		toast.error(errorMessage, castToastOptions);
+	}
 };
 
 export interface PremiumizeCastSettings {
