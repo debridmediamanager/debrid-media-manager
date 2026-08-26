@@ -3,8 +3,8 @@
  * Same rewrite the debrid uploader service applies before building a torrent
  * (see debrid/src/naming.ts), so a title produced here matches what actually
  * lands in the RD account: `WEB-DL` -> `WEB.DL`, `BluRay.x264` -> `BluRay-x264`,
- * `BDRip` -> `BD-Rip`. Newer codecs (x265/HEVC/AV1) and service tags are never
- * blocked, so they pass untouched.
+ * `BDRip` -> `BD-Rip`, `BluRay.DTS` -> `BluRay-DTS`. Newer codecs
+ * (x265/HEVC/AV1) and service tags are never blocked, so they pass untouched.
  *
  * The source/codec pair here is a deliberate over-match: it rewrites all nine
  * `(bluray|hdtv|web).(x264|xvid|h264)` combinations, while RD only blocks five
@@ -16,6 +16,7 @@
 export function deInfringe(name: string): string {
 	return name
 		.replace(/(bluray|hdtv|web)\.(x264|xvid|h264)/gi, '$1-$2')
+		.replace(/bluray\.dts/gi, (m) => m.replace('.', '-'))
 		.replace(/web-dl/gi, (m) => m.replace('-', '.'))
 		.replace(/(web|bd|hd|dvd)rip/gi, (m) => m.replace(/rip$/i, (r) => `-${r}`));
 }
@@ -23,13 +24,22 @@ export function deInfringe(name: string): string {
 /**
  * The patterns RD has actually been measured to reject, matched anywhere in a
  * name, case-insensitively: the source substrings `web-dl`/`webrip`/`bdrip`/
- * `hdrip`/`dvdrip`, and exactly five source-dot-codec pairs. Verified to pass
- * untouched: `WEB.DL`, `WEBDL`, `WEB-Rip`, `BluRay-x264`, `Blu-Ray.x264`,
- * `BluRay.x265`, `WEB.x265` and — measured 2026-08-23 on a name RD downloaded
- * to 100% — `HDTV.H264`, which `deInfringe` rewrites but RD does not block.
+ * `hdrip`/`dvdrip`, exactly five source-dot-codec pairs, and `bluray.dts`.
+ * Verified to pass untouched: `WEB.DL`, `WEBDL`, `WEB-Rip`, `BluRay-x264`,
+ * `Blu-Ray.x264`, `BluRay.x265`, `WEB.x265` and — measured 2026-08-23 on a name
+ * RD downloaded to 100% — `HDTV.H264`, which `deInfringe` rewrites but RD does
+ * not block.
+ *
+ * `bluray.dts` was measured 2026-08-25 by adding webseed torrents built over a
+ * text file, each a fresh infohash so only the name could decide it. RD refused
+ * `BluRay.DTS` followed by x264, x265, H264, AC3, `DTS-HD.MA.5.1.x264` and
+ * nothing at all, and refused a control release whose title had nothing to do
+ * with any film. It took `BluRay.AC3.x264`, `BluRay.DD5.1.x264`,
+ * `BluRay.REMUX.AVC`, `Blu-Ray.DTS.x264` and the `BluRay-DTS.x264` the rewrite
+ * emits — so the trigger is `BluRay` + `.` + `DTS`, not `BluRay.` + anything.
  */
 const RD_BLOCKED_NAME =
-	/web-dl|(?:web|bd|hd|dvd)rip|bluray\.x264|hdtv\.(?:x264|xvid)|web\.(?:x264|h264)/i;
+	/web-dl|(?:web|bd|hd|dvd)rip|bluray\.(?:x264|dts)|hdtv\.(?:x264|xvid)|web\.(?:x264|h264)/i;
 
 /**
  * Whether RD blocks this filename outright.

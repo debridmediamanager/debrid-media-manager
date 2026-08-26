@@ -14,6 +14,14 @@ describe('isRdBlockedName', () => {
 		'Show.S01E01.HDTV.XviD-AFG',
 		'Show.S01E01.1080p.WEB.x264-GROUP',
 		'Show.S01E01.1080p.WEB.h264-GROUP',
+		// Measured 2026-08-25 with webseed torrents over a text file, each a fresh
+		// infohash so only the name could decide it: RD refuses `BluRay.DTS`
+		// whatever follows it, and the audio tag puts it out of reach of the
+		// source/codec pair above.
+		'Beautiful.Creatures.2013.1080p.BluRay.DTS.x264-EbP',
+		'Movie.2015.1080p.BluRay.DTS.x265-GROUP',
+		'Movie.2015.1080p.BLURAY.DTS.AC3-GROUP',
+		'Movie.2015.1080p.BluRay.DTS-HD.MA.5.1.x264-GROUP',
 	])('flags %s', (name) => {
 		expect(isRdBlockedName(name)).toBe(true);
 	});
@@ -32,6 +40,12 @@ describe('isRdBlockedName', () => {
 		'Show.S01E01.1080p.HEVC.x265-MeGusta',
 		'Show.S01E01.480p.x264-mSD',
 		'Show.S01E01.XviD-AFG',
+		// Near-misses of `BluRay.DTS` that RD took in the same run — a different
+		// audio tag, a hyphenated source, and the form `deInfringe` emits.
+		'Movie.2015.1080p.BluRay.AC3.x264-GROUP',
+		'Movie.2015.1080p.BluRay.DD5.1.x264-GROUP',
+		'Movie.2015.1080p.Blu-Ray.DTS.x264-GROUP',
+		'Movie.2015.1080p.BluRay-DTS.x264-GROUP',
 	])('passes %s', (name) => {
 		expect(isRdBlockedName(name)).toBe(false);
 	});
@@ -65,6 +79,8 @@ describe('deInfringe', () => {
 			'Show.HDTV.XviD',
 			'Show.1080p.WEB.x264',
 			'Show.1080p.WEB.h264',
+			'Movie.1080p.BluRay.DTS.x264',
+			'Movie.1080p.BluRay.DTS-HD.MA.5.1.x264',
 		].map(deInfringe);
 		for (const name of rewritten) {
 			expect(isRdBlockedName(name)).toBe(false);
@@ -76,6 +92,8 @@ describe('deInfringe', () => {
 			'Movie.2015.1080p.BluRay.x265-GROUP',
 			'Show.S01E01.1080p.WEB.x265-GROUP',
 			'Show.S01E01.480p.x264-mSD',
+			'Movie.2015.1080p.BluRay.AC3.x264-GROUP',
+			'Movie.2015.1080p.BluRay.DD5.1.x264-GROUP',
 		]) {
 			expect(deInfringe(name)).toBe(name);
 		}
