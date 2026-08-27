@@ -11,6 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		background: 'https://static.debridmediamanager.com/background.png',
 		version: '0.0.1',
 		resources: [
+			'catalog',
 			{
 				name: 'stream',
 				types: ['movie', 'series'],
@@ -28,11 +29,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				id: 'ad-casted-movies',
 				name: 'DMM AD Movies',
 				type: 'movie',
+				extra: [{ name: 'skip' }],
 			},
 			{
 				id: 'ad-casted-shows',
 				name: 'DMM AD TV Shows',
 				type: 'series',
+				extra: [{ name: 'skip' }],
 			},
 			{
 				id: 'ad-casted-other',

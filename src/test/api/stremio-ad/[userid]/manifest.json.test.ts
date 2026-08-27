@@ -40,9 +40,10 @@ describe('/api/stremio-ad/[userid]/manifest.json', () => {
 	it('includes resources', async () => {
 		await handler(req, res);
 		const data = res._getData() as any;
-		expect(data.resources).toHaveLength(2);
-		expect(data.resources[0].name).toBe('stream');
-		expect(data.resources[1].name).toBe('meta');
+		expect(data.resources).toHaveLength(3);
+		expect(data.resources[0]).toBe('catalog');
+		expect(data.resources[1].name).toBe('stream');
+		expect(data.resources[2].name).toBe('meta');
 	});
 
 	it('includes types', async () => {

@@ -10,12 +10,24 @@ export const premiumizeCastManifest = (withCatalogs: boolean) => ({
 	logo: 'https://static.debridmediamanager.com/yellowlogo.jpeg',
 	background: 'https://static.debridmediamanager.com/background.png',
 	version: '0.0.1',
-	resources: [{ name: 'stream', types: ['movie', 'series'], idPrefixes: ['tt'] }],
+	resources: withCatalogs
+		? ['catalog', { name: 'stream', types: ['movie', 'series'], idPrefixes: ['tt'] }]
+		: [{ name: 'stream', types: ['movie', 'series'], idPrefixes: ['tt'] }],
 	types: withCatalogs ? ['movie', 'series'] : ['movie', 'series'],
 	catalogs: withCatalogs
 		? [
-				{ id: 'pm-casted-movies', name: 'DMM PM Movies', type: 'movie' },
-				{ id: 'pm-casted-shows', name: 'DMM PM TV Shows', type: 'series' },
+				{
+					id: 'pm-casted-movies',
+					name: 'DMM PM Movies',
+					type: 'movie',
+					extra: [{ name: 'skip' }],
+				},
+				{
+					id: 'pm-casted-shows',
+					name: 'DMM PM TV Shows',
+					type: 'series',
+					extra: [{ name: 'skip' }],
+				},
 			]
 		: [],
 	behaviorHints: { adult: false, p2p: false },

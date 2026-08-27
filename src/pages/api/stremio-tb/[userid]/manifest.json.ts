@@ -11,6 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		background: 'https://static.debridmediamanager.com/background.png',
 		version: '0.0.1',
 		resources: [
+			'catalog',
 			{
 				name: 'stream',
 				types: ['movie', 'series'],
@@ -28,11 +29,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				id: 'tb-casted-movies',
 				name: 'DMM TB Movies',
 				type: 'movie',
+				extra: [{ name: 'skip' }],
 			},
 			{
 				id: 'tb-casted-shows',
 				name: 'DMM TB TV Shows',
 				type: 'series',
+				extra: [{ name: 'skip' }],
 			},
 			{
 				id: 'tb-casted-other',
