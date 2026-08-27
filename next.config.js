@@ -31,6 +31,10 @@ const nextConfig = {
 					source: '/api/stremio-ad/:userid/no-catalog/:path*',
 					destination: '/api/stremio-ad/:userid/:path*',
 				},
+				{
+					source: '/api/stremio-pm/:userid/no-catalog/:path*',
+					destination: '/api/stremio-pm/:userid/:path*',
+				},
 			],
 		};
 	},
