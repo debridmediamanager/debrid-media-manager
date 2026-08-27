@@ -1,5 +1,8 @@
+import { Prisma } from '@prisma/client';
 import { MList, MMovie, MSearchResponse, MShow } from '../mdblist';
 import { DatabaseClient } from './client';
+
+const TITLE_LOOKUP_CHUNK = 1000;
 
 export class MdblistCacheService extends DatabaseClient {
 	/**
@@ -65,6 +68,44 @@ export class MdblistCacheService extends DatabaseClient {
 		} catch (error) {
 			console.error('Error setting MDBList cache:', error);
 		}
+	}
+
+	/**
+	 * Titles for many ids in one query. Ids with no cached entry are absent from
+	 * the map — callers decide what to show instead.
+	 */
+	async getTitles(ids: string[]): Promise<Map<string, string>> {
+		const titles = new Map<string, string>();
+		if (ids.length === 0) {
+			return titles;
+		}
+
+		try {
+			// Read the title out in SQL. Selecting the cached payload to pick one
+			// field off it pulls ~45MB for the largest casted catalog, which turned
+			// a 1.4s catalog into a 20s one.
+			for (let i = 0; i < ids.length; i += TITLE_LOOKUP_CHUNK) {
+				const chunk = ids.slice(i, i + TITLE_LOOKUP_CHUNK);
+				const rows = await this.prisma.$queryRaw<{ id: string; title: string | null }[]>(
+					Prisma.sql`
+						SELECT id, JSON_UNQUOTE(JSON_EXTRACT(data, '$.title')) AS title
+						FROM MdblistCache
+						WHERE id IN (${Prisma.join(chunk)})
+					`
+				);
+
+				for (const row of rows) {
+					// A JSON null unquotes to the literal string, not SQL NULL.
+					if (typeof row.title === 'string' && row.title && row.title !== 'null') {
+						titles.set(row.id, row.title);
+					}
+				}
+			}
+		} catch (error) {
+			console.error('Error getting MDBList cache titles:', error);
+		}
+
+		return titles;
 	}
 
 	/**

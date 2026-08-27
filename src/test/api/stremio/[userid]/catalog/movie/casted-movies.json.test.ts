@@ -17,6 +17,10 @@ vi.mock('@/utils/castApiHelpers', () => ({
 	isLegacyToken: mockIsLegacyToken,
 }));
 
+vi.mock('@/services/database/mdblistCache', () => ({
+	getMdblistCacheService: () => ({ getTitles: vi.fn().mockResolvedValue(new Map()) }),
+}));
+
 describe('/api/stremio/[userid]/catalog/movie/casted-movies.json', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -79,11 +83,13 @@ describe('/api/stremio/[userid]/catalog/movie/casted-movies.json', () => {
 			metas: [
 				{
 					id: 'tt100',
+					name: 'tt100',
 					type: 'movie',
 					poster: 'https://images.metahub.space/poster/small/tt100/img',
 				},
 				{
 					id: 'tt200',
+					name: 'tt200',
 					type: 'movie',
 					poster: 'https://images.metahub.space/poster/small/tt200/img',
 				},

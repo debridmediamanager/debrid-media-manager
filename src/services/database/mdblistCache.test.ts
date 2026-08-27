@@ -5,10 +5,16 @@ vi.mock('@prisma/client', () => ({
 	PrismaClient: vi.fn(() => ({
 		mdblistCache: {
 			findUnique: vi.fn(),
+			findMany: vi.fn(),
 			upsert: vi.fn(),
 		},
+		$queryRaw: vi.fn(),
 		$disconnect: vi.fn(),
 	})),
+	Prisma: {
+		sql: (strings: TemplateStringsArray, ...values: unknown[]) => ({ strings, values }),
+		join: (values: unknown[]) => values,
+	},
 }));
 
 describe('MdblistCacheService', () => {
@@ -19,6 +25,75 @@ describe('MdblistCacheService', () => {
 		vi.clearAllMocks();
 		service = new MdblistCacheService();
 		mockPrisma = (service as any).prisma;
+	});
+
+	describe('getTitles', () => {
+		const idsIn = (call: any) => call[0].values[0];
+
+		it('returns a title per cached id', async () => {
+			mockPrisma.$queryRaw.mockResolvedValue([
+				{ id: 'tt1', title: 'First' },
+				{ id: 'tt2', title: 'Second' },
+			]);
+
+			const result = await service.getTitles(['tt1', 'tt2', 'tt3']);
+
+			expect(result).toEqual(
+				new Map([
+					['tt1', 'First'],
+					['tt2', 'Second'],
+				])
+			);
+			expect(mockPrisma.$queryRaw).toHaveBeenCalledTimes(1);
+			expect(idsIn(mockPrisma.$queryRaw.mock.calls[0])).toEqual(['tt1', 'tt2', 'tt3']);
+		});
+
+		it('reads the title in SQL instead of hauling the cached payload', async () => {
+			mockPrisma.$queryRaw.mockResolvedValue([]);
+
+			await service.getTitles(['tt1']);
+
+			const sql = mockPrisma.$queryRaw.mock.calls[0][0].strings.join('');
+			expect(sql).toContain("JSON_EXTRACT(data, '$.title')");
+			expect(sql).not.toContain('SELECT *');
+			expect(mockPrisma.mdblistCache.findMany).not.toHaveBeenCalled();
+		});
+
+		it('skips rows with no usable title', async () => {
+			mockPrisma.$queryRaw.mockResolvedValue([
+				{ id: 'tt1', title: null },
+				{ id: 'tt2', title: '' },
+				{ id: 'tt3', title: 'null' },
+				{ id: 'tt4', title: 'Real' },
+			]);
+
+			expect(await service.getTitles(['tt1', 'tt2', 'tt3', 'tt4'])).toEqual(
+				new Map([['tt4', 'Real']])
+			);
+		});
+
+		it('chunks a catalog too big for one IN list', async () => {
+			const ids = Array.from({ length: 2500 }, (_, i) => `tt${i}`);
+			mockPrisma.$queryRaw.mockResolvedValue([]);
+
+			await service.getTitles(ids);
+
+			expect(mockPrisma.$queryRaw).toHaveBeenCalledTimes(3);
+			expect(mockPrisma.$queryRaw.mock.calls.map((c: any) => idsIn(c).length)).toEqual([
+				1000, 1000, 500,
+			]);
+		});
+
+		it('does not query for an empty catalog', async () => {
+			expect(await service.getTitles([])).toEqual(new Map());
+			expect(mockPrisma.$queryRaw).not.toHaveBeenCalled();
+		});
+
+		it('returns no titles rather than failing the catalog on a db error', async () => {
+			mockPrisma.$queryRaw.mockRejectedValue(new Error('db down'));
+
+			expect(await service.getTitles(['tt1'])).toEqual(new Map());
+		});
 	});
 
 	describe('get', () => {

@@ -3,6 +3,10 @@ import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('@/services/database/mdblistCache', () => ({
+	getMdblistCacheService: () => ({ getTitles: vi.fn().mockResolvedValue(new Map()) }),
+}));
+
 vi.mock('@/services/repository');
 
 const mockRepository = vi.mocked(repository);
@@ -47,11 +51,13 @@ describe('/api/stremio-tb/[userid]/catalog/movie/tb-casted-movies.json', () => {
 		expect(data.metas).toEqual([
 			{
 				id: 'tt1234567',
+				name: 'tt1234567',
 				type: 'movie',
 				poster: 'https://images.metahub.space/poster/small/tt1234567/img',
 			},
 			{
 				id: 'tt7654321',
+				name: 'tt7654321',
 				type: 'movie',
 				poster: 'https://images.metahub.space/poster/small/tt7654321/img',
 			},

@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { buildCatalogMetas } from '@/utils/castCatalogMeta';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -21,11 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	try {
 		const shows = await db.fetchAllDebridCastedShows(userid);
 
-		const metas = shows.map((imdbId) => ({
-			id: imdbId,
-			type: 'series',
-			poster: `https://images.metahub.space/poster/small/${imdbId}/img`,
-		}));
+		const metas = await buildCatalogMetas(shows, 'series');
 
 		res.status(200).json({
 			metas,

@@ -1,4 +1,5 @@
 import { repository as db } from '@/services/repository';
+import { buildCatalogMetas } from '@/utils/castCatalogMeta';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -19,11 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	try {
 		const castedMovies = await db.fetchTorBoxCastedMovies(userid);
-		const metas = castedMovies.map((movie) => ({
-			id: movie,
-			type: 'movie',
-			poster: `https://images.metahub.space/poster/small/${movie}/img`,
-		}));
+		const metas = await buildCatalogMetas(castedMovies, 'movie');
 
 		res.status(200).json({
 			metas,

@@ -1,5 +1,6 @@
 import { repository as db } from '@/services/repository';
 import { isLegacyToken } from '@/utils/castApiHelpers';
+import { buildCatalogMetas } from '@/utils/castCatalogMeta';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -38,11 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	try {
 		const castedShows = await db.fetchCastedShows(userid);
-		const metas = castedShows.map((show) => ({
-			id: show,
-			type: 'series',
-			poster: `https://images.metahub.space/poster/small/${show}/img`,
-		}));
+		const metas = await buildCatalogMetas(castedShows, 'series');
 
 		res.status(200).json({
 			metas,
