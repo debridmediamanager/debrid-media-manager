@@ -971,3 +971,42 @@ model TorBoxCdnDaily {
   @@index([date])
   @@index([region, date])
 }
+
+/// A request for content the asker cannot fetch themselves.
+///
+/// The uploader needs two credentials to move a release: a Real-Debrid key for
+/// where it lands, and a TorBox or AllDebrid key for where the bytes come from.
+/// A user with only Real-Debrid holds half of that pair, so this table is where
+/// they leave the other half for somebody else to supply.
+///
+/// It lives here rather than in the uploader because there are two uploader
+/// hosts with two separate SQLite files, and a board has to be one list.
+///
+/// `requesterId` and `fulfillerId` are DMM user ids — the HMAC of the
+/// Real-Debrid username that `generateUserId` produces — which is also what
+/// `CastProfile.userId` is keyed on. That join is deliberate: fulfilment mints a
+/// fresh Real-Debrid token from the requester's stored OAuth triple, because an
+/// access token dies in 24 hours and a request may sit here for days.
+model ContentRequest {
+  id          String   @id @default(uuid())
+  hash        String
+  imdbId      String
+  title       String?  @db.Text
+  mediaType   String
+  requesterId String
+  status      String   @default("open")
+  fulfillerId String?
+  /// The uploader job once one exists, and which host is running it — job ids
+  /// are generated per host and collide across them.
+  jobId       String?
+  jobHost     String?  @db.Text
+  error       String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  /// One ask per release per person, so re-asking cannot queue the same thing twice.
+  @@unique([hash, requesterId])
+  @@index([status, createdAt])
+  @@index([requesterId, status])
+  @@index([imdbId])
+}

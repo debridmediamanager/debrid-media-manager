@@ -4,6 +4,7 @@ import {
 	AnimeService,
 	AvailabilityService,
 	CastService,
+	ContentRequestService,
 	DebridUploaderMapService,
 	DmmApiKeysService,
 	HashImdbService,
@@ -61,6 +62,7 @@ export type RepositoryDependencies = Partial<{
 	nzb2rdMapService: Nzb2rdMapService;
 	nzbSearchCacheService: NzbSearchCacheService;
 	transferMetaService: TransferMetaService;
+	contentRequestService: ContentRequestService;
 }>;
 
 export class Repository {
@@ -88,6 +90,7 @@ export class Repository {
 	private nzb2rdMapService: Nzb2rdMapService;
 	private nzbSearchCacheService: NzbSearchCacheService;
 	private transferMetaService: TransferMetaService;
+	private contentRequestService: ContentRequestService;
 
 	constructor({
 		availabilityService,
@@ -114,6 +117,7 @@ export class Repository {
 		nzb2rdMapService,
 		nzbSearchCacheService,
 		transferMetaService,
+		contentRequestService,
 	}: RepositoryDependencies = {}) {
 		this.availabilityService = availabilityService ?? new AvailabilityService();
 		this.scrapedService = scrapedService ?? new ScrapedService();
@@ -140,6 +144,7 @@ export class Repository {
 		this.nzb2rdMapService = nzb2rdMapService ?? new Nzb2rdMapService();
 		this.nzbSearchCacheService = nzbSearchCacheService ?? new NzbSearchCacheService();
 		this.transferMetaService = transferMetaService ?? new TransferMetaService();
+		this.contentRequestService = contentRequestService ?? new ContentRequestService();
 	}
 
 	// Ensure connection is properly closed when repository is no longer needed
@@ -167,7 +172,41 @@ export class Repository {
 			this.nzb2rdMapService.disconnect(),
 			this.nzbSearchCacheService.disconnect(),
 			this.transferMetaService.disconnect(),
+			this.contentRequestService.disconnect(),
 		]);
+	}
+
+	// Content request board (RD-only users ask; TB/AD users fulfil)
+	public createContentRequest(input: Parameters<ContentRequestService['createRequest']>[0]) {
+		return this.contentRequestService.createRequest(input);
+	}
+
+	public getContentRequest(id: string) {
+		return this.contentRequestService.getRequest(id);
+	}
+
+	public listOpenContentRequests(limit: number) {
+		return this.contentRequestService.listOpenRequests(limit);
+	}
+
+	public listContentRequestsFor(requesterId: string, limit: number) {
+		return this.contentRequestService.listRequestsFor(requesterId, limit);
+	}
+
+	public claimContentRequest(id: string, fulfillerId: string) {
+		return this.contentRequestService.claimRequest(id, fulfillerId);
+	}
+
+	public attachContentRequestJob(id: string, jobId: string, jobHost: string) {
+		return this.contentRequestService.attachJob(id, jobId, jobHost);
+	}
+
+	public releaseContentRequest(id: string, error: string) {
+		return this.contentRequestService.releaseRequest(id, error);
+	}
+
+	public cancelContentRequest(id: string, requesterId: string) {
+		return this.contentRequestService.cancelRequest(id, requesterId);
 	}
 
 	// Debrid Uploader (TB → RD transfer) mapping methods
