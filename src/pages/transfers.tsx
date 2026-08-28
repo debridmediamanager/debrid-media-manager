@@ -9,7 +9,16 @@ import { deleteNzb2rdJob } from '@/utils/nzb2rd';
 import { describeTransfer, PHASE_STYLES } from '@/utils/transferPhase';
 import { isTerminal, ORIGIN_LABELS, ORIGIN_STYLES, originOf, TransferRow } from '@/utils/transfers';
 import { fetchTransfers } from '@/utils/transfersApi';
-import { AlertTriangle, CheckCircle2, Home, Loader2, RefreshCw, Send, XCircle } from 'lucide-react';
+import {
+	AlertTriangle,
+	CheckCircle2,
+	Home,
+	Loader2,
+	RefreshCw,
+	Send,
+	Trash2,
+	XCircle,
+} from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -100,20 +109,32 @@ export default function TransfersPage() {
 		}
 	};
 
-	// Cancelling is the only way a row leaves the list now. There is deliberately
-	// no "remove from list": the list is the account's, so a row hidden here would
+	// Deleting is the only way a row leaves the list. There is deliberately no
+	// "remove from list": the list is the account's, so a row hidden here would
 	// reappear on the next 5s poll.
-	const handleCancel = async (row: TransferRow) => {
-		if (!window.confirm('Cancel this transfer? The job will be stopped and deleted.')) return;
+	//
+	// It stays reachable once a row is terminal, which it did not used to be. A
+	// failed Usenet job leaves a `nzbrd:` marker behind, and that marker is what
+	// makes the release render a disabled "Running" button — for every user, not
+	// just this one. `DELETE /api/nzb2rd/jobs/:id` clearing it is the only path
+	// there is, so hiding this button on failed rows left the release unsendable
+	// by anybody: 2356 of them by the time it was found.
+	const handleRemove = async (row: TransferRow, terminal: boolean) => {
+		const question = terminal
+			? 'Clear this transfer? You will be able to send the release again.'
+			: 'Cancel this transfer? The job will be stopped and deleted.';
+		if (!window.confirm(question)) return;
 		try {
 			if (row.source === 'nzb2rd')
 				await deleteNzb2rdJob(row.id, row.releaseId, rdKey ?? undefined);
 			else await deleteDebridUploaderJob(row.id);
 			setTransfers((prev) => prev.filter((t) => t.id !== row.id));
-			toast.success('Transfer cancelled.');
+			toast.success(terminal ? 'Transfer cleared.' : 'Transfer cancelled.');
 		} catch (error) {
 			toast.error(
-				`Failed to cancel: ${error instanceof Error ? error.message : 'unreachable'}`
+				`Failed to ${terminal ? 'clear' : 'cancel'}: ${
+					error instanceof Error ? error.message : 'unreachable'
+				}`
 			);
 		}
 	};
@@ -312,15 +333,19 @@ export default function TransfersPage() {
 											)}
 										</div>
 										<div className="flex shrink-0 items-center gap-1">
-											{!terminal && (
-												<button
-													onClick={() => handleCancel(t)}
-													className="haptic-sm rounded border-2 border-red-500 bg-red-900/30 p-1.5 text-red-100 transition-colors hover:bg-red-800/50"
-													title="Cancel transfer"
-												>
+											<button
+												onClick={() => handleRemove(t, terminal)}
+												className="haptic-sm rounded border-2 border-red-500 bg-red-900/30 p-1.5 text-red-100 transition-colors hover:bg-red-800/50"
+												title={
+													terminal ? 'Clear transfer' : 'Cancel transfer'
+												}
+											>
+												{terminal ? (
+													<Trash2 className="h-4 w-4" />
+												) : (
 													<XCircle className="h-4 w-4" />
-												</button>
-											)}
+												)}
+											</button>
 										</div>
 									</div>
 								</div>

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -215,5 +215,70 @@ describe('Transfers page RD handoff', () => {
 
 		await waitFor(() => expect(fetch).toHaveBeenCalled());
 		expect(mockAddHashAsMagnet).not.toHaveBeenCalled();
+	});
+});
+
+// Cancelling is the only way a row leaves this list, and the button was rendered
+// only while a row was *not* terminal — so a failed row could never be removed.
+// That is not merely untidy: a failed Usenet job leaves a `nzbrd:` marker that
+// shows a disabled "Running" button on the release for every user, and this
+// delete is the one call that clears it.
+describe('Transfers page — clearing a terminal row', () => {
+	const failedNzb = {
+		source: 'nzb2rd',
+		id: 'job-9',
+		status: 'failed',
+		releaseId: 'release-9',
+		createdAt: 1700000000000,
+		name: 'Pirate For The Sea',
+		error: 'Real-Debrid refused this job saved credentials',
+	};
+
+	beforeEach(() => {
+		vi.stubGlobal('confirm', vi.fn().mockReturnValue(true));
+	});
+
+	it('offers a clear button on a failed row and deletes the job with its release id', async () => {
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(listResponse([failedNzb])));
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('Pirate For The Sea')).toBeInTheDocument());
+
+		fireEvent.click(screen.getByTitle('Clear transfer'));
+
+		await waitFor(() =>
+			expect(fetch).toHaveBeenCalledWith(
+				'/api/nzb2rd/jobs/job-9?releaseId=release-9',
+				expect.objectContaining({ method: 'DELETE' })
+			)
+		);
+		await waitFor(() =>
+			expect(screen.queryByText('Pirate For The Sea')).not.toBeInTheDocument()
+		);
+	});
+
+	it('still calls an in-flight row a cancel', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue(listResponse([{ ...failedNzb, status: 'fetching' }]))
+		);
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('Pirate For The Sea')).toBeInTheDocument());
+
+		expect(screen.getByTitle('Cancel transfer')).toBeInTheDocument();
+		expect(screen.queryByTitle('Clear transfer')).not.toBeInTheDocument();
+	});
+
+	it('does nothing when the confirm is declined', async () => {
+		vi.stubGlobal('confirm', vi.fn().mockReturnValue(false));
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(listResponse([failedNzb])));
+		render(<TransfersPage />);
+		await waitFor(() => expect(screen.getByText('Pirate For The Sea')).toBeInTheDocument());
+
+		fireEvent.click(screen.getByTitle('Clear transfer'));
+
+		expect(fetch).not.toHaveBeenCalledWith(
+			expect.stringContaining('/api/nzb2rd/jobs/'),
+			expect.anything()
+		);
 	});
 });
