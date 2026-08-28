@@ -356,7 +356,6 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						const isCastingPm = castingPmHashes.has(r.hash);
 						const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 						const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
-						const isCheckingPm = isHashServiceChecking(r.hash, 'PM');
 						const watchService = pickWatchService(r, {
 							rdKey,
 							adKey,
@@ -780,25 +779,6 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													<>
 														<Cast className="mr-1 inline-block h-3 w-3 text-red-400" />
 														Cast (PM)
-													</>
-												)}
-											</button>
-										)}
-										{premiumizeKey && !r.pmAvailable && (
-											<button
-												className={`haptic-sm inline rounded border-2 border-[#aa0000] bg-[#aa0000]/30 px-1 text-xs text-red-100 transition-colors hover:bg-[#aa0000]/50 ${isCheckingPm ? 'cursor-not-allowed opacity-50' : ''}`}
-												onClick={() => checkServiceAvailability(r, ['PM'])}
-												disabled={isCheckingPm}
-											>
-												{isCheckingPm ? (
-													<>
-														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-														Checking PM...
-													</>
-												) : (
-													<>
-														<SearchIcon className="mr-1 inline-block h-3 w-3 text-red-400" />
-														Check PM
 													</>
 												)}
 											</button>

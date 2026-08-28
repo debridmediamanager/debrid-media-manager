@@ -305,6 +305,19 @@ describe('TvSearchResults', () => {
 	});
 
 	describe('Premiumize watch', () => {
+		it('offers no per-row Premiumize check button', () => {
+			// Same as the movie grid: the load-time PM probe is the whole check,
+			// so a per-row repeat of it is dead weight.
+			renderTv({
+				rdKey: 'rd-key',
+				premiumizeKey: 'pm-key',
+				filteredResults: [{ ...baseTvResult, rdAvailable: false, pmAvailable: false }],
+			});
+
+			expect(screen.queryByRole('button', { name: /Check PM/i })).toBeNull();
+			expect(screen.getByRole('button', { name: /Check RD/i })).toBeTruthy();
+		});
+
 		it('hands the Premiumize key to openWatch for a PM-cached result', async () => {
 			openWatchSpy.mockClear();
 			renderTv({

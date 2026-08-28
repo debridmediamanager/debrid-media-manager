@@ -441,6 +441,21 @@ describe('MovieSearchResults', () => {
 			});
 		});
 
+		it('offers no per-row Premiumize check button', () => {
+			// Page load already probes PM for every row with the same
+			// `cache/check` call a per-row button would repeat, so there is
+			// nothing left for it to find. RD has no such probe - its load-time
+			// answer is DMM's database - so its check button stays.
+			renderComponent({
+				rdKey: 'rd-key',
+				premiumizeKey: 'pm-key',
+				filteredResults: [{ ...baseResult, rdAvailable: false, pmAvailable: false }],
+			});
+
+			expect(screen.queryByRole('button', { name: /Check PM/i })).toBeNull();
+			expect(screen.getByRole('button', { name: /Check RD/i })).toBeTruthy();
+		});
+
 		it('offers no watch button when the user has no Premiumize key', () => {
 			renderComponent({
 				rdKey: null,
