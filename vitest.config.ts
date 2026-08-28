@@ -8,7 +8,11 @@ export default defineConfig({
 		environment: 'jsdom',
 		globals: true,
 		setupFiles: './src/test/setup.ts',
-		exclude: [...configDefaults.exclude, '**/.next/**'],
+		// `.claude/worktrees/*` holds full checkouts of this same repo, one per
+		// agent session. Without this, every session's test run collects every
+		// other session's in-progress tests — so a commit here fails on code
+		// this checkout does not contain, and the run takes four times as long.
+		exclude: [...configDefaults.exclude, '**/.next/**', '**/.claude/**'],
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'html', 'json-summary'],
