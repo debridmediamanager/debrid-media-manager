@@ -27,6 +27,13 @@ const TorBoxHistoryCharts = dynamic(
 	{ ssr: false }
 );
 
+// Client-only: the panel probes TorBox's CDN from the reader's own browser, so
+// there is nothing for the server to render and nothing it could measure.
+const TorBoxCdnPanel = dynamic(
+	() => import('@/components/observability/TorBoxCdnPanel').then((mod) => mod.TorBoxCdnPanel),
+	{ ssr: false }
+);
+
 const FIXED_LOCALE = 'en-US';
 const REFRESH_INTERVAL_MS = 60_000;
 
@@ -143,7 +150,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 	const pageTitle = 'Is TorBox Down Or Just Me?';
 	const canonicalUrl = 'https://debridmediamanager.com/is-torbox-down-or-just-me';
 	const defaultDescription =
-		'Live TorBox availability, measured from what TorBox actually returns to real Debrid Media Manager users rather than from a synthetic probe.';
+		'Live TorBox availability, measured from what TorBox actually returns to real Debrid Media Manager users, plus a per-region CDN check your own browser runs against every TorBox node.';
 
 	if (loading || !stats) {
 		return (
@@ -348,8 +355,8 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 										Debrid Media Manager
 									</a>
 									, a free, open source dashboard for Real-Debrid, AllDebrid and
-									TorBox. We send TorBox no traffic of our own. Every number here
-									is counted from what the{' '}
+									TorBox. Our servers send TorBox no traffic of their own. The
+									verdict above is counted from what the{' '}
 									<a
 										className="font-semibold text-sky-300 hover:text-white"
 										href="https://api-docs.torbox.app/"
@@ -361,7 +368,10 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 									returned to real DMM users, across many accounts and many
 									networks, as they browsed their libraries. Only a 5xx counts
 									against TorBox - a rejected key is the caller&apos;s problem,
-									not an outage.
+									not an outage. The CDN panel below is the one exception, and it
+									runs in your browser rather than ours: a probe from a single
+									datacentre IP measures that IP&apos;s standing with TorBox, not
+									TorBox.
 								</p>
 							</div>
 
@@ -372,9 +382,11 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 								</h3>
 								<p className="mt-2 text-sm text-slate-400">
 									If this page says &quot;Operational&quot; but TorBox is failing
-									for you, the problem is on your side: check your internet
-									connection, then your API key. TorBox rotates the key of an
-									account it flags, and a rotated key answers{' '}
+									for you, the CDN panel below settles where the problem is - it
+									tests every TorBox region from your own network. Regions failing
+									there and nowhere else means your route, not TorBox. If they all
+									pass, check your API key: TorBox rotates the key of an account
+									it flags, and a rotated key answers{' '}
 									<code className="rounded bg-black/40 px-1 text-xs">
 										AUTH_ERROR
 									</code>{' '}
@@ -513,6 +525,8 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 								)}
 							</div>
 						</div>
+
+						<TorBoxCdnPanel />
 
 						<div className="rounded-xl border border-white/10 bg-white/5 p-6 md:col-span-2 lg:col-span-3">
 							<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">

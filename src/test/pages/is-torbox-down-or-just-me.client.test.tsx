@@ -10,6 +10,13 @@ vi.mock('@/components/observability/TorBoxHistoryCharts', () => ({
 	TorBoxHistoryCharts: () => <div data-testid="torbox-history-charts" />,
 }));
 
+// Stubbed so the page's own network behaviour can be asserted in isolation. The
+// panel is the one part of this page that talks to TorBox, and it does so from
+// the reader's browser - it has its own tests.
+vi.mock('@/components/observability/TorBoxCdnPanel', () => ({
+	TorBoxCdnPanel: () => <div data-testid="cdn-card" />,
+}));
+
 const NOW = new Date('2026-08-23T12:00:00Z').getTime();
 
 function buildTbApiStats(overrides: Partial<TorBoxOverallStats> = {}): TorBoxOverallStats {
@@ -97,13 +104,22 @@ describe('TorBoxStatusPage', () => {
 			const { queryByTestId, getByTestId } = render(<TorBoxStatusPage />);
 
 			await waitFor(() => expect(getByTestId('tb-api-card')).toBeInTheDocument());
-			expect(queryByTestId('cdn-card')).toBeNull();
 			expect(queryByTestId('api-card')).toBeNull();
 			expect(queryByTestId('service-card')).toBeNull();
 			expect(queryByTestId('auth-card')).toBeNull();
 		});
 
-		it('asks only the DMM observability endpoint, never TorBox', async () => {
+		// The CDN check is back, but as a client-side panel: it runs in the reader's
+		// browser, on the reader's network, decides nothing on the page, and is not
+		// stored. That is the "or just me" half, and it is what a server-side cron
+		// from one IP could never answer.
+		it('renders the CDN panel, which probes from the reader browser', async () => {
+			const { getByTestId } = render(<TorBoxStatusPage />);
+
+			await waitFor(() => expect(getByTestId('cdn-card')).toBeInTheDocument());
+		});
+
+		it('feeds the verdict from the DMM observability endpoint alone, never TorBox', async () => {
 			render(<TorBoxStatusPage />);
 
 			await waitFor(() => expect(globalWithFetch.fetch).toHaveBeenCalled());
