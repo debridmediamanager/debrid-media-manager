@@ -290,38 +290,41 @@ export const getPin = async (): Promise<PinData> => {
 	}
 };
 
-export const checkPin = async (pin: string, check: string): Promise<PinCheckData> => {
+/**
+ * One PIN check. `checkPin` waits out the whole activation on your behalf; this
+ * is the single request underneath it, for callers that have to own the waiting
+ * themselves - the login page stops polling when the user navigates away, which
+ * a loop buried in here cannot do.
+ */
+export const checkPinOnce = async (pin: string, check: string): Promise<PinCheckData> => {
 	const endpoint = `${config.allDebridHostname}/v4.1/pin/check`;
+	const params = new URLSearchParams();
+	params.append('pin', pin);
+	params.append('check', check);
+
+	const pinCheck = await allDebridAxios.post<ApiResponse<PinCheckData>>(endpoint, params, {
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+		},
+	});
+
+	if (pinCheck.data.status === 'error') {
+		throw new Error(pinCheck.data.error?.message || 'Unknown error');
+	}
+
+	return pinCheck.data.data!;
+};
+
+export const checkPin = async (pin: string, check: string): Promise<PinCheckData> => {
 	try {
-		const params = new URLSearchParams();
-		params.append('pin', pin);
-		params.append('check', check);
+		let pinCheck = await checkPinOnce(pin, check);
 
-		let pinCheck = await allDebridAxios.post<ApiResponse<PinCheckData>>(endpoint, params, {
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-		});
-
-		if (pinCheck.data.status === 'error') {
-			throw new Error(pinCheck.data.error?.message || 'Unknown error');
-		}
-
-		while (!pinCheck.data.data!.activated) {
+		while (!pinCheck.activated) {
 			await delayWithMessageChannel(5000);
-			pinCheck = await allDebridAxios.post<ApiResponse<PinCheckData>>(endpoint, params, {
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-			});
-
-			if (pinCheck.data.status === 'error') {
-				throw new Error(pinCheck.data.error?.message || 'Unknown error');
-			}
+			pinCheck = await checkPinOnce(pin, check);
 		}
 
-		// Return in old format for backward compatibility
-		return pinCheck.data.data!;
+		return pinCheck;
 	} catch (error) {
 		console.error('Error checking PIN:', (error as any).message);
 		throw error;
@@ -337,7 +340,12 @@ export const getAllDebridUser = async (apikey: string) => {
 		});
 
 		if (response.data.status === 'error') {
-			throw new Error(response.data.error?.message || 'Unknown error');
+			// The code is what separates a key AllDebrid rejects outright
+			// (AUTH_BAD_APIKEY) from one it refuses for this caller or endpoint
+			// (AUTH_BLOCKED), and only the message survives an Error on its own.
+			throw Object.assign(new Error(response.data.error?.message || 'Unknown error'), {
+				code: response.data.error?.code,
+			});
 		}
 
 		return response.data.data!.user;

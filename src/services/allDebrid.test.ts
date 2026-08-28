@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	checkPin,
+	checkPinOnce,
 	deleteMagnet,
 	getAllDebridUser,
 	getMagnetFiles,
@@ -80,6 +81,17 @@ describe('AllDebrid service helpers', () => {
 		vi.useRealTimers();
 	});
 
+	it('checks a PIN exactly once when the caller owns the waiting', async () => {
+		postMock.mockResolvedValueOnce({
+			data: { status: 'success', data: { activated: false, expires_in: 10 } },
+		});
+
+		const result = await checkPinOnce('pin', 'check');
+
+		expect(result.activated).toBe(false);
+		expect(postMock).toHaveBeenCalledTimes(1);
+	});
+
 	it('fetches user info and uploads magnets', async () => {
 		getMock.mockResolvedValueOnce({
 			data: { status: 'success', data: { user: { username: 'demo' } } },
@@ -97,6 +109,22 @@ describe('AllDebrid service helpers', () => {
 			data: { status: 'error', error: { message: 'invalid magnet' } },
 		});
 		await expect(uploadMagnet('token', ['invalid'])).rejects.toThrow('invalid magnet');
+	});
+
+	it('carries the error code out of a refused user lookup', async () => {
+		// The login page tells "wrong key" from "blocked caller" by this code;
+		// the message alone cannot separate them.
+		getMock.mockResolvedValueOnce({
+			data: {
+				status: 'error',
+				error: { code: 'AUTH_BAD_APIKEY', message: 'The auth apikey is invalid' },
+			},
+		});
+
+		await expect(getAllDebridUser('bad')).rejects.toMatchObject({
+			code: 'AUTH_BAD_APIKEY',
+			message: 'The auth apikey is invalid',
+		});
 	});
 
 	it('retrieves magnet status and converts files to links', async () => {
