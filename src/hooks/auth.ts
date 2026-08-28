@@ -163,10 +163,38 @@ const useRealDebrid = () => {
 			}
 
 			if (!refreshToken || !clientId || !clientSecret) {
+				clearRefreshTimer();
+
+				if (token) {
+					// A pasted API key is a complete login on its own: there are
+					// no OAuth credentials to exchange and nothing to renew, so
+					// the only open question is whether Real-Debrid still takes
+					// it. Without this branch the token worked everywhere that
+					// reads it directly while the profile stayed empty.
+					globalRealDebridState.isInitialized = true;
+					try {
+						const user = await getRealDebridUser(token);
+						if (!isMounted) return;
+						globalRealDebridState.user = user as RealDebridUser;
+						globalRealDebridState.error = null;
+						globalRealDebridState.hasAuth = true;
+					} catch (e) {
+						if (!isMounted) return;
+						console.error('RealDebrid auth error:', e);
+						if (isAuthError(e)) clearRdKeys();
+						globalRealDebridState.user = null;
+						globalRealDebridState.hasAuth = false;
+						globalRealDebridState.isInitialized = false;
+						globalRealDebridState.error = isAuthError(e) ? null : (e as Error);
+					}
+					globalRealDebridState.loading = false;
+					globalRealDebridState.subscribers.forEach((fn) => fn());
+					return;
+				}
+
 				// Credentials are gone (logout, or a switch to another account).
 				// The user object outlived them before, so useCurrentUser kept
 				// reporting the previous account until a full reload.
-				clearRefreshTimer();
 				globalRealDebridState.user = null;
 				globalRealDebridState.hasAuth = false;
 				globalRealDebridState.isInitialized = false;
@@ -263,8 +291,11 @@ const useRealDebrid = () => {
 			isMounted = false;
 			if (retryTimeout) clearTimeout(retryTimeout);
 		};
+		// `token` is watched for the API-key login, which writes nothing else:
+		// with only the OAuth credentials here, a pasted key sat unvalidated
+		// until the next full reload.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [refreshToken, clientId, clientSecret]);
+	}, [refreshToken, clientId, clientSecret, token]);
 
 	return { user, error, loading, isRefreshing, hasAuth: !!token };
 };

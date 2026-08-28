@@ -65,6 +65,32 @@ describe('auth hooks', () => {
 		expect(mockGetRealDebridUser).toHaveBeenCalledWith('rd-token');
 	});
 
+	it('validates a pasted API key that has no OAuth credentials behind it', async () => {
+		// The API-key login writes only this one key. Before, the missing OAuth
+		// credentials read as a logout: the token worked everywhere that reads it
+		// directly, while the profile stayed empty.
+		setStoredValue('rd:accessToken', 'pasted-key');
+		mockGetRealDebridUser.mockResolvedValue({ username: 'rd-user' });
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.rdUser?.username).toBe('rd-user'));
+		expect(result.current.hasRDAuth).toBe(true);
+		expect(mockGetToken).not.toHaveBeenCalled();
+	});
+
+	it('drops a pasted API key Real-Debrid rejects', async () => {
+		setStoredValue('rd:accessToken', 'revoked-key');
+		mockGetRealDebridUser.mockRejectedValue(
+			Object.assign(new Error('bad token'), { response: { status: 401 } })
+		);
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(window.localStorage.getItem('rd:accessToken')).toBeNull());
+		expect(result.current.rdUser).toBeNull();
+	});
+
 	it('refreshes RD token when the stored one is invalid', async () => {
 		setStoredValue('rd:accessToken', 'stale');
 		setStoredValue('rd:refreshToken', 'refresh');
