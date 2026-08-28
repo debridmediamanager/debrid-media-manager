@@ -143,7 +143,8 @@ export function useTorrentManagement(
 				},
 				deleteIfNotInstant,
 				0,
-				isCheckingAvailability
+				isCheckingAvailability,
+				torrentResult?.title ?? ''
 			);
 
 			// Clean up false positives: when the torrent wasn't instant (deleteIfNotInstant)

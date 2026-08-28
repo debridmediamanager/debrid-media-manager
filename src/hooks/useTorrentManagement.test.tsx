@@ -225,7 +225,8 @@ describe('useTorrentManagement', () => {
 			expect.any(Function),
 			false,
 			0,
-			false
+			false,
+			'Sample Torrent'
 		);
 		expect(mockSubmitAvailability).toHaveBeenCalledWith(
 			'token-ts',
@@ -267,7 +268,11 @@ describe('useTorrentManagement', () => {
 			expect.any(Function),
 			true,
 			0,
-			false
+			false,
+			// The row title goes with it: it is the only way to tell RD's
+			// content block apart from its throttle penalty, since both come
+			// back as 451 infringing_file.
+			'Sample Torrent'
 		);
 		expect(returnValue).toBe(true);
 		expect(mockSubmitAvailability).toHaveBeenCalled();

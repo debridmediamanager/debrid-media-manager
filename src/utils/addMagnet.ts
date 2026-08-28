@@ -37,6 +37,7 @@ import { UserTorrent } from '@/torrent/userTorrent';
 import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
+import { isRdBlockedName } from './deInfringe';
 import { handleDeleteRdTorrent } from './deleteTorrent';
 import {
 	buildPremiumizeRowSources,
@@ -79,6 +80,18 @@ const MAX_509_RETRIES = 5;
 // keeps us well under the burst budget.
 const BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 500;
 const TB_BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 1000;
+// RD answers `451 infringing_file` for two unrelated things: a filename it
+// blocks outright, and a throttle penalty during a burst of adds. The throttle
+// form arrives *instead of* a 429, so the 429 retry interceptor in
+// realDebrid.ts never engages and `hasRecentRdRateLimits()` stays false —
+// measured 2026-08-28, eight consecutive adds of one season's hashes all came
+// back 451 with no 429 anywhere in the burst, and the same hashes were accepted
+// 201 once the account went quiet. A blocked name is deterministic (refused on
+// request #1, every time) and `isRdBlockedName` is the test for it; anything
+// else answering 451 means slow down and re-probe after ~20s of quiet, which is
+// the spacing measured to take 6 adds out of 6.
+const RD_THROTTLE_BACKOFF = process.env.VITEST_WORKER_ID ? 0 : 20000;
+const MAX_THROTTLE_451_RETRIES = 2;
 
 export type RdAddResult = 'success' | 'infringing_file' | 'error';
 
@@ -88,7 +101,10 @@ export const handleAddAsMagnetInRd = async (
 	callback?: (info: TorrentInfoResponse) => Promise<void>,
 	deleteIfNotInstant: boolean = false,
 	retryCount: number = 0,
-	silent: boolean = false
+	silent: boolean = false,
+	/** Row title, when the caller knows it — the only way to read a 451. */
+	title: string = '',
+	throttleRetryCount: number = 0
 ): Promise<RdAddResult> => {
 	try {
 		const id = await addHashAsMagnet(rdKey, hash);
@@ -135,7 +151,9 @@ export const handleAddAsMagnetInRd = async (
 				callback,
 				deleteIfNotInstant,
 				retryCount + 1,
-				silent
+				silent,
+				title,
+				throttleRetryCount
 			);
 		}
 		const rdError = getRdError(error);
@@ -143,6 +161,43 @@ export const handleAddAsMagnetInRd = async (
 			'Error adding hash:',
 			error instanceof Error ? error.message : 'Unknown error'
 		);
+		// A 451 on a name RD does not block is the throttle penalty, not a
+		// content block: back off and replay it the way a 509 is replayed.
+		// Reporting it verbatim is what convinces users RD started blocking
+		// remuxes, and one row that answers 451 here is the same row that will
+		// answer 201 twenty seconds later. An unknown title takes this branch
+		// too — no evidence is not evidence of a block.
+		if (rdError === 'infringing_file' && !isRdBlockedName(title)) {
+			// Tell the rest of the session RD is throttling, so a genuinely
+			// blocked name arriving in the same window is not trusted either.
+			recordRdRateLimit();
+			// Availability checks skip the backoff: they run a torrent per row
+			// and are themselves the burst that earns the penalty, so waiting
+			// here would stall the sweep without making RD any happier.
+			if (!silent && throttleRetryCount < MAX_THROTTLE_451_RETRIES) {
+				toast.error(
+					`RD is throttling adds. Retrying in 20s... (${throttleRetryCount + 1}/${MAX_THROTTLE_451_RETRIES})`,
+					{ ...magnetToastOptions, duration: RD_THROTTLE_BACKOFF }
+				);
+				await delay(RD_THROTTLE_BACKOFF);
+				return handleAddAsMagnetInRd(
+					rdKey,
+					hash,
+					callback,
+					deleteIfNotInstant,
+					retryCount,
+					silent,
+					title,
+					throttleRetryCount + 1
+				);
+			}
+			if (!silent)
+				toast.error(
+					'RD is throttling adds — wait a minute and try again.',
+					magnetToastOptions
+				);
+			return 'error';
+		}
 		if (!silent)
 			toast.error(
 				rdError ? `RD error: ${rdError}` : 'Failed to add hash.',

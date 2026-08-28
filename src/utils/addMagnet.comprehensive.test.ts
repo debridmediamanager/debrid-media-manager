@@ -53,6 +53,10 @@ describe('addMagnet utilities', () => {
 	describe('handleAddAsMagnetInRd', () => {
 		const rdKey = 'test-rd-key';
 		const hash = 'test-hash-123';
+		// The release from the bug report — RD accepted this exact hash once the
+		// account was quiet.
+		const CLEAN_TITLE = 'The.Twilight.Zone.S01.1080p.BluRay.REMUX.AVC.FLAC.2.0-EPSiLON';
+		const BLOCKED_TITLE = 'Movie.2019.1080p.WEB-DL.DDP5.1.H.264-GROUP';
 
 		it('should successfully add magnet and select files', async () => {
 			const mockId = 'torrent-456';
@@ -112,12 +116,138 @@ describe('addMagnet utilities', () => {
 
 			vi.mocked(addHashAsMagnet).mockRejectedValue(error);
 
-			await handleAddAsMagnetInRd(rdKey, hash);
+			await handleAddAsMagnetInRd(rdKey, hash, undefined, false, 0, false, BLOCKED_TITLE);
 
 			expect(toast.error).toHaveBeenCalledWith(
 				'RD error: infringing_file',
 				expect.any(Object)
 			);
+		});
+
+		// RD returns `451 infringing_file` for a name it blocks AND as a throttle
+		// penalty during a burst of adds — and the throttle form arrives instead
+		// of a 429, so nothing else in the stack sees it as rate limiting.
+		// Measured 2026-08-28 on a season page's own hashes: eight consecutive
+		// adds all answered 451 with no 429 anywhere, and every one of them was
+		// accepted 201 after the account went quiet. Reporting the raw status
+		// told users RD had started blocking remuxes; the whole-season button
+		// looked like it worked only because it walks several candidates and one
+		// of them lands in a gap.
+		describe('451 infringing_file: throttle vs blocked name', () => {
+			const infringing = () => {
+				const error = new AxiosError('Infringing content');
+				error.response = {
+					status: 451,
+					data: { error: 'infringing_file', error_code: 35 },
+				} as any;
+				return error;
+			};
+
+			const downloaded = {
+				id: 'torrent-456',
+				status: 'downloaded',
+				progress: 100,
+				files: [],
+				links: [],
+			} as any;
+
+			it('replays a 451 on a name RD does not block, and succeeds', async () => {
+				vi.mocked(addHashAsMagnet)
+					.mockRejectedValueOnce(infringing())
+					.mockResolvedValueOnce('torrent-456');
+				vi.mocked(getTorrentInfo).mockResolvedValue(downloaded);
+				vi.mocked(selectFiles).mockResolvedValue({} as any);
+
+				const result = await handleAddAsMagnetInRd(
+					rdKey,
+					hash,
+					undefined,
+					false,
+					0,
+					false,
+					CLEAN_TITLE
+				);
+
+				expect(result).toBe('success');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(2);
+				expect(toast.error).toHaveBeenCalledWith(
+					'RD is throttling adds. Retrying in 20s... (1/2)',
+					expect.any(Object)
+				);
+				expect(toast.error).not.toHaveBeenCalledWith(
+					'RD error: infringing_file',
+					expect.any(Object)
+				);
+			});
+
+			it('gives up as an error, never as infringing_file', async () => {
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				const result = await handleAddAsMagnetInRd(
+					rdKey,
+					hash,
+					undefined,
+					false,
+					0,
+					false,
+					CLEAN_TITLE
+				);
+
+				// 'error' keeps the shared availability row: the caller evicts it
+				// on 'infringing_file', and a throttled add is no evidence at all.
+				expect(result).toBe('error');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(3);
+				expect(toast.error).toHaveBeenLastCalledWith(
+					'RD is throttling adds — wait a minute and try again.',
+					expect.any(Object)
+				);
+			});
+
+			it('takes the same branch when the caller knows no title', async () => {
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				const result = await handleAddAsMagnetInRd(rdKey, hash);
+
+				expect(result).toBe('error');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(3);
+			});
+
+			// An availability sweep is itself the burst that earns the penalty,
+			// so stalling 20s a row would slow it down without helping.
+			it('does not replay during a silent availability check', async () => {
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				const result = await handleAddAsMagnetInRd(
+					rdKey,
+					hash,
+					undefined,
+					false,
+					0,
+					true,
+					CLEAN_TITLE
+				);
+
+				expect(result).toBe('error');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
+				expect(toast.error).not.toHaveBeenCalled();
+			});
+
+			it('reports a blocked name straight away, without replaying', async () => {
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				const result = await handleAddAsMagnetInRd(
+					rdKey,
+					hash,
+					undefined,
+					false,
+					0,
+					false,
+					BLOCKED_TITLE
+				);
+
+				expect(result).toBe('infringing_file');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
+			});
 		});
 
 		it('should handle generic errors', async () => {
