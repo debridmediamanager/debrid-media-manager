@@ -63,6 +63,9 @@ public/sw.js.map
 public/workbox-*.js.map
 public/fallback-*.js
 **/.claude/settings.local.json
+# Agent sessions put full worktrees of this repo here. They are separate
+# checkouts, never content of this one.
+**/.claude/worktrees/
 
 credentials.txt
 
