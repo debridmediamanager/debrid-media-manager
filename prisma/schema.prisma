@@ -935,3 +935,39 @@ model TorBoxOperationalDaily {
   @@index([date])
   @@index([operation, date])
 }
+
+// Crowd-sourced TorBox CDN reachability, one row per region per hour.
+// Every count comes from a reader's own browser probing tb-cdn from their own
+// network - never from a probe of ours, which would only ever measure one
+// datacentre IP's standing with TorBox. See the status-page notes in AGENTS.md.
+model TorBoxCdnHourly {
+  id           Int      @id @default(autoincrement())
+  hour         DateTime
+  region       String   @db.VarChar(16)
+  okCount      Int      @default(0)
+  failCount    Int      @default(0)
+  latencySumMs Float    @default(0)
+  latencyCount Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@unique([hour, region])
+  @@index([hour])
+  @@index([region, hour])
+}
+
+model TorBoxCdnDaily {
+  id           Int      @id @default(autoincrement())
+  date         DateTime
+  region       String   @db.VarChar(16)
+  okCount      Int
+  failCount    Int
+  latencySumMs Float    @default(0)
+  latencyCount Int      @default(0)
+  minRate      Float    @default(0)
+  maxRate      Float    @default(0)
+  createdAt    DateTime @default(now())
+
+  @@unique([date, region])
+  @@index([date])
+  @@index([region, date])
+}

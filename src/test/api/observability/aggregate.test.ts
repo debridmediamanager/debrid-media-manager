@@ -6,6 +6,8 @@ const mockRepository = vi.hoisted(() => ({
 		cleanupOldHistoryData: vi.fn(),
 		rollupTorBoxOperationalDaily: vi.fn(),
 		cleanupOldTorBoxOperationalData: vi.fn(),
+		rollupTorBoxCdnDaily: vi.fn(),
+		cleanupOldTorBoxCdnData: vi.fn(),
 	},
 }));
 
@@ -112,6 +114,29 @@ describe('/api/observability/aggregate', () => {
 
 		expect(mockRepository.repository.rollupTorBoxOperationalDaily).toHaveBeenCalled();
 		expect(mockRepository.repository.cleanupOldTorBoxOperationalData).toHaveBeenCalled();
+	});
+
+	// Same reasoning for the reader-submitted CDN counters: they are written by
+	// every visitor to the status page, so unswept they grow faster than the
+	// user-traffic ones.
+	it('rolls up and cleans the TorBox CDN tables too', async () => {
+		mockRepository.repository.runDailyRollup.mockResolvedValue({});
+		mockRepository.repository.cleanupOldHistoryData.mockResolvedValue({});
+		mockRepository.repository.rollupTorBoxCdnDaily.mockResolvedValue(true);
+		mockRepository.repository.cleanupOldTorBoxCdnData.mockResolvedValue({
+			hourlyDeleted: 9,
+			dailyDeleted: 2,
+		});
+
+		const req = createMockRequest({ method: 'POST', query: { action: 'all' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockRepository.repository.rollupTorBoxCdnDaily).toHaveBeenCalled();
+		expect(mockRepository.repository.cleanupOldTorBoxCdnData).toHaveBeenCalled();
+		const data = res._getData() as { results: Record<string, unknown> };
+		expect(data.results.torboxCdnCleanup).toEqual({ hourlyDeleted: 9, dailyDeleted: 2 });
 	});
 
 	it('runs cleanup action', async () => {

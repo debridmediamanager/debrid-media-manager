@@ -3,7 +3,9 @@ import {
 	probeCdnNode,
 	regionLabel,
 	runCdnProbe,
+	submitCdnProbe,
 	type TorBoxCdnNode,
+	type TorBoxCdnNodeResult,
 } from '@/lib/observability/torboxCdnProbe';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -401,5 +403,76 @@ describe('runCdnProbe', () => {
 		await expect(runCdnProbe()).resolves.toMatchObject({
 			discoveryError: 'TorBox advertised no CDN nodes',
 		});
+	});
+});
+
+describe('submitCdnProbe', () => {
+	function nodeResult(overrides: Partial<TorBoxCdnNodeResult> = {}): TorBoxCdnNodeResult {
+		return { ...node(), ok: true, status: 206, latencyMs: 42, error: null, ...overrides };
+	}
+
+	it('posts one entry per probed region', async () => {
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 202 });
+		globalWithFetch.fetch = fetchMock as unknown as typeof fetch;
+
+		await expect(
+			submitCdnProbe({
+				nodes: [
+					nodeResult(),
+					nodeResult({ region: 'enam', ok: false, status: 502, latencyMs: null }),
+				],
+				discoveryError: null,
+				checkedAt: Date.now(),
+			})
+		).resolves.toBe(true);
+
+		const [url, init] = fetchMock.mock.calls[0];
+		expect(url).toBe('/api/observability/torbox-cdn');
+		expect(init.method).toBe('POST');
+		expect(JSON.parse(init.body)).toEqual({
+			results: [
+				{ region: 'ceur', ok: true, latencyMs: 42 },
+				{ region: 'enam', ok: false, latencyMs: null },
+			],
+		});
+	});
+
+	// A failure has no latency to report, and sending the node's stale one would
+	// let a dark region contribute to a healthy one's average.
+	it('sends no latency for a region that did not serve bytes', async () => {
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 202 });
+		globalWithFetch.fetch = fetchMock as unknown as typeof fetch;
+
+		await submitCdnProbe({
+			nodes: [nodeResult({ ok: false, latencyMs: 8000 })],
+			discoveryError: null,
+			checkedAt: Date.now(),
+		});
+
+		expect(JSON.parse(fetchMock.mock.calls[0][1].body).results[0].latencyMs).toBeNull();
+	});
+
+	it('sends nothing when there was nothing to measure', async () => {
+		const fetchMock = vi.fn();
+		globalWithFetch.fetch = fetchMock as unknown as typeof fetch;
+
+		await expect(
+			submitCdnProbe({ nodes: [], discoveryError: 'HTTP 429', checkedAt: Date.now() })
+		).resolves.toBe(false);
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	// The reader came for a status page. A rejected or rate-limited vote must
+	// never surface as a broken panel.
+	it('swallows a refused or unreachable endpoint', async () => {
+		globalWithFetch.fetch = vi.fn().mockResolvedValue({ ok: false, status: 429 });
+		await expect(
+			submitCdnProbe({ nodes: [nodeResult()], discoveryError: null, checkedAt: 1 })
+		).resolves.toBe(false);
+
+		globalWithFetch.fetch = vi.fn().mockRejectedValue(new TypeError('Failed to fetch'));
+		await expect(
+			submitCdnProbe({ nodes: [nodeResult()], discoveryError: null, checkedAt: 1 })
+		).resolves.toBe(false);
 	});
 });

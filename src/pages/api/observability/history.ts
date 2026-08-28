@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { repository } from '@/services/repository';
 
 export type HistoryRange = '24h' | '7d' | '30d' | '90d';
-export type HistoryType = 'stream' | 'servers' | 'rd' | 'torrentio' | 'torbox-api';
+export type HistoryType = 'stream' | 'servers' | 'rd' | 'torrentio' | 'torbox-api' | 'torbox-cdn';
 
 interface HistoryQuery {
 	type?: HistoryType;
@@ -33,6 +33,11 @@ function parseRange(range: HistoryRange): {
 
 // Max hourly retention in hours (90 days)
 const MAX_HOURLY_HOURS = 2160;
+
+// Window for the per-region CDN breakdown. A day is long enough that a quiet
+// region still has votes, and short enough that a region TorBox fixed this
+// morning stops being reported as broken.
+const CDN_REGION_SUMMARY_HOURS = 24;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
@@ -174,6 +179,50 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					granularity: 'hourly',
 					range,
 					data,
+				});
+			}
+
+			// Reader-browser CDN probes. The per-region summary rides along with
+			// the series because it answers the question the series cannot: a dip
+			// in the overall line is only actionable once you know which region
+			// caused it. It always comes from hourly rows - the daily rollup
+			// keeps per-region counts, but the summary window is "recently", not
+			// "over the whole chart range".
+			case 'torbox-cdn': {
+				const regions =
+					await repository.getTorBoxCdnRegionSummary(CDN_REGION_SUMMARY_HOURS);
+
+				if (useDaily) {
+					const dailyData = await repository.getTorBoxCdnDailyHistory(daysBack);
+					if (dailyData.length > 0) {
+						return res.status(200).json({
+							type: 'torbox-cdn',
+							granularity: 'daily',
+							range,
+							data: dailyData,
+							regions,
+							regionWindowHours: CDN_REGION_SUMMARY_HOURS,
+						});
+					}
+					const hourlyData = await repository.getTorBoxCdnHourlyHistory(MAX_HOURLY_HOURS);
+					return res.status(200).json({
+						type: 'torbox-cdn',
+						granularity: 'hourly',
+						range,
+						data: hourlyData,
+						regions,
+						regionWindowHours: CDN_REGION_SUMMARY_HOURS,
+					});
+				}
+
+				const data = await repository.getTorBoxCdnHourlyHistory(hoursBack!);
+				return res.status(200).json({
+					type: 'torbox-cdn',
+					granularity: 'hourly',
+					range,
+					data,
+					regions,
+					regionWindowHours: CDN_REGION_SUMMARY_HOURS,
 				});
 			}
 

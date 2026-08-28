@@ -17,6 +17,7 @@ import { ScrapedService } from './scraped';
 import { SearchService } from './search';
 import { StreamHealthService } from './streamHealth';
 import { TorBoxCastService } from './torboxCast';
+import { TorBoxCdnService } from './torboxCdn';
 import { TorBoxOperationalService } from './torboxOperational';
 import { TorrentSnapshotService } from './torrentSnapshot';
 import { TransferMetaService } from './transferMeta';
@@ -42,6 +43,7 @@ export {
 	SearchService,
 	StreamHealthService,
 	TorBoxCastService,
+	TorBoxCdnService,
 	TorBoxOperationalService,
 	TorrentSnapshotService,
 	TransferMetaService,

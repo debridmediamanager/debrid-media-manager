@@ -21,6 +21,7 @@ interface CronResponse {
 		rdDailyRolled: boolean;
 		torrentioDailyRolled: boolean;
 		torboxApiDailyRolled: boolean;
+		torboxCdnDailyRolled: boolean;
 	};
 	error?: string;
 }
@@ -64,7 +65,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			// inside the Real-Debrid aggregation service.
 			const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
 			const torboxApiDailyRolled = await repository.rollupTorBoxOperationalDaily(yesterday);
-			dailyRollup = { ...rollup, torboxApiDailyRolled };
+			// Reader-submitted CDN counters roll up the same way.
+			const torboxCdnDailyRolled = await repository.rollupTorBoxCdnDaily(yesterday);
+			dailyRollup = { ...rollup, torboxApiDailyRolled, torboxCdnDailyRolled };
 		} catch (e) {
 			console.error('[Cron] Daily rollup failed:', e);
 		}

@@ -1,6 +1,7 @@
 import {
 	regionLabel,
 	runCdnProbe,
+	submitCdnProbe,
 	type TorBoxCdnNodeResult,
 } from '@/lib/observability/torboxCdnProbe';
 import { AlertTriangle, Loader2, RefreshCw, Server } from 'lucide-react';
@@ -31,6 +32,13 @@ export function TorBoxCdnPanel() {
 		setDiscoveryError(result.discoveryError);
 		setCheckedAt(result.checkedAt);
 		setTesting(false);
+
+		// Contribute the run to the history chart below. Not awaited and not
+		// abortable: the panel is already showing its answer, and a vote that
+		// outlives a "Test again" click or a navigation is still a good vote.
+		// An aborted run never gets here - the guard above returns first - so
+		// only a complete measurement is ever submitted.
+		void submitCdnProbe(result);
 	}, []);
 
 	useEffect(() => {

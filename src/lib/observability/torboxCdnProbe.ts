@@ -30,6 +30,7 @@ const API_BASE = 'https://api.torbox.app';
 const API_VERSION = 'v1';
 const SPEEDTEST_PATH = `${API_VERSION}/api/speedtest?test_length=short`;
 const NODE_LIST_FALLBACK_URL = '/api/observability/torbox-cdn-nodes';
+const SUBMIT_URL = '/api/observability/torbox-cdn';
 const NODE_LIST_TIMEOUT_MS = 10_000;
 const NODE_TIMEOUT_MS = 8_000;
 
@@ -262,4 +263,38 @@ export async function runCdnProbe(signal?: AbortSignal): Promise<TorBoxCdnProbeR
 
 	const nodeResults = await Promise.all(nodes.map((node) => probeCdnNode(node, signal)));
 	return { nodes: nodeResults, discoveryError: null, checkedAt: Date.now() };
+}
+
+/**
+ * Contributes this run to the crowd-sourced history behind the CDN chart.
+ *
+ * Deliberately fire-and-forget and deliberately unable to fail loudly: the
+ * reader came for a status page, and a rejected or rate-limited submission must
+ * not turn a working panel into an error. Latency is sent only for a region that
+ * served bytes - a timeout has no latency, and averaging one in would quietly
+ * report an outage as slowness.
+ */
+export async function submitCdnProbe(
+	result: TorBoxCdnProbeResult,
+	signal?: AbortSignal
+): Promise<boolean> {
+	if (result.nodes.length === 0) return false;
+
+	try {
+		const response = await fetch(SUBMIT_URL, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				results: result.nodes.map((node) => ({
+					region: node.region,
+					ok: node.ok,
+					latencyMs: node.ok ? node.latencyMs : null,
+				})),
+			}),
+			signal,
+		});
+		return response.ok;
+	} catch {
+		return false;
+	}
 }

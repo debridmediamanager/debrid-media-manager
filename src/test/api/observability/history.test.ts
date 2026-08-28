@@ -11,6 +11,9 @@ const mockRepository = vi.hoisted(() => ({
 		getTorrentioDailyHistory: vi.fn(),
 		getTorBoxOperationalHourlyHistory: vi.fn(),
 		getTorBoxOperationalDailyHistory: vi.fn(),
+		getTorBoxCdnHourlyHistory: vi.fn(),
+		getTorBoxCdnDailyHistory: vi.fn(),
+		getTorBoxCdnRegionSummary: vi.fn(),
 	},
 }));
 
@@ -355,6 +358,88 @@ describe('/api/observability/history', () => {
 			granularity: 'hourly',
 			range: '30d',
 			data: mockHourly,
+		});
+	});
+
+	describe('torbox-cdn', () => {
+		const regions = [
+			{ region: 'enam', okCount: 0, failCount: 40, rate: 0, avgLatencyMs: null },
+		];
+
+		beforeEach(() => {
+			mockRepository.repository.getTorBoxCdnRegionSummary.mockResolvedValue(regions);
+		});
+
+		it('returns hourly buckets and the region breakdown for a 24h range', async () => {
+			const mockData = [
+				{ time: '2026-08-28T12:00:00Z', okCount: 130, failCount: 40, rate: 0.76 },
+			];
+			mockRepository.repository.getTorBoxCdnHourlyHistory.mockResolvedValue(mockData);
+			const res = createMockResponse();
+
+			await handler(createMockRequest({ method: 'GET', query: { type: 'torbox-cdn' } }), res);
+
+			expect(mockRepository.repository.getTorBoxCdnHourlyHistory).toHaveBeenCalledWith(24);
+			expect(res.json).toHaveBeenCalledWith({
+				type: 'torbox-cdn',
+				granularity: 'hourly',
+				range: '24h',
+				data: mockData,
+				regions,
+				regionWindowHours: 24,
+			});
+		});
+
+		it('returns daily buckets for a 90d range', async () => {
+			const mockData = [
+				{ time: '2026-08-27T00:00:00Z', okCount: 900, failCount: 100, rate: 0.9 },
+			];
+			mockRepository.repository.getTorBoxCdnDailyHistory.mockResolvedValue(mockData);
+			const res = createMockResponse();
+
+			await handler(
+				createMockRequest({ method: 'GET', query: { type: 'torbox-cdn', range: '90d' } }),
+				res
+			);
+
+			expect(mockRepository.repository.getTorBoxCdnDailyHistory).toHaveBeenCalledWith(90);
+			expect(res.json).toHaveBeenCalledWith(
+				expect.objectContaining({ granularity: 'daily', data: mockData })
+			);
+		});
+
+		it('falls back to hourly when the daily rollup has not run yet', async () => {
+			const mockHourly = [
+				{ time: '2026-08-28T12:00:00Z', okCount: 10, failCount: 0, rate: 1 },
+			];
+			mockRepository.repository.getTorBoxCdnDailyHistory.mockResolvedValue([]);
+			mockRepository.repository.getTorBoxCdnHourlyHistory.mockResolvedValue(mockHourly);
+			const res = createMockResponse();
+
+			await handler(
+				createMockRequest({ method: 'GET', query: { type: 'torbox-cdn', range: '30d' } }),
+				res
+			);
+
+			expect(mockRepository.repository.getTorBoxCdnHourlyHistory).toHaveBeenCalledWith(2160);
+			expect(res.json).toHaveBeenCalledWith(
+				expect.objectContaining({ granularity: 'hourly', data: mockHourly })
+			);
+		});
+
+		// The breakdown answers "which region", so it is scoped to recent hours
+		// rather than to the chart range - a region fixed this morning should stop
+		// being reported as broken even on the 90-day view.
+		it('scopes the region breakdown to a day whatever the chart range', async () => {
+			mockRepository.repository.getTorBoxCdnDailyHistory.mockResolvedValue([{ time: 'x' }]);
+			const res = createMockResponse();
+
+			await handler(
+				createMockRequest({ method: 'GET', query: { type: 'torbox-cdn', range: '90d' } }),
+				res
+			);
+
+			expect(mockRepository.repository.getTorBoxCdnRegionSummary).toHaveBeenCalledWith(24);
 		});
 	});
 

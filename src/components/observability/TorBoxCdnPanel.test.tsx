@@ -4,12 +4,17 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const runCdnProbe = vi.fn();
+const submitCdnProbe = vi.fn();
 
 vi.mock('@/lib/observability/torboxCdnProbe', async () => {
 	const actual = await vi.importActual<typeof import('@/lib/observability/torboxCdnProbe')>(
 		'@/lib/observability/torboxCdnProbe'
 	);
-	return { ...actual, runCdnProbe: (...args: unknown[]) => runCdnProbe(...args) };
+	return {
+		...actual,
+		runCdnProbe: (...args: unknown[]) => runCdnProbe(...args),
+		submitCdnProbe: (...args: unknown[]) => submitCdnProbe(...args),
+	};
 });
 
 function nodeResult(overrides: Partial<TorBoxCdnNodeResult> = {}): TorBoxCdnNodeResult {
@@ -33,6 +38,7 @@ function probeResult(overrides: Partial<TorBoxCdnProbeResult> = {}): TorBoxCdnPr
 
 beforeEach(() => {
 	runCdnProbe.mockResolvedValue(probeResult());
+	submitCdnProbe.mockResolvedValue(true);
 });
 
 afterEach(() => {
@@ -108,6 +114,34 @@ describe('TorBoxCdnPanel', () => {
 		expect(screen.queryByTestId('cdn-rate')).not.toBeInTheDocument();
 	});
 
+	// The chart underneath has no other source: DMM's servers never touch
+	// tb-cdn, so a run that is not contributed is a run that never happened.
+	it('contributes each completed run to the shared history', async () => {
+		const result = probeResult();
+		runCdnProbe.mockResolvedValue(result);
+
+		render(<TorBoxCdnPanel />);
+
+		await waitFor(() => expect(submitCdnProbe).toHaveBeenCalledWith(result));
+	});
+
+	it('contributes again after a manual re-test', async () => {
+		render(<TorBoxCdnPanel />);
+		await waitFor(() => expect(submitCdnProbe).toHaveBeenCalledTimes(1));
+
+		fireEvent.click(screen.getByTestId('cdn-retest'));
+
+		await waitFor(() => expect(submitCdnProbe).toHaveBeenCalledTimes(2));
+	});
+
+	it('shows its results even when contributing them fails', async () => {
+		submitCdnProbe.mockRejectedValue(new Error('rate limited'));
+
+		render(<TorBoxCdnPanel />);
+
+		expect(await screen.findByTestId('cdn-rate')).toHaveTextContent('100%');
+	});
+
 	it('aborts the in-flight probe when unmounted', async () => {
 		let seenSignal: AbortSignal | undefined;
 		runCdnProbe.mockImplementation((signal?: AbortSignal) => {
@@ -120,5 +154,8 @@ describe('TorBoxCdnPanel', () => {
 		unmount();
 
 		expect(seenSignal?.aborted).toBe(true);
+		// An abandoned run is a partial measurement, so it must never reach the
+		// shared counters.
+		expect(submitCdnProbe).not.toHaveBeenCalled();
 	});
 });

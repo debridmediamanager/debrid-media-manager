@@ -31,12 +31,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			results.torboxApiDailyRollup = await repository.rollupTorBoxOperationalDaily(
 				new Date(Date.now() - 24 * 60 * 60 * 1000)
 			);
+			results.torboxCdnDailyRollup = await repository.rollupTorBoxCdnDaily(
+				new Date(Date.now() - 24 * 60 * 60 * 1000)
+			);
 		}
 
 		if (action === 'cleanup' || action === 'all') {
 			const cleanupResult = await repository.cleanupOldHistoryData();
 			results.cleanup = cleanupResult;
 			results.torboxApiCleanup = await repository.cleanupOldTorBoxOperationalData();
+			results.torboxCdnCleanup = await repository.cleanupOldTorBoxCdnData();
 		}
 
 		return res.status(200).json({

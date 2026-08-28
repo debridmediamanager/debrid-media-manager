@@ -20,6 +20,7 @@ import {
 	SearchService,
 	StreamHealthService,
 	TorBoxCastService,
+	TorBoxCdnService,
 	TorBoxOperationalService,
 	TorrentSnapshotService,
 	type TransferMetaRecord,
@@ -30,6 +31,7 @@ import {
 import { HashSearchParams } from './database/hashSearch';
 import { RealDebridOperation } from './database/rdOperational';
 import { StreamServerStatus, TorrentioUrlCheckResult } from './database/streamHealth';
+import { TorBoxCdnSample } from './database/torboxCdn';
 import { TorBoxOperation } from './database/torboxOperational';
 import { ScrapeSearchResult } from './mediasearch';
 import { TorrentInfoResponse } from './types';
@@ -53,6 +55,7 @@ export type RepositoryDependencies = Partial<{
 	historyAggregationService: HistoryAggregationService;
 	rdOperationalService: RdOperationalService;
 	torboxOperationalService: TorBoxOperationalService;
+	torboxCdnService: TorBoxCdnService;
 	imdbSearchService: ImdbSearchService;
 	debridUploaderMapService: DebridUploaderMapService;
 	nzb2rdMapService: Nzb2rdMapService;
@@ -79,6 +82,7 @@ export class Repository {
 	private historyAggregationService: HistoryAggregationService;
 	private rdOperationalService: RdOperationalService;
 	private torboxOperationalService: TorBoxOperationalService;
+	private torboxCdnService: TorBoxCdnService;
 	private imdbSearchService: ImdbSearchService;
 	private debridUploaderMapService: DebridUploaderMapService;
 	private nzb2rdMapService: Nzb2rdMapService;
@@ -104,6 +108,7 @@ export class Repository {
 		historyAggregationService,
 		rdOperationalService,
 		torboxOperationalService,
+		torboxCdnService,
 		imdbSearchService,
 		debridUploaderMapService,
 		nzb2rdMapService,
@@ -129,6 +134,7 @@ export class Repository {
 			historyAggregationService ?? new HistoryAggregationService();
 		this.rdOperationalService = rdOperationalService ?? new RdOperationalService();
 		this.torboxOperationalService = torboxOperationalService ?? new TorBoxOperationalService();
+		this.torboxCdnService = torboxCdnService ?? new TorBoxCdnService();
 		this.imdbSearchService = imdbSearchService ?? new ImdbSearchService();
 		this.debridUploaderMapService = debridUploaderMapService ?? new DebridUploaderMapService();
 		this.nzb2rdMapService = nzb2rdMapService ?? new Nzb2rdMapService();
@@ -1047,6 +1053,31 @@ export class Repository {
 
 	public cleanupOldTorBoxOperationalData() {
 		return this.torboxOperationalService.cleanupOldData();
+	}
+
+	// TorBox CDN Service Methods (reachability measured in readers' own browsers)
+	public recordTorBoxCdnSamples(samples: TorBoxCdnSample[]) {
+		return this.torboxCdnService.recordSamples(samples);
+	}
+
+	public getTorBoxCdnHourlyHistory(hoursBack?: number) {
+		return this.torboxCdnService.getHourlyHistory(hoursBack);
+	}
+
+	public getTorBoxCdnDailyHistory(daysBack?: number) {
+		return this.torboxCdnService.getDailyHistory(daysBack);
+	}
+
+	public getTorBoxCdnRegionSummary(hoursBack?: number) {
+		return this.torboxCdnService.getRegionSummary(hoursBack);
+	}
+
+	public rollupTorBoxCdnDaily(targetDate?: Date) {
+		return this.torboxCdnService.rollupDaily(targetDate);
+	}
+
+	public cleanupOldTorBoxCdnData() {
+		return this.torboxCdnService.cleanupOldData();
 	}
 
 	// RD Operational Service Methods
