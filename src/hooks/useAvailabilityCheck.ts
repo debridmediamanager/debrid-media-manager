@@ -1,6 +1,8 @@
 import { SearchResult } from '@/services/mediasearch';
 import { CACHE_CHECK_CHUNK_SIZE, checkPremiumizeCache } from '@/services/premiumize';
+import { hasRecentRdRateLimits } from '@/services/realDebrid';
 import { checkCachedStatus, TorBoxCachedResponse } from '@/services/torbox';
+import { delay } from '@/utils/delay';
 import {
 	checkDatabaseAvailabilityAd,
 	checkDatabaseAvailabilityRd,
@@ -13,6 +15,32 @@ import { useCallback, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 export type DebridService = 'RD' | 'AD' | 'TB' | 'PM';
+
+// RD retired /instantAvailability, so the only way to ask whether it holds a
+// hash is to add the torrent and delete it again — which means a sweep of a
+// season page is a burst of adds, and RD punishes a burst of adds with
+// `451 infringing_file`, the throttle wearing its content-block status.
+// Measured 2026-08-28: this sweep's old shape (concurrency 3, no pacing) got 2
+// usable answers out of 15 hashes, reported the other 13 cached torrents as
+// uncached, and left the account refusing the user's own adds for minutes
+// afterwards. So probe one row at a time, widen the gap every time RD pushes
+// back, and give up rather than grind out answers that are wrong.
+const RD_PROBE_BASE_SPACING_MS = 1000;
+const RD_PROBE_MAX_SPACING_MS = 30_000;
+// Five rows in a row throttled means the penalty is not clearing inside a gap
+// this sweep can afford to wait.
+const RD_THROTTLE_ABORT_AFTER = 5;
+
+/**
+ * Whether an RD probe that came back empty was throttled rather than answered.
+ *
+ * `addRd` returns null for any failure, so the reason is gone by the time it
+ * gets here — but every 451 whose name RD does not actually block records a
+ * rate limit first (see `handleAddAsMagnetInRd`), and so does a real 429. A row
+ * classified this way must not be treated as "RD says no": it is "RD did not
+ * say".
+ */
+const wasThrottled = (addRdResponse: unknown) => addRdResponse === null && hasRecentRdRateLimits();
 
 const formatServicesLabel = (services: DebridService[]) =>
 	services.length ? services.join(' / ') : 'services';
@@ -284,9 +312,21 @@ export function useAvailabilityCheck(
 
 				// Process RD check result
 				let isCachedInRD = Boolean(result.rdAvailable);
+				let rdThrottled = false;
 				if (rdCheckResult.status === 'fulfilled') {
 					isCachedInRD = rdCheckResult.value.isCachedInRD;
-					if (!isCachedInRD && result.tbTransferred) {
+					rdThrottled = wasThrottled(rdCheckResult.value.addRdResponse);
+					// Only a probe RD actually answered can retire a transfer
+					// badge. `addRdResponse === null` means the add threw — and
+					// the usual reason is RD's 451 throttle penalty, which a
+					// sweep like this one earns for itself. `removeDebridTransfer`
+					// is keyed by hash alone, so one throttled user unregisters a
+					// working transfer for everybody.
+					if (
+						!isCachedInRD &&
+						result.tbTransferred &&
+						Boolean(rdCheckResult.value.addRdResponse)
+					) {
 						fetch('/api/debrid-uploader/unregister', {
 							method: 'POST',
 							headers: { 'Content-Type': 'application/json' },
@@ -375,9 +415,17 @@ export function useAvailabilityCheck(
 					console.error('Failed to get tracker stats:', trackerStatsResult.reason);
 				}
 
-				toast.success(`Service check done (${formatServicesLabel(services)}).`, {
-					id: toastId,
-				});
+				if (rdThrottled) {
+					// RD refused to answer rather than answering "not cached".
+					toast.error('RD is throttling adds — try this row again in a minute.', {
+						id: toastId,
+						duration: 6000,
+					});
+				} else {
+					toast.success(`Service check done (${formatServicesLabel(services)}).`, {
+						id: toastId,
+					});
+				}
 
 				// Update database cache with service check results
 				if (isMounted.current) {
@@ -552,6 +600,13 @@ export function useAvailabilityCheck(
 				}
 			};
 
+			// Adaptive pacing for the RD leg, held across the whole sweep.
+			let rdProbeSpacing = RD_PROBE_BASE_SPACING_MS;
+			let rdConsecutiveThrottled = 0;
+			let rdProbesStarted = 0;
+			let rdAbandoned = false;
+			let rdUnprobed = 0;
+
 			try {
 				const [
 					rdCheckResults,
@@ -560,12 +615,25 @@ export function useAvailabilityCheck(
 					pmCheckResults,
 					trackerStatsResults,
 				] = await Promise.all([
-					// RD availability checks with concurrency limit
+					// RD availability checks, one at a time and paced — see
+					// RD_PROBE_BASE_SPACING_MS above for why this is not parallel.
 					services.includes('RD')
 						? processWithConcurrency(
 								rdTargets,
 								async (result: SearchResult) => {
 									try {
+										if (rdAbandoned) {
+											rdUnprobed++;
+											return {
+												result,
+												isCachedInRD: false,
+												addRdResponse: null,
+												throttled: true,
+											};
+										}
+										if (rdProbesStarted > 0) await delay(rdProbeSpacing);
+										rdProbesStarted++;
+
 										let addRdResponse: any;
 										if (`rd:${result.hash}` in hashAndProgress) {
 											await deleteRd(result.hash);
@@ -583,7 +651,35 @@ export function useAvailabilityCheck(
 											realtimeAvailable.RD++;
 										}
 
-										return { result, isCachedInRD };
+										// A throttled probe is not an answer, so
+										// back off; a real one earns the gap back.
+										const throttled = wasThrottled(addRdResponse);
+										if (throttled) {
+											rdConsecutiveThrottled++;
+											rdProbeSpacing = Math.min(
+												rdProbeSpacing * 2,
+												RD_PROBE_MAX_SPACING_MS
+											);
+											if (rdConsecutiveThrottled >= RD_THROTTLE_ABORT_AFTER) {
+												rdAbandoned = true;
+											}
+										} else {
+											rdConsecutiveThrottled = 0;
+											rdProbeSpacing = Math.max(
+												RD_PROBE_BASE_SPACING_MS,
+												Math.floor(rdProbeSpacing / 2)
+											);
+										}
+
+										// `addRdResponse` rides along so a probe
+										// RD never answered can be told apart
+										// from RD answering "not cached".
+										return {
+											result,
+											isCachedInRD,
+											addRdResponse,
+											throttled,
+										};
 									} catch (error) {
 										console.error(
 											`Failed RD check for ${result.title}:`,
@@ -594,7 +690,7 @@ export function useAvailabilityCheck(
 										removeChecking(result.hash, ['RD']);
 									}
 								},
-								3,
+								1,
 								(completed: number, total: number) => {
 									checkProgress.RD = { completed, total };
 									updateProgressMessage();
@@ -876,8 +972,19 @@ export function useAvailabilityCheck(
 					}
 
 					// Clear stale transfer badges for hashes RD says are not cached
+					// `addRdResponse === null` means RD never answered the probe
+					// (its 451 throttle, most often, which this sweep earns for
+					// itself) — that is not RD saying the content is gone, and
+					// `removeDebridTransfer` is keyed by hash alone, so acting on
+					// it retires a working transfer for every user.
 					const staleTransferHashes = rdCheckResults
-						.filter((r) => r.success && !r.result?.isCachedInRD && r.item.tbTransferred)
+						.filter(
+							(r) =>
+								r.success &&
+								!r.result?.isCachedInRD &&
+								Boolean(r.result?.addRdResponse) &&
+								r.item.tbTransferred
+						)
 						.map((r) => r.item.hash);
 					if (staleTransferHashes.length > 0) {
 						const staleSet = new Set(staleTransferHashes);
@@ -971,6 +1078,16 @@ export function useAvailabilityCheck(
 				const availableSummary =
 					availableSummaryParts.length > 0 ? availableSummaryParts.join(', ') : '0';
 
+				// Say so when RD stopped answering. Silently reporting the
+				// remaining rows as "not available" is what teaches people the
+				// content is gone when RD is only refusing to be asked.
+				if (rdAbandoned) {
+					toast.error(
+						`RD is throttling adds — stopped after ${rdProbesStarted} of ${rdTargets.length}. ${rdUnprobed} left unchecked; try again in a minute.`,
+						{ duration: 8000 }
+					);
+				}
+
 				if (failed.length > 0) {
 					toast.error(
 						`${servicesLabel}: failed to check ${failed.length}/${totalCount}; ${availableSummary} available.`,
@@ -978,7 +1095,7 @@ export function useAvailabilityCheck(
 					);
 				} else {
 					toast.success(
-						`${servicesLabel}: checked ${totalCount}; ${availableSummary} available.`,
+						`${servicesLabel}: checked ${totalCount - rdUnprobed}; ${availableSummary} available.`,
 						{ duration: 3000 }
 					);
 				}

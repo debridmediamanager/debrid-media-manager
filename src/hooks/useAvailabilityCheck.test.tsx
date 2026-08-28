@@ -14,6 +14,8 @@ const {
 	mockShouldIncludeTrackerStats,
 	mockProcessWithConcurrency,
 	mockCheckCachedStatus,
+	mockDelay,
+	mockHasRecentRdRateLimits,
 	toastFunction,
 } = vi.hoisted(() => {
 	const loading = vi.fn().mockReturnValue('toast-id');
@@ -39,6 +41,8 @@ const {
 		mockShouldIncludeTrackerStats: vi.fn(),
 		mockProcessWithConcurrency: vi.fn(),
 		mockCheckCachedStatus: vi.fn(),
+		mockDelay: vi.fn(),
+		mockHasRecentRdRateLimits: vi.fn(),
 		toastFunction: toastFn,
 	};
 });
@@ -73,6 +77,16 @@ vi.mock('@/services/torbox', () => ({
 	TorBoxCachedResponse: {},
 }));
 
+vi.mock('@/services/realDebrid', () => ({
+	hasRecentRdRateLimits: mockHasRecentRdRateLimits,
+}));
+
+// The sweep paces its RD probes; the suite runs on fake timers, so the real
+// MessageChannel-backed delay would never resolve.
+vi.mock('@/utils/delay', () => ({
+	delay: mockDelay,
+}));
+
 const createSearchResult = (overrides: Partial<SearchResult> = {}): SearchResult => ({
 	title: overrides.title || 'Sample Torrent',
 	fileSize: overrides.fileSize ?? 1024,
@@ -87,6 +101,7 @@ const createSearchResult = (overrides: Partial<SearchResult> = {}): SearchResult
 	biggestFileSize: overrides.biggestFileSize ?? 1024,
 	videoCount: overrides.videoCount ?? 1,
 	trackerStats: overrides.trackerStats,
+	tbTransferred: overrides.tbTransferred ?? false,
 });
 
 const makeTbCachedResponse = (hashes: string[]) => {
@@ -132,6 +147,10 @@ describe('useAvailabilityCheck', () => {
 		mockToast.dismiss.mockClear();
 		mockToastCall.mockClear();
 		mockCheckCachedStatus.mockReset();
+		mockDelay.mockReset();
+		mockDelay.mockResolvedValue(undefined);
+		mockHasRecentRdRateLimits.mockReset();
+		mockHasRecentRdRateLimits.mockReturnValue(false);
 		mockGenerateTokenAndHash.mockResolvedValue(['token', 'hash']);
 		mockCheckDatabaseAvailabilityRd.mockResolvedValue(undefined);
 		mockCheckDatabaseAvailabilityAd.mockResolvedValue(undefined);
@@ -388,6 +407,185 @@ describe('useAvailabilityCheck', () => {
 	// =========================================================================
 	// checkServiceAvailabilityBulk
 	// =========================================================================
+
+	// `removeDebridTransfer` is keyed by hash alone, so retiring a transfer badge
+	// on a probe that never got an answer costs every user the registration, not
+	// just this one. The usual reason a probe gets no answer is RD's 451 throttle
+	// penalty — which a sweep of adds like this one earns for itself.
+	describe('transfer badges vs a probe RD never answered', () => {
+		const unregisterCalls = () =>
+			(global.fetch as any).mock.calls.filter(
+				(c: any[]) => c[0] === '/api/debrid-uploader/unregister'
+			);
+
+		beforeEach(() => {
+			global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) }) as any;
+			searchResults = [createSearchResult({ tbTransferred: true })];
+		});
+
+		it('keeps the badge when the RD add threw (throttled, no answer)', async () => {
+			addRd.mockResolvedValue(null);
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailability(searchResults[0], ['RD']);
+			});
+
+			expect(unregisterCalls()).toHaveLength(0);
+		});
+
+		it('retires the badge when RD answered that it is not cached', async () => {
+			addRd.mockResolvedValue({
+				id: 'rd-1',
+				status: 'downloading',
+				progress: 12,
+				links: [],
+				files: [],
+			});
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailability(searchResults[0], ['RD']);
+			});
+
+			expect(unregisterCalls()).toHaveLength(1);
+		});
+
+		it('keeps the badge mid-sweep when the RD add threw', async () => {
+			addRd.mockResolvedValue(null);
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['RD']);
+			});
+
+			expect(unregisterCalls()).toHaveLength(0);
+		});
+
+		it('retires the badge mid-sweep when RD answered', async () => {
+			addRd.mockResolvedValue({
+				id: 'rd-1',
+				status: 'downloading',
+				progress: 12,
+				links: [],
+				files: [],
+			});
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['RD']);
+			});
+
+			expect(unregisterCalls()).toHaveLength(1);
+		});
+	});
+
+	// RD retired /instantAvailability, so this sweep probes by adding and deleting
+	// each hash — a burst of adds, which RD punishes with `451 infringing_file`.
+	// Measured 2026-08-28: the old shape (concurrency 3, no pacing) got 2 usable
+	// answers out of 15 and reported the other 13 cached torrents as uncached.
+	describe('RD sweep pacing under throttle', () => {
+		const rows = (n: number) =>
+			Array.from({ length: n }, (_, i) => createSearchResult({ hash: `hash-${i}` }));
+
+		beforeEach(() => {
+			global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) }) as any;
+		});
+
+		it('probes one at a time, spaced', async () => {
+			searchResults = rows(3);
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['RD']);
+			});
+
+			expect(addRd).toHaveBeenCalledTimes(3);
+			// First probe goes straight out; the rest are spaced.
+			expect(mockDelay).toHaveBeenCalledTimes(2);
+			expect(mockDelay).toHaveBeenCalledWith(1000);
+		});
+
+		it('widens the gap each time RD throttles', async () => {
+			searchResults = rows(4);
+			addRd.mockResolvedValue(null);
+			mockHasRecentRdRateLimits.mockReturnValue(true);
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['RD']);
+			});
+
+			expect(mockDelay.mock.calls.map((c) => c[0])).toEqual([2000, 4000, 8000]);
+		});
+
+		it('stops after five throttled rows instead of grinding out wrong answers', async () => {
+			searchResults = rows(9);
+			addRd.mockResolvedValue(null);
+			mockHasRecentRdRateLimits.mockReturnValue(true);
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['RD']);
+			});
+
+			expect(addRd).toHaveBeenCalledTimes(5);
+			expect(mockToast.error).toHaveBeenCalledWith(
+				expect.stringContaining('RD is throttling adds — stopped after 5 of 9'),
+				expect.any(Object)
+			);
+		});
+
+		it('does not stop for probes RD actually answered', async () => {
+			searchResults = rows(9);
+			addRd.mockResolvedValue(null);
+			mockHasRecentRdRateLimits.mockReturnValue(false);
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['RD']);
+			});
+
+			expect(addRd).toHaveBeenCalledTimes(9);
+			expect(mockDelay.mock.calls.map((c) => c[0])).toEqual([
+				1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000,
+			]);
+		});
+
+		it('earns the gap back after a real answer', async () => {
+			searchResults = rows(4);
+			mockHasRecentRdRateLimits
+				.mockReturnValueOnce(true)
+				.mockReturnValueOnce(true)
+				.mockReturnValue(false);
+			addRd.mockResolvedValue(null);
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['RD']);
+			});
+
+			// 1s base -> 2s -> 4s after two throttles, then halved back to 2s.
+			expect(mockDelay.mock.calls.map((c) => c[0])).toEqual([2000, 4000, 2000]);
+		});
+
+		it('tells the single-row check apart from RD answering no', async () => {
+			searchResults = [createSearchResult()];
+			addRd.mockResolvedValue(null);
+			mockHasRecentRdRateLimits.mockReturnValue(true);
+			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailability(searchResults[0], ['RD']);
+			});
+
+			expect(mockToast.error).toHaveBeenCalledWith(
+				'RD is throttling adds — try this row again in a minute.',
+				expect.objectContaining({ id: 'toast-id' })
+			);
+			expect(mockToast.success).not.toHaveBeenCalled();
+		});
+	});
 
 	describe('checkServiceAvailabilityBulk', () => {
 		it('handles bulk availability check for multiple services', async () => {
