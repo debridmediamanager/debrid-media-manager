@@ -184,43 +184,36 @@ describe('MovieSearchResults', () => {
 		});
 	});
 
-	describe('AD → RD button', () => {
+	// AllDebrid is withdrawn as a transfer source. It answers `NO_SERVER` to the
+	// uploader hosts' addresses — debrid02 has 0 AllDebrid completions across its
+	// whole history — and `AUTH_BLOCKED` to most submitters' keys, which only the
+	// account owner can clear from an email they receive. Every transfer started
+	// here therefore failed, and failed as a terminal "uncached", which read as
+	// "this release does not exist".
+	describe('AD → RD button (withdrawn)', () => {
 		const adCachedResult: SearchResult = {
 			...baseResult,
 			adAvailable: true,
 			rdAvailable: false,
 		};
 
-		it('shows when logged into RD + AD and the result is AD-cached but not RD-cached', async () => {
-			const sendAdToRd = vi.fn().mockResolvedValue(undefined);
+		it('is gone even in the state that used to show it', () => {
 			renderComponent({
 				adKey: 'ad-key',
-				sendAdToRd,
-				filteredResults: [adCachedResult],
-			});
-
-			await userEvent.click(screen.getByRole('button', { name: /AD → RD/i }));
-			await waitFor(() => expect(sendAdToRd).toHaveBeenCalledWith('hash1'));
-		});
-
-		it('is hidden without an AllDebrid login', () => {
-			renderComponent({
-				adKey: null,
-				sendAdToRd: vi.fn(),
 				filteredResults: [adCachedResult],
 			});
 
 			expect(screen.queryByRole('button', { name: /AD → RD/i })).toBeNull();
 		});
 
-		it('is hidden when the result is already RD-cached', () => {
+		it('leaves the TorBox transfer alone', () => {
 			renderComponent({
-				adKey: 'ad-key',
-				sendAdToRd: vi.fn(),
-				filteredResults: [{ ...adCachedResult, rdAvailable: true }],
+				torboxKey: 'tb-key',
+				sendTbToRd: vi.fn(),
+				filteredResults: [{ ...baseResult, tbAvailable: true, rdAvailable: false }],
 			});
 
-			expect(screen.queryByRole('button', { name: /AD → RD/i })).toBeNull();
+			expect(screen.queryByRole('button', { name: /TB → RD/i })).not.toBeNull();
 		});
 	});
 
@@ -300,7 +293,6 @@ describe('MovieSearchResults', () => {
 				torboxKey: 'tb-key',
 				player: 'windows/vlc',
 				filteredResults: [everywhere],
-				sendAdToRd: vi.fn(),
 				sendTbToRd: vi.fn(),
 				handleCastAllDebrid: vi.fn(),
 				handleCastTorBox: vi.fn(),
@@ -309,16 +301,15 @@ describe('MovieSearchResults', () => {
 			const labels = labelsInOrder(container);
 			const rd = indexOfLabel(labels, 'Check RD');
 			const ad = indexOfLabel(labels, 'Instant AD');
-			const adToRd = indexOfLabel(labels, 'AD \u2192 RD');
 			const tb = indexOfLabel(labels, 'Instant TB');
 			const tbToRd = indexOfLabel(labels, 'TB \u2192 RD');
 			const watch = indexOfLabel(labels, 'Watch');
 			const copy = indexOfLabel(labels, 'Copy');
 
-			expect([rd, ad, adToRd, tb, tbToRd, watch, copy].every((i) => i >= 0)).toBe(true);
+			expect([rd, ad, tb, tbToRd, watch, copy].every((i) => i >= 0)).toBe(true);
 			// RD group, then AD group, then TB group
 			expect(rd).toBeLessThan(ad);
-			expect(adToRd).toBeLessThan(tb);
+			expect(ad).toBeLessThan(tb);
 			expect(tb).toBeLessThan(watch);
 			expect(tbToRd).toBeLessThan(watch);
 			// then the service-agnostic tail
@@ -332,7 +323,6 @@ describe('MovieSearchResults', () => {
 				torboxKey: 'tb-key',
 				player: 'windows/vlc',
 				filteredResults: [everywhere],
-				sendAdToRd: vi.fn(),
 				sendTbToRd: vi.fn(),
 				handleCastAllDebrid: vi.fn(),
 				handleCastTorBox: vi.fn(),
@@ -350,7 +340,6 @@ describe('MovieSearchResults', () => {
 				torboxKey: 'tb-key',
 				player: 'windows/vlc',
 				filteredResults: [everywhere],
-				sendAdToRd: vi.fn(),
 				sendTbToRd: vi.fn(),
 				handleCastAllDebrid: vi.fn(),
 				handleCastTorBox: vi.fn(),

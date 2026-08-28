@@ -53,7 +53,6 @@ type TvSearchResultsProps = {
 	addTb: (hash: string) => Promise<void>;
 	addPm: (hash: string) => Promise<void>;
 	sendTbToRd?: (hash: string) => Promise<void>;
-	sendAdToRd?: (hash: string) => Promise<void>;
 	deleteRd: (hash: string) => Promise<void>;
 	deleteAd: (hash: string) => Promise<void>;
 	deleteTb: (hash: string) => Promise<void>;
@@ -85,7 +84,6 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	addTb,
 	addPm,
 	sendTbToRd,
-	sendAdToRd,
 	deleteRd,
 	deleteAd,
 	deleteTb,
@@ -186,7 +184,6 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 		}
 	};
 	const handleSendTbToRd = (hash: string) => runSendToRd(hash, sendTbToRd);
-	const handleSendAdToRd = (hash: string) => runSendToRd(hash, sendAdToRd);
 
 	const handleCastWithLoading = async (hash: string, fileIds: string[]) => {
 		if (castingHashes.has(hash)) return;
@@ -554,31 +551,6 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													: btnLabel(r.adAvailable, 'AD')}
 											</button>
 										)}
-										{rdKey &&
-											adKey &&
-											sendAdToRd &&
-											r.adAvailable &&
-											!r.rdAvailable &&
-											!r.tbTransferred &&
-											notInLibrary('rd', r.hash) && (
-												<button
-													className={`haptic-sm inline rounded border-2 border-amber-500 bg-amber-900/30 px-1 text-xs text-amber-100 transition-colors hover:bg-amber-800/50 ${isSendingToRd ? 'cursor-not-allowed opacity-50' : ''}`}
-													onClick={() => handleSendAdToRd(r.hash)}
-													disabled={isSendingToRd}
-												>
-													{isSendingToRd ? (
-														<>
-															<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-															Sending...
-														</>
-													) : (
-														<>
-															<Send className="mr-1 inline-block h-3 w-3 text-amber-400" />
-															AD → RD
-														</>
-													)}
-												</button>
-											)}
 										{adKey &&
 											handleCastAllDebrid &&
 											r.adAvailable &&

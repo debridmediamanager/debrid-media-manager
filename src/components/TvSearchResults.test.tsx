@@ -182,7 +182,6 @@ describe('TvSearchResults', () => {
 				torboxKey: 'tb-key',
 				player: 'windows/vlc',
 				filteredResults: [everywhere],
-				sendAdToRd: vi.fn(),
 				sendTbToRd: vi.fn(),
 				handleCastAllDebrid: vi.fn(),
 				handleCastTorBox: vi.fn(),
@@ -191,16 +190,15 @@ describe('TvSearchResults', () => {
 			const labels = labelsInOrder(container);
 			const rd = indexOfLabel(labels, 'Check RD');
 			const ad = indexOfLabel(labels, 'Instant AD');
-			const adToRd = indexOfLabel(labels, 'AD \u2192 RD');
 			const tb = indexOfLabel(labels, 'Instant TB');
 			const tbToRd = indexOfLabel(labels, 'TB \u2192 RD');
 			const watch = indexOfLabel(labels, 'Watch');
 			const copy = indexOfLabel(labels, 'Copy');
 
-			expect([rd, ad, adToRd, tb, tbToRd, watch, copy].every((i) => i >= 0)).toBe(true);
+			expect([rd, ad, tb, tbToRd, watch, copy].every((i) => i >= 0)).toBe(true);
 			// RD group, then AD group, then TB group
 			expect(rd).toBeLessThan(ad);
-			expect(adToRd).toBeLessThan(tb);
+			expect(ad).toBeLessThan(tb);
 			expect(tb).toBeLessThan(watch);
 			expect(tbToRd).toBeLessThan(watch);
 			// then the service-agnostic tail
@@ -214,7 +212,6 @@ describe('TvSearchResults', () => {
 				torboxKey: 'tb-key',
 				player: 'windows/vlc',
 				filteredResults: [everywhere],
-				sendAdToRd: vi.fn(),
 				sendTbToRd: vi.fn(),
 				handleCastAllDebrid: vi.fn(),
 				handleCastTorBox: vi.fn(),
@@ -232,7 +229,6 @@ describe('TvSearchResults', () => {
 				torboxKey: 'tb-key',
 				player: 'windows/vlc',
 				filteredResults: [everywhere],
-				sendAdToRd: vi.fn(),
 				sendTbToRd: vi.fn(),
 				handleCastAllDebrid: vi.fn(),
 				handleCastTorBox: vi.fn(),

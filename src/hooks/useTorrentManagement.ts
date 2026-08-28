@@ -379,21 +379,29 @@ export function useTorrentManagement(
 		[premiumizeKey, fetchHashAndProgress, addToCache]
 	);
 
-	// Sends a cached search-result torrent into the user's RD account via the
-	// debrid uploader service, which rewrites the torrent with de-infringed
+	// Sends a TorBox-cached search-result torrent into the user's RD account via
+	// the debrid uploader service, which rewrites the torrent with de-infringed
 	// filenames so RD accepts it — which is why this works even on RD-blocked
-	// names. `service` picks the source (TorBox or AllDebrid). The RD torrent gets
-	// a different info hash than the search result, so the original hash is never
-	// RD-cached and neither the row nor the availability DB is marked here; the
-	// Transfers page (and the server-side registration) is where it surfaces.
+	// names. The RD torrent gets a different info hash than the search result, so
+	// the original hash is never RD-cached and neither the row nor the
+	// availability DB is marked here; the Transfers page (and the server-side
+	// registration) is where it surfaces.
+	//
+	// **AllDebrid was the other source and is withdrawn**, along with the AD key
+	// this used to send on every transfer. AllDebrid answers `NO_SERVER` to the
+	// uploader hosts' addresses (debrid02 has 0 AllDebrid completions in its
+	// entire history) and `AUTH_BLOCKED` to most submitters' keys, which only the
+	// account owner can clear from an email they receive — so the path could not
+	// work for the people using it. The Transfers page still labels older
+	// AllDebrid-served jobs; only the way to start a new one is gone.
 	//
 	// The loading state resolves as soon as RD's own download is underway
 	// ('uploading' in the service's pipeline): from there the transfer no longer
 	// needs the browser, so holding a spinner for the whole RD pull is noise.
 	const sendToRd = useCallback(
-		async (hash: string, service: 'tb' | 'ad') => {
-			const sourceKey = service === 'tb' ? torboxKey : adKey;
-			const label = service === 'tb' ? TRANSFER_LABELS.tb : TRANSFER_LABELS.ad;
+		async (hash: string) => {
+			const sourceKey = torboxKey;
+			const label = TRANSFER_LABELS.tb;
 			if (!rdKey || !sourceKey) return;
 			if (!/^tt\d+$/.test(imdbId)) {
 				toast.error(`${label} needs an IMDB id for this title.`);
@@ -449,7 +457,6 @@ export function useTorrentManagement(
 						imdbId,
 						rdKey,
 						tbKey: torboxKey ?? undefined,
-						adKey: adKey ?? undefined,
 						sizeBytes,
 					});
 
@@ -531,11 +538,10 @@ export function useTorrentManagement(
 				);
 			}
 		},
-		[rdKey, torboxKey, adKey, imdbId, searchResults, setSearchResults]
+		[rdKey, torboxKey, imdbId, searchResults, setSearchResults]
 	);
 
-	const sendTbToRd = useCallback((hash: string) => sendToRd(hash, 'tb'), [sendToRd]);
-	const sendAdToRd = useCallback((hash: string) => sendToRd(hash, 'ad'), [sendToRd]);
+	const sendTbToRd = useCallback((hash: string) => sendToRd(hash), [sendToRd]);
 
 	const deleteRd = useCallback(
 		async (hash: string) => {
@@ -625,7 +631,6 @@ export function useTorrentManagement(
 		addTb,
 		addPm,
 		sendTbToRd,
-		sendAdToRd,
 		deleteRd,
 		deleteAd,
 		deleteTb,

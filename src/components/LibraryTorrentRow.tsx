@@ -97,7 +97,6 @@ function TorrentRow({
 	// torrents carry no imdb id, so the user picks the title first. The matching
 	// source key must be present (it is, since the torrent lives in that service).
 	const isTbTorrent = torrent.id.startsWith('tb:');
-	const isAdTorrent = torrent.id.startsWith('ad:');
 	// A TorBox web download has no magnet, no swarm and no shareable infohash,
 	// so the actions built on those are meaningless for it.
 	const isTbWebDownload = isWebDownloadRowId(torrent.id);
@@ -105,10 +104,10 @@ function TorrentRow({
 	// whose transfer record is gone, so magnet-shaped actions have nothing to work
 	// with on those rows.
 	const hasInfoHash = /^[a-fA-F0-9]{40}$/.test(torrent.hash);
-	const canSendToRd =
-		!!rdKey &&
-		/^[a-fA-F0-9]{40}$/.test(torrent.hash) &&
-		((isTbTorrent && !!tbKey) || (isAdTorrent && !!adKey));
+	// TorBox only: AllDebrid is withdrawn as a transfer source, because it answers
+	// `NO_SERVER` to the uploader hosts and `AUTH_BLOCKED` to most submitters'
+	// keys, so an AD row's transfer could only ever fail.
+	const canSendToRd = !!rdKey && /^[a-fA-F0-9]{40}$/.test(torrent.hash) && isTbTorrent && !!tbKey;
 
 	const handleSendPick = async (pick: ImdbPick) => {
 		setShowSendModal(false);
@@ -119,8 +118,7 @@ function TorrentRow({
 				hash: torrent.hash,
 				imdbId: pick.imdbId,
 				rdKey,
-				tbKey: isTbTorrent ? (tbKey ?? undefined) : undefined,
-				adKey: isAdTorrent ? (adKey ?? undefined) : undefined,
+				tbKey: tbKey ?? undefined,
 				sizeBytes: torrent.bytes,
 				title: torrent.title || torrent.filename,
 				returnPath: '/library',

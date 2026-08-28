@@ -51,7 +51,6 @@ type MovieSearchResultsProps = {
 	addTb: (hash: string) => Promise<void>;
 	addPm: (hash: string) => Promise<void>;
 	sendTbToRd?: (hash: string) => Promise<void>;
-	sendAdToRd?: (hash: string) => Promise<void>;
 	deleteRd: (hash: string) => Promise<void>;
 	deleteAd: (hash: string) => Promise<void>;
 	deleteTb: (hash: string) => Promise<void>;
@@ -82,7 +81,6 @@ const MovieSearchResults = ({
 	addTb,
 	addPm,
 	sendTbToRd,
-	sendAdToRd,
 	deleteRd,
 	deleteAd,
 	deleteTb,
@@ -237,7 +235,6 @@ const MovieSearchResults = ({
 		}
 	};
 	const handleSendTbToRd = (hash: string) => runSendToRd(hash, sendTbToRd);
-	const handleSendAdToRd = (hash: string) => runSendToRd(hash, sendAdToRd);
 
 	const handleCastWithLoading = async (hash: string) => {
 		if (castingHashes.has(hash)) return;
@@ -584,31 +581,6 @@ const MovieSearchResults = ({
 										{isLoading ? 'Adding...' : btnLabel(r.adAvailable, 'AD')}
 									</button>
 								)}
-								{rdKey &&
-									adKey &&
-									sendAdToRd &&
-									r.adAvailable &&
-									!r.rdAvailable &&
-									!r.tbTransferred &&
-									notInLibrary('rd', r.hash) && (
-										<button
-											className={`haptic-sm inline rounded border-2 border-amber-500 bg-amber-900/30 px-1 text-xs text-amber-100 transition-colors hover:bg-amber-800/50 ${isSendingToRd ? 'cursor-not-allowed opacity-50' : ''}`}
-											onClick={() => handleSendAdToRd(r.hash)}
-											disabled={isSendingToRd}
-										>
-											{isSendingToRd ? (
-												<>
-													<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-													Sending...
-												</>
-											) : (
-												<span className="inline-flex items-center">
-													<Send className="mr-1 h-3 w-3 text-amber-400" />
-													AD → RD
-												</span>
-											)}
-										</button>
-									)}
 								{adKey && handleCastAllDebrid && r.adAvailable && (
 									<button
 										className={`haptic-sm inline rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 ${isCastingAd ? 'cursor-not-allowed opacity-50' : ''}`}

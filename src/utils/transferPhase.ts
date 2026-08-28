@@ -32,7 +32,9 @@ export const TRANSFER_STEP_TOAST_MS = 30000;
 /** How the toast on a transfer names its source, in one `X → RD` shape. */
 export const TRANSFER_LABELS = {
 	tb: 'TB → RD',
-	ad: 'AD → RD',
+	// No `ad`: AllDebrid is withdrawn as a transfer source. `ORIGIN_LABELS` in
+	// `transfers.ts` still names it, because jobs it already served are on the
+	// Transfers page and have to be labelled correctly.
 	usenet: 'Usenet → RD',
 	/** The library page's send button, which doesn't know its source yet. */
 	send: 'Send to RD',

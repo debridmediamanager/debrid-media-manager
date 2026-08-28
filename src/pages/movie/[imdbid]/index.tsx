@@ -200,7 +200,6 @@ const MovieSearch: FunctionComponent = () => {
 		addTb,
 		addPm,
 		sendTbToRd,
-		sendAdToRd,
 		deleteRd,
 		deleteAd,
 		deleteTb,
@@ -1047,7 +1046,6 @@ const MovieSearch: FunctionComponent = () => {
 						addTb={addTb}
 						addPm={addPm}
 						sendTbToRd={sendTbToRd}
-						sendAdToRd={sendAdToRd}
 						deleteRd={deleteRd}
 						deleteAd={deleteAd}
 						deleteTb={deleteTb}
