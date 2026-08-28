@@ -1,6 +1,6 @@
 import handler from '@/pages/api/transfers';
 import { repository } from '@/services/repository';
-import { listTransfers } from '@/services/transferList';
+import { keyOf, listTransfers } from '@/services/transferList';
 import {
 	registerCompletedDebridJob,
 	registerCompletedNzb2rdJob,
@@ -262,5 +262,84 @@ describe('registration from the list poll', () => {
 		await flush();
 
 		expect(res.status).toHaveBeenCalledWith(200);
+	});
+});
+
+// The `nzbrd:<releaseId>` marker is what the Usenet section reads to decide a
+// release is already being fetched. It only ever moved pending → completed, so
+// a failed job left it saying "someone is fetching this" forever — and because
+// it is keyed on the shared indexer release id, one person's failure showed a
+// disabled "Running" button to everyone. This poll is the one place that sees a
+// job go terminal on its owner's behalf.
+describe('GET /api/transfers — keeping the nzb2rd release markers truthful', () => {
+	const nzbRow = (over: Record<string, unknown> = {}) => ({
+		source: 'nzb2rd' as const,
+		id: 'job-9',
+		status: 'failed',
+		releaseId: 'release-9',
+		createdAt: 1700000000000,
+		...over,
+	});
+
+	beforeEach(() => {
+		mockRepo.removeNzb2rdTransfer = vi.fn().mockResolvedValue(undefined);
+	});
+
+	it('clears the marker of a failed Usenet job so the release can be sent again', async () => {
+		mockList.mockResolvedValue({ transfers: [nzbRow()], raw: new Map(), degraded: [] });
+
+		await run();
+		await flush();
+
+		expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith('release-9');
+	});
+
+	it('leaves the marker of a running Usenet job alone', async () => {
+		mockList.mockResolvedValue({
+			transfers: [nzbRow({ status: 'fetching' })],
+			raw: new Map(),
+			degraded: [],
+		});
+
+		await run();
+		await flush();
+
+		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
+	});
+
+	it('has no marker to clear for a failed debrid-uploader job', async () => {
+		mockList.mockResolvedValue({
+			transfers: [row({ status: 'failed' })],
+			raw: new Map(),
+			degraded: [],
+		});
+
+		await run();
+		await flush();
+
+		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
+	});
+
+	// Recording the marker and serving the waiting accounts need no page context;
+	// only filing into the search index does. Gating all three on `returnPath` is
+	// why 905 completed jobs still showed as "Running".
+	it('records a completed Usenet job even when the row carries no return path', async () => {
+		const completed = nzbRow({ status: 'completed', returnPath: undefined });
+		const job = { id: 'job-9', status: 'completed', info_hash: 'a'.repeat(40) };
+		mockList.mockResolvedValue({
+			transfers: [completed],
+			raw: new Map([[keyOf(completed as any), job]]),
+			degraded: [],
+		});
+
+		await run();
+		await flush();
+
+		expect(registerCompletedNzb2rdJob).toHaveBeenCalledWith(
+			job,
+			undefined,
+			undefined,
+			'release-9'
+		);
 	});
 });

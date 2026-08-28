@@ -35,6 +35,26 @@ function clampInt(raw: unknown, fallback: number, min: number, max: number): num
 }
 
 /**
+ * Stop a failed Usenet job from blocking its release forever.
+ *
+ * The `nzbrd:<releaseId>` marker is what the Usenet section reads to decide
+ * whether a release is already being fetched, and it only ever moved
+ * `pending` → `completed`. Nothing wrote a failure, so a failed job left the
+ * marker at `pending` — and because the marker is keyed on the indexer release
+ * id it is shared, so one person's failure rendered a disabled "Running" button
+ * for *everyone* looking at that title. Measured 2026-08-28: 2356 releases were
+ * blocked this way.
+ *
+ * Removing it also drops the waiter list, which is right: those accounts queued
+ * behind a job that will never deliver, and their stored credentials should not
+ * outlive it.
+ */
+async function clearMarkerIfFailed(row: TransferRow): Promise<void> {
+	if (row.source !== 'nzb2rd' || row.status !== 'failed' || !row.releaseId) return;
+	await db.removeNzb2rdTransfer(row.releaseId);
+}
+
+/**
  * File a newly-completed transfer into DMM's search index.
  *
  * The registration needs the movie-vs-show context the transfer was started
@@ -50,12 +70,25 @@ function clampInt(raw: unknown, fallback: number, min: number, max: number): num
 async function registerIfCompleted(row: TransferRow, job: any): Promise<void> {
 	if (row.status !== 'completed' || !job) return;
 	const context = transferContextFromPath(row.returnPath);
-	if (!context) return;
 
 	if (row.source === 'nzb2rd') {
-		await registerCompletedNzb2rdJob(job, context.mediaType, context.seasonNum, row.releaseId);
+		// Deliberately not gated on `context`. Filing the release into the search
+		// index needs to know film-vs-season, but the two things that happen
+		// first — recording the `nzbrd:` marker as completed, and handing the
+		// finished torrent to every account that queued behind this job — need no
+		// context at all. Returning early on a missing `returnPath` skipped both,
+		// which is why only 189 markers ever reached `completed` against 4210
+		// completed jobs, and why the release then showed a disabled "Running"
+		// instead of the instant "In RD" add it had earned.
+		await registerCompletedNzb2rdJob(
+			job,
+			context?.mediaType,
+			context?.seasonNum,
+			row.releaseId
+		);
 		return;
 	}
+	if (!context) return;
 	// Only the host that created a debrid job can serve the file list the
 	// registration is built from.
 	const server = await resolveJobServer(row.id, (j) => db.getDebridJobServer(j));
@@ -101,6 +134,9 @@ async function handler(
 		for (const row of enriched) {
 			registerIfCompleted(row, raw.get(keyOf(row))).catch((error) =>
 				console.error(`Registering completed transfer ${row.id} failed:`, error)
+			);
+			clearMarkerIfFailed(row).catch((error) =>
+				console.error(`Clearing the marker for failed transfer ${row.id} failed:`, error)
 			);
 		}
 

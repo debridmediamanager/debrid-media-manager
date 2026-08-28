@@ -41,6 +41,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				.catch((e) => console.error('Clearing nzb2rd transfer failed:', e));
 		}
 
+		// A failed job must stop blocking a resubmit of the same release, exactly
+		// as a cancelled one does. Without this the `nzbrd:` marker stays
+		// `pending` for good and the Usenet row shows a disabled "Running" to
+		// every user, while the resubmit the server would happily accept is
+		// unreachable from the UI.
+		if (req.method === 'GET' && response.ok && release && data?.status === 'failed') {
+			await db
+				.removeNzb2rdTransfer(release)
+				.catch((e) => console.error('Clearing a failed nzb2rd transfer failed:', e));
+		}
+
 		if (req.method === 'GET' && response.ok && data?.status === 'completed') {
 			try {
 				data.dmm_registered = await registerCompletedNzb2rdJob(

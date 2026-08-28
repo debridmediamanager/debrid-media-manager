@@ -166,3 +166,34 @@ describe('GET /api/nzb2rd/jobs/[id] — delivering a finished transfer', () => {
 		expect(mockRepo.upsertAvailability).toHaveBeenCalled();
 	});
 });
+
+// A cancelled job already cleared its `nzbrd:` marker; a failed one did not, so
+// the release it names stayed marked "someone is fetching this" forever and
+// every user saw a disabled "Running" button. The server would have accepted the
+// resubmit — `isTransferStillValid` returns false for a failed job — so the only
+// thing standing in the way was the marker nobody removed.
+describe('GET /api/nzb2rd/jobs/[id] — a failed job stops blocking its release', () => {
+	const failedJob = { id: 'job-A', status: 'failed', error: 'par2 exited 2' };
+
+	beforeEach(() => {
+		mockRepo.removeNzb2rdTransfer = vi.fn().mockResolvedValue(undefined);
+	});
+
+	it('clears the marker when the job has failed', async () => {
+		await run({ releaseId: 'release-1' }, failedJob);
+
+		expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith('release-1');
+	});
+
+	it('has nothing to clear without a release id', async () => {
+		await run({}, failedJob);
+
+		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
+	});
+
+	it('leaves the marker in place while the job is still running', async () => {
+		await run({ releaseId: 'release-1' }, { id: 'job-A', status: 'fetching' });
+
+		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
+	});
+});
