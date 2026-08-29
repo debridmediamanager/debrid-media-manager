@@ -190,6 +190,35 @@ describe('percent', () => {
 		expect(describeTransfer('debrid', { status: 'uploading' }).percent).toBe(25);
 		expect(describeTransfer('nzb2rd', { status: 'hashing' }).percent).toBe(8);
 	});
+});
+
+// `percent` spans the whole ladder, which is what a bar across the transfer
+// wants; a number printed beside a stage name wants the stage's own share, or a
+// download two thirds through reads as "Downloading 32%".
+describe('stagePercent', () => {
+	it('measures the stage rather than the ladder', () => {
+		expect(
+			describeTransfer('nzb2rd', { status: 'hashing', total_bytes: 4, done_bytes: 3 })
+		).toMatchObject({ percent: 38, stagePercent: 75 });
+		expect(
+			describeTransfer('nzb2rd', {
+				status: 'uploading',
+				status_message: 'RD: downloading 42% @ 8.0 MB/s',
+			})
+		).toMatchObject({ stagePercent: 42 });
+	});
+
+	// Only the Usenet pass and RD's pull count anything. Elsewhere the fraction is
+	// 0 because there is no counter, and showing that as "0%" would read as a
+	// stalled stage rather than an unmeasured one.
+	it('is absent for every stage that measures nothing', () => {
+		for (const status of ['pending', 'probing', 'unpacking', 'preparing']) {
+			expect(describeTransfer('nzb2rd', { status }).stagePercent).toBeNull();
+		}
+		expect(describeTransfer('nzb2rd', { status: 'failed' }).stagePercent).toBeNull();
+		expect(describeTransfer('nzb2rd', { status: 'nonsense' }).stagePercent).toBeNull();
+		expect(describeTransfer('nzb2rd', { status: 'completed' }).stagePercent).toBe(100);
+	});
 
 	it('ignores byte counters outside the download stage', () => {
 		// `preparing` leaves done_bytes at the total; reading it as a fraction

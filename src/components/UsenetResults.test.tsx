@@ -1,4 +1,5 @@
 import { UsenetResult } from '@/services/nzb2rd';
+import type { Nzb2rdTransferSummary } from '@/utils/nzb2rd';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -77,7 +78,20 @@ describe('sortResults', () => {
 
 describe('buttonState', () => {
 	const none = new Set<string>();
-	const noTransfers = new Map<string, 'pending' | 'completed'>();
+	const noTransfers = new Map<string, Nzb2rdTransferSummary>();
+	const marker = (over: Partial<Nzb2rdTransferSummary>): Map<string, Nzb2rdTransferSummary> =>
+		new Map([
+			[
+				'a',
+				{
+					releaseId: 'a',
+					jobId: 'job-1',
+					infoHash: null,
+					status: 'pending',
+					...over,
+				} as Nzb2rdTransferSummary,
+			],
+		]);
 
 	it('offers Send for an untouched release', () => {
 		expect(buttonState('a', none, none, noTransfers)).toMatchObject({
@@ -99,24 +113,107 @@ describe('buttonState', () => {
 	});
 
 	it("shows another user's completed fetch as cached, not sendable", () => {
-		expect(buttonState('a', none, none, new Map([['a', 'completed' as const]]))).toMatchObject({
+		expect(buttonState('a', none, none, marker({ status: 'completed' }))).toMatchObject({
 			kind: 'cached',
 			label: 'In RD',
 			disabled: true,
 		});
 	});
 
-	it("shows another user's running fetch as running", () => {
-		expect(buttonState('a', none, none, new Map([['a', 'pending' as const]]))).toMatchObject({
+	// The reason this exists: a marker only says `pending`, and "Running" read as
+	// work in progress. Measured 2026-08-29 against the live queue, 670 of the 683
+	// unfinished jobs had not started — none of them had a `started_at` or a
+	// single progress byte — while 13 were genuinely working. So the overwhelming
+	// majority of "Running" rows were releases sitting in a line up to 8 days deep.
+	it('says a queued job is queued, with its place in line', () => {
+		expect(
+			buttonState(
+				'a',
+				none,
+				none,
+				marker({ progress: { status: 'pending', queue: { position: 479, waiting: 670 } } })
+			)
+		).toMatchObject({
 			kind: 'running',
-			label: 'Running',
+			phase: 'queued',
+			label: 'Queued',
+			detail: '479th of 670 in line',
 			disabled: true,
 		});
 	});
 
+	it('says next in line rather than 1st of 1', () => {
+		expect(
+			buttonState(
+				'a',
+				none,
+				none,
+				marker({ progress: { status: 'pending', queue: { position: 1, waiting: 1 } } })
+			).detail
+		).toBe('next in line');
+	});
+
+	it('shows the Usenet pass as a download with its own percentage', () => {
+		expect(
+			buttonState(
+				'a',
+				none,
+				none,
+				marker({
+					progress: {
+						status: 'hashing',
+						done_bytes: 5_985_088_778,
+						total_bytes: 9_811_477_047,
+					},
+				})
+			)
+		).toMatchObject({
+			kind: 'running',
+			phase: 'downloading',
+			label: 'Downloading',
+			detail: '61%',
+			disabled: true,
+		});
+	});
+
+	// `uploading` is Real-Debrid pulling the bytes from us, which reads backwards
+	// to whoever is watching their own transfer.
+	it("names RD's own pull from the user's side", () => {
+		expect(
+			buttonState(
+				'a',
+				none,
+				none,
+				marker({
+					progress: {
+						status: 'uploading',
+						status_message: 'RD: downloading 42% @ 11.6 MB/s',
+					},
+				})
+			)
+		).toMatchObject({
+			phase: 'importing',
+			label: 'Real-Debrid downloading',
+			detail: '42%',
+		});
+	});
+
+	// Only eight markers are re-checked per request, and nzb2rd can be down, so a
+	// marker without live fields has to stay honest rather than claim a phase.
+	it('falls back to a phase-free label when the job could not be re-checked', () => {
+		expect(buttonState('a', none, none, marker({}))).toMatchObject({
+			kind: 'running',
+			label: 'In progress',
+			phase: null,
+			disabled: true,
+		});
+		expect(buttonState('a', none, none, marker({})).detail).toBeUndefined();
+	});
+
 	it('lets this browser own state win over the shared record', () => {
-		const shared = new Map([['a', 'completed' as const]]);
-		expect(buttonState('a', new Set(['a']), none, shared).kind).toBe('sending');
+		expect(buttonState('a', new Set(['a']), none, marker({ status: 'completed' })).kind).toBe(
+			'sending'
+		);
 	});
 });
 
@@ -331,8 +428,51 @@ describe('UsenetResults', () => {
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
 		expect(await screen.findByRole('button', { name: /in rd/i })).toBeDisabled();
-		expect(screen.getByRole('button', { name: /running/i })).toBeDisabled();
+		expect(screen.getByRole('button', { name: /in progress/i })).toBeDisabled();
 		expect(screen.queryByRole('button', { name: /^send$/i })).not.toBeInTheDocument();
+	});
+
+	// The distinction the row exists to make: one of these is finished and one is
+	// sitting in a queue that has run eight days deep, and both used to read as a
+	// green-adjacent disabled button.
+	it('separates a finished release from one still waiting in line', async () => {
+		mockSearch(RESULTS, [
+			{ releaseId: 'b', status: 'completed', infoHash: 'h', jobId: 'j' },
+			{
+				releaseId: 'a',
+				status: 'pending',
+				infoHash: null,
+				jobId: 'j2',
+				progress: { status: 'pending', queue: { position: 12, waiting: 670 } },
+			},
+		]);
+		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
+		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
+		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
+
+		expect(await screen.findByRole('button', { name: /in rd/i })).toBeDisabled();
+		const queued = screen.getByRole('button', { name: /queued/i });
+		expect(queued).toBeDisabled();
+		expect(queued).toHaveTextContent('12th of 670 in line');
+	});
+
+	it('shows how far along a release being fetched right now is', async () => {
+		mockSearch(RESULTS, [
+			{
+				releaseId: 'a',
+				status: 'pending',
+				infoHash: null,
+				jobId: 'j2',
+				progress: { status: 'hashing', done_bytes: 3, total_bytes: 4 },
+			},
+		]);
+		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
+		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
+		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
+
+		const row = await screen.findByRole('button', { name: /downloading/i });
+		expect(row).toHaveTextContent('75%');
+		expect(row).toBeDisabled();
 	});
 
 	it('tracks a started job so the Transfers page can follow it', async () => {
@@ -400,7 +540,9 @@ describe('UsenetResults', () => {
 		});
 		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
 
-		expect(await screen.findByRole('button', { name: /running/i })).toBeDisabled();
+		// The duplicate reply says a job exists, not where it stands, so the row
+		// stays vague until the next lookup places it in the queue.
+		expect(await screen.findByRole('button', { name: /in progress/i })).toBeDisabled();
 		const tracked = JSON.parse(localStorage.getItem('nzb2rd:jobs') ?? '[]');
 		expect(tracked).toHaveLength(1);
 		expect(tracked[0]).toMatchObject({ id: 'job-A', releaseId: 'b' });

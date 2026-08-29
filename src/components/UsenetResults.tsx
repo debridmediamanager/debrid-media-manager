@@ -6,9 +6,17 @@ import {
 	followNzb2rdTransfer,
 	isNzb2rdDuplicate,
 	trackNzb2rdJob,
+	type Nzb2rdTransferSummary,
 } from '@/utils/nzb2rd';
 import { readRdOAuthCredentials } from '@/utils/rdTokenStorage';
-import { TRANSFER_LABELS, TRANSFER_STEP_TOAST_MS, TRANSFER_TOAST_MS } from '@/utils/transferPhase';
+import {
+	describeTransfer,
+	PHASE_STYLES,
+	TRANSFER_LABELS,
+	TRANSFER_STEP_TOAST_MS,
+	TRANSFER_TOAST_MS,
+	type TransferPhase,
+} from '@/utils/transferPhase';
 import { Check, ChevronDown, ChevronRight, Loader2, Send } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -41,42 +49,92 @@ export function sortResults(results: UsenetResult[], key: SortKey, dir: SortDir)
 
 export type SendButtonKind = 'send' | 'sending' | 'sent' | 'cached' | 'running';
 
+export interface SendButtonState {
+	kind: SendButtonKind;
+	label: string;
+	/** Second line: place in line, or how far through the current stage. */
+	detail?: string;
+	title: string;
+	/** Set only for a job whose live state is known, and styles the button. */
+	phase: TransferPhase | null;
+	disabled: boolean;
+}
+
 /**
  * What the row's button says. A release someone has already fetched shows as
  * cached rather than sendable, because a Usenet fetch costs indexer grab quota
  * and block-account bytes and the server would dedup it anyway.
+ *
+ * An unfinished one used to say "Running", which was wrong far more often than
+ * it was right: the marker's `pending` covers both waiting in line and being
+ * fetched, and measured against the live queue on 2026-08-29, **670 of 683
+ * unfinished jobs had not started** — no `started_at`, no progress bytes — with
+ * the oldest queued 8 days. So a job's real phase is read through the same
+ * `describeTransfer` vocabulary the Transfers page uses, rather than inventing a
+ * second set of words for the same states.
  */
 export function buttonState(
 	id: string,
 	sending: Set<string>,
 	sent: Set<string>,
-	transferred: Map<string, 'pending' | 'completed'>
-): { kind: SendButtonKind; label: string; title: string; disabled: boolean } {
+	transferred: Map<string, Nzb2rdTransferSummary>
+): SendButtonState {
 	if (sending.has(id)) {
-		return { kind: 'sending', label: 'Sending', title: 'Submitting…', disabled: true };
+		return {
+			kind: 'sending',
+			label: 'Sending',
+			title: 'Submitting…',
+			phase: null,
+			disabled: true,
+		};
 	}
 	if (sent.has(id)) {
 		return {
 			kind: 'sent',
 			label: 'Sent',
 			title: 'Sent — follow it on the Transfers page',
+			phase: null,
 			disabled: true,
 		};
 	}
 	const existing = transferred.get(id);
-	if (existing === 'completed') {
+	if (existing?.status === 'completed') {
 		return {
 			kind: 'cached',
 			label: 'In RD',
 			title: 'Already fetched — available as a cached result for this title',
+			phase: null,
 			disabled: true,
 		};
 	}
-	if (existing === 'pending') {
+	if (existing) {
+		// Nothing came back about the job itself — past the server's re-check cap,
+		// or nzb2rd was unreachable. Say only what is actually known.
+		if (!existing.progress) {
+			return {
+				kind: 'running',
+				label: 'In progress',
+				title: 'Someone is already fetching this release',
+				phase: null,
+				disabled: true,
+			};
+		}
+		const progress = describeTransfer('nzb2rd', existing.progress);
 		return {
 			kind: 'running',
-			label: 'Running',
-			title: 'Someone is already fetching this release',
+			label: progress.label,
+			// The place in line while queued; otherwise the stage's own percentage,
+			// which only the Usenet pass and RD's pull can answer — `describeTransfer`
+			// leaves the rest sitting at the rung floor, and repeating that as a
+			// percentage would read as stalled progress rather than no progress.
+			detail:
+				progress.detail ??
+				(progress.stagePercent === null ? undefined : `${progress.stagePercent}%`),
+			title:
+				progress.phase === 'queued'
+					? 'Waiting in nzb2rd’s queue — you will get it when it lands'
+					: 'Someone is already fetching this release',
+			phase: progress.phase,
 			disabled: true,
 		};
 	}
@@ -84,6 +142,7 @@ export function buttonState(
 		kind: 'send',
 		label: 'Send',
 		title: 'Send to Real-Debrid via nzb2rd',
+		phase: null,
 		disabled: false,
 	};
 }
@@ -101,9 +160,9 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 	const [sortDir, setSortDir] = useState<SortDir>('desc');
 	const [sendingIds, setSendingIds] = useState<Set<string>>(new Set());
 	const [sentIds, setSentIds] = useState<Set<string>>(new Set());
-	// Releases someone has already fetched, so the row shows its state instead of
-	// a Send that the server would only reject as a duplicate.
-	const [transferred, setTransferred] = useState<Map<string, 'pending' | 'completed'>>(new Map());
+	// Releases someone has already fetched or is fetching, so the row shows where
+	// that stands instead of a Send the server would only reject as a duplicate.
+	const [transferred, setTransferred] = useState<Map<string, Nzb2rdTransferSummary>>(new Map());
 
 	const fetchResults = useCallback(async () => {
 		setIsLoading(true);
@@ -121,7 +180,7 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 			// Best-effort, and deliberately not awaited into the error path: a
 			// failed lookup should never hide the results themselves.
 			fetchNzb2rdTransfers(found.map((r) => r.id)).then((existing) =>
-				setTransferred(new Map(existing.map((t) => [t.releaseId, t.status])))
+				setTransferred(new Map(existing.map((t) => [t.releaseId, t])))
 			);
 		} catch (e) {
 			setError(e instanceof Error ? e.message : 'Usenet search failed');
@@ -194,10 +253,14 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 
 			if (isNzb2rdDuplicate(job)) {
 				setTransferred((prev) =>
-					new Map(prev).set(
-						result.id,
-						job.duplicate === 'completed' ? 'completed' : 'pending'
-					)
+					new Map(prev).set(result.id, {
+						releaseId: result.id,
+						jobId: job.jobId,
+						infoHash: job.infoHash,
+						status: job.duplicate === 'completed' ? 'completed' : 'pending',
+						// The duplicate reply says a job exists, not where it is. The
+						// row reads "In progress" until the next lookup places it.
+					})
 				);
 
 				if (job.duplicate === 'completed') {
@@ -339,7 +402,11 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 												Size{sortArrow('size')}
 											</button>
 										</th>
-										<th className="w-24 px-2 py-2"></th>
+										{/* Fixed, because the phase labels differ a lot in
+										    length ("In RD" against "Real-Debrid downloading")
+										    and a column that sizes to its content leaves the
+										    buttons ragged down the page. */}
+										<th className="w-32 px-2 py-2"></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -377,21 +444,34 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 														onClick={() => send(result)}
 														disabled={state.disabled}
 														title={state.title}
-														className={`haptic flex items-center gap-1 rounded border px-2 py-1 transition-colors duration-200 disabled:cursor-not-allowed ${
+														className={`haptic flex w-full flex-col items-start gap-0.5 rounded border px-2 py-1 text-left leading-tight transition-colors duration-200 disabled:cursor-not-allowed ${
 															state.kind === 'cached'
 																? 'border-green-500 bg-green-900/30 text-green-100'
-																: 'border-gray-500 bg-gray-800/60 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60'
+																: state.phase
+																	? PHASE_STYLES[state.phase]
+																	: 'border-gray-500 bg-gray-800/60 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60'
 														}`}
 													>
-														{state.kind === 'sending' ? (
-															<Loader2 className="h-3 w-3 animate-spin" />
-														) : state.kind === 'cached' ||
-														  state.kind === 'sent' ? (
-															<Check className="h-3 w-3" />
-														) : (
-															<Send className="h-3 w-3" />
+														<span className="flex items-center gap-1">
+															{state.kind === 'sending' ||
+															state.kind === 'running' ? (
+																<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+															) : state.kind === 'cached' ||
+															  state.kind === 'sent' ? (
+																<Check className="h-3 w-3 shrink-0" />
+															) : (
+																<Send className="h-3 w-3 shrink-0" />
+															)}
+															{state.label}
+														</span>
+														{/* Place in line, or how far through the current
+														    stage — the thing that tells a waiting user
+														    whether "not done yet" means minutes or days. */}
+														{state.detail && (
+															<span className="pl-4 text-xs opacity-70">
+																{state.detail}
+															</span>
 														)}
-														{state.label}
 													</button>
 												</td>
 											</tr>

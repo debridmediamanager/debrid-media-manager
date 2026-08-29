@@ -94,17 +94,80 @@ describe('POST /api/nzb2rd/registered — reconciling stale markers', () => {
 		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
 	});
 
-	it('leaves a marker alone while its job is genuinely running', async () => {
-		nzb2rdAnswers({ id: 'job-1', status: 'fetching' });
+	// The marker says only `pending`, which covers both waiting in line and being
+	// fetched — and against the live queue on 2026-08-29 that was 670 waiting to
+	// 13 working, the oldest queued 8 days. Reconciling already has the job in
+	// hand, so it hands back where the job actually is.
+	it('reports where a genuinely running job stands, and leaves the marker alone', async () => {
+		nzb2rdAnswers({
+			id: 'job-1',
+			status: 'fetching',
+			done_bytes: 3,
+			total_bytes: 4,
+			status_message: null,
+			queue: null,
+		});
 
 		const res = await run();
 
 		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
 		expect(res.json).toHaveBeenCalledWith({
 			transfers: [
-				{ releaseId: 'release-1', status: 'pending', infoHash: null, jobId: 'job-1' },
+				{
+					releaseId: 'release-1',
+					status: 'pending',
+					infoHash: null,
+					jobId: 'job-1',
+					progress: {
+						status: 'fetching',
+						status_message: null,
+						done_bytes: 3,
+						total_bytes: 4,
+						queue: null,
+					},
+				},
 			],
 		});
+	});
+
+	it('passes the queue place through so the row can say where in line it is', async () => {
+		nzb2rdAnswers({ id: 'job-1', status: 'pending', queue: { position: 479, waiting: 670 } });
+
+		const res = await run();
+
+		expect((res.json as any).mock.calls[0][0].transfers[0].progress).toMatchObject({
+			status: 'pending',
+			queue: { position: 479, waiting: 670 },
+		});
+	});
+
+	// The job record also carries the submitter's RD account id and the internal
+	// webseed URL; this route is public and unauthenticated.
+	it('never passes anything but the progress fields back', async () => {
+		nzb2rdAnswers({
+			id: 'job-1',
+			status: 'pending',
+			rd_user_id: 'rd:3214414',
+			webseed_url: 'http://10.0.0.1/webseed/secret',
+			owner_hash: 'deadbeef',
+		});
+
+		const res = await run();
+
+		const body = JSON.stringify((res.json as any).mock.calls[0][0]);
+		expect(body).not.toContain('rd:3214414');
+		expect(body).not.toContain('webseed');
+		expect(body).not.toContain('deadbeef');
+	});
+
+	// nzb2rd shipping a field in a shape DMM does not expect must not become a
+	// `queue.position` of undefined that the row then renders as "undefinedth".
+	it('drops a malformed queue place rather than passing it on', async () => {
+		nzb2rdAnswers({ id: 'job-1', status: 'pending', queue: { position: '3rd' } });
+
+		const res = await run();
+
+		expect((res.json as any).mock.calls[0][0].transfers[0].progress.queue).toBeNull();
 	});
 
 	// Failing open matters more here than healing: dropping the marker for a job

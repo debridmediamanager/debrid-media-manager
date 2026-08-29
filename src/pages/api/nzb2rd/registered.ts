@@ -3,6 +3,7 @@ import { getNzb2rdUrl } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { registerCompletedNzb2rdJob } from '@/services/transferRegistration';
+import type { ProgressFields } from '@/utils/transferPhase';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 type TransferSummary = {
@@ -10,6 +11,22 @@ type TransferSummary = {
 	status: 'pending' | 'completed';
 	infoHash: string | null;
 	jobId: string;
+	/**
+	 * Where the job actually is, when this request re-checked it.
+	 *
+	 * The marker itself only ever says `pending` or `completed`, and `pending`
+	 * covers two states a user cares about telling apart: waiting in line, and
+	 * being fetched. Measured against the live queue on 2026-08-29, 670 of the
+	 * 683 unfinished jobs had **not started** — no `started_at`, not one progress
+	 * byte — against 13 actually working, with the oldest having waited 8 days.
+	 * So the row's old "Running" was wrong for 98% of the releases wearing it.
+	 *
+	 * Reconciling already fetched the job to heal the marker; these are the
+	 * fields it was throwing away. Absent when the job was not re-checked (past
+	 * `MAX_RECONCILE`, or nzb2rd unreachable), and the row stays vague rather
+	 * than guessing.
+	 */
+	progress?: ProgressFields;
 };
 
 const summaryOf = (r: Nzb2rdTransferRecord): TransferSummary => ({
@@ -17,6 +34,21 @@ const summaryOf = (r: Nzb2rdTransferRecord): TransferSummary => ({
 	status: r.status,
 	infoHash: r.infoHash ?? null,
 	jobId: r.jobId,
+});
+
+/** Only the fields `describeTransfer` reads — never the whole job record, which
+ * carries the submitter's RD account id and the internal webseed URL. */
+const progressOf = (job: any): ProgressFields => ({
+	status: typeof job?.status === 'string' ? job.status : undefined,
+	status_message: typeof job?.status_message === 'string' ? job.status_message : null,
+	total_bytes: typeof job?.total_bytes === 'number' ? job.total_bytes : null,
+	done_bytes: typeof job?.done_bytes === 'number' ? job.done_bytes : null,
+	queue:
+		job?.queue &&
+		typeof job.queue.position === 'number' &&
+		typeof job.queue.waiting === 'number'
+			? { position: job.queue.position, waiting: job.queue.waiting }
+			: null,
 });
 
 /**
@@ -82,7 +114,9 @@ async function reconcile(record: Nzb2rdTransferRecord): Promise<TransferSummary 
 		const infoHash = typeof job.info_hash === 'string' ? job.info_hash.toLowerCase() : null;
 		return { ...summaryOf(record), status: 'completed', infoHash };
 	}
-	return summaryOf(record);
+	// Still running: hand back where it actually is, so the row can say "Queued,
+	// 479th of 670 in line" instead of a flat "Running".
+	return { ...summaryOf(record), progress: progressOf(job) };
 }
 
 // Given the release ids shown in the Usenet section of a movie/show page, report

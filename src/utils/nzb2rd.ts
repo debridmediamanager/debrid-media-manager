@@ -2,6 +2,7 @@ import { toast } from 'react-hot-toast';
 import { TransferContext } from './debridUploader';
 import {
 	phaseLabelOf,
+	ProgressFields,
 	QueuePlace,
 	toastRdUnderway,
 	TRANSFER_LABELS,
@@ -265,6 +266,15 @@ export interface Nzb2rdTransferSummary {
 	status: 'pending' | 'completed';
 	infoHash: string | null;
 	jobId: string;
+	/**
+	 * Where the job stands, when the server re-checked it on this request.
+	 *
+	 * The marker's `pending` conflates waiting in line with being fetched, and
+	 * the queue runs days deep, so the two need telling apart on the row.
+	 * Undefined when the job was not re-checked — the row then says only that
+	 * something is in progress.
+	 */
+	progress?: ProgressFields;
 }
 
 /**

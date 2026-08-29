@@ -235,6 +235,15 @@ export interface TransferProgress {
 	totalSteps: number;
 	/** 0-100, or null when there is nothing meaningful to draw. */
 	percent: number | null;
+	/**
+	 * How far through the *current stage* it is, 0-100 — "Downloading 61%".
+	 *
+	 * `percent` is the whole ladder, so a stage two thirds done reads as 32%
+	 * there; that is right for a bar spanning the transfer and wrong as a number
+	 * printed next to a stage name. Null wherever the stage counts nothing, which
+	 * is everywhere but the Usenet pass and RD's own pull.
+	 */
+	stagePercent: number | null;
 	terminal: boolean;
 }
 
@@ -258,6 +267,7 @@ export function describeTransfer(
 			step: null,
 			totalSteps,
 			percent: 100,
+			stagePercent: 100,
 			terminal: true,
 		};
 	}
@@ -268,6 +278,7 @@ export function describeTransfer(
 			step: null,
 			totalSteps,
 			percent: null,
+			stagePercent: null,
 			terminal: true,
 		};
 	}
@@ -280,18 +291,25 @@ export function describeTransfer(
 			step: null,
 			totalSteps,
 			percent: null,
+			stagePercent: null,
 			terminal: false,
 		};
 	}
 
 	const span = rung.to - rung.from;
+	const fraction = fractionWithin(rung, job ?? {});
+	// Only these two rungs measure anything; everywhere else `fractionWithin`
+	// answers 0 because the stage has no counter, and printing that as "0%" next
+	// to the stage name would read as stalled rather than unmeasured.
+	const measured = rung.phase === 'downloading' || rung.phase === 'importing';
 	return {
 		phase: rung.phase,
 		label: PHASE_LABELS[rung.phase],
 		detail: rung.phase === 'queued' ? queueDetail(job?.queue) : undefined,
 		step: rung.step,
 		totalSteps,
-		percent: Math.round(rung.from + span * fractionWithin(rung, job ?? {})),
+		percent: Math.round(rung.from + span * fraction),
+		stagePercent: measured ? Math.round(fraction * 100) : null,
 		terminal: false,
 	};
 }
