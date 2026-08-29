@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { safeReturnPath, transferContextFromPath } from './transferContext';
+import {
+	mediaTypeFromImdbTitleType,
+	safeReturnPath,
+	seasonFromReleaseName,
+	transferContextFromPath,
+} from './transferContext';
 
 describe('transferContextFromPath', () => {
 	it('reads a movie page', () => {
@@ -57,4 +62,57 @@ describe('safeReturnPath', () => {
 			expect(transferContextFromPath(safeReturnPath(path))).toBeDefined();
 		}
 	});
+});
+
+describe('seasonFromReleaseName', () => {
+	it.each([
+		['The.Traitors.NZ.S03E01.1080p.AMZN.WEB.DL.DDP2.0.H.264-Kitsune', 3],
+		['Conan.OBrien.Must.Go.S01.1080p.WEB.H264-SuccessfulCrab', 1],
+		['Some.Show.Season 12.1080p.WEB-DL', 12],
+		['Some.Show.Season.4.COMPLETE.1080p', 4],
+		['Some.Show.3x05.720p.HDTV', 3],
+	])('reads the season out of %s', (name, expected) => {
+		expect(seasonFromReleaseName(name)).toBe(expected);
+	});
+
+	// Each of these puts digits next to an `s` or an `x` without naming a season.
+	// A false positive files a whole season pack under a page it does not belong
+	// on, which is worse than not filing it.
+	it.each([
+		['a channel layout', 'Show.Name.2160p.UHD.BDRip.TrueHD.Atmos.7.1.x265-GRP'],
+		['a subtitle tag', 'Show.Name.1080p.NL.Subs.2160p.WEB-DL'],
+		['a codec', 'Show.Name.1080p.WEB-DL.DDP5.1.H.265-GRP'],
+		['a date-stamped episode', 'WCW.Monday.Nitro.1996.08.05.540p.WEBRip.h264'],
+		['nothing at all', 'Some.Movie.1998.BluRay.1080p.AVC.REMUX-GRP'],
+		['no name', undefined],
+	])('does not invent a season from %s', (_label, name) => {
+		expect(seasonFromReleaseName(name)).toBeUndefined();
+	});
+
+	it('prefers the Sxx marker over a later x-form', () => {
+		expect(seasonFromReleaseName('Show.S02.Part.3x04.1080p')).toBe(2);
+	});
+});
+
+describe('mediaTypeFromImdbTitleType', () => {
+	it.each([
+		['tvSeries', 'tv'],
+		['tvMiniSeries', 'tv'],
+		['movie', 'movie'],
+		// These live on a /movie/tt… page in DMM despite the "tv" prefix, and have
+		// no season to file under.
+		['tvMovie', 'movie'],
+		['tvSpecial', 'movie'],
+		['video', 'movie'],
+		['short', 'movie'],
+	])('maps %s to a %s page', (titleType, expected) => {
+		expect(mediaTypeFromImdbTitleType(titleType)).toBe(expected);
+	});
+
+	it.each([['tvEpisode'], ['videoGame'], [null], [undefined], ['']])(
+		'has no page for %s',
+		(titleType) => {
+			expect(mediaTypeFromImdbTitleType(titleType)).toBeUndefined();
+		}
+	);
 });

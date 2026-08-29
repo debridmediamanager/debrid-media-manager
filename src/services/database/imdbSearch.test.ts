@@ -255,4 +255,28 @@ describe('ImdbSearchService', () => {
 			expect(result!.title).toBe('Fallback Title');
 		});
 	});
+
+	describe('getTitleType', () => {
+		it('returns the raw title type', async () => {
+			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({ titleType: 'tvMiniSeries' });
+
+			expect(await service.getTitleType('tt001')).toBe('tvMiniSeries');
+		});
+
+		// The distinction getTitleById throws away: it answers 'show' for a
+		// tvMovie, which lives on a /movie/tt… page and has no season to file a
+		// completed transfer under.
+		it('keeps tvMovie distinct from a series', async () => {
+			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({ titleType: 'tvMovie' });
+
+			expect(await service.getTitleType('tt001')).toBe('tvMovie');
+			expect((await service.getTitleById('tt001'))?.type).toBe('show');
+		});
+
+		it('returns null for an id the dump does not carry', async () => {
+			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue(null);
+
+			expect(await service.getTitleType('tt404')).toBeNull();
+		});
+	});
 });

@@ -1116,6 +1116,10 @@ export class Repository {
 	public getImdbTitleById(imdbId: string) {
 		return this.imdbSearchService.getTitleById(imdbId);
 	}
+
+	public getImdbTitleType(imdbId: string) {
+		return this.imdbSearchService.getTitleType(imdbId);
+	}
 }
 
 // Export singleton instance to ensure only one PrismaClient exists

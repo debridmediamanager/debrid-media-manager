@@ -8,6 +8,12 @@ import {
 import { addHashToRdAccount, isValidImdbId } from '@/services/nzb2rd';
 import { getToken } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
+import {
+	mediaTypeFromImdbTitleType,
+	seasonFromReleaseName,
+	transferContextFromPath,
+	type TransferContext,
+} from '@/utils/transferContext';
 
 /**
  * Filing a finished transfer into DMM's own database, so the content it put in
@@ -23,7 +29,9 @@ import { repository as db } from '@/services/repository';
  *
  * Both functions are idempotent and best-effort. They answer `false` for
  * anything already registered or lacking the page context to be filed under,
- * and the caller treats a throw as "not this tick".
+ * and the caller treats a throw as "not this tick". The Usenet one works that
+ * context out for itself (`resolveNzb2rdContext`) rather than trusting the
+ * caller to supply it, because two of its three callers could not.
  */
 
 /**
@@ -53,6 +61,75 @@ async function deliveryKeyFor(waiter: Nzb2rdWaiter): Promise<string> {
 		console.error('Refreshing a waiting RD account token failed:', error);
 		return waiter.rdKey;
 	}
+}
+
+/**
+ * Where a finished Usenet release gets filed, worked out from whatever the
+ * caller could supply and then from what DMM already knows.
+ *
+ * This used to be the caller's whole responsibility, and three callers answered
+ * it three different ways: `/api/transfers` read the stored `returnPath`,
+ * `/api/nzb2rd/jobs/[id]` took it off the query string, and
+ * `/api/nzb2rd/registered` passed nothing at all because it runs with no page
+ * attached. Only the first ever produced a context, so the other two flipped the
+ * `nzbrd:` marker to `completed` — which renders a disabled **"In RD"** on the
+ * Usenet row — while filing the release into no search result anywhere.
+ * Measured 2026-08-29: 991 of 1128 completed markers, 88%, pointed at content
+ * that existed in RD and in no DMM listing.
+ *
+ * So resolution lives here instead, where every caller gets it whether it knows
+ * to ask or not, in descending order of authority:
+ *
+ * 1. What the caller passed, if anything — a live page knows better than a guess.
+ * 2. `xfer:nzb2rd:<jobId>.returnPath`, the page the transfer was started from.
+ *    Already stored for 2198 of 2207 nzb2rd jobs; the callers with "no context"
+ *    were always one lookup away from it.
+ * 3. The IMDb title type plus, for a show, the season named in the release. The
+ *    only tier that covers a transfer DMM never submitted — an *arr pushing into
+ *    nzb2rd's SABnzbd API, or the Discord uploader — which by construction can
+ *    never have a `returnPath`.
+ *
+ * Answers null only for a title with no DMM page to file under (a `tvEpisode`
+ * id, or an id absent from the IMDb dump) or a dated show release that names no
+ * season. Those keep their marker — the dedup and the waiter delivery are worth
+ * having regardless — and are logged, because a rising count there is the shape
+ * this bug would take if it came back.
+ */
+async function resolveNzb2rdContext(
+	job: any,
+	mediaType: unknown,
+	seasonNum: unknown
+): Promise<TransferContext | null> {
+	const passed = parseTransferContext(mediaType, seasonNum);
+	if (passed) return passed;
+
+	const jobId = typeof job?.id === 'string' ? job.id : null;
+	if (jobId) {
+		const meta = await db.getTransferMeta([{ source: 'nzb2rd', jobId }]).catch((e) => {
+			console.error('Reading stored transfer context failed:', e);
+			return new Map();
+		});
+		const stored = transferContextFromPath(meta.get(`nzb2rd:${jobId}`)?.returnPath);
+		if (stored) return stored;
+	}
+
+	const derived = mediaTypeFromImdbTitleType(
+		await db.getImdbTitleType(job.imdb_id).catch((e) => {
+			console.error('Reading the IMDb title type failed:', e);
+			return null;
+		})
+	);
+	if (derived === 'movie') return { mediaType: 'movie' };
+	if (derived === 'tv') {
+		const season = seasonFromReleaseName(typeof job?.name === 'string' ? job.name : undefined);
+		if (season !== undefined) return { mediaType: 'tv', seasonNum: season };
+	}
+
+	console.warn(
+		`[nzb2rd] job=${job?.id} imdb=${job?.imdb_id} completed but has no page to file under; ` +
+			`it will not appear in search results`
+	);
+	return null;
 }
 
 /**
@@ -117,6 +194,11 @@ export async function registerCompletedDebridJob(
  * built info_hash, the de-infringed name, and files as {name, size, rd_link} —
  * which is the exact shape `buildTransferRegistration` consumes, so the TB → RD
  * registration logic is reused verbatim rather than duplicated.
+ *
+ * `mediaType`/`seasonNum` are a hint, not a requirement: a caller with a live
+ * page should pass them, and one without should pass nothing and let
+ * `resolveNzb2rdContext` work it out. Passing nothing no longer means filing
+ * nothing.
  */
 export async function registerCompletedNzb2rdJob(
 	job: any,
@@ -165,7 +247,7 @@ export async function registerCompletedNzb2rdJob(
 		}
 	}
 
-	const context = parseTransferContext(mediaType, seasonNum);
+	const context = await resolveNzb2rdContext(job, mediaType, seasonNum);
 	if (!context) return false;
 
 	const already = await db.checkAvailabilityByHashes([infoHash]);

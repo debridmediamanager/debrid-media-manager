@@ -318,6 +318,23 @@ export class ImdbSearchService extends DatabaseClient {
 	}
 
 	/**
+	 * The raw IMDb `title_type` for an id — `movie`, `tvSeries`, `tvMovie`, …
+	 *
+	 * `getTitleById` collapses everything that is not exactly `movie` into
+	 * `'show'`, which is right for a search result and wrong for deciding where a
+	 * completed transfer gets filed: a `tvMovie` or a `video` lives on a
+	 * `/movie/tt…` page in DMM and has no season to file under. Callers that need
+	 * to tell those apart read the type itself.
+	 */
+	async getTitleType(imdbId: string): Promise<string | null> {
+		const result = await this.prisma.imdbTitleBasics.findUnique({
+			where: { tconst: imdbId },
+			select: { titleType: true },
+		});
+		return result?.titleType ?? null;
+	}
+
+	/**
 	 * Get title details by IMDB ID
 	 */
 	async getTitleById(imdbId: string): Promise<ImdbSearchResult | null> {

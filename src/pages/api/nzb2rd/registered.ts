@@ -73,9 +73,11 @@ async function reconcile(record: Nzb2rdTransferRecord): Promise<TransferSummary 
 		return null;
 	}
 	if (job?.status === 'completed') {
-		// No page context to pass: the marker and the waiting accounts are what
-		// matter here, and `registerCompletedNzb2rdJob` handles both before it
-		// needs to know film-vs-season.
+		// Nothing to pass: this runs on a page load with no transfer context of
+		// its own. `registerCompletedNzb2rdJob` resolves film-vs-season itself
+		// from the stored `returnPath` and the IMDb title type, which is what
+		// makes the release show up in search results rather than only flipping
+		// the marker to a disabled "In RD" pointing at nothing.
 		await registerCompletedNzb2rdJob(job, undefined, undefined, record.releaseId);
 		const infoHash = typeof job.info_hash === 'string' ? job.info_hash.toLowerCase() : null;
 		return { ...summaryOf(record), status: 'completed', infoHash };
