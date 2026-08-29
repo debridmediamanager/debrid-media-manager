@@ -12,6 +12,7 @@ import {
 	Cast,
 	Eye as EyeIcon,
 	Folder,
+	HandHeart,
 	Link2,
 	Loader2,
 	Search as SearchIcon,
@@ -51,6 +52,14 @@ type MovieSearchResultsProps = {
 	addTb: (hash: string) => Promise<void>;
 	addPm: (hash: string) => Promise<void>;
 	sendTbToRd?: (hash: string) => Promise<void>;
+	/**
+	 * File a request for a release this account cannot fetch on its own.
+	 *
+	 * Absent unless the page decided the user has only Real-Debrid — the
+	 * uploader needs a TorBox or AllDebrid key for the source side, so a user
+	 * holding neither has no way to start a transfer themselves.
+	 */
+	requestContent?: (result: SearchResult) => Promise<void>;
 	deleteRd: (hash: string) => Promise<void>;
 	deleteAd: (hash: string) => Promise<void>;
 	deleteTb: (hash: string) => Promise<void>;
@@ -81,6 +90,7 @@ const MovieSearchResults = ({
 	addTb,
 	addPm,
 	sendTbToRd,
+	requestContent,
 	deleteRd,
 	deleteAd,
 	deleteTb,
@@ -95,6 +105,7 @@ const MovieSearchResults = ({
 	const [castingAdHashes, setCastingAdHashes] = useState<Set<string>>(new Set());
 	const [castingPmHashes, setCastingPmHashes] = useState<Set<string>>(new Set());
 	const [watchingHashes, setWatchingHashes] = useState<Set<string>>(new Set());
+	const [requestingHashes, setRequestingHashes] = useState<Set<string>>(new Set());
 	const [downloadMagnets, setDownloadMagnets] = useState(false);
 
 	useEffect(() => {
@@ -148,6 +159,20 @@ const MovieSearchResults = ({
 			setLoadingHashes((prev) => {
 				const newSet = new Set(prev);
 				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
+	const handleRequest = async (result: SearchResult) => {
+		if (!requestContent || requestingHashes.has(result.hash)) return;
+		setRequestingHashes((prev) => new Set(prev).add(result.hash));
+		try {
+			await requestContent(result);
+		} finally {
+			setRequestingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(result.hash);
 				return newSet;
 			});
 		}
@@ -374,6 +399,7 @@ const MovieSearchResults = ({
 				const isSendingToRd = sendingToRdHashes.has(r.hash);
 				const isCasting = castingHashes.has(r.hash);
 				const isCastingTb = castingTbHashes.has(r.hash);
+				const isRequesting = requestingHashes.has(r.hash);
 				const watchService = pickWatchService(r, {
 					rdKey,
 					adKey,
@@ -678,6 +704,26 @@ const MovieSearchResults = ({
 											)}
 										</button>
 									)}
+								{requestContent && !r.rdAvailable && notInLibrary('rd', r.hash) && (
+									<button
+										className={`haptic-sm inline rounded border-2 border-cyan-500 bg-cyan-900/30 px-1 text-xs text-cyan-100 transition-colors hover:bg-cyan-800/50 ${isRequesting ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleRequest(r)}
+										disabled={isRequesting}
+										title="Ask someone with a TorBox or AllDebrid account to send this to your Real-Debrid"
+									>
+										{isRequesting ? (
+											<>
+												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+												Requesting...
+											</>
+										) : (
+											<span className="inline-flex items-center">
+												<HandHeart className="mr-1 h-3 w-3 text-cyan-400" />
+												Request
+											</span>
+										)}
+									</button>
+								)}
 								{torboxKey && handleCastTorBox && r.tbAvailable && (
 									<button
 										className={`haptic-sm inline rounded border-2 border-purple-500 bg-purple-900/30 px-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50 ${isCastingTb ? 'cursor-not-allowed opacity-50' : ''}`}

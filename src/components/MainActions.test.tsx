@@ -200,6 +200,38 @@ describe('MainActions', () => {
 		);
 	});
 
+	it('links to the request board for any Real-Debrid user', () => {
+		render(
+			<MainActions
+				rdUser={baseRdUser}
+				tbUser={baseTbUser}
+				adUser={false}
+				pmUser={false}
+				isLoading={false}
+			/>
+		);
+
+		// Shown to a TorBox user too: they are the ones who can fulfil, and the
+		// board is unreachable from anywhere else.
+		expect(screen.getByRole('link', { name: /requests/i }).getAttribute('href')).toBe(
+			'/requests'
+		);
+	});
+
+	it('hides the request board without Real-Debrid, which both halves need', () => {
+		render(
+			<MainActions
+				rdUser={null}
+				tbUser={baseTbUser}
+				adUser={false}
+				pmUser={false}
+				isLoading={false}
+			/>
+		);
+
+		expect(screen.queryByRole('link', { name: /requests/i })).toBeNull();
+	});
+
 	it('hides Transfers without Real-Debrid, since every transfer lands there', () => {
 		render(
 			<MainActions

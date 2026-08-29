@@ -1,6 +1,6 @@
 import { RealDebridUser } from '@/hooks/auth';
 import { TorBoxUser } from '@/services/types';
-import { BookOpen, Music2, Rocket, Send, Sparkles } from 'lucide-react';
+import { BookOpen, HandHeart, Music2, Rocket, Send, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
 interface MainActionsProps {
@@ -126,6 +126,19 @@ export function MainActions({ rdUser, tbUser, adUser, pmUser, isLoading }: MainA
 				>
 					<Send className="mr-2 inline-block h-4 w-4 text-indigo-400" />
 					Transfers
+				</Link>
+			)}
+
+			{/* The request board. Open to every signed-in user, not only the
+			    Real-Debrid-only ones the Request button is for: asking is one half
+			    of it, and fulfilling somebody else's ask is the other. */}
+			{rdUser && (
+				<Link
+					href="/requests"
+					className="haptic flex w-full items-center justify-center rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-center text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
+				>
+					<HandHeart className="mr-2 inline-block h-4 w-4 text-cyan-400" />
+					Requests
 				</Link>
 			)}
 
