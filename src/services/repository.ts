@@ -185,8 +185,8 @@ export class Repository {
 		return this.contentRequestService.getRequest(id);
 	}
 
-	public listOpenContentRequests(limit: number) {
-		return this.contentRequestService.listOpenRequests(limit);
+	public listOpenContentRequests(limit: number, offset = 0) {
+		return this.contentRequestService.listOpenRequests(limit, offset);
 	}
 
 	public listContentRequestsFor(requesterId: string, limit: number) {

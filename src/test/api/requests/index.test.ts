@@ -79,11 +79,13 @@ describe('GET /api/requests', () => {
 		expect(bodyOf(res).requests[0].mine).toBe(true);
 	});
 
-	// An open row belongs to the board and to its author; it must appear once.
-	it('does not list the caller’s own open request twice', async () => {
-		mockRepo.listContentRequestsFor = vi.fn().mockResolvedValue([row()]);
+	// The caller's own open row is on the board already; it is marked in place
+	// rather than merged in from a second query, so it appears exactly once.
+	it('marks the caller’s own open row in place, without a second listing', async () => {
 		const res = await call();
 		expect(bodyOf(res).requests).toHaveLength(1);
+		expect(bodyOf(res).requests[0].mine).toBe(true);
+		expect(mockRepo.listContentRequestsFor).not.toHaveBeenCalled();
 	});
 
 	it('never exposes participant ids', async () => {
@@ -94,15 +96,47 @@ describe('GET /api/requests', () => {
 		expect(JSON.stringify(bodyOf(res))).not.toContain('helper');
 	});
 
+	// The handler asks for one extra row (limit + 1) to learn whether another
+	// page follows, and never returns that extra.
 	it.each([
-		['', 100],
+		['', 25],
 		['5', 5],
-		['9999', 200],
+		['9999', 100],
 		['0', 1],
-		['junk', 100],
-	])('clamps limit=%s to %i', async (limit, expected) => {
+		['junk', 25],
+	])('clamps limit=%s to %i and peeks one past it', async (limit, effective) => {
 		await call({ query: { limit } });
-		expect(mockRepo.listOpenContentRequests).toHaveBeenCalledWith(expected);
+		expect(mockRepo.listOpenContentRequests).toHaveBeenCalledWith(effective + 1, 0);
+	});
+
+	it('passes the offset straight through', async () => {
+		await call({ query: { offset: '50' } });
+		expect(mockRepo.listOpenContentRequests).toHaveBeenCalledWith(26, 50);
+	});
+
+	it.each([
+		['-5', 0],
+		['junk', 0],
+		['', 0],
+	])('clamps a bad offset=%s to %i', async (offset, expected) => {
+		await call({ query: { offset } });
+		expect(mockRepo.listOpenContentRequests).toHaveBeenCalledWith(26, expected);
+	});
+
+	it('reports hasMore when the peek row comes back, and hides it', async () => {
+		// Twenty-six rows for a page of twenty-five: there is another page, and the
+		// twenty-sixth must not be served.
+		const rows = Array.from({ length: 26 }, (_, i) => row({ id: `req-${i}` }));
+		mockRepo.listOpenContentRequests = vi.fn().mockResolvedValue(rows);
+		const res = await call();
+		expect(bodyOf(res).hasMore).toBe(true);
+		expect(bodyOf(res).requests).toHaveLength(25);
+	});
+
+	it('reports no more when the page is not full', async () => {
+		mockRepo.listOpenContentRequests = vi.fn().mockResolvedValue([row()]);
+		const res = await call();
+		expect(bodyOf(res).hasMore).toBe(false);
 	});
 
 	it('500s when the listing fails', async () => {

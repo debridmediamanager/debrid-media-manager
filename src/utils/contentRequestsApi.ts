@@ -32,14 +32,26 @@ async function unwrap(response: Response): Promise<any> {
 	return data ?? {};
 }
 
-/** The board plus, for a signed-in caller, their own rows in any state. */
+/**
+ * One page of the board, oldest first. A signed-in caller's own open rows are
+ * marked `mine` in place. `hasMore` says whether another page follows, which is
+ * what the page's infinite scroll advances on.
+ */
 export async function fetchContentRequests(
-	rdKey: string | null
-): Promise<{ requests: PublicRequest[]; authenticated: boolean }> {
-	const data = await unwrap(await fetch('/api/requests', { headers: headers(rdKey) }));
+	rdKey: string | null,
+	opts: { offset?: number; limit?: number } = {}
+): Promise<{ requests: PublicRequest[]; authenticated: boolean; hasMore: boolean }> {
+	const params = new URLSearchParams();
+	if (opts.offset) params.set('offset', String(opts.offset));
+	if (opts.limit) params.set('limit', String(opts.limit));
+	const qs = params.toString();
+	const data = await unwrap(
+		await fetch(`/api/requests${qs ? `?${qs}` : ''}`, { headers: headers(rdKey) })
+	);
 	return {
 		requests: Array.isArray(data.requests) ? (data.requests as PublicRequest[]) : [],
 		authenticated: data.authenticated === true,
+		hasMore: data.hasMore === true,
 	};
 }
 

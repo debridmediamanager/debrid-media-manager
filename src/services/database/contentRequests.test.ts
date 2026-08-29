@@ -155,13 +155,25 @@ describe('ContentRequestService', () => {
 	});
 
 	describe('listing', () => {
-		it('shows open and failed rows oldest first, so nothing starves', async () => {
+		it('shows open and failed rows oldest first, tie-broken by id, so nothing starves', async () => {
 			prisma.contentRequest.findMany.mockResolvedValue([]);
 			await service.listOpenRequests(50);
 			expect(prisma.contentRequest.findMany).toHaveBeenCalledWith({
 				where: { status: { in: ['open', 'failed'] } },
-				orderBy: { createdAt: 'asc' },
+				orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
 				take: 50,
+				skip: 0,
+			});
+		});
+
+		it('skips by the offset the page passes, keeping the same order', async () => {
+			prisma.contentRequest.findMany.mockResolvedValue([]);
+			await service.listOpenRequests(25, 50);
+			expect(prisma.contentRequest.findMany).toHaveBeenCalledWith({
+				where: { status: { in: ['open', 'failed'] } },
+				orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+				take: 25,
+				skip: 50,
 			});
 		});
 

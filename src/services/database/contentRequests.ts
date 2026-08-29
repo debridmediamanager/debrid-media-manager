@@ -51,12 +51,20 @@ export class ContentRequestService extends DatabaseClient {
 		return this.prisma.contentRequest.findUnique({ where: { id } });
 	}
 
-	/** The board: what anyone could pick up, oldest first so nothing starves. */
-	public async listOpenRequests(limit: number): Promise<StoredRequest[]> {
+	/**
+	 * The board: what anyone could pick up, oldest first so nothing starves.
+	 *
+	 * `offset` is what makes the page's infinite scroll possible. Ordering is
+	 * `createdAt` then `id` rather than `createdAt` alone: two requests filed in
+	 * the same millisecond would otherwise have no defined order between pages,
+	 * so one could repeat on page two while another was skipped entirely.
+	 */
+	public async listOpenRequests(limit: number, offset = 0): Promise<StoredRequest[]> {
 		return this.prisma.contentRequest.findMany({
 			where: { status: { in: ['open', 'failed'] } },
-			orderBy: { createdAt: 'asc' },
+			orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
 			take: limit,
+			skip: offset,
 		});
 	}
 

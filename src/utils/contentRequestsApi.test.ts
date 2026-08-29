@@ -37,7 +37,31 @@ describe('fetchContentRequests', () => {
 
 	it('survives a body that is not the shape it expects', async () => {
 		(global.fetch as any).mockResolvedValue(ok({ requests: 'nope' }));
-		expect(await fetchContentRequests(null)).toEqual({ requests: [], authenticated: false });
+		expect(await fetchContentRequests(null)).toEqual({
+			requests: [],
+			authenticated: false,
+			hasMore: false,
+		});
+	});
+
+	it('passes offset and limit as query params, keeping the key in the header', async () => {
+		(global.fetch as any).mockResolvedValue(
+			ok({ requests: [], authenticated: true, hasMore: true })
+		);
+		const result = await fetchContentRequests('RD_TOKEN', { offset: 25, limit: 25 });
+		const [url, init] = lastCall();
+		expect(url).toBe('/api/requests?offset=25&limit=25');
+		expect(String(url)).not.toContain('RD_TOKEN');
+		expect(init.headers[RD_TOKEN_HEADER]).toBe('RD_TOKEN');
+		expect(result.hasMore).toBe(true);
+	});
+
+	it('omits a zero offset from the query', async () => {
+		(global.fetch as any).mockResolvedValue(
+			ok({ requests: [], authenticated: false, hasMore: false })
+		);
+		await fetchContentRequests(null, { offset: 0, limit: 25 });
+		expect(lastCall()[0]).toBe('/api/requests?limit=25');
 	});
 
 	it('raises the server’s own message rather than the status', async () => {

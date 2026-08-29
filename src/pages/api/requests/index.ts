@@ -19,14 +19,21 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 /** Matches the Transfers page: the key is a header, never a query param. */
 const RD_TOKEN_HEADER = 'x-rd-access-token';
 
-const DEFAULT_LIMIT = 100;
-const MAX_LIMIT = 200;
+const DEFAULT_LIMIT = 25;
+const MAX_LIMIT = 100;
 
 function clampLimit(raw: unknown): number {
 	if (typeof raw !== 'string' || raw.trim() === '') return DEFAULT_LIMIT;
 	const value = Number(raw);
 	if (!Number.isFinite(value)) return DEFAULT_LIMIT;
 	return Math.min(Math.max(Math.trunc(value), 1), MAX_LIMIT);
+}
+
+function clampOffset(raw: unknown): number {
+	const value = Array.isArray(raw) ? raw[0] : raw;
+	const n = typeof value === 'string' ? Number(value) : 0;
+	if (!Number.isFinite(n) || n < 0) return 0;
+	return Math.trunc(n);
 }
 
 function readToken(req: NextApiRequest): string | null {
@@ -57,22 +64,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === 'GET') {
 		const viewerId = await viewerIdOf(req);
 		const limit = clampLimit(req.query.limit);
+		const offset = clampOffset(req.query.offset);
 		try {
-			const [open, mine] = await Promise.all([
-				db.listOpenContentRequests(limit),
-				viewerId ? db.listContentRequestsFor(viewerId, limit) : Promise.resolve([]),
-			]);
-			// Deduped because an open row belongs on the board *and* in the
-			// caller's own list; without this their asks appear twice.
-			const seen = new Set<string>();
-			const rows = [...mine, ...open].filter((row) => {
-				if (seen.has(row.id)) return false;
-				seen.add(row.id);
-				return true;
-			});
+			// One extra row is fetched but never returned: its presence is how the
+			// page's infinite scroll learns there is another page without a second
+			// count query. A viewer's own open request is already on the board, so
+			// it is marked `mine` in place rather than merged in from a second list
+			// — merging broke pagination, since a `mine` row could land on any page.
+			const rows = await db.listOpenContentRequests(limit + 1, offset);
+			const hasMore = rows.length > limit;
 			return res.status(200).json({
-				requests: rows.map((row) => toPublicRequest(row, viewerId)),
+				requests: rows.slice(0, limit).map((row) => toPublicRequest(row, viewerId)),
 				authenticated: viewerId !== null,
+				hasMore,
 			});
 		} catch (error) {
 			console.error('Listing content requests failed:', error);
