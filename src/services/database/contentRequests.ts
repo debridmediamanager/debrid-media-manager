@@ -1,4 +1,4 @@
-import type { MediaType, RequestStatus, StoredRequest } from '@/utils/contentRequest';
+import type { MediaType, StoredRequest } from '@/utils/contentRequest';
 import { DatabaseClient } from './client';
 
 /**
@@ -109,9 +109,5 @@ export class ContentRequestService extends DatabaseClient {
 			data: { status: 'cancelled' },
 		});
 		return count > 0;
-	}
-
-	public async countByStatus(status: RequestStatus): Promise<number> {
-		return this.prisma.contentRequest.count({ where: { status } });
 	}
 }
