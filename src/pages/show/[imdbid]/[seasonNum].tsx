@@ -187,7 +187,12 @@ const TvSearch: FunctionComponent = () => {
 	 * people the request board exists for, so the Request button appears for them
 	 * and for nobody else — anyone with a second service can just send it.
 	 */
-	const canRequest = Boolean(rdKey) && !torboxKey && !adKey;
+	// The Request button is for Real-Debrid users: it files an ask for a
+	// release, which somebody with a TorBox or AllDebrid account then fulfils.
+	// It used to hide from a user who also held one of those keys, but that
+	// conflated "can ask" with "cannot fetch" — a user with both may still want
+	// to leave the ask for someone else rather than spend their own quota.
+	const canRequest = Boolean(rdKey);
 
 	const handleRequestContent = useCallback(
 		async (result: SearchResult) => {

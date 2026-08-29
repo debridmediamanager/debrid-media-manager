@@ -688,28 +688,6 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													)}
 												</button>
 											)}
-										{requestContent &&
-											!r.rdAvailable &&
-											notInLibrary('rd', r.hash) && (
-												<button
-													className={`haptic-sm inline rounded border-2 border-cyan-500 bg-cyan-900/30 px-1 text-xs text-cyan-100 transition-colors hover:bg-cyan-800/50 ${isRequesting ? 'cursor-not-allowed opacity-50' : ''}`}
-													onClick={() => handleRequest(r)}
-													disabled={isRequesting}
-													title="Ask someone with a TorBox or AllDebrid account to send this to your Real-Debrid"
-												>
-													{isRequesting ? (
-														<>
-															<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-															Requesting...
-														</>
-													) : (
-														<>
-															<HandHeart className="mr-1 inline-block h-3 w-3 text-cyan-400" />
-															Request
-														</>
-													)}
-												</button>
-											)}
 										{torboxKey &&
 											handleCastTorBox &&
 											r.tbAvailable &&
@@ -835,6 +813,28 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											<Link2 className="inline h-3 w-3 text-teal-400" />{' '}
 											{downloadMagnets ? 'Download' : 'Copy'}
 										</button>
+										{requestContent &&
+											!r.rdAvailable &&
+											notInLibrary('rd', r.hash) && (
+												<button
+													className={`haptic-sm inline rounded border-2 border-cyan-500 bg-cyan-900/30 px-1 text-xs text-cyan-100 transition-colors hover:bg-cyan-800/50 ${isRequesting ? 'cursor-not-allowed opacity-50' : ''}`}
+													onClick={() => handleRequest(r)}
+													disabled={isRequesting}
+													title="Ask someone with a TorBox or AllDebrid account to send this to your Real-Debrid"
+												>
+													{isRequesting ? (
+														<>
+															<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+															Requesting...
+														</>
+													) : (
+														<>
+															<HandHeart className="mr-1 inline-block h-3 w-3 text-cyan-400" />
+															Request
+														</>
+													)}
+												</button>
+											)}
 										<ReportButton
 											hash={r.hash}
 											imdbId={imdbId!}
