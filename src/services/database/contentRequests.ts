@@ -26,11 +26,25 @@ export class ContentRequestService extends DatabaseClient {
 		mediaType: MediaType;
 		requesterId: string;
 	}): Promise<StoredRequest> {
-		return this.prisma.contentRequest.upsert({
+		const row = await this.prisma.contentRequest.upsert({
 			where: { hash_requesterId: { hash: input.hash, requesterId: input.requesterId } },
 			create: input,
 			update: {},
 		});
+
+		// Withdrawing is not permanent, and the unique key is what makes that a
+		// problem worth code: one row per release per person means a cancelled ask
+		// is the *only* row that release can ever have for them, so leaving it
+		// alone would make the second ask look like it worked and do nothing.
+		// `cancelled` is the one status this moves — `open` and `failed` are
+		// already on the board, `claimed` must not be dragged back under a running
+		// transfer, and `fulfilled` has already landed.
+		if (row.status !== 'cancelled') return row;
+		const { count } = await this.prisma.contentRequest.updateMany({
+			where: { id: row.id, status: 'cancelled' },
+			data: { status: 'open', fulfillerId: null, error: null },
+		});
+		return count === 0 ? row : ((await this.getRequest(row.id)) ?? row);
 	}
 
 	public async getRequest(id: string): Promise<StoredRequest | null> {
