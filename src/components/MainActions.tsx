@@ -114,52 +114,60 @@ export function MainActions({ rdUser, tbUser, adUser, pmUser, isLoading }: MainA
 				</div>
 			)}
 
-			{/* Transfer jobs. Gated on RD alone, not RD+TB: every kind lands in Real-
+			{/* Transfers and Requests share a row: both are places to watch work
+			    somebody else started — another device, or another person.
+
+			    Both gated on RD alone, not RD+TB. Every transfer lands in Real-
 			    Debrid, but only the cache kind sources from TorBox — and even that
-			    one falls back to AllDebrid. Usenet transfers need neither account, so
-			    requiring TorBox here hid the page from the very users the toast tells
-			    to come and watch their job. */}
+			    one falls back to AllDebrid — while Usenet transfers need neither
+			    account, so requiring TorBox once hid the page from the very users
+			    the toast tells to come and watch their job. The board is the same:
+			    asking is one half of it and fulfilling is the other, so it is open
+			    to everyone rather than only to the users the Request button is for. */}
 			{rdUser && (
-				<Link
-					href="/transfers"
-					className="haptic flex w-full items-center justify-center rounded border-2 border-indigo-500 bg-indigo-900/30 p-3 text-center text-sm text-indigo-100 transition-colors hover:bg-indigo-800/50"
-				>
-					<Send className="mr-2 inline-block h-4 w-4 text-indigo-400" />
-					Transfers
-				</Link>
+				<div className="grid w-full grid-cols-2 gap-3">
+					<Link
+						href="/transfers"
+						className="haptic flex items-center justify-center rounded border-2 border-indigo-500 bg-indigo-900/30 p-3 text-center text-sm text-indigo-100 transition-colors hover:bg-indigo-800/50"
+					>
+						<Send className="mr-2 inline-block h-4 w-4 text-indigo-400" />
+						Transfers
+					</Link>
+					<Link
+						href="/requests"
+						className="haptic flex items-center justify-center rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-center text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
+					>
+						<HandHeart className="mr-2 inline-block h-4 w-4 text-cyan-400" />
+						Requests
+					</Link>
+				</div>
 			)}
 
-			{/* The request board. Open to every signed-in user, not only the
-			    Real-Debrid-only ones the Request button is for: asking is one half
-			    of it, and fulfilling somebody else's ask is the other. */}
-			{rdUser && (
-				<Link
-					href="/requests"
-					className="haptic flex w-full items-center justify-center rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-center text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
+			{/* The two status pages share a row. Either can be absent — a user
+			    with no TorBox account never sees its page — so the column count
+			    follows how many are actually rendered rather than being fixed at
+			    two, which would leave a lone button occupying half the row. */}
+			{(rdUser || tbUser) && (
+				<div
+					className={`grid w-full gap-3 ${rdUser && tbUser ? 'grid-cols-2' : 'grid-cols-1'}`}
 				>
-					<HandHeart className="mr-2 inline-block h-4 w-4 text-cyan-400" />
-					Requests
-				</Link>
-			)}
-
-			{/* Is RD Down - full width */}
-			{rdUser && (
-				<Link
-					href="/is-real-debrid-down-or-just-me"
-					className="haptic flex w-full items-center justify-center rounded border-2 border-emerald-500 bg-emerald-900/30 p-3 text-center text-sm text-emerald-100 transition-colors hover:bg-emerald-800/40"
-				>
-					Is Real-Debrid down or just me?
-				</Link>
-			)}
-
-			{/* Is TorBox Down - full width */}
-			{tbUser && (
-				<Link
-					href="/is-torbox-down-or-just-me"
-					className="haptic flex w-full items-center justify-center rounded border-2 border-[#4f46e5] bg-indigo-900/30 p-3 text-center text-sm text-indigo-100 transition-colors hover:bg-indigo-800/40"
-				>
-					Is TorBox down or just me?
-				</Link>
+					{rdUser && (
+						<Link
+							href="/is-real-debrid-down-or-just-me"
+							className="haptic flex items-center justify-center rounded border-2 border-emerald-500 bg-emerald-900/30 p-3 text-center text-sm text-emerald-100 transition-colors hover:bg-emerald-800/40"
+						>
+							Is Real-Debrid down or just me?
+						</Link>
+					)}
+					{tbUser && (
+						<Link
+							href="/is-torbox-down-or-just-me"
+							className="haptic flex items-center justify-center rounded border-2 border-[#4f46e5] bg-indigo-900/30 p-3 text-center text-sm text-indigo-100 transition-colors hover:bg-indigo-800/40"
+						>
+							Is TorBox down or just me?
+						</Link>
+					)}
+				</div>
 			)}
 		</div>
 	);
