@@ -200,10 +200,12 @@ describe('MainActions', () => {
 		);
 	});
 
-	it('links to the request board for any Real-Debrid user', () => {
+	it('links to the request board for a fulfiller — a TorBox, AllDebrid or Premiumize user', () => {
+		// A user with no Real-Debrid at all, only TorBox: they are exactly who the
+		// board is for, so the link is theirs even though Transfers is not.
 		render(
 			<MainActions
-				rdUser={baseRdUser}
+				rdUser={null}
 				tbUser={baseTbUser}
 				adUser={false}
 				pmUser={false}
@@ -211,18 +213,29 @@ describe('MainActions', () => {
 			/>
 		);
 
-		// Shown to a TorBox user too: they are the ones who can fulfil, and the
-		// board is unreachable from anywhere else.
 		expect(screen.getByRole('link', { name: /requests/i }).getAttribute('href')).toBe(
 			'/requests'
 		);
+		expect(screen.queryByRole('link', { name: /transfers/i })).toBeNull();
 	});
 
-	it('hides the request board without Real-Debrid, which both halves need', () => {
+	it('shows the request board to an AllDebrid or Premiumize user as well', () => {
+		const { rerender } = render(
+			<MainActions rdUser={null} tbUser={null} adUser pmUser={false} isLoading={false} />
+		);
+		expect(screen.getByRole('link', { name: /requests/i })).not.toBeNull();
+
+		rerender(
+			<MainActions rdUser={null} tbUser={null} adUser={false} pmUser isLoading={false} />
+		);
+		expect(screen.getByRole('link', { name: /requests/i })).not.toBeNull();
+	});
+
+	it('hides the request board from a Real-Debrid-only user, who asks from the search result instead', () => {
 		render(
 			<MainActions
-				rdUser={null}
-				tbUser={baseTbUser}
+				rdUser={baseRdUser}
+				tbUser={null}
 				adUser={false}
 				pmUser={false}
 				isLoading={false}

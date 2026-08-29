@@ -114,32 +114,36 @@ export function MainActions({ rdUser, tbUser, adUser, pmUser, isLoading }: MainA
 				</div>
 			)}
 
-			{/* Transfers and Requests share a row: both are places to watch work
-			    somebody else started — another device, or another person.
-
-			    Both gated on RD alone, not RD+TB. Every transfer lands in Real-
-			    Debrid, but only the cache kind sources from TorBox — and even that
-			    one falls back to AllDebrid — while Usenet transfers need neither
-			    account, so requiring TorBox once hid the page from the very users
-			    the toast tells to come and watch their job. The board is the same:
-			    asking is one half of it and fulfilling is the other, so it is open
-			    to everyone rather than only to the users the Request button is for. */}
-			{rdUser && (
-				<div className="grid w-full grid-cols-2 gap-3">
-					<Link
-						href="/transfers"
-						className="haptic flex items-center justify-center rounded border-2 border-indigo-500 bg-indigo-900/30 p-3 text-center text-sm text-indigo-100 transition-colors hover:bg-indigo-800/50"
-					>
-						<Send className="mr-2 inline-block h-4 w-4 text-indigo-400" />
-						Transfers
-					</Link>
-					<Link
-						href="/requests"
-						className="haptic flex items-center justify-center rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-center text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
-					>
-						<HandHeart className="mr-2 inline-block h-4 w-4 text-cyan-400" />
-						Requests
-					</Link>
+			{/* Transfers and Requests share a row, but they answer to different
+			    audiences. Transfers is where a Real-Debrid user watches content
+			    arrive, so it is theirs. Requests is where a TorBox, AllDebrid or
+			    Premiumize user picks up somebody else's ask, so it is the
+			    fulfillers'. A user who is both sees the pair side by side; a user
+			    who is only one sees that one full-width rather than stranded in
+			    half a row. (A Real-Debrid-only user files a request from the search
+			    result itself — the button there — and never needs the board.) */}
+			{(rdUser || tbUser || adUser || pmUser) && (
+				<div
+					className={`grid w-full gap-3 ${rdUser && (tbUser || adUser || pmUser) ? 'grid-cols-2' : 'grid-cols-1'}`}
+				>
+					{rdUser && (
+						<Link
+							href="/transfers"
+							className="haptic flex items-center justify-center rounded border-2 border-indigo-500 bg-indigo-900/30 p-3 text-center text-sm text-indigo-100 transition-colors hover:bg-indigo-800/50"
+						>
+							<Send className="mr-2 inline-block h-4 w-4 text-indigo-400" />
+							Transfers
+						</Link>
+					)}
+					{(tbUser || adUser || pmUser) && (
+						<Link
+							href="/requests"
+							className="haptic flex items-center justify-center rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-center text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
+						>
+							<HandHeart className="mr-2 inline-block h-4 w-4 text-cyan-400" />
+							Requests
+						</Link>
+					)}
 				</div>
 			)}
 
