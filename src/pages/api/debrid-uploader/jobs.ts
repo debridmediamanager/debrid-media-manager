@@ -2,6 +2,7 @@ import { orderedServersForNewJob, resolveJobServer } from '@/services/debridUplo
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { safeReturnPath } from '@/utils/transferContext';
+import { exceedsTransferSizeCap, MAX_TRANSFER_BYTES, tooLargeMessage } from '@/utils/transferSize';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 // The debrid uploader service speaks plain HTTP with no CORS, so the browser can
@@ -116,6 +117,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		console.error('Debrid transfer dedup check failed (continuing):', error);
 	}
 
+	// Route by size so a big torrent never lands on an underpowered, capped host.
+	const jobSize = typeof sizeBytes === 'number' && sizeBytes > 0 ? sizeBytes : undefined;
+
+	// Too large to be worth starting. Deliberately **after** the dedup check
+	// above: a release transferred before the cap existed is already RD-cached
+	// under its rewritten hash, and serving that costs one instant addMagnet and
+	// no uploader bandwidth at all — refusing it would deny content for free.
+	// This only stops a *new* transfer.
+	//
+	// The uploader enforces the same cap itself once it knows the real size, so
+	// this is the early half of the decision rather than the load-bearing one —
+	// which is why an unknown size is allowed through rather than guessed at.
+	if (exceedsTransferSizeCap(jobSize)) {
+		return res.status(413).json({
+			error: tooLargeMessage(jobSize as number),
+			sizeBytes: jobSize,
+			maxBytes: MAX_TRANSFER_BYTES,
+		});
+	}
+
 	const body = JSON.stringify({
 		input: `magnet:?xt=urn:btih:${originalHash}`,
 		imdb_id: imdbId,
@@ -123,9 +144,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		...(tbSource ? { tb_api_key: tbSource } : {}),
 		...(adSource ? { ad_api_key: adSource } : {}),
 	});
-
-	// Route by size so a big torrent never lands on an underpowered, capped host.
-	const jobSize = typeof sizeBytes === 'number' && sizeBytes > 0 ? sizeBytes : undefined;
 
 	// Try the round-robin-chosen server first; on a network failure fall through
 	// to the others. A non-network error (e.g. 400) is deterministic, so return it.

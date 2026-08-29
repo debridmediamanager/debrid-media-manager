@@ -31,6 +31,7 @@ import {
 import { convertToUserTorrent } from '@/utils/fetchTorrents';
 import { generateTokenAndHash } from '@/utils/token';
 import { TRANSFER_LABELS, TRANSFER_STEP_TOAST_MS, TRANSFER_TOAST_MS } from '@/utils/transferPhase';
+import { exceedsTransferSizeCap, tooLargeMessage } from '@/utils/transferSize';
 import { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -415,6 +416,19 @@ export function useTorrentManagement(
 			const row = searchResults.find((r) => r.hash === hash);
 			const sizeMb = row?.biggestFileSize || row?.fileSize || 0;
 			const sizeBytes = sizeMb > 0 ? Math.round(sizeMb * 1024 * 1024) : undefined;
+
+			// Refuse an oversize release here rather than letting it travel to the
+			// uploader to be refused there. `fileSize` and not `sizeBytes` above:
+			// that one is `biggestFileSize` first, which is the right routing signal
+			// but badly understates a season pack — the cap is about the whole
+			// release, which is what the uploader sums its files to.
+			const totalBytes = row?.fileSize ? Math.round(row.fileSize * 1024 * 1024) : undefined;
+			if (exceedsTransferSizeCap(totalBytes)) {
+				toast.error(`${label}: ${tooLargeMessage(totalBytes as number)}`, {
+					duration: TRANSFER_TOAST_MS,
+				});
+				return;
+			}
 
 			const toastId = toast.loading(`${label}: submitting transfer...`, {
 				duration: TRANSFER_STEP_TOAST_MS,

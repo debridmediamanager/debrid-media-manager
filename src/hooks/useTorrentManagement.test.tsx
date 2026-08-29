@@ -1,5 +1,6 @@
 import { UserTorrentStatus } from '@/torrent/userTorrent';
 import { act, renderHook } from '@testing-library/react';
+import toast from 'react-hot-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useTorrentManagement } from './useTorrentManagement';
 
@@ -83,6 +84,9 @@ vi.mock('react-hot-toast', () => ({
 	default: {
 		error: vi.fn(),
 		success: vi.fn(),
+		// The send flows carry one toast from submit onwards, so anything that
+		// gets past a guard and actually starts a transfer needs this.
+		loading: vi.fn(() => 'toast-id'),
 	},
 }));
 
@@ -486,5 +490,63 @@ describe('useTorrentManagement', () => {
 
 		expect(result.current.hashAndProgress['rd:hash-1']).toBe(70);
 		expect(result.current.hashAndProgress['ad:hash-2']).toBe(20);
+	});
+
+	// The uploader refuses these anyway once it knows the size, but not before
+	// the submission has crossed the network and taken a job row. Measured over
+	// 30 days to 2026-08-29, releases this size never complete: 0 of 14 above
+	// 200 GB, against a largest-ever success of 186.1 GB.
+	describe('the transfer size cap', () => {
+		// `fileSize` is in MB and is the whole release; the hook's routing hint
+		// uses `biggestFileSize` first, which would read a 600 GB season pack as
+		// one 8 GB episode — so the cap has to read the total itself.
+		const oversize = { fileSize: 600_000, biggestFileSize: 8_000, tbAvailable: true };
+
+		it('refuses to send a release over the cap', async () => {
+			currentResults = [createSearchResult(oversize)];
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.sendTbToRd('hash-1');
+			});
+
+			expect(toast.error).toHaveBeenCalledWith(
+				expect.stringContaining('over the 100 GB limit'),
+				expect.anything()
+			);
+			expect(setSearchResults).not.toHaveBeenCalled();
+		});
+
+		it('names the actual size so the refusal is explicable', async () => {
+			currentResults = [createSearchResult(oversize)];
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.sendTbToRd('hash-1');
+			});
+
+			expect(toast.error).toHaveBeenCalledWith(
+				expect.stringContaining('629.1 GB'),
+				expect.anything()
+			);
+		});
+
+		// A season pack whose biggest file is small must still be measured whole.
+		it('measures the whole release, not its biggest file', async () => {
+			currentResults = [
+				createSearchResult({ fileSize: 50_000, biggestFileSize: 8_000, tbAvailable: true }),
+			];
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.sendTbToRd('hash-1');
+			});
+
+			// 50 GB total is under the cap, so this one is not refused here.
+			expect(toast.error).not.toHaveBeenCalledWith(
+				expect.stringContaining('over the 100 GB limit'),
+				expect.anything()
+			);
+		});
 	});
 });
