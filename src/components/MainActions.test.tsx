@@ -219,16 +219,16 @@ describe('MainActions', () => {
 		expect(screen.queryByRole('link', { name: /transfers/i })).toBeNull();
 	});
 
-	it('shows the request board to an AllDebrid or Premiumize user as well', () => {
-		const { rerender } = render(
-			<MainActions rdUser={null} tbUser={null} adUser pmUser={false} isLoading={false} />
-		);
+	it('shows the request board to an AllDebrid user', () => {
+		render(<MainActions rdUser={null} tbUser={null} adUser pmUser={false} isLoading={false} />);
 		expect(screen.getByRole('link', { name: /requests/i })).not.toBeNull();
+	});
 
-		rerender(
-			<MainActions rdUser={null} tbUser={null} adUser={false} pmUser isLoading={false} />
-		);
-		expect(screen.getByRole('link', { name: /requests/i })).not.toBeNull();
+	it('hides the request board from a Premiumize-only user, who has nothing to fulfil with', () => {
+		// The uploader cannot source a transfer from Premiumize, so a Premiumize
+		// user is not sent to the board at all.
+		render(<MainActions rdUser={null} tbUser={null} adUser={false} pmUser isLoading={false} />);
+		expect(screen.queryByRole('link', { name: /requests/i })).toBeNull();
 	});
 
 	it('hides the request board from a Real-Debrid-only user, who asks from the search result instead', () => {

@@ -1,9 +1,4 @@
-import {
-	useAllDebridApiKey,
-	usePremiumizeCredential,
-	useRealDebridAccessToken,
-	useTorBoxAccessToken,
-} from '@/hooks/auth';
+import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
 import type { SearchResult } from '@/services/mediasearch';
 import type { PublicRequest } from '@/utils/contentRequest';
 import {
@@ -11,11 +6,7 @@ import {
 	fetchContentRequests,
 	fulfillContentRequest,
 } from '@/utils/contentRequestsApi';
-import {
-	checkAvailabilityPm,
-	checkDatabaseAvailabilityAd,
-	checkDatabaseAvailabilityTb,
-} from '@/utils/instantChecks';
+import { checkDatabaseAvailabilityAd, checkDatabaseAvailabilityTb } from '@/utils/instantChecks';
 import { generateTokenAndHash } from '@/utils/token';
 import {
 	CheckCircle2,
@@ -35,12 +26,12 @@ import { toast, Toaster } from 'react-hot-toast';
 /**
  * The request board — the fulfillers' view.
  *
- * A Real-Debrid user files an ask from a search result. Here a TorBox,
- * AllDebrid or Premiumize user picks one up: fulfilling fetches the release with
- * *their* quota and lands it in the asker's Real-Debrid library. So the page
- * runs a cache check across everything on it with the viewer's own keys, which
- * is the thing that tells a fulfiller what they can actually serve, and asks
- * before spending anything.
+ * A Real-Debrid user files an ask from a search result. Here a TorBox or
+ * AllDebrid user picks one up: fulfilling fetches the release with *their* quota
+ * and lands it in the asker's Real-Debrid library. So the page runs a cache
+ * check across everything on it with the viewer's own keys, which is the thing
+ * that tells a fulfiller what they can actually serve, and asks before spending
+ * anything.
  *
  * It pages the board 25 at a time and loads the next page as the last one
  * scrolls into view, because the board grows without bound and nobody scrolls
@@ -73,7 +64,7 @@ const CLAIMABLE = new Set(['open', 'failed']);
 /**
  * A stand-in torrent for one request, only so the cache-check helpers — which
  * all speak `SearchResult` — can write their answers onto it. Nothing here is
- * rendered; the row reads back `tbAvailable`/`adAvailable`/`pmAvailable` alone.
+ * rendered; the row reads back `tbAvailable`/`adAvailable` alone.
  */
 function seedResult(row: PublicRequest): SearchResult {
 	return {
@@ -109,7 +100,6 @@ export default function RequestsPage() {
 	const [rdKey] = useRealDebridAccessToken();
 	const torboxKey = useTorBoxAccessToken();
 	const adKey = useAllDebridApiKey();
-	const premiumizeKey = usePremiumizeCredential();
 
 	const rdKeyRef = useRef(rdKey);
 	rdKeyRef.current = rdKey;
@@ -119,11 +109,12 @@ export default function RequestsPage() {
 	// A single in-flight guard shared by the scroll trigger and the buttons.
 	const loadingRef = useRef(false);
 
-	// Only TorBox and AllDebrid can actually source a transfer — the uploader
-	// takes no Premiumize key — so a Premiumize-only user can watch the board and
-	// see what Premiumize holds, but cannot fulfil until they add one of those.
+	// TorBox and AllDebrid are the only sources the uploader can pull from, so
+	// they are the only keys the board cares about. (Premiumize is not one: the
+	// uploader cannot source from it, which is why a Premiumize user is not sent
+	// here in the first place.)
 	const canFulfil = Boolean(rdKey) && Boolean(torboxKey || adKey);
-	const hasFulfillerKey = Boolean(torboxKey || adKey || premiumizeKey);
+	const hasFulfillerKey = Boolean(torboxKey || adKey);
 
 	/**
 	 * Ask each service the viewer holds a key for which of these hashes it has
@@ -143,11 +134,6 @@ export default function RequestsPage() {
 			const hashes = rows.map((r) => r.hash);
 			if (torboxKey) {
 				checkDatabaseAvailabilityTb(torboxKey, hashes, setCheckResults, identity).catch(
-					() => {}
-				);
-			}
-			if (premiumizeKey) {
-				checkAvailabilityPm(premiumizeKey, hashes, setCheckResults, identity).catch(
 					() => {}
 				);
 			}
@@ -178,7 +164,7 @@ export default function RequestsPage() {
 				}
 			}
 		},
-		[torboxKey, premiumizeKey, adKey]
+		[torboxKey, adKey]
 	);
 
 	/**
@@ -382,9 +368,7 @@ export default function RequestsPage() {
 
 				{loaded && !canFulfil && hasFulfillerKey && (
 					<div className="mb-3 rounded border-2 border-gray-700 bg-gray-800/30 p-3 text-xs text-gray-300">
-						{premiumizeKey && !torboxKey && !adKey
-							? 'Fulfilling needs a TorBox or AllDebrid account — the uploader cannot source from Premiumize. You can still see what Premiumize has cached below.'
-							: 'Sign in with Real-Debrid to fulfil requests for others.'}
+						Sign in with Real-Debrid to fulfil requests for others.
 					</div>
 				)}
 
@@ -448,11 +432,6 @@ export default function RequestsPage() {
 													{avail?.adAvailable && (
 														<span className="inline-flex items-center rounded border-2 border-sky-500 bg-sky-900/30 px-1.5 py-0.5 font-medium text-sky-100">
 															AD cached
-														</span>
-													)}
-													{avail?.pmAvailable && (
-														<span className="inline-flex items-center rounded border-2 border-red-500 bg-red-900/30 px-1.5 py-0.5 font-medium text-red-100">
-															PM cached
 														</span>
 													)}
 													{row.mine && (

@@ -116,15 +116,17 @@ export function MainActions({ rdUser, tbUser, adUser, pmUser, isLoading }: MainA
 
 			{/* Transfers and Requests share a row, but they answer to different
 			    audiences. Transfers is where a Real-Debrid user watches content
-			    arrive, so it is theirs. Requests is where a TorBox, AllDebrid or
-			    Premiumize user picks up somebody else's ask, so it is the
-			    fulfillers'. A user who is both sees the pair side by side; a user
-			    who is only one sees that one full-width rather than stranded in
-			    half a row. (A Real-Debrid-only user files a request from the search
-			    result itself — the button there — and never needs the board.) */}
-			{(rdUser || tbUser || adUser || pmUser) && (
+			    arrive, so it is theirs. Requests is where a TorBox or AllDebrid
+			    user picks up somebody else's ask, so it is the fulfillers'.
+			    Premiumize is deliberately not here: the uploader cannot source a
+			    transfer from it, so a Premiumize user has nothing to fulfil with. A
+			    user who is both sees the pair side by side; a user who is only one
+			    sees that one full-width rather than stranded in half a row. (A
+			    Real-Debrid-only user files a request from the search result itself —
+			    the button there — and never needs the board.) */}
+			{(rdUser || tbUser || adUser) && (
 				<div
-					className={`grid w-full gap-3 ${rdUser && (tbUser || adUser || pmUser) ? 'grid-cols-2' : 'grid-cols-1'}`}
+					className={`grid w-full gap-3 ${rdUser && (tbUser || adUser) ? 'grid-cols-2' : 'grid-cols-1'}`}
 				>
 					{rdUser && (
 						<Link
@@ -135,7 +137,7 @@ export function MainActions({ rdUser, tbUser, adUser, pmUser, isLoading }: MainA
 							Transfers
 						</Link>
 					)}
-					{(tbUser || adUser || pmUser) && (
+					{(tbUser || adUser) && (
 						<Link
 							href="/requests"
 							className="haptic flex items-center justify-center rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-center text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
