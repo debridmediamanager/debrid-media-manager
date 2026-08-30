@@ -8,6 +8,8 @@ const deleteMock = vi.fn();
 const findUniqueMock = vi.fn();
 const findFirstFileMock = vi.fn();
 const deleteManyFileMock = vi.fn();
+const createManyMock = vi.fn();
+const createManyFileMock = vi.fn();
 
 vi.mock('@prisma/client', () => ({
 	PrismaClient: vi.fn().mockImplementation(() => ({
@@ -16,11 +18,13 @@ vi.mock('@prisma/client', () => ({
 			upsert: upsertMock,
 			findMany: findManyMock,
 			delete: deleteMock,
+			createMany: createManyMock,
 		},
 		availableFile: {
 			findUnique: findUniqueMock,
 			findFirst: findFirstFileMock,
 			deleteMany: deleteManyFileMock,
+			createMany: createManyFileMock,
 		},
 		$disconnect: vi.fn(),
 	})),
@@ -37,6 +41,8 @@ describe('AvailabilityService', () => {
 		findUniqueMock.mockReset();
 		findFirstFileMock.mockReset();
 		deleteManyFileMock.mockReset();
+		createManyMock.mockReset();
+		createManyFileMock.mockReset();
 		service = new AvailabilityService();
 	});
 
@@ -149,5 +155,60 @@ describe('AvailabilityService', () => {
 		expect(deleteManyFileMock).toHaveBeenCalledWith({
 			where: { link: { startsWith: 'https://real-debrid.com/d/abcdef1234567' } },
 		});
+	});
+
+	it('saves instant availability with a synthetic marker file', async () => {
+		findManyMock.mockResolvedValue([]);
+		createManyMock.mockResolvedValue({ count: 1 });
+		createManyFileMock.mockResolvedValue({ count: 1 });
+
+		const saved = await service.saveInstantAvailability('tt0903747', [
+			{
+				hash: 'a'.repeat(40),
+				filename: 'Breaking.Bad.S01E01.Pilot.1080p.mkv',
+				bytes: 3811783475,
+			},
+		]);
+
+		expect(saved).toBe(1);
+		const availableRow = createManyMock.mock.calls[0][0].data[0];
+		expect(availableRow).toMatchObject({
+			hash: 'a'.repeat(40),
+			imdbId: 'tt0903747',
+			status: 'downloaded',
+			host: 'real-debrid.com',
+			progress: 100,
+			season: 1,
+			episode: 1,
+		});
+		const fileRow = createManyFileMock.mock.calls[0][0].data[0];
+		expect(fileRow).toMatchObject({
+			link: `debridio:${'a'.repeat(40)}`,
+			file_id: 0,
+			path: 'Breaking.Bad.S01E01.Pilot.1080p.mkv',
+			season: 1,
+			episode: 1,
+		});
+	});
+
+	it('skips hashes that already have availability rows', async () => {
+		findManyMock.mockResolvedValue([{ hash: 'a'.repeat(40) }]);
+
+		const saved = await service.saveInstantAvailability('tt0903747', [
+			{ hash: 'a'.repeat(40), filename: 'already-present.mkv', bytes: 1000 },
+		]);
+
+		expect(saved).toBe(0);
+		expect(createManyMock).not.toHaveBeenCalled();
+		expect(createManyFileMock).not.toHaveBeenCalled();
+	});
+
+	it('returns null when a title has no instant availability yet', async () => {
+		findFirstMock.mockResolvedValue(null);
+
+		await expect(service.getInstantAvailabilityUpdatedAt('tt0111161')).resolves.toBeNull();
+		const args = findFirstMock.mock.calls[0][0];
+		expect(args.where.imdbId).toBe('tt0111161');
+		expect(args.where.files.some.link.startsWith).toBe('debridio:');
 	});
 });

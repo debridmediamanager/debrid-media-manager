@@ -351,6 +351,17 @@ export class Repository {
 		return this.availabilityService.upsertAvailability(data);
 	}
 
+	public saveInstantAvailability(
+		imdbId: string,
+		rows: Array<{ hash: string; filename: string; bytes: number }>
+	) {
+		return this.availabilityService.saveInstantAvailability(imdbId, rows);
+	}
+
+	public getInstantAvailabilityUpdatedAt(imdbId: string) {
+		return this.availabilityService.getInstantAvailabilityUpdatedAt(imdbId);
+	}
+
 	public checkAvailability(imdbId: string, hashes: string[]) {
 		return this.availabilityService.checkAvailability(imdbId, hashes);
 	}

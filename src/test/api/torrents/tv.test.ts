@@ -13,6 +13,8 @@ const {
 	mockRecordCanary,
 	mockFlatten,
 	mockSort,
+	mockBackfillDebridio,
+	mockRefreshDebridio,
 } = vi.hoisted(() => ({
 	mockValidateTokenWithHash: vi.fn(),
 	mockGetScrapedTrueResults: vi.fn(),
@@ -23,6 +25,8 @@ const {
 	mockRecordCanary: vi.fn(),
 	mockFlatten: vi.fn((items: any[]) => items),
 	mockSort: vi.fn((items: any[]) => items),
+	mockBackfillDebridio: vi.fn().mockResolvedValue([]),
+	mockRefreshDebridio: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock('@/utils/token', () => ({
@@ -46,6 +50,11 @@ vi.mock('@/services/mediasearch', () => ({
 
 vi.mock('@/services/canary/canaryStore', () => ({
 	getCanaryStore: () => ({ record: mockRecordCanary }),
+}));
+
+vi.mock('@/utils/debridioBackfill', () => ({
+	backfillFromDebridioNow: mockBackfillDebridio,
+	refreshDebridioAvailabilityInBackground: mockRefreshDebridio,
 }));
 
 describe('/api/torrents/tv', () => {
@@ -191,6 +200,56 @@ describe('/api/torrents/tv', () => {
 
 		expect(res.status).toHaveBeenCalledWith(500);
 		expect(res.json).toHaveBeenCalledWith({ errorMessage: 'An internal error occurred' });
+	});
+
+	it('fills an unscraped season from debridio on the same request', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetScrapedResults.mockResolvedValue([]);
+		const debridioResults = [
+			{ title: 'Show.S02.1080p.BluRay', fileSize: 4096, hash: 'b'.repeat(40) },
+		];
+		mockBackfillDebridio.mockResolvedValue(debridioResults);
+
+		const req = createMockRequest({ query: baseQuery });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockBackfillDebridio).toHaveBeenCalledWith({
+			imdbId: 'tt7654321',
+			key: 'tv:tt7654321:2',
+			kind: 'series',
+			season: 2,
+		});
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ results: debridioResults });
+		expect(mockSaveScrapedResults).toHaveBeenCalledWith('requested:tt7654321', []);
+	});
+
+	it('reports requested when debridio also has nothing', async () => {
+		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetScrapedResults.mockResolvedValue([]);
+		mockBackfillDebridio.mockResolvedValue([]);
+		mockKeyExists.mockResolvedValue(false);
+
+		const req = createMockRequest({ query: baseQuery });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockBackfillDebridio).toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(204);
+	});
+
+	it('refreshes debridio availability in the background on a served page', async () => {
+		await handler(createMockRequest({ query: baseQuery }), createMockResponse());
+
+		expect(mockRefreshDebridio).toHaveBeenCalledWith({
+			imdbId: 'tt7654321',
+			key: 'tv:tt7654321:2',
+			kind: 'series',
+			season: 2,
+		});
 	});
 
 	describe('impossible titles', () => {

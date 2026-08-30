@@ -277,6 +277,86 @@ export class AvailabilityService extends DatabaseClient {
 		});
 	}
 
+	/**
+	 * Persists Real-Debrid instant availability learned from Debridio's ⚡
+	 * markers - the hash is in RD's shared cache, so any user adding it gets an
+	 * instant download, but it is in nobody's account and has no real file list.
+	 *
+	 * The client marks a torrent rdAvailable only when at least one video file
+	 * exists (an empty file list reads as `noVideos`), so each row gets one
+	 * synthetic file. Its link is the `debridio:{hash}` marker: unique, never an
+	 * RD URL, and it identifies the row as instant-only - real rows (transfer
+	 * registrations, user downloads) keep their genuine file lists untouched.
+	 * Rows already present are skipped entirely rather than refreshed; like real
+	 * rows, an instant row is trusted until something deletes it.
+	 */
+	public async saveInstantAvailability(
+		imdbId: string,
+		rows: Array<{ hash: string; filename: string; bytes: number }>
+	): Promise<number> {
+		if (rows.length === 0) return 0;
+
+		const existing = await this.prisma.available.findMany({
+			where: { hash: { in: rows.map((row) => row.hash) } },
+			select: { hash: true },
+		});
+		const knownHashes = new Set(existing.map((row) => row.hash));
+		const fresh = rows.filter((row) => !knownHashes.has(row.hash));
+		if (fresh.length === 0) return 0;
+
+		const now = new Date();
+		await this.prisma.available.createMany({
+			data: fresh.map((row) => {
+				const episodeInfo = extractEpisodeInfo(row.filename);
+				return {
+					hash: row.hash,
+					imdbId,
+					filename: row.filename,
+					originalFilename: row.filename,
+					bytes: BigInt(row.bytes),
+					originalBytes: BigInt(row.bytes),
+					host: 'real-debrid.com',
+					progress: 100,
+					status: 'downloaded',
+					ended: now,
+					season: episodeInfo?.season,
+					episode: episodeInfo?.episode,
+				};
+			}),
+			skipDuplicates: true,
+		});
+		await this.prisma.availableFile.createMany({
+			data: fresh.map((row) => {
+				const episodeInfo = extractEpisodeInfo(row.filename);
+				return {
+					link: `debridio:${row.hash}`,
+					file_id: 0,
+					hash: row.hash,
+					path: row.filename,
+					bytes: BigInt(row.bytes),
+					season: episodeInfo?.season,
+					episode: episodeInfo?.episode,
+				};
+			}),
+			skipDuplicates: true,
+		});
+		return fresh.length;
+	}
+
+	// Last time Debridio instant availability was recorded for a title, for
+	// refresh gating; null means the title has none yet.
+	public async getInstantAvailabilityUpdatedAt(imdbId: string): Promise<Date | null> {
+		const row = await this.prisma.available.findFirst({
+			where: {
+				imdbId,
+				files: { some: { link: { startsWith: 'debridio:' } } },
+			},
+			orderBy: { updatedAt: 'desc' },
+			select: { updatedAt: true },
+		});
+		return row?.updatedAt ?? null;
+	}
+
 	public async checkAvailability(
 		imdbId: string,
 		hashes: string[]
