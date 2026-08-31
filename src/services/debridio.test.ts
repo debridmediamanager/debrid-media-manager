@@ -113,6 +113,22 @@ describe('parseDebridioStreams', () => {
 		expect(torrents).toHaveLength(0);
 	});
 
+	it('drops entries whose release title carries debridio branding', () => {
+		const branded = {
+			...CACHED_REMUX,
+			title: 'Debridio 4k HDR REMUX\n⚡ 📺 4k 💾 56.99 GB  ',
+		};
+		const brandedOnly = parseDebridioStreams({ streams: [branded] });
+		expect(brandedOnly.torrents).toHaveLength(0);
+		expect(brandedOnly.available).toHaveLength(0);
+
+		// Same hash with a clean title still lands; only the branded variant is
+		// dropped.
+		const mixed = parseDebridioStreams({ streams: [branded, CACHED_REMUX] });
+		expect(mixed.torrents).toHaveLength(1);
+		expect(mixed.available).toHaveLength(1);
+	});
+
 	it('merges episode payloads by hash, ORing the cached flag and keeping the larger size', () => {
 		// The same pack seen cached in one episode query and uncached in another.
 		const cachedVariant = {

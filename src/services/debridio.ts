@@ -121,6 +121,10 @@ export function parseDebridioStreams(payloads: unknown | unknown[]): DebridioScr
 		const fullTitle = typeof s.title === 'string' ? s.title : '';
 		const title = fullTitle.split('\n')[0].trim();
 		if (!title) continue;
+		// Stored results must stay source-anonymous: the `name` field carries
+		// debridio branding but is never read, and if a listing ever leaked the
+		// brand into a title, the entry is dropped rather than shown.
+		if (title.toLowerCase().includes('debridio')) continue;
 
 		const bytes = parseBytes(fullTitle);
 		if (bytes > 0 && bytes < MIN_TORRENT_BYTES) continue;
