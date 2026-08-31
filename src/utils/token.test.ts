@@ -74,10 +74,30 @@ describe('generateTokenAndHash', () => {
 		const fetchMock = mockChallenge(PAIR);
 
 		await generateTokenAndHash();
-		vi.setSystemTime(new Date(1_800_000_000_000 + 4 * 60_000 + 1));
+		vi.setSystemTime(new Date(1_800_000_000_000 + 2 * 60_000 + 1));
 		await generateTokenAndHash();
 
 		expect(fetchMock).toHaveBeenCalledTimes(2);
+	});
+
+	// The server refuses a token older than 5 minutes. Whatever this cache hands
+	// out has to still be comfortably inside that when the request lands, so the
+	// reuse window is checked directly rather than left implicit.
+	it('never hands out a token with less than three minutes of server validity', async () => {
+		vi.useFakeTimers();
+		vi.setSystemTime(new Date(1_800_000_000_000));
+		mockChallenge(PAIR);
+
+		await generateTokenAndHash();
+
+		// One millisecond before the cache would refresh: the oldest a reused
+		// token can be.
+		vi.setSystemTime(new Date(1_800_000_000_000 + 2 * 60_000 - 1));
+		const [token] = await generateTokenAndHash();
+
+		expect(token).toBe(PAIR.token);
+		const remainingMs = 5 * 60_000 - (2 * 60_000 - 1);
+		expect(remainingMs).toBeGreaterThanOrEqual(3 * 60_000);
 	});
 
 	it('does not cache a failed mint', async () => {

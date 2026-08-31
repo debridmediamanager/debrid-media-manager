@@ -17,9 +17,13 @@ interface CachedToken {
 	expiresAt: number;
 }
 
-// Refreshed a minute before the server's 5-minute TTL, so a token handed out
-// here is always still valid by the time the request carrying it lands.
-const TOKEN_REUSE_MS = 4 * 60 * 1000;
+// Held for well under the server's 5-minute TTL so that a token handed out here
+// always has a wide margin left when the request carrying it actually lands. The
+// margin is what matters: reusing for the near-full TTL would hand a caller a
+// token with seconds to live, and a slow sweep on a large library would start
+// silently collecting 403s. It also bounds how long a stale token can linger if
+// the signing secret is ever rotated under a running tab.
+const TOKEN_REUSE_MS = 2 * 60 * 1000;
 
 let cached: CachedToken | null = null;
 let inFlight: Promise<[string, string]> | null = null;
