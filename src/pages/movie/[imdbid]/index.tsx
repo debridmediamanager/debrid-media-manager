@@ -403,7 +403,25 @@ const MovieSearch: FunctionComponent = () => {
 	}, [imdbid]);
 
 	async function fetchData(imdbId: string, page: number = 0) {
-		const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+		// The search token is minted by the server now, so obtaining it can fail
+		// where the old client-side computation could not. This is the first await in
+		// the function and `initializeData` does not catch, so an unguarded rejection
+		// escapes as an unhandled promise and leaves the page blank — no results, no
+		// spinner, no message. Surface it the way a failed search is surfaced instead.
+		let tokenWithTimestamp: string;
+		let tokenHash: string;
+		try {
+			[tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+		} catch (error) {
+			console.error(
+				'Could not obtain a search token:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
+			setErrorMessage('There was an error searching for the query. Please try again later.');
+			setSearchState('loaded');
+			setHasMoreResults(false);
+			return;
+		}
 		if (page === 0) {
 			setSearchResults([]);
 		}

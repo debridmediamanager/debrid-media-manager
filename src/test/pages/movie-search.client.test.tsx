@@ -123,9 +123,13 @@ vi.mock('@/utils/browserStorage', () => ({
 		key === 'settings:movieYearFilter' ? '1' : defaultValue,
 }));
 
+const { generateTokenAndHashMock } = vi.hoisted(() => ({
+	generateTokenAndHashMock: vi.fn(),
+}));
+
 vi.mock('@/utils/token', () => ({
 	__esModule: true,
-	generateTokenAndHash: () => Promise.resolve(['token', 'hash']),
+	generateTokenAndHash: (...args: any[]) => generateTokenAndHashMock(...args),
 }));
 
 vi.mock('@/utils/instantChecks', () => ({
@@ -197,6 +201,8 @@ const movieInfo: Record<string, { title: string; year: string }> = {
 describe('Movie search page across client-side navigation', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		generateTokenAndHashMock.mockReset();
+		generateTokenAndHashMock.mockResolvedValue(['token', 'hash']);
 		routerQuery.imdbid = 'tt1111111';
 		torrentUrls.length = 0;
 		torrentResults.length = 0;
@@ -344,5 +350,26 @@ describe('Movie search page across client-side navigation', () => {
 			expect(showInfoForAD).toHaveBeenCalledTimes(1);
 			expect(showInfoForTB).not.toHaveBeenCalled();
 		});
+	});
+
+	// The search token is minted over the network now. It is the first await in
+	// fetchData and the effect that calls it has no catch, so an unguarded
+	// rejection escaped as an unhandled promise and left the page blank — no
+	// results, no spinner, no message. Any /api/challenge hiccup does this, not
+	// just an unprovisioned secret.
+	it('surfaces an error instead of blanking the page when the token cannot be minted', async () => {
+		const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+		generateTokenAndHashMock.mockRejectedValue(new Error('challenge unavailable'));
+
+		render(<MovieSearchPage />);
+
+		await waitFor(() =>
+			expect(screen.getByText(/error searching for the query/i)).toBeInTheDocument()
+		);
+
+		// The search itself must not have been attempted without a token.
+		expect(torrentUrls).toHaveLength(0);
+
+		consoleError.mockRestore();
 	});
 });
