@@ -17,6 +17,7 @@ describe('ZurgBanner', () => {
 		expect(cta.getAttribute('target')).toBe('_blank');
 		expect(cta.getAttribute('rel')).toContain('noopener');
 		expect(screen.getByText(/read it like a normal drive/i)).toBeInTheDocument();
+		expect(screen.getByText('No symlinks!')).toBeInTheDocument();
 	});
 
 	it('stays gone after it is dismissed', async () => {
