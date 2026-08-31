@@ -24,6 +24,9 @@ describe('Nzb2rdMapService', () => {
 		vi.clearAllMocks();
 		service = new Nzb2rdMapService();
 		prisma = (service as any).prisma;
+		// Every delete in this service is fire-and-forget with a .catch, so the
+		// mock has to hand back a promise or the call throws before the assertion.
+		prisma.cache.delete.mockResolvedValue(undefined);
 	});
 
 	it('keys reads by a lowercased nzbrd: prefix', async () => {
@@ -34,6 +37,76 @@ describe('Nzb2rdMapService', () => {
 		const rec = await service.getTransfer(RELEASE);
 		expect(prisma.cache.findUnique).toHaveBeenCalledWith({ where: { key: 'nzbrd:abc123def' } });
 		expect(rec?.jobId).toBe('j');
+	});
+
+	describe('recordFailed', () => {
+		it('writes a failed marker carrying the reason, and drops the waiters', async () => {
+			prisma.cache.findUnique.mockResolvedValue(null);
+
+			await service.recordFailed(RELEASE, 'job-9', 'tt1418646', 'RD refused the credentials');
+
+			expect(prisma.cache.upsert).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: { key: 'nzbrd:abc123def' },
+					create: expect.objectContaining({
+						value: expect.objectContaining({
+							releaseId: 'abc123def',
+							jobId: 'job-9',
+							imdbId: 'tt1418646',
+							status: 'failed',
+							error: 'RD refused the credentials',
+						}),
+					}),
+				})
+			);
+			// The parked accounts queued behind a job that will never deliver, and
+			// their stored Real-Debrid credentials must not outlive it.
+			expect(prisma.cache.delete).toHaveBeenCalledWith({
+				where: { key: 'nzbwait:abc123def' },
+			});
+		});
+
+		// The content is in Real-Debrid regardless of what a later job for the same
+		// release did, so a completed marker must never be demoted to failed — that
+		// would turn a working "Add to RD" into a Retry that fetches it all again.
+		it('never demotes a completed marker', async () => {
+			prisma.cache.findUnique.mockResolvedValue({
+				key: 'nzbrd:abc123def',
+				value: { releaseId: 'abc123def', jobId: 'j', status: 'completed', infoHash: HASH },
+			});
+
+			await service.recordFailed(RELEASE, 'job-9', 'tt1418646', 'too late');
+
+			expect(prisma.cache.upsert).not.toHaveBeenCalled();
+		});
+
+		// The poll route knows the job but not the title it was started from; the
+		// marker already holds both, so a failure must not blank them.
+		it('keeps the imdb id and title the marker already has', async () => {
+			prisma.cache.findUnique.mockResolvedValue({
+				key: 'nzbrd:abc123def',
+				value: {
+					releaseId: 'abc123def',
+					jobId: 'j',
+					imdbId: 'tt1418646',
+					title: 'Some.Release.2160p',
+					status: 'pending',
+				},
+			});
+
+			await service.recordFailed(RELEASE, 'job-9', '');
+
+			expect(prisma.cache.upsert).toHaveBeenCalledWith(
+				expect.objectContaining({
+					create: expect.objectContaining({
+						value: expect.objectContaining({
+							imdbId: 'tt1418646',
+							title: 'Some.Release.2160p',
+						}),
+					}),
+				})
+			);
+		});
 	});
 
 	it('returns null when no mapping exists', async () => {

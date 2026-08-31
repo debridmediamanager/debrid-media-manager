@@ -283,15 +283,33 @@ describe('GET /api/transfers — keeping the nzb2rd release markers truthful', (
 
 	beforeEach(() => {
 		mockRepo.removeNzb2rdTransfer = vi.fn().mockResolvedValue(undefined);
+		mockRepo.recordNzb2rdTransferFailed = vi.fn().mockResolvedValue(undefined);
 	});
 
-	it('clears the marker of a failed Usenet job so the release can be sent again', async () => {
-		mockList.mockResolvedValue({ transfers: [nzbRow()], raw: new Map(), degraded: [] });
+	// Recorded rather than deleted: deleting unblocked the resubmit but left the
+	// row saying nothing about the attempt that had already failed. The marker
+	// now carries the reason so the Usenet row can offer an informed Retry, and
+	// it still blocks nothing — the dedup check re-reads the job either way.
+	it('records the failure of a Usenet job, with the reason and the release it belongs to', async () => {
+		mockList.mockResolvedValue({
+			transfers: [
+				nzbRow({ error: 'par2 exited 2', imdbId: 'tt1308738', title: 'A.Release' }),
+			],
+			raw: new Map(),
+			degraded: [],
+		});
 
 		await run();
 		await flush();
 
-		expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith('release-9');
+		expect(mockRepo.recordNzb2rdTransferFailed).toHaveBeenCalledWith(
+			'release-9',
+			'job-9',
+			'tt1308738',
+			'par2 exited 2',
+			'A.Release'
+		);
+		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
 	});
 
 	it('leaves the marker of a running Usenet job alone', async () => {

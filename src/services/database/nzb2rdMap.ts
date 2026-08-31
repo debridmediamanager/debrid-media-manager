@@ -15,7 +15,7 @@ import { DatabaseClient } from './client';
  * Stored in the generic `Cache` KV table under an `nzbrd:` prefix, mirroring how
  * DebridUploaderMapService stores TB → RD transfers — no migration needed.
  */
-export type Nzb2rdTransferStatus = 'pending' | 'completed';
+export type Nzb2rdTransferStatus = 'pending' | 'completed' | 'failed';
 
 export interface Nzb2rdTransferRecord {
 	releaseId: string;
@@ -24,6 +24,13 @@ export interface Nzb2rdTransferRecord {
 	status: Nzb2rdTransferStatus;
 	/** The built torrent's hash. Only known once the job completes. */
 	infoHash?: string;
+	/**
+	 * Why the job failed, as nzb2rd reported it. Carried so the row can say what
+	 * went wrong rather than offering a bare Retry the user has no reason to
+	 * trust — most of these are actionable ("reconnect Real-Debrid"), and a
+	 * retry that repeats the same failure is worse than no button.
+	 */
+	error?: string;
 	title?: string;
 	updatedAt: number;
 }
@@ -110,6 +117,46 @@ export class Nzb2rdMapService extends DatabaseClient {
 			title,
 			updatedAt: Date.now(),
 		});
+	}
+
+	/**
+	 * Mark a release's job as failed, keeping the marker instead of dropping it.
+	 *
+	 * The marker used to be deleted here, which returned the row to a plain
+	 * "Send" — correct in that a resubmit is allowed (`isTransferStillValid`
+	 * answers false for a failed job), but it threw away the one thing worth
+	 * saying: this release was already tried and did not work. A `failed` marker
+	 * renders an enabled Retry carrying the reason, and never blocks the
+	 * resubmit, because every dedup path treats a non-`completed` marker as
+	 * something to re-check against nzb2rd rather than a veto.
+	 *
+	 * The waiter list still goes, exactly as `removeTransfer` drops it: those
+	 * accounts queued behind a job that will never deliver, and their stored
+	 * Real-Debrid credentials must not outlive it.
+	 */
+	async recordFailed(
+		releaseId: string,
+		jobId: string,
+		imdbId: string,
+		error?: string,
+		title?: string
+	): Promise<void> {
+		// A completed fetch stays completed: the content is in RD regardless of
+		// what a later job for the same release did.
+		const existing = await this.getTransfer(releaseId);
+		if (existing?.status === 'completed') return;
+		await this.put({
+			releaseId: releaseId.toLowerCase(),
+			jobId,
+			// Callers that only ever handled the job (the poll route) know the id
+			// from nzb2rd's own record; the marker already holds it either way.
+			imdbId: imdbId || existing?.imdbId || '',
+			status: 'failed',
+			error,
+			title: title ?? existing?.title,
+			updatedAt: Date.now(),
+		});
+		await this.clearWaiters(releaseId);
 	}
 
 	async removeTransfer(releaseId: string): Promise<void> {

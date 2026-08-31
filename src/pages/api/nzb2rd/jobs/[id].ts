@@ -46,10 +46,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		// `pending` for good and the Usenet row shows a disabled "Running" to
 		// every user, while the resubmit the server would happily accept is
 		// unreachable from the UI.
+		//
+		// Recorded rather than deleted: deleting returned the row to a bare
+		// "Send", which unblocks the resubmit but hides that this release was
+		// already tried. The `failed` marker renders an enabled Retry carrying
+		// nzb2rd's own reason, and is just as invisible to the dedup check.
 		if (req.method === 'GET' && response.ok && release && data?.status === 'failed') {
 			await db
-				.removeNzb2rdTransfer(release)
-				.catch((e) => console.error('Clearing a failed nzb2rd transfer failed:', e));
+				.recordNzb2rdTransferFailed(
+					release,
+					id,
+					typeof data.imdb_id === 'string' ? data.imdb_id : '',
+					typeof data.error === 'string' ? data.error : undefined
+				)
+				.catch((e) => console.error('Recording a failed nzb2rd transfer failed:', e));
 		}
 
 		if (req.method === 'GET' && response.ok && data?.status === 'completed') {

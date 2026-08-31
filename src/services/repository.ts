@@ -282,6 +282,16 @@ export class Repository {
 		return this.nzb2rdMapService.recordCompleted(releaseId, jobId, imdbId, infoHash, title);
 	}
 
+	public recordNzb2rdTransferFailed(
+		releaseId: string,
+		jobId: string,
+		imdbId: string,
+		error?: string,
+		title?: string
+	) {
+		return this.nzb2rdMapService.recordFailed(releaseId, jobId, imdbId, error, title);
+	}
+
 	public removeNzb2rdTransfer(releaseId: string) {
 		return this.nzb2rdMapService.removeTransfer(releaseId);
 	}

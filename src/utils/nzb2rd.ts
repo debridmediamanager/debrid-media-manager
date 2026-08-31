@@ -263,9 +263,16 @@ export function isTerminalNzb2rdStatus(status: Nzb2rdJobStatus): boolean {
 
 export interface Nzb2rdTransferSummary {
 	releaseId: string;
-	status: 'pending' | 'completed';
+	status: 'pending' | 'completed' | 'failed';
 	infoHash: string | null;
 	jobId: string;
+	/**
+	 * Why a `failed` job failed, as nzb2rd reported it. Shown on the row's Retry
+	 * so the user knows whether retrying is worth anything — plenty of these
+	 * name something they can fix ("reconnect Real-Debrid") and the rest at
+	 * least say the attempt was real.
+	 */
+	error?: string | null;
 	/**
 	 * Where the job stands, when the server re-checked it on this request.
 	 *

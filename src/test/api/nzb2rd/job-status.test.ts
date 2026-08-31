@@ -177,18 +177,28 @@ describe('GET /api/nzb2rd/jobs/[id] — a failed job stops blocking its release'
 
 	beforeEach(() => {
 		mockRepo.removeNzb2rdTransfer = vi.fn().mockResolvedValue(undefined);
+		mockRepo.recordNzb2rdTransferFailed = vi.fn().mockResolvedValue(undefined);
 	});
 
-	it('clears the marker when the job has failed', async () => {
-		await run({ releaseId: 'release-1' }, failedJob);
+	// The marker is kept, carrying nzb2rd's own reason, so the Usenet row shows a
+	// Retry that says why the last attempt failed instead of a bare Send. It
+	// blocks the resubmit no more than deleting it did.
+	it('records the failure, with the reason nzb2rd gave', async () => {
+		await run({ releaseId: 'release-1' }, { ...failedJob, imdb_id: 'tt1308738' });
 
-		expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith('release-1');
+		expect(mockRepo.recordNzb2rdTransferFailed).toHaveBeenCalledWith(
+			'release-1',
+			'job-A',
+			'tt1308738',
+			'par2 exited 2'
+		);
+		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
 	});
 
-	it('has nothing to clear without a release id', async () => {
+	it('has nothing to record without a release id', async () => {
 		await run({}, failedJob);
 
-		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
+		expect(mockRepo.recordNzb2rdTransferFailed).not.toHaveBeenCalled();
 	});
 
 	it('leaves the marker in place while the job is still running', async () => {

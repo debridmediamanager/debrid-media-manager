@@ -17,7 +17,7 @@ import {
 	TRANSFER_TOAST_MS,
 	type TransferPhase,
 } from '@/utils/transferPhase';
-import { Check, ChevronDown, ChevronRight, Loader2, Send } from 'lucide-react';
+import { Check, ChevronDown, ChevronRight, Download, Loader2, RotateCw, Send } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -47,7 +47,14 @@ export function sortResults(results: UsenetResult[], key: SortKey, dir: SortDir)
 	});
 }
 
-export type SendButtonKind = 'send' | 'sending' | 'sent' | 'cached' | 'running';
+export type SendButtonKind =
+	| 'send'
+	| 'sending'
+	| 'sent'
+	| 'cached'
+	| 'running'
+	| 'failed'
+	| 'added';
 
 export interface SendButtonState {
 	kind: SendButtonKind;
@@ -61,29 +68,61 @@ export interface SendButtonState {
 }
 
 /**
- * What the row's button says. A release someone has already fetched shows as
- * cached rather than sendable, because a Usenet fetch costs indexer grab quota
- * and block-account bytes and the server would dedup it anyway.
+ * What the row's button says.
  *
- * An unfinished one used to say "Running", which was wrong far more often than
- * it was right: the marker's `pending` covers both waiting in line and being
- * fetched, and measured against the live queue on 2026-08-29, **670 of 683
- * unfinished jobs had not started** — no `started_at`, no progress bytes — with
- * the oldest queued 8 days. So a job's real phase is read through the same
- * `describeTransfer` vocabulary the Transfers page uses, rather than inventing a
- * second set of words for the same states.
+ * Three of these states are the whole point of the section, and two of them
+ * used to be dead ends:
+ *
+ * - **Completed** ("Add to RD"). A finished fetch left the content in
+ *   Real-Debrid under a hash the marker already stores — 1501 of 1501 completed
+ *   markers carried one, measured 2026-09-01 — and `POST /api/nzb2rd/jobs` has
+ *   always put that hash straight into the caller's own account instead of
+ *   starting a second Usenet fetch. The row simply never let anyone reach it:
+ *   the button was disabled and read "In RD", which is only true of whoever
+ *   submitted it. So it is live now, and says what a click actually does.
+ * - **Failed** ("Retry"). A resubmit was always allowed server-side — the dedup
+ *   check re-reads a non-`completed` marker's job and lets a failed one through
+ *   — but the marker was deleted on discovery, so the row fell back to a bare
+ *   "Send" that said nothing about the attempt that had already failed. The
+ *   marker is kept now, and its reason rides the tooltip.
+ * - **Unfinished** (a phase label). The marker's `pending` covers both waiting
+ *   in line and being fetched, and measured against the live queue on
+ *   2026-08-29, **670 of 683 unfinished jobs had not started** — no
+ *   `started_at`, no progress bytes — with the oldest queued 8 days. So a job's
+ *   real phase is read through the same `describeTransfer` vocabulary the
+ *   Transfers page uses, rather than inventing a second set of words for the
+ *   same states.
+ *
+ * A Usenet fetch costs indexer grab quota and block-account bytes, so nothing
+ * here ever starts a second one for content that already exists.
  */
 export function buttonState(
 	id: string,
 	sending: Set<string>,
 	sent: Set<string>,
-	transferred: Map<string, Nzb2rdTransferSummary>
+	transferred: Map<string, Nzb2rdTransferSummary>,
+	added: Set<string> = new Set()
 ): SendButtonState {
+	const existing = transferred.get(id);
+	// A completed job with no hash cannot be handed to anyone — there is nothing
+	// to add — so it is not "cached" in any useful sense. The server agrees: its
+	// dedup check answers false for exactly this record and accepts a fresh fetch.
+	const cached = existing?.status === 'completed' && !!existing.infoHash;
+
+	if (added.has(id)) {
+		return {
+			kind: 'added',
+			label: 'Added',
+			title: 'Added to your Real-Debrid library',
+			phase: null,
+			disabled: true,
+		};
+	}
 	if (sending.has(id)) {
 		return {
 			kind: 'sending',
-			label: 'Sending',
-			title: 'Submitting…',
+			label: cached ? 'Adding' : 'Sending',
+			title: cached ? 'Adding to your library…' : 'Submitting…',
 			phase: null,
 			disabled: true,
 		};
@@ -97,17 +136,31 @@ export function buttonState(
 			disabled: true,
 		};
 	}
-	const existing = transferred.get(id);
-	if (existing?.status === 'completed') {
+	if (cached) {
 		return {
 			kind: 'cached',
-			label: 'In RD',
-			title: 'Already fetched — available as a cached result for this title',
+			label: 'Add to RD',
+			title: 'Already fetched from Usenet — add it to your Real-Debrid library now',
 			phase: null,
-			disabled: true,
+			disabled: false,
 		};
 	}
-	if (existing) {
+	if (existing?.status === 'failed') {
+		return {
+			kind: 'failed',
+			label: 'Retry',
+			// The reason is what makes this button worth offering: most failures
+			// name something the user can act on, and one they cannot fix is worth
+			// knowing before spending another multi-day queue wait on it.
+			detail: existing.error ?? undefined,
+			title: existing.error
+				? `Last attempt failed: ${existing.error}`
+				: 'The last attempt failed — send it again',
+			phase: null,
+			disabled: false,
+		};
+	}
+	if (existing && existing.status !== 'completed') {
 		// Nothing came back about the job itself — past the server's re-check cap,
 		// or nzb2rd was unreachable. Say only what is actually known.
 		if (!existing.progress) {
@@ -160,6 +213,10 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 	const [sortDir, setSortDir] = useState<SortDir>('desc');
 	const [sendingIds, setSendingIds] = useState<Set<string>>(new Set());
 	const [sentIds, setSentIds] = useState<Set<string>>(new Set());
+	// Releases this browser has just put into its own Real-Debrid library.
+	// Real-Debrid does not dedupe an addMagnet by hash, so a second click would
+	// make a second library entry rather than being absorbed.
+	const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
 	// Releases someone has already fetched or is fetching, so the row shows where
 	// that stands instead of a Send the server would only reject as a duplicate.
 	const [transferred, setTransferred] = useState<Map<string, Nzb2rdTransferSummary>>(new Map());
@@ -221,16 +278,24 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 			toast.error('Log in with Real-Debrid to send Usenet releases', { duration: 5000 });
 			return;
 		}
-		if (sendingIds.has(result.id) || sentIds.has(result.id)) return;
+		if (sendingIds.has(result.id) || sentIds.has(result.id) || addedIds.has(result.id)) return;
+
+		// The same request covers both buttons. A release someone already fetched
+		// is answered by `POST /api/nzb2rd/jobs` with the stored hash added to
+		// this caller's account — no NZB is pulled and no job is queued — so the
+		// only thing that differs is what the user is told is happening.
+		const marker = transferred.get(result.id);
+		const isAdd = marker?.status === 'completed' && !!marker.infoHash;
 
 		setSendingIds((prev) => new Set(prev).add(result.id));
 		// One toast per transfer, carried from submit to the point RD takes over,
 		// exactly as a TorBox or AllDebrid send does. `followNzb2rdTransfer` runs
 		// detached: the row is "Sent" the moment the job exists, and the Usenet
 		// pass that follows is minutes long.
-		const toastId = toast.loading(`${label}: submitting transfer...`, {
-			duration: TRANSFER_STEP_TOAST_MS,
-		});
+		const toastId = toast.loading(
+			isAdd ? `${label}: adding to your library...` : `${label}: submitting transfer...`,
+			{ duration: TRANSFER_STEP_TOAST_MS }
+		);
 		const follow = (jobId: string) =>
 			void followNzb2rdTransfer({
 				jobId,
@@ -264,6 +329,10 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 				);
 
 				if (job.duplicate === 'completed') {
+					// The row is done either way: it landed, or it did not and a
+					// repeat click would fail the same way. Only a success marks
+					// the release as added, so a failed add stays clickable.
+					if (job.added) setAddedIds((prev) => new Set(prev).add(result.id));
 					toast.success(
 						job.added
 							? `${label}: already fetched — it is in your Real-Debrid library.`
@@ -415,7 +484,8 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 											result.id,
 											sendingIds,
 											sentIds,
-											transferred
+											transferred,
+											addedIds
 										);
 										return (
 											<tr
@@ -445,20 +515,32 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 														disabled={state.disabled}
 														title={state.title}
 														className={`haptic flex w-full flex-col items-start gap-0.5 rounded border px-2 py-1 text-left leading-tight transition-colors duration-200 disabled:cursor-not-allowed ${
-															state.kind === 'cached'
-																? 'border-green-500 bg-green-900/30 text-green-100'
-																: state.phase
-																	? PHASE_STYLES[state.phase]
-																	: 'border-gray-500 bg-gray-800/60 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60'
+															// Green covers both halves of a finished
+															// fetch — the live "Add to RD" and the
+															// "Added" it becomes — so the colour tracks
+															// "this release exists" rather than
+															// whether the button is still clickable.
+															state.kind === 'cached' ||
+															state.kind === 'added'
+																? 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-900/60 disabled:opacity-60'
+																: state.kind === 'failed'
+																	? 'border-red-500 bg-red-900/30 text-red-100 hover:bg-red-900/60'
+																	: state.phase
+																		? PHASE_STYLES[state.phase]
+																		: 'border-gray-500 bg-gray-800/60 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60'
 														}`}
 													>
 														<span className="flex items-center gap-1">
 															{state.kind === 'sending' ||
 															state.kind === 'running' ? (
 																<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
-															) : state.kind === 'cached' ||
+															) : state.kind === 'added' ||
 															  state.kind === 'sent' ? (
 																<Check className="h-3 w-3 shrink-0" />
+															) : state.kind === 'cached' ? (
+																<Download className="h-3 w-3 shrink-0" />
+															) : state.kind === 'failed' ? (
+																<RotateCw className="h-3 w-3 shrink-0" />
 															) : (
 																<Send className="h-3 w-3 shrink-0" />
 															)}
@@ -468,7 +550,17 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 														    stage — the thing that tells a waiting user
 														    whether "not done yet" means minutes or days. */}
 														{state.detail && (
-															<span className="pl-4 text-xs opacity-70">
+															<span
+																className={`pl-4 text-xs opacity-70 ${
+																	// A failure reason is a sentence, not
+																	// a place in line: let it wrap, and cap
+																	// it so one long message cannot stretch
+																	// the row down the page.
+																	state.kind === 'failed'
+																		? 'line-clamp-2 whitespace-normal break-words'
+																		: ''
+																}`}
+															>
 																{state.detail}
 															</span>
 														)}

@@ -8,9 +8,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 type TransferSummary = {
 	releaseId: string;
-	status: 'pending' | 'completed';
+	status: 'pending' | 'completed' | 'failed';
 	infoHash: string | null;
 	jobId: string;
+	/** Why a `failed` job failed, so the row's Retry can say what went wrong. */
+	error?: string | null;
 	/**
 	 * Where the job actually is, when this request re-checked it.
 	 *
@@ -34,6 +36,7 @@ const summaryOf = (r: Nzb2rdTransferRecord): TransferSummary => ({
 	status: r.status,
 	infoHash: r.infoHash ?? null,
 	jobId: r.jobId,
+	error: r.error ?? null,
 });
 
 /** Only the fields `describeTransfer` reads — never the whole job record, which
@@ -101,8 +104,18 @@ async function reconcile(record: Nzb2rdTransferRecord): Promise<TransferSummary 
 	}
 
 	if (job?.status === 'failed') {
-		await db.removeNzb2rdTransfer(record.releaseId);
-		return null;
+		const error = typeof job.error === 'string' ? job.error : undefined;
+		await db.recordNzb2rdTransferFailed(
+			record.releaseId,
+			record.jobId,
+			record.imdbId,
+			error,
+			record.title
+		);
+		// Kept, not dropped: the row shows an enabled Retry carrying the reason
+		// rather than a bare Send, and a `failed` marker vetoes nothing — the
+		// dedup check re-reads the job and lets a resubmit through.
+		return { ...summaryOf(record), status: 'failed', error: error ?? null };
 	}
 	if (job?.status === 'completed') {
 		// Nothing to pass: this runs on a page load with no transfer context of

@@ -112,12 +112,66 @@ describe('buttonState', () => {
 		});
 	});
 
-	it("shows another user's completed fetch as cached, not sendable", () => {
-		expect(buttonState('a', none, none, marker({ status: 'completed' }))).toMatchObject({
+	/** A finished fetch, as the reconcile hands it back: completed plus a hash. */
+	const done = (over: Partial<Nzb2rdTransferSummary> = {}) =>
+		marker({ status: 'completed', infoHash: 'd'.repeat(40), ...over });
+
+	// This button used to be a dead end. The content was in Real-Debrid under a
+	// hash the marker already stored, and the server has always answered a send
+	// for it by adding that hash to the caller's own account — but the row said
+	// "In RD" (true only of whoever submitted it) and refused the click.
+	it("offers another user's completed fetch as an add to your own library", () => {
+		expect(buttonState('a', none, none, done())).toMatchObject({
 			kind: 'cached',
-			label: 'In RD',
+			label: 'Add to RD',
+			disabled: false,
+		});
+	});
+
+	// Nothing to hand over, so there is nothing to add — and the server agrees:
+	// its dedup check answers false for this record and takes a fresh fetch.
+	it('falls back to Send for a completed job with no hash', () => {
+		expect(buttonState('a', none, none, marker({ status: 'completed' }))).toMatchObject({
+			kind: 'send',
+			label: 'Send',
+			disabled: false,
+		});
+	});
+
+	it('marks a release this browser has already added, so a second click cannot double it', () => {
+		expect(buttonState('a', none, none, done(), new Set(['a']))).toMatchObject({
+			kind: 'added',
+			label: 'Added',
 			disabled: true,
 		});
+	});
+
+	// A resubmit was always allowed server-side; the row just never said the last
+	// attempt had failed, or why.
+	it('offers a retry carrying the reason the last attempt failed', () => {
+		expect(
+			buttonState(
+				'a',
+				none,
+				none,
+				marker({ status: 'failed', error: 'RD refused the credentials' })
+			)
+		).toMatchObject({
+			kind: 'failed',
+			label: 'Retry',
+			detail: 'RD refused the credentials',
+			title: 'Last attempt failed: RD refused the credentials',
+			disabled: false,
+		});
+	});
+
+	it('still offers a retry when nzb2rd gave no reason', () => {
+		expect(buttonState('a', none, none, marker({ status: 'failed' }))).toMatchObject({
+			kind: 'failed',
+			label: 'Retry',
+			disabled: false,
+		});
+		expect(buttonState('a', none, none, marker({ status: 'failed' })).detail).toBeUndefined();
 	});
 
 	// The reason this exists: a marker only says `pending`, and "Running" read as
@@ -211,9 +265,111 @@ describe('buttonState', () => {
 	});
 
 	it('lets this browser own state win over the shared record', () => {
-		expect(buttonState('a', new Set(['a']), none, marker({ status: 'completed' })).kind).toBe(
-			'sending'
+		expect(buttonState('a', new Set(['a']), none, done()).kind).toBe('sending');
+	});
+
+	// Same request either way, but "Sending" would be a lie: no NZB is pulled and
+	// nothing joins the queue, the stored hash just goes into the caller's account.
+	it('says adding, not sending, while a finished release is being claimed', () => {
+		expect(buttonState('a', new Set(['a']), none, done())).toMatchObject({
+			kind: 'sending',
+			label: 'Adding',
+		});
+		expect(buttonState('a', new Set(['a']), none, noTransfers).label).toBe('Sending');
+	});
+});
+
+describe('UsenetResults — claiming a finished release', () => {
+	const COMPLETED = {
+		releaseId: 'a',
+		jobId: 'job-1',
+		infoHash: 'd'.repeat(40),
+		status: 'completed' as const,
+	};
+
+	/** Search, then the marker lookup, then whatever the send POST answers. */
+	function mockClaim(jobResponse: unknown) {
+		const fetchMock = vi.fn().mockImplementation((url: string) => {
+			if (String(url).includes('/registered')) {
+				return Promise.resolve({
+					ok: true,
+					json: async () => ({ transfers: [COMPLETED] }),
+				});
+			}
+			if (String(url).includes('/api/nzb2rd/jobs')) {
+				return Promise.resolve({ ok: true, json: async () => jobResponse });
+			}
+			return Promise.resolve({ ok: true, json: async () => ({ results: RESULTS }) });
+		});
+		vi.stubGlobal('fetch', fetchMock);
+		return fetchMock;
+	}
+
+	const openAndFind = async (name: RegExp) => {
+		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
+		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
+		return await screen.findByRole('button', { name });
+	};
+
+	// The whole point of the change: the content is already in Real-Debrid, and
+	// one click puts it in *this* user's account without a second Usenet fetch.
+	it('adds the stored hash to the caller and settles the row on Added', async () => {
+		const fetchMock = mockClaim({
+			duplicate: 'completed',
+			infoHash: COMPLETED.infoHash,
+			jobId: 'job-1',
+			added: true,
+		});
+
+		await userEvent.click(await openAndFind(/add to rd/i));
+
+		await waitFor(() => expect(screen.getByRole('button', { name: /added/i })).toBeDisabled());
+		const posts = fetchMock.mock.calls.filter((c: any[]) =>
+			String(c[0]).includes('/api/nzb2rd/jobs')
 		);
+		expect(posts).toHaveLength(1);
+		expect(JSON.parse(posts[0][1].body)).toMatchObject({ id: 'a', imdbId: 'tt1418646' });
+		expect(toastSuccess).toHaveBeenCalledWith(
+			expect.stringContaining('it is in your Real-Debrid library'),
+			expect.anything()
+		);
+	});
+
+	// Real-Debrid does not dedupe an addMagnet by hash, so a row that has landed
+	// must stop accepting clicks or it makes a second library entry.
+	it('refuses a second click once it has landed', async () => {
+		const fetchMock = mockClaim({
+			duplicate: 'completed',
+			infoHash: COMPLETED.infoHash,
+			jobId: 'job-1',
+			added: true,
+		});
+
+		await userEvent.click(await openAndFind(/add to rd/i));
+		const added = await screen.findByRole('button', { name: /added/i });
+		await userEvent.click(added);
+
+		expect(
+			fetchMock.mock.calls.filter((c: any[]) => String(c[0]).includes('/api/nzb2rd/jobs'))
+		).toHaveLength(1);
+	});
+
+	// An add that did not land must stay clickable — settling it on "Added" would
+	// tell the user they have content they do not.
+	it('leaves the row clickable when the add failed', async () => {
+		mockClaim({
+			duplicate: 'completed',
+			infoHash: COMPLETED.infoHash,
+			jobId: 'job-1',
+			added: false,
+		});
+
+		await userEvent.click(await openAndFind(/add to rd/i));
+
+		await waitFor(() =>
+			expect(screen.getByRole('button', { name: /add to rd/i })).toBeEnabled()
+		);
+		expect(screen.queryByRole('button', { name: /added/i })).not.toBeInTheDocument();
 	});
 });
 
@@ -418,7 +574,7 @@ describe('UsenetResults', () => {
 		expect(fetchMock).not.toHaveBeenCalled();
 	});
 
-	it('marks releases someone already fetched as cached instead of sendable', async () => {
+	it('offers a release someone already fetched as an add, never a second fetch', async () => {
 		mockSearch(RESULTS, [
 			{ releaseId: 'b', status: 'completed', infoHash: 'h', jobId: 'j' },
 			{ releaseId: 'a', status: 'pending', infoHash: null, jobId: 'j2' },
@@ -427,8 +583,10 @@ describe('UsenetResults', () => {
 		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
-		expect(await screen.findByRole('button', { name: /in rd/i })).toBeDisabled();
+		expect(await screen.findByRole('button', { name: /add to rd/i })).toBeEnabled();
 		expect(screen.getByRole('button', { name: /in progress/i })).toBeDisabled();
+		// Enabled, but not a Send: clicking it claims the stored hash rather than
+		// spending indexer quota and block-account bytes on the same release twice.
 		expect(screen.queryByRole('button', { name: /^send$/i })).not.toBeInTheDocument();
 	});
 
@@ -450,7 +608,7 @@ describe('UsenetResults', () => {
 		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
-		expect(await screen.findByRole('button', { name: /in rd/i })).toBeDisabled();
+		expect(await screen.findByRole('button', { name: /add to rd/i })).toBeEnabled();
 		const queued = screen.getByRole('button', { name: /queued/i });
 		expect(queued).toBeDisabled();
 		expect(queued).toHaveTextContent('12th of 670 in line');
@@ -510,7 +668,7 @@ describe('UsenetResults', () => {
 		});
 		await userEvent.click(screen.getAllByRole('button', { name: /^send$/i })[0]);
 
-		expect(await screen.findByRole('button', { name: /in rd/i })).toBeDisabled();
+		expect(await screen.findByRole('button', { name: /added/i })).toBeDisabled();
 		await waitFor(() =>
 			expect(toastSuccess).toHaveBeenCalledWith(
 				`${USENET}: already fetched — it is in your Real-Debrid library.`,

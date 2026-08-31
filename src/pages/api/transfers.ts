@@ -45,13 +45,25 @@ function clampInt(raw: unknown, fallback: number, min: number, max: number): num
  * for *everyone* looking at that title. Measured 2026-08-28: 2356 releases were
  * blocked this way.
  *
- * Removing it also drops the waiter list, which is right: those accounts queued
- * behind a job that will never deliver, and their stored credentials should not
- * outlive it.
+ * Recording the failure also drops the waiter list, which is right: those
+ * accounts queued behind a job that will never deliver, and their stored
+ * credentials should not outlive it.
+ *
+ * The marker is kept rather than deleted, carrying nzb2rd's reason, so the row
+ * can offer an informed Retry instead of a bare Send that says nothing about
+ * the attempt that already failed. Either way the resubmit is unblocked: the
+ * dedup check re-reads a non-`completed` marker's job from nzb2rd and lets a
+ * failed one through.
  */
-async function clearMarkerIfFailed(row: TransferRow): Promise<void> {
+async function markMarkerFailed(row: TransferRow): Promise<void> {
 	if (row.source !== 'nzb2rd' || row.status !== 'failed' || !row.releaseId) return;
-	await db.removeNzb2rdTransfer(row.releaseId);
+	await db.recordNzb2rdTransferFailed(
+		row.releaseId,
+		row.id,
+		row.imdbId ?? '',
+		row.error ?? undefined,
+		row.title
+	);
 }
 
 /**
@@ -135,7 +147,7 @@ async function handler(
 			registerIfCompleted(row, raw.get(keyOf(row))).catch((error) =>
 				console.error(`Registering completed transfer ${row.id} failed:`, error)
 			);
-			clearMarkerIfFailed(row).catch((error) =>
+			markMarkerFailed(row).catch((error) =>
 				console.error(`Clearing the marker for failed transfer ${row.id} failed:`, error)
 			);
 		}

@@ -42,6 +42,7 @@ beforeEach(() => {
 	vi.clearAllMocks();
 	mockRepo.getNzb2rdTransfers = vi.fn().mockResolvedValue([pendingRecord]);
 	mockRepo.removeNzb2rdTransfer = vi.fn().mockResolvedValue(undefined);
+	mockRepo.recordNzb2rdTransferFailed = vi.fn().mockResolvedValue(undefined);
 	mockRegister.mockResolvedValue(true);
 });
 
@@ -50,13 +51,70 @@ beforeEach(() => {
 // release id. Both stale states render as a disabled "Running" button for every
 // user, so the marker has to be checked against the job it names.
 describe('POST /api/nzb2rd/registered — reconciling stale markers', () => {
-	it('drops a marker whose job has failed, so the release can be sent again', async () => {
+	// Deleting the marker unblocked the resubmit but threw away the only thing
+	// worth telling the next viewer: this release was tried and did not work. The
+	// marker is kept as `failed` so the row can offer an informed Retry — and it
+	// still blocks nothing, because the dedup check re-reads the job.
+	it('records the failure and hands back its reason, rather than dropping the marker', async () => {
 		nzb2rdAnswers({ id: 'job-1', status: 'failed', error: 'RD refused the credentials' });
 
 		const res = await run();
 
-		expect(mockRepo.removeNzb2rdTransfer).toHaveBeenCalledWith('release-1');
-		expect(res.json).toHaveBeenCalledWith({ transfers: [] });
+		expect(mockRepo.recordNzb2rdTransferFailed).toHaveBeenCalledWith(
+			'release-1',
+			'job-1',
+			'tt1308738',
+			'RD refused the credentials',
+			undefined
+		);
+		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith({
+			transfers: [
+				expect.objectContaining({
+					releaseId: 'release-1',
+					status: 'failed',
+					error: 'RD refused the credentials',
+				}),
+			],
+		});
+	});
+
+	// nzb2rd does not always say why, and a Retry with no reason is still better
+	// than a disabled button — it just must not invent one.
+	it('records a reasonless failure without inventing a reason', async () => {
+		nzb2rdAnswers({ id: 'job-1', status: 'failed' });
+
+		const res = await run();
+
+		expect(mockRepo.recordNzb2rdTransferFailed).toHaveBeenCalledWith(
+			'release-1',
+			'job-1',
+			'tt1308738',
+			undefined,
+			undefined
+		);
+		expect(res.json).toHaveBeenCalledWith({
+			transfers: [expect.objectContaining({ status: 'failed', error: null })],
+		});
+	});
+
+	// A marker already settled as failed is terminal: re-asking nzb2rd about it
+	// on every page load would spend the reconcile budget re-reading answers that
+	// cannot change, and starve the `pending` markers that still need it.
+	it('does not re-check a marker that is already failed', async () => {
+		mockRepo.getNzb2rdTransfers = vi
+			.fn()
+			.mockResolvedValue([
+				{ ...pendingRecord, status: 'failed' as const, error: 'article missing' },
+			]);
+		global.fetch = vi.fn() as any;
+
+		const res = await run();
+
+		expect(global.fetch).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith({
+			transfers: [expect.objectContaining({ status: 'failed', error: 'article missing' })],
+		});
 	});
 
 	it('drops a marker whose job nzb2rd no longer has', async () => {
@@ -88,7 +146,13 @@ describe('POST /api/nzb2rd/registered — reconciling stale markers', () => {
 		);
 		expect(res.json).toHaveBeenCalledWith({
 			transfers: [
-				{ releaseId: 'release-1', status: 'completed', infoHash: HASH, jobId: 'job-1' },
+				{
+					releaseId: 'release-1',
+					status: 'completed',
+					infoHash: HASH,
+					jobId: 'job-1',
+					error: null,
+				},
 			],
 		});
 		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
@@ -118,6 +182,7 @@ describe('POST /api/nzb2rd/registered — reconciling stale markers', () => {
 					status: 'pending',
 					infoHash: null,
 					jobId: 'job-1',
+					error: null,
 					progress: {
 						status: 'fetching',
 						status_message: null,
@@ -181,7 +246,13 @@ describe('POST /api/nzb2rd/registered — reconciling stale markers', () => {
 		expect(mockRepo.removeNzb2rdTransfer).not.toHaveBeenCalled();
 		expect(res.json).toHaveBeenCalledWith({
 			transfers: [
-				{ releaseId: 'release-1', status: 'pending', infoHash: null, jobId: 'job-1' },
+				{
+					releaseId: 'release-1',
+					status: 'pending',
+					infoHash: null,
+					jobId: 'job-1',
+					error: null,
+				},
 			],
 		});
 	});
@@ -199,7 +270,13 @@ describe('POST /api/nzb2rd/registered — reconciling stale markers', () => {
 		expect(global.fetch).not.toHaveBeenCalled();
 		expect(res.json).toHaveBeenCalledWith({
 			transfers: [
-				{ releaseId: 'release-1', status: 'completed', infoHash: HASH, jobId: 'job-1' },
+				{
+					releaseId: 'release-1',
+					status: 'completed',
+					infoHash: HASH,
+					jobId: 'job-1',
+					error: null,
+				},
 			],
 		});
 	});
