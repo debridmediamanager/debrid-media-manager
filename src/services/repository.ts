@@ -351,6 +351,28 @@ export class Repository {
 		return this.availabilityService.upsertAvailability(data);
 	}
 
+	public saveInstantAvailability(
+		imdbId: string,
+		rows: Array<{ hash: string; filename: string; bytes: number }>
+	) {
+		return this.availabilityService.saveInstantAvailability(imdbId, rows);
+	}
+
+	public getDebridioRefreshedAt(key: string) {
+		return this.availabilityService.getDebridioRefreshedAt(key);
+	}
+
+	public markDebridioRefreshed(key: string) {
+		return this.availabilityService.markDebridioRefreshed(key);
+	}
+
+	public saveInstantAvailabilityAd(
+		imdbId: string,
+		rows: Array<{ hash: string; filename: string; bytes: number }>
+	) {
+		return this.availabilityService.saveInstantAvailabilityAd(imdbId, rows);
+	}
+
 	public checkAvailability(imdbId: string, hashes: string[]) {
 		return this.availabilityService.checkAvailability(imdbId, hashes);
 	}

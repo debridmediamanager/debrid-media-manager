@@ -8,7 +8,13 @@ const deleteMock = vi.fn();
 const findUniqueMock = vi.fn();
 const findFirstFileMock = vi.fn();
 const deleteManyFileMock = vi.fn();
-
+const createManyMock = vi.fn();
+const createManyFileMock = vi.fn();
+const cacheFindUniqueMock = vi.fn();
+const cacheUpsertMock = vi.fn();
+const findManyAdMock = vi.fn();
+const createManyAdMock = vi.fn();
+const createManyAdFileMock = vi.fn();
 vi.mock('@prisma/client', () => ({
 	PrismaClient: vi.fn().mockImplementation(() => ({
 		available: {
@@ -16,11 +22,24 @@ vi.mock('@prisma/client', () => ({
 			upsert: upsertMock,
 			findMany: findManyMock,
 			delete: deleteMock,
+			createMany: createManyMock,
+		},
+		availableAd: {
+			findMany: findManyAdMock,
+			createMany: createManyAdMock,
+		},
+		availableAdFile: {
+			createMany: createManyAdFileMock,
 		},
 		availableFile: {
 			findUnique: findUniqueMock,
 			findFirst: findFirstFileMock,
 			deleteMany: deleteManyFileMock,
+			createMany: createManyFileMock,
+		},
+		cache: {
+			findUnique: cacheFindUniqueMock,
+			upsert: cacheUpsertMock,
 		},
 		$disconnect: vi.fn(),
 	})),
@@ -37,6 +56,13 @@ describe('AvailabilityService', () => {
 		findUniqueMock.mockReset();
 		findFirstFileMock.mockReset();
 		deleteManyFileMock.mockReset();
+		createManyMock.mockReset();
+		createManyFileMock.mockReset();
+		cacheFindUniqueMock.mockReset();
+		cacheUpsertMock.mockReset();
+		findManyAdMock.mockReset();
+		createManyAdMock.mockReset();
+		createManyAdFileMock.mockReset();
 		service = new AvailabilityService();
 	});
 
@@ -149,5 +175,117 @@ describe('AvailabilityService', () => {
 		expect(deleteManyFileMock).toHaveBeenCalledWith({
 			where: { link: { startsWith: 'https://real-debrid.com/d/abcdef1234567' } },
 		});
+	});
+
+	it('saves instant availability with a synthetic marker file', async () => {
+		findManyMock.mockResolvedValue([]);
+		createManyMock.mockResolvedValue({ count: 1 });
+		createManyFileMock.mockResolvedValue({ count: 1 });
+
+		const saved = await service.saveInstantAvailability('tt0903747', [
+			{
+				hash: 'a'.repeat(40),
+				filename: 'Breaking.Bad.S01E01.Pilot.1080p.mkv',
+				bytes: 3811783475,
+			},
+		]);
+
+		expect(saved).toBe(1);
+		const availableRow = createManyMock.mock.calls[0][0].data[0];
+		expect(availableRow).toMatchObject({
+			hash: 'a'.repeat(40),
+			imdbId: 'tt0903747',
+			status: 'downloaded',
+			host: 'real-debrid.com',
+			progress: 100,
+			season: 1,
+			episode: 1,
+		});
+		const fileRow = createManyFileMock.mock.calls[0][0].data[0];
+		expect(fileRow).toMatchObject({
+			link: `debridio:${'a'.repeat(40)}`,
+			file_id: 0,
+			path: 'Breaking.Bad.S01E01.Pilot.1080p.mkv',
+			season: 1,
+			episode: 1,
+		});
+	});
+
+	it('skips hashes that already have availability rows', async () => {
+		findManyMock.mockResolvedValue([{ hash: 'a'.repeat(40) }]);
+
+		const saved = await service.saveInstantAvailability('tt0903747', [
+			{ hash: 'a'.repeat(40), filename: 'already-present.mkv', bytes: 1000 },
+		]);
+
+		expect(saved).toBe(0);
+		expect(createManyMock).not.toHaveBeenCalled();
+		expect(createManyFileMock).not.toHaveBeenCalled();
+	});
+
+	it('reads the debridio refresh gate from its cache row', async () => {
+		cacheFindUniqueMock.mockResolvedValue({ updatedAt: new Date('2026-08-01') });
+
+		await expect(service.getDebridioRefreshedAt('movie:tt1')).resolves.toEqual(
+			new Date('2026-08-01')
+		);
+		expect(cacheFindUniqueMock).toHaveBeenCalledWith({
+			where: { key: 'debridio:refresh:movie:tt1' },
+			select: { updatedAt: true },
+		});
+
+		cacheFindUniqueMock.mockResolvedValue(null);
+		await expect(service.getDebridioRefreshedAt('movie:tt1')).resolves.toBeNull();
+	});
+
+	it('upserts the debridio refresh gate row', async () => {
+		await service.markDebridioRefreshed('tv:tt2:1');
+		expect(cacheUpsertMock).toHaveBeenCalledWith({
+			where: { key: 'debridio:refresh:tv:tt2:1' },
+			update: { value: {} },
+			create: { key: 'debridio:refresh:tv:tt2:1', value: {} },
+		});
+	});
+
+	it('saves instant availability for alldebrid with Ready statuses and marker files', async () => {
+		findManyAdMock.mockResolvedValue([]);
+		createManyAdMock.mockResolvedValue({ count: 1 });
+		createManyAdFileMock.mockResolvedValue({ count: 1 });
+
+		const saved = await service.saveInstantAvailabilityAd('tt0111161', [
+			{
+				hash: 'B'.repeat(40),
+				filename: 'The.Shawshank.Redemption.1994.MULTI.1080p.BluRay.x265',
+				bytes: 5368709120,
+			},
+		]);
+
+		expect(saved).toBe(1);
+		const adRow = createManyAdMock.mock.calls[0][0].data[0];
+		expect(adRow).toMatchObject({
+			hash: 'b'.repeat(40),
+			imdbId: 'tt0111161',
+			status: 'Ready',
+			statusCode: 4,
+			host: 'alldebrid.com',
+		});
+		const adFile = createManyAdFileMock.mock.calls[0][0].data[0];
+		expect(adFile).toMatchObject({
+			link: `debridio:${'b'.repeat(40)}`,
+			file_id: 0,
+			path: 'The.Shawshank.Redemption.1994.MULTI.1080p.BluRay.x265',
+		});
+	});
+
+	it('skips alldebrid hashes that already exist', async () => {
+		findManyAdMock.mockResolvedValue([{ hash: 'b'.repeat(40) }]);
+
+		const saved = await service.saveInstantAvailabilityAd('tt0111161', [
+			{ hash: 'B'.repeat(40), filename: 'present.mkv', bytes: 1 },
+		]);
+
+		expect(saved).toBe(0);
+		expect(createManyAdMock).not.toHaveBeenCalled();
+		expect(createManyAdFileMock).not.toHaveBeenCalled();
 	});
 });

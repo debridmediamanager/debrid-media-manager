@@ -2,6 +2,11 @@ import { flattenAndRemoveDuplicates, sortByFileSize } from '@/services/mediasear
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { checkCanary, respondAsNeverScraped } from '@/utils/canaryGuard';
+import type { DebridioTarget } from '@/utils/debridioBackfill';
+import {
+	backfillFromDebridioNow,
+	refreshDebridioAvailabilityInBackground,
+} from '@/utils/debridioBackfill';
 import { validateTokenWithHash } from '@/utils/token';
 import { NextApiHandler } from 'next';
 
@@ -56,23 +61,40 @@ const handler: NextApiHandler = async (req, res) => {
 		}
 		const results = await Promise.all(promises);
 		// should contain both results
-		const searchResults = [...(results[0] || []), ...(results[1] || [])];
+		let searchResults = [...(results[0] || []), ...(results[1] || [])];
 
 		// An empty page only means "never scraped" when nothing narrowed the query.
 		// Later pages run out by design, and maxSize/onlyTrusted can filter a
 		// well-scraped title down to nothing - neither should queue a scrape.
 		const isUnfilteredFirstPage = pageNum === 0 && maxSizeInGB === 0 && onlyTrusted !== 'true';
 
+		const trimmedImdbId = imdbId.toString().trim();
+		const debridioTarget = {
+			imdbId: trimmedImdbId,
+			key: `movie:${trimmedImdbId}`,
+			kind: 'movie',
+		} satisfies DebridioTarget;
+
 		if (searchResults.length === 0 && isUnfilteredFirstPage) {
-			const isProcessing = await db.keyExists(`processing:${imdbId.toString().trim()}`);
-			if (isProcessing) {
-				res.setHeader('status', 'processing').status(204).end();
+			// Debridio answers in about a second what the heavy scrapers queue
+			// for minutes, so a first view fills the table on this very request.
+			// An empty result (disabled, already in flight, unknown title) falls
+			// through to the request queue exactly as before.
+			searchResults = await backfillFromDebridioNow(debridioTarget);
+			if (searchResults.length > 0) {
+				// The heavy scrapers still deepen coverage afterwards.
+				await db.saveScrapedResults(`requested:${trimmedImdbId}`, []);
+			} else {
+				const isProcessing = await db.keyExists(`processing:${trimmedImdbId}`);
+				if (isProcessing) {
+					res.setHeader('status', 'processing').status(204).end();
+					return;
+				}
+
+				await db.saveScrapedResults(`requested:${trimmedImdbId}`, []);
+				res.setHeader('status', 'requested').status(204).end();
 				return;
 			}
-
-			await db.saveScrapedResults(`requested:${imdbId.toString().trim()}`, []);
-			res.setHeader('status', 'requested').status(204).end();
-			return;
 		}
 
 		try {
@@ -89,6 +111,9 @@ const handler: NextApiHandler = async (req, res) => {
 			// Process the filtered results
 			let processedResults = flattenAndRemoveDuplicates(filteredResults);
 			processedResults = sortByFileSize(processedResults);
+			// Keeps the debridio ⚡ availability markers for this title fresh
+			// without holding the response; no-ops inside its TTL.
+			void refreshDebridioAvailabilityInBackground(debridioTarget);
 			res.status(200).json({ results: processedResults });
 		} catch (error: any) {
 			console.error(
