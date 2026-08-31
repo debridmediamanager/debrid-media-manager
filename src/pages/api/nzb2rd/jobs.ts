@@ -8,16 +8,9 @@ import {
 } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { safeNzbName } from '@/utils/nzbName';
 import { safeReturnPath } from '@/utils/transferContext';
 import type { NextApiRequest, NextApiResponse } from 'next';
-
-// Windows-illegal characters plus path separators; nzb2rd writes this straight
-// to disk as the job's NZB filename.
-function safeNzbName(title: string): string {
-	const cleaned = title.replace(/[/\\?%*:|"<>\x00-\x1f]/g, '').trim();
-	const base = (cleaned || 'release').slice(0, 200);
-	return base.toLowerCase().endsWith('.nzb') ? base : `${base}.nzb`;
-}
 
 // Is a recorded transfer still worth blocking a fresh submission? A completed
 // one counts only while its torrent is still RD-cached (a pruned one should be
