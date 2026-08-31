@@ -35,6 +35,34 @@ export function decodeSponsorClaims(token: string | null): SponsorClaims | null 
 	}
 }
 
+/**
+ * Reads the stored sponsor token outside React, for the plain API clients that
+ * need to send it as a header. Unwraps the `{ value, expiry }` envelope
+ * useLocalStorage writes when a TTL is given, and drops an expired token.
+ */
+export function getSponsorToken(): string | null {
+	if (typeof window === 'undefined') return null;
+	try {
+		const raw = window.localStorage.getItem(SPONSOR_TOKEN_KEY);
+		if (!raw) return null;
+		const parsed = JSON.parse(raw);
+		if (typeof parsed === 'string') return parsed;
+		if (parsed && typeof parsed.value === 'string') {
+			if (typeof parsed.expiry === 'number' && parsed.expiry < Date.now()) return null;
+			return parsed.value;
+		}
+		return null;
+	} catch {
+		return null;
+	}
+}
+
+/** Header carrying the sponsor token on requests that widen a limit. */
+export function sponsorHeaders(): Record<string, string> {
+	const token = getSponsorToken();
+	return token ? { 'x-dmm-sponsor': token } : {};
+}
+
 /** Refresh once the token is inside its last day. */
 const REFRESH_THRESHOLD_MS = 24 * 60 * 60 * 1000;
 

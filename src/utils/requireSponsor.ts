@@ -15,10 +15,20 @@ export function requireSponsor(
 	req: NextApiRequest,
 	res: NextApiResponse
 ): SponsorTokenPayload | null {
-	const payload = verifySponsorToken(req.headers[SPONSOR_HEADER] as string | undefined);
+	const payload = verifySponsorToken(req.headers?.[SPONSOR_HEADER] as string | undefined);
 	if (!payload) {
 		res.status(401).json({ error: 'Sponsors only' });
 		return null;
 	}
 	return payload;
+}
+
+/**
+ * Whether a request carries a valid sponsor token, without writing a response.
+ *
+ * For endpoints that stay open to everyone but widen a limit for sponsors: a
+ * missing or bad token is a non-sponsor, not an error.
+ */
+export function isSponsorRequest(req: NextApiRequest): boolean {
+	return verifySponsorToken(req.headers?.[SPONSOR_HEADER] as string | undefined) !== null;
 }

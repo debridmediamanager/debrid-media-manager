@@ -1,5 +1,7 @@
 import { repository as db } from '@/services/repository';
 import { resolvePremiumizeUser } from '@/utils/premiumizeCastApiHelpers';
+import { isSponsorRequest } from '@/utils/requireSponsor';
+import { maxOtherStreamsLimit } from '@/utils/sponsorLimits';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // POST, not GET: the API key travels in the body so it never reaches an access
@@ -25,11 +27,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	if (otherStreamsLimit !== undefined) {
+		// Sponsors may raise this; everyone else stays at the standard ceiling.
+		const maxLimit = maxOtherStreamsLimit(isSponsorRequest(req));
 		const limit = Number(otherStreamsLimit);
-		if (!Number.isInteger(limit) || limit < 0 || limit > 5) {
+		if (!Number.isInteger(limit) || limit < 0 || limit > maxLimit) {
 			res.status(400).json({
 				status: 'error',
-				errorMessage: 'otherStreamsLimit must be an integer between 0 and 5',
+				errorMessage: `otherStreamsLimit must be an integer between 0 and ${maxLimit}`,
 			});
 			return;
 		}

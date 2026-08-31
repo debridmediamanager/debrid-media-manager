@@ -1,3 +1,4 @@
+import { sponsorHeaders } from '@/hooks/useSponsor';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { castToastOptions } from './toastOptions';
@@ -64,7 +65,11 @@ export const savePremiumizeCastProfile = async (
 	settings: PremiumizeCastSettings = {}
 ): Promise<string | null> => {
 	try {
-		const resp = await axios.post(`/api/stremio-pm/cast/saveProfile`, { apiKey, ...settings });
+		const resp = await axios.post(
+			`/api/stremio-pm/cast/saveProfile`,
+			{ apiKey, ...settings },
+			{ headers: sponsorHeaders() }
+		);
 		return resp.data?.profile?.userId ?? null;
 	} catch (error) {
 		console.error('Error saving Premiumize cast profile:', errorTextOf(error));
@@ -77,7 +82,11 @@ export const updatePremiumizeCastSettings = async (
 	settings: PremiumizeCastSettings
 ): Promise<boolean> => {
 	try {
-		await axios.post(`/api/stremio-pm/cast/updateSizeLimits`, { userId, ...settings });
+		await axios.post(
+			`/api/stremio-pm/cast/updateSizeLimits`,
+			{ userId, ...settings },
+			{ headers: sponsorHeaders() }
+		);
 		return true;
 	} catch (error) {
 		console.error('Error updating Premiumize cast settings:', errorTextOf(error));

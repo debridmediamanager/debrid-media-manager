@@ -197,13 +197,17 @@ describe('allDebridCastApiClient', () => {
 				hideCastOption: false,
 			});
 
-			expect(axios.post).toHaveBeenCalledWith('/api/stremio-ad/cast/saveProfile', {
-				apiKey: 'key',
-				movieMaxSize: 5000,
-				episodeMaxSize: 2000,
-				otherStreamsLimit: 10,
-				hideCastOption: false,
-			});
+			expect(axios.post).toHaveBeenCalledWith(
+				'/api/stremio-ad/cast/saveProfile',
+				{
+					apiKey: 'key',
+					movieMaxSize: 5000,
+					episodeMaxSize: 2000,
+					otherStreamsLimit: 10,
+					hideCastOption: false,
+				},
+				{ headers: {} }
+			);
 			expect(token).toBe('cast-1');
 		});
 
@@ -212,9 +216,13 @@ describe('allDebridCastApiClient', () => {
 
 			await saveAllDebridCastProfile('key');
 
-			expect(axios.post).toHaveBeenCalledWith('/api/stremio-ad/cast/saveProfile', {
-				apiKey: 'key',
-			});
+			expect(axios.post).toHaveBeenCalledWith(
+				'/api/stremio-ad/cast/saveProfile',
+				{
+					apiKey: 'key',
+				},
+				{ headers: {} }
+			);
 		});
 
 		it('silently handles errors', async () => {
@@ -239,13 +247,17 @@ describe('allDebridCastApiClient', () => {
 			});
 
 			expect(axios.post).toHaveBeenCalledTimes(1);
-			expect(axios.post).toHaveBeenCalledWith('/api/stremio-ad/cast/updateSizeLimits', {
-				castToken: 'cast-1',
-				movieMaxSize: 3000,
-				episodeMaxSize: 1000,
-				otherStreamsLimit: 5,
-				hideCastOption: true,
-			});
+			expect(axios.post).toHaveBeenCalledWith(
+				'/api/stremio-ad/cast/updateSizeLimits',
+				{
+					castToken: 'cast-1',
+					movieMaxSize: 3000,
+					episodeMaxSize: 1000,
+					otherStreamsLimit: 5,
+					hideCastOption: true,
+				},
+				{ headers: {} }
+			);
 			expect(token).toBe('cast-1');
 		});
 
@@ -256,10 +268,15 @@ describe('allDebridCastApiClient', () => {
 
 			const token = await syncAllDebridCastSettings('stale', 'key', { hideCastOption: true });
 
-			expect(axios.post).toHaveBeenNthCalledWith(2, '/api/stremio-ad/cast/saveProfile', {
-				apiKey: 'key',
-				hideCastOption: true,
-			});
+			expect(axios.post).toHaveBeenNthCalledWith(
+				2,
+				'/api/stremio-ad/cast/saveProfile',
+				{
+					apiKey: 'key',
+					hideCastOption: true,
+				},
+				{ headers: {} }
+			);
 			expect(token).toBe('cast-2');
 		});
 
@@ -269,9 +286,13 @@ describe('allDebridCastApiClient', () => {
 			const token = await syncAllDebridCastSettings(null, 'key', {});
 
 			expect(axios.post).toHaveBeenCalledTimes(1);
-			expect(axios.post).toHaveBeenCalledWith('/api/stremio-ad/cast/saveProfile', {
-				apiKey: 'key',
-			});
+			expect(axios.post).toHaveBeenCalledWith(
+				'/api/stremio-ad/cast/saveProfile',
+				{
+					apiKey: 'key',
+				},
+				{ headers: {} }
+			);
 			expect(token).toBe('cast-3');
 		});
 

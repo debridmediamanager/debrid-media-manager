@@ -1,6 +1,8 @@
 import { getToken } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { isSponsorRequest } from '@/utils/requireSponsor';
+import { maxOtherStreamsLimit } from '@/utils/sponsorLimits';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -37,10 +39,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		if (otherStreamsLimit !== undefined) {
+			// Sponsors may raise this; everyone else stays at the standard ceiling.
+			const maxLimit = maxOtherStreamsLimit(isSponsorRequest(req));
 			const limit = Number(otherStreamsLimit);
-			if (!Number.isInteger(limit) || limit < 0 || limit > 5) {
+			if (!Number.isInteger(limit) || limit < 0 || limit > maxLimit) {
 				return res.status(400).json({
-					error: 'otherStreamsLimit must be an integer between 0 and 5',
+					error: `otherStreamsLimit must be an integer between 0 and ${maxLimit}`,
 				});
 			}
 		}

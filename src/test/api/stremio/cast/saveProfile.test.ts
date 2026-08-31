@@ -1,6 +1,7 @@
 import handler from '@/pages/api/stremio/cast/saveProfile';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { signSponsorToken } from '@/utils/sponsorToken';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { mockGetToken, mockGenerateUserId, mockSaveCastProfile } = vi.hoisted(() => ({
 	mockGetToken: vi.fn(),
@@ -181,6 +182,75 @@ describe('/api/stremio/cast/saveProfile', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
 			error: 'otherStreamsLimit must be an integer between 0 and 5',
+		});
+	});
+
+	describe('sponsor stream limit', () => {
+		beforeEach(() => {
+			process.env.DMM_SPONSOR_SECRET = 'test-sponsor-secret';
+		});
+
+		afterEach(() => {
+			delete process.env.DMM_SPONSOR_SECRET;
+		});
+
+		const sponsorToken = () =>
+			signSponsorToken({
+				shortId: 'ZP1M',
+				githubUsername: 'someone',
+				sources: ['github'],
+				keyVersion: 1,
+				exp: Date.now() + 3_600_000,
+			});
+
+		const save = (otherStreamsLimit: number, headers: Record<string, string> = {}) =>
+			createMockRequest({
+				method: 'POST',
+				headers,
+				body: { clientId: 'id', clientSecret: 'secret', otherStreamsLimit },
+			});
+
+		it('lets a sponsor set 10', async () => {
+			const res = createMockResponse();
+			await handler(save(10, { 'x-dmm-sponsor': sponsorToken() }), res);
+
+			expect(res.status).toHaveBeenCalledWith(200);
+			expect(mockSaveCastProfile).toHaveBeenCalledWith(
+				'user-1',
+				'id',
+				'secret',
+				null,
+				undefined,
+				undefined,
+				10,
+				undefined
+			);
+		});
+
+		it('still refuses 11 from a sponsor', async () => {
+			const res = createMockResponse();
+			await handler(save(11, { 'x-dmm-sponsor': sponsorToken() }), res);
+
+			expect(res.status).toHaveBeenCalledWith(400);
+			expect(res.json).toHaveBeenCalledWith({
+				error: 'otherStreamsLimit must be an integer between 0 and 10',
+			});
+			expect(mockSaveCastProfile).not.toHaveBeenCalled();
+		});
+
+		// A forged token must not buy the raised ceiling, or the gate is decorative.
+		it('refuses 10 when the token is forged', async () => {
+			const res = createMockResponse();
+			await handler(save(10, { 'x-dmm-sponsor': 'forged.signature' }), res);
+
+			expect(res.status).toHaveBeenCalledWith(400);
+			expect(mockSaveCastProfile).not.toHaveBeenCalled();
+		});
+
+		it('still lets a sponsor set a value inside the standard range', async () => {
+			const res = createMockResponse();
+			await handler(save(3, { 'x-dmm-sponsor': sponsorToken() }), res);
+			expect(res.status).toHaveBeenCalledWith(200);
 		});
 	});
 

@@ -122,7 +122,7 @@ describe('/api/stremio-ad/[userid]/stream/[mediaType]/[imdbid]', () => {
 			);
 		});
 
-		it('clamps otherStreamsLimit above 5 to 5', async () => {
+		it('clamps otherStreamsLimit above the sponsor ceiling to 10', async () => {
 			setupProfile({ otherStreamsLimit: 99 });
 			mockRepository.getAllDebridUserCastStreams = vi.fn().mockResolvedValue([]);
 			mockRepository.getAllDebridOtherStreams = vi.fn().mockResolvedValue([]);
@@ -136,7 +136,7 @@ describe('/api/stremio-ad/[userid]/stream/[mediaType]/[imdbid]', () => {
 			expect(mockRepository.getAllDebridOtherStreams).toHaveBeenCalledWith(
 				'tt111',
 				'user1',
-				5,
+				10,
 				undefined
 			);
 		});

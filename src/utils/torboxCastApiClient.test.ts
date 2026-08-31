@@ -174,13 +174,17 @@ describe('torboxCastApiClient', () => {
 
 			await saveTorBoxCastProfile('key', 5000, 2000, 10, false);
 
-			expect(axios.post).toHaveBeenCalledWith('/api/stremio-tb/cast/saveProfile', {
-				apiKey: 'key',
-				movieMaxSize: 5000,
-				episodeMaxSize: 2000,
-				otherStreamsLimit: 10,
-				hideCastOption: false,
-			});
+			expect(axios.post).toHaveBeenCalledWith(
+				'/api/stremio-tb/cast/saveProfile',
+				{
+					apiKey: 'key',
+					movieMaxSize: 5000,
+					episodeMaxSize: 2000,
+					otherStreamsLimit: 10,
+					hideCastOption: false,
+				},
+				{ headers: {} }
+			);
 		});
 
 		it('omits undefined optional fields', async () => {
@@ -188,9 +192,13 @@ describe('torboxCastApiClient', () => {
 
 			await saveTorBoxCastProfile('key');
 
-			expect(axios.post).toHaveBeenCalledWith('/api/stremio-tb/cast/saveProfile', {
-				apiKey: 'key',
-			});
+			expect(axios.post).toHaveBeenCalledWith(
+				'/api/stremio-tb/cast/saveProfile',
+				{
+					apiKey: 'key',
+				},
+				{ headers: {} }
+			);
 		});
 
 		it('silently handles errors', async () => {
@@ -209,13 +217,17 @@ describe('torboxCastApiClient', () => {
 
 			await updateTorBoxSizeLimits('key', 3000, 1000, 5, true);
 
-			expect(axios.post).toHaveBeenCalledWith('/api/stremio-tb/cast/updateSizeLimits', {
-				apiKey: 'key',
-				movieMaxSize: 3000,
-				episodeMaxSize: 1000,
-				otherStreamsLimit: 5,
-				hideCastOption: true,
-			});
+			expect(axios.post).toHaveBeenCalledWith(
+				'/api/stremio-tb/cast/updateSizeLimits',
+				{
+					apiKey: 'key',
+					movieMaxSize: 3000,
+					episodeMaxSize: 1000,
+					otherStreamsLimit: 5,
+					hideCastOption: true,
+				},
+				{ headers: {} }
+			);
 		});
 
 		it('surfaces a toast on errors instead of failing silently', async () => {

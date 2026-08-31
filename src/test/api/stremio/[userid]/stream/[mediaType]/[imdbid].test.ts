@@ -461,6 +461,28 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 			expect(nonCastStreams[0].title).toContain('MyMovie.mkv');
 		});
 
+		// A sponsor's profile can hold up to 10. Stremio calls this endpoint with
+		// nothing but the userid, so the stored value is the only authority here -
+		// clamping it back to 5 would silently undo what the sponsor was allowed
+		// to save.
+		it('honours a sponsor profile set above the standard limit', async () => {
+			setupProfile({ otherStreamsLimit: 10 });
+			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
+
+			const req = createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt111' },
+			});
+			await handler(req, createMockResponse());
+
+			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith(
+				'tt111',
+				'user1',
+				10,
+				undefined
+			);
+		});
+
 		it('passes otherStreamsLimit to getOtherStreams query', async () => {
 			setupProfile({ otherStreamsLimit: 3 });
 			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
@@ -499,7 +521,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 			);
 		});
 
-		it('clamps otherStreamsLimit above 5 to 5', async () => {
+		it('clamps otherStreamsLimit above the sponsor ceiling to 10', async () => {
 			setupProfile({ otherStreamsLimit: 99 });
 			mockRepository.getUserCastStreams = vi.fn().mockResolvedValue([]);
 			mockRepository.getOtherStreams = vi.fn().mockResolvedValue([]);
@@ -513,7 +535,7 @@ describe('/api/stremio/[userid]/stream/[mediaType]/[imdbid]', () => {
 			expect(mockRepository.getOtherStreams).toHaveBeenCalledWith(
 				'tt111',
 				'user1',
-				5,
+				10,
 				undefined
 			);
 		});

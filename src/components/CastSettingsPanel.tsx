@@ -1,3 +1,5 @@
+import { useSponsor } from '@/hooks/useSponsor';
+import { otherStreamsLimitOptions } from '@/utils/sponsorLimits';
 import { Settings } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -20,6 +22,7 @@ interface CastSettingsPanelProps {
 }
 
 export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelProps) => {
+	const { isSponsor } = useSponsor();
 	const [movieMaxSize, setMovieMaxSize] = useState(() =>
 		getLocalStorageItemOrDefault('settings:movieMaxSize', defaultMovieSize)
 	);
@@ -240,12 +243,17 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 						value={otherStreamsLimit}
 						onChange={handleOtherStreamsLimitChange}
 					>
-						<option value="0">Don&apos;t show other streams</option>
-						<option value="1">1 stream</option>
-						<option value="2">2 streams</option>
-						<option value="3">3 streams</option>
-						<option value="4">4 streams</option>
-						<option value="5">5 streams</option>
+						{otherStreamsLimitOptions(isSponsor, Number(otherStreamsLimit)).map(
+							(count) => (
+								<option key={count} value={String(count)}>
+									{count === 0
+										? `Don't show other streams`
+										: count === 1
+											? '1 stream'
+											: `${count} streams`}
+								</option>
+							)
+						)}
 					</select>
 					<p className="mt-1 text-xs text-gray-400">
 						Limits streams from available files, torrents, and other users&apos; casts

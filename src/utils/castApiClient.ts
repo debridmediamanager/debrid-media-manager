@@ -1,3 +1,4 @@
+import { sponsorHeaders } from '@/hooks/useSponsor';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { runConcurrentFunctions } from './batch';
@@ -73,14 +74,18 @@ export const saveCastProfile = async (
 	hideCastOption?: boolean
 ) => {
 	try {
-		await axios.post(`/api/stremio/cast/saveProfile`, {
-			clientId,
-			clientSecret,
-			refreshToken,
-			...(movieMaxSize !== undefined && { movieMaxSize }),
-			...(episodeMaxSize !== undefined && { episodeMaxSize }),
-			...(otherStreamsLimit !== undefined && { otherStreamsLimit }),
-			...(hideCastOption !== undefined && { hideCastOption }),
-		});
+		await axios.post(
+			`/api/stremio/cast/saveProfile`,
+			{
+				clientId,
+				clientSecret,
+				refreshToken,
+				...(movieMaxSize !== undefined && { movieMaxSize }),
+				...(episodeMaxSize !== undefined && { episodeMaxSize }),
+				...(otherStreamsLimit !== undefined && { otherStreamsLimit }),
+				...(hideCastOption !== undefined && { hideCastOption }),
+			},
+			{ headers: sponsorHeaders() }
+		);
 	} catch (error) {}
 };

@@ -1,3 +1,4 @@
+import { sponsorHeaders } from '@/hooks/useSponsor';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { runConcurrentFunctions } from './batch';
@@ -69,13 +70,17 @@ export const saveTorBoxCastProfile = async (
 	hideCastOption?: boolean
 ) => {
 	try {
-		await axios.post(`/api/stremio-tb/cast/saveProfile`, {
-			apiKey,
-			...(movieMaxSize !== undefined && { movieMaxSize }),
-			...(episodeMaxSize !== undefined && { episodeMaxSize }),
-			...(otherStreamsLimit !== undefined && { otherStreamsLimit }),
-			...(hideCastOption !== undefined && { hideCastOption }),
-		});
+		await axios.post(
+			`/api/stremio-tb/cast/saveProfile`,
+			{
+				apiKey,
+				...(movieMaxSize !== undefined && { movieMaxSize }),
+				...(episodeMaxSize !== undefined && { episodeMaxSize }),
+				...(otherStreamsLimit !== undefined && { otherStreamsLimit }),
+				...(hideCastOption !== undefined && { hideCastOption }),
+			},
+			{ headers: sponsorHeaders() }
+		);
 	} catch (error) {
 		console.error('Error saving TorBox cast profile:', error);
 	}
@@ -89,13 +94,17 @@ export const updateTorBoxSizeLimits = async (
 	hideCastOption?: boolean
 ) => {
 	try {
-		await axios.post(`/api/stremio-tb/cast/updateSizeLimits`, {
-			apiKey,
-			movieMaxSize,
-			episodeMaxSize,
-			otherStreamsLimit,
-			hideCastOption,
-		});
+		await axios.post(
+			`/api/stremio-tb/cast/updateSizeLimits`,
+			{
+				apiKey,
+				movieMaxSize,
+				episodeMaxSize,
+				otherStreamsLimit,
+				hideCastOption,
+			},
+			{ headers: sponsorHeaders() }
+		);
 	} catch (error) {
 		console.error('Error updating TorBox size limits:', error);
 		toast.error('Failed to save TorBox cast settings. Please try again.');

@@ -1,3 +1,4 @@
+import { sponsorHeaders } from '@/hooks/useSponsor';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import {
@@ -129,10 +130,14 @@ export const saveAllDebridCastProfile = async (
 	settings: AllDebridCastSettings = {}
 ): Promise<string | null> => {
 	try {
-		const resp = await axios.post(`/api/stremio-ad/cast/saveProfile`, {
-			apiKey,
-			...settingsBody(settings),
-		});
+		const resp = await axios.post(
+			`/api/stremio-ad/cast/saveProfile`,
+			{
+				apiKey,
+				...settingsBody(settings),
+			},
+			{ headers: sponsorHeaders() }
+		);
 		return resp.data?.profile?.userId ?? null;
 	} catch (error) {
 		console.error('Error saving AllDebrid cast profile:', error);
@@ -152,10 +157,14 @@ export const syncAllDebridCastSettings = async (
 ): Promise<string | null> => {
 	if (castToken) {
 		try {
-			await axios.post(`/api/stremio-ad/cast/updateSizeLimits`, {
-				castToken,
-				...settingsBody(settings),
-			});
+			await axios.post(
+				`/api/stremio-ad/cast/updateSizeLimits`,
+				{
+					castToken,
+					...settingsBody(settings),
+				},
+				{ headers: sponsorHeaders() }
+			);
 			return castToken;
 		} catch (error: any) {
 			if (error?.response?.status !== 404) {

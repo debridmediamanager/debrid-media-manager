@@ -174,16 +174,43 @@ describe('castApiClient', () => {
 	});
 
 	describe('saveCastProfile', () => {
+		// The header is what buys the raised stream limit server-side, so its
+		// absence would silently cap a sponsor back at 5.
+		it('sends the sponsor token when one is stored', async () => {
+			window.localStorage.setItem('dmm:sponsorToken', JSON.stringify('sponsor-token'));
+			vi.mocked(axios.post).mockResolvedValue({ data: {} });
+
+			await saveCastProfile(
+				'client-id',
+				'client-secret',
+				'refresh-token',
+				undefined,
+				undefined,
+				10
+			);
+
+			expect(axios.post).toHaveBeenCalledWith(
+				'/api/stremio/cast/saveProfile',
+				expect.objectContaining({ otherStreamsLimit: 10 }),
+				{ headers: { 'x-dmm-sponsor': 'sponsor-token' } }
+			);
+			window.localStorage.clear();
+		});
+
 		it('successfully saves cast profile', async () => {
 			vi.mocked(axios.post).mockResolvedValue({ data: {} });
 
 			await saveCastProfile('client-id', 'client-secret', 'refresh-token');
 
-			expect(axios.post).toHaveBeenCalledWith('/api/stremio/cast/saveProfile', {
-				clientId: 'client-id',
-				clientSecret: 'client-secret',
-				refreshToken: 'refresh-token',
-			});
+			expect(axios.post).toHaveBeenCalledWith(
+				'/api/stremio/cast/saveProfile',
+				{
+					clientId: 'client-id',
+					clientSecret: 'client-secret',
+					refreshToken: 'refresh-token',
+				},
+				{ headers: {} }
+			);
 		});
 
 		it('silently handles errors without throwing', async () => {

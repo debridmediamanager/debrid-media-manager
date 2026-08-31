@@ -2,6 +2,7 @@ import { checkPremiumizeCache } from '@/services/premiumize';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { getTroveCandidates } from '@/utils/cachedTroveStreams';
+import { SPONSOR_MAX_OTHER_STREAMS_LIMIT } from '@/utils/sponsorLimits';
 import {
 	extractStreamMetadata,
 	formatStremioStreamTitle,
@@ -65,7 +66,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	try {
 		const maxSize = typeSlug === 'movie' ? profile.movieMaxSize : profile.episodeMaxSize;
 		const rawLimit = profile.otherStreamsLimit ?? 5;
-		const otherStreamsLimit = Math.max(0, Math.min(5, rawLimit));
+		// The ceiling is the sponsor one because only a verified sponsor could
+		// have stored a value above the standard limit - Stremio calls this
+		// endpoint with nothing but the userid, so there is no token to check here.
+		const otherStreamsLimit = Math.max(0, Math.min(SPONSOR_MAX_OTHER_STREAMS_LIMIT, rawLimit));
 
 		const [userCastItems, otherItems, troveCandidates] = await Promise.all([
 			db.getPremiumizeUserCastStreams(imdbidStr, userid, 5),
