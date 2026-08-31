@@ -8,6 +8,10 @@ import UsenetResults, { buttonState, formatSize, sortResults } from './UsenetRes
 const toastSuccess = vi.fn();
 const toastError = vi.fn();
 const toastLoading = vi.fn((..._args: unknown[]) => 'toast-id');
+const downloadCleanNzbMock = vi.fn();
+vi.mock('@/utils/nzbDownload', () => ({
+	downloadCleanNzb: (...args: unknown[]) => downloadCleanNzbMock(...args),
+}));
 vi.mock('react-hot-toast', () => ({
 	__esModule: true,
 	default: {
@@ -742,5 +746,107 @@ describe('UsenetResults', () => {
 		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
 
 		expect(await screen.findByText(/no usenet results found/i)).toBeInTheDocument();
+	});
+});
+
+/**
+ * Saving the NZB instead of sending it. The file is cleaned server-side, so the
+ * row's job is only to ask for it and say what came off.
+ */
+describe('UsenetResults NZB download', () => {
+	const openPanel = async (rdKey: string | null = 'rd-key') => {
+		mockSearch();
+		render(<UsenetResults imdbId="tt1418646" rdKey={rdKey} />);
+		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
+		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
+	};
+
+	const downloadButtons = () => screen.getAllByRole('button', { name: /download clean nzb/i });
+
+	it('asks for the release under the row it sits in', async () => {
+		downloadCleanNzbMock.mockResolvedValue({ name: 'Alpha.Release.2160p.nzb', removed: [] });
+		await openPanel();
+
+		await userEvent.click(downloadButtons()[0]);
+
+		// Sorted biggest-first, so the top row is Alpha.
+		expect(downloadCleanNzbMock).toHaveBeenCalledWith('b', 'Alpha.Release.2160p');
+	});
+
+	it('names what was stripped, which is the point of the button', async () => {
+		downloadCleanNzbMock.mockResolvedValue({
+			name: 'Alpha.Release.2160p.nzb',
+			removed: ['<meta type="tag"> (0a624180.278)', 'DOCTYPE'],
+		});
+		await openPanel();
+
+		await userEvent.click(downloadButtons()[0]);
+
+		await waitFor(() =>
+			expect(toastSuccess).toHaveBeenCalledWith(
+				expect.stringContaining('<meta type="tag"> (0a624180.278)'),
+				expect.anything()
+			)
+		);
+	});
+
+	// Claiming a clean-up that found nothing would be a lie about the file.
+	it('says plainly when there was nothing identifying to remove', async () => {
+		downloadCleanNzbMock.mockResolvedValue({ name: 'Alpha.nzb', removed: [] });
+		await openPanel();
+
+		await userEvent.click(downloadButtons()[0]);
+
+		await waitFor(() =>
+			expect(toastSuccess).toHaveBeenCalledWith(
+				expect.stringContaining('nothing identifying'),
+				expect.anything()
+			)
+		);
+	});
+
+	it('reports a failure instead of leaving the row spinning', async () => {
+		downloadCleanNzbMock.mockRejectedValue(new Error('Could not download the NZB'));
+		await openPanel();
+
+		await userEvent.click(downloadButtons()[0]);
+
+		await waitFor(() =>
+			expect(toastError).toHaveBeenCalledWith(
+				expect.stringContaining('Could not download the NZB'),
+				expect.anything()
+			)
+		);
+		expect(downloadButtons()[0]).toBeEnabled();
+	});
+
+	// Unlike Send, this needs no account: it goes to the user's own SABnzbd.
+	it('works without a Real-Debrid login', async () => {
+		downloadCleanNzbMock.mockResolvedValue({ name: 'Alpha.nzb', removed: [] });
+		await openPanel(null);
+
+		await userEvent.click(downloadButtons()[0]);
+
+		expect(downloadCleanNzbMock).toHaveBeenCalled();
+		expect(toastError).not.toHaveBeenCalled();
+	});
+
+	// A release someone else is still fetching disables Send. It is nonetheless
+	// one this user can save a clean copy of right now.
+	it('stays available on a row whose Send is disabled', async () => {
+		downloadCleanNzbMock.mockResolvedValue({ name: 'Alpha.nzb', removed: [] });
+		mockSearch(RESULTS, [
+			{ releaseId: 'b', jobId: 'job-1', infoHash: null, status: 'pending' },
+		]);
+		render(<UsenetResults imdbId="tt1418646" rdKey="rd-key" />);
+		await userEvent.click(screen.getByRole('button', { name: /usenet/i }));
+		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
+		await waitFor(() =>
+			expect(screen.getByRole('button', { name: /in progress/i })).toBeDisabled()
+		);
+
+		expect(downloadButtons()[0]).toBeEnabled();
+		await userEvent.click(downloadButtons()[0]);
+		expect(downloadCleanNzbMock).toHaveBeenCalledWith('b', 'Alpha.Release.2160p');
 	});
 });

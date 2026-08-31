@@ -8,6 +8,7 @@ import {
 	trackNzb2rdJob,
 	type Nzb2rdTransferSummary,
 } from '@/utils/nzb2rd';
+import { downloadCleanNzb } from '@/utils/nzbDownload';
 import { readRdOAuthCredentials } from '@/utils/rdTokenStorage';
 import {
 	describeTransfer,
@@ -17,7 +18,16 @@ import {
 	TRANSFER_TOAST_MS,
 	type TransferPhase,
 } from '@/utils/transferPhase';
-import { Check, ChevronDown, ChevronRight, Download, Loader2, RotateCw, Send } from 'lucide-react';
+import {
+	Check,
+	ChevronDown,
+	ChevronRight,
+	Download,
+	FileDown,
+	Loader2,
+	RotateCw,
+	Send,
+} from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -217,6 +227,7 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 	// Real-Debrid does not dedupe an addMagnet by hash, so a second click would
 	// make a second library entry rather than being absorbed.
 	const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
+	const [downloadingIds, setDownloadingIds] = useState<Set<string>>(new Set());
 	// Releases someone has already fetched or is fetching, so the row shows where
 	// that stands instead of a Send the server would only reject as a duplicate.
 	const [transferred, setTransferred] = useState<Map<string, Nzb2rdTransferSummary>>(new Map());
@@ -394,6 +405,38 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 		}
 	};
 
+	// Saving the release instead of sending it. Same articles, so the same
+	// download — but the file that lands has been rebuilt without the indexer's
+	// per-download watermark, so nothing in it points back at the account that
+	// grabbed it. Needs no Real-Debrid login: it goes to the user's own SABnzbd
+	// or NZBGet, not through nzb2rd.
+	const download = async (result: UsenetResult) => {
+		if (downloadingIds.has(result.id)) return;
+
+		setDownloadingIds((prev) => new Set(prev).add(result.id));
+		const toastId = toast.loading('Cleaning the NZB…', { duration: TRANSFER_STEP_TOAST_MS });
+		try {
+			const { name, removed } = await downloadCleanNzb(result.id, result.title);
+			toast.success(
+				removed.length > 0
+					? `${name} saved — removed ${removed.join(', ')}`
+					: `${name} saved — the indexer left nothing identifying on it`,
+				{ id: toastId, duration: TRANSFER_TOAST_MS }
+			);
+		} catch (e) {
+			toast.error(`NZB download: ${e instanceof Error ? e.message : 'failed'}`, {
+				id: toastId,
+				duration: TRANSFER_TOAST_MS,
+			});
+		} finally {
+			setDownloadingIds((prev) => {
+				const next = new Set(prev);
+				next.delete(result.id);
+				return next;
+			});
+		}
+	};
+
 	const sortArrow = (key: SortKey) => (sortKey === key ? (sortDir === 'asc' ? ' ▲' : ' ▼') : '');
 
 	// Both pages read the id straight off router.query, which is undefined on the
@@ -475,7 +518,7 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 										    length ("In RD" against "Real-Debrid downloading")
 										    and a column that sizes to its content leaves the
 										    buttons ragged down the page. */}
-										<th className="w-32 px-2 py-2"></th>
+										<th className="w-40 px-2 py-2"></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -509,62 +552,83 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 													{formatSize(result.size)}
 												</td>
 												<td className="px-2 py-2">
-													<button
-														type="button"
-														onClick={() => send(result)}
-														disabled={state.disabled}
-														title={state.title}
-														className={`haptic flex w-full flex-col items-start gap-0.5 rounded border px-2 py-1 text-left leading-tight transition-colors duration-200 disabled:cursor-not-allowed ${
-															// Green covers both halves of a finished
-															// fetch — the live "Add to RD" and the
-															// "Added" it becomes — so the colour tracks
-															// "this release exists" rather than
-															// whether the button is still clickable.
-															state.kind === 'cached' ||
-															state.kind === 'added'
-																? 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-900/60 disabled:opacity-60'
-																: state.kind === 'failed'
-																	? 'border-red-500 bg-red-900/30 text-red-100 hover:bg-red-900/60'
-																	: state.phase
-																		? PHASE_STYLES[state.phase]
-																		: 'border-gray-500 bg-gray-800/60 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60'
-														}`}
-													>
-														<span className="flex items-center gap-1">
-															{state.kind === 'sending' ||
-															state.kind === 'running' ? (
-																<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
-															) : state.kind === 'added' ||
-															  state.kind === 'sent' ? (
-																<Check className="h-3 w-3 shrink-0" />
-															) : state.kind === 'cached' ? (
-																<Download className="h-3 w-3 shrink-0" />
-															) : state.kind === 'failed' ? (
-																<RotateCw className="h-3 w-3 shrink-0" />
-															) : (
-																<Send className="h-3 w-3 shrink-0" />
-															)}
-															{state.label}
-														</span>
-														{/* Place in line, or how far through the current
+													<div className="flex items-stretch gap-1">
+														<button
+															type="button"
+															onClick={() => send(result)}
+															disabled={state.disabled}
+															title={state.title}
+															className={`haptic flex flex-1 flex-col items-start gap-0.5 rounded border px-2 py-1 text-left leading-tight transition-colors duration-200 disabled:cursor-not-allowed ${
+																// Green covers both halves of a finished
+																// fetch — the live "Add to RD" and the
+																// "Added" it becomes — so the colour tracks
+																// "this release exists" rather than
+																// whether the button is still clickable.
+																state.kind === 'cached' ||
+																state.kind === 'added'
+																	? 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-900/60 disabled:opacity-60'
+																	: state.kind === 'failed'
+																		? 'border-red-500 bg-red-900/30 text-red-100 hover:bg-red-900/60'
+																		: state.phase
+																			? PHASE_STYLES[
+																					state.phase
+																				]
+																			: 'border-gray-500 bg-gray-800/60 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60'
+															}`}
+														>
+															<span className="flex items-center gap-1">
+																{state.kind === 'sending' ||
+																state.kind === 'running' ? (
+																	<Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+																) : state.kind === 'added' ||
+																  state.kind === 'sent' ? (
+																	<Check className="h-3 w-3 shrink-0" />
+																) : state.kind === 'cached' ? (
+																	<Download className="h-3 w-3 shrink-0" />
+																) : state.kind === 'failed' ? (
+																	<RotateCw className="h-3 w-3 shrink-0" />
+																) : (
+																	<Send className="h-3 w-3 shrink-0" />
+																)}
+																{state.label}
+															</span>
+															{/* Place in line, or how far through the current
 														    stage — the thing that tells a waiting user
 														    whether "not done yet" means minutes or days. */}
-														{state.detail && (
-															<span
-																className={`pl-4 text-xs opacity-70 ${
-																	// A failure reason is a sentence, not
-																	// a place in line: let it wrap, and cap
-																	// it so one long message cannot stretch
-																	// the row down the page.
-																	state.kind === 'failed'
-																		? 'line-clamp-2 whitespace-normal break-words'
-																		: ''
-																}`}
-															>
-																{state.detail}
-															</span>
-														)}
-													</button>
+															{state.detail && (
+																<span
+																	className={`pl-4 text-xs opacity-70 ${
+																		// A failure reason is a sentence, not
+																		// a place in line: let it wrap, and cap
+																		// it so one long message cannot stretch
+																		// the row down the page.
+																		state.kind === 'failed'
+																			? 'line-clamp-2 whitespace-normal break-words'
+																			: ''
+																	}`}
+																>
+																	{state.detail}
+																</span>
+															)}
+														</button>
+														{/* Always live, unlike Send: a release someone else already
+											    fetched is still one this user can save, and no Real-Debrid
+											    login is involved either way. */}
+														<button
+															type="button"
+															onClick={() => download(result)}
+															disabled={downloadingIds.has(result.id)}
+															title="Download the NZB, cleaned of the indexer’s watermark"
+															aria-label={`Download clean NZB for ${result.title}`}
+															className="haptic flex shrink-0 items-center rounded border border-gray-500 bg-gray-800/60 px-2 text-gray-100 transition-colors duration-200 hover:bg-gray-700/50 disabled:cursor-not-allowed disabled:opacity-60"
+														>
+															{downloadingIds.has(result.id) ? (
+																<Loader2 className="h-3.5 w-3.5 animate-spin" />
+															) : (
+																<FileDown className="h-3.5 w-3.5" />
+															)}
+														</button>
+													</div>
 												</td>
 											</tr>
 										);

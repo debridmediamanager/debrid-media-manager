@@ -9,6 +9,9 @@ export const RATE_LIMIT_CONFIGS = {
 	zurg: { rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for zurg API endpoints
 	zurgAdmin: { rateLimit: 1, windowSeconds: 10 }, // 1 request per 10 seconds for zurg admin endpoints
 	sponsor: { rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for sponsor status endpoints
+	// Every miss spends a grab from the one indexer account the whole site shares,
+	// so this is paced like a stream rather than like a page fetch.
+	nzbDownload: { rateLimit: 1, windowSeconds: 5 },
 	default: { rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;
 
