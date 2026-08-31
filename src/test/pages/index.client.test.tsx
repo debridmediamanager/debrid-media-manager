@@ -90,6 +90,7 @@ vi.mock('@/utils/withAuth', () => ({
 
 vi.mock('lucide-react', () => ({
 	__esModule: true,
+	FolderTree: () => <svg data-testid="folder-tree-icon" />,
 	Megaphone: () => <svg data-testid="megaphone-icon" />,
 	Settings: () => <svg data-testid="settings-icon" />,
 	Star: () => <svg data-testid="star-icon" />,
@@ -172,6 +173,23 @@ describe('IndexPage', () => {
 
 		expect(screen.getByTestId('main-actions')).toBeInTheDocument();
 		expect(screen.queryByText(/Debrid Media Manager is loading/i)).not.toBeInTheDocument();
+	});
+
+	// The zurg banner is marketing, so it sits above everything else on the page -
+	// including the logo - and it shows whether or not the providers have answered.
+	it('puts the zurg banner above the logo in both states', () => {
+		currentUserMock.mockReturnValue({ ...settledFixture, hasTBAuth: true });
+
+		const { container } = render(<IndexPage />);
+
+		const banner = screen.getByRole('link', { name: 'Get zurg' });
+		const logo = screen.getByTestId('logo');
+		expect(banner.getAttribute('href')).toContain('zurg.debridmediamanager.com');
+		expect(screen.getByText(/Debrid Media Manager is loading/i)).toBeInTheDocument();
+		expect(
+			banner.compareDocumentPosition(logo) & Node.DOCUMENT_POSITION_FOLLOWING
+		).toBeTruthy();
+		expect(container.firstElementChild?.firstElementChild).toContainElement(banner);
 	});
 
 	it('still waits while a configured provider is genuinely in flight', () => {

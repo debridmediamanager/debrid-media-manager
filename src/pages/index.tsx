@@ -5,6 +5,7 @@ import { MainActions } from '@/components/MainActions';
 import { SearchBar } from '@/components/SearchBar';
 import { ServiceCard } from '@/components/ServiceCard';
 import { TraktSection } from '@/components/TraktSection';
+import { ZurgBanner } from '@/components/ZurgBanner';
 import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
 import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/castToken';
@@ -166,6 +167,7 @@ function IndexPage() {
 				<title>Debrid Media Manager - Home</title>
 				<meta name="robots" content="index, nofollow" />
 			</Head>
+			<ZurgBanner />
 			<Logo />
 			<Toaster position="bottom-right" />
 			{servicesSettled || profileWaitElapsed ? (
