@@ -17,9 +17,9 @@ export type DebridioTarget = {
 };
 
 // Debridio refreshes its own listings behind a ~5 minute edge cache, but RD
-// instant availability drifts slowly; three days keeps refresh traffic near
+// instant availability drifts slowly; seven days keeps refresh traffic near
 // zero while the ⚡ markers stay trustworthy.
-const AVAILABILITY_TTL_MS = 3 * 24 * 60 * 60 * 1000;
+const AVAILABILITY_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const FALLBACK_EPISODE_COUNT = 12;
 
 async function seasonEpisodes(imdbId: string, season: number): Promise<number[]> {
