@@ -1,6 +1,10 @@
+import { useSponsor } from '@/hooks/useSponsor';
 import { Handshake, Sparkles } from 'lucide-react';
+import { SponsorBadge } from './SponsorBadge';
 
 export function InfoSection() {
+	const { isSponsor } = useSponsor();
+
 	return (
 		<div className="space-y-3 text-center text-sm">
 			<div className="rounded border-2 border-gray-600 bg-gray-800/50 p-4 text-gray-100">
@@ -66,33 +70,42 @@ export function InfoSection() {
 						target="_blank"
 					>
 						r/debridmediamanager
-					</a>{' '}
-					<Handshake className="mr-1 inline-block h-3 w-3 text-blue-400" />
-					Sponsor this project&apos;s development on{' '}
-					<a
-						className="text-blue-300 underline hover:text-blue-200"
-						href="https://github.com/sponsors/debridmediamanager"
-						target="_blank"
-					>
-						Github
-					</a>{' '}
-					|{' '}
-					<a
-						className="text-blue-300 underline hover:text-blue-200"
-						href="https://www.patreon.com/debridmediamanager"
-						target="_blank"
-					>
-						Patreon
-					</a>{' '}
-					|{' '}
-					<a
-						className="text-blue-300 underline hover:text-blue-200"
-						href="https://paypal.me/yowmamasita"
-						target="_blank"
-					>
-						Paypal
 					</a>
 				</div>
+				{isSponsor ? (
+					<div className="mb-1 flex items-center justify-center gap-2 text-center text-sm">
+						<SponsorBadge />
+						<span className="text-gray-300">Thank you for supporting DMM</span>
+					</div>
+				) : (
+					<div className="mb-1 text-center text-sm">
+						<Handshake className="mr-1 inline-block h-3 w-3 text-blue-400" />
+						Sponsor this project&apos;s development on{' '}
+						<a
+							className="text-blue-300 underline hover:text-blue-200"
+							href="https://github.com/sponsors/debridmediamanager"
+							target="_blank"
+						>
+							Github
+						</a>{' '}
+						|{' '}
+						<a
+							className="text-blue-300 underline hover:text-blue-200"
+							href="https://www.patreon.com/debridmediamanager"
+							target="_blank"
+						>
+							Patreon
+						</a>{' '}
+						|{' '}
+						<a
+							className="text-blue-300 underline hover:text-blue-200"
+							href="https://paypal.me/yowmamasita"
+							target="_blank"
+						>
+							Paypal
+						</a>
+					</div>
+				)}
 				<div className="mb-1 text-center text-sm">
 					<Sparkles className="mr-1 inline-block h-3 w-3 text-yellow-400" /> Lastly... we
 					now have a{' '}

@@ -1,4 +1,5 @@
 import { AlertTriangle, Check, Link2, Settings } from 'lucide-react';
+import { SponsorPanel } from './SponsorPanel';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { syncAllDebridCastSettings } from '../utils/allDebridCastApiClient';
@@ -434,6 +435,8 @@ export const SettingsSection = () => {
 				</div>
 				<div className="mt-4 text-sm text-gray-200">
 					<div className="flex flex-col gap-4">
+						<SponsorPanel />
+
 						<div className="rounded border-2 border-yellow-500/30 p-4">
 							<div className="mb-4 flex items-center justify-center text-center text-sm font-medium text-yellow-200">
 								<AlertTriangle className="mr-2 inline-block h-4 w-4 text-yellow-400" />
