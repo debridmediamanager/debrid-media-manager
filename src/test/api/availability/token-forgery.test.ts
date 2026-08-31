@@ -17,10 +17,11 @@ const mockRepository = vi.mocked(repository);
 
 const SECRET = 'test-problem-secret-route-level';
 
-// The salt that used to ship in the client bundle, plus the hashing it fed.
-// Duplicated from `legacyProblemToken.ts` rather than imported because that
-// module exposes only a validator — a forger is what an attacker had, and it is
-// what this file needs. Both copies go when the legacy branch does.
+// The salt that used to ship in the client bundle, plus the hashing it fed. The
+// server-side validator for it is gone, so this is now the only copy — kept
+// deliberately: it reproduces exactly what any visitor could mint offline, which
+// is the thing these routes must keep refusing. Deleting it would leave nothing
+// proving the old forgery still fails.
 const LEAKED_SALT = 'debridmediamanager.com%%fe7#td00rA3vHz%VmI';
 
 function legacyHash(str: string): string {
@@ -104,7 +105,7 @@ describe.each(routes)('$name refuses forged availability tokens', ({ handler, db
 		vi.clearAllMocks();
 		// Legacy off is the end state; one case below turns it back on to pin
 		// down what the transitional release still lets through.
-		process.env = { ...originalEnv, DMM_PROBLEM_SECRET: SECRET, DMM_PROBLEM_LEGACY: 'off' };
+		process.env = { ...originalEnv, DMM_PROBLEM_SECRET: SECRET };
 		mockRepository.upsertAvailability = vi.fn().mockResolvedValue(undefined);
 		mockRepository.removeAvailability = vi.fn().mockResolvedValue(undefined);
 	});
@@ -167,16 +168,16 @@ describe.each(routes)('$name refuses forged availability tokens', ({ handler, db
 		expect(dbCall()).not.toHaveBeenCalled();
 	});
 
-	// Documents the cost of the changeover rather than approving of it: while
-	// the legacy branch is on, a bundle-derived forgery still gets through. When
-	// that branch goes, this test flips to expecting a 403 and can be deleted.
-	it('still lets a legacy forgery through while DMM_PROBLEM_LEGACY is on', async () => {
-		delete process.env.DMM_PROBLEM_LEGACY;
+	// This used to document the changeover's cost: with the legacy branch on, a
+	// bundle-derived forgery reached the database. That branch is gone, so the
+	// same request must now be refused with nothing written.
+	it('refuses a legacy forgery outright now the grace period has ended', async () => {
 		const [token, hash] = forgeFromLeakedSalt();
 
 		const res = await post(token, hash);
 
-		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.status).toHaveBeenCalledWith(403);
+		expect(dbCall()).not.toHaveBeenCalled();
 	});
 
 	it('accepts a freshly minted token and proceeds to the database', async () => {

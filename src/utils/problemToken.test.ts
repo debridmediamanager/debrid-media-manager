@@ -52,7 +52,6 @@ describe('problemToken', () => {
 
 	beforeEach(() => {
 		process.env = { ...originalEnv, DMM_PROBLEM_SECRET: SECRET };
-		delete process.env.DMM_PROBLEM_LEGACY;
 	});
 
 	afterEach(() => {
@@ -139,22 +138,23 @@ describe('problemToken', () => {
 		});
 	});
 
+	// The salt below was readable in every visitor's JS bundle, so this is the
+	// forgery anyone could produce offline. The one-release grace period that
+	// accepted it ended 2026-08-31; it must now be refused outright.
 	describe('the leaked-salt forgery this change exists to stop', () => {
 		const now = 1_800_000_000_000;
 
-		it('is accepted during the changeover so cached tabs keep working', () => {
-			const [token, hash] = forgeWithLeakedSalt(now);
-			expect(validateProblemToken(token, hash, now)).toBe(true);
-		});
-
-		it('is refused once legacy tokens are turned off', () => {
-			process.env.DMM_PROBLEM_LEGACY = 'off';
+		it('is refused', () => {
 			const [token, hash] = forgeWithLeakedSalt(now);
 			expect(validateProblemToken(token, hash, now)).toBe(false);
 		});
 
-		it('still accepts a properly minted token with legacy off', () => {
-			process.env.DMM_PROBLEM_LEGACY = 'off';
+		it('is still refused when the timestamp is fresh and well-formed', () => {
+			const [token, hash] = forgeWithLeakedSalt(Date.now());
+			expect(validateProblemToken(token, hash)).toBe(false);
+		});
+
+		it('does not stop a properly minted token from working', () => {
 			const [token, hash] = mintProblemToken(SECRET, now);
 			expect(validateProblemToken(token, hash, now)).toBe(true);
 		});

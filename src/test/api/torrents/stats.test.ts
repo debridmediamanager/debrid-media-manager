@@ -40,7 +40,6 @@ describe('/api/torrents/stats', () => {
 		process.env = {
 			...originalEnv,
 			DMM_PROBLEM_SECRET: SECRET,
-			DMM_PROBLEM_LEGACY: 'off',
 		};
 		mockScrapeTorrent.mockResolvedValue({
 			seeders: 10,

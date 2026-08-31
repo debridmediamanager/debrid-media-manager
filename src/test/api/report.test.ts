@@ -37,7 +37,7 @@ describe('/api/report', () => {
 		// Legacy off: the old scheme's salt shipped in the browser bundle, so
 		// leaving it on would let a forged token through and hide the regression
 		// these tests exist to catch.
-		process.env = { ...originalEnv, DMM_PROBLEM_SECRET: SECRET, DMM_PROBLEM_LEGACY: 'off' };
+		process.env = { ...originalEnv, DMM_PROBLEM_SECRET: SECRET };
 	});
 
 	afterEach(() => {

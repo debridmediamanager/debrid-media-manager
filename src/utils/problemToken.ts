@@ -1,7 +1,5 @@
 import crypto from 'crypto';
 
-import { validateLegacyProblemToken } from './legacyProblemToken';
-
 // A minted token is presentable for this long. Matches the window the old
 // client-side scheme allowed, so a slow availability sweep behaves exactly as
 // it did before — a season page that takes four minutes to walk its rows still
@@ -9,17 +7,6 @@ import { validateLegacyProblemToken } from './legacyProblemToken';
 const TOKEN_TTL_SECONDS = 300;
 
 let warnedAboutMissingSecret = false;
-
-/**
- * Whether a token from the old client-side scheme is still accepted.
- *
- * On by default for the changeover. Set `DMM_PROBLEM_LEGACY=off` to refuse them
- * — which is the end state, and what the tests exercise to prove the forgeable
- * scheme is genuinely closed rather than merely superseded.
- */
-function legacyTokensAccepted(): boolean {
-	return process.env.DMM_PROBLEM_LEGACY !== 'off';
-}
 
 /**
  * The server-only signing key. Unlike the salt it replaces, this never reaches
@@ -68,14 +55,14 @@ function parseTimestamp(token: string): number | null {
 /**
  * Validate a token presented as `dmmProblemKey` + `solution`.
  *
- * Replaces `validateTokenWithHash`, whose salt shipped in the browser bundle and
+ * Replaced `validateTokenWithHash`, whose salt shipped in the browser bundle and
  * was therefore mintable offline by anyone — which left the `Available` table
  * open to writes and deletes from unauthenticated callers.
  *
- * The legacy branch is transitional: it keeps a tab that loaded the previous
- * bundle working until it reloads. Remove it, and `legacyProblemToken.ts`, next
- * release — at which point a missing `DMM_PROBLEM_SECRET` starts refusing every
- * caller, so the env var must be provisioned before that lands.
+ * The one-release grace period that also accepted those old client-signed tokens
+ * ended on 2026-08-31; `legacyProblemToken.ts` is gone and a token is now valid
+ * only if this server signed it. That makes `DMM_PROBLEM_SECRET` load-bearing:
+ * without it nothing validates, which is why `getProblemSecret` shouts.
  */
 export function validateProblemToken(
 	token: unknown,
@@ -95,23 +82,17 @@ export function validateProblemToken(
 	}
 
 	const secret = getProblemSecret();
-	if (secret) {
-		if (timingSafeEquals(sign(token, secret), hash)) {
-			return true;
+	if (!secret) {
+		// Loud once rather than per request. This is now fail-closed: with no
+		// secret there is nothing to verify against, so every caller is refused.
+		if (!warnedAboutMissingSecret) {
+			warnedAboutMissingSecret = true;
+			console.error(
+				'DMM_PROBLEM_SECRET is not set — every availability token will be refused'
+			);
 		}
-	} else if (!warnedAboutMissingSecret) {
-		// Loud once rather than per request: without the secret only the legacy
-		// (forgeable) branch can pass, which is the state this change exists to
-		// end.
-		warnedAboutMissingSecret = true;
-		console.error(
-			'DMM_PROBLEM_SECRET is not set — availability tokens fall back to the legacy forgeable scheme'
-		);
-	}
-
-	if (!legacyTokensAccepted()) {
 		return false;
 	}
 
-	return validateLegacyProblemToken(token, hash, now);
+	return timingSafeEquals(sign(token, secret), hash);
 }
