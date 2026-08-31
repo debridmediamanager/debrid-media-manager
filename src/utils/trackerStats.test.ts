@@ -5,6 +5,14 @@ import {
 	shouldIncludeTrackerStats,
 } from './trackerStats';
 
+// A fresh scrape now needs a token, because the route it hits fans out to every
+// tracker in the list. The mint itself is covered in `token.test.ts`; here it
+// only has to succeed so the stats path is what's under test.
+vi.mock('./token', () => ({
+	__esModule: true,
+	generateTokenAndHash: vi.fn(async () => ['test-token', 'test-solution']),
+}));
+
 const fetchMock = vi.fn();
 
 describe('trackerStats utils', () => {
@@ -113,6 +121,13 @@ describe('trackerStats utils', () => {
 			successfulTrackers: 3,
 			totalTrackers: 5,
 		});
+
+		// The scrape call must carry credentials; without them the route refuses
+		// and no stats come back at all.
+		const scrapeUrl = fetchMock.mock.calls[1][0] as string;
+		expect(scrapeUrl).toContain('/api/torrents/stats?hash=abc');
+		expect(scrapeUrl).toContain('dmmProblemKey=test-token');
+		expect(scrapeUrl).toContain('solution=test-solution');
 		expect(fetchMock).toHaveBeenCalledTimes(2);
 	});
 

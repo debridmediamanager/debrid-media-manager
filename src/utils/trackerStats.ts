@@ -1,4 +1,5 @@
 import { fetchWithRetry } from './fetchWithRetry';
+import { generateTokenAndHash } from './token';
 
 // Helper function to batch arrays into chunks
 function batchArray<T>(array: T[], batchSize: number): T[][] {
@@ -84,12 +85,23 @@ export async function getCachedTrackerStats(
 
 		// If no stored stats, they're stale, or force refresh is requested, fetch fresh ones
 		// This should only be called during availability checks when the setting is enabled
-		const freshResponse = await fetchWithRetry(`/api/torrents/stats?hash=${hash}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		//
+		// A fresh fetch makes the server scrape every tracker in the list, so the
+		// route now demands a token. The mint is cached and shared, so asking for
+		// one per hash costs a single request per couple of minutes across an
+		// entire sweep.
+		const [dmmProblemKey, solution] = await generateTokenAndHash();
+		const freshResponse = await fetchWithRetry(
+			`/api/torrents/stats?hash=${hash}&dmmProblemKey=${encodeURIComponent(
+				dmmProblemKey
+			)}&solution=${encodeURIComponent(solution)}`,
+			{
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+		);
 
 		if (!freshResponse.ok) {
 			const error = await freshResponse.json();
