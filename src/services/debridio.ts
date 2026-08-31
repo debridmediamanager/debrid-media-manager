@@ -37,6 +37,8 @@ const BYTES_PER_GB = 1024 * 1024 * 1024;
 const MIN_TORRENT_BYTES = 100 * BYTES_PER_MB;
 const FETCH_TIMEOUT_MS = 10_000;
 const MAX_EPISODES_PER_SEASON = 40;
+const EPISODE_CONCURRENCY = 5;
+const CHUNK_PAUSE_MS = 250;
 
 const SIZE_MARKER = /💾\s*([\d.]+)\s*(KB|MB|GB)/i;
 
@@ -183,14 +185,30 @@ export async function scrapeDebridioSeason(
 	const list = episodes.slice(0, MAX_EPISODES_PER_SEASON);
 	if (list.length === 0) throw new Error('no episodes to scrape');
 
-	const settled = await Promise.allSettled(
-		list.map((episode) =>
-			fetchStreams(`${base}/stream/series/${imdbId}:${season}:${episode}.json`)
-		)
-	);
-	const payloads = settled
-		.filter((r): r is PromiseFulfilledResult<unknown> => r.status === 'fulfilled')
-		.map((r) => r.value);
+	// Fire the whole season at once and debridio's edge rejects the burst -
+	// measured in production 2026-08-31: single episode requests answer in
+	// under a second while a 20-40 wide fan-out from one container (times four
+	// swarm replicas) came back with every request failed. Chunked with a short
+	// pause keeps a full season around 2-8s while staying under the burst
+	// limit; a chunk's failures cost their own requests only, the healthy
+	// episodes still land.
+	const payloads: unknown[] = [];
+	for (let start = 0; start < list.length; start += EPISODE_CONCURRENCY) {
+		const chunk = list.slice(start, start + EPISODE_CONCURRENCY);
+		const settled = await Promise.allSettled(
+			chunk.map((episode) =>
+				fetchStreams(`${base}/stream/series/${imdbId}:${season}:${episode}.json`)
+			)
+		);
+		for (const result of settled) {
+			if (result.status === 'fulfilled') payloads.push(result.value);
+		}
+		if (start + EPISODE_CONCURRENCY < list.length) {
+			const { promise, resolve } = Promise.withResolvers<void>();
+			setTimeout(resolve, CHUNK_PAUSE_MS);
+			await promise;
+		}
+	}
 	if (payloads.length === 0) {
 		throw new Error('all debridio episode requests failed');
 	}
