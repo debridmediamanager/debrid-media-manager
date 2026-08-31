@@ -343,6 +343,70 @@ export class AvailabilityService extends DatabaseClient {
 		return fresh.length;
 	}
 
+	/**
+	 * The AllDebrid twin of saveInstantAvailability, for Debridio ⚡ markers
+	 * scraped from the alldebrid addon config. The same marker-file trick, but
+	 * on AvailableAd/AvailableAdFile with the statuses checkAvailabilityAd
+	 * filters on: status 'Ready' and statusCode 4 (Ready on AllDebrid).
+	 */
+	public async saveInstantAvailabilityAd(
+		imdbId: string,
+		rows: Array<{ hash: string; filename: string; bytes: number }>
+	): Promise<number> {
+		if (rows.length === 0) return 0;
+
+		const normalized = rows.map((row) => ({
+			...row,
+			hash: row.hash.toLowerCase(),
+		}));
+		const existing = await this.prisma.availableAd.findMany({
+			where: { hash: { in: normalized.map((row) => row.hash) } },
+			select: { hash: true },
+		});
+		const knownHashes = new Set(existing.map((row) => row.hash));
+		const fresh = normalized.filter((row) => !knownHashes.has(row.hash));
+		if (fresh.length === 0) return 0;
+
+		const now = new Date();
+		await this.prisma.availableAd.createMany({
+			data: fresh.map((row) => {
+				const episodeInfo = extractEpisodeInfo(row.filename);
+				return {
+					hash: row.hash,
+					imdbId,
+					filename: row.filename,
+					originalFilename: row.filename,
+					bytes: BigInt(row.bytes),
+					originalBytes: BigInt(row.bytes),
+					host: 'alldebrid.com',
+					progress: 100,
+					status: 'Ready',
+					statusCode: 4,
+					ended: now,
+					season: episodeInfo?.season,
+					episode: episodeInfo?.episode,
+				};
+			}),
+			skipDuplicates: true,
+		});
+		await this.prisma.availableAdFile.createMany({
+			data: fresh.map((row) => {
+				const episodeInfo = extractEpisodeInfo(row.filename);
+				return {
+					link: `debridio:${row.hash}`,
+					file_id: 0,
+					hash: row.hash,
+					path: row.filename,
+					bytes: BigInt(row.bytes),
+					season: episodeInfo?.season,
+					episode: episodeInfo?.episode,
+				};
+			}),
+			skipDuplicates: true,
+		});
+		return fresh.length;
+	}
+
 	// Refresh bookkeeping for the debridio integration, one Cache row per
 	// ScrapedTrue key. The row's own updatedAt is the clock (the nzbSearchCache
 	// pattern): saveInstantAvailability is create-only, so a refresh that finds

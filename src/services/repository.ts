@@ -366,6 +366,13 @@ export class Repository {
 		return this.availabilityService.markDebridioRefreshed(key);
 	}
 
+	public saveInstantAvailabilityAd(
+		imdbId: string,
+		rows: Array<{ hash: string; filename: string; bytes: number }>
+	) {
+		return this.availabilityService.saveInstantAvailabilityAd(imdbId, rows);
+	}
+
 	public checkAvailability(imdbId: string, hashes: string[]) {
 		return this.availabilityService.checkAvailability(imdbId, hashes);
 	}

@@ -48,16 +48,27 @@ type ParsedStream = {
 	cached: boolean;
 };
 
-function addonBase(): string | null {
-	const raw = process.env.DEBRIDIO_ADDON_URL?.trim();
+export type DebridioProvider = 'realdebrid' | 'alldebrid';
+
+const ENV_BY_PROVIDER: Record<DebridioProvider, string> = {
+	realdebrid: 'DEBRIDIO_ADDON_URL',
+	alldebrid: 'DEBRIDIO_ALLDEBRID_URL',
+};
+
+function addonBase(provider: DebridioProvider): string | null {
+	const raw = process.env[ENV_BY_PROVIDER[provider]]?.trim();
 	if (!raw) return null;
 	// Accept both the bare config URL and a full manifest.json paste.
 	const base = raw.replace(/\/manifest\.json\/?$/i, '').replace(/\/+$/, '');
 	return base.startsWith('https://') ? base : null;
 }
 
+export function configuredDebridioProviders(): DebridioProvider[] {
+	return (['realdebrid', 'alldebrid'] as const).filter((p) => addonBase(p) !== null);
+}
+
 export function isDebridioEnabled(): boolean {
-	return addonBase() !== null;
+	return configuredDebridioProviders().length > 0;
 }
 
 export function parseBytes(displayTitle: string): number {
@@ -152,19 +163,23 @@ async function fetchStreams(url: string): Promise<unknown> {
 	return response.json();
 }
 
-export async function scrapeDebridioMovie(imdbId: string): Promise<DebridioScrape> {
-	const base = addonBase();
-	if (!base) throw new Error('DEBRIDIO_ADDON_URL is not configured');
+export async function scrapeDebridioMovie(
+	imdbId: string,
+	provider: DebridioProvider = 'realdebrid'
+): Promise<DebridioScrape> {
+	const base = addonBase(provider);
+	if (!base) throw new Error(`${ENV_BY_PROVIDER[provider]} is not configured`);
 	return parseDebridioStreams(await fetchStreams(`${base}/stream/movie/${imdbId}.json`));
 }
 
 export async function scrapeDebridioSeason(
 	imdbId: string,
 	season: number,
-	episodes: number[]
+	episodes: number[],
+	provider: DebridioProvider = 'realdebrid'
 ): Promise<DebridioScrape> {
-	const base = addonBase();
-	if (!base) throw new Error('DEBRIDIO_ADDON_URL is not configured');
+	const base = addonBase(provider);
+	if (!base) throw new Error(`${ENV_BY_PROVIDER[provider]} is not configured`);
 	const list = episodes.slice(0, MAX_EPISODES_PER_SEASON);
 	if (list.length === 0) throw new Error('no episodes to scrape');
 

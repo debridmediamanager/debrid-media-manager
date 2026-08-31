@@ -12,7 +12,9 @@ const createManyMock = vi.fn();
 const createManyFileMock = vi.fn();
 const cacheFindUniqueMock = vi.fn();
 const cacheUpsertMock = vi.fn();
-
+const findManyAdMock = vi.fn();
+const createManyAdMock = vi.fn();
+const createManyAdFileMock = vi.fn();
 vi.mock('@prisma/client', () => ({
 	PrismaClient: vi.fn().mockImplementation(() => ({
 		available: {
@@ -21,6 +23,13 @@ vi.mock('@prisma/client', () => ({
 			findMany: findManyMock,
 			delete: deleteMock,
 			createMany: createManyMock,
+		},
+		availableAd: {
+			findMany: findManyAdMock,
+			createMany: createManyAdMock,
+		},
+		availableAdFile: {
+			createMany: createManyAdFileMock,
 		},
 		availableFile: {
 			findUnique: findUniqueMock,
@@ -51,6 +60,9 @@ describe('AvailabilityService', () => {
 		createManyFileMock.mockReset();
 		cacheFindUniqueMock.mockReset();
 		cacheUpsertMock.mockReset();
+		findManyAdMock.mockReset();
+		createManyAdMock.mockReset();
+		createManyAdFileMock.mockReset();
 		service = new AvailabilityService();
 	});
 
@@ -233,5 +245,47 @@ describe('AvailabilityService', () => {
 			update: { value: {} },
 			create: { key: 'debridio:refresh:tv:tt2:1', value: {} },
 		});
+	});
+
+	it('saves instant availability for alldebrid with Ready statuses and marker files', async () => {
+		findManyAdMock.mockResolvedValue([]);
+		createManyAdMock.mockResolvedValue({ count: 1 });
+		createManyAdFileMock.mockResolvedValue({ count: 1 });
+
+		const saved = await service.saveInstantAvailabilityAd('tt0111161', [
+			{
+				hash: 'B'.repeat(40),
+				filename: 'The.Shawshank.Redemption.1994.MULTI.1080p.BluRay.x265',
+				bytes: 5368709120,
+			},
+		]);
+
+		expect(saved).toBe(1);
+		const adRow = createManyAdMock.mock.calls[0][0].data[0];
+		expect(adRow).toMatchObject({
+			hash: 'b'.repeat(40),
+			imdbId: 'tt0111161',
+			status: 'Ready',
+			statusCode: 4,
+			host: 'alldebrid.com',
+		});
+		const adFile = createManyAdFileMock.mock.calls[0][0].data[0];
+		expect(adFile).toMatchObject({
+			link: `debridio:${'b'.repeat(40)}`,
+			file_id: 0,
+			path: 'The.Shawshank.Redemption.1994.MULTI.1080p.BluRay.x265',
+		});
+	});
+
+	it('skips alldebrid hashes that already exist', async () => {
+		findManyAdMock.mockResolvedValue([{ hash: 'b'.repeat(40) }]);
+
+		const saved = await service.saveInstantAvailabilityAd('tt0111161', [
+			{ hash: 'B'.repeat(40), filename: 'present.mkv', bytes: 1 },
+		]);
+
+		expect(saved).toBe(0);
+		expect(createManyAdMock).not.toHaveBeenCalled();
+		expect(createManyAdFileMock).not.toHaveBeenCalled();
 	});
 });

@@ -10,9 +10,11 @@ const {
 	markAsDoneMock,
 	saveScrapedTrueResultsMock,
 	saveInstantAvailabilityMock,
+	saveInstantAvailabilityAdMock,
 	getDebridioRefreshedAtMock,
 	markDebridioRefreshedMock,
 	enabledMock,
+	providersMock,
 	scrapeMovieMock,
 	scrapeSeasonMock,
 	cinemetaMock,
@@ -22,9 +24,11 @@ const {
 	markAsDoneMock: vi.fn(),
 	saveScrapedTrueResultsMock: vi.fn(),
 	saveInstantAvailabilityMock: vi.fn(),
+	saveInstantAvailabilityAdMock: vi.fn(),
 	getDebridioRefreshedAtMock: vi.fn(),
 	markDebridioRefreshedMock: vi.fn(),
 	enabledMock: vi.fn(),
+	providersMock: vi.fn(),
 	scrapeMovieMock: vi.fn(),
 	scrapeSeasonMock: vi.fn(),
 	cinemetaMock: vi.fn(),
@@ -37,6 +41,7 @@ vi.mock('@/services/repository', () => ({
 		markAsDone: markAsDoneMock,
 		saveScrapedTrueResults: saveScrapedTrueResultsMock,
 		saveInstantAvailability: saveInstantAvailabilityMock,
+		saveInstantAvailabilityAd: saveInstantAvailabilityAdMock,
 		getDebridioRefreshedAt: getDebridioRefreshedAtMock,
 		markDebridioRefreshed: markDebridioRefreshedMock,
 	},
@@ -44,6 +49,7 @@ vi.mock('@/services/repository', () => ({
 
 vi.mock('@/services/debridio', () => ({
 	isDebridioEnabled: enabledMock,
+	configuredDebridioProviders: providersMock,
 	scrapeDebridioMovie: scrapeMovieMock,
 	scrapeDebridioSeason: scrapeSeasonMock,
 }));
@@ -65,14 +71,26 @@ const SCRAPE = {
 	available: [{ hash: 'a'.repeat(40), filename: 'Some.Release.1080p.mkv', bytes: 2147483648 }],
 };
 
+const AD_SCRAPE = {
+	torrents: [
+		{ title: 'Some.Release.1080p', fileSize: 2048, hash: 'a'.repeat(40) },
+		{ title: 'AD.Only.Release.2160p', fileSize: 4096, hash: 'b'.repeat(40) },
+	],
+	available: [{ hash: 'b'.repeat(40), filename: 'AD.Only.Release.2160p.mkv', bytes: 4294967296 }],
+};
+
 describe('backfillFromDebridioNow', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		enabledMock.mockReturnValue(true);
+		providersMock.mockReturnValue(['realdebrid']);
+		scrapeMovieMock.mockReset();
+		scrapeSeasonMock.mockReset();
 		keyExistsMock.mockResolvedValue(false);
 		saveScrapedResultsMock.mockResolvedValue(undefined);
 		markAsDoneMock.mockResolvedValue(undefined);
 		saveInstantAvailabilityMock.mockResolvedValue(1);
+		saveInstantAvailabilityAdMock.mockResolvedValue(1);
 		getDebridioRefreshedAtMock.mockResolvedValue(null);
 		markDebridioRefreshedMock.mockResolvedValue(undefined);
 	});
@@ -106,7 +124,7 @@ describe('backfillFromDebridioNow', () => {
 
 		const results = await backfillFromDebridioNow(MOVIE_TARGET);
 
-		expect(results).toBe(SCRAPE.torrents);
+		expect(results).toEqual(SCRAPE.torrents);
 		expect(keyExistsMock).toHaveBeenCalledWith('processing:tt0111161');
 		expect(saveScrapedResultsMock).toHaveBeenCalledWith('processing:tt0111161', []);
 		expect(saveScrapedTrueResultsMock).toHaveBeenCalledWith(
@@ -133,7 +151,7 @@ describe('backfillFromDebridioNow', () => {
 
 		await backfillFromDebridioNow(SEASON_TARGET);
 
-		expect(scrapeSeasonMock).toHaveBeenCalledWith('tt0903747', 1, [2, 7]);
+		expect(scrapeSeasonMock).toHaveBeenCalledWith('tt0903747', 1, [2, 7], 'realdebrid');
 		expect(saveInstantAvailabilityMock).toHaveBeenCalledWith('tt0903747', SCRAPE.available);
 	});
 
@@ -164,16 +182,66 @@ describe('backfillFromDebridioNow', () => {
 		expect(saveScrapedTrueResultsMock).not.toHaveBeenCalled();
 		expect(saveInstantAvailabilityMock).not.toHaveBeenCalled();
 	});
+
+	it('splits availability by provider and dedupes shared torrents across both', async () => {
+		providersMock.mockReturnValue(['realdebrid', 'alldebrid']);
+		scrapeMovieMock.mockImplementation(async (_imdbId: string, provider: string) =>
+			provider === 'alldebrid' ? AD_SCRAPE : SCRAPE
+		);
+
+		const results = await backfillFromDebridioNow(MOVIE_TARGET);
+
+		expect(results).toHaveLength(2);
+		expect(saveScrapedTrueResultsMock).toHaveBeenCalledWith(
+			'movie:tt0111161',
+			expect.arrayContaining([
+				expect.objectContaining({ hash: 'a'.repeat(40) }),
+				expect.objectContaining({ hash: 'b'.repeat(40) }),
+			]),
+			true
+		);
+		expect(saveInstantAvailabilityMock).toHaveBeenCalledWith('tt0111161', SCRAPE.available);
+		expect(saveInstantAvailabilityAdMock).toHaveBeenCalledWith(
+			'tt0111161',
+			AD_SCRAPE.available
+		);
+	});
+
+	it('persists the healthy provider and still tombstones when only alldebrid fails', async () => {
+		providersMock.mockReturnValue(['realdebrid', 'alldebrid']);
+		scrapeMovieMock.mockImplementation(async (_imdbId: string, provider: string) => {
+			if (provider === 'alldebrid') throw new Error('The auth apikey is invalid');
+			return SCRAPE;
+		});
+
+		const results = await backfillFromDebridioNow(MOVIE_TARGET);
+
+		expect(results).toEqual(SCRAPE.torrents);
+		expect(saveInstantAvailabilityMock).toHaveBeenCalledWith('tt0111161', SCRAPE.available);
+		expect(saveInstantAvailabilityAdMock).not.toHaveBeenCalled();
+		expect(markDebridioRefreshedMock).toHaveBeenCalledWith('movie:tt0111161');
+	});
+
+	it('fails without tombstoning when every configured provider fails', async () => {
+		providersMock.mockReturnValue(['realdebrid', 'alldebrid']);
+		scrapeMovieMock.mockRejectedValue(new Error('(upstream_error) bad_token'));
+
+		expect(await backfillFromDebridioNow(MOVIE_TARGET)).toEqual([]);
+		expect(markDebridioRefreshedMock).not.toHaveBeenCalled();
+		expect(markAsDoneMock).toHaveBeenCalledWith('tt0111161');
+	});
 });
 
 describe('refreshDebridioAvailabilityInBackground', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		enabledMock.mockReturnValue(true);
+		providersMock.mockReturnValue(['realdebrid']);
 		getDebridioRefreshedAtMock.mockResolvedValue(null);
 		markDebridioRefreshedMock.mockResolvedValue(undefined);
 		scrapeMovieMock.mockResolvedValue(SCRAPE);
 		saveInstantAvailabilityMock.mockResolvedValue(1);
+		saveInstantAvailabilityAdMock.mockResolvedValue(1);
 	});
 
 	it('does nothing while disabled', async () => {
@@ -198,7 +266,7 @@ describe('refreshDebridioAvailabilityInBackground', () => {
 
 		await refreshDebridioAvailabilityInBackground(MOVIE_TARGET);
 
-		expect(scrapeMovieMock).toHaveBeenCalledWith('tt0111161');
+		expect(scrapeMovieMock).toHaveBeenCalledWith('tt0111161', 'realdebrid');
 		expect(saveInstantAvailabilityMock).toHaveBeenCalledWith('tt0111161', SCRAPE.available);
 		expect(markDebridioRefreshedMock).toHaveBeenCalledWith('movie:tt0111161');
 	});
