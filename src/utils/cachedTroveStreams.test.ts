@@ -24,13 +24,21 @@ describe('filterTroveCandidates', () => {
 		expect(out.map((c) => c.hash)).toEqual(['bbb', 'ccc']);
 	});
 
-	it('honors the size ceiling', () => {
+	it('honors the size ceiling, set in GB against MB file sizes', () => {
 		const out = filterTroveCandidates(
-			rows(['aaa', 'Big.Movie.2160p', 9000], ['ccc', 'Mid.Movie.1080p', 5000]),
-			{ mediaType: 'movie', imdbId: 'tt123', maxSizeMb: 6000 }
+			rows(
+				['aaa', 'Big.Movie.2160p', 9000],
+				['bbb', 'Over.Movie.2160p', 20000],
+				['ccc', 'Mid.Movie.1080p', 5000]
+			),
+			// The settings select stores GB; 15 GB = 15360 MB keeps the ~9 GB
+			// release and drops the ~20 GB one. This pins the unit: the first
+			// version of the ceiling compared the GB value against MB sizes and
+			// filtered out everything the moment a limit was set.
+			{ mediaType: 'movie', imdbId: 'tt123', maxSizeGb: 15 }
 		);
 
-		expect(out.map((c) => c.hash)).toEqual(['ccc']);
+		expect(out.map((c) => c.hash)).toEqual(['aaa', 'ccc']);
 	});
 
 	it('caps the candidate count after sorting', () => {

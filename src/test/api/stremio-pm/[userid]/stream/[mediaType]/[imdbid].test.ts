@@ -169,6 +169,36 @@ describe('/api/stremio-pm/[userid]/stream/[mediaType]/[imdbid]', () => {
 			);
 		});
 
+		// The size settings are GB. The first version of the trove filter
+		// compared that value against MB file sizes, so any limit below ~1000
+		// emptied the trove entirely - this pins the units at the API boundary.
+		it('applies the profile size ceiling in GB to scraped releases', async () => {
+			mockRepository.getPremiumizeCastProfile = vi.fn().mockResolvedValue({
+				apiKey: 'viewer-key',
+				movieMaxSize: 15,
+				episodeMaxSize: 0,
+				otherStreamsLimit: 5,
+			});
+			mockRepository.getAllScrapedTrueResults = vi
+				.fn()
+				.mockResolvedValue([
+					...trove,
+					{ hash: '4'.repeat(40), title: 'Small.Movie.1080p', fileSize: 8000 },
+				]);
+			mockCacheCheck.mockImplementation((_key: string, hashes: string[]) =>
+				Promise.resolve(
+					hashes.map((hash) => ({ hash, cached: true, filename: null, filesize: null }))
+				)
+			);
+
+			await handler(requestTrove(), res);
+
+			const playStreams = (res._getData() as any).streams.filter((s: any) => s.url);
+			// 15 GB keeps the 7.8 GB release and drops the 18.5 GB and 53.7 GB ones.
+			expect(playStreams).toHaveLength(1);
+			expect(playStreams[0].url).toContain('/play/4444');
+		});
+
 		it('withholds trove releases when the cache probe fails, while casts stay unfiltered', async () => {
 			mockRepository.getPremiumizeUserCastStreams = vi
 				.fn()

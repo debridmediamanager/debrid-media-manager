@@ -81,7 +81,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			getTroveCandidates({
 				mediaType: typeSlug === 'movie' ? 'movie' : 'series',
 				imdbId: imdbidStr,
-				maxSizeMb: maxSize > 0 ? maxSize : undefined,
+				maxSizeGb: maxSize > 0 ? maxSize : undefined,
 			}),
 		]);
 

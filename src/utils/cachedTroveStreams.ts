@@ -12,8 +12,8 @@ export interface TroveCandidateOptions {
 	mediaType: 'movie' | 'series';
 	/** Full Stremio video id for series (`tt…:season:episode`); bare id for movies. */
 	imdbId: string;
-	/** Cast-setting ceiling in MB; 0 or unset means unbounded. */
-	maxSizeMb?: number;
+	/** Cast-setting ceiling in GB, matching `settings:movieMaxSize` and the profile columns; 0 or unset means unbounded. */
+	maxSizeGb?: number;
 	/** Upper bound on candidates returned. They are the only hashes probed, so this is also the cost bound. */
 	maxCount?: number;
 }
@@ -35,7 +35,7 @@ const isFinitePositive = (value: unknown): value is number =>
  */
 export function filterTroveCandidates(
 	rows: ScrapeSearchResult[] | null | undefined,
-	{ mediaType, imdbId, maxSizeMb, maxCount = DEFAULT_MAX_COUNT }: TroveCandidateOptions
+	{ mediaType, imdbId, maxSizeGb, maxCount = DEFAULT_MAX_COUNT }: TroveCandidateOptions
 ): TroveStreamCandidate[] {
 	if (!rows || rows.length === 0) return [];
 
@@ -49,14 +49,14 @@ export function filterTroveCandidates(
 		if (!Number.isInteger(season) || !Number.isInteger(episode)) return [];
 	}
 
-	const ceiling = isFinitePositive(maxSizeMb) ? maxSizeMb : undefined;
+	const ceilingMb = isFinitePositive(maxSizeGb) ? maxSizeGb * 1024 : undefined;
 
 	const candidates: TroveStreamCandidate[] = [];
 	for (const row of rows) {
 		if (typeof row?.hash !== 'string' || typeof row?.title !== 'string') continue;
 		const sizeMb = row.fileSize;
 		if (!isFinitePositive(sizeMb) || sizeMb <= MIN_SIZE_MB) continue;
-		if (ceiling !== undefined && sizeMb > ceiling) continue;
+		if (ceilingMb !== undefined && sizeMb > ceilingMb) continue;
 
 		if (season !== undefined && episode !== undefined) {
 			const parsed = ptt.parse(row.title);
