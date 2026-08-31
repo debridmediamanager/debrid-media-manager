@@ -29,6 +29,14 @@ vi.mock('react-hot-toast', () => ({
 	default: toastMocks,
 }));
 
+// The hook paces its batches to stay inside the endpoint's 5-per-10s IP limit.
+// The pacing itself is not what these tests are checking, and waiting it out
+// would push the batching test past Vitest's timeout.
+vi.mock('@/utils/delay', () => ({
+	__esModule: true,
+	delay: vi.fn(async () => {}),
+}));
+
 vi.mock('@/utils/token', () => ({
 	generateTokenAndHash: () => generateTokenAndHashMock(),
 }));
@@ -172,5 +180,35 @@ describe('useMassReport', () => {
 		});
 		vi.runAllTimers();
 		vi.useRealTimers();
+	});
+
+	// A batch failing mid-run used to unwind the whole loop and tell the user
+	// "Failed to submit reports." — even though every earlier batch had already
+	// been written. The count that actually landed has to survive into the message.
+	it('reports how much landed when a later batch fails', async () => {
+		const selection = Array.from({ length: 250 }, (_, i) => ({ hash: `h${i}` }) as any);
+		axiosPostMock
+			.mockResolvedValueOnce({ data: { success: true, reported: 100, failed: 0 } })
+			.mockResolvedValueOnce({ data: { success: true, reported: 100, failed: 0 } })
+			.mockRejectedValueOnce(
+				Object.assign(new Error('rate limited'), {
+					response: { status: 429 },
+				})
+			);
+
+		const { result } = renderHook(() => useMassReport('rd-key', null, null, 'tt1234567'));
+
+		await act(async () => {
+			await result.current.handleMassReport('porn', selection);
+		});
+
+		expect(axiosPostMock).toHaveBeenCalledTimes(3);
+		expect(toastMocks.error).toHaveBeenCalledWith(
+			'Reported 200 of 250 torrents. Please retry the rest.',
+			{ id: 'toast-id' }
+		);
+		expect(toastMocks.error).not.toHaveBeenCalledWith('Failed to submit reports.', {
+			id: 'toast-id',
+		});
 	});
 });
