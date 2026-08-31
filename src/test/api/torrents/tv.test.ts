@@ -4,7 +4,7 @@ import { TRAP_POOL } from '@/utils/canary';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
-	mockValidateTokenWithHash,
+	mockValidateProblemToken,
 	mockGetScrapedTrueResults,
 	mockGetScrapedResults,
 	mockGetReportedHashes,
@@ -16,7 +16,7 @@ const {
 	mockBackfillDebridio,
 	mockRefreshDebridio,
 } = vi.hoisted(() => ({
-	mockValidateTokenWithHash: vi.fn(),
+	mockValidateProblemToken: vi.fn(),
 	mockGetScrapedTrueResults: vi.fn(),
 	mockGetScrapedResults: vi.fn(),
 	mockGetReportedHashes: vi.fn(),
@@ -29,8 +29,8 @@ const {
 	mockRefreshDebridio: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock('@/utils/token', () => ({
-	validateTokenWithHash: mockValidateTokenWithHash,
+vi.mock('@/utils/problemToken', () => ({
+	validateProblemToken: mockValidateProblemToken,
 }));
 
 vi.mock('@/services/repository', () => ({
@@ -60,7 +60,7 @@ vi.mock('@/utils/debridioBackfill', () => ({
 describe('/api/torrents/tv', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockValidateTokenWithHash.mockResolvedValue(true);
+		mockValidateProblemToken.mockReturnValue(true);
 		mockGetScrapedTrueResults.mockResolvedValue([{ title: 'Season Pack', hash: 'hash-1' }]);
 		mockGetScrapedResults.mockResolvedValue([{ title: 'Reported', hash: 'hash-2' }]);
 		mockGetReportedHashes.mockResolvedValue(['hash-2']);
@@ -83,7 +83,7 @@ describe('/api/torrents/tv', () => {
 	});
 
 	it('rejects invalid tokens', async () => {
-		mockValidateTokenWithHash.mockResolvedValue(false);
+		mockValidateProblemToken.mockReturnValue(false);
 		const req = createMockRequest({ query: baseQuery });
 		const res = createMockResponse();
 

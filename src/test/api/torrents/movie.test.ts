@@ -4,7 +4,7 @@ import { TRAP_POOL } from '@/utils/canary';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
-	mockValidateTokenWithHash,
+	mockValidateProblemToken,
 	mockGetScrapedTrueResults,
 	mockGetScrapedResults,
 	mockGetReportedHashes,
@@ -16,7 +16,7 @@ const {
 	mockBackfillDebridio,
 	mockRefreshDebridio,
 } = vi.hoisted(() => ({
-	mockValidateTokenWithHash: vi.fn(),
+	mockValidateProblemToken: vi.fn(),
 	mockGetScrapedTrueResults: vi.fn(),
 	mockGetScrapedResults: vi.fn(),
 	mockGetReportedHashes: vi.fn(),
@@ -29,8 +29,8 @@ const {
 	mockRefreshDebridio: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock('@/utils/token', () => ({
-	validateTokenWithHash: mockValidateTokenWithHash,
+vi.mock('@/utils/problemToken', () => ({
+	validateProblemToken: mockValidateProblemToken,
 }));
 
 vi.mock('@/services/repository', () => ({
@@ -60,7 +60,7 @@ vi.mock('@/utils/debridioBackfill', () => ({
 describe('/api/torrents/movie', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockValidateTokenWithHash.mockResolvedValue(true);
+		mockValidateProblemToken.mockReturnValue(true);
 		mockGetScrapedTrueResults.mockResolvedValue([{ title: 'Trusted', hash: 'hash-1' }]);
 		mockGetScrapedResults.mockResolvedValue([{ title: 'Community', hash: 'hash-2' }]);
 		mockGetReportedHashes.mockResolvedValue(['hash-2']);
@@ -79,11 +79,11 @@ describe('/api/torrents/movie', () => {
 		await handler(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(403);
-		expect(mockValidateTokenWithHash).not.toHaveBeenCalled();
+		expect(mockValidateProblemToken).not.toHaveBeenCalled();
 	});
 
 	it('rejects when token validation fails', async () => {
-		mockValidateTokenWithHash.mockResolvedValue(false);
+		mockValidateProblemToken.mockReturnValue(false);
 		const req = createMockRequest({ query: baseQuery });
 		const res = createMockResponse();
 

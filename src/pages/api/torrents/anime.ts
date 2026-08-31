@@ -1,7 +1,7 @@
 import { flattenAndRemoveDuplicates, sortByFileSize } from '@/services/mediasearch';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
-import { validateTokenWithHash } from '@/utils/token';
+import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiHandler } from 'next';
 
 // returns scraped results or marks the imdb id as requested
@@ -16,7 +16,7 @@ const handler: NextApiHandler = async (req, res) => {
 	) {
 		res.status(403).json({ errorMessage: 'Authentication not provided' });
 		return;
-	} else if (!(await validateTokenWithHash(dmmProblemKey.toString(), solution.toString()))) {
+	} else if (!validateProblemToken(dmmProblemKey, solution)) {
 		res.status(403).json({ errorMessage: 'Authentication error' });
 		return;
 	}

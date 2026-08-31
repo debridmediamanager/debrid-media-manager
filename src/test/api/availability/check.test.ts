@@ -1,14 +1,14 @@
 import handler from '@/pages/api/availability/check';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { validateTokenWithHash } from '@/utils/token';
+import { validateProblemToken } from '@/utils/problemToken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
-vi.mock('@/utils/token');
+vi.mock('@/utils/problemToken');
 
 const mockRepository = vi.mocked(repository);
-const mockValidate = vi.mocked(validateTokenWithHash);
+const mockValidate = vi.mocked(validateProblemToken);
 
 const validHash = 'a'.repeat(40);
 
@@ -23,7 +23,7 @@ const buildBody = (overrides: Record<string, unknown> = {}) => ({
 describe('/api/availability/check', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockValidate.mockResolvedValue(true);
+		mockValidate.mockReturnValue(true);
 		mockRepository.checkAvailability = vi.fn().mockResolvedValue([{ hash: validHash }]);
 	});
 
@@ -50,7 +50,7 @@ describe('/api/availability/check', () => {
 	});
 
 	it('rejects invalid auth tokens', async () => {
-		mockValidate.mockResolvedValue(false);
+		mockValidate.mockReturnValue(false);
 		const req = createMockRequest({ method: 'POST', body: buildBody() });
 		const res = createMockResponse();
 

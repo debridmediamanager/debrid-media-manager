@@ -1,14 +1,14 @@
 import handler from '@/pages/api/availability/ad/check';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { validateTokenWithHash } from '@/utils/token';
+import { validateProblemToken } from '@/utils/problemToken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
-vi.mock('@/utils/token');
+vi.mock('@/utils/problemToken');
 
 const mockRepository = vi.mocked(repository);
-const mockValidateTokenWithHash = vi.mocked(validateTokenWithHash);
+const mockValidateProblemToken = vi.mocked(validateProblemToken);
 
 const buildBody = (overrides: Record<string, unknown> = {}) => ({
 	dmmProblemKey: 'key-1-1234567890',
@@ -21,7 +21,7 @@ const buildBody = (overrides: Record<string, unknown> = {}) => ({
 describe('/api/availability/ad/check', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockValidateTokenWithHash.mockReturnValue(true);
+		mockValidateProblemToken.mockReturnValue(true);
 		mockRepository.checkAvailabilityAd = vi
 			.fn()
 			.mockResolvedValue([{ hash: 'a'.repeat(40), files: [] }]);
@@ -62,7 +62,7 @@ describe('/api/availability/ad/check', () => {
 	});
 
 	it('returns 403 when token validation fails', async () => {
-		mockValidateTokenWithHash.mockReturnValue(false);
+		mockValidateProblemToken.mockReturnValue(false);
 		const req = createMockRequest({ method: 'POST', body: buildBody() });
 		const res = createMockResponse();
 

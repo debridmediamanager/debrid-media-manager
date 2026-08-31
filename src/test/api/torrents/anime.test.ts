@@ -3,14 +3,14 @@ import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
-	mockValidateTokenWithHash,
+	mockValidateProblemToken,
 	mockGetScrapedTrueResults,
 	mockKeyExists,
 	mockSaveScrapedResults,
 	mockFlatten,
 	mockSort,
 } = vi.hoisted(() => ({
-	mockValidateTokenWithHash: vi.fn(),
+	mockValidateProblemToken: vi.fn(),
 	mockGetScrapedTrueResults: vi.fn(),
 	mockKeyExists: vi.fn(),
 	mockSaveScrapedResults: vi.fn(),
@@ -18,8 +18,8 @@ const {
 	mockSort: vi.fn((items: any[]) => items),
 }));
 
-vi.mock('@/utils/token', () => ({
-	validateTokenWithHash: mockValidateTokenWithHash,
+vi.mock('@/utils/problemToken', () => ({
+	validateProblemToken: mockValidateProblemToken,
 }));
 
 vi.mock('@/services/repository', () => ({
@@ -38,7 +38,7 @@ vi.mock('@/services/mediasearch', () => ({
 describe('/api/torrents/anime', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockValidateTokenWithHash.mockResolvedValue(true);
+		mockValidateProblemToken.mockReturnValue(true);
 		mockGetScrapedTrueResults.mockResolvedValue([
 			{ filename: 'Anime.EP01', size_bytes: 1234, hash: 'hash-1' },
 		]);

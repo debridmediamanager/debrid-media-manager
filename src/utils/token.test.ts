@@ -1,50 +1,111 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { generateTokenAndHash, validateTokenWithHash } from './token';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock getTimeISO used by generateTokenAndHash
-vi.mock('@/services/realDebrid', () => ({
-	getTimeISO: vi.fn(async () => new Date(10_000).toISOString()), // 10s after epoch
-}));
+import { generateTokenAndHash, resetTokenCache } from './token';
 
-// Provide deterministic crypto.getRandomValues
-beforeEach(() => {
-	const arr = new Uint32Array([0x1abc]);
-	vi.spyOn(globalThis.crypto, 'getRandomValues').mockImplementation((buffer) => {
-		const typedBuffer = buffer as Uint32Array;
-		typedBuffer.set(arr);
-		return typedBuffer;
+const PAIR = { token: 'abc123-1800000000', hash: 'signature-one' };
+
+function mockChallenge(payload: unknown, ok = true, status = 200) {
+	const fetchMock = vi.fn(async () => ({
+		ok,
+		status,
+		json: async () => payload,
+	})) as unknown as typeof fetch;
+	vi.stubGlobal('fetch', fetchMock);
+	return fetchMock as unknown as ReturnType<typeof vi.fn>;
+}
+
+describe('generateTokenAndHash', () => {
+	beforeEach(() => {
+		resetTokenCache();
 	});
-});
 
-describe('token utils', () => {
-	it('generates a token/hash pair that validates', async () => {
-		vi.useFakeTimers();
-		vi.setSystemTime(new Date(12_000)); // 12s after epoch
-
-		const [tokenWithTimestamp, hash] = await generateTokenAndHash();
-		expect(typeof tokenWithTimestamp).toBe('string');
-		expect(typeof hash).toBe('string');
-		// Should validate under threshold
-		expect(validateTokenWithHash(tokenWithTimestamp, hash)).toBe(true);
-
+	afterEach(() => {
+		vi.unstubAllGlobals();
 		vi.useRealTimers();
+		resetTokenCache();
 	});
 
-	it('fails validation if hash mismatches', async () => {
-		const [tokenWithTimestamp] = await generateTokenAndHash();
-		expect(validateTokenWithHash(tokenWithTimestamp, 'deadbeef')).toBe(false);
+	it('returns the pair minted by the server', async () => {
+		mockChallenge(PAIR);
+
+		const [token, hash] = await generateTokenAndHash();
+
+		expect(token).toBe(PAIR.token);
+		expect(hash).toBe(PAIR.hash);
 	});
 
-	it('expires tokens outside threshold', async () => {
+	it('asks the server, never signing locally', async () => {
+		const fetchMock = mockChallenge(PAIR);
+
+		await generateTokenAndHash();
+
+		expect(fetchMock).toHaveBeenCalledWith('/api/challenge');
+	});
+
+	// The sweep mints once per row per service. Re-fetching each time would put a
+	// season page into the endpoint's rate limit and, before this rewrite, cost a
+	// Real-Debrid `getTimeISO` call every time.
+	it('reuses a cached token instead of re-minting per call', async () => {
+		const fetchMock = mockChallenge(PAIR);
+
+		await generateTokenAndHash();
+		await generateTokenAndHash();
+		await generateTokenAndHash();
+
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+	});
+
+	it('shares one request between concurrent callers', async () => {
+		const fetchMock = mockChallenge(PAIR);
+
+		const results = await Promise.all([
+			generateTokenAndHash(),
+			generateTokenAndHash(),
+			generateTokenAndHash(),
+		]);
+
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		expect(results.every(([token]) => token === PAIR.token)).toBe(true);
+	});
+
+	it('re-mints once the cached token nears expiry', async () => {
 		vi.useFakeTimers();
-		// getTimeISO returns ~10s; jump far ahead to exceed 5 minutes threshold
-		vi.setSystemTime(new Date(3600_000));
-		const [tokenWithTimestamp, hash] = await generateTokenAndHash();
+		vi.setSystemTime(new Date(1_800_000_000_000));
+		const fetchMock = mockChallenge(PAIR);
 
-		// Move 10 minutes ahead
-		vi.setSystemTime(new Date(3600_000 + 10 * 60_000));
-		expect(validateTokenWithHash(tokenWithTimestamp, hash)).toBe(false);
+		await generateTokenAndHash();
+		vi.setSystemTime(new Date(1_800_000_000_000 + 4 * 60_000 + 1));
+		await generateTokenAndHash();
 
-		vi.useRealTimers();
+		expect(fetchMock).toHaveBeenCalledTimes(2);
+	});
+
+	it('does not cache a failed mint', async () => {
+		const fetchMock = mockChallenge(null, false, 500);
+
+		await expect(generateTokenAndHash()).rejects.toThrow(
+			'Failed to obtain an availability token: 500'
+		);
+		await expect(generateTokenAndHash()).rejects.toThrow();
+
+		expect(fetchMock).toHaveBeenCalledTimes(2);
+	});
+
+	it('rejects a malformed response rather than sending junk to the server', async () => {
+		mockChallenge({ token: 'abc-123' });
+
+		await expect(generateTokenAndHash()).rejects.toThrow(
+			'Malformed availability token response'
+		);
+	});
+
+	it('re-mints after the cache is reset', async () => {
+		const fetchMock = mockChallenge(PAIR);
+
+		await generateTokenAndHash();
+		resetTokenCache();
+		await generateTokenAndHash();
+
+		expect(fetchMock).toHaveBeenCalledTimes(2);
 	});
 });

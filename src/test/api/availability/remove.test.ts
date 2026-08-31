@@ -1,14 +1,14 @@
 import handler from '@/pages/api/availability/remove';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { validateTokenWithHash } from '@/utils/token';
+import { validateProblemToken } from '@/utils/problemToken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
-vi.mock('@/utils/token');
+vi.mock('@/utils/problemToken');
 
 const mockRepository = vi.mocked(repository);
-const mockValidate = vi.mocked(validateTokenWithHash);
+const mockValidate = vi.mocked(validateProblemToken);
 const validHash = 'c'.repeat(40);
 
 const buildBody = (overrides: Record<string, unknown> = {}) => ({
@@ -22,7 +22,7 @@ const buildBody = (overrides: Record<string, unknown> = {}) => ({
 describe('/api/availability/remove', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockValidate.mockResolvedValue(true);
+		mockValidate.mockReturnValue(true);
 		mockRepository.removeAvailability = vi.fn().mockResolvedValue(undefined);
 	});
 
@@ -45,7 +45,7 @@ describe('/api/availability/remove', () => {
 	});
 
 	it('rejects invalid tokens', async () => {
-		mockValidate.mockResolvedValue(false);
+		mockValidate.mockReturnValue(false);
 		const req = createMockRequest({ method: 'POST', body: buildBody() });
 		const res = createMockResponse();
 		await handler(req, res);

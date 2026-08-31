@@ -1,14 +1,14 @@
 import handler from '@/pages/api/availability';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { validateTokenWithHash } from '@/utils/token';
+import { validateProblemToken } from '@/utils/problemToken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
-vi.mock('@/utils/token');
+vi.mock('@/utils/problemToken');
 
 const mockRepository = vi.mocked(repository);
-const mockValidateTokenWithHash = vi.mocked(validateTokenWithHash);
+const mockValidateProblemToken = vi.mocked(validateProblemToken);
 
 const buildBody = (overrides: Record<string, unknown> = {}) => ({
 	dmmProblemKey: 'key-1-1234567890',
@@ -34,7 +34,7 @@ const buildBody = (overrides: Record<string, unknown> = {}) => ({
 describe('/api/availability', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockValidateTokenWithHash.mockReturnValue(true);
+		mockValidateProblemToken.mockReturnValue(true);
 		mockRepository.upsertAvailability = vi.fn().mockResolvedValue(undefined);
 	});
 
@@ -61,13 +61,13 @@ describe('/api/availability', () => {
 	});
 
 	it('rejects invalid auth tokens', async () => {
-		mockValidateTokenWithHash.mockReturnValue(false);
+		mockValidateProblemToken.mockReturnValue(false);
 		const req = createMockRequest({ method: 'POST', body: buildBody() });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(mockValidateTokenWithHash).toHaveBeenCalledWith('key-1-1234567890', 'solution-hash');
+		expect(mockValidateProblemToken).toHaveBeenCalledWith('key-1-1234567890', 'solution-hash');
 		expect(res.status).toHaveBeenCalledWith(403);
 		expect(res.json).toHaveBeenCalledWith({ errorMessage: 'Authentication error' });
 	});

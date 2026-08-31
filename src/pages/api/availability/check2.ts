@@ -1,6 +1,6 @@
+import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { repository as db } from '../../../services/repository';
-import { validateTokenWithHash } from '../../../utils/token';
 
 function isValidTorrentHash(hash: string): boolean {
 	return /^[a-fA-F0-9]{40}$/.test(hash);
@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		) {
 			res.status(403).json({ errorMessage: 'Authentication not provided' });
 			return;
-		} else if (!(await validateTokenWithHash(dmmProblemKey.toString(), solution.toString()))) {
+		} else if (!validateProblemToken(dmmProblemKey, solution)) {
 			res.status(403).json({ errorMessage: 'Authentication error' });
 			return;
 		}
