@@ -16,6 +16,7 @@ import { RdOperationalService } from './rdOperational';
 import { ReportService } from './report';
 import { ScrapedService } from './scraped';
 import { SearchService } from './search';
+import { SponsorsService } from './sponsors';
 import { StreamHealthService } from './streamHealth';
 import { TorBoxCastService } from './torboxCast';
 import { TorBoxCdnService } from './torboxCdn';
@@ -43,6 +44,7 @@ export {
 	ReportService,
 	ScrapedService,
 	SearchService,
+	SponsorsService,
 	StreamHealthService,
 	TorBoxCastService,
 	TorBoxCdnService,
@@ -52,5 +54,6 @@ export {
 	ZurgKeysService,
 };
 
+export type { SponsorLookup } from './sponsors';
 export type { Nzb2rdWaiter } from './nzb2rdMap';
 export type { TransferMetaRecord, TransferMetaSource } from './transferMeta';

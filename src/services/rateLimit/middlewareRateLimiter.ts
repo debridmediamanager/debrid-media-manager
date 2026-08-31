@@ -8,6 +8,7 @@ export const RATE_LIMIT_CONFIGS = {
 	report: { rateLimit: 5, windowSeconds: 10 }, // 5 reports per 10 seconds
 	zurg: { rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for zurg API endpoints
 	zurgAdmin: { rateLimit: 1, windowSeconds: 10 }, // 1 request per 10 seconds for zurg admin endpoints
+	sponsor: { rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for sponsor status endpoints
 	default: { rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;
 

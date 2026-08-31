@@ -19,6 +19,7 @@ import {
 	ReportService,
 	ScrapedService,
 	SearchService,
+	SponsorsService,
 	StreamHealthService,
 	TorBoxCastService,
 	TorBoxCdnService,
@@ -52,6 +53,7 @@ export type RepositoryDependencies = Partial<{
 	hashSearchService: HashSearchService;
 	zurgKeysService: ZurgKeysService;
 	dmmApiKeysService: DmmApiKeysService;
+	sponsorsService: SponsorsService;
 	streamHealthService: StreamHealthService;
 	historyAggregationService: HistoryAggregationService;
 	rdOperationalService: RdOperationalService;
@@ -80,6 +82,7 @@ export class Repository {
 	private hashSearchService: HashSearchService;
 	private zurgKeysService: ZurgKeysService;
 	private dmmApiKeysService: DmmApiKeysService;
+	private sponsorsService: SponsorsService;
 	private streamHealthService: StreamHealthService;
 	private historyAggregationService: HistoryAggregationService;
 	private rdOperationalService: RdOperationalService;
@@ -107,6 +110,7 @@ export class Repository {
 		hashSearchService,
 		zurgKeysService,
 		dmmApiKeysService,
+		sponsorsService,
 		streamHealthService,
 		historyAggregationService,
 		rdOperationalService,
@@ -133,6 +137,7 @@ export class Repository {
 		this.hashSearchService = hashSearchService ?? new HashSearchService();
 		this.zurgKeysService = zurgKeysService ?? new ZurgKeysService();
 		this.dmmApiKeysService = dmmApiKeysService ?? new DmmApiKeysService();
+		this.sponsorsService = sponsorsService ?? new SponsorsService();
 		this.streamHealthService = streamHealthService ?? new StreamHealthService();
 		this.historyAggregationService =
 			historyAggregationService ?? new HistoryAggregationService();
@@ -163,6 +168,7 @@ export class Repository {
 			this.hashSearchService.disconnect(),
 			this.zurgKeysService.disconnect(),
 			this.dmmApiKeysService.disconnect(),
+			this.sponsorsService.disconnect(),
 			this.streamHealthService.disconnect(),
 			this.historyAggregationService.disconnect(),
 			this.rdOperationalService.disconnect(),
@@ -971,6 +977,15 @@ export class Repository {
 	// DMM API Keys Service Methods
 	public validateDmmApiKey(apiKey: string) {
 		return this.dmmApiKeysService.validateApiKey(apiKey);
+	}
+
+	// Sponsors Service Methods
+	public getSponsorByDmmApiKey(apiKey: string) {
+		return this.sponsorsService.getByDmmApiKey(apiKey);
+	}
+
+	public getSponsorByShortId(shortId: string) {
+		return this.sponsorsService.getByShortId(shortId);
 	}
 
 	// Stream Health Service Methods
