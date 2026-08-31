@@ -358,8 +358,12 @@ export class Repository {
 		return this.availabilityService.saveInstantAvailability(imdbId, rows);
 	}
 
-	public getInstantAvailabilityUpdatedAt(imdbId: string) {
-		return this.availabilityService.getInstantAvailabilityUpdatedAt(imdbId);
+	public getDebridioRefreshedAt(key: string) {
+		return this.availabilityService.getDebridioRefreshedAt(key);
+	}
+
+	public markDebridioRefreshed(key: string) {
+		return this.availabilityService.markDebridioRefreshed(key);
 	}
 
 	public checkAvailability(imdbId: string, hashes: string[]) {

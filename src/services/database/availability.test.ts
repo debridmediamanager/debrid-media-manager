@@ -10,6 +10,8 @@ const findFirstFileMock = vi.fn();
 const deleteManyFileMock = vi.fn();
 const createManyMock = vi.fn();
 const createManyFileMock = vi.fn();
+const cacheFindUniqueMock = vi.fn();
+const cacheUpsertMock = vi.fn();
 
 vi.mock('@prisma/client', () => ({
 	PrismaClient: vi.fn().mockImplementation(() => ({
@@ -25,6 +27,10 @@ vi.mock('@prisma/client', () => ({
 			findFirst: findFirstFileMock,
 			deleteMany: deleteManyFileMock,
 			createMany: createManyFileMock,
+		},
+		cache: {
+			findUnique: cacheFindUniqueMock,
+			upsert: cacheUpsertMock,
 		},
 		$disconnect: vi.fn(),
 	})),
@@ -43,6 +49,8 @@ describe('AvailabilityService', () => {
 		deleteManyFileMock.mockReset();
 		createManyMock.mockReset();
 		createManyFileMock.mockReset();
+		cacheFindUniqueMock.mockReset();
+		cacheUpsertMock.mockReset();
 		service = new AvailabilityService();
 	});
 
@@ -203,12 +211,27 @@ describe('AvailabilityService', () => {
 		expect(createManyFileMock).not.toHaveBeenCalled();
 	});
 
-	it('returns null when a title has no instant availability yet', async () => {
-		findFirstMock.mockResolvedValue(null);
+	it('reads the debridio refresh gate from its cache row', async () => {
+		cacheFindUniqueMock.mockResolvedValue({ updatedAt: new Date('2026-08-01') });
 
-		await expect(service.getInstantAvailabilityUpdatedAt('tt0111161')).resolves.toBeNull();
-		const args = findFirstMock.mock.calls[0][0];
-		expect(args.where.imdbId).toBe('tt0111161');
-		expect(args.where.files.some.link.startsWith).toBe('debridio:');
+		await expect(service.getDebridioRefreshedAt('movie:tt1')).resolves.toEqual(
+			new Date('2026-08-01')
+		);
+		expect(cacheFindUniqueMock).toHaveBeenCalledWith({
+			where: { key: 'debridio:refresh:movie:tt1' },
+			select: { updatedAt: true },
+		});
+
+		cacheFindUniqueMock.mockResolvedValue(null);
+		await expect(service.getDebridioRefreshedAt('movie:tt1')).resolves.toBeNull();
+	});
+
+	it('upserts the debridio refresh gate row', async () => {
+		await service.markDebridioRefreshed('tv:tt2:1');
+		expect(cacheUpsertMock).toHaveBeenCalledWith({
+			where: { key: 'debridio:refresh:tv:tt2:1' },
+			update: { value: {} },
+			create: { key: 'debridio:refresh:tv:tt2:1', value: {} },
+		});
 	});
 });

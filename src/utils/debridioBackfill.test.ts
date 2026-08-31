@@ -10,7 +10,8 @@ const {
 	markAsDoneMock,
 	saveScrapedTrueResultsMock,
 	saveInstantAvailabilityMock,
-	getInstantAvailabilityUpdatedAtMock,
+	getDebridioRefreshedAtMock,
+	markDebridioRefreshedMock,
 	enabledMock,
 	scrapeMovieMock,
 	scrapeSeasonMock,
@@ -21,7 +22,8 @@ const {
 	markAsDoneMock: vi.fn(),
 	saveScrapedTrueResultsMock: vi.fn(),
 	saveInstantAvailabilityMock: vi.fn(),
-	getInstantAvailabilityUpdatedAtMock: vi.fn(),
+	getDebridioRefreshedAtMock: vi.fn(),
+	markDebridioRefreshedMock: vi.fn(),
 	enabledMock: vi.fn(),
 	scrapeMovieMock: vi.fn(),
 	scrapeSeasonMock: vi.fn(),
@@ -35,7 +37,8 @@ vi.mock('@/services/repository', () => ({
 		markAsDone: markAsDoneMock,
 		saveScrapedTrueResults: saveScrapedTrueResultsMock,
 		saveInstantAvailability: saveInstantAvailabilityMock,
-		getInstantAvailabilityUpdatedAt: getInstantAvailabilityUpdatedAtMock,
+		getDebridioRefreshedAt: getDebridioRefreshedAtMock,
+		markDebridioRefreshed: markDebridioRefreshedMock,
 	},
 }));
 
@@ -69,8 +72,9 @@ describe('backfillFromDebridioNow', () => {
 		keyExistsMock.mockResolvedValue(false);
 		saveScrapedResultsMock.mockResolvedValue(undefined);
 		markAsDoneMock.mockResolvedValue(undefined);
-		saveScrapedTrueResultsMock.mockResolvedValue(undefined);
 		saveInstantAvailabilityMock.mockResolvedValue(1);
+		getDebridioRefreshedAtMock.mockResolvedValue(null);
+		markDebridioRefreshedMock.mockResolvedValue(undefined);
 	});
 
 	it('returns nothing and touches nothing when debridio is disabled', async () => {
@@ -89,6 +93,14 @@ describe('backfillFromDebridioNow', () => {
 		expect(markAsDoneMock).not.toHaveBeenCalled();
 	});
 
+	it('does not re-scrape a key tombstoned inside the ttl', async () => {
+		getDebridioRefreshedAtMock.mockResolvedValue(new Date());
+
+		expect(await backfillFromDebridioNow(MOVIE_TARGET)).toEqual([]);
+		expect(scrapeMovieMock).not.toHaveBeenCalled();
+		expect(keyExistsMock).not.toHaveBeenCalled();
+	});
+
 	it('scrapes, persists torrents and availability, and cleans the processing key', async () => {
 		scrapeMovieMock.mockResolvedValue(SCRAPE);
 
@@ -103,6 +115,7 @@ describe('backfillFromDebridioNow', () => {
 			true
 		);
 		expect(saveInstantAvailabilityMock).toHaveBeenCalledWith('tt0111161', SCRAPE.available);
+		expect(markDebridioRefreshedMock).toHaveBeenCalledWith('movie:tt0111161');
 		expect(markAsDoneMock).toHaveBeenCalledWith('tt0111161');
 	});
 
@@ -157,7 +170,8 @@ describe('refreshDebridioAvailabilityInBackground', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		enabledMock.mockReturnValue(true);
-		getInstantAvailabilityUpdatedAtMock.mockResolvedValue(null);
+		getDebridioRefreshedAtMock.mockResolvedValue(null);
+		markDebridioRefreshedMock.mockResolvedValue(undefined);
 		scrapeMovieMock.mockResolvedValue(SCRAPE);
 		saveInstantAvailabilityMock.mockResolvedValue(1);
 	});
@@ -167,24 +181,35 @@ describe('refreshDebridioAvailabilityInBackground', () => {
 
 		await refreshDebridioAvailabilityInBackground(MOVIE_TARGET);
 
-		expect(getInstantAvailabilityUpdatedAtMock).not.toHaveBeenCalled();
+		expect(getDebridioRefreshedAtMock).not.toHaveBeenCalled();
 	});
 
-	it('skips a title whose instant availability is fresh', async () => {
-		getInstantAvailabilityUpdatedAtMock.mockResolvedValue(new Date());
+	it('skips a key refreshed inside the ttl', async () => {
+		getDebridioRefreshedAtMock.mockResolvedValue(new Date());
 
 		await refreshDebridioAvailabilityInBackground(MOVIE_TARGET);
 
 		expect(scrapeMovieMock).not.toHaveBeenCalled();
+		expect(markDebridioRefreshedMock).not.toHaveBeenCalled();
 	});
 
-	it('refreshes when the last recording is older than the ttl', async () => {
-		getInstantAvailabilityUpdatedAtMock.mockResolvedValue(new Date('2026-01-01'));
+	it('refreshes and re-arms the ttl when the last refresh is older', async () => {
+		getDebridioRefreshedAtMock.mockResolvedValue(new Date('2026-01-01'));
 
 		await refreshDebridioAvailabilityInBackground(MOVIE_TARGET);
 
 		expect(scrapeMovieMock).toHaveBeenCalledWith('tt0111161');
 		expect(saveInstantAvailabilityMock).toHaveBeenCalledWith('tt0111161', SCRAPE.available);
+		expect(markDebridioRefreshedMock).toHaveBeenCalledWith('movie:tt0111161');
+	});
+
+	it('does not re-arm the ttl when the scrape fails', async () => {
+		getDebridioRefreshedAtMock.mockResolvedValue(new Date('2026-01-01'));
+		scrapeMovieMock.mockRejectedValue(new Error('boom'));
+
+		await refreshDebridioAvailabilityInBackground(MOVIE_TARGET);
+
+		expect(markDebridioRefreshedMock).not.toHaveBeenCalled();
 	});
 
 	it('swallows failures without rejecting', async () => {

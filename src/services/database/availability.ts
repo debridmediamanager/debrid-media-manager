@@ -343,18 +343,25 @@ export class AvailabilityService extends DatabaseClient {
 		return fresh.length;
 	}
 
-	// Last time Debridio instant availability was recorded for a title, for
-	// refresh gating; null means the title has none yet.
-	public async getInstantAvailabilityUpdatedAt(imdbId: string): Promise<Date | null> {
-		const row = await this.prisma.available.findFirst({
-			where: {
-				imdbId,
-				files: { some: { link: { startsWith: 'debridio:' } } },
-			},
-			orderBy: { updatedAt: 'desc' },
+	// Refresh bookkeeping for the debridio integration, one Cache row per
+	// ScrapedTrue key. The row's own updatedAt is the clock (the nzbSearchCache
+	// pattern): saveInstantAvailability is create-only, so a refresh that finds
+	// no new cached hashes writes nothing to Available and could never advance a
+	// gate read from those rows - this row is what actually throttles.
+	public async getDebridioRefreshedAt(key: string): Promise<Date | null> {
+		const row = await this.prisma.cache.findUnique({
+			where: { key: `debridio:refresh:${key}` },
 			select: { updatedAt: true },
 		});
 		return row?.updatedAt ?? null;
+	}
+
+	public async markDebridioRefreshed(key: string): Promise<void> {
+		await this.prisma.cache.upsert({
+			where: { key: `debridio:refresh:${key}` },
+			update: { value: {} },
+			create: { key: `debridio:refresh:${key}`, value: {} },
+		});
 	}
 
 	public async checkAvailability(

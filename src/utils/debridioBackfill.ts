@@ -58,6 +58,11 @@ async function persist(target: DebridioTarget, scrape: DebridioScrape): Promise<
 	}
 }
 
+async function refreshedRecently(key: string): Promise<boolean> {
+	const refreshedAt = await db.getDebridioRefreshedAt(key);
+	return !!refreshedAt && Date.now() - refreshedAt.getTime() < AVAILABILITY_TTL_MS;
+}
+
 /**
  * Synchronous first-fill for a title the external scrapers have not reached.
  * Debridio answers in about a second, so the page gets results on this request
@@ -69,6 +74,7 @@ export async function backfillFromDebridioNow(
 	target: DebridioTarget
 ): Promise<ScrapeSearchResult[]> {
 	if (!isDebridioEnabled()) return [];
+	if (await refreshedRecently(target.key)) return [];
 
 	const processingKey = `processing:${target.imdbId}`;
 	if (await db.keyExists(processingKey)) return [];
@@ -77,6 +83,11 @@ export async function backfillFromDebridioNow(
 	try {
 		const scrape = await scrapeFor(target);
 		await persist(target, scrape);
+		// Tombstone the answer itself - including an empty one, so a title whose
+		// stored results are all filtered out at read time (Cyrillic-only) or
+		// that debridio simply does not know does not re-trigger a scrape on
+		// every page view for the TTL window.
+		await db.markDebridioRefreshed(target.key);
 		if (scrape.torrents.length === 0) {
 			console.log(`[debridio] no results for ${target.kind} ${target.imdbId}`);
 		}
@@ -96,20 +107,22 @@ export async function backfillFromDebridioNow(
 
 /**
  * Availability refresh for titles that already have scrape results, so their ⚡
- * markers survive RD cache turnover. Skips titles whose instant availability
- * was recorded inside the TTL. Returns the promise so callers can await it in
- * tests while production call sites fire and forget.
+ * markers survive RD cache turnover. Throttled per ScrapedTrue key: the
+ * debridio:refresh Cache row's updatedAt is the clock, so a refresh that finds
+ * no new cached hashes (create-only writes, nothing advanced in Available)
+ * still counts and suppresses the next views. Returns the promise so callers
+ * can await it in tests while production call sites fire and forget.
  */
 export async function refreshDebridioAvailabilityInBackground(
 	target: DebridioTarget
 ): Promise<void> {
 	if (!isDebridioEnabled()) return;
+	if (await refreshedRecently(target.key)) return;
 
 	try {
-		const updatedAt = await db.getInstantAvailabilityUpdatedAt(target.imdbId);
-		if (updatedAt && Date.now() - updatedAt.getTime() < AVAILABILITY_TTL_MS) return;
 		const scrape = await scrapeFor(target);
 		await persist(target, scrape);
+		await db.markDebridioRefreshed(target.key);
 		console.log(
 			`[debridio] refreshed ${target.kind} ${target.imdbId}` +
 				(target.season !== undefined ? ` season ${target.season}` : '') +
