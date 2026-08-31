@@ -66,6 +66,21 @@ export class ScrapedService extends DatabaseClient {
 		console.log(`🚧 Dropped ${value.length - kept.length} over-shared results`);
 		return kept;
 	}
+
+	/**
+	 * The whole stored array for a page key, in one read. `getScrapedTrueResults`
+	 * pages 50 at a time through a JSON_TABLE scan, which is the right shape for
+	 * the site's lazy lists but costs one full-array scan per page; callers that
+	 * want the entire release list for a title (the Stremio addons' cached-trove
+	 * source) want the row once and the slicing in JS.
+	 */
+	public async getAllScrapedTrueResults(key: string): Promise<ScrapeSearchResult[] | null> {
+		if (!key || typeof key !== 'string') {
+			throw new Error('Invalid key provided.');
+		}
+		const row = await this.prisma.scrapedTrue.findUnique({ where: { key } });
+		return (row?.value as ScrapeSearchResult[] | undefined) ?? null;
+	}
 	public async getScrapedTrueResults<T>(
 		key: string,
 		maxSizeGB?: number,

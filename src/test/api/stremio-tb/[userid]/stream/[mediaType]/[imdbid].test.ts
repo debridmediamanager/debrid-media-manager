@@ -1,12 +1,15 @@
 import handler from '@/pages/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]';
 import { repository } from '@/services/repository';
+import { checkCachedStatus } from '@/services/torbox';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/services/torbox');
 
 const mockRepository = vi.mocked(repository);
+const mockCheckCachedStatus = vi.mocked(checkCachedStatus);
 
 describe('/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]', () => {
 	const originalOrigin = process.env.DMM_ORIGIN;
@@ -376,30 +379,26 @@ describe('/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]', () => {
 			episodeMaxSize: 0,
 			otherStreamsLimit: 5,
 		});
-		mockRepository.getTorBoxUserCastStreams = vi
-			.fn()
-			.mockResolvedValue([
-				{
-					url: 'Mine.mkv',
-					filename: 'Mine.mkv',
-					size: 100,
-					hash: 'a'.repeat(40),
-					torrentId: 1,
-					fileId: 2,
-				},
-			]);
-		mockRepository.getTorBoxOtherStreams = vi
-			.fn()
-			.mockResolvedValue([
-				{
-					url: 'Theirs.mkv',
-					filename: 'Theirs.mkv',
-					size: 100,
-					hash: 'b'.repeat(40),
-					torrentId: 3,
-					fileId: 4,
-				},
-			]);
+		mockRepository.getTorBoxUserCastStreams = vi.fn().mockResolvedValue([
+			{
+				url: 'Mine.mkv',
+				filename: 'Mine.mkv',
+				size: 100,
+				hash: 'a'.repeat(40),
+				torrentId: 1,
+				fileId: 2,
+			},
+		]);
+		mockRepository.getTorBoxOtherStreams = vi.fn().mockResolvedValue([
+			{
+				url: 'Theirs.mkv',
+				filename: 'Theirs.mkv',
+				size: 100,
+				hash: 'b'.repeat(40),
+				torrentId: 3,
+				fileId: 4,
+			},
+		]);
 		mockRepository.getSnapshotsByHashes = vi.fn().mockResolvedValue([]);
 
 		const req = createMockRequest({
@@ -411,5 +410,109 @@ describe('/api/stremio-tb/[userid]/stream/[mediaType]/[imdbid]', () => {
 		const urls = (res._getData() as any).streams.map((s: any) => s.url).filter(Boolean);
 		expect(urls.find((u: string) => u.includes('/1:2'))).toContain('own=1');
 		expect(urls.find((u: string) => u.includes('/3:4'))).not.toContain('own=1');
+	});
+
+	// The scraped pool behind the detail page: every release for the title,
+	// offered once TorBox's checkcached confirms the hash. Casts are not probed
+	// - unchanged behaviour - and a probe failure costs only the trove streams.
+	describe('cached trove releases', () => {
+		const T1 = '1'.repeat(40);
+		const T2 = '2'.repeat(40);
+		const T3 = '3'.repeat(40);
+		const trove = [
+			{ hash: T1, title: 'Movie.2026.2160p.WEB-DL', fileSize: 55000 },
+			{ hash: T2, title: 'Movie.2026.DOCU.1080p', fileSize: 4000 },
+			{ hash: T3, title: 'Movie.2026.1080p.WEB-DL', fileSize: 19000 },
+		];
+
+		const setup = (overrides: Record<string, unknown> = {}) => {
+			mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({
+				apiKey: 'tb-key',
+				movieMaxSize: 0,
+				episodeMaxSize: 0,
+				otherStreamsLimit: 5,
+				hideCastOption: false,
+				...overrides,
+			});
+		};
+
+		const requestTrove = () =>
+			createMockRequest({
+				query: { userid: 'user1', mediaType: 'movie', imdbid: 'tt12042730' },
+			});
+
+		it('offers cache-confirmed releases in the slots other casts leave open', async () => {
+			setup();
+			mockRepository.getTorBoxUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getTorBoxOtherStreams = vi.fn().mockResolvedValue([
+				{
+					url: 'https://files.dmm.test/OtherMovie.mkv',
+					hash: 'otherhash5678',
+					size: 3072,
+					filename: 'OtherMovie.mkv',
+					torrentId: 200,
+					fileId: 2,
+				},
+			]);
+			mockRepository.getAllScrapedTrueResults = vi.fn().mockResolvedValue(trove);
+			mockCheckCachedStatus.mockResolvedValue({
+				success: true,
+				data: { [T1]: { id: 1 }, [T3]: { id: 3 } },
+			} as any);
+
+			const res = createMockResponse();
+			await handler(requestTrove(), res);
+
+			const payload = (res.json as Mock).mock.calls[0][0];
+			const urls: string[] = payload.streams.filter((s: any) => s.url).map((s: any) => s.url);
+			// One other-user cast plus the two cached releases; the uncached one
+			// is never offered. A bare hash, no torrent ids or filename.
+			expect(urls).toHaveLength(3);
+			expect(urls).toContain(`https://dmm.test/api/stremio-tb/user1/play/${T1}`);
+			expect(urls).toContain(`https://dmm.test/api/stremio-tb/user1/play/${T3}`);
+			expect(urls.some((url) => url.includes(T2))).toBe(false);
+			expect(mockRepository.getAllScrapedTrueResults).toHaveBeenCalledWith(
+				'movie:tt12042730'
+			);
+		});
+
+		it('skips trove entirely when the probe fails, leaving casts untouched', async () => {
+			setup();
+			mockRepository.getTorBoxUserCastStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getTorBoxOtherStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getAllScrapedTrueResults = vi.fn().mockResolvedValue(trove);
+			mockCheckCachedStatus.mockRejectedValue(new Error('torbox down'));
+
+			const res = createMockResponse();
+			await handler(requestTrove(), res);
+
+			const payload = (res.json as Mock).mock.calls[0][0];
+			expect(payload.streams.filter((s: any) => s.url)).toEqual([]);
+			expect(res.status).not.toHaveBeenCalledWith(500);
+		});
+
+		it('never sends cast hashes to the probe', async () => {
+			setup();
+			mockRepository.getTorBoxUserCastStreams = vi.fn().mockResolvedValue([
+				{
+					url: 'https://files.dmm.test/MyMovie.mkv',
+					hash: 'userhash1234',
+					size: 5120,
+					filename: 'MyMovie.mkv',
+					torrentId: 100,
+					fileId: 1,
+				},
+			]);
+			mockRepository.getTorBoxOtherStreams = vi.fn().mockResolvedValue([]);
+			mockRepository.getAllScrapedTrueResults = vi.fn().mockResolvedValue(trove);
+			mockCheckCachedStatus.mockResolvedValue({ success: true, data: {} } as any);
+
+			const res = createMockResponse();
+			await handler(requestTrove(), res);
+
+			const probed = (mockCheckCachedStatus.mock.calls[0]?.[0] as any)?.hash as string[];
+			// Size-descending: the probe sees the biggest releases first.
+			expect(probed).toEqual([T1, T3, T2]);
+		});
 	});
 });

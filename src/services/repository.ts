@@ -410,6 +410,10 @@ export class Repository {
 		return this.scrapedService.getScrapedTrueResults<T>(key, maxSizeGB, page);
 	}
 
+	public getAllScrapedTrueResults(key: string) {
+		return this.scrapedService.getAllScrapedTrueResults(key);
+	}
+
 	public getScrapedResults<T>(key: string, maxSizeGB?: number, page?: number) {
 		return this.scrapedService.getScrapedResults<T>(key, maxSizeGB, page);
 	}

@@ -133,4 +133,102 @@ describe('/api/stremio-pm/[userid]/stream/[mediaType]/[imdbid]', () => {
 		await handler(request(), res2);
 		expect((res2._getData() as any).streams).toEqual([]);
 	});
+
+	// The scraped pool behind the detail page: every release for the title,
+	// offered once Premiumize confirms the hash is cached. It is what makes the
+	// addon show streams for a title nobody has cast.
+	describe('cached trove releases', () => {
+		const T1 = '1'.repeat(40);
+		const T2 = '2'.repeat(40);
+		const trove = [
+			{ hash: T1, title: 'Project.Hail.Mary.2026.1080p.WEB-DL.x264', fileSize: 19000 },
+			{ hash: T2, title: 'Project.Hail.Mary.2026.2160p.WEB-DL.x265', fileSize: 55000 },
+		];
+
+		const requestTrove = () =>
+			createMockRequest({
+				query: { userid: 'pm-user', mediaType: 'movie', imdbid: 'tt12042730' },
+			});
+
+		it('offers cached releases after the casts, without a stored file path', async () => {
+			mockRepository.getAllScrapedTrueResults = vi.fn().mockResolvedValue(trove);
+			mockCacheCheck.mockResolvedValue([
+				{ hash: T1, cached: true, filename: null, filesize: null },
+				{ hash: T2, cached: false, filename: null, filesize: null },
+			]);
+
+			await handler(requestTrove(), res);
+
+			const playStreams = (res._getData() as any).streams.filter((s: any) => s.url);
+			expect(playStreams).toHaveLength(1);
+			// No ?file=: the play route resolves the release and picks the feature.
+			expect(playStreams[0].url).toBe(`https://dmm.test/api/stremio-pm/pm-user/play/${T1}`);
+			expect(playStreams[0].behaviorHints.bingeGroup).toBe('dmm-pm:tt12042730:trove:1');
+			expect(mockRepository.getAllScrapedTrueResults).toHaveBeenCalledWith(
+				'movie:tt12042730'
+			);
+		});
+
+		it('withholds trove releases when the cache probe fails, while casts stay unfiltered', async () => {
+			mockRepository.getPremiumizeUserCastStreams = vi
+				.fn()
+				.mockResolvedValue([row(A, 'Live.mkv')]);
+			mockRepository.getAllScrapedTrueResults = vi.fn().mockResolvedValue(trove);
+			mockCacheCheck.mockRejectedValue(new Error('premiumize down'));
+
+			await handler(requestTrove(), res);
+
+			const playStreams = (res._getData() as any).streams.filter((s: any) => s.url);
+			expect(playStreams).toHaveLength(1);
+			expect(playStreams[0].url).toContain(`/play/${A}?file=`);
+		});
+
+		it('fills only the slots other casts leave open', async () => {
+			mockRepository.getPremiumizeOtherStreams = vi
+				.fn()
+				.mockResolvedValue([row(B, 'Other1.mkv'), row('c'.repeat(40), 'Other2.mkv')]);
+			mockRepository.getAllScrapedTrueResults = vi
+				.fn()
+				.mockResolvedValue([
+					...trove,
+					{ hash: '3'.repeat(40), title: 'Third.Release', fileSize: 30000 },
+				]);
+			mockCacheCheck.mockImplementation((_key: string, hashes: string[]) =>
+				Promise.resolve(
+					hashes.map((hash) => ({ hash, cached: true, filename: null, filesize: null }))
+				)
+			);
+
+			await handler(requestTrove(), res);
+
+			const playStreams = (res._getData() as any).streams.filter((s: any) => s.url);
+			// 2 other casts against a limit of 5 leaves 3 trove slots.
+			expect(playStreams).toHaveLength(5);
+			expect(playStreams.filter((s: any) => s.url.includes('?file='))).toHaveLength(2);
+		});
+
+		it('does not probe or re-offer a hash already offered as a cast', async () => {
+			mockRepository.getPremiumizeOtherStreams = vi
+				.fn()
+				.mockResolvedValue([row(T1, 'CastCopy.mkv')]);
+			mockRepository.getAllScrapedTrueResults = vi.fn().mockResolvedValue(trove);
+			mockCacheCheck.mockImplementation((_key: string, hashes: string[]) =>
+				Promise.resolve(
+					hashes.map((hash) => ({ hash, cached: true, filename: null, filesize: null }))
+				)
+			);
+
+			await handler(requestTrove(), res);
+
+			// T1 appears once, as the cast row - and is probed once.
+			const probed = mockCacheCheck.mock.calls[0][1] as string[];
+			expect(probed.filter((h) => h === T1)).toHaveLength(1);
+			const playStreams = (res._getData() as any).streams.filter((s: any) => s.url);
+			expect(
+				playStreams.filter((s: any) =>
+					s.url.startsWith(`https://dmm.test/api/stremio-pm/pm-user/play/${T1}?`)
+				)
+			).toHaveLength(1);
+		});
+	});
 });

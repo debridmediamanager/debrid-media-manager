@@ -1,0 +1,90 @@
+import type { ScrapeSearchResult } from '@/services/mediasearch';
+import { repository } from '@/services/repository';
+import ptt from 'parse-torrent-title';
+
+export interface TroveStreamCandidate {
+	hash: string;
+	title: string;
+	sizeMb: number;
+}
+
+export interface TroveCandidateOptions {
+	mediaType: 'movie' | 'series';
+	/** Full Stremio video id for series (`tt…:season:episode`); bare id for movies. */
+	imdbId: string;
+	/** Cast-setting ceiling in MB; 0 or unset means unbounded. */
+	maxSizeMb?: number;
+	/** Upper bound on candidates returned. They are the only hashes probed, so this is also the cost bound. */
+	maxCount?: number;
+}
+
+/** Junk floor shared with the cast pool's `size > 10` filter, in MB. */
+const MIN_SIZE_MB = 10;
+/** Enough size-ranked releases to fill a 5-stream list many times over on any populated title. */
+const DEFAULT_MAX_COUNT = 200;
+
+const isFinitePositive = (value: unknown): value is number =>
+	typeof value === 'number' && Number.isFinite(value) && value > 0;
+
+/**
+ * Picks the releases a Stremio addon may offer from DMM's scraped pool.
+ *
+ * Movies pass every release through. Series keep only releases whose *title*
+ * names the exact season and episode - the scraped pool carries no file
+ * listing, so a season pack cannot be mapped to one episode and stays out.
+ */
+export function filterTroveCandidates(
+	rows: ScrapeSearchResult[] | null | undefined,
+	{ mediaType, imdbId, maxSizeMb, maxCount = DEFAULT_MAX_COUNT }: TroveCandidateOptions
+): TroveStreamCandidate[] {
+	if (!rows || rows.length === 0) return [];
+
+	let season: number | undefined;
+	let episode: number | undefined;
+	if (mediaType === 'series') {
+		const parts = imdbId.split(':');
+		if (parts.length !== 3) return [];
+		season = Number.parseInt(parts[1], 10);
+		episode = Number.parseInt(parts[2], 10);
+		if (!Number.isInteger(season) || !Number.isInteger(episode)) return [];
+	}
+
+	const ceiling = isFinitePositive(maxSizeMb) ? maxSizeMb : undefined;
+
+	const candidates: TroveStreamCandidate[] = [];
+	for (const row of rows) {
+		if (typeof row?.hash !== 'string' || typeof row?.title !== 'string') continue;
+		const sizeMb = row.fileSize;
+		if (!isFinitePositive(sizeMb) || sizeMb <= MIN_SIZE_MB) continue;
+		if (ceiling !== undefined && sizeMb > ceiling) continue;
+
+		if (season !== undefined && episode !== undefined) {
+			const parsed = ptt.parse(row.title);
+			// A pack ("S01") or a date-style episode has no episode number to
+			// match; anything without both numbers cannot name this video.
+			if (parsed.season !== season || parsed.episode !== episode) continue;
+		}
+
+		candidates.push({ hash: row.hash, title: row.title, sizeMb });
+	}
+
+	// Biggest first, matching the cast pool's ordering and the "Biggest
+	// available" default the size settings describe.
+	candidates.sort((a, b) => b.sizeMb - a.sizeMb);
+	return candidates.slice(0, maxCount);
+}
+
+/**
+ * The scraped release list behind a DMM detail page, filtered to what the
+ * addon may offer. Reads the stored row once; a title DMM has never scraped
+ * simply yields nothing.
+ */
+export async function getTroveCandidates(
+	options: TroveCandidateOptions
+): Promise<TroveStreamCandidate[]> {
+	const key =
+		options.mediaType === 'series'
+			? `tv:${options.imdbId.split(':')[0]}:${options.imdbId.split(':')[1]}`
+			: `movie:${options.imdbId}`;
+	return filterTroveCandidates(await repository.getAllScrapedTrueResults(key), options);
+}

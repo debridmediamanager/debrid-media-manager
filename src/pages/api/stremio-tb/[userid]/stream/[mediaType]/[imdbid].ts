@@ -1,5 +1,7 @@
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { checkCachedStatus } from '@/services/torbox';
+import { getTroveCandidates, TroveStreamCandidate } from '@/utils/cachedTroveStreams';
 import {
 	extractStreamMetadata,
 	formatStremioStreamTitle,
@@ -96,7 +98,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const otherStreamsLimit = Math.max(0, Math.min(5, rawLimit));
 
 		// get urls from db
-		const [userCastItems, allOtherItems] = await Promise.all([
+		const [userCastItems, allOtherItems, troveCandidates] = await Promise.all([
 			db.getTorBoxUserCastStreams(imdbidStr, userid, 5),
 			db.getTorBoxOtherStreams(
 				imdbidStr,
@@ -104,6 +106,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				otherStreamsLimit,
 				maxSize > 0 ? maxSize : undefined
 			),
+			// The scraped pool behind the DMM detail page - same data the page
+			// paints its TorBox tokens from. Only cache-confirmed releases are
+			// offered; the probe runs below.
+			getTroveCandidates({
+				mediaType: typeSlug === 'movie' ? 'movie' : 'series',
+				imdbId: imdbidStr,
+				maxSizeMb: maxSize > 0 ? maxSize : undefined,
+			}),
 		]);
 
 		// Another user's web download can't be resolved with this user's key —
@@ -111,9 +121,51 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		// rather than offered as a stream that would 500 on play.
 		const otherItems = allOtherItems.filter((item) => !isWebDownloadHash(item.hash));
 
+		const offeredHashes = new Set(
+			[...userCastItems, ...otherItems].map((item) => item.hash.toLowerCase())
+		);
+		const troveToProbe = troveCandidates.filter(
+			(item) => !offeredHashes.has(item.hash.toLowerCase())
+		);
+
+		// TorBox can answer "is this cached?" without touching the account, so
+		// the scraped pool is filtered to what the viewer can actually play.
+		// Casts are deliberately NOT probed - unchanged behaviour - which is why
+		// this has its own try/catch: a TorBox hiccup costs the trove streams,
+		// never the casts.
+		const playableTrove: TroveStreamCandidate[] = [];
+		if (troveToProbe.length > 0) {
+			try {
+				const cachedHashes = new Set<string>();
+				for (let start = 0; start < troveToProbe.length; start += 100) {
+					const chunk = troveToProbe.slice(start, start + 100).map((item) => item.hash);
+					const resp = await checkCachedStatus(
+						{ hash: chunk, format: 'object' },
+						profile.apiKey
+					);
+					if (!resp.success) {
+						throw new Error(resp.detail ?? 'checkcached reported failure');
+					}
+					const data = resp.data as Record<string, unknown> | null;
+					for (const hash of Object.keys(data ?? {})) {
+						cachedHashes.add(hash.toLowerCase());
+					}
+				}
+				for (const item of troveToProbe) {
+					if (cachedHashes.has(item.hash.toLowerCase())) playableTrove.push(item);
+				}
+			} catch (error) {
+				console.error(
+					'[Stremio-TB Stream] Trove cache probe failed, skipping trove streams:',
+					error instanceof Error ? error.message : 'Unknown error'
+				);
+			}
+		}
+
 		const allHashes = [
 			...userCastItems.map((item) => item.hash),
 			...otherItems.map((item) => item.hash),
+			...playableTrove.map((item) => item.hash),
 		];
 		const uniqueHashes = Array.from(new Set(allHashes));
 
@@ -122,6 +174,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		console.log('[Stremio-TB Stream] Metadata enrichment stats:', {
 			totalStreams: userCastItems.length + otherItems.length,
+			troveStreams: playableTrove.length,
 			uniqueHashes: uniqueHashes.length,
 			snapshotsFound: snapshots.length,
 			hitRate:
@@ -173,6 +226,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				url: buildPlayUrl(userid, item, false),
 				behaviorHints: {
 					bingeGroup: `dmm-tb:${imdbidStr}:other:${i + 1}`,
+				},
+			} as any);
+		}
+		// Cached scraped releases fill whatever the cast pool left open, in the
+		// same "other streams" budget the size-limits setting describes. A bare
+		// hash (sha1, so the torrent path) with no `?file=` re-adds the cached
+		// torrent to the viewer's account at play time and hands back the
+		// biggest file - the feature for a movie, the episode for a
+		// single-episode release.
+		const troveSlots = Math.max(0, otherStreamsLimit - otherItems.length);
+		for (let i = 0; i < Math.min(troveSlots, playableTrove.length); i++) {
+			const item = playableTrove[i];
+			const snapshot = snapshotMap.get(item.hash);
+			const metadata = snapshot ? extractStreamMetadata(snapshot.payload) : null;
+			streams.push({
+				name: generateStreamName(item.sizeMb, metadata),
+				title: formatStremioStreamTitle(item.title, item.sizeMb, metadata, false, 'TB'),
+				url: `${process.env.DMM_ORIGIN}/api/stremio-tb/${userid}/play/${item.hash}`,
+				behaviorHints: {
+					bingeGroup: `dmm-tb:${imdbidStr}:trove:${i + 1}`,
 				},
 			} as any);
 		}

@@ -1,6 +1,7 @@
 import { checkPremiumizeCache } from '@/services/premiumize';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { getTroveCandidates } from '@/utils/cachedTroveStreams';
 import {
 	extractStreamMetadata,
 	formatStremioStreamTitle,
@@ -66,7 +67,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const rawLimit = profile.otherStreamsLimit ?? 5;
 		const otherStreamsLimit = Math.max(0, Math.min(5, rawLimit));
 
-		const [userCastItems, otherItems] = await Promise.all([
+		const [userCastItems, otherItems, troveCandidates] = await Promise.all([
 			db.getPremiumizeUserCastStreams(imdbidStr, userid, 5),
 			db.getPremiumizeOtherStreams(
 				imdbidStr,
@@ -74,6 +75,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				otherStreamsLimit,
 				maxSize > 0 ? maxSize : undefined
 			),
+			// The scraped pool behind the DMM detail page: every release for the
+			// title, offered once Premiumize confirms the hash is cached. This is
+			// the same probe the page runs to paint its green tokens.
+			getTroveCandidates({
+				mediaType: typeSlug === 'movie' ? 'movie' : 'series',
+				imdbId: imdbidStr,
+				maxSizeMb: maxSize > 0 ? maxSize : undefined,
+			}),
 		]);
 
 		// Premiumize is the one provider that can answer "will this actually
@@ -81,8 +90,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		// batched, so a hash that has fallen out of the cache is dropped here
 		// rather than handed over as a stream that errors on click.
 		const candidates = [...userCastItems, ...otherItems];
-		const uniqueHashes = Array.from(new Set(candidates.map((item) => item.hash)));
+		const offeredHashes = new Set(candidates.map((item) => item.hash.toLowerCase()));
+		const troveCandidatesToProbe = troveCandidates.filter(
+			(item) => !offeredHashes.has(item.hash.toLowerCase())
+		);
+		const uniqueHashes = Array.from(
+			new Set([
+				...candidates.map((item) => item.hash),
+				...troveCandidatesToProbe.map((i) => i.hash),
+			])
+		);
 		const cached = new Set<string>();
+		let cacheProbeFailed = false;
 		if (uniqueHashes.length > 0) {
 			try {
 				const results = await checkPremiumizeCache(profile.apiKey, uniqueHashes);
@@ -91,9 +110,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				}
 			} catch (error) {
 				// A failed probe must not empty the list - fall back to offering
-				// everything and let play report the truth.
+				// every *cast* and let play report the truth. Trove releases get no
+				// such pass: nobody chose them, so an unverified one is noise, not
+				// a fallback.
+				cacheProbeFailed = true;
 				console.error(
-					'[Stremio-PM Stream] Cache probe failed, offering unfiltered:',
+					'[Stremio-PM Stream] Cache probe failed, offering casts unfiltered:',
 					error instanceof Error ? error.message : 'Unknown error'
 				);
 				uniqueHashes.forEach((hash) => cached.add(hash.toLowerCase()));
@@ -103,12 +125,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const isPlayable = (hash: string) => cached.has(hash.toLowerCase());
 		const playableUserItems = userCastItems.filter((item) => isPlayable(item.hash));
 		const playableOtherItems = otherItems.filter((item) => isPlayable(item.hash));
+		const playableTrove = cacheProbeFailed
+			? []
+			: troveCandidatesToProbe.filter((item) => isPlayable(item.hash));
 
 		const snapshots = await db.getSnapshotsByHashes(uniqueHashes);
 		const snapshotMap = new Map(snapshots.map((s) => [s.hash, s]));
 
 		console.log('[Stremio-PM Stream] Stream stats:', {
 			totalStreams: playableUserItems.length + playableOtherItems.length,
+			troveStreams: playableTrove.length,
 			droppedUncached:
 				candidates.length - (playableUserItems.length + playableOtherItems.length),
 			uniqueHashes: uniqueHashes.length,
@@ -141,6 +167,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		}
 		for (let i = 0; i < playableOtherItems.length; i++) {
 			push(playableOtherItems[i], false, `dmm-pm:${imdbidStr}:other:${i + 1}`);
+		}
+		// Cached scraped releases fill whatever the cast pool left open, in the
+		// same "other streams" budget the size-limits setting describes. No
+		// `?file=`: the play route resolves the release and picks the feature
+		// file, exactly as it does for a cast row without a stored path.
+		const troveSlots = Math.max(0, otherStreamsLimit - playableOtherItems.length);
+		for (let i = 0; i < Math.min(troveSlots, playableTrove.length); i++) {
+			const item = playableTrove[i];
+			const snapshot = snapshotMap.get(item.hash);
+			const metadata = snapshot ? extractStreamMetadata(snapshot.payload) : null;
+			streams.push({
+				name: generateStreamName(item.sizeMb, metadata),
+				title: formatStremioStreamTitle(item.title, item.sizeMb, metadata, false, 'PM'),
+				url: `${process.env.DMM_ORIGIN}/api/stremio-pm/${userid}/play/${item.hash}`,
+				behaviorHints: { bingeGroup: `dmm-pm:${imdbidStr}:trove:${i + 1}` },
+			} as any);
 		}
 
 		res.status(200).json({ streams, cacheMaxAge: 0 });
