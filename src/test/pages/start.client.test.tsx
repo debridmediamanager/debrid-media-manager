@@ -222,7 +222,7 @@ describe('StartPage', () => {
 		render(<StartPage />);
 
 		const pageContainer = document.querySelector<HTMLDivElement>(
-			'.flex.h-screen.flex-col.items-center.justify-center'
+			'.flex.min-h-screen.flex-col.items-center.justify-center'
 		);
 		expect(pageContainer).toBeInTheDocument();
 
