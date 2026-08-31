@@ -23,6 +23,14 @@ import handler from '@/pages/api/scrapers/listoflists';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 
 const originalEnv = { ...process.env };
+// These suites exercise the scrape behaviour itself, so every request here is an
+// authorised one and the process is standing in for the throwaway worker that
+// `scraper.sh` boots (hence SCRAPE_WORKER, which is what re-enables the
+// `process.exit(0)` teardown the assertions below check for). The guard itself —
+// refusing an unauthorised caller, and never exiting a swarm replica — is
+// covered in `auth.test.ts`.
+const TEST_SCRAPE_PASSWORD = 'test-scrape-password';
+
 const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
 
 function makeAsyncIterator<T>(items: T[]): AsyncIterableIterator<T> {
@@ -42,7 +50,13 @@ function makeAsyncIterator<T>(items: T[]): AsyncIterableIterator<T> {
 
 beforeEach(() => {
 	vi.clearAllMocks();
-	process.env = { ...originalEnv, JACKETT: '1', PROWLARR: '1' };
+	process.env = {
+		...originalEnv,
+		JACKETT: '1',
+		PROWLARR: '1',
+		SCRAPE_API_PASSWORD: TEST_SCRAPE_PASSWORD,
+		SCRAPE_WORKER: '1',
+	};
 	scrapeInputMocks.ScrapeInput.mockImplementation(() => ({
 		byLists: vi.fn(),
 		byListId: vi.fn(),
@@ -58,7 +72,7 @@ describe('API /api/scrapers/listoflists', () => {
 	it('returns 403 when env vars not set', async () => {
 		process.env.JACKETT = '';
 		process.env.PROWLARR = '';
-		const req = createMockRequest({ query: {} });
+		const req = createMockRequest({ query: { password: TEST_SCRAPE_PASSWORD } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -69,7 +83,7 @@ describe('API /api/scrapers/listoflists', () => {
 
 	it('returns 403 when only JACKETT is missing', async () => {
 		delete process.env.JACKETT;
-		const req = createMockRequest({ query: {} });
+		const req = createMockRequest({ query: { password: TEST_SCRAPE_PASSWORD } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -78,7 +92,7 @@ describe('API /api/scrapers/listoflists', () => {
 	});
 
 	it('returns 400 when search is missing', async () => {
-		const req = createMockRequest({ query: {} });
+		const req = createMockRequest({ query: { password: TEST_SCRAPE_PASSWORD } });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -91,7 +105,9 @@ describe('API /api/scrapers/listoflists', () => {
 	});
 
 	it('returns 400 when search is an array', async () => {
-		const req = createMockRequest({ query: { search: ['a', 'b'] as unknown as string } });
+		const req = createMockRequest({
+			query: { password: TEST_SCRAPE_PASSWORD, search: ['a', 'b'] as unknown as string },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -111,7 +127,9 @@ describe('API /api/scrapers/listoflists', () => {
 		repositoryMocks.repository.isOlderThan.mockResolvedValue(true);
 		scrapeJobsMocks.generateScrapeJobs.mockResolvedValue(undefined);
 
-		const req = createMockRequest({ query: { search: 'movies' } });
+		const req = createMockRequest({
+			query: { password: TEST_SCRAPE_PASSWORD, search: 'movies' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -132,7 +150,9 @@ describe('API /api/scrapers/listoflists', () => {
 		}));
 		repositoryMocks.repository.keyExists.mockResolvedValue(true);
 
-		const req = createMockRequest({ query: { search: 'movies' } });
+		const req = createMockRequest({
+			query: { password: TEST_SCRAPE_PASSWORD, search: 'movies' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -153,7 +173,9 @@ describe('API /api/scrapers/listoflists', () => {
 		repositoryMocks.repository.keyExists.mockResolvedValue(false);
 		repositoryMocks.repository.isOlderThan.mockResolvedValue(false);
 
-		const req = createMockRequest({ query: { search: 'movies', skipMs: '0' } });
+		const req = createMockRequest({
+			query: { password: TEST_SCRAPE_PASSWORD, search: 'movies', skipMs: '0' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -172,7 +194,9 @@ describe('API /api/scrapers/listoflists', () => {
 			byListId: byListIdMock,
 		}));
 
-		const req = createMockRequest({ query: { search: 'movies' } });
+		const req = createMockRequest({
+			query: { password: TEST_SCRAPE_PASSWORD, search: 'movies' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -195,7 +219,9 @@ describe('API /api/scrapers/listoflists', () => {
 		repositoryMocks.repository.isOlderThan.mockResolvedValue(true);
 		scrapeJobsMocks.generateScrapeJobs.mockResolvedValue(undefined);
 
-		const req = createMockRequest({ query: { search: 'movies', quantity: '2' } });
+		const req = createMockRequest({
+			query: { password: TEST_SCRAPE_PASSWORD, search: 'movies', quantity: '2' },
+		});
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -216,7 +242,7 @@ describe('API /api/scrapers/listoflists', () => {
 		scrapeJobsMocks.generateScrapeJobs.mockResolvedValue(undefined);
 
 		const req = createMockRequest({
-			query: { search: 'movies', rescrapeIfXDaysOld: '30' },
+			query: { password: TEST_SCRAPE_PASSWORD, search: 'movies', rescrapeIfXDaysOld: '30' },
 		});
 		const res = createMockResponse();
 

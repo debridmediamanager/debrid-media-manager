@@ -9,6 +9,14 @@ vi.mock('@/scrapers/scrapeJobs', () => scrapeMocks);
 import handler from '@/pages/api/scrapers/imdb';
 
 const originalEnv = { ...process.env };
+// These suites exercise the scrape behaviour itself, so every request here is an
+// authorised one and the process is standing in for the throwaway worker that
+// `scraper.sh` boots (hence SCRAPE_WORKER, which is what re-enables the
+// `process.exit(0)` teardown the assertions below check for). The guard itself —
+// refusing an unauthorised caller, and never exiting a swarm replica — is
+// covered in `auth.test.ts`.
+const TEST_SCRAPE_PASSWORD = 'test-scrape-password';
+
 const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
 
 const createRes = () => {
@@ -22,7 +30,13 @@ const createRes = () => {
 
 beforeEach(() => {
 	vi.clearAllMocks();
-	process.env = { ...originalEnv, JACKETT: '1', PROWLARR: '1' };
+	process.env = {
+		...originalEnv,
+		JACKETT: '1',
+		PROWLARR: '1',
+		SCRAPE_API_PASSWORD: TEST_SCRAPE_PASSWORD,
+		SCRAPE_WORKER: '1',
+	};
 });
 
 afterAll(() => {
@@ -35,7 +49,7 @@ describe('API /api/scrapers/imdb', () => {
 		process.env.JACKETT = '';
 		const res = createRes();
 
-		await handler({ query: {} } as any, res);
+		await handler({ query: { password: TEST_SCRAPE_PASSWORD } } as any, res);
 
 		expect(res.status).toHaveBeenCalledWith(403);
 		expect(res.json).toHaveBeenCalledWith({ status: 'failed' });
@@ -43,11 +57,11 @@ describe('API /api/scrapers/imdb', () => {
 
 	it('validates the imdb id', async () => {
 		const res = createRes();
-		await handler({ query: {} } as any, res);
+		await handler({ query: { password: TEST_SCRAPE_PASSWORD } } as any, res);
 		expect(res.status).toHaveBeenCalledWith(400);
 
 		const res2 = createRes();
-		await handler({ query: { id: '123' } } as any, res2);
+		await handler({ query: { password: TEST_SCRAPE_PASSWORD, id: '123' } } as any, res2);
 		expect(res2.status).toHaveBeenCalledWith(400);
 	});
 
@@ -56,6 +70,7 @@ describe('API /api/scrapers/imdb', () => {
 		await handler(
 			{
 				query: {
+					password: TEST_SCRAPE_PASSWORD,
 					id: 'tt1234567',
 					season: '2',
 					lastSeason: 'false',
@@ -77,6 +92,7 @@ describe('API /api/scrapers/imdb', () => {
 		await handler(
 			{
 				query: {
+					password: TEST_SCRAPE_PASSWORD,
 					id: 'tt7654321',
 					lastSeason: 'true',
 					replaceOldScrape: 'false',

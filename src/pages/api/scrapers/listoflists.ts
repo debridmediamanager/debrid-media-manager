@@ -1,9 +1,16 @@
 import { ScrapeInput } from '@/scrapers/scrapeInput';
 import { ScrapeResponse, generateScrapeJobs } from '@/scrapers/scrapeJobs';
 import { repository as db } from '@/services/repository';
+import { authorizeScrapeRequest, exitIfScrapeWorker } from '@/services/scrapeAuth';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ScrapeResponse>) {
+	// Before the env guard, so an anonymous caller learns nothing about which
+	// indexers this deployment has configured.
+	if (!authorizeScrapeRequest(req, res)) {
+		return;
+	}
+
 	if (!process.env.JACKETT || !process.env.PROWLARR) {
 		res.status(403).json({ status: 'failed' });
 		return;
@@ -47,5 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			await Promise.all(imdbIds.map(async (id) => await generateScrapeJobs(id)));
 		}
 	}
-	process.exit(0);
+	res.status(200).json({ status: 'success' });
+	// Only a one-shot `scraper.sh` worker exits here; a swarm replica must not.
+	exitIfScrapeWorker();
 }
