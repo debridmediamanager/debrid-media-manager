@@ -247,6 +247,24 @@ describe('StartPage', () => {
 		expect(mockPush).toHaveBeenCalledWith('/');
 	});
 
+	// A logged-out visitor lands here rather than on the index page, so the banner
+	// has to be on this page too or most first-time visitors never see it.
+	it('shows the zurg banner between the welcome copy and the login buttons', () => {
+		render(<StartPage />);
+
+		const banner = screen.getByRole('link', { name: 'Get zurg' });
+		const heading = screen.getByRole('heading', { name: /Welcome to Debrid Media Manager/i });
+		const loginPrompt = screen.getByText(/Please login with one of the supported services/i);
+		expect(banner.getAttribute('href')).toContain('zurg.debridmediamanager.com');
+		expect(screen.getByText('No symlinks!')).toBeInTheDocument();
+		expect(
+			heading.compareDocumentPosition(banner) & Node.DOCUMENT_POSITION_FOLLOWING
+		).toBeTruthy();
+		expect(
+			banner.compareDocumentPosition(loginPrompt) & Node.DOCUMENT_POSITION_FOLLOWING
+		).toBeTruthy();
+	});
+
 	it('should prioritize redirect when multiple auth tokens exist', () => {
 		vi.mocked(useRealDebridAccessToken).mockReturnValue(['rd-token', false, false]);
 		vi.mocked(useAllDebridApiKey).mockReturnValue('ad-key');

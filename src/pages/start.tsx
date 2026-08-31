@@ -1,3 +1,4 @@
+import { ZurgBanner } from '@/components/ZurgBanner';
 import {
 	useAllDebridApiKey,
 	useDebridLogin,
@@ -66,6 +67,8 @@ export default function StartPage() {
 					This website is open source and you can also run this on your own machine
 				</a>
 			</div>
+
+			<ZurgBanner />
 
 			{/* Login Buttons */}
 			<div className="flex flex-col items-center">

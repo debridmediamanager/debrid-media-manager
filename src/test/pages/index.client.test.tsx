@@ -175,21 +175,23 @@ describe('IndexPage', () => {
 		expect(screen.queryByText(/Debrid Media Manager is loading/i)).not.toBeInTheDocument();
 	});
 
-	// The zurg banner is marketing, so it sits above everything else on the page -
-	// including the logo - and it shows whether or not the providers have answered.
-	it('puts the zurg banner above the logo in both states', () => {
-		currentUserMock.mockReturnValue({ ...settledFixture, hasTBAuth: true });
+	// The zurg banner sits directly under the page title and above the search bar,
+	// so it reads as part of the header rather than as a bar bolted onto the top.
+	it('puts the zurg banner between the title and the search bar', () => {
+		currentUserMock.mockReturnValue(settledFixture);
 
-		const { container } = render(<IndexPage />);
+		render(<IndexPage />);
 
 		const banner = screen.getByRole('link', { name: 'Get zurg' });
-		const logo = screen.getByTestId('logo');
+		const title = screen.getByRole('heading', { name: /Debrid Media Manager/i });
+		const searchBar = screen.getByTestId('search-bar');
 		expect(banner.getAttribute('href')).toContain('zurg.debridmediamanager.com');
-		expect(screen.getByText(/Debrid Media Manager is loading/i)).toBeInTheDocument();
 		expect(
-			banner.compareDocumentPosition(logo) & Node.DOCUMENT_POSITION_FOLLOWING
+			title.compareDocumentPosition(banner) & Node.DOCUMENT_POSITION_FOLLOWING
 		).toBeTruthy();
-		expect(container.firstElementChild?.firstElementChild).toContainElement(banner);
+		expect(
+			banner.compareDocumentPosition(searchBar) & Node.DOCUMENT_POSITION_FOLLOWING
+		).toBeTruthy();
 	});
 
 	it('still waits while a configured provider is genuinely in flight', () => {
