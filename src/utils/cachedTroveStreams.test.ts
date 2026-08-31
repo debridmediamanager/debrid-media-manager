@@ -41,6 +41,43 @@ describe('filterTroveCandidates', () => {
 		expect(out.map((c) => c.hash)).toEqual(['aaa', 'ccc']);
 	});
 
+	it('drops scraper unit noise: a 1080p WEBRip stored as 28 TB', () => {
+		const out = filterTroveCandidates(
+			rows(
+				['aaa', 'Movie.2026.1080p.WEBRip.x265-DH', 29000000],
+				['bbb', 'Movie.2026.2160p.REMUX', 80000]
+			),
+			{ mediaType: 'movie', imdbId: 'tt123' }
+		);
+
+		expect(out.map((c) => c.hash)).toEqual(['bbb']);
+	});
+
+	it('hides Cyrillic-leading titles, like the detail page does', () => {
+		const out = filterTroveCandidates(
+			rows(
+				['aaa', 'Проект «Конец света» / Movie (2026) UHD BDRemux', 80000],
+				['bbb', 'Movie.2026.2160p.REMUX', 70000]
+			),
+			{ mediaType: 'movie', imdbId: 'tt123' }
+		);
+
+		expect(out.map((c) => c.hash)).toEqual(['bbb']);
+	});
+
+	it('keeps one release per size: the same encode scraped under two infohashes', () => {
+		const out = filterTroveCandidates(
+			rows(
+				['aaa', 'Movie.2026.WEBRip.1080p.H264.DD51.mkv', 18972.83],
+				['bbb', 'Movie.2026.WEBRip.1080p.H264.DD51.mkv', 18972.84],
+				['ccc', 'Movie.2026.2160p.WEB-DL', 55000]
+			),
+			{ mediaType: 'movie', imdbId: 'tt123' }
+		);
+
+		expect(out.map((c) => c.hash)).toEqual(['ccc', 'aaa']);
+	});
+
 	it('caps the candidate count after sorting', () => {
 		const out = filterTroveCandidates(
 			rows(['aaa', 'A', 100], ['bbb', 'B', 300], ['ccc', 'C', 200]),
