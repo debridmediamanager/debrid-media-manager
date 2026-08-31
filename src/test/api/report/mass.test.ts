@@ -1,5 +1,6 @@
 import handler from '@/pages/api/report/mass';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { mintProblemToken } from '@/utils/problemToken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { mockReportContent } = vi.hoisted(() => ({
@@ -12,9 +13,28 @@ vi.mock('@/services/repository', () => ({
 	},
 }));
 
+const SECRET = 'test-problem-secret';
+
+// A real minted pair rather than a mocked validator, so these tests exercise the
+// same check production runs.
+function auth() {
+	const [dmmProblemKey, solution] = mintProblemToken(SECRET);
+	return { dmmProblemKey, solution };
+}
+
 describe('/api/report/mass', () => {
+	const originalEnv = process.env;
+
 	beforeEach(() => {
 		vi.clearAllMocks();
+		// Legacy off: the old scheme's salt shipped in the browser bundle, so
+		// leaving it on would let a forged token through and hide the regression
+		// these tests exist to catch.
+		process.env = { ...originalEnv, DMM_PROBLEM_SECRET: SECRET, DMM_PROBLEM_LEGACY: 'off' };
+	});
+
+	afterEach(() => {
+		process.env = originalEnv;
 	});
 
 	it('rejects non-POST requests', async () => {
@@ -26,10 +46,87 @@ describe('/api/report/mass', () => {
 		expect(res.status).toHaveBeenCalledWith(405);
 	});
 
+	// The gap this endpoint had: an IP rate limit was the only gate, and one
+	// request became one DB write per element of an unbounded array.
+	it('rejects and writes nothing when no token is provided', async () => {
+		const req = createMockRequest({
+			method: 'POST',
+			body: {
+				reports: [{ hash: 'h1', imdbId: 'tt1' }],
+				userId: 'user',
+				type: 'porn',
+			},
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(403);
+		expect(res.json).toHaveBeenCalledWith({ errorMessage: 'Authentication not provided' });
+		expect(mockReportContent).not.toHaveBeenCalled();
+	});
+
+	it('rejects and writes nothing when the token is forged', async () => {
+		const req = createMockRequest({
+			method: 'POST',
+			body: {
+				reports: [{ hash: 'h1', imdbId: 'tt1' }],
+				userId: 'user',
+				type: 'porn',
+				dmmProblemKey: `deadbeef-${Math.floor(Date.now() / 1000)}`,
+				solution: 'not-a-real-signature',
+			},
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(403);
+		expect(res.json).toHaveBeenCalledWith({ errorMessage: 'Authentication error' });
+		expect(mockReportContent).not.toHaveBeenCalled();
+	});
+
+	// The fan-out cap: 100 matches what the availability endpoints already allow.
+	it('refuses more reports than the per-request cap and writes nothing', async () => {
+		const reports = Array.from({ length: 101 }, (_, i) => ({
+			hash: `h${i}`,
+			imdbId: 'tt1',
+		}));
+		const req = createMockRequest({
+			method: 'POST',
+			body: { reports, userId: 'user', type: 'porn', ...auth() },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({ message: 'Maximum 100 reports allowed' });
+		expect(mockReportContent).not.toHaveBeenCalled();
+	});
+
+	it('accepts a request exactly at the cap', async () => {
+		mockReportContent.mockResolvedValue(undefined);
+		const reports = Array.from({ length: 100 }, (_, i) => ({
+			hash: `h${i}`,
+			imdbId: 'tt1',
+		}));
+		const req = createMockRequest({
+			method: 'POST',
+			body: { reports, userId: 'user', type: 'porn', ...auth() },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(mockReportContent).toHaveBeenCalledTimes(100);
+	});
+
 	it('validates payload shape', async () => {
 		const req = createMockRequest({
 			method: 'POST',
-			body: { reports: [], userId: 'user', type: 'porn' },
+			body: { reports: [], userId: 'user', type: 'porn', ...auth() },
 		});
 		const res = createMockResponse();
 
@@ -42,7 +139,7 @@ describe('/api/report/mass', () => {
 	it('requires valid report type and entries', async () => {
 		const req = createMockRequest({
 			method: 'POST',
-			body: { reports: [{ hash: 'h1' }], userId: 'user', type: 'unknown' },
+			body: { reports: [{ hash: 'h1' }], userId: 'user', type: 'unknown', ...auth() },
 		});
 		const res = createMockResponse();
 
@@ -52,7 +149,7 @@ describe('/api/report/mass', () => {
 
 		const req2 = createMockRequest({
 			method: 'POST',
-			body: { reports: [{ hash: 'h1' }], userId: 'user', type: 'porn' },
+			body: { reports: [{ hash: 'h1' }], userId: 'user', type: 'porn', ...auth() },
 		});
 		const res2 = createMockResponse();
 
@@ -77,6 +174,7 @@ describe('/api/report/mass', () => {
 				],
 				userId: 'user',
 				type: 'porn',
+				...auth(),
 			},
 		});
 		const res = createMockResponse();
@@ -98,7 +196,12 @@ describe('/api/report/mass', () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
 		const req = createMockRequest({
 			method: 'POST',
-			body: { reports: [{ hash: 'h1', imdbId: 'tt1' }], userId: 'user', type: 'porn' },
+			body: {
+				reports: [{ hash: 'h1', imdbId: 'tt1' }],
+				userId: 'user',
+				type: 'porn',
+				...auth(),
+			},
 		});
 		const res = createMockResponse();
 		mockReportContent.mockImplementation(() => {

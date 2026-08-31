@@ -5,6 +5,10 @@ const { axiosPostMock } = vi.hoisted(() => ({
 	axiosPostMock: vi.fn(),
 }));
 
+const { generateTokenAndHashMock } = vi.hoisted(() => ({
+	generateTokenAndHashMock: vi.fn(),
+}));
+
 const { toastMocks } = vi.hoisted(() => ({
 	toastMocks: {
 		error: vi.fn(),
@@ -23,6 +27,10 @@ vi.mock('axios', () => ({
 vi.mock('react-hot-toast', () => ({
 	__esModule: true,
 	default: toastMocks,
+}));
+
+vi.mock('@/utils/token', () => ({
+	generateTokenAndHash: () => generateTokenAndHashMock(),
 }));
 
 import { useMassReport } from './useMassReport';
@@ -44,6 +52,7 @@ describe('useMassReport', () => {
 		toastMocks.success.mockReset();
 		toastMocks.loading.mockReset().mockReturnValue('toast-id');
 		reloadMock.mockReset();
+		generateTokenAndHashMock.mockReset().mockResolvedValue(['token', 'hash']);
 	});
 
 	afterAll(() => {
@@ -92,6 +101,8 @@ describe('useMassReport', () => {
 			],
 			userId: 'rd',
 			type: 'wrong_imdb',
+			dmmProblemKey: 'token',
+			solution: 'hash',
 		});
 		expect(toastMocks.success).toHaveBeenCalledWith('Reported 2 torrents.', {
 			id: 'toast-id',
@@ -117,6 +128,49 @@ describe('useMassReport', () => {
 		});
 		vi.runAllTimers();
 		expect(reloadMock).toHaveBeenCalled();
+		vi.useRealTimers();
+	});
+
+	// The endpoint caps a request at 100 rows, and a filtered result set routinely
+	// runs longer than that — so the tail must be batched, not dropped.
+	it('splits a selection larger than the per-request cap into batches', async () => {
+		vi.useFakeTimers();
+		const { result } = renderHook(() => useMassReport('rd', null, null, 'tt1234'));
+		axiosPostMock.mockResolvedValue({ data: { success: true, reported: 100, failed: 0 } });
+
+		const selection = Array.from({ length: 250 }, (_, i) => ({ hash: `h${i}` }) as any);
+
+		await act(async () => {
+			await result.current.handleMassReport('porn', selection);
+		});
+
+		expect(axiosPostMock).toHaveBeenCalledTimes(3);
+		expect(axiosPostMock.mock.calls[0][1].reports).toHaveLength(100);
+		expect(axiosPostMock.mock.calls[2][1].reports).toHaveLength(50);
+		// One mint reused across the batches rather than one per batch.
+		expect(generateTokenAndHashMock).toHaveBeenCalledTimes(1);
+		expect(toastMocks.success).toHaveBeenCalledWith('Reported 300 torrents.', {
+			id: 'toast-id',
+		});
+
+		vi.runAllTimers();
+		vi.useRealTimers();
+	});
+
+	it('tells the user when the token could not be minted', async () => {
+		vi.useFakeTimers();
+		const { result } = renderHook(() => useMassReport('rd', null, null, 'tt1234'));
+		generateTokenAndHashMock.mockRejectedValue(new Error('challenge down'));
+
+		await act(async () => {
+			await result.current.handleMassReport('porn', [{ hash: 'abc' } as any]);
+		});
+
+		expect(axiosPostMock).not.toHaveBeenCalled();
+		expect(toastMocks.error).toHaveBeenLastCalledWith('Failed to submit reports.', {
+			id: 'toast-id',
+		});
+		vi.runAllTimers();
 		vi.useRealTimers();
 	});
 });

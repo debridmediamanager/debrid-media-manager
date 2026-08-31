@@ -4,6 +4,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const { axiosPostMock } = vi.hoisted(() => ({
 	axiosPostMock: vi.fn(),
 }));
+const { generateTokenAndHashMock } = vi.hoisted(() => ({
+	generateTokenAndHashMock: vi.fn(),
+}));
 const { toastMock } = vi.hoisted(() => ({
 	toastMock: {
 		success: vi.fn(),
@@ -23,6 +26,10 @@ vi.mock('react-hot-toast', () => ({
 	default: toastMock,
 }));
 
+vi.mock('@/utils/token', () => ({
+	generateTokenAndHash: () => generateTokenAndHashMock(),
+}));
+
 vi.mock('lucide-react', () => ({
 	__esModule: true,
 	AlertTriangle: () => <svg data-testid="alert-icon" />,
@@ -35,6 +42,7 @@ describe('ReportButton', () => {
 		axiosPostMock.mockReset();
 		toastMock.success.mockReset();
 		toastMock.error.mockReset();
+		generateTokenAndHashMock.mockReset().mockResolvedValue(['token', 'hash']);
 	});
 
 	it('opens the dialog and submits a report successfully', async () => {
@@ -50,6 +58,8 @@ describe('ReportButton', () => {
 			imdbId: 'tt123',
 			userId: 'user1',
 			type: 'porn',
+			dmmProblemKey: 'token',
+			solution: 'hash',
 		});
 		expect(toastMock.success).toHaveBeenCalledWith('Report submitted.');
 	});
@@ -64,5 +74,18 @@ describe('ReportButton', () => {
 		await waitFor(() =>
 			expect(toastMock.error).toHaveBeenCalledWith('Report submission failed.')
 		);
+	});
+
+	it('tells the user when the token could not be minted', async () => {
+		generateTokenAndHashMock.mockRejectedValue(new Error('challenge down'));
+		render(<ReportButton hash="hash" imdbId="tt123" userId="user1" />);
+
+		fireEvent.click(screen.getByRole('button', { name: /Report/i }));
+		fireEvent.click(screen.getByText(/XXX \/ Porn Content/i));
+
+		await waitFor(() =>
+			expect(toastMock.error).toHaveBeenCalledWith('Report submission failed.')
+		);
+		expect(axiosPostMock).not.toHaveBeenCalled();
 	});
 });

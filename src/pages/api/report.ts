@@ -1,4 +1,5 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { repository } from '../../services/repository';
 
@@ -8,7 +9,23 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	try {
-		const { hash, imdbId, userId, type } = req.body;
+		const { hash, imdbId, userId, type, dmmProblemKey, solution } = req.body;
+
+		// Checked before the field validation so an unauthenticated caller cannot
+		// use the 400s to probe what this endpoint accepts. The IP rate limit
+		// below was the only gate here, which left anyone able to flag any hash
+		// as porn / wrong_imdb / wrong_season and poison moderation.
+		if (
+			!dmmProblemKey ||
+			!(typeof dmmProblemKey === 'string') ||
+			!solution ||
+			!(typeof solution === 'string')
+		) {
+			return res.status(403).json({ errorMessage: 'Authentication not provided' });
+		}
+		if (!validateProblemToken(dmmProblemKey, solution)) {
+			return res.status(403).json({ errorMessage: 'Authentication error' });
+		}
 
 		if (!hash || !imdbId || !userId || !type) {
 			return res.status(400).json({ message: 'Missing required fields' });

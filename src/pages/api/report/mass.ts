@@ -1,6 +1,9 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
+import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
+
+const MAX_REPORTS_PER_REQUEST = 100;
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -8,10 +11,34 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	try {
-		const { reports, userId, type } = req.body;
+		const { reports, userId, type, dmmProblemKey, solution } = req.body;
+
+		// Checked before the payload validation so an unauthenticated caller
+		// cannot use the 400s to probe what this endpoint accepts. The IP rate
+		// limit below was the only gate here, and one request became one DB write
+		// per element of an unbounded array.
+		if (
+			!dmmProblemKey ||
+			!(typeof dmmProblemKey === 'string') ||
+			!solution ||
+			!(typeof solution === 'string')
+		) {
+			return res.status(403).json({ errorMessage: 'Authentication not provided' });
+		}
+		if (!validateProblemToken(dmmProblemKey, solution)) {
+			return res.status(403).json({ errorMessage: 'Authentication error' });
+		}
 
 		if (!reports || !Array.isArray(reports) || reports.length === 0) {
 			return res.status(400).json({ message: 'Invalid or empty reports array' });
+		}
+
+		// Same cap the availability endpoints use, so a single rate-limited
+		// request cannot fan out into an unbounded number of DB writes.
+		if (reports.length > MAX_REPORTS_PER_REQUEST) {
+			return res
+				.status(400)
+				.json({ message: `Maximum ${MAX_REPORTS_PER_REQUEST} reports allowed` });
 		}
 
 		if (!userId || !type) {

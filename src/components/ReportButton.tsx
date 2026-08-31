@@ -1,3 +1,4 @@
+import { generateTokenAndHash } from '@/utils/token';
 import axios from 'axios';
 import { AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
@@ -15,11 +16,18 @@ export default function ReportButton({ hash, imdbId, userId, isShow }: ReportBut
 
 	const handleReport = async (type: string) => {
 		try {
+			// `/api/report` writes to the moderation table, so it now demands a
+			// server-minted token. A failed mint throws into the same catch as a
+			// failed post — the user is told either way rather than the click
+			// silently doing nothing.
+			const [dmmProblemKey, solution] = await generateTokenAndHash();
 			await axios.post('/api/report', {
 				hash,
 				imdbId,
 				userId,
 				type,
+				dmmProblemKey,
+				solution,
 			});
 			toast.success('Report submitted.');
 		} catch (error) {

@@ -1,12 +1,23 @@
 import handler from '@/pages/api/report';
 import { repository } from '@/services/repository';
 import { createMockRequest } from '@/test/utils/api';
+import { mintProblemToken } from '@/utils/problemToken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 const mockRepository = vi.mocked(repository);
 
+const SECRET = 'test-problem-secret';
+
+// A real minted pair rather than a mocked validator, so these tests exercise the
+// same check production runs.
+function auth() {
+	const [dmmProblemKey, solution] = mintProblemToken(SECRET);
+	return { dmmProblemKey, solution };
+}
+
 describe('/api/report', () => {
+	const originalEnv = process.env;
 	let mockReq: any;
 	let mockRes: any;
 
@@ -23,6 +34,14 @@ describe('/api/report', () => {
 			_setStatusCode: vi.fn(),
 		} as any;
 		vi.clearAllMocks();
+		// Legacy off: the old scheme's salt shipped in the browser bundle, so
+		// leaving it on would let a forged token through and hide the regression
+		// these tests exist to catch.
+		process.env = { ...originalEnv, DMM_PROBLEM_SECRET: SECRET, DMM_PROBLEM_LEGACY: 'off' };
+	});
+
+	afterEach(() => {
+		process.env = originalEnv;
 	});
 
 	it('should return 405 for non-POST requests', async () => {
@@ -38,9 +57,69 @@ describe('/api/report', () => {
 		}
 	});
 
+	// The gap this endpoint had: an IP rate limit was the only gate, so anyone
+	// could flag any hash and poison moderation.
+	it('should return 403 and write nothing when no token is provided', async () => {
+		mockRepository.reportContent = vi.fn().mockResolvedValue(undefined);
+		mockReq.method = 'POST';
+		mockReq.body = {
+			hash: 'abc123',
+			imdbId: 'tt1234567',
+			userId: 'user123',
+			type: 'porn',
+		};
+
+		await handler(mockReq, mockRes);
+
+		expect(mockRes.status).toHaveBeenCalledWith(403);
+		expect(mockRes.json).toHaveBeenCalledWith({
+			errorMessage: 'Authentication not provided',
+		});
+		expect(mockRepository.reportContent).not.toHaveBeenCalled();
+	});
+
+	it('should return 403 and write nothing when the token is forged', async () => {
+		mockRepository.reportContent = vi.fn().mockResolvedValue(undefined);
+		mockReq.method = 'POST';
+		mockReq.body = {
+			hash: 'abc123',
+			imdbId: 'tt1234567',
+			userId: 'user123',
+			type: 'porn',
+			dmmProblemKey: `deadbeef-${Math.floor(Date.now() / 1000)}`,
+			solution: 'not-a-real-signature',
+		};
+
+		await handler(mockReq, mockRes);
+
+		expect(mockRes.status).toHaveBeenCalledWith(403);
+		expect(mockRes.json).toHaveBeenCalledWith({ errorMessage: 'Authentication error' });
+		expect(mockRepository.reportContent).not.toHaveBeenCalled();
+	});
+
+	it('should return 403 and write nothing when the token has expired', async () => {
+		mockRepository.reportContent = vi.fn().mockResolvedValue(undefined);
+		const [dmmProblemKey, solution] = mintProblemToken(SECRET, Date.now() - 10 * 60 * 1000);
+		mockReq.method = 'POST';
+		mockReq.body = {
+			hash: 'abc123',
+			imdbId: 'tt1234567',
+			userId: 'user123',
+			type: 'porn',
+			dmmProblemKey,
+			solution,
+		};
+
+		await handler(mockReq, mockRes);
+
+		expect(mockRes.status).toHaveBeenCalledWith(403);
+		expect(mockRes.json).toHaveBeenCalledWith({ errorMessage: 'Authentication error' });
+		expect(mockRepository.reportContent).not.toHaveBeenCalled();
+	});
+
 	it('should return 400 when required fields are missing', async () => {
 		mockReq.method = 'POST';
-		mockReq.body = { hash: 'abc123' }; // missing other fields
+		mockReq.body = { hash: 'abc123', ...auth() }; // missing other fields
 		await handler(mockReq, mockRes);
 
 		expect(mockRes.status).toHaveBeenCalledWith(400);
@@ -54,80 +133,12 @@ describe('/api/report', () => {
 			imdbId: 'tt1234567',
 			userId: 'user123',
 			type: 'invalid_type',
+			...auth(),
 		};
 		await handler(mockReq, mockRes);
 
 		expect(mockRes.status).toHaveBeenCalledWith(400);
 		expect(mockRes.json).toHaveBeenCalledWith({ message: 'Invalid report type' });
-	});
-
-	it('should return 200 for valid porn report', async () => {
-		mockReq.method = 'POST';
-		mockReq.body = {
-			hash: 'abc123',
-			imdbId: 'tt1234567',
-			userId: 'user123',
-			type: 'porn',
-		};
-
-		mockRepository.reportContent = vi.fn().mockResolvedValue(undefined);
-
-		await handler(mockReq, mockRes);
-
-		expect(mockRepository.reportContent).toHaveBeenCalledWith(
-			'abc123',
-			'tt1234567',
-			'user123',
-			'porn'
-		);
-		expect(mockRes.status).toHaveBeenCalledWith(200);
-		expect(mockRes.json).toHaveBeenCalledWith({ success: true });
-	});
-
-	it('should return 200 for valid wrong_imdb report', async () => {
-		mockReq.method = 'POST';
-		mockReq.body = {
-			hash: 'abc123',
-			imdbId: 'tt1234567',
-			userId: 'user123',
-			type: 'wrong_imdb',
-		};
-
-		mockRepository.reportContent = vi.fn().mockResolvedValue(undefined);
-
-		await handler(mockReq, mockRes);
-
-		expect(mockRepository.reportContent).toHaveBeenCalledWith(
-			'abc123',
-			'tt1234567',
-			'user123',
-			'wrong_imdb'
-		);
-		expect(mockRes.status).toHaveBeenCalledWith(200);
-		expect(mockRes.json).toHaveBeenCalledWith({ success: true });
-	});
-
-	it('should return 200 for valid wrong_season report', async () => {
-		mockReq.method = 'POST';
-		mockReq.body = {
-			hash: 'abc123',
-			imdbId: 'tt1234567',
-			userId: 'user123',
-			type: 'wrong_season',
-		};
-
-		mockRepository.reportContent = vi.fn().mockResolvedValue(undefined);
-
-		await handler(mockReq, mockRes);
-
-		expect(mockRepository.reportContent).toHaveBeenCalledWith(
-			'abc123',
-			'tt1234567',
-			'user123',
-			'wrong_season'
-		);
-		expect(mockRes.status).toHaveBeenCalledWith(200);
-		expect(mockRes.json).toHaveBeenCalledWith({ success: true });
 	});
 
 	it('should return 500 when repository throws error', async () => {
@@ -137,6 +148,7 @@ describe('/api/report', () => {
 			imdbId: 'tt1234567',
 			userId: 'user123',
 			type: 'porn',
+			...auth(),
 		};
 
 		mockRepository.reportContent = vi.fn().mockRejectedValue(new Error('Database error'));
@@ -158,6 +170,7 @@ describe('/api/report', () => {
 				imdbId: 'tt1234567',
 				userId: 'user123',
 				type,
+				...auth(),
 			};
 
 			mockRepository.reportContent = vi.fn().mockResolvedValue(undefined);
