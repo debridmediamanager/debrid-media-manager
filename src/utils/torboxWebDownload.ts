@@ -15,16 +15,27 @@ export const parseTorBoxRowId = (rowId: string): number =>
 	parseInt(rowId.replace(/^tb:w?/, ''), 10);
 
 /**
- * Path segment used by the cast route to name a TorBox item: `123` for a
- * torrent, `w123` for a web download.
+ * TorBox keeps three separate download tables, and their numeric ids overlap.
+ * Only the prefix tells them apart.
+ */
+export type TorBoxItemKind = 'torrent' | 'webdl' | 'usenet';
+
+const KIND_BY_PREFIX: Record<string, TorBoxItemKind> = { w: 'webdl', u: 'usenet' };
+
+/**
+ * Path segment naming a TorBox item: `123` for a torrent, `w123` for a web
+ * download, `u123` for a usenet download.
+ *
+ * `isWebDownload` is kept alongside `kind` because the cast route only ever
+ * distinguishes those two - a cast is never a usenet download.
  */
 export const parseTorBoxCastTarget = (
 	idPart: string
-): { id: number; isWebDownload: boolean } | null => {
-	const isWebDownload = idPart.startsWith('w');
-	const id = parseInt(isWebDownload ? idPart.substring(1) : idPart, 10);
+): { id: number; kind: TorBoxItemKind; isWebDownload: boolean } | null => {
+	const kind = KIND_BY_PREFIX[idPart.charAt(0)] ?? 'torrent';
+	const id = parseInt(kind === 'torrent' ? idPart : idPart.substring(1), 10);
 	if (isNaN(id)) return null;
-	return { id, isWebDownload };
+	return { id, kind, isWebDownload: kind === 'webdl' };
 };
 
 /**

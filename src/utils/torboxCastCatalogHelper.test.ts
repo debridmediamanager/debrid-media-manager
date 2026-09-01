@@ -9,10 +9,11 @@ vi.mock('@/services/repository', () => ({
 vi.mock('@/services/torbox', () => ({
 	getTorrentList: vi.fn(),
 	getWebDownloadList: vi.fn(),
+	getUsenetList: vi.fn(),
 }));
 
 import { repository as db } from '@/services/repository';
-import { getTorrentList, getWebDownloadList } from '@/services/torbox';
+import { getTorrentList, getUsenetList, getWebDownloadList } from '@/services/torbox';
 import { getTorBoxDMMLibrary, getTorBoxDMMTorrent, PAGE_SIZE } from './torboxCastCatalogHelper';
 
 describe('torboxCastCatalogHelper', () => {
@@ -21,6 +22,7 @@ describe('torboxCastCatalogHelper', () => {
 		process.env.DMM_ORIGIN = 'https://debridmediamanager.com';
 		// Most cases are about torrents; the merged web-download list is opted into.
 		vi.mocked(getWebDownloadList).mockResolvedValue({ success: true, data: [] } as any);
+		vi.mocked(getUsenetList).mockResolvedValue({ success: true, data: [] } as any);
 	});
 
 	describe('PAGE_SIZE', () => {
@@ -284,6 +286,7 @@ describe('torboxCastCatalogHelper web downloads', () => {
 		vi.clearAllMocks();
 		process.env.DMM_ORIGIN = 'https://debridmediamanager.com';
 		vi.mocked(db.getTorBoxCastProfile).mockResolvedValue({ apiKey: 'key' } as any);
+		vi.mocked(getUsenetList).mockResolvedValue({ success: true, data: [] } as any);
 	});
 
 	// Web downloads are a whole second library TorBox keeps in its own table.
@@ -377,5 +380,76 @@ describe('torboxCastCatalogHelper web downloads', () => {
 
 	it('rejects an id that is neither a torrent nor a web download', async () => {
 		expect(await getTorBoxDMMTorrent('user1', 'nonsense')).toMatchObject({ status: 400 });
+	});
+});
+
+describe('torboxCastCatalogHelper usenet downloads', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+		process.env.DMM_ORIGIN = 'https://debridmediamanager.com';
+		vi.mocked(db.getTorBoxCastProfile).mockResolvedValue({ apiKey: 'key' } as any);
+		vi.mocked(getWebDownloadList).mockResolvedValue({ success: true, data: [] } as any);
+		vi.mocked(getUsenetList).mockResolvedValue({ success: true, data: [] } as any);
+		vi.mocked(getTorrentList).mockResolvedValue({ success: true, data: [] } as any);
+	});
+
+	// Usenet is TorBox's third download table. It shares an id space with neither
+	// of the others, so its entries carry a `u` prefix.
+	it('lists usenet downloads after web downloads and before torrents', async () => {
+		vi.mocked(getWebDownloadList).mockResolvedValue({
+			success: true,
+			data: [{ id: 1, name: 'W' }],
+		} as any);
+		vi.mocked(getUsenetList).mockResolvedValue({
+			success: true,
+			data: [{ id: 2367148, name: 'Big Buck Bunny' }],
+		} as any);
+		vi.mocked(getTorrentList).mockResolvedValue({
+			success: true,
+			data: [{ id: 9, name: 'T' }],
+		} as any);
+
+		const result = await getTorBoxDMMLibrary('user1', 1);
+		if ('error' in result) throw new Error(result.error);
+		expect(result.data.metas.map((m) => m.id)).toEqual([
+			'dmm-tb:w1',
+			'dmm-tb:u2367148',
+			'dmm-tb:9',
+		]);
+	});
+
+	it('reads a u-prefixed meta from the usenet table', async () => {
+		vi.mocked(getUsenetList).mockResolvedValue({
+			success: true,
+			data: [
+				{
+					id: 2367148,
+					name: 'Big Buck Bunny 480p test',
+					files: [{ id: 0, short_name: 'bbb.mov', size: 1024 ** 3 }],
+				},
+			],
+		} as any);
+
+		const result = await getTorBoxDMMTorrent('user1', 'u2367148');
+		if ('error' in result) throw new Error(result.error);
+
+		expect(getUsenetList).toHaveBeenCalledWith('key', { id: 2367148 });
+		expect(getTorrentList).not.toHaveBeenCalled();
+		expect(getWebDownloadList).not.toHaveBeenCalled();
+		expect(result.data.meta.videos[0].streams[0].url).toBe(
+			'https://debridmediamanager.com/api/stremio-tb/user1/play/u2367148:0'
+		);
+	});
+
+	it('still serves the rest when the usenet list fails', async () => {
+		vi.mocked(getUsenetList).mockRejectedValue(new Error('TorBox down'));
+		vi.mocked(getTorrentList).mockResolvedValue({
+			success: true,
+			data: [{ id: 9, name: 'T' }],
+		} as any);
+
+		const result = await getTorBoxDMMLibrary('user1', 1);
+		if ('error' in result) throw new Error(result.error);
+		expect(result.data.metas.map((m) => m.id)).toEqual(['dmm-tb:9']);
 	});
 });

@@ -1,6 +1,6 @@
 import handler from '@/pages/api/stremio-tb/[userid]/play/[hash]';
 import { repository } from '@/services/repository';
-import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
+import { requestDownloadLink, requestUsenetLink, requestWebDownloadLink } from '@/services/torbox';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import {
 	getBiggestFileTorBoxStreamUrl,
@@ -16,6 +16,7 @@ vi.mock('@/utils/getTorBoxStreamUrl');
 const mockRepository = vi.mocked(repository);
 const mockRequestDownloadLink = vi.mocked(requestDownloadLink);
 const mockRequestWebDownloadLink = vi.mocked(requestWebDownloadLink);
+const mockRequestUsenetLink = vi.mocked(requestUsenetLink);
 const mockGetBiggestFile = vi.mocked(getBiggestFileTorBoxStreamUrl);
 const mockGetFileByName = vi.mocked(getFileByNameTorBoxStreamUrl);
 const mockGetWebDownloadByHash = vi.mocked(getWebDownloadStreamUrlByHash);
@@ -92,6 +93,24 @@ describe('/api/stremio-tb/[userid]/play/[hash]', () => {
 		);
 		expect(mockRequestDownloadLink).not.toHaveBeenCalled();
 		expect(res.redirect).toHaveBeenCalledWith('https://stream.test/webdl.mkv');
+	});
+
+	it('resolves a u-prefixed id through the usenet endpoint', async () => {
+		mockRepository.getTorBoxCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+		mockRequestUsenetLink.mockResolvedValue({
+			success: true,
+			data: 'https://stream.test/usenet.mkv',
+		} as any);
+		const req = createMockRequest({ query: { userid: 'user1', hash: 'u2367148:0' } });
+		await handler(req, res);
+		expect(mockRequestUsenetLink).toHaveBeenCalledWith(
+			'key',
+			{ usenet_id: 2367148, file_id: 0 },
+			expect.anything()
+		);
+		expect(mockRequestDownloadLink).not.toHaveBeenCalled();
+		expect(mockRequestWebDownloadLink).not.toHaveBeenCalled();
+		expect(res.redirect).toHaveBeenCalledWith('https://stream.test/usenet.mkv');
 	});
 
 	it('still sends an unprefixed id to the torrent endpoint', async () => {

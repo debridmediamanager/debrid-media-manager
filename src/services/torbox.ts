@@ -13,6 +13,7 @@ import {
 	TorBoxResponse,
 	TorBoxTorrentInfo,
 	TorBoxTorrentMetadata,
+	TorBoxUsenetDownload,
 	TorBoxUser,
 	TorBoxWebDownload,
 } from './types';
@@ -628,6 +629,60 @@ export const getWebDownloadList = async (
 		elapsedMs: Date.now() - requestStartedAt,
 	});
 	return result;
+};
+
+/**
+ * The account's usenet downloads. A third list beside torrents and web
+ * downloads, with the same shape and its own id space.
+ */
+export const getUsenetList = async (
+	accessToken: string,
+	params?: {
+		bypass_cache?: boolean;
+		id?: number;
+		offset?: number;
+		limit?: number;
+	}
+): Promise<TorBoxResponse<TorBoxUsenetDownload[] | TorBoxUsenetDownload>> => {
+	const requestMeta = {
+		hasId: Boolean(params?.id),
+		offset: params?.offset ?? 0,
+		limit: params?.limit ?? 'default',
+	};
+	const requestStartedAt = Date.now();
+	console.log('[TorboxAPI] getUsenetList start', requestMeta);
+
+	const response = await torBoxAxios.get<
+		TorBoxResponse<TorBoxUsenetDownload[] | TorBoxUsenetDownload>
+	>(`${getTorBoxBaseUrl()}/${API_VERSION}/api/usenet/mylist`, {
+		params: { ...params, bypass_cache: true, _fresh: Date.now() },
+		...getAxiosConfig(accessToken),
+	});
+	const result = response.data;
+	console.log('[TorboxAPI] getUsenetList success', {
+		...requestMeta,
+		success: result.success,
+		itemCount: Array.isArray(result.data) ? result.data.length : result.data ? 1 : 0,
+		elapsedMs: Date.now() - requestStartedAt,
+	});
+	return result;
+};
+
+/** A download link for one file of a usenet download. */
+export const requestUsenetLink = async (
+	accessToken: string,
+	params: { usenet_id: number; file_id?: number; user_ip?: string },
+	options?: { timeout?: number }
+): Promise<TorBoxResponse<string>> => {
+	const response = await torBoxAxios.get<TorBoxResponse<string>>(
+		`${getTorBoxBaseUrl()}/${API_VERSION}/api/usenet/requestdl`,
+		{
+			params: { token: accessToken, ...params },
+			...getAxiosConfig(accessToken),
+			...(options?.timeout && { timeout: options.timeout }),
+		}
+	);
+	return response.data;
 };
 
 export const controlWebDownload = async (

@@ -1,5 +1,5 @@
 import { repository as db } from '@/services/repository';
-import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
+import { requestDownloadLink, requestUsenetLink, requestWebDownloadLink } from '@/services/torbox';
 import {
 	getBiggestFileTorBoxStreamUrl,
 	getFileByNameTorBoxStreamUrl,
@@ -11,9 +11,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 // Play a TorBox file from an existing torrent
 // Supports two formats:
 // 1. torrentId:fileId (e.g., "123456:789") - direct lookup (with ?h=hash&file=filename fallback)
-//    A `w` prefix on the id (e.g., "w1599037:0") means a web download, which
-//    lives in a different TorBox table whose ids overlap torrent ids. Library
-//    metas carry that prefix; casts identify a web download by its md5 hash.
+//    A `w` prefix on the id (e.g., "w1599037:0") means a web download and a `u`
+//    prefix a usenet download; each lives in a different TorBox table whose ids
+//    overlap torrent ids. Library metas carry the prefix; casts have none and
+//    identify a web download by its md5 hash instead.
 // 2. hash (e.g., "fbadffe5476df0674dbec75e81426895e40b6427") - legacy format
 //    - With ?file=filename: matches specific file by name (for TV episodes)
 //    - Without ?file: uses biggest file (for movies)
@@ -86,6 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// The id itself settles it for a library entry; a cast has no prefix and
 			// is identified by its hash instead.
 			const resolveAsWebDownload = target.isWebDownload || isWebDownload;
+			const resolveAsUsenet = target.kind === 'usenet';
 
 			// A torrent id only resolves inside the account that created it, so for
 			// someone else's cast the direct lookup is a guaranteed 500 - measured
@@ -99,22 +101,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// A web download is always the caster's own - the stream route drops
 			// other users' web downloads because no other key can resolve them.
 			const canResolveDirectly =
-				own === '1' || resolveAsWebDownload || typeof fallbackHash !== 'string';
+				own === '1' ||
+				resolveAsWebDownload ||
+				resolveAsUsenet ||
+				typeof fallbackHash !== 'string';
 			try {
 				if (!canResolveDirectly) {
 					throw new Error("not this account's torrent id");
 				}
-				const downloadResult = resolveAsWebDownload
-					? await requestWebDownloadLink(
+				const downloadResult = resolveAsUsenet
+					? await requestUsenetLink(
 							apiKey,
-							{ web_id: torrentId, file_id: fileId },
-							{ skipRetry: true, timeout: 8000 }
+							{ usenet_id: torrentId, file_id: fileId },
+							{ timeout: 8000 }
 						)
-					: await requestDownloadLink(
-							apiKey,
-							{ torrent_id: torrentId, file_id: fileId },
-							{ skipRetry: true, timeout: 8000 }
-						);
+					: resolveAsWebDownload
+						? await requestWebDownloadLink(
+								apiKey,
+								{ web_id: torrentId, file_id: fileId },
+								{ skipRetry: true, timeout: 8000 }
+							)
+						: await requestDownloadLink(
+								apiKey,
+								{ torrent_id: torrentId, file_id: fileId },
+								{ skipRetry: true, timeout: 8000 }
+							);
 
 				if (downloadResult.success && downloadResult.data) {
 					streamUrl = downloadResult.data;

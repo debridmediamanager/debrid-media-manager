@@ -26,8 +26,16 @@ describe('torboxWebDownload helpers', () => {
 	});
 
 	it('parses cast path segments', () => {
-		expect(parseTorBoxCastTarget('456')).toEqual({ id: 456, isWebDownload: false });
-		expect(parseTorBoxCastTarget('w456')).toEqual({ id: 456, isWebDownload: true });
+		expect(parseTorBoxCastTarget('456')).toEqual({
+			id: 456,
+			kind: 'torrent',
+			isWebDownload: false,
+		});
+		expect(parseTorBoxCastTarget('w456')).toEqual({
+			id: 456,
+			kind: 'webdl',
+			isWebDownload: true,
+		});
 		expect(parseTorBoxCastTarget('abc')).toBeNull();
 		expect(parseTorBoxCastTarget('w')).toBeNull();
 	});
@@ -38,5 +46,25 @@ describe('torboxWebDownload helpers', () => {
 		expect(isWebDownloadHash('a'.repeat(40))).toBe(false);
 		expect(isWebDownloadHash('z'.repeat(32))).toBe(false);
 		expect(isWebDownloadHash('')).toBe(false);
+	});
+});
+
+describe('parseTorBoxCastTarget kinds', () => {
+	// TorBox keeps torrents, web downloads and usenet downloads in three tables
+	// whose numeric ids overlap. Only the prefix says which table to look in.
+	it.each([
+		['123', 'torrent', 123],
+		['w1599037', 'webdl', 1599037],
+		['u2367148', 'usenet', 2367148],
+	])('reads %s as a %s id', (idPart, kind, id) => {
+		expect(parseTorBoxCastTarget(idPart)).toEqual({
+			id,
+			kind,
+			isWebDownload: kind === 'webdl',
+		});
+	});
+
+	it.each(['abc', 'w', 'u', '', 'wabc'])('rejects %s', (idPart) => {
+		expect(parseTorBoxCastTarget(idPart)).toBeNull();
 	});
 });
