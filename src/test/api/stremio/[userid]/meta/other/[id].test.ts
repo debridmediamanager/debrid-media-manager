@@ -43,6 +43,20 @@ describe('/api/stremio/[userid]/meta/other/[id]', () => {
 		mockGetDMMTorrent.mockResolvedValue({ status: 200, data: { meta: { id: 'dmm:1' } } });
 	});
 
+	// Every DMM Cast addon declares the `dmm` meta prefix, so Stremio asks all of
+	// them for every library id. A sibling addon's id must come back as a null
+	// meta - answering it here sends a Premiumize folder id to Real-Debrid.
+	it.each(['dmm-ad:456', 'dmm-tb:123', 'dmm-pm:folder:f1'])(
+		'returns a null meta for %s',
+		async (id) => {
+			const res = createMockResponse();
+			await handler(createMockRequest({ query: { userid: 'user1', id } }), res);
+			expect(res.status).toHaveBeenCalledWith(200);
+			expect(res._getData()).toEqual({ meta: null });
+			expect(mockGetDMMTorrent).not.toHaveBeenCalled();
+		}
+	);
+
 	it('validates query params', async () => {
 		const req = createMockRequest({ query: { userid: ['u'] as any, id: 'dmm:1' } });
 		const res = createMockResponse();
