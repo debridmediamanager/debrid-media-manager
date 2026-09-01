@@ -1,5 +1,9 @@
 import { repository as db } from '@/services/repository';
-import { getAllDebridDMMTorrent } from '@/utils/allDebridCastCatalogHelper';
+import {
+	getAllDebridDMMTorrent,
+	getAllDebridSavedLink,
+	parseSavedLinkMetaId,
+} from '@/utils/allDebridCastCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -42,7 +46,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return;
 		}
 
-		const result = await getAllDebridDMMTorrent(profile.apiKey, magnetId, userid);
+		// An `l`-prefixed id is a saved hoster link, which has no magnet behind it.
+		const result = parseSavedLinkMetaId(magnetId)
+			? await getAllDebridSavedLink(profile.apiKey, magnetId, userid)
+			: await getAllDebridDMMTorrent(profile.apiKey, magnetId, userid);
 
 		if ('error' in result) {
 			res.status(result.status).json({ error: result.error });

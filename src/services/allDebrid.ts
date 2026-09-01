@@ -775,6 +775,42 @@ interface UnlockLinkData {
 	hostDomain: string;
 }
 
+export interface AllDebridSavedLink {
+	link: string;
+	filename: string;
+	size: number;
+	date: number;
+	host: string;
+}
+
+/**
+ * The user's saved hoster links - a second library beside magnets.
+ *
+ * These carry no id of their own; the link URL is the key, which is why the
+ * library encodes it into the meta id rather than an index into this list.
+ */
+export const getSavedLinks = async (apiKey: string): Promise<AllDebridSavedLink[]> => {
+	const endpoint = `${config.allDebridHostname}/v4.1/user/links`;
+	const params = new URLSearchParams();
+	params.append('_fresh', Date.now().toString());
+
+	const response = await allDebridAxios.post<ApiResponse<{ links?: AllDebridSavedLink[] }>>(
+		endpoint,
+		params,
+		{
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+				Authorization: `Bearer ${apiKey}`,
+			},
+		}
+	);
+
+	if (response.data.status === 'error') {
+		throw new Error(response.data.error?.message || 'Failed to list saved links');
+	}
+	return response.data.data?.links ?? [];
+};
+
 /**
  * Unlock an AllDebrid link to get a direct download URL
  * @param apiKey AllDebrid API key

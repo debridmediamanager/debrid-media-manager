@@ -1,8 +1,11 @@
 import {
+	AllDebridSavedLink,
 	getMagnetFiles,
 	getMagnetStatus,
 	getMagnetStatusAd,
+	getSavedLinks,
 	MagnetFile,
+	unlockLink,
 } from '@/services/allDebrid';
 
 export const PAGE_SIZE = 12;
@@ -40,6 +43,95 @@ function flattenFiles(files: MagnetFile[], parentPath: string = ''): FlatFile[] 
  * `hasMore` is part of the answer, not decoration: without it a client has no
  * reason to ask for a second page, so the library reads as 12 items long.
  */
+/**
+ * A saved link has no id of its own - AllDebrid keys it by the URL - so the
+ * library meta id carries the URL itself, base64url encoded so it survives a
+ * path segment intact.
+ */
+export const savedLinkMetaId = (link: string) =>
+	`l${Buffer.from(link, 'utf8').toString('base64url')}`;
+
+export const parseSavedLinkMetaId = (idPart: string): string | null => {
+	if (!idPart.startsWith('l')) return null;
+	try {
+		const link = Buffer.from(idPart.slice(1), 'base64url').toString('utf8');
+		return link.startsWith('http') ? link : null;
+	} catch {
+		return null;
+	}
+};
+
+/**
+ * The user's saved hoster links, as library metas.
+ *
+ * Read whole - the list is small and unpaged at the vendor - and degraded to
+ * empty on failure, because losing it must not cost the user their magnets.
+ */
+async function fetchSavedLinkMetas(apiKey: string) {
+	let links: AllDebridSavedLink[] = [];
+	try {
+		links = await getSavedLinks(apiKey);
+	} catch (error) {
+		console.error(
+			'[AD Library] saved links unavailable:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		return [];
+	}
+	return links.map((saved) => ({
+		id: `dmm-ad:${savedLinkMetaId(saved.link)}`,
+		name: saved.filename,
+		type: 'other',
+	}));
+}
+
+/**
+ * The meta for one saved link: a single file, resolved fresh.
+ *
+ * `link/unlock` is what turns a saved hoster link into a playable URL, and it
+ * works from a datacenter IP - measured 2026-09-01 from dmm-01 as well as a
+ * residential line, unlike AllDebrid's magnet upload path.
+ */
+export async function getAllDebridSavedLink(apiKey: string, idPart: string, userid: string) {
+	const link = parseSavedLinkMetaId(idPart);
+	if (!link) {
+		return { error: 'Invalid saved link id', status: 400 };
+	}
+
+	let unlocked;
+	try {
+		unlocked = await unlockLink(apiKey, link);
+	} catch (error) {
+		return { error: 'Failed to unlock saved link', status: 500 };
+	}
+
+	const metaId = `dmm-ad:${idPart}`;
+	const size = unlocked.filesize ?? 0;
+	return {
+		data: {
+			meta: {
+				id: metaId,
+				type: 'other',
+				name: `DMM AD: ${unlocked.filename} - ${(size / 1024 / 1024 / 1024).toFixed(2)} GB`,
+				videos: [
+					{
+						id: `${metaId}:0`,
+						title: `${unlocked.filename} - ${(size / 1024 / 1024 / 1024).toFixed(2)} GB`,
+						streams: [
+							{
+								url: `${process.env.DMM_ORIGIN}/api/stremio-ad/${userid}/play/${idPart}:0`,
+								behaviorHints: { bingeGroup: metaId },
+							},
+						],
+					},
+				],
+			},
+			cacheMaxAge: 0,
+		},
+		status: 200,
+	};
+}
+
 export async function getAllDebridDMMLibrary(apiKey: string, page: number) {
 	try {
 		// Get all magnets (don't use status=active filter - it means "downloading", not "ready")
@@ -57,17 +149,24 @@ export async function getAllDebridDMMLibrary(apiKey: string, page: number) {
 		const readyMagnets = result.data.magnets.filter((m) => m.statusCode === 4);
 		console.log('[AD Library] Ready magnets:', readyMagnets.length);
 
-		// Paginate
-		const offset = (page - 1) * PAGE_SIZE;
-		const paginatedMagnets = readyMagnets.slice(offset, offset + PAGE_SIZE);
-
-		return {
-			metas: paginatedMagnets.map((magnet) => ({
+		// Saved hoster links are a second library AllDebrid keeps apart from
+		// magnets. They come first: the list is short and the whole of it is
+		// known, so paging stays a slice over one concatenated array.
+		const entries = [
+			...(await fetchSavedLinkMetas(apiKey)),
+			...readyMagnets.map((magnet) => ({
 				id: `dmm-ad:${magnet.id}`,
 				name: magnet.filename,
 				type: 'other',
 			})),
-			hasMore: offset + PAGE_SIZE < readyMagnets.length,
+		];
+
+		// Paginate
+		const offset = (page - 1) * PAGE_SIZE;
+
+		return {
+			metas: entries.slice(offset, offset + PAGE_SIZE),
+			hasMore: offset + PAGE_SIZE < entries.length,
 		};
 	} catch (error) {
 		console.error('[AD Library] Error getting AllDebrid library:', error);

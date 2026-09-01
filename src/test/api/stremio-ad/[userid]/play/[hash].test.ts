@@ -176,3 +176,36 @@ describe('/api/stremio-ad/[userid]/play/[hash]', () => {
 		expect(res.status).toHaveBeenCalledWith(500);
 	});
 });
+
+describe('/api/stremio-ad/[userid]/play/[hash] saved links', () => {
+	let res: ReturnType<typeof createMockResponse>;
+	const LINK = 'https://1fichier.com/?lemotqxaz1mytbbh93i5';
+	const ID = `l${Buffer.from(LINK, 'utf8').toString('base64url')}`;
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		res = createMockResponse();
+		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
+	});
+
+	// A saved link is the source itself - there is no magnet id to look up, and
+	// parseInt on the encoded URL is NaN, which would 400 the request outright.
+	it('unlocks the encoded link and redirects', async () => {
+		mockUnlockLink.mockResolvedValue({ link: 'https://cdn.test/file.mkv' } as any);
+		await handler(createMockRequest({ query: { userid: 'user1', hash: `${ID}:0` } }), res);
+		expect(mockUnlockLink).toHaveBeenCalledWith('key', LINK);
+		expect(mockGetMagnetFiles).not.toHaveBeenCalled();
+		expect(res.redirect).toHaveBeenCalledWith('https://cdn.test/file.mkv');
+	});
+
+	it('returns 500 when the link will not unlock', async () => {
+		mockUnlockLink.mockRejectedValue(new Error('LINK_DOWN'));
+		await handler(createMockRequest({ query: { userid: 'user1', hash: `${ID}:0` } }), res);
+		expect(res.status).toHaveBeenCalledWith(500);
+	});
+
+	it('still rejects a genuinely malformed id', async () => {
+		await handler(createMockRequest({ query: { userid: 'user1', hash: 'abc:0' } }), res);
+		expect(res.status).toHaveBeenCalledWith(400);
+	});
+});

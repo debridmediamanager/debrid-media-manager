@@ -1,5 +1,6 @@
 import { getMagnetFiles, MagnetFile, unlockLink } from '@/services/allDebrid';
 import { repository as db } from '@/services/repository';
+import { parseSavedLinkMetaId } from '@/utils/allDebridCastCatalogHelper';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface FlatFile {
@@ -97,10 +98,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
+	// An `l`-prefixed id carries a saved hoster link rather than a magnet id.
+	const savedLink = parseSavedLinkMetaId(parts[0]);
 	const magnetId = parseInt(parts[0], 10);
 	const fileIndex = parseInt(parts[1], 10);
 
-	if (isNaN(magnetId) || isNaN(fileIndex)) {
+	if ((!savedLink && isNaN(magnetId)) || isNaN(fileIndex)) {
 		res.status(400).json({
 			status: 'error',
 			errorMessage: 'Invalid magnetId or fileIndex',
@@ -125,6 +128,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	const apiKey = profile.apiKey;
+
+	if (savedLink) {
+		// A saved link is already the source; there is no magnet to fall back to.
+		try {
+			res.redirect((await unlockLink(apiKey, savedLink)).link);
+		} catch (error) {
+			console.error(
+				'Failed to unlock AllDebrid saved link:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
+			res.status(500).json({ error: 'Failed to play link' });
+		}
+		return;
+	}
 
 	try {
 		// The stored `/f/` link first: any premium key can unlock it and it
