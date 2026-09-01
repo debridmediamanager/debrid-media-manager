@@ -18,6 +18,7 @@ import toast from 'react-hot-toast';
 import { handleShare } from '../../utils/hashList';
 import { isVideo } from '../../utils/selectable';
 import Modal from '../modals/modal';
+import { bindCastAllButton } from './castAll';
 import { renderButton, renderInfoTable } from './components';
 import type { PremiumizeFileRow } from './render';
 import { renderTorrentInfo, renderTorrentInfoPM, renderTorrentInfoTB } from './render';
@@ -632,91 +633,12 @@ export const showInfoForRD = async (
 				}
 			});
 
-			// Cast All button handler
-			const castAllBtn = document.getElementById('btn-cast-all');
-			logAction('binding cast-all button (RD)', {
-				exists: Boolean(castAllBtn),
-				hash: info.hash,
-			});
-			castAllBtn?.addEventListener('click', async () => {
-				logAction('cast-all clicked (RD)', {
-					hash: info.hash,
-					id: info.id,
-				});
-				const castUrl = `/api/stremio/cast/library/${info.id}:${info.hash}?rdToken=${rdKey}`;
-				const toastId = toast.loading('Preparing cast...', magnetToastOptions);
-				try {
-					const response = await fetch(castUrl);
-					const data = await response.json();
-
-					if (data.status === 'need_imdb_id') {
-						// Prompt user for IMDB ID
-						toast.dismiss(toastId);
-						const result = await Modal.fire({
-							title: 'IMDB ID Required',
-							html: `<p class="text-gray-300 mb-4">Could not determine the IMDB ID for this torrent. Please enter it manually.</p>
-								<p class="text-gray-400 text-sm mb-2">Torrent: ${data.torrentInfo?.filename || info.filename}</p>
-								<input type="text" id="imdb-input" class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white" placeholder="tt1234567" />
-								<p class="text-gray-500 text-xs mt-2">Find the IMDB ID on <a href="https://www.imdb.com" target="_blank" class="text-blue-400 underline">imdb.com</a></p>`,
-							showCancelButton: true,
-							confirmButtonText: 'Cast',
-							customClass: {
-								popup: '!bg-gray-900 !text-gray-100',
-								confirmButton: 'haptic',
-								cancelButton: 'haptic',
-							},
-							preConfirm: () => {
-								const input = document.getElementById(
-									'imdb-input'
-								) as HTMLInputElement;
-								const imdbId = input?.value?.trim();
-								if (!imdbId || !/^tt\d{7,}$/.test(imdbId)) {
-									Modal.showValidationMessage(
-										'Please enter a valid IMDB ID (e.g., tt1234567)'
-									);
-									return false;
-								}
-								return imdbId;
-							},
-						});
-
-						if (result.isConfirmed && result.value) {
-							// Retry with the provided IMDB ID
-							const retryToastId = toast.loading('Casting...', magnetToastOptions);
-							try {
-								const retryUrl = `${castUrl}&imdbId=${result.value}`;
-								const retryResponse = await fetch(retryUrl);
-								const retryData = await retryResponse.json();
-
-								if (retryData.status === 'success') {
-									toast.dismiss(retryToastId);
-									window.location.href = retryData.redirectUrl;
-									toast.success('Opening in Stremio...', magnetToastOptions);
-								} else {
-									toast.dismiss(retryToastId);
-									toast.error(
-										retryData.errorMessage || 'Failed to cast',
-										magnetToastOptions
-									);
-								}
-							} catch (error) {
-								toast.dismiss(retryToastId);
-								toast.error('Failed to cast to Stremio', magnetToastOptions);
-							}
-						}
-					} else if (data.status === 'success') {
-						toast.dismiss(toastId);
-						window.location.href = data.redirectUrl;
-						toast.success('Opening in Stremio...', magnetToastOptions);
-					} else {
-						toast.dismiss(toastId);
-						toast.error(data.errorMessage || 'Failed to cast', magnetToastOptions);
-					}
-				} catch (error) {
-					toast.dismiss(toastId);
-					console.error('Cast error:', error);
-					toast.error('Failed to cast to Stremio', magnetToastOptions);
-				}
+			bindCastAllButton({
+				buttonId: 'btn-cast-all',
+				castUrl: `/api/stremio/cast/library/${info.id}:${info.hash}`,
+				apiKey: rdKey,
+				filename: info.filename,
+				log: logAction,
 			});
 		},
 	});
@@ -751,6 +673,7 @@ export const showInfoForAD = async (
             ${renderButton('delete', { id: 'btn-delete-ad' })}
             ${renderButton('magnet', { id: 'btn-magnet-copy', text: shouldDownloadMagnets ? 'Download' : 'Copy' })}
             ${renderButton('reinsert', { id: 'btn-restart-ad' })}
+            ${adKey ? renderButton('castAll', { id: 'btn-cast-all' }) : ''}
 	            ${info.links.length > 1 ? renderButton('downloadAll', { link: `${downloadAllLink}`, id: 'btn-download-all-ad' }) : ''}
             ${info.links.length > 0 ? renderButton('exportLinks', { id: 'btn-export-links' }) : ''}
             ${info.links.length > 0 ? renderButton('generateStrm', { id: 'btn-generate-strm' }) : ''}
@@ -807,6 +730,13 @@ export const showInfoForAD = async (
 			const logAction = (event: string, data: Record<string, unknown> = {}) => {
 				console.log('[torrentModal]', event, data);
 			};
+			bindCastAllButton({
+				buttonId: 'btn-cast-all',
+				castUrl: `/api/stremio-ad/cast/library/${info.id}:${info.hash}`,
+				apiKey: adKey,
+				filename: info.filename,
+				log: logAction,
+			});
 			bindWatchButtons({
 				service: 'ad',
 				hash: info.hash,
@@ -1015,6 +945,7 @@ export const showInfoForTB = async (
         <div class="mb-3 flex justify-center items-center flex-wrap">
             ${isWebDownload ? '' : renderButton('share', { link: `${await handleShare(torrent)}` })}
             ${renderButton('delete', { id: 'btn-delete-tb' })}
+            ${tbKey ? renderButton('castAll', { id: 'btn-cast-all' }) : ''}
             ${isWebDownload ? '' : renderButton('magnet', { id: 'btn-magnet-copy', text: shouldDownloadMagnets ? 'Download' : 'Copy' })}
             ${info.files?.length ? renderButton('exportLinks', { id: 'btn-export-links' }) : ''}
         </div>`;
@@ -1080,6 +1011,14 @@ export const showInfoForTB = async (
 			const logAction = (event: string, data: Record<string, unknown> = {}) => {
 				console.log('[torrentModal]', event, data);
 			};
+			bindCastAllButton({
+				buttonId: 'btn-cast-all',
+				// A web download lives in its own TorBox table, named by a `w` prefix.
+				castUrl: `/api/stremio-tb/cast/library/${isWebDownload ? 'w' : ''}${info.id}:${info.hash}`,
+				apiKey: tbKey,
+				filename: info.name,
+				log: logAction,
+			});
 			bindWatchButtons({
 				service: isWebDownload ? 'tbw' : 'tb',
 				hash: info.hash,
@@ -1224,6 +1163,7 @@ export const showInfoForPM = async (
         <div class="mb-3 flex justify-center items-center flex-wrap">
             ${hasInfoHash ? renderButton('share', { link: `${await handleShare(torrent)}` }) : ''}
             ${renderButton('delete', { id: 'btn-delete-pm' })}
+            ${hasInfoHash ? renderButton('castAll', { id: 'btn-cast-all' }) : ''}
             ${hasInfoHash ? renderButton('magnet', { id: 'btn-magnet-copy', text: shouldDownloadMagnets ? 'Download' : 'Copy' }) : ''}
             ${files.length ? renderButton('exportLinks', { id: 'btn-export-links' }) : ''}
         </div>`;
@@ -1275,6 +1215,17 @@ export const showInfoForPM = async (
 				player: app ?? '',
 				keys: { premiumizeKey: pmKey },
 			});
+
+			// Only a row whose transfer record survives reports an info hash, and
+			// the cast is resolved from that hash alone - see the route.
+			if (hasInfoHash) {
+				bindCastAllButton({
+					buttonId: 'btn-cast-all',
+					castUrl: `/api/stremio-pm/cast/library/${torrent.hash}`,
+					apiKey: pmKey,
+					filename: torrent.filename,
+				});
+			}
 
 			document
 				.querySelectorAll<HTMLButtonElement>('button[data-pm-file-id]')
