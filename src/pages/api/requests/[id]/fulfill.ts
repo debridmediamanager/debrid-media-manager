@@ -82,10 +82,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(401).json({ error: 'Real-Debrid session is not valid' });
 	}
 
-	let sourceKeys: { tb_api_key?: string; ad_api_key?: string };
+	let sourceKeys: { tb_api_key: string };
 	try {
-		const { tbKey, adKey } = (req.body ?? {}) as { tbKey?: string; adKey?: string };
-		sourceKeys = pickSourceKeys({ torboxApiKey: tbKey, alldebridApiKey: adKey });
+		const { tbKey } = (req.body ?? {}) as { tbKey?: string };
+		sourceKeys = pickSourceKeys({ torboxApiKey: tbKey });
 	} catch (error) {
 		if (error instanceof RequestValidationError) {
 			return res.status(400).json({ error: error.message });

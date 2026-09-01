@@ -61,10 +61,9 @@ export interface CreateDebridJobParams {
 	hash: string;
 	imdbId: string;
 	rdKey: string;
-	// At least one source key. TorBox-held content uses tbKey; AllDebrid-held
-	// uses adKey. The debrid service picks the source it finds the hash cached on.
+	// TorBox is the only cache source; see api/debrid-uploader/jobs.ts for why
+	// AllDebrid was withdrawn.
 	tbKey?: string;
-	adKey?: string;
 	sizeBytes?: number;
 	/**
 	 * The DMM title and the page this was started from. Stored server-side against
@@ -322,12 +321,11 @@ export async function runDebridTransferToRd(params: {
 	imdbId: string;
 	rdKey: string;
 	tbKey?: string;
-	adKey?: string;
 	sizeBytes?: number;
 	title?: string;
 	returnPath?: string;
 }): Promise<TransferOutcome> {
-	const { hash, imdbId, rdKey, tbKey, adKey, sizeBytes, title, returnPath } = params;
+	const { hash, imdbId, rdKey, tbKey, sizeBytes, title, returnPath } = params;
 	const label = TRANSFER_LABELS.send;
 
 	const toastId = toast.loading(`${label}: submitting transfer...`, {
@@ -368,7 +366,6 @@ export async function runDebridTransferToRd(params: {
 				imdbId,
 				rdKey,
 				tbKey,
-				adKey,
 				sizeBytes,
 				title,
 				returnPath,

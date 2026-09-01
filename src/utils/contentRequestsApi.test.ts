@@ -106,14 +106,14 @@ describe('fileContentRequest', () => {
 describe('fulfillContentRequest', () => {
 	it('sends only the keys the fulfiller actually holds', async () => {
 		(global.fetch as any).mockResolvedValue(ok({ jobId: 'job-9' }));
-		const jobId = await fulfillContentRequest('RD', 'req-1', { tbKey: 'TB', adKey: null });
+		const jobId = await fulfillContentRequest('RD', 'req-1', { tbKey: 'TB' });
 		expect(JSON.parse(lastInit().body)).toEqual({ tbKey: 'TB' });
 		expect(jobId).toBe('job-9');
 	});
 
 	it('escapes the id into the path', async () => {
 		(global.fetch as any).mockResolvedValue(ok({ jobId: 'j' }));
-		await fulfillContentRequest('RD', 'a/b', { adKey: 'AD' });
+		await fulfillContentRequest('RD', 'a/b', { tbKey: 'TB' });
 		expect(lastCall()[0]).toBe('/api/requests/a%2Fb/fulfill');
 	});
 

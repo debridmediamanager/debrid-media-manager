@@ -134,7 +134,6 @@ export function canClaim(request: ClaimSubject, fulfillerId: string): ClaimVerdi
 
 export interface SourceKeys {
 	torboxApiKey?: string | null;
-	alldebridApiKey?: string | null;
 }
 
 /**
@@ -143,16 +142,12 @@ export interface SourceKeys {
  * Mirrors the uploader's own rule — it refuses a job carrying no cache source —
  * so the failure is a 400 here rather than a job that dies on arrival.
  */
-export function pickSourceKeys(keys: SourceKeys): { tb_api_key?: string; ad_api_key?: string } {
+export function pickSourceKeys(keys: SourceKeys): { tb_api_key: string } {
 	const torbox = typeof keys.torboxApiKey === 'string' ? keys.torboxApiKey.trim() : '';
-	const alldebrid = typeof keys.alldebridApiKey === 'string' ? keys.alldebridApiKey.trim() : '';
-	if (!torbox && !alldebrid) {
-		throw new RequestValidationError('a TorBox or AllDebrid key is required to fulfil');
+	if (!torbox) {
+		throw new RequestValidationError('a TorBox key is required to fulfil');
 	}
-	return {
-		...(torbox ? { tb_api_key: torbox } : {}),
-		...(alldebrid ? { ad_api_key: alldebrid } : {}),
-	};
+	return { tb_api_key: torbox };
 }
 
 /** What the board shows. Never the ids of the people involved, nor any key. */

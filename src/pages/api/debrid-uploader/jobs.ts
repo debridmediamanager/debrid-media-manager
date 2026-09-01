@@ -73,7 +73,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { hash, imdbId, rdKey, tbKey, adKey, sizeBytes, title, returnPath } = req.body ?? {};
+	const { hash, imdbId, rdKey, tbKey, sizeBytes, title, returnPath } = req.body ?? {};
 
 	if (typeof hash !== 'string' || !/^[a-fA-F0-9]{40}$/.test(hash)) {
 		return res.status(400).json({ error: 'hash must be a 40-char hex info hash' });
@@ -84,12 +84,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (typeof rdKey !== 'string' || !rdKey) {
 		return res.status(400).json({ error: 'rdKey is required' });
 	}
-	// At least one source key: TorBox and/or AllDebrid. The debrid service uses
-	// whichever it finds the hash cached on.
+	// TorBox is the only cache source. AllDebrid was withdrawn on 2026-09-01 with
+	// debrid01, the one uploader host whose IP AllDebrid permitted: `magnet/upload`
+	// is the cache probe now that the read-only check is retired, so from any
+	// remaining host it can only answer `NO_SERVER`. The UI stopped offering it
+	// first, but this route kept accepting `adKey` from stale browser bundles and
+	// turned a guaranteed refusal into the job's user-visible failure reason.
 	const tbSource = typeof tbKey === 'string' && tbKey ? tbKey : undefined;
-	const adSource = typeof adKey === 'string' && adKey ? adKey : undefined;
-	if (!tbSource && !adSource) {
-		return res.status(400).json({ error: 'a tbKey or adKey source is required' });
+	if (!tbSource) {
+		return res.status(400).json({ error: 'a tbKey source is required' });
 	}
 
 	const originalHash = hash.toLowerCase();
@@ -141,8 +144,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		input: `magnet:?xt=urn:btih:${originalHash}`,
 		imdb_id: imdbId,
 		rd_api_key: rdKey,
-		...(tbSource ? { tb_api_key: tbSource } : {}),
-		...(adSource ? { ad_api_key: adSource } : {}),
+		tb_api_key: tbSource,
 	});
 
 	// Try the round-robin-chosen server first; on a network failure fall through

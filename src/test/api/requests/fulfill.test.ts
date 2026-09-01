@@ -104,11 +104,22 @@ describe('POST /api/requests/[id]/fulfill', () => {
 		expect(mockToken).toHaveBeenCalledWith('cid', 'secret', 'refresh', true);
 	});
 
-	it('accepts an AllDebrid fulfiller', async () => {
-		await call({ body: { adKey: 'AD_KEY' } });
+	// AllDebrid was withdrawn as a cache source on 2026-09-01 along with debrid01,
+	// the only uploader host whose IP AllDebrid permitted. A forwarded AD key can
+	// now only come back `NO_SERVER`, which surfaced to the user as their job's
+	// failure reason, so the refusal has to happen here instead.
+	it('refuses an AllDebrid-only fulfiller rather than forwarding the key', async () => {
+		const res = await call({ body: { adKey: 'AD_KEY' } });
+		expect(statusOf(res)).toBe(400);
+		expect(bodyOf(res).error).toMatch(/TorBox key is required/);
+		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
+	it('never forwards an AllDebrid key alongside a TorBox one', async () => {
+		await call({ body: { tbKey: 'TB_KEY', adKey: 'AD_KEY' } });
 		const body = JSON.parse((global.fetch as any).mock.calls[0][1].body);
-		expect(body.ad_api_key).toBe('AD_KEY');
-		expect(body.tb_api_key).toBeUndefined();
+		expect(body.tb_api_key).toBe('TB_KEY');
+		expect(body.ad_api_key).toBeUndefined();
 	});
 
 	it('files the transfer under the requester, whose account it lands in', async () => {
@@ -128,7 +139,7 @@ describe('refusals', () => {
 	it('rejects a fulfiller carrying no cache-source key', async () => {
 		const res = await call({ body: {} });
 		expect(statusOf(res)).toBe(400);
-		expect(bodyOf(res).error).toContain('TorBox or AllDebrid key is required');
+		expect(bodyOf(res).error).toContain('TorBox key is required');
 	});
 
 	it('404s an unknown request', async () => {

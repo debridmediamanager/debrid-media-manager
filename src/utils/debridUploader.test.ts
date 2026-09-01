@@ -128,7 +128,7 @@ describe('createDebridUploaderJob', () => {
 			hash: 'a'.repeat(40),
 			imdbId: 'tt1418646',
 			rdKey: 'k',
-			adKey: 'ad',
+			tbKey: 'tb',
 		});
 		expect(isDuplicateResponse(job)).toBe(false);
 	});
@@ -149,7 +149,7 @@ describe('createDebridUploaderJob', () => {
 			hash: 'a'.repeat(40),
 			imdbId: 'tt1418646',
 			rdKey: 'k',
-			adKey: 'ad',
+			tbKey: 'tb',
 		});
 		expect(isDuplicateResponse(job)).toBe(true);
 	});
@@ -168,7 +168,7 @@ describe('createDebridUploaderJob', () => {
 				hash: 'a'.repeat(40),
 				imdbId: 'tt1418646',
 				rdKey: 'k',
-				adKey: 'ad',
+				tbKey: 'tb',
 			})
 		).rejects.toThrow('all servers unreachable');
 	});
@@ -205,7 +205,7 @@ describe('runDebridTransferToRd', () => {
 			hash,
 			imdbId: 'tt1234567',
 			rdKey: 'rdkey',
-			adKey: 'adkey',
+			tbKey: 'tbkey',
 			title: 'Test Movie',
 			returnPath: '/movie/tt1234567',
 		});
@@ -242,7 +242,7 @@ describe('runDebridTransferToRd', () => {
 			hash,
 			imdbId: 'tt9999999',
 			rdKey: 'rdkey',
-			adKey: 'adkey',
+			tbKey: 'tbkey',
 		});
 
 		expect(outcome).toBe('completed');
@@ -271,7 +271,7 @@ describe('runDebridTransferToRd', () => {
 			hash,
 			imdbId: 'tt9999999',
 			rdKey: 'rdkey',
-			adKey: 'adkey',
+			tbKey: 'tbkey',
 		});
 
 		expect(outcome).toBe('completed');
@@ -298,7 +298,7 @@ describe('runDebridTransferToRd', () => {
 			hash: 'd'.repeat(40),
 			imdbId: 'tt9999999',
 			rdKey: 'rdkey',
-			adKey: 'adkey',
+			tbKey: 'tbkey',
 		});
 
 		expect(outcome).toBe('duplicate');
@@ -329,9 +329,9 @@ describe('runDebridTransferToRd joining a transfer this browser already tracks',
 			hash,
 			imdbId: 'tt1234567',
 			rdKey: 'rdkey',
-			// The button clicked is irrelevant: the transfer is identified by its
-			// magnet, so an AD → RD click joins a transfer TorBox is sourcing.
-			adKey: 'adkey',
+			// The row clicked is irrelevant: the transfer is identified by its
+			// magnet, so a second click joins the transfer already in flight.
+			tbKey: 'tbkey',
 		});
 
 	const postedJobs = (fetchMock: ReturnType<typeof vi.fn>) =>
@@ -495,7 +495,7 @@ describe('runDebridTransferToRd settling once Real-Debrid is pulling', () => {
 		});
 
 	const run = () =>
-		runDebridTransferToRd({ hash, imdbId: 'tt1234567', rdKey: 'rdkey', adKey: 'adkey' });
+		runDebridTransferToRd({ hash, imdbId: 'tt1234567', rdKey: 'rdkey', tbKey: 'tbkey' });
 
 	it('settles a joined transfer on the shared toast instead of waiting out RD', async () => {
 		vi.useFakeTimers();

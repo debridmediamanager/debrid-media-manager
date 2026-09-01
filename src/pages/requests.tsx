@@ -109,12 +109,14 @@ export default function RequestsPage() {
 	// A single in-flight guard shared by the scroll trigger and the buttons.
 	const loadingRef = useRef(false);
 
-	// TorBox and AllDebrid are the only sources the uploader can pull from, so
-	// they are the only keys the board cares about. (Premiumize is not one: the
+	// TorBox is the only source the uploader can pull from, so it is the only key
+	// the board cares about. AllDebrid was withdrawn on 2026-09-01 with debrid01,
+	// the one uploader host whose IP it permitted; offering fulfil to an AD-only
+	// holder would now only earn them a 400. (Premiumize is not one either: the
 	// uploader cannot source from it, which is why a Premiumize user is not sent
 	// here in the first place.)
-	const canFulfil = Boolean(rdKey) && Boolean(torboxKey || adKey);
-	const hasFulfillerKey = Boolean(torboxKey || adKey);
+	const canFulfil = Boolean(rdKey) && Boolean(torboxKey);
+	const hasFulfillerKey = Boolean(torboxKey);
 
 	/**
 	 * Ask each service the viewer holds a key for which of these hashes it has
@@ -282,7 +284,7 @@ export default function RequestsPage() {
 			)
 				return;
 			try {
-				const jobId = await fulfillContentRequest(key, row.id, { tbKey: torboxKey, adKey });
+				const jobId = await fulfillContentRequest(key, row.id, { tbKey: torboxKey });
 				toast.success('Transfer started. Thank you!');
 				// Reflect it in place rather than reloading, so the scroll position
 				// and the rest of the loaded pages survive.

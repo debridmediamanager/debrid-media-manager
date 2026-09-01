@@ -88,7 +88,7 @@ export async function fileContentRequest(
 export async function fulfillContentRequest(
 	rdKey: string,
 	id: string,
-	keys: { tbKey?: string | null; adKey?: string | null }
+	keys: { tbKey?: string | null }
 ): Promise<string> {
 	const data = await unwrap(
 		await fetch(`/api/requests/${encodeURIComponent(id)}/fulfill`, {
@@ -96,7 +96,6 @@ export async function fulfillContentRequest(
 			headers: headers(rdKey, true),
 			body: JSON.stringify({
 				...(keys.tbKey ? { tbKey: keys.tbKey } : {}),
-				...(keys.adKey ? { adKey: keys.adKey } : {}),
 			}),
 		})
 	);

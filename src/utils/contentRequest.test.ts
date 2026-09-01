@@ -8,6 +8,7 @@ import {
 	parseRequestInput,
 	pickSourceKeys,
 	RequestValidationError,
+	type SourceKeys,
 	toPublicRequest,
 } from '@/utils/contentRequest';
 import { describe, expect, it } from 'vitest';
@@ -151,15 +152,20 @@ describe('pickSourceKeys', () => {
 		expect(pickSourceKeys({ torboxApiKey: 'TB' })).toEqual({ tb_api_key: 'TB' });
 	});
 
-	it('passes an AllDebrid key through', () => {
-		expect(pickSourceKeys({ alldebridApiKey: 'AD' })).toEqual({ ad_api_key: 'AD' });
+	// AllDebrid was withdrawn as a cache source on 2026-09-01 with debrid01, the
+	// only uploader host whose IP it permitted. An AD key reaching the uploader
+	// can now only come back `NO_SERVER`, so it must never be forwarded — and a
+	// fulfiller holding one is refused here rather than after the job dies.
+	it('never forwards an AllDebrid key, even alongside a TorBox one', () => {
+		expect(
+			pickSourceKeys({ torboxApiKey: 'TB', alldebridApiKey: 'AD' } as unknown as SourceKeys)
+		).toEqual({ tb_api_key: 'TB' });
 	});
 
-	it('passes both when the fulfiller has both', () => {
-		expect(pickSourceKeys({ torboxApiKey: 'TB', alldebridApiKey: 'AD' })).toEqual({
-			tb_api_key: 'TB',
-			ad_api_key: 'AD',
-		});
+	it('refuses an AllDebrid-only fulfiller', () => {
+		expect(() => pickSourceKeys({ alldebridApiKey: 'AD' } as unknown as SourceKeys)).toThrow(
+			'TorBox key is required'
+		);
 	});
 
 	it('trims', () => {
@@ -168,10 +174,10 @@ describe('pickSourceKeys', () => {
 
 	// Mirrors the uploader's own refusal, so this fails as a 400 rather than as
 	// a job that dies the moment it arrives.
-	it.each([{}, { torboxApiKey: '' }, { torboxApiKey: '   ', alldebridApiKey: null }])(
+	it.each([{}, { torboxApiKey: '' }, { torboxApiKey: '   ' }])(
 		'refuses %p, which carries no cache source',
 		(keys) => {
-			expect(() => pickSourceKeys(keys)).toThrow('TorBox or AllDebrid key is required');
+			expect(() => pickSourceKeys(keys)).toThrow('TorBox key is required');
 		}
 	);
 });
