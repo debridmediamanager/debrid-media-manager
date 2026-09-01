@@ -1,3 +1,4 @@
+import { CAST_ADDON_VERSIONS } from '@/utils/castAddonVersions';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -15,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			'Cast your preferred Debrid Media Manager streams to your Stremio device using Real-Debrid; supports Anime, TV shows and Movies!',
 		logo: 'https://static.debridmediamanager.com/greenlogo.jpeg',
 		background: 'https://static.debridmediamanager.com/background.png',
-		version: '0.0.5',
+		version: CAST_ADDON_VERSIONS.realdebrid,
 		resources: [
 			{
 				name: 'stream',
