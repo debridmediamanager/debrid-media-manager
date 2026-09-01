@@ -5,12 +5,15 @@ import {
 	getFileByNameTorBoxStreamUrl,
 	getWebDownloadStreamUrlByHash,
 } from '@/utils/getTorBoxStreamUrl';
-import { isWebDownloadHash } from '@/utils/torboxWebDownload';
+import { isWebDownloadHash, parseTorBoxCastTarget } from '@/utils/torboxWebDownload';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // Play a TorBox file from an existing torrent
 // Supports two formats:
 // 1. torrentId:fileId (e.g., "123456:789") - direct lookup (with ?h=hash&file=filename fallback)
+//    A `w` prefix on the id (e.g., "w1599037:0") means a web download, which
+//    lives in a different TorBox table whose ids overlap torrent ids. Library
+//    metas carry that prefix; casts identify a web download by its md5 hash.
 // 2. hash (e.g., "fbadffe5476df0674dbec75e81426895e40b6427") - legacy format
 //    - With ?file=filename: matches specific file by name (for TV episodes)
 //    - Without ?file: uses biggest file (for movies)
@@ -68,16 +71,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				return;
 			}
 
-			const torrentId = parseInt(parts[0], 10);
+			const target = parseTorBoxCastTarget(parts[0]);
 			const fileId = parseInt(parts[1], 10);
 
-			if (isNaN(torrentId) || isNaN(fileId)) {
+			if (!target || isNaN(fileId)) {
 				res.status(400).json({
 					status: 'error',
 					errorMessage: 'Invalid torrentId or fileId',
 				});
 				return;
 			}
+
+			const torrentId = target.id;
+			// The id itself settles it for a library entry; a cast has no prefix and
+			// is identified by its hash instead.
+			const resolveAsWebDownload = target.isWebDownload || isWebDownload;
 
 			// A torrent id only resolves inside the account that created it, so for
 			// someone else's cast the direct lookup is a guaranteed 500 - measured
@@ -91,12 +99,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// A web download is always the caster's own - the stream route drops
 			// other users' web downloads because no other key can resolve them.
 			const canResolveDirectly =
-				own === '1' || isWebDownload || typeof fallbackHash !== 'string';
+				own === '1' || resolveAsWebDownload || typeof fallbackHash !== 'string';
 			try {
 				if (!canResolveDirectly) {
 					throw new Error("not this account's torrent id");
 				}
-				const downloadResult = isWebDownload
+				const downloadResult = resolveAsWebDownload
 					? await requestWebDownloadLink(
 							apiKey,
 							{ web_id: torrentId, file_id: fileId },
@@ -126,7 +134,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// working without it - an in-flight read survives the delete and a
 			// later seek still answers 206.
 			if (!streamUrl && typeof fallbackHash === 'string') {
-				if (isWebDownload) {
+				if (resolveAsWebDownload) {
 					streamUrl = await getWebDownloadStreamUrlByHash(apiKey, fallbackHash, filename);
 				} else if (filename) {
 					const [url] = await getFileByNameTorBoxStreamUrl(
