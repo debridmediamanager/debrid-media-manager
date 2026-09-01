@@ -7,10 +7,12 @@ import {
 	deletePremiumizeTransfer,
 	directDownloadPremiumize,
 	getPremiumizeAccountInfo,
+	infoHashFromTorrentFile,
 	isEnergyCdnLink,
 	isPremiumizePremium,
 	listAllPremiumizeItems,
 	listPremiumizeTransfers,
+	resolvePremiumizeTransferHash,
 	resolvePremiumizeTransferHashes,
 	toMagnetUri,
 } from './premiumize';
@@ -311,5 +313,74 @@ describe('item/listall', () => {
 	it('tolerates a missing files array', async () => {
 		fetchMock.mockResolvedValue(jsonResponse({ status: 'success' }));
 		expect(await listAllPremiumizeItems('key')).toEqual([]);
+	});
+});
+
+describe('recovering a transfer info hash', () => {
+	// The vendor answers `job/src` two different ways, and only one is a redirect.
+	const bencodeTorrent = async () => {
+		const bencode = (await import('bencode')).default;
+		const crypto = await import('crypto');
+		const info = { name: Buffer.from('Release.mkv'), 'piece length': 262144 };
+		return {
+			body: bencode.encode({ announce: Buffer.from('udp://t/announce'), info }),
+			hash: crypto.createHash('sha1').update(bencode.encode(info)).digest('hex'),
+		};
+	};
+
+	afterEach(() => {
+		vi.unstubAllGlobals();
+	});
+
+	it('reads the hash out of a magnet redirect', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({
+				ok: false,
+				headers: {
+					get: () => 'magnet:?xt=urn:btih:FE149AB2D6D2B059F5BE02ACD5050BE2594284B7&dn=x',
+				},
+			})
+		);
+		await expect(resolvePremiumizeTransferHash('key', 'id')).resolves.toBe(
+			'fe149ab2d6d2b059f5be02acd5050be2594284b7'
+		);
+	});
+
+	// A transfer created from a .torrent file answers 200 with the torrent bytes,
+	// mislabelled `application/json`. Reading only the redirect reported those
+	// transfers as having no info hash — 2 of 3 on the probe account.
+	it('computes the hash from a torrent body when there is no redirect', async () => {
+		const { body, hash } = await bencodeTorrent();
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({
+				ok: true,
+				headers: { get: () => null },
+				arrayBuffer: async () =>
+					body.buffer.slice(body.byteOffset, body.byteOffset + body.byteLength),
+			})
+		);
+		await expect(resolvePremiumizeTransferHash('key', 'id')).resolves.toBe(hash);
+	});
+
+	it('returns null on a non-ok response with no redirect', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({ ok: false, headers: { get: () => null } })
+		);
+		await expect(resolvePremiumizeTransferHash('key', 'id')).resolves.toBeNull();
+	});
+
+	it('returns null for bytes that are not a torrent', async () => {
+		await expect(
+			infoHashFromTorrentFile(new TextEncoder().encode('not bencode'))
+		).resolves.toBeNull();
+	});
+
+	it('returns null for a bencoded value with no info dict', async () => {
+		const bencode = (await import('bencode')).default;
+		const body = bencode.encode({ announce: Buffer.from('udp://t') });
+		await expect(infoHashFromTorrentFile(body)).resolves.toBeNull();
 	});
 });

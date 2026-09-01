@@ -440,6 +440,28 @@ export const deletePremiumizeItem = (apiKey: string, id: string): Promise<Premiu
  * following it is not something a browser fetch will do - so the browser goes
  * through the proxy's virtual endpoint.
  */
+/**
+ * The info hash of a .torrent file: sha1 over the bencoded `info` dictionary,
+ * re-encoded rather than sliced out of the original bytes so a non-canonical
+ * ordering cannot shift the boundaries.
+ *
+ * `bencode` and node's `crypto` are imported lazily because this module is also
+ * bundled for the browser, where neither belongs and only the proxy path runs.
+ */
+export async function infoHashFromTorrentFile(body: Uint8Array): Promise<string | null> {
+	try {
+		const [{ default: bencode }, { createHash }] = await Promise.all([
+			import('bencode'),
+			import('crypto'),
+		]);
+		const decoded = bencode.decode(body as Buffer) as { info?: unknown };
+		if (!decoded?.info) return null;
+		return createHash('sha1').update(bencode.encode(decoded.info)).digest('hex');
+	} catch {
+		return null;
+	}
+}
+
 export async function resolvePremiumizeTransferHash(
 	apiKey: string,
 	id: string
@@ -452,10 +474,22 @@ export async function resolvePremiumizeTransferHash(
 				redirect: 'manual',
 				signal,
 			});
+
+			// A transfer created from a magnet 302s back to that magnet.
 			const location = response.headers.get('location');
-			if (!location) return null;
-			const match = /urn:btih:([a-fA-F0-9]{40})/.exec(location);
-			return match ? match[1].toLowerCase() : null;
+			if (location) {
+				const match = /urn:btih:([a-fA-F0-9]{40})/.exec(location);
+				return match ? match[1].toLowerCase() : null;
+			}
+
+			// A transfer created from a .torrent file answers 200 with the torrent
+			// itself - mislabelled `application/json`, so the content type is no
+			// help. The hash is still there, as the sha1 of the bencoded `info`
+			// dict. Measured 2026-09-01: 2 of 3 transfers on the probe account
+			// take this branch, and reading only the redirect reported them as
+			// having no info hash at all.
+			if (!response.ok) return null;
+			return await infoHashFromTorrentFile(new Uint8Array(await response.arrayBuffer()));
 		});
 	} catch {
 		return null;
