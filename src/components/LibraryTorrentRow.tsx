@@ -142,7 +142,7 @@ function TorrentRow({
 		return torrent.serviceStatus; // Fallback to raw status
 	};
 
-	const [castService, setCastService] = useState<'rd' | 'ad' | 'tb' | null>(null);
+	const [castService, setCastService] = useState<'rd' | 'ad' | 'tb' | 'pm' | null>(null);
 
 	// Handler for cast button click
 	const handleCastClick = async (imdbId?: string) => {
@@ -242,10 +242,45 @@ function TorrentRow({
 		}
 	};
 
+	const handlePmCastClick = async (imdbId?: string) => {
+		if (!pmKey || !torrent.id.startsWith('pm:')) return;
+
+		// Premiumize resolves a cast from the info hash alone, and a row whose
+		// transfer record was cleared reports none - there is nothing to cast.
+		if (!torrent.hash) return;
+
+		setCastService('pm');
+		setIsCasting(true);
+		try {
+			const castUrl = `/api/stremio-pm/cast/library/${torrent.hash}${imdbId ? `?imdbId=${imdbId}` : ''}`;
+			const response = await fetch(castUrl, {
+				headers: { Authorization: `Bearer ${pmKey}` },
+			});
+			const data = await response.json();
+
+			if (data.status === 'need_imdb_id') {
+				setCastTorrentInfo(data.torrentInfo);
+				setShowCastModal(true);
+			} else if (data.status === 'error') {
+				toast.error(data.errorMessage || 'Failed to cast to Stremio');
+			} else if (data.status === 'success') {
+				window.location.href = data.redirectUrl;
+				toast.success('Opening in Stremio...');
+			}
+		} catch (error) {
+			console.error('Cast error:', error);
+			toast.error('Failed to cast to Stremio');
+		} finally {
+			setIsCasting(false);
+		}
+	};
+
 	// Handler for IMDB ID selection from modal
 	const handleSelectImdbId = async (imdbId: string) => {
 		setShowCastModal(false);
-		if (castService === 'tb') {
+		if (castService === 'pm') {
+			await handlePmCastClick(imdbId);
+		} else if (castService === 'tb') {
 			await handleTbCastClick(imdbId);
 		} else if (castService === 'ad') {
 			await handleAdCastClick(imdbId);
@@ -431,6 +466,19 @@ function TorrentRow({
 							disabled={isCasting}
 						>
 							<Cast className="h-4 w-4 text-cyan-400" />
+						</button>
+					)}
+					{pmKey && torrent.id.startsWith('pm:') && torrent.hash && (
+						<button
+							title="Cast (PM)"
+							className="mb-2 mr-2 cursor-pointer text-yellow-400 disabled:opacity-50"
+							onClick={(e) => {
+								e.stopPropagation();
+								handlePmCastClick();
+							}}
+							disabled={isCasting}
+						>
+							<Cast className="h-4 w-4 text-yellow-400" />
 						</button>
 					)}
 					{canSendToRd && (

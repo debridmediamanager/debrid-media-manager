@@ -103,6 +103,49 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 		(useRouter as any).mockReturnValue?.(mockRouter);
 	});
 
+	describe('Premiumize cast button', () => {
+		const pmProps = (overrides: Partial<UserTorrent> = {}) => ({
+			...defaultProps,
+			rdKey: null,
+			pmKey: 'test-pm-key',
+			torrent: { ...mockTorrent, id: 'pm:abc', hash: 'f'.repeat(40), ...overrides },
+		});
+
+		it('renders for a Premiumize row that reports an info hash', () => {
+			const { container } = render(<LibraryTorrentRow {...pmProps()} />);
+			expect(container.querySelector('button[title="Cast (PM)"]')).toBeInTheDocument();
+		});
+
+		// A row whose transfer record was cleared reports no info hash, and
+		// Premiumize resolves a cast from the hash alone - so there is nothing to
+		// cast and the button must not be offered.
+		it('is hidden when the row has no info hash', () => {
+			const { container } = render(<LibraryTorrentRow {...pmProps({ hash: '' })} />);
+			expect(container.querySelector('button[title="Cast (PM)"]')).not.toBeInTheDocument();
+		});
+
+		it('is hidden without a Premiumize key', () => {
+			const { container } = render(<LibraryTorrentRow {...pmProps()} pmKey={null} />);
+			expect(container.querySelector('button[title="Cast (PM)"]')).not.toBeInTheDocument();
+		});
+
+		it('posts the key as a bearer token, never in the URL', async () => {
+			const fetchMock = vi.fn().mockResolvedValue({
+				json: async () => ({ status: 'success', redirectUrl: '/x' }),
+			});
+			vi.stubGlobal('fetch', fetchMock);
+
+			const { container } = render(<LibraryTorrentRow {...pmProps()} />);
+			fireEvent.click(container.querySelector('button[title="Cast (PM)"]')!);
+			await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+
+			const [url, init] = fetchMock.mock.calls[0];
+			expect(url).toBe(`/api/stremio-pm/cast/library/${'f'.repeat(40)}`);
+			expect(url).not.toContain('test-pm-key');
+			expect(init.headers.Authorization).toBe('Bearer test-pm-key');
+		});
+	});
+
 	describe('Reinsert Button Click', () => {
 		it('should call handleReinsertTorrentinRd without selectedFileIds for RD torrents', async () => {
 			mockHandleReinsertTorrentinRd.mockResolvedValueOnce('rd:reinserted');
