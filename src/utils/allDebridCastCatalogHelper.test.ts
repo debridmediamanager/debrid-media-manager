@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
-const { mockGetMagnetFiles, mockGetMagnetStatusAd } = vi.hoisted(() => ({
+const { mockGetMagnetFiles, mockGetMagnetStatusAd, mockGetMagnetStatus } = vi.hoisted(() => ({
 	mockGetMagnetFiles: vi.fn(),
 	mockGetMagnetStatusAd: vi.fn(),
+	mockGetMagnetStatus: vi.fn(),
 }));
 
 vi.mock('@/services/allDebrid', async () => {
@@ -12,10 +13,15 @@ vi.mock('@/services/allDebrid', async () => {
 		...actual,
 		getMagnetFiles: mockGetMagnetFiles,
 		getMagnetStatusAd: mockGetMagnetStatusAd,
+		getMagnetStatus: mockGetMagnetStatus,
 	};
 });
 
-import { getAllDebridDMMTorrent } from './allDebridCastCatalogHelper';
+import {
+	PAGE_SIZE,
+	getAllDebridDMMLibrary,
+	getAllDebridDMMTorrent,
+} from './allDebridCastCatalogHelper';
 
 describe('allDebridCastCatalogHelper', () => {
 	it('assigns video indices after sorting so play URLs match /play/[hash] resolver', async () => {
@@ -54,5 +60,47 @@ describe('allDebridCastCatalogHelper', () => {
 			expect(v.id).toBe(`dmm-ad:42:${idx}`);
 			expect(v.streams[0].url).toBe(`https://dmm.test/api/stremio-ad/user-1/play/42:${idx}`);
 		});
+	});
+});
+
+describe('getAllDebridDMMLibrary', () => {
+	const magnets = (count: number) =>
+		Array.from({ length: count }, (_, i) => ({
+			id: i,
+			filename: `Release.${i}`,
+			statusCode: 4,
+		}));
+
+	it('pages 1-based, the way the other three provider catalogs do', async () => {
+		mockGetMagnetStatus.mockResolvedValue({ data: { magnets: magnets(30) } });
+
+		const first = await getAllDebridDMMLibrary('ad-key', 1);
+		expect(first.metas).toHaveLength(PAGE_SIZE);
+		expect(first.metas[0].id).toBe('dmm-ad:0');
+		expect(first.hasMore).toBe(true);
+
+		const third = await getAllDebridDMMLibrary('ad-key', 3);
+		expect(third.metas[0].id).toBe(`dmm-ad:${PAGE_SIZE * 2}`);
+		expect(third.metas).toHaveLength(30 - PAGE_SIZE * 2);
+		expect(third.hasMore).toBe(false);
+	});
+
+	it('skips magnets that are not ready', async () => {
+		mockGetMagnetStatus.mockResolvedValue({
+			data: {
+				magnets: [
+					{ id: 1, filename: 'done', statusCode: 4 },
+					{ id: 2, filename: 'downloading', statusCode: 1 },
+				],
+			},
+		});
+		const result = await getAllDebridDMMLibrary('ad-key', 1);
+		expect(result.metas).toEqual([{ id: 'dmm-ad:1', name: 'done', type: 'other' }]);
+		expect(result.hasMore).toBe(false);
+	});
+
+	it('returns an empty page rather than throwing when AllDebrid errors', async () => {
+		mockGetMagnetStatus.mockRejectedValue(new Error('AD down'));
+		expect(await getAllDebridDMMLibrary('ad-key', 1)).toEqual({ metas: [], hasMore: false });
 	});
 });

@@ -33,6 +33,13 @@ function flattenFiles(files: MagnetFile[], parentPath: string = ''): FlatFile[] 
 	return result;
 }
 
+/**
+ * One page of the user's AllDebrid library. `page` is 1-based, as it is for the
+ * Real-Debrid, TorBox and Premiumize catalogs.
+ *
+ * `hasMore` is part of the answer, not decoration: without it a client has no
+ * reason to ask for a second page, so the library reads as 12 items long.
+ */
 export async function getAllDebridDMMLibrary(apiKey: string, page: number) {
 	try {
 		// Get all magnets (don't use status=active filter - it means "downloading", not "ready")
@@ -41,7 +48,7 @@ export async function getAllDebridDMMLibrary(apiKey: string, page: number) {
 
 		if (!result.data?.magnets) {
 			console.log('[AD Library] No magnets data in response');
-			return [];
+			return { metas: [], hasMore: false };
 		}
 
 		console.log('[AD Library] Total magnets:', result.data.magnets.length);
@@ -51,17 +58,20 @@ export async function getAllDebridDMMLibrary(apiKey: string, page: number) {
 		console.log('[AD Library] Ready magnets:', readyMagnets.length);
 
 		// Paginate
-		const offset = page * PAGE_SIZE;
+		const offset = (page - 1) * PAGE_SIZE;
 		const paginatedMagnets = readyMagnets.slice(offset, offset + PAGE_SIZE);
 
-		return paginatedMagnets.map((magnet) => ({
-			id: `dmm-ad:${magnet.id}`,
-			name: magnet.filename,
-			type: 'other',
-		}));
+		return {
+			metas: paginatedMagnets.map((magnet) => ({
+				id: `dmm-ad:${magnet.id}`,
+				name: magnet.filename,
+				type: 'other',
+			})),
+			hasMore: offset + PAGE_SIZE < readyMagnets.length,
+		};
 	} catch (error) {
 		console.error('[AD Library] Error getting AllDebrid library:', error);
-		return [];
+		return { metas: [], hasMore: false };
 	}
 }
 

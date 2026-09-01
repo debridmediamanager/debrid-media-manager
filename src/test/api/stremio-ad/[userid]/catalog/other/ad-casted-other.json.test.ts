@@ -41,16 +41,18 @@ describe('/api/stremio-ad/[userid]/catalog/other/ad-casted-other.json', () => {
 		expect(data.metas).toEqual([]);
 	});
 
-	it('returns metas from library', async () => {
+	it('returns the first page of the library with hasMore', async () => {
 		const mockMetas = [{ id: 'dmm-ad:123', type: 'other', name: 'Test' }];
 		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue({ apiKey: 'test-key' });
-		mockGetAllDebridDMMLibrary.mockResolvedValue(mockMetas as any);
+		mockGetAllDebridDMMLibrary.mockResolvedValue({ metas: mockMetas, hasMore: true } as any);
 		const req = createMockRequest({ query: { userid: 'user1' } });
 		await handler(req, res);
 		expect(res.status).toHaveBeenCalledWith(200);
-		expect(mockGetAllDebridDMMLibrary).toHaveBeenCalledWith('test-key', 0);
+		expect(mockGetAllDebridDMMLibrary).toHaveBeenCalledWith('test-key', 1);
 		const data = res._getData() as any;
 		expect(data.metas).toEqual(mockMetas);
+		// Without hasMore a client has no reason to ask for page two.
+		expect(data.hasMore).toBe(true);
 		expect(data.cacheMaxAge).toBe(0);
 	});
 
