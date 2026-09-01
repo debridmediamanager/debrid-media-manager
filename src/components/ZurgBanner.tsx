@@ -1,7 +1,7 @@
 import { FolderTree, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const DISMISS_KEY = 'zurg_banner_dismissed';
+export const ZURG_BANNER_DISMISS_KEY = 'zurg_banner_dismissed';
 
 export const ZURG_SITE_URL = 'https://zurg.debridmediamanager.com/';
 
@@ -13,7 +13,7 @@ export function ZurgBanner() {
 
 	useEffect(() => {
 		try {
-			if (window.localStorage.getItem(DISMISS_KEY) === '1') setDismissed(true);
+			if (window.localStorage.getItem(ZURG_BANNER_DISMISS_KEY) === '1') setDismissed(true);
 		} catch {
 			// Blocked or full storage. Showing the banner again beats crashing.
 		}
@@ -22,7 +22,7 @@ export function ZurgBanner() {
 	const dismiss = () => {
 		setDismissed(true);
 		try {
-			window.localStorage.setItem(DISMISS_KEY, '1');
+			window.localStorage.setItem(ZURG_BANNER_DISMISS_KEY, '1');
 		} catch {
 			// Same as above. The banner still closes for this visit.
 		}
