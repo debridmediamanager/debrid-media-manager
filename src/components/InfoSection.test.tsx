@@ -26,9 +26,7 @@ describe('InfoSection', () => {
 	it('promotes community and sponsorship resources', () => {
 		render(<InfoSection />);
 
-		expect(screen.getByRole('link', { name: /zurg/i }).getAttribute('href')).toContain(
-			'github.com'
-		);
+		expect(screen.queryByRole('link', { name: /zurg/i })).toBeNull();
 		expect(
 			screen.getByRole('link', { name: /r\/debridmediamanager/i }).getAttribute('href')
 		).toContain('reddit.com');

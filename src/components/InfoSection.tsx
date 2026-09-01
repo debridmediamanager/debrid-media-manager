@@ -53,18 +53,6 @@ export function InfoSection() {
 				<div className="mb-1 text-center text-sm">
 					<Sparkles className="mr-1 inline-block h-3 w-3 text-yellow-400" />
 					<a
-						className="text-blue-300 underline hover:text-blue-200"
-						href="https://github.com/debridmediamanager/zurg-public"
-						target="_blank"
-					>
-						<b>zurg</b>
-					</a>{' '}
-					mounts your Real-Debrid library and play your files directly from your computer
-					or with Plex
-				</div>
-				<div className="mb-1 text-center text-sm">
-					<Sparkles className="mr-1 inline-block h-3 w-3 text-yellow-400" />
-					<a
 						className="text-azure bg-red-500 px-1 text-red-100"
 						href="https://www.reddit.com/r/debridmediamanager/"
 						target="_blank"
