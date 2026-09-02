@@ -20,7 +20,11 @@ describe('RATE_LIMIT_CONFIGS', () => {
 			rateLimit: 1,
 			windowSeconds: 2,
 		});
-		expect(RATE_LIMIT_CONFIGS.proxy).toEqual({ name: 'proxy', rateLimit: 3, windowSeconds: 1 });
+		expect(RATE_LIMIT_CONFIGS.proxy).toEqual({
+			name: 'proxy',
+			rateLimit: 20,
+			windowSeconds: 2,
+		});
 		expect(RATE_LIMIT_CONFIGS.report).toEqual({
 			name: 'report',
 			rateLimit: 5,

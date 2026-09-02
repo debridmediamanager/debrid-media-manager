@@ -11,7 +11,10 @@ import Redis from 'ioredis';
 export const RATE_LIMIT_CONFIGS = {
 	stream: { name: 'stream', rateLimit: 1, windowSeconds: 5 }, // 1 request per 5 seconds for stream endpoints
 	torrents: { name: 'torrents', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for torrents API
-	proxy: { name: 'proxy', rateLimit: 3, windowSeconds: 1 }, // 3 requests per second for proxy endpoints
+	// A season search asks two episodes at a time of every enabled Tor addon, and
+	// there are five of those, so ten proxy calls land together - and the sliding
+	// window still holds the previous second, so two of those bursts have to fit.
+	proxy: { name: 'proxy', rateLimit: 20, windowSeconds: 2 },
 	report: { name: 'report', rateLimit: 5, windowSeconds: 10 }, // 5 reports per 10 seconds
 	zurg: { name: 'zurg', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for zurg API endpoints
 	zurgAdmin: { name: 'zurgAdmin', rateLimit: 1, windowSeconds: 10 }, // 1 request per 10 seconds for zurg admin endpoints

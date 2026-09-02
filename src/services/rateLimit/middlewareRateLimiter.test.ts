@@ -249,6 +249,14 @@ describe('middlewareRateLimiter', () => {
 			expect(limiter.check('user1', RATE_LIMIT_CONFIGS.proxy).success).toBe(true);
 		});
 
+		it('should fit the largest fan-out a search page makes', () => {
+			// A season search asks 2 episodes at a time of every enabled Tor addon,
+			// and there are 5 of them, so 10 proxy calls land at once.
+			for (let i = 0; i < 10; i++) {
+				expect(limiter.check('user1', RATE_LIMIT_CONFIGS.proxy).success).toBe(true);
+			}
+		});
+
 		it('should track different rate limit configs independently', () => {
 			const streamConfig = RATE_LIMIT_CONFIGS.stream; // 1 req per 5s
 			const defaultConfig = RATE_LIMIT_CONFIGS.default; // 5 req per 1s
