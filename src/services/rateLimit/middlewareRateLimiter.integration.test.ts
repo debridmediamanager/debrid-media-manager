@@ -109,6 +109,31 @@ describe.skipIf(!dockerAvailable)('Redis Rate Limiter Integration Tests', () => 
 			expect(result.reset).toBeLessThanOrEqual(Date.now() + 61000);
 		});
 
+		it('should give same-window configs separate keys', async () => {
+			const limiter = new RedisRateLimiter(redis);
+
+			// torrents, zurg and sponsor are all 1-per-2s. Keying on the window
+			// alone gave the three of them one shared 1-per-2s budget, so a movie
+			// page that fetched sponsor status and then searched 429'd on the
+			// search.
+			expect((await limiter.check('redis-buckets', RATE_LIMIT_CONFIGS.sponsor)).success).toBe(
+				true
+			);
+			expect(
+				(await limiter.check('redis-buckets', RATE_LIMIT_CONFIGS.torrents)).success
+			).toBe(true);
+			expect((await limiter.check('redis-buckets', RATE_LIMIT_CONFIGS.zurg)).success).toBe(
+				true
+			);
+
+			const keys = await redis.keys('ratelimit:redis-buckets:*');
+			expect(keys.sort()).toEqual([
+				'ratelimit:redis-buckets:sponsor',
+				'ratelimit:redis-buckets:torrents',
+				'ratelimit:redis-buckets:zurg',
+			]);
+		});
+
 		it('should handle concurrent requests correctly', async () => {
 			const limiter = new RedisRateLimiter(redis);
 			const config = { rateLimit: 10, windowSeconds: 60 };

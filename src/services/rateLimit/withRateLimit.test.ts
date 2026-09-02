@@ -10,11 +10,27 @@ import {
 
 describe('RATE_LIMIT_CONFIGS', () => {
 	it('defines stream, torrents, proxy, report, and default configs', () => {
-		expect(RATE_LIMIT_CONFIGS.stream).toEqual({ rateLimit: 1, windowSeconds: 5 });
-		expect(RATE_LIMIT_CONFIGS.torrents).toEqual({ rateLimit: 1, windowSeconds: 2 });
-		expect(RATE_LIMIT_CONFIGS.proxy).toEqual({ rateLimit: 3, windowSeconds: 1 });
-		expect(RATE_LIMIT_CONFIGS.report).toEqual({ rateLimit: 5, windowSeconds: 10 });
-		expect(RATE_LIMIT_CONFIGS.default).toEqual({ rateLimit: 5, windowSeconds: 1 });
+		expect(RATE_LIMIT_CONFIGS.stream).toEqual({
+			name: 'stream',
+			rateLimit: 1,
+			windowSeconds: 5,
+		});
+		expect(RATE_LIMIT_CONFIGS.torrents).toEqual({
+			name: 'torrents',
+			rateLimit: 1,
+			windowSeconds: 2,
+		});
+		expect(RATE_LIMIT_CONFIGS.proxy).toEqual({ name: 'proxy', rateLimit: 3, windowSeconds: 1 });
+		expect(RATE_LIMIT_CONFIGS.report).toEqual({
+			name: 'report',
+			rateLimit: 5,
+			windowSeconds: 10,
+		});
+		expect(RATE_LIMIT_CONFIGS.default).toEqual({
+			name: 'default',
+			rateLimit: 5,
+			windowSeconds: 1,
+		});
 	});
 });
 

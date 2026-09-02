@@ -1,18 +1,25 @@
 import Redis from 'ioredis';
 
-// Rate limit configs for different endpoint types
+// Rate limit configs for different endpoint types.
+//
+// `name` is the counter bucket. It has to be spelled out per config because the
+// bucket used to be keyed on the window alone, which quietly merged every config
+// sharing a window into one budget the size of the strictest member: torrents,
+// zurg and sponsor all became a combined 1-per-2s, and proxy shared its second
+// with default, so an /api/challenge call drained the budget /api/proxy/stream
+// was about to spend.
 export const RATE_LIMIT_CONFIGS = {
-	stream: { rateLimit: 1, windowSeconds: 5 }, // 1 request per 5 seconds for stream endpoints
-	torrents: { rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for torrents API
-	proxy: { rateLimit: 3, windowSeconds: 1 }, // 3 requests per second for proxy endpoints
-	report: { rateLimit: 5, windowSeconds: 10 }, // 5 reports per 10 seconds
-	zurg: { rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for zurg API endpoints
-	zurgAdmin: { rateLimit: 1, windowSeconds: 10 }, // 1 request per 10 seconds for zurg admin endpoints
-	sponsor: { rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for sponsor status endpoints
+	stream: { name: 'stream', rateLimit: 1, windowSeconds: 5 }, // 1 request per 5 seconds for stream endpoints
+	torrents: { name: 'torrents', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for torrents API
+	proxy: { name: 'proxy', rateLimit: 3, windowSeconds: 1 }, // 3 requests per second for proxy endpoints
+	report: { name: 'report', rateLimit: 5, windowSeconds: 10 }, // 5 reports per 10 seconds
+	zurg: { name: 'zurg', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for zurg API endpoints
+	zurgAdmin: { name: 'zurgAdmin', rateLimit: 1, windowSeconds: 10 }, // 1 request per 10 seconds for zurg admin endpoints
+	sponsor: { name: 'sponsor', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for sponsor status endpoints
 	// Every miss spends a grab from the one indexer account the whole site shares,
 	// so this is paced like a stream rather than like a page fetch.
-	nzbDownload: { rateLimit: 1, windowSeconds: 5 },
-	default: { rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
+	nzbDownload: { name: 'nzbDownload', rateLimit: 1, windowSeconds: 5 },
+	default: { name: 'default', rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;
 
 export const REDIS_CHECK_INTERVAL = 30_000; // Re-check Redis availability every 30s
@@ -27,6 +34,19 @@ export interface RateLimitResult {
 export interface RateLimitConfig {
 	rateLimit: number;
 	windowSeconds: number;
+	/**
+	 * Counter bucket. Two configs sharing a name share a budget, so every entry
+	 * in RATE_LIMIT_CONFIGS names itself. An ad-hoc config may leave it out and
+	 * gets a bucket derived from its own shape instead.
+	 */
+	name?: string;
+}
+
+/**
+ * The per-identifier counter a config draws from.
+ */
+export function rateLimitBucket(config: RateLimitConfig): string {
+	return config.name ?? `${config.rateLimit}p${config.windowSeconds}`;
 }
 
 /**
@@ -54,8 +74,8 @@ export class InMemoryRateLimiter {
 	check(identifier: string, config: RateLimitConfig): RateLimitResult {
 		const now = Date.now();
 		const windowMs = config.windowSeconds * 1000;
-		// Use a composite key that includes the window to separate different rate limit buckets
-		const key = `${identifier}:${config.windowSeconds}`;
+		// Bucket per config, not per window - see rateLimitBucket
+		const key = `${identifier}:${rateLimitBucket(config)}`;
 		const userLimit = this.map.get(key);
 
 		// Clean up old entries periodically (1% chance per request)
@@ -120,8 +140,8 @@ export class RedisRateLimiter {
 	constructor(private client: Redis) {}
 
 	async check(identifier: string, config: RateLimitConfig): Promise<RateLimitResult> {
-		// Include window in key to separate different rate limit buckets
-		const key = `ratelimit:${identifier}:${config.windowSeconds}`;
+		// Bucket per config, not per window - see rateLimitBucket
+		const key = `ratelimit:${identifier}:${rateLimitBucket(config)}`;
 		const now = Math.floor(Date.now() / 1000);
 		const windowStart = now - config.windowSeconds;
 

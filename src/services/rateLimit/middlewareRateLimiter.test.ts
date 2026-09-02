@@ -6,6 +6,7 @@ import {
 	getRateLimitConfig,
 	InMemoryRateLimiter,
 	RATE_LIMIT_CONFIGS,
+	rateLimitBucket,
 	shouldRateLimit,
 } from './middlewareRateLimiter';
 
@@ -228,6 +229,26 @@ describe('middlewareRateLimiter', () => {
 			expect(result.remaining).toBe(4);
 		});
 
+		it('should keep same-window configs in separate buckets', () => {
+			// torrents, zurg and sponsor are all 1-per-2s but belong to different
+			// endpoint classes. Keying the counter on the window alone merged them
+			// into one 1-per-2s budget, so a page that called sponsor/status and
+			// torrents/movie together 429'd on the second call.
+			expect(limiter.check('user1', RATE_LIMIT_CONFIGS.sponsor).success).toBe(true);
+			expect(limiter.check('user1', RATE_LIMIT_CONFIGS.torrents).success).toBe(true);
+			expect(limiter.check('user1', RATE_LIMIT_CONFIGS.zurg).success).toBe(true);
+		});
+
+		it('should not let default-config calls spend the proxy budget', () => {
+			// proxy and default are both 1s windows. /api/challenge (default) used
+			// to drain the shared counter, so the first /api/proxy/stream call of a
+			// page load answered 429.
+			for (let i = 0; i < RATE_LIMIT_CONFIGS.default.rateLimit; i++) {
+				expect(limiter.check('user1', RATE_LIMIT_CONFIGS.default).success).toBe(true);
+			}
+			expect(limiter.check('user1', RATE_LIMIT_CONFIGS.proxy).success).toBe(true);
+		});
+
 		it('should track different rate limit configs independently', () => {
 			const streamConfig = RATE_LIMIT_CONFIGS.stream; // 1 req per 5s
 			const defaultConfig = RATE_LIMIT_CONFIGS.default; // 5 req per 1s
@@ -413,6 +434,24 @@ describe('middlewareRateLimiter', () => {
 
 			it('should not match partial torrents prefix', () => {
 				expect(shouldRateLimit('/api/torrent')).toBe(false);
+			});
+		});
+
+		describe('rateLimitBucket', () => {
+			it('gives every named config its own bucket', () => {
+				const names = Object.values(RATE_LIMIT_CONFIGS).map((config) =>
+					rateLimitBucket(config)
+				);
+				expect(new Set(names).size).toBe(names.length);
+			});
+
+			it('falls back to the shape for an unnamed config', () => {
+				expect(rateLimitBucket({ rateLimit: 3, windowSeconds: 1 })).toBe(
+					rateLimitBucket({ rateLimit: 3, windowSeconds: 1 })
+				);
+				expect(rateLimitBucket({ rateLimit: 3, windowSeconds: 1 })).not.toBe(
+					rateLimitBucket({ rateLimit: 5, windowSeconds: 1 })
+				);
 			});
 		});
 
