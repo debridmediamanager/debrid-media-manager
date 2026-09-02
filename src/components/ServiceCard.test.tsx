@@ -61,6 +61,14 @@ const basePmUser = {
 	booster_points: 0,
 } as any;
 
+const baseOcUser = {
+	user_id: '100000001',
+	email: 'oc-user@example.com',
+	is_premium: true,
+	expiration_date: '2026-10-02',
+	can_download: true,
+} as any;
+
 const baseTraktUser = {
 	user: {
 		username: 'trakt-user',
@@ -157,6 +165,54 @@ describe('ServiceCard', () => {
 		expect(onLogout).toHaveBeenCalledWith('pm:');
 	});
 
+	it('identifies Offcloud by the local part of its email', () => {
+		render(
+			<ServiceCard service="oc" user={baseOcUser} onTraktLogin={vi.fn()} onLogout={vi.fn()} />
+		);
+
+		expect(screen.getByRole('button', { name: /Offcloud/ })).toHaveTextContent('oc-user');
+	});
+
+	it('shows the Offcloud expiry date verbatim - it is a string, not a timestamp', async () => {
+		const onLogout = vi.fn();
+		fireMock
+			.mockResolvedValueOnce({ isDismissed: true, dismiss: dismissReasons.cancel })
+			.mockResolvedValueOnce({ isConfirmed: true });
+
+		render(
+			<ServiceCard
+				service="oc"
+				user={baseOcUser}
+				onTraktLogin={vi.fn()}
+				onLogout={onLogout}
+			/>
+		);
+
+		await userEvent.click(screen.getByRole('button', { name: /Offcloud/ }));
+
+		await waitFor(() => expect(fireMock).toHaveBeenCalledTimes(2));
+		expect(fireMock.mock.calls[0][0].title).toBe('Offcloud');
+		expect(fireMock.mock.calls[0][0].html).toContain('oc-user@example.com');
+		expect(fireMock.mock.calls[0][0].html).toContain('2026-10-02');
+		expect(onLogout).toHaveBeenCalledWith('oc:');
+	});
+
+	it('marks a non-premium Offcloud account as unusable', () => {
+		render(
+			<ServiceCard
+				service="oc"
+				user={{ ...baseOcUser, is_premium: false }}
+				onTraktLogin={vi.fn()}
+				onLogout={vi.fn()}
+			/>
+		);
+
+		// The premium tick is the X, not the check - a free account cannot download.
+		expect(
+			screen.getByRole('button', { name: /Offcloud/ }).querySelector('.text-red-500')
+		).toBeTruthy();
+	});
+
 	it('presents login buttons when accounts are missing', async () => {
 		const onLogin = vi.fn();
 		render(
@@ -164,6 +220,7 @@ describe('ServiceCard', () => {
 				<ServiceCard service="rd" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
 				<ServiceCard service="tb" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
 				<ServiceCard service="pm" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
+				<ServiceCard service="oc" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
 				<ServiceCard
 					service="trakt"
 					user={null}
@@ -174,10 +231,10 @@ describe('ServiceCard', () => {
 		);
 
 		const loginButtons = screen.getAllByRole('button', { name: /Login/ });
-		expect(loginButtons).toHaveLength(4);
+		expect(loginButtons).toHaveLength(5);
 		for (const button of loginButtons) {
 			await userEvent.click(button);
 		}
-		expect(onLogin).toHaveBeenCalledTimes(4);
+		expect(onLogin).toHaveBeenCalledTimes(5);
 	});
 });

@@ -1,6 +1,16 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { __resetRealDebridStateForTests, useCurrentUser, useRealDebridAccessToken } from './auth';
+import {
+	__resetRealDebridStateForTests,
+	useCurrentUser,
+	useDebridLogin,
+	useRealDebridAccessToken,
+} from './auth';
+
+const routerPush = vi.fn();
+vi.mock('next/router', () => ({
+	useRouter: () => ({ push: routerPush, asPath: '/library' }),
+}));
 
 const {
 	mockGetRealDebridUser,
@@ -8,6 +18,7 @@ const {
 	mockGetAllDebridUser,
 	mockGetTorboxUser,
 	mockGetPremiumizeAccountInfo,
+	mockGetOffcloudAccountInfo,
 	mockGetTraktUser,
 } = vi.hoisted(() => ({
 	mockGetRealDebridUser: vi.fn(),
@@ -15,6 +26,7 @@ const {
 	mockGetAllDebridUser: vi.fn(),
 	mockGetTorboxUser: vi.fn(),
 	mockGetPremiumizeAccountInfo: vi.fn(),
+	mockGetOffcloudAccountInfo: vi.fn(),
 	mockGetTraktUser: vi.fn(),
 }));
 
@@ -33,6 +45,10 @@ vi.mock('../services/torbox', () => ({
 
 vi.mock('../services/premiumize', () => ({
 	getPremiumizeAccountInfo: mockGetPremiumizeAccountInfo,
+}));
+
+vi.mock('../services/offcloud', () => ({
+	getOffcloudAccountInfo: mockGetOffcloudAccountInfo,
 }));
 
 vi.mock('../services/trakt', () => ({
@@ -330,6 +346,70 @@ describe('usePremiumize via useCurrentUser', () => {
 
 		await waitFor(() => expect(result.current.pmUser).not.toBeNull());
 		expect(mockGetPremiumizeAccountInfo).toHaveBeenCalledWith('pasted-key');
+	});
+});
+
+describe('useOffcloud via useCurrentUser', () => {
+	const account = {
+		user_id: '100000001',
+		email: 'me@example.com',
+		is_premium: true,
+		expiration_date: '2026-10-02',
+		can_download: true,
+	};
+
+	beforeEach(() => {
+		window.localStorage.clear();
+		__resetRealDebridStateForTests();
+		vi.clearAllMocks();
+	});
+
+	it('loads the account once a key is stored', async () => {
+		setStoredValue('oc:apiKey', 'oc-key');
+		mockGetOffcloudAccountInfo.mockResolvedValue(account);
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.ocUser).not.toBeNull());
+		expect(result.current.hasOCAuth).toBe(true);
+		expect(result.current.ocUser?.email).toBe('me@example.com');
+		expect(mockGetOffcloudAccountInfo).toHaveBeenCalledWith('oc-key');
+	});
+
+	it('does not call Offcloud without a key', async () => {
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.hasOCAuth).toBe(false));
+		expect(mockGetOffcloudAccountInfo).not.toHaveBeenCalled();
+	});
+
+	// NOAUTH covers a missing, malformed and revoked key alike, so the hook has
+	// nothing to distinguish and just has to settle on the error rather than
+	// leaving the home page waiting for a profile that will never arrive.
+	it('keeps the error rather than the user when the key is refused', async () => {
+		setStoredValue('oc:apiKey', 'bad-key');
+		mockGetOffcloudAccountInfo.mockRejectedValue(
+			Object.assign(new Error('Offcloud account/info failed (401)'), { code: 'NOAUTH' })
+		);
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.ocError).not.toBeNull());
+		expect(result.current.ocUser).toBeNull();
+	});
+});
+
+describe('useDebridLogin', () => {
+	it('sends Offcloud sign-in to its own login page, carrying the return path', () => {
+		routerPush.mockClear();
+
+		const { result } = renderHook(() => useDebridLogin());
+		result.current.loginWithOffcloud();
+
+		expect(routerPush).toHaveBeenCalledWith({
+			pathname: '/offcloud/login',
+			query: { redirect: '/library' },
+		});
 	});
 });
 

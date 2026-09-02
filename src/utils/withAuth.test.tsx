@@ -82,6 +82,24 @@ describe('withAuth', () => {
 		});
 	});
 
+	// Offcloud's only credential is this key. Left out of the guard, an
+	// Offcloud-only user is bounced to /start on every page, forever.
+	it('renders wrapped component when authenticated with OC', async () => {
+		mockUseRealDebridAccessToken.mockReturnValue([null, false, false]);
+		mockUseAllDebridApiKey.mockReturnValue(null);
+		localStorage.setItem('oc:apiKey', 'oc-key');
+
+		const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+		const WrappedComponent = withAuth(TestComponent);
+
+		render(<WrappedComponent />);
+
+		await waitFor(() => {
+			expect(screen.getByTestId('test-component')).toBeInTheDocument();
+		});
+		expect(mockPush).not.toHaveBeenCalledWith('/start');
+	});
+
 	it('redirects to start route when not authenticated', async () => {
 		mockUseRealDebridAccessToken.mockReturnValue([null, false, false]);
 		mockUseAllDebridApiKey.mockReturnValue(null);

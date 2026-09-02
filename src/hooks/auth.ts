@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { getAllDebridUser } from '../services/allDebrid';
+import { getOffcloudAccountInfo, type OffcloudAccountInfo } from '../services/offcloud';
 import { getPremiumizeAccountInfo, type PremiumizeAccountInfo } from '../services/premiumize';
 import { getCurrentUser as getRealDebridUser, getToken } from '../services/realDebrid';
 import { TorBoxUser, getUserData } from '../services/torbox';
@@ -29,6 +30,14 @@ export interface RealDebridUser {
  * treated as a secret (it is embedded in every CDN link the account mints).
  */
 export type PremiumizeUser = PremiumizeAccountInfo;
+
+/**
+ * `account/info` is Offcloud's entire introspection surface: an email, a
+ * user id, `is_premium` and a `YYYY-MM-DD` expiry. No bandwidth counter, no
+ * quota, no plan name. The `user_id` is also the customer segment embedded in
+ * every CDN link the account mints, so it is shown rather than hidden.
+ */
+export type OffcloudUser = OffcloudAccountInfo;
 
 export interface AllDebridUser {
 	username: string;
@@ -417,6 +426,39 @@ const usePremiumize = () => {
 	return { user, error, hasAuth: !!token, loading };
 };
 
+const useOffcloud = () => {
+	const [user, setUser] = useState<OffcloudUser | null>(null);
+	const [error, setError] = useState<Error | null>(null);
+	const [loading, setLoading] = useState(false);
+	const [token] = useLocalStorage<string>('oc:apiKey');
+
+	useEffect(() => {
+		if (!token) {
+			return;
+		}
+
+		let isMounted = true;
+		setLoading(true);
+		getOffcloudAccountInfo(token)
+			.then((info) => {
+				if (!isMounted) return;
+				setUser(info);
+				setError(null);
+				setLoading(false);
+			})
+			.catch((e) => {
+				if (!isMounted) return;
+				setError(e as Error);
+				setLoading(false);
+			});
+		return () => {
+			isMounted = false;
+		};
+	}, [token]);
+
+	return { user, error, hasAuth: !!token, loading };
+};
+
 const useTrakt = () => {
 	const [user, setUser] = useState<TraktUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
@@ -488,12 +530,24 @@ export const usePremiumizeCredential = () => {
 	return accessToken || apiKey;
 };
 
+/**
+ * Offcloud has one credential and no OAuth: the key from the account page,
+ * which is the whole account (no scoping, no per-app keys). It is also
+ * case-insensitive upstream, so normalising it buys nothing - store it as the
+ * user pasted it.
+ */
+export const useOffcloudApiKey = () => {
+	const [apiKey] = useLocalStorage<string>('oc:apiKey');
+	return apiKey;
+};
+
 // Main hook that combines all services
 export const useCurrentUser = () => {
 	const rd = useRealDebrid();
 	const ad = useAllDebrid();
 	const tb = useTorBox();
 	const pm = usePremiumize();
+	const oc = useOffcloud();
 	const trakt = useTrakt();
 
 	return {
@@ -510,6 +564,9 @@ export const useCurrentUser = () => {
 		pmUser: pm.user,
 		pmError: pm.error,
 		hasPMAuth: pm.hasAuth,
+		ocUser: oc.user,
+		ocError: oc.error,
+		hasOCAuth: oc.hasAuth,
 		traktUser: trakt.user,
 		traktError: trakt.error,
 		hasTraktAuth: trakt.hasAuth,
@@ -542,5 +599,6 @@ export const useDebridLogin = () => {
 		loginWithAllDebrid: () => navigateToLogin('/alldebrid/login'),
 		loginWithTorbox: () => navigateToLogin('/torbox/login'),
 		loginWithPremiumize: () => navigateToLogin('/premiumize/login'),
+		loginWithOffcloud: () => navigateToLogin('/offcloud/login'),
 	};
 };

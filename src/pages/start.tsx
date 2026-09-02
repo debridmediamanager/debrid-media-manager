@@ -2,6 +2,7 @@ import { ZurgBanner } from '@/components/ZurgBanner';
 import {
 	useAllDebridApiKey,
 	useDebridLogin,
+	useOffcloudApiKey,
 	usePremiumizeCredential,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
@@ -13,20 +14,26 @@ import { useEffect } from 'react';
 
 export default function StartPage() {
 	const router = useRouter();
-	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox, loginWithPremiumize } =
-		useDebridLogin();
+	const {
+		loginWithRealDebrid,
+		loginWithAllDebrid,
+		loginWithTorbox,
+		loginWithPremiumize,
+		loginWithOffcloud,
+	} = useDebridLogin();
 	const [rdToken] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
 	const pmKey = usePremiumizeCredential();
+	const ocKey = useOffcloudApiKey();
 
 	// Redirect to index if already logged in
 	useEffect(() => {
-		const isLoggedIn = rdToken || adKey || tbKey || pmKey;
+		const isLoggedIn = rdToken || adKey || tbKey || pmKey || ocKey;
 		if (isLoggedIn) {
 			router.push('/');
 		}
-	}, [rdToken, adKey, tbKey, pmKey, router]);
+	}, [rdToken, adKey, tbKey, pmKey, ocKey, router]);
 
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -142,6 +149,24 @@ export default function StartPage() {
 						rel="noopener noreferrer"
 					>
 						Create an account with Premiumize
+					</a>
+				</div>
+
+				{/* Offcloud */}
+				<div className="flex flex-row">
+					<button
+						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						onClick={loginWithOffcloud}
+					>
+						Login with Offcloud
+					</button>
+					<a
+						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+						href="https://offcloud.com"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Create an account with Offcloud
 					</a>
 				</div>
 

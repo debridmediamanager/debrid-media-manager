@@ -1,6 +1,7 @@
 import {
 	useAllDebridApiKey,
 	useDebridLogin,
+	useOffcloudApiKey,
 	usePremiumizeCredential,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
@@ -28,6 +29,7 @@ vi.mock('@/hooks/auth', () => ({
 	useAllDebridApiKey: vi.fn(),
 	useTorBoxAccessToken: vi.fn(),
 	usePremiumizeCredential: vi.fn(),
+	useOffcloudApiKey: vi.fn(),
 }));
 
 describe('StartPage', () => {
@@ -36,6 +38,7 @@ describe('StartPage', () => {
 	let mockLoginWithAllDebrid: any;
 	let mockLoginWithTorbox: any;
 	let mockLoginWithPremiumize: any;
+	let mockLoginWithOffcloud: any;
 
 	beforeEach(() => {
 		mockPush = vi.fn();
@@ -43,6 +46,7 @@ describe('StartPage', () => {
 		mockLoginWithAllDebrid = vi.fn();
 		mockLoginWithTorbox = vi.fn();
 		mockLoginWithPremiumize = vi.fn();
+		mockLoginWithOffcloud = vi.fn();
 
 		vi.mocked(useRouter).mockReturnValue({
 			push: mockPush,
@@ -56,12 +60,14 @@ describe('StartPage', () => {
 			loginWithAllDebrid: mockLoginWithAllDebrid,
 			loginWithTorbox: mockLoginWithTorbox,
 			loginWithPremiumize: mockLoginWithPremiumize,
+			loginWithOffcloud: mockLoginWithOffcloud,
 		});
 
 		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false]);
 		vi.mocked(useAllDebridApiKey).mockReturnValue(null);
 		vi.mocked(useTorBoxAccessToken).mockReturnValue(null);
 		vi.mocked(usePremiumizeCredential).mockReturnValue(null);
+		vi.mocked(useOffcloudApiKey).mockReturnValue(null);
 	});
 
 	it('should render the start page correctly', () => {
@@ -85,6 +91,7 @@ describe('StartPage', () => {
 		expect(screen.getByText('Login with AllDebrid')).toBeInTheDocument();
 		expect(screen.getByText('Login with Torbox')).toBeInTheDocument();
 		expect(screen.getByText('Login with Premiumize')).toBeInTheDocument();
+		expect(screen.getByText('Login with Offcloud')).toBeInTheDocument();
 	});
 
 	it('should render account creation links', () => {
@@ -94,6 +101,7 @@ describe('StartPage', () => {
 		expect(screen.getByText('Create an account with AllDebrid')).toBeInTheDocument();
 		expect(screen.getByText('Create an account with Torbox')).toBeInTheDocument();
 		expect(screen.getByText('Create an account with Premiumize')).toBeInTheDocument();
+		expect(screen.getByText('Create an account with Offcloud')).toBeInTheDocument();
 	});
 
 	it('should render data storage policy', () => {
@@ -123,6 +131,9 @@ describe('StartPage', () => {
 
 		fireEvent.click(screen.getByText('Login with Premiumize'));
 		expect(mockLoginWithPremiumize).toHaveBeenCalledTimes(1);
+
+		fireEvent.click(screen.getByText('Login with Offcloud'));
+		expect(mockLoginWithOffcloud).toHaveBeenCalledTimes(1);
 	});
 
 	it('should redirect to home when user is logged in with Real-Debrid', () => {
@@ -151,6 +162,14 @@ describe('StartPage', () => {
 
 	it('should redirect to home when user is logged in with Premiumize', () => {
 		vi.mocked(usePremiumizeCredential).mockReturnValue('pm-key');
+
+		render(<StartPage />);
+
+		expect(mockPush).toHaveBeenCalledWith('/');
+	});
+
+	it('should redirect to home when user is logged in with Offcloud', () => {
+		vi.mocked(useOffcloudApiKey).mockReturnValue('oc-key');
 
 		render(<StartPage />);
 
@@ -196,6 +215,11 @@ describe('StartPage', () => {
 			'href',
 			'https://torbox.app/subscription?referral=74ffa560-7381-4a18-adb1-cef97378c670'
 		);
+
+		const ocLink = screen.getByText('Create an account with Offcloud');
+		expect(ocLink).toHaveAttribute('target', '_blank');
+		expect(ocLink).toHaveAttribute('rel', 'noopener noreferrer');
+		expect(ocLink).toHaveAttribute('href', 'https://offcloud.com');
 	});
 
 	it('should have correct page title and meta tags', () => {

@@ -32,21 +32,29 @@ function IndexPage() {
 		adUser,
 		tbUser,
 		pmUser,
+		ocUser,
 		rdError,
 		adError,
 		tbError,
 		pmError,
+		ocError,
 		traktUser,
 		traktError,
 		hasRDAuth,
 		hasADAuth,
 		hasTBAuth,
 		hasPMAuth,
+		hasOCAuth,
 		hasTraktAuth,
 		isLoading,
 	} = useCurrentUser();
-	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox, loginWithPremiumize } =
-		useDebridLogin();
+	const {
+		loginWithRealDebrid,
+		loginWithAllDebrid,
+		loginWithTorbox,
+		loginWithPremiumize,
+		loginWithOffcloud,
+	} = useDebridLogin();
 	// Cosmetic gate only - it reads an unverified localStorage token. The Newznab
 	// endpoint itself checks the DMM API key server-side, so hiding the link here
 	// only keeps it out of the way for everyone who cannot use it.
@@ -63,6 +71,7 @@ function IndexPage() {
 		(!hasADAuth || !!adUser || !!adError) &&
 		(!hasTBAuth || !!tbUser || !!tbError) &&
 		(!hasPMAuth || !!pmUser || !!pmError) &&
+		(!hasOCAuth || !!ocUser || !!ocError) &&
 		(!hasTraktAuth || !!traktUser || !!traktError);
 
 	// Settling still depends on a promise resolving, and a provider can park one
@@ -117,6 +126,9 @@ function IndexPage() {
 		if (pmError) {
 			toast.error('Premiumize profile failed. Verify the API key in Settings.');
 		}
+		if (ocError) {
+			toast.error('Offcloud profile failed. Verify the API key in Settings.');
+		}
 		if (traktError) {
 			toast.error('Trakt profile fetch failed.');
 		}
@@ -133,7 +145,7 @@ function IndexPage() {
 				toast('Local DB still open. Refresh and retry.', genericToastOptions);
 			};
 		}
-	}, [rdError, adError, tbError, pmError, traktError]);
+	}, [rdError, adError, tbError, pmError, ocError, traktError]);
 
 	useEffect(() => {
 		if (rdUser) {
@@ -257,6 +269,13 @@ function IndexPage() {
 								error={pmError}
 								user={pmUser}
 								onTraktLogin={loginWithPremiumize}
+								onLogout={async (prefix) => await handleLogout(prefix, router)}
+							/>
+							<ServiceCard
+								service="oc"
+								error={ocError}
+								user={ocUser}
+								onTraktLogin={loginWithOffcloud}
 								onLogout={async (prefix) => await handleLogout(prefix, router)}
 							/>
 							<ServiceCard
