@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../utils/allDebridCastApiClient', () => ({
@@ -116,6 +116,62 @@ describe('CastSettingsPanel', () => {
 				})
 			);
 		});
+	});
+
+	// The Real-Debrid path is the only one that talks to the endpoint with a raw
+	// fetch instead of a cast API client, and it was the only one omitting the
+	// sponsor token. The server then applied the non-sponsor ceiling of 5 and
+	// 400d the raised limit this very panel had just offered to a sponsor.
+	it('sends the sponsor token with the rd settings update', async () => {
+		const claims = {
+			shortId: 'ZP1M',
+			githubUsername: 'someone',
+			sources: ['github'],
+			keyVersion: 1,
+			exp: Date.now() + 3_600_000,
+		};
+		const token = `${Buffer.from(JSON.stringify(claims)).toString('base64url')}.sig`;
+		mockLocalStorage['dmm:sponsorToken'] = JSON.stringify(token);
+		mockLocalStorage['rd:castToken'] = 'test-token';
+		mockLocalStorage['rd:clientId'] = '"test-client-id"';
+		mockLocalStorage['rd:clientSecret'] = '"test-client-secret"';
+
+		render(<CastSettingsPanel service="rd" accentColor="green" />);
+		const selects = screen.getAllByRole('combobox');
+		fireEvent.change(selects[0], { target: { value: '30' } });
+
+		await waitFor(() => {
+			expect(global.fetch).toHaveBeenCalledWith(
+				'/api/stremio/cast/updateSizeLimits',
+				expect.objectContaining({
+					headers: expect.objectContaining({ 'x-dmm-sponsor': token }),
+				})
+			);
+		});
+	});
+
+	it('offers a sponsor the raised other-streams ceiling', () => {
+		const claims = {
+			shortId: 'ZP1M',
+			githubUsername: 'someone',
+			sources: ['github'],
+			keyVersion: 1,
+			exp: Date.now() + 3_600_000,
+		};
+		mockLocalStorage['dmm:sponsorToken'] = JSON.stringify(
+			`${Buffer.from(JSON.stringify(claims)).toString('base64url')}.sig`
+		);
+
+		render(<CastSettingsPanel service="rd" accentColor="green" />);
+		const limitSelect = screen.getAllByRole('combobox')[2];
+		expect(within(limitSelect).getByRole('option', { name: '10 streams' })).toBeInTheDocument();
+	});
+
+	it('caps a non-sponsor at the standard other-streams ceiling', () => {
+		render(<CastSettingsPanel service="rd" accentColor="green" />);
+		const limitSelect = screen.getAllByRole('combobox')[2];
+		expect(within(limitSelect).queryByRole('option', { name: '10 streams' })).toBeNull();
+		expect(within(limitSelect).getByRole('option', { name: '5 streams' })).toBeInTheDocument();
 	});
 
 	it('calls updateTorBoxSizeLimits for tb service', async () => {

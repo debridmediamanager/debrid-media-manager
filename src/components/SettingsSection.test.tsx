@@ -307,6 +307,50 @@ describe('SettingsSection', () => {
 		});
 	});
 
+	// Real-Debrid is the only provider this section reaches with a raw fetch
+	// rather than a cast API client, and it was the only one omitting the sponsor
+	// token. The server then validated the raised limit against the non-sponsor
+	// ceiling of 5 and rejected it, so the dropdown offered a sponsor a value
+	// that could never save.
+	it('sends the sponsor token with the Real-Debrid cast settings update', async () => {
+		const claims = {
+			shortId: 'ZP1M',
+			githubUsername: 'someone',
+			sources: ['github'],
+			keyVersion: 1,
+			exp: Date.now() + 3_600_000,
+		};
+		const token = `${Buffer.from(JSON.stringify(claims)).toString('base64url')}.sig`;
+		localStorage.setItem('dmm:sponsorToken', JSON.stringify(token));
+		localStorage.setItem('rd:castToken', 'cast-token');
+		localStorage.setItem('rd:clientId', JSON.stringify('client-id'));
+		localStorage.setItem('rd:clientSecret', JSON.stringify('client-secret'));
+
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+		vi.stubGlobal('fetch', fetchMock);
+
+		try {
+			render(<SettingsSection />);
+			const user = userEvent.setup();
+
+			const limitContainer = screen.getByText('Other streams limit').closest('div')!;
+			const limitSelect = within(limitContainer).getByRole('combobox');
+			// 10 is the sponsor-only ceiling, so it is only in the list at all
+			// because the badge decoded; saving it is what the header unlocks.
+			expect(within(limitSelect).getByRole('option', { name: '10 streams' })).toBeVisible();
+			await user.selectOptions(limitSelect, '10');
+
+			expect(fetchMock).toHaveBeenCalledWith(
+				'/api/stremio/cast/updateSizeLimits',
+				expect.objectContaining({
+					headers: expect.objectContaining({ 'x-dmm-sponsor': token }),
+				})
+			);
+		} finally {
+			vi.unstubAllGlobals();
+		}
+	});
+
 	it('leaves AllDebrid alone when the member never enrolled in cast', async () => {
 		localStorage.setItem('ad:apiKey', JSON.stringify('ad-key'));
 

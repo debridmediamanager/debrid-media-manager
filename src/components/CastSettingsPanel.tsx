@@ -1,4 +1,4 @@
-import { useSponsor } from '@/hooks/useSponsor';
+import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
 import { otherStreamsLimitOptions } from '@/utils/sponsorLimits';
 import { Settings } from 'lucide-react';
 import { useState } from 'react';
@@ -83,7 +83,10 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 
 					const res = await fetch('/api/stremio/cast/updateSizeLimits', {
 						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
+						// The sponsor token has to ride along or the server
+						// validates against the non-sponsor ceiling and 400s the
+						// very value this panel just offered a sponsor.
+						headers: { 'Content-Type': 'application/json', ...sponsorHeaders() },
 						body: JSON.stringify({
 							clientId,
 							clientSecret,

@@ -1,4 +1,4 @@
-import { useSponsor } from '@/hooks/useSponsor';
+import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
 import { otherStreamsLimitOptions } from '@/utils/sponsorLimits';
 import { AlertTriangle, Check, Link2, Settings } from 'lucide-react';
 import { useState } from 'react';
@@ -159,7 +159,10 @@ export const SettingsSection = () => {
 			updatePromises.push(
 				fetch('/api/stremio/cast/updateSizeLimits', {
 					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
+					// Same as the TorBox/AllDebrid/Premiumize clients: without the
+					// sponsor token the server applies the non-sponsor ceiling and
+					// rejects the raised limit this section just offered.
+					headers: { 'Content-Type': 'application/json', ...sponsorHeaders() },
 					body: JSON.stringify({
 						clientId,
 						clientSecret,
