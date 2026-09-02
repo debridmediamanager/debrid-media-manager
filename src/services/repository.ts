@@ -6,7 +6,6 @@ import {
 	CastService,
 	ContentRequestService,
 	DebridUploaderMapService,
-	DmmApiKeysService,
 	HashImdbService,
 	HashSearchService,
 	HistoryAggregationService,
@@ -52,7 +51,6 @@ export type RepositoryDependencies = Partial<{
 	hashImdbService: HashImdbService;
 	hashSearchService: HashSearchService;
 	zurgKeysService: ZurgKeysService;
-	dmmApiKeysService: DmmApiKeysService;
 	sponsorsService: SponsorsService;
 	streamHealthService: StreamHealthService;
 	historyAggregationService: HistoryAggregationService;
@@ -81,7 +79,6 @@ export class Repository {
 	private hashImdbService: HashImdbService;
 	private hashSearchService: HashSearchService;
 	private zurgKeysService: ZurgKeysService;
-	private dmmApiKeysService: DmmApiKeysService;
 	private sponsorsService: SponsorsService;
 	private streamHealthService: StreamHealthService;
 	private historyAggregationService: HistoryAggregationService;
@@ -109,7 +106,6 @@ export class Repository {
 		hashImdbService,
 		hashSearchService,
 		zurgKeysService,
-		dmmApiKeysService,
 		sponsorsService,
 		streamHealthService,
 		historyAggregationService,
@@ -136,7 +132,6 @@ export class Repository {
 		this.hashImdbService = hashImdbService ?? new HashImdbService();
 		this.hashSearchService = hashSearchService ?? new HashSearchService();
 		this.zurgKeysService = zurgKeysService ?? new ZurgKeysService();
-		this.dmmApiKeysService = dmmApiKeysService ?? new DmmApiKeysService();
 		this.sponsorsService = sponsorsService ?? new SponsorsService();
 		this.streamHealthService = streamHealthService ?? new StreamHealthService();
 		this.historyAggregationService =
@@ -167,7 +162,6 @@ export class Repository {
 			this.hashImdbService.disconnect(),
 			this.hashSearchService.disconnect(),
 			this.zurgKeysService.disconnect(),
-			this.dmmApiKeysService.disconnect(),
 			this.sponsorsService.disconnect(),
 			this.streamHealthService.disconnect(),
 			this.historyAggregationService.disconnect(),
@@ -982,11 +976,6 @@ export class Repository {
 
 	public listZurgApiKeys() {
 		return this.zurgKeysService.listApiKeys();
-	}
-
-	// DMM API Keys Service Methods
-	public validateDmmApiKey(apiKey: string) {
-		return this.dmmApiKeysService.validateApiKey(apiKey);
 	}
 
 	// Sponsors Service Methods

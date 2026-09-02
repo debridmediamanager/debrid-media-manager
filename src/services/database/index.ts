@@ -4,7 +4,6 @@ import { AvailabilityService } from './availability';
 import { CastService } from './cast';
 import { ContentRequestService } from './contentRequests';
 import { DebridUploaderMapService } from './debridUploaderMap';
-import { DmmApiKeysService } from './dmmApiKeys';
 import { HashImdbService } from './hashImdb';
 import { HashSearchService } from './hashSearch';
 import { HistoryAggregationService } from './historyAggregation';
@@ -32,7 +31,6 @@ export {
 	CastService,
 	ContentRequestService,
 	DebridUploaderMapService,
-	DmmApiKeysService,
 	HashImdbService,
 	HashSearchService,
 	HistoryAggregationService,
@@ -54,6 +52,6 @@ export {
 	ZurgKeysService,
 };
 
-export type { SponsorLookup } from './sponsors';
 export type { Nzb2rdWaiter } from './nzb2rdMap';
+export type { SponsorLookup } from './sponsors';
 export type { TransferMetaRecord, TransferMetaSource } from './transferMeta';
