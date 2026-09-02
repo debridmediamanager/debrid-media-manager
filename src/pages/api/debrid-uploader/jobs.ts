@@ -1,6 +1,7 @@
 import { orderedServersForNewJob, resolveJobServer } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { isSponsorRequest } from '@/utils/requireSponsor';
 import { safeReturnPath } from '@/utils/transferContext';
 import { exceedsTransferSizeCap, MAX_TRANSFER_BYTES, tooLargeMessage } from '@/utils/transferSize';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -145,6 +146,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		imdb_id: imdbId,
 		rd_api_key: rdKey,
 		tb_api_key: tbSource,
+		// Sponsor perk: a higher concurrent-job ceiling on the uploader, which
+		// refuses over-limit submissions with a 429 rather than queueing them.
+		// Verified here — the browser only ever sends the signed token, and this
+		// is the one place that checks its signature.
+		sponsor: isSponsorRequest(req),
 	});
 
 	// Try the round-robin-chosen server first; on a network failure fall through

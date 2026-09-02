@@ -534,11 +534,23 @@ export async function submitNzb(args: {
 	imdbId: string;
 	rdKey: string;
 	oauth?: RdOAuthCredentials | null;
+	/**
+	 * Admit the job to nzb2rd's priority tier — the sponsor perk.
+	 *
+	 * Only ever set from `isSponsorRequest`, which checks the HMAC on a token
+	 * this app minted. Never from anything the browser supplies directly: the
+	 * field nzb2rd reads is a bare boolean, so dmm vouching for it is the whole
+	 * verification.
+	 *
+	 * It reorders the wait; it buys no extra concurrency on that host.
+	 */
+	priority?: boolean;
 }): Promise<{ status: number; data: any }> {
 	const form = new FormData();
 	form.append('nzb', new Blob([args.nzbText], { type: 'application/x-nzb' }), args.nzbName);
 	form.append('imdb_id', args.imdbId);
 	form.append('rd_api_key', args.rdKey);
+	if (args.priority) form.append('priority', '1');
 	if (isCompleteOAuth(args.oauth)) {
 		form.append('rd_client_id', args.oauth.clientId);
 		form.append('rd_client_secret', args.oauth.clientSecret);

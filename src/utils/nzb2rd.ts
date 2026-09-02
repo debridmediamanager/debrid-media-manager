@@ -1,3 +1,4 @@
+import { sponsorHeaders } from '@/hooks/useSponsor';
 import { toast } from 'react-hot-toast';
 import { TransferContext } from './debridUploader';
 import {
@@ -99,7 +100,10 @@ export async function createNzb2rdJob(params: {
 }): Promise<Nzb2rdJob | Nzb2rdDuplicate> {
 	const response = await fetch('/api/nzb2rd/jobs', {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
+		// The sponsor token rides along so the route can verify it and vouch for
+		// the perk to the uploader service. Absent for everyone else, which the
+		// route reads as a normal-tier submission.
+		headers: { 'Content-Type': 'application/json', ...sponsorHeaders() },
 		body: JSON.stringify(params),
 	});
 	return parseJsonResponse(response);

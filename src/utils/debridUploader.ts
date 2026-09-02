@@ -1,3 +1,4 @@
+import { sponsorHeaders } from '@/hooks/useSponsor';
 import { addHashAsMagnet, selectFiles } from '@/services/realDebrid';
 import { toast } from 'react-hot-toast';
 import { type TransferContext, transferContextFromPath } from './transferContext';
@@ -85,7 +86,10 @@ export async function createDebridUploaderJob(
 ): Promise<DebridUploaderJob | DebridUploaderDuplicate> {
 	const response = await fetch('/api/debrid-uploader/jobs', {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
+		// The sponsor token rides along so the route can verify it and vouch for
+		// the perk to the uploader service. Absent for everyone else, which the
+		// route reads as a normal-tier submission.
+		headers: { 'Content-Type': 'application/json', ...sponsorHeaders() },
 		body: JSON.stringify(params),
 	});
 	return parseJsonResponse(response);

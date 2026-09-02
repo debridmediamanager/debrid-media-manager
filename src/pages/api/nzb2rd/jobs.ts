@@ -9,6 +9,7 @@ import {
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { safeNzbName } from '@/utils/nzbName';
+import { isSponsorRequest } from '@/utils/requireSponsor';
 import { safeReturnPath } from '@/utils/transferContext';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -124,6 +125,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// `rdKey` expires 24h after login and that queue is days deep, which is
 			// what produced the `401 bad_token` failures on the Transfers page.
 			oauth: isCompleteOAuth(oauth) ? oauth : null,
+			// Sponsor perk: a place in nzb2rd's priority tier. Verified here
+			// rather than trusted from the body — the browser only ever sends the
+			// signed token, and this is the one place that checks its signature.
+			priority: isSponsorRequest(req),
 		});
 		if (status < 300 && data?.id) {
 			await Promise.all([
