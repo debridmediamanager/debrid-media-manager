@@ -14,6 +14,10 @@ vi.mock('axios', () => ({
 	},
 }));
 
+vi.mock('@/utils/token', () => ({
+	generateTokenAndHash: vi.fn(async () => ['token-abc', 'hash-abc']),
+}));
+
 const { get: mockGet, post: mockPost } = axiosMocks;
 
 describe('useExternalSources', () => {
@@ -76,6 +80,9 @@ describe('useExternalSources', () => {
 
 		expect(mockGet.mock.calls[0][0]).toBe('/api/proxy/stream');
 		expect(mockGet.mock.calls[0][1]?.params?.service).toBe('torrentio-tor');
+		// The proxy only answers callers carrying a server-signed token.
+		expect(mockGet.mock.calls[0][1]?.params?.dmmProblemKey).toBe('token-abc');
+		expect(mockGet.mock.calls[0][1]?.params?.solution).toBe('hash-abc');
 	});
 
 	it('reads enabled sources from localStorage flags', () => {

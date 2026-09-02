@@ -1,6 +1,7 @@
 import { FileData, SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
 import { getLocalStorageBoolean } from '@/utils/browserStorage';
 import { normalizeHash } from '@/utils/extractHashes';
+import { generateTokenAndHash } from '@/utils/token';
 import axios from 'axios';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -336,9 +337,12 @@ export function useExternalSources(
 				const isTorService = source.includes('-tor');
 
 				if (isTorService) {
-					// Use our proxy endpoint for Tor services
+					// Use our proxy endpoint for Tor services. It only answers
+					// callers carrying a token the server signed, so that the Tor
+					// circuit it opens is spent on this site's own searches.
+					const [dmmProblemKey, solution] = await generateTokenAndHash();
 					response = await axios.get('/api/proxy/stream', {
-						params: { url, service: source },
+						params: { url, service: source, dmmProblemKey, solution },
 						timeout: 30000,
 					});
 				} else {

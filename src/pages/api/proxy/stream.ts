@@ -1,4 +1,5 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { validateProblemToken } from '@/utils/problemToken';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { randomUUID } from 'node:crypto';
@@ -20,12 +21,35 @@ const TOR_SERVICES = [
 	'torrentio-tor',
 ];
 
+// This endpoint spends dmm's own resources on the caller's behalf - a Tor
+// circuit out of dmm-01 and a slice of the per-IP budget - so it is meant for
+// the site's own search pages and nothing else. Two gates keep it there:
+// a browser is refused outright if it says the call came from somewhere other
+// than dmm, and every caller has to present a token this server signed.
+//
+// Neither makes the endpoint unscriptable; the allowlist above is what keeps a
+// forged caller from reaching anything but the five addons.
+function isForeignBrowserRequest(req: NextApiRequest): boolean {
+	// Sent by every current browser and unsettable from page script. Absent for
+	// older browsers and non-browser callers, who fall through to the token.
+	const site = req.headers['sec-fetch-site'];
+	return typeof site === 'string' && site !== 'same-origin';
+}
+
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const { url, service } = req.query;
+	if (isForeignBrowserRequest(req)) {
+		return res.status(403).json({ error: 'Forbidden' });
+	}
+
+	const { url, service, dmmProblemKey, solution } = req.query;
+
+	if (!validateProblemToken(dmmProblemKey, solution)) {
+		return res.status(403).json({ error: 'Authentication error' });
+	}
 
 	if (!url || typeof url !== 'string') {
 		return res.status(400).json({ error: 'URL parameter is required' });
