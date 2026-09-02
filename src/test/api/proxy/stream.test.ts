@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { mockAxiosGet, mockSocksProxyAgent } = vi.hoisted(() => ({
 	mockAxiosGet: vi.fn(),
-	mockSocksProxyAgent: vi.fn(() => ({ proxy: true })),
+	mockSocksProxyAgent: vi.fn((_uri: string, _opts?: unknown) => ({ proxy: true })),
 }));
 
 vi.mock('axios', () => {
@@ -99,6 +99,33 @@ describe('/api/proxy/stream', () => {
 				httpsAgent: expect.any(Object),
 			})
 		);
+	});
+
+	it('gives every TOR request its own circuit', async () => {
+		// Tor isolates circuits on the SOCKS username, so two requests sharing one
+		// leave from the same exit IP. The username was Date.now(), and a burst of
+		// handler calls lands inside a single millisecond - so pin the clock and
+		// check the usernames still differ.
+		const nowSpy = vi.spyOn(Date, 'now').mockReturnValue(1_700_000_000_000);
+
+		const callTor = async () => {
+			const req = createMockRequest({
+				method: 'GET',
+				query: { url: 'https://comet.elfhosted.com/api', service: 'comet-tor' },
+			});
+			await handler(req, createMockResponse());
+		};
+
+		await callTor();
+		await callTor();
+
+		const usernames = mockSocksProxyAgent.mock.calls.map(
+			([uri]) => uri.split('//')[1].split(':')[0]
+		);
+		expect(usernames).toHaveLength(2);
+		expect(usernames[0]).not.toBe(usernames[1]);
+
+		nowSpy.mockRestore();
 	});
 
 	it('returns upstream status codes for axios errors', async () => {

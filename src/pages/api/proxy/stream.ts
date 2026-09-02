@@ -1,6 +1,7 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { randomUUID } from 'node:crypto';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 
 const ALLOWED_HOSTS = [
@@ -45,8 +46,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		let response;
 
 		if (useTor) {
+			// Tor isolates circuits on the SOCKS username, so this is what decides
+			// whether two requests leave from the same exit IP. It used to be
+			// Date.now(), which is only millisecond-granular: a burst handled
+			// inside one millisecond shared a circuit, and a search page fans out
+			// ten of these at once - measured 3 distinct stamps across a 10-request
+			// burst, so 7 of them went out from an exit another request was
+			// already using. A random id gives each request its own.
 			const torProxy = new SocksProxyAgent(
-				`socks5h://${Date.now()}:any_password@${process.env.PROXY || 'localhost:9050'}`,
+				`socks5h://${randomUUID()}:any_password@${process.env.PROXY || 'localhost:9050'}`,
 				{
 					timeout: parseInt(process.env.REQUEST_TIMEOUT!) || 30000,
 				}
