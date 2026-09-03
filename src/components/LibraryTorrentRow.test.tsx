@@ -203,10 +203,38 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			).not.toBeInTheDocument();
 		});
 
-		// The cast button arrives with the Offcloud cast addon, not before.
-		it('offers no cast button yet', () => {
+		it('renders a cast button for a row that reports an info hash', () => {
 			const { container } = render(<LibraryTorrentRow {...ocProps()} />);
+			expect(container.querySelector('button[title="Cast (OC)"]')).toBeInTheDocument();
+		});
+
+		// A plain HTTP submission never had an info hash, and Offcloud resolves a
+		// cast from the hash alone - there is nothing to cast.
+		it('hides the cast button when the row has no info hash', () => {
+			const { container } = render(<LibraryTorrentRow {...ocProps({ hash: '' })} />);
 			expect(container.querySelector('button[title="Cast (OC)"]')).not.toBeInTheDocument();
+		});
+
+		it('hides the cast button without an Offcloud key', () => {
+			const { container } = render(<LibraryTorrentRow {...ocProps()} ocKey={null} />);
+			expect(container.querySelector('button[title="Cast (OC)"]')).not.toBeInTheDocument();
+		});
+
+		it('casts with the key as a bearer token and the request id in the URL', async () => {
+			const fetchMock = vi.fn().mockResolvedValue({
+				json: async () => ({ status: 'success', redirectUrl: '/x' }),
+			});
+			vi.stubGlobal('fetch', fetchMock);
+
+			const { container } = render(<LibraryTorrentRow {...ocProps()} />);
+			fireEvent.click(container.querySelector('button[title="Cast (OC)"]')!);
+			await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+
+			const [url, init] = fetchMock.mock.calls[0];
+			expect(url).toBe(`/api/stremio-oc/cast/library/${'a'.repeat(40)}?requestId=req123`);
+			// The Offcloud key is the whole account, so it never reaches a URL.
+			expect(url).not.toContain('test-oc-key');
+			expect(init.headers.Authorization).toBe('Bearer test-oc-key');
 		});
 	});
 

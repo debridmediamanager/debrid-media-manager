@@ -149,7 +149,7 @@ function TorrentRow({
 		return torrent.serviceStatus; // Fallback to raw status
 	};
 
-	const [castService, setCastService] = useState<'rd' | 'ad' | 'tb' | 'pm' | null>(null);
+	const [castService, setCastService] = useState<'rd' | 'ad' | 'tb' | 'pm' | 'oc' | null>(null);
 
 	// Handler for cast button click
 	const handleCastClick = async (imdbId?: string) => {
@@ -282,10 +282,49 @@ function TorrentRow({
 		}
 	};
 
+	const handleOcCastClick = async (imdbId?: string) => {
+		if (!ocKey || !torrent.id.startsWith('oc:')) return;
+
+		// Offcloud resolves a cast from the info hash alone, and a row created
+		// from a plain HTTP submission never had one - there is nothing to cast.
+		if (!torrent.hash) return;
+
+		setCastService('oc');
+		setIsCasting(true);
+		try {
+			// The request id rides along so the route can fall back to
+			// `cloud/explore` for an item this account holds but Offcloud's
+			// shared cache does not.
+			const requestId = torrent.id.substring(3);
+			const castUrl = `/api/stremio-oc/cast/library/${torrent.hash}?requestId=${encodeURIComponent(requestId)}${imdbId ? `&imdbId=${imdbId}` : ''}`;
+			const response = await fetch(castUrl, {
+				headers: { Authorization: `Bearer ${ocKey}` },
+			});
+			const data = await response.json();
+
+			if (data.status === 'need_imdb_id') {
+				setCastTorrentInfo(data.torrentInfo);
+				setShowCastModal(true);
+			} else if (data.status === 'error') {
+				toast.error(data.errorMessage || 'Failed to cast to Stremio');
+			} else if (data.status === 'success') {
+				window.location.href = data.redirectUrl;
+				toast.success('Opening in Stremio...');
+			}
+		} catch (error) {
+			console.error('Cast error:', error);
+			toast.error('Failed to cast to Stremio');
+		} finally {
+			setIsCasting(false);
+		}
+	};
+
 	// Handler for IMDB ID selection from modal
 	const handleSelectImdbId = async (imdbId: string) => {
 		setShowCastModal(false);
-		if (castService === 'pm') {
+		if (castService === 'oc') {
+			await handleOcCastClick(imdbId);
+		} else if (castService === 'pm') {
 			await handlePmCastClick(imdbId);
 		} else if (castService === 'tb') {
 			await handleTbCastClick(imdbId);
@@ -486,6 +525,19 @@ function TorrentRow({
 							disabled={isCasting}
 						>
 							<Cast className="h-4 w-4 text-yellow-400" />
+						</button>
+					)}
+					{ocKey && torrent.id.startsWith('oc:') && torrent.hash && (
+						<button
+							title="Cast (OC)"
+							className="mb-2 mr-2 cursor-pointer text-orange-400 disabled:opacity-50"
+							onClick={(e) => {
+								e.stopPropagation();
+								handleOcCastClick();
+							}}
+							disabled={isCasting}
+						>
+							<Cast className="h-4 w-4 text-orange-400" />
 						</button>
 					)}
 					{canSendToRd && (

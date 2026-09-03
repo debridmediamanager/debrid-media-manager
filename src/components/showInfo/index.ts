@@ -1416,6 +1416,7 @@ export const showInfoForOC = async (
         <div class="mb-3 flex justify-center items-center flex-wrap">
             ${hasInfoHash ? renderButton('share', { link: `${await handleShare({ ...torrent, bytes: totalBytes })}` }) : ''}
             ${renderButton('delete', { id: 'btn-delete-oc' })}
+            ${hasInfoHash ? renderButton('castAll', { id: 'btn-cast-all' }) : ''}
             ${hasInfoHash ? renderButton('magnet', { id: 'btn-magnet-copy-oc', text: shouldDownloadMagnets ? 'Download' : 'Copy' }) : ''}
             ${files.length ? renderButton('exportLinks', { id: 'btn-export-links-oc' }) : ''}
         </div>`;
@@ -1490,6 +1491,19 @@ export const showInfoForOC = async (
 				player: app ?? '',
 				keys: { offcloudKey: ocKey },
 			});
+
+			// Offcloud resolves a cast from the info hash alone, so a row created
+			// from a plain HTTP submission has nothing to cast. The request id
+			// goes along so the route can fall back to `cloud/explore` for an
+			// item this account holds but Offcloud's shared cache does not.
+			if (hasInfoHash) {
+				bindCastAllButton({
+					buttonId: 'btn-cast-all',
+					castUrl: `/api/stremio-oc/cast/library/${torrent.hash}?requestId=${encodeURIComponent(requestId)}`,
+					apiKey: ocKey,
+					filename: torrent.filename,
+				});
+			}
 
 			document
 				.querySelectorAll<HTMLButtonElement>('button[data-oc-link]')
