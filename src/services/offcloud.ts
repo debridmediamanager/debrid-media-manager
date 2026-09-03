@@ -70,6 +70,11 @@ export interface OffcloudCacheResult {
 }
 
 export interface OffcloudCacheInfoFile {
+	/**
+	 * The containing directory as a `/`-joined path, normalised by
+	 * `normalizeCacheInfoFolder` - the wire form is an **array of path
+	 * segments**, not a string.
+	 */
 	folder: string;
 	filename: string;
 	size: number;
@@ -262,6 +267,29 @@ const toBareHash = (hashOrMagnet: string): string =>
 		: hashOrMagnet.trim()
 	).toLowerCase();
 
+/**
+ * `cache/info` reports a file's directory as an **array of path segments**, not
+ * a string - `{"folder": ["Big Buck Bunny"], "filename": "Big Buck Bunny.mp4"}`
+ * (measured live 2026-09-03 against the reference release). Handing that array
+ * on unconverted crashed every consumer that builds a path from it with
+ * `TypeError: value.replace is not a function`, which is the whole Offcloud cast
+ * surface plus the library modal and the watch intent: each of them turns the
+ * folder into a stored path through `offcloudFilePath`.
+ *
+ * A plain string is accepted too, because nothing in Offcloud's undocumented API
+ * promises the array form will stay - and a single string is the shape everyone
+ * downstream was written against.
+ */
+const normalizeCacheInfoFolder = (folder: unknown): string => {
+	if (Array.isArray(folder)) {
+		return folder
+			.map((segment) => String(segment ?? '').replace(/^\/+|\/+$/g, ''))
+			.filter((segment) => segment.length > 0 && segment !== '.')
+			.join('/');
+	}
+	return typeof folder === 'string' ? folder : '';
+};
+
 const basenameOf = (link: string): string => {
 	const raw = (() => {
 		try {
@@ -350,7 +378,7 @@ export async function getOffcloudCacheInfo(
 	});
 	if (urls.length === 0) return [];
 
-	const body = await ocRequest<Array<{ cached?: boolean; files?: OffcloudCacheInfoFile[] }>>(
+	const body = await ocRequest<Array<{ cached?: boolean; files?: unknown }>>(
 		apiKey,
 		'cache/info',
 		{ urls, includeFiles }
@@ -363,11 +391,23 @@ export async function getOffcloudCacheInfo(
 		);
 	}
 
-	return urls.map((source, i) => ({
-		source,
-		cached: body[i]?.cached === true,
-		files: Array.isArray(body[i]?.files) ? (body[i].files as OffcloudCacheInfoFile[]) : [],
-	}));
+	return urls.map((source, i) => {
+		const raw = body[i]?.files;
+		return {
+			source,
+			cached: body[i]?.cached === true,
+			files: (Array.isArray(raw) ? raw : []).map((file) => {
+				const entry = (file ?? {}) as Record<string, unknown>;
+				return {
+					// The wire form is an array of path segments - see
+					// `normalizeCacheInfoFolder`.
+					folder: normalizeCacheInfoFolder(entry.folder),
+					filename: typeof entry.filename === 'string' ? entry.filename : '',
+					size: typeof entry.size === 'number' ? entry.size : 0,
+				};
+			}),
+		};
+	});
 }
 
 /**
@@ -485,4 +525,4 @@ export function joinExploreWithCacheInfo(
 	});
 }
 
-export const _testing = { toBareHash, basenameOf, OC_API_BASE };
+export const _testing = { toBareHash, basenameOf, normalizeCacheInfoFolder, OC_API_BASE };

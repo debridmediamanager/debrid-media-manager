@@ -298,6 +298,59 @@ describe('getOffcloudCacheInfo', () => {
 		expect(await getOffcloudCacheInfo('key', [])).toEqual([]);
 		expect(fetchMock).not.toHaveBeenCalled();
 	});
+
+	// Measured live 2026-09-03: the wire form of `folder` is an **array of path
+	// segments**, not the string every consumer was written against. Passed on
+	// unconverted it reaches `offcloudFilePath`, whose `trimSlashes` throws
+	// `TypeError: value.replace is not a function` - taking out the whole cast
+	// surface, the library modal and the Offcloud watch intent.
+	it('flattens the array of path segments the live endpoint sends as `folder`', async () => {
+		fetchMock.mockResolvedValue(
+			jsonResponse([
+				{
+					cached: true,
+					files: [
+						{ folder: ['Big Buck Bunny'], filename: 'poster.jpg', size: 310380 },
+						{
+							folder: ['Show.S01', 'Season 1'],
+							filename: 'Show.S01E01.mkv',
+							size: 500,
+						},
+					],
+				},
+			])
+		);
+
+		const [result] = await getOffcloudCacheInfo('key', [HASH]);
+
+		expect(result.files).toEqual([
+			{ folder: 'Big Buck Bunny', filename: 'poster.jpg', size: 310380 },
+			{ folder: 'Show.S01/Season 1', filename: 'Show.S01E01.mkv', size: 500 },
+		]);
+	});
+
+	it('keeps accepting a plain string folder, and defaults what it cannot read', async () => {
+		fetchMock.mockResolvedValue(
+			jsonResponse([
+				{
+					cached: true,
+					files: [
+						{ folder: 'BBB', filename: 'a.mkv', size: 5 },
+						{ filename: 'b.mkv' },
+						{ folder: [], filename: 'c.mkv', size: 1 },
+					],
+				},
+			])
+		);
+
+		const [result] = await getOffcloudCacheInfo('key', [HASH]);
+
+		expect(result.files).toEqual([
+			{ folder: 'BBB', filename: 'a.mkv', size: 5 },
+			{ folder: '', filename: 'b.mkv', size: 0 },
+			{ folder: '', filename: 'c.mkv', size: 1 },
+		]);
+	});
 });
 
 describe('addOffcloudCloud', () => {
