@@ -125,17 +125,20 @@ function IndexPage() {
 		if (adError) {
 			toast.error('AllDebrid fetch failed. Confirm your DMM login email.');
 		}
+		// Not "verify the key in Settings" - Settings holds playback and cast
+		// preferences and cannot show, replace or clear a credential. The card
+		// for the failed provider is where sign-in and logout actually live.
 		if (tbError) {
-			toast.error('Torbox profile failed. Verify the API key in Settings.');
+			toast.error('Torbox profile failed. Use the Torbox card below.');
 		}
 		if (pmError) {
-			toast.error('Premiumize profile failed. Verify the API key in Settings.');
+			toast.error('Premiumize profile failed. Use the Premiumize card below.');
 		}
 		if (ocError) {
-			toast.error('Offcloud profile failed. Verify the API key in Settings.');
+			toast.error('Offcloud profile failed. Use the Offcloud card below.');
 		}
 		if (dlError) {
-			toast.error('Debrid-Link profile failed. Verify the API token in Settings.');
+			toast.error('Debrid-Link profile failed. Use the Debrid-Link card below.');
 		}
 		if (traktError) {
 			toast.error('Trakt profile fetch failed.');

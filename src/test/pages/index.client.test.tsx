@@ -365,4 +365,27 @@ describe('IndexPage', () => {
 		expect(container).toHaveClass('grid');
 		expect(container).toHaveClass('gap-3');
 	});
+
+	// Settings holds playback and cast preferences only - it can neither show
+	// nor replace nor clear a provider credential. Sending a user there to
+	// "verify the API key" is the same dead end as a retry-only error card: the
+	// actions that fix a rejected key all live on the card itself.
+	it.each([
+		['tbError', 'Torbox'],
+		['pmError', 'Premiumize'],
+		['ocError', 'Offcloud'],
+		['dlError', 'Debrid-Link'],
+	])('does not send a failed %s to Settings', (errorKey, label) => {
+		currentUserMock.mockReturnValue({
+			...settledFixture,
+			[errorKey]: new Error('rejected'),
+		});
+
+		render(<IndexPage />);
+
+		const messages = toastMock.error.mock.calls.map((call: any[]) => String(call[0]));
+		const message = messages.find((text: string) => text.includes(label));
+		expect(message).toBeDefined();
+		expect(message).not.toMatch(/in Settings/i);
+	});
 });
