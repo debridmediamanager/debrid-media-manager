@@ -20,7 +20,11 @@ import { SearchApiResponse, SearchResult, hasSubstantialTitle } from '@/services
 import UserTorrentDB from '@/torrent/db';
 import { handleCastMovieAllDebrid } from '@/utils/allDebridCastApiClient';
 import axiosWithRetry from '@/utils/axiosWithRetry';
-import { getLocalStorageBoolean, getLocalStorageItemOrDefault } from '@/utils/browserStorage';
+import {
+	getLocalStorageBoolean,
+	getLocalStorageItemOrDefault,
+	hideRdBlockedTorrentsDefault,
+} from '@/utils/browserStorage';
 import { handleCastMovie } from '@/utils/castApiClient';
 import { fileContentRequest } from '@/utils/contentRequestsApi';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
@@ -135,15 +139,7 @@ const MovieSearch: FunctionComponent = () => {
 	const player = getLocalStorageItemOrDefault('settings:player', defaultPlayer);
 	const movieMaxSize = getLocalStorageItemOrDefault('settings:movieMaxSize', defaultMovieSize);
 	const onlyTrustedTorrents = getLocalStorageBoolean('settings:onlyTrustedTorrents', false);
-	const hideRdBlockedTorrents = (() => {
-		if (typeof localStorage === 'undefined') return false;
-		const stored = localStorage.getItem('settings:hideRdBlockedTorrents');
-		if (stored !== null) return stored === 'true';
-		const hasRd = !!localStorage.getItem('rd:accessToken');
-		const hasAd = !!localStorage.getItem('ad:apiKey');
-		const hasTb = !!localStorage.getItem('tb:apiKey');
-		return hasRd && !hasAd && !hasTb;
-	})();
+	const hideRdBlockedTorrents = hideRdBlockedTorrentsDefault(false);
 	const defaultTorrentsFilter = getLocalStorageItemOrDefault(
 		'settings:defaultTorrentsFilter',
 		defaultFilterSetting

@@ -4,6 +4,7 @@ import {
 	getLocalStorageItem,
 	getLocalStorageItemOrDefault,
 	getLocalStorageString,
+	hideRdBlockedTorrentsDefault,
 } from './browserStorage';
 
 describe('browserStorage', () => {
@@ -95,6 +96,45 @@ describe('browserStorage', () => {
 			spy.mockReturnValue(null);
 			expect(getLocalStorageBoolean('testKey', true)).toBe(true);
 			spy.mockRestore();
+		});
+	});
+
+	describe('hideRdBlockedTorrentsDefault', () => {
+		it('honours an explicit choice over any credential', () => {
+			localStorage.setItem('rd:accessToken', 'rd');
+			localStorage.setItem('settings:hideRdBlockedTorrents', 'false');
+			expect(hideRdBlockedTorrentsDefault(false)).toBe(false);
+
+			localStorage.setItem('ad:apiKey', 'ad');
+			localStorage.setItem('settings:hideRdBlockedTorrents', 'true');
+			expect(hideRdBlockedTorrentsDefault(false)).toBe(true);
+		});
+
+		it('hides them for a Real-Debrid-only user', () => {
+			localStorage.setItem('rd:accessToken', 'rd');
+			expect(hideRdBlockedTorrentsDefault(false)).toBe(true);
+		});
+
+		it('shows them when there is nowhere to take a Real-Debrid-blocked release', () => {
+			expect(hideRdBlockedTorrentsDefault(false)).toBe(false);
+		});
+
+		// The rule lived in three places and only one of them learned about each
+		// new provider, so a user with Real-Debrid plus one of these had a
+		// Settings checkbox reading unchecked while both search pages hid the
+		// releases anyway.
+		it.each([
+			['ad:apiKey'],
+			['tb:apiKey'],
+			['pm:accessToken'],
+			['pm:apiKey'],
+			['oc:apiKey'],
+			['dl:accessToken'],
+			['dl:apiKey'],
+		])('stops hiding them once %s is present alongside Real-Debrid', (key) => {
+			localStorage.setItem('rd:accessToken', 'rd');
+			localStorage.setItem(key, 'other-service');
+			expect(hideRdBlockedTorrentsDefault(false)).toBe(false);
 		});
 	});
 });

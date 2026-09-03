@@ -131,6 +131,7 @@ vi.mock('@/utils/browserStorage', () => ({
 	getLocalStorageBoolean: (_key: string, defaultValue: boolean) => defaultValue,
 	getLocalStorageItemOrDefault: (key: string, defaultValue: any) =>
 		key === 'settings:movieYearFilter' ? '1' : defaultValue,
+	hideRdBlockedTorrentsDefault: (fallback: boolean) => fallback,
 }));
 
 const { generateTokenAndHashMock } = vi.hoisted(() => ({

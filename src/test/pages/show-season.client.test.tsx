@@ -118,6 +118,7 @@ vi.mock('@/utils/browserStorage', () => ({
 	__esModule: true,
 	getLocalStorageBoolean: () => false,
 	getLocalStorageItemOrDefault: (_key: string, defaultValue: any) => defaultValue,
+	hideRdBlockedTorrentsDefault: (fallback: boolean) => fallback,
 }));
 
 vi.mock('@/utils/token', () => ({
