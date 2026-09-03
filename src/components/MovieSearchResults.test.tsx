@@ -659,4 +659,62 @@ describe('MovieSearchResults', () => {
 			expect(screen.getByText('Sample Movie')).toBeTruthy();
 		});
 	});
+
+	// A completed TB → RD transfer puts the content in RD under a *rewritten*
+	// hash: de-infringed filenames plus a per-attempt salt. This row's own hash
+	// still carries the blocked release name, so its Add button can only ever
+	// answer `451 infringing_file`. The badge that marks the transfer used to be
+	// an inert <span> telling people to "use its Instant RD result", which is how
+	// a working transfer read as a broken one.
+	describe('a row with a completed TB → RD transfer', () => {
+		const transferred: SearchResult = {
+			...baseResult,
+			tbAvailable: true,
+			tbTransferred: true,
+			tbTransferredHash: 'rewritten1',
+		};
+
+		it('adds the rewritten hash, never the row’s own blocked one', async () => {
+			const { props } = renderComponent({
+				filteredResults: [transferred],
+				torboxKey: 'tb-key',
+			});
+
+			await userEvent.click(screen.getByRole('button', { name: /Instant RD/i }));
+
+			await waitFor(() => expect(props.addRd).toHaveBeenCalledWith('rewritten1'));
+			expect(props.addRd).not.toHaveBeenCalledWith('hash1');
+		});
+
+		it('hides the redundant TB → RD button', () => {
+			renderComponent({ filteredResults: [transferred], torboxKey: 'tb-key' });
+
+			expect(screen.queryByRole('button', { name: /TB → RD/i })).toBeNull();
+		});
+
+		// Once the transferred copy is in the library there is nothing left to add,
+		// and the library state belongs to the rewritten hash, not to this row.
+		it('falls back to a static badge once the rewritten hash is in the library', () => {
+			renderComponent({
+				filteredResults: [transferred],
+				torboxKey: 'tb-key',
+				hashAndProgress: { 'rd:rewritten1': 100 },
+			});
+
+			expect(screen.queryByRole('button', { name: /Instant RD/i })).toBeNull();
+			expect(screen.getByText('In RD')).toBeTruthy();
+		});
+
+		// An older mapping recorded before the rewritten hash was carried through
+		// still marks the row; it must not render a button that adds `undefined`.
+		it('stays a static badge when no rewritten hash is known', () => {
+			renderComponent({
+				filteredResults: [{ ...transferred, tbTransferredHash: undefined }],
+				torboxKey: 'tb-key',
+			});
+
+			expect(screen.queryByRole('button', { name: /Instant RD/i })).toBeNull();
+			expect(screen.getByText('In RD')).toBeTruthy();
+		});
+	});
 });

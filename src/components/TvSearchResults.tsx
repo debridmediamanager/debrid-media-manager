@@ -20,6 +20,7 @@ import {
 	Search as SearchIcon,
 	Send,
 	X,
+	Zap,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ReportButton from './ReportButton';
@@ -488,6 +489,11 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						}));
 
 						const isLoading = loadingHashes.has(r.hash);
+						// A completed TB → RD transfer lives under its own hash, so its
+						// library and loading state are that hash's, never this row's.
+						const transferHash = r.tbTransferredHash;
+						const isAddingTransfer = !!transferHash && loadingHashes.has(transferHash);
+						const transferInLibrary = !!transferHash && inLibrary('rd', transferHash);
 						const isSendingToRd = sendingToRdHashes.has(r.hash);
 						const isCasting = castingHashes.has(r.hash);
 						const isCastingTb = castingTbHashes.has(r.hash);
@@ -609,17 +615,32 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 										{rdKey &&
 											(torboxKey || adKey) &&
 											r.tbTransferred &&
-											!r.rdAvailable && (
+											!r.rdAvailable &&
+											(transferHash && !transferInLibrary ? (
+												<button
+													className={`haptic-sm inline rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${isAddingTransfer ? 'cursor-not-allowed opacity-50' : ''}`}
+													onClick={() => handleAddRd(transferHash)}
+													disabled={isAddingTransfer}
+													title="Already in Real-Debrid under a transferred torrent. This row's own name is the one RD blocks, so adding it can only fail — this adds the copy that works."
+												>
+													{isAddingTransfer ? (
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+													) : (
+														<Zap className="mr-1 inline h-3 w-3 text-yellow-400" />
+													)}
+													{isAddingTransfer ? 'Adding...' : 'Instant RD'}
+												</button>
+											) : (
 												<span
 													className="inline rounded border-2 border-indigo-500/50 bg-indigo-900/20 px-1 text-xs text-indigo-300"
-													title="Already in Real-Debrid via a transfer — use its Instant RD result for this title."
+													title="Already in Real-Debrid via a transfer, and in your library."
 												>
 													<span className="inline-flex items-center">
 														<Send className="mr-1 h-3 w-3 text-indigo-400" />
 														In RD
 													</span>
 												</span>
-											)}
+											))}
 										{rdKey && r.rdAvailable && castableRdFileIds.length > 0 && (
 											<button
 												className={`haptic-sm inline rounded border-2 border-green-500 bg-green-900/30 px-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 ${isCasting ? 'cursor-not-allowed opacity-50' : ''}`}

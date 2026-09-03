@@ -364,7 +364,9 @@ export function useAvailabilityCheck(
 						}).catch(() => {});
 						setSearchResults((prev) =>
 							prev.map((r) =>
-								r.hash === result.hash ? { ...r, tbTransferred: false } : r
+								r.hash === result.hash
+									? { ...r, tbTransferred: false, tbTransferredHash: undefined }
+									: r
 							)
 						);
 					}
@@ -1099,7 +1101,9 @@ export function useAvailabilityCheck(
 						const staleSet = new Set(staleTransferHashes);
 						setSearchResults((prev) =>
 							prev.map((r) =>
-								staleSet.has(r.hash) ? { ...r, tbTransferred: false } : r
+								staleSet.has(r.hash)
+									? { ...r, tbTransferred: false, tbTransferredHash: undefined }
+									: r
 							)
 						);
 						for (const hash of staleTransferHashes) {

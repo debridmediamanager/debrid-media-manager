@@ -39,6 +39,10 @@ export type SearchResult = {
 	// a completed TB → RD transfer already exists for this hash (its content is
 	// in RD under a different, rewritten hash), so the "TB → RD" button is redundant
 	tbTransferred?: boolean;
+	// That rewritten hash — the one RD will actually accept. This row's own hash
+	// is the release name RD blocks, so adding it can only ever answer 451; the
+	// content is reachable through this one and nothing else.
+	tbTransferredHash?: string;
 	// tracker stats (optional)
 	trackerStats?: {
 		seeders: number;

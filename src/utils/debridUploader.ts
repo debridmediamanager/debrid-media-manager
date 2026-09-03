@@ -442,7 +442,16 @@ export async function runDebridTransferToRd(params: {
 }
 
 // Marks any search-result rows whose original hash already has a completed
-// transfer with `tbTransferred: true`, so the redundant "TB → RD" button hides.
+// transfer with `tbTransferred: true`, so the redundant "TB → RD" button hides,
+// and carries the rewritten hash onto the row so the badge that replaces it can
+// actually deliver the content.
+//
+// Keeping only the boolean was the whole of a user-visible bug: the row showed
+// an inert "In RD" telling people to "use its Instant RD result", while the Add
+// button an inch to its left still added *this* row's hash — the blocked release
+// name — and answered `451 infringing_file` every time. Reported 2026-09-03 as
+// "TB to RD transfers aren't being cached for everyone"; the content was in RD
+// throughout, under the hash this field now carries.
 export async function markTransferredHashes(
 	hashes: string[],
 	setSearchResults: (updater: (prev: any[]) => any[]) => void
@@ -456,12 +465,21 @@ export async function markTransferredHashes(
 		});
 		if (!response.ok) return;
 		const data = await response.json();
-		const transferred: Array<{ originalHash: string }> = data?.transferred ?? [];
+		const transferred: Array<{ originalHash: string; rewrittenHash?: string }> =
+			data?.transferred ?? [];
 		if (transferred.length === 0) return;
-		const transferredSet = new Set(transferred.map((t) => t.originalHash.toLowerCase()));
+		const rewrittenByOriginal = new Map(
+			transferred.map((t) => [t.originalHash.toLowerCase(), t.rewrittenHash?.toLowerCase()])
+		);
 		setSearchResults((prev) =>
 			prev.map((r) =>
-				transferredSet.has(r.hash.toLowerCase()) ? { ...r, tbTransferred: true } : r
+				rewrittenByOriginal.has(r.hash.toLowerCase())
+					? {
+							...r,
+							tbTransferred: true,
+							tbTransferredHash: rewrittenByOriginal.get(r.hash.toLowerCase()),
+						}
+					: r
 			)
 		);
 	} catch {

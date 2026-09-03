@@ -5,6 +5,7 @@ import {
 	getTrackedDebridUploaderJobs,
 	isDuplicateResponse,
 	isTerminalDebridUploaderStatus,
+	markTransferredHashes,
 	needsRdHandoff,
 	runDebridTransferToRd,
 	trackDebridUploaderJob,
@@ -627,5 +628,50 @@ describe('needsRdHandoff', () => {
 
 	it('is not owed for an untracked job', () => {
 		expect(needsRdHandoff(undefined)).toBe(false);
+	});
+});
+
+// The badge this drives is the only route to a transferred release from the
+// search page, and the rewritten hash is the only hash RD will take — marking
+// the row without carrying it renders a dead end.
+describe('markTransferredHashes', () => {
+	const rows = [
+		{ hash: 'AAA', tbTransferred: false },
+		{ hash: 'bbb', tbTransferred: false },
+	];
+
+	const respondWith = (transferred: unknown) => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({ ok: true, json: async () => ({ transferred }) })
+		);
+	};
+
+	it('carries the rewritten hash onto the row it marks', async () => {
+		respondWith([{ originalHash: 'aaa', rewrittenHash: 'REWRITTEN' }]);
+		let results: any[] = rows;
+
+		await markTransferredHashes(['AAA', 'bbb'], (updater) => {
+			results = updater(results);
+		});
+
+		expect(results[0]).toMatchObject({
+			tbTransferred: true,
+			tbTransferredHash: 'rewritten',
+		});
+		expect(results[1]).toMatchObject({ tbTransferred: false });
+		expect(results[1].tbTransferredHash).toBeUndefined();
+	});
+
+	it('still marks a row whose mapping carries no rewritten hash', async () => {
+		respondWith([{ originalHash: 'aaa' }]);
+		let results: any[] = rows;
+
+		await markTransferredHashes(['AAA'], (updater) => {
+			results = updater(results);
+		});
+
+		expect(results[0]).toMatchObject({ tbTransferred: true });
+		expect(results[0].tbTransferredHash).toBeUndefined();
 	});
 });
