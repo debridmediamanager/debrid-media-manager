@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { runHealthCheckNow } from '@/lib/observability/streamServersHealth';
 import { runTorrentioHealthCheckNow } from '@/lib/observability/torrentioHealth';
+import { reconcileDebridTransfers, type ReconcileResult } from '@/services/debridTransferReconcile';
 import { repository } from '@/services/repository';
 
 interface CronResponse {
@@ -23,6 +24,7 @@ interface CronResponse {
 		torboxApiDailyRolled: boolean;
 		torboxCdnDailyRolled: boolean;
 	};
+	debridTransfers?: ReconcileResult;
 	error?: string;
 }
 
@@ -72,6 +74,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Daily rollup failed:', e);
 		}
 
+		// Not observability, but this is the only scheduler DMM has, and the
+		// alternative — a second crontab line on dmm-01 — is an ops step that
+		// ships separately from the code and is forgotten exactly once. A tick
+		// that throws must not take the health checks with it.
+		let debridTransfers: ReconcileResult | undefined;
+		try {
+			debridTransfers = await reconcileDebridTransfers();
+		} catch (e) {
+			console.error('[Cron] Debrid transfer reconciliation failed:', e);
+		}
+
 		return res.status(200).json({
 			success: true,
 			timestamp: new Date().toISOString(),
@@ -87,6 +100,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 				checked: true,
 			},
 			dailyRollup,
+			debridTransfers,
 		});
 	} catch (error) {
 		console.error('[Cron] Job failed:', error);

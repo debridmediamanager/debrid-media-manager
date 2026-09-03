@@ -252,6 +252,10 @@ export class Repository {
 		);
 	}
 
+	public listPendingDebridTransfers(limit: number) {
+		return this.debridUploaderMapService.listPending(limit);
+	}
+
 	public removeDebridTransfer(originalHash: string) {
 		return this.debridUploaderMapService.removeTransfer(originalHash);
 	}

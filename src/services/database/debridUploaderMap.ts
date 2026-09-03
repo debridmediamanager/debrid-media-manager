@@ -25,6 +25,15 @@ export interface DebridTransferRecord {
 const KEY_PREFIX = 'tbrd:';
 const keyFor = (originalHash: string) => `${KEY_PREFIX}${originalHash.toLowerCase()}`;
 
+/**
+ * How many `tbrd:` rows the pending scan reads before giving up on finding more.
+ *
+ * Oldest-first, so `pending` rows — whose `updatedAt` is never bumped again —
+ * sort ahead of every `completed` one, and the cap is only ever reached by a
+ * backlog far larger than the 1.8k rows this table holds.
+ */
+const PENDING_SCAN_CAP = 3000;
+
 // A job lives on exactly one server (the one that created it), keyed by job id.
 const JOB_KEY_PREFIX = 'tbjob:';
 const jobKeyFor = (jobId: string) => `${JOB_KEY_PREFIX}${jobId}`;
@@ -79,6 +88,31 @@ export class DebridUploaderMapService extends DatabaseClient {
 			rewrittenHash: rewrittenHash.toLowerCase(),
 			updatedAt: Date.now(),
 		});
+	}
+
+	/**
+	 * The oldest mappings still marked `pending`, for the reconciliation sweep.
+	 *
+	 * Filters the status in JS off a prefix scan rather than with a JSON path
+	 * predicate. Nothing else in this codebase filters on a JSON column, the
+	 * whole prefix is a couple of thousand small rows, and this runs inside a
+	 * cron that must not throw — a dialect mismatch there would be silent.
+	 */
+	async listPending(limit: number): Promise<DebridTransferRecord[]> {
+		if (limit <= 0) return [];
+		const rows = await this.prisma.cache.findMany({
+			where: { key: { startsWith: KEY_PREFIX } },
+			orderBy: { updatedAt: 'asc' },
+			take: PENDING_SCAN_CAP,
+		});
+		const pending: DebridTransferRecord[] = [];
+		for (const row of rows) {
+			const record = row.value as unknown as DebridTransferRecord | null;
+			if (record?.status !== 'pending' || !record.jobId) continue;
+			pending.push(record);
+			if (pending.length >= limit) break;
+		}
+		return pending;
 	}
 
 	async removeTransfer(originalHash: string): Promise<void> {

@@ -133,10 +133,66 @@ async function resolveNzb2rdContext(
 }
 
 /**
+ * Where a finished TB → RD transfer gets filed, on the same descending ladder
+ * `resolveNzb2rdContext` uses: what the caller passed, then the page the
+ * transfer was started from, then what DMM knows about the IMDb id.
+ *
+ * The Usenet path grew this first, for a measured reason: taking the caller's
+ * context verbatim filed 991 of 1128 completed releases into no search result at
+ * all. This path had exactly the same shape and the same outcome — of 310
+ * completed TB → RD mappings on 2026-09-03, 75 were in no search blob, because
+ * the only two callers that ever supplied a context were a live movie or show
+ * page, and neither `/api/transfers` nor the reconciliation sweep is one.
+ *
+ * Tier 3 is what makes the sweep useful at all: a transfer whose submitter
+ * closed the tab has no live page, and reaching it later through the recorded
+ * `returnPath` or the title type is the only way it is ever filed.
+ */
+async function resolveDebridContext(
+	job: any,
+	mediaType: unknown,
+	seasonNum: unknown
+): Promise<TransferContext | null> {
+	const passed = parseTransferContext(mediaType, seasonNum);
+	if (passed) return passed;
+
+	const jobId = typeof job?.id === 'string' ? job.id : null;
+	if (jobId) {
+		const meta = await db.getTransferMeta([{ source: 'debrid', jobId }]).catch((e) => {
+			console.error('Reading stored transfer context failed:', e);
+			return new Map();
+		});
+		const stored = transferContextFromPath(meta.get(`debrid:${jobId}`)?.returnPath);
+		if (stored) return stored;
+	}
+
+	const derived = mediaTypeFromImdbTitleType(
+		await db.getImdbTitleType(job?.imdb_id).catch((e) => {
+			console.error('Reading the IMDb title type failed:', e);
+			return null;
+		})
+	);
+	if (derived === 'movie') return { mediaType: 'movie' };
+	if (derived === 'tv') {
+		const season = seasonFromReleaseName(typeof job?.name === 'string' ? job.name : undefined);
+		if (season !== undefined) return { mediaType: 'tv', seasonNum: season };
+	}
+
+	console.warn(
+		`[debrid] job=${job?.id} imdb=${job?.imdb_id} completed but has no page to file under; ` +
+			`it will not appear in search results`
+	);
+	return null;
+}
+
+/**
  * Register a completed TB/AD → RD transfer.
  *
  * `server` is the debrid uploader host that owns this job, since only it can
  * serve the file list the registration is built from.
+ *
+ * `mediaType`/`seasonNum` are a hint, not a requirement — see
+ * `resolveDebridContext`.
  */
 export async function registerCompletedDebridJob(
 	job: any,
@@ -157,7 +213,7 @@ export async function registerCompletedDebridJob(
 			.catch((e) => console.error('Recording completed transfer failed (non-fatal):', e));
 	}
 
-	const context = parseTransferContext(mediaType, seasonNum);
+	const context = await resolveDebridContext(job, mediaType, seasonNum);
 	if (!context) return false;
 
 	const already = await db.checkAvailabilityByHashes([rewrittenHash]);

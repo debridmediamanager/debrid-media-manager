@@ -1,5 +1,8 @@
 import { repository as db } from '@/services/repository';
-import { registerCompletedNzb2rdJob } from '@/services/transferRegistration';
+import {
+	registerCompletedDebridJob,
+	registerCompletedNzb2rdJob,
+} from '@/services/transferRegistration';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -207,5 +210,123 @@ describe('registerCompletedNzb2rdJob — filing the release into search', () => 
 
 		expect(mockDb.recordNzb2rdTransferCompleted).not.toHaveBeenCalled();
 		expect(mockDb.getTransferMeta).not.toHaveBeenCalled();
+	});
+});
+
+// The TB → RD path had the same defect the Usenet one above was fixed for, and
+// the same consequence: the only callers that ever supplied a context were a
+// live movie or show page, so a transfer whose submitter closed the tab — or one
+// swept up server-side, which by construction has no page — was filed nowhere.
+// Measured on production 2026-09-03: 75 of 310 completed mappings were in no
+// search blob, and a further 344 completed jobs had never been recorded at all.
+describe('registerCompletedDebridJob — filing a TB → RD transfer into search', () => {
+	const REWRITTEN = 'a'.repeat(40);
+	const ORIGINAL = 'b'.repeat(40);
+	const SERVER = 'http://uploader:3100';
+
+	const debridJob = (over?: Record<string, unknown>) => ({
+		id: 'job-9',
+		status: 'completed',
+		info_hash: REWRITTEN,
+		input: `magnet:?xt=urn:btih:${ORIGINAL}`,
+		imdb_id: 'tt0190641',
+		name: 'Pokemon.The.First.Movie.1998.BluRay.1080p.AVC.REMUX-GRP',
+		completed_at: '2026-09-01T07:49:19.000Z',
+		...over,
+	});
+
+	/** What `xfer:debrid:<jobId>` holds for this job, if anything. */
+	const debridMetaSays = (returnPath?: string) => {
+		mockDb.getTransferMeta = vi
+			.fn()
+			.mockResolvedValue(
+				returnPath
+					? new Map([['debrid:job-9', { source: 'debrid', jobId: 'job-9', returnPath }]])
+					: new Map()
+			);
+	};
+
+	beforeEach(() => {
+		mockDb.recordDebridTransferCompleted = vi.fn().mockResolvedValue(undefined);
+		debridMetaSays(undefined);
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({
+				ok: true,
+				json: async () => [
+					{
+						name: 'Pokemon.The.First.Movie.1998.BluRay.1080p.AVC.REMUX-GRP.mkv',
+						size: 19_046_597_500,
+						rd_link: 'https://real-debrid.com/d/JMMWHJYVBAYMS',
+					},
+				],
+			})
+		);
+	});
+
+	it('files a movie under the context the caller passes', async () => {
+		expect(await registerCompletedDebridJob(debridJob(), 'movie', undefined, SERVER)).toBe(
+			true
+		);
+
+		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+			'movie:tt0190641',
+			[expect.objectContaining({ hash: REWRITTEN })],
+			true
+		);
+	});
+
+	// The regression. The reconciliation sweep runs with no page attached, and
+	// this used to stop at the mapping.
+	it('falls back to the stored returnPath when the caller passes no context', async () => {
+		debridMetaSays('/show/tt0190641/2');
+
+		expect(await registerCompletedDebridJob(debridJob(), undefined, undefined, SERVER)).toBe(
+			true
+		);
+
+		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+			'tv:tt0190641:2',
+			[expect.objectContaining({ hash: REWRITTEN })],
+			true
+		);
+	});
+
+	// Third tier: a job with neither a caller context nor a stored path is still
+	// filable from what DMM knows about the IMDb id.
+	it('falls back to the IMDb title type and the season in the release name', async () => {
+		mockDb.getImdbTitleType = vi.fn().mockResolvedValue('tvSeries');
+
+		expect(
+			await registerCompletedDebridJob(
+				debridJob({ name: 'Pokemon.S03.1080p.BluRay.AVC.REMUX-GRP' }),
+				undefined,
+				undefined,
+				SERVER
+			)
+		).toBe(true);
+
+		expect(mockDb.saveScrapedTrueResults).toHaveBeenCalledWith(
+			'tv:tt0190641:3',
+			[expect.objectContaining({ hash: REWRITTEN })],
+			true
+		);
+	});
+
+	// The mapping is written before the filing is even attempted: a title with
+	// nowhere to be filed must still stop blocking every later submitter of that
+	// original hash, which is what a mapping stuck on `pending` does.
+	it('records the mapping even when the release can be filed nowhere', async () => {
+		expect(await registerCompletedDebridJob(debridJob(), undefined, undefined, SERVER)).toBe(
+			false
+		);
+
+		expect(mockDb.recordDebridTransferCompleted).toHaveBeenCalledWith(
+			ORIGINAL,
+			'job-9',
+			'tt0190641',
+			REWRITTEN
+		);
+		expect(mockDb.saveScrapedTrueResults).not.toHaveBeenCalled();
 	});
 });
