@@ -69,6 +69,15 @@ const baseOcUser = {
 	can_download: true,
 } as any;
 
+const baseDlUser = {
+	username: 'ymsita',
+	email: 'p**d@deb*******k',
+	emailVerified: true,
+	accountType: 1,
+	premiumLeft: 3628800,
+	pts: 305,
+} as any;
+
 const baseTraktUser = {
 	user: {
 		username: 'trakt-user',
@@ -213,6 +222,58 @@ describe('ServiceCard', () => {
 		).toBeTruthy();
 	});
 
+	it('identifies Debrid-Link by its username', () => {
+		render(
+			<ServiceCard service="dl" user={baseDlUser} onTraktLogin={vi.fn()} onLogout={vi.fn()} />
+		);
+
+		expect(screen.getByRole('button', { name: /Debrid-Link/ })).toHaveTextContent('ymsita');
+	});
+
+	// `premiumLeft` is seconds remaining, not a timestamp - read as one it dates
+	// the account to 1970.
+	it('turns the Debrid-Link premiumLeft seconds into days', async () => {
+		const onLogout = vi.fn();
+		fireMock
+			.mockResolvedValueOnce({ isDismissed: true, dismiss: dismissReasons.cancel })
+			.mockResolvedValueOnce({ isConfirmed: true });
+
+		render(
+			<ServiceCard
+				service="dl"
+				user={baseDlUser}
+				onTraktLogin={vi.fn()}
+				onLogout={onLogout}
+			/>
+		);
+
+		await userEvent.click(screen.getByRole('button', { name: /Debrid-Link/ }));
+
+		await waitFor(() => expect(fireMock).toHaveBeenCalledTimes(2));
+		expect(fireMock.mock.calls[0][0].title).toBe('Debrid-Link');
+		// 3,628,800 seconds is 42 days
+		expect(fireMock.mock.calls[0][0].html).toContain('<strong>Days Remaining:</strong> 42');
+		expect(fireMock.mock.calls[0][0].html).toContain('ymsita');
+		expect(fireMock.mock.calls[0][0].html).not.toContain('1970');
+		expect(onLogout).toHaveBeenCalledWith('dl:');
+	});
+
+	it('marks a free Debrid-Link account as unusable', () => {
+		render(
+			<ServiceCard
+				service="dl"
+				user={{ ...baseDlUser, accountType: 0 }}
+				onTraktLogin={vi.fn()}
+				onLogout={vi.fn()}
+			/>
+		);
+
+		// The seedbox is premium-only, so a free account gets the X.
+		expect(
+			screen.getByRole('button', { name: /Debrid-Link/ }).querySelector('.text-red-500')
+		).toBeTruthy();
+	});
+
 	it('presents login buttons when accounts are missing', async () => {
 		const onLogin = vi.fn();
 		render(
@@ -221,6 +282,7 @@ describe('ServiceCard', () => {
 				<ServiceCard service="tb" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
 				<ServiceCard service="pm" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
 				<ServiceCard service="oc" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
+				<ServiceCard service="dl" user={null} onTraktLogin={onLogin} onLogout={vi.fn()} />
 				<ServiceCard
 					service="trakt"
 					user={null}
@@ -231,10 +293,10 @@ describe('ServiceCard', () => {
 		);
 
 		const loginButtons = screen.getAllByRole('button', { name: /Login/ });
-		expect(loginButtons).toHaveLength(5);
+		expect(loginButtons).toHaveLength(6);
 		for (const button of loginButtons) {
 			await userEvent.click(button);
 		}
-		expect(onLogin).toHaveBeenCalledTimes(5);
+		expect(onLogin).toHaveBeenCalledTimes(6);
 	});
 });

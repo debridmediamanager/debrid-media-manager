@@ -51,6 +51,15 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			return null;
 		});
 
+		// Either Debrid-Link credential counts as being signed in. Without this
+		// a Debrid-Link-only user bounces to /start on every page, forever.
+		const [dlKey] = useState(() => {
+			if (typeof window !== 'undefined') {
+				return localStorage.getItem('dl:accessToken') || localStorage.getItem('dl:apiKey');
+			}
+			return null;
+		});
+
 		// Check for refresh credentials
 		const [hasRefreshCredentials] = useState(() => {
 			if (typeof window !== 'undefined') {
@@ -74,6 +83,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 				!tbKey &&
 				!pmKey &&
 				!ocKey &&
+				!dlKey &&
 				router.pathname !== START_ROUTE &&
 				!router.pathname.endsWith(LOGIN_ROUTE) &&
 				!rdLoading &&
@@ -99,6 +109,7 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			tbKey,
 			pmKey,
 			ocKey,
+			dlKey,
 			router,
 		]);
 

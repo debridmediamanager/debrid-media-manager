@@ -1,6 +1,7 @@
 import { ZurgBanner } from '@/components/ZurgBanner';
 import {
 	useAllDebridApiKey,
+	useDebridLinkCredential,
 	useDebridLogin,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
@@ -20,20 +21,22 @@ export default function StartPage() {
 		loginWithTorbox,
 		loginWithPremiumize,
 		loginWithOffcloud,
+		loginWithDebridLink,
 	} = useDebridLogin();
 	const [rdToken] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
 	const pmKey = usePremiumizeCredential();
 	const ocKey = useOffcloudApiKey();
+	const dlKey = useDebridLinkCredential();
 
 	// Redirect to index if already logged in
 	useEffect(() => {
-		const isLoggedIn = rdToken || adKey || tbKey || pmKey || ocKey;
+		const isLoggedIn = rdToken || adKey || tbKey || pmKey || ocKey || dlKey;
 		if (isLoggedIn) {
 			router.push('/');
 		}
-	}, [rdToken, adKey, tbKey, pmKey, ocKey, router]);
+	}, [rdToken, adKey, tbKey, pmKey, ocKey, dlKey, router]);
 
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -167,6 +170,24 @@ export default function StartPage() {
 						rel="noopener noreferrer"
 					>
 						Create an account with Offcloud
+					</a>
+				</div>
+
+				{/* Debrid-Link */}
+				<div className="flex flex-row">
+					<button
+						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						onClick={loginWithDebridLink}
+					>
+						Login with Debrid-Link
+					</button>
+					<a
+						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+						href="https://debrid-link.fr"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Create an account with Debrid-Link
 					</a>
 				</div>
 

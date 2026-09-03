@@ -1,5 +1,6 @@
 import {
 	useAllDebridApiKey,
+	useDebridLinkCredential,
 	useDebridLogin,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
@@ -30,6 +31,7 @@ vi.mock('@/hooks/auth', () => ({
 	useTorBoxAccessToken: vi.fn(),
 	usePremiumizeCredential: vi.fn(),
 	useOffcloudApiKey: vi.fn(),
+	useDebridLinkCredential: vi.fn(),
 }));
 
 describe('StartPage', () => {
@@ -39,6 +41,7 @@ describe('StartPage', () => {
 	let mockLoginWithTorbox: any;
 	let mockLoginWithPremiumize: any;
 	let mockLoginWithOffcloud: any;
+	let mockLoginWithDebridLink: any;
 
 	beforeEach(() => {
 		mockPush = vi.fn();
@@ -47,6 +50,7 @@ describe('StartPage', () => {
 		mockLoginWithTorbox = vi.fn();
 		mockLoginWithPremiumize = vi.fn();
 		mockLoginWithOffcloud = vi.fn();
+		mockLoginWithDebridLink = vi.fn();
 
 		vi.mocked(useRouter).mockReturnValue({
 			push: mockPush,
@@ -61,6 +65,7 @@ describe('StartPage', () => {
 			loginWithTorbox: mockLoginWithTorbox,
 			loginWithPremiumize: mockLoginWithPremiumize,
 			loginWithOffcloud: mockLoginWithOffcloud,
+			loginWithDebridLink: mockLoginWithDebridLink,
 		});
 
 		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false]);
@@ -68,6 +73,7 @@ describe('StartPage', () => {
 		vi.mocked(useTorBoxAccessToken).mockReturnValue(null);
 		vi.mocked(usePremiumizeCredential).mockReturnValue(null);
 		vi.mocked(useOffcloudApiKey).mockReturnValue(null);
+		vi.mocked(useDebridLinkCredential).mockReturnValue(null);
 	});
 
 	it('should render the start page correctly', () => {
@@ -92,6 +98,7 @@ describe('StartPage', () => {
 		expect(screen.getByText('Login with Torbox')).toBeInTheDocument();
 		expect(screen.getByText('Login with Premiumize')).toBeInTheDocument();
 		expect(screen.getByText('Login with Offcloud')).toBeInTheDocument();
+		expect(screen.getByText('Login with Debrid-Link')).toBeInTheDocument();
 	});
 
 	it('should render account creation links', () => {
@@ -102,6 +109,7 @@ describe('StartPage', () => {
 		expect(screen.getByText('Create an account with Torbox')).toBeInTheDocument();
 		expect(screen.getByText('Create an account with Premiumize')).toBeInTheDocument();
 		expect(screen.getByText('Create an account with Offcloud')).toBeInTheDocument();
+		expect(screen.getByText('Create an account with Debrid-Link')).toBeInTheDocument();
 	});
 
 	it('should render data storage policy', () => {
@@ -134,6 +142,9 @@ describe('StartPage', () => {
 
 		fireEvent.click(screen.getByText('Login with Offcloud'));
 		expect(mockLoginWithOffcloud).toHaveBeenCalledTimes(1);
+
+		fireEvent.click(screen.getByText('Login with Debrid-Link'));
+		expect(mockLoginWithDebridLink).toHaveBeenCalledTimes(1);
 	});
 
 	it('should redirect to home when user is logged in with Real-Debrid', () => {
@@ -170,6 +181,16 @@ describe('StartPage', () => {
 
 	it('should redirect to home when user is logged in with Offcloud', () => {
 		vi.mocked(useOffcloudApiKey).mockReturnValue('oc-key');
+
+		render(<StartPage />);
+
+		expect(mockPush).toHaveBeenCalledWith('/');
+	});
+
+	// Either Debrid-Link credential is a complete login, so the credential hook
+	// is what this reads rather than one of the two keys behind it.
+	it('should redirect to home when user is logged in with Debrid-Link', () => {
+		vi.mocked(useDebridLinkCredential).mockReturnValue('dl-test-token');
 
 		render(<StartPage />);
 
@@ -220,6 +241,11 @@ describe('StartPage', () => {
 		expect(ocLink).toHaveAttribute('target', '_blank');
 		expect(ocLink).toHaveAttribute('rel', 'noopener noreferrer');
 		expect(ocLink).toHaveAttribute('href', 'https://offcloud.com');
+
+		const dlLink = screen.getByText('Create an account with Debrid-Link');
+		expect(dlLink).toHaveAttribute('target', '_blank');
+		expect(dlLink).toHaveAttribute('rel', 'noopener noreferrer');
+		expect(dlLink).toHaveAttribute('href', 'https://debrid-link.fr');
 	});
 
 	it('should have correct page title and meta tags', () => {

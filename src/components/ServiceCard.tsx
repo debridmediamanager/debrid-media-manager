@@ -1,4 +1,11 @@
-import { AllDebridUser, OffcloudUser, PremiumizeUser, RealDebridUser } from '@/hooks/auth';
+import {
+	AllDebridUser,
+	DebridLinkUser,
+	OffcloudUser,
+	PremiumizeUser,
+	RealDebridUser,
+} from '@/hooks/auth';
+import { debridLinkPremiumDaysLeft, isDebridLinkPremium } from '@/services/debridLink';
 import { isOffcloudPremium } from '@/services/offcloud';
 import { isPremiumizePremium } from '@/services/premiumize';
 import { TraktUser } from '@/services/trakt';
@@ -7,7 +14,7 @@ import { Check, X } from 'lucide-react';
 import Modal from '../components/modals/modal';
 
 interface ServiceCardProps {
-	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'trakt';
+	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl' | 'trakt';
 	user: RealDebridUser | AllDebridUser | TraktUser | any | null;
 	onTraktLogin: () => void;
 	onLogout: (prefix: string) => void;
@@ -21,6 +28,7 @@ const SERVICE_LABELS: Record<ServiceCardProps['service'], string> = {
 	tb: 'TorBox',
 	pm: 'Premiumize',
 	oc: 'Offcloud',
+	dl: 'Debrid-Link',
 	trakt: 'Trakt',
 };
 
@@ -136,6 +144,21 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: Se
         <p><strong>Type:</strong> ${ocUser.is_premium ? 'premium' : 'free'}</p>
         <p><strong>Premium Until:</strong> ${ocUser.expiration_date || 'N/A'}</p>
         <p><strong>Can Download:</strong> ${ocUser.can_download ? 'Yes' : 'No'}</p>
+      </div>
+    `;
+		} else if (service === 'dl' && user && 'accountType' in user) {
+			const dlUser = user as DebridLinkUser;
+			title = 'Debrid-Link';
+			prefix = 'dl:';
+			// `premiumLeft` is **seconds remaining**, not a timestamp - reading
+			// it as one dates the account to 1970.
+			html = `
+      <div class="text-left">
+        <p><strong>Username:</strong> ${dlUser.username}</p>
+        <p><strong>Email:</strong> ${dlUser.email}</p>
+        <p><strong>Points:</strong> ${dlUser.pts}</p>
+        <p><strong>Type:</strong> ${isDebridLinkPremium(dlUser) ? 'premium' : 'free'}</p>
+        <p><strong>Days Remaining:</strong> ${debridLinkPremiumDaysLeft(dlUser)}</p>
       </div>
     `;
 		} else if (service === 'trakt' && user && 'user' in user) {
@@ -329,6 +352,35 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: Se
 				className="haptic w-full rounded border-2 border-[#f97316] bg-[#f97316]/30 py-1 text-center text-orange-100 transition-colors hover:bg-[#f97316]/50"
 			>
 				Offcloud Login
+			</button>
+		);
+	}
+
+	if (service === 'dl') {
+		const dlUser = user as DebridLinkUser | null;
+		// Debrid-Link sky blue, far enough from TorBox's indigo to tell apart
+		// in a column of badges. Written out in full because Tailwind only
+		// keeps arbitrary-value classes it can find as literals.
+		return dlUser ? (
+			<button
+				onClick={() => showUserInfo('dl')}
+				className="haptic flex items-center justify-center gap-2 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/30 p-1 text-sky-100 transition-colors hover:bg-[#38bdf8]/50"
+			>
+				<span className="font-medium">Debrid-Link</span>
+				<span>{dlUser.username}</span>
+				{isDebridLinkPremium(dlUser) ? (
+					<Check className="h-4 w-4 text-green-500" />
+				) : (
+					<X className="h-4 w-4 text-red-500" />
+				)}
+			</button>
+		) : (
+			<button
+				type="button"
+				onClick={onTraktLogin}
+				className="haptic w-full rounded border-2 border-[#38bdf8] bg-[#38bdf8]/30 py-1 text-center text-sky-100 transition-colors hover:bg-[#38bdf8]/50"
+			>
+				Debrid-Link Login
 			</button>
 		);
 	}

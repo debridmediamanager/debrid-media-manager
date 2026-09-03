@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { clearRdKeys } from './clearLocalStorage';
+import { clearDlKeys, clearRdKeys } from './clearLocalStorage';
 
 describe('clearLocalStorage', () => {
 	let localStorageMock: Storage;
@@ -108,6 +108,42 @@ describe('clearLocalStorage', () => {
 			expect(localStorageMock.removeItem).toHaveBeenNthCalledWith(2, 'rd:config');
 			expect(localStorageMock.removeItem).not.toHaveBeenCalledWith('rdNotPrefix');
 			expect(localStorageMock.removeItem).not.toHaveBeenCalledWith('prefix:rd:');
+		});
+	});
+
+	describe('clearDlKeys', () => {
+		// A `badToken` kills the whole Debrid-Link session, so all four keys go:
+		// leaving `dl:tokenExpiry` behind would keep triggering a refresh against
+		// a token that no longer exists.
+		it('removes every dl: credential and nothing else', () => {
+			localStorageMock.setItem('dl:accessToken', 'token');
+			localStorageMock.setItem('dl:refreshToken', 'refresh');
+			localStorageMock.setItem('dl:tokenExpiry', '1');
+			localStorageMock.setItem('dl:apiKey', 'key');
+			localStorageMock.setItem('rd:accessToken', 'other');
+
+			clearDlKeys();
+
+			expect(localStorageMock.removeItem).toHaveBeenCalledWith('dl:accessToken');
+			expect(localStorageMock.removeItem).toHaveBeenCalledWith('dl:refreshToken');
+			expect(localStorageMock.removeItem).toHaveBeenCalledWith('dl:tokenExpiry');
+			expect(localStorageMock.removeItem).toHaveBeenCalledWith('dl:apiKey');
+			expect(localStorageMock.removeItem).not.toHaveBeenCalledWith('rd:accessToken');
+		});
+
+		it('announces each removed key so useLocalStorage stops serving it', () => {
+			localStorageMock.setItem('dl:accessToken', 'token');
+
+			clearDlKeys();
+
+			const notified = dispatchEventSpy.mock.calls
+				.map(([event]) => event as Event)
+				.filter((event) => event.type === 'local-storage')
+				.map((event) => (event as CustomEvent).detail?.key);
+			expect(notified).toEqual(expect.arrayContaining(['dl:accessToken']));
+			expect(dispatchEventSpy.mock.calls.some(([e]) => (e as Event).type === 'logout')).toBe(
+				true
+			);
 		});
 	});
 });

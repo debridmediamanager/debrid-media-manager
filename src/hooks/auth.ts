@@ -1,12 +1,18 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getAllDebridUser } from '../services/allDebrid';
+import {
+	BAD_TOKEN,
+	getDebridLinkAccountInfo,
+	type DebridLinkAccountInfo,
+} from '../services/debridLink';
+import { refreshDebridLinkToken } from '../services/debridLinkOAuth';
 import { getOffcloudAccountInfo, type OffcloudAccountInfo } from '../services/offcloud';
 import { getPremiumizeAccountInfo, type PremiumizeAccountInfo } from '../services/premiumize';
 import { getCurrentUser as getRealDebridUser, getToken } from '../services/realDebrid';
 import { TorBoxUser, getUserData } from '../services/torbox';
 import { TraktUser, getTraktUser } from '../services/trakt';
-import { clearRdKeys } from '../utils/clearLocalStorage';
+import { clearDlKeys, clearRdKeys } from '../utils/clearLocalStorage';
 import { readStoredAccessToken } from '../utils/rdTokenStorage';
 import { getSafeRedirectPath } from '../utils/router';
 import useLocalStorage from './localStorage';
@@ -38,6 +44,13 @@ export type PremiumizeUser = PremiumizeAccountInfo;
  * every CDN link the account mints, so it is shown rather than hidden.
  */
 export type OffcloudUser = OffcloudAccountInfo;
+
+/**
+ * `account/infos` carries a real username and a masked email, plus
+ * `accountType` (0 free / 1 premium) and `premiumLeft` in **seconds** - not a
+ * timestamp, which is the one field here it is easy to render as 1970.
+ */
+export type DebridLinkUser = DebridLinkAccountInfo;
 
 export interface AllDebridUser {
 	username: string;
@@ -459,6 +472,103 @@ const useOffcloud = () => {
 	return { user, error, hasAuth: !!token, loading };
 };
 
+/**
+ * How close to expiry a stored Debrid-Link access token has to be before it is
+ * renewed. Wide on purpose: the renewal is a single call made once per mount,
+ * so being early costs one request and being late costs the session.
+ */
+const DL_REFRESH_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+const useDebridLink = () => {
+	const [user, setUser] = useState<DebridLinkUser | null>(null);
+	const [error, setError] = useState<Error | null>(null);
+	const [loading, setLoading] = useState(false);
+	const [accessToken, setAccessToken] = useLocalStorage<string>('dl:accessToken');
+	const [refreshToken] = useLocalStorage<string>('dl:refreshToken');
+	const [tokenExpiry, setTokenExpiry] = useLocalStorage<number>('dl:tokenExpiry');
+	const [apiKey] = useLocalStorage<string>('dl:apiKey');
+	const token = accessToken || apiKey;
+	const refreshAttempted = useRef(false);
+
+	/**
+	 * Lazy, single-shot renewal - no timers, no scheduler, no global state.
+	 *
+	 * Debrid-Link's real `expires_in` has not been measured yet (plex_debrid
+	 * never refreshes and keeps working, which hints at a long life but proves
+	 * nothing), so this refreshes only when the token actually carried an
+	 * expiry and that expiry is close. If a device-flow mint turns out to last
+	 * years, `dl:tokenExpiry` is simply never near and this never fires; if it
+	 * lasts days, one call on mount covers it. The alternative - Real-Debrid's
+	 * timer machinery - is what put a 24h token into queues that hold jobs for
+	 * days, and it is not worth importing here on a guess.
+	 */
+	useEffect(() => {
+		if (refreshAttempted.current) return;
+		if (!accessToken || !refreshToken || !tokenExpiry) return;
+		if (tokenExpiry - Date.now() > DL_REFRESH_WINDOW_MS) return;
+
+		refreshAttempted.current = true;
+		let isMounted = true;
+		refreshDebridLinkToken(refreshToken)
+			.then((fresh) => {
+				if (!isMounted) return;
+				setAccessToken(fresh.access_token);
+				if (typeof fresh.expires_in === 'number') {
+					setTokenExpiry(Date.now() + fresh.expires_in * 1000);
+				}
+			})
+			.catch((e) => {
+				// Not fatal on its own: the stored token may still be good, and
+				// the profile call below is what settles whether it is.
+				console.error('[Auth] Debrid-Link token refresh failed', e);
+			});
+		return () => {
+			isMounted = false;
+		};
+		// The localStorage setters are new identities on every render; including
+		// them would re-run this effect constantly for nothing.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [accessToken, refreshToken, tokenExpiry]);
+
+	useEffect(() => {
+		if (!token) {
+			return;
+		}
+
+		let isMounted = true;
+		setLoading(true);
+		getDebridLinkAccountInfo(token)
+			.then((info) => {
+				if (!isMounted) return;
+				setUser(info);
+				setError(null);
+				setLoading(false);
+			})
+			.catch((e) => {
+				if (!isMounted) return;
+				// `badToken` is returned for an absent, malformed and expired
+				// token alike, and by this point the refresh above has already
+				// had its one chance. Drop the credentials so withAuth routes
+				// the user to the login page instead of leaving a dead session
+				// that fails every call it makes.
+				if ((e as { code?: string })?.code === BAD_TOKEN) {
+					clearDlKeys();
+					setUser(null);
+					setError(null);
+					setLoading(false);
+					return;
+				}
+				setError(e as Error);
+				setLoading(false);
+			});
+		return () => {
+			isMounted = false;
+		};
+	}, [token]);
+
+	return { user, error, hasAuth: !!token, loading };
+};
+
 const useTrakt = () => {
 	const [user, setUser] = useState<TraktUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
@@ -541,6 +651,21 @@ export const useOffcloudApiKey = () => {
 	return apiKey;
 };
 
+/**
+ * The credential to put in a Debrid-Link `Authorization: Bearer` header.
+ *
+ * Either an OAuth access token (`dl:accessToken`, from the device-code login)
+ * or a manually pasted API token (`dl:apiKey`). The token wins when both exist
+ * because it is the narrower credential: it carries only the scopes DMM asked
+ * for and the user can revoke it from their account without rotating the key
+ * that authenticates everything else they own.
+ */
+export const useDebridLinkCredential = () => {
+	const [accessToken] = useLocalStorage<string>('dl:accessToken');
+	const [apiKey] = useLocalStorage<string>('dl:apiKey');
+	return accessToken || apiKey;
+};
+
 // Main hook that combines all services
 export const useCurrentUser = () => {
 	const rd = useRealDebrid();
@@ -548,6 +673,7 @@ export const useCurrentUser = () => {
 	const tb = useTorBox();
 	const pm = usePremiumize();
 	const oc = useOffcloud();
+	const dl = useDebridLink();
 	const trakt = useTrakt();
 
 	return {
@@ -567,6 +693,9 @@ export const useCurrentUser = () => {
 		ocUser: oc.user,
 		ocError: oc.error,
 		hasOCAuth: oc.hasAuth,
+		dlUser: dl.user,
+		dlError: dl.error,
+		hasDLAuth: dl.hasAuth,
 		traktUser: trakt.user,
 		traktError: trakt.error,
 		hasTraktAuth: trakt.hasAuth,
@@ -600,5 +729,6 @@ export const useDebridLogin = () => {
 		loginWithTorbox: () => navigateToLogin('/torbox/login'),
 		loginWithPremiumize: () => navigateToLogin('/premiumize/login'),
 		loginWithOffcloud: () => navigateToLogin('/offcloud/login'),
+		loginWithDebridLink: () => navigateToLogin('/debridlink/login'),
 	};
 };

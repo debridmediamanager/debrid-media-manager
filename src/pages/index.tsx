@@ -33,11 +33,13 @@ function IndexPage() {
 		tbUser,
 		pmUser,
 		ocUser,
+		dlUser,
 		rdError,
 		adError,
 		tbError,
 		pmError,
 		ocError,
+		dlError,
 		traktUser,
 		traktError,
 		hasRDAuth,
@@ -45,6 +47,7 @@ function IndexPage() {
 		hasTBAuth,
 		hasPMAuth,
 		hasOCAuth,
+		hasDLAuth,
 		hasTraktAuth,
 		isLoading,
 	} = useCurrentUser();
@@ -54,6 +57,7 @@ function IndexPage() {
 		loginWithTorbox,
 		loginWithPremiumize,
 		loginWithOffcloud,
+		loginWithDebridLink,
 	} = useDebridLogin();
 	// Cosmetic gate only - it reads an unverified localStorage token. The Newznab
 	// endpoint itself checks the DMM API key server-side, so hiding the link here
@@ -72,6 +76,7 @@ function IndexPage() {
 		(!hasTBAuth || !!tbUser || !!tbError) &&
 		(!hasPMAuth || !!pmUser || !!pmError) &&
 		(!hasOCAuth || !!ocUser || !!ocError) &&
+		(!hasDLAuth || !!dlUser || !!dlError) &&
 		(!hasTraktAuth || !!traktUser || !!traktError);
 
 	// Settling still depends on a promise resolving, and a provider can park one
@@ -129,6 +134,9 @@ function IndexPage() {
 		if (ocError) {
 			toast.error('Offcloud profile failed. Verify the API key in Settings.');
 		}
+		if (dlError) {
+			toast.error('Debrid-Link profile failed. Verify the API token in Settings.');
+		}
 		if (traktError) {
 			toast.error('Trakt profile fetch failed.');
 		}
@@ -145,7 +153,7 @@ function IndexPage() {
 				toast('Local DB still open. Refresh and retry.', genericToastOptions);
 			};
 		}
-	}, [rdError, adError, tbError, pmError, ocError, traktError]);
+	}, [rdError, adError, tbError, pmError, ocError, dlError, traktError]);
 
 	useEffect(() => {
 		if (rdUser) {
@@ -277,6 +285,13 @@ function IndexPage() {
 								error={ocError}
 								user={ocUser}
 								onTraktLogin={loginWithOffcloud}
+								onLogout={async (prefix) => await handleLogout(prefix, router)}
+							/>
+							<ServiceCard
+								service="dl"
+								error={dlError}
+								user={dlUser}
+								onTraktLogin={loginWithDebridLink}
 								onLogout={async (prefix) => await handleLogout(prefix, router)}
 							/>
 							<ServiceCard

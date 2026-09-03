@@ -100,6 +100,40 @@ describe('withAuth', () => {
 		expect(mockPush).not.toHaveBeenCalledWith('/start');
 	});
 
+	// Debrid-Link has two credentials and either one is a complete login, so
+	// both have to count here or a signed-in user is bounced forever.
+	it('renders wrapped component when authenticated with a DL OAuth token', async () => {
+		mockUseRealDebridAccessToken.mockReturnValue([null, false, false]);
+		mockUseAllDebridApiKey.mockReturnValue(null);
+		localStorage.setItem('dl:accessToken', 'dl-test-token');
+
+		const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+		const WrappedComponent = withAuth(TestComponent);
+
+		render(<WrappedComponent />);
+
+		await waitFor(() => {
+			expect(screen.getByTestId('test-component')).toBeInTheDocument();
+		});
+		expect(mockPush).not.toHaveBeenCalledWith('/start');
+	});
+
+	it('renders wrapped component when authenticated with a pasted DL token', async () => {
+		mockUseRealDebridAccessToken.mockReturnValue([null, false, false]);
+		mockUseAllDebridApiKey.mockReturnValue(null);
+		localStorage.setItem('dl:apiKey', 'dl-test-token');
+
+		const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+		const WrappedComponent = withAuth(TestComponent);
+
+		render(<WrappedComponent />);
+
+		await waitFor(() => {
+			expect(screen.getByTestId('test-component')).toBeInTheDocument();
+		});
+		expect(mockPush).not.toHaveBeenCalledWith('/start');
+	});
+
 	it('redirects to start route when not authenticated', async () => {
 		mockUseRealDebridAccessToken.mockReturnValue([null, false, false]);
 		mockUseAllDebridApiKey.mockReturnValue(null);
