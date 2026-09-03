@@ -99,18 +99,29 @@ export async function reconcileDebridTransfers(
 
 	const pending = await db.listPendingDebridTransfers(batch);
 
+	// A mapping this tick leaves alone goes to the back of the queue, so the next
+	// tick looks at different rows. Without it the scan's oldest-first order
+	// re-examines the same long-running jobs forever and the backlog behind them
+	// is never reached — see `touchPending`.
+	const leaveForNextTick = (record: (typeof pending)[number]) =>
+		db.touchPendingDebridTransfer(record).catch((e) => {
+			console.error(`[reconcile] re-queueing ${record.originalHash} failed:`, e);
+		});
+
 	for (const record of pending) {
 		result.checked++;
 
 		const server = await resolveJobServer(record.jobId, (j) => db.getDebridJobServer(j));
 		if (!server) {
 			result.unreachable++;
+			await leaveForNextTick(record);
 			continue;
 		}
 
 		const { job, gone, unreachable } = await lookupJob(server, record.jobId);
 		if (unreachable) {
 			result.unreachable++;
+			await leaveForNextTick(record);
 			continue;
 		}
 
@@ -124,6 +135,7 @@ export async function reconcileDebridTransfers(
 
 		if (job?.status !== 'completed') {
 			result.inFlight++;
+			await leaveForNextTick(record);
 			continue;
 		}
 

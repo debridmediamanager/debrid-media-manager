@@ -115,6 +115,24 @@ export class DebridUploaderMapService extends DatabaseClient {
 		return pending;
 	}
 
+	/**
+	 * Move a mapping to the back of the pending queue without changing what it
+	 * says.
+	 *
+	 * `listPending` reads oldest-first, so a job that is legitimately still
+	 * running keeps its place at the front and is re-examined every tick.
+	 * Measured on the first production tick, 2026-09-03: 13 of 25 slots went to
+	 * in-flight jobs while debrid02 held ~128 non-terminal ones — more than a
+	 * whole batch. Left alone the sweep would have filled with the same rows and
+	 * never reached the 344 completions it exists to file. Bumping the row on
+	 * each look makes the scan a fair round-robin instead; nothing reads this
+	 * timestamp for anything but that ordering.
+	 */
+	async touchPending(record: DebridTransferRecord): Promise<void> {
+		if (record.status !== 'pending') return;
+		await this.put(record);
+	}
+
 	async removeTransfer(originalHash: string): Promise<void> {
 		await this.prisma.cache
 			.delete({ where: { key: keyFor(originalHash) } })

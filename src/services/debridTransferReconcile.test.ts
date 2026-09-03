@@ -40,6 +40,7 @@ beforeEach(() => {
 	process.env.DEBRID_UPLOADER_URLS = SERVER;
 	mockDb.removeDebridTransfer = vi.fn().mockResolvedValue(undefined);
 	mockDb.getDebridJobServer = vi.fn().mockResolvedValue(SERVER);
+	mockDb.touchPendingDebridTransfer = vi.fn().mockResolvedValue(undefined);
 	mockRegister.mockResolvedValue(true);
 });
 
@@ -146,6 +147,50 @@ describe('reconcileDebridTransfers', () => {
 		const result = await reconcileDebridTransfers();
 
 		expect(result).toMatchObject({ checked: 2, registered: 1 });
+	});
+
+	// The scan is oldest-first and a running job keeps its place, so without
+	// re-queueing the front of the queue silts up with jobs that never finish and
+	// the completions behind them are never reached. Observed on the first
+	// production tick, 2026-09-03: 13 of 25 slots went to in-flight jobs while
+	// the uploader held ~128 non-terminal ones — more than a whole batch.
+	it('sends a still-running job to the back of the queue', async () => {
+		const record = pendingRecord('7'.repeat(40), 'job-live');
+		mockDb.listPendingDebridTransfers = vi.fn().mockResolvedValue([record]);
+		uploaderSays({ 'job-live': { body: { id: 'job-live', status: 'downloading' } } });
+
+		await reconcileDebridTransfers();
+
+		expect(mockDb.touchPendingDebridTransfer).toHaveBeenCalledWith(record);
+	});
+
+	it('sends an unreachable job to the back of the queue too', async () => {
+		const record = pendingRecord('8'.repeat(40), 'job-unreachable');
+		mockDb.listPendingDebridTransfers = vi.fn().mockResolvedValue([record]);
+		uploaderSays({});
+
+		await reconcileDebridTransfers();
+
+		expect(mockDb.touchPendingDebridTransfer).toHaveBeenCalledWith(record);
+	});
+
+	// A row that is resolved this tick is gone from the pending set anyway;
+	// re-queueing it would be a wasted write on every completion.
+	it('does not re-queue a row it resolved', async () => {
+		mockDb.listPendingDebridTransfers = vi
+			.fn()
+			.mockResolvedValue([
+				pendingRecord('9'.repeat(40), 'job-done'),
+				pendingRecord('0'.repeat(40), 'job-failed'),
+			]);
+		uploaderSays({
+			'job-done': { body: { id: 'job-done', status: 'completed' } },
+			'job-failed': { body: { id: 'job-failed', status: 'failed' } },
+		});
+
+		await reconcileDebridTransfers();
+
+		expect(mockDb.touchPendingDebridTransfer).not.toHaveBeenCalled();
 	});
 
 	it('asks for a bounded batch rather than the whole backlog', async () => {
