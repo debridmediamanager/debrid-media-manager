@@ -42,7 +42,8 @@ const RD_BLOCKED_NAME =
 	/web-dl|(?:web|bd|hd|dvd)rip|bluray\.(?:x264|dts)|hdtv\.(?:x264|xvid)|web\.(?:x264|h264)/i;
 
 /**
- * Whether RD blocks this filename outright.
+ * Whether RD blocks this torrent outright, judged on its display title *and*
+ * whatever filenames the caller knows.
  *
  * This is the only reliable way to read a `451 infringing_file`: RD returns
  * that status both for a genuinely blocked name and as a throttle penalty
@@ -51,10 +52,26 @@ const RD_BLOCKED_NAME =
  * first request, every time — so when the name is clean, a 451 means slow down
  * and retry, not that the content is gone.
  *
+ * **RD reads the paths inside the torrent, not just its root name, and a
+ * display title can lose the very dots the block needs.** Measured 2026-09-03
+ * on `25f9ffaf…`: the title everything here had to work with was `Soul Power
+ * The Legend of the American Basketball Association S01E04 1080p WEB h264-GRACE`
+ * — space-separated, so clean by this test — while the actual path in the
+ * torrent was `Soul.Power.….1080p.WEB.h264-GRACE[EZTVx.to]/….mkv`, which is a
+ * `web.h264` hit. RD refused it on request #1 between two accepted controls, so
+ * it was a real block, and reading only the title called it a throttle and sat
+ * through two 20-second backoffs before giving up with the wrong message.
+ * Widening the *pattern* to treat a space as a separator would be wrong in the
+ * other direction — the uploader's rewrite of that same release, named with
+ * spaces, is in RD and downloaded fine.
+ *
  * Unlike `deInfringe`, this matches only the measured patterns. It gates a
  * destructive, shared-state deletion, so a false positive is far more expensive
- * than a false negative here.
+ * than a false negative here — which is why filenames are an argument the
+ * caller supplies rather than something guessed at, and an empty list leaves
+ * the answer exactly as the title alone gives it.
  */
-export function isRdBlockedName(name: string): boolean {
-	return RD_BLOCKED_NAME.test(name);
+export function isRdBlockedName(name: string, filenames: readonly string[] = []): boolean {
+	if (RD_BLOCKED_NAME.test(name)) return true;
+	return filenames.some((filename) => RD_BLOCKED_NAME.test(filename));
 }

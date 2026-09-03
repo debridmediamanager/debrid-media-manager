@@ -64,6 +64,39 @@ describe('isRdBlockedName', () => {
 		expect(isRdBlockedName('pack/Movie.2019.1080p.web-dl.x265/file.mkv')).toBe(true);
 		expect(isRdBlockedName('')).toBe(false);
 	});
+
+	// Measured 2026-09-03 on `25f9ffaf…`, the release that exposed this. RD
+	// refused it on request #1 between two accepted controls — a real block — but
+	// the only name DMM held was the space-separated display title, which reads
+	// clean. The dots the block keys on survive only in the path inside the
+	// torrent, which TorBox's `checkcached` reports in full.
+	describe('a torrent whose block lives in its filenames', () => {
+		const title =
+			'Soul Power The Legend of the American Basketball Association S01E04 1080p WEB h264-GRACE';
+		const path =
+			'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.h264-GRACE[EZTVx.to]/' +
+			'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.h264-GRACE[EZTVx.to].mkv';
+
+		it('reads the title alone as clean', () => {
+			expect(isRdBlockedName(title)).toBe(false);
+		});
+
+		it('flags it once the filenames are supplied', () => {
+			expect(isRdBlockedName(title, [path])).toBe(true);
+		});
+
+		// The uploader's rewrite of this very release is in RD and downloaded to
+		// 100% under a space-separated name, so widening the pattern to treat a
+		// space as a separator would condemn content RD demonstrably accepts.
+		it('still clears the space-separated rewrite RD accepted', () => {
+			expect(isRdBlockedName(title, [`${title} {imdb-tt38638035}.mkv`])).toBe(false);
+		});
+
+		it('leaves the answer to the title when no filenames are known', () => {
+			expect(isRdBlockedName('Movie.2019.1080p.WEB-DL.x264', [])).toBe(true);
+			expect(isRdBlockedName('Movie.2019.1080p.BluRay.x265', [])).toBe(false);
+		});
+	});
 });
 
 describe('deInfringe', () => {

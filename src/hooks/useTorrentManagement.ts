@@ -93,6 +93,18 @@ export function useTorrentManagement(
 			const wasMarkedAvailable = torrentResult?.rdAvailable || false;
 			let torrentInfo: TorrentInfoResponse | null = null;
 
+			// Every path DMM has heard of for this torrent. RD blocks on the names
+			// inside it, not only on the row title, and the title is often the
+			// space-separated display form that has lost the dots the block keys
+			// on — so reading the title alone calls a real block a throttle and
+			// waits out two 20-second backoffs for nothing. The lists disagree only
+			// on `fileId`, never on filenames, so all three are worth reading.
+			const knownFilenames = [
+				...(torrentResult?.files ?? []),
+				...(torrentResult?.tbFiles ?? []),
+				...(torrentResult?.rdFiles ?? []),
+			].map((f) => f.filename);
+
 			const addResult = await handleAddAsMagnetInRd(
 				rdKey,
 				hash,
@@ -151,7 +163,9 @@ export function useTorrentManagement(
 				deleteIfNotInstant,
 				0,
 				isCheckingAvailability,
-				torrentResult?.title ?? ''
+				torrentResult?.title ?? '',
+				0,
+				knownFilenames
 			);
 
 			// Clean up false positives: when the torrent wasn't instant (deleteIfNotInstant)
@@ -171,7 +185,7 @@ export function useTorrentManagement(
 			const shouldRemoveAvailability =
 				addResult !== 'error' &&
 				(addResult === 'infringing_file'
-					? isRdBlockedName(torrentResult?.title ?? '')
+					? isRdBlockedName(torrentResult?.title ?? '', knownFilenames)
 					: deleteIfNotInstant) &&
 				torrentInfo === null &&
 				wasMarkedAvailable;

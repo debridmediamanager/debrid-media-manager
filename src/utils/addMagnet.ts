@@ -118,7 +118,13 @@ export const handleAddAsMagnetInRd = async (
 	silent: boolean = false,
 	/** Row title, when the caller knows it — the only way to read a 451. */
 	title: string = '',
-	throttleRetryCount: number = 0
+	throttleRetryCount: number = 0,
+	/**
+	 * The torrent's own filenames, when the caller knows them. RD blocks on the
+	 * paths inside the torrent as well as its name, and a display title can have
+	 * lost the dots the block keys on — see `isRdBlockedName`.
+	 */
+	filenames: readonly string[] = []
 ): Promise<RdAddResult> => {
 	try {
 		const id = await addHashAsMagnet(rdKey, hash);
@@ -167,7 +173,8 @@ export const handleAddAsMagnetInRd = async (
 				retryCount + 1,
 				silent,
 				title,
-				throttleRetryCount
+				throttleRetryCount,
+				filenames
 			);
 		}
 		const rdError = getRdError(error);
@@ -181,7 +188,7 @@ export const handleAddAsMagnetInRd = async (
 		// remuxes, and one row that answers 451 here is the same row that will
 		// answer 201 twenty seconds later. An unknown title takes this branch
 		// too — no evidence is not evidence of a block.
-		if (rdError === 'infringing_file' && !isRdBlockedName(title)) {
+		if (rdError === 'infringing_file' && !isRdBlockedName(title, filenames)) {
 			// Tell the rest of the session RD is throttling, so a genuinely
 			// blocked name arriving in the same window is not trusted either.
 			recordRdRateLimit();
@@ -202,7 +209,8 @@ export const handleAddAsMagnetInRd = async (
 					retryCount,
 					silent,
 					title,
-					throttleRetryCount + 1
+					throttleRetryCount + 1,
+					filenames
 				);
 			}
 			if (!silent)

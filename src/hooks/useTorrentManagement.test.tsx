@@ -247,7 +247,9 @@ describe('useTorrentManagement', () => {
 			false,
 			0,
 			false,
-			'Sample Torrent'
+			'Sample Torrent',
+			0,
+			[]
 		);
 		expect(mockSubmitAvailability).toHaveBeenCalledWith(
 			'token-ts',
@@ -293,11 +295,47 @@ describe('useTorrentManagement', () => {
 			// The row title goes with it: it is the only way to tell RD's
 			// content block apart from its throttle penalty, since both come
 			// back as 451 infringing_file.
-			'Sample Torrent'
+			'Sample Torrent',
+			0,
+			// …and so do the filenames, because RD reads the paths inside the
+			// torrent too and a display title can have lost the dots it blocks on.
+			[]
 		);
 		expect(returnValue).toBe(true);
 		expect(mockSubmitAvailability).toHaveBeenCalled();
 		expect(mockRemoveAvailability).not.toHaveBeenCalled();
+	});
+
+	// RD blocks on the paths inside a torrent, not only on its root name, and the
+	// row title is often the space-separated display form that has lost the dots
+	// the block keys on — measured 2026-09-03 on a `WEB.h264` release whose title
+	// read clean. Without these the 451 is misread as a throttle and the add sits
+	// through two 20-second backoffs before failing with the wrong message.
+	it('addRd hands over every filename it knows for the row', async () => {
+		currentResults = [
+			createSearchResult({
+				files: [{ fileId: 1, filename: 'from.files.mkv', filesize: 1 }],
+				tbFiles: [{ fileId: 7, filename: 'from.tbFiles.mkv', filesize: 1 }],
+				rdFiles: [{ fileId: 2, filename: 'from.rdFiles.mkv', filesize: 1 }],
+			}),
+		];
+		const { result } = renderManagementHook();
+
+		await act(async () => {
+			await result.current.addRd('hash-1');
+		});
+
+		expect(mockHandleAddAsMagnetInRd).toHaveBeenCalledWith(
+			'rd-key',
+			'hash-1',
+			expect.any(Function),
+			false,
+			0,
+			false,
+			'Sample Torrent',
+			0,
+			['from.files.mkv', 'from.tbFiles.mkv', 'from.rdFiles.mkv']
+		);
 	});
 
 	it('addRd with deleteIfNotInstant=true returns false and cleans up when torrent is not instant', async () => {

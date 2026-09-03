@@ -248,6 +248,54 @@ describe('addMagnet utilities', () => {
 				expect(result).toBe('infringing_file');
 				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
 			});
+
+			// Measured 2026-09-03 on `25f9ffaf…`: RD refused it on request #1
+			// between two accepted controls, so it is a real block — but the only
+			// title DMM held was the space-separated display form, which reads
+			// clean, and the dots survive only in the path inside the torrent.
+			// Judged on the title alone this burnt two 20-second backoffs and then
+			// blamed a throttle that was not happening.
+			it('reads a block that lives only in the filenames', async () => {
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+				const title =
+					'Soul Power The Legend of the American Basketball Association S01E04 1080p WEB h264-GRACE';
+
+				const result = await handleAddAsMagnetInRd(
+					rdKey,
+					hash,
+					undefined,
+					false,
+					0,
+					false,
+					title,
+					0,
+					[
+						'Soul.Power.The.Legend.of.the.American.Basketball.Association.S01E04.1080p.WEB.h264-GRACE[EZTVx.to].mkv',
+					]
+				);
+
+				expect(result).toBe('infringing_file');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
+			});
+
+			it('still replays when the filenames are as clean as the title', async () => {
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				const result = await handleAddAsMagnetInRd(
+					rdKey,
+					hash,
+					undefined,
+					false,
+					0,
+					false,
+					CLEAN_TITLE,
+					0,
+					['Some.Movie.2019.1080p.BluRay.x265-GRP.mkv']
+				);
+
+				expect(result).toBe('error');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(3);
+			});
 		});
 
 		it('should handle generic errors', async () => {
