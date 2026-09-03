@@ -32,6 +32,22 @@ const SERVICE_LABELS: Record<ServiceCardProps['service'], string> = {
 	trakt: 'Trakt',
 };
 
+/**
+ * The localStorage key prefix `handleLogout` sweeps for each service. The
+ * connected card derives the same value inside `showUserInfo`, but the error
+ * card never reaches that branch - it has no profile to show - so the mapping
+ * has to exist independently of it.
+ */
+const SERVICE_PREFIXES: Record<ServiceCardProps['service'], string> = {
+	rd: 'rd:',
+	ad: 'ad:',
+	tb: 'tb:',
+	pm: 'pm:',
+	oc: 'oc:',
+	dl: 'dl:',
+	trakt: 'trakt:',
+};
+
 export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: ServiceCardProps) {
 	const formatBytes = (bytes: number) => {
 		const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -203,18 +219,61 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: Se
 		});
 	};
 
+	const confirmErrorLogout = () => {
+		const label = SERVICE_LABELS[service];
+		Modal.fire({
+			title: 'Confirm Logout',
+			text: `Are you sure you want to logout from ${label}?`,
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Yes, logout',
+			cancelButtonText: 'No, cancel',
+			confirmButtonColor: '#d33',
+			cancelButtonColor: '#3085d6',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				onLogout(SERVICE_PREFIXES[service]);
+			}
+		});
+	};
+
 	// Without this a provider whose profile call failed falls through to its
 	// own `user ? connected : login` branch and renders the login button - so a
 	// signed-in user is told to sign in, with no hint that anything went wrong.
+	//
+	// Retry alone is not enough to stand here, though. A revoked or rotated
+	// credential fails identically on every attempt - Premiumize answers a dead
+	// key `authentication_failed` forever - and this card replaces the very one
+	// that carries the provider's logout, so a retry-only card traps the user:
+	// the only escape from one broken service is "Logout All", which drops the
+	// five that still work. Sign-in replaces the credential in place; logout
+	// clears it.
 	if (error) {
+		const actionClasses =
+			'haptic-sm rounded border border-red-400/60 bg-red-950/40 px-2 py-1 text-xs font-medium text-red-100 transition-colors hover:bg-red-800/60';
 		return (
-			<button
-				type="button"
-				onClick={() => window.location.reload()}
-				className="haptic w-full rounded border-2 border-red-500 bg-red-900/30 py-1 text-center text-red-100 transition-colors hover:bg-red-800/50"
-			>
-				{SERVICE_LABELS[service]} did not load &mdash; tap to retry
-			</button>
+			<div className="rounded border-2 border-red-500 bg-red-900/30 p-2 text-red-100">
+				<p className="text-center text-sm">{SERVICE_LABELS[service]} did not load</p>
+				<p className="mt-0.5 text-center text-xs text-red-200/70">
+					If the key was revoked or replaced, retrying cannot help &mdash; sign in again
+					or log out.
+				</p>
+				<div className="mt-2 grid grid-cols-3 gap-2">
+					<button
+						type="button"
+						onClick={() => window.location.reload()}
+						className={actionClasses}
+					>
+						Retry
+					</button>
+					<button type="button" onClick={onTraktLogin} className={actionClasses}>
+						Sign in again
+					</button>
+					<button type="button" onClick={confirmErrorLogout} className={actionClasses}>
+						Log out
+					</button>
+				</div>
+			</div>
 		);
 	}
 
