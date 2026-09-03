@@ -6,7 +6,14 @@ import { describe, expect, it } from 'vitest';
  * without the rewrite, so its no-catalog install 404'd on every stream.
  */
 describe('no-catalog rewrites', () => {
-	const providers = ['stremio', 'stremio-tb', 'stremio-ad', 'stremio-pm', 'stremio-oc'];
+	const providers = [
+		'stremio',
+		'stremio-tb',
+		'stremio-ad',
+		'stremio-pm',
+		'stremio-oc',
+		'stremio-dl',
+	];
 
 	it.each(providers)('%s folds no-catalog paths back onto the addon', async (provider) => {
 		const config = await import('../../../next.config.js');

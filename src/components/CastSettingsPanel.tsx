@@ -10,6 +10,10 @@ import {
 	getLocalStorageString,
 } from '../utils/browserStorage';
 import {
+	saveDebridLinkCastProfile,
+	updateDebridLinkCastSettings,
+} from '../utils/debridLinkCastApiClient';
+import {
 	saveOffcloudCastProfile,
 	updateOffcloudCastSettings,
 } from '../utils/offcloudCastApiClient';
@@ -21,8 +25,8 @@ import { defaultEpisodeSize, defaultMovieSize, defaultOtherStreamsLimit } from '
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
 
 interface CastSettingsPanelProps {
-	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc';
-	accentColor: 'green' | 'yellow' | 'purple' | 'red' | 'orange';
+	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl';
+	accentColor: 'green' | 'yellow' | 'purple' | 'red' | 'orange' | 'sky';
 }
 
 export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelProps) => {
@@ -65,6 +69,11 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 			border: 'border-orange-500/30',
 			title: 'text-orange-200',
 			icon: 'text-orange-400',
+		},
+		sky: {
+			border: 'border-sky-500/30',
+			title: 'text-sky-200',
+			icon: 'text-sky-400',
 		},
 	};
 
@@ -160,6 +169,34 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 				if (!saved) {
 					const ocKey = getLocalStorageString('oc:apiKey');
 					if (ocKey) await saveOffcloudCastProfile(ocKey, settings);
+				}
+			} else if (service === 'dl') {
+				// Prefers the cast token, so changing a setting costs no
+				// Debrid-Link call at all - which matters more here than for the
+				// other providers, because a wasted request is a step towards an
+				// hour-long lockout of the endpoint that made it.
+				const dlCastToken = getLocalStorageString('dl:castToken');
+				const settings = {
+					movieMaxSize: movieSize !== undefined ? Number(movieSize) : undefined,
+					episodeMaxSize: episodeSize !== undefined ? Number(episodeSize) : undefined,
+					otherStreamsLimit:
+						streamsLimit !== undefined ? Number(streamsLimit) : undefined,
+					hideCastOption: hideCast,
+				};
+				const saved =
+					dlCastToken && (await updateDebridLinkCastSettings(dlCastToken, settings));
+				if (!saved) {
+					// Either credential authenticates the same Bearer header; the
+					// OAuth token wins because it is the narrower one.
+					const dlKey =
+						getLocalStorageString('dl:accessToken') ||
+						getLocalStorageString('dl:apiKey');
+					if (dlKey)
+						await saveDebridLinkCastProfile(
+							dlKey,
+							settings,
+							getLocalStorageString('dl:refreshToken')
+						);
 				}
 			} else if (service === 'ad') {
 				const adApiKey = getLocalStorageString('ad:apiKey');

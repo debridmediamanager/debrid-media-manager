@@ -71,6 +71,7 @@ type TvSearchResultsProps = {
 	handleCastAllDebrid?: (hash: string, files: { filename: string }[]) => Promise<void>;
 	handleCastPremiumize?: (hash: string) => Promise<void>;
 	handleCastOffcloud?: (hash: string) => Promise<void>;
+	handleCastDebridLink?: (hash: string) => Promise<void>;
 	handleCopyMagnet: (hash: string) => void;
 	checkServiceAvailability: (
 		result: SearchResult,
@@ -120,6 +121,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	handleCastAllDebrid,
 	handleCastPremiumize,
 	handleCastOffcloud,
+	handleCastDebridLink,
 	handleCopyMagnet,
 	checkServiceAvailability,
 	addRd,
@@ -146,6 +148,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	const [castingAdHashes, setCastingAdHashes] = useState<Set<string>>(new Set());
 	const [castingPmHashes, setCastingPmHashes] = useState<Set<string>>(new Set());
 	const [castingOcHashes, setCastingOcHashes] = useState<Set<string>>(new Set());
+	const [castingDlHashes, setCastingDlHashes] = useState<Set<string>>(new Set());
 	const [watchingHashes, setWatchingHashes] = useState<Set<string>>(new Set());
 	const [requestingHashes, setRequestingHashes] = useState<Set<string>>(new Set());
 	const [downloadMagnets, setDownloadMagnets] = useState(false);
@@ -319,6 +322,20 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 		}
 	};
 
+	const handleCastDebridLinkWithLoading = async (hash: string) => {
+		if (!handleCastDebridLink || castingDlHashes.has(hash)) return;
+		setCastingDlHashes((prev) => new Set(prev).add(hash));
+		try {
+			await handleCastDebridLink(hash);
+		} finally {
+			setCastingDlHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
 	const handleMagnetAction = (hash: string) => {
 		if (downloadMagnets) {
 			downloadMagnetFile(hash);
@@ -478,6 +495,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						const isCastingAd = castingAdHashes.has(r.hash);
 						const isCastingPm = castingPmHashes.has(r.hash);
 						const isCastingOc = castingOcHashes.has(r.hash);
+						const isCastingDl = castingDlHashes.has(r.hash);
 						const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 						const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
 						const watchService = pickWatchService(r, {
@@ -1016,6 +1034,36 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												{isLoading ? 'Adding...' : 'Add to DL'}
 											</button>
 										)}
+										{/* No file-list gate and no availability gate.
+										    The episodes are resolved server-side out of
+										    one `seedbox/add`, so this browser needing to
+										    know them first would make Cast (DL) a
+										    movies-only button — and Debrid-Link
+										    publishes no cache probe at all, so there is
+										    no `dlAvailable` to gate on either. */}
+										{debridLinkKey && handleCastDebridLink && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isCastingDl ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() =>
+													handleCastDebridLinkWithLoading(r.hash)
+												}
+												disabled={isCastingDl}
+												title="Debrid-Link has no cache check — casting adds the release, and an uncached one downloads for real"
+											>
+												{isCastingDl ? (
+													<>
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Casting...
+													</>
+												) : (
+													<>
+														<Cast className="mr-1 inline-block h-3 w-3 text-sky-400" />
+														Cast (DL)
+													</>
+												)}
+											</button>
+										)}
+
 										{debridLinkKey && inLibrary('dl', r.hash) && player && (
 											<button
 												className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isWatching ? 'cursor-not-allowed opacity-50' : ''}`}

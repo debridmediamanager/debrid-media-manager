@@ -5,6 +5,7 @@ import {
 	AvailabilityService,
 	CastService,
 	ContentRequestService,
+	DebridLinkCastService,
 	DebridUploaderMapService,
 	HashImdbService,
 	HashSearchService,
@@ -49,6 +50,7 @@ export type RepositoryDependencies = Partial<{
 	allDebridCastService: AllDebridCastService;
 	premiumizeCastService: PremiumizeCastService;
 	offcloudCastService: OffcloudCastService;
+	debridLinkCastService: DebridLinkCastService;
 	reportService: ReportService;
 	torrentSnapshotService: TorrentSnapshotService;
 	hashImdbService: HashImdbService;
@@ -79,6 +81,7 @@ export class Repository {
 	private allDebridCastService: AllDebridCastService;
 	private premiumizeCastService: PremiumizeCastService;
 	private offcloudCastService: OffcloudCastService;
+	private debridLinkCastService: DebridLinkCastService;
 	private reportService: ReportService;
 	private torrentSnapshotService: TorrentSnapshotService;
 	private hashImdbService: HashImdbService;
@@ -108,6 +111,7 @@ export class Repository {
 		allDebridCastService,
 		premiumizeCastService,
 		offcloudCastService,
+		debridLinkCastService,
 		reportService,
 		torrentSnapshotService,
 		hashImdbService,
@@ -136,6 +140,7 @@ export class Repository {
 		this.allDebridCastService = allDebridCastService ?? new AllDebridCastService();
 		this.premiumizeCastService = premiumizeCastService ?? new PremiumizeCastService();
 		this.offcloudCastService = offcloudCastService ?? new OffcloudCastService();
+		this.debridLinkCastService = debridLinkCastService ?? new DebridLinkCastService();
 		this.reportService = reportService ?? new ReportService();
 		this.torrentSnapshotService = torrentSnapshotService ?? new TorrentSnapshotService();
 		this.hashImdbService = hashImdbService ?? new HashImdbService();
@@ -961,6 +966,105 @@ export class Repository {
 		maxSize?: number
 	) {
 		return this.offcloudCastService.getOtherStreams(imdbId, userId, limit, maxSize);
+	}
+
+	// Debrid-Link Cast Methods
+	public saveDebridLinkCastProfile(
+		userId: string,
+		apiKey: string,
+		movieMaxSize?: number,
+		episodeMaxSize?: number,
+		otherStreamsLimit?: number,
+		hideCastOption?: boolean,
+		refreshToken?: string | null
+	) {
+		return this.debridLinkCastService.saveCastProfile(
+			userId,
+			apiKey,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption,
+			refreshToken
+		);
+	}
+
+	public updateDebridLinkCastSettings(
+		userId: string,
+		movieMaxSize?: number,
+		episodeMaxSize?: number,
+		otherStreamsLimit?: number,
+		hideCastOption?: boolean
+	) {
+		return this.debridLinkCastService.updateCastSettings(
+			userId,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption
+		);
+	}
+
+	public getDebridLinkCastProfile(userId: string) {
+		return this.debridLinkCastService.getCastProfile(userId);
+	}
+
+	public saveDebridLinkCast(
+		imdbId: string,
+		userId: string,
+		hash: string,
+		filename: string,
+		fileSize: number,
+		path?: string,
+		downloadUrl?: string
+	) {
+		return this.debridLinkCastService.saveCast(
+			imdbId,
+			userId,
+			hash,
+			filename,
+			fileSize,
+			path,
+			downloadUrl
+		);
+	}
+
+	public fetchDebridLinkCastedMovies(userId: string) {
+		return this.debridLinkCastService.fetchCastedMovies(userId);
+	}
+
+	public fetchDebridLinkCastedShows(userId: string) {
+		return this.debridLinkCastService.fetchCastedShows(userId);
+	}
+
+	public fetchAllDebridLinkCastedLinks(userId: string) {
+		return this.debridLinkCastService.fetchAllCastedLinks(userId);
+	}
+
+	public deleteDebridLinkCastedLink(imdbId: string, userId: string, hash: string) {
+		return this.debridLinkCastService.deleteCastedLink(imdbId, userId, hash);
+	}
+
+	public getDebridLinkUserCastStreams(imdbId: string, userId: string, limit?: number) {
+		return this.debridLinkCastService.getUserCastStreams(imdbId, userId, limit);
+	}
+
+	public getDebridLinkOtherStreams(
+		imdbId: string,
+		userId: string,
+		limit?: number,
+		maxSize?: number
+	) {
+		return this.debridLinkCastService.getOtherStreams(imdbId, userId, limit, maxSize);
+	}
+
+	/**
+	 * The play route's last resort. See `DebridLinkCastService` - the value is a
+	 * permanent unauthenticated capability, so this is the only read that returns
+	 * it and the only caller is the redirect.
+	 */
+	public getDebridLinkStoredDownloadUrl(hash: string, path?: string | null) {
+		return this.debridLinkCastService.getStoredDownloadUrl(hash, path);
 	}
 
 	public getAllDebridCastLink(magnetId: number, fileIndex: number) {

@@ -220,6 +220,7 @@ function IndexPage() {
 							adUser={!!adUser}
 							pmUser={!!pmUser}
 							ocUser={!!ocUser}
+							dlUser={!!dlUser}
 							isLoading={isLoading}
 						/>
 						<Link

@@ -25,6 +25,7 @@ import { getLocalStorageBoolean, getLocalStorageItemOrDefault } from '@/utils/br
 import { handleCastTvShow } from '@/utils/castApiClient';
 import { fileContentRequest } from '@/utils/contentRequestsApi';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
+import { handleCastTvShowDebridLink } from '@/utils/debridLinkCastApiClient';
 import { markTransferredHashes } from '@/utils/debridUploader';
 import { delay } from '@/utils/delay';
 import {
@@ -946,6 +947,26 @@ const TvSearch: FunctionComponent = () => {
 		);
 	}
 
+	async function handleCastDebridLink(hash: string) {
+		await toast.promise(
+			// No file list goes over: `POST /seedbox/add` answers with the whole
+			// release, so the server resolves the episodes and casts every one of
+			// them. Debrid-Link publishes no cache probe, so this browser could
+			// not have built that list anyway.
+			handleCastTvShowDebridLink(imdbid as string, debridLinkKey!, hash),
+			{
+				loading: 'Casting episodes (Debrid-Link)...',
+				success: 'Casting succeeded.',
+				error: 'Casting failed.',
+			},
+			castToastOptions
+		);
+		// open stremio after casting
+		window.open(
+			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
+		);
+	}
+
 	async function handleCastOffcloud(hash: string) {
 		await toast.promise(
 			// No file list goes over: Offcloud's `cache/info` returns the whole
@@ -1570,6 +1591,7 @@ const TvSearch: FunctionComponent = () => {
 				handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
 				handleCastPremiumize={premiumizeKey ? handleCastPremiumize : undefined}
 				handleCastOffcloud={offcloudKey ? handleCastOffcloud : undefined}
+				handleCastDebridLink={debridLinkKey ? handleCastDebridLink : undefined}
 				handleCopyMagnet={(hash) => handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)}
 				checkServiceAvailability={checkServiceAvailability}
 				addRd={addRd}

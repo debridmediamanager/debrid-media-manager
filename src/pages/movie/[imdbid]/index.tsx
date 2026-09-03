@@ -24,6 +24,7 @@ import { getLocalStorageBoolean, getLocalStorageItemOrDefault } from '@/utils/br
 import { handleCastMovie } from '@/utils/castApiClient';
 import { fileContentRequest } from '@/utils/contentRequestsApi';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
+import { handleCastMovieDebridLink } from '@/utils/debridLinkCastApiClient';
 import { markTransferredHashes } from '@/utils/debridUploader';
 import {
 	checkAvailabilityOc,
@@ -893,6 +894,23 @@ const MovieSearch: FunctionComponent = () => {
 		window.open(getStremioDetailUrl(imdbid as string));
 	}
 
+	async function handleCastDebridLink(hash: string) {
+		await toast.promise(
+			// Debrid-Link has no cache probe, so the cast is the probe: the server
+			// adds the full magnet with this member's own credential, which comes
+			// back complete in one request for cached content and starts a real
+			// download - one of the day's 50 torrents - otherwise.
+			handleCastMovieDebridLink(imdbid as string, debridLinkKey!, hash),
+			{
+				loading: 'Starting Debrid-Link cast in Stremio...',
+				success: 'Cast started in Stremio',
+				error: 'Debrid-Link cast failed in Stremio',
+			},
+			castToastOptions
+		);
+		window.open(getStremioDetailUrl(imdbid as string));
+	}
+
 	async function handleCastOffcloud(hash: string) {
 		await toast.promise(
 			handleCastMovieOffcloud(imdbid as string, offcloudKey!, hash),
@@ -1170,6 +1188,7 @@ const MovieSearch: FunctionComponent = () => {
 						handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
 						handleCastPremiumize={premiumizeKey ? handleCastPremiumize : undefined}
 						handleCastOffcloud={offcloudKey ? handleCastOffcloud : undefined}
+						handleCastDebridLink={debridLinkKey ? handleCastDebridLink : undefined}
 						handleCopyMagnet={(hash) =>
 							handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)
 						}

@@ -9,6 +9,7 @@ interface MainActionsProps {
 	adUser: boolean;
 	pmUser: boolean;
 	ocUser: boolean;
+	dlUser: boolean;
 	isLoading: boolean;
 }
 
@@ -20,6 +21,7 @@ export function MainActions({
 	adUser,
 	pmUser,
 	ocUser,
+	dlUser,
 	isLoading,
 }: MainActionsProps) {
 	const castButtons = [
@@ -67,6 +69,15 @@ export function MainActions({
 			hoverColor: 'hover:bg-orange-800/50',
 			textColor: 'text-orange-100',
 			iconColor: 'text-orange-400',
+		},
+		dlUser && {
+			href: '/stremio-debridlink',
+			label: 'Cast for DL',
+			borderColor: 'border-sky-500',
+			bgColor: 'bg-sky-900/30',
+			hoverColor: 'hover:bg-sky-800/50',
+			textColor: 'text-sky-100',
+			iconColor: 'text-sky-400',
 		},
 	].filter(Boolean) as {
 		href: string;
@@ -144,10 +155,10 @@ export function MainActions({
 			    audiences. Transfers is where a Real-Debrid user watches content
 			    arrive, so it is theirs. Requests is where a TorBox or AllDebrid
 			    user picks up somebody else's ask, so it is the fulfillers'.
-			    Premiumize and Offcloud are deliberately not here: the uploader
-			    cannot source a transfer from either, so those users have nothing to
-			    fulfil with — which is why Offcloud is not even a prop of this
-			    component. A user who is both sees the pair side by side; a user who is only one
+			    Premiumize, Offcloud and Debrid-Link are deliberately not here: the
+			    uploader cannot source a transfer from any of them, so those users
+			    have nothing to fulfil with — which is why neither Offcloud nor
+			    Debrid-Link reaches the gate below. A user who is both sees the pair side by side; a user who is only one
 			    sees that one full-width rather than stranded in half a row. (A
 			    Real-Debrid-only user files a request from the search result itself —
 			    the button there — and never needs the board.) */}

@@ -3,6 +3,7 @@ import { AnimeService } from './anime';
 import { AvailabilityService } from './availability';
 import { CastService } from './cast';
 import { ContentRequestService } from './contentRequests';
+import { DebridLinkCastService } from './debridLinkCast';
 import { DebridUploaderMapService } from './debridUploaderMap';
 import { HashImdbService } from './hashImdb';
 import { HashSearchService } from './hashSearch';
@@ -32,6 +33,7 @@ export {
 	AvailabilityService,
 	CastService,
 	ContentRequestService,
+	DebridLinkCastService,
 	DebridUploaderMapService,
 	HashImdbService,
 	HashSearchService,

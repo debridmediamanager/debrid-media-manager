@@ -23,4 +23,6 @@ export const CAST_ADDON_VERSIONS = {
 	premiumize: '0.0.2',
 	/** Offcloud. 0.0.1: first publish. */
 	offcloud: '0.0.1',
+	/** Debrid-Link. 0.0.1: first publish. */
+	debridlink: '0.0.1',
 } as const;

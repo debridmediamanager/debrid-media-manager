@@ -288,6 +288,59 @@ model OffcloudCastProfile {
   hideCastOption    Boolean  @default(false)
 }
 
+// Debrid-Link casts store a hash and a file path like their siblings, and one
+// thing none of the others can: the file's own download URL.
+//
+// `POST /seedbox/add` is idempotent by hash and the torrent id it returns is
+// *stable* - a bare-hash add, a magnet add, a duplicate add and a re-add after
+// removal all answer with the same id - so the viewer resolves the release with
+// their own credential at play time exactly as the other providers do.
+//
+// `downloadUrl` is the deliberate extra. A Debrid-Link URL carries no token, no
+// signature, no timestamp and no user id: the torrent id is the whole
+// capability, it serves any IP, and it keeps serving after the torrent is
+// deleted. That makes a stored one a genuine fallback when the viewer's own
+// credential cannot resolve the hash (quota spent, hour-long flood lockout,
+// dead token) - and, in exactly the same breath, an irrevocable capability to
+// the content. It is never logged and never handed to a client; only the play
+// route reads it, and only to redirect.
+model DebridLinkCast {
+  id        String   @id @default(uuid())
+  imdbId    String
+  userId    String
+  hash      String
+  // The filename, as in every sibling table - NOT the download URL.
+  url       String   @db.Text
+  updatedAt DateTime @updatedAt
+  size      BigInt   @default(0)
+  // The file's path inside the release, which is how play finds it again
+  path      String?  @db.Text
+  // The keyless Debrid-Link URL for this file. Nullable: a row cast before this
+  // column existed, or one whose resolve produced no URL, still plays through
+  // the viewer's own credential.
+  downloadUrl String? @db.Text
+
+  @@unique([imdbId, userId, hash])
+  @@index([imdbId, userId, updatedAt])
+}
+
+model DebridLinkCastProfile {
+  userId            String   @id
+  // Whatever `useDebridLinkCredential` held at enrol: an OAuth access token
+  // (`dl:accessToken`) or a pasted API token (`dl:apiKey`). Both go in the same
+  // `Authorization: Bearer` header, so nothing downstream has to tell them
+  // apart.
+  apiKey            String   @db.Text
+  // Written when the browser has one. Debrid-Link's real token lifetime is
+  // still unmeasured, so this is a column rather than a migration later.
+  refreshToken      String?  @db.Text
+  updatedAt         DateTime @updatedAt
+  movieMaxSize      Float    @default(0)
+  episodeMaxSize    Float    @default(0)
+  otherStreamsLimit Int      @default(5)
+  hideCastOption    Boolean  @default(false)
+}
+
 model AllDebridCastProfile {
   userId            String   @id
   apiKey            String   @db.Text
