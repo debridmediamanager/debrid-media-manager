@@ -4,7 +4,9 @@ import {
 	buildSearchUrl,
 	buildTextSearchUrl,
 	dedupeResults,
+	fanOut,
 	fetchNzb,
+	fetchNzbFrom,
 	getIndexers,
 	isCompleteOAuth,
 	isSeasonPack,
@@ -792,5 +794,247 @@ describe('newznab error envelopes returned with HTTP 200', () => {
 		);
 		const results = await searchUsenet({ imdbId: 'tt1418646' });
 		expect(results).toEqual([{ id: 'ds:x', title: 'A', size: 5, indexer: 'DrunkenSlug' }]);
+	});
+});
+
+// --- serving one named indexer ------------------------------------------
+//
+// The media pages ask every configured indexer and merge; a request that names
+// its indexer must not do that. These two are what let a caller hold an
+// `Indexer` and a native id and stay on that server for both halves of the
+// round trip.
+
+describe('fetchNzbFrom', () => {
+	const indexer = {
+		prefix: 'ah',
+		name: 'altHUB',
+		url: 'https://althub.test/api',
+		apiKey: 'althub-key',
+	};
+
+	it('asks the indexer it was handed, with that indexer key and a native id', async () => {
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, text: async () => '<nzb/>' });
+		vi.stubGlobal('fetch', fetchMock);
+
+		await expect(fetchNzbFrom(indexer, '059b7d')).resolves.toBe('<nzb/>');
+
+		const url = new URL(fetchMock.mock.calls[0][0]);
+		expect(url.origin + url.pathname).toBe('https://althub.test/api');
+		expect(url.searchParams.get('t')).toBe('get');
+		expect(url.searchParams.get('id')).toBe('059b7d');
+		expect(url.searchParams.get('apikey')).toBe('althub-key');
+	});
+
+	// The whole reason it takes an Indexer rather than a qualified id: an indexer
+	// this deployment does not have in `getIndexers()` is still servable when the
+	// caller supplies it.
+	it('serves an indexer that getIndexers does not list', async () => {
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, text: async () => '<nzb/>' });
+		vi.stubGlobal('fetch', fetchMock);
+
+		expect(getIndexers().map((i) => i.prefix)).not.toContain('ah');
+		await expect(fetchNzbFrom(indexer, '059b7d')).resolves.toBe('<nzb/>');
+	});
+
+	// Same checks fetchNzb has always run, in the one place both now share.
+	it('keeps the status and error-envelope checks', async () => {
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 404 }));
+		await expect(fetchNzbFrom(indexer, 'x')).rejects.toThrow('404');
+
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({
+				ok: true,
+				text: async () => '<error code="300" description="No such item"/>',
+			})
+		);
+		await expect(fetchNzbFrom(indexer, 'x')).rejects.toThrow(
+			'altHUB refused the NZB: No such item'
+		);
+	});
+});
+
+describe('fetchNzb delegating to fetchNzbFrom', () => {
+	it('resolves the prefix and downloads from the indexer it names', async () => {
+		withAlthub();
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, text: async () => '<nzb/>' });
+		vi.stubGlobal('fetch', fetchMock);
+
+		await fetchNzb('ah:059b7d');
+		const althubUrl = new URL(fetchMock.mock.calls[0][0]);
+		expect(althubUrl.origin + althubUrl.pathname).toBe('https://althub.test/api');
+		expect(althubUrl.searchParams.get('apikey')).toBe('althub-key');
+
+		await fetchNzb('abc123'); // bare, so DrunkenSlug
+		const dsUrl = new URL(fetchMock.mock.calls[1][0]);
+		expect(dsUrl.origin + dsUrl.pathname).toBe('https://indexer.test/api');
+		expect(dsUrl.searchParams.get('id')).toBe('abc123');
+		expect(dsUrl.searchParams.get('apikey')).toBe('secret-key');
+	});
+});
+
+describe('fanOut with an explicit indexer list', () => {
+	const body = (guid: string) => ({
+		item: [{ title: `Title ${guid}`, guid, 'newznab:attr': [{ _name: 'size', _value: '10' }] }],
+	});
+
+	// A request that names its indexer must not spend a grab on the others, nor
+	// answer from one it was not asked for.
+	it('queries only the indexers it is given', async () => {
+		withAlthub();
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => body('b') });
+		vi.stubGlobal('fetch', fetchMock);
+
+		const only = getIndexers().filter((indexer) => indexer.prefix === 'ah');
+		const { ok, lists } = await fanOut((indexer) => `${indexer.url}?q=x`, 'test', only);
+
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		expect(new URL(fetchMock.mock.calls[0][0]).origin).toBe('https://althub.test');
+		expect(ok).toBe(true);
+		expect(lists.flat().map((r) => [r.id, r.indexer])).toEqual([['ah:b', 'altHUB']]);
+	});
+
+	it('still asks every configured indexer when no list is given', async () => {
+		withAlthub();
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => body('b') });
+		vi.stubGlobal('fetch', fetchMock);
+
+		await fanOut((indexer) => `${indexer.url}?q=x`, 'test');
+
+		expect(fetchMock).toHaveBeenCalledTimes(2);
+	});
+
+	// `ok` is what tells an outage apart from a genuine no-results, so an empty
+	// list must not read as "every indexer answered".
+	it('reports not-ok for an empty list rather than claiming success', async () => {
+		const fetchMock = vi.fn();
+		vi.stubGlobal('fetch', fetchMock);
+
+		const { ok, lists } = await fanOut((indexer) => `${indexer.url}?q=x`, 'test', []);
+
+		expect(fetchMock).not.toHaveBeenCalled();
+		expect(ok).toBe(false);
+		expect(lists).toEqual([]);
+	});
+});
+
+// --- pubDate and category ------------------------------------------------
+//
+// Both fixtures below are trimmed from live 2026-09-03 responses to the same
+// movie search (`t=movie&imdbid=1418646`) on each indexer. The finding that
+// mattered: `pubDate` is a plain item-level string in both dialects — the
+// @attributes/underscore split only ever touches attrs and the enclosure — and
+// `category` repeats, which is why it is collected as a list.
+
+describe('parseNewznabItem capturing pubDate and category', () => {
+	const DRUNKENSLUG_ITEM = {
+		title: 'Beneath.Hill.60.2010.1080p.BluRay.x264-nikt0',
+		guid: {
+			_isPermaLink: 'true',
+			text: 'https://drunkenslug.com/details/dcfa8ce0e7f355442d63bff0dde1e5c066045185',
+		},
+		pubDate: 'Mon, 17 Nov 2025 22:08:02 +0000',
+		category: 'Movies > HD',
+		'newznab:attr': [
+			{ _name: 'category', _value: '2040' },
+			{ _name: 'size', _value: '6459339787' },
+			{ _name: 'grabs', _value: '37' },
+		],
+	};
+
+	const ALTHUB_ITEM = {
+		title: 'Beneath.Hill.60.2010.BluRay.Remux.1080p.AVC.DTS-HD.MA-5.1-ZQ',
+		guid: 'https://api.althub.co.za/details/17de128214448f2bdbd7e79ea33e649f',
+		pubDate: 'Fri, 06 Oct 2023 20:42:41 +0000',
+		category: 'Movies > HD',
+		attr: [
+			{ '@attributes': { name: 'category', value: '2000' } },
+			{ '@attributes': { name: 'category', value: '2040' } },
+			{ '@attributes': { name: 'size', value: '22170715450' } },
+		],
+	};
+
+	it('reads the nZEDb flat item', () => {
+		expect(parseNewznabItem(DRUNKENSLUG_ITEM)).toEqual({
+			id: 'dcfa8ce0e7f355442d63bff0dde1e5c066045185',
+			title: 'Beneath.Hill.60.2010.1080p.BluRay.x264-nikt0',
+			size: 6459339787,
+			pubDate: 'Mon, 17 Nov 2025 22:08:02 +0000',
+			category: ['2040'],
+		});
+	});
+
+	it('reads the altHUB @attributes item, keeping every category it sends', () => {
+		expect(parseNewznabItem(ALTHUB_ITEM)).toEqual({
+			id: '17de128214448f2bdbd7e79ea33e649f',
+			title: 'Beneath.Hill.60.2010.BluRay.Remux.1080p.AVC.DTS-HD.MA-5.1-ZQ',
+			size: 22170715450,
+			pubDate: 'Fri, 06 Oct 2023 20:42:41 +0000',
+			// Parent and child both, which `attrValue` would have cut to one.
+			category: ['2000', '2040'],
+		});
+	});
+
+	// The ids are what a Newznab client filters on; the `<category>` element is
+	// prose for a human and differs between indexers for the same release.
+	it('takes the category ids, not the human category element', () => {
+		expect(parseNewznabItem(DRUNKENSLUG_ITEM)?.category).not.toContain('Movies > HD');
+	});
+
+	// These rows are cached as JSON per title, so an absent field must stay absent
+	// rather than becoming an empty one on every row.
+	it('leaves both fields off entirely when the indexer sent neither', () => {
+		const parsed = parseNewznabItem({
+			title: 'A',
+			guid: 'x',
+			'newznab:attr': [{ _name: 'size', _value: '10' }],
+		});
+		expect(parsed).toEqual({ id: 'x', title: 'A', size: 10 });
+		expect(Object.keys(parsed as object)).toEqual(['id', 'title', 'size']);
+	});
+
+	it('ignores a non-string pubDate rather than stringifying it', () => {
+		const parsed = parseNewznabItem({ title: 'A', guid: 'x', pubDate: { text: 'nope' } });
+		expect(Object.keys(parsed as object)).not.toContain('pubDate');
+	});
+
+	it('carries both fields through the response parser, in either dialect', () => {
+		const [fromDs] = parseNewznabResponse({ item: [DRUNKENSLUG_ITEM] });
+		expect([fromDs.pubDate, fromDs.category]).toEqual([
+			'Mon, 17 Nov 2025 22:08:02 +0000',
+			['2040'],
+		]);
+
+		// altHUB keeps the channel wrapper DrunkenSlug drops.
+		const [fromAh] = parseNewznabResponse({ channel: { item: [ALTHUB_ITEM] } });
+		expect([fromAh.pubDate, fromAh.category]).toEqual([
+			'Fri, 06 Oct 2023 20:42:41 +0000',
+			['2000', '2040'],
+		]);
+	});
+
+	// The whitelist is what keeps the api key out of the browser, and these two
+	// fields are additions to it — not a door to passing the raw item through.
+	it('still exposes nothing else, api key included', async () => {
+		const leaky = 'https://indexer.test/getnzb/x.nzb&i=1&r=secret-key';
+		vi.stubGlobal(
+			'fetch',
+			vi.fn().mockResolvedValue({
+				ok: true,
+				json: async () => ({ item: [{ ...DRUNKENSLUG_ITEM, link: leaky }] }),
+			})
+		);
+
+		const results = await searchUsenet({ imdbId: 'tt1418646' });
+
+		expect(Object.keys(results[0]).sort()).toEqual([
+			'category',
+			'id',
+			'indexer',
+			'pubDate',
+			'size',
+			'title',
+		]);
+		expect(JSON.stringify(results)).not.toContain('secret-key');
 	});
 });

@@ -103,6 +103,26 @@ export interface UsenetResult {
 	isPack?: boolean;
 	/** Which indexer supplied it, for the UI badge. */
 	indexer?: string;
+	/**
+	 * The item's `<pubDate>`, verbatim (`Mon, 17 Nov 2025 22:08:02 +0000`).
+	 *
+	 * A plain item-level string on both indexers — measured 2026-09-03 against
+	 * both live APIs rather than inferred from the dialect split below, which
+	 * only ever touches attributes and the enclosure.
+	 *
+	 * Safe to ship: it is the posting's own date and says nothing about the
+	 * account that asked for it.
+	 */
+	pubDate?: string;
+	/**
+	 * Newznab category ids from the item's `category` attrs, e.g. `['2000',
+	 * '2040']`. Several per item is normal — altHUB sends the parent and the
+	 * child both — which is why this is a list and not `attrValue`'s first hit.
+	 *
+	 * Deliberately not the human `<category>` element (`Movies > HD`): the ids
+	 * are what a Newznab client filters on.
+	 */
+	category?: string[];
 }
 
 // Episode markers as they actually appear on the indexer: S02E09, S02 E09,
@@ -160,6 +180,30 @@ function attrValue(attrs: NewznabAttr[], name: string): string | undefined {
 	return undefined;
 }
 
+/**
+ * Every value under `name`, not just the first: `category` legitimately repeats
+ * (one altHUB movie carries `2000` and `2040`, the parent and the child).
+ *
+ * Kept beside `attrValue` rather than folded into it: that one stops at the
+ * first entry whose name matches and hands back whatever it held, `undefined`
+ * included, where this one skips a valueless entry and reads on. Expressing one
+ * in terms of the other would change which value a half-written attr yields.
+ */
+function attrValues(attrs: NewznabAttr[], name: string): string[] {
+	const values: string[] = [];
+	for (const attr of attrs) {
+		const underscore = attr as { _name?: string; _value?: string };
+		if (underscore._name === name && underscore._value !== undefined) {
+			values.push(underscore._value);
+		}
+		const wrapped = (attr as { '@attributes'?: { name?: string; value?: string } })[
+			'@attributes'
+		];
+		if (wrapped?.name === name && wrapped.value !== undefined) values.push(wrapped.value);
+	}
+	return values;
+}
+
 function enclosureLength(enclosure: unknown): string | undefined {
 	const entry = enclosure as
 		| { _length?: string; '@attributes'?: { length?: string } }
@@ -182,11 +226,17 @@ function guidToId(guid: unknown): string {
  * Normalise one Newznab `item`. Size prefers the `size` attribute and falls
  * back to the enclosure length, because indexers are inconsistent about which
  * of the two they populate.
+ *
+ * `pubDate` and `category` are attached only when the indexer sent them. These
+ * results are cached as JSON per title, so an always-present empty field is
+ * paid for on every row of every cached search — and a caller can then tell
+ * "the indexer said nothing" apart from "the indexer said nothing useful".
  */
 export function parseNewznabItem(item: unknown): UsenetResult | null {
 	const entry = item as {
 		title?: unknown;
 		guid?: unknown;
+		pubDate?: unknown;
 		'newznab:attr'?: NewznabAttr | NewznabAttr[];
 		attr?: NewznabAttr | NewznabAttr[];
 		enclosure?: unknown;
@@ -200,7 +250,14 @@ export function parseNewznabItem(item: unknown): UsenetResult | null {
 	const attrs = asArray(entry['newznab:attr'] ?? entry.attr);
 	const size = Number(attrValue(attrs, 'size') ?? enclosureLength(entry.enclosure) ?? 0);
 
-	return { id, title, size: Number.isFinite(size) && size > 0 ? size : 0 };
+	const result: UsenetResult = { id, title, size: Number.isFinite(size) && size > 0 ? size : 0 };
+
+	const pubDate = typeof entry.pubDate === 'string' ? entry.pubDate.trim() : '';
+	if (pubDate) result.pubDate = pubDate;
+	const category = attrValues(attrs, 'category');
+	if (category.length > 0) result.category = category;
+
+	return result;
 }
 
 /**
@@ -376,12 +433,17 @@ export function dedupeResults(lists: UsenetResult[][]): UsenetResult[] {
  * one being down degrades coverage instead of emptying the page. `ok` reports
  * whether *any* indexer answered, so a total outage can still be told apart
  * from a genuine no-results.
+ *
+ * `indexers` defaults to the whole configured set, which is what the media
+ * pages want. Passing an explicit list is how a caller narrows the fan-out to
+ * one server — a request that names its indexer must not spend a grab on the
+ * others, and must not silently answer from an indexer it did not ask for.
  */
-async function fanOut(
+export async function fanOut(
 	toUrl: (indexer: Indexer) => string,
-	label: string
+	label: string,
+	indexers: Indexer[] = getIndexers()
 ): Promise<{ ok: boolean; lists: UsenetResult[][] }> {
-	const indexers = getIndexers();
 	const settled = await Promise.all(
 		indexers.map((indexer) =>
 			fetchResults(toUrl(indexer), indexer)
@@ -443,27 +505,38 @@ export function newznabError(body: string): string | null {
 }
 
 /**
- * Download one NZB by qualified release id. Returns the raw XML.
+ * Download one NZB from a named indexer, by that indexer's own release id.
+ * Returns the raw XML.
  *
  * altHUB answers `t=get` with a 302 to its own `/getnzb` path; `fetch` follows
  * redirects by default, so both indexers work through the same call.
+ *
+ * Split out from `fetchNzb` for the caller that already knows which indexer it
+ * is talking to and holds a native id — going back through a qualified id would
+ * mean re-deriving the indexer from a prefix it just took apart, and would
+ * refuse ids for indexers `getIndexers()` does not list.
  */
-export async function fetchNzb(id: string): Promise<string> {
-	const target = parseReleaseId(id);
-	if (!target) throw new Error(`unknown indexer for release id ${id}`);
+export async function fetchNzbFrom(indexer: Indexer, nativeId: string): Promise<string> {
 	const params = new URLSearchParams({
 		t: 'get',
-		id: target.nativeId,
-		apikey: target.indexer.apiKey,
+		id: nativeId,
+		apikey: indexer.apiKey,
 	});
-	const response = await fetch(`${target.indexer.url}?${params}`, {
+	const response = await fetch(`${indexer.url}?${params}`, {
 		signal: AbortSignal.timeout(30000),
 	});
 	if (!response.ok) throw new Error(`NZB download returned ${response.status}`);
 	const body = await response.text();
 	const failed = newznabError(body);
-	if (failed) throw new Error(`${target.indexer.name} refused the NZB: ${failed}`);
+	if (failed) throw new Error(`${indexer.name} refused the NZB: ${failed}`);
 	return body;
+}
+
+/** Download one NZB by qualified release id (`ds:abc123`). Returns the raw XML. */
+export async function fetchNzb(id: string): Promise<string> {
+	const target = parseReleaseId(id);
+	if (!target) throw new Error(`unknown indexer for release id ${id}`);
+	return fetchNzbFrom(target.indexer, target.nativeId);
 }
 
 export interface Nzb2rdJob {
