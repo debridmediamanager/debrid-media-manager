@@ -9,11 +9,8 @@ import { isSearchType, runSearch } from '@/services/newznab/search';
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
 import { capsXml, newznabErrorXml, searchRssXml } from '@/services/newznab/xml';
 import { fetchNzbFrom } from '@/services/nzb2rd';
-import {
-	checkRateLimitFor,
-	RATE_LIMIT_CONFIGS,
-	withIpRateLimit,
-} from '@/services/rateLimit/withRateLimit';
+import { getClientIp } from '@/services/rateLimit/middlewareRateLimiter';
+import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { safeNzbName } from '@/utils/nzbName';
 import { NzbSanitizeError, sanitizeNzb } from '@/utils/nzbSanitize';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -165,9 +162,26 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 	return sendNzb(res, token, cleaned.xml, cleaned.removed.join('; '));
 }
 
+/** The same header fold `withRateLimit` applies, for the same proxy chain. */
+function clientIp(req: NextApiRequest): string {
+	return getClientIp(
+		(req.headers['cf-connecting-ip'] as string) || null,
+		(req.headers['x-real-ip'] as string) || null,
+		(req.headers['x-forwarded-for'] as string) || null
+	);
+}
+
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
 		return sendError(res, 405, 202, 'No such function');
+	}
+
+	// The cheap pre-auth reject, per IP, before any DB lookup. In the protocol,
+	// not `withIpRateLimit`: that wrapper answers a 429 with a JSON body, which
+	// an *arr logs as a broken indexer instead of backing off — and its
+	// `default` config trips at 5/s, under a Sonarr interactive search burst.
+	if (!(await checkRateLimitFor(clientIp(req), RATE_LIMIT_CONFIGS.newznabIp, res))) {
+		return sendError(res, 429, 500, 'Request limit reached');
 	}
 
 	const t = firstValue(req.query.t).toLowerCase();
@@ -200,6 +214,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 }
 
-// A cheap outer reject on the client IP, before any DB lookup: the per-sponsor
-// budgets above are the real limits, but they cost a sponsor lookup to reach.
-export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.default);
+export default handler;

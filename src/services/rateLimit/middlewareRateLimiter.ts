@@ -32,6 +32,11 @@ export const RATE_LIMIT_CONFIGS = {
 	// the burst limit one counter - see the note above.
 	newznabGrab: { name: 'newznabGrab', rateLimit: 10, windowSeconds: 60 },
 	newznabGrabDay: { name: 'newznabGrabDay', rateLimit: 150, windowSeconds: 86400 },
+	// The cheap pre-auth reject on the newznab endpoint, per IP. Wider than
+	// `default`'s 5/s because a Sonarr interactive season search bursts its
+	// queries faster than that from one IP - the per-key budgets above are the
+	// real limits; this only has to stop unauthenticated hammering of caps.
+	newznabIp: { name: 'newznabIp', rateLimit: 20, windowSeconds: 10 },
 	default: { name: 'default', rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;
 

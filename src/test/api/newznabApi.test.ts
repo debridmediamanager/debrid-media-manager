@@ -123,6 +123,11 @@ function setIndexers(indexers: unknown[]): void {
 	_resetUpstreamIndexersForTest();
 }
 
+// Every request in a test shares this IP and every test gets a fresh one:
+// the handler's pre-auth reject buckets on the client IP, and without this the
+// whole file drains one 'unknown' bucket and unrelated tests answer 429.
+let testIp = '10.0.0.1';
+
 async function run(
 	query: Record<string, string>,
 	headers: Record<string, string> = {}
@@ -130,7 +135,7 @@ async function run(
 	const req = createMockRequest({
 		method: 'GET',
 		query,
-		headers,
+		headers: { 'x-real-ip': testIp, ...headers },
 		url: '/api/newznab/api',
 	});
 	const res = createMockResponse();
@@ -166,6 +171,7 @@ beforeEach(() => {
 	// A fresh sponsorship per test: the in-memory limiter is a module singleton
 	// and its buckets are keyed on this.
 	shortId = `Z${Math.random().toString(36).slice(2, 8)}`;
+	testIp = `10.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
 	mockRepo.getSponsorByDmmApiKey = vi.fn().mockResolvedValue({
 		isSponsor: true,
 		sources: ['github'],
@@ -466,6 +472,9 @@ describe('GET /api/newznab/api search', () => {
 
 	it('answers 429 with a Newznab error document once the search budget is spent', async () => {
 		for (let i = 0; i < 30; i++) {
+			// Rotate the IP so only the per-key budget is being spent: 30 calls
+			// from one address would trip the pre-auth IP reject at 20 first.
+			testIp = `10.200.${i}.1`;
 			expect(
 				(
 					await run({ t: 'search', q: 'some release', apikey: SPONSOR_KEY })
@@ -473,6 +482,7 @@ describe('GET /api/newznab/api search', () => {
 			).toBe(200);
 		}
 
+		testIp = '10.200.99.1';
 		const res = await run({ t: 'search', q: 'some release', apikey: SPONSOR_KEY });
 
 		expect(res._getStatusCode()).toBe(429);
@@ -590,6 +600,23 @@ describe('GET /api/newznab/api grab', () => {
 		expect(res._getStatusCode()).toBe(429);
 		expect(body(res)).toContain('<error code="500"');
 		expect(Number(res._getHeaders()['Retry-After'])).toBeGreaterThan(0);
+	});
+});
+
+describe('GET /api/newznab/api pre-auth IP reject', () => {
+	// The outer guard used to be `withIpRateLimit`, whose 429 carries a JSON
+	// body — which an *arr logs as a broken indexer rather than backing off.
+	// This pins the replacement answering in the protocol, before any auth.
+	it('answers 429 as a Newznab error document, without a sponsor lookup', async () => {
+		let res: MockResponse | null = null;
+		for (let i = 0; i < 21; i++) {
+			res = await run({ t: 'caps' });
+		}
+
+		expect(res?._getStatusCode()).toBe(429);
+		expect(body(res as MockResponse)).toContain('<error code="500"');
+		expect(Number((res as MockResponse)._getHeaders()['Retry-After'])).toBeGreaterThan(0);
+		expect(mockRepo.getSponsorByDmmApiKey).not.toHaveBeenCalled();
 	});
 });
 
