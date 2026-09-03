@@ -226,11 +226,27 @@ export const isValidBtih = (hash: string): boolean => {
 	return BTIH_HEX.test(trimmed) || BTIH_BASE32.test(trimmed);
 };
 
-/** The info hash inside a magnet URI, lowercased, or null if there is not a valid one. */
+/**
+ * The info hash a source string carries, lowercased, or null if it carries none.
+ *
+ * Two forms, because `originalLink` on a cloud item is Offcloud's **resolved**
+ * source rather than an echo of the input:
+ *
+ *  - a magnet, canonicalised with trackers and webseeds - the usual case;
+ *  - `<hash>.torrent`, which is what a torrent-file URL is rewritten to.
+ *
+ * The second form is the whole reason a library row built from a `.torrent`
+ * submission has a hash at all: without it those rows share nothing, group under
+ * the empty string and lose their magnet-shaped actions. Only the 40-char hex
+ * spelling is accepted there - a base32 info hash is indistinguishable from an
+ * ordinary 32-character release name, and guessing wrong would invent a hash.
+ */
 export const extractBtih = (source: string): string | null => {
-	const match = /urn:btih:([a-zA-Z0-9]{32,40})/.exec(source);
-	if (!match) return null;
-	return isValidBtih(match[1]) ? match[1].toLowerCase() : null;
+	const magnet = /urn:btih:([a-zA-Z0-9]{32,40})/.exec(source);
+	if (magnet) return isValidBtih(magnet[1]) ? magnet[1].toLowerCase() : null;
+
+	const torrentFile = /(?:^|[/\\])([0-9a-fA-F]{40})\.torrent(?:$|[?#])/.exec(source);
+	return torrentFile ? torrentFile[1].toLowerCase() : null;
 };
 
 /** `/cache/info` and `/cloud` want a magnet; only `/cache` takes a bare hash. */

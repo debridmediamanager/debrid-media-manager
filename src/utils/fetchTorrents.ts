@@ -1,5 +1,11 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
 import {
+	extractBtih,
+	getOffcloudHistory,
+	type OffcloudAddResult,
+	type OffcloudHistoryItem,
+} from '@/services/offcloud';
+import {
 	listAllPremiumizeItems,
 	listPremiumizeFolder,
 	listPremiumizeTransfers,
@@ -19,6 +25,8 @@ import { every, some } from 'lodash';
 import toast from 'react-hot-toast';
 import { getMediaId } from './mediaId';
 import { getTypeByNameAndFileCount } from './mediaType';
+import { toOffcloudRowId } from './offcloudRow';
+import { getOffcloudUserTorrentStatus } from './offcloudStatus';
 import { toPremiumizeRowId, type PremiumizeRowKind } from './premiumizeRow';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
 import { genericToastOptions } from './toastOptions';
@@ -921,5 +929,118 @@ export const fetchPremiumize = async (
 			genericToastOptions
 		);
 		console.error('[PremiumizeFetch] error', { elapsedMs: Date.now() - startedAt, error });
+	}
+};
+
+// ==================== Offcloud ====================
+
+/**
+ * The fields a library row needs off a cloud item. `GET /api/cloud/history` and
+ * the `POST /api/cloud` add response carry the same ones, which is why a
+ * freshly added item and a listed one build the same row through one function.
+ */
+type OffcloudRowSource = Pick<
+	OffcloudHistoryItem & OffcloudAddResult,
+	'requestId' | 'fileName' | 'status'
+> & {
+	originalLink?: string;
+	createdOn?: string;
+};
+
+/**
+ * Builds a library row from an Offcloud cloud item.
+ *
+ * Two Offcloud facts shape this, both measured (`docs/providers/offcloud.md`):
+ *
+ *  - **The history carries no sizes and no file list.** One `cloud/history` call
+ *    returns the whole library, but `bytes` starts at 0 and the listing is
+ *    fetched on demand when a modal asks `cache/info` for it. Paying a
+ *    `cloud/explore` per item to fill a column in would cost one request per row.
+ *  - **`originalLink` is Offcloud's *resolved* source, not an echo.** A magnet
+ *    comes back canonicalised and a torrent-file URL comes back as
+ *    `<hash>.torrent`, so both forms are read by `extractBtih`. A plain HTTP
+ *    submission - Offcloud is a remote-download service too - genuinely has no
+ *    info hash, and an empty one is normal there, guarded the same way a
+ *    Premiumize row with no hash already is.
+ */
+export function convertToOffcloudUserTorrent(
+	item: OffcloudRowSource,
+	knownHash?: string
+): UserTorrent {
+	const filename = item.fileName || 'noname';
+	const hash = (knownHash ?? extractBtih(item.originalLink ?? '') ?? '').toLowerCase();
+	const [status, progress] = getOffcloudUserTorrentStatus(item.status);
+
+	let mediaType: UserTorrent['mediaType'] = getTypeByNameAndFileCount(filename);
+	let info: ParsedFilename | undefined;
+	try {
+		info = mediaType === 'movie' ? filenameParse(filename) : filenameParse(filename, true);
+	} catch {
+		// flip the condition if parsing throws, exactly as the other services do
+		mediaType = mediaType === 'movie' ? 'tv' : 'movie';
+		try {
+			info = mediaType === 'movie' ? filenameParse(filename) : filenameParse(filename, true);
+		} catch {
+			info = undefined;
+		}
+	}
+	if (info && (!info.title || !/\w/.test(info.title))) info = undefined;
+
+	const added = item.createdOn ? new Date(item.createdOn) : new Date();
+
+	return {
+		id: toOffcloudRowId(item.requestId),
+		filename,
+		title: getMediaId(info ?? filename, mediaType, false) || filename,
+		hash,
+		bytes: 0,
+		progress,
+		status,
+		serviceStatus: item.status,
+		added: Number.isNaN(added.getTime()) ? new Date() : added,
+		mediaType,
+		info,
+		// Offcloud's signed CDN links are minted per call and carry an
+		// account-scoped token, so none are stored on the row; the modal explores
+		// for them when a user asks to play or download something.
+		links: [],
+		selectedFiles: [],
+		seeders: 0,
+		speed: 0,
+	};
+}
+
+/**
+ * The whole Offcloud library in one call.
+ *
+ * `GET /api/cloud/history` lists every cloud item newest first with no paging
+ * parameters found and no per-item fan-out needed - there is nothing else to
+ * ask for, because the endpoint carries no sizes and no files to begin with.
+ */
+export const fetchOffcloud = async (
+	ocKey: string,
+	callback: (torrents: UserTorrent[]) => Promise<void>,
+	customLimit?: number
+) => {
+	const startedAt = Date.now();
+	console.log('[OffcloudFetch] start', { customLimit: customLimit ?? null });
+	try {
+		const history = await getOffcloudHistory(ocKey);
+		const limited = customLimit ? history.slice(0, customLimit) : history;
+		const torrents = limited.map((item) => convertToOffcloudUserTorrent(item));
+		await callback(torrents);
+		console.log('[OffcloudFetch] end', {
+			elapsedMs: Date.now() - startedAt,
+			returned: torrents.length,
+			withHash: torrents.filter((t) => t.hash).length,
+		});
+	} catch (error) {
+		await callback([]);
+		const apiError = getErrorMessage(error);
+		toast.error(
+			apiError ? `Offcloud error: ${apiError}` : 'Failed to fetch Offcloud items.',
+			genericToastOptions
+		);
+		console.error('[OffcloudFetch] error', { elapsedMs: Date.now() - startedAt, error });
 	}
 };

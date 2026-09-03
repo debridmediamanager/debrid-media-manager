@@ -165,6 +165,22 @@ describe('extractBtih / toMagnetUri', () => {
 		expect(extractBtih('not a magnet')).toBeNull();
 	});
 
+	// A torrent-URL submission stores `<hash>.torrent` as its originalLink, not a
+	// magnet - the only hash a library row built from one will ever have.
+	it('recovers the hash from a torrent-file originalLink', () => {
+		expect(extractBtih(`${HASH.toUpperCase()}.torrent`)).toBe(HASH);
+		expect(extractBtih(`https://archive.org/download/x/${HASH}.torrent`)).toBe(HASH);
+		expect(extractBtih(`https://example.com/${HASH}.torrent?token=abc`)).toBe(HASH);
+	});
+
+	it('does not invent a hash from an ordinary torrent filename', () => {
+		expect(extractBtih('Some.Release.2024.1080p.torrent')).toBeNull();
+		// 32 base32-legal characters are indistinguishable from a release name
+		expect(extractBtih('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA.torrent')).toBeNull();
+		// 40 hex characters that are not the whole basename
+		expect(extractBtih(`prefix${HASH}.torrent`)).toBeNull();
+	});
+
 	it('expands a bare hash and leaves a magnet alone', () => {
 		expect(toMagnetUri(HASH)).toBe(MAGNET);
 		expect(toMagnetUri(MAGNET)).toBe(MAGNET);

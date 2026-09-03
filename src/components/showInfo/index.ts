@@ -1,3 +1,10 @@
+import {
+	exploreOffcloudCloud,
+	getOffcloudCacheInfo,
+	getOffcloudCloudStatus,
+	joinExploreWithCacheInfo,
+	type OffcloudFile,
+} from '@/services/offcloud';
 import { getPremiumizeItemDetails } from '@/services/premiumize';
 import { addHashAsMagnet, proxyUnrestrictLink, selectFiles } from '@/services/realDebrid';
 import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
@@ -6,10 +13,13 @@ import { handleRestartTorrent } from '@/utils/addMagnet';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import {
 	handleDeleteAdTorrent,
+	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
+import { parseOffcloudRowId } from '@/utils/offcloudRow';
+import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
 import { magnetToastOptions } from '@/utils/toastOptions';
 import { toWebDownloadRowId } from '@/utils/torboxWebDownload';
@@ -21,7 +31,12 @@ import Modal from '../modals/modal';
 import { bindCastAllButton } from './castAll';
 import { renderButton, renderInfoTable } from './components';
 import type { PremiumizeFileRow } from './render';
-import { renderTorrentInfo, renderTorrentInfoPM, renderTorrentInfoTB } from './render';
+import {
+	renderTorrentInfo,
+	renderTorrentInfoOC,
+	renderTorrentInfoPM,
+	renderTorrentInfoTB,
+} from './render';
 import { icons } from './styles';
 import { ApiTorrentFile, MagnetLink } from './types';
 import { buildSearchQueryFromFilename, fetchMediaInfo, getStreamInfo } from './utils';
@@ -1304,6 +1319,214 @@ export const showInfoForPM = async (
 						id: toastId,
 					});
 				}
+			});
+		},
+	});
+};
+
+/**
+ * Info modal for an Offcloud library item.
+ *
+ * Three measured Offcloud behaviours decide what this does
+ * (`docs/providers/offcloud.md`):
+ *
+ *  - **The library listing carries no files and no sizes.** `cloud/history` is
+ *    all the library fetch gets, so the listing is assembled here, on open:
+ *    `cloud/explore` for the signed links and `cache/info` for the names and
+ *    byte sizes, joined on the filename. Two requests for the one row a user
+ *    actually looked at.
+ *  - **A garbage magnet becomes a zombie.** Offcloud accepts an invalid magnet
+ *    with a 200 and parks it in `created` / "Loading..." indefinitely - nothing
+ *    upstream ever finishes or fails it. An unfinished row is therefore polled
+ *    once for a fresher status, and one still sitting in `created` is offered
+ *    an explicit way out rather than left to occupy the library forever.
+ *  - **The links are already playable.** Keyless, any IP, Range honoured - the
+ *    same energycdn objects Premiumize serves. Nothing has to be unrestricted,
+ *    so both Watch and DL work straight off the explore URL, and neither needs
+ *    the info hash a plain-HTTP row does not have.
+ */
+export const showInfoForOC = async (
+	app: string,
+	ocKey: string,
+	torrent: {
+		id: string;
+		hash: string;
+		filename: string;
+		title: string;
+		bytes: number;
+		serviceStatus: string;
+		progress: number;
+		added: Date;
+	},
+	shouldDownloadMagnets?: boolean,
+	handlers: { onDeleteOc?: (ocKey: string, id: string) => Promise<void> } = {}
+): Promise<void> => {
+	const requestId = parseOffcloudRowId(torrent.id);
+	if (!requestId) {
+		toast.error(`Unrecognised Offcloud row ${torrent.id}.`, magnetToastOptions);
+		return;
+	}
+
+	// An Offcloud row built from a plain HTTP submission has no info hash, and
+	// one recovered from `originalLink` is the 40-char hex form.
+	const hasInfoHash = /^[a-fA-F0-9]{40}$/.test(torrent.hash);
+
+	Modal.showLoading();
+
+	let serviceStatus = torrent.serviceStatus;
+	let progress = torrent.progress;
+	// One poll, not a loop: `cloud/status` takes a single requestId per call and
+	// a zombie would never change however long it were watched.
+	if (serviceStatus === 'created' || serviceStatus === 'queued') {
+		try {
+			const status = await getOffcloudCloudStatus(ocKey, requestId);
+			serviceStatus = status.status;
+			if (typeof status.progress === 'number') progress = status.progress;
+		} catch (error) {
+			console.error('[torrentModal] status poll failed (OC)', error);
+		}
+	}
+
+	let files: OffcloudFile[] = [];
+	if (serviceStatus === 'downloaded') {
+		try {
+			const links = await exploreOffcloudCloud(ocKey, requestId);
+			// `cache/info` is where names and sizes come from, and it needs the
+			// magnet form - a bare hash there silently reports cached content as
+			// uncached. Without a hash the links still list, by basename alone.
+			let cacheFiles: { folder: string; filename: string; size: number }[] = [];
+			if (hasInfoHash) {
+				try {
+					const [info] = await getOffcloudCacheInfo(ocKey, [torrent.hash]);
+					cacheFiles = info?.files ?? [];
+				} catch (error) {
+					console.error('[torrentModal] cache/info failed (OC)', error);
+				}
+			}
+			files = joinExploreWithCacheInfo(links, cacheFiles);
+		} catch (error) {
+			console.error('[torrentModal] explore failed (OC)', error);
+		}
+	}
+
+	const isStuck = serviceStatus === 'created';
+	const totalBytes = files.reduce((sum, file) => sum + (file.size ?? 0), 0) || torrent.bytes;
+
+	const libraryActions = `
+        <div class="mb-3 flex justify-center items-center flex-wrap">
+            ${hasInfoHash ? renderButton('share', { link: `${await handleShare({ ...torrent, bytes: totalBytes })}` }) : ''}
+            ${renderButton('delete', { id: 'btn-delete-oc' })}
+            ${hasInfoHash ? renderButton('magnet', { id: 'btn-magnet-copy-oc', text: shouldDownloadMagnets ? 'Download' : 'Copy' }) : ''}
+            ${files.length ? renderButton('exportLinks', { id: 'btn-export-links-oc' }) : ''}
+        </div>`;
+
+	const infoRows = [
+		{ label: 'Size', value: (totalBytes / 1024 ** 3).toFixed(2) + ' GB' },
+		{ label: 'ID', value: torrent.id },
+		{ label: 'Status', value: getOffcloudStatusText(serviceStatus) },
+		...(serviceStatus !== 'downloaded' && progress > 0
+			? [{ label: 'Progress', value: progress + '%' }]
+			: []),
+		...(hasInfoHash ? [] : [{ label: 'Info hash', value: 'not a torrent submission' }]),
+		{
+			label: 'Added',
+			value: new Date(torrent.added).toLocaleString(undefined, { timeZone: 'UTC' }),
+		},
+	];
+
+	// Offcloud never times a stuck item out, so the user is told what this state
+	// means and given the one action that clears it.
+	const stuckNotice = isStuck
+		? `<div class="mb-2 rounded border border-amber-600 bg-amber-900/30 p-2 text-sm text-amber-100">
+            Offcloud has not started this one. It accepts an unusable magnet without
+            refusing it and then leaves it here indefinitely — removing it is the only
+            way out.
+            ${renderButton('delete', { id: 'btn-remove-stuck-oc', text: 'Remove stuck item' })}
+        </div>`
+		: '';
+
+	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${torrent.filename}</h1>
+    ${libraryActions}
+    ${stuckNotice}
+    <div class="text-sm text-gray-200">
+        ${renderInfoTable(infoRows)}
+    </div>
+    <div class="text-sm max-h-60 mb-2 text-left p-1 bg-gray-900">
+        <div class="overflow-x-auto" style="max-width: 100%;">
+            <table class="table-auto">
+                <tbody>
+                    ${renderTorrentInfoOC(
+						files.map((file) => ({
+							link: file.link,
+							filename: file.filename,
+							filesize: file.size,
+						})),
+						{ canWatch: Boolean(app) }
+					)}
+                </tbody>
+            </table>
+        </div>
+    </div>`;
+
+	await Modal.fire({
+		html,
+		showConfirmButton: false,
+		showCancelButton: false,
+		customClass: {
+			htmlContainer: '!mx-1',
+			popup: '!bg-gray-900 !text-gray-100 !px-4 !py-3',
+			confirmButton: 'haptic',
+			cancelButton: 'haptic',
+		},
+		width: '800px',
+		showCloseButton: true,
+		inputAutoFocus: true,
+		didOpen: () => {
+			// Every Watch row carries its own already-playable link, so nothing
+			// here has to resolve the hash - which a plain-HTTP row does not have.
+			bindWatchButtons({
+				service: 'oc',
+				hash: torrent.hash,
+				player: app ?? '',
+				keys: { offcloudKey: ocKey },
+			});
+
+			document
+				.querySelectorAll<HTMLButtonElement>('button[data-oc-link]')
+				.forEach((button) => {
+					button.addEventListener('click', () => {
+						window.open(button.dataset.ocLink!, '_blank');
+					});
+				});
+
+			document.getElementById('btn-magnet-copy-oc')?.addEventListener('click', () => {
+				void handleCopyOrDownloadMagnet(torrent.hash, shouldDownloadMagnets);
+			});
+
+			const removeItem = async () => {
+				try {
+					if (handlers.onDeleteOc) await handlers.onDeleteOc(ocKey, torrent.id);
+					else await handleDeleteOcTorrent(ocKey, torrent.id);
+					Modal.close();
+				} catch (error) {
+					console.error('[torrentModal] delete failed (OC)', error);
+				}
+			};
+			document.getElementById('btn-delete-oc')?.addEventListener('click', removeItem);
+			document.getElementById('btn-remove-stuck-oc')?.addEventListener('click', removeItem);
+
+			// The links are already minted and keyless, so this is a plain export
+			// with no per-file request behind it - unlike Premiumize's.
+			document.getElementById('btn-export-links-oc')?.addEventListener('click', () => {
+				const blob = new Blob([files.map((file) => file.link).join('\n')], {
+					type: 'text/plain',
+				});
+				const a = document.createElement('a');
+				a.href = URL.createObjectURL(blob);
+				a.download = `${torrent.filename}.txt`;
+				a.click();
+				URL.revokeObjectURL(a.href);
+				toast.success('Download links exported.', magnetToastOptions);
 			});
 		},
 	});

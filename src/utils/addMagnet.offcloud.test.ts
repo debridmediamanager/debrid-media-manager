@@ -142,8 +142,23 @@ describe('handleAddAsMagnetInOc', () => {
 		expect(torrent.bytes).toBe(0);
 	});
 
-	it('marks an unfinished row as downloading rather than finished', async () => {
+	// `created` is accepted-but-not-started, which is the state a zombie parks in
+	// - calling it "downloading" would tell the user bytes are moving when
+	// Offcloud has not begun and, for a garbage magnet, never will.
+	it('marks an unstarted row as waiting, not downloading', async () => {
 		oc.addOffcloudCloud.mockResolvedValue(added('created'));
+		const callback = vi.fn();
+
+		await handleAddAsMagnetInOc('oc-key', HASH, callback);
+
+		const [torrent] = callback.mock.calls[0];
+		expect(torrent.progress).toBe(0);
+		expect(torrent.status).toBe('waiting');
+		expect(torrent.serviceStatus).toBe('created');
+	});
+
+	it('marks a started row as downloading', async () => {
+		oc.addOffcloudCloud.mockResolvedValue(added('downloading'));
 		const callback = vi.fn();
 
 		await handleAddAsMagnetInOc('oc-key', HASH, callback);

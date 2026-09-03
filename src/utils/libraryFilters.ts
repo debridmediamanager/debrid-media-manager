@@ -113,6 +113,7 @@ export const filterLibraryItems = ({
 			ad: 'AllDebrid',
 			tb: 'TorBox',
 			pm: 'Premiumize',
+			oc: 'Offcloud',
 		};
 		nextHelpText = `Showing torrents from ${serviceNames[serviceValue] ?? serviceValue}`;
 	}

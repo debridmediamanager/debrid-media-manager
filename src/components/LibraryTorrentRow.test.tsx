@@ -6,6 +6,7 @@ import {
 } from '@/utils/addMagnet';
 import {
 	handleDeleteAdTorrent,
+	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
@@ -53,6 +54,9 @@ const mockHandleRestartTbTorrent = handleRestartTbTorrent as MockedFunction<
 const mockHandleDeletePmTorrent = handleDeletePmTorrent as MockedFunction<
 	typeof handleDeletePmTorrent
 >;
+const mockHandleDeleteOcTorrent = handleDeleteOcTorrent as MockedFunction<
+	typeof handleDeleteOcTorrent
+>;
 
 describe('LibraryTorrentRow Reinsert Functionality', () => {
 	const mockRouter = {
@@ -83,6 +87,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 		adKey: null,
 		tbKey: null,
 		pmKey: null,
+		ocKey: null,
 		shouldDownloadMagnets: false,
 		hashGrouping: {},
 		titleGrouping: {},
@@ -143,6 +148,65 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			expect(url).toBe(`/api/stremio-pm/cast/library/${'f'.repeat(40)}`);
 			expect(url).not.toContain('test-pm-key');
 			expect(init.headers.Authorization).toBe('Bearer test-pm-key');
+		});
+	});
+
+	describe('Offcloud rows', () => {
+		const ocProps = (overrides: Partial<UserTorrent> = {}) => ({
+			...defaultProps,
+			rdKey: null,
+			ocKey: 'test-oc-key',
+			torrent: {
+				...mockTorrent,
+				id: 'oc:req123',
+				hash: 'a'.repeat(40),
+				serviceStatus: 'downloaded',
+				...overrides,
+			},
+		});
+
+		it('deletes through the Offcloud handler', async () => {
+			mockHandleDeleteOcTorrent.mockResolvedValueOnce(true);
+			const onDelete = vi.fn();
+
+			const { container } = render(<LibraryTorrentRow {...ocProps()} onDelete={onDelete} />);
+			fireEvent.click(container.querySelector('button[title="Delete"]')!);
+
+			await waitFor(() =>
+				expect(mockHandleDeleteOcTorrent).toHaveBeenCalledWith('test-oc-key', 'oc:req123')
+			);
+			expect(onDelete).toHaveBeenCalledWith('oc:req123');
+		});
+
+		// `created` is where a zombie sits forever, so the row has to say so
+		// rather than showing Offcloud's raw enum.
+		it('renders the friendly status text for an unstarted item', () => {
+			render(
+				<LibraryTorrentRow
+					{...ocProps({
+						serviceStatus: 'created',
+						status: UserTorrentStatus.waiting,
+						filename: 'Magnet',
+					})}
+				/>
+			);
+			expect(screen.getByText(/Queued/)).toBeInTheDocument();
+		});
+
+		// A plain HTTP submission genuinely has no info hash, the same shape a
+		// hashless Premiumize row already has.
+		it('hides the magnet-shaped actions when the row has no info hash', () => {
+			const { container } = render(<LibraryTorrentRow {...ocProps({ hash: '' })} />);
+			expect(container.querySelector('button[title="Share"]')).not.toBeInTheDocument();
+			expect(
+				container.querySelector('button[title="Copy magnet url"]')
+			).not.toBeInTheDocument();
+		});
+
+		// The cast button arrives with the Offcloud cast addon, not before.
+		it('offers no cast button yet', () => {
+			const { container } = render(<LibraryTorrentRow {...ocProps()} />);
+			expect(container.querySelector('button[title="Cast (OC)"]')).not.toBeInTheDocument();
 		});
 	});
 

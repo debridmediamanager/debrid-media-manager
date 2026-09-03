@@ -8,6 +8,7 @@ vi.mock('@/hooks/auth', () => ({
 	useAllDebridApiKey: vi.fn(),
 	useTorBoxAccessToken: vi.fn(),
 	usePremiumizeCredential: vi.fn(),
+	useOffcloudApiKey: vi.fn(),
 }));
 
 vi.mock('@/contexts/LibraryCacheContext', () => ({
@@ -22,6 +23,7 @@ vi.mock('next/router', () => ({
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import {
 	useAllDebridApiKey,
+	useOffcloudApiKey,
 	usePremiumizeCredential,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
@@ -55,6 +57,7 @@ describe('FloatingLibraryIndicator', () => {
 		(useRealDebridAccessToken as any).mockReturnValue([null, false, false]);
 		(useAllDebridApiKey as any).mockReturnValue(null);
 		(usePremiumizeCredential as any).mockReturnValue(null);
+		(useOffcloudApiKey as any).mockReturnValue(null);
 		(useTorBoxAccessToken as any).mockReturnValue(null);
 	});
 

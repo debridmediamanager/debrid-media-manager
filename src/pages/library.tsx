@@ -6,6 +6,7 @@ import LibraryTorrentRow from '@/components/LibraryTorrentRow';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import {
 	useAllDebridApiKey,
+	useOffcloudApiKey,
 	usePremiumizeCredential,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
@@ -16,10 +17,12 @@ import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
 	handleAddAsMagnetInAd,
+	handleAddAsMagnetInOc,
 	handleAddAsMagnetInPm,
 	handleAddAsMagnetInRd,
 	handleAddAsMagnetInTb,
 	handleAddMultipleHashesInAd,
+	handleAddMultipleHashesInOc,
 	handleAddMultipleHashesInPm,
 	handleAddMultipleHashesInRd,
 	handleAddMultipleHashesInTb,
@@ -33,6 +36,7 @@ import { AsyncFunction, runConcurrentFunctions } from '@/utils/batch';
 import { deleteFilteredTorrents } from '@/utils/deleteList';
 import {
 	handleDeleteAdTorrent,
+	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
@@ -50,6 +54,7 @@ import { libraryToastOptions, magnetToastOptions } from '@/utils/toastOptions';
 import { getHashOfTorrent } from '@/utils/torrentFile';
 import {
 	handleShowInfoForAD,
+	handleShowInfoForOC,
 	handleShowInfoForPM,
 	handleShowInfoForRD,
 	handleShowInfoForTB,
@@ -141,6 +146,7 @@ function TorrentsPage() {
 	const adKey = useAllDebridApiKey();
 	const tbKey = useTorBoxAccessToken();
 	const pmKey = usePremiumizeCredential();
+	const ocKey = useOffcloudApiKey();
 
 	const [defaultTitleGrouping] = useState<Record<string, number>>(() => ({}));
 	const [movieTitleGrouping] = useState<Record<string, number>>(() => ({}));
@@ -349,6 +355,20 @@ function TorrentsPage() {
 			);
 		}
 
+		if (ocKey) {
+			promises.push(
+				(async () => {
+					try {
+						await handleAddAsMagnetInOc(ocKey, hash, async (userTorrent) => {
+							addTorrent(userTorrent);
+						});
+					} catch (error) {
+						console.error('Error adding magnet to Offcloud:', error);
+					}
+				})()
+			);
+		}
+
 		Promise.all(promises).then(() => {
 			processingHashRef.current = null;
 		});
@@ -476,9 +496,10 @@ function TorrentsPage() {
 			if (/^Magnet/.test(t.title)) continue;
 
 			// group by hash. A Premiumize row often has no info hash at all -
-			// `transfer/list` never reports one - and grouping on the empty string
-			// would fold every such row into one "same hash" set and count only the
-			// first one's bytes.
+			// `transfer/list` never reports one - and an Offcloud row created from a
+			// plain HTTP URL never had one. Grouping on the empty string would fold
+			// every such row into one "same hash" set and count only the first one's
+			// bytes.
 			if (!t.hash) {
 				bytes += t.bytes;
 			} else if (t.hash in hashGrouping) {
@@ -776,11 +797,14 @@ function TorrentsPage() {
 				if (pmKey && t.id.startsWith('pm:')) {
 					success = await handleDeletePmTorrent(pmKey, t.id);
 				}
+				if (ocKey && t.id.startsWith('oc:')) {
+					success = await handleDeleteOcTorrent(ocKey, t.id);
+				}
 				if (!success) throw new Error(`Failed to delete ${t.id}`);
 				return t.id;
 			};
 		},
-		[rdKey, adKey, tbKey, pmKey]
+		[rdKey, adKey, tbKey, pmKey, ocKey]
 	);
 
 	const wrapReinsertFn = useCallback(
@@ -1446,6 +1470,8 @@ function TorrentsPage() {
 			if (tbKey && debridService === 'tb') return handleAddAsMagnetInTb(tbKey, hash);
 			if (pmKey && debridService === 'pm')
 				return handleAddAsMagnetInPm(pmKey, hash, undefined, true);
+			if (ocKey && debridService === 'oc')
+				return handleAddAsMagnetInOc(ocKey, hash, undefined, true);
 		};
 
 		function wrapAddMagnetFn(hash: string) {
@@ -1806,6 +1832,26 @@ function TorrentsPage() {
 				handleAddMultipleHashesInPm(pmKey, allHashes, async () => await refreshLibrary());
 			}
 		}
+		if (ocKey && debridService === 'oc') {
+			// `POST /api/cloud` takes a magnet or a torrent-file URL, but not an
+			// uploaded file, so a .torrent is reduced to its hash here the same way
+			// Premiumize's is.
+			const allHashes = [...hashes];
+			if (torrentFiles.length > 0) {
+				try {
+					const fileHashes = await Promise.all(
+						torrentFiles.map((file) => getHashOfTorrent(file))
+					);
+					allHashes.push(...(fileHashes.filter((h) => h !== undefined) as string[]));
+				} catch (error) {
+					toast.error(`Hash extraction failed: ${error}`);
+					return;
+				}
+			}
+			if (allHashes.length > 0) {
+				handleAddMultipleHashesInOc(ocKey, allHashes, async () => await refreshLibrary());
+			}
+		}
 	}
 
 	const resetFilters = () => {
@@ -1927,6 +1973,7 @@ function TorrentsPage() {
 						hasAd={!!adKey}
 						hasTb={!!tbKey}
 						hasPm={!!pmKey}
+						hasOc={!!ocKey}
 					/>
 					<LibraryActionButtons
 						onSelectShown={() => selectShown(currentPageData, setSelectedTorrents)}
@@ -1945,6 +1992,7 @@ function TorrentsPage() {
 						adKey={adKey}
 						tbKey={tbKey}
 						pmKey={pmKey}
+						ocKey={ocKey}
 						showDedupe={
 							router.query.status === 'sametitle' ||
 							(!!titleFilter && filteredList.length > 1)
@@ -1993,6 +2041,7 @@ function TorrentsPage() {
 												adKey={adKey}
 												tbKey={tbKey}
 												pmKey={pmKey}
+												ocKey={ocKey}
 												shouldDownloadMagnets={shouldDownloadMagnets}
 												hashGrouping={hashGrouping}
 												titleGrouping={getTitleGroupings(torrent.mediaType)}
@@ -2079,6 +2128,14 @@ function TorrentsPage() {
 														await handleShowInfoForPM(
 															t,
 															pmKey,
+															setUserTorrentsList,
+															setSelectedTorrents,
+															shouldDownloadMagnets
+														);
+													} else if (t.id.startsWith('oc:') && ocKey) {
+														await handleShowInfoForOC(
+															t,
+															ocKey,
 															setUserTorrentsList,
 															setSelectedTorrents,
 															shouldDownloadMagnets

@@ -92,6 +92,35 @@ describe('hashList utils', () => {
 			);
 		});
 
+		it('leaves out an Offcloud row created from a plain HTTP URL', async () => {
+			// Offcloud is a remote-download service too: a `/cloud` submission of an
+			// ordinary http URL has no info hash anywhere in it, and `originalLink`
+			// carries a URL rather than a magnet or `<hash>.torrent`.
+			const offcloudDirectDownload: UserTorrent = {
+				...mockTorrent,
+				id: 'oc:68b7f0c1e4b0a1',
+				filename: 'some-file.mkv',
+				hash: '',
+			};
+			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('compressed-data');
+			vi.mocked(createShortUrl).mockResolvedValue('https://short.url/abc123');
+
+			await generateHashList('Mixed', [mockTorrent, offcloudDirectDownload]);
+
+			expect(lzString.compressToEncodedURIComponent).toHaveBeenCalledWith(
+				JSON.stringify({
+					title: 'Mixed',
+					torrents: [
+						{
+							filename: mockTorrent.filename,
+							hash: mockTorrent.hash,
+							bytes: mockTorrent.bytes,
+						},
+					],
+				})
+			);
+		});
+
 		it('should generate hash list successfully', async () => {
 			const title = 'Test Collection';
 			const filteredList = [mockTorrent];

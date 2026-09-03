@@ -39,7 +39,7 @@ import {
 	TorBoxRateLimitError,
 } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorBoxWebDownload, TorrentInfoResponse } from '@/services/types';
-import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
+import { UserTorrent } from '@/torrent/userTorrent';
 import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
@@ -47,6 +47,7 @@ import { isRdBlockedName } from './deInfringe';
 import { handleDeleteRdTorrent } from './deleteTorrent';
 import {
 	buildPremiumizeRowSources,
+	convertToOffcloudUserTorrent,
 	convertToPremiumizeUserTorrent,
 	convertToTbUserTorrent,
 	convertToTbWebDownloadUserTorrent,
@@ -889,36 +890,6 @@ export const handleAddMultipleHashesInPm = async (
 const OC_BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 250;
 
 /**
- * Builds the library row for a freshly added Offcloud item.
- *
- * `/cloud` answers with an id, a name and a status and nothing else - no size,
- * no file list - and `/cloud/history` is no richer, so bytes start at 0 and are
- * filled in on demand when a modal asks `/cache/info` for the listing.
- */
-const convertToOcUserTorrent = (
-	added: { requestId: string; fileName: string; status: string; createdOn?: string },
-	hash: string
-): UserTorrent => {
-	const finished = added.status === 'downloaded';
-	return {
-		id: `oc:${added.requestId}`,
-		filename: added.fileName,
-		title: added.fileName,
-		hash: hash.toLowerCase(),
-		bytes: 0,
-		progress: finished ? 100 : 0,
-		status: finished ? UserTorrentStatus.finished : UserTorrentStatus.downloading,
-		serviceStatus: added.status,
-		added: added.createdOn ? new Date(added.createdOn) : new Date(),
-		mediaType: 'other',
-		links: [],
-		selectedFiles: [],
-		seeders: 0,
-		speed: 0,
-	};
-};
-
-/**
  * Adds a magnet to Offcloud's cloud.
  *
  * Two measured behaviours shape this (`docs/providers/offcloud.md`):
@@ -959,7 +930,10 @@ export const handleAddAsMagnetInOc = async (
 			return;
 		}
 
-		if (callback) await callback(convertToOcUserTorrent(added, hash));
+		// The hash is known here - it is what was just submitted - so the row is
+		// built with it rather than re-derived from Offcloud's rewritten
+		// `originalLink`.
+		if (callback) await callback(convertToOffcloudUserTorrent(added, hash));
 
 		if (!silent) {
 			toast.success(

@@ -9,12 +9,14 @@ import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { runDebridTransferToRd } from '@/utils/debridUploader';
 import {
 	handleDeleteAdTorrent,
+	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
 import { handleShare } from '@/utils/hashList';
 import { normalize } from '@/utils/mediaId';
+import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
 import { getRealDebridStatusText } from '@/utils/realDebridStatus';
 import { torrentPrefix } from '@/utils/results';
@@ -51,6 +53,7 @@ interface TorrentRowProps {
 	adKey: string | null;
 	tbKey: string | null;
 	pmKey: string | null;
+	ocKey: string | null;
 	shouldDownloadMagnets: boolean;
 	hashGrouping: Record<string, number>;
 	titleGrouping: Record<string, number>;
@@ -72,6 +75,7 @@ function TorrentRow({
 	adKey,
 	tbKey,
 	pmKey,
+	ocKey,
 	shouldDownloadMagnets,
 	hashGrouping,
 	titleGrouping,
@@ -101,7 +105,8 @@ function TorrentRow({
 	// so the actions built on those are meaningless for it.
 	const isTbWebDownload = isWebDownloadRowId(torrent.id);
 	// Premiumize reports no info hash for a transfer, and none at all for content
-	// whose transfer record is gone, so magnet-shaped actions have nothing to work
+	// whose transfer record is gone; an Offcloud row created from a plain HTTP
+	// URL never had one to report. Magnet-shaped actions have nothing to work
 	// with on those rows.
 	const hasInfoHash = /^[a-fA-F0-9]{40}$/.test(torrent.hash);
 	// TorBox only: AllDebrid is withdrawn as a transfer source, because it answers
@@ -138,6 +143,8 @@ function TorrentRow({
 			return getTorBoxStatusText(torrent.serviceStatus);
 		} else if (torrent.id.startsWith('pm:')) {
 			return getPremiumizeStatusText(torrent.serviceStatus);
+		} else if (torrent.id.startsWith('oc:')) {
+			return getOffcloudStatusText(torrent.serviceStatus);
 		}
 		return torrent.serviceStatus; // Fallback to raw status
 	};
@@ -390,7 +397,7 @@ function TorrentRow({
 							<br />
 						</>
 					)}
-					{[rdKey, adKey, tbKey, pmKey].filter(Boolean).length > 1 &&
+					{[rdKey, adKey, tbKey, pmKey, ocKey].filter(Boolean).length > 1 &&
 						torrentPrefix(torrent.id)}{' '}
 					{torrent.filename === torrent.hash ? 'Magnet' : torrent.filename}
 					{torrent.filename === torrent.hash ||
@@ -527,6 +534,9 @@ function TorrentRow({
 							}
 							if (pmKey && torrent.id.startsWith('pm:')) {
 								success = await handleDeletePmTorrent(pmKey, torrent.id);
+							}
+							if (ocKey && torrent.id.startsWith('oc:')) {
+								success = await handleDeleteOcTorrent(ocKey, torrent.id);
 							}
 							if (success) onDelete(torrent.id);
 						}}

@@ -9,6 +9,7 @@ import { deleteTorrent as deleteRdTorrent } from '@/services/realDebrid';
 import { deleteTorrent as deleteTbTorrent, deleteWebDownload } from '@/services/torbox';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
+import { parseOffcloudRowId } from './offcloudRow';
 import { parsePremiumizeRowId } from './premiumizeRow';
 import { magnetToastOptions } from './toastOptions';
 import { isWebDownloadRowId, parseTorBoxRowId } from './torboxWebDownload';
@@ -158,10 +159,7 @@ export const handleDeleteOcTorrent = async (
 	id: string,
 	disableToast: boolean = false
 ): Promise<boolean> => {
-	// Row ids are `oc:<requestId>`. Parsing lives inline rather than in a helper
-	// because there is only one row shape to parse - unlike Premiumize, whose
-	// rows can be a transfer, a folder or a bare file.
-	const requestId = id.startsWith('oc:') ? id.slice(3) : '';
+	const requestId = parseOffcloudRowId(id);
 	if (!requestId) {
 		toast.error(`Unrecognised Offcloud row ${id}.`);
 		return false;

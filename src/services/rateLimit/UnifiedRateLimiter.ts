@@ -74,6 +74,22 @@ export class UnifiedRateLimiter {
 			burstSize: 15,
 		});
 
+		// Offcloud is the same posture as Premiumize and for the same reason: 280
+		// requests at up to 96/s drew zero refusals, no `X-RateLimit-*` headers and
+		// no `Retry-After`, and a 5,000-hash cache probe went through in 2.1 s.
+		// That reads as a limiter that is off rather than absent, so this stays
+		// well under what was measured - the library needs one call anyway, and
+		// every request pays a Cloudflare hop (250-370 ms) that makes a burst
+		// expensive without being refused.
+		this.configs.set('offcloud', {
+			maxRequestsPerMinute: 150,
+			maxConcurrent: 3,
+			retryAttempts: 3,
+			backoffMultiplier: 2,
+			jitterRange: 0.2,
+			burstSize: 8,
+		});
+
 		// Initialize structures for each service
 		for (const service of this.configs.keys()) {
 			this.queues.set(service, []);

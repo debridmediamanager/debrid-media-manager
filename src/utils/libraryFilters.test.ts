@@ -83,6 +83,18 @@ describe('filterLibraryItems', () => {
 		expect(helpText).toBe('Torrents that are no longer cached');
 	});
 
+	it('names Offcloud when filtering by its service tab', () => {
+		const offcloud = createTorrent({ id: 'oc:req-1', title: 'Cloud item', hash: 'h1' });
+		const premiumize = createTorrent({ id: 'pm:t1', title: 'Transfer', hash: 'h2' });
+		const { list, helpText } = filterLibraryItems({
+			torrents: [offcloud, premiumize],
+			service: 'oc',
+		});
+
+		expect(list).toEqual([offcloud]);
+		expect(helpText).toBe('Showing torrents from Offcloud');
+	});
+
 	it('matches normalized title filters from router params', () => {
 		const target = createTorrent({ id: 'target', title: 'My Movie Title' });
 		const other = createTorrent({ id: 'other', title: 'Another Movie' });

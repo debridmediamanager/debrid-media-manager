@@ -12,12 +12,13 @@ import {
 	convertToTbUserTorrent,
 	convertToTbWebDownloadUserTorrent,
 	convertToUserTorrent,
+	fetchOffcloud,
 	fetchPremiumize,
 } from '@/utils/fetchTorrents';
 import { CacheManager, getGlobalCache } from '../cache/CacheManager';
 import { UnifiedRateLimiter, getGlobalRateLimiter } from '../rateLimit/UnifiedRateLimiter';
 
-export type LibraryService = 'realdebrid' | 'alldebrid' | 'torbox' | 'premiumize';
+export type LibraryService = 'realdebrid' | 'alldebrid' | 'torbox' | 'premiumize' | 'offcloud';
 
 export interface FetchOptions {
 	forceRefresh?: boolean;
@@ -92,9 +93,46 @@ export class UnifiedLibraryFetcher {
 				return this.fetchTorbox(token, options);
 			case 'premiumize':
 				return this.fetchPremiumizeLibrary(token, options);
+			case 'offcloud':
+				return this.fetchOffcloudLibrary(token, options);
 			default:
 				throw new Error(`Unknown service: ${service}`);
 		}
+	}
+
+	/**
+	 * Offcloud is one call for the whole library: `cloud/history` lists every
+	 * item, newest first, with no paging parameters and nothing to fan out to.
+	 * What it does not carry - sizes, file lists - is not obtainable in bulk at
+	 * any price, so the rows are deliberately thin and the modal fills one in.
+	 */
+	private async fetchOffcloudLibrary(
+		token: string,
+		options: FetchOptions
+	): Promise<UserTorrent[]> {
+		const cacheKey = `oc:library:${token}`;
+		if (!options.forceRefresh) {
+			const cached = await this.cache.get<UserTorrent[]>(cacheKey);
+			if (cached) return cached;
+		}
+
+		let torrents: UserTorrent[] = [];
+		await this.rateLimiter.execute('offcloud', 'oc-library', async () => {
+			await fetchOffcloud(
+				token,
+				async (fetched) => {
+					torrents = fetched;
+				},
+				options.maxItems
+			);
+		});
+
+		options.onProgress?.(torrents.length, torrents.length);
+		options.onBatchComplete?.(torrents);
+		// Same short TTL the other services use, so a staleness sweep collapses
+		// several tabs into one fetch.
+		await this.cache.set(cacheKey, torrents, undefined, 5 * 60 * 1000);
+		return torrents;
 	}
 
 	/**

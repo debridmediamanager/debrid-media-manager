@@ -5,13 +5,15 @@ import toast from 'react-hot-toast';
 import { libraryToastOptions } from './toastOptions';
 import { isWebDownloadRowId } from './torboxWebDownload';
 
-// A hash list is a list of infohashes anyone can re-add. Two kinds of row have
-// no infohash to share: a TorBox web download carries an md5 of its source link,
-// and a Premiumize row carries nothing at all unless its transfer is still live
+// A hash list is a list of infohashes anyone can re-add. Three kinds of row have
+// no infohash to share: a TorBox web download carries an md5 of its source link;
+// a Premiumize row carries nothing at all unless its transfer is still live
 // (`transfer/list` does not report a hash, and `job/src` only answers for a
-// transfer that still exists). Both are left out rather than shared as a hash
-// that resolves to nothing - and an empty hash would otherwise collapse every
-// such row into one "same hash" group.
+// transfer that still exists); and an Offcloud row created from a plain HTTP URL
+// - it is a remote-download service as well as a torrent one - never had one.
+// All are left out rather than shared as a hash that resolves to nothing - and
+// an empty hash would otherwise collapse every such row into one "same hash"
+// group.
 export const shareableTorrents = (list: UserTorrent[]) =>
 	list.filter((t) => !isWebDownloadRowId(t.id) && !!t.hash);
 

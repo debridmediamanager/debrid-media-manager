@@ -211,3 +211,62 @@ export const renderTorrentInfoPM = (
 		})
 		.join('');
 };
+
+export interface OffcloudFileRow {
+	/** The signed energycdn URL `cloud/explore` handed back for this file. */
+	link: string;
+	filename: string;
+	/** `cache/info` knows the size; explore does not, so it can be missing. */
+	filesize: number | null;
+}
+
+/**
+ * File rows for an Offcloud library item.
+ *
+ * Offcloud's links come out of `cloud/explore` already playable - keyless, any
+ * IP, Range honoured, the same energycdn objects Premiumize serves - so both
+ * buttons work off the link itself and neither needs the info hash. "DL" opens
+ * it directly; "Watch" hands it to `openWatch`, which passes it through as a
+ * link rather than resolving a hash.
+ *
+ * `cloud/explore` returns a bare array of URLs with no names and no sizes, so a
+ * file whose metadata `cache/info` did not cover still gets a row, showing its
+ * decoded basename and a zero size rather than disappearing from the listing.
+ */
+export const renderTorrentInfoOC = (
+	files: OffcloudFileRow[],
+	options: { canWatch?: boolean } = {}
+) => {
+	const sorted = [...files].sort((a, b) => a.filename.localeCompare(b.filename));
+	return sorted
+		.map((file) => {
+			const isPlayable = Boolean(isVideo({ path: file.filename }));
+			const actions: string[] = [];
+			if (isPlayable && options.canWatch) {
+				actions.push(
+					renderButton('watch', {
+						text: 'Watch',
+						data: {
+							watch: '1',
+							'watch-link': file.link,
+							'watch-file-name': file.filename,
+						},
+					})
+				);
+			}
+			actions.push(
+				renderButton('download', {
+					text: 'DL',
+					data: { 'oc-link': file.link, 'oc-file-name': file.filename },
+				})
+			);
+			return renderFileRow({
+				id: 0,
+				path: file.filename,
+				size: file.filesize ?? 0,
+				isPlayable,
+				actions,
+			});
+		})
+		.join('');
+};
