@@ -22,6 +22,16 @@ export const RATE_LIMIT_CONFIGS = {
 	// Every miss spends a grab from the one indexer account the whole site shares,
 	// so this is paced like a stream rather than like a page fetch.
 	nzbDownload: { name: 'nzbDownload', rateLimit: 1, windowSeconds: 5 },
+	// The Newznab aggregation endpoint. An *arr RSS-syncs on a timer and issues
+	// one search per configured indexer, so the budget is sized for a fleet of
+	// them behind one sponsor key rather than for a person clicking.
+	newznabSearch: { name: 'newznabSearch', rateLimit: 30, windowSeconds: 60 },
+	// A grab spends a real download from the shared upstream account, so it gets
+	// both a burst limit and a day-long one. Two entries, two names: same-name
+	// configs share a bucket, so a single name would have made the day limit and
+	// the burst limit one counter - see the note above.
+	newznabGrab: { name: 'newznabGrab', rateLimit: 10, windowSeconds: 60 },
+	newznabGrabDay: { name: 'newznabGrabDay', rateLimit: 150, windowSeconds: 86400 },
 	default: { name: 'default', rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;
 
