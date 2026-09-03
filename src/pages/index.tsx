@@ -10,6 +10,7 @@ import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
 import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/castToken';
 import { useTorBoxCastToken } from '@/hooks/torboxCastToken';
+import { useSponsor } from '@/hooks/useSponsor';
 import { getTerms } from '@/utils/browseTerms';
 import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
@@ -46,6 +47,10 @@ function IndexPage() {
 	} = useCurrentUser();
 	const { loginWithRealDebrid, loginWithAllDebrid, loginWithTorbox, loginWithPremiumize } =
 		useDebridLogin();
+	// Cosmetic gate only - it reads an unverified localStorage token. The Newznab
+	// endpoint itself checks the DMM API key server-side, so hiding the link here
+	// only keeps it out of the way for everyone who cannot use it.
+	const { isSponsor } = useSponsor();
 	const [browseTerms] = useState(getTerms(2));
 
 	// A provider has settled once it has answered - either a profile or an
@@ -206,6 +211,23 @@ function IndexPage() {
 							</span>
 							<span className="text-xs text-gray-400">Open full page</span>
 						</Link>
+						{isSponsor && (
+							<Link
+								href="/newznab"
+								className="haptic-sm flex w-full items-center justify-between rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+							>
+								<span className="flex items-center">
+									<span
+										aria-hidden="true"
+										className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
+									/>
+									Usenet Indexer
+								</span>
+								<span className="text-xs text-gray-400">
+									Prowlarr-compatible endpoint for sponsors
+								</span>
+							</Link>
+						)}
 						<BrowseSection terms={browseTerms} />
 						<TraktSection traktUser={traktUser} />
 						<div className="grid w-full grid-cols-1 gap-3">
