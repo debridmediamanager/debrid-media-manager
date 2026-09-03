@@ -4,6 +4,7 @@ import {
 	NzbSanitizeError,
 	quoteFilenameInSubject,
 	sanitizeNzb,
+	SMALL_FILE_THRESHOLD,
 } from './nzbSanitize';
 
 /**
@@ -252,6 +253,154 @@ describe('sanitizeNzb', () => {
 
 		expect(twice.xml).toBe(once.xml);
 		expect(twice.removed).toEqual([]);
+	});
+});
+
+// --- the head whitelist --------------------------------------------------
+//
+// `name`, `title`, `category` and `password` describe the release, not the
+// download: identical for everyone who grabs it, and what SABnzbd names the job
+// from. Everything else in <head> is still dropped, watermarks included.
+
+describe('sanitizeNzb head metas', () => {
+	const file = `<file subject="&quot;a.mkv&quot;"><groups><group>a.b.c</group></groups><segments>
+			<segment bytes="739000" number="1">part1@news</segment>
+		</segments></file>`;
+
+	it('keeps name and category beside the password, in a fixed order', () => {
+		const result = sanitizeNzb(
+			`<nzb><head>
+				<meta type="password">houseofusenet</meta>
+				<meta type="category">TV &gt; HD</meta>
+				<meta type="name">Some.Release.S01E01.1080p</meta>
+			</head>${file}</nzb>`
+		);
+
+		expect(result.xml).toContain(`\t<head>
+\t\t<meta type="name">Some.Release.S01E01.1080p</meta>
+\t\t<meta type="category">TV &gt; HD</meta>
+\t\t<meta type="password">houseofusenet</meta>
+\t</head>`);
+		expect(result.removed).toEqual([]);
+	});
+
+	// newznab's spelling of the same field. Emitting both would let a downstream
+	// reader pick either one and get a different job name.
+	it('normalises title to name on output', () => {
+		const result = sanitizeNzb(
+			`<nzb><head><meta type="title">Some.Release.1080p</meta></head>${file}</nzb>`
+		);
+
+		expect(result.xml).toContain('<meta type="name">Some.Release.1080p</meta>');
+		expect(result.xml).not.toContain('type="title"');
+		expect(result.removed).toEqual([]);
+	});
+
+	it('takes the first of name or title, whichever the indexer wrote first', () => {
+		const nameFirst = sanitizeNzb(
+			`<nzb><head><meta type="name">From.Name</meta><meta type="title">From.Title</meta></head>${file}</nzb>`
+		);
+		expect(nameFirst.xml).toContain('<meta type="name">From.Name</meta>');
+		expect(nameFirst.xml).not.toContain('From.Title');
+
+		const titleFirst = sanitizeNzb(
+			`<nzb><head><meta type="title">From.Title</meta><meta type="name">From.Name</meta></head>${file}</nzb>`
+		);
+		expect(titleFirst.xml).toContain('<meta type="name">From.Title</meta>');
+		expect(titleFirst.xml).not.toContain('From.Name');
+	});
+
+	// The reason this module exists still holds: a kept meta beside the watermark
+	// must not carry the watermark through with it.
+	it('still strips the DrunkenSlug tag from a head it keeps other metas from', () => {
+		const result = sanitizeNzb(
+			`<nzb><head>
+				<meta type="name">Some.Release.1080p</meta>
+				<meta type="tag">0a624180.27889905291</meta>
+			</head>${file}</nzb>`
+		);
+
+		expect(result.xml).toContain('<meta type="name">Some.Release.1080p</meta>');
+		expect(result.xml).not.toContain('0a624180.27889905291');
+		expect(result.removed[0]).toContain('<meta type="tag">');
+	});
+
+	it('emits no head at all when the source had no whitelisted meta', () => {
+		expect(sanitizeNzb(`<nzb>${file}</nzb>`).xml).not.toContain('<head>');
+		expect(sanitizeNzb(DRUNKENSLUG).xml).not.toContain('<head>');
+	});
+
+	it('is still a fixed point with a full head', () => {
+		const once = sanitizeNzb(
+			`<nzb><head>
+				<meta type="title">Some.Release.1080p</meta>
+				<meta type="category">TV &gt; HD</meta>
+				<meta type="password">houseofusenet</meta>
+				<meta type="tag">0a624180.27889905291</meta>
+			</head>${file}</nzb>`
+		);
+		const twice = sanitizeNzb(once.xml);
+
+		expect(twice.xml).toBe(once.xml);
+		expect(twice.removed).toEqual([]);
+	});
+});
+
+// --- planted payloads ----------------------------------------------------
+//
+// A one-segment file of a few hundred bytes is not part of a release; it is a
+// "your user id is …" article wearing a filename. Flagged and kept, never
+// dropped — a release can legitimately carry a tiny nfo, and removing a file
+// would change the download this module exists to preserve.
+
+describe('sanitizeNzb planted-file flagging', () => {
+	const PLANTED = `<nzb>
+		<file subject="&quot;downloaded-by-user-4417.txt&quot; yEnc (1/1)"><groups><group>a.b.c</group></groups><segments>
+			<segment bytes="312" number="1">planted@news</segment>
+		</segments></file>
+		<file subject="&quot;real.mkv&quot; yEnc (1/1)"><groups><group>a.b.c</group></groups><segments>
+			<segment bytes="739000" number="1">real@news</segment>
+		</segments></file>
+	</nzb>`;
+
+	it('names the small file and leaves it in the document', () => {
+		const result = sanitizeNzb(PLANTED);
+
+		expect(result.plantedSuspects).toEqual(['"downloaded-by-user-4417.txt" yEnc (1/1)']);
+		expect(result.files).toBe(2);
+		expect(result.xml).toContain('planted@news');
+		expect(result.droppedFiles).toBe(0);
+		// Not a strip, so it stays out of the "what came off" report the download
+		// endpoint puts in its X-Nzb-Removed header.
+		expect(result.removed).toEqual([]);
+	});
+
+	it('sums the file segments rather than judging them one at a time', () => {
+		const result =
+			sanitizeNzb(`<nzb><file subject="&quot;a.txt&quot;"><groups><group>a.b.c</group></groups><segments>
+			<segment bytes="1000" number="1">one@news</segment>
+			<segment bytes="1000" number="2">two@news</segment>
+		</segments></file></nzb>`);
+
+		expect(result.plantedSuspects).toEqual(['"a.txt"']);
+		expect(result.suspectBytes).toBe(0); // each segment is fine on its own
+	});
+
+	it.each([
+		[SMALL_FILE_THRESHOLD - 1, true],
+		[SMALL_FILE_THRESHOLD, false],
+	])('treats a %i-byte file as suspect: %s', (bytes, suspect) => {
+		const result =
+			sanitizeNzb(`<nzb><file subject="&quot;a.bin&quot;"><groups><group>a.b.c</group></groups><segments>
+			<segment bytes="${bytes}" number="1">one@news</segment>
+		</segments></file></nzb>`);
+
+		expect(result.plantedSuspects.length > 0).toBe(suspect);
+	});
+
+	it('finds nothing to flag in a healthy NZB from either indexer', () => {
+		expect(sanitizeNzb(DRUNKENSLUG).plantedSuspects).toEqual([]);
+		expect(sanitizeNzb(ALTHUB).plantedSuspects).toEqual([]);
 	});
 });
 

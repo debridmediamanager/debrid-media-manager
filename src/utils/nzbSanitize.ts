@@ -33,8 +33,16 @@
  *   - `subject`, optional, but with the filename quoted or both readers fall
  *     back to deobfuscation, the yEnc header or a par2 rename
  *
- * The `<?xml?>` declaration, DOCTYPE, `<head>`, `poster` and `date` are all
- * optional, so none of them are emitted.
+ * The DOCTYPE, `poster` and `date` are all optional, so none of them are
+ * emitted, and `<head>` appears only when a whitelisted meta survived.
+ *
+ * Four head metas do survive — `name`, `title`, `category` and `password`, the
+ * same whitelist zurg's `internal/nzbclean` keeps, for the same reason: each
+ * describes the release rather than the download, so it reads identically for
+ * everyone who grabs it, and SABnzbd names the job from them. `title` is
+ * newznab's spelling of `name` and is written back out as `name`, so the two
+ * cannot disagree downstream. Everything else in `<head>` goes, a future
+ * indexer's inventions included — which is the point of a whitelist.
  */
 
 /** Encoded segment size SAB rejects at or above. */
@@ -42,6 +50,17 @@ export const MAX_SEGMENT_BYTES = 8 * 1024 * 1024;
 
 /** Emitted for a file whose groups the source omitted entirely. */
 export const FALLBACK_GROUP = 'alt.binaries.misc';
+
+/**
+ * A file whose segments total less than this is a planted-payload candidate.
+ *
+ * No genuine Usenet file is this small — even a par2 index runs to tens of
+ * kilobytes — but a one-segment "your user id is …" article is, and that is a
+ * watermark wearing a filename. Flagged rather than dropped: the same threshold
+ * zurg's cleaner uses, and the same call, since a release really can carry a
+ * tiny nfo or sfv and deleting one would change the download.
+ */
+export const SMALL_FILE_THRESHOLD = 4096;
 
 export interface NzbSanitizeReport {
 	/** Files in the rebuilt document. */
@@ -64,6 +83,14 @@ export interface NzbSanitizeReport {
 	 * would turn a visible failure into a corrupt download.
 	 */
 	suspectBytes: number;
+	/**
+	 * Subjects of the files whose segments total under `SMALL_FILE_THRESHOLD` —
+	 * planted-payload candidates. Reported, never dropped, for the same reason
+	 * `suspectBytes` is: this is an observation about a file still in the
+	 * document, not part of the list of what came off it, so it stays out of
+	 * `removed`. Empty on a healthy NZB.
+	 */
+	plantedSuspects: string[];
 }
 
 export interface SanitizedNzb extends NzbSanitizeReport {
@@ -288,10 +315,17 @@ export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): Sanitiz
 	const { keepPassword = true } = options;
 
 	const metas: Record<string, string> = {};
+	// `name` and `title` are two spellings of one field, so the first of either
+	// to appear wins and the loser is not emitted twice under different names.
+	let name: string | undefined;
 	for (const match of xml.matchAll(META_RE)) {
 		const type = parseAttrs(match[1]).type;
-		if (type) metas[type] = decodeEntities(match[2]).trim();
+		if (!type) continue;
+		const value = decodeEntities(match[2]).trim();
+		metas[type] = value;
+		if (!name && value && (type === 'name' || type === 'title')) name = value;
 	}
+	const category = metas.category;
 	const password = keepPassword ? metas.password : undefined;
 
 	const { files: parsed, droppedSegments } = parseFiles(xml);
@@ -317,10 +351,15 @@ export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): Sanitiz
 		'<nzb xmlns="http://www.newzbin.com/DTD/2003/nzb">',
 	];
 
-	if (password) {
-		lines.push('\t<head>');
-		lines.push(`\t\t<meta type="password">${escapeText(password)}</meta>`);
-		lines.push('\t</head>');
+	// Fixed order, and a `title` has already become `name` by here: two NZBs whose
+	// sources differed only in meta order or spelling come out identical, which is
+	// what makes the cleaned file cacheable per release rather than per source.
+	const head: string[] = [];
+	if (name) head.push(`\t\t<meta type="name">${escapeText(name)}</meta>`);
+	if (category) head.push(`\t\t<meta type="category">${escapeText(category)}</meta>`);
+	if (password) head.push(`\t\t<meta type="password">${escapeText(password)}</meta>`);
+	if (head.length > 0) {
+		lines.push('\t<head>', ...head, '\t</head>');
 	}
 
 	for (const file of usable) {
@@ -346,7 +385,24 @@ export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): Sanitiz
 
 	lines.push('</nzb>');
 
-	const removed = describeStripped(xml, metas, password ? ['password'] : []);
+	// A `title` counts as kept whenever a name survived: the field is not gone,
+	// it went back out under the other spelling.
+	const kept: string[] = [];
+	if (name) kept.push('name', 'title');
+	if (category) kept.push('category');
+	if (password) kept.push('password');
+	const removed = describeStripped(xml, metas, kept);
+
+	// Only the files that made it into the document: a file dropped for having no
+	// usable segment is already accounted for, and cannot be planted in a file
+	// nobody will download.
+	const plantedSuspects = usable
+		.filter(
+			(file) =>
+				file.segments.reduce((total, segment) => total + (segment.bytes ?? 0), 0) <
+				SMALL_FILE_THRESHOLD
+		)
+		.map((file) => file.subject);
 
 	return {
 		xml: `${lines.join('\n')}\n`,
@@ -356,5 +412,6 @@ export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): Sanitiz
 		droppedSegments,
 		droppedFiles: parsed.length - usable.length,
 		suspectBytes,
+		plantedSuspects,
 	};
 }
