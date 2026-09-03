@@ -109,6 +109,14 @@ export default function DebridLinkLoginPage() {
 				return;
 			}
 			setApiKey(inputApiKey.trim());
+			// `useDebridLinkCredential` prefers the access token, so a stale one
+			// left here outranks the token just validated and nothing sent from
+			// this browser would use it - the login reports success while every
+			// page keeps failing. The refresh pair goes with it, or it mints a
+			// replacement access token that wins again. Only after acceptance.
+			setAccessToken(null);
+			setRefreshToken(null);
+			setTokenExpiry(null);
 			await finish();
 		} catch (err: any) {
 			setError(

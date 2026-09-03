@@ -96,6 +96,11 @@ export default function PremiumizeLoginPage() {
 				return;
 			}
 			setApiKey(inputApiKey.trim());
+			// `usePremiumizeCredential` prefers the access token, so a stale one
+			// left here outranks the key just validated and nothing sent from
+			// this browser would use it - the login reports success while every
+			// page keeps failing. Only drop it once the key has been accepted.
+			setAccessToken(null);
 			await finish();
 		} catch (err: any) {
 			setError(

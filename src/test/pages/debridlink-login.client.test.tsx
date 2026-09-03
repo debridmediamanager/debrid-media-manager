@@ -89,8 +89,42 @@ describe('DebridLinkLoginPage', () => {
 			await waitFor(() => expect(setApiKey).toHaveBeenCalledWith('dl-test-token'));
 			// The pasted token is the whole account; it must never be filed as
 			// the scoped OAuth credential.
-			expect(setAccessToken).not.toHaveBeenCalled();
+			expect(setAccessToken).not.toHaveBeenCalledWith('dl-test-token');
 			expect(replace).toHaveBeenCalledWith('/');
+		});
+
+		// `useDebridLinkCredential` prefers `dl:accessToken` over `dl:apiKey`,
+		// so a token saved beside a stale OAuth credential is never the one
+		// sent. Someone whose OAuth access died and who fixes it by pasting a
+		// fresh API token would stay broken with no feedback: the login says it
+		// worked and every page keeps failing. The refresh pair goes with it -
+		// left behind, it mints a replacement access token that wins again.
+		it('drops a superseded OAuth credential so the new token is the one in use', async () => {
+			getDebridLinkAccountInfo.mockResolvedValue(premiumAccount);
+
+			render(<DebridLinkLoginPage />);
+			submit();
+
+			await waitFor(() => expect(setApiKey).toHaveBeenCalledWith('dl-test-token'));
+			expect(setAccessToken).toHaveBeenCalledWith(null);
+			expect(setRefreshToken).toHaveBeenCalledWith(null);
+			expect(setTokenExpiry).toHaveBeenCalledWith(null);
+		});
+
+		it('leaves the OAuth credential alone when the token is rejected', async () => {
+			getDebridLinkAccountInfo.mockRejectedValue(
+				Object.assign(new Error('bad'), { code: 'badToken' })
+			);
+
+			render(<DebridLinkLoginPage />);
+			submit();
+
+			await waitFor(() =>
+				expect(screen.getByText(/rejected that token/i)).toBeInTheDocument()
+			);
+			expect(setAccessToken).not.toHaveBeenCalled();
+			expect(setRefreshToken).not.toHaveBeenCalled();
+			expect(setApiKey).not.toHaveBeenCalled();
 		});
 
 		it('returns the user to where they came from', async () => {

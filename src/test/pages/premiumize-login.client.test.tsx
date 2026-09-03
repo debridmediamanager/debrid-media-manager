@@ -82,6 +82,40 @@ describe('PremiumizeLoginPage', () => {
 		expect(replace).toHaveBeenCalledWith('/');
 	});
 
+	// `usePremiumizeCredential` prefers `pm:accessToken` over `pm:apiKey`, so a
+	// key saved beside a stale token is never the one that gets sent. Someone
+	// whose OAuth token died and who fixes it by pasting a fresh key would stay
+	// broken with no feedback at all - the login says it worked and the home
+	// page keeps failing.
+	it('drops a superseded access token so the new key is the credential in use', async () => {
+		getPremiumizeAccountInfo.mockResolvedValue({
+			customer_id: '100000002',
+			premium_until: premiumUntil(86400),
+			limit_used: 0,
+			space_used: 0,
+			booster_points: 0,
+		});
+
+		render(<PremiumizeLoginPage />);
+		submit();
+
+		await waitFor(() => expect(setApiKey).toHaveBeenCalledWith('pm-test-api-key'));
+		expect(setAccessToken).toHaveBeenCalledWith(null);
+	});
+
+	it('leaves the access token alone when the key is rejected', async () => {
+		getPremiumizeAccountInfo.mockRejectedValue(
+			Object.assign(new Error('Not logged in.'), { code: 'authentication_failed' })
+		);
+
+		render(<PremiumizeLoginPage />);
+		submit();
+
+		await waitFor(() => expect(screen.getByText(/rejected that key/i)).toBeInTheDocument());
+		expect(setAccessToken).not.toHaveBeenCalled();
+		expect(setApiKey).not.toHaveBeenCalled();
+	});
+
 	it('trims the pasted key - Premiumize compares without trimming', async () => {
 		getPremiumizeAccountInfo.mockResolvedValue({
 			customer_id: '100000002',
