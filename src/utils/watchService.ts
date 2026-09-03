@@ -17,6 +17,7 @@ export type WatchKeys = {
 	adKey?: string | null;
 	torboxKey?: string | null;
 	premiumizeKey?: string | null;
+	offcloudKey?: string | null;
 };
 
 export const WATCH_SERVICE_LABEL: Record<WatchService, string> = {
@@ -25,26 +26,37 @@ export const WATCH_SERVICE_LABEL: Record<WatchService, string> = {
 	tb: 'TorBox',
 	tbw: 'TorBox',
 	pm: 'Premiumize',
+	oc: 'Offcloud',
 };
 
 /**
  * Which service should serve this stream.
  *
- * Preference order is RD > AD > TB > PM. RD resolves in one server round-trip,
- * AD needs a browser-side magnet upload first, and TB has to add the torrent to
- * the account before it can hand out a link. Premiumize is the cheapest of the
- * four in isolation - one stateless call, nothing written to the account - but
- * it sits last so that adding a Premiumize key never silently takes playback
- * away from the service a user already had.
+ * Preference order is RD > AD > TB > PM > OC. RD resolves in one server
+ * round-trip, AD needs a browser-side magnet upload first, and TB has to add the
+ * torrent to the account before it can hand out a link. Premiumize is the
+ * cheapest of them all in isolation - one stateless call, nothing written to the
+ * account - but it sits behind the three so that adding a Premiumize key never
+ * silently takes playback away from the service a user already had.
+ *
+ * Offcloud goes last of all, and behind Premiumize specifically. The two serve
+ * the same objects off the same CDN, so the stream is identical either way - but
+ * Premiumize's `directdl` resolves it without touching the account, while
+ * Offcloud has to add the item and leaves a cloud entry behind. Given a free
+ * choice between two paths to the same bytes, take the one that mutates nothing.
  */
 export const pickWatchService = (
-	result: Pick<SearchResult, 'rdAvailable' | 'adAvailable' | 'tbAvailable' | 'pmAvailable'>,
+	result: Pick<
+		SearchResult,
+		'rdAvailable' | 'adAvailable' | 'tbAvailable' | 'pmAvailable' | 'ocAvailable'
+	>,
 	keys: WatchKeys
 ): WatchService | null => {
 	if (keys.rdKey && result.rdAvailable) return 'rd';
 	if (keys.adKey && result.adAvailable) return 'ad';
 	if (keys.torboxKey && result.tbAvailable) return 'tb';
 	if (keys.premiumizeKey && result.pmAvailable) return 'pm';
+	if (keys.offcloudKey && result.ocAvailable) return 'oc';
 	return null;
 };
 
@@ -58,7 +70,10 @@ export const pickWatchService = (
  * add-to-library surface, so it falls back to whichever key exists.
  */
 export const pickInfoService = (
-	result: Pick<SearchResult, 'rdAvailable' | 'adAvailable' | 'tbAvailable' | 'pmAvailable'>,
+	result: Pick<
+		SearchResult,
+		'rdAvailable' | 'adAvailable' | 'tbAvailable' | 'pmAvailable' | 'ocAvailable'
+	>,
 	keys: WatchKeys
 ): WatchService | null => {
 	const watchable = pickWatchService(result, keys);
@@ -67,6 +82,7 @@ export const pickInfoService = (
 	if (keys.adKey) return 'ad';
 	if (keys.torboxKey) return 'tb';
 	if (keys.premiumizeKey) return 'pm';
+	if (keys.offcloudKey) return 'oc';
 	return null;
 };
 
@@ -74,6 +90,7 @@ export const watchKeyFor = (service: WatchService, keys: WatchKeys): string | nu
 	if (service === 'rd') return keys.rdKey ?? null;
 	if (service === 'ad') return keys.adKey ?? null;
 	if (service === 'pm') return keys.premiumizeKey ?? null;
+	if (service === 'oc') return keys.offcloudKey ?? null;
 	// 'tb' and 'tbw' are both TorBox, differing only in which namespace the
 	// server resolves the hash against.
 	return keys.torboxKey ?? null;

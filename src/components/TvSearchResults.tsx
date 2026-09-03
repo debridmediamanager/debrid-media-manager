@@ -28,6 +28,22 @@ import ReportButton from './ReportButton';
 // a stray line.
 const ActionSeparator = () => <hr data-action-separator="true" className="my-1 border-gray-600" />;
 
+/**
+ * The three states of an add button, written out in full.
+ *
+ * Tailwind only keeps class names it can find as literals in the source, so an
+ * assembled one (`` `border-${color}-500` ``) is silently dropped from the
+ * build. The older service blocks in this file still assemble theirs off
+ * `btnColor` and render unstyled because of it - a latent bug, not a pattern to
+ * copy.
+ */
+const addButtonClass = (avail: boolean, noVideos: boolean) =>
+	avail
+		? 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50'
+		: noVideos
+			? 'border-gray-500 bg-gray-900/30 text-gray-100 hover:bg-gray-800/50'
+			: 'border-blue-500 bg-blue-900/30 text-blue-100 hover:bg-blue-800/50';
+
 type TvSearchResultsProps = {
 	filteredResults: SearchResult[];
 	expectedEpisodeCount: number;
@@ -37,6 +53,7 @@ type TvSearchResultsProps = {
 	adKey: string | null;
 	torboxKey?: string | null;
 	premiumizeKey?: string | null;
+	offcloudKey?: string | null;
 	player: string;
 	hashAndProgress: Record<string, number>;
 	handleShowInfo: (result: SearchResult) => void;
@@ -53,6 +70,7 @@ type TvSearchResultsProps = {
 	addAd: (hash: string) => Promise<void>;
 	addTb: (hash: string) => Promise<void>;
 	addPm: (hash: string) => Promise<void>;
+	addOc: (hash: string) => Promise<void>;
 	sendTbToRd?: (hash: string) => Promise<void>;
 	/**
 	 * File a request for a release this account cannot fetch on its own.
@@ -66,6 +84,7 @@ type TvSearchResultsProps = {
 	deleteAd: (hash: string) => Promise<void>;
 	deleteTb: (hash: string) => Promise<void>;
 	deletePm: (hash: string) => Promise<void>;
+	deleteOc: (hash: string) => Promise<void>;
 	imdbId?: string;
 	isHashServiceChecking: (hash: string, service: DebridService) => boolean;
 };
@@ -79,6 +98,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	adKey,
 	torboxKey,
 	premiumizeKey,
+	offcloudKey,
 	player,
 	hashAndProgress,
 	handleShowInfo,
@@ -92,12 +112,14 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	addAd,
 	addTb,
 	addPm,
+	addOc,
 	sendTbToRd,
 	requestContent,
 	deleteRd,
 	deleteAd,
 	deleteTb,
 	deletePm,
+	deleteOc,
 	imdbId,
 	isHashServiceChecking,
 }) => {
@@ -291,7 +313,16 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	);
 
 	const handleWatch = async (result: SearchResult) => {
-		const service = pickWatchService(result, { rdKey, adKey, torboxKey, premiumizeKey });
+		// The render-time and click-time service picks are two separate calls, and
+		// both need every key: leaving one out of the second silently does nothing
+		// on click, which is exactly what happened to Premiumize in 91aad488.
+		const service = pickWatchService(result, {
+			rdKey,
+			adKey,
+			torboxKey,
+			premiumizeKey,
+			offcloudKey,
+		});
 		if (!service) return;
 		const biggest = getBiggestVideoFile(result);
 		setWatchingHashes((prev) => new Set(prev).add(result.hash));
@@ -300,7 +331,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 				service,
 				player,
 				hash: result.hash,
-				keys: { rdKey, adKey, torboxKey, premiumizeKey },
+				keys: { rdKey, adKey, torboxKey, premiumizeKey, offcloudKey },
 				fileName: biggest?.filename,
 				fileId: biggest?.fileId,
 				adInLibrary: inLibrary('ad', result.hash),
@@ -322,12 +353,14 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 							isDownloaded('rd', r.hash) ||
 							isDownloaded('ad', r.hash) ||
 							isDownloaded('tb', r.hash) ||
-							isDownloaded('pm', r.hash);
+							isDownloaded('pm', r.hash) ||
+							isDownloaded('oc', r.hash);
 						const downloading =
 							isDownloading('rd', r.hash) ||
 							isDownloading('ad', r.hash) ||
 							isDownloading('tb', r.hash) ||
-							isDownloading('pm', r.hash);
+							isDownloading('pm', r.hash) ||
+							isDownloading('oc', r.hash);
 						const inYourLibrary = downloaded || downloading;
 
 						if (
@@ -336,6 +369,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 							!r.adAvailable &&
 							!r.tbAvailable &&
 							!r.pmAvailable &&
+							!r.ocAvailable &&
 							!inYourLibrary
 						)
 							return null;
@@ -384,13 +418,14 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 							adKey,
 							torboxKey,
 							premiumizeKey,
+							offcloudKey,
 						});
 						const isWatching = watchingHashes.has(r.hash);
 
 						return (
 							<div
 								key={i}
-								className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable)} overflow-hidden rounded-lg bg-opacity-30 shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
+								className={`border-2 border-gray-700 ${borderColor(downloaded, downloading)} ${getEpisodeCountClass(r.videoCount, expectedEpisodeCount, r.rdAvailable || r.adAvailable || r.tbAvailable || r.pmAvailable || r.ocAvailable)} overflow-hidden rounded-lg bg-opacity-30 shadow transition-shadow duration-200 ease-in hover:shadow-lg`}
 							>
 								<div className="space-y-2 p-1">
 									<h2 className="line-clamp-2 overflow-hidden text-ellipsis break-words text-sm font-bold leading-tight">
@@ -411,6 +446,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													!r.adAvailable &&
 													!r.tbAvailable &&
 													!r.pmAvailable &&
+													!r.ocAvailable &&
 													(r.trackerStats.seeders > 0 ? (
 														<span className="text-green-400">
 															{' '}
@@ -432,6 +468,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												!r.adAvailable &&
 												!r.tbAvailable &&
 												!r.pmAvailable &&
+												!r.ocAvailable &&
 												(r.trackerStats.hasActivity ? (
 													<span className="text-green-400">
 														{' '}
@@ -782,10 +819,59 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											</button>
 										)}
 
-										{/* — Separator: everything above belongs to one service, everything below does not — */}
-										{(rdKey || adKey || torboxKey || premiumizeKey) && (
-											<ActionSeparator />
+										{(rdKey || adKey || torboxKey || premiumizeKey) &&
+											offcloudKey && <ActionSeparator />}
+
+										{/* — OC —
+										    No "Check OC" button on purpose: the
+										    page-load sweep already probed every row
+										    with the same `/cache` call, so a per-row
+										    repeat finds nothing new. Premiumize had
+										    one and it was removed in d3d6dd49 for
+										    exactly that reason. */}
+										{offcloudKey && inLibrary('oc', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => deleteOc(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<span className="inline-block animate-spin">
+														⌛
+													</span>
+												) : (
+													<X className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading
+													? 'Removing...'
+													: `OC (${hashAndProgress[`oc:${r.hash}`] + '%'})`}
+											</button>
 										)}
+										{offcloudKey && notInLibrary('oc', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 px-1 text-xs transition-colors ${addButtonClass(r.ocAvailable, r.noVideos)} ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => addOc(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<span className="inline-block animate-spin">
+														⌛
+													</span>
+												) : (
+													btnIcon(r.ocAvailable)
+												)}
+												{isLoading
+													? 'Adding...'
+													: btnLabel(r.ocAvailable, 'OC')}
+											</button>
+										)}
+
+										{/* — Separator: everything above belongs to one service, everything below does not — */}
+										{(rdKey ||
+											adKey ||
+											torboxKey ||
+											premiumizeKey ||
+											offcloudKey) && <ActionSeparator />}
 
 										{watchService && player && (
 											<button

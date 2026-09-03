@@ -5,6 +5,7 @@ import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
 	handleAddAsMagnetInAd,
+	handleAddAsMagnetInOc,
 	handleAddAsMagnetInPm,
 	handleAddAsMagnetInRd,
 	handleAddAsMagnetInTb,
@@ -24,6 +25,7 @@ import {
 import { isRdBlockedName } from '@/utils/deInfringe';
 import {
 	handleDeleteAdTorrent,
+	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
@@ -57,6 +59,7 @@ export function useTorrentManagement(
 	adKey: string | null,
 	torboxKey: string | null,
 	premiumizeKey: string | null,
+	offcloudKey: string | null,
 	imdbId: string,
 	searchResults: SearchResult[],
 	setSearchResults: React.Dispatch<React.SetStateAction<SearchResult[]>>
@@ -380,6 +383,25 @@ export function useTorrentManagement(
 		[premiumizeKey, fetchHashAndProgress, addToCache]
 	);
 
+	const addOc = useCallback(
+		async (hash: string) => {
+			if (!offcloudKey) return;
+
+			await handleAddAsMagnetInOc(offcloudKey, hash, async (userTorrent: UserTorrent) => {
+				await torrentDB.add(userTorrent);
+				addToCache(userTorrent);
+
+				setHashAndProgress((prev) => ({
+					...prev,
+					[`${userTorrent.id.substring(0, 3)}${userTorrent.hash}`]: userTorrent.progress,
+				}));
+
+				await fetchHashAndProgress();
+			});
+		},
+		[offcloudKey, fetchHashAndProgress, addToCache]
+	);
+
 	// Sends a TorBox-cached search-result torrent into the user's RD account via
 	// the debrid uploader service, which rewrites the torrent with de-infringed
 	// filenames so RD accepts it — which is why this works even on RD-blocked
@@ -637,6 +659,26 @@ export function useTorrentManagement(
 		[premiumizeKey, removeFromCache]
 	);
 
+	const deleteOc = useCallback(
+		async (hash: string) => {
+			if (!offcloudKey) return;
+
+			const torrents = await torrentDB.getAllByHash(hash);
+			for (const t of torrents) {
+				if (!t.id.startsWith('oc:')) continue;
+				await handleDeleteOcTorrent(offcloudKey, t.id);
+				await torrentDB.deleteByHash('oc', hash);
+				removeFromCache(t.id);
+				setHashAndProgress((prev) => {
+					const newHashAndProgress = { ...prev };
+					delete newHashAndProgress[`oc:${hash}`];
+					return newHashAndProgress;
+				});
+			}
+		},
+		[offcloudKey, removeFromCache]
+	);
+
 	return {
 		hashAndProgress,
 		fetchHashAndProgress,
@@ -644,10 +686,12 @@ export function useTorrentManagement(
 		addAd,
 		addTb,
 		addPm,
+		addOc,
 		sendTbToRd,
 		deleteRd,
 		deleteAd,
 		deleteTb,
 		deletePm,
+		deleteOc,
 	};
 }

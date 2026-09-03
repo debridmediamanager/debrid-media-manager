@@ -30,6 +30,7 @@ vi.mock('@/hooks/auth', () => ({
 	useAllDebridApiKey: vi.fn(() => null),
 	useTorBoxAccessToken: vi.fn(() => null),
 	usePremiumizeCredential: () => null,
+	useOffcloudApiKey: () => null,
 }));
 
 vi.mock('@/contexts/LibraryCacheContext', () => ({

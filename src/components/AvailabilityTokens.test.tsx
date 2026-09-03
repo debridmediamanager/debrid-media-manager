@@ -23,6 +23,7 @@ describe('AvailabilityTokens', () => {
 		expect(screen.queryByText('AD ✓')).not.toBeInTheDocument();
 		expect(screen.queryByText('TB ✓')).not.toBeInTheDocument();
 		expect(screen.queryByText('PM ✓')).not.toBeInTheDocument();
+		expect(screen.queryByText('OC ✓')).not.toBeInTheDocument();
 		expect(screen.queryByText('Any ✓')).not.toBeInTheDocument();
 	});
 
@@ -120,5 +121,49 @@ describe('AvailabilityTokens', () => {
 
 		expect(screen.getByText('PM ✓')).toBeInTheDocument();
 		expect(screen.queryByText('Any ✓')).not.toBeInTheDocument();
+	});
+
+	it('offers an Offcloud pill only once an Offcloud key exists', () => {
+		const { rerender } = render(
+			<AvailabilityTokens query="" onQueryChange={onQueryChange} rdKey="rd-key" />
+		);
+		expect(screen.queryByText('OC ✓')).not.toBeInTheDocument();
+
+		rerender(
+			<AvailabilityTokens
+				query=""
+				onQueryChange={onQueryChange}
+				rdKey="rd-key"
+				offcloudKey="oc-key"
+			/>
+		);
+
+		fireEvent.click(screen.getByText('OC ✓'));
+		expect(onQueryChange).toHaveBeenCalledWith('is:oc');
+		// Offcloud orange, far enough from AllDebrid's amber to tell apart.
+		expect(screen.getByText('OC ✓').className).toContain('[#f97316]');
+	});
+
+	it('shows only Offcloud for an Offcloud-only user, with no "Any"', () => {
+		render(<AvailabilityTokens query="" onQueryChange={onQueryChange} offcloudKey="oc-key" />);
+
+		expect(screen.getByText('OC ✓')).toBeInTheDocument();
+		expect(screen.queryByText('Any ✓')).not.toBeInTheDocument();
+	});
+
+	it('replaces an active Premiumize token with the Offcloud one', () => {
+		// The tokens are mutually exclusive: quickSearch ANDs every term, so
+		// "is:pm is:oc" would mean "cached in both".
+		render(
+			<AvailabilityTokens
+				query="1080p is:pm"
+				onQueryChange={onQueryChange}
+				premiumizeKey="pm-key"
+				offcloudKey="oc-key"
+			/>
+		);
+
+		fireEvent.click(screen.getByText('OC ✓'));
+		expect(onQueryChange).toHaveBeenCalledWith('1080p is:oc');
 	});
 });

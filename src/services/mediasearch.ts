@@ -19,6 +19,7 @@ export type SearchResult = {
 	adAvailable: boolean; // AllDebrid
 	tbAvailable: boolean; // Torbox
 	pmAvailable: boolean; // Premiumize
+	ocAvailable: boolean; // Offcloud
 	files: FileData[];
 	// `files` is whichever availability check answered last - the four run
 	// concurrently and each overwrites it. Filenames and sizes agree across
@@ -68,6 +69,7 @@ export interface EnrichedHashlistTorrent extends HashlistTorrent {
 	adAvailable: boolean;
 	tbAvailable: boolean; // TorBox
 	pmAvailable: boolean; // Premiumize
+	ocAvailable: boolean; // Offcloud
 	files: FileData[];
 	rdFiles?: FileData[];
 	tbFiles?: FileData[];

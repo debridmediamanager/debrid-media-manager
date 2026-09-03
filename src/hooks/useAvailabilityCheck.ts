@@ -1,4 +1,8 @@
 import { SearchResult } from '@/services/mediasearch';
+import {
+	checkOffcloudCache,
+	CACHE_CHECK_CHUNK_SIZE as OC_CACHE_CHECK_CHUNK_SIZE,
+} from '@/services/offcloud';
 import { CACHE_CHECK_CHUNK_SIZE, checkPremiumizeCache } from '@/services/premiumize';
 import { hasRecentRdRateLimits } from '@/services/realDebrid';
 import { checkCachedStatus, TorBoxCachedResponse } from '@/services/torbox';
@@ -14,7 +18,7 @@ import { getCachedTrackerStats, shouldIncludeTrackerStats } from '@/utils/tracke
 import { useCallback, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
-export type DebridService = 'RD' | 'AD' | 'TB' | 'PM';
+export type DebridService = 'RD' | 'AD' | 'TB' | 'PM' | 'OC';
 
 // RD retired /instantAvailability, so the only way to ask whether it holds a
 // hash is to add the torrent and delete it again — which means a sweep of a
@@ -63,12 +67,15 @@ const markAvailableServices = (
 				result.tbAvailable || Boolean(availableHashesByService.TB?.has(result.hash));
 			const pmAvailable =
 				result.pmAvailable || Boolean(availableHashesByService.PM?.has(result.hash));
+			const ocAvailable =
+				result.ocAvailable || Boolean(availableHashesByService.OC?.has(result.hash));
 
 			if (
 				rdAvailable === result.rdAvailable &&
 				adAvailable === result.adAvailable &&
 				tbAvailable === result.tbAvailable &&
-				pmAvailable === result.pmAvailable
+				pmAvailable === result.pmAvailable &&
+				ocAvailable === result.ocAvailable
 			) {
 				return result;
 			}
@@ -80,6 +87,7 @@ const markAvailableServices = (
 				adAvailable,
 				tbAvailable,
 				pmAvailable,
+				ocAvailable,
 			};
 			delete updated.trackerStats;
 			return updated;
@@ -94,6 +102,7 @@ export function useAvailabilityCheck(
 	adKey: string | null,
 	torboxKey: string | null,
 	premiumizeKey: string | null,
+	offcloudKey: string | null,
 	imdbId: string,
 	searchResults: SearchResult[],
 	setSearchResults: React.Dispatch<React.SetStateAction<SearchResult[]>>,
@@ -136,6 +145,7 @@ export function useAvailabilityCheck(
 			if (adKey) available.push('AD');
 			if (torboxKey) available.push('TB');
 			if (premiumizeKey) available.push('PM');
+			if (offcloudKey) available.push('OC');
 
 			if (!requested || requested.length === 0) {
 				return available;
@@ -144,7 +154,7 @@ export function useAvailabilityCheck(
 			const requestedSet = new Set(requested);
 			return available.filter((service) => requestedSet.has(service));
 		},
-		[rdKey, adKey, torboxKey, premiumizeKey]
+		[rdKey, adKey, torboxKey, premiumizeKey, offcloudKey]
 	);
 
 	const isServiceAvailable = useCallback((service: DebridService, result: SearchResult) => {
@@ -157,6 +167,8 @@ export function useAvailabilityCheck(
 				return Boolean(result.tbAvailable);
 			case 'PM':
 				return Boolean(result.pmAvailable);
+			case 'OC':
+				return Boolean(result.ocAvailable);
 			default:
 				return false;
 		}
@@ -210,6 +222,7 @@ export function useAvailabilityCheck(
 					adCheckResult,
 					tbCheckResult,
 					pmCheckResult,
+					ocCheckResult,
 					trackerStatsResult,
 				] = await Promise.allSettled([
 					// RD availability check
@@ -289,6 +302,22 @@ export function useAvailabilityCheck(
 							})()
 						: Promise.resolve({ isCachedInPM: Boolean(result.pmAvailable) }),
 
+					// Offcloud availability check. Read-only like Premiumize's -
+					// `/cache` adds nothing to the account - and answering with
+					// hits only, so a miss is an absent hash rather than a
+					// `cached: false`. Deliberately a second call even though
+					// Offcloud's cache is measured to *be* Premiumize's cache
+					// (identical to the hash, 2026-09-02): the two accounts,
+					// keys and outages are separate.
+					offcloudKey && servicesNeedingCheck.includes('OC')
+						? (async () => {
+								const [probe] = await checkOffcloudCache(offcloudKey, [
+									result.hash,
+								]);
+								return { isCachedInOC: Boolean(probe?.cached) };
+							})()
+						: Promise.resolve({ isCachedInOC: Boolean(result.ocAvailable) }),
+
 					// Tracker stats check (only if enabled and not already available)
 					(async () => {
 						if (
@@ -296,7 +325,8 @@ export function useAvailabilityCheck(
 							result.rdAvailable ||
 							result.adAvailable ||
 							result.tbAvailable ||
-							result.pmAvailable
+							result.pmAvailable ||
+							result.ocAvailable
 						) {
 							return null;
 						}
@@ -366,11 +396,20 @@ export function useAvailabilityCheck(
 					console.error('Premiumize availability check failed:', pmCheckResult.reason);
 				}
 
+				// Process Offcloud check result
+				let isCachedInOC = Boolean(result.ocAvailable);
+				if (ocCheckResult.status === 'fulfilled') {
+					isCachedInOC = ocCheckResult.value.isCachedInOC;
+				} else if (offcloudKey && servicesNeedingCheck.includes('OC')) {
+					console.error('Offcloud availability check failed:', ocCheckResult.reason);
+				}
+
 				const positiveAvailability: Partial<Record<DebridService, Set<string>>> = {};
 				if (isCachedInRD) positiveAvailability.RD = new Set([result.hash]);
 				if (isCachedInAD) positiveAvailability.AD = new Set([result.hash]);
 				if (isCachedInTB) positiveAvailability.TB = new Set([result.hash]);
 				if (isCachedInPM) positiveAvailability.PM = new Set([result.hash]);
+				if (isCachedInOC) positiveAvailability.OC = new Set([result.hash]);
 
 				if (Object.keys(positiveAvailability).length > 0 && isMounted.current) {
 					markAvailableServices(setSearchResults, sortFunction, positiveAvailability);
@@ -383,7 +422,8 @@ export function useAvailabilityCheck(
 					!isCachedInRD &&
 					!isCachedInAD &&
 					!isCachedInTB &&
-					!isCachedInPM
+					!isCachedInPM &&
+					!isCachedInOC
 				) {
 					const trackerStats = trackerStatsResult.value;
 
@@ -410,7 +450,8 @@ export function useAvailabilityCheck(
 					!isCachedInRD &&
 					!isCachedInAD &&
 					!isCachedInTB &&
-					!isCachedInPM
+					!isCachedInPM &&
+					!isCachedInOC
 				) {
 					console.error('Failed to get tracker stats:', trackerStatsResult.reason);
 				}
@@ -482,6 +523,7 @@ export function useAvailabilityCheck(
 			adKey,
 			torboxKey,
 			premiumizeKey,
+			offcloudKey,
 			searchResults,
 			setSearchResults,
 			hashAndProgress,
@@ -557,12 +599,16 @@ export function useAvailabilityCheck(
 			const pmTargets = services.includes('PM')
 				? torrentsToCheck.filter((r) => !r.pmAvailable)
 				: [];
+			const ocTargets = services.includes('OC')
+				? torrentsToCheck.filter((r) => !r.ocAvailable)
+				: [];
 
 			const checkProgress: Record<DebridService, { completed: number; total: number }> = {
 				RD: { completed: 0, total: rdTargets.length },
 				AD: { completed: 0, total: adTargets.length },
 				TB: { completed: 0, total: tbTargets.length },
 				PM: { completed: 0, total: pmTargets.length },
+				OC: { completed: 0, total: ocTargets.length },
 			};
 			let statsProgress = { completed: 0, total: 0 };
 			let torrentsWithSeeds = 0;
@@ -571,6 +617,7 @@ export function useAvailabilityCheck(
 				AD: 0,
 				TB: 0,
 				PM: 0,
+				OC: 0,
 			};
 
 			const updateProgressMessage = () => {
@@ -613,6 +660,7 @@ export function useAvailabilityCheck(
 					adCheckResults,
 					tbCheckResults,
 					pmCheckResults,
+					ocCheckResults,
 					trackerStatsResults,
 				] = await Promise.all([
 					// RD availability checks, one at a time and paced — see
@@ -822,6 +870,51 @@ export function useAvailabilityCheck(
 							})()
 						: Promise.resolve([]),
 
+					// Offcloud availability checks. Same shape as Premiumize's -
+					// one batch POST, nothing added to the account - but the
+					// reply carries hits only, so `checkOffcloudCache` rebuilds
+					// per-hash answers by set membership and a miss is simply an
+					// absent hash. Kept as its own request even though Offcloud
+					// serves Premiumize's cache: separate keys, separate outages.
+					services.includes('OC')
+						? (async () => {
+								const cached = new Set<string>();
+								for (
+									let i = 0;
+									i < ocTargets.length;
+									i += OC_CACHE_CHECK_CHUNK_SIZE
+								) {
+									const batch = ocTargets.slice(i, i + OC_CACHE_CHECK_CHUNK_SIZE);
+									const probes = await checkOffcloudCache(
+										offcloudKey!,
+										batch.map((t) => t.hash)
+									);
+									for (const probe of probes) {
+										if (probe.cached) cached.add(probe.hash.toLowerCase());
+									}
+									checkProgress.OC = {
+										completed: Math.min(
+											i + OC_CACHE_CHECK_CHUNK_SIZE,
+											ocTargets.length
+										),
+										total: ocTargets.length,
+									};
+									updateProgressMessage();
+								}
+
+								return ocTargets.map((result) => {
+									const isCachedInOC = cached.has(result.hash.toLowerCase());
+									if (isCachedInOC) realtimeAvailable.OC++;
+									removeChecking(result.hash, ['OC']);
+									return {
+										item: result,
+										success: true,
+										result: { result, isCachedInOC },
+									};
+								});
+							})()
+						: Promise.resolve([]),
+
 					// Tracker stats checks (only for non-available torrents)
 					(async () => {
 						if (!shouldIncludeTrackerStats()) {
@@ -831,7 +924,11 @@ export function useAvailabilityCheck(
 						// Filter out torrents that are already available in any service
 						const torrentsNeedingStats = torrentsToCheck.filter(
 							(t) =>
-								!t.rdAvailable && !t.adAvailable && !t.tbAvailable && !t.pmAvailable
+								!t.rdAvailable &&
+								!t.adAvailable &&
+								!t.tbAvailable &&
+								!t.pmAvailable &&
+								!t.ocAvailable
 						);
 
 						if (torrentsNeedingStats.length === 0) {
@@ -898,6 +995,9 @@ export function useAvailabilityCheck(
 					...pmCheckResults
 						.filter((r) => r.success && r.result?.isCachedInPM)
 						.map((r) => r.item.hash),
+					...ocCheckResults
+						.filter((r) => r.success && r.result?.isCachedInOC)
+						.map((r) => r.item.hash),
 				]);
 
 				// Apply tracker stats only to non-cached torrents
@@ -919,6 +1019,7 @@ export function useAvailabilityCheck(
 					...adCheckResults,
 					...tbCheckResults,
 					...pmCheckResults,
+					...ocCheckResults,
 				];
 				const succeeded = allResults.filter((r) => r.success);
 				const failed = allResults.filter((r) => !r.success);
@@ -932,6 +1033,7 @@ export function useAvailabilityCheck(
 					AD: 0,
 					TB: 0,
 					PM: 0,
+					OC: 0,
 				};
 
 				// Update database cache and get final count
@@ -948,6 +1050,9 @@ export function useAvailabilityCheck(
 					const pmSuccessfulHashes = pmCheckResults
 						.filter((r) => r.success && r.result?.isCachedInPM)
 						.map((r) => r.item.hash);
+					const ocSuccessfulHashes = ocCheckResults
+						.filter((r) => r.success && r.result?.isCachedInOC)
+						.map((r) => r.item.hash);
 
 					const positiveAvailability: Partial<Record<DebridService, Set<string>>> = {};
 					if (rdSuccessfulHashes.length > 0) {
@@ -961,6 +1066,10 @@ export function useAvailabilityCheck(
 					if (pmSuccessfulHashes.length > 0) {
 						positiveAvailability.PM = new Set(pmSuccessfulHashes);
 						availableByService.PM = pmSuccessfulHashes.length;
+					}
+					if (ocSuccessfulHashes.length > 0) {
+						positiveAvailability.OC = new Set(ocSuccessfulHashes);
+						availableByService.OC = ocSuccessfulHashes.length;
 					}
 					if (tbSuccessfulHashes.length > 0) {
 						positiveAvailability.TB = new Set(tbSuccessfulHashes);
@@ -1115,6 +1224,7 @@ export function useAvailabilityCheck(
 			adKey,
 			torboxKey,
 			premiumizeKey,
+			offcloudKey,
 			setSearchResults,
 			hashAndProgress,
 			addRd,

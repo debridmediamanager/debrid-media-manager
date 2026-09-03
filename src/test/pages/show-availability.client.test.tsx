@@ -79,6 +79,7 @@ vi.mock('@/hooks/auth', () => ({
 	useAllDebridApiKey: () => 'ad-token',
 	useTorBoxAccessToken: () => 'tb-token',
 	usePremiumizeCredential: () => null,
+	useOffcloudApiKey: () => null,
 }));
 
 vi.mock('@/hooks/useExternalSources', () => ({

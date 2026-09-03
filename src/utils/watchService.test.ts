@@ -26,7 +26,9 @@ import {
 	buildLinkWatchUrl,
 	getBiggestVideoFile,
 	openWatch,
+	pickInfoService,
 	pickWatchService,
+	WATCH_SERVICE_LABEL,
 	watchKeyFor,
 } from './watchService';
 
@@ -35,6 +37,7 @@ const cached = (over: Partial<Record<string, boolean>> = {}) => ({
 	adAvailable: false,
 	tbAvailable: false,
 	pmAvailable: false,
+	ocAvailable: false,
 	...over,
 });
 
@@ -503,5 +506,53 @@ describe('Premiumize in the watch order', () => {
 	it('hands the Premiumize key to the pm service', () => {
 		expect(watchKeyFor('pm', { rdKey: 'rd', premiumizeKey: 'pm' })).toBe('pm');
 		expect(watchKeyFor('pm', { rdKey: 'rd' })).toBeNull();
+	});
+});
+describe('Offcloud in the watch order', () => {
+	it('serves a stream when Offcloud is the only service that has it', () => {
+		expect(pickWatchService(cached({ ocAvailable: true }), { offcloudKey: 'oc' })).toBe('oc');
+	});
+
+	it('prefers Premiumize over Offcloud for the very same bytes', () => {
+		// The two serve the same energycdn objects, so the stream is identical
+		// either way - but Premiumize resolves it with one stateless `directdl`
+		// while Offcloud has to add the item and leaves a cloud entry behind.
+		// Given a free choice, take the path that mutates nothing.
+		expect(
+			pickWatchService(cached({ pmAvailable: true, ocAvailable: true }), {
+				premiumizeKey: 'pm',
+				offcloudKey: 'oc',
+			})
+		).toBe('pm');
+	});
+
+	it('never takes playback away from a service the user already had', () => {
+		const keys = {
+			rdKey: 'rd',
+			adKey: 'ad',
+			torboxKey: 'tb',
+			premiumizeKey: 'pm',
+			offcloudKey: 'oc',
+		};
+		expect(pickWatchService(cached({ rdAvailable: true, ocAvailable: true }), keys)).toBe('rd');
+		expect(pickWatchService(cached({ adAvailable: true, ocAvailable: true }), keys)).toBe('ad');
+		expect(pickWatchService(cached({ tbAvailable: true, ocAvailable: true }), keys)).toBe('tb');
+	});
+
+	it('ignores a cached Offcloud result when the user has no Offcloud key', () => {
+		expect(pickWatchService(cached({ ocAvailable: true }), { rdKey: 'rd' })).toBeNull();
+	});
+
+	it('hands the Offcloud key to the oc service', () => {
+		expect(watchKeyFor('oc', { rdKey: 'rd', offcloudKey: 'oc' })).toBe('oc');
+		expect(watchKeyFor('oc', { rdKey: 'rd' })).toBeNull();
+	});
+
+	it('falls back to Offcloud in the info modal when it is the only key', () => {
+		expect(pickInfoService(cached(), { offcloudKey: 'oc' })).toBe('oc');
+	});
+
+	it('labels the service by name', () => {
+		expect(WATCH_SERVICE_LABEL.oc).toBe('Offcloud');
 	});
 });

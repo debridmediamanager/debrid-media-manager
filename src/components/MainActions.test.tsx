@@ -231,6 +231,24 @@ describe('MainActions', () => {
 		expect(screen.queryByRole('link', { name: /requests/i })).toBeNull();
 	});
 
+	it('hides the request board from an Offcloud-only user, who has nothing to fulfil with', () => {
+		// Offcloud is not even a prop of this component: like Premiumize, the
+		// uploader cannot source a transfer from it, so an Offcloud-only login
+		// carries no fulfiller signal and the board never appears. This asserts
+		// that absence — the row itself is gated on rd/tb/ad.
+		render(
+			<MainActions
+				rdUser={null}
+				tbUser={null}
+				adUser={false}
+				pmUser={false}
+				isLoading={false}
+			/>
+		);
+
+		expect(screen.queryByRole('link', { name: /requests/i })).toBeNull();
+	});
+
 	it('hides the request board from a Real-Debrid-only user, who asks from the search result instead', () => {
 		render(
 			<MainActions

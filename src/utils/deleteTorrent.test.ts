@@ -1,4 +1,5 @@
 import { deleteMagnet as deleteAdTorrent } from '@/services/allDebrid';
+import { removeOffcloudCloud } from '@/services/offcloud';
 import {
 	deletePremiumizeFolder,
 	deletePremiumizeItem,
@@ -10,6 +11,7 @@ import toast from 'react-hot-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	handleDeleteAdTorrent,
+	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
@@ -20,6 +22,7 @@ vi.mock('@/services/allDebrid');
 vi.mock('@/services/realDebrid');
 vi.mock('@/services/torbox');
 vi.mock('@/services/premiumize');
+vi.mock('@/services/offcloud');
 vi.mock('react-hot-toast', () => {
 	const fn: any = vi.fn((message: string) => {});
 	fn.error = vi.fn();
@@ -438,6 +441,51 @@ describe('deleteTorrent utilities', () => {
 			expect(toast.error).toHaveBeenCalledWith(
 				'Premiumize error: An unknown error occurred.'
 			);
+		});
+	});
+	describe('handleDeleteOcTorrent', () => {
+		const ocKey = 'test-oc-key';
+
+		it('removes the item behind an oc: row', async () => {
+			vi.mocked(removeOffcloudCloud).mockResolvedValue({ success: true });
+
+			const ok = await handleDeleteOcTorrent(ocKey, 'oc:pQR7Zs3');
+
+			expect(ok).toBe(true);
+			expect(removeOffcloudCloud).toHaveBeenCalledWith(ocKey, 'pQR7Zs3');
+			expect(toast).toHaveBeenCalledWith(
+				'Deleted oc:pQR7Zs3 from Offcloud.',
+				expect.any(Object)
+			);
+		});
+
+		it('never builds the destructive URL itself - Offcloud deletes on a GET', async () => {
+			// `GET /api/cloud/remove/<id>` destroys the item, so anything that
+			// resolves links would delete a user's content by following one. The
+			// request id goes to the client and the URL is never assembled, logged
+			// or rendered here.
+			vi.mocked(removeOffcloudCloud).mockResolvedValue({ success: true });
+
+			await handleDeleteOcTorrent(ocKey, 'oc:pQR7Zs3', true);
+
+			const toasted = vi.mocked(toast).mock.calls.flat().join(' ');
+			expect(toasted).not.toContain('cloud/remove');
+			expect(toasted).not.toContain('offcloud.com');
+			expect(toast).not.toHaveBeenCalled();
+		});
+
+		it('refuses a row that is not an Offcloud row', async () => {
+			const ok = await handleDeleteOcTorrent(ocKey, 'pm:tabc');
+
+			expect(ok).toBe(false);
+			expect(removeOffcloudCloud).not.toHaveBeenCalled();
+		});
+
+		it('reports a failure without throwing', async () => {
+			vi.mocked(removeOffcloudCloud).mockRejectedValue(new Error('NOAUTH'));
+
+			expect(await handleDeleteOcTorrent(ocKey, 'oc:pQR7Zs3')).toBe(false);
+			expect(toast.error).toHaveBeenCalledWith('Offcloud error: NOAUTH');
 		});
 	});
 });

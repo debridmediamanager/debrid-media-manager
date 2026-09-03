@@ -1,4 +1,12 @@
 import { unlockLink } from '@/services/allDebrid';
+import {
+	addOffcloudCloud,
+	exploreOffcloudCloud,
+	getOffcloudCacheInfo,
+	getOffcloudCloudStatus,
+	isValidBtih,
+	joinExploreWithCacheInfo,
+} from '@/services/offcloud';
 import { directDownloadPremiumize } from '@/services/premiumize';
 import {
 	addHashAsMagnet,
@@ -16,10 +24,15 @@ import {
 
 // 'tbw' is a TorBox web download, which lives in its own namespace with its own
 // list and its own download-link endpoint — it cannot be resolved as a torrent.
-export type WatchService = 'rd' | 'ad' | 'tb' | 'tbw' | 'pm';
+export type WatchService = 'rd' | 'ad' | 'tb' | 'tbw' | 'pm' | 'oc';
 
 export const isWatchService = (value: unknown): value is WatchService =>
-	value === 'rd' || value === 'ad' || value === 'tb' || value === 'tbw' || value === 'pm';
+	value === 'rd' ||
+	value === 'ad' ||
+	value === 'tb' ||
+	value === 'tbw' ||
+	value === 'pm' ||
+	value === 'oc';
 
 const basename = (path: string) => path.split('/').pop() || path;
 
@@ -205,6 +218,97 @@ const getPmInstantIntent = async (
 	}
 };
 
+/**
+ * How long a freshly added Offcloud item is given to reach `downloaded` before
+ * this gives up on it.
+ *
+ * Offcloud accepts a syntactically invalid magnet with a `200` and parks it in
+ * `created` with `message: "Loading..."` **forever** — nothing upstream ever
+ * fails it. `isValidBtih` refuses the shapes that are knowably bad, but a valid
+ * hash for content nobody is seeding behaves the same way, so an unbounded poll
+ * would hold a watch tab open indefinitely. Fifteen seconds is well past the
+ * cached case (which finishes inside the add response, no poll at all) and short
+ * enough that "it is downloading" arrives as an answer rather than a hang.
+ */
+const OC_STATUS_POLL_TIMEOUT_MS = 15_000;
+const OC_STATUS_POLL_INTERVAL_MS = 1_500;
+
+/**
+ * Resolves an Offcloud hash to a playable URL.
+ *
+ * Unlike Premiumize's stateless `directdl`, Offcloud has no probe that returns
+ * links: the item has to exist in the account before `/cloud/explore` will name
+ * it. The add is idempotent while the item lives (the same magnet returns the
+ * same `requestId`), so replaying a watch costs nothing, and a cached magnet
+ * answers `downloaded` inside the add response — which is the whole path for
+ * anything the availability sweep flagged.
+ *
+ * Explore returns a bare array of signed CDN URLs with no names and no sizes, so
+ * the file listing comes from a second, non-destructive `/cache/info` call and
+ * the two are paired on the filename that sits URL-encoded at the end of the CDN
+ * path. The resulting URL is keyless, any-IP and honours Range, so it is handed
+ * to the player as-is.
+ */
+const getOcInstantIntent = async (
+	ocKey: string,
+	hash: string,
+	os: string,
+	player: string,
+	fileName?: string
+): Promise<{ intent?: string; error?: string }> => {
+	if (!isValidBtih(hash)) {
+		// Offcloud would accept this and create a zombie; refuse it here.
+		return { error: `"${hash}" is not a valid info hash` };
+	}
+	try {
+		const added = await addOffcloudCloud(ocKey, hash);
+		if (!added.requestId) {
+			return { error: `Offcloud accepted ${hash} without a request id` };
+		}
+
+		let status = added.status;
+		const deadline = Date.now() + OC_STATUS_POLL_TIMEOUT_MS;
+		while (status !== 'downloaded' && Date.now() < deadline) {
+			if (status === 'error' || status === 'canceled') {
+				return { error: `Offcloud reported '${status}' for ${hash}` };
+			}
+			await new Promise((resolve) => setTimeout(resolve, OC_STATUS_POLL_INTERVAL_MS));
+			status = (await getOffcloudCloudStatus(ocKey, added.requestId)).status;
+		}
+		if (status !== 'downloaded') {
+			return {
+				error: `Offcloud is still '${status}' after ${OC_STATUS_POLL_TIMEOUT_MS / 1000}s — try again once it finishes`,
+			};
+		}
+
+		const [links, [info]] = await Promise.all([
+			exploreOffcloudCloud(ocKey, added.requestId),
+			// Non-destructive, and the only way to learn names and sizes: explore
+			// hands back links and nothing else. A failure here is not fatal — the
+			// join still yields decoded basenames off the URLs themselves.
+			getOffcloudCacheInfo(ocKey, [hash]).catch(() => [null]),
+		]);
+		const files = joinExploreWithCacheInfo(links, info?.files ?? []);
+		if (files.length === 0) {
+			return { error: `No Offcloud files found for ${hash}` };
+		}
+
+		const target = basename(fileName || '').toLowerCase();
+		const byName = target
+			? files.find((file) => file.filename.toLowerCase() === target)
+			: undefined;
+		// Explore's order is Offcloud's, not "biggest first", so a first-file
+		// fallback hands the user whatever sorts first — a poster or a sample.
+		const biggest = files.reduce((best, file) =>
+			(file.size ?? 0) > (best.size ?? 0) ? file : best
+		);
+		const picked = byName ?? biggest;
+		return { intent: buildPlayerIntent(os, player, picked.link, picked.link) };
+	} catch (e: any) {
+		return { error: `Failed to get Offcloud stream: ${e.message || e}` };
+	}
+};
+
 const getRdInstantIntent = async (
 	rdKey: string,
 	hash: string,
@@ -272,6 +376,9 @@ export const getInstantIntent = async (
 	if (service === 'pm') {
 		return getPmInstantIntent(key, hash, os, player, fileName);
 	}
+	if (service === 'oc') {
+		return getOcInstantIntent(key, hash, os, player, fileName);
+	}
 	if (service === 'ad') {
 		return {
 			error: 'AllDebrid magnets must be prepared in the browser; call /api/watch with a link',
@@ -299,9 +406,11 @@ export const getIntent = async (
 	if (service === 'tb' || service === 'tbw') {
 		return { error: 'TorBox links are resolved by hash; call /api/watch/instant instead' };
 	}
-	if (service === 'pm') {
+	if (service === 'pm' || service === 'oc') {
 		// A Premiumize CDN link is already the playable URL: no auth, no
 		// redemption step, and Range works. There is nothing to unrestrict.
+		// Offcloud's links are the same objects on the same CDN (energycdn),
+		// measured keyless and any-IP the same way, so they take the same path.
 		return { intent: buildPlayerIntent(os, player, link, link) };
 	}
 	if (service === 'ad') {

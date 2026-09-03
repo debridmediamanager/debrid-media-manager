@@ -14,6 +14,7 @@ const {
 	mockShouldIncludeTrackerStats,
 	mockProcessWithConcurrency,
 	mockCheckCachedStatus,
+	mockCheckOffcloudCache,
 	mockDelay,
 	mockHasRecentRdRateLimits,
 	toastFunction,
@@ -41,6 +42,7 @@ const {
 		mockShouldIncludeTrackerStats: vi.fn(),
 		mockProcessWithConcurrency: vi.fn(),
 		mockCheckCachedStatus: vi.fn(),
+		mockCheckOffcloudCache: vi.fn(),
 		mockDelay: vi.fn(),
 		mockHasRecentRdRateLimits: vi.fn(),
 		toastFunction: toastFn,
@@ -77,6 +79,11 @@ vi.mock('@/services/torbox', () => ({
 	TorBoxCachedResponse: {},
 }));
 
+vi.mock('@/services/offcloud', () => ({
+	checkOffcloudCache: mockCheckOffcloudCache,
+	CACHE_CHECK_CHUNK_SIZE: 1000,
+}));
+
 vi.mock('@/services/realDebrid', () => ({
 	hasRecentRdRateLimits: mockHasRecentRdRateLimits,
 }));
@@ -95,6 +102,7 @@ const createSearchResult = (overrides: Partial<SearchResult> = {}): SearchResult
 	adAvailable: overrides.adAvailable ?? false,
 	tbAvailable: overrides.tbAvailable ?? false,
 	pmAvailable: false,
+	ocAvailable: overrides.ocAvailable ?? false,
 	files: overrides.files ?? [],
 	noVideos: overrides.noVideos ?? false,
 	medianFileSize: overrides.medianFileSize ?? 1024,
@@ -147,6 +155,8 @@ describe('useAvailabilityCheck', () => {
 		mockToast.dismiss.mockClear();
 		mockToastCall.mockClear();
 		mockCheckCachedStatus.mockReset();
+		mockCheckOffcloudCache.mockReset();
+		mockCheckOffcloudCache.mockResolvedValue([]);
 		mockDelay.mockReset();
 		mockDelay.mockResolvedValue(undefined);
 		mockHasRecentRdRateLimits.mockReset();
@@ -220,6 +230,7 @@ describe('useAvailabilityCheck', () => {
 			adKey?: string | null;
 			torboxKey?: string | null;
 			premiumizeKey?: string | null;
+			offcloudKey?: string | null;
 			hashAndProgress?: Record<string, number>;
 		} = {}
 	) =>
@@ -229,6 +240,7 @@ describe('useAvailabilityCheck', () => {
 				overrides.adKey !== undefined ? overrides.adKey : 'ad-key',
 				overrides.torboxKey !== undefined ? overrides.torboxKey : 'tb-key',
 				overrides.premiumizeKey !== undefined ? overrides.premiumizeKey : null,
+				overrides.offcloudKey !== undefined ? overrides.offcloudKey : null,
 				'tt123',
 				searchResults,
 				setSearchResults,
@@ -301,6 +313,7 @@ describe('useAvailabilityCheck', () => {
 				useAvailabilityCheck(
 					null,
 					'ad-key',
+					null,
 					null,
 					null,
 					'tt123',
@@ -1137,6 +1150,96 @@ describe('useAvailabilityCheck', () => {
 			// But the response was not "cached" so the isCachedInRD flag is false
 			expect(addRd).toHaveBeenCalled();
 			expect(deleteRd).toHaveBeenCalled();
+		});
+	});
+	// =========================================================================
+	// Offcloud
+	// =========================================================================
+
+	describe('Offcloud', () => {
+		it('marks a row available from a single-row probe', async () => {
+			mockCheckOffcloudCache.mockResolvedValue([{ hash: 'hash-1', cached: true }]);
+			const { result } = renderAvailabilityHook({
+				rdKey: null,
+				adKey: null,
+				torboxKey: null,
+				offcloudKey: 'oc-key',
+			});
+
+			await act(async () => {
+				await result.current.checkServiceAvailability(searchResults[0], ['OC']);
+			});
+
+			expect(mockCheckOffcloudCache).toHaveBeenCalledWith('oc-key', ['hash-1']);
+			expect(searchResults.find((r) => r.hash === 'hash-1')?.ocAvailable).toBe(true);
+		});
+
+		it('marks by set membership, so a miss is an absent hash', async () => {
+			// `/cache` replies with hits only. `checkOffcloudCache` has already
+			// rebuilt one answer per input, and this consumes it that way: an
+			// answer that never mentions hash-2 must leave hash-2 uncached rather
+			// than shifting hash-1's answer onto it.
+			mockCheckOffcloudCache.mockResolvedValue([
+				{ hash: 'hash-1', cached: true },
+				{ hash: 'hash-2', cached: false },
+			]);
+			const { result } = renderAvailabilityHook({
+				rdKey: null,
+				adKey: null,
+				torboxKey: null,
+				offcloudKey: 'oc-key',
+			});
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['OC']);
+			});
+
+			expect(searchResults.find((r) => r.hash === 'hash-1')?.ocAvailable).toBe(true);
+			expect(searchResults.find((r) => r.hash === 'hash-2')?.ocAvailable).toBe(false);
+		});
+
+		it('ignores a hash Offcloud volunteered that was never asked about', async () => {
+			mockCheckOffcloudCache.mockResolvedValue([
+				{ hash: 'someone-elses-hash', cached: true },
+				{ hash: 'hash-2', cached: true },
+			]);
+			const { result } = renderAvailabilityHook({
+				rdKey: null,
+				adKey: null,
+				torboxKey: null,
+				offcloudKey: 'oc-key',
+			});
+
+			await act(async () => {
+				await result.current.checkServiceAvailabilityBulk(searchResults, ['OC']);
+			});
+
+			expect(searchResults.find((r) => r.hash === 'hash-1')?.ocAvailable).toBe(false);
+			expect(searchResults.find((r) => r.hash === 'hash-2')?.ocAvailable).toBe(true);
+		});
+
+		it('never probes Offcloud without an Offcloud key', async () => {
+			const { result } = renderAvailabilityHook({ offcloudKey: null });
+
+			await act(async () => {
+				await result.current.checkServiceAvailability(searchResults[0], ['OC']);
+			});
+
+			expect(mockCheckOffcloudCache).not.toHaveBeenCalled();
+			expect(mockToast.error).toHaveBeenCalledWith(
+				'No services available for availability check.'
+			);
+		});
+
+		it('tracks OC in the per-row checking state', async () => {
+			const { result } = renderAvailabilityHook({
+				rdKey: null,
+				adKey: null,
+				torboxKey: null,
+				offcloudKey: 'oc-key',
+			});
+
+			expect(result.current.isHashServiceChecking('hash-1', 'OC')).toBe(false);
 		});
 	});
 });

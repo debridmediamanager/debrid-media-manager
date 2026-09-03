@@ -8,12 +8,14 @@ interface AvailabilityTokensProps {
 	adKey?: string | null;
 	torboxKey?: string | null;
 	premiumizeKey?: string | null;
+	offcloudKey?: string | null;
 }
 
 // Service colours match the library's torrent prefix badges (see utils/results.tsx):
-// RD green, AD amber, TB indigo, PM the dark red of Premiumize's own icon.
-// Written out in full because Tailwind only keeps class names it can find as
-// literals.
+// RD green, AD amber, TB indigo, PM the dark red of Premiumize's own icon, OC
+// the orange of Offcloud's - far enough from AD's amber to tell apart in a badge
+// row, which is the whole point of the coding. Written out in full because
+// Tailwind only keeps class names it can find as literals.
 const SERVICE_STYLES = {
 	rd: {
 		active: 'border-[#b5d496] bg-[#b5d496] text-black',
@@ -31,6 +33,10 @@ const SERVICE_STYLES = {
 		active: 'border-[#aa0000] bg-[#aa0000] text-white',
 		idle: 'border-[#aa0000] bg-[#aa0000]/20 text-[#f2a0a0] hover:bg-[#aa0000]/40',
 	},
+	oc: {
+		active: 'border-[#f97316] bg-[#f97316] text-black',
+		idle: 'border-[#f97316] bg-[#f97316]/10 text-[#f97316] hover:bg-[#f97316]/25',
+	},
 	// "any" is not a service, so it stays neutral rather than borrowing a colour
 	any: {
 		active: 'border-gray-300 bg-gray-200 text-black',
@@ -45,6 +51,7 @@ const AvailabilityTokens: FC<AvailabilityTokensProps> = ({
 	adKey,
 	torboxKey,
 	premiumizeKey,
+	offcloudKey,
 }) => {
 	// Availability is only ever checked for services the user has a key for, so a
 	// button for an unconfigured one would always filter down to nothing
@@ -76,6 +83,13 @@ const AvailabilityTokens: FC<AvailabilityTokensProps> = ({
 			title: 'Show only results cached in Premiumize',
 			style: SERVICE_STYLES.pm,
 			key: premiumizeKey,
+		},
+		{
+			token: 'is:oc',
+			label: 'OC',
+			title: 'Show only results cached in Offcloud',
+			style: SERVICE_STYLES.oc,
+			key: offcloudKey,
 		},
 	].filter((service) => !!service.key);
 

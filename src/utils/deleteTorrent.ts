@@ -1,4 +1,5 @@
 import { deleteMagnet as deleteAdTorrent } from '@/services/allDebrid';
+import { removeOffcloudCloud } from '@/services/offcloud';
 import {
 	deletePremiumizeFolder,
 	deletePremiumizeItem,
@@ -132,6 +133,51 @@ export const handleDeletePmTorrent = async (
 		const apiError = getErrorMessage(error);
 		toast.error(
 			apiError ? `Premiumize error: ${apiError}` : `Failed to delete ${id} in Premiumize.`
+		);
+		return false;
+	}
+};
+
+/**
+ * Removes an Offcloud cloud item.
+ *
+ * **Offcloud's delete is a GET** - `GET /api/cloud/remove/<requestId>` - which
+ * makes the URL itself destructive: anything that resolves links (a prefetcher,
+ * a log scraper, a chat client unfurling a paste, a browser speculative fetch)
+ * would destroy a user's item just by following it. That is why this goes
+ * through `removeOffcloudCloud` and why the URL is never built here, never
+ * logged, and never rendered as an `href`. Only an explicit user action reaches
+ * this function.
+ *
+ * Removal is complete and immediate: status and explore both 404 afterwards and
+ * the item leaves the history. The signed CDN links it minted keep serving,
+ * which is measured behaviour and not a leak this code can close.
+ */
+export const handleDeleteOcTorrent = async (
+	ocKey: string,
+	id: string,
+	disableToast: boolean = false
+): Promise<boolean> => {
+	// Row ids are `oc:<requestId>`. Parsing lives inline rather than in a helper
+	// because there is only one row shape to parse - unlike Premiumize, whose
+	// rows can be a transfer, a folder or a bare file.
+	const requestId = id.startsWith('oc:') ? id.slice(3) : '';
+	if (!requestId) {
+		toast.error(`Unrecognised Offcloud row ${id}.`);
+		return false;
+	}
+	try {
+		await removeOffcloudCloud(ocKey, requestId);
+		if (!disableToast) toast(`Deleted ${id} from Offcloud.`, magnetToastOptions);
+		return true;
+	} catch (error) {
+		console.error(
+			'Error deleting Offcloud item:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		const apiError = getErrorMessage(error);
+		toast.error(
+			apiError ? `Offcloud error: ${apiError}` : `Failed to delete ${id} in Offcloud.`
 		);
 		return false;
 	}

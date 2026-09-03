@@ -29,6 +29,7 @@ const baseResult: SearchResult = {
 	adAvailable: false,
 	tbAvailable: false,
 	pmAvailable: false,
+	ocAvailable: false,
 	files: [{ fileId: 1, filename: 'Sample.mkv', filesize: 1024 * 10 }],
 	noVideos: false,
 	medianFileSize: 10,
@@ -46,6 +47,7 @@ const renderComponent = (override?: Partial<React.ComponentProps<typeof MovieSea
 		adKey: null,
 		torboxKey: null,
 		premiumizeKey: null,
+		offcloudKey: null,
 		player: '',
 		hashAndProgress: {},
 		handleShowInfo: vi.fn(),
@@ -56,10 +58,12 @@ const renderComponent = (override?: Partial<React.ComponentProps<typeof MovieSea
 		addAd: vi.fn().mockResolvedValue(undefined),
 		addTb: vi.fn().mockResolvedValue(undefined),
 		addPm: vi.fn().mockResolvedValue(undefined),
+		addOc: vi.fn().mockResolvedValue(undefined),
 		deleteRd: vi.fn().mockResolvedValue(undefined),
 		deleteAd: vi.fn().mockResolvedValue(undefined),
 		deleteTb: vi.fn().mockResolvedValue(undefined),
 		deletePm: vi.fn().mockResolvedValue(undefined),
+		deleteOc: vi.fn().mockResolvedValue(undefined),
 		imdbId: 'tt123',
 		isHashServiceChecking: () => false,
 		...override,
@@ -454,6 +458,96 @@ describe('MovieSearchResults', () => {
 			});
 
 			expect(screen.queryByTitle('Watch via Premiumize')).toBeNull();
+		});
+	});
+	describe('Offcloud', () => {
+		it('adds and removes through the Offcloud handlers', async () => {
+			const { props } = renderComponent({
+				offcloudKey: 'oc-key',
+				filteredResults: [{ ...baseResult, ocAvailable: true }],
+			});
+
+			await userEvent.click(screen.getByRole('button', { name: /Instant OC/i }));
+			await waitFor(() => expect(props.addOc).toHaveBeenCalledWith('hash1'));
+		});
+
+		it('offers RM instead of add once the row is in the Offcloud library', async () => {
+			const { props } = renderComponent({
+				offcloudKey: 'oc-key',
+				hashAndProgress: { 'oc:hash1': 100 },
+			});
+
+			expect(screen.queryByRole('button', { name: /DL with OC/i })).toBeNull();
+			await userEvent.click(screen.getByRole('button', { name: /OC \(100%\)/i }));
+			await waitFor(() => expect(props.deleteOc).toHaveBeenCalledWith('hash1'));
+		});
+
+		it('styles the add button with a literal class, never an assembled one', () => {
+			// Tailwind drops `bg-${color}-900/30` from the build silently, so the
+			// three states are written out in full.
+			renderComponent({
+				offcloudKey: 'oc-key',
+				filteredResults: [{ ...baseResult, ocAvailable: true }],
+			});
+
+			const button = screen.getByRole('button', { name: /Instant OC/i });
+			expect(button.className).toContain('border-green-500');
+			expect(button.className).not.toContain('${');
+		});
+
+		it('offers no per-row Offcloud check button', () => {
+			// Page load already probes OC for every row with the same `/cache`
+			// call a per-row button would repeat, so there is nothing left for it
+			// to find - the same reason Premiumize's was removed in d3d6dd49.
+			renderComponent({
+				rdKey: 'rd-key',
+				offcloudKey: 'oc-key',
+				filteredResults: [{ ...baseResult, rdAvailable: false, ocAvailable: false }],
+			});
+
+			expect(screen.queryByRole('button', { name: /Check OC/i })).toBeNull();
+			expect(screen.getByRole('button', { name: /Check RD/i })).toBeTruthy();
+		});
+
+		it('hands the Offcloud key to openWatch for an OC-cached result', async () => {
+			// The render-time and click-time service picks are two separate calls;
+			// leaving the key out of the second silently does nothing on click.
+			openWatchSpy.mockClear();
+			renderComponent({
+				rdKey: null,
+				offcloudKey: 'oc-key',
+				player: 'windows/vlc',
+				filteredResults: [{ ...baseResult, rdAvailable: false, ocAvailable: true }],
+			});
+
+			await userEvent.click(screen.getByTitle('Watch via Offcloud'));
+
+			await waitFor(() => expect(openWatchSpy).toHaveBeenCalledTimes(1));
+			expect(openWatchSpy.mock.calls[0][0]).toMatchObject({
+				service: 'oc',
+				keys: expect.objectContaining({ offcloudKey: 'oc-key' }),
+			});
+		});
+
+		it('offers no watch button when the user has no Offcloud key', () => {
+			renderComponent({
+				rdKey: null,
+				offcloudKey: null,
+				player: 'windows/vlc',
+				filteredResults: [{ ...baseResult, rdAvailable: false, ocAvailable: true }],
+			});
+
+			expect(screen.queryByTitle('Watch via Offcloud')).toBeNull();
+		});
+
+		it('keeps an OC-only cached row when "only cached" is on', () => {
+			renderComponent({
+				onlyShowCached: true,
+				offcloudKey: 'oc-key',
+				filteredResults: [{ ...baseResult, rdAvailable: false, ocAvailable: true }],
+			});
+
+			expect(screen.getByText('Sample Movie')).toBeTruthy();
 		});
 	});
 });

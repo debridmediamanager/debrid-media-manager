@@ -6,6 +6,7 @@ import {
 	btnIcon,
 	btnLabel,
 	fileSize,
+	isAvailable,
 	sortByBiggest,
 	sortByMean,
 	torrentPrefix,
@@ -121,6 +122,21 @@ describe('results utils', () => {
 			const result = torrentPrefix('ad:12345');
 			expect(result.props.className).toContain('bg-[#fbc730]');
 			expect(result.props.children).toBe('AD');
+		});
+
+		it('returns PM badge for Premiumize torrents', () => {
+			const result = torrentPrefix('pm:t12345');
+			expect(result.props.className).toContain('bg-[#aa0000]');
+			expect(result.props.children).toBe('PM');
+		});
+
+		it('returns OC badge for Offcloud torrents', () => {
+			// Offcloud orange, with black text on the solid fill - distinct from
+			// AllDebrid's amber, which is the whole point of the colour coding.
+			const result = torrentPrefix('oc:12345');
+			expect(result.props.className).toContain('bg-[#f97316]');
+			expect(result.props.className).toContain('text-black');
+			expect(result.props.children).toBe('OC');
 		});
 
 		it('defaults to AD badge for unknown prefix', () => {
@@ -414,6 +430,26 @@ describe('results utils', () => {
 				'uncached-big',
 				'uncached-small',
 			]);
+		});
+	});
+	describe('isAvailable', () => {
+		const row = (over: Partial<SearchResult> = {}) =>
+			({
+				rdAvailable: false,
+				adAvailable: false,
+				tbAvailable: false,
+				pmAvailable: false,
+				ocAvailable: false,
+				...over,
+			}) as SearchResult;
+
+		it('counts every service, Offcloud included', () => {
+			// A row cached only in Offcloud is playable, so it must sort and filter
+			// as cached. Premiumize was missed here at first (97a28e0f).
+			expect(isAvailable(row({ ocAvailable: true }))).toBe(true);
+			expect(isAvailable(row({ pmAvailable: true }))).toBe(true);
+			expect(isAvailable(row({ rdAvailable: true }))).toBe(true);
+			expect(isAvailable(row())).toBe(false);
 		});
 	});
 });

@@ -32,6 +32,8 @@ export const torrentPrefix = (id: string) =>
 		<span className="bg-[#4f46e5] text-xs text-white">TB</span>
 	) : id.startsWith('pm:') ? (
 		<span className="bg-[#aa0000] text-xs text-white">PM</span>
+	) : id.startsWith('oc:') ? (
+		<span className="bg-[#f97316] text-xs text-black">OC</span>
 	) : (
 		<span className="bg-[#fbc730] text-[8px] text-black">AD</span>
 	);
@@ -47,7 +49,13 @@ export const btnLabel = (avail: boolean, debridService: string) =>
 	avail ? <b>Instant {debridService}</b> : `DL with ${debridService}`;
 
 export const isAvailable = (result: SearchResult) =>
-	!!(result.rdAvailable || result.adAvailable || result.tbAvailable || result.pmAvailable);
+	!!(
+		result.rdAvailable ||
+		result.adAvailable ||
+		result.tbAvailable ||
+		result.pmAvailable ||
+		result.ocAvailable
+	);
 
 /**
  * Biggest video file, in MB. Only a debrid availability check knows the per-file

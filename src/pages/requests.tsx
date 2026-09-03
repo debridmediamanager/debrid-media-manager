@@ -36,6 +36,13 @@ import { toast, Toaster } from 'react-hot-toast';
  * It pages the board 25 at a time and loads the next page as the last one
  * scrolls into view, because the board grows without bound and nobody scrolls
  * three thousand rows.
+ *
+ * **Premiumize and Offcloud are deliberately absent**, from the fulfil path and
+ * from the cache checks alike: the uploader can source a transfer from TorBox
+ * and AllDebrid only, so those two keys buy a viewer nothing here. Neither
+ * service is offered the board on the home page either (`MainActions`), which is
+ * why probing for them would be spending a request to render a badge nobody with
+ * only those keys ever sees.
  */
 
 const PAGE_SIZE = 25;
@@ -75,6 +82,7 @@ function seedResult(row: PublicRequest): SearchResult {
 		adAvailable: false,
 		tbAvailable: false,
 		pmAvailable: false,
+		ocAvailable: false,
 		files: [],
 		noVideos: false,
 		medianFileSize: 0,

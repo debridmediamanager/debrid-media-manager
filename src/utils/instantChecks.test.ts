@@ -1,3 +1,4 @@
+import { checkOffcloudCache } from '@/services/offcloud';
 import { checkPremiumizeCache } from '@/services/premiumize';
 import { checkCachedStatus } from '@/services/torbox';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -8,6 +9,8 @@ import {
 	checkAvailabilityByHashes,
 } from './availability';
 import {
+	checkAvailabilityOc,
+	checkAvailabilityOc2,
 	checkAvailabilityPm,
 	checkAvailabilityPm2,
 	checkDatabaseAvailabilityAd,
@@ -32,6 +35,10 @@ vi.mock('@/services/torbox', () => ({
 
 vi.mock('@/services/premiumize', () => ({
 	checkPremiumizeCache: vi.fn(),
+}));
+
+vi.mock('@/services/offcloud', () => ({
+	checkOffcloudCache: vi.fn(),
 }));
 
 vi.mock('react-hot-toast', () => {
@@ -59,6 +66,7 @@ const mockCheckAvailabilityAd = vi.mocked(checkAvailabilityAd);
 const mockCheckAvailabilityAdByHashes = vi.mocked(checkAvailabilityAdByHashes);
 const mockCheckCachedStatus = vi.mocked(checkCachedStatus);
 const mockCheckPremiumizeCache = vi.mocked(checkPremiumizeCache);
+const mockCheckOffcloudCache = vi.mocked(checkOffcloudCache);
 
 const createStateHarness = <T extends { hash: string }>(initial: T[]) => {
 	let state = [...initial];
@@ -646,6 +654,116 @@ describe('instantChecks utilities', () => {
 			] as any[]);
 
 			expect(await checkAvailabilityPm2('pm-key', ['hash-1'], setter)).toBe(0);
+			expect(setter).not.toHaveBeenCalled();
+		});
+	});
+	describe('Offcloud', () => {
+		const identity = <T>(rows: T[]) => rows;
+
+		it('marks the cached hashes and leaves the rest alone', async () => {
+			// `/cache` answers with hits only; `checkOffcloudCache` has already
+			// turned that into one answer per input by set membership, so this
+			// consumes `cached: false` rows as genuine misses rather than gaps.
+			mockCheckOffcloudCache.mockResolvedValue([
+				{ hash: 'hash-1', cached: true },
+				{ hash: 'hash-2', cached: false },
+			]);
+			const { setter, getState } = createStateHarness([
+				{
+					hash: 'hash-1',
+					noVideos: false,
+					ocAvailable: false,
+					files: [{ fileId: 0, filename: 'Movie.mkv', filesize: 5 }],
+					fileSize: 1024,
+					medianFileSize: 1024,
+					videoCount: 1,
+				},
+				{ hash: 'hash-2', noVideos: false, ocAvailable: false, files: [] },
+			] as any[]);
+
+			const hits = await checkAvailabilityOc(
+				'oc-key',
+				['hash-1', 'hash-2'],
+				setter,
+				identity
+			);
+
+			expect(hits).toBe(1);
+			expect(getState()[0].ocAvailable).toBe(true);
+			expect(getState()[1].ocAvailable).toBe(false);
+		});
+
+		it('leaves files, counts and sizes untouched - the probe reports none', async () => {
+			// `/cache` carries no filenames and no sizes at all (its `/cache/info`
+			// sibling does, at the cost of a second request that only a modal or a
+			// cast is worth spending). So unlike Premiumize's probe there is not
+			// even a total to repair a missing size with, and whatever another
+			// service worked out has to survive verbatim.
+			mockCheckOffcloudCache.mockResolvedValue([{ hash: 'hash-1', cached: true }]);
+			const { setter, getState } = createStateHarness([
+				{
+					hash: 'hash-1',
+					noVideos: false,
+					ocAvailable: false,
+					files: [{ fileId: 0, filename: 'Movie.mkv', filesize: 5 }],
+					fileSize: 0,
+					medianFileSize: 7,
+					videoCount: 1,
+				},
+			] as any[]);
+
+			await checkAvailabilityOc('oc-key', ['hash-1'], setter, identity);
+
+			expect(getState()[0].files).toHaveLength(1);
+			expect(getState()[0].fileSize).toBe(0);
+			expect(getState()[0].medianFileSize).toBe(7);
+			expect(getState()[0].videoCount).toBe(1);
+		});
+
+		it('matches case-insensitively, because the probe echoes what it was sent', async () => {
+			mockCheckOffcloudCache.mockResolvedValue([{ hash: 'AABBCC', cached: true }]);
+			const { setter, getState } = createStateHarness([
+				{ hash: 'aabbcc', noVideos: false, ocAvailable: false, files: [] },
+			] as any[]);
+
+			expect(await checkAvailabilityOc2('oc-key', ['AABBCC'], setter)).toBe(1);
+			expect(getState()[0].ocAvailable).toBe(true);
+		});
+
+		it('ignores a hash Offcloud volunteered that was never asked about', async () => {
+			// Set membership, not position: an extra entry in the reply can only
+			// fail to match a row, never shift another row's answer onto it.
+			mockCheckOffcloudCache.mockResolvedValue([
+				{ hash: 'hash-1', cached: true },
+				{ hash: 'someone-elses-hash', cached: true },
+			]);
+			const { setter, getState } = createStateHarness([
+				{ hash: 'hash-1', noVideos: false, ocAvailable: false, files: [] },
+				{ hash: 'hash-2', noVideos: false, ocAvailable: false, files: [] },
+			] as any[]);
+
+			expect(await checkAvailabilityOc2('oc-key', ['hash-1', 'hash-2'], setter)).toBe(1);
+			expect(getState()[0].ocAvailable).toBe(true);
+			expect(getState()[1].ocAvailable).toBe(false);
+		});
+
+		it('leaves a row with no videos alone', async () => {
+			mockCheckOffcloudCache.mockResolvedValue([{ hash: 'hash-1', cached: true }]);
+			const { setter, getState } = createStateHarness([
+				{ hash: 'hash-1', noVideos: true, ocAvailable: false, files: [] },
+			] as any[]);
+
+			expect(await checkAvailabilityOc2('oc-key', ['hash-1'], setter)).toBe(0);
+			expect(getState()[0].ocAvailable).toBe(false);
+		});
+
+		it('does not re-render when nothing is cached', async () => {
+			mockCheckOffcloudCache.mockResolvedValue([{ hash: 'hash-1', cached: false }]);
+			const { setter } = createStateHarness([
+				{ hash: 'hash-1', noVideos: false, ocAvailable: false, files: [] },
+			] as any[]);
+
+			expect(await checkAvailabilityOc2('oc-key', ['hash-1'], setter)).toBe(0);
 			expect(setter).not.toHaveBeenCalled();
 		});
 	});

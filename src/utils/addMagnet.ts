@@ -10,6 +10,12 @@ import {
 	uploadMagnetAd,
 } from '@/services/allDebrid';
 import {
+	addOffcloudCloud,
+	isValidBtih,
+	OffcloudError,
+	toMagnetUri as toOffcloudMagnetUri,
+} from '@/services/offcloud';
+import {
 	createPremiumizeTransfer,
 	listPremiumizeFolder,
 	listPremiumizeTransfers,
@@ -33,7 +39,7 @@ import {
 	TorBoxRateLimitError,
 } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorBoxWebDownload, TorrentInfoResponse } from '@/services/types';
-import { UserTorrent } from '@/torrent/userTorrent';
+import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
@@ -878,4 +884,125 @@ export const handleAddMultipleHashesInPm = async (
 		`Added ${success} ${success === 1 ? 'hash' : 'hashes'} to Premiumize.`,
 		magnetToastOptions
 	);
+};
+
+const OC_BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 250;
+
+/**
+ * Builds the library row for a freshly added Offcloud item.
+ *
+ * `/cloud` answers with an id, a name and a status and nothing else - no size,
+ * no file list - and `/cloud/history` is no richer, so bytes start at 0 and are
+ * filled in on demand when a modal asks `/cache/info` for the listing.
+ */
+const convertToOcUserTorrent = (
+	added: { requestId: string; fileName: string; status: string; createdOn?: string },
+	hash: string
+): UserTorrent => {
+	const finished = added.status === 'downloaded';
+	return {
+		id: `oc:${added.requestId}`,
+		filename: added.fileName,
+		title: added.fileName,
+		hash: hash.toLowerCase(),
+		bytes: 0,
+		progress: finished ? 100 : 0,
+		status: finished ? UserTorrentStatus.finished : UserTorrentStatus.downloading,
+		serviceStatus: added.status,
+		added: added.createdOn ? new Date(added.createdOn) : new Date(),
+		mediaType: 'other',
+		links: [],
+		selectedFiles: [],
+		seeders: 0,
+		speed: 0,
+	};
+};
+
+/**
+ * Adds a magnet to Offcloud's cloud.
+ *
+ * Two measured behaviours shape this (`docs/providers/offcloud.md`):
+ *
+ *  - **A garbage magnet is accepted.** `magnet:?xt=urn:btih:zzzz` comes back
+ *    `200` with a requestId and then sits in `created` / "Loading..."
+ *    indefinitely - nothing upstream ever refuses it and nothing ever finishes
+ *    it. `isValidBtih` is checked here so the user gets a sentence rather than a
+ *    zombie row they then have to remove.
+ *  - **A cached magnet finishes inside the add response**, `status:
+ *    "downloaded"` synchronously, Premiumize-style. So the toast can tell the
+ *    user whether they can play it now or have to wait, without a poll.
+ *
+ * Idempotent while the item lives: re-submitting the same magnet returns the
+ * same `requestId` and creates nothing, so a double click is harmless. After a
+ * removal the same magnet gets a new id.
+ */
+export const handleAddAsMagnetInOc = async (
+	ocKey: string,
+	hash: string,
+	callback?: (torrent: UserTorrent) => Promise<void>,
+	silent: boolean = false
+) => {
+	if (!isValidBtih(hash)) {
+		// Refused before the request, not after: Offcloud would take it.
+		if (!silent) toast.error('That is not a valid info hash.', magnetToastOptions);
+		throw new OffcloudError(`"${hash}" is not a valid info hash.`, 'invalid_info_hash');
+	}
+
+	try {
+		// Always the full magnet form. `/cloud` accepts a bare hash from us only
+		// because we build the magnet here; its `/cache/info` sibling silently
+		// reports cached content as uncached when handed a bare hash, so the
+		// magnet form is the house rule for every Offcloud call that takes a url.
+		const added = await addOffcloudCloud(ocKey, toOffcloudMagnetUri(hash));
+		if (!added.requestId) {
+			if (!silent) toast.error('Offcloud added it without an ID.', magnetToastOptions);
+			return;
+		}
+
+		if (callback) await callback(convertToOcUserTorrent(added, hash));
+
+		if (!silent) {
+			toast.success(
+				added.status === 'downloaded'
+					? 'Cached on Offcloud — ready to play.'
+					: 'Added to Offcloud — downloading.',
+				magnetToastOptions
+			);
+		}
+	} catch (error) {
+		console.error(
+			'Error adding magnet to Offcloud:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		if (!silent) {
+			const message = error instanceof OffcloudError ? error.message : null;
+			toast.error(
+				message ? `Offcloud error: ${message}` : 'Failed to add to Offcloud.',
+				magnetToastOptions
+			);
+		}
+		throw error;
+	}
+};
+
+export const handleAddMultipleHashesInOc = async (
+	ocKey: string,
+	hashes: string[],
+	callback?: () => Promise<void>
+) => {
+	let success = 0;
+	for (let i = 0; i < hashes.length; i++) {
+		if (i > 0) await delay(OC_BATCH_MAGNET_DELAY);
+		try {
+			await handleAddAsMagnetInOc(ocKey, hashes[i], undefined, true);
+			success++;
+		} catch (error) {
+			console.error(
+				'Error adding hash in Offcloud:',
+				error instanceof Error ? error.message : 'Unknown error'
+			);
+		}
+	}
+	if (callback) await callback();
+	toast(`Added ${success} ${success === 1 ? 'hash' : 'hashes'} to Offcloud.`, magnetToastOptions);
 };
