@@ -41,6 +41,35 @@ describe('SettingsSection', () => {
 		originalRegister = undefined;
 	});
 
+	// The default only makes sense for someone who has nothing but Real-Debrid:
+	// the filter hides releases RD refuses by name, which every other service
+	// serves perfectly well. A Debrid-Link credential is one of those, in either
+	// of the two shapes it can take.
+	describe('the hide-RD-blocked default', () => {
+		const checkbox = () =>
+			document.getElementById('dmm-hide-rd-blocked-torrents') as HTMLInputElement;
+
+		it('defaults on for a Real-Debrid-only user', () => {
+			localStorage.setItem('rd:accessToken', JSON.stringify('rd-token'));
+			render(<SettingsSection />);
+			expect(checkbox().checked).toBe(true);
+		});
+
+		it('defaults off when the user also holds a Debrid-Link OAuth token', () => {
+			localStorage.setItem('rd:accessToken', JSON.stringify('rd-token'));
+			localStorage.setItem('dl:accessToken', JSON.stringify('dl-token'));
+			render(<SettingsSection />);
+			expect(checkbox().checked).toBe(false);
+		});
+
+		it('defaults off when the user also holds a pasted Debrid-Link token', () => {
+			localStorage.setItem('rd:accessToken', JSON.stringify('rd-token'));
+			localStorage.setItem('dl:apiKey', JSON.stringify('dl-api-token'));
+			render(<SettingsSection />);
+			expect(checkbox().checked).toBe(false);
+		});
+	});
+
 	it('loads persisted preferences and updates each toggle', async () => {
 		localStorage.setItem('settings:player', 'ios/infuse');
 		localStorage.setItem('settings:movieMaxSize', '15');

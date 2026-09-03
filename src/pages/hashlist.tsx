@@ -1,6 +1,7 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import {
 	useAllDebridApiKey,
+	useDebridLinkCredential,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
 	useRealDebridAccessToken,
@@ -17,13 +18,16 @@ import {
 import { TorBoxTorrentInfo } from '@/services/types';
 import UserTorrentDB from '@/torrent/db';
 import {
+	handleAddAsMagnetInDl,
 	handleAddAsMagnetInOc,
 	handleAddAsMagnetInPm,
 	handleAddAsMagnetInRd,
+	handleAddMultipleHashesInDl,
 } from '@/utils/addMagnet';
 import { runConcurrentFunctions } from '@/utils/batch';
 import {
 	handleDeleteAdTorrent,
+	handleDeleteDlTorrent,
 	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
@@ -90,6 +94,7 @@ function HashlistPage() {
 	const tbKey = useTorBoxAccessToken();
 	const pmKey = usePremiumizeCredential();
 	const ocKey = useOffcloudApiKey();
+	const dlKey = useDebridLinkCredential();
 	const { addTorrent: addToCache, removeTorrent: removeFromCache } = useLibraryCache();
 
 	const [currentPage, setCurrentPage] = useState(1);
@@ -182,7 +187,7 @@ function HashlistPage() {
 		if (userTorrentsList.length !== 0) return;
 		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey, adKey, tbKey, pmKey, ocKey]);
+	}, [rdKey, adKey, tbKey, pmKey, ocKey, dlKey]);
 
 	async function decodeJsonStringFromUrl(): Promise<string> {
 		const hash = window.location.hash;
@@ -271,6 +276,15 @@ function HashlistPage() {
 			// probes stay independent: one vendor being down is not the other's
 			// answer, and a user may hold only one of the two keys.
 			if (ocKey) wrapLoading('OC', checkAvailabilityOc2(ocKey, hashArr, setUserTorrentsList));
+			// **No Debrid-Link probe, and none is possible.** `/seedbox/cached` is
+			// disabled and nothing replaced it, so the only cache question
+			// Debrid-Link answers is a mutating add. A `dlAvailable` flag would
+			// therefore have to read false for every row whether or not
+			// Debrid-Link holds it, which is worse than no flag at all - it would
+			// hide rows behind "instantly available only" that Debrid-Link would
+			// have served. That is also why `dlKey` is absent from that filter's
+			// OR-chain below: with only a Debrid-Link key there is nothing to
+			// filter on, so nothing is filtered.
 		} catch (error) {
 			console.error('Error fetching user torrents list:', error);
 			setUserTorrentsList([]);
@@ -767,6 +781,72 @@ function HashlistPage() {
 		}
 	}
 
+	/**
+	 * Adds one row to Debrid-Link, as a **full magnet**.
+	 *
+	 * The bulk button below deliberately sends bare hashes, because one click
+	 * there means hundreds of adds against a 50-a-day quota. A per-row click is
+	 * one release the user picked, which is the same intent the search page's
+	 * button carries - so it downloads for real rather than being refused with
+	 * `notAddTorrent` for not being cached.
+	 */
+	async function addDl(hash: string) {
+		try {
+			await handleAddAsMagnetInDl(dlKey!, hash, async (userTorrent) => {
+				await torrentDB.addAll([userTorrent]);
+				addToCache(userTorrent);
+				await fetchHashAndProgress(hash);
+			});
+		} catch {
+			// handleAddAsMagnetInDl reports its own failure
+		}
+	}
+
+	async function deleteDl(hash: string) {
+		const torrents = await torrentDB.getAllByHash(hash);
+		for (const t of torrents) {
+			if (!t.id.startsWith('dl:')) continue;
+			// Debrid-Link's remove never reports a failure, so the local row goes
+			// either way and the next library listing is what settles it.
+			await handleDeleteDlTorrent(dlKey!, t.id);
+			await torrentDB.deleteByHash('dl', hash);
+			removeFromCache(t.id);
+			setHashAndProgress((prev) => {
+				const newHashAndProgress = { ...prev };
+				delete newHashAndProgress[`dl:${hash}`];
+				return newHashAndProgress;
+			});
+		}
+	}
+
+	/**
+	 * Sweeps the shown list into Debrid-Link, **as bare hashes**.
+	 *
+	 * This is the one surface where "only land it if it is already cached" is
+	 * the right semantics: a hash list is hundreds of rows and the account's
+	 * whole day is 50 torrents, so sending magnets here would let one click
+	 * start fifty real downloads and burn the quota on releases nobody asked
+	 * for. `handleAddMultipleHashesInDl` paces the adds, counts the misses into
+	 * one summary toast instead of toasting each, and stops the sweep outright
+	 * on `maxTorrent` (every remaining add is refused for the day) or
+	 * `floodDetected` (the endpoint is locked for an hour) rather than spending
+	 * requests to collect the same refusal.
+	 */
+	async function downloadNonDupeTorrentsInDl() {
+		const libraryHashes = await torrentDB.hashes();
+		const yetToDownload = filteredList
+			.filter((t) => !libraryHashes.has(t.hash))
+			.map((t) => t.hash);
+		if (yetToDownload.length === 0) {
+			toast('Everything already downloaded', genericToastOptions);
+			return;
+		}
+
+		await handleAddMultipleHashesInDl(dlKey!, yetToDownload, async () => {
+			await fetchHashAndProgress();
+		});
+	}
+
 	async function addOc(hash: string) {
 		try {
 			await handleAddAsMagnetInOc(ocKey!, hash, async (userTorrent) => {
@@ -1090,6 +1170,18 @@ function HashlistPage() {
 					</button>
 				)}
 
+				{mounted && dlKey && (
+					<button
+						className={`mb-2 mr-2 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/30 px-2 py-1 text-sky-100 transition-colors hover:bg-[#38bdf8]/50 ${
+							filteredList.length === 0 ? 'cursor-not-allowed opacity-60' : ''
+						}`}
+						onClick={downloadNonDupeTorrentsInDl}
+						disabled={filteredList.length === 0}
+					>
+						DL Download ({filteredList.length})
+					</button>
+				)}
+
 				{Object.keys(router.query).length !== 0 && (
 					<Link
 						href="/hashlist"
@@ -1099,15 +1191,15 @@ function HashlistPage() {
 					</Link>
 				)}
 
-				{mounted && !rdKey && !adKey && !tbKey && !pmKey && !ocKey && (
+				{mounted && !rdKey && !adKey && !tbKey && !pmKey && !ocKey && !dlKey && (
 					<>
 						<span className="mb-2 mr-2 rounded px-2 py-1 text-white">
-							Login to RD/AD/TB/PM/OC to download
+							Login to RD/AD/TB/PM/OC/DL to download
 						</span>
 					</>
 				)}
 
-				{mounted && (rdKey || adKey || tbKey || pmKey || ocKey) && (
+				{mounted && (rdKey || adKey || tbKey || pmKey || ocKey || dlKey) && (
 					<span className="text-s mr-2 bg-green-100 px-2.5 py-1 text-green-800">
 						<strong>{userTorrentsList.length - filteredList.length}</strong> hidden
 					</span>
@@ -1347,6 +1439,30 @@ function HashlistPage() {
 											>
 												<Download className="mr-1 inline h-3 w-3" />
 												OC
+											</button>
+										)}
+										{mounted && dlKey && isDownloading('dl', t.hash) && (
+											<button
+												className="ml-2 rounded border-2 border-red-500 bg-red-900/30 px-2 py-1 text-red-100 transition-colors hover:bg-red-800/50"
+												onClick={() => deleteDl(t.hash)}
+											>
+												<X className="mr-1 inline h-3 w-3" />
+												DL ({hashAndProgress[`dl:${t.hash}`] || 0}%)
+											</button>
+										)}
+										{/*
+										 * One colour, always: there is no `dlAvailable`
+										 * to switch on, so the green "instant" variant
+										 * the other services use would be a claim
+										 * nothing here can make.
+										 */}
+										{mounted && dlKey && notInLibrary('dl', t.hash) && (
+											<button
+												className="ml-2 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/30 px-2 py-1 text-sky-100 transition-colors hover:bg-[#38bdf8]/50"
+												onClick={() => addDl(t.hash)}
+											>
+												<Download className="mr-1 inline h-3 w-3" />
+												DL
 											</button>
 										)}
 									</td>
