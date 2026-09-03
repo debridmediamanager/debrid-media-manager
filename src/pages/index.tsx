@@ -119,15 +119,23 @@ function IndexPage() {
 	}, []);
 
 	useEffect(() => {
+		// Every one of these points at the provider's own card, because that is
+		// the only place sign-in and a single-provider logout exist. The two
+		// destinations previously offered both dead-ended: Settings holds
+		// playback and cast preferences and cannot show, replace or clear a
+		// credential, and "clear site data" drops all seven accounts to fix one.
+		//
+		// Real-Debrid and Debrid-Link drop their own keys on a rejected
+		// credential (`clearRdKeys` / `clearDlKeys`, both then setting error to
+		// null), so those two only ever reach here on a transient failure and
+		// Retry really is their answer. The other five park on the card until
+		// the user acts, which is the case this whole flow was built for.
 		if (rdError) {
-			toast.error('RD load failed. Clear site data and sign in again.');
+			toast.error('Real-Debrid load failed. Use the Real-Debrid card below.');
 		}
 		if (adError) {
-			toast.error('AllDebrid fetch failed. Confirm your DMM login email.');
+			toast.error('AllDebrid fetch failed. Use the AllDebrid card below.');
 		}
-		// Not "verify the key in Settings" - Settings holds playback and cast
-		// preferences and cannot show, replace or clear a credential. The card
-		// for the failed provider is where sign-in and logout actually live.
 		if (tbError) {
 			toast.error('Torbox profile failed. Use the Torbox card below.');
 		}
@@ -141,7 +149,7 @@ function IndexPage() {
 			toast.error('Debrid-Link profile failed. Use the Debrid-Link card below.');
 		}
 		if (traktError) {
-			toast.error('Trakt profile fetch failed.');
+			toast.error('Trakt profile fetch failed. Use the Trakt card below.');
 		}
 		if (localStorage.getItem('next_action') === 'clear_cache') {
 			localStorage.removeItem('next_action');

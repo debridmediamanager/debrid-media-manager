@@ -370,12 +370,21 @@ describe('IndexPage', () => {
 	// nor replace nor clear a provider credential. Sending a user there to
 	// "verify the API key" is the same dead end as a retry-only error card: the
 	// actions that fix a rejected key all live on the card itself.
+	//
+	// Every provider that can raise an error is listed, so a seventh cannot be
+	// added later with advice that points somewhere the user cannot act. The
+	// two destinations that do not work are Settings and "clear site data" -
+	// the latter drops all seven accounts to fix one, which is the very dead
+	// end the card's own logout exists to avoid.
 	it.each([
+		['rdError', 'Real-Debrid'],
+		['adError', 'AllDebrid'],
 		['tbError', 'Torbox'],
 		['pmError', 'Premiumize'],
 		['ocError', 'Offcloud'],
 		['dlError', 'Debrid-Link'],
-	])('does not send a failed %s to Settings', (errorKey, label) => {
+		['traktError', 'Trakt'],
+	])('points a failed %s at its own card', (errorKey, label) => {
 		currentUserMock.mockReturnValue({
 			...settledFixture,
 			[errorKey]: new Error('rejected'),
@@ -387,5 +396,7 @@ describe('IndexPage', () => {
 		const message = messages.find((text: string) => text.includes(label));
 		expect(message).toBeDefined();
 		expect(message).not.toMatch(/in Settings/i);
+		expect(message).not.toMatch(/clear site data/i);
+		expect(message).toMatch(/card below/i);
 	});
 });
