@@ -87,5 +87,18 @@ describe('quickSearch', () => {
 		it('matches nothing for an unknown service', () => {
 			expect(quickSearch('is:xx', availability).length).toBe(0);
 		});
+
+		it('has no is:dl token, and a Debrid-Link row is never counted as cached', () => {
+			// Debrid-Link publishes no cache probe, so there is nothing an
+			// `is:dl` pill could filter on and no flag `is:cached` could read. It
+			// is `is:xx` as far as this function is concerned, on purpose - a
+			// token backed by a permanently-false field would hide every row from
+			// a Debrid-Link user who filtered by it.
+			const withDl = [...availability, { title: 'In DL', hash: 'a8', dlAvailable: true }];
+
+			expect(quickSearch('is:dl', withDl).length).toBe(0);
+			expect(quickSearch('is:cached', withDl).map((r) => r.hash)).not.toContain('a8');
+			expect(quickSearch('is:uncached', withDl).map((r) => r.hash)).toEqual(['a5', 'a8']);
+		});
 	});
 });

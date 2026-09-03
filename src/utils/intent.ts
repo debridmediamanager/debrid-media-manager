@@ -1,5 +1,10 @@
 import { unlockLink } from '@/services/allDebrid';
 import {
+	addSeedboxTorrent,
+	isDlFinished,
+	toMagnetUri as toDlMagnetUri,
+} from '@/services/debridLink';
+import {
 	addOffcloudCloud,
 	exploreOffcloudCloud,
 	getOffcloudCacheInfo,
@@ -24,7 +29,7 @@ import {
 
 // 'tbw' is a TorBox web download, which lives in its own namespace with its own
 // list and its own download-link endpoint — it cannot be resolved as a torrent.
-export type WatchService = 'rd' | 'ad' | 'tb' | 'tbw' | 'pm' | 'oc';
+export type WatchService = 'rd' | 'ad' | 'tb' | 'tbw' | 'pm' | 'oc' | 'dl';
 
 export const isWatchService = (value: unknown): value is WatchService =>
 	value === 'rd' ||
@@ -32,7 +37,8 @@ export const isWatchService = (value: unknown): value is WatchService =>
 	value === 'tb' ||
 	value === 'tbw' ||
 	value === 'pm' ||
-	value === 'oc';
+	value === 'oc' ||
+	value === 'dl';
 
 const basename = (path: string) => path.split('/').pop() || path;
 
@@ -309,6 +315,76 @@ const getOcInstantIntent = async (
 	}
 };
 
+/**
+ * Resolves a Debrid-Link hash to a playable URL.
+ *
+ * Debrid-Link has no cache probe at all — `/seedbox/cached` is disabled and
+ * nothing replaced it — so the add *is* the probe, and there is no availability
+ * flag anywhere in the app that could have gated this call. That is fine here:
+ * the add is idempotent by hash and the torrent id is stable across duplicate
+ * adds and even across remove-then-re-add, so replaying a watch costs one
+ * request and creates nothing new.
+ *
+ * **The full magnet, never the bare hash.** A bare hash is only accepted when
+ * the content is already cached, which would turn "play this" into a probe that
+ * refuses everything else with `notAddTorrent`. Cached content answers
+ * synchronously complete — `status: 100` with live URLs, ~150 ms — so the
+ * happy path is still one request, and an uncached one honestly reports that it
+ * is downloading rather than sitting in a poll.
+ *
+ * There is deliberately no poll here, unlike Offcloud's: a Debrid-Link add that
+ * is not already finished is a real BitTorrent download, minutes long at best,
+ * and holding a watch tab open for it teaches the user nothing they cannot read
+ * off the library page.
+ *
+ * The URL that comes back is the whole capability — no token, no signature, no
+ * IP binding — so it is handed to the player exactly as received and belongs
+ * nowhere that logs URLs.
+ */
+const getDlInstantIntent = async (
+	dlKey: string,
+	hash: string,
+	os: string,
+	player: string,
+	fileName?: string
+): Promise<{ intent?: string; error?: string }> => {
+	try {
+		const torrent = await addSeedboxTorrent(dlKey, toDlMagnetUri(hash));
+
+		// `>=`, never `=== 100`: the lower states are flags that combine and the
+		// vendor's own sample carries `status: 6`.
+		if (!isDlFinished(torrent.status)) {
+			const percent = Math.floor(torrent.downloadPercent ?? 0);
+			return {
+				error: `Debrid-Link is still downloading this (${percent}%) — try again once it finishes`,
+			};
+		}
+
+		const files = torrent.files ?? [];
+		if (files.length === 0) {
+			return { error: `No Debrid-Link files found for ${hash}` };
+		}
+
+		const target = basename(fileName || '').toLowerCase();
+		const byName = target
+			? files.find((file) => basename(file.name || '').toLowerCase() === target)
+			: undefined;
+		// The file list is the torrent's own order, so a first-file fallback hands
+		// the user whatever the release happened to list first — a sample or a
+		// poster. The biggest file is the one they meant.
+		const biggest = files.reduce((best, file) =>
+			(file.size ?? 0) > (best.size ?? 0) ? file : best
+		);
+		const picked = byName ?? biggest;
+		if (!picked?.downloadUrl) {
+			return { error: `Debrid-Link has no download URL for ${hash}` };
+		}
+		return { intent: buildPlayerIntent(os, player, picked.downloadUrl, picked.downloadUrl) };
+	} catch (e: any) {
+		return { error: `Failed to get Debrid-Link stream: ${e.message || e}` };
+	}
+};
+
 const getRdInstantIntent = async (
 	rdKey: string,
 	hash: string,
@@ -379,6 +455,9 @@ export const getInstantIntent = async (
 	if (service === 'oc') {
 		return getOcInstantIntent(key, hash, os, player, fileName);
 	}
+	if (service === 'dl') {
+		return getDlInstantIntent(key, hash, os, player, fileName);
+	}
 	if (service === 'ad') {
 		return {
 			error: 'AllDebrid magnets must be prepared in the browser; call /api/watch with a link',
@@ -406,11 +485,14 @@ export const getIntent = async (
 	if (service === 'tb' || service === 'tbw') {
 		return { error: 'TorBox links are resolved by hash; call /api/watch/instant instead' };
 	}
-	if (service === 'pm' || service === 'oc') {
+	if (service === 'pm' || service === 'oc' || service === 'dl') {
 		// A Premiumize CDN link is already the playable URL: no auth, no
 		// redemption step, and Range works. There is nothing to unrestrict.
 		// Offcloud's links are the same objects on the same CDN (energycdn),
 		// measured keyless and any-IP the same way, so they take the same path.
+		// Debrid-Link's go further still - the torrent id is the entire
+		// capability, and the URL keeps serving after the torrent is deleted -
+		// so there is nothing to redeem there either.
 		return { intent: buildPlayerIntent(os, player, link, link) };
 	}
 	if (service === 'ad') {

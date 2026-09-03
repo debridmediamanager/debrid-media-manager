@@ -6,6 +6,7 @@ import UsenetResults from '@/components/UsenetResults';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import {
 	useAllDebridApiKey,
+	useDebridLinkCredential,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
 	useRealDebridAccessToken,
@@ -182,6 +183,10 @@ const MovieSearch: FunctionComponent = () => {
 	const torboxKey = useTorBoxAccessToken();
 	const premiumizeKey = usePremiumizeCredential();
 	const offcloudKey = useOffcloudApiKey();
+	// Debrid-Link joins the add buttons and nothing else: it has no cache probe,
+	// so it takes no part in the availability sweep, the cached/uncached counts
+	// or the `is:` filters.
+	const debridLinkKey = useDebridLinkCredential();
 
 	/**
 	 * A user holding only Real-Debrid cannot start a transfer at all: the uploader
@@ -242,18 +247,21 @@ const MovieSearch: FunctionComponent = () => {
 		addTb,
 		addPm,
 		addOc,
+		addDl,
 		sendTbToRd,
 		deleteRd,
 		deleteAd,
 		deleteTb,
 		deletePm,
 		deleteOc,
+		deleteDl,
 	} = useTorrentManagement(
 		rdKey,
 		adKey,
 		torboxKey,
 		premiumizeKey,
 		offcloudKey,
+		debridLinkKey,
 		imdbid as string,
 		searchResults,
 		setSearchResults
@@ -1153,6 +1161,7 @@ const MovieSearch: FunctionComponent = () => {
 						torboxKey={torboxKey}
 						premiumizeKey={premiumizeKey}
 						offcloudKey={offcloudKey}
+						debridLinkKey={debridLinkKey}
 						player={player}
 						hashAndProgress={hashAndProgress}
 						handleShowInfo={handleShowInfo}
@@ -1170,6 +1179,7 @@ const MovieSearch: FunctionComponent = () => {
 						addTb={addTb}
 						addPm={addPm}
 						addOc={addOc}
+						addDl={addDl}
 						sendTbToRd={sendTbToRd}
 						requestContent={canRequest ? handleRequestContent : undefined}
 						deleteRd={deleteRd}
@@ -1177,6 +1187,7 @@ const MovieSearch: FunctionComponent = () => {
 						deleteTb={deleteTb}
 						deletePm={deletePm}
 						deleteOc={deleteOc}
+						deleteDl={deleteDl}
 						imdbId={imdbid as string}
 						isHashServiceChecking={isHashServiceChecking}
 					/>

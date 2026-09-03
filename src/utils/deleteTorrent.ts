@@ -1,4 +1,5 @@
 import { deleteMagnet as deleteAdTorrent } from '@/services/allDebrid';
+import { deleteSeedboxTorrents } from '@/services/debridLink';
 import { removeOffcloudCloud } from '@/services/offcloud';
 import {
 	deletePremiumizeFolder,
@@ -176,6 +177,50 @@ export const handleDeleteOcTorrent = async (
 		const apiError = getErrorMessage(error);
 		toast.error(
 			apiError ? `Offcloud error: ${apiError}` : `Failed to delete ${id} in Offcloud.`
+		);
+		return false;
+	}
+};
+
+/**
+ * Removes a Debrid-Link seedbox torrent.
+ *
+ * **Debrid-Link's removal never fails, so this can only report "asked".**
+ * `DELETE /seedbox/<garbage>/remove` answers `{"success":true,"value":["<garbage>"]}`
+ * — the echoed array is what the server *tried*, not what it found, and no error
+ * shape exists for "no such torrent". So a `true` here means the request was
+ * accepted, never that a torrent was destroyed; the only way to know is to list
+ * again, which the library page does on its next fetch.
+ *
+ * Two consequences worth keeping in mind rather than coding around: the download
+ * URLs the torrent minted **keep serving after removal** (keyless and durable,
+ * measured), and re-adding the same hash returns the *same* torrent id — so a
+ * delete is never as final as it looks.
+ */
+export const handleDeleteDlTorrent = async (
+	dlKey: string,
+	id: string,
+	disableToast: boolean = false
+): Promise<boolean> => {
+	// Row ids are `dl:<torrentId>`. Parsed inline because there is one row shape
+	// to parse, unlike Premiumize's transfer/folder/file trio.
+	const torrentId = id.startsWith('dl:') ? id.slice(3) : '';
+	if (!torrentId) {
+		toast.error(`Unrecognised Debrid-Link row ${id}.`);
+		return false;
+	}
+	try {
+		await deleteSeedboxTorrents(dlKey, [torrentId]);
+		if (!disableToast) toast(`Deleted ${id} from Debrid-Link.`, magnetToastOptions);
+		return true;
+	} catch (error) {
+		console.error(
+			'Error deleting Debrid-Link torrent:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		const apiError = getErrorMessage(error);
+		toast.error(
+			apiError ? `Debrid-Link error: ${apiError}` : `Failed to delete ${id} in Debrid-Link.`
 		);
 		return false;
 	}

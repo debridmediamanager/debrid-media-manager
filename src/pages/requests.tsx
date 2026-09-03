@@ -37,12 +37,16 @@ import { toast, Toaster } from 'react-hot-toast';
  * scrolls into view, because the board grows without bound and nobody scrolls
  * three thousand rows.
  *
- * **Premiumize and Offcloud are deliberately absent**, from the fulfil path and
- * from the cache checks alike: the uploader can source a transfer from TorBox
- * and AllDebrid only, so those two keys buy a viewer nothing here. Neither
- * service is offered the board on the home page either (`MainActions`), which is
- * why probing for them would be spending a request to render a badge nobody with
- * only those keys ever sees.
+ * **Premiumize, Offcloud and Debrid-Link are deliberately absent**, from the
+ * fulfil path and from the cache checks alike: the uploader can source a
+ * transfer from TorBox and AllDebrid only, so those three keys buy a viewer
+ * nothing here. None of them is offered the board on the home page either
+ * (`MainActions`), which is why probing for them would be spending a request to
+ * render a badge nobody with only those keys ever sees.
+ *
+ * Debrid-Link is doubly excluded: it has no cache probe at all, so the only way
+ * to answer "can I serve this" would be to *add* the torrent — spending one of
+ * the account's 50 adds a day per row of a board that pages 25 at a time.
  */
 
 const PAGE_SIZE = 25;

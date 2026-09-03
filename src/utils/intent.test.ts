@@ -12,6 +12,7 @@ const mocks = vi.hoisted(() => ({
 	getOwnedTorBoxStreamUrl: vi.fn(),
 	getWebDownloadStreamUrlByHash: vi.fn(),
 	directDownloadPremiumize: vi.fn(),
+	addSeedboxTorrent: vi.fn(),
 	addOffcloudCloud: vi.fn(),
 	getOffcloudCloudStatus: vi.fn(),
 	exploreOffcloudCloud: vi.fn(),
@@ -33,6 +34,13 @@ vi.mock('@/services/offcloud', async (importOriginal) => {
 		exploreOffcloudCloud: mocks.exploreOffcloudCloud,
 		getOffcloudCacheInfo: mocks.getOffcloudCacheInfo,
 	};
+});
+// `toMagnetUri` and `isDlFinished` are pure and are the behaviour under test
+// here - the magnet form and the `>=` threshold are the two things that decide
+// what the user gets - so only the one network call is replaced.
+vi.mock('@/services/debridLink', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/services/debridLink')>();
+	return { ...actual, addSeedboxTorrent: mocks.addSeedboxTorrent };
 });
 vi.mock('@/services/realDebrid', () => ({
 	addHashAsMagnet: mocks.addHashAsMagnet,
@@ -167,6 +175,11 @@ describe('isWatchService', () => {
 		expect(isWatchService('ad')).toBe(true);
 		expect(isWatchService('tb')).toBe(true);
 		expect(isWatchService('tbw')).toBe(true);
+		expect(isWatchService('pm')).toBe(true);
+		expect(isWatchService('oc')).toBe(true);
+		// Debrid-Link is a watch service even though nothing can ever *pick* it
+		// from an availability flag - the /api/watch routes gate on this.
+		expect(isWatchService('dl')).toBe(true);
 		expect(isWatchService('bogus')).toBe(false);
 		expect(isWatchService(undefined)).toBe(false);
 	});
@@ -703,5 +716,133 @@ describe('Offcloud intents', () => {
 
 	it('recognises oc as a watch service', () => {
 		expect(isWatchService('oc')).toBe(true);
+	});
+});
+
+describe('Debrid-Link intents', () => {
+	const HASH = 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c';
+	const HOST = 'https://seed41.debrid.link/dl/s37yg6wsgdilpqo80wwssulm';
+	const FILES = [
+		{ id: 'f0', name: 'poster.jpg', size: 310_380, downloadUrl: `${HOST}-1/poster.jpg` },
+		{
+			id: 'f1',
+			name: 'Big Buck Bunny.mp4',
+			size: 276_134_947,
+			downloadUrl: `${HOST}-2/Big+Buck+Bunny.mp4`,
+		},
+	];
+
+	const torrent = (status: number, over: Record<string, unknown> = {}) => ({
+		id: 's37yg6wsgdilpqo80wwssulm',
+		name: 'Big Buck Bunny',
+		hashString: HASH,
+		status,
+		downloadPercent: status >= 100 ? 100 : 37,
+		totalSize: 276_445_327,
+		files: FILES,
+		...over,
+	});
+
+	it('adds the FULL magnet, never the bare hash', async () => {
+		// A bare hash is only accepted when the content is already cached, so
+		// sending one here would turn "play this" into a probe that refuses
+		// anything Debrid-Link does not already hold.
+		mocks.addSeedboxTorrent.mockResolvedValue(torrent(100));
+
+		await getInstantIntent('dl-key', HASH, 0, '1.2.3.4', 'web', 'x', 'dl');
+
+		expect(mocks.addSeedboxTorrent).toHaveBeenCalledWith(
+			'dl-key',
+			`magnet:?xt=urn:btih:${HASH}`
+		);
+	});
+
+	it('plays a cached hash straight off the add response', async () => {
+		// Cached content answers synchronously complete with live URLs in ~150 ms,
+		// so one request goes from hash to playable.
+		mocks.addSeedboxTorrent.mockResolvedValue(torrent(100));
+
+		const { intent } = await getInstantIntent('dl-key', HASH, 0, '1.2.3.4', 'web', 'x', 'dl');
+
+		expect(intent).toBe(`${HOST}-2/Big+Buck+Bunny.mp4`);
+		expect(mocks.addSeedboxTorrent).toHaveBeenCalledTimes(1);
+	});
+
+	it('picks the biggest file, never files[0]', async () => {
+		// The list is the torrent's own order, so a first-file fallback hands the
+		// user the 310 KB poster.
+		mocks.addSeedboxTorrent.mockResolvedValue(torrent(100));
+
+		const { intent } = await getInstantIntent('dl-key', HASH, 0, '1.2.3.4', 'web', 'x', 'dl');
+
+		expect(intent).not.toBe(`${HOST}-1/poster.jpg`);
+	});
+
+	it('prefers the named file when the caller knows which one it wants', async () => {
+		mocks.addSeedboxTorrent.mockResolvedValue(torrent(100));
+
+		const { intent } = await getInstantIntent(
+			'dl-key',
+			HASH,
+			0,
+			'1.2.3.4',
+			'web',
+			'x',
+			'dl',
+			'poster.jpg'
+		);
+
+		expect(intent).toBe(`${HOST}-1/poster.jpg`);
+	});
+
+	it('says it is still downloading rather than polling or hanging', async () => {
+		// An unfinished Debrid-Link add is a real BitTorrent download, minutes
+		// long at best, so there is nothing worth waiting for in a watch tab.
+		mocks.addSeedboxTorrent.mockResolvedValue(torrent(4));
+
+		const { intent, error } = await getInstantIntent(
+			'dl-key',
+			HASH,
+			0,
+			'1.2.3.4',
+			'web',
+			'x',
+			'dl'
+		);
+
+		expect(intent).toBeUndefined();
+		expect(error).toBe(
+			'Debrid-Link is still downloading this (37%) — try again once it finishes'
+		);
+	});
+
+	it('treats a combined status flag as unfinished, never as done', async () => {
+		// The vendor's own sample carries `status: 6` (VERIFICATION|DOWNLOADING),
+		// which equals no single enum member - hence `>=`, never equality.
+		mocks.addSeedboxTorrent.mockResolvedValue(torrent(6));
+
+		const { error } = await getInstantIntent('dl-key', HASH, 0, '1.2.3.4', 'web', 'x', 'dl');
+
+		expect(error).toMatch(/still downloading/);
+	});
+
+	it('reports a refusal rather than throwing at the route', async () => {
+		mocks.addSeedboxTorrent.mockRejectedValue(new Error('maxTorrent'));
+
+		const { error } = await getInstantIntent('dl-key', HASH, 0, '1.2.3.4', 'web', 'x', 'dl');
+
+		expect(error).toBe('Failed to get Debrid-Link stream: maxTorrent');
+	});
+
+	it('serves a known Debrid-Link link directly - there is nothing to redeem', async () => {
+		// The torrent id is the whole capability: no token, no signature, no IP
+		// binding, and it keeps serving after the torrent is deleted.
+		const link = `${HOST}-2/Big+Buck+Bunny.mp4`;
+
+		const { intent } = await getIntent('dl-key', link, '1.2.3.4', 'web', 'x', 'dl');
+
+		expect(intent).toBe(link);
+		expect(mocks.unrestrictLink).not.toHaveBeenCalled();
+		expect(mocks.unlockLink).not.toHaveBeenCalled();
 	});
 });

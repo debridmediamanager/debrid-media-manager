@@ -139,6 +139,16 @@ describe('results utils', () => {
 			expect(result.props.children).toBe('OC');
 		});
 
+		it('returns DL badge for Debrid-Link torrents', () => {
+			// Debrid-Link sky, black text on the solid fill - far enough from
+			// TorBox indigo to tell apart in a badge row, which is the whole
+			// point of the colour coding.
+			const result = torrentPrefix('dl:seed-1');
+			expect(result.props.className).toContain('bg-[#38bdf8]');
+			expect(result.props.className).toContain('text-black');
+			expect(result.props.children).toBe('DL');
+		});
+
 		it('defaults to AD badge for unknown prefix', () => {
 			const result = torrentPrefix('unknown:12345');
 			expect(result.props.className).toContain('bg-[#fbc730]');
@@ -450,6 +460,14 @@ describe('results utils', () => {
 			expect(isAvailable(row({ pmAvailable: true }))).toBe(true);
 			expect(isAvailable(row({ rdAvailable: true }))).toBe(true);
 			expect(isAvailable(row())).toBe(false);
+		});
+
+		it('has no Debrid-Link flag to count, and must not grow one', () => {
+			// Debrid-Link publishes no cache probe, so a `dlAvailable` could only
+			// ever be false - and a permanently-false flag here would report a
+			// Debrid-Link user's playable rows as uncached in the sorts, the
+			// counters and `is:cached` alike. A stray field must change nothing.
+			expect(isAvailable(row({ dlAvailable: true } as Partial<SearchResult>))).toBe(false);
 		});
 	});
 });

@@ -556,3 +556,40 @@ describe('Offcloud in the watch order', () => {
 		expect(WATCH_SERVICE_LABEL.oc).toBe('Offcloud');
 	});
 });
+
+describe('Debrid-Link in the watch order', () => {
+	it('is never chosen from a search result, because nothing can mark it cached', () => {
+		// Debrid-Link publishes no cache probe - `/seedbox/cached` is disabled and
+		// nothing replaced it - so no `dlAvailable` exists and `pickWatchService`
+		// has nothing to read. This asserts the absence deliberately: a future
+		// `dlAvailable: false` field would make this function answer "not cached"
+		// for content Debrid-Link is happily holding.
+		expect(pickWatchService(cached(), { debridLinkKey: 'dl' })).toBeNull();
+		expect(
+			pickWatchService(cached({ rdAvailable: true }), { rdKey: 'rd', debridLinkKey: 'dl' })
+		).toBe('rd');
+	});
+
+	it('does not become the info modal fallback either', () => {
+		// Same reason: `pickInfoService` agrees with `pickWatchService` by design,
+		// and the search-result modal has no Debrid-Link view to open.
+		expect(pickInfoService(cached(), { debridLinkKey: 'dl' })).toBeNull();
+	});
+
+	it('hands the Debrid-Link credential to the dl service', () => {
+		// Reached from a library row or a row the user has already added, never
+		// from a flag - so `watchKeyFor` still has to know about it.
+		expect(watchKeyFor('dl', { rdKey: 'rd', debridLinkKey: 'dl' })).toBe('dl');
+		expect(watchKeyFor('dl', { rdKey: 'rd' })).toBeNull();
+	});
+
+	it('never mistakes the Debrid-Link key for TorBox’s', () => {
+		// `watchKeyFor` falls through to `torboxKey`, so a missing branch would
+		// silently hand a Debrid-Link watch somebody else's credential.
+		expect(watchKeyFor('dl', { torboxKey: 'tb' })).toBeNull();
+	});
+
+	it('labels the service by name', () => {
+		expect(WATCH_SERVICE_LABEL.dl).toBe('Debrid-Link');
+	});
+});

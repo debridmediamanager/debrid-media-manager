@@ -18,6 +18,7 @@ export type WatchKeys = {
 	torboxKey?: string | null;
 	premiumizeKey?: string | null;
 	offcloudKey?: string | null;
+	debridLinkKey?: string | null;
 };
 
 export const WATCH_SERVICE_LABEL: Record<WatchService, string> = {
@@ -27,6 +28,7 @@ export const WATCH_SERVICE_LABEL: Record<WatchService, string> = {
 	tbw: 'TorBox',
 	pm: 'Premiumize',
 	oc: 'Offcloud',
+	dl: 'Debrid-Link',
 };
 
 /**
@@ -44,6 +46,13 @@ export const WATCH_SERVICE_LABEL: Record<WatchService, string> = {
  * Premiumize's `directdl` resolves it without touching the account, while
  * Offcloud has to add the item and leaves a cloud entry behind. Given a free
  * choice between two paths to the same bytes, take the one that mutates nothing.
+ *
+ * **Debrid-Link is not in this order at all, and cannot be.** It has no cache
+ * probe - `/seedbox/cached` is disabled and nothing replaced it - so no
+ * `dlAvailable` flag exists to test, and inventing one would mean answering
+ * "false" for every row whether or not Debrid-Link holds it. `'dl'` is still a
+ * `WatchService`, reached from a library row or from a search row the user has
+ * already added, where the answer is known rather than guessed.
  */
 export const pickWatchService = (
 	result: Pick<
@@ -91,6 +100,7 @@ export const watchKeyFor = (service: WatchService, keys: WatchKeys): string | nu
 	if (service === 'ad') return keys.adKey ?? null;
 	if (service === 'pm') return keys.premiumizeKey ?? null;
 	if (service === 'oc') return keys.offcloudKey ?? null;
+	if (service === 'dl') return keys.debridLinkKey ?? null;
 	// 'tb' and 'tbw' are both TorBox, differing only in which namespace the
 	// server resolves the hash against.
 	return keys.torboxKey ?? null;

@@ -50,6 +50,7 @@ const renderTv = (override?: Partial<React.ComponentProps<typeof TvSearchResults
 		torboxKey: null,
 		premiumizeKey: null,
 		offcloudKey: null,
+		debridLinkKey: null,
 		player: '',
 		hashAndProgress: {},
 		handleShowInfo: vi.fn(),
@@ -61,11 +62,13 @@ const renderTv = (override?: Partial<React.ComponentProps<typeof TvSearchResults
 		addTb: vi.fn().mockResolvedValue(undefined),
 		addPm: vi.fn().mockResolvedValue(undefined),
 		addOc: vi.fn().mockResolvedValue(undefined),
+		addDl: vi.fn().mockResolvedValue(undefined),
 		deleteRd: vi.fn().mockResolvedValue(undefined),
 		deleteAd: vi.fn().mockResolvedValue(undefined),
 		deleteTb: vi.fn().mockResolvedValue(undefined),
 		deletePm: vi.fn().mockResolvedValue(undefined),
 		deleteOc: vi.fn().mockResolvedValue(undefined),
+		deleteDl: vi.fn().mockResolvedValue(undefined),
 		imdbId: 'tt456',
 		isHashServiceChecking: () => false,
 		...override,
@@ -449,6 +452,83 @@ describe('TvSearchResults', () => {
 			});
 
 			expect(screen.getByText('Sample Show')).toBeTruthy();
+		});
+	});
+
+	describe('Debrid-Link', () => {
+		it('offers the add button on a row with no availability flag set anywhere', async () => {
+			// Debrid-Link has no cache probe, so its button cannot be gated on one
+			// and appears on every row - season packs included, with no file-list
+			// gate either (the PM lesson from 2026-08-26).
+			const { props } = renderTv({
+				debridLinkKey: 'dl-key',
+				filteredResults: [{ ...baseTvResult }],
+			});
+
+			await userEvent.click(screen.getByRole('button', { name: /Add to DL/i }));
+			await waitFor(() => expect(props.addDl).toHaveBeenCalledWith('tv-hash'));
+		});
+
+		it('shows no DL badge, pill or check button', () => {
+			renderTv({
+				rdKey: 'rd-key',
+				debridLinkKey: 'dl-key',
+				filteredResults: [{ ...baseTvResult, rdAvailable: false }],
+			});
+
+			expect(screen.queryByRole('button', { name: /Check DL/i })).toBeNull();
+			expect(screen.queryByRole('button', { name: /Instant DL/i })).toBeNull();
+			expect(screen.getByRole('button', { name: /Check RD/i })).toBeTruthy();
+		});
+
+		it('offers RM instead of add once the row is in the Debrid-Link library', async () => {
+			const { props } = renderTv({
+				debridLinkKey: 'dl-key',
+				hashAndProgress: { 'dl:tv-hash': 100 },
+			});
+
+			expect(screen.queryByRole('button', { name: /Add to DL/i })).toBeNull();
+			await userEvent.click(screen.getByRole('button', { name: /DL \(100%\)/i }));
+			await waitFor(() => expect(props.deleteDl).toHaveBeenCalledWith('tv-hash'));
+		});
+
+		it('styles the add button with a literal class, never an assembled one', () => {
+			renderTv({
+				debridLinkKey: 'dl-key',
+				filteredResults: [{ ...baseTvResult }],
+			});
+
+			const button = screen.getByRole('button', { name: /Add to DL/i });
+			expect(button.className).toContain('border-[#38bdf8]');
+			expect(button.className).not.toContain('${');
+		});
+
+		it('hands the Debrid-Link credential to openWatch for a row in its library', async () => {
+			openWatchSpy.mockClear();
+			renderTv({
+				rdKey: null,
+				debridLinkKey: 'dl-key',
+				player: 'windows/vlc',
+				hashAndProgress: { 'dl:tv-hash': 100 },
+			});
+
+			await userEvent.click(screen.getByTitle('Watch via Debrid-Link'));
+
+			await waitFor(() => expect(openWatchSpy).toHaveBeenCalledTimes(1));
+			expect(openWatchSpy.mock.calls[0][0]).toMatchObject({
+				service: 'dl',
+				keys: expect.objectContaining({ debridLinkKey: 'dl-key' }),
+			});
+		});
+
+		it('renders nothing at all without a Debrid-Link credential', () => {
+			renderTv({
+				debridLinkKey: null,
+				hashAndProgress: { 'dl:tv-hash': 100 },
+			});
+
+			expect(screen.queryByRole('button', { name: /Add to DL/i })).toBeNull();
+			expect(screen.queryByRole('button', { name: /DL \(100%\)/i })).toBeNull();
 		});
 	});
 });

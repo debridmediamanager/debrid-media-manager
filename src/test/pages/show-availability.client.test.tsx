@@ -80,6 +80,7 @@ vi.mock('@/hooks/auth', () => ({
 	useTorBoxAccessToken: () => 'tb-token',
 	usePremiumizeCredential: () => null,
 	useOffcloudApiKey: () => null,
+	useDebridLinkCredential: () => null,
 }));
 
 vi.mock('@/hooks/useExternalSources', () => ({

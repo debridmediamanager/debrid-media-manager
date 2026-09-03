@@ -5,6 +5,7 @@ import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import {
 	handleAddAsMagnetInAd,
+	handleAddAsMagnetInDl,
 	handleAddAsMagnetInOc,
 	handleAddAsMagnetInPm,
 	handleAddAsMagnetInRd,
@@ -25,6 +26,7 @@ import {
 import { isRdBlockedName } from '@/utils/deInfringe';
 import {
 	handleDeleteAdTorrent,
+	handleDeleteDlTorrent,
 	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
@@ -60,6 +62,7 @@ export function useTorrentManagement(
 	torboxKey: string | null,
 	premiumizeKey: string | null,
 	offcloudKey: string | null,
+	debridLinkKey: string | null,
 	imdbId: string,
 	searchResults: SearchResult[],
 	setSearchResults: React.Dispatch<React.SetStateAction<SearchResult[]>>
@@ -402,6 +405,33 @@ export function useTorrentManagement(
 		[offcloudKey, fetchHashAndProgress, addToCache]
 	);
 
+	/**
+	 * Adds a hash to Debrid-Link.
+	 *
+	 * No availability gate and none possible: Debrid-Link publishes no cache
+	 * probe, so the add is the probe. It sends the full magnet, so an uncached
+	 * release downloads for real rather than being refused — see
+	 * `handleAddAsMagnetInDl`.
+	 */
+	const addDl = useCallback(
+		async (hash: string) => {
+			if (!debridLinkKey) return;
+
+			await handleAddAsMagnetInDl(debridLinkKey, hash, async (userTorrent: UserTorrent) => {
+				await torrentDB.add(userTorrent);
+				addToCache(userTorrent);
+
+				setHashAndProgress((prev) => ({
+					...prev,
+					[`${userTorrent.id.substring(0, 3)}${userTorrent.hash}`]: userTorrent.progress,
+				}));
+
+				await fetchHashAndProgress();
+			});
+		},
+		[debridLinkKey, fetchHashAndProgress, addToCache]
+	);
+
 	// Sends a TorBox-cached search-result torrent into the user's RD account via
 	// the debrid uploader service, which rewrites the torrent with de-infringed
 	// filenames so RD accepts it — which is why this works even on RD-blocked
@@ -679,6 +709,33 @@ export function useTorrentManagement(
 		[offcloudKey, removeFromCache]
 	);
 
+	/**
+	 * Removes the Debrid-Link rows for a hash.
+	 *
+	 * Debrid-Link's removal never reports a failure — it echoes back whatever id
+	 * it was asked about — so the local row goes either way and the truth comes
+	 * from the next library listing.
+	 */
+	const deleteDl = useCallback(
+		async (hash: string) => {
+			if (!debridLinkKey) return;
+
+			const torrents = await torrentDB.getAllByHash(hash);
+			for (const t of torrents) {
+				if (!t.id.startsWith('dl:')) continue;
+				await handleDeleteDlTorrent(debridLinkKey, t.id);
+				await torrentDB.deleteByHash('dl', hash);
+				removeFromCache(t.id);
+				setHashAndProgress((prev) => {
+					const newHashAndProgress = { ...prev };
+					delete newHashAndProgress[`dl:${hash}`];
+					return newHashAndProgress;
+				});
+			}
+		},
+		[debridLinkKey, removeFromCache]
+	);
+
 	return {
 		hashAndProgress,
 		fetchHashAndProgress,
@@ -687,11 +744,13 @@ export function useTorrentManagement(
 		addTb,
 		addPm,
 		addOc,
+		addDl,
 		sendTbToRd,
 		deleteRd,
 		deleteAd,
 		deleteTb,
 		deletePm,
 		deleteOc,
+		deleteDl,
 	};
 }

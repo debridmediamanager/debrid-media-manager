@@ -11,6 +11,7 @@ import {
 } from '@/utils/watchService';
 import {
 	Cast,
+	Download,
 	Eye as EyeIcon,
 	Folder,
 	HandHeart,
@@ -54,6 +55,14 @@ type TvSearchResultsProps = {
 	torboxKey?: string | null;
 	premiumizeKey?: string | null;
 	offcloudKey?: string | null;
+	/**
+	 * Debrid-Link's OAuth token or pasted API token.
+	 *
+	 * Unlike every other key here it gates nothing but the buttons themselves:
+	 * Debrid-Link has no cache probe, so there is no `dlAvailable` to consult and
+	 * its add button is offered on every row.
+	 */
+	debridLinkKey?: string | null;
 	player: string;
 	hashAndProgress: Record<string, number>;
 	handleShowInfo: (result: SearchResult) => void;
@@ -72,6 +81,7 @@ type TvSearchResultsProps = {
 	addTb: (hash: string) => Promise<void>;
 	addPm: (hash: string) => Promise<void>;
 	addOc: (hash: string) => Promise<void>;
+	addDl?: (hash: string) => Promise<void>;
 	sendTbToRd?: (hash: string) => Promise<void>;
 	/**
 	 * File a request for a release this account cannot fetch on its own.
@@ -86,6 +96,7 @@ type TvSearchResultsProps = {
 	deleteTb: (hash: string) => Promise<void>;
 	deletePm: (hash: string) => Promise<void>;
 	deleteOc: (hash: string) => Promise<void>;
+	deleteDl?: (hash: string) => Promise<void>;
 	imdbId?: string;
 	isHashServiceChecking: (hash: string, service: DebridService) => boolean;
 };
@@ -100,6 +111,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	torboxKey,
 	premiumizeKey,
 	offcloudKey,
+	debridLinkKey,
 	player,
 	hashAndProgress,
 	handleShowInfo,
@@ -115,6 +127,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	addTb,
 	addPm,
 	addOc,
+	addDl,
 	sendTbToRd,
 	requestContent,
 	deleteRd,
@@ -122,6 +135,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	deleteTb,
 	deletePm,
 	deleteOc,
+	deleteDl,
 	imdbId,
 	isHashServiceChecking,
 }) => {
@@ -348,10 +362,40 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 				service,
 				player,
 				hash: result.hash,
-				keys: { rdKey, adKey, torboxKey, premiumizeKey, offcloudKey },
+				keys: { rdKey, adKey, torboxKey, premiumizeKey, offcloudKey, debridLinkKey },
 				fileName: biggest?.filename,
 				fileId: biggest?.fileId,
 				adInLibrary: inLibrary('ad', result.hash),
+			});
+		} finally {
+			setWatchingHashes((prev) => {
+				const next = new Set(prev);
+				next.delete(result.hash);
+				return next;
+			});
+		}
+	};
+
+	/**
+	 * Watch through Debrid-Link, which `pickWatchService` can never choose.
+	 *
+	 * That is not an oversight: choosing needs an availability flag and
+	 * Debrid-Link has no cache probe to set one from. Its watch button is offered
+	 * on rows the user has already added instead, where the torrent is known to
+	 * be in the account and the resolve is a re-add that returns the same id.
+	 */
+	const handleWatchDl = async (result: SearchResult) => {
+		if (!debridLinkKey) return;
+		const biggest = getBiggestVideoFile(result);
+		setWatchingHashes((prev) => new Set(prev).add(result.hash));
+		try {
+			await openWatch({
+				service: 'dl',
+				player,
+				hash: result.hash,
+				keys: { rdKey, adKey, torboxKey, premiumizeKey, offcloudKey, debridLinkKey },
+				fileName: biggest?.filename,
+				fileId: biggest?.fileId,
 			});
 		} finally {
 			setWatchingHashes((prev) => {
@@ -371,13 +415,18 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 							isDownloaded('ad', r.hash) ||
 							isDownloaded('tb', r.hash) ||
 							isDownloaded('pm', r.hash) ||
-							isDownloaded('oc', r.hash);
+							isDownloaded('oc', r.hash) ||
+							isDownloaded('dl', r.hash);
 						const downloading =
 							isDownloading('rd', r.hash) ||
 							isDownloading('ad', r.hash) ||
 							isDownloading('tb', r.hash) ||
 							isDownloading('pm', r.hash) ||
-							isDownloading('oc', r.hash);
+							isDownloading('oc', r.hash) ||
+							// Debrid-Link contributes to the library state but never
+							// to the availability flags beside it - it has no cache
+							// probe to set one.
+							isDownloading('dl', r.hash);
 						const inYourLibrary = downloaded || downloading;
 
 						if (
@@ -911,12 +960,87 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											</button>
 										)}
 
+										{(rdKey ||
+											adKey ||
+											torboxKey ||
+											premiumizeKey ||
+											offcloudKey) &&
+											debridLinkKey && <ActionSeparator />}
+
+										{/* — DL —
+										    The add button renders on **every** row,
+										    and no badge, pill or "Check DL" goes
+										    with it. Debrid-Link retired
+										    `/seedbox/cached` and put nothing in its
+										    place, so its only remaining cache probe
+										    is a mutating add — there is nothing to
+										    check with, and a permanently-false
+										    `dlAvailable` would lie to the pills, the
+										    sorts and `pickWatchService` alike. The
+										    add is the probe: it sends the full
+										    magnet, so a cached release comes back
+										    playable in one request and an uncached
+										    one downloads for real. */}
+										{debridLinkKey && inLibrary('dl', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => deleteDl?.(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<span className="inline-block animate-spin">
+														⌛
+													</span>
+												) : (
+													<X className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading
+													? 'Removing...'
+													: `DL (${hashAndProgress[`dl:${r.hash}`] + '%'})`}
+											</button>
+										)}
+										{debridLinkKey && notInLibrary('dl', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => addDl?.(r.hash)}
+												disabled={isLoading}
+												title="Debrid-Link has no cache check — adding is the only way to find out, and an uncached release downloads for real"
+											>
+												{isLoading ? (
+													<span className="inline-block animate-spin">
+														⌛
+													</span>
+												) : (
+													<Download className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading ? 'Adding...' : 'Add to DL'}
+											</button>
+										)}
+										{debridLinkKey && inLibrary('dl', r.hash) && player && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isWatching ? 'cursor-not-allowed opacity-50' : ''}`}
+												title="Watch via Debrid-Link"
+												onClick={() => handleWatchDl(r)}
+												disabled={isWatching}
+											>
+												<>
+													{isWatching ? (
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+													) : (
+														<EyeIcon className="mr-1 inline-block h-3 w-3 text-sky-400" />
+													)}
+													Watch (DL)
+												</>
+											</button>
+										)}
+
 										{/* — Separator: everything above belongs to one service, everything below does not — */}
 										{(rdKey ||
 											adKey ||
 											torboxKey ||
 											premiumizeKey ||
-											offcloudKey) && <ActionSeparator />}
+											offcloudKey ||
+											debridLinkKey) && <ActionSeparator />}
 
 										{watchService && player && (
 											<button
