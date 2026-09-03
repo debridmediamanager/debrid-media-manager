@@ -30,8 +30,17 @@ import { registerCompletedDebridJob } from '@/services/transferRegistration';
  * blocks the resubmission that would fix it.
  */
 
-/** Mappings examined per tick. The cron runs every 5 minutes. */
+/**
+ * Mappings examined per tick, and how long each lookup may take.
+ *
+ * The two are one decision: the cron fires every 5 minutes and the sweep runs
+ * sequentially, so `RECONCILE_BATCH × LOOKUP_TIMEOUT_MS` has to stay under that
+ * interval or a stalled uploader piles ticks on top of each other. 25 × 8s =
+ * 200s leaves headroom; the same batch at the 15s used elsewhere would not.
+ * 8 seconds also matches what `resolveJobServer` already allows a job lookup.
+ */
 export const RECONCILE_BATCH = 25;
+const LOOKUP_TIMEOUT_MS = 8000;
 
 export interface ReconcileResult {
 	checked: number;
@@ -58,7 +67,7 @@ async function lookupJob(server: string, jobId: string): Promise<UploaderJobLook
 	try {
 		const res = await fetch(`${server}/jobs/${jobId}`, {
 			headers: { Accept: 'application/json' },
-			signal: AbortSignal.timeout(15000),
+			signal: AbortSignal.timeout(LOOKUP_TIMEOUT_MS),
 		});
 		if (res.status === 404) return { gone: true, unreachable: false };
 		if (!res.ok) return { gone: false, unreachable: true };
