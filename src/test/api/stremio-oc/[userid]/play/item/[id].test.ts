@@ -19,7 +19,7 @@ vi.mock('@/services/offcloud', async () => {
 const mockRepository = vi.mocked(repository);
 const mockExplore = vi.mocked(exploreOffcloudCloud);
 
-const CDN = 'https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/n-sto/obj/848306982/1788380601/tok/sig';
+const CDN = 'https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/n-sto/obj/100000001/1788380601/tok/sig';
 
 describe('/api/stremio-oc/[userid]/play/item/[id]', () => {
 	let res: ReturnType<typeof createMockResponse>;

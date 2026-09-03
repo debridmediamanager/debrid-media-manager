@@ -35,7 +35,7 @@ const mockHistory = vi.mocked(getOffcloudHistory);
 const mockRemove = vi.mocked(removeOffcloudCloud);
 
 const HASH = 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c';
-const CDN = 'https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/n-sto/obj/848306982/1788380601/tok/sig';
+const CDN = 'https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/n-sto/obj/100000001/1788380601/tok/sig';
 
 const request = (query: Record<string, string> = {}) =>
 	createMockRequest({ query: { userid: 'u', hash: HASH, ...query } });

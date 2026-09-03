@@ -64,7 +64,7 @@ vi.mock('@/utils/deleteTorrent', () => ({
 import { showInfoForOC } from './index';
 
 const HASH = 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c';
-const CDN = 'https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/n-sto/obj/848306982/1/tok/sig';
+const CDN = 'https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/n-sto/obj/100000001/1/tok/sig';
 
 const row = (over: Record<string, unknown> = {}) => ({
 	id: 'oc:req-1',

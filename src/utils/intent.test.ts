@@ -535,7 +535,7 @@ describe('Premiumize intents', () => {
 describe('Offcloud intents', () => {
 	const HASH = 'dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c';
 	const CDN =
-		'https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/littlemouse-sto/5e8a93bb/848306982/1788380601/tok/sig';
+		'https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/littlemouse-sto/5e8a93bb/100000001/1788380601/tok/sig';
 	const LINKS = [`${CDN}/poster.jpg`, `${CDN}/Big%20Buck%20Bunny.mp4`];
 	const FILES = [
 		{ folder: 'BBB', filename: 'poster.jpg', size: 310380 },

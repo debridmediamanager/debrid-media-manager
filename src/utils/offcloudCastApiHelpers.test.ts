@@ -18,7 +18,7 @@ describe('offcloudCastApiHelpers', () => {
 	});
 
 	it('answers validity and the user id in one round trip', async () => {
-		mockInfo.mockResolvedValue({ user_id: '848306982' } as any);
+		mockInfo.mockResolvedValue({ user_id: '100000001' } as any);
 
 		const result = await resolveOffcloudUser('key');
 
@@ -28,7 +28,7 @@ describe('offcloudCastApiHelpers', () => {
 	});
 
 	it('is stable for the same account and different across accounts', async () => {
-		mockInfo.mockResolvedValue({ user_id: '848306982' } as any);
+		mockInfo.mockResolvedValue({ user_id: '100000001' } as any);
 		const first = await generateOffcloudUserId('key');
 		const again = await generateOffcloudUserId('key');
 		mockInfo.mockResolvedValue({ user_id: '111111111' } as any);
@@ -64,10 +64,10 @@ describe('offcloudCastApiHelpers', () => {
 	// documentation promises that, and a number would otherwise blow up on
 	// `update()`.
 	it('accepts a numeric user id', async () => {
-		mockInfo.mockResolvedValue({ user_id: 848306982 } as any);
+		mockInfo.mockResolvedValue({ user_id: 100000001 } as any);
 		const result = await resolveOffcloudUser('key');
 		expect(result.valid).toBe(true);
-		expect(result.accountUserId).toBe('848306982');
+		expect(result.accountUserId).toBe('100000001');
 	});
 
 	it('reports an unusable key without a user id', async () => {
@@ -86,7 +86,7 @@ describe('offcloudCastApiHelpers', () => {
 	// A missing salt is our misconfiguration, not a bad key
 	it('surfaces a missing salt rather than calling the key invalid', async () => {
 		delete process.env.DMMCAST_SALT;
-		mockInfo.mockResolvedValue({ user_id: '848306982' } as any);
+		mockInfo.mockResolvedValue({ user_id: '100000001' } as any);
 		await expect(resolveOffcloudUser('key')).rejects.toThrow('DMMCAST_SALT');
 	});
 });
