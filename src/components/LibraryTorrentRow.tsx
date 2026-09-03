@@ -6,9 +6,11 @@ import {
 } from '@/utils/addMagnet';
 import { getAllDebridStatusText } from '@/utils/allDebridStatus';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
+import { getDebridLinkStatusText } from '@/utils/debridLinkStatus';
 import { runDebridTransferToRd } from '@/utils/debridUploader';
 import {
 	handleDeleteAdTorrent,
+	handleDeleteDlTorrent,
 	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
@@ -54,6 +56,7 @@ interface TorrentRowProps {
 	tbKey: string | null;
 	pmKey: string | null;
 	ocKey: string | null;
+	dlKey: string | null;
 	shouldDownloadMagnets: boolean;
 	hashGrouping: Record<string, number>;
 	titleGrouping: Record<string, number>;
@@ -76,6 +79,7 @@ function TorrentRow({
 	tbKey,
 	pmKey,
 	ocKey,
+	dlKey,
 	shouldDownloadMagnets,
 	hashGrouping,
 	titleGrouping,
@@ -145,6 +149,8 @@ function TorrentRow({
 			return getPremiumizeStatusText(torrent.serviceStatus);
 		} else if (torrent.id.startsWith('oc:')) {
 			return getOffcloudStatusText(torrent.serviceStatus);
+		} else if (torrent.id.startsWith('dl:')) {
+			return getDebridLinkStatusText(torrent.serviceStatus);
 		}
 		return torrent.serviceStatus; // Fallback to raw status
 	};
@@ -436,7 +442,7 @@ function TorrentRow({
 							<br />
 						</>
 					)}
-					{[rdKey, adKey, tbKey, pmKey, ocKey].filter(Boolean).length > 1 &&
+					{[rdKey, adKey, tbKey, pmKey, ocKey, dlKey].filter(Boolean).length > 1 &&
 						torrentPrefix(torrent.id)}{' '}
 					{torrent.filename === torrent.hash ? 'Magnet' : torrent.filename}
 					{torrent.filename === torrent.hash ||
@@ -589,6 +595,13 @@ function TorrentRow({
 							}
 							if (ocKey && torrent.id.startsWith('oc:')) {
 								success = await handleDeleteOcTorrent(ocKey, torrent.id);
+							}
+							// Debrid-Link's remove never reports a failure - it echoes
+							// back whatever id it was asked about - so this is
+							// "asked", not "destroyed"; the next library listing is
+							// what settles it.
+							if (dlKey && torrent.id.startsWith('dl:')) {
+								success = await handleDeleteDlTorrent(dlKey, torrent.id);
 							}
 							if (success) onDelete(torrent.id);
 						}}

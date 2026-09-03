@@ -11,6 +11,10 @@ const dl = vi.hoisted(() => ({
 			? hashOrMagnet
 			: `magnet:?xt=urn:btih:${hashOrMagnet.trim()}`,
 	isDlFinished: (status: number) => status >= 100,
+	// `convertToDlUserTorrent` now lives in `fetchTorrents` and reads the real
+	// status mapping, which needs the enum and the pager binding to exist.
+	DL_STATUS: { PAUSED: 0, QUEUED: 1, VERIFICATION: 2, DOWNLOADING: 4, SEEDING: 8, FINISHED: 100 },
+	listAllSeedboxTorrents: vi.fn(),
 	DebridLinkError: class DebridLinkError extends Error {
 		code: string;
 		retryAfterMs?: number;

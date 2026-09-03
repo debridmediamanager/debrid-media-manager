@@ -1,5 +1,6 @@
 import {
 	showInfoForAD,
+	showInfoForDL,
 	showInfoForOC,
 	showInfoForPM,
 	showInfoForRD,
@@ -314,4 +315,26 @@ export async function handleShowInfoForOC(
 
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	await showInfoForOC(player, ocKey, t, shouldDownloadMagnets, { onDeleteOc });
+}
+
+export async function handleShowInfoForDL(
+	t: UserTorrent,
+	dlKey: string,
+	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
+	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>,
+	shouldDownloadMagnets?: boolean
+) {
+	const onDeleteDl = async (key: string, id: string) => {
+		const { handleDeleteDlTorrent } = await import('./deleteTorrent');
+		await handleDeleteDlTorrent(key, id);
+		setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== id));
+		setSelectedTorrents((prev) => {
+			prev.delete(id);
+			return new Set(prev);
+		});
+		Modal.close();
+	};
+
+	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
+	await showInfoForDL(player, dlKey, t, shouldDownloadMagnets, { onDeleteDl });
 }

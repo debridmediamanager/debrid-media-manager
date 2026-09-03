@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { renderTorrentInfo, renderTorrentInfoOC, renderTorrentInfoTB } from './render';
+import {
+	renderTorrentInfo,
+	renderTorrentInfoDL,
+	renderTorrentInfoOC,
+	renderTorrentInfoTB,
+} from './render';
 
 const baseFile = {
 	id: 1,
@@ -199,5 +204,49 @@ describe('renderTorrentInfoOC', () => {
 
 		expect(html).toContain('Episode.mkv');
 		expect(html).toContain('0.00');
+	});
+});
+
+describe('renderTorrentInfoDL', () => {
+	const SEED = 'https://seed41.debrid.link/dl/s37yg6wsgdilpqo80wwssulm';
+	const files = [
+		{ downloadUrl: `${SEED}-2/Episode.mkv`, filename: 'Episode.mkv', filesize: 2048 },
+		{ downloadUrl: `${SEED}-3/readme.txt`, filename: 'readme.txt', filesize: 12 },
+	];
+
+	// A Debrid-Link download URL is the entire capability - no token, no
+	// signature, no IP binding - so both buttons work off it directly and
+	// neither resolves a hash.
+	it('carries the keyless download URL on the watch row', () => {
+		const html = renderTorrentInfoDL(files, { canWatch: true });
+
+		expect(html).toContain('data-watch="1"');
+		expect(html).toContain(`data-watch-link="${SEED}-2/Episode.mkv"`);
+		expect(html).toContain(`data-dl-link="${SEED}-2/Episode.mkv"`);
+	});
+
+	it('does not offer watch on a non-video row', () => {
+		const html = renderTorrentInfoDL(files, { canWatch: true });
+
+		expect(html).not.toContain(`data-watch-link="${SEED}-3/readme.txt"`);
+		// Downloading it is still fine.
+		expect(html).toContain(`data-dl-link="${SEED}-3/readme.txt"`);
+	});
+
+	it('offers no watch button without a player', () => {
+		expect(renderTorrentInfoDL(files)).not.toContain('data-watch');
+	});
+
+	// A ZIP placeholder row has no URL to hand out; it is still listed, because
+	// blanking the file table would hide the release entirely.
+	it('lists a file with no URL but offers no buttons for it', () => {
+		const html = renderTorrentInfoDL(
+			[{ downloadUrl: '', filename: 'Some.Show.S02.zip', filesize: 4096 }],
+			{ canWatch: true }
+		);
+
+		expect(html).toContain('Some.Show.S02.zip');
+		expect(html).not.toContain('data-dl-link');
+		expect(html).not.toContain('data-watch');
 	});
 });

@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
 	useAllDebridApiKey,
+	useDebridLinkCredential,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
 	useRealDebridAccessToken,
@@ -116,6 +117,7 @@ vi.mock('@/hooks/auth', () => ({
 	useTorBoxAccessToken: vi.fn(),
 	usePremiumizeCredential: vi.fn(),
 	useOffcloudApiKey: vi.fn(),
+	useDebridLinkCredential: vi.fn(),
 }));
 
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -127,6 +129,7 @@ const mockedUseAllDebridApiKey = vi.mocked(useAllDebridApiKey);
 const mockedUseTorBoxAccessToken = vi.mocked(useTorBoxAccessToken);
 const mockedUsePremiumizeApiKey = vi.mocked(usePremiumizeCredential);
 const mockedUseOffcloudApiKey = vi.mocked(useOffcloudApiKey);
+const mockedUseDebridLinkCredential = vi.mocked(useDebridLinkCredential);
 
 describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 	beforeEach(() => {
@@ -142,6 +145,7 @@ describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 		mockedUseTorBoxAccessToken.mockReturnValue(null);
 		mockedUsePremiumizeApiKey.mockReturnValue(null);
 		mockedUseOffcloudApiKey.mockReturnValue(null);
+		mockedUseDebridLinkCredential.mockReturnValue(null);
 		window.localStorage.clear();
 	});
 

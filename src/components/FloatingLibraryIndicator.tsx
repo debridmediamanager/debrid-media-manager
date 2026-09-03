@@ -1,6 +1,7 @@
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import {
 	useAllDebridApiKey,
+	useDebridLinkCredential,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
 	useRealDebridAccessToken,
@@ -21,6 +22,7 @@ export default function FloatingLibraryIndicator() {
 	const tbKey = useTorBoxAccessToken();
 	const pmKey = usePremiumizeCredential();
 	const ocKey = useOffcloudApiKey();
+	const dlKey = useDebridLinkCredential();
 	const [mounted, setMounted] = useState(false);
 	const lastFetchLabel = useRelativeTimeLabel(lastFetchTime, 'Just now');
 
@@ -39,7 +41,8 @@ export default function FloatingLibraryIndicator() {
 		!!adKey?.trim() ||
 		!!tbKey?.trim() ||
 		!!pmKey?.trim() ||
-		!!ocKey?.trim();
+		!!ocKey?.trim() ||
+		!!dlKey?.trim();
 
 	const handleRefresh = async () => {
 		try {

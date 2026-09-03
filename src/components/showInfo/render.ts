@@ -270,3 +270,63 @@ export const renderTorrentInfoOC = (
 		})
 		.join('');
 };
+
+export interface DebridLinkFileRow {
+	/** The keyless `https://seedN.debrid.link/dl/<torrentid>-<n>/<name>` URL. */
+	downloadUrl: string;
+	filename: string;
+	filesize: number;
+}
+
+/**
+ * File rows for a Debrid-Link library item.
+ *
+ * Every row already carries its own playable URL, so neither button resolves
+ * anything: a Debrid-Link download link has no token, no signature, no
+ * timestamp and no IP binding - the torrent id is the whole capability, and the
+ * trailing filename is decorative. "DL" opens it; "Watch" hands it to
+ * `openWatch`, which passes a link straight through to the player intent.
+ *
+ * That portability is also why these URLs are built here, at open time, from a
+ * fresh fetch rather than read back off the stored row - see
+ * `convertToDlUserTorrent`.
+ */
+export const renderTorrentInfoDL = (
+	files: DebridLinkFileRow[],
+	options: { canWatch?: boolean } = {}
+) => {
+	const sorted = [...files].sort((a, b) => a.filename.localeCompare(b.filename));
+	return sorted
+		.map((file) => {
+			const isPlayable = Boolean(isVideo({ path: file.filename }));
+			const actions: string[] = [];
+			if (isPlayable && options.canWatch && file.downloadUrl) {
+				actions.push(
+					renderButton('watch', {
+						text: 'Watch',
+						data: {
+							watch: '1',
+							'watch-link': file.downloadUrl,
+							'watch-file-name': file.filename,
+						},
+					})
+				);
+			}
+			if (file.downloadUrl) {
+				actions.push(
+					renderButton('download', {
+						text: 'DL',
+						data: { 'dl-link': file.downloadUrl, 'dl-file-name': file.filename },
+					})
+				);
+			}
+			return renderFileRow({
+				id: 0,
+				path: file.filename,
+				size: file.filesize ?? 0,
+				isPlayable,
+				actions,
+			});
+		})
+		.join('');
+};

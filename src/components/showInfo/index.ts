@@ -1,3 +1,4 @@
+import { getSeedboxTorrent, type DebridLinkFile } from '@/services/debridLink';
 import {
 	exploreOffcloudCloud,
 	getOffcloudCacheInfo,
@@ -11,8 +12,10 @@ import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
 import { TorBoxTorrentInfo } from '@/services/types';
 import { handleRestartTorrent } from '@/utils/addMagnet';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
+import { getDebridLinkServiceStatus, getDebridLinkStatusText } from '@/utils/debridLinkStatus';
 import {
 	handleDeleteAdTorrent,
+	handleDeleteDlTorrent,
 	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
@@ -33,6 +36,7 @@ import { renderButton, renderInfoTable } from './components';
 import type { PremiumizeFileRow } from './render';
 import {
 	renderTorrentInfo,
+	renderTorrentInfoDL,
 	renderTorrentInfoOC,
 	renderTorrentInfoPM,
 	renderTorrentInfoTB,
@@ -1533,6 +1537,195 @@ export const showInfoForOC = async (
 			// with no per-file request behind it - unlike Premiumize's.
 			document.getElementById('btn-export-links-oc')?.addEventListener('click', () => {
 				const blob = new Blob([files.map((file) => file.link).join('\n')], {
+					type: 'text/plain',
+				});
+				const a = document.createElement('a');
+				a.href = URL.createObjectURL(blob);
+				a.download = `${torrent.filename}.txt`;
+				a.click();
+				URL.revokeObjectURL(a.href);
+				toast.success('Download links exported.', magnetToastOptions);
+			});
+		},
+	});
+};
+
+/**
+ * Info modal for a Debrid-Link library item.
+ *
+ * Three measured Debrid-Link behaviours decide what this does
+ * (`docs/providers/debrid-link.md`):
+ *
+ *  - **The files are fetched, not read off the row.** The library listing does
+ *    carry them, but the per-file download URLs are deliberately not persisted
+ *    (`convertToDlUserTorrent` says why: a keyless, IP-agnostic URL that keeps
+ *    serving after the torrent is deleted has no business sitting in IndexedDB).
+ *    One `seedbox/list` call by id rebuilds them for the row a user opened.
+ *  - **That same call is the ZIP escape hatch.** A torrent with many files
+ *    lists as a single `isZip: true` entry in the bulk listing and only expands
+ *    when fetched on its own. The client sends both the `id` and `ids`
+ *    parameters, because the endpoint's description spells the expanding one
+ *    `id` while its parameter table lists only `ids` - and it matches the
+ *    answer against the requested id afterwards either way, because an id
+ *    Debrid-Link does not recognise makes the filter vanish and the *entire
+ *    account* come back.
+ *  - **The links are already playable.** No token, no signature, no IP binding
+ *    - the torrent id is the whole capability - so Watch and DL both work
+ *    straight off the URL and nothing has to be unrestricted.
+ */
+export const showInfoForDL = async (
+	app: string,
+	dlKey: string,
+	torrent: {
+		id: string;
+		hash: string;
+		filename: string;
+		title: string;
+		bytes: number;
+		serviceStatus: string;
+		progress: number;
+		added: Date;
+	},
+	shouldDownloadMagnets?: boolean,
+	handlers: { onDeleteDl?: (dlKey: string, id: string) => Promise<void> } = {}
+): Promise<void> => {
+	// Row ids are `dl:<torrentId>`, parsed inline for the same reason the delete
+	// path parses inline: there is exactly one row shape.
+	const torrentId = torrent.id.startsWith('dl:') ? torrent.id.slice(3) : '';
+	if (!torrentId) {
+		toast.error(`Unrecognised Debrid-Link row ${torrent.id}.`, magnetToastOptions);
+		return;
+	}
+
+	Modal.showLoading();
+
+	let files: DebridLinkFile[] = [];
+	let serviceStatus = torrent.serviceStatus;
+	let progress = torrent.progress;
+	let totalBytes = torrent.bytes;
+	let stillZipped = false;
+	try {
+		const fresh = await getSeedboxTorrent(dlKey, torrentId);
+		if (fresh) {
+			files = Array.isArray(fresh.files) ? fresh.files : [];
+			serviceStatus = getDebridLinkServiceStatus(fresh);
+			progress = fresh.downloadPercent ?? progress;
+			totalBytes = fresh.totalSize ?? totalBytes;
+			// A torrent that is still one ZIP entry after being fetched on its own
+			// has not expanded, so the listing below is the archive rather than
+			// its contents - say so instead of implying a one-file release.
+			stillZipped = Boolean(fresh.isZip) && files.length <= 1;
+		}
+	} catch (error) {
+		console.error('[torrentModal] fetch by id failed (DL)', error);
+	}
+
+	// Debrid-Link reports `hashString` on every seedbox row, so unlike Premiumize
+	// and Offcloud there is no hashless case to guard - but a row restored from
+	// an old cache could still be missing one.
+	const hasInfoHash = /^[a-fA-F0-9]{40}$/.test(torrent.hash);
+
+	const libraryActions = `
+        <div class="mb-3 flex justify-center items-center flex-wrap">
+            ${hasInfoHash ? renderButton('share', { link: `${await handleShare({ ...torrent, bytes: totalBytes })}` }) : ''}
+            ${renderButton('delete', { id: 'btn-delete-dl' })}
+            ${hasInfoHash ? renderButton('magnet', { id: 'btn-magnet-copy-dl', text: shouldDownloadMagnets ? 'Download' : 'Copy' }) : ''}
+            ${files.length ? renderButton('exportLinks', { id: 'btn-export-links-dl' }) : ''}
+        </div>`;
+
+	const infoRows = [
+		{ label: 'Size', value: (totalBytes / 1024 ** 3).toFixed(2) + ' GB' },
+		{ label: 'ID', value: torrent.id },
+		{ label: 'Status', value: getDebridLinkStatusText(serviceStatus) },
+		...(progress > 0 && progress < 100 ? [{ label: 'Progress', value: progress + '%' }] : []),
+		{
+			label: 'Added',
+			value: new Date(torrent.added).toLocaleString(undefined, { timeZone: 'UTC' }),
+		},
+	];
+
+	const zipNotice = stillZipped
+		? `<div class="mb-2 rounded border border-sky-600 bg-sky-900/30 p-2 text-sm text-sky-100">
+            Debrid-Link serves this release as a single archive, so the row below is the
+            whole thing rather than its individual files.
+        </div>`
+		: '';
+
+	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${torrent.filename}</h1>
+    ${libraryActions}
+    ${zipNotice}
+    <div class="text-sm text-gray-200">
+        ${renderInfoTable(infoRows)}
+    </div>
+    <div class="text-sm max-h-60 mb-2 text-left p-1 bg-gray-900">
+        <div class="overflow-x-auto" style="max-width: 100%;">
+            <table class="table-auto">
+                <tbody>
+                    ${renderTorrentInfoDL(
+						files.map((file) => ({
+							downloadUrl: file.downloadUrl,
+							filename: file.name,
+							filesize: file.size,
+						})),
+						{ canWatch: Boolean(app) }
+					)}
+                </tbody>
+            </table>
+        </div>
+    </div>`;
+
+	await Modal.fire({
+		html,
+		showConfirmButton: false,
+		showCancelButton: false,
+		customClass: {
+			htmlContainer: '!mx-1',
+			popup: '!bg-gray-900 !text-gray-100 !px-4 !py-3',
+			confirmButton: 'haptic',
+			cancelButton: 'haptic',
+		},
+		width: '800px',
+		showCloseButton: true,
+		inputAutoFocus: true,
+		didOpen: () => {
+			// Every Watch row carries its own already-playable link, so nothing
+			// here resolves a hash or adds anything to the account.
+			bindWatchButtons({
+				service: 'dl',
+				hash: torrent.hash,
+				player: app ?? '',
+				keys: { debridLinkKey: dlKey },
+			});
+
+			document
+				.querySelectorAll<HTMLButtonElement>('button[data-dl-link]')
+				.forEach((button) => {
+					button.addEventListener('click', () => {
+						window.open(button.dataset.dlLink!, '_blank');
+					});
+				});
+
+			document.getElementById('btn-magnet-copy-dl')?.addEventListener('click', () => {
+				void handleCopyOrDownloadMagnet(torrent.hash, shouldDownloadMagnets);
+			});
+
+			document.getElementById('btn-delete-dl')?.addEventListener('click', async () => {
+				try {
+					// Debrid-Link's remove never fails - it echoes back whatever id
+					// it was handed - so the modal closes on "asked", and the next
+					// library listing is what confirms.
+					if (handlers.onDeleteDl) await handlers.onDeleteDl(dlKey, torrent.id);
+					else await handleDeleteDlTorrent(dlKey, torrent.id);
+					Modal.close();
+				} catch (error) {
+					console.error('[torrentModal] delete failed (DL)', error);
+				}
+			});
+
+			// The links are already minted and keyless, so this is a plain export
+			// with no per-file request behind it - unlike Premiumize's.
+			document.getElementById('btn-export-links-dl')?.addEventListener('click', () => {
+				const blob = new Blob([files.map((file) => file.downloadUrl).join('\n')], {
 					type: 'text/plain',
 				});
 				const a = document.createElement('a');

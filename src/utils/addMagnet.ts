@@ -12,7 +12,6 @@ import {
 import {
 	addSeedboxTorrent,
 	DebridLinkError,
-	DebridLinkTorrent,
 	isDlFinished,
 	toMagnetUri as toDlMagnetUri,
 } from '@/services/debridLink';
@@ -46,7 +45,7 @@ import {
 	TorBoxRateLimitError,
 } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorBoxWebDownload, TorrentInfoResponse } from '@/services/types';
-import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
+import { UserTorrent } from '@/torrent/userTorrent';
 import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
@@ -54,6 +53,7 @@ import { isRdBlockedName } from './deInfringe';
 import { handleDeleteRdTorrent } from './deleteTorrent';
 import {
 	buildPremiumizeRowSources,
+	convertToDlUserTorrent,
 	convertToOffcloudUserTorrent,
 	convertToPremiumizeUserTorrent,
 	convertToTbUserTorrent,
@@ -1028,41 +1028,6 @@ const dlErrorMessage = (error: unknown): string | null => {
 			: 'Debrid-Link rate-limited this action — locked for an hour.';
 	}
 	return DL_ERROR_MESSAGES[error.code] ?? error.message ?? null;
-};
-
-/**
- * Builds the library row for a freshly added Debrid-Link torrent.
- *
- * Unlike every other provider here, the add response is already the whole
- * object - hash, size, per-file list, live download URLs - so nothing has to be
- * read back. B4 moves this next to `fetchDebridLink` in `fetchTorrents.ts`
- * (where the OC equivalent ended up) once the library listing needs the same
- * conversion; until then it is deliberately minimal and lives with its one
- * caller.
- */
-const convertToDlUserTorrent = (torrent: DebridLinkTorrent, hash: string): UserTorrent => {
-	const finished = isDlFinished(torrent.status);
-	return {
-		id: `dl:${torrent.id}`,
-		filename: torrent.name || 'noname',
-		title: torrent.name || 'noname',
-		// Debrid-Link reports the hash on every torrent object, so a row is never
-		// hashless the way a Premiumize or an Offcloud one can be.
-		hash: (torrent.hashString || hash).toLowerCase(),
-		bytes: torrent.totalSize ?? 0,
-		progress: finished ? 100 : (torrent.downloadPercent ?? 0),
-		status: finished ? UserTorrentStatus.finished : UserTorrentStatus.downloading,
-		serviceStatus: `${torrent.status}`,
-		added: torrent.created ? new Date(torrent.created * 1000) : new Date(),
-		mediaType: 'other',
-		// The per-file URLs are keyless, IP-agnostic and outlive the torrent, so
-		// they are a capability rather than a session artefact - they stay off
-		// the row until B4 decides where they can safely live.
-		links: [],
-		selectedFiles: [],
-		seeders: 0,
-		speed: torrent.downloadSpeed ?? 0,
-	};
 };
 
 /**

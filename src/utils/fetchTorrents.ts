@@ -1,4 +1,5 @@
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
+import { listAllSeedboxTorrents, type DebridLinkTorrent } from '@/services/debridLink';
 import {
 	extractBtih,
 	getOffcloudHistory,
@@ -23,6 +24,7 @@ import { ParsedFilename, filenameParse } from '@ctrl/video-filename-parser';
 import { AxiosError } from 'axios';
 import { every, some } from 'lodash';
 import toast from 'react-hot-toast';
+import { getDebridLinkServiceStatus, getDebridLinkUserTorrentStatus } from './debridLinkStatus';
 import { getMediaId } from './mediaId';
 import { getTypeByNameAndFileCount } from './mediaType';
 import { toOffcloudRowId } from './offcloudRow';
@@ -1042,5 +1044,159 @@ export const fetchOffcloud = async (
 			genericToastOptions
 		);
 		console.error('[OffcloudFetch] error', { elapsedMs: Date.now() - startedAt, error });
+	}
+};
+
+// ==================== Debrid-Link ====================
+
+/**
+ * A stand-in file row for a torrent Debrid-Link collapsed into a single ZIP.
+ *
+ * A torrent with many files lists as one `isZip: true` entry and only expands
+ * when fetched on its own by id, so a library row cannot know its contents
+ * without one request per row. The placeholder keeps the row honest - it shows
+ * the release and its size rather than an empty listing - and the modal fetches
+ * the real thing when a user opens it.
+ */
+const dlZipPlaceholder = (torrent: DebridLinkTorrent) => ({
+	fileId: 0,
+	filename: `${torrent.name || 'noname'}.zip`,
+	filesize: torrent.totalSize ?? 0,
+	link: '',
+});
+
+/**
+ * Builds a library row from a Debrid-Link seedbox torrent.
+ *
+ * Debrid-Link is the richest listing of any provider here - one call returns the
+ * hash, the size, the per-file breakdown and live download URLs - so nothing has
+ * to be joined, resolved or fetched a second time. Three of its facts still
+ * shape this (`docs/providers/debrid-link.md`, measured 2026-09-02):
+ *
+ *  - **The hash is always there.** `hashString` rides on every seedbox row, so a
+ *    Debrid-Link row is never the hashless kind a Premiumize or Offcloud row can
+ *    be, and every magnet-shaped action works on all of them.
+ *  - **Completion is `>= 100`, never `=== 100`.** The lower states are flags
+ *    that combine and the vendor's own sample carries `status: 6`; the mapping
+ *    lives in `debridLinkStatus.ts` so the library page and this share one.
+ *  - **The per-file download URLs are deliberately not stored.** They are
+ *    keyless, IP-agnostic, stable across remove-and-re-add and they keep serving
+ *    after the torrent is deleted - the torrent id is the entire capability. A
+ *    row lives in IndexedDB for as long as the browser profile does, so
+ *    persisting them would leave an irrevocable capability sitting on disk long
+ *    after the user thought they had removed the content. They cost one request
+ *    to re-derive from the torrent object, which is what the info modal does on
+ *    open, so nothing is lost by leaving them out.
+ */
+export function convertToDlUserTorrent(
+	torrent: DebridLinkTorrent,
+	knownHash?: string
+): UserTorrent {
+	const filename = torrent.name || 'noname';
+	const files = Array.isArray(torrent.files) ? torrent.files : [];
+	const selectedFiles = files.length
+		? files.map((file, index) => ({
+				fileId: index,
+				filename: file.name,
+				filesize: file.size,
+				// Deliberately empty - see the note above.
+				link: '',
+			}))
+		: torrent.isZip
+			? [dlZipPlaceholder(torrent)]
+			: [];
+
+	const filenames = selectedFiles.map((file) => file.filename ?? '');
+	const torrentAndFiles = [filename, ...filenames];
+	const hasEpisodes = checkArithmeticSequenceInFilenames(filenames);
+	const noPlayableFiles =
+		filenames.length > 0 && every(torrentAndFiles, (f) => !isVideo({ path: f }));
+
+	let mediaType: UserTorrent['mediaType'] = getTypeByNameAndFileCount(filename);
+	if (noPlayableFiles) {
+		mediaType = 'other';
+	} else if (
+		hasEpisodes ||
+		some(torrentAndFiles, (f) => /s\d\d\d?.?e\d\d\d?/i.test(f)) ||
+		some(torrentAndFiles, (f) => /season.?\d+/i.test(f)) ||
+		some(torrentAndFiles, (f) => /episodes?\s?\d+/i.test(f))
+	) {
+		mediaType = 'tv';
+	}
+
+	let info: ParsedFilename | undefined;
+	if (mediaType !== 'other') {
+		try {
+			info = mediaType === 'movie' ? filenameParse(filename) : filenameParse(filename, true);
+		} catch {
+			// flip the condition if parsing throws, exactly as the other services do
+			mediaType = mediaType === 'movie' ? 'tv' : 'movie';
+			try {
+				info =
+					mediaType === 'movie' ? filenameParse(filename) : filenameParse(filename, true);
+			} catch {
+				info = undefined;
+			}
+		}
+	}
+	if (info && (!info.title || !/\w/.test(info.title))) info = undefined;
+
+	const [status, progress] = getDebridLinkUserTorrentStatus(torrent);
+
+	return {
+		id: `dl:${torrent.id}`,
+		filename,
+		title: getMediaId(info ?? filename, mediaType, false) || filename,
+		hash: (torrent.hashString || knownHash || '').toLowerCase(),
+		bytes: torrent.totalSize ?? 0,
+		progress,
+		status,
+		serviceStatus: getDebridLinkServiceStatus(torrent),
+		added: torrent.created ? new Date(torrent.created * 1000) : new Date(),
+		mediaType,
+		info,
+		links: [],
+		selectedFiles,
+		// Debrid-Link reports connected peers rather than a seeder count; it is
+		// the same "is anything talking to this" signal the column shows.
+		seeders: torrent.peersConnected ?? 0,
+		speed: torrent.downloadSpeed ?? 0,
+	};
+}
+
+/**
+ * The whole Debrid-Link seedbox, paged at the documented maximum.
+ *
+ * `listAllSeedboxTorrents` walks `pagination.next` until it comes back as -1,
+ * 100 rows at a time. No per-row fan-out: the listing already carries everything
+ * a row needs, and Debrid-Link punishes a request loop with an **hour-long**
+ * lockout of the endpoint, which is the most expensive throttle of any provider
+ * in this stack - so the cheapest correct shape is the only acceptable one.
+ */
+export const fetchDebridLink = async (
+	dlKey: string,
+	callback: (torrents: UserTorrent[]) => Promise<void>,
+	customLimit?: number
+) => {
+	const startedAt = Date.now();
+	console.log('[DebridLinkFetch] start', { customLimit: customLimit ?? null });
+	try {
+		const seedbox = await listAllSeedboxTorrents(dlKey);
+		const limited = customLimit ? seedbox.slice(0, customLimit) : seedbox;
+		const torrents = limited.map((torrent) => convertToDlUserTorrent(torrent));
+		await callback(torrents);
+		console.log('[DebridLinkFetch] end', {
+			elapsedMs: Date.now() - startedAt,
+			returned: torrents.length,
+			zipped: limited.filter((t) => t.isZip).length,
+		});
+	} catch (error) {
+		await callback([]);
+		const apiError = getErrorMessage(error);
+		toast.error(
+			apiError ? `Debrid-Link error: ${apiError}` : 'Failed to fetch Debrid-Link torrents.',
+			genericToastOptions
+		);
+		console.error('[DebridLinkFetch] error', { elapsedMs: Date.now() - startedAt, error });
 	}
 };

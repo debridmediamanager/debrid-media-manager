@@ -90,6 +90,23 @@ export class UnifiedRateLimiter {
 			burstSize: 8,
 		});
 
+		// Debrid-Link is the opposite trade to the two above: the budget is
+		// generous - 280 requests to one endpoint at up to 220/s drew zero
+		// refusals - but the penalty is the harshest of any provider here, a
+		// **one-hour lockout of that endpoint**. So this is not sized against what
+		// the API tolerates; it is sized to never find out. Retries are few for
+		// the same reason: retrying into an hour-long lockout is not resilience,
+		// it is spending requests to be refused again. The client keeps its own
+		// lockout map and short-circuits locally once `floodDetected` fires.
+		this.configs.set('debridlink', {
+			maxRequestsPerMinute: 40,
+			maxConcurrent: 2,
+			retryAttempts: 2,
+			backoffMultiplier: 3,
+			jitterRange: 0.3,
+			burstSize: 5,
+		});
+
 		// Initialize structures for each service
 		for (const service of this.configs.keys()) {
 			this.queues.set(service, []);

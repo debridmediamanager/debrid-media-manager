@@ -12,13 +12,20 @@ import {
 	convertToTbUserTorrent,
 	convertToTbWebDownloadUserTorrent,
 	convertToUserTorrent,
+	fetchDebridLink,
 	fetchOffcloud,
 	fetchPremiumize,
 } from '@/utils/fetchTorrents';
 import { CacheManager, getGlobalCache } from '../cache/CacheManager';
 import { UnifiedRateLimiter, getGlobalRateLimiter } from '../rateLimit/UnifiedRateLimiter';
 
-export type LibraryService = 'realdebrid' | 'alldebrid' | 'torbox' | 'premiumize' | 'offcloud';
+export type LibraryService =
+	| 'realdebrid'
+	| 'alldebrid'
+	| 'torbox'
+	| 'premiumize'
+	| 'offcloud'
+	| 'debridlink';
 
 export interface FetchOptions {
 	forceRefresh?: boolean;
@@ -95,9 +102,50 @@ export class UnifiedLibraryFetcher {
 				return this.fetchPremiumizeLibrary(token, options);
 			case 'offcloud':
 				return this.fetchOffcloudLibrary(token, options);
+			case 'debridlink':
+				return this.fetchDebridLinkLibrary(token, options);
 			default:
 				throw new Error(`Unknown service: ${service}`);
 		}
+	}
+
+	/**
+	 * Debrid-Link pages its seedbox at 100 rows a request and carries everything
+	 * a library row needs in the listing itself - hash, size, status, files - so
+	 * there is no fan-out at all, only the pager.
+	 *
+	 * The cache matters more here than for the other services: Debrid-Link's
+	 * punishment for hammering an endpoint is an **hour** without it, so the
+	 * five-minute TTL and the deduplicated in-flight promise above are what keep
+	 * several tabs from turning one library page into a lockout.
+	 */
+	private async fetchDebridLinkLibrary(
+		token: string,
+		options: FetchOptions
+	): Promise<UserTorrent[]> {
+		const cacheKey = `dl:library:${token}`;
+		if (!options.forceRefresh) {
+			const cached = await this.cache.get<UserTorrent[]>(cacheKey);
+			if (cached) return cached;
+		}
+
+		let torrents: UserTorrent[] = [];
+		await this.rateLimiter.execute('debridlink', 'dl-library', async () => {
+			await fetchDebridLink(
+				token,
+				async (fetched) => {
+					torrents = fetched;
+				},
+				options.maxItems
+			);
+		});
+
+		options.onProgress?.(torrents.length, torrents.length);
+		options.onBatchComplete?.(torrents);
+		// Same short TTL the other services use, so a staleness sweep collapses
+		// several tabs into one fetch.
+		await this.cache.set(cacheKey, torrents, undefined, 5 * 60 * 1000);
+		return torrents;
 	}
 
 	/**

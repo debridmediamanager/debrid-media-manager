@@ -6,6 +6,7 @@
 
 import {
 	useAllDebridApiKey,
+	useDebridLinkCredential,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
 	useRealDebridAccessToken,
@@ -112,6 +113,7 @@ interface LibraryStats {
 	tbItems: number;
 	pmItems: number;
 	ocItems: number;
+	dlItems: number;
 	lastSync: Date | null;
 	cacheHitRate: number;
 	averageFetchTime: number;
@@ -134,6 +136,7 @@ interface EnhancedLibraryCacheContextType {
 	tbLibrary: UserTorrent[];
 	pmLibrary: UserTorrent[];
 	ocLibrary: UserTorrent[];
+	dlLibrary: UserTorrent[];
 
 	// Status and stats
 	syncStatus: SyncStatus;
@@ -181,6 +184,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 	const tbKey = useTorBoxAccessToken();
 	const pmKey = usePremiumizeCredential();
 	const ocKey = useOffcloudApiKey();
+	const dlKey = useDebridLinkCredential();
 
 	// Library state
 	const [libraryItems, setLibraryItems] = useState<UserTorrent[]>([]);
@@ -189,9 +193,10 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 	const [tbLibrary, setTbLibrary] = useState<UserTorrent[]>([]);
 	const [pmLibrary, setPmLibrary] = useState<UserTorrent[]>([]);
 	const [ocLibrary, setOcLibrary] = useState<UserTorrent[]>([]);
+	const [dlLibrary, setDlLibrary] = useState<UserTorrent[]>([]);
 
 	// Auth state helper
-	const hasAnyAuth = Boolean(rdKey || adKey || tbKey || pmKey || ocKey);
+	const hasAnyAuth = Boolean(rdKey || adKey || tbKey || pmKey || ocKey || dlKey);
 
 	// Sync status
 	const [syncStatus, setSyncStatus] = useState<SyncStatus>({
@@ -211,6 +216,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		tbItems: 0,
 		pmItems: 0,
 		ocItems: 0,
+		dlItems: 0,
 		lastSync: null,
 		cacheHitRate: 0,
 		averageFetchTime: 0,
@@ -236,6 +242,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		tb: normalizeToken(tbKey),
 		pm: normalizeToken(pmKey),
 		oc: normalizeToken(ocKey),
+		dl: normalizeToken(dlKey),
 	});
 	const initialRefreshDoneRef = useRef({
 		rd: false,
@@ -243,6 +250,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		tb: false,
 		pm: false,
 		oc: false,
+		dl: false,
 	});
 
 	// Update statistics
@@ -252,6 +260,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		const tb = torrents.filter((t) => t.id.startsWith('tb:')).length;
 		const pm = torrents.filter((t) => t.id.startsWith('pm:')).length;
 		const oc = torrents.filter((t) => t.id.startsWith('oc:')).length;
+		const dl = torrents.filter((t) => t.id.startsWith('dl:')).length;
 
 		const cacheHitRate =
 			cacheHitsRef.current.hits + cacheHitsRef.current.misses > 0
@@ -271,6 +280,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			tbItems: tb,
 			pmItems: pm,
 			ocItems: oc,
+			dlItems: dl,
 			lastSync: prev.lastSync,
 			cacheHitRate: Math.round(cacheHitRate * 100),
 			averageFetchTime: Math.round(avgFetchTime),
@@ -291,18 +301,21 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 				const tb = cachedTorrents.filter((t) => t.id.startsWith('tb:'));
 				const pm = cachedTorrents.filter((t) => t.id.startsWith('pm:'));
 				const oc = cachedTorrents.filter((t) => t.id.startsWith('oc:'));
+				const dl = cachedTorrents.filter((t) => t.id.startsWith('dl:'));
 
 				setRdLibrary(rd);
 				setAdLibrary(ad);
 				setTbLibrary(tb);
 				setPmLibrary(pm);
 				setOcLibrary(oc);
+				setDlLibrary(dl);
 
 				initialRefreshDoneRef.current.rd = rd.length > 0;
 				initialRefreshDoneRef.current.ad = ad.length > 0;
 				initialRefreshDoneRef.current.tb = tb.length > 0;
 				initialRefreshDoneRef.current.pm = pm.length > 0;
 				initialRefreshDoneRef.current.oc = oc.length > 0;
+				initialRefreshDoneRef.current.dl = dl.length > 0;
 
 				updateStats(cachedTorrents);
 
@@ -364,14 +377,27 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		}
 	}, [ocKey]);
 
+	useEffect(() => {
+		if (!dlKey) {
+			setDlLibrary([]);
+		}
+	}, [dlKey]);
+
 	// Update combined library
 	const updateCombinedLibrary = useCallback(() => {
-		const combined = [...rdLibrary, ...adLibrary, ...tbLibrary, ...pmLibrary, ...ocLibrary];
+		const combined = [
+			...rdLibrary,
+			...adLibrary,
+			...tbLibrary,
+			...pmLibrary,
+			...ocLibrary,
+			...dlLibrary,
+		];
 
 		const shouldLogAndPersist = hasAnyAuth || combined.length > 0;
 		if (shouldLogAndPersist) {
 			console.log(
-				`[LibraryCache] Updating combined library: RD:${rdLibrary.length}, AD:${adLibrary.length}, TB:${tbLibrary.length}, PM:${pmLibrary.length}, OC:${ocLibrary.length}, Total:${combined.length}`
+				`[LibraryCache] Updating combined library: RD:${rdLibrary.length}, AD:${adLibrary.length}, TB:${tbLibrary.length}, PM:${pmLibrary.length}, OC:${ocLibrary.length}, DL:${dlLibrary.length}, Total:${combined.length}`
 			);
 		}
 
@@ -461,12 +487,12 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		}
 
 		updateStats(combined);
-	}, [rdLibrary, adLibrary, tbLibrary, pmLibrary, ocLibrary, updateStats, hasAnyAuth]);
+	}, [rdLibrary, adLibrary, tbLibrary, pmLibrary, ocLibrary, dlLibrary, updateStats, hasAnyAuth]);
 
 	// Trigger combined library update when any service library changes
 	useEffect(() => {
 		updateCombinedLibrary();
-	}, [rdLibrary, adLibrary, tbLibrary, pmLibrary, ocLibrary, updateCombinedLibrary]);
+	}, [rdLibrary, adLibrary, tbLibrary, pmLibrary, ocLibrary, dlLibrary, updateCombinedLibrary]);
 
 	// Refresh library for a specific service or all
 	const refreshLibrary = useCallback(
@@ -480,6 +506,8 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 				premiumize:
 					typeof pmKey === 'string' && pmKey.trim().length > 0 ? pmKey : undefined,
 				offcloud: typeof ocKey === 'string' && ocKey.trim().length > 0 ? ocKey : undefined,
+				debridlink:
+					typeof dlKey === 'string' && dlKey.trim().length > 0 ? dlKey : undefined,
 			};
 
 			const runSingle = async (target: Service, token: string | undefined) => {
@@ -561,6 +589,9 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 						case 'offcloud':
 							setOcLibrary(torrents);
 							break;
+						case 'debridlink':
+							setDlLibrary(torrents);
+							break;
 					}
 
 					setStats((prev) => ({ ...prev, lastSync: syncCompletedAt }));
@@ -599,6 +630,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 					'torbox',
 					'premiumize',
 					'offcloud',
+					'debridlink',
 				];
 				const active = services.filter((target) => Boolean(tokens[target]));
 				console.log('[LibraryCache] refreshLibrary multi-service start', {
@@ -618,7 +650,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			});
 			await runSingle(service, tokens[service]);
 		},
-		[rdKey, adKey, tbKey, pmKey, ocKey]
+		[rdKey, adKey, tbKey, pmKey, ocKey, dlKey]
 	);
 
 	const refreshAll = useCallback(
@@ -647,7 +679,9 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 								? 'tb'
 								: target === 'premiumize'
 									? 'pm'
-									: 'oc'
+									: target === 'offcloud'
+										? 'oc'
+										: 'dl'
 				] = false;
 			}
 		},
@@ -889,6 +923,46 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		);
 	}, [ocKey, ocLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
 
+	useEffect(() => {
+		if (!hasLoadedInitialData) {
+			return;
+		}
+
+		const currentToken = normalizeToken(dlKey);
+		const previousToken = previousTokenStateRef.current.dl;
+		const tokenChanged = currentToken !== previousToken;
+		logTokenTransition('Debrid-Link', currentToken, previousToken, {
+			librarySize: dlLibrary.length,
+			hasFetched: initialRefreshDoneRef.current.dl,
+		});
+
+		if (!currentToken) {
+			previousTokenStateRef.current.dl = null;
+			initialRefreshDoneRef.current.dl = false;
+			return;
+		}
+
+		if (tokenChanged) {
+			initialRefreshDoneRef.current.dl = false;
+		}
+
+		previousTokenStateRef.current.dl = currentToken;
+
+		const hasFetched = initialRefreshDoneRef.current.dl;
+		const shouldRefresh =
+			tokenChanged || (!hasFetched && dlLibrary.length === 0) || isCachedLibraryStale();
+
+		if (!shouldRefresh) {
+			return;
+		}
+
+		initialRefreshDoneRef.current.dl = true;
+		void scheduleServiceRefresh(
+			'debridlink',
+			tokenChanged ? 'tokenChanged' : hasFetched ? 'stale' : 'initialEmpty'
+		);
+	}, [dlKey, dlLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
+
 	// Clear cache
 	const clearCache = async (service?: string) => {
 		if (service) {
@@ -916,6 +990,8 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			setPmLibrary((prev) => upsertTorrentById(prev, torrent));
 		} else if (torrent.id.startsWith('oc:')) {
 			setOcLibrary((prev) => upsertTorrentById(prev, torrent));
+		} else if (torrent.id.startsWith('dl:')) {
+			setDlLibrary((prev) => upsertTorrentById(prev, torrent));
 		}
 	};
 
@@ -935,6 +1011,8 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			setPmLibrary((prev) => prev.filter((t) => t.id !== torrentId));
 		} else if (torrentId.startsWith('oc:')) {
 			setOcLibrary((prev) => prev.filter((t) => t.id !== torrentId));
+		} else if (torrentId.startsWith('dl:')) {
+			setDlLibrary((prev) => prev.filter((t) => t.id !== torrentId));
 		}
 	};
 
@@ -949,6 +1027,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		const tbIds = torrentIds.filter((id) => id.startsWith('tb:'));
 		const pmIds = torrentIds.filter((id) => id.startsWith('pm:'));
 		const ocIds = torrentIds.filter((id) => id.startsWith('oc:'));
+		const dlIds = torrentIds.filter((id) => id.startsWith('dl:'));
 		if (rdIds.length > 0) {
 			const rdSet = new Set(rdIds);
 			setRdLibrary((prev) => prev.filter((t) => !rdSet.has(t.id)));
@@ -969,6 +1048,10 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			const ocSet = new Set(ocIds);
 			setOcLibrary((prev) => prev.filter((t) => !ocSet.has(t.id)));
 		}
+		if (dlIds.length > 0) {
+			const dlSet = new Set(dlIds);
+			setDlLibrary((prev) => prev.filter((t) => !dlSet.has(t.id)));
+		}
 	};
 
 	/**
@@ -984,18 +1067,21 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		const tb: UserTorrent[] = [];
 		const pm: UserTorrent[] = [];
 		const oc: UserTorrent[] = [];
+		const dl: UserTorrent[] = [];
 		for (const torrent of torrents) {
 			if (torrent.id.startsWith('rd:')) rd.push(torrent);
 			else if (torrent.id.startsWith('ad:')) ad.push(torrent);
 			else if (torrent.id.startsWith('tb:')) tb.push(torrent);
 			else if (torrent.id.startsWith('pm:')) pm.push(torrent);
 			else if (torrent.id.startsWith('oc:')) oc.push(torrent);
+			else if (torrent.id.startsWith('dl:')) dl.push(torrent);
 		}
 		setRdLibrary(rd);
 		setAdLibrary(ad);
 		setTbLibrary(tb);
 		setPmLibrary(pm);
 		setOcLibrary(oc);
+		setDlLibrary(dl);
 	}, []);
 
 	const updateTorrent = (torrentId: string, updates: Partial<UserTorrent>) => {
@@ -1015,6 +1101,8 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			setPmLibrary(updateFn);
 		} else if (torrentId.startsWith('oc:')) {
 			setOcLibrary(updateFn);
+		} else if (torrentId.startsWith('dl:')) {
+			setDlLibrary(updateFn);
 		}
 
 		// Update in database. Read from the latest committed library rather than
@@ -1034,6 +1122,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		tbLibrary,
 		pmLibrary,
 		ocLibrary,
+		dlLibrary,
 		syncStatus,
 		stats,
 		refreshLibrary,

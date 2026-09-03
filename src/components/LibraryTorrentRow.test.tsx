@@ -6,6 +6,7 @@ import {
 } from '@/utils/addMagnet';
 import {
 	handleDeleteAdTorrent,
+	handleDeleteDlTorrent,
 	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
 	handleDeleteRdTorrent,
@@ -57,6 +58,9 @@ const mockHandleDeletePmTorrent = handleDeletePmTorrent as MockedFunction<
 const mockHandleDeleteOcTorrent = handleDeleteOcTorrent as MockedFunction<
 	typeof handleDeleteOcTorrent
 >;
+const mockHandleDeleteDlTorrent = handleDeleteDlTorrent as MockedFunction<
+	typeof handleDeleteDlTorrent
+>;
 
 describe('LibraryTorrentRow Reinsert Functionality', () => {
 	const mockRouter = {
@@ -88,6 +92,7 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 		tbKey: null,
 		pmKey: null,
 		ocKey: null,
+		dlKey: null,
 		shouldDownloadMagnets: false,
 		hashGrouping: {},
 		titleGrouping: {},
@@ -235,6 +240,63 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			// The Offcloud key is the whole account, so it never reaches a URL.
 			expect(url).not.toContain('test-oc-key');
 			expect(init.headers.Authorization).toBe('Bearer test-oc-key');
+		});
+	});
+
+	describe('Debrid-Link rows', () => {
+		const dlProps = (overrides: Partial<UserTorrent> = {}) => ({
+			...defaultProps,
+			rdKey: null,
+			dlKey: 'test-dl-key',
+			torrent: {
+				...mockTorrent,
+				id: 'dl:seed-1',
+				hash: 'b'.repeat(40),
+				serviceStatus: '100',
+				...overrides,
+			},
+		});
+
+		it('deletes through the Debrid-Link handler', async () => {
+			mockHandleDeleteDlTorrent.mockResolvedValueOnce(true);
+			const onDelete = vi.fn();
+
+			const { container } = render(<LibraryTorrentRow {...dlProps()} onDelete={onDelete} />);
+			fireEvent.click(container.querySelector('button[title="Delete"]')!);
+
+			await waitFor(() =>
+				expect(mockHandleDeleteDlTorrent).toHaveBeenCalledWith('test-dl-key', 'dl:seed-1')
+			);
+			expect(onDelete).toHaveBeenCalledWith('dl:seed-1');
+		});
+
+		// The row stores the raw numeric status, and `6` is
+		// VERIFICATION|DOWNLOADING - a status no equality ladder would name.
+		it('names a combined status flag rather than showing the number', () => {
+			render(
+				<LibraryTorrentRow
+					{...dlProps({
+						serviceStatus: '6',
+						status: UserTorrentStatus.downloading,
+						filename: 'Magnet',
+					})}
+				/>
+			);
+			expect(screen.getByText(/Downloading/)).toBeInTheDocument();
+		});
+
+		// `hashString` rides on every seedbox row, so the magnet-shaped actions
+		// are always available - unlike Premiumize's and Offcloud's.
+		it('always offers the magnet-shaped actions', () => {
+			const { container } = render(<LibraryTorrentRow {...dlProps()} />);
+			expect(container.querySelector('button[title="Share"]')).toBeInTheDocument();
+			expect(container.querySelector('button[title="Copy magnet url"]')).toBeInTheDocument();
+		});
+
+		// The cast button arrives with the Debrid-Link cast addon, not before.
+		it('offers no cast button yet', () => {
+			const { container } = render(<LibraryTorrentRow {...dlProps()} />);
+			expect(container.querySelector('button[title="Cast (DL)"]')).not.toBeInTheDocument();
 		});
 	});
 
