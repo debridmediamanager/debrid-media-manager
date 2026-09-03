@@ -1629,6 +1629,7 @@ export const showInfoForDL = async (
         <div class="mb-3 flex justify-center items-center flex-wrap">
             ${hasInfoHash ? renderButton('share', { link: `${await handleShare({ ...torrent, bytes: totalBytes })}` }) : ''}
             ${renderButton('delete', { id: 'btn-delete-dl' })}
+            ${hasInfoHash ? renderButton('castAll', { id: 'btn-cast-all' }) : ''}
             ${hasInfoHash ? renderButton('magnet', { id: 'btn-magnet-copy-dl', text: shouldDownloadMagnets ? 'Download' : 'Copy' }) : ''}
             ${files.length ? renderButton('exportLinks', { id: 'btn-export-links-dl' }) : ''}
         </div>`;
@@ -1696,6 +1697,20 @@ export const showInfoForDL = async (
 				player: app ?? '',
 				keys: { debridLinkKey: dlKey },
 			});
+
+			// A cast is addressed by hash, because play resolves by hash with the
+			// viewer's own credential. The torrent id goes along and is what the
+			// route prefers: listing by id costs no quota, while resolving by hash
+			// means an add - one of the day's 50 torrents - for something the user
+			// is already looking at in their own library.
+			if (hasInfoHash) {
+				bindCastAllButton({
+					buttonId: 'btn-cast-all',
+					castUrl: `/api/stremio-dl/cast/library/${torrent.hash}?torrentId=${encodeURIComponent(torrentId)}`,
+					apiKey: dlKey,
+					filename: torrent.filename,
+				});
+			}
 
 			document
 				.querySelectorAll<HTMLButtonElement>('button[data-dl-link]')

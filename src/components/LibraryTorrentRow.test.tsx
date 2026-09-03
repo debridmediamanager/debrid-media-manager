@@ -293,10 +293,42 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			expect(container.querySelector('button[title="Copy magnet url"]')).toBeInTheDocument();
 		});
 
-		// The cast button arrives with the Debrid-Link cast addon, not before.
-		it('offers no cast button yet', () => {
+		it('renders a cast button for a row that reports an info hash', () => {
 			const { container } = render(<LibraryTorrentRow {...dlProps()} />);
+			expect(container.querySelector('button[title="Cast (DL)"]')).toBeInTheDocument();
+		});
+
+		// Every seedbox row carries `hashString`, so this is a row restored from
+		// an old cache rather than a shape Debrid-Link produces - and a cast is
+		// addressed by hash, so there is nothing to cast.
+		it('hides the cast button when the row has no info hash', () => {
+			const { container } = render(<LibraryTorrentRow {...dlProps({ hash: '' })} />);
 			expect(container.querySelector('button[title="Cast (DL)"]')).not.toBeInTheDocument();
+		});
+
+		it('hides the cast button without a Debrid-Link credential', () => {
+			const { container } = render(<LibraryTorrentRow {...dlProps()} dlKey={null} />);
+			expect(container.querySelector('button[title="Cast (DL)"]')).not.toBeInTheDocument();
+		});
+
+		// The torrent id goes over because listing by id costs no quota, while
+		// resolving by hash means an add - one of the day's 50 torrents.
+		it('casts with the credential as a bearer token and the torrent id in the URL', async () => {
+			const fetchMock = vi.fn().mockResolvedValue({
+				json: async () => ({ status: 'success', redirectUrl: '/x' }),
+			});
+			vi.stubGlobal('fetch', fetchMock);
+
+			const { container } = render(<LibraryTorrentRow {...dlProps()} />);
+			fireEvent.click(container.querySelector('button[title="Cast (DL)"]')!);
+			await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+
+			const [url, init] = fetchMock.mock.calls[0];
+			expect(url).toBe(`/api/stremio-dl/cast/library/${'b'.repeat(40)}?torrentId=seed-1`);
+			// Debrid-Link accepts `?access_token=` upstream, so a credential must
+			// never reach a URL.
+			expect(url).not.toContain('test-dl-key');
+			expect(init.headers.Authorization).toBe('Bearer test-dl-key');
 		});
 	});
 

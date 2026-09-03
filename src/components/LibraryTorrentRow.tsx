@@ -155,7 +155,9 @@ function TorrentRow({
 		return torrent.serviceStatus; // Fallback to raw status
 	};
 
-	const [castService, setCastService] = useState<'rd' | 'ad' | 'tb' | 'pm' | 'oc' | null>(null);
+	const [castService, setCastService] = useState<'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl' | null>(
+		null
+	);
 
 	// Handler for cast button click
 	const handleCastClick = async (imdbId?: string) => {
@@ -325,10 +327,52 @@ function TorrentRow({
 		}
 	};
 
+	const handleDlCastClick = async (imdbId?: string) => {
+		if (!dlKey || !torrent.id.startsWith('dl:')) return;
+
+		// The cast is addressed by hash, because play resolves by hash with the
+		// viewer's own credential. Debrid-Link reports `hashString` on every
+		// seedbox row, so unlike Premiumize and Offcloud there is no hashless
+		// case - but a row restored from an old cache could still lack one.
+		if (!torrent.hash) return;
+
+		setCastService('dl');
+		setIsCasting(true);
+		try {
+			// The torrent id rides along and is what the route prefers: listing a
+			// torrent by id costs no quota, while resolving by hash means an add,
+			// which spends one of the day's 50 torrents. Casting something the
+			// user is already looking at in their library should be free.
+			const torrentId = torrent.id.substring(3);
+			const castUrl = `/api/stremio-dl/cast/library/${torrent.hash}?torrentId=${encodeURIComponent(torrentId)}${imdbId ? `&imdbId=${imdbId}` : ''}`;
+			const response = await fetch(castUrl, {
+				headers: { Authorization: `Bearer ${dlKey}` },
+			});
+			const data = await response.json();
+
+			if (data.status === 'need_imdb_id') {
+				setCastTorrentInfo(data.torrentInfo);
+				setShowCastModal(true);
+			} else if (data.status === 'error') {
+				toast.error(data.errorMessage || 'Failed to cast to Stremio');
+			} else if (data.status === 'success') {
+				window.location.href = data.redirectUrl;
+				toast.success('Opening in Stremio...');
+			}
+		} catch (error) {
+			console.error('Cast error:', error);
+			toast.error('Failed to cast to Stremio');
+		} finally {
+			setIsCasting(false);
+		}
+	};
+
 	// Handler for IMDB ID selection from modal
 	const handleSelectImdbId = async (imdbId: string) => {
 		setShowCastModal(false);
-		if (castService === 'oc') {
+		if (castService === 'dl') {
+			await handleDlCastClick(imdbId);
+		} else if (castService === 'oc') {
 			await handleOcCastClick(imdbId);
 		} else if (castService === 'pm') {
 			await handlePmCastClick(imdbId);
@@ -544,6 +588,19 @@ function TorrentRow({
 							disabled={isCasting}
 						>
 							<Cast className="h-4 w-4 text-orange-400" />
+						</button>
+					)}
+					{dlKey && torrent.id.startsWith('dl:') && torrent.hash && (
+						<button
+							title="Cast (DL)"
+							className="mb-2 mr-2 cursor-pointer text-sky-400 disabled:opacity-50"
+							onClick={(e) => {
+								e.stopPropagation();
+								handleDlCastClick();
+							}}
+							disabled={isCasting}
+						>
+							<Cast className="h-4 w-4 text-sky-400" />
 						</button>
 					)}
 					{canSendToRd && (
