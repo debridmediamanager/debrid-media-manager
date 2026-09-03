@@ -453,14 +453,14 @@ describe('Premiumize intents', () => {
 		{
 			path: 'BBB/poster.jpg',
 			size: 310380,
-			link: `https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/poster.jpg`,
+			link: `https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/100000002/1/tok/sig/poster.jpg`,
 			stream_link: null,
 		},
 		{
 			path: 'BBB/Big Buck Bunny.mp4',
 			size: 276134947,
-			link: `https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/BBB.mp4`,
-			stream_link: `https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/BBB-stream.mp4`,
+			link: `https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/100000002/1/tok/sig/BBB.mp4`,
+			stream_link: `https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/100000002/1/tok/sig/BBB-stream.mp4`,
 		},
 	];
 
@@ -472,7 +472,7 @@ describe('Premiumize intents', () => {
 		const { intent } = await getInstantIntent('pm-key', 'hash', 0, '1.2.3.4', 'web', 'x', 'pm');
 
 		expect(intent).toBe(
-			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/BBB-stream.mp4`
+			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/100000002/1/tok/sig/BBB-stream.mp4`
 		);
 	});
 
@@ -491,7 +491,7 @@ describe('Premiumize intents', () => {
 		);
 
 		expect(intent).toBe(
-			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/poster.jpg`
+			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/100000002/1/tok/sig/poster.jpg`
 		);
 	});
 
@@ -514,7 +514,7 @@ describe('Premiumize intents', () => {
 	it('treats a Premiumize link as already playable - there is nothing to unrestrict', async () => {
 		const { intent } = await getIntent(
 			'pm-key',
-			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/BBB.mp4`,
+			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/100000002/1/tok/sig/BBB.mp4`,
 			'1.2.3.4',
 			'web',
 			'x',
@@ -522,7 +522,7 @@ describe('Premiumize intents', () => {
 		);
 
 		expect(intent).toBe(
-			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig/BBB.mp4`
+			`https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/100000002/1/tok/sig/BBB.mp4`
 		);
 		expect(mocks.unrestrictLink).not.toHaveBeenCalled();
 		expect(mocks.unlockLink).not.toHaveBeenCalled();

@@ -17,7 +17,7 @@ import {
 	toMagnetUri,
 } from './premiumize';
 
-const CDN = 'https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/704233992/1/tok/sig';
+const CDN = 'https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/100000002/1/tok/sig';
 
 const jsonResponse = (body: unknown, status = 200) =>
 	({
@@ -42,7 +42,7 @@ const lastCall = () => fetchMock.mock.calls[fetchMock.mock.calls.length - 1];
 
 describe('premiumize transport', () => {
 	it('posts through the same-origin proxy with the key in a header, never the URL', async () => {
-		fetchMock.mockResolvedValue(jsonResponse({ status: 'success', customer_id: '704233992' }));
+		fetchMock.mockResolvedValue(jsonResponse({ status: 'success', customer_id: '100000002' }));
 
 		await getPremiumizeAccountInfo('secretkey');
 

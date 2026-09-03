@@ -296,7 +296,7 @@ describe('usePremiumize via useCurrentUser', () => {
 	it('loads the account once a key is stored', async () => {
 		setStoredValue('pm:apiKey', 'pm-key');
 		mockGetPremiumizeAccountInfo.mockResolvedValue({
-			customer_id: '704233992',
+			customer_id: '100000002',
 			premium_until: 1789862400,
 			limit_used: 0.004,
 			space_used: 0,
@@ -307,7 +307,7 @@ describe('usePremiumize via useCurrentUser', () => {
 
 		await waitFor(() => expect(result.current.pmUser).not.toBeNull());
 		expect(result.current.hasPMAuth).toBe(true);
-		expect(result.current.pmUser?.customer_id).toBe('704233992');
+		expect(result.current.pmUser?.customer_id).toBe('100000002');
 		expect(mockGetPremiumizeAccountInfo).toHaveBeenCalledWith('pm-key');
 	});
 
@@ -333,7 +333,7 @@ describe('usePremiumize via useCurrentUser', () => {
 		setStoredValue('pm:apiKey', 'pasted-key');
 		setStoredValue('pm:accessToken', 'oauth-token');
 		mockGetPremiumizeAccountInfo.mockResolvedValue({
-			customer_id: '704233992',
+			customer_id: '100000002',
 			premium_until: 1789862400,
 			limit_used: 0,
 			space_used: 0,
@@ -349,7 +349,7 @@ describe('usePremiumize via useCurrentUser', () => {
 	it('falls back to the pasted key when there is no token', async () => {
 		setStoredValue('pm:apiKey', 'pasted-key');
 		mockGetPremiumizeAccountInfo.mockResolvedValue({
-			customer_id: '704233992',
+			customer_id: '100000002',
 			premium_until: 1789862400,
 			limit_used: 0,
 			space_used: 0,

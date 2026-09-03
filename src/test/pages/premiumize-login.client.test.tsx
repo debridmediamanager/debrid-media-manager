@@ -47,7 +47,7 @@ const replace = vi.fn();
 
 const premiumUntil = (offsetSeconds: number) => Math.floor(Date.now() / 1000) + offsetSeconds;
 
-const submit = (key = 'ukf695qc73cqny3q') => {
+const submit = (key = 'pm-test-api-key') => {
 	fireEvent.change(screen.getByLabelText('API Key'), { target: { value: key } });
 	fireEvent.click(screen.getByRole('button', { name: 'Save API Key' }));
 };
@@ -68,7 +68,7 @@ beforeEach(() => {
 describe('PremiumizeLoginPage', () => {
 	it('stores the key and redirects once Premiumize accepts it', async () => {
 		getPremiumizeAccountInfo.mockResolvedValue({
-			customer_id: '704233992',
+			customer_id: '100000002',
 			premium_until: premiumUntil(86400),
 			limit_used: 0,
 			space_used: 0,
@@ -78,13 +78,13 @@ describe('PremiumizeLoginPage', () => {
 		render(<PremiumizeLoginPage />);
 		submit();
 
-		await waitFor(() => expect(setApiKey).toHaveBeenCalledWith('ukf695qc73cqny3q'));
+		await waitFor(() => expect(setApiKey).toHaveBeenCalledWith('pm-test-api-key'));
 		expect(replace).toHaveBeenCalledWith('/');
 	});
 
 	it('trims the pasted key - Premiumize compares without trimming', async () => {
 		getPremiumizeAccountInfo.mockResolvedValue({
-			customer_id: '704233992',
+			customer_id: '100000002',
 			premium_until: premiumUntil(86400),
 			limit_used: 0,
 			space_used: 0,
@@ -92,14 +92,14 @@ describe('PremiumizeLoginPage', () => {
 		});
 
 		render(<PremiumizeLoginPage />);
-		submit('  ukf695qc73cqny3q  ');
+		submit('  pm-test-api-key  ');
 
-		await waitFor(() => expect(setApiKey).toHaveBeenCalledWith('ukf695qc73cqny3q'));
+		await waitFor(() => expect(setApiKey).toHaveBeenCalledWith('pm-test-api-key'));
 	});
 
 	it('refuses a free account, which can resolve one link every two hours', async () => {
 		getPremiumizeAccountInfo.mockResolvedValue({
-			customer_id: '704233992',
+			customer_id: '100000002',
 			premium_until: null,
 			limit_used: 0,
 			space_used: 0,

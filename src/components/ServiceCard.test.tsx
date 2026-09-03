@@ -54,7 +54,7 @@ const baseTbUser = {
 } as any;
 
 const basePmUser = {
-	customer_id: '704233992',
+	customer_id: '100000002',
 	premium_until: Math.floor(Date.now() / 1000) + 86400,
 	limit_used: 0.0381,
 	space_used: 276445467,
@@ -148,7 +148,7 @@ describe('ServiceCard', () => {
 			<ServiceCard service="pm" user={basePmUser} onTraktLogin={vi.fn()} onLogout={vi.fn()} />
 		);
 
-		expect(screen.getByRole('button', { name: /Premiumize/ })).toHaveTextContent('704233992');
+		expect(screen.getByRole('button', { name: /Premiumize/ })).toHaveTextContent('100000002');
 	});
 
 	it('reports Premiumize fair use in points of a 1000-point pool', async () => {

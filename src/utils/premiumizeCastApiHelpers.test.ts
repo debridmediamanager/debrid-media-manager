@@ -18,7 +18,7 @@ describe('premiumizeCastApiHelpers', () => {
 	});
 
 	it('answers validity and the user id in one round trip', async () => {
-		mockInfo.mockResolvedValue({ customer_id: '704233992' } as any);
+		mockInfo.mockResolvedValue({ customer_id: '100000002' } as any);
 
 		const result = await resolvePremiumizeUser('key');
 
@@ -28,7 +28,7 @@ describe('premiumizeCastApiHelpers', () => {
 	});
 
 	it('is stable for the same customer and different across accounts', async () => {
-		mockInfo.mockResolvedValue({ customer_id: '704233992' } as any);
+		mockInfo.mockResolvedValue({ customer_id: '100000002' } as any);
 		const first = await generatePremiumizeUserId('key');
 		const again = await generatePremiumizeUserId('key');
 		mockInfo.mockResolvedValue({ customer_id: '999999999' } as any);
@@ -70,7 +70,7 @@ describe('premiumizeCastApiHelpers', () => {
 	// A missing salt is our misconfiguration, not a bad key
 	it('surfaces a missing salt rather than calling the key invalid', async () => {
 		delete process.env.DMMCAST_SALT;
-		mockInfo.mockResolvedValue({ customer_id: '704233992' } as any);
+		mockInfo.mockResolvedValue({ customer_id: '100000002' } as any);
 		await expect(resolvePremiumizeUser('key')).rejects.toThrow('DMMCAST_SALT');
 	});
 });
