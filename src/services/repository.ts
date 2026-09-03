@@ -10,6 +10,7 @@ import {
 	HashSearchService,
 	HistoryAggregationService,
 	ImdbSearchService,
+	NewznabApiCacheService,
 	Nzb2rdMapService,
 	type Nzb2rdWaiter,
 	NzbSearchCacheService,
@@ -61,6 +62,7 @@ export type RepositoryDependencies = Partial<{
 	debridUploaderMapService: DebridUploaderMapService;
 	nzb2rdMapService: Nzb2rdMapService;
 	nzbSearchCacheService: NzbSearchCacheService;
+	newznabApiCacheService: NewznabApiCacheService;
 	transferMetaService: TransferMetaService;
 	contentRequestService: ContentRequestService;
 }>;
@@ -89,6 +91,7 @@ export class Repository {
 	private debridUploaderMapService: DebridUploaderMapService;
 	private nzb2rdMapService: Nzb2rdMapService;
 	private nzbSearchCacheService: NzbSearchCacheService;
+	private newznabApiCacheService: NewznabApiCacheService;
 	private transferMetaService: TransferMetaService;
 	private contentRequestService: ContentRequestService;
 
@@ -116,6 +119,7 @@ export class Repository {
 		debridUploaderMapService,
 		nzb2rdMapService,
 		nzbSearchCacheService,
+		newznabApiCacheService,
 		transferMetaService,
 		contentRequestService,
 	}: RepositoryDependencies = {}) {
@@ -143,6 +147,7 @@ export class Repository {
 		this.debridUploaderMapService = debridUploaderMapService ?? new DebridUploaderMapService();
 		this.nzb2rdMapService = nzb2rdMapService ?? new Nzb2rdMapService();
 		this.nzbSearchCacheService = nzbSearchCacheService ?? new NzbSearchCacheService();
+		this.newznabApiCacheService = newznabApiCacheService ?? new NewznabApiCacheService();
 		this.transferMetaService = transferMetaService ?? new TransferMetaService();
 		this.contentRequestService = contentRequestService ?? new ContentRequestService();
 	}
@@ -171,6 +176,7 @@ export class Repository {
 			this.debridUploaderMapService.disconnect(),
 			this.nzb2rdMapService.disconnect(),
 			this.nzbSearchCacheService.disconnect(),
+			this.newznabApiCacheService.disconnect(),
 			this.transferMetaService.disconnect(),
 			this.contentRequestService.disconnect(),
 		]);
@@ -329,6 +335,20 @@ export class Repository {
 		results: Parameters<NzbSearchCacheService['set']>[2]
 	) {
 		return this.nzbSearchCacheService.set(imdbId, seasonNum, results);
+	}
+
+	// Newznab aggregation cache. Separate from the one above because the clock is
+	// different: an *arr polls the same searches on a timer, so the TTL scales
+	// with the age of the content rather than being fixed per title.
+	public getCachedNewznabApiSearch(key: string, maxTtlMs?: number) {
+		return this.newznabApiCacheService.get(key, Date.now(), maxTtlMs);
+	}
+
+	public setCachedNewznabApiSearch(
+		key: string,
+		results: Parameters<NewznabApiCacheService['set']>[1]
+	) {
+		return this.newznabApiCacheService.set(key, results);
 	}
 
 	// Availability Service Methods

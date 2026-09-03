@@ -8,6 +8,7 @@ import { HashImdbService } from './hashImdb';
 import { HashSearchService } from './hashSearch';
 import { HistoryAggregationService } from './historyAggregation';
 import { ImdbSearchService } from './imdbSearch';
+import { NewznabApiCacheService } from './newznabApiCache';
 import { Nzb2rdMapService } from './nzb2rdMap';
 import { NzbSearchCacheService } from './nzbSearchCache';
 import { PremiumizeCastService } from './premiumizeCast';
@@ -35,6 +36,7 @@ export {
 	HashSearchService,
 	HistoryAggregationService,
 	ImdbSearchService,
+	NewznabApiCacheService,
 	Nzb2rdMapService,
 	NzbSearchCacheService,
 	PremiumizeCastService,
@@ -52,6 +54,7 @@ export {
 	ZurgKeysService,
 };
 
+export type { CachedNewznabApiSearch, CachedUsenetResult } from './newznabApiCache';
 export type { Nzb2rdWaiter } from './nzb2rdMap';
 export type { SponsorLookup } from './sponsors';
 export type { TransferMetaRecord, TransferMetaSource } from './transferMeta';
