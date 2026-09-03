@@ -930,15 +930,32 @@ const MovieSearch: FunctionComponent = () => {
 
 	// Unlike "Instant RD" and "Cast (RD)", Watch works with whichever service has
 	// the torrent cached, so it gets its own pick rather than reusing the RD one.
+	//
+	// **Every key the user holds, every time.** `pickWatchService` answers from the
+	// keys it is handed, so a partial set does not degrade gracefully - it silently
+	// reports "nothing is watchable" for a service that holds the release, and this
+	// button goes dead for anyone signed in only to the omitted one. Handing it
+	// three of the six is what made Watch-first dead for Premiumize users, and it
+	// would have shipped dead for Offcloud too. Debrid-Link is deliberately absent
+	// from the *answer* (it publishes no cache probe, so `pickWatchService` can
+	// never return `'dl'`), but its key still travels so `openWatch` can redeem a
+	// pick made anywhere else.
+	const watchKeys = {
+		rdKey,
+		adKey,
+		torboxKey,
+		premiumizeKey,
+		offcloudKey,
+		debridLinkKey,
+	};
+
 	const getFirstWatchableTorrent = () =>
-		filteredResults.find(
-			(r) => !r.noVideos && pickWatchService(r, { rdKey, adKey, torboxKey }) !== null
-		);
+		filteredResults.find((r) => !r.noVideos && pickWatchService(r, watchKeys) !== null);
 
 	const handleWatchFirst = async () => {
 		const result = getFirstWatchableTorrent();
 		if (!result) return;
-		const service = pickWatchService(result, { rdKey, adKey, torboxKey });
+		const service = pickWatchService(result, watchKeys);
 		if (!service) return;
 		const biggest = getBiggestVideoFile(result);
 		setIsWatching(true);
@@ -947,7 +964,7 @@ const MovieSearch: FunctionComponent = () => {
 				service,
 				player,
 				hash: result.hash,
-				keys: { rdKey, adKey, torboxKey },
+				keys: watchKeys,
 				fileName: biggest?.filename,
 				fileId: biggest?.fileId,
 				adInLibrary: `ad:${result.hash}` in hashAndProgress,
@@ -960,7 +977,7 @@ const MovieSearch: FunctionComponent = () => {
 	const handleActionButtons = () => {
 		const firstWatchable = getFirstWatchableTorrent();
 		const watchableService = firstWatchable
-			? pickWatchService(firstWatchable, { rdKey, adKey, torboxKey })
+			? pickWatchService(firstWatchable, watchKeys)
 			: null;
 		return (
 			<>
