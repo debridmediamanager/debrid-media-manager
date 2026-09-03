@@ -63,12 +63,16 @@ describe('offcloudCastCatalogHelper', () => {
 			expect(parseOffcloudMetaId(offcloudMetaId('abc123'))).toBe('abc123');
 		});
 
-		it.each(['dmm:RDTORRENT', 'dmm-tb:1', 'dmm-ad:2', 'dmm-pm:folder:f1', 'dmm-oc:'])(
-			'refuses %s',
-			(id) => {
-				expect(parseOffcloudMetaId(id)).toBeNull();
-			}
-		);
+		it.each([
+			'dmm:RDTORRENT',
+			'dmm-tb:1',
+			'dmm-ad:2',
+			'dmm-pm:folder:f1',
+			'dmm-dl:seed1',
+			'dmm-oc:',
+		])('refuses %s', (id) => {
+			expect(parseOffcloudMetaId(id)).toBeNull();
+		});
 	});
 
 	describe('getOffcloudDMMLibrary', () => {

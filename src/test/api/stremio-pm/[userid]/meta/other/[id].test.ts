@@ -40,7 +40,7 @@ describe('/api/stremio-pm/[userid]/meta/other/[id]', () => {
 
 	// Every DMM Cast addon declares the `dmm` meta prefix, so Stremio fans a
 	// library id out to all of them. A sibling's id must come back null, not 500.
-	it.each(['dmm:RDTORRENT', 'dmm-tb:123', 'dmm-ad:456'])(
+	it.each(['dmm:RDTORRENT', 'dmm-tb:123', 'dmm-ad:456', 'dmm-oc:req1', 'dmm-dl:seed1'])(
 		'returns a null meta for %s',
 		async (id) => {
 			await handler(createMockRequest({ query: { userid: 'user1', id } }), res);

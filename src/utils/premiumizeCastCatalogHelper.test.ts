@@ -63,6 +63,8 @@ describe('premiumizeCastCatalogHelper', () => {
 			expect(parsePremiumizeMetaId('dmm:ABC123')).toBeNull();
 			expect(parsePremiumizeMetaId('dmm-tb:123')).toBeNull();
 			expect(parsePremiumizeMetaId('dmm-ad:123')).toBeNull();
+			expect(parsePremiumizeMetaId('dmm-oc:123')).toBeNull();
+			expect(parsePremiumizeMetaId('dmm-dl:123')).toBeNull();
 		});
 	});
 

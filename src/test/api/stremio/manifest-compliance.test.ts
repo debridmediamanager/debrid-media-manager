@@ -1,4 +1,8 @@
 import adManifest from '@/pages/api/stremio-ad/[userid]/manifest.json';
+import dlManifest from '@/pages/api/stremio-dl/[userid]/manifest.json';
+import dlNoCatalogManifest from '@/pages/api/stremio-dl/[userid]/no-catalog/manifest.json';
+import ocManifest from '@/pages/api/stremio-oc/[userid]/manifest.json';
+import ocNoCatalogManifest from '@/pages/api/stremio-oc/[userid]/no-catalog/manifest.json';
 import pmManifest from '@/pages/api/stremio-pm/[userid]/manifest.json';
 import pmNoCatalogManifest from '@/pages/api/stremio-pm/[userid]/no-catalog/manifest.json';
 import tbManifest from '@/pages/api/stremio-tb/[userid]/manifest.json';
@@ -11,6 +15,14 @@ const manifests = [
 	{ name: 'AllDebrid', handler: adManifest },
 	{ name: 'TorBox', handler: tbManifest },
 	{ name: 'Premiumize', handler: pmManifest },
+	{ name: 'Offcloud', handler: ocManifest },
+	{ name: 'Debrid-Link', handler: dlManifest },
+] as const;
+
+const noCatalogManifests = [
+	{ name: 'Premiumize', handler: pmNoCatalogManifest },
+	{ name: 'Offcloud', handler: ocNoCatalogManifest },
+	{ name: 'Debrid-Link', handler: dlNoCatalogManifest },
 ] as const;
 
 const render = async (handler: (typeof manifests)[number]['handler']) => {
@@ -41,10 +53,13 @@ describe('DMM Cast manifests', () => {
 		}
 	});
 
-	it('the Premiumize no-catalog variant claims neither catalogs nor the resource', async () => {
-		const data = await render(pmNoCatalogManifest);
+	it.each(noCatalogManifests)(
+		'the $name no-catalog variant claims neither catalogs nor the resource',
+		async ({ handler }) => {
+			const data = await render(handler);
 
-		expect(data.catalogs).toEqual([]);
-		expect(data.resources).not.toContain('catalog');
-	});
+			expect(data.catalogs).toEqual([]);
+			expect(data.resources).not.toContain('catalog');
+		}
+	);
 });

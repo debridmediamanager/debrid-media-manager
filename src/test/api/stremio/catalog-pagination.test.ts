@@ -1,5 +1,9 @@
 import adMovies from '@/pages/api/stremio-ad/[userid]/catalog/movie/ad-casted-movies/[...extra]';
 import adShows from '@/pages/api/stremio-ad/[userid]/catalog/series/ad-casted-shows/[...extra]';
+import dlMovies from '@/pages/api/stremio-dl/[userid]/catalog/movie/dl-casted-movies/[...extra]';
+import dlShows from '@/pages/api/stremio-dl/[userid]/catalog/series/dl-casted-shows/[...extra]';
+import ocMovies from '@/pages/api/stremio-oc/[userid]/catalog/movie/oc-casted-movies/[...extra]';
+import ocShows from '@/pages/api/stremio-oc/[userid]/catalog/series/oc-casted-shows/[...extra]';
 import pmMovies from '@/pages/api/stremio-pm/[userid]/catalog/movie/pm-casted-movies/[...extra]';
 import pmShows from '@/pages/api/stremio-pm/[userid]/catalog/series/pm-casted-shows/[...extra]';
 import tbMovies from '@/pages/api/stremio-tb/[userid]/catalog/movie/tb-casted-movies/[...extra]';
@@ -32,6 +36,10 @@ const catalogs = [
 	{ name: 'AD shows', handler: adShows, method: 'fetchAllDebridCastedShows', type: 'series' },
 	{ name: 'PM movies', handler: pmMovies, method: 'fetchPremiumizeCastedMovies', type: 'movie' },
 	{ name: 'PM shows', handler: pmShows, method: 'fetchPremiumizeCastedShows', type: 'series' },
+	{ name: 'OC movies', handler: ocMovies, method: 'fetchOffcloudCastedMovies', type: 'movie' },
+	{ name: 'OC shows', handler: ocShows, method: 'fetchOffcloudCastedShows', type: 'series' },
+	{ name: 'DL movies', handler: dlMovies, method: 'fetchDebridLinkCastedMovies', type: 'movie' },
+	{ name: 'DL shows', handler: dlShows, method: 'fetchDebridLinkCastedShows', type: 'series' },
 ] as const;
 
 describe('casted catalog pagination', () => {
