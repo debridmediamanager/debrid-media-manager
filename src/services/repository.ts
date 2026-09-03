@@ -14,6 +14,7 @@ import {
 	Nzb2rdMapService,
 	type Nzb2rdWaiter,
 	NzbSearchCacheService,
+	OffcloudCastService,
 	PremiumizeCastService,
 	RdOperationalService,
 	ReportService,
@@ -47,6 +48,7 @@ export type RepositoryDependencies = Partial<{
 	torboxCastService: TorBoxCastService;
 	allDebridCastService: AllDebridCastService;
 	premiumizeCastService: PremiumizeCastService;
+	offcloudCastService: OffcloudCastService;
 	reportService: ReportService;
 	torrentSnapshotService: TorrentSnapshotService;
 	hashImdbService: HashImdbService;
@@ -76,6 +78,7 @@ export class Repository {
 	private torboxCastService: TorBoxCastService;
 	private allDebridCastService: AllDebridCastService;
 	private premiumizeCastService: PremiumizeCastService;
+	private offcloudCastService: OffcloudCastService;
 	private reportService: ReportService;
 	private torrentSnapshotService: TorrentSnapshotService;
 	private hashImdbService: HashImdbService;
@@ -104,6 +107,7 @@ export class Repository {
 		torboxCastService,
 		allDebridCastService,
 		premiumizeCastService,
+		offcloudCastService,
 		reportService,
 		torrentSnapshotService,
 		hashImdbService,
@@ -131,6 +135,7 @@ export class Repository {
 		this.torboxCastService = torboxCastService ?? new TorBoxCastService();
 		this.allDebridCastService = allDebridCastService ?? new AllDebridCastService();
 		this.premiumizeCastService = premiumizeCastService ?? new PremiumizeCastService();
+		this.offcloudCastService = offcloudCastService ?? new OffcloudCastService();
 		this.reportService = reportService ?? new ReportService();
 		this.torrentSnapshotService = torrentSnapshotService ?? new TorrentSnapshotService();
 		this.hashImdbService = hashImdbService ?? new HashImdbService();
@@ -877,6 +882,85 @@ export class Repository {
 		maxSize?: number
 	) {
 		return this.premiumizeCastService.getOtherStreams(imdbId, userId, limit, maxSize);
+	}
+
+	// Offcloud Cast Methods
+	public saveOffcloudCastProfile(
+		userId: string,
+		apiKey: string,
+		movieMaxSize?: number,
+		episodeMaxSize?: number,
+		otherStreamsLimit?: number,
+		hideCastOption?: boolean
+	) {
+		return this.offcloudCastService.saveCastProfile(
+			userId,
+			apiKey,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption
+		);
+	}
+
+	public updateOffcloudCastSettings(
+		userId: string,
+		movieMaxSize?: number,
+		episodeMaxSize?: number,
+		otherStreamsLimit?: number,
+		hideCastOption?: boolean
+	) {
+		return this.offcloudCastService.updateCastSettings(
+			userId,
+			movieMaxSize,
+			episodeMaxSize,
+			otherStreamsLimit,
+			hideCastOption
+		);
+	}
+
+	public getOffcloudCastProfile(userId: string) {
+		return this.offcloudCastService.getCastProfile(userId);
+	}
+
+	public saveOffcloudCast(
+		imdbId: string,
+		userId: string,
+		hash: string,
+		filename: string,
+		fileSize: number,
+		path?: string
+	) {
+		return this.offcloudCastService.saveCast(imdbId, userId, hash, filename, fileSize, path);
+	}
+
+	public fetchOffcloudCastedMovies(userId: string) {
+		return this.offcloudCastService.fetchCastedMovies(userId);
+	}
+
+	public fetchOffcloudCastedShows(userId: string) {
+		return this.offcloudCastService.fetchCastedShows(userId);
+	}
+
+	public fetchAllOffcloudCastedLinks(userId: string) {
+		return this.offcloudCastService.fetchAllCastedLinks(userId);
+	}
+
+	public deleteOffcloudCastedLink(imdbId: string, userId: string, hash: string) {
+		return this.offcloudCastService.deleteCastedLink(imdbId, userId, hash);
+	}
+
+	public getOffcloudUserCastStreams(imdbId: string, userId: string, limit?: number) {
+		return this.offcloudCastService.getUserCastStreams(imdbId, userId, limit);
+	}
+
+	public getOffcloudOtherStreams(
+		imdbId: string,
+		userId: string,
+		limit?: number,
+		maxSize?: number
+	) {
+		return this.offcloudCastService.getOtherStreams(imdbId, userId, limit, maxSize);
 	}
 
 	public getAllDebridCastLink(magnetId: number, fileIndex: number) {

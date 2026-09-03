@@ -211,6 +211,7 @@ function IndexPage() {
 							tbUser={tbUser}
 							adUser={!!adUser}
 							pmUser={!!pmUser}
+							ocUser={!!ocUser}
 							isLoading={isLoading}
 						/>
 						<Link

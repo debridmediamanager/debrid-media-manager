@@ -38,6 +38,7 @@ import {
 	checkDatabaseAvailabilityRd,
 	checkDatabaseAvailabilityTb,
 } from '@/utils/instantChecks';
+import { handleCastTvShowOffcloud } from '@/utils/offcloudCastApiClient';
 import { handleCastTvShowPremiumize } from '@/utils/premiumizeCastApiClient';
 import { quickSearch } from '@/utils/quickSearch';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
@@ -937,6 +938,25 @@ const TvSearch: FunctionComponent = () => {
 		);
 	}
 
+	async function handleCastOffcloud(hash: string) {
+		await toast.promise(
+			// No file list goes over: Offcloud's `cache/info` returns the whole
+			// listing server-side without adding anything, so the server resolves
+			// the release and casts every episode in it.
+			handleCastTvShowOffcloud(imdbid as string, offcloudKey!, hash),
+			{
+				loading: 'Casting episodes (Offcloud)...',
+				success: 'Casting succeeded.',
+				error: 'Casting failed.',
+			},
+			castToastOptions
+		);
+		// open stremio after casting
+		window.open(
+			getStremioDetailUrl(imdbid as string, { season: String(seasonNum), episode: 1 })
+		);
+	}
+
 	async function handleCastPremiumize(hash: string) {
 		await toast.promise(
 			// No file list goes over: Premiumize's cache probe reports no files,
@@ -1540,6 +1560,7 @@ const TvSearch: FunctionComponent = () => {
 				handleCastTorBox={torboxKey ? handleCastTorBox : undefined}
 				handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
 				handleCastPremiumize={premiumizeKey ? handleCastPremiumize : undefined}
+				handleCastOffcloud={offcloudKey ? handleCastOffcloud : undefined}
 				handleCopyMagnet={(hash) => handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)}
 				checkServiceAvailability={checkServiceAvailability}
 				addRd={addRd}

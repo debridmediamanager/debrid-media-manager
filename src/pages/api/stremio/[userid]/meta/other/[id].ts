@@ -51,13 +51,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		// Clean up the ID - remove prefix and .json suffix
 		const cleanId = id.replaceAll(/\.json$/g, '');
 
-		// Skip if this is an AllDebrid, TorBox or Premiumize ID - let those addons
-		// handle it. They all share the `dmm` meta prefix, so Stremio asks every
-		// installed DMM Cast addon for every library id.
+		// Skip if this is an AllDebrid, TorBox, Premiumize or Offcloud ID - let
+		// those addons handle it. They all share the `dmm` meta prefix, so
+		// Stremio asks every installed DMM Cast addon for every library id.
 		if (
 			cleanId.startsWith('dmm-ad:') ||
 			cleanId.startsWith('dmm-tb:') ||
-			cleanId.startsWith('dmm-pm:')
+			cleanId.startsWith('dmm-pm:') ||
+			cleanId.startsWith('dmm-oc:')
 		) {
 			console.log('[meta/other/id] Skipping non-RD ID:', cleanId);
 			res.status(200).json({ meta: null });

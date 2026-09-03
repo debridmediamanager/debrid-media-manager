@@ -1,5 +1,7 @@
 import adManifest from '@/pages/api/stremio-ad/[userid]/manifest.json';
 import adNoCatalog from '@/pages/api/stremio-ad/[userid]/no-catalog/manifest.json';
+import ocManifest from '@/pages/api/stremio-oc/[userid]/manifest.json';
+import ocNoCatalog from '@/pages/api/stremio-oc/[userid]/no-catalog/manifest.json';
 import pmManifest from '@/pages/api/stremio-pm/[userid]/manifest.json';
 import pmNoCatalog from '@/pages/api/stremio-pm/[userid]/no-catalog/manifest.json';
 import tbManifest from '@/pages/api/stremio-tb/[userid]/manifest.json';
@@ -27,6 +29,7 @@ const ADDONS: Array<{
 	{ provider: 'torbox', withCatalog: tbManifest, noCatalog: tbNoCatalog },
 	{ provider: 'alldebrid', withCatalog: adManifest, noCatalog: adNoCatalog },
 	{ provider: 'premiumize', withCatalog: pmManifest, noCatalog: pmNoCatalog },
+	{ provider: 'offcloud', withCatalog: ocManifest, noCatalog: ocNoCatalog },
 ];
 
 describe('cast addon manifest versions', () => {

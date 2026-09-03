@@ -8,12 +8,20 @@ interface MainActionsProps {
 	tbUser: TorBoxUser | null;
 	adUser: boolean;
 	pmUser: boolean;
+	ocUser: boolean;
 	isLoading: boolean;
 }
 
 const isLocalDev = process.env.NODE_ENV === 'development';
 
-export function MainActions({ rdUser, tbUser, adUser, pmUser, isLoading }: MainActionsProps) {
+export function MainActions({
+	rdUser,
+	tbUser,
+	adUser,
+	pmUser,
+	ocUser,
+	isLoading,
+}: MainActionsProps) {
 	const castButtons = [
 		rdUser && {
 			href: '/stremio',
@@ -51,6 +59,15 @@ export function MainActions({ rdUser, tbUser, adUser, pmUser, isLoading }: MainA
 			textColor: 'text-red-100',
 			iconColor: 'text-red-400',
 		},
+		ocUser && {
+			href: '/stremio-offcloud',
+			label: 'Cast for OC',
+			borderColor: 'border-orange-500',
+			bgColor: 'bg-orange-900/30',
+			hoverColor: 'hover:bg-orange-800/50',
+			textColor: 'text-orange-100',
+			iconColor: 'text-orange-400',
+		},
 	].filter(Boolean) as {
 		href: string;
 		label: string;
@@ -61,6 +78,13 @@ export function MainActions({ rdUser, tbUser, adUser, pmUser, isLoading }: MainA
 		iconColor: string;
 	}[];
 
+	// Written out as literals, never assembled: Tailwind only keeps class names
+	// it can find whole in the source.
+	//
+	// Past four buttons the row does not get narrower columns, it gets a second
+	// line - five wear 3+2 and six wear 3+3. A fifth button under `grid-cols-4`
+	// would have wrapped alone into a quarter-width cell, which is why this
+	// stops at four columns rather than counting up.
 	const castGridCols =
 		castButtons.length === 1
 			? 'grid-cols-1'
@@ -68,7 +92,9 @@ export function MainActions({ rdUser, tbUser, adUser, pmUser, isLoading }: MainA
 				? 'grid-cols-2'
 				: castButtons.length === 3
 					? 'grid-cols-3'
-					: 'grid-cols-4';
+					: castButtons.length === 4
+						? 'grid-cols-4'
+						: 'grid-cols-3';
 
 	return (
 		<div className="flex w-full flex-col gap-3">

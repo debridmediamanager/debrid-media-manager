@@ -32,6 +32,7 @@ import {
 	checkDatabaseAvailabilityTb,
 } from '@/utils/instantChecks';
 import { formatReleaseDate } from '@/utils/movieReleaseDates';
+import { handleCastMovieOffcloud } from '@/utils/offcloudCastApiClient';
 import { handleCastMoviePremiumize } from '@/utils/premiumizeCastApiClient';
 import { quickSearch } from '@/utils/quickSearch';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
@@ -884,6 +885,19 @@ const MovieSearch: FunctionComponent = () => {
 		window.open(getStremioDetailUrl(imdbid as string));
 	}
 
+	async function handleCastOffcloud(hash: string) {
+		await toast.promise(
+			handleCastMovieOffcloud(imdbid as string, offcloudKey!, hash),
+			{
+				loading: 'Starting Offcloud cast in Stremio...',
+				success: 'Cast started in Stremio',
+				error: 'Offcloud cast failed in Stremio',
+			},
+			castToastOptions
+		);
+		window.open(getStremioDetailUrl(imdbid as string));
+	}
+
 	const getFirstAvailableRdTorrent = () => {
 		return filteredResults.find((r) => r.rdAvailable && !r.noVideos);
 	};
@@ -1146,6 +1160,7 @@ const MovieSearch: FunctionComponent = () => {
 						handleCastTorBox={torboxKey ? handleCastTorBox : undefined}
 						handleCastAllDebrid={adKey ? handleCastAllDebrid : undefined}
 						handleCastPremiumize={premiumizeKey ? handleCastPremiumize : undefined}
+						handleCastOffcloud={offcloudKey ? handleCastOffcloud : undefined}
 						handleCopyMagnet={(hash) =>
 							handleCopyOrDownloadMagnet(hash, shouldDownloadMagnets)
 						}

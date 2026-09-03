@@ -59,6 +59,7 @@ type MovieSearchResultsProps = {
 	handleCastTorBox?: (hash: string) => Promise<void>;
 	handleCastAllDebrid?: (hash: string) => Promise<void>;
 	handleCastPremiumize?: (hash: string) => Promise<void>;
+	handleCastOffcloud?: (hash: string) => Promise<void>;
 	handleCopyMagnet: (hash: string) => void;
 	checkServiceAvailability: (
 		result: SearchResult,
@@ -103,6 +104,7 @@ const MovieSearchResults = ({
 	handleCastTorBox,
 	handleCastAllDebrid,
 	handleCastPremiumize,
+	handleCastOffcloud,
 	handleCopyMagnet,
 	checkServiceAvailability,
 	addRd,
@@ -126,6 +128,7 @@ const MovieSearchResults = ({
 	const [castingTbHashes, setCastingTbHashes] = useState<Set<string>>(new Set());
 	const [castingAdHashes, setCastingAdHashes] = useState<Set<string>>(new Set());
 	const [castingPmHashes, setCastingPmHashes] = useState<Set<string>>(new Set());
+	const [castingOcHashes, setCastingOcHashes] = useState<Set<string>>(new Set());
 	const [watchingHashes, setWatchingHashes] = useState<Set<string>>(new Set());
 	const [requestingHashes, setRequestingHashes] = useState<Set<string>>(new Set());
 	const [downloadMagnets, setDownloadMagnets] = useState(false);
@@ -365,6 +368,20 @@ const MovieSearchResults = ({
 		}
 	};
 
+	const handleCastOffcloudWithLoading = async (hash: string) => {
+		if (!handleCastOffcloud || castingOcHashes.has(hash)) return;
+		setCastingOcHashes((prev) => new Set(prev).add(hash));
+		try {
+			await handleCastOffcloud(hash);
+		} finally {
+			setCastingOcHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
 	const handleMagnetAction = (hash: string) => {
 		if (downloadMagnets) {
 			downloadMagnetFile(hash);
@@ -470,6 +487,7 @@ const MovieSearchResults = ({
 				const isWatching = watchingHashes.has(r.hash);
 				const isCastingAd = castingAdHashes.has(r.hash);
 				const isCastingPm = castingPmHashes.has(r.hash);
+				const isCastingOc = castingOcHashes.has(r.hash);
 				const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 				const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
 
@@ -881,6 +899,26 @@ const MovieSearchResults = ({
 											btnIcon(r.ocAvailable)
 										)}
 										{isLoading ? 'Adding...' : btnLabel(r.ocAvailable, 'OC')}
+									</button>
+								)}
+
+								{offcloudKey && handleCastOffcloud && r.ocAvailable && (
+									<button
+										className={`haptic-sm inline rounded border-2 border-[#f97316] bg-[#f97316]/30 px-1 text-xs text-orange-100 transition-colors hover:bg-[#f97316]/50 ${isCastingOc ? 'cursor-not-allowed opacity-50' : ''}`}
+										onClick={() => handleCastOffcloudWithLoading(r.hash)}
+										disabled={isCastingOc}
+									>
+										{isCastingOc ? (
+											<>
+												<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+												Casting...
+											</>
+										) : (
+											<span className="inline-flex items-center">
+												<Cast className="mr-1 h-3 w-3 text-orange-400" />
+												Cast (OC)
+											</span>
+										)}
 									</button>
 								)}
 

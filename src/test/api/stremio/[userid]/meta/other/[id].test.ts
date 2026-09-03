@@ -46,7 +46,7 @@ describe('/api/stremio/[userid]/meta/other/[id]', () => {
 	// Every DMM Cast addon declares the `dmm` meta prefix, so Stremio asks all of
 	// them for every library id. A sibling addon's id must come back as a null
 	// meta - answering it here sends a Premiumize folder id to Real-Debrid.
-	it.each(['dmm-ad:456', 'dmm-tb:123', 'dmm-pm:folder:f1'])(
+	it.each(['dmm-ad:456', 'dmm-tb:123', 'dmm-pm:folder:f1', 'dmm-oc:r1'])(
 		'returns a null meta for %s',
 		async (id) => {
 			const res = createMockResponse();

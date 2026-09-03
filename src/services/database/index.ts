@@ -11,6 +11,7 @@ import { ImdbSearchService } from './imdbSearch';
 import { NewznabApiCacheService } from './newznabApiCache';
 import { Nzb2rdMapService } from './nzb2rdMap';
 import { NzbSearchCacheService } from './nzbSearchCache';
+import { OffcloudCastService } from './offcloudCast';
 import { PremiumizeCastService } from './premiumizeCast';
 import { RdOperationalService } from './rdOperational';
 import { ReportService } from './report';
@@ -39,6 +40,7 @@ export {
 	NewznabApiCacheService,
 	Nzb2rdMapService,
 	NzbSearchCacheService,
+	OffcloudCastService,
 	PremiumizeCastService,
 	RdOperationalService,
 	ReportService,

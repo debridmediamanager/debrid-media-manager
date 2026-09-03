@@ -10,6 +10,10 @@ import {
 	getLocalStorageString,
 } from '../utils/browserStorage';
 import {
+	saveOffcloudCastProfile,
+	updateOffcloudCastSettings,
+} from '../utils/offcloudCastApiClient';
+import {
 	savePremiumizeCastProfile,
 	updatePremiumizeCastSettings,
 } from '../utils/premiumizeCastApiClient';
@@ -17,8 +21,8 @@ import { defaultEpisodeSize, defaultMovieSize, defaultOtherStreamsLimit } from '
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
 
 interface CastSettingsPanelProps {
-	service: 'rd' | 'ad' | 'tb' | 'pm';
-	accentColor: 'green' | 'yellow' | 'purple' | 'red';
+	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc';
+	accentColor: 'green' | 'yellow' | 'purple' | 'red' | 'orange';
 }
 
 export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelProps) => {
@@ -56,6 +60,11 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 			border: 'border-red-500/30',
 			title: 'text-red-200',
 			icon: 'text-red-400',
+		},
+		orange: {
+			border: 'border-orange-500/30',
+			title: 'text-orange-200',
+			icon: 'text-orange-400',
 		},
 	};
 
@@ -133,6 +142,24 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 						getLocalStorageString('pm:accessToken') ||
 						getLocalStorageString('pm:apiKey');
 					if (pmKey) await savePremiumizeCastProfile(pmKey, settings);
+				}
+			} else if (service === 'oc') {
+				// Prefers the cast token, so changing a setting costs no
+				// Offcloud call; the key is only the fallback for a profile
+				// that no longer exists server-side.
+				const ocCastToken = getLocalStorageString('oc:castToken');
+				const settings = {
+					movieMaxSize: movieSize !== undefined ? Number(movieSize) : undefined,
+					episodeMaxSize: episodeSize !== undefined ? Number(episodeSize) : undefined,
+					otherStreamsLimit:
+						streamsLimit !== undefined ? Number(streamsLimit) : undefined,
+					hideCastOption: hideCast,
+				};
+				const saved =
+					ocCastToken && (await updateOffcloudCastSettings(ocCastToken, settings));
+				if (!saved) {
+					const ocKey = getLocalStorageString('oc:apiKey');
+					if (ocKey) await saveOffcloudCastProfile(ocKey, settings);
 				}
 			} else if (service === 'ad') {
 				const adApiKey = getLocalStorageString('ad:apiKey');
