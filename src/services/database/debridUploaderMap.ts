@@ -116,20 +116,46 @@ export class DebridUploaderMapService extends DatabaseClient {
 	}
 
 	/**
-	 * Move a mapping to the back of the pending queue without changing what it
-	 * says.
+	 * Completed mappings, oldest first — the second half of the sweep.
 	 *
-	 * `listPending` reads oldest-first, so a job that is legitimately still
-	 * running keeps its place at the front and is re-examined every tick.
-	 * Measured on the first production tick, 2026-09-03: 13 of 25 slots went to
-	 * in-flight jobs while debrid02 held ~128 non-terminal ones — more than a
-	 * whole batch. Left alone the sweep would have filled with the same rows and
-	 * never reached the 344 completions it exists to file. Bumping the row on
-	 * each look makes the scan a fair round-robin instead; nothing reads this
-	 * timestamp for anything but that ordering.
+	 * A mapping goes `completed` as soon as the rewritten hash is known, which
+	 * happens *before* the release is filed into search, and the filing can fail
+	 * on its own (a title with no page to file under, a job whose file list has
+	 * no RD links). Those rows are redeemable — the dedup path hands the content
+	 * to anyone who asks for that magnet — but they appear in no listing, which
+	 * is the half of the complaint that reads as "TB → RD transfers aren't
+	 * showing in the list". 71 of 323 were in that state on 2026-09-03.
 	 */
-	async touchPending(record: DebridTransferRecord): Promise<void> {
-		if (record.status !== 'pending') return;
+	async listCompleted(limit: number): Promise<DebridTransferRecord[]> {
+		if (limit <= 0) return [];
+		const rows = await this.prisma.cache.findMany({
+			where: { key: { startsWith: KEY_PREFIX } },
+			orderBy: { updatedAt: 'asc' },
+			take: PENDING_SCAN_CAP,
+		});
+		const completed: DebridTransferRecord[] = [];
+		for (const row of rows) {
+			const record = row.value as unknown as DebridTransferRecord | null;
+			if (record?.status !== 'completed' || !record.rewrittenHash) continue;
+			completed.push(record);
+			if (completed.length >= limit) break;
+		}
+		return completed;
+	}
+
+	/**
+	 * Move a mapping to the back of its queue without changing what it says.
+	 *
+	 * Both listings read oldest-first, so a row the sweep cannot resolve keeps
+	 * its place at the front and is re-examined every tick. Measured on the
+	 * first production tick, 2026-09-03: 13 of 25 slots went to in-flight jobs
+	 * while debrid02 held ~128 non-terminal ones — more than a whole batch. Left
+	 * alone the sweep would have filled with the same rows and never reached the
+	 * 344 completions it exists to file. Bumping the row on each look makes the
+	 * scan a fair round-robin instead; nothing reads this timestamp for anything
+	 * but that ordering.
+	 */
+	async touchTransfer(record: DebridTransferRecord): Promise<void> {
 		await this.put(record);
 	}
 

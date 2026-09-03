@@ -256,10 +256,12 @@ export class Repository {
 		return this.debridUploaderMapService.listPending(limit);
 	}
 
-	public touchPendingDebridTransfer(
-		record: Parameters<DebridUploaderMapService['touchPending']>[0]
-	) {
-		return this.debridUploaderMapService.touchPending(record);
+	public listCompletedDebridTransfers(limit: number) {
+		return this.debridUploaderMapService.listCompleted(limit);
+	}
+
+	public touchDebridTransfer(record: Parameters<DebridUploaderMapService['touchTransfer']>[0]) {
+		return this.debridUploaderMapService.touchTransfer(record);
 	}
 
 	public removeDebridTransfer(originalHash: string) {

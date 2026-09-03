@@ -42,6 +42,14 @@ import { registerCompletedDebridJob } from '@/services/transferRegistration';
 export const RECONCILE_BATCH = 25;
 const LOOKUP_TIMEOUT_MS = 8000;
 
+/**
+ * Completed mappings re-examined per tick for a missing search entry.
+ *
+ * Smaller than the pending batch because the common answer is "already filed",
+ * which costs one indexed lookup and no uploader call at all.
+ */
+export const REFILE_BATCH = 10;
+
 export interface ReconcileResult {
 	checked: number;
 	/** Completed jobs whose mapping (and, where filable, search entry) was written. */
@@ -52,6 +60,8 @@ export interface ReconcileResult {
 	inFlight: number;
 	/** Jobs whose owning server could not be reached this tick. */
 	unreachable: number;
+	/** Already-completed transfers that were missing from search and got filed. */
+	refiled: number;
 }
 
 interface UploaderJobLookup {
@@ -95,6 +105,7 @@ export async function reconcileDebridTransfers(
 		pruned: 0,
 		inFlight: 0,
 		unreachable: 0,
+		refiled: 0,
 	};
 
 	const pending = await db.listPendingDebridTransfers(batch);
@@ -104,7 +115,7 @@ export async function reconcileDebridTransfers(
 	// re-examines the same long-running jobs forever and the backlog behind them
 	// is never reached — see `touchPending`.
 	const leaveForNextTick = (record: (typeof pending)[number]) =>
-		db.touchPendingDebridTransfer(record).catch((e) => {
+		db.touchDebridTransfer(record).catch((e) => {
 			console.error(`[reconcile] re-queueing ${record.originalHash} failed:`, e);
 		});
 
@@ -151,5 +162,51 @@ export async function reconcileDebridTransfers(
 		}
 	}
 
+	result.refiled = await refileUnsearchable(leaveForNextTick);
 	return result;
+}
+
+/**
+ * File a completed transfer that never made it into search.
+ *
+ * The mapping goes `completed` the moment the rewritten hash is known, before
+ * the filing is attempted, and deliberately so: a mapping is what stops a
+ * second user from running the whole pipeline again for content that is already
+ * in RD. But that means a filing which fails — no page context to file under, a
+ * file list with no RD links, a transient DB error — leaves the release
+ * redeemable and invisible, and nothing ever looked at it again.
+ *
+ * `registerCompletedDebridJob` is idempotent and returns false for anything
+ * already registered, so this is safe to re-run on every row forever; the
+ * `Available` check just avoids paying an uploader round-trip to be told so.
+ */
+type TransferRecord = Awaited<ReturnType<typeof db.listCompletedDebridTransfers>>[number];
+
+async function refileUnsearchable(
+	leaveForNextTick: (record: TransferRecord) => Promise<void>
+): Promise<number> {
+	let refiled = 0;
+	const completed = await db.listCompletedDebridTransfers(REFILE_BATCH);
+
+	for (const record of completed) {
+		await leaveForNextTick(record);
+		if (!record.rewrittenHash) continue;
+
+		try {
+			const available = await db.checkAvailabilityByHashes([record.rewrittenHash]);
+			if (available.length > 0) continue;
+
+			const server = await resolveJobServer(record.jobId, (j) => db.getDebridJobServer(j));
+			if (!server) continue;
+
+			const { job } = await lookupJob(server, record.jobId);
+			if (job?.status !== 'completed') continue;
+
+			if (await registerCompletedDebridJob(job, undefined, undefined, server)) refiled++;
+		} catch (error) {
+			console.error(`[reconcile] re-filing job ${record.jobId} failed:`, error);
+		}
+	}
+
+	return refiled;
 }

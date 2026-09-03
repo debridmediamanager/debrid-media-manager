@@ -40,7 +40,9 @@ beforeEach(() => {
 	process.env.DEBRID_UPLOADER_URLS = SERVER;
 	mockDb.removeDebridTransfer = vi.fn().mockResolvedValue(undefined);
 	mockDb.getDebridJobServer = vi.fn().mockResolvedValue(SERVER);
-	mockDb.touchPendingDebridTransfer = vi.fn().mockResolvedValue(undefined);
+	mockDb.touchDebridTransfer = vi.fn().mockResolvedValue(undefined);
+	mockDb.listCompletedDebridTransfers = vi.fn().mockResolvedValue([]);
+	mockDb.checkAvailabilityByHashes = vi.fn().mockResolvedValue([]);
 	mockRegister.mockResolvedValue(true);
 });
 
@@ -161,7 +163,7 @@ describe('reconcileDebridTransfers', () => {
 
 		await reconcileDebridTransfers();
 
-		expect(mockDb.touchPendingDebridTransfer).toHaveBeenCalledWith(record);
+		expect(mockDb.touchDebridTransfer).toHaveBeenCalledWith(record);
 	});
 
 	it('sends an unreachable job to the back of the queue too', async () => {
@@ -171,7 +173,7 @@ describe('reconcileDebridTransfers', () => {
 
 		await reconcileDebridTransfers();
 
-		expect(mockDb.touchPendingDebridTransfer).toHaveBeenCalledWith(record);
+		expect(mockDb.touchDebridTransfer).toHaveBeenCalledWith(record);
 	});
 
 	// A row that is resolved this tick is gone from the pending set anyway;
@@ -190,7 +192,75 @@ describe('reconcileDebridTransfers', () => {
 
 		await reconcileDebridTransfers();
 
-		expect(mockDb.touchPendingDebridTransfer).not.toHaveBeenCalled();
+		expect(mockDb.touchDebridTransfer).not.toHaveBeenCalled();
+	});
+
+	// The other half of the complaint. A mapping goes `completed` as soon as the
+	// rewritten hash is known — before the filing is attempted — so a filing that
+	// failed left the release redeemable but in no listing anywhere, and nothing
+	// looked at it again. 71 of 323 completed mappings were in that state on
+	// 2026-09-03: "the files from TB -> RD aren't showing in the list".
+	describe('completed transfers that never reached search', () => {
+		const completedRecord = {
+			originalHash: 'c'.repeat(40),
+			jobId: 'job-unfiled',
+			imdbId: 'tt0190641',
+			status: 'completed' as const,
+			rewrittenHash: 'd'.repeat(40),
+			updatedAt: 1_756_000_000_000,
+		};
+
+		beforeEach(() => {
+			mockDb.listPendingDebridTransfers = vi.fn().mockResolvedValue([]);
+			mockDb.listCompletedDebridTransfers = vi.fn().mockResolvedValue([completedRecord]);
+		});
+
+		it('files one that is missing from Available', async () => {
+			uploaderSays({ 'job-unfiled': { body: { id: 'job-unfiled', status: 'completed' } } });
+
+			const result = await reconcileDebridTransfers();
+
+			expect(mockDb.checkAvailabilityByHashes).toHaveBeenCalledWith(['d'.repeat(40)]);
+			expect(mockRegister).toHaveBeenCalledWith(
+				expect.objectContaining({ id: 'job-unfiled' }),
+				undefined,
+				undefined,
+				SERVER
+			);
+			expect(result.refiled).toBe(1);
+		});
+
+		// The common case by far, and it must not cost an uploader round-trip.
+		it('costs nothing for one already in search', async () => {
+			mockDb.checkAvailabilityByHashes = vi
+				.fn()
+				.mockResolvedValue([{ hash: 'd'.repeat(40) }]);
+			uploaderSays({});
+
+			const result = await reconcileDebridTransfers();
+
+			expect(mockRegister).not.toHaveBeenCalled();
+			expect(result.refiled).toBe(0);
+		});
+
+		// Same silting problem as the pending queue: this listing is oldest-first
+		// too, so a row that stays unfilable would hold its slot forever.
+		it('rotates the row whether or not it could file it', async () => {
+			uploaderSays({});
+
+			await reconcileDebridTransfers();
+
+			expect(mockDb.touchDebridTransfer).toHaveBeenCalledWith(completedRecord);
+		});
+
+		it('does not blame a transfer for an uploader that is down', async () => {
+			uploaderSays({});
+
+			const result = await reconcileDebridTransfers();
+
+			expect(mockDb.removeDebridTransfer).not.toHaveBeenCalled();
+			expect(result.refiled).toBe(0);
+		});
 	});
 
 	it('asks for a bounded batch rather than the whole backlog', async () => {
