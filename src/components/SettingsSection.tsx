@@ -126,7 +126,8 @@ export const SettingsSection = () => {
 		const hasTb = !!localStorage.getItem('tb:apiKey');
 		const hasPm =
 			!!localStorage.getItem('pm:accessToken') || !!localStorage.getItem('pm:apiKey');
-		return hasRd && !hasAd && !hasTb && !hasPm;
+		const hasOc = !!localStorage.getItem('oc:apiKey');
+		return hasRd && !hasAd && !hasTb && !hasPm && !hasOc;
 	});
 
 	const handlePlayerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
