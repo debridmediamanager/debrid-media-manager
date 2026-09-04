@@ -50,12 +50,16 @@ export const generateUserId = async (token: string): Promise<string> => {
 			throw new Error('Invalid username');
 		}
 
-		const salt = process.env.DMMCAST_SALT;
-		if (!salt) {
-			throw new Error('DMMCAST_SALT environment variable is not set');
+		let salt = process.env.DMMCAST_SALT;
+		if (!salt || salt === 'your-random-salt-here') {
+			console.warn('WARNING: DMMCAST_SALT is missing or insecure in environment variables. Using a temporary random salt. Cast profiles will not persist across server restarts. Please set DMMCAST_SALT securely in your .env file.');
+			
+			// We can't persist it, but we can store it in memory for the session
+			const globalAny = global as any;
+			salt = globalAny.__DMMCAST_TEMP_SALT || (globalAny.__DMMCAST_TEMP_SALT = crypto.randomBytes(32).toString('hex'));
 		}
 
-		const hmac = crypto.createHmac('sha256', salt).update(username).digest('base64url');
+		const hmac = crypto.createHmac('sha256', salt as string).update(username).digest('base64url');
 
 		// Return 12 characters for much better collision resistance
 		// With 62^12 possible values, collision probability is effectively 0 for millions of users
@@ -73,9 +77,10 @@ export const generateLegacyUserId = async (token: string): Promise<string> => {
 			throw new Error('Invalid username');
 		}
 
-		const salt = process.env.DMMCAST_SALT;
-		if (!salt) {
-			throw new Error('DMMCAST_SALT environment variable is not set');
+		let salt = process.env.DMMCAST_SALT;
+		if (!salt || salt === 'your-random-salt-here') {
+			const globalAny = global as any;
+			salt = globalAny.__DMMCAST_TEMP_SALT || (globalAny.__DMMCAST_TEMP_SALT = crypto.randomBytes(32).toString('hex'));
 		}
 
 		const hash = crypto
