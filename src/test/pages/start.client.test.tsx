@@ -245,7 +245,7 @@ describe('StartPage', () => {
 		const dlLink = screen.getByText('Create an account with Debrid-Link');
 		expect(dlLink).toHaveAttribute('target', '_blank');
 		expect(dlLink).toHaveAttribute('rel', 'noopener noreferrer');
-		expect(dlLink).toHaveAttribute('href', 'https://debrid-link.fr');
+		expect(dlLink).toHaveAttribute('href', 'https://debrid-link.com/id/diG1t');
 	});
 
 	it('should have correct page title and meta tags', () => {
