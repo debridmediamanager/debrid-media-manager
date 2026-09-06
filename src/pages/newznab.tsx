@@ -1,10 +1,11 @@
+import { ApiKeyField, Card, Field } from '@/components/IndexerSetup';
 import { Logo } from '@/components/Logo';
 import { useSponsor } from '@/hooks/useSponsor';
-import { Check, Copy, Handshake, KeyRound, Lock, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Handshake, KeyRound, Lock, ShieldCheck } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 // Setup guide for pointing Prowlarr / Sonarr / Radarr at DMM's Newznab endpoint.
 //
@@ -12,6 +13,10 @@ import toast, { Toaster } from 'react-hot-toast';
 // token out of localStorage, so anyone can flip it by hand; the real gate is
 // `/api/newznab/api` itself, which verifies the DMM API key server-side on
 // every request. This page only decides what to *show*, never what to allow.
+//
+// The API key itself is read from `dmm:apiKey`, which the browser keeps once a
+// sponsorship has been linked in Settings. Flipping the sponsor token by hand
+// therefore reveals nothing: an unlinked browser has no key to show.
 
 const PRODUCTION_ORIGIN = 'https://debridmediamanager.com';
 const GATEKEEPER_URL = 'https://gatekeeper.debridmediamanager.com';
@@ -55,73 +60,7 @@ const SEARCH_MODES = [
 	},
 ];
 
-function CopyButton({ value, label }: { value: string; label: string }) {
-	const [copied, setCopied] = useState(false);
-
-	useEffect(() => {
-		if (!copied) return;
-		const timer = setTimeout(() => setCopied(false), 1500);
-		return () => clearTimeout(timer);
-	}, [copied]);
-
-	return (
-		<button
-			type="button"
-			aria-label={`Copy ${label}`}
-			className="shrink-0 rounded p-1.5 text-gray-400 transition-colors hover:bg-gray-700 hover:text-gray-100"
-			onClick={async () => {
-				try {
-					await navigator.clipboard.writeText(value);
-					setCopied(true);
-				} catch {
-					toast.error('Could not reach the clipboard — copy it by hand');
-				}
-			}}
-		>
-			{copied ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
-		</button>
-	);
-}
-
-/** One row of *arr's Add Indexer → Newznab form. */
-function Field({
-	label,
-	value,
-	hint,
-	copyable = true,
-}: {
-	label: string;
-	value: string;
-	hint?: string;
-	copyable?: boolean;
-}) {
-	return (
-		<div
-			data-testid={`field-${label}`}
-			className="flex flex-col gap-1 border-b border-gray-700/60 py-2.5 last:border-b-0 sm:flex-row sm:items-center sm:gap-3"
-		>
-			<div className="w-32 shrink-0 text-sm font-semibold text-gray-300">{label}</div>
-			<div className="flex min-w-0 flex-1 items-center gap-1">
-				<code className="min-w-0 flex-1 truncate rounded bg-gray-800 px-2 py-1.5 font-mono text-sm text-cyan-300">
-					{value}
-				</code>
-				{copyable ? <CopyButton value={value} label={label} /> : null}
-			</div>
-			{hint ? <div className="text-xs text-gray-500 sm:w-56 sm:shrink-0">{hint}</div> : null}
-		</div>
-	);
-}
-
-function Card({ title, children }: { title: string; children: React.ReactNode }) {
-	return (
-		<section className="w-full rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-5 shadow">
-			<h2 className="mb-3 text-lg font-semibold text-gray-100">{title}</h2>
-			<div className="text-sm text-gray-200">{children}</div>
-		</section>
-	);
-}
-
-function SetupGuide({ indexerUrl }: { indexerUrl: string }) {
+function SetupGuide({ indexerUrl, apiKey }: { indexerUrl: string; apiKey: string | null }) {
 	return (
 		<>
 			<Card title="1. Paste this into Prowlarr / Sonarr / Radarr">
@@ -134,12 +73,7 @@ function SetupGuide({ indexerUrl }: { indexerUrl: string }) {
 				<div className="rounded bg-gray-900/60 px-3 py-1">
 					<Field label="URL" value={indexerUrl} hint="this DMM instance" />
 					<Field label="API Path" value={API_PATH} hint="appended to the URL above" />
-					<Field
-						label="API Key"
-						value="your DMM API key from gatekeeper"
-						copyable={false}
-						hint="paste it yourself — DMM never shows it"
-					/>
+					<ApiKeyField apiKey={apiKey} />
 				</div>
 				<div className="mt-3 flex gap-2 rounded border-2 border-yellow-500/30 p-3 text-xs text-gray-300">
 					<KeyRound className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
@@ -154,9 +88,8 @@ function SetupGuide({ indexerUrl }: { indexerUrl: string }) {
 						>
 							gatekeeper
 						</a>
-						. This page cannot fill it in for you — the browser only holds a signed
-						sponsor token, never the key itself, so copy it from gatekeeper straight
-						into your indexer.
+						. Once you have linked it in Settings this browser remembers it, and the
+						copy button above hands over the whole key without putting it on screen.
 					</span>
 				</div>
 			</Card>
@@ -310,7 +243,7 @@ function SponsorPitch() {
 }
 
 export default function NewznabSetupPage() {
-	const { isSponsor } = useSponsor();
+	const { isSponsor, apiKey } = useSponsor();
 
 	// Rendered on the client: the host depends on where DMM is served from, so a
 	// self-hosted or localhost instance gets its own URL rather than the public
@@ -333,6 +266,13 @@ export default function NewznabSetupPage() {
 			<Toaster position="bottom-right" />
 
 			<div className="mt-6 flex w-full max-w-3xl flex-col gap-5 pb-16">
+				<Link
+					href="/"
+					className="inline-flex w-full items-center gap-2 text-sm text-gray-400 transition-colors hover:text-gray-200"
+				>
+					<ArrowLeft className="h-4 w-4" />
+					<span>Back to dashboard</span>
+				</Link>
 				<header>
 					<h1 className="flex items-center gap-2 text-2xl font-bold text-gray-100">
 						{isSponsor ? null : <Lock className="h-5 w-5 text-pink-400" />}
@@ -344,7 +284,11 @@ export default function NewznabSetupPage() {
 					</p>
 				</header>
 
-				{isSponsor ? <SetupGuide indexerUrl={indexerUrl} /> : <SponsorPitch />}
+				{isSponsor ? (
+					<SetupGuide indexerUrl={indexerUrl} apiKey={apiKey} />
+				) : (
+					<SponsorPitch />
+				)}
 			</div>
 		</div>
 	);

@@ -1,4 +1,4 @@
-import { SPONSOR_TOKEN_KEY } from '@/hooks/useSponsor';
+import { SPONSOR_API_KEY_KEY, SPONSOR_TOKEN_KEY } from '@/hooks/useSponsor';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -27,6 +27,12 @@ function makeToken(claims: object) {
 
 function storeToken(claims: object) {
 	window.localStorage.setItem(SPONSOR_TOKEN_KEY, JSON.stringify(makeToken(claims)));
+}
+
+const API_KEY = 'k'.repeat(64);
+
+function storeApiKey(apiKey = API_KEY) {
+	window.localStorage.setItem(SPONSOR_API_KEY_KEY, JSON.stringify(apiKey));
 }
 
 describe('SponsorPanel', () => {
@@ -118,5 +124,35 @@ describe('SponsorPanel', () => {
 			expect(screen.getByPlaceholderText('64-character DMM API key')).toBeInTheDocument()
 		);
 		expect(window.localStorage.getItem(SPONSOR_TOKEN_KEY)).toBeNull();
+	});
+
+	// A browser that linked before the key was worth keeping holds a token and
+	// nothing else, and the indexer pages then have no key to fill in. Without
+	// this, getting one back means disconnecting a working sponsorship first.
+	it('asks a linked sponsor with no stored key for it again', async () => {
+		storeToken(ACTIVE);
+		render(<SponsorPanel />);
+
+		expect(await screen.findByText(/have it filled in for you/)).toBeInTheDocument();
+		expect(screen.getByPlaceholderText('64-character DMM API key')).toBeInTheDocument();
+	});
+
+	it('leaves a sponsor who already has a stored key alone', async () => {
+		storeToken(ACTIVE);
+		storeApiKey();
+		render(<SponsorPanel />);
+
+		await screen.findByRole('button', { name: /Disconnect/ });
+		expect(screen.queryByPlaceholderText('64-character DMM API key')).toBeNull();
+	});
+
+	it('disconnecting drops the stored key too', async () => {
+		storeToken(ACTIVE);
+		storeApiKey();
+		render(<SponsorPanel />);
+
+		await userEvent.click(await screen.findByRole('button', { name: /Disconnect/ }));
+
+		await waitFor(() => expect(window.localStorage.getItem(SPONSOR_API_KEY_KEY)).toBeNull());
 	});
 });

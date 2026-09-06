@@ -1,5 +1,6 @@
 import { useSponsor } from '@/hooks/useSponsor';
 import { Heart, LogOut } from 'lucide-react';
+import Link from 'next/link';
 import { FC, FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { SponsorBadge } from './SponsorBadge';
@@ -19,7 +20,14 @@ const SOURCE_LABELS: Record<string, string> = {
  * link rather than a third-party login: dmm has no accounts of its own.
  */
 export const SponsorPanel: FC = () => {
-	const { isSponsor, sources, githubUsername, link, disconnect } = useSponsor();
+	const {
+		isSponsor,
+		sources,
+		githubUsername,
+		apiKey: storedApiKey,
+		link,
+		disconnect,
+	} = useSponsor();
 	const [apiKey, setApiKey] = useState('');
 	const [busy, setBusy] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -41,6 +49,32 @@ export const SponsorPanel: FC = () => {
 		}
 	};
 
+	const keyForm = (
+		<>
+			<input
+				id="dmm-api-key"
+				type="text"
+				value={apiKey}
+				onChange={(e) => {
+					setApiKey(e.target.value);
+					setError(null);
+				}}
+				placeholder="64-character DMM API key"
+				autoComplete="off"
+				spellCheck={false}
+				className="rounded border border-gray-600 bg-gray-900 px-3 py-2 font-mono text-xs text-gray-100 placeholder:text-gray-500 focus:border-pink-400 focus:outline-none"
+			/>
+			{error && <p className="text-center text-xs text-red-300">{error}</p>}
+			<button
+				type="submit"
+				disabled={busy || !apiKey.trim()}
+				className="rounded bg-pink-600 px-3 py-2 text-sm font-medium text-white hover:bg-pink-500 disabled:opacity-50"
+			>
+				{busy ? 'Verifying…' : 'Verify sponsorship'}
+			</button>
+		</>
+	);
+
 	return (
 		<div className="rounded border-2 border-pink-500/30 p-4">
 			<div className="mb-3 flex items-center justify-center gap-2 text-center text-sm font-medium text-pink-200">
@@ -56,6 +90,30 @@ export const SponsorPanel: FC = () => {
 					<p className="text-center text-xs text-gray-400">
 						Verified via {sources.map((s) => SOURCE_LABELS[s] ?? s).join(' · ')}
 					</p>
+					{/*
+					 * A browser that linked before the key was worth keeping holds a
+					 * token and nothing else, and the indexer pages have no key to
+					 * fill in. Asking for it again here is the only way back to one
+					 * short of disconnecting a working sponsorship first.
+					 */}
+					{!storedApiKey && (
+						<form onSubmit={submit} className="flex flex-col gap-3">
+							<label
+								htmlFor="dmm-api-key"
+								className="text-center text-xs text-gray-400"
+							>
+								Paste your DMM API key again to have it filled in for you on the{' '}
+								<Link href="/newznab" className="text-blue-400 hover:underline">
+									indexer
+								</Link>{' '}
+								<Link href="/torznab" className="text-blue-400 hover:underline">
+									setup
+								</Link>{' '}
+								pages.
+							</label>
+							{keyForm}
+						</form>
+					)}
 					<button
 						onClick={() => {
 							disconnect();
@@ -73,27 +131,7 @@ export const SponsorPanel: FC = () => {
 						Already sponsoring? Paste your DMM API key to show your badge and unlock
 						sponsor features.
 					</label>
-					<input
-						id="dmm-api-key"
-						type="text"
-						value={apiKey}
-						onChange={(e) => {
-							setApiKey(e.target.value);
-							setError(null);
-						}}
-						placeholder="64-character DMM API key"
-						autoComplete="off"
-						spellCheck={false}
-						className="rounded border border-gray-600 bg-gray-900 px-3 py-2 font-mono text-xs text-gray-100 placeholder:text-gray-500 focus:border-pink-400 focus:outline-none"
-					/>
-					{error && <p className="text-center text-xs text-red-300">{error}</p>}
-					<button
-						type="submit"
-						disabled={busy || !apiKey.trim()}
-						className="rounded bg-pink-600 px-3 py-2 text-sm font-medium text-white hover:bg-pink-500 disabled:opacity-50"
-					>
-						{busy ? 'Verifying…' : 'Verify sponsorship'}
-					</button>
+					{keyForm}
 					<p className="text-center text-xs text-gray-500">
 						Get your key by connecting your GitHub account on{' '}
 						<a

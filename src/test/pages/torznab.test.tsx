@@ -30,8 +30,12 @@ vi.mock('next/link', () => ({
 
 import TorznabSetupPage from '@/pages/torznab';
 
-const asSponsor = () => sponsorMock.mockReturnValue({ isSponsor: true });
-const asVisitor = () => sponsorMock.mockReturnValue({ isSponsor: false });
+const API_KEY = 'a1b2c3' + 'd'.repeat(54) + 'ef12';
+
+const asSponsor = (apiKey: string | null = null) =>
+	sponsorMock.mockReturnValue({ isSponsor: true, apiKey });
+const asLinkedSponsor = () => asSponsor(API_KEY);
+const asVisitor = () => sponsorMock.mockReturnValue({ isSponsor: false, apiKey: null });
 
 const field = (label: string) => screen.getByTestId(`field-${label}`);
 
@@ -68,12 +72,49 @@ describe('Torznab setup page, for a sponsor', () => {
 		expect(within(field('API Path')).getByText('/api')).toBeTruthy();
 	});
 
-	it('never renders a key, and sends the sponsor to gatekeeper for it', () => {
-		asSponsor();
+	// A browser that never linked a key, or linked one before it was worth
+	// keeping, has nothing to fill in — so the page has to say where to get one
+	// rather than render an empty box.
+	it('points at gatekeeper when this browser holds no key', () => {
+		asSponsor(null);
 		render(<TorznabSetupPage />);
 
 		expect(within(field('API Key')).getByText('your DMM API key from gatekeeper')).toBeTruthy();
 		expect(screen.queryByLabelText('Copy API Key')).toBeNull();
+		expect(screen.queryByLabelText('Reveal API key')).toBeNull();
+	});
+
+	// Masked rather than printed: this page is what someone screen-shares while
+	// wiring up their stack, and the copy button never needs it on screen.
+	it('shows the linked key masked, and copies the whole thing', async () => {
+		asLinkedSponsor();
+		render(<TorznabSetupPage />);
+
+		expect(within(field('API Key')).getByText('a1b2c3••••••••ef12')).toBeTruthy();
+		expect(screen.queryByText(API_KEY)).toBeNull();
+
+		fireEvent.click(screen.getByLabelText('Copy API Key'));
+		await waitFor(() => expect(writeText).toHaveBeenCalledWith(API_KEY));
+	});
+
+	it('reveals the key on request, and hides it again', () => {
+		asLinkedSponsor();
+		render(<TorznabSetupPage />);
+
+		fireEvent.click(screen.getByLabelText('Reveal API key'));
+		expect(within(field('API Key')).getByText(API_KEY)).toBeTruthy();
+
+		fireEvent.click(screen.getByLabelText('Hide API key'));
+		expect(within(field('API Key')).getByText('a1b2c3••••••••ef12')).toBeTruthy();
+	});
+
+	it('offers a way back to the dashboard, as the other pages do', () => {
+		asSponsor();
+		render(<TorznabSetupPage />);
+
+		expect(screen.getByRole('link', { name: 'Back to dashboard' }).getAttribute('href')).toBe(
+			'/'
+		);
 	});
 
 	it('copies the URL on demand', async () => {

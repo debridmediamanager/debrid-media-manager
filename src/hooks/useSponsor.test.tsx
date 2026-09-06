@@ -1,6 +1,11 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { decodeSponsorClaims, SPONSOR_TOKEN_KEY, useSponsor } from './useSponsor';
+import {
+	decodeSponsorClaims,
+	SPONSOR_API_KEY_KEY,
+	SPONSOR_TOKEN_KEY,
+	useSponsor,
+} from './useSponsor';
 
 function makeToken(claims: object): string {
 	const body = Buffer.from(JSON.stringify(claims)).toString('base64url');
@@ -80,14 +85,43 @@ describe('useSponsor', () => {
 		await waitFor(() => expect(result.current.isSponsor).toBe(false));
 	});
 
-	it('disconnect clears the stored token', async () => {
+	it('disconnect clears the stored token and the key with it', async () => {
 		window.localStorage.setItem(SPONSOR_TOKEN_KEY, JSON.stringify(makeToken(ACTIVE)));
+		window.localStorage.setItem(SPONSOR_API_KEY_KEY, JSON.stringify('k'.repeat(64)));
 		const { result } = renderHook(() => useSponsor());
 		await waitFor(() => expect(result.current.isSponsor).toBe(true));
 
 		result.current.disconnect();
 		await waitFor(() => expect(result.current.isSponsor).toBe(false));
 		expect(window.localStorage.getItem(SPONSOR_TOKEN_KEY)).toBeNull();
+		expect(window.localStorage.getItem(SPONSOR_API_KEY_KEY)).toBeNull();
+	});
+
+	it('serves the stored key, and nothing when the browser has none', async () => {
+		window.localStorage.setItem(SPONSOR_TOKEN_KEY, JSON.stringify(makeToken(ACTIVE)));
+		const bare = renderHook(() => useSponsor());
+		await waitFor(() => expect(bare.result.current.isSponsor).toBe(true));
+		// A browser that linked before the key was worth keeping.
+		expect(bare.result.current.apiKey).toBeNull();
+
+		window.localStorage.setItem(SPONSOR_API_KEY_KEY, JSON.stringify('k'.repeat(64)));
+		const linked = renderHook(() => useSponsor());
+		await waitFor(() => expect(linked.result.current.apiKey).toBe('k'.repeat(64)));
+	});
+
+	// A key that no longer opens anything is worse than none: it gets pasted into
+	// an indexer and the refusal reads as a broken endpoint.
+	it('drops the stored key when the sponsorship turns out to have lapsed', async () => {
+		(fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
+			json: async () => ({ isSponsor: false }),
+		});
+		const nearlyExpired = { ...ACTIVE, exp: Date.now() + 60_000 };
+		window.localStorage.setItem(SPONSOR_TOKEN_KEY, JSON.stringify(makeToken(nearlyExpired)));
+		window.localStorage.setItem(SPONSOR_API_KEY_KEY, JSON.stringify('k'.repeat(64)));
+
+		const { result } = renderHook(() => useSponsor());
+		await waitFor(() => expect(result.current.isSponsor).toBe(false));
+		expect(window.localStorage.getItem(SPONSOR_API_KEY_KEY)).toBeNull();
 	});
 });
 
@@ -101,14 +135,17 @@ describe('useSponsor.link', () => {
 		vi.unstubAllGlobals();
 	});
 
-	it('stores the token returned for a good key', async () => {
+	it('stores the token returned for a good key, and the key itself', async () => {
 		(fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
 			json: async () => ({ isSponsor: true, token: makeToken(ACTIVE), expiresIn: 604800 }),
 		});
 		const { result } = renderHook(() => useSponsor());
 
-		await waitFor(async () => expect((await result.current.link('k')).ok).toBe(true));
+		// Padded, because the trim is what stops a pasted key arriving with the
+		// newline a terminal copy brings along.
+		await waitFor(async () => expect((await result.current.link('  key-1  ')).ok).toBe(true));
 		await waitFor(() => expect(result.current.isSponsor).toBe(true));
+		await waitFor(() => expect(result.current.apiKey).toBe('key-1'));
 	});
 
 	it('surfaces the server error for a bad key and stores nothing', async () => {
@@ -120,6 +157,9 @@ describe('useSponsor.link', () => {
 		const outcome = await result.current.link('nope');
 		expect(outcome).toEqual({ ok: false, error: 'Unknown API key' });
 		expect(window.localStorage.getItem(SPONSOR_TOKEN_KEY)).toBeNull();
+		// Only a key the server accepted is kept, so the setup pages can never
+		// show back a typo.
+		expect(window.localStorage.getItem(SPONSOR_API_KEY_KEY)).toBeNull();
 	});
 
 	it('reports a network failure rather than throwing', async () => {
