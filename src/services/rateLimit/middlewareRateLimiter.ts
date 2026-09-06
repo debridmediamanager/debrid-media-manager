@@ -37,6 +37,12 @@ export const RATE_LIMIT_CONFIGS = {
 	// queries faster than that from one IP - the per-key budgets above are the
 	// real limits; this only has to stop unauthenticated hammering of caps.
 	newznabIp: { name: 'newznabIp', rateLimit: 20, windowSeconds: 10 },
+	// The Torznab indexer. Sized like its Newznab twin and for the same reason —
+	// an *arr fleet behind one sponsor key, not a person clicking. It has no grab
+	// budget: a Torznab item's download is a magnet the client resolves against
+	// its own debrid account, so a grab never comes back to DMM at all.
+	torznabSearch: { name: 'torznabSearch', rateLimit: 30, windowSeconds: 60 },
+	torznabIp: { name: 'torznabIp', rateLimit: 20, windowSeconds: 10 },
 	default: { name: 'default', rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;
 

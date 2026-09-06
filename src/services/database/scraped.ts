@@ -81,6 +81,71 @@ export class ScrapedService extends DatabaseClient {
 		const row = await this.prisma.scrapedTrue.findUnique({ where: { key } });
 		return (row?.value as ScrapeSearchResult[] | undefined) ?? null;
 	}
+	/**
+	 * One library page together with the row's own timestamp.
+	 *
+	 * The Torznab feed needs both. Nothing in a stored result records when the
+	 * release was posted — the rows are `{hash, title, fileSize}` and nothing
+	 * more — so the row's `updatedAt`, meaning "when DMM last refreshed this
+	 * title's release list", is the only real date available, and an RSS parser
+	 * refuses a feed whose items carry no date at all.
+	 */
+	public async getScrapedTrueRow(
+		key: string
+	): Promise<{ results: ScrapeSearchResult[]; updatedAt: Date } | null> {
+		if (!key || typeof key !== 'string') {
+			throw new Error('Invalid key provided.');
+		}
+		const row = await this.prisma.scrapedTrue.findUnique({ where: { key } });
+		if (!row) return null;
+		return {
+			results: (row.value as ScrapeSearchResult[] | undefined) ?? [],
+			updatedAt: row.updatedAt,
+		};
+	}
+
+	/**
+	 * The season pages that exist for one show, most recently refreshed first.
+	 *
+	 * Keys only — the values are never touched, so this stays cheap for a show
+	 * with forty seasons. A TV search that names no season has to pick a subset
+	 * of them, and **recency is the ordering that picks the real ones**: a
+	 * mis-parsed release invents a season page and never touches it again, while
+	 * a real season is refreshed on every scrape. Measured on 2026-09-06,
+	 * `tt0903747` had season pages up to 72 — its five real seasons were the five
+	 * most recently updated, holding 629–1710 releases each, while `:72`, `:71`
+	 * and `:0` held three to fifteen and had not moved in nine months. Ordering
+	 * by season number instead would have answered a search with page 72.
+	 */
+	public async getScrapedTrueSeasonKeys(imdbId: string): Promise<string[]> {
+		const rows = await this.prisma.scrapedTrue.findMany({
+			where: { key: { startsWith: `tv:${imdbId}:` } },
+			orderBy: { updatedAt: 'desc' },
+			select: { key: true },
+		});
+		return rows.map((row) => row.key).filter((key) => /^tv:[^:]+:\d+$/.test(key));
+	}
+
+	/**
+	 * The most recently refreshed library pages, for an *arr's RSS sync.
+	 *
+	 * Metadata only, and bounded by the caller: an RSS sync runs on a timer
+	 * against every indexer a client has, so it must cost a fixed number of reads
+	 * no matter how large the library grows. The timestamps come back with the
+	 * keys because the caller needs them for `pubDate` and would otherwise have to
+	 * read whole rows to get them.
+	 */
+	public async getRecentScrapedTrueKeys(
+		limit: number
+	): Promise<Array<{ key: string; updatedAt: Date }>> {
+		return this.prisma.scrapedTrue.findMany({
+			where: { OR: [{ key: { startsWith: 'movie:tt' } }, { key: { startsWith: 'tv:tt' } }] },
+			orderBy: { updatedAt: 'desc' },
+			take: limit,
+			select: { key: true, updatedAt: true },
+		});
+	}
+
 	public async getScrapedTrueResults<T>(
 		key: string,
 		maxSizeGB?: number,

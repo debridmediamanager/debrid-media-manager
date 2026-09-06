@@ -265,6 +265,65 @@ describe('ScrapedService', () => {
 		expect(recent).toEqual(['movie:tt1', 'tv:tt2']);
 	});
 
+	it('returns a library page with the timestamp the feed dates it from', async () => {
+		const updatedAt = new Date('2026-02-01T10:00:00Z');
+		prismaMock.scrapedTrue.findUnique.mockResolvedValueOnce({
+			key: 'movie:tt1',
+			value: [{ title: 'x', fileSize: 1, hash: HASH_ONE }],
+			updatedAt,
+		});
+
+		expect(await service.getScrapedTrueRow('movie:tt1')).toEqual({
+			results: [{ title: 'x', fileSize: 1, hash: HASH_ONE }],
+			updatedAt,
+		});
+		expect(await service.getScrapedTrueRow('movie:missing')).toBeNull();
+	});
+
+	// Ordering by season number would answer a show's search with its junk pages:
+	// tt0903747 had season keys up to 72 on 2026-09-06, while its five real
+	// seasons were the five most recently refreshed.
+	it('lists season pages in refresh order, not by season number', async () => {
+		prismaMock.scrapedTrue.findMany.mockResolvedValueOnce([
+			{ key: 'tv:tt1:5' },
+			{ key: 'tv:tt1:72' },
+			{ key: 'tv:tt1:1' },
+		]);
+
+		expect(await service.getScrapedTrueSeasonKeys('tt1')).toEqual([
+			'tv:tt1:5',
+			'tv:tt1:72',
+			'tv:tt1:1',
+		]);
+		expect(prismaMock.scrapedTrue.findMany).toHaveBeenCalledWith({
+			where: { key: { startsWith: 'tv:tt1:' } },
+			orderBy: { updatedAt: 'desc' },
+			select: { key: true },
+		});
+	});
+
+	it('drops a key that is not a season page', async () => {
+		prismaMock.scrapedTrue.findMany.mockResolvedValueOnce([
+			{ key: 'tv:tt1:2' },
+			{ key: 'tv:tt1:' },
+			{ key: 'tv:tt1:2:extra' },
+		]);
+
+		expect(await service.getScrapedTrueSeasonKeys('tt1')).toEqual(['tv:tt1:2']);
+	});
+
+	it('returns recent library pages with their timestamps', async () => {
+		const updatedAt = new Date('2026-02-01T10:00:00Z');
+		prismaMock.scrapedTrue.findMany.mockResolvedValueOnce([{ key: 'movie:tt1', updatedAt }]);
+
+		expect(await service.getRecentScrapedTrueKeys(8)).toEqual([
+			{ key: 'movie:tt1', updatedAt },
+		]);
+		expect(prismaMock.scrapedTrue.findMany).toHaveBeenCalledWith(
+			expect.objectContaining({ take: 8, orderBy: { updatedAt: 'desc' } })
+		);
+	});
+
 	it('returns cached counts from raw queries', async () => {
 		prismaMock.$queryRaw
 			.mockResolvedValueOnce([{ contentSize: BigInt(10) }])

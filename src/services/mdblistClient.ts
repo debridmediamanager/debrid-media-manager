@@ -139,6 +139,72 @@ export class MDBListClient {
 	}
 
 	/**
+	 * Get info for a show by TVDB ID.
+	 *
+	 * The reverse of the mapping `tvdbLookup` does: Sonarr identifies a series by
+	 * its TVDB id and DMM keys everything on IMDb ids, so a Torznab search that
+	 * arrives with only a `tvdbid` has to be translated before it can be answered.
+	 * `m=show` is sent because a TVDB id always names a series, and mdblist needs
+	 * the media type to disambiguate its id spaces.
+	 */
+	async getInfoByTvdbId(tvdbId: number | string): Promise<MMovie | MShow> {
+		const cacheKey = `tvdb_${tvdbId}`;
+
+		const cached = await this.cache.getWithMetadata(cacheKey);
+		const cachedIsError = cached ? isMdblistError(cached.data) : false;
+		if (cached) {
+			const maxAge = cachedIsError ? CACHE_TTL.ERROR : CACHE_TTL.SHOW;
+			if (this.isFresh(cached.updatedAt, maxAge)) {
+				console.log(`[MDBList] Using cached data for TVDB ID: ${tvdbId}`);
+				return cached.data;
+			}
+		}
+
+		const url = new URL(this.baseUrl);
+		url.searchParams.append('apikey', this.apiKey);
+		url.searchParams.append('tv', tvdbId.toString());
+		url.searchParams.append('m', 'show');
+
+		let response;
+		try {
+			response = (await axios.get(url.toString())).data;
+		} catch (error) {
+			if (cached) {
+				console.error(
+					`[MDBList] Refetch failed for TVDB ${tvdbId}, serving stale cache`,
+					error
+				);
+				return cached.data;
+			}
+			throw error;
+		}
+
+		if (isMdblistError(response)) {
+			if (cached && !cachedIsError) {
+				console.error(
+					`[MDBList] Error body for TVDB ${tvdbId} (${response?.error}), serving stale cache`
+				);
+				return cached.data;
+			}
+			await this.cache.set(cacheKey, 'error', response);
+			console.log(`[MDBList] Cached error for TVDB ID: ${tvdbId} (${response?.error})`);
+			return response;
+		}
+
+		const type = response.type === 'movie' ? 'movie' : 'show';
+		await this.cache.set(cacheKey, type, response);
+		console.log(`[MDBList] Cached ${type} data for TVDB ID: ${tvdbId}`);
+
+		// The IMDb id is the whole point of the lookup, so cache it under that key
+		// too — the next caller asking about the same show by IMDb id skips a call.
+		if (response.imdbid) {
+			await this.cache.set(response.imdbid, type, response);
+		}
+
+		return response;
+	}
+
+	/**
 	 * Get info for a movie or show by TMDB ID
 	 */
 	async getInfoByTmdbId(tmdbId: number | string): Promise<MMovie | MShow> {

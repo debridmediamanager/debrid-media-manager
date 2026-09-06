@@ -261,6 +261,23 @@ function IndexPage() {
 								</span>
 							</Link>
 						)}
+						{isSponsor && (
+							<Link
+								href="/torznab"
+								className="haptic-sm flex w-full items-center justify-between rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+							>
+								<span className="flex items-center">
+									<span
+										aria-hidden="true"
+										className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
+									/>
+									Torrent Indexer
+								</span>
+								<span className="text-xs text-gray-400">
+									DMM&apos;s library as a Torznab indexer
+								</span>
+							</Link>
+						)}
 						<BrowseSection terms={browseTerms} />
 						<TraktSection traktUser={traktUser} />
 						<div className="grid w-full grid-cols-1 gap-3">

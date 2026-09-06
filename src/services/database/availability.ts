@@ -506,6 +506,44 @@ export class AvailabilityService extends DatabaseClient {
 		}));
 	}
 
+	/**
+	 * Which of these hashes Real-Debrid already holds — the set, nothing else.
+	 *
+	 * `checkAvailability` pulls every file row of every match, which is what a
+	 * page rendering a file list needs and pure weight for a caller that only
+	 * wants to know whether a grab would be instant. The Torznab feed asks this
+	 * of a whole title's hash list at once, so the file rows would dominate it.
+	 *
+	 * Answered in lower case: the hash column collates case-insensitively, so a
+	 * row can come back in a different case from the hash that was asked for,
+	 * and a caller comparing sets would silently miss it.
+	 */
+	public async filterCachedHashes(hashes: string[]): Promise<Set<string>> {
+		if (hashes.length === 0) return new Set();
+		const rows = await this.prisma.available.findMany({
+			where: { hash: { in: hashes }, status: 'downloaded' },
+			select: { hash: true },
+		});
+		return new Set(rows.map((row) => row.hash.toLowerCase()));
+	}
+
+	/**
+	 * The AllDebrid counterpart of `filterCachedHashes`. Its rows carry AD's own
+	 * ready state, not RD's — same pair of conditions `checkAvailabilityAd` uses.
+	 */
+	public async filterCachedHashesAd(hashes: string[]): Promise<Set<string>> {
+		if (hashes.length === 0) return new Set();
+		const rows = await this.prisma.availableAd.findMany({
+			where: {
+				hash: { in: hashes.map((hash) => hash.toLowerCase()) },
+				status: 'Ready',
+				statusCode: 4,
+			},
+			select: { hash: true },
+		});
+		return new Set(rows.map((row) => row.hash.toLowerCase()));
+	}
+
 	public async removeAvailability(hash: string): Promise<void> {
 		await this.prisma.available.delete({
 			where: { hash },

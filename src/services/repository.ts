@@ -433,6 +433,14 @@ export class Repository {
 		return this.availabilityService.checkAvailabilityByHashes(hashes);
 	}
 
+	public filterCachedHashes(hashes: string[]) {
+		return this.availabilityService.filterCachedHashes(hashes);
+	}
+
+	public filterCachedHashesAd(hashes: string[]) {
+		return this.availabilityService.filterCachedHashesAd(hashes);
+	}
+
 	public removeAvailability(hash: string) {
 		return this.availabilityService.removeAvailability(hash);
 	}
@@ -486,6 +494,18 @@ export class Repository {
 
 	public getAllScrapedTrueResults(key: string) {
 		return this.scrapedService.getAllScrapedTrueResults(key);
+	}
+
+	public getScrapedTrueRow(key: string) {
+		return this.scrapedService.getScrapedTrueRow(key);
+	}
+
+	public getScrapedTrueSeasonKeys(imdbId: string) {
+		return this.scrapedService.getScrapedTrueSeasonKeys(imdbId);
+	}
+
+	public getRecentScrapedTrueKeys(limit: number) {
+		return this.scrapedService.getRecentScrapedTrueKeys(limit);
 	}
 
 	public getScrapedResults<T>(key: string, maxSizeGB?: number, page?: number) {

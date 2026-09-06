@@ -30,3 +30,28 @@ export async function resolveTvdbId(imdbId: string): Promise<number | undefined>
 		return undefined;
 	}
 }
+
+/** MDBList answers an unmapped title with 0, null or an error envelope. */
+export function imdbIdFrom(info: unknown): string | undefined {
+	const raw = (info as { imdbid?: unknown } | null)?.imdbid;
+	if (typeof raw !== 'string') return undefined;
+	const trimmed = raw.trim();
+	return /^tt\d{7,}$/.test(trimmed) ? trimmed : undefined;
+}
+
+/**
+ * The other direction, for the Torznab indexer: Sonarr identifies a series by
+ * its TVDB id on every TV search it makes, while DMM's library is keyed on IMDb
+ * ids from end to end.
+ *
+ * Best-effort in the same way — an unresolvable id leaves the caller to fall
+ * back to a title search rather than failing the request.
+ */
+export async function resolveImdbIdFromTvdbId(tvdbId: number): Promise<string | undefined> {
+	try {
+		return imdbIdFrom(await getMdblistClient().getInfoByTvdbId(tvdbId));
+	} catch (error) {
+		console.error(`IMDb id lookup failed for TVDB ${tvdbId}:`, error);
+		return undefined;
+	}
+}
