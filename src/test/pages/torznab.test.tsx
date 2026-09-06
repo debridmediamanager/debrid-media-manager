@@ -125,7 +125,7 @@ describe('Torznab setup page, for a sponsor', () => {
 		asSponsor();
 		render(<TorznabSetupPage />);
 
-		expect(screen.getByText('30 searches')).toBeTruthy();
+		expect(screen.getByText('20 searches')).toBeTruthy();
 		expect(screen.getByText('No grab limit')).toBeTruthy();
 		expect(screen.getByText(/Counted against your DMM API key, not your IP/)).toBeTruthy();
 	});
@@ -153,7 +153,7 @@ describe('Torznab setup page, for everyone else', () => {
 
 		expect(screen.queryByTestId('field-URL')).toBeNull();
 		expect(screen.queryByText(`${window.location.origin}/api/torznab`)).toBeNull();
-		expect(screen.queryByText('30 searches')).toBeNull();
+		expect(screen.queryByText('20 searches')).toBeNull();
 	});
 
 	it('makes the sponsorship pitch instead', () => {

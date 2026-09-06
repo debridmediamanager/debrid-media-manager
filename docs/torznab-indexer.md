@@ -87,11 +87,18 @@ a Next.js 500 is an HTML page).
 | Bucket          | Limit    | Keyed on                                  |
 | --------------- | -------- | ----------------------------------------- |
 | `torznabIp`     | 20 / 10s | client IP, before auth — the cheap reject |
-| `torznabSearch` | 30 / min | `sponsor:<shortId>`                       |
+| `torznabSearch` | 20 / min | `sponsor:<shortId>`                       |
 
 No grab bucket exists, because a grab never comes back to DMM. Keying on `shortId` rather
 than the key string means a gatekeeper key reset does not reset the budget and one
 sponsor's whole \*arr farm shares one budget.
+
+Tighter than the Newznab endpoint's 30/min on purpose. A search here reads whole library
+pages out of the database and classifies every hash in them against the debrid caches,
+which costs DMM considerably more than fanning a Newznab query out to upstream indexers
+does. Twenty a minute is a sustained search every three seconds across a whole \*arr
+fleet; what it refuses is a burst, and a client that gets the 429 backs off on
+`Retry-After` rather than treating the indexer as broken.
 
 ## Where the results come from
 

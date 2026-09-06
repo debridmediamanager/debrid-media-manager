@@ -1,4 +1,5 @@
 import handler from '@/pages/api/torznab/[...route]';
+import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
 import { CACHED_SEEDERS, UNCACHED_SEEDERS } from '@/services/torznab/search';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
@@ -560,22 +561,31 @@ describe('the untargeted feed', () => {
 });
 
 describe('rate limits', () => {
-	it('answers an exceeded per-key budget with a document a client can read', async () => {
-		// 30 searches a minute; the 31st is refused. Each request comes from its
-		// own IP so only the per-key budget can be what refuses it — one
-		// sponsor's *arr fleet shares a budget wherever the boxes run from. A
-		// JSON 429 would be logged as a broken indexer instead of backed off.
+	it('spends exactly the configured per-key budget, then refuses in the protocol', async () => {
+		// The budget is read from the config rather than written out here, so
+		// changing the limit cannot leave this asserting one that no longer
+		// exists. Every request comes from its own IP, so the per-key budget is
+		// the only thing that can refuse one — a sponsor's *arr fleet shares a
+		// budget wherever the boxes run from. A JSON 429 would be logged as a
+		// broken indexer instead of backed off.
+		const { rateLimit } = RATE_LIMIT_CONFIGS.torznabSearch;
+
 		let last: MockResponse | undefined;
-		for (let attempt = 0; attempt < 31; attempt++) {
+		for (let attempt = 0; attempt < rateLimit; attempt++) {
 			last = await run(
 				{ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY },
 				{ ip: `172.16.0.${attempt}` }
 			);
 		}
+		expect(last!._getStatusCode()).toBe(200);
 
-		expect(last!._getStatusCode()).toBe(429);
-		expect(body(last!)).toContain('code="500"');
-		expect(res429IsXml(last!)).toBe(true);
+		const refused = await run(
+			{ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY },
+			{ ip: '172.16.1.1' }
+		);
+		expect(refused._getStatusCode()).toBe(429);
+		expect(body(refused)).toContain('code="500"');
+		expect(res429IsXml(refused)).toBe(true);
 	});
 
 	it('rejects an unauthenticated flood on the IP budget before any lookup', async () => {

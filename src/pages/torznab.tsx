@@ -20,7 +20,7 @@ const GATEKEEPER_URL = 'https://gatekeeper.debridmediamanager.com';
 const API_PATH = '/api';
 
 const LIMITS = [
-	{ label: '30 searches', per: 'per minute, per key' },
+	{ label: '20 searches', per: 'per minute, per key' },
 	{ label: 'No grab limit', per: 'grabs never come back to DMM' },
 ];
 
