@@ -101,7 +101,10 @@ export interface UsenetResult {
 	size: number;
 	/** A whole-season release rather than a single episode. Shows only. */
 	isPack?: boolean;
-	/** Which indexer supplied it, for the UI badge. */
+	/**
+	 * Which indexer supplied it. Kept for parsing and diagnostics only —
+	 * the results table deliberately shows no indexer name.
+	 */
 	indexer?: string;
 	/**
 	 * The item's `<pubDate>`, verbatim (`Mon, 17 Nov 2025 22:08:02 +0000`).
