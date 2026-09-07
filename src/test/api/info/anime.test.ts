@@ -18,6 +18,11 @@ vi.mock('@/services/anime/kitsu', () => ({
 	fetchKitsuAnime: (...args: unknown[]) => mockFetchKitsuAnime(...args),
 }));
 
+const mockResolveImdbIdFromSimkl = vi.fn();
+vi.mock('@/services/anime/simkl', () => ({
+	resolveImdbIdFromSimkl: (...args: unknown[]) => mockResolveImdbIdFromSimkl(...args),
+}));
+
 const mockGetImdbIdByKitsuId = vi.fn();
 vi.mock('@/services/repository', () => ({
 	repository: {
@@ -38,6 +43,7 @@ describe('/api/info/anime', () => {
 		vi.clearAllMocks();
 		mockFetchKitsuAnime.mockResolvedValue(null);
 		mockGetImdbIdByKitsuId.mockResolvedValue(null);
+		mockResolveImdbIdFromSimkl.mockResolvedValue(null);
 	});
 
 	it('rejects non-GET methods', async () => {
@@ -190,6 +196,76 @@ describe('/api/info/anime', () => {
 		expect(res.json).toHaveBeenCalledWith(
 			expect.objectContaining({ title: 'Cowboy Bebop', imdbid: '' })
 		);
+	});
+
+	it('asks Simkl for an imdb id the addon and database both lack', async () => {
+		const handler = await loadHandler();
+		const req = createMockRequest({ query: { animeid: 'kitsu-123' } });
+		const res = createMockResponse();
+		mockedAxios.get.mockResolvedValue({
+			data: { meta: { name: 'Cowboy Bebop', imdbRating: '8.9' } },
+		});
+		mockGetImdbIdByKitsuId.mockResolvedValue(null);
+		mockResolveImdbIdFromSimkl.mockResolvedValue('tt0213338');
+
+		await handler(req, res);
+
+		expect(mockResolveImdbIdFromSimkl).toHaveBeenCalledWith('kitsu', 123);
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({ title: 'Cowboy Bebop', imdbid: 'tt0213338' })
+		);
+	});
+
+	it('prefers the database over Simkl and skips the extra call', async () => {
+		const handler = await loadHandler();
+		const req = createMockRequest({ query: { animeid: 'kitsu-123' } });
+		const res = createMockResponse();
+		mockedAxios.get.mockResolvedValue({ data: { meta: { name: 'Cowboy Bebop' } } });
+		mockGetImdbIdByKitsuId.mockResolvedValue('tt0213338');
+
+		await handler(req, res);
+
+		expect(mockResolveImdbIdFromSimkl).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ imdbid: 'tt0213338' }));
+	});
+
+	it('never overrides an imdb id the addon already supplied', async () => {
+		const handler = await loadHandler();
+		const req = createMockRequest({ query: { animeid: 'kitsu-123' } });
+		const res = createMockResponse();
+		mockedAxios.get.mockResolvedValue({
+			data: { meta: { name: 'Cowboy Bebop', imdb_id: 'tt_from_addon' } },
+		});
+
+		await handler(req, res);
+
+		expect(mockGetImdbIdByKitsuId).not.toHaveBeenCalled();
+		expect(mockResolveImdbIdFromSimkl).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ imdbid: 'tt_from_addon' }));
+	});
+
+	it('still asks Simkl when the database lookup throws', async () => {
+		const handler = await loadHandler();
+		const req = createMockRequest({ query: { animeid: 'kitsu-123' } });
+		const res = createMockResponse();
+		mockedAxios.get.mockResolvedValue({ data: { meta: { name: 'Cowboy Bebop' } } });
+		mockGetImdbIdByKitsuId.mockRejectedValue(new Error('no database'));
+		mockResolveImdbIdFromSimkl.mockResolvedValue('tt0213338');
+
+		await handler(req, res);
+
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ imdbid: 'tt0213338' }));
+	});
+
+	it('leaves the imdb id empty when nothing can resolve it', async () => {
+		const handler = await loadHandler();
+		const req = createMockRequest({ query: { animeid: 'kitsu-123' } });
+		const res = createMockResponse();
+		mockedAxios.get.mockResolvedValue({ data: { meta: { name: 'Cowboy Bebop' } } });
+
+		await handler(req, res);
+
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ imdbid: '' }));
 	});
 
 	it('does not attempt the Kitsu fallback for a non-Kitsu id', async () => {

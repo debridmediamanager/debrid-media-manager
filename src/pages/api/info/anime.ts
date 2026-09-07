@@ -1,4 +1,5 @@
 import { fetchKitsuAnime } from '@/services/anime/kitsu';
+import { resolveImdbIdFromSimkl } from '@/services/anime/simkl';
 import { repository as db } from '@/services/repository';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -69,7 +70,7 @@ async function fromStremioAddon(animeid: string): Promise<AnimeInfoResponse | nu
 /**
  * The addon is community-run and has no SLA. Kitsu publishes the same
  * catalogue, so its outage costs the rating's provenance rather than the whole
- * page. Kitsu has no IMDb id of its own; the local table supplies it.
+ * page. Kitsu carries no IMDb id; resolveImdbId supplies one.
  */
 async function fromKitsu(animeid: string): Promise<AnimeInfoResponse | null> {
 	const kitsuId = parseKitsuId(animeid);
@@ -78,21 +79,30 @@ async function fromKitsu(animeid: string): Promise<AnimeInfoResponse | null> {
 	const meta = await fetchKitsuAnime(kitsuId);
 	if (!meta) return null;
 
-	let imdbid = '';
-	try {
-		imdbid = (await db.getImdbIdByKitsuId(kitsuId)) ?? '';
-	} catch {
-		imdbid = '';
-	}
-
 	return {
 		title: meta.title,
 		description: meta.description,
 		poster: meta.poster,
 		backdrop: meta.backdrop,
-		imdbid,
+		imdbid: '',
 		imdbRating: meta.rating,
 	};
+}
+
+/**
+ * Every other DMM surface is keyed by IMDb id, so a page without one is a dead
+ * end. The local table answers first because it costs no round trip; Simkl is
+ * asked only for the rows it still has no id for, and no-ops when unconfigured.
+ */
+async function resolveImdbId(kitsuId: number): Promise<string> {
+	try {
+		const fromDb = await db.getImdbIdByKitsuId(kitsuId);
+		if (fromDb) return fromDb;
+	} catch {
+		// A database outage should not stop Simkl from answering.
+	}
+
+	return (await resolveImdbIdFromSimkl('kitsu', kitsuId)) ?? '';
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -107,5 +117,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	const info = (await fromStremioAddon(animeid)) ?? (await fromKitsu(animeid));
-	return res.status(200).json(info ?? UNKNOWN);
+	if (!info) return res.status(200).json(UNKNOWN);
+
+	if (!info.imdbid) {
+		const kitsuId = parseKitsuId(animeid);
+		if (kitsuId !== null) info.imdbid = await resolveImdbId(kitsuId);
+	}
+
+	return res.status(200).json(info);
 }
