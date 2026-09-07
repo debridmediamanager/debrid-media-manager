@@ -13,6 +13,18 @@ vi.mock('user-agents', () => ({
 	default: mockUserAgent,
 }));
 
+const mockFetchKitsuAnime = vi.fn();
+vi.mock('@/services/anime/kitsu', () => ({
+	fetchKitsuAnime: (...args: unknown[]) => mockFetchKitsuAnime(...args),
+}));
+
+const mockGetImdbIdByKitsuId = vi.fn();
+vi.mock('@/services/repository', () => ({
+	repository: {
+		getImdbIdByKitsuId: (...args: unknown[]) => mockGetImdbIdByKitsuId(...args),
+	},
+}));
+
 const mockedAxios = vi.mocked(axios, true);
 
 describe('/api/info/anime', () => {
@@ -24,6 +36,8 @@ describe('/api/info/anime', () => {
 	beforeEach(() => {
 		vi.resetModules();
 		vi.clearAllMocks();
+		mockFetchKitsuAnime.mockResolvedValue(null);
+		mockGetImdbIdByKitsuId.mockResolvedValue(null);
 	});
 
 	it('rejects non-GET methods', async () => {
@@ -89,11 +103,12 @@ describe('/api/info/anime', () => {
 		});
 	});
 
-	it('falls back to defaults when upstream fails', async () => {
+	it('falls back to defaults when every upstream fails', async () => {
 		const handler = await loadHandler();
 		const req = createMockRequest({ query: { animeid: 'kitsu-123' } });
 		const res = createMockResponse();
 		mockedAxios.get.mockRejectedValue(new Error('down'));
+		mockFetchKitsuAnime.mockResolvedValue(null);
 
 		await handler(req, res);
 
@@ -106,5 +121,86 @@ describe('/api/info/anime', () => {
 			imdbid: '',
 			imdbRating: 0,
 		});
+	});
+
+	it('serves Kitsu metadata when the addon is down', async () => {
+		const handler = await loadHandler();
+		const req = createMockRequest({ query: { animeid: 'kitsu-123' } });
+		const res = createMockResponse();
+		mockedAxios.get.mockRejectedValue(new Error('down'));
+		mockFetchKitsuAnime.mockResolvedValue({
+			title: 'Cowboy Bebop',
+			description: 'In the year 2071...',
+			poster: 'o.jpg',
+			backdrop: 'co.jpg',
+			rating: 8.2,
+		});
+		mockGetImdbIdByKitsuId.mockResolvedValue('tt0213338');
+
+		await handler(req, res);
+
+		expect(mockFetchKitsuAnime).toHaveBeenCalledWith(123);
+		expect(mockGetImdbIdByKitsuId).toHaveBeenCalledWith(123);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({
+			title: 'Cowboy Bebop',
+			description: 'In the year 2071...',
+			poster: 'o.jpg',
+			backdrop: 'co.jpg',
+			imdbid: 'tt0213338',
+			imdbRating: 8.2,
+		});
+	});
+
+	it('falls back when the addon answers without a title', async () => {
+		const handler = await loadHandler();
+		const req = createMockRequest({ query: { animeid: 'kitsu-123' } });
+		const res = createMockResponse();
+		mockedAxios.get.mockResolvedValue({ data: { meta: { description: 'orphan' } } });
+		mockFetchKitsuAnime.mockResolvedValue({
+			title: 'From Kitsu',
+			description: '',
+			poster: '',
+			backdrop: '',
+			rating: 0,
+		});
+
+		await handler(req, res);
+
+		expect(mockFetchKitsuAnime).toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ title: 'From Kitsu' }));
+	});
+
+	it('still serves Kitsu metadata when the imdb lookup fails', async () => {
+		const handler = await loadHandler();
+		const req = createMockRequest({ query: { animeid: 'kitsu-123' } });
+		const res = createMockResponse();
+		mockedAxios.get.mockRejectedValue(new Error('down'));
+		mockFetchKitsuAnime.mockResolvedValue({
+			title: 'Cowboy Bebop',
+			description: '',
+			poster: '',
+			backdrop: '',
+			rating: 8.2,
+		});
+		mockGetImdbIdByKitsuId.mockRejectedValue(new Error('no database'));
+
+		await handler(req, res);
+
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({ title: 'Cowboy Bebop', imdbid: '' })
+		);
+	});
+
+	it('does not attempt the Kitsu fallback for a non-Kitsu id', async () => {
+		const handler = await loadHandler();
+		const req = createMockRequest({ query: { animeid: 'mal-99' } });
+		const res = createMockResponse();
+		mockedAxios.get.mockRejectedValue(new Error('down'));
+
+		await handler(req, res);
+
+		expect(mockFetchKitsuAnime).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ title: 'Unknown' }));
 	});
 });

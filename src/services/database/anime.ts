@@ -103,4 +103,16 @@ export class AnimeService extends DatabaseClient {
 			poster_url: anime.poster_url,
 		}));
 	}
+
+	/**
+	 * The Kitsu API carries no IMDb id, so a page served from the Kitsu
+	 * fallback resolves one here instead of losing it.
+	 */
+	public async getImdbIdByKitsuId(kitsuId: number): Promise<string | null> {
+		const anime = await this.prisma.anime.findUnique({
+			where: { kitsu_id: kitsuId },
+			select: { imdb_id: true },
+		});
+		return anime?.imdb_id ?? null;
+	}
 }

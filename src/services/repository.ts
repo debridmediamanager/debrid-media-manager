@@ -598,6 +598,10 @@ export class Repository {
 		return this.animeService.getAnimeByKitsuIds(kitsuIds);
 	}
 
+	public getImdbIdByKitsuId(kitsuId: number) {
+		return this.animeService.getImdbIdByKitsuId(kitsuId);
+	}
+
 	// Cast Service Methods
 	public saveCastProfile(
 		userId: string,
