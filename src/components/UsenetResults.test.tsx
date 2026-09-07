@@ -12,14 +12,17 @@ const downloadCleanNzbMock = vi.fn();
 vi.mock('@/utils/nzbDownload', () => ({
 	downloadCleanNzb: (...args: unknown[]) => downloadCleanNzbMock(...args),
 }));
-vi.mock('react-hot-toast', () => ({
-	__esModule: true,
-	default: {
+vi.mock('react-hot-toast', () => {
+	const toastMock = {
 		success: (...args: unknown[]) => toastSuccess(...args),
 		error: (...args: unknown[]) => toastError(...args),
 		loading: (...args: unknown[]) => toastLoading(...args),
-	},
-}));
+	};
+	// followNzb2rdTransfer imports the named export, and reaches it from a timer
+	// rather than from a click, so leaving it out only fails once the poll
+	// happens to fire before this file tears its mocks down.
+	return { __esModule: true, default: toastMock, toast: toastMock };
+});
 
 // A Usenet send is the same transfer as a TB → RD one from the user's side, so
 // it wears the same `X → RD` prefix and rides one toast from submit onwards.
