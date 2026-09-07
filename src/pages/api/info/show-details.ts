@@ -1,3 +1,4 @@
+import { getTmdbAuth, tmdbAxiosOptions } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import getConfig from 'next/config';
@@ -6,7 +7,8 @@ const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TRAKT_BASE_URL = 'https://api.trakt.tv';
 const { publicRuntimeConfig } = getConfig();
 
-const resolveTmdbKey = () => process.env.TMDB_KEY;
+// The v4 read token authenticates by header; the v3 key by query parameter.
+const resolveTmdbAuth = () => getTmdbAuth();
 const resolveTraktClientId = () => {
 	return process.env.TRAKT_CLIENT_ID || publicRuntimeConfig?.traktClientId;
 };
@@ -37,10 +39,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(400).json({ message: 'Missing imdbId query parameter.' });
 	}
 
-	const tmdbKey = resolveTmdbKey();
+	const tmdbAuth = resolveTmdbAuth();
 	const traktClientId = resolveTraktClientId();
 
-	if (!tmdbKey) {
+	if (!tmdbAuth) {
 		console.error('TMDB key missing when requesting show details');
 		return res.status(500).json({ message: 'TMDB configuration missing.' });
 	}
@@ -54,10 +56,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	try {
 		const findResponse = await axios.get(`${TMDB_BASE_URL}/find/${imdbId}`, {
-			params: {
-				api_key: tmdbKey,
+			...tmdbAxiosOptions(tmdbAuth, {
 				external_source: 'imdb_id',
-			},
+			}),
 		});
 
 		const tmdbId = findResponse.data.tv_results?.[0]?.id;
@@ -66,10 +67,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		const detailsResponse = await axios.get(`${TMDB_BASE_URL}/tv/${tmdbId}`, {
-			params: {
-				api_key: tmdbKey,
+			...tmdbAxiosOptions(tmdbAuth, {
 				append_to_response: 'credits',
-			},
+			}),
 		});
 
 		const show = detailsResponse.data;

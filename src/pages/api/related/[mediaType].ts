@@ -1,3 +1,4 @@
+import { getTmdbAuth, tmdbAxiosOptions, type TmdbAuth } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import getConfig from 'next/config';
@@ -10,7 +11,8 @@ const resolveTraktClientId = () => {
 	return process.env.TRAKT_CLIENT_ID || publicRuntimeConfig?.traktClientId;
 };
 
-const resolveTmdbKey = () => process.env.TMDB_KEY;
+// The v4 read token authenticates by header; the v3 key by query parameter.
+const resolveTmdbAuth = () => getTmdbAuth();
 
 type MediaType = 'movie' | 'show';
 
@@ -47,13 +49,12 @@ const fetchRelatedFromTrakt = async (
 const fetchRelatedFromTmdb = async (
 	mediaType: MediaType,
 	imdbId: string,
-	tmdbKey: string
+	tmdbAuth: TmdbAuth
 ): Promise<MediaItem[]> => {
 	const findResponse = await axios.get(`${TMDB_BASE_URL}/find/${imdbId}`, {
-		params: {
-			api_key: tmdbKey,
+		...tmdbAxiosOptions(tmdbAuth, {
 			external_source: 'imdb_id',
-		},
+		}),
 	});
 
 	const findData = findResponse.data ?? {};
@@ -67,9 +68,7 @@ const fetchRelatedFromTmdb = async (
 	const similarResponse = await axios.get(
 		`${TMDB_BASE_URL}/${mediaType === 'movie' ? 'movie' : 'tv'}/${tmdbId}/similar`,
 		{
-			params: {
-				api_key: tmdbKey,
-			},
+			...tmdbAxiosOptions(tmdbAuth, {}),
 		}
 	);
 
@@ -81,10 +80,9 @@ const fetchRelatedFromTmdb = async (
 			const detailResponse = await axios.get(
 				`${TMDB_BASE_URL}/${mediaType === 'movie' ? 'movie' : 'tv'}/${item.id}`,
 				{
-					params: {
-						api_key: tmdbKey,
+					...tmdbAxiosOptions(tmdbAuth, {
 						append_to_response: 'external_ids',
-					},
+					}),
 				}
 			);
 			const detail = detailResponse.data ?? {};
@@ -140,7 +138,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	const traktClientId = resolveTraktClientId();
-	const tmdbKey = resolveTmdbKey();
+	const tmdbAuth = resolveTmdbAuth();
 	let traktErrorStatus: number | null = null;
 
 	if (!traktClientId) {
@@ -184,10 +182,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		});
 	}
 
-	if (tmdbKey) {
+	if (tmdbAuth) {
 		try {
 			console.info('Attempting TMDB fallback for related media', { mediaTypeParam, imdbId });
-			const tmdbResults = await fetchRelatedFromTmdb(mediaTypeParam, imdbId, tmdbKey);
+			const tmdbResults = await fetchRelatedFromTmdb(mediaTypeParam, imdbId, tmdbAuth);
 			if (tmdbResults.length > 0) {
 				return res.status(200).json({
 					results: tmdbResults,

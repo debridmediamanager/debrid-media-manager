@@ -22,7 +22,42 @@ describe('/api/info/movie-details', () => {
 
 	afterEach(() => {
 		delete process.env.TMDB_KEY;
+		delete process.env.TMDB_READ_TOKEN;
 		delete process.env.TRAKT_CLIENT_ID;
+	});
+
+	it('authenticates with the v4 read token when one is configured', async () => {
+		delete process.env.TMDB_KEY;
+		process.env.TMDB_READ_TOKEN = 'v4-read-token';
+
+		mockedAxios.get.mockResolvedValueOnce({ data: { movie_results: [] } });
+
+		const req = createMockRequest({ method: 'GET', query: { imdbId: 'tt1234567' } });
+		res = createMockResponse();
+		await handler(req, res);
+
+		const [, options] = mockedAxios.get.mock.calls[0];
+		expect(options).toMatchObject({
+			headers: { Authorization: 'Bearer v4-read-token' },
+		});
+		// A bearer-authenticated call must not also carry an api_key parameter.
+		expect((options as { params: Record<string, unknown> }).params).not.toHaveProperty(
+			'api_key'
+		);
+	});
+
+	it('still authenticates with the v3 key when no read token is set', async () => {
+		mockedAxios.get.mockResolvedValueOnce({ data: { movie_results: [] } });
+
+		const req = createMockRequest({ method: 'GET', query: { imdbId: 'tt1234567' } });
+		res = createMockResponse();
+		await handler(req, res);
+
+		const [, options] = mockedAxios.get.mock.calls[0];
+		expect((options as { params: Record<string, unknown> }).params).toMatchObject({
+			api_key: 'test-tmdb-key',
+		});
+		expect((options as { headers: Record<string, unknown> }).headers).toEqual({});
 	});
 
 	it('rejects non-GET with 405 and Allow header', async () => {

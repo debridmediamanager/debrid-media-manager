@@ -1,3 +1,4 @@
+import { getTmdbAuth, tmdbRequestConfig, tmdbUrl, type TmdbAuth } from '@/utils/tmdbAuth';
 import axios, { AxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 import { getMdblistCacheService } from './database/mdblistCache';
@@ -8,6 +9,19 @@ export class MetadataCacheService {
 	private get runtimeConfig() {
 		const config = getConfig();
 		return config?.publicRuntimeConfig || {};
+	}
+
+	/**
+	 * The v4 read token counts as configured just as the v3 key does; with
+	 * neither, these calls still fail loudly rather than hitting TMDB
+	 * unauthenticated.
+	 */
+	private requireTmdbAuth(): TmdbAuth {
+		const auth = getTmdbAuth(this.runtimeConfig.tmdbKey);
+		if (!auth) {
+			throw new Error('TMDB_KEY environment variable is not set');
+		}
+		return auth;
 	}
 
 	// Cache durations in milliseconds
@@ -208,12 +222,8 @@ export class MetadataCacheService {
 	 * Search TMDB by IMDB ID with caching
 	 */
 	async searchTmdbByImdb(imdbId: string): Promise<any> {
-		const tmdbKey = process.env.TMDB_KEY || this.runtimeConfig.tmdbKey;
-		if (!tmdbKey) {
-			throw new Error('TMDB_KEY environment variable is not set');
-		}
-
-		const url = `https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`;
+		const auth = this.requireTmdbAuth();
+		const url = tmdbUrl(`/find/${imdbId}`, { external_source: 'imdb_id' }, auth);
 		const cacheKey = `tmdb_find_${imdbId}`;
 		// Callers read vote_count off this to decide movie-vs-show, and a title that
 		// has no votes yet gains them later, so this cannot be cached permanently.
@@ -221,7 +231,7 @@ export class MetadataCacheService {
 			url,
 			cacheKey,
 			'tmdb_find',
-			undefined,
+			tmdbRequestConfig(auth),
 			this.CACHE_DURATIONS.MOVIE
 		);
 	}
@@ -230,18 +240,14 @@ export class MetadataCacheService {
 	 * Get TMDB movie info with caching
 	 */
 	async getTmdbMovieInfo(tmdbId: string | number): Promise<any> {
-		const tmdbKey = process.env.TMDB_KEY || this.runtimeConfig.tmdbKey;
-		if (!tmdbKey) {
-			throw new Error('TMDB_KEY environment variable is not set');
-		}
-
-		const url = `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${tmdbKey}`;
+		const auth = this.requireTmdbAuth();
+		const url = tmdbUrl(`/movie/${tmdbId}`, {}, auth);
 		const cacheKey = `tmdb_movie_${tmdbId}`;
 		return this.fetchWithCache(
 			url,
 			cacheKey,
 			'tmdb_movie',
-			undefined,
+			tmdbRequestConfig(auth),
 			this.CACHE_DURATIONS.MOVIE
 		);
 	}
@@ -250,33 +256,25 @@ export class MetadataCacheService {
 	 * Get TMDB TV info with caching
 	 */
 	async getTmdbTvInfo(tmdbId: string | number): Promise<any> {
-		const tmdbKey = process.env.TMDB_KEY || this.runtimeConfig.tmdbKey;
-		if (!tmdbKey) {
-			throw new Error('TMDB_KEY environment variable is not set');
-		}
-
-		const url = `https://api.themoviedb.org/3/tv/${tmdbId}?api_key=${tmdbKey}`;
+		const auth = this.requireTmdbAuth();
+		const url = tmdbUrl(`/tv/${tmdbId}`, {}, auth);
 		const cacheKey = `tmdb_tv_${tmdbId}`;
 		return this.fetchWithCache(
 			url,
 			cacheKey,
 			'tmdb_tv',
-			undefined,
+			tmdbRequestConfig(auth),
 			this.CACHE_DURATIONS.TV_SERIES
 		);
 	}
 
 	async getTmdbExternalIds(tmdbId: string | number, mediaType: 'movie' | 'tv'): Promise<any> {
-		const tmdbKey = process.env.TMDB_KEY || this.runtimeConfig.tmdbKey;
-		if (!tmdbKey) {
-			throw new Error('TMDB_KEY environment variable is not set');
-		}
-
-		const url = `https://api.themoviedb.org/3/${mediaType}/${tmdbId}/external_ids?api_key=${tmdbKey}`;
+		const auth = this.requireTmdbAuth();
+		const url = tmdbUrl(`/${mediaType}/${tmdbId}/external_ids`, {}, auth);
 		const cacheKey = `tmdb_external_ids_${mediaType}_${tmdbId}`;
 		// Deliberately permanent: this is an id-to-id mapping, not descriptive
 		// metadata, so it does not go stale the way titles and posters do.
-		return this.fetchWithCache(url, cacheKey, 'tmdb_external_ids');
+		return this.fetchWithCache(url, cacheKey, 'tmdb_external_ids', tmdbRequestConfig(auth));
 	}
 
 	/**

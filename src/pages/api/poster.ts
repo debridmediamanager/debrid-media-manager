@@ -1,7 +1,7 @@
 import { getMdblistCacheService } from '@/services/database/mdblistCache';
 import { getMdblistClient } from '@/services/mdblistClient';
-import { getTmdbKey } from '@/utils/freekeys';
 import { getOmdbMetadata, getOmdbPoster } from '@/utils/omdb';
+import { getTmdbAuthWithFreeKey, tmdbRequestConfig, tmdbUrl } from '@/utils/tmdbAuth';
 import { TmdbResponse } from '@/utils/tmdb';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -56,15 +56,21 @@ async function getFanartPoster(imdbId: string): Promise<string | null> {
 
 async function resolvePoster(imdbid: string): Promise<string | null> {
 	const mdblistClient = getMdblistClient();
+	// Keeps the shared free-key pool as the last resort, and picks up the v4
+	// read token when one is configured.
+	const tmdbAuth = getTmdbAuthWithFreeKey();
 	const getTmdbInfo = (imdbId: string) =>
-		`https://api.themoviedb.org/3/find/${imdbId}?api_key=${getTmdbKey()}&external_source=imdb_id`;
+		tmdbUrl(`/find/${imdbId}`, { external_source: 'imdb_id' }, tmdbAuth);
 
 	// 1. Try Fanart.tv first (movies only, supports IMDB IDs directly)
 	const fanartUrl = await getFanartPoster(imdbid);
 	if (fanartUrl) return fanartUrl;
 
 	// 2. Try TMDB (movies and TV)
-	const tmdbResp = await axios.get<TmdbResponse>(getTmdbInfo(imdbid));
+	const tmdbResp = await axios.get<TmdbResponse>(
+		getTmdbInfo(imdbid),
+		tmdbRequestConfig(tmdbAuth)
+	);
 	const movieResult = tmdbResp.data.movie_results[0];
 	const tvResult = tmdbResp.data.tv_results[0];
 	const posterPath = movieResult?.poster_path || tvResult?.poster_path;

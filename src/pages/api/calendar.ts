@@ -1,9 +1,9 @@
+import { getTmdbAuthWithFreeKey, tmdbAxiosOptions } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import getConfig from 'next/config';
 
 import { getMdblistCacheService } from '@/services/database/mdblistCache';
-import { getTmdbKey } from '@/utils/freekeys';
 
 const TRAKT_BASE_URL = 'https://api.trakt.tv';
 
@@ -169,7 +169,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		'trakt-api-key': traktClientId,
 	};
 
-	const tmdbKey = process.env.TMDB_KEY || getTmdbKey();
+	const tmdbAuth = getTmdbAuthWithFreeKey();
 
 	try {
 		const [allResp, premieresResp, airingTodayResp, onTheAirResp] = await Promise.all([
@@ -187,12 +187,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					params: { extended: 'full' },
 				}
 			),
-			axios.get(`https://api.themoviedb.org/3/tv/airing_today`, {
-				params: { api_key: tmdbKey },
-			}),
-			axios.get(`https://api.themoviedb.org/3/tv/on_the_air`, {
-				params: { api_key: tmdbKey },
-			}),
+			axios.get(`https://api.themoviedb.org/3/tv/airing_today`, tmdbAxiosOptions(tmdbAuth)),
+			axios.get(`https://api.themoviedb.org/3/tv/on_the_air`, tmdbAxiosOptions(tmdbAuth)),
 		]);
 
 		const combinedDays = mapTraktItems(allResp.data, false);

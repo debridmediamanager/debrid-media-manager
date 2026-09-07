@@ -7,6 +7,7 @@ import {
 	isIsoDateOnOrBeforeToday,
 } from '@/utils/movieReleaseDates';
 import { getOmdbMetadata, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
+import { getTmdbAuth, tmdbAxiosOptions } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import UserAgent from 'user-agents';
@@ -88,16 +89,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		if (mdbResponse.tmdbid) {
 			try {
-				const tmdbKey = process.env.TMDB_KEY;
-				if (tmdbKey) {
+				const tmdbAuth = getTmdbAuth();
+				if (tmdbAuth) {
 					const tmdbResponse = await axios.get(
 						`https://api.themoviedb.org/3/movie/${mdbResponse.tmdbid}`,
-						{
-							params: {
-								api_key: tmdbKey,
-								append_to_response: 'videos,release_dates',
-							},
-						}
+						tmdbAxiosOptions(tmdbAuth, {
+							append_to_response: 'videos,release_dates',
+						})
 					);
 					const tmdbTrailer = tmdbResponse.data.videos?.results?.find(
 						(v: any) => v.type === 'Trailer' && v.site === 'YouTube'

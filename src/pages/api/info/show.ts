@@ -2,6 +2,7 @@ import { MRating, MShow } from '@/services/mdblist';
 import { getMdblistClient } from '@/services/mdblistClient';
 import { getMetadataCache } from '@/services/metadataCache';
 import { getOmdbMetadata, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
+import { getTmdbAuth, tmdbRequestConfig, tmdbUrl } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import UserAgent from 'user-agents';
@@ -173,10 +174,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const tmdbPromise = mdbResponse?.tmdbid
 			? (async () => {
 					try {
-						const tmdbKey = process.env.TMDB_KEY;
-						if (!tmdbKey) return null;
+						const tmdbAuth = getTmdbAuth();
+						if (!tmdbAuth) return null;
 						const resp = await axios.get(
-							`https://api.themoviedb.org/3/tv/${mdbResponse.tmdbid}?api_key=${tmdbKey}&append_to_response=videos`
+							tmdbUrl(
+								`/tv/${mdbResponse.tmdbid}`,
+								{ append_to_response: 'videos' },
+								tmdbAuth
+							),
+							tmdbRequestConfig(tmdbAuth)
 						);
 						return resp.data;
 					} catch {
