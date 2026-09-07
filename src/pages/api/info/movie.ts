@@ -6,6 +6,7 @@ import {
 	getExpectedDigitalReleaseDate,
 	isIsoDateOnOrBeforeToday,
 } from '@/utils/movieReleaseDates';
+import { getOmdbMetadata, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import UserAgent from 'user-agents';
@@ -41,7 +42,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			},
 		});
 
-		const [mdbResponse, cinemetaResponse] = await Promise.all([mdbPromise, cinePromise]);
+		// OMDb only has to answer when both of the above miss, but it is fetched
+		// alongside them so a fallback costs no extra round trip. getOmdbMetadata
+		// resolves to null rather than rejecting, so it cannot fail the request.
+		const omdbPromise = getOmdbMetadata(imdbid);
+
+		const [mdbResponse, cinemetaResponse, omdbResponse] = await Promise.all([
+			mdbPromise,
+			cinePromise,
+			omdbPromise,
+		]);
 
 		let imdb_score =
 			(mdbResponse.ratings?.reduce((acc: number | undefined, rating: MRating) => {
@@ -53,7 +63,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				? parseFloat(cinemetaResponse.meta?.imdbRating) * 10
 				: null;
 
-		const title = mdbResponse.title ?? cinemetaResponse.meta?.name ?? 'Unknown';
+		// Also covers the NaN this produces when mdblist has a rating but cinemeta
+		// has no imdbRating to parse; `??` alone would let that NaN through.
+		if (imdb_score === null || !Number.isFinite(imdb_score)) {
+			const omdbRating = getOmdbRating(omdbResponse);
+			imdb_score = omdbRating === null ? null : omdbRating * 10;
+		}
+
+		const title =
+			mdbResponse.title ??
+			cinemetaResponse.meta?.name ??
+			omdbField(omdbResponse?.Title) ??
+			'Unknown';
 
 		let trailer = mdbResponse.trailer ?? '';
 		let digitalReleaseDate = '';
@@ -111,13 +132,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		return res.status(200).json({
 			title,
-			description: mdbResponse.description ?? cinemetaResponse.meta?.description ?? 'n/a',
-			poster: mdbResponse.poster ?? cinemetaResponse.meta?.poster ?? '',
+			description:
+				mdbResponse.description ??
+				cinemetaResponse.meta?.description ??
+				omdbField(omdbResponse?.Plot) ??
+				'n/a',
+			poster:
+				mdbResponse.poster ??
+				cinemetaResponse.meta?.poster ??
+				getOmdbPoster(omdbResponse) ??
+				'',
 			backdrop:
 				mdbResponse.backdrop ??
 				cinemetaResponse.meta?.background ??
 				`https://picsum.photos/seed/${encodeURIComponent(title)}/1800/300`,
-			year: mdbResponse.year ?? cinemetaResponse.meta?.releaseInfo ?? '????',
+			year:
+				mdbResponse.year ??
+				cinemetaResponse.meta?.releaseInfo ??
+				omdbField(omdbResponse?.Year) ??
+				'????',
 			imdb_score: imdb_score ?? 0,
 			trailer,
 			digitalReleaseDate,

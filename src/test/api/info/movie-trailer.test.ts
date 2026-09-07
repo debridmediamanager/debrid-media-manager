@@ -23,6 +23,7 @@ describe('/api/info/movie - trailer field', () => {
 		};
 
 		const mockMetadataCache = {
+			getOmdbInfo: vi.fn().mockResolvedValue(null),
 			getCinemetaMovie: vi.fn().mockResolvedValue({
 				meta: {
 					name: 'Test Movie',
@@ -72,6 +73,7 @@ describe('/api/info/movie - trailer field', () => {
 		};
 
 		const mockMetadataCache = {
+			getOmdbInfo: vi.fn().mockResolvedValue(null),
 			getCinemetaMovie: vi.fn().mockResolvedValue({
 				meta: {
 					name: 'Test Movie',

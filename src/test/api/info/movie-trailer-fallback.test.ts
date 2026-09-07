@@ -21,6 +21,7 @@ describe('/api/info/movie - trailer fallback sources', () => {
 		};
 
 		const mockMetadataCache = {
+			getOmdbInfo: vi.fn().mockResolvedValue(null),
 			getCinemetaMovie: vi.fn().mockResolvedValue({
 				meta: {
 					name: 'Test Movie',
@@ -69,6 +70,7 @@ describe('/api/info/movie - trailer fallback sources', () => {
 		};
 
 		const mockMetadataCache = {
+			getOmdbInfo: vi.fn().mockResolvedValue(null),
 			getCinemetaMovie: vi.fn().mockResolvedValue({
 				meta: {
 					name: 'Test Movie',
@@ -143,6 +145,7 @@ describe('/api/info/movie - trailer fallback sources', () => {
 		};
 
 		const mockMetadataCache = {
+			getOmdbInfo: vi.fn().mockResolvedValue(null),
 			getCinemetaMovie: vi.fn().mockResolvedValue({
 				meta: {
 					name: 'Test Movie',

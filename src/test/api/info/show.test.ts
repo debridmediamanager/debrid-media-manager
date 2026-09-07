@@ -26,6 +26,7 @@ describe('/api/info/show', () => {
 	const mockMetadataCache = {
 		getCinemetaSeries: vi.fn(),
 		getTraktShowEpisode: vi.fn().mockResolvedValue(null),
+		getOmdbInfo: vi.fn().mockResolvedValue(null),
 	};
 
 	beforeEach(() => {
@@ -204,5 +205,76 @@ describe('/api/info/show', () => {
 				},
 			})
 		);
+	});
+
+	it('falls back to OMDb when mdblist and cinemeta have nothing', async () => {
+		mockMdbClient.getInfoByImdbId.mockResolvedValue({});
+		mockMetadataCache.getCinemetaSeries.mockResolvedValue({});
+		mockMetadataCache.getOmdbInfo.mockResolvedValue({
+			Response: 'True',
+			Title: 'Breaking Bad',
+			Plot: 'A chemistry teacher turns to manufacturing methamphetamine.',
+			Poster: 'https://m.media-amazon.com/images/M/breakingbad.jpg',
+			imdbRating: '9.5',
+		});
+
+		const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt0903747' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({
+				title: 'Breaking Bad',
+				description: 'A chemistry teacher turns to manufacturing methamphetamine.',
+				poster: 'https://m.media-amazon.com/images/M/breakingbad.jpg',
+				// This route reports the rating on its native 0-10 scale, unlike
+				// /api/info/movie which multiplies by 10.
+				imdb_score: 9.5,
+			})
+		);
+	});
+
+	it('never renders OMDb’s "N/A" filler as real metadata', async () => {
+		mockMdbClient.getInfoByImdbId.mockResolvedValue({});
+		mockMetadataCache.getCinemetaSeries.mockResolvedValue({});
+		mockMetadataCache.getOmdbInfo.mockResolvedValue({
+			Response: 'True',
+			Title: 'Some Obscure Show',
+			Plot: 'N/A',
+			Poster: 'N/A',
+			imdbRating: 'N/A',
+		});
+
+		const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt0000002' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({
+				title: 'Some Obscure Show',
+				description: 'n/a',
+				poster: '',
+				imdb_score: 0,
+			})
+		);
+	});
+
+	it('still answers when OMDb itself fails', async () => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+		mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'MDB Show' });
+		mockMetadataCache.getCinemetaSeries.mockResolvedValue({});
+		mockMetadataCache.getOmdbInfo.mockRejectedValue(new Error('Invalid API key!'));
+
+		const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt1234567' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ title: 'MDB Show' }));
+		warn.mockRestore();
 	});
 });
