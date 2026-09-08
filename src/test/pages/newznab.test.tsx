@@ -203,7 +203,7 @@ describe('Newznab setup page, for a sponsor', () => {
 		asSponsor();
 		render(<NewznabSetupPage />);
 
-		expect(screen.queryByRole('link', { name: 'Patreon' })).toBeNull();
+		expect(screen.queryByText(/Sponsor this project/)).toBeNull();
 		expect(screen.queryByText('A sponsor feature')).toBeNull();
 	});
 });
@@ -237,17 +237,22 @@ describe('Newznab setup page, for everyone else', () => {
 		expect(screen.queryByLabelText('Reveal API key')).toBeNull();
 	});
 
-	it('adds the sponsorship pitch above it', () => {
+	// The pitch used to name Github, Patreon and Paypal side by side. Every way
+	// of paying now goes through gatekeeper, which is also the only place the
+	// DMM API key comes from, so nothing else may be linked here.
+	it('adds the sponsorship pitch above it, pointing only at gatekeeper', () => {
 		asVisitor();
 		render(<NewznabSetupPage />);
 
 		expect(screen.getByText('A sponsor feature')).toBeTruthy();
-		expect(screen.getByRole('link', { name: 'Github' }).getAttribute('href')).toContain(
-			'github.com/sponsors'
-		);
-		expect(screen.getByRole('link', { name: 'Patreon' }).getAttribute('href')).toContain(
-			'patreon.com'
-		);
+		for (const link of screen.getAllByRole('link', { name: 'gatekeeper' })) {
+			expect(link.getAttribute('href')).toBe('https://gatekeeper.debridmediamanager.com');
+		}
+		for (const link of screen.getAllByRole('link')) {
+			expect(link.getAttribute('href')).not.toMatch(
+				/patreon\.com|paypal\.me|github\.com\/sponsors/
+			);
+		}
 	});
 
 	// A lapsed-looking visitor is often an existing sponsor on a fresh browser;

@@ -107,7 +107,7 @@ vi.mock('@/utils/withAuth', () => ({
 
 vi.mock('lucide-react', () => ({
 	__esModule: true,
-	Megaphone: () => <svg data-testid="megaphone-icon" />,
+	Handshake: () => <svg data-testid="handshake-icon" />,
 	Settings: () => <svg data-testid="settings-icon" />,
 }));
 

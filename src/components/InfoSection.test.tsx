@@ -42,15 +42,14 @@ describe('InfoSection', () => {
 		expect(
 			screen.getByRole('link', { name: /r\/debridmediamanager/i }).getAttribute('href')
 		).toContain('reddit.com');
-		expect(screen.getByRole('link', { name: 'Github' }).getAttribute('href')).toContain(
-			'github.com/sponsors'
+		expect(screen.getByRole('link', { name: 'gatekeeper' }).getAttribute('href')).toBe(
+			'https://gatekeeper.debridmediamanager.com'
 		);
-		expect(screen.getByRole('link', { name: 'Patreon' }).getAttribute('href')).toContain(
-			'patreon.com'
-		);
-		expect(screen.getByRole('link', { name: 'Paypal' }).getAttribute('href')).toContain(
-			'paypal.me'
-		);
+		for (const link of screen.getAllByRole('link')) {
+			expect(link.getAttribute('href')).not.toMatch(
+				/patreon\.com|paypal\.me|github\.com\/sponsors/
+			);
+		}
 		expect(screen.getByRole('link', { name: /Discord/i }).getAttribute('href')).toContain(
 			'discord.gg'
 		);

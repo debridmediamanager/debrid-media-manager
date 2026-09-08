@@ -91,7 +91,7 @@ vi.mock('@/utils/withAuth', () => ({
 vi.mock('lucide-react', () => ({
 	__esModule: true,
 	FolderTree: () => <svg data-testid="folder-tree-icon" />,
-	Megaphone: () => <svg data-testid="megaphone-icon" />,
+	Handshake: () => <svg data-testid="handshake-icon" />,
 	Settings: () => <svg data-testid="settings-icon" />,
 	Star: () => <svg data-testid="star-icon" />,
 	X: () => <svg data-testid="x-icon" />,
@@ -398,5 +398,23 @@ describe('IndexPage', () => {
 		expect(message).not.toMatch(/in Settings/i);
 		expect(message).not.toMatch(/clear site data/i);
 		expect(message).toMatch(/card below/i);
+	});
+
+	// The megaphone beside the title went to Patreon, which is one of three
+	// funding destinations DMM used to name. gatekeeper is the only one now: it
+	// takes the payment and it mints the DMM API key the sponsor features want.
+	it('sends the header sponsor link to gatekeeper and nowhere else', () => {
+		currentUserMock.mockReturnValue(settledFixture);
+
+		render(<IndexPage />);
+
+		expect(screen.getByRole('link', { name: 'Sponsor DMM' }).getAttribute('href')).toBe(
+			'https://gatekeeper.debridmediamanager.com'
+		);
+		for (const link of screen.getAllByRole('link')) {
+			expect(link.getAttribute('href')).not.toMatch(
+				/patreon\.com|paypal\.me|github\.com\/sponsors/
+			);
+		}
 	});
 });

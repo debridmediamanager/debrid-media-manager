@@ -198,44 +198,17 @@ function SponsorPitch() {
 				<div className="text-sm text-gray-300">
 					<a
 						className="text-blue-300 underline hover:text-blue-200"
-						href="https://github.com/sponsors/debridmediamanager"
+						href={GATEKEEPER_URL}
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						Github
-					</a>{' '}
-					|{' '}
-					<a
-						className="text-blue-300 underline hover:text-blue-200"
-						href="https://www.patreon.com/debridmediamanager"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Patreon
-					</a>{' '}
-					|{' '}
-					<a
-						className="text-blue-300 underline hover:text-blue-200"
-						href="https://paypal.me/yowmamasita"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Paypal
+						gatekeeper
 					</a>
 				</div>
 			</div>
 
 			<p className="mt-4 text-sm text-gray-400">
-				Get your key by connecting your GitHub account on{' '}
-				<a
-					href={GATEKEEPER_URL}
-					target="_blank"
-					rel="noopener noreferrer"
-					className="text-blue-300 underline hover:text-blue-200"
-				>
-					gatekeeper
-				</a>
-				, then paste it in{' '}
+				Get your key by connecting your GitHub account there, then paste it in{' '}
 				<Link href="/settings" className="text-blue-300 underline hover:text-blue-200">
 					Settings
 				</Link>{' '}

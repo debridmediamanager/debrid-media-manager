@@ -11,11 +11,12 @@ import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/castToken';
 import { useTorBoxCastToken } from '@/hooks/torboxCastToken';
 import { getTerms } from '@/utils/browseTerms';
+import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
-import { Megaphone, Settings } from 'lucide-react';
+import { Handshake, Settings } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -205,10 +206,13 @@ function IndexPage() {
 					<h1 className="mb-2 flex items-center justify-center text-xl font-bold text-white">
 						Debrid Media Manager{' '}
 						<a
-							href="https://www.patreon.com/debridmediamanager"
+							href={GATEKEEPER_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Sponsor DMM"
 							className="ml-2 inline-flex hover:opacity-75"
 						>
-							<Megaphone className="h-6 w-6 text-yellow-400" />
+							<Handshake className="h-6 w-6 text-yellow-400" />
 						</a>
 					</h1>
 

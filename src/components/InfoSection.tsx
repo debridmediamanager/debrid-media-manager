@@ -73,38 +73,14 @@ export function InfoSection() {
 						Sponsor this project&apos;s development on{' '}
 						<a
 							className="text-blue-300 underline hover:text-blue-200"
-							href="https://github.com/sponsors/debridmediamanager"
+							href={GATEKEEPER_URL}
 							target="_blank"
+							rel="noopener noreferrer"
 						>
-							Github
-						</a>{' '}
-						|{' '}
-						<a
-							className="text-blue-300 underline hover:text-blue-200"
-							href="https://www.patreon.com/debridmediamanager"
-							target="_blank"
-						>
-							Patreon
-						</a>{' '}
-						|{' '}
-						<a
-							className="text-blue-300 underline hover:text-blue-200"
-							href="https://paypal.me/yowmamasita"
-							target="_blank"
-						>
-							Paypal
+							gatekeeper
 						</a>
 						<div className="mt-1 text-xs text-gray-400">
-							Already sponsoring? Get your DMM API key on{' '}
-							<a
-								className="text-blue-300 underline hover:text-blue-200"
-								href={GATEKEEPER_URL}
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								gatekeeper
-							</a>{' '}
-							and paste it in{' '}
+							Already sponsoring? Get your DMM API key there and paste it in{' '}
 							<Link
 								href="/settings"
 								className="text-blue-300 underline hover:text-blue-200"

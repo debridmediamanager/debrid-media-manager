@@ -186,7 +186,7 @@ describe('SABnzbd setup page', () => {
 		const href = (name: string) => screen.getByRole('link', { name }).getAttribute('href');
 		expect(href('zurg-public')).toBe('https://github.com/debridmediamanager/zurg-public');
 		expect(href('zurg nightly builds')).toBe('https://github.com/debridmediamanager/zurg');
-		expect(href('Patreon subscription')).toBe('https://www.patreon.com/debridmediamanager');
+		expect(href('sponsorship')).toBe('https://gatekeeper.debridmediamanager.com');
 		// The nightly repo is private, so say so next to the link rather than
 		// letting people click into a 404.
 		expect(screen.getByText(/the repo is private/)).toBeTruthy();

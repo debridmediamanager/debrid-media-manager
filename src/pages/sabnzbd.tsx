@@ -1,5 +1,6 @@
 import { Logo } from '@/components/Logo';
 import { needsUsernameSlot, sabUrlBase } from '@/services/sabnzbdProxy';
+import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { AlertTriangle, Check, Copy, Eye, EyeOff, Loader2 } from 'lucide-react';
 import Head from 'next/head';
 import { useEffect, useMemo, useState } from 'react';
@@ -341,12 +342,12 @@ export default function SabnzbdSetupPage() {
 								</a>{' '}
 								— the repo is private; access comes with a{' '}
 								<a
-									href="https://www.patreon.com/debridmediamanager"
+									href={GATEKEEPER_URL}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="underline decoration-dotted"
 								>
-									Patreon subscription
+									sponsorship
 								</a>
 								.
 							</li>

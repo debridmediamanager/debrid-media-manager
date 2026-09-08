@@ -1,3 +1,4 @@
+import { ZURG_SITE_URL } from '@/components/ZurgBanner';
 import { getSeedboxTorrent, type DebridLinkFile } from '@/services/debridLink';
 import {
 	exploreOffcloudCloud,
@@ -94,7 +95,7 @@ export const showInfoForRD = async (
 
 	if (info.progress === 100 && !isIntact) {
 		if (info.links.length === 1) {
-			warning = `<div class="text-sm text-red-400">Warning: This torrent appears to have been rar'ed by Real-Debrid (<a class="underline text-red-200" href="https://www.patreon.com/posts/that-annoying-rd-144564359" target="_blank" rel="noreferrer">zurg supports rar files</a>)<br/></div>`;
+			warning = `<div class="text-sm text-red-400">Warning: This torrent appears to have been rar'ed by Real-Debrid (<a class="underline text-red-200" href="${ZURG_SITE_URL}" target="_blank" rel="noreferrer">zurg supports rar files</a>)<br/></div>`;
 		} else {
 			warning = `<div class="text-sm text-red-400">Warning: Some files have expired</div>`;
 		}
