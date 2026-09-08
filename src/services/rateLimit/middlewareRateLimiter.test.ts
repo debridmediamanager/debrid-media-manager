@@ -230,10 +230,11 @@ describe('middlewareRateLimiter', () => {
 		});
 
 		it('should keep same-window configs in separate buckets', () => {
-			// torrents, zurg and sponsor are all 1-per-2s but belong to different
-			// endpoint classes. Keying the counter on the window alone merged them
-			// into one 1-per-2s budget, so a page that called sponsor/status and
-			// torrents/movie together 429'd on the second call.
+			// torrents and sponsor are both 1-per-2s but belong to different
+			// endpoint classes, and zurg used to be a third. Keying the counter on
+			// the window alone merged them into one 1-per-2s budget, so a page that
+			// called sponsor/status and torrents/movie together 429'd on the second
+			// call.
 			expect(limiter.check('user1', RATE_LIMIT_CONFIGS.sponsor).success).toBe(true);
 			expect(limiter.check('user1', RATE_LIMIT_CONFIGS.torrents).success).toBe(true);
 			expect(limiter.check('user1', RATE_LIMIT_CONFIGS.zurg).success).toBe(true);

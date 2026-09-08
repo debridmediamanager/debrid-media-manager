@@ -3,6 +3,7 @@ import type { CachedUsenetResult } from '@/services/database/newznabApiCache';
 import { _resetUpstreamIndexersForTest } from '@/services/newznab/indexers';
 import { _resetTokenSecretForTest, encryptReleaseId } from '@/services/newznab/opaqueId';
 import { _resetUpstreamLimiterForTest, RSS_TTL_MS } from '@/services/newznab/search';
+import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/middlewareRateLimiter';
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
@@ -471,9 +472,13 @@ describe('GET /api/newznab/api search', () => {
 	});
 
 	it('answers 429 with a Newznab error document once the search budget is spent', async () => {
-		for (let i = 0; i < 30; i++) {
-			// Rotate the IP so only the per-key budget is being spent: 30 calls
-			// from one address would trip the pre-auth IP reject at 20 first.
+		// Read from the config so changing the limit cannot leave this asserting
+		// one that no longer exists.
+		const { rateLimit } = RATE_LIMIT_CONFIGS.newznabSearch;
+
+		for (let i = 0; i < rateLimit; i++) {
+			// Rotate the IP so only the per-key budget is being spent: a run of
+			// calls from one address would trip the pre-auth IP reject first.
 			testIp = `10.200.${i}.1`;
 			expect(
 				(

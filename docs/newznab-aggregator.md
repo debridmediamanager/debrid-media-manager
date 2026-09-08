@@ -75,7 +75,7 @@ across the swarm instances, in-memory per-instance fallback.
 | Bucket           | Limit     | Keyed on                                                                                                                                            |
 | ---------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `newznabIp`      | 20 / 10s  | client IP, before auth — the cheap reject; wider than the app default because a Sonarr interactive season search bursts faster than 5/s from one IP |
-| `newznabSearch`  | 30 / min  | `sponsor:<shortId>`                                                                                                                                 |
+| `newznabSearch`  | 20 / min  | `sponsor:<shortId>`                                                                                                                                 |
 | `newznabGrab`    | 10 / min  | `sponsor:<shortId>`                                                                                                                                 |
 | `newznabGrabDay` | 150 / day | `sponsor:<shortId>`                                                                                                                                 |
 

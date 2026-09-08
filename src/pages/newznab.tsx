@@ -26,7 +26,7 @@ const API_PATH = '/api';
 
 /** Per-key limits enforced by the endpoint, stated here so nobody has to find them by tripping them. */
 const LIMITS = [
-	{ label: '30 searches', per: 'per minute' },
+	{ label: '20 searches', per: 'per minute' },
 	{ label: '10 grabs', per: 'per minute' },
 	{ label: '150 grabs', per: 'per day' },
 ];

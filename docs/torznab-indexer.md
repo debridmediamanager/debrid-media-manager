@@ -93,10 +93,10 @@ No grab bucket exists, because a grab never comes back to DMM. Keying on `shortI
 than the key string means a gatekeeper key reset does not reset the budget and one
 sponsor's whole \*arr farm shares one budget.
 
-Tighter than the Newznab endpoint's 30/min on purpose. A search here reads whole library
-pages out of the database and classifies every hash in them against the debrid caches,
-which costs DMM considerably more than fanning a Newznab query out to upstream indexers
-does. Twenty a minute is a sustained search every three seconds across a whole \*arr
+The same budget as the Newznab endpoint, though a search here costs DMM considerably
+more: it reads whole library pages out of the database and classifies every hash in them
+against the debrid caches, where a Newznab query is fanned out to upstream indexers.
+Twenty a minute is a sustained search every three seconds across a whole \*arr
 fleet; what it refuses is a burst, and a client that gets the 429 backs off on
 `Retry-After` rather than treating the indexer as broken.
 

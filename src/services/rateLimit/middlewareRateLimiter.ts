@@ -16,7 +16,13 @@ export const RATE_LIMIT_CONFIGS = {
 	// window still holds the previous second, so two of those bursts have to fit.
 	proxy: { name: 'proxy', rateLimit: 20, windowSeconds: 2 },
 	report: { name: 'report', rateLimit: 5, windowSeconds: 10 }, // 5 reports per 10 seconds
-	zurg: { name: 'zurg', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for zurg API endpoints
+	// The zurg endpoints, sized like the Newznab and Torznab indexers rather
+	// than like a person clicking: a minute's worth in one budget, so a client
+	// that fans out over several titles is not refused on its second call.
+	// `search-torrents` draws from here too - it used to share the `torrents`
+	// bucket with the website's own search API, so a sponsor's zurg and their
+	// browser spent one 1-per-2s counter between them.
+	zurg: { name: 'zurg', rateLimit: 20, windowSeconds: 60 },
 	zurgAdmin: { name: 'zurgAdmin', rateLimit: 1, windowSeconds: 10 }, // 1 request per 10 seconds for zurg admin endpoints
 	sponsor: { name: 'sponsor', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for sponsor status endpoints
 	// Every miss spends a grab from the one indexer account the whole site shares,
@@ -25,7 +31,7 @@ export const RATE_LIMIT_CONFIGS = {
 	// The Newznab aggregation endpoint. An *arr RSS-syncs on a timer and issues
 	// one search per configured indexer, so the budget is sized for a fleet of
 	// them behind one sponsor key rather than for a person clicking.
-	newznabSearch: { name: 'newznabSearch', rateLimit: 30, windowSeconds: 60 },
+	newznabSearch: { name: 'newznabSearch', rateLimit: 20, windowSeconds: 60 },
 	// A grab spends a real download from the shared upstream account, so it gets
 	// both a burst limit and a day-long one. Two entries, two names: same-name
 	// configs share a bucket, so a single name would have made the day limit and
@@ -38,10 +44,10 @@ export const RATE_LIMIT_CONFIGS = {
 	// real limits; this only has to stop unauthenticated hammering of caps.
 	newznabIp: { name: 'newznabIp', rateLimit: 20, windowSeconds: 10 },
 	// The Torznab indexer, sized for an *arr fleet behind one sponsor key rather
-	// than for a person clicking. Tighter than its Newznab twin's 30: a search
-	// here reads whole library pages and classifies every hash in them against
-	// the debrid caches, so it costs the database far more than a fan-out to
-	// upstream indexers costs DMM. It has no grab budget — a Torznab item's
+	// than for a person clicking, and the same budget as its Newznab twin. A
+	// search here reads whole library pages and classifies every hash in them
+	// against the debrid caches, so it costs the database far more than a fan-out
+	// to upstream indexers costs DMM. It has no grab budget — a Torznab item's
 	// download is a magnet the client resolves against its own debrid account, so
 	// a grab never comes back to DMM at all.
 	torznabSearch: { name: 'torznabSearch', rateLimit: 20, windowSeconds: 60 },

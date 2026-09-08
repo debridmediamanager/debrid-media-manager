@@ -174,7 +174,7 @@ describe('Newznab setup page, for a sponsor', () => {
 		asSponsor();
 		render(<NewznabSetupPage />);
 
-		expect(screen.getByText('30 searches')).toBeTruthy();
+		expect(screen.getByText('20 searches')).toBeTruthy();
 		expect(screen.getByText('10 grabs')).toBeTruthy();
 		expect(screen.getByText('150 grabs')).toBeTruthy();
 		expect(screen.getAllByText('per minute')).toHaveLength(2);
@@ -217,7 +217,7 @@ describe('Newznab setup page, for everyone else', () => {
 		expect(screen.queryByTestId('field-API Path')).toBeNull();
 		expect(screen.queryByText(`${window.location.origin}/api/newznab`)).toBeNull();
 		expect(screen.queryByText('/api')).toBeNull();
-		expect(screen.queryByText('30 searches')).toBeNull();
+		expect(screen.queryByText('20 searches')).toBeNull();
 	});
 
 	it('makes the sponsorship pitch instead', () => {

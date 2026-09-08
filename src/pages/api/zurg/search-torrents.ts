@@ -168,4 +168,7 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 };
 
-export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.torrents);
+// The `zurg` budget, not `torrents`: buckets are keyed on the config name, so
+// drawing from `torrents` put this on one counter with the website's own
+// /api/torrents/* search routes and with zurg's hash-imdb ingestion.
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.zurg);

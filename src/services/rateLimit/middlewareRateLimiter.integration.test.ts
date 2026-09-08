@@ -112,10 +112,10 @@ describe.skipIf(!dockerAvailable)('Redis Rate Limiter Integration Tests', () => 
 		it('should give same-window configs separate keys', async () => {
 			const limiter = new RedisRateLimiter(redis);
 
-			// torrents, zurg and sponsor are all 1-per-2s. Keying on the window
-			// alone gave the three of them one shared 1-per-2s budget, so a movie
-			// page that fetched sponsor status and then searched 429'd on the
-			// search.
+			// torrents and sponsor are both 1-per-2s, and zurg used to be a third.
+			// Keying on the window alone gave the three of them one shared 1-per-2s
+			// budget, so a movie page that fetched sponsor status and then searched
+			// 429'd on the search.
 			expect((await limiter.check('redis-buckets', RATE_LIMIT_CONFIGS.sponsor)).success).toBe(
 				true
 			);

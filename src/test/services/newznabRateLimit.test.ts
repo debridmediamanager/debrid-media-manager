@@ -20,7 +20,7 @@ describe('Newznab rate limit configs', () => {
 	it('defines a search config and both grab configs', () => {
 		expect(RATE_LIMIT_CONFIGS.newznabSearch).toEqual({
 			name: 'newznabSearch',
-			rateLimit: 30,
+			rateLimit: 20,
 			windowSeconds: 60,
 		});
 		expect(RATE_LIMIT_CONFIGS.newznabGrab).toEqual({

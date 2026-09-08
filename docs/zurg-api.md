@@ -413,8 +413,13 @@ keys.forEach((key) => {
     - Recommended: 30-90 days for regular use
 
 4. **Rate Limiting**:
-    - Consider implementing rate limiting on the hash search endpoint
-    - Monitor for abuse
+    - Enforced per client IP, before the API key is checked: 20 requests per
+      minute across `hashes-by-imdb`, `search-torrents`, `show-info` and
+      `resolve-tmdb`, which share the `zurg` bucket
+      (`RATE_LIMIT_CONFIGS`, `src/services/rateLimit/middlewareRateLimiter.ts`)
+    - `register-api-key` is separate and far tighter: 1 request per 10 seconds
+    - An exceeded budget answers `429 {"error":"Rate limit exceeded"}` with
+      `Retry-After` and the `X-RateLimit-*` headers
 
 ---
 
