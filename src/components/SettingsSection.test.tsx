@@ -380,6 +380,37 @@ describe('SettingsSection', () => {
 		}
 	});
 
+	// The same gate that locked pasted-key members out of the DMM Cast page made
+	// this section a silent no-op for them: no clientId, so nothing was sent.
+	it('updates the Real-Debrid cast profile from a pasted API key', async () => {
+		localStorage.setItem('rd:castToken', 'cast-token');
+		localStorage.setItem('rd:accessToken', JSON.stringify('pasted-key'));
+
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+		vi.stubGlobal('fetch', fetchMock);
+
+		try {
+			render(<SettingsSection />);
+			const user = userEvent.setup();
+
+			const limitContainer = screen.getByText('Other streams limit').closest('div')!;
+			await user.selectOptions(within(limitContainer).getByRole('combobox'), '3');
+
+			const call = fetchMock.mock.calls.find(
+				([url]) => url === '/api/stremio/cast/updateSizeLimits'
+			);
+			expect(call, 'no cast settings update was sent').toBeTruthy();
+			const body = JSON.parse(call![1].body);
+			expect(body.apiKey).toBe('pasted-key');
+			// Sending an empty triple alongside would fail the server's own
+			// "missing required fields" check.
+			expect(body).not.toHaveProperty('clientId');
+			expect(body.otherStreamsLimit).toBe(3);
+		} finally {
+			vi.unstubAllGlobals();
+		}
+	});
+
 	it('leaves AllDebrid alone when the member never enrolled in cast', async () => {
 		localStorage.setItem('ad:apiKey', JSON.stringify('ad-key'));
 

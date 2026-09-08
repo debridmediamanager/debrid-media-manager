@@ -144,11 +144,22 @@ export const SettingsSection = () => {
 		const clientSecretRaw = localStorage.getItem('rd:clientSecret');
 		const refreshTokenRaw = localStorage.getItem('rd:refreshToken');
 
-		if (castToken && clientIdRaw && clientSecretRaw) {
-			const clientId = JSON.parse(clientIdRaw);
-			const clientSecret = JSON.parse(clientSecretRaw);
-			const refreshToken = refreshTokenRaw ? JSON.parse(refreshTokenRaw) : null;
+		// A pasted API key stores only the access token, so gating on the OAuth
+		// triple made this section a silent no-op for those members - the same
+		// way it locked them out of the DMM Cast page.
+		const accessToken = getLocalStorageString('rd:accessToken');
+		const rdCredentials =
+			clientIdRaw && clientSecretRaw
+				? {
+						clientId: JSON.parse(clientIdRaw),
+						clientSecret: JSON.parse(clientSecretRaw),
+						refreshToken: refreshTokenRaw ? JSON.parse(refreshTokenRaw) : null,
+					}
+				: accessToken
+					? { apiKey: accessToken }
+					: null;
 
+		if (castToken && rdCredentials) {
 			updatePromises.push(
 				fetch('/api/stremio/cast/updateSizeLimits', {
 					method: 'POST',
@@ -157,9 +168,7 @@ export const SettingsSection = () => {
 					// rejects the raised limit this section just offered.
 					headers: { 'Content-Type': 'application/json', ...sponsorHeaders() },
 					body: JSON.stringify({
-						clientId,
-						clientSecret,
-						refreshToken,
+						...rdCredentials,
 						movieMaxSize: movieSize !== undefined ? Number(movieSize) : undefined,
 						episodeMaxSize: episodeSize !== undefined ? Number(episodeSize) : undefined,
 						otherStreamsLimit:

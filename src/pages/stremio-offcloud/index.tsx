@@ -31,7 +31,7 @@ export function StremioOffcloudPage() {
 						You must be logged in with Offcloud to use the Stremio Cast feature.
 					</p>
 					<Link
-						href="/offcloud/login"
+						href={`/offcloud/login?redirect=${encodeURIComponent('/stremio-offcloud')}`}
 						className="haptic-sm inline-block rounded border-2 border-orange-500 bg-orange-800/30 px-6 py-2 font-medium text-orange-100 transition-colors hover:bg-orange-700/50"
 					>
 						Login with Offcloud

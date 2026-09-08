@@ -31,7 +31,7 @@ export function StremioAllDebridPage() {
 						You must be logged in with AllDebrid to use the Stremio Cast feature.
 					</p>
 					<Link
-						href="/alldebrid"
+						href={`/alldebrid/login?redirect=${encodeURIComponent('/stremio-alldebrid')}`}
 						className="haptic-sm inline-block rounded border-2 border-yellow-500 bg-yellow-800/30 px-6 py-2 font-medium text-yellow-100 transition-colors hover:bg-yellow-700/50"
 					>
 						Login with AllDebrid

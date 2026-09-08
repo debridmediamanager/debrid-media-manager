@@ -31,7 +31,7 @@ export function StremioPremiumizePage() {
 						You must be logged in with Premiumize to use the Stremio Cast feature.
 					</p>
 					<Link
-						href="/premiumize"
+						href={`/premiumize/login?redirect=${encodeURIComponent('/stremio-premiumize')}`}
 						className="haptic-sm inline-block rounded border-2 border-red-500 bg-red-800/30 px-6 py-2 font-medium text-red-100 transition-colors hover:bg-red-700/50"
 					>
 						Login with Premiumize

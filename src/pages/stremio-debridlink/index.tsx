@@ -33,7 +33,7 @@ export function StremioDebridLinkPage() {
 						You must be logged in with Debrid-Link to use the Stremio Cast feature.
 					</p>
 					<Link
-						href="/debridlink/login"
+						href={`/debridlink/login?redirect=${encodeURIComponent('/stremio-debridlink')}`}
 						className="haptic-sm inline-block rounded border-2 border-sky-500 bg-sky-800/30 px-6 py-2 font-medium text-sky-100 transition-colors hover:bg-sky-700/50"
 					>
 						Login with Debrid-Link

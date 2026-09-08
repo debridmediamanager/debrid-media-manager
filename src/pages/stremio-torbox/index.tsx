@@ -31,7 +31,7 @@ export function StremioTorBoxPage() {
 						You must be logged in with TorBox to use the Stremio Cast feature.
 					</p>
 					<Link
-						href="/torbox/login"
+						href={`/torbox/login?redirect=${encodeURIComponent('/stremio-torbox')}`}
 						className="haptic-sm inline-block rounded border-2 border-purple-500 bg-purple-800/30 px-6 py-2 font-medium text-purple-100 transition-colors hover:bg-purple-700/50"
 					>
 						Login with TorBox
