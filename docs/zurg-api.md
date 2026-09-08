@@ -140,7 +140,7 @@ Content-Type: application/json
 ```json
 {
 	"imdbId": "tt1234567",
-	"limit": 10, // Optional: max results, default: 5, max: 100
+	"limit": 10, // Optional: max results, default and max: 10 (higher values are clamped)
 	"sizeFilters": {
 		"min": 5, // Optional: minimum size in GB (inclusive)
 		"max": 50 // Optional: maximum size in GB (inclusive)
@@ -209,7 +209,7 @@ Content-Type: application/json
 | 401    | `Missing x-api-key header`                                              | No API key provided                   |
 | 401    | `Invalid or expired API key`                                            | API key doesn't exist or is expired   |
 | 400    | `Invalid IMDB ID format`                                                | IMDB ID doesn't match `tt\d+` pattern |
-| 400    | `Limit must be a number between 1 and 100`                              | Invalid limit value                   |
+| 400    | `Limit must be a number of at least 1`                                  | Invalid limit value                   |
 | 400    | `sizeFilters.min cannot be greater than sizeFilters.max`                | Invalid size range                    |
 | 400    | `substringFilters must contain at least one of: blacklist or whitelist` | Empty substringFilters object         |
 | 405    | `Method not allowed`                                                    | Non-POST request                      |

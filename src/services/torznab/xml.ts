@@ -13,8 +13,16 @@ import { escapeXml, newznabErrorXml } from '../newznab/xml';
 /** Torznab's error document is Newznab's, protocol codes included. */
 export const torznabErrorXml = newznabErrorXml;
 
-/** Matches `capsXml`'s `<limits max=…>`, which is what a client pages against. */
-export const MAX_LIMIT = 100;
+/**
+ * Matches `capsXml`'s `<limits max=…>`, which is what a client pages against.
+ *
+ * Ten rather than a full hundred: a page is cut out of the whole matching set,
+ * which for a popular title runs to the better part of a thousand releases, and
+ * a client that only ever reads page one was being handed ten times what it
+ * would look at. What a client cannot see on one page it reaches with `offset`
+ * — `total` still reports the whole set.
+ */
+export const MAX_LIMIT = 10;
 
 /**
  * The static capabilities document.

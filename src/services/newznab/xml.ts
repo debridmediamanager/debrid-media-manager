@@ -44,10 +44,21 @@ export function newznabErrorXml(code: number, description: string): string {
 }
 
 /**
+ * The page size a client sizes its paging against.
+ *
+ * Lives here rather than beside the handler that enforces it because `capsXml`
+ * below is the half a client reads: the two drifting apart makes every page
+ * after the first wrong, and a constant one file can only interpolate cannot
+ * drift. Ten rather than a hundred — a client reaching past it pages with
+ * `offset`, and the response's `total` still names the whole set.
+ */
+export const MAX_LIMIT = 10;
+
+/**
  * The static capabilities document.
  *
- * `limits max` is what a client uses to size its paging, so it has to match
- * what the search handler actually caps a request at. The categories advertised
+ * `limits max` is what a client uses to size its paging, so it is the same
+ * constant the search handler caps a request at. The categories advertised
  * here are the ones DMM maps upstream results onto; a client filters on them
  * before it ever issues a search, so an unlisted category is invisible.
  *
@@ -58,7 +69,7 @@ export function capsXml(): string {
 	return `<?xml version="1.0" encoding="UTF-8"?>
 <caps>
 	<server title="DMM"/>
-	<limits max="100" default="100"/>
+	<limits max="${MAX_LIMIT}" default="${MAX_LIMIT}"/>
 	<searching>
 		<search available="yes" supportedParams="q"/>
 		<tv-search available="yes" supportedParams="q,tvdbid,imdbid,season,ep"/>

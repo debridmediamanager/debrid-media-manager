@@ -206,7 +206,12 @@ those releases were found.
 
 ## Ordering and paging
 
-`total` is the size of the whole matching set, and a client pages until it reaches it.
+A page holds **10 items** — `MAX_LIMIT` in `src/services/torznab/xml.ts`, which is the
+same constant `caps` advertises as `<limits max="10" default="10"/>`. A larger `limit` is
+clamped, not refused. `total` is the size of the whole matching set, not of the page, so
+a client pages with `offset` until it reaches it; nothing is unreachable, it just takes
+more requests. Note that each of those requests costs a full search — there is no
+response cache on this path, and the per-sponsor budget is in **Rate limits** above.
 
 **Cached releases come first.** Measured against the live library, a plain movie search's
 first hundred results were almost entirely 24-terabyte "Top 5000 Movies Pack" style

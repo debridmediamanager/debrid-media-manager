@@ -1,6 +1,7 @@
 import {
 	capsXml,
 	escapeXml,
+	MAX_LIMIT,
 	newznabErrorXml,
 	NewznabRssItem,
 	searchRssXml,
@@ -72,8 +73,8 @@ describe('capsXml', () => {
 
 	it('advertises the server title and paging limits', () => {
 		expect(doc.querySelector('server')?.getAttribute('title')).toBe('DMM');
-		expect(doc.querySelector('limits')?.getAttribute('max')).toBe('100');
-		expect(doc.querySelector('limits')?.getAttribute('default')).toBe('100');
+		expect(doc.querySelector('limits')?.getAttribute('max')).toBe(String(MAX_LIMIT));
+		expect(doc.querySelector('limits')?.getAttribute('default')).toBe(String(MAX_LIMIT));
 	});
 
 	it('advertises the supported search params', () => {

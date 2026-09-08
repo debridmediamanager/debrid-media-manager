@@ -2,6 +2,7 @@ import handler from '@/pages/api/torznab/[...route]';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
 import { CACHED_SEEDERS, UNCACHED_SEEDERS } from '@/services/torznab/search';
+import { MAX_LIMIT } from '@/services/torznab/xml';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import {
 	backfillFromDebridioNow,
@@ -49,6 +50,28 @@ let testIp: string;
 
 function release(title: string, fileSize: number, torrentHash: string) {
 	return { title, fileSize, hash: torrentHash };
+}
+
+/**
+ * Replaces the movie page with `count` distinct uncached releases, for the
+ * paging tests — the three-release fixture is smaller than the page cap and so
+ * cannot show one being applied.
+ */
+function stockLibraryWith(count: number): void {
+	library.set(`movie:${MOVIE_ID}`, {
+		results: Array.from({ length: count }, (_, index) =>
+			release(
+				`Shawshank.1994.Cut${String(index).padStart(2, '0')}`,
+				10_000 - index,
+				// `a`-prefixed so index 0 is not the all-zero hash, which is dropped
+				// as degenerate before the page is ever cut.
+				hash(`a${String(index).padStart(2, '0')}`)
+			)
+		),
+		updatedAt: PAGE_UPDATED_AT,
+	});
+	rdCached = new Set();
+	adCached = new Set();
 }
 
 async function run(
@@ -358,13 +381,44 @@ describe('paging and filtering', () => {
 	});
 
 	it('caps limit at what the caps document promises', async () => {
+		stockLibraryWith(25);
+
 		const res = await run({
 			t: 'movie',
 			imdbid: MOVIE_ID,
 			limit: '5000',
 			apikey: SPONSOR_KEY,
 		});
-		expect(titles(res)).toHaveLength(3);
+
+		expect(titles(res)).toHaveLength(MAX_LIMIT);
+		// The whole set is still named, so a client knows to keep paging.
+		expect(body(res)).toContain('total="25"');
+	});
+
+	it('caps an unasked-for limit at the same ceiling', async () => {
+		stockLibraryWith(25);
+
+		const res = await run({ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY });
+
+		expect(titles(res)).toHaveLength(MAX_LIMIT);
+		expect(body(res)).toContain('total="25"');
+	});
+
+	it('reaches what the cap held back through offset', async () => {
+		stockLibraryWith(25);
+
+		const first = titles(await run({ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY }));
+		const second = titles(
+			await run({ t: 'movie', imdbid: MOVIE_ID, offset: '10', apikey: SPONSOR_KEY })
+		);
+		const third = titles(
+			await run({ t: 'movie', imdbid: MOVIE_ID, offset: '20', apikey: SPONSOR_KEY })
+		);
+
+		expect(second).toHaveLength(MAX_LIMIT);
+		expect(third).toHaveLength(5);
+		// Three pages, no overlap, and between them the whole set.
+		expect(new Set([...first, ...second, ...third]).size).toBe(25);
 	});
 });
 

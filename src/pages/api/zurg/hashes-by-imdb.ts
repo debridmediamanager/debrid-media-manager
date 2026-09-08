@@ -3,6 +3,16 @@ import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRa
 import { repository as db } from '@/services/repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+/**
+ * Hashes handed back per request, and the default when the caller names none.
+ *
+ * The search behind this runs Available, then Cast, then Scraped, stopping as
+ * soon as it has enough — so a low ceiling costs the tail of the list rather
+ * than the pick of it, and a caller wanting different hashes is better served
+ * by narrowing `sizeFilters` / `substringFilters` than by asking for more.
+ */
+const MAX_LIMIT = 10;
+
 function isValidImdbId(imdbId: string): boolean {
 	return /^tt\d+$/.test(imdbId);
 }
@@ -34,11 +44,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				.json({ error: 'Invalid IMDB ID format. Expected format: ttXXXXXXX' });
 		}
 
-		// Validate limit
-		const hashLimit = limit ?? 5;
-		if (typeof hashLimit !== 'number' || hashLimit < 1 || hashLimit > 100) {
-			return res.status(400).json({ error: 'Limit must be a number between 1 and 100' });
+		// Validate limit. Anything above the ceiling is clamped rather than
+		// refused: a caller that has been asking for fifty since before the
+		// ceiling existed should get ten, not a 400 that reads as the endpoint
+		// having broken.
+		const requested = limit ?? MAX_LIMIT;
+		if (typeof requested !== 'number' || !Number.isFinite(requested) || requested < 1) {
+			return res.status(400).json({ error: 'Limit must be a number of at least 1' });
 		}
+		const hashLimit = Math.min(Math.trunc(requested), MAX_LIMIT);
 
 		// Validate sizeFilters if provided
 		let validatedSizeFilters: SizeFilters | undefined;

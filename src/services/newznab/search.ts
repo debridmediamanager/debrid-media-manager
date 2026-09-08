@@ -24,7 +24,7 @@ import { repository as db } from '@/services/repository';
 import type { NextApiRequest } from 'next';
 import { getUpstreamIndexers, UpstreamIndexer } from './indexers';
 import { encryptReleaseId } from './opaqueId';
-import { NewznabRssItem } from './xml';
+import { MAX_LIMIT, NewznabRssItem } from './xml';
 
 /** The `t` values that reach this module. `caps` and `get` are handled elsewhere. */
 export const SEARCH_TYPES = ['search', 'tvsearch', 'movie'] as const;
@@ -33,9 +33,6 @@ export type SearchType = (typeof SEARCH_TYPES)[number];
 export function isSearchType(value: string): value is SearchType {
 	return (SEARCH_TYPES as readonly string[]).includes(value);
 }
-
-/** Matches `capsXml`'s `<limits max="100" default="100"/>`. */
-export const MAX_LIMIT = 100;
 
 /** Freshness ceiling for untargeted (RSS-sync) queries — see runSearch. */
 export const RSS_TTL_MS = 15 * 60 * 1000;

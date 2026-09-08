@@ -37,7 +37,7 @@ describe('capsXml', () => {
 	});
 
 	it('states the paging limit the search handler enforces', () => {
-		expect(capsXml()).toContain('<limits max="100" default="100"/>');
+		expect(capsXml()).toContain('<limits max="10" default="10"/>');
 	});
 });
 

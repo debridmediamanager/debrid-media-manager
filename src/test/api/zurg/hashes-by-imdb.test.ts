@@ -74,15 +74,62 @@ describe('POST /api/zurg/hashes-by-imdb', () => {
 		});
 	});
 
-	it('rejects limit above maximum', async () => {
+	it('clamps a limit above the ceiling instead of refusing it', async () => {
 		const req = buildRequest({ limit: 101 });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(mockRepository.getHashesByImdbId).toHaveBeenCalledWith(
+			expect.objectContaining({ limit: 10 })
+		);
+	});
+
+	it('caps a limit the old ceiling would have allowed', async () => {
+		const req = buildRequest({ limit: 50 });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(mockRepository.getHashesByImdbId).toHaveBeenCalledWith(
+			expect.objectContaining({ limit: 10 })
+		);
+	});
+
+	it('honours a limit below the ceiling', async () => {
+		const req = buildRequest({ limit: 3 });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockRepository.getHashesByImdbId).toHaveBeenCalledWith(
+			expect.objectContaining({ limit: 3 })
+		);
+	});
+
+	it('rejects a limit below one', async () => {
+		const req = buildRequest({ limit: 0 });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
-			error: 'Limit must be a number between 1 and 100',
+			error: 'Limit must be a number of at least 1',
+		});
+	});
+
+	it('rejects a non-numeric limit', async () => {
+		const req = buildRequest({ limit: '10' });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({
+			error: 'Limit must be a number of at least 1',
 		});
 	});
 
@@ -136,7 +183,7 @@ describe('POST /api/zurg/hashes-by-imdb', () => {
 
 		mockRepository.getHashesByImdbId = vi.fn().mockResolvedValue(mockResults);
 
-		const req = buildRequest({ limit: 5 });
+		const req = buildRequest({ limit: 10 });
 		const res = createMockResponse();
 
 		await handler(req, res);
@@ -156,7 +203,7 @@ describe('POST /api/zurg/hashes-by-imdb', () => {
 			imdbId: 'tt1234567',
 			sizeFilters: undefined,
 			substringFilters: undefined,
-			limit: 5,
+			limit: 10,
 		});
 	});
 
@@ -173,7 +220,7 @@ describe('POST /api/zurg/hashes-by-imdb', () => {
 			imdbId: 'tt1234567',
 			sizeFilters: { min: 5, max: 50 },
 			substringFilters: undefined,
-			limit: 5,
+			limit: 10,
 		});
 	});
 
@@ -190,7 +237,7 @@ describe('POST /api/zurg/hashes-by-imdb', () => {
 			imdbId: 'tt1234567',
 			sizeFilters: { min: 10, max: undefined },
 			substringFilters: undefined,
-			limit: 5,
+			limit: 10,
 		});
 	});
 
@@ -207,7 +254,7 @@ describe('POST /api/zurg/hashes-by-imdb', () => {
 			imdbId: 'tt1234567',
 			sizeFilters: { min: undefined, max: 20 },
 			substringFilters: undefined,
-			limit: 5,
+			limit: 10,
 		});
 	});
 
@@ -229,7 +276,7 @@ describe('POST /api/zurg/hashes-by-imdb', () => {
 				blacklist: ['CAM', 'TS'],
 				whitelist: undefined,
 			},
-			limit: 5,
+			limit: 10,
 		});
 	});
 
@@ -251,7 +298,7 @@ describe('POST /api/zurg/hashes-by-imdb', () => {
 				blacklist: undefined,
 				whitelist: ['1080p', 'BluRay'],
 			},
-			limit: 5,
+			limit: 10,
 		});
 	});
 
@@ -274,7 +321,7 @@ describe('POST /api/zurg/hashes-by-imdb', () => {
 				blacklist: ['CAM', 'TS'],
 				whitelist: ['1080p', 'BluRay'],
 			},
-			limit: 5,
+			limit: 10,
 		});
 	});
 
@@ -314,7 +361,7 @@ describe('POST /api/zurg/hashes-by-imdb', () => {
 			imdbId: 'tt1234567',
 			sizeFilters: undefined,
 			substringFilters: undefined,
-			limit: 5,
+			limit: 10,
 		});
 	});
 });
