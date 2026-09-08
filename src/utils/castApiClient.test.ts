@@ -181,9 +181,11 @@ describe('castApiClient', () => {
 			vi.mocked(axios.post).mockResolvedValue({ data: {} });
 
 			await saveCastProfile(
-				'client-id',
-				'client-secret',
-				'refresh-token',
+				{
+					clientId: 'client-id',
+					clientSecret: 'client-secret',
+					refreshToken: 'refresh-token',
+				},
 				undefined,
 				undefined,
 				10
@@ -200,7 +202,11 @@ describe('castApiClient', () => {
 		it('successfully saves cast profile', async () => {
 			vi.mocked(axios.post).mockResolvedValue({ data: {} });
 
-			await saveCastProfile('client-id', 'client-secret', 'refresh-token');
+			await saveCastProfile({
+				clientId: 'client-id',
+				clientSecret: 'client-secret',
+				refreshToken: 'refresh-token',
+			});
 
 			expect(axios.post).toHaveBeenCalledWith(
 				'/api/stremio/cast/saveProfile',
@@ -213,12 +219,30 @@ describe('castApiClient', () => {
 			);
 		});
 
+		// A pasted API key is the whole session: sending an empty triple
+		// alongside it would fail the server's "missing required fields" check.
+		it('sends a pasted API key on its own', async () => {
+			vi.mocked(axios.post).mockResolvedValue({ data: {} });
+
+			await saveCastProfile({ apiKey: 'pasted-key' });
+
+			expect(axios.post).toHaveBeenCalledWith(
+				'/api/stremio/cast/saveProfile',
+				{ apiKey: 'pasted-key' },
+				{ headers: {} }
+			);
+		});
+
 		it('silently handles errors without throwing', async () => {
 			vi.mocked(axios.post).mockRejectedValue(new Error('Network error'));
 
 			// Should not throw
 			await expect(
-				saveCastProfile('client-id', 'client-secret', 'refresh-token')
+				saveCastProfile({
+					clientId: 'client-id',
+					clientSecret: 'client-secret',
+					refreshToken: 'refresh-token',
+				})
 			).resolves.not.toThrow();
 		});
 
@@ -226,7 +250,11 @@ describe('castApiClient', () => {
 			vi.mocked(axios.post).mockRejectedValue('string error');
 
 			await expect(
-				saveCastProfile('client-id', 'client-secret', 'refresh-token')
+				saveCastProfile({
+					clientId: 'client-id',
+					clientSecret: 'client-secret',
+					refreshToken: 'refresh-token',
+				})
 			).resolves.not.toThrow();
 		});
 	});

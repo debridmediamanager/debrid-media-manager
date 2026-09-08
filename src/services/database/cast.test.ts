@@ -50,7 +50,11 @@ describe('CastService', () => {
 	};
 
 	it('upserts cast profiles', async () => {
-		await service.saveCastProfile('user', 'client', 'secret', 'refresh');
+		await service.saveCastProfile('user', {
+			clientId: 'client',
+			clientSecret: 'secret',
+			refreshToken: 'refresh',
+		});
 		expect(prismaMock.castProfile.upsert).toHaveBeenCalledWith({
 			where: { userId: 'user' },
 			update: expect.objectContaining({ clientId: 'client', clientSecret: 'secret' }),
@@ -58,8 +62,49 @@ describe('CastService', () => {
 		});
 	});
 
+	// The userId is an HMAC of the Real-Debrid username, so swapping a pasted
+	// key for the device-code login lands on the same row. Leaving the other
+	// credential in place would strand a revoked one that `castAccessToken`
+	// still prefers, so every save writes both shapes.
+	it('clears the OAuth triple when a profile switches to an API key', async () => {
+		await service.saveCastProfile('user', { apiKey: 'pasted-key' });
+		expect(prismaMock.castProfile.upsert).toHaveBeenCalledWith({
+			where: { userId: 'user' },
+			update: expect.objectContaining({
+				apiKey: 'pasted-key',
+				clientId: null,
+				clientSecret: null,
+				refreshToken: null,
+			}),
+			create: expect.objectContaining({
+				apiKey: 'pasted-key',
+				clientId: null,
+				clientSecret: null,
+				refreshToken: null,
+			}),
+		});
+	});
+
+	it('clears a stored API key when a profile switches back to OAuth', async () => {
+		await service.saveCastProfile('user', {
+			clientId: 'client',
+			clientSecret: 'secret',
+			refreshToken: 'refresh',
+		});
+		expect(prismaMock.castProfile.upsert).toHaveBeenCalledWith({
+			where: { userId: 'user' },
+			update: expect.objectContaining({ apiKey: null }),
+			create: expect.objectContaining({ apiKey: null }),
+		});
+	});
+
 	it('upserts cast profiles with size limits', async () => {
-		await service.saveCastProfile('user', 'client', 'secret', 'refresh', 15, 3);
+		await service.saveCastProfile(
+			'user',
+			{ clientId: 'client', clientSecret: 'secret', refreshToken: 'refresh' },
+			15,
+			3
+		);
 		expect(prismaMock.castProfile.upsert).toHaveBeenCalledWith({
 			where: { userId: 'user' },
 			update: expect.objectContaining({

@@ -137,9 +137,11 @@ describe('Stremio manage page poster integration', () => {
 
 		await waitFor(() => {
 			expect(saveCastProfileMock).toHaveBeenCalledWith(
-				'client-id',
-				'client-secret',
-				'refresh-token',
+				{
+					clientId: 'client-id',
+					clientSecret: 'client-secret',
+					refreshToken: 'refresh-token',
+				},
 				0, // movieMaxSize default
 				0, // episodeMaxSize default
 				5, // otherStreamsLimit default

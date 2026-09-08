@@ -94,11 +94,22 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 				const clientSecretRaw = localStorage.getItem('rd:clientSecret');
 				const refreshTokenRaw = localStorage.getItem('rd:refreshToken');
 
-				if (castToken && clientIdRaw && clientSecretRaw) {
-					const clientId = JSON.parse(clientIdRaw);
-					const clientSecret = JSON.parse(clientSecretRaw);
-					const refreshToken = refreshTokenRaw ? JSON.parse(refreshTokenRaw) : null;
+				// An API-key session has no clientId to send, only the access
+				// token - and gating on the triple made this panel a silent
+				// no-op for those users.
+				const accessToken = getLocalStorageString('rd:accessToken');
+				const credentials =
+					clientIdRaw && clientSecretRaw
+						? {
+								clientId: JSON.parse(clientIdRaw),
+								clientSecret: JSON.parse(clientSecretRaw),
+								refreshToken: refreshTokenRaw ? JSON.parse(refreshTokenRaw) : null,
+							}
+						: accessToken
+							? { apiKey: accessToken }
+							: null;
 
+				if (castToken && credentials) {
 					const res = await fetch('/api/stremio/cast/updateSizeLimits', {
 						method: 'POST',
 						// The sponsor token has to ride along or the server
@@ -106,9 +117,7 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 						// very value this panel just offered a sponsor.
 						headers: { 'Content-Type': 'application/json', ...sponsorHeaders() },
 						body: JSON.stringify({
-							clientId,
-							clientSecret,
-							refreshToken,
+							...credentials,
 							movieMaxSize: movieSize !== undefined ? Number(movieSize) : undefined,
 							episodeMaxSize:
 								episodeSize !== undefined ? Number(episodeSize) : undefined,

@@ -12,11 +12,12 @@ export function StremioPage() {
 	const dmmCastToken = useCastToken();
 	const [hasRdCredentials] = useState(() => {
 		if (typeof window !== 'undefined') {
-			const clientId = localStorage.getItem('rd:clientId');
-			const clientSecret = localStorage.getItem('rd:clientSecret');
-			const refreshToken = localStorage.getItem('rd:refreshToken');
-			const accessToken = localStorage.getItem('rd:accessToken');
-			return !!(clientId && clientSecret && refreshToken && accessToken);
+			// The access token alone, matching every other provider's cast page
+			// and `withAuth`. Demanding the whole OAuth quad locked out anyone
+			// who signed in with a pasted API key, which stores nothing else -
+			// and the login they were sent to returned them home, so the page
+			// asked for the key again, forever.
+			return !!localStorage.getItem('rd:accessToken');
 		}
 		return false;
 	});
@@ -34,7 +35,7 @@ export function StremioPage() {
 						You must be logged in with Real-Debrid to use the Stremio Cast feature.
 					</p>
 					<Link
-						href="/realdebrid/login"
+						href={`/realdebrid/login?redirect=${encodeURIComponent('/stremio')}`}
 						className="haptic-sm inline-block rounded border-2 border-green-500 bg-green-800/30 px-6 py-2 font-medium text-green-100 transition-colors hover:bg-green-700/50"
 					>
 						Login with Real-Debrid

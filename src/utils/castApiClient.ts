@@ -64,10 +64,16 @@ export const handleCastTvShow = async (
 	}
 };
 
+/**
+ * Either the OAuth triple or a pasted API key - `/realdebrid/login` stores one
+ * or the other, never both.
+ */
+export type RdCastCredentialsInput =
+	| { clientId: string; clientSecret: string; refreshToken: string }
+	| { apiKey: string };
+
 export const saveCastProfile = async (
-	clientId: string,
-	clientSecret: string,
-	refreshToken: string,
+	credentials: RdCastCredentialsInput,
 	movieMaxSize?: number,
 	episodeMaxSize?: number,
 	otherStreamsLimit?: number,
@@ -77,9 +83,7 @@ export const saveCastProfile = async (
 		await axios.post(
 			`/api/stremio/cast/saveProfile`,
 			{
-				clientId,
-				clientSecret,
-				refreshToken,
+				...credentials,
 				...(movieMaxSize !== undefined && { movieMaxSize }),
 				...(episodeMaxSize !== undefined && { episodeMaxSize }),
 				...(otherStreamsLimit !== undefined && { otherStreamsLimit }),

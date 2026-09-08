@@ -74,9 +74,7 @@ describe('/api/stremio/cast/saveProfile', () => {
 		expect(mockGenerateUserId).toHaveBeenCalledWith('rd-token');
 		expect(mockSaveCastProfile).toHaveBeenCalledWith(
 			'user-1',
-			'id',
-			'secret',
-			'refresh',
+			{ clientId: 'id', clientSecret: 'secret', refreshToken: 'refresh' },
 			undefined,
 			undefined,
 			undefined,
@@ -90,6 +88,34 @@ describe('/api/stremio/cast/saveProfile', () => {
 			otherStreamsLimit: 5,
 			hideCastOption: false,
 		});
+	});
+
+	// The reported symptom: `/realdebrid/login` has taken a pasted key since
+	// 18b32d04 and stores only `rd:accessToken`, so there is no clientId to
+	// send. Rejecting that body left those users unable to install DMM Cast at
+	// all - the page sent them to the login, the login sent them home, and the
+	// page asked again.
+	it('saves the profile from a pasted API key alone', async () => {
+		const req = createMockRequest({
+			method: 'POST',
+			body: { apiKey: 'pasted-key' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		// The key is its own bearer token, so nothing is exchanged for it.
+		expect(mockGetToken).not.toHaveBeenCalled();
+		expect(mockGenerateUserId).toHaveBeenCalledWith('pasted-key');
+		expect(mockSaveCastProfile).toHaveBeenCalledWith(
+			'user-1',
+			{ apiKey: 'pasted-key' },
+			undefined,
+			undefined,
+			undefined,
+			undefined
+		);
+		expect(res.status).toHaveBeenCalledWith(200);
 	});
 
 	// The raw Prisma row carries the caller's long-lived Real-Debrid credentials,
@@ -159,9 +185,7 @@ describe('/api/stremio/cast/saveProfile', () => {
 
 		expect(mockSaveCastProfile).toHaveBeenCalledWith(
 			'user-1',
-			'id',
-			'secret',
-			'refresh',
+			{ clientId: 'id', clientSecret: 'secret', refreshToken: 'refresh' },
 			15,
 			3,
 			2,
@@ -207,7 +231,12 @@ describe('/api/stremio/cast/saveProfile', () => {
 			createMockRequest({
 				method: 'POST',
 				headers,
-				body: { clientId: 'id', clientSecret: 'secret', otherStreamsLimit },
+				body: {
+					clientId: 'id',
+					clientSecret: 'secret',
+					refreshToken: 'refresh',
+					otherStreamsLimit,
+				},
 			});
 
 		it('lets a sponsor set 10', async () => {
@@ -217,9 +246,7 @@ describe('/api/stremio/cast/saveProfile', () => {
 			expect(res.status).toHaveBeenCalledWith(200);
 			expect(mockSaveCastProfile).toHaveBeenCalledWith(
 				'user-1',
-				'id',
-				'secret',
-				null,
+				{ clientId: 'id', clientSecret: 'secret', refreshToken: 'refresh' },
 				undefined,
 				undefined,
 				10,
@@ -258,7 +285,7 @@ describe('/api/stremio/cast/saveProfile', () => {
 		mockGetToken.mockRejectedValue(new Error('oauth'));
 		const req = createMockRequest({
 			method: 'POST',
-			body: { clientId: 'id', clientSecret: 'secret' },
+			body: { clientId: 'id', clientSecret: 'secret', refreshToken: 'refresh' },
 		});
 		const res = createMockResponse();
 
@@ -274,7 +301,7 @@ describe('/api/stremio/cast/saveProfile', () => {
 		mockSaveCastProfile.mockRejectedValue(new Error('db'));
 		const req = createMockRequest({
 			method: 'POST',
-			body: { clientId: 'id', clientSecret: 'secret' },
+			body: { clientId: 'id', clientSecret: 'secret', refreshToken: 'refresh' },
 		});
 		const res = createMockResponse();
 

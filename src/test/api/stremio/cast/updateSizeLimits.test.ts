@@ -73,6 +73,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 			clientId: 'client',
 			clientSecret: 'secret',
 			refreshToken: 'refresh',
+			apiKey: null,
 			movieMaxSize: 15,
 			episodeMaxSize: 0,
 			otherStreamsLimit: 5,
@@ -85,9 +86,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 		expect(rdModule.getToken).toHaveBeenCalledWith('client', 'secret', 'refresh', true);
 		expect(repoModule.repository.saveCastProfile).toHaveBeenCalledWith(
 			'user123',
-			'client',
-			'secret',
-			'refresh',
+			{ clientId: 'client', clientSecret: 'secret', refreshToken: 'refresh' },
 			15,
 			undefined,
 			undefined,
@@ -111,6 +110,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 			clientId: 'client',
 			clientSecret: 'secret',
 			refreshToken: 'refresh',
+			apiKey: null,
 			movieMaxSize: 0,
 			episodeMaxSize: 3,
 			otherStreamsLimit: 5,
@@ -122,9 +122,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 
 		expect(repoModule.repository.saveCastProfile).toHaveBeenCalledWith(
 			'user123',
-			'client',
-			'secret',
-			'refresh',
+			{ clientId: 'client', clientSecret: 'secret', refreshToken: 'refresh' },
 			undefined,
 			3,
 			undefined,
@@ -149,6 +147,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 			clientId: 'client',
 			clientSecret: 'secret',
 			refreshToken: 'refresh',
+			apiKey: null,
 			movieMaxSize: 15,
 			episodeMaxSize: 3,
 			otherStreamsLimit: 5,
@@ -160,9 +159,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 
 		expect(repoModule.repository.saveCastProfile).toHaveBeenCalledWith(
 			'user123',
-			'client',
-			'secret',
-			'refresh',
+			{ clientId: 'client', clientSecret: 'secret', refreshToken: 'refresh' },
 			15,
 			3,
 			undefined,
@@ -186,6 +183,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 			clientId: 'client',
 			clientSecret: 'secret',
 			refreshToken: 'refresh',
+			apiKey: null,
 			movieMaxSize: 0,
 			episodeMaxSize: 0,
 			otherStreamsLimit: 3,
@@ -197,9 +195,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 
 		expect(repoModule.repository.saveCastProfile).toHaveBeenCalledWith(
 			'user123',
-			'client',
-			'secret',
-			'refresh',
+			{ clientId: 'client', clientSecret: 'secret', refreshToken: 'refresh' },
 			undefined,
 			undefined,
 			3,
@@ -273,6 +269,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 			clientId: 'client',
 			clientSecret: 'secret',
 			refreshToken: 'refresh',
+			apiKey: null,
 			movieMaxSize: 15,
 			episodeMaxSize: 3,
 			otherStreamsLimit: 4,
@@ -284,9 +281,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 
 		expect(repoModule.repository.saveCastProfile).toHaveBeenCalledWith(
 			'user123',
-			'client',
-			'secret',
-			'refresh',
+			{ clientId: 'client', clientSecret: 'secret', refreshToken: 'refresh' },
 			15,
 			3,
 			4,
@@ -321,6 +316,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 			clientId: 'LEAK_CLIENT',
 			clientSecret: 'LEAK_SECRET',
 			refreshToken: 'LEAK_REFRESH',
+			apiKey: 'LEAK_APIKEY',
 			movieMaxSize: 15,
 			episodeMaxSize: 0,
 			otherStreamsLimit: 5,
@@ -333,6 +329,9 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 		const body = JSON.stringify((res.json as ReturnType<typeof vi.fn>).mock.calls[0][0]);
 		expect(body).not.toContain('LEAK_SECRET');
 		expect(body).not.toContain('LEAK_REFRESH');
+		// A pasted API key never expires, so echoing it back is worse than the
+		// refresh token was.
+		expect(body).not.toContain('LEAK_APIKEY');
 	});
 
 	// Expanding an AxiosError prints `config.data` — the OAuth POST body, which

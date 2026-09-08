@@ -1,3 +1,4 @@
+import type { RdCastCredentials } from '@/utils/castRdToken';
 import { Prisma } from '@prisma/client';
 import {
 	AllDebridCastService,
@@ -605,9 +606,7 @@ export class Repository {
 	// Cast Service Methods
 	public saveCastProfile(
 		userId: string,
-		clientId: string,
-		clientSecret: string,
-		refreshToken?: string | null,
+		credentials: RdCastCredentials,
 		movieMaxSize?: number,
 		episodeMaxSize?: number,
 		otherStreamsLimit?: number,
@@ -615,9 +614,7 @@ export class Repository {
 	) {
 		return this.castService.saveCastProfile(
 			userId,
-			clientId,
-			clientSecret,
-			refreshToken,
+			credentials,
 			movieMaxSize,
 			episodeMaxSize,
 			otherStreamsLimit,

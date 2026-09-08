@@ -1,18 +1,15 @@
-import {
-	RdTokenExpiredError,
-	getToken,
-	getTorrentInfo,
-	getUserTorrentsList,
-} from '@/services/realDebrid';
+import { RdTokenExpiredError, getTorrentInfo, getUserTorrentsList } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
+import { castAccessToken } from './castRdToken';
 
 export const PAGE_SIZE = 12;
 
 export async function getDMMLibrary(userid: string, page: number) {
 	let profile: {
-		clientId: string;
-		clientSecret: string;
-		refreshToken: string;
+		clientId: string | null;
+		clientSecret: string | null;
+		refreshToken: string | null;
+		apiKey: string | null;
 	} | null = null;
 	try {
 		profile = await db.getCastProfile(userid);
@@ -23,14 +20,9 @@ export async function getDMMLibrary(userid: string, page: number) {
 		return { error: 'Go to DMM and connect your RD account', status: 401 };
 	}
 
-	let response: { access_token: string } | null = null;
+	let accessToken: string | null = null;
 	try {
-		response = await getToken(
-			profile.clientId,
-			profile.clientSecret,
-			profile.refreshToken,
-			true
-		);
+		accessToken = await castAccessToken(profile);
 	} catch (error) {
 		if (error instanceof RdTokenExpiredError) {
 			return {
@@ -40,11 +32,11 @@ export async function getDMMLibrary(userid: string, page: number) {
 		}
 		throw error;
 	}
-	if (!response) {
+	if (!accessToken) {
 		return { error: 'Go to DMM and connect your RD account', status: 500 };
 	}
 
-	const results = await getUserTorrentsList(response.access_token, PAGE_SIZE, page, true);
+	const results = await getUserTorrentsList(accessToken, PAGE_SIZE, page, true);
 	if (!results) {
 		return { error: 'Failed to get user torrents list', status: 500 };
 	}

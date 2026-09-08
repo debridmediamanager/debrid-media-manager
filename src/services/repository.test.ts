@@ -313,7 +313,14 @@ describe('Repository', () => {
 				method: 'saveCastProfile',
 				service: 'cast',
 				serviceMethod: 'saveCastProfile',
-				args: ['user', 'id', 'secret', 'refresh', 15, 3, undefined, undefined],
+				args: [
+					'user',
+					{ clientId: 'id', clientSecret: 'secret', refreshToken: 'refresh' },
+					15,
+					3,
+					undefined,
+					undefined,
+				],
 				value: undefined,
 			},
 			{

@@ -46,9 +46,28 @@ describe('StremioPage', () => {
 		render(<StremioPage />);
 		expect(screen.getByText(/Real-Debrid Required/i)).toBeInTheDocument();
 		expect(screen.getByText(/You must be logged in with Real-Debrid/i)).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: /Login with Real-Debrid/i })).toBeInTheDocument();
+	});
+
+	// `/realdebrid/login` has taken a pasted API key since 18b32d04, and that
+	// path stores only `rd:accessToken`. Gating this page on the full OAuth
+	// quad left those users in a loop: the page demanded a login, the login
+	// saved their key and returned them home, and the page demanded it again.
+	it('renders for a session holding only a pasted API key', () => {
+		localStorage.setItem('rd:accessToken', 'apikey123');
+		castTokenMock.mockReturnValue('token123');
+		render(<StremioPage />);
+
+		expect(screen.queryByText(/Real-Debrid Required/i)).not.toBeInTheDocument();
+		expect(screen.getByText(/api\/stremio\/token123\/manifest\.json/i)).toBeInTheDocument();
+	});
+
+	it('sends the login link back to this page instead of home', () => {
+		castTokenMock.mockReturnValue(undefined);
+		render(<StremioPage />);
 		expect(screen.getByRole('link', { name: /Login with Real-Debrid/i })).toHaveAttribute(
 			'href',
-			'/realdebrid/login'
+			'/realdebrid/login?redirect=%2Fstremio'
 		);
 	});
 

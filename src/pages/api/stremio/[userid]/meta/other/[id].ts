@@ -1,7 +1,8 @@
-import { RdTokenExpiredError, getToken } from '@/services/realDebrid';
+import { RdTokenExpiredError } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 import { isLegacyToken } from '@/utils/castApiHelpers';
 import { getDMMTorrent } from '@/utils/castCatalogHelper';
+import { castAccessToken } from '@/utils/castRdToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // gets information about a torrent (viewing your library)
@@ -78,16 +79,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 		console.log('[meta/other/id] Profile found for user:', userid);
 
-		let response: { access_token: string } | null = null;
+		let accessToken: string | null = null;
 		try {
 			console.log('[meta/other/id] Getting token for user:', userid);
-			response = await getToken(
-				profile.clientId,
-				profile.clientSecret,
-				profile.refreshToken,
-				true
-			);
-			if (!response) {
+			accessToken = await castAccessToken(profile);
+			if (!accessToken) {
 				throw new Error(`no token found for user ${userid}`);
 			}
 			console.log('[meta/other/id] Token obtained successfully');
@@ -110,7 +106,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		console.log('[meta/other/id] Fetching torrent:', torrentID);
-		const result = await getDMMTorrent(userid as string, torrentID, response.access_token);
+		const result = await getDMMTorrent(userid as string, torrentID, accessToken);
 		if ('error' in result) {
 			console.log('[meta/other/id] Torrent fetch error:', result);
 			res.status(result.status).json({ error: result.error });

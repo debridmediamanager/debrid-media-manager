@@ -1,3 +1,4 @@
+import type { RdCastCredentials } from '@/utils/castRdToken';
 import { rdLinkCutoff } from '@/utils/rdLinkRot';
 import { DatabaseClient } from './client';
 
@@ -118,16 +119,26 @@ function matchesEpisodeFilters(
 }
 
 export class CastService extends DatabaseClient {
+	/**
+	 * Both credential shapes are written on every save, the unused one as null.
+	 * A user who swaps a pasted API key for the device-code login - or back -
+	 * keeps the same userId, so this is an update, and leaving the old columns
+	 * alone would strand a revoked refresh token that `castAccessToken` would
+	 * still prefer to reach for.
+	 */
 	public async saveCastProfile(
 		userId: string,
-		clientId: string,
-		clientSecret: string,
-		refreshToken: string | null = null,
+		credentials: RdCastCredentials,
 		movieMaxSize?: number,
 		episodeMaxSize?: number,
 		otherStreamsLimit?: number,
 		hideCastOption?: boolean
 	) {
+		const clientId = credentials.clientId ?? null;
+		const clientSecret = credentials.clientSecret ?? null;
+		const refreshToken = credentials.refreshToken ?? null;
+		const apiKey = credentials.apiKey ?? null;
+
 		return this.prisma.castProfile.upsert({
 			where: {
 				userId: userId,
@@ -135,7 +146,8 @@ export class CastService extends DatabaseClient {
 			update: {
 				clientId,
 				clientSecret,
-				refreshToken: refreshToken ?? undefined,
+				refreshToken,
+				apiKey,
 				...(movieMaxSize !== undefined && { movieMaxSize }),
 				...(episodeMaxSize !== undefined && { episodeMaxSize }),
 				...(otherStreamsLimit !== undefined && { otherStreamsLimit }),
@@ -146,7 +158,8 @@ export class CastService extends DatabaseClient {
 				userId: userId,
 				clientId,
 				clientSecret,
-				refreshToken: refreshToken ?? '',
+				refreshToken,
+				apiKey,
 				movieMaxSize: movieMaxSize ?? 0,
 				episodeMaxSize: episodeMaxSize ?? 0,
 				otherStreamsLimit: otherStreamsLimit ?? 5,
@@ -212,9 +225,10 @@ export class CastService extends DatabaseClient {
 	}
 
 	public async getCastProfile(userId: string): Promise<{
-		clientId: string;
-		clientSecret: string;
-		refreshToken: string;
+		clientId: string | null;
+		clientSecret: string | null;
+		refreshToken: string | null;
+		apiKey: string | null;
 		movieMaxSize: number;
 		episodeMaxSize: number;
 		otherStreamsLimit?: number;
@@ -226,6 +240,7 @@ export class CastService extends DatabaseClient {
 				clientId: true,
 				clientSecret: true,
 				refreshToken: true,
+				apiKey: true,
 				movieMaxSize: true,
 				episodeMaxSize: true,
 				otherStreamsLimit: true,

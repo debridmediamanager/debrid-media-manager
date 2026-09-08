@@ -1,5 +1,6 @@
-import { RdTokenExpiredError, getToken, unrestrictLink } from '@/services/realDebrid';
+import { RdTokenExpiredError, unrestrictLink } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
+import { castAccessToken } from '@/utils/castRdToken';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { isDeadRdLink, rdErrorOf } from '@/utils/rdLinkRot';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -19,9 +20,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	let profile: {
-		clientId: string;
-		clientSecret: string;
-		refreshToken: string;
+		clientId: string | null;
+		clientSecret: string | null;
+		refreshToken: string | null;
+		apiKey: string | null;
 	} | null = null;
 	try {
 		profile = await db.getCastProfile(userid);
@@ -37,15 +39,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return;
 	}
 
-	let response: { access_token: string } | null = null;
+	let accessToken: string | null = null;
 	try {
-		response = await getToken(
-			profile.clientId,
-			profile.clientSecret,
-			profile.refreshToken,
-			true
-		);
-		if (!response) {
+		accessToken = await castAccessToken(profile);
+		if (!accessToken) {
 			throw new Error(`no token found for user ${userid}`);
 		}
 	} catch (error) {
@@ -88,7 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	try {
 		const ipAddress = getClientIpFromRequest(req);
-		const unrestrict = await unrestrictLink(response.access_token, rdLink, ipAddress, true);
+		const unrestrict = await unrestrictLink(accessToken, rdLink, ipAddress, true);
 		if (!unrestrict) {
 			console.error('Failed to unrestrict link:', rdLink);
 			res.status(500).json({ error: 'Failed to unrestrict link' });

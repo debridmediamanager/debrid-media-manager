@@ -1,6 +1,6 @@
-import { getToken } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { castAccessToken } from '@/utils/castRdToken';
 import { isSponsorRequest } from '@/utils/requireSponsor';
 import { maxOtherStreamsLimit } from '@/utils/sponsorLimits';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -17,13 +17,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			clientId,
 			clientSecret,
 			refreshToken,
+			apiKey,
 			movieMaxSize,
 			episodeMaxSize,
 			otherStreamsLimit,
 			hideCastOption,
 		} = req.body;
 
-		if (!clientId || !clientSecret) {
+		// Either credential is a complete Real-Debrid session: the device-code
+		// triple, or a key pasted on `/realdebrid/login`, which stores nothing
+		// else. Demanding a clientId is what left API-key users unable to save a
+		// cast profile at all.
+		const credentials = apiKey ? { apiKey } : { clientId, clientSecret, refreshToken };
+		if (!credentials.apiKey && (!clientId || !clientSecret)) {
 			return res.status(400).json({ error: 'Missing required fields' });
 		}
 
@@ -38,10 +44,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 		}
 
-		let response: { access_token: string } | null = null;
+		let accessToken: string | null = null;
 		try {
-			response = await getToken(clientId, clientSecret, refreshToken, true);
-			if (!response) {
+			accessToken = await castAccessToken(credentials);
+			if (!accessToken) {
 				throw new Error(`no token found`);
 			}
 		} catch (error) {
@@ -59,13 +65,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return;
 		}
 
-		const userid = await generateUserId(response.access_token);
+		const userid = await generateUserId(accessToken);
 
 		const profile = await db.saveCastProfile(
 			userid,
-			clientId,
-			clientSecret,
-			refreshToken || null,
+			credentials,
 			movieMaxSize !== undefined ? Number(movieMaxSize) : undefined,
 			episodeMaxSize !== undefined ? Number(episodeMaxSize) : undefined,
 			otherStreamsLimit !== undefined ? Number(otherStreamsLimit) : undefined,

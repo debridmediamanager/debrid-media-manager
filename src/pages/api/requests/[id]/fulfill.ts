@@ -1,8 +1,8 @@
 import { orderedServersForNewJob } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
-import { getToken } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { castAccessToken } from '@/utils/castRdToken';
 import { canClaim, pickSourceKeys, RequestValidationError } from '@/utils/contentRequest';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -39,15 +39,9 @@ function readToken(req: NextApiRequest): string | null {
  */
 async function mintRequesterToken(requesterId: string): Promise<string | null> {
 	const profile = await db.getCastProfile(requesterId);
-	if (!profile?.clientId || !profile?.clientSecret || !profile?.refreshToken) return null;
+	if (!profile) return null;
 	try {
-		const token = await getToken(
-			profile.clientId,
-			profile.clientSecret,
-			profile.refreshToken,
-			true
-		);
-		return token?.access_token ?? null;
+		return await castAccessToken(profile);
 	} catch (error) {
 		// Only the message: an AxiosError expands to include `config.data`, which
 		// here is the OAuth POST body — the triple itself.

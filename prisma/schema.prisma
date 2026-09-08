@@ -178,10 +178,14 @@ model Cast {
 
 model CastProfile {
   userId            String   @id
-  clientId          String
-  clientSecret      String
+  clientId          String?
+  clientSecret      String?
   updatedAt         DateTime @updatedAt
-  refreshToken      String
+  refreshToken      String?
+  // A pasted Real-Debrid API key, held instead of the OAuth triple. Both are
+  // bearer tokens for the same REST API; only the triple needs renewing, so
+  // the columns are mutually exclusive rather than both required.
+  apiKey            String?
   movieMaxSize      Float    @default(0)
   episodeMaxSize    Float    @default(0)
   otherStreamsLimit Int      @default(5)
