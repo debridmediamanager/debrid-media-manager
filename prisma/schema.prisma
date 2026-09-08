@@ -958,6 +958,25 @@ model Sponsors {
   @@index([updatedAt])
 }
 
+/// A sponsor's own debrid credential, for the Torznab feed's availability filters.
+///
+/// Real-Debrid and AllDebrid availability is answered from `Available` and
+/// `AvailableAd`, which DMM populates itself. The other providers have no such
+/// table and no anonymous cache probe, so filtering on one means asking that
+/// provider with an account key. The key is the sponsor's own, linked once here
+/// rather than carried in the feed URL, where it would sit in every *arr's
+/// config file and in DMM's own access logs.
+model SponsorProviderKey {
+  shortId   String   @db.VarChar(16)
+  /// `tb`, `pm` or `oc`. Debrid-Link has no non-mutating availability check.
+  service   String   @db.VarChar(4)
+  apiKey    String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([shortId, service])
+}
+
 model DiscordUser {
   id              String   @id @default(cuid()) @db.VarChar(30)
   createdAt       DateTime @default(now())

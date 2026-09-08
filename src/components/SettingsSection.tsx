@@ -32,6 +32,7 @@ import {
 } from '../utils/settings';
 import { updateTorBoxSizeLimits } from '../utils/torboxCastApiClient';
 import { SponsorPanel } from './SponsorPanel';
+import { TorznabProviderPanel } from './TorznabProviderPanel';
 
 export const SettingsSection = () => {
 	const { isSponsor } = useSponsor();
@@ -449,6 +450,7 @@ export const SettingsSection = () => {
 				<div className="mt-4 text-sm text-gray-200">
 					<div className="flex flex-col gap-4">
 						<SponsorPanel />
+						<TorznabProviderPanel />
 
 						<div className="rounded border-2 border-yellow-500/30 p-4">
 							<div className="mb-4 flex items-center justify-center text-center text-sm font-medium text-yellow-200">

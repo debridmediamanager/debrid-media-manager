@@ -228,9 +228,11 @@ describe('Torznab setup page, for everyone else', () => {
 		asVisitor();
 		render(<TorznabSetupPage />);
 
-		expect(screen.getByRole('link', { name: 'Settings' }).getAttribute('href')).toBe(
-			'/settings'
-		);
+		// Two of them now: the pitch card's, and the one in the feeds card that
+		// explains where a provider key is linked.
+		for (const link of screen.getAllByRole('link', { name: 'Settings' })) {
+			expect(link.getAttribute('href')).toBe('/settings');
+		}
 		for (const link of screen.getAllByRole('link', { name: 'gatekeeper' })) {
 			expect(link.getAttribute('href')).toBe('https://gatekeeper.debridmediamanager.com');
 		}

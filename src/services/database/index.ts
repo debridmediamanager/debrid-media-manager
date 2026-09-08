@@ -18,6 +18,7 @@ import { RdOperationalService } from './rdOperational';
 import { ReportService } from './report';
 import { ScrapedService } from './scraped';
 import { SearchService } from './search';
+import { SponsorProviderKeysService } from './sponsorProviderKeys';
 import { SponsorsService } from './sponsors';
 import { StreamHealthService } from './streamHealth';
 import { TorBoxCastService } from './torboxCast';
@@ -48,6 +49,7 @@ export {
 	ReportService,
 	ScrapedService,
 	SearchService,
+	SponsorProviderKeysService,
 	SponsorsService,
 	StreamHealthService,
 	TorBoxCastService,

@@ -61,12 +61,26 @@ const SEARCH_MODES = [
 ];
 
 /** The path variants, and what each one changes about the feed. */
+/**
+ * The feed variants, split by where the availability answer comes from.
+ *
+ * The `library` set is answered from DMM's own tables and works for every
+ * sponsor with nothing else set up. The `linked` set has to ask the provider,
+ * so each needs that provider's key linked in Settings first.
+ */
 const FEEDS = [
 	{ suffix: '', what: 'Everything DMM has, cached or not' },
 	{ suffix: '/cached', what: 'Only releases already cached on Real-Debrid or AllDebrid' },
 	{ suffix: '/rd', what: 'Cache signal read from Real-Debrid only' },
 	{ suffix: '/ad', what: 'Cache signal read from AllDebrid only' },
 	{ suffix: '/rd/cached', what: 'Only what Real-Debrid already holds' },
+	{ suffix: '/ad/cached', what: 'Only what AllDebrid already holds' },
+];
+
+const LINKED_FEEDS = [
+	{ suffix: '/tb/cached', what: 'Only what TorBox already holds' },
+	{ suffix: '/pm/cached', what: 'Only what Premiumize already holds' },
+	{ suffix: '/oc/cached', what: 'Only what Offcloud already holds' },
 ];
 
 function SetupGuide({ indexerUrl, apiKey }: { indexerUrl: string; apiKey: string | null }) {
@@ -148,6 +162,41 @@ function SetupGuide({ indexerUrl, apiKey }: { indexerUrl: string; apiKey: string
 							<div className="min-w-0 flex-1 text-xs text-gray-400">{what}</div>
 						</div>
 					))}
+				</div>
+
+				<p className="mb-3 mt-4 text-gray-300">
+					Real-Debrid and AllDebrid are answered out of DMM&apos;s own library, so those
+					work as soon as you paste the URL. The rest have no such table and no way to be
+					asked anonymously, so they use a key of yours, linked once in{' '}
+					<Link href="/settings" className="underline decoration-dotted">
+						Settings
+					</Link>{' '}
+					rather than put in the URL — an indexer URL ends up in config files, forum posts
+					and server logs.
+				</p>
+				<div className="rounded bg-gray-900/60 px-3 py-1">
+					{LINKED_FEEDS.map(({ suffix, what }) => (
+						<div
+							key={suffix}
+							data-testid={`feed-${suffix}`}
+							className="flex flex-col gap-1 border-b border-gray-700/60 py-2.5 last:border-b-0 sm:flex-row sm:items-baseline sm:gap-3"
+						>
+							<code className="w-40 shrink-0 font-mono text-sm text-cyan-300">
+								/api/torznab{suffix}
+							</code>
+							<div className="min-w-0 flex-1 text-xs text-gray-400">{what}</div>
+						</div>
+					))}
+				</div>
+				<div className="mt-3 flex gap-2 rounded border-2 border-yellow-500/30 p-3 text-xs text-gray-300">
+					<Zap className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
+					<span>
+						A linked feed asks the provider about a few hundred hashes per search and
+						remembers the answers, so a title with thousands of releases fills in over
+						the first few searches rather than all at once. Debrid-Link is not offered:
+						its API has no way to ask whether a hash is held without adding it, which
+						would spend your quota on every search.
+					</span>
 				</div>
 			</Card>
 

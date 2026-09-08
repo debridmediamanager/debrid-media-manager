@@ -1,6 +1,7 @@
 import { NEWZNAB_AUTH_MESSAGES, resolveNewznabSponsor } from '@/services/newznab/auth';
 import { getClientIp } from '@/services/rateLimit/middlewareRateLimiter';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
+import { MissingProviderKeyError, ProviderProbeError } from '@/services/torznab/providerCache';
 import { isSearchType } from '@/services/torznab/resolve';
 import { parseFeedOptions, runSearch } from '@/services/torznab/search';
 import { capsXml, searchRssXml, torznabErrorXml } from '@/services/torznab/xml';
@@ -29,6 +30,13 @@ import type { NextApiRequest, NextApiResponse } from 'next';
  */
 
 const XML_CONTENT_TYPE = 'application/xml; charset=utf-8';
+
+/**
+ * Newznab's "insufficient privileges", which is the closest the shared code
+ * space has to "the account is fine, this particular feed is not set up".
+ * Distinct from the 100/101 pair so a client's log says which of the two to fix.
+ */
+const NO_PROVIDER_KEY = 102;
 
 function sendError(res: NextApiResponse, status: number, code: number, description: string) {
 	res.setHeader('Content-Type', XML_CONTENT_TYPE);
@@ -107,11 +115,29 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			return sendError(res, 429, 500, 'Request limit reached');
 		}
 
-		const { items, offset, total } = await runSearch(t, req.query, options);
+		const { items, offset, total } = await runSearch(t, req.query, options, {
+			shortId: auth.sponsor.shortId,
+		});
 
 		res.setHeader('Content-Type', 'application/rss+xml; charset=utf-8');
 		return res.status(200).send(searchRssXml(items, offset, total));
 	} catch (error) {
+		// A feed naming a provider DMM cannot answer for itself has two failure
+		// modes worth telling apart, because only one of them is the sponsor's to
+		// fix. Both are described rather than swallowed: an *arr shows the text.
+		if (error instanceof MissingProviderKeyError) {
+			return sendError(
+				res,
+				200,
+				NO_PROVIDER_KEY,
+				`${error.message}. Link one in DMM Settings to use this feed.`
+			);
+		}
+		if (error instanceof ProviderProbeError) {
+			console.error('Torznab provider probe failed:', error);
+			return sendError(res, 200, 900, error.message);
+		}
+
 		// A Next.js 500 is an HTML page, which an *arr logs as an unreachable
 		// indexer. Say it in the protocol instead.
 		console.error('Torznab endpoint failed:', error);

@@ -1,4 +1,5 @@
 import type { RdCastCredentials } from '@/utils/castRdToken';
+import type { TorznabLiveService } from '@/utils/sponsorProviders';
 import { Prisma } from '@prisma/client';
 import {
 	AllDebridCastService,
@@ -22,6 +23,7 @@ import {
 	ReportService,
 	ScrapedService,
 	SearchService,
+	SponsorProviderKeysService,
 	SponsorsService,
 	StreamHealthService,
 	TorBoxCastService,
@@ -58,6 +60,7 @@ export type RepositoryDependencies = Partial<{
 	hashSearchService: HashSearchService;
 	zurgKeysService: ZurgKeysService;
 	sponsorsService: SponsorsService;
+	sponsorProviderKeysService: SponsorProviderKeysService;
 	streamHealthService: StreamHealthService;
 	historyAggregationService: HistoryAggregationService;
 	rdOperationalService: RdOperationalService;
@@ -89,6 +92,7 @@ export class Repository {
 	private hashSearchService: HashSearchService;
 	private zurgKeysService: ZurgKeysService;
 	private sponsorsService: SponsorsService;
+	private sponsorProviderKeysService: SponsorProviderKeysService;
 	private streamHealthService: StreamHealthService;
 	private historyAggregationService: HistoryAggregationService;
 	private rdOperationalService: RdOperationalService;
@@ -119,6 +123,7 @@ export class Repository {
 		hashSearchService,
 		zurgKeysService,
 		sponsorsService,
+		sponsorProviderKeysService,
 		streamHealthService,
 		historyAggregationService,
 		rdOperationalService,
@@ -148,6 +153,8 @@ export class Repository {
 		this.hashSearchService = hashSearchService ?? new HashSearchService();
 		this.zurgKeysService = zurgKeysService ?? new ZurgKeysService();
 		this.sponsorsService = sponsorsService ?? new SponsorsService();
+		this.sponsorProviderKeysService =
+			sponsorProviderKeysService ?? new SponsorProviderKeysService();
 		this.streamHealthService = streamHealthService ?? new StreamHealthService();
 		this.historyAggregationService =
 			historyAggregationService ?? new HistoryAggregationService();
@@ -179,6 +186,7 @@ export class Repository {
 			this.hashSearchService.disconnect(),
 			this.zurgKeysService.disconnect(),
 			this.sponsorsService.disconnect(),
+			this.sponsorProviderKeysService.disconnect(),
 			this.streamHealthService.disconnect(),
 			this.historyAggregationService.disconnect(),
 			this.rdOperationalService.disconnect(),
@@ -1226,6 +1234,28 @@ export class Repository {
 
 	public getSponsorByShortId(shortId: string) {
 		return this.sponsorsService.getByShortId(shortId);
+	}
+
+	/**
+	 * A sponsor's own provider key for a live Torznab availability filter.
+	 *
+	 * Returned raw because its only caller hands it straight to that provider's
+	 * cache probe. Nothing on a response path may read it.
+	 */
+	public getSponsorProviderKey(shortId: string, service: TorznabLiveService) {
+		return this.sponsorProviderKeysService.getKey(shortId, service);
+	}
+
+	public listSponsorProviderKeys(shortId: string) {
+		return this.sponsorProviderKeysService.listLinked(shortId);
+	}
+
+	public setSponsorProviderKey(shortId: string, service: TorznabLiveService, apiKey: string) {
+		return this.sponsorProviderKeysService.setKey(shortId, service, apiKey);
+	}
+
+	public removeSponsorProviderKey(shortId: string, service: TorznabLiveService) {
+		return this.sponsorProviderKeysService.removeKey(shortId, service);
 	}
 
 	// Stream Health Service Methods

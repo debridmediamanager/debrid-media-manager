@@ -21,6 +21,7 @@ import {
 	backfillFromDebridioNow,
 	refreshDebridioAvailabilityInBackground,
 } from '@/utils/debridioBackfill';
+import { isTorznabLiveService, type TorznabLiveService } from '@/utils/sponsorProviders';
 import type { NextApiRequest } from 'next';
 import {
 	categoriesFor,
@@ -28,6 +29,11 @@ import {
 	matchesCategoryFilter,
 	parseCategoryFilter,
 } from './categories';
+import {
+	MissingProviderKeyError,
+	probeProviderCache,
+	type ProviderCacheAnswer,
+} from './providerCache';
 import { resolveTargets, SearchType, TorznabTarget } from './resolve';
 import { MAX_LIMIT, TorznabRssItem } from './xml';
 
@@ -64,10 +70,24 @@ export const UNCACHED_SEEDERS = 1;
 /** The same rule the library's own SQL applies on the site's read path. */
 const CYRILLIC_TITLE = /^[А-Яа-яЁё]/;
 
-/** Which debrid cache the ⚡ signal is read from, and whether it filters. */
+/**
+ * Which debrid cache the ⚡ signal is read from, and whether it filters.
+ *
+ * `rd` and `ad` are answered from DMM's own tables and cost nothing but a
+ * query. The rest are asked of the provider with the sponsor's own key, which
+ * is why they are named apart: everything that has to hold a credential, bound
+ * a probe or fail loudly keys off this distinction.
+ */
+export type TorznabCacheScope = 'any' | 'rd' | 'ad' | TorznabLiveService;
+
 export interface TorznabFeedOptions {
-	cache: 'any' | 'rd' | 'ad';
+	cache: TorznabCacheScope;
 	cachedOnly: boolean;
+}
+
+/** Who is asking, for the feeds that need that sponsor's own provider key. */
+export interface TorznabSearchContext {
+	shortId: string;
 }
 
 export const DEFAULT_FEED_OPTIONS: TorznabFeedOptions = { cache: 'any', cachedOnly: false };
@@ -90,6 +110,7 @@ export function parseFeedOptions(segments: string[]): TorznabFeedOptions | null 
 	const options = { ...DEFAULT_FEED_OPTIONS };
 	for (const segment of segments) {
 		if (segment === 'rd' || segment === 'ad') options.cache = segment;
+		else if (isTorznabLiveService(segment)) options.cache = segment;
 		else if (segment === 'cached') options.cachedOnly = true;
 		else return null;
 	}
@@ -329,10 +350,7 @@ async function recentReleases(): Promise<LibraryRelease[]> {
  */
 const CACHE_LOOKUP_CHUNK = 500;
 
-async function lookupCached(
-	hashes: string[],
-	scope: TorznabFeedOptions['cache']
-): Promise<Set<string>> {
+async function lookupCached(hashes: string[], scope: 'any' | 'rd' | 'ad'): Promise<Set<string>> {
 	if (scope === 'rd') return db.filterCachedHashes(hashes);
 	if (scope === 'ad') return db.filterCachedHashesAd(hashes);
 
@@ -344,9 +362,9 @@ async function lookupCached(
 	return rd;
 }
 
-async function cachedHashes(
+async function cachedHashesFromDb(
 	hashes: string[],
-	scope: TorznabFeedOptions['cache']
+	scope: 'any' | 'rd' | 'ad'
 ): Promise<Set<string>> {
 	if (hashes.length <= CACHE_LOOKUP_CHUNK) return lookupCached(hashes, scope);
 
@@ -356,6 +374,36 @@ async function cachedHashes(
 		for (const hash of chunk) found.add(hash);
 	}
 	return found;
+}
+
+/**
+ * The cache answer for one search, from whichever source the feed names.
+ *
+ * The two paths are not interchangeable and are deliberately not merged. The
+ * database path is exhaustive: every hash gets a verdict, so `unresolved` is
+ * always zero and a `cached` feed's `total` is exact. The provider path is
+ * bounded, so a large title's first search leaves a tail unresolved and
+ * converges over the searches that follow.
+ */
+async function resolveCache(
+	hashes: string[],
+	options: TorznabFeedOptions,
+	context?: TorznabSearchContext
+): Promise<ProviderCacheAnswer> {
+	const scope = options.cache;
+	if (scope === 'any' || scope === 'rd' || scope === 'ad') {
+		return { cached: await cachedHashesFromDb(hashes, scope), unresolved: 0 };
+	}
+
+	// A feed that names a provider is unusable without that provider's key, and
+	// silently falling back to the plain feed would answer a different question
+	// than the URL asks. The caller turns this into a Torznab error naming the
+	// provider, so the fix is in the message rather than in an *arr's log.
+	if (!context?.shortId) throw new MissingProviderKeyError(scope);
+	const apiKey = await db.getSponsorProviderKey(context.shortId, scope);
+	if (!apiKey) throw new MissingProviderKeyError(scope);
+
+	return probeProviderCache(scope, apiKey, hashes);
 }
 
 function magnetUri(hash: string, title: string): string {
@@ -385,6 +433,11 @@ export interface TorznabPage {
 	offset: number;
 	/** The whole matching set, not this page — a client pages until it reaches it. */
 	total: number;
+	/**
+	 * Hashes this request's probe budget did not reach, on a provider-backed
+	 * feed. Always zero for `rd`, `ad` and the plain feed, which are exhaustive.
+	 */
+	unresolved: number;
 }
 
 /**
@@ -405,7 +458,8 @@ export interface TorznabPage {
 export async function runSearch(
 	t: SearchType,
 	query: NextApiRequest['query'],
-	options: TorznabFeedOptions = DEFAULT_FEED_OPTIONS
+	options: TorznabFeedOptions = DEFAULT_FEED_OPTIONS,
+	context?: TorznabSearchContext
 ): Promise<TorznabPage> {
 	const params = normalizeSearchQuery(query);
 	const releases = params.targeted ? await targetedReleases(t, params) : await recentReleases();
@@ -413,21 +467,23 @@ export async function runSearch(
 	const matching = releases.filter((release) =>
 		matchesCategoryFilter(release.categories, params.categories)
 	);
-	const cache = await cachedHashes(
+	const { cached, unresolved } = await resolveCache(
 		matching.map((release) => release.hash),
-		options.cache
+		options,
+		context
 	);
 
 	const kept = options.cachedOnly
-		? matching.filter((release) => cache.has(release.hash))
+		? matching.filter((release) => cached.has(release.hash))
 		: matching;
-	kept.sort((a, b) => Number(cache.has(b.hash)) - Number(cache.has(a.hash)));
+	kept.sort((a, b) => Number(cached.has(b.hash)) - Number(cached.has(a.hash)));
 
 	const page = kept.slice(params.offset, params.offset + params.limit);
 
 	return {
-		items: page.map((release) => toRssItem(release, cache.has(release.hash))),
+		items: page.map((release) => toRssItem(release, cached.has(release.hash))),
 		offset: params.offset,
 		total: kept.length,
+		unresolved,
 	};
 }
