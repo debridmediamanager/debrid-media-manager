@@ -167,11 +167,29 @@ describe('CastSettingsPanel', () => {
 		expect(within(limitSelect).getByRole('option', { name: '10 streams' })).toBeInTheDocument();
 	});
 
-	it('caps a non-sponsor at the standard other-streams ceiling', () => {
+	// The sponsor range used to be missing from the list entirely, so a
+	// non-sponsor saw a dropdown that stopped at 5 and nothing to say it went
+	// further. It is shown and disabled now: same ceiling, visible perk.
+	it('shows a non-sponsor the sponsor range, locked', () => {
 		render(<CastSettingsPanel service="rd" accentColor="green" />);
 		const limitSelect = screen.getAllByRole('combobox')[2];
 		expect(within(limitSelect).queryByRole('option', { name: '10 streams' })).toBeNull();
-		expect(within(limitSelect).getByRole('option', { name: '5 streams' })).toBeInTheDocument();
+		const locked = within(limitSelect).getByRole('option', {
+			name: '10 streams (sponsors only)',
+		});
+		expect(locked).toBeInTheDocument();
+		expect(locked).toBeDisabled();
+		const open = within(limitSelect).getByRole('option', { name: '5 streams' });
+		expect(open).toBeInTheDocument();
+		expect(open).not.toBeDisabled();
+	});
+
+	it('points a non-sponsor at gatekeeper for the raised ceiling', () => {
+		render(<CastSettingsPanel service="rd" accentColor="green" />);
+		expect(screen.getByRole('link', { name: 'gatekeeper' })).toHaveAttribute(
+			'href',
+			'https://gatekeeper.debridmediamanager.com'
+		);
 	});
 
 	it('calls updateTorBoxSizeLimits for tb service', async () => {

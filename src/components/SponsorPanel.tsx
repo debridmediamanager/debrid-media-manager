@@ -1,11 +1,38 @@
 import { useSponsor } from '@/hooks/useSponsor';
+import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { Heart, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { FC, FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { SponsorBadge } from './SponsorBadge';
 
-const GATEKEEPER_URL = 'https://gatekeeper.debridmediamanager.com';
+/**
+ * What a sponsorship actually opens, named on the panel that asks for one.
+ *
+ * Each of these is reachable and documented without a key, so the links go to
+ * the real pages rather than to a paywall: the setup guides read the same for
+ * everyone, and only the endpoints behind them check the key.
+ */
+const PERKS: { href?: string; name: string; what: string }[] = [
+	{
+		href: '/newznab',
+		name: 'Usenet indexer',
+		what: 'DMM as a Newznab indexer in Prowlarr, Sonarr and Radarr',
+	},
+	{
+		href: '/torznab',
+		name: 'Torrent indexer',
+		what: "DMM's torrent library as a Torznab indexer",
+	},
+	{
+		name: 'Ten other streams in Stremio Cast',
+		what: 'instead of five, set per profile below',
+	},
+	{
+		name: 'Skip the queue',
+		what: 'priority on the NZB uploader and a higher job ceiling on the torrent uploader',
+	},
+];
 
 const SOURCE_LABELS: Record<string, string> = {
 	github: 'GitHub Sponsors',
@@ -127,9 +154,26 @@ export const SponsorPanel: FC = () => {
 				</div>
 			) : (
 				<form onSubmit={submit} className="flex flex-col gap-3">
+					<div className="text-xs text-gray-400">
+						<p className="mb-2 text-center">A sponsorship opens:</p>
+						<ul className="flex list-none flex-col gap-1">
+							{PERKS.map(({ href, name, what }) => (
+								<li key={name} className="flex flex-col">
+									{href ? (
+										<Link href={href} className="text-blue-400 hover:underline">
+											{name}
+										</Link>
+									) : (
+										<span className="text-gray-300">{name}</span>
+									)}
+									<span className="text-gray-500">{what}</span>
+								</li>
+							))}
+						</ul>
+					</div>
 					<label htmlFor="dmm-api-key" className="text-center text-xs text-gray-400">
-						Already sponsoring? Paste your DMM API key to show your badge and unlock
-						sponsor features.
+						Already sponsoring? Paste your DMM API key to show your badge and open them
+						here.
 					</label>
 					{keyForm}
 					<p className="text-center text-xs text-gray-500">

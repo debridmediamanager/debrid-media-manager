@@ -23,6 +23,18 @@ describe('InfoSection', () => {
 		expect(userscriptLink.getAttribute('target')).toBe('_blank');
 	});
 
+	// The sponsorship block named three payment links and no way to use a
+	// sponsorship already paid for. gatekeeper is where the key comes from.
+	it('says where a sponsor gets the key that opens the features', () => {
+		render(<InfoSection />);
+
+		expect(screen.getByRole('link', { name: 'gatekeeper' })).toHaveAttribute(
+			'href',
+			'https://gatekeeper.debridmediamanager.com'
+		);
+		expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings');
+	});
+
 	it('promotes community and sponsorship resources', () => {
 		render(<InfoSection />);
 

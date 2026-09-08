@@ -183,39 +183,56 @@ describe('Torznab setup page, for a sponsor', () => {
 		render(<TorznabSetupPage />);
 
 		expect(screen.queryByRole('link', { name: 'Patreon' })).toBeNull();
-		expect(screen.queryByText('Sponsors only')).toBeNull();
+		expect(screen.queryByText('A sponsor feature')).toBeNull();
 	});
 });
 
 describe('Torznab setup page, for everyone else', () => {
-	it('withholds the endpoint details entirely', () => {
+	// It used to render the pitch *instead of* the guide, so the URL, the feeds
+	// and the limits were all withheld from the people being asked to pay for
+	// them. The endpoint checks the DMM API key on every request, so none of
+	// that was ever the gate.
+	it('shows the same setup the sponsor sees', async () => {
 		asVisitor();
 		render(<TorznabSetupPage />);
 
-		expect(screen.queryByTestId('field-URL')).toBeNull();
-		expect(screen.queryByText(`${window.location.origin}/api/torznab`)).toBeNull();
-		expect(screen.queryByText('20 searches')).toBeNull();
+		await waitFor(() =>
+			expect(
+				within(field('URL')).getByText(`${window.location.origin}/api/torznab`)
+			).toBeTruthy()
+		);
+		expect(screen.getByText('20 searches')).toBeTruthy();
 	});
 
-	it('makes the sponsorship pitch instead', () => {
+	// An unlinked browser has no key to fill in, which is the one part of the
+	// guide that genuinely needs a sponsorship.
+	it('leaves the key field pointing at gatekeeper', () => {
 		asVisitor();
 		render(<TorznabSetupPage />);
 
-		expect(screen.getByText('Sponsors only')).toBeTruthy();
+		expect(within(field('API Key')).getByText('your DMM API key from gatekeeper')).toBeTruthy();
+		expect(screen.queryByLabelText('Reveal API key')).toBeNull();
+	});
+
+	it('adds the sponsorship pitch above it', () => {
+		asVisitor();
+		render(<TorznabSetupPage />);
+
+		expect(screen.getByText('A sponsor feature')).toBeTruthy();
 		expect(screen.getByRole('link', { name: 'Github' }).getAttribute('href')).toContain(
 			'github.com/sponsors'
 		);
 	});
 
-	it('sends an existing sponsor to Settings to link their key', () => {
+	it('sends an existing sponsor to gatekeeper and then to Settings', () => {
 		asVisitor();
 		render(<TorznabSetupPage />);
 
 		expect(screen.getByRole('link', { name: 'Settings' }).getAttribute('href')).toBe(
 			'/settings'
 		);
-		expect(screen.getByRole('link', { name: 'gatekeeper' }).getAttribute('href')).toBe(
-			'https://gatekeeper.debridmediamanager.com'
-		);
+		for (const link of screen.getAllByRole('link', { name: 'gatekeeper' })) {
+			expect(link.getAttribute('href')).toBe('https://gatekeeper.debridmediamanager.com');
+		}
 	});
 });

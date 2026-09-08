@@ -1,6 +1,7 @@
 import { ApiKeyField, Card, Field } from '@/components/IndexerSetup';
 import { Logo } from '@/components/Logo';
 import { useSponsor } from '@/hooks/useSponsor';
+import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { ArrowLeft, Handshake, KeyRound, Lock, ShieldCheck } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -9,17 +10,18 @@ import { Toaster } from 'react-hot-toast';
 
 // Setup guide for pointing Prowlarr / Sonarr / Radarr at DMM's Newznab endpoint.
 //
-// The sponsor check below is COSMETIC ONLY. It reads the unverified sponsor
-// token out of localStorage, so anyone can flip it by hand; the real gate is
-// `/api/newznab/api` itself, which verifies the DMM API key server-side on
-// every request. This page only decides what to *show*, never what to allow.
+// The setup is shown to everyone. The real gate is `/api/newznab/api` itself,
+// which verifies the DMM API key server-side on every request, so withholding
+// the URL and the category list only hid the feature from the people who might
+// have sponsored for it. The sponsor check below decides whether to add the
+// pitch above the guide, and nothing else.
 //
-// The API key itself is read from `dmm:apiKey`, which the browser keeps once a
-// sponsorship has been linked in Settings. Flipping the sponsor token by hand
-// therefore reveals nothing: an unlinked browser has no key to show.
+// It is COSMETIC in any case: it reads the unverified sponsor token out of
+// localStorage, which anyone can flip by hand. That reveals nothing, because
+// the API key comes from `dmm:apiKey`, which is only written once a real key
+// has been accepted in Settings, and an unlinked browser has none to show.
 
 const PRODUCTION_ORIGIN = 'https://debridmediamanager.com';
-const GATEKEEPER_URL = 'https://gatekeeper.debridmediamanager.com';
 
 /** The path segment *arr appends to the indexer URL. */
 const API_PATH = '/api';
@@ -180,11 +182,12 @@ function SetupGuide({ indexerUrl, apiKey }: { indexerUrl: string; apiKey: string
 
 function SponsorPitch() {
 	return (
-		<Card title="Sponsors only">
+		<Card title="A sponsor feature">
 			<p className="text-gray-300">
-				The Usenet indexer is a sponsor feature. It answers Prowlarr, Sonarr and Radarr as a
-				Newznab indexer, so your *arr stack can search DMM directly and hand grabs straight
-				to your Real-Debrid account.
+				The Usenet indexer answers Prowlarr, Sonarr and Radarr as a Newznab indexer, so your
+				*arr stack can search DMM directly and hand grabs straight to your Real-Debrid
+				account. The whole setup is written out below; the one thing it needs that this
+				browser does not have yet is a DMM API key, which comes with a sponsorship.
 			</p>
 
 			<div className="mt-4 rounded border-2 border-pink-500/30 p-4 text-center">
@@ -223,11 +226,7 @@ function SponsorPitch() {
 			</div>
 
 			<p className="mt-4 text-sm text-gray-400">
-				Already sponsoring? Paste your DMM API key in{' '}
-				<Link href="/settings" className="text-blue-300 underline hover:text-blue-200">
-					Settings
-				</Link>{' '}
-				to link this browser. Get the key by connecting your GitHub account on{' '}
+				Get your key by connecting your GitHub account on{' '}
 				<a
 					href={GATEKEEPER_URL}
 					target="_blank"
@@ -236,7 +235,12 @@ function SponsorPitch() {
 				>
 					gatekeeper
 				</a>
-				.
+				, then paste it in{' '}
+				<Link href="/settings" className="text-blue-300 underline hover:text-blue-200">
+					Settings
+				</Link>{' '}
+				to link this browser. Already sponsoring on another machine? It is the same key on
+				this one, so there is nothing to pay twice.
 			</p>
 		</Card>
 	);
@@ -284,11 +288,8 @@ export default function NewznabSetupPage() {
 					</p>
 				</header>
 
-				{isSponsor ? (
-					<SetupGuide indexerUrl={indexerUrl} apiKey={apiKey} />
-				) : (
-					<SponsorPitch />
-				)}
+				{isSponsor ? null : <SponsorPitch />}
+				<SetupGuide indexerUrl={indexerUrl} apiKey={apiKey} />
 			</div>
 		</div>
 	);

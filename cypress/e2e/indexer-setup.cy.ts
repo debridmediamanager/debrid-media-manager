@@ -3,8 +3,8 @@
 // Both render a credential, so the thing worth checking here rather than in
 // jsdom is what actually reaches the screen: the key masked by default, the
 // whole key only after asking, and the clipboard carrying the whole key either
-// way. The sponsor gate on these pages is cosmetic, so a seeded token is all it
-// takes to see the guide.
+// way. The guide itself is shown to everyone, so a seeded token only decides
+// whether the sponsorship pitch sits above it.
 
 const API_KEY = 'a1b2c3' + 'd'.repeat(54) + 'ef12';
 const MASKED = 'a1b2c3••••••••ef12';
@@ -28,6 +28,10 @@ function visitAsSponsor(path: string, apiKey: string | null) {
 			if (apiKey) win.localStorage.setItem('dmm:apiKey', JSON.stringify(apiKey));
 		},
 	});
+}
+
+function visitAsVisitor(path: string) {
+	cy.visit(path, { onBeforeLoad: (win) => win.localStorage.clear() });
 }
 
 for (const { name, path, indexerUrl } of [
@@ -79,6 +83,25 @@ for (const { name, path, indexerUrl } of [
 		it('offers a way back to the dashboard', () => {
 			visitAsSponsor(path, API_KEY);
 			cy.contains('a', 'Back to dashboard').should('have.attr', 'href', '/');
+		});
+
+		// The guide used to be replaced wholesale by the pitch, which withheld
+		// the setup from everyone being asked to pay for it. The endpoint checks
+		// the key on every request, so the page can show the whole thing.
+		it('shows the same guide to someone who has not linked a sponsorship', () => {
+			visitAsVisitor(path);
+
+			cy.get('[data-testid="field-URL"]').should('contain', indexerUrl);
+			cy.get('[data-testid="field-API Key"]').should(
+				'contain',
+				'your DMM API key from gatekeeper'
+			);
+			cy.contains('A sponsor feature').should('exist');
+			cy.contains('a', 'gatekeeper').should(
+				'have.attr',
+				'href',
+				'https://gatekeeper.debridmediamanager.com'
+			);
 		});
 	});
 }

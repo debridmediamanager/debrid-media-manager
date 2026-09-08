@@ -56,6 +56,33 @@ describe('SponsorPanel', () => {
 		);
 	});
 
+	// The panel used to ask for money without saying what it buys, while the
+	// features themselves were hidden from anyone who had not paid. Naming them
+	// here, with links to the pages that now explain them, is the other half of
+	// unhiding them.
+	it('names what a sponsorship opens, and links the pages that explain it', () => {
+		render(<SponsorPanel />);
+
+		expect(screen.getByRole('link', { name: 'Usenet indexer' })).toHaveAttribute(
+			'href',
+			'/newznab'
+		);
+		expect(screen.getByRole('link', { name: 'Torrent indexer' })).toHaveAttribute(
+			'href',
+			'/torznab'
+		);
+		expect(screen.getByText('Ten other streams in Stremio Cast')).toBeInTheDocument();
+		expect(screen.getByText('Skip the queue')).toBeInTheDocument();
+	});
+
+	it('drops the pitch once the sponsorship is linked', () => {
+		storeToken(ACTIVE);
+		storeApiKey();
+		render(<SponsorPanel />);
+
+		expect(screen.queryByRole('link', { name: 'Usenet indexer' })).toBeNull();
+	});
+
 	it('keeps submit disabled until a key is typed', async () => {
 		render(<SponsorPanel />);
 		const submit = screen.getByRole('button', { name: 'Verify sponsorship' });

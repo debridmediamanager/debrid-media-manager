@@ -159,46 +159,51 @@ const settledFixture = {
 	isLoading: false,
 };
 
-describe('IndexPage Usenet indexer entry', () => {
+describe('IndexPage indexer entries', () => {
 	beforeEach(() => {
 		currentUserMock.mockReset();
 		currentUserMock.mockReturnValue(settledFixture);
 		sponsorMock.mockReset();
-	});
-
-	it('offers a sponsor the way in to the indexer setup page', () => {
-		sponsorMock.mockReturnValue({ isSponsor: true });
-
-		render(<IndexPage />);
-
-		const link = screen.getByRole('link', { name: /Usenet Indexer/i });
-		expect(link).toHaveAttribute('href', '/newznab');
-		expect(link).toHaveTextContent('Prowlarr-compatible endpoint for sponsors');
-	});
-
-	// Cosmetic, not a security boundary - the endpoint checks the key itself -
-	// but a link everyone can see is a link everyone reports as broken.
-	it('shows nothing to everyone else', () => {
+		// The page no longer asks. Kept wired up so a reintroduced gate shows up
+		// here as an unused mock rather than as a link that quietly disappears.
 		sponsorMock.mockReturnValue({ isSponsor: false });
+	});
 
+	// Both rows used to be hidden from non-sponsors, which meant the one page
+	// that explains each feature and sells the sponsorship was reachable only by
+	// people who had already sponsored. The endpoints check the DMM API key
+	// server-side, so the links cost nothing and the setup pages carry the pitch.
+	it('offers the way in to both indexer setup pages', () => {
 		render(<IndexPage />);
 
-		expect(screen.queryByRole('link', { name: /Usenet Indexer/i })).toBeNull();
-		expect(screen.queryByRole('link', { name: /newznab/i })).toBeNull();
-		// The rest of the page is untouched by the gate.
-		expect(screen.getByRole('link', { name: /Settings/i })).toHaveAttribute(
+		expect(screen.getByRole('link', { name: /Usenet Indexer/i })).toHaveAttribute(
 			'href',
-			'/settings'
+			'/newznab'
+		);
+		expect(screen.getByRole('link', { name: /Torrent Indexer/i })).toHaveAttribute(
+			'href',
+			'/torznab'
 		);
 	});
 
-	it('keeps the entry next to the settings shortcut', () => {
-		sponsorMock.mockReturnValue({ isSponsor: true });
+	// Visible is not the same as free: each row still has to say who it is for.
+	it('says the indexers are a sponsor feature', () => {
+		render(<IndexPage />);
 
+		expect(screen.getByRole('link', { name: /Usenet Indexer/i })).toHaveTextContent(
+			'for sponsors'
+		);
+		expect(screen.getByRole('link', { name: /Torrent Indexer/i })).toHaveTextContent(
+			'for sponsors'
+		);
+	});
+
+	it('keeps the entries next to the settings shortcut', () => {
 		render(<IndexPage />);
 
 		const settings = screen.getByRole('link', { name: /Settings/i });
 		const indexer = screen.getByRole('link', { name: /Usenet Indexer/i });
+		expect(settings).toHaveAttribute('href', '/settings');
 		expect(
 			settings.compareDocumentPosition(indexer) & Node.DOCUMENT_POSITION_FOLLOWING
 		).toBeTruthy();

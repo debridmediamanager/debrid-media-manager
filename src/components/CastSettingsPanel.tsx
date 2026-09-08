@@ -1,5 +1,10 @@
 import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
-import { otherStreamsLimitOptions } from '@/utils/sponsorLimits';
+import { GATEKEEPER_URL } from '@/utils/gatekeeper';
+import {
+	SPONSOR_MAX_OTHER_STREAMS_LIMIT,
+	otherStreamsLimitChoices,
+	otherStreamsLimitLabel,
+} from '@/utils/sponsorLimits';
 import { Settings } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -319,14 +324,14 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 						value={otherStreamsLimit}
 						onChange={handleOtherStreamsLimitChange}
 					>
-						{otherStreamsLimitOptions(isSponsor, Number(otherStreamsLimit)).map(
-							(count) => (
-								<option key={count} value={String(count)}>
-									{count === 0
-										? `Don't show other streams`
-										: count === 1
-											? '1 stream'
-											: `${count} streams`}
+						{otherStreamsLimitChoices(isSponsor, Number(otherStreamsLimit)).map(
+							(choice) => (
+								<option
+									key={choice.value}
+									value={String(choice.value)}
+									disabled={choice.sponsorOnly}
+								>
+									{otherStreamsLimitLabel(choice)}
 								</option>
 							)
 						)}
@@ -334,6 +339,21 @@ export const CastSettingsPanel = ({ service, accentColor }: CastSettingsPanelPro
 					<p className="mt-1 text-xs text-gray-400">
 						Limits streams from available files, torrents, and other users&apos; casts
 					</p>
+					{!isSponsor && (
+						<p className="text-xs text-gray-400">
+							Sponsors can raise this to {SPONSOR_MAX_OTHER_STREAMS_LIMIT}. Get your
+							DMM API key on{' '}
+							<a
+								href={GATEKEEPER_URL}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-blue-300 underline hover:text-blue-200"
+							>
+								gatekeeper
+							</a>{' '}
+							and paste it in Settings.
+						</p>
+					)}
 				</div>
 
 				<div className="flex items-center gap-2">

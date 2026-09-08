@@ -15,19 +15,48 @@ export function maxOtherStreamsLimit(isSponsor: boolean): number {
 	return isSponsor ? SPONSOR_MAX_OTHER_STREAMS_LIMIT : MAX_OTHER_STREAMS_LIMIT;
 }
 
+export interface OtherStreamsLimitChoice {
+	value: number;
+	/** Above the caller's ceiling: shown, but not selectable. */
+	sponsorOnly: boolean;
+}
+
 /**
- * Options offered by the "Other streams limit" dropdown, 0 through the caller's
- * ceiling.
+ * Every value the "Other streams limit" dropdown shows, and which of them a
+ * sponsorship is what opens.
  *
- * `current` is kept in the list even when it sits above that ceiling, which is
+ * The sponsor-only values used to be missing from the list entirely, which hid
+ * the perk from exactly the people it is meant to reach: a non-sponsor saw a
+ * dropdown that stopped at 5 and no reason to think it went further. They are
+ * listed and disabled instead. The ceiling is unchanged, and the server checks
+ * it again on every save, so this only decides what is on screen.
+ *
+ * `current` is kept in the list even when it sits above the ceiling, which is
  * what a sponsor who set 10 and then lapsed will have stored. Dropping it would
  * render the select blank and silently misreport what the profile actually holds.
  */
-export function otherStreamsLimitOptions(isSponsor: boolean, current?: number): number[] {
+export function otherStreamsLimitChoices(
+	isSponsor: boolean,
+	current?: number
+): OtherStreamsLimitChoice[] {
 	const ceiling = maxOtherStreamsLimit(isSponsor);
-	const options = Array.from({ length: ceiling + 1 }, (_, i) => i);
-	if (typeof current === 'number' && Number.isInteger(current) && current > ceiling) {
-		options.push(current);
+	const choices = Array.from(
+		{ length: SPONSOR_MAX_OTHER_STREAMS_LIMIT + 1 },
+		(_, value): OtherStreamsLimitChoice => ({ value, sponsorOnly: value > ceiling })
+	);
+	if (
+		typeof current === 'number' &&
+		Number.isInteger(current) &&
+		current > SPONSOR_MAX_OTHER_STREAMS_LIMIT
+	) {
+		choices.push({ value: current, sponsorOnly: current > ceiling });
 	}
-	return options;
+	return choices;
+}
+
+/** The dropdown label for one choice. */
+export function otherStreamsLimitLabel({ value, sponsorOnly }: OtherStreamsLimitChoice): string {
+	const base =
+		value === 0 ? `Don't show other streams` : value === 1 ? '1 stream' : `${value} streams`;
+	return sponsorOnly ? `${base} (sponsors only)` : base;
 }
