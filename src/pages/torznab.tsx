@@ -1,5 +1,6 @@
 import { ApiKeyField, Card, Field } from '@/components/IndexerSetup';
 import { Logo } from '@/components/Logo';
+import { TorznabProviderPanel } from '@/components/TorznabProviderPanel';
 import { useSponsor } from '@/hooks/useSponsor';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { ArrowLeft, Handshake, KeyRound, Lock, Zap } from 'lucide-react';
@@ -231,17 +232,17 @@ function SetupGuide({ indexerUrl, apiKey }: { indexerUrl: string; apiKey: string
 					<span>
 						Real-Debrid and AllDebrid are answered from DMM&apos;s own library, so those
 						work the moment you paste the URL. TorBox, Premiumize and Offcloud have to
-						be asked directly, so each needs your key linked in{' '}
-						<Link href="/settings" className="underline decoration-dotted">
-							Settings
-						</Link>{' '}
-						first — not in this URL, which ends up in config files, forum posts and
-						server logs. Those three answer a few hundred releases per search and
-						remember what they learn, so a title with thousands fills in over the first
-						few searches. Debrid-Link is not offered: its API cannot be asked whether it
-						holds something without adding it, which would spend your quota on every
-						search.
+						be asked directly, so each needs a key of yours — linked below rather than
+						put in this URL, which ends up in config files, forum posts and server logs.
+						Those three answer a few hundred releases per search and remember what they
+						learn, so a title with thousands fills in over the first few searches.
+						Debrid-Link is not offered: its API cannot be asked whether it holds
+						something without adding it, which would spend your quota on every search.
 					</span>
+				</div>
+
+				<div className="mt-4">
+					<TorznabProviderPanel />
 				</div>
 			</Card>
 

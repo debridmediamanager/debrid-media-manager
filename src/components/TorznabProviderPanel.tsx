@@ -22,10 +22,15 @@ interface LinkedProvider {
  * Where a sponsor links the debrid key that a provider-backed Torznab feed
  * needs.
  *
- * Real-Debrid and AllDebrid are not offered here, and their absence is the
- * point: `/api/torznab/rd/cached` is answered from DMM's own tables, so it
- * already works for every sponsor and asking for an RD key would imply
- * otherwise. Only the providers DMM cannot answer for by itself appear.
+ * Lives on `/torznab`, inside the card that explains the feeds, rather than in
+ * Settings where it started. Reading "only what TorBox already holds" and then
+ * being sent to another page to make it work was one context switch too many,
+ * and the form has no meaning away from that explanation.
+ *
+ * Real-Debrid and AllDebrid are not offered, and their absence is the point:
+ * `/api/torznab/rd/cached` is answered from DMM's own tables, so it already
+ * works for every sponsor and asking for an RD key would imply otherwise. Only
+ * the providers DMM cannot answer for by itself appear.
  *
  * Shown to everyone. A non-sponsor sees exactly what the feature is and what
  * would open it, rather than a panel that is simply not there.
@@ -106,16 +111,12 @@ export const TorznabProviderPanel: FC = () => {
 		<div className="rounded border-2 border-cyan-500/30 p-4">
 			<div className="mb-1 flex items-center justify-center gap-2 text-center text-sm font-medium text-cyan-200">
 				<Filter className="h-4 w-4 text-cyan-400" />
-				Torznab availability filters
+				Link a provider key
 			</div>
 			<p className="mb-3 text-center text-xs text-gray-400">
-				The{' '}
-				<Link href="/torznab" className="text-blue-400 hover:underline">
-					torrent indexer
-				</Link>{' '}
-				can hide everything your debrid account does not already hold. Real-Debrid and
-				AllDebrid need nothing here — DMM answers those from its own library. The rest have
-				to be asked, so they need a key of yours.
+				Only the three that have to be asked. Each key is checked against that provider
+				before it is stored, so a typo is refused here rather than turning into an empty
+				feed a week from now.
 			</p>
 
 			{error && <p className="mb-2 text-center text-xs text-red-300">{error}</p>}
@@ -209,7 +210,11 @@ export const TorznabProviderPanel: FC = () => {
 					>
 						gatekeeper
 					</a>{' '}
-					and paste it in the Sponsorship box above.
+					and paste it in{' '}
+					<Link href="/settings" className="text-blue-300 underline hover:text-blue-200">
+						Settings
+					</Link>
+					.
 				</p>
 			)}
 		</div>

@@ -49,6 +49,15 @@ describe('SettingsSection', () => {
 		const checkbox = () =>
 			document.getElementById('dmm-hide-rd-blocked-torrents') as HTMLInputElement;
 
+		// The provider key form moved to /torznab, next to the feeds it configures.
+		// Settings keeps the sponsorship box, which is what opens it.
+		it('leaves the torznab provider keys to the page that explains them', () => {
+			render(<SettingsSection />);
+
+			expect(screen.queryByLabelText('TorBox API key')).toBeNull();
+			expect(screen.queryByText('Link a provider key')).toBeNull();
+		});
+
 		it('defaults on for a Real-Debrid-only user', () => {
 			localStorage.setItem('rd:accessToken', JSON.stringify('rd-token'));
 			render(<SettingsSection />);

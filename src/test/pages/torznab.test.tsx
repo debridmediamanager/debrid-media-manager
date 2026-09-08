@@ -7,6 +7,7 @@ const sponsorMock = vi.fn();
 vi.mock('@/hooks/useSponsor', () => ({
 	__esModule: true,
 	useSponsor: () => sponsorMock(),
+	sponsorHeaders: () => ({}),
 }));
 
 vi.mock('@/components/Logo', () => ({
@@ -189,6 +190,27 @@ describe('Torznab setup page, for a sponsor', () => {
 });
 
 describe('Torznab setup page, the feed variants', () => {
+	// The form used to live in Settings, so reading "only what TorBox already
+	// holds" sent you to another page to make it work. It belongs next to the
+	// sentence that explains it.
+	it('offers the provider key form on the page that explains the feeds', () => {
+		asSponsor();
+		render(<TorznabSetupPage />);
+
+		expect(screen.getByLabelText('TorBox API key')).toBeInTheDocument();
+		expect(screen.getByLabelText('Premiumize API key')).toBeInTheDocument();
+		expect(screen.getByLabelText('Offcloud API key')).toBeInTheDocument();
+	});
+
+	it('asks for no key for the caches DMM answers itself', () => {
+		asSponsor();
+		render(<TorznabSetupPage />);
+
+		expect(screen.queryByLabelText(/Real-Debrid API key/)).toBeNull();
+		expect(screen.queryByLabelText(/AllDebrid API key/)).toBeNull();
+		expect(screen.queryByLabelText(/Debrid-Link API key/)).toBeNull();
+	});
+
 	// The suffix list used to be one flat set of five URLs under the heading
 	// "Cached-only variants", three of which did not filter anything. The two
 	// choices are separate, so they are shown separately.
