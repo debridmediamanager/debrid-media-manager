@@ -62,22 +62,31 @@ const SEARCH_MODES = [
 
 /** The path variants, and what each one changes about the feed. */
 /**
- * The feed variants, split by where the availability answer comes from.
+ * The URL's first optional segment: whose cache decides a release's seeder
+ * count, and so what `/cached` would filter on.
  *
- * The `library` set is answered from DMM's own tables and works for every
- * sponsor with nothing else set up. The `linked` set has to ask the provider,
- * so each needs that provider's key linked in Settings first.
+ * The last three have no table in DMM and no anonymous way to be asked, so each
+ * needs that provider's own key linked before its feeds answer at all.
  */
-const FEEDS = [
-	{ suffix: '', what: 'Everything DMM has, cached or not' },
-	{ suffix: '/cached', what: 'Only releases already cached on Real-Debrid or AllDebrid' },
-	{ suffix: '/rd', what: 'Cache signal read from Real-Debrid only' },
-	{ suffix: '/ad', what: 'Cache signal read from AllDebrid only' },
-	{ suffix: '/rd/cached', what: 'Only what Real-Debrid already holds' },
-	{ suffix: '/ad/cached', what: 'Only what AllDebrid already holds' },
+const CACHE_SOURCES = [
+	{ segment: '', name: 'Real-Debrid or AllDebrid', note: 'the default — either one counts' },
+	{ segment: '/rd', name: 'Real-Debrid', note: '' },
+	{ segment: '/ad', name: 'AllDebrid', note: '' },
+	{ segment: '/tb', name: 'TorBox', note: 'needs your key linked' },
+	{ segment: '/pm', name: 'Premiumize', note: 'needs your key linked' },
+	{ segment: '/oc', name: 'Offcloud', note: 'needs your key linked' },
 ];
 
-const LINKED_FEEDS = [
+/**
+ * Whole URLs, so the two optional parts can be read combined rather than
+ * assembled in the reader's head.
+ */
+const FEED_EXAMPLES = [
+	{ suffix: '', what: 'Everything DMM has, cached releases ranked first' },
+	{ suffix: '/cached', what: 'Only what Real-Debrid or AllDebrid already holds' },
+	{ suffix: '/rd', what: 'Everything, with only Real-Debrid deciding the ranking' },
+	{ suffix: '/rd/cached', what: 'Only what Real-Debrid already holds' },
+	{ suffix: '/ad/cached', what: 'Only what AllDebrid already holds' },
 	{ suffix: '/tb/cached', what: 'Only what TorBox already holds' },
 	{ suffix: '/pm/cached', what: 'Only what Premiumize already holds' },
 	{ suffix: '/oc/cached', what: 'Only what Offcloud already holds' },
@@ -142,60 +151,96 @@ function SetupGuide({ indexerUrl, apiKey }: { indexerUrl: string; apiKey: string
 				</p>
 			</Card>
 
-			<Card title="3. Cached-only variants">
+			<Card title="3. Which cache, and whether to filter">
 				<p className="mb-3 text-gray-300">
-					Every release is reported with a seeder count that says whether it is already
-					cached on a debrid service — cached releases come back as 100 seeders,
-					everything else as 1 — because nothing here is downloaded from a swarm. Add a
-					suffix to the URL to narrow the feed instead:
+					Nothing here comes off a swarm, so <strong>seeders</strong> is repurposed: a
+					release your debrid account can grab instantly comes back as 100 seeders, and
+					everything else as 1. Prowlarr, Sonarr and Radarr rank on that number, so the
+					plain URL already puts what you can actually grab at the top. Most people need
+					nothing below this line.
 				</p>
+				<p className="mb-3 text-gray-300">
+					If you want more than ranking, the URL takes two optional parts, in this order:
+				</p>
+				<div className="mb-4 overflow-x-auto rounded bg-gray-900/60 px-3 py-3">
+					<code className="whitespace-nowrap font-mono text-sm text-gray-300">
+						/api/torznab
+						<span className="rounded bg-cyan-500/20 px-1 text-cyan-300">
+							[/service]
+						</span>
+						<span className="rounded bg-purple-500/20 px-1 text-purple-300">
+							[/cached]
+						</span>
+					</code>
+				</div>
+
+				<div className="mb-1 text-sm font-semibold text-cyan-300">
+					/service — whose cache sets that seeder count
+				</div>
 				<div className="rounded bg-gray-900/60 px-3 py-1">
-					{FEEDS.map(({ suffix, what }) => (
+					{CACHE_SOURCES.map(({ segment, name, note }) => (
+						<div
+							key={segment || 'any'}
+							data-testid={`source-${segment || 'any'}`}
+							className="flex flex-col gap-1 border-b border-gray-700/60 py-2.5 last:border-b-0 sm:flex-row sm:items-baseline sm:gap-3"
+						>
+							<code className="w-28 shrink-0 font-mono text-sm text-cyan-300">
+								{segment || '(nothing)'}
+							</code>
+							<div className="min-w-0 flex-1 text-sm text-gray-200">{name}</div>
+							{note ? (
+								<div className="text-xs text-gray-400 sm:w-48 sm:shrink-0">
+									{note}
+								</div>
+							) : null}
+						</div>
+					))}
+				</div>
+
+				<div className="mb-1 mt-4 text-sm font-semibold text-purple-300">
+					/cached — drop the rest instead of just ranking it lower
+				</div>
+				<p className="text-xs text-gray-400">
+					Without it the feed carries everything and the seeder count does the sorting.
+					With it, anything that cache does not already hold is left out of the feed
+					entirely — use it when you would rather import nothing than wait on a download.
+				</p>
+
+				<div className="mb-1 mt-4 text-sm font-semibold text-gray-200">Put together</div>
+				<div className="rounded bg-gray-900/60 px-3 py-1">
+					{FEED_EXAMPLES.map(({ suffix, what }) => (
 						<div
 							key={suffix || 'plain'}
 							data-testid={`feed-${suffix || 'plain'}`}
 							className="flex flex-col gap-1 border-b border-gray-700/60 py-2.5 last:border-b-0 sm:flex-row sm:items-baseline sm:gap-3"
 						>
-							<code className="w-40 shrink-0 font-mono text-sm text-cyan-300">
+							<code className="w-56 shrink-0 font-mono text-sm text-cyan-300">
 								/api/torznab{suffix}
 							</code>
 							<div className="min-w-0 flex-1 text-xs text-gray-400">{what}</div>
 						</div>
 					))}
 				</div>
-
-				<p className="mb-3 mt-4 text-gray-300">
-					Real-Debrid and AllDebrid are answered out of DMM&apos;s own library, so those
-					work as soon as you paste the URL. The rest have no such table and no way to be
-					asked anonymously, so they use a key of yours, linked once in{' '}
-					<Link href="/settings" className="underline decoration-dotted">
-						Settings
-					</Link>{' '}
-					rather than put in the URL — an indexer URL ends up in config files, forum posts
-					and server logs.
+				<p className="mt-3 text-xs text-gray-400">
+					Remember an *arr appends <code className="text-cyan-300">/api</code> itself, so
+					what you paste into the URL field is the line above and nothing more.
 				</p>
-				<div className="rounded bg-gray-900/60 px-3 py-1">
-					{LINKED_FEEDS.map(({ suffix, what }) => (
-						<div
-							key={suffix}
-							data-testid={`feed-${suffix}`}
-							className="flex flex-col gap-1 border-b border-gray-700/60 py-2.5 last:border-b-0 sm:flex-row sm:items-baseline sm:gap-3"
-						>
-							<code className="w-40 shrink-0 font-mono text-sm text-cyan-300">
-								/api/torznab{suffix}
-							</code>
-							<div className="min-w-0 flex-1 text-xs text-gray-400">{what}</div>
-						</div>
-					))}
-				</div>
-				<div className="mt-3 flex gap-2 rounded border-2 border-yellow-500/30 p-3 text-xs text-gray-300">
+
+				<div className="mt-4 flex gap-2 rounded border-2 border-yellow-500/30 p-3 text-xs text-gray-300">
 					<Zap className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
 					<span>
-						A linked feed asks the provider about a few hundred hashes per search and
-						remembers the answers, so a title with thousands of releases fills in over
-						the first few searches rather than all at once. Debrid-Link is not offered:
-						its API has no way to ask whether a hash is held without adding it, which
-						would spend your quota on every search.
+						Real-Debrid and AllDebrid are answered from DMM&apos;s own library, so those
+						work the moment you paste the URL. TorBox, Premiumize and Offcloud have to
+						be asked directly, so each needs your key linked in{' '}
+						<Link href="/settings" className="underline decoration-dotted">
+							Settings
+						</Link>{' '}
+						first — not in this URL, which ends up in config files, forum posts and
+						server logs. Those three answer a few hundred releases per search and
+						remember what they learn, so a title with thousands fills in over the first
+						few searches. Debrid-Link is not offered: its API cannot be asked whether it
+						holds something without adding it, which would spend your quota on every
+						search.
 					</span>
 				</div>
 			</Card>

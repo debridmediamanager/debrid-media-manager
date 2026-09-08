@@ -148,9 +148,10 @@ describe('Torznab setup page, for a sponsor', () => {
 		asSponsor();
 		render(<TorznabSetupPage />);
 
-		expect(screen.getByText(/already\s+cached on a debrid service/)).toBeTruthy();
+		expect(screen.getByText(/your debrid account can grab instantly/)).toBeTruthy();
 		expect(screen.getByTestId('feed-/cached')).toBeTruthy();
 		expect(screen.getByTestId('feed-/rd/cached')).toBeTruthy();
+		expect(screen.getByTestId('feed-/tb/cached')).toBeTruthy();
 	});
 
 	it('advertises the movie and TV categories', () => {
@@ -184,6 +185,45 @@ describe('Torznab setup page, for a sponsor', () => {
 
 		expect(screen.queryByRole('link', { name: 'Patreon' })).toBeNull();
 		expect(screen.queryByText('A sponsor feature')).toBeNull();
+	});
+});
+
+describe('Torznab setup page, the feed variants', () => {
+	// The suffix list used to be one flat set of five URLs under the heading
+	// "Cached-only variants", three of which did not filter anything. The two
+	// choices are separate, so they are shown separately.
+	it('names each cache the seeder count can come from', () => {
+		asSponsor();
+		render(<TorznabSetupPage />);
+
+		for (const segment of ['any', '/rd', '/ad', '/tb', '/pm', '/oc']) {
+			expect(screen.getByTestId(`source-${segment}`)).toBeTruthy();
+		}
+	});
+
+	it('says which of those need a key linked first', () => {
+		asSponsor();
+		render(<TorznabSetupPage />);
+
+		for (const segment of ['/tb', '/pm', '/oc']) {
+			expect(screen.getByTestId(`source-${segment}`)).toHaveTextContent(
+				'needs your key linked'
+			);
+		}
+		for (const segment of ['any', '/rd', '/ad']) {
+			expect(screen.getByTestId(`source-${segment}`)).not.toHaveTextContent(
+				'needs your key linked'
+			);
+		}
+	});
+
+	// The point most readers need is that they probably need no suffix at all.
+	it('explains that the plain feed already ranks cached releases first', () => {
+		asSponsor();
+		render(<TorznabSetupPage />);
+
+		expect(screen.getByText(/100 seeders/)).toBeTruthy();
+		expect(screen.getByText(/Most people need nothing below this line/)).toBeTruthy();
 	});
 });
 
