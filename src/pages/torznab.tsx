@@ -93,7 +93,21 @@ const FEED_EXAMPLES = [
 	{ suffix: '/oc/cached', what: 'Only what Offcloud already holds' },
 ];
 
-function SetupGuide({ indexerUrl, apiKey }: { indexerUrl: string; apiKey: string | null }) {
+/**
+ * `needsKeySource` is true only when this browser holds a sponsorship but no
+ * key: the sponsor pitch is hidden then, so this note is the one place left to
+ * say where a key comes from. A visitor already has that sentence in the pitch
+ * above, and repeating it here said the same thing twice on one page.
+ */
+function SetupGuide({
+	indexerUrl,
+	apiKey,
+	needsKeySource,
+}: {
+	indexerUrl: string;
+	apiKey: string | null;
+	needsKeySource: boolean;
+}) {
 	return (
 		<>
 			<Card title="1. Paste this into Prowlarr / Sonarr / Radarr">
@@ -111,19 +125,27 @@ function SetupGuide({ indexerUrl, apiKey }: { indexerUrl: string; apiKey: string
 				<div className="mt-3 flex gap-2 rounded border-2 border-yellow-500/30 p-3 text-xs text-gray-300">
 					<KeyRound className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
 					<span>
-						The key is the same 64-character DMM API key you get by connecting your
-						GitHub account on{' '}
-						<a
-							href={GATEKEEPER_URL}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="underline decoration-dotted"
-						>
-							gatekeeper
-						</a>
-						, and the same one the Usenet indexer uses. Once you have linked it in
-						Settings this browser remembers it, and the copy button above hands over the
-						whole key without putting it on screen.
+						The same 64-character DMM API key works for the Usenet indexer too.{' '}
+						{needsKeySource ? (
+							<>
+								Get it by connecting your GitHub account on{' '}
+								<a
+									href={GATEKEEPER_URL}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="underline decoration-dotted"
+								>
+									gatekeeper
+								</a>
+								, then paste it in{' '}
+								<Link href="/settings" className="underline decoration-dotted">
+									Settings
+								</Link>{' '}
+								to fill it in here.
+							</>
+						) : (
+							'This browser remembers it once linked, and the copy button above hands over the whole key without putting it on screen.'
+						)}
 					</span>
 				</div>
 			</Card>
@@ -386,7 +408,11 @@ export default function TorznabSetupPage() {
 				</header>
 
 				{isSponsor ? null : <SponsorPitch />}
-				<SetupGuide indexerUrl={indexerUrl} apiKey={apiKey} />
+				<SetupGuide
+					indexerUrl={indexerUrl}
+					apiKey={apiKey}
+					needsKeySource={isSponsor && !apiKey}
+				/>
 			</div>
 		</div>
 	);

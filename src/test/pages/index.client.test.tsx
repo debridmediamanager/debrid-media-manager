@@ -91,7 +91,6 @@ vi.mock('@/utils/withAuth', () => ({
 vi.mock('lucide-react', () => ({
 	__esModule: true,
 	FolderTree: () => <svg data-testid="folder-tree-icon" />,
-	Handshake: () => <svg data-testid="handshake-icon" />,
 	Settings: () => <svg data-testid="settings-icon" />,
 	Star: () => <svg data-testid="star-icon" />,
 	X: () => <svg data-testid="x-icon" />,
@@ -400,20 +399,18 @@ describe('IndexPage', () => {
 		expect(message).toMatch(/card below/i);
 	});
 
-	// The megaphone beside the title went to Patreon, which is one of three
-	// funding destinations DMM used to name. gatekeeper is the only one now: it
-	// takes the payment and it mints the DMM API key the sponsor features want.
-	it('sends the header sponsor link to gatekeeper and nowhere else', () => {
+	// The megaphone beside the title went to Patreon. gatekeeper replaced it and
+	// then took it away again: the info card below already says where to sponsor,
+	// so a second link in the header was the same offer twice on one page.
+	it('leaves the sponsorship offer to the info card alone', () => {
 		currentUserMock.mockReturnValue(settledFixture);
 
 		render(<IndexPage />);
 
-		expect(screen.getByRole('link', { name: 'Sponsor DMM' }).getAttribute('href')).toBe(
-			'https://gatekeeper.debridmediamanager.com'
-		);
+		expect(screen.queryByRole('link', { name: 'Sponsor DMM' })).toBeNull();
 		for (const link of screen.getAllByRole('link')) {
 			expect(link.getAttribute('href')).not.toMatch(
-				/patreon\.com|paypal\.me|github\.com\/sponsors/
+				/patreon\.com|paypal\.me|github\.com\/sponsors|gatekeeper\./
 			);
 		}
 	});

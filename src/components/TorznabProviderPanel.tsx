@@ -1,5 +1,4 @@
 import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
-import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import {
 	LIVE_SERVICE_KEY_SOURCES,
 	LIVE_SERVICE_LABELS,
@@ -7,7 +6,6 @@ import {
 	type TorznabLiveService,
 } from '@/utils/sponsorProviders';
 import { Filter, Trash2 } from 'lucide-react';
-import Link from 'next/link';
 import { FC, FormEvent, useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -201,20 +199,7 @@ export const TorznabProviderPanel: FC = () => {
 
 			{!isSponsor && (
 				<p className="mt-3 text-center text-xs text-gray-400">
-					Linking a key is a sponsor feature. Get your DMM API key on{' '}
-					<a
-						href={GATEKEEPER_URL}
-						target="_blank"
-						rel="noopener noreferrer"
-						className="text-blue-300 underline hover:text-blue-200"
-					>
-						gatekeeper
-					</a>{' '}
-					and paste it in{' '}
-					<Link href="/settings" className="text-blue-300 underline hover:text-blue-200">
-						Settings
-					</Link>
-					.
+					Linking a key is a sponsor feature.
 				</p>
 			)}
 		</div>

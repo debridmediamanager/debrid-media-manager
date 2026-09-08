@@ -71,16 +71,15 @@ describe('TorznabProviderPanel', () => {
 		expect(screen.getByText('/api/torznab/oc/cached')).toBeInTheDocument();
 	});
 
-	// Visible to everyone, in the shape the rest of Settings uses: the feature
-	// is described and the way in is named rather than the panel being absent.
-	it('shows a non-sponsor the panel, disabled, with the way in', () => {
+	// Visible to everyone rather than absent: the feature is described and the
+	// fields are shown, disabled. Where a sponsorship comes from is left to the
+	// pitch on the page that renders this panel, which says it once.
+	it('shows a non-sponsor the panel, disabled, and does not repeat the pitch', () => {
 		render(<TorznabProviderPanel />);
 
 		expect(screen.getByLabelText('TorBox API key')).toBeDisabled();
-		expect(screen.getByRole('link', { name: 'gatekeeper' })).toHaveAttribute(
-			'href',
-			'https://gatekeeper.debridmediamanager.com'
-		);
+		expect(screen.getByText('Linking a key is a sponsor feature.')).toBeInTheDocument();
+		expect(screen.queryByRole('link', { name: 'gatekeeper' })).toBeNull();
 	});
 
 	it('sends the sponsor token when it links a key', async () => {

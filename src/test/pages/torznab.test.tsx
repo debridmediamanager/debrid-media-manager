@@ -284,9 +284,13 @@ describe('Torznab setup page, for everyone else', () => {
 		render(<TorznabSetupPage />);
 
 		expect(screen.getByText('A sponsor feature')).toBeTruthy();
-		for (const link of screen.getAllByRole('link', { name: 'gatekeeper' })) {
-			expect(link.getAttribute('href')).toBe('https://gatekeeper.debridmediamanager.com');
-		}
+		// Once. The setup guide below used to repeat the whole "connect your
+		// GitHub account on gatekeeper" sentence, so a visitor read the same
+		// instruction twice on one page.
+		expect(screen.getAllByRole('link', { name: 'gatekeeper' })).toHaveLength(1);
+		expect(screen.getByRole('link', { name: 'gatekeeper' }).getAttribute('href')).toBe(
+			'https://gatekeeper.debridmediamanager.com'
+		);
 		for (const link of screen.getAllByRole('link')) {
 			expect(link.getAttribute('href')).not.toMatch(
 				/patreon\.com|paypal\.me|github\.com\/sponsors/
