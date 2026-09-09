@@ -26,6 +26,13 @@ const AUTH_TTL_MS = 23 * 60 * 60 * 1000;
 
 /** Reads are on a page's critical path; a slow B2 must lose to the indexer. */
 const READ_TIMEOUT_MS = 5000;
+/**
+ * A plugin ZIP is ~100 KB but is fetched by an installer that is already waiting,
+ * so it gets a longer budget than a page-critical NZB read.
+ */
+const OBJECT_READ_TIMEOUT_MS = 20000;
+/** A publish uploads a few hundred KB from a laptop, not from the swarm. */
+const OBJECT_WRITE_TIMEOUT_MS = 60000;
 /** Writes carry the NZB body, which runs to a few MB on a large season pack. */
 const WRITE_TIMEOUT_MS = 15000;
 /** Control calls (authorize, list buckets, get upload url) carry no payload. */
@@ -141,6 +148,42 @@ async function callWithAuth(
 }
 
 /**
+ * Reads any object out of the same bucket, as bytes.
+ *
+ * The Jellyfin plugin catalog keeps its ZIPs and images here rather than in this
+ * repository, which is public. It shares this module because it shares the
+ * bucket and the authorization: a second B2 client would mean a second token
+ * refresh and a second way to get the 401 retry wrong. Unlike the NZB paths this
+ * one does **not** degrade a failure to a miss silently for the caller's
+ * benefit - it still answers `null`, but the caller is serving a download rather
+ * than falling through to an indexer, so it turns that into a 502.
+ *
+ * @param objectKey Full object key inside the bucket, unencoded.
+ * @returns The bytes, or `null` on any failure.
+ */
+export async function getStoredObject(objectKey: string): Promise<Buffer | null> {
+	const config = getConfig();
+	if (!config) return null;
+
+	const key = encodeObjectKey(objectKey);
+	try {
+		const res = await callWithAuth(config, (state) =>
+			fetch(`${state.downloadUrl}/file/${config.bucketName}/${key}`, {
+				headers: { Authorization: state.token },
+				signal: AbortSignal.timeout(OBJECT_READ_TIMEOUT_MS),
+			})
+		);
+		if (!res.ok) return null;
+
+		const bytes = Buffer.from(await res.arrayBuffer());
+		return bytes.length > 0 ? bytes : null;
+	} catch (error) {
+		console.error('Error reading object from B2:', error);
+		return null;
+	}
+}
+
+/**
  * The B2 file name for a release.
  *
  * `nativeId` is indexer-supplied, so it is encoded before it becomes a path
@@ -240,6 +283,63 @@ export async function getStoredNzb(prefix: string, nativeId: string): Promise<st
 	} catch (error) {
 		console.error('Error reading NZB from B2:', error);
 		return null;
+	}
+}
+
+/**
+ * Writes any object into the same bucket.
+ *
+ * Used by the Jellyfin plugin publish script rather than by a request path, so
+ * unlike the NZB write it reports the failure to its caller: publishing half a
+ * catalog silently would leave sponsors installing a version that is not there.
+ *
+ * @param objectKey Full object key inside the bucket, unencoded.
+ * @param body The bytes to store.
+ * @param contentType The type to serve them back as.
+ * @returns Whether the object landed.
+ */
+export async function putStoredObject(
+	objectKey: string,
+	body: Buffer,
+	contentType: string
+): Promise<boolean> {
+	const config = getConfig();
+	if (!config) return false;
+
+	const key = encodeObjectKey(objectKey);
+	const sha1 = createHash('sha1').update(body).digest('hex');
+
+	const attempt = async (state: AuthState): Promise<MaybeUnauthorized<boolean>> => {
+		const bucketId = await resolveBucketId(config, state);
+		if (bucketId === UNAUTHORIZED) return UNAUTHORIZED;
+		if (!bucketId) return false;
+
+		const target = await getUploadTarget(bucketId, state);
+		if (target === UNAUTHORIZED) return UNAUTHORIZED;
+		if (!target) return false;
+
+		const res = await fetch(target.uploadUrl, {
+			method: 'POST',
+			headers: {
+				Authorization: target.token,
+				'X-Bz-File-Name': key,
+				'Content-Type': contentType,
+				'X-Bz-Content-Sha1': sha1,
+			},
+			body: new Uint8Array(body),
+			signal: AbortSignal.timeout(OBJECT_WRITE_TIMEOUT_MS),
+		});
+		if (res.status === 401) return UNAUTHORIZED;
+		return res.ok;
+	};
+
+	try {
+		const outcome = await attempt(await getAuth(config));
+		if (outcome !== UNAUTHORIZED) return outcome;
+		return (await attempt(await getAuth(config, true))) === true;
+	} catch (error) {
+		console.error('Error writing object to B2:', error);
+		return false;
 	}
 }
 
