@@ -2,31 +2,29 @@
  * Publishes built Jellyfin plugin ZIPs to the sponsor-gated catalog.
  *
  * The plugin repositories are private and this one is public, so the artifacts
- * live in the same B2 bucket the Newznab store uses and are served by
- * `/api/plugins/*` to sponsors only. Nothing is committed here.
+ * live in a B2 bucket and are served by `/api/plugins/*` to sponsors only.
+ * Nothing is committed here.
  *
  *   npx tsx scripts/publish-jellyfin-plugins.ts path/to/rd-zurg_1.0.2.0.zip …
  *   npx tsx scripts/publish-jellyfin-plugins.ts --apply path/to/*.zip
  *
- * The plugin's `build.sh` leaves an unpacked directory beside every ZIP, so the
- * `meta.json` and `thumb.png` are read from there rather than by unpacking the
- * archive — which keeps this repository free of a zip dependency it would
- * otherwise carry for one script. The catalog's version, GUID, ABI and
- * description therefore always come from the artifact rather than being
- * restated here.
+ * It posts to `/api/plugins/publish` rather than writing the bucket directly, so
+ * a publish from a laptop and a publish from a plugin repository's release job
+ * take the same path: one writer, the same merge, and the bucket credentials
+ * only ever on the server. Set `DMM_PUBLISH_TOKEN`, and `DMM_PUBLISH_URL` when
+ * targeting something other than production.
  *
- * Publishing replaces `catalog.json` wholesale, so pass every plugin you want
- * listed, not just the one that changed.
+ * The plugin's `build.sh` leaves an unpacked directory beside every ZIP, so the
+ * `meta.json` and card image are read from there rather than by unpacking the
+ * archive, which keeps this repository free of a zip dependency.
+ *
+ * Each plugin is published on its own. Publishing one leaves the others in the
+ * catalog untouched, so there is no need to pass all four.
  */
-import { createHash } from 'crypto';
 import { readFile } from 'fs/promises';
 import path from 'path';
-import {
-	CATALOG_OBJECT_KEY,
-	pluginObjectKey,
-	type PublishedPlugin,
-} from '../src/services/jellyfinPlugins/catalog';
-import { putStoredObject } from '../src/services/newznab/store';
+
+const DEFAULT_URL = 'https://debridmediamanager.com';
 
 interface PluginMeta {
 	category: string;
@@ -43,14 +41,16 @@ interface PluginMeta {
 }
 
 interface Prepared {
-	plugin: PublishedPlugin;
-	uploads: { key: string; body: Buffer; contentType: string }[];
+	file: string;
+	meta: PluginMeta;
+	zip: Buffer;
+	image: Buffer | null;
 }
 
 async function prepare(file: string): Promise<Prepared> {
 	if (!file.endsWith('.zip')) throw new Error(`${file} is not a .zip`);
 
-	const bytes = await readFile(file);
+	const zip = await readFile(file);
 	const zipName = path.basename(file);
 	// build.sh writes `artifacts/<slug>_<version>/` beside `<slug>_<version>.zip`.
 	const unpacked = file.slice(0, -'.zip'.length);
@@ -64,45 +64,28 @@ async function prepare(file: string): Promise<Prepared> {
 		);
 	}
 
-	const uploads: Prepared['uploads'] = [
-		{ key: pluginObjectKey(zipName), body: bytes, contentType: 'application/zip' },
-	];
+	const image = meta.imagePath ? await readFile(path.join(unpacked, meta.imagePath)) : null;
 
-	// The card image is part of the package; taking the same file means the
-	// catalog listing and the installed plugin can never show different art.
-	let image: string | undefined;
-	if (meta.imagePath) {
-		image = `${zipName.replace(/\.zip$/, '')}.png`;
-		uploads.push({
-			key: pluginObjectKey(image),
-			body: await readFile(path.join(unpacked, meta.imagePath)),
-			contentType: 'image/png',
-		});
+	return { file: zipName, meta, zip, image };
+}
+
+async function publish(prepared: Prepared, base: string, token: string): Promise<void> {
+	const response = await fetch(`${base.replace(/\/+$/, '')}/api/plugins/publish`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json', 'x-publish-token': token },
+		body: JSON.stringify({
+			file: prepared.file,
+			zip: prepared.zip.toString('base64'),
+			meta: prepared.meta,
+			image: prepared.image ? prepared.image.toString('base64') : null,
+		}),
+	});
+
+	const text = await response.text();
+	if (!response.ok) {
+		throw new Error(`${prepared.file}: HTTP ${response.status} ${text.slice(0, 300)}`);
 	}
-
-	return {
-		plugin: {
-			category: meta.category,
-			description: meta.description,
-			guid: meta.guid,
-			name: meta.name,
-			overview: meta.overview,
-			owner: meta.owner,
-			...(image ? { image } : {}),
-			versions: [
-				{
-					version: meta.version,
-					changelog: meta.changelog,
-					targetAbi: meta.targetAbi,
-					file: zipName,
-					// MD5 is what Jellyfin's installer verifies, not SHA-256.
-					checksum: createHash('md5').update(bytes).digest('hex'),
-					timestamp: meta.timestamp,
-				},
-			],
-		},
-		uploads,
-	};
+	console.log(`published ${prepared.file}  ${text.slice(0, 300)}`);
 }
 
 async function main() {
@@ -116,38 +99,29 @@ async function main() {
 	}
 
 	const prepared = await Promise.all(files.map(prepare));
-	const catalog = prepared.map((entry) => entry.plugin);
 
-	for (const { plugin, uploads } of prepared) {
-		const version = plugin.versions[0];
+	for (const { file, meta, zip, image } of prepared) {
 		console.log(
-			`${plugin.name} ${version.version}  abi ${version.targetAbi}  md5 ${version.checksum}`
+			`${meta.name} ${meta.version}  abi ${meta.targetAbi}  ${zip.length} bytes` +
+				(image ? ` + ${image.length} byte image` : '')
 		);
-		for (const upload of uploads) console.log(`   ${upload.key} (${upload.body.length} bytes)`);
+		console.log(`   -> ${file}`);
 	}
-
-	const catalogBody = Buffer.from(JSON.stringify(catalog, null, 2) + '\n', 'utf8');
-	console.log(`   ${CATALOG_OBJECT_KEY} (${catalogBody.length} bytes)`);
 
 	if (!apply) {
 		console.log('\nDry run. Re-run with --apply to publish.');
 		return;
 	}
 
-	// Artifacts before the descriptor: a catalog that names a file nobody can
-	// download is worse than one that has not been updated yet.
-	for (const { uploads } of prepared) {
-		for (const upload of uploads) {
-			const ok = await putStoredObject(upload.key, upload.body, upload.contentType);
-			if (!ok) throw new Error(`Failed to upload ${upload.key}`);
-			console.log(`uploaded ${upload.key}`);
-		}
-	}
+	const token = process.env.DMM_PUBLISH_TOKEN;
+	if (!token) throw new Error('DMM_PUBLISH_TOKEN is not set');
+	const base = process.env.DMM_PUBLISH_URL || DEFAULT_URL;
 
-	if (!(await putStoredObject(CATALOG_OBJECT_KEY, catalogBody, 'application/json'))) {
-		throw new Error('Uploaded the artifacts but failed to write the catalog');
+	// One at a time. The endpoint merges each publish into the catalog, so two
+	// at once could read the same catalog and one would lose its entry.
+	for (const entry of prepared) {
+		await publish(entry, base, token);
 	}
-	console.log(`uploaded ${CATALOG_OBJECT_KEY}`);
 }
 
 main().catch((error) => {
