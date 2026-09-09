@@ -71,6 +71,12 @@ describe('SponsorPanel', () => {
 			'href',
 			'/torznab'
 		);
+		// Shipped after this list was written and left out of it, so it is asserted
+		// by name rather than covered by "the panel lists some perks".
+		expect(screen.getByRole('link', { name: 'Jellyfin plugins' })).toHaveAttribute(
+			'href',
+			'/jellyfin'
+		);
 		expect(screen.getByText('Ten other streams in Stremio Cast')).toBeInTheDocument();
 		expect(screen.getByText('Skip the queue')).toBeInTheDocument();
 	});

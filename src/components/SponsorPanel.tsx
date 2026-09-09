@@ -12,6 +12,11 @@ import { SponsorBadge } from './SponsorBadge';
  * Each of these is reachable and documented without a key, so the links go to
  * the real pages rather than to a paywall: the setup guides read the same for
  * everyone, and only the endpoints behind them check the key.
+ *
+ * Anything gated on the sponsor token or on `Sponsors.dmmApiKey` belongs in this
+ * list. The Jellyfin plugin repository shipped without being added to it, so for
+ * a few days the only page that offers a sponsorship left out the newest reason
+ * to take one.
  */
 const PERKS: { href?: string; name: string; what: string }[] = [
 	{
@@ -23,6 +28,11 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 		href: '/torznab',
 		name: 'Torrent indexer',
 		what: "DMM's torrent library as a Torznab indexer",
+	},
+	{
+		href: '/jellyfin',
+		name: 'Jellyfin plugins',
+		what: 'your Real-Debrid, AllDebrid, TorBox and Usenet libraries inside Jellyfin, with nothing mounted',
 	},
 	{
 		name: 'Ten other streams in Stremio Cast',
