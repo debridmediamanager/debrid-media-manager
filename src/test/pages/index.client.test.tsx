@@ -322,7 +322,7 @@ describe('IndexPage', () => {
 
 		const refreshButton = screen.getByRole('button', { name: /Refresh/i });
 		const clearCacheButton = screen.getByRole('button', { name: /Clear library cache/i });
-		const logoutButton = screen.getByRole('button', { name: /Logout All/i });
+		const logoutButton = screen.getByRole('button', { name: /Clear browser data/i });
 
 		expect(refreshButton.className).toBe(clearCacheButton.className);
 		expect(logoutButton.className).toBe(refreshButton.className);

@@ -11,7 +11,7 @@ import { useCurrentUser, useDebridLogin } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/castToken';
 import { useTorBoxCastToken } from '@/hooks/torboxCastToken';
 import { getTerms } from '@/utils/browseTerms';
-import { disableGuestMode, useGuestMode } from '@/utils/guestMode';
+import { useGuestMode } from '@/utils/guestMode';
 import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
 import { genericToastOptions } from '@/utils/toastOptions';
@@ -181,14 +181,6 @@ function IndexPage() {
 	const handleClearCache = async () => {
 		localStorage.setItem('next_action', 'clear_cache');
 		window.location.assign('/');
-	};
-
-	// Guest mode is the only thing this drops. Anything the browser picked up
-	// while in it - a linked sponsor key, a Trakt login - belongs to the person,
-	// not to the mode, and "Logout All" is still there for clearing those.
-	const handleExitGuestMode = () => {
-		disableGuestMode();
-		router.push('/start');
 	};
 
 	const handleClearLocalStorage = () => {
@@ -376,20 +368,17 @@ function IndexPage() {
 							>
 								Clear library cache
 							</button>
+							{/* One button, whoever is looking at it. Guest mode used
+							    to have its own narrower exit next to this one, and
+							    the pair read as the same action: both landed on
+							    /start, and the difference - whether a linked DMM API
+							    key survived - was invisible from the labels. */}
 							<button
 								onClick={async () => await handleLogout(undefined, router)}
 								className={actionButtonClasses}
 							>
-								Logout All
+								Clear browser data
 							</button>
-							{isGuest && (
-								<button
-									onClick={handleExitGuestMode}
-									className={actionButtonClasses}
-								>
-									Exit guest mode
-								</button>
-							)}
 						</div>
 					</div>
 				</>

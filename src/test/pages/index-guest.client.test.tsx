@@ -4,7 +4,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const currentUserMock = vi.fn();
 
-const { pushMock, toastMock } = vi.hoisted(() => ({
+const { handleLogoutMock, pushMock, toastMock } = vi.hoisted(() => ({
+	handleLogoutMock: vi.fn(),
 	pushMock: vi.fn(),
 	toastMock: Object.assign(vi.fn(), { success: vi.fn(), error: vi.fn() }),
 }));
@@ -88,7 +89,7 @@ vi.mock('@/utils/browseTerms', () => ({
 
 vi.mock('@/utils/logout', () => ({
 	__esModule: true,
-	handleLogout: vi.fn(),
+	handleLogout: handleLogoutMock,
 }));
 
 vi.mock('@/utils/premiumCheck', () => ({
@@ -133,7 +134,8 @@ vi.mock('react-hot-toast', () => ({
 }));
 
 import IndexPage from '@/pages/index';
-import { GUEST_MODE_KEY, isGuestMode } from '@/utils/guestMode';
+import { GUEST_MODE_KEY } from '@/utils/guestMode';
+import { handleLogout } from '@/utils/logout';
 
 const DEBRID_SERVICES = ['rd', 'ad', 'tb', 'pm', 'oc', 'dl'];
 
@@ -166,6 +168,7 @@ describe('IndexPage in guest mode', () => {
 	beforeEach(() => {
 		localStorage.clear();
 		pushMock.mockReset();
+		handleLogoutMock.mockReset();
 		currentUserMock.mockReset();
 		currentUserMock.mockReturnValue(signedOutFixture);
 	});
@@ -199,15 +202,21 @@ describe('IndexPage in guest mode', () => {
 		expect(disclosure).not.toContainElement(screen.getByTestId('service-card-trakt'));
 	});
 
-	it('lets a guest hand the browser back to the login page', () => {
+	// Guest mode used to carry its own narrower exit beside this button, and the
+	// pair read as one action: both landed on /start, and the only difference -
+	// whether a linked DMM API key survived - was invisible from the labels.
+	it('offers one way out, the same one everybody else gets', () => {
 		localStorage.setItem(GUEST_MODE_KEY, 'true');
 
 		render(<IndexPage />);
 
-		fireEvent.click(screen.getByText('Exit guest mode'));
+		expect(screen.queryByText('Exit guest mode')).toBeNull();
+		expect(screen.queryByText('Logout All')).toBeNull();
 
-		expect(isGuestMode()).toBe(false);
-		expect(pushMock).toHaveBeenCalledWith('/start');
+		fireEvent.click(screen.getByRole('button', { name: /Clear browser data/i }));
+
+		// handleLogout drops every key, guest mode included, then leaves on /start.
+		expect(handleLogout).toHaveBeenCalledWith(undefined, expect.anything());
 	});
 
 	// Settings is why guest mode exists: it is where a sponsor links the DMM API
@@ -234,7 +243,6 @@ describe('IndexPage in guest mode', () => {
 
 		expect(container.querySelector('details')).toBeNull();
 		expect(screen.queryByText('You are browsing as a guest')).toBeNull();
-		expect(screen.queryByText('Exit guest mode')).toBeNull();
 		expect(screen.getByTestId('main-actions')).toHaveAttribute('data-guest', 'false');
 		for (const service of DEBRID_SERVICES) {
 			expect(screen.getByTestId(`service-card-${service}`)).toBeInTheDocument();
