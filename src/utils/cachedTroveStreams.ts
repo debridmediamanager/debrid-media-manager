@@ -1,5 +1,6 @@
 import type { ScrapeSearchResult } from '@/services/mediasearch';
 import { repository } from '@/services/repository';
+import { MAX_SIZE_MB, MIN_SIZE_MB } from '@/utils/releaseSize';
 import ptt from 'parse-torrent-title';
 
 export interface TroveStreamCandidate {
@@ -18,15 +19,6 @@ export interface TroveCandidateOptions {
 	maxCount?: number;
 }
 
-/** Junk floor shared with the cast pool's `size > 10` filter, in MB. */
-const MIN_SIZE_MB = 10;
-/**
- * Scraper noise ceiling, in MB. Some rows carry bytes or kilobytes where the
- * column means megabytes (a 1080p WEBRip stored as 29000000 read as 28 TB);
- * no real single-video release is half a terabyte, so anything over this is
- * unit noise, not a candidate.
- */
-const MAX_SIZE_MB = 500 * 1024;
 /**
  * Titles the detail page hides - its SQL drops Cyrillic-leading names, so the
  * addon must too or it offers releases the page never shows.

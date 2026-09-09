@@ -767,3 +767,62 @@ describe('rate limits', () => {
 function res429IsXml(res: MockResponse): boolean {
 	return res._getHeaders()['Content-Type'] === 'application/xml; charset=utf-8';
 }
+
+describe('a size the library cannot mean', () => {
+	// Library rows record megabytes, and some scrapers write bytes or kilobytes
+	// there instead. The feed publishes biggest-first, so one of those rows does
+	// not sit quietly at the bottom of a page — it takes the top of it.
+	//
+	// Measured against the live feed on 2026-09-09: the first result of a
+	// `Sicario` search was `Sicario 2015 1080p BluRay x264-OFT` published at
+	// 30,408.7 GB, whose real size TorBox reports as 5.65 GB. The numbers below
+	// are that row: fileSize 29,000,000 in a column that means MB.
+	const MIS_UNITED = hash('9');
+
+	beforeEach(() => {
+		library.set(`movie:${MOVIE_ID}`, {
+			results: [
+				release('Sicario.2015.1080p.BluRay.x264-OFT', 29_000_000, MIS_UNITED),
+				release('Shawshank.1994.2160p.BluRay', 60_000, BIG),
+				release('Shawshank.1994.1080p.WEB', 4_000, SMALL),
+			],
+			updatedAt: PAGE_UPDATED_AT,
+		});
+		rdCached = new Set([MIS_UNITED, BIG, SMALL]);
+		adCached = new Set();
+	});
+
+	it('publishes it as unknown rather than as thirty terabytes', async () => {
+		const res = await run({ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY });
+
+		const sizes = attrValue(body(res), 'size');
+		expect(sizes).not.toContain('30408704000000');
+		expect(sizes[sizes.length - 1]).toBe('0');
+	});
+
+	it('keeps the release, because only its size is wrong', async () => {
+		const res = await run({ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY });
+
+		expect(titles(res)).toContain('Sicario.2015.1080p.BluRay.x264-OFT');
+	});
+
+	it('stops it taking the top of the page from a real release', async () => {
+		const res = await run({ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY });
+
+		expect(titles(res)[0]).toBe('Shawshank.1994.2160p.BluRay');
+	});
+
+	// A size the row could plausibly mean is published unchanged, ceiling or no
+	// ceiling: 500 GB is a real remux collection, not a unit mistake.
+	it('leaves a large but believable size alone', async () => {
+		library.set(`movie:${MOVIE_ID}`, {
+			results: [release('Shawshank.1994.Remux.Collection', 500 * 1024, BIG)],
+			updatedAt: PAGE_UPDATED_AT,
+		});
+		rdCached = new Set([BIG]);
+
+		const res = await run({ t: 'movie', imdbid: MOVIE_ID, apikey: SPONSOR_KEY });
+
+		expect(attrValue(body(res), 'size')).toEqual([String(500 * 1024 * 1024 * 1024)]);
+	});
+});

@@ -21,6 +21,7 @@ import {
 	backfillFromDebridioNow,
 	refreshDebridioAvailabilityInBackground,
 } from '@/utils/debridioBackfill';
+import { MAX_SIZE_MB } from '@/utils/releaseSize';
 import { isTorznabLiveService, type TorznabLiveService } from '@/utils/sponsorProviders';
 import type { NextApiRequest } from 'next';
 import {
@@ -195,12 +196,36 @@ function toReleases(
 		.map((result) => ({
 			title: result.title,
 			hash: result.hash,
-			size: Number.isFinite(result.fileSize)
-				? Math.max(0, Math.round(result.fileSize * BYTES_PER_MB))
-				: 0,
+			size: reportableSize(result.fileSize),
 			categories: categoriesFor(kind, result.title),
 			pubDate,
 		}));
+}
+
+/**
+ * The size a release is published with, in bytes.
+ *
+ * A size above the noise ceiling is reported as unknown rather than as itself,
+ * which is what a missing one has always been reported as. Some library rows
+ * carry bytes or kilobytes where the column means megabytes — see
+ * `MAX_SIZE_MB` — and this feed orders biggest-first, so such a row does
+ * not sit at the bottom of a page, it takes the top of it: measured on
+ * 2026-09-09, the first result of a `Sicario` search was a 5.65 GB release
+ * published as 30,408.7 GB.
+ *
+ * Unknown rather than dropped, because the release itself is real and
+ * grabbable — only the number is wrong, and an \*arr skips its size checks for
+ * a release whose size it does not know. Dropping would take a working release
+ * out of the feed to fix a field.
+ *
+ * The floor is deliberately not applied here. A release genuinely under the
+ * junk floor is better published at its real size, where a client's own minimum
+ * rejects it, than published as unknown, where nothing does.
+ */
+function reportableSize(fileSize: number): number {
+	if (!Number.isFinite(fileSize) || fileSize <= 0) return 0;
+	if (fileSize > MAX_SIZE_MB) return 0;
+	return Math.round(fileSize * BYTES_PER_MB);
 }
 
 /** Concatenates pages, keeping the first sighting of each hash. */
