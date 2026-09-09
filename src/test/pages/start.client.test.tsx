@@ -8,6 +8,7 @@ import {
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
 import StartPage from '@/pages/start';
+import { GUEST_MODE_KEY, isGuestMode } from '@/utils/guestMode';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
@@ -201,6 +202,43 @@ describe('StartPage', () => {
 		render(<StartPage />);
 
 		expect(mockPush).not.toHaveBeenCalled();
+	});
+
+	// Guest entry. DMM's Torznab and Newznab endpoints authenticate on a DMM API
+	// key, so a sponsor pointing Prowlarr at DMM needs no debrid account - but
+	// the page that links that key sits behind the same gate as everything else,
+	// and before this button there was no way past it.
+	describe('Enter as Guest', () => {
+		beforeEach(() => {
+			localStorage.clear();
+		});
+
+		it('offers the way in for someone with no debrid account', () => {
+			render(<StartPage />);
+
+			expect(screen.getByText('Enter as Guest')).toBeInTheDocument();
+			expect(screen.getByText(/only needs a DMM API key/i)).toBeInTheDocument();
+		});
+
+		it('marks the browser as a guest and opens the dashboard', () => {
+			render(<StartPage />);
+
+			fireEvent.click(screen.getByText('Enter as Guest'));
+
+			expect(isGuestMode()).toBe(true);
+			expect(mockPush).toHaveBeenCalledWith('/');
+		});
+
+		// Guest mode is not a login, so this page has to stay reachable: it is
+		// where a guest goes when they decide they want an account after all.
+		it('does not redirect a guest away from the login page', () => {
+			localStorage.setItem(GUEST_MODE_KEY, 'true');
+
+			render(<StartPage />);
+
+			expect(mockPush).not.toHaveBeenCalled();
+			expect(screen.getByText('Login with Real Debrid')).toBeInTheDocument();
+		});
 	});
 
 	it('should render open source link with correct attributes', () => {

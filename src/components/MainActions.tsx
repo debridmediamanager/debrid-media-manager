@@ -11,6 +11,8 @@ interface MainActionsProps {
 	ocUser: boolean;
 	dlUser: boolean;
 	isLoading: boolean;
+	/** No debrid account connected: the library has nothing to list. */
+	isGuest?: boolean;
 }
 
 const isLocalDev = process.env.NODE_ENV === 'development';
@@ -23,6 +25,7 @@ export function MainActions({
 	ocUser,
 	dlUser,
 	isLoading,
+	isGuest = false,
 }: MainActionsProps) {
 	const castButtons = [
 		rdUser && {
@@ -109,15 +112,20 @@ export function MainActions({
 
 	return (
 		<div className="flex w-full flex-col gap-3">
-			{/* First row: Library, Hash lists, Is RD Down */}
-			<div className="grid w-full grid-cols-3 gap-3">
-				<Link
-					href="/library"
-					className="haptic flex items-center justify-center gap-2 rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-cyan-100 transition-colors hover:bg-cyan-800/50"
-				>
-					<BookOpen className="mr-1 inline-block h-4 w-4 text-cyan-400" />
-					Library
-				</Link>
+			{/* First row: Library, Hash lists, Music. A guest has no provider
+			    account, so Library is left out rather than shown pointing at a
+			    page `withAuth` sends them straight back from - and the row
+			    narrows to two columns instead of leaving a hole. */}
+			<div className={`grid w-full gap-3 ${isGuest ? 'grid-cols-2' : 'grid-cols-3'}`}>
+				{!isGuest && (
+					<Link
+						href="/library"
+						className="haptic flex items-center justify-center gap-2 rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-cyan-100 transition-colors hover:bg-cyan-800/50"
+					>
+						<BookOpen className="mr-1 inline-block h-4 w-4 text-cyan-400" />
+						Library
+					</Link>
+				)}
 				<Link
 					href={isLocalDev ? '/hashlists' : 'https://hashlists.debridmediamanager.com'}
 					target={isLocalDev ? undefined : '_blank'}

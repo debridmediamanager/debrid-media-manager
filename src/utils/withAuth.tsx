@@ -16,13 +16,29 @@ import { Logo } from '@/components/Logo';
 import { useAllDebridApiKey, useRealDebridAccessToken } from '@/hooks/auth';
 import { useRouter } from 'next/router';
 import { ComponentType, useEffect, useState } from 'react';
+import { disableGuestMode, useGuestMode } from './guestMode';
 import { supportsLookbehind } from './lookbehind';
 
 const START_ROUTE = '/start';
 const LOGIN_ROUTE = '/login';
+const HOME_ROUTE = '/';
 const RETURN_URL_KEY = 'dmm_return_url';
 
-export const withAuth = <P extends object>(Component: ComponentType<P>) => {
+export interface WithAuthOptions {
+	/**
+	 * Whether a guest - a browser that entered without connecting a debrid
+	 * service - may open this page. Almost every page says yes: search, browse
+	 * and Settings need no provider account, and Settings is where a sponsor
+	 * links the DMM API key the indexer endpoints run on. The library says no,
+	 * because there is no account whose torrents it could list.
+	 */
+	allowGuest?: boolean;
+}
+
+export const withAuth = <P extends object>(
+	Component: ComponentType<P>,
+	{ allowGuest = true }: WithAuthOptions = {}
+) => {
 	return function WithAuth(props: P) {
 		const router = useRouter();
 		const [isLoading, setIsLoading] = useState(true);
@@ -60,6 +76,8 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			return null;
 		});
 
+		const isGuest = useGuestMode();
+
 		// Check for refresh credentials
 		const [hasRefreshCredentials] = useState(() => {
 			if (typeof window !== 'undefined') {
@@ -71,19 +89,35 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			return false;
 		});
 
+		const hasCredential = !!(rdKey || adKey || tbKey || pmKey || ocKey || dlKey);
+
+		// Signing in ends guest mode. Otherwise the flag outlives the reason it
+		// was set and keeps hiding the library from someone who now has an
+		// account to fill it.
+		useEffect(() => {
+			if (isGuest && (hasCredential || hasRefreshCredentials)) {
+				disableGuestMode();
+			}
+		}, [isGuest, hasCredential, hasRefreshCredentials]);
+
 		useEffect(() => {
 			// Don't redirect if token is refreshing
 			if (rdIsRefreshing) {
 				return;
 			}
 
+			// A guest on a page that needs a provider account. Home, not /start:
+			// /start would offer a login they already declined, and the return
+			// URL stored on that path would send them straight back here on the
+			// next render - a loop, because guest mode never resolves it.
+			if (isGuest && !allowGuest && !hasCredential && !hasRefreshCredentials) {
+				router.push(HOME_ROUTE);
+				return;
+			}
+
 			if (
-				!rdKey &&
-				!adKey &&
-				!tbKey &&
-				!pmKey &&
-				!ocKey &&
-				!dlKey &&
+				!hasCredential &&
+				!isGuest &&
 				router.pathname !== START_ROUTE &&
 				!router.pathname.endsWith(LOGIN_ROUTE) &&
 				!rdLoading &&
@@ -104,7 +138,9 @@ export const withAuth = <P extends object>(Component: ComponentType<P>) => {
 			rdKey,
 			rdLoading,
 			rdIsRefreshing,
+			hasCredential,
 			hasRefreshCredentials,
+			isGuest,
 			adKey,
 			tbKey,
 			pmKey,

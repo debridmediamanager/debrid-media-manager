@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { GUEST_MODE_KEY } from './guestMode';
 import { withAuth } from './withAuth';
 
 const mockPush = vi.fn();
@@ -266,6 +267,96 @@ describe('withAuth', () => {
 			expect(screen.getByTestId('test-component')).toBeInTheDocument();
 		});
 		expect(mockPush).not.toHaveBeenCalledWith('/realdebrid/login');
+	});
+
+	// Guest mode: the way in for someone who has no debrid account and only
+	// wants DMM's indexer endpoints, which authenticate on a DMM API key.
+	describe('guest mode', () => {
+		beforeEach(() => {
+			mockUseRealDebridAccessToken.mockReturnValue([null, false, false]);
+			mockUseAllDebridApiKey.mockReturnValue(null);
+			localStorage.setItem(GUEST_MODE_KEY, 'true');
+		});
+
+		it('lets a guest open a page without bouncing to /start', async () => {
+			mockRouter.pathname = '/settings';
+
+			const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+			const WrappedComponent = withAuth(TestComponent);
+
+			render(<WrappedComponent />);
+
+			await waitFor(() => {
+				expect(screen.getByTestId('test-component')).toBeInTheDocument();
+			});
+			expect(mockPush).not.toHaveBeenCalledWith('/start');
+		});
+
+		it('keeps a guest out of a page that needs a provider account', async () => {
+			mockRouter.pathname = '/library';
+			mockRouter.asPath = '/library';
+
+			const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+			const WrappedComponent = withAuth(TestComponent, { allowGuest: false });
+
+			render(<WrappedComponent />);
+
+			await waitFor(() => {
+				expect(mockPush).toHaveBeenCalledWith('/');
+			});
+			expect(screen.queryByTestId('test-component')).toBeNull();
+		});
+
+		// /start does not know about guest mode, so it would sit there offering
+		// a login the guest already declined - and the return URL stored on that
+		// path sends them straight back to the blocked page on the next render.
+		it('sends a blocked guest home rather than to /start with a return URL', async () => {
+			mockRouter.pathname = '/library';
+			mockRouter.asPath = '/library?genre=action';
+
+			const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+			const WrappedComponent = withAuth(TestComponent, { allowGuest: false });
+
+			render(<WrappedComponent />);
+
+			await waitFor(() => {
+				expect(mockPush).toHaveBeenCalledWith('/');
+			});
+			expect(mockPush).not.toHaveBeenCalledWith('/start');
+			expect(localStorage.getItem('dmm_return_url')).toBeNull();
+		});
+
+		// A guest who signs in is no longer a guest. Left set, the flag outlives
+		// its reason and keeps hiding the library from an account that has one.
+		it('drops the flag once a real credential appears', async () => {
+			mockUseRealDebridAccessToken.mockReturnValue(['rd-token', false, false]);
+			mockRouter.pathname = '/library';
+
+			const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+			const WrappedComponent = withAuth(TestComponent, { allowGuest: false });
+
+			render(<WrappedComponent />);
+
+			await waitFor(() => {
+				expect(screen.getByTestId('test-component')).toBeInTheDocument();
+			});
+			expect(localStorage.getItem(GUEST_MODE_KEY)).toBeNull();
+			expect(mockPush).not.toHaveBeenCalledWith('/');
+		});
+
+		it('leaves a signed-out non-guest heading for /start as before', async () => {
+			localStorage.removeItem(GUEST_MODE_KEY);
+			mockRouter.pathname = '/settings';
+
+			const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+			const WrappedComponent = withAuth(TestComponent);
+
+			render(<WrappedComponent />);
+
+			await waitFor(() => {
+				expect(mockPush).toHaveBeenCalledWith('/start');
+			});
+		});
 	});
 
 	it('passes props to wrapped component', async () => {

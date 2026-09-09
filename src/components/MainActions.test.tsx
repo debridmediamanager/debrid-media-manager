@@ -58,6 +58,31 @@ describe('MainActions', () => {
 		expect(hashListLink.getAttribute('target')).toBe('_blank');
 	});
 
+	// A guest has no provider account, so /library has nothing to list and
+	// `withAuth` sends them straight back from it. The row narrows rather than
+	// keeping a hole where the button was.
+	it('leaves the library out for a guest and closes the gap', () => {
+		const { container } = render(
+			<MainActions
+				rdUser={null}
+				tbUser={null}
+				adUser={false}
+				pmUser={false}
+				ocUser={false}
+				dlUser={false}
+				isLoading={false}
+				isGuest={true}
+			/>
+		);
+
+		expect(screen.queryByRole('link', { name: /library/i })).toBeNull();
+
+		const hashListLink = screen.getByRole('link', { name: /hash lists/i });
+		expect(hashListLink.parentElement?.className).toContain('grid-cols-2');
+		expect(hashListLink.parentElement?.className).not.toContain('grid-cols-3');
+		expect(container.querySelector('a[href="/albums"]')).not.toBeNull();
+	});
+
 	it('shows RD cast action when only RD user is authenticated', () => {
 		render(
 			<MainActions

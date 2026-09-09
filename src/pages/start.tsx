@@ -8,6 +8,7 @@ import {
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
+import { enableGuestMode } from '@/utils/guestMode';
 import { DEBRID_LINK_REFERRAL_URL, TORBOX_REFERRAL_URL } from '@/utils/referrals';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -37,6 +38,14 @@ export default function StartPage() {
 			router.push('/');
 		}
 	}, [rdToken, adKey, tbKey, pmKey, ocKey, dlKey, router]);
+
+	// Guest mode is not a login, so this page stays reachable afterwards: the
+	// home page's "Connect a debrid service" section and this page are both
+	// still there when a guest decides they want an account after all.
+	const enterAsGuest = () => {
+		enableGuestMode();
+		router.push('/');
+	};
 
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -189,6 +198,29 @@ export default function StartPage() {
 					>
 						Create an account with Debrid-Link
 					</a>
+				</div>
+
+				{/* Guest entry. DMM's Torznab and Newznab endpoints answer to a
+				    DMM API key rather than a debrid credential, so a sponsor
+				    pointing Prowlarr at DMM needs no account here - and the page
+				    that links that key is behind the same gate as everything
+				    else. This is the way past it. */}
+				<div className="mt-6 flex max-w-lg flex-col items-center border-t border-slate-700 pt-6">
+					<p className="text-center text-sm">
+						No debrid account? DMM also answers as a Torznab and Newznab indexer for
+						Prowlarr, Sonarr and Radarr, and that only needs a DMM API key.
+					</p>
+					<button
+						className="m-2 rounded bg-slate-600 px-4 py-2 text-white hover:bg-slate-500"
+						onClick={enterAsGuest}
+					>
+						Enter as Guest
+					</button>
+					<p className="text-center text-xs text-slate-500">
+						Search, settings and the indexer setup pages stay open. Your library,
+						casting and transfers need a debrid account, and you can connect one at any
+						time.
+					</p>
 				</div>
 
 				<h2 className="text-l mb-2 mt-2 font-bold text-slate-500">Data Storage Policy</h2>

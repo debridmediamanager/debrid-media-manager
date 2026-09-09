@@ -2227,4 +2227,6 @@ function TorrentsPage() {
 	);
 }
 
-export default withAuth(TorrentsPage);
+// The library lists the torrents on a provider account, so it is the one page
+// guest mode does not open - there is no account behind it to read.
+export default withAuth(TorrentsPage, { allowGuest: false });
