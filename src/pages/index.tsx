@@ -311,6 +311,21 @@ function IndexPage() {
 							</span>
 						</Link>
 						<Link
+							href="/jellyfin"
+							className="haptic-sm flex w-full items-center justify-between rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+						>
+							<span className="flex items-center">
+								<span
+									aria-hidden="true"
+									className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
+								/>
+								Jellyfin plugins
+							</span>
+							<span className="text-xs text-gray-400">
+								Your library in Jellyfin, for sponsors
+							</span>
+						</Link>
+						<Link
 							href="/torznab"
 							className="haptic-sm flex w-full items-center justify-between rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
 						>
