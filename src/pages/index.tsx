@@ -270,8 +270,8 @@ function IndexPage() {
 								<p className="font-medium">You are browsing as a guest</p>
 								<p className="mt-1 text-xs text-amber-200/80">
 									Search, settings and the indexer setup pages are open. Your
-									library, casting and transfers need a debrid account - connect
-									one below whenever you want them.
+									library, music, casting and transfers need a debrid account -
+									connect one below whenever you want them.
 								</p>
 							</div>
 						)}

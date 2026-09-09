@@ -112,11 +112,14 @@ export function MainActions({
 
 	return (
 		<div className="flex w-full flex-col gap-3">
-			{/* First row: Library, Hash lists, Music. A guest has no provider
-			    account, so Library is left out rather than shown pointing at a
-			    page `withAuth` sends them straight back from - and the row
-			    narrows to two columns instead of leaving a hole. */}
-			<div className={`grid w-full gap-3 ${isGuest ? 'grid-cols-2' : 'grid-cols-3'}`}>
+			{/* First row: Library, Hash lists, Music. Two of the three need a
+			    provider account and dead-end without one - the library because
+			    `withAuth` sends a guest straight back from it, and Music because
+			    the albums page pushes anyone with no Real-Debrid token into
+			    /realdebrid/login, which is the exact flow guest mode exists to
+			    skip. Hash lists is the one that works either way, so a guest
+			    gets it full width rather than a row with two holes in it. */}
+			<div className={`grid w-full gap-3 ${isGuest ? 'grid-cols-1' : 'grid-cols-3'}`}>
 				{!isGuest && (
 					<Link
 						href="/library"
@@ -134,13 +137,15 @@ export function MainActions({
 					<Rocket className="mr-1 inline-block h-4 w-4 text-indigo-400" />
 					Hash lists
 				</Link>
-				<Link
-					href="/albums"
-					className="haptic flex items-center justify-center gap-2 rounded border-2 border-green-500 bg-green-900/30 p-3 text-green-100 transition-colors hover:bg-green-800/50"
-				>
-					<Music2 className="mr-1 inline-block h-4 w-4 text-green-400" />
-					Music
-				</Link>
+				{!isGuest && (
+					<Link
+						href="/albums"
+						className="haptic flex items-center justify-center gap-2 rounded border-2 border-green-500 bg-green-900/30 p-3 text-green-100 transition-colors hover:bg-green-800/50"
+					>
+						<Music2 className="mr-1 inline-block h-4 w-4 text-green-400" />
+						Music
+					</Link>
+				)}
 			</div>
 
 			{/* Second row: Cast buttons */}
