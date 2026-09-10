@@ -5,7 +5,7 @@ import { safeNzbName } from '@/utils/nzbName';
 import { sanitizeNzb, type SanitizedNzb } from '@/utils/nzbSanitize';
 import { FileDown, ShieldCheck, TriangleAlert, Upload, X } from 'lucide-react';
 import Head from 'next/head';
-import { useMemo, useRef, useState, type DragEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type DragEvent } from 'react';
 
 // Rebuilds an NZB someone already has so it can be posted publicly without
 // naming the account that grabbed it.
@@ -44,6 +44,16 @@ function plural(count: number, noun: string): string {
 function save(name: string, result: SanitizedNzb): void {
 	saveBlob(new Blob([result.xml], { type: 'application/x-nzb' }), safeNzbName(name));
 }
+
+/**
+ * Pause between the saves of one "Download all".
+ *
+ * Chrome keeps only the first ten downloads a page fires back to back and drops
+ * the rest without an error. Measured 2026-09-10 on this page: 10 of 25 landed
+ * with no gap, 24 of 25 at 100 ms, all 25 from 250 ms apart. This is twice the
+ * smallest gap that kept them all, because the limit is Chrome's and can move.
+ */
+const DOWNLOAD_GAP_MS = 500;
 
 function Warnings({ result }: { result: SanitizedNzb }) {
 	const lines: string[] = [];
@@ -158,6 +168,14 @@ export default function AnonymizeNzbPage() {
 	// A ref, not state: two drops in quick succession each read it before either
 	// render lands, and state read from a closure would hand both the same ids.
 	const nextId = useRef(1);
+	// How far a Download all has got, for the button, and its saves still to come,
+	// so leaving the page cancels them instead of downloading from a closed tab.
+	const [saving, setSaving] = useState<{ done: number; total: number } | null>(null);
+	const pendingSaves = useRef<ReturnType<typeof setTimeout>[]>([]);
+	useEffect(() => {
+		const pending = pendingSaves.current;
+		return () => pending.forEach(clearTimeout);
+	}, []);
 
 	// Recomputed from the source rather than stored, so flipping the password
 	// switch re-cleans what is already on the page instead of only what comes next.
@@ -169,6 +187,24 @@ export default function AnonymizeNzbPage() {
 		(entry): entry is typeof entry & { outcome: { ok: true; result: SanitizedNzb } } =>
 			entry.outcome.ok
 	);
+
+	const downloadAll = () => {
+		const queue = downloadable.map((entry) => ({
+			name: entry.name,
+			result: entry.outcome.result,
+		}));
+		queue.forEach(({ name, result }, index) => {
+			const step = () => {
+				save(name, result);
+				const last = index + 1 === queue.length;
+				if (last) pendingSaves.current.length = 0;
+				setSaving(last ? null : { done: index + 1, total: queue.length });
+			};
+			// The first goes out inside the click, exactly like a single Download.
+			if (index === 0) step();
+			else pendingSaves.current.push(setTimeout(step, index * DOWNLOAD_GAP_MS));
+		});
+	};
 
 	const addFiles = async (files: FileList | null) => {
 		if (!files || files.length === 0) return;
@@ -286,14 +322,14 @@ export default function AnonymizeNzbPage() {
 					{downloadable.length > 1 ? (
 						<button
 							type="button"
-							onClick={() => {
-								for (const entry of downloadable)
-									save(entry.name, entry.outcome.result);
-							}}
-							className="mt-3 inline-flex items-center gap-1.5 rounded border-2 border-green-500 bg-green-900/30 px-3 py-1.5 text-sm text-green-100 transition-colors hover:bg-green-800/50"
+							disabled={saving !== null}
+							onClick={downloadAll}
+							className="mt-3 inline-flex items-center gap-1.5 rounded border-2 border-green-500 bg-green-900/30 px-3 py-1.5 text-sm text-green-100 transition-colors hover:bg-green-800/50 disabled:cursor-wait disabled:opacity-60"
 						>
 							<FileDown className="h-4 w-4" />
-							Download all {downloadable.length}
+							{saving
+								? `Saving ${saving.done} of ${saving.total}`
+								: `Download all ${downloadable.length}`}
 						</button>
 					) : null}
 				</Card>

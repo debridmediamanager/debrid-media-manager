@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -96,6 +96,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+	vi.useRealTimers();
 	vi.unstubAllGlobals();
 });
 
@@ -206,7 +207,7 @@ describe('Anonymize NZB page', () => {
 		expect(await screen.findByText('dropped.nzb')).toBeTruthy();
 	});
 
-	it('downloads every cleanable file at once and skips the broken one', async () => {
+	it('downloads every cleanable file and skips the broken one', async () => {
 		render(<AnonymizeNzbPage />);
 		choose(
 			nzbFile('one.nzb', TAGGED),
@@ -215,8 +216,59 @@ describe('Anonymize NZB page', () => {
 		);
 
 		await waitFor(() => expect(screen.getAllByTestId('nzb-result')).toHaveLength(3));
+		vi.useFakeTimers();
 		fireEvent.click(screen.getByRole('button', { name: /Download all 2/ }));
+		act(() => {
+			vi.runAllTimers();
+		});
 
 		expect(saveBlobMock.mock.calls.map(([, name]) => name)).toEqual(['one.nzb', 'two.nzb']);
+	});
+
+	// Chrome keeps only the first ten downloads a page fires back to back and
+	// drops the rest without an error. Measured 2026-09-10 on this page: 10 of 25
+	// landed with no gap, 24 of 25 at 100 ms, all 25 from 250 ms apart. Twelve
+	// files, so a plain loop loses the last two.
+	it('spaces Download all out so the browser keeps every file past the tenth', async () => {
+		render(<AnonymizeNzbPage />);
+		const names = Array.from(
+			{ length: 12 },
+			(_, i) => `release-${String(i + 1).padStart(2, '0')}.nzb`
+		);
+		choose(...names.map((name) => nzbFile(name, TAGGED)));
+		await waitFor(() => expect(screen.getAllByTestId('nzb-result')).toHaveLength(12));
+
+		vi.useFakeTimers();
+		const savedAt: number[] = [];
+		saveBlobMock.mockImplementation(() => savedAt.push(Date.now()));
+		fireEvent.click(screen.getByRole('button', { name: /Download all 12/ }));
+		act(() => {
+			vi.runAllTimers();
+		});
+
+		expect(saveBlobMock.mock.calls.map(([, name]) => name)).toEqual(names);
+		for (let i = 1; i < savedAt.length; i++) {
+			expect(savedAt[i] - savedAt[i - 1]).toBeGreaterThanOrEqual(250);
+		}
+	});
+
+	// Spacing the saves out makes Download all take seconds, so the button has
+	// to say it is working, and a second press must not queue every file again.
+	it('shows progress and ignores a second press while it is still saving', async () => {
+		render(<AnonymizeNzbPage />);
+		choose(nzbFile('a.nzb', TAGGED), nzbFile('b.nzb', TAGGED), nzbFile('c.nzb', TAGGED));
+		await waitFor(() => expect(screen.getAllByTestId('nzb-result')).toHaveLength(3));
+
+		vi.useFakeTimers();
+		fireEvent.click(screen.getByRole('button', { name: /Download all 3/ }));
+		const busy = screen.getByRole('button', { name: /Saving 1 of 3/ });
+		expect((busy as HTMLButtonElement).disabled).toBe(true);
+		fireEvent.click(busy);
+		act(() => {
+			vi.runAllTimers();
+		});
+
+		expect(saveBlobMock).toHaveBeenCalledTimes(3);
+		expect(screen.getByRole('button', { name: /Download all 3/ })).toBeTruthy();
 	});
 });
