@@ -1,51 +1,7 @@
-import type { MediaInfoResponse } from '@/components/showInfo/types';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
+import { publicMediaInfo } from '@/utils/torrentSnapshot';
 import type { NextApiRequest, NextApiResponse } from 'next';
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-	return typeof value === 'object' && value !== null;
-}
-
-function hasMediaInfo(selectedFiles: unknown): selectedFiles is MediaInfoResponse['SelectedFiles'] {
-	if (!isRecord(selectedFiles)) return false;
-	for (const entry of Object.values(selectedFiles)) {
-		if (!isRecord(entry)) continue;
-		const media =
-			(entry as Record<string, unknown>).MediaInfo ??
-			(entry as Record<string, unknown>).mediaInfo;
-		if (isRecord(media)) {
-			return true;
-		}
-	}
-	return false;
-}
-
-function coerceMediaInfo(payload: unknown): MediaInfoResponse | null {
-	if (!isRecord(payload)) return null;
-
-	const selectedFiles =
-		(payload as Record<string, unknown>).SelectedFiles ??
-		(payload as Record<string, unknown>).selectedFiles;
-	if (hasMediaInfo(selectedFiles)) {
-		return { SelectedFiles: selectedFiles };
-	}
-
-	const mediaInfo =
-		(payload as Record<string, unknown>).MediaInfo ??
-		(payload as Record<string, unknown>).mediaInfo;
-	if (isRecord(mediaInfo)) {
-		return {
-			SelectedFiles: {
-				default: {
-					MediaInfo: mediaInfo as MediaInfoResponse['SelectedFiles'][string]['MediaInfo'],
-				},
-			},
-		};
-	}
-
-	return null;
-}
 
 function isValidHash(value: string): boolean {
 	return /^[a-fA-F0-9]{40}$/.test(value);
@@ -70,7 +26,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(404).json({ message: 'Not found' });
 		}
 
-		const mediaInfo = coerceMediaInfo(snapshot.payload);
+		const mediaInfo = publicMediaInfo(snapshot.payload);
 		if (!mediaInfo) {
 			console.info('Torrent snapshot missing media info payload', { hash });
 			return res.status(404).json({ message: 'Not found' });
