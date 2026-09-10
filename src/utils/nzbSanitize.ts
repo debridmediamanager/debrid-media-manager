@@ -5,12 +5,25 @@
  * indexers behind the Usenet panel:
  *
  *   DrunkenSlug  `<head><meta type="tag">0a624180.27889905291</meta></head>`
- *                — an opaque per-download token, the one thing here that ties a
- *                file back to the account that grabbed it.
+ *                — an opaque per-download token.
  *   altHUB       `<!-- newznab 2026-07-11 21:32:26 -->` before `</nzb>`, and a
  *                branded `poster` (`cmVsZWFzZXM@YWx0aHViLmNvLnph.com`, which is
  *                base64 for releases@althub.co.za).
  *   both         a `<!DOCTYPE nzb PUBLIC …>` line and per-file `poster`/`date`.
+ *
+ * One copy cannot show what changes per download, so on 2026-09-10 six
+ * indexers were each asked for one release twice from the same account and the
+ * copies were diffed. Three changed nothing. Three stamp every download, some
+ * of it inside fields a downloader keeps:
+ *
+ *   one        a fresh token (see `isIndexerToken`) as the `title`, and on 612
+ *              of its 618 passworded files as the `password`, plus a random
+ *              poster, a jittered date and a different single group on every
+ *              file
+ *   another    one subject per download prefixed `[N3wZ] \<6 random><number>\::`,
+ *              the number identical across all 254 of its NZBs in the library:
+ *              the account
+ *   a third    a random prefix on every poster ahead of a constant marker
  *
  * Rather than blacklisting those — a list that goes stale the moment an indexer
  * adds a field — this emits a fresh document containing only the elements the
@@ -28,28 +41,61 @@
  *   - `segment@bytes`, required by SAB and needed for size accounting in NZBGet
  *   - the Message-ID as element text with no angle brackets; both add their own
  *   - `<groups><group>`, which SAB never uses (it fetches by Message-ID and
- *     never sends GROUP) and NZBGet needs only with JoinGroup=yes — one is
- *     emitted anyway, because it costs nothing and a missing one is fatal there
+ *     never sends GROUP) and NZBGet needs only with JoinGroup=yes. The source's
+ *     groups are not kept, since one indexer writes a different one into every
+ *     download; each file gets `FALLBACK_GROUP`, because a missing group is
+ *     fatal to NZBGet there
  *   - `subject`, optional, but with the filename quoted or both readers fall
  *     back to deobfuscation, the yEnc header or a par2 rename
  *
  * The DOCTYPE, `poster` and `date` are all optional, so none of them are
  * emitted, and `<head>` appears only when a whitelisted meta survived.
  *
- * Four head metas do survive — `name`, `title`, `category` and `password`, the
- * same whitelist zurg's `internal/nzbclean` keeps, for the same reason: each
- * describes the release rather than the download, so it reads identically for
- * everyone who grabs it, and SABnzbd names the job from them. `title` is
- * newznab's spelling of `name` and is written back out as `name`, so the two
- * cannot disagree downstream. Everything else in `<head>` goes, a future
- * indexer's inventions included — which is the point of a whitelist.
+ * Four head metas can survive: `name`, `title`, `category` and `password`, the
+ * same whitelist zurg's `internal/nzbclean` keeps, because each normally
+ * describes the release rather than the download and SABnzbd names the job from
+ * them. `title` is newznab's spelling of `name` and is written back out as
+ * `name`, but only when there is no `name`: in all 1,140 library NZBs carrying
+ * both, the title was an indexer's token. A value shaped like that token is dropped
+ * from any of the four. Everything else in `<head>` goes, a future indexer's
+ * inventions included, which is the point of a whitelist. zurg applies the same
+ * rules; keep the two in step.
  */
 
 /** Encoded segment size SAB rejects at or above. */
 export const MAX_SEGMENT_BYTES = 8 * 1024 * 1024;
 
-/** Emitted for a file whose groups the source omitted entirely. */
+/**
+ * The one group every file is written with, whatever the source listed. One
+ * indexer writes a different single group into every download, and no reader needs the
+ * real one: SAB, zurg and nzb2rd never send GROUP, and NZBGet sends it only
+ * with JoinGroup=yes and still fetches by Message-ID.
+ */
 export const FALLBACK_GROUP = 'alt.binaries.misc';
+
+const TOKEN_SHAPE_RE = /^\d{3,7}(?:[A-Za-z]\d+){8,}$/;
+
+/**
+ * One indexer's per-download token, as it writes it into `title` (with a video
+ * extension) and often `password`: a run of digits, then at least eight single
+ * letters each followed by digits, the first letter coming back as the sixth.
+ * Across the 6,531-NZB library measured 2026-09-10 it matched all 1,140 of that
+ * indexer's titles and 612 of its 618 passwords, and none of the 487 passwords,
+ * 115 title-only names or 1,600-odd names and categories any other indexer wrote.
+ */
+export function isIndexerToken(value: string): boolean {
+	const bare = value.trim().replace(/\.[A-Za-z0-9]{2,4}$/, '');
+	if (!TOKEN_SHAPE_RE.test(bare)) return false;
+	const letters = bare.replace(/[^A-Za-z]/g, '');
+	return letters[0] === letters[5];
+}
+
+/**
+ * One indexer's per-download stamp: `[N3wZ] \`, six random characters, the
+ * account number, `\::`, ahead of the real subject. It sat on exactly one
+ * subject in each of the 258 library NZBs that carried it.
+ */
+const SUBJECT_STAMP_RE = /^\[N3wZ\] \\[A-Za-z0-9]{6}\d{3,8}\\::/;
 
 /**
  * A file whose segments total less than this is a planted-payload candidate.
@@ -122,6 +168,8 @@ interface ParsedSegment {
 
 interface ParsedFile {
 	subject: string;
+	/** Whether an indexer's account stamp was cut off the subject. */
+	stamped: boolean;
 	groups: string[];
 	segments: ParsedSegment[];
 }
@@ -266,8 +314,11 @@ function parseFiles(xml: string): { files: ParsedFile[]; droppedSegments: number
 		}
 		segments.sort((a, b) => a.number - b.number);
 
+		const subject = (file.attrs.subject ?? '').trim();
+		const stamp = SUBJECT_STAMP_RE.exec(subject);
 		files.push({
-			subject: quoteFilenameInSubject((file.attrs.subject ?? '').trim()),
+			subject: quoteFilenameInSubject(stamp ? subject.slice(stamp[0].length) : subject),
+			stamped: stamp !== null,
 			groups: [...file.body.matchAll(GROUP_RE)]
 				.map((match) => decodeEntities(match[1]).trim())
 				.filter(Boolean),
@@ -278,7 +329,12 @@ function parseFiles(xml: string): { files: ParsedFile[]; droppedSegments: number
 	return { files, droppedSegments };
 }
 
-function describeStripped(xml: string, metas: Record<string, string>, kept: string[]): string[] {
+function describeStripped(
+	xml: string,
+	metas: Record<string, string>,
+	kept: string[],
+	files: ParsedFile[]
+): string[] {
 	const removed: string[] = [];
 
 	// First, because it is the only field here that is per-download rather than
@@ -287,6 +343,9 @@ function describeStripped(xml: string, metas: Record<string, string>, kept: stri
 		if (kept.includes(type)) continue;
 		removed.push(`<meta type="${type}"> (${value.slice(0, 40)})`);
 	}
+
+	const stamped = files.filter((file) => file.stamped).length;
+	if (stamped > 0) removed.push(`account stamp on ${stamped} subject${stamped > 1 ? 's' : ''}`);
 
 	const comments = xml.match(COMMENT_RE);
 	if (comments) removed.push(`${comments.length} XML comment${comments.length > 1 ? 's' : ''}`);
@@ -299,6 +358,12 @@ function describeStripped(xml: string, metas: Record<string, string>, kept: stri
 		removed.push(`poster on every file (${posters.size} distinct)`);
 	}
 	if (/<file\b[^>]*?\bdate\s*=\s*"/i.test(xml)) removed.push('post dates');
+
+	const groups = new Set(files.flatMap((file) => file.groups));
+	groups.delete(FALLBACK_GROUP);
+	if (groups.size > 0) {
+		removed.push(`newsgroups (${groups.size} distinct), written as one fixed group`);
+	}
 
 	return removed;
 }
@@ -315,18 +380,24 @@ export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): Sanitiz
 	const { keepPassword = true } = options;
 
 	const metas: Record<string, string> = {};
-	// `name` and `title` are two spellings of one field, so the first of either
-	// to appear wins and the loser is not emitted twice under different names.
-	let name: string | undefined;
+	// `name` and `title` are two spellings of one field, and `name` wins wherever
+	// it sits: in every library NZB carrying both, the title was a token.
+	let nameMeta: string | undefined;
+	let titleMeta: string | undefined;
 	for (const match of xml.matchAll(META_RE)) {
 		const type = parseAttrs(match[1]).type;
 		if (!type) continue;
 		const value = decodeEntities(match[2]).trim();
 		metas[type] = value;
-		if (!name && value && (type === 'name' || type === 'title')) name = value;
+		if (!value || isIndexerToken(value)) continue;
+		if (type === 'name' && nameMeta === undefined) nameMeta = value;
+		if (type === 'title' && titleMeta === undefined) titleMeta = value;
 	}
-	const category = metas.category;
-	const password = keepPassword ? metas.password : undefined;
+	const name = nameMeta ?? titleMeta;
+	const release = (value: string | undefined) =>
+		value && !isIndexerToken(value) ? value : undefined;
+	const category = release(metas.category);
+	const password = keepPassword ? release(metas.password) : undefined;
 
 	const { files: parsed, droppedSegments } = parseFiles(xml);
 	const usable = parsed.filter((file) => file.segments.length > 0);
@@ -337,12 +408,6 @@ export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): Sanitiz
 				: 'Every file in that NZB was empty, so there is nothing to download'
 		);
 	}
-
-	// One group for the whole document when a file lists none: NZBGet with
-	// JoinGroup=yes needs a group name, and any group the same NZB already names
-	// is a better guess than a constant.
-	const documentGroup =
-		usable.find((file) => file.groups.length > 0)?.groups[0] ?? FALLBACK_GROUP;
 
 	let segments = 0;
 	let suspectBytes = 0;
@@ -364,10 +429,7 @@ export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): Sanitiz
 
 	for (const file of usable) {
 		lines.push(file.subject ? `\t<file subject="${escapeAttr(file.subject)}">` : '\t<file>');
-		const groups = file.groups.length > 0 ? file.groups : [documentGroup];
-		lines.push('\t\t<groups>');
-		for (const group of groups) lines.push(`\t\t\t<group>${escapeText(group)}</group>`);
-		lines.push('\t\t</groups>');
+		lines.push('\t\t<groups>', `\t\t\t<group>${FALLBACK_GROUP}</group>`, '\t\t</groups>');
 		lines.push('\t\t<segments>');
 		for (const segment of file.segments) {
 			segments++;
@@ -385,13 +447,14 @@ export function sanitizeNzb(xml: string, options: SanitizeOptions = {}): Sanitiz
 
 	lines.push('</nzb>');
 
-	// A `title` counts as kept whenever a name survived: the field is not gone,
-	// it went back out under the other spelling.
+	// A `title` counts as kept when it is the name that went out under the other
+	// spelling. One that lost to a `name` is reported: it is usually the token.
 	const kept: string[] = [];
-	if (name) kept.push('name', 'title');
+	if (name) kept.push('name');
+	if (name !== undefined && metas.title === name) kept.push('title');
 	if (category) kept.push('category');
 	if (password) kept.push('password');
-	const removed = describeStripped(xml, metas, kept);
+	const removed = describeStripped(xml, metas, kept, usable);
 
 	// Only the files that made it into the document: a file dropped for having no
 	// usable segment is already accounted for, and cannot be planted in a file

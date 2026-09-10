@@ -342,15 +342,17 @@ export default function AnonymizeNzbPage() {
 					</p>
 					<ul className="mt-3 list-inside list-disc text-gray-400">
 						<li>
-							<strong className="text-gray-200">Removed:</strong> per-download tags
-							and every other head field, XML comments, the DOCTYPE, and the poster
-							and date on each file.
+							<strong className="text-gray-200">Removed:</strong> every head field but
+							the release name, category and archive password, the per-download tokens
+							some indexers hide in those three, account stamps in file subjects, XML
+							comments, the DOCTYPE, and the poster, date and newsgroups on each file.
 						</li>
 						<li>
 							<strong className="text-gray-200">Kept:</strong> the release name,
-							category and archive password, and each file&apos;s subject, groups and
+							category and a real archive password, and each file&apos;s subject and
 							article ids. Those are identical in every copy of the release, so they
-							identify the release and never you.
+							identify the release and never you. Every file gets the same fixed
+							newsgroup, since downloaders fetch articles by id anyway.
 						</li>
 					</ul>
 				</Card>
