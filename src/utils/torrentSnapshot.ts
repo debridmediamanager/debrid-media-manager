@@ -46,9 +46,38 @@ const SnapshotFile = v
 		selected: v.number(),
 		Link: v.string().optional(),
 		Ended: v.string(),
-		MediaInfo,
+		MediaInfo: MediaInfo.nullable().optional(),
 	})
 	.rest(v.unknown());
+
+// The extensions zurg hands to ffprobe (IsVideoOrAudio in zurg's
+// pkg/utils/playable.go). A release also carries sidecars zurg never probes, an
+// .nfo beside the episode, so the worker's rule that every file has a probe
+// refused whole releases; only these files have to have one.
+const PROBED_EXTENSIONS = new Set([
+	'.avi',
+	'.flv',
+	'.m2ts',
+	'.m4v',
+	'.mk3d',
+	'.mkv',
+	'.mov',
+	'.mp4',
+	'.mpeg',
+	'.mpg',
+	'.ts',
+	'.webm',
+	'.wmv',
+	'.mp3',
+	'.m4a',
+	'.m4b',
+	'.flac',
+]);
+
+function isProbed(path: string): boolean {
+	const dot = path.lastIndexOf('.');
+	return dot > path.lastIndexOf('/') && PROBED_EXTENSIONS.has(path.slice(dot).toLowerCase());
+}
 
 const ADDED = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?(Z|[+-]\d{2}:\d{2})?$/;
 
@@ -64,7 +93,15 @@ export const TorrentSnapshot = v
 		SelectedFiles: v
 			.object({})
 			.rest(SnapshotFile)
-			.assert((files) => Object.keys(files).length > 0, 'SelectedFiles is empty'),
+			.assert(
+				(files) =>
+					Object.values(files).every((file) => file.MediaInfo || !isProbed(file.path)),
+				'A media file was not analyzed'
+			)
+			.assert(
+				(files) => Object.values(files).some((file) => file.MediaInfo),
+				'No file was analyzed'
+			),
 		Unfixable: v.literal('').optional(),
 		State: v.literal('ok_torrent'),
 		Version: v.string().assert((version) => /^\d+\.\d+\.\d+$/.test(version), 'Invalid Version'),
@@ -88,14 +125,16 @@ function withoutProbeSource(mediaInfo: Record<string, unknown>): Record<string, 
 	return { ...mediaInfo, format };
 }
 
-// toStoredSnapshot keeps the release's identity and each file's probe. Links,
-// torrent ids and Plex keys belong to the account that posted and are dropped.
+// toStoredSnapshot keeps the release's identity and each analyzed file's probe.
+// Links, torrent ids and Plex keys belong to the account that posted and are
+// dropped, and so are files that carry no probe.
 export function toStoredSnapshot(snapshot: TorrentSnapshot) {
 	const files: Record<
 		string,
 		{ path: string; bytes: number; MediaInfo: Prisma.InputJsonObject }
 	> = {};
 	for (const [key, file] of Object.entries(snapshot.SelectedFiles)) {
+		if (!file.MediaInfo) continue;
 		files[key] = {
 			path: file.path,
 			bytes: file.bytes,

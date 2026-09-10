@@ -54,7 +54,13 @@ function generatePassword(hash: string, salt: string): string {
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
 	const result = TorrentSnapshot.try(req.body);
 	if (!result.ok) {
-		console.warn('Rejected torrent snapshot', { issue: result.message });
+		// Every failing path, not just the first: "(+ 2 other issues)" hid whether
+		// a refused release was half-analyzed or only carried an unprobed sidecar.
+		console.warn('Rejected torrent snapshot', {
+			issues: result.issues
+				.slice(0, 5)
+				.map((issue) => `${issue.code} at .${issue.path.join('.')}`),
+		});
 		return res.status(400).json({ message: 'Invalid torrent snapshot', issue: result.message });
 	}
 

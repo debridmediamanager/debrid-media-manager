@@ -1,6 +1,7 @@
 import handler from '@/pages/api/torrents/snapshot';
 import { repository } from '@/services/repository';
 import legacyWorkerSnapshot from '@/test/fixtures/torrentSnapshot/legacy-worker-0.10.0.json';
+import zurgDirectWithNfoSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0-with-nfo.json';
 import zurgDirectSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { extractStreamMetadata } from '@/utils/streamMetadata';
@@ -10,12 +11,16 @@ import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/services/repository');
 const mockRepository = vi.mocked(repository);
 
-// Both fixtures are real snapshots with their account links, torrent ids and
+// The fixtures are real snapshots with their account links, torrent ids and
 // Plex keys replaced. One is what zurgtorrent-worker forwarded before January,
-// the other is what zurg 0.11.0 posts here directly.
+// one is what zurg 0.11.0 posts here directly. The third adds a real .nfo entry
+// as zurg serializes it: zurg selects sidecars but only probes media, and on
+// 2026-09-10 DMM refused live releases for exactly that
+// ("invalid_type at .SelectedFiles.<name>.nfo.MediaInfo (expected object)").
 const fixtures = [
 	['as zurgtorrent-worker forwards it', legacyWorkerSnapshot],
 	['as zurg posts it directly', zurgDirectSnapshot],
+	['with a sidecar zurg never probes', zurgDirectWithNfoSnapshot],
 ] as const;
 
 function post(body: unknown, headers: Record<string, string> = {}) {
