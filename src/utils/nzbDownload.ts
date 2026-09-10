@@ -61,7 +61,7 @@ export async function downloadCleanNzb(id: string, title: string): Promise<Clean
 }
 
 /** Same anchor dance as downloadMagnetFile, which is what the rest of the app does. */
-function saveBlob(blob: Blob, name: string): void {
+export function saveBlob(blob: Blob, name: string): void {
 	const url = window.URL.createObjectURL(blob);
 	const anchor = document.createElement('a');
 	anchor.href = url;
