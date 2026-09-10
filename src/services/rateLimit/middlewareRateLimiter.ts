@@ -11,6 +11,12 @@ import Redis from 'ioredis';
 export const RATE_LIMIT_CONFIGS = {
 	stream: { name: 'stream', rateLimit: 1, windowSeconds: 5 }, // 1 request per 5 seconds for stream endpoints
 	torrents: { name: 'torrents', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for torrents API
+	// zurg posts a snapshot after each analysis pass and does not pace itself. Over
+	// 2026-09-07..10 one zurg averaged 13 a minute and another sent 82 inside two
+	// seconds, so on the `torrents` budget two posts in three were refused - and
+	// their hash-imdb calls shared that counter. Sized to fit every burst seen
+	// while still holding an address to 10 a second.
+	snapshot: { name: 'snapshot', rateLimit: 100, windowSeconds: 10 },
 	// A season search asks two episodes at a time of every enabled Tor addon, and
 	// there are five of those, so ten proxy calls land together - and the sliding
 	// window still holds the previous second, so two of those bursts have to fit.

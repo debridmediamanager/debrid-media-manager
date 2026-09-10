@@ -1,5 +1,6 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
+import { TorrentSnapshot, toStoredSnapshot } from '@/utils/torrentSnapshot';
 import crypto from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -13,13 +14,6 @@ export const config = {
 
 function getSharedSecret() {
 	return process.env.ZURGTORRENT_SYNC_SECRET;
-}
-
-function extractHash(payload: any): string | null {
-	if (!payload) return null;
-	if (typeof payload.Hash === 'string') return payload.Hash;
-	if (typeof payload.hash === 'string') return payload.hash;
-	return null;
 }
 
 function deriveSnapshotId(hash: string, added: unknown): { id: string; date: Date } {
@@ -54,35 +48,24 @@ function generatePassword(hash: string, salt: string): string {
 		.digest('hex');
 }
 
+// Any zurg may post, with or without a token: zurg sends its user's own DMM
+// key, and older builds reach here through zurgtorrent-worker. The shape check
+// and the allowlist in toStoredSnapshot are what keep junk and account data out.
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
-	const sharedSecret = getSharedSecret();
-	if (!sharedSecret) {
-		console.error('Missing ZURGTORRENT_SYNC_SECRET environment variable');
-		return res.status(500).json({ message: 'Server misconfiguration' });
+	const result = TorrentSnapshot.try(req.body);
+	if (!result.ok) {
+		console.warn('Rejected torrent snapshot', { issue: result.message });
+		return res.status(400).json({ message: 'Invalid torrent snapshot', issue: result.message });
 	}
 
-	const authHeader = req.headers['x-zurg-token'];
-	const token = Array.isArray(authHeader) ? authHeader[0] : authHeader;
-	if (token !== sharedSecret) {
-		console.warn('Rejected torrent snapshot ingestion due to invalid sync secret');
-		return res.status(401).json({ message: 'Unauthorized' });
-	}
-
-	const payload = req.body;
-	const hash = extractHash(payload);
-
-	if (!hash) {
-		console.warn('Torrent snapshot payload missing hash field');
-		return res.status(400).json({ message: 'Missing torrent hash' });
-	}
-
+	const snapshot = toStoredSnapshot(result.value);
 	try {
-		const { id, date } = deriveSnapshotId(hash, payload?.Added ?? payload?.added);
+		const { id, date } = deriveSnapshotId(snapshot.Hash, snapshot.Added);
 		await repository.upsertTorrentSnapshot({
 			id,
-			hash,
+			hash: snapshot.Hash,
 			addedDate: date,
-			payload,
+			payload: snapshot,
 		});
 		return res.status(201).json({ success: true, id });
 	} catch (error) {
@@ -139,4 +122,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	return res.status(405).json({ message: 'Method not allowed' });
 }
 
-export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.torrents);
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.snapshot);

@@ -1,11 +1,36 @@
 import handler from '@/pages/api/torrents/snapshot';
 import { repository } from '@/services/repository';
+import legacyWorkerSnapshot from '@/test/fixtures/torrentSnapshot/legacy-worker-0.10.0.json';
+import zurgDirectSnapshot from '@/test/fixtures/torrentSnapshot/zurg-direct-0.11.0.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { extractStreamMetadata } from '@/utils/streamMetadata';
 import crypto from 'crypto';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 const mockRepository = vi.mocked(repository);
+
+// Both fixtures are real snapshots with their account links, torrent ids and
+// Plex keys replaced. One is what zurgtorrent-worker forwarded before January,
+// the other is what zurg 0.11.0 posts here directly.
+const fixtures = [
+	['as zurgtorrent-worker forwards it', legacyWorkerSnapshot],
+	['as zurg posts it directly', zurgDirectSnapshot],
+] as const;
+
+function post(body: unknown, headers: Record<string, string> = {}) {
+	return createMockRequest({ method: 'POST', headers, body });
+}
+
+function storedPayload(): Record<string, any> {
+	return mockRepository.upsertTorrentSnapshot.mock.calls[0][0].payload as Record<string, any>;
+}
+
+function withChange(change: (snapshot: Record<string, any>) => void) {
+	const snapshot = structuredClone(zurgDirectSnapshot) as Record<string, any>;
+	change(snapshot);
+	return snapshot;
+}
 
 describe('/api/torrents/snapshot', () => {
 	const originalEnv = { ...process.env };
@@ -14,7 +39,7 @@ describe('/api/torrents/snapshot', () => {
 		vi.clearAllMocks();
 		process.env = { ...originalEnv };
 		process.env.ZURGTORRENT_SYNC_SECRET = 'sync-secret';
-		mockRepository.upsertTorrentSnapshot = vi.fn();
+		mockRepository.upsertTorrentSnapshot = vi.fn().mockResolvedValue(undefined);
 		mockRepository.getLatestTorrentSnapshot = vi.fn();
 	});
 
@@ -32,94 +57,112 @@ describe('/api/torrents/snapshot', () => {
 		expect(res.json).toHaveBeenCalledWith({ message: 'Method not allowed' });
 	});
 
-	it('returns 500 when sync secret is missing', async () => {
-		delete process.env.ZURGTORRENT_SYNC_SECRET;
-		const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+	describe('POST', () => {
+		it('accepts a zurg snapshot with no sync secret configured', async () => {
+			delete process.env.ZURGTORRENT_SYNC_SECRET;
+			const res = createMockResponse();
 
-		const req = createMockRequest({
-			method: 'POST',
-			headers: { 'x-zurg-token': 'sync-secret' },
-			body: { hash: 'abc' },
+			await handler(post(zurgDirectSnapshot, { 'x-zurg-token': 'a-users-own-key' }), res);
+
+			const id = `${zurgDirectSnapshot.Hash}:${zurgDirectSnapshot.Added.slice(0, 10)}`;
+			expect(res.status).toHaveBeenCalledWith(201);
+			expect(res.json).toHaveBeenCalledWith({ success: true, id });
+			expect(mockRepository.upsertTorrentSnapshot).toHaveBeenCalledWith(
+				expect.objectContaining({ id, hash: zurgDirectSnapshot.Hash })
+			);
 		});
-		const res = createMockResponse();
 
-		await handler(req, res);
+		it.each(fixtures)('accepts a snapshot %s', async (_, snapshot) => {
+			const res = createMockResponse();
 
-		expect(errorSpy).toHaveBeenCalledWith(
-			'Missing ZURGTORRENT_SYNC_SECRET environment variable'
+			await handler(post(snapshot), res);
+
+			expect(res.status).toHaveBeenCalledWith(201);
+			expect(mockRepository.upsertTorrentSnapshot).toHaveBeenCalledTimes(1);
+		});
+
+		it.each(fixtures)(
+			'stores media details and nothing of the account, %s',
+			async (_, snapshot) => {
+				await handler(post(snapshot), createMockResponse());
+
+				const payload = storedPayload();
+				const text = JSON.stringify(payload);
+				expect(text).not.toContain('real-debrid.com');
+				expect(text).not.toContain('REDACTEDID');
+				const kept = [
+					'Added',
+					'Hash',
+					'IMDBID',
+					'Name',
+					'OriginalName',
+					'SelectedFiles',
+					'State',
+					'Version',
+				];
+				// An empty IMDBID says nothing, so it is not kept.
+				expect(Object.keys(payload).sort()).toEqual(
+					kept.filter((key) => key !== 'IMDBID' || Boolean(snapshot.IMDBID))
+				);
+				const files = Object.values(payload.SelectedFiles) as Record<string, any>[];
+				expect(files).toHaveLength(1);
+				expect(Object.keys(files[0]).sort()).toEqual(['MediaInfo', 'bytes', 'path']);
+				expect(files[0].MediaInfo.streams.length).toBeGreaterThan(0);
+				expect(files[0].MediaInfo.format).not.toHaveProperty('filename');
+				expect(files[0].MediaInfo.format.duration).toEqual(expect.any(String));
+			}
 		);
-		expect(res.status).toHaveBeenCalledWith(500);
-		expect(res.json).toHaveBeenCalledWith({ message: 'Server misconfiguration' });
 
-		errorSpy.mockRestore();
-	});
+		it.each(fixtures)('keeps what the Stremio addons read, %s', async (_, snapshot) => {
+			await handler(post(snapshot), createMockResponse());
 
-	it('returns 401 when sync secret does not match', async () => {
-		const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-		const req = createMockRequest({
-			method: 'POST',
-			headers: { 'x-zurg-token': 'bad-secret' },
-			body: { hash: 'abc' },
+			const metadata = extractStreamMetadata(storedPayload());
+			expect(metadata?.resolution).toEqual(expect.any(String));
+			expect(metadata?.videoCodec).toEqual(expect.any(String));
+			expect(metadata?.audioCodec).toEqual(expect.any(String));
 		});
-		const res = createMockResponse();
 
-		await handler(req, res);
+		it.each([
+			[
+				'a file that was never analyzed',
+				withChange((s) => {
+					Object.values<Record<string, any>>(s.SelectedFiles)[0].MediaInfo = null;
+				}),
+			],
+			['a release zurg holds as broken', withChange((s) => (s.State = 'broken_torrent'))],
+			[
+				'a release zurg could not repair',
+				withChange((s) => (s.Unfixable = 'infringing_torrent')),
+			],
+			['a hash that is not an infohash', withChange((s) => (s.Hash = 'abc'))],
+			['no files', withChange((s) => (s.SelectedFiles = {}))],
+			['an unparseable Added date', withChange((s) => (s.Added = 'yesterday'))],
+			['no body', undefined],
+		])('rejects %s', async (_, snapshot) => {
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			const res = createMockResponse();
 
-		expect(warnSpy).toHaveBeenCalledWith(
-			'Rejected torrent snapshot ingestion due to invalid sync secret'
-		);
-		expect(res.status).toHaveBeenCalledWith(401);
-		expect(res.json).toHaveBeenCalledWith({ message: 'Unauthorized' });
+			await handler(post(snapshot), res);
 
-		warnSpy.mockRestore();
-	});
-
-	it('returns 400 when payload hash is missing', async () => {
-		const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-		const req = createMockRequest({
-			method: 'POST',
-			headers: { 'x-zurg-token': 'sync-secret' },
-			body: { name: 'no hash here' },
+			expect(res.status).toHaveBeenCalledWith(400);
+			expect(res.json).toHaveBeenCalledWith(
+				expect.objectContaining({ message: 'Invalid torrent snapshot' })
+			);
+			expect(mockRepository.upsertTorrentSnapshot).not.toHaveBeenCalled();
+			warnSpy.mockRestore();
 		});
-		const res = createMockResponse();
 
-		await handler(req, res);
+		it('returns 500 when the snapshot cannot be stored', async () => {
+			const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+			mockRepository.upsertTorrentSnapshot = vi.fn().mockRejectedValue(new Error('db down'));
+			const res = createMockResponse();
 
-		expect(warnSpy).toHaveBeenCalledWith('Torrent snapshot payload missing hash field');
-		expect(res.status).toHaveBeenCalledWith(400);
-		expect(res.json).toHaveBeenCalledWith({ message: 'Missing torrent hash' });
+			await handler(post(zurgDirectSnapshot), res);
 
-		warnSpy.mockRestore();
-	});
-
-	it('persists snapshot when payload is valid', async () => {
-		mockRepository.upsertTorrentSnapshot = vi.fn().mockResolvedValue(undefined);
-
-		const req = createMockRequest({
-			method: 'POST',
-			headers: { 'x-zurg-token': 'sync-secret' },
-			body: {
-				Hash: 'abcdef1234567890abcdef1234567890abcdef12',
-				Added: '2024-01-01T12:00:00Z',
-			},
+			expect(res.status).toHaveBeenCalledWith(500);
+			expect(res.json).toHaveBeenCalledWith({ message: 'Internal server error' });
+			errorSpy.mockRestore();
 		});
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(mockRepository.upsertTorrentSnapshot).toHaveBeenCalledTimes(1);
-		const callArgs = mockRepository.upsertTorrentSnapshot.mock.calls[0][0];
-		expect(callArgs).toMatchObject({
-			id: 'abcdef1234567890abcdef1234567890abcdef12:2024-01-01',
-			hash: 'abcdef1234567890abcdef1234567890abcdef12',
-			payload: {
-				Hash: 'abcdef1234567890abcdef1234567890abcdef12',
-				Added: '2024-01-01T12:00:00Z',
-			},
-		});
-		expect(callArgs.addedDate.toISOString()).toBe('2024-01-01T00:00:00.000Z');
-		expect(res.status).toHaveBeenCalledWith(201);
-		expect(res.json).toHaveBeenCalledWith({ success: true, id: callArgs.id });
 	});
 
 	it('returns 500 when sync secret is missing for reads', async () => {
