@@ -1,0 +1,88 @@
+{
+	"meta": {
+		"imdb_id": "tt37752275",
+		"name": "Clash of the Thundermans",
+		"popularities": { "trakt": 62, "moviedb": 214.9437, "stremio": 7.16479, "stremio_lib": 0 },
+		"type": "movie",
+		"cast": ["Kira Kosarin", "Jack Griffo", "Maya Le Clark"],
+		"country": "Canada",
+		"description": "When Chloe's dangerous new power emerges, she's ordered to superhero boarding school. The family divides as Phoebe, Barb and Billy hide with her, while Max, Hank and Nora pursue them, leading to a battle over their future.",
+		"director": ["Trevor Kirschner"],
+		"genre": ["Action", "Comedy", "Crime"],
+		"imdbRating": "4.6",
+		"released": "2026-09-03T00:00:00.000Z",
+		"slug": "movie/clash-of-the-thundermans-37752275",
+		"writer": ["Jed Spingarn", "Sean W. Cunningham", "Marc Dworkin"],
+		"year": "2026",
+		"moviedb_id": 1506560,
+		"poster": "https://images.metahub.space/poster/small/tt37752275/img",
+		"runtime": "72 min",
+		"trailers": [{ "source": "Tui9Jpmyb6Q", "type": "Trailer" }],
+		"popularity": 7.16479,
+		"logo": "https://images.metahub.space/logo/medium/tt37752275/img",
+		"background": "https://images.metahub.space/background/medium/tt37752275/img",
+		"id": "tt37752275",
+		"genres": ["Action", "Comedy", "Crime"],
+		"releaseInfo": "2026",
+		"trailerStreams": [{ "title": "Clash of the Thundermans", "ytId": "Tui9Jpmyb6Q" }],
+		"links": [
+			{ "name": "4.6", "category": "imdb", "url": "https://imdb.com/title/tt37752275" },
+			{
+				"name": "Clash of the Thundermans",
+				"category": "share",
+				"url": "https://www.strem.io/s/movie/clash-of-the-thundermans-37752275"
+			},
+			{
+				"name": "Action",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Action"
+			},
+			{
+				"name": "Comedy",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Comedy"
+			},
+			{
+				"name": "Crime",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Crime"
+			},
+			{
+				"name": "Kira Kosarin",
+				"category": "Cast",
+				"url": "stremio:///search?search=Kira%20Kosarin"
+			},
+			{
+				"name": "Jack Griffo",
+				"category": "Cast",
+				"url": "stremio:///search?search=Jack%20Griffo"
+			},
+			{
+				"name": "Maya Le Clark",
+				"category": "Cast",
+				"url": "stremio:///search?search=Maya%20Le%20Clark"
+			},
+			{
+				"name": "Jed Spingarn",
+				"category": "Writers",
+				"url": "stremio:///search?search=Jed%20Spingarn"
+			},
+			{
+				"name": "Sean W. Cunningham",
+				"category": "Writers",
+				"url": "stremio:///search?search=Sean%20W.%20Cunningham"
+			},
+			{
+				"name": "Marc Dworkin",
+				"category": "Writers",
+				"url": "stremio:///search?search=Marc%20Dworkin"
+			},
+			{
+				"name": "Trevor Kirschner",
+				"category": "Directors",
+				"url": "stremio:///search?search=Trevor%20Kirschner"
+			}
+		],
+		"behaviorHints": { "defaultVideoId": "tt37752275", "hasScheduledVideos": false }
+	}
+}

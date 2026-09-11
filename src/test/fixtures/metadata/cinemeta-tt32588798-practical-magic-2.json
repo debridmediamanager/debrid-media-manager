@@ -1,0 +1,92 @@
+{
+	"meta": {
+		"imdb_id": "tt32588798",
+		"name": "Practical Magic 2",
+		"type": "movie",
+		"cast": ["Lee Pace", "Nicole Kidman", "Maisie Williams"],
+		"country": "United States",
+		"description": "A multi generational family of witches, cursed to be loveless for centuries, attempts to break the spell by confronting dark secrets and sacrificing for each other.",
+		"director": ["Susanne Bier"],
+		"genre": ["Comedy", "Drama", "Fantasy"],
+		"imdbRating": "",
+		"released": "2026-09-11T00:00:00.000Z",
+		"slug": "movie/practical-magic-2-32588798",
+		"writer": ["Akiva Goldsman", "Alice Hoffman", "Georgia Pritchett"],
+		"year": "2026",
+		"moviedb_id": 1302904,
+		"popularities": {
+			"moviedb": 2.4681,
+			"stremio": 0.08227000000000001,
+			"stremio_lib": 0,
+			"trakt": 174
+		},
+		"background": "https://images.metahub.space/background/medium/tt32588798/img",
+		"logo": "https://images.metahub.space/logo/medium/tt32588798/img",
+		"poster": "https://images.metahub.space/poster/small/tt32588798/img",
+		"trailers": [{ "source": "iSWP2feb4rw", "type": "Trailer" }],
+		"awards": "1 nomination total",
+		"popularity": 0.08227000000000001,
+		"id": "tt32588798",
+		"genres": ["Comedy", "Drama", "Fantasy"],
+		"releaseInfo": "2026",
+		"trailerStreams": [{ "title": "Practical Magic 2", "ytId": "iSWP2feb4rw" }],
+		"links": [
+			{
+				"name": "Practical Magic 2",
+				"category": "share",
+				"url": "https://www.strem.io/s/movie/practical-magic-2-32588798"
+			},
+			{
+				"name": "Comedy",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Comedy"
+			},
+			{
+				"name": "Drama",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Drama"
+			},
+			{
+				"name": "Fantasy",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Fantasy"
+			},
+			{
+				"name": "Lee Pace",
+				"category": "Cast",
+				"url": "stremio:///search?search=Lee%20Pace"
+			},
+			{
+				"name": "Nicole Kidman",
+				"category": "Cast",
+				"url": "stremio:///search?search=Nicole%20Kidman"
+			},
+			{
+				"name": "Maisie Williams",
+				"category": "Cast",
+				"url": "stremio:///search?search=Maisie%20Williams"
+			},
+			{
+				"name": "Akiva Goldsman",
+				"category": "Writers",
+				"url": "stremio:///search?search=Akiva%20Goldsman"
+			},
+			{
+				"name": "Alice Hoffman",
+				"category": "Writers",
+				"url": "stremio:///search?search=Alice%20Hoffman"
+			},
+			{
+				"name": "Georgia Pritchett",
+				"category": "Writers",
+				"url": "stremio:///search?search=Georgia%20Pritchett"
+			},
+			{
+				"name": "Susanne Bier",
+				"category": "Directors",
+				"url": "stremio:///search?search=Susanne%20Bier"
+			}
+		],
+		"behaviorHints": { "defaultVideoId": "tt32588798", "hasScheduledVideos": false }
+	}
+}

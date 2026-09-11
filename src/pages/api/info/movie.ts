@@ -43,39 +43,64 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			},
 		});
 
-		// OMDb only has to answer when both of the above miss, but it is fetched
-		// alongside them so a fallback costs no extra round trip. getOmdbMetadata
-		// resolves to null rather than rejecting, so it cannot fail the request.
-		const omdbPromise = getOmdbMetadata(imdbid);
+		const [mdbResponse, cinemetaResponse] = await Promise.all([mdbPromise, cinePromise]);
 
-		const [mdbResponse, cinemetaResponse, omdbResponse] = await Promise.all([
-			mdbPromise,
-			cinePromise,
-			omdbPromise,
-		]);
-
-		let imdb_score =
-			(mdbResponse.ratings?.reduce((acc: number | undefined, rating: MRating) => {
+		// mdblist scores IMDb out of 100 and Cinemeta out of 10; this route reports
+		// out of 100. mdblist is read first because it carries the exact rating
+		// Cinemeta has already rounded, and it has one for titles Cinemeta has not
+		// rated yet. Neither is guaranteed: a rating can be absent, null, or an
+		// empty string that parses to NaN.
+		const mdbImdbScore = mdbResponse.ratings?.reduce(
+			(acc: number | undefined, rating: MRating) => {
 				if (rating.source === 'imdb') {
 					return rating.score as number;
 				}
 				return acc;
-			}, undefined) ?? cinemetaResponse.meta?.imdbRating)
-				? parseFloat(cinemetaResponse.meta?.imdbRating) * 10
+			},
+			undefined
+		);
+		const cinemetaImdbScore = parseFloat(cinemetaResponse.meta?.imdbRating) * 10;
+
+		let imdb_score: number | null = Number.isFinite(mdbImdbScore as number)
+			? (mdbImdbScore as number)
+			: Number.isFinite(cinemetaImdbScore)
+				? cinemetaImdbScore
 				: null;
 
-		// Also covers the NaN this produces when mdblist has a rating but cinemeta
-		// has no imdbRating to parse; `??` alone would let that NaN through.
-		if (imdb_score === null || !Number.isFinite(imdb_score)) {
-			const omdbRating = getOmdbRating(omdbResponse);
-			imdb_score = omdbRating === null ? null : omdbRating * 10;
+		let resolvedTitle: string | undefined =
+			mdbResponse.title ?? cinemetaResponse.meta?.name ?? undefined;
+		let resolvedDescription: string | undefined =
+			mdbResponse.description ?? cinemetaResponse.meta?.description ?? undefined;
+		let resolvedPoster: string | undefined =
+			mdbResponse.poster ?? cinemetaResponse.meta?.poster ?? undefined;
+		let resolvedYear: string | number | undefined =
+			mdbResponse.year ?? cinemetaResponse.meta?.releaseInfo ?? undefined;
+
+		// OMDb is the last resort for every field above and the most rate-limited
+		// source DMM uses, so it is asked only when one of them is actually missing.
+		// On a title mdblist and Cinemeta both know it has nothing to add, and the
+		// round trip it costs here is one this request would otherwise have spent on
+		// every title. getOmdbMetadata resolves to null rather than rejecting, so it
+		// cannot fail the request.
+		if (
+			imdb_score === null ||
+			resolvedTitle === undefined ||
+			resolvedDescription === undefined ||
+			resolvedPoster === undefined ||
+			resolvedYear === undefined
+		) {
+			const omdbResponse = await getOmdbMetadata(imdbid);
+			if (imdb_score === null) {
+				const omdbRating = getOmdbRating(omdbResponse);
+				imdb_score = omdbRating === null ? null : omdbRating * 10;
+			}
+			resolvedTitle = resolvedTitle ?? omdbField(omdbResponse?.Title);
+			resolvedDescription = resolvedDescription ?? omdbField(omdbResponse?.Plot);
+			resolvedPoster = resolvedPoster ?? getOmdbPoster(omdbResponse) ?? undefined;
+			resolvedYear = resolvedYear ?? omdbField(omdbResponse?.Year);
 		}
 
-		const title =
-			mdbResponse.title ??
-			cinemetaResponse.meta?.name ??
-			omdbField(omdbResponse?.Title) ??
-			'Unknown';
+		const title = resolvedTitle ?? 'Unknown';
 
 		let trailer = mdbResponse.trailer ?? '';
 		let digitalReleaseDate = '';
@@ -130,25 +155,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		return res.status(200).json({
 			title,
-			description:
-				mdbResponse.description ??
-				cinemetaResponse.meta?.description ??
-				omdbField(omdbResponse?.Plot) ??
-				'n/a',
-			poster:
-				mdbResponse.poster ??
-				cinemetaResponse.meta?.poster ??
-				getOmdbPoster(omdbResponse) ??
-				'',
+			description: resolvedDescription ?? 'n/a',
+			poster: resolvedPoster ?? '',
 			backdrop:
 				mdbResponse.backdrop ??
 				cinemetaResponse.meta?.background ??
 				`https://picsum.photos/seed/${encodeURIComponent(title)}/1800/300`,
-			year:
-				mdbResponse.year ??
-				cinemetaResponse.meta?.releaseInfo ??
-				omdbField(omdbResponse?.Year) ??
-				'????',
+			year: resolvedYear ?? '????',
 			imdb_score: imdb_score ?? 0,
 			trailer,
 			digitalReleaseDate,

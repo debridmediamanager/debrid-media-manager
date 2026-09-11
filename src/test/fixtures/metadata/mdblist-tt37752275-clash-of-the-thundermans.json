@@ -1,0 +1,82 @@
+{
+	"age_rating": 7,
+	"backdrop": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/tBZMwg5oCJn8P0pStfuOMhhSQD3.jpg",
+	"certification": "G",
+	"commonsense": null,
+	"country": "us",
+	"description": "When Chloe develops a destructive new superpower, the Hero League orders her to an elite boarding school for superheroes to learn control of her abilities. Faced with the prospect of sending Chloe away for years, the Thundermans split apart, with Phoebe, Barb and Billy taking her into hiding. Max, Hank, and Nora track their rogue family members, until the two factions face off against each other in a full-on battle for the Thundermans\u2019 future.",
+	"imdbid": "tt37752275",
+	"keywords": [
+		{ "id": 43291, "name": "has-trailer" },
+		{ "id": 153, "name": "sequel" },
+		{ "id": 404295, "name": "collection-follow-up" },
+		{ "id": 38390, "name": "belongs-to-collection" },
+		{ "id": 295883, "name": "final-battle" },
+		{ "id": 15676, "name": "superpower" },
+		{ "id": 44240, "name": "final-showdown" },
+		{ "id": 295544, "name": "superhero" },
+		{ "id": 48371, "name": "talking-rabbit" },
+		{ "id": 295210, "name": "family-relationships" },
+		{ "id": 8793, "name": "sitcom" },
+		{ "id": 298704, "name": "based-on-tv-series" },
+		{ "id": 518, "name": "family-relationships" },
+		{ "id": 637, "name": "superhero" }
+	],
+	"language": "en",
+	"poster": "https://image.tmdb.org/t/p/original/16oqRrWVzQm6qdGfBxvziZ2UiMT.jpg",
+	"ratings": [
+		{ "source": "imdb", "value": 4.6, "score": 46, "votes": 433, "popular": 79 },
+		{ "source": "metacritic", "value": null, "score": null, "votes": null, "url": null },
+		{ "source": "metacriticuser", "value": 0, "score": null, "votes": null },
+		{ "source": "trakt", "value": 58, "score": 58, "votes": 91 },
+		{
+			"source": "tomatoes",
+			"value": null,
+			"score": null,
+			"votes": null,
+			"url": "/m/clash_of_the_thundermans"
+		},
+		{ "source": "tomatoesaudience", "value": null, "score": null, "votes": 14 },
+		{ "source": "tmdb", "value": 67, "score": 67, "votes": 43 },
+		{
+			"source": "letterboxd",
+			"value": 2.6,
+			"score": 52,
+			"votes": 1814,
+			"url": "/film/clash-of-the-thundermans/"
+		},
+		{ "source": "rogerebert", "value": null, "url": null },
+		{ "source": "myanimelist", "value": null, "votes": null, "id": null }
+	],
+	"released": "2026-09-03",
+	"released_digital": "2026-09-03",
+	"response": true,
+	"reviews": [
+		{
+			"updated_at": "2026-09-07",
+			"author": "Lunita Marino",
+			"rating": 7,
+			"provider_id": 1,
+			"content": "despues de 10 a\u00f1os, era hora de separar a max de la familia, le va a ir mejor"
+		}
+	],
+	"runtime": 72,
+	"score": 40,
+	"score_average": 56,
+	"spoken_language": "en",
+	"status": "released",
+	"streams": [],
+	"title": "Clash of the Thundermans",
+	"tmdbid": 1506560,
+	"trailer": "https://youtube.com/watch?v=Tui9Jpmyb6Q",
+	"traktid": 1235745,
+	"type": "movie",
+	"watch_providers": [
+		{ "id": 582, "name": "Paramount+ Amazon Channel" },
+		{ "id": 633, "name": "Paramount+ Roku Premium Channel" },
+		{ "id": 2303, "name": "Paramount Plus Premium" },
+		{ "id": 2383, "name": "Philo" },
+		{ "id": 2616, "name": "Paramount Plus Essential" }
+	],
+	"year": 2026
+}

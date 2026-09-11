@@ -1,6 +1,8 @@
 import handler from '@/pages/api/info/show';
+import wednesdayCinemeta from '@/test/fixtures/metadata/cinemeta-tt13443470-wednesday.json';
+import wednesdayMdblist from '@/test/fixtures/metadata/mdblist-tt13443470-wednesday.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/mdblistClient', () => ({
 	getMdblistClient: vi.fn(),
@@ -29,10 +31,24 @@ describe('/api/info/show', () => {
 		getOmdbInfo: vi.fn().mockResolvedValue(null),
 	};
 
+	const tmdbEnv = { key: process.env.TMDB_KEY, token: process.env.TMDB_READ_TOKEN };
+
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.mocked(getMdblistClient).mockReturnValue(mockMdbClient as any);
 		vi.mocked(getMetadataCache).mockReturnValue(mockMetadataCache as any);
+		mockMetadataCache.getTraktShowEpisode.mockResolvedValue(null);
+		// Fixtures carry a real tmdbid; without a credential the route skips the
+		// TMDB status/trailer call rather than reaching the network.
+		delete process.env.TMDB_KEY;
+		delete process.env.TMDB_READ_TOKEN;
+	});
+
+	afterEach(() => {
+		if (tmdbEnv.key === undefined) delete process.env.TMDB_KEY;
+		else process.env.TMDB_KEY = tmdbEnv.key;
+		if (tmdbEnv.token === undefined) delete process.env.TMDB_READ_TOKEN;
+		else process.env.TMDB_READ_TOKEN = tmdbEnv.token;
 	});
 
 	it('requires an IMDb id', async () => {
@@ -233,6 +249,23 @@ describe('/api/info/show', () => {
 				// /api/info/movie which multiplies by 10.
 				imdb_score: 9.5,
 			})
+		);
+	});
+
+	it('does not ask OMDb when mdblist and Cinemeta have already answered', async () => {
+		// OMDb is the most rate-limited source DMM uses, and on a show the other
+		// two know, every field it could fill is already filled.
+		mockMdbClient.getInfoByImdbId.mockResolvedValue(wednesdayMdblist);
+		mockMetadataCache.getCinemetaSeries.mockResolvedValue(wednesdayCinemeta);
+
+		const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt13443470' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockMetadataCache.getOmdbInfo).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({ title: 'Wednesday', status: 'Returning Series' })
 		);
 	});
 

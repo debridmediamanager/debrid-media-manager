@@ -34,15 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			},
 		});
 
-		// Last-resort source for the fields below; resolves to null instead of
-		// rejecting, so it can never fail the request.
-		const omdbPromise = getOmdbMetadata(imdbid);
-
-		const [mdbResponse, cinemetaResponse, omdbResponse] = await Promise.all([
-			mdbPromise,
-			cinePromise,
-			omdbPromise,
-		]);
+		const [mdbResponse, cinemetaResponse] = await Promise.all([mdbPromise, cinePromise]);
 
 		const isShowType = (response: any): response is MShow => {
 			return 'seasons' in response;
@@ -114,16 +106,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					return rating.score as number;
 				}
 				return acc;
-			}, undefined) ??
-			// Left on OMDb's native 0-10 scale, which is what this route returns;
-			// movie.ts reports the same rating out of 100.
-			getOmdbRating(omdbResponse);
+			}, undefined);
 
-		const title =
-			mdbResponse?.title ??
-			cinemetaResponse?.meta?.name ??
-			omdbField(omdbResponse?.Title) ??
-			'Unknown';
+		let resolvedTitle: string | undefined =
+			mdbResponse?.title ?? cinemetaResponse?.meta?.name ?? undefined;
+		let resolvedDescription: string | undefined =
+			mdbResponse?.description ?? cinemetaResponse?.meta?.description ?? undefined;
+		let resolvedPoster: string | undefined =
+			mdbResponse?.poster ?? cinemetaResponse?.meta?.poster ?? undefined;
+
+		// OMDb is the last resort for each of these, and the most rate-limited
+		// source DMM uses, so it is asked only when one of them is actually
+		// missing rather than on every request. It resolves to null instead of
+		// rejecting, so it can never fail the request. Its rating stays on OMDb's
+		// native 0-10 scale, as Cinemeta's does; mdblist's above is out of 100.
+		if (
+			imdb_score === undefined ||
+			imdb_score === null ||
+			resolvedTitle === undefined ||
+			resolvedDescription === undefined ||
+			resolvedPoster === undefined
+		) {
+			const omdbResponse = await getOmdbMetadata(imdbid);
+			imdb_score = imdb_score ?? getOmdbRating(omdbResponse);
+			resolvedTitle = resolvedTitle ?? omdbField(omdbResponse?.Title);
+			resolvedDescription = resolvedDescription ?? omdbField(omdbResponse?.Plot);
+			resolvedPoster = resolvedPoster ?? getOmdbPoster(omdbResponse) ?? undefined;
+		}
+
+		const title = resolvedTitle ?? 'Unknown';
 
 		// Check if specials (season 0) exist
 		const has_specials =
@@ -232,16 +243,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		const responseData = {
 			title,
-			description:
-				mdbResponse?.description ??
-				cinemetaResponse?.meta?.description ??
-				omdbField(omdbResponse?.Plot) ??
-				'n/a',
-			poster:
-				mdbResponse?.poster ??
-				cinemetaResponse?.meta?.poster ??
-				getOmdbPoster(omdbResponse) ??
-				'',
+			description: resolvedDescription ?? 'n/a',
+			poster: resolvedPoster ?? '',
 			backdrop:
 				mdbResponse?.backdrop ??
 				cinemetaResponse?.meta?.background ??

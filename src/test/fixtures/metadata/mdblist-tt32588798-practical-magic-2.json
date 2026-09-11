@@ -1,0 +1,93 @@
+{
+	"age_rating": 13,
+	"backdrop": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/wE6syT1vv6W24iLGfhR4kQHnIDN.jpg",
+	"certification": "PG-13",
+	"commonsense": null,
+	"country": "us",
+	"description": "The Owens sisters must confront the dark curse that threatens to unravel their family once and for all.",
+	"imdbid": "tt32588798",
+	"keywords": [
+		{ "id": 153, "name": "sequel" },
+		{ "id": 404295, "name": "collection-follow-up" },
+		{ "id": 38390, "name": "belongs-to-collection" },
+		{ "id": 295219, "name": "sequel" },
+		{ "id": 411056, "name": "legacy-sequel" },
+		{ "id": 44348, "name": "second-part" },
+		{ "id": 43291, "name": "has-trailer" },
+		{ "id": 91, "name": "based-on-novel-or-book" },
+		{ "id": 189, "name": "magic" },
+		{ "id": 3779, "name": "witch" },
+		{ "id": 5876, "name": "legacy" },
+		{ "id": 386, "name": "family" },
+		{ "id": 518, "name": "family-relationships" },
+		{ "id": 307039, "name": "rotten" }
+	],
+	"language": "en",
+	"poster": "https://image.tmdb.org/t/p/original/ogwQOLbCfncjvBhFb5l0OmQH8KC.jpg",
+	"ratings": [
+		{ "source": "imdb", "value": 6.2, "score": 62, "votes": 185, "popular": 19 },
+		{
+			"source": "metacritic",
+			"value": 45,
+			"score": 45,
+			"votes": 27,
+			"url": "/movie/practical-magic-2"
+		},
+		{ "source": "metacriticuser", "value": 0.0, "score": 0.0, "votes": 0 },
+		{ "source": "trakt", "value": 75, "score": 75, "votes": 24 },
+		{
+			"source": "tomatoes",
+			"value": 35,
+			"score": 35,
+			"votes": 62,
+			"url": "/m/practical_magic_2"
+		},
+		{ "source": "tomatoesaudience", "value": null, "score": null, "votes": 0 },
+		{ "source": "tmdb", "value": 65, "score": 65, "votes": 12 },
+		{
+			"source": "letterboxd",
+			"value": 3.1,
+			"score": 62,
+			"votes": 2603,
+			"url": "/film/practical-magic-2/"
+		},
+		{
+			"source": "rogerebert",
+			"value": 1.5,
+			"url": "practical-magic-2-nicole-kidman-sandra-bullock-movie-review-2026"
+		},
+		{ "source": "myanimelist", "value": null, "votes": null, "id": null }
+	],
+	"released": "2026-09-09",
+	"released_digital": null,
+	"response": true,
+	"reviews": [
+		{
+			"updated_at": "2026-08-27",
+			"author": "Zoe",
+			"rating": null,
+			"provider_id": 1,
+			"content": "I know it's just a Hollywood movie but all that botox puts me off this film."
+		},
+		{
+			"updated_at": "2026-08-27",
+			"author": "Zoe",
+			"rating": null,
+			"provider_id": 1,
+			"content": "The first Practical Magic they were obsesses with a man &amp; it looks like this one is centred around a man too...."
+		}
+	],
+	"runtime": 110,
+	"score": 33,
+	"score_average": 57,
+	"spoken_language": "en",
+	"status": "released",
+	"streams": [],
+	"title": "Practical Magic 2",
+	"tmdbid": 1302904,
+	"trailer": "https://youtube.com/watch?v=Ho10_4IX1jE",
+	"traktid": 1062564,
+	"type": "movie",
+	"watch_providers": [],
+	"year": 2026
+}

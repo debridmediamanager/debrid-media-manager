@@ -1,6 +1,11 @@
 import handler from '@/pages/api/info/movie';
+import practicalMagicCinemeta from '@/test/fixtures/metadata/cinemeta-tt32588798-practical-magic-2.json';
+import thundermansCinemeta from '@/test/fixtures/metadata/cinemeta-tt37752275-clash-of-the-thundermans.json';
+import practicalMagicMdblist from '@/test/fixtures/metadata/mdblist-tt32588798-practical-magic-2.json';
+import thundermansMdblist from '@/test/fixtures/metadata/mdblist-tt37752275-clash-of-the-thundermans.json';
+import practicalMagicOmdb from '@/test/fixtures/metadata/omdb-tt32588798-practical-magic-2.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/mdblistClient', () => ({
 	getMdblistClient: vi.fn(),
@@ -28,10 +33,23 @@ describe('/api/info/movie', () => {
 		getOmdbInfo: vi.fn().mockResolvedValue(null),
 	};
 
+	const tmdbEnv = { key: process.env.TMDB_KEY, token: process.env.TMDB_READ_TOKEN };
+
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.mocked(getMdblistClient).mockReturnValue(mockMdbClient as any);
 		vi.mocked(getMetadataCache).mockReturnValue(mockMetadataCache as any);
+		// Fixtures carry a real tmdbid; without a credential the route skips the
+		// TMDB trailer/release-date call rather than reaching the network.
+		delete process.env.TMDB_KEY;
+		delete process.env.TMDB_READ_TOKEN;
+	});
+
+	afterEach(() => {
+		if (tmdbEnv.key === undefined) delete process.env.TMDB_KEY;
+		else process.env.TMDB_KEY = tmdbEnv.key;
+		if (tmdbEnv.token === undefined) delete process.env.TMDB_READ_TOKEN;
+		else process.env.TMDB_READ_TOKEN = tmdbEnv.token;
 	});
 
 	it('rejects non-GET methods', async () => {
@@ -61,7 +79,8 @@ describe('/api/info/movie', () => {
 			poster: 'mdb-poster',
 			backdrop: 'mdb-backdrop',
 			year: 2020,
-			ratings: [{ source: 'imdb', score: 8.3 }],
+			// mdblist scores IMDb out of 100: 83 is a rating of 8.3.
+			ratings: [{ source: 'imdb', score: 83 }],
 		});
 		mockMetadataCache.getCinemetaMovie.mockResolvedValue({
 			meta: {
@@ -91,7 +110,9 @@ describe('/api/info/movie', () => {
 			poster: 'mdb-poster',
 			backdrop: 'mdb-backdrop',
 			year: 2020,
-			imdb_score: 75,
+			// mdblist wins over Cinemeta's 7.5: it is the source this route asks
+			// first, and the one that is not already rounded.
+			imdb_score: 83,
 			trailer: '',
 			digitalReleaseDate: '',
 			expectedDigitalReleaseDate: '',
@@ -128,6 +149,53 @@ describe('/api/info/movie', () => {
 				poster: 'https://m.media-amazon.com/images/M/guardians.jpg',
 				year: '2017',
 				imdb_score: 76,
+			})
+		);
+	});
+
+	it('reports the rating mdblist has when it is the only source that has one', async () => {
+		// Captured 2026-09-11, two days after this film opened: mdblist had rated
+		// it 6.2, Cinemeta's imdbRating was an empty string and OMDb's was "N/A".
+		// Production answered 0 for it, and the page hid the IMDb score entirely.
+		mockMdbClient.getInfoByImdbId.mockResolvedValue(practicalMagicMdblist);
+		mockMetadataCache.getCinemetaMovie.mockResolvedValue(practicalMagicCinemeta);
+		mockMetadataCache.getOmdbInfo.mockResolvedValue(practicalMagicOmdb);
+
+		const req = createMockRequest({
+			method: 'GET',
+			query: { imdbid: 'tt32588798' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({
+				title: 'Practical Magic 2',
+				imdb_score: 62,
+			})
+		);
+	});
+
+	it('does not ask OMDb when mdblist and Cinemeta have already answered', async () => {
+		// OMDb is the most rate-limited source DMM uses. On a title the other two
+		// know, every field it could fill is already filled.
+		mockMdbClient.getInfoByImdbId.mockResolvedValue(thundermansMdblist);
+		mockMetadataCache.getCinemetaMovie.mockResolvedValue(thundermansCinemeta);
+
+		const req = createMockRequest({
+			method: 'GET',
+			query: { imdbid: 'tt37752275' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(mockMetadataCache.getOmdbInfo).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({
+				title: 'Clash of the Thundermans',
+				imdb_score: 46,
 			})
 		);
 	});
