@@ -1,4 +1,8 @@
-import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import shawshankCinemeta from '@/test/fixtures/metadata/cinemeta-tt0111161-the-shawshank-redemption.json';
+import wednesdayCinemeta from '@/test/fixtures/metadata/cinemeta-tt13443470-wednesday.json';
+import thundermansCinemeta from '@/test/fixtures/metadata/cinemeta-tt37752275-clash-of-the-thundermans.json';
+import { RECENT_METADATA_TTL } from '@/utils/metadataFreshness';
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MetadataCacheService, getMetadataCache } from './metadataCache';
 
 vi.mock('next/config', () => ({
@@ -187,13 +191,20 @@ describe('MetadataCacheService API helpers', () => {
 			tmdbTvCall,
 			externalIdsCall,
 		] = spy.mock.calls;
-		expect(movieCall).toEqual([
+		expect(movieCall.slice(0, 4)).toEqual([
 			'https://v3-cinemeta.strem.io/meta/movie/tt123.json',
 			'cinemeta_movie_tt123',
 			'cinemeta_movie',
 			undefined,
-			2592000000, // 30 days — never cache a movie permanently, see MOVIE duration
 		]);
+		// The lifetime is a function of the cached row, not a constant: a settled
+		// movie keeps the 30 days it always had, one still being rated does not.
+		const movieMaxAge = movieCall[4] as (cached: unknown) => number;
+		expect(typeof movieMaxAge).toBe('function');
+		expect(movieMaxAge({ meta: { released: '1994-09-23T00:00:00.000Z' } })).toBe(2592000000);
+		expect(movieMaxAge({ meta: { releaseInfo: String(new Date().getFullYear()) } })).toBe(
+			RECENT_METADATA_TTL
+		);
 		expect(seriesCall[0]).toBe(
 			'https://v3-cinemeta.strem.io/catalog/series/top/search=query.json'
 		);
@@ -234,5 +245,74 @@ describe('MetadataCacheService API helpers', () => {
 		const first = getMetadataCache();
 		const second = getMetadataCache();
 		expect(first).toBe(second);
+	});
+});
+
+describe('Cinemeta cache lifetime follows the title', () => {
+	// Pinned to the day the fixtures were captured so "recent" keeps meaning what
+	// it meant then. Only Date is faked; the service still awaits real promises.
+	const CAPTURED_AT = new Date('2026-09-11T12:00:00Z');
+	const HOURS = 60 * 60 * 1000;
+
+	beforeEach(() => {
+		cacheFactory.current = buildCache();
+		vi.useFakeTimers({ toFake: ['Date'] });
+		vi.setSystemTime(CAPTURED_AT);
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+	});
+
+	const cachedRow = (data: unknown, ageMs: number) => ({
+		data,
+		updatedAt: new Date(Date.now() - ageMs),
+	});
+
+	it('refetches a movie released days ago once the row is hours old', async () => {
+		const service = new MetadataCacheService();
+		cacheFactory.current!.getWithMetadata.mockResolvedValue(
+			cachedRow(thundermansCinemeta, 7 * HOURS)
+		);
+		axiosMocks.get.mockResolvedValue({ data: { meta: { imdbRating: '4.6' } } });
+
+		const result = await service.getCinemetaMovie('tt37752275');
+
+		expect(axiosMocks.get).toHaveBeenCalledTimes(1);
+		expect(result).toEqual({ meta: { imdbRating: '4.6' } });
+	});
+
+	it('still serves that row while it is fresh', async () => {
+		const service = new MetadataCacheService();
+		cacheFactory.current!.getWithMetadata.mockResolvedValue(
+			cachedRow(thundermansCinemeta, 2 * HOURS)
+		);
+
+		await service.getCinemetaMovie('tt37752275');
+
+		expect(axiosMocks.get).not.toHaveBeenCalled();
+	});
+
+	it('keeps serving a settled movie for the full thirty days', async () => {
+		const service = new MetadataCacheService();
+		cacheFactory.current!.getWithMetadata.mockResolvedValue(
+			cachedRow(shawshankCinemeta, 10 * 24 * HOURS)
+		);
+
+		await service.getCinemetaMovie('tt0111161');
+
+		expect(axiosMocks.get).not.toHaveBeenCalled();
+	});
+
+	it('refetches an airing series once its row is hours old', async () => {
+		const service = new MetadataCacheService();
+		cacheFactory.current!.getWithMetadata.mockResolvedValue(
+			cachedRow(wednesdayCinemeta, 7 * HOURS)
+		);
+		axiosMocks.get.mockResolvedValue({ data: { meta: { name: 'Wednesday' } } });
+
+		await service.getCinemetaSeries('tt13443470');
+
+		expect(axiosMocks.get).toHaveBeenCalledTimes(1);
 	});
 });

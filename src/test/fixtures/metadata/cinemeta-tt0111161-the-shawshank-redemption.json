@@ -1,0 +1,87 @@
+{
+	"meta": {
+		"awards": "Nominated for 7 Oscars. 21 wins & 43 nominations total",
+		"cast": ["Tim Robbins", "Morgan Freeman", "Bob Gunton"],
+		"country": "United States",
+		"description": "After a banker is sentenced to life in Shawshank Prison, he forms an unlikely friendship with a seasoned inmate and clings to hope amid cruelty and corruption.",
+		"director": ["Frank Darabont"],
+		"dvdRelease": "2008-08-15T00:00:00.000Z",
+		"genre": ["Drama"],
+		"imdbRating": "9.3",
+		"imdb_id": "tt0111161",
+		"moviedb_id": 278,
+		"name": "The Shawshank Redemption",
+		"popularity": 3.1764666666666668,
+		"poster": "https://images.metahub.space/poster/small/tt0111161/img",
+		"released": "1994-10-14T00:00:00.000Z",
+		"runtime": "142 min",
+		"trailers": [
+			{ "source": "PLl99DlL6b4", "type": "Trailer" },
+			{ "source": "xyXX8LXiNJ4", "type": "Trailer" }
+		],
+		"type": "movie",
+		"writer": ["Stephen King", "Frank Darabont"],
+		"year": "1994",
+		"background": "https://images.metahub.space/background/medium/tt0111161/img",
+		"logo": "https://images.metahub.space/logo/medium/tt0111161/img",
+		"popularities": {
+			"moviedb": 95.294,
+			"stremio": 3.1764666666666668,
+			"trakt": 61,
+			"stremio_lib": 0
+		},
+		"slug": "movie/the-shawshank-redemption-0111161",
+		"id": "tt0111161",
+		"genres": ["Drama"],
+		"releaseInfo": "1994",
+		"videos": [],
+		"trailerStreams": [
+			{ "title": "The Shawshank Redemption", "ytId": "PLl99DlL6b4" },
+			{ "title": "The Shawshank Redemption", "ytId": "xyXX8LXiNJ4" }
+		],
+		"links": [
+			{ "name": "9.3", "category": "imdb", "url": "https://imdb.com/title/tt0111161" },
+			{
+				"name": "The Shawshank Redemption",
+				"category": "share",
+				"url": "https://www.strem.io/s/movie/the-shawshank-redemption-0111161"
+			},
+			{
+				"name": "Drama",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Drama"
+			},
+			{
+				"name": "Tim Robbins",
+				"category": "Cast",
+				"url": "stremio:///search?search=Tim%20Robbins"
+			},
+			{
+				"name": "Morgan Freeman",
+				"category": "Cast",
+				"url": "stremio:///search?search=Morgan%20Freeman"
+			},
+			{
+				"name": "Bob Gunton",
+				"category": "Cast",
+				"url": "stremio:///search?search=Bob%20Gunton"
+			},
+			{
+				"name": "Stephen King",
+				"category": "Writers",
+				"url": "stremio:///search?search=Stephen%20King"
+			},
+			{
+				"name": "Frank Darabont",
+				"category": "Writers",
+				"url": "stremio:///search?search=Frank%20Darabont"
+			},
+			{
+				"name": "Frank Darabont",
+				"category": "Directors",
+				"url": "stremio:///search?search=Frank%20Darabont"
+			}
+		],
+		"behaviorHints": { "defaultVideoId": "tt0111161", "hasScheduledVideos": false }
+	}
+}

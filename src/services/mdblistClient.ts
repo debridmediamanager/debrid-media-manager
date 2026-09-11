@@ -1,3 +1,4 @@
+import { mdblistReleaseSignals, metadataMaxAge } from '@/utils/metadataFreshness';
 import axios from 'axios';
 import { getMdblistCacheService } from './database/mdblistCache';
 import { MList, MMovie, MSearchResponse, MShow } from './mdblist';
@@ -10,6 +11,9 @@ const ONE_DAY = 86400000;
 // place indefinitely. Lists are curated collections that gain items over time.
 // A failed lookup is not data: an id mdblist does not know today it may well
 // know tomorrow, so a miss expires in an hour rather than in a show's 7 days.
+// These are the lifetimes for a title that has settled. One still being rated —
+// a recent or unreleased movie, a show still airing — expires far sooner; see
+// `metadataMaxAge`, which reads that from the cached row itself.
 const CACHE_TTL = {
 	MOVIE: 30 * ONE_DAY,
 	SHOW: 7 * ONE_DAY,
@@ -85,9 +89,10 @@ export class MDBListClient {
 			const kind = cachedIsError ? 'error' : isShow ? 'show' : 'movie';
 			const maxAge = cachedIsError
 				? CACHE_TTL.ERROR
-				: isShow
-					? CACHE_TTL.SHOW
-					: CACHE_TTL.MOVIE;
+				: metadataMaxAge(
+						mdblistReleaseSignals(cached.data),
+						isShow ? CACHE_TTL.SHOW : CACHE_TTL.MOVIE
+					);
 			const cacheAge = Date.now() - cached.updatedAt.getTime();
 
 			if (this.isFresh(cached.updatedAt, maxAge)) {
@@ -153,7 +158,9 @@ export class MDBListClient {
 		const cached = await this.cache.getWithMetadata(cacheKey);
 		const cachedIsError = cached ? isMdblistError(cached.data) : false;
 		if (cached) {
-			const maxAge = cachedIsError ? CACHE_TTL.ERROR : CACHE_TTL.SHOW;
+			const maxAge = cachedIsError
+				? CACHE_TTL.ERROR
+				: metadataMaxAge(mdblistReleaseSignals(cached.data), CACHE_TTL.SHOW);
 			if (this.isFresh(cached.updatedAt, maxAge)) {
 				console.log(`[MDBList] Using cached data for TVDB ID: ${tvdbId}`);
 				return cached.data;

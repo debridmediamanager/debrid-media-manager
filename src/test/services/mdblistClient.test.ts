@@ -1,7 +1,11 @@
 import { getMdblistCacheService } from '@/services/database/mdblistCache';
 import { MDBListClient } from '@/services/mdblistClient';
+import shawshank from '@/test/fixtures/metadata/mdblist-tt0111161-the-shawshank-redemption.json';
+import breakingBad from '@/test/fixtures/metadata/mdblist-tt0903747-breaking-bad.json';
+import wednesday from '@/test/fixtures/metadata/mdblist-tt13443470-wednesday.json';
+import thundermans from '@/test/fixtures/metadata/mdblist-tt37752275-clash-of-the-thundermans.json';
 import axios from 'axios';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('axios');
 vi.mock('@/services/database/mdblistCache', () => ({
@@ -157,6 +161,89 @@ describe('MDBListClient cache expiration for TV shows', () => {
 		expect(axios.get).toHaveBeenCalled();
 		expect(mockCache.set).toHaveBeenCalledWith('tt77777', 'show', freshData);
 		expect(result).toEqual(freshData);
+	});
+});
+
+describe('MDBListClient cache lifetime follows the title', () => {
+	const mockCache = {
+		getWithMetadata: vi.fn(),
+		set: vi.fn(),
+	};
+
+	// Pinned to the day the fixtures were captured, so "recent" keeps meaning what
+	// it meant then. Only Date is faked; the client still awaits real promises.
+	const CAPTURED_AT = new Date('2026-09-11T12:00:00Z');
+	const HOURS = 60 * 60 * 1000;
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		vi.mocked(getMdblistCacheService).mockReturnValue(mockCache as any);
+		vi.useFakeTimers({ toFake: ['Date'] });
+		vi.setSystemTime(CAPTURED_AT);
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+	});
+
+	const cachedRow = (data: unknown, ageMs: number) => ({
+		data,
+		updatedAt: new Date(Date.now() - ageMs),
+	});
+
+	it('refetches a movie released days ago once its row is hours old', async () => {
+		// The row production was serving: an 8.8 from the film's opening week,
+		// with 30 days still to run on it, against a real rating of 4.6.
+		const client = new MDBListClient('test-api-key');
+		mockCache.getWithMetadata.mockResolvedValue(cachedRow(thundermans, 7 * HOURS));
+		vi.mocked(axios.get).mockResolvedValue({ data: { ...thundermans, title: 'refetched' } });
+
+		const result = await client.getInfoByImdbId('tt37752275');
+
+		expect(axios.get).toHaveBeenCalled();
+		expect((result as { title: string }).title).toBe('refetched');
+	});
+
+	it('still serves that row while it is fresh', async () => {
+		const client = new MDBListClient('test-api-key');
+		mockCache.getWithMetadata.mockResolvedValue(cachedRow(thundermans, 2 * HOURS));
+
+		await client.getInfoByImdbId('tt37752275');
+
+		expect(axios.get).not.toHaveBeenCalled();
+	});
+
+	it('keeps serving a movie from 1994 for the full thirty days', async () => {
+		const client = new MDBListClient('test-api-key');
+		mockCache.getWithMetadata.mockResolvedValue(cachedRow(shawshank, 10 * 24 * HOURS));
+
+		const result = await client.getInfoByImdbId('tt0111161');
+
+		expect(axios.get).not.toHaveBeenCalled();
+		expect((result as { title: string }).title).toBe('The Shawshank Redemption');
+	});
+
+	it('refetches a show that is still airing once its row is hours old', async () => {
+		// First aired in 2022, which is outside the window: what makes it moving
+		// is that mdblist still calls it a Returning Series.
+		const client = new MDBListClient('test-api-key');
+		mockCache.getWithMetadata.mockResolvedValue(cachedRow(wednesday, 7 * HOURS));
+		vi.mocked(axios.get).mockResolvedValue({ data: { ...wednesday, title: 'refetched' } });
+
+		const result = await client.getInfoByImdbId('tt13443470');
+
+		expect(axios.get).toHaveBeenCalled();
+		expect((result as { title: string }).title).toBe('refetched');
+	});
+
+	it('keeps serving a show that ended in 2013 for the full seven days', async () => {
+		const client = new MDBListClient('test-api-key');
+		mockCache.getWithMetadata.mockResolvedValue(cachedRow(breakingBad, 3 * 24 * HOURS));
+
+		const result = await client.getInfoByImdbId('tt0903747');
+
+		expect(axios.get).not.toHaveBeenCalled();
+		expect((result as { title: string }).title).toBe('Breaking Bad');
 	});
 });
 

@@ -1,7 +1,18 @@
+import { cinemetaReleaseSignals, metadataMaxAge } from '@/utils/metadataFreshness';
 import { getTmdbAuth, tmdbRequestConfig, tmdbUrl, type TmdbAuth } from '@/utils/tmdbAuth';
 import axios, { AxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
 import { getMdblistCacheService } from './database/mdblistCache';
+
+/**
+ * A fixed lifetime, or one derived from the row already in the cache — which is
+ * how a title that is still being rated gets a shorter TTL than one that settled
+ * decades ago. See `@/utils/metadataFreshness`.
+ */
+export type MaxAge = number | ((cached: unknown) => number);
+
+const resolveMaxAge = (maxAge: MaxAge, cached: unknown): number =>
+	typeof maxAge === 'function' ? maxAge(cached) : maxAge;
 
 export class MetadataCacheService {
 	private cache = getMdblistCacheService();
@@ -57,6 +68,19 @@ export class MetadataCacheService {
 	}
 
 	/**
+	 * A Cinemeta row's lifetime, read off the row itself: a title that is still
+	 * being rated expires in hours, a settled one keeps the long lifetime it
+	 * always had. Deciding from the cached payload costs no extra request.
+	 */
+	private cinemetaMaxAge(settledMaxAge: number): MaxAge {
+		return (cached: unknown) =>
+			metadataMaxAge(
+				cinemetaReleaseSignals((cached as { meta?: unknown } | null)?.meta),
+				settledMaxAge
+			);
+	}
+
+	/**
 	 * Fetch data from URL with caching and optional expiration
 	 */
 	async fetchWithCache<T = any>(
@@ -64,11 +88,11 @@ export class MetadataCacheService {
 		cacheKey: string,
 		cacheType: string,
 		config?: AxiosRequestConfig,
-		maxAge: number = 0 // Default to permanent cache
+		maxAge: MaxAge = 0 // Default to permanent cache
 	): Promise<T> {
 		// Check cache first
 		const cached = await this.cache.getWithMetadata(cacheKey);
-		if (cached && !this.isCacheExpired(cached.updatedAt, maxAge)) {
+		if (cached && !this.isCacheExpired(cached.updatedAt, resolveMaxAge(maxAge, cached.data))) {
 			console.log(`[MetadataCache] Using cached ${cacheType} data for: ${cacheKey}`);
 			return cached.data as T;
 		}
@@ -129,7 +153,7 @@ export class MetadataCacheService {
 			cacheKey,
 			'cinemeta_movie',
 			config,
-			this.CACHE_DURATIONS.MOVIE
+			this.cinemetaMaxAge(this.CACHE_DURATIONS.MOVIE)
 		);
 	}
 
@@ -144,7 +168,7 @@ export class MetadataCacheService {
 			cacheKey,
 			'cinemeta_series',
 			config,
-			this.CACHE_DURATIONS.TV_SERIES
+			this.cinemetaMaxAge(this.CACHE_DURATIONS.TV_SERIES)
 		);
 	}
 
