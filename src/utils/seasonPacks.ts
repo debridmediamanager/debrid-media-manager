@@ -362,3 +362,34 @@ export function summarisePlan(entries: SeasonPlanEntry[]) {
 		totalAddCount: distinctPackHashes.size + episodeAddCount,
 	};
 }
+
+/**
+ * Makes every season that a shared release can cover choose the same one.
+ *
+ * Seasons are planned independently, so each ranks its own packs by size and
+ * two seasons can pick two *different* complete-series releases. Measured
+ * against the live index on 2026-09-12, `tt0306414` did exactly that: season
+ * one's best was `The.Wire.(2002-2008).Complete.S01-S05…` and seasons two
+ * through four's was `The Wire [S01-05] … [MayhemHD]`, so a run would have put
+ * two 470 GB copies of the same show in the account.
+ *
+ * Walking in season order and promoting a release an earlier season already
+ * chose collapses that to one, and leaves a season with no shared candidate
+ * exactly as it was.
+ */
+export function preferSharedPacks(entries: SeasonPlanEntry[]): SeasonPlanEntry[] {
+	const chosen = new Set<string>();
+	return entries.map((entry) => {
+		if (entry.status !== 'pack' || entry.packCandidates.length === 0) return entry;
+
+		const shared = entry.packCandidates.find((candidate) => chosen.has(candidate.hash));
+		if (!shared) {
+			chosen.add(entry.packCandidates[0].hash);
+			return entry;
+		}
+		return {
+			...entry,
+			packCandidates: [shared, ...entry.packCandidates.filter((c) => c !== shared)],
+		};
+	});
+}

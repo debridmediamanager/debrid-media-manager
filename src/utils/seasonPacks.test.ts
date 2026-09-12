@@ -8,6 +8,7 @@ import {
 	isCompleteSeasonPack,
 	missingEpisodesFor,
 	planSeason,
+	preferSharedPacks,
 	summarisePlan,
 	type SeasonCandidate,
 } from './seasonPacks';
@@ -363,5 +364,43 @@ describe('summarisePlan with a shared release', () => {
 		const summary = summarisePlan(entries);
 		expect(summary.packs).toHaveLength(5);
 		expect(summary.totalAddCount).toBe(1);
+	});
+});
+
+describe('preferSharedPacks', () => {
+	const planWith = (season: number, candidates: SeasonCandidate[]) =>
+		planSeason({
+			season,
+			expectedEpisodeCount: WIRE_COUNTS[season as keyof typeof WIRE_COUNTS],
+			episodeCounts: WIRE_COUNTS,
+			coverage: noCoverage,
+			packCandidates: candidates,
+			episodeCandidates: new Map(),
+		});
+
+	it('collapses two seasons onto one shared release', () => {
+		// The live shape on 2026-09-12: season one ranked the PiR8 series pack
+		// first and season two ranked the MayhemHD one first, so the run would
+		// have added two complete copies of the same show.
+		const pir8 = candidate('pir8', 60, [1, 2, 3, 4, 5]);
+		const mayhem = candidate('mayhem', 60, [1, 2, 3, 4, 5]);
+		const entries = preferSharedPacks([
+			planWith(1, [pir8, mayhem]),
+			planWith(2, [mayhem, pir8]),
+		]);
+
+		expect(entries[0].packCandidates[0].hash).toBe('pir8');
+		expect(entries[1].packCandidates[0].hash).toBe('pir8');
+		expect(summarisePlan(entries).totalAddCount).toBe(1);
+	});
+
+	it('leaves a season with nothing in common alone', () => {
+		const entries = preferSharedPacks([
+			planWith(1, [candidate('series', 60, [1, 2, 3, 4, 5])]),
+			planWith(3, [candidate('season-three', 12, [3])]),
+		]);
+
+		expect(entries[1].packCandidates[0].hash).toBe('season-three');
+		expect(summarisePlan(entries).totalAddCount).toBe(2);
 	});
 });

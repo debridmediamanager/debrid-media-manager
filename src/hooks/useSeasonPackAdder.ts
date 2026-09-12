@@ -10,6 +10,7 @@ import {
 	airedEpisodeCount,
 	getSeasonCoverage,
 	planSeason,
+	preferSharedPacks,
 	summarisePlan,
 	type SeasonPlanEntry,
 } from '@/utils/seasonPacks';
@@ -344,6 +345,7 @@ export function useSeasonPackAdder({
 				}
 
 				entries.sort((a, b) => a.season - b.season);
+				entries = preferSharedPacks(entries);
 				setSeasonState(
 					Object.fromEntries(
 						entries.map((entry) => [
