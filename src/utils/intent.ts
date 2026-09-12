@@ -71,12 +71,14 @@ export const buildPlayerIntent = (
 	if (os === 'ios2' || os === 'mac4') {
 		return `${player}://x-callback-url/open?url=${downloadUrl}`;
 	}
-	// SenPlayer answers the x-callback-url `play` action rather than VidHub's
+	// SenPlayer is one app across iOS, tvOS and macOS, so both os keys land here;
+	// they exist apart only so the Settings list can group the entry twice.
+	// It answers the x-callback-url `play` action rather than VidHub's
 	// `open`, and takes the stream URL as a query parameter — so it is encoded
 	// here: a TorBox link carries its own credential after a `?`, and pasted in
 	// raw its `&` would start a second parameter of the intent and hand the
 	// player a truncated, unauthenticated URL.
-	if (os === 'ios3') {
+	if (os === 'ios3' || os === 'mac5') {
 		return `${player}://x-callback-url/play?url=${encodeURIComponent(downloadUrl)}`;
 	}
 	if (os === 'mac2') {

@@ -93,6 +93,18 @@ describe('SettingsSection', () => {
 		expect(localStorage.getItem('settings:player')).toBe('ios3/senplayer');
 	});
 
+	// The same app is on the Mac App Store, and it answers the same scheme there.
+	it('offers SenPlayer as a macOS player', async () => {
+		render(<SettingsSection />);
+		const user = userEvent.setup();
+
+		const playerContainer = screen.getByText('Video player').closest('div')!;
+		const playerSelect = within(playerContainer).getByRole('combobox');
+		await user.selectOptions(playerSelect, 'mac5/senplayer');
+
+		expect(localStorage.getItem('settings:player')).toBe('mac5/senplayer');
+	});
+
 	it('loads persisted preferences and updates each toggle', async () => {
 		localStorage.setItem('settings:player', 'ios/infuse');
 		localStorage.setItem('settings:movieMaxSize', '15');

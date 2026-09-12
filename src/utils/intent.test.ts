@@ -127,8 +127,10 @@ describe('buildPlayerIntent', () => {
 	// SenPlayer's x-callback-url action is `play`, not VidHub's `open`, and it
 	// takes the stream URL as a query parameter — so the URL has to be encoded
 	// rather than pasted in raw.
-	it('builds a SenPlayer intent', () => {
-		expect(buildPlayerIntent('ios3', 'senplayer', url, 'fallback')).toBe(
+	// SenPlayer ships one app for iOS, tvOS and macOS, so the Mac entry answers
+	// the same action — the os key exists only so the Settings list can group it.
+	it.each(['ios3', 'mac5'])('builds a SenPlayer intent for %s', (os) => {
+		expect(buildPlayerIntent(os, 'senplayer', url, 'fallback')).toBe(
 			`senplayer://x-callback-url/play?url=${encodeURIComponent(url)}`
 		);
 	});
