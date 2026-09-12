@@ -3,6 +3,7 @@ import {
 	pluginObjectKey,
 	readPublishedPlugins,
 } from '@/services/jellyfinPlugins/catalog';
+import { withCatalogLock } from '@/services/jellyfinPlugins/catalogLock';
 import {
 	isAuthorizedPublisher,
 	mergeIntoCatalog,
@@ -81,9 +82,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 	}
 
-	const catalog = mergeIntoCatalog(await readPublishedPlugins(), entry);
-	const body = Buffer.from(JSON.stringify(catalog, null, 2) + '\n', 'utf8');
-	if (!(await putStoredObject(CATALOG_OBJECT_KEY, body, 'application/json'))) {
+	// Read, merge and write under a lock every replica shares. Without it two publishes
+	// arriving together each merge into the catalog as it was before the other wrote,
+	// and the later write drops the earlier plugin.
+	const locked = await withCatalogLock(async () => {
+		const merged = mergeIntoCatalog(await readPublishedPlugins(), entry);
+		const body = Buffer.from(JSON.stringify(merged, null, 2) + '\n', 'utf8');
+		return {
+			catalog: merged,
+			stored: await putStoredObject(CATALOG_OBJECT_KEY, body, 'application/json'),
+		};
+	});
+
+	if (!locked.acquired) {
+		console.error(
+			`Could not take the plugin catalog lock for ${entry.name} after ${locked.waitedMs} ms`
+		);
+		return res
+			.status(503)
+			.json({ error: 'Stored the package but the catalog is busy; publish again' });
+	}
+
+	console.log(`Took the plugin catalog lock for ${entry.name} after ${locked.waitedMs} ms`);
+	const { catalog, stored } = locked.value;
+	if (!stored) {
 		return res
 			.status(502)
 			.json({ error: 'Stored the package but could not update the catalog' });

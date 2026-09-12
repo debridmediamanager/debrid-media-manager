@@ -14,6 +14,33 @@ vi.mock('@/services/newznab/store', () => ({
 	putStoredObject: vi.fn(),
 }));
 
+// Redis as the catalog lock uses it: SET NX takes a key only when nobody holds it, and the
+// release script deletes it only for the token that took it. Shared by every request, as
+// Redis is shared by every web replica.
+const redisState = vi.hoisted(() => ({ values: new Map<string, string>(), failing: false }));
+
+vi.mock('ioredis', () => ({
+	default: class FakeRedis {
+		on() {
+			return this;
+		}
+
+		async set(key: string, value: string, ...options: unknown[]) {
+			if (redisState.failing) throw new Error('Connection is closed.');
+			if (options.includes('NX') && redisState.values.has(key)) return null;
+			redisState.values.set(key, value);
+			return 'OK';
+		}
+
+		async eval(_script: string, _keys: number, key: string, token: string) {
+			if (redisState.failing) throw new Error('Connection is closed.');
+			if (redisState.values.get(key) !== token) return 0;
+			redisState.values.delete(key);
+			return 1;
+		}
+	},
+}));
+
 const mockGet = vi.mocked(getStoredObject);
 const mockPut = vi.mocked(putStoredObject);
 
@@ -88,6 +115,9 @@ async function post(
 beforeEach(() => {
 	vi.clearAllMocks();
 	process.env.PLUGIN_PUBLISH_SECRET = SECRET;
+	process.env.REDIS_URL = 'redis://catalog-lock.test';
+	redisState.values.clear();
+	redisState.failing = false;
 	mockPut.mockResolvedValue(true);
 	mockGet.mockResolvedValue(Buffer.from(JSON.stringify([EXISTING]), 'utf8'));
 });
@@ -207,6 +237,66 @@ describe('what it refuses', () => {
 		const res = await post(body());
 		expect(res._getStatusCode()).toBe(502);
 		expect((res._getData() as { error: string }).error).toContain('catalog');
+	});
+});
+
+describe('publishes that arrive together', () => {
+	const TB_META = {
+		...META,
+		guid: 'b2fbcb58-7681-44c9-9e9c-0ac2e1456a2b',
+		name: 'TB zurg',
+		version: '1.0.2.0',
+	};
+
+	const later = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+	/** A store whose reads and writes each take a moment, as B2's do. */
+	function slowStore() {
+		let catalog: Buffer = Buffer.from(JSON.stringify([EXISTING]), 'utf8');
+		mockGet.mockImplementation(async (key: string) => {
+			await later(25);
+			return key.endsWith('catalog.json') ? catalog : null;
+		});
+		mockPut.mockImplementation(async (key: string, bytes: Buffer) => {
+			await later(25);
+			if (key.endsWith('catalog.json')) catalog = bytes;
+			return true;
+		});
+		return () =>
+			(JSON.parse(catalog.toString()) as PublishedPlugin[]).map(
+				(plugin) => `${plugin.name} ${plugin.versions[0].version}`
+			);
+	}
+
+	// On 2026-09-13 seven tag releases published within 22 seconds and RD zurg 1.0.4.0
+	// vanished: a later publish had read the catalog before RD's write and wrote it back.
+	it('keeps both plugins when two publish at the same moment', async () => {
+		const stored = slowStore();
+
+		const [rd, tb] = await Promise.all([
+			post(body()),
+			post(body({ file: 'tb-zurg_1.0.2.0.zip', meta: TB_META })),
+		]);
+
+		expect(rd._getStatusCode()).toBe(200);
+		expect(tb._getStatusCode()).toBe(200);
+		expect(stored()).toEqual(['NZB zurg 1.0.1.0', 'RD zurg 1.0.2.0', 'TB zurg 1.0.2.0']);
+	});
+
+	it('refuses to write the catalog without the lock', async () => {
+		redisState.failing = true;
+
+		const res = await post(body());
+
+		expect(res._getStatusCode()).toBe(503);
+		expect(mockPut.mock.calls.map((call) => call[0])).not.toContain(
+			'jellyfin-plugins/catalog.json'
+		);
+	});
+
+	it('lets go of the lock after a publish, so the next one is not kept waiting', async () => {
+		await post(body());
+		expect(redisState.values.size).toBe(0);
 	});
 });
 
