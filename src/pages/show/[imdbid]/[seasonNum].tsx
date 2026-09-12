@@ -4,6 +4,7 @@ import SearchSourceProgress from '@/components/SearchSourceProgress';
 import SearchTokens from '@/components/SearchTokens';
 import TvSearchResults from '@/components/TvSearchResults';
 import UsenetResults from '@/components/UsenetResults';
+import Modal from '@/components/modals/modal';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import {
 	useAllDebridApiKey,
@@ -16,6 +17,7 @@ import {
 import { useAvailabilityCheck } from '@/hooks/useAvailabilityCheck';
 import { useExternalSources } from '@/hooks/useExternalSources';
 import { useMassReport } from '@/hooks/useMassReport';
+import { useSeasonPackAdder, type SeasonRunState } from '@/hooks/useSeasonPackAdder';
 import { useTorrentManagement } from '@/hooks/useTorrentManagement';
 import { SearchApiResponse, SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
 import UserTorrentDB from '@/torrent/db';
@@ -76,12 +78,16 @@ import { AxiosError } from 'axios';
 import {
 	Calendar,
 	CheckCircle,
+	CircleSlash,
 	CloudOff,
+	Layers,
 	Loader2,
 	RotateCcw,
 	Search,
 	Sparkles,
+	Square,
 	Tv,
+	X,
 	Zap,
 } from 'lucide-react';
 import Head from 'next/head';
@@ -156,7 +162,7 @@ const TvSearch: FunctionComponent = () => {
 	const debridLinkKey = useDebridLinkCredential();
 
 	// Library sync status - used to prevent auto-availability check while library is still loading
-	const { isFetching: isLibrarySyncing } = useLibraryCache();
+	const { isFetching: isLibrarySyncing, libraryItems } = useLibraryCache();
 
 	const [onlyShowCached, setOnlyShowCached] = useState<boolean>(false);
 	const [currentPage, setCurrentPage] = useState(0);
@@ -282,6 +288,152 @@ const TvSearch: FunctionComponent = () => {
 	);
 
 	const { handleMassReport } = useMassReport(rdKey, adKey, torboxKey, imdbid as string);
+
+	const showFacts = useMemo(
+		() =>
+			showInfo
+				? {
+						title: showInfo.title,
+						seasonCount: showInfo.season_count,
+						episodeCounts: showInfo.season_episode_counts ?? {},
+						lastEpisodeToAir: showInfo.last_episode_to_air ?? null,
+					}
+				: null,
+		[showInfo]
+	);
+
+	const {
+		discover: discoverSeasons,
+		run: runSeasons,
+		stop: stopSeasons,
+		discovering: isDiscoveringSeasons,
+		running: isAddingSeasons,
+		seasonState,
+	} = useSeasonPackAdder({
+		imdbId: (imdbid as string) ?? '',
+		show: showFacts,
+		libraryItems,
+		hashAndProgress,
+		addRd,
+		addTb,
+		episodeMaxSize,
+	});
+
+	/**
+	 * Adds every season this library is missing, in one go.
+	 *
+	 * Discovery runs first and adds nothing: the dialog it leads to is the only
+	 * point at which the cost is knowable, and a user with a slot limit needs to
+	 * see "four seasons have no cached pack" before spending the other fourteen.
+	 */
+	const handleAllSeasons = useCallback(
+		async (service: 'rd' | 'tb') => {
+			if (!showInfo) return;
+			const label = service === 'rd' ? 'Real-Debrid' : 'TorBox';
+			const discoverToast = toast.loading(`Checking all ${showInfo.season_count} seasons...`);
+			let plan;
+			try {
+				plan = await discoverSeasons(service, torboxKey);
+			} catch (error) {
+				toast.error('Could not check the other seasons. Please try again.', {
+					id: discoverToast,
+				});
+				return;
+			}
+			toast.dismiss(discoverToast);
+			if (!plan) return;
+
+			const { summary } = plan;
+			if (summary.totalAddCount === 0) {
+				toast(
+					summary.held.length > 0
+						? `Nothing to add - all ${summary.held.length} seasons are already in your ${label} library.`
+						: `Nothing cached for any season of this show on ${label}.`,
+					{ duration: 6000 }
+				);
+				return;
+			}
+
+			const lines = [
+				`${summary.packs.length} season${summary.packs.length === 1 ? '' : 's'} as a complete pack`,
+			];
+			if (summary.episodes.length > 0) {
+				lines.push(
+					`${summary.episodes.length} season${
+						summary.episodes.length === 1 ? '' : 's'
+					} episode by episode (${summary.episodeAddCount} episodes)`
+				);
+			}
+			if (summary.held.length > 0) {
+				lines.push(`${summary.held.length} already in your library`);
+			}
+			if (summary.gaps.length > 0) {
+				lines.push(
+					`${summary.gaps.length} with nothing cached (${summary.gaps
+						.map((entry) => `S${entry.season}`)
+						.join(', ')})`
+				);
+			}
+
+			const confirmed = (
+				await Modal.fire({
+					title: `Add all seasons to ${label}?`,
+					text: `${lines.join('. ')}. That is ${summary.totalAddCount} torrent${
+						summary.totalAddCount === 1 ? '' : 's'
+					} in total. Only cached releases are added, and the filter box is ignored.`,
+					icon: 'question',
+					showCancelButton: true,
+					confirmButtonColor: '#0891b2',
+					cancelButtonColor: '#374151',
+					confirmButtonText: `Yes, add ${summary.totalAddCount}`,
+					background: '#111827',
+					color: '#f3f4f6',
+					customClass: {
+						popup: 'bg-gray-900',
+						htmlContainer: 'text-gray-100',
+					},
+				})
+			).isConfirmed;
+			if (!confirmed) return;
+
+			// No duration: a run that sits through a Real-Debrid backoff outlives
+			// any fixed one, and a progress notice that vanishes mid-run reads as
+			// a crash.
+			const runToast = toast.loading(`Adding seasons to ${label}...`);
+			try {
+				const outcome = await runSeasons(plan, !!torboxKey);
+				toast.dismiss(runToast);
+
+				const parts: string[] = [];
+				if (outcome.added > 0) parts.push(`${outcome.added} added`);
+				if (summary.held.length > 0) parts.push(`${summary.held.length} already held`);
+				if (outcome.gaps.length > 0) {
+					parts.push(
+						`${outcome.gaps.length} with nothing cached (${outcome.gaps
+							.map((season) => `S${season}`)
+							.join(', ')})`
+					);
+				}
+				const summaryText = parts.length > 0 ? parts.join(', ') : 'nothing to do';
+
+				if (outcome.abortedByThrottle) {
+					toast.error(
+						`${label} is throttling adds, so the run stopped early: ${summaryText}. Try the rest in a few minutes.`,
+						{ duration: 10000 }
+					);
+				} else if (outcome.stopped) {
+					toast(`Stopped: ${summaryText}.`, { duration: 8000 });
+				} else if (outcome.added > 0) {
+					toast.success(`${summaryText}.`, { duration: 8000 });
+				} else {
+					toast.error(`${summaryText}.`, { duration: 8000 });
+				}
+			} catch (error) {
+				toast.error('The run failed part way through.', { id: runToast });
+			}
+		},
+		[showInfo, discoverSeasons, runSeasons, torboxKey]
+	);
 
 	const expectedEpisodeCount = useMemo(
 		() =>
@@ -1190,6 +1342,34 @@ const TvSearch: FunctionComponent = () => {
 	const seasonId = (Array.isArray(seasonNum) ? seasonNum[0] : seasonNum) ?? '1';
 	const selectedSeason = Number.parseInt(seasonId, 10);
 
+	/**
+	 * What the All Seasons run did to each season, drawn on the season nav.
+	 *
+	 * Icons rather than colours: the nav builds its Tailwind classes by string
+	 * assembly (`border-${color}-500`), and the build cannot see an assembled
+	 * class name, so a state expressed as a colour would render unstyled.
+	 */
+	const seasonRunIcon = (season: number) => {
+		const state: SeasonRunState | undefined = seasonState[season];
+		if (!state || state === 'pending') return null;
+		if (state === 'running')
+			return <Loader2 className="ml-1 h-3 w-3 animate-spin text-cyan-300" />;
+		if (state === 'added') return <CheckCircle className="ml-1 h-3 w-3 text-green-400" />;
+		if (state === 'held') return <CheckCircle className="ml-1 h-3 w-3 text-gray-400" />;
+		if (state === 'gap') return <CircleSlash className="ml-1 h-3 w-3 text-gray-500" />;
+		return <X className="ml-1 h-3 w-3 text-red-400" />;
+	};
+
+	const seasonRunTitle = (season: number) => {
+		const state: SeasonRunState | undefined = seasonState[season];
+		if (state === 'running') return 'Adding this season';
+		if (state === 'added') return 'Added by the last All Seasons run';
+		if (state === 'held') return 'Already in your library';
+		if (state === 'gap') return 'Nothing cached for this season';
+		if (state === 'failed') return 'Could not be added';
+		return undefined;
+	};
+
 	const seasonNavigation = (
 		<div className="flex items-center overflow-x-auto" data-testid="media-header-season-nav">
 			{showInfo.has_specials && (
@@ -1208,6 +1388,7 @@ const TvSearch: FunctionComponent = () => {
 						<Link
 							key={idx}
 							href={`/show/${imdbId}/${season}`}
+							title={seasonRunTitle(season)}
 							className={`inline-flex items-center border-2 p-1 text-xs border-${color}-500 bg-${color}-900/30 text-${color}-100 hover:bg-${color}-800/50 mb-1 mr-2 rounded transition-colors`}
 						>
 							<Tv className="mr-2 h-3 w-3 text-cyan-500" />
@@ -1216,6 +1397,7 @@ const TvSearch: FunctionComponent = () => {
 									? showInfo.season_names[season - 1]
 									: `Season ${season}`}
 							</span>
+							{seasonRunIcon(season)}
 						</Link>
 					);
 				}
@@ -1385,6 +1567,55 @@ const TvSearch: FunctionComponent = () => {
 							<b className="flex items-center justify-center">
 								<Zap className="mr-1 h-3 w-3 text-yellow-500" />
 								Instant RD (Every Episode)
+							</b>
+						</button>
+					)}
+					{showInfo.season_count > 1 && (isAddingSeasons || isDiscoveringSeasons) && (
+						<button
+							className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-red-500 bg-red-900/30 p-1 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+							onClick={stopSeasons}
+						>
+							<b className="flex items-center justify-center">
+								<Square className="mr-1 h-3 w-3 text-red-400" />
+								Stop
+							</b>
+						</button>
+					)}
+					{/*
+					 * Deliberately not gated on this season having a cached pack the
+					 * way Whole Season is: that gate reads the rows on screen, and a
+					 * show-wide action must not disappear because season one's first
+					 * page happens to hold nothing.
+					 */}
+					{rdKey && showInfo.season_count > 1 && !isAddingSeasons && (
+						<button
+							className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+							onClick={() => handleAllSeasons('rd')}
+							disabled={isDiscoveringSeasons}
+						>
+							<b className="flex items-center justify-center">
+								{isDiscoveringSeasons ? (
+									<Loader2 className="mr-1 h-3 w-3 animate-spin text-green-400" />
+								) : (
+									<Layers className="mr-1 h-3 w-3 text-yellow-500" />
+								)}
+								Instant RD (All Seasons)
+							</b>
+						</button>
+					)}
+					{torboxKey && showInfo.season_count > 1 && !isAddingSeasons && (
+						<button
+							className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-indigo-500 bg-indigo-900/30 p-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 disabled:cursor-not-allowed disabled:opacity-50"
+							onClick={() => handleAllSeasons('tb')}
+							disabled={isDiscoveringSeasons}
+						>
+							<b className="flex items-center justify-center">
+								{isDiscoveringSeasons ? (
+									<Loader2 className="mr-1 h-3 w-3 animate-spin text-indigo-400" />
+								) : (
+									<Layers className="mr-1 h-3 w-3 text-indigo-300" />
+								)}
+								Instant TB (All Seasons)
 							</b>
 						</button>
 					)}
