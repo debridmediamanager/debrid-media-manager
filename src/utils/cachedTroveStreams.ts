@@ -7,7 +7,6 @@ import {
 	titleNamesNoEpisode,
 	titleNamesSeason,
 } from '@/utils/seasonNaming';
-import ptt from 'parse-torrent-title';
 
 export interface TroveStreamCandidate {
 	hash: string;
@@ -100,10 +99,20 @@ export function filterTroveCandidates(
 		const sizeMb = row.fileSize;
 
 		if (season !== undefined && episode !== undefined) {
-			const parsed = ptt.parse(row.title);
-			// A pack ("S01") or a date-style episode has no episode number to
-			// match; anything without both numbers cannot name this video.
-			if (parsed.season !== season || parsed.episode !== episode) continue;
+			// The title has to name this episode and no other. The addon offers a
+			// bare hash, and playing it hands back the torrent's *biggest file*
+			// (see the trove loop in the stream routes) - so a release covering
+			// more than one episode serves whichever of them is largest, not the
+			// one the viewer clicked. A pack or a date-style episode names no
+			// episode at all and cannot be this video either.
+			//
+			// `ptt` alone is not enough for the same reason it is not enough for
+			// the season page's own adds: it reads an episode number out of
+			// `2xRus`, `3D` and `Cap. 101`, so it called 42% of a 4,498-title
+			// corpus's season packs single episodes. Offering one of those as
+			// episode two plays an arbitrary episode of the whole season.
+			const named = episodesNamedForSeason(row.title, season);
+			if (named.length !== 1 || named[0] !== episode) continue;
 		}
 
 		// The same release is routinely scraped under several infohashes with

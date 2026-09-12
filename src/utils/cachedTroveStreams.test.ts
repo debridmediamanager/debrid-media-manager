@@ -106,6 +106,55 @@ describe('filterTroveCandidates', () => {
 		expect(out.map((c) => c.hash)).toEqual(['aaa']);
 	});
 
+	it('does not offer a season pack as a single episode', () => {
+		// The addon offers a bare hash and playing it hands back the torrent's
+		// biggest file, so a pack served as episode two plays whichever episode
+		// happens to be largest. `ptt` calls each of these a single episode:
+		// `x2` is a disc count, `2xRus` an audio track, `3D` a format.
+		const cases: [string, string][] = [
+			['aaa', 'Friends S01 x2 Untouched BD100 Caver'],
+			['bbb', 'The.Wire.S02.720p.WEB-DL.2xRus.Eng.HDCLUB'],
+			['ccc', 'Breaking.Bad.S02.1080p.3D.FULL-SBS.HEVC'],
+		];
+		for (const [hash, title] of cases) {
+			const out = filterTroveCandidates(rows([hash, title, 40000]), {
+				mediaType: 'series',
+				imdbId: 'tt500:2:2',
+			});
+			expect(out, title).toEqual([]);
+		}
+	});
+
+	it('does not offer a multi-season pack as an episode of one of them', () => {
+		const out = filterTroveCandidates(
+			rows(['aaa', 'Friends Season 1 - 3 1080p BDrip AC3 5.1', 90000]),
+			{ mediaType: 'series', imdbId: 'tt500:1:3' }
+		);
+		expect(out).toEqual([]);
+	});
+
+	it('does not offer a release that spans several episodes', () => {
+		// It would play the biggest of the three, not the one clicked.
+		const out = filterTroveCandidates(rows(['aaa', 'Show.S01E01-E03.1080p.WEB', 12000]), {
+			mediaType: 'series',
+			imdbId: 'tt500:1:1',
+		});
+		expect(out).toEqual([]);
+	});
+
+	it('still offers a plain single episode, padded or not', () => {
+		for (const title of ['Show.S01E02.1080p.WEB.h265', 'Show.S1E2.1080p.WEB.h265']) {
+			const out = filterTroveCandidates(rows(['aaa', title, 4000]), {
+				mediaType: 'series',
+				imdbId: 'tt500:1:2',
+			});
+			expect(
+				out.map((c) => c.hash),
+				title
+			).toEqual(['aaa']);
+		}
+	});
+
 	it('rejects a series id without season and episode', () => {
 		const out = filterTroveCandidates(rows(['aaa', 'Show.S01E02.1080p', 4000]), {
 			mediaType: 'series',

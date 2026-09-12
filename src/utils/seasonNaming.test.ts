@@ -2,7 +2,11 @@ import type { ScrapeSearchResult } from '@/services/mediasearch';
 import corpus from '@/test/fixtures/season-titles.json';
 import ptt from 'parse-torrent-title';
 import { describe, expect, it } from 'vitest';
-import { filterSeasonEpisodes, filterSeasonPacks } from './cachedTroveStreams';
+import {
+	filterSeasonEpisodes,
+	filterSeasonPacks,
+	filterTroveCandidates,
+} from './cachedTroveStreams';
 import {
 	episodesNamedForSeason,
 	namedEpisodes,
@@ -171,6 +175,27 @@ describe('against the live corpus', () => {
 			if (isPack && isEpisode) both.push(`S${r.season} :: ${r.title}`);
 		}
 		expect(both).toEqual([]);
+	});
+
+	it('offers the Stremio addon no episode the title does not name exactly', () => {
+		// The addon plays the torrent's biggest file, so anything but a release
+		// naming this one episode serves the wrong content. Over this corpus the
+		// old `ptt`-only rule offered 59 releases that name no episode at all.
+		const offenders: string[] = [];
+		for (const r of rows) {
+			for (let episode = 1; episode <= 25; episode++) {
+				const offered = filterTroveCandidates([asRow(r)], {
+					mediaType: 'series',
+					imdbId: `${r.imdbId}:${r.season}:${episode}`,
+				});
+				if (offered.length === 0) continue;
+				const named = episodesNamedForSeason(r.title, r.season);
+				if (named.length !== 1 || named[0] !== episode) {
+					offenders.push(`S${r.season}E${episode} :: ${r.title}`);
+				}
+			}
+		}
+		expect(offenders).toEqual([]);
 	});
 
 	it('keeps the season packs whose names carry a phantom episode number', () => {
