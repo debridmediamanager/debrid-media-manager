@@ -50,6 +50,8 @@ export type SeasonCandidate = {
 	sizeMb: number;
 	/** Video files the provider reported; absent until an availability check has run. */
 	videoCount?: number;
+	/** Seasons the title claims. A complete-series release claims several. */
+	seasons?: number[];
 };
 
 export type SeasonPlanEntry = {
@@ -78,6 +80,32 @@ export function isCompleteSeasonPack(videoCount: number, expectedEpisodeCount: n
 	const min = Math.max(1, expectedEpisodeCount - 2);
 	const max = expectedEpisodeCount + 2;
 	return videoCount >= min && videoCount <= max;
+}
+
+/**
+ * How many episodes a release ought to carry, given the seasons it claims.
+ *
+ * A complete-series pack has to be judged against the whole run, not against
+ * one season. Measured on the live index 2026-09-12: `tt0306414` seasons one
+ * and five had *no* cached single-season pack at all, only `S01-S05` releases
+ * carrying 60 videos - which is exactly 13+12+12+13+10, and which a
+ * one-season window rejects out of hand. Judged that way both seasons fell
+ * through to twenty-three individual episode adds while a single cached
+ * release covering the entire show sat there unused.
+ *
+ * Seasons the show metadata says nothing about are left out of the sum rather
+ * than counted as zero, so a pack claiming a season DMM has no count for is
+ * judged on the ones it does know.
+ */
+export function expectedEpisodesForClaim(
+	claimedSeasons: number[] | undefined,
+	season: number,
+	episodeCounts: Record<number, number>
+): number {
+	const claimed = claimedSeasons?.length ? claimedSeasons : [season];
+	const known = claimed.filter((s) => (episodeCounts[s] ?? 0) > 0);
+	if (known.length === 0) return episodeCounts[season] ?? 0;
+	return known.reduce((total, s) => total + episodeCounts[s], 0);
 }
 
 /**
@@ -222,12 +250,15 @@ export function missingEpisodesFor(
 export function planSeason({
 	season,
 	expectedEpisodeCount,
+	episodeCounts,
 	coverage,
 	packCandidates,
 	episodeCandidates,
 }: {
 	season: number;
 	expectedEpisodeCount: number;
+	/** Per-season episode counts, so a multi-season pack is judged on its whole claim. */
+	episodeCounts?: Record<number, number>;
 	coverage: SeasonCoverage;
 	packCandidates: SeasonCandidate[];
 	episodeCandidates: Map<number, SeasonCandidate[]>;
@@ -262,11 +293,14 @@ export function planSeason({
 		};
 	}
 
-	const packs = packCandidates.filter(
-		(candidate) =>
-			candidate.videoCount !== undefined &&
-			isCompleteSeasonPack(candidate.videoCount, expectedEpisodeCount)
-	);
+	const counts = episodeCounts ?? { [season]: expectedEpisodeCount };
+	const packs = packCandidates.filter((candidate) => {
+		if (candidate.videoCount === undefined) return false;
+		return isCompleteSeasonPack(
+			candidate.videoCount,
+			expectedEpisodesForClaim(candidate.seasons, season, counts)
+		);
+	});
 	if (packs.length > 0) {
 		return {
 			...base,
@@ -301,18 +335,30 @@ export function planSeason({
 	};
 }
 
-/** Totals the confirmation dialog needs, so it can state cost before anything is added. */
+/**
+ * Totals the confirmation dialog needs, so it can state cost before anything is
+ * added.
+ *
+ * Pack adds are counted by distinct first choice, not per season: one
+ * complete-series release is the first choice for every season it covers, and
+ * the run adds it once. Counting per season would promise five torrents and
+ * add one.
+ */
 export function summarisePlan(entries: SeasonPlanEntry[]) {
 	const held = entries.filter((e) => e.status === 'held');
 	const packs = entries.filter((e) => e.status === 'pack');
 	const episodes = entries.filter((e) => e.status === 'episodes');
 	const gaps = entries.filter((e) => e.status === 'gap');
+	const distinctPackHashes = new Set(
+		packs.map((entry) => entry.packCandidates[0]?.hash).filter(Boolean)
+	);
+	const episodeAddCount = episodes.reduce((total, entry) => total + entry.addCount, 0);
 	return {
 		held,
 		packs,
 		episodes,
 		gaps,
-		episodeAddCount: episodes.reduce((total, entry) => total + entry.addCount, 0),
-		totalAddCount: entries.reduce((total, entry) => total + entry.addCount, 0),
+		episodeAddCount,
+		totalAddCount: distinctPackHashes.size + episodeAddCount,
 	};
 }

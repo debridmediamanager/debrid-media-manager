@@ -21,7 +21,13 @@ vi.mock('@/utils/token', () => ({
 
 const hash = (marker: string) => marker.repeat(40).slice(0, 40);
 
-const candidate = (hash: string, title: string, videoCount?: number, episodes?: number[]) => ({
+const candidate = (
+	hash: string,
+	title: string,
+	videoCount?: number,
+	episodes?: number[],
+	seasons?: number[]
+) => ({
 	hash,
 	title,
 	sizeMb: 5000,
@@ -29,6 +35,7 @@ const candidate = (hash: string, title: string, videoCount?: number, episodes?: 
 	videoCount,
 	files: [{ fileId: 1, filename: `${title}.mkv`, filesize: 1 }],
 	...(episodes ? { episodes } : {}),
+	...(seasons ? { seasons } : {}),
 });
 
 const libraryRow = (name: string, service: 'rd' | 'tb' = 'rd'): UserTorrent => ({
@@ -465,6 +472,40 @@ describe('useSeasonPackAdder', () => {
 
 		expect(addRd).toHaveBeenCalledTimes(1);
 		expect(outcome.stopped).toBe(true);
+	});
+
+	it('adds a complete-series release once and counts every season it covers', async () => {
+		// tt0306414 on the live index: seasons one and five had no cached
+		// single-season pack, only 60-video `S01-S05` releases. Adding one per
+		// season would put the same 470 GB torrent in the account five times.
+		// Three ten-episode seasons, so a release covering all three carries 30.
+		const series = candidate(
+			'e'.repeat(40),
+			'The.Wire.Complete.S01-S03.1080p',
+			30,
+			undefined,
+			[1, 2, 3]
+		);
+		respondWith({ packs: { 1: [series], 2: [series], 3: [series] } });
+		const { result } = render();
+
+		let plan: SeasonAdderPlan | null = null;
+		await act(async () => {
+			plan = await result.current.discover('rd', null);
+		});
+
+		expect(plan!.entries.map((e) => e.status)).toEqual(['pack', 'pack', 'pack']);
+		// Three seasons, one torrent.
+		expect(plan!.summary.totalAddCount).toBe(1);
+
+		let outcome: any;
+		await act(async () => {
+			outcome = await result.current.run(plan!, false);
+		});
+
+		expect(addRd).toHaveBeenCalledTimes(1);
+		expect(outcome.added).toBe(3);
+		expect(outcome.gaps).toEqual([]);
 	});
 
 	it('never offers a release whose name Real-Debrid blocks', async () => {

@@ -3,6 +3,7 @@ import { filenameParse } from '@ctrl/video-filename-parser';
 import { describe, expect, it } from 'vitest';
 import {
 	airedEpisodeCount,
+	expectedEpisodesForClaim,
 	getSeasonCoverage,
 	isCompleteSeasonPack,
 	missingEpisodesFor,
@@ -39,12 +40,16 @@ const libraryRow = (
 	speed: 0,
 });
 
-const candidate = (hash: string, videoCount?: number): SeasonCandidate => ({
+const candidate = (hash: string, videoCount?: number, seasons?: number[]): SeasonCandidate => ({
 	hash,
 	title: hash,
 	sizeMb: 5000,
 	videoCount,
+	...(seasons ? { seasons } : {}),
 });
+
+/** The Wire's real per-season episode counts, as the live index reports them. */
+const WIRE_COUNTS = { 1: 13, 2: 12, 3: 12, 4: 13, 5: 10 };
 
 const noCoverage = { hasPack: false, episodes: [] };
 
@@ -274,5 +279,89 @@ describe('summarisePlan', () => {
 		expect(summary.packs).toHaveLength(1);
 		expect(summary.episodeAddCount).toBe(3);
 		expect(summary.totalAddCount).toBe(4);
+	});
+});
+
+describe('expectedEpisodesForClaim', () => {
+	it('sums every season a release claims', () => {
+		// 13+12+12+13+10 = 60, which is exactly what the cached `S01-S05`
+		// releases for tt0306414 carry.
+		expect(expectedEpisodesForClaim([1, 2, 3, 4, 5], 1, WIRE_COUNTS)).toBe(60);
+	});
+
+	it('falls back to the season asked about when the title claims none', () => {
+		expect(expectedEpisodesForClaim(undefined, 3, WIRE_COUNTS)).toBe(12);
+		expect(expectedEpisodesForClaim([], 3, WIRE_COUNTS)).toBe(12);
+	});
+
+	it('ignores seasons the show metadata knows nothing about', () => {
+		// A mis-parsed `S72` must not drag the expected count to the season it
+		// does know, nor count as zero episodes.
+		expect(expectedEpisodesForClaim([3, 72], 3, WIRE_COUNTS)).toBe(12);
+	});
+});
+
+describe('planSeason with a complete-series release', () => {
+	const base = {
+		coverage: noCoverage,
+		episodeCandidates: new Map<number, SeasonCandidate[]>(),
+		episodeCounts: WIRE_COUNTS,
+	};
+
+	it('accepts a series pack for a season that has no pack of its own', () => {
+		// Measured on the live index 2026-09-12: tt0306414 seasons one and five
+		// had no cached single-season pack at all, only 60-video `S01-S05`
+		// releases. Judged against season one's thirteen episodes those are
+		// rejected, and the season falls through to thirteen individual adds
+		// while one cached release covering the whole show sits unused.
+		const entry = planSeason({
+			...base,
+			season: 1,
+			expectedEpisodeCount: 13,
+			packCandidates: [candidate('series', 60, [1, 2, 3, 4, 5])],
+		});
+		expect(entry.status).toBe('pack');
+	});
+
+	it('still rejects a series pack that is nowhere near the whole run', () => {
+		const entry = planSeason({
+			...base,
+			season: 1,
+			expectedEpisodeCount: 13,
+			packCandidates: [candidate('half-series', 25, [1, 2, 3, 4, 5])],
+		});
+		expect(entry.status).toBe('gap');
+	});
+
+	it('leaves the single-season window alone', () => {
+		const entry = planSeason({
+			...base,
+			season: 3,
+			expectedEpisodeCount: 12,
+			packCandidates: [candidate('season-three', 12, [3])],
+		});
+		expect(entry.status).toBe('pack');
+	});
+});
+
+describe('summarisePlan with a shared release', () => {
+	it('counts one series pack once, not once per season it covers', () => {
+		// The run adds it on the first season and recognises it as already added
+		// for the rest, so promising five torrents would be a lie.
+		const series = candidate('series', 60, [1, 2, 3, 4, 5]);
+		const entries = [1, 2, 3, 4, 5].map((season) =>
+			planSeason({
+				season,
+				expectedEpisodeCount: WIRE_COUNTS[season as keyof typeof WIRE_COUNTS],
+				episodeCounts: WIRE_COUNTS,
+				coverage: noCoverage,
+				packCandidates: [series],
+				episodeCandidates: new Map(),
+			})
+		);
+
+		const summary = summarisePlan(entries);
+		expect(summary.packs).toHaveLength(5);
+		expect(summary.totalAddCount).toBe(1);
 	});
 });

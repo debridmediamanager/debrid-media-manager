@@ -251,8 +251,16 @@ export function useSeasonPackAdder({
 	);
 
 	const buildEntries = useCallback(
-		(apiSeasons: ApiSeason[], service: SeasonAdderService, facts: ShowFacts) =>
-			apiSeasons.map((entry) => {
+		(apiSeasons: ApiSeason[], service: SeasonAdderService, facts: ShowFacts) => {
+			const airedCounts: Record<number, number> = {};
+			for (let season = 1; season <= facts.seasonCount; season++) {
+				airedCounts[season] = airedEpisodeCount(
+					season,
+					facts.episodeCounts[season] ?? 0,
+					facts.lastEpisodeToAir
+				);
+			}
+			return apiSeasons.map((entry) => {
 				const knownHashes = new Set<string>();
 				for (const pack of entry.packs) knownHashes.add(pack.hash.toLowerCase());
 				for (const bucket of Object.values(entry.episodes)) {
@@ -276,11 +284,11 @@ export function useSeasonPackAdder({
 
 				return planSeason({
 					season: entry.season,
-					expectedEpisodeCount: airedEpisodeCount(
-						entry.season,
-						facts.episodeCounts[entry.season] ?? 0,
-						facts.lastEpisodeToAir
-					),
+					expectedEpisodeCount: airedCounts[entry.season] ?? 0,
+					// The whole run's counts, so a complete-series release is
+					// judged against every season it claims rather than against
+					// this one - see `expectedEpisodesForClaim`.
+					episodeCounts: airedCounts,
 					coverage,
 					// A release RD has already rejected for its name can only answer
 					// 451 again, so it is not a candidate at all.
@@ -289,7 +297,8 @@ export function useSeasonPackAdder({
 					),
 					episodeCandidates,
 				});
-			}),
+			});
+		},
 		[libraryItems]
 	);
 
@@ -373,16 +382,25 @@ export function useSeasonPackAdder({
 			let consecutiveThrottles = 0;
 			let abortedByThrottle = false;
 			const gaps: number[] = [];
+			/**
+			 * Hashes this run has already put in the account. A complete-series
+			 * release is the best candidate for every season it covers, so
+			 * without this the run adds the same 470 GB torrent once per season
+			 * and reports five adds where it made one.
+			 */
+			const addedHashes = new Set<string>();
 
 			const markSeason = (season: number, state: SeasonRunState) =>
 				setSeasonState((prev) => ({ ...prev, [season]: state }));
 
 			const tryAdd = async (candidate: ApiCandidate): Promise<boolean> => {
+				if (addedHashes.has(candidate.hash.toLowerCase())) return true;
 				const row = asSearchResult(candidate, plan.service);
 				if (plan.service === 'tb') {
 					if (!tbKeyPresent) return false;
 					try {
 						await addTb(candidate.hash, { row, silent: true });
+						addedHashes.add(candidate.hash.toLowerCase());
 						consecutiveThrottles = 0;
 						return true;
 					} catch {
@@ -394,6 +412,7 @@ export function useSeasonPackAdder({
 				// left downloading in the user's account.
 				const result = await addRd(candidate.hash, false, true, { row, silent: true });
 				if (result === true) {
+					addedHashes.add(candidate.hash.toLowerCase());
 					consecutiveThrottles = 0;
 					return true;
 				}
