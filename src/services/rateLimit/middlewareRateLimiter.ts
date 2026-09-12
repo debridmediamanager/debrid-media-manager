@@ -17,6 +17,13 @@ export const RATE_LIMIT_CONFIGS = {
 	// their hash-imdb calls shared that counter. Sized to fit every burst seen
 	// while still holding an address to 10 a second.
 	snapshot: { name: 'snapshot', rateLimit: 100, windowSeconds: 10 },
+	// The whole-show season resolver behind "All Seasons". It reads many season
+	// rows in one request precisely so the browser does not walk `torrents` once
+	// per season at 1-per-2s, which for a twenty-season show is forty seconds of
+	// waiting and forty entries in a bucket shared with everyone on that IP.
+	// Its own name so the two budgets stay separate, and four per minute because
+	// a run asks for packs and then, only where a season has none, episodes.
+	tvSeasons: { name: 'tvSeasons', rateLimit: 4, windowSeconds: 60 },
 	// A season search asks two episodes at a time of every enabled Tor addon, and
 	// there are five of those, so ten proxy calls land together - and the sliding
 	// window still holds the previous second, so two of those bursts have to fit.
