@@ -40,7 +40,11 @@ export type ReleaseSignals = {
 	year?: string | number | null;
 	/** Production status, in the source's own wording. */
 	status?: string | null;
-	/** Newest episode date the payload knows, aired or scheduled. */
+	/**
+	 * Newest episode date the payload knows, aired or scheduled. Present only for
+	 * shows, and authoritative for them: nothing else in the payload is checked
+	 * when it is set.
+	 */
 	latestEpisode?: string | null;
 };
 
@@ -90,20 +94,29 @@ const latestDate = (values: unknown[]): string | null => {
  * whole undated long tail for nothing.
  */
 export function isMetadataStillMoving(signals: ReleaseSignals, now: number = Date.now()): boolean {
+	const cutoff = now - RECENT_METADATA_WINDOW_MS;
+
+	// A show is judged by the newest episode it knows about — aired or scheduled —
+	// and by nothing else. Its first air date says nothing about whether anything
+	// is still changing, and `status` and the year range are labels that go stale
+	// while the episode list does not: Cinemeta still calls True Detective
+	// "Continuing" with an open-ended "2014–" two and a half years after its last
+	// episode, and would have had it refetched every six hours forever.
+	const latestEpisode = parseTimestamp(signals.latestEpisode);
+	if (latestEpisode !== null) return latestEpisode >= cutoff;
+
+	// Everything below answers for a title with no episode list at all: a movie,
+	// or a show announced before it has any dated episodes.
 	const status = signals.status?.trim().toLowerCase();
 	if (status && ONGOING_STATUSES.has(status)) return true;
 
 	const { endYear, openEnded } = parseYearSignal(signals.year);
 	if (openEnded) return true;
 
-	const cutoff = now - RECENT_METADATA_WINDOW_MS;
-
 	// A date in the future is a title that has not landed yet, which is exactly
 	// when the cached row is a placeholder synopsis and a teaser poster.
-	const dates = [parseTimestamp(signals.released), parseTimestamp(signals.latestEpisode)].filter(
-		(value): value is number => value !== null
-	);
-	if (dates.length > 0) return Math.max(...dates) >= cutoff;
+	const released = parseTimestamp(signals.released);
+	if (released !== null) return released >= cutoff;
 
 	// Year granularity only: the year counts as recent until it ends, which errs
 	// toward refetching rather than toward serving a stale rating.
@@ -124,7 +137,15 @@ export function metadataMaxAge(
 		: settledMaxAge;
 }
 
-/** Release signals out of an mdblist title payload. */
+/**
+ * Release signals out of an mdblist title payload.
+ *
+ * mdblist dates a season, not an episode, so `latestEpisode` here is the newest
+ * season's first air date — up to a season early for a show that has just
+ * finished. Cinemeta's per-episode dates are exact, and both caches decide
+ * their own row's lifetime, so the approximation only ever costs this one row a
+ * late refresh.
+ */
 export function mdblistReleaseSignals(data: any): ReleaseSignals {
 	const seasons = Array.isArray(data?.seasons) ? data.seasons : [];
 	return {

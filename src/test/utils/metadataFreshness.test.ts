@@ -1,6 +1,7 @@
 import shawshankCinemeta from '@/test/fixtures/metadata/cinemeta-tt0111161-the-shawshank-redemption.json';
 import breakingBadCinemeta from '@/test/fixtures/metadata/cinemeta-tt0903747-breaking-bad.json';
 import wednesdayCinemeta from '@/test/fixtures/metadata/cinemeta-tt13443470-wednesday.json';
+import trueDetectiveCinemeta from '@/test/fixtures/metadata/cinemeta-tt2356777-true-detective.json';
 import thundermansCinemeta from '@/test/fixtures/metadata/cinemeta-tt37752275-clash-of-the-thundermans.json';
 import shawshankMdblist from '@/test/fixtures/metadata/mdblist-tt0111161-the-shawshank-redemption.json';
 import breakingBadMdblist from '@/test/fixtures/metadata/mdblist-tt0903747-breaking-bad.json';
@@ -40,12 +41,40 @@ describe('isMetadataStillMoving', () => {
 	});
 
 	it('treats a show that is still airing as moving, whatever its first-air date says', () => {
-		// mdblist says "Returning Series", Cinemeta writes the same fact as an
-		// open-ended year range. Both first aired in 2022, outside the window.
+		// Both first aired in 2022, outside the window; both have aired an episode
+		// inside it, which is what the decision rests on.
 		expect(isMetadataStillMoving(mdblistReleaseSignals(wednesdayMdblist), NOW)).toBe(true);
 		expect(isMetadataStillMoving(cinemetaReleaseSignals(wednesdayCinemeta.meta), NOW)).toBe(
 			true
 		);
+	});
+
+	it('judges a show by its newest episode, not by a label that has gone stale', () => {
+		// Cinemeta still calls this one "Continuing" and writes its run as the
+		// open-ended "2014–", but no episode has aired since 2024-02-19. Believing
+		// either label refetches it every six hours for as long as it exists.
+		const signals = cinemetaReleaseSignals(trueDetectiveCinemeta.meta);
+		expect(signals.status).toBe('Continuing');
+		expect(signals.year).toBe('2014–');
+		expect(signals.latestEpisode?.slice(0, 10)).toBe('2024-02-19');
+
+		expect(isMetadataStillMoving(signals, NOW)).toBe(false);
+		expect(metadataMaxAge(signals, SEVEN_DAYS, NOW)).toBe(SEVEN_DAYS);
+	});
+
+	it('judges a show that is still airing by that same episode date', () => {
+		// The mirror of the case above: a first air date outside the window, a
+		// newest episode inside it. Nothing but the episode date decides either.
+		const signals = cinemetaReleaseSignals(wednesdayCinemeta.meta);
+		expect(signals.released?.slice(0, 10)).toBe('2022-11-23');
+		expect(isMetadataStillMoving({ ...signals, status: null, year: null }, NOW)).toBe(true);
+	});
+
+	it('keeps the fallbacks for a show that has no dated episode yet', () => {
+		// A show announced before its episode list exists has nothing else to go on.
+		expect(isMetadataStillMoving({ status: 'Returning Series' }, NOW)).toBe(true);
+		expect(isMetadataStillMoving({ year: '2026–' }, NOW)).toBe(true);
+		expect(isMetadataStillMoving({ released: '2026-08-01' }, NOW)).toBe(true);
 	});
 
 	it('treats a show that ended years ago as settled', () => {
