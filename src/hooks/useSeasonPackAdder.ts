@@ -16,7 +16,7 @@ import {
 import { isVideo } from '@/utils/selectable';
 import { generateTokenAndHash } from '@/utils/token';
 import axios from 'axios';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AddRdOptions, AddTbOptions } from './useTorrentManagement';
 
 export type SeasonAdderService = 'rd' | 'tb';
@@ -127,7 +127,20 @@ export function useSeasonPackAdder({
 	const [running, setRunning] = useState(false);
 	const [seasonState, setSeasonState] = useState<Record<number, SeasonRunState>>({});
 	const stopped = useRef(false);
-	const runningForImdbId = useRef<string | null>(null);
+
+	/**
+	 * Leaving the show ends the run.
+	 *
+	 * Without this, navigating away keeps filling the previous show's library in
+	 * the background - the loop holds its own closure, so it cannot notice on its
+	 * own that the page has moved on. The cleanup covers unmounting too, which is
+	 * the other way a user leaves.
+	 */
+	useEffect(() => {
+		return () => {
+			stopped.current = true;
+		};
+	}, [imdbId]);
 
 	const stop = useCallback(() => {
 		stopped.current = true;
@@ -353,7 +366,6 @@ export function useSeasonPackAdder({
 	const run = useCallback(
 		async (plan: SeasonAdderPlan, tbKeyPresent: boolean) => {
 			stopped.current = false;
-			runningForImdbId.current = imdbId;
 			setRunning(true);
 
 			let added = 0;
@@ -393,7 +405,7 @@ export function useSeasonPackAdder({
 
 			try {
 				for (const entry of plan.entries) {
-					if (stopped.current || runningForImdbId.current !== imdbId) break;
+					if (stopped.current) break;
 					if (entry.status === 'held' || entry.status === 'gap') continue;
 
 					markSeason(entry.season, 'running');
@@ -468,7 +480,6 @@ export function useSeasonPackAdder({
 				}
 			} finally {
 				setRunning(false);
-				runningForImdbId.current = null;
 			}
 
 			return {

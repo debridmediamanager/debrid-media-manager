@@ -60,16 +60,18 @@ let addRd: ReturnType<typeof vi.fn>;
 let addTb: ReturnType<typeof vi.fn>;
 
 const render = (libraryItems: UserTorrent[] = []) =>
-	renderHook(() =>
-		useSeasonPackAdder({
-			imdbId: 'tt0306414',
-			show,
-			libraryItems,
-			hashAndProgress: {},
-			addRd: addRd as never,
-			addTb: addTb as never,
-			episodeMaxSize: '0',
-		})
+	renderHook(
+		({ imdbId }: { imdbId: string }) =>
+			useSeasonPackAdder({
+				imdbId,
+				show,
+				libraryItems,
+				hashAndProgress: {},
+				addRd: addRd as never,
+				addTb: addTb as never,
+				episodeMaxSize: '0',
+			}),
+		{ initialProps: { imdbId: 'tt0306414' } }
 	);
 
 /** Answers the packs call, then the episodes call, from a per-season script. */
@@ -411,6 +413,58 @@ describe('useSeasonPackAdder', () => {
 		});
 
 		expect(addRd).toHaveBeenCalledTimes(1);
+	});
+
+	it('abandons the run when the page moves to another show', async () => {
+		respondWith({
+			packs: {
+				1: [candidate(hash('a'), 'The.Wire.S01.1080p', 10)],
+				2: [candidate(hash('b'), 'The.Wire.S02.1080p', 10)],
+				3: [candidate(hash('c'), 'The.Wire.S03.1080p', 10)],
+			},
+		});
+		const { result, rerender } = render();
+
+		let plan: SeasonAdderPlan | null = null;
+		await act(async () => {
+			plan = await result.current.discover('rd', null);
+		});
+
+		// Hold the first add open so the navigation lands mid-run rather than
+		// after the loop has already raced to the end.
+		let announceFirstAdd: () => void = () => {};
+		const firstAddStarted = new Promise<void>((resolve) => {
+			announceFirstAdd = resolve;
+		});
+		let releaseFirstAdd: () => void = () => {};
+		const firstAddGate = new Promise<void>((resolve) => {
+			releaseFirstAdd = resolve;
+		});
+		addRd.mockImplementation(async () => {
+			announceFirstAdd();
+			await firstAddGate;
+			return true;
+		});
+
+		const running = result.current.run(plan!, false);
+		await firstAddStarted;
+
+		// Navigating re-renders with a new id, which tears down the effect keyed
+		// on it. The loop holds its own closure and cannot notice the page moved
+		// on by itself, so without that cleanup it would keep filling the
+		// previous show's library in the background.
+		await act(async () => {
+			rerender({ imdbId: 'tt0141842' });
+		});
+
+		releaseFirstAdd();
+		let outcome: any;
+		await act(async () => {
+			outcome = await running;
+		});
+
+		expect(addRd).toHaveBeenCalledTimes(1);
+		expect(outcome.stopped).toBe(true);
 	});
 
 	it('never offers a release whose name Real-Debrid blocks', async () => {

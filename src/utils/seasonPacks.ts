@@ -171,14 +171,15 @@ export function getSeasonCoverage(
 		if (!info) continue;
 		const seasons = seasonsOf(info);
 
+		// By hash: the release is filed under this season of this imdb id, which
+		// is anchored to the title and cannot be confused by a similarly named
+		// show - and it still counts when the name itself parses no season.
+		// By name: the fallback for releases DMM has not scraped under this
+		// season key, a multi-season pack chief among them.
 		const byHash = knownHashes?.has(torrent.hash?.toLowerCase() ?? '') ?? false;
 		const byName =
 			seasons.includes(season) && !!info.title && normalize(info.title) === wantedTitle;
 		if (!byHash && !byName) continue;
-
-		// A hash filed under this season whose name parses no season at all is
-		// still this season's - that is what the season key asserts.
-		if (!seasons.includes(season) && !byHash) continue;
 
 		if (claimsWholeSeason(info)) {
 			hasPack = true;
