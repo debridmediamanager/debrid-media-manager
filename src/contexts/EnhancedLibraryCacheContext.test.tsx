@@ -120,6 +120,12 @@ vi.mock('@/hooks/auth', () => ({
 	useDebridLinkCredential: vi.fn(),
 }));
 
+const callsForService = (service: string) =>
+	fetchLibraryMock.mock.calls.filter(([svc]) => svc === service).length;
+
+/** Let any refresh the render would have scheduled actually fire. */
+const settle = () => new Promise((resolve) => setTimeout(resolve, 50));
+
 const wrapper = ({ children }: { children: ReactNode }) => (
 	<EnhancedLibraryCacheProvider>{children}</EnhancedLibraryCacheProvider>
 );
@@ -435,6 +441,136 @@ describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 		await new Promise((resolve) => setTimeout(resolve, 50));
 		expect(fetchLibraryMock).not.toHaveBeenCalled();
 		expect(result.current.rdLibrary[0]?.id).toBe('rd:cached');
+
+		unmount();
+	});
+
+	it('refetches only the provider whose own library went stale', async () => {
+		// Staleness used to hang off one shared `library:lastSync`, so whichever
+		// provider synced last marked every other provider fresh. Real-Debrid
+		// renews its access token about hourly and refreshes on its own, which
+		// meant an AllDebrid library could sit untouched for days and still read
+		// as synced a minute ago.
+		window.localStorage.setItem('library:lastSync:realdebrid', new Date().toISOString());
+		window.localStorage.setItem(
+			'library:lastSync:alldebrid',
+			new Date(Date.now() - 90 * 60 * 1000).toISOString()
+		);
+		torrentDbMocks.all.mockResolvedValueOnce([
+			buildTorrent('rd:cached'),
+			buildTorrent('ad:cached'),
+		]);
+		mockedUseRealDebridAccessToken.mockReturnValue(['rd-token', false, false]);
+		mockedUseAllDebridApiKey.mockReturnValue('ad-key');
+		fetchLibraryMock.mockResolvedValue([buildTorrent('ad:fresh')] as UserTorrent[]);
+
+		const { unmount } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+
+		await waitFor(() => expect(callsForService('alldebrid')).toBe(1));
+		await settle();
+		expect(callsForService('realdebrid')).toBe(0);
+
+		unmount();
+	});
+
+	it('records a sync against the provider that synced, not the whole library', async () => {
+		const seeded = new Date(Date.now() - 60 * 1000).toISOString();
+		window.localStorage.setItem('library:lastSync:realdebrid', seeded);
+		window.localStorage.setItem('library:lastSync:alldebrid', seeded);
+		torrentDbMocks.all.mockResolvedValueOnce([
+			buildTorrent('rd:cached'),
+			buildTorrent('ad:cached'),
+		]);
+		mockedUseRealDebridAccessToken.mockReturnValue(['rd-token', false, false]);
+		mockedUseAllDebridApiKey.mockReturnValue('ad-key');
+		fetchLibraryMock.mockResolvedValue([] as UserTorrent[]);
+
+		const { result, unmount } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+		await waitFor(() => expect(result.current.syncStatus.isLoading).toBe(false));
+		await settle();
+		expect(fetchLibraryMock).not.toHaveBeenCalled();
+
+		await act(async () => {
+			await result.current.refreshLibrary('realdebrid', true);
+		});
+
+		expect(window.localStorage.getItem('library:lastSync:realdebrid')).not.toBe(seeded);
+		expect(window.localStorage.getItem('library:lastSync:alldebrid')).toBe(seeded);
+
+		unmount();
+	});
+
+	it('inherits the shared timestamp per provider on upgrade instead of refetching all of them', async () => {
+		// Splitting the shared key must not stampede six libraries at once the
+		// first time an existing install loads the new code
+		window.localStorage.setItem('library:lastSync', new Date().toISOString());
+		torrentDbMocks.all.mockResolvedValueOnce([
+			buildTorrent('rd:cached'),
+			buildTorrent('ad:cached'),
+		]);
+		mockedUseRealDebridAccessToken.mockReturnValue(['rd-token', false, false]);
+		mockedUseAllDebridApiKey.mockReturnValue('ad-key');
+		fetchLibraryMock.mockResolvedValue([buildTorrent('rd:fresh')] as UserTorrent[]);
+
+		const { result, unmount } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+
+		await waitFor(() => expect(result.current.syncStatus.isLoading).toBe(false));
+		await settle();
+		expect(fetchLibraryMock).not.toHaveBeenCalled();
+		expect(window.localStorage.getItem('library:lastSync:realdebrid')).toBeTruthy();
+		expect(window.localStorage.getItem('library:lastSync:alldebrid')).toBeTruthy();
+
+		unmount();
+	});
+
+	it('re-checks staleness when the tab comes back to the foreground', async () => {
+		// An AllDebrid key never expires and never changes, so nothing re-runs
+		// the rule while the tab stays open - the 30 minute branch was only ever
+		// reachable on a full page load
+		const fresh = new Date().toISOString();
+		window.localStorage.setItem('library:lastSync', fresh);
+		window.localStorage.setItem('library:lastSync:alldebrid', fresh);
+		torrentDbMocks.all.mockResolvedValueOnce([buildTorrent('ad:cached')]);
+		mockedUseAllDebridApiKey.mockReturnValue('ad-key');
+		fetchLibraryMock.mockResolvedValue([buildTorrent('ad:fresh')] as UserTorrent[]);
+
+		const { result, unmount } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+		await waitFor(() => expect(result.current.syncStatus.isLoading).toBe(false));
+		await settle();
+		expect(fetchLibraryMock).not.toHaveBeenCalled();
+
+		const stale = new Date(Date.now() - 90 * 60 * 1000).toISOString();
+		window.localStorage.setItem('library:lastSync', stale);
+		window.localStorage.setItem('library:lastSync:alldebrid', stale);
+		await act(async () => {
+			window.dispatchEvent(new Event('focus'));
+		});
+
+		await waitFor(() => expect(callsForService('alldebrid')).toBe(1));
+		// a staleness sweep goes through the fetcher cache rather than forcing
+		expect(fetchLibraryMock.mock.calls[0][2]).toMatchObject({ forceRefresh: false });
+
+		unmount();
+	});
+
+	it('does not refetch a fresh provider when the tab comes back', async () => {
+		const fresh = new Date().toISOString();
+		window.localStorage.setItem('library:lastSync', fresh);
+		window.localStorage.setItem('library:lastSync:alldebrid', fresh);
+		torrentDbMocks.all.mockResolvedValueOnce([buildTorrent('ad:cached')]);
+		mockedUseAllDebridApiKey.mockReturnValue('ad-key');
+		fetchLibraryMock.mockResolvedValue([buildTorrent('ad:fresh')] as UserTorrent[]);
+
+		const { result, unmount } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+		await waitFor(() => expect(result.current.syncStatus.isLoading).toBe(false));
+
+		await act(async () => {
+			window.dispatchEvent(new Event('focus'));
+			document.dispatchEvent(new Event('visibilitychange'));
+		});
+		await settle();
+
+		expect(fetchLibraryMock).not.toHaveBeenCalled();
 
 		unmount();
 	});

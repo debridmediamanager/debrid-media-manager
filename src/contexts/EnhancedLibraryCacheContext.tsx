@@ -32,32 +32,85 @@ import {
 } from 'react';
 import toast from 'react-hot-toast';
 
+const LIBRARY_SERVICES: LibraryService[] = [
+	'realdebrid',
+	'alldebrid',
+	'torbox',
+	'premiumize',
+	'offcloud',
+	'debridlink',
+];
+
+/** Newest sync across every provider - what the floating indicator labels. */
 const LAST_SYNC_STORAGE_KEY = 'library:lastSync';
+/** Set once the shared key above has been split into the per-provider keys. */
+const LAST_SYNC_MIGRATED_KEY = 'library:lastSync:migrated';
+const serviceLastSyncKey = (service: LibraryService) => `${LAST_SYNC_STORAGE_KEY}:${service}`;
 // Matches the staleness threshold the floating indicator already shows in yellow
 const LIBRARY_STALE_AFTER_MS = 30 * 60 * 1000;
+// focus and visibilitychange both fire when a tab comes forward - treat the
+// pair as one wake-up rather than two evaluations
+const WAKE_COALESCE_MS = 1000;
 
-const readPersistedLastSync = (): Date | null => {
-	if (typeof window === 'undefined') return null;
-	const stored = window.localStorage.getItem(LAST_SYNC_STORAGE_KEY);
+const parseStoredDate = (stored: string | null): Date | null => {
 	if (!stored) return null;
 	const parsed = new Date(stored);
 	return Number.isNaN(parsed.getTime()) ? null : parsed;
 };
 
 /**
+ * One-shot split of the single shared `library:lastSync` into one timestamp per
+ * provider. Every provider inherits the old value, so upgrading does not refetch
+ * all six libraries at once.
+ *
+ * The shared key is never consulted for staleness again. Leaving it as a
+ * fallback would re-create the defect this replaced: Real-Debrid renews its
+ * access token roughly hourly and refreshes on its own, and that one sync kept
+ * bumping the shared timestamp, so an AllDebrid or TorBox library could sit
+ * untouched for days and still read as "synced a minute ago".
+ */
+const migrateSharedLastSync = () => {
+	if (typeof window === 'undefined') return;
+	if (window.localStorage.getItem(LAST_SYNC_MIGRATED_KEY)) return;
+	const shared = parseStoredDate(window.localStorage.getItem(LAST_SYNC_STORAGE_KEY));
+	if (shared) {
+		for (const service of LIBRARY_SERVICES) {
+			if (!window.localStorage.getItem(serviceLastSyncKey(service))) {
+				window.localStorage.setItem(serviceLastSyncKey(service), shared.toISOString());
+			}
+		}
+	}
+	window.localStorage.setItem(LAST_SYNC_MIGRATED_KEY, '1');
+};
+
+const readServiceLastSync = (service: LibraryService): Date | null => {
+	if (typeof window === 'undefined') return null;
+	return parseStoredDate(window.localStorage.getItem(serviceLastSyncKey(service)));
+};
+
+/**
  * A cached library that nobody refreshes goes stale silently: torrents added or
  * removed from another device, the debrid site, or Stremio never showed up,
  * because any cached rows at all satisfied the "already fetched" check.
+ *
+ * Asked per provider, because one provider syncing says nothing about whether
+ * any of the others did.
  */
-const isCachedLibraryStale = (): boolean => {
-	const lastSync = readPersistedLastSync();
+const isServiceStale = (service: LibraryService): boolean => {
+	const lastSync = readServiceLastSync(service);
 	if (!lastSync) return true;
 	return Date.now() - lastSync.getTime() > LIBRARY_STALE_AFTER_MS;
 };
 
-const persistLastSync = (when: Date) => {
+const persistServiceLastSync = (service: LibraryService, when: Date) => {
 	if (typeof window === 'undefined') return;
-	window.localStorage.setItem(LAST_SYNC_STORAGE_KEY, when.toISOString());
+	window.localStorage.setItem(serviceLastSyncKey(service), when.toISOString());
+	// The indicator shows one time for the whole library, so keep the shared key
+	// as the newest sync across providers - display only, never staleness
+	const newest = parseStoredDate(window.localStorage.getItem(LAST_SYNC_STORAGE_KEY));
+	if (!newest || when.getTime() > newest.getTime()) {
+		window.localStorage.setItem(LAST_SYNC_STORAGE_KEY, when.toISOString());
+	}
 };
 
 const reportDbWriteFailure = (operation: string) => (error: unknown) =>
@@ -222,6 +275,9 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 		averageFetchTime: 0,
 	});
 	const [hasLoadedInitialData, setHasLoadedInitialData] = useState(false);
+	// Bumped when the tab comes back to the foreground, purely to re-run the
+	// per-provider refresh rule below. See the listener effect for why.
+	const [wakeTick, setWakeTick] = useState(0);
 
 	// Performance tracking
 	const fetchTimesRef = useRef<number[]>([]);
@@ -229,6 +285,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 	const dbSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const libraryItemsRef = useRef<UserTorrent[]>([]);
 	const syncInFlightRef = useRef(0);
+	const lastWakeRef = useRef(0);
 	const lastPersistedSnapshotRef = useRef<Map<string, string>>(new Map());
 	// id -> the object we last stringified and its signature. Callers that change
 	// one torrent keep every other object's identity, so this skips re-serialising
@@ -335,6 +392,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 
 	// Initialize services on mount and restore cached data for display
 	useEffect(() => {
+		migrateSharedLastSync();
 		initializeServices();
 		loadExistingData();
 
@@ -345,6 +403,35 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			}
 		};
 	}, [loadExistingData]);
+
+	/**
+	 * Re-evaluate the per-provider refresh rule when the tab comes back to the
+	 * foreground.
+	 *
+	 * Not a poll: nothing runs while the tab is hidden or idle, and waking only
+	 * reads a localStorage timestamp - a provider that is still fresh makes no
+	 * request. Without it the 30-minute branch is unreachable for AllDebrid,
+	 * TorBox, Premiumize and Offcloud, whose keys never expire and so never
+	 * change to re-trigger the effects; only Real-Debrid and Debrid-Link, which
+	 * renew their own tokens, would ever refresh in a tab left open.
+	 */
+	useEffect(() => {
+		if (typeof window === 'undefined') return;
+		const wake = () => {
+			if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
+			const now = Date.now();
+			// focus and visibilitychange both fire when a tab comes forward
+			if (now - lastWakeRef.current < WAKE_COALESCE_MS) return;
+			lastWakeRef.current = now;
+			setWakeTick((tick) => tick + 1);
+		};
+		window.addEventListener('focus', wake);
+		document.addEventListener('visibilitychange', wake);
+		return () => {
+			window.removeEventListener('focus', wake);
+			document.removeEventListener('visibilitychange', wake);
+		};
+	}, []);
 
 	// Reset per-service libraries when tokens are cleared
 	useEffect(() => {
@@ -595,7 +682,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 					}
 
 					setStats((prev) => ({ ...prev, lastSync: syncCompletedAt }));
-					persistLastSync(syncCompletedAt);
+					persistServiceLastSync(target, syncCompletedAt);
 
 					toast.success(`${target} library refreshed (${torrents.length}).`);
 				} catch (error: any) {
@@ -624,15 +711,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			};
 
 			if (!service) {
-				const services: Service[] = [
-					'realdebrid',
-					'alldebrid',
-					'torbox',
-					'premiumize',
-					'offcloud',
-					'debridlink',
-				];
-				const active = services.filter((target) => Boolean(tokens[target]));
+				const active = LIBRARY_SERVICES.filter((target) => Boolean(tokens[target]));
 				console.log('[LibraryCache] refreshLibrary multi-service start', {
 					force,
 					services: active,
@@ -720,7 +799,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 
 		const hasFetched = initialRefreshDoneRef.current.rd;
 		const shouldRefresh =
-			tokenChanged || (!hasFetched && rdLibrary.length === 0) || isCachedLibraryStale();
+			tokenChanged || (!hasFetched && rdLibrary.length === 0) || isServiceStale('realdebrid');
 
 		if (!shouldRefresh) {
 			console.log('[LibraryCache] Auto refresh skipped for RealDebrid', {
@@ -741,7 +820,14 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			reason: refreshReason,
 		});
 		void scheduleServiceRefresh('realdebrid', refreshReason);
-	}, [rdKey, rdLoading, rdLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
+	}, [
+		rdKey,
+		rdLoading,
+		rdLibrary.length,
+		scheduleServiceRefresh,
+		hasLoadedInitialData,
+		wakeTick,
+	]);
 
 	useEffect(() => {
 		if (!hasLoadedInitialData) {
@@ -770,7 +856,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 
 		const hasFetched = initialRefreshDoneRef.current.ad;
 		const shouldRefresh =
-			tokenChanged || (!hasFetched && adLibrary.length === 0) || isCachedLibraryStale();
+			tokenChanged || (!hasFetched && adLibrary.length === 0) || isServiceStale('alldebrid');
 
 		if (!shouldRefresh) {
 			console.log('[LibraryCache] Auto refresh skipped for AllDebrid', {
@@ -791,7 +877,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			reason: refreshReason,
 		});
 		void scheduleServiceRefresh('alldebrid', refreshReason);
-	}, [adKey, adLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
+	}, [adKey, adLibrary.length, scheduleServiceRefresh, hasLoadedInitialData, wakeTick]);
 
 	useEffect(() => {
 		if (!hasLoadedInitialData) {
@@ -820,7 +906,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 
 		const hasFetched = initialRefreshDoneRef.current.tb;
 		const shouldRefresh =
-			tokenChanged || (!hasFetched && tbLibrary.length === 0) || isCachedLibraryStale();
+			tokenChanged || (!hasFetched && tbLibrary.length === 0) || isServiceStale('torbox');
 
 		if (!shouldRefresh) {
 			console.log('[LibraryCache] Auto refresh skipped for TorBox', {
@@ -841,7 +927,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			reason: refreshReason,
 		});
 		void scheduleServiceRefresh('torbox', refreshReason);
-	}, [tbKey, tbLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
+	}, [tbKey, tbLibrary.length, scheduleServiceRefresh, hasLoadedInitialData, wakeTick]);
 
 	useEffect(() => {
 		if (!hasLoadedInitialData) {
@@ -870,7 +956,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 
 		const hasFetched = initialRefreshDoneRef.current.pm;
 		const shouldRefresh =
-			tokenChanged || (!hasFetched && pmLibrary.length === 0) || isCachedLibraryStale();
+			tokenChanged || (!hasFetched && pmLibrary.length === 0) || isServiceStale('premiumize');
 
 		if (!shouldRefresh) {
 			return;
@@ -881,7 +967,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			'premiumize',
 			tokenChanged ? 'tokenChanged' : hasFetched ? 'stale' : 'initialEmpty'
 		);
-	}, [pmKey, pmLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
+	}, [pmKey, pmLibrary.length, scheduleServiceRefresh, hasLoadedInitialData, wakeTick]);
 
 	useEffect(() => {
 		if (!hasLoadedInitialData) {
@@ -910,7 +996,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 
 		const hasFetched = initialRefreshDoneRef.current.oc;
 		const shouldRefresh =
-			tokenChanged || (!hasFetched && ocLibrary.length === 0) || isCachedLibraryStale();
+			tokenChanged || (!hasFetched && ocLibrary.length === 0) || isServiceStale('offcloud');
 
 		if (!shouldRefresh) {
 			return;
@@ -921,7 +1007,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			'offcloud',
 			tokenChanged ? 'tokenChanged' : hasFetched ? 'stale' : 'initialEmpty'
 		);
-	}, [ocKey, ocLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
+	}, [ocKey, ocLibrary.length, scheduleServiceRefresh, hasLoadedInitialData, wakeTick]);
 
 	useEffect(() => {
 		if (!hasLoadedInitialData) {
@@ -950,7 +1036,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 
 		const hasFetched = initialRefreshDoneRef.current.dl;
 		const shouldRefresh =
-			tokenChanged || (!hasFetched && dlLibrary.length === 0) || isCachedLibraryStale();
+			tokenChanged || (!hasFetched && dlLibrary.length === 0) || isServiceStale('debridlink');
 
 		if (!shouldRefresh) {
 			return;
@@ -961,7 +1047,7 @@ export function EnhancedLibraryCacheProvider({ children }: { children: ReactNode
 			'debridlink',
 			tokenChanged ? 'tokenChanged' : hasFetched ? 'stale' : 'initialEmpty'
 		);
-	}, [dlKey, dlLibrary.length, scheduleServiceRefresh, hasLoadedInitialData]);
+	}, [dlKey, dlLibrary.length, scheduleServiceRefresh, hasLoadedInitialData, wakeTick]);
 
 	// Clear cache
 	const clearCache = async (service?: string) => {
