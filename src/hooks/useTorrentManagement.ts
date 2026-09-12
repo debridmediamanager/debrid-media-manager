@@ -56,6 +56,21 @@ function flattenMagnetFiles(files: MagnetFile[], parentPath = ''): MagnetFile[] 
 
 const torrentDB = new UserTorrentDB();
 
+/**
+ * Extras for an `addRd` call that the page's own state cannot answer.
+ *
+ * Both exist for the same caller: a run that adds releases for seasons other
+ * than the one on screen. Such a run has the row in hand but `searchResults`
+ * does not hold it, and it reports its own progress rather than letting each
+ * add narrate itself.
+ */
+export type AddRdOptions = {
+	/** The row being added, when it is not in `searchResults`. */
+	row?: SearchResult;
+	/** Suppress the per-add toasts; the caller is reporting progress itself. */
+	silent?: boolean;
+};
+
 export function useTorrentManagement(
 	rdKey: string | null,
 	adKey: string | null,
@@ -84,12 +99,16 @@ export function useTorrentManagement(
 		async (
 			hash: string,
 			isCheckingAvailability = false,
-			deleteIfNotInstant = false
+			deleteIfNotInstant = false,
+			opts?: AddRdOptions
 		): Promise<any> => {
 			if (!rdKey) return;
 
-			// Read searchResults at call time via closure - no need for dependency
-			const torrentResult = searchResults.find((r) => r.hash === hash);
+			// Read searchResults at call time via closure - no need for dependency.
+			// A bulk run over seasons the page never rendered has no row to find,
+			// so it passes the one it is working from: without it the blocked-name
+			// test below reads an empty title and calls every 451 a throttle.
+			const torrentResult = opts?.row ?? searchResults.find((r) => r.hash === hash);
 			const wasMarkedAvailable = torrentResult?.rdAvailable || false;
 			let torrentInfo: TorrentInfoResponse | null = null;
 
@@ -138,7 +157,7 @@ export function useTorrentManagement(
 								)
 							);
 
-							toast.error('Torrent misflagged as RD available.');
+							if (!opts?.silent) toast.error('Torrent misflagged as RD available.');
 						}
 					}
 
@@ -162,7 +181,10 @@ export function useTorrentManagement(
 				},
 				deleteIfNotInstant,
 				0,
-				isCheckingAvailability,
+				// `silent` suppresses the per-add toasts. An availability check has
+				// always been silent; a bulk run must be too, or one progress
+				// notice competes with three toasts per season.
+				isCheckingAvailability || !!opts?.silent,
 				torrentResult?.title ?? '',
 				0,
 				knownFilenames

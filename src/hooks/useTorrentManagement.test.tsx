@@ -338,6 +338,49 @@ describe('useTorrentManagement', () => {
 		);
 	});
 
+	it('addRd reads the row from opts when the hash is not on screen', async () => {
+		// A run over seasons the page never rendered finds nothing in
+		// searchResults. Without the row it hands RD an empty title, and the
+		// blocked-name test that separates a real 451 from a throttle penalty
+		// then has nothing to read - so every block is waited out as a throttle.
+		currentResults = [];
+		const { result } = renderManagementHook();
+
+		await act(async () => {
+			await result.current.addRd('hash-9', false, false, {
+				row: createSearchResult({
+					hash: 'hash-9',
+					title: 'Other.Season.Pack',
+					files: [{ fileId: 1, filename: 'other.season.pack.mkv', filesize: 1 }],
+				}),
+			});
+		});
+
+		expect(mockHandleAddAsMagnetInRd).toHaveBeenCalledWith(
+			'rd-key',
+			'hash-9',
+			expect.any(Function),
+			false,
+			0,
+			false,
+			'Other.Season.Pack',
+			0,
+			['other.season.pack.mkv']
+		);
+	});
+
+	it('addRd passes opts.silent through to the add handler', async () => {
+		const { result } = renderManagementHook();
+
+		await act(async () => {
+			await result.current.addRd('hash-1', false, false, { silent: true });
+		});
+
+		// Position six is `silent`; a bulk caller reports its own progress and
+		// would otherwise be buried under three toasts per season.
+		expect(mockHandleAddAsMagnetInRd.mock.calls[0][5]).toBe(true);
+	});
+
 	it('addRd with deleteIfNotInstant=true returns false and cleans up when torrent is not instant', async () => {
 		// When deleteIfNotInstant=true and torrent is not instant,
 		// handleAddAsMagnetInRd deletes the torrent and does NOT call the callback.
