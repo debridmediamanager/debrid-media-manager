@@ -64,6 +64,13 @@ const torrentDB = new UserTorrentDB();
  * does not hold it, and it reports its own progress rather than letting each
  * add narrate itself.
  */
+export type AddTbOptions = {
+	/** The row being added, when it is not in `searchResults`. */
+	row?: SearchResult;
+	/** Suppress the per-add toasts; the caller is reporting progress itself. */
+	silent?: boolean;
+};
+
 export type AddRdOptions = {
 	/** The row being added, when it is not in `searchResults`. */
 	row?: SearchResult;
@@ -377,28 +384,34 @@ export function useTorrentManagement(
 	);
 
 	const addTb = useCallback(
-		async (hash: string) => {
+		async (hash: string, opts?: AddTbOptions) => {
 			if (!torboxKey) return;
 
-			// Read searchResults at call time via closure
-			const torrentResult = searchResults.find((r) => r.hash === hash);
+			// Read searchResults at call time via closure. A bulk run over other
+			// seasons has the row in hand instead - see `AddRdOptions`.
+			const torrentResult = opts?.row ?? searchResults.find((r) => r.hash === hash);
 			const wasMarkedAvailable = torrentResult?.tbAvailable || false;
 
-			await handleAddAsMagnetInTb(torboxKey, hash, async (userTorrent: UserTorrent) => {
-				await torrentDB.add(userTorrent);
-				addToCache(userTorrent); // Update global cache
+			await handleAddAsMagnetInTb(
+				torboxKey,
+				hash,
+				async (userTorrent: UserTorrent) => {
+					await torrentDB.add(userTorrent);
+					addToCache(userTorrent); // Update global cache
 
-				// Immediately update hashAndProgress state for this torrent
-				setHashAndProgress((prev) => ({
-					...prev,
-					[`${userTorrent.id.substring(0, 3)}${userTorrent.hash}`]:
-						wasMarkedAvailable || userTorrent.status === UserTorrentStatus.finished
-							? 100
-							: userTorrent.progress,
-				}));
+					// Immediately update hashAndProgress state for this torrent
+					setHashAndProgress((prev) => ({
+						...prev,
+						[`${userTorrent.id.substring(0, 3)}${userTorrent.hash}`]:
+							wasMarkedAvailable || userTorrent.status === UserTorrentStatus.finished
+								? 100
+								: userTorrent.progress,
+					}));
 
-				await fetchHashAndProgress();
-			});
+					await fetchHashAndProgress();
+				},
+				!!opts?.silent
+			);
 		},
 		[torboxKey, fetchHashAndProgress, addToCache, searchResults]
 	);

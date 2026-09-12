@@ -599,7 +599,9 @@ export const handleRestartTbTorrent = async (tbKey: string, id: string) => {
 export const handleAddAsMagnetInTb = async (
 	tbKey: string,
 	hash: string,
-	callback?: (torrent: UserTorrent) => Promise<void>
+	callback?: (torrent: UserTorrent) => Promise<void>,
+	/** Suppress the per-add toasts; a bulk caller reports its own progress. */
+	silent: boolean = false
 ) => {
 	try {
 		// TorBox requires a full magnet URI, not a bare info hash
@@ -612,8 +614,8 @@ export const handleAddAsMagnetInTb = async (
 			const info = torrentInfo.data as TorBoxTorrentInfo;
 			const userTorrent = convertToTbUserTorrent(info);
 			if (callback) await callback(userTorrent);
-			toast.success('Torrent added.', magnetToastOptions);
-		} else {
+			if (!silent) toast.success('Torrent added.', magnetToastOptions);
+		} else if (!silent) {
 			toast.error('Torrent added without an ID.', magnetToastOptions);
 		}
 	} catch (error: any) {
@@ -621,17 +623,19 @@ export const handleAddAsMagnetInTb = async (
 			'Error adding torrent:',
 			error instanceof Error ? error.message : 'Unknown error'
 		);
-		if (error instanceof TorBoxRateLimitError) {
-			toast.error(
-				'TorBox rate limit exceeded. Please wait and try again.',
-				magnetToastOptions
-			);
-		} else {
-			const tbError = getTbError(error);
-			toast.error(
-				tbError ? `TorBox error: ${tbError}` : 'Failed to add torrent.',
-				magnetToastOptions
-			);
+		if (!silent) {
+			if (error instanceof TorBoxRateLimitError) {
+				toast.error(
+					'TorBox rate limit exceeded. Please wait and try again.',
+					magnetToastOptions
+				);
+			} else {
+				const tbError = getTbError(error);
+				toast.error(
+					tbError ? `TorBox error: ${tbError}` : 'Failed to add torrent.',
+					magnetToastOptions
+				);
+			}
 		}
 		throw error;
 	}

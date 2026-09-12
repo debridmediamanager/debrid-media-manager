@@ -524,10 +524,33 @@ describe('useTorrentManagement', () => {
 		expect(mockHandleAddAsMagnetInTb).toHaveBeenCalledWith(
 			'tb-key',
 			'hash-tb',
-			expect.any(Function)
+			expect.any(Function),
+			false
 		);
 		expect(mockAddTorrentToCache).toHaveBeenCalled();
 		expect(result.current.hashAndProgress['tb:hash-tb']).toBe(40);
+	});
+
+	it('addTb takes its row and stays quiet for a bulk caller', async () => {
+		currentResults = [];
+		const { result } = renderManagementHook();
+
+		await act(async () => {
+			await result.current.addTb('hash-tb', {
+				row: createSearchResult({ hash: 'hash-tb', tbAvailable: true }),
+				silent: true,
+			});
+		});
+
+		expect(mockHandleAddAsMagnetInTb).toHaveBeenCalledWith(
+			'tb-key',
+			'hash-tb',
+			expect.any(Function),
+			true
+		);
+		// The row said cached, so the entry lands at 100 rather than at whatever
+		// progress TorBox reports for a torrent it has only just accepted.
+		expect(result.current.hashAndProgress['tb:hash-tb']).toBe(100);
 	});
 
 	it('deletes RD torrents and removes them from cache', async () => {
