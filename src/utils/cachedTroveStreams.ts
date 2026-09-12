@@ -1,6 +1,12 @@
 import type { ScrapeSearchResult } from '@/services/mediasearch';
 import { repository } from '@/services/repository';
 import { MAX_SIZE_MB, MIN_SIZE_MB } from '@/utils/releaseSize';
+import {
+	episodesNamedForSeason,
+	namedSeasons,
+	titleNamesNoEpisode,
+	titleNamesSeason,
+} from '@/utils/seasonNaming';
 import ptt from 'parse-torrent-title';
 
 export interface TroveStreamCandidate {
@@ -61,16 +67,6 @@ const SUPPLEMENT_RELEASE = /\b(?:extras?|subpack|sample|subs|subtitles|bonus)\b/
 
 /** Half-season packs, which name a season but carry part of it. */
 const PARTIAL_SEASON_RELEASE = /\b(?:part|pt)\.?\s*\d+\b/i;
-
-const seasonsOfTitle = (parsed: { season?: number; seasons?: number[] }): number[] => {
-	if (Array.isArray(parsed.seasons) && parsed.seasons.length > 0) return parsed.seasons;
-	return typeof parsed.season === 'number' ? [parsed.season] : [];
-};
-
-const episodesOfTitle = (parsed: { episode?: number; episodes?: number[] }): number[] => {
-	if (Array.isArray(parsed.episodes) && parsed.episodes.length > 0) return parsed.episodes;
-	return typeof parsed.episode === 'number' ? [parsed.episode] : [];
-};
 
 /**
  * Picks the releases a Stremio addon may offer from DMM's scraped pool.
@@ -189,15 +185,18 @@ export function filterSeasonPacks(
 		if (SUPPLEMENT_RELEASE.test(row.title)) continue;
 		if (PARTIAL_SEASON_RELEASE.test(row.title)) continue;
 
-		const parsed = ptt.parse(row.title);
-		const seasons = seasonsOfTitle(parsed);
-		if (!seasons.includes(season)) continue;
-		if (episodesOfTitle(parsed).length > 0) continue;
+		// The title has to say so itself. `ptt` alone both loses real packs and
+		// invents episodes in them - `The.Wire.S02.720p.WEB-DL.2xRus` comes back
+		// as season two episode two, which drops it from here and offers it as a
+		// single episode instead. See `seasonNaming`.
+		if (!titleNamesSeason(row.title, season)) continue;
+		if (!titleNamesNoEpisode(row.title)) continue;
 
 		const sizeKey = Math.round(row.fileSize);
 		if (seenSizes.has(sizeKey)) continue;
 		seenSizes.add(sizeKey);
 
+		const seasons = [...namedSeasons(row.title)].sort((a, b) => a - b);
 		candidates.push({ hash: row.hash, title: row.title, sizeMb: row.fileSize, seasons });
 	}
 
@@ -227,9 +226,12 @@ export function filterSeasonEpisodes(
 		if (!passesRowHygiene(row, ceilingMb)) continue;
 		if (SUPPLEMENT_RELEASE.test(row.title)) continue;
 
-		const parsed = ptt.parse(row.title);
-		if (!seasonsOfTitle(parsed).includes(season)) continue;
-		const episodes = episodesOfTitle(parsed);
+		// Only `SxxEyy` and `NxM` prove a season and an episode together, and
+		// nothing else may stand in: 42% of what `ptt` called single episodes
+		// over the live corpus were season packs whose names happened to contain
+		// `2xRus`, `3D` or `Cap. 101`. Adding one of those as "episode two"
+		// pulls down a whole season and then asks for eleven more.
+		const episodes = episodesNamedForSeason(row.title, season);
 		if (episodes.length === 0) continue;
 
 		const sizeKey = Math.round(row.fileSize);
