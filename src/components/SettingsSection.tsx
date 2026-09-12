@@ -628,6 +628,7 @@ export const SettingsSection = () => {
 										<option value="ios/infuse">Infuse</option>
 										<option value="ios/vlc">VLC</option>
 										<option value="ios/outplayer">Outplayer</option>
+										<option value="ios3/senplayer">SenPlayer</option>
 									</optgroup>
 									<optgroup label="MacOS">
 										<option value="mac4/open-vidhub">VidHub</option>

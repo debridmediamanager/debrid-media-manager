@@ -79,6 +79,20 @@ describe('SettingsSection', () => {
 		});
 	});
 
+	// Requested in #xmas-wishlist: SenPlayer is the iOS/tvOS player on a current
+	// FFmpeg build, and it answers a different x-callback-url action than the
+	// other two iOS entries, so the option carries its own os key.
+	it('offers SenPlayer as an iOS player', async () => {
+		render(<SettingsSection />);
+		const user = userEvent.setup();
+
+		const playerContainer = screen.getByText('Video player').closest('div')!;
+		const playerSelect = within(playerContainer).getByRole('combobox');
+		await user.selectOptions(playerSelect, 'ios3/senplayer');
+
+		expect(localStorage.getItem('settings:player')).toBe('ios3/senplayer');
+	});
+
 	it('loads persisted preferences and updates each toggle', async () => {
 		localStorage.setItem('settings:player', 'ios/infuse');
 		localStorage.setItem('settings:movieMaxSize', '15');
