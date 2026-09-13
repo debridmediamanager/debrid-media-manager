@@ -1,3 +1,4 @@
+import dailyRows from '@/test/fixtures/observability/torbox-operational-daily-2026-09-08-to-12.json';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { TorBoxOperationalService, resolveTorBoxOperation } from './torboxOperational';
 
@@ -392,6 +393,29 @@ describe('TorBoxOperationalService', () => {
 			expect(history[0].avgSuccessRate).toBeCloseTo(0.9);
 			expect(history[0].minSuccessRate).toBe(0.6);
 			expect(history[0].maxSuccessRate).toBe(1);
+		});
+
+		// Production's per-operation rows for 2026-09-08 to 12. Averaging each
+		// operation's rate with equal weight let 2 createwebdownload calls count
+		// as much as 85,922 checkcached ones, so 2026-09-12 charted at 90% against
+		// the 98.5% its own hourly points add up to.
+		it('weights the daily rate by calls rather than by operation', async () => {
+			(prismaMock.torBoxOperationalDaily.findMany as Mock).mockResolvedValue(
+				dailyRows.map((row) => ({ ...row, date: new Date(row.date) }))
+			);
+
+			const history = await service.getDailyHistory(30);
+
+			expect(history).toHaveLength(5);
+			for (const day of history) {
+				expect(day.avgSuccessRate).toBeCloseTo(
+					day.successCount / (day.successCount + day.failureCount),
+					6
+				);
+			}
+			const sep12 = history.find((day) => day.date.toISOString().startsWith('2026-09-12'));
+			expect(sep12).toMatchObject({ successCount: 177411, failureCount: 2782 });
+			expect(sep12?.avgSuccessRate).toBeCloseTo(0.9846, 3);
 		});
 
 		it('returns an empty list when the table is missing', async () => {

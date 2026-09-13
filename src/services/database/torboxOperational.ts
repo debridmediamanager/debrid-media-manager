@@ -465,7 +465,6 @@ export class TorBoxOperationalService extends DatabaseClient {
 					totalCount: number;
 					successCount: number;
 					failureCount: number;
-					rates: number[];
 					minRates: number[];
 					maxRates: number[];
 				}
@@ -478,7 +477,6 @@ export class TorBoxOperationalService extends DatabaseClient {
 					existing.totalCount += row.totalCount;
 					existing.successCount += row.successCount;
 					existing.failureCount += row.failureCount;
-					existing.rates.push(row.avgSuccessRate);
 					existing.minRates.push(row.minSuccessRate);
 					existing.maxRates.push(row.maxSuccessRate);
 				} else {
@@ -487,23 +485,27 @@ export class TorBoxOperationalService extends DatabaseClient {
 						totalCount: row.totalCount,
 						successCount: row.successCount,
 						failureCount: row.failureCount,
-						rates: [row.avgSuccessRate],
 						minRates: [row.minSuccessRate],
 						maxRates: [row.maxSuccessRate],
 					});
 				}
 			}
 
-			return Array.from(byDate.values()).map((d) => ({
-				date: d.date,
-				totalCount: d.totalCount,
-				successCount: d.successCount,
-				failureCount: d.failureCount,
-				avgSuccessRate:
-					d.rates.length > 0 ? d.rates.reduce((a, b) => a + b, 0) / d.rates.length : 0,
-				minSuccessRate: d.minRates.length > 0 ? Math.min(...d.minRates) : 0,
-				maxSuccessRate: d.maxRates.length > 0 ? Math.max(...d.maxRates) : 0,
-			}));
+			return Array.from(byDate.values()).map((d) => {
+				// Pooled from the counts, as the hourly points are. Averaging each
+				// operation's stored rate gave two webdl calls the same weight as
+				// tens of thousands of checkcached ones.
+				const considered = d.successCount + d.failureCount;
+				return {
+					date: d.date,
+					totalCount: d.totalCount,
+					successCount: d.successCount,
+					failureCount: d.failureCount,
+					avgSuccessRate: considered > 0 ? d.successCount / considered : 0,
+					minSuccessRate: d.minRates.length > 0 ? Math.min(...d.minRates) : 0,
+					maxSuccessRate: d.maxRates.length > 0 ? Math.max(...d.maxRates) : 0,
+				};
+			});
 		} catch (error: any) {
 			if (error?.code === 'P2021' || error?.message?.includes('does not exist')) {
 				return [];

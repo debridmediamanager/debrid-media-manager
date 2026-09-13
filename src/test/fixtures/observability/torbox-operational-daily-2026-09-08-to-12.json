@@ -1,0 +1,482 @@
+[
+	{
+		"date": "2026-09-08T00:00:00.000Z",
+		"operation": "GET /torrents/checkcached",
+		"totalCount": 82600,
+		"successCount": 82261,
+		"failureCount": 111,
+		"avgSuccessRate": 0.998606860069719,
+		"minSuccessRate": 0.9971560611446854,
+		"maxSuccessRate": 0.9996487530734106
+	},
+	{
+		"date": "2026-09-08T00:00:00.000Z",
+		"operation": "GET /torrents/mylist",
+		"totalCount": 36352,
+		"successCount": 35754,
+		"failureCount": 327,
+		"avgSuccessRate": 0.9908352237960472,
+		"minSuccessRate": 0.9701411509229099,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-08T00:00:00.000Z",
+		"operation": "GET /torrents/requestdl",
+		"totalCount": 7591,
+		"successCount": 7338,
+		"failureCount": 251,
+		"avgSuccessRate": 0.967805105246164,
+		"minSuccessRate": 0.7652582159624414,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-08T00:00:00.000Z",
+		"operation": "GET /user/me",
+		"totalCount": 10389,
+		"successCount": 10323,
+		"failureCount": 10,
+		"avgSuccessRate": 0.9990189076062389,
+		"minSuccessRate": 0.99644128113879,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-08T00:00:00.000Z",
+		"operation": "GET /webdl/mylist",
+		"totalCount": 5282,
+		"successCount": 5232,
+		"failureCount": 2,
+		"avgSuccessRate": 0.9995416569405539,
+		"minSuccessRate": 0.9934640522875817,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-08T00:00:00.000Z",
+		"operation": "GET /webdl/requestdl",
+		"totalCount": 3,
+		"successCount": 3,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-08T00:00:00.000Z",
+		"operation": "POST /torrents/controltorrent",
+		"totalCount": 5998,
+		"successCount": 5547,
+		"failureCount": 448,
+		"avgSuccessRate": 0.9122280212277171,
+		"minSuccessRate": 0.8401826484018264,
+		"maxSuccessRate": 0.9811122770199371
+	},
+	{
+		"date": "2026-09-08T00:00:00.000Z",
+		"operation": "POST /torrents/createtorrent",
+		"totalCount": 7020,
+		"successCount": 6886,
+		"failureCount": 14,
+		"avgSuccessRate": 0.9979584723281029,
+		"minSuccessRate": 0.9809523809523809,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-08T00:00:00.000Z",
+		"operation": "POST /webdl/controlwebdownload",
+		"totalCount": 54,
+		"successCount": 54,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-08T00:00:00.000Z",
+		"operation": "POST /webdl/createwebdownload",
+		"totalCount": 3,
+		"successCount": 2,
+		"failureCount": 1,
+		"avgSuccessRate": 0.5,
+		"minSuccessRate": 0,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-09T00:00:00.000Z",
+		"operation": "GET /torrents/checkcached",
+		"totalCount": 85401,
+		"successCount": 85250,
+		"failureCount": 59,
+		"avgSuccessRate": 0.9991682734238254,
+		"minSuccessRate": 0.9912207357859532,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-09T00:00:00.000Z",
+		"operation": "GET /torrents/mylist",
+		"totalCount": 31351,
+		"successCount": 30536,
+		"failureCount": 536,
+		"avgSuccessRate": 0.9831523020242142,
+		"minSuccessRate": 0.905240488155061,
+		"maxSuccessRate": 0.9988851727982163
+	},
+	{
+		"date": "2026-09-09T00:00:00.000Z",
+		"operation": "GET /torrents/requestdl",
+		"totalCount": 6487,
+		"successCount": 6065,
+		"failureCount": 420,
+		"avgSuccessRate": 0.9434668059048078,
+		"minSuccessRate": 0.5978260869565217,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-09T00:00:00.000Z",
+		"operation": "GET /user/me",
+		"totalCount": 10836,
+		"successCount": 10745,
+		"failureCount": 4,
+		"avgSuccessRate": 0.9995861745418525,
+		"minSuccessRate": 0.9973118279569892,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-09T00:00:00.000Z",
+		"operation": "GET /webdl/mylist",
+		"totalCount": 5135,
+		"successCount": 5091,
+		"failureCount": 2,
+		"avgSuccessRate": 0.9996031386066763,
+		"minSuccessRate": 0.9951923076923077,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-09T00:00:00.000Z",
+		"operation": "GET /webdl/requestdl",
+		"totalCount": 24,
+		"successCount": 24,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-09T00:00:00.000Z",
+		"operation": "POST /torrents/controltorrent",
+		"totalCount": 5666,
+		"successCount": 5287,
+		"failureCount": 378,
+		"avgSuccessRate": 0.9120937127055878,
+		"minSuccessRate": 0.8064516129032258,
+		"maxSuccessRate": 0.9899497487437185
+	},
+	{
+		"date": "2026-09-09T00:00:00.000Z",
+		"operation": "POST /torrents/createtorrent",
+		"totalCount": 5502,
+		"successCount": 5344,
+		"failureCount": 8,
+		"avgSuccessRate": 0.9987888318262557,
+		"minSuccessRate": 0.9874476987447699,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-09T00:00:00.000Z",
+		"operation": "POST /webdl/controlwebdownload",
+		"totalCount": 13,
+		"successCount": 13,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-10T00:00:00.000Z",
+		"operation": "GET /torrents/checkcached",
+		"totalCount": 78638,
+		"successCount": 78483,
+		"failureCount": 7,
+		"avgSuccessRate": 0.9999149260691925,
+		"minSuccessRate": 0.9994036970781157,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-10T00:00:00.000Z",
+		"operation": "GET /torrents/mylist",
+		"totalCount": 31961,
+		"successCount": 30915,
+		"failureCount": 622,
+		"avgSuccessRate": 0.9803103557248548,
+		"minSuccessRate": 0.8962962962962963,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-10T00:00:00.000Z",
+		"operation": "GET /torrents/requestdl",
+		"totalCount": 5746,
+		"successCount": 5643,
+		"failureCount": 99,
+		"avgSuccessRate": 0.9851403028525539,
+		"minSuccessRate": 0.8308157099697885,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-10T00:00:00.000Z",
+		"operation": "GET /user/me",
+		"totalCount": 10718,
+		"successCount": 10664,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-10T00:00:00.000Z",
+		"operation": "GET /webdl/mylist",
+		"totalCount": 5154,
+		"successCount": 5106,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-10T00:00:00.000Z",
+		"operation": "GET /webdl/requestdl",
+		"totalCount": 1,
+		"successCount": 1,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-10T00:00:00.000Z",
+		"operation": "POST /torrents/controltorrent",
+		"totalCount": 4962,
+		"successCount": 4512,
+		"failureCount": 450,
+		"avgSuccessRate": 0.9026842461312249,
+		"minSuccessRate": 0.8202247191011236,
+		"maxSuccessRate": 0.9606299212598425
+	},
+	{
+		"date": "2026-09-10T00:00:00.000Z",
+		"operation": "POST /torrents/createtorrent",
+		"totalCount": 5917,
+		"successCount": 5668,
+		"failureCount": 13,
+		"avgSuccessRate": 0.997950226877722,
+		"minSuccessRate": 0.9814241486068112,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-10T00:00:00.000Z",
+		"operation": "POST /webdl/controlwebdownload",
+		"totalCount": 10,
+		"successCount": 10,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-10T00:00:00.000Z",
+		"operation": "POST /webdl/createwebdownload",
+		"totalCount": 2,
+		"successCount": 0,
+		"failureCount": 2,
+		"avgSuccessRate": 0,
+		"minSuccessRate": 0,
+		"maxSuccessRate": 0
+	},
+	{
+		"date": "2026-09-11T00:00:00.000Z",
+		"operation": "GET /torrents/checkcached",
+		"totalCount": 75427,
+		"successCount": 75320,
+		"failureCount": 6,
+		"avgSuccessRate": 0.9999137317923856,
+		"minSuccessRate": 0.9994782154969998,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-11T00:00:00.000Z",
+		"operation": "GET /torrents/mylist",
+		"totalCount": 28501,
+		"successCount": 27845,
+		"failureCount": 316,
+		"avgSuccessRate": 0.9882017375182418,
+		"minSuccessRate": 0.9662162162162162,
+		"maxSuccessRate": 0.9984779299847792
+	},
+	{
+		"date": "2026-09-11T00:00:00.000Z",
+		"operation": "GET /torrents/requestdl",
+		"totalCount": 6088,
+		"successCount": 5934,
+		"failureCount": 116,
+		"avgSuccessRate": 0.9672471944771739,
+		"minSuccessRate": 0.875,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-11T00:00:00.000Z",
+		"operation": "GET /user/me",
+		"totalCount": 10282,
+		"successCount": 10239,
+		"failureCount": 1,
+		"avgSuccessRate": 0.9999377179870453,
+		"minSuccessRate": 0.9985052316890882,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-11T00:00:00.000Z",
+		"operation": "GET /webdl/mylist",
+		"totalCount": 5106,
+		"successCount": 5077,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-11T00:00:00.000Z",
+		"operation": "GET /webdl/requestdl",
+		"totalCount": 91,
+		"successCount": 85,
+		"failureCount": 6,
+		"avgSuccessRate": 0.5,
+		"minSuccessRate": 0,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-11T00:00:00.000Z",
+		"operation": "POST /torrents/controltorrent",
+		"totalCount": 5833,
+		"successCount": 5339,
+		"failureCount": 493,
+		"avgSuccessRate": 0.8918613808235394,
+		"minSuccessRate": 0.8085106382978723,
+		"maxSuccessRate": 0.9770679770679771
+	},
+	{
+		"date": "2026-09-11T00:00:00.000Z",
+		"operation": "POST /torrents/createtorrent",
+		"totalCount": 6234,
+		"successCount": 6002,
+		"failureCount": 6,
+		"avgSuccessRate": 0.9986203849677245,
+		"minSuccessRate": 0.9823008849557522,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-11T00:00:00.000Z",
+		"operation": "POST /webdl/controlwebdownload",
+		"totalCount": 2,
+		"successCount": 2,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-12T00:00:00.000Z",
+		"operation": "GET /torrents/checkcached",
+		"totalCount": 85922,
+		"successCount": 85811,
+		"failureCount": 10,
+		"avgSuccessRate": 0.9999112808398993,
+		"minSuccessRate": 0.9990821477742083,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-12T00:00:00.000Z",
+		"operation": "GET /torrents/mylist",
+		"totalCount": 47057,
+		"successCount": 45536,
+		"failureCount": 831,
+		"avgSuccessRate": 0.983188016529576,
+		"minSuccessRate": 0.9281879194630872,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-12T00:00:00.000Z",
+		"operation": "GET /torrents/requestdl",
+		"totalCount": 12846,
+		"successCount": 12359,
+		"failureCount": 421,
+		"avgSuccessRate": 0.9584500068549996,
+		"minSuccessRate": 0.6410256410256411,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-12T00:00:00.000Z",
+		"operation": "GET /user/me",
+		"totalCount": 11190,
+		"successCount": 11100,
+		"failureCount": 4,
+		"avgSuccessRate": 0.9997465640687794,
+		"minSuccessRate": 0.9982517482517482,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-12T00:00:00.000Z",
+		"operation": "GET /webdl/mylist",
+		"totalCount": 5736,
+		"successCount": 5704,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-12T00:00:00.000Z",
+		"operation": "GET /webdl/requestdl",
+		"totalCount": 41,
+		"successCount": 24,
+		"failureCount": 17,
+		"avgSuccessRate": 0.6666666666666666,
+		"minSuccessRate": 0,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-12T00:00:00.000Z",
+		"operation": "POST /torrents/controltorrent",
+		"totalCount": 9320,
+		"successCount": 7842,
+		"failureCount": 1477,
+		"avgSuccessRate": 0.8834202429154198,
+		"minSuccessRate": 0.7112831858407079,
+		"maxSuccessRate": 0.9674721189591078
+	},
+	{
+		"date": "2026-09-12T00:00:00.000Z",
+		"operation": "POST /torrents/createtorrent",
+		"totalCount": 9202,
+		"successCount": 9019,
+		"failureCount": 21,
+		"avgSuccessRate": 0.9983991164545439,
+		"minSuccessRate": 0.9911894273127754,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-12T00:00:00.000Z",
+		"operation": "POST /webdl/controlwebdownload",
+		"totalCount": 15,
+		"successCount": 15,
+		"failureCount": 0,
+		"avgSuccessRate": 1,
+		"minSuccessRate": 1,
+		"maxSuccessRate": 1
+	},
+	{
+		"date": "2026-09-12T00:00:00.000Z",
+		"operation": "POST /webdl/createwebdownload",
+		"totalCount": 2,
+		"successCount": 1,
+		"failureCount": 1,
+		"avgSuccessRate": 0.5,
+		"minSuccessRate": 0,
+		"maxSuccessRate": 1
+	}
+]
