@@ -41,6 +41,21 @@ const PLUGINS = [
 		detail: 'Streams through your server, because a TorBox link carries your API key.',
 	},
 	{
+		name: 'PM zurg',
+		account: 'Premiumize',
+		detail: 'Links are made only when you press play. They stream through your server because a Premiumize link bills whoever holds it.',
+	},
+	{
+		name: 'OC zurg',
+		account: 'Offcloud',
+		detail: 'A resync with nothing new is a single request. It streams through your server because an Offcloud link carries your account token.',
+	},
+	{
+		name: 'DL zurg',
+		account: 'Debrid-Link',
+		detail: 'Your players never see a download link, because a Debrid-Link link keeps working for anyone who has it.',
+	},
+	{
 		name: 'NZB zurg',
 		account: 'Usenet',
 		detail: 'Point it at a folder of NZBs. Nothing is downloaded until you press play.',
@@ -192,8 +207,9 @@ function SetupGuide({
 				</p>
 				<p className="mt-3 text-gray-300">
 					Then run the sync under Dashboard → <strong>Scheduled Tasks</strong>. It also
-					runs by itself every six hours. A first pass over a few thousand torrents takes
-					a couple of minutes, and every pass after that is much cheaper.
+					runs by itself, every hour for OC zurg and every six hours for the rest. A first
+					pass over a few thousand torrents takes a couple of minutes, and every pass
+					after that is much cheaper.
 				</p>
 				<div className="mt-3 flex gap-2 rounded border-2 border-green-500/30 p-3 text-xs text-gray-300">
 					<ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
@@ -302,9 +318,9 @@ export default function JellyfinSetupPage() {
 						Put your library in Jellyfin
 					</h1>
 					<p className="mt-2 text-sm text-gray-400">
-						Four plugins that add your Real-Debrid, AllDebrid, TorBox and Usenet
-						libraries to Jellyfin as ordinary movies and shows. No mount, no rclone, no
-						second service.
+						Seven plugins that add your Real-Debrid, AllDebrid, TorBox, Premiumize,
+						Offcloud, Debrid-Link and Usenet libraries to Jellyfin as ordinary movies
+						and shows. No mount, no rclone, no second service.
 					</p>
 				</header>
 

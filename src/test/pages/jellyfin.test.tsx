@@ -94,8 +94,36 @@ describe('the page', () => {
 		asSponsor(API_KEY);
 		render(<JellyfinSetupPage />);
 
-		for (const name of ['RD zurg', 'AD zurg', 'TB zurg', 'NZB zurg']) {
+		// The catalog has served PM, OC and DL zurg since 2026-09-13 while this page still
+		// listed only the first four, so a sponsor could not tell they existed.
+		for (const name of [
+			'RD zurg',
+			'AD zurg',
+			'TB zurg',
+			'PM zurg',
+			'OC zurg',
+			'DL zurg',
+			'NZB zurg',
+		]) {
 			expect(screen.getByTestId(`plugin-${name}`)).toBeTruthy();
+		}
+	});
+
+	it('names every account a plugin serves in the introduction', () => {
+		asVisitor();
+		render(<JellyfinSetupPage />);
+
+		const intro = screen.getByText(/plugins that add your/).textContent ?? '';
+		for (const account of [
+			'Real-Debrid',
+			'AllDebrid',
+			'TorBox',
+			'Premiumize',
+			'Offcloud',
+			'Debrid-Link',
+			'Usenet',
+		]) {
+			expect(intro).toContain(account);
 		}
 	});
 
