@@ -146,6 +146,44 @@ function formatCount(value: number): string {
 	return value.toLocaleString(FIXED_LOCALE);
 }
 
+const HOUR_MS = 60 * 60 * 1000;
+const DAY_MS = 24 * HOUR_MS;
+
+// The server returns only the buckets somebody measured, so a quiet stretch
+// arrives as no rows at all. On a category axis that pulled readings hours
+// apart next to each other; an explicit empty bucket keeps the axis in real
+// time and leaves the gap where nobody checked.
+function fillMissingBuckets<T extends { time: string }>(
+	points: T[],
+	stepMs: number,
+	emptyBucket: (time: string) => T
+): T[] {
+	const filled: T[] = [];
+	for (const point of points) {
+		const previous = filled[filled.length - 1];
+		if (previous) {
+			const current = parseUtcDate(point.time).getTime();
+			for (
+				let time = parseUtcDate(previous.time).getTime() + stepMs;
+				current - time >= stepMs / 2;
+				time += stepMs
+			) {
+				filled.push(emptyBucket(new Date(time).toISOString()));
+			}
+		}
+		filled.push(point);
+	}
+	return filled;
+}
+
+// Ticks picked by pixel spacing over hourly points printed the same date twice
+// and left other days unlabelled. One tick on the first bucket of each local
+// day instead; the partial day a range opens on stays unlabelled.
+function dayStartTicks(times: string[]): string[] {
+	const dayOf = (time: string) => parseUtcDate(time).toLocaleDateString(FIXED_LOCALE);
+	return times.filter((time, i) => i > 0 && dayOf(time) !== dayOf(times[i - 1]));
+}
+
 interface UserApiChartPoint {
 	time: string;
 	successRate: number;
@@ -164,6 +202,7 @@ export function TorBoxHistoryCharts() {
 	const [cdnData, setCdnData] = useState<TorBoxCdnBucket[]>([]);
 	const [cdnRegions, setCdnRegions] = useState<TorBoxCdnRegionSummary[]>([]);
 	const [cdnRegionWindowHours, setCdnRegionWindowHours] = useState(24);
+	const [cdnGranularity, setCdnGranularity] = useState<'hourly' | 'daily'>('hourly');
 
 	const fetchHistory = useCallback(
 		async (isActive: () => boolean = () => true) => {
@@ -206,6 +245,7 @@ export function TorBoxHistoryCharts() {
 				setUserApiData(json.data ?? []);
 				setGranularity((json.granularity as 'hourly' | 'daily') ?? 'hourly');
 				setCdnData(cdnJson?.data ?? []);
+				setCdnGranularity(cdnJson?.granularity === 'daily' ? 'daily' : 'hourly');
 				setCdnRegions(cdnJson?.regions ?? []);
 				setCdnRegionWindowHours(cdnJson?.regionWindowHours ?? 24);
 			} catch (err) {
@@ -250,10 +290,14 @@ export function TorBoxHistoryCharts() {
 		}))
 		.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
 
+	const userApiTicks = isMultiDay
+		? dayStartTicks(userApiChartData.map((point) => point.time))
+		: undefined;
+
 	// Buckets under the sample floor are plotted as gaps rather than as zeroes:
 	// recharts skips a null, so a quiet 4am leaves a break in the line instead of
 	// a cliff that reads as an outage.
-	const cdnChartData = (cdnData ?? [])
+	const measuredCdnPoints = (cdnData ?? [])
 		.map((item) => {
 			const sampleCount = item.okCount + item.failCount;
 			return {
@@ -265,6 +309,31 @@ export function TorBoxHistoryCharts() {
 			};
 		})
 		.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
+
+	const cdnChartData = fillMissingBuckets(
+		measuredCdnPoints,
+		cdnGranularity === 'daily' ? DAY_MS : HOUR_MS,
+		(time) => ({ time, rate: null, sampleCount: 0, failCount: 0, avgLatencyMs: null })
+	);
+
+	const cdnTicks = isMultiDay
+		? dayStartTicks(cdnChartData.map((point) => point.time))
+		: undefined;
+
+	// An area only draws between two plotted neighbours, so an hour that cleared
+	// the floor with a gap on each side left no mark at all, and a quiet day of
+	// real readings rendered as an empty grid. Those hours get a dot.
+	const isCdnPointPlotted = (index: number) => typeof cdnChartData[index]?.rate === 'number';
+	const renderCdnDot = ({ index, cx, cy }: { index?: number; cx?: number; cy?: number }) => {
+		const key = `cdn-dot-${index}`;
+		const isLone =
+			index !== undefined &&
+			isCdnPointPlotted(index) &&
+			!isCdnPointPlotted(index - 1) &&
+			!isCdnPointPlotted(index + 1);
+		if (!isLone || cx === undefined || cy === undefined) return <g key={key} />;
+		return <circle key={key} cx={cx} cy={cy} r={3} fill={CDN_EMERALD} />;
+	};
 
 	const hasCdnSamples = cdnChartData.some((point) => point.rate !== null);
 
@@ -410,6 +479,7 @@ export function TorBoxHistoryCharts() {
 											dataKey="time"
 											{...axisProps}
 											interval="preserveStartEnd"
+											ticks={userApiTicks}
 											minTickGap={40}
 											tickFormatter={formatTickLabel}
 										/>
@@ -483,6 +553,7 @@ export function TorBoxHistoryCharts() {
 											dataKey="time"
 											{...axisProps}
 											interval="preserveStartEnd"
+											ticks={userApiTicks}
 											minTickGap={40}
 											tickFormatter={formatTickLabel}
 										/>
@@ -563,6 +634,7 @@ export function TorBoxHistoryCharts() {
 										dataKey="time"
 										{...axisProps}
 										interval="preserveStartEnd"
+										ticks={cdnTicks}
 										minTickGap={40}
 										tickFormatter={formatTickLabel}
 									/>
@@ -592,6 +664,7 @@ export function TorBoxHistoryCharts() {
 										fill="url(#torboxCdnGradient)"
 										strokeWidth={2}
 										connectNulls={false}
+										dot={renderCdnDot}
 									/>
 								</AreaChart>
 							</ResponsiveContainer>

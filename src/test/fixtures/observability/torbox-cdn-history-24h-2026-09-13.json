@@ -1,0 +1,227 @@
+{
+	"data": [
+		{
+			"time": "2026-09-12T11:00:00.000Z",
+			"okCount": 34,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 525.1176470588252
+		},
+		{
+			"time": "2026-09-12T12:00:00.000Z",
+			"okCount": 15,
+			"failCount": 2,
+			"rate": 0.8823529411764706,
+			"avgLatencyMs": 1909.7266666650771
+		},
+		{
+			"time": "2026-09-12T13:00:00.000Z",
+			"okCount": 102,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 499.2480392156942
+		},
+		{
+			"time": "2026-09-12T14:00:00.000Z",
+			"okCount": 17,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 1716.8823529411766
+		},
+		{
+			"time": "2026-09-12T15:00:00.000Z",
+			"okCount": 14,
+			"failCount": 3,
+			"rate": 0.8235294117647058,
+			"avgLatencyMs": 687.3714285663197
+		},
+		{
+			"time": "2026-09-12T16:00:00.000Z",
+			"okCount": 34,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 631.117647058827
+		},
+		{
+			"time": "2026-09-12T17:00:00.000Z",
+			"okCount": 16,
+			"failCount": 1,
+			"rate": 0.9411764705882353,
+			"avgLatencyMs": 829.8562499973923
+		},
+		{
+			"time": "2026-09-12T18:00:00.000Z",
+			"okCount": 16,
+			"failCount": 1,
+			"rate": 0.9411764705882353,
+			"avgLatencyMs": 457.5125000048429
+		},
+		{
+			"time": "2026-09-12T19:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 390.5187499993481
+		},
+		{
+			"time": "2026-09-12T22:00:00.000Z",
+			"okCount": 31,
+			"failCount": 1,
+			"rate": 0.96875,
+			"avgLatencyMs": 1529.5483870967892
+		},
+		{
+			"time": "2026-09-12T23:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 602.1250000000009
+		},
+		{
+			"time": "2026-09-13T04:00:00.000Z",
+			"okCount": 32,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 583.1562500004657
+		},
+		{
+			"time": "2026-09-13T05:00:00.000Z",
+			"okCount": 16,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 477.375
+		},
+		{
+			"time": "2026-09-13T08:00:00.000Z",
+			"okCount": 30,
+			"failCount": 2,
+			"rate": 0.9375,
+			"avgLatencyMs": 417.2600000123183
+		}
+	],
+	"granularity": "hourly",
+	"range": "24h",
+	"regionWindowHours": 24,
+	"regions": [
+		{
+			"region": "zafr",
+			"okCount": 13,
+			"failCount": 2,
+			"rate": 0.8666666666666667,
+			"avgLatencyMs": 1083.6076923150283
+		},
+		{
+			"region": "erth",
+			"okCount": 21,
+			"failCount": 3,
+			"rate": 0.875,
+			"avgLatencyMs": 269.7333333408807
+		},
+		{
+			"region": "hare",
+			"okCount": 22,
+			"failCount": 2,
+			"rate": 0.9166666666666666,
+			"avgLatencyMs": 555.0318181862823
+		},
+		{
+			"region": "snam",
+			"okCount": 22,
+			"failCount": 2,
+			"rate": 0.9166666666666666,
+			"avgLatencyMs": 607.4727272717705
+		},
+		{
+			"region": "seur",
+			"okCount": 23,
+			"failCount": 1,
+			"rate": 0.9583333333333334,
+			"avgLatencyMs": 698.2217391244244
+		},
+		{
+			"region": "apac",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 994.86666666662
+		},
+		{
+			"region": "ceur",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 639.6208333361817
+		},
+		{
+			"region": "cnam",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 570.6666666630288
+		},
+		{
+			"region": "enam",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 624.9833333326192
+		},
+		{
+			"region": "indi",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 921.720833336003
+		},
+		{
+			"region": "japn",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 985.6166666713933
+		},
+		{
+			"region": "latm",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 875.1874999980987
+		},
+		{
+			"region": "neur",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 639.1041666676034
+		},
+		{
+			"region": "nord",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 653.0374999967188
+		},
+		{
+			"region": "slav",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 737.9375000013988
+		},
+		{
+			"region": "weur",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 658.2041666712324
+		},
+		{
+			"region": "wnam",
+			"okCount": 24,
+			"failCount": 0,
+			"rate": 1,
+			"avgLatencyMs": 824.8416666642305
+		}
+	],
+	"type": "torbox-cdn"
+}

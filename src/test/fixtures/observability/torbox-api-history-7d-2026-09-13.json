@@ -1,0 +1,1183 @@
+{
+	"data": [
+		{
+			"hour": "2026-09-06T09:00:00.000Z",
+			"totalCount": 4059,
+			"successCount": 3970,
+			"failureCount": 42,
+			"successRate": 0.9895314057826521
+		},
+		{
+			"hour": "2026-09-06T10:00:00.000Z",
+			"totalCount": 4690,
+			"successCount": 4626,
+			"failureCount": 41,
+			"successRate": 0.9912149132204843
+		},
+		{
+			"hour": "2026-09-06T11:00:00.000Z",
+			"totalCount": 4716,
+			"successCount": 4662,
+			"failureCount": 38,
+			"successRate": 0.9919148936170212
+		},
+		{
+			"hour": "2026-09-06T12:00:00.000Z",
+			"totalCount": 4488,
+			"successCount": 4129,
+			"failureCount": 336,
+			"successRate": 0.9247480403135498
+		},
+		{
+			"hour": "2026-09-06T13:00:00.000Z",
+			"totalCount": 5399,
+			"successCount": 5321,
+			"failureCount": 59,
+			"successRate": 0.9890334572490707
+		},
+		{
+			"hour": "2026-09-06T14:00:00.000Z",
+			"totalCount": 5162,
+			"successCount": 5017,
+			"failureCount": 22,
+			"successRate": 0.9956340543758683
+		},
+		{
+			"hour": "2026-09-06T15:00:00.000Z",
+			"totalCount": 7876,
+			"successCount": 7796,
+			"failureCount": 53,
+			"successRate": 0.9932475474582749
+		},
+		{
+			"hour": "2026-09-06T16:00:00.000Z",
+			"totalCount": 7009,
+			"successCount": 6929,
+			"failureCount": 67,
+			"successRate": 0.990423098913665
+		},
+		{
+			"hour": "2026-09-06T17:00:00.000Z",
+			"totalCount": 8654,
+			"successCount": 8581,
+			"failureCount": 46,
+			"successRate": 0.9946679030949345
+		},
+		{
+			"hour": "2026-09-06T18:00:00.000Z",
+			"totalCount": 7592,
+			"successCount": 7469,
+			"failureCount": 58,
+			"successRate": 0.9922944068021788
+		},
+		{
+			"hour": "2026-09-06T19:00:00.000Z",
+			"totalCount": 9224,
+			"successCount": 9073,
+			"failureCount": 136,
+			"successRate": 0.985231838418938
+		},
+		{
+			"hour": "2026-09-06T20:00:00.000Z",
+			"totalCount": 7335,
+			"successCount": 7235,
+			"failureCount": 50,
+			"successRate": 0.9931365820178449
+		},
+		{
+			"hour": "2026-09-06T21:00:00.000Z",
+			"totalCount": 8063,
+			"successCount": 7772,
+			"failureCount": 274,
+			"successRate": 0.9659458115833954
+		},
+		{
+			"hour": "2026-09-06T22:00:00.000Z",
+			"totalCount": 8038,
+			"successCount": 7884,
+			"failureCount": 141,
+			"successRate": 0.9824299065420561
+		},
+		{
+			"hour": "2026-09-06T23:00:00.000Z",
+			"totalCount": 8694,
+			"successCount": 8557,
+			"failureCount": 44,
+			"successRate": 0.9948843157772352
+		},
+		{
+			"hour": "2026-09-07T00:00:00.000Z",
+			"totalCount": 7511,
+			"successCount": 7470,
+			"failureCount": 29,
+			"successRate": 0.9961328177090278
+		},
+		{
+			"hour": "2026-09-07T01:00:00.000Z",
+			"totalCount": 7354,
+			"successCount": 6857,
+			"failureCount": 30,
+			"successRate": 0.9956439668941484
+		},
+		{
+			"hour": "2026-09-07T02:00:00.000Z",
+			"totalCount": 5334,
+			"successCount": 5253,
+			"failureCount": 28,
+			"successRate": 0.9946979738685855
+		},
+		{
+			"hour": "2026-09-07T03:00:00.000Z",
+			"totalCount": 5665,
+			"successCount": 5617,
+			"failureCount": 25,
+			"successRate": 0.9955689471818504
+		},
+		{
+			"hour": "2026-09-07T04:00:00.000Z",
+			"totalCount": 6594,
+			"successCount": 6462,
+			"failureCount": 130,
+			"successRate": 0.9802791262135923
+		},
+		{
+			"hour": "2026-09-07T05:00:00.000Z",
+			"totalCount": 5198,
+			"successCount": 4962,
+			"failureCount": 113,
+			"successRate": 0.9777339901477833
+		},
+		{
+			"hour": "2026-09-07T06:00:00.000Z",
+			"totalCount": 4481,
+			"successCount": 4436,
+			"failureCount": 7,
+			"successRate": 0.9984244879585865
+		},
+		{
+			"hour": "2026-09-07T07:00:00.000Z",
+			"totalCount": 3061,
+			"successCount": 2988,
+			"failureCount": 60,
+			"successRate": 0.9803149606299213
+		},
+		{
+			"hour": "2026-09-07T08:00:00.000Z",
+			"totalCount": 3882,
+			"successCount": 3810,
+			"failureCount": 67,
+			"successRate": 0.982718596853237
+		},
+		{
+			"hour": "2026-09-07T09:00:00.000Z",
+			"totalCount": 4107,
+			"successCount": 4060,
+			"failureCount": 27,
+			"successRate": 0.9933936873011989
+		},
+		{
+			"hour": "2026-09-07T10:00:00.000Z",
+			"totalCount": 10092,
+			"successCount": 9988,
+			"failureCount": 54,
+			"successRate": 0.9946225851424019
+		},
+		{
+			"hour": "2026-09-07T11:00:00.000Z",
+			"totalCount": 9959,
+			"successCount": 9927,
+			"failureCount": 24,
+			"successRate": 0.9975881820922521
+		},
+		{
+			"hour": "2026-09-07T12:00:00.000Z",
+			"totalCount": 12712,
+			"successCount": 12626,
+			"failureCount": 47,
+			"successRate": 0.9962913280202004
+		},
+		{
+			"hour": "2026-09-07T13:00:00.000Z",
+			"totalCount": 11353,
+			"successCount": 11309,
+			"failureCount": 24,
+			"successRate": 0.9978822906556075
+		},
+		{
+			"hour": "2026-09-07T14:00:00.000Z",
+			"totalCount": 11321,
+			"successCount": 11289,
+			"failureCount": 14,
+			"successRate": 0.9987613907812085
+		},
+		{
+			"hour": "2026-09-07T15:00:00.000Z",
+			"totalCount": 12536,
+			"successCount": 12370,
+			"failureCount": 150,
+			"successRate": 0.9880191693290735
+		},
+		{
+			"hour": "2026-09-07T16:00:00.000Z",
+			"totalCount": 8467,
+			"successCount": 8381,
+			"failureCount": 78,
+			"successRate": 0.9907790518973874
+		},
+		{
+			"hour": "2026-09-07T17:00:00.000Z",
+			"totalCount": 9356,
+			"successCount": 9269,
+			"failureCount": 41,
+			"successRate": 0.9955961331901182
+		},
+		{
+			"hour": "2026-09-07T18:00:00.000Z",
+			"totalCount": 11830,
+			"successCount": 11671,
+			"failureCount": 79,
+			"successRate": 0.9932765957446809
+		},
+		{
+			"hour": "2026-09-07T19:00:00.000Z",
+			"totalCount": 11725,
+			"successCount": 11592,
+			"failureCount": 77,
+			"successRate": 0.9934013197360528
+		},
+		{
+			"hour": "2026-09-07T20:00:00.000Z",
+			"totalCount": 11702,
+			"successCount": 11573,
+			"failureCount": 99,
+			"successRate": 0.9915181631254284
+		},
+		{
+			"hour": "2026-09-07T21:00:00.000Z",
+			"totalCount": 10655,
+			"successCount": 10544,
+			"failureCount": 96,
+			"successRate": 0.9909774436090225
+		},
+		{
+			"hour": "2026-09-07T22:00:00.000Z",
+			"totalCount": 7563,
+			"successCount": 7388,
+			"failureCount": 154,
+			"successRate": 0.9795810129939008
+		},
+		{
+			"hour": "2026-09-07T23:00:00.000Z",
+			"totalCount": 8372,
+			"successCount": 8193,
+			"failureCount": 86,
+			"successRate": 0.9896122720135282
+		},
+		{
+			"hour": "2026-09-08T00:00:00.000Z",
+			"totalCount": 8798,
+			"successCount": 8698,
+			"failureCount": 75,
+			"successRate": 0.9914510429727573
+		},
+		{
+			"hour": "2026-09-08T01:00:00.000Z",
+			"totalCount": 9159,
+			"successCount": 9008,
+			"failureCount": 35,
+			"successRate": 0.9961296030078514
+		},
+		{
+			"hour": "2026-09-08T02:00:00.000Z",
+			"totalCount": 9690,
+			"successCount": 9555,
+			"failureCount": 128,
+			"successRate": 0.9867809563151916
+		},
+		{
+			"hour": "2026-09-08T03:00:00.000Z",
+			"totalCount": 7459,
+			"successCount": 7419,
+			"failureCount": 27,
+			"successRate": 0.9963738920225624
+		},
+		{
+			"hour": "2026-09-08T04:00:00.000Z",
+			"totalCount": 5380,
+			"successCount": 5344,
+			"failureCount": 34,
+			"successRate": 0.9936779471922648
+		},
+		{
+			"hour": "2026-09-08T05:00:00.000Z",
+			"totalCount": 7397,
+			"successCount": 7344,
+			"failureCount": 52,
+			"successRate": 0.9929691725256896
+		},
+		{
+			"hour": "2026-09-08T06:00:00.000Z",
+			"totalCount": 4509,
+			"successCount": 4454,
+			"failureCount": 35,
+			"successRate": 0.9922031632880374
+		},
+		{
+			"hour": "2026-09-08T07:00:00.000Z",
+			"totalCount": 3772,
+			"successCount": 3746,
+			"failureCount": 21,
+			"successRate": 0.9944252720998141
+		},
+		{
+			"hour": "2026-09-08T08:00:00.000Z",
+			"totalCount": 3357,
+			"successCount": 3338,
+			"failureCount": 12,
+			"successRate": 0.9964179104477612
+		},
+		{
+			"hour": "2026-09-08T09:00:00.000Z",
+			"totalCount": 2845,
+			"successCount": 2811,
+			"failureCount": 26,
+			"successRate": 0.9908353894959464
+		},
+		{
+			"hour": "2026-09-08T10:00:00.000Z",
+			"totalCount": 4731,
+			"successCount": 4608,
+			"failureCount": 29,
+			"successRate": 0.9937459564373518
+		},
+		{
+			"hour": "2026-09-08T11:00:00.000Z",
+			"totalCount": 4498,
+			"successCount": 4465,
+			"failureCount": 12,
+			"successRate": 0.99731963368327
+		},
+		{
+			"hour": "2026-09-08T12:00:00.000Z",
+			"totalCount": 4599,
+			"successCount": 4538,
+			"failureCount": 34,
+			"successRate": 0.9925634295713036
+		},
+		{
+			"hour": "2026-09-08T13:00:00.000Z",
+			"totalCount": 4799,
+			"successCount": 4708,
+			"failureCount": 35,
+			"successRate": 0.9926207041956567
+		},
+		{
+			"hour": "2026-09-08T14:00:00.000Z",
+			"totalCount": 5287,
+			"successCount": 5249,
+			"failureCount": 20,
+			"successRate": 0.9962042133232112
+		},
+		{
+			"hour": "2026-09-08T15:00:00.000Z",
+			"totalCount": 5665,
+			"successCount": 5598,
+			"failureCount": 57,
+			"successRate": 0.9899204244031831
+		},
+		{
+			"hour": "2026-09-08T16:00:00.000Z",
+			"totalCount": 10812,
+			"successCount": 10693,
+			"failureCount": 43,
+			"successRate": 0.9959947839046199
+		},
+		{
+			"hour": "2026-09-08T17:00:00.000Z",
+			"totalCount": 8740,
+			"successCount": 8636,
+			"failureCount": 71,
+			"successRate": 0.9918456414379235
+		},
+		{
+			"hour": "2026-09-08T18:00:00.000Z",
+			"totalCount": 7209,
+			"successCount": 7138,
+			"failureCount": 53,
+			"successRate": 0.9926296759838688
+		},
+		{
+			"hour": "2026-09-08T19:00:00.000Z",
+			"totalCount": 7143,
+			"successCount": 7030,
+			"failureCount": 45,
+			"successRate": 0.9936395759717315
+		},
+		{
+			"hour": "2026-09-08T20:00:00.000Z",
+			"totalCount": 6839,
+			"successCount": 6725,
+			"failureCount": 94,
+			"successRate": 0.9862149875348292
+		},
+		{
+			"hour": "2026-09-08T21:00:00.000Z",
+			"totalCount": 8537,
+			"successCount": 8373,
+			"failureCount": 140,
+			"successRate": 0.9835545636085986
+		},
+		{
+			"hour": "2026-09-08T22:00:00.000Z",
+			"totalCount": 7340,
+			"successCount": 7247,
+			"failureCount": 58,
+			"successRate": 0.9920602327173169
+		},
+		{
+			"hour": "2026-09-08T23:00:00.000Z",
+			"totalCount": 6727,
+			"successCount": 6675,
+			"failureCount": 28,
+			"successRate": 0.995822765925705
+		},
+		{
+			"hour": "2026-09-09T00:00:00.000Z",
+			"totalCount": 6654,
+			"successCount": 6591,
+			"failureCount": 42,
+			"successRate": 0.9936680235187698
+		},
+		{
+			"hour": "2026-09-09T01:00:00.000Z",
+			"totalCount": 5195,
+			"successCount": 5077,
+			"failureCount": 100,
+			"successRate": 0.9806837937029167
+		},
+		{
+			"hour": "2026-09-09T02:00:00.000Z",
+			"totalCount": 8216,
+			"successCount": 8138,
+			"failureCount": 69,
+			"successRate": 0.9915925429511393
+		},
+		{
+			"hour": "2026-09-09T03:00:00.000Z",
+			"totalCount": 5892,
+			"successCount": 5853,
+			"failureCount": 24,
+			"successRate": 0.9959162838182747
+		},
+		{
+			"hour": "2026-09-09T04:00:00.000Z",
+			"totalCount": 5236,
+			"successCount": 5189,
+			"failureCount": 38,
+			"successRate": 0.9927300554811556
+		},
+		{
+			"hour": "2026-09-09T05:00:00.000Z",
+			"totalCount": 4379,
+			"successCount": 4295,
+			"failureCount": 76,
+			"successRate": 0.9826126744452071
+		},
+		{
+			"hour": "2026-09-09T06:00:00.000Z",
+			"totalCount": 5076,
+			"successCount": 5050,
+			"failureCount": 18,
+			"successRate": 0.9964483030781374
+		},
+		{
+			"hour": "2026-09-09T07:00:00.000Z",
+			"totalCount": 4504,
+			"successCount": 4474,
+			"failureCount": 8,
+			"successRate": 0.998215082552432
+		},
+		{
+			"hour": "2026-09-09T08:00:00.000Z",
+			"totalCount": 4036,
+			"successCount": 3999,
+			"failureCount": 20,
+			"successRate": 0.995023637720826
+		},
+		{
+			"hour": "2026-09-09T09:00:00.000Z",
+			"totalCount": 4521,
+			"successCount": 4457,
+			"failureCount": 46,
+			"successRate": 0.9897845880524095
+		},
+		{
+			"hour": "2026-09-09T10:00:00.000Z",
+			"totalCount": 5140,
+			"successCount": 5116,
+			"failureCount": 12,
+			"successRate": 0.9976599063962559
+		},
+		{
+			"hour": "2026-09-09T11:00:00.000Z",
+			"totalCount": 4710,
+			"successCount": 4683,
+			"failureCount": 16,
+			"successRate": 0.9965950202170675
+		},
+		{
+			"hour": "2026-09-09T12:00:00.000Z",
+			"totalCount": 4431,
+			"successCount": 4380,
+			"failureCount": 39,
+			"successRate": 0.991174473862865
+		},
+		{
+			"hour": "2026-09-09T13:00:00.000Z",
+			"totalCount": 5807,
+			"successCount": 5499,
+			"failureCount": 256,
+			"successRate": 0.955516941789748
+		},
+		{
+			"hour": "2026-09-09T14:00:00.000Z",
+			"totalCount": 7601,
+			"successCount": 7423,
+			"failureCount": 161,
+			"successRate": 0.9787710970464135
+		},
+		{
+			"hour": "2026-09-09T15:00:00.000Z",
+			"totalCount": 6235,
+			"successCount": 6052,
+			"failureCount": 129,
+			"successRate": 0.9791295906811196
+		},
+		{
+			"hour": "2026-09-09T16:00:00.000Z",
+			"totalCount": 7377,
+			"successCount": 7269,
+			"failureCount": 54,
+			"successRate": 0.9926259729619009
+		},
+		{
+			"hour": "2026-09-09T17:00:00.000Z",
+			"totalCount": 8110,
+			"successCount": 7997,
+			"failureCount": 19,
+			"successRate": 0.997629740518962
+		},
+		{
+			"hour": "2026-09-09T18:00:00.000Z",
+			"totalCount": 7319,
+			"successCount": 7220,
+			"failureCount": 55,
+			"successRate": 0.9924398625429554
+		},
+		{
+			"hour": "2026-09-09T19:00:00.000Z",
+			"totalCount": 11501,
+			"successCount": 11355,
+			"failureCount": 117,
+			"successRate": 0.9898012552301255
+		},
+		{
+			"hour": "2026-09-09T20:00:00.000Z",
+			"totalCount": 9362,
+			"successCount": 9258,
+			"failureCount": 39,
+			"successRate": 0.9958050984188448
+		},
+		{
+			"hour": "2026-09-09T21:00:00.000Z",
+			"totalCount": 5886,
+			"successCount": 5816,
+			"failureCount": 22,
+			"successRate": 0.9962315861596437
+		},
+		{
+			"hour": "2026-09-09T22:00:00.000Z",
+			"totalCount": 5382,
+			"successCount": 5334,
+			"failureCount": 37,
+			"successRate": 0.9931111524855707
+		},
+		{
+			"hour": "2026-09-09T23:00:00.000Z",
+			"totalCount": 7845,
+			"successCount": 7830,
+			"failureCount": 10,
+			"successRate": 0.9987244897959183
+		},
+		{
+			"hour": "2026-09-10T00:00:00.000Z",
+			"totalCount": 6075,
+			"successCount": 6027,
+			"failureCount": 35,
+			"successRate": 0.9942263279445728
+		},
+		{
+			"hour": "2026-09-10T01:00:00.000Z",
+			"totalCount": 8620,
+			"successCount": 8572,
+			"failureCount": 37,
+			"successRate": 0.9957021721454292
+		},
+		{
+			"hour": "2026-09-10T02:00:00.000Z",
+			"totalCount": 7839,
+			"successCount": 7760,
+			"failureCount": 65,
+			"successRate": 0.9916932907348243
+		},
+		{
+			"hour": "2026-09-10T03:00:00.000Z",
+			"totalCount": 5466,
+			"successCount": 5436,
+			"failureCount": 16,
+			"successRate": 0.9970652971386648
+		},
+		{
+			"hour": "2026-09-10T04:00:00.000Z",
+			"totalCount": 6252,
+			"successCount": 6204,
+			"failureCount": 45,
+			"successRate": 0.9927988478156505
+		},
+		{
+			"hour": "2026-09-10T05:00:00.000Z",
+			"totalCount": 4506,
+			"successCount": 4475,
+			"failureCount": 22,
+			"successRate": 0.9951078496775628
+		},
+		{
+			"hour": "2026-09-10T06:00:00.000Z",
+			"totalCount": 3329,
+			"successCount": 3313,
+			"failureCount": 4,
+			"successRate": 0.998794091046126
+		},
+		{
+			"hour": "2026-09-10T07:00:00.000Z",
+			"totalCount": 4162,
+			"successCount": 4150,
+			"failureCount": 9,
+			"successRate": 0.9978360182736234
+		},
+		{
+			"hour": "2026-09-10T08:00:00.000Z",
+			"totalCount": 4432,
+			"successCount": 4418,
+			"failureCount": 9,
+			"successRate": 0.9979670205556811
+		},
+		{
+			"hour": "2026-09-10T09:00:00.000Z",
+			"totalCount": 4668,
+			"successCount": 4594,
+			"failureCount": 59,
+			"successRate": 0.9873200085966043
+		},
+		{
+			"hour": "2026-09-10T10:00:00.000Z",
+			"totalCount": 4304,
+			"successCount": 4237,
+			"failureCount": 32,
+			"successRate": 0.992504099320684
+		},
+		{
+			"hour": "2026-09-10T11:00:00.000Z",
+			"totalCount": 4100,
+			"successCount": 4004,
+			"failureCount": 39,
+			"successRate": 0.9903536977491961
+		},
+		{
+			"hour": "2026-09-10T12:00:00.000Z",
+			"totalCount": 5108,
+			"successCount": 5072,
+			"failureCount": 22,
+			"successRate": 0.9956811935610522
+		},
+		{
+			"hour": "2026-09-10T13:00:00.000Z",
+			"totalCount": 5719,
+			"successCount": 5676,
+			"failureCount": 25,
+			"successRate": 0.9956148044202772
+		},
+		{
+			"hour": "2026-09-10T14:00:00.000Z",
+			"totalCount": 5906,
+			"successCount": 5858,
+			"failureCount": 36,
+			"successRate": 0.993892093654564
+		},
+		{
+			"hour": "2026-09-10T15:00:00.000Z",
+			"totalCount": 7186,
+			"successCount": 6798,
+			"failureCount": 160,
+			"successRate": 0.9770048864616269
+		},
+		{
+			"hour": "2026-09-10T16:00:00.000Z",
+			"totalCount": 6283,
+			"successCount": 6105,
+			"failureCount": 51,
+			"successRate": 0.9917153996101364
+		},
+		{
+			"hour": "2026-09-10T17:00:00.000Z",
+			"totalCount": 5051,
+			"successCount": 4963,
+			"failureCount": 61,
+			"successRate": 0.9878582802547771
+		},
+		{
+			"hour": "2026-09-10T18:00:00.000Z",
+			"totalCount": 6279,
+			"successCount": 6182,
+			"failureCount": 56,
+			"successRate": 0.9910227637063161
+		},
+		{
+			"hour": "2026-09-10T19:00:00.000Z",
+			"totalCount": 6905,
+			"successCount": 6770,
+			"failureCount": 112,
+			"successRate": 0.983725661145016
+		},
+		{
+			"hour": "2026-09-10T20:00:00.000Z",
+			"totalCount": 9787,
+			"successCount": 9650,
+			"failureCount": 54,
+			"successRate": 0.9944352844187964
+		},
+		{
+			"hour": "2026-09-10T21:00:00.000Z",
+			"totalCount": 9842,
+			"successCount": 9748,
+			"failureCount": 43,
+			"successRate": 0.995608211622919
+		},
+		{
+			"hour": "2026-09-10T22:00:00.000Z",
+			"totalCount": 5274,
+			"successCount": 5147,
+			"failureCount": 46,
+			"successRate": 0.9911419218178317
+		},
+		{
+			"hour": "2026-09-10T23:00:00.000Z",
+			"totalCount": 6016,
+			"successCount": 5843,
+			"failureCount": 155,
+			"successRate": 0.9741580526842281
+		},
+		{
+			"hour": "2026-09-11T00:00:00.000Z",
+			"totalCount": 5382,
+			"successCount": 5312,
+			"failureCount": 37,
+			"successRate": 0.9930828192185456
+		},
+		{
+			"hour": "2026-09-11T01:00:00.000Z",
+			"totalCount": 7136,
+			"successCount": 7067,
+			"failureCount": 53,
+			"successRate": 0.9925561797752809
+		},
+		{
+			"hour": "2026-09-11T02:00:00.000Z",
+			"totalCount": 7668,
+			"successCount": 7573,
+			"failureCount": 56,
+			"successRate": 0.992659588412636
+		},
+		{
+			"hour": "2026-09-11T03:00:00.000Z",
+			"totalCount": 5298,
+			"successCount": 5258,
+			"failureCount": 30,
+			"successRate": 0.9943267776096822
+		},
+		{
+			"hour": "2026-09-11T04:00:00.000Z",
+			"totalCount": 4327,
+			"successCount": 4290,
+			"failureCount": 30,
+			"successRate": 0.9930555555555556
+		},
+		{
+			"hour": "2026-09-11T05:00:00.000Z",
+			"totalCount": 4455,
+			"successCount": 4391,
+			"failureCount": 58,
+			"successRate": 0.9869633625533828
+		},
+		{
+			"hour": "2026-09-11T06:00:00.000Z",
+			"totalCount": 2992,
+			"successCount": 2970,
+			"failureCount": 14,
+			"successRate": 0.9953083109919572
+		},
+		{
+			"hour": "2026-09-11T07:00:00.000Z",
+			"totalCount": 3706,
+			"successCount": 3648,
+			"failureCount": 20,
+			"successRate": 0.9945474372955289
+		},
+		{
+			"hour": "2026-09-11T08:00:00.000Z",
+			"totalCount": 4379,
+			"successCount": 4276,
+			"failureCount": 35,
+			"successRate": 0.991881234052424
+		},
+		{
+			"hour": "2026-09-11T09:00:00.000Z",
+			"totalCount": 3136,
+			"successCount": 3085,
+			"failureCount": 24,
+			"successRate": 0.9922804760373111
+		},
+		{
+			"hour": "2026-09-11T10:00:00.000Z",
+			"totalCount": 3590,
+			"successCount": 3557,
+			"failureCount": 20,
+			"successRate": 0.9944087223930668
+		},
+		{
+			"hour": "2026-09-11T11:00:00.000Z",
+			"totalCount": 4416,
+			"successCount": 4300,
+			"failureCount": 29,
+			"successRate": 0.9933009933009933
+		},
+		{
+			"hour": "2026-09-11T12:00:00.000Z",
+			"totalCount": 3508,
+			"successCount": 3450,
+			"failureCount": 32,
+			"successRate": 0.9908098793796669
+		},
+		{
+			"hour": "2026-09-11T13:00:00.000Z",
+			"totalCount": 4810,
+			"successCount": 4695,
+			"failureCount": 53,
+			"successRate": 0.9888374052232519
+		},
+		{
+			"hour": "2026-09-11T14:00:00.000Z",
+			"totalCount": 4977,
+			"successCount": 4937,
+			"failureCount": 20,
+			"successRate": 0.9959653015937059
+		},
+		{
+			"hour": "2026-09-11T15:00:00.000Z",
+			"totalCount": 5215,
+			"successCount": 5159,
+			"failureCount": 44,
+			"successRate": 0.9915433403805497
+		},
+		{
+			"hour": "2026-09-11T16:00:00.000Z",
+			"totalCount": 4962,
+			"successCount": 4925,
+			"failureCount": 25,
+			"successRate": 0.9949494949494949
+		},
+		{
+			"hour": "2026-09-11T17:00:00.000Z",
+			"totalCount": 7177,
+			"successCount": 7087,
+			"failureCount": 63,
+			"successRate": 0.9911888111888112
+		},
+		{
+			"hour": "2026-09-11T18:00:00.000Z",
+			"totalCount": 7531,
+			"successCount": 7376,
+			"failureCount": 30,
+			"successRate": 0.9959492303537673
+		},
+		{
+			"hour": "2026-09-11T19:00:00.000Z",
+			"totalCount": 8108,
+			"successCount": 8010,
+			"failureCount": 83,
+			"successRate": 0.9897442234029408
+		},
+		{
+			"hour": "2026-09-11T20:00:00.000Z",
+			"totalCount": 6345,
+			"successCount": 6306,
+			"failureCount": 30,
+			"successRate": 0.9952651515151515
+		},
+		{
+			"hour": "2026-09-11T21:00:00.000Z",
+			"totalCount": 8863,
+			"successCount": 8762,
+			"failureCount": 70,
+			"successRate": 0.9920742753623188
+		},
+		{
+			"hour": "2026-09-11T22:00:00.000Z",
+			"totalCount": 9827,
+			"successCount": 9756,
+			"failureCount": 49,
+			"successRate": 0.9950025497195308
+		},
+		{
+			"hour": "2026-09-11T23:00:00.000Z",
+			"totalCount": 9756,
+			"successCount": 9653,
+			"failureCount": 39,
+			"successRate": 0.9959760627321502
+		},
+		{
+			"hour": "2026-09-12T00:00:00.000Z",
+			"totalCount": 6793,
+			"successCount": 6687,
+			"failureCount": 82,
+			"successRate": 0.9878859506574088
+		},
+		{
+			"hour": "2026-09-12T01:00:00.000Z",
+			"totalCount": 5853,
+			"successCount": 5703,
+			"failureCount": 122,
+			"successRate": 0.9790557939914163
+		},
+		{
+			"hour": "2026-09-12T02:00:00.000Z",
+			"totalCount": 7200,
+			"successCount": 7125,
+			"failureCount": 57,
+			"successRate": 0.9920634920634921
+		},
+		{
+			"hour": "2026-09-12T03:00:00.000Z",
+			"totalCount": 7507,
+			"successCount": 7458,
+			"failureCount": 29,
+			"successRate": 0.9961266194737545
+		},
+		{
+			"hour": "2026-09-12T04:00:00.000Z",
+			"totalCount": 8609,
+			"successCount": 8439,
+			"failureCount": 142,
+			"successRate": 0.9834518121431068
+		},
+		{
+			"hour": "2026-09-12T05:00:00.000Z",
+			"totalCount": 5569,
+			"successCount": 5437,
+			"failureCount": 87,
+			"successRate": 0.9842505430847213
+		},
+		{
+			"hour": "2026-09-12T06:00:00.000Z",
+			"totalCount": 4345,
+			"successCount": 4278,
+			"failureCount": 10,
+			"successRate": 0.9976679104477612
+		},
+		{
+			"hour": "2026-09-12T07:00:00.000Z",
+			"totalCount": 2920,
+			"successCount": 2885,
+			"failureCount": 20,
+			"successRate": 0.9931153184165232
+		},
+		{
+			"hour": "2026-09-12T08:00:00.000Z",
+			"totalCount": 3720,
+			"successCount": 3662,
+			"failureCount": 51,
+			"successRate": 0.9862644761648263
+		},
+		{
+			"hour": "2026-09-12T09:00:00.000Z",
+			"totalCount": 3132,
+			"successCount": 3116,
+			"failureCount": 6,
+			"successRate": 0.9980781550288277
+		},
+		{
+			"hour": "2026-09-12T10:00:00.000Z",
+			"totalCount": 2951,
+			"successCount": 2893,
+			"failureCount": 13,
+			"successRate": 0.9955264969029594
+		},
+		{
+			"hour": "2026-09-12T11:00:00.000Z",
+			"totalCount": 4431,
+			"successCount": 4329,
+			"failureCount": 2,
+			"successRate": 0.9995382128838606
+		},
+		{
+			"hour": "2026-09-12T12:00:00.000Z",
+			"totalCount": 5327,
+			"successCount": 5069,
+			"failureCount": 68,
+			"successRate": 0.9867627019661281
+		},
+		{
+			"hour": "2026-09-12T13:00:00.000Z",
+			"totalCount": 6712,
+			"successCount": 6641,
+			"failureCount": 46,
+			"successRate": 0.9931209810079258
+		},
+		{
+			"hour": "2026-09-12T14:00:00.000Z",
+			"totalCount": 5422,
+			"successCount": 5334,
+			"failureCount": 37,
+			"successRate": 0.9931111524855707
+		},
+		{
+			"hour": "2026-09-12T15:00:00.000Z",
+			"totalCount": 6774,
+			"successCount": 6728,
+			"failureCount": 18,
+			"successRate": 0.9973317521494219
+		},
+		{
+			"hour": "2026-09-12T16:00:00.000Z",
+			"totalCount": 10516,
+			"successCount": 10142,
+			"failureCount": 348,
+			"successRate": 0.9668255481410868
+		},
+		{
+			"hour": "2026-09-12T17:00:00.000Z",
+			"totalCount": 14474,
+			"successCount": 14010,
+			"failureCount": 387,
+			"successRate": 0.973119399874974
+		},
+		{
+			"hour": "2026-09-12T18:00:00.000Z",
+			"totalCount": 14768,
+			"successCount": 14347,
+			"failureCount": 353,
+			"successRate": 0.9759863945578231
+		},
+		{
+			"hour": "2026-09-12T19:00:00.000Z",
+			"totalCount": 13338,
+			"successCount": 12922,
+			"failureCount": 353,
+			"successRate": 0.9734086629001883
+		},
+		{
+			"hour": "2026-09-12T20:00:00.000Z",
+			"totalCount": 13389,
+			"successCount": 12977,
+			"failureCount": 365,
+			"successRate": 0.9726427821915755
+		},
+		{
+			"hour": "2026-09-12T21:00:00.000Z",
+			"totalCount": 9435,
+			"successCount": 9310,
+			"failureCount": 74,
+			"successRate": 0.9921142369991475
+		},
+		{
+			"hour": "2026-09-12T22:00:00.000Z",
+			"totalCount": 9614,
+			"successCount": 9516,
+			"failureCount": 36,
+			"successRate": 0.9962311557788944
+		},
+		{
+			"hour": "2026-09-12T23:00:00.000Z",
+			"totalCount": 8532,
+			"successCount": 8403,
+			"failureCount": 76,
+			"successRate": 0.9910366788536384
+		},
+		{
+			"hour": "2026-09-13T00:00:00.000Z",
+			"totalCount": 5678,
+			"successCount": 5581,
+			"failureCount": 78,
+			"successRate": 0.9862166460505389
+		},
+		{
+			"hour": "2026-09-13T01:00:00.000Z",
+			"totalCount": 5794,
+			"successCount": 5692,
+			"failureCount": 33,
+			"successRate": 0.994235807860262
+		},
+		{
+			"hour": "2026-09-13T02:00:00.000Z",
+			"totalCount": 5752,
+			"successCount": 5635,
+			"failureCount": 42,
+			"successRate": 0.9926017262638718
+		},
+		{
+			"hour": "2026-09-13T03:00:00.000Z",
+			"totalCount": 5831,
+			"successCount": 5783,
+			"failureCount": 25,
+			"successRate": 0.9956955922865014
+		},
+		{
+			"hour": "2026-09-13T04:00:00.000Z",
+			"totalCount": 6417,
+			"successCount": 6358,
+			"failureCount": 23,
+			"successRate": 0.9963955492869456
+		},
+		{
+			"hour": "2026-09-13T05:00:00.000Z",
+			"totalCount": 6171,
+			"successCount": 6082,
+			"failureCount": 52,
+			"successRate": 0.9915226605803718
+		},
+		{
+			"hour": "2026-09-13T06:00:00.000Z",
+			"totalCount": 4209,
+			"successCount": 4165,
+			"failureCount": 25,
+			"successRate": 0.9940334128878282
+		},
+		{
+			"hour": "2026-09-13T07:00:00.000Z",
+			"totalCount": 4409,
+			"successCount": 4390,
+			"failureCount": 3,
+			"successRate": 0.999317095379012
+		},
+		{
+			"hour": "2026-09-13T08:00:00.000Z",
+			"totalCount": 11658,
+			"successCount": 11595,
+			"failureCount": 4,
+			"successRate": 0.9996551426847142
+		}
+	],
+	"granularity": "hourly",
+	"range": "7d",
+	"type": "torbox-api"
+}

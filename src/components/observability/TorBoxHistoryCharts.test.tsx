@@ -1,5 +1,10 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+const rechartsProps = vi.hoisted(() => ({
+	areas: [] as Array<Record<string, unknown>>,
+	xAxes: [] as Array<Record<string, unknown>>,
+}));
 
 vi.mock('recharts', () => ({
 	ResponsiveContainer: ({ children }: { children: React.ReactNode }) => (
@@ -10,13 +15,21 @@ vi.mock('recharts', () => ({
 			{children}
 		</div>
 	),
-	Area: () => <div data-testid="area" />,
+	Area: (props: Record<string, unknown>) => {
+		rechartsProps.areas.push(props);
+		return <div data-testid="area" />;
+	},
 	CartesianGrid: () => <div />,
-	XAxis: () => <div />,
+	XAxis: (props: Record<string, unknown>) => {
+		rechartsProps.xAxes.push(props);
+		return <div />;
+	},
 	YAxis: () => <div />,
 	Tooltip: () => <div />,
 }));
 
+import apiHistory7d from '@/test/fixtures/observability/torbox-api-history-7d-2026-09-13.json';
+import cdnHistory24h from '@/test/fixtures/observability/torbox-cdn-history-24h-2026-09-13.json';
 import { TorBoxHistoryCharts } from './TorBoxHistoryCharts';
 
 const API_PAYLOAD = {
@@ -78,12 +91,29 @@ function mockFetch(options: { api?: unknown; cdn?: unknown; cdnOk?: boolean } = 
 	}) as unknown as typeof fetch;
 }
 
+type CdnPoint = { time: string; rate: number | null; sampleCount: number };
+
+function cdnPoints(): CdnPoint[] {
+	return (
+		screen
+			.getAllByTestId('area-chart')
+			.map((chart) => JSON.parse(chart.getAttribute('data-points') ?? '[]') as CdnPoint[])
+			.find((points) => points.some((point) => 'sampleCount' in point)) ?? []
+	);
+}
+
+function latestAreaProps(dataKey: string): Record<string, unknown> | undefined {
+	return [...rechartsProps.areas].reverse().find((props) => props.dataKey === dataKey);
+}
+
 beforeEach(() => {
 	mockFetch();
 });
 
 afterEach(() => {
 	vi.clearAllMocks();
+	rechartsProps.areas.length = 0;
+	rechartsProps.xAxes.length = 0;
 	if (originalFetch) {
 		globalWithFetch.fetch = originalFetch;
 	} else {
@@ -231,5 +261,75 @@ describe('TorBoxHistoryCharts', () => {
 			expect(screen.getByText('No historical data available yet')).toBeInTheDocument()
 		);
 		expect(screen.queryByTestId('torbox-cdn-chart')).toBeNull();
+	});
+
+	// Production's 24h CDN series on 2026-09-13. Every hour that cleared the
+	// floor had an unplotted hour on both sides, and an area draws nothing for a
+	// lone point, so the chart rendered as an empty grid.
+	it('marks a plotted hour that has no plotted neighbour', async () => {
+		mockFetch({ cdn: cdnHistory24h });
+
+		render(<TorBoxHistoryCharts />);
+
+		await screen.findByTestId('torbox-cdn-chart');
+		const points = cdnPoints();
+		const plotted = points.map((point) => point.rate !== null);
+		const lone = plotted.flatMap((isPlotted, i) =>
+			isPlotted && !plotted[i - 1] && !plotted[i + 1] ? [i] : []
+		);
+		expect(lone.length).toBeGreaterThan(0);
+
+		const dot = latestAreaProps('rate')?.dot;
+		expect(typeof dot).toBe('function');
+		const renderDot = dot as (props: Record<string, unknown>) => { type?: unknown } | null;
+		const marked = points.flatMap((_, index) =>
+			renderDot({ index, cx: 10, cy: 10 })?.type === 'circle' ? [index] : []
+		);
+		expect(marked).toEqual(lone);
+	});
+
+	// The server returns only the hours somebody measured. On a category axis
+	// that pulled readings hours apart next to each other, and the 24h axis ran
+	// 9 PM, 1 AM, 10 AM at even spacing.
+	it('keeps unmeasured hours on the axis as gaps', async () => {
+		mockFetch({ cdn: cdnHistory24h });
+
+		render(<TorBoxHistoryCharts />);
+
+		await screen.findByTestId('torbox-cdn-chart');
+		const points = cdnPoints();
+		const times = points.map((point) => Date.parse(point.time));
+		expect(times[0]).toBe(Date.parse('2026-09-12T11:00:00Z'));
+		expect(times[times.length - 1]).toBe(Date.parse('2026-09-13T08:00:00Z'));
+		expect(times.slice(1).map((time, i) => time - times[i])).toEqual(
+			Array(times.length - 1).fill(60 * 60 * 1000)
+		);
+		expect(
+			points.find((point) => Date.parse(point.time) === Date.parse('2026-09-12T20:00:00Z'))
+		).toMatchObject({ rate: null, sampleCount: 0 });
+	});
+
+	// Production's 7d API series on 2026-09-13. Ticks chosen by pixel spacing
+	// over hourly points printed "Sep 7" twice and left other days unlabelled.
+	it('labels each day of a multi-day hourly chart once', async () => {
+		mockFetch({ api: apiHistory7d });
+
+		render(<TorBoxHistoryCharts />);
+
+		fireEvent.click(await screen.findByRole('button', { name: '7 Days' }));
+		await screen.findByText('Hourly aggregates for the past 7d');
+
+		const times = apiHistory7d.data.map((row) => row.hour);
+		const day = (time: string) => new Date(time).toLocaleDateString('en-US');
+		const dayStarts = times.filter((time, i) => i > 0 && day(time) !== day(times[i - 1]));
+		expect(dayStarts.length).toBeGreaterThanOrEqual(6);
+
+		const [successAxis, volumeAxis] = rechartsProps.xAxes.slice(-3);
+		for (const axis of [successAxis, volumeAxis]) {
+			expect(axis?.ticks).toEqual(dayStarts);
+			const format = axis?.tickFormatter as (time: string) => string;
+			const labels = dayStarts.map(format);
+			expect(new Set(labels).size).toBe(labels.length);
+		}
 	});
 });
