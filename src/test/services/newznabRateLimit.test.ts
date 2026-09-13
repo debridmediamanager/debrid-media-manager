@@ -20,22 +20,22 @@ describe('Newznab rate limit configs', () => {
 	it('defines the search, grab, day and per-IP budgets', () => {
 		expect(RATE_LIMIT_CONFIGS.newznabSearch).toEqual({
 			name: 'newznabSearch',
-			rateLimit: 40,
+			rateLimit: 30,
 			windowSeconds: 60,
 		});
 		expect(RATE_LIMIT_CONFIGS.newznabGrab).toEqual({
 			name: 'newznabGrab',
-			rateLimit: 20,
+			rateLimit: 15,
 			windowSeconds: 60,
 		});
 		expect(RATE_LIMIT_CONFIGS.newznabGrabDay).toEqual({
 			name: 'newznabGrabDay',
-			rateLimit: 400,
+			rateLimit: 250,
 			windowSeconds: 86400,
 		});
 		expect(RATE_LIMIT_CONFIGS.newznabIp).toEqual({
 			name: 'newznabIp',
-			rateLimit: 40,
+			rateLimit: 25,
 			windowSeconds: 10,
 		});
 		// The Torznab twin is deliberately not on the same numbers any more: its

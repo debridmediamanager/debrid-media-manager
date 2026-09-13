@@ -45,24 +45,35 @@ export const RATE_LIMIT_CONFIGS = {
 	// one search per configured indexer, so the budget is sized for a fleet of
 	// them behind one sponsor key rather than for a person clicking.
 	//
-	// Doubled from 20 on 2026-09-14. Measured over 8 days of proxy logs (81,997
+	// Raised from 20 on 2026-09-14. Measured over 8 days of proxy logs (81,997
 	// requests, 1,981/day rising to 19,945/day): 20/min refused 125 searches
 	// across 82 minutes and 14 keys, all of them *arr bursts rather than abuse.
-	// 40 refuses none of the traffic seen so far.
-	newznabSearch: { name: 'newznabSearch', rateLimit: 40, windowSeconds: 60 },
+	// 30 is the smallest budget that refuses none of it - the busiest minute any
+	// key managed was 26 - and every search fans out to all four upstreams, so
+	// the headroom above that is spent on the one with a metered API allowance.
+	newznabSearch: { name: 'newznabSearch', rateLimit: 30, windowSeconds: 60 },
 	// A grab spends a real download from the shared upstream account, so it gets
 	// both a burst limit and a day-long one. Two entries, two names: same-name
 	// configs share a bucket, so a single name would have made the day limit and
 	// the burst limit one counter - see the note above.
 	//
-	// Also doubled on 2026-09-14, off the same logs: grabs were the budget
+	// Also raised on 2026-09-14, off the same logs: grabs were the budget
 	// actually biting, at 1,017 of 3,095 attempts refused. 10/min cost 569
-	// requests over 56 minutes; 20/min costs 173 over 26. The day cap went to
-	// 400 rather than a strict double, because at 20/min it is the day cap that
-	// binds: 300 would still refuse 302 requests, 400 refuses 189, and every
-	// refusal left belongs to one key that grabbed 589 in a day.
-	newznabGrab: { name: 'newznabGrab', rateLimit: 20, windowSeconds: 60 },
-	newznabGrabDay: { name: 'newznabGrabDay', rateLimit: 400, windowSeconds: 86400 },
+	// requests over 56 minutes, 15/min costs 331 over 36.
+	//
+	// Sized against what the upstream accounts actually allow, read off their own
+	// pages the same day: two are unlimited (5,122 and 4,409 API hits, 737 and
+	// 176 grabs that day), but one is metered at 600 grabs and 5,000 API hits a
+	// day for every DMM sponsor put together, and the fleet already attempted 999
+	// grabs on 2026-09-13. So the day cap is deliberately well under that shared
+	// ceiling rather than sized to the busiest key: 250 refuses 402 requests
+	// across 8 days, all of them from the single key that grabbed 589 in a day.
+	//
+	// Note what these do NOT bound: a per-key budget times 466 keys is not an
+	// aggregate. If the fleet total keeps doubling weekly, the metered upstream
+	// needs a real fleet-wide counter, not a bigger per-key one.
+	newznabGrab: { name: 'newznabGrab', rateLimit: 15, windowSeconds: 60 },
+	newznabGrabDay: { name: 'newznabGrabDay', rateLimit: 250, windowSeconds: 86400 },
 	// The cheap pre-auth reject on the newznab endpoint, per IP. Wider than
 	// `default`'s 5/s because a Sonarr interactive season search bursts its
 	// queries faster than that from one IP - the per-key budgets above are the
@@ -71,8 +82,9 @@ export const RATE_LIMIT_CONFIGS = {
 	// Raised with them, though nothing has hit it yet: the busiest 10s bucket in
 	// those 8 days was 18 requests from one IP, against a ceiling of 20. Leaving
 	// it there would have turned a per-IP gate into the binding limit as soon as
-	// the per-key budgets above opened up.
-	newznabIp: { name: 'newznabIp', rateLimit: 40, windowSeconds: 10 },
+	// the per-key budgets above opened up; 25 keeps a margin over that peak
+	// without becoming a budget of its own.
+	newznabIp: { name: 'newznabIp', rateLimit: 25, windowSeconds: 10 },
 	// The Torznab indexer, sized for an *arr fleet behind one sponsor key rather
 	// than for a person clicking. It kept the original 20/min when Newznab's
 	// budgets were doubled, because its cost is not the same: a

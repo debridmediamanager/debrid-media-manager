@@ -34,12 +34,12 @@ describe('zurg rate limit config', () => {
 		]) {
 			expect(config.windowSeconds).toBe(60);
 		}
-		// The sizes are no longer equal. Newznab's was doubled on 2026-09-14 off
+		// The sizes are no longer equal. Newznab's was raised on 2026-09-14 off
 		// its measured *arr load; a zurg or Torznab search costs the database
 		// here rather than an upstream account, so neither followed it.
 		expect(RATE_LIMIT_CONFIGS.zurg.rateLimit).toBe(20);
 		expect(RATE_LIMIT_CONFIGS.torznabSearch.rateLimit).toBe(20);
-		expect(RATE_LIMIT_CONFIGS.newznabSearch.rateLimit).toBe(40);
+		expect(RATE_LIMIT_CONFIGS.newznabSearch.rateLimit).toBe(30);
 	});
 
 	it('is a different bucket from the website torrents budget', () => {
