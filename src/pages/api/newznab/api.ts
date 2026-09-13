@@ -122,8 +122,42 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 
 	// The store is where a re-grab of the same release costs nothing: an NZB is
 	// immutable once posted, so only the first fetch spends an upstream call.
+	//
+	// A stored copy was cleaned by whatever rules were current the day it was
+	// written, and those rules change: the per-download stamp fix landed after
+	// more than half the objects in the store had been written, and every one of
+	// those still carries the upstream newsgroup list this endpoint now replaces
+	// with a fixed one. So a stored copy is cleaned again on the way out. The
+	// pass is idempotent on a copy that is already current, which is the common
+	// case, and it is cheap next to the B2 read it follows: measured over 100 of
+	// the live objects, 4 ms at the median 295 KB and 169 ms on an 11 MB outlier.
+	// A copy today's rules cannot clean at all counts as a miss, so the upstream
+	// fetch below replaces it.
 	const stored = await getStoredNzb(release.prefix, release.nativeId);
-	if (stored) return sendNzb(res, token, stored, '-');
+	if (stored) {
+		let recleaned;
+		try {
+			recleaned = sanitizeNzb(stored);
+		} catch (error) {
+			// Worth a line: the store only ever held cleaned documents, so a copy
+			// that today's rules reject is either corrupt at rest or a rule that
+			// went too far.
+			console.error('Stored NZB could not be re-cleaned, refetching:', error);
+			recleaned = null;
+		}
+		if (recleaned) {
+			// Only when the rules actually took something off, so a popular
+			// release does not rewrite identical bytes on every grab.
+			if (recleaned.xml !== stored) {
+				void putStoredNzb(release.prefix, release.nativeId, recleaned.xml).catch(
+					(error) => {
+						console.error('Newznab NZB store refresh failed:', error);
+					}
+				);
+			}
+			return sendNzb(res, token, recleaned.xml, recleaned.removed.join('; '));
+		}
+	}
 
 	const indexer = getUpstreamIndexers().find((candidate) => candidate.prefix === release.prefix);
 	// A token minted before an indexer was removed from the config. Nothing can
