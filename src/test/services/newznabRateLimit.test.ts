@@ -17,22 +17,30 @@ beforeAll(() => {
 });
 
 describe('Newznab rate limit configs', () => {
-	it('defines a search config and both grab configs', () => {
+	it('defines the search, grab, day and per-IP budgets', () => {
 		expect(RATE_LIMIT_CONFIGS.newznabSearch).toEqual({
 			name: 'newznabSearch',
-			rateLimit: 20,
+			rateLimit: 40,
 			windowSeconds: 60,
 		});
 		expect(RATE_LIMIT_CONFIGS.newznabGrab).toEqual({
 			name: 'newznabGrab',
-			rateLimit: 10,
+			rateLimit: 20,
 			windowSeconds: 60,
 		});
 		expect(RATE_LIMIT_CONFIGS.newznabGrabDay).toEqual({
 			name: 'newznabGrabDay',
-			rateLimit: 150,
+			rateLimit: 400,
 			windowSeconds: 86400,
 		});
+		expect(RATE_LIMIT_CONFIGS.newznabIp).toEqual({
+			name: 'newznabIp',
+			rateLimit: 40,
+			windowSeconds: 10,
+		});
+		// The Torznab twin is deliberately not on the same numbers any more: its
+		// searches cost the database, not an upstream account.
+		expect(RATE_LIMIT_CONFIGS.torznabSearch.rateLimit).toBe(20);
 	});
 
 	it('gives every config a distinct name', () => {

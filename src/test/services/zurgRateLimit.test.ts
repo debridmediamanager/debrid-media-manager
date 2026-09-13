@@ -23,7 +23,7 @@ vi.mock('@/services/rateLimit/withRateLimit', async () => {
 });
 
 describe('zurg rate limit config', () => {
-	it('is a minute-long budget, matching the Newznab and Torznab indexers', () => {
+	it('is a minute-long budget, like the Newznab and Torznab indexers', () => {
 		// These are the three machine-facing search surfaces. A client that fans
 		// out over several titles at once has to fit in one budget rather than be
 		// refused on its second call, so all three are sized per minute.
@@ -32,9 +32,14 @@ describe('zurg rate limit config', () => {
 			RATE_LIMIT_CONFIGS.newznabSearch,
 			RATE_LIMIT_CONFIGS.torznabSearch,
 		]) {
-			expect(config.rateLimit).toBe(20);
 			expect(config.windowSeconds).toBe(60);
 		}
+		// The sizes are no longer equal. Newznab's was doubled on 2026-09-14 off
+		// its measured *arr load; a zurg or Torznab search costs the database
+		// here rather than an upstream account, so neither followed it.
+		expect(RATE_LIMIT_CONFIGS.zurg.rateLimit).toBe(20);
+		expect(RATE_LIMIT_CONFIGS.torznabSearch.rateLimit).toBe(20);
+		expect(RATE_LIMIT_CONFIGS.newznabSearch.rateLimit).toBe(40);
 	});
 
 	it('is a different bucket from the website torrents budget', () => {

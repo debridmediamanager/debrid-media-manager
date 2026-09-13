@@ -44,20 +44,38 @@ export const RATE_LIMIT_CONFIGS = {
 	// The Newznab aggregation endpoint. An *arr RSS-syncs on a timer and issues
 	// one search per configured indexer, so the budget is sized for a fleet of
 	// them behind one sponsor key rather than for a person clicking.
-	newznabSearch: { name: 'newznabSearch', rateLimit: 20, windowSeconds: 60 },
+	//
+	// Doubled from 20 on 2026-09-14. Measured over 8 days of proxy logs (81,997
+	// requests, 1,981/day rising to 19,945/day): 20/min refused 125 searches
+	// across 82 minutes and 14 keys, all of them *arr bursts rather than abuse.
+	// 40 refuses none of the traffic seen so far.
+	newznabSearch: { name: 'newznabSearch', rateLimit: 40, windowSeconds: 60 },
 	// A grab spends a real download from the shared upstream account, so it gets
 	// both a burst limit and a day-long one. Two entries, two names: same-name
 	// configs share a bucket, so a single name would have made the day limit and
 	// the burst limit one counter - see the note above.
-	newznabGrab: { name: 'newznabGrab', rateLimit: 10, windowSeconds: 60 },
-	newznabGrabDay: { name: 'newznabGrabDay', rateLimit: 150, windowSeconds: 86400 },
+	//
+	// Also doubled on 2026-09-14, off the same logs: grabs were the budget
+	// actually biting, at 1,017 of 3,095 attempts refused. 10/min cost 569
+	// requests over 56 minutes; 20/min costs 173 over 26. The day cap went to
+	// 400 rather than a strict double, because at 20/min it is the day cap that
+	// binds: 300 would still refuse 302 requests, 400 refuses 189, and every
+	// refusal left belongs to one key that grabbed 589 in a day.
+	newznabGrab: { name: 'newznabGrab', rateLimit: 20, windowSeconds: 60 },
+	newznabGrabDay: { name: 'newznabGrabDay', rateLimit: 400, windowSeconds: 86400 },
 	// The cheap pre-auth reject on the newznab endpoint, per IP. Wider than
 	// `default`'s 5/s because a Sonarr interactive season search bursts its
 	// queries faster than that from one IP - the per-key budgets above are the
 	// real limits; this only has to stop unauthenticated hammering of caps.
-	newznabIp: { name: 'newznabIp', rateLimit: 20, windowSeconds: 10 },
+	//
+	// Raised with them, though nothing has hit it yet: the busiest 10s bucket in
+	// those 8 days was 18 requests from one IP, against a ceiling of 20. Leaving
+	// it there would have turned a per-IP gate into the binding limit as soon as
+	// the per-key budgets above opened up.
+	newznabIp: { name: 'newznabIp', rateLimit: 40, windowSeconds: 10 },
 	// The Torznab indexer, sized for an *arr fleet behind one sponsor key rather
-	// than for a person clicking, and the same budget as its Newznab twin. A
+	// than for a person clicking. It kept the original 20/min when Newznab's
+	// budgets were doubled, because its cost is not the same: a
 	// search here reads whole library pages and classifies every hash in them
 	// against the debrid caches, so it costs the database far more than a fan-out
 	// to upstream indexers costs DMM. It has no grab budget — a Torznab item's

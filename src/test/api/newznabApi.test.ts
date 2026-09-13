@@ -690,7 +690,10 @@ describe('GET /api/newznab/api grab', () => {
 	});
 
 	it('spends both grab budgets and answers 429 once the burst one is gone', async () => {
-		for (let i = 0; i < 10; i++) {
+		// Read from the config rather than written out: the budget is tuned off
+		// measured load and has moved once already.
+		const { rateLimit } = RATE_LIMIT_CONFIGS.newznabGrab;
+		for (let i = 0; i < rateLimit; i++) {
 			expect(
 				(await run({ t: 'get', id: token(), apikey: SPONSOR_KEY }))._getStatusCode()
 			).toBe(200);
@@ -710,7 +713,7 @@ describe('GET /api/newznab/api pre-auth IP reject', () => {
 	// This pins the replacement answering in the protocol, before any auth.
 	it('answers 429 as a Newznab error document, without a sponsor lookup', async () => {
 		let res: MockResponse | null = null;
-		for (let i = 0; i < 21; i++) {
+		for (let i = 0; i < RATE_LIMIT_CONFIGS.newznabIp.rateLimit + 1; i++) {
 			res = await run({ t: 'caps' });
 		}
 
