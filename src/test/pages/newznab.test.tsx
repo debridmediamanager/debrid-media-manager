@@ -2,6 +2,8 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
+
 const sponsorMock = vi.fn();
 
 vi.mock('@/hooks/useSponsor', () => ({
@@ -169,14 +171,21 @@ describe('Newznab setup page, for a sponsor', () => {
 		}
 	});
 
-	// Stated up front so nobody discovers them by tripping them.
-	it('states the per-key limits', () => {
+	// Stated up front so nobody discovers them by tripping them, and asserted
+	// against the configs the endpoint enforces rather than against numbers typed
+	// twice: the page sat a full revision behind the real budgets once already,
+	// and a test carrying its own copy of them could not have caught it.
+	it('states the per-key limits the endpoint actually enforces', () => {
 		asSponsor();
 		render(<NewznabSetupPage />);
 
-		expect(screen.getByText('20 searches')).toBeTruthy();
-		expect(screen.getByText('10 grabs')).toBeTruthy();
-		expect(screen.getByText('150 grabs')).toBeTruthy();
+		expect(
+			screen.getByText(`${RATE_LIMIT_CONFIGS.newznabSearch.rateLimit} searches`)
+		).toBeTruthy();
+		expect(screen.getByText(`${RATE_LIMIT_CONFIGS.newznabGrab.rateLimit} grabs`)).toBeTruthy();
+		expect(
+			screen.getByText(`${RATE_LIMIT_CONFIGS.newznabGrabDay.rateLimit} grabs`)
+		).toBeTruthy();
 		expect(screen.getAllByText('per minute')).toHaveLength(2);
 		expect(screen.getByText('per day')).toBeTruthy();
 		expect(screen.getByText(/counted against your DMM API key, not your IP/)).toBeTruthy();
@@ -223,7 +232,9 @@ describe('Newznab setup page, for everyone else', () => {
 			).toBeTruthy()
 		);
 		expect(within(field('API Path')).getByText('/api')).toBeTruthy();
-		expect(screen.getByText('20 searches')).toBeTruthy();
+		expect(
+			screen.getByText(`${RATE_LIMIT_CONFIGS.newznabSearch.rateLimit} searches`)
+		).toBeTruthy();
 		expect(screen.getByText('2040')).toBeTruthy();
 	});
 

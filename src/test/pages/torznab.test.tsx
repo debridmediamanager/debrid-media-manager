@@ -2,6 +2,8 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
+
 const sponsorMock = vi.fn();
 
 vi.mock('@/hooks/useSponsor', () => ({
@@ -168,7 +170,9 @@ describe('Torznab setup page, for a sponsor', () => {
 		asSponsor();
 		render(<TorznabSetupPage />);
 
-		expect(screen.getByText('20 searches')).toBeTruthy();
+		expect(
+			screen.getByText(`${RATE_LIMIT_CONFIGS.torznabSearch.rateLimit} searches`)
+		).toBeTruthy();
 		expect(screen.getByText('No grab limit')).toBeTruthy();
 		expect(screen.getByText(/Counted against your DMM API key, not your IP/)).toBeTruthy();
 	});
@@ -263,7 +267,9 @@ describe('Torznab setup page, for everyone else', () => {
 				within(field('URL')).getByText(`${window.location.origin}/api/torznab`)
 			).toBeTruthy()
 		);
-		expect(screen.getByText('20 searches')).toBeTruthy();
+		expect(
+			screen.getByText(`${RATE_LIMIT_CONFIGS.torznabSearch.rateLimit} searches`)
+		).toBeTruthy();
 	});
 
 	// An unlinked browser has no key to fill in, which is the one part of the

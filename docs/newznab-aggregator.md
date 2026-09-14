@@ -69,16 +69,18 @@ which is why this route is not wrapped in `withIpRateLimit`.
 
 ## Rate limits
 
-Configured in `RATE_LIMIT_CONFIGS` (`src/services/rateLimit/middlewareRateLimiter.ts`),
-enforced via `checkRateLimitFor` (`withRateLimit.ts`) — Redis sliding windows shared
-across the swarm instances, in-memory per-instance fallback.
+Configured in `RATE_LIMIT_CONFIGS` (`src/services/rateLimit/configs.ts`, re-exported by
+`middlewareRateLimiter.ts`), enforced via `checkRateLimitFor` (`withRateLimit.ts`) —
+Redis sliding windows shared across the swarm instances, in-memory per-instance
+fallback. The setup page at `/newznab` renders these same values rather than repeating
+them, so the table below is the only copy that can go stale.
 
 | Bucket           | Limit     | Keyed on                                                                                                                                            |
 | ---------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `newznabIp`      | 20 / 10s  | client IP, before auth — the cheap reject; wider than the app default because a Sonarr interactive season search bursts faster than 5/s from one IP |
-| `newznabSearch`  | 20 / min  | `sponsor:<shortId>`                                                                                                                                 |
-| `newznabGrab`    | 10 / min  | `sponsor:<shortId>`                                                                                                                                 |
-| `newznabGrabDay` | 150 / day | `sponsor:<shortId>`                                                                                                                                 |
+| `newznabIp`      | 25 / 10s  | client IP, before auth — the cheap reject; wider than the app default because a Sonarr interactive season search bursts faster than 5/s from one IP |
+| `newznabSearch`  | 30 / min  | `sponsor:<shortId>`                                                                                                                                 |
+| `newznabGrab`    | 15 / min  | `sponsor:<shortId>`                                                                                                                                 |
+| `newznabGrabDay` | 250 / day | `sponsor:<shortId>`                                                                                                                                 |
 
 Keying on `shortId` rather than the key string means a gatekeeper key reset does not
 reset the budget, and one sponsor's whole \*arr farm shares one budget.

@@ -2,6 +2,7 @@ import { ApiKeyField, Card, Field } from '@/components/IndexerSetup';
 import { Logo } from '@/components/Logo';
 import { TorznabProviderPanel } from '@/components/TorznabProviderPanel';
 import { useSponsor } from '@/hooks/useSponsor';
+import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { ArrowLeft, Handshake, KeyRound, Lock, Zap } from 'lucide-react';
 import Head from 'next/head';
@@ -28,7 +29,12 @@ const PRODUCTION_ORIGIN = 'https://debridmediamanager.com';
 const API_PATH = '/api';
 
 const LIMITS = [
-	{ label: '20 searches', per: 'per minute, per key' },
+	// Read from the enforced config, like the Newznab guide's: this page's copy
+	// is the only place a reader can learn the budget without tripping it.
+	{
+		label: `${RATE_LIMIT_CONFIGS.torznabSearch.rateLimit} searches`,
+		per: 'per minute, per key',
+	},
 	{ label: 'No grab limit', per: 'grabs never come back to DMM' },
 ];
 

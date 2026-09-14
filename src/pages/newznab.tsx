@@ -1,6 +1,7 @@
 import { ApiKeyField, Card, Field } from '@/components/IndexerSetup';
 import { Logo } from '@/components/Logo';
 import { useSponsor } from '@/hooks/useSponsor';
+import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/configs';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { ArrowLeft, Handshake, KeyRound, Lock, ShieldCheck } from 'lucide-react';
 import Head from 'next/head';
@@ -26,11 +27,18 @@ const PRODUCTION_ORIGIN = 'https://debridmediamanager.com';
 /** The path segment *arr appends to the indexer URL. */
 const API_PATH = '/api';
 
-/** Per-key limits enforced by the endpoint, stated here so nobody has to find them by tripping them. */
+/**
+ * Per-key limits enforced by the endpoint, stated here so nobody has to find
+ * them by tripping them.
+ *
+ * Read from the configs the endpoint actually enforces rather than written out:
+ * the budgets are tuned against measured load and the numbers on this page had
+ * already drifted a full revision behind them once.
+ */
 const LIMITS = [
-	{ label: '20 searches', per: 'per minute' },
-	{ label: '10 grabs', per: 'per minute' },
-	{ label: '150 grabs', per: 'per day' },
+	{ label: `${RATE_LIMIT_CONFIGS.newznabSearch.rateLimit} searches`, per: 'per minute' },
+	{ label: `${RATE_LIMIT_CONFIGS.newznabGrab.rateLimit} grabs`, per: 'per minute' },
+	{ label: `${RATE_LIMIT_CONFIGS.newznabGrabDay.rateLimit} grabs`, per: 'per day' },
 ];
 
 const CATEGORIES = [
