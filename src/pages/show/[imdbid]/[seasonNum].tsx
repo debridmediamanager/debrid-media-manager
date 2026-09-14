@@ -354,9 +354,25 @@ const TvSearch: FunctionComponent = () => {
 				return;
 			}
 
-			const lines = [
-				`${summary.packs.length} season${summary.packs.length === 1 ? '' : 's'} as a complete pack`,
-			];
+			// Seasons that were already complete episode by episode are named apart
+			// from the ones that were missing something. Nothing is deleted, so
+			// those seasons end up holding the pack and the episodes at once, and
+			// a confirmation that folded them together would read as if the
+			// library were merely being filled in.
+			const newPackCount = summary.packs.length - summary.upgrades.length;
+			const lines: string[] = [];
+			if (newPackCount > 0) {
+				lines.push(
+					`${newPackCount} season${newPackCount === 1 ? '' : 's'} as a complete pack`
+				);
+			}
+			if (summary.upgrades.length > 0) {
+				lines.push(
+					`${summary.upgrades.length} season${
+						summary.upgrades.length === 1 ? '' : 's'
+					} you already have episode by episode, upgraded to a pack (the episodes stay)`
+				);
+			}
 			if (summary.episodes.length > 0) {
 				lines.push(
 					`${summary.episodes.length} season${

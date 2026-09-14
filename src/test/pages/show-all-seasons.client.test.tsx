@@ -281,6 +281,7 @@ const planFor = (overrides: Record<string, unknown> = {}) => ({
 	summary: {
 		held: [],
 		packs: [{ season: 1 }, { season: 2 }],
+		upgrades: [],
 		episodes: [],
 		gaps: [],
 		episodeAddCount: 0,
@@ -360,6 +361,28 @@ describe('All Seasons buttons', () => {
 		expect(options.text).toMatch(/2 torrents in total/);
 		// Discovery adds nothing, so a refusal here costs the user nothing.
 		expect(runMock).not.toHaveBeenCalled();
+	});
+
+	it('says which seasons it is only upgrading, and that the episodes stay', async () => {
+		// Two seasons getting a pack, one of which the library already holds in
+		// full as loose episodes. Nothing is deleted, so the dialog has to say
+		// that season ends up with both rather than call it a plain add.
+		discoverMock.mockResolvedValue(
+			planFor({
+				packs: [{ season: 1 }, { season: 2 }],
+				upgrades: [{ season: 2 }],
+			})
+		);
+		modalFireMock.mockResolvedValue({ isConfirmed: false });
+		const actions = await mountPage();
+
+		await userEvent.click(actions.getByRole('button', { name: /Instant RD \(All Seasons\)/i }));
+
+		await waitFor(() => expect(modalFireMock).toHaveBeenCalled());
+		const options = modalFireMock.mock.calls[0][0];
+		expect(options.text).toMatch(/1 season as a complete pack/);
+		expect(options.text).toMatch(/1 season you already have episode by episode/);
+		expect(options.text).toMatch(/the episodes stay/);
 	});
 
 	it('runs only once the dialog is confirmed', async () => {

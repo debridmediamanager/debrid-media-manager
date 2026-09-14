@@ -1,4 +1,8 @@
+import type { ScrapeSearchResult } from '@/services/mediasearch';
+import WIRE from '@/test/fixtures/seasonPacks/wire-tt0306414-season3.json';
 import { UserTorrentStatus, type UserTorrent } from '@/torrent/userTorrent';
+import { filterSeasonPacks } from '@/utils/cachedTroveStreams';
+import { isVideo } from '@/utils/selectable';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import { describe, expect, it } from 'vitest';
 import {
@@ -183,9 +187,20 @@ describe('planSeason', () => {
 		expect(entry.addCount).toBe(0);
 	});
 
-	it('skips a season held complete as individual episodes', () => {
+	it('skips a season complete as individual episodes when no pack is cached', () => {
 		const coverage = { hasPack: false, episodes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] };
 		expect(planSeason({ ...base, coverage }).status).toBe('held');
+	});
+
+	it('offers a pack to a season complete as individual episodes', () => {
+		const coverage = { hasPack: false, episodes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] };
+		const entry = planSeason({
+			...base,
+			coverage,
+			packCandidates: [candidate('pack', 10)],
+		});
+		expect(entry.status).toBe('pack');
+		expect(entry.addCount).toBe(1);
 	});
 
 	it('prefers a cached pack even when some episodes are already held', () => {
@@ -402,5 +417,138 @@ describe('preferSharedPacks', () => {
 
 		expect(entries[1].packCandidates[0].hash).toBe('season-three');
 		expect(summarisePlan(entries).totalAddCount).toBe(2);
+	});
+});
+
+/**
+ * The whole decision, driven from real index rows rather than from names
+ * written here.
+ *
+ * `wire-tt0306414-season3.json` is the live `ScrapedTrue` row for
+ * `tv:tt0306414:3` and the `Available` file lists for every hash in it, read
+ * on 2026-09-14. Nothing in it is derived: the pack candidates come out of the
+ * production `filterSeasonPacks`, their video counts out of the production
+ * `isVideo`, and the library rows out of the real parser, so this exercises the
+ * same chain the season page runs rather than a restatement of it.
+ */
+describe('a season the library holds only as loose episodes', () => {
+	const counts = Object.fromEntries(
+		Object.entries(WIRE.episodeCounts).map(([season, count]) => [Number(season), count])
+	) as Record<number, number>;
+
+	/** What `/api/torrents/tv-seasons` would answer for season three. */
+	const cachedPacks = (): SeasonCandidate[] =>
+		filterSeasonPacks(WIRE.scraped as ScrapeSearchResult[], {
+			season: WIRE.season,
+			maxSizeGb: 0,
+		})
+			.map((pack) => {
+				const paths = (WIRE.availableFiles as Record<string, string[]>)[pack.hash];
+				return {
+					hash: pack.hash,
+					title: pack.title,
+					sizeMb: pack.sizeMb,
+					seasons: pack.seasons,
+					// Only a hash Real-Debrid has actually held reports files, and
+					// the run treats one with no file list as no candidate at all.
+					videoCount: paths
+						? paths.filter((path) => isVideo({ path })).length
+						: undefined,
+				};
+			})
+			.filter((pack) => pack.videoCount !== undefined);
+
+	/** Twelve real releases, one per episode, as mismatched as the report described. */
+	const library = () =>
+		WIRE.libraryEpisodes.map((episode) => libraryRow(episode.title, { hash: episode.hash }));
+
+	it('reads twelve mismatched episode releases as the whole season, held loose', () => {
+		expect(
+			getSeasonCoverage(library(), {
+				season: WIRE.season,
+				showTitle: WIRE.show,
+				servicePrefix: 'rd',
+			})
+		).toEqual({ hasPack: false, episodes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] });
+	});
+
+	it('offers a cached pack even though no episode is missing', () => {
+		const entry = planSeason({
+			season: WIRE.season,
+			expectedEpisodeCount: counts[WIRE.season],
+			episodeCounts: counts,
+			coverage: getSeasonCoverage(library(), {
+				season: WIRE.season,
+				showTitle: WIRE.show,
+				servicePrefix: 'rd',
+			}),
+			packCandidates: cachedPacks(),
+			episodeCandidates: new Map(),
+		});
+
+		expect(entry.status).toBe('pack');
+		expect(entry.addCount).toBe(1);
+		// Nothing is missing - the pack is an upgrade, not a repair.
+		expect(entry.missingEpisodes).toEqual([]);
+	});
+
+	it('reports the season as an upgrade, so the confirmation can say the episodes stay', () => {
+		const entry = planSeason({
+			season: WIRE.season,
+			expectedEpisodeCount: counts[WIRE.season],
+			episodeCounts: counts,
+			coverage: getSeasonCoverage(library(), {
+				season: WIRE.season,
+				showTitle: WIRE.show,
+				servicePrefix: 'rd',
+			}),
+			packCandidates: cachedPacks(),
+			episodeCandidates: new Map(),
+		});
+
+		const summary = summarisePlan([entry]);
+		expect(summary.upgrades).toHaveLength(1);
+		expect(summary.packs).toHaveLength(1);
+		expect(summary.held).toHaveLength(0);
+		expect(summary.totalAddCount).toBe(1);
+	});
+
+	it('does not call a season with real gaps an upgrade', () => {
+		// The same season, three episodes short of what the library holds.
+		const partial = library().slice(0, 9);
+		const entry = planSeason({
+			season: WIRE.season,
+			expectedEpisodeCount: counts[WIRE.season],
+			episodeCounts: counts,
+			coverage: getSeasonCoverage(partial, {
+				season: WIRE.season,
+				showTitle: WIRE.show,
+				servicePrefix: 'rd',
+			}),
+			packCandidates: cachedPacks(),
+			episodeCandidates: new Map(),
+		});
+
+		expect(entry.status).toBe('pack');
+		expect(entry.missingEpisodes).toEqual([10, 11, 12]);
+		expect(summarisePlan([entry]).upgrades).toHaveLength(0);
+	});
+
+	it('leaves the season held when nothing cached is a complete pack', () => {
+		const entry = planSeason({
+			season: WIRE.season,
+			expectedEpisodeCount: counts[WIRE.season],
+			episodeCounts: counts,
+			coverage: getSeasonCoverage(library(), {
+				season: WIRE.season,
+				showTitle: WIRE.show,
+				servicePrefix: 'rd',
+			}),
+			packCandidates: [],
+			episodeCandidates: new Map(),
+		});
+
+		expect(entry.status).toBe('held');
+		expect(entry.addCount).toBe(0);
 	});
 });

@@ -162,6 +162,58 @@ describe('useSeasonPackAdder', () => {
 		expect(plan!.summary.totalAddCount).toBe(2);
 	});
 
+	it('offers a pack to a season the library holds complete as loose episodes', async () => {
+		// The library that prompted this: an old *arr filled season two one
+		// episode at a time, from whatever it could find, so the season is
+		// complete and mismatched at once. It used to report as held and never
+		// see the pack that would make it consistent.
+		const looseSeasonTwo = [
+			'The.Wire.S02E01.1080p.WEBRip.H264-TARS',
+			'The Wire S02E02 720p WEBRip H264-TARS',
+			'The Wire S02E03 1080p',
+			'The Wire S02E04 1080p.ts',
+			'The.Wire.S02E05.1080p.WEBRip.H264-TARS[brassetv]',
+			'The.Wire.S02E06.720p.HDTV.x264-BATV[rarbg]',
+			'The.Wire.S02E07.1080p.WEBRip.H264-TARS',
+			'The Wire S02E08 720p WEBRip H264-TARS',
+			'The Wire S02E09 1080p.ts',
+			'The Wire S02E10 1080p [Timati]',
+		].map((name) => libraryRow(name));
+
+		respondWith({
+			packs: {
+				1: [],
+				2: [candidate(hash('b'), 'The.Wire.S02.1080p', 10)],
+				3: [],
+			},
+		});
+		const { result } = render(looseSeasonTwo);
+
+		let plan: SeasonAdderPlan | null = null;
+		await act(async () => {
+			plan = await result.current.discover('rd', null);
+		});
+
+		expect(plan!.entries[1].status).toBe('pack');
+		expect(plan!.entries[1].coverage).toEqual({
+			hasPack: false,
+			episodes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+		});
+		// Nothing is missing, so the pack is an upgrade the confirmation names
+		// apart from the seasons that were actually short.
+		expect(plan!.entries[1].missingEpisodes).toEqual([]);
+		expect(plan!.summary.upgrades).toHaveLength(1);
+
+		await act(async () => {
+			await result.current.run(plan!, false);
+		});
+
+		// One add, and the ten episodes it duplicates are left exactly as they
+		// were - the run has no way to remove anything at all.
+		expect(addRd).toHaveBeenCalledTimes(1);
+		expect(addRd.mock.calls[0][0]).toBe(hash('b'));
+	});
+
 	it('asks for episodes only for the seasons with no usable pack', async () => {
 		respondWith({
 			packs: {

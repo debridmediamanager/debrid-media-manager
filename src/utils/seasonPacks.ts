@@ -28,7 +28,11 @@ import type { ParsedShow } from '@ctrl/video-filename-parser';
 
 /** A season's state once the library and the cached candidates are both known. */
 export type SeasonPlanStatus =
-	/** Already covered by a pack (or a multi-season pack) in the library. */
+	/**
+	 * Nothing better to offer: the library already holds a pack (or a
+	 * multi-season pack), or it holds every episode loose and no cached release
+	 * is a complete pack.
+	 */
 	| 'held'
 	/** A cached pack will be added, whether or not loose episodes are held. */
 	| 'pack'
@@ -242,10 +246,23 @@ export function missingEpisodesFor(
 
 /**
  * The per-season decision, in the order the user asked for it: a cached pack
- * beats loose episodes even when some episodes are already held, because it is
- * one add rather than ten and the window above already treats a pack that is
- * one episode short as the season. Only when no pack is cached does the run
- * fall back to filling the gaps episode by episode.
+ * beats loose episodes, because it is one add rather than ten and the window
+ * above already treats a pack that is one episode short as the season. Only
+ * when no pack is cached does the run fall back to filling the gaps episode by
+ * episode.
+ *
+ * The pack is preferred whether or not anything is actually missing. A library
+ * that old *arr setups filled one episode at a time is complete and mismatched
+ * at once - a remux here, a 720p WEBRip there - and testing for missing
+ * episodes first meant those seasons were reported as held and never offered
+ * the pack that would make them consistent. What the library already holds is
+ * left alone: preferring a pack adds one release, it never removes the
+ * episodes it duplicates, so a season keeps both until its owner decides
+ * otherwise.
+ *
+ * A season already covered by a pack stays held. Size is the only signal the
+ * index ranks on, so "a better pack" could only ever mean a bigger one, which
+ * is not what consistency means.
  */
 export function planSeason({
 	season,
@@ -281,18 +298,6 @@ export function planSeason({
 		};
 	}
 
-	if (missingEpisodes.length === 0) {
-		// Every episode is held individually - the season is complete without a
-		// pack, so adding one would only duplicate it.
-		return {
-			...base,
-			status: 'held',
-			packCandidates: [],
-			episodeCandidates: new Map(),
-			addCount: 0,
-		};
-	}
-
 	const counts = episodeCounts ?? { [season]: expectedEpisodeCount };
 	const packs = packCandidates.filter((candidate) => {
 		if (candidate.videoCount === undefined) return false;
@@ -308,6 +313,18 @@ export function planSeason({
 			packCandidates: packs,
 			episodeCandidates: new Map(),
 			addCount: 1,
+		};
+	}
+
+	if (missingEpisodes.length === 0) {
+		// Complete episode by episode, and nothing cached is a pack - so there is
+		// nothing better to offer and the loose episodes stay as they are.
+		return {
+			...base,
+			status: 'held',
+			packCandidates: [],
+			episodeCandidates: new Map(),
+			addCount: 0,
 		};
 	}
 
@@ -347,6 +364,14 @@ export function planSeason({
 export function summarisePlan(entries: SeasonPlanEntry[]) {
 	const held = entries.filter((e) => e.status === 'held');
 	const packs = entries.filter((e) => e.status === 'pack');
+	/**
+	 * Seasons the library already holds in full, one episode at a time, that are
+	 * getting a pack anyway. They used to be reported as held and skipped, so
+	 * the confirmation has to name them rather than fold them in with the
+	 * seasons that were actually missing: nothing is deleted, and their owner is
+	 * about to hold the pack and the episodes at once.
+	 */
+	const upgrades = packs.filter((e) => e.missingEpisodes.length === 0);
 	const episodes = entries.filter((e) => e.status === 'episodes');
 	const gaps = entries.filter((e) => e.status === 'gap');
 	const distinctPackHashes = new Set(
@@ -356,6 +381,7 @@ export function summarisePlan(entries: SeasonPlanEntry[]) {
 	return {
 		held,
 		packs,
+		upgrades,
 		episodes,
 		gaps,
 		episodeAddCount,
