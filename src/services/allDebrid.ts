@@ -473,7 +473,10 @@ export const getMagnetStatus = async (
 			throw new Error(response.data.error?.message || 'Unknown error');
 		}
 
-		// v4.1 status endpoint includes files in the response
+		// The list form of /v4.1/magnet/status carries NO files — measured 0 of 44 magnets
+		// on 2026-09-02, and again a month earlier. Only the single-id form embeds them
+		// inline (see getMagnetStatusAd). The loop below is therefore a no-op on this path
+		// and is kept for the single-id branch and for older response shapes.
 		const magnets = response.data.data!.magnets;
 		const durationMs = Date.now() - requestStartedAt;
 		console.log('[AllDebridAPI] getMagnetStatus success', {

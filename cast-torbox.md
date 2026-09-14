@@ -1,5 +1,20 @@
 # DMM Cast for TorBox - Implementation Plan
 
+> **Historical plan. Three rows of the comparison table below are stale — corrected inline
+> and listed here so nobody has to spot them.**
+>
+> - **RD's cached check does not exist.** `GET /torrents/instantAvailability/{hash}` has been
+>   **disabled since 2024-11-22** (`error_code` 37) and nothing replaced it. Real-Debrid has
+>   no cache probe.
+> - **"RD: 1 req/500ms" understates the limit and hides the ones that matter.** RD documents
+>   **250 req/min**, which is 1 per 240 ms. More importantly a single global figure is not
+>   safe here at all: `/unrestrict/link` needs **≥5 s** spacing and `addMagnet` about **20 s**,
+>   both undocumented and both far tighter than any per-minute budget. 500 ms breaches both.
+> - **The colour scheme here disagrees with `cast-alldebrid.md`.** Both are superseded by
+>   `AGENTS.md`: RD green `#b5d496`, AD amber `#fbc730`, TB indigo `#4f46e5`.
+>
+> The architecture sections below are still accurate and are why this file is kept.
+
 ## Overview
 
 This document outlines a comprehensive plan to create "DMM Cast for TorBox" - a Stremio addon system for TorBox users, similar to the existing DMM Cast for Real-Debrid. The implementation will maintain complete separation from the Real-Debrid version while reusing shared patterns and components where appropriate.
@@ -14,11 +29,11 @@ This document outlines a comprehensive plan to create "DMM Cast for TorBox" - a 
 | Link Generation  | `POST /unrestrict/link`                                   | `GET /torrents/requestdl?token=&torrent_id=&file_id=`      |
 | File Selection   | Required: `POST /torrents/selectFiles/{id}`               | Not needed - TorBox downloads all files automatically      |
 | User Info        | `GET /user` returns `username`                            | `GET /user/me` returns `email` (use email hash for userId) |
-| Rate Limits      | 1 req/500ms                                               | 5 req/sec (more generous)                                  |
+| Rate Limits      | 250 req/min; unrestrict ≥5s, addMagnet ~20s               | 5 req/sec (more generous)                                  |
 | Permalinks       | Not available                                             | Supported via `?redirect=true`                             |
 | Torrent Creation | `POST /torrents/addMagnet`                                | `POST /torrents/createtorrent`                             |
 | Torrent Deletion | `DELETE /torrents/delete/{id}`                            | `POST /torrents/controltorrent` with `operation: 'delete'` |
-| Cached Check     | `GET /torrents/instantAvailability/{hash}`                | `GET /torrents/checkcached?hash=`                          |
+| Cached Check     | None — `instantAvailability` disabled since 2024-11-22    | `GET /torrents/checkcached?hash=`                          |
 
 ---
 

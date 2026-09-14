@@ -1,5 +1,28 @@
 # DMM Cast for AllDebrid - Implementation Plan
 
+> **Historical plan. Four rows of the comparison table below are stale — corrected inline
+> and listed here so nobody has to spot them.**
+>
+> - **RD's cached check does not exist.** `GET /torrents/instantAvailability` has been
+>   **disabled since 2024-11-22** (`error_code` 37) and nothing replaced it.
+> - **"RD: 1 req/500ms" understates the limit and hides the ones that matter.** RD documents
+>   **250 req/min** (1 per 240 ms), and a single global figure is not safe here regardless:
+>   `/unrestrict/link` needs **≥5 s** spacing and `addMagnet` about **20 s**, both
+>   undocumented, both far tighter than any per-minute budget.
+> - **AllDebrid's "12 req/sec, 600 req/min" are the documented figures and they contradict
+>   each other** (12/s is 720/min). Measured: authenticated bursts well above 12/s are
+>   tolerated, the per-minute budget is what binds, and the throttle answers **503 with an
+>   empty `text/html` body** — never the documented 429.
+> - **The colour scheme here disagrees with `cast-torbox.md`.** Both are superseded by
+>   `AGENTS.md`: RD green `#b5d496`, AD amber `#fbc730`, TB indigo `#4f46e5`.
+>
+> One row worth reading twice rather than correcting: **AllDebrid's cache probe _is_ the
+> upload.** There is no non-mutating probe left — `/magnet/instant` 404s and v4
+> `/magnet/status` is discontinued — so a miss has to be deleted again afterwards or
+> AllDebrid downloads it. `services/allDebrid.ts` already documents this at `isAdMagnetInstant`.
+>
+> The architecture sections below are still accurate and are why this file is kept.
+
 ## Overview
 
 This document outlines a comprehensive plan to create "DMM Cast for AllDebrid" - a Stremio addon system for AllDebrid users, following the same architecture as DMM Cast for Real-Debrid and TorBox. The implementation will maintain complete separation while reusing shared patterns.
@@ -8,19 +31,19 @@ This document outlines a comprehensive plan to create "DMM Cast for AllDebrid" -
 
 ## Key Differences: AllDebrid vs Real-Debrid vs TorBox
 
-| Feature         | Real-Debrid                         | TorBox                          | AllDebrid                         |
-| --------------- | ----------------------------------- | ------------------------------- | --------------------------------- |
-| Authentication  | OAuth (4 tokens)                    | Simple API Key                  | PIN-based flow → API Key          |
-| User ID Source  | Username                            | Email                           | Username                          |
-| Link Generation | `POST /unrestrict/link`             | `GET /torrents/requestdl`       | Links in `/magnet/files` response |
-| File Selection  | Required                            | Not needed                      | Not needed                        |
-| Rate Limits     | 1 req/500ms                         | 5 req/sec                       | 12 req/sec, 600 req/min           |
-| Permalinks      | No                                  | Yes (`?redirect=true`)          | No (links expire)                 |
-| Magnet Upload   | `POST /torrents/addMagnet`          | `POST /torrents/createtorrent`  | `POST /magnet/upload`             |
-| Magnet Status   | `GET /torrents/info/{id}`           | `GET /torrents/mylist?id=`      | `POST /v4.1/magnet/status`        |
-| Magnet Delete   | `DELETE /torrents/delete/{id}`      | `POST /torrents/controltorrent` | `POST /magnet/delete`             |
-| Cached Check    | `GET /torrents/instantAvailability` | `GET /torrents/checkcached`     | `ready` field in upload response  |
-| Files Structure | Flat array                          | Flat array                      | Nested tree (folders)             |
+| Feature         | Real-Debrid                      | TorBox                          | AllDebrid                             |
+| --------------- | -------------------------------- | ------------------------------- | ------------------------------------- |
+| Authentication  | OAuth (4 tokens)                 | Simple API Key                  | PIN-based flow → API Key              |
+| User ID Source  | Username                         | Email                           | Username                              |
+| Link Generation | `POST /unrestrict/link`          | `GET /torrents/requestdl`       | Links in `/magnet/files` response     |
+| File Selection  | Required                         | Not needed                      | Not needed                            |
+| Rate Limits     | 250 req/min; unrestrict ≥5s      | 5 req/sec                       | 600 req/min binds; throttle is 503    |
+| Permalinks      | No                               | Yes (`?redirect=true`)          | No (links expire)                     |
+| Magnet Upload   | `POST /torrents/addMagnet`       | `POST /torrents/createtorrent`  | `POST /magnet/upload`                 |
+| Magnet Status   | `GET /torrents/info/{id}`        | `GET /torrents/mylist?id=`      | `POST /v4.1/magnet/status`            |
+| Magnet Delete   | `DELETE /torrents/delete/{id}`   | `POST /torrents/controltorrent` | `POST /magnet/delete`                 |
+| Cached Check    | None — disabled since 2024-11-22 | `GET /torrents/checkcached`     | `ready` on upload — the probe mutates |
+| Files Structure | Flat array                       | Flat array                      | Nested tree (folders)                 |
 
 ---
 
