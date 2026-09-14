@@ -1,13 +1,15 @@
 import handler from '@/pages/api/stremio/cast/saveProfile';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { signSponsorToken } from '@/utils/sponsorToken';
+import { activeSponsor, sponsorshipLapsed } from '@/test/utils/sponsor';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { mockGetToken, mockGenerateUserId, mockSaveCastProfile } = vi.hoisted(() => ({
-	mockGetToken: vi.fn(),
-	mockGenerateUserId: vi.fn(),
-	mockSaveCastProfile: vi.fn(),
-}));
+const { mockGetToken, mockGenerateUserId, mockSaveCastProfile, mockGetSponsorByShortId } =
+	vi.hoisted(() => ({
+		mockGetToken: vi.fn(),
+		mockGenerateUserId: vi.fn(),
+		mockSaveCastProfile: vi.fn(),
+		mockGetSponsorByShortId: vi.fn(),
+	}));
 
 vi.mock('@/services/realDebrid', () => ({
 	getToken: mockGetToken,
@@ -20,6 +22,9 @@ vi.mock('@/utils/castApiHelpers', () => ({
 vi.mock('@/services/repository', () => ({
 	repository: {
 		saveCastProfile: mockSaveCastProfile,
+		// The sponsor gate re-reads the row behind the token, so this endpoint
+		// reaches the repository even when it is only widening a limit.
+		getSponsorByShortId: mockGetSponsorByShortId,
 	},
 }));
 
@@ -218,14 +223,8 @@ describe('/api/stremio/cast/saveProfile', () => {
 			delete process.env.DMM_SPONSOR_SECRET;
 		});
 
-		const sponsorToken = () =>
-			signSponsorToken({
-				shortId: 'ZP1M',
-				githubUsername: 'someone',
-				sources: ['github'],
-				keyVersion: 1,
-				exp: Date.now() + 3_600_000,
-			});
+		// Mints the token *and* seeds the live row it names — the gate needs both.
+		const sponsorToken = () => activeSponsor();
 
 		const save = (otherStreamsLimit: number, headers: Record<string, string> = {}) =>
 			createMockRequest({
@@ -278,6 +277,23 @@ describe('/api/stremio/cast/saveProfile', () => {
 			const res = createMockResponse();
 			await handler(save(3, { 'x-dmm-sponsor': sponsorToken() }), res);
 			expect(res.status).toHaveBeenCalledWith(200);
+		});
+
+		// The regression: a token minted while the pledge was live stays signed and
+		// unexpired for up to a week after gatekeeper zeroes the row, so trusting the
+		// signature alone kept the raised ceiling for that whole window.
+		it('refuses 10 once the sponsorship behind the token has lapsed', async () => {
+			const token = sponsorToken();
+			sponsorshipLapsed();
+
+			const res = createMockResponse();
+			await handler(save(10, { 'x-dmm-sponsor': token }), res);
+
+			expect(res.status).toHaveBeenCalledWith(400);
+			expect(res.json).toHaveBeenCalledWith({
+				error: 'otherStreamsLimit must be an integer between 0 and 5',
+			});
+			expect(mockSaveCastProfile).not.toHaveBeenCalled();
 		});
 	});
 

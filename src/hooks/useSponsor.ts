@@ -31,8 +31,8 @@ interface SponsorClaims {
  * Reads the token payload without checking the signature.
  *
  * Deliberately browser-only - it never imports the server's crypto helpers, so
- * node:crypto stays out of the client bundle. Cosmetics only; the signature is
- * checked server-side by requireSponsor.
+ * node:crypto stays out of the client bundle. Cosmetics only; requireSponsor
+ * checks the signature server-side and re-reads the sponsorship behind it.
  */
 export function decodeSponsorClaims(token: string | null): SponsorClaims | null {
 	if (!token) return null;

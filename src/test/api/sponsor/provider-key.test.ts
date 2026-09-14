@@ -2,7 +2,7 @@ import handler from '@/pages/api/sponsor/provider-key';
 import { repository } from '@/services/repository';
 import { ProviderProbeError } from '@/services/torznab/providerCache';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { signSponsorToken } from '@/utils/sponsorToken';
+import { activeSponsor, sponsorshipLapsed } from '@/test/utils/sponsor';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -21,14 +21,9 @@ vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => {
 const SHORT_ID = 'ZP1M';
 const TB_KEY = 'tb-' + 'k'.repeat(30);
 
+/** Mints the token *and* seeds the live row it names — the gate needs both. */
 function token() {
-	return signSponsorToken({
-		shortId: SHORT_ID,
-		githubUsername: 'someone',
-		sources: ['github'],
-		keyVersion: 1,
-		exp: Date.now() + 3_600_000,
-	});
+	return activeSponsor({ shortId: SHORT_ID });
 }
 
 /** `_getData` is whatever was handed to `json` or `send`. */
@@ -54,6 +49,7 @@ beforeEach(() => {
 	vi.mocked(repository.listSponsorProviderKeys).mockResolvedValue([]);
 	vi.mocked(repository.setSponsorProviderKey).mockResolvedValue(undefined);
 	vi.mocked(repository.removeSponsorProviderKey).mockResolvedValue(true);
+	activeSponsor({ shortId: SHORT_ID });
 });
 
 afterEach(() => {
@@ -145,5 +141,43 @@ describe('/api/sponsor/provider-key', () => {
 		const res = await call('PUT', { service: 'tb', apiKey: TB_KEY });
 
 		expect(res._getStatusCode()).toBe(405);
+	});
+
+	// The regression. A token minted while the pledge was live stays signed and
+	// unexpired for up to SPONSOR_TOKEN_TTL_SECONDS after gatekeeper's sync zeroes
+	// the row, so checking only the signature let a lapsed sponsor keep storing
+	// provider credentials for a week after they stopped paying.
+	it('refuses a caller whose sponsorship has lapsed since the token was minted', async () => {
+		const req = createMockRequest({
+			method: 'POST',
+			body: { service: 'tb', apiKey: TB_KEY },
+			headers: { 'x-dmm-sponsor': token() },
+		});
+		sponsorshipLapsed(SHORT_ID);
+
+		const res = createMockResponse();
+		await handler(req as never, res as never);
+
+		expect(res._getStatusCode()).toBe(401);
+		expect(json(res)).toEqual({ error: 'Sponsorship is no longer active' });
+		expect(repository.setSponsorProviderKey).not.toHaveBeenCalled();
+		expect(validateMock).not.toHaveBeenCalled();
+	});
+
+	// A lookup we could not perform is not a sponsorship that ended: telling an
+	// active sponsor their pledge lapsed sends them back to gatekeeper for a key
+	// that is already fine.
+	it('answers 503 when the sponsorship cannot be read', async () => {
+		const req = createMockRequest({
+			method: 'GET',
+			headers: { 'x-dmm-sponsor': token() },
+		});
+		vi.mocked(repository.getSponsorByShortId).mockRejectedValue(new Error('db down'));
+
+		const res = createMockResponse();
+		await handler(req as never, res as never);
+
+		expect(res._getStatusCode()).toBe(503);
+		expect(repository.listSponsorProviderKeys).not.toHaveBeenCalled();
 	});
 });

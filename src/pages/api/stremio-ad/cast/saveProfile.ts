@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	if (otherStreamsLimit !== undefined) {
 		// Sponsors may raise this; everyone else stays at the standard ceiling.
-		const maxLimit = maxOtherStreamsLimit(isSponsorRequest(req));
+		const maxLimit = maxOtherStreamsLimit(await isSponsorRequest(req));
 		const limit = Number(otherStreamsLimit);
 		if (!Number.isInteger(limit) || limit < 0 || limit > maxLimit) {
 			res.status(400).json({

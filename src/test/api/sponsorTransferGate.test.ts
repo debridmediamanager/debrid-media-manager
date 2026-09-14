@@ -3,6 +3,7 @@ import nzbHandler from '@/pages/api/nzb2rd/jobs';
 import { fetchNzb, submitNzb } from '@/services/nzb2rd';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { activeSponsor, sponsorshipLapsed } from '@/test/utils/sponsor';
 import { signSponsorToken } from '@/utils/sponsorToken';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -20,14 +21,9 @@ const mockRepo = vi.mocked(repository);
 const mockSubmit = vi.mocked(submitNzb);
 const HASH = 'a'.repeat(40);
 
+/** Mints the token *and* seeds the live row it names — the gate needs both. */
 function sponsorToken(): string {
-	return signSponsorToken({
-		shortId: 'ZP1M',
-		githubUsername: 'someone',
-		sources: ['github'],
-		keyVersion: 1,
-		exp: Date.now() + 3_600_000,
-	});
+	return activeSponsor();
 }
 
 beforeEach(() => {
@@ -94,6 +90,16 @@ describe('usenet→RD carries a verified sponsorship, never a claimed one', () =
 		await runNzb({ 'x-dmm-sponsor': expired });
 		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ priority: false }));
 	});
+
+	// The regression: the token outlives the pledge by up to a week, so a signature
+	// check alone kept handing a lapsed sponsor the priority tier for that window.
+	it('does not once the sponsorship behind a still-valid token has lapsed', async () => {
+		const token = sponsorToken();
+		sponsorshipLapsed();
+
+		await runNzb({ 'x-dmm-sponsor': token });
+		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ priority: false }));
+	});
 });
 
 describe('debrid→RD carries a verified sponsorship, never a claimed one', () => {
@@ -129,6 +135,16 @@ describe('debrid→RD carries a verified sponsorship, never a claimed one', () =
 	it('does not on a forged token', async () => {
 		const [payload] = sponsorToken().split('.');
 		const fetchMock = await runDebrid({ 'x-dmm-sponsor': `${payload}.forged` });
+		const call = fetchMock.mock.calls.find(([url]) => String(url).endsWith('/jobs'));
+		expect(JSON.parse(call![1].body).sponsor).toBe(false);
+	});
+
+	// Same regression on the uploader's raised job ceiling.
+	it('does not once the sponsorship behind a still-valid token has lapsed', async () => {
+		const token = sponsorToken();
+		sponsorshipLapsed();
+
+		const fetchMock = await runDebrid({ 'x-dmm-sponsor': token });
 		const call = fetchMock.mock.calls.find(([url]) => String(url).endsWith('/jobs'));
 		expect(JSON.parse(call![1].body).sponsor).toBe(false);
 	});

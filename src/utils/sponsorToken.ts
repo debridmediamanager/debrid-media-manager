@@ -14,9 +14,9 @@ export interface SponsorTokenPayload {
 	sources: SponsorSource[];
 	/**
 	 * `Sponsors.dmmApiKeyVersion` at mint time. gatekeeper's Reset API Key button
-	 * bumps it, so a refresh that finds a different version knows the key it was
-	 * minted from has been revoked. Without this, Reset would revoke the key but
-	 * not the tokens already issued from it.
+	 * bumps it, so a request or refresh that finds a different version knows the
+	 * key it was minted from has been revoked. Without this, Reset would revoke
+	 * the key but not the tokens already issued from it.
 	 */
 	keyVersion: number;
 	/** Expiry, epoch milliseconds. */
@@ -26,10 +26,12 @@ export interface SponsorTokenPayload {
 /**
  * How long a minted token stays valid.
  *
- * This doubles as the revocation window: dmm has no channel for gatekeeper to
- * push "this sponsorship lapsed", so a token that outlives the sponsorship is
- * the failure mode. Seven days keeps a lapsed sponsor's access short-lived
- * while still letting an active one go a week without re-authorising.
+ * This is not the revocation window. dmm has no channel for gatekeeper to push
+ * "this sponsorship lapsed", so entitlement is never read from the token: every
+ * gate in `requireSponsor` re-reads the row, and a pledge that ended stops
+ * buying anything on the next request whatever the token still says. What the
+ * TTL bounds is how long the client may go without re-authorising, and how
+ * stale the decorative badge in `useSponsor` can get.
  */
 export const SPONSOR_TOKEN_TTL_SECONDS = 7 * 24 * 60 * 60;
 

@@ -128,7 +128,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// Sponsor perk: a place in nzb2rd's priority tier. Verified here
 			// rather than trusted from the body — the browser only ever sends the
 			// signed token, and this is the one place that checks its signature.
-			priority: isSponsorRequest(req),
+			priority: await isSponsorRequest(req),
 		});
 		if (status < 300 && data?.id) {
 			await Promise.all([

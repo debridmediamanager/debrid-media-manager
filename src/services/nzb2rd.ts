@@ -614,9 +614,10 @@ export async function submitNzb(args: {
 	 * Admit the job to nzb2rd's priority tier — the sponsor perk.
 	 *
 	 * Only ever set from `isSponsorRequest`, which checks the HMAC on a token
-	 * this app minted. Never from anything the browser supplies directly: the
-	 * field nzb2rd reads is a bare boolean, so dmm vouching for it is the whole
-	 * verification.
+	 * this app minted and then re-reads the sponsorship behind it, so a pledge
+	 * that ended stops buying priority on the next submission. Never from
+	 * anything the browser supplies directly: the field nzb2rd reads is a bare
+	 * boolean, so dmm vouching for it is the whole verification.
 	 *
 	 * It reorders the wait; it buys no extra concurrency on that host.
 	 */

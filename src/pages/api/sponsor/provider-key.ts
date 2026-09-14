@@ -50,7 +50,7 @@ async function listFor(shortId: string): Promise<LinkedProviderResponse[]> {
 }
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const payload = requireSponsor(req, res);
+	const payload = await requireSponsor(req, res);
 	if (!payload) return;
 
 	if (req.method === 'GET') {
