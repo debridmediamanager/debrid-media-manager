@@ -136,6 +136,11 @@ describe('a sponsor asking for a release someone else already queued', () => {
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ promoted: true }));
 	});
 
+	// This one is not decoration. `isSponsorRequest` is async — it revalidates
+	// against the live sponsor row — and an unawaited call returns a promise,
+	// which is truthy, so a missing `await` promotes every caller instead of
+	// none. That exact slip shipped into review and this assertion is what
+	// caught it. `no-misused-promises` now catches the shape at lint time too.
 	it('leaves a non-sponsor where they are', async () => {
 		const res = await runNzb();
 

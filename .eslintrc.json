@@ -1,4 +1,22 @@
 {
 	"extends": "next/core-web-vitals",
+	"overrides": [
+		{
+			"files": ["**/*.ts", "**/*.tsx"],
+			"parser": "@typescript-eslint/parser",
+			"parserOptions": { "project": "./tsconfig.json" },
+			"plugins": ["@typescript-eslint"],
+			"rules": {
+				"@typescript-eslint/no-misused-promises": [
+					"error",
+					{
+						"checksConditionals": true,
+						"checksVoidReturn": false,
+						"checksSpreads": false
+					}
+				]
+			}
+		}
+	],
 	"root": true
 }
