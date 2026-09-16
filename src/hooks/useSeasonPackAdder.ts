@@ -1,5 +1,5 @@
 import type { FileData, SearchResult } from '@/services/mediasearch';
-import { hasRecentRdRateLimits } from '@/services/realDebrid';
+import { isRdThrottling } from '@/services/realDebrid';
 import { checkCachedStatus } from '@/services/torbox';
 import type { UserTorrent } from '@/torrent/userTorrent';
 import { runConcurrentFunctions } from '@/utils/batch';
@@ -419,8 +419,11 @@ export function useSeasonPackAdder({
 					return true;
 				}
 				// `addRd` returns false for every failure, so the reason is gone by
-				// now; a throttled add always records a rate limit on its way out.
-				if (hasRecentRdRateLimits()) consecutiveThrottles++;
+				// now; `isRdThrottling` is what separates RD refusing everything
+				// from RD refusing this release. Only the first ends a run — two
+				// releases RD will not accept are a reason to try the next
+				// candidate, not to stop adding seasons.
+				if (isRdThrottling()) consecutiveThrottles++;
 				return false;
 			};
 

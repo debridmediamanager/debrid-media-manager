@@ -9,6 +9,8 @@ import {
 	addHashAsMagnet,
 	addTorrentFile,
 	getTorrentInfo,
+	isRdThrottling,
+	recordRdRateLimit,
 	selectFiles,
 } from '@/services/realDebrid';
 import { createTorrent, getTorrentList } from '@/services/torbox';
@@ -129,10 +131,19 @@ describe('addMagnet utilities', () => {
 		// of a 429, so nothing else in the stack sees it as rate limiting.
 		// Measured 2026-08-28 on a season page's own hashes: eight consecutive
 		// adds all answered 451 with no 429 anywhere, and every one of them was
-		// accepted 201 after the account went quiet. Reporting the raw status
-		// told users RD had started blocking remuxes; the whole-season button
-		// looked like it worked only because it walks several candidates and one
-		// of them lands in a gap.
+		// accepted 201 after the account went quiet.
+		//
+		// The burst is the whole of that story, though, and treating every clean
+		// name as one is what produced the 2026-09-16 bug report. Measured
+		// 2026-09-17: 37 of 48 real search-result hashes were refused 451 on a
+		// quiet account at 30s spacing, 22 of the 23 re-tested were refused again
+		// from another account on another host, and `isRdBlockedName` recognised
+		// only 15 of the 37 because RD reads the paths inside the torrent and a
+		// search row usually carries no file list at all. In production that day
+		// 28.6% of first-attempt browser adds came back 451 against 7.5% 429, and
+		// the 515 users who added once or twice all day took 51 of those 451s and
+		// not a single 429. So the throttle branch needs evidence of a throttle,
+		// not merely the absence of evidence of a block.
 		describe('451 infringing_file: throttle vs blocked name', () => {
 			const infringing = () => {
 				const error = new AxiosError('Infringing content');
@@ -151,7 +162,51 @@ describe('addMagnet utilities', () => {
 				links: [],
 			} as any;
 
-			it('replays a 451 on a name RD does not block, and succeeds', async () => {
+			// The reported bug. One add, nothing else going on, and RD refuses it:
+			// dmm used to answer "RD is throttling adds", sit through two
+			// twenty-second backoffs and then tell the user to come back in a
+			// minute. Coming back never helped — the release is refused, every
+			// time, from any account.
+			it('refuses a lone 451 outright instead of blaming a throttle', async () => {
+				vi.mocked(isRdThrottling).mockReturnValue(false);
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				const result = await handleAddAsMagnetInRd(
+					rdKey,
+					hash,
+					undefined,
+					false,
+					0,
+					false,
+					CLEAN_TITLE
+				);
+
+				expect(result).toBe('infringing_file');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
+				expect(toast.error).toHaveBeenCalledWith(
+					'Real-Debrid will not accept this release. Try a different one.',
+					expect.any(Object)
+				);
+				expect(toast.error).not.toHaveBeenCalledWith(
+					expect.stringContaining('throttling'),
+					expect.any(Object)
+				);
+			});
+
+			// A refusal is not a rate limit, and recording one as such made every
+			// other row in the next 30 seconds report a throttle that was not
+			// happening — and ended an All Seasons run after two of them.
+			it('does not record a rate limit for a release RD simply refuses', async () => {
+				vi.mocked(isRdThrottling).mockReturnValue(false);
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				await handleAddAsMagnetInRd(rdKey, hash, undefined, false, 0, false, CLEAN_TITLE);
+
+				expect(recordRdRateLimit).not.toHaveBeenCalled();
+			});
+
+			it('still replays a 451 while RD really is throttling', async () => {
+				vi.mocked(isRdThrottling).mockReturnValue(true);
 				vi.mocked(addHashAsMagnet)
 					.mockRejectedValueOnce(infringing())
 					.mockResolvedValueOnce('torrent-456');
@@ -180,7 +235,8 @@ describe('addMagnet utilities', () => {
 				);
 			});
 
-			it('gives up as an error, never as infringing_file', async () => {
+			it('gives up a throttled add as an error, never as infringing_file', async () => {
+				vi.mocked(isRdThrottling).mockReturnValue(true);
 				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
 
 				const result = await handleAddAsMagnetInRd(
@@ -204,6 +260,7 @@ describe('addMagnet utilities', () => {
 			});
 
 			it('takes the same branch when the caller knows no title', async () => {
+				vi.mocked(isRdThrottling).mockReturnValue(true);
 				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
 
 				const result = await handleAddAsMagnetInRd(rdKey, hash);
@@ -215,6 +272,7 @@ describe('addMagnet utilities', () => {
 			// An availability sweep is itself the burst that earns the penalty,
 			// so stalling 20s a row would slow it down without helping.
 			it('does not replay during a silent availability check', async () => {
+				vi.mocked(isRdThrottling).mockReturnValue(true);
 				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
 
 				const result = await handleAddAsMagnetInRd(
@@ -228,6 +286,27 @@ describe('addMagnet utilities', () => {
 				);
 
 				expect(result).toBe('error');
+				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
+				expect(toast.error).not.toHaveBeenCalled();
+			});
+
+			// Off a burst the same silent probe has an answer rather than a
+			// missing one, and says so without a toast of its own.
+			it('reports a refusal from a silent probe that was not bursting', async () => {
+				vi.mocked(isRdThrottling).mockReturnValue(false);
+				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
+
+				const result = await handleAddAsMagnetInRd(
+					rdKey,
+					hash,
+					undefined,
+					false,
+					0,
+					true,
+					CLEAN_TITLE
+				);
+
+				expect(result).toBe('infringing_file');
 				expect(addHashAsMagnet).toHaveBeenCalledTimes(1);
 				expect(toast.error).not.toHaveBeenCalled();
 			});
@@ -279,6 +358,7 @@ describe('addMagnet utilities', () => {
 			});
 
 			it('still replays when the filenames are as clean as the title', async () => {
+				vi.mocked(isRdThrottling).mockReturnValue(true);
 				vi.mocked(addHashAsMagnet).mockRejectedValue(infringing());
 
 				const result = await handleAddAsMagnetInRd(

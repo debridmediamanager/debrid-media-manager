@@ -202,15 +202,15 @@ export function useTorrentManagement(
 			//
 			// A 451 `infringing_file` only counts as a rejection when the name is
 			// one RD actually blocks. RD returns that same status as a throttle
-			// penalty mid-burst — before it ever escalates to an honest 429, so
-			// `hasRecentRdRateLimits()` rarely sees the 429 that would excuse it —
-			// and a single "Check RD" sweep over a season page is exactly the
-			// burst that triggers it. Since a row here only exists because RD once
+			// penalty mid-burst — before it ever escalates to an honest 429 — and
+			// a single "Check RD" sweep over a season page is exactly the burst
+			// that triggers it. Since a row here only exists because RD once
 			// served the torrent at 100%, and the row is shared by every user,
 			// trusting the raw status evicted 285 working hashes in one day. The
-			// name is the deterministic test: a blocked one is refused on the
-			// first request, every time. An unknown title stays, on the same
-			// principle — no evidence is not evidence of a block.
+			// name stays the test that gates the eviction, even though
+			// `handleAddAsMagnetInRd` now reports an off-burst 451 as a refusal:
+			// telling one user "RD will not accept this" costs them a click,
+			// while evicting the row costs everybody the release.
 			const shouldRemoveAvailability =
 				addResult !== 'error' &&
 				(addResult === 'infringing_file'

@@ -16,7 +16,7 @@ const {
 	mockCheckCachedStatus,
 	mockCheckOffcloudCache,
 	mockDelay,
-	mockHasRecentRdRateLimits,
+	mockIsRdThrottling,
 	toastFunction,
 } = vi.hoisted(() => {
 	const loading = vi.fn().mockReturnValue('toast-id');
@@ -44,7 +44,7 @@ const {
 		mockCheckCachedStatus: vi.fn(),
 		mockCheckOffcloudCache: vi.fn(),
 		mockDelay: vi.fn(),
-		mockHasRecentRdRateLimits: vi.fn(),
+		mockIsRdThrottling: vi.fn(),
 		toastFunction: toastFn,
 	};
 });
@@ -85,7 +85,7 @@ vi.mock('@/services/offcloud', () => ({
 }));
 
 vi.mock('@/services/realDebrid', () => ({
-	hasRecentRdRateLimits: mockHasRecentRdRateLimits,
+	isRdThrottling: mockIsRdThrottling,
 }));
 
 // The sweep paces its RD probes; the suite runs on fake timers, so the real
@@ -159,8 +159,8 @@ describe('useAvailabilityCheck', () => {
 		mockCheckOffcloudCache.mockResolvedValue([]);
 		mockDelay.mockReset();
 		mockDelay.mockResolvedValue(undefined);
-		mockHasRecentRdRateLimits.mockReset();
-		mockHasRecentRdRateLimits.mockReturnValue(false);
+		mockIsRdThrottling.mockReset();
+		mockIsRdThrottling.mockReturnValue(false);
 		mockGenerateTokenAndHash.mockResolvedValue(['token', 'hash']);
 		mockCheckDatabaseAvailabilityRd.mockResolvedValue(undefined);
 		mockCheckDatabaseAvailabilityAd.mockResolvedValue(undefined);
@@ -522,7 +522,7 @@ describe('useAvailabilityCheck', () => {
 		it('widens the gap each time RD throttles', async () => {
 			searchResults = rows(4);
 			addRd.mockResolvedValue(null);
-			mockHasRecentRdRateLimits.mockReturnValue(true);
+			mockIsRdThrottling.mockReturnValue(true);
 			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
 
 			await act(async () => {
@@ -535,7 +535,7 @@ describe('useAvailabilityCheck', () => {
 		it('stops after five throttled rows instead of grinding out wrong answers', async () => {
 			searchResults = rows(9);
 			addRd.mockResolvedValue(null);
-			mockHasRecentRdRateLimits.mockReturnValue(true);
+			mockIsRdThrottling.mockReturnValue(true);
 			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
 
 			await act(async () => {
@@ -552,7 +552,7 @@ describe('useAvailabilityCheck', () => {
 		it('does not stop for probes RD actually answered', async () => {
 			searchResults = rows(9);
 			addRd.mockResolvedValue(null);
-			mockHasRecentRdRateLimits.mockReturnValue(false);
+			mockIsRdThrottling.mockReturnValue(false);
 			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
 
 			await act(async () => {
@@ -567,7 +567,7 @@ describe('useAvailabilityCheck', () => {
 
 		it('earns the gap back after a real answer', async () => {
 			searchResults = rows(4);
-			mockHasRecentRdRateLimits
+			mockIsRdThrottling
 				.mockReturnValueOnce(true)
 				.mockReturnValueOnce(true)
 				.mockReturnValue(false);
@@ -585,7 +585,7 @@ describe('useAvailabilityCheck', () => {
 		it('tells the single-row check apart from RD answering no', async () => {
 			searchResults = [createSearchResult()];
 			addRd.mockResolvedValue(null);
-			mockHasRecentRdRateLimits.mockReturnValue(true);
+			mockIsRdThrottling.mockReturnValue(true);
 			const { result } = renderAvailabilityHook({ adKey: null, torboxKey: null });
 
 			await act(async () => {

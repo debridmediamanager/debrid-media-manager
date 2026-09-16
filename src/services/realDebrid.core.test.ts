@@ -27,7 +27,12 @@ import {
 	getToken,
 	getTorrentInfo,
 	getUserTorrentsList,
+	hasRecentRdAddBurst,
+	isRdThrottling,
 	proxyUnrestrictLink,
+	RD_ADDS_PER_MINUTE,
+	recordRdRateLimit,
+	resetRdThrottleTracking,
 	selectFiles,
 	unrestrictLink,
 } from './realDebrid';
@@ -45,6 +50,7 @@ beforeEach(() => {
 	__testing.clearUserRequestCache();
 	__testing.resetTimeISOCache();
 	__testing.clearAccessTokenCache();
+	resetRdThrottleTracking();
 });
 
 describe('RealDebrid auth helpers', () => {
@@ -195,5 +201,60 @@ describe('RealDebrid time helpers', () => {
 		await expect(getTimeISO()).rejects.toThrow('fail');
 		await expect(getTimeISO()).resolves.toBe('ok');
 		expect(genericAxios.get).toHaveBeenCalledTimes(2);
+	});
+});
+
+// `addMagnet` has a budget of its own and it belongs to the account, not the
+// address. Measured 2026-09-17: bursting one test account from one host earned
+// `429 too_many_requests` after 25 to 31 adds and settled at about 30 accepted a
+// minute, while an idle token from that same address kept getting 201 (8 of 8)
+// and the burned token was refused from a different host (6 of 8). So dmm can
+// only stay inside it by adding more slowly, and it can only honestly blame a
+// throttle when it has been adding fast.
+describe('RealDebrid add budget', () => {
+	const hash = 'a'.repeat(40);
+
+	it('counts every add attempt, refusals included', async () => {
+		realAxios.post = vi.fn().mockRejectedValue(new Error('refused'));
+
+		expect(hasRecentRdAddBurst()).toBe(false);
+		for (let i = 0; i < RD_ADDS_PER_MINUTE - 1; i++) {
+			await expect(addHashAsMagnet('token', hash)).rejects.toThrow();
+		}
+		// One short of the budget is not yet a burst.
+		expect(hasRecentRdAddBurst()).toBe(false);
+
+		await expect(addHashAsMagnet('token', hash)).rejects.toThrow();
+		expect(hasRecentRdAddBurst()).toBe(true);
+	});
+
+	it('forgets adds older than the window', async () => {
+		vi.useFakeTimers();
+		try {
+			realAxios.post = vi.fn().mockResolvedValue({ status: 201, data: { id: 'x' } });
+			for (let i = 0; i < RD_ADDS_PER_MINUTE; i++) {
+				await addHashAsMagnet('token', hash);
+			}
+			expect(hasRecentRdAddBurst()).toBe(true);
+
+			vi.advanceTimersByTime(60_001);
+			expect(hasRecentRdAddBurst()).toBe(false);
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	// The whole point: a single add that RD refuses must not read as throttling.
+	it('is not throttling after one quiet add', async () => {
+		realAxios.post = vi.fn().mockRejectedValue(new Error('refused'));
+
+		await expect(addHashAsMagnet('token', hash)).rejects.toThrow();
+
+		expect(isRdThrottling()).toBe(false);
+	});
+
+	it('is throttling once RD has actually said so', () => {
+		recordRdRateLimit();
+		expect(isRdThrottling()).toBe(true);
 	});
 });

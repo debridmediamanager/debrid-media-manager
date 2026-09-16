@@ -4,16 +4,16 @@ import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSeasonPackAdder, type SeasonAdderPlan } from './useSeasonPackAdder';
 
-const { mockAxiosGet, mockCheckCachedStatus, mockHasRecentRdRateLimits } = vi.hoisted(() => ({
+const { mockAxiosGet, mockCheckCachedStatus, mockIsRdThrottling } = vi.hoisted(() => ({
 	mockAxiosGet: vi.fn(),
 	mockCheckCachedStatus: vi.fn(),
-	mockHasRecentRdRateLimits: vi.fn(() => false),
+	mockIsRdThrottling: vi.fn(() => false),
 }));
 
 vi.mock('axios', () => ({ default: { get: mockAxiosGet } }));
 vi.mock('@/services/torbox', () => ({ checkCachedStatus: mockCheckCachedStatus }));
 vi.mock('@/services/realDebrid', () => ({
-	hasRecentRdRateLimits: mockHasRecentRdRateLimits,
+	isRdThrottling: mockIsRdThrottling,
 }));
 vi.mock('@/utils/token', () => ({
 	generateTokenAndHash: vi.fn(async () => ['token-ts', 'token-hash']),
@@ -116,7 +116,7 @@ const respondWith = (script: {
 describe('useSeasonPackAdder', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockHasRecentRdRateLimits.mockReturnValue(false);
+		mockIsRdThrottling.mockReturnValue(false);
 		addRd = vi.fn(async () => true);
 		addTb = vi.fn(async () => undefined);
 	});
@@ -370,7 +370,7 @@ describe('useSeasonPackAdder', () => {
 			},
 		});
 		addRd.mockResolvedValue(false);
-		mockHasRecentRdRateLimits.mockReturnValue(true);
+		mockIsRdThrottling.mockReturnValue(true);
 		const { result } = render();
 
 		let plan: SeasonAdderPlan | null = null;

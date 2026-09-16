@@ -32,7 +32,7 @@ import {
 	addHashAsMagnet,
 	addTorrentFile,
 	getTorrentInfo,
-	hasRecentRdRateLimits,
+	isRdThrottling,
 	recordRdRateLimit,
 	selectFiles,
 } from '@/services/realDebrid';
@@ -94,16 +94,15 @@ const MAX_509_RETRIES = 5;
 // keeps us well under the burst budget.
 const BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 500;
 const TB_BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 1000;
-// RD answers `451 infringing_file` for two unrelated things: a filename it
-// blocks outright, and a throttle penalty during a burst of adds. The throttle
+// RD answers `451 infringing_file` for two unrelated things: a release it
+// refuses outright, and a throttle penalty during a burst of adds. The throttle
 // form arrives *instead of* a 429, so the 429 retry interceptor in
-// realDebrid.ts never engages and `hasRecentRdRateLimits()` stays false —
-// measured 2026-08-28, eight consecutive adds of one season's hashes all came
-// back 451 with no 429 anywhere in the burst, and the same hashes were accepted
-// 201 once the account went quiet. A blocked name is deterministic (refused on
-// request #1, every time) and `isRdBlockedName` is the test for it; anything
-// else answering 451 means slow down and re-probe after ~20s of quiet, which is
-// the spacing measured to take 6 adds out of 6.
+// realDebrid.ts never engages — measured 2026-08-28, eight consecutive adds of
+// one season's hashes all came back 451 with no 429 anywhere in the burst, and
+// the same hashes were accepted 201 once the account went quiet. Re-probing
+// after ~20s of quiet is what took 6 adds out of 6 there, so the backoff is
+// worth spending — but only on a burst. `isRdThrottling` is what says whether
+// there was one; see the 451 branch below for why the name cannot answer it.
 const RD_THROTTLE_BACKOFF = process.env.VITEST_WORKER_ID ? 0 : 20000;
 const MAX_THROTTLE_451_RETRIES = 2;
 
@@ -182,15 +181,33 @@ export const handleAddAsMagnetInRd = async (
 			'Error adding hash:',
 			error instanceof Error ? error.message : 'Unknown error'
 		);
-		// A 451 on a name RD does not block is the throttle penalty, not a
-		// content block: back off and replay it the way a 509 is replayed.
-		// Reporting it verbatim is what convinces users RD started blocking
-		// remuxes, and one row that answers 451 here is the same row that will
-		// answer 201 twenty seconds later. An unknown title takes this branch
-		// too — no evidence is not evidence of a block.
+		// A 451 on a name RD does not block is *sometimes* the throttle penalty
+		// rather than a content block, and when it is, backing off and replaying
+		// it the way a 509 is replayed does land the add. But only when there is
+		// something to back off from. Measured 2026-09-17: on a quiet account at
+		// 30s spacing RD still refused 37 of 48 real search-result hashes, and 22
+		// of the 23 re-tested were refused again from another account on another
+		// host — deterministic refusals, nothing to wait out. `isRdBlockedName`
+		// caught only 15 of the 37, because RD decides on the paths inside the
+		// torrent and a search row usually carries no file list at all, so "the
+		// name looks clean" is not evidence of anything. Blaming the throttle on
+		// that alone is what put "RD is throttling adds" in front of users who
+		// had added one torrent all day, then made them sit through two
+		// twenty-second backoffs before telling them to try again in a minute.
 		if (rdError === 'infringing_file' && !isRdBlockedName(title, filenames)) {
-			// Tell the rest of the session RD is throttling, so a genuinely
-			// blocked name arriving in the same window is not trusted either.
+			if (!isRdThrottling()) {
+				// Nothing points at a throttle, so this is RD refusing the
+				// release. Say that, and let the caller treat it as an answer.
+				if (!silent)
+					toast.error(
+						'Real-Debrid will not accept this release. Try a different one.',
+						magnetToastOptions
+					);
+				return 'infringing_file';
+			}
+			// Keep the rest of the session in the throttled state it is already
+			// in, so a genuinely blocked name arriving in the same window is not
+			// trusted either.
 			recordRdRateLimit();
 			// Availability checks skip the backoff: they run a torrent per row
 			// and are themselves the burst that earns the penalty, so waiting
@@ -225,7 +242,7 @@ export const handleAddAsMagnetInRd = async (
 				rdError ? `RD error: ${rdError}` : 'Failed to add hash.',
 				magnetToastOptions
 			);
-		if (rdError === 'infringing_file' && !hasRecentRdRateLimits()) return 'infringing_file';
+		if (rdError === 'infringing_file' && !isRdThrottling()) return 'infringing_file';
 		return 'error';
 	}
 };

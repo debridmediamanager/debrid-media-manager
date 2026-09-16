@@ -61,6 +61,62 @@ export function hasRecentRdRateLimits(): boolean {
 	return Date.now() - lastRdRateLimitTimestamp < RATE_LIMIT_WINDOW_MS;
 }
 
+// `addMagnet` has a budget of its own, far tighter than the 250 requests a
+// minute RD publishes for the API as a whole, and it is scoped to the
+// **account**, not the caller's address. Measured 2026-09-17 against two test
+// accounts: bursting one of them from one host earned `429 too_many_requests`
+// after 25 to 31 adds and then settled at roughly 30 accepted a minute, while
+// an idle token from that very same address kept getting 201 and the burned
+// token was refused from a completely different host. So dmm cannot spend its
+// way out of this by moving egress around, and a client that has not issued
+// anything like 30 adds in the last minute has no business blaming a throttle.
+export const RD_ADDS_PER_MINUTE = 30;
+/** Spacing that keeps a bulk add inside `RD_ADDS_PER_MINUTE`. */
+export const RD_ADD_MIN_SPACING_MS = 60_000 / RD_ADDS_PER_MINUTE;
+const ADD_RATE_WINDOW_MS = 60_000;
+let recentAddAttempts: number[] = [];
+
+/** One attempted `addMagnet`, whatever it answered: RD counts refusals too. */
+export function recordRdAddAttempt(): void {
+	const now = Date.now();
+	recentAddAttempts = recentAddAttempts.filter((at) => now - at < ADD_RATE_WINDOW_MS);
+	recentAddAttempts.push(now);
+}
+
+/**
+ * Whether this session has added fast enough in the last minute to have
+ * plausibly earned RD's add penalty.
+ */
+export function hasRecentRdAddBurst(): boolean {
+	const now = Date.now();
+	recentAddAttempts = recentAddAttempts.filter((at) => now - at < ADD_RATE_WINDOW_MS);
+	return recentAddAttempts.length >= RD_ADDS_PER_MINUTE;
+}
+
+/**
+ * Whether RD is throttling this account's adds right now, on evidence rather
+ * than on a guess.
+ *
+ * Two things count: a real rate-limit answer (HTTP 429, or `error_code` 34),
+ * and dmm having just burst past the add budget itself. A bare
+ * `451 infringing_file` counts as neither. RD does answer 451 as a throttle
+ * penalty mid-burst, which is why the burst half of this test exists — but
+ * measured 2026-09-17, 37 of 48 real search-result hashes were refused 451 on a
+ * quiet account at 30s spacing, and 22 of 23 re-tested were refused again from
+ * a different account on a different host. Off a burst, a 451 is RD refusing
+ * that release, and saying "throttling" sends the user off to wait for
+ * something that is never going to clear.
+ */
+export function isRdThrottling(): boolean {
+	return hasRecentRdRateLimits() || hasRecentRdAddBurst();
+}
+
+/** Test seam: forget both halves of the throttle evidence between cases. */
+export function resetRdThrottleTracking(): void {
+	recentAddAttempts = [];
+	lastRdRateLimitTimestamp = 0;
+}
+
 // Shared rate limiting function that serializes all requests
 async function enforceRateLimit(): Promise<void> {
 	// Chain onto the global queue to ensure serialization
@@ -669,6 +725,11 @@ export const addHashAsMagnet = async (
 	if (!isValidSHA40Hash(hash)) {
 		throw new Error(`Invalid SHA40 hash: ${hash}`);
 	}
+
+	// Counted before the call, and counted whatever comes back: RD's budget is
+	// spent by refused requests too, so a burst that is already being turned away
+	// still has to read as a burst.
+	recordRdAddAttempt();
 
 	try {
 		const response = await realDebridAxios.post(

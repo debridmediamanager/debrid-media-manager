@@ -4,7 +4,7 @@ import {
 	CACHE_CHECK_CHUNK_SIZE as OC_CACHE_CHECK_CHUNK_SIZE,
 } from '@/services/offcloud';
 import { CACHE_CHECK_CHUNK_SIZE, checkPremiumizeCache } from '@/services/premiumize';
-import { hasRecentRdRateLimits } from '@/services/realDebrid';
+import { isRdThrottling } from '@/services/realDebrid';
 import { checkCachedStatus, TorBoxCachedResponse } from '@/services/torbox';
 import { delay } from '@/utils/delay';
 import {
@@ -39,12 +39,14 @@ const RD_THROTTLE_ABORT_AFTER = 5;
  * Whether an RD probe that came back empty was throttled rather than answered.
  *
  * `addRd` returns null for any failure, so the reason is gone by the time it
- * gets here — but every 451 whose name RD does not actually block records a
- * rate limit first (see `handleAddAsMagnetInRd`), and so does a real 429. A row
- * classified this way must not be treated as "RD says no": it is "RD did not
- * say".
+ * gets here — `isRdThrottling` is what says whether RD was refusing everything
+ * at that moment, on the evidence of a real rate-limit answer or of this sweep
+ * having just burst past the add budget. A row classified this way must not be
+ * treated as "RD says no": it is "RD did not say". A release RD simply refuses
+ * no longer lands here, which is the point: it *is* an answer, and reporting it
+ * as a throttle told the user to retry something that never clears.
  */
-const wasThrottled = (addRdResponse: unknown) => addRdResponse === null && hasRecentRdRateLimits();
+const wasThrottled = (addRdResponse: unknown) => addRdResponse === null && isRdThrottling();
 
 const formatServicesLabel = (services: DebridService[]) =>
 	services.length ? services.join(' / ') : 'services';
