@@ -20,6 +20,7 @@ import { useMassReport } from '@/hooks/useMassReport';
 import { useSeasonPackAdder, type SeasonRunState } from '@/hooks/useSeasonPackAdder';
 import { useTorrentManagement } from '@/hooks/useTorrentManagement';
 import { SearchApiResponse, SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
+import { RD_ADD_MIN_SPACING_MS } from '@/services/realDebrid';
 import UserTorrentDB from '@/torrent/db';
 import { handleCastTvShowAllDebrid } from '@/utils/allDebridCastApiClient';
 import axiosWithRetry from '@/utils/axiosWithRetry';
@@ -1197,6 +1198,7 @@ const TvSearch: FunctionComponent = () => {
 			return;
 		}
 
+		let attempted = 0;
 		for (const candidate of candidates) {
 			// Skip if already in library
 			if (`rd:${candidate.hash}` in hashAndProgress) {
@@ -1204,6 +1206,9 @@ const TvSearch: FunctionComponent = () => {
 				return;
 			}
 
+			// Walking the candidates is a burst of adds like any other.
+			if (attempted > 0) await delay(RD_ADD_MIN_SPACING_MS);
+			attempted++;
 			// deleteIfNotInstant=true: rejects non-instant torrents (deletes from RD, cleans up DB)
 			const wasInstant = await addRd(candidate.hash, false, true);
 			if (wasInstant) return;
@@ -1308,7 +1313,11 @@ const TvSearch: FunctionComponent = () => {
 					{ id: toastId }
 				);
 
-				// Add to RD
+				// Add to RD, spaced: `addMagnet` sustains about 30 adds a minute
+				// per account, and this loop used to run flat out, so a season
+				// of any length spent the user's whole add budget partway
+				// through and then failed every episode after that.
+				if (addedCount > 0) await delay(RD_ADD_MIN_SPACING_MS);
 				await addRd(episode.hash);
 				addedCount++;
 				toast.success(`Episode ${epNum}: Added`, { duration: 2000 });

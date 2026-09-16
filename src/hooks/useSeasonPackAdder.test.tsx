@@ -14,6 +14,7 @@ vi.mock('axios', () => ({ default: { get: mockAxiosGet } }));
 vi.mock('@/services/torbox', () => ({ checkCachedStatus: mockCheckCachedStatus }));
 vi.mock('@/services/realDebrid', () => ({
 	isRdThrottling: mockIsRdThrottling,
+	RD_ADD_MIN_SPACING_MS: 2000,
 }));
 vi.mock('@/utils/token', () => ({
 	generateTokenAndHash: vi.fn(async () => ['token-ts', 'token-hash']),

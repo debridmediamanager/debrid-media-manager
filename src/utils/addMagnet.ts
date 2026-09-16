@@ -33,6 +33,7 @@ import {
 	addTorrentFile,
 	getTorrentInfo,
 	isRdThrottling,
+	RD_ADD_MIN_SPACING_MS,
 	recordRdRateLimit,
 	selectFiles,
 } from '@/services/realDebrid';
@@ -89,10 +90,11 @@ const getTbError = (error: unknown): string | null => {
 const retryDelay = process.env.VITEST_WORKER_ID ? 0 : 5000;
 const infoRetryDelay = process.env.VITEST_WORKER_ID ? 0 : 2000;
 const MAX_509_RETRIES = 5;
-// Pacing for batch addMagnet: RD allows ~22 requests per 10s.
-// Each hash requires addMagnet + selectFiles (2 calls), so 500ms between hashes
-// keeps us well under the burst budget.
-const BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 500;
+// Pacing for batch addMagnet. Not the published 250/min: `addMagnet` has its
+// own budget of roughly 30 a minute per account (see `RD_ADDS_PER_MINUTE`), and
+// 500ms between hashes was four times that, so a batch spent the user's whole
+// allowance in the first fifteen seconds and then failed the rest of the run.
+const BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : RD_ADD_MIN_SPACING_MS;
 const TB_BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 1000;
 // RD answers `451 infringing_file` for two unrelated things: a release it
 // refuses outright, and a throttle penalty during a burst of adds. The throttle

@@ -86,6 +86,7 @@ vi.mock('@/services/offcloud', () => ({
 
 vi.mock('@/services/realDebrid', () => ({
 	isRdThrottling: mockIsRdThrottling,
+	RD_ADD_MIN_SPACING_MS: 2000,
 }));
 
 // The sweep paces its RD probes; the suite runs on fake timers, so the real
@@ -497,6 +498,9 @@ describe('useAvailabilityCheck', () => {
 	// each hash — a burst of adds, which RD punishes with `451 infringing_file`.
 	// Measured 2026-08-28: the old shape (concurrency 3, no pacing) got 2 usable
 	// answers out of 15 and reported the other 13 cached torrents as uncached.
+	// The base spacing is `addMagnet`'s own budget, about 30 adds a minute per
+	// account (measured 2026-09-17), not the 250/min the API publishes: at the
+	// old 1s the sweep was still running at twice what RD sustains.
 	describe('RD sweep pacing under throttle', () => {
 		const rows = (n: number) =>
 			Array.from({ length: n }, (_, i) => createSearchResult({ hash: `hash-${i}` }));
@@ -516,7 +520,7 @@ describe('useAvailabilityCheck', () => {
 			expect(addRd).toHaveBeenCalledTimes(3);
 			// First probe goes straight out; the rest are spaced.
 			expect(mockDelay).toHaveBeenCalledTimes(2);
-			expect(mockDelay).toHaveBeenCalledWith(1000);
+			expect(mockDelay).toHaveBeenCalledWith(2000);
 		});
 
 		it('widens the gap each time RD throttles', async () => {
@@ -529,7 +533,7 @@ describe('useAvailabilityCheck', () => {
 				await result.current.checkServiceAvailabilityBulk(searchResults, ['RD']);
 			});
 
-			expect(mockDelay.mock.calls.map((c) => c[0])).toEqual([2000, 4000, 8000]);
+			expect(mockDelay.mock.calls.map((c) => c[0])).toEqual([4000, 8000, 16000]);
 		});
 
 		it('stops after five throttled rows instead of grinding out wrong answers', async () => {
@@ -561,7 +565,7 @@ describe('useAvailabilityCheck', () => {
 
 			expect(addRd).toHaveBeenCalledTimes(9);
 			expect(mockDelay.mock.calls.map((c) => c[0])).toEqual([
-				1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000,
+				2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
 			]);
 		});
 
@@ -578,8 +582,8 @@ describe('useAvailabilityCheck', () => {
 				await result.current.checkServiceAvailabilityBulk(searchResults, ['RD']);
 			});
 
-			// 1s base -> 2s -> 4s after two throttles, then halved back to 2s.
-			expect(mockDelay.mock.calls.map((c) => c[0])).toEqual([2000, 4000, 2000]);
+			// 2s base -> 4s -> 8s after two throttles, then halved back to 4s.
+			expect(mockDelay.mock.calls.map((c) => c[0])).toEqual([4000, 8000, 4000]);
 		});
 
 		it('tells the single-row check apart from RD answering no', async () => {

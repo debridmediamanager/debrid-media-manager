@@ -1,5 +1,5 @@
 import type { FileData, SearchResult } from '@/services/mediasearch';
-import { isRdThrottling } from '@/services/realDebrid';
+import { isRdThrottling, RD_ADD_MIN_SPACING_MS } from '@/services/realDebrid';
 import { checkCachedStatus } from '@/services/torbox';
 import type { UserTorrent } from '@/torrent/userTorrent';
 import { runConcurrentFunctions } from '@/utils/batch';
@@ -40,8 +40,12 @@ export type SeasonRunState = 'pending' | 'running' | 'added' | 'held' | 'gap' | 
  * infohash - see `getSeasonCoverage`.
  */
 
-/** Between adds. RD answers a burst of adds with 451, its throttle wearing a content-block status. */
-const ADD_SPACING_MS = process.env.VITEST_WORKER_ID ? 0 : 1200;
+/**
+ * Between adds. RD answers a burst of adds with 451, its throttle wearing a
+ * content-block status, and its `addMagnet` budget is about 30 a minute per
+ * account rather than the 250/min it publishes for the API as a whole.
+ */
+const ADD_SPACING_MS = process.env.VITEST_WORKER_ID ? 0 : RD_ADD_MIN_SPACING_MS;
 /**
  * Two throttled adds in a row ends the run. Each one has already spent up to
  * two twenty-second backoffs inside `handleAddAsMagnetInRd`, so grinding on

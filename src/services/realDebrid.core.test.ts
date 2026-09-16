@@ -30,6 +30,7 @@ import {
 	hasRecentRdAddBurst,
 	isRdThrottling,
 	proxyUnrestrictLink,
+	RD_ADD_MIN_SPACING_MS,
 	RD_ADDS_PER_MINUTE,
 	recordRdRateLimit,
 	resetRdThrottleTracking,
@@ -213,6 +214,11 @@ describe('RealDebrid time helpers', () => {
 // throttle when it has been adding fast.
 describe('RealDebrid add budget', () => {
 	const hash = 'a'.repeat(40);
+
+	it('spaces bulk adds to the add budget rather than the API budget', () => {
+		expect(RD_ADDS_PER_MINUTE).toBe(30);
+		expect(RD_ADD_MIN_SPACING_MS).toBe(2000);
+	});
 
 	it('counts every add attempt, refusals included', async () => {
 		realAxios.post = vi.fn().mockRejectedValue(new Error('refused'));

@@ -4,7 +4,7 @@ import {
 	CACHE_CHECK_CHUNK_SIZE as OC_CACHE_CHECK_CHUNK_SIZE,
 } from '@/services/offcloud';
 import { CACHE_CHECK_CHUNK_SIZE, checkPremiumizeCache } from '@/services/premiumize';
-import { isRdThrottling } from '@/services/realDebrid';
+import { isRdThrottling, RD_ADD_MIN_SPACING_MS } from '@/services/realDebrid';
 import { checkCachedStatus, TorBoxCachedResponse } from '@/services/torbox';
 import { delay } from '@/utils/delay';
 import {
@@ -27,9 +27,11 @@ export type DebridService = 'RD' | 'AD' | 'TB' | 'PM' | 'OC';
 // Measured 2026-08-28: this sweep's old shape (concurrency 3, no pacing) got 2
 // usable answers out of 15 hashes, reported the other 13 cached torrents as
 // uncached, and left the account refusing the user's own adds for minutes
-// afterwards. So probe one row at a time, widen the gap every time RD pushes
-// back, and give up rather than grind out answers that are wrong.
-const RD_PROBE_BASE_SPACING_MS = 1000;
+// afterwards. So probe one row at a time, start at the spacing `addMagnet`
+// actually sustains (about 30 adds a minute per account, not the 250/min the
+// API as a whole publishes), widen the gap every time RD pushes back, and give
+// up rather than grind out answers that are wrong.
+const RD_PROBE_BASE_SPACING_MS = RD_ADD_MIN_SPACING_MS;
 const RD_PROBE_MAX_SPACING_MS = 30_000;
 // Five rows in a row throttled means the penalty is not clearing inside a gap
 // this sweep can afford to wait.
