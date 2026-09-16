@@ -642,3 +642,33 @@ export async function submitNzb(args: {
 	const data = await response.json().catch(() => ({}));
 	return { status: response.status, data };
 }
+
+/**
+ * Ask nzb2rd to move a job already in its queue into the priority tier.
+ *
+ * The perk is granted at submit, and a sponsor asking for a release somebody
+ * else already queued never reaches a submit: the dedup in
+ * `pages/api/nzb2rd/jobs.ts` attaches them to the existing job instead of
+ * fetching the same bytes twice, so the flag their own submission would have
+ * carried is never set. This grants it after the fact.
+ *
+ * Best effort by design. The promotion is a nicety on top of a request that has
+ * already succeeded — the caller is on the job either way — so a failure is
+ * logged and swallowed rather than turned into an error the user sees. Returns
+ * whether the tier actually changed, which is false for a job that had already
+ * been promoted by an earlier sponsor.
+ */
+export async function promoteJob(jobId: string): Promise<boolean> {
+	try {
+		const response = await fetch(
+			`${getNzb2rdUrl()}/jobs/${encodeURIComponent(jobId)}/priority`,
+			{ method: 'POST', signal: AbortSignal.timeout(10000) }
+		);
+		if (!response.ok) return false;
+		const data = await response.json().catch(() => ({}));
+		return data?.promoted === true;
+	} catch (error) {
+		console.error('Promoting an nzb2rd job failed:', error);
+		return false;
+	}
+}

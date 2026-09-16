@@ -1,6 +1,6 @@
 import debridHandler from '@/pages/api/debrid-uploader/jobs';
 import nzbHandler from '@/pages/api/nzb2rd/jobs';
-import { fetchNzb, submitNzb } from '@/services/nzb2rd';
+import { fetchNzb, promoteJob, submitNzb } from '@/services/nzb2rd';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { activeSponsor, sponsorshipLapsed } from '@/test/utils/sponsor';
@@ -10,7 +10,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/services/repository');
 vi.mock('@/services/nzb2rd', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('@/services/nzb2rd')>();
-	return { ...actual, fetchNzb: vi.fn(), submitNzb: vi.fn(), addHashToRdAccount: vi.fn() };
+	return {
+		...actual,
+		fetchNzb: vi.fn(),
+		submitNzb: vi.fn(),
+		addHashToRdAccount: vi.fn(),
+		promoteJob: vi.fn(),
+	};
 });
 vi.mock('@/services/debridUploaderServers', () => ({
 	orderedServersForNewJob: () => ['http://uploader.test'],
@@ -19,6 +25,7 @@ vi.mock('@/services/debridUploaderServers', () => ({
 
 const mockRepo = vi.mocked(repository);
 const mockSubmit = vi.mocked(submitNzb);
+const mockPromote = vi.mocked(promoteJob);
 const HASH = 'a'.repeat(40);
 
 /** Mints the token *and* seeds the live row it names — the gate needs both. */
@@ -39,6 +46,7 @@ beforeEach(() => {
 	mockRepo.checkAvailabilityByHashes = vi.fn().mockResolvedValue([]);
 	vi.mocked(fetchNzb).mockResolvedValue('<nzb></nzb>');
 	mockSubmit.mockResolvedValue({ status: 201, data: { id: 'job-1', status: 'pending' } });
+	mockPromote.mockResolvedValue(true);
 });
 
 afterEach(() => {
@@ -99,6 +107,54 @@ describe('usenet→RD carries a verified sponsorship, never a claimed one', () =
 
 		await runNzb({ 'x-dmm-sponsor': token });
 		expect(mockSubmit).toHaveBeenCalledWith(expect.objectContaining({ priority: false }));
+	});
+});
+
+describe('a sponsor asking for a release someone else already queued', () => {
+	// The case the perk used to miss entirely. Dedup returns before `submitNzb`,
+	// so the tier flag that call carries is never set and the sponsor inherits
+	// the first submitter's tier — normal, when the first submitter was not one.
+	beforeEach(() => {
+		mockRepo.getNzb2rdTransfer = vi.fn().mockResolvedValue({
+			releaseId: 'release-1',
+			jobId: 'job-A',
+			imdbId: 'tt1418646',
+			status: 'pending',
+		});
+		global.fetch = vi.fn().mockResolvedValue({
+			status: 200,
+			json: async () => ({ status: 'pending' }),
+		}) as never;
+	});
+
+	it('promotes the existing job instead of leaving them in the normal line', async () => {
+		const res = await runNzb({ 'x-dmm-sponsor': sponsorToken() });
+
+		expect(mockPromote).toHaveBeenCalledWith('job-A');
+		// Still no second fetch of the same bytes — the dedup is the point.
+		expect(mockSubmit).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ promoted: true }));
+	});
+
+	it('leaves a non-sponsor where they are', async () => {
+		const res = await runNzb();
+
+		expect(mockPromote).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ promoted: false }));
+	});
+
+	it('does not promote on a forged token', async () => {
+		const [payload] = sponsorToken().split('.');
+		await runNzb({ 'x-dmm-sponsor': `${payload}.not-the-real-signature` });
+		expect(mockPromote).not.toHaveBeenCalled();
+	});
+
+	it('reports promoted:false when the job was already in the tier', async () => {
+		// A second sponsor asking for the same release. nzb2rd refuses to restamp
+		// it, so the first sponsor keeps their place in the tier.
+		mockPromote.mockResolvedValue(false);
+		const res = await runNzb({ 'x-dmm-sponsor': sponsorToken() });
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ promoted: false }));
 	});
 });
 

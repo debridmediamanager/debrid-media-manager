@@ -1,5 +1,5 @@
 import handler from '@/pages/api/nzb2rd/jobs';
-import { addHashToRdAccount, fetchNzb, submitNzb } from '@/services/nzb2rd';
+import { addHashToRdAccount, fetchNzb, promoteJob, submitNzb } from '@/services/nzb2rd';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -12,6 +12,7 @@ vi.mock('@/services/nzb2rd', async (importOriginal) => {
 		fetchNzb: vi.fn(),
 		submitNzb: vi.fn(),
 		addHashToRdAccount: vi.fn(),
+		promoteJob: vi.fn(),
 	};
 });
 
@@ -19,6 +20,7 @@ const mockRepo = vi.mocked(repository);
 const mockFetchNzb = vi.mocked(fetchNzb);
 const mockSubmit = vi.mocked(submitNzb);
 const mockAddToRd = vi.mocked(addHashToRdAccount);
+const mockPromote = vi.mocked(promoteJob);
 
 const HASH = 'a'.repeat(40);
 const body = (over: Record<string, unknown> = {}) => ({
@@ -75,7 +77,10 @@ describe('POST /api/nzb2rd/jobs — user B asks for a release user A is already 
 			infoHash: null,
 			jobId: 'job-A',
 			queued: true,
+			// No sponsor token on this request, so nothing to promote.
+			promoted: false,
 		});
+		expect(mockPromote).not.toHaveBeenCalled();
 		// the expensive half never runs
 		expect(mockFetchNzb).not.toHaveBeenCalled();
 		expect(mockSubmit).not.toHaveBeenCalled();

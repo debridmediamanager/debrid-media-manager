@@ -4,6 +4,7 @@ import {
 	getNzb2rdUrl,
 	isCompleteOAuth,
 	isValidImdbId,
+	promoteJob,
 	submitNzb,
 } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
@@ -93,11 +94,27 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			await db
 				.addNzb2rdWaiter(id, rdKey, imdbId, isCompleteOAuth(oauth) ? oauth : null)
 				.catch((e) => console.error('Queueing nzb2rd waiter failed:', e));
+			// The sponsor perk, which this branch would otherwise skip entirely:
+			// dedup returns before `submitNzb`, so the tier flag a sponsor's own
+			// submission carries is never set and they inherit whatever tier the
+			// first submitter had — normal, in the case that prompted this. The
+			// promotion joins the tier at the back, so it does not displace
+			// sponsors already waiting in it.
+			//
+			// Awaited rather than detached: the job is promoted before the caller is
+			// told they are queued, so a poll cannot read a stale place in line. It
+			// cannot fail the request — `promoteJob` swallows its own errors.
+			// Awaited: `isSponsorRequest` revalidates against the live sponsor row, and
+			// an unawaited promise is truthy — which promoted every caller.
+			const promoted = (await isSponsorRequest(req))
+				? await promoteJob(existing.jobId)
+				: false;
 			return res.status(200).json({
 				duplicate: 'in_progress',
 				infoHash: null,
 				jobId: existing.jobId,
 				queued: true,
+				promoted,
 			});
 		}
 	} catch (error) {
