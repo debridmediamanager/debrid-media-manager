@@ -41,6 +41,7 @@ import {
 	getQueryForEpisodeCount,
 } from '@/utils/episodeUtils';
 import {
+	checkAvailabilityDl,
 	checkAvailabilityOc,
 	checkAvailabilityPm,
 	checkDatabaseAvailabilityAd,
@@ -177,6 +178,7 @@ const TvSearch: FunctionComponent = () => {
 		tbAvailableCount?: number;
 		pmAvailableCount?: number;
 		ocAvailableCount?: number;
+		dlAvailableCount?: number;
 		allSourcesCompleted: boolean;
 		pendingAvailabilityChecks: number;
 		isAvailabilityOnly?: boolean;
@@ -588,6 +590,7 @@ const TvSearch: FunctionComponent = () => {
 		let tbAvailableCount = 0;
 		let pmAvailableCount = 0;
 		let ocAvailableCount = 0;
+		let dlAvailableCount = 0;
 		let pendingAvailabilityChecks = 0;
 		let allSourcesCompleted = false;
 		let finalResultCount = 0;
@@ -607,12 +610,14 @@ const TvSearch: FunctionComponent = () => {
 					adAvailableCount +
 					tbAvailableCount +
 					pmAvailableCount +
-					ocAvailableCount,
+					ocAvailableCount +
+					dlAvailableCount,
 				rdAvailableCount,
 				adAvailableCount,
 				tbAvailableCount,
 				pmAvailableCount,
 				ocAvailableCount,
+				dlAvailableCount,
 				allSourcesCompleted: true,
 				pendingAvailabilityChecks: 0,
 			});
@@ -747,6 +752,25 @@ const TvSearch: FunctionComponent = () => {
 						sortByMean
 					).then((count) => {
 						ocAvailableCount += count;
+						pendingAvailabilityChecks--;
+						checkAndShowFinalToast();
+					});
+				}
+
+				if (debridLinkKey) {
+					pendingAvailabilityChecks++;
+					// The only live cache answer left in DMM. Debrid-Link has no
+					// cache endpoint - the bare-hash add IS the probe, and it is
+					// free either way - but a hit lands in the user's library, so
+					// the sweep reads the library first and removes only what it
+					// put there. See processDlInstantCheck.
+					checkAvailabilityDl(
+						debridLinkKey,
+						hashesToCheck,
+						setSearchResults,
+						sortByMean
+					).then((count) => {
+						dlAvailableCount += count;
 						pendingAvailabilityChecks--;
 						checkAndShowFinalToast();
 					});
@@ -930,6 +954,7 @@ const TvSearch: FunctionComponent = () => {
 			tbAvailableCount,
 			pmAvailableCount,
 			ocAvailableCount,
+			dlAvailableCount,
 			allSourcesCompleted,
 			pendingAvailabilityChecks,
 			isAvailabilityOnly,
@@ -958,6 +983,8 @@ const TvSearch: FunctionComponent = () => {
 				servicesWithCache.push(`PM: ${pmAvailableCount}`);
 			if (offcloudKey && (ocAvailableCount ?? 0) > 0)
 				servicesWithCache.push(`OC: ${ocAvailableCount}`);
+			if (debridLinkKey && (dlAvailableCount ?? 0) > 0)
+				servicesWithCache.push(`DL: ${dlAvailableCount}`);
 
 			// Show toast for cached torrents if any found
 			if (totalAvailableCount > 0) {

@@ -600,6 +600,243 @@ export async function getSeedboxLimits(token: string): Promise<DebridLinkLimits>
 	return value && typeof value === 'object' ? value : {};
 }
 
+/** One hash's verdict from `checkDebridLinkCache`. */
+export interface DebridLinkCacheResult {
+	hash: string;
+	/** Whether Debrid-Link can serve this content now. */
+	cached: boolean;
+	/**
+	 * False when the sweep never got an answer for this hash - it ran into the
+	 * hour-long lockout, hit the probe budget, or was aborted. A caller must
+	 * not render "not cached" for these: nothing was learned about them.
+	 */
+	checked: boolean;
+	/** The torrent id, for a hit. Stable across remove and re-add. */
+	torrentId?: string;
+	/** Total bytes, for a hit. Useful for repairing a scraped row's missing size. */
+	filesize?: number;
+	files?: DebridLinkFile[];
+	/** True when this hash was already in the account before the sweep started. */
+	alreadyInLibrary?: boolean;
+	/** True when the probe created the torrent and the sweep removed it again. */
+	removed?: boolean;
+}
+
+/** What a whole sweep did, so a caller can report and audit it. */
+export interface DebridLinkCacheSweep {
+	results: DebridLinkCacheResult[];
+	/** Ids the sweep created and then asked to remove. */
+	removedIds: string[];
+	/**
+	 * Ids the sweep created, asked to remove, and still found in the account
+	 * afterwards. Debrid-Link's delete answers success for anything, so this is
+	 * the only way to know - it is read back off a fresh listing.
+	 */
+	leftBehindIds: string[];
+	/** True when the sweep stopped early because the endpoint got locked out. */
+	floodLockedOut: boolean;
+}
+
+export interface DebridLinkCacheOptions {
+	/**
+	 * How many probes may run at once. Debrid-Link took 1,020 bare-hash adds at
+	 * up to 327 req/s without a refusal (measured 2026-09-17), so this is not
+	 * about the burst - it is about leaving the account's budget for the user's
+	 * real adds. See `maxProbes`.
+	 */
+	concurrency?: number;
+	/**
+	 * A ceiling on how many hashes one sweep will probe. Hashes past it come
+	 * back `checked: false`.
+	 *
+	 * The endpoint's hour-long lockout tripped at roughly 3,600 adds inside a
+	 * few minutes (measured 2026-09-17), and the lockout blocks *cached* adds
+	 * too - so overrunning it does not merely stop the badges, it stops the
+	 * user adding anything at all for an hour. A page of results is ~100.
+	 */
+	maxProbes?: number;
+	signal?: AbortSignal;
+}
+
+const DEFAULT_CACHE_CONCURRENCY = 4;
+const DEFAULT_MAX_PROBES = 150;
+
+const normalizeHash = (hash: string) => hash.trim().toLowerCase();
+
+/**
+ * Whether Debrid-Link can serve these hashes right now.
+ *
+ * **There is no cache endpoint.** `GET /seedbox/cached` answers
+ * `400 endpointDisabled` for every parameter shape and the vendor's own API
+ * description no longer lists it. What replaces it is a property of the add:
+ * `/seedbox/add` accepts a **bare info hash**, and the documented contract for
+ * that form is "the hash is only added if it is already cached on our servers".
+ * So the add is the probe, and it is a good one - measured 2026-09-17 against
+ * the same uncached hash, back to back:
+ *
+ *  - bare hash    -> `400 notAddTorrent` in 117 ms, account untouched, no quota
+ *  - full magnet  -> `200` accepted, and one of the 50 daily uncached adds plus
+ *                    one of the 20 active transfer slots reserved on the spot
+ *
+ * A hit costs nothing either: adding, re-adding and duplicating a cached hash
+ * all left the daily and monthly counters untouched.
+ *
+ * **The catch is that a hit mutates.** The torrent lands in the user's library,
+ * because being added is exactly what "it was cached" means here. So the sweep
+ * reads the library first and removes only what it created - anything the user
+ * already had is left alone, and never probed in the first place.
+ *
+ * Removal cannot be trusted from its own response (`DELETE` on a nonexistent id
+ * answers `success: true` echoing that id back), so the sweep re-lists
+ * afterwards and reports anything still there as `leftBehindIds` rather than
+ * claiming a clean-up it cannot see.
+ *
+ * Three ways a hash comes back `checked: false`, and none of them mean "not
+ * cached": the hour-long lockout fired, the probe budget ran out, or the caller
+ * aborted.
+ */
+export async function checkDebridLinkCache(
+	token: string,
+	hashes: string[],
+	options: DebridLinkCacheOptions = {}
+): Promise<DebridLinkCacheSweep> {
+	const {
+		concurrency = DEFAULT_CACHE_CONCURRENCY,
+		maxProbes = DEFAULT_MAX_PROBES,
+		signal,
+	} = options;
+
+	const wanted: string[] = [];
+	const seen = new Set<string>();
+	for (const raw of hashes) {
+		const hash = normalizeHash(raw);
+		if (!hash || seen.has(hash)) continue;
+		seen.add(hash);
+		wanted.push(hash);
+	}
+	if (wanted.length === 0) {
+		return { results: [], removedIds: [], leftBehindIds: [], floodLockedOut: false };
+	}
+
+	// What the user already has. A torrent already in the library is an answer
+	// on its own - and probing it would be worse than pointless, because the
+	// clean-up afterwards could not tell its torrent apart from ours.
+	const existing = new Map<string, DebridLinkTorrent>();
+	for (const torrent of await listAllSeedboxTorrents(token)) {
+		const hash = normalizeHash(torrent.hashString || '');
+		if (hash) existing.set(hash, torrent);
+	}
+
+	const results = new Map<string, DebridLinkCacheResult>();
+	const createdIds: string[] = [];
+	const toProbe: string[] = [];
+
+	for (const hash of wanted) {
+		const held = existing.get(hash);
+		if (!held) {
+			toProbe.push(hash);
+			continue;
+		}
+		results.set(hash, {
+			hash,
+			cached: isDlFinished(held.status) || held.downloadPercent >= 100,
+			checked: true,
+			torrentId: held.id,
+			filesize: held.totalSize,
+			files: held.files,
+			alreadyInLibrary: true,
+		});
+	}
+
+	const budgeted = toProbe.slice(0, Math.max(0, maxProbes));
+	for (const hash of toProbe.slice(budgeted.length)) {
+		results.set(hash, { hash, cached: false, checked: false });
+	}
+
+	let floodLockedOut = false;
+	let cursor = 0;
+
+	const worker = async () => {
+		for (;;) {
+			if (floodLockedOut || signal?.aborted) return;
+			const index = cursor++;
+			if (index >= budgeted.length) return;
+			const hash = budgeted[index];
+
+			try {
+				const torrent = await addSeedboxTorrent(token, hash);
+				createdIds.push(torrent.id);
+				results.set(hash, {
+					hash,
+					// Admission is not completion: a bare-hash add has been seen
+					// admitted at 97%. Only a torrent the account reports whole
+					// is something the user can play now.
+					cached: isDlFinished(torrent.status) || torrent.downloadPercent >= 100,
+					checked: true,
+					torrentId: torrent.id,
+					filesize: torrent.totalSize,
+					files: torrent.files,
+				});
+			} catch (error) {
+				const code = error instanceof DebridLinkError ? error.code : '';
+				if (code === FLOOD_DETECTED) {
+					// Every further add is refused for the hour anyway, and the
+					// lockout covers the user's real adds too. Stop immediately
+					// rather than spending the rest of the batch on refusals.
+					floodLockedOut = true;
+					return;
+				}
+				// `notAddTorrent` is the miss this whole function is built on.
+				// `badArguments` is a hash the API would never take. Both are
+				// answers; anything else is not, so it is not recorded as one.
+				if (code === 'notAddTorrent' || code === 'badArguments') {
+					results.set(hash, { hash, cached: false, checked: true });
+				}
+			}
+		}
+	};
+
+	await Promise.all(
+		Array.from({ length: Math.max(1, Math.min(concurrency, budgeted.length)) }, worker)
+	);
+
+	// Anything the sweep never reached - the lockout fired, or it was aborted.
+	for (const hash of budgeted) {
+		if (!results.has(hash)) results.set(hash, { hash, cached: false, checked: false });
+	}
+
+	// Put the library back exactly as it was found. Only ids this sweep created
+	// are removed; the user's own torrents were never probed.
+	let leftBehindIds: string[] = [];
+	if (createdIds.length > 0) {
+		try {
+			await deleteSeedboxTorrents(token, createdIds);
+			// The delete response is "attempted", never "found", so the only
+			// honest check is a fresh listing.
+			const remaining = new Set(
+				(await listAllSeedboxTorrents(token)).map((torrent) => torrent.id)
+			);
+			leftBehindIds = createdIds.filter((id) => remaining.has(id));
+		} catch {
+			// A clean-up that could not run is reported, not swallowed: these
+			// are torrents this sweep put in someone's library.
+			leftBehindIds = [...createdIds];
+		}
+		for (const result of results.values()) {
+			if (result.torrentId && createdIds.includes(result.torrentId)) {
+				result.removed = !leftBehindIds.includes(result.torrentId);
+			}
+		}
+	}
+
+	return {
+		results: wanted.map((hash) => results.get(hash) ?? { hash, cached: false, checked: false }),
+		removedIds: createdIds,
+		leftBehindIds,
+		floodLockedOut,
+	};
+}
+
 export const _testing = {
 	resetFloodLockouts,
 	floodLockoutRemainingMs,

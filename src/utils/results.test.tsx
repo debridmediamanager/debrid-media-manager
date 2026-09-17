@@ -462,12 +462,14 @@ describe('results utils', () => {
 			expect(isAvailable(row())).toBe(false);
 		});
 
-		it('has no Debrid-Link flag to count, and must not grow one', () => {
-			// Debrid-Link publishes no cache probe, so a `dlAvailable` could only
-			// ever be false - and a permanently-false flag here would report a
-			// Debrid-Link user's playable rows as uncached in the sorts, the
-			// counters and `is:cached` alike. A stray field must change nothing.
-			expect(isAvailable(row({ dlAvailable: true } as Partial<SearchResult>))).toBe(false);
+		it('counts Debrid-Link, whose probe is the bare-hash add', () => {
+			// `dlAvailable` is set only for a hash the sweep actually got an
+			// answer for. One it could not reach - the hour-long lockout fired,
+			// the probe budget ran out - stays unset, so it reads here exactly
+			// like a row no check has run against rather than as a claim that
+			// Debrid-Link lacks it.
+			expect(isAvailable(row({ dlAvailable: true } as Partial<SearchResult>))).toBe(true);
+			expect(isAvailable(row())).toBe(false);
 		});
 	});
 });

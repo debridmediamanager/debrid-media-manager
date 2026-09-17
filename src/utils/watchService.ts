@@ -47,17 +47,21 @@ export const WATCH_SERVICE_LABEL: Record<WatchService, string> = {
  * Offcloud has to add the item and leaves a cloud entry behind. Given a free
  * choice between two paths to the same bytes, take the one that mutates nothing.
  *
- * **Debrid-Link is not in this order at all, and cannot be.** It has no cache
- * probe - `/seedbox/cached` is disabled and nothing replaced it - so no
- * `dlAvailable` flag exists to test, and inventing one would mean answering
- * "false" for every row whether or not Debrid-Link holds it. `'dl'` is still a
- * `WatchService`, reached from a library row or from a search row the user has
- * already added, where the answer is known rather than guessed.
+ * **Debrid-Link goes last of the ones that can be tested.** Its probe is the
+ * only mutating one - a hit is an add, undone afterwards - so where another
+ * service already answered yes for the same row, that service is the cheaper
+ * path to the same playback and wins. `dlAvailable` is set only for a hash the
+ * sweep actually got an answer for, never for one it could not reach.
  */
 export const pickWatchService = (
 	result: Pick<
 		SearchResult,
-		'rdAvailable' | 'adAvailable' | 'tbAvailable' | 'pmAvailable' | 'ocAvailable'
+		| 'rdAvailable'
+		| 'adAvailable'
+		| 'tbAvailable'
+		| 'pmAvailable'
+		| 'ocAvailable'
+		| 'dlAvailable'
 	>,
 	keys: WatchKeys
 ): WatchService | null => {
@@ -66,6 +70,7 @@ export const pickWatchService = (
 	if (keys.torboxKey && result.tbAvailable) return 'tb';
 	if (keys.premiumizeKey && result.pmAvailable) return 'pm';
 	if (keys.offcloudKey && result.ocAvailable) return 'oc';
+	if (keys.debridLinkKey && result.dlAvailable) return 'dl';
 	return null;
 };
 
@@ -81,7 +86,12 @@ export const pickWatchService = (
 export const pickInfoService = (
 	result: Pick<
 		SearchResult,
-		'rdAvailable' | 'adAvailable' | 'tbAvailable' | 'pmAvailable' | 'ocAvailable'
+		| 'rdAvailable'
+		| 'adAvailable'
+		| 'tbAvailable'
+		| 'pmAvailable'
+		| 'ocAvailable'
+		| 'dlAvailable'
 	>,
 	keys: WatchKeys
 ): WatchService | null => {

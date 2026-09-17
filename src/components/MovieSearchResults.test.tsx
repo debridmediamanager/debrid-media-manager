@@ -30,6 +30,7 @@ const baseResult: SearchResult = {
 	tbAvailable: false,
 	pmAvailable: false,
 	ocAvailable: false,
+	dlAvailable: false,
 	files: [{ fileId: 1, filename: 'Sample.mkv', filesize: 1024 * 10 }],
 	noVideos: false,
 	medianFileSize: 10,
@@ -556,9 +557,9 @@ describe('MovieSearchResults', () => {
 
 	describe('Debrid-Link', () => {
 		it('offers the add button on a row with no availability flag set anywhere', async () => {
-			// This is the whole Debrid-Link UX: it has no cache probe, so its
-			// button cannot be gated on one and appears on every row. Any other
-			// service's button would be a "check" here.
+			// The add button is offered whether or not the sweep marked the row:
+			// an unmarked row is one Debrid-Link was never asked about, or could
+			// not answer for, and adding it is still the user's call.
 			const { props } = renderComponent({
 				debridLinkKey: 'dl-key',
 				filteredResults: [{ ...baseResult }],
@@ -568,9 +569,9 @@ describe('MovieSearchResults', () => {
 			await waitFor(() => expect(props.addDl).toHaveBeenCalledWith('hash1'));
 		});
 
-		it('shows no DL badge, pill or check button', () => {
-			// Nothing may claim Debrid-Link knows whether a row is cached, because
-			// nothing can find out without adding it.
+		it('shows no separate DL check button - the sweep runs with the others', () => {
+			// `dlAvailable` is filled by the availability sweep alongside every
+			// other service, so there is no per-row "Check DL" to press.
 			renderComponent({
 				rdKey: 'rd-key',
 				debridLinkKey: 'dl-key',
@@ -601,7 +602,7 @@ describe('MovieSearchResults', () => {
 			});
 
 			const button = screen.getByRole('button', { name: /Add to DL/i });
-			expect(button.className).toContain('border-[#38bdf8]');
+			expect(button.className).toContain('border-blue-500');
 			expect(button.className).not.toContain('${');
 		});
 

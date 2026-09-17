@@ -87,6 +87,7 @@ function seedResult(row: PublicRequest): SearchResult {
 		tbAvailable: false,
 		pmAvailable: false,
 		ocAvailable: false,
+		dlAvailable: false,
 		files: [],
 		noVideos: false,
 		medianFileSize: 0,

@@ -104,6 +104,7 @@ const createSearchResult = (overrides: Partial<SearchResult> = {}): SearchResult
 	tbAvailable: overrides.tbAvailable ?? false,
 	pmAvailable: false,
 	ocAvailable: overrides.ocAvailable ?? false,
+	dlAvailable: overrides.dlAvailable ?? false,
 	files: overrides.files ?? [],
 	noVideos: overrides.noVideos ?? false,
 	medianFileSize: overrides.medianFileSize ?? 1024,

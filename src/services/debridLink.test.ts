@@ -6,6 +6,7 @@ import {
 	SEEDBOX_PAGE_SIZE,
 	_testing,
 	addSeedboxTorrent,
+	checkDebridLinkCache,
 	debridLinkPremiumDaysLeft,
 	deleteSeedboxTorrents,
 	getDebridLinkAccountInfo,
@@ -613,5 +614,172 @@ describe('getSeedboxLimits', () => {
 		fetchMock.mockResolvedValue(ok(null));
 
 		await expect(getSeedboxLimits(TOKEN)).resolves.toEqual({});
+	});
+});
+
+/**
+ * The bare-hash cache probe.
+ *
+ * Debrid-Link has no cache endpoint - `/seedbox/cached` answers
+ * `400 endpointDisabled` - but `/seedbox/add` accepts a bare info hash and the
+ * documented contract for that form is "the hash is only added if it is
+ * already cached on our servers". Measured 2026-09-17 against one uncached
+ * hash, back to back: the bare hash was refused `400 notAddTorrent` in 117 ms
+ * with every quota counter untouched, while the same hash as a magnet was
+ * accepted and immediately took one of the 50 daily uncached adds and one of
+ * the 20 active transfer slots.
+ */
+describe('debrid-link cache probe', () => {
+	const HASH_B = 'aa11bb22cc33dd44ee55ff6677889900aabbccdd';
+	const HASH_C = '1122334455667788990011223344556677889900';
+
+	/** `POST /seedbox/add` calls only, as `{url}` bodies. */
+	const addBodies = () =>
+		fetchMock.mock.calls
+			.filter((call) => String(call[0]).includes('/seedbox/add'))
+			.map((call) => Object.fromEntries(new URLSearchParams(call[1].body)).url);
+
+	const deleteUrls = () =>
+		fetchMock.mock.calls
+			.map((call) => String(call[0]))
+			.filter((url) => url.includes('/remove'));
+
+	const refusal = (code: string, status = 400) =>
+		jsonResponse({ success: false, error: code }, status);
+
+	it('probes with the bare hash, never a magnet', async () => {
+		// This is the entire point. A magnet is an instruction to fetch and is
+		// obeyed: the miss is accepted, charged a daily add and an active slot,
+		// and has to be deleted again to get them back.
+		fetchMock
+			.mockResolvedValueOnce(ok([], { next: -1 })) // empty library
+			.mockResolvedValueOnce(refusal('notAddTorrent'));
+
+		const sweep = await checkDebridLinkCache(TOKEN, [HASH]);
+
+		expect(addBodies()).toEqual([HASH]);
+		expect(addBodies()[0]).not.toContain('magnet:');
+		expect(sweep.results).toEqual([{ hash: HASH, cached: false, checked: true }]);
+	});
+
+	it('reports a hit and takes the torrent back out of the library', async () => {
+		// A hit *is* an add - that is what "cached" means here - so the sweep
+		// removes exactly what it created.
+		fetchMock
+			.mockResolvedValueOnce(ok([], { next: -1 })) // library before: empty
+			.mockResolvedValueOnce(ok(torrent({ id: 'made-by-probe' }))) // the hit
+			.mockResolvedValueOnce(ok(['made-by-probe'])) // delete: "attempted"
+			.mockResolvedValueOnce(ok([], { next: -1 })); // library after: empty again
+
+		const sweep = await checkDebridLinkCache(TOKEN, [HASH]);
+
+		expect(sweep.results[0].cached).toBe(true);
+		expect(sweep.results[0].removed).toBe(true);
+		expect(sweep.removedIds).toEqual(['made-by-probe']);
+		expect(sweep.leftBehindIds).toEqual([]);
+		expect(deleteUrls()).toHaveLength(1);
+		expect(deleteUrls()[0]).toContain('made-by-probe');
+	});
+
+	it('never probes or removes a torrent the user already had', async () => {
+		// Probing it would be worse than pointless: the clean-up afterwards
+		// could not tell the user's torrent apart from one the probe made.
+		fetchMock.mockResolvedValueOnce(ok([torrent({ id: 'users-own' })], { next: -1 }));
+
+		const sweep = await checkDebridLinkCache(TOKEN, [HASH]);
+
+		expect(sweep.results[0]).toMatchObject({ cached: true, alreadyInLibrary: true });
+		expect(addBodies()).toEqual([]);
+		expect(deleteUrls()).toEqual([]);
+		expect(sweep.removedIds).toEqual([]);
+	});
+
+	it('reads a removal that did not take off a fresh listing, not off its response', async () => {
+		// `DELETE /seedbox/<garbage>/remove` answers `{"success":true,...}`
+		// echoing the id back, so the delete response can never be the check.
+		fetchMock
+			.mockResolvedValueOnce(ok([], { next: -1 }))
+			.mockResolvedValueOnce(ok(torrent({ id: 'stuck' })))
+			.mockResolvedValueOnce(ok(['stuck'])) // claims success
+			.mockResolvedValueOnce(ok([torrent({ id: 'stuck' })], { next: -1 })); // still there
+
+		const sweep = await checkDebridLinkCache(TOKEN, [HASH]);
+
+		expect(sweep.leftBehindIds).toEqual(['stuck']);
+		expect(sweep.results[0].removed).toBe(false);
+	});
+
+	it('stops on the hour-long lockout and never calls the rest uncached', async () => {
+		// floodDetected costs the endpoint for an hour and blocks *cached* adds
+		// too, so continuing would spend the rest of the batch on refusals. The
+		// hashes it never reached come back `checked: false` - painting them as
+		// misses would tell the user Debrid-Link lacks content it may well hold.
+		fetchMock
+			.mockResolvedValueOnce(ok([], { next: -1 }))
+			.mockResolvedValue(refusal('floodDetected', 503));
+
+		const sweep = await checkDebridLinkCache(TOKEN, [HASH, HASH_B, HASH_C], {
+			concurrency: 1,
+		});
+
+		expect(sweep.floodLockedOut).toBe(true);
+		for (const result of sweep.results) {
+			expect(result.cached).toBe(false);
+			expect(result.checked).toBe(false);
+		}
+	});
+
+	it('treats an admitted-but-incomplete add as not playable', async () => {
+		// A bare-hash add has been seen admitted at 97% (2026-09-06), so being
+		// accepted is not proof the content can be played now.
+		fetchMock
+			.mockResolvedValueOnce(ok([], { next: -1 }))
+			.mockResolvedValueOnce(ok(torrent({ id: 'partial', status: 4, downloadPercent: 97 })))
+			.mockResolvedValueOnce(ok(['partial']))
+			.mockResolvedValueOnce(ok([], { next: -1 }));
+
+		const sweep = await checkDebridLinkCache(TOKEN, [HASH]);
+
+		expect(sweep.results[0].cached).toBe(false);
+		expect(sweep.results[0].checked).toBe(true);
+		expect(sweep.removedIds).toEqual(['partial']);
+	});
+
+	it('answers a malformed hash without spending a probe on the rest', async () => {
+		fetchMock
+			.mockResolvedValueOnce(ok([], { next: -1 }))
+			.mockResolvedValueOnce(refusal('badArguments'));
+
+		const sweep = await checkDebridLinkCache(TOKEN, ['nothex'], { concurrency: 1 });
+
+		expect(sweep.results[0]).toEqual({ hash: 'nothex', cached: false, checked: true });
+	});
+
+	it('stops at the probe budget and marks the overflow unanswered', async () => {
+		fetchMock
+			.mockResolvedValueOnce(ok([], { next: -1 }))
+			.mockResolvedValue(refusal('notAddTorrent'));
+
+		const sweep = await checkDebridLinkCache(TOKEN, [HASH, HASH_B, HASH_C], {
+			maxProbes: 1,
+			concurrency: 1,
+		});
+
+		expect(addBodies()).toHaveLength(1);
+		expect(sweep.results.filter((r) => r.checked)).toHaveLength(1);
+		expect(sweep.results.filter((r) => !r.checked)).toHaveLength(2);
+	});
+
+	it('deduplicates and normalises hashes before spending requests on them', async () => {
+		fetchMock
+			.mockResolvedValueOnce(ok([], { next: -1 }))
+			.mockResolvedValue(refusal('notAddTorrent'));
+
+		const sweep = await checkDebridLinkCache(TOKEN, [HASH, HASH.toUpperCase(), ` ${HASH} `], {
+			concurrency: 1,
+		});
+
+		expect(addBodies()).toEqual([HASH]);
+		expect(sweep.results).toHaveLength(1);
 	});
 });

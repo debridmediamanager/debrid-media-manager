@@ -147,6 +147,7 @@ const createSearchResult = (overrides: Partial<any> = {}) => ({
 	tbAvailable: false,
 	pmAvailable: false,
 	ocAvailable: false,
+	dlAvailable: false,
 	adAvailable: false,
 	noVideos: false,
 	files: [],

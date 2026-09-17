@@ -53,13 +53,12 @@ export const btnLabel = (avail: boolean, debridService: string) =>
 /**
  * Whether any service the user holds can play this row right now.
  *
- * **Debrid-Link is deliberately not here, and must not be added.** It publishes
- * no cache probe at all (`/seedbox/cached` is disabled and nothing replaced it),
- * so there is no `dlAvailable` to read - a field would have to be permanently
- * false, which would tell this function, the cached/uncached sorts and the
- * `is:cached` filter that a Debrid-Link user's playable rows are uncached.
- * Debrid-Link's add button is offered on every row instead, and the add itself
- * is the probe.
+ * `dlAvailable` is only ever set by a sweep that actually asked Debrid-Link,
+ * and a hash the sweep could not reach - the hour-long lockout fired, the probe
+ * budget ran out - is left alone rather than set false. That distinction is the
+ * whole reason this flag is safe to read here: an unanswered row sorts and
+ * filters as "not known to be cached", exactly like a row no check has run
+ * against yet, instead of as a positive claim that Debrid-Link lacks it.
  */
 export const isAvailable = (result: SearchResult) =>
 	!!(
@@ -67,7 +66,8 @@ export const isAvailable = (result: SearchResult) =>
 		result.adAvailable ||
 		result.tbAvailable ||
 		result.pmAvailable ||
-		result.ocAvailable
+		result.ocAvailable ||
+		result.dlAvailable
 	);
 
 /**

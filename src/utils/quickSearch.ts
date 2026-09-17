@@ -62,7 +62,7 @@ export function quickSearch(query: string, unfiltered: SearchResult[]) {
 			}
 
 			// Handle debrid availability queries
-			// (is:rd, is:ad, is:tb, is:pm, is:oc, is:cached, is:uncached)
+			// (is:rd, is:ad, is:tb, is:pm, is:oc, is:dl, is:cached, is:uncached)
 			if (q.startsWith('is:')) {
 				const value = q.substring(3);
 				const anyAvailable = !!(
@@ -70,7 +70,8 @@ export function quickSearch(query: string, unfiltered: SearchResult[]) {
 					t.adAvailable ||
 					t.tbAvailable ||
 					t.pmAvailable ||
-					t.ocAvailable
+					t.ocAvailable ||
+					t.dlAvailable
 				);
 
 				let available: boolean;
@@ -89,6 +90,9 @@ export function quickSearch(query: string, unfiltered: SearchResult[]) {
 						break;
 					case 'oc':
 						available = !!t.ocAvailable;
+						break;
+					case 'dl':
+						available = !!t.dlAvailable;
 						break;
 					case 'cached':
 						available = anyAvailable;

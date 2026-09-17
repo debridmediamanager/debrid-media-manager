@@ -39,6 +39,7 @@ import {
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
 import {
+	checkAvailabilityDl2,
 	checkAvailabilityOc2,
 	checkAvailabilityPm2,
 	checkDatabaseAvailabilityAd2,
@@ -228,6 +229,7 @@ function HashlistPage() {
 						tbAvailable: false,
 						pmAvailable: false,
 						ocAvailable: false,
+						dlAvailable: false,
 						noVideos: false,
 						files: [],
 						...torrent,
@@ -276,15 +278,13 @@ function HashlistPage() {
 			// probes stay independent: one vendor being down is not the other's
 			// answer, and a user may hold only one of the two keys.
 			if (ocKey) wrapLoading('OC', checkAvailabilityOc2(ocKey, hashArr, setUserTorrentsList));
-			// **No Debrid-Link probe, and none is possible.** `/seedbox/cached` is
-			// disabled and nothing replaced it, so the only cache question
-			// Debrid-Link answers is a mutating add. A `dlAvailable` flag would
-			// therefore have to read false for every row whether or not
-			// Debrid-Link holds it, which is worse than no flag at all - it would
-			// hide rows behind "instantly available only" that Debrid-Link would
-			// have served. That is also why `dlKey` is absent from that filter's
-			// OR-chain below: with only a Debrid-Link key there is nothing to
-			// filter on, so nothing is filtered.
+			// **Debrid-Link's probe is the add itself.** `/seedbox/cached` is
+			// disabled and nothing replaced it, but `/seedbox/add` accepts a bare
+			// info hash and only takes one it already holds, which makes the add
+			// the cache question - free on a hit and on a miss alike. The cost is
+			// that a hit mutates: the torrent lands in the library, so the sweep
+			// reads the library first and takes back out exactly what it put in.
+			if (dlKey) wrapLoading('DL', checkAvailabilityDl2(dlKey, hashArr, setUserTorrentsList));
 		} catch (error) {
 			console.error('Error fetching user torrents list:', error);
 			setUserTorrentsList([]);
@@ -367,14 +367,15 @@ function HashlistPage() {
 		tmpList = tmpList.filter((t, i, self) => self.findIndex((s) => s.hash === t.hash) === i);
 
 		// Filter for instantly available torrents if enabled and keys are present
-		if (showOnlyAvailable && (rdKey || adKey || tbKey || pmKey || ocKey)) {
+		if (showOnlyAvailable && (rdKey || adKey || tbKey || pmKey || ocKey || dlKey)) {
 			tmpList = tmpList.filter(
 				(t) =>
 					t.rdAvailable ||
 					t.adAvailable ||
 					t.tbAvailable ||
 					t.pmAvailable ||
-					t.ocAvailable
+					t.ocAvailable ||
+					t.dlAvailable
 			);
 		}
 
@@ -1450,15 +1451,13 @@ function HashlistPage() {
 												DL ({hashAndProgress[`dl:${t.hash}`] || 0}%)
 											</button>
 										)}
-										{/*
-										 * One colour, always: there is no `dlAvailable`
-										 * to switch on, so the green "instant" variant
-										 * the other services use would be a claim
-										 * nothing here can make.
-										 */}
 										{mounted && dlKey && notInLibrary('dl', t.hash) && (
 											<button
-												className="ml-2 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/30 px-2 py-1 text-sky-100 transition-colors hover:bg-[#38bdf8]/50"
+												className={`ml-2 rounded border-2 px-2 py-1 transition-colors ${
+													t.dlAvailable
+														? 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50'
+														: 'border-[#38bdf8] bg-[#38bdf8]/30 text-sky-100 hover:bg-[#38bdf8]/50'
+												}`}
 												onClick={() => addDl(t.hash)}
 											>
 												<Download className="mr-1 inline h-3 w-3" />

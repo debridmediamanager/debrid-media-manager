@@ -59,9 +59,9 @@ type TvSearchResultsProps = {
 	/**
 	 * Debrid-Link's OAuth token or pasted API token.
 	 *
-	 * Unlike every other key here it gates nothing but the buttons themselves:
-	 * Debrid-Link has no cache probe, so there is no `dlAvailable` to consult and
-	 * its add button is offered on every row.
+	 * Debrid-Link's cache answer comes from `dlAvailable`, which a sweep sets
+	 * only for a hash it actually got an answer for - the probe is a bare-hash
+	 * add, so an unreached row is left unset rather than claimed uncached.
 	 */
 	debridLinkKey?: string | null;
 	player: string;
@@ -1007,19 +1007,16 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											debridLinkKey && <ActionSeparator />}
 
 										{/* — DL —
-										    The add button renders on **every** row,
-										    and no badge, pill or "Check DL" goes
-										    with it. Debrid-Link retired
-										    `/seedbox/cached` and put nothing in its
-										    place, so its only remaining cache probe
-										    is a mutating add — there is nothing to
-										    check with, and a permanently-false
-										    `dlAvailable` would lie to the pills, the
-										    sorts and `pickWatchService` alike. The
-										    add is the probe: it sends the full
-										    magnet, so a cached release comes back
-										    playable in one request and an uncached
-										    one downloads for real. */}
+										    Debrid-Link retired `/seedbox/cached`,
+										    but `/seedbox/add` takes a bare info hash
+										    and only accepts one it already holds, so
+										    the availability sweep probes with that:
+										    free on a hit and on a miss, and a hit is
+										    removed again afterwards. `dlAvailable`
+										    therefore means the same thing here as
+										    every other service's flag. The add button
+										    below still sends the full magnet, because
+										    there the intent is "download this". */}
 										{debridLinkKey && inLibrary('dl', r.hash) && (
 											<button
 												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
@@ -1040,10 +1037,14 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 										)}
 										{debridLinkKey && notInLibrary('dl', r.hash) && (
 											<button
-												className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												className={`haptic-sm inline rounded border-2 px-1 text-xs transition-colors ${addButtonClass(r.dlAvailable, r.noVideos)} ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
 												onClick={() => addDl?.(r.hash)}
 												disabled={isLoading}
-												title="Debrid-Link has no cache check — adding is the only way to find out, and an uncached release downloads for real"
+												title={
+													r.dlAvailable
+														? 'Debrid-Link already holds this — it will be ready at once'
+														: 'Not found in Debrid-Link’s cache — adding starts a real download'
+												}
 											>
 												{isLoading ? (
 													<span className="inline-block animate-spin">
@@ -1052,24 +1053,29 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												) : (
 													<Download className="mr-2 inline h-3 w-3" />
 												)}
-												{isLoading ? 'Adding...' : 'Add to DL'}
+												{isLoading ? (
+													'Adding...'
+												) : r.dlAvailable ? (
+													<b>Instant DL</b>
+												) : (
+													'Add to DL'
+												)}
 											</button>
 										)}
-										{/* No file-list gate and no availability gate.
-										    The episodes are resolved server-side out of
-										    one `seedbox/add`, so this browser needing to
-										    know them first would make Cast (DL) a
-										    movies-only button — and Debrid-Link
-										    publishes no cache probe at all, so there is
-										    no `dlAvailable` to gate on either. */}
-										{debridLinkKey && handleCastDebridLink && (
+										{/* No file-list gate: the episodes are resolved
+										    server-side out of one `seedbox/add`, so this
+										    browser needing to know them first would make
+										    Cast (DL) a movies-only button. It is gated on
+										    `dlAvailable` now that a sweep can set it, so
+										    casting never silently starts a download. */}
+										{debridLinkKey && handleCastDebridLink && r.dlAvailable && (
 											<button
 												className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isCastingDl ? 'cursor-not-allowed opacity-50' : ''}`}
 												onClick={() =>
 													handleCastDebridLinkWithLoading(r.hash)
 												}
 												disabled={isCastingDl}
-												title="Debrid-Link has no cache check — casting adds the release, and an uncached one downloads for real"
+												title="Debrid-Link holds this — casting is instant"
 											>
 												{isCastingDl ? (
 													<>

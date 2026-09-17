@@ -38,6 +38,7 @@ const cached = (over: Partial<Record<string, boolean>> = {}) => ({
 	tbAvailable: false,
 	pmAvailable: false,
 	ocAvailable: false,
+	dlAvailable: false,
 	...over,
 });
 
@@ -558,15 +559,23 @@ describe('Offcloud in the watch order', () => {
 });
 
 describe('Debrid-Link in the watch order', () => {
-	it('is never chosen from a search result, because nothing can mark it cached', () => {
-		// Debrid-Link publishes no cache probe - `/seedbox/cached` is disabled and
-		// nothing replaced it - so no `dlAvailable` exists and `pickWatchService`
-		// has nothing to read. This asserts the absence deliberately: a future
-		// `dlAvailable: false` field would make this function answer "not cached"
-		// for content Debrid-Link is happily holding.
+	it('is chosen when it is the only service holding the row', () => {
+		// The bare-hash add gives Debrid-Link a real cache answer, so it can be
+		// picked now. An unmarked row is still not picked: the sweep leaves a
+		// hash it could not reach unset rather than setting it false.
+		expect(pickWatchService(cached({ dlAvailable: true }), { debridLinkKey: 'dl' })).toBe('dl');
 		expect(pickWatchService(cached(), { debridLinkKey: 'dl' })).toBeNull();
+	});
+
+	it('yields to a service that answered yes without mutating anything', () => {
+		// Debrid-Link's probe is the only one that adds and then undoes an add.
+		// Where another service already holds the same row, that is the cheaper
+		// path to the same bytes, so it wins the order.
 		expect(
-			pickWatchService(cached({ rdAvailable: true }), { rdKey: 'rd', debridLinkKey: 'dl' })
+			pickWatchService(cached({ rdAvailable: true, dlAvailable: true }), {
+				rdKey: 'rd',
+				debridLinkKey: 'dl',
+			})
 		).toBe('rd');
 	});
 

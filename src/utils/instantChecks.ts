@@ -1,3 +1,4 @@
+import { checkDebridLinkCache } from '@/services/debridLink';
 import { EnrichedHashlistTorrent, FileData, SearchResult } from '@/services/mediasearch';
 import { checkOffcloudCache } from '@/services/offcloud';
 import { checkPremiumizeCache } from '@/services/premiumize';
@@ -572,6 +573,79 @@ const processOcInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	return instantCount;
 };
 
+/**
+ * Debrid-Link instant check.
+ *
+ * Unlike every other probe here this one **mutates, on a hit**. Debrid-Link
+ * retired `/seedbox/cached` (it answers `400 endpointDisabled`) and what
+ * replaced it is a property of the add itself: `/seedbox/add` takes a bare info
+ * hash, and the documented contract for that form is "the hash is only added if
+ * it is already cached on our servers". So a hit *is* an add - the torrent
+ * lands in the user's library - and `checkDebridLinkCache` reads the library
+ * first so it can take back out exactly what it put in, and nothing else.
+ *
+ * What makes it worth doing anyway is the price. Measured 2026-09-17 against
+ * the same uncached hash: the bare hash was refused in 117 ms with no quota
+ * touched, while the same hash as a magnet was accepted and immediately took
+ * one of the account's 50 daily uncached adds and one of its 20 transfer slots.
+ * Cached adds, re-adds and duplicates left every counter untouched. This is the
+ * only *live* cache answer any provider in DMM still gives - RD's and AD's
+ * probes are both gone, so those two read DMM's own database instead.
+ *
+ * Two results are deliberately not rendered as misses. `checked: false` means
+ * the sweep never got an answer for that hash (the hour-long lockout fired, the
+ * probe budget ran out, or it was aborted), and leaving those flags alone is
+ * what keeps a lockout from painting a whole page "not cached".
+ */
+const processDlInstantCheck = async <T extends SearchResult | EnrichedHashlistTorrent>(
+	dlKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<T[]>>,
+	sortFn?: (results: T[]) => T[]
+): Promise<number> => {
+	const sweep = await checkDebridLinkCache(dlKey, hashes);
+	const cached = new Map(
+		sweep.results
+			.filter((result) => result.checked && result.cached)
+			.map((result) => [result.hash.toLowerCase(), result] as const)
+	);
+
+	if (sweep.leftBehindIds.length > 0) {
+		// The sweep added these to the user's own library and could not confirm
+		// taking them back out. Debrid-Link's delete answers success for any id
+		// whatever, so this was read off a fresh listing - it is real.
+		toast.error(
+			`Debrid-Link: ${sweep.leftBehindIds.length} probe torrent(s) could not be removed from your library.`,
+			searchToastOptions
+		);
+	}
+
+	if (cached.size === 0) return 0;
+
+	let instantCount = 0;
+	setTorrentList((prevSearchResults) => {
+		const newSearchResults = [...prevSearchResults];
+		for (const torrent of newSearchResults) {
+			if (torrent.noVideos) continue;
+			const hit = cached.get(torrent.hash.toLowerCase());
+			if (!hit) continue;
+
+			torrent.dlAvailable = true;
+			instantCount += 1;
+
+			// A hit answers with the real file list off Debrid-Link's own
+			// record, so it can repair a scraped row that reported no size.
+			if ('medianFileSize' in torrent && hit.filesize) {
+				const result = torrent as SearchResult;
+				if (result.fileSize <= 0) result.fileSize = hit.filesize / 1024 / 1024;
+			}
+		}
+		return sortFn ? sortFn(newSearchResults) : newSearchResults;
+	});
+
+	return instantCount;
+};
+
 // Wrapper functions
 export const wrapLoading = async function (debrid: string, checkAvailability: Promise<number>) {
 	return await toast.promise(
@@ -657,3 +731,16 @@ export const checkAvailabilityOc2 = (
 	hashes: string[],
 	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
 ) => processOcInstantCheck(ocKey, hashes, setTorrentList);
+
+export const checkAvailabilityDl = (
+	dlKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
+	sortFn: (searchResults: SearchResult[]) => SearchResult[]
+) => processDlInstantCheck(dlKey, hashes, setTorrentList, sortFn);
+
+export const checkAvailabilityDl2 = (
+	dlKey: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
+) => processDlInstantCheck(dlKey, hashes, setTorrentList);

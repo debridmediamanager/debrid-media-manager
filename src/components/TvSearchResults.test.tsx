@@ -30,6 +30,7 @@ const baseTvResult: SearchResult = {
 	tbAvailable: false,
 	pmAvailable: false,
 	ocAvailable: false,
+	dlAvailable: false,
 	files: [{ fileId: 1, filename: 'Sample.S01E01.1080p.mkv', filesize: 1024 * 10 }],
 	rdFiles: [{ fileId: 1, filename: 'Sample.S01E01.1080p.mkv', filesize: 1024 * 10 }],
 	noVideos: false,
@@ -499,7 +500,7 @@ describe('TvSearchResults', () => {
 			});
 
 			const button = screen.getByRole('button', { name: /Add to DL/i });
-			expect(button.className).toContain('border-[#38bdf8]');
+			expect(button.className).toContain('border-blue-500');
 			expect(button.className).not.toContain('${');
 		});
 
