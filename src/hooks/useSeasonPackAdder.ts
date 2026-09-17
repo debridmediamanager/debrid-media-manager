@@ -95,6 +95,7 @@ const asSearchResult = (candidate: ApiCandidate, service: SeasonAdderService): S
 	tbAvailable: service === 'tb',
 	pmAvailable: false,
 	ocAvailable: false,
+	dlAvailable: false,
 	files: candidate.files ?? [],
 	rdFiles: service === 'rd' ? candidate.files : undefined,
 	tbFiles: service === 'tb' ? candidate.files : undefined,
