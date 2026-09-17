@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		let imdb_score;
 
 		const allCineVideos =
-			cinemetaResponse.meta?.videos.filter((video: any) => video.season >= 0) || [];
+			cinemetaResponse.meta?.videos?.filter((video: any) => video.season >= 0) || [];
 		let cineSeasons = allCineVideos.filter((video: any) => video.season > 0);
 		const uniqueSeasons: number[] = Array.from(
 			new Set(cineSeasons.map((video: any) => video.season))

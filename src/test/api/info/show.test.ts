@@ -315,6 +315,26 @@ describe('/api/info/show', () => {
 		expect(new URL(backdrop).hostname).toBe('picsum.photos');
 	});
 
+	// meta.videos was dereferenced without a guard eight lines after the same
+	// expression was written with one, so a meta object carrying no videos array
+	// threw and the route answered 500 — losing the poster entirely.
+	it('survives a cinemeta meta object with no videos array', async () => {
+		mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'Videoless' });
+		mockMetadataCache.getCinemetaSeries.mockResolvedValue({
+			meta: { name: 'Videoless', poster: 'cine-poster' },
+		});
+
+		const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt0000003' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({ title: 'Videoless', poster: 'cine-poster' })
+		);
+	});
+
 	it('still answers when OMDb itself fails', async () => {
 		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 		mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'MDB Show' });
