@@ -88,6 +88,7 @@ beforeEach(() => {
 	fetchMock.mockReset();
 	vi.stubGlobal('fetch', fetchMock);
 	_testing.resetFloodLockouts();
+	_testing.resetProbeBudget();
 });
 
 afterEach(() => {
@@ -768,6 +769,46 @@ describe('debrid-link cache probe', () => {
 		expect(addBodies()).toHaveLength(1);
 		expect(sweep.results.filter((r) => r.checked)).toHaveLength(1);
 		expect(sweep.results.filter((r) => !r.checked)).toHaveLength(2);
+	});
+
+	it("stops probing once the hour's budget is spent, and says so rather than guessing", async () => {
+		// The per-sweep cap bounds one page; this bounds a session. floodDetected
+		// tripped at ~3,640 adds in about three minutes and blocks *cached* adds
+		// too, so a reader working through page after page must not be able to
+		// walk into it and lose the ability to add anything for an hour.
+		fetchMock
+			.mockResolvedValueOnce(ok([], { next: -1 }))
+			.mockResolvedValue(refusal('notAddTorrent'));
+
+		// Leave exactly one probe of the hour's allowance.
+		_testing.spendProbeBudget(_testing.PROBE_BUDGET_PER_HOUR - 1);
+		expect(_testing.probesLeftThisHour()).toBe(1);
+
+		const sweep = await checkDebridLinkCache(TOKEN, [HASH, HASH_B, HASH_C], {
+			concurrency: 1,
+		});
+
+		expect(addBodies()).toHaveLength(1);
+		expect(sweep.results.filter((r) => r.checked)).toHaveLength(1);
+
+		// The two it could not afford are unanswered, never reported as misses:
+		// nothing was learned about them.
+		const unanswered = sweep.results.filter((r) => !r.checked);
+		expect(unanswered).toHaveLength(2);
+		for (const r of unanswered) expect(r.cached).toBe(false);
+		expect(_testing.probesLeftThisHour()).toBe(0);
+	});
+
+	it('spends nothing from the budget on hashes already in the library', async () => {
+		// Those are answered off the listing, so they must not eat an allowance
+		// that exists to protect the account's real adds.
+		fetchMock.mockResolvedValueOnce(ok([torrent()], { next: -1 }));
+
+		const before = _testing.probesLeftThisHour();
+		const sweep = await checkDebridLinkCache(TOKEN, [HASH]);
+
+		expect(sweep.results[0].alreadyInLibrary).toBe(true);
+		expect(_testing.probesLeftThisHour()).toBe(before);
 	});
 
 	it('deduplicates and normalises hashes before spending requests on them', async () => {

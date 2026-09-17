@@ -661,6 +661,35 @@ export interface DebridLinkCacheOptions {
 const DEFAULT_CACHE_CONCURRENCY = 4;
 const DEFAULT_MAX_PROBES = 150;
 
+/**
+ * How many probes this tab will spend on `/seedbox/add` in any rolling hour.
+ *
+ * The per-sweep cap bounds one page; this bounds a session. `floodDetected`
+ * tripped at roughly **3,640 adds inside about three minutes** (measured
+ * 2026-09-17), and it is not a probing-only penalty - the lockout refuses
+ * *cached* adds too, so overrunning it stops the user adding anything at all
+ * for the next hour.
+ *
+ * At the per-sweep cap of 150 a reader would reach that ceiling in about
+ * 24 pages, which is a plausible evening of browsing rather than an abusive
+ * one. This sits at roughly a third of the observed ceiling, so a session can
+ * fill it and still leave the account's own adds working.
+ */
+const PROBE_BUDGET_PER_HOUR = 1200;
+const PROBE_BUDGET_WINDOW_MS = 60 * 60 * 1000;
+
+/** Timestamps of probes this tab has spent, newest last. */
+let probeSpend: number[] = [];
+
+const probesLeftThisHour = (now = Date.now()) => {
+	probeSpend = probeSpend.filter((at) => now - at < PROBE_BUDGET_WINDOW_MS);
+	return Math.max(0, PROBE_BUDGET_PER_HOUR - probeSpend.length);
+};
+
+const recordProbes = (count: number, now = Date.now()) => {
+	for (let i = 0; i < count; i++) probeSpend.push(now);
+};
+
 const normalizeHash = (hash: string) => hash.trim().toLowerCase();
 
 /**
@@ -748,7 +777,11 @@ export async function checkDebridLinkCache(
 		});
 	}
 
-	const budgeted = toProbe.slice(0, Math.max(0, maxProbes));
+	// Two ceilings: what one sweep may spend, and what this tab may spend in an
+	// hour. Whatever is left over is reported unanswered rather than uncached.
+	const allowance = Math.min(Math.max(0, maxProbes), probesLeftThisHour());
+	const budgeted = toProbe.slice(0, allowance);
+	recordProbes(budgeted.length);
 	for (const hash of toProbe.slice(budgeted.length)) {
 		results.set(hash, { hash, cached: false, checked: false });
 	}
@@ -839,6 +872,12 @@ export async function checkDebridLinkCache(
 
 export const _testing = {
 	resetFloodLockouts,
+	resetProbeBudget: () => {
+		probeSpend = [];
+	},
+	probesLeftThisHour,
+	spendProbeBudget: recordProbes,
+	PROBE_BUDGET_PER_HOUR,
 	floodLockoutRemainingMs,
 	toFormBody,
 	toQueryString,
