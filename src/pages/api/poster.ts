@@ -1,8 +1,8 @@
 import { getMdblistCacheService } from '@/services/database/mdblistCache';
 import { getMdblistClient } from '@/services/mdblistClient';
 import { getOmdbMetadata, getOmdbPoster } from '@/utils/omdb';
-import { getTmdbAuthWithFreeKey, tmdbRequestConfig, tmdbUrl } from '@/utils/tmdbAuth';
 import { TmdbResponse } from '@/utils/tmdb';
+import { getTmdbAuthWithFreeKey, tmdbRequestConfig, tmdbUrl } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -59,33 +59,56 @@ async function resolvePoster(imdbid: string): Promise<string | null> {
 	// Keeps the shared free-key pool as the last resort, and picks up the v4
 	// read token when one is configured.
 	const tmdbAuth = getTmdbAuthWithFreeKey();
-	const getTmdbInfo = (imdbId: string) =>
-		tmdbUrl(`/find/${imdbId}`, { external_source: 'imdb_id' }, tmdbAuth);
 
-	// 1. Try Fanart.tv first (movies only, supports IMDB IDs directly)
-	const fanartUrl = await getFanartPoster(imdbid);
-	if (fanartUrl) return fanartUrl;
+	// A rejected source has no opinion on whether art exists, so it must not be
+	// recorded as a miss. Collected across both waves and rethrown at the end.
+	const failures: unknown[] = [];
 
-	// 2. Try TMDB (movies and TV)
-	const tmdbResp = await axios.get<TmdbResponse>(
-		getTmdbInfo(imdbid),
-		tmdbRequestConfig(tmdbAuth)
-	);
-	const movieResult = tmdbResp.data.movie_results[0];
-	const tvResult = tmdbResp.data.tv_results[0];
-	const posterPath = movieResult?.poster_path || tvResult?.poster_path;
+	const pick = async (sources: Array<() => Promise<string | null>>): Promise<string | null> => {
+		const settled = await Promise.allSettled(sources.map((source) => source()));
+		for (const result of settled) {
+			if (result.status === 'fulfilled' && result.value) return result.value;
+			if (result.status === 'rejected') failures.push(result.reason);
+		}
+		return null;
+	};
 
-	if (posterPath) return `https://image.tmdb.org/t/p/w500${posterPath}`;
+	// Wave 1: Fanart and TMDB together. Asking them at once rather than in turn
+	// costs the slower of the two instead of their sum.
+	const generous = await pick([
+		// Fanart.tv covers movies only; it keys TV art by TVDB id, not IMDb.
+		() => getFanartPoster(imdbid),
+		// TMDB covers both movies and TV.
+		async () => {
+			const resp = await axios.get<TmdbResponse>(
+				tmdbUrl(`/find/${imdbid}`, { external_source: 'imdb_id' }, tmdbAuth),
+				tmdbRequestConfig(tmdbAuth)
+			);
+			const posterPath =
+				resp.data.movie_results[0]?.poster_path || resp.data.tv_results[0]?.poster_path;
+			return posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : null;
+		},
+	]);
+	if (generous) return generous;
 
-	// 3. Try OMDb, whose poster is IMDb's own art and covers titles TMDB skips.
-	//    The URL it returns is on m.media-amazon.com and carries no API key, so
-	//    it can be handed to the browser as-is.
-	const omdbUrl = getOmdbPoster(await getOmdbMetadata(imdbid));
-	if (omdbUrl) return omdbUrl;
+	// Wave 2, reached only when neither of the above had art. OMDb is the most
+	// rate-limited source DMM uses, so it stays behind that check rather than
+	// being asked on every call — the same reason /api/info/show defers it.
+	const lastResort = await pick([
+		// OMDb's poster is IMDb's own art and covers titles TMDB skips. The URL
+		// it returns is on m.media-amazon.com and carries no API key, so it can
+		// be handed to the browser as-is.
+		async () => getOmdbPoster(await getOmdbMetadata(imdbid)),
+		async () => {
+			const resp = await mdblistClient.getInfoByImdbId(imdbid);
+			return resp.poster?.startsWith('http') ? resp.poster : null;
+		},
+	]);
+	if (lastResort) return lastResort;
 
-	// 4. Try MDBList as final fallback
-	const mdbResp = await mdblistClient.getInfoByImdbId(imdbid);
-	if (mdbResp.poster && mdbResp.poster.startsWith('http')) return mdbResp.poster;
+	// Nothing was found. If a source threw rather than simply having no art, let
+	// the caller see that so it does not record a miss the title may not deserve.
+	if (failures.length > 0) throw failures[0];
 
 	return null;
 }

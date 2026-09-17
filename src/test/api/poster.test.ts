@@ -342,6 +342,92 @@ describe('/api/poster', () => {
 		expect(mockCache.set).not.toHaveBeenCalled();
 	});
 
+	// Serially, a throwing source ended the chain and everything behind it went
+	// unasked, so one flaky upstream could hide art another source was holding.
+	it('still reaches OMDb when TMDB throws', async () => {
+		mockReq.method = 'GET';
+		mockReq.query = { imdbid: 'tt1234567' };
+
+		mockedAxios.get.mockRejectedValue(new Error('TMDB down'));
+		mockMetadataCache.getOmdbInfo.mockResolvedValue({
+			Response: 'True',
+			Poster: 'https://m.media-amazon.com/images/M/rescued.jpg',
+		});
+
+		await handler(mockReq, mockRes);
+
+		expect(mockRes.json).toHaveBeenCalledWith({
+			url: 'https://m.media-amazon.com/images/M/rescued.jpg',
+		});
+	});
+
+	it('still reaches MDBList when TMDB throws and OMDb has nothing', async () => {
+		mockReq.method = 'GET';
+		mockReq.query = { imdbid: 'tt1234567' };
+
+		mockedAxios.get.mockRejectedValue(new Error('TMDB down'));
+		mockMdblistClient.getInfoByImdbId.mockResolvedValue({
+			poster: 'https://mdblist.example/rescued.jpg',
+		});
+
+		await handler(mockReq, mockRes);
+
+		expect(mockRes.json).toHaveBeenCalledWith({
+			url: 'https://mdblist.example/rescued.jpg',
+		});
+	});
+
+	// Fanart and TMDB are asked together, so a title neither has costs the
+	// slower of the two rather than their sum.
+	it('asks Fanart and TMDB at the same time', async () => {
+		process.env.FANART_KEY = 'test-fanart-key';
+		mockReq.method = 'GET';
+		mockReq.query = { imdbid: 'tt1234567' };
+
+		let releaseFanart: (value: any) => void = () => {};
+		const fanartPending = new Promise((resolve) => {
+			releaseFanart = resolve;
+		});
+		mockedAxios.get.mockImplementation((url: any) =>
+			String(url).includes('fanart.tv')
+				? (fanartPending as any)
+				: Promise.resolve({ data: { movie_results: [], tv_results: [] } })
+		);
+
+		const pending = handler(mockReq, mockRes);
+		await new Promise((resolve) => setImmediate(resolve));
+
+		// Fanart, the higher-priority source, has not answered yet. Serially,
+		// TMDB had not been asked at all.
+		expect(mockedAxios.get).toHaveBeenCalledWith(
+			expect.stringContaining('/find/tt1234567'),
+			expect.anything()
+		);
+
+		releaseFanart({ data: {} });
+		await pending;
+		delete process.env.FANART_KEY;
+	});
+
+	// OMDb is the most rate-limited source DMM uses, so it stays behind the
+	// wave-1 check rather than being asked on every uncached call.
+	it('does not ask OMDb when Fanart or TMDB already had art', async () => {
+		mockReq.method = 'GET';
+		mockReq.query = { imdbid: 'tt1234567' };
+
+		mockedAxios.get.mockResolvedValue({
+			data: { movie_results: [{ poster_path: '/poster123.jpg' }], tv_results: [] },
+		});
+
+		await handler(mockReq, mockRes);
+
+		expect(mockRes.json).toHaveBeenCalledWith({
+			url: 'https://image.tmdb.org/t/p/w500/poster123.jpg',
+		});
+		expect(mockMetadataCache.getOmdbInfo).not.toHaveBeenCalled();
+		expect(mockMdblistClient.getInfoByImdbId).not.toHaveBeenCalled();
+	});
+
 	it('still answers when the cache is unreachable', async () => {
 		const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 		mockReq.method = 'GET';
