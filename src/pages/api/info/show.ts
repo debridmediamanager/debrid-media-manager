@@ -2,6 +2,7 @@ import { MRating, MShow } from '@/services/mdblist';
 import { getMdblistClient } from '@/services/mdblistClient';
 import { getMetadataCache } from '@/services/metadataCache';
 import { getOmdbMetadata, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
+import { tmdbImageUrl } from '@/utils/tmdb';
 import { getTmdbAuth, tmdbRequestConfig, tmdbUrl } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -244,10 +245,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const responseData = {
 			title,
 			description: resolvedDescription ?? 'n/a',
-			poster: resolvedPoster ?? '',
+			// tmdbData is already fetched above for status and the trailer, so its
+			// art is a free extra source rather than another round trip.
+			poster: resolvedPoster ?? tmdbImageUrl(tmdbData?.poster_path, 'w500') ?? '',
 			backdrop:
 				mdbResponse?.backdrop ??
 				cinemetaResponse?.meta?.background ??
+				tmdbImageUrl(tmdbData?.backdrop_path, 'w1280') ??
 				`https://picsum.photos/seed/${encodeURIComponent(title)}/1800/300`,
 			season_count,
 			season_names,

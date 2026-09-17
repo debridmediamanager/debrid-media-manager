@@ -5,6 +5,7 @@ import practicalMagicMdblist from '@/test/fixtures/metadata/mdblist-tt32588798-p
 import thundermansMdblist from '@/test/fixtures/metadata/mdblist-tt37752275-clash-of-the-thundermans.json';
 import practicalMagicOmdb from '@/test/fixtures/metadata/omdb-tt32588798-practical-magic-2.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import axios from 'axios';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/mdblistClient', () => ({
@@ -268,6 +269,78 @@ describe('/api/info/movie', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ title: 'MDB Title' }));
 		warn.mockRestore();
+	});
+
+	describe('poster and backdrop sources', () => {
+		const originalTmdbKey = process.env.TMDB_KEY;
+		const originalTmdbReadToken = process.env.TMDB_READ_TOKEN;
+
+		const restore = (name: string, value: string | undefined) => {
+			if (value === undefined) delete process.env[name];
+			else process.env[name] = value;
+		};
+
+		beforeEach(() => {
+			process.env.TMDB_KEY = 'test-tmdb-key';
+			// The v4 token takes precedence over the key, so it has to be absent
+			// for these cases to exercise the key path.
+			delete process.env.TMDB_READ_TOKEN;
+		});
+
+		afterEach(() => {
+			vi.restoreAllMocks();
+			restore('TMDB_KEY', originalTmdbKey);
+			restore('TMDB_READ_TOKEN', originalTmdbReadToken);
+		});
+
+		// The same TMDB response already supplies the release dates and trailer,
+		// so its art cost nothing extra and was being thrown away.
+		it('uses the art from the TMDB response it already fetched', async () => {
+			mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'Arty', tmdbid: 27205 });
+			mockMetadataCache.getCinemetaMovie.mockResolvedValue({});
+			vi.spyOn(axios, 'get').mockResolvedValue({
+				data: {
+					poster_path: '/tmdb-poster.jpg',
+					backdrop_path: '/tmdb-backdrop.jpg',
+					release_date: '2010-07-16',
+				},
+			} as any);
+
+			const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt1375666' } });
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(res.json).toHaveBeenCalledWith(
+				expect.objectContaining({
+					poster: 'https://image.tmdb.org/t/p/w500/tmdb-poster.jpg',
+					backdrop: 'https://image.tmdb.org/t/p/w1280/tmdb-backdrop.jpg',
+				})
+			);
+		});
+
+		it('still prefers mdblist and cinemeta art over TMDB', async () => {
+			mockMdbClient.getInfoByImdbId.mockResolvedValue({
+				title: 'Arty',
+				tmdbid: 27205,
+				poster: 'mdb-poster',
+			});
+			mockMetadataCache.getCinemetaMovie.mockResolvedValue({
+				meta: { background: 'cine-bg' },
+			});
+			vi.spyOn(axios, 'get').mockResolvedValue({
+				data: { poster_path: '/tmdb-poster.jpg', backdrop_path: '/tmdb-backdrop.jpg' },
+			} as any);
+
+			const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt1375666' } });
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(res.json).toHaveBeenCalledWith(
+				expect.objectContaining({ poster: 'mdb-poster', backdrop: 'cine-bg' })
+			);
+		});
 	});
 
 	it('falls back to default payload on failure', async () => {

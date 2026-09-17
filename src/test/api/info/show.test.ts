@@ -2,6 +2,7 @@ import handler from '@/pages/api/info/show';
 import wednesdayCinemeta from '@/test/fixtures/metadata/cinemeta-tt13443470-wednesday.json';
 import wednesdayMdblist from '@/test/fixtures/metadata/mdblist-tt13443470-wednesday.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import axios from 'axios';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/mdblistClient', () => ({
@@ -333,6 +334,78 @@ describe('/api/info/show', () => {
 		expect(res.json).toHaveBeenCalledWith(
 			expect.objectContaining({ title: 'Videoless', poster: 'cine-poster' })
 		);
+	});
+
+	describe('poster and backdrop sources', () => {
+		const originalTmdbKey = process.env.TMDB_KEY;
+		const originalTmdbReadToken = process.env.TMDB_READ_TOKEN;
+
+		const restore = (name: string, value: string | undefined) => {
+			if (value === undefined) delete process.env[name];
+			else process.env[name] = value;
+		};
+
+		beforeEach(() => {
+			process.env.TMDB_KEY = 'test-tmdb-key';
+			// The v4 token takes precedence over the key, so it has to be absent
+			// for these cases to exercise the key path.
+			delete process.env.TMDB_READ_TOKEN;
+		});
+
+		afterEach(() => {
+			vi.restoreAllMocks();
+			restore('TMDB_KEY', originalTmdbKey);
+			restore('TMDB_READ_TOKEN', originalTmdbReadToken);
+		});
+
+		// The TMDB detail object is already fetched for status and the trailer, so
+		// its art was a source the route paid for and then discarded.
+		it('uses the art from the TMDB response it already fetched', async () => {
+			mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'Arty', tmdbid: 1396 });
+			mockMetadataCache.getCinemetaSeries.mockResolvedValue({});
+			vi.spyOn(axios, 'get').mockResolvedValue({
+				data: {
+					status: 'Ended',
+					poster_path: '/tmdb-poster.jpg',
+					backdrop_path: '/tmdb-backdrop.jpg',
+				},
+			} as any);
+
+			const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt0903747' } });
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(res.json).toHaveBeenCalledWith(
+				expect.objectContaining({
+					poster: 'https://image.tmdb.org/t/p/w500/tmdb-poster.jpg',
+					backdrop: 'https://image.tmdb.org/t/p/w1280/tmdb-backdrop.jpg',
+				})
+			);
+		});
+
+		it('still prefers mdblist and cinemeta art over TMDB', async () => {
+			mockMdbClient.getInfoByImdbId.mockResolvedValue({
+				title: 'Arty',
+				tmdbid: 1396,
+				poster: 'mdb-poster',
+			});
+			mockMetadataCache.getCinemetaSeries.mockResolvedValue({
+				meta: { background: 'cine-bg' },
+			});
+			vi.spyOn(axios, 'get').mockResolvedValue({
+				data: { poster_path: '/tmdb-poster.jpg', backdrop_path: '/tmdb-backdrop.jpg' },
+			} as any);
+
+			const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt0903747' } });
+			const res = createMockResponse();
+
+			await handler(req, res);
+
+			expect(res.json).toHaveBeenCalledWith(
+				expect.objectContaining({ poster: 'mdb-poster', backdrop: 'cine-bg' })
+			);
+		});
 	});
 
 	it('still answers when OMDb itself fails', async () => {

@@ -7,6 +7,7 @@ import {
 	isIsoDateOnOrBeforeToday,
 } from '@/utils/movieReleaseDates';
 import { getOmdbMetadata, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
+import { tmdbImageUrl } from '@/utils/tmdb';
 import { getTmdbAuth, tmdbAxiosOptions } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -107,6 +108,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		let expectedDigitalReleaseDate = '';
 		let expectedDigitalReleaseSource: 'tmdb' | 'estimated' | null = null;
 		let digitalReleaseAvailable = false;
+		// Art from the same TMDB response the release dates come from, so reading
+		// it costs no extra request.
+		let tmdbPosterPath: string | null = null;
+		let tmdbBackdropPath: string | null = null;
 
 		if (!trailer && cinemetaResponse.meta?.trailers?.[0]?.source) {
 			trailer = `https://youtube.com/watch?v=${cinemetaResponse.meta.trailers[0].source}`;
@@ -122,6 +127,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 							append_to_response: 'videos,release_dates',
 						})
 					);
+					tmdbPosterPath = tmdbResponse.data.poster_path ?? null;
+					tmdbBackdropPath = tmdbResponse.data.backdrop_path ?? null;
+
 					const tmdbTrailer = tmdbResponse.data.videos?.results?.find(
 						(v: any) => v.type === 'Trailer' && v.site === 'YouTube'
 					);
@@ -156,10 +164,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(200).json({
 			title,
 			description: resolvedDescription ?? 'n/a',
-			poster: resolvedPoster ?? '',
+			poster: resolvedPoster ?? tmdbImageUrl(tmdbPosterPath, 'w500') ?? '',
 			backdrop:
 				mdbResponse.backdrop ??
 				cinemetaResponse.meta?.background ??
+				tmdbImageUrl(tmdbBackdropPath, 'w1280') ??
 				`https://picsum.photos/seed/${encodeURIComponent(title)}/1800/300`,
 			year: resolvedYear ?? '????',
 			imdb_score: imdb_score ?? 0,
