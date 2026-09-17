@@ -295,6 +295,26 @@ describe('/api/info/show', () => {
 		);
 	});
 
+	// https://github.com/debridmediamanager/debrid-media-manager/issues/235 —
+	// source.unsplash.com/random was deprecated mid-2024 and answers 503, so the
+	// backdrop fallback rendered a broken image on every show without one.
+	it('falls back to a backdrop host that still serves images', async () => {
+		mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'Breaking Bad' });
+		mockMetadataCache.getCinemetaSeries.mockResolvedValue({});
+
+		const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt0903747' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		const { backdrop } = vi.mocked(res.json).mock.calls[0][0];
+		expect(backdrop).not.toContain('source.unsplash.com');
+		// Same host and shape as /api/info/movie's fallback, and the title is
+		// encoded rather than pasted in raw.
+		expect(backdrop).toBe('https://picsum.photos/seed/Breaking%20Bad/1800/300');
+		expect(new URL(backdrop).hostname).toBe('picsum.photos');
+	});
+
 	it('still answers when OMDb itself fails', async () => {
 		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 		mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'MDB Show' });
