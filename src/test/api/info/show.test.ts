@@ -406,6 +406,38 @@ describe('/api/info/show', () => {
 				expect.objectContaining({ poster: 'mdb-poster', backdrop: 'cine-bg' })
 			);
 		});
+
+		// Trakt keys on the IMDb id alone. Waiting for mdblist — and now for the
+		// deferred OMDb lookup too — put whole round trips on the critical path.
+		it('starts the Trakt lookups without waiting for mdblist', async () => {
+			let releaseMdb: (value: any) => void = () => {};
+			mockMdbClient.getInfoByImdbId.mockReturnValue(
+				new Promise((resolve) => {
+					releaseMdb = resolve;
+				})
+			);
+			mockMetadataCache.getCinemetaSeries.mockResolvedValue({});
+
+			const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt0903747' } });
+			const res = createMockResponse();
+			const pending = handler(req, res);
+
+			await new Promise((resolve) => setImmediate(resolve));
+
+			// mdblist has not answered yet, so on the old ordering Trakt had not
+			// been asked either.
+			expect(mockMetadataCache.getTraktShowEpisode).toHaveBeenCalledWith(
+				'tt0903747',
+				'next_episode'
+			);
+			expect(mockMetadataCache.getTraktShowEpisode).toHaveBeenCalledWith(
+				'tt0903747',
+				'last_episode'
+			);
+
+			releaseMdb({ title: 'Arty' });
+			await pending;
+		});
 	});
 
 	it('still answers when OMDb itself fails', async () => {

@@ -35,6 +35,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			},
 		});
 
+		// Trakt keys on the IMDb id alone, so it does not have to wait for mdblist
+		// the way the TMDB call below does. Started here it overlaps everything
+		// between, instead of adding a round trip after it.
+		const traktNextPromise = metadataCache.getTraktShowEpisode(imdbid, 'next_episode');
+		const traktLastPromise = metadataCache.getTraktShowEpisode(imdbid, 'last_episode');
+
 		const [mdbResponse, cinemetaResponse] = await Promise.all([mdbPromise, cinePromise]);
 
 		const isShowType = (response: any): response is MShow => {
@@ -180,9 +186,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			trailer = `https://youtube.com/watch?v=${cinemetaResponse.meta.trailers[0].source}`;
 		}
 
-		// Fetch Trakt next/last episode (accurate datetimes) and TMDB for trailer/status
-		const traktNextPromise = metadataCache.getTraktShowEpisode(imdbid, 'next_episode');
-		const traktLastPromise = metadataCache.getTraktShowEpisode(imdbid, 'last_episode');
+		// TMDB needs mdblist's tmdbid, so it is the only lookup left that has to
+		// wait for the first wave.
 		const tmdbPromise = mdbResponse?.tmdbid
 			? (async () => {
 					try {
