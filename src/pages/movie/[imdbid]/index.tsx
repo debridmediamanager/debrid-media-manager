@@ -978,7 +978,7 @@ const MovieSearch: FunctionComponent = () => {
 			: null;
 		return (
 			<>
-				{(rdKey || adKey || torboxKey) && (
+				{(rdKey || adKey || torboxKey || debridLinkKey) && (
 					<>
 						{rdKey && (
 							<button
@@ -1021,6 +1021,30 @@ const MovieSearch: FunctionComponent = () => {
 										<>
 											<Search className="mr-1 h-3 w-3 text-orange-500" />
 											Check AD
+										</>
+									)}
+								</b>
+							</button>
+						)}
+						{debridLinkKey && (
+							<button
+								className="mb-1 mr-2 mt-0 rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 p-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 disabled:cursor-not-allowed disabled:opacity-50"
+								onClick={() =>
+									checkServiceAvailabilityBulk(filteredResults, ['DL'])
+								}
+								disabled={isAnyChecking}
+								title="Asks Debrid-Link about every row shown. Each hit is added and removed again, which is why it is a button."
+							>
+								<b className="flex items-center justify-center">
+									{isAnyChecking ? (
+										<>
+											<Loader2 className="mr-1 h-3 w-3 animate-spin text-sky-400" />
+											Checking DL...
+										</>
+									) : (
+										<>
+											<Search className="mr-1 h-3 w-3 text-sky-400" />
+											Check DL
 										</>
 									)}
 								</b>
