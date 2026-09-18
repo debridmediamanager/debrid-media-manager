@@ -59,9 +59,10 @@ type TvSearchResultsProps = {
 	/**
 	 * Debrid-Link's OAuth token or pasted API token.
 	 *
-	 * Debrid-Link's cache answer comes from `dlAvailable`, which a sweep sets
-	 * only for a hash it actually got an answer for - the probe is a bare-hash
-	 * add, so an unreached row is left unset rather than claimed uncached.
+	 * Debrid-Link's cache answer comes from `dlAvailable`, which only a Check DL
+	 * the user pressed can set. The probe is a bare-hash add and therefore
+	 * mutates, so it is not run across the page the way Premiumize's and
+	 * Offcloud's read-only probes are.
 	 */
 	debridLinkKey?: string | null;
 	player: string;
@@ -504,6 +505,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 						const isCastingDl = castingDlHashes.has(r.hash);
 						const isCheckingRd = isHashServiceChecking(r.hash, 'RD');
 						const isCheckingAd = isHashServiceChecking(r.hash, 'AD');
+						const isCheckingDl = isHashServiceChecking(r.hash, 'DL');
 						const watchService = pickWatchService(r, {
 							rdKey,
 							adKey,
@@ -1007,16 +1009,16 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 											debridLinkKey && <ActionSeparator />}
 
 										{/* — DL —
-										    Debrid-Link retired `/seedbox/cached`,
-										    but `/seedbox/add` takes a bare info hash
-										    and only accepts one it already holds, so
-										    the availability sweep probes with that:
-										    free on a hit and on a miss, and a hit is
-										    removed again afterwards. `dlAvailable`
-										    therefore means the same thing here as
-										    every other service's flag. The add button
-										    below still sends the full magnet, because
-										    there the intent is "download this". */}
+										    Check DL asks by adding the bare info
+										    hash, which Debrid-Link only accepts when
+										    it already holds the release. That costs
+										    nothing either way, but a hit lands the
+										    torrent in the library and is removed
+										    again, so it is a button rather than part
+										    of the page sweep, like RD's and AD's. The
+										    add button below still sends the full
+										    magnet, because there the intent really is
+										    "download this". */}
 										{debridLinkKey && inLibrary('dl', r.hash) && (
 											<button
 												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
@@ -1033,6 +1035,26 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 												{isLoading
 													? 'Removing...'
 													: `DL (${hashAndProgress[`dl:${r.hash}`] + '%'})`}
+											</button>
+										)}
+										{debridLinkKey && !r.dlAvailable && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-[#38bdf8] bg-[#38bdf8]/20 px-1 text-xs text-sky-100 transition-colors hover:bg-[#38bdf8]/40 ${isCheckingDl ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => checkServiceAvailability(r, ['DL'])}
+												disabled={isCheckingDl}
+												title="Asks Debrid-Link by adding the bare hash, which only works when it already has the release. A hit is removed again straight away."
+											>
+												{isCheckingDl ? (
+													<span className="inline-flex items-center">
+														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+														Checking DL...
+													</span>
+												) : (
+													<span className="inline-flex items-center">
+														<SearchIcon className="mr-1 h-3 w-3 text-sky-400" />
+														Check DL
+													</span>
+												)}
 											</button>
 										)}
 										{debridLinkKey && notInLibrary('dl', r.hash) && (

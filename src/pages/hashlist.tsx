@@ -39,7 +39,6 @@ import {
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
 import {
-	checkAvailabilityDl2,
 	checkAvailabilityOc2,
 	checkAvailabilityPm2,
 	checkDatabaseAvailabilityAd2,
@@ -278,13 +277,13 @@ function HashlistPage() {
 			// probes stay independent: one vendor being down is not the other's
 			// answer, and a user may hold only one of the two keys.
 			if (ocKey) wrapLoading('OC', checkAvailabilityOc2(ocKey, hashArr, setUserTorrentsList));
-			// **Debrid-Link's probe is the add itself.** `/seedbox/cached` is
-			// disabled and nothing replaced it, but `/seedbox/add` accepts a bare
-			// info hash and only takes one it already holds, which makes the add
-			// the cache question - free on a hit and on a miss alike. The cost is
-			// that a hit mutates: the torrent lands in the library, so the sweep
-			// reads the library first and takes back out exactly what it put in.
-			if (dlKey) wrapLoading('DL', checkAvailabilityDl2(dlKey, hashArr, setUserTorrentsList));
+			// **No Debrid-Link probe on load, deliberately.** Its probe is a
+			// bare-hash add, which only succeeds when Debrid-Link already holds
+			// the content, so a hit puts the torrent in the user's library. That
+			// is a mutation, and DMM keeps mutating probes behind a button, the
+			// way RD's and AD's already are. There is no per-row check here, so
+			// `dlAvailable` stays unset on this page and `dlKey` is absent from
+			// the filter's OR-chain below for the same reason.
 		} catch (error) {
 			console.error('Error fetching user torrents list:', error);
 			setUserTorrentsList([]);
@@ -367,15 +366,14 @@ function HashlistPage() {
 		tmpList = tmpList.filter((t, i, self) => self.findIndex((s) => s.hash === t.hash) === i);
 
 		// Filter for instantly available torrents if enabled and keys are present
-		if (showOnlyAvailable && (rdKey || adKey || tbKey || pmKey || ocKey || dlKey)) {
+		if (showOnlyAvailable && (rdKey || adKey || tbKey || pmKey || ocKey)) {
 			tmpList = tmpList.filter(
 				(t) =>
 					t.rdAvailable ||
 					t.adAvailable ||
 					t.tbAvailable ||
 					t.pmAvailable ||
-					t.ocAvailable ||
-					t.dlAvailable
+					t.ocAvailable
 			);
 		}
 

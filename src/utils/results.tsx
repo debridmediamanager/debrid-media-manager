@@ -53,12 +53,11 @@ export const btnLabel = (avail: boolean, debridService: string) =>
 /**
  * Whether any service the user holds can play this row right now.
  *
- * `dlAvailable` is only ever set by a sweep that actually asked Debrid-Link,
- * and a hash the sweep could not reach - the hour-long lockout fired, the probe
- * budget ran out - is left alone rather than set false. That distinction is the
- * whole reason this flag is safe to read here: an unanswered row sorts and
- * filters as "not known to be cached", exactly like a row no check has run
- * against yet, instead of as a positive claim that Debrid-Link lacks it.
+ * `dlAvailable` is only ever set by a Check DL the user pressed. Debrid-Link's
+ * probe mutates, so it is not in the page sweep, which means an unchecked row
+ * reads here exactly like one no check has run against yet rather than as a
+ * claim that Debrid-Link lacks it. A row the check could not get an answer for
+ * is left unset for the same reason.
  */
 export const isAvailable = (result: SearchResult) =>
 	!!(

@@ -569,18 +569,34 @@ describe('MovieSearchResults', () => {
 			await waitFor(() => expect(props.addDl).toHaveBeenCalledWith('hash1'));
 		});
 
-		it('shows no separate DL check button - the sweep runs with the others', () => {
-			// `dlAvailable` is filled by the availability sweep alongside every
-			// other service, so there is no per-row "Check DL" to press.
-			renderComponent({
+		it('offers Check DL, because the probe mutates like RD and AD do', async () => {
+			// Debrid-Link's probe is a bare-hash add, so a hit puts the torrent
+			// in the user's library. That is why it is a button and not part of
+			// the page sweep: Premiumize's and Offcloud's probes add nothing and
+			// can run across every row, this one cannot.
+			const { props } = renderComponent({
 				rdKey: 'rd-key',
 				debridLinkKey: 'dl-key',
-				filteredResults: [{ ...baseResult }],
+				filteredResults: [{ ...baseResult, rdAvailable: false }],
+			});
+
+			await userEvent.click(screen.getByRole('button', { name: /Check DL/i }));
+			await waitFor(() =>
+				expect(props.checkServiceAvailability).toHaveBeenCalledWith(
+					expect.objectContaining({ hash: 'hash1' }),
+					['DL']
+				)
+			);
+		});
+
+		it('drops the check once the row is known cached, and shows Instant DL', () => {
+			renderComponent({
+				debridLinkKey: 'dl-key',
+				filteredResults: [{ ...baseResult, dlAvailable: true }],
 			});
 
 			expect(screen.queryByRole('button', { name: /Check DL/i })).toBeNull();
-			expect(screen.queryByRole('button', { name: /Instant DL/i })).toBeNull();
-			expect(screen.getByRole('button', { name: /Check RD/i })).toBeTruthy();
+			expect(screen.getByRole('button', { name: /Instant DL/i })).toBeTruthy();
 		});
 
 		it('offers RM instead of add once the row is in the Debrid-Link library', async () => {

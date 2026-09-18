@@ -1,3 +1,4 @@
+import { checkDebridLinkCache } from '@/services/debridLink';
 import { SearchResult } from '@/services/mediasearch';
 import {
 	checkOffcloudCache,
@@ -18,7 +19,7 @@ import { getCachedTrackerStats, shouldIncludeTrackerStats } from '@/utils/tracke
 import { useCallback, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
-export type DebridService = 'RD' | 'AD' | 'TB' | 'PM' | 'OC';
+export type DebridService = 'RD' | 'AD' | 'TB' | 'PM' | 'OC' | 'DL';
 
 // RD retired /instantAvailability, so the only way to ask whether it holds a
 // hash is to add the torrent and delete it again — which means a sweep of a
@@ -73,13 +74,16 @@ const markAvailableServices = (
 				result.pmAvailable || Boolean(availableHashesByService.PM?.has(result.hash));
 			const ocAvailable =
 				result.ocAvailable || Boolean(availableHashesByService.OC?.has(result.hash));
+			const dlAvailable =
+				result.dlAvailable || Boolean(availableHashesByService.DL?.has(result.hash));
 
 			if (
 				rdAvailable === result.rdAvailable &&
 				adAvailable === result.adAvailable &&
 				tbAvailable === result.tbAvailable &&
 				pmAvailable === result.pmAvailable &&
-				ocAvailable === result.ocAvailable
+				ocAvailable === result.ocAvailable &&
+				dlAvailable === result.dlAvailable
 			) {
 				return result;
 			}
@@ -92,6 +96,7 @@ const markAvailableServices = (
 				tbAvailable,
 				pmAvailable,
 				ocAvailable,
+				dlAvailable,
 			};
 			delete updated.trackerStats;
 			return updated;
@@ -107,6 +112,7 @@ export function useAvailabilityCheck(
 	torboxKey: string | null,
 	premiumizeKey: string | null,
 	offcloudKey: string | null,
+	debridLinkKey: string | null,
 	imdbId: string,
 	searchResults: SearchResult[],
 	setSearchResults: React.Dispatch<React.SetStateAction<SearchResult[]>>,
@@ -150,6 +156,7 @@ export function useAvailabilityCheck(
 			if (torboxKey) available.push('TB');
 			if (premiumizeKey) available.push('PM');
 			if (offcloudKey) available.push('OC');
+			if (debridLinkKey) available.push('DL');
 
 			if (!requested || requested.length === 0) {
 				return available;
@@ -158,7 +165,7 @@ export function useAvailabilityCheck(
 			const requestedSet = new Set(requested);
 			return available.filter((service) => requestedSet.has(service));
 		},
-		[rdKey, adKey, torboxKey, premiumizeKey, offcloudKey]
+		[rdKey, adKey, torboxKey, premiumizeKey, offcloudKey, debridLinkKey]
 	);
 
 	const isServiceAvailable = useCallback((service: DebridService, result: SearchResult) => {
@@ -173,6 +180,8 @@ export function useAvailabilityCheck(
 				return Boolean(result.pmAvailable);
 			case 'OC':
 				return Boolean(result.ocAvailable);
+			case 'DL':
+				return Boolean(result.dlAvailable);
 			default:
 				return false;
 		}
@@ -227,6 +236,7 @@ export function useAvailabilityCheck(
 					tbCheckResult,
 					pmCheckResult,
 					ocCheckResult,
+					dlCheckResult,
 					trackerStatsResult,
 				] = await Promise.allSettled([
 					// RD availability check
@@ -322,6 +332,34 @@ export function useAvailabilityCheck(
 							})()
 						: Promise.resolve({ isCachedInOC: Boolean(result.ocAvailable) }),
 
+					// Debrid-Link availability check.
+					//
+					// Behind a button rather than in the page sweep, for the
+					// same reason RD's and AD's are: the probe mutates. A bare
+					// hash add is only accepted when Debrid-Link already holds
+					// the content, so a hit lands the torrent in the user's
+					// library, and `checkDebridLinkCache` takes back out only
+					// what it created. Running that on every page load would
+					// churn somebody's library for rows they never asked about.
+					debridLinkKey && servicesNeedingCheck.includes('DL')
+						? (async () => {
+								const sweep = await checkDebridLinkCache(debridLinkKey, [
+									result.hash,
+								]);
+								const probe = sweep.results[0];
+								if (sweep.leftBehindIds.length > 0) {
+									toast.error(
+										'Debrid-Link: a probe torrent could not be removed from your library.'
+									);
+								}
+								// `checked: false` means the sweep never got an
+								// answer, so it must not read as "not cached".
+								return {
+									isCachedInDL: Boolean(probe?.checked && probe.cached),
+								};
+							})()
+						: Promise.resolve({ isCachedInDL: Boolean(result.dlAvailable) }),
+
 					// Tracker stats check (only if enabled and not already available)
 					(async () => {
 						if (
@@ -330,7 +368,8 @@ export function useAvailabilityCheck(
 							result.adAvailable ||
 							result.tbAvailable ||
 							result.pmAvailable ||
-							result.ocAvailable
+							result.ocAvailable ||
+							result.dlAvailable
 						) {
 							return null;
 						}
@@ -410,12 +449,21 @@ export function useAvailabilityCheck(
 					console.error('Offcloud availability check failed:', ocCheckResult.reason);
 				}
 
+				// Process Debrid-Link check result
+				let isCachedInDL = Boolean(result.dlAvailable);
+				if (dlCheckResult.status === 'fulfilled') {
+					isCachedInDL = dlCheckResult.value.isCachedInDL;
+				} else if (debridLinkKey && servicesNeedingCheck.includes('DL')) {
+					console.error('Debrid-Link availability check failed:', dlCheckResult.reason);
+				}
+
 				const positiveAvailability: Partial<Record<DebridService, Set<string>>> = {};
 				if (isCachedInRD) positiveAvailability.RD = new Set([result.hash]);
 				if (isCachedInAD) positiveAvailability.AD = new Set([result.hash]);
 				if (isCachedInTB) positiveAvailability.TB = new Set([result.hash]);
 				if (isCachedInPM) positiveAvailability.PM = new Set([result.hash]);
 				if (isCachedInOC) positiveAvailability.OC = new Set([result.hash]);
+				if (isCachedInDL) positiveAvailability.DL = new Set([result.hash]);
 
 				if (Object.keys(positiveAvailability).length > 0 && isMounted.current) {
 					markAvailableServices(setSearchResults, sortFunction, positiveAvailability);
@@ -429,7 +477,8 @@ export function useAvailabilityCheck(
 					!isCachedInAD &&
 					!isCachedInTB &&
 					!isCachedInPM &&
-					!isCachedInOC
+					!isCachedInOC &&
+					!isCachedInDL
 				) {
 					const trackerStats = trackerStatsResult.value;
 
@@ -608,6 +657,9 @@ export function useAvailabilityCheck(
 			const ocTargets = services.includes('OC')
 				? torrentsToCheck.filter((r) => !r.ocAvailable)
 				: [];
+			const dlTargets = services.includes('DL')
+				? torrentsToCheck.filter((r) => !r.dlAvailable)
+				: [];
 
 			const checkProgress: Record<DebridService, { completed: number; total: number }> = {
 				RD: { completed: 0, total: rdTargets.length },
@@ -615,6 +667,7 @@ export function useAvailabilityCheck(
 				TB: { completed: 0, total: tbTargets.length },
 				PM: { completed: 0, total: pmTargets.length },
 				OC: { completed: 0, total: ocTargets.length },
+				DL: { completed: 0, total: dlTargets.length },
 			};
 			let statsProgress = { completed: 0, total: 0 };
 			let torrentsWithSeeds = 0;
@@ -624,6 +677,7 @@ export function useAvailabilityCheck(
 				TB: 0,
 				PM: 0,
 				OC: 0,
+				DL: 0,
 			};
 
 			const updateProgressMessage = () => {
@@ -667,6 +721,7 @@ export function useAvailabilityCheck(
 					tbCheckResults,
 					pmCheckResults,
 					ocCheckResults,
+					dlCheckResults,
 					trackerStatsResults,
 				] = await Promise.all([
 					// RD availability checks, one at a time and paced — see
@@ -921,6 +976,51 @@ export function useAvailabilityCheck(
 							})()
 						: Promise.resolve([]),
 
+					// Debrid-Link availability checks.
+					//
+					// One call for the whole batch on purpose: the sweep reads
+					// the library once, probes each hash, and removes in one
+					// request only the torrents it created. Per row it would
+					// re-list the library every time.
+					//
+					// This is the only mutating probe here besides RD's and
+					// AD's, and like them it runs only because somebody pressed
+					// a check. It is never part of the page's own sweep.
+					services.includes('DL')
+						? (async () => {
+								const sweep = await checkDebridLinkCache(
+									debridLinkKey!,
+									dlTargets.map((t) => t.hash)
+								);
+								if (sweep.leftBehindIds.length > 0) {
+									toast.error(
+										`Debrid-Link: ${sweep.leftBehindIds.length} probe torrent(s) could not be removed from your library.`
+									);
+								}
+								const cached = new Set(
+									sweep.results
+										.filter((probe) => probe.checked && probe.cached)
+										.map((probe) => probe.hash.toLowerCase())
+								);
+								checkProgress.DL = {
+									completed: dlTargets.length,
+									total: dlTargets.length,
+								};
+								updateProgressMessage();
+
+								return dlTargets.map((result) => {
+									const isCachedInDL = cached.has(result.hash.toLowerCase());
+									if (isCachedInDL) realtimeAvailable.DL++;
+									removeChecking(result.hash, ['DL']);
+									return {
+										item: result,
+										success: true,
+										result: { result, isCachedInDL },
+									};
+								});
+							})()
+						: Promise.resolve([]),
+
 					// Tracker stats checks (only for non-available torrents)
 					(async () => {
 						if (!shouldIncludeTrackerStats()) {
@@ -1004,6 +1104,9 @@ export function useAvailabilityCheck(
 					...ocCheckResults
 						.filter((r) => r.success && r.result?.isCachedInOC)
 						.map((r) => r.item.hash),
+					...dlCheckResults
+						.filter((r) => r.success && r.result?.isCachedInDL)
+						.map((r) => r.item.hash),
 				]);
 
 				// Apply tracker stats only to non-cached torrents
@@ -1026,6 +1129,7 @@ export function useAvailabilityCheck(
 					...tbCheckResults,
 					...pmCheckResults,
 					...ocCheckResults,
+					...dlCheckResults,
 				];
 				const succeeded = allResults.filter((r) => r.success);
 				const failed = allResults.filter((r) => !r.success);
@@ -1040,6 +1144,7 @@ export function useAvailabilityCheck(
 					TB: 0,
 					PM: 0,
 					OC: 0,
+					DL: 0,
 				};
 
 				// Update database cache and get final count
@@ -1058,6 +1163,9 @@ export function useAvailabilityCheck(
 						.map((r) => r.item.hash);
 					const ocSuccessfulHashes = ocCheckResults
 						.filter((r) => r.success && r.result?.isCachedInOC)
+						.map((r) => r.item.hash);
+					const dlSuccessfulHashes = dlCheckResults
+						.filter((r) => r.success && r.result?.isCachedInDL)
 						.map((r) => r.item.hash);
 
 					const positiveAvailability: Partial<Record<DebridService, Set<string>>> = {};
@@ -1080,6 +1188,10 @@ export function useAvailabilityCheck(
 					if (tbSuccessfulHashes.length > 0) {
 						positiveAvailability.TB = new Set(tbSuccessfulHashes);
 						availableByService.TB = tbSuccessfulHashes.length;
+					}
+					if (dlSuccessfulHashes.length > 0) {
+						positiveAvailability.DL = new Set(dlSuccessfulHashes);
+						availableByService.DL = dlSuccessfulHashes.length;
 					}
 
 					if (Object.keys(positiveAvailability).length > 0) {

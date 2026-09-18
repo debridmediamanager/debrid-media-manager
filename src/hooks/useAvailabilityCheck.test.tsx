@@ -18,6 +18,7 @@ const {
 	mockDelay,
 	mockIsRdThrottling,
 	toastFunction,
+	mockCheckDebridLinkCache,
 } = vi.hoisted(() => {
 	const loading = vi.fn().mockReturnValue('toast-id');
 	const success = vi.fn();
@@ -43,6 +44,7 @@ const {
 		mockProcessWithConcurrency: vi.fn(),
 		mockCheckCachedStatus: vi.fn(),
 		mockCheckOffcloudCache: vi.fn(),
+		mockCheckDebridLinkCache: vi.fn(),
 		mockDelay: vi.fn(),
 		mockIsRdThrottling: vi.fn(),
 		toastFunction: toastFn,
@@ -77,6 +79,10 @@ vi.mock('@/utils/parallelProcessor', () => ({
 vi.mock('@/services/torbox', () => ({
 	checkCachedStatus: mockCheckCachedStatus,
 	TorBoxCachedResponse: {},
+}));
+
+vi.mock('@/services/debridLink', () => ({
+	checkDebridLinkCache: mockCheckDebridLinkCache,
 }));
 
 vi.mock('@/services/offcloud', () => ({
@@ -233,6 +239,7 @@ describe('useAvailabilityCheck', () => {
 			torboxKey?: string | null;
 			premiumizeKey?: string | null;
 			offcloudKey?: string | null;
+			debridLinkKey?: string | null;
 			hashAndProgress?: Record<string, number>;
 		} = {}
 	) =>
@@ -243,6 +250,7 @@ describe('useAvailabilityCheck', () => {
 				overrides.torboxKey !== undefined ? overrides.torboxKey : 'tb-key',
 				overrides.premiumizeKey !== undefined ? overrides.premiumizeKey : null,
 				overrides.offcloudKey !== undefined ? overrides.offcloudKey : null,
+				overrides.debridLinkKey !== undefined ? overrides.debridLinkKey : null,
 				'tt123',
 				searchResults,
 				setSearchResults,
@@ -315,6 +323,7 @@ describe('useAvailabilityCheck', () => {
 				useAvailabilityCheck(
 					null,
 					'ad-key',
+					null,
 					null,
 					null,
 					null,
@@ -1157,6 +1166,76 @@ describe('useAvailabilityCheck', () => {
 			expect(deleteRd).toHaveBeenCalled();
 		});
 	});
+	// =========================================================================
+	// Debrid-Link
+	// =========================================================================
+
+	describe('Debrid-Link', () => {
+		const sweep = (over = {}) => ({
+			results: [{ hash: 'hash-1', cached: true, checked: true, ...over }],
+			removedIds: [],
+			leftBehindIds: [],
+			floodLockedOut: false,
+		});
+
+		it('probes the one row it was asked about, not the page', async () => {
+			// The probe mutates, so it runs per row from a button. Handing it
+			// the whole page is what the sweep used to do and is exactly what
+			// churned somebody's library for rows they never asked about.
+			mockCheckDebridLinkCache.mockResolvedValue(sweep());
+			const { result } = renderAvailabilityHook({
+				rdKey: null,
+				adKey: null,
+				torboxKey: null,
+				debridLinkKey: 'dl-key',
+			});
+
+			await act(async () => {
+				await result.current.checkServiceAvailability(searchResults[0], ['DL']);
+			});
+
+			expect(mockCheckDebridLinkCache).toHaveBeenCalledWith('dl-key', ['hash-1']);
+			expect(searchResults.find((r) => r.hash === 'hash-1')?.dlAvailable).toBe(true);
+		});
+
+		it('leaves a row alone when the probe never got an answer', async () => {
+			// `checked: false` is the hour-long lockout or an aborted sweep. It
+			// is not a miss, and marking it one would tell a user Debrid-Link
+			// lacks something it may well be holding.
+			mockCheckDebridLinkCache.mockResolvedValue(sweep({ cached: false, checked: false }));
+			const { result } = renderAvailabilityHook({
+				rdKey: null,
+				adKey: null,
+				torboxKey: null,
+				debridLinkKey: 'dl-key',
+			});
+
+			await act(async () => {
+				await result.current.checkServiceAvailability(searchResults[0], ['DL']);
+			});
+
+			// Unset, not false: an unanswered row has to read the same as one
+			// nobody has checked yet.
+			expect(searchResults.find((r) => r.hash === 'hash-1')?.dlAvailable).toBeFalsy();
+		});
+
+		it('is not asked at all without a Debrid-Link key', async () => {
+			mockCheckDebridLinkCache.mockClear();
+			const { result } = renderAvailabilityHook({
+				rdKey: null,
+				adKey: null,
+				torboxKey: null,
+				debridLinkKey: null,
+			});
+
+			await act(async () => {
+				await result.current.checkServiceAvailability(searchResults[0], ['DL']);
+			});
+
+			expect(mockCheckDebridLinkCache).not.toHaveBeenCalled();
+		});
+	});
+
 	// =========================================================================
 	// Offcloud
 	// =========================================================================

@@ -470,16 +470,34 @@ describe('TvSearchResults', () => {
 			await waitFor(() => expect(props.addDl).toHaveBeenCalledWith('tv-hash'));
 		});
 
-		it('shows no DL badge, pill or check button', () => {
-			renderTv({
+		it('offers Check DL, because the probe mutates like RD and AD do', async () => {
+			// Debrid-Link's probe is a bare-hash add, so a hit puts the torrent
+			// in the user's library. That is why it is a button and not part of
+			// the page sweep: Premiumize's and Offcloud's probes add nothing and
+			// can run across every row, this one cannot.
+			const { props } = renderTv({
 				rdKey: 'rd-key',
 				debridLinkKey: 'dl-key',
 				filteredResults: [{ ...baseTvResult, rdAvailable: false }],
 			});
 
+			await userEvent.click(screen.getByRole('button', { name: /Check DL/i }));
+			await waitFor(() =>
+				expect(props.checkServiceAvailability).toHaveBeenCalledWith(
+					expect.objectContaining({ hash: 'tv-hash' }),
+					['DL']
+				)
+			);
+		});
+
+		it('drops the check once the row is known cached, and shows Instant DL', () => {
+			renderTv({
+				debridLinkKey: 'dl-key',
+				filteredResults: [{ ...baseTvResult, dlAvailable: true }],
+			});
+
 			expect(screen.queryByRole('button', { name: /Check DL/i })).toBeNull();
-			expect(screen.queryByRole('button', { name: /Instant DL/i })).toBeNull();
-			expect(screen.getByRole('button', { name: /Check RD/i })).toBeTruthy();
+			expect(screen.getByRole('button', { name: /Instant DL/i })).toBeTruthy();
 		});
 
 		it('offers RM instead of add once the row is in the Debrid-Link library', async () => {

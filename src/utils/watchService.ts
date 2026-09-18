@@ -48,10 +48,10 @@ export const WATCH_SERVICE_LABEL: Record<WatchService, string> = {
  * choice between two paths to the same bytes, take the one that mutates nothing.
  *
  * **Debrid-Link goes last of the ones that can be tested.** Its probe is the
- * only mutating one - a hit is an add, undone afterwards - so where another
- * service already answered yes for the same row, that service is the cheaper
- * path to the same playback and wins. `dlAvailable` is set only for a hash the
- * sweep actually got an answer for, never for one it could not reach.
+ * only mutating one - a hit is an add, undone afterwards - so it sits behind a
+ * Check DL button rather than in the page sweep, and where another service
+ * already answered yes for the same row that service is the cheaper path to the
+ * same playback and wins. `dlAvailable` is set only for a row the user checked.
  */
 export const pickWatchService = (
 	result: Pick<
