@@ -112,6 +112,10 @@ vi.mock('@/services/torbox', () => ({
 vi.mock('@/utils/extractHashes', () => ({
 	__esModule: true,
 	extractHashes: (str: string) => [str.includes('btih:') ? str.split('btih:')[1] : str],
+	extractTorrentInputs: (str: string) => {
+		const hash = str.includes('btih:') ? str.split('btih:')[1].split('&')[0] : str;
+		return [{ kind: str.startsWith('magnet:') ? 'magnet' : 'hash', source: str, hash }];
+	},
 }));
 
 vi.mock('react-hot-toast', () => ({
@@ -306,7 +310,7 @@ describe('Library Page - addMagnet Query Parameter', () => {
 		await waitFor(() => {
 			expect(mockHandleAddAsMagnetInRd).toHaveBeenCalledWith(
 				'test-rd-key',
-				testHash,
+				magnetUri,
 				expect.any(Function)
 			);
 		});
@@ -324,9 +328,12 @@ describe('Library Page - addMagnet Query Parameter', () => {
 	});
 
 	it('should not process if more than one hash extracted', async () => {
-		vi.mocked(await import('@/utils/extractHashes')).extractHashes = vi
+		vi.mocked(await import('@/utils/extractHashes')).extractTorrentInputs = vi
 			.fn()
-			.mockReturnValue(['hash1', 'hash2']);
+			.mockReturnValue([
+				{ kind: 'hash', source: 'hash1', hash: 'hash1' },
+				{ kind: 'hash', source: 'hash2', hash: 'hash2' },
+			]);
 
 		mockRouter.query = { addMagnet: 'multiple hashes' };
 

@@ -4,6 +4,7 @@ import {
 	restartMagnet,
 	uploadMagnet,
 	uploadMagnetAd,
+	uploadTorrentFile,
 } from '@/services/allDebrid';
 import {
 	addHashAsMagnet,
@@ -25,6 +26,7 @@ import {
 	handleAddAsMagnetInTb,
 	handleAddMultipleHashesInAd,
 	handleAddMultipleHashesInRd,
+	handleAddMultipleTorrentFilesInAd,
 	handleAddMultipleTorrentFilesInRd,
 	handleAddTorrentFileInRd,
 	handleReinsertTorrentinRd,
@@ -905,6 +907,18 @@ describe('addMagnet utilities', () => {
 			await handleAddMultipleHashesInAd(adKey, hashes);
 
 			expect(toast.error).toHaveBeenCalledWith('Failed to add hash. Try again.');
+		});
+	});
+
+	describe('handleAddMultipleTorrentFilesInAd', () => {
+		it('passes the original files to the native upload helper', async () => {
+			const files = [new File(['one'], 'one.torrent'), new File(['two'], 'two.torrent')];
+			vi.mocked(uploadTorrentFile).mockResolvedValue({ files: [{ id: 1 }] } as any);
+
+			await handleAddMultipleTorrentFilesInAd('test-ad-key', files);
+
+			expect(uploadTorrentFile).toHaveBeenNthCalledWith(1, 'test-ad-key', files[0]);
+			expect(uploadTorrentFile).toHaveBeenNthCalledWith(2, 'test-ad-key', files[1]);
 		});
 	});
 

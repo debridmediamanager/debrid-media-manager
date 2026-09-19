@@ -4,6 +4,7 @@ const pm = vi.hoisted(() => ({
 	createPremiumizeTransfer: vi.fn(),
 	listPremiumizeTransfers: vi.fn(),
 	listPremiumizeFolder: vi.fn(),
+	uploadPremiumizeTorrentFile: vi.fn(),
 	toMagnetUri: (hash: string) =>
 		hash.startsWith('magnet:') ? hash : `magnet:?xt=urn:btih:${hash}`,
 	PremiumizeError: class PremiumizeError extends Error {
@@ -52,7 +53,11 @@ vi.mock('react-hot-toast', () => {
 	return { __esModule: true, default: fn };
 });
 
-import { handleAddAsMagnetInPm, handleAddMultipleHashesInPm } from './addMagnet';
+import {
+	handleAddAsMagnetInPm,
+	handleAddMultipleHashesInPm,
+	handleAddMultipleTorrentFilesInPm,
+} from './addMagnet';
 
 const HASH = 'DD8255ECDC7CA55FB0BBF81323D87062DB1F6D1C';
 
@@ -96,6 +101,14 @@ describe('handleAddAsMagnetInPm', () => {
 			`magnet:?xt=urn:btih:${HASH}`
 		);
 		expect(toastSuccess).toHaveBeenCalled();
+	});
+
+	it('preserves every parameter on a pasted magnet', async () => {
+		const magnet = `magnet:?xt=urn:btih:${HASH}&dn=Example&tr=udp%3A%2F%2Ftracker&ws=https%3A%2F%2Fseed`;
+
+		await handleAddAsMagnetInPm('pm-key', magnet);
+
+		expect(pm.createPremiumizeTransfer).toHaveBeenCalledWith('pm-key', magnet);
 	});
 
 	it('builds a finished library row from the transfer it just created', async () => {
@@ -157,5 +170,16 @@ describe('handleAddMultipleHashesInPm', () => {
 
 		expect(callback).toHaveBeenCalled();
 		expect(pm.createPremiumizeTransfer).toHaveBeenCalledTimes(3);
+	});
+});
+
+describe('handleAddMultipleTorrentFilesInPm', () => {
+	it('passes each original file to Premiumize', async () => {
+		const file = new File(['torrent'], 'sample.torrent');
+		pm.uploadPremiumizeTorrentFile.mockResolvedValue({ status: 'success', id: 'tid' });
+
+		await handleAddMultipleTorrentFilesInPm('pm-key', [file]);
+
+		expect(pm.uploadPremiumizeTorrentFile).toHaveBeenCalledWith('pm-key', file);
 	});
 });

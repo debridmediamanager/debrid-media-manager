@@ -3,6 +3,7 @@ import {
 	CACHE_CHECK_CHUNK_SIZE,
 	OffcloudError,
 	addOffcloudCloud,
+	addOffcloudTorrentFile,
 	checkOffcloudCache,
 	exploreOffcloudCloud,
 	extractBtih,
@@ -354,6 +355,20 @@ describe('getOffcloudCacheInfo', () => {
 });
 
 describe('addOffcloudCloud', () => {
+	it('uploads a torrent file as multipart without reducing it to a hash', async () => {
+		fetchMock.mockResolvedValue(jsonResponse({ requestId: 'r-file', status: 'created' }));
+		const file = new File(['d4:infod4:name6:Sampleee'], 'sample.torrent', {
+			type: 'application/x-bittorrent',
+		});
+
+		await addOffcloudTorrentFile('key', file);
+
+		const [, init] = lastCall();
+		expect(init.headers['Content-Type']).toBeUndefined();
+		expect(init.body).toBeInstanceOf(FormData);
+		expect((init.body as FormData).get('file')).toBe(file);
+	});
+
 	it('reports a cached magnet as downloaded from the add response alone', async () => {
 		fetchMock.mockResolvedValue(
 			jsonResponse({

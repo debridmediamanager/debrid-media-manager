@@ -718,13 +718,18 @@ export const getTorrentInfo = async (
 
 export const addHashAsMagnet = async (
 	accessToken: string,
-	hash: string,
+	hashOrMagnet: string,
 	bare: boolean = false
 ): Promise<string> => {
-	// Skip invalid hashes
-	if (!isValidSHA40Hash(hash)) {
-		throw new Error(`Invalid SHA40 hash: ${hash}`);
+	const source = hashOrMagnet.trim();
+	const isMagnet = source.startsWith('magnet:');
+	const magnetHash = isMagnet
+		? /(?:^|[?&])xt=urn:btih:([a-fA-F0-9]{40}|[A-Za-z2-7]{32})(?:&|$)/i.exec(source)?.[1]
+		: null;
+	if ((!isMagnet && !isValidSHA40Hash(source)) || (isMagnet && !magnetHash)) {
+		throw new Error(`Invalid SHA40 hash or v1 magnet: ${hashOrMagnet}`);
 	}
+	const magnet = isMagnet ? source : `magnet:?xt=urn:btih:${source}`;
 
 	// Counted before the call, and counted whatever comes back: RD's budget is
 	// spent by refused requests too, so a burst that is already being turned away
@@ -734,7 +739,7 @@ export const addHashAsMagnet = async (
 	try {
 		const response = await realDebridAxios.post(
 			`${bare ? 'https://app.real-debrid.com' : getProxyUrl(config.authProxy) + config.realDebridHostname}/rest/1.0/torrents/addMagnet`,
-			qs.stringify({ magnet: `magnet:?xt=urn:btih:${hash}` }),
+			qs.stringify({ magnet }),
 			{
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',

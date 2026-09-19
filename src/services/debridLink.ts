@@ -242,6 +242,7 @@ interface DlCallOptions {
 	path?: string;
 	query?: Record<string, string | number | boolean | undefined>;
 	body?: Record<string, string | number | boolean | undefined>;
+	formData?: FormData;
 }
 
 async function withTimeout<T>(run: (signal: AbortSignal) => Promise<T>): Promise<T> {
@@ -303,7 +304,8 @@ async function dlRequest<T>(
 
 	const path = options.path ?? endpoint;
 	const method = options.method ?? 'GET';
-	const body = options.body ? toFormBody(options.body) : undefined;
+	const body: BodyInit | undefined =
+		options.formData ?? (options.body ? toFormBody(options.body) : undefined);
 
 	return withTimeout(async (signal) => {
 		const response = await fetch(`${DL_API_BASE}/${path}${toQueryString(options.query)}`, {
@@ -313,7 +315,7 @@ async function dlRequest<T>(
 				// is a live log-leak path - query strings land in access logs,
 				// which is exactly how ten Real-Debrid keys got there.
 				Authorization: `Bearer ${token}`,
-				...(body === undefined
+				...(body === undefined || options.formData
 					? {}
 					: { 'Content-Type': 'application/x-www-form-urlencoded' }),
 			},
@@ -516,6 +518,17 @@ export async function addSeedboxTorrent(
 			structureType: options.structureType,
 			ip: options.ip,
 		},
+	});
+	return value;
+}
+
+/** Uploads the original .torrent file instead of converting it to a cached-only hash. */
+export async function addSeedboxTorrentFile(token: string, file: File): Promise<DebridLinkTorrent> {
+	const formData = new FormData();
+	formData.append('file', file);
+	const { value } = await dlRequest<DebridLinkTorrent>(token, 'seedbox/add', {
+		method: 'POST',
+		formData,
 	});
 	return value;
 }

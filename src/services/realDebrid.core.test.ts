@@ -130,6 +130,17 @@ describe('RealDebrid torrent APIs', () => {
 		expect(body).toContain('magnet%3A%3Fxt%3Durn%3Abtih%3A');
 	});
 
+	it('forwards the complete magnet URI instead of rebuilding it from the hash', async () => {
+		const hash = 'a'.repeat(40);
+		const magnet = `magnet:?xt=urn:btih:${hash}&dn=Example&tr=udp%3A%2F%2Ftracker&ws=https%3A%2F%2Fseed`;
+		realAxios.post.mockResolvedValue({ status: 201, data: { id: 'new' } });
+
+		await addHashAsMagnet('token', magnet);
+
+		const [, body] = realAxios.post.mock.calls[0];
+		expect(new URLSearchParams(body).get('magnet')).toBe(magnet);
+	});
+
 	it('uploads torrent files and returns the identifier', async () => {
 		const buffer = new ArrayBuffer(8);
 		const fakeFile = {

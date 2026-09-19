@@ -195,6 +195,10 @@ interface MagnetUploadData {
 	magnets: MagnetObject[];
 }
 
+interface MagnetFileUploadData {
+	files: MagnetObject[];
+}
+
 // For backward compatibility with existing code
 interface LinkObject {
 	link: string;
@@ -392,6 +396,26 @@ export const uploadMagnet = async (apikey: string, hashes: string[]): Promise<Ma
 		console.error('Error uploading magnet:', (error as any).message);
 		throw error;
 	}
+};
+
+/** Uploads the original .torrent bytes through AllDebrid's multipart endpoint. */
+export const uploadTorrentFile = async (
+	apikey: string,
+	file: File
+): Promise<MagnetFileUploadData> => {
+	const endpoint = `${config.allDebridHostname}/v4/magnet/upload/file`;
+	const form = new FormData();
+	form.append('files[]', file);
+	const response = await allDebridAxios.post<ApiResponse<MagnetFileUploadData>>(endpoint, form, {
+		headers: { Authorization: `Bearer ${apikey}` },
+	});
+	if (response.data.status === 'error') {
+		throw new Error(response.data.error?.message || 'Unknown error');
+	}
+	const data = response.data.data!;
+	const refused = data.files?.find((uploaded) => uploaded.error);
+	if (refused?.error) throw new Error(refused.error.message || refused.error.code);
+	return data;
 };
 
 // Helper function to convert MagnetFile structure to LinkObject for backward compatibility

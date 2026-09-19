@@ -29,6 +29,11 @@ import {
 	handleAddMultipleHashesInPm,
 	handleAddMultipleHashesInRd,
 	handleAddMultipleHashesInTb,
+	handleAddMultipleMagnetsInDl,
+	handleAddMultipleTorrentFilesInAd,
+	handleAddMultipleTorrentFilesInDl,
+	handleAddMultipleTorrentFilesInOc,
+	handleAddMultipleTorrentFilesInPm,
 	handleAddMultipleTorrentFilesInRd,
 	handleAddMultipleTorrentFilesInTb,
 	handleAddMultipleWebDownloadsInTb,
@@ -45,7 +50,7 @@ import {
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
-import { extractDownloadLinks, extractHashes } from '@/utils/extractHashes';
+import { extractDownloadLinks, extractTorrentInputs } from '@/utils/extractHashes';
 import { getRdStatus } from '@/utils/fetchTorrents';
 import { generateHashList, shareableTorrents } from '@/utils/hashList';
 import { filterLibraryItems, isRdBlockedFilename } from '@/utils/libraryFilters';
@@ -55,7 +60,6 @@ import { normalize } from '@/utils/mediaId';
 import { quickSearchLibrary } from '@/utils/quickSearch';
 import { isFailed, isInProgress, isSlowOrNoLinks } from '@/utils/slow';
 import { libraryToastOptions, magnetToastOptions } from '@/utils/toastOptions';
-import { getHashOfTorrent } from '@/utils/torrentFile';
 import {
 	handleShowInfoForAD,
 	handleShowInfoForDL,
@@ -261,10 +265,10 @@ function TorrentsPage() {
 		const { addMagnet } = router.query;
 		if (!addMagnet) return;
 
-		const hashes = extractHashes(addMagnet as string);
-		if (hashes.length !== 1) return;
+		const torrentInputs = extractTorrentInputs(addMagnet as string);
+		if (torrentInputs.length !== 1) return;
 
-		const hash = hashes[0];
+		const [{ hash, source }] = torrentInputs;
 
 		if (processingHashRef.current === hash) return;
 
@@ -277,7 +281,7 @@ function TorrentsPage() {
 			promises.push(
 				(async () => {
 					try {
-						await handleAddAsMagnetInRd(rdKey, hash, async (info) => {
+						await handleAddAsMagnetInRd(rdKey, source, async (info) => {
 							const userTorrent = (
 								await import('@/utils/fetchTorrents')
 							).convertToUserTorrent({
@@ -302,13 +306,10 @@ function TorrentsPage() {
 			promises.push(
 				new Promise<void>(async (resolve) => {
 					try {
-						const magnetUri = hash.startsWith('magnet:?')
-							? hash
-							: `magnet:?xt=urn:btih:${hash}`;
 						const { uploadMagnet, getMagnetStatus } = await import(
 							'@/services/allDebrid'
 						);
-						const resp = await uploadMagnet(adKey, [magnetUri]);
+						const resp = await uploadMagnet(adKey, [source]);
 						if (
 							resp.magnets.length > 0 &&
 							!resp.magnets[0].error &&
@@ -337,7 +338,7 @@ function TorrentsPage() {
 			promises.push(
 				(async () => {
 					try {
-						await handleAddAsMagnetInTb(tbKey, hash, async (userTorrent) => {
+						await handleAddAsMagnetInTb(tbKey, source, async (userTorrent) => {
 							addTorrent(userTorrent);
 						});
 					} catch (error) {
@@ -351,7 +352,7 @@ function TorrentsPage() {
 			promises.push(
 				(async () => {
 					try {
-						await handleAddAsMagnetInPm(pmKey, hash, async (userTorrent) => {
+						await handleAddAsMagnetInPm(pmKey, source, async (userTorrent) => {
 							addTorrent(userTorrent);
 						});
 					} catch (error) {
@@ -365,7 +366,7 @@ function TorrentsPage() {
 			promises.push(
 				(async () => {
 					try {
-						await handleAddAsMagnetInOc(ocKey, hash, async (userTorrent) => {
+						await handleAddAsMagnetInOc(ocKey, source, async (userTorrent) => {
 							addTorrent(userTorrent);
 						});
 					} catch (error) {
@@ -382,7 +383,7 @@ function TorrentsPage() {
 						// The full magnet, not the bare hash: on this surface the
 						// button means "add this", and a bare hash only lands when
 						// Debrid-Link already holds the content.
-						await handleAddAsMagnetInDl(dlKey, hash, async (userTorrent) => {
+						await handleAddAsMagnetInDl(dlKey, source, async (userTorrent) => {
 							addTorrent(userTorrent);
 						});
 					} catch (error) {
@@ -1735,13 +1736,13 @@ function TorrentsPage() {
 					document.getElementById('webDownloadInput') as HTMLTextAreaElement | null
 				)?.value;
 
-				let hashes: string[] = [];
+				let torrentInputs: ReturnType<typeof extractTorrentInputs> = [];
 				let torrentFiles: File[] = [];
 				let webDownloadLinks: string[] = [];
 
 				// Process magnet links
 				if (magnetInput) {
-					hashes.push(...extractHashes(magnetInput));
+					torrentInputs = extractTorrentInputs(magnetInput);
 				}
 
 				// Collect torrent files (don't convert to hashes)
@@ -1763,7 +1764,7 @@ function TorrentsPage() {
 				}
 
 				if (
-					hashes.length === 0 &&
+					torrentInputs.length === 0 &&
 					torrentFiles.length === 0 &&
 					webDownloadLinks.length === 0
 				) {
@@ -1775,17 +1776,24 @@ function TorrentsPage() {
 					return false;
 				}
 
-				return { hashes, torrentFiles, webDownloadLinks };
+				return { torrentInputs, torrentFiles, webDownloadLinks };
 			},
 		});
 
 		if (dismiss === Modal.DismissReason.cancel || !input) return;
 
-		const { hashes, torrentFiles, webDownloadLinks } = input as {
-			hashes: string[];
+		const { torrentInputs, torrentFiles, webDownloadLinks } = input as {
+			torrentInputs: ReturnType<typeof extractTorrentInputs>;
 			torrentFiles: File[];
 			webDownloadLinks: string[];
 		};
+		const torrentSources = torrentInputs.map(({ source }) => source);
+		const pastedMagnets = torrentInputs
+			.filter(({ kind }) => kind === 'magnet')
+			.map(({ source }) => source);
+		const standaloneHashes = torrentInputs
+			.filter(({ kind }) => kind === 'hash')
+			.map(({ hash }) => hash);
 
 		if (rdKey && debridService === 'rd') {
 			// Handle torrent files first (direct upload)
@@ -1797,28 +1805,28 @@ function TorrentsPage() {
 				);
 			}
 			// Then handle magnet hashes
-			if (hashes.length > 0) {
-				handleAddMultipleHashesInRd(rdKey, hashes, async () => await refreshLibrary());
+			if (torrentSources.length > 0) {
+				handleAddMultipleHashesInRd(
+					rdKey,
+					torrentSources,
+					async () => await refreshLibrary()
+				);
 			}
 		}
 		if (adKey && debridService === 'ad') {
-			// AllDebrid: combine hashes from magnets and torrent files
-			const allHashes = [...hashes];
-
 			if (torrentFiles.length > 0) {
-				try {
-					const fileHashes = await Promise.all(
-						torrentFiles.map((file) => getHashOfTorrent(file))
-					);
-					allHashes.push(...(fileHashes.filter((h) => h !== undefined) as string[]));
-				} catch (error) {
-					toast.error(`Hash extraction failed: ${error}`);
-					return;
-				}
+				handleAddMultipleTorrentFilesInAd(
+					adKey,
+					torrentFiles,
+					async () => await refreshLibrary()
+				);
 			}
-
-			if (allHashes.length > 0) {
-				handleAddMultipleHashesInAd(adKey, allHashes, async () => await refreshLibrary());
+			if (torrentSources.length > 0) {
+				handleAddMultipleHashesInAd(
+					adKey,
+					torrentSources,
+					async () => await refreshLibrary()
+				);
 			}
 		}
 		if (tbKey && debridService === 'tb') {
@@ -1830,8 +1838,12 @@ function TorrentsPage() {
 					async () => await refreshLibrary()
 				);
 			}
-			if (hashes.length > 0) {
-				handleAddMultipleHashesInTb(tbKey, hashes, async () => await refreshLibrary());
+			if (torrentSources.length > 0) {
+				handleAddMultipleHashesInTb(
+					tbKey,
+					torrentSources,
+					async () => await refreshLibrary()
+				);
 			}
 			if (webDownloadLinks.length > 0) {
 				handleAddMultipleWebDownloadsInTb(
@@ -1842,64 +1854,59 @@ function TorrentsPage() {
 			}
 		}
 		if (pmKey && debridService === 'pm') {
-			// Premiumize takes a magnet or any HTTP URL through the same endpoint,
-			// so a .torrent file is the one shape it has no route for.
-			const allHashes = [...hashes];
 			if (torrentFiles.length > 0) {
-				try {
-					const fileHashes = await Promise.all(
-						torrentFiles.map((file) => getHashOfTorrent(file))
-					);
-					allHashes.push(...(fileHashes.filter((h) => h !== undefined) as string[]));
-				} catch (error) {
-					toast.error(`Hash extraction failed: ${error}`);
-					return;
-				}
+				handleAddMultipleTorrentFilesInPm(
+					pmKey,
+					torrentFiles,
+					async () => await refreshLibrary()
+				);
 			}
-			if (allHashes.length > 0) {
-				handleAddMultipleHashesInPm(pmKey, allHashes, async () => await refreshLibrary());
+			if (torrentSources.length > 0) {
+				handleAddMultipleHashesInPm(
+					pmKey,
+					torrentSources,
+					async () => await refreshLibrary()
+				);
 			}
 		}
 		if (ocKey && debridService === 'oc') {
-			// `POST /api/cloud` takes a magnet or a torrent-file URL, but not an
-			// uploaded file, so a .torrent is reduced to its hash here the same way
-			// Premiumize's is.
-			const allHashes = [...hashes];
 			if (torrentFiles.length > 0) {
-				try {
-					const fileHashes = await Promise.all(
-						torrentFiles.map((file) => getHashOfTorrent(file))
-					);
-					allHashes.push(...(fileHashes.filter((h) => h !== undefined) as string[]));
-				} catch (error) {
-					toast.error(`Hash extraction failed: ${error}`);
-					return;
-				}
+				handleAddMultipleTorrentFilesInOc(
+					ocKey,
+					torrentFiles,
+					async () => await refreshLibrary()
+				);
 			}
-			if (allHashes.length > 0) {
-				handleAddMultipleHashesInOc(ocKey, allHashes, async () => await refreshLibrary());
+			if (torrentSources.length > 0) {
+				handleAddMultipleHashesInOc(
+					ocKey,
+					torrentSources,
+					async () => await refreshLibrary()
+				);
 			}
 		}
 		if (dlKey && debridService === 'dl') {
-			// `POST /seedbox/add` takes a magnet, a bare hash or a public torrent
-			// URL, but a multipart upload is a different call, so a .torrent is
-			// reduced to its hash here the same way Premiumize's is.
-			const allHashes = [...hashes];
 			if (torrentFiles.length > 0) {
-				try {
-					const fileHashes = await Promise.all(
-						torrentFiles.map((file) => getHashOfTorrent(file))
-					);
-					allHashes.push(...(fileHashes.filter((h) => h !== undefined) as string[]));
-				} catch (error) {
-					toast.error(`Hash extraction failed: ${error}`);
-					return;
-				}
+				handleAddMultipleTorrentFilesInDl(
+					dlKey,
+					torrentFiles,
+					async () => await refreshLibrary()
+				);
 			}
-			if (allHashes.length > 0) {
-				// Bare hashes, so a paste of many only lands what Debrid-Link
-				// already holds - the account's whole day is 50 torrents.
-				handleAddMultipleHashesInDl(dlKey, allHashes, async () => await refreshLibrary());
+			if (pastedMagnets.length > 0) {
+				handleAddMultipleMagnetsInDl(
+					dlKey,
+					pastedMagnets,
+					async () => await refreshLibrary()
+				);
+			}
+			if (standaloneHashes.length > 0) {
+				// Standalone hash lists remain cached-only to protect the daily quota.
+				handleAddMultipleHashesInDl(
+					dlKey,
+					standaloneHashes,
+					async () => await refreshLibrary()
+				);
 			}
 		}
 	}

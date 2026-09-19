@@ -20,7 +20,7 @@ import {
  *    gets followed: header in, header out.
  */
 
-/** Every endpoint DMM may reach. `folder/paste`, `feed/*` and uploads are deliberately absent. */
+/** Every JSON endpoint DMM may reach. Multipart uploads use the byte-preserving upload route. */
 export const ALLOWED_ENDPOINTS = [
 	'account/info',
 	'cache/check',

@@ -4,6 +4,7 @@ import {
 	extractDownloadLinks,
 	extractHashes,
 	extractMagnets,
+	extractTorrentInputs,
 	isValidHash,
 	normalizeHash,
 } from './extractHashes';
@@ -48,6 +49,30 @@ describe('extractHashes utils', () => {
 		expect(extractMagnets(`foo ${magnet} bar`)).toEqual([magnet]);
 		// When only hashes provided, convert them to magnets
 		expect(extractMagnets(`hashes: ${hash}`)).toEqual([magnet]);
+	});
+
+	it('preserves complete magnet URIs and normalizes base32 BTIH values', () => {
+		const base32 = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+		const magnet = `magnet:?xt=urn:btih:${base32}&dn=Example+Release&tr=udp%3A%2F%2Fone&tr=udp%3A%2F%2Ftwo&ws=https%3A%2F%2Fseed%2Ffile`;
+
+		expect(extractTorrentInputs(`before ${magnet} after`)).toEqual([
+			{
+				kind: 'magnet',
+				source: magnet,
+				hash: '0000000000000000000000000000000000000000',
+			},
+		]);
+	});
+
+	it('keeps standalone hashes distinct from full magnets in mixed input', () => {
+		const magnetHash = 'abcdef0123456789abcdef0123456789abcdef01';
+		const bareHash = '1234567890abcdef1234567890abcdef12345678';
+		const magnet = `magnet:?xt=urn:btih:${magnetHash}&dn=Example&tr=udp%3A%2F%2Ftracker`;
+
+		expect(extractTorrentInputs(`${magnet}\n${bareHash}`)).toEqual([
+			{ kind: 'magnet', source: magnet, hash: magnetHash },
+			{ kind: 'hash', source: bareHash, hash: bareHash },
+		]);
 	});
 
 	describe('extractDownloadLinks', () => {

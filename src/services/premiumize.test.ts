@@ -15,6 +15,7 @@ import {
 	resolvePremiumizeTransferHash,
 	resolvePremiumizeTransferHashes,
 	toMagnetUri,
+	uploadPremiumizeTorrentFile,
 } from './premiumize';
 
 const CDN = 'https://1-cdn2-ovh-fra.energycdn.com/cdn3sto/pool/uid/100000002/1/tok/sig';
@@ -41,6 +42,21 @@ afterEach(() => {
 const lastCall = () => fetchMock.mock.calls[fetchMock.mock.calls.length - 1];
 
 describe('premiumize transport', () => {
+	it('uploads torrent files through the same-origin multipart proxy', async () => {
+		fetchMock.mockResolvedValue(jsonResponse({ status: 'success', id: 'transfer-1' }));
+		const file = new File(['d4:infod4:name6:Sampleee'], 'sample.torrent', {
+			type: 'application/x-bittorrent',
+		});
+
+		await uploadPremiumizeTorrentFile('secretkey', file);
+
+		const [url, init] = lastCall();
+		expect(url).toBe('/api/premiumize/upload');
+		expect(init.headers.Authorization).toBe('Bearer secretkey');
+		expect(init.body).toBeInstanceOf(FormData);
+		expect((init.body as FormData).get('src')).toBe(file);
+	});
+
 	it('posts through the same-origin proxy with the key in a header, never the URL', async () => {
 		fetchMock.mockResolvedValue(jsonResponse({ status: 'success', customer_id: '100000002' }));
 

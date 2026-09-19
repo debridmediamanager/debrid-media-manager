@@ -2,10 +2,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const oc = vi.hoisted(() => ({
 	addOffcloudCloud: vi.fn(),
+	addOffcloudTorrentFile: vi.fn(),
 	// The pure helpers are the behaviour under test - `isValidBtih` is what stops
 	// a zombie being created - so they are the real implementations, not stubs.
 	isValidBtih: (hash: string) =>
 		/^[0-9a-fA-F]{40}$/.test(hash.trim()) || /^[A-Za-z2-7]{32}$/.test(hash.trim()),
+	extractBtih: (source: string) =>
+		/(?:^|[?&])xt=urn:btih:([A-Za-z0-9]{32,40})(?:&|$)/.exec(source)?.[1] ?? null,
 	toMagnetUri: (hash: string) =>
 		hash.startsWith('magnet:') ? hash : `magnet:?xt=urn:btih:${hash.trim()}`,
 	OffcloudError: class OffcloudError extends Error {
@@ -62,7 +65,11 @@ vi.mock('react-hot-toast', () => {
 	return { __esModule: true, default: fn };
 });
 
-import { handleAddAsMagnetInOc, handleAddMultipleHashesInOc } from './addMagnet';
+import {
+	handleAddAsMagnetInOc,
+	handleAddMultipleHashesInOc,
+	handleAddMultipleTorrentFilesInOc,
+} from './addMagnet';
 
 const HASH = 'DD8255ECDC7CA55FB0BBF81323D87062DB1F6D1C';
 
@@ -87,6 +94,14 @@ describe('handleAddAsMagnetInOc', () => {
 		await handleAddAsMagnetInOc('oc-key', HASH);
 
 		expect(oc.addOffcloudCloud).toHaveBeenCalledWith('oc-key', `magnet:?xt=urn:btih:${HASH}`);
+	});
+
+	it('preserves display name, trackers, and webseeds on pasted magnets', async () => {
+		const magnet = `magnet:?xt=urn:btih:${HASH}&dn=Example&tr=udp%3A%2F%2Fone&tr=udp%3A%2F%2Ftwo&ws=https%3A%2F%2Fseed`;
+
+		await handleAddAsMagnetInOc('oc-key', magnet);
+
+		expect(oc.addOffcloudCloud).toHaveBeenCalledWith('oc-key', magnet);
 	});
 
 	it('says the content is ready when Offcloud finished inside the add response', async () => {
@@ -212,5 +227,16 @@ describe('handleAddMultipleHashesInOc', () => {
 
 		expect(oc.addOffcloudCloud).toHaveBeenCalledTimes(1);
 		expect(toastPlain).toHaveBeenCalledWith('Added 1 hash to Offcloud.', expect.any(Object));
+	});
+});
+
+describe('handleAddMultipleTorrentFilesInOc', () => {
+	it('passes each original file to Offcloud', async () => {
+		const file = new File(['torrent'], 'sample.torrent');
+		oc.addOffcloudTorrentFile.mockResolvedValue(added('created'));
+
+		await handleAddMultipleTorrentFilesInOc('oc-key', [file]);
+
+		expect(oc.addOffcloudTorrentFile).toHaveBeenCalledWith('oc-key', file);
 	});
 });

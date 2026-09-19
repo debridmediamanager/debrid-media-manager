@@ -1,7 +1,7 @@
 /**
  * Premiumize API client.
  *
- * Premiumize is not shaped like the other three services and the differences
+ * Premiumize is not shaped like the other debrid services and the differences
  * are load-bearing, so they are encoded here rather than left to callers:
  *
  *  - **Everything goes through a server-side proxy in the browser.** Premiumize's
@@ -362,6 +362,33 @@ export const createPremiumizeTransfer = (
 	src: string
 ): Promise<PremiumizeEnvelope & { id: string; name: string; type?: string }> =>
 	pmRequest(apiKey, 'transfer/create', { src });
+
+/** Uploads a .torrent file through DMM's same-origin multipart proxy. */
+export async function uploadPremiumizeTorrentFile(
+	apiKey: string,
+	file: File
+): Promise<PremiumizeEnvelope & { id: string; name: string; type?: string }> {
+	if (!apiKey) throw new PremiumizeError('Missing Premiumize API key.', 'authentication_failed');
+	const formData = new FormData();
+	formData.append('src', file);
+	const response = await fetch(`${PM_PROXY_BASE}/upload`, {
+		method: 'POST',
+		headers: { Authorization: `Bearer ${apiKey}` },
+		body: formData,
+	});
+	const body = (await response.json().catch(() => ({
+		status: 'error' as const,
+		code: 'non_json_response',
+		message: `Proxy answered ${response.status}`,
+	}))) as PremiumizeEnvelope & { id: string; name: string; type?: string };
+	if (response.status >= 400 || body.status !== 'success') {
+		throw new PremiumizeError(
+			body.message || 'Premiumize torrent upload failed',
+			body.code || `http_${response.status}`
+		);
+	}
+	return body;
+}
 
 /**
  * Deletes a transfer **and the files it produced**. That is not what the vendor

@@ -8,15 +8,18 @@ import {
 	restartMagnet,
 	uploadMagnet,
 	uploadMagnetAd,
+	uploadTorrentFile,
 } from '@/services/allDebrid';
 import {
 	addSeedboxTorrent,
+	addSeedboxTorrentFile,
 	DebridLinkError,
 	isDlFinished,
 	toMagnetUri as toDlMagnetUri,
 } from '@/services/debridLink';
 import {
 	addOffcloudCloud,
+	addOffcloudTorrentFile,
 	isValidBtih,
 	OffcloudError,
 	toMagnetUri as toOffcloudMagnetUri,
@@ -27,6 +30,7 @@ import {
 	listPremiumizeTransfers,
 	PremiumizeError,
 	toMagnetUri,
+	uploadPremiumizeTorrentFile,
 } from '@/services/premiumize';
 import {
 	addHashAsMagnet,
@@ -52,6 +56,7 @@ import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { isRdBlockedName } from './deInfringe';
 import { handleDeleteRdTorrent } from './deleteTorrent';
+import { extractTorrentInputs } from './extractHashes';
 import {
 	buildPremiumizeRowSources,
 	convertToDlUserTorrent,
@@ -572,6 +577,27 @@ export const handleAddMultipleHashesInAd = async (
 	}
 };
 
+export const handleAddMultipleTorrentFilesInAd = async (
+	adKey: string,
+	files: File[],
+	callback?: () => Promise<void>
+) => {
+	let success = 0;
+	for (const file of files) {
+		try {
+			await uploadTorrentFile(adKey, file);
+			success++;
+		} catch (error) {
+			console.error('Error uploading torrent file to AllDebrid:', error);
+		}
+	}
+	if (callback) await callback();
+	toast(
+		`Added ${success} torrent file${success === 1 ? '' : 's'} to AllDebrid.`,
+		magnetToastOptions
+	);
+};
+
 export const handleRestartTorrent = async (adKey: string, id: string) => {
 	try {
 		await restartMagnet(adKey, id.substring(3));
@@ -849,6 +875,7 @@ export const handleAddAsMagnetInPm = async (
 	callback?: (torrent: UserTorrent) => Promise<void>,
 	silent: boolean = false
 ) => {
+	const sourceHash = extractTorrentInputs(hash)[0]?.hash ?? hash.toLowerCase();
 	try {
 		const created = await createPremiumizeTransfer(pmKey, toMagnetUri(hash));
 		if (!created.id) {
@@ -879,7 +906,7 @@ export const handleAddAsMagnetInPm = async (
 						path: `${transfer.name}/${entry.name}`,
 					}));
 				const [source] = buildPremiumizeRowSources([transfer], root.content ?? [], files);
-				await callback(convertToPremiumizeUserTorrent(source, hash.toLowerCase()));
+				await callback(convertToPremiumizeUserTorrent(source, sourceHash));
 			}
 		}
 
@@ -925,6 +952,28 @@ export const handleAddMultipleHashesInPm = async (
 	);
 };
 
+export const handleAddMultipleTorrentFilesInPm = async (
+	pmKey: string,
+	files: File[],
+	callback?: () => Promise<void>
+) => {
+	let success = 0;
+	for (let i = 0; i < files.length; i++) {
+		if (i > 0) await delay(PM_BATCH_MAGNET_DELAY);
+		try {
+			await uploadPremiumizeTorrentFile(pmKey, files[i]);
+			success++;
+		} catch (error) {
+			console.error('Error uploading torrent file to Premiumize:', error);
+		}
+	}
+	if (callback) await callback();
+	toast(
+		`Added ${success} torrent file${success === 1 ? '' : 's'} to Premiumize.`,
+		magnetToastOptions
+	);
+};
+
 const OC_BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 250;
 
 /**
@@ -951,7 +1000,8 @@ export const handleAddAsMagnetInOc = async (
 	callback?: (torrent: UserTorrent) => Promise<void>,
 	silent: boolean = false
 ) => {
-	if (!isValidBtih(hash)) {
+	const sourceHash = extractTorrentInputs(hash)[0]?.hash ?? null;
+	if (!sourceHash || !isValidBtih(sourceHash)) {
 		// Refused before the request, not after: Offcloud would take it.
 		if (!silent) toast.error('That is not a valid info hash.', magnetToastOptions);
 		throw new OffcloudError(`"${hash}" is not a valid info hash.`, 'invalid_info_hash');
@@ -971,7 +1021,7 @@ export const handleAddAsMagnetInOc = async (
 		// The hash is known here - it is what was just submitted - so the row is
 		// built with it rather than re-derived from Offcloud's rewritten
 		// `originalLink`.
-		if (callback) await callback(convertToOffcloudUserTorrent(added, hash));
+		if (callback) await callback(convertToOffcloudUserTorrent(added, sourceHash.toLowerCase()));
 
 		if (!silent) {
 			toast.success(
@@ -1017,6 +1067,28 @@ export const handleAddMultipleHashesInOc = async (
 	}
 	if (callback) await callback();
 	toast(`Added ${success} ${success === 1 ? 'hash' : 'hashes'} to Offcloud.`, magnetToastOptions);
+};
+
+export const handleAddMultipleTorrentFilesInOc = async (
+	ocKey: string,
+	files: File[],
+	callback?: () => Promise<void>
+) => {
+	let success = 0;
+	for (let i = 0; i < files.length; i++) {
+		if (i > 0) await delay(OC_BATCH_MAGNET_DELAY);
+		try {
+			await addOffcloudTorrentFile(ocKey, files[i]);
+			success++;
+		} catch (error) {
+			console.error('Error uploading torrent file to Offcloud:', error);
+		}
+	}
+	if (callback) await callback();
+	toast(
+		`Added ${success} torrent file${success === 1 ? '' : 's'} to Offcloud.`,
+		magnetToastOptions
+	);
 };
 
 const DL_BATCH_MAGNET_DELAY = process.env.VITEST_WORKER_ID ? 0 : 250;
@@ -1086,6 +1158,7 @@ export const handleAddAsMagnetInDl = async (
 	callback?: (torrent: UserTorrent) => Promise<void>,
 	silent: boolean = false
 ) => {
+	const sourceHash = extractTorrentInputs(hash)[0]?.hash ?? hash.toLowerCase();
 	try {
 		const torrent = await addSeedboxTorrent(dlKey, toDlMagnetUri(hash));
 		if (!torrent?.id) {
@@ -1093,7 +1166,7 @@ export const handleAddAsMagnetInDl = async (
 			return;
 		}
 
-		if (callback) await callback(convertToDlUserTorrent(torrent, hash));
+		if (callback) await callback(convertToDlUserTorrent(torrent, sourceHash));
 
 		if (!silent) {
 			toast.success(
@@ -1184,4 +1257,46 @@ export const handleAddMultipleHashesInDl = async (
 			magnetToastOptions
 		);
 	}
+};
+
+/** Full magnets are intentional downloads; unlike bare hash lists they may consume quota. */
+export const handleAddMultipleMagnetsInDl = async (
+	dlKey: string,
+	magnets: string[],
+	callback?: () => Promise<void>
+) => {
+	let success = 0;
+	for (let i = 0; i < magnets.length; i++) {
+		if (i > 0) await delay(DL_BATCH_MAGNET_DELAY);
+		try {
+			await handleAddAsMagnetInDl(dlKey, magnets[i], undefined, true);
+			success++;
+		} catch (error) {
+			console.error('Error adding magnet in Debrid-Link:', error);
+		}
+	}
+	if (callback) await callback();
+	toast(`Added ${success} magnet${success === 1 ? '' : 's'} to Debrid-Link.`, magnetToastOptions);
+};
+
+export const handleAddMultipleTorrentFilesInDl = async (
+	dlKey: string,
+	files: File[],
+	callback?: () => Promise<void>
+) => {
+	let success = 0;
+	for (let i = 0; i < files.length; i++) {
+		if (i > 0) await delay(DL_BATCH_MAGNET_DELAY);
+		try {
+			await addSeedboxTorrentFile(dlKey, files[i]);
+			success++;
+		} catch (error) {
+			console.error('Error uploading torrent file to Debrid-Link:', error);
+		}
+	}
+	if (callback) await callback();
+	toast(
+		`Added ${success} torrent file${success === 1 ? '' : 's'} to Debrid-Link.`,
+		magnetToastOptions
+	);
 };

@@ -160,20 +160,21 @@ async function withTimeout<T>(run: (signal: AbortSignal) => Promise<T>): Promise
 async function ocRequest<T>(
 	apiKey: string,
 	path: string,
-	body?: Record<string, unknown>
+	body?: Record<string, unknown> | FormData
 ): Promise<T> {
 	if (!apiKey) throw new OffcloudError('Missing Offcloud API key.', 'authentication_failed');
 
 	return withTimeout(async (signal) => {
+		const isMultipart = typeof FormData !== 'undefined' && body instanceof FormData;
 		const response = await fetch(`${OC_API_BASE}/${path}`, {
 			method: body ? 'POST' : 'GET',
 			headers: {
 				// Header only. `?key=<key>` authenticates upstream and is a leak
 				// path - query strings land in access logs.
 				Authorization: `Bearer ${apiKey}`,
-				...(body ? { 'Content-Type': 'application/json' } : {}),
+				...(body && !isMultipart ? { 'Content-Type': 'application/json' } : {}),
 			},
-			...(body ? { body: JSON.stringify(body) } : {}),
+			...(body ? { body: isMultipart ? body : JSON.stringify(body) } : {}),
 			signal,
 		});
 
@@ -435,6 +436,13 @@ export function addOffcloudCloud(apiKey: string, source: string): Promise<Offclo
 	return ocRequest<OffcloudAddResult>(apiKey, 'cloud', {
 		url: looksLikeUrl ? trimmed : toMagnetUri(trimmed),
 	});
+}
+
+/** Uploads the original .torrent bytes through Offcloud's multipart cloud endpoint. */
+export function addOffcloudTorrentFile(apiKey: string, file: File): Promise<OffcloudAddResult> {
+	const formData = new FormData();
+	formData.append('file', file);
+	return ocRequest<OffcloudAddResult>(apiKey, 'cloud', formData);
 }
 
 /**

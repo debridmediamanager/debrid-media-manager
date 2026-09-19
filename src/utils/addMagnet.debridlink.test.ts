@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const dl = vi.hoisted(() => ({
 	addSeedboxTorrent: vi.fn(),
+	addSeedboxTorrentFile: vi.fn(),
 	// The pure helpers are part of the behaviour under test - `toMagnetUri` is
 	// what separates the search-page add from the hash-list one, and the `>=`
 	// threshold is what decides which toast a user sees - so they are the real
@@ -80,7 +81,12 @@ vi.mock('react-hot-toast', () => {
 	return { __esModule: true, default: fn };
 });
 
-import { handleAddAsMagnetInDl, handleAddMultipleHashesInDl } from './addMagnet';
+import {
+	handleAddAsMagnetInDl,
+	handleAddMultipleHashesInDl,
+	handleAddMultipleMagnetsInDl,
+	handleAddMultipleTorrentFilesInDl,
+} from './addMagnet';
 
 const HASH = 'DD8255ECDC7CA55FB0BBF81323D87062DB1F6D1C';
 const HASH2 = 'DD8255ECDC7CA55FB0BBF81323D87062DB1F6D1D';
@@ -326,5 +332,26 @@ describe('handleAddMultipleHashesInDl', () => {
 			'Added 2 hashes to Debrid-Link.',
 			expect.any(Object)
 		);
+	});
+});
+
+describe('handleAddMultipleMagnetsInDl', () => {
+	it('keeps full magnet metadata and does not use the cached-only hash path', async () => {
+		const magnet = `magnet:?xt=urn:btih:${HASH}&dn=Example&tr=udp%3A%2F%2Ftracker&ws=https%3A%2F%2Fseed`;
+
+		await handleAddMultipleMagnetsInDl('dl-key', [magnet]);
+
+		expect(dl.addSeedboxTorrent).toHaveBeenCalledWith('dl-key', magnet);
+	});
+});
+
+describe('handleAddMultipleTorrentFilesInDl', () => {
+	it('passes each original file to Debrid-Link', async () => {
+		const file = new File(['torrent'], 'sample.torrent');
+		dl.addSeedboxTorrentFile.mockResolvedValue(torrent(100));
+
+		await handleAddMultipleTorrentFilesInDl('dl-key', [file]);
+
+		expect(dl.addSeedboxTorrentFile).toHaveBeenCalledWith('dl-key', file);
 	});
 });
