@@ -139,6 +139,13 @@ const nextConfig = {
 		allDebridHostname: 'https://api.alldebrid.com',
 		allDebridAgent: 'debridMediaManager',
 		traktClientId: '8a7455d06804b07fa25e27454706c6f2107b6fe5ed2ad805eff3b456a17e79f0',
+		// Simkl AUTH V2. A public PKCE client, so this is meant to be published -
+		// but it is registered against one redirect URI, so an instance served
+		// from another origin has to register its own and set SIMKL_V2_CLIENT_ID.
+		// Not interchangeable with SIMKL_CLIENT_ID, which is a V1 key.
+		simklClientId:
+			process.env.SIMKL_V2_CLIENT_ID ||
+			'ee604693523d56749368fc703b2467b60a2ee2531af258f689c8b9666a5d3c5b',
 		torboxHostname: 'https://api.torbox.app',
 		patreonClientId: process.env.PATREON_CLIENT_ID,
 		githubClientId: process.env.GITHUB_CLIENT_ID,

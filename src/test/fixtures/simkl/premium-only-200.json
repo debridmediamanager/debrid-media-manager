@@ -1,0 +1,9 @@
+{
+	"error": "premium_only",
+	"item": {
+		"title": "Upgrade to Simkl PRO/VIP to unlock this list",
+		"description": "Subscribe to Simkl PRO or VIP to view this list",
+		"poster": "https://simkl.in/poster_upgrade.webp"
+	},
+	"message": "Custom list items are available to Simkl PRO and VIP members only."
+}

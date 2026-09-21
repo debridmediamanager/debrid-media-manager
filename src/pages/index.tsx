@@ -4,6 +4,7 @@ import { Logo } from '@/components/Logo';
 import { MainActions } from '@/components/MainActions';
 import { SearchBar } from '@/components/SearchBar';
 import { ServiceCard } from '@/components/ServiceCard';
+import { SimklSection } from '@/components/SimklSection';
 import { TraktSection } from '@/components/TraktSection';
 import { ZurgBanner } from '@/components/ZurgBanner';
 import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
@@ -14,6 +15,7 @@ import { getTerms } from '@/utils/browseTerms';
 import { useGuestMode } from '@/utils/guestMode';
 import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
+import { beginSimklLogin } from '@/utils/simklLogin';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { Settings } from 'lucide-react';
@@ -42,6 +44,8 @@ function IndexPage() {
 		dlError,
 		traktUser,
 		traktError,
+		simklUser,
+		simklError,
 		hasRDAuth,
 		hasADAuth,
 		hasTBAuth,
@@ -49,6 +53,7 @@ function IndexPage() {
 		hasOCAuth,
 		hasDLAuth,
 		hasTraktAuth,
+		hasSimklAuth,
 		isLoading,
 	} = useCurrentUser();
 	const {
@@ -74,7 +79,8 @@ function IndexPage() {
 		(!hasPMAuth || !!pmUser || !!pmError) &&
 		(!hasOCAuth || !!ocUser || !!ocError) &&
 		(!hasDLAuth || !!dlUser || !!dlError) &&
-		(!hasTraktAuth || !!traktUser || !!traktError);
+		(!hasTraktAuth || !!traktUser || !!traktError) &&
+		(!hasSimklAuth || !!simklUser || !!simklError);
 
 	// Settling still depends on a promise resolving, and a provider can park one
 	// for minutes - TorBox answers a 429 by pausing every one of its calls for
@@ -148,6 +154,9 @@ function IndexPage() {
 		if (traktError) {
 			toast.error('Trakt profile fetch failed. Use the Trakt card below.');
 		}
+		if (simklError) {
+			toast.error('Simkl profile fetch failed. Use the Simkl card below.');
+		}
 		if (localStorage.getItem('next_action') === 'clear_cache') {
 			localStorage.removeItem('next_action');
 			const request = window.indexedDB.deleteDatabase('DMMDB');
@@ -161,7 +170,7 @@ function IndexPage() {
 				toast('Local DB still open. Refresh and retry.', genericToastOptions);
 			};
 		}
-	}, [rdError, adError, tbError, pmError, ocError, dlError, traktError]);
+	}, [rdError, adError, tbError, pmError, ocError, dlError, traktError, simklError]);
 
 	useEffect(() => {
 		if (rdUser) {
@@ -176,6 +185,16 @@ function IndexPage() {
 	const loginWithTrakt = async () => {
 		const authUrl = `/api/trakt/auth?redirect=${window.location.origin}`;
 		router.push(authUrl);
+	};
+
+	// A full navigation, not `router.push`: the consent page is Simkl's, so the
+	// Next router has nothing to route to.
+	const loginWithSimkl = async () => {
+		try {
+			window.location.assign(await beginSimklLogin(window.location.origin));
+		} catch (e) {
+			toast.error(e instanceof Error ? e.message : 'Could not start Simkl sign-in');
+		}
 	};
 
 	const handleClearCache = async () => {
@@ -342,6 +361,7 @@ function IndexPage() {
 						</Link>
 						<BrowseSection terms={browseTerms} />
 						<TraktSection traktUser={traktUser} />
+						<SimklSection simklUser={simklUser} />
 						<div className="grid w-full grid-cols-1 gap-3">
 							{/* A guest declined all six of these on the way in, so
 							    they are folded away rather than dropped: the whole
@@ -364,6 +384,13 @@ function IndexPage() {
 								error={traktError}
 								user={traktUser}
 								onTraktLogin={loginWithTrakt}
+								onLogout={async (prefix) => await handleLogout(prefix, router)}
+							/>
+							<ServiceCard
+								service="simkl"
+								error={simklError}
+								user={simklUser}
+								onTraktLogin={loginWithSimkl}
 								onLogout={async (prefix) => await handleLogout(prefix, router)}
 							/>
 						</div>
