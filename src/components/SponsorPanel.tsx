@@ -35,6 +35,11 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 		what: 'your Real-Debrid, AllDebrid, TorBox and Usenet libraries inside Jellyfin, with nothing mounted',
 	},
 	{
+		href: '/emby',
+		name: 'Emby plugins',
+		what: 'the same debrid libraries inside Emby, one file per account',
+	},
+	{
 		name: 'Ten other streams in Stremio Cast',
 		what: 'instead of five, set per profile below',
 	},
