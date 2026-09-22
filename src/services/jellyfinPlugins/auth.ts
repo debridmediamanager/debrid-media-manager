@@ -10,7 +10,7 @@
 
 import type { SponsorLookup } from '@/services/database';
 import { repository as db } from '@/services/repository';
-import type { NextApiRequest } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 export type PluginAuthResult =
 	| { sponsor: SponsorLookup; apiKey: string }
@@ -72,4 +72,16 @@ export async function resolvePluginSponsor(
 	if (!sponsor.isSponsor) return { status: 401, error: LAPSED };
 
 	return { sponsor, apiKey };
+}
+
+/**
+ * Nothing a plugin route answers may be cached: the request carries the
+ * credential being checked, and a cached answer would outlive its revocation.
+ *
+ * @param res The response to mark.
+ */
+export function setPluginNoStore(res: NextApiResponse): void {
+	res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+	res.setHeader('Pragma', 'no-cache');
+	res.setHeader('Referrer-Policy', 'no-referrer');
 }
