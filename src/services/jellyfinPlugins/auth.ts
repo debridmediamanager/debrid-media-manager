@@ -1,4 +1,4 @@
-// Sponsor gate for the Jellyfin plugin catalog.
+// Sponsor gate for the Jellyfin and Emby plugin catalogs.
 //
 // Same resolution as the zurg and Newznab gates — `Sponsors.dmmApiKey`, never
 // the `DmmApiKeys` table, so a lapsed sponsorship and a gatekeeper key reset
