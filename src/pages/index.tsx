@@ -215,8 +215,8 @@ function IndexPage() {
 	const actionButtonClasses =
 		'haptic-sm w-full rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50';
 
-	// The six provider cards, so guest mode can fold them away without the JSX
-	// below having to exist twice.
+	const debridServiceFailed = !!(rdError || adError || tbError || pmError || ocError || dlError);
+
 	const debridServiceCards = (
 		<>
 			<ServiceCard
@@ -344,22 +344,21 @@ function IndexPage() {
 						<BrowseSection terms={browseTerms} />
 						<TraktSection traktUser={traktUser} />
 						<div className="grid w-full grid-cols-1 gap-3">
-							{/* A guest declined all six of these on the way in, so
-							    they are folded away rather than dropped: the whole
-							    point of guest mode is that connecting a service
-							    later stays one click away. */}
-							{isGuest ? (
-								<details className="w-full rounded border-2 border-gray-500 bg-gray-800/30">
-									<summary className="haptic-sm cursor-pointer px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50">
-										Connect a debrid service
-									</summary>
-									<div className="grid grid-cols-1 gap-3 p-3 pt-0">
-										{debridServiceCards}
-									</div>
-								</details>
-							) : (
-								debridServiceCards
-							)}
+							{/* Folded for everyone: six login buttons nobody needs twice
+							    took most of the page. Folded rather than dropped, so connecting
+							    another service stays one click away, and opened whenever a
+							    provider failed, because its toast points at its card. */}
+							<details
+								open={debridServiceFailed}
+								className="w-full rounded border-2 border-gray-500 bg-gray-800/30"
+							>
+								<summary className="haptic-sm cursor-pointer px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50">
+									{isGuest ? 'Connect a debrid service' : 'Debrid services'}
+								</summary>
+								<div className="grid grid-cols-1 gap-3 p-3 pt-0">
+									{debridServiceCards}
+								</div>
+							</details>
 							<ServiceCard
 								service="trakt"
 								error={traktError}
