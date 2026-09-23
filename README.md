@@ -14,7 +14,7 @@ These Debrid services also offer a WebDAV interface that lets you mount your lib
 
 ## Features
 
-This builds on top of the amazing service brought by [Real-Debrid](https://real-debrid.com/?id=11137529), [AllDebrid](https://alldebrid.com/?uid=1kk5i&lang=en), and [TorBox](https://torbox.app/subscription?referral=74ffa560-7381-4a18-adb1-cef97378c670).
+This builds on top of the amazing service brought by [Real-Debrid](https://real-debrid.com/?id=3290031), [AllDebrid](https://alldebrid.com/?uid=1kk5i&lang=en), and [TorBox](https://torbox.app/subscription?referral=74ffa560-7381-4a18-adb1-cef97378c670).
 
 ### Library management
 

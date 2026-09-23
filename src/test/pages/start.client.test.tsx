@@ -260,7 +260,7 @@ describe('StartPage', () => {
 		const rdLink = screen.getByText('Create an account with RealDebrid');
 		expect(rdLink).toHaveAttribute('target', '_blank');
 		expect(rdLink).toHaveAttribute('rel', 'noopener noreferrer');
-		expect(rdLink).toHaveAttribute('href', 'http://real-debrid.com/?id=11137529');
+		expect(rdLink).toHaveAttribute('href', 'http://real-debrid.com/?id=3290031');
 
 		const adLink = screen.getByText('Create an account with AllDebrid');
 		expect(adLink).toHaveAttribute('target', '_blank');

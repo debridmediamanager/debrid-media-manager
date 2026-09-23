@@ -9,7 +9,11 @@ import {
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
 import { enableGuestMode } from '@/utils/guestMode';
-import { DEBRID_LINK_REFERRAL_URL, TORBOX_REFERRAL_URL } from '@/utils/referrals';
+import {
+	DEBRID_LINK_REFERRAL_URL,
+	REAL_DEBRID_REFERRAL_URL,
+	TORBOX_REFERRAL_URL,
+} from '@/utils/referrals';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -102,7 +106,7 @@ export default function StartPage() {
 					</button>
 					<a
 						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
-						href="http://real-debrid.com/?id=11137529"
+						href={REAL_DEBRID_REFERRAL_URL}
 						target="_blank"
 						rel="noopener noreferrer"
 					>
