@@ -25,6 +25,27 @@ import { Toaster, toast } from 'react-hot-toast';
 
 const PROFILE_WAIT_MS = 5000;
 
+// Indexers first, torrent before Usenet as everywhere else in DMM, then the
+// media server plugins.
+const sponsorLinks = [
+	{
+		href: '/torznab',
+		label: 'Torrent Indexer',
+		description: "DMM's library as a Torznab indexer, for sponsors",
+	},
+	{
+		href: '/newznab',
+		label: 'Usenet Indexer',
+		description: 'Prowlarr-compatible endpoint for sponsors',
+	},
+	{
+		href: '/jellyfin',
+		label: 'Jellyfin plugins',
+		description: 'Your library in Jellyfin, for sponsors',
+	},
+	{ href: '/emby', label: 'Emby plugins', description: 'Your library in Emby, for sponsors' },
+];
+
 function IndexPage() {
 	const router = useRouter();
 	const {
@@ -295,66 +316,31 @@ function IndexPage() {
 							</span>
 							<span className="text-xs text-gray-400">Open full page</span>
 						</Link>
-						<Link
-							href="/newznab"
-							className="haptic-sm flex w-full items-center justify-between rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-						>
-							<span className="flex items-center">
+						{/* Folded like the guest-mode debrid cards: four always-open rows
+						    pushed the rest of the page down for everyone, sponsor or not. */}
+						<details className="w-full rounded border-2 border-pink-500/40 bg-gray-800/30">
+							<summary className="haptic-sm cursor-pointer px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50">
 								<span
 									aria-hidden="true"
 									className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
 								/>
-								Usenet Indexer
-							</span>
-							<span className="text-xs text-gray-400">
-								Prowlarr-compatible endpoint for sponsors
-							</span>
-						</Link>
-						<Link
-							href="/jellyfin"
-							className="haptic-sm flex w-full items-center justify-between rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-						>
-							<span className="flex items-center">
-								<span
-									aria-hidden="true"
-									className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
-								/>
-								Jellyfin plugins
-							</span>
-							<span className="text-xs text-gray-400">
-								Your library in Jellyfin, for sponsors
-							</span>
-						</Link>
-						<Link
-							href="/emby"
-							className="haptic-sm flex w-full items-center justify-between rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-						>
-							<span className="flex items-center">
-								<span
-									aria-hidden="true"
-									className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
-								/>
-								Emby plugins
-							</span>
-							<span className="text-xs text-gray-400">
-								Your library in Emby, for sponsors
-							</span>
-						</Link>
-						<Link
-							href="/torznab"
-							className="haptic-sm flex w-full items-center justify-between rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-						>
-							<span className="flex items-center">
-								<span
-									aria-hidden="true"
-									className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
-								/>
-								Torrent Indexer
-							</span>
-							<span className="text-xs text-gray-400">
-								DMM&apos;s library as a Torznab indexer, for sponsors
-							</span>
-						</Link>
+								Sponsor features
+							</summary>
+							<div className="grid grid-cols-1 gap-3 p-3 pt-0">
+								{sponsorLinks.map(({ href, label, description }) => (
+									<Link
+										key={href}
+										href={href}
+										className="haptic-sm flex w-full items-center justify-between gap-3 rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+									>
+										<span className="shrink-0">{label}</span>
+										<span className="text-right text-xs text-gray-400">
+											{description}
+										</span>
+									</Link>
+								))}
+							</div>
+						</details>
 						<BrowseSection terms={browseTerms} />
 						<TraktSection traktUser={traktUser} />
 						<div className="grid w-full grid-cols-1 gap-3">

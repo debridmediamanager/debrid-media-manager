@@ -206,6 +206,31 @@ describe('IndexPage indexer entries', () => {
 		expect(
 			settings.compareDocumentPosition(indexer) & Node.DOCUMENT_POSITION_FOLLOWING
 		).toBeTruthy();
-		expect(indexer.parentElement).toBe(settings.parentElement);
+		expect(indexer.closest('details')?.parentElement).toBe(settings.parentElement);
+	});
+
+	// Four always-open rows pushed the rest of the home page down for everyone,
+	// sponsor or not, so they sit folded under one summary line.
+	it('folds the sponsor features into one closed disclosure', () => {
+		render(<IndexPage />);
+
+		const summary = screen.getByText('Sponsor features');
+		const disclosure = summary.closest('details');
+		expect(disclosure).not.toBeNull();
+		expect(disclosure?.open).toBe(false);
+		for (const name of [/Torrent Indexer/i, /Usenet Indexer/i, /Jellyfin/i, /Emby/i]) {
+			expect(disclosure).toContainElement(screen.getByRole('link', { name }));
+		}
+	});
+
+	// Indexers first, torrent before Usenet as everywhere else in DMM, then the
+	// media server plugins.
+	it('lists the sponsor features indexers first, then plugins', () => {
+		render(<IndexPage />);
+
+		const hrefs = Array.from(
+			screen.getByText('Sponsor features').closest('details')!.querySelectorAll('a')
+		).map((link) => link.getAttribute('href'));
+		expect(hrefs).toEqual(['/torznab', '/newznab', '/jellyfin', '/emby']);
 	});
 });

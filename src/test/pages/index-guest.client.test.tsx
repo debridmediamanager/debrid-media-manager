@@ -187,12 +187,11 @@ describe('IndexPage in guest mode', () => {
 	it('folds the debrid cards away without removing them', () => {
 		localStorage.setItem(GUEST_MODE_KEY, 'true');
 
-		const { container } = render(<IndexPage />);
+		render(<IndexPage />);
 
-		const disclosure = container.querySelector('details');
+		const disclosure = screen.getByText('Connect a debrid service').closest('details');
 		expect(disclosure).not.toBeNull();
 		expect(disclosure?.open).toBe(false);
-		expect(screen.getByText('Connect a debrid service')).toBeInTheDocument();
 
 		for (const service of DEBRID_SERVICES) {
 			expect(disclosure).toContainElement(screen.getByTestId(`service-card-${service}`));
@@ -239,9 +238,9 @@ describe('IndexPage in guest mode', () => {
 			hasRDAuth: true,
 		});
 
-		const { container } = render(<IndexPage />);
+		render(<IndexPage />);
 
-		expect(container.querySelector('details')).toBeNull();
+		expect(screen.queryByText('Connect a debrid service')).toBeNull();
 		expect(screen.queryByText('You are browsing as a guest')).toBeNull();
 		expect(screen.getByTestId('main-actions')).toHaveAttribute('data-guest', 'false');
 		for (const service of DEBRID_SERVICES) {
