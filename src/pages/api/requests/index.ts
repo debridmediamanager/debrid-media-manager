@@ -3,7 +3,7 @@ import { repository as db } from '@/services/repository';
 import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { parseRequestInput, RequestValidationError, toPublicRequest } from '@/utils/contentRequest';
-import { torboxCachedHashes } from '@/utils/torboxCache';
+import { torboxCachedHashesReusing } from '@/utils/torboxCache';
 import { exceedsTransferSizeCap, tooLargeMessage } from '@/utils/transferSize';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -28,6 +28,12 @@ const RD_TOKEN_HEADER = 'x-rd-access-token';
 const TB_KEY_HEADER = 'x-tb-api-key';
 
 const DEFAULT_LIMIT = 25;
+/**
+ * How much of the board the "only what TorBox can send" view reads. It filters
+ * before paging, so it has to see the whole board rather than one page; 1,095
+ * rows were open on 2026-09-24.
+ */
+const SERVABLE_SCAN = 3000;
 const MAX_LIMIT = 100;
 
 function clampLimit(raw: unknown): number {
@@ -100,6 +106,37 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		const limit = clampLimit(req.query.limit);
 		const offset = clampOffset(req.query.offset);
+		const tbKey = readTbKey(req);
+
+		// `?servable=1`: only what TorBox has cached, across the whole board.
+		// The board is oldest-first and mostly releases TorBox does not have, so
+		// on 2026-09-24 nothing filed after 09-15 had been reached. Only these
+		// rows can be sent by anyone, and here they come first.
+		if (req.query.servable === '1') {
+			if (!tbKey) return res.status(400).json({ error: 'a TorBox key is required' });
+			try {
+				const rows = await db.listOpenContentRequests(SERVABLE_SCAN, 0);
+				const cached = await torboxCachedHashesReusing(
+					tbKey,
+					rows.map((row) => row.hash)
+				);
+				if (!cached) {
+					return res.status(503).json({ error: 'TorBox did not answer, try again' });
+				}
+				const servable = rows.filter((row) => cached.has(row.hash));
+				return res.status(200).json({
+					requests: servable
+						.slice(offset, offset + limit)
+						.map((row) => toPublicRequest(row, viewerId, cached)),
+					authenticated: viewerId !== null,
+					hasMore: servable.length > offset + limit,
+				});
+			} catch (error) {
+				console.error('Listing servable content requests failed:', error);
+				return res.status(500).json({ error: 'Failed to list requests' });
+			}
+		}
+
 		try {
 			// One extra row is fetched but never returned: its presence is how the
 			// page's infinite scroll learns there is another page without a second
@@ -111,10 +148,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			const page = rows.slice(0, limit);
 			// Asked here rather than from the browser so the answer is the same
 			// one the fulfil route will act on, and arrives with the rows.
-			const tbKey = readTbKey(req);
 			const tbCached =
 				tbKey && page.length > 0
-					? await torboxCachedHashes(
+					? await torboxCachedHashesReusing(
 							tbKey,
 							page.map((row) => row.hash)
 						)

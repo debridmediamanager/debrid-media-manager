@@ -49,11 +49,13 @@ async function unwrap(response: Response): Promise<any> {
  */
 export async function fetchContentRequests(
 	rdKey: string | null,
-	opts: { offset?: number; limit?: number; tbKey?: string | null } = {}
+	opts: { offset?: number; limit?: number; tbKey?: string | null; servable?: boolean } = {}
 ): Promise<{ requests: PublicRequest[]; authenticated: boolean; hasMore: boolean }> {
 	const params = new URLSearchParams();
 	if (opts.offset) params.set('offset', String(opts.offset));
 	if (opts.limit) params.set('limit', String(opts.limit));
+	// Only what TorBox has cached, filtered across the whole board server-side.
+	if (opts.servable && opts.tbKey) params.set('servable', '1');
 	const qs = params.toString();
 	const data = await unwrap(
 		await fetch(`/api/requests${qs ? `?${qs}` : ''}`, {

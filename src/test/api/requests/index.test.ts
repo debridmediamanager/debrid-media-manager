@@ -3,11 +3,11 @@ import { repository } from '@/services/repository';
 import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
-import { torboxCachedHashes } from '@/utils/torboxCache';
+import { torboxCachedHashesReusing as torboxCachedHashes } from '@/utils/torboxCache';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
-vi.mock('@/utils/torboxCache', () => ({ __esModule: true, torboxCachedHashes: vi.fn() }));
+vi.mock('@/utils/torboxCache', () => ({ __esModule: true, torboxCachedHashesReusing: vi.fn() }));
 vi.mock('@/services/requestDelivery', () => ({
 	__esModule: true,
 	alreadyOnRealDebrid: vi.fn(async () => new Map()),
@@ -57,6 +57,53 @@ beforeEach(() => {
 	mockRepo.listOpenContentRequests = vi.fn().mockResolvedValue([row()]);
 	mockRepo.listContentRequestsFor = vi.fn().mockResolvedValue([]);
 	mockRepo.createContentRequest = vi.fn().mockResolvedValue(row());
+});
+
+describe('GET /api/requests?servable=1', () => {
+	// The two releases from the recorded TorBox answer: only one is cached.
+	const CACHED = '90a7b57357ed0f2ae65ca39336b3bd923684413e';
+	const UNCACHED = 'abb28cb1dc25c1e2fa27aac9d1fe70d4c02be8f2';
+	const servable = (over: Record<string, unknown> = {}) =>
+		call({
+			query: { servable: '1', ...over },
+			headers: { 'x-rd-access-token': 'tok', 'x-tb-api-key': 'TB' },
+		});
+
+	beforeEach(() => {
+		mockRepo.listOpenContentRequests = vi
+			.fn()
+			.mockResolvedValue([
+				row({ id: 'old-uncached', hash: UNCACHED }),
+				row({ id: 'newer-cached', hash: CACHED }),
+			]);
+		vi.mocked(torboxCachedHashes).mockResolvedValue(new Set([CACHED]));
+	});
+
+	// Oldest-first paging put a page of unsendable rows in front of every
+	// fulfiller; nothing filed after 2026-09-15 had been reached by 09-24.
+	it('lists only what TorBox can send, from across the whole board', async () => {
+		const res = await servable();
+		expect(statusOf(res)).toBe(200);
+		expect(mockRepo.listOpenContentRequests).toHaveBeenCalledWith(3000, 0);
+		expect(bodyOf(res).requests.map((r: any) => r.id)).toEqual(['newer-cached']);
+		expect(bodyOf(res).requests[0].tbCached).toBe(true);
+		expect(bodyOf(res).hasMore).toBe(false);
+	});
+
+	it('pages the filtered list, not the board', async () => {
+		const res = await servable({ offset: '1' });
+		expect(bodyOf(res).requests).toEqual([]);
+	});
+
+	it('needs a TorBox key', async () => {
+		const res = await call({ query: { servable: '1' } });
+		expect(statusOf(res)).toBe(400);
+	});
+
+	it('says so when TorBox gives no answer rather than showing an empty board', async () => {
+		vi.mocked(torboxCachedHashes).mockResolvedValue(null);
+		expect(statusOf(await servable())).toBe(503);
+	});
 });
 
 describe('GET /api/requests', () => {

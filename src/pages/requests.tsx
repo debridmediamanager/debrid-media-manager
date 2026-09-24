@@ -173,6 +173,11 @@ export default function RequestsPage() {
 	const torboxKey = useTorBoxAccessToken();
 	const torboxKeyRef = useRef(torboxKey);
 	torboxKeyRef.current = torboxKey;
+	// Most of the board is releases TorBox does not have, which nobody can send,
+	// so a fulfiller starts on the ones they can. Off shows the whole board.
+	const [onlyServable, setOnlyServable] = useState(true);
+	const onlyServableRef = useRef(onlyServable);
+	onlyServableRef.current = onlyServable;
 
 	const rdKeyRef = useRef(rdKey);
 	rdKeyRef.current = rdKey;
@@ -206,6 +211,7 @@ export default function RequestsPage() {
 				offset,
 				limit: PAGE_SIZE,
 				tbKey: torboxKeyRef.current,
+				servable: onlyServableRef.current,
 			});
 			offsetRef.current = offset + rows.length;
 			setHasMore(more);
@@ -240,7 +246,7 @@ export default function RequestsPage() {
 	useEffect(() => {
 		loadPage(true);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey, torboxKey]);
+	}, [rdKey, torboxKey, onlyServable]);
 
 	// Infinite scroll: when the sentinel at the end of the list comes into view
 	// and there is another page, fetch it.
@@ -427,6 +433,17 @@ export default function RequestsPage() {
 					<MyRequests rows={myRequests} busyIds={busyIds} onCancel={handleCancel} />
 				)}
 
+				{loaded && hasFulfillerKey && (
+					<label className="mb-3 flex items-center gap-2 text-xs text-gray-300">
+						<input
+							type="checkbox"
+							checked={onlyServable}
+							onChange={(e) => setOnlyServable(e.target.checked)}
+						/>
+						Only what TorBox can send now
+					</label>
+				)}
+
 				{!loaded ? (
 					<div className="flex items-center justify-center gap-2 rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-sm text-gray-300">
 						<Loader2 className="h-4 w-4 animate-spin" />
@@ -434,9 +451,18 @@ export default function RequestsPage() {
 					</div>
 				) : requests.length === 0 ? (
 					<div className="rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-center text-sm text-gray-300">
-						Nothing requested right now. Real-Debrid users leave asks here with the{' '}
-						<span className="text-cyan-300">Request</span> button on a search result
-						they cannot fetch themselves.
+						{hasFulfillerKey && onlyServable ? (
+							<>
+								Nothing on the board is on TorBox right now. Untick the box above to
+								see every request.
+							</>
+						) : (
+							<>
+								Nothing requested right now. Real-Debrid users leave asks here with
+								the <span className="text-cyan-300">Request</span> button on a
+								search result they cannot fetch themselves.
+							</>
+						)}
 					</div>
 				) : (
 					<>

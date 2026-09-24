@@ -21,6 +21,12 @@ beforeEach(() => {
 });
 
 describe('fetchContentRequests', () => {
+	it('asks for only what TorBox can send when a fulfiller wants that', async () => {
+		(global.fetch as any).mockResolvedValue(ok({ requests: [], authenticated: true }));
+		await fetchContentRequests('RD', { tbKey: 'TB', servable: true, limit: 25 });
+		expect(lastCall()[0]).toBe('/api/requests?limit=25&servable=1');
+	});
+
 	it('sends a TorBox key as a header so the server can mark what it can send', async () => {
 		(global.fetch as any).mockResolvedValue(ok({ requests: [], authenticated: true }));
 		await fetchContentRequests('RD_TOKEN', { tbKey: 'TB_KEY' });

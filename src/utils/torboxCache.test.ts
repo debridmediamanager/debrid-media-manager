@@ -1,7 +1,13 @@
 import batch from '@/test/fixtures/contentRequests/tb-checkcached-batch.json';
 import uncached from '@/test/fixtures/contentRequests/tb-checkcached-uncached.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { CHECKCACHED_CHUNK, torboxCachedHashes } from './torboxCache';
+import {
+	CACHE_ANSWER_TTL_MS,
+	CHECKCACHED_CHUNK,
+	clearTorboxCacheAnswers,
+	torboxCachedHashes,
+	torboxCachedHashesReusing,
+} from './torboxCache';
 
 const UNCACHED = 'abb28cb1dc25c1e2fa27aac9d1fe70d4c02be8f2';
 const CACHED = '90a7b57357ed0f2ae65ca39336b3bd923684413e';
@@ -9,7 +15,10 @@ const CACHED = '90a7b57357ed0f2ae65ca39336b3bd923684413e';
 const answer = (body: unknown, status = 200) =>
 	vi.fn(async () => ({ ok: status >= 200 && status < 300, status, json: async () => body }));
 
-beforeEach(() => vi.unstubAllGlobals());
+beforeEach(() => {
+	vi.unstubAllGlobals();
+	clearTorboxCacheAnswers();
+});
 
 describe('torboxCachedHashes', () => {
 	it('reads an empty list as uncached', async () => {
@@ -60,5 +69,36 @@ describe('torboxCachedHashes', () => {
 			})
 		);
 		expect(await torboxCachedHashes('KEY', [CACHED])).toBeNull();
+	});
+});
+
+describe('torboxCachedHashesReusing', () => {
+	it('asks TorBox only for what it has not answered recently', async () => {
+		const fetchMock = answer(batch);
+		vi.stubGlobal('fetch', fetchMock);
+		const now = 1_000_000;
+		expect(await torboxCachedHashesReusing('KEY', [UNCACHED, CACHED], now)).toEqual(
+			new Set([CACHED])
+		);
+		expect(await torboxCachedHashesReusing('OTHER', [UNCACHED, CACHED], now + 1000)).toEqual(
+			new Set([CACHED])
+		);
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+	});
+
+	it('asks again once an answer is stale', async () => {
+		const fetchMock = answer(batch);
+		vi.stubGlobal('fetch', fetchMock);
+		await torboxCachedHashesReusing('KEY', [CACHED], 0);
+		await torboxCachedHashesReusing('KEY', [CACHED], CACHE_ANSWER_TTL_MS);
+		expect(fetchMock).toHaveBeenCalledTimes(2);
+	});
+
+	it('remembers nothing from a failed answer', async () => {
+		vi.stubGlobal('fetch', answer({ success: false }, 429));
+		expect(await torboxCachedHashesReusing('KEY', [CACHED], 0)).toBeNull();
+		const fetchMock = answer(batch);
+		vi.stubGlobal('fetch', fetchMock);
+		expect(await torboxCachedHashesReusing('KEY', [CACHED], 1)).toEqual(new Set([CACHED]));
 	});
 });
