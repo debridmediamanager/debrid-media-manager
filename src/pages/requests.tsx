@@ -23,29 +23,24 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 
 /**
- * The request board — the fulfillers' view.
+ * The request board, and each asker's own requests.
  *
- * A Real-Debrid user files an ask from a search result. Here a TorBox or
- * AllDebrid user picks one up: fulfilling fetches the release with *their* quota
- * and lands it in the asker's Real-Debrid library. So the page runs a cache
- * check across everything on it with the viewer's own keys, which is the thing
- * that tells a fulfiller what they can actually serve, and asks before spending
- * anything.
+ * A Real-Debrid user files an ask from a search result. Here a TorBox user
+ * picks one up: fulfilling fetches the release with *their* quota and lands it
+ * in the asker's Real-Debrid library. The server marks each row with whether
+ * TorBox has it cached, asked with the viewer's own key, because the uploader
+ * can only move what TorBox already has. The asker's section above the board
+ * shows every request of theirs and what became of it.
  *
  * It pages the board 25 at a time and loads the next page as the last one
  * scrolls into view, because the board grows without bound and nobody scrolls
  * three thousand rows.
  *
- * **Premiumize, Offcloud and Debrid-Link are deliberately absent**, from the
- * fulfil path and from the cache checks alike: the uploader can source a
- * transfer from TorBox and AllDebrid only, so those three keys buy a viewer
- * nothing here. None of them is offered the board on the home page either
- * (`MainActions`), which is why probing for them would be spending a request to
- * render a badge nobody with only those keys ever sees.
- *
- * Debrid-Link is doubly excluded: it has no cache probe at all, so the only way
- * to answer "can I serve this" would be to *add* the torrent — spending one of
- * the account's 50 adds a day per row of a board that pages 25 at a time.
+ * **TorBox is the only source.** AllDebrid was withdrawn on 2026-09-01 with
+ * debrid01, the one uploader host whose IP it permitted, and Premiumize,
+ * Offcloud and Debrid-Link were never sources. None of those keys buys a viewer
+ * anything here, so none of them is offered the board on the home page
+ * (`MainActions`) unless the viewer also asks with Real-Debrid.
  */
 
 const PAGE_SIZE = 25;
@@ -287,7 +282,7 @@ export default function RequestsPage() {
 	 * Take a request and pay for it.
 	 *
 	 * Confirmed rather than immediate because the cost lands on the person
-	 * clicking: the transfer spends *their* TorBox or AllDebrid quota, and what
+	 * clicking: the transfer spends *their* TorBox quota, and what
 	 * it produces goes into somebody else's Real-Debrid library. Nothing about
 	 * it comes back to them.
 	 */
@@ -295,13 +290,12 @@ export default function RequestsPage() {
 		withBusy(row.id, async () => {
 			const key = rdKeyRef.current;
 			if (!key) return;
-			const source = torboxKey ? 'TorBox' : 'AllDebrid';
 			if (
 				!window.confirm(
-					`Fulfil this request using your ${source} account?\n\n` +
+					'Fulfil this request using your TorBox account?\n\n' +
 						`${row.title || row.hash}\n\n` +
-						`The release is fetched with your ${source} quota and lands in the ` +
-						`asker's Real-Debrid library, not yours.`
+						'The release is fetched with your TorBox quota and lands in the ' +
+						"asker's Real-Debrid library, not yours."
 				)
 			)
 				return;
@@ -399,10 +393,10 @@ export default function RequestsPage() {
 					These are releases people want in their{' '}
 					<span className="text-emerald-300">Real-Debrid</span> library but cannot fetch
 					themselves. Fulfil one with your <span className="text-indigo-300">TorBox</span>{' '}
-					or <span className="text-sky-300">AllDebrid</span> account and it lands in the
-					asker&apos;s library, not yours, on your quota. Every row is checked against the
-					accounts you hold, so a <span className="text-cyan-300">cached</span> badge
-					means you can serve it instantly.
+					account and it lands in the asker&apos;s library, not yours, on your quota.
+					Every row is checked against TorBox&apos;s cache:{' '}
+					<span className="text-indigo-300">TB cached</span> means you can send it now,
+					and a release that is not on TorBox yet cannot be sent by anyone.
 				</p>
 
 				{errorText && (
@@ -507,7 +501,7 @@ export default function RequestsPage() {
 															onClick={() => handleFulfil(row)}
 															disabled={busy}
 															className={`haptic-sm inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-2 py-1.5 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${busy ? 'cursor-not-allowed opacity-50' : ''}`}
-															title="Send this to the asker using your TorBox or AllDebrid account"
+															title="Send this to the asker using your TorBox account"
 														>
 															{busy ? (
 																<Loader2 className="mr-1 h-3 w-3 animate-spin" />

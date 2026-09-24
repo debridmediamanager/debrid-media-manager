@@ -197,12 +197,12 @@ const TvSearch: FunctionComponent = () => {
 
 	/**
 	 * A user holding only Real-Debrid cannot start a transfer at all: the uploader
-	 * needs a TorBox or AllDebrid key for the source side. They are exactly the
+	 * needs a TorBox key for the source side. They are exactly the
 	 * people the request board exists for, so the Request button appears for them
 	 * and for nobody else — anyone with a second service can just send it.
 	 */
 	// The Request button is for Real-Debrid users: it files an ask for a
-	// release, which somebody with a TorBox or AllDebrid account then fulfils.
+	// release, which somebody with a TorBox account then fulfils.
 	// It used to hide from a user who also held one of those keys, but that
 	// conflated "can ask" with "cannot fetch" — a user with both may still want
 	// to leave the ask for someone else rather than spend their own quota.
@@ -231,7 +231,7 @@ const TvSearch: FunctionComponent = () => {
 					return;
 				}
 				toast.success(
-					'Requested. Anyone with TorBox or AllDebrid can now send it to your library.',
+					'Requested. Anyone with TorBox can now send it to your library. Follow it under Requests.',
 					{ duration: 6000 }
 				);
 			} catch (error) {

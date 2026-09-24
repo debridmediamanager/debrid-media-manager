@@ -310,7 +310,7 @@ describe('MainActions', () => {
 		);
 	});
 
-	it('links to the request board for a fulfiller — a TorBox, AllDebrid or Premiumize user', () => {
+	it('links a TorBox-only fulfiller to the request board', () => {
 		// A user with no Real-Debrid at all, only TorBox: they are exactly who the
 		// board is for, so the link is theirs even though Transfers is not.
 		render(
@@ -331,7 +331,9 @@ describe('MainActions', () => {
 		expect(screen.queryByRole('link', { name: /transfers/i })).toBeNull();
 	});
 
-	it('shows the request board to an AllDebrid user', () => {
+	// AllDebrid stopped being a transfer source on 2026-09-01, so the board has
+	// nothing an AllDebrid-only user can do.
+	it('hides the request board from an AllDebrid-only user', () => {
 		render(
 			<MainActions
 				rdUser={null}
@@ -343,7 +345,7 @@ describe('MainActions', () => {
 				isLoading={false}
 			/>
 		);
-		expect(screen.getByRole('link', { name: /requests/i })).not.toBeNull();
+		expect(screen.queryByRole('link', { name: /requests/i })).toBeNull();
 	});
 
 	it('hides the request board from a Premiumize-only user, who has nothing to fulfil with', () => {
@@ -420,7 +422,9 @@ describe('MainActions', () => {
 		expect(screen.getByRole('link', { name: /cast for dl/i })).not.toBeNull();
 	});
 
-	it('hides the request board from a Real-Debrid-only user, who asks from the search result instead', () => {
+	// Their own requests are listed there, and it is the only place that says
+	// whether one was sent or failed.
+	it('links a Real-Debrid-only user to Requests, where their own asks are', () => {
 		render(
 			<MainActions
 				rdUser={baseRdUser}
@@ -433,7 +437,9 @@ describe('MainActions', () => {
 			/>
 		);
 
-		expect(screen.queryByRole('link', { name: /requests/i })).toBeNull();
+		expect(screen.getByRole('link', { name: /requests/i }).getAttribute('href')).toBe(
+			'/requests'
+		);
 	});
 
 	it('hides Transfers without Real-Debrid, since every transfer lands there', () => {
