@@ -3,6 +3,7 @@ import type { PublicRequest } from '@/utils/contentRequest';
 import {
 	cancelContentRequest,
 	fetchContentRequests,
+	fetchMyContentRequests,
 	fulfillContentRequest,
 	UncachedError,
 } from '@/utils/contentRequestsApi';
@@ -70,8 +71,96 @@ const STATUS_LABELS: Record<string, string> = {
 /** Only these can be taken, matching `isClaimable` on the server. */
 const CLAIMABLE = new Set(['open', 'failed']);
 
+/**
+ * What each state means to the person who asked, which is not what it means to
+ * a fulfiller: `claimed` is a transfer on its way to them, and a failure is
+ * something they should hear about rather than a row somebody can retry.
+ */
+const MINE_LABELS: Record<string, string> = {
+	open: 'Waiting for someone to send it',
+	failed: 'Waiting. The last try failed',
+	claimed: 'On its way to your library',
+	fulfilled: 'Sent to your library',
+	cancelled: 'Withdrawn',
+};
+
+function MyRequests({
+	rows,
+	busyIds,
+	onCancel,
+}: {
+	rows: PublicRequest[];
+	busyIds: Set<string>;
+	onCancel: (row: PublicRequest) => void;
+}) {
+	if (rows.length === 0) return null;
+	return (
+		<section className="mb-6">
+			<h2 className="mb-2 text-sm font-bold text-white">Your requests</h2>
+			<div className="space-y-2">
+				{rows.map((row) => {
+					const style = STATUS_STYLES[row.status] ?? STATUS_STYLES.cancelled;
+					const busy = busyIds.has(row.id);
+					return (
+						<div
+							key={row.id}
+							className="flex items-start justify-between gap-2 rounded-lg border-2 border-gray-700 bg-gray-800/30 p-3"
+						>
+							<div className="min-w-0 flex-1">
+								<div className="truncate text-sm font-bold text-white">
+									{row.title || row.hash}
+								</div>
+								<div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-400">
+									<span
+										className={`inline-flex items-center rounded border-2 px-1.5 py-0.5 font-medium ${style}`}
+									>
+										{row.status === 'fulfilled' && (
+											<CheckCircle2 className="mr-1 h-3 w-3" />
+										)}
+										{row.status === 'claimed' && (
+											<Loader2 className="mr-1 h-3 w-3 animate-spin" />
+										)}
+										{MINE_LABELS[row.status] ?? row.status}
+									</span>
+									<span>{new Date(row.createdAt).toLocaleString()}</span>
+									{row.status === 'claimed' && (
+										<Link
+											href="/transfers"
+											className="text-indigo-300 underline hover:text-indigo-200"
+										>
+											Follow it on Transfers
+										</Link>
+									)}
+								</div>
+								{row.status === 'failed' && row.error && (
+									<div className="mt-1 text-xs text-amber-200">{row.error}</div>
+								)}
+							</div>
+							{CLAIMABLE.has(row.status) && (
+								<button
+									onClick={() => onCancel(row)}
+									disabled={busy}
+									className={`haptic-sm shrink-0 rounded border-2 border-red-500 bg-red-900/30 p-1.5 text-red-100 transition-colors hover:bg-red-800/50 ${busy ? 'cursor-not-allowed opacity-50' : ''}`}
+									title="Withdraw this request"
+								>
+									{busy ? (
+										<Loader2 className="h-4 w-4 animate-spin" />
+									) : (
+										<Trash2 className="h-4 w-4" />
+									)}
+								</button>
+							)}
+						</div>
+					);
+				})}
+			</div>
+		</section>
+	);
+}
+
 export default function RequestsPage() {
 	const [requests, setRequests] = useState<PublicRequest[]>([]);
+	const [myRequests, setMyRequests] = useState<PublicRequest[]>([]);
 	const [errorText, setErrorText] = useState<string | null>(null);
 	const [loaded, setLoaded] = useState(false);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -122,6 +211,14 @@ export default function RequestsPage() {
 			setErrorText(null);
 			if (reset) {
 				setRequests(rows);
+				const key = rdKeyRef.current;
+				if (key) {
+					fetchMyContentRequests(key)
+						.then(setMyRequests)
+						.catch(() => setMyRequests([]));
+				} else {
+					setMyRequests([]);
+				}
 			} else {
 				setRequests((prev) => {
 					const seen = new Set(prev.map((r) => r.id));
@@ -252,6 +349,9 @@ export default function RequestsPage() {
 			try {
 				await cancelContentRequest(key, row.id);
 				setRequests((prev) => prev.filter((r) => r.id !== row.id));
+				setMyRequests((prev) =>
+					prev.map((r) => (r.id === row.id ? { ...r, status: 'cancelled' } : r))
+				);
 				toast.success('Request withdrawn.');
 			} catch (error) {
 				toast.error(
@@ -323,6 +423,10 @@ export default function RequestsPage() {
 				 * from localStorage on its first paint, and branching on the key first
 				 * makes the two disagree and fails hydration.
 				 */}
+				{loaded && (
+					<MyRequests rows={myRequests} busyIds={busyIds} onCancel={handleCancel} />
+				)}
+
 				{!loaded ? (
 					<div className="flex items-center justify-center gap-2 rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-sm text-gray-300">
 						<Loader2 className="h-4 w-4 animate-spin" />
@@ -393,18 +497,6 @@ export default function RequestsPage() {
 														{new Date(row.createdAt).toLocaleString()}
 													</span>
 												</div>
-												{row.mine && row.jobId && (
-													<div className="mt-1 text-xs text-gray-300">
-														Somebody sent this.{' '}
-														<Link
-															href="/transfers"
-															className="text-indigo-300 underline hover:text-indigo-200"
-														>
-															Follow it on Transfers
-														</Link>
-														.
-													</div>
-												)}
 											</div>
 											<div className="flex shrink-0 items-center gap-1">
 												{canFulfil &&

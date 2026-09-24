@@ -60,6 +60,41 @@ beforeEach(() => {
 });
 
 describe('GET /api/requests', () => {
+	// The board lists only open rows, so an asker whose request was sent, failed
+	// or was on its way had nowhere to see it.
+	it('lists the caller’s own requests in every state with ?mine=1', async () => {
+		mockRepo.listContentRequestsFor = vi
+			.fn()
+			.mockResolvedValue([
+				row({ id: 'a', status: 'claimed', jobId: 'job-1' }),
+				row({ id: 'b', status: 'failed', error: 'uncached' }),
+				row({ id: 'c', status: 'fulfilled', jobId: 'job-2' }),
+			]);
+		const res = await call({ query: { mine: '1' } });
+		expect(statusOf(res)).toBe(200);
+		expect(mockRepo.listContentRequestsFor).toHaveBeenCalledWith('asker', 100);
+		expect(mockRepo.listOpenContentRequests).not.toHaveBeenCalled();
+		expect(bodyOf(res).requests.map((r: any) => [r.status, r.error])).toEqual([
+			['claimed', null],
+			['failed', 'uncached'],
+			['fulfilled', null],
+		]);
+	});
+
+	it('refuses ?mine=1 without a Real-Debrid session', async () => {
+		const res = await call({ query: { mine: '1' }, headers: {} });
+		expect(statusOf(res)).toBe(401);
+	});
+
+	it('never shows a failure reason on somebody else’s row', async () => {
+		mockUserId.mockResolvedValue('helper');
+		mockRepo.listOpenContentRequests = vi
+			.fn()
+			.mockResolvedValue([row({ status: 'failed', error: 'RD credentials rejected: 401' })]);
+		const res = await call();
+		expect(bodyOf(res).requests[0].error).toBeNull();
+	});
+
 	it('marks each row with whether the viewer’s TorBox can send it', async () => {
 		const other = 'b'.repeat(40);
 		mockRepo.listOpenContentRequests = vi

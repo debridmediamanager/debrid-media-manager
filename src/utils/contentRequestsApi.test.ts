@@ -1,6 +1,7 @@
 import {
 	cancelContentRequest,
 	fetchContentRequests,
+	fetchMyContentRequests,
 	fileContentRequest,
 	fulfillContentRequest,
 	RD_TOKEN_HEADER,
@@ -117,6 +118,16 @@ describe('fileContentRequest', () => {
 			mediaType: 'movie',
 		});
 		expect(row).toEqual({ delivered: false, request: { id: 'req-1' } });
+	});
+});
+
+describe('fetchMyContentRequests', () => {
+	it('asks for the caller’s own rows with the key in a header', async () => {
+		(global.fetch as any).mockResolvedValue(ok({ requests: [{ id: 'a' }] }));
+		expect(await fetchMyContentRequests('RD')).toEqual([{ id: 'a' }]);
+		const [url, init] = lastCall();
+		expect(url).toBe('/api/requests?mine=1');
+		expect(init.headers[RD_TOKEN_HEADER]).toBe('RD');
 	});
 });
 

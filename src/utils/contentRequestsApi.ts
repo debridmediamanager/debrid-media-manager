@@ -68,6 +68,12 @@ export async function fetchContentRequests(
 	};
 }
 
+/** The caller's own requests in every state, newest first. */
+export async function fetchMyContentRequests(rdKey: string): Promise<PublicRequest[]> {
+	const data = await unwrap(await fetch('/api/requests?mine=1', { headers: headers(rdKey) }));
+	return Array.isArray(data.requests) ? (data.requests as PublicRequest[]) : [];
+}
+
 export interface NewContentRequest {
 	hash: string;
 	imdbId: string;

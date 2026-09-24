@@ -184,6 +184,11 @@ export interface PublicRequest {
 	 * `null` when the viewer sent no key or TorBox gave no answer.
 	 */
 	tbCached: boolean | null;
+	/**
+	 * Why the last attempt failed. Only ever set on the viewer's own rows: the
+	 * uploader's reasons can name the asker's account state.
+	 */
+	error: string | null;
 }
 
 export interface StoredRequest {
@@ -216,6 +221,7 @@ export function toPublicRequest(
 	viewerId: string | null,
 	tbCached: Set<string> | null = null
 ): PublicRequest {
+	const mine = viewerId !== null && row.requesterId === viewerId;
 	return {
 		id: row.id,
 		hash: row.hash,
@@ -224,8 +230,9 @@ export function toPublicRequest(
 		mediaType: row.mediaType,
 		status: row.status,
 		createdAt: new Date(row.createdAt).toISOString(),
-		mine: viewerId !== null && row.requesterId === viewerId,
+		mine,
 		jobId: row.jobId,
 		tbCached: tbCached ? tbCached.has(row.hash) : null,
+		error: mine ? (row.error ?? null) : null,
 	};
 }

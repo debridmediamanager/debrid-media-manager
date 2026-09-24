@@ -77,6 +77,27 @@ async function viewerIdOf(req: NextApiRequest): Promise<string | null> {
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === 'GET') {
 		const viewerId = await viewerIdOf(req);
+
+		// `?mine=1`: the caller's own asks in every state, newest first. The
+		// board only lists what is still open, so this is the one place an asker
+		// learns that a request was sent, failed, or is on its way.
+		if (req.query.mine === '1') {
+			if (!viewerId) {
+				return res.status(401).json({ error: 'A Real-Debrid session is required' });
+			}
+			try {
+				const rows = await db.listContentRequestsFor(viewerId, MAX_LIMIT);
+				return res.status(200).json({
+					requests: rows.map((row) => toPublicRequest(row, viewerId)),
+					authenticated: true,
+					hasMore: false,
+				});
+			} catch (error) {
+				console.error('Listing own content requests failed:', error);
+				return res.status(500).json({ error: 'Failed to list requests' });
+			}
+		}
+
 		const limit = clampLimit(req.query.limit);
 		const offset = clampOffset(req.query.offset);
 		try {
