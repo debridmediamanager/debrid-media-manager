@@ -120,13 +120,47 @@ describe('ContentRequestService', () => {
 		});
 	});
 
+	describe('attachJob', () => {
+		// Marking the row `fulfilled` here is what hid 322 failed transfers: the
+		// job is recorded, and the row waits for it to end.
+		it('records the job and leaves the request claimed', async () => {
+			prisma.contentRequest.updateMany.mockResolvedValue({ count: 1 });
+			await service.attachJob('req-1', 'job-9', 'http://debrid02:3100');
+			expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
+				where: { id: 'req-1', status: 'claimed' },
+				data: { jobId: 'job-9', jobHost: 'http://debrid02:3100' },
+			});
+		});
+	});
+
+	describe('settleDelivered', () => {
+		it('closes only the claim that job belongs to', async () => {
+			prisma.contentRequest.updateMany.mockResolvedValue({ count: 1 });
+			expect(await service.settleDelivered('req-1', 'job-9')).toBe(true);
+			expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
+				where: { id: 'req-1', status: 'claimed', jobId: 'job-9' },
+				data: { status: 'fulfilled', error: null },
+			});
+		});
+	});
+
 	describe('releaseRequest', () => {
 		it('clears the fulfiller with the failure, since the row is nobody’s again', async () => {
 			prisma.contentRequest.updateMany.mockResolvedValue({ count: 1 });
 			await service.releaseRequest('req-1', 'uploader answered 500');
 			expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
-				where: { id: 'req-1' },
+				where: { id: 'req-1', status: 'claimed' },
 				data: { status: 'failed', fulfillerId: null, error: 'uploader answered 500' },
+			});
+		});
+
+		it('scopes a job failure to that job, so it cannot reopen a later claim', async () => {
+			prisma.contentRequest.updateMany.mockResolvedValue({ count: 0 });
+			expect(await service.releaseRequest('req-1', 'uncached', 'job-old')).toBe(false);
+			expect(prisma.contentRequest.updateMany.mock.calls[0][0].where).toEqual({
+				id: 'req-1',
+				status: 'claimed',
+				jobId: 'job-old',
 			});
 		});
 

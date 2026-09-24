@@ -2,6 +2,10 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { runHealthCheckNow } from '@/lib/observability/streamServersHealth';
 import { runTorrentioHealthCheckNow } from '@/lib/observability/torrentioHealth';
+import {
+	reconcileContentRequests,
+	type RequestReconcileResult,
+} from '@/services/contentRequestReconcile';
 import { reconcileDebridTransfers, type ReconcileResult } from '@/services/debridTransferReconcile';
 import { repository } from '@/services/repository';
 
@@ -25,6 +29,7 @@ interface CronResponse {
 		torboxCdnDailyRolled: boolean;
 	};
 	debridTransfers?: ReconcileResult;
+	contentRequests?: RequestReconcileResult;
 	error?: string;
 }
 
@@ -85,6 +90,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Debrid transfer reconciliation failed:', e);
 		}
 
+		// Requests are only settled once their transfer has ended, and nothing
+		// else is watching them: a fulfiller moves on the moment they click.
+		let contentRequests: RequestReconcileResult | undefined;
+		try {
+			contentRequests = await reconcileContentRequests();
+		} catch (e) {
+			console.error('[Cron] Content request reconciliation failed:', e);
+		}
+
 		return res.status(200).json({
 			success: true,
 			timestamp: new Date().toISOString(),
@@ -101,6 +115,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			},
 			dailyRollup,
 			debridTransfers,
+			contentRequests,
 		});
 	} catch (error) {
 		console.error('[Cron] Job failed:', error);

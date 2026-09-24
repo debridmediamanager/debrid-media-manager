@@ -226,8 +226,20 @@ export class Repository {
 		return this.contentRequestService.attachJob(id, jobId, jobHost);
 	}
 
-	public releaseContentRequest(id: string, error: string) {
-		return this.contentRequestService.releaseRequest(id, error);
+	public releaseContentRequest(id: string, error: string, jobId?: string) {
+		return this.contentRequestService.releaseRequest(id, error, jobId);
+	}
+
+	public settleContentRequestDelivered(id: string, jobId: string) {
+		return this.contentRequestService.settleDelivered(id, jobId);
+	}
+
+	public listClaimedContentRequests(limit: number) {
+		return this.contentRequestService.listClaimedRequests(limit);
+	}
+
+	public touchClaimedContentRequest(id: string) {
+		return this.contentRequestService.touchClaimed(id);
 	}
 
 	public cancelContentRequest(id: string, requesterId: string) {

@@ -96,11 +96,53 @@ export class ContentRequestService extends DatabaseClient {
 		return this.getRequest(id);
 	}
 
-	/** Record the transfer a claim produced, and which host is running it. */
+	/**
+	 * Record the transfer a claim produced, and which host is running it.
+	 *
+	 * The row stays `claimed`. A job the uploader accepted is not a job that
+	 * delivered: on 2026-09-24, 322 of the 369 requests this used to mark
+	 * `fulfilled` at submission had failed on the uploader, 219 of them because the
+	 * fulfiller's TorBox did not have the release. Marking them done took them off
+	 * the board for good and told the asker nothing. `settleDelivered` and
+	 * `releaseRequest` move the row on once the job has actually ended.
+	 */
 	public async attachJob(id: string, jobId: string, jobHost: string): Promise<void> {
 		await this.prisma.contentRequest.updateMany({
-			where: { id },
-			data: { status: 'fulfilled', jobId, jobHost },
+			where: { id, status: 'claimed' },
+			data: { jobId, jobHost },
+		});
+	}
+
+	/**
+	 * The transfer landed in the asker's library.
+	 *
+	 * Conditional on the job id as well as the status, so a late answer about an
+	 * earlier attempt cannot close a request somebody has since claimed again.
+	 */
+	public async settleDelivered(id: string, jobId: string): Promise<boolean> {
+		const { count } = await this.prisma.contentRequest.updateMany({
+			where: { id, status: 'claimed', jobId },
+			data: { status: 'fulfilled', error: null },
+		});
+		return count > 0;
+	}
+
+	/**
+	 * Claimed rows oldest-touched first, for the sweep that settles them.
+	 * `touchClaimed` sends a row still in flight to the back of that queue.
+	 */
+	public async listClaimedRequests(limit: number): Promise<StoredRequest[]> {
+		return this.prisma.contentRequest.findMany({
+			where: { status: 'claimed' },
+			orderBy: [{ updatedAt: 'asc' }, { id: 'asc' }],
+			take: limit,
+		});
+	}
+
+	public async touchClaimed(id: string): Promise<void> {
+		await this.prisma.contentRequest.updateMany({
+			where: { id, status: 'claimed' },
+			data: { updatedAt: new Date() },
 		});
 	}
 
@@ -109,13 +151,16 @@ export class ContentRequestService extends DatabaseClient {
 	 *
 	 * `fulfillerId` is cleared with it: the row is open again, and leaving the
 	 * previous fulfiller on it would misreport who is responsible for a request
-	 * that is nobody's.
+	 * that is nobody's. Only a `claimed` row moves, and when `jobId` is given only
+	 * the claim that job belongs to, so a stale failure cannot reopen a request
+	 * that has since been delivered or withdrawn.
 	 */
-	public async releaseRequest(id: string, error: string): Promise<void> {
-		await this.prisma.contentRequest.updateMany({
-			where: { id },
+	public async releaseRequest(id: string, error: string, jobId?: string): Promise<boolean> {
+		const { count } = await this.prisma.contentRequest.updateMany({
+			where: { id, status: 'claimed', ...(jobId ? { jobId } : {}) },
 			data: { status: 'failed', fulfillerId: null, error: error.slice(0, 500) },
 		});
+		return count > 0;
 	}
 
 	/**

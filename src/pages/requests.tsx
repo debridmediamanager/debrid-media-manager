@@ -300,9 +300,11 @@ export default function RequestsPage() {
 				const jobId = await fulfillContentRequest(key, row.id, { tbKey: torboxKey });
 				toast.success('Transfer started. Thank you!');
 				// Reflect it in place rather than reloading, so the scroll position
-				// and the rest of the loaded pages survive.
+				// and the rest of the loaded pages survive. `claimed`, not
+				// `fulfilled`: it is only sent once the transfer completes, and it
+				// comes back to the board if it fails.
 				setRequests((prev) =>
-					prev.map((r) => (r.id === row.id ? { ...r, status: 'fulfilled', jobId } : r))
+					prev.map((r) => (r.id === row.id ? { ...r, status: 'claimed', jobId } : r))
 				);
 			} catch (error) {
 				toast.error(

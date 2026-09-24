@@ -175,7 +175,10 @@ export interface StoredRequest {
 	requesterId: string;
 	fulfillerId: string | null;
 	jobId: string | null;
+	jobHost?: string | null;
+	error?: string | null;
 	createdAt: Date | string;
+	updatedAt?: Date | string;
 }
 
 /**
