@@ -1,0 +1,9 @@
+{
+	"body": {
+		"success": false,
+		"error": "BAD_TOKEN",
+		"detail": "Your token is invalid or has expired. Please log in again or reset your token.",
+		"data": null
+	},
+	"status": 403
+}

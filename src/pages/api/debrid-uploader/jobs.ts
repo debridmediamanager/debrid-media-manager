@@ -2,6 +2,7 @@ import { orderedServersForNewJob, resolveJobServer } from '@/services/debridUplo
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { isSponsorRequest } from '@/utils/requireSponsor';
+import { FREE_TORBOX_PLAN_MESSAGE, isFreeTorBoxPlan } from '@/utils/torboxPlan';
 import { safeReturnPath } from '@/utils/transferContext';
 import { exceedsTransferSizeCap, MAX_TRANSFER_BYTES, tooLargeMessage } from '@/utils/transferSize';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -139,6 +140,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			sizeBytes: jobSize,
 			maxBytes: MAX_TRANSFER_BYTES,
 		});
+	}
+
+	// After the dedup check for the same reason as the size cap: serving an
+	// already-completed transfer never touches TorBox, so a free account can
+	// still have it.
+	if (await isFreeTorBoxPlan(tbSource)) {
+		return res.status(403).json({ error: FREE_TORBOX_PLAN_MESSAGE });
 	}
 
 	const body = JSON.stringify({

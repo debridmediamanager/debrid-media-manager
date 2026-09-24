@@ -4,6 +4,7 @@ import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { castAccessToken } from '@/utils/castRdToken';
 import { canClaim, pickSourceKeys, RequestValidationError } from '@/utils/contentRequest';
+import { FREE_TORBOX_PLAN_MESSAGE, isFreeTorBoxPlan } from '@/utils/torboxPlan';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -92,6 +93,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	const verdict = canClaim(request, fulfillerId);
 	if (!verdict.ok) return res.status(verdict.code).json({ error: verdict.reason });
+
+	// Before the claim, so a fulfiller whose TorBox account cannot source the
+	// transfer never takes the request off the board.
+	if (await isFreeTorBoxPlan(sourceKeys.tb_api_key)) {
+		return res.status(403).json({ error: FREE_TORBOX_PLAN_MESSAGE });
+	}
 
 	// Claim before doing any work. The status is part of the update's `where`,
 	// so if two fulfillers arrive together the database picks one and the other

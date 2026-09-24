@@ -4,9 +4,14 @@ import { getToken } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { isFreeTorBoxPlan } from '@/utils/torboxPlan';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/utils/torboxPlan', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/utils/torboxPlan')>()),
+	isFreeTorBoxPlan: vi.fn(async () => false),
+}));
 vi.mock('@/services/realDebrid', () => ({ __esModule: true, getToken: vi.fn() }));
 vi.mock('@/services/debridUploaderServers', () => ({
 	__esModule: true,
@@ -53,6 +58,7 @@ const bodyOf = (res: any) => (res.json as any).mock.calls[0][0];
 
 beforeEach(() => {
 	vi.clearAllMocks();
+	vi.mocked(isFreeTorBoxPlan).mockResolvedValue(false);
 	mockUserId.mockResolvedValue('helper');
 	mockServers.mockReturnValue(['http://debrid02:3100']);
 	mockRepo.getContentRequest = vi.fn().mockResolvedValue(request());
@@ -227,5 +233,20 @@ describe('races and failures', () => {
 			'req-1',
 			'all uploader hosts unreachable'
 		);
+	});
+});
+
+describe('POST /api/requests/[id]/fulfill — a free TorBox account', () => {
+	it('is refused before the request is claimed', async () => {
+		vi.mocked(isFreeTorBoxPlan).mockResolvedValue(true);
+
+		const res = await call();
+
+		expect(statusOf(res)).toBe(403);
+		expect(bodyOf(res).error).toMatch(/free plan/);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+		expect(mockRepo.releaseContentRequest).not.toHaveBeenCalled();
+		expect(isFreeTorBoxPlan).toHaveBeenCalledWith('TB_KEY');
+		expect(global.fetch).not.toHaveBeenCalled();
 	});
 });

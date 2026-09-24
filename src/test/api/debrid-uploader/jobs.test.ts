@@ -1,9 +1,14 @@
 import handler from '@/pages/api/debrid-uploader/jobs';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { isFreeTorBoxPlan } from '@/utils/torboxPlan';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/utils/torboxPlan', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/utils/torboxPlan')>()),
+	isFreeTorBoxPlan: vi.fn(async () => false),
+}));
 vi.mock('@/services/debridUploaderServers', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/debridUploaderServers')>()),
 	orderedServersForNewJob: vi.fn(() => ['http://uploader:3100']),
@@ -32,6 +37,7 @@ const validBody = (over?: Record<string, unknown>) => ({
 
 beforeEach(() => {
 	vi.clearAllMocks();
+	vi.mocked(isFreeTorBoxPlan).mockResolvedValue(false);
 	mockRepo.getDebridTransfer = vi.fn().mockResolvedValue(null);
 	mockRepo.recordDebridTransferPending = vi.fn().mockResolvedValue(undefined);
 	mockRepo.recordDebridJobServer = vi.fn().mockResolvedValue(undefined);
@@ -98,5 +104,49 @@ describe('POST /api/debrid-uploader/jobs — the size cap', () => {
 
 		expect(res._getStatusCode()).toBe(200);
 		expect(res._getData()).toMatchObject({ duplicate: 'completed', addedToRd: true });
+	});
+});
+
+// TorBox is the only cache source, and a free account's `createtorrent` answers
+// 403 PLAN_RESTRICTED_FEATURE, so a job submitted with one could only fail.
+// Nineteen did between 2026-08-08 and 2026-09-23.
+describe('POST /api/debrid-uploader/jobs — a free TorBox account', () => {
+	const withTorBoxPlan = (plan: number) =>
+		vi.mocked(isFreeTorBoxPlan).mockResolvedValue(plan === 0);
+	const uploaderCalls = () => vi.mocked(global.fetch).mock.calls;
+
+	it('is refused before anything is queued', async () => {
+		withTorBoxPlan(0);
+		const res = await post(validBody());
+
+		expect(res._getStatusCode()).toBe(403);
+		expect(res._getData()).toMatchObject({ error: expect.stringMatching(/free plan/) });
+		expect(isFreeTorBoxPlan).toHaveBeenCalledWith('tb-key');
+		expect(uploaderCalls()).toHaveLength(0);
+		expect(mockRepo.recordDebridTransferPending).not.toHaveBeenCalled();
+	});
+
+	it('does not stop a paid account', async () => {
+		withTorBoxPlan(2);
+		const res = await post(validBody());
+
+		expect(res._getStatusCode()).toBe(201);
+		expect(uploaderCalls()).toHaveLength(1);
+	});
+
+	// Serving a completed duplicate is one RD addMagnet and never touches TorBox.
+	it('still serves an already-completed transfer', async () => {
+		withTorBoxPlan(0);
+		mockRepo.getDebridTransfer = vi.fn().mockResolvedValue({
+			status: 'completed',
+			jobId: 'old-job',
+			rewrittenHash: 'c'.repeat(40),
+		});
+		mockRepo.checkAvailabilityByHashes = vi.fn().mockResolvedValue([{ hash: 'c'.repeat(40) }]);
+
+		const res = await post(validBody());
+
+		expect(res._getStatusCode()).toBe(200);
+		expect(res._getData()).toMatchObject({ duplicate: 'completed' });
 	});
 });
