@@ -209,7 +209,16 @@ export default function RequestsPage() {
 			)
 				return;
 			try {
-				const jobId = await fulfillContentRequest(key, row.id, { tbKey: torboxKey });
+				const { jobId, delivered } = await fulfillContentRequest(key, row.id, {
+					tbKey: torboxKey,
+				});
+				if (delivered) {
+					toast.success(
+						'Real-Debrid already had this, so it went straight to the asker. Your TorBox was not used.'
+					);
+					setRequests((prev) => prev.filter((r) => r.id !== row.id));
+					return;
+				}
 				toast.success('Transfer started. Thank you!');
 				// Reflect it in place rather than reloading, so the scroll position
 				// and the rest of the loaded pages survive. `claimed`, not

@@ -230,6 +230,10 @@ export class Repository {
 		return this.contentRequestService.releaseRequest(id, error, jobId);
 	}
 
+	public markContentRequestDelivered(id: string) {
+		return this.contentRequestService.markDelivered(id);
+	}
+
 	public settleContentRequestDelivered(id: string, jobId: string) {
 		return this.contentRequestService.settleDelivered(id, jobId);
 	}

@@ -128,6 +128,19 @@ export class ContentRequestService extends DatabaseClient {
 	}
 
 	/**
+	 * Close a request that needed no transfer: its release was already on
+	 * Real-Debrid and has been added to the asker's account. Only a row still
+	 * on the board moves, so this cannot overwrite a running claim.
+	 */
+	public async markDelivered(id: string): Promise<boolean> {
+		const { count } = await this.prisma.contentRequest.updateMany({
+			where: { id, status: { in: ['open', 'failed'] } },
+			data: { status: 'fulfilled', error: null },
+		});
+		return count > 0;
+	}
+
+	/**
 	 * Claimed rows oldest-touched first, for the sweep that settles them.
 	 * `touchClaimed` sends a row still in flight to the back of that queue.
 	 */

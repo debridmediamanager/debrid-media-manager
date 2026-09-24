@@ -13,3 +13,9 @@ answers, captured 2026-09-24 with a trial account:
   empty list, not null.
 - `tb-checkcached-batch.json`: both hashes in one call. Only the cached one
   comes back, so membership is the answer.
+
+`free-delivery.json`: three open requests from production on 2026-09-24,
+together with the `Available` hashes and `tbrd:` transfer records DMM held for
+them. One was already cached on Real-Debrid. One matched a completed transfer
+whose rewritten hash was still available. One matched a transfer whose
+rewritten hash had since been pruned.

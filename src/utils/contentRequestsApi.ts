@@ -75,11 +75,16 @@ export interface NewContentRequest {
 	mediaType: 'movie' | 'show';
 }
 
-/** File a request. Idempotent — asking twice returns the row already there. */
+/**
+ * File a request. Idempotent — asking twice returns the row already there.
+ *
+ * `delivered` instead of a row means nothing was filed: Real-Debrid already had
+ * the release, and it has been added to the asker's library.
+ */
 export async function fileContentRequest(
 	rdKey: string,
 	input: NewContentRequest
-): Promise<PublicRequest> {
+): Promise<{ delivered: true } | { delivered: false; request: PublicRequest }> {
 	const data = await unwrap(
 		await fetch('/api/requests', {
 			method: 'POST',
@@ -87,7 +92,8 @@ export async function fileContentRequest(
 			body: JSON.stringify(input),
 		})
 	);
-	return data.request as PublicRequest;
+	if (data.delivered === true) return { delivered: true };
+	return { delivered: false, request: data.request as PublicRequest };
 }
 
 /**
@@ -102,7 +108,7 @@ export async function fulfillContentRequest(
 	rdKey: string,
 	id: string,
 	keys: { tbKey?: string | null }
-): Promise<string> {
+): Promise<{ jobId: string | null; delivered: boolean }> {
 	const data = await unwrap(
 		await fetch(`/api/requests/${encodeURIComponent(id)}/fulfill`, {
 			method: 'POST',
@@ -112,7 +118,10 @@ export async function fulfillContentRequest(
 			}),
 		})
 	);
-	return String(data.jobId ?? '');
+	// `delivered`: the release was already on Real-Debrid, so it went straight
+	// into the asker's library and no transfer was started.
+	if (data.delivered === true) return { jobId: null, delivered: true };
+	return { jobId: String(data.jobId ?? ''), delivered: false };
 }
 
 /** Withdraw one's own request. */

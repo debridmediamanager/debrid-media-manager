@@ -1,5 +1,6 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { parseRequestInput, RequestValidationError, toPublicRequest } from '@/utils/contentRequest';
 import { torboxCachedHashes } from '@/utils/torboxCache';
@@ -128,6 +129,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				return res.status(400).json({ error: error.message });
 			}
 			throw error;
+		}
+
+		// Nothing to ask for when Real-Debrid already has it: add it now with the
+		// asker's own session. 72 open requests on 2026-09-24 were for releases
+		// RD had cached. A failed add files the request as usual.
+		try {
+			const onRd = (await alreadyOnRealDebrid([input.hash])).get(input.hash);
+			if (onRd && (await addHashToRd(token, onRd))) {
+				return res.status(200).json({ delivered: true });
+			}
+		} catch (error) {
+			console.error('Checking Real-Debrid before filing a request failed:', error);
 		}
 
 		try {

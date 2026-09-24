@@ -1,5 +1,6 @@
 import handler from '@/pages/api/requests';
 import { repository } from '@/services/repository';
+import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { torboxCachedHashes } from '@/utils/torboxCache';
@@ -7,6 +8,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 vi.mock('@/utils/torboxCache', () => ({ __esModule: true, torboxCachedHashes: vi.fn() }));
+vi.mock('@/services/requestDelivery', () => ({
+	__esModule: true,
+	alreadyOnRealDebrid: vi.fn(async () => new Map()),
+	addHashToRd: vi.fn(async () => true),
+}));
 vi.mock('@/utils/castApiHelpers', () => ({ __esModule: true, generateUserId: vi.fn() }));
 
 const mockRepo = vi.mocked(repository);
@@ -45,6 +51,8 @@ const bodyOf = (res: any) => (res.json as any).mock.calls[0][0];
 
 beforeEach(() => {
 	vi.clearAllMocks();
+	vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map());
+	vi.mocked(addHashToRd).mockResolvedValue(true);
 	mockUserId.mockResolvedValue('asker');
 	mockRepo.listOpenContentRequests = vi.fn().mockResolvedValue([row()]);
 	mockRepo.listContentRequestsFor = vi.fn().mockResolvedValue([]);
@@ -165,6 +173,23 @@ describe('GET /api/requests', () => {
 });
 
 describe('POST /api/requests', () => {
+	// 72 open requests on 2026-09-24 were for releases Real-Debrid already had.
+	it('adds a release RD already has instead of filing a request for it', async () => {
+		vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map([[HASH, HASH]]));
+		const res = await post(valid);
+		expect(statusOf(res)).toBe(200);
+		expect(bodyOf(res)).toEqual({ delivered: true });
+		expect(vi.mocked(addHashToRd)).toHaveBeenCalledWith('tok', HASH);
+		expect(mockRepo.createContentRequest).not.toHaveBeenCalled();
+	});
+
+	it('files the request when the add to RD does not go through', async () => {
+		vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map([[HASH, HASH]]));
+		vi.mocked(addHashToRd).mockResolvedValue(false);
+		await post(valid);
+		expect(mockRepo.createContentRequest).toHaveBeenCalled();
+	});
+
 	const post = (
 		body: unknown,
 		headers: Record<string, string> = { 'x-rd-access-token': 'tok' }

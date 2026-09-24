@@ -1,6 +1,7 @@
 import { orderedServersForNewJob, resolveJobServer } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { addHashToRd } from '@/services/requestDelivery';
 import { isSponsorRequest } from '@/utils/requireSponsor';
 import { FREE_TORBOX_PLAN_MESSAGE, isFreeTorBoxPlan } from '@/utils/torboxPlan';
 import { safeReturnPath } from '@/utils/transferContext';
@@ -37,36 +38,6 @@ async function isTransferStillValid(record: {
 		return job?.status !== 'failed';
 	} catch {
 		return false; // can't confirm it's alive — let the resubmit through
-	}
-}
-
-// Add a completed rewritten torrent to the requesting user's RD account.
-// The content is RD-cached (another user's job completed it), so this is instant.
-async function addRewrittenToUserRd(rdKey: string, rewrittenHash: string): Promise<boolean> {
-	try {
-		const addRes = await fetch('https://app.real-debrid.com/rest/1.0/torrents/addMagnet', {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${rdKey}`,
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: `magnet=${encodeURIComponent(`magnet:?xt=urn:btih:${rewrittenHash}`)}`,
-			signal: AbortSignal.timeout(15000),
-		});
-		if (addRes.status !== 201) return false;
-		const { id } = await addRes.json();
-		await fetch(`https://app.real-debrid.com/rest/1.0/torrents/selectFiles/${id}`, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${rdKey}`,
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: 'files=all',
-			signal: AbortSignal.timeout(15000),
-		});
-		return true;
-	} catch {
-		return false;
 	}
 }
 
@@ -109,7 +80,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		if (existing && (await isTransferStillValid(existing))) {
 			let addedToRd = false;
 			if (existing.status === 'completed' && existing.rewrittenHash) {
-				addedToRd = await addRewrittenToUserRd(rdKey, existing.rewrittenHash);
+				addedToRd = await addHashToRd(rdKey, existing.rewrittenHash);
 			}
 			return res.status(200).json({
 				duplicate: existing.status === 'completed' ? 'completed' : 'in_progress',

@@ -202,12 +202,18 @@ const MovieSearch: FunctionComponent = () => {
 		async (result: SearchResult) => {
 			if (!rdKey) return;
 			try {
-				await fileContentRequest(rdKey, {
+				const filed = await fileContentRequest(rdKey, {
 					hash: result.hash,
 					imdbId: imdbid as string,
 					title: result.title,
 					mediaType: 'movie',
 				});
+				if (filed.delivered) {
+					toast.success('Real-Debrid already had this. It is in your library now.', {
+						duration: 6000,
+					});
+					return;
+				}
 				toast.success(
 					'Requested. Anyone with TorBox or AllDebrid can now send it to your library.',
 					{ duration: 6000 }

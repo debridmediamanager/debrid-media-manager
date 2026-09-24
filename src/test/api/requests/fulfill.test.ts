@@ -2,6 +2,7 @@ import handler from '@/pages/api/requests/[id]/fulfill';
 import { orderedServersForNewJob } from '@/services/debridUploaderServers';
 import { getToken } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
+import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { torboxCachedHashes } from '@/utils/torboxCache';
@@ -14,6 +15,11 @@ vi.mock('@/utils/torboxPlan', async (importOriginal) => ({
 	isFreeTorBoxPlan: vi.fn(async () => false),
 }));
 vi.mock('@/utils/torboxCache', () => ({ __esModule: true, torboxCachedHashes: vi.fn() }));
+vi.mock('@/services/requestDelivery', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/services/requestDelivery')>()),
+	alreadyOnRealDebrid: vi.fn(async () => new Map()),
+	addHashToRd: vi.fn(async () => true),
+}));
 vi.mock('@/services/realDebrid', () => ({ __esModule: true, getToken: vi.fn() }));
 vi.mock('@/services/debridUploaderServers', () => ({
 	__esModule: true,
@@ -61,12 +67,15 @@ const bodyOf = (res: any) => (res.json as any).mock.calls[0][0];
 beforeEach(() => {
 	vi.clearAllMocks();
 	vi.mocked(isFreeTorBoxPlan).mockResolvedValue(false);
+	vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map());
+	vi.mocked(addHashToRd).mockResolvedValue(true);
 	vi.mocked(torboxCachedHashes).mockResolvedValue(new Set([HASH]));
 	mockUserId.mockResolvedValue('helper');
 	mockServers.mockReturnValue(['http://debrid02:3100']);
 	mockRepo.getContentRequest = vi.fn().mockResolvedValue(request());
 	mockRepo.claimContentRequest = vi.fn().mockResolvedValue(request({ status: 'claimed' }));
 	mockRepo.attachContentRequestJob = vi.fn().mockResolvedValue(undefined);
+	mockRepo.markContentRequestDelivered = vi.fn().mockResolvedValue(true);
 	mockRepo.releaseContentRequest = vi.fn().mockResolvedValue(undefined);
 	mockRepo.recordDebridJobServer = vi.fn().mockResolvedValue(undefined);
 	mockRepo.recordTransferMeta = vi.fn().mockResolvedValue(undefined);
@@ -85,6 +94,20 @@ beforeEach(() => {
 });
 
 describe('POST /api/requests/[id]/fulfill', () => {
+	// A release already on Real-Debrid needs one addMagnet on the asker's
+	// account, not a TorBox transfer. The direct route always did this.
+	it('delivers a release already on RD without claiming or spending TorBox', async () => {
+		const rewritten = 'c'.repeat(40);
+		vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map([[HASH, rewritten]]));
+		const res = await call();
+		expect(statusOf(res)).toBe(200);
+		expect(bodyOf(res)).toEqual({ delivered: true });
+		expect(vi.mocked(addHashToRd)).toHaveBeenCalledWith('FRESH_RD_TOKEN', rewritten);
+		expect(mockRepo.markContentRequestDelivered).toHaveBeenCalledWith('req-1');
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
 	// 219 of the first 369 fulfilments were queued for releases TorBox did not
 	// have, failed `uncached` a second later, and still took the request off the
 	// board. The route has to ask before it claims.

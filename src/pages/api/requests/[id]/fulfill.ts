@@ -1,8 +1,8 @@
 import { orderedServersForNewJob } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { addHashToRd, alreadyOnRealDebrid, mintRequesterToken } from '@/services/requestDelivery';
 import { generateUserId } from '@/utils/castApiHelpers';
-import { castAccessToken } from '@/utils/castRdToken';
 import { canClaim, pickSourceKeys, RequestValidationError } from '@/utils/contentRequest';
 import { torboxCachedHashes } from '@/utils/torboxCache';
 import { FREE_TORBOX_PLAN_MESSAGE, isFreeTorBoxPlan } from '@/utils/torboxPlan';
@@ -28,31 +28,6 @@ function readToken(req: NextApiRequest): string | null {
 	const header = req.headers[RD_TOKEN_HEADER];
 	const token = Array.isArray(header) ? header[0] : header;
 	return typeof token === 'string' && token.trim() !== '' ? token.trim() : null;
-}
-
-/**
- * A Real-Debrid access token for the *requester*, minted now.
- *
- * Not the token they filed the request with. Real-Debrid expires an access
- * token 24 hours after minting, and a request may sit on the board for days —
- * nzb2rd learned this the expensive way, where stale tokens were 1298 of 1952
- * Usenet failures. The OAuth triple in `CastProfile` does not expire, so the
- * token is minted at the moment of fulfilment instead of being carried.
- */
-async function mintRequesterToken(requesterId: string): Promise<string | null> {
-	const profile = await db.getCastProfile(requesterId);
-	if (!profile) return null;
-	try {
-		return await castAccessToken(profile);
-	} catch (error) {
-		// Only the message: an AxiosError expands to include `config.data`, which
-		// here is the OAuth POST body — the triple itself.
-		console.error(
-			'Minting a Real-Debrid token for a request failed:',
-			error instanceof Error ? error.message : String(error)
-		);
-		return null;
-	}
 }
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -94,6 +69,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	const verdict = canClaim(request, fulfillerId);
 	if (!verdict.ok) return res.status(verdict.code).json({ error: verdict.reason });
+
+	// Already on Real-Debrid, either cached there all along or put there by an
+	// earlier transfer: add it to the asker's account and spend nobody's TorBox.
+	// Falls through to a normal fulfil if the add does not go through.
+	const onRd = (await alreadyOnRealDebrid([request.hash]).catch(() => new Map())).get(
+		request.hash
+	);
+	if (onRd) {
+		const token = await mintRequesterToken(request.requesterId);
+		if (token && (await addHashToRd(token, onRd))) {
+			await db.markContentRequestDelivered(id);
+			return res.status(200).json({ delivered: true });
+		}
+	}
 
 	// Before the claim, so a fulfiller whose TorBox account cannot source the
 	// transfer never takes the request off the board.
