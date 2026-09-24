@@ -25,10 +25,13 @@ export class ContentRequestService extends DatabaseClient {
 		title: string | null;
 		mediaType: MediaType;
 		requesterId: string;
+		sizeBytes?: number | null;
+		returnPath?: string | null;
 	}): Promise<StoredRequest> {
+		const { sizeBytes, ...rest } = input;
 		const row = await this.prisma.contentRequest.upsert({
 			where: { hash_requesterId: { hash: input.hash, requesterId: input.requesterId } },
-			create: input,
+			create: { ...rest, sizeBytes: sizeBytes == null ? null : BigInt(sizeBytes) },
 			update: {},
 		});
 

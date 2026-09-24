@@ -53,8 +53,21 @@ describe('ContentRequestService', () => {
 			await service.createRequest(input);
 			expect(prisma.contentRequest.upsert).toHaveBeenCalledWith({
 				where: { hash_requesterId: { hash: HASH, requesterId: 'asker' } },
-				create: input,
+				create: { ...input, sizeBytes: null },
 				update: {},
+			});
+		});
+
+		it('stores a size as the BigInt the column holds', async () => {
+			prisma.contentRequest.upsert.mockResolvedValue(row());
+			await service.createRequest({
+				...input,
+				sizeBytes: 4e9,
+				returnPath: '/movie/tt1234567',
+			});
+			expect(prisma.contentRequest.upsert.mock.calls[0][0].create).toMatchObject({
+				sizeBytes: BigInt(4e9),
+				returnPath: '/movie/tt1234567',
 			});
 		});
 

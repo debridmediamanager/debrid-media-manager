@@ -1102,6 +1102,11 @@ model ContentRequest {
   jobId       String?
   jobHost     String?  @db.Text
   error       String?  @db.Text
+  /// The whole release in bytes, for the transfer size cap and host routing.
+  sizeBytes   BigInt?
+  /// The page it was asked from, so a completed transfer is filed under the
+  /// right film or season.
+  returnPath  String?  @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

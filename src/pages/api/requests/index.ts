@@ -4,6 +4,7 @@ import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { parseRequestInput, RequestValidationError, toPublicRequest } from '@/utils/contentRequest';
 import { torboxCachedHashes } from '@/utils/torboxCache';
+import { exceedsTransferSizeCap, tooLargeMessage } from '@/utils/transferSize';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -129,6 +130,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				return res.status(400).json({ error: error.message });
 			}
 			throw error;
+		}
+
+		// Too big for any transfer, so nobody could ever fulfil it. Refused here
+		// the same way the direct route refuses it.
+		if (exceedsTransferSizeCap(input.sizeBytes)) {
+			return res.status(413).json({ error: tooLargeMessage(input.sizeBytes as number) });
 		}
 
 		// Nothing to ask for when Real-Debrid already has it: add it now with the

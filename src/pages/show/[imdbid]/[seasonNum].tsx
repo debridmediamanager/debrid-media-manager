@@ -217,6 +217,12 @@ const TvSearch: FunctionComponent = () => {
 					imdbId: imdbid as string,
 					title: result.title,
 					mediaType: 'show',
+					// Whole release, in bytes: the transfer cap is about what the uploader
+					// moves, and a row's sizes are in MB.
+					sizeBytes: result.fileSize
+						? Math.round(result.fileSize * 1024 * 1024)
+						: undefined,
+					returnPath: window.location.pathname,
 				});
 				if (filed.delivered) {
 					toast.success('Real-Debrid already had this. It is in your library now.', {

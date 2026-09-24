@@ -1,3 +1,4 @@
+import { isTransferStillValid } from '@/services/debridTransferValidity';
 import { orderedServersForNewJob } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
@@ -6,6 +7,7 @@ import { generateUserId } from '@/utils/castApiHelpers';
 import { canClaim, pickSourceKeys, RequestValidationError } from '@/utils/contentRequest';
 import { torboxCachedHashes } from '@/utils/torboxCache';
 import { FREE_TORBOX_PLAN_MESSAGE, isFreeTorBoxPlan } from '@/utils/torboxPlan';
+import { exceedsTransferSizeCap, tooLargeMessage } from '@/utils/transferSize';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -84,6 +86,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		}
 	}
 
+	// Somebody's transfer of this exact release is already running. A second
+	// one would spend another TorBox fetch on the same bytes; once the first
+	// lands, the cron's free delivery adds it to this asker too.
+	const existing = await db.getDebridTransfer(request.hash).catch(() => null);
+	if (existing?.status === 'pending' && (await isTransferStillValid(existing))) {
+		return res.status(409).json({
+			error: 'this release is already being transferred, and will reach the asker when it lands',
+			inProgress: true,
+		});
+	}
+
+	const sizeBytes = request.sizeBytes == null ? undefined : Number(request.sizeBytes);
+	if (exceedsTransferSizeCap(sizeBytes)) {
+		return res.status(413).json({ error: tooLargeMessage(sizeBytes as number) });
+	}
+
 	// Before the claim, so a fulfiller whose TorBox account cannot source the
 	// transfer never takes the request off the board.
 	if (await isFreeTorBoxPlan(sourceKeys.tb_api_key)) {
@@ -125,7 +143,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	});
 
 	let lastNetworkError = false;
-	for (const server of orderedServersForNewJob(undefined)) {
+	for (const server of orderedServersForNewJob(sizeBytes)) {
 		let response: Response;
 		try {
 			response = await fetch(`${server}/jobs`, {
@@ -142,8 +160,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		const data = await response.json().catch(() => ({}));
 		if (response.ok && data?.id) {
+			// The same records a direct submission writes. Without the pending
+			// mapping, 359 of the first 369 fulfilments were invisible to the
+			// dedup check, the "In RD" badge and the cron that files completed
+			// transfers into search.
 			await Promise.all([
 				db.attachContentRequestJob(id, data.id, server),
+				db
+					.recordDebridTransferPending(request.hash, data.id, request.imdbId)
+					.catch((e) => console.error('Recording pending transfer failed:', e)),
 				db
 					.recordDebridJobServer(data.id, server)
 					.catch((e) => console.error('Recording job server failed:', e)),
@@ -155,6 +180,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 						jobId: data.id,
 						imdbId: request.imdbId,
 						title: request.title ?? undefined,
+						returnPath: request.returnPath ?? undefined,
 					})
 					.catch((e) => console.error('Recording transfer context failed:', e)),
 			]);

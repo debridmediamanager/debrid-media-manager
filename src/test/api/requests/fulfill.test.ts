@@ -15,6 +15,10 @@ vi.mock('@/utils/torboxPlan', async (importOriginal) => ({
 	isFreeTorBoxPlan: vi.fn(async () => false),
 }));
 vi.mock('@/utils/torboxCache', () => ({ __esModule: true, torboxCachedHashes: vi.fn() }));
+vi.mock('@/services/debridTransferValidity', () => ({
+	__esModule: true,
+	isTransferStillValid: vi.fn(async () => true),
+}));
 vi.mock('@/services/requestDelivery', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/requestDelivery')>()),
 	alreadyOnRealDebrid: vi.fn(async () => new Map()),
@@ -78,6 +82,8 @@ beforeEach(() => {
 	mockRepo.markContentRequestDelivered = vi.fn().mockResolvedValue(true);
 	mockRepo.releaseContentRequest = vi.fn().mockResolvedValue(undefined);
 	mockRepo.recordDebridJobServer = vi.fn().mockResolvedValue(undefined);
+	mockRepo.recordDebridTransferPending = vi.fn().mockResolvedValue(undefined);
+	mockRepo.getDebridTransfer = vi.fn().mockResolvedValue(null);
 	mockRepo.recordTransferMeta = vi.fn().mockResolvedValue(undefined);
 	mockRepo.getCastProfile = vi.fn().mockResolvedValue({
 		userId: 'asker',
@@ -94,6 +100,51 @@ beforeEach(() => {
 });
 
 describe('POST /api/requests/[id]/fulfill', () => {
+	// 359 of the first 369 fulfilments left no `tbrd:` mapping, so the dedup
+	// check, the In RD badge and the cron that files completed transfers into
+	// search never saw them.
+	it('records the transfer the way a direct submission does', async () => {
+		mockRepo.getContentRequest = vi
+			.fn()
+			.mockResolvedValue(
+				request({ sizeBytes: BigInt(4_000_000_000), returnPath: '/show/tt1234567/2' })
+			);
+		await call();
+		expect(mockRepo.recordDebridTransferPending).toHaveBeenCalledWith(
+			HASH,
+			'job-9',
+			'tt1234567'
+		);
+		expect(mockRepo.recordTransferMeta).toHaveBeenCalledWith(
+			expect.objectContaining({ jobId: 'job-9', returnPath: '/show/tt1234567/2' })
+		);
+		expect(mockServers).toHaveBeenCalledWith(4_000_000_000);
+	});
+
+	it('does not start a second transfer of a release already on its way', async () => {
+		mockRepo.getDebridTransfer = vi.fn().mockResolvedValue({
+			originalHash: HASH,
+			jobId: 'job-other',
+			imdbId: 'tt1234567',
+			status: 'pending',
+			updatedAt: 0,
+		});
+		const res = await call();
+		expect(statusOf(res)).toBe(409);
+		expect(bodyOf(res).inProgress).toBe(true);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
+	it('refuses a request too large for any transfer', async () => {
+		mockRepo.getContentRequest = vi
+			.fn()
+			.mockResolvedValue(request({ sizeBytes: BigInt(150e9) }));
+		const res = await call();
+		expect(statusOf(res)).toBe(413);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+	});
+
 	// A release already on Real-Debrid needs one addMagnet on the asker's
 	// account, not a TorBox transfer. The direct route always did this.
 	it('delivers a release already on RD without claiming or spending TorBox', async () => {

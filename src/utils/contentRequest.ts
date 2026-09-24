@@ -1,3 +1,5 @@
+import { safeReturnPath } from './transferContext';
+
 /**
  * The rules a content request obeys, kept away from Prisma and HTTP.
  *
@@ -22,6 +24,8 @@ export interface ContentRequestInput {
 	imdbId: string;
 	title?: string | null;
 	mediaType: string;
+	sizeBytes?: number | null;
+	returnPath?: string | null;
 }
 
 export interface ValidRequest {
@@ -29,6 +33,10 @@ export interface ValidRequest {
 	imdbId: string;
 	title: string | null;
 	mediaType: MediaType;
+	/** Whole release in bytes, when the page knew it. */
+	sizeBytes: number | null;
+	/** The DMM page it was asked from, when that is a page we recognise. */
+	returnPath: string | null;
 }
 
 export class RequestValidationError extends Error {
@@ -77,6 +85,12 @@ export function normalizeTitle(raw: unknown): string | null {
 	return title.length > MAX_TITLE ? title.slice(0, MAX_TITLE) : title;
 }
 
+/** A size is a hint for routing and the cap; anything unusable is dropped. */
+export function normalizeSize(raw: unknown): number | null {
+	if (typeof raw !== 'number' || !Number.isFinite(raw) || raw <= 0) return null;
+	return Math.round(raw);
+}
+
 export function parseRequestInput(body: unknown): ValidRequest {
 	const input = (body ?? {}) as Partial<ContentRequestInput>;
 	return {
@@ -84,6 +98,8 @@ export function parseRequestInput(body: unknown): ValidRequest {
 		imdbId: normalizeImdbId(input.imdbId),
 		title: normalizeTitle(input.title),
 		mediaType: normalizeMediaType(input.mediaType),
+		sizeBytes: normalizeSize(input.sizeBytes),
+		returnPath: safeReturnPath(input.returnPath) ?? null,
 	};
 }
 
@@ -182,6 +198,8 @@ export interface StoredRequest {
 	jobId: string | null;
 	jobHost?: string | null;
 	error?: string | null;
+	sizeBytes?: bigint | number | null;
+	returnPath?: string | null;
 	createdAt: Date | string;
 	updatedAt?: Date | string;
 }

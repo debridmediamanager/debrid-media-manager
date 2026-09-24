@@ -73,6 +73,10 @@ export interface NewContentRequest {
 	imdbId: string;
 	title?: string | null;
 	mediaType: 'movie' | 'show';
+	/** The whole release in bytes, when known. */
+	sizeBytes?: number;
+	/** The page the request is made from. */
+	returnPath?: string;
 }
 
 /**

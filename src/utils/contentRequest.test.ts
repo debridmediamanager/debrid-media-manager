@@ -92,7 +92,24 @@ describe('parseRequestInput', () => {
 				title: '  Some   Release ',
 				mediaType: 'Movie',
 			})
-		).toEqual({ hash: HASH, imdbId: 'tt1234567', title: 'Some Release', mediaType: 'movie' });
+		).toEqual({
+			hash: HASH,
+			imdbId: 'tt1234567',
+			title: 'Some Release',
+			mediaType: 'movie',
+			sizeBytes: null,
+			returnPath: null,
+		});
+	});
+
+	it('keeps a usable size and a recognised page, and drops anything else', () => {
+		const base = { hash: HASH, imdbId: 'tt1234567', mediaType: 'show' };
+		expect(
+			parseRequestInput({ ...base, sizeBytes: 4e9 + 0.4, returnPath: '/show/tt1234567/2' })
+		).toMatchObject({ sizeBytes: 4e9, returnPath: '/show/tt1234567/2' });
+		expect(
+			parseRequestInput({ ...base, sizeBytes: -1, returnPath: 'https://evil.example/' })
+		).toMatchObject({ sizeBytes: null, returnPath: null });
 	});
 
 	it('accepts a body with no title', () => {

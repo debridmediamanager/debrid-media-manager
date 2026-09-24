@@ -173,6 +173,19 @@ describe('GET /api/requests', () => {
 });
 
 describe('POST /api/requests', () => {
+	it('refuses to file a release too large for any transfer', async () => {
+		const res = await post({ ...valid, sizeBytes: 150e9 });
+		expect(statusOf(res)).toBe(413);
+		expect(mockRepo.createContentRequest).not.toHaveBeenCalled();
+	});
+
+	it('stores the size and the page it was asked from', async () => {
+		await post({ ...valid, sizeBytes: 4e9, returnPath: '/movie/tt1234567' });
+		expect(mockRepo.createContentRequest).toHaveBeenCalledWith(
+			expect.objectContaining({ sizeBytes: 4e9, returnPath: '/movie/tt1234567' })
+		);
+	});
+
 	// 72 open requests on 2026-09-24 were for releases Real-Debrid already had.
 	it('adds a release RD already has instead of filing a request for it', async () => {
 		vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map([[HASH, HASH]]));
