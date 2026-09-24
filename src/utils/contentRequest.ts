@@ -10,7 +10,14 @@ import { safeReturnPath } from './transferContext';
  * database or a debrid host.
  */
 
-export const REQUEST_STATUSES = ['open', 'claimed', 'fulfilled', 'failed', 'cancelled'] as const;
+export const REQUEST_STATUSES = [
+	'open',
+	'claimed',
+	'fulfilled',
+	'failed',
+	'cancelled',
+	'stalled',
+] as const;
 export type RequestStatus = (typeof REQUEST_STATUSES)[number];
 
 export const MEDIA_TYPES = ['movie', 'show'] as const;

@@ -81,6 +81,8 @@ beforeEach(() => {
 	mockRepo.attachContentRequestJob = vi.fn().mockResolvedValue(undefined);
 	mockRepo.markContentRequestDelivered = vi.fn().mockResolvedValue(true);
 	mockRepo.releaseContentRequest = vi.fn().mockResolvedValue(undefined);
+	mockRepo.stallContentRequest = vi.fn().mockResolvedValue(true);
+	mockRepo.returnContentRequestClaim = vi.fn().mockResolvedValue(true);
 	mockRepo.recordDebridJobServer = vi.fn().mockResolvedValue(undefined);
 	mockRepo.recordDebridTransferPending = vi.fn().mockResolvedValue(undefined);
 	mockRepo.getDebridTransfer = vi.fn().mockResolvedValue(null);
@@ -277,18 +279,36 @@ describe('races and failures', () => {
 		expect(global.fetch).not.toHaveBeenCalled();
 	});
 
-	it('hands the request back when the requester has no usable credentials', async () => {
+	// Handed back as `failed`, such a request went straight back on the board
+	// and failed identically for every fulfiller: seven did by 2026-09-24.
+	it('takes the request off the board when the requester has no usable credentials', async () => {
 		mockRepo.getCastProfile = vi.fn().mockResolvedValue(null);
 		const res = await call();
 		expect(statusOf(res)).toBe(409);
-		expect(mockRepo.releaseContentRequest).toHaveBeenCalledWith('req-1', expect.any(String));
+		expect(mockRepo.stallContentRequest).toHaveBeenCalledWith('req-1', expect.any(String));
+		expect(mockRepo.releaseContentRequest).not.toHaveBeenCalled();
 		expect(global.fetch).not.toHaveBeenCalled();
 	});
 
-	it('hands the request back when the mint fails', async () => {
+	it('takes the request off the board when the mint fails', async () => {
 		mockToken.mockRejectedValue(new Error('refresh rejected'));
 		expect(statusOf(await call())).toBe(409);
-		expect(mockRepo.releaseContentRequest).toHaveBeenCalled();
+		expect(mockRepo.stallContentRequest).toHaveBeenCalled();
+	});
+
+	// The uploader's per-user ceiling answered 429 "job limit reached", and seven
+	// requests carried that as their failure though nothing was wrong with them.
+	it('hands a request back untouched when the uploader is too busy', async () => {
+		global.fetch = vi.fn().mockResolvedValue({
+			ok: false,
+			status: 429,
+			json: async () => ({ error: 'job limit reached' }),
+		}) as any;
+		const res = await call();
+		expect(statusOf(res)).toBe(503);
+		expect(bodyOf(res).busy).toBe(true);
+		expect(mockRepo.returnContentRequestClaim).toHaveBeenCalledWith('req-1');
+		expect(mockRepo.releaseContentRequest).not.toHaveBeenCalled();
 	});
 
 	// A deterministic refusal must not be retried on the next host.
@@ -322,14 +342,12 @@ describe('races and failures', () => {
 		expect(global.fetch).toHaveBeenCalledTimes(2);
 	});
 
-	it('releases the request when every host is unreachable', async () => {
+	it('hands the request back untouched when every host is unreachable', async () => {
 		global.fetch = vi.fn().mockRejectedValue(new Error('ECONNREFUSED')) as any;
 		const res = await call();
 		expect(statusOf(res)).toBe(502);
-		expect(mockRepo.releaseContentRequest).toHaveBeenCalledWith(
-			'req-1',
-			'all uploader hosts unreachable'
-		);
+		expect(mockRepo.returnContentRequestClaim).toHaveBeenCalledWith('req-1');
+		expect(mockRepo.releaseContentRequest).not.toHaveBeenCalled();
 	});
 });
 

@@ -39,12 +39,13 @@ export class ContentRequestService extends DatabaseClient {
 		// problem worth code: one row per release per person means a cancelled ask
 		// is the *only* row that release can ever have for them, so leaving it
 		// alone would make the second ask look like it worked and do nothing.
-		// `cancelled` is the one status this moves — `open` and `failed` are
-		// already on the board, `claimed` must not be dragged back under a running
-		// transfer, and `fulfilled` has already landed.
-		if (row.status !== 'cancelled') return row;
+		// `cancelled` and `stalled` are the statuses this moves — `open` and
+		// `failed` are already on the board, `claimed` must not be dragged back
+		// under a running transfer, and `fulfilled` has already landed. A stalled
+		// ask is waiting on exactly this: the asker coming back signed in.
+		if (row.status !== 'cancelled' && row.status !== 'stalled') return row;
 		const { count } = await this.prisma.contentRequest.updateMany({
-			where: { id: row.id, status: 'cancelled' },
+			where: { id: row.id, status: row.status },
 			data: { status: 'open', fulfillerId: null, error: null },
 		});
 		return count === 0 ? row : ((await this.getRequest(row.id)) ?? row);
@@ -180,6 +181,36 @@ export class ContentRequestService extends DatabaseClient {
 	}
 
 	/**
+	 * Take a claim off the board because the asker's side is broken.
+	 *
+	 * Their stored Real-Debrid credentials would not mint a token, so every
+	 * fulfiller who tried would fail the same way. Seven requests went round
+	 * that loop as `failed` by 2026-09-24. `stalled` keeps it off the board
+	 * until the asker files it again, which `createRequest` turns back to
+	 * `open`.
+	 */
+	public async stallRequest(id: string, error: string): Promise<boolean> {
+		const { count } = await this.prisma.contentRequest.updateMany({
+			where: { id, status: 'claimed' },
+			data: { status: 'stalled', fulfillerId: null, error: error.slice(0, 500) },
+		});
+		return count > 0;
+	}
+
+	/**
+	 * Undo a claim that never reached a fulfiller's attempt: the uploader was
+	 * too busy to take the job. Nothing about the request or the fulfiller was
+	 * wrong, so it goes back as `open` with no failure recorded against it.
+	 */
+	public async returnClaim(id: string): Promise<boolean> {
+		const { count } = await this.prisma.contentRequest.updateMany({
+			where: { id, status: 'claimed' },
+			data: { status: 'open', fulfillerId: null },
+		});
+		return count > 0;
+	}
+
+	/**
 	 * Withdraw one's own request.
 	 *
 	 * Scoped to the requester in the `where` clause rather than checked first,
@@ -188,7 +219,7 @@ export class ContentRequestService extends DatabaseClient {
 	 */
 	public async cancelRequest(id: string, requesterId: string): Promise<boolean> {
 		const { count } = await this.prisma.contentRequest.updateMany({
-			where: { id, requesterId, status: { in: ['open', 'failed'] } },
+			where: { id, requesterId, status: { in: ['open', 'failed', 'stalled'] } },
 			data: { status: 'cancelled' },
 		});
 		return count > 0;

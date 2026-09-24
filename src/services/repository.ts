@@ -246,6 +246,14 @@ export class Repository {
 		return this.contentRequestService.touchClaimed(id);
 	}
 
+	public stallContentRequest(id: string, error: string) {
+		return this.contentRequestService.stallRequest(id, error);
+	}
+
+	public returnContentRequestClaim(id: string) {
+		return this.contentRequestService.returnClaim(id);
+	}
+
 	public cancelContentRequest(id: string, requesterId: string) {
 		return this.contentRequestService.cancelRequest(id, requesterId);
 	}

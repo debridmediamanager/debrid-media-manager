@@ -51,6 +51,7 @@ const STATUS_STYLES: Record<string, string> = {
 	claimed: 'border-violet-500 bg-violet-900/30 text-violet-100',
 	fulfilled: 'border-green-500 bg-green-900/30 text-green-100',
 	cancelled: 'border-gray-500 bg-gray-900/30 text-gray-400',
+	stalled: 'border-amber-500 bg-amber-900/30 text-amber-100',
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -61,6 +62,7 @@ const STATUS_LABELS: Record<string, string> = {
 	claimed: 'Being fulfilled',
 	fulfilled: 'Sent',
 	cancelled: 'Withdrawn',
+	stalled: 'Paused',
 };
 
 /** Only these can be taken, matching `isClaimable` on the server. */
@@ -77,6 +79,7 @@ const MINE_LABELS: Record<string, string> = {
 	claimed: 'On its way to your library',
 	fulfilled: 'Sent to your library',
 	cancelled: 'Withdrawn',
+	stalled: 'Paused. Sign in to Real-Debrid on DMM again, then request it again',
 };
 
 function MyRequests({
@@ -127,11 +130,14 @@ function MyRequests({
 										</Link>
 									)}
 								</div>
-								{row.status === 'failed' && row.error && (
-									<div className="mt-1 text-xs text-amber-200">{row.error}</div>
-								)}
+								{(row.status === 'failed' || row.status === 'stalled') &&
+									row.error && (
+										<div className="mt-1 text-xs text-amber-200">
+											{row.error}
+										</div>
+									)}
 							</div>
-							{CLAIMABLE.has(row.status) && (
+							{(CLAIMABLE.has(row.status) || row.status === 'stalled') && (
 								<button
 									onClick={() => onCancel(row)}
 									disabled={busy}

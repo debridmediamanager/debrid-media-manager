@@ -83,6 +83,18 @@ describe('ContentRequestService', () => {
 			}
 		);
 
+		it('puts a stalled row back on the board when its asker files it again', async () => {
+			prisma.contentRequest.upsert.mockResolvedValue(row({ status: 'stalled' }));
+			prisma.contentRequest.updateMany.mockResolvedValue({ count: 1 });
+			prisma.contentRequest.findUnique.mockResolvedValue(row({ status: 'open' }));
+			const result = await service.createRequest(input);
+			expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
+				where: { id: 'req-1', status: 'stalled' },
+				data: { status: 'open', fulfillerId: null, error: null },
+			});
+			expect(result.status).toBe('open');
+		});
+
 		it('puts a withdrawn row back on the board when it is asked for again', async () => {
 			prisma.contentRequest.upsert.mockResolvedValue(row({ status: 'cancelled' }));
 			prisma.contentRequest.updateMany.mockResolvedValue({ count: 1 });
@@ -185,12 +197,38 @@ describe('ContentRequestService', () => {
 		});
 	});
 
+	describe('stallRequest', () => {
+		it('takes a claim off the board with the reason', async () => {
+			prisma.contentRequest.updateMany.mockResolvedValue({ count: 1 });
+			await service.stallRequest('req-1', 'no credentials');
+			expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
+				where: { id: 'req-1', status: 'claimed' },
+				data: { status: 'stalled', fulfillerId: null, error: 'no credentials' },
+			});
+		});
+	});
+
+	describe('returnClaim', () => {
+		it('puts a claim back as open without recording a failure', async () => {
+			prisma.contentRequest.updateMany.mockResolvedValue({ count: 1 });
+			await service.returnClaim('req-1');
+			expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
+				where: { id: 'req-1', status: 'claimed' },
+				data: { status: 'open', fulfillerId: null },
+			});
+		});
+	});
+
 	describe('cancelRequest', () => {
 		it('scopes the write to the requester, so an id alone cancels nothing', async () => {
 			prisma.contentRequest.updateMany.mockResolvedValue({ count: 1 });
 			expect(await service.cancelRequest('req-1', 'asker')).toBe(true);
 			expect(prisma.contentRequest.updateMany).toHaveBeenCalledWith({
-				where: { id: 'req-1', requesterId: 'asker', status: { in: ['open', 'failed'] } },
+				where: {
+					id: 'req-1',
+					requesterId: 'asker',
+					status: { in: ['open', 'failed', 'stalled'] },
+				},
 				data: { status: 'cancelled' },
 			});
 		});

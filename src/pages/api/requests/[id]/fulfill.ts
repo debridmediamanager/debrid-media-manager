@@ -129,7 +129,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	const requesterToken = await mintRequesterToken(request.requesterId);
 	if (!requesterToken) {
-		await db.releaseContentRequest(id, 'the requester has no usable Real-Debrid credentials');
+		// Stalled, not failed: every other fulfiller would hit the same wall.
+		await db.stallContentRequest(id, 'the requester has no usable Real-Debrid credentials');
 		return res.status(409).json({
 			error: 'the requester needs to reconnect Real-Debrid before this can be fulfilled',
 		});
@@ -187,6 +188,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(200).json({ jobId: data.id });
 		}
 
+		// Busy or broken on the uploader's side, not a verdict on the request: its
+		// per-user job ceiling answers 429 ("job limit reached", seven requests
+		// recorded as failed that way by 2026-09-24). Hand it back untouched.
+		if (response.status === 429 || response.status >= 500) {
+			await db.returnContentRequestClaim(id);
+			return res.status(503).json({
+				error: 'the uploader is busy right now, try again in a minute',
+				busy: true,
+			});
+		}
+
 		// The uploader refused it — a deterministic answer, so stop and hand the
 		// request back to the board rather than retrying it on another host.
 		const reason =
@@ -195,10 +207,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(response.status).json({ error: reason });
 	}
 
-	await db.releaseContentRequest(
-		id,
-		lastNetworkError ? 'all uploader hosts unreachable' : 'no uploader host available'
-	);
+	// Our side is down, which says nothing about the request: put it back as it
+	// was instead of recording a failed attempt against it.
+	await db.returnContentRequestClaim(id);
 	return res.status(502).json({
 		error: lastNetworkError ? 'All debrid uploader servers unreachable' : 'no server',
 	});
