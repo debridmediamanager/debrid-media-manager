@@ -4,6 +4,7 @@ import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { castAccessToken } from '@/utils/castRdToken';
 import { canClaim, pickSourceKeys, RequestValidationError } from '@/utils/contentRequest';
+import { torboxCachedHashes } from '@/utils/torboxCache';
 import { FREE_TORBOX_PLAN_MESSAGE, isFreeTorBoxPlan } from '@/utils/torboxPlan';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -98,6 +99,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	// transfer never takes the request off the board.
 	if (await isFreeTorBoxPlan(sourceKeys.tb_api_key)) {
 		return res.status(403).json({ error: FREE_TORBOX_PLAN_MESSAGE });
+	}
+
+	// Also before the claim: the uploader only moves what TorBox already has, and
+	// a job for anything else fails `uncached` a second later. That was 219 of
+	// the first 369 fulfilments. An unknown answer lets it through; only a
+	// definite "not cached" keeps the request on the board untouched.
+	const cached = await torboxCachedHashes(sourceKeys.tb_api_key, [request.hash]);
+	if (cached && !cached.has(request.hash)) {
+		return res.status(409).json({
+			error: 'TorBox does not have this release cached, so it cannot be sent yet',
+			uncached: true,
+		});
 	}
 
 	// Claim before doing any work. The status is part of the update's `where`,

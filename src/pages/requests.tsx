@@ -1,13 +1,11 @@
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
-import type { SearchResult } from '@/services/mediasearch';
+import { useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
 import type { PublicRequest } from '@/utils/contentRequest';
 import {
 	cancelContentRequest,
 	fetchContentRequests,
 	fulfillContentRequest,
+	UncachedError,
 } from '@/utils/contentRequestsApi';
-import { checkDatabaseAvailabilityAd, checkDatabaseAvailabilityTb } from '@/utils/instantChecks';
-import { generateTokenAndHash } from '@/utils/token';
 import {
 	CheckCircle2,
 	HandHeart,
@@ -72,37 +70,8 @@ const STATUS_LABELS: Record<string, string> = {
 /** Only these can be taken, matching `isClaimable` on the server. */
 const CLAIMABLE = new Set(['open', 'failed']);
 
-/**
- * A stand-in torrent for one request, only so the cache-check helpers — which
- * all speak `SearchResult` — can write their answers onto it. Nothing here is
- * rendered; the row reads back `tbAvailable`/`adAvailable` alone.
- */
-function seedResult(row: PublicRequest): SearchResult {
-	return {
-		hash: row.hash,
-		title: row.title || row.hash,
-		fileSize: 0,
-		rdAvailable: false,
-		adAvailable: false,
-		tbAvailable: false,
-		pmAvailable: false,
-		ocAvailable: false,
-		dlAvailable: false,
-		files: [],
-		noVideos: false,
-		medianFileSize: 0,
-		biggestFileSize: 0,
-		videoCount: 0,
-		imdbId: row.imdbId,
-	};
-}
-
-const identity = <T,>(x: T): T => x;
-
 export default function RequestsPage() {
 	const [requests, setRequests] = useState<PublicRequest[]>([]);
-	// Availability answers, one entry per request seen, keyed by hash.
-	const [checkResults, setCheckResults] = useState<SearchResult[]>([]);
 	const [errorText, setErrorText] = useState<string | null>(null);
 	const [loaded, setLoaded] = useState(false);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -112,7 +81,8 @@ export default function RequestsPage() {
 
 	const [rdKey] = useRealDebridAccessToken();
 	const torboxKey = useTorBoxAccessToken();
-	const adKey = useAllDebridApiKey();
+	const torboxKeyRef = useRef(torboxKey);
+	torboxKeyRef.current = torboxKey;
 
 	const rdKeyRef = useRef(rdKey);
 	rdKeyRef.current = rdKey;
@@ -132,102 +102,47 @@ export default function RequestsPage() {
 	const hasFulfillerKey = Boolean(torboxKey);
 
 	/**
-	 * Ask each service the viewer holds a key for which of these hashes it has
-	 * cached, and let the answers land on `checkResults`. Fire-and-forget: a row
-	 * simply gains its badge whenever its service replies, and a service that is
-	 * slow or down never blocks the others or the page.
-	 */
-	const runChecks = useCallback(
-		async (rows: PublicRequest[]) => {
-			if (rows.length === 0) return;
-			setCheckResults((prev) => {
-				const known = new Set(prev.map((p) => p.hash));
-				const add = rows.filter((r) => !known.has(r.hash)).map(seedResult);
-				return add.length ? [...prev, ...add] : prev;
-			});
-
-			const hashes = rows.map((r) => r.hash);
-			if (torboxKey) {
-				checkDatabaseAvailabilityTb(torboxKey, hashes, setCheckResults, identity).catch(
-					() => {}
-				);
-			}
-			if (adKey) {
-				// AllDebrid availability is read from DMM's own store, which is keyed
-				// per title, so the hashes are grouped by imdbId. One token covers the
-				// whole batch.
-				try {
-					const [token, solution] = await generateTokenAndHash();
-					const byImdb = new Map<string, string[]>();
-					for (const r of rows) {
-						const list = byImdb.get(r.imdbId) ?? [];
-						list.push(r.hash);
-						byImdb.set(r.imdbId, list);
-					}
-					for (const [imdbId, hs] of byImdb) {
-						checkDatabaseAvailabilityAd(
-							token,
-							solution,
-							imdbId,
-							hs,
-							setCheckResults,
-							identity
-						).catch(() => {});
-					}
-				} catch {
-					// a failed token fetch just means no AD badges this pass
-				}
-			}
-		},
-		[torboxKey, adKey]
-	);
-
-	/**
 	 * Load one page. `reset` starts the board over from the top — used by the
 	 * refresh button and whenever the identity changes — while the scroll trigger
 	 * calls it to append the next page.
 	 */
-	const loadPage = useCallback(
-		async (reset: boolean) => {
-			if (loadingRef.current) return;
-			loadingRef.current = true;
-			if (!reset) setLoadingMore(true);
-			const offset = reset ? 0 : offsetRef.current;
-			try {
-				const { requests: rows, hasMore: more } = await fetchContentRequests(
-					rdKeyRef.current,
-					{ offset, limit: PAGE_SIZE }
-				);
-				offsetRef.current = offset + rows.length;
-				setHasMore(more);
-				setErrorText(null);
-				if (reset) {
-					setRequests(rows);
-					setCheckResults([]);
-				} else {
-					setRequests((prev) => {
-						const seen = new Set(prev.map((r) => r.id));
-						return [...prev, ...rows.filter((r) => !seen.has(r.id))];
-					});
-				}
-				void runChecks(rows);
-			} catch (error) {
-				setErrorText(error instanceof Error ? error.message : 'unreachable');
-			} finally {
-				setLoaded(true);
-				setLoadingMore(false);
-				loadingRef.current = false;
+	const loadPage = useCallback(async (reset: boolean) => {
+		if (loadingRef.current) return;
+		loadingRef.current = true;
+		if (!reset) setLoadingMore(true);
+		const offset = reset ? 0 : offsetRef.current;
+		try {
+			const { requests: rows, hasMore: more } = await fetchContentRequests(rdKeyRef.current, {
+				offset,
+				limit: PAGE_SIZE,
+				tbKey: torboxKeyRef.current,
+			});
+			offsetRef.current = offset + rows.length;
+			setHasMore(more);
+			setErrorText(null);
+			if (reset) {
+				setRequests(rows);
+			} else {
+				setRequests((prev) => {
+					const seen = new Set(prev.map((r) => r.id));
+					return [...prev, ...rows.filter((r) => !seen.has(r.id))];
+				});
 			}
-		},
-		[runChecks]
-	);
+		} catch (error) {
+			setErrorText(error instanceof Error ? error.message : 'unreachable');
+		} finally {
+			setLoaded(true);
+			setLoadingMore(false);
+			loadingRef.current = false;
+		}
+	}, []);
 
-	// Reload from the top whenever the RD identity changes (sign-in/out). The
-	// board itself is readable signed out, so this runs with or without a key.
+	// Reload from the top whenever the RD identity or the TorBox key changes.
+	// The board itself is readable signed out, so this runs with or without one.
 	useEffect(() => {
 		loadPage(true);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey]);
+	}, [rdKey, torboxKey]);
 
 	// Infinite scroll: when the sentinel at the end of the list comes into view
 	// and there is another page, fetch it.
@@ -271,9 +186,6 @@ export default function RequestsPage() {
 		}
 	};
 
-	const availabilityOf = (hash: string): SearchResult | undefined =>
-		checkResults.find((c) => c.hash === hash);
-
 	/**
 	 * Take a request and pay for it.
 	 *
@@ -310,6 +222,13 @@ export default function RequestsPage() {
 				toast.error(
 					`Could not fulfil: ${error instanceof Error ? error.message : 'unreachable'}`
 				);
+				if (error instanceof UncachedError) {
+					// Nothing changed on the server; just stop offering it.
+					setRequests((prev) =>
+						prev.map((r) => (r.id === row.id ? { ...r, tbCached: false } : r))
+					);
+					return;
+				}
 				// Somebody else may have taken it a second ago, so start the board
 				// over rather than leave a row that is no longer takeable.
 				await loadPage(true);
@@ -413,7 +332,6 @@ export default function RequestsPage() {
 								const busy = busyIds.has(row.id);
 								const claimable = CLAIMABLE.has(row.status);
 								const style = STATUS_STYLES[row.status] ?? STATUS_STYLES.cancelled;
-								const avail = availabilityOf(row.hash);
 								const href =
 									row.mediaType === 'show'
 										? `/show/${row.imdbId}`
@@ -441,14 +359,14 @@ export default function RequestsPage() {
 														)}
 														{STATUS_LABELS[row.status] ?? row.status}
 													</span>
-													{avail?.tbAvailable && (
+													{row.tbCached === true && (
 														<span className="inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-1.5 py-0.5 font-medium text-indigo-100">
 															TB cached
 														</span>
 													)}
-													{avail?.adAvailable && (
-														<span className="inline-flex items-center rounded border-2 border-sky-500 bg-sky-900/30 px-1.5 py-0.5 font-medium text-sky-100">
-															AD cached
+													{row.tbCached === false && (
+														<span className="inline-flex items-center rounded border-2 border-gray-600 bg-gray-800/30 px-1.5 py-0.5 font-medium text-gray-400">
+															Not on TorBox yet
 														</span>
 													)}
 													{row.mine && (
@@ -480,21 +398,24 @@ export default function RequestsPage() {
 												)}
 											</div>
 											<div className="flex shrink-0 items-center gap-1">
-												{canFulfil && claimable && !row.mine && (
-													<button
-														onClick={() => handleFulfil(row)}
-														disabled={busy}
-														className={`haptic-sm inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-2 py-1.5 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${busy ? 'cursor-not-allowed opacity-50' : ''}`}
-														title="Send this to the asker using your TorBox or AllDebrid account"
-													>
-														{busy ? (
-															<Loader2 className="mr-1 h-3 w-3 animate-spin" />
-														) : (
-															<Send className="mr-1 h-3 w-3" />
-														)}
-														Fulfil
-													</button>
-												)}
+												{canFulfil &&
+													claimable &&
+													!row.mine &&
+													row.tbCached !== false && (
+														<button
+															onClick={() => handleFulfil(row)}
+															disabled={busy}
+															className={`haptic-sm inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-2 py-1.5 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${busy ? 'cursor-not-allowed opacity-50' : ''}`}
+															title="Send this to the asker using your TorBox or AllDebrid account"
+														>
+															{busy ? (
+																<Loader2 className="mr-1 h-3 w-3 animate-spin" />
+															) : (
+																<Send className="mr-1 h-3 w-3" />
+															)}
+															Fulfil
+														</button>
+													)}
 												{row.mine && claimable && (
 													<button
 														onClick={() => handleCancel(row)}

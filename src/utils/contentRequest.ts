@@ -163,6 +163,11 @@ export interface PublicRequest {
 	mine: boolean;
 	/** Present once a transfer exists, so the asker can follow it. */
 	jobId: string | null;
+	/**
+	 * Whether TorBox has the release cached, asked with the viewer's own key.
+	 * `null` when the viewer sent no key or TorBox gave no answer.
+	 */
+	tbCached: boolean | null;
 }
 
 export interface StoredRequest {
@@ -188,7 +193,11 @@ export interface StoredRequest {
  * of a Real-Debrid username, so publishing them would let anyone watching the
  * board follow one person's entire request history across releases.
  */
-export function toPublicRequest(row: StoredRequest, viewerId: string | null): PublicRequest {
+export function toPublicRequest(
+	row: StoredRequest,
+	viewerId: string | null,
+	tbCached: Set<string> | null = null
+): PublicRequest {
 	return {
 		id: row.id,
 		hash: row.hash,
@@ -199,5 +208,6 @@ export function toPublicRequest(row: StoredRequest, viewerId: string | null): Pu
 		createdAt: new Date(row.createdAt).toISOString(),
 		mine: viewerId !== null && row.requesterId === viewerId,
 		jobId: row.jobId,
+		tbCached: tbCached ? tbCached.has(row.hash) : null,
 	};
 }

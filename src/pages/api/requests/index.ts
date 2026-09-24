@@ -2,6 +2,7 @@ import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRa
 import { repository as db } from '@/services/repository';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { parseRequestInput, RequestValidationError, toPublicRequest } from '@/utils/contentRequest';
+import { torboxCachedHashes } from '@/utils/torboxCache';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -18,6 +19,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 /** Matches the Transfers page: the key is a header, never a query param. */
 const RD_TOKEN_HEADER = 'x-rd-access-token';
+/**
+ * A fulfiller's TorBox key, sent so each row can say whether TorBox has it.
+ * A header for the same reason as the RD key: nginx logs query strings.
+ */
+const TB_KEY_HEADER = 'x-tb-api-key';
 
 const DEFAULT_LIMIT = 25;
 const MAX_LIMIT = 100;
@@ -50,6 +56,12 @@ function readToken(req: NextApiRequest): string | null {
  * the same way rather than as an error: a browsing user whose Real-Debrid
  * session has lapsed should still see the board.
  */
+function readTbKey(req: NextApiRequest): string | null {
+	const header = req.headers[TB_KEY_HEADER];
+	const key = Array.isArray(header) ? header[0] : header;
+	return typeof key === 'string' && key.trim() !== '' ? key.trim() : null;
+}
+
 async function viewerIdOf(req: NextApiRequest): Promise<string | null> {
 	const token = readToken(req);
 	if (!token) return null;
@@ -73,8 +85,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// — merging broke pagination, since a `mine` row could land on any page.
 			const rows = await db.listOpenContentRequests(limit + 1, offset);
 			const hasMore = rows.length > limit;
+			const page = rows.slice(0, limit);
+			// Asked here rather than from the browser so the answer is the same
+			// one the fulfil route will act on, and arrives with the rows.
+			const tbKey = readTbKey(req);
+			const tbCached =
+				tbKey && page.length > 0
+					? await torboxCachedHashes(
+							tbKey,
+							page.map((row) => row.hash)
+						)
+					: null;
 			return res.status(200).json({
-				requests: rows.slice(0, limit).map((row) => toPublicRequest(row, viewerId)),
+				requests: page.map((row) => toPublicRequest(row, viewerId, tbCached)),
 				authenticated: viewerId !== null,
 				hasMore,
 			});

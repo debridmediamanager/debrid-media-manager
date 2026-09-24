@@ -4,6 +4,8 @@ import {
 	fileContentRequest,
 	fulfillContentRequest,
 	RD_TOKEN_HEADER,
+	TB_KEY_HEADER,
+	UncachedError,
 } from '@/utils/contentRequestsApi';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -18,6 +20,14 @@ beforeEach(() => {
 });
 
 describe('fetchContentRequests', () => {
+	it('sends a TorBox key as a header so the server can mark what it can send', async () => {
+		(global.fetch as any).mockResolvedValue(ok({ requests: [], authenticated: true }));
+		await fetchContentRequests('RD_TOKEN', { tbKey: 'TB_KEY' });
+		const [url, init] = lastCall();
+		expect(String(url)).not.toContain('TB_KEY');
+		expect(init.headers[TB_KEY_HEADER]).toBe('TB_KEY');
+	});
+
 	it('sends the key as a header, never in the URL', async () => {
 		(global.fetch as any).mockResolvedValue(ok({ requests: [], authenticated: true }));
 		await fetchContentRequests('RD_TOKEN');
@@ -104,6 +114,15 @@ describe('fileContentRequest', () => {
 });
 
 describe('fulfillContentRequest', () => {
+	it('raises a TorBox cache refusal as its own error, so the row can stop offering it', async () => {
+		(global.fetch as any).mockResolvedValue(
+			fail(409, { error: 'TorBox does not have this release cached', uncached: true })
+		);
+		await expect(fulfillContentRequest('RD', 'req-1', { tbKey: 'TB' })).rejects.toBeInstanceOf(
+			UncachedError
+		);
+	});
+
 	it('sends only the keys the fulfiller actually holds', async () => {
 		(global.fetch as any).mockResolvedValue(ok({ jobId: 'job-9' }));
 		const jobId = await fulfillContentRequest('RD', 'req-1', { tbKey: 'TB' });

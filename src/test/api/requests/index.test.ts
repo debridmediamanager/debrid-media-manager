@@ -2,9 +2,11 @@ import handler from '@/pages/api/requests';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { torboxCachedHashes } from '@/utils/torboxCache';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/utils/torboxCache', () => ({ __esModule: true, torboxCachedHashes: vi.fn() }));
 vi.mock('@/utils/castApiHelpers', () => ({ __esModule: true, generateUserId: vi.fn() }));
 
 const mockRepo = vi.mocked(repository);
@@ -50,6 +52,23 @@ beforeEach(() => {
 });
 
 describe('GET /api/requests', () => {
+	it('marks each row with whether the viewer’s TorBox can send it', async () => {
+		const other = 'b'.repeat(40);
+		mockRepo.listOpenContentRequests = vi
+			.fn()
+			.mockResolvedValue([row(), row({ id: 'req-2', hash: other })]);
+		vi.mocked(torboxCachedHashes).mockResolvedValue(new Set([HASH]));
+		const res = await call({ headers: { 'x-rd-access-token': 'tok', 'x-tb-api-key': 'TB' } });
+		expect(vi.mocked(torboxCachedHashes)).toHaveBeenCalledWith('TB', [HASH, other]);
+		expect(bodyOf(res).requests.map((r: any) => r.tbCached)).toEqual([true, false]);
+	});
+
+	it('leaves the cache state unknown without a TorBox key', async () => {
+		const res = await call();
+		expect(vi.mocked(torboxCachedHashes)).not.toHaveBeenCalled();
+		expect(bodyOf(res).requests[0].tbCached).toBeNull();
+	});
+
 	it('returns the open board', async () => {
 		const res = await call();
 		expect(statusOf(res)).toBe(200);

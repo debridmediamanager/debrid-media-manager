@@ -9,6 +9,7 @@ import type { PublicRequest } from './contentRequest';
  */
 
 export const RD_TOKEN_HEADER = 'x-rd-access-token';
+export const TB_KEY_HEADER = 'x-tb-api-key';
 
 function headers(rdKey: string | null, json = false): Record<string, string> {
 	return {
@@ -24,10 +25,19 @@ function headers(rdKey: string | null, json = false): Record<string, string> {
  * thing that tells a fulfiller *why* a claim was refused — "somebody else just
  * took this request" reads very differently from a bare 409.
  */
+/** TorBox does not have the release, so no fulfiller can send it yet. */
+export class UncachedError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'UncachedError';
+	}
+}
+
 async function unwrap(response: Response): Promise<any> {
 	const data = await response.json().catch(() => null);
 	if (!response.ok) {
-		throw new Error(data?.error || `Request failed with status ${response.status}`);
+		const message = data?.error || `Request failed with status ${response.status}`;
+		throw data?.uncached === true ? new UncachedError(message) : new Error(message);
 	}
 	return data ?? {};
 }
@@ -39,14 +49,17 @@ async function unwrap(response: Response): Promise<any> {
  */
 export async function fetchContentRequests(
 	rdKey: string | null,
-	opts: { offset?: number; limit?: number } = {}
+	opts: { offset?: number; limit?: number; tbKey?: string | null } = {}
 ): Promise<{ requests: PublicRequest[]; authenticated: boolean; hasMore: boolean }> {
 	const params = new URLSearchParams();
 	if (opts.offset) params.set('offset', String(opts.offset));
 	if (opts.limit) params.set('limit', String(opts.limit));
 	const qs = params.toString();
 	const data = await unwrap(
-		await fetch(`/api/requests${qs ? `?${qs}` : ''}`, { headers: headers(rdKey) })
+		await fetch(`/api/requests${qs ? `?${qs}` : ''}`, {
+			// The TorBox key lets the server mark which rows it can send.
+			headers: { ...headers(rdKey), ...(opts.tbKey ? { [TB_KEY_HEADER]: opts.tbKey } : {}) },
+		})
 	);
 	return {
 		requests: Array.isArray(data.requests) ? (data.requests as PublicRequest[]) : [],

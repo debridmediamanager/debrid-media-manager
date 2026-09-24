@@ -4,6 +4,7 @@ import { getToken } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { torboxCachedHashes } from '@/utils/torboxCache';
 import { isFreeTorBoxPlan } from '@/utils/torboxPlan';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -12,6 +13,7 @@ vi.mock('@/utils/torboxPlan', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/utils/torboxPlan')>()),
 	isFreeTorBoxPlan: vi.fn(async () => false),
 }));
+vi.mock('@/utils/torboxCache', () => ({ __esModule: true, torboxCachedHashes: vi.fn() }));
 vi.mock('@/services/realDebrid', () => ({ __esModule: true, getToken: vi.fn() }));
 vi.mock('@/services/debridUploaderServers', () => ({
 	__esModule: true,
@@ -59,6 +61,7 @@ const bodyOf = (res: any) => (res.json as any).mock.calls[0][0];
 beforeEach(() => {
 	vi.clearAllMocks();
 	vi.mocked(isFreeTorBoxPlan).mockResolvedValue(false);
+	vi.mocked(torboxCachedHashes).mockResolvedValue(new Set([HASH]));
 	mockUserId.mockResolvedValue('helper');
 	mockServers.mockReturnValue(['http://debrid02:3100']);
 	mockRepo.getContentRequest = vi.fn().mockResolvedValue(request());
@@ -82,6 +85,26 @@ beforeEach(() => {
 });
 
 describe('POST /api/requests/[id]/fulfill', () => {
+	// 219 of the first 369 fulfilments were queued for releases TorBox did not
+	// have, failed `uncached` a second later, and still took the request off the
+	// board. The route has to ask before it claims.
+	it('refuses a release TorBox does not have, before claiming it', async () => {
+		vi.mocked(torboxCachedHashes).mockResolvedValue(new Set());
+		const res = await call();
+		expect(statusOf(res)).toBe(409);
+		expect(bodyOf(res).uncached).toBe(true);
+		expect(vi.mocked(torboxCachedHashes)).toHaveBeenCalledWith('TB_KEY', [HASH]);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
+	it('lets an unknown cache answer through to the uploader', async () => {
+		vi.mocked(torboxCachedHashes).mockResolvedValue(null);
+		const res = await call();
+		expect(statusOf(res)).toBe(200);
+		expect(mockRepo.claimContentRequest).toHaveBeenCalled();
+	});
+
 	it('submits the job and records it against the request', async () => {
 		const res = await call();
 		expect(statusOf(res)).toBe(200);
