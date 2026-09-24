@@ -32,6 +32,13 @@ export interface UpstreamIndexer extends Indexer {
 	 * unset when the quota is unknown, because a guessed cap is worse than none.
 	 */
 	pacing?: { rateLimit: number; windowSeconds: number };
+	/**
+	 * How many NZBs DMM may fetch from this indexer per window, across every
+	 * sponsor. For an account whose download allowance is shared with other
+	 * consumers, so the aggregator can be held to its part of it. Only upstream
+	 * fetches count; a grab the NZB store answers never reaches the indexer.
+	 */
+	grabLimit?: { rateLimit: number; windowSeconds: number };
 }
 
 /**
@@ -47,7 +54,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function parsePacing(value: unknown): UpstreamIndexer['pacing'] {
+function parseLimit(value: unknown): UpstreamIndexer['pacing'] {
 	if (!isRecord(value)) return undefined;
 	const { rateLimit, windowSeconds } = value;
 	if (typeof rateLimit !== 'number' || !Number.isFinite(rateLimit) || rateLimit <= 0) {
@@ -78,7 +85,8 @@ function toIndexer(entry: unknown): UpstreamIndexer | null {
 	if (!apiKey && !keyless) return null;
 
 	const name = typeof entry.name === 'string' && entry.name.trim() ? entry.name.trim() : prefix;
-	const pacing = parsePacing(entry.pacing);
+	const pacing = parseLimit(entry.pacing);
+	const grabLimit = parseLimit(entry.grabLimit);
 
 	const indexer: UpstreamIndexer = {
 		prefix,
@@ -88,6 +96,7 @@ function toIndexer(entry: unknown): UpstreamIndexer | null {
 	};
 	if (keyless) indexer.keyless = true;
 	if (pacing) indexer.pacing = pacing;
+	if (grabLimit) indexer.grabLimit = grabLimit;
 	return indexer;
 }
 

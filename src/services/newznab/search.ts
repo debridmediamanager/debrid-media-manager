@@ -19,12 +19,14 @@
 
 import { CachedUsenetResult } from '@/services/database/newznabApiCache';
 import { dedupeResults, fanOut, Indexer } from '@/services/nzb2rd';
-import { HybridRateLimiter } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository as db } from '@/services/repository';
 import type { NextApiRequest } from 'next';
 import { getUpstreamIndexers, UpstreamIndexer } from './indexers';
 import { encryptReleaseId } from './opaqueId';
+import { getUpstreamLimiter } from './upstreamLimiter';
 import { MAX_LIMIT, NewznabRssItem } from './xml';
+
+export { _resetUpstreamLimiterForTest } from './upstreamLimiter';
 
 /** The `t` values that reach this module. `caps` and `get` are handled elsewhere. */
 export const SEARCH_TYPES = ['search', 'tvsearch', 'movie'] as const;
@@ -165,21 +167,6 @@ function buildUpstreamUrl(
 	if (!indexer.keyless) search.set('apikey', indexer.apiKey);
 	for (const [name, value] of Object.entries(params)) search.set(name, value);
 	return `${indexer.url}?${search}`;
-}
-
-// Its own limiter instance rather than `checkRateLimitFor`: that one writes the
-// X-RateLimit-* headers, which belong to the caller's own budget. These counters
-// pace DMM against an upstream and must never appear in a client's response.
-let upstreamLimiter: HybridRateLimiter | null = null;
-
-function getUpstreamLimiter(): HybridRateLimiter {
-	if (!upstreamLimiter) upstreamLimiter = new HybridRateLimiter(process.env.REDIS_URL);
-	return upstreamLimiter;
-}
-
-/** Test-only: the limiter is a module singleton and its counters outlive a test. */
-export function _resetUpstreamLimiterForTest(): void {
-	upstreamLimiter = null;
 }
 
 /**

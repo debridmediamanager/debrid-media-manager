@@ -177,6 +177,29 @@ describe('getUpstreamIndexers', () => {
 		expect(nzbgeek.pacing).toBeUndefined();
 	});
 
+	it('carries a grab limit through, and ignores a malformed one', () => {
+		setConfig(
+			JSON.stringify([
+				{
+					prefix: 'aa',
+					url: 'https://a.invalid/api',
+					apiKey: 'k',
+					grabLimit: { rateLimit: 200, windowSeconds: 86400 },
+				},
+				{
+					prefix: 'bb',
+					url: 'https://b.invalid/api',
+					apiKey: 'k',
+					grabLimit: { rateLimit: 0, windowSeconds: 86400 },
+				},
+			])
+		);
+
+		const [first, second] = getUpstreamIndexers();
+		expect(first.grabLimit).toEqual({ rateLimit: 200, windowSeconds: 86400 });
+		expect(second.grabLimit).toBeUndefined();
+	});
+
 	it('falls back to the media-page indexers when the env var is unset', () => {
 		expect(getUpstreamIndexers()).toEqual([
 			{

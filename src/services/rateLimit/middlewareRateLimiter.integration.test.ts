@@ -134,6 +134,26 @@ describe.skipIf(!dockerAvailable)('Redis Rate Limiter Integration Tests', () => 
 			]);
 		});
 
+		it('should not count a refused request when countRefused is false', async () => {
+			const limiter = new RedisRateLimiter(redis);
+			const config = {
+				rateLimit: 2,
+				windowSeconds: 60,
+				name: 'uncounted',
+				countRefused: false,
+			};
+
+			expect((await limiter.check('redis-uncounted', config)).success).toBe(true);
+			expect((await limiter.check('redis-uncounted', config)).success).toBe(true);
+			for (let i = 0; i < 5; i++) {
+				expect((await limiter.check('redis-uncounted', config)).success).toBe(false);
+			}
+
+			// Only the two admitted requests hold the window: counting the refusals
+			// would keep a busy caller locked out long after those two expire.
+			expect(await redis.zcard('ratelimit:redis-uncounted:uncounted')).toBe(2);
+		});
+
 		it('should handle concurrent requests correctly', async () => {
 			const limiter = new RedisRateLimiter(redis);
 			const config = { rateLimit: 10, windowSeconds: 60 };

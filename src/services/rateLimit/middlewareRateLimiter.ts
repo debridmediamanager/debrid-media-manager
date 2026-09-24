@@ -24,6 +24,14 @@ export interface RateLimitConfig {
 	 * gets a bucket derived from its own shape instead.
 	 */
 	name?: string;
+	/**
+	 * Whether a refused request takes a slot in the window. Defaults to true,
+	 * which is what a client-facing budget wants: a caller that keeps hammering
+	 * stays locked out. A budget DMM spends against an upstream wants false,
+	 * because there a refusal never reached the upstream and must not keep the
+	 * window full after the requests that did reach it have aged out.
+	 */
+	countRefused?: boolean;
 }
 
 /**
@@ -135,7 +143,8 @@ export class RedisRateLimiter {
 		// Remove old entries outside the window
 		pipeline.zremrangebyscore(key, 0, windowStart);
 		// Add current request
-		pipeline.zadd(key, now, `${now}:${Math.random()}`);
+		const member = `${now}:${Math.random()}`;
+		pipeline.zadd(key, now, member);
 		// Count requests in window
 		pipeline.zcard(key);
 		// Set expiry
@@ -147,6 +156,12 @@ export class RedisRateLimiter {
 		const success = count <= config.rateLimit;
 		const remaining = Math.max(0, config.rateLimit - count);
 		const reset = (now + config.windowSeconds) * 1000;
+
+		// The in-memory limiter never counts a refusal, so this is the one path
+		// that needs to take it back out.
+		if (!success && config.countRefused === false) {
+			await this.client.zrem(key, member);
+		}
 
 		return { success, remaining, reset, limit: config.rateLimit };
 	}

@@ -7,6 +7,7 @@ import { getUpstreamIndexers } from '@/services/newznab/indexers';
 import { decryptReleaseId, hasTokenSecret } from '@/services/newznab/opaqueId';
 import { isSearchType, runSearch } from '@/services/newznab/search';
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
+import { getUpstreamLimiter } from '@/services/newznab/upstreamLimiter';
 import { capsXml, newznabErrorXml, searchRssXml } from '@/services/newznab/xml';
 import { fetchNzbFrom } from '@/services/nzb2rd';
 import { getClientIp } from '@/services/rateLimit/middlewareRateLimiter';
@@ -163,6 +164,24 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 	// A token minted before an indexer was removed from the config. Nothing can
 	// serve it any more, which is exactly what 300 means.
 	if (!indexer) return sendError(res, 200, 300, 'No such item');
+
+	// The indexer's shared download allowance, spent here and nowhere earlier:
+	// a store hit above never reached it. Over the cap is a 300, not a 429. A
+	// `Request limit reached` benches all of DMM in an *arr for up to a day,
+	// when only this one upstream is out; a failed release sends it on to the
+	// next one. A refusal takes no slot, so the cap reopens as grabs age out.
+	if (indexer.grabLimit) {
+		const { success } = await getUpstreamLimiter().check(`upstream:${indexer.prefix}`, {
+			name: `upstream-grab-${indexer.prefix}`,
+			rateLimit: indexer.grabLimit.rateLimit,
+			windowSeconds: indexer.grabLimit.windowSeconds,
+			countRefused: false,
+		});
+		if (!success) {
+			console.warn(`Newznab: refusing a grab from ${indexer.name}, over its grab limit`);
+			return sendError(res, 200, 300, 'That release could not be downloaded');
+		}
+	}
 
 	let raw: string;
 	try {
