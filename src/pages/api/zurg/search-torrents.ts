@@ -4,11 +4,12 @@ import { ScrapeSearchResult, flattenAndRemoveDuplicates } from '@/services/media
 import { getMetadataCache } from '@/services/metadataCache';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { sortZurgResults, type ZurgQuality } from '@/services/zurgSearchFilters';
 import { NextApiHandler } from 'next';
 import UserAgent from 'user-agents';
 import { validateDmmApiKeyHeader } from './auth';
 
-type Quality = '4k' | '1080p' | '720p' | 'best';
+type Quality = ZurgQuality;
 
 const QUALITY_PATTERNS: Record<string, RegExp> = {
 	'4k': /2160p/i,
@@ -51,7 +52,7 @@ async function searchTorrentsForKey(
 	processed = processed.filter((t) => availableSet.has(t.hash));
 
 	processed = filterByQuality(processed, quality);
-	processed.sort((a, b) => b.fileSize - a.fileSize);
+	processed = sortZurgResults(processed, quality);
 
 	return processed.slice(0, limit);
 }
@@ -105,7 +106,7 @@ const handler: NextApiHandler = async (req, res) => {
 		return res.status(400).json({ error: 'mediaType must be "movie" or "tv"' });
 	}
 
-	const validQualities: Quality[] = ['4k', '1080p', '720p', 'best'];
+	const validQualities: Quality[] = ['4k', '1080p', '720p', 'best', 'smallest'];
 	const qualityParam: Quality = quality && validQualities.includes(quality) ? quality : 'best';
 
 	const maxSizeGB = maxSize && typeof maxSize === 'number' && maxSize > 0 ? maxSize : 0;
