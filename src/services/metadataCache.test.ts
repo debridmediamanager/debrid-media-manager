@@ -74,7 +74,7 @@ describe('MetadataCacheService fetchWithCache', () => {
 		const result = await service.fetchWithCache('url', 'key', 'type', { headers: {} }, 1000);
 
 		expect(result).toEqual({ fresh: true });
-		expect(axiosMocks.get).toHaveBeenCalledWith('url', { headers: {} });
+		expect(axiosMocks.get).toHaveBeenCalledWith('url', { timeout: 10000, headers: {} });
 		expect(cacheFactory.current.set).toHaveBeenCalledWith('key', 'type', { fresh: true });
 	});
 
@@ -231,7 +231,13 @@ describe('MetadataCacheService API helpers', () => {
 
 		// TMDB titles and posters get revised upstream, so neither may be permanent.
 		expect(tmdbMovieCall[2]).toBe('tmdb_movie');
-		expect(tmdbMovieCall[4]).toBe(2592000000);
+		// A film's lifetime is read off the row: 30 days once it has been out a
+		// while, hours while it is recent or not yet released.
+		const movieLifetime = tmdbMovieCall[4] as (row: unknown) => number;
+		expect(movieLifetime({ release_date: '2001-07-20' })).toBe(2592000000);
+		expect(movieLifetime({ release_date: new Date(Date.now() + 86400000).toISOString() })).toBe(
+			RECENT_METADATA_TTL
+		);
 		expect(tmdbTvCall[2]).toBe('tmdb_tv');
 		// A show's lifetime is read off the row: a week once it has ended, hours
 		// while it still has an episode to air.
@@ -531,5 +537,36 @@ describe('MetadataCacheService show providers', () => {
 		);
 		expect(spy.mock.calls[0][1]).toBe('trakt_search_person_Paul Hollywood');
 		expect(spy.mock.calls[0][4]).toBe(30 * day);
+	});
+
+	it('caches a Trakt summary per type with a lifetime from its release, and answers null on 404', async () => {
+		process.env.TRAKT_CLIENT_ID = 'trakt';
+		const service = new MetadataCacheService();
+		const spy = vi
+			.spyOn(service, 'fetchWithCache')
+			.mockResolvedValueOnce({ title: 'Spirited Away', ids: { trakt: 97 } })
+			.mockResolvedValueOnce({ error: 'not found' });
+
+		expect(await service.getTraktSummary('movies', 'tt0245429')).toEqual(
+			expect.objectContaining({ title: 'Spirited Away' })
+		);
+		const [url, key, , config, maxAge] = spy.mock.calls[0];
+		expect(url).toBe('https://api.trakt.tv/movies/tt0245429?extended=full');
+		expect(key).toBe('trakt_summary_movies_tt0245429');
+		expect(config?.validateStatus?.(404)).toBe(true);
+		expect((maxAge as (row: unknown) => number)({ released: '2001-07-20', year: 2001 })).toBe(
+			30 * day
+		);
+
+		expect(await service.getTraktSummary('shows', 'tt0000001')).toBeNull();
+	});
+
+	it('caches a TMDB movie separately for each appended response', async () => {
+		process.env.TMDB_KEY = 'tmdb';
+		const service = new MetadataCacheService();
+		const spy = vi.spyOn(service, 'fetchWithCache').mockResolvedValue({});
+		await service.getTmdbMovieInfo(129, 'videos,release_dates');
+		expect(spy.mock.calls[0][0]).toContain('append_to_response=videos%2Crelease_dates');
+		expect(spy.mock.calls[0][1]).toBe('tmdb_movie_129_videos,release_dates');
 	});
 });

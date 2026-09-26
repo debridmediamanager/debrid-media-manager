@@ -211,3 +211,25 @@ export function omdbReleaseSignals(data: any): ReleaseSignals {
 		year: typeof data?.Year === 'string' ? data.Year : null,
 	};
 }
+
+/** Release signals out of TMDB's `/movie/{id}`. */
+export function tmdbMovieReleaseSignals(data: any): ReleaseSignals {
+	return {
+		released: typeof data?.release_date === 'string' ? data.release_date : null,
+		status: typeof data?.status === 'string' ? data.status : null,
+	};
+}
+
+/** Release signals out of a Trakt movie or show summary. */
+export function traktSummaryReleaseSignals(data: any): ReleaseSignals {
+	return {
+		released:
+			typeof data?.released === 'string'
+				? data.released
+				: typeof data?.first_aired === 'string'
+					? data.first_aired
+					: null,
+		year: typeof data?.year === 'number' ? data.year : null,
+		status: typeof data?.status === 'string' ? data.status : null,
+	};
+}

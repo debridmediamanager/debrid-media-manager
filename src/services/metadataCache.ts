@@ -2,8 +2,10 @@ import {
 	cinemetaReleaseSignals,
 	metadataMaxAge,
 	omdbReleaseSignals,
+	tmdbMovieReleaseSignals,
 	tmdbTvReleaseSignals,
 	traktSeasonsReleaseSignals,
+	traktSummaryReleaseSignals,
 	tvmazeReleaseSignals,
 	type ReleaseSignals,
 } from '@/utils/metadataFreshness';
@@ -69,6 +71,10 @@ export class MetadataCacheService {
 	};
 
 	private static readonly TVMAZE_BASE = 'https://api.tvmaze.com';
+
+	// A provider that stops answering must not hold a page, or an internal
+	// caller, open with it. Past this the stale row is served, or nothing.
+	private static readonly REQUEST_TIMEOUT_MS = 10000;
 
 	/**
 	 * Check if cached data is expired
@@ -146,7 +152,10 @@ export class MetadataCacheService {
 		console.log(`[MetadataCache] Fetching ${cacheType} data from: ${url}`);
 		let data: T | undefined;
 		try {
-			const response = await axios.get(url, config || {});
+			const response = await axios.get(url, {
+				timeout: MetadataCacheService.REQUEST_TIMEOUT_MS,
+				...config,
+			});
 			data = response?.data;
 		} catch (error) {
 			// Now that these entries expire, an upstream outage would otherwise turn a
@@ -306,18 +315,25 @@ export class MetadataCacheService {
 	}
 
 	/**
-	 * Get TMDB movie info with caching
+	 * Get TMDB movie info with caching. A film's page settles once it has been
+	 * out a while; a recent or upcoming one keeps changing (release dates, art).
 	 */
-	async getTmdbMovieInfo(tmdbId: string | number): Promise<any> {
+	async getTmdbMovieInfo(tmdbId: string | number, appendToResponse?: string): Promise<any> {
 		const auth = this.requireTmdbAuth();
-		const url = tmdbUrl(`/movie/${tmdbId}`, {}, auth);
-		const cacheKey = `tmdb_movie_${tmdbId}`;
+		const url = tmdbUrl(
+			`/movie/${tmdbId}`,
+			appendToResponse ? { append_to_response: appendToResponse } : {},
+			auth
+		);
+		const cacheKey = appendToResponse
+			? `tmdb_movie_${tmdbId}_${appendToResponse}`
+			: `tmdb_movie_${tmdbId}`;
 		return this.fetchWithCache(
 			url,
 			cacheKey,
 			'tmdb_movie',
 			tmdbRequestConfig(auth),
-			this.CACHE_DURATIONS.MOVIE
+			this.freshnessMaxAge(tmdbMovieReleaseSignals, this.CACHE_DURATIONS.MOVIE)
 		);
 	}
 
@@ -451,7 +467,10 @@ export class MetadataCacheService {
 				return cached.data;
 			}
 
-			const response = await axios.get(url, config);
+			const response = await axios.get(url, {
+				timeout: MetadataCacheService.REQUEST_TIMEOUT_MS,
+				...config,
+			});
 			if (response.status === 204 || !response.data) {
 				await this.cache.set(cacheKey, `trakt_${which}`, null);
 				return null;
@@ -521,7 +540,9 @@ export class MetadataCacheService {
 			}
 
 			try {
-				const response = await axios.get(url);
+				const response = await axios.get(url, {
+					timeout: MetadataCacheService.REQUEST_TIMEOUT_MS,
+				});
 				const slim = slimTvmazeShow(response.data);
 				await this.store(cacheKey, 'tvmaze_show', slim);
 				return slim;
@@ -554,7 +575,10 @@ export class MetadataCacheService {
 
 		const response = await axios.get(
 			`${MetadataCacheService.TVMAZE_BASE}/lookup/shows?imdb=${encodeURIComponent(imdbId)}`,
-			{ validateStatus: (status: number) => status === 200 || status === 404 }
+			{
+				timeout: MetadataCacheService.REQUEST_TIMEOUT_MS,
+				validateStatus: (status: number) => status === 200 || status === 404,
+			}
 		);
 		const id =
 			response.status === 200 && typeof response.data?.id === 'number'
@@ -580,6 +604,87 @@ export class MetadataCacheService {
 			this.CACHE_DURATIONS.PERSON
 		);
 		return Array.isArray(data) ? (data[0]?.person ?? null) : null;
+	}
+
+	/**
+	 * Trakt's summary of a movie or show (`extended=full`), or null when Trakt
+	 * is unconfigured, does not know the id, or is unreachable with nothing cached.
+	 */
+	async getTraktSummary(type: 'movies' | 'shows', id: string): Promise<any | null> {
+		const clientId = this.traktClientId;
+		if (!clientId) return null;
+		try {
+			const data = await this.fetchWithCache<any>(
+				`https://api.trakt.tv/${type}/${encodeURIComponent(id)}?extended=full`,
+				`trakt_summary_${type}_${id}`,
+				'trakt_summary',
+				{
+					headers: this.traktHeaders(clientId),
+					validateStatus: (status: number) => status === 200 || status === 404,
+				},
+				this.freshnessMaxAge(
+					traktSummaryReleaseSignals,
+					type === 'movies' ? this.CACHE_DURATIONS.MOVIE : this.CACHE_DURATIONS.TV_SERIES
+				)
+			);
+			return data && typeof data === 'object' && data.ids ? data : null;
+		} catch (error) {
+			console.error(`[MetadataCache] Failed to fetch Trakt ${type} summary for ${id}`, error);
+			return null;
+		}
+	}
+
+	/**
+	 * TMDB title search, for resolving a release name to an id. Cached a day:
+	 * the same parsed titles arrive again and again from the uploaders.
+	 */
+	async searchTmdbTitles(kind: 'movie' | 'tv', query: string, year?: number): Promise<any> {
+		const auth = this.requireTmdbAuth();
+		const params: Record<string, string> = { query };
+		if (year) params[kind === 'movie' ? 'year' : 'first_air_date_year'] = String(year);
+		return this.fetchWithCache(
+			tmdbUrl(`/search/${kind}`, params, auth),
+			`tmdb_search_${kind}_${query.toLowerCase()}_${year ?? ''}`,
+			'tmdb_search',
+			tmdbRequestConfig(auth),
+			this.CACHE_DURATIONS.TOP_LISTS
+		);
+	}
+
+	/** Trakt title search with an optional year; see `searchTmdbTitles`. */
+	async searchTraktTitles(
+		kind: 'movie' | 'show',
+		query: string,
+		year?: number
+	): Promise<any[] | null> {
+		const clientId = this.traktClientId;
+		if (!clientId) return null;
+		const url = `https://api.trakt.tv/search/${kind}?query=${encodeURIComponent(query)}${year ? `&years=${year}` : ''}`;
+		const data = await this.fetchWithCache<any[]>(
+			url,
+			`trakt_search_${kind}_${query.toLowerCase()}_${year ?? ''}`,
+			'trakt_search',
+			{ headers: this.traktHeaders(clientId) },
+			this.CACHE_DURATIONS.TOP_LISTS
+		);
+		return Array.isArray(data) ? data : null;
+	}
+
+	/**
+	 * OMDb's exact-title lookup. Its year filter is the US release year, so no
+	 * year is sent; the resolver checks the year against the canonical record.
+	 */
+	async getOmdbByTitle(title: string, type: 'movie' | 'series'): Promise<any | null> {
+		const omdbKey = process.env.OMDB_KEY || this.runtimeConfig.omdbKey;
+		if (!omdbKey) return null;
+		const data = await this.fetchWithCache<any>(
+			`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&type=${type}&apikey=${omdbKey}`,
+			`omdb_title_${type}_${title.toLowerCase()}`,
+			'omdb_title',
+			undefined,
+			this.CACHE_DURATIONS.TOP_LISTS
+		);
+		return data?.Response === 'True' ? data : null;
 	}
 
 	/**
