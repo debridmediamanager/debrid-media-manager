@@ -1,5 +1,4 @@
 import handler from '@/pages/api/info/show';
-import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -82,10 +81,7 @@ describe('/api/info/show - trailer fallback sources', () => {
 				},
 			}),
 			getTraktShowEpisode: vi.fn().mockResolvedValue(null),
-		};
-
-		(axios.get as any).mockResolvedValue({
-			data: {
+			getTmdbTvInfo: vi.fn().mockResolvedValue({
 				status: 'Returning Series',
 				videos: {
 					results: [
@@ -93,8 +89,8 @@ describe('/api/info/show - trailer fallback sources', () => {
 						{ type: 'Teaser', site: 'YouTube', key: 'TMDB_SHOW012' },
 					],
 				},
-			},
-		});
+			}),
+		};
 
 		vi.mocked(getMdblistClient).mockReturnValue(mockMdblistClient as any);
 		vi.mocked(getMetadataCache).mockReturnValue(mockMetadataCache as any);
@@ -121,6 +117,7 @@ describe('/api/info/show - trailer fallback sources', () => {
 			}
 		}
 
+		expect(mockMetadataCache.getTmdbTvInfo).toHaveBeenCalledWith(1396, 'videos');
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(
 			expect.objectContaining({

@@ -2,11 +2,33 @@ import { MRating, MShow } from '@/services/mdblist';
 import { getMdblistClient } from '@/services/mdblistClient';
 import { getMetadataCache } from '@/services/metadataCache';
 import { getOmdbMetadata, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
+import {
+	mergeShowViews,
+	viewFromCinemeta,
+	viewFromMdblist,
+	viewFromOmdb,
+	viewFromTmdb,
+	viewFromTrakt,
+	viewFromTvmaze,
+} from '@/utils/showMetadataMerge';
 import { tmdbImageUrl } from '@/utils/tmdb';
-import { getTmdbAuth, tmdbRequestConfig, tmdbUrl } from '@/utils/tmdbAuth';
+import { getTmdbAuth } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import UserAgent from 'user-agents';
+
+/** A provider's answer, or null when it failed — including a synchronous throw. */
+async function settle<T>(call: () => Promise<T> | T): Promise<Awaited<T> | null> {
+	try {
+		return (await call()) ?? null;
+	} catch (error) {
+		console.warn('[show.ts] metadata provider failed', error);
+		return null;
+	}
+}
+
+const isShowType = (response: any): response is MShow =>
+	!!response && typeof response === 'object' && Array.isArray(response.seasons);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { imdbid } = req.query;
@@ -19,232 +41,142 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const mdblistClient = getMdblistClient();
 		const metadataCache = getMetadataCache();
 
-		const mdbPromise = mdblistClient.getInfoByImdbId(imdbid);
-		const cinePromise = metadataCache.getCinemetaSeries(imdbid, {
-			headers: {
-				accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-				'accept-language': 'en-US,en;q=0.5',
-				'accept-encoding': 'gzip, deflate, br',
-				connection: 'keep-alive',
-				'sec-fetch-dest': 'document',
-				'sec-fetch-mode': 'navigate',
-				'sec-fetch-site': 'same-origin',
-				'sec-fetch-user': '?1',
-				'upgrade-insecure-requests': '1',
-				'user-agent': new UserAgent().toString(),
-			},
-		});
+		const fetchMdblist = () => mdblistClient.getInfoByImdbId(imdbid);
+		const fetchCinemeta = () =>
+			metadataCache.getCinemetaSeries(imdbid, {
+				headers: {
+					accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+					'accept-language': 'en-US,en;q=0.5',
+					'accept-encoding': 'gzip, deflate, br',
+					connection: 'keep-alive',
+					'sec-fetch-dest': 'document',
+					'sec-fetch-mode': 'navigate',
+					'sec-fetch-site': 'same-origin',
+					'sec-fetch-user': '?1',
+					'upgrade-insecure-requests': '1',
+					'user-agent': new UserAgent().toString(),
+				},
+			});
 
-		// Trakt keys on the IMDb id alone, so it does not have to wait for mdblist
-		// the way the TMDB call below does. Started here it overlaps everything
-		// between, instead of adding a round trip after it.
-		const traktNextPromise = metadataCache.getTraktShowEpisode(imdbid, 'next_episode');
-		const traktLastPromise = metadataCache.getTraktShowEpisode(imdbid, 'last_episode');
-
-		const [mdbResponse, cinemetaResponse] = await Promise.all([mdbPromise, cinePromise]);
-
-		const isShowType = (response: any): response is MShow => {
-			return 'seasons' in response;
-		};
-
-		console.log(`[show.ts] Processing show ${imdbid}:`, {
-			hasMdbResponse: !!mdbResponse,
-			hasCinemetaResponse: !!cinemetaResponse,
-			mdbSeasons: isShowType(mdbResponse) ? mdbResponse.seasons?.length : 'N/A',
-			cinemetaVideos: cinemetaResponse.meta?.videos?.length,
-		});
-
-		let season_count = 1;
-		let season_names = [];
-		let imdb_score;
-
-		const allCineVideos =
-			cinemetaResponse.meta?.videos?.filter((video: any) => video.season >= 0) || [];
-		let cineSeasons = allCineVideos.filter((video: any) => video.season > 0);
-		const uniqueSeasons: number[] = Array.from(
-			new Set(cineSeasons.map((video: any) => video.season))
+		// Trakt and TVmaze key on the IMDb id alone, so they do not have to wait
+		// for mdblist the way the TMDB call below does. Started here they overlap
+		// everything between, instead of adding a round trip after it. Each one
+		// degrades to null: a provider being down, unconfigured or not knowing the
+		// title costs its opinion, never the page.
+		const traktNextPromise = settle(() =>
+			metadataCache.getTraktShowEpisode(imdbid, 'next_episode')
 		);
-		const cineSeasonCount = uniqueSeasons.length > 0 ? Math.max(...uniqueSeasons) : 1;
+		const traktLastPromise = settle(() =>
+			metadataCache.getTraktShowEpisode(imdbid, 'last_episode')
+		);
+		const traktSeasonsPromise = settle(() => metadataCache.getTraktShowSeasons(imdbid));
+		const tvmazePromise = settle(() => metadataCache.getTvmazeShow(imdbid));
+		const omdbPromise = settle(() => getOmdbMetadata(imdbid));
 
-		console.log(`[show.ts] Cinemeta data for ${imdbid}:`, {
-			totalVideos: cineSeasons.length,
-			uniqueSeasons,
-			cineSeasonCount,
+		const [mdbResponse, cinemetaResponse] = await Promise.all([
+			settle(fetchMdblist),
+			settle(fetchCinemeta),
+		]);
+
+		// TMDB needs mdblist's tmdbid; without one, TMDB's own IMDb lookup finds it.
+		const tmdbPromise = settle(async () => {
+			if (!getTmdbAuth()) return null;
+			let tmdbId = mdbResponse?.tmdbid;
+			if (!tmdbId) {
+				const found = await metadataCache.searchTmdbByImdb(imdbid);
+				tmdbId = found?.tv_results?.[0]?.id;
+			}
+			return tmdbId ? metadataCache.getTmdbTvInfo(tmdbId, 'videos') : null;
 		});
 
-		const mdbSeasons = isShowType(mdbResponse)
-			? mdbResponse.seasons.filter((season) => season.season_number > 0)
-			: [];
+		const [traktNext, traktLast, traktSeasons, tvmazeShow, omdbResponse, tmdbData] =
+			await Promise.all([
+				traktNextPromise,
+				traktLastPromise,
+				traktSeasonsPromise,
+				tvmazePromise,
+				omdbPromise,
+				tmdbPromise,
+			]);
 
-		const mdbSeasonCount =
-			mdbSeasons.length > 0
-				? Math.max(...mdbSeasons.map((season) => season.season_number))
-				: 1;
-		season_names = mdbSeasons.map((season) => season.name);
-
-		console.log(`[show.ts] MDBList data for ${imdbid}:`, {
-			mdbSeasons: mdbSeasons.map((s) => ({ num: s.season_number, name: s.name })),
-			mdbSeasonCount,
-		});
-
-		if (cineSeasonCount > mdbSeasonCount) {
-			season_count = cineSeasonCount;
-			const remaining = Array.from(
-				{ length: cineSeasonCount - mdbSeasonCount },
-				(_, i) => i + 1
-			);
-			season_names = season_names.concat(
-				remaining.map((i) => `Season ${mdbSeasonCount + i}`)
-			);
-			console.log(
-				`[show.ts] Using cinemeta count (${cineSeasonCount}) over mdb count (${mdbSeasonCount})`
-			);
-		} else {
-			season_count = mdbSeasonCount;
-			console.log(
-				`[show.ts] Using mdb count (${mdbSeasonCount}) over cinemeta count (${cineSeasonCount})`
-			);
+		if (
+			!mdbResponse &&
+			!cinemetaResponse &&
+			!tmdbData &&
+			!tvmazeShow &&
+			!traktSeasons &&
+			!omdbResponse
+		) {
+			throw new Error(`No metadata provider answered for ${imdbid}`);
 		}
 
-		imdb_score =
-			cinemetaResponse.meta?.imdbRating ??
-			mdbResponse.ratings?.reduce((acc: number | undefined, rating: MRating) => {
+		const merged = mergeShowViews([
+			viewFromTmdb(tmdbData),
+			viewFromTvmaze(tvmazeShow),
+			viewFromTrakt(traktSeasons, traktNext, traktLast),
+			viewFromMdblist(mdbResponse),
+			viewFromCinemeta(cinemetaResponse),
+			viewFromOmdb(omdbResponse),
+		]);
+
+		console.log(`[show.ts] Seasons for ${imdbid}:`, {
+			season_count: merged.season_count,
+			reach: merged.reach,
+			status: merged.status,
+		});
+
+		const season_count = merged.season_count;
+		const mdbSeasonNames = isShowType(mdbResponse)
+			? mdbResponse.seasons
+					.filter((season) => season.season_number > 0)
+					.sort((a, b) => a.season_number - b.season_number)
+					.map((season) => season.name)
+					.slice(0, season_count)
+			: [];
+		const season_names = mdbSeasonNames.concat(
+			Array.from(
+				{ length: season_count - mdbSeasonNames.length },
+				(_, i) => `Season ${mdbSeasonNames.length + i + 1}`
+			)
+		);
+
+		let imdb_score =
+			cinemetaResponse?.meta?.imdbRating ??
+			mdbResponse?.ratings?.reduce((acc: number | undefined, rating: MRating) => {
 				if (rating.source === 'imdb') {
 					return rating.score as number;
 				}
 				return acc;
 			}, undefined);
 
-		let resolvedTitle: string | undefined =
-			mdbResponse?.title ?? cinemetaResponse?.meta?.name ?? undefined;
-		let resolvedDescription: string | undefined =
-			mdbResponse?.description ?? cinemetaResponse?.meta?.description ?? undefined;
-		let resolvedPoster: string | undefined =
-			mdbResponse?.poster ?? cinemetaResponse?.meta?.poster ?? undefined;
-
-		// OMDb is the last resort for each of these, and the most rate-limited
-		// source DMM uses, so it is asked only when one of them is actually
-		// missing rather than on every request. It resolves to null instead of
-		// rejecting, so it can never fail the request. Its rating stays on OMDb's
+		// OMDb is the last resort for each of these. Its rating stays on OMDb's
 		// native 0-10 scale, as Cinemeta's does; mdblist's above is out of 100.
-		if (
-			imdb_score === undefined ||
-			imdb_score === null ||
-			resolvedTitle === undefined ||
-			resolvedDescription === undefined ||
-			resolvedPoster === undefined
-		) {
-			const omdbResponse = await getOmdbMetadata(imdbid);
-			imdb_score = imdb_score ?? getOmdbRating(omdbResponse);
-			resolvedTitle = resolvedTitle ?? omdbField(omdbResponse?.Title);
-			resolvedDescription = resolvedDescription ?? omdbField(omdbResponse?.Plot);
-			resolvedPoster = resolvedPoster ?? getOmdbPoster(omdbResponse) ?? undefined;
-		}
+		imdb_score = imdb_score ?? getOmdbRating(omdbResponse);
+		const resolvedTitle: string | undefined =
+			mdbResponse?.title ?? cinemetaResponse?.meta?.name ?? omdbField(omdbResponse?.Title);
+		const resolvedDescription: string | undefined =
+			mdbResponse?.description ??
+			cinemetaResponse?.meta?.description ??
+			omdbField(omdbResponse?.Plot);
+		const resolvedPoster: string | undefined =
+			mdbResponse?.poster ??
+			cinemetaResponse?.meta?.poster ??
+			getOmdbPoster(omdbResponse) ??
+			undefined;
 
 		const title = resolvedTitle ?? 'Unknown';
 
-		// Check if specials (season 0) exist
-		const has_specials =
-			allCineVideos.some((video: any) => video.season === 0) ||
-			(isShowType(mdbResponse) &&
-				mdbResponse.seasons?.some((season) => season.season_number === 0));
-
-		const season_episode_counts: Record<number, number> = {};
-
-		// Get counts from cinemeta (including season 0)
-		allCineVideos.forEach((video: any) => {
-			if (!season_episode_counts[video.season]) {
-				season_episode_counts[video.season] = 1;
-			} else {
-				season_episode_counts[video.season]++;
-			}
-		});
-
-		// Merge with mdb data if available
-		if (isShowType(mdbResponse) && mdbResponse.seasons) {
-			mdbResponse.seasons.forEach((season) => {
-				if (season.episode_count && season.season_number != null) {
-					// Use the larger count between the two sources
-					season_episode_counts[season.season_number] = Math.max(
-						season_episode_counts[season.season_number] || 0,
-						season.episode_count
-					);
-				}
-			});
-		}
-
 		let trailer = mdbResponse?.trailer ?? '';
-		let status: string | undefined;
-		let next_episode_to_air:
-			| { first_aired: string; episode_number: number; season_number: number; name: string }
-			| undefined;
-		let last_episode_to_air:
-			| { first_aired: string; episode_number: number; season_number: number; name: string }
-			| undefined;
-
-		if (!trailer && cinemetaResponse.meta?.trailers?.[0]?.source) {
+		if (!trailer && cinemetaResponse?.meta?.trailers?.[0]?.source) {
 			trailer = `https://youtube.com/watch?v=${cinemetaResponse.meta.trailers[0].source}`;
 		}
-
-		// TMDB needs mdblist's tmdbid, so it is the only lookup left that has to
-		// wait for the first wave.
-		const tmdbPromise = mdbResponse?.tmdbid
-			? (async () => {
-					try {
-						const tmdbAuth = getTmdbAuth();
-						if (!tmdbAuth) return null;
-						const resp = await axios.get(
-							tmdbUrl(
-								`/tv/${mdbResponse.tmdbid}`,
-								{ append_to_response: 'videos' },
-								tmdbAuth
-							),
-							tmdbRequestConfig(tmdbAuth)
-						);
-						return resp.data;
-					} catch {
-						return null;
-					}
-				})()
-			: Promise.resolve(null);
-
-		const [traktNext, traktLast, tmdbData] = await Promise.all([
-			traktNextPromise,
-			traktLastPromise,
-			tmdbPromise,
-		]);
-
-		if (traktNext?.first_aired) {
-			next_episode_to_air = {
-				first_aired: traktNext.first_aired,
-				episode_number: traktNext.number,
-				season_number: traktNext.season,
-				name: traktNext.title,
-			};
-		}
-		if (traktLast?.first_aired) {
-			last_episode_to_air = {
-				first_aired: traktLast.first_aired,
-				episode_number: traktLast.number,
-				season_number: traktLast.season,
-				name: traktLast.title,
-			};
-		}
-
-		if (tmdbData) {
-			status = tmdbData.status;
-			if (!trailer) {
-				const tmdbTrailer = tmdbData.videos?.results?.find(
-					(v: any) => v.type === 'Trailer' && v.site === 'YouTube'
-				);
-				if (tmdbTrailer?.key) {
-					trailer = `https://youtube.com/watch?v=${tmdbTrailer.key}`;
-				}
+		if (!trailer && tmdbData) {
+			const tmdbTrailer = tmdbData.videos?.results?.find(
+				(v: any) => v.type === 'Trailer' && v.site === 'YouTube'
+			);
+			if (tmdbTrailer?.key) {
+				trailer = `https://youtube.com/watch?v=${tmdbTrailer.key}`;
 			}
-		}
-
-		if (!status) {
-			status = mdbResponse?.status;
 		}
 
 		const responseData = {
@@ -260,13 +192,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				`https://picsum.photos/seed/${encodeURIComponent(title)}/1800/300`,
 			season_count,
 			season_names,
-			has_specials,
+			has_specials: merged.has_specials,
 			imdb_score: imdb_score ?? 0,
-			season_episode_counts,
+			season_episode_counts: merged.season_episode_counts,
 			trailer,
-			status,
-			next_episode_to_air,
-			last_episode_to_air,
+			status: merged.status,
+			next_episode_to_air: merged.next_episode_to_air,
+			last_episode_to_air: merged.last_episode_to_air,
 		};
 
 		console.log(`[show.ts] Final response for ${imdbid}:`, {
