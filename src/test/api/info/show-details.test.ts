@@ -6,6 +6,18 @@ vi.mock('next/config', () => ({
 	default: () => ({ publicRuntimeConfig: { traktClientId: 'test-trakt-id' } }),
 }));
 
+// The metadata cache's table, in memory, so a test can see what a second page
+// view would be served.
+const cacheRows = vi.hoisted(() => new Map<string, { data: unknown; updatedAt: Date }>());
+vi.mock('@/services/database/mdblistCache', () => ({
+	getMdblistCacheService: () => ({
+		getWithMetadata: async (key: string) => cacheRows.get(key) ?? null,
+		set: async (key: string, _type: string, data: unknown) => {
+			cacheRows.set(key, { data, updatedAt: new Date() });
+		},
+	}),
+}));
+
 const mockedAxios = vi.mocked(axios, true);
 
 import handler from '@/pages/api/info/show-details';
@@ -16,6 +28,7 @@ describe('/api/info/show-details', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		cacheRows.clear();
 		process.env.TMDB_KEY = 'test-tmdb-key';
 		process.env.TRAKT_CLIENT_ID = 'test-trakt-id';
 	});
@@ -152,6 +165,15 @@ describe('/api/info/show-details', () => {
 		expect(data.creators[0].name).toBe('Creator One');
 		expect(data.creators[0].job).toBe('Creator');
 		expect(data.creators[0].department).toBe('Production');
+
+		// A second view of the same show is answered from the cache.
+		const requests = mockedAxios.get.mock.calls.length;
+		expect(requests).toBe(4); // find, detail, one cast member, one creator
+		const again = createMockResponse();
+		await handler(createMockRequest({ method: 'GET', query: { imdbId: 'tt1234567' } }), again);
+		expect(again._getStatusCode()).toBe(200);
+		expect(again._getData()).toEqual(data);
+		expect(mockedAxios.get.mock.calls.length).toBe(requests);
 	});
 
 	it('handles Trakt slug lookup failures gracefully', async () => {
