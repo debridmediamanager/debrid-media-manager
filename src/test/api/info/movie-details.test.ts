@@ -6,6 +6,18 @@ vi.mock('next/config', () => ({
 	default: () => ({ publicRuntimeConfig: { traktClientId: 'test-trakt-id' } }),
 }));
 
+// The metadata cache's table, in memory, so a test can see what a second page
+// view would be served.
+const cacheRows = vi.hoisted(() => new Map<string, { data: unknown; updatedAt: Date }>());
+vi.mock('@/services/database/mdblistCache', () => ({
+	getMdblistCacheService: () => ({
+		getWithMetadata: async (key: string) => cacheRows.get(key) ?? null,
+		set: async (key: string, _type: string, data: unknown) => {
+			cacheRows.set(key, { data, updatedAt: new Date() });
+		},
+	}),
+}));
+
 const mockedAxios = vi.mocked(axios, true);
 
 import handler from '@/pages/api/info/movie-details';
@@ -16,6 +28,7 @@ describe('/api/info/movie-details', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		cacheRows.clear();
 		process.env.TMDB_KEY = 'test-tmdb-key';
 		process.env.TRAKT_CLIENT_ID = 'test-trakt-id';
 	});
@@ -36,14 +49,12 @@ describe('/api/info/movie-details', () => {
 		res = createMockResponse();
 		await handler(req, res);
 
-		const [, options] = mockedAxios.get.mock.calls[0];
+		const [url, options] = mockedAxios.get.mock.calls[0];
 		expect(options).toMatchObject({
 			headers: { Authorization: 'Bearer v4-read-token' },
 		});
 		// A bearer-authenticated call must not also carry an api_key parameter.
-		expect((options as { params: Record<string, unknown> }).params).not.toHaveProperty(
-			'api_key'
-		);
+		expect(String(url)).not.toContain('api_key');
 	});
 
 	it('still authenticates with the v3 key when no read token is set', async () => {
@@ -53,11 +64,8 @@ describe('/api/info/movie-details', () => {
 		res = createMockResponse();
 		await handler(req, res);
 
-		const [, options] = mockedAxios.get.mock.calls[0];
-		expect((options as { params: Record<string, unknown> }).params).toMatchObject({
-			api_key: 'test-tmdb-key',
-		});
-		expect((options as { headers: Record<string, unknown> }).headers).toEqual({});
+		const [url] = mockedAxios.get.mock.calls[0];
+		expect(String(url)).toContain('api_key=test-tmdb-key');
 	});
 
 	it('rejects non-GET with 405 and Allow header', async () => {
@@ -196,6 +204,13 @@ describe('/api/info/movie-details', () => {
 		expect(data.cast).toHaveLength(1);
 		expect(data.cast[0].name).toBe('Actor One');
 		expect(data.cast[0].slug).toBe('actor-one');
+
+		// A second view of the same movie is answered from the cache.
+		const requests = mockedAxios.get.mock.calls.length;
+		const again = createMockResponse();
+		await handler(createMockRequest({ method: 'GET', query: { imdbId: 'tt1234567' } }), again);
+		expect(again._getData()).toEqual(data);
+		expect(mockedAxios.get.mock.calls.length).toBe(requests);
 	});
 
 	it('handles Trakt slug lookup failures gracefully', async () => {

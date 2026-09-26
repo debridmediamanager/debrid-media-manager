@@ -10,10 +10,22 @@ vi.mock('next/config', () => ({
 
 const mockedAxios = vi.mocked(axios, true);
 
+// The metadata cache's table, in memory and emptied before every test.
+const cacheRows = vi.hoisted(() => new Map<string, { data: unknown; updatedAt: Date }>());
+vi.mock('@/services/database/mdblistCache', () => ({
+	getMdblistCacheService: () => ({
+		getWithMetadata: async (key: string) => cacheRows.get(key) ?? null,
+		set: async (key: string, _type: string, data: unknown) => {
+			cacheRows.set(key, { data, updatedAt: new Date() });
+		},
+	}),
+}));
+
 describe('/api/related/[mediaType]', () => {
 	let res: MockResponse;
 
 	beforeEach(() => {
+		cacheRows.clear();
 		vi.clearAllMocks();
 		process.env.TRAKT_CLIENT_ID = 'test-id';
 		process.env.TMDB_KEY = 'test-tmdb-key';
@@ -200,5 +212,19 @@ describe('/api/related/[mediaType]', () => {
 			expect.any(Object)
 		);
 		consoleSpy.mockRestore();
+	});
+
+	it('answers a repeat request from the cache', async () => {
+		mockedAxios.get.mockResolvedValueOnce({
+			data: [{ title: 'Related', year: 2001, ids: { imdb: 'tt0000002' } }],
+		});
+		const query = { mediaType: 'movie', imdbId: 'tt0245429' };
+		await handler(createMockRequest({ method: 'GET', query }), res);
+		const first = res._getData();
+		const again = createMockResponse();
+		await handler(createMockRequest({ method: 'GET', query }), again);
+
+		expect(again._getData()).toEqual(first);
+		expect(mockedAxios.get).toHaveBeenCalledTimes(1);
 	});
 });

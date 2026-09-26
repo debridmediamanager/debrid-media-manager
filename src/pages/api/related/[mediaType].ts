@@ -1,3 +1,4 @@
+import { getMdblistCacheService } from '@/services/database/mdblistCache';
 import { getTmdbAuth, tmdbAxiosOptions, type TmdbAuth } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -118,6 +119,33 @@ const fetchRelatedFromTmdb = async (
 	return hydrated.filter((item): item is MediaItem => Boolean(item));
 };
 
+// Related titles barely move, and a miss is worth remembering for less time
+// than a hit: Trakt may simply not have computed the list yet.
+const RELATED_TTL_MS = 24 * 60 * 60 * 1000;
+const RELATED_MISS_TTL_MS = 60 * 60 * 1000;
+
+type RelatedPayload = { results: MediaItem[]; source: string; message?: string };
+
+async function readRelated(key: string): Promise<RelatedPayload | null> {
+	try {
+		const cached = await getMdblistCacheService().getWithMetadata(key);
+		if (!cached) return null;
+		const payload = cached.data as RelatedPayload;
+		const ttl = payload?.results?.length ? RELATED_TTL_MS : RELATED_MISS_TTL_MS;
+		return Date.now() - cached.updatedAt.getTime() < ttl ? payload : null;
+	} catch {
+		return null;
+	}
+}
+
+async function storeRelated(key: string, payload: RelatedPayload) {
+	try {
+		await getMdblistCacheService().set(key, 'related', payload);
+	} catch (error) {
+		console.error('[related] failed to cache', key, error);
+	}
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
 		res.setHeader('Allow', 'GET');
@@ -146,6 +174,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(500).json({ message: 'Trakt configuration missing.' });
 	}
 
+	const cacheKey = `related_${mediaTypeParam}_${imdbId}`;
+	const cachedPayload = await readRelated(cacheKey);
+	if (cachedPayload) return res.status(200).json(cachedPayload);
+
 	console.info('Fetching related media from Trakt', {
 		mediaTypeParam,
 		imdbId,
@@ -159,7 +191,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			traktClientId
 		);
 		if (results.length > 0) {
-			return res.status(200).json({ results, source: 'trakt' });
+			const payload = { results, source: 'trakt' };
+			await storeRelated(cacheKey, payload);
+			return res.status(200).json(payload);
 		}
 		console.warn('Trakt returned no related media, attempting fallback', {
 			mediaTypeParam,
@@ -187,11 +221,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			console.info('Attempting TMDB fallback for related media', { mediaTypeParam, imdbId });
 			const tmdbResults = await fetchRelatedFromTmdb(mediaTypeParam, imdbId, tmdbAuth);
 			if (tmdbResults.length > 0) {
-				return res.status(200).json({
+				const payload = {
 					results: tmdbResults,
 					source: 'tmdb',
 					message: `Fetched related ${mediaTypeParam === 'movie' ? 'movies' : 'shows'} via TMDB fallback.`,
-				});
+				};
+				await storeRelated(cacheKey, payload);
+				return res.status(200).json(payload);
 			}
 			console.warn('TMDB fallback returned no results', { mediaTypeParam, imdbId });
 		} catch (fallbackError) {
@@ -206,5 +242,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			? 'Related media temporarily unavailable. Please try again later.'
 			: 'No related media found.';
 
-	return res.status(200).json({ results: [], source: 'none', message });
+	// A provider outage is not a verdict, so only a clean miss is remembered.
+	const payload = { results: [], source: 'none', message };
+	if (!traktErrorStatus || traktErrorStatus < 500) await storeRelated(cacheKey, payload);
+	return res.status(200).json(payload);
 }

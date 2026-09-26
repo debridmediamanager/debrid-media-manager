@@ -25,6 +25,17 @@ const { axiosMockModule, axiosGetMock, nextConfigMockModule } = vi.hoisted(() =>
 vi.mock('axios', () => axiosMockModule);
 vi.mock('next/config', () => nextConfigMockModule);
 
+// The metadata cache's table, in memory and emptied before every test.
+const cacheRows = vi.hoisted(() => new Map<string, { data: unknown; updatedAt: Date }>());
+vi.mock('@/services/database/mdblistCache', () => ({
+	getMdblistCacheService: () => ({
+		getWithMetadata: async (key: string) => cacheRows.get(key) ?? null,
+		set: async (key: string, _type: string, data: unknown) => {
+			cacheRows.set(key, { data, updatedAt: new Date() });
+		},
+	}),
+}));
+
 import handler from '@/pages/api/related/[mediaType]';
 
 type MockResponse = Pick<NextApiResponse, 'status' | 'json' | 'setHeader'>;
@@ -41,6 +52,7 @@ const originalTmdbKey = process.env.TMDB_KEY;
 
 describe('related media API', () => {
 	beforeEach(() => {
+		cacheRows.clear();
 		axiosGetMock.mockReset();
 		process.env.TRAKT_CLIENT_ID = 'test-client-id';
 		process.env.TMDB_KEY = '';
