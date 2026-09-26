@@ -1,0 +1,185 @@
+{
+	"age_rating": 8,
+	"backdrop": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/7rB1VhVXtLFTnOCY1Hz7ZEIz7CO.jpg",
+	"certification": "TV-PG",
+	"commonsense": 8,
+	"country": "gb",
+	"description": "This British television baking competition selects from amongst its competitors the best amateur baker. The series is credited with reinvigorating interest in baking throughout the UK, and many of its participants, including winners, have gone on to start a career based on baking.",
+	"imdbid": "tt1877368",
+	"keywords": [
+		{ "id": 999, "name": "competition" },
+		{ "id": 130, "name": "food" },
+		{ "id": 5934, "name": "baking" },
+		{ "id": 20170, "name": "baking-competition" },
+		{ "id": 306137, "name": "baking-competition" },
+		{ "id": 110876, "name": "baking-bread" },
+		{ "id": 296631, "name": "baker" },
+		{ "id": 110880, "name": "food-tasting" },
+		{ "id": 299358, "name": "amateur" },
+		{ "id": 164308, "name": "british-food" },
+		{ "id": 46759, "name": "baking-a-cake" },
+		{ "id": 89690, "name": "judging" },
+		{ "id": 296697, "name": "food" },
+		{ "id": 296630, "name": "baking" },
+		{ "id": 12228, "name": "tent" },
+		{ "id": 296138, "name": "challenge" },
+		{ "id": 61261, "name": "cooking-show" },
+		{ "id": 295861, "name": "british" },
+		{ "id": 14219, "name": "cake" },
+		{ "id": 15456, "name": "bread" },
+		{ "id": 20687, "name": "bake-off" },
+		{ "id": 16062, "name": "non-fiction" },
+		{ "id": 339724, "name": "common-sense-selection" }
+	],
+	"language": "en",
+	"poster": "https://image.tmdb.org/t/p/original/bNa02AorKSBRfWfVPmsL7SJrdfs.jpg",
+	"ratings": [
+		{ "source": "imdb", "value": 8.6, "score": 86, "votes": 16120, "popular": 1016 },
+		{
+			"source": "metacritic",
+			"value": 78,
+			"score": 78,
+			"votes": 45,
+			"url": "/tv/the-great-british-baking-show-2010"
+		},
+		{ "source": "metacriticuser", "value": 0.0, "score": 0.0, "votes": 1 },
+		{ "source": "trakt", "value": 80, "score": 80, "votes": 756 },
+		{
+			"source": "tomatoes",
+			"value": null,
+			"score": null,
+			"votes": 0,
+			"url": "/tv/the_great_british_bake_off/s01"
+		},
+		{ "source": "tomatoesaudience", "value": null, "score": null, "votes": 2 },
+		{ "source": "tmdb", "value": 75, "score": 75, "votes": 105 },
+		{ "source": "letterboxd", "value": 0, "score": null, "votes": null, "url": null },
+		{ "source": "rogerebert", "value": null, "url": null },
+		{ "source": "myanimelist", "value": null, "votes": null, "id": null }
+	],
+	"released": "2010-08-17",
+	"released_digital": null,
+	"response": true,
+	"reviews": [
+		{
+			"updated_at": "2017-10-31",
+			"author": "GuyD",
+			"rating": 6,
+			"provider_id": 1,
+			"content": "One series/season is enough to watch. Probably won't watch again."
+		},
+		{
+			"updated_at": "2021-10-29",
+			"author": "tvwatcherdenver",
+			"rating": 8,
+			"provider_id": 1,
+			"content": "I like cooking competition shows, this one is the best.  None of the contrived drama and BS of most American shows (and you can almost guarantee there will be an American version of this soon enough).  Such skilled bakers, I wish I could bake like that!  Not a fan of the new man-baby host but otherwise it's a solid show."
+		},
+		{
+			"updated_at": "2022-09-18",
+			"author": "Why Not Zoidberg?",
+			"rating": 9,
+			"provider_id": 1,
+			"content": "Where are the new episodes?"
+		},
+		{
+			"updated_at": "2025-07-13",
+			"author": "somesounds",
+			"rating": null,
+			"provider_id": 1,
+			"content": "Here's a guide to the super confusing release numbers:\r\nhttps://docs.google.com/spreadsheets/d/1-Gel1P7A1cUqCYvGr9cTZI6xUlqq0jajviiQdAHj05c"
+		}
+	],
+	"runtime": 5321,
+	"score": 79,
+	"score_average": 79,
+	"seasons": [
+		{
+			"tmdbid": 45294,
+			"name": "Specials",
+			"air_date": "2010-08-17",
+			"episode_count": 11,
+			"season_number": 0,
+			"tomatofresh": null,
+			"poster_path": "/xigBMfMY8ULVstqElMa6VCaSI0V.jpg"
+		},
+		{
+			"tmdbid": 45293,
+			"name": "Series 1",
+			"air_date": "2010-08-17",
+			"episode_count": 6,
+			"season_number": 1,
+			"tomatofresh": null,
+			"poster_path": "/ggZf5y6RDB7FJGOqekl0c2952bz.jpg"
+		},
+		{
+			"tmdbid": 45296,
+			"name": "Series 2",
+			"air_date": "2011-08-16",
+			"episode_count": 11,
+			"season_number": 2,
+			"tomatofresh": null,
+			"poster_path": "/e5FdvQy2SCl1dO1sd6LJfSfpN6e.jpg"
+		},
+		{
+			"tmdbid": 45295,
+			"name": "Series 3",
+			"air_date": "2012-08-14",
+			"episode_count": 14,
+			"season_number": 3,
+			"tomatofresh": null,
+			"poster_path": "/owOu8A3FTilx8YxJnhn0e6kd3SR.jpg"
+		},
+		{
+			"tmdbid": 45297,
+			"name": "Series 4",
+			"air_date": "2013-08-20",
+			"episode_count": 15,
+			"season_number": 4,
+			"tomatofresh": null,
+			"poster_path": "/kiglA2bggKVfP8PQZ3pCsV2SfA9.jpg"
+		},
+		{
+			"tmdbid": 62219,
+			"name": "Series 5",
+			"air_date": "2014-08-06",
+			"episode_count": 16,
+			"season_number": 5,
+			"tomatofresh": null,
+			"poster_path": "/d2Nedau7VK5khyk70ZCOyDOCpwq.jpg"
+		},
+		{
+			"tmdbid": 69330,
+			"name": "Series 6",
+			"air_date": "2015-08-05",
+			"episode_count": 16,
+			"season_number": 6,
+			"tomatofresh": null,
+			"poster_path": "/6fOVnhFblCb722KQnXmpMSCD0KI.jpg"
+		},
+		{
+			"tmdbid": 79474,
+			"name": "Series 7",
+			"air_date": "2016-08-22",
+			"episode_count": 11,
+			"season_number": 7,
+			"tomatofresh": null,
+			"poster_path": "/ccxB2SVM6f56i7x9vK60RxlZTkC.jpg"
+		}
+	],
+	"spoken_language": "en",
+	"status": "Canceled",
+	"streams": [{ "id": 1, "name": "Netflix" }],
+	"title": "The Great British Bake Off",
+	"tmdbid": 34549,
+	"trailer": null,
+	"traktid": 34400,
+	"tvdbid": null,
+	"type": "show",
+	"watch_providers": [
+		{ "id": 8, "name": "Netflix" },
+		{ "id": 207, "name": "The Roku Channel" },
+		{ "id": 1796, "name": "Netflix Standard with Ads" }
+	],
+	"year": 2010
+}

@@ -27,6 +27,7 @@ const ONGOING_STATUSES = new Set([
 	'pilot',
 	'upcoming',
 	'ongoing',
+	'running',
 ]);
 
 // "2008–2013" is a finished run, "2022–" an open one. Cinemeta writes the dash as
@@ -164,5 +165,49 @@ export function cinemetaReleaseSignals(meta: any): ReleaseSignals {
 		year: meta?.releaseInfo ?? meta?.year ?? null,
 		status: typeof meta?.status === 'string' ? meta.status : null,
 		latestEpisode: latestDate(videos.map((video: any) => video?.firstAired ?? video?.released)),
+	};
+}
+
+/** Release signals out of TMDB's `/tv/{id}`. */
+export function tmdbTvReleaseSignals(data: any): ReleaseSignals {
+	const seasons = Array.isArray(data?.seasons) ? data.seasons : [];
+	return {
+		released: typeof data?.first_air_date === 'string' ? data.first_air_date : null,
+		status: typeof data?.status === 'string' ? data.status : null,
+		latestEpisode: latestDate([
+			data?.last_episode_to_air?.air_date,
+			data?.next_episode_to_air?.air_date,
+			data?.last_air_date,
+			...seasons.map((season: any) => season?.air_date),
+		]),
+	};
+}
+
+/** Release signals out of Trakt's `/shows/{id}/seasons?extended=full`. */
+export function traktSeasonsReleaseSignals(data: any): ReleaseSignals {
+	const seasons = Array.isArray(data) ? data : [];
+	return { latestEpisode: latestDate(seasons.map((season: any) => season?.first_aired)) };
+}
+
+/** Release signals out of TVmaze's `/shows/{id}` with its seasons and episodes embedded. */
+export function tvmazeReleaseSignals(data: any): ReleaseSignals {
+	const embedded = data?._embedded ?? {};
+	const seasons = Array.isArray(embedded.seasons) ? embedded.seasons : [];
+	return {
+		released: typeof data?.premiered === 'string' ? data.premiered : null,
+		status: typeof data?.status === 'string' ? data.status : null,
+		latestEpisode: latestDate([
+			embedded.nextepisode?.airdate,
+			embedded.previousepisode?.airdate,
+			...seasons.flatMap((season: any) => [season?.premiereDate, season?.endDate]),
+		]),
+	};
+}
+
+/** Release signals out of an OMDb title payload: "2010–" is still running. */
+export function omdbReleaseSignals(data: any): ReleaseSignals {
+	return {
+		released: typeof data?.Released === 'string' ? data.Released : null,
+		year: typeof data?.Year === 'string' ? data.Year : null,
 	};
 }

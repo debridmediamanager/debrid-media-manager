@@ -1,0 +1,19 @@
+{
+	"after_credits": false,
+	"available_translations": ["en"],
+	"comment_count": 0,
+	"during_credits": false,
+	"episode_type": "standard",
+	"first_aired": "2026-09-25T03:00:00.000Z",
+	"ids": { "trakt": 14335940, "tvdb": null, "imdb": null, "tmdb": 7578682, "tvrage": null },
+	"number": 106,
+	"number_abs": 4566,
+	"original_title": "September 24, 2026 - Merritt Wever",
+	"overview": null,
+	"rating": 6.9,
+	"runtime": 35,
+	"season": 31,
+	"title": "September 24, 2026 - Merritt Wever",
+	"updated_at": "2026-09-26T08:36:11.000Z",
+	"votes": 10
+}

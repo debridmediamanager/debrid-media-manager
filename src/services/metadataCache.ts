@@ -1,4 +1,12 @@
-import { cinemetaReleaseSignals, metadataMaxAge } from '@/utils/metadataFreshness';
+import {
+	cinemetaReleaseSignals,
+	metadataMaxAge,
+	omdbReleaseSignals,
+	tmdbTvReleaseSignals,
+	traktSeasonsReleaseSignals,
+	tvmazeReleaseSignals,
+	type ReleaseSignals,
+} from '@/utils/metadataFreshness';
 import { getTmdbAuth, tmdbRequestConfig, tmdbUrl, type TmdbAuth } from '@/utils/tmdbAuth';
 import axios, { AxiosRequestConfig } from 'axios';
 import getConfig from 'next/config';
@@ -52,7 +60,15 @@ export class MetadataCacheService {
 		// when the synopsis is a placeholder and the poster is a teaser. Without an
 		// expiry that pre-release snapshot is served forever.
 		MOVIE: 2592000000, // 30 days
+		// Id-to-id mappings barely move, but a title TVmaze does not know yet may
+		// be added, so a miss is remembered for a week rather than forever.
+		ID_MAPPING: 2592000000, // 30 days
+		ID_MAPPING_MISS: 604800000, // 7 days
+		// Person slugs are looked up by name and do not change.
+		PERSON: 2592000000, // 30 days
 	};
+
+	private static readonly TVMAZE_BASE = 'https://api.tvmaze.com';
 
 	/**
 	 * Check if cached data is expired
@@ -78,6 +94,35 @@ export class MetadataCacheService {
 				cinemetaReleaseSignals((cached as { meta?: unknown } | null)?.meta),
 				settledMaxAge
 			);
+	}
+
+	/** A lifetime read off the cached payload by one of `@/utils/metadataFreshness`'s extractors. */
+	private freshnessMaxAge(
+		signals: (cached: any) => ReleaseSignals,
+		settledMaxAge: number
+	): MaxAge {
+		return (cached: unknown) => metadataMaxAge(signals(cached), settledMaxAge);
+	}
+
+	/** Writes a row, logging rather than failing when the cache table is unavailable. */
+	private async store(cacheKey: string, cacheType: string, data: unknown): Promise<void> {
+		try {
+			await this.cache.set(cacheKey, cacheType, data);
+		} catch (error) {
+			console.error(`[MetadataCache] Failed to cache ${cacheKey}`, error);
+		}
+	}
+
+	private traktHeaders(clientId: string) {
+		return {
+			'Content-Type': 'application/json',
+			'trakt-api-version': '2',
+			'trakt-api-key': clientId,
+		};
+	}
+
+	private get traktClientId(): string | undefined {
+		return process.env.TRAKT_CLIENT_ID || this.runtimeConfig.traktClientId || undefined;
 	}
 
 	/**
@@ -233,13 +278,13 @@ export class MetadataCacheService {
 
 		const url = `https://www.omdbapi.com/?i=${imdbId}&apikey=${omdbKey}`;
 		const cacheKey = `omdb_info_${imdbId}`;
-		return this.fetchWithCache(
-			url,
-			cacheKey,
-			'omdb_info',
-			undefined,
-			this.CACHE_DURATIONS.MOVIE
-		);
+		// A series row carries its season total, which grows while the show airs;
+		// a movie row keeps the lifetime it always had.
+		const maxAge: MaxAge = (cached: any) =>
+			cached?.Type === 'series'
+				? metadataMaxAge(omdbReleaseSignals(cached), this.CACHE_DURATIONS.TV_SERIES)
+				: this.CACHE_DURATIONS.MOVIE;
+		return this.fetchWithCache(url, cacheKey, 'omdb_info', undefined, maxAge);
 	}
 
 	/**
@@ -279,16 +324,24 @@ export class MetadataCacheService {
 	/**
 	 * Get TMDB TV info with caching
 	 */
-	async getTmdbTvInfo(tmdbId: string | number): Promise<any> {
+	async getTmdbTvInfo(tmdbId: string | number, appendToResponse?: string): Promise<any> {
 		const auth = this.requireTmdbAuth();
-		const url = tmdbUrl(`/tv/${tmdbId}`, {}, auth);
-		const cacheKey = `tmdb_tv_${tmdbId}`;
+		const url = tmdbUrl(
+			`/tv/${tmdbId}`,
+			appendToResponse ? { append_to_response: appendToResponse } : {},
+			auth
+		);
+		const cacheKey = appendToResponse
+			? `tmdb_tv_${tmdbId}_${appendToResponse}`
+			: `tmdb_tv_${tmdbId}`;
+		// The payload names the next episode and the status, so an airing show's
+		// row lives hours and an ended one's a week.
 		return this.fetchWithCache(
 			url,
 			cacheKey,
 			'tmdb_tv',
 			tmdbRequestConfig(auth),
-			this.CACHE_DURATIONS.TV_SERIES
+			this.freshnessMaxAge(tmdbTvReleaseSignals, this.CACHE_DURATIONS.TV_SERIES)
 		);
 	}
 
@@ -413,6 +466,123 @@ export class MetadataCacheService {
 	}
 
 	/**
+	 * Trakt's season list for a show, or null when Trakt is unconfigured, does not
+	 * know the id, or is unreachable with nothing cached. Show pages fall back to
+	 * the other providers rather than failing on Trakt.
+	 */
+	async getTraktShowSeasons(showId: string): Promise<any[] | null> {
+		const clientId = this.traktClientId;
+		if (!clientId) return null;
+
+		const url = `https://api.trakt.tv/shows/${encodeURIComponent(showId)}/seasons?extended=full`;
+		try {
+			const data = await this.fetchWithCache<any>(
+				url,
+				`trakt_seasons_${showId}`,
+				'trakt_seasons',
+				{
+					headers: this.traktHeaders(clientId),
+					// An unknown id is an answer, not an outage, and is cached as one.
+					validateStatus: (status: number) => status === 200 || status === 404,
+				},
+				this.freshnessMaxAge(traktSeasonsReleaseSignals, this.CACHE_DURATIONS.TV_SERIES)
+			);
+			return Array.isArray(data) ? data : null;
+		} catch (error) {
+			console.error(`[MetadataCache] Failed to fetch Trakt seasons for ${showId}`, error);
+			return null;
+		}
+	}
+
+	/**
+	 * TVmaze's show for an IMDb id, with its seasons and its next and previous
+	 * episodes embedded, or null.
+	 *
+	 * TVmaze answers a lookup with a redirect to `/shows/{id}` that drops any
+	 * `embed` parameter, so the id is resolved and cached on its own first. A
+	 * miss is cached too: TVmaze has no entry for most of the long tail, and
+	 * without that every page view for one of them would spend a lookup against
+	 * the per-IP limit every DMM user shares.
+	 */
+	async getTvmazeShow(imdbId: string): Promise<any | null> {
+		try {
+			const tvmazeId = await this.getTvmazeIdForImdb(imdbId);
+			if (!tvmazeId) return null;
+
+			const url = `${MetadataCacheService.TVMAZE_BASE}/shows/${tvmazeId}?embed[]=seasons&embed[]=nextepisode&embed[]=previousepisode`;
+			const cacheKey = `tvmaze_show_${tvmazeId}`;
+			const cached = await this.cache.getWithMetadata(cacheKey);
+			const maxAge = metadataMaxAge(
+				tvmazeReleaseSignals(cached?.data),
+				this.CACHE_DURATIONS.TV_SERIES
+			);
+			if (cached && !this.isCacheExpired(cached.updatedAt, maxAge)) {
+				return cached.data;
+			}
+
+			try {
+				const response = await axios.get(url);
+				const slim = slimTvmazeShow(response.data);
+				await this.store(cacheKey, 'tvmaze_show', slim);
+				return slim;
+			} catch (error) {
+				if (cached) {
+					console.error(
+						`[MetadataCache] Refetch failed for ${cacheKey}, serving stale`,
+						error
+					);
+					return cached.data;
+				}
+				throw error;
+			}
+		} catch (error) {
+			console.error(`[MetadataCache] Failed to fetch TVmaze show for ${imdbId}`, error);
+			return null;
+		}
+	}
+
+	private async getTvmazeIdForImdb(imdbId: string): Promise<number | null> {
+		const cacheKey = `tvmaze_lookup_${imdbId}`;
+		const cached = await this.cache.getWithMetadata(cacheKey);
+		if (cached) {
+			const id = (cached.data as { id?: number | null } | null)?.id ?? null;
+			const maxAge = id
+				? this.CACHE_DURATIONS.ID_MAPPING
+				: this.CACHE_DURATIONS.ID_MAPPING_MISS;
+			if (!this.isCacheExpired(cached.updatedAt, maxAge)) return id;
+		}
+
+		const response = await axios.get(
+			`${MetadataCacheService.TVMAZE_BASE}/lookup/shows?imdb=${encodeURIComponent(imdbId)}`,
+			{ validateStatus: (status: number) => status === 200 || status === 404 }
+		);
+		const id =
+			response.status === 200 && typeof response.data?.id === 'number'
+				? response.data.id
+				: null;
+		await this.store(cacheKey, 'tvmaze_lookup', { id });
+		return id;
+	}
+
+	/**
+	 * Trakt's best person match for a name, cached: a show-details page asks this
+	 * for up to fifteen cast members at once.
+	 */
+	async searchTraktPerson(name: string): Promise<any | null> {
+		const clientId = this.traktClientId;
+		if (!clientId) return null;
+		const url = `https://api.trakt.tv/search/person?query=${encodeURIComponent(name)}`;
+		const data = await this.fetchWithCache<any[]>(
+			url,
+			`trakt_search_person_${name}`,
+			'trakt_search_person',
+			{ headers: this.traktHeaders(clientId) },
+			this.CACHE_DURATIONS.PERSON
+		);
+		return Array.isArray(data) ? (data[0]?.person ?? null) : null;
+	}
+
+	/**
 	 * Search Trakt with caching
 	 */
 	async searchTrakt(query: string, type?: 'movie' | 'show'): Promise<any> {
@@ -441,6 +611,45 @@ export class MetadataCacheService {
 			this.CACHE_DURATIONS.SEARCH
 		);
 	}
+}
+
+/**
+ * The fields of a TVmaze show DMM reads. The full payload repeats every season's
+ * network, images and links, and the cache table is read whole.
+ */
+function slimTvmazeShow(data: any) {
+	if (!data || typeof data !== 'object') return data;
+	const embedded = data._embedded ?? {};
+	const pickEpisode = (episode: any) =>
+		episode
+			? {
+					season: episode.season,
+					number: episode.number,
+					name: episode.name,
+					airdate: episode.airdate,
+					airstamp: episode.airstamp,
+				}
+			: undefined;
+	return {
+		id: data.id,
+		name: data.name,
+		status: data.status,
+		premiered: data.premiered,
+		ended: data.ended,
+		externals: data.externals,
+		_embedded: {
+			seasons: Array.isArray(embedded.seasons)
+				? embedded.seasons.map((season: any) => ({
+						number: season?.number,
+						episodeOrder: season?.episodeOrder,
+						premiereDate: season?.premiereDate,
+						endDate: season?.endDate,
+					}))
+				: [],
+			nextepisode: pickEpisode(embedded.nextepisode),
+			previousepisode: pickEpisode(embedded.previousepisode),
+		},
+	};
 }
 
 // Create singleton instance

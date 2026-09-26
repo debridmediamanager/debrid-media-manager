@@ -1,0 +1,19 @@
+{
+	"after_credits": false,
+	"available_translations": ["en"],
+	"comment_count": 0,
+	"during_credits": false,
+	"episode_type": "standard",
+	"first_aired": "2026-09-29T03:00:00.000Z",
+	"ids": { "trakt": 14335941, "tvdb": null, "imdb": null, "tmdb": 7578683, "tvrage": null },
+	"number": 107,
+	"number_abs": 4567,
+	"original_title": "September 28, 2026",
+	"overview": null,
+	"rating": 0.0,
+	"runtime": 35,
+	"season": 31,
+	"title": "September 28, 2026",
+	"updated_at": "2026-09-25T14:58:14.000Z",
+	"votes": 0
+}

@@ -1,0 +1,494 @@
+{
+	"_embedded": {
+		"seasons": [
+			{
+				"id": 9439,
+				"url": "https://www.tvmaze.com/seasons/9439/the-great-british-bake-off-season-1",
+				"number": 1,
+				"name": "",
+				"episodeOrder": 6,
+				"premiereDate": "2010-08-17",
+				"endDate": "2011-04-20",
+				"network": {
+					"id": 12,
+					"name": "BBC One",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.bbc.co.uk/bbcone"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": "<p>In the first series, the search began for the country's top home baker. Ten passionate cooks travelled the country, baking cakes in the Cotswolds, biscuits in Scotland, bread in Sandwich, puddings in Bakewell and pastry in Cornwall before a grand final in London. The series also traced the history of British baking: visiting local baking landmarks and discovering why we bake what we bake today.</p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/9439" } }
+			},
+			{
+				"id": 9440,
+				"url": "https://www.tvmaze.com/seasons/9440/the-great-british-bake-off-season-2",
+				"number": 2,
+				"name": "",
+				"episodeOrder": 8,
+				"premiereDate": "2011-08-16",
+				"endDate": "2011-10-20",
+				"network": {
+					"id": 12,
+					"name": "BBC One",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.bbc.co.uk/bbcone"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": "<p>Over eight weeks, 12 of the Britain's best amateur bakers will show-off their cake-baking, pastry- and bread-making and patisserie skills as they are challenged to make everything from the perfect tarte au citron to towers of macaroons, and from iced fingers to family pies. But only one can become Britain's Best Amateur Baker. That's the icing on the cake! All the challenges are devised and judged by legendary cookery writer and baker Mary Berry and acclaimed Master Baker Paul Hollywood.</p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/9440" } }
+			},
+			{
+				"id": 9441,
+				"url": "https://www.tvmaze.com/seasons/9441/the-great-british-bake-off-season-3",
+				"number": 3,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2012-08-14",
+				"endDate": "2013-03-26",
+				"network": {
+					"id": 12,
+					"name": "BBC One",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.bbc.co.uk/bbcone"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": "<p>Over ten weeks, twelve of the country's best amateur bakers face challenges offered up by the King and Queen of baking, legendary cookery writer Mary Berry and Master Baker Paul Hollywood. Giving the bakers support whilst licking their mixing bowls clean are Mel Giedroyc and Sue Perkins who continue to host the proceedings. The Great British Bake Off returned for a third series with cakes, pies, breads and the odd kitchen disaster.</p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/9441" } }
+			},
+			{
+				"id": 9442,
+				"url": "https://www.tvmaze.com/seasons/9442/the-great-british-bake-off-season-4",
+				"number": 4,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2013-08-20",
+				"endDate": "2013-12-17",
+				"network": {
+					"id": 12,
+					"name": "BBC One",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.bbc.co.uk/bbcone"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": "<p>For the first time ever, the tent welcomes a baker's dozen to do baking battle. Mel Giedroyc and Sue Perkins coax them through their baking trials, all the while under the scrutiny of the judges Mary Berry and Paul Hollywood. But with 13 bakers, at any time Mary and Paul may decide to lose not one but TWO bakers.</p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/9442" } }
+			},
+			{
+				"id": 9443,
+				"url": "https://www.tvmaze.com/seasons/9443/the-great-british-bake-off-season-5",
+				"number": 5,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2014-08-06",
+				"endDate": "2014-12-16",
+				"network": {
+					"id": 12,
+					"name": "BBC One",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.bbc.co.uk/bbcone"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": "<p>The Bake Off was back for another year, welcoming the tent's youngest-ever baker and the oldest. All 12 bakers were challenged on their baking skills from every angle by judges Mary Berry and Paul Hollywood, all the while helped – or hindered – by Mel Giedroyc and Sue Perkins. 30 challenges, 12 brand-new bakers, two judges and two presenters, but there could only be one winner.</p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/9443" } }
+			},
+			{
+				"id": 9444,
+				"url": "https://www.tvmaze.com/seasons/9444/the-great-british-bake-off-season-6",
+				"number": 6,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2015-08-05",
+				"endDate": "2015-12-17",
+				"network": {
+					"id": 12,
+					"name": "BBC One",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.bbc.co.uk/bbcone"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": "<p>Once again 12 new bakers don their aprons and head for the iconic tent in the heart of the British Countryside. Judges Mary Berry &amp; Paul Hollywood have created 30 new challenges that will test their baking prowess, creativity and skill in a bid to find the country's best amateur baker. From Victorian classics to high end patisserie, chocolate sculptures to everyday staples the bakers will need a cool head and even colder hands to make it to the final. With them every step of the way are Mel Giedroyc and Sue Perkins ready to lend a hand or a shoulder to cry on.</p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/9444" } }
+			},
+			{
+				"id": 50835,
+				"url": "https://www.tvmaze.com/seasons/50835/the-great-british-bake-off-season-7",
+				"number": 7,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2016-08-24",
+				"endDate": "2016-12-26",
+				"network": {
+					"id": 12,
+					"name": "BBC One",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.bbc.co.uk/bbcone"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": "<p>From bread to biscuits, high-end patisserie to store cupboard classics and beautiful botanical creations. The bakers will have to whisk, knead, ice, roll, beat and bake week after week to make it to the final.</p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/50835" } }
+			},
+			{
+				"id": 53375,
+				"url": "https://www.tvmaze.com/seasons/53375/the-great-british-bake-off-season-8",
+				"number": 8,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2017-08-29",
+				"endDate": "2018-01-01",
+				"network": {
+					"id": 45,
+					"name": "Channel 4",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.channel4.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": "<p>Bake Off is back. Over the next 10 weeks, 12 of the best amateur bakers in Britain will whisk, knead, ice, beat and bake their way through classic British cakes, perfect patisserie, Italian delights, sticky caramel constructions and elaborate layered puddings. All 12 will be hoping to impress with their skill, creativity, knowledge and passion to clinch the Bake Off Crown. Each of the 30 new challenges have been carefully designed by judges Paul Hollywood and Prue Leith to reveal just who is a star baker. But it's not just a new experience for the bakers. Also joining the tent for the first time are Sandi Toksvig and Noel Fielding, who will be with the bakers every step of the way, ready with a pertinent pep talk, a helpful hand or just a sympathetic shoulder to cry on.</p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/53375" } }
+			},
+			{
+				"id": 87641,
+				"url": "https://www.tvmaze.com/seasons/87641/the-great-british-bake-off-season-9",
+				"number": 9,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2018-08-28",
+				"endDate": "2019-01-01",
+				"network": {
+					"id": 45,
+					"name": "Channel 4",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.channel4.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": "<p>Bake Off is back. The white tent awaits 12 of the nation's best amateur bakers, as they take their place under the critical eye of judges Paul Hollywood and Prue Leith with Noel Fielding and Sandi Toksvig returning for presenting duties. </p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/87641" } }
+			},
+			{
+				"id": 99099,
+				"url": "https://www.tvmaze.com/seasons/99099/the-great-british-bake-off-season-10",
+				"number": 10,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2019-08-27",
+				"endDate": "2020-01-01",
+				"network": {
+					"id": 45,
+					"name": "Channel 4",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.channel4.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/99099" } }
+			},
+			{
+				"id": 107787,
+				"url": "https://www.tvmaze.com/seasons/107787/the-great-british-bake-off-season-11",
+				"number": 11,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2020-09-22",
+				"endDate": "2021-01-03",
+				"network": {
+					"id": 45,
+					"name": "Channel 4",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.channel4.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": "<p>Matt Lucas takes over from Sandi Toksvig as host for the 2020 series, alongside returning presenter Noel Fielding and regular judges Paul Hollywood and Prue Leith. The 12 contestants for this series have been required to form a social bubble due to Covid-19 lockdown restrictions.</p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/107787" } }
+			},
+			{
+				"id": 128441,
+				"url": "https://www.tvmaze.com/seasons/128441/the-great-british-bake-off-season-12",
+				"number": 12,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2021-09-21",
+				"endDate": "2022-01-01",
+				"network": {
+					"id": 45,
+					"name": "Channel 4",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.channel4.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/128441" } }
+			},
+			{
+				"id": 142072,
+				"url": "https://www.tvmaze.com/seasons/142072/the-great-british-bake-off-season-13",
+				"number": 13,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2022-09-13",
+				"endDate": "2023-01-01",
+				"network": {
+					"id": 45,
+					"name": "Channel 4",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.channel4.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/142072" } }
+			},
+			{
+				"id": 149926,
+				"url": "https://www.tvmaze.com/seasons/149926/the-great-british-bake-off-season-14",
+				"number": 14,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2023-09-26",
+				"endDate": "2024-01-01",
+				"network": {
+					"id": 45,
+					"name": "Channel 4",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.channel4.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/584/1462273.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/584/1462273.jpg"
+				},
+				"summary": "<p>New series. New bakers. New host. </p><p>Join Paul, Prue, Noel and Alison in the Tent of Dreams as The Great British Bake Off returns to our screens.</p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/149926" } }
+			},
+			{
+				"id": 174616,
+				"url": "https://www.tvmaze.com/seasons/174616/the-great-british-bake-off-season-15",
+				"number": 15,
+				"name": "",
+				"episodeOrder": null,
+				"premiereDate": "2024-09-24",
+				"endDate": "2025-01-03",
+				"network": {
+					"id": 45,
+					"name": "Channel 4",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.channel4.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/584/1462272.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/584/1462272.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/174616" } }
+			},
+			{
+				"id": 189647,
+				"url": "https://www.tvmaze.com/seasons/189647/the-great-british-bake-off-season-16",
+				"number": 16,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2025-09-02",
+				"endDate": "2026-01-01",
+				"network": {
+					"id": 45,
+					"name": "Channel 4",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.channel4.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/585/1464905.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/585/1464905.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/189647" } }
+			},
+			{
+				"id": 204237,
+				"url": "https://www.tvmaze.com/seasons/204237/the-great-british-bake-off-season-17",
+				"number": 17,
+				"name": "",
+				"episodeOrder": 10,
+				"premiereDate": "2026-09-22",
+				"endDate": "2026-10-06",
+				"network": {
+					"id": 45,
+					"name": "Channel 4",
+					"country": {
+						"name": "United Kingdom",
+						"code": "GB",
+						"timezone": "Europe/London"
+					},
+					"officialSite": "https://www.channel4.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/642/1606558.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/642/1606558.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/204237" } }
+			}
+		],
+		"nextepisode": {
+			"id": 3765531,
+			"url": "https://www.tvmaze.com/episodes/3765531/the-great-british-bake-off-17x02-biscuit-week",
+			"name": "Biscuit Week",
+			"season": 17,
+			"number": 2,
+			"type": "regular",
+			"airdate": "2026-09-29",
+			"airtime": "20:00",
+			"airstamp": "2026-09-29T19:00:00+00:00",
+			"runtime": 90,
+			"rating": { "average": null },
+			"image": null,
+			"summary": "<p>It's Biscuit Week and there's a trip Stateside for the bakers in the Signature as they make American-style cookies. In the Technical, it's a journey of a different kind as they travel back in time for a nostalgic classic. But nothing is quite as it seems and they must rely on their taste alone to recreate this beloved bake. And in the Showstopper, a visually striking biscuit mosaic tests the bakers' artistic flair and also gives them the chance to create something that's close to their hearts.</p>",
+			"_links": {
+				"self": { "href": "https://api.tvmaze.com/episodes/3765531" },
+				"show": {
+					"href": "https://api.tvmaze.com/shows/2950",
+					"name": "The Great British Bake Off"
+				}
+			}
+		},
+		"previousepisode": {
+			"id": 3744890,
+			"url": "https://www.tvmaze.com/episodes/3744890/the-great-british-bake-off-17x01-cake-week",
+			"name": "Cake Week",
+			"season": 17,
+			"number": 1,
+			"type": "regular",
+			"airdate": "2026-09-22",
+			"airtime": "20:00",
+			"airstamp": "2026-09-22T19:00:00+00:00",
+			"runtime": 90,
+			"rating": { "average": 8 },
+			"image": {
+				"medium": "https://static.tvmaze.com/uploads/images/medium_landscape/642/1605546.jpg",
+				"original": "https://static.tvmaze.com/uploads/images/original_untouched/642/1605546.jpg"
+			},
+			"summary": "<p>The bunting has been hung and the tent is up, which can only mean one thing - Alison Hammond and Noel Fielding are back to guide a fresh batch of amateur bakers through 10 weeks of challenges set by new judge Nigella Lawson and Bake Off veteran Paul Hollywood. As ever, it all begins with cake week, for which Nigella sets the contestants a stout cake signature, before they get artistic in the technical and serve up a self-portrait showstopper.</p>",
+			"_links": {
+				"self": { "href": "https://api.tvmaze.com/episodes/3744890" },
+				"show": {
+					"href": "https://api.tvmaze.com/shows/2950",
+					"name": "The Great British Bake Off"
+				}
+			}
+		}
+	},
+	"_links": {
+		"self": { "href": "https://api.tvmaze.com/shows/2950" },
+		"previousepisode": {
+			"href": "https://api.tvmaze.com/episodes/3744890",
+			"name": "Cake Week"
+		},
+		"nextepisode": { "href": "https://api.tvmaze.com/episodes/3765531", "name": "Biscuit Week" }
+	},
+	"averageRuntime": 71,
+	"dvdCountry": null,
+	"ended": null,
+	"externals": { "tvrage": 26332, "thetvdb": 184871, "imdb": "tt1877368" },
+	"genres": ["Food"],
+	"id": 2950,
+	"image": {
+		"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/642/1606557.jpg",
+		"original": "https://static.tvmaze.com/uploads/images/original_untouched/642/1606557.jpg"
+	},
+	"language": "English",
+	"name": "The Great British Bake Off",
+	"network": {
+		"id": 45,
+		"name": "Channel 4",
+		"country": { "name": "United Kingdom", "code": "GB", "timezone": "Europe/London" },
+		"officialSite": "https://www.channel4.com/"
+	},
+	"officialSite": "https://www.channel4.com/programmes/the-great-british-bake-off",
+	"premiered": "2010-08-17",
+	"rating": { "average": 8 },
+	"runtime": null,
+	"schedule": { "time": "20:00", "days": ["Tuesday"] },
+	"status": "Running",
+	"summary": "<p>Over 10 weeks, 12 of the best amateur bakers in Britain will whisk, knead, ice, beat and bake their way through classic British cakes, perfect patisserie, Italian delights, sticky caramel constructions and elaborate layered puddings. All 12 will be hoping to impress with their skill, creativity, knowledge and passion to clinch the Bake Off Crown. Each of the 30 new challenges have been carefully designed by judges Paul Hollywood and Prue Leith to reveal just who is a star baker.</p>",
+	"type": "Reality",
+	"updated": 1790415629,
+	"url": "https://www.tvmaze.com/shows/2950/the-great-british-bake-off",
+	"webChannel": null,
+	"weight": 99
+}

@@ -7,12 +7,21 @@ import shawshankMdblist from '@/test/fixtures/metadata/mdblist-tt0111161-the-sha
 import breakingBadMdblist from '@/test/fixtures/metadata/mdblist-tt0903747-breaking-bad.json';
 import wednesdayMdblist from '@/test/fixtures/metadata/mdblist-tt13443470-wednesday.json';
 import thundermansMdblist from '@/test/fixtures/metadata/mdblist-tt37752275-clash-of-the-thundermans.json';
+import bakeOffOmdb from '@/test/fixtures/metadata/omdb-tt1877368-great-british-bake-off.json';
+import dailyShowTmdb from '@/test/fixtures/metadata/tmdb-tv-2224-the-daily-show.json';
+import bakeOffTmdb from '@/test/fixtures/metadata/tmdb-tv-34549-great-british-bake-off.json';
+import bakeOffTraktSeasons from '@/test/fixtures/metadata/trakt-seasons-tt1877368-great-british-bake-off.json';
+import bakeOffTvmaze from '@/test/fixtures/metadata/tvmaze-2950-great-british-bake-off.json';
 import {
 	RECENT_METADATA_TTL,
 	cinemetaReleaseSignals,
 	isMetadataStillMoving,
 	mdblistReleaseSignals,
 	metadataMaxAge,
+	omdbReleaseSignals,
+	tmdbTvReleaseSignals,
+	traktSeasonsReleaseSignals,
+	tvmazeReleaseSignals,
 } from '@/utils/metadataFreshness';
 import { describe, expect, it } from 'vitest';
 
@@ -149,5 +158,37 @@ describe('metadataMaxAge', () => {
 		);
 		// 0 is this cache's spelling of "permanent", not "already expired".
 		expect(metadataMaxAge(mdblistReleaseSignals(thundermansMdblist), 0, NOW)).toBe(0);
+	});
+});
+
+describe('show provider release signals, captured 2026-09-26', () => {
+	const CAPTURED = Date.parse('2026-09-26T12:00:00Z');
+
+	// Bake Off's series 17 is airing on Channel 4. TVmaze and OMDb know that; the
+	// TMDB and Trakt entries for tt1877368 are the BBC run, which ended in 2016.
+	it('keeps an airing show short-lived on TVmaze and OMDb', () => {
+		expect(metadataMaxAge(tvmazeReleaseSignals(bakeOffTvmaze), SEVEN_DAYS, CAPTURED)).toBe(
+			RECENT_METADATA_TTL
+		);
+		expect(metadataMaxAge(omdbReleaseSignals(bakeOffOmdb), SEVEN_DAYS, CAPTURED)).toBe(
+			RECENT_METADATA_TTL
+		);
+	});
+
+	it('lets an entry whose run ended in 2016 keep the long lifetime', () => {
+		expect(metadataMaxAge(tmdbTvReleaseSignals(bakeOffTmdb), SEVEN_DAYS, CAPTURED)).toBe(
+			SEVEN_DAYS
+		);
+		expect(
+			metadataMaxAge(traktSeasonsReleaseSignals(bakeOffTraktSeasons), SEVEN_DAYS, CAPTURED)
+		).toBe(SEVEN_DAYS);
+	});
+
+	// TMDB still says "Returning Series" for The Daily Show and names an episode
+	// two days out, so its row must be refetched in hours.
+	it('reads TMDB’s next episode as a show still moving', () => {
+		expect(metadataMaxAge(tmdbTvReleaseSignals(dailyShowTmdb), SEVEN_DAYS, CAPTURED)).toBe(
+			RECENT_METADATA_TTL
+		);
 	});
 });

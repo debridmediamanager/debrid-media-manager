@@ -1,0 +1,834 @@
+[
+	{
+		"ids": {
+			"plex": { "guid": "602e69befdd281002cdfaaed" },
+			"tmdb": 6869,
+			"tvdb": 18724,
+			"trakt": 7267
+		},
+		"title": "Specials",
+		"votes": 2,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/267/posters/medium/55699a340f.jpg.webp"
+			]
+		},
+		"number": 0,
+		"rating": 9.5,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:17.000Z",
+		"first_aired": "1999-06-02T03:00:00.000Z",
+		"episode_count": 100,
+		"total_runtime": 3159,
+		"aired_episodes": 90,
+		"original_title": "Specials"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e6986fdd281002cdfa1b0" },
+			"tmdb": 6853,
+			"tvdb": 1953,
+			"trakt": 7268
+		},
+		"title": "Season 1",
+		"votes": 2,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/268/posters/medium/2a36af3f18.jpg.webp"
+			]
+		},
+		"number": 1,
+		"rating": 4,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:18.000Z",
+		"first_aired": "1996-07-23T03:00:00.000Z",
+		"episode_count": 61,
+		"total_runtime": 1698,
+		"aired_episodes": 61,
+		"original_title": "Season 1"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69bffdd281002cdfaaef" },
+			"tmdb": 6854,
+			"tvdb": 1955,
+			"trakt": 7269
+		},
+		"title": "Season 2",
+		"votes": 1,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/269/posters/medium/90fa9bd9d5.jpg.webp"
+			]
+		},
+		"number": 2,
+		"rating": 7,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:18.000Z",
+		"first_aired": "1997-01-07T04:00:00.000Z",
+		"episode_count": 160,
+		"total_runtime": 4826,
+		"aired_episodes": 160,
+		"original_title": "Season 2"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e6988fdd281002cdfa23a" },
+			"tmdb": 6855,
+			"tvdb": 16874,
+			"trakt": 7270
+		},
+		"title": "Season 3",
+		"votes": 1,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/270/posters/medium/203ba09c93.jpg.webp"
+			]
+		},
+		"number": 3,
+		"rating": 7,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:18.000Z",
+		"first_aired": "1998-03-10T04:00:00.000Z",
+		"episode_count": 138,
+		"total_runtime": 4301,
+		"aired_episodes": 138,
+		"original_title": "Season 3"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69bffdd281002cdfaaf1" },
+			"tmdb": 6856,
+			"tvdb": 1956,
+			"trakt": 7271
+		},
+		"title": "Season 4",
+		"votes": 5,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/271/posters/medium/e6484c4834.jpg.webp"
+			]
+		},
+		"number": 4,
+		"rating": 8.199999809265137,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:18.000Z",
+		"first_aired": "1999-01-12T04:00:00.000Z",
+		"episode_count": 159,
+		"total_runtime": 3615,
+		"aired_episodes": 159,
+		"original_title": "Season 4"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69bffdd281002cdfaaf2" },
+			"tmdb": 6857,
+			"tvdb": 1957,
+			"trakt": 7272
+		},
+		"title": "Season 5",
+		"votes": 3,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/272/posters/medium/deb1593e38.jpg.webp"
+			]
+		},
+		"number": 5,
+		"rating": 8.666669845581055,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:19.000Z",
+		"first_aired": "2000-01-05T04:00:00.000Z",
+		"episode_count": 166,
+		"total_runtime": 5810,
+		"aired_episodes": 166,
+		"original_title": "Season 5"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e698dfdd281002cdfa318" },
+			"tmdb": 6858,
+			"tvdb": 1958,
+			"trakt": 7273
+		},
+		"title": "Season 6",
+		"votes": 3,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/273/posters/medium/941bd3a842.jpg.webp"
+			]
+		},
+		"number": 6,
+		"rating": 8.333333015441895,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:19.000Z",
+		"first_aired": "2001-01-10T04:00:00.000Z",
+		"episode_count": 158,
+		"total_runtime": 5495,
+		"aired_episodes": 157,
+		"original_title": "Season 6"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69bffdd281002cdfaaf4" },
+			"tmdb": 6859,
+			"tvdb": 1959,
+			"trakt": 7274
+		},
+		"title": "Season 7",
+		"votes": 5,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/274/posters/medium/2ebec7f3ca.jpg.webp"
+			]
+		},
+		"number": 7,
+		"rating": 8.800000190734863,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:20.000Z",
+		"first_aired": "2002-01-09T04:00:00.000Z",
+		"episode_count": 160,
+		"total_runtime": 5600,
+		"aired_episodes": 160,
+		"original_title": "Season 7"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e6992fdd281002cdfa3b1" },
+			"tmdb": 6860,
+			"tvdb": 1960,
+			"trakt": 7275
+		},
+		"title": "Season 8",
+		"votes": 5,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/275/posters/medium/bb34c51e39.jpg.webp"
+			]
+		},
+		"number": 8,
+		"rating": 9.199999809265137,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:20.000Z",
+		"first_aired": "2003-01-08T04:00:00.000Z",
+		"episode_count": 161,
+		"total_runtime": 5635,
+		"aired_episodes": 161,
+		"original_title": "Season 8"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e6996fdd281002cdfa3fd" },
+			"tmdb": 6861,
+			"tvdb": 1961,
+			"trakt": 7276
+		},
+		"title": "Season 9",
+		"votes": 4,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/276/posters/medium/805cff3fd9.jpg.webp"
+			]
+		},
+		"number": 9,
+		"rating": 7.25,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:20.000Z",
+		"first_aired": "2004-01-07T04:00:00.000Z",
+		"episode_count": 161,
+		"total_runtime": 5635,
+		"aired_episodes": 161,
+		"original_title": "Season 9"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e699afdd281002cdfa59a" },
+			"tmdb": 6862,
+			"tvdb": 1954,
+			"trakt": 7277
+		},
+		"title": "Season 10",
+		"votes": 5,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/277/posters/medium/90cf3b5501.jpg.webp"
+			]
+		},
+		"number": 10,
+		"rating": 8.800000190734863,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:21.000Z",
+		"first_aired": "2005-01-05T04:00:00.000Z",
+		"episode_count": 159,
+		"total_runtime": 5565,
+		"aired_episodes": 159,
+		"original_title": "Season 10"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e699cfdd281002cdfa77a" },
+			"tmdb": 6863,
+			"tvdb": 16545,
+			"trakt": 7278
+		},
+		"title": "Season 11",
+		"votes": 1100,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/278/posters/medium/aeaa915841.jpg.webp"
+			]
+		},
+		"number": 11,
+		"rating": 8.001818656921387,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:21.000Z",
+		"first_aired": "2006-01-05T04:00:00.000Z",
+		"episode_count": 161,
+		"total_runtime": 5635,
+		"aired_episodes": 161,
+		"original_title": "Season 11"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69c0fdd281002cdfaaf9" },
+			"tmdb": 6864,
+			"tvdb": 16976,
+			"trakt": 7279
+		},
+		"title": "Season 12",
+		"votes": 1186,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/279/posters/medium/1a71ac7800.jpg.webp"
+			]
+		},
+		"number": 12,
+		"rating": 7.004215717315674,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:21.000Z",
+		"first_aired": "2007-01-09T04:00:00.000Z",
+		"episode_count": 138,
+		"total_runtime": 4830,
+		"aired_episodes": 138,
+		"original_title": "Season 12"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69a3fdd281002cdfa8ad" },
+			"tmdb": 6865,
+			"tvdb": 30126,
+			"trakt": 7280
+		},
+		"title": "Season 13",
+		"votes": 1102,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/280/posters/medium/6499dc6c55.jpg.webp"
+			]
+		},
+		"number": 13,
+		"rating": 7.004537105560303,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:22.000Z",
+		"first_aired": "2008-01-08T04:00:00.000Z",
+		"episode_count": 160,
+		"total_runtime": 5600,
+		"aired_episodes": 160,
+		"original_title": "Season 13"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69a5fdd281002cdfa8f9" },
+			"tmdb": 6866,
+			"tvdb": 38962,
+			"trakt": 7281
+		},
+		"title": "Season 14",
+		"votes": 1303,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/281/posters/medium/acd47cb5c4.jpg.webp"
+			]
+		},
+		"number": 14,
+		"rating": 7.0038371086120605,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:22.000Z",
+		"first_aired": "2009-01-06T04:00:00.000Z",
+		"episode_count": 161,
+		"total_runtime": 5635,
+		"aired_episodes": 161,
+		"original_title": "Season 14"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69a8fdd281002cdfa946" },
+			"tmdb": 6867,
+			"tvdb": 167091,
+			"trakt": 7282
+		},
+		"title": "Season 15",
+		"votes": 1151,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/282/posters/medium/7b2d15543d.jpg.webp"
+			]
+		},
+		"number": 15,
+		"rating": 7.010425567626953,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:23.000Z",
+		"first_aired": "2010-01-05T04:00:00.000Z",
+		"episode_count": 161,
+		"total_runtime": 5635,
+		"aired_episodes": 161,
+		"original_title": "Season 15"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69abfdd281002cdfa9a2" },
+			"tmdb": 6868,
+			"tvdb": 375481,
+			"trakt": 7283
+		},
+		"title": "Season 16",
+		"votes": 1130,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/283/posters/medium/6c26cefb31.jpg.webp"
+			]
+		},
+		"number": 16,
+		"rating": 8.00531005859375,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:23.000Z",
+		"first_aired": "2011-01-04T04:00:00.000Z",
+		"episode_count": 124,
+		"total_runtime": 4340,
+		"aired_episodes": 124,
+		"original_title": "Season 16"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69acfdd281002cdfa9f1" },
+			"tmdb": 6870,
+			"tvdb": 475883,
+			"trakt": 7284
+		},
+		"title": "Season 17",
+		"votes": 1130,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/284/posters/medium/9d64f29f7c.jpg.webp"
+			]
+		},
+		"number": 17,
+		"rating": 8.007080078125,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:24.000Z",
+		"first_aired": "2011-10-04T03:00:00.000Z",
+		"episode_count": 157,
+		"total_runtime": 5495,
+		"aired_episodes": 157,
+		"original_title": "Season 17"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69affdd281002cdfaa3e" },
+			"tmdb": 6871,
+			"tvdb": 502390,
+			"trakt": 7285
+		},
+		"title": "Season 18",
+		"votes": 1169,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/285/posters/medium/4eaeea1668.jpg.webp"
+			]
+		},
+		"number": 18,
+		"rating": 9.001710891723633,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:25.000Z",
+		"first_aired": "2012-10-02T03:00:00.000Z",
+		"episode_count": 158,
+		"total_runtime": 5530,
+		"aired_episodes": 158,
+		"original_title": "Season 18"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69b1fdd281002cdfaa89" },
+			"tmdb": 6872,
+			"tvdb": 529946,
+			"trakt": 7286
+		},
+		"title": "Season 19",
+		"votes": 1268,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/007/286/posters/medium/c0c841ce13.jpg.webp"
+			]
+		},
+		"number": 19,
+		"rating": 8.99605655670166,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:25.000Z",
+		"first_aired": "2013-10-01T03:00:00.000Z",
+		"episode_count": 159,
+		"total_runtime": 5565,
+		"aired_episodes": 159,
+		"original_title": "Season 19"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69b3fdd281002cdfaad4" },
+			"tmdb": 62883,
+			"tvdb": 597411,
+			"trakt": 62107
+		},
+		"title": "Season 20",
+		"votes": 1152,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/062/107/posters/medium/c2599e21c1.jpg.webp"
+			]
+		},
+		"number": 20,
+		"rating": 8.995659828186035,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:26.000Z",
+		"first_aired": "2014-09-30T03:00:00.000Z",
+		"episode_count": 142,
+		"total_runtime": 4970,
+		"aired_episodes": 142,
+		"original_title": "Season 20"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69b5fdd281002cdfaad8" },
+			"tmdb": 69386,
+			"tvdb": 637089,
+			"trakt": 114293
+		},
+		"title": "Season 21",
+		"votes": 33,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/114/293/posters/medium/5b2fa69c99.jpg.webp"
+			]
+		},
+		"number": 21,
+		"rating": 6.030300140380859,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:26.000Z",
+		"first_aired": "2015-09-29T03:00:00.000Z",
+		"episode_count": 161,
+		"total_runtime": 5635,
+		"aired_episodes": 161,
+		"original_title": "Season 21"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69b6fdd281002cdfaade" },
+			"tmdb": 82654,
+			"tvdb": 680246,
+			"trakt": 132054
+		},
+		"title": "Season 22",
+		"votes": 21,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/132/054/posters/medium/9c5deccc74.jpg.webp"
+			]
+		},
+		"number": 22,
+		"rating": 6.714290142059326,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:27.000Z",
+		"first_aired": "2016-10-04T03:00:00.000Z",
+		"episode_count": 163,
+		"total_runtime": 5705,
+		"aired_episodes": 163,
+		"original_title": "Season 22"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69b8fdd281002cdfaae3" },
+			"tmdb": 93178,
+			"tvdb": 724814,
+			"trakt": 149075
+		},
+		"title": "Season 23",
+		"votes": 17,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/149/075/posters/medium/9c5deccc74.jpg.webp"
+			]
+		},
+		"number": 23,
+		"rating": 6,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:28.000Z",
+		"first_aired": "2017-10-03T03:00:00.000Z",
+		"episode_count": 157,
+		"total_runtime": 5495,
+		"aired_episodes": 157,
+		"original_title": "Season 23"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69bafdd281002cdfaae5" },
+			"tmdb": 110826,
+			"tvdb": 71256,
+			"trakt": 171957
+		},
+		"title": "Season 24",
+		"votes": 10,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/171/957/posters/medium/9c5deccc74.jpg.webp"
+			]
+		},
+		"number": 24,
+		"rating": 7.900000095367432,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:28.000Z",
+		"first_aired": "2018-10-02T03:00:00.000Z",
+		"episode_count": 158,
+		"total_runtime": 5511,
+		"aired_episodes": 158,
+		"original_title": "Season 24"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69bbfdd281002cdfaae7" },
+			"tmdb": 136086,
+			"tvdb": 826085,
+			"trakt": 199208
+		},
+		"title": "Season 25",
+		"votes": 6,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/199/208/posters/medium/9c5deccc74.jpg.webp"
+			]
+		},
+		"number": 25,
+		"rating": 7,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:29.000Z",
+		"first_aired": "2019-10-01T03:00:00.000Z",
+		"episode_count": 160,
+		"total_runtime": 5585,
+		"aired_episodes": 160,
+		"original_title": "Season 25"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e69bdfdd281002cdfaae9" },
+			"tmdb": 168511,
+			"tvdb": 1868974,
+			"trakt": 229365
+		},
+		"title": "Season 26",
+		"votes": 4,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/229/365/posters/medium/95ed326f41.jpg.webp"
+			]
+		},
+		"number": 26,
+		"rating": 7,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:29.000Z",
+		"first_aired": "2020-09-29T03:00:00.000Z",
+		"episode_count": 116,
+		"total_runtime": 4070,
+		"aired_episodes": 116,
+		"original_title": "Season 26"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "60cef989094d2d002c4b1168" },
+			"tmdb": 202361,
+			"tvdb": 1935840,
+			"trakt": 264324
+		},
+		"title": "Season 27",
+		"votes": 5,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/264/324/posters/medium/339e689c76.jpg.webp"
+			]
+		},
+		"number": 27,
+		"rating": 6.599999904632568,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:30.000Z",
+		"first_aired": "2021-09-28T03:00:00.000Z",
+		"episode_count": 140,
+		"total_runtime": 4902,
+		"aired_episodes": 140,
+		"original_title": "Season 27"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "6339b626d1ce0fd224352b16" },
+			"tmdb": 310853,
+			"tvdb": 2003638,
+			"trakt": 304565
+		},
+		"title": "Season 28",
+		"votes": 6,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/304/565/posters/medium/c362e84eca.jpg.webp"
+			]
+		},
+		"number": 28,
+		"rating": 8.333330154418945,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:30.000Z",
+		"first_aired": "2022-10-04T03:00:00.000Z",
+		"episode_count": 122,
+		"total_runtime": 3710,
+		"aired_episodes": 122,
+		"original_title": "Season 28"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "6396accfd5850784dc3d3936" },
+			"tmdb": 375682,
+			"tvdb": 2095115,
+			"trakt": 355329
+		},
+		"title": "Season 29",
+		"votes": 8,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/355/329/posters/medium/58d07f5610.jpg.webp"
+			]
+		},
+		"number": 29,
+		"rating": 8.5,
+		"network": null,
+		"overview": "Following the departure of host Trevor Noah at the end of 2022, a series of guest hosts from both within and outside \"The Daily Show's\" correspondents roster filled the program's anchor chair throughout 2023, each sitting in for a one-week assignment.  On January 24, 2024, it was announced that Jon Stewart would return to the show he had hosted from 1999 to 2015.  This time around, in addition to serving as an executive producer, Stewart will host Monday episodes through at least the end of the 2024 U.S. election cycle.\n\nFrom Tuesdays through Thursdays, members of  \"The Best F#@king News Team\" will rotate hosting duties.",
+		"updated_at": "2026-09-26T08:45:31.000Z",
+		"first_aired": "2024-02-13T04:00:00.000Z",
+		"episode_count": 138,
+		"total_runtime": 4050,
+		"aired_episodes": 138,
+		"original_title": "Season 29"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "6682f56377a9ca6e4d671ac1" },
+			"tmdb": 433278,
+			"tvdb": 2135050,
+			"trakt": 435583
+		},
+		"title": "Season 30",
+		"votes": 9,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/435/583/posters/medium/38fd71b9ab.jpg.webp"
+			]
+		},
+		"number": 30,
+		"rating": 9,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:32.000Z",
+		"first_aired": "2025-01-07T04:00:00.000Z",
+		"episode_count": 142,
+		"total_runtime": 4928,
+		"aired_episodes": 142,
+		"original_title": "Season 30"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "63a36e32a2ca6896359ed250" },
+			"tmdb": 486161,
+			"tvdb": 2200637,
+			"trakt": 500673
+		},
+		"title": "Season 31",
+		"votes": 7,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/500/673/posters/medium/075c8c9c79.jpg.webp"
+			]
+		},
+		"number": 31,
+		"rating": 7.714285850524902,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:45:32.000Z",
+		"first_aired": "2026-01-06T04:00:00.000Z",
+		"episode_count": 122,
+		"total_runtime": 3853,
+		"aired_episodes": 106,
+		"original_title": "Season 31"
+	}
+]

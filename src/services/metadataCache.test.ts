@@ -233,7 +233,20 @@ describe('MetadataCacheService API helpers', () => {
 		expect(tmdbMovieCall[2]).toBe('tmdb_movie');
 		expect(tmdbMovieCall[4]).toBe(2592000000);
 		expect(tmdbTvCall[2]).toBe('tmdb_tv');
-		expect(tmdbTvCall[4]).toBe(604800000);
+		// A show's lifetime is read off the row: a week once it has ended, hours
+		// while it still has an episode to air.
+		expect(
+			(tmdbTvCall[4] as (row: unknown) => number)({
+				status: 'Ended',
+				last_air_date: '2013-09-29',
+			})
+		).toBe(604800000);
+		expect(
+			(tmdbTvCall[4] as (row: unknown) => number)({
+				status: 'Returning Series',
+				next_episode_to_air: { air_date: new Date(Date.now() + 86400000).toISOString() },
+			})
+		).toBe(RECENT_METADATA_TTL);
 
 		// External ids are an immutable mapping and stay permanent on purpose.
 		expect(externalIdsCall[2]).toBe('tmdb_external_ids');
@@ -314,5 +327,209 @@ describe('Cinemeta cache lifetime follows the title', () => {
 		await service.getCinemetaSeries('tt13443470');
 
 		expect(axiosMocks.get).toHaveBeenCalledTimes(1);
+	});
+});
+
+describe('MetadataCacheService show providers', () => {
+	const day = 86400000;
+
+	it('resolves a TVmaze id once, then fetches the show with its embeds', async () => {
+		const cache = cacheFactory.current!;
+		cache.getWithMetadata.mockResolvedValue(null);
+		axiosMocks.get
+			.mockResolvedValueOnce({ status: 200, data: { id: 2950 } })
+			.mockResolvedValueOnce({
+				status: 200,
+				data: {
+					id: 2950,
+					name: 'The Great British Bake Off',
+					status: 'Running',
+					network: { name: 'Channel 4' },
+					_embedded: {
+						seasons: [
+							{
+								number: 17,
+								episodeOrder: 10,
+								premiereDate: '2026-09-22',
+								endDate: '2026-10-06',
+								image: { medium: 'x' },
+								network: { name: 'Channel 4' },
+							},
+						],
+						nextepisode: {
+							season: 17,
+							number: 2,
+							name: 'Biscuit Week',
+							airdate: '2026-09-29',
+							airstamp: '2026-09-29T19:00:00+00:00',
+							summary: '<p>long</p>',
+						},
+					},
+				},
+			});
+
+		const show = await new MetadataCacheService().getTvmazeShow('tt1877368');
+
+		expect(axiosMocks.get.mock.calls[0][0]).toBe(
+			'https://api.tvmaze.com/lookup/shows?imdb=tt1877368'
+		);
+		expect(axiosMocks.get.mock.calls[1][0]).toBe(
+			'https://api.tvmaze.com/shows/2950?embed[]=seasons&embed[]=nextepisode&embed[]=previousepisode'
+		);
+		expect(cache.set).toHaveBeenCalledWith('tvmaze_lookup_tt1877368', 'tvmaze_lookup', {
+			id: 2950,
+		});
+		// Only the fields the merge reads are stored.
+		expect(show._embedded.seasons).toEqual([
+			{ number: 17, episodeOrder: 10, premiereDate: '2026-09-22', endDate: '2026-10-06' },
+		]);
+		expect(show._embedded.nextepisode).not.toHaveProperty('summary');
+		expect(show).not.toHaveProperty('network');
+	});
+
+	it('remembers that TVmaze does not know an id, for a week', async () => {
+		const cache = cacheFactory.current!;
+		cache.getWithMetadata.mockResolvedValue(null);
+		axiosMocks.get.mockResolvedValueOnce({ status: 404, data: { name: 'Not Found' } });
+
+		expect(await new MetadataCacheService().getTvmazeShow('tt0000001')).toBeNull();
+		expect(cache.set).toHaveBeenCalledWith('tvmaze_lookup_tt0000001', 'tvmaze_lookup', {
+			id: null,
+		});
+
+		axiosMocks.get.mockClear();
+		cache.getWithMetadata.mockResolvedValue({
+			data: { id: null },
+			updatedAt: new Date(Date.now() - 6 * day),
+		});
+		expect(await new MetadataCacheService().getTvmazeShow('tt0000001')).toBeNull();
+		expect(axiosMocks.get).not.toHaveBeenCalled();
+
+		cache.getWithMetadata.mockResolvedValue({
+			data: { id: null },
+			updatedAt: new Date(Date.now() - 8 * day),
+		});
+		axiosMocks.get.mockResolvedValueOnce({ status: 404, data: {} });
+		await new MetadataCacheService().getTvmazeShow('tt0000001');
+		expect(axiosMocks.get).toHaveBeenCalledTimes(1);
+	});
+
+	it('keeps an airing TVmaze show for hours and an ended one for a week', async () => {
+		const cache = cacheFactory.current!;
+		const airing = {
+			status: 'Running',
+			_embedded: {
+				seasons: [],
+				nextepisode: { airdate: new Date(Date.now() + day).toISOString() },
+			},
+		};
+		const ended = {
+			status: 'Ended',
+			_embedded: {
+				seasons: [{ number: 8, premiereDate: '2015-09-28', endDate: '2022-12-08' }],
+			},
+		};
+		const rows: Record<string, any> = {
+			tvmaze_lookup_ttairing: { data: { id: 1 }, updatedAt: new Date() },
+			tvmaze_lookup_ttended: { data: { id: 2 }, updatedAt: new Date() },
+			tvmaze_show_1: { data: airing, updatedAt: new Date(Date.now() - 7 * 3600000) },
+			tvmaze_show_2: { data: ended, updatedAt: new Date(Date.now() - 6 * day) },
+		};
+		cache.getWithMetadata.mockImplementation(async (key: string) => rows[key] ?? null);
+		axiosMocks.get.mockResolvedValue({ status: 200, data: airing });
+
+		await new MetadataCacheService().getTvmazeShow('ttended');
+		expect(axiosMocks.get).not.toHaveBeenCalled();
+
+		await new MetadataCacheService().getTvmazeShow('ttairing');
+		expect(axiosMocks.get).toHaveBeenCalledTimes(1);
+	});
+
+	it('serves a stale TVmaze show when TVmaze is down, and null with nothing cached', async () => {
+		const cache = cacheFactory.current!;
+		const stale = { id: 1, status: 'Running', _embedded: { seasons: [] } };
+		cache.getWithMetadata.mockImplementation(async (key: string) =>
+			key === 'tvmaze_lookup_tt1'
+				? { data: { id: 1 }, updatedAt: new Date() }
+				: { data: stale, updatedAt: new Date(Date.now() - 30 * day) }
+		);
+		axiosMocks.get.mockRejectedValue(new Error('429'));
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		expect(await new MetadataCacheService().getTvmazeShow('tt1')).toEqual(stale);
+
+		cache.getWithMetadata.mockResolvedValue(null);
+		expect(await new MetadataCacheService().getTvmazeShow('tt2')).toBeNull();
+	});
+
+	it('caches Trakt seasons with a lifetime read off the seasons', async () => {
+		process.env.TRAKT_CLIENT_ID = 'trakt';
+		const service = new MetadataCacheService();
+		const spy = vi.spyOn(service, 'fetchWithCache').mockResolvedValue([{ number: 1 }]);
+
+		expect(await service.getTraktShowSeasons('tt1877368')).toEqual([{ number: 1 }]);
+		const [url, key, type, config, maxAge] = spy.mock.calls[0];
+		expect(url).toBe('https://api.trakt.tv/shows/tt1877368/seasons?extended=full');
+		expect(key).toBe('trakt_seasons_tt1877368');
+		expect(type).toBe('trakt_seasons');
+		expect(config?.validateStatus?.(404)).toBe(true);
+		const lifetime = maxAge as (row: unknown) => number;
+		expect(lifetime([{ first_aired: '2016-08-24T19:00:00.000Z' }])).toBe(7 * day);
+		expect(lifetime([{ first_aired: new Date(Date.now() - day).toISOString() }])).toBe(
+			RECENT_METADATA_TTL
+		);
+	});
+
+	it('answers null for Trakt seasons without a client id or when Trakt fails', async () => {
+		delete process.env.TRAKT_CLIENT_ID;
+		expect(await new MetadataCacheService().getTraktShowSeasons('tt1')).toBeNull();
+
+		process.env.TRAKT_CLIENT_ID = 'trakt';
+		const service = new MetadataCacheService();
+		vi.spyOn(service, 'fetchWithCache').mockRejectedValue(new Error('down'));
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+		expect(await service.getTraktShowSeasons('tt1')).toBeNull();
+	});
+
+	it('gives an OMDb series a lifetime from its year range and leaves movies at 30 days', async () => {
+		process.env.OMDB_KEY = 'omdb';
+		const service = new MetadataCacheService();
+		const spy = vi.spyOn(service, 'fetchWithCache').mockResolvedValue({});
+
+		await service.getOmdbInfo('tt1877368');
+		const lifetime = spy.mock.calls[0][4] as (row: unknown) => number;
+		expect(lifetime({ Type: 'series', Year: '2010–' })).toBe(RECENT_METADATA_TTL);
+		expect(lifetime({ Type: 'series', Year: '2004–2011' })).toBe(7 * day);
+		expect(lifetime({ Type: 'movie', Year: '2026' })).toBe(30 * day);
+	});
+
+	it('caches a TMDB show separately for each appended response', async () => {
+		process.env.TMDB_KEY = 'tmdb';
+		const service = new MetadataCacheService();
+		const spy = vi.spyOn(service, 'fetchWithCache').mockResolvedValue({});
+
+		await service.getTmdbTvInfo(34549, 'videos');
+		await service.getTmdbTvInfo(34549);
+		expect(spy.mock.calls[0][0]).toContain('/tv/34549?');
+		expect(spy.mock.calls[0][0]).toContain('append_to_response=videos');
+		expect(spy.mock.calls[0][1]).toBe('tmdb_tv_34549_videos');
+		expect(spy.mock.calls[1][1]).toBe('tmdb_tv_34549');
+	});
+
+	it('caches Trakt person lookups by name', async () => {
+		process.env.TRAKT_CLIENT_ID = 'trakt';
+		const service = new MetadataCacheService();
+		const spy = vi
+			.spyOn(service, 'fetchWithCache')
+			.mockResolvedValue([{ person: { ids: { slug: 'paul-hollywood', tmdb: 1 } } }]);
+
+		expect(await service.searchTraktPerson('Paul Hollywood')).toEqual({
+			ids: { slug: 'paul-hollywood', tmdb: 1 },
+		});
+		expect(spy.mock.calls[0][0]).toBe(
+			'https://api.trakt.tv/search/person?query=Paul%20Hollywood'
+		);
+		expect(spy.mock.calls[0][1]).toBe('trakt_search_person_Paul Hollywood');
+		expect(spy.mock.calls[0][4]).toBe(30 * day);
 	});
 });
