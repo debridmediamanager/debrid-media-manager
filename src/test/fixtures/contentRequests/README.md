@@ -19,3 +19,10 @@ together with the `Available` hashes and `tbrd:` transfer records DMM held for
 them. One was already cached on Real-Debrid. One matched a completed transfer
 whose rewritten hash was still available. One matched a transfer whose
 rewritten hash had since been pruned.
+
+TorBox `GET /v1/api/user/me`, captured 2026-09-26:
+
+- `tb-user-me.json`: a paid (Standard) account. The account id, email, auth id
+  and customer id are replaced. A TorBox-only fulfiller is identified by `id`.
+- `tb-user-me-bad-key.json`: an unknown key. TorBox answers HTTP 403 with
+  `AUTH_ERROR`.

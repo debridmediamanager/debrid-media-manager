@@ -117,7 +117,7 @@ export async function fileContentRequest(
  * id is all there is to follow, and only the asker sees the result.
  */
 export async function fulfillContentRequest(
-	rdKey: string,
+	rdKey: string | null,
 	id: string,
 	keys: { tbKey?: string | null }
 ): Promise<{ jobId: string | null; delivered: boolean }> {

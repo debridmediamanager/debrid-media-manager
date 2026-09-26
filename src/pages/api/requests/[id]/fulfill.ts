@@ -6,6 +6,7 @@ import { addHashToRd, alreadyOnRealDebrid, mintRequesterToken } from '@/services
 import { generateUserId } from '@/utils/castApiHelpers';
 import { canClaim, pickSourceKeys, RequestValidationError } from '@/utils/contentRequest';
 import { torboxCachedHashes } from '@/utils/torboxCache';
+import { torboxUserId } from '@/utils/torboxIdentity';
 import { FREE_TORBOX_PLAN_MESSAGE, isFreeTorBoxPlan } from '@/utils/torboxPlan';
 import { exceedsTransferSizeCap, tooLargeMessage } from '@/utils/transferSize';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -43,18 +44,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(400).json({ error: 'request id is required' });
 	}
 
-	const token = readToken(req);
-	if (!token) {
-		return res.status(401).json({ error: 'A Real-Debrid session is required to fulfil' });
-	}
-
-	let fulfillerId: string;
-	try {
-		fulfillerId = await generateUserId(token);
-	} catch {
-		return res.status(401).json({ error: 'Real-Debrid session is not valid' });
-	}
-
 	let sourceKeys: { tb_api_key: string };
 	try {
 		const { tbKey } = (req.body ?? {}) as { tbKey?: string };
@@ -64,6 +53,24 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(400).json({ error: error.message });
 		}
 		throw error;
+	}
+
+	// Who is fulfilling. The fulfiller's own Real-Debrid never takes part in the
+	// transfer, so it is not required: a signed-in Real-Debrid session identifies
+	// them when there is one (which is also what catches self-fulfilment), and the
+	// TorBox account does otherwise.
+	const token = readToken(req);
+	let fulfillerId: string;
+	if (token) {
+		try {
+			fulfillerId = await generateUserId(token);
+		} catch {
+			return res.status(401).json({ error: 'Real-Debrid session is not valid' });
+		}
+	} else {
+		const tbId = await torboxUserId(sourceKeys.tb_api_key);
+		if (!tbId) return res.status(401).json({ error: 'TorBox did not accept that key' });
+		fulfillerId = tbId;
 	}
 
 	const request = await db.getContentRequest(id);

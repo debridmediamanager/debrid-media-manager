@@ -1,0 +1,6 @@
+{
+	"data": null,
+	"detail": "An error occurred while verifying your token. Please try again.",
+	"error": "AUTH_ERROR",
+	"success": false
+}

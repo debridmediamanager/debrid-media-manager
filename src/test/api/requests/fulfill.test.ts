@@ -3,11 +3,13 @@ import { orderedServersForNewJob } from '@/services/debridUploaderServers';
 import { getToken } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
 import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
+import tbUserMeBadKey from '@/test/fixtures/contentRequests/tb-user-me-bad-key.json';
+import tbUserMe from '@/test/fixtures/contentRequests/tb-user-me.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { torboxCachedHashes } from '@/utils/torboxCache';
 import { isFreeTorBoxPlan } from '@/utils/torboxPlan';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 vi.mock('@/utils/torboxPlan', async (importOriginal) => ({
@@ -235,10 +237,57 @@ describe('POST /api/requests/[id]/fulfill', () => {
 	});
 });
 
-describe('refusals', () => {
-	it('rejects a caller with no Real-Debrid session', async () => {
+// The fulfiller's own Real-Debrid never takes part in a transfer: the bytes come
+// from their TorBox and land in the asker's Real-Debrid. Demanding an RD session
+// turned away exactly the people the board needs, those with TorBox and no RD.
+describe('a fulfiller with only TorBox', () => {
+	const userMe =
+		(body: unknown, status = 200) =>
+		async (url: string) =>
+			String(url).includes('/user/me')
+				? { ok: status === 200, status, json: async () => body }
+				: { ok: true, status: 200, json: async () => ({ id: 'job-9' }) };
+
+	beforeEach(() => {
+		vi.stubEnv('DMMCAST_SALT', 'test-salt');
+		global.fetch = vi.fn(userMe(tbUserMe)) as any;
+	});
+	afterEach(() => vi.unstubAllEnvs());
+
+	it('fulfils with a TorBox key and no Real-Debrid session', async () => {
+		const res = await call({ headers: {} });
+		expect(statusOf(res)).toBe(200);
+		expect(bodyOf(res)).toEqual({ jobId: 'job-9' });
+		expect(mockUserId).not.toHaveBeenCalled();
+	});
+
+	it('claims under a stable id derived from the TorBox account', async () => {
+		await call({ headers: {} });
+		await call({ headers: {} });
+		const [first, second] = mockRepo.claimContentRequest.mock.calls.map((c: any[]) => c[1]);
+		expect(first).toMatch(/^tb:/);
+		expect(first).toBe(second);
+		expect(first).not.toContain(String(tbUserMe.data.id));
+	});
+
+	it('rejects a TorBox key that TorBox does not recognise', async () => {
+		global.fetch = vi.fn(userMe(tbUserMeBadKey, 403)) as any;
 		const res = await call({ headers: {} });
 		expect(statusOf(res)).toBe(401);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+	});
+});
+
+describe('refusals', () => {
+	it('rejects a caller with no key at all', async () => {
+		const res = await call({ headers: {}, body: {} });
+		expect(statusOf(res)).toBe(400);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+	});
+
+	it('rejects a Real-Debrid session that does not verify', async () => {
+		mockUserId.mockRejectedValue(new Error('bad token'));
+		expect(statusOf(await call())).toBe(401);
 	});
 
 	it('rejects a fulfiller carrying no cache-source key', async () => {

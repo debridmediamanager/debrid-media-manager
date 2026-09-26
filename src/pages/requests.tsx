@@ -192,9 +192,9 @@ export default function RequestsPage() {
 	// the one uploader host whose IP it permitted; offering fulfil to an AD-only
 	// holder would now only earn them a 400. (Premiumize is not one either: the
 	// uploader cannot source from it, which is why a Premiumize user is not sent
-	// here in the first place.)
-	const canFulfil = Boolean(rdKey) && Boolean(torboxKey);
-	const hasFulfillerKey = Boolean(torboxKey);
+	// here in the first place.) A Real-Debrid login is not needed to fulfil: the
+	// release lands in the asker's Real-Debrid, never the fulfiller's.
+	const canFulfil = Boolean(torboxKey);
 
 	/**
 	 * Load one page. `reset` starts the board over from the top — used by the
@@ -300,8 +300,7 @@ export default function RequestsPage() {
 	 */
 	const handleFulfil = (row: PublicRequest) =>
 		withBusy(row.id, async () => {
-			const key = rdKeyRef.current;
-			if (!key) return;
+			if (!torboxKey) return;
 			if (
 				!window.confirm(
 					'Fulfil this request using your TorBox account?\n\n' +
@@ -312,7 +311,7 @@ export default function RequestsPage() {
 			)
 				return;
 			try {
-				const { jobId, delivered } = await fulfillContentRequest(key, row.id, {
+				const { jobId, delivered } = await fulfillContentRequest(rdKeyRef.current, row.id, {
 					tbKey: torboxKey,
 				});
 				if (delivered) {
@@ -417,12 +416,6 @@ export default function RequestsPage() {
 					</div>
 				)}
 
-				{loaded && !canFulfil && hasFulfillerKey && (
-					<div className="mb-3 rounded border-2 border-gray-700 bg-gray-800/30 p-3 text-xs text-gray-300">
-						Sign in with Real-Debrid to fulfil requests for others.
-					</div>
-				)}
-
 				{/*
 				 * `loaded` is tested before anything key-dependent, and the order is
 				 * load-bearing: the server renders with no key, the client reads one
@@ -433,7 +426,7 @@ export default function RequestsPage() {
 					<MyRequests rows={myRequests} busyIds={busyIds} onCancel={handleCancel} />
 				)}
 
-				{loaded && hasFulfillerKey && (
+				{loaded && canFulfil && (
 					<label className="mb-3 flex items-center gap-2 text-xs text-gray-300">
 						<input
 							type="checkbox"
@@ -451,7 +444,7 @@ export default function RequestsPage() {
 					</div>
 				) : requests.length === 0 ? (
 					<div className="rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-center text-sm text-gray-300">
-						{hasFulfillerKey && onlyServable ? (
+						{canFulfil && onlyServable ? (
 							<>
 								Nothing on the board is on TorBox right now. Untick the box above to
 								see every request.
