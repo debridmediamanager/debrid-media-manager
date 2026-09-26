@@ -1,0 +1,100 @@
+{
+	"_embedded": {
+		"seasons": [
+			{
+				"id": 133,
+				"url": "https://www.tvmaze.com/seasons/133/death-note-season-1",
+				"number": 1,
+				"name": "",
+				"episodeOrder": 37,
+				"premiereDate": "2006-10-03",
+				"endDate": "2007-06-26",
+				"network": {
+					"id": 137,
+					"name": "NTV",
+					"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+					"officialSite": null
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/133" } }
+			},
+			{
+				"id": 134,
+				"url": "https://www.tvmaze.com/seasons/134/death-note-season-2",
+				"number": 2,
+				"name": "",
+				"episodeOrder": 18,
+				"premiereDate": null,
+				"endDate": null,
+				"network": {
+					"id": 137,
+					"name": "NTV",
+					"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+					"officialSite": null
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/134" } }
+			}
+		],
+		"previousepisode": {
+			"id": 1865,
+			"url": "https://www.tvmaze.com/episodes/1865/death-note-1x37-new-world",
+			"name": "New World",
+			"season": 1,
+			"number": 37,
+			"type": "regular",
+			"airdate": "2007-06-26",
+			"airtime": "13:00",
+			"airstamp": "2007-06-26T04:00:00+00:00",
+			"runtime": 30,
+			"rating": { "average": 8.7 },
+			"image": {
+				"medium": "https://static.tvmaze.com/uploads/images/medium_landscape/537/1343153.jpg",
+				"original": "https://static.tvmaze.com/uploads/images/original_untouched/537/1343153.jpg"
+			},
+			"summary": "<p>Though Mikami has written all the investigators' names in the Death Note, 40 seconds pass and everyone is still alive.</p>",
+			"_links": {
+				"self": { "href": "https://api.tvmaze.com/episodes/1865" },
+				"show": { "href": "https://api.tvmaze.com/shows/40", "name": "Death Note" }
+			}
+		}
+	},
+	"_links": {
+		"self": { "href": "https://api.tvmaze.com/shows/40" },
+		"previousepisode": { "href": "https://api.tvmaze.com/episodes/1865", "name": "New World" }
+	},
+	"averageRuntime": 30,
+	"dvdCountry": null,
+	"ended": "2007-06-26",
+	"externals": { "tvrage": 13555, "thetvdb": 79481, "imdb": "tt0877057" },
+	"genres": ["Anime", "Fantasy", "Thriller"],
+	"id": 40,
+	"image": {
+		"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/499/1249019.jpg",
+		"original": "https://static.tvmaze.com/uploads/images/original_untouched/499/1249019.jpg"
+	},
+	"language": "Japanese",
+	"name": "Death Note",
+	"network": {
+		"id": 137,
+		"name": "NTV",
+		"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+		"officialSite": null
+	},
+	"officialSite": "http://www.j-deathnote.com/",
+	"premiered": "2006-10-03",
+	"rating": { "average": 8.8 },
+	"runtime": 30,
+	"schedule": { "time": "13:00", "days": ["Tuesday"] },
+	"status": "Ended",
+	"summary": "<p><b>Death Note </b>is an anime series based around a manga of the same name whereby a human finds a death god's notebook. Any person's name written in this notebook will die. The main character who finds this noteboook is Light Yagami who faces off against an unfaced character named L who tries to challenge him.</p>",
+	"type": "Animation",
+	"updated": 1765767086,
+	"url": "https://www.tvmaze.com/shows/40/death-note",
+	"webChannel": null,
+	"weight": 96
+}

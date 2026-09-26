@@ -184,6 +184,9 @@ export function viewFromTvmaze(data: any): ShowView | null {
 	const embedded = data._embedded ?? {};
 	const seasons = new Map<number, number | null>();
 	for (const season of list(embedded.seasons)) {
+		// A season TVmaze has not dated is a placeholder: Death Note (tt0877057)
+		// carries an undated second season of 18 that no other provider has.
+		if (!season?.premiereDate) continue;
 		addSeason(seasons, season?.number, season?.episodeOrder);
 	}
 	const next = embedded.nextepisode;
@@ -250,13 +253,47 @@ export function mergeShowViews(views: Array<ShowView | null | undefined>): Merge
 		.map((view) => ({ view, reach: reachOf(view) }))
 		.filter(({ reach }) => reach >= 0);
 
+	// The furthest any provider has seen: a season only one of them lists yet
+	// is usually the newest one, and the show page must offer it.
+	const season_count = usable.reduce((max, { reach }) => Math.max(max, reach), 0);
+
+	// TMDB files many anime as one long season: Re:ZERO (tt5607616) is 85
+	// episodes in season 1 there, Frieren (tt22248376) 38, where Cinemeta and
+	// TVmaze split them 25/25/16/19 and 28/10 the way release names do
+	// ("Frieren S2 - 05"). Trakt and mdblist copy TMDB. Taking the larger count
+	// per season mixed the two schemes into a season 1 of 85. A provider that
+	// stops short of the others and whose season 1 already holds most of the
+	// next season's episodes is numbering absolutely, and its counts are left out.
+	// Its season 1 is then the running total of the split seasons (85 =
+	// 25+25+16+19, 38 = 28+10), which a season 1 that is merely ahead of an
+	// incomplete listing is not.
+	const splitViews = usable
+		.filter(({ reach }) => reach > 1)
+		.map(({ view }) => view)
+		.filter((view) => (view.seasons.get(1) ?? 0) > 0 && (view.seasons.get(2) ?? 0) > 0);
+	const numbersAbsolutely = (view: ShowView, reach: number) => {
+		const first = view.seasons.get(1) ?? 0;
+		if (first === 0) return false;
+		return splitViews.some((split) => {
+			if (split === view || reachOf(split) <= reach) return false;
+			let total = 0;
+			for (let season = 1; season <= reachOf(split); season++) {
+				const episodes = split.seasons.get(season);
+				if (!episodes) break;
+				total += episodes;
+				if (season >= 2 && Math.abs(first - total) <= Math.max(2, total * 0.1)) return true;
+			}
+			return false;
+		});
+	};
+
 	const counts: Record<number, number> = {};
 	let has_specials = false;
-	let season_count = 0;
 	for (const { view, reach } of usable) {
-		season_count = Math.max(season_count, reach);
+		const absolute = numbersAbsolutely(view, reach);
 		for (const [season, episodes] of view.seasons) {
 			if (season === 0) has_specials = true;
+			if (season > season_count || (absolute && season > 0)) continue;
 			counts[season] = Math.max(counts[season] ?? 0, episodes ?? 0);
 		}
 	}
@@ -271,8 +308,13 @@ export function mergeShowViews(views: Array<ShowView | null | undefined>): Merge
 	// and its last episode is that entry's finale. Only the views that reach
 	// the latest season speak for the show, and when none of them has a status,
 	// no badge is better than a stale one.
-	const current = byReach.filter(({ reach }) => reach === (byReach[0]?.reach ?? 0));
-	const status = current.find(({ view }) => view.status)?.view.status;
+	const current = byReach.filter(({ reach }) => reach >= season_count);
+	// When only a provider without statuses (OMDb) has seen the newest,
+	// announced season — The Witcher's fifth — one a season behind still
+	// describes the same show. Bake Off's BBC entry, ten seasons behind, does not.
+	const status =
+		current.find(({ view }) => view.status)?.view.status ??
+		byReach.find(({ view, reach }) => view.status && reach >= season_count - 1)?.view.status;
 
 	const reach: MergedShowMetadata['reach'] = {};
 	for (const { view, reach: r } of usable) reach[view.source] = r;

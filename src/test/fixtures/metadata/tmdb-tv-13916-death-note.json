@@ -1,0 +1,162 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"results": [
+			{ "iso_3166_1": "AZ", "title": "Ölüm Dəftəri", "type": "" },
+			{ "iso_3166_1": "BG", "title": "Бележник на Смъртта", "type": "" },
+			{ "iso_3166_1": "CN", "title": "死筆", "type": "" },
+			{ "iso_3166_1": "CN", "title": "死亡笔记", "type": "" },
+			{ "iso_3166_1": "CN", "title": "死亡笔记-Death Note", "type": "动画" },
+			{ "iso_3166_1": "CN", "title": "死亡笔记 2006", "type": "" },
+			{ "iso_3166_1": "ES", "title": "El Libro De La Muerte", "type": "literal translation" },
+			{ "iso_3166_1": "ES", "title": "Death Note Rewrite 1", "type": "" },
+			{ "iso_3166_1": "FR", "title": "Carnet de la Mort", "type": "literal translation" },
+			{ "iso_3166_1": "HK", "title": "死亡筆記", "type": "" },
+			{ "iso_3166_1": "IR", "title": "دفترچه یادداشت مرگ", "type": "persian title" },
+			{ "iso_3166_1": "IR", "title": "دفتر مرگ", "type": "" },
+			{ "iso_3166_1": "JP", "title": "Desu Nōto", "type": "romaji" },
+			{ "iso_3166_1": "JP", "title": "デスノート", "type": "" },
+			{ "iso_3166_1": "JP", "title": "DEATH NOTE デスノート", "type": "" },
+			{ "iso_3166_1": "JP", "title": "Desu Nouto", "type": "romaji" },
+			{ "iso_3166_1": "KR", "title": "데스 노트", "type": "" },
+			{ "iso_3166_1": "KR", "title": "데스노트", "type": "" },
+			{ "iso_3166_1": "MN", "title": "Үхлийн Тэмдэглэл", "type": "" },
+			{ "iso_3166_1": "MX", "title": "Death Note", "type": "" },
+			{ "iso_3166_1": "PL", "title": "Notatnik śmierci", "type": "" },
+			{ "iso_3166_1": "RO", "title": "Death Note - Carnetul morţii", "type": "" },
+			{ "iso_3166_1": "SA", "title": "مذكرة الموت", "type": "" },
+			{ "iso_3166_1": "SE", "title": "Dödens Anteckningsbok", "type": "literal translation" },
+			{ "iso_3166_1": "SG", "title": "死神筆記簿", "type": "" },
+			{ "iso_3166_1": "TW", "title": "死亡筆記本", "type": "" },
+			{ "iso_3166_1": "US", "title": "DN", "type": "" },
+			{ "iso_3166_1": "US", "title": "Death Note Rewrite 1", "type": "" },
+			{ "iso_3166_1": "VN", "title": "Cuốn Sổ Tử Thần", "type": "" }
+		]
+	},
+	"backdrop_path": "/z8IPicmEKXUO4I2UDdMEqw7RqOE.jpg",
+	"created_by": [],
+	"episode_run_time": [22],
+	"external_ids": {
+		"imdb_id": "tt0877057",
+		"freebase_mid": "/m/02_2rby",
+		"freebase_id": null,
+		"tvdb_id": 79481,
+		"tvrage_id": null,
+		"wikidata_id": "Q718624",
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": null
+	},
+	"first_air_date": "2006-10-04",
+	"genres": [
+		{ "id": 16, "name": "Animation" },
+		{ "id": 9648, "name": "Mystery" },
+		{ "id": 10765, "name": "Sci-Fi & Fantasy" }
+	],
+	"homepage": "http://www.ntv.co.jp/deathnote/",
+	"id": 13916,
+	"in_production": false,
+	"languages": ["ja"],
+	"last_air_date": "2007-06-27",
+	"last_episode_to_air": {
+		"id": 1146047,
+		"name": "New World",
+		"overview": "Though Mikami has written all the investigators' names in the Death Note, a minute passes and everyone is still alive. Near seizes Mikami's Death Note, and all is at last revealed.",
+		"vote_average": 8.373,
+		"vote_count": 51,
+		"air_date": "2007-06-27",
+		"episode_number": 37,
+		"episode_type": "finale",
+		"production_code": "",
+		"runtime": 22,
+		"season_number": 1,
+		"show_id": 13916,
+		"still_path": "/85nG6sUrczzZVATIXP9JJvNMuSo.jpg"
+	},
+	"name": "Death Note",
+	"networks": [
+		{
+			"id": 57,
+			"logo_path": "/uxaXSoT8K0S2NE5PWsBpHUl3GGU.png",
+			"name": "Nippon TV",
+			"origin_country": "JP"
+		}
+	],
+	"next_episode_to_air": null,
+	"number_of_episodes": 37,
+	"number_of_seasons": 1,
+	"origin_country": ["JP"],
+	"original_language": "ja",
+	"original_name": "DEATH NOTE",
+	"overview": "Light Yagami is an ace student with great prospects—and he’s bored out of his mind. But all that changes when he finds the Death Note, a notebook dropped by a rogue Shinigami death god. Any human whose name is written in the notebook dies, and Light has vowed to use the power of the Death Note to rid the world of evil. But will Light succeed in his noble goal, or will the Death Note turn him into the very thing he fights against?",
+	"popularity": 54.2292,
+	"poster_path": "/tCZFfYTIwrR7n94J6G14Y4hAFU6.jpg",
+	"production_companies": [
+		{
+			"id": 3464,
+			"logo_path": "/9k0nr75nwnNeT2MHerf1OXJN0hj.png",
+			"name": "Madhouse",
+			"origin_country": "JP"
+		},
+		{
+			"id": 6755,
+			"logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+			"name": "Nippon Television Network Corporation",
+			"origin_country": "JP"
+		},
+		{
+			"id": 14789,
+			"logo_path": "/dThbJAnUAeQCANrj3kV7RGnLM7R.png",
+			"name": "D.N. Dream Partners",
+			"origin_country": "JP"
+		},
+		{
+			"id": 11725,
+			"logo_path": "/3OZxd70DZ1LbVelmZK8mR5FIXxO.png",
+			"name": "VAP",
+			"origin_country": "JP"
+		},
+		{
+			"id": 2918,
+			"logo_path": "/gyEWUBWwqrm3H5T2hkERD9LxpOq.png",
+			"name": "Shueisha",
+			"origin_country": "JP"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "JP", "name": "Japan" }],
+	"seasons": [
+		{
+			"air_date": "2006-10-04",
+			"episode_count": 37,
+			"id": 59776,
+			"name": "Season 1",
+			"overview": "",
+			"poster_path": "/1BloDOEmKxPFzbCIuNCLmCrcx6L.jpg",
+			"season_number": 1,
+			"vote_average": 7.9
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "Japanese", "iso_639_1": "ja", "name": "日本語" }],
+	"status": "Ended",
+	"tagline": "The human whose name is written in this note shall die.",
+	"type": "Scripted",
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer",
+				"key": "NlJZ-YgAt-c",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "629b7307d71fb474decdfa4f",
+				"published_at": "2019-12-16T17:17:25.000Z"
+			}
+		]
+	},
+	"vote_average": 8.618,
+	"vote_count": 5169
+}

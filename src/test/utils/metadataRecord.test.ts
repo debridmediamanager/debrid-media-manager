@@ -28,6 +28,7 @@ import {
 	voteYear,
 	yearOf,
 } from '@/utils/metadataRecord';
+import { readFileSync } from 'fs';
 import { describe, expect, it } from 'vitest';
 
 describe('mergeMovieRecord, on providers captured 2026-09-26', () => {
@@ -152,5 +153,47 @@ describe('year helpers', () => {
 		expect(voteYear([2001, 2002, undefined], [2003])).toBe(2001);
 		expect(voteYear([undefined], [undefined, 2003])).toBe(2003);
 		expect(voteYear([], [])).toBeNull();
+	});
+});
+
+describe('anime season structure, on providers captured 2026-09-26', () => {
+	const load = (name: string) =>
+		JSON.parse(readFileSync(`src/test/fixtures/metadata/${name}.json`, 'utf8'));
+	const record = (imdbId: string, slug: string, tmdbId: string, tvmazeId: string) =>
+		mergeShowRecord(imdbId, {
+			tmdb: load(`tmdb-tv-${tmdbId}-${slug}`),
+			mdblist: load(`mdblist-${imdbId}-${slug}`),
+			cinemeta: load(`cinemeta-${imdbId}-${slug}`),
+			omdb: load(`omdb-${imdbId}-${slug}`),
+			traktSeasons: load(`trakt-seasons-${imdbId}-${slug}`),
+			tvmaze: load(`tvmaze-${tvmazeId}-${slug}`),
+		});
+
+	// TMDB and Trakt file all 85 episodes as season 1; Cinemeta and TVmaze
+	// split them the way release names do. Production showed a season 1 of 85.
+	it('does not let a provider that numbers absolutely inflate season 1 (Re:ZERO)', () => {
+		const rezero = record('tt5607616', 're-zero', '65942', '14459');
+		expect(rezero.seasons).toEqual([
+			{ number: 1, episodes: 25 },
+			{ number: 2, episodes: 25 },
+			{ number: 3, episodes: 16 },
+			{ number: 4, episodes: 19 },
+		]);
+		expect(rezero.nextEpisode).toEqual(expect.objectContaining({ season_number: 4 }));
+	});
+
+	it('keeps Frieren’s first season at 28, not TMDB’s 38', () => {
+		const frieren = record('tt22248376', 'frieren', '209867', '69956');
+		expect(frieren.seasons.slice(0, 2)).toEqual([
+			{ number: 1, episodes: 28 },
+			{ number: 2, episodes: 10 },
+		]);
+	});
+
+	// TVmaze lists an undated second season of 18 no other provider has.
+	it('ignores an undated TVmaze placeholder season (Death Note)', () => {
+		const deathNote = record('tt0877057', 'death-note', '13916', '40');
+		expect(deathNote.seasonCount).toBe(1);
+		expect(deathNote.seasons).toEqual([{ number: 1, episodes: 37 }]);
 	});
 });

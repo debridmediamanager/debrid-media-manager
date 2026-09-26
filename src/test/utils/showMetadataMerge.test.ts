@@ -109,6 +109,15 @@ describe('mergeShowViews', () => {
 		expect(merged.status).toBeUndefined();
 	});
 
+	it('takes the status from a provider one season behind when the newest has none', () => {
+		const merged = mergeShowViews([
+			view('tmdb', [[4, 8]], { status: 'Returning Series' }),
+			view('omdb', [[5, null]]),
+		]);
+		expect(merged.season_count).toBe(5);
+		expect(merged.status).toBe('Returning Series');
+	});
+
 	it('breaks a tie in reach by source priority', () => {
 		const merged = mergeShowViews([
 			view('mdblist', [[3, 8]], { status: 'Ended' }),
