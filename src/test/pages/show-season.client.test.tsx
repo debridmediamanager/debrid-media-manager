@@ -182,13 +182,16 @@ vi.mock('next/image', () => ({
 	default: ({ alt, ...props }: any) => <img alt={alt} {...props} />,
 }));
 
+const routerMock = vi.hoisted(() => ({
+	query: { imdbid: 'tt1234567', seasonNum: '1' },
+	push: vi.fn(),
+	replace: vi.fn(),
+	prefetch: vi.fn(),
+}));
+
 vi.mock('next/router', () => ({
 	__esModule: true,
-	useRouter: () => ({
-		query: { imdbid: 'tt1234567', seasonNum: '1' },
-		push: vi.fn(),
-		prefetch: vi.fn(),
-	}),
+	useRouter: () => routerMock,
 }));
 
 vi.mock('next/head', () => ({
@@ -217,6 +220,35 @@ describe('TV show page header', () => {
 	beforeEach(() => {
 		axiosGetMock.mockReset();
 		posterMock.mockClear();
+		routerMock.replace.mockClear();
+	});
+
+	// tt21958588 is an episode on IMDb that Trakt files as a show with ten
+	// seasons; the API names its series and the page moves there.
+	it('moves an episode id to the series it belongs to', async () => {
+		axiosGetMock.mockImplementation((url: string) => {
+			if (url.startsWith('/api/info/show')) {
+				return Promise.resolve({
+					status: 200,
+					data: {
+						title: 'Cake Week',
+						season_count: 10,
+						season_names: [],
+						season_episode_counts: {},
+						series_imdbid: 'tt1877368',
+					},
+				});
+			}
+			return Promise.resolve({ status: 200, headers: {}, data: { results: [] } });
+		});
+
+		render(<ShowSeasonPage />);
+
+		await waitFor(() => expect(routerMock.replace).toHaveBeenCalledWith('/show/tt1877368/1'));
+		expect(screen.queryByRole('heading', { name: /Cake Week/ })).not.toBeInTheDocument();
+		expect(
+			axiosGetMock.mock.calls.some(([url]) => String(url).startsWith('/api/torrents/tv'))
+		).toBe(false);
 	});
 
 	it('delegates header rendering to MediaHeader with show context', async () => {

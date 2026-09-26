@@ -119,6 +119,7 @@ type ShowInfo = {
 	status?: string;
 	next_episode_to_air?: EpisodeAirInfo;
 	last_episode_to_air?: EpisodeAirInfo;
+	series_imdbid?: string;
 };
 
 const torrentDB = new UserTorrentDB();
@@ -474,6 +475,8 @@ const TvSearch: FunctionComponent = () => {
 		[seasonNum, showInfo]
 	);
 
+	const [seriesRedirect, setSeriesRedirect] = useState<string | null>(null);
+
 	// Fetch show info - keyed on the show alone so switching seasons reuses it
 	useEffect(() => {
 		if (!imdbid) return;
@@ -483,12 +486,20 @@ const TvSearch: FunctionComponent = () => {
 		// it belonged to this one
 		setShowInfo(null);
 		setInfoImdbId(null);
+		setSeriesRedirect(null);
 		setIsLoading(true);
 		setErrorMessage('');
 
 		const fetchShowInfo = async () => {
 			try {
 				const response = await axiosWithRetry.get(`/api/info/show?imdbid=${id}`);
+				// An episode's IMDb id filed as a show's: the series it belongs to
+				// has every season, this id only the ones its providers agree on.
+				const seriesImdbId = response.data?.series_imdbid;
+				if (typeof seriesImdbId === 'string' && seriesImdbId !== id) {
+					setSeriesRedirect(seriesImdbId);
+					return;
+				}
 				setShowInfo(response.data);
 				setInfoImdbId(id);
 			} catch (error) {
@@ -501,6 +512,10 @@ const TvSearch: FunctionComponent = () => {
 
 		fetchShowInfo();
 	}, [imdbid]);
+
+	useEffect(() => {
+		if (seriesRedirect) router.replace(`/show/${seriesRedirect}/1`);
+	}, [seriesRedirect, router]);
 
 	// Redirect away from seasons this show doesn't have
 	useEffect(() => {

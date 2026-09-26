@@ -2,8 +2,10 @@ import handler from '@/pages/api/info/show';
 import bakeOffCinemeta from '@/test/fixtures/metadata/cinemeta-tt1877368-great-british-bake-off.json';
 import dailyShowMdblist from '@/test/fixtures/metadata/mdblist-tt0115147-the-daily-show.json';
 import bakeOffMdblist from '@/test/fixtures/metadata/mdblist-tt1877368-great-british-bake-off.json';
+import episodeMdblist from '@/test/fixtures/metadata/mdblist-tt21958588-bake-off-episode.json';
 import dailyShowOmdb from '@/test/fixtures/metadata/omdb-tt0115147-the-daily-show.json';
 import bakeOffOmdb from '@/test/fixtures/metadata/omdb-tt1877368-great-british-bake-off.json';
+import episodeOmdb from '@/test/fixtures/metadata/omdb-tt21958588-bake-off-episode.json';
 import dailyShowTmdb from '@/test/fixtures/metadata/tmdb-tv-2224-the-daily-show.json';
 import bakeOffTmdb from '@/test/fixtures/metadata/tmdb-tv-34549-great-british-bake-off.json';
 import dailyShowTraktLast from '@/test/fixtures/metadata/trakt-last_episode-tt0115147-the-daily-show.json';
@@ -11,6 +13,7 @@ import bakeOffTraktLast from '@/test/fixtures/metadata/trakt-last_episode-tt1877
 import dailyShowTraktNext from '@/test/fixtures/metadata/trakt-next_episode-tt0115147-the-daily-show.json';
 import dailyShowTraktSeasons from '@/test/fixtures/metadata/trakt-seasons-tt0115147-the-daily-show.json';
 import bakeOffTraktSeasons from '@/test/fixtures/metadata/trakt-seasons-tt1877368-great-british-bake-off.json';
+import episodeTraktSeasons from '@/test/fixtures/metadata/trakt-seasons-tt21958588-bake-off-episode.json';
 import bakeOffTvmaze from '@/test/fixtures/metadata/tvmaze-2950-great-british-bake-off.json';
 import dailyShowTvmaze from '@/test/fixtures/metadata/tvmaze-3928-the-daily-show.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
@@ -159,5 +162,31 @@ describe('/api/info/show across all six providers', () => {
 		expect(cache.getOmdbInfo).toHaveBeenCalledWith('tt1877368');
 		expect(cache.getCinemetaSeries).toHaveBeenCalled();
 		expect(cache.getTmdbTvInfo).toHaveBeenCalledWith(34549, 'videos');
+	});
+
+	// Trakt and Cinemeta list Bake Off's Channel 4 years under tt21958588, which
+	// on IMDb is series 13 episode 1. Opened on that id, the page saw Trakt's ten
+	// seasons and nothing else.
+	it('names the series an episode id belongs to', async () => {
+		serve({
+			mdblist: episodeMdblist,
+			cinemeta: null,
+			omdb: episodeOmdb,
+			tmdb: null,
+			traktSeasons: episodeTraktSeasons,
+			traktNext: null,
+			traktLast: null,
+			tvmaze: null,
+		});
+		const info = await showInfo('tt21958588');
+
+		expect(info.series_imdbid).toBe('tt1877368');
+	});
+
+	it('names no parent for a series id', async () => {
+		serve(bakeOff);
+		const info = await showInfo('tt1877368');
+
+		expect(info.series_imdbid).toBeUndefined();
 	});
 });

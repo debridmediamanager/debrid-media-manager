@@ -1,7 +1,13 @@
 import { MRating, MShow } from '@/services/mdblist';
 import { getMdblistClient } from '@/services/mdblistClient';
 import { getMetadataCache } from '@/services/metadataCache';
-import { getOmdbMetadata, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
+import {
+	getOmdbMetadata,
+	getOmdbParentSeries,
+	getOmdbPoster,
+	getOmdbRating,
+	omdbField,
+} from '@/utils/omdb';
 import {
 	mergeShowViews,
 	viewFromCinemeta,
@@ -199,6 +205,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			status: merged.status,
 			next_episode_to_air: merged.next_episode_to_air,
 			last_episode_to_air: merged.last_episode_to_air,
+			// Set when the id is an episode's; the season page moves to the series.
+			series_imdbid: getOmdbParentSeries(omdbResponse, imdbid) ?? undefined,
 		};
 
 		console.log(`[show.ts] Final response for ${imdbid}:`, {
