@@ -1,0 +1,13 @@
+[
+	"All torrent sources failed for 0df9192514f5fa41cba532dfb30a49042665fced: https://itorrents.org/torrent/0DF9192514F5FA41CBA532DFB30A49042665FCED.torrent returned 9B759A08A3B154B20035DD8DD41975BD413F3CBD when 0DF9192514F5FA41CBA532DFB30A49042665FCED was requested; http://itorrents.net/torrent/0DF9192514F5FA41CBA532DFB30A49042665FCED.torrent returned 9B759A08A3B154B20035DD8DD41975BD413F3CBD when 0DF9192514F5FA41CBA532DFB30A49042665FCED was requested; https://btcache.me/torrent/0DF9192514F5FA41CBA53",
+	"AllDebrid NO_SERVER: Servers are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.",
+	"RD credentials rejected: 401 {\n\t\"error\": \"bad_token\",\n\t\"error_code\": 8\n}",
+	"RD credentials rejected: 403 {\n\t\"error\": \"permission_denied\",\n\t\"error_code\": 9\n}",
+	"RD torrent no longer exists: {\n\t\"error\": \"unknown_ressource\",\n\t\"error_code\": 7\n}",
+	"RD waiting_files_selection stalled: no progress for 30 minutes",
+	"TorBox reports the release cached but serves 404 for Resident Dead (2026) [1080p] [WEBRip] [5.1] [YTS.GG - YTS.BZ]/Resident.Dead.2026.1080p.WEBRip.x264.AAC5.1-[YTS.GG - YTS.BZ].mp4",
+	"job exceeded its 755 minute budget (ran 755 minutes)",
+	"job limit reached",
+	"the requester has no usable Real-Debrid credentials",
+	"uncached"
+]

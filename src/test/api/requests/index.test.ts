@@ -133,13 +133,22 @@ describe('GET /api/requests', () => {
 		expect(statusOf(res)).toBe(401);
 	});
 
-	it('never shows a failure reason on somebody else’s row', async () => {
+	it('never shows the asker’s credential state on somebody else’s row', async () => {
 		mockUserId.mockResolvedValue('helper');
 		mockRepo.listOpenContentRequests = vi
 			.fn()
 			.mockResolvedValue([row({ status: 'failed', error: 'RD credentials rejected: 401' })]);
 		const res = await call();
-		expect(bodyOf(res).requests[0].error).toBeNull();
+		expect(bodyOf(res).requests[0].error).not.toContain('401');
+	});
+
+	it('shows everyone why a release failed', async () => {
+		mockUserId.mockResolvedValue('helper');
+		mockRepo.listOpenContentRequests = vi
+			.fn()
+			.mockResolvedValue([row({ status: 'failed', error: 'uncached' })]);
+		const res = await call();
+		expect(bodyOf(res).requests[0].error).toBe('uncached');
 	});
 
 	it('marks each row with whether the viewer’s TorBox can send it', async () => {

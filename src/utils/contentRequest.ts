@@ -192,8 +192,9 @@ export interface PublicRequest {
 	 */
 	tbCached: boolean | null;
 	/**
-	 * Why the last attempt failed. Only ever set on the viewer's own rows: the
-	 * uploader's reasons can name the asker's account state.
+	 * Why the last attempt failed. The asker sees the stored reason verbatim;
+	 * everyone else sees it too unless it describes the asker's Real-Debrid
+	 * credentials, which {@link publicError} replaces with a neutral line.
 	 */
 	error: string | null;
 }
@@ -214,6 +215,24 @@ export interface StoredRequest {
 	returnPath?: string | null;
 	createdAt: Date | string;
 	updatedAt?: Date | string;
+}
+
+/** What strangers read in place of a reason about the asker's credentials. */
+export const ASKER_ACCOUNT_ERROR = "the asker's Real-Debrid account refused the transfer";
+
+/**
+ * The failure reason as a stranger may read it. Most reasons describe the
+ * release or the uploader (`uncached`, TorBox 404s, dead torrent sources) and
+ * are what a fulfiller needs to judge whether another try can work. Reasons
+ * about the asker's Real-Debrid credentials say whether that person's session
+ * is dead, so those stay the asker's own.
+ */
+export function publicError(error: string | null | undefined): string | null {
+	if (!error) return null;
+	if (/^RD credentials rejected|no usable Real-Debrid credentials/i.test(error)) {
+		return ASKER_ACCOUNT_ERROR;
+	}
+	return error;
 }
 
 /**
@@ -240,6 +259,6 @@ export function toPublicRequest(
 		mine,
 		jobId: row.jobId,
 		tbCached: tbCached ? tbCached.has(row.hash) : null,
-		error: mine ? (row.error ?? null) : null,
+		error: mine ? (row.error ?? null) : publicError(row.error),
 	};
 }

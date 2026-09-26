@@ -7,11 +7,13 @@ import {
 	normalizeTitle,
 	parseRequestInput,
 	pickSourceKeys,
+	publicError,
 	RequestValidationError,
-	type SourceKeys,
 	toPublicRequest,
+	type SourceKeys,
 } from '@/utils/contentRequest';
 import { describe, expect, it } from 'vitest';
+import storedErrors from '../test/fixtures/contentRequests/stored-errors.json';
 
 const HASH = '1ea32261cd04fc8633c6b30ca3d98213279d689f';
 
@@ -239,5 +241,43 @@ describe('toPublicRequest', () => {
 		expect(toPublicRequest({ ...row, createdAt: '2026-08-27T05:00:00Z' }, null).createdAt).toBe(
 			'2026-08-27T05:00:00.000Z'
 		);
+	});
+});
+
+describe('failure reasons on the board', () => {
+	const failed = {
+		id: 'r2',
+		hash: HASH,
+		imdbId: 'tt1234567',
+		title: 'Some Release',
+		mediaType: 'movie',
+		status: 'failed',
+		requesterId: 'asker',
+		fulfillerId: 'helper',
+		jobId: 'job-2',
+		createdAt: new Date('2026-08-30T02:06:19Z'),
+	};
+	const credential = (e: string) => /credentials/.test(e);
+
+	// Every failed row read "Open — last try failed" to anyone but the asker,
+	// whatever the uploader had said, so a fulfiller could not tell an uncached
+	// release from a dead session. One stored reason of each production shape.
+	it.each(storedErrors.filter((e) => !credential(e)))('shows strangers %s', (error) => {
+		expect(toPublicRequest({ ...failed, error }, null).error).toBe(error);
+		expect(toPublicRequest({ ...failed, error }, 'helper').error).toBe(error);
+	});
+
+	it.each(storedErrors.filter(credential))(
+		'keeps the asker credential state private: %s',
+		(error) => {
+			const shown = toPublicRequest({ ...failed, error }, 'helper').error;
+			expect(shown).not.toBe(error);
+			expect(shown).toBe(publicError(error));
+			expect(toPublicRequest({ ...failed, error }, 'asker').error).toBe(error);
+		}
+	);
+
+	it('has no reason for a row that never failed', () => {
+		expect(toPublicRequest(failed, null).error).toBeNull();
 	});
 });

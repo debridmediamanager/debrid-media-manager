@@ -523,6 +523,11 @@ export default function RequestsPage() {
 														{new Date(row.createdAt).toLocaleString()}
 													</span>
 												</div>
+												{row.status === 'failed' && row.error && (
+													<div className="mt-1 whitespace-pre-wrap break-words text-xs text-amber-200">
+														{row.error}
+													</div>
+												)}
 											</div>
 											<div className="flex shrink-0 items-center gap-1">
 												{canFulfil &&
