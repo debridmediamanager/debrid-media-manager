@@ -161,7 +161,10 @@ describe('/api/info/show across all six providers', () => {
 		expect(cache.getTraktShowSeasons).toHaveBeenCalledWith('tt1877368');
 		expect(cache.getOmdbInfo).toHaveBeenCalledWith('tt1877368');
 		expect(cache.getCinemetaSeries).toHaveBeenCalled();
-		expect(cache.getTmdbTvInfo).toHaveBeenCalledWith(34549, 'videos');
+		expect(cache.getTmdbTvInfo).toHaveBeenCalledWith(
+			34549,
+			'videos,external_ids,alternative_titles'
+		);
 	});
 
 	// Trakt and Cinemeta list Bake Off's Channel 4 years under tt21958588, which

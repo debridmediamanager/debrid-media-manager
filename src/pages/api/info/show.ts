@@ -1,13 +1,6 @@
 import { MRating, MShow } from '@/services/mdblist';
-import { getMdblistClient } from '@/services/mdblistClient';
-import { getMetadataCache } from '@/services/metadataCache';
-import {
-	getOmdbMetadata,
-	getOmdbParentSeries,
-	getOmdbPoster,
-	getOmdbRating,
-	omdbField,
-} from '@/utils/omdb';
+import { fetchShowSources } from '@/services/metadata';
+import { getOmdbParentSeries, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
 import {
 	mergeShowViews,
 	viewFromCinemeta,
@@ -18,20 +11,8 @@ import {
 	viewFromTvmaze,
 } from '@/utils/showMetadataMerge';
 import { tmdbImageUrl } from '@/utils/tmdb';
-import { getTmdbAuth } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import UserAgent from 'user-agents';
-
-/** A provider's answer, or null when it failed — including a synchronous throw. */
-async function settle<T>(call: () => Promise<T> | T): Promise<Awaited<T> | null> {
-	try {
-		return (await call()) ?? null;
-	} catch (error) {
-		console.warn('[show.ts] metadata provider failed', error);
-		return null;
-	}
-}
 
 const isShowType = (response: any): response is MShow =>
 	!!response && typeof response === 'object' && Array.isArray(response.seasons);
@@ -44,66 +25,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		const mdblistClient = getMdblistClient();
-		const metadataCache = getMetadataCache();
-
-		const fetchMdblist = () => mdblistClient.getInfoByImdbId(imdbid);
-		const fetchCinemeta = () =>
-			metadataCache.getCinemetaSeries(imdbid, {
-				headers: {
-					accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-					'accept-language': 'en-US,en;q=0.5',
-					'accept-encoding': 'gzip, deflate, br',
-					connection: 'keep-alive',
-					'sec-fetch-dest': 'document',
-					'sec-fetch-mode': 'navigate',
-					'sec-fetch-site': 'same-origin',
-					'sec-fetch-user': '?1',
-					'upgrade-insecure-requests': '1',
-					'user-agent': new UserAgent().toString(),
-				},
-			});
-
-		// Trakt and TVmaze key on the IMDb id alone, so they do not have to wait
-		// for mdblist the way the TMDB call below does. Started here they overlap
-		// everything between, instead of adding a round trip after it. Each one
-		// degrades to null: a provider being down, unconfigured or not knowing the
-		// title costs its opinion, never the page.
-		const traktNextPromise = settle(() =>
-			metadataCache.getTraktShowEpisode(imdbid, 'next_episode')
-		);
-		const traktLastPromise = settle(() =>
-			metadataCache.getTraktShowEpisode(imdbid, 'last_episode')
-		);
-		const traktSeasonsPromise = settle(() => metadataCache.getTraktShowSeasons(imdbid));
-		const tvmazePromise = settle(() => metadataCache.getTvmazeShow(imdbid));
-		const omdbPromise = settle(() => getOmdbMetadata(imdbid));
-
-		const [mdbResponse, cinemetaResponse] = await Promise.all([
-			settle(fetchMdblist),
-			settle(fetchCinemeta),
-		]);
-
-		// TMDB needs mdblist's tmdbid; without one, TMDB's own IMDb lookup finds it.
-		const tmdbPromise = settle(async () => {
-			if (!getTmdbAuth()) return null;
-			let tmdbId = mdbResponse?.tmdbid;
-			if (!tmdbId) {
-				const found = await metadataCache.searchTmdbByImdb(imdbid);
-				tmdbId = found?.tv_results?.[0]?.id;
-			}
-			return tmdbId ? metadataCache.getTmdbTvInfo(tmdbId, 'videos') : null;
-		});
-
-		const [traktNext, traktLast, traktSeasons, tvmazeShow, omdbResponse, tmdbData] =
-			await Promise.all([
-				traktNextPromise,
-				traktLastPromise,
-				traktSeasonsPromise,
-				tvmazePromise,
-				omdbPromise,
-				tmdbPromise,
-			]);
+		// Every provider, each cached and each allowed to fail on its own; the
+		// metadata API reads the same rows.
+		const sources = await fetchShowSources(imdbid);
+		const mdbResponse: any = sources.mdblist;
+		const cinemetaResponse: any = sources.cinemeta;
+		const omdbResponse: any = sources.omdb;
+		const tmdbData: any = sources.tmdb;
+		const tvmazeShow = sources.tvmaze;
+		const traktSeasons = sources.traktSeasons;
+		const traktNext = sources.traktNext;
+		const traktLast = sources.traktLast;
 
 		if (
 			!mdbResponse &&

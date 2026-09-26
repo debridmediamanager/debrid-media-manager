@@ -1,0 +1,1262 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"titles": [
+			{ "iso_3166_1": "ES", "title": "Anatomía de una caída", "type": "" },
+			{ "iso_3166_1": "CN", "title": "坠落的剖析", "type": "" },
+			{ "iso_3166_1": "UA", "title": "Анатомія падіння", "type": "" },
+			{ "iso_3166_1": "TR", "title": "Bir Düşüşün Anatomisi", "type": "" },
+			{ "iso_3166_1": "HU", "title": "Egy zuhanás anatómiája", "type": "" },
+			{ "iso_3166_1": "DE", "title": "Anatomie eines Falls", "type": "" },
+			{ "iso_3166_1": "AZ", "title": "Bir Düşüşün Anatomiyası", "type": "" },
+			{ "iso_3166_1": "MX", "title": "Anatomía de una Caída", "type": "" },
+			{ "iso_3166_1": "US", "title": "Anatomy Of A Fall", "type": "" },
+			{ "iso_3166_1": "TH", "title": "เขาบอกว่าเธอฆ่า", "type": "" },
+			{ "iso_3166_1": "FR", "title": "Anatomie d'une chute", "type": "" },
+			{ "iso_3166_1": "PT", "title": "Anatomia de Uma Queda", "type": "" },
+			{ "iso_3166_1": "BR", "title": "Anatomia de Uma Queda", "type": "" },
+			{ "iso_3166_1": "KR", "title": "추락의 해부", "type": "" },
+			{ "iso_3166_1": "GR", "title": "Ανατομία Μιας Πτώσης", "type": "" },
+			{ "iso_3166_1": "CN", "title": "坠楼死亡的剖析", "type": "" }
+		]
+	},
+	"backdrop_path": "/lDVl2jf6VB8ODl1olZ6FLvOV1gX.jpg",
+	"belongs_to_collection": null,
+	"budget": 6600000,
+	"external_ids": {
+		"imdb_id": "tt17009710",
+		"wikidata_id": "Q117037697",
+		"facebook_id": "AnatomyOfAFallFilm",
+		"instagram_id": null,
+		"twitter_id": null
+	},
+	"genres": [
+		{ "id": 53, "name": "Thriller" },
+		{ "id": 9648, "name": "Mystery" },
+		{ "id": 80, "name": "Crime" }
+	],
+	"homepage": "https://www.anatomyofafall.film/",
+	"id": 915935,
+	"imdb_id": "tt17009710",
+	"origin_country": ["FR"],
+	"original_language": "fr",
+	"original_title": "Anatomie d'une chute",
+	"overview": "A woman is suspected of her husband's murder, and their blind son faces a moral dilemma as the sole witness.",
+	"popularity": 19.06,
+	"poster_path": "/kQs6keheMwCxJxrzV83VUwFtHkB.jpg",
+	"production_companies": [
+		{
+			"id": 58568,
+			"logo_path": "/2qxPHPKa29w2MsaPKpYRfBnQcyq.png",
+			"name": "Les Films de Pierre",
+			"origin_country": "FR"
+		},
+		{
+			"id": 12389,
+			"logo_path": "/6yilbEvoHtPcTb4LwAueAq091iT.png",
+			"name": "Les Films Pelléas",
+			"origin_country": "FR"
+		},
+		{
+			"id": 83,
+			"logo_path": "/9OQ0rm55xtlgX7KcAKMUePJSrQc.png",
+			"name": "France 2 Cinéma",
+			"origin_country": "FR"
+		},
+		{
+			"id": 109756,
+			"logo_path": "/sudlIoNIIrKmVWaYD2ZVo9HGogW.png",
+			"name": "Auvergne-Rhône-Alpes Cinéma",
+			"origin_country": "FR"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "FR", "name": "France" }],
+	"release_date": "2023-08-23",
+	"release_dates": {
+		"results": [
+			{
+				"iso_3166_1": "AD",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-12-06T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "AR",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Cannes Film Festival Week",
+						"release_date": "2023-11-28T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "+13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-01-25T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "AU",
+				"release_dates": [
+					{
+						"certification": "MA 15+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Sydney Film Festival",
+						"release_date": "2023-06-15T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "MA 15+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Melbourne International Film Festival",
+						"release_date": "2023-08-05T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Darwin International Film Festival",
+						"release_date": "2023-09-20T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "MA 15+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-01-25T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "MA 15+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-03-22T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "MA 15+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-04-03T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "BE",
+				"release_dates": [
+					{
+						"certification": "16",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Brussels International Film Festival",
+						"release_date": "2023-07-01T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "16",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-08-30T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "16",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-12-21T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "BR",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Festival Varilux de Cinema Francês",
+						"release_date": "2023-11-10T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "São Paulo International Film Festival",
+						"release_date": "2023-10-19T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-01-25T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "14",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Prime Video",
+						"release_date": "2024-03-21T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CA",
+				"release_dates": [
+					{
+						"certification": "14A",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Toronto International Film Festival",
+						"release_date": "2023-09-07T00:00:00.000Z",
+						"type": 1
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CH",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Deutschschweiz",
+						"release_date": "2023-11-09T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Suisse romande",
+						"release_date": "2023-08-23T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Ticino",
+						"release_date": "2023-10-26T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CN",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-03-29T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "IQIYI",
+						"release_date": "2024-06-27T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CZ",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Karlovy Vary International Film Festival",
+						"release_date": "2023-07-05T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "12+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-10-19T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "DE",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": ["Self-harm", "Injury", "Language"],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-11-02T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-02-22T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Blu-ray & DVD",
+						"release_date": "2024-02-29T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Special Edition",
+						"release_date": "2024-04-04T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "de",
+						"note": "Das Erste",
+						"release_date": "2026-01-02T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "EE",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Tallinn Black Nights Film Festival",
+						"release_date": "2023-11-03T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-03-29T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "ES",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-12-06T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "FR",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Cannes Film Festival",
+						"release_date": "2023-05-21T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Paris",
+						"release_date": "2023-06-14T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "TP",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-08-23T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-12-21T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "fr",
+						"note": "France•2",
+						"release_date": "2026-05-17T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "GB",
+				"release_dates": [
+					{
+						"certification": "15",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "London, England",
+						"release_date": "2023-11-01T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "15",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-11-10T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "15",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Blu-ray & DVD",
+						"release_date": "2024-03-18T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "GR",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-08-31T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "HK",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Hong Kong French Film Festival ",
+						"release_date": "2023-11-22T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "IIA",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-01-11T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "ID",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Jakarta World Cinema Week",
+						"release_date": "2023-11-12T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-01-19T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IE",
+				"release_dates": [
+					{
+						"certification": "15A",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-11-10T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IL",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Jerusalem Film Festival",
+						"release_date": "2023-07-23T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "14",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-03-28T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IN",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Jio MAMI Film Festival",
+						"release_date": "2023-10-28T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "International Film Festival of India Goa",
+						"release_date": "2023-11-22T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "UA",
+						"descriptors": [],
+						"iso_639_1": "fr",
+						"note": "",
+						"release_date": "2024-02-02T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Disney+ Hotstar",
+						"release_date": "2024-03-22T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IT",
+				"release_dates": [
+					{
+						"certification": "6+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-10-26T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "6+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-02-08T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "JP",
+				"release_dates": [
+					{
+						"certification": "G",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-02-23T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "KR",
+				"release_dates": [
+					{
+						"certification": "15",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Busan International Film Festival",
+						"release_date": "2023-10-08T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "15",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-01-31T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "LT",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "LNOBT",
+						"release_date": "2024-03-03T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "N-13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-03-28T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "MX",
+				"release_dates": [
+					{
+						"certification": "B",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-01-25T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "MY",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Malaysia International Film Festival",
+						"release_date": "2024-07-27T00:00:00.000Z",
+						"type": 1
+					}
+				]
+			},
+			{
+				"iso_3166_1": "NL",
+				"release_dates": [
+					{
+						"certification": "16",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Film by the Sea Festival",
+						"release_date": "2023-09-15T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "12",
+						"descriptors": ["Fear", "Coarse Language", "Drugs and/or alcohol abuse"],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-10-12T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "NZ",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "New Zealand International Film Festival",
+						"release_date": "2023-07-19T00:00:00.000Z",
+						"type": 1
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PA",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-01-25T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PE",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Lima Film Festival",
+						"release_date": "2023-08-13T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-02-01T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PL",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Two Riversides Film and Art Festival",
+						"release_date": "2024-07-27T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Festiwal Filmu Muzyki Malarstwa Lato z Muzami",
+						"release_date": "2024-07-08T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-02-24T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-05-10T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PR",
+				"release_dates": [
+					{
+						"certification": "R",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Hulu",
+						"release_date": "2024-03-22T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PT",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Lisboa Film Festival ",
+						"release_date": "2023-11-16T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "M/12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-02-01T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "RU",
+				"release_dates": [
+					{
+						"certification": "18+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-10-19T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "SE",
+				"release_dates": [
+					{
+						"certification": "11",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-09-22T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "SG",
+				"release_dates": [
+					{
+						"certification": "NC16",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-11-23T00:00:00.000Z",
+						"type": 2
+					}
+				]
+			},
+			{
+				"iso_3166_1": "TH",
+				"release_dates": [
+					{
+						"certification": "15",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-12-14T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "TW",
+				"release_dates": [
+					{
+						"certification": "6+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2024-02-23T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "6+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "LiTV",
+						"release_date": "2024-04-26T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "UA",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Kyiv Critics Week",
+						"release_date": "2023-10-12T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-12-11T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-12-14T00:00:00.000Z",
+						"type": 2
+					}
+				]
+			},
+			{
+				"iso_3166_1": "US",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Telluride Film Festival",
+						"release_date": "2023-08-31T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "New York Film Festival",
+						"release_date": "2023-10-07T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "R",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-10-13T00:00:00.000Z",
+						"type": 2
+					},
+					{
+						"certification": "R",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Hulu",
+						"release_date": "2024-03-22T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "R",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-12-22T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "R",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "The Criterion Collection Blu-Ray & DVD",
+						"release_date": "2024-05-28T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "VI",
+				"release_dates": [
+					{
+						"certification": "R",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Hulu",
+						"release_date": "2024-03-22T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "VN",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2023-11-10T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			}
+		]
+	},
+	"revenue": 36000000,
+	"runtime": 151,
+	"softcore": false,
+	"spoken_languages": [
+		{ "english_name": "English", "iso_639_1": "en", "name": "English" },
+		{ "english_name": "French", "iso_639_1": "fr", "name": "Français" }
+	],
+	"status": "Released",
+	"tagline": "Did she do it?",
+	"title": "Anatomy of a Fall",
+	"video": false,
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Best Original Screenplay | 'Anatomy Of A Fall' | Oscars 2024 Press Room Speech",
+				"key": "iNRFQaoLEk8",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "65f2d45e35818f0188d16c96",
+				"published_at": "2024-03-11T01:13:32.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Arthur Harari's \"Words to Live By\" | 'Anatomy of a Fall' | Oscars",
+				"key": "HecyjmnikQU",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "65ec99f79a643501852e7623",
+				"published_at": "2024-03-08T15:00:06.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Clip - Would You Call It A Seduction [Subtitled]",
+				"key": "GdNjyAFLFGs",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "65dcb1c103bf840184b0079a",
+				"published_at": "2024-02-26T01:50:21.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "ANATOMY OF A FALL wins BEST INTERNATIONAL FILM at the 2024 Film Independent Spirit Awards",
+				"key": "NCuM7-l9jkw",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "65dcafe43dc88501684280f8",
+				"published_at": "2024-02-25T23:50:20.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Anatomy of a Fall wins Original Screenplay |  EE BAFTA Film Awards 2024",
+				"key": "u6khHayhmW0",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "65d3529be04d8a01489867ac",
+				"published_at": "2024-02-19T13:03:32.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Clip - A Couple is a Kind of Chaos",
+				"key": "OhxaZlDMhCw",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "65cf664e9ac5350147df7d3d",
+				"published_at": "2024-02-16T03:11:31.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Clip - You Are Not A Victim",
+				"key": "TLqgK_LQKS4",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "65ba8703b7d352014d22004c",
+				"published_at": "2024-01-30T23:45:07.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Clip - I Did Not Kill Him",
+				"key": "_4tp7QLgUZ0",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "65b282212866fa0148e373ec",
+				"published_at": "2024-01-25T02:46:12.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "A Conversation with ANATOMY OF A FALL Director/Co-writer Justine Triet",
+				"key": "AQ7XO8ceQSI",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "65b28264a802360150ae9f13",
+				"published_at": "2024-01-24T23:07:17.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Film Independent Presents ANATOMY OF A FALL Q&A with Justine Triet & Arthur Harari",
+				"key": "PvlKmNeRfbU",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "6568f2a0d05a03012c6ffdf7",
+				"published_at": "2023-11-24T15:00:21.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "UK Trailer #2",
+				"key": "vtNYnjWUFqE",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Teaser",
+				"official": true,
+				"id": "654f4fb829383543f296a993",
+				"published_at": "2023-11-10T16:38:13.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Sandra Hüller & Justine Triet Interview",
+				"key": "NEtX2WL_tKs",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "654e1e425a5ed0011e067dd0",
+				"published_at": "2023-11-09T15:30:18.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Anatomy of a Fall Q&A with Co-Writer and Director Justine Triet and Co-Writer Arthur Harari",
+				"key": "DgtzmjdLgIw",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "66e8bcdc82ff873f7d1e76b0",
+				"published_at": "2023-10-31T16:21:41.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Justine Triet Puts Her Own Spin on Crime in ANATOMY OF A FALL",
+				"key": "62p90Ta1H-Q",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": false,
+				"id": "6540dbf535818f00e3923211",
+				"published_at": "2023-10-16T14:30:04.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Justine Triet, Sandra Hüller & Arthur Harari on Anatomy of a Fall",
+				"key": "IvEhmdPgCgM",
+				"site": "YouTube",
+				"size": 2160,
+				"type": "Featurette",
+				"official": true,
+				"id": "6525353eea84c700ca0dde79",
+				"published_at": "2023-10-10T11:20:21.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official UK Trailer",
+				"key": "_MdTMA0PetA",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "651567cbc50ad200ad7f0e8c",
+				"published_at": "2023-09-28T11:37:17.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "TIFF 2023 Intro & Q&A with Justine Triet",
+				"key": "auqWyjYfK7I",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": false,
+				"id": "6540e233eec5b500aeb28711",
+				"published_at": "2023-09-08T18:00:02.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official US Trailer",
+				"key": "FUXawkH-ONM",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "64de469baaec7103f7e2f2fb",
+				"published_at": "2023-08-17T16:00:09.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer [Subtitled]",
+				"key": "fTrsp5BMloA",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "64b2f77be0ca7f014429e120",
+				"published_at": "2023-07-13T05:51:45.000Z"
+			}
+		]
+	},
+	"vote_average": 7.512,
+	"vote_count": 3488
+}

@@ -1,0 +1,96 @@
+{
+	"meta": {
+		"awards": "Won 1 Oscar. 58 wins & 31 nominations total",
+		"cast": ["Miyu Irino", "Rumi Hiiragi", "Mari Natsuki"],
+		"country": "Japan, United States",
+		"description": "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches and spirits, and where humans are changed into beasts.",
+		"director": ["Hayao Miyazaki"],
+		"dvdRelease": "2019-12-19T00:00:00.000Z",
+		"genre": ["Animation", "Adventure", "Family"],
+		"imdbRating": "8.6",
+		"imdb_id": "tt0245429",
+		"moviedb_id": 129,
+		"name": "Spirited Away",
+		"popularity": 1.3511366666666667,
+		"poster": "https://images.metahub.space/poster/small/tt0245429/img",
+		"released": "2003-03-28T00:00:00.000Z",
+		"runtime": "125 min",
+		"trailers": [
+			{ "source": "GAp2_0JJskk", "type": "Trailer" },
+			{ "source": "W6zsqNYMN18", "type": "Trailer" },
+			{ "source": "F-X_81GZ2Uo", "type": "Trailer" },
+			{ "source": "ByXuk9QqQkk", "type": "Trailer" }
+		],
+		"type": "movie",
+		"writer": ["Hayao Miyazaki"],
+		"year": "2003",
+		"background": "https://images.metahub.space/background/medium/tt0245429/img",
+		"logo": "https://images.metahub.space/logo/medium/tt0245429/img",
+		"popularities": {
+			"moviedb": 40.5341,
+			"stremio": 1.3511366666666667,
+			"trakt": 53,
+			"stremio_lib": 0
+		},
+		"slug": "movie/spirited-away-0245429",
+		"id": "tt0245429",
+		"genres": ["Animation", "Adventure", "Family"],
+		"releaseInfo": "2003",
+		"videos": [],
+		"trailerStreams": [
+			{ "title": "Spirited Away", "ytId": "GAp2_0JJskk" },
+			{ "title": "Spirited Away", "ytId": "W6zsqNYMN18" },
+			{ "title": "Spirited Away", "ytId": "F-X_81GZ2Uo" },
+			{ "title": "Spirited Away", "ytId": "ByXuk9QqQkk" }
+		],
+		"links": [
+			{ "name": "8.6", "category": "imdb", "url": "https://imdb.com/title/tt0245429" },
+			{
+				"name": "Spirited Away",
+				"category": "share",
+				"url": "https://www.strem.io/s/movie/spirited-away-0245429"
+			},
+			{
+				"name": "Animation",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Animation"
+			},
+			{
+				"name": "Adventure",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Adventure"
+			},
+			{
+				"name": "Family",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Family"
+			},
+			{
+				"name": "Miyu Irino",
+				"category": "Cast",
+				"url": "stremio:///search?search=Miyu%20Irino"
+			},
+			{
+				"name": "Rumi Hiiragi",
+				"category": "Cast",
+				"url": "stremio:///search?search=Rumi%20Hiiragi"
+			},
+			{
+				"name": "Mari Natsuki",
+				"category": "Cast",
+				"url": "stremio:///search?search=Mari%20Natsuki"
+			},
+			{
+				"name": "Hayao Miyazaki",
+				"category": "Writers",
+				"url": "stremio:///search?search=Hayao%20Miyazaki"
+			},
+			{
+				"name": "Hayao Miyazaki",
+				"category": "Directors",
+				"url": "stremio:///search?search=Hayao%20Miyazaki"
+			}
+		],
+		"behaviorHints": { "defaultVideoId": "tt0245429", "hasScheduledVideos": false }
+	}
+}

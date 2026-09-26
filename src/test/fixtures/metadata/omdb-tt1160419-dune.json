@@ -1,0 +1,31 @@
+{
+	"Actors": "Timothée Chalamet, Rebecca Ferguson, Zendaya",
+	"Awards": "Won 6 Oscars. 178 wins & 299 nominations total",
+	"BoxOffice": "$108,897,830",
+	"Country": "Canada, United States",
+	"DVD": "N/A",
+	"Director": "Denis Villeneuve",
+	"Genre": "Action, Adventure, Drama",
+	"Language": "English, Mandarin",
+	"Metascore": "74",
+	"Plot": "Paul Atreides arrives on Arrakis after his father accepts the stewardship of the dangerous planet. However, chaos ensues after a betrayal as forces clash to control melange, a precious resource.",
+	"Poster": "https://m.media-amazon.com/images/M/MV5BNWIyNmU5MGYtZDZmNi00ZjAwLWJlYjgtZTc0ZGIxMDE4ZGYwXkEyXkFqcGc@._V1_QL75_UY562_CR1,0,380,562_.jpg",
+	"Production": "N/A",
+	"Rated": "PG-13",
+	"Ratings": [
+		{ "Source": "Internet Movie Database", "Value": "8.0/10" },
+		{ "Source": "Rotten Tomatoes", "Value": "83%" },
+		{ "Source": "Metacritic", "Value": "74/100" }
+	],
+	"Released": "22 Oct 2021",
+	"Response": "True",
+	"Runtime": "155 min",
+	"Title": "Dune: Part One",
+	"Type": "movie",
+	"Website": "N/A",
+	"Writer": "Jon Spaihts, Denis Villeneuve, Eric Roth",
+	"Year": "2021",
+	"imdbID": "tt1160419",
+	"imdbRating": "8.0",
+	"imdbVotes": "1,038,179"
+}

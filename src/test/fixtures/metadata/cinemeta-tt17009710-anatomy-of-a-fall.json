@@ -1,0 +1,98 @@
+{
+	"meta": {
+		"imdb_id": "tt17009710",
+		"name": "Anatomy of a Fall",
+		"type": "movie",
+		"awards": "Won 1 Oscar. 132 wins & 191 nominations total",
+		"cast": ["Sandra Hüller", "Swann Arlaud", "Milo Machado-Graner"],
+		"country": "France",
+		"description": "A woman is suspected of murder after her husband's death; their half-blind son faces a moral dilemma as the main witness.",
+		"director": ["Justine Triet"],
+		"genre": ["Crime", "Drama", "Mystery"],
+		"imdbRating": "7.6",
+		"released": "2024-03-22T00:00:00.000Z",
+		"slug": "movie/anatomy-of-a-fall-17009710",
+		"writer": ["Justine Triet", "Arthur Harari"],
+		"year": "2024",
+		"moviedb_id": 915935,
+		"popularities": {
+			"moviedb": 6.1165,
+			"stremio": 0.20388333333333333,
+			"stremio_lib": 0,
+			"trakt": 2
+		},
+		"poster": "https://images.metahub.space/poster/small/tt17009710/img",
+		"runtime": "151 min",
+		"trailers": [
+			{ "source": "_MdTMA0PetA", "type": "Trailer" },
+			{ "source": "FUXawkH-ONM", "type": "Trailer" },
+			{ "source": "fTrsp5BMloA", "type": "Trailer" }
+		],
+		"background": "https://images.metahub.space/background/medium/tt17009710/img",
+		"logo": "https://images.metahub.space/logo/medium/tt17009710/img",
+		"dvdRelease": "2023-12-22T00:00:00.000Z",
+		"popularity": 0.20388333333333333,
+		"id": "tt17009710",
+		"genres": ["Crime", "Drama", "Mystery"],
+		"releaseInfo": "2024",
+		"trailerStreams": [
+			{ "title": "Anatomy of a Fall", "ytId": "_MdTMA0PetA" },
+			{ "title": "Anatomy of a Fall", "ytId": "FUXawkH-ONM" },
+			{ "title": "Anatomy of a Fall", "ytId": "fTrsp5BMloA" }
+		],
+		"links": [
+			{ "name": "7.6", "category": "imdb", "url": "https://imdb.com/title/tt17009710" },
+			{
+				"name": "Anatomy of a Fall",
+				"category": "share",
+				"url": "https://www.strem.io/s/movie/anatomy-of-a-fall-17009710"
+			},
+			{
+				"name": "Crime",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Crime"
+			},
+			{
+				"name": "Drama",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Drama"
+			},
+			{
+				"name": "Mystery",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Mystery"
+			},
+			{
+				"name": "Sandra Hüller",
+				"category": "Cast",
+				"url": "stremio:///search?search=Sandra%20H%C3%BCller"
+			},
+			{
+				"name": "Swann Arlaud",
+				"category": "Cast",
+				"url": "stremio:///search?search=Swann%20Arlaud"
+			},
+			{
+				"name": "Milo Machado-Graner",
+				"category": "Cast",
+				"url": "stremio:///search?search=Milo%20Machado-Graner"
+			},
+			{
+				"name": "Justine Triet",
+				"category": "Writers",
+				"url": "stremio:///search?search=Justine%20Triet"
+			},
+			{
+				"name": "Arthur Harari",
+				"category": "Writers",
+				"url": "stremio:///search?search=Arthur%20Harari"
+			},
+			{
+				"name": "Justine Triet",
+				"category": "Directors",
+				"url": "stremio:///search?search=Justine%20Triet"
+			}
+		],
+		"behaviorHints": { "defaultVideoId": "tt17009710", "hasScheduledVideos": false }
+	}
+}
