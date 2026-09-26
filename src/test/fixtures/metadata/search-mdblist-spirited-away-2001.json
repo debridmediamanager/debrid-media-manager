@@ -1,0 +1,30 @@
+{
+	"response": true,
+	"search": [
+		{
+			"id": "tt0245429",
+			"title": "Spirited Away",
+			"year": 2001,
+			"score": 91,
+			"score_average": 91,
+			"type": "movie",
+			"imdbid": "tt0245429",
+			"tmdbid": 129,
+			"traktid": 97,
+			"malid": 199
+		},
+		{
+			"id": "tr386880",
+			"title": "The Nippon Television Special of Spirited Away",
+			"year": 2001,
+			"score": 0,
+			"score_average": 0,
+			"type": "movie",
+			"imdbid": null,
+			"tmdbid": 535075,
+			"traktid": null,
+			"malid": null
+		}
+	],
+	"total": 2
+}

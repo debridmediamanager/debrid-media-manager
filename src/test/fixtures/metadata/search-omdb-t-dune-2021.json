@@ -1,0 +1,31 @@
+{
+	"Actors": "Kyle MacLachlan, Virginia Madsen, Francesca Annis",
+	"Awards": "Nominated for 1 Oscar. 2 wins & 7 nominations total",
+	"BoxOffice": "$31,439,560",
+	"Country": "United States, Mexico",
+	"DVD": "N/A",
+	"Director": "David Lynch",
+	"Genre": "Action, Adventure, Sci-Fi",
+	"Language": "English",
+	"Metascore": "41",
+	"Plot": "A Duke's son leads desert warriors against the galactic emperor and his father's evil nemesis to free their desert world from the emperor's rule.",
+	"Poster": "https://m.media-amazon.com/images/M/MV5BMGJlMGM3NDAtOWNhMy00MWExLWI2MzEtMDQ0ZDIzZDY5ZmQ2XkEyXkFqcGc@._V1_SX300.jpg",
+	"Production": "N/A",
+	"Rated": "PG-13",
+	"Ratings": [
+		{ "Source": "Internet Movie Database", "Value": "6.3/10" },
+		{ "Source": "Rotten Tomatoes", "Value": "36%" },
+		{ "Source": "Metacritic", "Value": "41/100" }
+	],
+	"Released": "14 Dec 1984",
+	"Response": "True",
+	"Runtime": "137 min",
+	"Title": "Dune",
+	"Type": "movie",
+	"Website": "N/A",
+	"Writer": "Frank Herbert, David Lynch",
+	"Year": "1984",
+	"imdbID": "tt0087182",
+	"imdbRating": "6.3",
+	"imdbVotes": "191,067"
+}

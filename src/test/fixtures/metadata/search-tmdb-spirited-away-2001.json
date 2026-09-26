@@ -1,0 +1,41 @@
+{
+	"page": 1,
+	"results": [
+		{
+			"adult": false,
+			"backdrop_path": "/6oaL4DP75yABrd5EbC4H2zq5ghc.jpg",
+			"genre_ids": [16, 10751, 14],
+			"id": 129,
+			"title": "Spirited Away",
+			"original_language": "ja",
+			"original_title": "千と千尋の神隠し",
+			"overview": "A young girl, Chihiro, becomes trapped in a strange new world of spirits. When her parents undergo a mysterious transformation, she must call upon the courage she never knew she had to free her family.",
+			"popularity": 40.5341,
+			"poster_path": "/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
+			"release_date": "2001-07-20",
+			"softcore": false,
+			"video": false,
+			"vote_average": 8.535,
+			"vote_count": 18941
+		},
+		{
+			"adult": false,
+			"backdrop_path": "/pN5AaSdGBpMIUptwY6ZpyNeqpzc.jpg",
+			"genre_ids": [10770, 99],
+			"id": 535075,
+			"title": "The Nippon Television Special of Spirited Away",
+			"original_language": "ja",
+			"original_title": "千と千尋の神隠し 公開直前スペシャル！",
+			"overview": "View this Japanese television special to get an insider's peek into Studio Ghibli during the creation of  Spirted Away.",
+			"popularity": 1.8411,
+			"poster_path": "/uvjE8iVZZ2EbQrP4gIQNHivaTjn.jpg",
+			"release_date": "2001-07-15",
+			"softcore": false,
+			"video": false,
+			"vote_average": 10.0,
+			"vote_count": 1
+		}
+	],
+	"total_pages": 1,
+	"total_results": 2
+}

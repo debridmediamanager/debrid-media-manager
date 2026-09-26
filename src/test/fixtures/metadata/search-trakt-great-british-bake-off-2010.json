@@ -1,0 +1,473 @@
+[
+	{
+		"score": 2314894167592929300,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt21958588",
+				"plex": {
+					"guid": "5d9c08097b5c2e001e652a87",
+					"slug": "the-great-british-bake-off-1"
+				},
+				"slug": "the-great-british-bake-off-2017",
+				"tmdb": 87012,
+				"tvdb": null,
+				"trakt": 174953
+			},
+			"airs": { "day": "Tuesday", "time": "20:00", "timezone": "Europe/London" },
+			"year": 2017,
+			"title": "The Great British Bake Off",
+			"votes": 1058,
+			"colors": { "poster": ["#7F7473", "#39A0E9"] },
+			"genres": ["reality"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/shows/000/174/953/logos/medium/ffdb0488e4.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/174/953/fanarts/medium/72dd38ef5e.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/174/953/posters/medium/65aaa4280f.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.849716663360596,
+			"status": "returning series",
+			"country": "gb",
+			"network": "Channel 4",
+			"runtime": 60,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=0EGEassda6g",
+			"homepage": "https://www.channel4.com/programmes/the-great-british-bake-off",
+			"language": "en",
+			"overview": "Britain's best amateur bakers compete in the iconic white tent - all united in their aim to prove their baking skills and impress judges Paul Hollywood and Prue Leith.",
+			"languages": ["en"],
+			"subgenres": ["food", "reality-competition", "baking"],
+			"last_aired": "2026-09-22T19:00:00.000Z",
+			"social_ids": {
+				"twitter": "britishbakeoff",
+				"facebook": null,
+				"instagram": "britishbakeoff",
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-25T17:25:40.000Z",
+			"first_aired": "2017-08-29T19:00:00.000Z",
+			"certification": null,
+			"comment_count": 8,
+			"total_runtime": 5414,
+			"aired_episodes": 91,
+			"original_title": "The Great British Bake Off",
+			"available_translations": [
+				"cs",
+				"da",
+				"en",
+				"hu",
+				"ja",
+				"ko",
+				"lt",
+				"nl",
+				"ru",
+				"sv",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 2314894167592929300,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt1877368",
+				"plex": {
+					"guid": "5d9c08097b5c2e001e652a87",
+					"slug": "the-great-british-bake-off-1"
+				},
+				"slug": "the-great-british-bake-off",
+				"tmdb": 34549,
+				"tvdb": 184871,
+				"trakt": 34400
+			},
+			"airs": { "day": "Tuesday", "time": "20:00", "timezone": "Europe/London" },
+			"year": 2010,
+			"title": "The Great British Bake Off",
+			"votes": 756,
+			"colors": { "poster": ["#BCC4D0", "#4B4E49"] },
+			"genres": ["reality"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/shows/000/034/400/logos/medium/984eb670ef.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/shows/000/034/400/thumbs/medium/5b887d3cf5.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/shows/000/034/400/banners/medium/0c88dfd041.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/034/400/fanarts/medium/91a24e20ce.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/034/400/posters/medium/ceb6339414.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 8.017195701599121,
+			"status": "canceled",
+			"country": "gb",
+			"network": "BBC Two",
+			"runtime": 60,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.bbc.co.uk/programmes/b013pqnm",
+			"language": "en",
+			"overview": "This British television baking competition selects from amongst its competitors the best amateur baker. The series is credited with reinvigorating interest in baking throughout the UK, and many of its participants, including winners, have gone on to start a career based on baking.",
+			"languages": ["en"],
+			"subgenres": ["food", "competition", "baking", "baking-competition"],
+			"last_aired": "2016-10-27T19:00:00.000Z",
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Great_British_Bake_Off"
+			},
+			"updated_at": "2026-09-24T16:00:56.000Z",
+			"first_aired": "2010-08-17T19:00:00.000Z",
+			"certification": "TV-PG",
+			"comment_count": 5,
+			"total_runtime": 5321,
+			"aired_episodes": 89,
+			"original_title": "The Great British Bake Off",
+			"available_translations": ["cs", "en", "fi", "fr", "ja", "nl", "sv", "zh"]
+		}
+	},
+	{
+		"score": 2314894167592929300,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt4057258",
+				"plex": {
+					"guid": "5d9c084308fddd001f296123",
+					"slug": "the-great-british-bake-off-an-extra-slice"
+				},
+				"slug": "the-great-british-bake-off-an-extra-slice",
+				"tmdb": 61162,
+				"tvdb": 284546,
+				"trakt": 60676
+			},
+			"airs": { "day": "Friday", "time": "20:00", "timezone": "Europe/London" },
+			"year": 2014,
+			"title": "The Great British Bake Off: An Extra Slice",
+			"votes": 24,
+			"colors": { "poster": ["#A7A7B7", "#393330"] },
+			"genres": ["documentary", "reality"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [
+					"media.trakt.tv/images/shows/000/060/676/banners/medium/74de42e6c7.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/060/676/fanarts/medium/6bfa1544fb.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/060/676/posters/medium/5dbe3f1333.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.916669845581055,
+			"status": "canceled",
+			"country": "gb",
+			"network": "BBC Two",
+			"runtime": 30,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.bbc.co.uk/programmes/b04dclt3",
+			"language": "en",
+			"overview": "Jo Brand is joined by three different celebrity Bake Off fans to shine a spotlight on the good, the bad and the soggy bottomed from the most recent episode.",
+			"languages": ["en"],
+			"subgenres": ["cooking", "food", "baking", "cooking-competition"],
+			"last_aired": "2016-10-28T19:00:00.000Z",
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Great_British_Bake_Off:_An_Extra_Slice"
+			},
+			"updated_at": "2026-09-06T15:56:37.000Z",
+			"first_aired": "2014-08-08T19:00:00.000Z",
+			"certification": null,
+			"comment_count": 0,
+			"total_runtime": 900,
+			"aired_episodes": 30,
+			"original_title": "The Great British Bake Off: An Extra Slice",
+			"available_translations": ["en"]
+		}
+	},
+	{
+		"score": 2314894167592929300,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": null,
+				"plex": {
+					"guid": "62e3e7e87c0870ba45c58bcf",
+					"slug": "the-great-british-bake-off-an-extra-slice-1"
+				},
+				"slug": "the-great-british-bake-off-an-extra-slice-2017",
+				"tmdb": 206957,
+				"tvdb": null,
+				"trakt": 197222
+			},
+			"airs": { "day": "Thursday", "time": "20:00", "timezone": "Europe/London" },
+			"year": 2017,
+			"title": "The Great British Bake Off: An Extra Slice",
+			"votes": 12,
+			"colors": { "poster": ["#F1EDEA", "#4D4039"] },
+			"genres": ["reality", "comedy", "talk-show"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/shows/000/197/222/logos/medium/53120b5cdd.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/197/222/fanarts/medium/15eac27e8d.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/197/222/posters/medium/9a8a460423.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 5.666669845581055,
+			"status": "returning series",
+			"country": "gb",
+			"network": "Channel 4",
+			"runtime": 47,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.channel4.com/programmes/the-great-british-bake-off-an-extra-slice",
+			"language": "en",
+			"overview": "The show that gives fans another bite of Bake Off when one helping just isn't enough. Jo Brand chats to a panel of celebrities about all the action, and meets the latest baker to leave the tent.",
+			"languages": ["en"],
+			"subgenres": ["food", "baking", "baking-competition"],
+			"last_aired": "2025-11-07T20:00:00.000Z",
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-01-27T15:42:48.000Z",
+			"first_aired": "2017-08-31T19:00:00.000Z",
+			"certification": null,
+			"comment_count": 0,
+			"total_runtime": 4119,
+			"aired_episodes": 90,
+			"original_title": "The Great British Bake Off: An Extra Slice",
+			"available_translations": ["en", "nl", "sv"]
+		}
+	},
+	{
+		"score": 2314894167592929300,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": null,
+				"plex": {
+					"guid": "6a9abbb6c7b97a9fcc14e103",
+					"slug": "the-great-british-bake-off-second-helpings-1"
+				},
+				"slug": "the-great-british-bake-off-second-helpings",
+				"tmdb": 333854,
+				"tvdb": 482425,
+				"trakt": 328545
+			},
+			"airs": { "day": "Tuesday", "time": "22:30", "timezone": "Europe/London" },
+			"year": 2026,
+			"title": "The Great British Bake Off: Second Helpings",
+			"votes": 0,
+			"colors": { "poster": ["#BD958A", "#3B202E"] },
+			"genres": ["talk-show", "reality", "documentary", "comedy"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/shows/000/328/545/logos/medium/987fe72695.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/328/545/fanarts/medium/e3d91bc892.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/328/545/posters/medium/a8a93f6f0c.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "returning series",
+			"country": "gb",
+			"network": "Channel 4",
+			"runtime": 40,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.channel4.com/programmes/the-great-british-bake-off-second-helpings",
+			"language": "en",
+			"overview": "Second Helpings is the companion show to The Great British Bake Off, offering a lively mix of discussion, interviews and behind-the-scenes features. Hosted by Jon Richardson and Judi Love, it revisits the week’s Bake Off highlights, welcomes contestants and guests, and explores the reactions, stories and memorable moments from the main competition. It replaces An Extra Slice with a refreshed format and new name.",
+			"languages": ["en"],
+			"subgenres": [
+				"playful",
+				"lighthearted",
+				"behind-the-scenes",
+				"interview",
+				"baking",
+				"cheerful",
+				"talk"
+			],
+			"last_aired": "2026-09-22T21:30:00.000Z",
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-25T15:07:44.000Z",
+			"first_aired": "2026-09-22T21:30:00.000Z",
+			"certification": null,
+			"comment_count": 1,
+			"total_runtime": 34,
+			"aired_episodes": 1,
+			"original_title": "The Great British Bake Off: Second Helpings",
+			"available_translations": ["en"]
+		}
+	},
+	{
+		"score": 2310372976047950000,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": null,
+				"plex": {
+					"guid": "5d9c08feffd9ef001e99db7f",
+					"slug": "bake-off-the-professionals"
+				},
+				"slug": "bake-off-the-professionals",
+				"tmdb": 79207,
+				"tvdb": 347046,
+				"trakt": 130188
+			},
+			"airs": { "day": "Tuesday", "time": "20:00", "timezone": "Europe/London" },
+			"year": 2018,
+			"title": "Bake Off: The Professionals",
+			"votes": 98,
+			"colors": { "poster": ["#BEAC9E", "#72644E"] },
+			"genres": ["reality"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/shows/000/130/188/logos/medium/de38103971.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/130/188/fanarts/medium/1d9611ddca.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/130/188/posters/medium/8ab09797f4.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.010200023651123,
+			"status": "returning series",
+			"country": "gb",
+			"network": "BBC Two",
+			"runtime": 45,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.channel4.com/programmes/bake-off-the-professionals",
+			"language": "en",
+			"overview": "Teams of professional pastry chefs do battle in the kitchen.",
+			"languages": ["en"],
+			"subgenres": ["baking-competition"],
+			"last_aired": "2026-07-22T19:00:00.000Z",
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-09T15:36:17.000Z",
+			"first_aired": "2018-05-06T19:00:00.000Z",
+			"certification": null,
+			"comment_count": 0,
+			"total_runtime": 4134,
+			"aired_episodes": 90,
+			"original_title": "Bake Off: The Professionals",
+			"available_translations": ["cs", "da", "el", "en", "sv", "zh"]
+		}
+	},
+	{
+		"score": 2310372976047950000,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt2131864",
+				"plex": { "guid": "5d9c08a402391c001f58db85", "slug": "junior-bake-off" },
+				"slug": "junior-bake-off",
+				"tmdb": 81492,
+				"tvdb": 277114,
+				"trakt": 75342
+			},
+			"airs": { "day": "Friday", "time": "17:00", "timezone": "Europe/London" },
+			"year": 2011,
+			"title": "Junior Bake Off",
+			"votes": 70,
+			"colors": { "poster": ["#A47261", "#3C3731"] },
+			"genres": ["reality", "children"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/shows/000/075/342/logos/medium/1d66dfb205.png.webp"
+				],
+				"thumb": [],
+				"banner": [
+					"media.trakt.tv/images/shows/000/075/342/banners/medium/f2fe9c0ae0.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/075/342/fanarts/medium/6c52d5d348.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/075/342/posters/medium/17d452714b.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.0714287757873535,
+			"status": "returning series",
+			"country": "gb",
+			"network": "Channel 4",
+			"runtime": 45,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.channel4.com/programmes/junior-bake-off",
+			"language": "en",
+			"overview": "A spinoff of 'The Great British Bake Off', this show features children aged 9-13 competing to be ‘Junior Bake Off’ Champion by taking part in a series of Technical Bakes and Showstopper Challenges using their own original recipes",
+			"languages": ["en"],
+			"subgenres": ["baking-competition"],
+			"last_aired": "2026-01-23T17:00:00.000Z",
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Junior_Bake_Off"
+			},
+			"updated_at": "2026-08-27T08:36:17.000Z",
+			"first_aired": "2011-10-31T17:00:00.000Z",
+			"certification": "NR",
+			"comment_count": 1,
+			"total_runtime": 7114,
+			"aired_episodes": 163,
+			"original_title": "Junior Bake Off",
+			"available_translations": ["da", "de", "en", "nl", "zh"]
+		}
+	}
+]
