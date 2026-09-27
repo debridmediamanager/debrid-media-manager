@@ -17,7 +17,7 @@ import { useTorrentManagement } from '@/hooks/useTorrentManagement';
 import type { AnimeFranchise } from '@/services/anime/animeEntries';
 import { SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
 import UserTorrentDB from '@/torrent/db';
-import { parseAnidbIdParam } from '@/utils/anidbId';
+import { parseAnimePageId } from '@/utils/anidbId';
 import {
 	AnimeEpisodeFilter,
 	AnimeEpisodeSummary,
@@ -104,7 +104,11 @@ const unavailable = (r: SearchResult) =>
  */
 const AnimePage: FunctionComponent = () => {
 	const router = useRouter();
-	const anidbId = parseAnidbIdParam(router.query.anidbid);
+	const pageId = parseAnimePageId(router.query.anidbid);
+	/** Null for an entry addressed by its MAL id, which has no AniDB relations. */
+	const anidbId = pageId?.source === 'anidb' ? pageId.id : null;
+	const pageSlug = pageId?.slug ?? null;
+	const pagePath = pageId?.path ?? null;
 	const isMounted = useRef(true);
 	const hasLoadedTrackerStats = useRef(false);
 
@@ -148,10 +152,10 @@ const AnimePage: FunctionComponent = () => {
 	// A bare `/anime/anidb-17617` from the old page or a search id: one address.
 	useEffect(() => {
 		const raw = router.query.anidbid;
-		if (anidbId !== null && typeof raw === 'string' && raw !== String(anidbId)) {
-			router.replace({ pathname: '/anime/[anidbid]', query: { anidbid: String(anidbId) } });
+		if (pagePath !== null && typeof raw === 'string' && raw !== pagePath) {
+			router.replace({ pathname: '/anime/[anidbid]', query: { anidbid: pagePath } });
 		}
-	}, [anidbId, router]);
+	}, [pagePath, router]);
 
 	/**
 	 * The IMDb id availability is filed under, when the entry has one.
@@ -167,7 +171,7 @@ const AnimePage: FunctionComponent = () => {
 		return info?.imdbid && /^tt\d+$/.test(info.imdbid) ? info.imdbid : '';
 	}, [franchise, info]);
 	/** What reports and tracker stats are filed under; an anime key, never a guessed IMDb id. */
-	const mediaKey = anidbId !== null ? `anime:anidb-${anidbId}` : '';
+	const mediaKey = pageSlug !== null ? `anime:${pageSlug}` : '';
 
 	const {
 		hashAndProgress,
@@ -228,7 +232,7 @@ const AnimePage: FunctionComponent = () => {
 
 	// Metadata and relations, keyed on the entry alone.
 	useEffect(() => {
-		if (anidbId === null) {
+		if (pageSlug === null) {
 			setIsInfoLoading(false);
 			return;
 		}
@@ -238,8 +242,11 @@ const AnimePage: FunctionComponent = () => {
 		setIsInfoLoading(true);
 
 		Promise.allSettled([
-			axiosWithRetry.get<AnimeInfo>(`/api/info/anime?animeid=anidb-${anidbId}`),
-			axiosWithRetry.get<AnimeFranchise>(`/api/anime/franchise?anidbid=${anidbId}`),
+			axiosWithRetry.get<AnimeInfo>(`/api/info/anime?animeid=${pageSlug}`),
+			// Relations are between AniDB entries; a MAL-only row has none to ask for.
+			anidbId !== null
+				? axiosWithRetry.get<AnimeFranchise>(`/api/anime/franchise?anidbid=${anidbId}`)
+				: Promise.reject(new Error('no AniDB id')),
 		]).then(([infoResult, franchiseResult]) => {
 			if (cancelled) return;
 			if (infoResult.status === 'fulfilled') setInfo(infoResult.value.data);
@@ -250,9 +257,9 @@ const AnimePage: FunctionComponent = () => {
 		return () => {
 			cancelled = true;
 		};
-	}, [anidbId]);
+	}, [pageSlug, anidbId]);
 
-	async function fetchData(id: number, episode: AnimeEpisodeFilter | null, page: number) {
+	async function fetchData(slug: string, episode: AnimeEpisodeFilter | null, page: number) {
 		let tokenWithTimestamp: string;
 		let tokenHash: string;
 		try {
@@ -311,7 +318,7 @@ const AnimePage: FunctionComponent = () => {
 
 		try {
 			const params = new URLSearchParams({
-				animeId: `anidb-${id}`,
+				animeId: slug,
 				dmmProblemKey: tokenWithTimestamp,
 				solution: tokenHash,
 				page: String(page),
@@ -458,24 +465,24 @@ const AnimePage: FunctionComponent = () => {
 	// Torrents, refetched when the entry or the episode filter changes. Every
 	// page 0 answers the whole entry's episode summary, so it is dropped only
 	// when the entry changes, not when an episode is picked.
-	const summaryFor = useRef<number | null>(null);
+	const summaryFor = useRef<string | null>(null);
 	useEffect(() => {
-		if (anidbId === null || !router.isReady) return;
+		if (pageSlug === null || !router.isReady) return;
 		setSearchResults([]);
 		setCurrentPage(0);
 		setHasMoreResults(true);
-		if (summaryFor.current !== anidbId) {
-			summaryFor.current = anidbId;
+		if (summaryFor.current !== pageSlug) {
+			summaryFor.current = pageSlug;
 			setEpisodeSummary(null);
 		}
 
 		const initialize = async () => {
 			await torrentDB.initializeDB();
-			await Promise.all([fetchData(anidbId, episodeFilter, 0), fetchHashAndProgress()]);
+			await Promise.all([fetchData(pageSlug, episodeFilter, 0), fetchHashAndProgress()]);
 		};
 		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [anidbId, episodeFilter, router.isReady]);
+	}, [pageSlug, episodeFilter, router.isReady]);
 
 	// Stored tracker stats for the uncached rows, once per fetch.
 	useEffect(() => {
@@ -533,14 +540,14 @@ const AnimePage: FunctionComponent = () => {
 
 	const setEpisodeFilter = useCallback(
 		(filter: AnimeEpisodeFilter | null) => {
-			if (anidbId === null) return;
-			const nextQuery: Record<string, string> = { anidbid: String(anidbId) };
+			if (pagePath === null) return;
+			const nextQuery: Record<string, string> = { anidbid: pagePath };
 			if (filter !== null) nextQuery.episode = String(filter);
 			router.replace({ pathname: '/anime/[anidbid]', query: nextQuery }, undefined, {
 				shallow: true,
 			});
 		},
-		[anidbId, router]
+		[pagePath, router]
 	);
 
 	const handleShowInfo = (result: SearchResult) => {
@@ -556,7 +563,7 @@ const AnimePage: FunctionComponent = () => {
 		});
 	};
 
-	if (anidbId === null) {
+	if (pageId === null) {
 		return (
 			<div className="mx-2 my-1 min-h-screen bg-gray-900 text-white">
 				<p className="mb-2">That is not an AniDB id.</p>
@@ -573,20 +580,24 @@ const AnimePage: FunctionComponent = () => {
 
 	const metadataKnown = Boolean(info && info.title && info.title !== UNKNOWN_TITLE);
 	const self = franchise?.entries.find((e) => e.anidbId === anidbId);
-	const title = metadataKnown ? info!.title : (self?.title ?? `AniDB ${anidbId}`);
+	const idLabel = pageId.source === 'anidb' ? `AniDB ${pageId.id}` : `MAL ${pageId.id}`;
+	const title = metadataKnown ? info!.title : (self?.title ?? idLabel);
 	const poster =
 		metadataKnown && info!.poster !== PLACEHOLDER_POSTER ? info!.poster : (self?.poster ?? '');
 	const type = animeTypeLabel(info?.type || self?.type);
 	const isKnown = metadataKnown || Boolean(franchise?.known);
-	const anidbUrl = `https://anidb.net/anime/${anidbId}`;
+	const anidbUrl =
+		pageId.source === 'anidb'
+			? `https://anidb.net/anime/${pageId.id}`
+			: `https://myanimelist.net/anime/${pageId.id}`;
 
 	if (!isKnown && searchState === 'loaded' && searchResults.length === 0 && !errorMessage) {
 		return (
 			<div className="min-h-screen bg-gray-900 p-2 text-gray-100" data-testid="anime-unknown">
 				<Head>
-					<title>Debrid Media Manager - Anime - AniDB {anidbId}</title>
+					<title>Debrid Media Manager - Anime - {idLabel}</title>
 				</Head>
-				<h1 className="mb-2 text-xl font-bold">AniDB {anidbId}</h1>
+				<h1 className="mb-2 text-xl font-bold">{idLabel}</h1>
 				<p className="mb-2">
 					DMM has no anime entry with this id, and nothing has been scraped for it.
 				</p>
@@ -596,7 +607,7 @@ const AnimePage: FunctionComponent = () => {
 						target="_blank"
 						className="rounded border-2 border-gray-500 bg-gray-800/30 px-2 py-1 text-sm"
 					>
-						Look it up on AniDB
+						Look it up on {pageId.source === 'anidb' ? 'AniDB' : 'MyAnimeList'}
 					</Link>
 					<Link
 						href="/"
@@ -634,7 +645,7 @@ const AnimePage: FunctionComponent = () => {
 				target="_blank"
 				className="inline-flex items-center rounded border border-gray-500 bg-gray-800/70 px-2 py-0.5 text-gray-200 hover:bg-gray-700/70"
 			>
-				AniDB {anidbId}
+				{idLabel}
 				<ExternalLink className="ml-1 h-3 w-3" />
 			</Link>
 			{imdbIds.map((id) => (
@@ -676,7 +687,7 @@ const AnimePage: FunctionComponent = () => {
 				</div>
 				<AnimeEntryLinks
 					entries={entries}
-					currentAnidbId={anidbId}
+					currentAnidbId={anidbId ?? undefined}
 					label="Same IMDb title"
 				/>
 			</div>
@@ -932,7 +943,7 @@ const AnimePage: FunctionComponent = () => {
 					className="haptic my-4 w-full rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 font-medium text-gray-100 shadow-md transition-colors duration-200 hover:bg-gray-700/50 hover:shadow-lg"
 					onClick={() => {
 						setCurrentPage((prev) => prev + 1);
-						fetchData(anidbId, episodeFilter, currentPage + 1);
+						fetchData(pageSlug!, episodeFilter, currentPage + 1);
 					}}
 				>
 					Show More Results

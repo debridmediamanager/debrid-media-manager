@@ -332,10 +332,10 @@ describe('SearchPage', () => {
 		const hrefs = Array.from(section.querySelectorAll('a')).map((a) => a.getAttribute('href'));
 		expect(hrefs).toContain('/anime/18302');
 		expect(hrefs[0]).toBe('/anime/14727');
-		// Rows with only a MAL id have no AniDB page to link to.
-		expect(anime.results.filter((r: any) => r.id.startsWith('anime:mal-'))).toHaveLength(2);
-		expect(hrefs).toHaveLength(anime.results.length - 2);
-		expect(hrefs.every((h) => /^\/anime\/\d+$/.test(h!))).toBe(true);
+		expect(hrefs).toHaveLength(anime.results.length);
+		// A row with only a MAL id is addressed by it.
+		expect(hrefs).toContain('/anime/mal-1278');
+		expect(hrefs.every((h) => /^\/anime\/(?:mal-)?\d+$/.test(h!))).toBe(true);
 		expect(screen.queryByText(/No results found/)).not.toBeInTheDocument();
 	});
 

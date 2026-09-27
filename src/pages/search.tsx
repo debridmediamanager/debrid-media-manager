@@ -48,8 +48,8 @@ function Search() {
 	const searchResults = data ?? [];
 
 	// AniDB entries matching the query, each its own anime page. A season or
-	// OVA with no IMDb id of its own is reachable only this way. Rows with no
-	// AniDB id (`anime:mal-N`) have no page and are left out.
+	// OVA with no IMDb id of its own is reachable only this way. A row with no
+	// AniDB id (`anime:mal-N`) has its page at `/anime/mal-N`.
 	const { data: animeData, loading: animeLoading } = useCachedList<AnimeSearchResult[]>(
 		query ? `animesearch:${query}` : null,
 		async () => {

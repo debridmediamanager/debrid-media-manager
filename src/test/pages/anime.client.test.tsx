@@ -211,8 +211,8 @@ describe('/anime/[anidbid]', () => {
 		checkRdMock.mockResolvedValue(0);
 		axiosGetMock.mockImplementation(async (url: string) => {
 			if (url.startsWith('/api/info/anime')) {
-				const aid = /anidb-(\d+)/.exec(url)![1];
-				const name = `api-info-anime-anidb-${aid}.json`;
+				const id = /animeid=((?:anidb|mal)-\d+)/.exec(url)![1];
+				const name = `api-info-anime-${id}.json`;
 				return {
 					status: 200,
 					data: fixture(hasFixture(name) ? name : 'api-info-anime-anidb-99999999.json'),
@@ -360,6 +360,22 @@ describe('/anime/[anidbid]', () => {
 			'Nothing has been scraped for this entry yet.'
 		);
 		expect(screen.getByTestId('anime-franchise')).toBeInTheDocument();
+	});
+
+	// The Stremio handlers link a row with no AniDB id here by its MAL id.
+	it('serves an entry the table knows only by its MAL id', async () => {
+		await openEntry('mal-26395');
+
+		expect(await screen.findByRole('heading', { name: 'Teekyuu 4' })).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: /MAL 26395/ })).toHaveAttribute(
+			'href',
+			'https://myanimelist.net/anime/26395'
+		);
+		expect(axiosGetMock.mock.calls.some(([u]) => String(u).includes('franchise'))).toBe(false);
+		await waitFor(() => expect(screen.getByTestId('results').children).toHaveLength(50));
+		expect(torrentCalls()[0]).toContain('animeId=mal-26395');
+		expect(resultsProps.at(-1).imdbId).toBe('anime:mal-26395');
+		expect(replaceMock).not.toHaveBeenCalled();
 	});
 
 	it('says so for an AniDB id nothing knows', async () => {
