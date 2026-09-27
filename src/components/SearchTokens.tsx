@@ -32,8 +32,8 @@ const SearchTokens: FC<SearchTokensProps> = ({ title, year, isShow = false, onTo
 		// Format season number as s01, s02, etc. if it's a show
 		const formattedYear = isShow ? `s${year.padStart(2, '0')}` : year.toString();
 
-		// Deduplicate
-		const unique = [...new Set([...titleWords, formattedYear])];
+		// Deduplicate. An anime entry has no year or season token to offer.
+		const unique = [...new Set([...titleWords, formattedYear])].filter((word) => word !== '');
 
 		return unique.map((word) => ({
 			display: word,

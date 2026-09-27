@@ -25,4 +25,8 @@ describe('SSR safety', () => {
 	it('show page can load when window is undefined', async () => {
 		await importWithoutWindow('@/pages/show/[imdbid]/[seasonNum].tsx');
 	});
+
+	it('anime page can load when window is undefined', async () => {
+		await importWithoutWindow('@/pages/anime/[anidbid].tsx');
+	});
 });

@@ -68,7 +68,11 @@ type TvSearchResultsProps = {
 	player: string;
 	hashAndProgress: Record<string, number>;
 	handleShowInfo: (result: SearchResult) => void;
-	handleCast: (hash: string, fileIds: string[]) => Promise<void>;
+	/**
+	 * Absent on the anime page: Stremio casts are keyed by IMDb season and
+	 * episode, which an absolutely numbered AniDB entry does not have.
+	 */
+	handleCast?: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCastTorBox?: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCastAllDebrid?: (hash: string, files: { filename: string }[]) => Promise<void>;
 	handleCastPremiumize?: (hash: string) => Promise<void>;
@@ -255,7 +259,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	const handleSendTbToRd = (hash: string) => runSendToRd(hash, sendTbToRd);
 
 	const handleCastWithLoading = async (hash: string, fileIds: string[]) => {
-		if (castingHashes.has(hash)) return;
+		if (!handleCast || castingHashes.has(hash)) return;
 		setCastingHashes((prev) => new Set(prev).add(hash));
 		try {
 			await handleCast(hash, fileIds);
@@ -643,27 +647,33 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													</span>
 												</span>
 											))}
-										{rdKey && r.rdAvailable && castableRdFileIds.length > 0 && (
-											<button
-												className={`haptic-sm inline rounded border-2 border-green-500 bg-green-900/30 px-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 ${isCasting ? 'cursor-not-allowed opacity-50' : ''}`}
-												onClick={() =>
-													handleCastWithLoading(r.hash, castableRdFileIds)
-												}
-												disabled={isCasting}
-											>
-												{isCasting ? (
-													<>
-														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-														Casting...
-													</>
-												) : (
-													<>
-														<Cast className="mr-1 inline-block h-3 w-3 text-green-400" />
-														Cast (RD)
-													</>
-												)}
-											</button>
-										)}
+										{handleCast &&
+											rdKey &&
+											r.rdAvailable &&
+											castableRdFileIds.length > 0 && (
+												<button
+													className={`haptic-sm inline rounded border-2 border-green-500 bg-green-900/30 px-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 ${isCasting ? 'cursor-not-allowed opacity-50' : ''}`}
+													onClick={() =>
+														handleCastWithLoading(
+															r.hash,
+															castableRdFileIds
+														)
+													}
+													disabled={isCasting}
+												>
+													{isCasting ? (
+														<>
+															<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+															Casting...
+														</>
+													) : (
+														<>
+															<Cast className="mr-1 inline-block h-3 w-3 text-green-400" />
+															Cast (RD)
+														</>
+													)}
+												</button>
+											)}
 										{rdKey && !r.rdAvailable && (
 											<button
 												className={`haptic-sm inline rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 ${isCheckingRd ? 'cursor-not-allowed opacity-50' : ''}`}
