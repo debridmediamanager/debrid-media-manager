@@ -290,15 +290,17 @@ export class ScrapedVerdictService extends DatabaseClient {
 					await tx.scrapedTrash.deleteMany({
 						where: { id: { in: pageRows.map((r) => r.id) } },
 					});
-					for (const r of pageRows) {
-						await tx.scrapedVerdict.deleteMany({
-							where: {
+					// One statement: deleting row by row held the transaction past
+					// its timeout on a 967-entry page.
+					await tx.scrapedVerdict.deleteMany({
+						where: {
+							OR: pageRows.map((r) => ({
 								imdbId: r.imdbId,
 								hash: r.hash,
 								titleKey: titleKeyOf(r.title),
-							},
-						});
-					}
+							})),
+						},
+					});
 					return missing.length;
 				},
 				{ timeout: 30_000 }

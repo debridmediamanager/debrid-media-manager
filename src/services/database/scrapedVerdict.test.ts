@@ -290,13 +290,25 @@ describe('ScrapedVerdictService', () => {
 			expect(tx.scrapedTrash.deleteMany).toHaveBeenCalledWith({
 				where: { id: { in: [7, 8] } },
 			});
+			// One statement for the whole page: a row-by-row delete held the
+			// transaction past its timeout on a 967-entry page (tt28959685).
+			expect(tx.scrapedVerdict.deleteMany).toHaveBeenCalledTimes(1);
 			expect(tx.scrapedVerdict.deleteMany).toHaveBeenCalledWith({
 				where: {
-					imdbId: 'tt3498820',
-					hash: 'aaa',
-					titleKey: titleKeyOf(
-						'Captain.America.Civil.War.HDR.1080p.HEVC.10bit.BT.2020.DTS-HD.MA'
-					),
+					OR: [
+						{
+							imdbId: 'tt3498820',
+							hash: 'aaa',
+							titleKey: titleKeyOf(
+								'Captain.America.Civil.War.HDR.1080p.HEVC.10bit.BT.2020.DTS-HD.MA'
+							),
+						},
+						{
+							imdbId: 'tt3498820',
+							hash: 'bbb',
+							titleKey: titleKeyOf('Already written back by a scraper'),
+						},
+					],
 				},
 			});
 		});
