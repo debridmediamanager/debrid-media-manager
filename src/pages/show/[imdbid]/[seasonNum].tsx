@@ -1,3 +1,4 @@
+import AnimeEntryLinks from '@/components/AnimeEntryLinks';
 import AvailabilityTokens from '@/components/AvailabilityTokens';
 import MediaHeader from '@/components/MediaHeader';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
@@ -14,6 +15,7 @@ import {
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
+import { useAnimeEntries } from '@/hooks/useAnimeEntries';
 import { useAvailabilityCheck } from '@/hooks/useAvailabilityCheck';
 import { useExternalSources } from '@/hooks/useExternalSources';
 import { useMassReport } from '@/hooks/useMassReport';
@@ -195,6 +197,14 @@ const TvSearch: FunctionComponent = () => {
 
 	const router = useRouter();
 	const { imdbid, seasonNum } = router.query;
+
+	/**
+	 * The AniDB entries this show is split into. IMDb files every season, cour
+	 * and OVA under one id while AniDB gives each its own entry, so these links
+	 * reach the releases this page's season numbering cannot place.
+	 */
+	const animeEntries = useAnimeEntries(typeof imdbid === 'string' ? [imdbid] : []);
+	const animeLinks = typeof imdbid === 'string' ? (animeEntries[imdbid] ?? []) : [];
 
 	/**
 	 * A user holding only Real-Debrid cannot start a transfer at all: the uploader
@@ -1748,6 +1758,7 @@ const TvSearch: FunctionComponent = () => {
 					<>
 						{airingStatus}
 						{seasonNavigation}
+						<AnimeEntryLinks entries={animeLinks} />
 					</>
 				}
 				trailer={showInfo.trailer}
