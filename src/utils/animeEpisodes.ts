@@ -87,13 +87,28 @@ export function parseAnimeEpisode(rawName: string): AnimeEpisodeMatch | null {
 		if (range) return range;
 	}
 
-	// `S04E23`, `S01E05v2`. The season is dropped: an AniDB entry is one season,
-	// and groups disagree about what to call it (`S04E23` and `S01E23` are the
-	// same episode of Bookworm's fourth season in production).
-	const tv = /\bs\d{1,2}\s?e(\d{1,4})(?:v\d{1,2})?(?![\d-])/i.exec(name);
-	if (tv) {
-		const episode = toEpisode(tv[1]);
-		if (episode !== null) return { kind: 'episode', episode };
+	// `Ep. 642 - 654`: with an episode marker in front, a spaced hyphen is a range.
+	const wordedRange = /\b(?:episodes?|eps?)\.?\s?(\d{1,4})\s?[-~]\s?(\d{1,4})\b/i.exec(name);
+	if (wordedRange) {
+		const range = toRange(wordedRange[1], wordedRange[2]);
+		if (range) return range;
+	}
+
+	// `S04E23`, `S01E05v2`, `S1E17-DUBBED`. The season is dropped: an AniDB entry
+	// is one season, and groups disagree about what to call it (`S04E23` and
+	// `S01E23` are the same episode of Bookworm's fourth season in production).
+	const tv = /\bs\d{1,2}\s?e(\d{1,4})(?:v\d{1,2})?(?!\d|\s?-\s?e?\d)/i.exec(name);
+	const tvEpisode = tv ? toEpisode(tv[1]) : null;
+	// A name giving the entry's own number and a TVDB one that disagree
+	// (`Tenjiku-hen - 08 (S02E21)`) names no episode anyone can trust.
+	const dashedTogether = [...name.matchAll(/\s-\s(\d{1,4})(?:v\d{1,2})?(?=\s|$|[[(]|\.(?!\d))/g)];
+	const dashedEpisode =
+		dashedTogether.length > 0 ? toEpisode(dashedTogether[dashedTogether.length - 1][1]) : null;
+	if (tvEpisode !== null) {
+		if (dashedEpisode !== null && !isYear(dashedEpisode) && dashedEpisode !== tvEpisode) {
+			return null;
+		}
+		return { kind: 'episode', episode: tvEpisode };
 	}
 
 	// `- 01 ~ 28`, `(01-28)`, `[1-8 из 24]`, `01-12 Batch`, `ep1-15`. A hyphen
@@ -125,10 +140,8 @@ export function parseAnimeEpisode(rawName: string): AnimeEpisodeMatch | null {
 	// The fansub form: `Title - 05`, `Title - 17v2 [480p]`. The last one wins,
 	// since a title can itself contain ` - ` (`Honzuki ... - Ryushu no Youjo - 23`).
 	// A decimal is a recap (`26.5`, `14.5 OVA`), which no whole episode is.
-	const dashed = [...name.matchAll(/\s-\s(\d{1,4})(?:v\d{1,2})?(?=\s|$|[[(]|\.(?!\d))/g)];
-	if (dashed.length > 0) {
-		const episode = toEpisode(dashed[dashed.length - 1][1]);
-		if (episode !== null && !isYear(episode)) return { kind: 'episode', episode };
+	if (dashedEpisode !== null && !isYear(dashedEpisode)) {
+		return { kind: 'episode', episode: dashedEpisode };
 	}
 
 	// `[Nekomoe kissaten][Sousou no Frieren][05][1080p]`. A bracket opening

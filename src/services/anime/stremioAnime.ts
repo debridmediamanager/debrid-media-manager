@@ -17,6 +17,7 @@
  */
 import type { AnimeIdSource } from '@/services/database/anime';
 import { repository } from '@/services/repository';
+import { parseAnimeEpisode } from '@/utils/animeEpisodes';
 import { getTroveCandidates, type TroveStreamCandidate } from '@/utils/cachedTroveStreams';
 import { MAX_SIZE_MB, MIN_SIZE_MB } from '@/utils/releaseSize';
 import { namedSeasons } from '@/utils/seasonNaming';
@@ -74,41 +75,25 @@ export async function resolveAnimeStreamTarget(
 /**
  * The episodes a release title names, in the numbering fansub and web releases
  * use: `Sousou no Frieren - 07`, `S01E08`, `E27`, `第5話`. A range
- * (`S01E01-E04`, `- 01 ~ 28`) names every episode in it. The season is the one
- * the title names, or null when it names none, which is how absolute numbering
- * (`One Piece - 1100`) looks.
+ * (`S01E01-E04`, `- 01 ~ 28`) names its first and last episode, so it counts
+ * as more than one; a pack that names no range names none. The season is the
+ * one the title names, or null when it names none, which is how absolute
+ * numbering (`One Piece - 1100`) looks.
+ *
+ * The episode is read by `parseAnimeEpisode`, the parser the anime page and
+ * `/api/torrents/anime` group releases by, so an episode the page lists is the
+ * episode Stremio is offered.
  */
 export function animeEpisodesNamed(title: string): { season: number | null; episodes: number[] } {
-	const episodes = new Set<number>();
-	const add = (from: string, to?: string) => {
-		const start = Number(from);
-		const end = to !== undefined ? Number(to) : start;
-		if (!Number.isInteger(start) || !Number.isInteger(end) || end < start) return;
-		// A range is only ever counted as "more than one"; its size does not matter.
-		episodes.add(start);
-		if (end !== start) episodes.add(end);
-	};
-
-	for (const m of title.matchAll(
-		/(?:^|[^a-z0-9])s\d{1,2}[ ._-]?e(\d{1,4})(?:v\d)?(?:[ ]?[-~–][ ]?e?(\d{1,4}))?(?![0-9a-z])/gi
-	)) {
-		add(m[1], m[2]);
-	}
-	// Not followed by a letter either: `[E827D70E]` is a release's CRC, not
-	// episode 827 (Erai-raws' `Uramichi Onii-san - 08 [v0][540p][E827D70E]`).
-	for (const m of title.matchAll(
-		/(?:^|[^a-z0-9])(?:ep?|episode)[ ._]?(\d{1,4})(?:v\d)?(?:[ ]?[-~–][ ]?(?:ep?)?(\d{1,4}))?(?![0-9a-z])/gi
-	)) {
-		add(m[1], m[2]);
-	}
-	for (const m of title.matchAll(
-		/\s[-–]\s(\d{1,4})(?:v\d+)?(?:\s?[-~–]\s?(\d{1,4}))?(?=$|[\s[(._])/g
-	)) {
-		add(m[1], m[2]);
-	}
-	for (const m of title.matchAll(/第(\d{1,4})[話话集]/g)) {
-		add(m[1]);
-	}
+	const match = parseAnimeEpisode(title);
+	const episodes =
+		match === null
+			? []
+			: match.kind === 'episode'
+				? [match.episode]
+				: match.from !== undefined && match.to !== undefined
+					? [match.from, match.to]
+					: [];
 
 	// SubsPlease's `Honzuki no Gekokujou S4 - 23` is season 4, episode 23;
 	// `namedSeasons` reads the same text as the season range 4-23.
@@ -116,7 +101,7 @@ export function animeEpisodesNamed(title: string): { season: number | null; epis
 	const seasons = fansubSeason ? new Set([Number(fansubSeason[1])]) : namedSeasons(title);
 	return {
 		season: seasons.size === 1 ? Array.from(seasons)[0] : null,
-		episodes: Array.from(episodes).sort((a, b) => a - b),
+		episodes,
 	};
 }
 

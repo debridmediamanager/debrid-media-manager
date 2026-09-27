@@ -321,5 +321,27 @@
 		"key": "anime:anidb-15300",
 		"name": "[224] Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen OAV [BDRip 1080p x265 FLAC][sub:eng,ara,fre,ger,ita,por,rus,spa][VostFr]",
 		"expected": null
+	},
+	{
+		"key": "anime:anidb-15743",
+		"name": "Rent-a-Girlfriend S1E17-DUBBED [English (United States)] (CR 1920x1080 H.264 AAC)-ZAITO.mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 17
+		}
+	},
+	{
+		"key": "anime:anidb-69",
+		"name": "[Maximus] One Piece Ep. 642 - 654 [FuniDub 1080p x265 AAC]",
+		"expected": {
+			"kind": "batch",
+			"from": 642,
+			"to": 654
+		}
+	},
+	{
+		"key": "anime:anidb-17969",
+		"name": "[ToonsHub] Tokyo Revengers: Tenjiku-hen - 08 (S02E21) (Japanese 1080p x264 AAC) [English-Subs]",
+		"expected": null
 	}
 ]
