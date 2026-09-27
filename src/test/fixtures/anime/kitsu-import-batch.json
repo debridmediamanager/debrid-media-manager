@@ -1,0 +1,588 @@
+{
+	"data": [
+		{
+			"id": "46474",
+			"type": "anime",
+			"links": {
+				"self": "https://kitsu.io/api/edge/anime/46474"
+			},
+			"attributes": {
+				"canonicalTitle": "Sousou no Frieren",
+				"titles": {
+					"en": "Frieren: Beyond Journey’s End",
+					"en_jp": "Sousou no Frieren",
+					"it_it": "Frieren: Oltre la Fine del Viaggio",
+					"ja_jp": "葬送のフリーレン",
+					"ko_kr": "장송의 프리렌",
+					"pt_br": "Frieren e a Jornada para o Além",
+					"th_th": "คำอธิษฐานในวันที่จากลา Frieren",
+					"zh_cn": "葬送的芙莉蓮"
+				},
+				"synopsis": "After the party of heroes defeated the Demon King, they restored peace to the land and returned to lives of solitude. Generations pass, and the elven mage Frieren comes face to face with humanity’s mortality. She takes on a new apprentice and promises to fulfill old friends’ dying wishes. Can an elven mind make peace with the nature of life and death? Frieren embarks on her quest to find out.\n\n(Source: Crunchyroll)",
+				"description": "After the party of heroes defeated the Demon King, they restored peace to the land and returned to lives of solitude. Generations pass, and the elven mage Frieren comes face to face with humanity’s mortality. She takes on a new apprentice and promises to fulfill old friends’ dying wishes. Can an elven mind make peace with the nature of life and death? Frieren embarks on her quest to find out.\n\n(Source: Crunchyroll)",
+				"posterImage": {
+					"tiny": "https://media.kitsu.app/anime/46474/poster_image/tiny-f77201d59d7f322510e3d28bc1930e29.jpeg",
+					"large": "https://media.kitsu.app/anime/46474/poster_image/large-ec9b98dd5fbf8f92532d1edb45f9e882.jpeg",
+					"small": "https://media.kitsu.app/anime/46474/poster_image/small-2dc1165f5acd773939c7befb0949d258.jpeg",
+					"medium": "https://media.kitsu.app/anime/46474/poster_image/medium-23e1293e41a0b54b6621eb589c3f0d62.jpeg",
+					"original": "https://media.kitsu.app/anime/46474/poster_image/99d7df09d8cb9360b1e02825372ce612.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 110,
+								"height": 156
+							},
+							"large": {
+								"width": 550,
+								"height": 780
+							},
+							"small": {
+								"width": 284,
+								"height": 402
+							},
+							"medium": {
+								"width": 390,
+								"height": 554
+							}
+						}
+					}
+				},
+				"coverImage": {
+					"tiny": "https://media.kitsu.app/anime/46474/cover_image/tiny-dccb49f6ea01f1fc1f93b10b6bc2608c.jpeg",
+					"large": "https://media.kitsu.app/anime/46474/cover_image/large-167edf3e01fac59ce6aacfeb47df5634.jpeg",
+					"small": "https://media.kitsu.app/anime/46474/cover_image/small-2467fb0c4f1283988febe4abd715a9b8.jpeg",
+					"original": "https://media.kitsu.app/anime/46474/cover_image/883c308356a4db76a9c0af900ada96ed.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 840,
+								"height": 200
+							},
+							"large": {
+								"width": 3360,
+								"height": 800
+							},
+							"small": {
+								"width": 1680,
+								"height": 400
+							}
+						}
+					}
+				},
+				"averageRating": "88.82",
+				"subtype": "TV",
+				"nsfw": false,
+				"ageRating": "PG",
+				"startDate": "2023-09-29"
+			}
+		},
+		{
+			"id": "48981",
+			"type": "anime",
+			"links": {
+				"self": "https://kitsu.io/api/edge/anime/48981"
+			},
+			"attributes": {
+				"canonicalTitle": "Ranma 1/2 (2024)",
+				"titles": {
+					"en": "Ranma1/2 (2024)",
+					"en_jp": "Ranma 1/2 (2024)",
+					"ja_jp": "らんま1/2 (2024)"
+				},
+				"synopsis": "A new anime adaptation of Rumiko Takahashi's Ranma 1/2.\n\nRanma Saotome and Akane Tendou of Tendou Dojo are betrothed to each other by their parents. But Ranma faces a unique problem…\n\nEver since he fell into the cursed springs of Jusenkyo while training in China, his body has acquired the peculiar trait of transforming into a girl when doused with cold water and reverting to a boy with hot water.\n\nGet ready for the slapstick, action-packed rom-com featuring Ranma, Akane, and a vibrant cast of unique characters!\n\n(Source: Ranma 1/2 PR Official Site, edited)",
+				"description": "A new anime adaptation of Rumiko Takahashi's Ranma 1/2.\n\nRanma Saotome and Akane Tendou of Tendou Dojo are betrothed to each other by their parents. But Ranma faces a unique problem…\n\nEver since he fell into the cursed springs of Jusenkyo while training in China, his body has acquired the peculiar trait of transforming into a girl when doused with cold water and reverting to a boy with hot water.\n\nGet ready for the slapstick, action-packed rom-com featuring Ranma, Akane, and a vibrant cast of unique characters!\n\n(Source: Ranma 1/2 PR Official Site, edited)",
+				"posterImage": {
+					"tiny": "https://media.kitsu.app/anime/48981/poster_image/tiny-4437a00a4a323ea07c637979217cf7d5.jpeg",
+					"large": "https://media.kitsu.app/anime/48981/poster_image/large-dccd73625ba1eaee27e750455de6d385.jpeg",
+					"small": "https://media.kitsu.app/anime/48981/poster_image/small-7677a1181335a77a0f1c93cfd527761f.jpeg",
+					"medium": "https://media.kitsu.app/anime/48981/poster_image/medium-abfe4d8f087bdfef4385faeb830873d4.jpeg",
+					"original": "https://media.kitsu.app/anime/48981/poster_image/1afe979ed53aecc0f2ff43296ca88ae3.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 110,
+								"height": 156
+							},
+							"large": {
+								"width": 550,
+								"height": 780
+							},
+							"small": {
+								"width": 284,
+								"height": 402
+							},
+							"medium": {
+								"width": 390,
+								"height": 554
+							}
+						}
+					}
+				},
+				"coverImage": {
+					"tiny": "https://media.kitsu.app/anime/48981/cover_image/tiny-8afa47e5c4bc8ee9a314c12a535e9ed8.jpeg",
+					"large": "https://media.kitsu.app/anime/48981/cover_image/large-92d27dd48093edca42235caf349b66c5.jpeg",
+					"small": "https://media.kitsu.app/anime/48981/cover_image/small-46d348b0fa58d1eb8db7f8de1b845d5c.jpeg",
+					"original": "https://media.kitsu.app/anime/48981/cover_image/5b037c79988774f0ec997c27add24401.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 840,
+								"height": 200
+							},
+							"large": {
+								"width": 3360,
+								"height": 800
+							},
+							"small": {
+								"width": 1680,
+								"height": 400
+							}
+						}
+					}
+				},
+				"averageRating": "79.92",
+				"subtype": "TV",
+				"nsfw": false,
+				"ageRating": "PG",
+				"startDate": "2024-10-05"
+			}
+		},
+		{
+			"id": "49008",
+			"type": "anime",
+			"links": {
+				"self": "https://kitsu.io/api/edge/anime/49008"
+			},
+			"attributes": {
+				"canonicalTitle": "Magical Knight Rayearth (2026)",
+				"titles": {
+					"en_jp": "Magical Knight Rayearth (2026)",
+					"ja_jp": "魔法騎士レイアース (2026)"
+				},
+				"synopsis": "Hikaru Shidou, Umi Ryuuzaki, and Fuu Hououji aren't from Cephiro. While on a school field trip to the Tokyo Tower, the three girls' minds are on anything but different worlds filled with magic and wonder. That is, until Princess Emeraude, the Pillar of Cephiro, cries out for the Magic Knights to save her world--and that just happens to be those three!\n\n(Source: Crunchyroll)",
+				"description": "Hikaru Shidou, Umi Ryuuzaki, and Fuu Hououji aren't from Cephiro. While on a school field trip to the Tokyo Tower, the three girls' minds are on anything but different worlds filled with magic and wonder. That is, until Princess Emeraude, the Pillar of Cephiro, cries out for the Magic Knights to save her world--and that just happens to be those three!\n\n(Source: Crunchyroll)",
+				"posterImage": {
+					"original": "https://kitsu-production-media.s3.us-west-002.backblazeb2.com/anime/49008/poster_image/cfaa988bcb352985d3ee1f36fd94c444.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&X-Amz-Date=20260927T114804Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+					"meta": {
+						"dimensions": {}
+					}
+				},
+				"coverImage": null,
+				"averageRating": null,
+				"subtype": "TV",
+				"nsfw": false,
+				"ageRating": null,
+				"startDate": "2026-10-07"
+			}
+		},
+		{
+			"id": "49090",
+			"type": "anime",
+			"links": {
+				"self": "https://kitsu.io/api/edge/anime/49090"
+			},
+			"attributes": {
+				"canonicalTitle": "Thunderbolt Fantasy: Touriken Yuuki - Saishuushou",
+				"titles": {
+					"en_jp": "Thunderbolt Fantasy: Touriken Yuuki - Saishuushou",
+					"ja_jp": "Thunderbolt Fantasy 東離劍遊紀 最終章"
+				},
+				"synopsis": "Theatrical follow-up to Thunderbolt Fantasy: Touriken Yuuki 4.",
+				"description": "Theatrical follow-up to Thunderbolt Fantasy: Touriken Yuuki 4.",
+				"posterImage": {
+					"tiny": "https://media.kitsu.app/anime/49090/poster_image/tiny-e54ce00fc71392366a8c4d7f8f53bcc7.jpeg",
+					"large": "https://media.kitsu.app/anime/49090/poster_image/large-6909433fd94e501371162b3ef97ace4e.jpeg",
+					"small": "https://media.kitsu.app/anime/49090/poster_image/small-bec016c3863f8d58ab8b693e759e6b8f.jpeg",
+					"medium": "https://media.kitsu.app/anime/49090/poster_image/medium-82b788a477592ae4724e8e4fb4337532.jpeg",
+					"original": "https://media.kitsu.app/anime/49090/poster_image/12db07edb4bb1a8497cf24294c9d83c2.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 110,
+								"height": 156
+							},
+							"large": {
+								"width": 550,
+								"height": 780
+							},
+							"small": {
+								"width": 284,
+								"height": 402
+							},
+							"medium": {
+								"width": 390,
+								"height": 554
+							}
+						}
+					}
+				},
+				"coverImage": null,
+				"averageRating": null,
+				"subtype": "movie",
+				"nsfw": false,
+				"ageRating": "PG",
+				"startDate": "2025-02-21"
+			}
+		},
+		{
+			"id": "49240",
+			"type": "anime",
+			"links": {
+				"self": "https://kitsu.io/api/edge/anime/49240"
+			},
+			"attributes": {
+				"canonicalTitle": "Sousou no Frieren 2nd Season",
+				"titles": {
+					"en": "Frieren: Beyond Journey's End Season 2",
+					"en_jp": "Sousou no Frieren 2nd Season",
+					"ja_jp": "葬送のフリーレン 第２期"
+				},
+				"synopsis": "The second season of Sousou no Frieren.\n\nOn the road to Ende, Frieren confronts past bonds and rising threats with her newfound party.\n\n(Source: Anime News Network)",
+				"description": "The second season of Sousou no Frieren.\n\nOn the road to Ende, Frieren confronts past bonds and rising threats with her newfound party.\n\n(Source: Anime News Network)",
+				"posterImage": {
+					"tiny": "https://media.kitsu.app/anime/49240/poster_image/tiny-d582a7d749477be01b03196f9f3dfffd.jpeg",
+					"large": "https://media.kitsu.app/anime/49240/poster_image/large-5f1824cd76b6e829012dc75a2f51ec44.jpeg",
+					"small": "https://media.kitsu.app/anime/49240/poster_image/small-b61dd0c91bf0152cb8275e9dc481cd2e.jpeg",
+					"medium": "https://media.kitsu.app/anime/49240/poster_image/medium-cf744f274c2064efd1abfef4ecdfbd6d.jpeg",
+					"original": "https://media.kitsu.app/anime/49240/poster_image/127830b1fbf80dd13a604998ef10d12c.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 110,
+								"height": 156
+							},
+							"large": {
+								"width": 550,
+								"height": 780
+							},
+							"small": {
+								"width": 284,
+								"height": 402
+							},
+							"medium": {
+								"width": 390,
+								"height": 554
+							}
+						}
+					}
+				},
+				"coverImage": {
+					"tiny": "https://media.kitsu.app/anime/49240/cover_image/tiny-be18b34b7b503ca5a9df332544a066f0.jpeg",
+					"large": "https://media.kitsu.app/anime/49240/cover_image/large-11304d969375d3e40cddbcb495725826.jpeg",
+					"small": "https://media.kitsu.app/anime/49240/cover_image/small-17e5a4a0627fe0cccdd309f6fb515ceb.jpeg",
+					"original": "https://media.kitsu.app/anime/49240/cover_image/b3d01e59bb588122c6c8691880aa3b1b.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 840,
+								"height": 200
+							},
+							"large": {
+								"width": 3360,
+								"height": 800
+							},
+							"small": {
+								"width": 1680,
+								"height": 400
+							}
+						}
+					}
+				},
+				"averageRating": "88.33",
+				"subtype": "TV",
+				"nsfw": false,
+				"ageRating": "PG",
+				"startDate": "2026-01-16"
+			}
+		},
+		{
+			"id": "49433",
+			"type": "anime",
+			"links": {
+				"self": "https://kitsu.io/api/edge/anime/49433"
+			},
+			"attributes": {
+				"canonicalTitle": "Ranma 1/2 (2024) 2",
+				"titles": {
+					"en": "Ranma1/2 (2024) Season 2",
+					"en_jp": "Ranma 1/2 (2024) 2",
+					"ja_jp": "らんま1/2 第2期"
+				},
+				"synopsis": "The second season of Ranma 1/2 (2024).\n\nThe mayhem continues at the Tendo Dojo as Akane and Ranma deal with a spatula-wielding fiancée, fowl-tempered rival, and lecherous martial arts master.\n\n(Source: Netflix)",
+				"description": "The second season of Ranma 1/2 (2024).\n\nThe mayhem continues at the Tendo Dojo as Akane and Ranma deal with a spatula-wielding fiancée, fowl-tempered rival, and lecherous martial arts master.\n\n(Source: Netflix)",
+				"posterImage": {
+					"tiny": "https://media.kitsu.app/anime/49433/poster_image/tiny-8e73346dce862df97cd948490c4886e1.jpeg",
+					"large": "https://media.kitsu.app/anime/49433/poster_image/large-a740c8b019c903820ab34d5bf2bc638e.jpeg",
+					"small": "https://media.kitsu.app/anime/49433/poster_image/small-c05aeeb98c6922dffa315ede295553a1.jpeg",
+					"medium": "https://media.kitsu.app/anime/49433/poster_image/medium-c7e1ab42cde2c85e70bad0945d596e4d.jpeg",
+					"original": "https://media.kitsu.app/anime/49433/poster_image/984dc0c091e73dc48c7a0b00d5d465af.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 110,
+								"height": 156
+							},
+							"large": {
+								"width": 550,
+								"height": 780
+							},
+							"small": {
+								"width": 284,
+								"height": 402
+							},
+							"medium": {
+								"width": 390,
+								"height": 554
+							}
+						}
+					}
+				},
+				"coverImage": {
+					"tiny": "https://media.kitsu.app/anime/49433/cover_image/tiny-bc5c4361686f8d9d6bf6baf116828d87.jpeg",
+					"large": "https://media.kitsu.app/anime/49433/cover_image/large-9d5aef23d0ea00f596d1ecce0e613929.jpeg",
+					"small": "https://media.kitsu.app/anime/49433/cover_image/small-a75ba1af66b3f7e2efa85749fdefe9ae.jpeg",
+					"original": "https://media.kitsu.app/anime/49433/cover_image/8a32958d7451bfffede0fefd3d928e5d.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 840,
+								"height": 200
+							},
+							"large": {
+								"width": 3360,
+								"height": 800
+							},
+							"small": {
+								"width": 1680,
+								"height": 400
+							}
+						}
+					}
+				},
+				"averageRating": "79.05",
+				"subtype": "TV",
+				"nsfw": false,
+				"ageRating": "PG",
+				"startDate": "2025-10-04"
+			}
+		},
+		{
+			"id": "49759",
+			"type": "anime",
+			"links": {
+				"self": "https://kitsu.io/api/edge/anime/49759"
+			},
+			"attributes": {
+				"canonicalTitle": "Beyond Meta",
+				"titles": {
+					"en_jp": "Beyond Meta"
+				},
+				"synopsis": "Music video for the song Beyond Meta by KAF and MIYAVI.",
+				"description": "Music video for the song Beyond Meta by KAF and MIYAVI.",
+				"posterImage": {
+					"tiny": "https://media.kitsu.app/anime/49759/poster_image/tiny-7872dbc095a17cdef7e3f9edd0d5f263.jpeg",
+					"large": "https://media.kitsu.app/anime/49759/poster_image/large-6bdeacb6af870f3ffb322427d5b0412f.jpeg",
+					"small": "https://media.kitsu.app/anime/49759/poster_image/small-14865debb3148a9066d829433f99a768.jpeg",
+					"medium": "https://media.kitsu.app/anime/49759/poster_image/medium-e977831b87d853ff532ea934c9f4a623.jpeg",
+					"original": "https://media.kitsu.app/anime/49759/poster_image/db4e0a6649866b619d57aaa034677885.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 110,
+								"height": 156
+							},
+							"large": {
+								"width": 550,
+								"height": 780
+							},
+							"small": {
+								"width": 284,
+								"height": 402
+							},
+							"medium": {
+								"width": 390,
+								"height": 554
+							}
+						}
+					}
+				},
+				"coverImage": {
+					"tiny": "https://media.kitsu.app/anime/49759/cover_image/tiny-6ce8cd9243bda27d96a0f368531dcc8e.jpeg",
+					"large": "https://media.kitsu.app/anime/49759/cover_image/large-22a39a313030251fe0a9a85273002155.jpeg",
+					"small": "https://media.kitsu.app/anime/49759/cover_image/small-3d9326eacaf82f9aa44b7b12f49dacef.jpeg",
+					"original": "https://media.kitsu.app/anime/49759/cover_image/4ee0b1e231b22c48b8135edc3b23e4ec.png",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 840,
+								"height": 200
+							},
+							"large": {
+								"width": 3360,
+								"height": 800
+							},
+							"small": {
+								"width": 1680,
+								"height": 400
+							}
+						}
+					}
+				},
+				"averageRating": null,
+				"subtype": "music",
+				"nsfw": false,
+				"ageRating": "G",
+				"startDate": "2022-05-11"
+			}
+		},
+		{
+			"id": "50626",
+			"type": "anime",
+			"links": {
+				"self": "https://kitsu.io/api/edge/anime/50626"
+			},
+			"attributes": {
+				"canonicalTitle": "Ranma 1/2 (2024) 3",
+				"titles": {
+					"en": "Ranma1/2 (2024) Season 3",
+					"en_jp": "Ranma 1/2 (2024) 3",
+					"ja_jp": "らんま1/2 第3期"
+				},
+				"synopsis": "The third season of Ranma 1/2 (2024).",
+				"description": "The third season of Ranma 1/2 (2024).",
+				"posterImage": {
+					"tiny": "https://media.kitsu.app/anime/50626/poster_image/tiny-d45614fae912f48d4914f9168114b211.jpeg",
+					"large": "https://media.kitsu.app/anime/50626/poster_image/large-d7d98ce91ec169282830a8c3cf1a900d.jpeg",
+					"small": "https://media.kitsu.app/anime/50626/poster_image/small-6381edeeeab26ca9cc9aa7625f800ec7.jpeg",
+					"medium": "https://media.kitsu.app/anime/50626/poster_image/medium-7c9ba67c7c315e6bfb90e2506900adf8.jpeg",
+					"original": "https://media.kitsu.app/anime/50626/poster_image/eceaa86e777d461942b01af7727396e0.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 110,
+								"height": 156
+							},
+							"large": {
+								"width": 550,
+								"height": 780
+							},
+							"small": {
+								"width": 284,
+								"height": 402
+							},
+							"medium": {
+								"width": 390,
+								"height": 554
+							}
+						}
+					}
+				},
+				"coverImage": {
+					"tiny": "https://media.kitsu.app/anime/50626/cover_image/tiny-8a4e52a924cc1e9fb728c4719171654d.jpeg",
+					"large": "https://media.kitsu.app/anime/50626/cover_image/large-0a5164605e41805d9c841cc0a3007186.jpeg",
+					"small": "https://media.kitsu.app/anime/50626/cover_image/small-e627a6096e6a575fd754c3521402b2fb.jpeg",
+					"original": "https://media.kitsu.app/anime/50626/cover_image/224415ce09731cdfbec49f403d67eedb.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 840,
+								"height": 200
+							},
+							"large": {
+								"width": 3360,
+								"height": 800
+							},
+							"small": {
+								"width": 1680,
+								"height": 400
+							}
+						}
+					}
+				},
+				"averageRating": null,
+				"subtype": "TV",
+				"nsfw": false,
+				"ageRating": "PG",
+				"startDate": "2026-10-03"
+			}
+		},
+		{
+			"id": "50629",
+			"type": "anime",
+			"links": {
+				"self": "https://kitsu.io/api/edge/anime/50629"
+			},
+			"attributes": {
+				"canonicalTitle": "Sousou no Frieren 3rd Season",
+				"titles": {
+					"en": "Frieren: Beyond Journey's End Season 3",
+					"en_jp": "Sousou no Frieren 3rd Season",
+					"ja_jp": "葬送のフリーレン 第3期"
+				},
+				"synopsis": "The third season of Sousou no Frieren.",
+				"description": "The third season of Sousou no Frieren.",
+				"posterImage": {
+					"tiny": "https://media.kitsu.app/anime/50629/poster_image/tiny-50e0075f1f6882961a1a41bfb5e8f7f8.jpeg",
+					"large": "https://media.kitsu.app/anime/50629/poster_image/large-54da92d066e34a377f9fc93325771caa.jpeg",
+					"small": "https://media.kitsu.app/anime/50629/poster_image/small-848e8ca6b4ba796e29340bccce0fb5ec.jpeg",
+					"medium": "https://media.kitsu.app/anime/50629/poster_image/medium-277767360a76d6cd0b04c4805c3f0296.jpeg",
+					"original": "https://media.kitsu.app/anime/50629/poster_image/d49477e12676c2c4a60a364e1b467b87.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 110,
+								"height": 156
+							},
+							"large": {
+								"width": 550,
+								"height": 780
+							},
+							"small": {
+								"width": 284,
+								"height": 402
+							},
+							"medium": {
+								"width": 390,
+								"height": 554
+							}
+						}
+					}
+				},
+				"coverImage": {
+					"tiny": "https://media.kitsu.app/anime/50629/cover_image/tiny-ee3c2c4b4c29dc5ef5798c66c030c93a.jpeg",
+					"large": "https://media.kitsu.app/anime/50629/cover_image/large-ac6fc3b5a1874d11833b7ace847dc308.jpeg",
+					"small": "https://media.kitsu.app/anime/50629/cover_image/small-a4732d89b8c17daf555eb8f85f58b7f9.jpeg",
+					"original": "https://media.kitsu.app/anime/50629/cover_image/dda13e3cca39ac4340d15933ae9cb7f7.jpg",
+					"meta": {
+						"dimensions": {
+							"tiny": {
+								"width": 840,
+								"height": 200
+							},
+							"large": {
+								"width": 3360,
+								"height": 800
+							},
+							"small": {
+								"width": 1680,
+								"height": 400
+							}
+						}
+					}
+				},
+				"averageRating": null,
+				"subtype": "TV",
+				"nsfw": false,
+				"ageRating": null,
+				"startDate": "2027-10-31"
+			}
+		}
+	],
+	"links": {
+		"first": "https://kitsu.io/api/edge/anime?fields%5Banime%5D=canonicalTitle%2Ctitles%2Csynopsis%2Cdescription%2CposterImage%2CcoverImage%2CaverageRating%2Csubtype%2Cnsfw%2CageRating%2CstartDate&filter%5Bid%5D=46474%2C48981%2C49008%2C49090%2C49240%2C49433%2C49759%2C50626%2C50629&page%5Blimit%5D=20&page%5Boffset%5D=0",
+		"last": "https://kitsu.io/api/edge/anime?fields%5Banime%5D=canonicalTitle%2Ctitles%2Csynopsis%2Cdescription%2CposterImage%2CcoverImage%2CaverageRating%2Csubtype%2Cnsfw%2CageRating%2CstartDate&filter%5Bid%5D=46474%2C48981%2C49008%2C49090%2C49240%2C49433%2C49759%2C50626%2C50629&page%5Blimit%5D=20&page%5Boffset%5D=0"
+	},
+	"meta": {
+		"count": 9
+	}
+}

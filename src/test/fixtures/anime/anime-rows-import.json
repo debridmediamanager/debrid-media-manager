@@ -1,0 +1,78 @@
+[
+	{
+		"id": 11142,
+		"anidb_id": 17617,
+		"anime_planet_id": "frieren-beyond-journeys-end",
+		"kitsu_id": 46474,
+		"mal_id": 52991,
+		"imdb_id": "tt22248376",
+		"title": "Sousou no Frieren",
+		"type": "TV",
+		"aliases": [
+			"Sousou no Frieren",
+			"Frieren: Nach dem Ende der Reise",
+			"Frieren: Beyond Journey`s End",
+			"Frieren: Tras finalizar el viaje",
+			"Frieren: Más allá del final del viaje",
+			"Frieren",
+			"פרירן: מעבר לסוף המסע",
+			"Frieren - Oltre la Fine del Viaggio",
+			"葬送のフリーレン",
+			"Frieren e a Jornada para o Além",
+			"葬送的芙莉莲",
+			"葬送的芙莉蓮"
+		],
+		"description": "After the party of heroes defeated the Demon King, they restored peace to the land and returned to lives of solitude. Generations pass, and the elven mage Frieren comes face to face with humanity’s mortality. She takes on a new apprentice and promises to fulfill old friends’ dying wishes. Can an elven mind make peace with the nature of life and death? Frieren embarks on her quest to find out.\n\n(Source: Crunchyroll)",
+		"poster_url": "https://media.kitsu.io/anime/46474/poster_image/medium-23e1293e41a0b54b6621eb589c3f0d62.jpeg",
+		"background_url": "https://assets.fanart.tv/fanart/tv/424536/showbackground/frieren-beyond-journeys-end-651b2c7b0eecb.jpg",
+		"rating": 8.7
+	},
+	{
+		"id": 11867,
+		"anidb_id": 18560,
+		"anime_planet_id": "thunderbolt-fantasy-movie-touri-ken-yuuki-saishuushou",
+		"kitsu_id": 49090,
+		"mal_id": null,
+		"imdb_id": null,
+		"title": "Thunderbolt Fantasy: Touri-ken Yuuki Saishuushou",
+		"type": "MOVIE",
+		"aliases": [
+			"Thunderbolt Fantasy: Touri-ken Yuuki Saishuushou",
+			"Thunderbolt Fantasy 東離劍遊紀 最終章"
+		],
+		"description": "",
+		"poster_url": "",
+		"background_url": "",
+		"rating": 0
+	},
+	{
+		"id": 15346,
+		"anidb_id": null,
+		"anime_planet_id": null,
+		"kitsu_id": 49759,
+		"mal_id": 58411,
+		"imdb_id": null,
+		"title": "",
+		"type": "SPECIAL",
+		"aliases": [],
+		"description": "",
+		"poster_url": "",
+		"background_url": "",
+		"rating": 0
+	},
+	{
+		"id": 16587,
+		"anidb_id": 16388,
+		"anime_planet_id": "climbing",
+		"kitsu_id": null,
+		"mal_id": 51957,
+		"imdb_id": null,
+		"title": "",
+		"type": "MOVIE",
+		"aliases": [],
+		"description": "",
+		"poster_url": "",
+		"background_url": "",
+		"rating": 0
+	}
+]

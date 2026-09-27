@@ -1,0 +1,196 @@
+[
+	{
+		"type": "MOVIE",
+		"anidb_id": 16388,
+		"anilist_id": 143315,
+		"animecountdown_id": 3228048,
+		"anime-planet_id": "climbing",
+		"anisearch_id": 16280,
+		"mal_id": 51957,
+		"simkl_id": 3228048
+	},
+	{
+		"type": "TV",
+		"anidb_id": 17617,
+		"anilist_id": 154587,
+		"animecountdown_id": 1990194,
+		"animenewsnetwork_id": 26334,
+		"anime-planet_id": "frieren-beyond-journeys-end",
+		"anisearch_id": 17669,
+		"imdb_id": ["tt22248376"],
+		"kitsu_id": 46474,
+		"livechart_id": 11376,
+		"mal_id": 52991,
+		"simkl_id": 1990194,
+		"themoviedb_id": {
+			"tv": 209867
+		},
+		"tvdb_id": 424536,
+		"season": {
+			"tvdb": 1,
+			"tmdb": 1
+		}
+	},
+	{
+		"type": "MOVIE",
+		"anidb_id": 18560,
+		"anilist_id": 176432,
+		"animecountdown_id": 2413568,
+		"animenewsnetwork_id": 33068,
+		"anime-planet_id": "thunderbolt-fantasy-movie-touri-ken-yuuki-saishuushou",
+		"kitsu_id": 49090,
+		"livechart_id": 12993,
+		"simkl_id": 2413568
+	},
+	{
+		"type": "TV",
+		"anidb_id": 18700,
+		"anilist_id": 178533,
+		"animecountdown_id": 2498114,
+		"animenewsnetwork_id": 32929,
+		"anime-planet_id": "ranma-12-2024",
+		"anisearch_id": 19375,
+		"imdb_id": ["tt32766897"],
+		"kitsu_id": 48981,
+		"livechart_id": 12717,
+		"mal_id": 59145,
+		"simkl_id": 2498114,
+		"themoviedb_id": {
+			"tv": 259140
+		},
+		"tvdb_id": 451479,
+		"season": {
+			"tvdb": 1,
+			"tmdb": 1
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 18729,
+		"anilist_id": 178868,
+		"animecountdown_id": 2505906,
+		"animenewsnetwork_id": 37921,
+		"anime-planet_id": "magic-knight-rayearth-2026",
+		"anisearch_id": 19448,
+		"kitsu_id": 49008,
+		"livechart_id": 12737,
+		"mal_id": 59204,
+		"simkl_id": 2505906
+	},
+	{
+		"anidb_id": 18756
+	},
+	{
+		"type": "TV",
+		"anidb_id": 18886,
+		"anilist_id": 182255,
+		"animecountdown_id": 2595284,
+		"animenewsnetwork_id": 33628,
+		"anime-planet_id": "frieren-beyond-journeys-end-season-2",
+		"anisearch_id": 19635,
+		"imdb_id": ["tt22248376"],
+		"kitsu_id": 49240,
+		"livechart_id": 12860,
+		"mal_id": 59978,
+		"simkl_id": 2595284,
+		"themoviedb_id": {
+			"tv": 209867
+		},
+		"tvdb_id": 424536,
+		"season": {
+			"tvdb": 2,
+			"tmdb": 1
+		},
+		"episode_offset": {
+			"tmdb": 28
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 19067,
+		"anilist_id": 185731,
+		"animecountdown_id": 2666836,
+		"animenewsnetwork_id": 34225,
+		"anime-planet_id": "ranma-12-season-2",
+		"anisearch_id": 19989,
+		"imdb_id": ["tt32766897"],
+		"kitsu_id": 49433,
+		"livechart_id": 12987,
+		"mal_id": 60564,
+		"simkl_id": 2666836,
+		"themoviedb_id": {
+			"tv": 259140
+		},
+		"tvdb_id": 451479,
+		"season": {
+			"tvdb": 2,
+			"tmdb": 1
+		},
+		"episode_offset": {
+			"tmdb": 12
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 19972,
+		"anilist_id": 209872,
+		"animecountdown_id": 3062560,
+		"animenewsnetwork_id": 38815,
+		"anime-planet_id": "ranma-12-season-3",
+		"anisearch_id": 21332,
+		"imdb_id": ["tt32766897"],
+		"kitsu_id": 50626,
+		"livechart_id": 13571,
+		"mal_id": 63801,
+		"simkl_id": 3062560,
+		"themoviedb_id": {
+			"tv": 259140
+		},
+		"tvdb_id": 451479,
+		"season": {
+			"tvdb": 3,
+			"tmdb": 1
+		},
+		"episode_offset": {
+			"tmdb": 24
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 19977,
+		"anilist_id": 209939,
+		"animecountdown_id": 3063278,
+		"animenewsnetwork_id": 38838,
+		"anime-planet_id": "frieren-beyond-journeys-end-season-3-golden-land-arc",
+		"anisearch_id": 21339,
+		"imdb_id": ["tt22248376"],
+		"kitsu_id": 50629,
+		"livechart_id": 13576,
+		"mal_id": 63816,
+		"simkl_id": 3063278,
+		"themoviedb_id": {
+			"tv": 209867
+		},
+		"tvdb_id": 424536,
+		"season": {
+			"tvdb": 3,
+			"tmdb": 1
+		},
+		"episode_offset": {
+			"tmdb": 38
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 20331,
+		"anilist_id": 216117,
+		"animenewsnetwork_id": 40485,
+		"livechart_id": 13783,
+		"mal_id": 64893
+	},
+	{
+		"type": "SPECIAL",
+		"kitsu_id": 49759,
+		"mal_id": 58411
+	}
+]
