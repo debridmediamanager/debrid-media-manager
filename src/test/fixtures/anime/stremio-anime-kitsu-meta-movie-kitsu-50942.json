@@ -1,0 +1,17 @@
+{
+	"meta": {
+		"id": "kitsu:50942",
+		"type": "movie",
+		"name": "Pokemon: Wild Card",
+		"imdb_id": null,
+		"videos": [
+			{
+				"id": "kitsu:50942",
+				"season": 1,
+				"episode": 1,
+				"title": "Episode 1",
+				"released": "1970-01-01T00:00:00.000Z"
+			}
+		]
+	}
+}

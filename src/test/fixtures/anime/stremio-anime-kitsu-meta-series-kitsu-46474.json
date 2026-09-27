@@ -1,0 +1,262 @@
+{
+	"meta": {
+		"id": "kitsu:46474",
+		"type": "series",
+		"name": "Sousou no Frieren",
+		"imdb_id": "tt22248376",
+		"videos": [
+			{
+				"id": "kitsu:46474:1",
+				"season": 1,
+				"episode": 1,
+				"imdbSeason": 1,
+				"imdbEpisode": 1,
+				"title": "The Journey's End",
+				"released": "2023-09-29T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:2",
+				"season": 1,
+				"episode": 2,
+				"imdbSeason": 1,
+				"imdbEpisode": 2,
+				"title": "It Didn't Have to Be Magic...",
+				"released": "2023-09-29T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:3",
+				"season": 1,
+				"episode": 3,
+				"imdbSeason": 1,
+				"imdbEpisode": 3,
+				"title": "Killing Magic",
+				"released": "2023-09-29T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:4",
+				"season": 1,
+				"episode": 4,
+				"imdbSeason": 1,
+				"imdbEpisode": 4,
+				"title": "The Land Where Souls Rest",
+				"released": "2023-09-29T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:5",
+				"season": 1,
+				"episode": 5,
+				"imdbSeason": 1,
+				"imdbEpisode": 5,
+				"title": "Phantoms of the Dead",
+				"released": "2023-10-06T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:6",
+				"season": 1,
+				"episode": 6,
+				"imdbSeason": 1,
+				"imdbEpisode": 6,
+				"title": "The Hero of the Village",
+				"released": "2023-10-13T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:7",
+				"season": 1,
+				"episode": 7,
+				"imdbSeason": 1,
+				"imdbEpisode": 7,
+				"title": "Like a Fairy Tale",
+				"released": "2023-10-20T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:8",
+				"season": 1,
+				"episode": 8,
+				"imdbSeason": 1,
+				"imdbEpisode": 8,
+				"title": "Frieren the Slayer",
+				"released": "2023-10-27T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:9",
+				"season": 1,
+				"episode": 9,
+				"imdbSeason": 1,
+				"imdbEpisode": 9,
+				"title": "Aura the Guillotine",
+				"released": "2023-11-03T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:10",
+				"season": 1,
+				"episode": 10,
+				"imdbSeason": 1,
+				"imdbEpisode": 10,
+				"title": "A Powerful Mage",
+				"released": "2023-11-10T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:11",
+				"season": 1,
+				"episode": 11,
+				"imdbSeason": 1,
+				"imdbEpisode": 11,
+				"title": "Winter in the Northern Lands",
+				"released": "2023-11-17T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:12",
+				"season": 1,
+				"episode": 12,
+				"imdbSeason": 1,
+				"imdbEpisode": 12,
+				"title": "A Real Hero",
+				"released": "2023-11-24T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:13",
+				"season": 1,
+				"episode": 13,
+				"imdbSeason": 1,
+				"imdbEpisode": 13,
+				"title": "Aversion to One's Own Kind",
+				"released": "2023-12-01T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:14",
+				"season": 1,
+				"episode": 14,
+				"imdbSeason": 1,
+				"imdbEpisode": 14,
+				"title": "Privilege of the Young",
+				"released": "2023-12-08T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:15",
+				"season": 1,
+				"episode": 15,
+				"imdbSeason": 1,
+				"imdbEpisode": 15,
+				"title": "Smells Like Trouble",
+				"released": "2023-12-15T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:16",
+				"season": 1,
+				"episode": 16,
+				"imdbSeason": 1,
+				"imdbEpisode": 16,
+				"title": "Long-Lived Friends",
+				"released": "2023-12-22T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:17",
+				"season": 1,
+				"episode": 17,
+				"imdbSeason": 1,
+				"imdbEpisode": 17,
+				"title": "Take Care",
+				"released": "2024-01-05T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:18",
+				"season": 1,
+				"episode": 18,
+				"imdbSeason": 1,
+				"imdbEpisode": 18,
+				"title": "First-Class Mage Exam",
+				"released": "2024-01-12T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:19",
+				"season": 1,
+				"episode": 19,
+				"imdbSeason": 1,
+				"imdbEpisode": 19,
+				"title": "Well-Laid Plans",
+				"released": "2024-01-19T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:20",
+				"season": 1,
+				"episode": 20,
+				"imdbSeason": 1,
+				"imdbEpisode": 20,
+				"title": "Necessary Killing",
+				"released": "2024-01-26T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:21",
+				"season": 1,
+				"episode": 21,
+				"imdbSeason": 1,
+				"imdbEpisode": 21,
+				"title": "The World of Magic",
+				"released": "2024-02-02T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:22",
+				"season": 1,
+				"episode": 22,
+				"imdbSeason": 1,
+				"imdbEpisode": 22,
+				"title": "Future Enemies",
+				"released": "2024-02-09T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:23",
+				"season": 1,
+				"episode": 23,
+				"imdbSeason": 1,
+				"imdbEpisode": 23,
+				"title": "Conquering the Labyrinth",
+				"released": "2024-02-16T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:24",
+				"season": 1,
+				"episode": 24,
+				"imdbSeason": 1,
+				"imdbEpisode": 24,
+				"title": "Perfect Replicas",
+				"released": "2024-02-23T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:25",
+				"season": 1,
+				"episode": 25,
+				"imdbSeason": 1,
+				"imdbEpisode": 25,
+				"title": "A Fatal Vulnerability",
+				"released": "2024-03-01T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:26",
+				"season": 1,
+				"episode": 26,
+				"imdbSeason": 1,
+				"imdbEpisode": 26,
+				"title": "The Height of Magic",
+				"released": "2024-03-08T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:27",
+				"season": 1,
+				"episode": 27,
+				"imdbSeason": 1,
+				"imdbEpisode": 27,
+				"title": "An Era of Humans",
+				"released": "2024-03-15T14:00:00.000Z"
+			},
+			{
+				"id": "kitsu:46474:28",
+				"season": 1,
+				"episode": 28,
+				"imdbSeason": 1,
+				"imdbEpisode": 28,
+				"title": "It Would Be Embarrassing When We Met Again",
+				"released": "2024-03-22T14:00:00.000Z"
+			}
+		]
+	}
+}

@@ -79,7 +79,7 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 
 		expect(mockGetStreamUrl).toHaveBeenCalledWith('tok', 'hash', 101, '127.0.0.1', 'anime');
 		expect(mockSaveCast).toHaveBeenCalledWith(
-			'anidb1:1:2',
+			'anidb-1:1:2',
 			'user-1',
 			'hash',
 			'https://stream/video.mkv',
@@ -89,6 +89,21 @@ describe('/api/stremio/cast/anime/[anidbid]', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({ errorEpisodes: [] });
 	});
+
+	// Stremio asks for `kitsu:46474:2`, which the stream routes turn into
+	// `anidb-17617:1:2`; a cast filed under the bare `17617` would never match.
+	it.each(['17617', 'anidb-17617', 'anime:anidb-17617'])(
+		'files an episode cast from %s under anidb-17617',
+		async (anidbid) => {
+			const req = createMockRequest({
+				query: { anidbid, token: 'tok', hash: 'hash', fileIds: ['101'] },
+				headers: { 'x-real-ip': '127.0.0.1' },
+			});
+			await handler(req, createMockResponse());
+
+			expect(mockSaveCast.mock.calls[0][0]).toBe('anidb-17617:1:2');
+		}
+	);
 
 	// The bare anidb id is the *movie* key, and Cast is unique on
 	// (imdbId, userId, hash) - so an episode written there overwrites whatever

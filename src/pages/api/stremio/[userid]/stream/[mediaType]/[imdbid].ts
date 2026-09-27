@@ -1,3 +1,4 @@
+import { resolveStreamTarget } from '@/services/anime/stremioAnime';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { isLegacyToken } from '@/utils/castApiHelpers';
@@ -60,14 +61,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	const imdbidStr = (imdbid as string).replace(/\.json$/, '');
-	const typeSlug = mediaType === 'movie' ? 'movie' : 'show';
-	let externalUrl = `${process.env.DMM_ORIGIN}/${typeSlug}/${imdbidStr}`;
-	if (typeSlug === 'show') {
-		// imdbidStr = imdbid:season:episode
-		// externalUrl should be /show/imdbid/season
-		const [imdbid2, season] = imdbidStr.split(':');
-		externalUrl = `${process.env.DMM_ORIGIN}/${typeSlug}/${imdbid2}/${season}`;
+	// An anime id (`kitsu:46474:5`) resolves to the AniDB key its casts are
+	// filed under; an IMDb id keeps its own.
+	const target = await resolveStreamTarget(imdbidStr, mediaType, process.env.DMM_ORIGIN);
+	if (!target) {
+		res.status(200).json({ streams: [], cacheMaxAge: 0 });
+		return;
 	}
+	const { castKey, typeSlug, externalUrl } = target;
 
 	const streams: any[] = [];
 
@@ -93,9 +94,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		// get urls from db
 		const [userCastItems, otherItems] = await Promise.all([
-			db.getUserCastStreams(imdbidStr, userid, 5),
+			db.getUserCastStreams(castKey, userid, 5),
 			db.getOtherStreams(
-				imdbidStr,
+				castKey,
 				userid,
 				otherStreamsLimit,
 				maxSize > 0 ? maxSize : undefined

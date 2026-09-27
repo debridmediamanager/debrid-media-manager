@@ -1,0 +1,7 @@
+{
+	"id": "community.anime.kitsu",
+	"idPrefixes": ["kitsu", "mal", "anilist", "anidb"],
+	"resources": ["catalog", "meta", "subtitles"],
+	"types": ["anime", "movie", "series"],
+	"version": "0.0.10"
+}

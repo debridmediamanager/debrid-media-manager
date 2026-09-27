@@ -7,6 +7,7 @@ import pmManifest from '@/pages/api/stremio-pm/[userid]/manifest.json';
 import pmNoCatalogManifest from '@/pages/api/stremio-pm/[userid]/no-catalog/manifest.json';
 import tbManifest from '@/pages/api/stremio-tb/[userid]/manifest.json';
 import rdManifest from '@/pages/api/stremio/[userid]/manifest.json';
+import seriesMeta from '@/test/fixtures/anime/stremio-anime-kitsu-meta-series-kitsu-46474.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { describe, expect, it } from 'vitest';
 
@@ -60,6 +61,29 @@ describe('DMM Cast manifests', () => {
 
 			expect(data.catalogs).toEqual([]);
 			expect(data.resources).not.toContain('catalog');
+		}
+	);
+
+	/**
+	 * Stremio sends a stream request only to addons whose stream resource lists
+	 * the video id's prefix. Every manifest listed only `tt`, so the Anime Kitsu
+	 * catalog's `kitsu:46474:1` never reached DMM Cast at all.
+	 */
+	it.each([...manifests, ...noCatalogManifests])(
+		'$name accepts the ids an anime catalog plays',
+		async ({ handler }) => {
+			const data = await render(handler);
+			const stream = data.resources.find(
+				(r: any) => typeof r === 'object' && r.name === 'stream'
+			);
+			const videoId = seriesMeta.meta.videos[0].id;
+
+			expect(videoId).toBe('kitsu:46474:1');
+			expect(stream.types).toContain(seriesMeta.meta.type);
+			expect(
+				stream.idPrefixes.some((prefix: string) => videoId.startsWith(`${prefix}:`))
+			).toBe(true);
+			expect(stream.idPrefixes).toEqual(['tt', 'kitsu', 'mal', 'anidb']);
 		}
 	);
 });

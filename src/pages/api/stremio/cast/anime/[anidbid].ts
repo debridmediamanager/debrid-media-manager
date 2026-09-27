@@ -1,3 +1,4 @@
+import { canonicalAnimeCastId } from '@/services/anime/stremioAnimeIds';
 import { repository as db } from '@/services/repository';
 import { extractToken, generateUserId } from '@/utils/castApiHelpers';
 import { getClientIpFromRequest } from '@/utils/clientIp';
@@ -53,7 +54,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// See the same guard in cast/series: the bare id is the movie key, so
 			// an unparsed episode overwrites whatever was cast before it.
 			if (streamUrl && season >= 0 && episodeNumber >= 0) {
-				const castKey = `${anidbid}:${season}:${episodeNumber}`;
+				// The Stremio stream routes look an anime episode up as
+				// `anidb-<aid>:<season>:<episode>`, however the page spelled the id.
+				const castKey = `${canonicalAnimeCastId(anidbid)}:${season}:${episodeNumber}`;
 				await db.saveCast(castKey, userid, hash, streamUrl, rdLink, fileSize);
 			} else if (streamUrl) {
 				errorEpisodes.push(`fileId:${fileId} (no episode number in filename)`);

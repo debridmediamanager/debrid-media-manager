@@ -1,3 +1,4 @@
+import { CAST_STREAM_RESOURCE } from '@/services/anime/stremioAnimeIds';
 import { CAST_ADDON_VERSIONS } from '@/utils/castAddonVersions';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -14,11 +15,11 @@ export const premiumizeCastManifest = (withCatalogs: boolean) => ({
 	resources: withCatalogs
 		? [
 				'catalog',
-				{ name: 'stream', types: ['movie', 'series'], idPrefixes: ['tt'] },
+				CAST_STREAM_RESOURCE,
 				{ name: 'meta', types: ['other'], idPrefixes: ['dmm-pm'] },
 			]
-		: [{ name: 'stream', types: ['movie', 'series'], idPrefixes: ['tt'] }],
-	types: withCatalogs ? ['movie', 'series', 'other'] : ['movie', 'series'],
+		: [CAST_STREAM_RESOURCE],
+	types: withCatalogs ? ['movie', 'series', 'anime', 'other'] : ['movie', 'series', 'anime'],
 	catalogs: withCatalogs
 		? [
 				{

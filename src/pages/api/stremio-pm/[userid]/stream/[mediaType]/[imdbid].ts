@@ -1,7 +1,7 @@
+import { resolveStreamTarget } from '@/services/anime/stremioAnime';
 import { checkPremiumizeCache } from '@/services/premiumize';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
-import { getTroveCandidates } from '@/utils/cachedTroveStreams';
 import { SPONSOR_MAX_OTHER_STREAMS_LIMIT } from '@/utils/sponsorLimits';
 import {
 	extractStreamMetadata,
@@ -44,13 +44,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	const imdbidStr = imdbid.replace(/\.json$/, '');
-	const typeSlug = mediaType === 'movie' ? 'movie' : 'show';
-	let externalUrl = `${process.env.DMM_ORIGIN}/${typeSlug}/${imdbidStr}`;
-	if (typeSlug === 'show') {
-		// imdbidStr = imdbid:season:episode, and the page is /show/imdbid/season
-		const [imdbid2, season] = imdbidStr.split(':');
-		externalUrl = `${process.env.DMM_ORIGIN}/${typeSlug}/${imdbid2}/${season}`;
+	// An anime id (`kitsu:46474:5`) resolves to the AniDB key its casts are
+	// filed under; an IMDb id keeps its own.
+	const target = await resolveStreamTarget(imdbidStr, mediaType, process.env.DMM_ORIGIN);
+	if (!target) {
+		res.status(200).json({ streams: [], cacheMaxAge: 0 });
+		return;
 	}
+	const { castKey, typeSlug, externalUrl } = target;
 
 	const streams: any[] = [];
 
@@ -72,9 +73,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const otherStreamsLimit = Math.max(0, Math.min(SPONSOR_MAX_OTHER_STREAMS_LIMIT, rawLimit));
 
 		const [userCastItems, otherItems, troveCandidates] = await Promise.all([
-			db.getPremiumizeUserCastStreams(imdbidStr, userid, 5),
+			db.getPremiumizeUserCastStreams(castKey, userid, 5),
 			db.getPremiumizeOtherStreams(
-				imdbidStr,
+				castKey,
 				userid,
 				otherStreamsLimit,
 				maxSize > 0 ? maxSize : undefined
@@ -82,11 +83,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// The scraped pool behind the DMM detail page: every release for the
 			// title, offered once Premiumize confirms the hash is cached. This is
 			// the same probe the page runs to paint its green tokens.
-			getTroveCandidates({
-				mediaType: typeSlug === 'movie' ? 'movie' : 'series',
-				imdbId: imdbidStr,
-				maxSizeGb: maxSize > 0 ? maxSize : undefined,
-			}),
+			target.trove(maxSize > 0 ? maxSize : undefined),
 		]);
 
 		// Premiumize is the one provider that can answer "will this actually
