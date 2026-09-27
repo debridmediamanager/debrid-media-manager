@@ -238,6 +238,26 @@ export function planAnimeMappingUpdates(rows: AnimeRow[], mappings: AnimeIdMappi
 	return { updates, collisions, ambiguousRows, conflictingRows, matchedRows };
 }
 
+/**
+ * The current value of every column the plan writes, for every row it writes.
+ *
+ * Taken from the same read the plan was built from, so it restores exactly
+ * what `--apply` replaces: set each listed column back on each listed id.
+ */
+export function backupRowsFor(plan: SyncPlan, rows: AnimeRow[]): AnimeRow[] {
+	const touched = new Set(plan.updates.map((u) => u.id));
+	return rows
+		.filter((row) => touched.has(row.id))
+		.map((row) => ({
+			id: row.id,
+			anidb_id: row.anidb_id,
+			kitsu_id: row.kitsu_id,
+			mal_id: row.mal_id,
+			anime_planet_id: row.anime_planet_id,
+			imdb_id: row.imdb_id,
+		}));
+}
+
 export function summarizePlan(plan: SyncPlan): Record<string, number> {
 	const filled: Record<string, number> = {};
 	for (const { column } of COLUMNS) {

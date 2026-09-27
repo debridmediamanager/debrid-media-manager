@@ -2,7 +2,12 @@ import conflicting from '@/test/fixtures/anime/fribb-conflicting-ids.json';
 import sharedImdb from '@/test/fixtures/anime/fribb-shared-imdb.json';
 import { describe, expect, it } from 'vitest';
 import { normalizeFribbEntry, type FribbAnimeEntry } from './animeMapping';
-import { planAnimeMappingUpdates, summarizePlan, type AnimeRow } from './animeMappingSync';
+import {
+	backupRowsFor,
+	planAnimeMappingUpdates,
+	summarizePlan,
+	type AnimeRow,
+} from './animeMappingSync';
 
 const row = (over: Partial<AnimeRow> & { id: number }): AnimeRow => ({
 	anidb_id: null,
@@ -237,5 +242,32 @@ describe('summarizePlan', () => {
 			anidb_id: 2,
 			imdb_id: 1,
 		});
+	});
+});
+
+describe('backupRowsFor', () => {
+	it('records every syncable column of exactly the rows the plan writes', () => {
+		const rows = conflicting.rows as (AnimeRow & { title: string })[];
+		const plan = planAnimeMappingUpdates(
+			rows,
+			(conflicting.fribb as FribbAnimeEntry[]).map(normalizeFribbEntry)
+		);
+
+		const backup = backupRowsFor(plan, rows);
+
+		expect(backup.map((b) => b.id).sort()).toEqual(plan.updates.map((u) => u.id).sort());
+		const frieren = rows.find((r) => r.title === 'Sousou no Frieren')!;
+		expect(backup.find((b) => b.id === frieren.id)).toEqual({
+			id: frieren.id,
+			anidb_id: 17617,
+			kitsu_id: 46474,
+			mal_id: 52991,
+			anime_planet_id: 'frieren-beyond-journeys-end',
+			imdb_id: null,
+		});
+		// Titles and other columns the sync never writes stay out of it.
+		expect(Object.keys(backup[0]).sort()).toEqual(
+			['anidb_id', 'anime_planet_id', 'id', 'imdb_id', 'kitsu_id', 'mal_id'].sort()
+		);
 	});
 });
