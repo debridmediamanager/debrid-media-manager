@@ -16,9 +16,10 @@
 # TypeScript runtime, and Swarm has no scheduler, so a job there would need a
 # second image and a leader among four replicas.
 #
-# The first install also needs /home/ben/anime-import/anime-import.env (0600):
-#   DATABASE_URL=mysql://dmmuser:<password>@127.0.0.1:3306/dmmdb
-#   ALERT_WEBHOOK_URL=<optional Discord webhook for failures>
+# The first install also needs /home/ben/anime-import/anime-import.env (0600).
+# run.sh sources it, so quote each value; a bare `&` in the URL would end the line:
+#   DATABASE_URL="mysql://dmmuser:<password>@127.0.0.1:3306/dmmdb?connection_limit=10"
+#   ALERT_WEBHOOK_URL="<optional Discord webhook for failures>"
 set -euo pipefail
 
 TARGET="${1:-ben@dmm}"
