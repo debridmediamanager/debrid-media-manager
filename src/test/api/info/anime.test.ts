@@ -23,6 +23,11 @@ vi.mock('@/services/anime/simkl', () => ({
 	resolveImdbIdFromSimkl: (...args: unknown[]) => mockResolveImdbIdFromSimkl(...args),
 }));
 
+const mockGetFranchiseIndex = vi.fn();
+vi.mock('@/services/anime/animeFranchise', () => ({
+	getFranchiseIndex: (...args: unknown[]) => mockGetFranchiseIndex(...args),
+}));
+
 const mockGetAnimeByExternalId = vi.fn();
 vi.mock('@/services/repository', () => ({
 	repository: {
@@ -57,6 +62,7 @@ describe('/api/info/anime', () => {
 		mockFetchKitsuAnime.mockResolvedValue(null);
 		mockGetAnimeByExternalId.mockResolvedValue(null);
 		mockResolveImdbIdFromSimkl.mockResolvedValue(null);
+		mockGetFranchiseIndex.mockResolvedValue(null);
 	});
 
 	it('rejects non-GET methods', async () => {
@@ -119,6 +125,8 @@ describe('/api/info/anime', () => {
 			backdrop: 'bg.png',
 			imdbid: 'tt123',
 			imdbRating: 8.5,
+			type: '',
+			episodeCount: 0,
 		});
 	});
 
@@ -139,6 +147,8 @@ describe('/api/info/anime', () => {
 			backdrop: '',
 			imdbid: '',
 			imdbRating: 0,
+			type: '',
+			episodeCount: 0,
 		});
 	});
 
@@ -153,6 +163,8 @@ describe('/api/info/anime', () => {
 			poster: 'o.jpg',
 			backdrop: 'co.jpg',
 			rating: 8.2,
+			type: 'TV',
+			episodeCount: 26,
 		});
 		mockGetAnimeByExternalId.mockResolvedValue(rowWithImdb('tt0213338'));
 
@@ -168,6 +180,8 @@ describe('/api/info/anime', () => {
 			backdrop: 'co.jpg',
 			imdbid: 'tt0213338',
 			imdbRating: 8.2,
+			type: 'TV',
+			episodeCount: 26,
 		});
 	});
 

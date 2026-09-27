@@ -24,6 +24,10 @@ export interface KitsuAnimeMeta {
 	 * (which does carry IMDb's) is unavailable.
 	 */
 	rating: number;
+	/** Kitsu's subtype in the `Anime` table's spelling (TV, OVA, ONA, MOVIE, SPECIAL); '' if absent. */
+	type: string;
+	/** Episodes Kitsu lists for the entry; 0 while airing with no count announced. */
+	episodeCount: number;
 }
 
 export type Fetcher = typeof fetch;
@@ -61,6 +65,13 @@ export function normalizeKitsuAnime(attributes: Record<string, unknown>): KitsuA
 		poster: pickImage(attributes.posterImage, ['original', 'large', 'medium', 'small']),
 		backdrop: pickImage(attributes.coverImage, ['original', 'large', 'small']),
 		rating: rescaleRating(attributes.averageRating),
+		type: typeof attributes.subtype === 'string' ? attributes.subtype.toUpperCase() : '',
+		episodeCount:
+			typeof attributes.episodeCount === 'number' &&
+			Number.isInteger(attributes.episodeCount) &&
+			attributes.episodeCount > 0
+				? attributes.episodeCount
+				: 0,
 	};
 }
 

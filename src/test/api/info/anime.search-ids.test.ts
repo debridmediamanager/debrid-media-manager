@@ -23,6 +23,10 @@ vi.mock('@/services/anime/simkl', () => ({
 	resolveImdbIdFromSimkl: (...args: unknown[]) => mockResolveImdbIdFromSimkl(...args),
 }));
 
+// No dataset: these cases are about the table and Kitsu. The dataset's part is
+// covered in anime.dataset.test.ts.
+vi.mock('@/services/anime/animeFranchise', () => ({ getFranchiseIndex: async () => null }));
+
 type Row = AnimeRecord;
 const COLUMN = { anidb: 'anidb_id', mal: 'mal_id', kitsu: 'kitsu_id' } as const;
 
@@ -119,6 +123,8 @@ describe('/api/info/anime resolves the ids /api/search/anime hands out', () => {
 			backdrop: frieren.background_url,
 			imdbid: '',
 			imdbRating: frieren.rating,
+			type: '',
+			episodeCount: 0,
 		});
 	});
 

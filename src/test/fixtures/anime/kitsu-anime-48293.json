@@ -1,0 +1,187 @@
+{
+	"data": {
+		"id": "48293",
+		"type": "anime",
+		"links": {
+			"self": "https://kitsu.io/api/edge/anime/48293"
+		},
+		"attributes": {
+			"createdAt": "2023-12-06T15:48:04.677Z",
+			"updatedAt": "2026-09-27T11:24:41.174Z",
+			"slug": "honzuki-no-gekokujou-shisho-ni-naru-tame-ni-wa-shudan-wo-erandeiraremasen-4th-season",
+			"synopsis": "Anime adaptation of Part 3 of Honzuki no Gekokujou.\n\nFollowing a disastrous encounter with a noble, Myne finally resolves to say goodbye to her family and friends in the lower city, changing her name to “Rozemyne” and beginning her new life as the adopted daughter of Ehrenfest’s archduke. However, her days as an arch-noble in noble society are brutal, as she is put through rigorous etiquette and magic training on top of her duties as High Bishop and forewoman. It all proves too much for a weak little seven-year-old girl... Or it would have, had the High Priest not offered her the keys to the temple’s book room as a reward. If she could get her hands on those, she’d be able to read all sorts of precious books! Her name may have changed, but Rozemyne’s passion for books remains the same as she charges into a whole new world! The detailed setting expands as the printing industry grows in size. Here begins Part 3 of this biblio-fantasy for book lovers everywhere!\n\n(Source: J-Novel Club)",
+			"description": "Anime adaptation of Part 3 of Honzuki no Gekokujou.\n\nFollowing a disastrous encounter with a noble, Myne finally resolves to say goodbye to her family and friends in the lower city, changing her name to “Rozemyne” and beginning her new life as the adopted daughter of Ehrenfest’s archduke. However, her days as an arch-noble in noble society are brutal, as she is put through rigorous etiquette and magic training on top of her duties as High Bishop and forewoman. It all proves too much for a weak little seven-year-old girl... Or it would have, had the High Priest not offered her the keys to the temple’s book room as a reward. If she could get her hands on those, she’d be able to read all sorts of precious books! Her name may have changed, but Rozemyne’s passion for books remains the same as she charges into a whole new world! The detailed setting expands as the printing industry grows in size. Here begins Part 3 of this biblio-fantasy for book lovers everywhere!\n\n(Source: J-Novel Club)",
+			"coverImageTopOffset": 0,
+			"titles": {
+				"en": "Ascendance of a Bookworm Season 4",
+				"en_jp": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 4th Season",
+				"ja_jp": "本好きの下剋上 司書になるためには手段を選んでいられません 第4期"
+			},
+			"canonicalTitle": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 4th Season",
+			"abbreviatedTitles": ["Honzuki no Gekokujou: Ryoushu no Youjo"],
+			"averageRating": "78.54",
+			"ratingFrequencies": {
+				"2": "2",
+				"6": "1",
+				"7": "0",
+				"8": "1",
+				"9": "1",
+				"10": "2",
+				"11": "1",
+				"12": "4",
+				"13": "2",
+				"14": "31",
+				"15": "8",
+				"16": "32",
+				"17": "3",
+				"18": "13",
+				"19": "1",
+				"20": "27"
+			},
+			"userCount": 1497,
+			"favoritesCount": 8,
+			"startDate": "2026-04-04",
+			"endDate": "2026-10-03",
+			"nextRelease": null,
+			"popularityRank": 5472,
+			"ratingRank": 1177,
+			"ageRating": null,
+			"ageRatingGuide": null,
+			"subtype": "TV",
+			"status": "current",
+			"tba": null,
+			"posterImage": {
+				"tiny": "https://media.kitsu.app/anime/48293/poster_image/tiny-9f5908c21eb2eb0e515d1af799c4e619.jpeg",
+				"large": "https://media.kitsu.app/anime/48293/poster_image/large-00288fe42418cf025a025bb80c266e21.jpeg",
+				"small": "https://media.kitsu.app/anime/48293/poster_image/small-90216b549f19f8372e5896387c77bc35.jpeg",
+				"medium": "https://media.kitsu.app/anime/48293/poster_image/medium-adcb4e75bf475bfb6eb302eb21c1a4d0.jpeg",
+				"original": "https://media.kitsu.app/anime/48293/poster_image/f0e5fd29688a7300e2589aa39c7dd75c.jpg",
+				"meta": {
+					"dimensions": {
+						"tiny": {
+							"width": 110,
+							"height": 156
+						},
+						"large": {
+							"width": 550,
+							"height": 780
+						},
+						"small": {
+							"width": 284,
+							"height": 402
+						},
+						"medium": {
+							"width": 390,
+							"height": 554
+						}
+					}
+				}
+			},
+			"coverImage": null,
+			"episodeCount": 24,
+			"episodeLength": 24,
+			"totalLength": null,
+			"youtubeVideoId": "ZrQoGBYHzIU",
+			"showType": "TV",
+			"nsfw": false
+		},
+		"relationships": {
+			"genres": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/genres",
+					"related": "https://kitsu.io/api/edge/anime/48293/genres"
+				}
+			},
+			"categories": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/categories",
+					"related": "https://kitsu.io/api/edge/anime/48293/categories"
+				}
+			},
+			"castings": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/castings",
+					"related": "https://kitsu.io/api/edge/anime/48293/castings"
+				}
+			},
+			"installments": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/installments",
+					"related": "https://kitsu.io/api/edge/anime/48293/installments"
+				}
+			},
+			"mappings": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/mappings",
+					"related": "https://kitsu.io/api/edge/anime/48293/mappings"
+				}
+			},
+			"reviews": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/reviews",
+					"related": "https://kitsu.io/api/edge/anime/48293/reviews"
+				}
+			},
+			"mediaRelationships": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/media-relationships",
+					"related": "https://kitsu.io/api/edge/anime/48293/media-relationships"
+				}
+			},
+			"characters": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/characters",
+					"related": "https://kitsu.io/api/edge/anime/48293/characters"
+				}
+			},
+			"staff": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/staff",
+					"related": "https://kitsu.io/api/edge/anime/48293/staff"
+				}
+			},
+			"productions": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/productions",
+					"related": "https://kitsu.io/api/edge/anime/48293/productions"
+				}
+			},
+			"quotes": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/quotes",
+					"related": "https://kitsu.io/api/edge/anime/48293/quotes"
+				}
+			},
+			"episodes": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/episodes",
+					"related": "https://kitsu.io/api/edge/anime/48293/episodes"
+				}
+			},
+			"streamingLinks": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/streaming-links",
+					"related": "https://kitsu.io/api/edge/anime/48293/streaming-links"
+				}
+			},
+			"animeProductions": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/anime-productions",
+					"related": "https://kitsu.io/api/edge/anime/48293/anime-productions"
+				}
+			},
+			"animeCharacters": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/anime-characters",
+					"related": "https://kitsu.io/api/edge/anime/48293/anime-characters"
+				}
+			},
+			"animeStaff": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48293/relationships/anime-staff",
+					"related": "https://kitsu.io/api/edge/anime/48293/anime-staff"
+				}
+			}
+		}
+	}
+}

@@ -1,3 +1,4 @@
+import { getFranchiseIndex } from '@/services/anime/animeFranchise';
 import { fetchKitsuAnime } from '@/services/anime/kitsu';
 import { resolveImdbIdFromSimkl } from '@/services/anime/simkl';
 import type { AnimeIdSource, AnimeRecord } from '@/services/database/anime';
@@ -16,6 +17,10 @@ interface AnimeInfoResponse {
 	backdrop: string;
 	imdbid: string;
 	imdbRating: number;
+	/** TV, OVA, ONA, MOVIE, SPECIAL or UNKNOWN; '' when no source says. */
+	type: string;
+	/** Episodes the entry has, when Kitsu lists a count; 0 otherwise. */
+	episodeCount: number;
 }
 
 const UNKNOWN: AnimeInfoResponse = {
@@ -25,6 +30,8 @@ const UNKNOWN: AnimeInfoResponse = {
 	backdrop: '',
 	imdbid: '',
 	imdbRating: 0,
+	type: '',
+	episodeCount: 0,
 };
 
 interface AnimeId {
@@ -77,6 +84,8 @@ async function fromStremioAddon(kitsuId: number): Promise<AnimeInfoResponse | nu
 			backdrop: meta.background ?? '',
 			imdbid: meta.imdb_id ?? '',
 			imdbRating: parseFloat(meta.imdbRating ?? '0'),
+			type: '',
+			episodeCount: 0,
 		};
 	} catch {
 		return null;
@@ -99,6 +108,8 @@ async function fromKitsu(kitsuId: number): Promise<AnimeInfoResponse | null> {
 		backdrop: meta.backdrop,
 		imdbid: '',
 		imdbRating: meta.rating,
+		type: meta.type,
+		episodeCount: meta.episodeCount,
 	};
 }
 
@@ -115,6 +126,8 @@ function fromRow(row: AnimeRecord): AnimeInfoResponse {
 		backdrop: row.background_url,
 		imdbid: row.imdb_id ?? '',
 		imdbRating: row.rating,
+		type: row.type ?? '',
+		episodeCount: 0,
 	};
 }
 
@@ -156,7 +169,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	// Both upstreams are keyed by Kitsu; the row translates anidb and mal ids.
 	const row = await findRow(animeId);
-	const kitsuId = animeId.source === 'kitsu' ? animeId.id : (row?.kitsu_id ?? null);
+	// The Fribb dataset the anime page reads for relations. Of the 211 AniDB ids
+	// with torrents and no row on 2026-09-27, it gave 128 a Kitsu id; it also
+	// carries a type that is refreshed daily.
+	const datasetEntry =
+		animeId.source === 'anidb'
+			? ((await getFranchiseIndex())?.byAnidb.get(animeId.id) ?? null)
+			: null;
+	const kitsuId =
+		animeId.source === 'kitsu' ? animeId.id : (row?.kitsu_id ?? datasetEntry?.kitsuId ?? null);
 
 	let info: AnimeInfoResponse | null = null;
 	if (kitsuId !== null) {
@@ -166,6 +187,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (!info) return res.status(200).json(UNKNOWN);
 
 	if (!info.imdbid) info.imdbid = await resolveImdbId(animeId, row);
+	// Of the 8,451 rows with torrents, 38 disagree with the dataset on type,
+	// all older imports: Bookworm's fourth season (18302) is a 24-episode TV
+	// season the row calls a SPECIAL. Kitsu's subtype is the last resort.
+	info.type = datasetEntry?.type || row?.type || info.type;
 
 	return res.status(200).json(info);
 }

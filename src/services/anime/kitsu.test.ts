@@ -34,6 +34,8 @@ describe('normalizeKitsuAnime', () => {
 			poster: 'o.jpg',
 			backdrop: 'co.jpg',
 			rating: 8.2,
+			type: '',
+			episodeCount: 0,
 		});
 	});
 
