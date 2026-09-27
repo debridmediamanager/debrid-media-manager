@@ -1,0 +1,315 @@
+{
+	"fribb": [
+		{
+			"type": "TV",
+			"anidb_id": 24,
+			"anilist_id": 48,
+			"animecountdown_id": 37947,
+			"animenewsnetwork_id": 605,
+			"anime-planet_id": "hack-sign",
+			"anisearch_id": 3491,
+			"imdb_id": ["tt0361140"],
+			"kitsu_id": 30,
+			"livechart_id": 3828,
+			"mal_id": 48,
+			"simkl_id": 37947,
+			"themoviedb_id": {
+				"tv": 8864
+			},
+			"tvdb_id": 79099,
+			"season": {
+				"tvdb": 1,
+				"tmdb": 1
+			}
+		},
+		{
+			"type": "OVA",
+			"anidb_id": 222,
+			"anilist_id": 299,
+			"animecountdown_id": 36360,
+			"animenewsnetwork_id": 709,
+			"anime-planet_id": "hack-liminality",
+			"anisearch_id": 159,
+			"imdb_id": ["tt0361140"],
+			"kitsu_id": 274,
+			"livechart_id": 5621,
+			"mal_id": 299,
+			"simkl_id": 36360,
+			"themoviedb_id": {
+				"tv": 8864
+			},
+			"tvdb_id": 79099,
+			"season": {
+				"tvdb": 0,
+				"tmdb": 0
+			},
+			"episode_offset": {
+				"tvdb": 1,
+				"tmdb": 1
+			}
+		},
+		{
+			"type": "TV",
+			"anidb_id": 447,
+			"anilist_id": 298,
+			"animecountdown_id": 38022,
+			"animenewsnetwork_id": 1963,
+			"anime-planet_id": "hack-legend-of-the-twilight",
+			"anisearch_id": 1650,
+			"imdb_id": ["tt0361140"],
+			"kitsu_id": 273,
+			"livechart_id": 4682,
+			"mal_id": 298,
+			"simkl_id": 38022,
+			"themoviedb_id": {
+				"tv": 8864
+			},
+			"tvdb_id": 79099,
+			"season": {
+				"tvdb": 2,
+				"tmdb": 2
+			}
+		},
+		{
+			"type": "OVA",
+			"anidb_id": 1135,
+			"anilist_id": 454,
+			"animecountdown_id": 38733,
+			"animenewsnetwork_id": 3613,
+			"anime-planet_id": "hack-gift",
+			"anisearch_id": 2559,
+			"imdb_id": ["tt0361140"],
+			"kitsu_id": 416,
+			"livechart_id": 5416,
+			"mal_id": 454,
+			"simkl_id": 38733,
+			"themoviedb_id": {
+				"tv": 8864
+			},
+			"tvdb_id": 79099,
+			"season": {
+				"tvdb": 0,
+				"tmdb": 0
+			},
+			"episode_offset": {
+				"tvdb": 7,
+				"tmdb": 7
+			}
+		},
+		{
+			"type": "TV",
+			"anidb_id": 4324,
+			"anilist_id": 873,
+			"animecountdown_id": 40426,
+			"animenewsnetwork_id": 6248,
+			"anime-planet_id": "hack-roots",
+			"anisearch_id": 3564,
+			"imdb_id": ["tt0361140"],
+			"kitsu_id": 773,
+			"livechart_id": 4186,
+			"mal_id": 873,
+			"simkl_id": 40426,
+			"themoviedb_id": {
+				"tv": 8864
+			},
+			"tvdb_id": 79099,
+			"season": {
+				"tvdb": 3,
+				"tmdb": 3
+			}
+		},
+		{
+			"type": "OVA",
+			"anidb_id": 5391,
+			"anilist_id": 2928,
+			"animecountdown_id": 37884,
+			"animenewsnetwork_id": 9179,
+			"anime-planet_id": "hack-g-u-returner",
+			"anisearch_id": 4410,
+			"imdb_id": ["tt0361140"],
+			"kitsu_id": 2652,
+			"livechart_id": 4717,
+			"mal_id": 2928,
+			"simkl_id": 37884,
+			"themoviedb_id": {
+				"tv": 8864
+			},
+			"tvdb_id": 79099,
+			"season": {
+				"tvdb": 0,
+				"tmdb": 0
+			},
+			"episode_offset": {
+				"tvdb": 13,
+				"tmdb": 13
+			}
+		},
+		{
+			"type": "OVA",
+			"anidb_id": 7883,
+			"anilist_id": 9332,
+			"animecountdown_id": 37194,
+			"animenewsnetwork_id": 11809,
+			"anime-planet_id": "hack-quantum",
+			"anisearch_id": 6438,
+			"imdb_id": ["tt0361140"],
+			"kitsu_id": 5680,
+			"livechart_id": 4724,
+			"mal_id": 9332,
+			"simkl_id": 37194,
+			"themoviedb_id": {
+				"tv": 8864
+			},
+			"tvdb_id": 79099,
+			"season": {
+				"tvdb": 0,
+				"tmdb": 0
+			},
+			"episode_offset": {
+				"tvdb": 8,
+				"tmdb": 8
+			}
+		},
+		{
+			"type": "TV",
+			"anidb_id": 14655,
+			"anilist_id": 107651,
+			"animecountdown_id": 1033707,
+			"animenewsnetwork_id": 22440,
+			"anime-planet_id": "a3-season-spring-and-summer",
+			"anisearch_id": 14152,
+			"imdb_id": ["tt11094154"],
+			"kitsu_id": 42146,
+			"livechart_id": 9212,
+			"mal_id": 39184,
+			"simkl_id": 1033707,
+			"themoviedb_id": {
+				"tv": 96860
+			},
+			"tvdb_id": 372853,
+			"season": {
+				"tvdb": 1,
+				"tmdb": 1
+			}
+		},
+		{
+			"type": "TV",
+			"anidb_id": 15048,
+			"anilist_id": 111145,
+			"animecountdown_id": 1152857,
+			"animenewsnetwork_id": 23264,
+			"anime-planet_id": "a3-season-autumn-and-winter",
+			"anisearch_id": 14564,
+			"imdb_id": ["tt11094154"],
+			"kitsu_id": 42508,
+			"livechart_id": 9567,
+			"mal_id": 40272,
+			"simkl_id": 1152857,
+			"themoviedb_id": {
+				"tv": 96860
+			},
+			"tvdb_id": 372853,
+			"season": {
+				"tvdb": 2,
+				"tmdb": 2
+			}
+		}
+	],
+	"rows": [
+		{
+			"id": 18,
+			"anidb_id": 5391,
+			"kitsu_id": 2652,
+			"mal_id": 2928,
+			"anime_planet_id": "hack-g-u-returner",
+			"imdb_id": null,
+			"title": ".hack//G.U. Returner",
+			"type": "OVA"
+		},
+		{
+			"id": 20,
+			"anidb_id": 1135,
+			"kitsu_id": 416,
+			"mal_id": 454,
+			"anime_planet_id": "hack-gift",
+			"imdb_id": null,
+			"title": ".hack//Gift",
+			"type": "OVA"
+		},
+		{
+			"id": 21,
+			"anidb_id": 222,
+			"kitsu_id": 274,
+			"mal_id": 299,
+			"anime_planet_id": "hack-liminality",
+			"imdb_id": null,
+			"title": ".hack//Liminality",
+			"type": "OVA"
+		},
+		{
+			"id": 22,
+			"anidb_id": 7883,
+			"kitsu_id": 5680,
+			"mal_id": 9332,
+			"anime_planet_id": "hack-quantum",
+			"imdb_id": null,
+			"title": ".hack//Quantum",
+			"type": "OVA"
+		},
+		{
+			"id": 23,
+			"anidb_id": 4324,
+			"kitsu_id": 773,
+			"mal_id": 873,
+			"anime_planet_id": "hack-roots",
+			"imdb_id": null,
+			"title": ".hack//Roots",
+			"type": "TV"
+		},
+		{
+			"id": 24,
+			"anidb_id": 24,
+			"kitsu_id": 30,
+			"mal_id": 48,
+			"anime_planet_id": "hack-sign",
+			"imdb_id": null,
+			"title": ".hack//Sign",
+			"type": "TV"
+		},
+		{
+			"id": 25,
+			"anidb_id": 447,
+			"kitsu_id": 273,
+			"mal_id": 298,
+			"anime_planet_id": "hack-legend-of-the-twilight",
+			"imdb_id": null,
+			"title": ".hack//Tasogare no Udewa Densetsu",
+			"type": "TV"
+		},
+		{
+			"id": 141,
+			"anidb_id": 15048,
+			"kitsu_id": 42508,
+			"mal_id": 40272,
+			"anime_planet_id": "a3-season-autumn-and-winter",
+			"imdb_id": null,
+			"title": "A3! Season Autumn & Winter",
+			"type": "TV"
+		},
+		{
+			"id": 142,
+			"anidb_id": 14655,
+			"kitsu_id": 42146,
+			"mal_id": 39184,
+			"anime_planet_id": "a3-season-spring-and-summer",
+			"imdb_id": null,
+			"title": "A3! Season Spring & Summer",
+			"type": "TV"
+		}
+	],
+	"source": {
+		"dataset": "https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json",
+		"commit": "8e4ec6a211f91c0cfa450f63aa1f403f8d5f0b2d",
+		"fetched": "2026-09-27"
+	}
+}

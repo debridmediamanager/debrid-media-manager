@@ -110,6 +110,33 @@ function findMapping(
 	return { mapping: null, ambiguous: false, conflicting: false };
 }
 
+/**
+ * The order rows claim values in; lower goes first.
+ *
+ * Several entries can name one IMDb title (a show's later seasons, its OVAs and
+ * recaps all carry the show's id), and the unique column lets only one row
+ * have it. Handing it to whichever row sorted first gave `.hack//Sign`'s id to
+ * the `.hack//G.U. Returner` OVA and A3!'s to its second season. The first
+ * season's TV entry is the one a viewer means by the title.
+ */
+function claimRank(mapping: AnimeIdMapping): number[] {
+	const season = mapping.tvdbSeason === 1 ? 0 : mapping.tvdbSeason === null ? 1 : 2;
+	const type = mapping.type === 'TV' ? 0 : 1;
+	return [season, type, mapping.tvdbEpisodeOffset ?? 0];
+}
+
+function compareClaims(
+	a: { row: AnimeRow; mapping: AnimeIdMapping },
+	b: { row: AnimeRow; mapping: AnimeIdMapping }
+): number {
+	const rankA = claimRank(a.mapping);
+	const rankB = claimRank(b.mapping);
+	for (let i = 0; i < rankA.length; i++) {
+		if (rankA[i] !== rankB[i]) return rankA[i] - rankB[i];
+	}
+	return a.row.id - b.row.id;
+}
+
 function buildIndex<T extends string | number>(
 	mappings: AnimeIdMapping[],
 	key: keyof AnimeIdMapping
@@ -168,6 +195,7 @@ export function planAnimeMappingUpdates(rows: AnimeRow[], mappings: AnimeIdMappi
 	let conflictingRows = 0;
 	let matchedRows = 0;
 
+	const matched: { row: AnimeRow; mapping: AnimeIdMapping }[] = [];
 	for (const row of rows) {
 		const { mapping, ambiguous, conflicting } = findMapping(row, indexes);
 		if (ambiguous) {
@@ -180,7 +208,11 @@ export function planAnimeMappingUpdates(rows: AnimeRow[], mappings: AnimeIdMappi
 		}
 		if (!mapping) continue;
 		matchedRows++;
+		matched.push({ row, mapping });
+	}
+	matched.sort(compareClaims);
 
+	for (const { row, mapping } of matched) {
 		const fields: AnimeMappingFields = {};
 		for (const { column, from } of COLUMNS) {
 			if (row[column] !== null) continue;

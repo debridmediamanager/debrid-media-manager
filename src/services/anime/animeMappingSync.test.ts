@@ -1,4 +1,5 @@
 import conflicting from '@/test/fixtures/anime/fribb-conflicting-ids.json';
+import sharedImdb from '@/test/fixtures/anime/fribb-shared-imdb.json';
 import { describe, expect, it } from 'vitest';
 import { normalizeFribbEntry, type FribbAnimeEntry } from './animeMapping';
 import { planAnimeMappingUpdates, summarizePlan, type AnimeRow } from './animeMappingSync';
@@ -187,6 +188,37 @@ describe('planAnimeMappingUpdates against rows whose ids disagree', () => {
 
 	it('still fills a row whose ids all agree', () => {
 		expect(update('Sousou no Frieren')?.fields).toEqual({ imdb_id: 'tt22248376' });
+	});
+});
+
+// Several dataset entries name one IMDb title, and `Anime.imdb_id` is unique,
+// so one row gets it. Real rows and entries: seven .hack// titles share
+// tt0361140 and A3!'s two seasons share tt11094154.
+describe('planAnimeMappingUpdates when several rows claim one imdb id', () => {
+	const rows = sharedImdb.rows as (AnimeRow & { title: string })[];
+	const mappings = (sharedImdb.fribb as FribbAnimeEntry[]).map(normalizeFribbEntry);
+	const owner = (plan: ReturnType<typeof planAnimeMappingUpdates>, imdbId: string) =>
+		rows.find((r) => r.id === plan.updates.find((u) => u.fields.imdb_id === imdbId)?.id)?.title;
+
+	it("gives it to the show's first season, not whichever row sorts first", () => {
+		const plan = planAnimeMappingUpdates(rows, mappings);
+
+		// Row 18 is ".hack//G.U. Returner", an OVA; row 141 is A3!'s second season.
+		expect(owner(plan, 'tt0361140')).toBe('.hack//Sign');
+		expect(owner(plan, 'tt11094154')).toBe('A3! Season Spring & Summer');
+	});
+
+	it('does not depend on the order the rows were read in', () => {
+		const plan = planAnimeMappingUpdates([...rows].reverse(), mappings);
+
+		expect(owner(plan, 'tt0361140')).toBe('.hack//Sign');
+		expect(owner(plan, 'tt11094154')).toBe('A3! Season Spring & Summer');
+	});
+
+	it('still counts every other claimant as a collision', () => {
+		const plan = planAnimeMappingUpdates(rows, mappings);
+
+		expect(plan.collisions.imdb_id).toBe(rows.length - 2);
 	});
 });
 
