@@ -1,6 +1,14 @@
+import kitsuNoMatch from '@/test/fixtures/anime/kitsu-search-zzqqxxnotananime.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { readFileSync } from 'fs';
+import path from 'path';
 import type { Mock } from 'vitest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+const addonBlockPage = readFileSync(
+	path.resolve(__dirname, '../../fixtures/anime/addon-search-zzqqxxnotananime-403.html'),
+	'utf8'
+);
 
 const mockGetAnimeByKitsuIds = vi.fn();
 
@@ -156,6 +164,45 @@ describe('/api/search/anime', () => {
 
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({ results: [] });
+	});
+
+	// What production received for this keyword on 2026-09-27: the addon's
+	// Cloudflare block page and Kitsu's valid "no matches". It answered 500.
+	it('answers a keyword nothing matches with an empty list', async () => {
+		const handler = await loadHandler();
+		const res = createMockResponse();
+		const fetchMock = global.fetch as unknown as Mock;
+		fetchMock.mockImplementation(async (url: string) =>
+			url.startsWith('https://anime-kitsu.strem.fun/')
+				? new Response(addonBlockPage, {
+						status: 403,
+						headers: { 'content-type': 'text/html; charset=UTF-8' },
+					})
+				: new Response(JSON.stringify(kitsuNoMatch), {
+						status: 200,
+						headers: { 'content-type': 'application/vnd.api+json' },
+					})
+		);
+		mockGetAnimeByKitsuIds.mockResolvedValue([]);
+
+		await handler(createMockRequest({ query: { keyword: 'zzqqxxnotananime' } }), res);
+
+		expect(fetchMock).toHaveBeenCalledTimes(2);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ results: [] });
+	});
+
+	it('still reports an error when the addon is blocked and Kitsu fails too', async () => {
+		const handler = await loadHandler();
+		const res = createMockResponse();
+		const fetchMock = global.fetch as unknown as Mock;
+		fetchMock
+			.mockResolvedValueOnce(new Response(addonBlockPage, { status: 403 }))
+			.mockResolvedValueOnce(new Response('upstream error', { status: 502 }));
+
+		await handler(createMockRequest({ query: { keyword: 'frieren' } }), res);
+
+		expect(res.status).toHaveBeenCalledWith(500);
 	});
 
 	it('does not cache a failed lookup as an empty result', async () => {

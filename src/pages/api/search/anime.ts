@@ -56,17 +56,19 @@ const handler: NextApiHandler = async (req, res) => {
 				const viaKitsu = await searchKitsuAnimeIds(normalized);
 				// Both upstreams unreachable is an error, not an empty result set:
 				// answering "no matches" would be a lie the caller cannot detect.
-				if (viaAddon === null && viaKitsu.length === 0) {
+				// Either one answering "no matches" is a real answer, though.
+				if (viaAddon === null && viaKitsu === null) {
 					throw new Error('anime search upstreams are unavailable');
 				}
-				kitsuIds = viaKitsu;
+				kitsuIds = viaKitsu ?? [];
 			}
 
 			// A failed lookup must not be cached as "this keyword has no results".
 			if (kitsuIds.length > 0) inMemoryCache[normalized] = kitsuIds;
 		}
 
-		const results: AnimeSearchResult[] = await db.getAnimeByKitsuIds(kitsuIds);
+		const results: AnimeSearchResult[] =
+			kitsuIds.length > 0 ? await db.getAnimeByKitsuIds(kitsuIds) : [];
 		res.status(200).json({ results });
 	} catch (error) {
 		console.error('An error occurred while fetching the data:', error);

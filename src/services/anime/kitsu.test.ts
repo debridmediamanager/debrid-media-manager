@@ -1,3 +1,4 @@
+import kitsuNoMatch from '@/test/fixtures/anime/kitsu-search-zzqqxxnotananime.json';
 import { describe, expect, it, vi } from 'vitest';
 import { KITSU_API_BASE, fetchKitsuAnime, normalizeKitsuAnime, searchKitsuAnimeIds } from './kitsu';
 
@@ -124,8 +125,16 @@ describe('searchKitsuAnimeIds', () => {
 		expect(await searchKitsuAnimeIds('x', fetcher)).toEqual([7]);
 	});
 
-	it('returns an empty list on error or malformed payload', async () => {
-		expect(await searchKitsuAnimeIds('x', respond({}, false))).toEqual([]);
-		expect(await searchKitsuAnimeIds('x', respond({ data: 'nope' }))).toEqual([]);
+	it('returns null, not an empty list, on error or malformed payload', async () => {
+		expect(await searchKitsuAnimeIds('x', respond({}, false))).toBeNull();
+		expect(await searchKitsuAnimeIds('x', respond({ data: 'nope' }))).toBeNull();
+		const throwing = vi.fn().mockRejectedValue(new Error('offline')) as unknown as typeof fetch;
+		expect(await searchKitsuAnimeIds('x', throwing)).toBeNull();
+	});
+
+	it('returns an empty list for a keyword nothing matches', async () => {
+		// kitsu.io's answer, verbatim, as dmm-01 received it.
+		const fetcher = respond(kitsuNoMatch);
+		expect(await searchKitsuAnimeIds('zzqqxxnotananime', fetcher)).toEqual([]);
 	});
 });

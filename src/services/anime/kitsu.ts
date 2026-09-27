@@ -85,12 +85,18 @@ export async function fetchKitsuAnime(
 	}
 }
 
-/** Kitsu returns ids as strings; callers index the local table by number. */
+/**
+ * Kitsu returns ids as strings; callers index the local table by number.
+ *
+ * Null means Kitsu could not be asked, which is not the same answer as the
+ * empty list it gives for a keyword nothing matches: the search route used to
+ * read both as an outage and answered a no-match search with a 500.
+ */
 export async function searchKitsuAnimeIds(
 	keyword: string,
 	fetcher: Fetcher = fetch,
 	limit = 20
-): Promise<number[]> {
+): Promise<number[] | null> {
 	const query = keyword.trim();
 	if (!query) return [];
 
@@ -99,14 +105,14 @@ export async function searchKitsuAnimeIds(
 			`${KITSU_API_BASE}/anime?filter%5Btext%5D=${encodeURIComponent(query)}` +
 			`&page%5Blimit%5D=${limit}`;
 		const res = await fetcher(url, { headers: JSON_API_HEADERS });
-		if (!res.ok) return [];
+		if (!res.ok) return null;
 		const body = await res.json();
-		if (!Array.isArray(body?.data)) return [];
+		if (!Array.isArray(body?.data)) return null;
 
 		return body.data
 			.map((entry: { id?: unknown }) => parseInt(String(entry?.id ?? ''), 10))
 			.filter((id: number) => Number.isInteger(id) && id > 0);
 	} catch {
-		return [];
+		return null;
 	}
 }
