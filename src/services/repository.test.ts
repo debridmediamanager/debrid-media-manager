@@ -47,14 +47,7 @@ const buildRepository = () => {
 
 	const search = createService(['disconnect', 'saveSearchResults', 'getSearchResults']);
 
-	const anime = createService([
-		'disconnect',
-		'getRecentlyUpdatedAnime',
-		'searchAnimeByTitle',
-		'getAnimeByMalIds',
-		'getAnimeByKitsuIds',
-		'getAnimeByExternalId',
-	]);
+	const anime = createService(['disconnect', 'getAnimeByKitsuIds', 'getAnimeByExternalId']);
 
 	const cast = createService([
 		'disconnect',
@@ -281,27 +274,6 @@ describe('Repository', () => {
 				serviceMethod: 'getSearchResults',
 				args: ['key'],
 				value: { foo: 'bar' },
-			},
-			{
-				method: 'getRecentlyUpdatedAnime',
-				service: 'anime',
-				serviceMethod: 'getRecentlyUpdatedAnime',
-				args: [5],
-				value: [],
-			},
-			{
-				method: 'searchAnimeByTitle',
-				service: 'anime',
-				serviceMethod: 'searchAnimeByTitle',
-				args: ['title'],
-				value: [],
-			},
-			{
-				method: 'getAnimeByMalIds',
-				service: 'anime',
-				serviceMethod: 'getAnimeByMalIds',
-				args: [[1]],
-				value: [],
 			},
 			{
 				method: 'getAnimeByKitsuIds',

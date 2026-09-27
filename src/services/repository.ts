@@ -616,18 +616,6 @@ export class Repository {
 	}
 
 	// Anime Service Methods
-	public getRecentlyUpdatedAnime(limit: number) {
-		return this.animeService.getRecentlyUpdatedAnime(limit);
-	}
-
-	public searchAnimeByTitle(query: string) {
-		return this.animeService.searchAnimeByTitle(query);
-	}
-
-	public getAnimeByMalIds(malIds: number[]) {
-		return this.animeService.getAnimeByMalIds(malIds);
-	}
-
 	public getAnimeByKitsuIds(kitsuIds: number[]) {
 		return this.animeService.getAnimeByKitsuIds(kitsuIds);
 	}
