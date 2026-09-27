@@ -85,6 +85,98 @@ export const EXTERNAL_SOURCE_SETTINGS: {
 	{ key: 'settings:enableTorrentsDBTor', source: 'torrentsdb-tor', defaultEnabled: false },
 ];
 
+/**
+ * One addon stream as a search row: the torrent name, its size, its hash and the
+ * file the stream plays. Null for a stream with no hash or no usable title.
+ */
+export function transformExternalStream(stream: any, source: string): SearchResult | null {
+	let cleanTitle = '';
+
+	if (source === 'torrentio' || source === 'peerflix') {
+		// Parse Torrentio/Peerflix format
+		cleanTitle = stream.title || stream.name || '';
+		const titleParts = cleanTitle.split('\n');
+		if (titleParts.length > 1) {
+			cleanTitle = titleParts[0].trim();
+		}
+	} else if (source === 'torrentsdb') {
+		// Parse TorrentsDB format
+		if (stream.title) {
+			const lines = stream.title.split('\n');
+			if (lines.length > 0) {
+				cleanTitle = lines[0].trim();
+			}
+		}
+		if (!cleanTitle && stream.name) {
+			const nameParts = stream.name.split('\n');
+			cleanTitle = nameParts[nameParts.length - 1].trim();
+		}
+	} else {
+		// Parse Comet/MediaFusion format
+		if (stream.description) {
+			const lines = stream.description.split('\n');
+			if (lines.length > 0) {
+				cleanTitle = lines[0]
+					.replace(/^\[TORRENT🧲\]\s*/, '')
+					.replace(/^📂\s*/, '')
+					.replace(/^📄\s*/, '')
+					.trim();
+			}
+		}
+		if (!cleanTitle) {
+			cleanTitle = stream.behaviorHints?.filename || stream.name || '';
+		}
+	}
+
+	// Prefer the exact byte count when the addon reports one, then fall back to
+	// the 💾 field on either the title or the description. Addons are
+	// inconsistent about which of the two carries it, and some (Peerflix on
+	// non-cached results) omit it entirely - those land on 0 and get repaired
+	// by the debrid availability check.
+	const videoSize = stream.behaviorHints?.videoSize;
+	const fileSize = videoSize
+		? videoSize / (1024 * 1024)
+		: parseSizeToMb(stream.title) || parseSizeToMb(stream.description);
+
+	// Debrid-resolving addons drop infoHash and hand out an opaque playback
+	// URL, but the hash is still recoverable from the URL path or bingeGroup.
+	const hashFromUrl = stream.url?.match(/\/([a-fA-F0-9]{40})\//)?.[1];
+	const hashFromBingeGroup = stream.behaviorHints?.bingeGroup?.match(/[a-fA-F0-9]{40}/)?.[0];
+	const hash = normalizeHash(hashFromUrl || stream.infoHash || hashFromBingeGroup || '');
+
+	if (!hash) return null;
+	if (!hasSubstantialTitle(cleanTitle)) return null;
+
+	const filename = stream.behaviorHints?.filename || cleanTitle;
+	const files: FileData[] = [];
+	if (filename) {
+		files.push({
+			fileId: stream.fileIdx || 0,
+			filename: filename,
+			filesize: stream.behaviorHints?.videoSize || fileSize * 1024 * 1024,
+		});
+	}
+
+	return {
+		title: cleanTitle,
+		fileSize: fileSize,
+		hash: hash,
+		rdAvailable: false,
+		adAvailable: false,
+		tbAvailable: false,
+		pmAvailable: false,
+		ocAvailable: false,
+		dlAvailable: false,
+		files: files,
+		noVideos: false,
+		medianFileSize: fileSize,
+		biggestFileSize: fileSize,
+		meanFileSize: fileSize,
+		videoCount: 1,
+		imdbId: '',
+	};
+}
+
 export function useExternalSources(
 	rdKey: string | null,
 	adKey?: string | null,
@@ -238,98 +330,6 @@ export function useExternalSources(
 		getHash();
 	}, []);
 
-	const transformExternalStream = useCallback(
-		(stream: any, source: string): SearchResult | null => {
-			let cleanTitle = '';
-
-			if (source === 'torrentio' || source === 'peerflix') {
-				// Parse Torrentio/Peerflix format
-				cleanTitle = stream.title || stream.name || '';
-				const titleParts = cleanTitle.split('\n');
-				if (titleParts.length > 1) {
-					cleanTitle = titleParts[0].trim();
-				}
-			} else if (source === 'torrentsdb') {
-				// Parse TorrentsDB format
-				if (stream.title) {
-					const lines = stream.title.split('\n');
-					if (lines.length > 0) {
-						cleanTitle = lines[0].trim();
-					}
-				}
-				if (!cleanTitle && stream.name) {
-					const nameParts = stream.name.split('\n');
-					cleanTitle = nameParts[nameParts.length - 1].trim();
-				}
-			} else {
-				// Parse Comet/MediaFusion format
-				if (stream.description) {
-					const lines = stream.description.split('\n');
-					if (lines.length > 0) {
-						cleanTitle = lines[0]
-							.replace(/^\[TORRENT🧲\]\s*/, '')
-							.replace(/^📂\s*/, '')
-							.replace(/^📄\s*/, '')
-							.trim();
-					}
-				}
-				if (!cleanTitle) {
-					cleanTitle = stream.behaviorHints?.filename || stream.name || '';
-				}
-			}
-
-			// Prefer the exact byte count when the addon reports one, then fall back to
-			// the 💾 field on either the title or the description. Addons are
-			// inconsistent about which of the two carries it, and some (Peerflix on
-			// non-cached results) omit it entirely - those land on 0 and get repaired
-			// by the debrid availability check.
-			const videoSize = stream.behaviorHints?.videoSize;
-			const fileSize = videoSize
-				? videoSize / (1024 * 1024)
-				: parseSizeToMb(stream.title) || parseSizeToMb(stream.description);
-
-			// Debrid-resolving addons drop infoHash and hand out an opaque playback
-			// URL, but the hash is still recoverable from the URL path or bingeGroup.
-			const hashFromUrl = stream.url?.match(/\/([a-fA-F0-9]{40})\//)?.[1];
-			const hashFromBingeGroup =
-				stream.behaviorHints?.bingeGroup?.match(/[a-fA-F0-9]{40}/)?.[0];
-			const hash = normalizeHash(hashFromUrl || stream.infoHash || hashFromBingeGroup || '');
-
-			if (!hash) return null;
-			if (!hasSubstantialTitle(cleanTitle)) return null;
-
-			const filename = stream.behaviorHints?.filename || cleanTitle;
-			const files: FileData[] = [];
-			if (filename) {
-				files.push({
-					fileId: stream.fileIdx || 0,
-					filename: filename,
-					filesize: stream.behaviorHints?.videoSize || fileSize * 1024 * 1024,
-				});
-			}
-
-			return {
-				title: cleanTitle,
-				fileSize: fileSize,
-				hash: hash,
-				rdAvailable: false,
-				adAvailable: false,
-				tbAvailable: false,
-				pmAvailable: false,
-				ocAvailable: false,
-				dlAvailable: false,
-				files: files,
-				noVideos: false,
-				medianFileSize: fileSize,
-				biggestFileSize: fileSize,
-				meanFileSize: fileSize,
-				videoCount: 1,
-				imdbId: '',
-			};
-		},
-		[]
-	);
-
 	const fetchExternalSource = useCallback(
 		async (url: string, source: string, imdbId: string): Promise<SearchResult[]> => {
 			if (!hasAnyDebridKey) return [];
@@ -371,7 +371,7 @@ export function useExternalSources(
 				return [];
 			}
 		},
-		[hasAnyDebridKey, transformExternalStream]
+		[hasAnyDebridKey]
 	);
 
 	const fetchMovieFromExternalSource = useCallback(
