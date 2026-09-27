@@ -168,8 +168,15 @@ export function useTorrentManagement(
 						}
 					}
 
-					// Only submit availability for truly available torrents
-					if (info.status === 'downloaded' && info.progress === 100) {
+					// Only submit availability for truly available torrents, and only
+					// under an IMDb id. The row is keyed by hash and an upsert rewrites
+					// its imdbId, so an anime page filing one under anything else would
+					// move a shared row off the show page it belongs to.
+					if (
+						info.status === 'downloaded' &&
+						info.progress === 100 &&
+						/^tt\d+$/.test(imdbId)
+					) {
 						await submitAvailability(tokenWithTimestamp, tokenHash, info, imdbId);
 					}
 
@@ -306,18 +313,21 @@ export function useTorrentManagement(
 								l: f.l || '',
 							}));
 
-						// Only submit if we have valid files (name and size required)
+						// Only submit if we have valid files (name and size required),
+						// under an IMDb id the route accepts - see addRd above.
 						if (validFiles.length > 0) {
-							await submitAvailabilityAd(tokenWithTimestamp, tokenHash, {
-								hash: hash.toLowerCase(),
-								imdbId,
-								filename: magnetStatus.filename,
-								size: magnetStatus.size,
-								status: magnetStatus.status,
-								statusCode: magnetStatus.statusCode,
-								completionDate: magnetStatus.completionDate || 0,
-								files: validFiles,
-							});
+							if (/^tt\d+$/.test(imdbId)) {
+								await submitAvailabilityAd(tokenWithTimestamp, tokenHash, {
+									hash: hash.toLowerCase(),
+									imdbId,
+									filename: magnetStatus.filename,
+									size: magnetStatus.size,
+									status: magnetStatus.status,
+									statusCode: magnetStatus.statusCode,
+									completionDate: magnetStatus.completionDate || 0,
+									files: validFiles,
+								});
+							}
 						} else {
 							console.warn(
 								'[TorrentManagement] addAd: No valid files found, skipping availability submission',

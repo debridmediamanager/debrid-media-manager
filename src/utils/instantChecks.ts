@@ -16,6 +16,13 @@ import { groupBy } from './groupBy';
 import { isVideo } from './selectable';
 import { searchToastOptions } from './toastOptions';
 
+/**
+ * Whether a page's id can scope an availability lookup. An anime entry with no
+ * IMDb id passes `''`, which `/api/availability/check` answers with a 400; the
+ * lookup then asks by hash alone, as the hashlist page does.
+ */
+const isImdbId = (id: string) => /^tt\d+$/.test(id);
+
 // Common utility functions
 const calculateFileStats = (videoFiles: FileData[]) => {
 	const sortedFileSizes = videoFiles.map((f) => f.filesize / 1024 / 1024).sort((a, b) => a - b);
@@ -184,7 +191,9 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
 			await waitForRateLimit();
-			const resp = await checkAvailability(dmmProblemKey, solution, imdbId, hashGroup);
+			const resp = isImdbId(imdbId)
+				? await checkAvailability(dmmProblemKey, solution, imdbId, hashGroup)
+				: await checkAvailabilityByHashes(dmmProblemKey, solution, hashGroup);
 			allAvailable.push(...resp.available);
 		});
 	}
@@ -350,7 +359,9 @@ const processAdInstantCheckDb = async <T extends SearchResult | EnrichedHashlist
 	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
 			await waitForAdRateLimit();
-			const resp = await checkAvailabilityAd(dmmProblemKey, solution, imdbId, hashGroup);
+			const resp = isImdbId(imdbId)
+				? await checkAvailabilityAd(dmmProblemKey, solution, imdbId, hashGroup)
+				: await checkAvailabilityAdByHashes(dmmProblemKey, solution, hashGroup);
 			allAvailable.push(...resp.available);
 		});
 	}

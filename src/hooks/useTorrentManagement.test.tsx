@@ -17,6 +17,7 @@ const {
 	mockConvertToUserTorrent,
 	mockGenerateTokenAndHash,
 	mockSubmitAvailability,
+	mockSubmitAvailabilityAd,
 	mockRemoveAvailability,
 	mockHandleDeleteRdTorrent,
 	mockHandleDeleteAdTorrent,
@@ -43,6 +44,7 @@ const {
 	mockConvertToUserTorrent: vi.fn(),
 	mockGenerateTokenAndHash: vi.fn(),
 	mockSubmitAvailability: vi.fn(),
+	mockSubmitAvailabilityAd: vi.fn(),
 	mockRemoveAvailability: vi.fn(),
 	mockHandleDeleteRdTorrent: vi.fn(),
 	mockHandleDeleteAdTorrent: vi.fn(),
@@ -81,6 +83,7 @@ vi.mock('@/utils/token', () => ({
 
 vi.mock('@/utils/availability', () => ({
 	submitAvailability: mockSubmitAvailability,
+	submitAvailabilityAd: mockSubmitAvailabilityAd,
 	removeAvailability: mockRemoveAvailability,
 }));
 
@@ -801,6 +804,83 @@ describe('useTorrentManagement', () => {
 
 			expect(mockHandleAddAsMagnetInDl).not.toHaveBeenCalled();
 			expect(mockHandleDeleteDlTorrent).not.toHaveBeenCalled();
+		});
+	});
+
+	// An availability row is keyed by hash and an upsert rewrites its imdbId.
+	// The anime page of an entry with no IMDb id passes '', and filing a row
+	// under that would move it off the show page it was recorded for.
+	describe('on a page with no IMDb id', () => {
+		const renderWithoutImdbId = () =>
+			renderHook(() =>
+				useTorrentManagement(
+					'rd-key',
+					'ad-key',
+					'tb-key',
+					'pm-key',
+					'oc-key',
+					'dl-key',
+					'',
+					currentResults,
+					setSearchResults
+				)
+			);
+
+		it('adds to RD without filing availability', async () => {
+			const { result } = renderWithoutImdbId();
+
+			await act(async () => {
+				await result.current.addRd('hash-1');
+			});
+
+			expect(mockHandleAddAsMagnetInRd).toHaveBeenCalled();
+			expect(mockSubmitAvailability).not.toHaveBeenCalled();
+			expect(result.current.hashAndProgress['rd:hash-1']).toBe(100);
+		});
+
+		it('adds to AD without filing availability, and still stores the torrent', async () => {
+			mockHandleAddAsMagnetInAd.mockImplementation(async (_adKey, hash, cb) => {
+				await cb({
+					id: 123,
+					filename: `${hash}.mkv`,
+					size: 1000000,
+					status: 'Ready',
+					statusCode: 4,
+					files: [{ n: `${hash}.mkv`, s: 1000000, l: 'https://alldebrid.com/f/x' }],
+				} as any);
+			});
+			const { result } = renderWithoutImdbId();
+
+			await act(async () => {
+				await result.current.addAd('hash-ad');
+			});
+
+			expect(mockSubmitAvailabilityAd).not.toHaveBeenCalled();
+			expect(mockDb.add).toHaveBeenCalled();
+		});
+
+		it('files AD availability as before when the page has one', async () => {
+			mockHandleAddAsMagnetInAd.mockImplementation(async (_adKey, hash, cb) => {
+				await cb({
+					id: 123,
+					filename: `${hash}.mkv`,
+					size: 1000000,
+					status: 'Ready',
+					statusCode: 4,
+					files: [{ n: `${hash}.mkv`, s: 1000000, l: 'https://alldebrid.com/f/x' }],
+				} as any);
+			});
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.addAd('hash-ad');
+			});
+
+			expect(mockSubmitAvailabilityAd).toHaveBeenCalledWith(
+				'token-ts',
+				'token-hash',
+				expect.objectContaining({ hash: 'hash-ad', imdbId: 'tt123' })
+			);
 		});
 	});
 });
