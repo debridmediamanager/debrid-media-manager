@@ -44,15 +44,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				'anime'
 			);
 
+			// Fansub releases number episodes absolutely (`Show - 05`,
+			// `One Piece - 1100`) and name no season. AniDB gives every season
+			// its own entry and numbers that entry's episodes from 1, so an
+			// episode with no season is season 1 of the entry this is keyed by.
+			const season = seasonNumber >= 0 ? seasonNumber : episodeNumber >= 0 ? 1 : -1;
+
 			// See the same guard in cast/series: the bare id is the movie key, so
 			// an unparsed episode overwrites whatever was cast before it.
-			if (streamUrl && seasonNumber >= 0 && episodeNumber >= 0) {
-				const castKey = `${anidbid}:${seasonNumber}:${episodeNumber}`;
+			if (streamUrl && season >= 0 && episodeNumber >= 0) {
+				const castKey = `${anidbid}:${season}:${episodeNumber}`;
 				await db.saveCast(castKey, userid, hash, streamUrl, rdLink, fileSize);
 			} else if (streamUrl) {
 				errorEpisodes.push(`fileId:${fileId} (no episode number in filename)`);
-			} else if (seasonNumber >= 0 && episodeNumber >= 0) {
-				errorEpisodes.push(`S${seasonNumber}E${episodeNumber}`);
+			} else if (season >= 0 && episodeNumber >= 0) {
+				errorEpisodes.push(`S${season}E${episodeNumber}`);
 			} else {
 				errorEpisodes.push(`fileId:${fileId}`);
 			}
