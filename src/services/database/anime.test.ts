@@ -1,5 +1,6 @@
 import addonFateZero from '@/test/fixtures/anime/addon-search-fate-zero.json';
 import rowsByKitsuId from '@/test/fixtures/anime/anime-rows-kitsu-fate-zero.json';
+import searchRows from '@/test/fixtures/anime/anime-rows-search-frieren.json';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { AnimeService } from './anime';
 
@@ -15,6 +16,8 @@ vi.mock('./client', () => ({
 		prisma = prismaMock;
 	},
 }));
+
+const frierenRow = searchRows.find((r) => r.anidb_id === 17617)!;
 
 describe('AnimeService', () => {
 	let service: AnimeService;
@@ -63,7 +66,41 @@ describe('AnimeService', () => {
 		expect(results[0]).toEqual({
 			id: 'anime:anidb-8160',
 			title: 'Fate/Zero',
-			poster_url: rowsByKitsuId.find((r) => r.kitsu_id === 6028)!.poster_url,
+			poster_url: rowsByKitsuId
+				.find((r) => r.kitsu_id === 6028)!
+				.poster_url.replace('media.kitsu.io', 'media.kitsu.app'),
 		});
+	});
+
+	// Every row in this fixture stores its poster under media.kitsu.io, which
+	// answers 404 since Kitsu moved to media.kitsu.app; production's search for
+	// "frieren" handed out four such URLs, all broken.
+	it("serves posters from Kitsu's current media host", async () => {
+		expect(rowsByKitsuId.every((r) => r.poster_url.startsWith('https://media.kitsu.io/'))).toBe(
+			true
+		);
+		prismaMock.anime.findMany.mockResolvedValue(structuredClone(rowsByKitsuId));
+
+		const results = await service.getAnimeByKitsuIds(rowsByKitsuId.map((r) => r.kitsu_id));
+
+		expect(
+			results.every((r) => r.poster_url.startsWith('https://media.kitsu.app/anime/'))
+		).toBe(true);
+	});
+
+	it('moves an entry row and a franchise row to the current host too', async () => {
+		const frieren = { ...frierenRow };
+		prismaMock.anime.findUnique.mockResolvedValue(frieren);
+		prismaMock.anime.findMany.mockResolvedValue([frieren]);
+
+		const row = await service.getAnimeByExternalId('anidb', 17617);
+		const [entry] = await service.getAnimeEntryRows({ anidbIds: [17617], imdbIds: [] });
+
+		expect(row!.poster_url).toBe(
+			'https://media.kitsu.app/anime/46474/poster_image/medium-23e1293e41a0b54b6621eb589c3f0d62.jpeg'
+		);
+		// fanart.tv is not Kitsu's and is left alone.
+		expect(row!.background_url).toBe(frieren.background_url);
+		expect(entry.poster_url).toBe(row!.poster_url);
 	});
 });

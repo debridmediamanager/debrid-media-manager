@@ -185,6 +185,11 @@ function Search() {
 											alt={`${result.title} poster`}
 											loading="lazy"
 											className="aspect-[2/3] w-full rounded object-cover"
+											// A third of the old Kitsu posters are gone from both of
+											// Kitsu's hosts; keep the card's shape, not the alt text.
+											onError={(e) => {
+												e.currentTarget.style.visibility = 'hidden';
+											}}
 										/>
 										<h3 className="text-center text-lg font-bold text-slate-300">
 											{result.title}

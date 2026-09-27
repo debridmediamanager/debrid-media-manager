@@ -1,3 +1,4 @@
+import { currentKitsuMediaUrl } from '@/utils/kitsuMedia';
 import { Prisma } from '@prisma/client';
 import { DatabaseClient } from './client';
 
@@ -77,7 +78,7 @@ export class AnimeService extends DatabaseClient {
 				id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
 				title: anime.title,
 				type: anime.type,
-				poster_url: anime.poster_url,
+				poster_url: currentKitsuMediaUrl(anime.poster_url),
 			}));
 	}
 
@@ -99,7 +100,7 @@ export class AnimeService extends DatabaseClient {
 				: source === 'mal'
 					? { mal_id: id }
 					: { kitsu_id: id };
-		return this.prisma.anime.findUnique({
+		const row = await this.prisma.anime.findUnique({
 			where,
 			select: {
 				anidb_id: true,
@@ -114,6 +115,13 @@ export class AnimeService extends DatabaseClient {
 				type: true,
 			},
 		});
+		return row
+			? {
+					...row,
+					poster_url: currentKitsuMediaUrl(row.poster_url),
+					background_url: currentKitsuMediaUrl(row.background_url),
+				}
+			: null;
 	}
 
 	/**
@@ -135,7 +143,7 @@ export class AnimeService extends DatabaseClient {
 		const or: Prisma.AnimeWhereInput[] = [];
 		if (anidbIds.length > 0) or.push({ anidb_id: { in: anidbIds } });
 		if (imdbIds.length > 0) or.push({ imdb_id: { in: imdbIds }, anidb_id: { not: null } });
-		return this.prisma.anime.findMany({
+		const rows = await this.prisma.anime.findMany({
 			where: { OR: or },
 			select: {
 				anidb_id: true,
@@ -147,5 +155,6 @@ export class AnimeService extends DatabaseClient {
 				poster_url: true,
 			},
 		});
+		return rows.map((row) => ({ ...row, poster_url: currentKitsuMediaUrl(row.poster_url) }));
 	}
 }
