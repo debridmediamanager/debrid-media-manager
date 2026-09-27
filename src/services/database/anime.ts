@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { soundex } from '../../utils/soundex';
 import { DatabaseClient } from './client';
 
@@ -8,6 +9,21 @@ interface AnimeItem {
 
 export interface AnimeSearchResult extends AnimeItem {
 	title: string;
+}
+
+/** The id spaces an `Anime` row is addressed by from outside. */
+export type AnimeIdSource = 'anidb' | 'mal' | 'kitsu';
+
+export interface AnimeRecord {
+	anidb_id: number | null;
+	kitsu_id: number | null;
+	mal_id: number | null;
+	imdb_id: string | null;
+	title: string;
+	description: string;
+	poster_url: string;
+	background_url: string;
+	rating: number;
 }
 
 export class AnimeService extends DatabaseClient {
@@ -105,14 +121,36 @@ export class AnimeService extends DatabaseClient {
 	}
 
 	/**
-	 * The Kitsu API carries no IMDb id, so a page served from the Kitsu
-	 * fallback resolves one here instead of losing it.
+	 * One row by whichever external id the caller holds.
+	 *
+	 * Search hands out anidb ids (mal when a row has none) while the metadata
+	 * upstreams are keyed by Kitsu, so the row is what translates between them.
+	 * It also carries the IMDb id the Kitsu API lacks, and enough metadata to
+	 * render a page when neither upstream answers.
 	 */
-	public async getImdbIdByKitsuId(kitsuId: number): Promise<string | null> {
-		const anime = await this.prisma.anime.findUnique({
-			where: { kitsu_id: kitsuId },
-			select: { imdb_id: true },
+	public async getAnimeByExternalId(
+		source: AnimeIdSource,
+		id: number
+	): Promise<AnimeRecord | null> {
+		const where: Prisma.AnimeWhereUniqueInput =
+			source === 'anidb'
+				? { anidb_id: id }
+				: source === 'mal'
+					? { mal_id: id }
+					: { kitsu_id: id };
+		return this.prisma.anime.findUnique({
+			where,
+			select: {
+				anidb_id: true,
+				kitsu_id: true,
+				mal_id: true,
+				imdb_id: true,
+				title: true,
+				description: true,
+				poster_url: true,
+				background_url: true,
+				rating: true,
+			},
 		});
-		return anime?.imdb_id ?? null;
 	}
 }

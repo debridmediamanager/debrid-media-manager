@@ -23,12 +23,25 @@ vi.mock('@/services/anime/simkl', () => ({
 	resolveImdbIdFromSimkl: (...args: unknown[]) => mockResolveImdbIdFromSimkl(...args),
 }));
 
-const mockGetImdbIdByKitsuId = vi.fn();
+const mockGetAnimeByExternalId = vi.fn();
 vi.mock('@/services/repository', () => ({
 	repository: {
-		getImdbIdByKitsuId: (...args: unknown[]) => mockGetImdbIdByKitsuId(...args),
+		getAnimeByExternalId: (...args: unknown[]) => mockGetAnimeByExternalId(...args),
 	},
 }));
+
+/** The row for kitsu 123, carrying only the imdb id these cases vary. */
+const rowWithImdb = (imdb_id: string | null) => ({
+	anidb_id: null,
+	kitsu_id: 123,
+	mal_id: null,
+	imdb_id,
+	title: 'Row title',
+	description: '',
+	poster_url: '',
+	background_url: '',
+	rating: 0,
+});
 
 const mockedAxios = vi.mocked(axios, true);
 
@@ -42,7 +55,7 @@ describe('/api/info/anime', () => {
 		vi.resetModules();
 		vi.clearAllMocks();
 		mockFetchKitsuAnime.mockResolvedValue(null);
-		mockGetImdbIdByKitsuId.mockResolvedValue(null);
+		mockGetAnimeByExternalId.mockResolvedValue(null);
 		mockResolveImdbIdFromSimkl.mockResolvedValue(null);
 	});
 
@@ -141,12 +154,12 @@ describe('/api/info/anime', () => {
 			backdrop: 'co.jpg',
 			rating: 8.2,
 		});
-		mockGetImdbIdByKitsuId.mockResolvedValue('tt0213338');
+		mockGetAnimeByExternalId.mockResolvedValue(rowWithImdb('tt0213338'));
 
 		await handler(req, res);
 
 		expect(mockFetchKitsuAnime).toHaveBeenCalledWith(123);
-		expect(mockGetImdbIdByKitsuId).toHaveBeenCalledWith(123);
+		expect(mockGetAnimeByExternalId).toHaveBeenCalledWith('kitsu', 123);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
 			title: 'Cowboy Bebop',
@@ -189,7 +202,7 @@ describe('/api/info/anime', () => {
 			backdrop: '',
 			rating: 8.2,
 		});
-		mockGetImdbIdByKitsuId.mockRejectedValue(new Error('no database'));
+		mockGetAnimeByExternalId.mockRejectedValue(new Error('no database'));
 
 		await handler(req, res);
 
@@ -205,7 +218,7 @@ describe('/api/info/anime', () => {
 		mockedAxios.get.mockResolvedValue({
 			data: { meta: { name: 'Cowboy Bebop', imdbRating: '8.9' } },
 		});
-		mockGetImdbIdByKitsuId.mockResolvedValue(null);
+		mockGetAnimeByExternalId.mockResolvedValue(rowWithImdb(null));
 		mockResolveImdbIdFromSimkl.mockResolvedValue('tt0213338');
 
 		await handler(req, res);
@@ -221,7 +234,7 @@ describe('/api/info/anime', () => {
 		const req = createMockRequest({ query: { animeid: 'kitsu-123' } });
 		const res = createMockResponse();
 		mockedAxios.get.mockResolvedValue({ data: { meta: { name: 'Cowboy Bebop' } } });
-		mockGetImdbIdByKitsuId.mockResolvedValue('tt0213338');
+		mockGetAnimeByExternalId.mockResolvedValue(rowWithImdb('tt0213338'));
 
 		await handler(req, res);
 
@@ -236,10 +249,10 @@ describe('/api/info/anime', () => {
 		mockedAxios.get.mockResolvedValue({
 			data: { meta: { name: 'Cowboy Bebop', imdb_id: 'tt_from_addon' } },
 		});
+		mockGetAnimeByExternalId.mockResolvedValue(rowWithImdb('tt_from_row'));
 
 		await handler(req, res);
 
-		expect(mockGetImdbIdByKitsuId).not.toHaveBeenCalled();
 		expect(mockResolveImdbIdFromSimkl).not.toHaveBeenCalled();
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ imdbid: 'tt_from_addon' }));
 	});
@@ -249,7 +262,7 @@ describe('/api/info/anime', () => {
 		const req = createMockRequest({ query: { animeid: 'kitsu-123' } });
 		const res = createMockResponse();
 		mockedAxios.get.mockResolvedValue({ data: { meta: { name: 'Cowboy Bebop' } } });
-		mockGetImdbIdByKitsuId.mockRejectedValue(new Error('no database'));
+		mockGetAnimeByExternalId.mockRejectedValue(new Error('no database'));
 		mockResolveImdbIdFromSimkl.mockResolvedValue('tt0213338');
 
 		await handler(req, res);
@@ -268,7 +281,7 @@ describe('/api/info/anime', () => {
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ imdbid: '' }));
 	});
 
-	it('does not attempt the Kitsu fallback for a non-Kitsu id', async () => {
+	it('asks no upstream for a mal id the table does not hold', async () => {
 		const handler = await loadHandler();
 		const req = createMockRequest({ query: { animeid: 'mal-99' } });
 		const res = createMockResponse();
@@ -276,6 +289,8 @@ describe('/api/info/anime', () => {
 
 		await handler(req, res);
 
+		expect(mockGetAnimeByExternalId).toHaveBeenCalledWith('mal', 99);
+		expect(mockedAxios.get).not.toHaveBeenCalled();
 		expect(mockFetchKitsuAnime).not.toHaveBeenCalled();
 		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ title: 'Unknown' }));
 	});

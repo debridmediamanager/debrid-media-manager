@@ -53,6 +53,7 @@ const buildRepository = () => {
 		'searchAnimeByTitle',
 		'getAnimeByMalIds',
 		'getAnimeByKitsuIds',
+		'getAnimeByExternalId',
 	]);
 
 	const cast = createService([
@@ -308,6 +309,13 @@ describe('Repository', () => {
 				serviceMethod: 'getAnimeByKitsuIds',
 				args: [[1]],
 				value: [],
+			},
+			{
+				method: 'getAnimeByExternalId',
+				service: 'anime',
+				serviceMethod: 'getAnimeByExternalId',
+				args: ['anidb', 17617],
+				value: null,
 			},
 			{
 				method: 'saveCastProfile',

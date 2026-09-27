@@ -1,3 +1,4 @@
+import type { AnimeIdSource } from '@/services/database/anime';
 import type { RdCastCredentials } from '@/utils/castRdToken';
 import type { TorznabLiveService } from '@/utils/sponsorProviders';
 import { Prisma } from '@prisma/client';
@@ -631,8 +632,8 @@ export class Repository {
 		return this.animeService.getAnimeByKitsuIds(kitsuIds);
 	}
 
-	public getImdbIdByKitsuId(kitsuId: number) {
-		return this.animeService.getImdbIdByKitsuId(kitsuId);
+	public getAnimeByExternalId(source: AnimeIdSource, id: number) {
+		return this.animeService.getAnimeByExternalId(source, id);
 	}
 
 	// Cast Service Methods
