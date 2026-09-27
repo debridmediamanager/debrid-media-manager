@@ -74,6 +74,7 @@ describe('/api/torrents/anime', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
 			results: [{ hash: HASH, title: 'Anime.EP01', fileSize: 1234 }],
+			episodes: { episodes: [{ episode: 1, count: 1 }], batches: 0, unnumbered: 0 },
 		});
 	});
 
@@ -91,6 +92,7 @@ describe('/api/torrents/anime', () => {
 
 		expect(res.json).toHaveBeenCalledWith({
 			results: [{ hash: HASH, title: 'Anime.EP01', fileSize: 1234 }],
+			episodes: { episodes: [{ episode: 1, count: 1 }], batches: 0, unnumbered: 0 },
 		});
 	});
 
@@ -113,7 +115,10 @@ describe('/api/torrents/anime', () => {
 		await handler(createMockRequest({ query: { ...baseQuery, animeId: 'anidb-18886' } }), res);
 
 		expect(res.status).toHaveBeenCalledWith(200);
-		expect(res.json).toHaveBeenCalledWith({ results: [] });
+		expect(res.json).toHaveBeenCalledWith({
+			results: [],
+			episodes: { episodes: [], batches: 0, unnumbered: 0 },
+		});
 		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
 		expect(mockKeyExists).not.toHaveBeenCalled();
 	});

@@ -5,6 +5,13 @@ import {
 } from '@/services/mediasearch';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import {
+	AnimeEpisodeFilter,
+	AnimeEpisodeSummary,
+	matchesAnimeEpisodeFilter,
+	parseAnimeEpisodeFilter,
+	summarizeAnimeEpisodes,
+} from '@/utils/animeEpisodes';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiHandler } from 'next';
 
@@ -51,11 +58,24 @@ function toSearchResult(entry: StoredRelease): ScrapeSearchResult | null {
  * with a null title, which its title filter then drops, so this route answered
  * 204 for every anime in the table — Frieren's row alone holds 772 releases.
  */
-async function readReleases(key: string, page: number): Promise<ScrapeSearchResult[]> {
+async function readReleases(
+	key: string,
+	page: number,
+	episode: AnimeEpisodeFilter | null
+): Promise<{ results: ScrapeSearchResult[]; episodes?: AnimeEpisodeSummary }> {
 	const stored = ((await db.getAllScrapedTrueResults(key)) ?? []) as StoredRelease[];
 	const releases = stored.map(toSearchResult).filter((r): r is ScrapeSearchResult => r !== null);
 	const sorted = sortByFileSize(flattenAndRemoveDuplicates([releases]));
-	return sorted.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+	const matching =
+		episode === null
+			? sorted
+			: sorted.filter((r) => matchesAnimeEpisodeFilter(r.title, episode));
+	const results = matching.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+	// Pages are sorted by size, so page 0 of Frieren's 772 releases is all packs
+	// and a single episode sits pages deep. The summary covers the whole row, so
+	// the page can offer every episode without paging through to find them.
+	if (page !== 0) return { results };
+	return { results, episodes: summarizeAnimeEpisodes(sorted.map((r) => r.title)) };
 }
 
 /**
@@ -68,7 +88,7 @@ async function readReleases(key: string, page: number): Promise<ScrapeSearchResu
  * scrapers on their own schedule, not on demand.
  */
 const handler: NextApiHandler = async (req, res) => {
-	const { animeId, dmmProblemKey, solution, page } = req.query;
+	const { animeId, dmmProblemKey, solution, page, episode } = req.query;
 
 	if (
 		!dmmProblemKey ||
@@ -94,9 +114,19 @@ const handler: NextApiHandler = async (req, res) => {
 		return;
 	}
 
+	const episodeFilter = parseAnimeEpisodeFilter(episode);
+	if (episode !== undefined && episodeFilter === null) {
+		res.status(400).json({ errorMessage: 'Invalid "episode" query parameter' });
+		return;
+	}
+
 	try {
-		const searchResults = await readReleases(`anime:${animeId.toString().trim()}`, pageNum);
-		res.status(200).json({ results: searchResults });
+		const served = await readReleases(
+			`anime:${animeId.toString().trim()}`,
+			pageNum,
+			episodeFilter
+		);
+		res.status(200).json(served);
 	} catch (error: any) {
 		console.error(
 			'Encountered a database issue:',
