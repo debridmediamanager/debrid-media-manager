@@ -26,6 +26,13 @@ export interface AnimeRecord {
 }
 
 export class AnimeService extends DatabaseClient {
+	/**
+	 * Rows for a search's Kitsu ids, in the order the search ranked them.
+	 *
+	 * `IN (...)` hands rows back in whatever order the index scan finds them,
+	 * which is kitsu_id order in production: a "Fate/Zero" search came back
+	 * with Gravitation (kitsu 218) ahead of Fate/Zero (6028).
+	 */
 	public async getAnimeByKitsuIds(kitsuIds: number[]): Promise<AnimeSearchResult[]> {
 		const results = await this.prisma.anime.findMany({
 			where: {
@@ -42,14 +49,20 @@ export class AnimeService extends DatabaseClient {
 				title: true,
 				anidb_id: true,
 				mal_id: true,
+				kitsu_id: true,
 				poster_url: true,
 			},
 		});
-		return results.map((anime) => ({
-			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
-			title: anime.title,
-			poster_url: anime.poster_url,
-		}));
+		const rank = new Map(kitsuIds.map((id, index) => [id, index]));
+		const position = (kitsuId: number | null) =>
+			(kitsuId !== null ? rank.get(kitsuId) : undefined) ?? kitsuIds.length;
+		return results
+			.sort((a, b) => position(a.kitsu_id) - position(b.kitsu_id))
+			.map((anime) => ({
+				id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
+				title: anime.title,
+				poster_url: anime.poster_url,
+			}));
 	}
 
 	/**
