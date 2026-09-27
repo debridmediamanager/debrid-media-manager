@@ -1,0 +1,719 @@
+[
+	{
+		"score": 1157451471441102800,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt12409194",
+				"plex": {
+					"guid": "5d9c08eb170e24001f2adf88",
+					"slug": "battle-through-the-heavens"
+				},
+				"slug": "fights-break-sphere-2017",
+				"tmdb": 79481,
+				"tvdb": 337284,
+				"trakt": 124987
+			},
+			"airs": { "day": "Friday", "time": "18:00", "timezone": "Asia/Shanghai" },
+			"year": 2017,
+			"title": "Fights Break Sphere",
+			"votes": 96,
+			"colors": { "poster": ["#788FBA", "#2A2F47"] },
+			"genres": ["donghua", "action", "adventure", "drama"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [
+					"media.trakt.tv/images/shows/000/124/987/banners/medium/17d55a6b9a.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/124/987/fanarts/medium/2105784ce2.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/124/987/posters/medium/1ec0db21d1.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.791666507720947,
+			"status": "returning series",
+			"country": "cn",
+			"network": "Tencent Video",
+			"runtime": 25,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://v.qq.com/x/cover/xvlhj7cglyfwx8x/m0022eyxv9v.html",
+			"language": "zh",
+			"overview": "In a land where no magic is present. A land where the strong make the rules and weak have to obey. A land filled with alluring treasures and beauty, yet also filled with unforeseen danger. Three years ago, Xiao Yan, who had shown talents none had seen in decades, suddenly lost everything. His powers, his reputation, and his promise to his mother. What sorcery has caused him to lose all of his powers? And why has his fiancee suddenly shown up?",
+			"languages": ["zh"],
+			"subgenres": ["martial-arts", "wuxia", "xianxia", "based-on-web-novel", "xuanhuan"],
+			"last_aired": "2026-09-26T10:00:00.000Z",
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-21T15:29:10.000Z",
+			"first_aired": "2017-01-07T10:00:00.000Z",
+			"certification": "TV-14",
+			"comment_count": 2,
+			"total_runtime": 6236,
+			"aired_episodes": 272,
+			"original_title": "斗破苍穹",
+			"available_translations": [
+				"de",
+				"en",
+				"es",
+				"fr",
+				"it",
+				"ka",
+				"ko",
+				"nl",
+				"pt",
+				"ru",
+				"th",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 1157451471441102800,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt9248626",
+				"plex": { "guid": "5d9c09081cae62001f750926", "slug": "fights-break-sphere-2018" },
+				"slug": "fights-break-sphere",
+				"tmdb": 81500,
+				"tvdb": 333354,
+				"trakt": 122865
+			},
+			"airs": { "day": "Saturday", "time": "20:00", "timezone": "Asia/Shanghai" },
+			"year": 2018,
+			"title": "Fights Break Sphere",
+			"votes": 30,
+			"colors": { "poster": ["#B6BDB8", "#292F32"] },
+			"genres": ["fantasy", "science-fiction", "action", "adventure", "romance"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/122/865/fanarts/medium/c84ec86fc3.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/122/865/posters/medium/9a9504f2cd.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.166669845581055,
+			"status": "ended",
+			"country": "cn",
+			"network": "Hunan Television",
+			"runtime": 45,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "zh",
+			"overview": "Once a prodigy, Xiao Yan loses all his powers and becomes the shame of his family—until he awakens a master from his mother’s ring, unlocking his true potential and setting out on a journey of revenge and redemption in the martial world.",
+			"languages": ["zh"],
+			"subgenres": [
+				"fantasy-world",
+				"martial-arts",
+				"wuxia",
+				"xianxia",
+				"based-on-web-novel",
+				"xuanhuan"
+			],
+			"last_aired": "2024-07-26T12:00:00.000Z",
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Battle_Through_the_Heavens"
+			},
+			"updated_at": "2026-09-26T15:59:01.000Z",
+			"first_aired": "2018-09-02T12:00:00.000Z",
+			"certification": null,
+			"comment_count": 2,
+			"total_runtime": 3553,
+			"aired_episodes": 79,
+			"original_title": "斗破苍穹",
+			"available_translations": [
+				"el",
+				"en",
+				"es",
+				"fr",
+				"ja",
+				"ko",
+				"pt",
+				"ro",
+				"ru",
+				"th",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 1157451471441102800,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt30318518",
+				"plex": { "guid": "656dff73bcc75c5c89df5770", "slug": "battle-through-the-heaven" },
+				"slug": "battle-through-the-heaven-2023",
+				"tmdb": 241007,
+				"tvdb": 442998,
+				"trakt": 216616
+			},
+			"airs": { "day": "Sunday", "time": "18:00", "timezone": "Asia/Shanghai" },
+			"year": 2023,
+			"title": "Battle Through the Heaven",
+			"votes": 7,
+			"colors": { "poster": ["#A9A099", "#482724"] },
+			"genres": ["drama", "action", "adventure"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/216/616/fanarts/medium/bbebb17bed.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/216/616/posters/medium/67f24ae78e.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6,
+			"status": "ended",
+			"country": "cn",
+			"network": "Tencent Video",
+			"runtime": 45,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://v.qq.com/x/cover/mzc00200z1ha0zk/k00479kszz7.html",
+			"language": "zh",
+			"overview": "In the vast Dou Qi Continent, the young Xiao Yan faces the prejudices and disdain of the world. After enduring a series of challenging trials, he ultimately attains unparalleled power. Joining forces with his master and companions, he defeats the malevolent forces threatening the world, saves the people, and steadfastly adheres to his initial cultivation principle of proving himself.",
+			"languages": ["zh"],
+			"subgenres": ["martial-arts", "xianxia", "based-on-web-novel", "xuanhuan"],
+			"last_aired": "2023-12-27T10:00:00.000Z",
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-06T15:28:53.000Z",
+			"first_aired": "2023-12-08T10:00:00.000Z",
+			"certification": null,
+			"comment_count": 0,
+			"total_runtime": 1530,
+			"aired_episodes": 34,
+			"original_title": "斗破苍穹之少年归来",
+			"available_translations": ["en", "ko", "pt", "ru", "th", "vi", "zh"]
+		}
+	},
+	{
+		"score": 1157451471441102800,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt27436791",
+				"plex": { "guid": "6431a0be7fed8fbbab8a58b1", "slug": "fights-break-sphere" },
+				"slug": "fights-break-sphere-2023",
+				"tmdb": 1206282,
+				"trakt": 970598
+			},
+			"year": 2023,
+			"title": "Fights Break Sphere",
+			"votes": 19,
+			"colors": { "poster": ["#B48B73", "#382A25"] },
+			"genres": ["drama", "action", "fantasy"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/970/598/fanarts/medium/bb2dd10ec9.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/970/598/posters/medium/56bddd403f.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6,
+			"status": "released",
+			"country": "cn",
+			"runtime": 93,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "zh",
+			"overview": "The film is the beginning of the entire story of Battle Through the Heavens; Xiao Yan, a talented young cultivator, to restore his Dou Qi and regain his dignity, with the guidance of \"Yao Lao\", leaves Wu Tan City alone and steps into the treacherous and dangerous Magical Beast Mountain Range, the beginning of the trial journey of searching for the Heavenly Flames to improve his cultivation.",
+			"released": "2023-11-17",
+			"languages": ["zh"],
+			"subgenres": ["martial-arts", "xianxia", "based-on-web-novel", "xuanhuan"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2025-11-07T08:07:28.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "斗破苍穹1：觉醒",
+			"available_translations": ["en", "es", "ko", "my", "ru", "vi", "zh"]
+		}
+	},
+	{
+		"score": 1157451471441102800,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt32969478",
+				"plex": {
+					"guid": "669b2ff682d63ba0341a5361",
+					"slug": "fights-break-sphere-2-2023"
+				},
+				"slug": "fights-break-sphere-2-2023",
+				"tmdb": 1220915,
+				"trakt": 985259
+			},
+			"year": 2023,
+			"title": "Fights Break Sphere 2",
+			"votes": 12,
+			"colors": { "poster": ["#C1AB8F", "#43382D"] },
+			"genres": ["action", "drama", "fantasy"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/985/259/fanarts/medium/8248992419.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/985/259/posters/medium/fc92eadb98.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.083330154418945,
+			"status": "released",
+			"country": "cn",
+			"runtime": 87,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.iq.com/album/fights-break-sphere-2-2023-1jkhvi94x24",
+			"language": "zh",
+			"overview": "To win the three-year agreement with Nalan Yanran, the chief disciple of the Cloud Sect, Xiao Yan and Medicine Elder journeyed to the Snake Clan Desert to seek the legendary Heavenly Flame-the Green Lotus Core Flame, in order to enhance their strength. In the Snake Clan Desert, they became unexpectedly involved in the racial conflict between the human race and the snake people. The Snake Clan Queen, Medusa, was in seclusion to advance to the Dou Zong realm, providing Xiao Yan with an opportunity. Xiao Yan, together with Qing Ling and Mu Li, infiltrated the Snake Clan's underground palace. Coincidentally, Medusa fell into demonic possession due to absorbing the Heavenly Flame, allowing Xiao Yan to effortlessly obtain the coveted \"Green Lotus Core Flame.\" Meanwhile, outside the city, a monumental racial war between the human race and the snake people was unfolding. With Xiao Yan's greatly enhanced strength, he thwarted the long-planned conspiracy of the snake people.",
+			"released": "2023-12-21",
+			"languages": ["zh"],
+			"subgenres": ["martial-arts", "xianxia", "based-on-web-novel", "xuanhuan"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-06-16T08:18:25.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "斗破苍穹2：止戈",
+			"available_translations": ["en", "ru", "vi", "zh"]
+		}
+	},
+	{
+		"score": 1157451471441102800,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt32985720",
+				"plex": {
+					"guid": "669b9166083725e87b84ee90",
+					"slug": "fights-break-sphere-3-2024"
+				},
+				"slug": "fights-break-sphere-3-the-origin-2024",
+				"tmdb": 1281386,
+				"trakt": 1041673
+			},
+			"year": 2024,
+			"title": "Fights Break Sphere 3: The Origin",
+			"votes": 6,
+			"colors": { "poster": ["#CED5CF", "#5D4D3F"] },
+			"genres": ["adventure", "action", "fantasy"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/001/041/673/fanarts/medium/50025d9078.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/001/041/673/posters/medium/2f7cedab64.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.166669845581055,
+			"status": "released",
+			"country": "cn",
+			"runtime": 81,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=I8OZbAc75Z0",
+			"homepage": null,
+			"language": "zh",
+			"overview": "After Xiao Yan and Yao Lao broke the battle between the Snake Human Clan and the Human Clan, they traveled with Qing Lin and Mu Li to enhance their strength. They won a three-year agreement with Nalan Yanran, the big disciple of the Yunlan Sect. When they arrived at the Tagore Desert, Qing Lin was unexpectedly abducted. In order to find Qing Lin, Xiao Yan and the others met the once-famous Ice Emperor Haibodong and then traveled to the Red Salt City. In the chaotic city, a black hand slowly revealed its true identity, intending to capture them all. Through Xiao Yan's persistent efforts, the truth about his mother's death during his childhood was gradually revealed.",
+			"released": "2024-05-02",
+			"languages": ["zh"],
+			"subgenres": ["martial-arts", "xianxia", "based-on-web-novel", "xuanhuan"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-07-31T08:09:02.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "斗破苍穹3：除恶",
+			"available_translations": ["en", "ru", "th", "vi", "zh"]
+		}
+	},
+	{
+		"score": 1155190875668613000,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0992911",
+				"plex": { "guid": "5d9f356fe4fc29001eb66c28", "slug": "flash-point" },
+				"slug": "flash-point-2007",
+				"tmdb": 35854,
+				"trakt": 22728
+			},
+			"year": 2007,
+			"title": "Flash Point",
+			"votes": 515,
+			"colors": { "poster": ["#C3BBA5", "#1F191A"] },
+			"genres": ["action"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/022/728/logos/medium/41c3776df2.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/022/728/fanarts/medium/ac5c076b04.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/022/728/posters/medium/30b7143fc9.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.965048313140869,
+			"status": "released",
+			"country": "hk",
+			"runtime": 88,
+			"tagline": "They made it personal... He'll make them pay.",
+			"trailer": "https://youtube.com/watch?v=2BVfX1aC9Nc",
+			"homepage": null,
+			"language": "zh",
+			"overview": "Detective Sergeant Ma Jun, known for dispensing his own brand of justice during arrests, teams up with an undercover cop, Wilson, to try and bring down three merciless Vietnamese brothers running a smuggling ring in the months before mainland China's takeover of Hong Kong. Jun pursues the gang tirelessly, sometimes ignoring police protocols. A showdown is inevitable!",
+			"released": "2007-08-09",
+			"languages": ["en", "zh", "zh", "vi"],
+			"subgenres": ["martial-arts"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Flash_Point_(film)"
+			},
+			"updated_at": "2026-09-24T08:20:15.000Z",
+			"after_credits": false,
+			"certification": "NC-17",
+			"comment_count": 5,
+			"during_credits": false,
+			"original_title": "導火線",
+			"available_translations": [
+				"cs",
+				"de",
+				"en",
+				"es",
+				"fa",
+				"fr",
+				"he",
+				"hu",
+				"ja",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"sk",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 1155190841308874800,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt2963556",
+				"plex": { "guid": "5d9c084fcb3ffa001f1b3c4b", "slug": "watamote" },
+				"slug": "watamote-no-matter-how-i-look-at-it-it-s-you-guys-fault-i-m-not-popular",
+				"tmdb": 61755,
+				"tvdb": 270062,
+				"trakt": 70831
+			},
+			"airs": { "day": "Tuesday", "time": "02:05", "timezone": "Asia/Tokyo" },
+			"year": 2013,
+			"title": "WATAMOTE ~No Matter How I Look at It, It's You Guys Fault I'm Not Popular!~",
+			"votes": 449,
+			"colors": { "poster": ["#E5E3E0", "#7F3D51"] },
+			"genres": ["comedy", "drama", "anime"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/shows/000/070/831/logos/medium/ce0d79a8c0.png.webp"
+				],
+				"thumb": [],
+				"banner": [
+					"media.trakt.tv/images/shows/000/070/831/banners/medium/0ba5c99717.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/070/831/fanarts/medium/4ae8ebaaea.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/070/831/posters/medium/cb1221df3c.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.011136054992676,
+			"status": "ended",
+			"country": "jp",
+			"network": "TV Tokyo",
+			"runtime": 24,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=-ROOe5_KJks",
+			"homepage": "https://watamote.jp/",
+			"language": "ja",
+			"overview": "Fifteen year old Kuroki Tomoko has dated dozens of boys and is easily the most popular girl around-- inside her dating games. In reality, she gets tongue tied just talking to people, and throughout middle school she's only had one actual friend. As she enters high school, she desperately wants to be popular, but doesn't understand that real-life doesn't work like her games. Her artificial successes pave the way to real folly and failure. But why drop this strategy when there's always someone else to blame?!",
+			"languages": ["ja"],
+			"subgenres": ["based-on-manga", "slice-of-life"],
+			"last_aired": "2013-09-23T17:05:00.000Z",
+			"social_ids": {
+				"twitter": "watamote_PR",
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-08-31T07:56:08.000Z",
+			"first_aired": "2013-07-08T17:05:00.000Z",
+			"certification": "TV-14",
+			"comment_count": 2,
+			"total_runtime": 288,
+			"aired_episodes": 12,
+			"original_title": "私がモテないのはどう考えてもお前らが悪い！",
+			"available_translations": [
+				"cs",
+				"de",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"th",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 1155190841308874800,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt6587046",
+				"plex": { "guid": "5d77703d31d95e001f19c90e", "slug": "the-boy-and-the-heron" },
+				"slug": "the-boy-and-the-heron-2023",
+				"tmdb": 508883,
+				"trakt": 356368
+			},
+			"year": 2023,
+			"title": "The Boy and the Heron",
+			"votes": 11350,
+			"colors": { "poster": ["#CCC5A6", "#636A4E"] },
+			"genres": ["anime", "fantasy", "drama"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/356/368/logos/medium/db50faf6d1.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/356/368/thumbs/medium/1cb601f4ec.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/356/368/banners/medium/6650f9b5ee.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/356/368/fanarts/medium/4ec7a7a47e.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/356/368/posters/medium/aba4c35ee1.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/356/368/cleararts/medium/db8ccd5ad3.png.webp"
+				]
+			},
+			"rating": 7.730836868286133,
+			"status": "released",
+			"country": "jp",
+			"runtime": 124,
+			"tagline": "Where death comes to an end, life finds a new beginning.",
+			"trailer": "https://youtube.com/watch?v=A002-b7IH2M",
+			"homepage": "https://gkids.com/films/the-boy-and-the-heron/",
+			"language": "ja",
+			"overview": "While the Second World War rages, the teenage Mahito, haunted by his mother's tragic death, is relocated from Tokyo to the serene rural home of his new stepmother Natsuko, a woman who bears a striking resemblance to the boy's mother.  As he tries to adjust, this strange new world grows even stranger following the appearance of a persistent gray heron, who perplexes and bedevils Mahito, dubbing him the \"long-awaited one.\"",
+			"released": "2023-07-14",
+			"languages": ["ja"],
+			"subgenres": [
+				"supernatural",
+				"world-war-ii",
+				"coming-of-age",
+				"education",
+				"suspenseful",
+				"1940s",
+				"loss-of-loved-one",
+				"based-on-myths-legends-or-folklore",
+				"imaginative"
+			],
+			"social_ids": {
+				"twitter": "boyheronfilm",
+				"facebook": "theboyandtheheronfilm",
+				"instagram": "theboyandtheheronfilm",
+				"wikipedia": "The_Boy_and_the_Heron"
+			},
+			"updated_at": "2026-09-16T08:24:41.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 59,
+			"during_credits": false,
+			"original_title": "君たちはどう生きるか",
+			"available_translations": [
+				"ar",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"eu",
+				"fa",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"id",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"lv",
+				"mk",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 1155190841308874800,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0067026",
+				"plex": { "guid": "5d7769a623d5a3001f4fa958", "slug": "duel-of-the-iron-fist" },
+				"slug": "the-duel-1971",
+				"tmdb": 139321,
+				"trakt": 93407
+			},
+			"year": 1971,
+			"title": "The Duel",
+			"votes": 21,
+			"colors": { "poster": ["#A081B0", "#2B1A39"] },
+			"genres": ["action", "drama", "crime"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/093/407/fanarts/medium/21819d0133.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/093/407/posters/medium/2abba2c111.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.523809909820557,
+			"status": "released",
+			"country": "hk",
+			"runtime": 110,
+			"tagline": "So Many Blades, So Much Blood!",
+			"trailer": "https://youtube.com/watch?v=Pq7Qp2oa38Y",
+			"homepage": null,
+			"language": "zh",
+			"overview": "After a gang massacre that resulted in the killing of his adopted father and gang leader, a martial artist goes into exile to take the blame. A year later, his gang is mysteriously trying to kill him, and he slowly discovers why.",
+			"released": "1971-04-21",
+			"languages": ["zh"],
+			"subgenres": ["kung-fu", "martial-arts"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Duel_(1971_film)"
+			},
+			"updated_at": "2026-08-31T16:25:32.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "大決鬥",
+			"available_translations": ["de", "en", "fr", "hu", "nl", "pl", "pt", "th", "zh"]
+		}
+	}
+]

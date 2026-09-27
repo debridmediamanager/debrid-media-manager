@@ -1,0 +1,1889 @@
+[
+	{
+		"score": 578730123365189600,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt22248376",
+				"plex": {
+					"guid": "631ccdfccbff4464978f9d53",
+					"slug": "frieren-beyond-journeys-end"
+				},
+				"slug": "frieren-beyond-journey-s-end",
+				"tmdb": 209867,
+				"tvdb": 424536,
+				"trakt": 198225
+			},
+			"airs": { "day": "Friday", "time": "23:00", "timezone": "Asia/Tokyo" },
+			"year": 2023,
+			"title": "Frieren: Beyond Journey's End",
+			"votes": 6069,
+			"colors": { "poster": ["#BFDECE", "#678668"] },
+			"genres": ["anime", "adventure", "drama", "fantasy"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/shows/000/198/225/logos/medium/7f5fa43601.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/shows/000/198/225/thumbs/medium/3acb0541f8.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/shows/000/198/225/banners/medium/9a10835e86.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/198/225/fanarts/medium/69bab33cea.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/198/225/posters/medium/adb0a916bd.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/shows/000/198/225/cleararts/medium/9775275585.png.webp"
+				]
+			},
+			"rating": 9.132970809936523,
+			"status": "returning series",
+			"country": "jp",
+			"network": "KRY",
+			"runtime": 25,
+			"tagline": "Living means being known and remembered by someone.",
+			"trailer": "https://youtube.com/watch?v=01WEqntM1NI",
+			"homepage": "https://frieren-anime.jp/",
+			"language": "ja",
+			"overview": "After the party of heroes defeated the Demon King, they restored peace to the land and returned to lives of solitude. Generations pass, and the elven mage Frieren comes face to face with humanity's mortality. She takes on a new apprentice and promises to fulfill old friends' dying wishes. Can an elven mind make peace with the nature of life and death? Frieren embarks on her quest to find out.",
+			"languages": ["ja"],
+			"subgenres": [
+				"based-on-manga",
+				"fantasy-world",
+				"friendship",
+				"magic",
+				"slice-of-life",
+				"travel",
+				"medieval",
+				"cheerful",
+				"elves",
+				"female-protagonist",
+				"time-skip",
+				"relationship",
+				"combat",
+				"shounen",
+				"immortality",
+				"journey"
+			],
+			"last_aired": "2026-03-27T14:00:00.000Z",
+			"social_ids": {
+				"twitter": "Anime_Frieren",
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Frieren_(TV_series)"
+			},
+			"updated_at": "2026-09-23T15:16:37.000Z",
+			"first_aired": "2023-09-29T14:00:00.000Z",
+			"certification": "TV-14",
+			"comment_count": 35,
+			"total_runtime": 931,
+			"aired_episodes": 38,
+			"original_title": "葬送のフリーレン",
+			"available_translations": [
+				"ar",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fa",
+				"fi",
+				"fo",
+				"fr",
+				"he",
+				"hi",
+				"hu",
+				"id",
+				"is",
+				"it",
+				"ja",
+				"ko",
+				"lt",
+				"ms",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt34986623",
+				"plex": {
+					"guid": "65857a6f0f47665f93ddfb73",
+					"slug": "kundschafter-des-friedens-2"
+				},
+				"slug": "kundschafter-des-friedens-2-2025",
+				"tmdb": 1220831,
+				"trakt": 985359
+			},
+			"year": 2025,
+			"title": "Kundschafter des Friedens 2",
+			"votes": 14,
+			"colors": { "poster": ["#F3EDEB", "#4B282D"] },
+			"genres": ["comedy"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/985/359/fanarts/medium/c2dc9dfac1.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/985/359/posters/medium/21e480e490.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 5.285709857940674,
+			"status": "released",
+			"country": "de",
+			"runtime": 96,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "de",
+			"overview": "The retired GDR spies have just buried their old mentor in Cuba as they set out to save the last real bastion of socialism. But they didn't expect their biggest opponent so far: full board and Cuba Libre.",
+			"released": "2025-01-23",
+			"languages": ["es", "de"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-26T08:21:37.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Kundschafter des Friedens 2",
+			"available_translations": ["de", "en", "fr", "nl", "ru"]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt36616393",
+				"plex": { "guid": null, "slug": null },
+				"slug": "wie-kriege-enden-und-frieden-moglich-ist-2025",
+				"tmdb": 1468936,
+				"trakt": 1203127
+			},
+			"year": 2025,
+			"title": "Wie Kriege enden und Frieden möglich ist",
+			"votes": 1,
+			"colors": { "poster": ["#C9B6A5", "#635E57"] },
+			"genres": ["documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [
+					"media.trakt.tv/images/movies/001/203/127/posters/medium/d24ad5b4f8.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 8,
+			"status": "released",
+			"country": "de",
+			"runtime": 91,
+			"tagline": "How does peace succeed?",
+			"trailer": null,
+			"homepage": null,
+			"language": "de",
+			"overview": "The documentary interviews Nobel Peace Prize winners, diplomats, negotiators and former guerrilla fighters who have dedicated their lives to the task. How did their mediation successes come about and why did they fail? Peacemaking is both art and hard work.",
+			"released": "2025-04-22",
+			"languages": ["de"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-08-23T08:08:28.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Wie Kriege enden und Frieden möglich ist",
+			"available_translations": ["de", "fr"]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt10724278",
+				"plex": { "guid": null, "slug": null },
+				"slug": "kolumbien-der-lange-weg-zum-frieden",
+				"tmdb": 1306116,
+				"trakt": 1065482
+			},
+			"year": null,
+			"title": "Kolumbien - Der lange Weg zum Frieden",
+			"votes": 0,
+			"colors": { "poster": ["#F5F6F7", "#1B1C1D"] },
+			"genres": ["documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [
+					"media.trakt.tv/images/movies/001/065/482/posters/medium/10ead8e125.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "de",
+			"runtime": 52,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "de",
+			"overview": "",
+			"released": null,
+			"languages": ["de"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-26T08:20:04.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Kolumbien - Der lange Weg zum Frieden",
+			"available_translations": []
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0365907",
+				"plex": {
+					"guid": "5d7769e796b655001fddd3ef",
+					"slug": "a-walk-among-the-tombstones"
+				},
+				"slug": "a-walk-among-the-tombstones-2014",
+				"tmdb": 169917,
+				"trakt": 108370
+			},
+			"year": 2014,
+			"title": "A Walk Among the Tombstones",
+			"votes": 4916,
+			"colors": { "poster": ["#EFEFF0", "#1E252C"] },
+			"genres": ["crime", "drama", "mystery", "thriller"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/108/370/logos/medium/96076a80c9.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/108/370/thumbs/medium/998e9392a6.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/108/370/banners/medium/8602c1dbd0.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/108/370/fanarts/medium/d1d7189012.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/108/370/posters/medium/8caf17b49a.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/108/370/cleararts/medium/d9b390dce1.png.webp"
+				]
+			},
+			"rating": 6.67819356918335,
+			"status": "released",
+			"country": "us",
+			"runtime": 114,
+			"tagline": "Some people are afraid of all the wrong things.",
+			"trailer": "https://youtube.com/watch?v=aTKBowDjMQg",
+			"homepage": null,
+			"language": "en",
+			"overview": "Private investigator Matthew Scudder is hired by a drug kingpin to find out who kidnapped and murdered his wife.",
+			"released": "2014-09-19",
+			"languages": ["en"],
+			"subgenres": ["drugs", "murder", "mafia", "private-investigator", "1990s"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "A_Walk_Among_the_Tombstones_(film)"
+			},
+			"updated_at": "2026-09-22T08:19:24.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 26,
+			"during_credits": false,
+			"original_title": "A Walk Among the Tombstones",
+			"available_translations": [
+				"ar",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0049934",
+				"plex": { "guid": "5d9f3500ca3253001ef2796a", "slug": "war-and-peace" },
+				"slug": "war-and-peace-1956",
+				"tmdb": 11706,
+				"trakt": 6778
+			},
+			"year": 1956,
+			"title": "War and Peace",
+			"votes": 320,
+			"colors": { "poster": ["#EC1F0B", "#6A7A7B"] },
+			"genres": ["drama", "romance", "war", "history"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/006/778/fanarts/medium/f4e00395ce.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/006/778/posters/medium/1ae7ba7aa3.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.021874904632568,
+			"status": "released",
+			"country": "us",
+			"runtime": 208,
+			"tagline": "The greatest novel ever written ... Now magnificently alive on the screen!",
+			"trailer": "https://youtube.com/watch?v=k5oUyH7NmKg",
+			"homepage": null,
+			"language": "en",
+			"overview": "The love story of young Countess Natasha Rostova and Count Pierre Bezukhov is interwoven with the Great Patriotic War of 1812 against Napoleon's invading army.",
+			"released": "1956-08-21",
+			"languages": ["en", "it", "ru"],
+			"subgenres": ["19th-century", "marriage", "winter"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "War_and_Peace_(1956_film)"
+			},
+			"updated_at": "2026-09-10T08:24:38.000Z",
+			"after_credits": false,
+			"certification": "PG",
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "War and Peace",
+			"available_translations": [
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fa",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"lt",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0063794",
+				"plex": { "guid": "5d776d0e96b655001fe3dece", "slug": "war-and-peace-1966" },
+				"slug": "war-and-peace-1968",
+				"tmdb": 29266,
+				"trakt": 240446
+			},
+			"year": 1968,
+			"title": "War and Peace",
+			"votes": 90,
+			"colors": { "poster": ["#D3CBBD", "#605B5E"] },
+			"genres": ["war", "drama", "history", "romance"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/240/446/fanarts/medium/39f49d6aa7.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/240/446/posters/medium/ee7b583d80.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.988888740539551,
+			"status": "released",
+			"country": "su",
+			"runtime": 422,
+			"tagline": "Greatest motion picture ever made! Romance ever lived! Adventure story written!",
+			"trailer": "https://youtube.com/watch?v=2F4xklWw5-k",
+			"homepage": null,
+			"language": "ru",
+			"overview": "The love story of young Countess Natasha Rostova and Count Pierre Bezukhov is interwoven with the Great Patriotic War of 1812 against Napoleon's invading army.",
+			"released": "1968-04-28",
+			"languages": ["de", "fr", "hu", "ru"],
+			"subgenres": ["19th-century", "historical-drama", "historical-epic"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "War_and_Peace_(film_series)"
+			},
+			"updated_at": "2026-09-22T08:16:08.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "Война и мир",
+			"available_translations": [
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"hu",
+				"it",
+				"ko",
+				"pt",
+				"ru",
+				"sv",
+				"tr",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt28769440",
+				"plex": { "guid": "64ed40451fc3633cf6a2276f", "slug": "rest-in-peace-2024" },
+				"slug": "rest-in-peace-2024",
+				"tmdb": 1106049,
+				"trakt": 889801
+			},
+			"year": 2024,
+			"title": "Rest in Peace",
+			"votes": 384,
+			"colors": { "poster": ["#B5ABA8", "#171C1E"] },
+			"genres": ["drama"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/889/801/logos/medium/d0a05f88bc.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/889/801/fanarts/medium/1423b1e962.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/889/801/posters/medium/71dace4244.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.125,
+			"status": "released",
+			"country": "ar",
+			"runtime": 105,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.netflix.com/watch/81564866",
+			"language": "es",
+			"overview": "A debt-ridden father takes advantage of an unforeseen situation to disappear and live off the grid under a false identity. But a chance event occurs and the temptation to want to know his family resurfaces.",
+			"released": "2024-03-21",
+			"languages": ["es"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Rest_in_Peace_(film)"
+			},
+			"updated_at": "2026-09-25T08:12:01.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Descansar en paz",
+			"available_translations": [
+				"cs",
+				"de",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"it",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0059884",
+				"plex": {
+					"guid": "5d7769b87a53e9001e6ee91e",
+					"slug": "war-and-peace-part-i-andrei-bolkonsky"
+				},
+				"slug": "war-and-peace-part-i-andrei-bolkonsky-1966",
+				"tmdb": 147371,
+				"trakt": 97403
+			},
+			"year": 1966,
+			"title": "War and Peace, Part I: Andrei Bolkonsky",
+			"votes": 81,
+			"colors": { "poster": ["#F9D57E", "#102249"] },
+			"genres": ["war", "drama", "history", "romance"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/097/403/logos/medium/92dd9a6029.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/097/403/fanarts/medium/fefb413c20.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/097/403/posters/medium/06730e9a9e.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.629629611968994,
+			"status": "released",
+			"country": "su",
+			"runtime": 147,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=3DqanxfecIA",
+			"homepage": null,
+			"language": "ru",
+			"overview": "In 1805 St. Petersburg, Pierre Bezukhov, illegitimate son of a rich nobleman, is introduced to high society. His friend, Prince Andrei Bolkonsky, joins the Imperial Russian Army as aide-de-camp of General Mikhail Kutuzov in the War of the Third Coalition against General Napoleon Bonaparte. Part one of the four-part adaptation of Leo Tolstoy's 1869 novel.",
+			"released": "1966-03-14",
+			"languages": ["ru"],
+			"subgenres": ["19th-century", "historical-drama", "period-drama"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-09T08:06:21.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "Война и Мир 1: Андрей Болконский",
+			"available_translations": [
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"hu",
+				"it",
+				"ko",
+				"lv",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0062455",
+				"plex": {
+					"guid": "5d7769bead5437001f766b24",
+					"slug": "war-and-peace-part-iii-the-year-1812"
+				},
+				"slug": "war-and-peace-part-iii-the-year-1812-1967",
+				"tmdb": 149467,
+				"trakt": 98481
+			},
+			"year": 1967,
+			"title": "War and Peace, Part III: The Year 1812",
+			"votes": 59,
+			"colors": { "poster": ["#F6F7E2", "#24201C"] },
+			"genres": ["drama", "war", "history", "romance"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/098/481/logos/medium/f2a9ab2004.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/098/481/fanarts/medium/668e089067.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/098/481/posters/medium/e8c87a60c3.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.813559532165527,
+			"status": "released",
+			"country": "su",
+			"runtime": 81,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=3DqanxfecIA",
+			"homepage": null,
+			"language": "ru",
+			"overview": "In 1812, as Napoleon's army invades Russia, Kutuzov asks Bolkonsky to join him as a staff officer, yet the prince requests a command in the field. Pierre sets out to watch the armies' impending confrontation. As the Battle of Borodino rages, he volunteers to assist in an artillery battery. Part three of the four-part adaptation of Leo Tolstoy's 1869 novel.",
+			"released": "1967-07-21",
+			"languages": ["ru"],
+			"subgenres": ["19th-century", "historical-drama", "period-drama"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-08-30T16:37:13.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Война и Мир 3: 1812 год",
+			"available_translations": [
+				"bg",
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"hu",
+				"it",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0062456",
+				"plex": {
+					"guid": "5d7769be23d5a3001f4fbc04",
+					"slug": "war-and-peace-part-iv-pierre-bezukhov"
+				},
+				"slug": "war-and-peace-part-iv-pierre-bezukhov-1967",
+				"tmdb": 149468,
+				"trakt": 98482
+			},
+			"year": 1967,
+			"title": "War and Peace, Part IV: Pierre Bezukhov",
+			"votes": 56,
+			"colors": { "poster": ["#EEDB97", "#0B0805"] },
+			"genres": ["drama", "history", "war", "romance"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/098/482/logos/medium/5e361693c5.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/098/482/fanarts/medium/71c30e8e85.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/098/482/posters/medium/0c2608c528.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.6964287757873535,
+			"status": "released",
+			"country": "su",
+			"runtime": 96,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=3DqanxfecIA",
+			"homepage": null,
+			"language": "ru",
+			"overview": "As Moscow is set ablaze by the retreating Russians, the Rostovs flee their estate, taking wounded soldiers with them, and unbeknownst to them, also Andrei. Pierre, dressed as a peasant, tries to assassinate Napoleon but is taken prisoner. As the French are forced to retreat, he's marched for months with the Grande Armée, until being freed by a raiding party. Part four of the four-part adaptation of Leo Tolstoy's 1869 novel.",
+			"released": "1967-11-04",
+			"languages": ["ru"],
+			"subgenres": ["19th-century", "historical-drama", "period-drama"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-08-30T16:41:28.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Война и Мир 4: Пьер Безухов",
+			"available_translations": [
+				"bg",
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"hu",
+				"it",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0061162",
+				"plex": {
+					"guid": "5d7769be23d5a3001f4fbc02",
+					"slug": "war-and-peace-part-ii-natasha-rostova"
+				},
+				"slug": "war-and-peace-part-ii-natasha-rostova-1966",
+				"tmdb": 149465,
+				"trakt": 98480
+			},
+			"year": 1966,
+			"title": "War and Peace, Part II: Natasha Rostova",
+			"votes": 69,
+			"colors": { "poster": ["#EEE8D4", "#272D4C"] },
+			"genres": ["drama", "history", "romance", "war"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/098/480/logos/medium/a972ca6240.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/098/480/fanarts/medium/cf2728d89d.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/098/480/posters/medium/64d0f6924c.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.2028985023498535,
+			"status": "released",
+			"country": "su",
+			"runtime": 98,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=3DqanxfecIA",
+			"homepage": null,
+			"language": "ru",
+			"overview": "As 1809 nears its end, Natasha attends her first ball, where Andrei falls in love with her with the intent of marriage. However, as her father demands they wait, the prince travels abroad, leaving Natasha in desperate longing. But she meets Anatol Kuragin and forgets Andrei. Part two of the four-part adaptation of Leo Tolstoy's 1869 novel.",
+			"released": "1966-07-20",
+			"languages": ["ru"],
+			"subgenres": ["19th-century", "historical-drama", "period-drama"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-10T08:19:42.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Война и Мир 2: Наташа Ростова",
+			"available_translations": [
+				"bg",
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"hu",
+				"it",
+				"ko",
+				"lv",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0063500",
+				"plex": { "guid": "5d776ced594b2b001e6fd661", "slug": "requiescant" },
+				"slug": "kill-and-pray-1967",
+				"tmdb": 122787,
+				"trakt": 84822
+			},
+			"year": 1967,
+			"title": "Kill and Pray",
+			"votes": 38,
+			"colors": { "poster": ["#CFA498", "#342528"] },
+			"genres": ["western", "action"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/084/822/fanarts/medium/67524ae3ba.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/084/822/posters/medium/4e1ff71e19.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.289470195770264,
+			"status": "released",
+			"country": "it",
+			"runtime": 107,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=aaHm_Ea3VSQ",
+			"homepage": null,
+			"language": "it",
+			"overview": "A Mexican community is slaughtered by Confederate troops; the lone survivor, a boy, is taken in by a preacher. Years later, the boy is now a soft-spoken, devout young man with perfect shooting skills (despite being a pacifist). On his journey to help his half-sister out of a complicated situation, he crosses paths with the men who killed his family, unbeknownst to him.",
+			"released": "1967-03-10",
+			"languages": ["it"],
+			"subgenres": ["spaghetti-western"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Requiescant"
+			},
+			"updated_at": "2026-08-31T16:38:24.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "Requiescant",
+			"available_translations": [
+				"bg",
+				"de",
+				"en",
+				"es",
+				"fr",
+				"hu",
+				"it",
+				"ko",
+				"nl",
+				"pt",
+				"ru",
+				"th",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt43329632",
+				"plex": { "guid": null, "slug": null },
+				"slug": "defending-europe-2026",
+				"tmdb": 1701855,
+				"trakt": 1373807
+			},
+			"year": 2026,
+			"title": "Defending Europe",
+			"votes": 2,
+			"colors": { "poster": ["#B8C7CF", "#2B2B2A"] },
+			"genres": ["history", "documentary", "war"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/001/373/807/fanarts/medium/2abb8a8295.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/001/373/807/posters/medium/45f135ea20.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 8.5,
+			"status": "released",
+			"country": "fr",
+			"runtime": 84,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://javafilms.fr/film/defending-europe/",
+			"language": "fr",
+			"overview": "For decades, European security has depended mainly on NATO, under-written by America. But under the Trump White House, the spectre of US disengagement threatens to leave the EU without its protector. We investigate the main threats facing Europe and examine how Europe can best defend itself.",
+			"released": "2026-05-12",
+			"languages": ["en", "fr", "de", "ro", "ru"],
+			"subgenres": ["military", "strategy"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-12T08:18:21.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Europe, le choix des armes",
+			"available_translations": []
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt1034314",
+				"plex": { "guid": "5d7768356f4521001ea9c12e", "slug": "iron-sky" },
+				"slug": "iron-sky-2012",
+				"tmdb": 10679,
+				"trakt": 5851
+			},
+			"year": 2012,
+			"title": "Iron Sky",
+			"votes": 4187,
+			"colors": { "poster": ["#A1B8BE", "#1C2E37"] },
+			"genres": ["action", "comedy", "science-fiction"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/005/851/logos/medium/b10da68f53.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/005/851/thumbs/medium/e352bb3f2c.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/005/851/banners/medium/53f44c7688.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/005/851/fanarts/medium/60aa4c5320.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/005/851/posters/medium/b5e6b4c54f.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/005/851/cleararts/medium/b50c6f54fc.png.webp"
+				]
+			},
+			"rating": 6.146644592285156,
+			"status": "released",
+			"country": "fi",
+			"runtime": 93,
+			"tagline": "We come in peace!",
+			"trailer": "https://youtube.com/watch?v=4lJAw_BtM2g",
+			"homepage": null,
+			"language": "en",
+			"overview": "In the last moments of World War II, a secret Nazi space program evaded destruction by fleeing to the Dark Side of the Moon. During 70 years of utter secrecy, the Nazis construct a gigantic space fortress with a massive armada of flying saucers.",
+			"released": "2012-04-04",
+			"languages": ["en", "de"],
+			"subgenres": ["nazi", "satirical", "space", "space-travel"],
+			"social_ids": {
+				"twitter": "",
+				"facebook": "",
+				"instagram": "",
+				"wikipedia": "Iron_Sky"
+			},
+			"updated_at": "2026-09-19T08:11:30.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 52,
+			"during_credits": false,
+			"original_title": "Iron Sky",
+			"available_translations": [
+				"bg",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fa",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt20113412",
+				"plex": { "guid": "627b70504398c9c8031dbb58", "slug": "the-convert-2024" },
+				"slug": "the-convert-2024",
+				"tmdb": 1066262,
+				"trakt": 857498
+			},
+			"year": 2024,
+			"title": "The Convert",
+			"votes": 966,
+			"colors": { "poster": ["#8F9598", "#2D3435"] },
+			"genres": ["action", "drama"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/857/498/logos/medium/4371a9fd7d.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/857/498/thumbs/medium/68bfa8ec25.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/857/498/banners/medium/da7cfc6098.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/857/498/fanarts/medium/58b3c27551.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/857/498/posters/medium/f2b0015a43.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.7060041427612305,
+			"status": "released",
+			"country": "au",
+			"runtime": 119,
+			"tagline": "A fight for peace. A heart at war.",
+			"trailer": "https://youtube.com/watch?v=6NQkoW7hwi8",
+			"homepage": null,
+			"language": "en",
+			"overview": "Munro, a soldier turned lay preacher, comes to New Zealand to minister to the first British colonists, but he is converted by the powerful chief Maianui to serve a different purpose.",
+			"released": "2024-06-20",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Convert"
+			},
+			"updated_at": "2026-08-31T17:06:25.000Z",
+			"after_credits": false,
+			"certification": "NR",
+			"comment_count": 6,
+			"during_credits": false,
+			"original_title": "The Convert",
+			"available_translations": [
+				"ar",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fa",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ka",
+				"ko",
+				"lt",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sl",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt2960930",
+				"plex": { "guid": "5d776ac6594b2b001e6c58fe", "slug": "extraterrestrial-2014" },
+				"slug": "extraterrestrial-2014",
+				"tmdb": 265016,
+				"trakt": 163697
+			},
+			"year": 2014,
+			"title": "Extraterrestrial",
+			"votes": 923,
+			"colors": { "poster": ["#90BECC", "#101D25"] },
+			"genres": ["horror", "science-fiction"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/163/697/logos/medium/a55c1fa952.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/163/697/thumbs/medium/619cab9870.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/163/697/banners/medium/028c6d9bec.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/163/697/fanarts/medium/7b66e92a79.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/163/697/posters/medium/e365a547e5.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/163/697/cleararts/medium/fd4ec4d666.png.webp"
+				]
+			},
+			"rating": 5.591549396514893,
+			"status": "released",
+			"country": "ca",
+			"runtime": 101,
+			"tagline": "They do not come in peace.",
+			"trailer": null,
+			"homepage": null,
+			"language": "en",
+			"overview": "Five friends set out to a cabin in the woods for a fun weekend getaway that is, until extraterrestrial visitors turn it into a fight for their lives. The group is pulled from their reverie when a flickering object crashes deep in the woods. As they investigate, the friends stumble across an alien spacecraft, and its inhabitants have not arrived in peace.",
+			"released": "2014-07-01",
+			"languages": ["en"],
+			"subgenres": ["drugs", "woods", "alien", "police-officer"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Extraterrestrial_(2014_film)"
+			},
+			"updated_at": "2026-09-18T08:22:15.000Z",
+			"after_credits": false,
+			"certification": "NR",
+			"comment_count": 14,
+			"during_credits": false,
+			"original_title": "Extraterrestrial",
+			"available_translations": [
+				"bg",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"nl",
+				"pt",
+				"ru",
+				"sl",
+				"sv",
+				"th",
+				"tr",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt2103264",
+				"plex": { "guid": "5d77698aad5437001f75fe3e", "slug": "emperor-2012" },
+				"slug": "emperor-2012",
+				"tmdb": 127372,
+				"trakt": 87249
+			},
+			"year": 2012,
+			"title": "Emperor",
+			"votes": 611,
+			"colors": { "poster": ["#B7B7B7", "#323637"] },
+			"genres": ["drama", "history", "war"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/087/249/logos/medium/393d760396.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/087/249/thumbs/medium/02462d37de.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/087/249/banners/medium/0af247b9e7.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/087/249/fanarts/medium/1f6ab93b71.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/087/249/posters/medium/3726424ddd.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.638298034667969,
+			"status": "released",
+			"country": "us",
+			"runtime": 105,
+			"tagline": "After the war was won, the battle for peace began.",
+			"trailer": "https://youtube.com/watch?v=fUTQrOGYhGI",
+			"homepage": null,
+			"language": "en",
+			"overview": "As the Japanese surrender at the end of WWII, Gen. Fellers is tasked with deciding if Emperor Hirohito will be hanged as a war criminal. Influencing his ruling is his quest to find Aya, an exchange student he met years earlier in the U.S.",
+			"released": "2013-03-08",
+			"languages": ["en", "ja"],
+			"subgenres": ["1940s"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Emperor_(2012_film)"
+			},
+			"updated_at": "2026-09-20T08:16:48.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 4,
+			"during_credits": false,
+			"original_title": "Emperor",
+			"available_translations": [
+				"ar",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sl",
+				"sv",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0435653",
+				"plex": { "guid": "5d77683ae6d55c002040e11c", "slug": "the-gravedancers" },
+				"slug": "the-gravedancers-2006",
+				"tmdb": 13557,
+				"trakt": 8008
+			},
+			"year": 2006,
+			"title": "The Gravedancers",
+			"votes": 263,
+			"colors": { "poster": ["#B8A2A9", "#2E2729"] },
+			"genres": ["horror", "thriller"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/008/008/fanarts/medium/ed08f98650.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/008/008/posters/medium/66690be0ee.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 5.6121673583984375,
+			"status": "released",
+			"country": "us",
+			"runtime": 95,
+			"tagline": "Unrest in Peace",
+			"trailer": "https://youtube.com/watch?v=E7-42pnTvNI",
+			"homepage": null,
+			"language": "en",
+			"overview": "After a night of drunken exploits, Allison, Harris, and Kira are chased and terrorized by the ghosts of a child pyromaniac, an ax murderer, and a rapist.",
+			"released": "2006-11-18",
+			"languages": ["en"],
+			"subgenres": ["ghost", "childhood-friends"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Gravedancers"
+			},
+			"updated_at": "2026-09-23T08:20:16.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 3,
+			"during_credits": false,
+			"original_title": "The Gravedancers",
+			"available_translations": [
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"hi",
+				"hu",
+				"ko",
+				"lt",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"th",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt1781775",
+				"plex": { "guid": "5d7768be308bca0020331a4e", "slug": "beneath-the-darkness" },
+				"slug": "beneath-the-darkness-2012",
+				"tmdb": 78461,
+				"trakt": 58108
+			},
+			"year": 2012,
+			"title": "Beneath the Darkness",
+			"votes": 245,
+			"colors": { "poster": ["#A6B09C", "#151F24"] },
+			"genres": ["thriller", "horror", "drama"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/058/108/fanarts/medium/ae5440433d.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/058/108/posters/medium/957cf694bc.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 4.6816325187683105,
+			"status": "released",
+			"country": "us",
+			"runtime": 96,
+			"tagline": "Now I lay you down to sleep.",
+			"trailer": "https://youtube.com/watch?v=oOwOkm1B62o",
+			"homepage": "https://www.BeneathTheDarknessMovie.com/",
+			"language": "en",
+			"overview": "After watching their best friend get murdered, a group of teens struggle to expose a local hero as the vicious killer and keep from becoming his next victims.",
+			"released": "2012-01-06",
+			"languages": ["fr", "en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Beneath_the_Darkness"
+			},
+			"updated_at": "2026-08-31T16:45:54.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 3,
+			"during_credits": false,
+			"original_title": "Beneath the Darkness",
+			"available_translations": [
+				"bg",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sv",
+				"tr",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt14104600",
+				"plex": { "guid": "6040a2e3fe3080002df0a4ab", "slug": "one-year-one-night" },
+				"slug": "one-year-one-night-2022",
+				"tmdb": 769466,
+				"trakt": 607375
+			},
+			"year": 2022,
+			"title": "One Year, One Night",
+			"votes": 85,
+			"colors": { "poster": ["#BA8E92", "#231519"] },
+			"genres": ["drama"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/607/375/fanarts/medium/bb6fbe6ae0.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/607/375/posters/medium/2bbff841b4.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.035289764404297,
+			"status": "released",
+			"country": "es",
+			"runtime": 130,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=uSQ6Q9r4q2o",
+			"homepage": null,
+			"language": "es",
+			"overview": "Ramón and Céline are a young couple that attended a concert at the Bataclan theatre in Paris on the fateful night of November 13, 2015. They survive the attack, but when they leave the theatre, they are no longer the same. That night leaves a deep scar on both their lives and each tries to cope.",
+			"released": "2022-10-21",
+			"languages": ["fr", "es"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "One_Year,_One_Night"
+			},
+			"updated_at": "2026-09-11T08:16:08.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "Un año, una noche",
+			"available_translations": [
+				"bg",
+				"ca",
+				"cs",
+				"de",
+				"en",
+				"es",
+				"fr",
+				"it",
+				"ko",
+				"nl",
+				"pt",
+				"ru",
+				"sk",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt26676104",
+				"plex": {
+					"guid": "63e7f1240b92845064ff44ac",
+					"slug": "hammarskjold-fight-for-peace"
+				},
+				"slug": "hammarskjold-fight-for-peace-2023",
+				"tmdb": 1084145,
+				"trakt": 871509
+			},
+			"year": 2023,
+			"title": "Hammarskjöld: Fight for Peace",
+			"votes": 119,
+			"colors": { "poster": ["#96A5A9", "#152229"] },
+			"genres": ["thriller", "drama", "history"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/871/509/fanarts/medium/8add85be23.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/871/509/posters/medium/74efc0e4c7.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.37814998626709,
+			"status": "released",
+			"country": "se",
+			"runtime": 114,
+			"tagline": "The Swede who challenged world politics.",
+			"trailer": "https://youtube.com/watch?v=kW4A80058uU",
+			"homepage": null,
+			"language": "sv",
+			"overview": "Set in Cold War in 1961, follows the story of diplomat and economist Dag Hammarskjöld, who boards a plane in a desperate attempt to negotiate a ceasefire from his enemies after he leads UN troops into their first wartime operation.",
+			"released": "2023-12-25",
+			"languages": ["en", "fr", "sv"],
+			"subgenres": ["1960s", "cold-war"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Hammarskjöld_(film)"
+			},
+			"updated_at": "2026-09-14T08:15:41.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "Hammarskjöld",
+			"available_translations": [
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"en",
+				"es",
+				"fa",
+				"fi",
+				"fr",
+				"it",
+				"ko",
+				"no",
+				"pt",
+				"ru",
+				"sk",
+				"sv"
+			]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0092873",
+				"plex": { "guid": "5d77685ceb5d26001f1e7e2e", "slug": "rest-in-pieces" },
+				"slug": "rest-in-pieces-1987",
+				"tmdb": 30796,
+				"trakt": 19579
+			},
+			"year": 1987,
+			"title": "Rest in Pieces",
+			"votes": 46,
+			"colors": { "poster": ["#A78672", "#35212C"] },
+			"genres": ["horror"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/019/579/fanarts/medium/a3645e9aa8.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/019/579/posters/medium/adc7f914bc.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 4.82608699798584,
+			"status": "released",
+			"country": "es",
+			"runtime": 90,
+			"tagline": "Their dream house brought them together...Their neighbors are tearing them apart!",
+			"trailer": "https://youtube.com/watch?v=FElYUDIcf8Y",
+			"homepage": null,
+			"language": "en",
+			"overview": "A newlywed couple move into the mansion of the bride's recently dead aunt. Soon strange things begin to happen when the various tenants and servants of the mansion don't want to leave and the bride and groom are in a deadly predicament.",
+			"released": "1987-08-13",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Rest_in_Pieces_(film)"
+			},
+			"updated_at": "2026-08-27T16:19:23.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "Rest in Pieces",
+			"available_translations": ["cs", "de", "el", "en", "es", "fr", "ko", "nl", "pt", "zh"]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt31913976",
+				"plex": { "guid": null, "slug": null },
+				"slug": "they-saw-japan-at-war-2023",
+				"tmdb": 1262039,
+				"trakt": 1024017
+			},
+			"year": 2023,
+			"title": "They Saw Japan at War",
+			"votes": 5,
+			"colors": { "poster": ["#B7B7B7", "#252525"] },
+			"genres": ["documentary", "history"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/001/024/017/fanarts/medium/186fea16d0.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/001/024/017/posters/medium/c0a28cbcf4.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.400000095367432,
+			"status": "released",
+			"country": "fr",
+			"runtime": 55,
+			"tagline": "From Japan glorious days to mid Twentieth Century defeat",
+			"trailer": null,
+			"homepage": "https://eleazarprod.com/en/francais-du-japon",
+			"language": "fr",
+			"overview": "The story of a Franco-Belgian family living in Japan from 1927 to 1947, a time of prosperity and fortune, but also of political turbulence and war.",
+			"released": "2023-04-24",
+			"languages": ["fr"],
+			"subgenres": ["world-war-ii", "historical-documentary"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2025-12-29T19:28:45.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Japon : ils ont vu la fin de l'Empire",
+			"available_translations": ["ar", "de", "en", "fr"]
+		}
+	},
+	{
+		"score": 578730054645712900,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt15177212",
+				"plex": { "guid": null, "slug": null },
+				"slug": "pray-for-peace-train-for-war-2023",
+				"tmdb": 1178673,
+				"trakt": 950367
+			},
+			"year": 2023,
+			"title": "Pray For Peace, Train For War",
+			"votes": 2,
+			"colors": { "poster": ["#F2A32A", "#7D4638"] },
+			"genres": ["comedy", "drama"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/950/367/fanarts/medium/a83479e599.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/950/367/posters/medium/68376fb610.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 4,
+			"status": "released",
+			"country": "pl",
+			"runtime": 71,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "pl",
+			"overview": "Despite really not being military material, Tytus decides to join a local paramilitary group created by his father. Forever an optimist, the boy heads into the forest convinced he can overcome any challenges that come his way.",
+			"released": "2024-10-18",
+			"languages": ["pl"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-03-17T08:43:42.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Chcesz pokoju, szykuj się do wojny",
+			"available_translations": ["de", "en", "nl", "pl"]
+		}
+	}
+]

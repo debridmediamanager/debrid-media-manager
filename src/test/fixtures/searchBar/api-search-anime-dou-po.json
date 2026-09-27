@@ -1,0 +1,46 @@
+{
+	"results": [
+		{
+			"id": "anime:anidb-14874",
+			"title": "Dou Po Cang Qiong: Tebie Pian 2 - Sha Zhi Lan Ge",
+			"type": "ONA",
+			"poster_url": "https://media.kitsu.app/anime/poster_images/42665/medium.jpg"
+		},
+		{
+			"id": "anime:anidb-17052",
+			"title": "Dou Po Cangqiong Nian Fan",
+			"type": "ONA",
+			"poster_url": "https://media.kitsu.app/anime/45946/poster_image/medium-3673e31755ac276687a2307311767894.jpeg"
+		},
+		{
+			"id": "anime:mal-null",
+			"title": "Dou Po Cangqiong: Nian Fan 2",
+			"type": "ONA",
+			"poster_url": "https://media.kitsu.app/anime/48062/poster_image/medium-bf3188646068ecd35329390c1cca85e9.jpeg"
+		},
+		{
+			"id": "anime:mal-null",
+			"title": "Dou Po Cangqiong: Nian Fan 3",
+			"type": "ONA",
+			"poster_url": "https://media.kitsu.app/anime/48063/poster_image/medium-1dd4cc45912b031192dfb79f804d50e2.jpeg"
+		},
+		{
+			"id": "anime:anidb-1763",
+			"title": "Ojamajo Doremi #",
+			"type": "TV",
+			"poster_url": "https://media.kitsu.app/anime/poster_images/318/medium.jpg"
+		},
+		{
+			"id": "anime:anidb-9582",
+			"title": "Watashi ga Motenai no wa Dou Kangaete mo Omaera ga Warui!",
+			"type": "TV",
+			"poster_url": "https://media.kitsu.app/anime/poster_images/7504/medium.jpg"
+		},
+		{
+			"id": "anime:anidb-13545",
+			"title": "Kimitachi wa Dou Ikiru ka",
+			"type": "MOVIE",
+			"poster_url": "https://media.kitsu.app/anime/41504/poster_image/medium-2c4502ffbec59965a086c44541756e09.jpeg"
+		}
+	]
+}

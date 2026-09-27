@@ -1,0 +1,293 @@
+[
+	{
+		"score": 578730123365189600,
+		"type": "show",
+		"show": {
+			"ids": {
+				"imdb": "tt10885406",
+				"plex": { "guid": "5df5b931bc7a03001de20d25", "slug": "ascendance-of-a-bookworm" },
+				"slug": "ascendance-of-a-bookworm",
+				"tmdb": 91768,
+				"tvdb": 366263,
+				"trakt": 149865
+			},
+			"airs": { "day": "Saturday", "time": "17:30", "timezone": "Asia/Tokyo" },
+			"year": 2019,
+			"title": "Ascendance of a Bookworm",
+			"votes": 642,
+			"colors": { "poster": ["#DFDCC7", "#7F7C5F"] },
+			"genres": ["fantasy", "anime", "drama", "comedy"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/shows/000/149/865/logos/medium/2297835402.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/shows/000/149/865/thumbs/medium/7029b8bb17.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/shows/000/149/865/banners/medium/6307cf53fa.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/shows/000/149/865/fanarts/medium/5023517260.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/shows/000/149/865/posters/medium/7c17220f37.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/shows/000/149/865/cleararts/medium/327f261eeb.png.webp"
+				]
+			},
+			"rating": 8.077881813049316,
+			"status": "returning series",
+			"country": "jp",
+			"network": "KRY",
+			"runtime": 24,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=Wo28IopG2WE",
+			"homepage": "https://booklove-anime.jp",
+			"language": "ja",
+			"overview": "When a sickly young girl suddenly becomes obsessed with inventing new things, her family and friends are all puzzled. \"What has gotten into Myne?\" they wondered, never dreaming that the answer is not a \"What\" but a \"Who\": Urano Motosu, a book-loving apprentice librarian who died in an earthquake in Tokyo who somehow found herself in Myne's body! And since Myne's world is still in a medieval stage, where books can only be owned by the elite, the new Myne intends to do everything she can to bring her beloved books to the masses in the time she has left.",
+			"languages": ["ja"],
+			"subgenres": [
+				"based-on-manga",
+				"magic",
+				"slice-of-life",
+				"reincarnation",
+				"medieval",
+				"religion",
+				"based-on-light-novel",
+				"isekai"
+			],
+			"last_aired": "2026-09-26T08:30:00.000Z",
+			"social_ids": {
+				"twitter": "anime_booklove",
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-26T16:35:41.000Z",
+			"first_aired": "2019-10-03T08:30:00.000Z",
+			"certification": "TV-14",
+			"comment_count": 15,
+			"total_runtime": 1416,
+			"aired_episodes": 59,
+			"original_title": "本好きの下剋上 司書になるためには手段を選んでいられません",
+			"available_translations": [
+				"ar",
+				"cs",
+				"de",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"id",
+				"it",
+				"ja",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"th",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt27451046",
+				"plex": { "guid": null, "slug": null },
+				"slug": "bookworm-2023",
+				"tmdb": 1123373,
+				"trakt": 905167
+			},
+			"year": 2023,
+			"title": "Bookworm",
+			"votes": 6,
+			"colors": { "poster": ["#A8A8A8", "#313231"] },
+			"genres": ["horror", "fantasy"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/905/167/fanarts/medium/1eb3a99318.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/905/167/posters/medium/e4fa5e7e9a.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 3.833329916000366,
+			"status": "released",
+			"country": "es",
+			"runtime": 14,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "es",
+			"overview": "Spain, 1979. Irene is an aspiring writer who is obsessed with the delicate ghost at the library she works at.",
+			"released": "2023-06-01",
+			"languages": ["es"],
+			"subgenres": ["short-film", "young-adult"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-02-12T17:14:14.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "Ratón de biblioteca",
+			"available_translations": ["en", "es", "nl"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt23472210",
+				"plex": { "guid": "636d326ccf466c572ff539af", "slug": "bookworm-2024" },
+				"slug": "bookworm-2024",
+				"tmdb": 1153110,
+				"trakt": 929010
+			},
+			"year": 2024,
+			"title": "Bookworm",
+			"votes": 440,
+			"colors": { "poster": ["#BEA84E", "#323119"] },
+			"genres": ["family", "adventure", "comedy", "drama"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/929/010/logos/medium/13b35b27bd.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/929/010/thumbs/medium/e9336c0672.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/929/010/banners/medium/bb4a73db6c.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/929/010/fanarts/medium/7adcd9359c.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/929/010/posters/medium/34c1a18c2f.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.427272796630859,
+			"status": "released",
+			"country": "nz",
+			"runtime": 104,
+			"tagline": "Adventure called her name... Unfortunately dad answered.",
+			"trailer": "https://youtube.com/watch?v=WLjVWIxwpao",
+			"homepage": null,
+			"language": "en",
+			"overview": "Eleven-year-old Mildred’s life is turned upside down when her mother lands in hospital and estranged, American magician father, Strawn Wise, comes to look after her.  Hoping to entertain the bookish tween, Strawn takes Mildred camping in the notoriously rugged New Zealand wilderness, and the pair embark on the ultimate test of family bonding – a quest to find the mythological beast known as the Canterbury Panther.",
+			"released": "2024-07-04",
+			"languages": ["en"],
+			"subgenres": ["wilderness"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": "bookwormmovie",
+				"wikipedia": "Bookworm_(film)"
+			},
+			"updated_at": "2026-09-12T08:14:36.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 7,
+			"during_credits": false,
+			"original_title": "Bookworm",
+			"available_translations": [
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"hr",
+				"it",
+				"ko",
+				"nl",
+				"pl",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt11033942",
+				"plex": { "guid": "5f4094d1ce2564003f9e18e5", "slug": "bookworm-and-the-beast" },
+				"slug": "bookworm-and-the-beast-2021",
+				"tmdb": 853291,
+				"trakt": 681554
+			},
+			"year": 2021,
+			"title": "Bookworm and the Beast",
+			"votes": 32,
+			"colors": { "poster": ["#BA927F", "#42261F"] },
+			"genres": ["romance"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/681/554/fanarts/medium/789de4b75c.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/681/554/posters/medium/9d7ea228e9.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 5.53125,
+			"status": "released",
+			"country": "us",
+			"runtime": 83,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "en",
+			"overview": "Izzy is ready to make a difference in the world as she starts her career in public relations. When Grant Beiste - the big-headed corporate celebrity in town - accidentally hits her father with a car, Izzy is thrown into a public scandal that forces her to work closely with Grant. As she fights to save both her father and Grant's public image, she falls in love and learns not to judge a book by it's cover.",
+			"released": "2021-04-23",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-05T08:19:45.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Bookworm and the Beast",
+			"available_translations": ["en", "es", "pt"]
+		}
+	}
+]
