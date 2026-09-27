@@ -100,5 +100,11 @@ export const RATE_LIMIT_CONFIGS = {
 	// a grab never comes back to DMM at all.
 	torznabSearch: { name: 'torznabSearch', rateLimit: 20, windowSeconds: 60 },
 	torznabIp: { name: 'torznabIp', rateLimit: 20, windowSeconds: 10 },
+	// /api/info/anime and /api/search/anime answer by asking the community
+	// Stremio addon and kitsu.io, so an unlimited client could drive both
+	// upstreams through dmm-01's address until one of them blocked it. A person
+	// opens a handful of titles a minute; its own bucket keeps a burst here from
+	// refusing /api/challenge, which shares `default`.
+	anime: { name: 'anime', rateLimit: 30, windowSeconds: 60 },
 	default: { name: 'default', rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;

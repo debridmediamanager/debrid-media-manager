@@ -1,5 +1,6 @@
 import { searchKitsuAnimeIds } from '@/services/anime/kitsu';
 import { AnimeSearchResult } from '@/services/database/anime';
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { BoundedTtlCache } from '@/utils/boundedTtlCache';
 import { NextApiHandler } from 'next';
@@ -87,4 +88,4 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 };
 
-export default handler;
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.anime);

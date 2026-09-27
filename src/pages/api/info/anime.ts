@@ -1,6 +1,7 @@
 import { fetchKitsuAnime } from '@/services/anime/kitsu';
 import { resolveImdbIdFromSimkl } from '@/services/anime/simkl';
 import type { AnimeIdSource, AnimeRecord } from '@/services/database/anime';
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -137,7 +138,7 @@ async function resolveImdbId(animeId: AnimeId, row: AnimeRecord | null): Promise
 	return (await resolveImdbIdFromSimkl(animeId.source, animeId.id)) ?? '';
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
@@ -168,3 +169,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	return res.status(200).json(info);
 }
+
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.anime);
