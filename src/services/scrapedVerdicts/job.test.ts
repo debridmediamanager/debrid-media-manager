@@ -42,6 +42,8 @@ function fakeDb(overrides: Partial<Record<keyof ScrapedVerdictService, any>> = {
 		trashPairs: vi.fn().mockImplementation(async (_k, _m, pairs) => pairs.length),
 		setCheckpoint: vi.fn().mockResolvedValue(undefined),
 		getTrashedPairKeys: vi.fn().mockResolvedValue(new Set()),
+		getTokensSpent: vi.fn().mockResolvedValue(0),
+		addTokensSpent: vi.fn().mockResolvedValue(undefined),
 		...overrides,
 	} as unknown as ScrapedVerdictService & Record<string, ReturnType<typeof vi.fn>>;
 }
@@ -94,6 +96,17 @@ describe('judgeMoviePage', () => {
 		await expect(judgeMoviePage('tt5177120', db)).resolves.toMatchObject({ status: 'done' });
 	});
 
+	it('stops once the fleet has spent the day’s token budget', async () => {
+		vi.stubEnv('SCRAPED_VERDICTS_DAILY_TOKENS', '1000');
+		const db = fakeDb({ getTokensSpent: vi.fn().mockResolvedValue(1000) });
+		await expect(judgeMoviePage('tt5177120', db)).resolves.toEqual({
+			status: 'skipped',
+			reason: 'daily token budget spent',
+		});
+		expect(db.getTokensSpent).toHaveBeenCalledWith(new Date().toISOString().slice(0, 10));
+		expect(mockClassify).not.toHaveBeenCalled();
+	});
+
 	it('leaves the page to the instance holding the lock', async () => {
 		const db = fakeDb({ acquireLock: vi.fn().mockResolvedValue(false) });
 		await expect(judgeMoviePage('tt5177120', db)).resolves.toEqual({
@@ -139,6 +152,7 @@ describe('judgeMoviePage', () => {
 			trashed: 4,
 			inputTokens: 1234,
 		});
+		expect(db.addTokensSpent).toHaveBeenCalledWith(new Date().toISOString().slice(0, 10), 1234);
 		expect(db.setCheckpoint).toHaveBeenCalledWith('movie:tt5177120', ENGINE, expect.any(Date));
 		expect(db.releaseLock).toHaveBeenCalledWith('movie:tt5177120');
 	});

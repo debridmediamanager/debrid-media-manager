@@ -23,11 +23,10 @@ export const ENGINE = 'rules-v6.2+jev';
 const MAX_CONCURRENT_JOBS = 2;
 /** A lock this old belonged to a job that died. */
 const LOCK_STALE_MS = 15 * 60 * 1000;
-const DEFAULT_DAILY_TOKENS = 50_000_000;
+/** About $8.40 a day at $0.042 per million input tokens. */
+const DEFAULT_DAILY_TOKENS = 200_000_000;
 
 const inFlight = new Set<string>();
-let budgetDay = '';
-let tokensToday = 0;
 let service: ScrapedVerdictService | undefined;
 
 const verdicts = () => (service ??= new ScrapedVerdictService());
@@ -36,18 +35,16 @@ function apiKey(): string | undefined {
 	return process.env.TYPESAFE_API_KEY || undefined;
 }
 
+const utcDay = () => new Date().toISOString().slice(0, 10);
+
 /**
- * Per-instance cap on model spend, reset at UTC midnight. Four instances run in
- * production, so the fleet ceiling is four times this.
+ * Fleet-wide cap on model spend per UTC day, counted in the database. A
+ * per-process counter reset on every deploy and let two deploys on 2026-09-27
+ * spend past the ceiling.
  */
-function underBudget(): boolean {
-	const today = new Date().toISOString().slice(0, 10);
-	if (today !== budgetDay) {
-		budgetDay = today;
-		tokensToday = 0;
-	}
+async function underBudget(db: ScrapedVerdictService): Promise<boolean> {
 	const limit = Number(process.env.SCRAPED_VERDICTS_DAILY_TOKENS) || DEFAULT_DAILY_TOKENS;
-	return tokensToday < limit;
+	return (await db.getTokensSpent(utcDay())) < limit;
 }
 
 type Judged = {
@@ -85,7 +82,7 @@ export async function judgeMoviePage(
 	) {
 		return { status: 'skipped', reason: 'unchanged since last check' };
 	}
-	if (!underBudget()) return { status: 'skipped', reason: 'daily token budget spent' };
+	if (!(await underBudget(db))) return { status: 'skipped', reason: 'daily token budget spent' };
 	if (!(await db.acquireLock(pageKey, LOCK_STALE_MS))) {
 		return { status: 'skipped', reason: 'another instance is on it' };
 	}
@@ -123,7 +120,7 @@ export async function judgeMoviePage(
 		if (forModel.length > 0) {
 			const result = await classifyFilenames(key, movie, forModel);
 			inputTokens = result.inputTokens;
-			tokensToday += inputTokens;
+			await db.addTokensSpent(utcDay(), inputTokens);
 			model = result.model;
 			forModel.forEach((title, i) => {
 				const { media, titleMatch } = result.answers[i];

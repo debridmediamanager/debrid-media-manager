@@ -24,6 +24,7 @@ const prismaMock = vi.hoisted(() => ({
 		deleteMany: vi.fn(),
 	},
 	$queryRaw: vi.fn(),
+	$executeRaw: vi.fn(),
 	$transaction: vi.fn(async (fn: (t: typeof tx) => unknown) => fn(tx)),
 }));
 
@@ -271,6 +272,22 @@ describe('ScrapedVerdictService', () => {
 				},
 			});
 		});
+	});
+
+	it('counts spend in one shared row per UTC day', async () => {
+		prismaMock.cache.findUnique.mockResolvedValue({ value: { tokens: 2468.0 } });
+		await expect(service.getTokensSpent('2026-09-27')).resolves.toBe(2468);
+		expect(prismaMock.cache.findUnique).toHaveBeenCalledWith({
+			where: { key: 'verdicts:tokens:2026-09-27' },
+		});
+
+		await service.addTokensSpent('2026-09-27', 1234);
+		const upsert = prismaMock.$executeRaw.mock.calls[0][0] as Prisma.Sql;
+		expect(sqlText(upsert)).toContain('ON DUPLICATE KEY UPDATE');
+		expect(upsert.values).toEqual(['verdicts:tokens:2026-09-27', 1234, 1234]);
+
+		await service.addTokensSpent('2026-09-27', 0);
+		expect(prismaMock.$executeRaw).toHaveBeenCalledTimes(1);
 	});
 
 	describe('acquireLock', () => {

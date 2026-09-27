@@ -41,6 +41,7 @@ export const pairKeyOf = (hash: string, title: string): string =>
 
 const LOCK_PREFIX = 'verdicts:lock:';
 const CHECKPOINT_PREFIX = 'verdicts:checked:';
+const TOKENS_PREFIX = 'verdicts:tokens:';
 
 function entriesOf(value: Prisma.JsonValue | undefined): StoredEntry[] {
 	return Array.isArray(value) ? (value as StoredEntry[]) : [];
@@ -312,6 +313,24 @@ export class ScrapedVerdictService extends DatabaseClient {
 			select: { hash: true, titleKey: true },
 		});
 		return new Set(rows.map((r) => `${r.hash.toLowerCase()}:${r.titleKey}`));
+	}
+
+	/** Model input tokens spent on `day` (YYYY-MM-DD, UTC) across every instance. */
+	public async getTokensSpent(day: string): Promise<number> {
+		const row = await this.prisma.cache.findUnique({ where: { key: TOKENS_PREFIX + day } });
+		const tokens = (row?.value as { tokens?: unknown } | undefined)?.tokens;
+		return typeof tokens === 'number' ? tokens : 0;
+	}
+
+	/** Atomic, so concurrent passes on four instances cannot lose each other's spend. */
+	public async addTokensSpent(day: string, tokens: number): Promise<void> {
+		if (tokens <= 0) return;
+		await this.prisma.$executeRaw(Prisma.sql`
+			INSERT INTO Cache (\`key\`, value, updatedAt)
+			VALUES (${TOKENS_PREFIX + day}, JSON_OBJECT('tokens', ${tokens}), NOW(3))
+			ON DUPLICATE KEY UPDATE
+				value = JSON_OBJECT('tokens', COALESCE(JSON_EXTRACT(value, '$.tokens'), 0) + ${tokens}),
+				updatedAt = NOW(3)`);
 	}
 
 	public async getCheckpoint(key: string): Promise<{ engine: string; checkedAt: Date } | null> {
