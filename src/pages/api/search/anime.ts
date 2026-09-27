@@ -1,12 +1,20 @@
 import { searchKitsuAnimeIds } from '@/services/anime/kitsu';
 import { AnimeSearchResult } from '@/services/database/anime';
 import { repository as db } from '@/services/repository';
+import { BoundedTtlCache } from '@/utils/boundedTtlCache';
 import { NextApiHandler } from 'next';
 
-const inMemoryCache: Record<string, number[]> = {};
+// Kitsu's catalogue changes by the season, not by the hour. Every distinct
+// keyword used to stay in memory for the life of the process, answered forever
+// with whatever it matched the first time.
+const KEYWORD_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+const KEYWORD_CACHE_MAX_ENTRIES = 1000;
+const keywordCache = new BoundedTtlCache<number[]>(KEYWORD_CACHE_TTL_MS, KEYWORD_CACHE_MAX_ENTRIES);
 
+// The keyword is a path segment here, so `Fate/Zero` or a trailing `?` used to
+// change which resource was asked for; the addon answers those with a 404.
 const CATALOG_URL = (keyword: string) =>
-	`https://anime-kitsu.strem.fun/catalog/anime/kitsu-anime-list/search=${keyword}.json`;
+	`https://anime-kitsu.strem.fun/catalog/anime/kitsu-anime-list/search=${encodeURIComponent(keyword)}.json`;
 
 /**
  * The community addon that has served this search until now. Returns null when
@@ -43,7 +51,7 @@ const handler: NextApiHandler = async (req, res) => {
 
 	try {
 		const normalized = keyword.toLocaleLowerCase();
-		let kitsuIds = inMemoryCache[normalized];
+		let kitsuIds = keywordCache.get(normalized);
 
 		if (!kitsuIds) {
 			// The addon stays primary; Kitsu's own API answers the same search
@@ -64,7 +72,7 @@ const handler: NextApiHandler = async (req, res) => {
 			}
 
 			// A failed lookup must not be cached as "this keyword has no results".
-			if (kitsuIds.length > 0) inMemoryCache[normalized] = kitsuIds;
+			if (kitsuIds.length > 0) keywordCache.set(normalized, kitsuIds);
 		}
 
 		const results: AnimeSearchResult[] =
