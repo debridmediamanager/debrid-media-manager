@@ -15,6 +15,8 @@ const {
 	mockSort,
 	mockBackfillDebridio,
 	mockRefreshDebridio,
+	mockWithoutTrashed,
+	mockCleanInBackground,
 } = vi.hoisted(() => ({
 	mockValidateProblemToken: vi.fn(),
 	mockGetScrapedTrueResults: vi.fn(),
@@ -27,6 +29,8 @@ const {
 	mockSort: vi.fn((items: any[]) => items),
 	mockBackfillDebridio: vi.fn().mockResolvedValue([]),
 	mockRefreshDebridio: vi.fn().mockResolvedValue(undefined),
+	mockWithoutTrashed: vi.fn(async (_imdbId: string, items: any[]) => items),
+	mockCleanInBackground: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock('@/utils/problemToken', () => ({
@@ -55,6 +59,11 @@ vi.mock('@/services/canary/canaryStore', () => ({
 vi.mock('@/utils/debridioBackfill', () => ({
 	backfillFromDebridioNow: mockBackfillDebridio,
 	refreshDebridioAvailabilityInBackground: mockRefreshDebridio,
+}));
+
+vi.mock('@/services/scrapedVerdicts/job', () => ({
+	withoutTrashedResults: mockWithoutTrashed,
+	cleanMovieResultsInBackground: mockCleanInBackground,
 }));
 
 describe('/api/torrents/movie', () => {
@@ -267,6 +276,28 @@ describe('/api/torrents/movie', () => {
 			key: 'movie:tt1234567',
 			kind: 'movie',
 		});
+	});
+
+	it('hides results already judged not to be the movie', async () => {
+		mockGetReportedHashes.mockResolvedValue([]);
+		mockWithoutTrashed.mockImplementationOnce(async (_imdbId: string, items: any[]) =>
+			items.filter((item) => item.hash !== 'hash-2')
+		);
+		const res = createMockResponse();
+
+		await handler(createMockRequest({ query: baseQuery }), res);
+
+		expect(mockWithoutTrashed).toHaveBeenCalledWith('tt1234567', [
+			{ title: 'Trusted', hash: 'hash-1' },
+			{ title: 'Community', hash: 'hash-2' },
+		]);
+		expect(res.json).toHaveBeenCalledWith({ results: [{ title: 'Trusted', hash: 'hash-1' }] });
+	});
+
+	it('judges the page in the background on a served page', async () => {
+		await handler(createMockRequest({ query: baseQuery }), createMockResponse());
+
+		expect(mockCleanInBackground).toHaveBeenCalledWith('tt1234567');
 	});
 
 	describe('impossible titles', () => {
