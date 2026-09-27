@@ -58,7 +58,15 @@ async function readReleases(key: string, page: number): Promise<ScrapeSearchResu
 	return sorted.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 }
 
-// returns scraped results or marks the anime id as requested
+/**
+ * Returns the scraped releases for an anime id.
+ *
+ * An anime nothing has scraped answers an empty list. It used to be written to
+ * the request queue as `requested:<animeId>`, but that queue is read only for
+ * `requested:tt*` and no scraper marks an anime id `processing:`, so each such
+ * view left a row nothing would ever act on. Anime rows are filled by the
+ * scrapers on their own schedule, not on demand.
+ */
 const handler: NextApiHandler = async (req, res) => {
 	const { animeId, dmmProblemKey, solution, page } = req.query;
 
@@ -76,7 +84,7 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 
 	if (!animeId || !(typeof animeId === 'string')) {
-		res.status(400).json({ errorMessage: 'Missing "imdbId" query parameter' });
+		res.status(400).json({ errorMessage: 'Missing "animeId" query parameter' });
 		return;
 	}
 
@@ -88,19 +96,6 @@ const handler: NextApiHandler = async (req, res) => {
 
 	try {
 		const searchResults = await readReleases(`anime:${animeId.toString().trim()}`, pageNum);
-
-		if (searchResults.length === 0) {
-			const isProcessing = await db.keyExists(`processing:${animeId.toString().trim()}`);
-			if (isProcessing) {
-				res.setHeader('status', 'processing').status(204).end();
-				return;
-			}
-
-			await db.saveScrapedResults(`requested:${animeId.toString().trim()}`, []);
-			res.setHeader('status', 'requested').status(204).end();
-			return;
-		}
-
 		res.status(200).json({ results: searchResults });
 	} catch (error: any) {
 		console.error(

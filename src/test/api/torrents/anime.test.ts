@@ -59,6 +59,9 @@ describe('/api/torrents/anime', () => {
 		await handler(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({
+			errorMessage: 'Missing "animeId" query parameter',
+		});
 	});
 
 	it('returns the stored releases in the shape the other torrent routes use', async () => {
@@ -100,29 +103,27 @@ describe('/api/torrents/anime', () => {
 		expect(mockGetAllScrapedTrueResults).not.toHaveBeenCalled();
 	});
 
-	it('marks the anime id as requested when nothing has been scraped', async () => {
+	// Nothing reads these: the request queue takes only `requested:tt*`, and no
+	// scraper marks an anime id `processing:`. On 2026-09-27 one probe of
+	// anidb-17617 left `requested:anidb-17617` behind in production.
+	it('answers an unscraped anime with an empty list and writes nothing', async () => {
 		mockGetAllScrapedTrueResults.mockResolvedValue(null);
-		mockKeyExists.mockResolvedValue(false);
-		const req = createMockRequest({ query: baseQuery });
 		const res = createMockResponse();
 
-		await handler(req, res);
+		await handler(createMockRequest({ query: { ...baseQuery, animeId: 'anidb-18886' } }), res);
 
-		expect(mockSaveScrapedResults).toHaveBeenCalledWith('requested:anidb:1', []);
-		expect(res.setHeader).toHaveBeenCalledWith('status', 'requested');
-		expect(res.status).toHaveBeenCalledWith(204);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({ results: [] });
+		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+		expect(mockKeyExists).not.toHaveBeenCalled();
 	});
 
-	it('reports processing instead of re-requesting an in-flight scrape', async () => {
-		mockGetAllScrapedTrueResults.mockResolvedValue(null);
-		mockKeyExists.mockResolvedValue(true);
-		const req = createMockRequest({ query: baseQuery });
+	it('writes nothing for a page past the end either', async () => {
 		const res = createMockResponse();
 
-		await handler(req, res);
+		await handler(createMockRequest({ query: { ...baseQuery, page: '3' } }), res);
 
-		expect(res.setHeader).toHaveBeenCalledWith('status', 'processing');
-		expect(res.status).toHaveBeenCalledWith(204);
+		expect(res.json).toHaveBeenCalledWith({ results: [] });
 		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
 	});
 

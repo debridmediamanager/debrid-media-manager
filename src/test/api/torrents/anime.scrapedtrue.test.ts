@@ -24,7 +24,6 @@ vi.mock('@/services/repository', () => ({
 		getScrapedTrueResults: mockGetScrapedTrueResults,
 		getAllScrapedTrueResults: mockGetAllScrapedTrueResults,
 		saveScrapedResults: mockSaveScrapedResults,
-		keyExists: vi.fn().mockResolvedValue(false),
 	},
 }));
 
@@ -34,9 +33,8 @@ const legacy = storedRow as Legacy[];
 const query = { animeId: 'anidb-17617', dmmProblemKey: 'key', solution: 'solution' };
 
 type Served = { hash: string; title: string; fileSize: number };
-/** A page past the end may answer without a body; that is zero releases. */
 const results = (res: ReturnType<typeof createMockResponse>): Served[] =>
-	vi.mocked(res.json).mock.calls[0]?.[0].results ?? [];
+	vi.mocked(res.json).mock.calls[0][0].results;
 
 describe('/api/torrents/anime reads the rows the scrapers stored', () => {
 	beforeEach(() => {
