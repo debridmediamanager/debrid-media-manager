@@ -1,0 +1,40 @@
+{
+	"backdrop": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/mLyW3UTgi2lsMdtueYODcfAB9Ku.jpg",
+	"description": "The everyday lives of office employees in the Scranton, Pennsylvania branch of the fictional Dunder Mifflin Paper Company.",
+	"has_specials": true,
+	"imdb_score": "9.0",
+	"last_episode_to_air": {
+		"first_aired": "2013-05-17T01:30:00+00:00",
+		"episode_number": 25,
+		"season_number": 9,
+		"name": "Finale (2)"
+	},
+	"poster": "https://image.tmdb.org/t/p/original/7DJKHzAi83BmQrWLrYYOqcoKfhR.jpg",
+	"season_count": 9,
+	"season_episode_counts": {
+		"0": 106,
+		"1": 6,
+		"2": 22,
+		"3": 25,
+		"4": 19,
+		"5": 28,
+		"6": 26,
+		"7": 26,
+		"8": 24,
+		"9": 27
+	},
+	"season_names": [
+		"Season 1",
+		"Season 2",
+		"Season 3",
+		"Season 4",
+		"Season 5",
+		"Season 6",
+		"Season 7",
+		"Season 8",
+		"Season 9"
+	],
+	"status": "Ended",
+	"title": "The Office",
+	"trailer": "https://www.youtube.com/watch?v=-C2z-nshFts"
+}

@@ -1,0 +1,30 @@
+{
+	"results": {
+		"tt13706018": [
+			{
+				"anidbId": 16947,
+				"title": "Spy x Family",
+				"type": "TV",
+				"poster": "https://media.kitsu.app/anime/45398/poster_image/medium-f2f30d957a12e8269655c6036b460c90.jpeg"
+			},
+			{
+				"anidbId": 17061,
+				"title": "Spy x Family (2022)",
+				"type": "TV",
+				"poster": "https://media.kitsu.app/anime/45619/poster_image/medium-32f8572bcf852803f4455c8c0f70ac11.jpeg"
+			},
+			{
+				"anidbId": 17784,
+				"title": "Spy x Family (2023)",
+				"type": "TV",
+				"poster": "https://media.kitsu.app/anime/46873/poster_image/medium-1f8f7cc96aa7aaae6b8345d7a5c352ea.jpeg"
+			},
+			{
+				"anidbId": 18677,
+				"title": "Spy x Family (2025)",
+				"type": "TV",
+				"poster": "https://media.kitsu.app/anime/48939/poster_image/medium-9ecfd45175a6ecc7e89f658c46c0f0c0.jpeg"
+			}
+		]
+	}
+}

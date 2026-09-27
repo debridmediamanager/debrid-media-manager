@@ -1,0 +1,19 @@
+{
+	"backdrop": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/lysUnU6V0VfcthDbviuVlIqgHOR.jpg",
+	"description": "A spy, an assassin and a telepath come together to pose as a family, each for their own reasons, while hiding their true identities from each other.",
+	"has_specials": true,
+	"imdb_score": "8.2",
+	"last_episode_to_air": {
+		"first_aired": "2025-12-27T14:00:00+00:00",
+		"episode_number": 13,
+		"season_number": 3,
+		"name": "A World Where We Cannot Survive"
+	},
+	"poster": "https://image.tmdb.org/t/p/original/7NAvPYPAu7MeHwP8E9sn81PqsRh.jpg",
+	"season_count": 3,
+	"season_episode_counts": { "0": 4, "1": 25, "2": 12, "3": 13 },
+	"season_names": ["Season 1", "Season 2", "Season 3"],
+	"status": "Ended",
+	"title": "SPY x FAMILY",
+	"trailer": "https://www.youtube.com/watch?v=JP6vBnazpWI"
+}

@@ -1,0 +1,266 @@
+{
+	"capturedAt": "2026-09-27",
+	"shows": {
+		"tt0108778": {
+			"title": "Friends",
+			"season_count": 10,
+			"season_episode_counts": {
+				"0": 40,
+				"1": 24,
+				"2": 24,
+				"3": 25,
+				"4": 24,
+				"5": 24,
+				"6": 25,
+				"7": 24,
+				"8": 24,
+				"9": 24,
+				"10": 18
+			},
+			"animeByImdb": []
+		},
+		"tt0306414": {
+			"title": "The Wire",
+			"season_count": 5,
+			"season_episode_counts": { "0": 7, "1": 13, "2": 12, "3": 12, "4": 13, "5": 10 },
+			"animeByImdb": []
+		},
+		"tt0411008": {
+			"title": "Lost",
+			"season_count": 6,
+			"season_episode_counts": {
+				"0": 162,
+				"1": 25,
+				"2": 24,
+				"3": 23,
+				"4": 14,
+				"5": 17,
+				"6": 18
+			},
+			"animeByImdb": []
+		},
+		"tt0412142": {
+			"title": "House",
+			"season_count": 8,
+			"season_episode_counts": {
+				"0": 46,
+				"1": 22,
+				"2": 24,
+				"3": 24,
+				"4": 16,
+				"5": 24,
+				"6": 22,
+				"7": 23,
+				"8": 22
+			},
+			"animeByImdb": []
+		},
+		"tt0903747": {
+			"title": "Breaking Bad",
+			"season_count": 5,
+			"season_episode_counts": { "0": 10, "1": 7, "2": 13, "3": 13, "4": 13, "5": 16 },
+			"animeByImdb": []
+		},
+		"tt0944947": {
+			"title": "Game of Thrones",
+			"season_count": 8,
+			"season_episode_counts": {
+				"0": 306,
+				"1": 10,
+				"2": 10,
+				"3": 10,
+				"4": 10,
+				"5": 10,
+				"6": 10,
+				"7": 7,
+				"8": 6
+			},
+			"animeByImdb": []
+		},
+		"tt11280740": {
+			"title": "Severance",
+			"season_count": 3,
+			"season_episode_counts": { "0": 21, "1": 9, "2": 10, "3": 0 },
+			"animeByImdb": []
+		},
+		"tt1305826": {
+			"title": "Adventure Time",
+			"season_count": 10,
+			"season_episode_counts": {
+				"0": 17,
+				"1": 26,
+				"2": 26,
+				"3": 26,
+				"4": 26,
+				"5": 52,
+				"6": 43,
+				"7": 38,
+				"8": 27,
+				"9": 14,
+				"10": 13
+			},
+			"animeByImdb": []
+		},
+		"tt13406094": {
+			"title": "The White Lotus",
+			"season_count": 4,
+			"season_episode_counts": { "0": 21, "1": 6, "2": 7, "3": 8, "4": 0 },
+			"animeByImdb": []
+		},
+		"tt14452776": {
+			"title": "The Bear",
+			"season_count": 5,
+			"season_episode_counts": { "0": 1, "1": 8, "2": 10, "3": 10, "4": 10, "5": 8 },
+			"animeByImdb": []
+		},
+		"tt1475582": {
+			"title": "Sherlock",
+			"season_count": 4,
+			"season_episode_counts": { "0": 9, "1": 3, "2": 3, "3": 3, "4": 3 },
+			"animeByImdb": []
+		},
+		"tt1520211": {
+			"title": "The Walking Dead",
+			"season_count": 11,
+			"season_episode_counts": {
+				"0": 88,
+				"1": 6,
+				"2": 13,
+				"3": 16,
+				"4": 16,
+				"5": 16,
+				"6": 16,
+				"7": 16,
+				"8": 16,
+				"9": 16,
+				"10": 22,
+				"11": 24
+			},
+			"animeByImdb": []
+		},
+		"tt1856010": {
+			"title": "House of Cards",
+			"season_count": 6,
+			"season_episode_counts": {
+				"0": 7,
+				"1": 13,
+				"2": 13,
+				"3": 13,
+				"4": 13,
+				"5": 13,
+				"6": 8
+			},
+			"animeByImdb": []
+		},
+		"tt2085059": {
+			"title": "Black Mirror",
+			"season_count": 7,
+			"season_episode_counts": {
+				"0": 2,
+				"1": 3,
+				"2": 4,
+				"3": 6,
+				"4": 6,
+				"5": 3,
+				"6": 5,
+				"7": 6
+			},
+			"animeByImdb": []
+		},
+		"tt2560140": {
+			"title": "Attack on Titan",
+			"season_count": 4,
+			"season_episode_counts": { "0": 42, "1": 25, "2": 12, "3": 22, "4": 30 },
+			"animeByImdb": [
+				{
+					"anidbId": 9541,
+					"title": "Shingeki no Kyojin",
+					"type": "TV",
+					"poster": "https://media.kitsu.app/anime/poster_images/7442/medium.jpg"
+				},
+				{
+					"anidbId": 9826,
+					"title": "Shingeki no Kyojin OAD",
+					"type": "OVA",
+					"poster": "https://media.kitsu.app/anime/7694/poster_image/medium-8020aa891d55e57bd2758b85cc2e592e.jpeg"
+				},
+				{
+					"anidbId": 10944,
+					"title": "Shingeki no Kyojin Season 2",
+					"type": "TV",
+					"poster": "https://media.kitsu.app/anime/poster_images/8671/medium.jpg"
+				},
+				{
+					"anidbId": 13241,
+					"title": "Shingeki no Kyojin Season 3",
+					"type": "TV",
+					"poster": "https://media.kitsu.app/anime/poster_images/13569/medium.jpg"
+				},
+				{
+					"anidbId": 14444,
+					"title": "Shingeki no Kyojin Season 3 (2019)",
+					"type": "TV",
+					"poster": "https://media.kitsu.app/anime/poster_images/41982/medium.jpg"
+				},
+				{
+					"anidbId": 14977,
+					"title": "Shingeki no Kyojin: The Final Season",
+					"type": "TV",
+					"poster": "https://media.kitsu.app/anime/poster_images/42422/medium.jpg"
+				},
+				{
+					"anidbId": 16177,
+					"title": "Shingeki no Kyojin: The Final Season (2022)",
+					"type": "TV",
+					"poster": "https://media.kitsu.app/anime/44240/poster_image/medium-0fa48d96e48646d81d486e67b60af617.jpeg"
+				},
+				{
+					"anidbId": 17303,
+					"title": "Shingeki no Kyojin: The Final Season (2023)",
+					"type": "SPECIAL",
+					"poster": "https://media.kitsu.app/anime/46038/poster_image/medium-ac80061d5b82bf4844d5a684e68121f6.jpeg"
+				}
+			]
+		},
+		"tt2861424": {
+			"title": "Rick and Morty",
+			"season_count": 12,
+			"season_episode_counts": {
+				"0": 113,
+				"1": 11,
+				"2": 10,
+				"3": 10,
+				"4": 10,
+				"5": 10,
+				"6": 10,
+				"7": 10,
+				"8": 10,
+				"9": 10,
+				"10": 0,
+				"11": 0,
+				"12": 0
+			},
+			"animeByImdb": []
+		},
+		"tt3230854": {
+			"title": "The Expanse",
+			"season_count": 6,
+			"season_episode_counts": {
+				"0": 71,
+				"1": 10,
+				"2": 13,
+				"3": 13,
+				"4": 10,
+				"5": 10,
+				"6": 6
+			},
+			"animeByImdb": []
+		},
+		"tt4574334": {
+			"title": "Stranger Things",
+			"season_count": 5,
+			"season_episode_counts": { "0": 36, "1": 8, "2": 9, "3": 8, "4": 9, "5": 8 },
+			"animeByImdb": []
+		}
+	}
+}
