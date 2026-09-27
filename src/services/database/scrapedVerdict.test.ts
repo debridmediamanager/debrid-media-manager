@@ -5,7 +5,8 @@ import { pairKeyOf, ScrapedVerdictService, titleKeyOf } from './scrapedVerdict';
 const tx = vi.hoisted(() => ({
 	$queryRaw: vi.fn(),
 	$executeRaw: vi.fn(),
-	scrapedTrash: { createMany: vi.fn() },
+	scrapedTrash: { createMany: vi.fn(), deleteMany: vi.fn() },
+	scrapedVerdict: { deleteMany: vi.fn() },
 }));
 
 const prismaMock = vi.hoisted(() => ({
@@ -14,6 +15,7 @@ const prismaMock = vi.hoisted(() => ({
 	scrapedTrue: { findUnique: vi.fn() },
 	scraped: { findUnique: vi.fn() },
 	scrapedVerdict: { findMany: vi.fn(), createMany: vi.fn() },
+	scrapedTrash: { findMany: vi.fn() },
 	cache: {
 		findUnique: vi.fn(),
 		upsert: vi.fn(),
@@ -208,6 +210,66 @@ describe('ScrapedVerdictService', () => {
 		expect(keys.has(pairKeyOf('abc', 'Name'))).toBe(true);
 		expect(prismaMock.scrapedVerdict.findMany.mock.calls[0][0].where.hash).toEqual({
 			in: ['abc'],
+		});
+	});
+
+	describe('restoreTrash', () => {
+		it('puts entries back without touching updatedAt and forgets their verdicts', async () => {
+			const refreshed = new Date('2026-09-21T14:41:34.273Z');
+			prismaMock.scrapedTrash.findMany.mockResolvedValue([
+				{
+					id: 7,
+					source: 'Scraped',
+					key: 'movie:tt3498820',
+					imdbId: 'tt3498820',
+					hash: 'aaa',
+					title: 'Captain.America.Civil.War.HDR.1080p.HEVC.10bit.BT.2020.DTS-HD.MA',
+					fileSize: 20000,
+				},
+				{
+					id: 8,
+					source: 'Scraped',
+					key: 'movie:tt3498820',
+					imdbId: 'tt3498820',
+					hash: 'bbb',
+					title: 'Already written back by a scraper',
+					fileSize: 10,
+				},
+			]);
+			tx.$queryRaw.mockResolvedValue([
+				{
+					value: [
+						{ hash: 'BBB', title: 'Already written back by a scraper', fileSize: 10 },
+					],
+					updatedAt: refreshed,
+				},
+			]);
+
+			await expect(service.restoreTrash([7, 8])).resolves.toBe(1);
+
+			const update = tx.$executeRaw.mock.calls[0][0] as Prisma.Sql;
+			expect(sqlText(update)).toContain('UPDATE `Scraped` SET value = ?, updatedAt = ?');
+			expect(JSON.parse(update.values[0] as string)).toEqual([
+				{ hash: 'BBB', title: 'Already written back by a scraper', fileSize: 10 },
+				{
+					hash: 'aaa',
+					title: 'Captain.America.Civil.War.HDR.1080p.HEVC.10bit.BT.2020.DTS-HD.MA',
+					fileSize: 20000,
+				},
+			]);
+			expect(update.values[1]).toBe(refreshed);
+			expect(tx.scrapedTrash.deleteMany).toHaveBeenCalledWith({
+				where: { id: { in: [7, 8] } },
+			});
+			expect(tx.scrapedVerdict.deleteMany).toHaveBeenCalledWith({
+				where: {
+					imdbId: 'tt3498820',
+					hash: 'aaa',
+					titleKey: titleKeyOf(
+						'Captain.America.Civil.War.HDR.1080p.HEVC.10bit.BT.2020.DTS-HD.MA'
+					),
+				},
+			});
 		});
 	});
 

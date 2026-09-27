@@ -223,6 +223,83 @@ export class ScrapedVerdictService extends DatabaseClient {
 		);
 	}
 
+	/**
+	 * Undoes trash: puts the entries back on their pages (unless a scraper
+	 * already wrote them back), deletes the trash rows, and deletes their
+	 * verdicts so the next pass judges them afresh. Returns how many entries
+	 * went back onto a page.
+	 */
+	public async restoreTrash(ids: number[]): Promise<number> {
+		if (ids.length === 0) return 0;
+		const rows = await this.prisma.scrapedTrash.findMany({ where: { id: { in: ids } } });
+		const byPage = new Map<string, typeof rows>();
+		for (const row of rows) {
+			const page = `${row.source}|${row.key}`;
+			byPage.set(page, [...(byPage.get(page) ?? []), row]);
+		}
+
+		let restored = 0;
+		for (const pageRows of byPage.values()) {
+			const { source, key } = pageRows[0];
+			if (source !== 'ScrapedTrue' && source !== 'Scraped') continue;
+			const table = Prisma.raw(`\`${source}\``);
+			restored += await this.prisma.$transaction(
+				async (tx) => {
+					const current = await tx.$queryRaw<
+						{ value: Prisma.JsonValue; updatedAt: Date }[]
+					>(
+						Prisma.sql`SELECT value, updatedAt FROM ${table} WHERE \`key\` = ${key} FOR UPDATE`
+					);
+					const entries = entriesOf(current[0]?.value);
+					const present = new Set(
+						entries.flatMap((e) =>
+							typeof e.hash === 'string' && typeof e.title === 'string'
+								? [pairKeyOf(e.hash, e.title)]
+								: []
+						)
+					);
+					const missing = pageRows.filter(
+						(r) => !present.has(pairKeyOf(r.hash, r.title))
+					);
+					if (missing.length > 0) {
+						const value = JSON.stringify([
+							...entries,
+							...missing.map((r) => ({
+								hash: r.hash,
+								title: r.title,
+								fileSize: r.fileSize,
+							})),
+						]);
+						if (current.length > 0) {
+							await tx.$executeRaw(
+								Prisma.sql`UPDATE ${table} SET value = ${value}, updatedAt = ${current[0].updatedAt} WHERE \`key\` = ${key}`
+							);
+						} else {
+							await tx.$executeRaw(
+								Prisma.sql`INSERT INTO ${table} (\`key\`, value, updatedAt) VALUES (${key}, ${value}, NOW(3))`
+							);
+						}
+					}
+					await tx.scrapedTrash.deleteMany({
+						where: { id: { in: pageRows.map((r) => r.id) } },
+					});
+					for (const r of pageRows) {
+						await tx.scrapedVerdict.deleteMany({
+							where: {
+								imdbId: r.imdbId,
+								hash: r.hash,
+								titleKey: titleKeyOf(r.title),
+							},
+						});
+					}
+					return missing.length;
+				},
+				{ timeout: 30_000 }
+			);
+		}
+		return restored;
+	}
+
 	/** `hash:titleKey` for each of these results that already has a trash verdict. */
 	public async getTrashedPairKeys(imdbId: string, hashes: string[]): Promise<Set<string>> {
 		if (hashes.length === 0) return new Set();

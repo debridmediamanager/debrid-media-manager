@@ -8,6 +8,7 @@ import {
 	type Media,
 	type MovieContext,
 	type TitleMatch,
+	yearsIn,
 } from './rules';
 
 /**
@@ -108,5 +109,34 @@ describe('scraped-result verdict rules', () => {
 			)
 		).toBe('trash');
 		expect(decide(re, 'Resident Evil Collection', 'FILM', 'DIFFERENT_TITLE')).toBe('keep');
+	});
+});
+
+describe('year extraction', () => {
+	// Real filenames from the Captain America: Civil War page, trashed in
+	// production on 2026-09-27 because BT.2020, the HDR colour space, read as a
+	// release year four years off the movie's.
+	const civilWar: MovieContext = {
+		imdbId: 'tt3498820',
+		name: 'Captain America: Civil War',
+		year: 2016,
+		titles: ['Captain America: Civil War', 'Capitão América: Guerra Civil'],
+		ambiguous: {},
+	};
+
+	it.each([
+		'Captain.America.Civil.War.HDR.1080p.HEVC.10bit.BT.2020.DTS-HD.MA.7.1-Мастер5.mkv',
+		'Captain.America.Civil.War.HDR.1080p.HEVC.10bit.BT.2020.DTS-HD.MA-VISIONPLUSHDR1000.mp4.',
+		'Capitão.America.Guerra.Civil.HDR.2160p REMASTERIZADO 4K.HEVC.10bit.BT.2020.DUAL AUDIO 5.1 ENCODER BY',
+	])('does not read a colour space as a year: %s', (filename) => {
+		expect(yearsIn(filename)).toEqual([]);
+		expect(decideWithoutModel(civilWar, filename)).not.toBe('trash');
+	});
+
+	it('does not read a resolution or a size as a year', () => {
+		expect(yearsIn('Frankenstein Family 03-06 (1920x1080 HEVC2 AAC)')).toEqual([]);
+		expect(yearsIn('Movie 2048 x 858 Rec.2020 1900MB')).toEqual([]);
+		expect(yearsIn('Civil.War.2016.UHD.BT2020.1920x1080')).toEqual([2016]);
+		expect(yearsIn('The Dark Knight 2008DVDScrENG')).toEqual([2008]);
 	});
 });

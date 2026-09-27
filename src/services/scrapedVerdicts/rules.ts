@@ -90,7 +90,14 @@ const PACK = new RegExp(
 );
 
 const ADULT_TAG = /\bxxx\b/i;
-const YEAR = /(?<!\d)(?:19|20)\d\d(?!\d)/g;
+/**
+ * Four digits that read as a year but are not one: the BT.2020 / Rec.2020 HDR
+ * colour space, either side of a resolution (1920x1080, 2048 x 858) and sizes
+ * (1900MB). BT.2020 on genuine Civil War HDR releases trashed them in
+ * production as a year four off the movie's.
+ */
+const YEAR =
+	/(?<!\d)(?<!(?:bt|rec)[ ._-]?)(?<!\d ?x ?)(?:19|20)\d\d(?!\d)(?! ?x ?\d)(?! ?(?:mb|gb|kbps|mbps|fps|hz)\b)/gi;
 const YEAR_RANGE = /((?:19|20)\d\d)\s*[-–]\s*((?:19|20)\d\d)/;
 const CJK = /[぀-ヿ㐀-鿿가-힯฀-๿]/;
 const LEADING_ARTICLE = /^ (the|a|an|le|la|les|el|los|las|il|der|die|das) /;
