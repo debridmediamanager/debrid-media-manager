@@ -1,5 +1,6 @@
+import conflicting from '@/test/fixtures/anime/fribb-conflicting-ids.json';
 import { describe, expect, it } from 'vitest';
-import { normalizeFribbEntry } from './animeMapping';
+import { normalizeFribbEntry, type FribbAnimeEntry } from './animeMapping';
 import { planAnimeMappingUpdates, summarizePlan, type AnimeRow } from './animeMappingSync';
 
 const row = (over: Partial<AnimeRow> & { id: number }): AnimeRow => ({
@@ -17,7 +18,7 @@ describe('planAnimeMappingUpdates', () => {
 		const mappings = [
 			normalizeFribbEntry({
 				mal_id: 290,
-				kitsu_id: 999,
+				kitsu_id: 265,
 				anidb_id: 1,
 				imdb_id: ['tt0286390'],
 				'anime-planet_id': 'crest-of-the-stars',
@@ -36,8 +37,25 @@ describe('planAnimeMappingUpdates', () => {
 				},
 			},
 		]);
-		// kitsu_id was already 265 and is not overwritten with the dataset's 999.
-		expect(plan.updates[0].fields.kitsu_id).toBeUndefined();
+	});
+
+	it('neither overwrites nor fills from an entry one of the row ids contradicts', () => {
+		// Matched on mal 290, but the row's kitsu 265 says it is another title.
+		const rows = [row({ id: 1, mal_id: 290, kitsu_id: 265 })];
+		const mappings = [
+			normalizeFribbEntry({
+				mal_id: 290,
+				kitsu_id: 999,
+				anidb_id: 1,
+				imdb_id: ['tt0286390'],
+			}),
+		];
+
+		const plan = planAnimeMappingUpdates(rows, mappings);
+
+		expect(plan.updates).toEqual([]);
+		expect(plan.conflictingRows).toBe(1);
+		expect(plan.matchedRows).toBe(0);
 	});
 
 	it('does not write an imdb id another row already owns', () => {
@@ -130,6 +148,45 @@ describe('planAnimeMappingUpdates', () => {
 
 		expect(plan.matchedRows).toBe(1);
 		expect(plan.updates).toEqual([]);
+	});
+});
+
+// Real rows from production and every Fribb entry that indexes to one of their
+// ids (commit 8e4ec6a2). Each of the first three is matched on one id while
+// another of its own ids belongs to a different entry.
+describe('planAnimeMappingUpdates against rows whose ids disagree', () => {
+	const rows = conflicting.rows as AnimeRow[];
+	const plan = planAnimeMappingUpdates(
+		rows,
+		(conflicting.fribb as FribbAnimeEntry[]).map(normalizeFribbEntry)
+	);
+	const update = (title: string) =>
+		plan.updates.find((u) => u.id === conflicting.rows.find((r) => r.title === title)!.id);
+
+	it.each([
+		// kitsu 48382 is anidb 19021's, but the row's mal 49982 and its
+		// anime-planet slug both belong to anidb 17512.
+		['Geu Yeoreum'],
+		// anidb 9168 is mal 21121's entry; the row's mal 58181 is another one.
+		['Heart Cocktail Again'],
+		// kitsu 46490 is a mal-63522 special; the row is the mal-53053 series.
+		['Genshin Impact'],
+	])('leaves %s alone rather than fill it from the wrong entry', (title) => {
+		expect(update(title)).toBeUndefined();
+	});
+
+	it('counts them, so a dry run says how many it refused', () => {
+		expect(plan.conflictingRows).toBe(3);
+		expect(summarizePlan(plan).conflictingRows).toBe(3);
+	});
+
+	// anime-planet renames its slugs; every numeric id still agrees here.
+	it('still fills a row whose only disagreement is a renamed slug', () => {
+		expect(update('Ameku Takao no Suiri Karte')?.fields).toEqual({ imdb_id: 'tt33384314' });
+	});
+
+	it('still fills a row whose ids all agree', () => {
+		expect(update('Sousou no Frieren')?.fields).toEqual({ imdb_id: 'tt22248376' });
 	});
 });
 
