@@ -139,4 +139,15 @@ describe('year extraction', () => {
 		expect(yearsIn('Civil.War.2016.UHD.BT2020.1920x1080')).toEqual([2016]);
 		expect(yearsIn('The Dark Knight 2008DVDScrENG')).toEqual([2008]);
 	});
+
+	// Real filenames from production: the resolution guard first read the
+	// codec after the year ("2014 x264") as a width x height.
+	it.each([
+		['Sleeping Beauty 2014 x264 720p Esub BluRay Dual Audio English Hindi GOPISAHI', [2014]],
+		['Moon 2001 X265', [2001]],
+		['Movie 2019 x266 1080p', [2019]],
+		['[SOFCJ-Raws] Detective Conan Movie 24 - The Scarlet Bullet (BDRip 1920x1080 x264', []],
+	])('still reads a year that a codec follows: %s', (filename, years) => {
+		expect(yearsIn(filename)).toEqual(years);
+	});
 });
