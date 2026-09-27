@@ -1,6 +1,7 @@
 import Poster from '@/components/poster';
 import { useCachedList } from '@/hooks/useCachedList';
 import { TraktMediaItem, getPopularByGenre, getTrendingByGenre } from '@/services/trakt';
+import { parseBrowseKey } from '@/utils/browseKey';
 import { withAuth } from '@/utils/withAuth';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -93,8 +94,9 @@ export const Genre: FunctionComponent = () => {
 									const key = formatMediaKey(item);
 									if (!key) return null;
 
-									const [mediaType, imdbid, title] = key.split(':');
-									if (!imdbid) return null;
+									const parsed = parseBrowseKey(key);
+									if (!parsed) return null;
+									const { mediaType, imdbid, title } = parsed;
 
 									return (
 										<Link

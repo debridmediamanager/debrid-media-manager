@@ -1,4 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import { readFileSync } from 'fs';
+import path from 'path';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -94,5 +96,29 @@ describe('Browse page', () => {
 
 		await waitFor(() => expect(screen.getByText(/Error:/i)).toBeInTheDocument());
 		expect(screen.getByText(/Failed to load data/i)).toBeInTheDocument();
+	});
+
+	// Production's /browse/anime answer on 2026-09-27. 12 of its 96 items were
+	// dropped: every title with a colon in it, Frieren's among them.
+	it('renders every item production listed, titles with colons included', async () => {
+		routerMock.query = { search: 'anime' };
+		const lists = JSON.parse(
+			readFileSync(
+				path.resolve(__dirname, '../fixtures/anime/api-info-browse-anime.json'),
+				'utf8'
+			)
+		);
+		fetchMock.mockResolvedValue({ ok: true, json: async () => lists });
+
+		render(<Browse />);
+
+		await waitFor(() => expect(screen.getAllByTestId('poster')).toHaveLength(96));
+		expect(screen.getByText("tt22248376:Frieren: Beyond Journey's End")).toBeInTheDocument();
+		expect(
+			screen.getByText('tt1355642:Fullmetal Alchemist: Brotherhood').closest('a')
+		).toHaveAttribute('href', '/show/tt1355642');
+		expect(
+			screen.getByText('tt5607616:Re:ZERO -Starting Life in Another World-')
+		).toBeInTheDocument();
 	});
 });

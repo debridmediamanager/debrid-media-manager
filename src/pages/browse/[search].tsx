@@ -1,5 +1,6 @@
 import Poster from '@/components/poster';
 import { useCachedList } from '@/hooks/useCachedList';
+import { parseBrowseKey } from '@/utils/browseKey';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -188,22 +189,19 @@ export const Browse: FunctionComponent = () => {
 									</h2>
 									<div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
 										{data[listName].map((key: string) => {
-											const matches = key.split(':');
-											if (matches.length === 3) {
-												const mediaType = key.split(':')[0];
-												const imdbid = key.split(':')[1];
-												const title = key.split(':')[2];
+											const item = parseBrowseKey(key);
+											if (!item) return null;
+											const { mediaType, imdbid, title } = item;
 
-												return (
-													<Link
-														key={key}
-														href={`/${mediaType}/${imdbid}`}
-														className=""
-													>
-														<Poster imdbId={imdbid} title={title} />
-													</Link>
-												);
-											}
+											return (
+												<Link
+													key={key}
+													href={`/${mediaType}/${imdbid}`}
+													className=""
+												>
+													<Poster imdbId={imdbid} title={title} />
+												</Link>
+											);
 										})}
 									</div>
 								</div>

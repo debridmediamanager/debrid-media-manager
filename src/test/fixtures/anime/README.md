@@ -47,3 +47,13 @@ its `id`, `version`, `resources`, `types` and `idPrefixes`; the values are as re
 | `stremio-anime-kitsu-meta-movie-kitsu-50942.json`  | `https://anime-kitsu.strem.fun/meta/movie/kitsu:50942.json`                                                   | A film's stream id is its bare `kitsu:50942`. It had no `Anime` row that day.                                                                                                                               |
 | `stremio-anime-kitsu-meta-by-other-ids.json`       | The same addon's `meta/series/{mal:52991,anidb:17617,anilist:154587}.json`, `meta.id` and every `videos[].id` | Asked by mal, anidb or anilist id, the addon answers with Kitsu video ids, so those prefixes reach a stream route only from catalogs that also serve their own meta.                                        |
 | `scrapedtrue-anime-anidb-18302.json`               | `SELECT value FROM ScrapedTrue WHERE key = 'anime:anidb-18302'`                                               | Honzuki no Gekokujou's fourth part: 64 releases, `S4 - 23` and `S04E23` for its own episodes and one `S01E23` from a group that numbers the part as its own season, plus Erai-raws' `- 23` absolute names.  |
+
+## Anime pages
+
+Captured 2026-09-27 for the `/anime/[anidbid]` page and the links to it. Database rows
+were read with a read-only session against production's `dmmdb`; upstream bodies were
+requested from dmm-01.
+
+| File                         | Source                                                        | Why it is here                                                                             |
+| ---------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `api-info-browse-anime.json` | `https://debridmediamanager.com/api/info/browse?search=anime` | 96 items; 12 have a colon in their title, and /browse dropped all 12 (Frieren among them). |
