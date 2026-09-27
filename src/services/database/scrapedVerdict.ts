@@ -39,6 +39,9 @@ export const titleKeyOf = (title: string): string =>
 export const pairKeyOf = (hash: string, title: string): string =>
 	`${hash.toLowerCase()}:${titleKeyOf(title)}`;
 
+/** IMDb title types a movie page can belong to. */
+const MOVIE_TYPES = new Set(['movie', 'tvMovie', 'video', 'short', 'tvSpecial', 'tvShort']);
+
 const LOCK_PREFIX = 'verdicts:lock:';
 const CHECKPOINT_PREFIX = 'verdicts:checked:';
 const TOKENS_PREFIX = 'verdicts:tokens:';
@@ -60,9 +63,12 @@ export class ScrapedVerdictService extends DatabaseClient {
 	public async getMovieContext(imdbId: string): Promise<MovieContext | null> {
 		const basics = await this.prisma.imdbTitleBasics.findUnique({
 			where: { tconst: imdbId },
-			select: { primaryTitle: true, originalTitle: true, startYear: true },
+			select: { primaryTitle: true, originalTitle: true, startYear: true, titleType: true },
 		});
 		if (!basics?.primaryTitle || !basics.startYear) return null;
+		// A movie verdict means nothing for a series: on 2026-09-27 the episodes
+		// filed under movie:tt28959685 (Love Island: All Stars) were all trashed.
+		if (!MOVIE_TYPES.has(basics.titleType)) return null;
 
 		const akas = await this.prisma.imdbTitleAkas.findMany({
 			where: { titleId: imdbId },
@@ -91,7 +97,7 @@ export class ScrapedVerdictService extends DatabaseClient {
 				SELECT primary_title, start_year FROM imdb_title_basics
 				WHERE MATCH(primary_title) AGAINST(${against} IN BOOLEAN MODE)
 				  AND tconst <> ${imdbId}
-				  AND title_type <> 'tvEpisode'
+				  AND title_type NOT IN ('tvEpisode', 'videoGame')
 				  AND start_year IS NOT NULL
 				LIMIT 5000`);
 			for (const other of others) {

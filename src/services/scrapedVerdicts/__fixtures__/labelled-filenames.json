@@ -2868,7 +2868,7 @@
 			"filename": "The Gentleman 2020 720p HDCAM 900MB getb8 x264 BONSAI[TGx]",
 			"media": "FILM",
 			"titleMatch": "SAME_TITLE",
-			"expected": "DELETE",
+			"expected": "KEEP",
 			"humanLabel": "MOVIE"
 		},
 		{

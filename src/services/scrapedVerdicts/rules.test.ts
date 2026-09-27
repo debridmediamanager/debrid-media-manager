@@ -36,7 +36,10 @@ const items = fixture.items as Item[];
 const context = (imdbId: string): MovieContext => ({ imdbId, ...movies[imdbId] });
 
 describe('scraped-result verdict rules', () => {
-	it('reproduces every verdict of the rules they were ported from', () => {
+	// `expected` started as the verdicts of the Python rules these were ported
+	// from. A deliberate rule change updates it item by item, never wholesale:
+	// engine v6.3 flipped one, "The Gentleman 2020" (a real release, now kept).
+	it('gives the recorded verdict for every labelled filename', () => {
 		const mismatches = items
 			.map((item) => ({
 				item,
@@ -149,5 +152,117 @@ describe('year extraction', () => {
 		['[SOFCJ-Raws] Detective Conan Movie 24 - The Scarlet Bullet (BDRip 1920x1080 x264', []],
 	])('still reads a year that a codec follows: %s', (filename, years) => {
 		expect(yearsIn(filename)).toEqual(years);
+	});
+});
+
+/**
+ * Real filenames trashed in production on 2026-09-27, each with the context
+ * `getMovieContext` built for its page that day (titles trimmed to the ones
+ * that matter).
+ */
+describe('verdicts that production got wrong on day one', () => {
+	it('keeps a release whose only title is shared by a same-year work', () => {
+		// The 2003 video game "Pirates of the Caribbean" tied on year.
+		const pirates: MovieContext = {
+			imdbId: 'tt0325980',
+			name: 'Pirates of the Caribbean: The Curse of the Black Pearl',
+			year: 2003,
+			titles: [
+				'Pirates of the Caribbean',
+				'Pirates of the Caribbean: The Curse of the Black Pearl',
+			],
+			ambiguous: { 'pirates of the caribbean': [2003] },
+		};
+		expect(
+			decideWithoutModel(pirates, 'Pirates of the Caribbean (2003).BRRIP.X264-ISAS')
+		).not.toBe('trash');
+		expect(
+			decide(pirates, 'Pirates of the Caribbean (2003).BRRIP.X264-ISAS', 'FILM', 'SAME_TITLE')
+		).toBe('keep');
+	});
+
+	it('finds a title whose ampersand the release dropped', () => {
+		const lostAndFound: MovieContext = {
+			imdbId: 'tt0120836',
+			name: 'Lost & Found',
+			year: 1999,
+			titles: ['Lost & Found', 'Perdido & encontrado'],
+			ambiguous: {},
+		};
+		expect(
+			foundTitles('Lost Found (1999) [1080p] [WEBRip] [5.1] [YTS.MX]', lostAndFound.titles)
+		).toEqual(['Lost & Found']);
+		expect(
+			decide(
+				lostAndFound,
+				'Lost Found (1999) [1080p] [WEBRip] [5.1] [YTS.MX]',
+				'FILM',
+				'NO_TITLE'
+			)
+		).toBe('keep');
+	});
+
+	it.each([
+		[
+			1993,
+			'Сильвестр Сталлоне: Фильмография / Sylvester Stallone: Filmography (1975-2013) BDRip 720p',
+		],
+		[2018, 'ALL Best Picture Nominees 1080p BluRay Part 3 of 3 2015-2023 82 Movies jZQ'],
+		[2008, 'Marvel.Cinematic.Universe.Phases.1-3.1080p.BluRay.HDR10.10Bit.DDP5.1.HEVC-d3g'],
+		[2003, 'Pirates Of The Carribean - All 4 movies - mp4'],
+	])('keeps a pack that spans the movie: %s %s', (year, filename) => {
+		const movie: MovieContext = {
+			imdbId: 'tt1',
+			name: 'x',
+			year,
+			titles: ['x'],
+			ambiguous: {},
+		};
+		expect(decide(movie, filename, 'FILM', 'NO_TITLE')).toBe('keep');
+	});
+
+	it.each([
+		[
+			'tt0067369',
+			1971,
+			['Der lüsterne Türke'],
+			'Der.lusterne.Turke.1971.DVDRip.x264-Flipper.mkv',
+		],
+		[
+			'tt0070543',
+			1974,
+			['Fun for Three', 'How to Seduce a Virgin'],
+			'How to Seduce a Virgin 1973 1080p BluRay REMUX AVC UNCUT DTS HD-MA 2 0-RaZoR',
+		],
+		[
+			'tt1365048',
+			2011,
+			['3-D Sex and Zen: Extreme Ecstasy', 'Sex and Zen Extreme Ecstasy'],
+			'Sex And Zen Extreme Ecstasy 2011 1080p GER Blu-ray AVC DTS-HD MA 7.1-K4miK4z3',
+		],
+	])('keeps an adult film’s own releases on its page: %s', (imdbId, year, titles, filename) => {
+		const movie: MovieContext = { imdbId, name: titles[0], year, titles, ambiguous: {} };
+		expect(decide(movie, filename, 'ADULT', 'SAME_TITLE')).toBe('keep');
+	});
+
+	it('still trashes adult content that is not the movie', () => {
+		const movie: MovieContext = {
+			imdbId: 'tt8367814',
+			name: 'The Gentlemen',
+			year: 2019,
+			titles: ['The Gentlemen'],
+			ambiguous: {},
+		};
+		expect(
+			decide(
+				movie,
+				'MissaX 19 08 02 Kira Noir The Gentleman Part 4 1080p',
+				'ADULT',
+				'DIFFERENT_TITLE'
+			)
+		).toBe('trash');
+		expect(decide(movie, 'The Gentlemen 2019 [XXX] parody', 'ADULT', 'SAME_TITLE')).toBe(
+			'trash'
+		);
 	});
 });

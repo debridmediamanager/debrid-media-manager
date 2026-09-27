@@ -85,6 +85,13 @@ const PACK = new RegExp(
 		'colecci',
 		'integral',
 		'\\b1[ ,&+-]+2[ ,&+-]+3\\b',
+		// Seen trashed in production: a Stallone filmography, 82 best-picture
+		// nominees, the MCU phases and "All 4 movies" on their movies' pages.
+		'filmograph',
+		'фильмограф',
+		'\\b\\d+\\s*(?:movies|films)\\b',
+		'nominees',
+		'\\bphases\\b',
 	].join('|'),
 	'iu'
 );
@@ -137,7 +144,9 @@ export function foundTitles(filename: string, titles: string[]): string[] {
 		}
 		const needle = fold(title);
 		if (needle.trim().length < 3) continue;
-		if (haystack.includes(needle)) {
+		// "Lost & Found" is released as "Lost Found" as often as "Lost and Found".
+		const dropped = title.includes('&') ? fold(title.replace(/&/g, ' ')) : null;
+		if (haystack.includes(needle) || (dropped && haystack.includes(dropped))) {
 			found.push(title);
 			continue;
 		}
@@ -161,7 +170,14 @@ export function decide(
 ): Verdict {
 	const years = yearsIn(filename);
 	const nearYear = years.some((y) => Math.abs(y - movie.year) <= 1);
-	const filmLike = media === 'FILM' || media === 'UNCLEAR';
+	const found = foundTitles(filename, movie.titles);
+	// An adult film's own releases are adult content too. They carry its title
+	// and year; a title alone is not enough, since short aliases ("The
+	// Prisoner") turn up inside unrelated adult clips.
+	const filmLike =
+		media === 'FILM' ||
+		media === 'UNCLEAR' ||
+		(media === 'ADULT' && found.length > 0 && nearYear);
 
 	if (ADULT_TAG.test(filename)) return 'trash';
 
@@ -181,7 +197,6 @@ export function decide(
 	if (years.length > 0 && !nearYear) return 'trash';
 	if (!filmLike) return 'trash';
 
-	const found = foundTitles(filename, movie.titles);
 	if (
 		found.length > 0 &&
 		found.every((t) => fold(t).trim() in movie.ambiguous) &&
@@ -190,7 +205,9 @@ export function decide(
 		const otherYears = found.flatMap((t) => movie.ambiguous[fold(t).trim()]);
 		const toOther = Math.min(...years.flatMap((y) => otherYears.map((o) => Math.abs(y - o))));
 		const toMovie = Math.min(...years.map((y) => Math.abs(y - movie.year)));
-		if (toOther <= toMovie) return 'trash';
+		// Strictly closer: the 2003 video game "Pirates of the Caribbean" tied
+		// with the 2003 film and trashed its releases.
+		if (toOther < toMovie) return 'trash';
 	}
 	if (found.length > 0 && nearYear) return 'keep';
 	if (found.length === 0 && titleMatch !== 'SAME_TITLE') return 'trash';

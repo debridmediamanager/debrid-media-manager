@@ -50,6 +50,7 @@ describe('ScrapedVerdictService', () => {
 				primaryTitle: 'The Ministry of Ungentlemanly Warfare',
 				originalTitle: 'The Ministry of Ungentlemanly Warfare',
 				startYear: 2024,
+				titleType: 'movie',
 			});
 			prismaMock.imdbTitleAkas.findMany.mockResolvedValue([
 				{ title: 'Your Lucky Day' },
@@ -83,6 +84,33 @@ describe('ScrapedVerdictService', () => {
 			expect(query.values[0]).toBe(
 				'"Guerra Sin Reglas" "The Ministry of Ungentlemanly Warfare" "Your Lucky Day"'
 			);
+		});
+
+		it('leaves a series alone even when its episodes sit under a movie key', async () => {
+			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
+				primaryTitle: 'Love Island: All Stars',
+				originalTitle: 'Love Island: All Stars',
+				startYear: 2024,
+				titleType: 'tvSeries',
+			});
+			await expect(service.getMovieContext('tt28959685')).resolves.toBeNull();
+			expect(prismaMock.imdbTitleAkas.findMany).not.toHaveBeenCalled();
+		});
+
+		it('does not count a video game sharing the name as another work', async () => {
+			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
+				primaryTitle: 'Pirates of the Caribbean: The Curse of the Black Pearl',
+				originalTitle: null,
+				startYear: 2003,
+				titleType: 'movie',
+			});
+			prismaMock.imdbTitleAkas.findMany.mockResolvedValue([
+				{ title: 'Pirates of the Caribbean' },
+			]);
+			prismaMock.$queryRaw.mockResolvedValue([]);
+			await service.getMovieContext('tt0325980');
+			const query = prismaMock.$queryRaw.mock.calls[0][0] as Prisma.Sql;
+			expect(sqlText(query)).toContain("title_type NOT IN ('tvEpisode', 'videoGame')");
 		});
 
 		it('returns null when IMDb has no year for the title', async () => {
