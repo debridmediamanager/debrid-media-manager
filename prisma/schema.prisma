@@ -27,6 +27,46 @@ model ScrapedTrue {
   updatedAt DateTime @updatedAt
 }
 
+/// One verdict per (movie, hash, filename): whether a scraped result belongs on
+/// the movie's page. Recorded for kept results too, so nothing is judged twice.
+model ScrapedVerdict {
+  id         Int      @id @default(autoincrement())
+  imdbId     String   @db.VarChar(16)
+  hash       String   @db.VarChar(40)
+  /// sha1 of the filename; the verdict depends on the filename, not the hash
+  titleKey   String   @db.Char(40)
+  title      String   @db.Text
+  verdict    String   @db.VarChar(8)
+  /// "rules" when code settled it, "jev" when the model's answers were needed
+  rule       String   @db.VarChar(16)
+  media      String?  @db.VarChar(16)
+  titleMatch String?  @db.VarChar(16)
+  engine     String   @db.VarChar(64)
+  createdAt  DateTime @default(now())
+
+  @@unique([imdbId, hash, titleKey])
+  @@index([imdbId, titleKey])
+}
+
+/// Results moved off a movie page by a trash verdict, kept for review and
+/// restore: the original entry, where it came from, and the movie it was on.
+model ScrapedTrash {
+  id         Int      @id @default(autoincrement())
+  source     String   @db.VarChar(16)
+  key        String   @db.VarChar(191)
+  imdbId     String   @db.VarChar(16)
+  movieTitle String   @db.VarChar(500)
+  hash       String   @db.VarChar(40)
+  title      String   @db.Text
+  fileSize   Float?
+  rule       String   @db.VarChar(16)
+  engine     String   @db.VarChar(64)
+  trashedAt  DateTime @default(now())
+
+  @@index([imdbId])
+  @@index([hash])
+}
+
 model ScrapedMusic {
   key       String   @id
   value     Json
