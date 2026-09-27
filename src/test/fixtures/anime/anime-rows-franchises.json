@@ -1,0 +1,128 @@
+[
+	{
+		"type": "ONA",
+		"title": "Douluo Dalu",
+		"mal_id": 37150,
+		"imdb_id": null,
+		"anidb_id": 13789,
+		"kitsu_id": 41004,
+		"poster_url": "https://media.kitsu.io/anime/poster_images/41004/medium.jpg"
+	},
+	{
+		"type": "ONA",
+		"title": "Dou Po Cangqiong Nian Fan",
+		"mal_id": 51039,
+		"imdb_id": null,
+		"anidb_id": 17052,
+		"kitsu_id": 45946,
+		"poster_url": "https://media.kitsu.io/anime/45946/poster_image/medium-3673e31755ac276687a2307311767894.jpeg"
+	},
+	{
+		"type": "MOVIE",
+		"title": "Ginga Tetsudou no Yoru",
+		"mal_id": 1441,
+		"imdb_id": "tt1920940",
+		"anidb_id": 1250,
+		"kitsu_id": 1294,
+		"poster_url": "https://media.kitsu.io/anime/poster_images/1294/medium.jpg"
+	},
+	{
+		"type": "TV",
+		"title": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen",
+		"mal_id": 39468,
+		"imdb_id": "tt10885406",
+		"anidb_id": 14727,
+		"kitsu_id": 42241,
+		"poster_url": "https://media.kitsu.io/anime/poster_images/42241/medium.jpg"
+	},
+	{
+		"type": "SPECIAL",
+		"title": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen - Ryoushu no Youjo",
+		"mal_id": 57466,
+		"imdb_id": null,
+		"anidb_id": 18302,
+		"kitsu_id": 48293,
+		"poster_url": "https://media.kitsu.io/anime/48293/poster_image/medium-868ed726bb10637b12710b0d85d18dcf.jpeg"
+	},
+	{
+		"type": "TV",
+		"title": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen (2020)",
+		"mal_id": 40815,
+		"imdb_id": null,
+		"anidb_id": 15293,
+		"kitsu_id": 42838,
+		"poster_url": "https://media.kitsu.io/anime/poster_images/42838/medium.jpg"
+	},
+	{
+		"type": "TV",
+		"title": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen (2022)",
+		"mal_id": 42429,
+		"imdb_id": null,
+		"anidb_id": 15634,
+		"kitsu_id": 43607,
+		"poster_url": "https://media.kitsu.io/anime/43607/poster_image/medium-2675837143988377da3aba3ef6926dc7.jpeg"
+	},
+	{
+		"type": "OVA",
+		"title": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen - Eustachius no Shitamachi Sennyuu Daisakusen / Corinna-sama no Otaku Houmon",
+		"mal_id": 40841,
+		"imdb_id": null,
+		"anidb_id": 15300,
+		"kitsu_id": 43048,
+		"poster_url": "https://media.kitsu.io/anime/43048/poster_image/medium-dc3ac253c48d77394a486481c72a6d59.jpeg"
+	},
+	{
+		"type": "TV",
+		"title": "Kusuriya no Hitorigoto",
+		"mal_id": 54492,
+		"imdb_id": "tt26743760",
+		"anidb_id": 17870,
+		"kitsu_id": 47083,
+		"poster_url": "https://media.kitsu.io/anime/47083/poster_image/medium-1ba1a4603c851776031d439eba948633.jpeg"
+	},
+	{
+		"type": "TV",
+		"title": "Kusuriya no Hitorigoto (2025)",
+		"mal_id": 58514,
+		"imdb_id": null,
+		"anidb_id": 18562,
+		"kitsu_id": 48649,
+		"poster_url": "https://media.kitsu.io/anime/48649/poster_image/medium-5e90cfbde6cc90703e5493a3a717b9e6.jpeg"
+	},
+	{
+		"type": "TV",
+		"title": "Salaryman Kintarou",
+		"mal_id": 1608,
+		"imdb_id": null,
+		"anidb_id": 850,
+		"kitsu_id": 1447,
+		"poster_url": "https://media.kitsu.io/anime/poster_images/1447/medium.jpg"
+	},
+	{
+		"type": "TV",
+		"title": "Sousou no Frieren",
+		"mal_id": 52991,
+		"imdb_id": "tt22248376",
+		"anidb_id": 17617,
+		"kitsu_id": 46474,
+		"poster_url": "https://media.kitsu.io/anime/46474/poster_image/medium-23e1293e41a0b54b6621eb589c3f0d62.jpeg"
+	},
+	{
+		"type": "OVA",
+		"title": "Tenchi Muyou! Ryououki",
+		"mal_id": 539,
+		"imdb_id": null,
+		"anidb_id": 205,
+		"kitsu_id": 498,
+		"poster_url": "https://media.kitsu.io/anime/poster_images/498/medium.jpg"
+	},
+	{
+		"type": "OVA",
+		"title": "Tenchi Muyou! Bangaihen: Galaxy Police Mihoshi Space Adventure",
+		"mal_id": 2725,
+		"imdb_id": null,
+		"anidb_id": 759,
+		"kitsu_id": 2485,
+		"poster_url": "https://media.kitsu.io/anime/poster_images/2485/medium.jpg"
+	}
+]

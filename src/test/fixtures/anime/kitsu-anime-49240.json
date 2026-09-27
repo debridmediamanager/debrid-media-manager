@@ -1,0 +1,210 @@
+{
+	"data": {
+		"id": "49240",
+		"type": "anime",
+		"links": {
+			"self": "https://kitsu.io/api/edge/anime/49240"
+		},
+		"attributes": {
+			"createdAt": "2024-09-28T11:58:04.596Z",
+			"updatedAt": "2026-09-27T08:08:48.668Z",
+			"slug": "sousou-no-frieren-season-2",
+			"synopsis": "The second season of Sousou no Frieren.\n\nOn the road to Ende, Frieren confronts past bonds and rising threats with her newfound party.\n\n(Source: Anime News Network)",
+			"description": "The second season of Sousou no Frieren.\n\nOn the road to Ende, Frieren confronts past bonds and rising threats with her newfound party.\n\n(Source: Anime News Network)",
+			"coverImageTopOffset": 0,
+			"titles": {
+				"en": "Frieren: Beyond Journey's End Season 2",
+				"en_jp": "Sousou no Frieren 2nd Season",
+				"ja_jp": "葬送のフリーレン 第２期"
+			},
+			"canonicalTitle": "Sousou no Frieren 2nd Season",
+			"abbreviatedTitles": [],
+			"averageRating": "88.33",
+			"ratingFrequencies": {
+				"2": "11",
+				"3": "0",
+				"4": "0",
+				"5": "0",
+				"6": "0",
+				"8": "22",
+				"9": "1",
+				"10": "11",
+				"11": "3",
+				"12": "24",
+				"13": "2",
+				"14": "202",
+				"15": "34",
+				"16": "273",
+				"17": "119",
+				"18": "402",
+				"19": "114",
+				"20": "866"
+			},
+			"userCount": 6168,
+			"favoritesCount": 59,
+			"startDate": "2026-01-16",
+			"endDate": "2026-03-27",
+			"nextRelease": null,
+			"popularityRank": 2418,
+			"ratingRank": 3,
+			"ageRating": "PG",
+			"ageRatingGuide": "Teens 13 or older",
+			"subtype": "TV",
+			"status": "finished",
+			"tba": null,
+			"posterImage": {
+				"tiny": "https://media.kitsu.app/anime/49240/poster_image/tiny-d582a7d749477be01b03196f9f3dfffd.jpeg",
+				"large": "https://media.kitsu.app/anime/49240/poster_image/large-5f1824cd76b6e829012dc75a2f51ec44.jpeg",
+				"small": "https://media.kitsu.app/anime/49240/poster_image/small-b61dd0c91bf0152cb8275e9dc481cd2e.jpeg",
+				"medium": "https://media.kitsu.app/anime/49240/poster_image/medium-cf744f274c2064efd1abfef4ecdfbd6d.jpeg",
+				"original": "https://media.kitsu.app/anime/49240/poster_image/127830b1fbf80dd13a604998ef10d12c.jpg",
+				"meta": {
+					"dimensions": {
+						"tiny": {
+							"width": 110,
+							"height": 156
+						},
+						"large": {
+							"width": 550,
+							"height": 780
+						},
+						"small": {
+							"width": 284,
+							"height": 402
+						},
+						"medium": {
+							"width": 390,
+							"height": 554
+						}
+					}
+				}
+			},
+			"coverImage": {
+				"tiny": "https://media.kitsu.app/anime/49240/cover_image/tiny-be18b34b7b503ca5a9df332544a066f0.jpeg",
+				"large": "https://media.kitsu.app/anime/49240/cover_image/large-11304d969375d3e40cddbcb495725826.jpeg",
+				"small": "https://media.kitsu.app/anime/49240/cover_image/small-17e5a4a0627fe0cccdd309f6fb515ceb.jpeg",
+				"original": "https://media.kitsu.app/anime/49240/cover_image/b3d01e59bb588122c6c8691880aa3b1b.jpg",
+				"meta": {
+					"dimensions": {
+						"tiny": {
+							"width": 840,
+							"height": 200
+						},
+						"large": {
+							"width": 3360,
+							"height": 800
+						},
+						"small": {
+							"width": 1680,
+							"height": 400
+						}
+					}
+				}
+			},
+			"episodeCount": 10,
+			"episodeLength": 24,
+			"totalLength": 0,
+			"youtubeVideoId": "RH-FcW94z00",
+			"showType": "TV",
+			"nsfw": false
+		},
+		"relationships": {
+			"genres": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/genres",
+					"related": "https://kitsu.io/api/edge/anime/49240/genres"
+				}
+			},
+			"categories": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/categories",
+					"related": "https://kitsu.io/api/edge/anime/49240/categories"
+				}
+			},
+			"castings": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/castings",
+					"related": "https://kitsu.io/api/edge/anime/49240/castings"
+				}
+			},
+			"installments": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/installments",
+					"related": "https://kitsu.io/api/edge/anime/49240/installments"
+				}
+			},
+			"mappings": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/mappings",
+					"related": "https://kitsu.io/api/edge/anime/49240/mappings"
+				}
+			},
+			"reviews": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/reviews",
+					"related": "https://kitsu.io/api/edge/anime/49240/reviews"
+				}
+			},
+			"mediaRelationships": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/media-relationships",
+					"related": "https://kitsu.io/api/edge/anime/49240/media-relationships"
+				}
+			},
+			"characters": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/characters",
+					"related": "https://kitsu.io/api/edge/anime/49240/characters"
+				}
+			},
+			"staff": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/staff",
+					"related": "https://kitsu.io/api/edge/anime/49240/staff"
+				}
+			},
+			"productions": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/productions",
+					"related": "https://kitsu.io/api/edge/anime/49240/productions"
+				}
+			},
+			"quotes": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/quotes",
+					"related": "https://kitsu.io/api/edge/anime/49240/quotes"
+				}
+			},
+			"episodes": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/episodes",
+					"related": "https://kitsu.io/api/edge/anime/49240/episodes"
+				}
+			},
+			"streamingLinks": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/streaming-links",
+					"related": "https://kitsu.io/api/edge/anime/49240/streaming-links"
+				}
+			},
+			"animeProductions": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/anime-productions",
+					"related": "https://kitsu.io/api/edge/anime/49240/anime-productions"
+				}
+			},
+			"animeCharacters": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/anime-characters",
+					"related": "https://kitsu.io/api/edge/anime/49240/anime-characters"
+				}
+			},
+			"animeStaff": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/49240/relationships/anime-staff",
+					"related": "https://kitsu.io/api/edge/anime/49240/anime-staff"
+				}
+			}
+		}
+	}
+}

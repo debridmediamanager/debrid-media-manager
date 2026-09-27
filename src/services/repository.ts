@@ -624,6 +624,10 @@ export class Repository {
 		return this.animeService.getAnimeByExternalId(source, id);
 	}
 
+	public getAnimeEntryRows(ids: { anidbIds: number[]; imdbIds: string[] }) {
+		return this.animeService.getAnimeEntryRows(ids);
+	}
+
 	// Cast Service Methods
 	public saveCastProfile(
 		userId: string,

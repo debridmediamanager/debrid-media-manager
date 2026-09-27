@@ -106,5 +106,10 @@ export const RATE_LIMIT_CONFIGS = {
 	// opens a handful of titles a minute; its own bucket keeps a burst here from
 	// refusing /api/challenge, which shares `default`.
 	anime: { name: 'anime', rateLimit: 30, windowSeconds: 60 },
+	// /api/anime/franchise and /api/anime/by-imdb read an in-memory dataset and
+	// one indexed query; Kitsu is asked only for entries the table has no row
+	// for, at most 12 a request and cached for a day. Every show and movie page
+	// asks once, so they get a bucket of their own rather than spending `anime`'s.
+	animeEntries: { name: 'animeEntries', rateLimit: 60, windowSeconds: 60 },
 	default: { name: 'default', rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;

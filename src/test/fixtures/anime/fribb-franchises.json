@@ -1,0 +1,403 @@
+[
+	{
+		"type": "TV",
+		"anidb_id": 14727,
+		"anilist_id": 108268,
+		"animecountdown_id": 1055017,
+		"animenewsnetwork_id": 22255,
+		"anime-planet_id": "ascendance-of-a-bookworm",
+		"anisearch_id": 14237,
+		"imdb_id": ["tt10885406"],
+		"kitsu_id": 42241,
+		"livechart_id": 9258,
+		"mal_id": 39468,
+		"simkl_id": 1055017,
+		"themoviedb_id": {
+			"tv": 91768
+		},
+		"tvdb_id": 366263,
+		"season": {
+			"tvdb": 1,
+			"tmdb": 1
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 15293,
+		"anilist_id": 113693,
+		"animecountdown_id": 1221807,
+		"animenewsnetwork_id": 23026,
+		"anime-planet_id": "ascendance-of-a-bookworm-season-2",
+		"anisearch_id": 14813,
+		"imdb_id": ["tt10885406"],
+		"kitsu_id": 42838,
+		"livechart_id": 9703,
+		"mal_id": 40815,
+		"simkl_id": 1221807,
+		"themoviedb_id": {
+			"tv": 91768
+		},
+		"tvdb_id": 366263,
+		"season": {
+			"tvdb": 1,
+			"tmdb": 1
+		},
+		"episode_offset": {
+			"tvdb": 14,
+			"tmdb": 14
+		}
+	},
+	{
+		"type": "OVA",
+		"anidb_id": 15300,
+		"anilist_id": 113811,
+		"animecountdown_id": 1223565,
+		"animenewsnetwork_id": 23166,
+		"anime-planet_id": "ascendance-of-a-bookworm-ova",
+		"anisearch_id": 15064,
+		"imdb_id": ["tt10885406"],
+		"kitsu_id": 43048,
+		"livechart_id": 9708,
+		"mal_id": 40841,
+		"simkl_id": 1223565,
+		"themoviedb_id": {
+			"tv": 91768
+		},
+		"tvdb_id": 366263,
+		"season": {
+			"tvdb": 0,
+			"tmdb": 0
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 15634,
+		"anilist_id": 121176,
+		"animecountdown_id": 1406099,
+		"animenewsnetwork_id": 24606,
+		"anime-planet_id": "ascendance-of-a-bookworm-season-3",
+		"anisearch_id": 15391,
+		"imdb_id": ["tt10885406"],
+		"kitsu_id": 43607,
+		"livechart_id": 10065,
+		"mal_id": 42429,
+		"simkl_id": 1406099,
+		"themoviedb_id": {
+			"tv": 91768
+		},
+		"tvdb_id": 366263,
+		"season": {
+			"tvdb": 1,
+			"tmdb": 1
+		},
+		"episode_offset": {
+			"tvdb": 26,
+			"tmdb": 26
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 17617,
+		"anilist_id": 154587,
+		"animecountdown_id": 1990194,
+		"animenewsnetwork_id": 26334,
+		"anime-planet_id": "frieren-beyond-journeys-end",
+		"anisearch_id": 17669,
+		"imdb_id": ["tt22248376"],
+		"kitsu_id": 46474,
+		"livechart_id": 11376,
+		"mal_id": 52991,
+		"simkl_id": 1990194,
+		"themoviedb_id": {
+			"tv": 209867
+		},
+		"tvdb_id": 424536,
+		"season": {
+			"tvdb": 1,
+			"tmdb": 1
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 17870,
+		"anilist_id": 161645,
+		"animecountdown_id": 2097814,
+		"animenewsnetwork_id": 27141,
+		"anime-planet_id": "the-apothecary-diaries",
+		"anisearch_id": 18232,
+		"imdb_id": ["tt26743760"],
+		"kitsu_id": 47083,
+		"livechart_id": 10701,
+		"mal_id": 54492,
+		"simkl_id": 2097814,
+		"themoviedb_id": {
+			"tv": 220542
+		},
+		"tvdb_id": 431162,
+		"season": {
+			"tvdb": 1,
+			"tmdb": 1
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 18302,
+		"anilist_id": 171110,
+		"animecountdown_id": 2316218,
+		"animenewsnetwork_id": 30955,
+		"anime-planet_id": "ascendance-of-a-bookworm-season-4",
+		"anisearch_id": 18911,
+		"imdb_id": ["tt10885406"],
+		"kitsu_id": 48293,
+		"livechart_id": 12439,
+		"mal_id": 57466,
+		"simkl_id": 2316218,
+		"themoviedb_id": {
+			"tv": 91768
+		},
+		"tvdb_id": 366263,
+		"season": {
+			"tvdb": 1,
+			"tmdb": 2
+		},
+		"episode_offset": {
+			"tvdb": 36
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 18562,
+		"anilist_id": 176301,
+		"animecountdown_id": 2413572,
+		"animenewsnetwork_id": 32557,
+		"anime-planet_id": "the-apothecary-diaries-2nd-season",
+		"anisearch_id": 19138,
+		"imdb_id": ["tt26743760"],
+		"kitsu_id": 48649,
+		"livechart_id": 12609,
+		"mal_id": 58514,
+		"simkl_id": 2413572,
+		"themoviedb_id": {
+			"tv": 220542
+		},
+		"tvdb_id": 431162,
+		"season": {
+			"tvdb": 2,
+			"tmdb": 1
+		},
+		"episode_offset": {
+			"tmdb": 24
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 18886,
+		"anilist_id": 182255,
+		"animecountdown_id": 2595284,
+		"animenewsnetwork_id": 33628,
+		"anime-planet_id": "frieren-beyond-journeys-end-season-2",
+		"anisearch_id": 19635,
+		"imdb_id": ["tt22248376"],
+		"kitsu_id": 49240,
+		"livechart_id": 12860,
+		"mal_id": 59978,
+		"simkl_id": 2595284,
+		"themoviedb_id": {
+			"tv": 209867
+		},
+		"tvdb_id": 424536,
+		"season": {
+			"tvdb": 2,
+			"tmdb": 1
+		},
+		"episode_offset": {
+			"tmdb": 28
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 19444,
+		"anilist_id": 195516,
+		"animecountdown_id": 2909052,
+		"animenewsnetwork_id": 37932,
+		"anime-planet_id": "the-apothecary-diaries-3rd-season",
+		"anisearch_id": 20704,
+		"imdb_id": ["tt26743760"],
+		"kitsu_id": 50021,
+		"livechart_id": 13226,
+		"mal_id": 61987,
+		"simkl_id": 2909052,
+		"themoviedb_id": {
+			"tv": 220542
+		},
+		"tvdb_id": 431162,
+		"season": {
+			"tvdb": 3,
+			"tmdb": 1
+		},
+		"episode_offset": {
+			"tmdb": 48
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 19671,
+		"anilist_id": 200927,
+		"anime-planet_id": "the-apothecary-diaries-3rd-season-part-ii",
+		"anisearch_id": 20989,
+		"imdb_id": ["tt26743760"],
+		"kitsu_id": 50896,
+		"livechart_id": 13370,
+		"mal_id": 62841,
+		"themoviedb_id": {
+			"tv": 220542
+		},
+		"tvdb_id": 431162,
+		"season": {
+			"tvdb": 4,
+			"tmdb": 1
+		},
+		"episode_offset": {
+			"tmdb": 72
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 19977,
+		"anilist_id": 209939,
+		"animecountdown_id": 3063278,
+		"animenewsnetwork_id": 38838,
+		"anime-planet_id": "frieren-beyond-journeys-end-season-3-golden-land-arc",
+		"anisearch_id": 21339,
+		"imdb_id": ["tt22248376"],
+		"kitsu_id": 50629,
+		"livechart_id": 13576,
+		"mal_id": 63816,
+		"simkl_id": 3063278,
+		"themoviedb_id": {
+			"tv": 209867
+		},
+		"tvdb_id": 424536,
+		"season": {
+			"tvdb": 3,
+			"tmdb": 1
+		},
+		"episode_offset": {
+			"tmdb": 38
+		}
+	},
+	{
+		"type": "ONA",
+		"anidb_id": 13789,
+		"anilist_id": 101920,
+		"animecountdown_id": 764963,
+		"anime-planet_id": "soul-land",
+		"anisearch_id": 13902,
+		"kitsu_id": 41004,
+		"livechart_id": 8015,
+		"mal_id": 37150,
+		"simkl_id": 764963
+	},
+	{
+		"type": "ONA",
+		"anidb_id": 17052,
+		"anilist_id": 137728,
+		"animecountdown_id": 1972214,
+		"anime-planet_id": "fights-break-sphere-5th-season",
+		"anisearch_id": 19239,
+		"kitsu_id": 45946,
+		"livechart_id": 11682,
+		"mal_id": 51039,
+		"simkl_id": 1972214
+	},
+	{
+		"type": "OVA",
+		"anidb_id": 205,
+		"anilist_id": 539,
+		"animecountdown_id": 38389,
+		"animenewsnetwork_id": 919,
+		"anime-planet_id": "tenchi-muyo-ryo-ohki",
+		"anisearch_id": 782,
+		"imdb_id": [""],
+		"kitsu_id": 498,
+		"livechart_id": 4613,
+		"mal_id": 539,
+		"simkl_id": 38389,
+		"themoviedb_id": {
+			"tv": 43004
+		},
+		"tvdb_id": 80009,
+		"season": {
+			"tvdb": 1,
+			"tmdb": 1
+		}
+	},
+	{
+		"type": "OVA",
+		"anidb_id": 759,
+		"anilist_id": 2725,
+		"animecountdown_id": 39142,
+		"animenewsnetwork_id": 765,
+		"anime-planet_id": "tenchi-muyo-mihoshi-special",
+		"anisearch_id": 990,
+		"imdb_id": [""],
+		"kitsu_id": 2485,
+		"livechart_id": 6460,
+		"mal_id": 2725,
+		"simkl_id": 39142,
+		"themoviedb_id": {
+			"tv": 43004
+		},
+		"tvdb_id": 80009,
+		"season": {
+			"tvdb": 0,
+			"tmdb": 0
+		}
+	},
+	{
+		"type": "TV",
+		"anidb_id": 850,
+		"anilist_id": 1608,
+		"animecountdown_id": 39309,
+		"animenewsnetwork_id": 1759,
+		"anime-planet_id": "salaryman-kintaro",
+		"anisearch_id": 3459,
+		"imdb_id": [""],
+		"kitsu_id": 1447,
+		"livechart_id": 8433,
+		"mal_id": 1608,
+		"simkl_id": 39309,
+		"themoviedb_id": {
+			"tv": 55377
+		},
+		"tvdb_id": 79471,
+		"season": {
+			"tvdb": 1,
+			"tmdb": 1
+		}
+	},
+	{
+		"type": "MOVIE",
+		"anidb_id": 1250,
+		"anilist_id": 1441,
+		"animecountdown_id": 37340,
+		"animenewsnetwork_id": 51,
+		"anime-planet_id": "night-on-the-galactic-railroad",
+		"anisearch_id": 1102,
+		"imdb_id": ["tt1920940", "tt0089206"],
+		"kitsu_id": 1294,
+		"livechart_id": 6241,
+		"mal_id": 1441,
+		"simkl_id": 37340,
+		"themoviedb_id": {
+			"movie": [37585]
+		}
+	},
+	{
+		"type": "SPECIAL",
+		"anilist_id": 142051,
+		"anime-planet_id": "raise-a-suilen-nvade-show",
+		"kitsu_id": 47450,
+		"mal_id": 51478
+	}
+]

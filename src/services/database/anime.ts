@@ -8,6 +8,8 @@ interface AnimeItem {
 
 export interface AnimeSearchResult extends AnimeItem {
 	title: string;
+	/** TV, OVA, ONA, MOVIE, SPECIAL or UNKNOWN, as the row stores it. */
+	type?: string;
 }
 
 /** The id spaces an `Anime` row is addressed by from outside. */
@@ -23,6 +25,18 @@ export interface AnimeRecord {
 	poster_url: string;
 	background_url: string;
 	rating: number;
+	type?: string;
+}
+
+/** What a link to an AniDB entry is labelled with. */
+export interface AnimeEntryRow {
+	anidb_id: number | null;
+	kitsu_id: number | null;
+	mal_id: number | null;
+	imdb_id: string | null;
+	title: string;
+	type: string;
+	poster_url: string;
 }
 
 export class AnimeService extends DatabaseClient {
@@ -47,6 +61,7 @@ export class AnimeService extends DatabaseClient {
 			},
 			select: {
 				title: true,
+				type: true,
 				anidb_id: true,
 				mal_id: true,
 				kitsu_id: true,
@@ -61,6 +76,7 @@ export class AnimeService extends DatabaseClient {
 			.map((anime) => ({
 				id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
 				title: anime.title,
+				type: anime.type,
 				poster_url: anime.poster_url,
 			}));
 	}
@@ -95,6 +111,40 @@ export class AnimeService extends DatabaseClient {
 				poster_url: true,
 				background_url: true,
 				rating: true,
+				type: true,
+			},
+		});
+	}
+
+	/**
+	 * The rows that label links to AniDB entries: every row for these AniDB
+	 * ids, plus the rows the table itself files under these IMDb ids.
+	 *
+	 * The second half matters when the Fribb dataset could not be downloaded.
+	 * `imdb_id` is unique, so it finds at most one row per IMDb id, and only
+	 * rows with an AniDB id can be linked to.
+	 */
+	public async getAnimeEntryRows({
+		anidbIds,
+		imdbIds,
+	}: {
+		anidbIds: number[];
+		imdbIds: string[];
+	}): Promise<AnimeEntryRow[]> {
+		if (anidbIds.length === 0 && imdbIds.length === 0) return [];
+		const or: Prisma.AnimeWhereInput[] = [];
+		if (anidbIds.length > 0) or.push({ anidb_id: { in: anidbIds } });
+		if (imdbIds.length > 0) or.push({ imdb_id: { in: imdbIds }, anidb_id: { not: null } });
+		return this.prisma.anime.findMany({
+			where: { OR: or },
+			select: {
+				anidb_id: true,
+				kitsu_id: true,
+				mal_id: true,
+				imdb_id: true,
+				title: true,
+				type: true,
+				poster_url: true,
 			},
 		});
 	}
