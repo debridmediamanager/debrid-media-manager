@@ -171,13 +171,13 @@ export function decide(
 	const years = yearsIn(filename);
 	const nearYear = years.some((y) => Math.abs(y - movie.year) <= 1);
 	const found = foundTitles(filename, movie.titles);
-	// An adult film's own releases are adult content too. They carry its title
-	// and year; a title alone is not enough, since short aliases ("The
-	// Prisoner") turn up inside unrelated adult clips.
+	// An adult film's own releases are adult content too: they carry its title
+	// and year and the model reads the title as the movie's. Less is not enough,
+	// since short aliases ("The Prisoner", "Dude") turn up in unrelated clips.
 	const filmLike =
 		media === 'FILM' ||
 		media === 'UNCLEAR' ||
-		(media === 'ADULT' && found.length > 0 && nearYear);
+		(media === 'ADULT' && found.length > 0 && nearYear && titleMatch === 'SAME_TITLE');
 
 	if (ADULT_TAG.test(filename)) return 'trash';
 
@@ -205,9 +205,10 @@ export function decide(
 		const otherYears = found.flatMap((t) => movie.ambiguous[fold(t).trim()]);
 		const toOther = Math.min(...years.flatMap((y) => otherYears.map((o) => Math.abs(y - o))));
 		const toMovie = Math.min(...years.map((y) => Math.abs(y - movie.year)));
-		// Strictly closer: the 2003 video game "Pirates of the Caribbean" tied
-		// with the 2003 film and trashed its releases.
-		if (toOther < toMovie) return 'trash';
+		// A tie trashes: "Daredevil" is an alias of Ong-Bak and also a 2003 film.
+		// Same-name video games (Pirates of the Caribbean, Harry Potter, both the
+		// films' own years) are left out of `ambiguous` instead.
+		if (toOther <= toMovie) return 'trash';
 	}
 	if (found.length > 0 && nearYear) return 'keep';
 	if (found.length === 0 && titleMatch !== 'SAME_TITLE') return 'trash';

@@ -37,8 +37,7 @@ const context = (imdbId: string): MovieContext => ({ imdbId, ...movies[imdbId] }
 
 describe('scraped-result verdict rules', () => {
 	// `expected` started as the verdicts of the Python rules these were ported
-	// from. A deliberate rule change updates it item by item, never wholesale:
-	// engine v6.3 flipped one, "The Gentleman 2020" (a real release, now kept).
+	// from. A deliberate rule change updates it item by item, never wholesale.
 	it('gives the recorded verdict for every labelled filename', () => {
 		const mismatches = items
 			.map((item) => ({
@@ -161,8 +160,10 @@ describe('year extraction', () => {
  * that matter).
  */
 describe('verdicts that production got wrong on day one', () => {
-	it('keeps a release whose only title is shared by a same-year work', () => {
-		// The 2003 video game "Pirates of the Caribbean" tied on year.
+	it('keeps a release once a same-name video game no longer counts as another work', () => {
+		// The 2003 video game "Pirates of the Caribbean" used to sit in
+		// `ambiguous` and trash the 2003 film's own releases; games are now left
+		// out when the context is built, so the alias is not ambiguous at all.
 		const pirates: MovieContext = {
 			imdbId: 'tt0325980',
 			name: 'Pirates of the Caribbean: The Curse of the Black Pearl',
@@ -171,14 +172,24 @@ describe('verdicts that production got wrong on day one', () => {
 				'Pirates of the Caribbean',
 				'Pirates of the Caribbean: The Curse of the Black Pearl',
 			],
-			ambiguous: { 'pirates of the caribbean': [2003] },
+			ambiguous: {},
 		};
-		expect(
-			decideWithoutModel(pirates, 'Pirates of the Caribbean (2003).BRRIP.X264-ISAS')
-		).not.toBe('trash');
 		expect(
 			decide(pirates, 'Pirates of the Caribbean (2003).BRRIP.X264-ISAS', 'FILM', 'SAME_TITLE')
 		).toBe('keep');
+	});
+
+	it('still trashes on a tie with another film sharing the alias and the year', () => {
+		const ongBak: MovieContext = {
+			imdbId: 'tt0368909',
+			name: 'Ong-Bak: The Thai Warrior',
+			year: 2003,
+			titles: ['Ong-Bak: The Thai Warrior', 'Daredevil'],
+			ambiguous: { daredevil: [1919, 1968, 2003, 2007, 2015, 2023] },
+		};
+		expect(decideWithoutModel(ongBak, 'Daredevil 2003 DirCut 720p Brrip Xvid AC3-LmB')).toBe(
+			'trash'
+		);
 	});
 
 	it('finds a title whose ampersand the release dropped', () => {
@@ -264,5 +275,21 @@ describe('verdicts that production got wrong on day one', () => {
 		expect(decide(movie, 'The Gentlemen 2019 [XXX] parody', 'ADULT', 'SAME_TITLE')).toBe(
 			'trash'
 		);
+		// Real, from the Dude (2025) page: a title word and the year are not enough.
+		const dude: MovieContext = {
+			imdbId: 'tt36388163',
+			name: 'Dude',
+			year: 2025,
+			titles: ['Dude'],
+			ambiguous: {},
+		};
+		expect(
+			decide(
+				dude,
+				'RKPrime - Reyna Belle - Surfer Dude Bags Bodacious Babe (19 05 2025) rq mp4',
+				'ADULT',
+				'DIFFERENT_TITLE'
+			)
+		).toBe('trash');
 	});
 });
