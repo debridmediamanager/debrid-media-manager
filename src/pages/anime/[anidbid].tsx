@@ -1,5 +1,6 @@
 import AnimeEntryLinks, { animeTypeLabel } from '@/components/AnimeEntryLinks';
 import AvailabilityTokens from '@/components/AvailabilityTokens';
+import EpisodeChips from '@/components/EpisodeChips';
 import MediaHeader from '@/components/MediaHeader';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
 import SearchTokens from '@/components/SearchTokens';
@@ -747,47 +748,34 @@ const AnimePage: FunctionComponent = () => {
 		</div>
 	);
 
-	const episodeChip = (filter: AnimeEpisodeFilter | null, label: string, count?: number) => {
-		const selected = episodeFilter === filter;
-		return (
-			<button
-				key={String(filter)}
-				type="button"
-				onClick={() => setEpisodeFilter(selected ? null : filter)}
-				aria-pressed={selected}
-				className={
-					selected
-						? 'whitespace-nowrap rounded border-2 border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100'
-						: 'whitespace-nowrap rounded border-2 border-yellow-500 bg-yellow-900/30 px-2 py-0.5 text-xs text-yellow-100 hover:bg-yellow-800/50'
-				}
-			>
-				{label}
-				{count !== undefined && (
-					<>
-						{' '}
-						<span className="text-gray-300">({count})</span>
-					</>
-				)}
-			</button>
-		);
-	};
-
 	const summary = episodeSummary;
 	const episodeNav =
 		summary && (summary.episodes.length > 0 || summary.batches > 0) ? (
-			<div
-				className="flex items-center gap-1 overflow-x-auto pb-1"
-				data-testid="anime-episode-nav"
-			>
-				<span className="mr-1 shrink-0 text-xs text-gray-300">Episodes:</span>
-				{episodeChip(null, 'All')}
-				{summary.batches > 0 && episodeChip('batch', 'Packs', summary.batches)}
-				{summary.episodes.map(({ episode, count }) =>
-					episodeChip(episode, String(episode).padStart(2, '0'), count)
-				)}
-				{summary.unnumbered > 0 &&
-					episodeChip('unnumbered', 'Unnumbered', summary.unnumbered)}
-			</div>
+			<EpisodeChips<AnimeEpisodeFilter>
+				testId="anime-episode-nav"
+				selected={episodeFilter}
+				onSelect={setEpisodeFilter}
+				items={[
+					{ filter: null, label: 'All' },
+					...(summary.batches > 0
+						? [{ filter: 'batch' as const, label: 'Packs', count: summary.batches }]
+						: []),
+					...summary.episodes.map(({ episode, count }) => ({
+						filter: episode,
+						label: String(episode).padStart(2, '0'),
+						count,
+					})),
+					...(summary.unnumbered > 0
+						? [
+								{
+									filter: 'unnumbered' as const,
+									label: 'Unnumbered',
+									count: summary.unnumbered,
+								},
+							]
+						: []),
+				]}
+			/>
 		) : null;
 
 	const emptyMessage =
