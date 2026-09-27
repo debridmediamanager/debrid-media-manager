@@ -256,6 +256,52 @@ describe('verdicts that production got wrong on day one', () => {
 		expect(decide(movie, filename, 'ADULT', 'SAME_TITLE')).toBe('keep');
 	});
 
+	it('does not read a year in front of "Movies" as a pack size', () => {
+		// Real, on the Rogue One page: "2017 Movies" is an uploader tag.
+		const rogueOne: MovieContext = {
+			imdbId: 'tt3748528',
+			name: 'Rogue One: A Star Wars Story',
+			year: 2016,
+			titles: ['Rogue One', 'Rogue One: A Star Wars Story'],
+			ambiguous: { 'rogue one': [2017] },
+		};
+		expect(
+			decide(
+				rogueOne,
+				'Super Dark Times 2017 Movies HDRip XviD 5 1 AAC with Sample',
+				'FILM',
+				'NO_TITLE'
+			)
+		).toBe('trash');
+	});
+
+	it('does not let a very short alias make adult content the movie', () => {
+		// Real, on the Mother (2009) page: its Turkish title "Ana" is a name.
+		const mother: MovieContext = {
+			imdbId: 'tt1216496',
+			name: 'Mother',
+			year: 2009,
+			titles: ['Mother', 'Madeo', 'Ana'],
+			ambiguous: {},
+		};
+		expect(
+			decide(
+				mother,
+				'Shemale-Club.com - Ana Paula Samadhi - Nycoly Spyleer - 11.21.2009',
+				'ADULT',
+				'SAME_TITLE'
+			)
+		).toBe('trash');
+		const anita: MovieContext = {
+			imdbId: 'tt0069718',
+			name: 'Anita',
+			year: 1973,
+			titles: ['Anita'],
+			ambiguous: {},
+		};
+		expect(decide(anita, 'Anita (1973) VHSRip Oldies', 'ADULT', 'SAME_TITLE')).toBe('keep');
+	});
+
 	it('still trashes adult content that is not the movie', () => {
 		const movie: MovieContext = {
 			imdbId: 'tt8367814',

@@ -89,7 +89,8 @@ const PACK = new RegExp(
 		// nominees, the MCU phases and "All 4 movies" on their movies' pages.
 		'filmograph',
 		'фильмограф',
-		'\\b\\d+\\s*(?:movies|films)\\b',
+		// A count, not a year: "2017 Movies" is an uploader tag.
+		'\\b(?!(?:19|20)\\d\\d\\b)\\d+\\s*(?:movies|films)\\b',
 		'nominees',
 		'\\bphases\\b',
 	].join('|'),
@@ -172,12 +173,16 @@ export function decide(
 	const nearYear = years.some((y) => Math.abs(y - movie.year) <= 1);
 	const found = foundTitles(filename, movie.titles);
 	// An adult film's own releases are adult content too: they carry its title
-	// and year and the model reads the title as the movie's. Less is not enough,
-	// since short aliases ("The Prisoner", "Dude") turn up in unrelated clips.
+	// and year and the model reads the title as the movie's. Less is not enough:
+	// aliases turn up in unrelated clips ("The Prisoner", "Dude", and "Ana", the
+	// Turkish title of Mother, as a performer's name), so very short ones never count.
 	const filmLike =
 		media === 'FILM' ||
 		media === 'UNCLEAR' ||
-		(media === 'ADULT' && found.length > 0 && nearYear && titleMatch === 'SAME_TITLE');
+		(media === 'ADULT' &&
+			nearYear &&
+			titleMatch === 'SAME_TITLE' &&
+			found.some((t) => fold(t).replace(/ /g, '').length >= 5));
 
 	if (ADULT_TAG.test(filename)) return 'trash';
 
