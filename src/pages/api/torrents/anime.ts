@@ -1,12 +1,66 @@
-import { flattenAndRemoveDuplicates, sortByFileSize } from '@/services/mediasearch';
+import {
+	flattenAndRemoveDuplicates,
+	ScrapeSearchResult,
+	sortByFileSize,
+} from '@/services/mediasearch';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiHandler } from 'next';
 
-// returns scraped results or marks the imdb id as requested
+/** Matches the page size of `getScrapedTrueResults`, which the other routes use. */
+const PAGE_SIZE = 50;
+
+/** The same exclusion `getScrapedTrueResults` applies to every other page. */
+const LEADING_CYRILLIC = /^[А-Яа-яЁё]/;
+
+/**
+ * One stored release, in either shape an `anime:*` row holds.
+ *
+ * Every anime row in production on 2026-09-27 (16,602 of them) stores
+ * `{hash, filename, size_bytes}`; movie and TV rows, and whatever the scrapers'
+ * shared pipeline appends to an existing array, store `{hash, title, fileSize}`.
+ * Both sizes are MiB, whatever the legacy field's name says.
+ */
+interface StoredRelease {
+	hash?: unknown;
+	title?: unknown;
+	fileSize?: unknown;
+	filename?: unknown;
+	size_bytes?: unknown;
+}
+
+function toSearchResult(entry: StoredRelease): ScrapeSearchResult | null {
+	if (!entry || typeof entry.hash !== 'string') return null;
+	const title =
+		typeof entry.title === 'string' && entry.title.trim() !== ''
+			? entry.title
+			: typeof entry.filename === 'string'
+				? entry.filename
+				: '';
+	if (title.trim() === '' || LEADING_CYRILLIC.test(title)) return null;
+	const size = Number(entry.fileSize ?? entry.size_bytes);
+	return { hash: entry.hash, title, fileSize: Number.isFinite(size) ? size : 0 };
+}
+
+/**
+ * The whole row, read once and paged here.
+ *
+ * `getScrapedTrueResults` pages in SQL through a JSON_TABLE that projects only
+ * `$.title` and `$.fileSize`. Against the legacy shape every entry comes back
+ * with a null title, which its title filter then drops, so this route answered
+ * 204 for every anime in the table — Frieren's row alone holds 772 releases.
+ */
+async function readReleases(key: string, page: number): Promise<ScrapeSearchResult[]> {
+	const stored = ((await db.getAllScrapedTrueResults(key)) ?? []) as StoredRelease[];
+	const releases = stored.map(toSearchResult).filter((r): r is ScrapeSearchResult => r !== null);
+	const sorted = sortByFileSize(flattenAndRemoveDuplicates([releases]));
+	return sorted.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+}
+
+// returns scraped results or marks the anime id as requested
 const handler: NextApiHandler = async (req, res) => {
-	const { animeId, dmmProblemKey, solution, onlyTrusted } = req.query;
+	const { animeId, dmmProblemKey, solution, page } = req.query;
 
 	if (
 		!dmmProblemKey ||
@@ -26,14 +80,14 @@ const handler: NextApiHandler = async (req, res) => {
 		return;
 	}
 
+	const pageNum = page ? parseInt(page.toString(), 10) : 0;
+	if (!Number.isInteger(pageNum) || pageNum < 0) {
+		res.status(400).json({ errorMessage: 'Invalid "page" query parameter' });
+		return;
+	}
+
 	try {
-		const promises = [db.getScrapedTrueResults<any[]>(`anime:${animeId.toString().trim()}`)];
-		// if (onlyTrusted !== 'true') {
-		// 	promises.push(db.getScrapedResults<any[]>(`anime:${animeId.toString().trim()}`));
-		// }
-		const results = await Promise.all(promises);
-		// should contain both results
-		const searchResults = [...(results[0] || []), ...(results[1] || [])];
+		const searchResults = await readReleases(`anime:${animeId.toString().trim()}`, pageNum);
 
 		if (searchResults.length === 0) {
 			const isProcessing = await db.keyExists(`processing:${animeId.toString().trim()}`);
@@ -47,15 +101,7 @@ const handler: NextApiHandler = async (req, res) => {
 			return;
 		}
 
-		let processedResults = flattenAndRemoveDuplicates(
-			searchResults.map((r) => {
-				r.title = r.filename;
-				r.fileSize = r.size_bytes;
-				return r;
-			})
-		);
-		processedResults = sortByFileSize(processedResults);
-		res.status(200).json({ results: processedResults });
+		res.status(200).json({ results: searchResults });
 	} catch (error: any) {
 		console.error(
 			'Encountered a database issue:',

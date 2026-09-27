@@ -4,18 +4,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
 	mockValidateProblemToken,
-	mockGetScrapedTrueResults,
+	mockGetAllScrapedTrueResults,
 	mockKeyExists,
 	mockSaveScrapedResults,
-	mockFlatten,
-	mockSort,
 } = vi.hoisted(() => ({
 	mockValidateProblemToken: vi.fn(),
-	mockGetScrapedTrueResults: vi.fn(),
+	mockGetAllScrapedTrueResults: vi.fn(),
 	mockKeyExists: vi.fn(),
 	mockSaveScrapedResults: vi.fn(),
-	mockFlatten: vi.fn((items: any[]) => items),
-	mockSort: vi.fn((items: any[]) => items),
 }));
 
 vi.mock('@/utils/problemToken', () => ({
@@ -24,23 +20,20 @@ vi.mock('@/utils/problemToken', () => ({
 
 vi.mock('@/services/repository', () => ({
 	repository: {
-		getScrapedTrueResults: mockGetScrapedTrueResults,
+		getAllScrapedTrueResults: mockGetAllScrapedTrueResults,
 		keyExists: mockKeyExists,
 		saveScrapedResults: mockSaveScrapedResults,
 	},
 }));
 
-vi.mock('@/services/mediasearch', () => ({
-	flattenAndRemoveDuplicates: mockFlatten,
-	sortByFileSize: mockSort,
-}));
+const HASH = 'a'.repeat(40);
 
 describe('/api/torrents/anime', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockValidateProblemToken.mockReturnValue(true);
-		mockGetScrapedTrueResults.mockResolvedValue([
-			{ filename: 'Anime.EP01', size_bytes: 1234, hash: 'hash-1' },
+		mockGetAllScrapedTrueResults.mockResolvedValue([
+			{ filename: 'Anime.EP01', size_bytes: 1234, hash: HASH },
 		]);
 	});
 
@@ -68,23 +61,47 @@ describe('/api/torrents/anime', () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 	});
 
-	it('returns flattened anime results', async () => {
+	it('returns the stored releases in the shape the other torrent routes use', async () => {
 		const req = createMockRequest({ query: baseQuery });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(mockFlatten).toHaveBeenCalled();
+		expect(mockGetAllScrapedTrueResults).toHaveBeenCalledWith('anime:anidb:1');
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
-			results: expect.arrayContaining([
-				expect.objectContaining({ title: 'Anime.EP01', fileSize: 1234 }),
-			]),
+			results: [{ hash: HASH, title: 'Anime.EP01', fileSize: 1234 }],
 		});
 	});
 
+	it('drops the same releases the paged query drops', async () => {
+		mockGetAllScrapedTrueResults.mockResolvedValue([
+			{ filename: 'Anime.EP01', size_bytes: 1234, hash: HASH },
+			{ filename: 'Anime.EP01 again', size_bytes: 1, hash: HASH },
+			{ filename: 'Аниме 01', size_bytes: 9, hash: 'b'.repeat(40) },
+			{ filename: '', size_bytes: 9, hash: 'c'.repeat(40) },
+			{ filename: 'no hash', size_bytes: 9 },
+		]);
+		const res = createMockResponse();
+
+		await handler(createMockRequest({ query: baseQuery }), res);
+
+		expect(res.json).toHaveBeenCalledWith({
+			results: [{ hash: HASH, title: 'Anime.EP01', fileSize: 1234 }],
+		});
+	});
+
+	it('rejects a page that is not a non-negative integer', async () => {
+		const res = createMockResponse();
+
+		await handler(createMockRequest({ query: { ...baseQuery, page: '-1' } }), res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(mockGetAllScrapedTrueResults).not.toHaveBeenCalled();
+	});
+
 	it('marks the anime id as requested when nothing has been scraped', async () => {
-		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetAllScrapedTrueResults.mockResolvedValue(null);
 		mockKeyExists.mockResolvedValue(false);
 		const req = createMockRequest({ query: baseQuery });
 		const res = createMockResponse();
@@ -97,7 +114,7 @@ describe('/api/torrents/anime', () => {
 	});
 
 	it('reports processing instead of re-requesting an in-flight scrape', async () => {
-		mockGetScrapedTrueResults.mockResolvedValue([]);
+		mockGetAllScrapedTrueResults.mockResolvedValue(null);
 		mockKeyExists.mockResolvedValue(true);
 		const req = createMockRequest({ query: baseQuery });
 		const res = createMockResponse();
@@ -110,7 +127,7 @@ describe('/api/torrents/anime', () => {
 	});
 
 	it('returns 500 when the repository throws', async () => {
-		mockGetScrapedTrueResults.mockRejectedValue(new Error('db'));
+		mockGetAllScrapedTrueResults.mockRejectedValue(new Error('db'));
 		const req = createMockRequest({ query: baseQuery });
 		const res = createMockResponse();
 
