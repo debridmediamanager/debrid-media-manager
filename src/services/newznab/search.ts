@@ -20,6 +20,7 @@
 import { CachedUsenetResult } from '@/services/database/newznabApiCache';
 import { dedupeResults, fanOut, Indexer } from '@/services/nzb2rd';
 import { repository as db } from '@/services/repository';
+import { withoutBlockedReleases } from '@/services/takedown/blocklist';
 import type { NextApiRequest } from 'next';
 import { getUpstreamIndexers, UpstreamIndexer } from './indexers';
 import { encryptReleaseId } from './opaqueId';
@@ -257,7 +258,11 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	const targeted =
 		params.q !== undefined || params.imdbid !== undefined || params.tvdbid !== undefined;
 	const cached = await db.getCachedNewznabApiSearch(key, targeted ? undefined : RSS_TTL_MS);
-	if (cached?.isFresh) return toPage(cached.results, apiKey, { limit, offset });
+	// Filtered on the way out rather than before caching, so an approval or a
+	// reversal applies to entries already cached.
+	const page = async (results: CachedUsenetResult[]) =>
+		toPage(await withoutBlockedReleases(results), apiKey, { limit, offset });
+	if (cached?.isFresh) return page(cached.results);
 
 	const indexers = await pacedIndexers(getUpstreamIndexers());
 	const { ok, lists } = await fanOut(
@@ -271,7 +276,7 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	if (!ok) {
 		// Nothing answered — including the case where every indexer was over its
 		// pacing budget. Whatever is cached, however old, beats an empty feed.
-		if (cached) return toPage(cached.results, apiKey, { limit, offset });
+		if (cached) return page(cached.results);
 		return { items: [], offset, total: 0 };
 	}
 
@@ -280,5 +285,5 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	// the empty TTL, and it is what caps upstream calls for a query nobody can
 	// satisfy. `set` swallows its own failures.
 	await db.setCachedNewznabApiSearch(key, merged);
-	return toPage(merged, apiKey, { limit, offset });
+	return page(merged);
 }

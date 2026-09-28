@@ -1,3 +1,4 @@
+import { getBlocklist } from '@/services/takedown/blocklist';
 import { prisma } from '@/utils/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -148,6 +149,8 @@ export default async function handler(
 	try {
 		const includeTracks = req.query.summary !== '1';
 		const hash = typeof req.query.hash === 'string' ? req.query.hash : undefined;
+		const blocked = [...(await getBlocklist()).hashes];
+		const unblocked = blocked.length > 0 ? { hash: { notIn: blocked } } : undefined;
 		const page = getPositiveInt(req.query.page, 1);
 		const limit = Math.min(getPositiveInt(req.query.limit, 48), 96);
 		const search = getStringQuery(req.query.search)?.trim().toLowerCase() ?? '';
@@ -158,6 +161,7 @@ export default async function handler(
 			const skip = (page - 1) * limit;
 			const [availableMusic, musicCounts] = await Promise.all([
 				prisma.availableMusic.findMany({
+					where: unblocked,
 					include: {
 						_count: {
 							select: {
@@ -172,6 +176,7 @@ export default async function handler(
 					take,
 				}),
 				prisma.availableMusic.findMany({
+					where: unblocked,
 					select: {
 						mbid: true,
 						_count: {
@@ -242,7 +247,7 @@ export default async function handler(
 
 		// Get all available music albums with their files and metadata
 		const availableMusic = await prisma.availableMusic.findMany({
-			where: hash ? { hash } : undefined,
+			where: hash ? { AND: [{ hash }, unblocked ?? {}] } : unblocked,
 			include: includeTracks
 				? {
 						files: {

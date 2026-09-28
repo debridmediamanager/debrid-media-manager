@@ -9,6 +9,7 @@ import {
 } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { BLOCKED_MESSAGE, isNzbBlocked, isReleaseBlocked } from '@/services/takedown/blocklist';
 import { safeNzbName } from '@/utils/nzbName';
 import { isSponsorRequest } from '@/utils/requireSponsor';
 import { safeReturnPath } from '@/utils/transferContext';
@@ -60,6 +61,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 	if (typeof rdKey !== 'string' || !rdKey) {
 		return res.status(400).json({ error: 'rdKey is required' });
+	}
+
+	if (typeof title === 'string' && (await isReleaseBlocked(title))) {
+		return res.status(451).json({ error: BLOCKED_MESSAGE });
 	}
 
 	// Cross-user / cross-device dedup: a Usenet fetch is expensive (indexer grab
@@ -130,6 +135,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 	if (!nzbText.trim()) {
 		return res.status(502).json({ error: 'The indexer returned an empty NZB' });
+	}
+	if (await isNzbBlocked(nzbText)) {
+		return res.status(451).json({ error: BLOCKED_MESSAGE });
 	}
 
 	try {

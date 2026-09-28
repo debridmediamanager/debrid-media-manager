@@ -427,7 +427,9 @@ describe('Repository', () => {
 		for (const entry of matrix) {
 			const service = mocks[entry.service].methods;
 			service[entry.serviceMethod].mockReturnValue(entry.value);
-			const result = (repo as any)[entry.method](...entry.args);
+			// Awaited: the methods that enforce the takedown blocklist check it
+			// before delegating.
+			const result = await (repo as any)[entry.method](...entry.args);
 			expect(service[entry.serviceMethod]).toHaveBeenCalledWith(...entry.args);
 			expect(result).toBe(entry.value);
 		}

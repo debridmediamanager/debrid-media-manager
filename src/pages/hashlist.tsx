@@ -49,6 +49,7 @@ import {
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
+import { fetchBlockedHashes } from '@/utils/takedownClient';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { filenameParse } from '@ctrl/video-filename-parser';
@@ -197,16 +198,21 @@ function HashlistPage() {
 	}
 
 	async function readHashlist(): Promise<HashlistTorrent[]> {
-		const jsonString = await decodeJsonStringFromUrl();
+		const [jsonString, blocked] = await Promise.all([
+			decodeJsonStringFromUrl(),
+			fetchBlockedHashes(),
+		]);
+		const unblocked = (torrents: HashlistTorrent[]) =>
+			torrents.filter((torrent) => !blocked.has(torrent.hash?.toLowerCase()));
 		if (jsonString.charAt(0) !== '[') {
 			const hashlist = JSON.parse(jsonString) as Hashlist;
 			setHashlistTitle(hashlist.title);
-			return hashlist.torrents;
+			return unblocked(hashlist.torrents);
 		}
 
 		const torrents = JSON.parse(jsonString) as HashlistTorrent[];
 		setHashlistTitle('Share this page');
-		return torrents;
+		return unblocked(torrents);
 	}
 
 	async function fetchUserTorrentsList() {

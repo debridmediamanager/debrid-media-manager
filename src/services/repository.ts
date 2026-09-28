@@ -42,6 +42,7 @@ import { StreamServerStatus, TorrentioUrlCheckResult } from './database/streamHe
 import { TorBoxCdnSample } from './database/torboxCdn';
 import { TorBoxOperation } from './database/torboxOperational';
 import { ScrapeSearchResult } from './mediasearch';
+import { isHashBlocked, withoutBlockedHashList, withoutBlockedHashes } from './takedown/blocklist';
 import { TorrentInfoResponse } from './types';
 
 export type RepositoryDependencies = Partial<{
@@ -211,8 +212,10 @@ export class Repository {
 		return this.contentRequestService.getRequest(id);
 	}
 
-	public listOpenContentRequests(limit: number, offset = 0) {
-		return this.contentRequestService.listOpenRequests(limit, offset);
+	public async listOpenContentRequests(limit: number, offset = 0) {
+		return withoutBlockedHashes(
+			await this.contentRequestService.listOpenRequests(limit, offset)
+		);
 	}
 
 	public listContentRequestsFor(requesterId: string, limit: number) {
@@ -416,11 +419,16 @@ export class Repository {
 		return this.availabilityService.saveIMDBIdMapping(hash, imdbId);
 	}
 
-	public handleDownloadedTorrent(torrentInfo: TorrentInfoResponse, hash: string, imdbId: string) {
+	public async handleDownloadedTorrent(
+		torrentInfo: TorrentInfoResponse,
+		hash: string,
+		imdbId: string
+	) {
+		if (await isHashBlocked(hash)) return;
 		return this.availabilityService.handleDownloadedTorrent(torrentInfo, hash, imdbId);
 	}
 
-	public upsertAvailability(data: {
+	public async upsertAvailability(data: {
 		hash: string;
 		imdbId: string;
 		filename: string;
@@ -434,14 +442,18 @@ export class Repository {
 		selectedFiles: Array<{ id: number; path: string; bytes: number; selected: number }>;
 		links: string[];
 	}) {
+		if (await isHashBlocked(data.hash)) return;
 		return this.availabilityService.upsertAvailability(data);
 	}
 
-	public saveInstantAvailability(
+	public async saveInstantAvailability(
 		imdbId: string,
 		rows: Array<{ hash: string; filename: string; bytes: number }>
 	) {
-		return this.availabilityService.saveInstantAvailability(imdbId, rows);
+		return this.availabilityService.saveInstantAvailability(
+			imdbId,
+			await withoutBlockedHashes(rows)
+		);
 	}
 
 	public getDebridioRefreshedAt(key: string) {
@@ -452,27 +464,35 @@ export class Repository {
 		return this.availabilityService.markDebridioRefreshed(key);
 	}
 
-	public saveInstantAvailabilityAd(
+	public async saveInstantAvailabilityAd(
 		imdbId: string,
 		rows: Array<{ hash: string; filename: string; bytes: number }>
 	) {
-		return this.availabilityService.saveInstantAvailabilityAd(imdbId, rows);
+		return this.availabilityService.saveInstantAvailabilityAd(
+			imdbId,
+			await withoutBlockedHashes(rows)
+		);
 	}
 
-	public checkAvailability(imdbId: string, hashes: string[]) {
-		return this.availabilityService.checkAvailability(imdbId, hashes);
+	public async checkAvailability(imdbId: string, hashes: string[]) {
+		return this.availabilityService.checkAvailability(
+			imdbId,
+			await withoutBlockedHashList(hashes)
+		);
 	}
 
-	public checkAvailabilityByHashes(hashes: string[]) {
-		return this.availabilityService.checkAvailabilityByHashes(hashes);
+	public async checkAvailabilityByHashes(hashes: string[]) {
+		return this.availabilityService.checkAvailabilityByHashes(
+			await withoutBlockedHashList(hashes)
+		);
 	}
 
-	public filterCachedHashes(hashes: string[]) {
-		return this.availabilityService.filterCachedHashes(hashes);
+	public async filterCachedHashes(hashes: string[]) {
+		return this.availabilityService.filterCachedHashes(await withoutBlockedHashList(hashes));
 	}
 
-	public filterCachedHashesAd(hashes: string[]) {
-		return this.availabilityService.filterCachedHashesAd(hashes);
+	public async filterCachedHashesAd(hashes: string[]) {
+		return this.availabilityService.filterCachedHashesAd(await withoutBlockedHashList(hashes));
 	}
 
 	public removeAvailability(hash: string) {
@@ -492,7 +512,7 @@ export class Repository {
 	}
 
 	// AllDebrid Availability Service Methods
-	public upsertAvailabilityAd(data: {
+	public async upsertAvailabilityAd(data: {
 		hash: string;
 		imdbId: string;
 		filename: string;
@@ -502,15 +522,21 @@ export class Repository {
 		completionDate: number;
 		files: Array<{ n: string; s: number; l: string }>;
 	}) {
+		if (await isHashBlocked(data.hash)) return;
 		return this.availabilityService.upsertAvailabilityAd(data);
 	}
 
-	public checkAvailabilityAd(imdbId: string, hashes: string[]) {
-		return this.availabilityService.checkAvailabilityAd(imdbId, hashes);
+	public async checkAvailabilityAd(imdbId: string, hashes: string[]) {
+		return this.availabilityService.checkAvailabilityAd(
+			imdbId,
+			await withoutBlockedHashList(hashes)
+		);
 	}
 
-	public checkAvailabilityAdByHashes(hashes: string[]) {
-		return this.availabilityService.checkAvailabilityAdByHashes(hashes);
+	public async checkAvailabilityAdByHashes(hashes: string[]) {
+		return this.availabilityService.checkAvailabilityAdByHashes(
+			await withoutBlockedHashList(hashes)
+		);
 	}
 
 	public removeAvailabilityAd(hash: string) {
@@ -522,16 +548,21 @@ export class Repository {
 	}
 
 	// Scraped Service Methods
-	public getScrapedTrueResults<T>(key: string, maxSizeGB?: number, page?: number) {
-		return this.scrapedService.getScrapedTrueResults<T>(key, maxSizeGB, page);
+	// Every read of a scraped page drops what a takedown blocked, and every
+	// save below refuses it, so a crawl cannot put it back either.
+	public async getScrapedTrueResults<T>(key: string, maxSizeGB?: number, page?: number) {
+		return withoutBlockedHashes(
+			await this.scrapedService.getScrapedTrueResults<T>(key, maxSizeGB, page)
+		);
 	}
 
-	public getAllScrapedTrueResults(key: string) {
-		return this.scrapedService.getAllScrapedTrueResults(key);
+	public async getAllScrapedTrueResults(key: string) {
+		return withoutBlockedHashes(await this.scrapedService.getAllScrapedTrueResults(key));
 	}
 
-	public getScrapedTrueRow(key: string) {
-		return this.scrapedService.getScrapedTrueRow(key);
+	public async getScrapedTrueRow(key: string) {
+		const row = await this.scrapedService.getScrapedTrueRow(key);
+		return row && { ...row, results: await withoutBlockedHashes(row.results) };
 	}
 
 	public getScrapedTrueSeasonKeys(imdbId: string) {
@@ -542,11 +573,13 @@ export class Repository {
 		return this.scrapedService.getRecentScrapedTrueKeys(limit);
 	}
 
-	public getScrapedResults<T>(key: string, maxSizeGB?: number, page?: number) {
-		return this.scrapedService.getScrapedResults<T>(key, maxSizeGB, page);
+	public async getScrapedResults<T>(key: string, maxSizeGB?: number, page?: number) {
+		return withoutBlockedHashes(
+			await this.scrapedService.getScrapedResults<T>(key, maxSizeGB, page)
+		);
 	}
 
-	public saveScrapedTrueResults(
+	public async saveScrapedTrueResults(
 		key: string,
 		value: ScrapeSearchResult[],
 		updateUpdatedAt?: boolean,
@@ -554,13 +587,13 @@ export class Repository {
 	) {
 		return this.scrapedService.saveScrapedTrueResults(
 			key,
-			value,
+			await withoutBlockedHashes(value),
 			updateUpdatedAt,
 			replaceOldScrape
 		);
 	}
 
-	public saveScrapedResults(
+	public async saveScrapedResults(
 		key: string,
 		value: ScrapeSearchResult[],
 		updateUpdatedAt?: boolean,
@@ -568,7 +601,7 @@ export class Repository {
 	) {
 		return this.scrapedService.saveScrapedResults(
 			key,
-			value,
+			await withoutBlockedHashes(value),
 			updateUpdatedAt,
 			replaceOldScrape
 		);
@@ -694,8 +727,10 @@ export class Repository {
 		return this.castService.getUserCastStreams(imdbId, userId, limit);
 	}
 
-	public getOtherStreams(imdbId: string, userId: string, limit?: number, maxSize?: number) {
-		return this.castService.getOtherStreams(imdbId, userId, limit, maxSize);
+	public async getOtherStreams(imdbId: string, userId: string, limit?: number, maxSize?: number) {
+		return withoutBlockedHashes(
+			await this.castService.getOtherStreams(imdbId, userId, limit, maxSize)
+		);
 	}
 
 	// TorBox Cast Service Methods
@@ -775,8 +810,15 @@ export class Repository {
 		return this.torboxCastService.getUserCastStreams(imdbId, userId, limit);
 	}
 
-	public getTorBoxOtherStreams(imdbId: string, userId: string, limit?: number, maxSize?: number) {
-		return this.torboxCastService.getOtherStreams(imdbId, userId, limit, maxSize);
+	public async getTorBoxOtherStreams(
+		imdbId: string,
+		userId: string,
+		limit?: number,
+		maxSize?: number
+	) {
+		return withoutBlockedHashes(
+			await this.torboxCastService.getOtherStreams(imdbId, userId, limit, maxSize)
+		);
 	}
 
 	// AllDebrid Cast Service Methods
@@ -938,13 +980,15 @@ export class Repository {
 		return this.premiumizeCastService.getUserCastStreams(imdbId, userId, limit);
 	}
 
-	public getPremiumizeOtherStreams(
+	public async getPremiumizeOtherStreams(
 		imdbId: string,
 		userId: string,
 		limit?: number,
 		maxSize?: number
 	) {
-		return this.premiumizeCastService.getOtherStreams(imdbId, userId, limit, maxSize);
+		return withoutBlockedHashes(
+			await this.premiumizeCastService.getOtherStreams(imdbId, userId, limit, maxSize)
+		);
 	}
 
 	// Offcloud Cast Methods
@@ -1017,13 +1061,15 @@ export class Repository {
 		return this.offcloudCastService.getUserCastStreams(imdbId, userId, limit);
 	}
 
-	public getOffcloudOtherStreams(
+	public async getOffcloudOtherStreams(
 		imdbId: string,
 		userId: string,
 		limit?: number,
 		maxSize?: number
 	) {
-		return this.offcloudCastService.getOtherStreams(imdbId, userId, limit, maxSize);
+		return withoutBlockedHashes(
+			await this.offcloudCastService.getOtherStreams(imdbId, userId, limit, maxSize)
+		);
 	}
 
 	// Debrid-Link Cast Methods
@@ -1107,13 +1153,15 @@ export class Repository {
 		return this.debridLinkCastService.getUserCastStreams(imdbId, userId, limit);
 	}
 
-	public getDebridLinkOtherStreams(
+	public async getDebridLinkOtherStreams(
 		imdbId: string,
 		userId: string,
 		limit?: number,
 		maxSize?: number
 	) {
-		return this.debridLinkCastService.getOtherStreams(imdbId, userId, limit, maxSize);
+		return withoutBlockedHashes(
+			await this.debridLinkCastService.getOtherStreams(imdbId, userId, limit, maxSize)
+		);
 	}
 
 	/**
@@ -1133,17 +1181,19 @@ export class Repository {
 		return this.allDebridCastService.getUserCastStreams(imdbId, userId, limit);
 	}
 
-	public getAllDebridOtherStreams(
+	public async getAllDebridOtherStreams(
 		imdbId: string,
 		userId: string,
 		limit?: number,
 		maxSize?: number
 	) {
-		return this.allDebridCastService.getOtherStreams(imdbId, userId, limit, maxSize);
+		return withoutBlockedHashes(
+			await this.allDebridCastService.getOtherStreams(imdbId, userId, limit, maxSize)
+		);
 	}
 
 	// Torrent Snapshot Methods
-	public upsertTorrentSnapshot({
+	public async upsertTorrentSnapshot({
 		id,
 		hash,
 		addedDate,
@@ -1154,6 +1204,7 @@ export class Repository {
 		addedDate: Date;
 		payload: Prisma.InputJsonValue;
 	}) {
+		if (await isHashBlocked(hash)) return null;
 		return this.torrentSnapshotService.upsertSnapshot({
 			id,
 			hash,
@@ -1162,17 +1213,20 @@ export class Repository {
 		});
 	}
 
-	public getLatestTorrentSnapshot(hash: string) {
+	public async getLatestTorrentSnapshot(hash: string) {
+		if (await isHashBlocked(hash)) return null;
 		return this.torrentSnapshotService.getLatestSnapshot(hash);
 	}
 
-	public getSnapshotsByHashes(hashes: string[]) {
-		return this.torrentSnapshotService.getSnapshotsByHashes(hashes);
+	public async getSnapshotsByHashes(hashes: string[]) {
+		return this.torrentSnapshotService.getSnapshotsByHashes(
+			await withoutBlockedHashList(hashes)
+		);
 	}
 
 	// Hash-IMDB Mapping Methods
-	public upsertHashImdbBatch(pairs: { hash: string; imdbId: string }[]) {
-		return this.hashImdbService.upsertBatch(pairs);
+	public async upsertHashImdbBatch(pairs: { hash: string; imdbId: string }[]) {
+		return this.hashImdbService.upsertBatch(await withoutBlockedHashes(pairs));
 	}
 
 	public getHashImdbByHash(hash: string) {
@@ -1215,8 +1269,8 @@ export class Repository {
 	}
 
 	// Hash Search Service Methods
-	public getHashesByImdbId(params: HashSearchParams) {
-		return this.hashSearchService.getHashesByImdbId(params);
+	public async getHashesByImdbId(params: HashSearchParams) {
+		return withoutBlockedHashes(await this.hashSearchService.getHashesByImdbId(params));
 	}
 
 	// Zurg Keys Service Methods

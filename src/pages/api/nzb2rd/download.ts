@@ -1,5 +1,6 @@
 import { fetchNzb } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { BLOCKED_MESSAGE, isNzbBlocked } from '@/services/takedown/blocklist';
 import { safeNzbName } from '@/utils/nzbName';
 import { NzbSanitizeError, sanitizeNzb } from '@/utils/nzbSanitize';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -49,6 +50,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(502).json({ error: error.message });
 		}
 		throw error;
+	}
+
+	if (await isNzbBlocked(cleaned.xml, typeof title === 'string' ? title : null)) {
+		return res.status(451).json({ error: BLOCKED_MESSAGE });
 	}
 
 	const name = safeNzbName(typeof title === 'string' && title.trim() ? title : id);

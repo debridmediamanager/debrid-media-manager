@@ -150,3 +150,14 @@ describe('POST /api/debrid-uploader/jobs — a free TorBox account', () => {
 		expect(res._getData()).toMatchObject({ duplicate: 'completed' });
 	});
 });
+
+describe('POST /api/debrid-uploader/jobs — takedown', () => {
+	it('refuses a blocked hash with 451 and never reaches the uploader', async () => {
+		const { setBlocklistForTests } = await import('@/services/takedown/blocklist');
+		setBlocklistForTests([HASH]);
+		const res = await post(validBody({ hash: HASH.toUpperCase() }));
+		expect(res._getStatusCode()).toBe(451);
+		expect(global.fetch).not.toHaveBeenCalled();
+		expect(mockRepo.recordDebridTransferPending).not.toHaveBeenCalled();
+	});
+});

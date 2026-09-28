@@ -1,6 +1,7 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
+import { BLOCKED_MESSAGE, isHashBlocked } from '@/services/takedown/blocklist';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { parseRequestInput, RequestValidationError, toPublicRequest } from '@/utils/contentRequest';
 import { torboxCachedHashesReusing } from '@/utils/torboxCache';
@@ -187,6 +188,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				return res.status(400).json({ error: error.message });
 			}
 			throw error;
+		}
+
+		if (await isHashBlocked(input.hash)) {
+			return res.status(451).json({ error: BLOCKED_MESSAGE });
 		}
 
 		// Too big for any transfer, so nobody could ever fulfil it. Refused here

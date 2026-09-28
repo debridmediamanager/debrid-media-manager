@@ -6,6 +6,7 @@ import { _resetUpstreamLimiterForTest, RSS_TTL_MS } from '@/services/newznab/sea
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
+import { setBlocklistForTests } from '@/services/takedown/blocklist';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import { sanitizeNzb } from '@/utils/nzbSanitize';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -790,5 +791,26 @@ describe('RSS-shaped queries get the short cache cap', () => {
 		for (const call of (mockRepo.getCachedNewznabApiSearch as any).mock.calls) {
 			expect(call[1]).toBeUndefined();
 		}
+	});
+});
+
+describe('GET /api/newznab/api takedown', () => {
+	it('leaves a blocked release out of search results, cached ones included', async () => {
+		setBlocklistForTests([], ['some.release.2160p.web']);
+		const res = await run({ t: 'search', q: 'some release', apikey: SPONSOR_KEY });
+		expect(itemTitles(res)).toEqual(['Another.Release.1080p']);
+	});
+
+	it('answers a grab of a blocked release as no such item', async () => {
+		setBlocklistForTests([], ['some.release.2160p.web']);
+		const xml = body(
+			await run({
+				t: 'get',
+				id: encryptReleaseId('ds', 'first-native-id'),
+				apikey: SPONSOR_KEY,
+			})
+		);
+		expect(xml).toContain('code="300"');
+		expect(xml).not.toContain('first-article@news');
 	});
 });

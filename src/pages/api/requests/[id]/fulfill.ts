@@ -3,6 +3,7 @@ import { orderedServersForNewJob } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { addHashToRd, alreadyOnRealDebrid, mintRequesterToken } from '@/services/requestDelivery';
+import { BLOCKED_MESSAGE, isHashBlocked } from '@/services/takedown/blocklist';
 import { generateUserId } from '@/utils/castApiHelpers';
 import { canClaim, pickSourceKeys, RequestValidationError } from '@/utils/contentRequest';
 import { torboxCachedHashes } from '@/utils/torboxCache';
@@ -75,6 +76,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	const request = await db.getContentRequest(id);
 	if (!request) return res.status(404).json({ error: 'request not found' });
+	if (await isHashBlocked(request.hash)) return res.status(451).json({ error: BLOCKED_MESSAGE });
 
 	const verdict = canClaim(request, fulfillerId);
 	if (!verdict.ok) return res.status(verdict.code).json({ error: verdict.reason });
