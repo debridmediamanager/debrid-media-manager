@@ -34,6 +34,12 @@ export const RATE_LIMIT_CONFIGS = {
 	// window still holds the previous second, so two of those bursts have to fit.
 	proxy: { name: 'proxy', rateLimit: 20, windowSeconds: 2 },
 	report: { name: 'report', rateLimit: 5, windowSeconds: 10 }, // 5 reports per 10 seconds
+	// Copyright notices. An agent filing for a rights holder sends a batch in
+	// one notice, so an hour's worth per address is plenty and caps a flood.
+	takedown: { name: 'takedown', rateLimit: 20, windowSeconds: 3600 },
+	// The blocklist the uploaders and scrapers poll every ten minutes each.
+	takedownBlocklist: { name: 'takedownBlocklist', rateLimit: 60, windowSeconds: 60 },
+	takedownAdmin: { name: 'takedownAdmin', rateLimit: 60, windowSeconds: 60 },
 	// The zurg endpoints, sized like the Newznab and Torznab indexers rather
 	// than like a person clicking: a minute's worth in one budget, so a client
 	// that fans out over several titles is not refused on its second call.

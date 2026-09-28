@@ -15,6 +15,7 @@ import {
 	TORBOX_REFERRAL_URL,
 } from '@/utils/referrals';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
@@ -235,6 +236,9 @@ export default function StartPage() {
 					<br />
 					Everything is stored on your browser&apos;s local storage
 				</p>
+				<Link href="/copyright" className="mt-4 text-xs text-slate-500 underline">
+					Report copyright infringement
+				</Link>
 			</div>
 		</div>
 	);
