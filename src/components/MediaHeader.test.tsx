@@ -120,4 +120,20 @@ describe('MediaHeader', () => {
 		const [relatedProps] = relatedMediaMock.mock.calls.at(-1)!;
 		expect(relatedProps).toMatchObject({ mediaType: 'show' });
 	});
+
+	it('wraps title actions when a narrow header cannot fit them on one line', () => {
+		render(
+			<MediaHeader
+				{...createProps({
+					title: 'The Shawshank Redemption',
+					year: '1994',
+					trailer: 'https://example.com/trailer',
+				})}
+			/>
+		);
+
+		const title = screen.getByRole('heading', { name: 'The Shawshank Redemption (1994)' });
+		expect(title).toHaveClass('min-w-0');
+		expect(title.parentElement).toHaveClass('flex-wrap');
+	});
 });

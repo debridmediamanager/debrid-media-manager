@@ -98,8 +98,8 @@ const MediaHeader: React.FC<MediaHeaderProps> = ({
 						</Link>
 					</div>
 
-					<div className="flex items-center gap-2">
-						<h2 className="text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
+					<div className="flex min-w-0 flex-wrap items-center gap-2">
+						<h2 className="min-w-0 text-xl font-bold [text-shadow:_0_2px_0_rgb(0_0_0_/_80%)]">
 							{displayTitle}
 						</h2>
 						{!isAnime && (

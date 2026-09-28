@@ -71,6 +71,13 @@ describe('TorznabProviderPanel', () => {
 		expect(screen.getByText('/api/torznab/oc/cached')).toBeInTheDocument();
 	});
 
+	it('wraps a provider endpoint below its label on a narrow card', () => {
+		render(<TorznabProviderPanel />);
+
+		const endpoint = screen.getByText('/api/torznab/pm/cached');
+		expect(endpoint.parentElement).toHaveClass('min-w-0', 'flex-wrap');
+	});
+
 	// Visible to everyone rather than absent: the feature is described and the
 	// fields are shown, disabled. Where a sponsorship comes from is left to the
 	// pitch on the page that renders this panel, which says it once.

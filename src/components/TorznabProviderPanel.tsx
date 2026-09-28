@@ -127,7 +127,7 @@ export const TorznabProviderPanel: FC = () => {
 							key={service}
 							className="rounded border border-gray-600 bg-gray-900/40 p-3"
 						>
-							<div className="mb-2 flex items-center justify-between gap-2">
+							<div className="mb-2 flex min-w-0 flex-wrap items-center justify-between gap-2">
 								<span className="text-sm font-medium text-gray-100">
 									{LIVE_SERVICE_LABELS[service]}
 								</span>
