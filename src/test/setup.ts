@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { beforeEach, vi } from 'vitest';
 
 // Mock rate limiting wrappers to pass through handlers unchanged in tests
 vi.mock('@/services/rateLimit/withRateLimit', () => ({
@@ -30,3 +30,12 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Silence console.error in tests to avoid non-zero exit codes on intentional error logs
 vi.spyOn(console, 'error').mockImplementation(() => {});
+
+// Nothing is blocked unless a test says so, and no test reaches the database
+// for the takedown list. The blocklist tests reset this themselves. Imported
+// here rather than at the top, so a test file's vi.mock of the modules behind
+// it still applies.
+beforeEach(async () => {
+	const { setBlocklistForTests } = await import('@/services/takedown/blocklist');
+	setBlocklistForTests([]);
+});
