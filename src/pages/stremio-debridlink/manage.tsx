@@ -464,7 +464,7 @@ export function DebridLinkManagePage() {
 									</label>
 									<Link
 										href={`/x/${imdbId}`}
-										className="haptic-sm rounded bg-sky-600 px-3 py-1 text-sm text-white hover:bg-sky-700"
+										className="haptic-sm rounded bg-sky-700 px-3 py-1 text-sm text-white hover:bg-sky-800"
 										title={`Cast other torrents for ${displayTitle}`}
 										aria-label={`Cast other torrents for ${displayTitle}`}
 									>
@@ -511,7 +511,7 @@ export function DebridLinkManagePage() {
 														<span className="break-all text-sm text-gray-300">
 															{getFilename(link.url)}
 														</span>
-														<span className="text-xs text-gray-400">
+														<span className="text-xs text-gray-300">
 															{formatSize(link.size)}
 														</span>
 													</div>
@@ -519,7 +519,7 @@ export function DebridLinkManagePage() {
 												<div className="flex shrink-0 gap-2">
 													<a
 														href={getStremioUrl(link)}
-														className="haptic-sm rounded bg-cyan-600 px-3 py-1 text-sm text-white hover:bg-cyan-700"
+														className="haptic-sm rounded bg-cyan-700 px-3 py-1 text-sm text-white hover:bg-cyan-800"
 													>
 														<Eye className="h-4 w-4" />
 													</a>

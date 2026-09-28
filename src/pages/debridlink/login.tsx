@@ -150,7 +150,7 @@ export default function DebridLinkLoginPage() {
 							href={deviceVerificationUri(device)}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="inline-block rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+							className="inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
 						>
 							Open {deviceVerificationUri(device).replace(/^https?:\/\//, '')}
 						</a>
@@ -169,7 +169,7 @@ export default function DebridLinkLoginPage() {
 							{checking ? 'Starting...' : 'Sign in with Debrid-Link'}
 						</button>
 
-						<div className="flex items-center gap-2 text-xs text-gray-500">
+						<div className="flex items-center gap-2 text-xs text-gray-400">
 							<span className="h-px flex-1 bg-gray-700" />
 							or paste an API token
 							<span className="h-px flex-1 bg-gray-700" />
@@ -194,7 +194,7 @@ export default function DebridLinkLoginPage() {
 								<button
 									type="submit"
 									disabled={checking}
-									className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
+									className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
 								>
 									{checking ? 'Checking...' : 'Save API Token'}
 								</button>
@@ -206,7 +206,7 @@ export default function DebridLinkLoginPage() {
 											'_blank'
 										)
 									}
-									className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+									className="rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
 								>
 									Get API Token from Debrid-Link
 								</button>

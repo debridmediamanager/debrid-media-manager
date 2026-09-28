@@ -318,11 +318,11 @@ describe('StartPage', () => {
 		expect(loginButton).toHaveClass(
 			'm-2',
 			'rounded',
-			'bg-blue-500',
+			'bg-blue-600',
 			'px-4',
 			'py-2',
 			'text-white',
-			'hover:bg-blue-600'
+			'hover:bg-blue-700'
 		);
 	});
 

@@ -53,11 +53,11 @@ function Field({ label, value, hint }: { label: string; value: string; hint?: st
 			<div className="w-40 shrink-0 text-sm font-semibold text-gray-300">{label}</div>
 			<div className="flex min-w-0 flex-1 items-center gap-1">
 				<code className="min-w-0 flex-1 truncate rounded bg-gray-800 px-2 py-1.5 font-mono text-sm text-cyan-300">
-					{value || <span className="text-gray-500">(leave blank)</span>}
+					{value || <span className="text-gray-400">(leave blank)</span>}
 				</code>
 				{value ? <CopyButton value={value} label={label} /> : null}
 			</div>
-			{hint ? <div className="text-xs text-gray-500 sm:w-48 sm:shrink-0">{hint}</div> : null}
+			{hint ? <div className="text-xs text-gray-400 sm:w-48 sm:shrink-0">{hint}</div> : null}
 		</div>
 	);
 }
@@ -391,7 +391,7 @@ export default function SabnzbdSetupPage() {
 								</option>
 							))}
 						</select>
-						<span className="text-xs text-gray-500">
+						<span className="text-xs text-gray-400">
 							It must be one of these, or *arr&apos;s test fails with &ldquo;Category
 							does not exist&rdquo;.
 						</span>
@@ -404,14 +404,14 @@ export default function SabnzbdSetupPage() {
 							type="button"
 							onClick={runTest}
 							disabled={test.kind === 'running'}
-							className="inline-flex items-center gap-2 rounded bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600 disabled:opacity-60"
+							className="inline-flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 disabled:opacity-60"
 						>
 							{test.kind === 'running' ? (
 								<Loader2 className="h-4 w-4 animate-spin" />
 							) : null}
 							Test these settings
 						</button>
-						<span className="text-xs text-gray-500">
+						<span className="text-xs text-gray-400">
 							Checks more than Radarr&apos;s own Test does — see below.
 						</span>
 					</div>

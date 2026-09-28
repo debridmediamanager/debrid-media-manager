@@ -283,7 +283,7 @@ const EpisodeCard = memo(function EpisodeCard({
 								)}
 							</div>
 						)}
-						<p className="text-xs text-gray-500">{localTime} (local)</p>
+						<p className="text-xs text-gray-400">{localTime} (local)</p>
 					</div>
 				</div>
 			</div>
@@ -773,7 +773,7 @@ function CalendarPage() {
 					<div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
 						<div className="space-y-0.5">
 							<h1 className="text-xl font-semibold text-white">Episode Calendar</h1>
-							<p className="text-xs text-gray-500">
+							<p className="text-xs text-gray-400">
 								{calendarWindow
 									? `Window: ${calendarWindow} • ${totalLinkableEpisodes} episodes`
 									: 'Loading calendar window...'}

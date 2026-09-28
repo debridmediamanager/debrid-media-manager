@@ -231,7 +231,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 							Live monitoring of Real-Debrid stream server availability.
 						</p>
 
-						<div className="flex items-center gap-4 text-xs font-medium text-slate-500">
+						<div className="flex items-center gap-4 text-xs font-medium text-slate-400">
 							<div className="flex items-center gap-1.5">
 								<Clock className="h-3.5 w-3.5" />
 								<span data-testid="status-freshness">
@@ -318,7 +318,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 											? `${Math.round(workingStream.rate * 100)}%`
 											: '—'}
 									</span>
-									<span className="text-sm text-slate-500">
+									<span className="text-sm text-slate-400">
 										{workingStream.total > 0
 											? `${workingStream.working}/${workingStream.total} servers`
 											: 'no data yet'}
@@ -344,7 +344,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 														.replace('.download.real-debrid.com', '')
 														.toUpperCase()}
 													{s.latencyMs && (
-														<span className="ml-1 text-emerald-500/70">
+														<span className="ml-1 text-emerald-300">
 															{Math.round(s.latencyMs)}ms
 														</span>
 													)}
@@ -373,7 +373,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 									</div>
 								)}
 								{workingStream.total > 0 && (
-									<div className="mt-3 text-xs text-slate-500">
+									<div className="mt-3 text-xs text-slate-400">
 										Latencies measured from Germany
 									</div>
 								)}
@@ -403,7 +403,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 									>
 										{rdApiPct !== null ? `${rdApiPct}%` : '—'}
 									</span>
-									<span className="text-sm text-slate-500">
+									<span className="text-sm text-slate-400">
 										{rdApiConsidered > 0
 											? `${rdApi?.successCount ?? 0} of ${rdApiConsidered}`
 											: 'no data yet'}
@@ -411,7 +411,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 								</div>
 								{rdApi && rdApi.totalCount > 0 && (
 									<div className="mt-3 space-y-2">
-										<div className="text-xs font-medium text-slate-500">
+										<div className="text-xs font-medium text-slate-400">
 											By operation
 										</div>
 										{Object.values(rdApi.byOperation)
@@ -492,7 +492,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 									>
 										{torrentioPct !== null ? `${torrentioPct}%` : '—'}
 									</span>
-									<span className="text-sm text-slate-500">
+									<span className="text-sm text-slate-400">
 										{torrentioTotalChecks > 0
 											? `${torrentioPassedCount}/${torrentioTotalChecks} passed`
 											: 'no data yet'}
@@ -500,7 +500,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 								</div>
 								{torrentioTotalChecks > 0 && (
 									<div className="mt-3 space-y-1.5">
-										<div className="text-xs font-medium text-slate-500">
+										<div className="text-xs font-medium text-slate-400">
 											Last {torrentioTotalChecks} checks
 										</div>
 										{torrentioChecks.map((check, i) => (
@@ -561,7 +561,7 @@ const RealDebridStatusPage: NextPage & { disableLibraryProvider?: boolean } = ()
 
 					{/* Footer */}
 					<footer className="mt-8 border-t border-white/10 pt-8 text-center">
-						<p className="text-sm text-slate-500">
+						<p className="text-sm text-slate-400">
 							Debrid Media Manager is an open-source project.
 							<a
 								href="https://debridmediamanager.com"

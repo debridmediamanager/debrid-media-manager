@@ -134,7 +134,7 @@ export default function PremiumizeLoginPage() {
 							href={device.verification_uri}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="inline-block rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+							className="inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
 						>
 							Open {device.verification_uri.replace(/^https?:\/\//, '')}
 						</a>
@@ -153,7 +153,7 @@ export default function PremiumizeLoginPage() {
 							{checking ? 'Starting...' : 'Sign in with Premiumize'}
 						</button>
 
-						<div className="flex items-center gap-2 text-xs text-gray-500">
+						<div className="flex items-center gap-2 text-xs text-gray-400">
 							<span className="h-px flex-1 bg-gray-700" />
 							or paste an API key
 							<span className="h-px flex-1 bg-gray-700" />
@@ -178,7 +178,7 @@ export default function PremiumizeLoginPage() {
 								<button
 									type="submit"
 									disabled={checking}
-									className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
+									className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
 								>
 									{checking ? 'Checking...' : 'Save API Key'}
 								</button>
@@ -187,7 +187,7 @@ export default function PremiumizeLoginPage() {
 									onClick={() =>
 										window.open('https://www.premiumize.me/account', '_blank')
 									}
-									className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+									className="rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
 								>
 									Get API Key from Premiumize
 								</button>

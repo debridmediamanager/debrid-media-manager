@@ -462,7 +462,7 @@ export function PremiumizeManagePage() {
 									</label>
 									<Link
 										href={`/x/${imdbId}`}
-										className="haptic-sm rounded bg-yellow-600 px-3 py-1 text-sm text-white hover:bg-yellow-700"
+										className="haptic-sm rounded bg-yellow-700 px-3 py-1 text-sm text-white hover:bg-yellow-800"
 										title={`Cast other torrents for ${displayTitle}`}
 										aria-label={`Cast other torrents for ${displayTitle}`}
 									>
@@ -509,7 +509,7 @@ export function PremiumizeManagePage() {
 														<span className="break-all text-sm text-gray-300">
 															{getFilename(link.url)}
 														</span>
-														<span className="text-xs text-gray-400">
+														<span className="text-xs text-gray-300">
 															{formatSize(link.size)}
 														</span>
 													</div>
@@ -517,7 +517,7 @@ export function PremiumizeManagePage() {
 												<div className="flex shrink-0 gap-2">
 													<a
 														href={getStremioUrl(link)}
-														className="haptic-sm rounded bg-cyan-600 px-3 py-1 text-sm text-white hover:bg-cyan-700"
+														className="haptic-sm rounded bg-cyan-700 px-3 py-1 text-sm text-white hover:bg-cyan-800"
 													>
 														<Eye className="h-4 w-4" />
 													</a>

@@ -143,7 +143,7 @@ const Poster = memo(
 						className="object-cover"
 					/>
 				) : (
-					<div className="absolute inset-0 flex items-center justify-center text-gray-600">
+					<div className="absolute inset-0 flex items-center justify-center text-gray-400">
 						<div className="p-2 text-center text-sm">Loading...</div>
 					</div>
 				)}

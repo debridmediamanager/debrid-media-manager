@@ -99,7 +99,7 @@ export default function FloatingLibraryIndicator() {
 					</span>
 					{!isLoading && !isFetching && lastFetchTime && (
 						<span
-							className={`text-xs ${isStale ? 'text-yellow-400' : 'text-gray-500'} hidden sm:block`}
+							className={`text-xs ${isStale ? 'text-yellow-400' : 'text-gray-400'} hidden sm:block`}
 						>
 							{lastFetchLabel}
 						</span>
@@ -110,7 +110,7 @@ export default function FloatingLibraryIndicator() {
 					disabled={isFetching || isLoading}
 					className={`rounded-full p-1.5 transition-all ${
 						isFetching || isLoading
-							? 'cursor-not-allowed bg-gray-700 text-gray-500'
+							? 'cursor-not-allowed bg-gray-700 text-gray-300'
 							: error
 								? 'bg-red-900/50 text-red-400 hover:bg-red-800/50'
 								: isStale

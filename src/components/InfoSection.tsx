@@ -55,7 +55,7 @@ export function InfoSection() {
 				<div className="mb-1 text-center text-sm">
 					<Sparkles className="mr-1 inline-block h-3 w-3 text-yellow-400" />
 					<a
-						className="text-azure bg-red-500 px-1 text-red-100"
+						className="text-azure bg-red-600 px-1 text-white"
 						href="https://www.reddit.com/r/debridmediamanager/"
 						target="_blank"
 					>

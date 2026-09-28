@@ -114,12 +114,12 @@ export default function PersonMoviesPage() {
 										</div>
 										<div className="text-xs text-gray-400">{item.year}</div>
 										{item.character && (
-											<div className="text-xs text-gray-500">
+											<div className="text-xs text-gray-400">
 												as {item.character}
 											</div>
 										)}
 										{item.job && (
-											<div className="text-xs text-gray-500">{item.job}</div>
+											<div className="text-xs text-gray-400">{item.job}</div>
 										)}
 									</div>
 								</div>

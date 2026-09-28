@@ -136,7 +136,7 @@ export default function RealDebridLoginPage() {
 							<input type="hidden" name="action" value="Continue" />
 							<button
 								type="submit"
-								className="inline-block rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+								className="inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
 							>
 								Open {device.verification_url.replace(/^https?:\/\//, '')}
 							</button>
@@ -162,7 +162,7 @@ export default function RealDebridLoginPage() {
 							does not expire and is not scoped to this app.
 						</p>
 
-						<div className="flex items-center gap-2 text-xs text-gray-500">
+						<div className="flex items-center gap-2 text-xs text-gray-400">
 							<span className="h-px flex-1 bg-gray-700" />
 							or paste an API key
 							<span className="h-px flex-1 bg-gray-700" />
@@ -187,7 +187,7 @@ export default function RealDebridLoginPage() {
 								<button
 									type="submit"
 									disabled={checking}
-									className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
+									className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
 								>
 									{checking ? 'Checking...' : 'Save API Key'}
 								</button>
@@ -196,7 +196,7 @@ export default function RealDebridLoginPage() {
 									onClick={() =>
 										window.open('https://real-debrid.com/apitoken', '_blank')
 									}
-									className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+									className="rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
 								>
 									Get API Key from Real-Debrid
 								</button>

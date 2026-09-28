@@ -67,7 +67,7 @@ export function Field({
 				{extra}
 				{copyable ? <CopyButton value={copyValue ?? value} label={label} /> : null}
 			</div>
-			{hint ? <div className="text-xs text-gray-500 sm:w-56 sm:shrink-0">{hint}</div> : null}
+			{hint ? <div className="text-xs text-gray-400 sm:w-56 sm:shrink-0">{hint}</div> : null}
 		</div>
 	);
 }

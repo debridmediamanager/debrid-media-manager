@@ -47,5 +47,6 @@ describe('PersonMoviesPage responsive content', () => {
 			.getAllByText(longTitleCredits[0].title)
 			.find((element) => element.classList.contains('text-sm'));
 		expect(title).toHaveClass('break-words');
+		expect(screen.getByText('as The Hen')).toHaveClass('text-gray-400');
 	});
 });

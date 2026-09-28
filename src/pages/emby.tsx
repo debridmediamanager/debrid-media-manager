@@ -194,7 +194,7 @@ function DownloadButton({ plugin, apiKey }: { plugin: EmbyPlugin; apiKey: string
 			disabled={!apiKey || busy}
 			aria-label={`Download ${plugin.name}`}
 			title={apiKey ? plugin.assembly : 'Paste your DMM API key in Settings first'}
-			className="haptic-sm inline-flex shrink-0 items-center gap-1.5 rounded border-2 border-green-500/60 bg-green-900/30 px-3 py-1.5 text-xs font-medium text-green-100 transition-colors hover:bg-green-800/50 disabled:cursor-not-allowed disabled:border-gray-600 disabled:bg-gray-800/40 disabled:text-gray-500"
+			className="haptic-sm inline-flex shrink-0 items-center gap-1.5 rounded border-2 border-green-500/60 bg-green-800 px-3 py-1.5 text-xs font-medium text-green-100 transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:border-gray-600 disabled:bg-gray-800/40 disabled:text-gray-300"
 		>
 			{busy ? (
 				<Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -253,7 +253,7 @@ function SetupGuide({
 									<div className="text-sm text-gray-200">
 										{plugin.account}
 										{release ? (
-											<span className="ml-2 text-xs text-gray-500">
+											<span className="ml-2 text-xs text-gray-400">
 												v{release.version}
 											</span>
 										) : null}
@@ -261,7 +261,7 @@ function SetupGuide({
 									<div className="text-xs text-gray-400">{plugin.detail}</div>
 									{release ? (
 										<div
-											className="mt-0.5 truncate font-mono text-[11px] text-gray-500"
+											className="mt-0.5 truncate font-mono text-[11px] text-gray-400"
 											title={release.sha256}
 										>
 											sha256 {release.sha256}
@@ -346,7 +346,7 @@ function SetupGuide({
 									{path}
 								</code>
 								{note ? (
-									<span className="ml-2 text-xs text-gray-500">{note}</span>
+									<span className="ml-2 text-xs text-gray-400">{note}</span>
 								) : null}
 							</div>
 						</div>

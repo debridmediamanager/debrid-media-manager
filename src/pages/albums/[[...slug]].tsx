@@ -100,7 +100,7 @@ function SidebarAlbumButton({
 			</div>
 			<div className="min-w-0">
 				<p className="truncate text-sm font-medium">{album.album}</p>
-				<p className="truncate text-xs text-gray-500">{album.artist}</p>
+				<p className="truncate text-xs text-gray-400">{album.artist}</p>
 			</div>
 		</button>
 	);
@@ -1060,7 +1060,7 @@ export default function AlbumsPage() {
 							</button>
 						</div>
 						<div className="min-h-0 flex-1 overflow-y-auto p-2">
-							<p className="px-3 py-2 text-xs font-bold uppercase text-gray-500">
+							<p className="px-3 py-2 text-xs font-bold uppercase text-gray-400">
 								Recently added
 							</p>
 							{sidebarAlbums.map((album) => (
@@ -1119,7 +1119,7 @@ export default function AlbumsPage() {
 								/>
 								<div
 									ref={loadMoreRef}
-									className="flex min-h-20 items-center justify-center pb-8 text-sm text-gray-500"
+									className="flex min-h-20 items-center justify-center pb-8 text-sm text-gray-400"
 								>
 									{libraryLoadingMore ? (
 										<Loader2 className="h-5 w-5 animate-spin text-green-500" />

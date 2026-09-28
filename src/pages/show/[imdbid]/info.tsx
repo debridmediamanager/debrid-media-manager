@@ -268,7 +268,7 @@ export default function ShowInfoPage() {
 																	loading="lazy"
 																/>
 															) : (
-																<div className="flex h-full items-center justify-center text-gray-600">
+																<div className="flex h-full items-center justify-center text-gray-400">
 																	<div className="p-2 text-center text-sm">
 																		No Photo
 																	</div>

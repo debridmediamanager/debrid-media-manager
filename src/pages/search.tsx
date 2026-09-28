@@ -159,7 +159,7 @@ function Search() {
 									<h3 className="text-center text-lg font-bold text-slate-300">
 										{result.title}
 									</h3>
-									<div className="text-sm text-gray-600">{result.year}</div>
+									<div className="text-sm text-gray-400">{result.year}</div>
 								</Link>
 							))}
 						</div>

@@ -54,4 +54,13 @@ describe('InfoSection', () => {
 			'discord.gg'
 		);
 	});
+
+	it('keeps the community badge readable on the dark panel', () => {
+		render(<InfoSection />);
+
+		expect(screen.getByRole('link', { name: 'r/debridmediamanager' })).toHaveClass(
+			'bg-red-600',
+			'text-white'
+		);
+	});
 });
