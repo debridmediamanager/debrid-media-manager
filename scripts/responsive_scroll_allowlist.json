@@ -141,5 +141,11 @@
 		"classContains": "flex w-full items-center justify-center gap-2 overflow-x-auto",
 		"textIncludes": "genres",
 		"reason": "A signed-in /start lands on the home page, whose category strip scrolls sideways."
+	},
+	{
+		"route": "/library",
+		"classContains": "flex w-full items-center justify-center gap-2 overflow-x-auto",
+		"textIncludes": "genres",
+		"reason": "A guest opening /library lands on the home page, whose category strip scrolls sideways."
 	}
 ]
