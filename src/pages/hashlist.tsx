@@ -1054,7 +1054,7 @@ function HashlistPage() {
 					}}
 				/>
 			</div>
-			<div className="mb-4">
+			<div className="mb-4 flex flex-wrap items-center gap-1">
 				<button
 					className={`mb-2 mr-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
 						currentPage <= 1 ? 'cursor-not-allowed opacity-60' : ''
