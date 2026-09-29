@@ -97,6 +97,11 @@ export function AnimeHome() {
 									alt={entry.title}
 									loading="lazy"
 									className="aspect-[2/3] w-full rounded object-cover"
+									// Some Kitsu posters are gone; keep the card's shape, not a
+									// broken image, as the search page does.
+									onError={(e) => {
+										e.currentTarget.style.visibility = 'hidden';
+									}}
 								/>
 								<div className="mt-1 line-clamp-2 text-xs">{entry.title}</div>
 								{type && <div className="text-[10px] text-gray-400">{type}</div>}

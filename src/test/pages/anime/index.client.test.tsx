@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/router', () => ({ useRouter: () => ({ push: vi.fn() }) }));
@@ -43,5 +43,16 @@ describe('anime home page', () => {
 		expect(screen.getByRole('link', { name: /Mal only/ }).getAttribute('href')).toBe(
 			'/anime/mal-52991'
 		);
+	});
+
+	// Kitsu no longer serves some of its posters: on 2026-09-29 /anime listed
+	// media.kitsu.app/anime/48323/poster_image/medium-….jpeg, which answers 404,
+	// and the card showed a broken image. The search page hides such posters.
+	it('hides a poster that fails to load but keeps the card', () => {
+		render(<AnimeHome />);
+		const poster = screen.getByRole('img', { name: 'Frieren' });
+		fireEvent.error(poster);
+		expect(poster.style.visibility).toBe('hidden');
+		expect(screen.getByRole('link', { name: /Frieren/ })).toBeInTheDocument();
 	});
 });
