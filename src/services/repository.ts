@@ -495,6 +495,18 @@ export class Repository {
 		return this.availabilityService.filterCachedHashesAd(await withoutBlockedHashList(hashes));
 	}
 
+	public async filterPlayableCachedHashes(hashes: string[]) {
+		return this.availabilityService.filterPlayableCachedHashes(
+			await withoutBlockedHashList(hashes)
+		);
+	}
+
+	public async filterPlayableCachedHashesAd(hashes: string[]) {
+		return this.availabilityService.filterPlayableCachedHashesAd(
+			await withoutBlockedHashList(hashes)
+		);
+	}
+
 	public removeAvailability(hash: string) {
 		return this.availabilityService.removeAvailability(hash);
 	}

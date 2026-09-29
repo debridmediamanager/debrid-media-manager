@@ -288,4 +288,41 @@ describe('AvailabilityService', () => {
 		expect(createManyAdMock).not.toHaveBeenCalled();
 		expect(createManyAdFileMock).not.toHaveBeenCalled();
 	});
+
+	describe('filterPlayableCachedHashes', () => {
+		const rows = [
+			{ hash: 'AAAA', files: [{ path: '/Show/Episode.mkv' }] },
+			// cached, but nothing in it plays
+			{
+				hash: 'bbbb',
+				files: [{ path: '/Show/Episode.nfo' }, { path: '/Sample/sample.mkv' }],
+			},
+			{ hash: 'cccc', files: [] },
+		];
+
+		it('answers only the cached hashes holding a video, lower-cased', async () => {
+			findManyMock.mockResolvedValue(rows);
+			const cached = await service.filterPlayableCachedHashes(['AAAA', 'bbbb', 'cccc']);
+			expect(cached).toEqual(new Set(['aaaa']));
+			expect(findManyMock).toHaveBeenCalledWith({
+				where: { hash: { in: ['AAAA', 'bbbb', 'cccc'] }, status: 'downloaded' },
+				select: { hash: true, files: { select: { path: true } } },
+			});
+		});
+
+		it("reads AllDebrid's own ready rows, by lower-cased hash", async () => {
+			findManyAdMock.mockResolvedValue(rows);
+			const cached = await service.filterPlayableCachedHashesAd(['AAAA', 'bbbb']);
+			expect(cached).toEqual(new Set(['aaaa']));
+			expect(findManyAdMock).toHaveBeenCalledWith({
+				where: { hash: { in: ['aaaa', 'bbbb'] }, status: 'Ready', statusCode: 4 },
+				select: { hash: true, files: { select: { path: true } } },
+			});
+		});
+
+		it('asks the database nothing for an empty list', async () => {
+			expect(await service.filterPlayableCachedHashes([])).toEqual(new Set());
+			expect(findManyMock).not.toHaveBeenCalled();
+		});
+	});
 });

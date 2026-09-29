@@ -7,6 +7,7 @@ import {
 	checkAvailabilityAd,
 	checkAvailabilityAdByHashes,
 	checkAvailabilityByHashes,
+	checkPlayableCachedHashes,
 } from './availability';
 import {
 	checkAvailabilityOc,
@@ -14,11 +15,11 @@ import {
 	checkAvailabilityPm,
 	checkAvailabilityPm2,
 	checkDatabaseAvailabilityAd,
-	checkDatabaseAvailabilityAd2,
 	checkDatabaseAvailabilityRd,
-	checkDatabaseAvailabilityRd2,
 	checkDatabaseAvailabilityTb,
 	checkDatabaseAvailabilityTb2,
+	checkPlayableAvailabilityAd,
+	checkPlayableAvailabilityRd,
 	wrapLoading,
 } from './instantChecks';
 
@@ -27,6 +28,8 @@ vi.mock('./availability', () => ({
 	checkAvailability: vi.fn(),
 	checkAvailabilityAd: vi.fn(),
 	checkAvailabilityAdByHashes: vi.fn(),
+	checkPlayableCachedHashes: vi.fn(),
+	MAX_PLAYABLE_HASHES: 500,
 }));
 
 vi.mock('@/services/torbox', () => ({
@@ -64,6 +67,7 @@ const mockCheckAvailabilityByHashes = vi.mocked(checkAvailabilityByHashes);
 const mockCheckAvailability = vi.mocked(checkAvailability);
 const mockCheckAvailabilityAd = vi.mocked(checkAvailabilityAd);
 const mockCheckAvailabilityAdByHashes = vi.mocked(checkAvailabilityAdByHashes);
+const mockCheckPlayableCachedHashes = vi.mocked(checkPlayableCachedHashes);
 const mockCheckCachedStatus = vi.mocked(checkCachedStatus);
 const mockCheckPremiumizeCache = vi.mocked(checkPremiumizeCache);
 const mockCheckOffcloudCache = vi.mocked(checkOffcloudCache);
@@ -83,90 +87,6 @@ const createStateHarness = <T extends { hash: string }>(initial: T[]) => {
 describe('instantChecks utilities', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-	});
-
-	it('marks RD torrents as available when instant cache hits', async () => {
-		mockCheckAvailabilityByHashes.mockResolvedValue({
-			available: [
-				{
-					hash: 'hash-1',
-					files: [{ file_id: 1, path: 'Movie.mkv', bytes: 2048 }],
-				},
-			],
-		} as any);
-		const { setter, getState } = createStateHarness([
-			{
-				hash: 'hash-1',
-				noVideos: false,
-				rdAvailable: false,
-				files: [],
-			},
-		] as any[]);
-
-		const instantHits = await checkDatabaseAvailabilityRd2(
-			'problem',
-			'solution',
-			'rd-key',
-			['hash-1'],
-			setter
-		);
-
-		expect(instantHits).toBe(1);
-		expect(getState()[0].rdAvailable).toBe(true);
-		expect(getState()[0].files).toHaveLength(1);
-		// RD's own ids are kept apart so a later TorBox check cannot replace them
-		expect(getState()[0].rdFiles).toEqual(getState()[0].files);
-	});
-
-	it('marks AD torrents as available from the hash-only database check', async () => {
-		mockCheckAvailabilityAdByHashes.mockResolvedValue({
-			available: [
-				{
-					hash: 'hash-ad',
-					files: [{ file_id: 3, path: 'Episode.mkv', bytes: 1024 }],
-				},
-			],
-		} as any);
-		const { setter, getState } = createStateHarness([
-			{
-				hash: 'hash-ad',
-				noVideos: false,
-				adAvailable: false,
-				files: [],
-			},
-		] as any[]);
-
-		const hits = await checkDatabaseAvailabilityAd2('problem', 'solution', ['hash-ad'], setter);
-
-		expect(hits).toBe(1);
-		expect(getState()[0].adAvailable).toBe(true);
-		expect(getState()[0].files[0]).toMatchObject({ fileId: 3, filename: 'Episode.mkv' });
-	});
-
-	// AllDebrid reports hashes lowercase while hashlists carry them uppercase,
-	// so a case-sensitive join would silently mark everything unavailable.
-	it('matches AD availability regardless of hash case', async () => {
-		mockCheckAvailabilityAdByHashes.mockResolvedValue({
-			available: [
-				{
-					hash: 'abcdef',
-					files: [{ file_id: 1, path: 'Episode.mkv', bytes: 1024 }],
-				},
-			],
-		} as any);
-		const { setter, getState } = createStateHarness([
-			{
-				hash: 'ABCDEF',
-				noVideos: false,
-				adAvailable: false,
-				files: [],
-			},
-		] as any[]);
-
-		const hits = await checkDatabaseAvailabilityAd2('problem', 'solution', ['ABCDEF'], setter);
-
-		expect(hits).toBe(1);
-		expect(getState()[0].adAvailable).toBe(true);
 	});
 
 	it('marks TB torrents as available when cached data exists', async () => {
@@ -285,6 +205,111 @@ describe('instantChecks utilities', () => {
 		const asyncCheck = Promise.resolve(3);
 		const result = await wrapLoading('RD', asyncCheck);
 		expect(result).toBe(3);
+	});
+
+	// The hashlist page's check: hashes only, 500 at a time, merged per batch.
+	describe('hashlist playable check', () => {
+		const rows = (hashes: string[]) =>
+			hashes.map((hash) => ({
+				hash,
+				noVideos: false,
+				rdAvailable: false,
+				adAvailable: false,
+				files: [],
+			}));
+
+		it('marks the rows Real-Debrid holds and leaves files and sizes alone', async () => {
+			mockCheckPlayableCachedHashes.mockResolvedValue(['hash-1']);
+			const { setter, getState } = createStateHarness(rows(['hash-1', 'hash-2']) as any[]);
+
+			const hits = await checkPlayableAvailabilityRd(
+				'problem',
+				'solution',
+				['hash-1', 'hash-2'],
+				setter
+			);
+
+			expect(mockCheckPlayableCachedHashes).toHaveBeenCalledWith(
+				'problem',
+				'solution',
+				'rd',
+				['hash-1', 'hash-2']
+			);
+			expect(hits).toBe(1);
+			expect(getState().map((t: any) => t.rdAvailable)).toEqual([true, false]);
+			expect(getState()[0].files).toEqual([]);
+			expect(getState()[0]).not.toHaveProperty('fileSize');
+			expect(getState()[0].adAvailable).toBe(false);
+		});
+
+		// AllDebrid and the endpoint answer lowercase while hashlists can carry
+		// uppercase, so a case-sensitive join would mark everything unavailable.
+		it('marks AllDebrid rows regardless of hash case', async () => {
+			mockCheckPlayableCachedHashes.mockResolvedValue(['abcdef']);
+			const { setter, getState } = createStateHarness(rows(['ABCDEF']) as any[]);
+
+			const hits = await checkPlayableAvailabilityAd(
+				'problem',
+				'solution',
+				['ABCDEF'],
+				setter
+			);
+
+			expect(mockCheckPlayableCachedHashes).toHaveBeenCalledWith(
+				'problem',
+				'solution',
+				'ad',
+				['ABCDEF']
+			);
+			expect(hits).toBe(1);
+			expect(getState()[0].adAvailable).toBe(true);
+			expect(getState()[0].rdAvailable).toBe(false);
+		});
+
+		it('asks 500 hashes at a time and merges each batch as it answers', async () => {
+			const hashes = Array.from({ length: 1200 }, (_, i) => `hash-${i}`);
+			mockCheckPlayableCachedHashes.mockImplementation(
+				async (_p: string, _s: string, _service: string, group: string[]) => group
+			);
+			const { setter, getState } = createStateHarness(rows(hashes) as any[]);
+
+			const hits = await checkPlayableAvailabilityRd('problem', 'solution', hashes, setter);
+
+			expect(mockCheckPlayableCachedHashes.mock.calls.map((c) => c[3].length)).toEqual([
+				500, 500, 200,
+			]);
+			expect(setter).toHaveBeenCalledTimes(3);
+			expect(hits).toBe(1200);
+			expect(getState().every((t: any) => t.rdAvailable)).toBe(true);
+		});
+
+		it('keeps the list when a batch finds nothing', async () => {
+			mockCheckPlayableCachedHashes.mockResolvedValue([]);
+			const { setter } = createStateHarness(rows(['hash-1']) as any[]);
+
+			expect(
+				await checkPlayableAvailabilityRd('problem', 'solution', ['hash-1'], setter)
+			).toBe(0);
+			expect(setter).not.toHaveBeenCalled();
+		});
+
+		it('fails only when every batch failed, so a partial answer still counts', async () => {
+			const hashes = Array.from({ length: 600 }, (_, i) => `hash-${i}`);
+			mockCheckPlayableCachedHashes
+				.mockRejectedValueOnce(new Error('503'))
+				.mockResolvedValueOnce(['hash-500']);
+			const { setter, getState } = createStateHarness(rows(hashes) as any[]);
+
+			expect(await checkPlayableAvailabilityRd('problem', 'solution', hashes, setter)).toBe(
+				1
+			);
+			expect(getState()[500].rdAvailable).toBe(true);
+
+			mockCheckPlayableCachedHashes.mockRejectedValue(new Error('503'));
+			await expect(
+				checkPlayableAvailabilityRd('problem', 'solution', hashes, setter)
+			).rejects.toThrow('503');
+		});
 	});
 
 	describe('imdb-based availability checks', () => {
@@ -491,40 +516,6 @@ describe('instantChecks utilities', () => {
 			// 250 hashes / 100 batch size = 3 batches
 			expect(mockCheckAvailability).toHaveBeenCalledTimes(3);
 			expect(hits).toBe(250);
-			expect(getState().every((t: any) => t.rdAvailable)).toBe(true);
-		});
-
-		it('processes all hash batches for RD2 (hash-only variant)', async () => {
-			const hashes = Array.from({ length: 150 }, (_, i) => `hash-${i}`);
-			const torrents = hashes.map((hash) => ({
-				hash,
-				noVideos: false,
-				rdAvailable: false,
-				files: [],
-			}));
-
-			mockCheckAvailabilityByHashes.mockImplementation(
-				async (_p: string, _s: string, hashGroup: string[]) => ({
-					available: hashGroup.map((h: string) => ({
-						hash: h,
-						files: [{ file_id: 1, path: 'Movie.mkv', bytes: 1024 }],
-					})),
-				})
-			);
-
-			const { setter, getState } = createStateHarness(torrents as any[]);
-
-			const hits = await checkDatabaseAvailabilityRd2(
-				'problem',
-				'solution',
-				'rd-key',
-				hashes,
-				setter
-			);
-
-			// 150 hashes / 100 batch size = 2 batches
-			expect(mockCheckAvailabilityByHashes).toHaveBeenCalledTimes(2);
-			expect(hits).toBe(150);
 			expect(getState().every((t: any) => t.rdAvailable)).toBe(true);
 		});
 

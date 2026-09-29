@@ -24,6 +24,8 @@ const build = () => {
 	const availability = {
 		checkAvailabilityByHashes: vi.fn(async (hashes: string[]) => hashes),
 		filterCachedHashes: vi.fn(async (hashes: string[]) => new Set(hashes)),
+		filterPlayableCachedHashes: vi.fn(async (hashes: string[]) => new Set(hashes)),
+		filterPlayableCachedHashesAd: vi.fn(async (hashes: string[]) => new Set(hashes)),
 		upsertAvailability: vi.fn(),
 		saveInstantAvailability: vi.fn(),
 	};
@@ -63,6 +65,8 @@ describe('Repository takedown enforcement', () => {
 		const { repo } = build();
 		expect(await repo.checkAvailabilityByHashes([BLOCKED, KEPT])).toEqual([KEPT]);
 		expect(await repo.filterCachedHashes([BLOCKED, KEPT])).toEqual(new Set([KEPT]));
+		expect(await repo.filterPlayableCachedHashes([BLOCKED, KEPT])).toEqual(new Set([KEPT]));
+		expect(await repo.filterPlayableCachedHashesAd([BLOCKED, KEPT])).toEqual(new Set([KEPT]));
 	});
 
 	it('keeps blocked hashes out of the shared availability tables', async () => {
