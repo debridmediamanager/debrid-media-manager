@@ -2,6 +2,7 @@ import type { DebridService } from '@/hooks/useAvailabilityCheck';
 import { FileData, SearchResult } from '@/services/mediasearch';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { getEpisodeCountClass, getEpisodeCountLabel } from '@/utils/episodeUtils';
+import { reporterIdFor } from '@/utils/reporterId';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize, totalFileSize } from '@/utils/results';
 import {
 	getBiggestVideoFile,
@@ -1200,7 +1201,14 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 										<ReportButton
 											hash={r.hash}
 											imdbId={imdbId!}
-											userId={rdKey || adKey || ''}
+											userId={reporterIdFor({
+												rdKey,
+												adKey,
+												torboxKey,
+												premiumizeKey,
+												offcloudKey,
+												debridLinkKey,
+											})}
 											isShow={true}
 										/>
 									</div>

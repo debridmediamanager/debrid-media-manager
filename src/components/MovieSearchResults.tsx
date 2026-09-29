@@ -1,6 +1,7 @@
 import type { DebridService } from '@/hooks/useAvailabilityCheck';
 import { SearchResult } from '@/services/mediasearch';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
+import { reporterIdFor } from '@/utils/reporterId';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize, totalFileSize } from '@/utils/results';
 import {
 	getBiggestVideoFile,
@@ -1217,7 +1218,14 @@ const MovieSearchResults = ({
 								<ReportButton
 									hash={r.hash}
 									imdbId={imdbId!}
-									userId={rdKey || adKey || torboxKey || ''}
+									userId={reporterIdFor({
+										rdKey,
+										adKey,
+										torboxKey,
+										premiumizeKey,
+										offcloudKey,
+										debridLinkKey,
+									})}
 								/>
 							</div>
 						</div>

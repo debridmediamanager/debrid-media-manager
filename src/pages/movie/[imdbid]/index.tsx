@@ -310,7 +310,15 @@ const MovieSearch: FunctionComponent = () => {
 		sortByBiggest
 	);
 
-	const { handleMassReport } = useMassReport(rdKey, adKey, torboxKey, imdbid as string);
+	const reporterKeys = {
+		rdKey,
+		adKey,
+		torboxKey,
+		premiumizeKey,
+		offcloudKey,
+		debridLinkKey,
+	};
+	const { handleMassReport } = useMassReport(reporterKeys, imdbid as string);
 
 	// Fetch movie info
 	useEffect(() => {
@@ -1210,6 +1218,7 @@ const MovieSearch: FunctionComponent = () => {
 				torboxKey={torboxKey}
 				premiumizeKey={premiumizeKey}
 				offcloudKey={offcloudKey}
+				debridLinkKey={debridLinkKey}
 				onMassReport={(type) => handleMassReport(type, filteredResults)}
 				mediaType="movie"
 				title={movieInfo.title}

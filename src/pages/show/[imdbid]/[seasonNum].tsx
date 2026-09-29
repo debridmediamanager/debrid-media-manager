@@ -59,6 +59,7 @@ import { handleCastTvShowOffcloud } from '@/utils/offcloudCastApiClient';
 import { handleCastTvShowPremiumize } from '@/utils/premiumizeCastApiClient';
 import { quickSearch } from '@/utils/quickSearch';
 import { isRdBlockedFilename } from '@/utils/rdFilenameFilter';
+import { canReportWith } from '@/utils/reporterId';
 import { sortByMean } from '@/utils/results';
 import { searchStateFromStatusHeader } from '@/utils/searchNotice';
 import { showInfoForSearchResult } from '@/utils/searchResultInfo';
@@ -406,7 +407,16 @@ const TvSearch: FunctionComponent = () => {
 		sortByMean
 	);
 
-	const { handleMassReport } = useMassReport(rdKey, adKey, torboxKey, imdbid as string);
+	const reporterKeys = {
+		rdKey,
+		adKey,
+		torboxKey,
+		premiumizeKey,
+		offcloudKey,
+		debridLinkKey,
+	};
+	const canReport = canReportWith(reporterKeys);
+	const { handleMassReport } = useMassReport(reporterKeys, imdbid as string);
 
 	const showFacts = useMemo(
 		() =>
@@ -2078,7 +2088,7 @@ const TvSearch: FunctionComponent = () => {
 					}
 					/{filteredResults.length}
 				</span>
-				{query && filteredResults.length > 0 && rdKey && showMassReportButtons && (
+				{query && filteredResults.length > 0 && canReport && showMassReportButtons && (
 					<div className="ml-2 flex gap-2">
 						<span
 							className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"

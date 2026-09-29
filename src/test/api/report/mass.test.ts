@@ -218,4 +218,40 @@ describe('/api/report/mass', () => {
 			errors: [{ hash: 'h1', error: 'boom' }],
 		});
 	});
+
+	it('stores a digest, never the credential, for a Premiumize reporter', async () => {
+		mockReportContent.mockResolvedValue(undefined);
+		const req = createMockRequest({
+			method: 'POST',
+			body: {
+				reports: [{ hash: 'h1', imdbId: 'tt1' }],
+				userId: 'pm:secret-pm-token',
+				type: 'porn',
+				...auth(),
+			},
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		const stored = mockReportContent.mock.calls[0][2] as string;
+		expect(stored).toMatch(/^pm:[0-9a-f]{64}$/);
+		expect(stored).not.toContain('secret-pm-token');
+	});
+
+	it('stores a Real-Debrid reporter as sent, which the admin override matches', async () => {
+		mockReportContent.mockResolvedValue(undefined);
+		const req = createMockRequest({
+			method: 'POST',
+			body: {
+				reports: [{ hash: 'h1', imdbId: 'tt1' }],
+				userId: 'RDTOKEN123',
+				type: 'porn',
+				...auth(),
+			},
+		});
+		await handler(req, createMockResponse());
+		expect(mockReportContent.mock.calls[0][2]).toBe('RDTOKEN123');
+	});
 });

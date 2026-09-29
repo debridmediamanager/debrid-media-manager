@@ -1,4 +1,5 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { storedReporterId } from '@/services/reporterId';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { repository } from '../../services/repository';
@@ -27,7 +28,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(403).json({ errorMessage: 'Authentication error' });
 		}
 
-		if (!hash || !imdbId || !userId || !type) {
+		if (!hash || !imdbId || !userId || typeof userId !== 'string' || !type) {
 			return res.status(400).json({ message: 'Missing required fields' });
 		}
 
@@ -40,7 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		await db.reportContent(
 			hash,
 			imdbId,
-			userId,
+			storedReporterId(userId),
 			type as 'porn' | 'wrong_imdb' | 'wrong_season'
 		);
 
