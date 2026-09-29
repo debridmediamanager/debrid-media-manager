@@ -156,6 +156,19 @@ describe('HashlistPage', () => {
 		vi.mocked(useDebridLinkCredential).mockReturnValue(null);
 	});
 
+	// /hashlist opened without a #fragment (a bookmark, or the nav link) has no
+	// list to read. It used to JSON.parse('') and toast a fetch failure.
+	it('does not report a failure when the URL carries no hashlist', async () => {
+		const { toast } = await import('react-hot-toast');
+		const HashlistPage = (await import('@/pages/hashlist')).default;
+		render(<HashlistPage />);
+
+		// initialize() awaits the DB and then reads the list; let it finish.
+		await new Promise((resolve) => setTimeout(resolve, 50));
+		expect(toast.error).not.toHaveBeenCalled();
+		expect(screen.getByText('0 Movies')).toBeInTheDocument();
+	});
+
 	it('should render pagination controls', async () => {
 		const HashlistPage = (await import('@/pages/hashlist')).default;
 		render(<HashlistPage />);

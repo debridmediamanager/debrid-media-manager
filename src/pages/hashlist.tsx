@@ -204,6 +204,8 @@ function HashlistPage() {
 		]);
 		const unblocked = (torrents: HashlistTorrent[]) =>
 			torrents.filter((torrent) => !blocked.has(torrent.hash?.toLowerCase()));
+		// No #fragment means no list was shared, not that reading one failed.
+		if (!jsonString) return [];
 		if (jsonString.charAt(0) !== '[') {
 			const hashlist = JSON.parse(jsonString) as Hashlist;
 			setHashlistTitle(hashlist.title);
