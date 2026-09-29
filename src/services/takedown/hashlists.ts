@@ -1,3 +1,4 @@
+import { hashlistDataPath } from '@/utils/hashlistSource';
 import { Octokit } from '@octokit/rest';
 
 const OWNER = 'debridmediamanager';
@@ -5,8 +6,9 @@ const REPO = 'hashlists';
 
 /**
  * Deletes shared hash list pages from the repository that serves
- * hashlists.debridmediamanager.com, in one commit. Ids that are not there are
- * skipped, so re-approving a notice is harmless.
+ * hashlists.debridmediamanager.com, in one commit, together with the list
+ * each one stores under `lists/` (see hashlistSource). Ids that are not there
+ * are skipped, so re-approving a notice is harmless.
  */
 export async function deleteHashlistPages(
 	ids: string[],
@@ -30,16 +32,28 @@ export async function deleteHashlistPages(
 		tree_sha: commit.tree.sha,
 	});
 	const present = new Set(tree.tree.map((entry) => entry.path));
-	const deleted = ids.filter((id) => present.has(`${id}.html`));
-	const missing = ids.filter((id) => !present.has(`${id}.html`));
+	// The root tree lists `lists` as one entry; its files are one level down.
+	const listsTree = tree.tree.find((entry) => entry.path === 'lists' && entry.type === 'tree');
+	if (listsTree?.sha) {
+		const { data: lists } = await octokit.rest.git.getTree({
+			owner: OWNER,
+			repo: REPO,
+			tree_sha: listsTree.sha,
+		});
+		for (const entry of lists.tree) present.add(`lists/${entry.path}`);
+	}
+	const pathsOf = (id: string) =>
+		[`${id}.html`, hashlistDataPath(id)].filter((path) => present.has(path));
+	const deleted = ids.filter((id) => pathsOf(id).length > 0);
+	const missing = ids.filter((id) => pathsOf(id).length === 0);
 	if (deleted.length === 0) return { deleted, missing };
 
 	const { data: newTree } = await octokit.rest.git.createTree({
 		owner: OWNER,
 		repo: REPO,
 		base_tree: commit.tree.sha,
-		tree: deleted.map((id) => ({
-			path: `${id}.html`,
+		tree: deleted.flatMap(pathsOf).map((path) => ({
+			path,
 			mode: '100644' as const,
 			type: 'blob' as const,
 			sha: null,

@@ -1,4 +1,4 @@
-import { createShortUrl } from '@/services/hashlists';
+import { publishHashlist } from '@/services/hashlists';
 import { UserTorrent } from '@/torrent/userTorrent';
 import lzString from 'lz-string';
 import toast from 'react-hot-toast';
@@ -47,10 +47,8 @@ export async function generateHashList(title: string, filteredList: UserTorrent[
 			title,
 			torrents,
 		};
-		const shortUrl = await createShortUrl(
-			`${window.location.protocol}//${
-				window.location.host
-			}/hashlist#${lzString.compressToEncodedURIComponent(JSON.stringify(hashlist))}`
+		const shortUrl = await publishHashlist(
+			lzString.compressToEncodedURIComponent(JSON.stringify(hashlist))
 		);
 		window.open(shortUrl);
 	} catch (error) {

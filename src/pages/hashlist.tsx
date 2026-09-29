@@ -38,6 +38,7 @@ import {
 	convertToTbUserTorrent,
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
+import { HashlistNotPublishedError, readHashlistFragment } from '@/utils/hashlistSource';
 import {
 	checkAvailabilityOc2,
 	checkAvailabilityPm2,
@@ -64,7 +65,6 @@ import {
 	Tv,
 	X,
 } from 'lucide-react';
-import lzString from 'lz-string';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -204,10 +204,7 @@ function HashlistPage() {
 	}, [rdKey, adKey, tbKey, pmKey, ocKey, dlKey]);
 
 	async function decodeJsonStringFromUrl(): Promise<string> {
-		const hash = window.location.hash;
-		if (!hash) return '';
-		const jsonString = lzString.decompressFromEncodedURIComponent(hash.substring(1));
-		return jsonString;
+		return readHashlistFragment(window.location.hash.substring(1));
 	}
 
 	async function readHashlist(): Promise<HashlistTorrent[]> {
@@ -308,7 +305,11 @@ function HashlistPage() {
 		} catch (error) {
 			console.error('Error fetching user torrents list:', error);
 			setUserTorrentsList([]);
-			toast.error('Failed to fetch user torrents.');
+			toast.error(
+				error instanceof HashlistNotPublishedError
+					? 'This hash list is still being published; refresh in a minute or two.'
+					: 'Failed to fetch user torrents.'
+			);
 		}
 	}
 

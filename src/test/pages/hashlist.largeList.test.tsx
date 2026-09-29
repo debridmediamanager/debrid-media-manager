@@ -192,4 +192,29 @@ describe('HashlistPage with a 27,991-item shared list', () => {
 		await waitFor(() => expect(rdDownloadCount()).toBeGreaterThan(0), { timeout: 60000 });
 		expect(rdDownloadCount()).toBeLessThan(LISTED);
 	}, 180000);
+
+	// The same list stored beside its page, which is how a list past Chrome's
+	// 2 MB URL limit can be opened at all; the fragment only names it.
+	it('opens a list stored beside its page', async () => {
+		const id = '421ab9ff-ed7f-4c0b-9f66-ee91f12d57eb';
+		window.location.hash = `#id=${id}`;
+		const fetchMock = vi.fn(async (url: string) => {
+			if (url === `https://hashlists.debridmediamanager.com/lists/${id}.txt`) {
+				return new Response(FRAGMENT);
+			}
+			throw new Error(`unexpected fetch ${url}`);
+		});
+		vi.stubGlobal('fetch', fetchMock);
+		const HashlistPage = (await import('@/pages/hashlist')).default;
+		render(<HashlistPage />);
+
+		await waitFor(
+			() =>
+				expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+					`Aster's hashlist (${LISTED} files in total; size: 607.9 TB)`
+				),
+			{ timeout: 90000 }
+		);
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+	}, 180000);
 });
