@@ -105,6 +105,7 @@ describe('mediaTypeFromImdbTitleType', () => {
 		['tvSpecial', 'movie'],
 		['video', 'movie'],
 		['short', 'movie'],
+		['tvShort', 'movie'],
 	])('maps %s to a %s page', (titleType, expected) => {
 		expect(mediaTypeFromImdbTitleType(titleType)).toBe(expected);
 	});

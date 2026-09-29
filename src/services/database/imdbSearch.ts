@@ -1,3 +1,8 @@
+import {
+	MOVIE_TITLE_TYPES,
+	NON_THEATRICAL_MOVIE_TYPES,
+	SHOW_TITLE_TYPES,
+} from '@/utils/imdbTitleTypes';
 import { Prisma } from '@prisma/client';
 import { DatabaseClient } from './client';
 
@@ -12,23 +17,45 @@ export type ImdbSearchResult = {
 	isOriginalMatch: boolean;
 };
 
+const sqlList = (types: readonly string[]) =>
+	Prisma.raw(`(${types.map((t) => `'${t}'`).join(', ')})`);
+
 /**
- * IMDb title types that search offers, and which of them open a movie page.
+ * Which titles search offers.
  *
- * Direct-to-video features (`video`) and TV films (`tvMovie`, `tvSpecial`) have
- * movie pages like any theatrical film. The Futurama films are all `video`, and
- * A Charlie Brown Christmas is a `tvMovie`, so leaving the types out made them
- * unfindable from the search page. Most titles of these types are featurettes
- * and making-ofs, though, and fulltext relevance rewards a title that repeats
- * the query ("Beyond Batman: ... Batman" outranks Batman Begins), so they only
- * count once enough people have rated them. At 1000 votes they are real films.
+ * Films and series need a ratings row, which drops IMDb's placeholder entries,
+ * except in the last two years: an announced or just-released title has no
+ * votes yet and is exactly what people search for (Avengers: Doomsday had
+ * none on 2026-09-29, and searching it found nothing). Unrated titles rank
+ * after every rated one, so they never displace an established match.
  *
- * Built per query, never at module load: Prisma's browser stub throws from these
+ * The other movie-page types (`NON_THEATRICAL_MOVIE_TYPES`) are mostly
+ * featurettes, and fulltext relevance rewards a title that repeats the query
+ * ("Beyond Batman: ... Batman" outranks Batman Begins), so they need votes:
+ * 1000, or 100 in the last two years for specials that have not collected
+ * them yet. Measured against what users streamed on 2026-09-29, a flat 1000
+ * found 3653 of 5464 streams of these types, this rule 3870, and neither moved
+ * the top result of 24 common searches; a flat 250 found 4829 but put "From
+ * Star Wars to Star Wars" above every Star Wars film.
+ */
+function typeFilterFor(mediaType: 'movie' | 'show' | undefined): Prisma.Sql {
+	const recent = Prisma.raw(String(new Date().getUTCFullYear() - 1));
+	const theatrical =
+		mediaType === 'movie'
+			? sqlList(['movie'])
+			: mediaType === 'show'
+				? sqlList(SHOW_TITLE_TYPES)
+				: sqlList(['movie', ...SHOW_TITLE_TYPES]);
+	const listed = Prisma.sql`(b.title_type IN ${theatrical} AND (r.tconst IS NOT NULL OR b.start_year >= ${recent}))`;
+	if (mediaType === 'show') return Prisma.sql`AND ${listed}`;
+	return Prisma.sql`AND (${listed} OR (b.title_type IN ${sqlList(NON_THEATRICAL_MOVIE_TYPES)} AND (r.num_votes >= 1000 OR (b.start_year >= ${recent} AND r.num_votes >= 100))))`;
+}
+
+/**
+ * Built per query, never at module load: Prisma's browser stub throws from its
  * helpers, and a call at the top of a module any page imports blanks every page.
  */
-const movieTypes = () => Prisma.raw(`('movie', 'tvMovie', 'video', 'tvSpecial')`);
-const ratedNonTheatrical = () =>
-	Prisma.raw(`(b.title_type IN ('tvMovie', 'video', 'tvSpecial') AND r.num_votes >= 1000)`);
+const movieTypes = () => sqlList(MOVIE_TITLE_TYPES);
 
 export class ImdbSearchService extends DatabaseClient {
 	/**
@@ -57,13 +84,7 @@ export class ImdbSearchService extends DatabaseClient {
 			return [];
 		}
 
-		// Build type filter as parameterized Prisma.sql
-		const typeFilter =
-			mediaType === 'movie'
-				? Prisma.sql`AND (b.title_type = 'movie' OR ${ratedNonTheatrical()})`
-				: mediaType === 'show'
-					? Prisma.sql`AND b.title_type IN ('tvSeries', 'tvMiniSeries')`
-					: Prisma.sql`AND (b.title_type IN ('movie', 'tvSeries', 'tvMiniSeries') OR ${ratedNonTheatrical()})`;
+		const typeFilter = typeFilterFor(mediaType);
 
 		// Build year filter as parameterized Prisma.sql
 		const yearFilter = year ? Prisma.sql`AND b.start_year = ${year}` : Prisma.empty;
@@ -188,12 +209,12 @@ export class ImdbSearchService extends DatabaseClient {
 				1 as isOriginalMatch,
 				MATCH(b.primary_title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE) as relevance
 			FROM imdb_title_basics b
-			INNER JOIN imdb_title_ratings r ON b.tconst = r.tconst
+			LEFT JOIN imdb_title_ratings r ON b.tconst = r.tconst
 			WHERE MATCH(b.primary_title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)
 				${typeFilter}
 				${yearFilter}
 				AND b.is_adult = 0
-			ORDER BY relevance DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
+			ORDER BY r.tconst IS NULL, relevance DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
 			LIMIT ${limit}
 		`;
 
@@ -258,13 +279,13 @@ export class ImdbSearchService extends DatabaseClient {
 				MAX(MATCH(a.title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)) as relevance
 			FROM imdb_title_akas a
 			JOIN imdb_title_basics b ON a.title_id = b.tconst
-			INNER JOIN imdb_title_ratings r ON b.tconst = r.tconst
+			LEFT JOIN imdb_title_ratings r ON b.tconst = r.tconst
 			WHERE MATCH(a.title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)
 				${typeFilter}
 				${yearFilter}
 				AND b.is_adult = 0
 			GROUP BY b.tconst, b.title_type, b.start_year, b.primary_title, b.original_title, r.average_rating, r.num_votes
-			ORDER BY relevance DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
+			ORDER BY r.tconst IS NULL, relevance DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
 			LIMIT ${limit}
 		`;
 
@@ -311,13 +332,13 @@ export class ImdbSearchService extends DatabaseClient {
 					ELSE 1
 				END as matchQuality
 			FROM imdb_title_basics b
-			INNER JOIN imdb_title_ratings r ON b.tconst = r.tconst
+			LEFT JOIN imdb_title_ratings r ON b.tconst = r.tconst
 			WHERE (LOWER(b.primary_title) LIKE LOWER(${likePattern})
 				OR LOWER(b.original_title) LIKE LOWER(${likePattern}))
 				${typeFilter}
 				${yearFilter}
 				AND b.is_adult = 0
-			ORDER BY matchQuality DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
+			ORDER BY r.tconst IS NULL, matchQuality DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
 			LIMIT ${limit}
 		`;
 

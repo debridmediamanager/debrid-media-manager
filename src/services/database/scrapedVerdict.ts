@@ -1,5 +1,6 @@
 import type { MovieContext, Verdict } from '@/services/scrapedVerdicts/rules';
 import { fold } from '@/services/scrapedVerdicts/rules';
+import { isMovieTitleType } from '@/utils/imdbTitleTypes';
 import { Prisma } from '@prisma/client';
 import { createHash } from 'crypto';
 import { DatabaseClient } from './client';
@@ -39,9 +40,6 @@ export const titleKeyOf = (title: string): string =>
 export const pairKeyOf = (hash: string, title: string): string =>
 	`${hash.toLowerCase()}:${titleKeyOf(title)}`;
 
-/** IMDb title types a movie page can belong to. */
-const MOVIE_TYPES = new Set(['movie', 'tvMovie', 'video', 'short', 'tvSpecial', 'tvShort']);
-
 const LOCK_PREFIX = 'verdicts:lock:';
 const CHECKPOINT_PREFIX = 'verdicts:checked:';
 const TOKENS_PREFIX = 'verdicts:tokens:';
@@ -68,7 +66,7 @@ export class ScrapedVerdictService extends DatabaseClient {
 		if (!basics?.primaryTitle || !basics.startYear) return null;
 		// A movie verdict means nothing for a series: on 2026-09-27 the episodes
 		// filed under movie:tt28959685 (Love Island: All Stars) were all trashed.
-		if (!MOVIE_TYPES.has(basics.titleType)) return null;
+		if (!isMovieTitleType(basics.titleType)) return null;
 
 		const akas = await this.prisma.imdbTitleAkas.findMany({
 			where: { titleId: imdbId },
