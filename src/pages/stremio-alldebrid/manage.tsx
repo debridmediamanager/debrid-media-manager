@@ -1,3 +1,4 @@
+import { CastLoginRequired } from '@/components/CastLoginRequired';
 import Poster from '@/components/poster';
 import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
 import useLocalStorage from '@/hooks/localStorage';
@@ -385,11 +386,12 @@ export function AllDebridManagePage() {
 
 	if (!apiKey) {
 		return (
-			<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900">
-				<h1 className="text-center text-xl text-white">
-					Debrid Media Manager is loading...
-				</h1>
-			</div>
+			<CastLoginRequired
+				provider="alldebrid"
+				name="AllDebrid"
+				returnPath="/stremio-alldebrid/manage"
+				title="DMM Cast for AllDebrid - Manage"
+			/>
 		);
 	}
 

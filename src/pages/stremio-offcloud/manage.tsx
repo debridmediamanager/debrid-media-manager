@@ -1,3 +1,4 @@
+import { CastLoginRequired } from '@/components/CastLoginRequired';
 import Poster from '@/components/poster';
 import { useOffcloudApiKey } from '@/hooks/auth';
 import { useOffcloudCastToken } from '@/hooks/offcloudCastToken';
@@ -386,11 +387,12 @@ export function OffcloudManagePage() {
 
 	if (!apiKey) {
 		return (
-			<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900">
-				<h1 className="text-center text-xl text-white">
-					Debrid Media Manager is loading...
-				</h1>
-			</div>
+			<CastLoginRequired
+				provider="offcloud"
+				name="Offcloud"
+				returnPath="/stremio-offcloud/manage"
+				title="DMM Cast for Offcloud - Manage"
+			/>
 		);
 	}
 

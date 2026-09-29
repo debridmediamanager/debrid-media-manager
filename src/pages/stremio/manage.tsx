@@ -1,3 +1,4 @@
+import { CastLoginRequired } from '@/components/CastLoginRequired';
 import Poster from '@/components/poster';
 import { useRealDebridAccessToken } from '@/hooks/auth';
 import { useCastToken } from '@/hooks/castToken';
@@ -36,7 +37,7 @@ interface MediaMetadata {
 }
 
 export function ManagePage() {
-	const [rdKey] = useRealDebridAccessToken();
+	const [rdKey, rdKeyLoading] = useRealDebridAccessToken();
 	useCastToken();
 	const [groupedLinks, setGroupedLinks] = useState<GroupedLinks>({});
 	const [loading, setLoading] = useState(true);
@@ -378,12 +379,22 @@ export function ManagePage() {
 	};
 
 	if (!rdKey) {
+		if (rdKeyLoading) {
+			return (
+				<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900">
+					<h1 className="text-center text-xl text-white">
+						Debrid Media Manager is loading...
+					</h1>
+				</div>
+			);
+		}
 		return (
-			<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900">
-				<h1 className="text-center text-xl text-white">
-					Debrid Media Manager is loading...
-				</h1>
-			</div>
+			<CastLoginRequired
+				provider="realdebrid"
+				name="Real-Debrid"
+				returnPath="/stremio/manage"
+				title="DMM Cast for Real-Debrid - Manage"
+			/>
 		);
 	}
 

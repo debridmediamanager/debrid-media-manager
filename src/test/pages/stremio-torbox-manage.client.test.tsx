@@ -73,14 +73,21 @@ describe('TorBoxManagePage', () => {
 		global.fetch = fetchSpy;
 	});
 
-	it('should show loading state when no api key', async () => {
+	// A key missing from localStorage never arrives, so this used to read
+	// "loading..." forever for someone signed in to another provider.
+	it('asks for a TorBox login when there is no api key', async () => {
 		const useLocalStorage = (await import('@/hooks/localStorage')).default;
 		vi.mocked(useLocalStorage).mockReturnValue([null, vi.fn()]);
 
 		const { TorBoxManagePage } = await import('@/pages/stremio-torbox/manage');
 		render(<TorBoxManagePage />);
 
-		expect(screen.getByText('Debrid Media Manager is loading...')).toBeInTheDocument();
+		expect(screen.getByText('TorBox Required')).toBeInTheDocument();
+		expect(screen.getByText('Login with TorBox').closest('a')).toHaveAttribute(
+			'href',
+			'/torbox/login?redirect=%2Fstremio-torbox%2Fmanage'
+		);
+		expect(screen.queryByText('Debrid Media Manager is loading...')).not.toBeInTheDocument();
 	});
 
 	it('should show loading text while fetching links', async () => {
