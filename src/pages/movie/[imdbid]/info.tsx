@@ -117,9 +117,9 @@ export default function MovieInfoPage() {
 			)}
 
 			<main className="mx-auto max-w-6xl px-4 py-4">
-				<div className="mb-4 flex items-end justify-between gap-3">
-					<div className="flex items-center gap-2">
-						<h1 className="text-3xl font-bold">
+				<div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+					<div className="flex min-w-0 flex-wrap items-center gap-2">
+						<h1 className="min-w-0 break-words text-3xl font-bold">
 							{movieDetails?.title || 'Loading...'}
 						</h1>
 						{trailerUrl && (
@@ -141,7 +141,7 @@ export default function MovieInfoPage() {
 					</div>
 					<Link
 						href={`/movie/${imdbId}`}
-						className="inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-3 py-1 text-sm text-indigo-100 transition-colors hover:bg-indigo-800/50"
+						className="inline-flex shrink-0 items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-3 py-1 text-sm text-indigo-100 transition-colors hover:bg-indigo-800/50"
 					>
 						Back to Movie
 					</Link>

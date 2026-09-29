@@ -105,9 +105,11 @@ export default function ShowInfoPage() {
 			)}
 
 			<main className="mx-auto max-w-6xl px-4 py-4">
-				<div className="mb-4 flex items-end justify-between gap-3">
-					<div className="flex items-center gap-2">
-						<h1 className="text-3xl font-bold">{showDetails?.title || 'Loading...'}</h1>
+				<div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+					<div className="flex min-w-0 flex-wrap items-center gap-2">
+						<h1 className="min-w-0 break-words text-3xl font-bold">
+							{showDetails?.title || 'Loading...'}
+						</h1>
 						{trailerUrl && (
 							<button
 								onClick={() => setShowTrailerModal(true)}
@@ -127,7 +129,7 @@ export default function ShowInfoPage() {
 					</div>
 					<Link
 						href={`/show/${imdbId}/1`}
-						className="inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-3 py-1 text-sm text-indigo-100 transition-colors hover:bg-indigo-800/50"
+						className="inline-flex shrink-0 items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-3 py-1 text-sm text-indigo-100 transition-colors hover:bg-indigo-800/50"
 					>
 						Back to Show
 					</Link>
