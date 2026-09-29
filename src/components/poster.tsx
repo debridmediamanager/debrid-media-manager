@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 // Pre-compute subdomain based on IMDB ID (deterministic hash)
 const getPosterUrl = (imdbId: string | null | undefined): string => {
@@ -59,8 +59,19 @@ type PosterProps = {
 const Poster = memo(
 	function Poster({ imdbId, title }: PosterProps) {
 		const [posterUrl, setPosterUrl] = useState(() => getPosterUrl(imdbId));
-		const [step, setStep] = useState<FallbackStep>('cdn');
+		// Refs, not state: image errors can arrive twice for one URL and while
+		// the poster API is still answering, and each handler must see where the
+		// chain is now rather than where it was when it was created.
+		const stepRef = useRef<FallbackStep>('cdn');
+		const urlRef = useRef(posterUrl);
+		const lookupRef = useRef(false);
 		const mountedRef = useRef(true);
+
+		const show = useCallback((step: FallbackStep, url: string) => {
+			stepRef.current = step;
+			urlRef.current = url;
+			setPosterUrl(url);
+		}, []);
 
 		useEffect(() => {
 			mountedRef.current = true;
@@ -71,64 +82,69 @@ const Poster = memo(
 
 		useEffect(() => {
 			if (imdbId) {
-				// Check cache first
+				lookupRef.current = false;
+				// Check cache first. A cached API answer is still a remote URL that
+				// can be dead; only the generated placeholder ends the chain.
 				const cached = posterCache.get(imdbId);
 				if (cached) {
-					setPosterUrl(cached);
-					setStep('placeholder');
+					show(cached.startsWith('data:') ? 'placeholder' : 'api', cached);
 				} else {
-					setPosterUrl(getPosterUrl(imdbId));
-					setStep('cdn');
+					show('cdn', getPosterUrl(imdbId));
 				}
 			}
-		}, [imdbId]);
+		}, [imdbId, show]);
 
-		const handleImageError = useCallback(async () => {
-			if (!imdbId) return;
+		const handleImageError = useCallback(
+			async (event?: SyntheticEvent<HTMLImageElement>) => {
+				if (!imdbId || lookupRef.current) return;
+				// An error for a URL the chain has already moved past is stale.
+				const failed = event?.currentTarget?.getAttribute?.('src');
+				if (failed && failed !== urlRef.current) return;
 
-			const cached = posterCache.get(imdbId);
-			if (cached && cached !== posterUrl) {
-				setPosterUrl(cached);
-				setStep('placeholder');
-				return;
-			}
-
-			if (step === 'cdn') {
-				setStep('metahub');
-				setPosterUrl(getMetahubUrl(imdbId));
-				return;
-			}
-
-			if (step === 'metahub') {
-				setStep('api');
-				try {
-					const response = await fetch(`/api/poster?imdbid=${imdbId}`);
-					if (response.ok && mountedRef.current) {
-						const data = await response.json();
-						if (data?.url) {
-							posterCache.set(imdbId, data.url);
-							setPosterUrl(data.url);
-							return;
-						}
-					}
-					throw new Error('API failed');
-				} catch {
-					if (!mountedRef.current) return;
+				const showPlaceholder = () => {
 					const placeholder = getPlaceholderUrl(title || imdbId || 'No Poster');
 					posterCache.set(imdbId, placeholder);
-					setPosterUrl(placeholder);
-					setStep('placeholder');
-				}
-				return;
-			}
+					show('placeholder', placeholder);
+				};
+				const step = stepRef.current;
 
-			if (step === 'api') {
-				const placeholder = getPlaceholderUrl(title || imdbId || 'No Poster');
-				posterCache.set(imdbId, placeholder);
-				setPosterUrl(placeholder);
-				setStep('placeholder');
-			}
-		}, [step, imdbId, title, posterUrl]);
+				const cached = posterCache.get(imdbId);
+				if (step !== 'placeholder' && cached && cached !== urlRef.current) {
+					show(cached.startsWith('data:') ? 'placeholder' : 'api', cached);
+					return;
+				}
+
+				if (step === 'cdn') {
+					show('metahub', getMetahubUrl(imdbId));
+					return;
+				}
+
+				if (step === 'metahub') {
+					stepRef.current = 'api';
+					lookupRef.current = true;
+					try {
+						const response = await fetch(`/api/poster?imdbid=${imdbId}`);
+						if (response.ok) {
+							const data = await response.json();
+							if (data?.url) {
+								posterCache.set(imdbId, data.url);
+								if (mountedRef.current) show('api', data.url);
+								return;
+							}
+						}
+						throw new Error('API failed');
+					} catch {
+						if (mountedRef.current) showPlaceholder();
+					} finally {
+						lookupRef.current = false;
+					}
+					return;
+				}
+
+				if (step === 'api') showPlaceholder();
+			},
+			[imdbId, title, show]
+		);
 
 		return (
 			<div className="relative aspect-[2/3] w-full overflow-hidden rounded bg-gray-800">
