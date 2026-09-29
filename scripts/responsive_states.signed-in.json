@@ -1,0 +1,392 @@
+{
+	"/": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Debrid Media Manager"],
+		"expectPath": "/"
+	},
+	"/_offline": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Looks like you are offline"],
+		"expectPath": "/_offline"
+	},
+	"/albums": {
+		"status": "verified",
+		"observedStates": ["rendered", "loading"],
+		"expectText": ["\\d+ albums"],
+		"expectPath": "/music",
+		"reason": "Redirects to /music; the library pages in lazily behind a loading row."
+	},
+	"/albums/sample": {
+		"status": "verified",
+		"observedStates": ["rendered", "loading"],
+		"expectText": ["\\d+ albums"],
+		"expectPath": "/music/sample"
+	},
+	"/alldebrid/login": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Connect AllDebrid"],
+		"expectPath": "/alldebrid/login"
+	},
+	"/anime/anidb-1": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Seikai no Monshou"],
+		"expectPath": "/anime/1",
+		"reason": "Canonicalizes the AniDB id."
+	},
+	"/anonymize-nzb": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Anonymize an NZB"],
+		"expectPath": "/anonymize-nzb"
+	},
+	"/browse": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Browse", "Action"],
+		"expectPath": "/browse"
+	},
+	"/browse/genre/action": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["action", "Trending"],
+		"expectPath": "/browse/genre/action"
+	},
+	"/browse/movies": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Movies"],
+		"expectPath": "/browse/movies"
+	},
+	"/browse/recent": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Recently Updated"],
+		"expectPath": "/browse/recent"
+	},
+	"/calendar": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Episode Calendar", "\\d+ episodes"],
+		"expectPath": "/calendar"
+	},
+	"/copyright": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Report copyright infringement"],
+		"expectPath": "/copyright"
+	},
+	"/copyright/admin": {
+		"status": "verified",
+		"observedStates": ["rendered", "unauthenticated"],
+		"expectText": ["Copyright notices"],
+		"expectPath": "/copyright/admin",
+		"reason": "Measured without an admin token: the token form. The populated review queue needs the production admin token and is not measured."
+	},
+	"/debridlink/login": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Connect Debrid-Link"],
+		"expectPath": "/debridlink/login"
+	},
+	"/emby": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Put your library in Emby"],
+		"expectPath": "/emby"
+	},
+	"/hashlist": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["0 files in total"],
+		"expectPath": "/hashlist",
+		"reason": "No fragment: an empty list, no error."
+	},
+	"/hashlists": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["files in total"],
+		"expectPath": "/hashlist",
+		"reason": "Opens a random public hash list."
+	},
+	"/is-real-debrid-down-or-just-me": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Real-Debrid is (Operational|Degraded|Down|Partial)"],
+		"expectPath": "/is-real-debrid-down-or-just-me"
+	},
+	"/is-torbox-down-or-just-me": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["TorBox is (Operational|Degraded|Down|Partial)"],
+		"expectPath": "/is-torbox-down-or-just-me"
+	},
+	"/jellyfin": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Put your library in Jellyfin"],
+		"expectPath": "/jellyfin"
+	},
+	"/library": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["\\d+ torrents", "TB"],
+		"expectPath": "/library"
+	},
+	"/movie/tt0111161": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["The Shawshank Redemption", "Total: \\d"],
+		"expectPath": "/movie/tt0111161"
+	},
+	"/movie/tt0111161/info": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["The Shawshank Redemption", "Release Date"],
+		"expectPath": "/movie/tt0111161/info"
+	},
+	"/movie/tt0111161/related": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Related Movies", "Cool Hand Luke"],
+		"expectPath": "/movie/tt0111161/related"
+	},
+	"/music": {
+		"status": "verified",
+		"observedStates": ["rendered", "loading"],
+		"expectText": ["\\d+ albums"],
+		"expectPath": "/music"
+	},
+	"/music/sample": {
+		"status": "verified",
+		"observedStates": ["rendered", "loading"],
+		"expectText": ["\\d+ albums"],
+		"expectPath": "/music/sample"
+	},
+	"/newznab": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Use DMM as a Usenet indexer"],
+		"expectPath": "/newznab"
+	},
+	"/offcloud/login": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Connect Offcloud"],
+		"expectPath": "/offcloud/login"
+	},
+	"/person/christopher-nolan": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Christopher Nolan", "Movies \\(\\d+\\)"],
+		"expectPath": "/person/christopher-nolan/movies",
+		"reason": "Redirects to the movie credits."
+	},
+	"/person/christopher-nolan/movies": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Christopher Nolan", "Movies \\(\\d+\\)"],
+		"expectPath": "/person/christopher-nolan/movies"
+	},
+	"/person/christopher-nolan/shows": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Christopher Nolan", "TV Shows \\(\\d+\\)"],
+		"expectPath": "/person/christopher-nolan/shows"
+	},
+	"/premiumize/login": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Connect Premiumize"],
+		"expectPath": "/premiumize/login"
+	},
+	"/realdebrid/login": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Connect Real-Debrid"],
+		"expectPath": "/realdebrid/login"
+	},
+	"/requests": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Requests", "Your requests"],
+		"expectPath": "/requests"
+	},
+	"/sabnzbd": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Use DMM as a download client"],
+		"expectPath": "/sabnzbd"
+	},
+	"/search?query=matrix": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Search Results for matrix", "The Matrix"],
+		"expectPath": "/search"
+	},
+	"/settings": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Settings"],
+		"expectPath": "/settings"
+	},
+	"/show/tt0944947": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Game of Thrones - Season 1"],
+		"expectPath": "/show/tt0944947/1",
+		"reason": "Redirects to the first season, which is also measured on its own."
+	},
+	"/show/tt0944947/1": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Game of Thrones - Season 1", "Total: \\d"],
+		"expectPath": "/show/tt0944947/1"
+	},
+	"/show/tt0944947/info": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Game of Thrones", "First Air Date"],
+		"expectPath": "/show/tt0944947/info"
+	},
+	"/show/tt0944947/related": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Related Shows", "House of the Dragon"],
+		"expectPath": "/show/tt0944947/related"
+	},
+	"/start": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Debrid Media Manager"],
+		"expectPath": "/",
+		"reason": "A signed-in visitor is sent to the dashboard."
+	},
+	"/stremio": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["DMM Cast for Real-Debrid", "manifest.json"],
+		"expectPath": "/stremio"
+	},
+	"/stremio-alldebrid": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["AllDebrid Required"],
+		"expectPath": "/stremio-alldebrid"
+	},
+	"/stremio-alldebrid/manage": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["AllDebrid Required"],
+		"expectPath": "/stremio-alldebrid/manage"
+	},
+	"/stremio-debridlink": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Debrid-Link Required"],
+		"expectPath": "/stremio-debridlink"
+	},
+	"/stremio-debridlink/manage": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Debrid-Link Required"],
+		"expectPath": "/stremio-debridlink/manage"
+	},
+	"/stremio-offcloud": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Offcloud Required"],
+		"expectPath": "/stremio-offcloud"
+	},
+	"/stremio-offcloud/manage": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Offcloud Required"],
+		"expectPath": "/stremio-offcloud/manage"
+	},
+	"/stremio-premiumize": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Premiumize Required"],
+		"expectPath": "/stremio-premiumize"
+	},
+	"/stremio-premiumize/manage": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Premiumize Required"],
+		"expectPath": "/stremio-premiumize/manage"
+	},
+	"/stremio-torbox": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["TorBox Required"],
+		"expectPath": "/stremio-torbox"
+	},
+	"/stremio-torbox/manage": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["TorBox Required"],
+		"expectPath": "/stremio-torbox/manage"
+	},
+	"/stremio/manage": {
+		"status": "verified",
+		"observedStates": ["rendered", "empty"],
+		"expectText": ["Manage Casted Links"],
+		"expectPath": "/stremio/manage"
+	},
+	"/torbox/login": {
+		"status": "verified",
+		"observedStates": ["unauthenticated"],
+		"expectText": ["Connect Torbox"],
+		"expectPath": "/torbox/login"
+	},
+	"/torznab": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Use DMM as a torrent indexer"],
+		"expectPath": "/torznab"
+	},
+	"/trakt/callback": {
+		"status": "blocked",
+		"reason": "OAuth callback needs a real Trakt authorization code; none is fabricated."
+	},
+	"/trakt/collection": {
+		"status": "blocked",
+		"reason": "Needs a signed-in Trakt account; no Trakt test account exists."
+	},
+	"/trakt/mylists": {
+		"status": "blocked",
+		"reason": "Needs a signed-in Trakt account; no Trakt test account exists."
+	},
+	"/trakt/mylists/favorites": {
+		"status": "blocked",
+		"reason": "Needs a signed-in Trakt account; no Trakt test account exists."
+	},
+	"/trakt/popular": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Trakt - Movies"],
+		"expectPath": "/trakt/popular",
+		"reason": "Trakt's public popular list renders without a Trakt login."
+	},
+	"/trakt/watchlist": {
+		"status": "blocked",
+		"reason": "Needs a signed-in Trakt account; no Trakt test account exists."
+	},
+	"/transfers": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["Transfers"],
+		"expectPath": "/transfers"
+	},
+	"/x/tt0111161": {
+		"status": "verified",
+		"observedStates": ["rendered"],
+		"expectText": ["The Shawshank Redemption"],
+		"expectPath": "/movie/tt0111161",
+		"reason": "Server redirect through MDBList to the movie page."
+	}
+}
