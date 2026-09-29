@@ -42,7 +42,7 @@ const SearchTokens: FC<SearchTokensProps> = ({ title, year, isShow = false, onTo
 	}, [title, year, isShow]);
 
 	return (
-		<div className="flex flex-row flex-wrap gap-1">
+		<div className="flex shrink-0 flex-row gap-1">
 			{tokens.map((token, index) => (
 				<span
 					key={index}

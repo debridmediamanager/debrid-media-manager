@@ -13,6 +13,18 @@ describe('SearchTokens', () => {
 		expect(screen.getByText('2008')).toBeInTheDocument();
 	});
 
+	// SearchControls puts this group in a non-wrapping, horizontally scrolling
+	// chip row. At 390px the group shrank to its widest word and stacked
+	// "the / shawshank / redemption / 1994" one per line; it must keep its
+	// one-line width and let the row scroll.
+	it('keeps its tokens on one line inside the scrolling chip row', () => {
+		render(
+			<SearchTokens title="The Shawshank Redemption" year="1994" onTokenClick={vi.fn()} />
+		);
+
+		expect(screen.getByText('shawshank').parentElement).toHaveClass('shrink-0');
+	});
+
 	it('formats year as season number for shows', () => {
 		const onTokenClick = vi.fn();
 		render(
