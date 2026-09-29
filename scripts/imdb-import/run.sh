@@ -14,6 +14,9 @@
 #   /home/ben/imdb-import/last-success    when the last run finished cleanly
 #   /home/ben/logs/imdb-import.log        rotated by /etc/logrotate.d/dmm-imdb-import
 #
+# After the import it runs check-search-coverage.ts, which alerts when search
+# cannot find a title enough users streamed.
+#
 # A failed run exits non-zero, logs a `FAILED` line, writes to syslog at
 # user.err (`journalctl -t dmm-imdb-import`) and posts to ALERT_WEBHOOK_URL
 # when one is set. A run still holding the lock at the next start is reported
@@ -58,11 +61,16 @@ echo "=== $(date -u +%FT%TZ) imdb import, app $(cat "$ROOT/app/VERSION" 2>/dev/n
 cd "$ROOT/app" || { fail "no $ROOT/app"; exit 1; }
 "$BUN" scripts/import-imdb.ts --data-dir "$ROOT/data" --apply "$@"
 status=$?
+[ "$status" -ne 0 ] && fail "import-imdb.ts exited $status"
 
-if [ "$status" -ne 0 ]; then
-	fail "import-imdb.ts exited $status"
-else
+# Whatever the import did, check search against what users stream.
+"$BUN" scripts/check-search-coverage.ts
+coverage=$?
+[ "$coverage" -ne 0 ] && fail "search cannot find titles users stream (check-search-coverage.ts exited $coverage)"
+
+if [ "$status" -eq 0 ] && [ "$coverage" -eq 0 ]; then
 	date -u +%FT%TZ >"$ROOT/last-success"
 	echo "=== $(date -u +%FT%TZ) ok ==="
+	exit 0
 fi
-exit "$status"
+exit 1

@@ -25,7 +25,7 @@ ROOT=/home/ben/imdb-import
 CRON_LINE="0 3 * * * $ROOT/run.sh"
 
 cd "$REPO"
-if [ -n "$(git status --porcelain -- scripts/import-imdb.ts scripts/imdb-import src/services/imdbImport prisma/schema.prisma)" ]; then
+if [ -n "$(git status --porcelain -- scripts/import-imdb.ts scripts/check-search-coverage.ts scripts/imdb-import src/services/imdbImport src/services/database/searchableTitles.ts src/services/searchCoverage.ts src/utils/imdbTitleTypes.ts prisma/schema.prisma)" ]; then
 	echo "ABORT: the importer's files have uncommitted changes" >&2
 	exit 1
 fi
@@ -34,9 +34,13 @@ PRISMA_VERSION="$(node -p "require('./node_modules/@prisma/client/package.json')
 
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
-mkdir -p "$STAGE/app/scripts" "$STAGE/app/src/services/imdbImport" "$STAGE/app/prisma"
-cp scripts/import-imdb.ts "$STAGE/app/scripts/"
+mkdir -p "$STAGE/app/scripts" "$STAGE/app/src/services/imdbImport" "$STAGE/app/src/services/database" \
+	"$STAGE/app/src/utils" "$STAGE/app/prisma"
+cp scripts/import-imdb.ts scripts/check-search-coverage.ts "$STAGE/app/scripts/"
 cp src/services/imdbImport/imdbSync.ts "$STAGE/app/src/services/imdbImport/"
+cp src/services/database/searchableTitles.ts "$STAGE/app/src/services/database/"
+cp src/services/searchCoverage.ts "$STAGE/app/src/services/"
+cp src/utils/imdbTitleTypes.ts "$STAGE/app/src/utils/"
 cp prisma/schema.prisma "$STAGE/app/prisma/"
 echo "$COMMIT" >"$STAGE/app/VERSION"
 cat >"$STAGE/app/package.json" <<JSON

@@ -1,10 +1,6 @@
-import {
-	MOVIE_TITLE_TYPES,
-	NON_THEATRICAL_MOVIE_TYPES,
-	SHOW_TITLE_TYPES,
-} from '@/utils/imdbTitleTypes';
 import { Prisma } from '@prisma/client';
 import { DatabaseClient } from './client';
+import { movieTypesSql, searchableTitleSql } from './searchableTitles';
 
 export type ImdbSearchResult = {
 	imdbId: string;
@@ -16,46 +12,6 @@ export type ImdbSearchResult = {
 	votes: number | null;
 	isOriginalMatch: boolean;
 };
-
-const sqlList = (types: readonly string[]) =>
-	Prisma.raw(`(${types.map((t) => `'${t}'`).join(', ')})`);
-
-/**
- * Which titles search offers.
- *
- * Films and series need a ratings row, which drops IMDb's placeholder entries,
- * except in the last two years: an announced or just-released title has no
- * votes yet and is exactly what people search for (Avengers: Doomsday had
- * none on 2026-09-29, and searching it found nothing). Unrated titles rank
- * after every rated one, so they never displace an established match.
- *
- * The other movie-page types (`NON_THEATRICAL_MOVIE_TYPES`) are mostly
- * featurettes, and fulltext relevance rewards a title that repeats the query
- * ("Beyond Batman: ... Batman" outranks Batman Begins), so they need votes:
- * 1000, or 100 in the last two years for specials that have not collected
- * them yet. Measured against what users streamed on 2026-09-29, a flat 1000
- * found 3653 of 5464 streams of these types, this rule 3870, and neither moved
- * the top result of 24 common searches; a flat 250 found 4829 but put "From
- * Star Wars to Star Wars" above every Star Wars film.
- */
-function typeFilterFor(mediaType: 'movie' | 'show' | undefined): Prisma.Sql {
-	const recent = Prisma.raw(String(new Date().getUTCFullYear() - 1));
-	const theatrical =
-		mediaType === 'movie'
-			? sqlList(['movie'])
-			: mediaType === 'show'
-				? sqlList(SHOW_TITLE_TYPES)
-				: sqlList(['movie', ...SHOW_TITLE_TYPES]);
-	const listed = Prisma.sql`(b.title_type IN ${theatrical} AND (r.tconst IS NOT NULL OR b.start_year >= ${recent}))`;
-	if (mediaType === 'show') return Prisma.sql`AND ${listed}`;
-	return Prisma.sql`AND (${listed} OR (b.title_type IN ${sqlList(NON_THEATRICAL_MOVIE_TYPES)} AND (r.num_votes >= 1000 OR (b.start_year >= ${recent} AND r.num_votes >= 100))))`;
-}
-
-/**
- * Built per query, never at module load: Prisma's browser stub throws from its
- * helpers, and a call at the top of a module any page imports blanks every page.
- */
-const movieTypes = () => sqlList(MOVIE_TITLE_TYPES);
 
 export class ImdbSearchService extends DatabaseClient {
 	/**
@@ -84,7 +40,7 @@ export class ImdbSearchService extends DatabaseClient {
 			return [];
 		}
 
-		const typeFilter = typeFilterFor(mediaType);
+		const typeFilter = Prisma.sql`AND ${searchableTitleSql(mediaType)}`;
 
 		// Build year filter as parameterized Prisma.sql
 		const yearFilter = year ? Prisma.sql`AND b.start_year = ${year}` : Prisma.empty;
@@ -198,7 +154,7 @@ export class ImdbSearchService extends DatabaseClient {
 			SELECT
 				b.tconst as imdbId,
 				CASE
-					WHEN b.title_type IN ${movieTypes()} THEN 'movie'
+					WHEN b.title_type IN ${movieTypesSql()} THEN 'movie'
 					ELSE 'show'
 				END as type,
 				b.start_year as year,
@@ -267,7 +223,7 @@ export class ImdbSearchService extends DatabaseClient {
 			SELECT
 				b.tconst as imdbId,
 				CASE
-					WHEN b.title_type IN ${movieTypes()} THEN 'movie'
+					WHEN b.title_type IN ${movieTypesSql()} THEN 'movie'
 					ELSE 'show'
 				END as type,
 				b.start_year as year,
@@ -317,7 +273,7 @@ export class ImdbSearchService extends DatabaseClient {
 			SELECT
 				b.tconst as imdbId,
 				CASE
-					WHEN b.title_type IN ${movieTypes()} THEN 'movie'
+					WHEN b.title_type IN ${movieTypesSql()} THEN 'movie'
 					ELSE 'show'
 				END as type,
 				b.start_year as year,
