@@ -1,0 +1,101 @@
+{
+	"rows": [
+		{
+			"tconst": "tt0149460",
+			"titleType": "tvSeries",
+			"startYear": 1999,
+			"primaryTitle": "Futurama",
+			"averageRating": 8.5,
+			"numVotes": 280675
+		},
+		{
+			"tconst": "tt0471711",
+			"titleType": "video",
+			"startYear": 2007,
+			"primaryTitle": "Futurama: Bender's Big Score",
+			"averageRating": 7.6,
+			"numVotes": 36474
+		},
+		{
+			"tconst": "tt1054485",
+			"titleType": "video",
+			"startYear": 2008,
+			"primaryTitle": "Futurama: The Beast with a Billion Backs",
+			"averageRating": 7.1,
+			"numVotes": 25983
+		},
+		{
+			"tconst": "tt1054486",
+			"titleType": "video",
+			"startYear": 2008,
+			"primaryTitle": "Futurama: Bender's Game",
+			"averageRating": 7.2,
+			"numVotes": 22630
+		},
+		{
+			"tconst": "tt1054487",
+			"titleType": "video",
+			"startYear": 2009,
+			"primaryTitle": "Futurama: Into the Wild Green Yonder",
+			"averageRating": 7.2,
+			"numVotes": 20132
+		},
+		{
+			"tconst": "tt1630885",
+			"titleType": "tvEpisode",
+			"startYear": 2010,
+			"primaryTitle": "The Futurama Holiday Spectacular",
+			"averageRating": 6.4,
+			"numVotes": 2198
+		},
+		{
+			"tconst": "tt1483352",
+			"titleType": "video",
+			"startYear": 2008,
+			"primaryTitle": "D & D & F: 'Dungeons & Dragons' & 'Futurama'",
+			"averageRating": 7.8,
+			"numVotes": 1281
+		},
+		{
+			"tconst": "tt28326349",
+			"titleType": "tvEpisode",
+			"startYear": 2024,
+			"primaryTitle": "The Futurama Mystery Liberry",
+			"averageRating": 6.1,
+			"numVotes": 934
+		},
+		{
+			"tconst": "tt1230102",
+			"titleType": "video",
+			"startYear": 2007,
+			"primaryTitle": "'Futurama' Returns",
+			"averageRating": 7.8,
+			"numVotes": 768
+		},
+		{
+			"tconst": "tt0377952",
+			"titleType": "videoGame",
+			"startYear": 2003,
+			"primaryTitle": "Futurama",
+			"averageRating": 7.8,
+			"numVotes": 590
+		},
+		{
+			"tconst": "tt6090450",
+			"titleType": "tvMiniSeries",
+			"startYear": 2013,
+			"primaryTitle": "Futurama Live!",
+			"averageRating": 7.1,
+			"numVotes": 132
+		},
+		{
+			"tconst": "tt1230103",
+			"titleType": "video",
+			"startYear": 2007,
+			"primaryTitle": "'Futurama': Bite My Shiny Metal X",
+			"averageRating": 7.9,
+			"numVotes": 129
+		}
+	],
+	"source": "dmmdb imdb_title_basics JOIN imdb_title_ratings, MATCH(primary_title) AGAINST('+futurama*'), is_adult=0, top 12 by num_votes, captured 2026-09-29"
+}
