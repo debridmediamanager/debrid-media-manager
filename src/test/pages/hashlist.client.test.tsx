@@ -20,8 +20,18 @@ vi.mock('next/head', () => ({
 
 vi.mock('next/link', () => ({
 	__esModule: true,
-	default: ({ children, href }: { children: ReactNode; href: string }) => (
-		<a href={href}>{children}</a>
+	default: ({
+		children,
+		href,
+		className,
+	}: {
+		children: ReactNode;
+		href: string;
+		className?: string;
+	}) => (
+		<a href={href} className={className}>
+			{children}
+		</a>
 	),
 }));
 
@@ -167,6 +177,27 @@ describe('HashlistPage', () => {
 		await new Promise((resolve) => setTimeout(resolve, 50));
 		expect(toast.error).not.toHaveBeenCalled();
 		expect(screen.getByText('0 Movies')).toBeInTheDocument();
+	});
+
+	// A real shared list from /hashlists (2026-09-29) is titled with one unbroken
+	// release-style token. At 320px the heading kept that token's width and pushed
+	// "Go Home" to 364px, scrolling the page sideways.
+	it('lets a long unbroken list title wrap beside Go Home', async () => {
+		const lzString = (await import('lz-string')).default;
+		vi.mocked(lzString.decompressFromEncodedURIComponent).mockReturnValue(
+			JSON.stringify({ title: 'ENG.GER.WEBDL.REMUX.2160P', torrents: [] })
+		);
+		window.location.hash = '#list';
+		const HashlistPage = (await import('@/pages/hashlist')).default;
+		render(<HashlistPage />);
+
+		const heading = await screen.findByRole('heading', {
+			level: 1,
+			name: /ENG\.GER\.WEBDL\.REMUX\.2160P/,
+		});
+		expect(heading).toHaveClass('min-w-0', 'break-words');
+		expect(screen.getByText('Go Home')).toHaveClass('shrink-0');
+		vi.mocked(lzString.decompressFromEncodedURIComponent).mockReturnValue('[]');
 	});
 
 	it('should render pagination controls', async () => {
