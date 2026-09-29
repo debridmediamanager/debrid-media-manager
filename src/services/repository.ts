@@ -661,6 +661,10 @@ export class Repository {
 		return this.animeService.getAnimeEntryRows(ids);
 	}
 
+	public getRecentlyUpdatedAnime(take: number) {
+		return this.animeService.getRecentlyUpdatedAnime(take);
+	}
+
 	// Cast Service Methods
 	public saveCastProfile(
 		userId: string,

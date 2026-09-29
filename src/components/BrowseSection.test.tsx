@@ -34,11 +34,11 @@ describe('BrowseSection', () => {
 		randomSpy.mockRestore();
 	});
 
-	it('links straight to the anime genre from the home page', () => {
+	it('links to the anime page from the home page', () => {
 		render(<BrowseSection terms={['Action!', 'Drama']} />);
 
 		const animeLink = screen.getByRole('link', { name: /anime/i });
-		expect(animeLink.getAttribute('href')).toBe('/browse/genre/anime');
+		expect(animeLink.getAttribute('href')).toBe('/anime');
 	});
 
 	it('routes to cleaned term when a custom search is entered', async () => {

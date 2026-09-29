@@ -157,4 +157,31 @@ export class AnimeService extends DatabaseClient {
 		});
 		return rows.map((row) => ({ ...row, poster_url: currentKitsuMediaUrl(row.poster_url) }));
 	}
+
+	/**
+	 * The anime whose releases were stored most recently, newest first.
+	 *
+	 * The release rows are `anime:anidb-<aid>` in `ScrapedTrue`, rewritten
+	 * whenever a scraper files a new release under them, so their `updatedAt` is
+	 * when an entry last got something. An entry the `Anime` table has no
+	 * poster for is left out, as it would be a blank tile.
+	 */
+	public async getRecentlyUpdatedAnime(take: number): Promise<AnimeEntryRow[]> {
+		const keys = await this.prisma.scrapedTrue.findMany({
+			// Some rows have no poster and are dropped below, so over-read.
+			take: take * 2,
+			orderBy: { updatedAt: 'desc' },
+			where: { key: { startsWith: 'anime:anidb-' } },
+			select: { key: true },
+		});
+		const anidbIds = keys
+			.map((row) => parseInt(row.key.slice('anime:anidb-'.length), 10))
+			.filter((id) => Number.isSafeInteger(id) && id > 0);
+		const rows = await this.getAnimeEntryRows({ anidbIds, imdbIds: [] });
+		const byId = new Map(rows.map((row) => [row.anidb_id, row]));
+		return anidbIds
+			.map((id) => byId.get(id))
+			.filter((row): row is AnimeEntryRow => row !== undefined && row.poster_url !== '')
+			.slice(0, take);
+	}
 }

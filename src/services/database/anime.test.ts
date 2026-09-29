@@ -104,3 +104,39 @@ describe('AnimeService', () => {
 		expect(entry.poster_url).toBe(row!.poster_url);
 	});
 });
+
+describe('AnimeService.getRecentlyUpdatedAnime', () => {
+	it('lists entries in the order their release rows were last updated, dropping posterless ones', async () => {
+		const scrapedTrue = { findMany: vi.fn() };
+		(prismaMock as any).scrapedTrue = scrapedTrue;
+		scrapedTrue.findMany.mockResolvedValue([
+			{ key: 'anime:anidb-2' },
+			{ key: 'anime:anidb-1' },
+			{ key: 'anime:anidb-3' },
+		]);
+		const row = (anidb_id: number, poster_url: string) => ({
+			anidb_id,
+			kitsu_id: null,
+			mal_id: null,
+			imdb_id: null,
+			title: `t${anidb_id}`,
+			type: 'TV',
+			poster_url,
+		});
+		(prismaMock.anime.findMany as Mock).mockResolvedValue([
+			row(1, 'https://x/1.jpg'),
+			row(2, 'https://x/2.jpg'),
+			row(3, ''),
+		]);
+
+		const result = await new AnimeService().getRecentlyUpdatedAnime(10);
+
+		expect(scrapedTrue.findMany).toHaveBeenCalledWith(
+			expect.objectContaining({
+				orderBy: { updatedAt: 'desc' },
+				where: { key: { startsWith: 'anime:anidb-' } },
+			})
+		);
+		expect(result.map((r) => r.anidb_id)).toEqual([2, 1]);
+	});
+});
