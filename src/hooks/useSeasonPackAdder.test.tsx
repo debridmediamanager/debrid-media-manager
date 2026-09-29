@@ -4,14 +4,24 @@ import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSeasonPackAdder, type SeasonAdderPlan } from './useSeasonPackAdder';
 
-const { mockAxiosGet, mockCheckCachedStatus, mockIsRdThrottling } = vi.hoisted(() => ({
+const {
+	mockAxiosGet,
+	mockCheckCachedStatus,
+	mockCheckPremiumizeCache,
+	mockCheckOffcloudCache,
+	mockIsRdThrottling,
+} = vi.hoisted(() => ({
 	mockAxiosGet: vi.fn(),
 	mockCheckCachedStatus: vi.fn(),
+	mockCheckPremiumizeCache: vi.fn(),
+	mockCheckOffcloudCache: vi.fn(),
 	mockIsRdThrottling: vi.fn(() => false),
 }));
 
 vi.mock('axios', () => ({ default: { get: mockAxiosGet } }));
 vi.mock('@/services/torbox', () => ({ checkCachedStatus: mockCheckCachedStatus }));
+vi.mock('@/services/premiumize', () => ({ checkPremiumizeCache: mockCheckPremiumizeCache }));
+vi.mock('@/services/offcloud', () => ({ checkOffcloudCache: mockCheckOffcloudCache }));
 vi.mock('@/services/realDebrid', () => ({
 	isRdThrottling: mockIsRdThrottling,
 	RD_ADD_MIN_SPACING_MS: 2000,
@@ -64,8 +74,7 @@ const show = {
 	lastEpisodeToAir: null,
 };
 
-let addRd: ReturnType<typeof vi.fn>;
-let addTb: ReturnType<typeof vi.fn>;
+let addCached: ReturnType<typeof vi.fn>;
 
 const render = (libraryItems: UserTorrent[] = []) =>
 	renderHook(
@@ -75,8 +84,7 @@ const render = (libraryItems: UserTorrent[] = []) =>
 				show,
 				libraryItems,
 				hashAndProgress: {},
-				addRd: addRd as never,
-				addTb: addTb as never,
+				addCached: addCached as never,
 				episodeMaxSize: '0',
 			}),
 		{ initialProps: { imdbId: 'tt0306414' } }
@@ -118,8 +126,7 @@ describe('useSeasonPackAdder', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockIsRdThrottling.mockReturnValue(false);
-		addRd = vi.fn(async () => true);
-		addTb = vi.fn(async () => undefined);
+		addCached = vi.fn(async () => true);
 	});
 
 	it('plans a pack for every season that has one', async () => {
@@ -134,7 +141,7 @@ describe('useSeasonPackAdder', () => {
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 
 		expect(plan!.entries.map((e) => e.status)).toEqual(['pack', 'pack', 'pack']);
@@ -156,7 +163,7 @@ describe('useSeasonPackAdder', () => {
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 
 		expect(plan!.entries.map((e) => e.status)).toEqual(['pack', 'held', 'pack']);
@@ -192,7 +199,7 @@ describe('useSeasonPackAdder', () => {
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 
 		expect(plan!.entries[1].status).toBe('pack');
@@ -206,13 +213,13 @@ describe('useSeasonPackAdder', () => {
 		expect(plan!.summary.upgrades).toHaveLength(1);
 
 		await act(async () => {
-			await result.current.run(plan!, false);
+			await result.current.run(plan!);
 		});
 
 		// One add, and the ten episodes it duplicates are left exactly as they
 		// were - the run has no way to remove anything at all.
-		expect(addRd).toHaveBeenCalledTimes(1);
-		expect(addRd.mock.calls[0][0]).toBe(hash('b'));
+		expect(addCached).toHaveBeenCalledTimes(1);
+		expect(addCached.mock.calls[0][1]).toBe(hash('b'));
 	});
 
 	it('asks for episodes only for the seasons with no usable pack', async () => {
@@ -230,7 +237,7 @@ describe('useSeasonPackAdder', () => {
 		const { result } = render();
 
 		await act(async () => {
-			await result.current.discover('rd', null);
+			await result.current.discover('rd');
 		});
 
 		const episodeCall = mockAxiosGet.mock.calls.find(
@@ -249,7 +256,7 @@ describe('useSeasonPackAdder', () => {
 		});
 		const { result } = render();
 		await act(async () => {
-			await result.current.discover('rd', null);
+			await result.current.discover('rd');
 		});
 		expect(mockAxiosGet.mock.calls.some((call) => call[1].params.mode === 'episodes')).toBe(
 			false
@@ -268,17 +275,17 @@ describe('useSeasonPackAdder', () => {
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 		let outcome: any;
 		await act(async () => {
-			outcome = await result.current.run(plan!, false);
+			outcome = await result.current.run(plan!);
 		});
 
-		expect(addRd.mock.calls.map((c) => c[0])).toEqual([hash('a'), hash('b'), hash('c')]);
+		expect(addCached.mock.calls.map((c) => c[1])).toEqual([hash('a'), hash('b'), hash('c')]);
 		// Silent, and carrying the row: the page never rendered these seasons.
-		expect(addRd.mock.calls[0][3].silent).toBe(true);
-		expect(addRd.mock.calls[0][3].row.title).toBe('The.Wire.S01.1080p');
+		expect(addCached.mock.calls[0][2].silent).toBe(true);
+		expect(addCached.mock.calls[0][2].row.title).toBe('The.Wire.S01.1080p');
 		expect(outcome.added).toBe(3);
 	});
 
@@ -294,18 +301,18 @@ describe('useSeasonPackAdder', () => {
 			},
 			episodes: { 2: {}, 3: {} },
 		});
-		addRd.mockImplementation(async (h: string) => h !== hash('a'));
+		addCached.mockImplementation(async (_service: string, h: string) => h !== hash('a'));
 		const { result } = render();
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 		await act(async () => {
-			await result.current.run(plan!, false);
+			await result.current.run(plan!);
 		});
 
-		expect(addRd.mock.calls.map((c) => c[0])).toEqual([hash('a'), hash('b')]);
+		expect(addCached.mock.calls.map((c) => c[1])).toEqual([hash('a'), hash('b')]);
 	});
 
 	it('fills only the episodes the library is missing', async () => {
@@ -326,13 +333,13 @@ describe('useSeasonPackAdder', () => {
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 		await act(async () => {
-			await result.current.run(plan!, false);
+			await result.current.run(plan!);
 		});
 
-		expect(addRd.mock.calls.map((c) => c[0])).toEqual([hash('b'), hash('c')]);
+		expect(addCached.mock.calls.map((c) => c[1])).toEqual([hash('b'), hash('c')]);
 	});
 
 	it('lets one release satisfy every episode it spans', async () => {
@@ -352,14 +359,14 @@ describe('useSeasonPackAdder', () => {
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 		await act(async () => {
-			await result.current.run(plan!, false);
+			await result.current.run(plan!);
 		});
 
 		// One add, not three: the release covers episodes one through three.
-		expect(addRd).toHaveBeenCalledTimes(1);
+		expect(addCached).toHaveBeenCalledTimes(1);
 	});
 
 	it('gives up once Real-Debrid is throttling rather than grinding', async () => {
@@ -370,23 +377,23 @@ describe('useSeasonPackAdder', () => {
 				3: [candidate(hash('c'), 'The.Wire.S03.1080p', 10)],
 			},
 		});
-		addRd.mockResolvedValue(false);
+		addCached.mockResolvedValue(false);
 		mockIsRdThrottling.mockReturnValue(true);
 		const { result } = render();
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 		let outcome: any;
 		await act(async () => {
-			outcome = await result.current.run(plan!, false);
+			outcome = await result.current.run(plan!);
 		});
 
 		// Each attempt has already spent up to two twenty-second backoffs inside
 		// the add itself, so a run that kept going would cost minutes.
 		expect(outcome.abortedByThrottle).toBe(true);
-		expect(addRd.mock.calls.length).toBeLessThanOrEqual(2);
+		expect(addCached.mock.calls.length).toBeLessThanOrEqual(2);
 	});
 
 	it('keeps going when an add simply fails without a throttle', async () => {
@@ -397,16 +404,16 @@ describe('useSeasonPackAdder', () => {
 				3: [candidate(hash('c'), 'The.Wire.S03.1080p', 10)],
 			},
 		});
-		addRd.mockImplementation(async (h: string) => h !== hash('a'));
+		addCached.mockImplementation(async (_service: string, h: string) => h !== hash('a'));
 		const { result } = render();
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 		let outcome: any;
 		await act(async () => {
-			outcome = await result.current.run(plan!, false);
+			outcome = await result.current.run(plan!);
 		});
 
 		expect(outcome.added).toBe(2);
@@ -440,14 +447,14 @@ describe('useSeasonPackAdder', () => {
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('tb', 'tb-key');
+			plan = await result.current.discover('tb', { tb: 'tb-key' });
 		});
 		await act(async () => {
-			await result.current.run(plan!, true);
+			await result.current.run(plan!);
 		});
 
-		expect(addTb.mock.calls.map((c) => c[0])).toEqual([hash('a')]);
-		expect(addTb.mock.calls[0][1].silent).toBe(true);
+		expect(addCached.mock.calls.map((c) => [c[0], c[1]])).toEqual([['tb', hash('a')]]);
+		expect(addCached.mock.calls[0][2].silent).toBe(true);
 	});
 
 	it('stops when asked', async () => {
@@ -458,7 +465,7 @@ describe('useSeasonPackAdder', () => {
 				3: [candidate(hash('c'), 'The.Wire.S03.1080p', 10)],
 			},
 		});
-		addRd.mockImplementation(async () => {
+		addCached.mockImplementation(async () => {
 			result.current.stop();
 			return true;
 		});
@@ -466,13 +473,13 @@ describe('useSeasonPackAdder', () => {
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 		await act(async () => {
-			await result.current.run(plan!, false);
+			await result.current.run(plan!);
 		});
 
-		expect(addRd).toHaveBeenCalledTimes(1);
+		expect(addCached).toHaveBeenCalledTimes(1);
 	});
 
 	it('abandons the run when the page moves to another show', async () => {
@@ -487,7 +494,7 @@ describe('useSeasonPackAdder', () => {
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 
 		// Hold the first add open so the navigation lands mid-run rather than
@@ -500,13 +507,13 @@ describe('useSeasonPackAdder', () => {
 		const firstAddGate = new Promise<void>((resolve) => {
 			releaseFirstAdd = resolve;
 		});
-		addRd.mockImplementation(async () => {
+		addCached.mockImplementation(async () => {
 			announceFirstAdd();
 			await firstAddGate;
 			return true;
 		});
 
-		const running = result.current.run(plan!, false);
+		const running = result.current.run(plan!);
 		await firstAddStarted;
 
 		// Navigating re-renders with a new id, which tears down the effect keyed
@@ -523,7 +530,7 @@ describe('useSeasonPackAdder', () => {
 			outcome = await running;
 		});
 
-		expect(addRd).toHaveBeenCalledTimes(1);
+		expect(addCached).toHaveBeenCalledTimes(1);
 		expect(outcome.stopped).toBe(true);
 	});
 
@@ -544,7 +551,7 @@ describe('useSeasonPackAdder', () => {
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 
 		expect(plan!.entries.map((e) => e.status)).toEqual(['pack', 'pack', 'pack']);
@@ -553,10 +560,10 @@ describe('useSeasonPackAdder', () => {
 
 		let outcome: any;
 		await act(async () => {
-			outcome = await result.current.run(plan!, false);
+			outcome = await result.current.run(plan!);
 		});
 
-		expect(addRd).toHaveBeenCalledTimes(1);
+		expect(addCached).toHaveBeenCalledTimes(1);
 		expect(outcome.added).toBe(3);
 		expect(outcome.gaps).toEqual([]);
 	});
@@ -574,15 +581,129 @@ describe('useSeasonPackAdder', () => {
 
 		let plan: SeasonAdderPlan | null = null;
 		await act(async () => {
-			plan = await result.current.discover('rd', null);
+			plan = await result.current.discover('rd');
 		});
 		await act(async () => {
-			await result.current.run(plan!, false);
+			await result.current.run(plan!);
 		});
 
 		// `web-dl` is one of the measured `451 infringing_file` patterns. A
 		// blocked name is refused on the first request every time, so spending
 		// an attempt on it only earns a 451 and two twenty-second backoffs.
-		expect(addRd).not.toHaveBeenCalled();
+		expect(addCached).not.toHaveBeenCalled();
+	});
+
+	it('adds only what AllDebrid holds, from its own availability table', async () => {
+		respondWith({
+			packs: {
+				1: [{ ...candidate(hash('a'), 'The.Wire.S01.1080p', 10), adAvailable: true }],
+				// RD holds season two, AllDebrid does not.
+				2: [candidate(hash('b'), 'The.Wire.S02.1080p', 10)],
+				3: [],
+			},
+			episodes: { 2: {}, 3: {} },
+		});
+		const { result } = render();
+
+		let plan: SeasonAdderPlan | null = null;
+		await act(async () => {
+			plan = await result.current.discover('ad');
+		});
+		expect(plan!.entries.map((e) => e.status)).toEqual(['pack', 'gap', 'gap']);
+
+		await act(async () => {
+			await result.current.run(plan!);
+		});
+		expect(addCached.mock.calls.map((c) => [c[0], c[1]])).toEqual([['ad', hash('a')]]);
+		expect(addCached.mock.calls[0][2].row.adAvailable).toBe(true);
+	});
+
+	it.each([
+		['pm', () => mockCheckPremiumizeCache],
+		['oc', () => mockCheckOffcloudCache],
+	] as const)(
+		'adds only what the %s probe reports, counting packs from the stored file list',
+		async (service, probe) => {
+			respondWith({
+				packs: {
+					1: [candidate(hash('a'), 'The.Wire.S01.1080p', 10)],
+					2: [candidate(hash('b'), 'The.Wire.S02.1080p', 10)],
+					3: [],
+				},
+				episodes: { 3: {} },
+			});
+			probe().mockResolvedValue([
+				{ hash: hash('a'), cached: true },
+				{ hash: hash('b'), cached: false },
+			]);
+			const { result } = render();
+
+			let plan: SeasonAdderPlan | null = null;
+			await act(async () => {
+				plan = await result.current.discover(service, { [service]: 'the-key' });
+			});
+			expect(probe()).toHaveBeenCalledWith('the-key', expect.arrayContaining([hash('a')]));
+
+			await act(async () => {
+				await result.current.run(plan!);
+			});
+			expect(addCached.mock.calls.map((c) => [c[0], c[1]])).toEqual([[service, hash('a')]]);
+		}
+	);
+
+	it('offers a release to TorBox that only Real-Debrid blocks by name', async () => {
+		const name = 'The.Wire.S01.1080p.WEB-DL.DDP5.1.H.264';
+		respondWith({ packs: { 1: [candidate(hash('a'), name)], 2: [], 3: [] }, episodes: {} });
+		mockCheckCachedStatus.mockResolvedValue({
+			success: true,
+			data: {
+				[hash('a')]: {
+					files: Array.from({ length: 10 }, (_, i) => ({
+						id: i,
+						name: `The.Wire.S01E${i + 1}.mkv`,
+						size: 1,
+					})),
+				},
+			},
+		});
+		const { result } = render();
+
+		let plan: SeasonAdderPlan | null = null;
+		await act(async () => {
+			plan = await result.current.discover('tb', { tb: 'tb-key' });
+		});
+		await act(async () => {
+			await result.current.run(plan!);
+		});
+
+		// `web-dl` is RD's 451 filter. TorBox serves the name, so dropping it
+		// here left the season as a gap for no reason.
+		expect(addCached.mock.calls.map((c) => [c[0], c[1]])).toEqual([['tb', hash('a')]]);
+	});
+
+	it("does not read Real-Debrid's throttle into another service's misses", async () => {
+		respondWith({
+			packs: {
+				1: [{ ...candidate(hash('a'), 'The.Wire.S01.1080p', 10), adAvailable: true }],
+				2: [{ ...candidate(hash('b'), 'The.Wire.S02.1080p', 10), adAvailable: true }],
+				3: [{ ...candidate(hash('c'), 'The.Wire.S03.1080p', 10), adAvailable: true }],
+			},
+		});
+		// RD happens to be in a penalty from something else on the page.
+		mockIsRdThrottling.mockReturnValue(true);
+		addCached.mockImplementation(async (_service: string, h: string) => h !== hash('a'));
+		const { result } = render();
+
+		let plan: SeasonAdderPlan | null = null;
+		await act(async () => {
+			plan = await result.current.discover('ad');
+		});
+		let outcome: any;
+		await act(async () => {
+			outcome = await result.current.run(plan!);
+		});
+
+		expect(outcome.abortedByThrottle).toBe(false);
+		expect(outcome.added).toBe(2);
 	});
 });

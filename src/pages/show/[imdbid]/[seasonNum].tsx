@@ -20,7 +20,11 @@ import { useAnimeEntries } from '@/hooks/useAnimeEntries';
 import { useAvailabilityCheck } from '@/hooks/useAvailabilityCheck';
 import { useExternalSources } from '@/hooks/useExternalSources';
 import { useMassReport } from '@/hooks/useMassReport';
-import { useSeasonPackAdder, type SeasonRunState } from '@/hooks/useSeasonPackAdder';
+import {
+	useSeasonPackAdder,
+	type SeasonAdderService,
+	type SeasonRunState,
+} from '@/hooks/useSeasonPackAdder';
 import { useTorrentManagement } from '@/hooks/useTorrentManagement';
 import { SearchApiResponse, SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
 import type { UsenetResult } from '@/services/nzb2rd';
@@ -109,6 +113,64 @@ import { useRouter } from 'next/router';
 import { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
+
+/**
+ * The services the Instant buttons can promise "cached only" on, and how each
+ * one's buttons are drawn. Debrid-Link has no cache signal, so it has none.
+ * Class names are written out whole: the build cannot see an assembled one.
+ */
+const INSTANT_SERVICES: {
+	service: SeasonAdderService;
+	short: string;
+	label: string;
+	available: 'rdAvailable' | 'adAvailable' | 'tbAvailable' | 'pmAvailable' | 'ocAvailable';
+	button: string;
+	icon: string;
+}[] = [
+	{
+		service: 'rd',
+		short: 'RD',
+		label: 'Real-Debrid',
+		available: 'rdAvailable',
+		button: 'border-green-500 bg-green-900/30 text-green-100 hover:bg-green-800/50',
+		icon: 'text-yellow-500',
+	},
+	{
+		service: 'ad',
+		short: 'AD',
+		label: 'AllDebrid',
+		available: 'adAvailable',
+		button: 'border-orange-500 bg-orange-900/30 text-orange-100 hover:bg-orange-800/50',
+		icon: 'text-orange-400',
+	},
+	{
+		service: 'tb',
+		short: 'TB',
+		label: 'TorBox',
+		available: 'tbAvailable',
+		button: 'border-indigo-500 bg-indigo-900/30 text-indigo-100 hover:bg-indigo-800/50',
+		icon: 'text-indigo-300',
+	},
+	{
+		service: 'pm',
+		short: 'PM',
+		label: 'Premiumize',
+		available: 'pmAvailable',
+		button: 'border-rose-500 bg-rose-900/30 text-rose-100 hover:bg-rose-800/50',
+		icon: 'text-rose-300',
+	},
+	{
+		service: 'oc',
+		short: 'OC',
+		label: 'Offcloud',
+		available: 'ocAvailable',
+		button: 'border-teal-500 bg-teal-900/30 text-teal-100 hover:bg-teal-800/50',
+		icon: 'text-teal-300',
+	},
+];
+
+const labelFor = (service: SeasonAdderService) =>
+	INSTANT_SERVICES.find((entry) => entry.service === service)!.label;
 
 type EpisodeAirInfo = {
 	first_aired: string;
@@ -295,6 +357,7 @@ const TvSearch: FunctionComponent = () => {
 		addPm,
 		addOc,
 		addDl,
+		addCached,
 		sendTbToRd,
 		deleteRd,
 		deleteAd,
@@ -370,8 +433,7 @@ const TvSearch: FunctionComponent = () => {
 		show: showFacts,
 		libraryItems,
 		hashAndProgress,
-		addRd,
-		addTb,
+		addCached,
 		episodeMaxSize,
 	});
 
@@ -383,13 +445,17 @@ const TvSearch: FunctionComponent = () => {
 	 * see "four seasons have no cached pack" before spending the other fourteen.
 	 */
 	const handleAllSeasons = useCallback(
-		async (service: 'rd' | 'tb') => {
+		async (service: SeasonAdderService) => {
 			if (!showInfo) return;
-			const label = service === 'rd' ? 'Real-Debrid' : 'TorBox';
+			const label = labelFor(service);
 			const discoverToast = toast.loading(`Checking all ${showInfo.season_count} seasons...`);
 			let plan;
 			try {
-				plan = await discoverSeasons(service, torboxKey);
+				plan = await discoverSeasons(service, {
+					tb: torboxKey,
+					pm: premiumizeKey,
+					oc: offcloudKey,
+				});
 			} catch (error) {
 				toast.error('Could not check the other seasons. Please try again.', {
 					id: discoverToast,
@@ -473,7 +539,7 @@ const TvSearch: FunctionComponent = () => {
 			// a crash.
 			const runToast = toast.loading(`Adding seasons to ${label}...`);
 			try {
-				const outcome = await runSeasons(plan, !!torboxKey);
+				const outcome = await runSeasons(plan);
 				toast.dismiss(runToast);
 
 				const parts: string[] = [];
@@ -504,7 +570,18 @@ const TvSearch: FunctionComponent = () => {
 				toast.error('The run failed part way through.', { id: runToast });
 			}
 		},
-		[showInfo, discoverSeasons, runSeasons, torboxKey]
+		[showInfo, discoverSeasons, runSeasons, torboxKey, premiumizeKey, offcloudKey]
+	);
+
+	const instantServices = INSTANT_SERVICES.filter(
+		({ service }) =>
+			({
+				rd: rdKey,
+				ad: adKey,
+				tb: torboxKey,
+				pm: premiumizeKey,
+				oc: offcloudKey,
+			})[service]
 	);
 
 	const expectedEpisodeCount = useMemo(
@@ -1311,30 +1388,24 @@ const TvSearch: FunctionComponent = () => {
 		);
 	}
 
-	// Helper function to find all complete season torrents (RD-available with matching episode count)
-	const getCompleteSeasonTorrents = () => {
+	// Complete season torrents the service holds: its own availability, and a
+	// video count within two of the season's episode count.
+	const getCompleteSeasonTorrents = (entry: (typeof INSTANT_SERVICES)[number]) => {
 		const minEpisodes = Math.max(1, expectedEpisodeCount - 2);
 		const maxEpisodes = expectedEpisodeCount + 2;
 		return filteredResults.filter((result) => {
-			if (!result.rdAvailable) return false;
+			if (!result[entry.available]) return false;
 			return result.videoCount >= minEpisodes && result.videoCount <= maxEpisodes;
 		});
 	};
 
-	// Helper function to find individual episode torrents
-	const getIndividualEpisodeTorrents = () => {
-		// Find torrents that are individual episodes (videoCount === 1)
-		return filteredResults.filter((result) => {
-			// Must be available in RD
-			if (!result.rdAvailable) return false;
+	// Single-episode torrents (exactly one video) the service holds.
+	const getIndividualEpisodeTorrents = (entry: (typeof INSTANT_SERVICES)[number]) =>
+		filteredResults.filter((result) => result[entry.available] && result.videoCount === 1);
 
-			// Individual episodes typically have exactly 1 video file
-			return result.videoCount === 1;
-		});
-	};
-
-	async function handleInstantRdWholeSeason() {
-		const candidates = getCompleteSeasonTorrents();
+	async function handleInstantWholeSeason(entry: (typeof INSTANT_SERVICES)[number]) {
+		const { service, label } = entry;
+		const candidates = getCompleteSeasonTorrents(entry);
 		if (candidates.length === 0) {
 			toast.error('No complete season torrents found.');
 			return;
@@ -1343,24 +1414,26 @@ const TvSearch: FunctionComponent = () => {
 		let attempted = 0;
 		for (const candidate of candidates) {
 			// Skip if already in library
-			if (`rd:${candidate.hash}` in hashAndProgress) {
-				toast.success('Season already in your Real-Debrid library.');
+			if (`${service}:${candidate.hash}` in hashAndProgress) {
+				toast.success(`Season already in your ${label} library.`);
 				return;
 			}
 
 			// Walking the candidates is a burst of adds like any other.
 			if (attempted > 0) await delay(RD_ADD_MIN_SPACING_MS);
 			attempted++;
-			// deleteIfNotInstant=true: rejects non-instant torrents (deletes from RD, cleans up DB)
-			const wasInstant = await addRd(candidate.hash, false, true);
+			// Cached only: a release the service does not serve at once is
+			// removed again (and, on RD, cleaned out of the availability table).
+			const wasInstant = await addCached(service, candidate.hash);
 			if (wasInstant) return;
 		}
 
 		toast.error('No truly instant season torrents found. False positives were cleaned up.');
 	}
 
-	async function handleInstantRdEveryEpisode() {
-		const individualEpisodes = getIndividualEpisodeTorrents();
+	async function handleInstantEveryEpisode(entry: (typeof INSTANT_SERVICES)[number]) {
+		const { service } = entry;
+		const individualEpisodes = getIndividualEpisodeTorrents(entry);
 		if (individualEpisodes.length === 0) {
 			toast.error('No individual episode torrents found.');
 			return;
@@ -1428,6 +1501,7 @@ const TvSearch: FunctionComponent = () => {
 		let addedCount = 0;
 		let skippedCount = 0;
 		let notFoundCount = 0;
+		let uncachedCount = 0;
 		const notFoundEpisodes: number[] = [];
 
 		try {
@@ -1443,7 +1517,7 @@ const TvSearch: FunctionComponent = () => {
 				}
 
 				// Check if already in library
-				if (`rd:${episode.hash}` in hashAndProgress) {
+				if (`${service}:${episode.hash}` in hashAndProgress) {
 					skippedCount++;
 					toast(`Episode ${epNum}: Already in library`, { duration: 2000 });
 					continue;
@@ -1451,18 +1525,24 @@ const TvSearch: FunctionComponent = () => {
 
 				// Update progress toast
 				toast.loading(
-					`Adding Episode ${epNum} (${addedCount} added, ${skippedCount} skipped, ${notFoundCount} missing)...`,
+					`Adding Episode ${epNum} (${addedCount} added, ${skippedCount} skipped, ${notFoundCount + uncachedCount} missing)...`,
 					{ id: toastId }
 				);
 
-				// Add to RD, spaced: `addMagnet` sustains about 30 adds a minute
-				// per account, and this loop used to run flat out, so a season
-				// of any length spent the user's whole add budget partway
-				// through and then failed every episode after that.
-				if (addedCount > 0) await delay(RD_ADD_MIN_SPACING_MS);
-				await addRd(episode.hash);
-				addedCount++;
-				toast.success(`Episode ${epNum}: Added`, { duration: 2000 });
+				// Spaced: RD's `addMagnet` sustains about 30 adds a minute per
+				// account, and this loop used to run flat out, so a season of
+				// any length spent the user's whole add budget partway through
+				// and then failed every episode after that.
+				if (addedCount + uncachedCount > 0) await delay(RD_ADD_MIN_SPACING_MS);
+				// Cached only, like the button says: a miss is removed again
+				// rather than left downloading.
+				if (await addCached(service, episode.hash, { silent: true })) {
+					addedCount++;
+					toast.success(`Episode ${epNum}: Added`, { duration: 2000 });
+				} else {
+					uncachedCount++;
+					toast.error(`Episode ${epNum}: Not cached`, { duration: 2000 });
+				}
 			}
 
 			// Final summary
@@ -1471,6 +1551,7 @@ const TvSearch: FunctionComponent = () => {
 			const summaryParts = [];
 			if (addedCount > 0) summaryParts.push(`${addedCount} added`);
 			if (skippedCount > 0) summaryParts.push(`${skippedCount} already in library`);
+			if (uncachedCount > 0) summaryParts.push(`${uncachedCount} not cached`);
 			if (notFoundCount > 0) {
 				summaryParts.push(`${notFoundCount} not found`);
 				if (notFoundEpisodes.length <= 5) {
@@ -1480,7 +1561,7 @@ const TvSearch: FunctionComponent = () => {
 
 			const summaryMessage = `Episodes 1-${maxEpisode}: ${summaryParts.join(', ')}`;
 
-			if (notFoundCount === 0) {
+			if (notFoundCount === 0 && uncachedCount === 0) {
 				toast.success(summaryMessage, { duration: 5000 });
 			} else if (addedCount > 0) {
 				toast.success(summaryMessage, { duration: 5000 });
@@ -1754,7 +1835,7 @@ const TvSearch: FunctionComponent = () => {
 
 	const headerActionButtons = (
 		<div data-testid="media-header-actions">
-			{(rdKey || adKey || torboxKey || debridLinkKey) && (
+			{(rdKey || adKey || torboxKey || premiumizeKey || offcloudKey || debridLinkKey) && (
 				<>
 					{rdKey && (
 						<button
@@ -1820,27 +1901,35 @@ const TvSearch: FunctionComponent = () => {
 							</b>
 						</button>
 					)}
-					{getCompleteSeasonTorrents().length > 0 && (
-						<button
-							className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
-							onClick={handleInstantRdWholeSeason}
-						>
-							<b className="flex items-center justify-center">
-								<Zap className="mr-1 h-3 w-3 text-yellow-500" />
-								Instant RD (Whole Season)
-							</b>
-						</button>
+					{instantServices.map(
+						(entry) =>
+							getCompleteSeasonTorrents(entry).length > 0 && (
+								<button
+									key={`whole-${entry.service}`}
+									className={`haptic-sm mb-1 mr-2 mt-0 rounded border-2 p-1 text-xs transition-colors ${entry.button}`}
+									onClick={() => handleInstantWholeSeason(entry)}
+								>
+									<b className="flex items-center justify-center">
+										<Zap className={`mr-1 h-3 w-3 ${entry.icon}`} />
+										Instant {entry.short} (Whole Season)
+									</b>
+								</button>
+							)
 					)}
-					{getIndividualEpisodeTorrents().length > 0 && (
-						<button
-							className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50"
-							onClick={handleInstantRdEveryEpisode}
-						>
-							<b className="flex items-center justify-center">
-								<Zap className="mr-1 h-3 w-3 text-yellow-500" />
-								Instant RD (Every Episode)
-							</b>
-						</button>
+					{instantServices.map(
+						(entry) =>
+							getIndividualEpisodeTorrents(entry).length > 0 && (
+								<button
+									key={`every-${entry.service}`}
+									className={`haptic-sm mb-1 mr-2 mt-0 rounded border-2 p-1 text-xs transition-colors ${entry.button}`}
+									onClick={() => handleInstantEveryEpisode(entry)}
+								>
+									<b className="flex items-center justify-center">
+										<Zap className={`mr-1 h-3 w-3 ${entry.icon}`} />
+										Instant {entry.short} (Every Episode)
+									</b>
+								</button>
+							)
 					)}
 					{showInfo.season_count > 1 && (isAddingSeasons || isDiscoveringSeasons) && (
 						<button
@@ -1859,38 +1948,27 @@ const TvSearch: FunctionComponent = () => {
 					 * show-wide action must not disappear because season one's first
 					 * page happens to hold nothing.
 					 */}
-					{rdKey && showInfo.season_count > 1 && !isAddingSeasons && (
-						<button
-							className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-green-500 bg-green-900/30 p-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 disabled:cursor-not-allowed disabled:opacity-50"
-							onClick={() => handleAllSeasons('rd')}
-							disabled={isDiscoveringSeasons}
-						>
-							<b className="flex items-center justify-center">
-								{isDiscoveringSeasons ? (
-									<Loader2 className="mr-1 h-3 w-3 animate-spin text-green-400" />
-								) : (
-									<Layers className="mr-1 h-3 w-3 text-yellow-500" />
-								)}
-								Instant RD (All Seasons)
-							</b>
-						</button>
-					)}
-					{torboxKey && showInfo.season_count > 1 && !isAddingSeasons && (
-						<button
-							className="haptic-sm mb-1 mr-2 mt-0 rounded border-2 border-indigo-500 bg-indigo-900/30 p-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 disabled:cursor-not-allowed disabled:opacity-50"
-							onClick={() => handleAllSeasons('tb')}
-							disabled={isDiscoveringSeasons}
-						>
-							<b className="flex items-center justify-center">
-								{isDiscoveringSeasons ? (
-									<Loader2 className="mr-1 h-3 w-3 animate-spin text-indigo-400" />
-								) : (
-									<Layers className="mr-1 h-3 w-3 text-indigo-300" />
-								)}
-								Instant TB (All Seasons)
-							</b>
-						</button>
-					)}
+					{showInfo.season_count > 1 &&
+						!isAddingSeasons &&
+						instantServices.map((entry) => (
+							<button
+								key={`all-${entry.service}`}
+								className={`haptic-sm mb-1 mr-2 mt-0 rounded border-2 p-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${entry.button}`}
+								onClick={() => handleAllSeasons(entry.service)}
+								disabled={isDiscoveringSeasons}
+							>
+								<b className="flex items-center justify-center">
+									{isDiscoveringSeasons ? (
+										<Loader2
+											className={`mr-1 h-3 w-3 animate-spin ${entry.icon}`}
+										/>
+									) : (
+										<Layers className={`mr-1 h-3 w-3 ${entry.icon}`} />
+									)}
+									Instant {entry.short} (All Seasons)
+								</b>
+							</button>
+						))}
 					<button
 						className="mb-1 mr-2 mt-0 rounded border-2 border-purple-500 bg-purple-900/30 p-1 text-xs text-purple-100 transition-colors hover:bg-purple-800/50"
 						onClick={() =>

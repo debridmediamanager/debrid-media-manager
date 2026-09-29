@@ -15,7 +15,7 @@ const {
 	modalFireMock,
 	keys,
 	seasonStateMock,
-	addRdMock,
+	addCachedMock,
 	delayMock,
 	callLog,
 } = vi.hoisted(() => {
@@ -39,9 +39,13 @@ const {
 		runMock: vi.fn(),
 		stopMock: vi.fn(),
 		modalFireMock: vi.fn(),
-		keys: { rd: 'rd-token' as string | null, ad: null, tb: 'tb-token' as string | null },
+		keys: {
+			rd: 'rd-token' as string | null,
+			ad: null as string | null,
+			tb: 'tb-token' as string | null,
+		},
 		seasonStateMock: {} as Record<number, string>,
-		addRdMock: vi.fn(),
+		addCachedMock: vi.fn(),
 		delayMock: vi.fn(),
 		callLog: [] as string[],
 	};
@@ -138,7 +142,8 @@ vi.mock('@/hooks/useTorrentManagement', () => ({
 	useTorrentManagement: () => ({
 		hashAndProgress: {},
 		fetchHashAndProgress: vi.fn().mockResolvedValue(undefined),
-		addRd: addRdMock,
+		addRd: vi.fn(),
+		addCached: addCachedMock,
 		addAd: vi.fn(),
 		addTb: vi.fn(),
 		deleteRd: vi.fn(),
@@ -174,7 +179,20 @@ vi.mock('@/utils/instantChecks', () => ({
 	checkAvailabilityDl: vi.fn().mockResolvedValue(0),
 	checkAvailabilityOc: vi.fn().mockResolvedValue(0),
 	checkAvailabilityPm: vi.fn().mockResolvedValue(0),
-	checkDatabaseAvailabilityAd: vi.fn().mockResolvedValue(0),
+	checkDatabaseAvailabilityAd: vi.fn(
+		async (
+			_token: string,
+			_hash: string,
+			_imdbId: string,
+			hashes: string[],
+			setSearchResults: (fn: (prev: any[]) => any[]) => void
+		) => {
+			setSearchResults((prev) =>
+				prev.map((r) => (hashes.includes(r.hash) ? { ...r, adAvailable: true } : r))
+			);
+			return hashes.length;
+		}
+	),
 	// Rows arrive from the search with `rdAvailable: false` and it is this
 	// lookup that flips them, so the Instant RD buttons only exist once it has.
 	checkDatabaseAvailabilityRd: vi.fn(
@@ -293,23 +311,27 @@ const SHOW = {
 	season_episode_counts: { 1: 3 },
 };
 
-const episodeRow = (n: number) => ({
+const episodeRow = (n: number, available: Record<string, boolean> = { rdAvailable: true }) => ({
 	hash: `hash-${n}`,
 	title: `Example.Show.S01E0${n}.1080p.WEB.h265-GRP`,
 	fileSize: 1000,
 	medianFileSize: 1000,
 	biggestFileSize: 1000,
 	videoCount: 1,
-	rdAvailable: true,
+	rdAvailable: false,
 	adAvailable: false,
 	tbAvailable: false,
 	pmAvailable: false,
 	ocAvailable: false,
 	dlAvailable: false,
 	files: [],
+	...available,
 });
 
-const mountSeason = async () => {
+const mountSeason = async (
+	available: Record<string, boolean> = { rdAvailable: true },
+	buttonName: RegExp = /Instant RD \(Every Episode\)/i
+) => {
 	axiosGetMock.mockImplementation((url: string) => {
 		if (url.startsWith('/api/info/show')) {
 			return Promise.resolve({ status: 200, data: SHOW });
@@ -318,13 +340,19 @@ const mountSeason = async () => {
 			return Promise.resolve({
 				status: 200,
 				headers: {},
-				data: { results: [episodeRow(1), episodeRow(2), episodeRow(3)] },
+				data: {
+					results: [
+						episodeRow(1, available),
+						episodeRow(2, available),
+						episodeRow(3, available),
+					],
+				},
 			});
 		}
 		return Promise.resolve({ status: 200, data: {} });
 	});
 	render(<ShowSeasonPage />);
-	return screen.findByRole('button', { name: /Instant RD \(Every Episode\)/i });
+	return screen.findByRole('button', { name: buttonName });
 };
 
 // Adding every episode of a season is a burst of `addMagnet` calls against one
@@ -340,9 +368,10 @@ describe('Instant RD (Every Episode) pacing', () => {
 		toastMock.mockClear();
 		toastMock.success.mockClear();
 		toastMock.error.mockClear();
-		addRdMock.mockReset();
-		addRdMock.mockImplementation(async () => {
+		addCachedMock.mockReset();
+		addCachedMock.mockImplementation(async () => {
 			callLog.push('add');
+			return true;
 		});
 		delayMock.mockReset();
 		delayMock.mockImplementation(async (ms: number) => {
@@ -350,6 +379,7 @@ describe('Instant RD (Every Episode) pacing', () => {
 		});
 		callLog.length = 0;
 		keys.rd = 'rd-token';
+		keys.ad = null;
 		keys.tb = null;
 	});
 
@@ -358,7 +388,8 @@ describe('Instant RD (Every Episode) pacing', () => {
 
 		await userEvent.click(button);
 
-		await waitFor(() => expect(addRdMock).toHaveBeenCalledTimes(3));
+		await waitFor(() => expect(addCachedMock).toHaveBeenCalledTimes(3));
+		expect(addCachedMock.mock.calls.map((call) => call[0])).toEqual(['rd', 'rd', 'rd']);
 
 		// One add, then a gap, for every episode after the first.
 		expect(callLog.filter((entry) => entry === 'add')).toHaveLength(3);
@@ -369,5 +400,39 @@ describe('Instant RD (Every Episode) pacing', () => {
 			`delay:${RD_ADD_MIN_SPACING_MS}`,
 			'add',
 		]);
+	});
+
+	it('offers an AllDebrid user the same action, adding to AllDebrid', async () => {
+		keys.rd = null;
+		keys.ad = 'ad-key';
+		const button = await mountSeason({ adAvailable: true }, /Instant AD \(Every Episode\)/i);
+		expect(screen.queryByRole('button', { name: /Instant RD/i })).toBeNull();
+
+		await userEvent.click(button);
+
+		await waitFor(() => expect(addCachedMock).toHaveBeenCalledTimes(3));
+		expect(addCachedMock.mock.calls.map((call) => [call[0], call[1]])).toEqual([
+			['ad', 'hash-1'],
+			['ad', 'hash-2'],
+			['ad', 'hash-3'],
+		]);
+	});
+
+	it('counts an episode the service turns out not to have as not cached', async () => {
+		addCachedMock.mockImplementation(async (_service: string, hash: string) => {
+			callLog.push('add');
+			return hash !== 'hash-2';
+		});
+		const button = await mountSeason();
+
+		await userEvent.click(button);
+
+		await waitFor(() => expect(addCachedMock).toHaveBeenCalledTimes(3));
+		await waitFor(() =>
+			expect(toastMock.success).toHaveBeenCalledWith(
+				expect.stringContaining('2 added, 1 not cached'),
+				expect.anything()
+			)
+		);
 	});
 });

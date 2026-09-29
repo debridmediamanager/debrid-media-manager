@@ -40,7 +40,13 @@ type ResolvedCandidate = {
 	title: string;
 	sizeMb: number;
 	rdAvailable: boolean;
-	/** Video files RD recorded for this hash; absent when RD has never held it. */
+	adAvailable: boolean;
+	/**
+	 * Video files recorded for this hash, from RD's table or else AllDebrid's;
+	 * absent when neither has held it. A file list describes the torrent, not
+	 * the service, so a run on a service with no list of its own (Premiumize,
+	 * Offcloud) counts the pack window from this one.
+	 */
 	videoCount?: number;
 	files?: { fileId: number; filename: string; filesize: number }[];
 	/** Seasons the title claims, on a pack. */
@@ -149,21 +155,34 @@ const handler: NextApiHandler = async (req, res) => {
 			}
 		}
 
-		const availability =
-			allHashes.size > 0 ? await db.checkAvailability(trimmedImdbId, [...allHashes]) : [];
+		const hashList = [...allHashes];
+		const [availability, availabilityAd] =
+			hashList.length > 0
+				? await Promise.all([
+						db.checkAvailability(trimmedImdbId, hashList),
+						db.checkAvailabilityAd(trimmedImdbId, hashList),
+					])
+				: [[], []];
 		const availableByHash = new Map(
 			availability.map((row) => [row.hash.toLowerCase(), row.files] as const)
+		);
+		const availableAdByHash = new Map(
+			availabilityAd.map((row) => [row.hash.toLowerCase(), row.files] as const)
 		);
 
 		const resolve = (
 			candidate: SeasonPackCandidate | SeasonEpisodeCandidate
 		): ResolvedCandidate => {
-			const files = availableByHash.get(candidate.hash.toLowerCase());
+			const key = candidate.hash.toLowerCase();
+			const rdFiles = availableByHash.get(key);
+			const adFiles = availableAdByHash.get(key);
+			const files = rdFiles ?? adFiles;
 			const resolved: ResolvedCandidate = {
 				hash: candidate.hash,
 				title: candidate.title,
 				sizeMb: candidate.sizeMb,
-				rdAvailable: !!files,
+				rdAvailable: !!rdFiles,
+				adAvailable: !!adFiles,
 			};
 			if ('seasons' in candidate) resolved.seasons = candidate.seasons;
 			if ('episodes' in candidate) resolved.episodes = candidate.episodes;

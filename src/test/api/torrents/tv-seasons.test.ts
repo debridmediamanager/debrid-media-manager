@@ -7,12 +7,14 @@ const {
 	mockGetAllScrapedTrueResults,
 	mockGetReportedHashes,
 	mockCheckAvailability,
+	mockCheckAvailabilityAd,
 	mockCheckCanary,
 } = vi.hoisted(() => ({
 	mockValidateProblemToken: vi.fn(),
 	mockGetAllScrapedTrueResults: vi.fn(),
 	mockGetReportedHashes: vi.fn(),
 	mockCheckAvailability: vi.fn(),
+	mockCheckAvailabilityAd: vi.fn(),
 	mockCheckCanary: vi.fn(),
 }));
 
@@ -25,6 +27,7 @@ vi.mock('@/services/repository', () => ({
 		getAllScrapedTrueResults: mockGetAllScrapedTrueResults,
 		getReportedHashes: mockGetReportedHashes,
 		checkAvailability: mockCheckAvailability,
+		checkAvailabilityAd: mockCheckAvailabilityAd,
 	},
 }));
 
@@ -62,6 +65,7 @@ describe('/api/torrents/tv-seasons', () => {
 		mockCheckCanary.mockResolvedValue(null);
 		mockGetReportedHashes.mockResolvedValue([]);
 		mockCheckAvailability.mockResolvedValue([]);
+		mockCheckAvailabilityAd.mockResolvedValue([]);
 		mockGetAllScrapedTrueResults.mockResolvedValue([]);
 	});
 
@@ -169,7 +173,50 @@ describe('/api/torrents/tv-seasons', () => {
 		const res = await call(baseQuery);
 		const pack = (res._getData() as any).seasons[0].packs[0];
 		expect(pack.rdAvailable).toBe(false);
+		expect(pack.adAvailable).toBe(false);
 		expect(pack.videoCount).toBeUndefined();
+	});
+
+	it('marks what AllDebrid holds, so an AllDebrid run has candidates', async () => {
+		mockGetAllScrapedTrueResults.mockResolvedValue([
+			row(PACK, 'The.Wire.S03.1080p.BluRay.x264-GROUP'),
+		]);
+		// AllDebrid's table stores hashes lowercased; the scraped row may not be.
+		mockCheckAvailabilityAd.mockResolvedValue([
+			{
+				hash: PACK,
+				files: [
+					{ file_id: 0, path: 'The.Wire.S03E01.mkv', bytes: 1 },
+					{ file_id: 1, path: 'The.Wire.S03E02.mkv', bytes: 1 },
+				],
+			},
+		]);
+
+		const res = await call(baseQuery);
+		const [held] = (res._getData() as any).seasons[0].packs;
+		expect(held.adAvailable).toBe(true);
+		expect(held.rdAvailable).toBe(false);
+		// RD has never held it, so the pack window counts from AllDebrid's list.
+		expect(held.videoCount).toBe(2);
+		expect(mockCheckAvailabilityAd).toHaveBeenCalledWith('tt0306414', [PACK]);
+	});
+
+	it("prefers RD's file list when both tables hold the torrent", async () => {
+		mockGetAllScrapedTrueResults.mockResolvedValue([
+			row(PACK, 'The.Wire.S03.1080p.BluRay.x264-GROUP'),
+		]);
+		mockCheckAvailability.mockResolvedValue([
+			{ hash: PACK, files: [{ file_id: 7, path: 'The.Wire.S03E01.mkv', bytes: 1 }] },
+		]);
+		mockCheckAvailabilityAd.mockResolvedValue([
+			{ hash: PACK, files: [{ file_id: 0, path: 'The.Wire.S03E01.mkv', bytes: 1 }] },
+		]);
+
+		const pack = ((await call(baseQuery))._getData() as any).seasons[0].packs[0];
+		expect(pack.rdAvailable).toBe(true);
+		expect(pack.adAvailable).toBe(true);
+		// An RD run selects files by RD's ids; AllDebrid numbers them differently.
+		expect(pack.files[0].fileId).toBe(7);
 	});
 
 	it('reads availability once for the whole show, not once per season', async () => {
@@ -180,6 +227,7 @@ describe('/api/torrents/tv-seasons', () => {
 		]);
 		await call({ ...baseQuery, seasons: '1,2,3,4,5' });
 		expect(mockCheckAvailability).toHaveBeenCalledTimes(1);
+		expect(mockCheckAvailabilityAd).toHaveBeenCalledTimes(1);
 	});
 
 	it('returns per-episode buckets only when asked for them', async () => {
