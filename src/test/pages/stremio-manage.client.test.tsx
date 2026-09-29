@@ -194,4 +194,14 @@ describe('Stremio manage page poster integration', () => {
 		expect(fetchMock).toHaveBeenCalledWith('/api/info/show?imdbid=tt1234567');
 		expect(fetchMock).toHaveBeenCalledWith('/api/info/movie?imdbid=tt7654321');
 	});
+
+	// break-all split every filename at the card edge mid-word, "After An / other"
+	// and "Bl / uRay" at 320px; words should only break when one cannot fit.
+	it('wraps casted filenames at word boundaries', async () => {
+		render(<ManagePage />);
+
+		const filename = await screen.findByText('Example.Movie.2020.1080p.mkv');
+		expect(filename).toHaveClass('break-words');
+		expect(filename).not.toHaveClass('break-all');
+	});
 });

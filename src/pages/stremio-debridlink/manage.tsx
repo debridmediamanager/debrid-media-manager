@@ -510,7 +510,7 @@ export function DebridLinkManagePage() {
 																{episodeLabel}
 															</span>
 														)}
-														<span className="break-all text-sm text-gray-300">
+														<span className="break-words text-sm text-gray-300">
 															{getFilename(link.url)}
 														</span>
 														<span className="text-xs text-gray-300">
