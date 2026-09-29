@@ -27,6 +27,12 @@
 		"expectText": ["Connect AllDebrid"],
 		"expectPath": "/alldebrid/login"
 	},
+	"/anime": {
+		"status": "verified",
+		"observedStates": ["rendered", "loading"],
+		"expectText": ["[Aa]nime"],
+		"expectPath": "/anime"
+	},
 	"/anime/anidb-1": {
 		"status": "verified",
 		"observedStates": ["rendered"],
