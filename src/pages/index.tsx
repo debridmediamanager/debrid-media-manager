@@ -397,7 +397,7 @@ function IndexPage() {
 						</div>
 						<Link
 							href="/copyright"
-							className="mt-2 text-center text-xs text-gray-500 underline"
+							className="mt-2 text-center text-xs text-gray-400 underline"
 						>
 							Report copyright infringement
 						</Link>
