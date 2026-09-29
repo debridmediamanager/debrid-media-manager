@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import futurama from './__fixtures__/imdb-futurama-titles.json';
 import { ImdbSearchService } from './imdbSearch';
 
 const prismaMock = vi.hoisted(() => ({
@@ -186,94 +185,6 @@ describe('ImdbSearchService', () => {
 			await service.searchTitles('test', { limit: 10 });
 
 			expect(prismaMock.$queryRaw).toHaveBeenCalled();
-		});
-	});
-
-	describe('title types', () => {
-		type Row = (typeof futurama.rows)[number];
-
-		/**
-		 * Apply the generated query's own type filter and type mapping to real
-		 * rows, since the mocked client cannot run the SQL itself.
-		 */
-		function applyTypeClauses(sql: string, rows: Row[]) {
-			const filter = sql.split('\n').find((l) => /^\s*AND .*b\.title_type/.test(l));
-			const mapping = sql.match(
-				/WHEN b\.title_type (?:= '(\w+)'|IN \(([^)]*)\)) THEN 'movie'/
-			);
-			if (!filter || !mapping) throw new Error('type clauses not found in:\n' + sql);
-			// The clause is plain SQL over two columns; evaluate it as JS.
-			const admits = new Function(
-				'type',
-				'votes',
-				'return ' +
-					filter
-						.trim()
-						.replace(/^AND /, '')
-						.replace(/b\.title_type IN \(([^)]*)\)/g, '[$1].includes(type)')
-						.replace(/b\.title_type = /g, 'type === ')
-						.replace(/r\.num_votes/g, 'votes')
-						.replace(/ AND /g, ' && ')
-						.replace(/ OR /g, ' || ')
-			) as (type: string, votes: number) => boolean;
-			const movieTypes = (mapping[1] ?? mapping[2])
-				.split(',')
-				.map((t) => t.trim().replace(/'/g, ''));
-			return rows
-				.filter((r) => admits(r.titleType, r.numVotes))
-				.map((r) => ({
-					imdbId: r.tconst,
-					type: movieTypes.includes(r.titleType) ? 'movie' : 'show',
-				}));
-		}
-
-		const films = [
-			{ imdbId: 'tt0471711', type: 'movie' }, // Bender's Big Score
-			{ imdbId: 'tt1054485', type: 'movie' }, // The Beast with a Billion Backs
-			{ imdbId: 'tt1054486', type: 'movie' }, // Bender's Game
-			{ imdbId: 'tt1054487', type: 'movie' }, // Into the Wild Green Yonder
-		];
-
-		it('finds direct-to-video films, filed as movies, when no type is given', async () => {
-			prismaMock.$queryRaw.mockResolvedValue([]);
-			await service.searchTitles('futurama');
-
-			const admitted = applyTypeClauses(
-				prismaMock.$queryRaw.mock.calls[0][0].sql,
-				futurama.rows
-			);
-
-			expect(admitted).toEqual(expect.arrayContaining(films));
-			expect(admitted).toContainEqual({ imdbId: 'tt0149460', type: 'show' });
-			expect(admitted.map((r) => r.imdbId)).not.toContain('tt0377952'); // videoGame
-			expect(admitted.map((r) => r.imdbId)).not.toContain('tt1630885'); // tvEpisode
-			// A featurette nobody rates stays out: 'Futurama' Returns, 768 votes
-			expect(admitted.map((r) => r.imdbId)).not.toContain('tt1230102');
-		});
-
-		it('keeps direct-to-video films in a movie-only search', async () => {
-			prismaMock.$queryRaw.mockResolvedValue([]);
-			await service.searchTitles('futurama', { mediaType: 'movie' });
-
-			const admitted = applyTypeClauses(
-				prismaMock.$queryRaw.mock.calls[0][0].sql,
-				futurama.rows
-			);
-
-			expect(admitted).toEqual(expect.arrayContaining(films));
-			expect(admitted.every((r) => r.type === 'movie')).toBe(true);
-		});
-
-		it('leaves direct-to-video films out of a show-only search', async () => {
-			prismaMock.$queryRaw.mockResolvedValue([]);
-			await service.searchTitles('futurama', { mediaType: 'show' });
-
-			const admitted = applyTypeClauses(
-				prismaMock.$queryRaw.mock.calls[0][0].sql,
-				futurama.rows
-			);
-
-			expect(admitted.map((r) => r.imdbId).sort()).toEqual(['tt0149460', 'tt6090450']);
 		});
 	});
 

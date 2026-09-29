@@ -12,22 +12,6 @@ export type ImdbSearchResult = {
 	isOriginalMatch: boolean;
 };
 
-/**
- * IMDb title types that search offers, and which of them open a movie page.
- *
- * Direct-to-video features (`video`) and TV films (`tvMovie`, `tvSpecial`) have
- * movie pages like any theatrical film. The Futurama films are all `video`, and
- * A Charlie Brown Christmas is a `tvMovie`, so leaving the types out made them
- * unfindable from the search page. Most titles of these types are featurettes
- * and making-ofs, though, and fulltext relevance rewards a title that repeats
- * the query ("Beyond Batman: ... Batman" outranks Batman Begins), so they only
- * count once enough people have rated them. At 1000 votes they are real films.
- */
-const MOVIE_TYPES = Prisma.raw(`('movie', 'tvMovie', 'video', 'tvSpecial')`);
-const RATED_NON_THEATRICAL = Prisma.raw(
-	`(b.title_type IN ('tvMovie', 'video', 'tvSpecial') AND r.num_votes >= 1000)`
-);
-
 export class ImdbSearchService extends DatabaseClient {
 	/**
 	 * Search IMDB titles using fulltext search on title variants
@@ -58,10 +42,10 @@ export class ImdbSearchService extends DatabaseClient {
 		// Build type filter as parameterized Prisma.sql
 		const typeFilter =
 			mediaType === 'movie'
-				? Prisma.sql`AND (b.title_type = 'movie' OR ${RATED_NON_THEATRICAL})`
+				? Prisma.sql`AND b.title_type = 'movie'`
 				: mediaType === 'show'
 					? Prisma.sql`AND b.title_type IN ('tvSeries', 'tvMiniSeries')`
-					: Prisma.sql`AND (b.title_type IN ('movie', 'tvSeries', 'tvMiniSeries') OR ${RATED_NON_THEATRICAL})`;
+					: Prisma.sql`AND b.title_type IN ('movie', 'tvSeries', 'tvMiniSeries')`;
 
 		// Build year filter as parameterized Prisma.sql
 		const yearFilter = year ? Prisma.sql`AND b.start_year = ${year}` : Prisma.empty;
@@ -175,7 +159,7 @@ export class ImdbSearchService extends DatabaseClient {
 			SELECT
 				b.tconst as imdbId,
 				CASE
-					WHEN b.title_type IN ${MOVIE_TYPES} THEN 'movie'
+					WHEN b.title_type = 'movie' THEN 'movie'
 					ELSE 'show'
 				END as type,
 				b.start_year as year,
@@ -244,7 +228,7 @@ export class ImdbSearchService extends DatabaseClient {
 			SELECT
 				b.tconst as imdbId,
 				CASE
-					WHEN b.title_type IN ${MOVIE_TYPES} THEN 'movie'
+					WHEN b.title_type = 'movie' THEN 'movie'
 					ELSE 'show'
 				END as type,
 				b.start_year as year,
@@ -294,7 +278,7 @@ export class ImdbSearchService extends DatabaseClient {
 			SELECT
 				b.tconst as imdbId,
 				CASE
-					WHEN b.title_type IN ${MOVIE_TYPES} THEN 'movie'
+					WHEN b.title_type = 'movie' THEN 'movie'
 					ELSE 'show'
 				END as type,
 				b.start_year as year,
