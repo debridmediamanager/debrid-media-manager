@@ -3,8 +3,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
 	HashlistNotPublishedError,
 	hashlistDataUrl,
+	hashlistPageHtml,
 	readHashlistFragment,
 	storedHashlistId,
+	storedListText,
 } from './hashlistSource';
 
 const ID = '421ab9ff-ed7f-4c0b-9f66-ee91f12d57eb';
@@ -40,6 +42,19 @@ describe('hashlistSource', () => {
 		expect(hashlistDataUrl(ID)).toBe(
 			`https://hashlists.debridmediamanager.com/lists/${ID}.txt`
 		);
+	});
+
+	// The backfill moved each old page to lists/<id>.txt unchanged.
+	it('reads a stored list that is an old page moved whole', async () => {
+		const page = hashlistPageHtml(
+			`https://debridmediamanager.com/hashlist#${lzString.compressToEncodedURIComponent(LIST)}`
+		);
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => new Response(page))
+		);
+		expect(await readHashlistFragment(`id=${ID}`)).toBe(LIST);
+		expect(storedListText('<html>no iframe</html>')).toBe('');
 	});
 
 	// GitHub Pages publishes a new file a minute or two after its commit.

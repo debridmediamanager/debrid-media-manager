@@ -11,6 +11,10 @@ import lzString from 'lz-string';
  * fragment carries `id=<id>`. `=` is outside lz-string's URI-safe alphabet,
  * so the two forms cannot be mistaken for each other, and old links keep
  * working unchanged.
+ *
+ * A list published before this was moved there whole: its old page, iframe
+ * and all, became `lists/<id>.txt` unchanged, so the move added no copy of the
+ * data to the repository. `storedListText` reads either shape.
  */
 export const HASHLIST_HOST = 'https://hashlists.debridmediamanager.com';
 export const HASHLIST_APP_URL = 'https://debridmediamanager.com/hashlist';
@@ -33,6 +37,13 @@ export function storedHashlistId(fragment: string): string | null {
 	return isHashlistId(id) ? id : null;
 }
 
+/** The lz-string text in a stored list: the file itself, or an old page's fragment. */
+export function storedListText(file: string): string {
+	const text = file.trim();
+	if (!text.startsWith('<')) return text;
+	return text.match(/<iframe src="[^"#]*#([^"]+)"/)?.[1] ?? '';
+}
+
 /** GitHub Pages publishes a new file a minute or two after its commit. */
 export class HashlistNotPublishedError extends Error {
 	constructor(id: string) {
@@ -52,7 +63,7 @@ export async function readHashlistFragment(fragment: string): Promise<string> {
 	const response = await fetch(hashlistDataUrl(id));
 	if (response.status === 404) throw new HashlistNotPublishedError(id);
 	if (!response.ok) throw new Error(`Hash list ${id} answered ${response.status}`);
-	return lzString.decompressFromEncodedURIComponent((await response.text()).trim()) ?? '';
+	return lzString.decompressFromEncodedURIComponent(storedListText(await response.text())) ?? '';
 }
 
 /** The page hashlists.debridmediamanager.com serves for a list. */
