@@ -82,6 +82,64 @@ interface SortBy {
 
 const torrentDB = new UserTorrentDB();
 
+// Parsing a filename costs ~0.15 ms, so a 176k-item list took ~27 s of main
+// thread in one go; with the page frozen that long Chrome offers to kill it.
+function enrichHashlistTorrent(torrent: HashlistTorrent): EnrichedHashlistTorrent | null {
+	const mediaType = getTypeByName(torrent.filename);
+	const info =
+		mediaType === 'movie'
+			? filenameParse(torrent.filename)
+			: filenameParse(torrent.filename, true);
+	// Movies without a valid year are left out; TV shows don't need one
+	if (mediaType !== 'tv' && !(info.year && Number(info.year) > 0)) return null;
+	return {
+		score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
+		info,
+		mediaType,
+		title: getMediaId(info, mediaType, false) || torrent.filename,
+		rdAvailable: false,
+		adAvailable: false,
+		tbAvailable: false,
+		pmAvailable: false,
+		ocAvailable: false,
+		dlAvailable: false,
+		noVideos: false,
+		files: [],
+		...torrent,
+	} as EnrichedHashlistTorrent;
+}
+
+const ENRICH_SLICE_MS = 50;
+const ENRICH_PUBLISH_MS = 1000;
+
+/**
+ * Enriches the list in slices of ~50 ms, yielding to the browser between them
+ * so the page stays responsive, and hands what is done so far to `onProgress`
+ * about once a second, so a long list starts showing rows before it finishes.
+ */
+async function enrichInSlices(
+	torrents: HashlistTorrent[],
+	onProgress: (partial: EnrichedHashlistTorrent[]) => void
+): Promise<EnrichedHashlistTorrent[]> {
+	const enriched: EnrichedHashlistTorrent[] = [];
+	let sliceStart = performance.now();
+	let lastPublish = sliceStart;
+	for (let i = 0; i < torrents.length; i++) {
+		const torrent = enrichHashlistTorrent(torrents[i]);
+		if (torrent) enriched.push(torrent);
+		if (i % 256 !== 255) continue;
+		const now = performance.now();
+		if (now - sliceStart < ENRICH_SLICE_MS) continue;
+		if (now - lastPublish >= ENRICH_PUBLISH_MS) {
+			onProgress(enriched.slice());
+			lastPublish = now;
+		}
+		await new Promise((resolve) => setTimeout(resolve, 0));
+		sliceStart = performance.now();
+	}
+	return enriched;
+}
+
 function HashlistPage() {
 	const router = useRouter();
 	const [query, setQuery] = useState('');
@@ -197,11 +255,16 @@ function HashlistPage() {
 		await Promise.all([fetchUserTorrentsList(), fetchHashAndProgress()]);
 	}
 
+	// The list is read once. This effect used to re-run whenever a debrid key
+	// changed while the list was still empty, and keys hydrate after mount, so a
+	// logged-in visit parsed every filename twice.
+	const listLoadStarted = useRef(false);
 	useEffect(() => {
-		if (userTorrentsList.length !== 0) return;
+		if (listLoadStarted.current) return;
+		listLoadStarted.current = true;
 		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey, adKey, tbKey, pmKey, ocKey, dlKey]);
+	}, []);
 
 	async function decodeJsonStringFromUrl(): Promise<string> {
 		return readHashlistFragment(window.location.hash.substring(1));
@@ -227,81 +290,15 @@ function HashlistPage() {
 		return unblocked(torrents);
 	}
 
-	async function fetchUserTorrentsList() {
-		try {
-			let torrents = (await readHashlist())
-				.map((torrent) => {
-					const mediaType = getTypeByName(torrent.filename);
-					const info =
-						mediaType === 'movie'
-							? filenameParse(torrent.filename)
-							: filenameParse(torrent.filename, true);
-					return {
-						score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
-						info,
-						mediaType,
-						title: getMediaId(info, mediaType, false) || torrent.filename,
-						rdAvailable: false,
-						adAvailable: false,
-						tbAvailable: false,
-						pmAvailable: false,
-						ocAvailable: false,
-						dlAvailable: false,
-						noVideos: false,
-						files: [],
-						...torrent,
-					};
-				})
-				// Filter out movies without a valid year; TV shows don't need one
-				.filter(
-					(t) => t.mediaType === 'tv' || (t.info.year && Number(t.info.year) > 0)
-				) as EnrichedHashlistTorrent[];
-			if (!torrents.length) return;
-			torrents = uniqueByHash(torrents);
-			setUserTorrentsList(torrents);
+	// The hashes of the loaded list; availability checks start once it is set.
+	const [listHashes, setListHashes] = useState<string[]>([]);
 
-			const hashArr = torrents.map((r) => r.hash);
-			if (rdKey) {
-				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-				wrapLoading(
-					'RD',
-					checkPlayableAvailabilityRd(
-						tokenWithTimestamp,
-						tokenHash,
-						hashArr,
-						setUserTorrentsList
-					)
-				);
-			}
-			if (adKey) {
-				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-				wrapLoading(
-					'AD',
-					checkPlayableAvailabilityAd(
-						tokenWithTimestamp,
-						tokenHash,
-						hashArr,
-						setUserTorrentsList
-					)
-				);
-			}
-			if (tbKey)
-				wrapLoading(
-					'TB',
-					checkDatabaseAvailabilityTb2(tbKey, hashArr, setUserTorrentsList)
-				);
-			if (pmKey) wrapLoading('PM', checkAvailabilityPm2(pmKey, hashArr, setUserTorrentsList));
-			// Offcloud's cache is measured to be Premiumize's, hash for hash, but the
-			// probes stay independent: one vendor being down is not the other's
-			// answer, and a user may hold only one of the two keys.
-			if (ocKey) wrapLoading('OC', checkAvailabilityOc2(ocKey, hashArr, setUserTorrentsList));
-			// **No Debrid-Link probe on load, deliberately.** Its probe is a
-			// bare-hash add, which only succeeds when Debrid-Link already holds
-			// the content, so a hit puts the torrent in the user's library. That
-			// is a mutation, and DMM keeps mutating probes behind a button, the
-			// way RD's and AD's already are. There is no per-row check here, so
-			// `dlAvailable` stays unset on this page and `dlKey` is absent from
-			// the filter's OR-chain below for the same reason.
+	async function fetchUserTorrentsList() {
+		let torrents: EnrichedHashlistTorrent[];
+		try {
+			torrents = await enrichInSlices(await readHashlist(), (partial) =>
+				setUserTorrentsList(uniqueByHash(partial))
+			);
 		} catch (error) {
 			console.error('Error fetching user torrents list:', error);
 			setUserTorrentsList([]);
@@ -310,8 +307,61 @@ function HashlistPage() {
 					? 'This hash list is still being published; refresh in a minute or two.'
 					: 'Failed to fetch user torrents.'
 			);
+			return;
 		}
+		if (!torrents.length) return;
+		torrents = uniqueByHash(torrents);
+		setUserTorrentsList(torrents);
+		setListHashes(torrents.map((r) => r.hash));
 	}
+
+	// Each provider is checked once, when both the list and its key are there.
+	// A failed check only says so: it used to share the list's try block, so a
+	// failed token request emptied a list that had already loaded.
+	const startedChecks = useRef(new Set<string>());
+	useEffect(() => {
+		if (listHashes.length === 0) return;
+		const start = (service: string, key: unknown, check: () => Promise<number>) => {
+			if (!key || startedChecks.current.has(service)) return;
+			startedChecks.current.add(service);
+			wrapLoading(service, check()).catch((error) =>
+				console.error(`Error checking ${service} availability:`, error)
+			);
+		};
+		start('RD', rdKey, async () => {
+			const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+			return checkPlayableAvailabilityRd(
+				tokenWithTimestamp,
+				tokenHash,
+				listHashes,
+				setUserTorrentsList
+			);
+		});
+		start('AD', adKey, async () => {
+			const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+			return checkPlayableAvailabilityAd(
+				tokenWithTimestamp,
+				tokenHash,
+				listHashes,
+				setUserTorrentsList
+			);
+		});
+		start('TB', tbKey, () =>
+			checkDatabaseAvailabilityTb2(tbKey!, listHashes, setUserTorrentsList)
+		);
+		start('PM', pmKey, () => checkAvailabilityPm2(pmKey!, listHashes, setUserTorrentsList));
+		// Offcloud's cache is measured to be Premiumize's, hash for hash, but the
+		// probes stay independent: one vendor being down is not the other's
+		// answer, and a user may hold only one of the two keys.
+		start('OC', ocKey, () => checkAvailabilityOc2(ocKey!, listHashes, setUserTorrentsList));
+		// **No Debrid-Link probe on load, deliberately.** Its probe is a
+		// bare-hash add, which only succeeds when Debrid-Link already holds
+		// the content, so a hit puts the torrent in the user's library. That
+		// is a mutation, and DMM keeps mutating probes behind a button, the
+		// way RD's and AD's already are. There is no per-row check here, so
+		// `dlAvailable` stays unset on this page and `dlKey` is absent from
+		// the filter's OR-chain below for the same reason.
+	}, [listHashes, rdKey, adKey, tbKey, pmKey, ocKey]);
 
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	async function fetchHashAndProgress(hash?: string) {
