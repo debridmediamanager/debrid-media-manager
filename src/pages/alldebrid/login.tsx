@@ -1,5 +1,6 @@
 import useLocalStorage from '@/hooks/localStorage';
 import { checkPinOnce, getAllDebridUser, getPin } from '@/services/allDebrid';
+import { ALLDEBRID_APIKEYS_URL } from '@/utils/referrals';
 import { getSafeRedirectPath } from '@/utils/router';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -183,9 +184,7 @@ export default function AllDebridLoginPage() {
 								</button>
 								<button
 									type="button"
-									onClick={() =>
-										window.open('https://alldebrid.com/apikeys', '_blank')
-									}
+									onClick={() => window.open(ALLDEBRID_APIKEYS_URL, '_blank')}
 									className="rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
 								>
 									Get API Key from AllDebrid

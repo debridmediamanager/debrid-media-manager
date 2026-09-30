@@ -64,6 +64,16 @@ afterEach(() => {
 });
 
 describe('AllDebridLoginPage', () => {
+	it('opens the API-key page with the referral attached', () => {
+		const open = vi.spyOn(window, 'open').mockReturnValue(null);
+
+		render(<AllDebridLoginPage />);
+		fireEvent.click(screen.getByRole('button', { name: 'Get API Key from AllDebrid' }));
+
+		expect(open).toHaveBeenCalledWith('https://alldebrid.com/apikeys?uid=1kk5i', '_blank');
+		open.mockRestore();
+	});
+
 	it('stores the key and redirects once AllDebrid accepts it', async () => {
 		getAllDebridUser.mockResolvedValue({ username: 'demo', isPremium: true });
 

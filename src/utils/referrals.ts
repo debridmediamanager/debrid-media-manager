@@ -2,6 +2,14 @@
  * Sign-up links that credit DMM's referral. Kept in one place so the referral id
  * cannot drift between the pages that link to it.
  */
+/**
+ * AllDebrid credits `?uid=` on any page by setting a `parrain` cookie, so the API-key
+ * link carries it as well and still lands on the key page.
+ */
+export const ALLDEBRID_REFERRAL_UID = '1kk5i';
+export const ALLDEBRID_REFERRAL_URL = `https://alldebrid.com/?uid=${ALLDEBRID_REFERRAL_UID}&lang=en`;
+export const ALLDEBRID_APIKEYS_URL = `https://alldebrid.com/apikeys?uid=${ALLDEBRID_REFERRAL_UID}`;
+
 export const TORBOX_REFERRAL_URL =
 	'https://torbox.app/subscription?referral=74ffa560-7381-4a18-adb1-cef97378c670';
 

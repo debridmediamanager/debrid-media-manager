@@ -118,6 +118,15 @@ describe('the page', () => {
 		expect(screen.getByText('/var/lib/emby/plugins')).toBeTruthy();
 	});
 
+	it('credits the AllDebrid referral from the API-key link', () => {
+		asVisitor();
+		render(<EmbySetupPage />);
+		expect(screen.getByText('alldebrid.com/apikeys').closest('a')).toHaveAttribute(
+			'href',
+			'https://alldebrid.com/apikeys?uid=1kk5i'
+		);
+	});
+
 	it('links to the Jellyfin page', () => {
 		asVisitor();
 		render(<EmbySetupPage />);

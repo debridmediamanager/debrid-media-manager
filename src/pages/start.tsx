@@ -10,6 +10,7 @@ import {
 } from '@/hooks/auth';
 import { enableGuestMode } from '@/utils/guestMode';
 import {
+	ALLDEBRID_REFERRAL_URL,
 	DEBRID_LINK_REFERRAL_URL,
 	REAL_DEBRID_REFERRAL_URL,
 	TORBOX_REFERRAL_URL,
@@ -125,7 +126,7 @@ export default function StartPage() {
 					</button>
 					<a
 						className="m-2 rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
-						href="https://alldebrid.com/?uid=1kk5i&lang=en"
+						href={ALLDEBRID_REFERRAL_URL}
 						target="_blank"
 						rel="noopener noreferrer"
 					>

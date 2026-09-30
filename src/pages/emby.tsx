@@ -2,6 +2,7 @@ import { ApiKeyField, Card, CopyButton } from '@/components/IndexerSetup';
 import { Logo } from '@/components/Logo';
 import { useSponsor } from '@/hooks/useSponsor';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
+import { ALLDEBRID_APIKEYS_URL } from '@/utils/referrals';
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -60,7 +61,7 @@ const PLUGINS: EmbyPlugin[] = [
 		credential: 'API key',
 		credentialFrom: {
 			label: 'alldebrid.com/apikeys',
-			href: 'https://alldebrid.com/apikeys',
+			href: ALLDEBRID_APIKEYS_URL,
 		},
 		detail: 'A resync with nothing new costs a single request, however big the account is.',
 	},
