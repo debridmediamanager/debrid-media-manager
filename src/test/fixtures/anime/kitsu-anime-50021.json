@@ -1,0 +1,155 @@
+{
+	"data": {
+		"id": "50021",
+		"type": "anime",
+		"links": {
+			"self": "https://kitsu.io/api/edge/anime/50021"
+		},
+		"attributes": {
+			"createdAt": "2025-07-05T09:46:34.713Z",
+			"updatedAt": "2026-09-27T09:12:02.942Z",
+			"slug": "Kusuriya-no-Hitorigoto-3rd-season",
+			"synopsis": "The third season of Kusuriya no Hitorigoto.\n\nIn the aftermath of the Shi Clan’s rebellion, things have finally settled down, and Maomao has returned to her old life as a pharmacist in the pleasure district.\n\nOne day, triggered by a breakfast served at the Verdigris House, Maomao senses an anomaly and begins investigating its true nature.\n\nMeanwhile, Jinshi, who has revealed his true identity as the Imperial brother and begun to face his heavy responsibilities, is deeply troubled by the final message left by Loulan: a warning of an impending \"disaster that will strike the nation.\"\n\nTo make matters worse, rumors of a mysterious shrine maiden who deceives the people begin to spread, casting a dark shadow over the country of Li once again.\n\nFrom the depths of the inner court to the city streets, and across foreign borders—the world grows wider, and the stakes even higher for Maomao and Jinshi.\n\n(Source: Crunchyroll News)",
+			"description": "The third season of Kusuriya no Hitorigoto.\n\nIn the aftermath of the Shi Clan’s rebellion, things have finally settled down, and Maomao has returned to her old life as a pharmacist in the pleasure district.\n\nOne day, triggered by a breakfast served at the Verdigris House, Maomao senses an anomaly and begins investigating its true nature.\n\nMeanwhile, Jinshi, who has revealed his true identity as the Imperial brother and begun to face his heavy responsibilities, is deeply troubled by the final message left by Loulan: a warning of an impending \"disaster that will strike the nation.\"\n\nTo make matters worse, rumors of a mysterious shrine maiden who deceives the people begin to spread, casting a dark shadow over the country of Li once again.\n\nFrom the depths of the inner court to the city streets, and across foreign borders—the world grows wider, and the stakes even higher for Maomao and Jinshi.\n\n(Source: Crunchyroll News)",
+			"coverImageTopOffset": 0,
+			"titles": {
+				"en": "The Apothecary Diaries Season 3",
+				"en_jp": "Kusuriya no Hitorigoto 3rd Season",
+				"ja_jp": "薬屋のひとりごと 第3期"
+			},
+			"canonicalTitle": "Kusuriya no Hitorigoto 3rd Season",
+			"abbreviatedTitles": [],
+			"averageRating": null,
+			"ratingFrequencies": {
+				"14": "1",
+				"16": "1",
+				"18": "2",
+				"19": "1",
+				"20": "12"
+			},
+			"userCount": 865,
+			"favoritesCount": 4,
+			"startDate": "2026-10-02",
+			"endDate": null,
+			"nextRelease": null,
+			"popularityRank": 7026,
+			"ratingRank": null,
+			"ageRating": "PG",
+			"ageRatingGuide": "Teens 13 or older",
+			"subtype": "TV",
+			"status": "upcoming",
+			"tba": null,
+			"posterImage": {
+				"original": "https://kitsu-production-media.s3.us-west-002.backblazeb2.com/anime/50021/poster_image/86805fd5105a8da9c0d9c34e5d254992.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=002d6013655cdc00000000003%2F20260927%2Fus-west-002%2Fs3%2Faws4_request&X-Amz-Date=20260927T114923Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=f64ec03d9c8a9353e81d5e337623d3eff58e1c628dc9c418fc3afb2c579beb33",
+				"meta": {
+					"dimensions": {}
+				}
+			},
+			"coverImage": null,
+			"episodeCount": 12,
+			"episodeLength": null,
+			"totalLength": 0,
+			"youtubeVideoId": "9rProUQlD-I",
+			"showType": "TV",
+			"nsfw": false
+		},
+		"relationships": {
+			"genres": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/genres",
+					"related": "https://kitsu.io/api/edge/anime/50021/genres"
+				}
+			},
+			"categories": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/categories",
+					"related": "https://kitsu.io/api/edge/anime/50021/categories"
+				}
+			},
+			"castings": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/castings",
+					"related": "https://kitsu.io/api/edge/anime/50021/castings"
+				}
+			},
+			"installments": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/installments",
+					"related": "https://kitsu.io/api/edge/anime/50021/installments"
+				}
+			},
+			"mappings": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/mappings",
+					"related": "https://kitsu.io/api/edge/anime/50021/mappings"
+				}
+			},
+			"reviews": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/reviews",
+					"related": "https://kitsu.io/api/edge/anime/50021/reviews"
+				}
+			},
+			"mediaRelationships": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/media-relationships",
+					"related": "https://kitsu.io/api/edge/anime/50021/media-relationships"
+				}
+			},
+			"characters": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/characters",
+					"related": "https://kitsu.io/api/edge/anime/50021/characters"
+				}
+			},
+			"staff": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/staff",
+					"related": "https://kitsu.io/api/edge/anime/50021/staff"
+				}
+			},
+			"productions": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/productions",
+					"related": "https://kitsu.io/api/edge/anime/50021/productions"
+				}
+			},
+			"quotes": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/quotes",
+					"related": "https://kitsu.io/api/edge/anime/50021/quotes"
+				}
+			},
+			"episodes": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/episodes",
+					"related": "https://kitsu.io/api/edge/anime/50021/episodes"
+				}
+			},
+			"streamingLinks": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/streaming-links",
+					"related": "https://kitsu.io/api/edge/anime/50021/streaming-links"
+				}
+			},
+			"animeProductions": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/anime-productions",
+					"related": "https://kitsu.io/api/edge/anime/50021/anime-productions"
+				}
+			},
+			"animeCharacters": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/anime-characters",
+					"related": "https://kitsu.io/api/edge/anime/50021/anime-characters"
+				}
+			},
+			"animeStaff": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/50021/relationships/anime-staff",
+					"related": "https://kitsu.io/api/edge/anime/50021/anime-staff"
+				}
+			}
+		}
+	}
+}

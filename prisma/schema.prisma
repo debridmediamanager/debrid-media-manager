@@ -27,6 +27,46 @@ model ScrapedTrue {
   updatedAt DateTime @updatedAt
 }
 
+/// One verdict per (movie, hash, filename): whether a scraped result belongs on
+/// the movie's page. Recorded for kept results too, so nothing is judged twice.
+model ScrapedVerdict {
+  id         Int      @id @default(autoincrement())
+  imdbId     String   @db.VarChar(16)
+  hash       String   @db.VarChar(40)
+  /// sha1 of the filename; the verdict depends on the filename, not the hash
+  titleKey   String   @db.Char(40)
+  title      String   @db.Text
+  verdict    String   @db.VarChar(8)
+  /// "rules" when code settled it, "jev" when the model's answers were needed
+  rule       String   @db.VarChar(16)
+  media      String?  @db.VarChar(16)
+  titleMatch String?  @db.VarChar(16)
+  engine     String   @db.VarChar(64)
+  createdAt  DateTime @default(now())
+
+  @@unique([imdbId, hash, titleKey])
+  @@index([imdbId, titleKey])
+}
+
+/// Results moved off a movie page by a trash verdict, kept for review and
+/// restore: the original entry, where it came from, and the movie it was on.
+model ScrapedTrash {
+  id         Int      @id @default(autoincrement())
+  source     String   @db.VarChar(16)
+  key        String   @db.VarChar(191)
+  imdbId     String   @db.VarChar(16)
+  movieTitle String   @db.VarChar(500)
+  hash       String   @db.VarChar(40)
+  title      String   @db.Text
+  fileSize   Float?
+  rule       String   @db.VarChar(16)
+  engine     String   @db.VarChar(64)
+  trashedAt  DateTime @default(now())
+
+  @@index([imdbId])
+  @@index([hash])
+}
+
 model ScrapedMusic {
   key       String   @id
   value     Json
@@ -1102,6 +1142,11 @@ model ContentRequest {
   jobId       String?
   jobHost     String?  @db.Text
   error       String?  @db.Text
+  /// The whole release in bytes, for the transfer size cap and host routing.
+  sizeBytes   BigInt?
+  /// The page it was asked from, so a completed transfer is filed under the
+  /// right film or season.
+  returnPath  String?  @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -1110,4 +1155,49 @@ model ContentRequest {
   @@index([status, createdAt])
   @@index([requesterId, status])
   @@index([imdbId])
+}
+
+/// A copyright notice as it arrived. Nothing it names is blocked until an
+/// operator approves it; the row stays as the record of what was asked and when
+/// it was acted on.
+model TakedownNotice {
+  id            String    @id @default(uuid())
+  /// pending, approved or rejected.
+  status        String    @default("pending")
+  claimantName  String    @db.VarChar(200)
+  claimantEmail String    @db.VarChar(320)
+  /// Whom the claimant acts for, when that is not themselves.
+  representing  String?   @db.VarChar(200)
+  work          String    @db.Text
+  reason        String    @db.Text
+  /// The locations exactly as submitted, so a review sees what was asked
+  /// rather than only what the parser understood.
+  locations     String    @db.MediumText
+  hashes        Json
+  releases      Json
+  hashlistIds   Json
+  submitterIp   String?   @db.VarChar(64)
+  reviewNote    String?   @db.Text
+  reviewedAt    DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([status, createdAt])
+}
+
+/// A torrent infohash removed by an approved notice. Lowercase hex.
+model BlockedHash {
+  hash      String   @id @db.VarChar(40)
+  noticeId  String
+  createdAt DateTime @default(now())
+
+  @@index([noticeId])
+}
+
+/// A Usenet release removed by an approved notice, by normalized name.
+model BlockedRelease {
+  name      String   @id @db.VarChar(191)
+  noticeId  String
+  createdAt DateTime @default(now())
+
+  @@index([noticeId])
 }

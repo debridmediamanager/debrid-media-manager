@@ -73,14 +73,18 @@ describe('AllDebridManagePage', () => {
 		global.fetch = fetchSpy;
 	});
 
-	it('should show loading state when no api key', async () => {
+	it('asks for an AllDebrid login when there is no api key', async () => {
 		const useLocalStorage = (await import('@/hooks/localStorage')).default;
 		vi.mocked(useLocalStorage).mockReturnValue([null, vi.fn()]);
 
 		const { AllDebridManagePage } = await import('@/pages/stremio-alldebrid/manage');
 		render(<AllDebridManagePage />);
 
-		expect(screen.getByText('Debrid Media Manager is loading...')).toBeInTheDocument();
+		expect(screen.getByText('AllDebrid Required')).toBeInTheDocument();
+		expect(screen.getByText('Login with AllDebrid').closest('a')).toHaveAttribute(
+			'href',
+			'/alldebrid/login?redirect=%2Fstremio-alldebrid%2Fmanage'
+		);
 	});
 
 	it('should show loading text while fetching links', async () => {

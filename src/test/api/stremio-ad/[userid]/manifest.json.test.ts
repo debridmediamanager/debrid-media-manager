@@ -49,7 +49,7 @@ describe('/api/stremio-ad/[userid]/manifest.json', () => {
 	it('includes types', async () => {
 		await handler(req, res);
 		const data = res._getData() as any;
-		expect(data.types).toEqual(['movie', 'series', 'other']);
+		expect(data.types).toEqual(['movie', 'series', 'anime', 'other']);
 	});
 
 	it('includes behaviorHints', async () => {

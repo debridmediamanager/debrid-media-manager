@@ -34,6 +34,13 @@ describe('BrowseSection', () => {
 		randomSpy.mockRestore();
 	});
 
+	it('links to the anime page from the home page', () => {
+		render(<BrowseSection terms={['Action!', 'Drama']} />);
+
+		const animeLink = screen.getByRole('link', { name: /anime/i });
+		expect(animeLink.getAttribute('href')).toBe('/anime');
+	});
+
 	it('routes to cleaned term when a custom search is entered', async () => {
 		const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5);
 		const promptMock = vi.spyOn(window, 'prompt').mockReturnValue('  One-Word  ');

@@ -9,6 +9,7 @@ import type { PublicRequest } from './contentRequest';
  */
 
 export const RD_TOKEN_HEADER = 'x-rd-access-token';
+export const TB_KEY_HEADER = 'x-tb-api-key';
 
 function headers(rdKey: string | null, json = false): Record<string, string> {
 	return {
@@ -24,10 +25,19 @@ function headers(rdKey: string | null, json = false): Record<string, string> {
  * thing that tells a fulfiller *why* a claim was refused — "somebody else just
  * took this request" reads very differently from a bare 409.
  */
+/** TorBox does not have the release, so no fulfiller can send it yet. */
+export class UncachedError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'UncachedError';
+	}
+}
+
 async function unwrap(response: Response): Promise<any> {
 	const data = await response.json().catch(() => null);
 	if (!response.ok) {
-		throw new Error(data?.error || `Request failed with status ${response.status}`);
+		const message = data?.error || `Request failed with status ${response.status}`;
+		throw data?.uncached === true ? new UncachedError(message) : new Error(message);
 	}
 	return data ?? {};
 }
@@ -39,14 +49,19 @@ async function unwrap(response: Response): Promise<any> {
  */
 export async function fetchContentRequests(
 	rdKey: string | null,
-	opts: { offset?: number; limit?: number } = {}
+	opts: { offset?: number; limit?: number; tbKey?: string | null; servable?: boolean } = {}
 ): Promise<{ requests: PublicRequest[]; authenticated: boolean; hasMore: boolean }> {
 	const params = new URLSearchParams();
 	if (opts.offset) params.set('offset', String(opts.offset));
 	if (opts.limit) params.set('limit', String(opts.limit));
+	// Only what TorBox has cached, filtered across the whole board server-side.
+	if (opts.servable && opts.tbKey) params.set('servable', '1');
 	const qs = params.toString();
 	const data = await unwrap(
-		await fetch(`/api/requests${qs ? `?${qs}` : ''}`, { headers: headers(rdKey) })
+		await fetch(`/api/requests${qs ? `?${qs}` : ''}`, {
+			// The TorBox key lets the server mark which rows it can send.
+			headers: { ...headers(rdKey), ...(opts.tbKey ? { [TB_KEY_HEADER]: opts.tbKey } : {}) },
+		})
 	);
 	return {
 		requests: Array.isArray(data.requests) ? (data.requests as PublicRequest[]) : [],
@@ -55,18 +70,33 @@ export async function fetchContentRequests(
 	};
 }
 
+/** The caller's own requests in every state, newest first. */
+export async function fetchMyContentRequests(rdKey: string): Promise<PublicRequest[]> {
+	const data = await unwrap(await fetch('/api/requests?mine=1', { headers: headers(rdKey) }));
+	return Array.isArray(data.requests) ? (data.requests as PublicRequest[]) : [];
+}
+
 export interface NewContentRequest {
 	hash: string;
 	imdbId: string;
 	title?: string | null;
 	mediaType: 'movie' | 'show';
+	/** The whole release in bytes, when known. */
+	sizeBytes?: number;
+	/** The page the request is made from. */
+	returnPath?: string;
 }
 
-/** File a request. Idempotent — asking twice returns the row already there. */
+/**
+ * File a request. Idempotent — asking twice returns the row already there.
+ *
+ * `delivered` instead of a row means nothing was filed: Real-Debrid already had
+ * the release, and it has been added to the asker's library.
+ */
 export async function fileContentRequest(
 	rdKey: string,
 	input: NewContentRequest
-): Promise<PublicRequest> {
+): Promise<{ delivered: true } | { delivered: false; request: PublicRequest }> {
 	const data = await unwrap(
 		await fetch('/api/requests', {
 			method: 'POST',
@@ -74,7 +104,8 @@ export async function fileContentRequest(
 			body: JSON.stringify(input),
 		})
 	);
-	return data.request as PublicRequest;
+	if (data.delivered === true) return { delivered: true };
+	return { delivered: false, request: data.request as PublicRequest };
 }
 
 /**
@@ -86,10 +117,10 @@ export async function fileContentRequest(
  * id is all there is to follow, and only the asker sees the result.
  */
 export async function fulfillContentRequest(
-	rdKey: string,
+	rdKey: string | null,
 	id: string,
 	keys: { tbKey?: string | null }
-): Promise<string> {
+): Promise<{ jobId: string | null; delivered: boolean }> {
 	const data = await unwrap(
 		await fetch(`/api/requests/${encodeURIComponent(id)}/fulfill`, {
 			method: 'POST',
@@ -99,7 +130,10 @@ export async function fulfillContentRequest(
 			}),
 		})
 	);
-	return String(data.jobId ?? '');
+	// `delivered`: the release was already on Real-Debrid, so it went straight
+	// into the asker's library and no transfer was started.
+	if (data.delivered === true) return { jobId: null, delivered: true };
+	return { jobId: String(data.jobId ?? ''), delivered: false };
 }
 
 /** Withdraw one's own request. */

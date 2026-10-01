@@ -1,0 +1,61 @@
+{
+	"rows": [
+		{
+			"tconst": "tt0059026",
+			"titleType": "tvMovie",
+			"startYear": 1965,
+			"primaryTitle": "A Charlie Brown Christmas",
+			"numVotes": 51008
+		},
+		{
+			"tconst": "tt0108598",
+			"titleType": "short",
+			"startYear": 1993,
+			"primaryTitle": "Wallace & Gromit: The Wrong Trousers",
+			"numVotes": 64168
+		},
+		{
+			"tconst": "tt0350345",
+			"titleType": "movie",
+			"startYear": 1995,
+			"primaryTitle": "Drowning",
+			"numVotes": null
+		},
+		{
+			"tconst": "tt0372784",
+			"titleType": "movie",
+			"startYear": 2005,
+			"primaryTitle": "Batman Begins",
+			"numVotes": 1746327
+		},
+		{
+			"tconst": "tt1006835",
+			"titleType": "video",
+			"startYear": 2005,
+			"primaryTitle": "Beyond Batman: Visualizing Gotham - The Production Design of Batman",
+			"numVotes": 60
+		},
+		{
+			"tconst": "tt21357150",
+			"titleType": "movie",
+			"startYear": 2026,
+			"primaryTitle": "Avengers: Doomsday",
+			"numVotes": null
+		},
+		{
+			"tconst": "tt33049792",
+			"titleType": "video",
+			"startYear": 2023,
+			"primaryTitle": "Spider-Man: Across the Spider-Verse - Creating the Ultimate Spider-Man Movie",
+			"numVotes": 20
+		},
+		{
+			"tconst": "tt41368989",
+			"titleType": "tvSpecial",
+			"startYear": 2026,
+			"primaryTitle": "Finding Harry: The Craft Behind the Magic",
+			"numVotes": 985
+		}
+	],
+	"source": "dmmdb imdb_title_basics LEFT JOIN imdb_title_ratings, captured 2026-09-30: titles users streamed that search could not find on 2026-09-29, and the featurettes and placeholders it should keep out"
+}

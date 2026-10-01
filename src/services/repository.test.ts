@@ -47,13 +47,7 @@ const buildRepository = () => {
 
 	const search = createService(['disconnect', 'saveSearchResults', 'getSearchResults']);
 
-	const anime = createService([
-		'disconnect',
-		'getRecentlyUpdatedAnime',
-		'searchAnimeByTitle',
-		'getAnimeByMalIds',
-		'getAnimeByKitsuIds',
-	]);
+	const anime = createService(['disconnect', 'getAnimeByKitsuIds', 'getAnimeByExternalId']);
 
 	const cast = createService([
 		'disconnect',
@@ -282,32 +276,18 @@ describe('Repository', () => {
 				value: { foo: 'bar' },
 			},
 			{
-				method: 'getRecentlyUpdatedAnime',
-				service: 'anime',
-				serviceMethod: 'getRecentlyUpdatedAnime',
-				args: [5],
-				value: [],
-			},
-			{
-				method: 'searchAnimeByTitle',
-				service: 'anime',
-				serviceMethod: 'searchAnimeByTitle',
-				args: ['title'],
-				value: [],
-			},
-			{
-				method: 'getAnimeByMalIds',
-				service: 'anime',
-				serviceMethod: 'getAnimeByMalIds',
-				args: [[1]],
-				value: [],
-			},
-			{
 				method: 'getAnimeByKitsuIds',
 				service: 'anime',
 				serviceMethod: 'getAnimeByKitsuIds',
 				args: [[1]],
 				value: [],
+			},
+			{
+				method: 'getAnimeByExternalId',
+				service: 'anime',
+				serviceMethod: 'getAnimeByExternalId',
+				args: ['anidb', 17617],
+				value: null,
 			},
 			{
 				method: 'saveCastProfile',
@@ -447,7 +427,9 @@ describe('Repository', () => {
 		for (const entry of matrix) {
 			const service = mocks[entry.service].methods;
 			service[entry.serviceMethod].mockReturnValue(entry.value);
-			const result = (repo as any)[entry.method](...entry.args);
+			// Awaited: the methods that enforce the takedown blocklist check it
+			// before delegating.
+			const result = await (repo as any)[entry.method](...entry.args);
 			expect(service[entry.serviceMethod]).toHaveBeenCalledWith(...entry.args);
 			expect(result).toBe(entry.value);
 		}

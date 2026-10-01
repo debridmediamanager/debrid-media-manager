@@ -74,7 +74,7 @@ export default function OffcloudLoginPage() {
 						<button
 							type="submit"
 							disabled={checking}
-							className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
+							className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
 						>
 							{checking ? 'Checking...' : 'Save API Key'}
 						</button>

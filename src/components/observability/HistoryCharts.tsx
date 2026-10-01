@@ -280,7 +280,7 @@ export function HistoryCharts() {
 				<div className="flex h-64 items-center justify-center">
 					<div className="text-center text-slate-400">
 						<p>Unable to load historical data</p>
-						<p className="mt-1 text-xs text-slate-500">{error}</p>
+						<p className="mt-1 text-xs text-slate-400">{error}</p>
 						<button
 							onClick={() => fetchHistory()}
 							className="mt-3 rounded-lg bg-slate-700 px-4 py-2 text-sm hover:bg-slate-600"
@@ -317,7 +317,7 @@ export function HistoryCharts() {
 							onClick={() => setRange(option.value)}
 							className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
 								range === option.value
-									? 'bg-sky-600 text-white'
+									? 'bg-sky-700 text-white'
 									: 'bg-slate-800 text-slate-300 hover:bg-slate-700'
 							}`}
 						>
@@ -332,7 +332,7 @@ export function HistoryCharts() {
 					<div className="text-center text-slate-400">
 						<BarChart3 className="mx-auto h-12 w-12 text-slate-600" />
 						<p className="mt-3">No historical data available yet</p>
-						<p className="mt-1 text-xs text-slate-500">
+						<p className="mt-1 text-xs text-slate-400">
 							Data will appear after the first aggregation runs
 						</p>
 					</div>

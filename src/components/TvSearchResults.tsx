@@ -2,6 +2,7 @@ import type { DebridService } from '@/hooks/useAvailabilityCheck';
 import { FileData, SearchResult } from '@/services/mediasearch';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { getEpisodeCountClass, getEpisodeCountLabel } from '@/utils/episodeUtils';
+import { reporterIdFor } from '@/utils/reporterId';
 import { borderColor, btnColor, btnIcon, btnLabel, fileSize, totalFileSize } from '@/utils/results';
 import {
 	getBiggestVideoFile,
@@ -68,7 +69,11 @@ type TvSearchResultsProps = {
 	player: string;
 	hashAndProgress: Record<string, number>;
 	handleShowInfo: (result: SearchResult) => void;
-	handleCast: (hash: string, fileIds: string[]) => Promise<void>;
+	/**
+	 * Absent on the anime page: Stremio casts are keyed by IMDb season and
+	 * episode, which an absolutely numbered AniDB entry does not have.
+	 */
+	handleCast?: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCastTorBox?: (hash: string, fileIds: string[]) => Promise<void>;
 	handleCastAllDebrid?: (hash: string, files: { filename: string }[]) => Promise<void>;
 	handleCastPremiumize?: (hash: string) => Promise<void>;
@@ -90,7 +95,7 @@ type TvSearchResultsProps = {
 	 * File a request for a release this account cannot fetch on its own.
 	 *
 	 * Absent unless the page decided the user has only Real-Debrid — the
-	 * uploader needs a TorBox or AllDebrid key for the source side, so a user
+	 * uploader needs a TorBox key for the source side, so a user
 	 * holding neither has no way to start a transfer themselves.
 	 */
 	requestContent?: (result: SearchResult) => Promise<void>;
@@ -255,7 +260,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	const handleSendTbToRd = (hash: string) => runSendToRd(hash, sendTbToRd);
 
 	const handleCastWithLoading = async (hash: string, fileIds: string[]) => {
-		if (castingHashes.has(hash)) return;
+		if (!handleCast || castingHashes.has(hash)) return;
 		setCastingHashes((prev) => new Set(prev).add(hash));
 		try {
 			await handleCast(hash, fileIds);
@@ -643,27 +648,33 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													</span>
 												</span>
 											))}
-										{rdKey && r.rdAvailable && castableRdFileIds.length > 0 && (
-											<button
-												className={`haptic-sm inline rounded border-2 border-green-500 bg-green-900/30 px-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 ${isCasting ? 'cursor-not-allowed opacity-50' : ''}`}
-												onClick={() =>
-													handleCastWithLoading(r.hash, castableRdFileIds)
-												}
-												disabled={isCasting}
-											>
-												{isCasting ? (
-													<>
-														<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
-														Casting...
-													</>
-												) : (
-													<>
-														<Cast className="mr-1 inline-block h-3 w-3 text-green-400" />
-														Cast (RD)
-													</>
-												)}
-											</button>
-										)}
+										{handleCast &&
+											rdKey &&
+											r.rdAvailable &&
+											castableRdFileIds.length > 0 && (
+												<button
+													className={`haptic-sm inline rounded border-2 border-green-500 bg-green-900/30 px-1 text-xs text-green-100 transition-colors hover:bg-green-800/50 ${isCasting ? 'cursor-not-allowed opacity-50' : ''}`}
+													onClick={() =>
+														handleCastWithLoading(
+															r.hash,
+															castableRdFileIds
+														)
+													}
+													disabled={isCasting}
+												>
+													{isCasting ? (
+														<>
+															<Loader2 className="mr-1 inline-block h-3 w-3 animate-spin" />
+															Casting...
+														</>
+													) : (
+														<>
+															<Cast className="mr-1 inline-block h-3 w-3 text-green-400" />
+															Cast (RD)
+														</>
+													)}
+												</button>
+											)}
 										{rdKey && !r.rdAvailable && (
 											<button
 												className={`haptic-sm inline rounded border-2 border-yellow-500 bg-yellow-900/30 px-1 text-xs text-yellow-100 transition-colors hover:bg-yellow-800/50 ${isCheckingRd ? 'cursor-not-allowed opacity-50' : ''}`}
@@ -1172,7 +1183,7 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													className={`haptic-sm inline rounded border-2 border-cyan-500 bg-cyan-900/30 px-1 text-xs text-cyan-100 transition-colors hover:bg-cyan-800/50 ${isRequesting ? 'cursor-not-allowed opacity-50' : ''}`}
 													onClick={() => handleRequest(r)}
 													disabled={isRequesting}
-													title="Ask someone with a TorBox or AllDebrid account to send this to your Real-Debrid"
+													title="Ask someone with a TorBox account to send this to your Real-Debrid"
 												>
 													{isRequesting ? (
 														<>
@@ -1190,7 +1201,14 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 										<ReportButton
 											hash={r.hash}
 											imdbId={imdbId!}
-											userId={rdKey || adKey || ''}
+											userId={reporterIdFor({
+												rdKey,
+												adKey,
+												torboxKey,
+												premiumizeKey,
+												offcloudKey,
+												debridLinkKey,
+											})}
 											isShow={true}
 										/>
 									</div>

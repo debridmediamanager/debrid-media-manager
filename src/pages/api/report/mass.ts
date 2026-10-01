@@ -1,4 +1,5 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { storedReporterId } from '@/services/reporterId';
 import { repository } from '@/services/repository';
 import { validateProblemToken } from '@/utils/problemToken';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -56,6 +57,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(400).json({ message: 'Some reports are missing hash or imdbId' });
 		}
 
+		if (typeof userId !== 'string') {
+			return res.status(400).json({ message: 'Missing userId or type' });
+		}
+		const reporter = storedReporterId(userId);
+
 		const db = repository;
 		const results = [];
 		const errors = [];
@@ -66,7 +72,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				await db.reportContent(
 					report.hash,
 					report.imdbId,
-					userId,
+					reporter,
 					type as 'porn' | 'wrong_imdb' | 'wrong_season'
 				);
 				results.push({ hash: report.hash, success: true });

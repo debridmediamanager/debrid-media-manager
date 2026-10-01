@@ -1,9 +1,12 @@
 import {
 	cancelContentRequest,
 	fetchContentRequests,
+	fetchMyContentRequests,
 	fileContentRequest,
 	fulfillContentRequest,
 	RD_TOKEN_HEADER,
+	TB_KEY_HEADER,
+	UncachedError,
 } from '@/utils/contentRequestsApi';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -18,6 +21,20 @@ beforeEach(() => {
 });
 
 describe('fetchContentRequests', () => {
+	it('asks for only what TorBox can send when a fulfiller wants that', async () => {
+		(global.fetch as any).mockResolvedValue(ok({ requests: [], authenticated: true }));
+		await fetchContentRequests('RD', { tbKey: 'TB', servable: true, limit: 25 });
+		expect(lastCall()[0]).toBe('/api/requests?limit=25&servable=1');
+	});
+
+	it('sends a TorBox key as a header so the server can mark what it can send', async () => {
+		(global.fetch as any).mockResolvedValue(ok({ requests: [], authenticated: true }));
+		await fetchContentRequests('RD_TOKEN', { tbKey: 'TB_KEY' });
+		const [url, init] = lastCall();
+		expect(String(url)).not.toContain('TB_KEY');
+		expect(init.headers[TB_KEY_HEADER]).toBe('TB_KEY');
+	});
+
 	it('sends the key as a header, never in the URL', async () => {
 		(global.fetch as any).mockResolvedValue(ok({ requests: [], authenticated: true }));
 		await fetchContentRequests('RD_TOKEN');
@@ -82,6 +99,13 @@ describe('fetchContentRequests', () => {
 });
 
 describe('fileContentRequest', () => {
+	it('reports a release Real-Debrid already had instead of a filed row', async () => {
+		(global.fetch as any).mockResolvedValue(ok({ delivered: true }));
+		expect(
+			await fileContentRequest('RD', { hash: 'abc', imdbId: 'tt1234567', mediaType: 'movie' })
+		).toEqual({ delivered: true });
+	});
+
 	it('posts the release as JSON', async () => {
 		(global.fetch as any).mockResolvedValue(ok({ request: { id: 'req-1' } }));
 		const row = await fileContentRequest('RD', {
@@ -99,16 +123,43 @@ describe('fileContentRequest', () => {
 			title: 'Some Release',
 			mediaType: 'movie',
 		});
-		expect(row).toEqual({ id: 'req-1' });
+		expect(row).toEqual({ delivered: false, request: { id: 'req-1' } });
+	});
+});
+
+describe('fetchMyContentRequests', () => {
+	it('asks for the caller’s own rows with the key in a header', async () => {
+		(global.fetch as any).mockResolvedValue(ok({ requests: [{ id: 'a' }] }));
+		expect(await fetchMyContentRequests('RD')).toEqual([{ id: 'a' }]);
+		const [url, init] = lastCall();
+		expect(url).toBe('/api/requests?mine=1');
+		expect(init.headers[RD_TOKEN_HEADER]).toBe('RD');
 	});
 });
 
 describe('fulfillContentRequest', () => {
+	it('reports a release that went straight to the asker without a transfer', async () => {
+		(global.fetch as any).mockResolvedValue(ok({ delivered: true }));
+		expect(await fulfillContentRequest('RD', 'req-1', { tbKey: 'TB' })).toEqual({
+			jobId: null,
+			delivered: true,
+		});
+	});
+
+	it('raises a TorBox cache refusal as its own error, so the row can stop offering it', async () => {
+		(global.fetch as any).mockResolvedValue(
+			fail(409, { error: 'TorBox does not have this release cached', uncached: true })
+		);
+		await expect(fulfillContentRequest('RD', 'req-1', { tbKey: 'TB' })).rejects.toBeInstanceOf(
+			UncachedError
+		);
+	});
+
 	it('sends only the keys the fulfiller actually holds', async () => {
 		(global.fetch as any).mockResolvedValue(ok({ jobId: 'job-9' }));
-		const jobId = await fulfillContentRequest('RD', 'req-1', { tbKey: 'TB' });
+		const result = await fulfillContentRequest('RD', 'req-1', { tbKey: 'TB' });
 		expect(JSON.parse(lastInit().body)).toEqual({ tbKey: 'TB' });
-		expect(jobId).toBe('job-9');
+		expect(result).toEqual({ jobId: 'job-9', delivered: false });
 	});
 
 	it('escapes the id into the path', async () => {

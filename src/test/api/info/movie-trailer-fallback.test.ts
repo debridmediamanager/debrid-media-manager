@@ -1,5 +1,4 @@
 import handler from '@/pages/api/info/movie';
-import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -70,16 +69,7 @@ describe('/api/info/movie - trailer fallback sources', () => {
 		};
 
 		const mockMetadataCache = {
-			getOmdbInfo: vi.fn().mockResolvedValue(null),
-			getCinemetaMovie: vi.fn().mockResolvedValue({
-				meta: {
-					name: 'Test Movie',
-				},
-			}),
-		};
-
-		(axios.get as any).mockResolvedValue({
-			data: {
+			getTmdbMovieInfo: vi.fn().mockResolvedValue({
 				videos: {
 					results: [
 						{ type: 'Trailer', site: 'YouTube', key: 'TMDB789' },
@@ -94,8 +84,14 @@ describe('/api/info/movie - trailer fallback sources', () => {
 						},
 					],
 				},
-			},
-		});
+			}),
+			getOmdbInfo: vi.fn().mockResolvedValue(null),
+			getCinemetaMovie: vi.fn().mockResolvedValue({
+				meta: {
+					name: 'Test Movie',
+				},
+			}),
+		};
 
 		vi.mocked(getMdblistClient).mockReturnValue(mockMdblistClient as any);
 		vi.mocked(getMetadataCache).mockReturnValue(mockMetadataCache as any);

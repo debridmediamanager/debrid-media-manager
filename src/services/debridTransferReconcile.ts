@@ -64,7 +64,7 @@ export interface ReconcileResult {
 	refiled: number;
 }
 
-interface UploaderJobLookup {
+export interface UploaderJobLookup {
 	/** The job body, when the server answered with one. */
 	job?: any;
 	/** The server definitively does not have this job (404). */
@@ -73,7 +73,7 @@ interface UploaderJobLookup {
 	unreachable: boolean;
 }
 
-async function lookupJob(server: string, jobId: string): Promise<UploaderJobLookup> {
+export async function lookupJob(server: string, jobId: string): Promise<UploaderJobLookup> {
 	try {
 		const res = await fetch(`${server}/jobs/${jobId}`, {
 			headers: { Accept: 'application/json' },

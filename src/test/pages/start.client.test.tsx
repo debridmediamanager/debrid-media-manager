@@ -260,7 +260,7 @@ describe('StartPage', () => {
 		const rdLink = screen.getByText('Create an account with RealDebrid');
 		expect(rdLink).toHaveAttribute('target', '_blank');
 		expect(rdLink).toHaveAttribute('rel', 'noopener noreferrer');
-		expect(rdLink).toHaveAttribute('href', 'http://real-debrid.com/?id=11137529');
+		expect(rdLink).toHaveAttribute('href', 'http://real-debrid.com/?id=20474106');
 
 		const adLink = screen.getByText('Create an account with AllDebrid');
 		expect(adLink).toHaveAttribute('target', '_blank');
@@ -318,11 +318,11 @@ describe('StartPage', () => {
 		expect(loginButton).toHaveClass(
 			'm-2',
 			'rounded',
-			'bg-blue-500',
+			'bg-blue-600',
 			'px-4',
 			'py-2',
 			'text-white',
-			'hover:bg-blue-600'
+			'hover:bg-blue-700'
 		);
 	});
 

@@ -1,8 +1,10 @@
 import { clearCachedList } from '@/hooks/useCachedList';
 import SearchPage from '@/pages/search';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { readFileSync } from 'fs';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
+import path from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock Next.js router
@@ -250,10 +252,11 @@ describe('SearchPage', () => {
 			asPath: '/search?query=loading%20test',
 		} as any);
 
-		let resolveFetch: (value: Response) => void;
+		// The page asks two things at once: titles, and AniDB entries.
+		const resolvers: ((value: Response) => void)[] = [];
 		const mockFetch = vi.fn<typeof fetch>((input: RequestInfo | URL, init?: RequestInit) => {
 			return new Promise<Response>((resolve) => {
-				resolveFetch = resolve;
+				resolvers.push(resolve);
 			});
 		});
 
@@ -264,8 +267,9 @@ describe('SearchPage', () => {
 		// Check if loading state is shown
 		expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
 
-		// Resolve the fetch
-		resolveFetch!(createJsonResponse({ results: [] }));
+		// Resolve every fetch
+		await waitFor(() => expect(resolvers.length).toBeGreaterThan(0));
+		for (const resolve of resolvers) resolve(createJsonResponse({ results: [] }));
 
 		await waitFor(() => {
 			expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
@@ -299,6 +303,40 @@ describe('SearchPage', () => {
 			expect(screen.getByRole('heading', { name: 'The Avengers' })).toBeInTheDocument();
 			expect(screen.getByRole('heading', { name: 'Avengers: Endgame' })).toBeInTheDocument();
 		});
+	});
+
+	// What production's /api/search/anime answered for "bookworm" on 2026-09-27.
+	it('lists matching AniDB entries, each linking to its anime page', async () => {
+		mockQuery = { query: 'bookworm' };
+		vi.mocked(useRouter).mockReturnValue({
+			push: mockPush,
+			query: mockQuery,
+			pathname: '/search',
+			asPath: '/search?query=bookworm',
+		} as any);
+		const anime = JSON.parse(
+			readFileSync(
+				path.resolve(__dirname, '../fixtures/anime/api-search-anime-bookworm.json'),
+				'utf8'
+			)
+		);
+		global.fetch = vi.fn<typeof fetch>(async (input) =>
+			String(input).includes('api/search/anime?keyword=bookworm')
+				? createJsonResponse(anime)
+				: createJsonResponse({ results: [] })
+		);
+
+		render(<SearchPage />);
+
+		const section = await screen.findByTestId('anime-search-results');
+		const hrefs = Array.from(section.querySelectorAll('a')).map((a) => a.getAttribute('href'));
+		expect(hrefs).toContain('/anime/18302');
+		expect(hrefs[0]).toBe('/anime/14727');
+		expect(hrefs).toHaveLength(anime.results.length);
+		// A row with only a MAL id is addressed by it.
+		expect(hrefs).toContain('/anime/mal-1278');
+		expect(hrefs.every((h) => /^\/anime\/(?:mal-)?\d+$/.test(h!))).toBe(true);
+		expect(screen.queryByText(/No results found/)).not.toBeInTheDocument();
 	});
 
 	it('should handle empty search results', async () => {

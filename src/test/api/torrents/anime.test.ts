@@ -4,18 +4,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
 	mockValidateProblemToken,
-	mockGetScrapedTrueResults,
+	mockGetAllScrapedTrueResults,
 	mockKeyExists,
 	mockSaveScrapedResults,
-	mockFlatten,
-	mockSort,
 } = vi.hoisted(() => ({
 	mockValidateProblemToken: vi.fn(),
-	mockGetScrapedTrueResults: vi.fn(),
+	mockGetAllScrapedTrueResults: vi.fn(),
 	mockKeyExists: vi.fn(),
 	mockSaveScrapedResults: vi.fn(),
-	mockFlatten: vi.fn((items: any[]) => items),
-	mockSort: vi.fn((items: any[]) => items),
 }));
 
 vi.mock('@/utils/problemToken', () => ({
@@ -24,23 +20,20 @@ vi.mock('@/utils/problemToken', () => ({
 
 vi.mock('@/services/repository', () => ({
 	repository: {
-		getScrapedTrueResults: mockGetScrapedTrueResults,
+		getAllScrapedTrueResults: mockGetAllScrapedTrueResults,
 		keyExists: mockKeyExists,
 		saveScrapedResults: mockSaveScrapedResults,
 	},
 }));
 
-vi.mock('@/services/mediasearch', () => ({
-	flattenAndRemoveDuplicates: mockFlatten,
-	sortByFileSize: mockSort,
-}));
+const HASH = 'a'.repeat(40);
 
 describe('/api/torrents/anime', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockValidateProblemToken.mockReturnValue(true);
-		mockGetScrapedTrueResults.mockResolvedValue([
-			{ filename: 'Anime.EP01', size_bytes: 1234, hash: 'hash-1' },
+		mockGetAllScrapedTrueResults.mockResolvedValue([
+			{ filename: 'Anime.EP01', size_bytes: 1234, hash: HASH },
 		]);
 	});
 
@@ -66,51 +59,81 @@ describe('/api/torrents/anime', () => {
 		await handler(req, res);
 
 		expect(res.status).toHaveBeenCalledWith(400);
-	});
-
-	it('returns flattened anime results', async () => {
-		const req = createMockRequest({ query: baseQuery });
-		const res = createMockResponse();
-
-		await handler(req, res);
-
-		expect(mockFlatten).toHaveBeenCalled();
-		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith({
-			results: expect.arrayContaining([
-				expect.objectContaining({ title: 'Anime.EP01', fileSize: 1234 }),
-			]),
+			errorMessage: 'Missing "animeId" query parameter',
 		});
 	});
 
-	it('marks the anime id as requested when nothing has been scraped', async () => {
-		mockGetScrapedTrueResults.mockResolvedValue([]);
-		mockKeyExists.mockResolvedValue(false);
+	it('returns the stored releases in the shape the other torrent routes use', async () => {
 		const req = createMockRequest({ query: baseQuery });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(mockSaveScrapedResults).toHaveBeenCalledWith('requested:anidb:1', []);
-		expect(res.setHeader).toHaveBeenCalledWith('status', 'requested');
-		expect(res.status).toHaveBeenCalledWith(204);
+		expect(mockGetAllScrapedTrueResults).toHaveBeenCalledWith('anime:anidb:1');
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({
+			results: [{ hash: HASH, title: 'Anime.EP01', fileSize: 1234 }],
+			episodes: { episodes: [{ episode: 1, count: 1 }], batches: 0, unnumbered: 0 },
+		});
 	});
 
-	it('reports processing instead of re-requesting an in-flight scrape', async () => {
-		mockGetScrapedTrueResults.mockResolvedValue([]);
-		mockKeyExists.mockResolvedValue(true);
-		const req = createMockRequest({ query: baseQuery });
+	it('drops the same releases the paged query drops', async () => {
+		mockGetAllScrapedTrueResults.mockResolvedValue([
+			{ filename: 'Anime.EP01', size_bytes: 1234, hash: HASH },
+			{ filename: 'Anime.EP01 again', size_bytes: 1, hash: HASH },
+			{ filename: 'Аниме 01', size_bytes: 9, hash: 'b'.repeat(40) },
+			{ filename: '', size_bytes: 9, hash: 'c'.repeat(40) },
+			{ filename: 'no hash', size_bytes: 9 },
+		]);
 		const res = createMockResponse();
 
-		await handler(req, res);
+		await handler(createMockRequest({ query: baseQuery }), res);
 
-		expect(res.setHeader).toHaveBeenCalledWith('status', 'processing');
-		expect(res.status).toHaveBeenCalledWith(204);
+		expect(res.json).toHaveBeenCalledWith({
+			results: [{ hash: HASH, title: 'Anime.EP01', fileSize: 1234 }],
+			episodes: { episodes: [{ episode: 1, count: 1 }], batches: 0, unnumbered: 0 },
+		});
+	});
+
+	it('rejects a page that is not a non-negative integer', async () => {
+		const res = createMockResponse();
+
+		await handler(createMockRequest({ query: { ...baseQuery, page: '-1' } }), res);
+
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(mockGetAllScrapedTrueResults).not.toHaveBeenCalled();
+	});
+
+	// Nothing reads these: the request queue takes only `requested:tt*`, and no
+	// scraper marks an anime id `processing:`. On 2026-09-27 one probe of
+	// anidb-17617 left `requested:anidb-17617` behind in production.
+	it('answers an unscraped anime with an empty list and writes nothing', async () => {
+		mockGetAllScrapedTrueResults.mockResolvedValue(null);
+		const res = createMockResponse();
+
+		await handler(createMockRequest({ query: { ...baseQuery, animeId: 'anidb-18886' } }), res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith({
+			results: [],
+			episodes: { episodes: [], batches: 0, unnumbered: 0 },
+		});
+		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
+		expect(mockKeyExists).not.toHaveBeenCalled();
+	});
+
+	it('writes nothing for a page past the end either', async () => {
+		const res = createMockResponse();
+
+		await handler(createMockRequest({ query: { ...baseQuery, page: '3' } }), res);
+
+		expect(res.json).toHaveBeenCalledWith({ results: [] });
 		expect(mockSaveScrapedResults).not.toHaveBeenCalled();
 	});
 
 	it('returns 500 when the repository throws', async () => {
-		mockGetScrapedTrueResults.mockRejectedValue(new Error('db'));
+		mockGetAllScrapedTrueResults.mockRejectedValue(new Error('db'));
 		const req = createMockRequest({ query: baseQuery });
 		const res = createMockResponse();
 

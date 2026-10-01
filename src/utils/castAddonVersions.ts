@@ -13,16 +13,16 @@
  * disagrees with itself about which version is installed.
  */
 export const CAST_ADDON_VERSIONS = {
-	/** Real-Debrid. 0.0.6: library ids belonging to a sibling addon are handed back. */
-	realdebrid: '0.0.6',
-	/** TorBox. 0.0.2: the library catalog now lists web downloads and usenet downloads. */
-	torbox: '0.0.2',
-	/** AllDebrid. 0.0.2: the library pages past its first twelve entries, and lists saved links. */
-	alldebrid: '0.0.2',
-	/** Premiumize. 0.0.2: adds the library catalog, its `other` type and its meta resource. */
-	premiumize: '0.0.2',
-	/** Offcloud. 0.0.1: first publish. */
-	offcloud: '0.0.1',
-	/** Debrid-Link. 0.0.1: first publish. */
-	debridlink: '0.0.1',
+	/** Real-Debrid. 0.0.7: streams anime by `kitsu`, `mal` and `anidb` id. */
+	realdebrid: '0.0.7',
+	/** TorBox. 0.0.3: streams anime by `kitsu`, `mal` and `anidb` id. */
+	torbox: '0.0.3',
+	/** AllDebrid. 0.0.3: streams anime by `kitsu`, `mal` and `anidb` id. */
+	alldebrid: '0.0.3',
+	/** Premiumize. 0.0.3: streams anime by `kitsu`, `mal` and `anidb` id. */
+	premiumize: '0.0.3',
+	/** Offcloud. 0.0.2: streams anime by `kitsu`, `mal` and `anidb` id. */
+	offcloud: '0.0.2',
+	/** Debrid-Link. 0.0.2: streams anime by `kitsu`, `mal` and `anidb` id. */
+	debridlink: '0.0.2',
 } as const;

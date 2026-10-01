@@ -68,7 +68,7 @@ describe('useMassReport', () => {
 	});
 
 	it('asks the user to sign in before reporting when no keys are present', async () => {
-		const { result } = renderHook(() => useMassReport(null, null, null, 'tt1234'));
+		const { result } = renderHook(() => useMassReport({}, 'tt1234'));
 		await act(async () => {
 			await result.current.handleMassReport('porn', [{ hash: 'abc' } as any]);
 		});
@@ -80,7 +80,7 @@ describe('useMassReport', () => {
 	});
 
 	it('requires torrents to be selected before reporting', async () => {
-		const { result } = renderHook(() => useMassReport('rd', null, null, 'tt1234'));
+		const { result } = renderHook(() => useMassReport({ rdKey: 'rd' }, 'tt1234'));
 		await act(async () => {
 			await result.current.handleMassReport('porn', []);
 		});
@@ -90,7 +90,7 @@ describe('useMassReport', () => {
 
 	it('submits mass reports and refreshes the page on success', async () => {
 		vi.useFakeTimers();
-		const { result } = renderHook(() => useMassReport('rd', null, null, 'tt1234'));
+		const { result } = renderHook(() => useMassReport({ rdKey: 'rd' }, 'tt1234'));
 		axiosPostMock.mockResolvedValue({
 			data: { success: true, reported: 2, failed: 1 },
 		});
@@ -124,7 +124,7 @@ describe('useMassReport', () => {
 
 	it('shows an error toast when the API request fails', async () => {
 		vi.useFakeTimers();
-		const { result } = renderHook(() => useMassReport(null, 'ad', null, 'tt9999'));
+		const { result } = renderHook(() => useMassReport({ adKey: 'ad' }, 'tt9999'));
 		axiosPostMock.mockRejectedValue(new Error('boom'));
 
 		await act(async () => {
@@ -143,7 +143,7 @@ describe('useMassReport', () => {
 	// runs longer than that — so the tail must be batched, not dropped.
 	it('splits a selection larger than the per-request cap into batches', async () => {
 		vi.useFakeTimers();
-		const { result } = renderHook(() => useMassReport('rd', null, null, 'tt1234'));
+		const { result } = renderHook(() => useMassReport({ rdKey: 'rd' }, 'tt1234'));
 		axiosPostMock.mockResolvedValue({ data: { success: true, reported: 100, failed: 0 } });
 
 		const selection = Array.from({ length: 250 }, (_, i) => ({ hash: `h${i}` }) as any);
@@ -167,7 +167,7 @@ describe('useMassReport', () => {
 
 	it('tells the user when the token could not be minted', async () => {
 		vi.useFakeTimers();
-		const { result } = renderHook(() => useMassReport('rd', null, null, 'tt1234'));
+		const { result } = renderHook(() => useMassReport({ rdKey: 'rd' }, 'tt1234'));
 		generateTokenAndHashMock.mockRejectedValue(new Error('challenge down'));
 
 		await act(async () => {
@@ -196,7 +196,7 @@ describe('useMassReport', () => {
 				})
 			);
 
-		const { result } = renderHook(() => useMassReport('rd-key', null, null, 'tt1234567'));
+		const { result } = renderHook(() => useMassReport({ rdKey: 'rd-key' }, 'tt1234567'));
 
 		await act(async () => {
 			await result.current.handleMassReport('porn', selection);
@@ -210,5 +210,21 @@ describe('useMassReport', () => {
 		expect(toastMocks.error).not.toHaveBeenCalledWith('Failed to submit reports.', {
 			id: 'toast-id',
 		});
+	});
+
+	it('lets a Premiumize-only user report, tagged for the server to digest', async () => {
+		vi.useFakeTimers();
+		const { result } = renderHook(() => useMassReport({ premiumizeKey: 'pm-token' }, 'tt1234'));
+		axiosPostMock.mockResolvedValue({ data: { success: true, reported: 1, failed: 0 } });
+
+		await act(async () => {
+			await result.current.handleMassReport('porn', [{ hash: 'abc' } as any]);
+		});
+
+		expect(axiosPostMock).toHaveBeenCalledWith(
+			'/api/report/mass',
+			expect.objectContaining({ userId: 'pm:pm-token' })
+		);
+		vi.useRealTimers();
 	});
 });

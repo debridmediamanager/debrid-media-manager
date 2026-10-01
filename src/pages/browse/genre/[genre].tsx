@@ -1,12 +1,15 @@
+import AnimeEntryLinks from '@/components/AnimeEntryLinks';
 import Poster from '@/components/poster';
+import { useAnimeEntries } from '@/hooks/useAnimeEntries';
 import { useCachedList } from '@/hooks/useCachedList';
 import { TraktMediaItem, getPopularByGenre, getTrendingByGenre } from '@/services/trakt';
+import { parseBrowseKey } from '@/utils/browseKey';
 import { withAuth } from '@/utils/withAuth';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useMemo } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 const { publicRuntimeConfig: config } = getConfig();
@@ -35,6 +38,18 @@ export const Genre: FunctionComponent = () => {
 			return { trendingMovies, trendingShows, popularMovies, popularShows };
 		}
 	);
+
+	// Trakt's anime and donghua genres are AniDB entries too; link each title to them.
+	const animeImdbIds = useMemo(() => {
+		if (!data || (genreSlug !== 'anime' && genreSlug !== 'donghua')) return [];
+		return [
+			...data.trendingMovies,
+			...data.trendingShows,
+			...data.popularMovies,
+			...data.popularShows,
+		].map((item) => item.movie?.ids?.imdb ?? item.show?.ids?.imdb ?? '');
+	}, [data, genreSlug]);
+	const animeEntries = useAnimeEntries(animeImdbIds);
 
 	if (!genreSlug || (loading && !data)) {
 		return <div className="mx-2 my-1 text-white">Loading...</div>;
@@ -93,17 +108,20 @@ export const Genre: FunctionComponent = () => {
 									const key = formatMediaKey(item);
 									if (!key) return null;
 
-									const [mediaType, imdbid, title] = key.split(':');
-									if (!imdbid) return null;
+									const parsed = parseBrowseKey(key);
+									if (!parsed) return null;
+									const { mediaType, imdbid, title } = parsed;
 
 									return (
-										<Link
-											key={key}
-											href={`/${mediaType}/${imdbid}`}
-											className=""
-										>
-											<Poster imdbId={imdbid} title={title} />
-										</Link>
+										<div key={key} className="min-w-0">
+											<Link href={`/${mediaType}/${imdbid}`} className="">
+												<Poster imdbId={imdbid} title={title} />
+											</Link>
+											<AnimeEntryLinks
+												entries={animeEntries[imdbid] ?? []}
+												compact
+											/>
+										</div>
 									);
 								})}
 							</div>

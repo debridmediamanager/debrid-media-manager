@@ -1,0 +1,9 @@
+tconst	titleType	primaryTitle	originalTitle	isAdult	startYear	endYear	runtimeMinutes	genres
+tt0073045	movie	"Giliap"	"Giliap"	0	1975	\N	137	Crime,Drama
+tt0149460	tvSeries	Futurama	Futurama	0	1999	\N	22	Adventure,Animation,Comedy
+tt0253684	tvEpisode	"Rome brûle" (Portrait de Shirley Clarke)	"Rome brûle" (Portrait de Shirley Clarke)	0	1970	\N	54	Documentary
+tt0471711	video	Futurama: Bender's Big Score	Futurama: Bender's Big Score	0	2007	\N	88	Animation,Comedy,Musical
+tt10233360	tvEpisode	La venganza de Benjamín	La venganza de Benjamín	0	2019	\N	\N	Crime,Drama,Thriller
+tt10233364	tvEpisode	"Rolling in the Deep Dish	"Rolling in the Deep Dish	0	2019	\N	22	Reality-TV
+tt10233366	tvEpisode	Pawn of the Undead	Pawn of the Undead	0	2019	\N	41	Reality-TV
+tt1023337	short	Detector	Detector	0	2007	\N	10	Drama,Short

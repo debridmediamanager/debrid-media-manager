@@ -1,5 +1,6 @@
 import useLocalStorage from '@/hooks/localStorage';
 import { checkPinOnce, getAllDebridUser, getPin } from '@/services/allDebrid';
+import { ALLDEBRID_APIKEYS_URL } from '@/utils/referrals';
 import { getSafeRedirectPath } from '@/utils/router';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -128,7 +129,7 @@ export default function AllDebridLoginPage() {
 							href={pin.user_url}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="inline-block rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+							className="inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
 						>
 							Open {pin.user_url.replace(/^https?:\/\//, '').split('/')[0]}
 						</a>
@@ -152,7 +153,7 @@ export default function AllDebridLoginPage() {
 							key, kept in this browser.
 						</p>
 
-						<div className="flex items-center gap-2 text-xs text-gray-500">
+						<div className="flex items-center gap-2 text-xs text-gray-400">
 							<span className="h-px flex-1 bg-gray-700" />
 							or paste an API key
 							<span className="h-px flex-1 bg-gray-700" />
@@ -177,16 +178,14 @@ export default function AllDebridLoginPage() {
 								<button
 									type="submit"
 									disabled={checking}
-									className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
+									className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
 								>
 									{checking ? 'Checking...' : 'Save API Key'}
 								</button>
 								<button
 									type="button"
-									onClick={() =>
-										window.open('https://alldebrid.com/apikeys', '_blank')
-									}
-									className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+									onClick={() => window.open(ALLDEBRID_APIKEYS_URL, '_blank')}
+									className="rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
 								>
 									Get API Key from AllDebrid
 								</button>

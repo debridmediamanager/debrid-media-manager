@@ -73,6 +73,32 @@ describe('SearchControls', () => {
 		expect(onMassReport).toHaveBeenCalledWith('wrong_season');
 	});
 
+	it.each([
+		['AllDebrid', { adKey: 'ad' }],
+		['TorBox', { torboxKey: 'tb' }],
+		['Premiumize', { premiumizeKey: 'pm' }],
+		['Offcloud', { offcloudKey: 'oc' }],
+		['Debrid-Link', { debridLinkKey: 'dl' }],
+	])('shows mass report buttons to a %s-only user', (_name, keys) => {
+		render(
+			<SearchControls
+				{...defaultProps}
+				query="filter"
+				totalCount={3}
+				showMassReportButtons
+				{...keys}
+			/>
+		);
+		expect(screen.getByText(/Report as Porn \(3\)/i)).toBeInTheDocument();
+	});
+
+	it('shows no mass report buttons without any signed-in service', () => {
+		render(
+			<SearchControls {...defaultProps} query="filter" totalCount={3} showMassReportButtons />
+		);
+		expect(screen.queryByText(/Report as Porn/i)).toBeNull();
+	});
+
 	it('appends search tokens and color scale queries', () => {
 		render(
 			<SearchControls

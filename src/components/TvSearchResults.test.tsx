@@ -12,7 +12,9 @@ vi.mock('@/utils/downloadMagnet', () => ({
 }));
 
 vi.mock('./ReportButton', () => ({
-	default: () => <div data-testid="report-button" />,
+	default: ({ userId }: { userId: string }) => (
+		<div data-testid="report-button" data-user-id={userId} />
+	),
 }));
 
 const openWatchSpy = vi.fn();
@@ -89,6 +91,17 @@ describe('TvSearchResults', () => {
 
 	afterEach(() => {
 		cleanup();
+	});
+
+	it('identifies a TorBox-only reporter, which the report endpoint requires', () => {
+		// It sent an empty id, and `/api/report` answers that with a 400.
+		renderTv({ rdKey: null, torboxKey: 'tb-key' });
+		expect(screen.getByTestId('report-button').getAttribute('data-user-id')).toBe('tb-key');
+	});
+
+	it('identifies an Offcloud-only reporter by a tagged id the server digests', () => {
+		renderTv({ rdKey: null, offcloudKey: 'oc-key' });
+		expect(screen.getByTestId('report-button').getAttribute('data-user-id')).toBe('oc:oc-key');
 	});
 
 	it('casts episodes with matching filenames', async () => {

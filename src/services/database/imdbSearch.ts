@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { DatabaseClient } from './client';
+import { movieTypesSql, searchableTitleSql } from './searchableTitles';
 
 export type ImdbSearchResult = {
 	imdbId: string;
@@ -39,13 +40,7 @@ export class ImdbSearchService extends DatabaseClient {
 			return [];
 		}
 
-		// Build type filter as parameterized Prisma.sql
-		const typeFilter =
-			mediaType === 'movie'
-				? Prisma.sql`AND b.title_type = 'movie'`
-				: mediaType === 'show'
-					? Prisma.sql`AND b.title_type IN ('tvSeries', 'tvMiniSeries')`
-					: Prisma.sql`AND b.title_type IN ('movie', 'tvSeries', 'tvMiniSeries')`;
+		const typeFilter = Prisma.sql`AND ${searchableTitleSql(mediaType)}`;
 
 		// Build year filter as parameterized Prisma.sql
 		const yearFilter = year ? Prisma.sql`AND b.start_year = ${year}` : Prisma.empty;
@@ -159,7 +154,7 @@ export class ImdbSearchService extends DatabaseClient {
 			SELECT
 				b.tconst as imdbId,
 				CASE
-					WHEN b.title_type = 'movie' THEN 'movie'
+					WHEN b.title_type IN ${movieTypesSql()} THEN 'movie'
 					ELSE 'show'
 				END as type,
 				b.start_year as year,
@@ -170,12 +165,12 @@ export class ImdbSearchService extends DatabaseClient {
 				1 as isOriginalMatch,
 				MATCH(b.primary_title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE) as relevance
 			FROM imdb_title_basics b
-			INNER JOIN imdb_title_ratings r ON b.tconst = r.tconst
+			LEFT JOIN imdb_title_ratings r ON b.tconst = r.tconst
 			WHERE MATCH(b.primary_title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)
 				${typeFilter}
 				${yearFilter}
 				AND b.is_adult = 0
-			ORDER BY relevance DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
+			ORDER BY r.tconst IS NULL, relevance DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
 			LIMIT ${limit}
 		`;
 
@@ -228,7 +223,7 @@ export class ImdbSearchService extends DatabaseClient {
 			SELECT
 				b.tconst as imdbId,
 				CASE
-					WHEN b.title_type = 'movie' THEN 'movie'
+					WHEN b.title_type IN ${movieTypesSql()} THEN 'movie'
 					ELSE 'show'
 				END as type,
 				b.start_year as year,
@@ -240,13 +235,13 @@ export class ImdbSearchService extends DatabaseClient {
 				MAX(MATCH(a.title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)) as relevance
 			FROM imdb_title_akas a
 			JOIN imdb_title_basics b ON a.title_id = b.tconst
-			INNER JOIN imdb_title_ratings r ON b.tconst = r.tconst
+			LEFT JOIN imdb_title_ratings r ON b.tconst = r.tconst
 			WHERE MATCH(a.title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)
 				${typeFilter}
 				${yearFilter}
 				AND b.is_adult = 0
 			GROUP BY b.tconst, b.title_type, b.start_year, b.primary_title, b.original_title, r.average_rating, r.num_votes
-			ORDER BY relevance DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
+			ORDER BY r.tconst IS NULL, relevance DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
 			LIMIT ${limit}
 		`;
 
@@ -278,7 +273,7 @@ export class ImdbSearchService extends DatabaseClient {
 			SELECT
 				b.tconst as imdbId,
 				CASE
-					WHEN b.title_type = 'movie' THEN 'movie'
+					WHEN b.title_type IN ${movieTypesSql()} THEN 'movie'
 					ELSE 'show'
 				END as type,
 				b.start_year as year,
@@ -293,13 +288,13 @@ export class ImdbSearchService extends DatabaseClient {
 					ELSE 1
 				END as matchQuality
 			FROM imdb_title_basics b
-			INNER JOIN imdb_title_ratings r ON b.tconst = r.tconst
+			LEFT JOIN imdb_title_ratings r ON b.tconst = r.tconst
 			WHERE (LOWER(b.primary_title) LIKE LOWER(${likePattern})
 				OR LOWER(b.original_title) LIKE LOWER(${likePattern}))
 				${typeFilter}
 				${yearFilter}
 				AND b.is_adult = 0
-			ORDER BY matchQuality DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
+			ORDER BY r.tconst IS NULL, matchQuality DESC, COALESCE(r.num_votes, 0) DESC, b.start_year DESC
 			LIMIT ${limit}
 		`;
 

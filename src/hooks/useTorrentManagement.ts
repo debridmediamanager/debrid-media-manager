@@ -56,6 +56,8 @@ function flattenMagnetFiles(files: MagnetFile[], parentPath = ''): MagnetFile[] 
 
 const torrentDB = new UserTorrentDB();
 
+const SERVICE_LABELS = { tb: 'TorBox', pm: 'Premiumize', oc: 'Offcloud' } as const;
+
 /**
  * Extras for an `addRd` call that the page's own state cannot answer.
  *
@@ -77,6 +79,19 @@ export type AddRdOptions = {
 	/** Suppress the per-add toasts; the caller is reporting progress itself. */
 	silent?: boolean;
 };
+
+export type AddAdOptions = AddRdOptions & {
+	/**
+	 * Keep the magnet only when AllDebrid serves it at once, and answer whether
+	 * it did. Without it an uncached add stays in the account downloading from
+	 * peers, which is right for a click on one row and wrong for a bulk run that
+	 * promised cached releases only.
+	 */
+	onlyIfCached?: boolean;
+};
+
+/** The services `addCached` can judge. Debrid-Link has no cache signal at all. */
+export type CachedAddService = 'rd' | 'ad' | 'tb' | 'pm' | 'oc';
 
 export function useTorrentManagement(
 	rdKey: string | null,
@@ -168,8 +183,15 @@ export function useTorrentManagement(
 						}
 					}
 
-					// Only submit availability for truly available torrents
-					if (info.status === 'downloaded' && info.progress === 100) {
+					// Only submit availability for truly available torrents, and only
+					// under an IMDb id. The row is keyed by hash and an upsert rewrites
+					// its imdbId, so an anime page filing one under anything else would
+					// move a shared row off the show page it belongs to.
+					if (
+						info.status === 'downloaded' &&
+						info.progress === 100 &&
+						/^tt\d+$/.test(imdbId)
+					) {
 						await submitAvailability(tokenWithTimestamp, tokenHash, info, imdbId);
 					}
 
@@ -242,11 +264,13 @@ export function useTorrentManagement(
 	);
 
 	const addAd = useCallback(
-		async (hash: string, isCheckingAvailability = false): Promise<any> => {
+		async (hash: string, isCheckingAvailability = false, opts?: AddAdOptions): Promise<any> => {
 			if (!adKey) return;
 
-			// Read searchResults at call time via closure
-			const torrentResult = searchResults.find((r) => r.hash === hash);
+			// Read searchResults at call time via closure. A bulk run over other
+			// seasons has the row in hand instead - see `AddRdOptions`.
+			const torrentResult = opts?.row ?? searchResults.find((r) => r.hash === hash);
+			const silent = isCheckingAvailability || !!opts?.silent;
 			const wasMarkedAvailable = torrentResult?.adAvailable || false;
 			let magnetStatusInfo: any = null;
 
@@ -268,7 +292,7 @@ export function useTorrentManagement(
 									r.hash === hash ? { ...r, adAvailable: false } : r
 								)
 							);
-							toast.error('Torrent misflagged as AD available.');
+							if (!silent) toast.error('Torrent misflagged as AD available.');
 						}
 
 						return;
@@ -290,7 +314,7 @@ export function useTorrentManagement(
 								)
 							);
 
-							toast.error('Torrent misflagged as AD available.');
+							if (!silent) toast.error('Torrent misflagged as AD available.');
 						}
 					}
 
@@ -306,18 +330,21 @@ export function useTorrentManagement(
 								l: f.l || '',
 							}));
 
-						// Only submit if we have valid files (name and size required)
+						// Only submit if we have valid files (name and size required),
+						// under an IMDb id the route accepts - see addRd above.
 						if (validFiles.length > 0) {
-							await submitAvailabilityAd(tokenWithTimestamp, tokenHash, {
-								hash: hash.toLowerCase(),
-								imdbId,
-								filename: magnetStatus.filename,
-								size: magnetStatus.size,
-								status: magnetStatus.status,
-								statusCode: magnetStatus.statusCode,
-								completionDate: magnetStatus.completionDate || 0,
-								files: validFiles,
-							});
+							if (/^tt\d+$/.test(imdbId)) {
+								await submitAvailabilityAd(tokenWithTimestamp, tokenHash, {
+									hash: hash.toLowerCase(),
+									imdbId,
+									filename: magnetStatus.filename,
+									size: magnetStatus.size,
+									status: magnetStatus.status,
+									statusCode: magnetStatus.statusCode,
+									completionDate: magnetStatus.completionDate || 0,
+									files: validFiles,
+								});
+							}
 						} else {
 							console.warn(
 								'[TorrentManagement] addAd: No valid files found, skipping availability submission',
@@ -372,13 +399,19 @@ export function useTorrentManagement(
 						});
 					}
 				},
-				isCheckingAvailability, // deleteIfNotInstant parameter
+				// deleteIfNotInstant: a service check never keeps a miss, and
+				// neither does a cached-only add.
+				isCheckingAvailability || !!opts?.onlyIfCached,
 				!isCheckingAvailability, // keepInLibrary parameter - keep if not checking service
-				isCheckingAvailability // silent parameter - suppress toasts during checks
+				silent
 			);
 
 			console.log('[TorrentManagement] addAd end', { hash });
-			return isCheckingAvailability ? magnetStatusInfo : undefined;
+			if (isCheckingAvailability) return magnetStatusInfo;
+			// The callback only ever sees a status for a magnet AD served at once;
+			// a miss arrives as null and has already been deleted.
+			if (opts?.onlyIfCached) return magnetStatusInfo !== null;
+			return undefined;
 		},
 		[adKey, setSearchResults, imdbId, fetchHashAndProgress, addToCache, searchResults]
 	);
@@ -785,6 +818,100 @@ export function useTorrentManagement(
 		[debridLinkKey, removeFromCache]
 	);
 
+	/**
+	 * Adds to TorBox, Premiumize or Offcloud and keeps the result only if the
+	 * service already had it.
+	 *
+	 * Each of them has a cache probe, and a bulk run uses it to choose what to
+	 * add, but a probe answers for the service's cache rather than for what this
+	 * account ends up holding. The row the add itself returns is the verdict: a
+	 * cached add comes back finished on all three (TorBox marks it
+	 * `download_finished` and present, Premiumize and Offcloud finish inside the
+	 * add), so anything short of 100% was a miss and is removed again rather than
+	 * left downloading in an account that was promised cached releases.
+	 */
+	const addVerified = useCallback(
+		async (
+			service: 'tb' | 'pm' | 'oc',
+			hash: string,
+			opts?: { silent?: boolean }
+		): Promise<boolean> => {
+			const key =
+				service === 'tb' ? torboxKey : service === 'pm' ? premiumizeKey : offcloudKey;
+			if (!key) return false;
+
+			const label = SERVICE_LABELS[service];
+			let added: UserTorrent | null = null;
+			const capture = async (userTorrent: UserTorrent) => {
+				added = userTorrent;
+			};
+			// The handlers always run silent: their "added" toast would land
+			// before the verdict below, and then the add may be removed again.
+			// Their failure toasts are lost with it, so this says it instead.
+			try {
+				if (service === 'tb') await handleAddAsMagnetInTb(key, hash, capture, true);
+				else if (service === 'pm') await handleAddAsMagnetInPm(key, hash, capture, true);
+				else await handleAddAsMagnetInOc(key, hash, capture, true);
+			} catch (error) {
+				if (!opts?.silent) toast.error(`${label} refused the add.`);
+				throw error;
+			}
+
+			const row = added as UserTorrent | null;
+			// No row means the add came back without an id to read (a TorBox
+			// add that only queued), so there is nothing to judge or remove.
+			if (!row || !row.id || row.id.endsWith(':undefined')) return false;
+
+			if (!(row.progress >= 100)) {
+				if (service === 'tb') await handleDeleteTbTorrent(key, row.id, true);
+				else if (service === 'pm') await handleDeletePmTorrent(key, row.id, true);
+				else await handleDeleteOcTorrent(key, row.id, true);
+				if (!opts?.silent) toast.error(`Not cached on ${label}; removed.`);
+				return false;
+			}
+
+			await torrentDB.add(row);
+			addToCache(row);
+			setHashAndProgress((prev) => ({
+				...prev,
+				[`${row.id.substring(0, 3)}${row.hash}`]: row.progress,
+			}));
+			if (!opts?.silent) toast.success(`Added to ${label}.`);
+			return true;
+		},
+		[torboxKey, premiumizeKey, offcloudKey, addToCache]
+	);
+
+	/**
+	 * Adds a release only if the service serves it at once, and says whether it
+	 * did. The one entry point the bulk actions (whole season, every episode,
+	 * every season) use, so each of them works on every service with a cache
+	 * signal rather than on the one it was first written for.
+	 *
+	 * A release already in the library answers true without an add. That is
+	 * what the bulk actions mean by it, and it keeps the verified path from
+	 * removing a user's own unfinished transfer: Premiumize and Offcloud hand
+	 * back the existing item when the same magnet is added twice.
+	 */
+	const addCached = useCallback(
+		async (service: CachedAddService, hash: string, opts?: AddRdOptions): Promise<boolean> => {
+			if (`${service}:${hash.toLowerCase()}` in hashAndProgress) return true;
+			if (`${service}:${hash}` in hashAndProgress) return true;
+			try {
+				if (service === 'rd') return (await addRd(hash, false, true, opts)) === true;
+				if (service === 'ad') {
+					return (await addAd(hash, false, { ...opts, onlyIfCached: true })) === true;
+				}
+				return await addVerified(service, hash, opts);
+			} catch {
+				// Every handler has already said why, unless the caller asked for
+				// silence and is counting failures itself.
+				return false;
+			}
+		},
+		[hashAndProgress, addRd, addAd, addVerified]
+	);
+
 	return {
 		hashAndProgress,
 		fetchHashAndProgress,
@@ -794,6 +921,7 @@ export function useTorrentManagement(
 		addPm,
 		addOc,
 		addDl,
+		addCached,
 		sendTbToRd,
 		deleteRd,
 		deleteAd,

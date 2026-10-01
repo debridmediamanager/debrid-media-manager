@@ -1,5 +1,6 @@
 import { SearchResult } from '@/services/mediasearch';
 import { delay } from '@/utils/delay';
+import { reporterIdFor, type ReporterKeys } from '@/utils/reporterId';
 import { generateTokenAndHash } from '@/utils/token';
 import axios from 'axios';
 import { useCallback } from 'react';
@@ -17,15 +18,11 @@ const MAX_REPORTS_PER_REQUEST = 100;
 // large set working; 2.5s puts at most four requests in any 10s window.
 const BATCH_SPACING_MS = 2500;
 
-export function useMassReport(
-	rdKey: string | null,
-	adKey: string | null,
-	torboxKey: string | null,
-	imdbId: string
-) {
+export function useMassReport(keys: ReporterKeys, imdbId: string) {
+	const userId = reporterIdFor(keys);
 	const handleMassReport = useCallback(
 		async (type: 'porn' | 'wrong_imdb' | 'wrong_season', filteredResults: SearchResult[]) => {
-			if (!rdKey && !adKey && !torboxKey) {
+			if (!userId) {
 				toast.error('Sign in to a debrid service before reporting.');
 				return;
 			}
@@ -47,9 +44,6 @@ export function useMassReport(
 			const toastId = toast.loading(`Reporting ${filteredResults.length} torrents...`);
 
 			try {
-				// Use the debrid key as userId
-				const userId = rdKey || adKey || torboxKey || '';
-
 				// Prepare reports data
 				const reports = filteredResults.map((result) => ({
 					hash: result.hash,
@@ -132,7 +126,7 @@ export function useMassReport(
 				}, 1500);
 			}
 		},
-		[rdKey, adKey, torboxKey, imdbId]
+		[userId, imdbId]
 	);
 
 	return { handleMassReport };

@@ -7,7 +7,6 @@ import {
 } from './availability';
 import {
 	checkDatabaseAvailabilityAd,
-	checkDatabaseAvailabilityAd2,
 	checkDatabaseAvailabilityRd,
 	checkDatabaseAvailabilityTb,
 } from './instantChecks';
@@ -189,31 +188,6 @@ describe('missing fileSize backfill', () => {
 		await checkDatabaseAvailabilityTb('tb-key', ['hash-zero-tb'], setter, identity);
 
 		expect(getState()[0].fileSize).toBe(3);
-	});
-
-	it('does not invent a fileSize on hashlist torrents', async () => {
-		mockCheckAvailabilityAdByHashes.mockResolvedValue({
-			available: [
-				{
-					hash: 'hash-hashlist',
-					files: [{ file_id: 0, path: 'Movie.mkv', bytes: 8 * MB }],
-				},
-			],
-		} as any);
-		const { setter, getState } = createStateHarness([
-			{
-				hash: 'hash-hashlist',
-				noVideos: false,
-				adAvailable: false,
-				files: [],
-				bytes: 8 * MB,
-			},
-		] as any[]);
-
-		await checkDatabaseAvailabilityAd2('problem', 'solution', ['hash-hashlist'], setter);
-
-		expect(getState()[0].adAvailable).toBe(true);
-		expect(getState()[0]).not.toHaveProperty('fileSize');
 	});
 
 	// The show page ranks cached rows on the mean, so it has to be the mean of the

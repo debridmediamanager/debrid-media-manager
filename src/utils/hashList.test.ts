@@ -4,7 +4,7 @@ import { generateHashList, handleShare } from './hashList';
 
 // Mock dependencies
 vi.mock('@/services/hashlists', () => ({
-	createShortUrl: vi.fn(),
+	publishHashlist: vi.fn(),
 }));
 
 vi.mock('react-hot-toast', () => {
@@ -24,7 +24,7 @@ vi.mock('./toastOptions', () => ({
 	libraryToastOptions: { position: 'top-right' },
 }));
 
-import { createShortUrl } from '@/services/hashlists';
+import { publishHashlist } from '@/services/hashlists';
 import lzString from 'lz-string';
 import toast from 'react-hot-toast';
 
@@ -74,7 +74,7 @@ describe('hashList utils', () => {
 				hash: '',
 			};
 			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('compressed-data');
-			vi.mocked(createShortUrl).mockResolvedValue('https://short.url/abc123');
+			vi.mocked(publishHashlist).mockResolvedValue('https://short.url/abc123');
 
 			await generateHashList('Mixed', [mockTorrent, premiumizeOrphan]);
 
@@ -103,7 +103,7 @@ describe('hashList utils', () => {
 				hash: '',
 			};
 			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('compressed-data');
-			vi.mocked(createShortUrl).mockResolvedValue('https://short.url/abc123');
+			vi.mocked(publishHashlist).mockResolvedValue('https://short.url/abc123');
 
 			await generateHashList('Mixed', [mockTorrent, offcloudDirectDownload]);
 
@@ -133,7 +133,7 @@ describe('hashList utils', () => {
 				bytes: 276_134_947,
 			};
 			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('compressed-data');
-			vi.mocked(createShortUrl).mockResolvedValue('https://short.url/abc123');
+			vi.mocked(publishHashlist).mockResolvedValue('https://short.url/abc123');
 
 			await generateHashList('Mixed', [mockTorrent, debridLinkRow]);
 
@@ -162,7 +162,7 @@ describe('hashList utils', () => {
 			const shortUrl = 'https://short.url/abc123';
 
 			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('compressed-data');
-			vi.mocked(createShortUrl).mockResolvedValue(shortUrl);
+			vi.mocked(publishHashlist).mockResolvedValue(shortUrl);
 
 			await generateHashList(title, filteredList);
 
@@ -182,9 +182,9 @@ describe('hashList utils', () => {
 					],
 				})
 			);
-			expect(createShortUrl).toHaveBeenCalledWith(
-				'https://example.com/hashlist#compressed-data'
-			);
+			// The list itself, not a URL carrying it: a URL over 2 MB leaves
+			// Chrome's iframe at about:blank#blocked
+			expect(publishHashlist).toHaveBeenCalledWith('compressed-data');
 			expect(window.open).toHaveBeenCalledWith(shortUrl);
 		});
 
@@ -196,7 +196,7 @@ describe('hashList utils', () => {
 				hash: 'd41d8cd98f00b204e9800998ecf8427e',
 			};
 			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('compressed-data');
-			vi.mocked(createShortUrl).mockResolvedValue('https://short.url/abc123');
+			vi.mocked(publishHashlist).mockResolvedValue('https://short.url/abc123');
 
 			await generateHashList('Mixed', [mockTorrent, webDownload]);
 
@@ -227,7 +227,7 @@ describe('hashList utils', () => {
 
 			await generateHashList('Only web', [webDownload]);
 
-			expect(createShortUrl).not.toHaveBeenCalled();
+			expect(publishHashlist).not.toHaveBeenCalled();
 			expect(toast.error).toHaveBeenCalledWith(
 				'Nothing to share — none of those have an info hash.',
 				expect.anything()
@@ -240,7 +240,7 @@ describe('hashList utils', () => {
 			const shortUrl = 'https://short.url/empty';
 
 			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('empty-data');
-			vi.mocked(createShortUrl).mockResolvedValue(shortUrl);
+			vi.mocked(publishHashlist).mockResolvedValue(shortUrl);
 
 			await generateHashList(title, filteredList);
 
@@ -266,7 +266,7 @@ describe('hashList utils', () => {
 			const shortUrl = 'https://short.url/multi';
 
 			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('multi-data');
-			vi.mocked(createShortUrl).mockResolvedValue(shortUrl);
+			vi.mocked(publishHashlist).mockResolvedValue(shortUrl);
 
 			await generateHashList(title, filteredList);
 
@@ -290,13 +290,13 @@ describe('hashList utils', () => {
 			expect(window.open).toHaveBeenCalledWith(shortUrl);
 		});
 
-		it('should handle createShortUrl failure', async () => {
+		it('should handle publishHashlist failure', async () => {
 			const title = 'Failed Collection';
 			const filteredList = [mockTorrent];
 			const error = new Error('Failed to create short URL');
 
 			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('data');
-			vi.mocked(createShortUrl).mockRejectedValue(error);
+			vi.mocked(publishHashlist).mockRejectedValue(error);
 
 			await generateHashList(title, filteredList);
 
@@ -324,7 +324,7 @@ describe('hashList utils', () => {
 				expect.any(Object)
 			);
 			expect(console.error).toHaveBeenCalledWith(error);
-			expect(createShortUrl).not.toHaveBeenCalled();
+			expect(publishHashlist).not.toHaveBeenCalled();
 		});
 
 		it('should handle window.open failure gracefully', async () => {
@@ -333,7 +333,7 @@ describe('hashList utils', () => {
 			const shortUrl = 'https://short.url/fail';
 
 			vi.mocked(lzString.compressToEncodedURIComponent).mockReturnValue('data');
-			vi.mocked(createShortUrl).mockResolvedValue(shortUrl);
+			vi.mocked(publishHashlist).mockResolvedValue(shortUrl);
 			vi.mocked(window.open).mockImplementation(() => {
 				throw new Error('Popup blocked');
 			});

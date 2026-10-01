@@ -1,13 +1,19 @@
+import AnimeEntryLinks from '@/components/AnimeEntryLinks';
 import Poster from '@/components/poster';
+import { useAnimeEntries } from '@/hooks/useAnimeEntries';
 import { useCachedList } from '@/hooks/useCachedList';
+import { parseBrowseKey } from '@/utils/browseKey';
 import { withAuth } from '@/utils/withAuth';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useMemo } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 type BrowseResponse = Record<string, string[]>;
+
+/** Lists whose titles are AniDB entries too, and so get links to their anime pages. */
+const ANIME_BROWSE_LISTS = new Set(['anime', 'donghua']);
 
 const genres = [
 	{
@@ -138,6 +144,19 @@ export const Browse: FunctionComponent = () => {
 		}
 	);
 
+	// Lists are keyed `movie:tt…:title` / `show:tt…:title`, and a title with
+	// several AniDB entries (seasons, cours, OVAs) links to each of them.
+	const animeImdbIds = useMemo(
+		() =>
+			ANIME_BROWSE_LISTS.has(searchKey) && data
+				? Object.values(data)
+						.flat()
+						.map((key) => parseBrowseKey(key)?.imdbid ?? '')
+				: [],
+		[data, searchKey]
+	);
+	const animeEntries = useAnimeEntries(animeImdbIds);
+
 	if (loading && search && !data) {
 		return <div className="mx-2 my-1 text-white">Loading...</div>;
 	}
@@ -188,22 +207,24 @@ export const Browse: FunctionComponent = () => {
 									</h2>
 									<div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
 										{data[listName].map((key: string) => {
-											const matches = key.split(':');
-											if (matches.length === 3) {
-												const mediaType = key.split(':')[0];
-												const imdbid = key.split(':')[1];
-												const title = key.split(':')[2];
+											const item = parseBrowseKey(key);
+											if (!item) return null;
+											const { mediaType, imdbid, title } = item;
 
-												return (
+											return (
+												<div key={key} className="min-w-0">
 													<Link
-														key={key}
 														href={`/${mediaType}/${imdbid}`}
 														className=""
 													>
 														<Poster imdbId={imdbid} title={title} />
 													</Link>
-												);
-											}
+													<AnimeEntryLinks
+														entries={animeEntries[imdbid] ?? []}
+														compact
+													/>
+												</div>
+											);
 										})}
 									</div>
 								</div>

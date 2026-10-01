@@ -1,4 +1,6 @@
-import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import coverage from './__fixtures__/imdb-coverage-titles.json';
+import futurama from './__fixtures__/imdb-futurama-titles.json';
 import { ImdbSearchService } from './imdbSearch';
 
 const prismaMock = vi.hoisted(() => ({
@@ -185,6 +187,158 @@ describe('ImdbSearchService', () => {
 			await service.searchTitles('test', { limit: 10 });
 
 			expect(prismaMock.$queryRaw).toHaveBeenCalled();
+		});
+	});
+
+	describe('title types', () => {
+		type Row = {
+			tconst: string;
+			titleType: string;
+			startYear: number | null;
+			numVotes: number | null;
+		};
+
+		// "The last two years" is relative to now; pin now to when the rows were captured.
+		beforeEach(() => {
+			vi.useFakeTimers({ toFake: ['Date'] });
+			vi.setSystemTime(new Date('2026-09-30T00:00:00Z'));
+		});
+		afterEach(() => {
+			vi.useRealTimers();
+		});
+
+		/**
+		 * Apply the generated query's own type filter and type mapping to real
+		 * rows, since the mocked client cannot run the SQL itself.
+		 */
+		function applyTypeClauses(sql: string, rows: Row[]) {
+			const filter = sql.split('\n').find((l) => /^\s*AND .*b\.title_type/.test(l));
+			const mapping = sql.match(
+				/WHEN b\.title_type (?:= '(\w+)'|IN \(([^)]*)\)) THEN 'movie'/
+			);
+			if (!filter || !mapping) throw new Error('type clauses not found in:\n' + sql);
+			const ratedOnly = /INNER JOIN imdb_title_ratings/.test(sql);
+			// The clause is plain SQL over three columns; evaluate it as JS. A null
+			// compares false in both, and a missing ratings row has null votes.
+			const admits = new Function(
+				'type',
+				'votes',
+				'year',
+				'return ' +
+					filter
+						.trim()
+						.replace(/^AND /, '')
+						.replace(/b\.title_type IN \(([^)]*)\)/g, '[$1].includes(type)')
+						.replace(/b\.title_type = /g, 'type === ')
+						.replace(/r\.tconst IS NOT NULL/g, '(votes !== null)')
+						.replace(/r\.num_votes/g, 'votes')
+						.replace(/b\.start_year/g, 'year')
+						.replace(/ AND /g, ' && ')
+						.replace(/ OR /g, ' || ')
+			) as (type: string, votes: number | null, year: number | null) => boolean;
+			const movieTypes = (mapping[1] ?? mapping[2])
+				.split(',')
+				.map((t) => t.trim().replace(/'/g, ''));
+			return rows
+				.filter((r) => !ratedOnly || r.numVotes !== null)
+				.filter((r) => admits(r.titleType, r.numVotes, r.startYear))
+				.map((r) => ({
+					imdbId: r.tconst,
+					type: movieTypes.includes(r.titleType) ? 'movie' : 'show',
+				}));
+		}
+
+		const films = [
+			{ imdbId: 'tt0471711', type: 'movie' }, // Bender's Big Score
+			{ imdbId: 'tt1054485', type: 'movie' }, // The Beast with a Billion Backs
+			{ imdbId: 'tt1054486', type: 'movie' }, // Bender's Game
+			{ imdbId: 'tt1054487', type: 'movie' }, // Into the Wild Green Yonder
+		];
+
+		it('finds direct-to-video films, filed as movies, when no type is given', async () => {
+			prismaMock.$queryRaw.mockResolvedValue([]);
+			await service.searchTitles('futurama');
+
+			const admitted = applyTypeClauses(
+				prismaMock.$queryRaw.mock.calls[0][0].sql,
+				futurama.rows
+			);
+
+			expect(admitted).toEqual(expect.arrayContaining(films));
+			expect(admitted).toContainEqual({ imdbId: 'tt0149460', type: 'show' });
+			expect(admitted.map((r) => r.imdbId)).not.toContain('tt0377952'); // videoGame
+			expect(admitted.map((r) => r.imdbId)).not.toContain('tt1630885'); // tvEpisode
+			// A featurette nobody rates stays out: 'Futurama' Returns, 768 votes
+			expect(admitted.map((r) => r.imdbId)).not.toContain('tt1230102');
+		});
+
+		it('keeps direct-to-video films in a movie-only search', async () => {
+			prismaMock.$queryRaw.mockResolvedValue([]);
+			await service.searchTitles('futurama', { mediaType: 'movie' });
+
+			const admitted = applyTypeClauses(
+				prismaMock.$queryRaw.mock.calls[0][0].sql,
+				futurama.rows
+			);
+
+			expect(admitted).toEqual(expect.arrayContaining(films));
+			expect(admitted.every((r) => r.type === 'movie')).toBe(true);
+		});
+
+		it('leaves direct-to-video films out of a show-only search', async () => {
+			prismaMock.$queryRaw.mockResolvedValue([]);
+			await service.searchTitles('futurama', { mediaType: 'show' });
+
+			const admitted = applyTypeClauses(
+				prismaMock.$queryRaw.mock.calls[0][0].sql,
+				futurama.rows
+			);
+
+			expect(admitted.map((r) => r.imdbId).sort()).toEqual(['tt0149460', 'tt6090450']);
+		});
+
+		const ids = (rows: Array<{ imdbId: string }>) => rows.map((r) => r.imdbId);
+
+		it('finds the titles users streamed that search used to miss', async () => {
+			prismaMock.$queryRaw.mockResolvedValue([]);
+			await service.searchTitles('anything');
+
+			const admitted = applyTypeClauses(
+				prismaMock.$queryRaw.mock.calls[0][0].sql,
+				coverage.rows
+			);
+
+			expect(admitted).toEqual(
+				expect.arrayContaining([
+					{ imdbId: 'tt0059026', type: 'movie' }, // A Charlie Brown Christmas, tvMovie
+					{ imdbId: 'tt0108598', type: 'movie' }, // The Wrong Trousers, short
+					{ imdbId: 'tt41368989', type: 'movie' }, // Finding Harry, 2026 special, 985 votes
+					{ imdbId: 'tt21357150', type: 'movie' }, // Avengers: Doomsday, unrated, 2026
+					{ imdbId: 'tt0372784', type: 'movie' }, // Batman Begins
+				])
+			);
+		});
+
+		it('keeps out featurettes and old unrated placeholders', async () => {
+			prismaMock.$queryRaw.mockResolvedValue([]);
+			await service.searchTitles('anything');
+
+			const admitted = ids(
+				applyTypeClauses(prismaMock.$queryRaw.mock.calls[0][0].sql, coverage.rows)
+			);
+
+			expect(admitted).not.toContain('tt1006835'); // Beyond Batman ... Batman, 60 votes
+			expect(admitted).not.toContain('tt33049792'); // a 2023 Spider-Verse featurette, 20 votes
+			expect(admitted).not.toContain('tt0350345'); // Drowning (1995), no ratings row
+		});
+
+		it('ranks unrated titles after every rated one', async () => {
+			prismaMock.$queryRaw.mockResolvedValue([]);
+			await service.searchTitles('avengers doomsday');
+
+			expect(prismaMock.$queryRaw.mock.calls[0][0].sql).toMatch(
+				/ORDER BY r\.tconst IS NULL, /
+			);
 		});
 	});
 

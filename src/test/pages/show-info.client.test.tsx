@@ -14,8 +14,18 @@ vi.mock('next/head', () => ({
 
 vi.mock('next/link', () => ({
 	__esModule: true,
-	default: ({ children, href }: { children: ReactNode; href: string }) => (
-		<a href={href}>{children}</a>
+	default: ({
+		children,
+		href,
+		className,
+	}: {
+		children: ReactNode;
+		href: string;
+		className?: string;
+	}) => (
+		<a href={href} className={className}>
+			{children}
+		</a>
 	),
 }));
 
@@ -69,6 +79,22 @@ describe('ShowInfoPage', () => {
 
 		const backLink = screen.getByText('Back to Show');
 		expect(backLink).toHaveAttribute('href', '/show/tt9999999/1');
+	});
+
+	// At 320px /show/tt…/info put "Game of Thrones", its icon buttons and
+	// "Back to Show" on one non-wrapping row, which ran the link to 339px and
+	// scrolled the page sideways (measured 2026-09-29).
+	it('lets the title row wrap on a narrow screen', async () => {
+		const axios = (await import('axios')).default;
+		vi.mocked(axios.get).mockReturnValue(new Promise(() => {}));
+
+		const ShowInfoPage = (await import('@/pages/show/[imdbid]/info')).default;
+		render(<ShowInfoPage />);
+
+		const back = screen.getByText('Back to Show');
+		expect(back).toHaveClass('shrink-0');
+		expect(back.parentElement).toHaveClass('flex-wrap');
+		expect(screen.getByRole('heading', { level: 1 })).toHaveClass('min-w-0', 'break-words');
 	});
 
 	it('should show error message on fetch failure', async () => {

@@ -1,7 +1,8 @@
+import { resolveStreamTarget } from '@/services/anime/stremioAnime';
 import { withRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { checkCachedStatus } from '@/services/torbox';
-import { getTroveCandidates, TroveStreamCandidate } from '@/utils/cachedTroveStreams';
+import { TroveStreamCandidate } from '@/utils/cachedTroveStreams';
 import { SPONSOR_MAX_OTHER_STREAMS_LIMIT } from '@/utils/sponsorLimits';
 import {
 	extractStreamMetadata,
@@ -70,14 +71,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	const imdbidStr = (imdbid as string).replace(/\.json$/, '');
-	const typeSlug = mediaType === 'movie' ? 'movie' : 'show';
-	let externalUrl = `${process.env.DMM_ORIGIN}/${typeSlug}/${imdbidStr}`;
-	if (typeSlug === 'show') {
-		// imdbidStr = imdbid:season:episode
-		// externalUrl should be /show/imdbid/season
-		const [imdbid2, season] = imdbidStr.split(':');
-		externalUrl = `${process.env.DMM_ORIGIN}/${typeSlug}/${imdbid2}/${season}`;
+	// An anime id (`kitsu:46474:5`) resolves to the AniDB key its casts are
+	// filed under; an IMDb id keeps its own.
+	const target = await resolveStreamTarget(imdbidStr, mediaType, process.env.DMM_ORIGIN);
+	if (!target) {
+		res.status(200).json({ streams: [], cacheMaxAge: 0 });
+		return;
 	}
+	const { castKey, typeSlug, externalUrl } = target;
 
 	const streams: any[] = [];
 
@@ -103,9 +104,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		// get urls from db
 		const [userCastItems, allOtherItems, troveCandidates] = await Promise.all([
-			db.getTorBoxUserCastStreams(imdbidStr, userid, 5),
+			db.getTorBoxUserCastStreams(castKey, userid, 5),
 			db.getTorBoxOtherStreams(
-				imdbidStr,
+				castKey,
 				userid,
 				otherStreamsLimit,
 				maxSize > 0 ? maxSize : undefined
@@ -113,11 +114,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			// The scraped pool behind the DMM detail page - same data the page
 			// paints its TorBox tokens from. Only cache-confirmed releases are
 			// offered; the probe runs below.
-			getTroveCandidates({
-				mediaType: typeSlug === 'movie' ? 'movie' : 'series',
-				imdbId: imdbidStr,
-				maxSizeGb: maxSize > 0 ? maxSize : undefined,
-			}),
+			target.trove(maxSize > 0 ? maxSize : undefined),
 		]);
 
 		// Another user's web download can't be resolved with this user's key —

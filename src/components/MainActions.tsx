@@ -164,21 +164,19 @@ export function MainActions({
 				</div>
 			)}
 
-			{/* Transfers and Requests share a row, but they answer to different
-			    audiences. Transfers is where a Real-Debrid user watches content
-			    arrive, so it is theirs. Requests is where a TorBox or AllDebrid
-			    user picks up somebody else's ask, so it is the fulfillers'.
+			{/* Transfers and Requests share a row. Transfers is where a Real-Debrid
+			    user watches content arrive. Requests serves both sides: a TorBox
+			    user picks up somebody else's ask there, and a Real-Debrid user
+			    follows their own asks there, which is the only place that says
+			    whether one was sent or failed. AllDebrid stopped being a source on
+			    2026-09-01, so an AllDebrid-only user has nothing to do there.
 			    Premiumize, Offcloud and Debrid-Link are deliberately not here: the
 			    uploader cannot source a transfer from any of them, so those users
 			    have nothing to fulfil with — which is why neither Offcloud nor
 			    Debrid-Link reaches the gate below. A user who is both sees the pair side by side; a user who is only one
-			    sees that one full-width rather than stranded in half a row. (A
-			    Real-Debrid-only user files a request from the search result itself —
-			    the button there — and never needs the board.) */}
-			{(rdUser || tbUser || adUser) && (
-				<div
-					className={`grid w-full gap-3 ${rdUser && (tbUser || adUser) ? 'grid-cols-2' : 'grid-cols-1'}`}
-				>
+			    sees that one full-width rather than stranded in half a row. */}
+			{(rdUser || tbUser) && (
+				<div className={`grid w-full gap-3 ${rdUser ? 'grid-cols-2' : 'grid-cols-1'}`}>
 					{rdUser && (
 						<Link
 							href="/transfers"
@@ -188,7 +186,7 @@ export function MainActions({
 							Transfers
 						</Link>
 					)}
-					{(tbUser || adUser) && (
+					{(rdUser || tbUser) && (
 						<Link
 							href="/requests"
 							className="haptic flex items-center justify-center rounded border-2 border-cyan-500 bg-cyan-900/30 p-3 text-center text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"

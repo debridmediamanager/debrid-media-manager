@@ -1,0 +1,249 @@
+{
+	"_embedded": {
+		"seasons": [
+			{
+				"id": 12206,
+				"url": "https://www.tvmaze.com/seasons/12206/the-daily-show-with-trevor-noah-season-2015",
+				"number": 2015,
+				"name": "",
+				"episodeOrder": null,
+				"premiereDate": "2015-09-28",
+				"endDate": "2015-12-17",
+				"network": {
+					"id": 23,
+					"name": "Comedy Central",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.cc.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": "",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/12206" } }
+			},
+			{
+				"id": 27836,
+				"url": "https://www.tvmaze.com/seasons/27836/the-daily-show-with-trevor-noah-season-2016",
+				"number": 2016,
+				"name": "",
+				"episodeOrder": 164,
+				"premiereDate": "2016-01-04",
+				"endDate": "2016-12-15",
+				"network": {
+					"id": 23,
+					"name": "Comedy Central",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.cc.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/27836" } }
+			},
+			{
+				"id": 58681,
+				"url": "https://www.tvmaze.com/seasons/58681/the-daily-show-with-trevor-noah-season-2017",
+				"number": 2017,
+				"name": "",
+				"episodeOrder": 164,
+				"premiereDate": "2017-01-03",
+				"endDate": "2017-12-14",
+				"network": {
+					"id": 23,
+					"name": "Comedy Central",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.cc.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/58681" } }
+			},
+			{
+				"id": 79688,
+				"url": "https://www.tvmaze.com/seasons/79688/the-daily-show-with-trevor-noah-season-2018",
+				"number": 2018,
+				"name": "",
+				"episodeOrder": null,
+				"premiereDate": "2018-01-02",
+				"endDate": "2018-12-19",
+				"network": {
+					"id": 23,
+					"name": "Comedy Central",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.cc.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/79688" } }
+			},
+			{
+				"id": 92435,
+				"url": "https://www.tvmaze.com/seasons/92435/the-daily-show-with-trevor-noah-season-2019",
+				"number": 2019,
+				"name": "",
+				"episodeOrder": null,
+				"premiereDate": "2019-01-07",
+				"endDate": "2019-12-19",
+				"network": {
+					"id": 23,
+					"name": "Comedy Central",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.cc.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/92435" } }
+			},
+			{
+				"id": 104610,
+				"url": "https://www.tvmaze.com/seasons/104610/the-daily-show-with-trevor-noah-season-2020",
+				"number": 2020,
+				"name": "",
+				"episodeOrder": null,
+				"premiereDate": "2020-01-06",
+				"endDate": "2020-12-17",
+				"network": {
+					"id": 23,
+					"name": "Comedy Central",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.cc.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/104610" } }
+			},
+			{
+				"id": 118752,
+				"url": "https://www.tvmaze.com/seasons/118752/the-daily-show-with-trevor-noah-season-2021",
+				"number": 2021,
+				"name": "",
+				"episodeOrder": null,
+				"premiereDate": "2021-01-19",
+				"endDate": "2021-12-16",
+				"network": {
+					"id": 23,
+					"name": "Comedy Central",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.cc.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/118752" } }
+			},
+			{
+				"id": 134114,
+				"url": "https://www.tvmaze.com/seasons/134114/the-daily-show-with-trevor-noah-season-2022",
+				"number": 2022,
+				"name": "",
+				"episodeOrder": null,
+				"premiereDate": "2022-01-18",
+				"endDate": "2022-12-08",
+				"network": {
+					"id": 23,
+					"name": "Comedy Central",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.cc.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/134114" } }
+			}
+		],
+		"previousepisode": {
+			"id": 2424014,
+			"url": "https://www.tvmaze.com/episodes/2424014/the-daily-show-with-trevor-noah-2022-12-08-neal-brennan",
+			"name": "Neal Brennan",
+			"season": 2022,
+			"number": 133,
+			"type": "regular",
+			"airdate": "2022-12-08",
+			"airtime": "23:00",
+			"airstamp": "2022-12-09T04:00:00+00:00",
+			"runtime": 60,
+			"rating": { "average": null },
+			"image": null,
+			"summary": "<p>Trevor ends his seven-year run as host of The Daily Show with fond farewells from his correspondents, a chat with comedian Neal Brennan about his Netflix special \"Blocks\" and more.</p>",
+			"_links": {
+				"self": { "href": "https://api.tvmaze.com/episodes/2424014" },
+				"show": {
+					"href": "https://api.tvmaze.com/shows/3928",
+					"name": "The Daily Show with Trevor Noah"
+				}
+			}
+		}
+	},
+	"_links": {
+		"self": { "href": "https://api.tvmaze.com/shows/3928" },
+		"previousepisode": {
+			"href": "https://api.tvmaze.com/episodes/2424014",
+			"name": "Neal Brennan"
+		}
+	},
+	"averageRuntime": 30,
+	"dvdCountry": null,
+	"ended": "2022-12-08",
+	"externals": { "tvrage": null, "thetvdb": 71256, "imdb": "tt0115147" },
+	"genres": ["Comedy"],
+	"id": 3928,
+	"image": {
+		"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/446/1115582.jpg",
+		"original": "https://static.tvmaze.com/uploads/images/original_untouched/446/1115582.jpg"
+	},
+	"language": "English",
+	"name": "The Daily Show with Trevor Noah",
+	"network": {
+		"id": 23,
+		"name": "Comedy Central",
+		"country": { "name": "United States", "code": "US", "timezone": "America/New_York" },
+		"officialSite": "https://www.cc.com/"
+	},
+	"officialSite": "https://www.cc.com/shows/the-daily-show",
+	"premiered": "2015-09-28",
+	"rating": { "average": 5.4 },
+	"runtime": 30,
+	"schedule": { "time": "23:00", "days": ["Monday", "Tuesday", "Wednesday", "Thursday"] },
+	"status": "Ended",
+	"summary": "<p>An irreverent skewering of the news and pop culture with South African comedian Trevor Noah, who took over for Jon Stewart when he left the anchor desk after 17 seasons.</p>",
+	"type": "Talk Show",
+	"updated": 1780488511,
+	"url": "https://www.tvmaze.com/shows/3928/the-daily-show-with-trevor-noah",
+	"webChannel": null,
+	"weight": 95
+}

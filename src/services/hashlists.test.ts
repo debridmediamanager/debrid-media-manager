@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { createShortUrl } from './hashlists';
+import { publishHashlist } from './hashlists';
 
 // Mock axios
 vi.mock('axios');
@@ -11,7 +11,7 @@ describe('hashlists service', () => {
 		vi.mocked(console.error).mockImplementation(() => {});
 	});
 
-	describe('createShortUrl', () => {
+	describe('publishHashlist', () => {
 		it('should create short URL successfully', async () => {
 			const originalUrl = 'https://example.com/very-long-url-path';
 			const expectedShortUrl = 'https://short.io/abc123';
@@ -22,11 +22,9 @@ describe('hashlists service', () => {
 
 			vi.mocked(axios.post).mockResolvedValue(mockResponse);
 
-			const result = await createShortUrl(originalUrl);
+			const result = await publishHashlist(originalUrl);
 
-			expect(axios.post).toHaveBeenCalledWith('api/hashlists', {
-				url: originalUrl,
-			});
+			expect(axios.post).toHaveBeenCalledWith('api/hashlists', { data: originalUrl });
 			expect(result).toBe(expectedShortUrl);
 		});
 
@@ -40,11 +38,9 @@ describe('hashlists service', () => {
 
 			vi.mocked(axios.post).mockResolvedValue(mockResponse);
 
-			const result = await createShortUrl(originalUrl);
+			const result = await publishHashlist(originalUrl);
 
-			expect(axios.post).toHaveBeenCalledWith('api/hashlists', {
-				url: '',
-			});
+			expect(axios.post).toHaveBeenCalledWith('api/hashlists', { data: '' });
 			expect(result).toBe(expectedShortUrl);
 		});
 
@@ -59,11 +55,9 @@ describe('hashlists service', () => {
 
 			vi.mocked(axios.post).mockResolvedValue(mockResponse);
 
-			const result = await createShortUrl(originalUrl);
+			const result = await publishHashlist(originalUrl);
 
-			expect(axios.post).toHaveBeenCalledWith('api/hashlists', {
-				url: originalUrl,
-			});
+			expect(axios.post).toHaveBeenCalledWith('api/hashlists', { data: originalUrl });
 			expect(result).toBe(expectedShortUrl);
 		});
 
@@ -78,11 +72,9 @@ describe('hashlists service', () => {
 
 			vi.mocked(axios.post).mockResolvedValue(mockResponse);
 
-			const result = await createShortUrl(originalUrl);
+			const result = await publishHashlist(originalUrl);
 
-			expect(axios.post).toHaveBeenCalledWith('api/hashlists', {
-				url: originalUrl,
-			});
+			expect(axios.post).toHaveBeenCalledWith('api/hashlists', { data: originalUrl });
 			expect(result).toBe(expectedShortUrl);
 		});
 
@@ -92,7 +84,7 @@ describe('hashlists service', () => {
 
 			vi.mocked(axios.post).mockRejectedValue(networkError);
 
-			await expect(createShortUrl(originalUrl)).rejects.toThrow('Network Error');
+			await expect(publishHashlist(originalUrl)).rejects.toThrow('Network Error');
 			expect(console.error).toHaveBeenCalledWith('Error creating short URL:', networkError);
 		});
 
@@ -107,7 +99,7 @@ describe('hashlists service', () => {
 
 			vi.mocked(axios.post).mockRejectedValue(apiError);
 
-			await expect(createShortUrl(originalUrl)).rejects.toEqual(apiError);
+			await expect(publishHashlist(originalUrl)).rejects.toEqual(apiError);
 			expect(console.error).toHaveBeenCalledWith('Error creating short URL:', apiError);
 		});
 
@@ -117,7 +109,7 @@ describe('hashlists service', () => {
 
 			vi.mocked(axios.post).mockRejectedValue(timeoutError);
 
-			await expect(createShortUrl(originalUrl)).rejects.toThrow('Request timeout');
+			await expect(publishHashlist(originalUrl)).rejects.toThrow('Request timeout');
 			expect(console.error).toHaveBeenCalledWith('Error creating short URL:', timeoutError);
 		});
 
@@ -132,7 +124,7 @@ describe('hashlists service', () => {
 
 			vi.mocked(axios.post).mockRejectedValue(rateLimitError);
 
-			await expect(createShortUrl(originalUrl)).rejects.toEqual(rateLimitError);
+			await expect(publishHashlist(originalUrl)).rejects.toEqual(rateLimitError);
 			expect(console.error).toHaveBeenCalledWith('Error creating short URL:', rateLimitError);
 		});
 
@@ -147,7 +139,7 @@ describe('hashlists service', () => {
 
 			vi.mocked(axios.post).mockRejectedValue(serverError);
 
-			await expect(createShortUrl(originalUrl)).rejects.toEqual(serverError);
+			await expect(publishHashlist(originalUrl)).rejects.toEqual(serverError);
 			expect(console.error).toHaveBeenCalledWith('Error creating short URL:', serverError);
 		});
 
@@ -161,12 +153,10 @@ describe('hashlists service', () => {
 			vi.mocked(axios.post).mockResolvedValue(mockResponse);
 
 			// This should now throw an error for missing shortUrl
-			await expect(createShortUrl(originalUrl)).rejects.toThrow(
+			await expect(publishHashlist(originalUrl)).rejects.toThrow(
 				'Invalid response: missing shortUrl'
 			);
-			expect(axios.post).toHaveBeenCalledWith('api/hashlists', {
-				url: originalUrl,
-			});
+			expect(axios.post).toHaveBeenCalledWith('api/hashlists', { data: originalUrl });
 		});
 
 		it('should handle empty response data', async () => {
@@ -178,12 +168,10 @@ describe('hashlists service', () => {
 
 			vi.mocked(axios.post).mockResolvedValue(mockResponse);
 
-			await expect(createShortUrl(originalUrl)).rejects.toThrow(
+			await expect(publishHashlist(originalUrl)).rejects.toThrow(
 				'Invalid response: missing shortUrl'
 			);
-			expect(axios.post).toHaveBeenCalledWith('api/hashlists', {
-				url: originalUrl,
-			});
+			expect(axios.post).toHaveBeenCalledWith('api/hashlists', { data: originalUrl });
 		});
 
 		it('should handle null response data', async () => {
@@ -195,12 +183,10 @@ describe('hashlists service', () => {
 
 			vi.mocked(axios.post).mockResolvedValue(mockResponse);
 
-			await expect(createShortUrl(originalUrl)).rejects.toThrow(
+			await expect(publishHashlist(originalUrl)).rejects.toThrow(
 				'Invalid response: missing shortUrl'
 			);
-			expect(axios.post).toHaveBeenCalledWith('api/hashlists', {
-				url: originalUrl,
-			});
+			expect(axios.post).toHaveBeenCalledWith('api/hashlists', { data: originalUrl });
 		});
 	});
 });

@@ -1,0 +1,359 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"results": [
+			{
+				"iso_3166_1": "BR",
+				"title": "Re:ZERO -Começando uma Vida em Outro Mundo-",
+				"type": "official title of the novel"
+			},
+			{ "iso_3166_1": "CN", "title": "从零开始的异世界生活", "type": "" },
+			{ "iso_3166_1": "CN", "title": "Each One's Promise", "type": "" },
+			{
+				"iso_3166_1": "ES",
+				"title": "Re Zero Empezar de cero en un mundo diferente",
+				"type": ""
+			},
+			{
+				"iso_3166_1": "FR",
+				"title": "RE:ZERO - Re:vivre dans un autre monde à partir de zéro",
+				"type": ""
+			},
+			{ "iso_3166_1": "FR", "title": "ReZERO - Starting Life in Another World", "type": "" },
+			{ "iso_3166_1": "FR", "title": "Re ZERO - Starting Life in Another World", "type": "" },
+			{ "iso_3166_1": "GB", "title": "Re Zero Starting Life in Another World", "type": "" },
+			{
+				"iso_3166_1": "IN",
+				"title": "विषय: शून्य - एक दूसरी दुनिया में जीवन की शुरुआत",
+				"type": "देवनागरी"
+			},
+			{ "iso_3166_1": "IR", "title": "دوباره: هیچ، شروع زندگی در دنیایی دیگر", "type": "" },
+			{ "iso_3166_1": "IR", "title": "دوباره: صفر، شروع زندگی در دنیایی دیگر", "type": "" },
+			{ "iso_3166_1": "IT", "title": "Re zero Ricominciare in un altro mondo", "type": "" },
+			{
+				"iso_3166_1": "JP",
+				"title": "Re:Zero kara Hajimeru Isekai Seikatsu",
+				"type": "romaji"
+			},
+			{
+				"iso_3166_1": "JP",
+				"title": "ReZero kara Hajimeru Isekai Seikatsu",
+				"type": "romanization"
+			},
+			{
+				"iso_3166_1": "JP",
+				"title": "Re:ゼロから始める異世界生活 2nd season",
+				"type": "season 2"
+			},
+			{
+				"iso_3166_1": "JP",
+				"title": "Re:ゼロから始める異世界生活 新編集版",
+				"type": "director's cut"
+			},
+			{
+				"iso_3166_1": "JP",
+				"title": "Re:ゼロから始める異世界生活 3rd season 襲撃編",
+				"type": "season 3 part 1"
+			},
+			{
+				"iso_3166_1": "JP",
+				"title": "Re:ゼロから始める異世界生活 3rd season 反撃編",
+				"type": "season 3 part 2"
+			},
+			{ "iso_3166_1": "JP", "title": "リゼロ", "type": "" },
+			{ "iso_3166_1": "JP", "title": "Re：ゼロから始める異世界生活 4th season", "type": "" },
+			{ "iso_3166_1": "KR", "title": "리제로", "type": "short" },
+			{ "iso_3166_1": "MX", "title": "ReZero", "type": "" },
+			{
+				"iso_3166_1": "MX",
+				"title": "Re Zero Empezar de cero en un mundo diferente Temporada 2",
+				"type": "season 2"
+			},
+			{ "iso_3166_1": "MX", "title": "Re:Zero", "type": "" },
+			{ "iso_3166_1": "MX", "title": "Re Zero", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Re: Жизнь в другом мире с нуля", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Re: Жизнь в альтернативном мире с нуля", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Re:Zero — жизнь с нуля в другом мире", "type": "" },
+			{
+				"iso_3166_1": "RU",
+				"title": "Re:Zero. Жизнь с нуля в альтернативном мире",
+				"type": ""
+			},
+			{
+				"iso_3166_1": "RU",
+				"title": "С нуля: Жизнь с нуля в альтернативном мире",
+				"type": ""
+			},
+			{ "iso_3166_1": "RU", "title": "Жизнь с нуля в альтернативном мире", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Жизнь в альтернативном мире с нуля", "type": "" },
+			{
+				"iso_3166_1": "RU",
+				"title": "Re:Zero.  Жизнь в aльтepнaтивнoм мире c нyля",
+				"type": ""
+			},
+			{ "iso_3166_1": "RU", "title": "Жизнь в другом мире с нуля", "type": "" },
+			{
+				"iso_3166_1": "RU",
+				"title": "Ре Зеро Жизнь с нуля в альтернативном мире",
+				"type": ""
+			},
+			{ "iso_3166_1": "TW", "title": "Re：從零開始的異世界生活", "type": "" },
+			{ "iso_3166_1": "TW", "title": "Re:0", "type": "" },
+			{ "iso_3166_1": "US", "title": "Re: Life in a Different World From Zero", "type": "" },
+			{ "iso_3166_1": "US", "title": "Re:Zero", "type": "short" },
+			{
+				"iso_3166_1": "US",
+				"title": "Re:ZERO -Starting Life in Another World- Director's Cut",
+				"type": "season 1 re-edited"
+			}
+		]
+	},
+	"backdrop_path": "/7ZruEnSnHD6Jx5mF0hBt1E306Vt.jpg",
+	"created_by": [],
+	"episode_run_time": [25],
+	"external_ids": {
+		"imdb_id": "tt5607616",
+		"freebase_mid": null,
+		"freebase_id": null,
+		"tvdb_id": 305089,
+		"tvrage_id": null,
+		"wikidata_id": "Q65086934",
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": "Rezero_official"
+	},
+	"first_air_date": "2016-04-04",
+	"genres": [
+		{ "id": 16, "name": "Animation" },
+		{ "id": 9648, "name": "Mystery" },
+		{ "id": 10759, "name": "Action & Adventure" },
+		{ "id": 10765, "name": "Sci-Fi & Fantasy" }
+	],
+	"homepage": "http://re-zero-anime.jp/",
+	"id": 65942,
+	"in_production": true,
+	"languages": ["ja"],
+	"last_air_date": "2026-09-23",
+	"last_episode_to_air": {
+		"id": 7130181,
+		"name": "Ram",
+		"overview": "While Emilia faces the final trial in the tower, Ram faces off against Rye.",
+		"vote_average": 7.4,
+		"vote_count": 7,
+		"air_date": "2026-09-23",
+		"episode_number": 84,
+		"episode_type": "standard",
+		"production_code": "",
+		"runtime": 24,
+		"season_number": 1,
+		"show_id": 65942,
+		"still_path": "/s8tlx1j61q7TVPu9INcmMih8G8G.jpg"
+	},
+	"name": "Re:ZERO -Starting Life in Another World-",
+	"networks": [
+		{
+			"id": 98,
+			"logo_path": "/jnuO8pZNEBLEq5YaOP1f5OkmG91.png",
+			"name": "TV Tokyo",
+			"origin_country": "JP"
+		},
+		{
+			"id": 173,
+			"logo_path": "/fERjndErEpveJmQZccJbJDi93rj.png",
+			"name": "AT-X",
+			"origin_country": "JP"
+		}
+	],
+	"next_episode_to_air": {
+		"id": 7130183,
+		"name": "Episode 85",
+		"overview": "",
+		"vote_average": 1.0,
+		"vote_count": 1,
+		"air_date": "2026-09-30",
+		"episode_number": 85,
+		"episode_type": "finale",
+		"production_code": "",
+		"runtime": null,
+		"season_number": 1,
+		"show_id": 65942,
+		"still_path": null
+	},
+	"number_of_episodes": 85,
+	"number_of_seasons": 1,
+	"origin_country": ["JP"],
+	"original_language": "ja",
+	"original_name": "Re:ゼロから始める異世界生活",
+	"overview": "Natsuki Subaru, an ordinary high school  student, is on his way home from the convenience store when he finds  himself transported to another world. As he's lost and confused in a new  world where he doesn't even know left from right, the only person to  reach out to him was a beautiful girl with silver hair. Determined to  repay her somehow for saving him from his own despair, Subaru agrees to  help the girl find something she's looking for.",
+	"popularity": 175.1274,
+	"poster_path": "/oHqYrPAsIiTD5m4DuxumV4er8BU.jpg",
+	"production_companies": [
+		{
+			"id": 12569,
+			"logo_path": "/pROt6mT15AC5aTadf7NRBRiTVo3.png",
+			"name": "White Fox",
+			"origin_country": "JP"
+		},
+		{
+			"id": 2073,
+			"logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+			"name": "KADOKAWA",
+			"origin_country": "JP"
+		},
+		{
+			"id": 142186,
+			"logo_path": "/bdXTOuU7PdsDtQngyM7vb47zePs.png",
+			"name": "Hakuhodo DY Music & Pictures",
+			"origin_country": "JP"
+		},
+		{
+			"id": 157002,
+			"logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+			"name": "Tokyo MX",
+			"origin_country": "JP"
+		},
+		{
+			"id": 17981,
+			"logo_path": "/8UABNMysukRi4udTHYxcNUMbPR1.png",
+			"name": "AT-X",
+			"origin_country": "JP"
+		},
+		{ "id": 12540, "logo_path": null, "name": "Memory-Tech", "origin_country": "JP" },
+		{
+			"id": 225089,
+			"logo_path": "/g2DdqSxJNOzr9uoEwAcOcSi6DRQ.png",
+			"name": "DAXEL",
+			"origin_country": "JP"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "JP", "name": "Japan" }],
+	"seasons": [
+		{
+			"air_date": "2016-04-05",
+			"episode_count": 84,
+			"id": 76465,
+			"name": "Specials",
+			"overview": "",
+			"poster_path": "/DZtIJ4MbMgvrdZ6aqcCRfWjH03.jpg",
+			"season_number": 0,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "2016-04-04",
+			"episode_count": 85,
+			"id": 75470,
+			"name": "Season 1",
+			"overview": "",
+			"poster_path": "/a8p5VEnstPypeZWhsKhEadRG3jW.jpg",
+			"season_number": 1,
+			"vote_average": 9.3
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "Japanese", "iso_639_1": "ja", "name": "日本語" }],
+	"status": "Returning Series",
+	"tagline": "Racing through the journey of memories——",
+	"type": "Scripted",
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Blu-ray Limited Ed. Collection",
+				"key": "P4l9d-rlD4o",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "67e571b7421eb8c331ba5866",
+				"published_at": "2020-12-05T13:37:43.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "DIRECTOR’S CUT - Trailer",
+				"key": "M_3bHiFqx9c",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "686a72c1bb64f77f457027d9",
+				"published_at": "2020-05-29T01:00:06.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official UK Trailer",
+				"key": "_1jcITg3DxM",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "5f05e246dd25890039a2a4ad",
+				"published_at": "2019-08-15T16:48:55.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Emilia vs Elsa",
+				"key": "YuUGWm1IWzo",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "60ea344719418600451d8539",
+				"published_at": "2019-04-29T15:00:08.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Twin Maids!",
+				"key": "aVN8nOsRZdo",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "60ea34f642d8a5005e399b16",
+				"published_at": "2019-02-02T16:00:02.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Pick on Someone Your Own Size",
+				"key": "pb9KFf3vlnI",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "60e757cccaaca2002dcf3392",
+				"published_at": "2018-07-11T18:42:46.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Whose Blood is This?",
+				"key": "ml-bkegEJZ4",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "60e757dccd2046002dc834b7",
+				"published_at": "2018-05-10T22:00:14.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer",
+				"key": "2RzX-uQE1Yg",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "6073324fcdf2e600294baf28",
+				"published_at": "2018-04-15T17:34:47.000Z"
+			}
+		]
+	},
+	"vote_average": 8.115,
+	"vote_count": 790
+}

@@ -1,0 +1,165 @@
+{
+	"data": {
+		"id": "48642",
+		"type": "anime",
+		"links": { "self": "https://kitsu.io/api/edge/anime/48642" },
+		"attributes": {
+			"createdAt": "2024-03-23T00:17:59.981Z",
+			"updatedAt": "2026-09-27T00:00:31.417Z",
+			"slug": "haru",
+			"synopsis": "Music video directed by Kohta Morie for the song Sunny by Yorushika.\n\nNote: The song featured in this music video also serves as the second opening theme of the anime Sousou no Frieren.",
+			"description": "Music video directed by Kohta Morie for the song Sunny by Yorushika.\n\nNote: The song featured in this music video also serves as the second opening theme of the anime Sousou no Frieren.",
+			"coverImageTopOffset": 0,
+			"titles": { "en": "Sunny", "en_jp": "Haru", "ja_jp": "晴る" },
+			"canonicalTitle": "Haru",
+			"abbreviatedTitles": [],
+			"averageRating": null,
+			"ratingFrequencies": {
+				"2": "2",
+				"8": "1",
+				"9": "1",
+				"10": "2",
+				"11": "1",
+				"12": "2",
+				"13": "1",
+				"14": "12",
+				"16": "7",
+				"18": "1",
+				"19": "2",
+				"20": "6"
+			},
+			"userCount": 104,
+			"favoritesCount": 0,
+			"startDate": "2024-03-05",
+			"endDate": "2024-03-05",
+			"nextRelease": null,
+			"popularityRank": 14771,
+			"ratingRank": null,
+			"ageRating": null,
+			"ageRatingGuide": null,
+			"subtype": "music",
+			"status": "finished",
+			"tba": null,
+			"posterImage": {
+				"tiny": "https://media.kitsu.app/anime/48642/poster_image/tiny-d964db2577a8522f89531906ac1c71a5.jpeg",
+				"large": "https://media.kitsu.app/anime/48642/poster_image/large-eb74211a7d5ec3a60bcea01a5c823330.jpeg",
+				"small": "https://media.kitsu.app/anime/48642/poster_image/small-157af1c47b19870ef0e80d18ebe3ae1a.jpeg",
+				"medium": "https://media.kitsu.app/anime/48642/poster_image/medium-826333aff8e2865fcd7c1d7608220ed8.jpeg",
+				"original": "https://media.kitsu.app/anime/48642/poster_image/7715ca64c901b374905cfbcde10a32d7.png",
+				"meta": {
+					"dimensions": {
+						"tiny": { "width": 110, "height": 156 },
+						"large": { "width": 550, "height": 780 },
+						"small": { "width": 284, "height": 402 },
+						"medium": { "width": 390, "height": 554 }
+					}
+				}
+			},
+			"coverImage": null,
+			"episodeCount": 1,
+			"episodeLength": 5,
+			"totalLength": 5,
+			"youtubeVideoId": "CkvWJNt77mU",
+			"showType": "music",
+			"nsfw": false
+		},
+		"relationships": {
+			"genres": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/genres",
+					"related": "https://kitsu.io/api/edge/anime/48642/genres"
+				}
+			},
+			"categories": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/categories",
+					"related": "https://kitsu.io/api/edge/anime/48642/categories"
+				}
+			},
+			"castings": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/castings",
+					"related": "https://kitsu.io/api/edge/anime/48642/castings"
+				}
+			},
+			"installments": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/installments",
+					"related": "https://kitsu.io/api/edge/anime/48642/installments"
+				}
+			},
+			"mappings": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/mappings",
+					"related": "https://kitsu.io/api/edge/anime/48642/mappings"
+				}
+			},
+			"reviews": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/reviews",
+					"related": "https://kitsu.io/api/edge/anime/48642/reviews"
+				}
+			},
+			"mediaRelationships": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/media-relationships",
+					"related": "https://kitsu.io/api/edge/anime/48642/media-relationships"
+				}
+			},
+			"characters": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/characters",
+					"related": "https://kitsu.io/api/edge/anime/48642/characters"
+				}
+			},
+			"staff": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/staff",
+					"related": "https://kitsu.io/api/edge/anime/48642/staff"
+				}
+			},
+			"productions": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/productions",
+					"related": "https://kitsu.io/api/edge/anime/48642/productions"
+				}
+			},
+			"quotes": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/quotes",
+					"related": "https://kitsu.io/api/edge/anime/48642/quotes"
+				}
+			},
+			"episodes": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/episodes",
+					"related": "https://kitsu.io/api/edge/anime/48642/episodes"
+				}
+			},
+			"streamingLinks": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/streaming-links",
+					"related": "https://kitsu.io/api/edge/anime/48642/streaming-links"
+				}
+			},
+			"animeProductions": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/anime-productions",
+					"related": "https://kitsu.io/api/edge/anime/48642/anime-productions"
+				}
+			},
+			"animeCharacters": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/anime-characters",
+					"related": "https://kitsu.io/api/edge/anime/48642/anime-characters"
+				}
+			},
+			"animeStaff": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48642/relationships/anime-staff",
+					"related": "https://kitsu.io/api/edge/anime/48642/anime-staff"
+				}
+			}
+		}
+	}
+}

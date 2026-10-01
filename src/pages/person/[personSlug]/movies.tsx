@@ -104,22 +104,22 @@ export default function PersonMoviesPage() {
 								key={item.ids.imdb}
 								onClick={(event) => handleNavigate(event, item.ids.imdb)}
 								type="button"
-								className="cursor-pointer rounded bg-gray-800/40 p-2 text-left transition-transform hover:scale-105 hover:bg-gray-800/70"
+								className="min-w-0 cursor-pointer rounded bg-gray-800/40 p-2 text-left transition-transform hover:scale-105 hover:bg-gray-800/70"
 							>
-								<div className="mx-auto flex w-full max-w-[200px] flex-col items-center">
+								<div className="mx-auto flex w-full min-w-0 max-w-[200px] flex-col items-center">
 									<Poster imdbId={item.ids.imdb} title={item.title} />
 									<div className="mt-2 w-full text-center">
-										<div className="text-sm font-semibold text-gray-100">
+										<div className="break-words text-sm font-semibold text-gray-100">
 											{item.title}
 										</div>
 										<div className="text-xs text-gray-400">{item.year}</div>
 										{item.character && (
-											<div className="text-xs text-gray-500">
+											<div className="text-xs text-gray-400">
 												as {item.character}
 											</div>
 										)}
 										{item.job && (
-											<div className="text-xs text-gray-500">{item.job}</div>
+											<div className="text-xs text-gray-400">{item.job}</div>
 										)}
 									</div>
 								</div>

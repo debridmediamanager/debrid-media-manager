@@ -1,5 +1,6 @@
 import AvailabilityTokens from '@/components/AvailabilityTokens';
 import SearchTokens from '@/components/SearchTokens';
+import { canReportWith } from '@/utils/reporterId';
 import { RotateCcw, Search } from 'lucide-react';
 import React from 'react';
 
@@ -14,6 +15,7 @@ interface SearchControlsProps {
 	torboxKey?: string | null;
 	premiumizeKey?: string | null;
 	offcloudKey?: string | null;
+	debridLinkKey?: string | null;
 	onMassReport: (type: 'porn' | 'wrong_imdb' | 'wrong_season') => void;
 	mediaType: 'movie' | 'tv';
 	title: string;
@@ -35,6 +37,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 	torboxKey,
 	premiumizeKey,
 	offcloudKey,
+	debridLinkKey,
 	onMassReport,
 	mediaType,
 	title,
@@ -67,33 +70,43 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 				<span className="mr-2 text-xs text-gray-400">
 					{filteredCount}/{totalCount}
 				</span>
-				{query && totalCount > 0 && rdKey && showMassReportButtons && (
-					<div className="ml-2 flex gap-2">
-						<span
-							className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
-							onClick={() => onMassReport('porn')}
-							title="Report all filtered torrents as pornographic content"
-						>
-							Report as Porn ({totalCount})
-						</span>
-						<span
-							className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
-							onClick={() => onMassReport('wrong_imdb')}
-							title="Report all filtered torrents as wrong IMDB ID"
-						>
-							Report Wrong IMDB ({totalCount})
-						</span>
-						{mediaType === 'tv' && (
+				{query &&
+					totalCount > 0 &&
+					canReportWith({
+						rdKey,
+						adKey,
+						torboxKey,
+						premiumizeKey,
+						offcloudKey,
+						debridLinkKey,
+					}) &&
+					showMassReportButtons && (
+						<div className="ml-2 flex gap-2">
 							<span
 								className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
-								onClick={() => onMassReport('wrong_season')}
-								title="Report all filtered torrents as wrong season"
+								onClick={() => onMassReport('porn')}
+								title="Report all filtered torrents as pornographic content"
 							>
-								Report Wrong Season ({totalCount})
+								Report as Porn ({totalCount})
 							</span>
-						)}
-					</div>
-				)}
+							<span
+								className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+								onClick={() => onMassReport('wrong_imdb')}
+								title="Report all filtered torrents as wrong IMDB ID"
+							>
+								Report Wrong IMDB ({totalCount})
+							</span>
+							{mediaType === 'tv' && (
+								<span
+									className="cursor-pointer whitespace-nowrap rounded border border-red-500 bg-red-900/30 px-2 py-0.5 text-xs text-red-100 transition-colors hover:bg-red-800/50"
+									onClick={() => onMassReport('wrong_season')}
+									title="Report all filtered torrents as wrong season"
+								>
+									Report Wrong Season ({totalCount})
+								</span>
+							)}
+						</div>
+					)}
 			</div>
 
 			<div className="mb-2 flex items-center gap-2 overflow-x-auto p-2">

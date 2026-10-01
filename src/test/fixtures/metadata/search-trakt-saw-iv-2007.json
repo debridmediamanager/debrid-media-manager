@@ -1,0 +1,190 @@
+[
+	{
+		"score": 1157451471575320600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0890870",
+				"plex": { "guid": "5d7768276f4521001ea98f6f", "slug": "saw-iv" },
+				"slug": "saw-iv-2007",
+				"tmdb": 663,
+				"trakt": 537
+			},
+			"year": 2007,
+			"title": "Saw IV",
+			"votes": 8010,
+			"colors": { "poster": ["#F7F7F5", "#544B3C"] },
+			"genres": ["crime", "horror", "thriller"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/000/537/logos/medium/a77d92831b.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/000/537/thumbs/medium/db71f0ac38.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/000/537/banners/medium/967a672181.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/000/537/fanarts/medium/abaaff009b.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/000/537/posters/medium/239c0b9d9d.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.584144592285156,
+			"status": "released",
+			"country": "us",
+			"runtime": 93,
+			"tagline": "You thought it was over...but the games have just begun.",
+			"trailer": "https://youtube.com/watch?v=OxwdZMMymqY",
+			"homepage": "https://www.lionsgate.com/movies/saw-4",
+			"language": "en",
+			"overview": "Despite Jigsaw's death, and in order to save the lives of two of his colleagues, Lieutenant Rigg is forced to take part in a new game, which promises to test him to the limit.",
+			"released": "2007-10-26",
+			"languages": ["en"],
+			"subgenres": [
+				"fbi",
+				"psychopath",
+				"doctor",
+				"death-game",
+				"game",
+				"sadism",
+				"survival-horror",
+				"torture",
+				"police-officer"
+			],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Saw_IV"
+			},
+			"updated_at": "2026-09-20T08:13:12.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 26,
+			"during_credits": false,
+			"original_title": "Saw IV",
+			"available_translations": [
+				"ar",
+				"az",
+				"bg",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fa",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"uz",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 1157451471575320600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt4061848",
+				"plex": {
+					"guid": "5d776b2847dd6e001f6dbc40",
+					"slug": "alpha-and-omega-4-the-legend-of-the-saw-tooth-cave"
+				},
+				"slug": "alpha-and-omega-the-legend-of-the-saw-tooth-cave-2014",
+				"tmdb": 294512,
+				"trakt": 196134
+			},
+			"year": 2014,
+			"title": "Alpha and Omega: The Legend of the Saw Tooth Cave",
+			"votes": 60,
+			"colors": { "poster": ["#80A58F", "#2F3E41"] },
+			"genres": ["adventure", "animation", "comedy", "family"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/196/134/fanarts/medium/1c992ba853.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/196/134/posters/medium/83e9af14c0.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 5.050000190734863,
+			"status": "released",
+			"country": "us",
+			"runtime": 53,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=Apduy0sJMCE",
+			"homepage": null,
+			"language": "en",
+			"overview": "The Alphas and Omegas share a thrilling adventure after Runt discovers the Saw Tooth Cave. Runt finds a wolf in need and lends a helping paw. Stars Ben Diskin &amp; Kate Higgins.  American computer-animated action-comedy/fantasy film exclusively from Walmart. It is the fourth film in the Alpha and Omega franchise and the sequel to Alpha and Omega, A Howl-iday Adventure, and The Great Wolf Games.",
+			"released": "2014-07-21",
+			"languages": ["en"],
+			"subgenres": ["3d-animation"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Alpha_and_Omega:_The_Legend_of_the_Saw_Tooth_Cave"
+			},
+			"updated_at": "2026-09-13T08:17:52.000Z",
+			"after_credits": false,
+			"certification": "PG",
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Alpha and Omega: The Legend of the Saw Tooth Cave",
+			"available_translations": [
+				"bg",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"hu",
+				"it",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sv",
+				"vi",
+				"zh"
+			]
+		}
+	}
+]

@@ -219,3 +219,27 @@ describe('POST /api/nzb2rd/jobs — nothing recorded yet', () => {
 		expect(mockFetchNzb).not.toHaveBeenCalled();
 	});
 });
+
+describe('POST /api/nzb2rd/jobs — takedown', () => {
+	it('refuses a blocked release by the title it was sent with', async () => {
+		const { setBlocklistForTests } = await import('@/services/takedown/blocklist');
+		const title = String(body().title);
+		const { normalizeReleaseName } = await import('@/utils/takedownParse');
+		setBlocklistForTests([], [normalizeReleaseName(title)]);
+		const res = await run();
+		expect(res.status).toHaveBeenCalledWith(451);
+		expect(mockFetchNzb).not.toHaveBeenCalled();
+		expect(mockSubmit).not.toHaveBeenCalled();
+	});
+
+	it('refuses a blocked release by the name its NZB declares, whatever the client called it', async () => {
+		const { setBlocklistForTests } = await import('@/services/takedown/blocklist');
+		setBlocklistForTests([], ['big.buck.bunny.2008.1080p']);
+		mockFetchNzb.mockResolvedValue(
+			'<nzb><head><meta type="name">Big.Buck.Bunny.2008.1080p</meta></head></nzb>'
+		);
+		const res = await run({ title: 'innocent.name' });
+		expect(res.status).toHaveBeenCalledWith(451);
+		expect(mockSubmit).not.toHaveBeenCalled();
+	});
+});

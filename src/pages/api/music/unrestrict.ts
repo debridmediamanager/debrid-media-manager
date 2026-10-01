@@ -5,6 +5,7 @@ import {
 	selectFiles,
 	unrestrictLink,
 } from '@/services/realDebrid';
+import { BLOCKED_MESSAGE, isHashBlocked } from '@/services/takedown/blocklist';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { isVideo } from '@/utils/selectable';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -96,6 +97,9 @@ export default async function handler(
 
 	if (!hash || fileId === undefined) {
 		return res.status(400).json({ error: 'Missing hash or fileId' });
+	}
+	if (await isHashBlocked(hash)) {
+		return res.status(451).json({ error: BLOCKED_MESSAGE });
 	}
 
 	const ipAddress = getClientIpFromRequest(req);

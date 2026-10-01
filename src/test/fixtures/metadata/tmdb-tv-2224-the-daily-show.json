@@ -1,0 +1,434 @@
+{
+	"adult": false,
+	"backdrop_path": "/qLMfcvdCcCGD2BNLH8b6ZCBuO7D.jpg",
+	"created_by": [
+		{
+			"id": 1230176,
+			"credit_id": "52572b64760ee3776a2dbc75",
+			"name": "Madeleine Smithberg",
+			"original_name": "Madeleine Smithberg",
+			"gender": 1,
+			"profile_path": null
+		},
+		{
+			"id": 1230175,
+			"credit_id": "52572b63760ee3776a2dbc6d",
+			"name": "Lizz Winstead",
+			"original_name": "Lizz Winstead",
+			"gender": 1,
+			"profile_path": null
+		}
+	],
+	"episode_run_time": [],
+	"first_air_date": "1996-07-22",
+	"genres": [
+		{ "id": 10763, "name": "News" },
+		{ "id": 35, "name": "Comedy" }
+	],
+	"homepage": "https://www.cc.com/shows/the-daily-show",
+	"id": 2224,
+	"in_production": true,
+	"languages": ["en"],
+	"last_air_date": "2026-09-10",
+	"last_episode_to_air": {
+		"id": 7578682,
+		"name": "September 24, 2026 - Merritt Wever",
+		"overview": "Desi Lydic breaks down the headlines as Republicans face a tough road to the midterms. Fortunately, Sen. Tommy Tuberville may have found a winning issue: cracking down on in-flight furries. Meanwhile, Jordan Klepper reports from Trump’s summit with President Xi, where Trump was startled by his own flyover and unveiled a flashy new helipad. In Tech Yeah!, Grace Kuhlenschmidt covers the latest tech buzz, including Apple’s foldable iPhone Duo, a smartwatch that can eavesdrop around the clock, robots catching fire at the World Humanoid Robot Games, and a robotic companion with oversized accessories. Three-time Emmy winner Merritt Wever joins Desi to discuss her new film, Primetime, her early Daily Show experience, being mentored by Edie Falco, her viral Emmy speech, and how she prepared for her role by studying veteran TV producers and the blurred lines between news, entertainment, and law enforcement.",
+		"vote_average": 0.0,
+		"vote_count": 0,
+		"air_date": "2026-09-24",
+		"episode_number": 106,
+		"episode_type": "standard",
+		"production_code": "",
+		"runtime": 35,
+		"season_number": 31,
+		"show_id": 2224,
+		"still_path": "/gcPgsPyWAuMZ1m6mSBju98i0wuO.jpg"
+	},
+	"name": "The Daily Show",
+	"networks": [
+		{
+			"id": 47,
+			"logo_path": "/6ooPjtXufjsoskdJqj6pxuvHEno.png",
+			"name": "Comedy Central",
+			"origin_country": "US"
+		}
+	],
+	"next_episode_to_air": {
+		"id": 7578683,
+		"name": "September 28, 2026",
+		"overview": "",
+		"vote_average": 0.0,
+		"vote_count": 0,
+		"air_date": "2026-09-28",
+		"episode_number": 107,
+		"episode_type": "standard",
+		"production_code": "",
+		"runtime": null,
+		"season_number": 31,
+		"show_id": 2224,
+		"still_path": null
+	},
+	"number_of_episodes": 4272,
+	"number_of_seasons": 31,
+	"origin_country": ["US"],
+	"original_language": "en",
+	"original_name": "The Daily Show",
+	"overview": "The World's Fakest News Team tackle the biggest stories in news, politics and pop culture.",
+	"popularity": 354.2367,
+	"poster_path": "/ixcfyK7it6FjRM36Te4OdblAq4X.jpg",
+	"production_companies": [
+		{
+			"id": 1538,
+			"logo_path": "/1y7qNFwczl2zZS62Hrlw6dsAwgR.png",
+			"name": "Comedy Central",
+			"origin_country": "US"
+		},
+		{
+			"id": 6329,
+			"logo_path": "/4lZJiVHPClma8YB9hXodraFXSwi.png",
+			"name": "MTV Entertainment Studios",
+			"origin_country": "US"
+		},
+		{ "id": 68479, "logo_path": null, "name": "Ark Angel", "origin_country": "US" },
+		{ "id": 8290, "logo_path": null, "name": "Busboy Productions", "origin_country": "US" },
+		{ "id": 281059, "logo_path": null, "name": "Mad Cow Productions", "origin_country": "US" },
+		{
+			"id": 270146,
+			"logo_path": "/4r6rIxegOrrVeJwqRxpzNrCRQMD.png",
+			"name": "Paramount Television Studios",
+			"origin_country": "US"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "US", "name": "United States of America" }],
+	"seasons": [
+		{
+			"air_date": "1999-12-15",
+			"episode_count": 99,
+			"id": 6869,
+			"name": "Specials",
+			"overview": "",
+			"poster_path": null,
+			"season_number": 0,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "1996-07-22",
+			"episode_count": 7,
+			"id": 6853,
+			"name": "Season 1",
+			"overview": "",
+			"poster_path": "/yCk9E4zzDi5W9zpDc2L8vCeLA.jpg",
+			"season_number": 1,
+			"vote_average": 7.3
+		},
+		{
+			"air_date": "1997-01-06",
+			"episode_count": 16,
+			"id": 6854,
+			"name": "Season 2",
+			"overview": "",
+			"poster_path": "/w7sob0PFeYV0S2Q8v1PMhge8qQS.jpg",
+			"season_number": 2,
+			"vote_average": 8.0
+		},
+		{
+			"air_date": "1998-03-09",
+			"episode_count": 33,
+			"id": 6855,
+			"name": "Season 3",
+			"overview": "",
+			"poster_path": "/jXrc4QyW1berVN4ZaX2eX0jOPsq.jpg",
+			"season_number": 3,
+			"vote_average": 5.2
+		},
+		{
+			"air_date": "1999-01-11",
+			"episode_count": 159,
+			"id": 6856,
+			"name": "Season 4",
+			"overview": "",
+			"poster_path": "/5geFJYuUrQPdNSiKPvJAfw1xCAu.jpg",
+			"season_number": 4,
+			"vote_average": 5.2
+		},
+		{
+			"air_date": "2000-01-04",
+			"episode_count": 166,
+			"id": 6857,
+			"name": "Season 5",
+			"overview": "",
+			"poster_path": "/qd87rtrifcts3nV9pza1N17xWtU.jpg",
+			"season_number": 5,
+			"vote_average": 5.1
+		},
+		{
+			"air_date": "2001-01-09",
+			"episode_count": 158,
+			"id": 6858,
+			"name": "Season 6",
+			"overview": "",
+			"poster_path": "/yiQeAEBblEDLVqg2ninkMvgj1d7.jpg",
+			"season_number": 6,
+			"vote_average": 5.2
+		},
+		{
+			"air_date": "2002-01-08",
+			"episode_count": 160,
+			"id": 6859,
+			"name": "Season 7",
+			"overview": "",
+			"poster_path": "/rnbkP4MG91w72LyGyHlBUfZC3Rv.jpg",
+			"season_number": 7,
+			"vote_average": 5.1
+		},
+		{
+			"air_date": "2003-01-07",
+			"episode_count": 161,
+			"id": 6860,
+			"name": "Season 8",
+			"overview": "",
+			"poster_path": "/1Vii2YyKtU6fLcKhHzsx5zk2Kay.jpg",
+			"season_number": 8,
+			"vote_average": 5.0
+		},
+		{
+			"air_date": "2004-01-06",
+			"episode_count": 161,
+			"id": 6861,
+			"name": "Season 9",
+			"overview": "",
+			"poster_path": "/mtE8VmeNr0UX1Q6B48HTjhu33kN.jpg",
+			"season_number": 9,
+			"vote_average": 5.1
+		},
+		{
+			"air_date": "2005-01-04",
+			"episode_count": 159,
+			"id": 6862,
+			"name": "Season 10",
+			"overview": "",
+			"poster_path": "/y5LJHtLDL1H7ZIcNUfuGQpmYbaG.jpg",
+			"season_number": 10,
+			"vote_average": 7.1
+		},
+		{
+			"air_date": "2006-01-04",
+			"episode_count": 161,
+			"id": 6863,
+			"name": "Season 11",
+			"overview": "",
+			"poster_path": "/pn7dQLjbYCpthiGTOKh2svdKscr.jpg",
+			"season_number": 11,
+			"vote_average": 6.7
+		},
+		{
+			"air_date": "2007-01-08",
+			"episode_count": 138,
+			"id": 6864,
+			"name": "Season 12",
+			"overview": "",
+			"poster_path": "/7FGRSBm7ofcsGrGm8t1qPRfNAKG.jpg",
+			"season_number": 12,
+			"vote_average": 6.7
+		},
+		{
+			"air_date": "2008-01-07",
+			"episode_count": 160,
+			"id": 6865,
+			"name": "Season 13",
+			"overview": "",
+			"poster_path": "/y7hvsKSD8rwVcFcFrK01SrbdKQv.jpg",
+			"season_number": 13,
+			"vote_average": 7.2
+		},
+		{
+			"air_date": "2009-01-05",
+			"episode_count": 161,
+			"id": 6866,
+			"name": "Season 14",
+			"overview": "",
+			"poster_path": "/rDXpjby6TwgZGgOIV2C3TGV7pFz.jpg",
+			"season_number": 14,
+			"vote_average": 7.2
+		},
+		{
+			"air_date": "2010-01-04",
+			"episode_count": 161,
+			"id": 6867,
+			"name": "Season 15",
+			"overview": "",
+			"poster_path": "/9RJ8xiky5HjRaHyTqHr6Wnq7PsX.jpg",
+			"season_number": 15,
+			"vote_average": 7.1
+		},
+		{
+			"air_date": "2011-01-03",
+			"episode_count": 124,
+			"id": 6868,
+			"name": "Season 16",
+			"overview": "",
+			"poster_path": "/kqgmQuTwhhLVfKryvvRsDbphgP6.jpg",
+			"season_number": 16,
+			"vote_average": 6.3
+		},
+		{
+			"air_date": "2011-10-03",
+			"episode_count": 157,
+			"id": 6870,
+			"name": "Season 17",
+			"overview": "",
+			"poster_path": "/gF5TfevTC8TygbP7UxAhHyxcBX.jpg",
+			"season_number": 17,
+			"vote_average": 7.7
+		},
+		{
+			"air_date": "2012-10-01",
+			"episode_count": 158,
+			"id": 6871,
+			"name": "Season 18",
+			"overview": "",
+			"poster_path": "/slYpAA2Z59Hqe9hly1Icie77j0N.jpg",
+			"season_number": 18,
+			"vote_average": 7.2
+		},
+		{
+			"air_date": "2013-09-30",
+			"episode_count": 159,
+			"id": 6872,
+			"name": "Season 19",
+			"overview": "",
+			"poster_path": "/uW0IkZO2jTkkvcJNnQyORow567m.jpg",
+			"season_number": 19,
+			"vote_average": 6.9
+		},
+		{
+			"air_date": "2014-09-29",
+			"episode_count": 142,
+			"id": 62883,
+			"name": "Season 20",
+			"overview": "",
+			"poster_path": "/sef2tN05NkqEBebMpxYUbqmhtTJ.jpg",
+			"season_number": 20,
+			"vote_average": 6.9
+		},
+		{
+			"air_date": "2015-09-28",
+			"episode_count": 161,
+			"id": 69386,
+			"name": "Season 21",
+			"overview": "",
+			"poster_path": "/eD57c6ZXKhCXDL1x04BQ8f3UvUo.jpg",
+			"season_number": 21,
+			"vote_average": 6.2
+		},
+		{
+			"air_date": "2016-10-03",
+			"episode_count": 163,
+			"id": 82654,
+			"name": "Season 22",
+			"overview": "",
+			"poster_path": "/tsZObxYYSYHW5T4BJh2tx43awxi.jpg",
+			"season_number": 22,
+			"vote_average": 6.7
+		},
+		{
+			"air_date": "2017-10-02",
+			"episode_count": 157,
+			"id": 93178,
+			"name": "Season 23",
+			"overview": "",
+			"poster_path": "/tsZObxYYSYHW5T4BJh2tx43awxi.jpg",
+			"season_number": 23,
+			"vote_average": 6.5
+		},
+		{
+			"air_date": "2018-10-01",
+			"episode_count": 158,
+			"id": 110826,
+			"name": "Season 24",
+			"overview": "",
+			"poster_path": "/tsZObxYYSYHW5T4BJh2tx43awxi.jpg",
+			"season_number": 24,
+			"vote_average": 6.8
+		},
+		{
+			"air_date": "2019-09-30",
+			"episode_count": 160,
+			"id": 136086,
+			"name": "Season 25",
+			"overview": "",
+			"poster_path": "/tsZObxYYSYHW5T4BJh2tx43awxi.jpg",
+			"season_number": 25,
+			"vote_average": 6.2
+		},
+		{
+			"air_date": "2020-09-28",
+			"episode_count": 116,
+			"id": 168511,
+			"name": "Season 26",
+			"overview": "",
+			"poster_path": "/nz5fAg1OomLZ7fxiM4RnLbJxppc.jpg",
+			"season_number": 26,
+			"vote_average": 6.0
+		},
+		{
+			"air_date": "2021-09-27",
+			"episode_count": 140,
+			"id": 202361,
+			"name": "Season 27",
+			"overview": "",
+			"poster_path": "/keWvkxMEfa3whsRyWFGPcNVbIN8.jpg",
+			"season_number": 27,
+			"vote_average": 7.0
+		},
+		{
+			"air_date": "2022-10-03",
+			"episode_count": 122,
+			"id": 310853,
+			"name": "Season 28",
+			"overview": "",
+			"poster_path": "/9xcM8pbsMNR7eLdVCzzfcB59xgT.jpg",
+			"season_number": 28,
+			"vote_average": 9.3
+		},
+		{
+			"air_date": "2024-02-12",
+			"episode_count": 138,
+			"id": 375682,
+			"name": "Season 29",
+			"overview": "Following the departure of host Trevor Noah at the end of 2022, a series of guest hosts from both within and outside \"The Daily Show's\" correspondents roster filled the program's anchor chair throughout 2023, each sitting in for a one-week assignment.  On January 24, 2024, it was announced that Jon Stewart would return to the show he had hosted from 1999 to 2015.  This time around, in addition to serving as an executive producer, Stewart will host Monday episodes through at least the end of the 2024 U.S. election cycle.\n\nFrom Tuesdays through Thursdays, members of  \"The Best F#@king News Team\" will rotate hosting duties.",
+			"poster_path": "/9mK4ZRWpKUA77XNv6rnI8gnyrhQ.jpg",
+			"season_number": 29,
+			"vote_average": 7.1
+		},
+		{
+			"air_date": "2025-01-06",
+			"episode_count": 142,
+			"id": 433278,
+			"name": "Season 30",
+			"overview": "",
+			"poster_path": "/2hnZC9YtpJO0VRdBXxima60QFQc.jpg",
+			"season_number": 30,
+			"vote_average": 4.3
+		},
+		{
+			"air_date": "2026-01-05",
+			"episode_count": 122,
+			"id": 486161,
+			"name": "Season 31",
+			"overview": "",
+			"poster_path": "/sos0NA5OkuUtKyCt1YvW4Zevp9h.jpg",
+			"season_number": 31,
+			"vote_average": 3.7
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "English", "iso_639_1": "en", "name": "English" }],
+	"status": "Returning Series",
+	"tagline": "When news breaks we fix it.",
+	"type": "Talk Show",
+	"videos": { "results": [] },
+	"vote_average": 6.405,
+	"vote_count": 663
+}

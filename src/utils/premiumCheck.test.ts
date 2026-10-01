@@ -31,7 +31,7 @@ describe('checkPremiumStatus', () => {
 			expect.objectContaining({ title: 'Premium Required' })
 		);
 		expect(openMock).toHaveBeenCalledWith(
-			'https://real-debrid.com/premium?id=11137529',
+			'https://real-debrid.com/premium?id=20474106',
 			'_blank'
 		);
 		expect(result).toEqual({ shouldLogout: true });

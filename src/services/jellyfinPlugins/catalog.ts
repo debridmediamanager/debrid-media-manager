@@ -16,11 +16,26 @@
 
 import { getStoredObject } from '@/services/newznab/store';
 
-/** Where the published artifacts live inside the shared B2 bucket. */
-const PREFIX = 'jellyfin-plugins';
+/**
+ * Which media server a catalog is for. Each keeps its artifacts and its own
+ * catalog document under its own prefix of the shared B2 bucket, so a publish
+ * for one can never rewrite or drop the other's entries.
+ */
+export type PluginPlatform = 'jellyfin' | 'emby';
 
-/** The descriptor the publish script writes beside the artifacts. */
-export const CATALOG_OBJECT_KEY = `${PREFIX}/catalog.json`;
+/** Where each platform's published artifacts live inside the shared B2 bucket. */
+const PREFIXES: Record<PluginPlatform, string> = {
+	jellyfin: 'jellyfin-plugins',
+	emby: 'emby-plugins',
+};
+
+/** The descriptor a platform's publishes merge into, beside its artifacts. */
+export function catalogObjectKey(platform: PluginPlatform = 'jellyfin'): string {
+	return `${PREFIXES[platform]}/catalog.json`;
+}
+
+/** The Jellyfin catalog's descriptor. */
+export const CATALOG_OBJECT_KEY = catalogObjectKey('jellyfin');
 
 /** A file the catalog is allowed to serve, and the type it is served as. */
 const SERVABLE: Record<string, string> = {
@@ -91,26 +106,37 @@ export function servableContentType(file: string): string | null {
 }
 
 /** The B2 object key for a published file. */
-export function pluginObjectKey(file: string): string {
-	return `${PREFIX}/${file}`;
+export function pluginObjectKey(file: string, platform: PluginPlatform = 'jellyfin'): string {
+	return `${PREFIXES[platform]}/${file}`;
 }
 
 /**
- * The published descriptor, or null when nothing has been published yet.
+ * A platform's published descriptor, or null when nothing has been published
+ * yet or the bucket could not be read.
  *
- * @returns The plugins as the publish script recorded them.
+ * @param platform Whose catalog to read.
+ * @returns The entries as the publish endpoint recorded them.
  */
-export async function readPublishedPlugins(): Promise<PublishedPlugin[] | null> {
-	const bytes = await getStoredObject(CATALOG_OBJECT_KEY);
+export async function readCatalogDocument<T>(platform: PluginPlatform): Promise<T[] | null> {
+	const bytes = await getStoredObject(catalogObjectKey(platform));
 	if (!bytes) return null;
 
 	try {
 		const parsed = JSON.parse(bytes.toString('utf8'));
-		return Array.isArray(parsed) ? (parsed as PublishedPlugin[]) : null;
+		return Array.isArray(parsed) ? (parsed as T[]) : null;
 	} catch (error) {
-		console.error('Error parsing the Jellyfin plugin catalog:', error);
+		console.error(`Error parsing the ${platform} plugin catalog:`, error);
 		return null;
 	}
+}
+
+/**
+ * The published Jellyfin descriptor, or null when nothing has been published yet.
+ *
+ * @returns The plugins as the publish script recorded them.
+ */
+export async function readPublishedPlugins(): Promise<PublishedPlugin[] | null> {
+	return readCatalogDocument<PublishedPlugin>('jellyfin');
 }
 
 /**

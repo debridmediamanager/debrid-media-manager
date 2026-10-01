@@ -5,7 +5,6 @@ import practicalMagicMdblist from '@/test/fixtures/metadata/mdblist-tt32588798-p
 import thundermansMdblist from '@/test/fixtures/metadata/mdblist-tt37752275-clash-of-the-thundermans.json';
 import practicalMagicOmdb from '@/test/fixtures/metadata/omdb-tt32588798-practical-magic-2.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import axios from 'axios';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/mdblistClient', () => ({
@@ -32,12 +31,18 @@ describe('/api/info/movie', () => {
 	const mockMetadataCache = {
 		getCinemetaMovie: vi.fn(),
 		getOmdbInfo: vi.fn().mockResolvedValue(null),
+		getTmdbMovieInfo: vi.fn().mockResolvedValue(null),
+		getTraktSummary: vi.fn().mockResolvedValue(null),
+		searchTmdbByImdb: vi.fn().mockResolvedValue(null),
 	};
 
 	const tmdbEnv = { key: process.env.TMDB_KEY, token: process.env.TMDB_READ_TOKEN };
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		mockMetadataCache.getTmdbMovieInfo.mockResolvedValue(null);
+		mockMetadataCache.getTraktSummary.mockResolvedValue(null);
+		mockMetadataCache.searchTmdbByImdb.mockResolvedValue(null);
 		vi.mocked(getMdblistClient).mockReturnValue(mockMdbClient as any);
 		vi.mocked(getMetadataCache).mockReturnValue(mockMetadataCache as any);
 		// Fixtures carry a real tmdbid; without a credential the route skips the
@@ -298,13 +303,11 @@ describe('/api/info/movie', () => {
 		it('uses the art from the TMDB response it already fetched', async () => {
 			mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'Arty', tmdbid: 27205 });
 			mockMetadataCache.getCinemetaMovie.mockResolvedValue({});
-			vi.spyOn(axios, 'get').mockResolvedValue({
-				data: {
-					poster_path: '/tmdb-poster.jpg',
-					backdrop_path: '/tmdb-backdrop.jpg',
-					release_date: '2010-07-16',
-				},
-			} as any);
+			mockMetadataCache.getTmdbMovieInfo.mockResolvedValue({
+				poster_path: '/tmdb-poster.jpg',
+				backdrop_path: '/tmdb-backdrop.jpg',
+				release_date: '2010-07-16',
+			});
 
 			const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt1375666' } });
 			const res = createMockResponse();
@@ -328,9 +331,10 @@ describe('/api/info/movie', () => {
 			mockMetadataCache.getCinemetaMovie.mockResolvedValue({
 				meta: { background: 'cine-bg' },
 			});
-			vi.spyOn(axios, 'get').mockResolvedValue({
-				data: { poster_path: '/tmdb-poster.jpg', backdrop_path: '/tmdb-backdrop.jpg' },
-			} as any);
+			mockMetadataCache.getTmdbMovieInfo.mockResolvedValue({
+				poster_path: '/tmdb-poster.jpg',
+				backdrop_path: '/tmdb-backdrop.jpg',
+			});
 
 			const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt1375666' } });
 			const res = createMockResponse();
@@ -343,9 +347,26 @@ describe('/api/info/movie', () => {
 		});
 	});
 
-	it('falls back to default payload on failure', async () => {
-		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+	it('still answers from Cinemeta when mdblist fails', async () => {
+		vi.spyOn(console, 'warn').mockImplementation(() => {});
 		mockMdbClient.getInfoByImdbId.mockRejectedValue(new Error('network down'));
+		mockMetadataCache.getCinemetaMovie.mockResolvedValue({
+			meta: { name: 'Cine Only', releaseInfo: '1999', description: 'desc' },
+		});
+
+		const res = createMockResponse();
+		await handler(createMockRequest({ method: 'GET', query: { imdbid: 'tt7654321' } }), res);
+
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({ title: 'Cine Only', year: 1999 })
+		);
+	});
+
+	it('falls back to default payload when every provider fails', async () => {
+		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+		vi.spyOn(console, 'warn').mockImplementation(() => {});
+		mockMdbClient.getInfoByImdbId.mockRejectedValue(new Error('network down'));
+		mockMetadataCache.getCinemetaMovie.mockRejectedValue(new Error('network down'));
 
 		const req = createMockRequest({
 			method: 'GET',

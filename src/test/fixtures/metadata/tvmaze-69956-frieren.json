@@ -1,0 +1,133 @@
+{
+	"_embedded": {
+		"seasons": [
+			{
+				"id": 154707,
+				"url": "https://www.tvmaze.com/seasons/154707/frieren-beyond-journeys-end-season-1",
+				"number": 1,
+				"name": "",
+				"episodeOrder": 28,
+				"premiereDate": "2023-09-29",
+				"endDate": "2024-03-22",
+				"network": {
+					"id": 137,
+					"name": "NTV",
+					"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+					"officialSite": null
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/154707" } }
+			},
+			{
+				"id": 191260,
+				"url": "https://www.tvmaze.com/seasons/191260/frieren-beyond-journeys-end-season-2",
+				"number": 2,
+				"name": "Sōsō no Frieren",
+				"episodeOrder": 10,
+				"premiereDate": "2026-01-16",
+				"endDate": "2026-03-27",
+				"network": {
+					"id": 137,
+					"name": "NTV",
+					"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+					"officialSite": null
+				},
+				"webChannel": {
+					"id": 20,
+					"name": "Crunchyroll",
+					"country": null,
+					"officialSite": "https://www.crunchyroll.com/"
+				},
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/628/1572236.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/628/1572236.jpg"
+				},
+				"summary": "<p><i>Season 2</i> of <i>Frieren: Beyond Journey's End</i> follows Frieren, Fern, and Stark as they finally secure the qualifications to enter the treacherous Northern Plateau. The season focuses on their continued trek toward Ende to reach the resting place of souls, interspersed with monster encounters and deepening emotional growth.</p>",
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/191260" } }
+			},
+			{
+				"id": 199382,
+				"url": "https://www.tvmaze.com/seasons/199382/frieren-beyond-journeys-end-season-3",
+				"number": 3,
+				"name": "Golden Land Arc",
+				"episodeOrder": null,
+				"premiereDate": null,
+				"endDate": null,
+				"network": {
+					"id": 137,
+					"name": "NTV",
+					"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+					"officialSite": null
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/199382" } }
+			}
+		],
+		"previousepisode": {
+			"id": 3526012,
+			"url": "https://www.tvmaze.com/episodes/3526012/frieren-beyond-journeys-end-2x10-a-beautiful-sight",
+			"name": "A Beautiful Sight",
+			"season": 2,
+			"number": 10,
+			"type": "regular",
+			"airdate": "2026-03-27",
+			"airtime": "01:00",
+			"airstamp": "2026-03-27T16:00:00+00:00",
+			"runtime": 30,
+			"rating": { "average": 8.8 },
+			"image": {
+				"medium": "https://static.tvmaze.com/uploads/images/medium_landscape/619/1548917.jpg",
+				"original": "https://static.tvmaze.com/uploads/images/original_untouched/619/1548917.jpg"
+			},
+			"summary": "<p>Hidden within the massive bridge spanning the Great Canyon Tor is a secret story of Himmel and Gehen.</p>",
+			"_links": {
+				"self": { "href": "https://api.tvmaze.com/episodes/3526012" },
+				"show": {
+					"href": "https://api.tvmaze.com/shows/69956",
+					"name": "Frieren: Beyond Journey's End"
+				}
+			}
+		}
+	},
+	"_links": {
+		"self": { "href": "https://api.tvmaze.com/shows/69956" },
+		"previousepisode": {
+			"href": "https://api.tvmaze.com/episodes/3526012",
+			"name": "A Beautiful Sight"
+		}
+	},
+	"averageRuntime": 25,
+	"dvdCountry": null,
+	"ended": null,
+	"externals": { "tvrage": null, "thetvdb": 424536, "imdb": "tt22248376" },
+	"genres": ["Anime"],
+	"id": 69956,
+	"image": {
+		"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/479/1198409.jpg",
+		"original": "https://static.tvmaze.com/uploads/images/original_untouched/479/1198409.jpg"
+	},
+	"language": "Japanese",
+	"name": "Frieren: Beyond Journey's End",
+	"network": {
+		"id": 137,
+		"name": "NTV",
+		"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+		"officialSite": null
+	},
+	"officialSite": "https://frieren-anime.jp/",
+	"premiered": "2023-09-29",
+	"rating": { "average": 7.7 },
+	"runtime": 30,
+	"schedule": { "time": "01:00", "days": ["Friday"] },
+	"status": "Running",
+	"summary": "<p>The mage Frieren defeated the Demon King alongside the hero Himmel's party after a 10-year quest. Peace was restored to the kingdom. Because she is an elf, she is able to live over a thousand years. She promises Himmel and the others that she will be back to see them and then sets out on a journey by herself. Fifty years later, Frieren goes to visit Himmel and the others. She remained unchanged, but Himmel and the others have aged and only a little of their lives remain. Later, she witnesses Himmel's death. Frieren is pained by her desire to have spent more time getting to know people. With that regret in her heart, she then goes on a journey to do just that. On her journey, she meets many people and many events await her.</p>",
+	"type": "Animation",
+	"updated": 1787505980,
+	"url": "https://www.tvmaze.com/shows/69956/frieren-beyond-journeys-end",
+	"webChannel": null,
+	"weight": 98
+}

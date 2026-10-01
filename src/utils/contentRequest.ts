@@ -1,3 +1,5 @@
+import { safeReturnPath } from './transferContext';
+
 /**
  * The rules a content request obeys, kept away from Prisma and HTTP.
  *
@@ -8,7 +10,14 @@
  * database or a debrid host.
  */
 
-export const REQUEST_STATUSES = ['open', 'claimed', 'fulfilled', 'failed', 'cancelled'] as const;
+export const REQUEST_STATUSES = [
+	'open',
+	'claimed',
+	'fulfilled',
+	'failed',
+	'cancelled',
+	'stalled',
+] as const;
 export type RequestStatus = (typeof REQUEST_STATUSES)[number];
 
 export const MEDIA_TYPES = ['movie', 'show'] as const;
@@ -22,6 +31,8 @@ export interface ContentRequestInput {
 	imdbId: string;
 	title?: string | null;
 	mediaType: string;
+	sizeBytes?: number | null;
+	returnPath?: string | null;
 }
 
 export interface ValidRequest {
@@ -29,6 +40,10 @@ export interface ValidRequest {
 	imdbId: string;
 	title: string | null;
 	mediaType: MediaType;
+	/** Whole release in bytes, when the page knew it. */
+	sizeBytes: number | null;
+	/** The DMM page it was asked from, when that is a page we recognise. */
+	returnPath: string | null;
 }
 
 export class RequestValidationError extends Error {
@@ -77,6 +92,12 @@ export function normalizeTitle(raw: unknown): string | null {
 	return title.length > MAX_TITLE ? title.slice(0, MAX_TITLE) : title;
 }
 
+/** A size is a hint for routing and the cap; anything unusable is dropped. */
+export function normalizeSize(raw: unknown): number | null {
+	if (typeof raw !== 'number' || !Number.isFinite(raw) || raw <= 0) return null;
+	return Math.round(raw);
+}
+
 export function parseRequestInput(body: unknown): ValidRequest {
 	const input = (body ?? {}) as Partial<ContentRequestInput>;
 	return {
@@ -84,6 +105,8 @@ export function parseRequestInput(body: unknown): ValidRequest {
 		imdbId: normalizeImdbId(input.imdbId),
 		title: normalizeTitle(input.title),
 		mediaType: normalizeMediaType(input.mediaType),
+		sizeBytes: normalizeSize(input.sizeBytes),
+		returnPath: safeReturnPath(input.returnPath) ?? null,
 	};
 }
 
@@ -163,6 +186,17 @@ export interface PublicRequest {
 	mine: boolean;
 	/** Present once a transfer exists, so the asker can follow it. */
 	jobId: string | null;
+	/**
+	 * Whether TorBox has the release cached, asked with the viewer's own key.
+	 * `null` when the viewer sent no key or TorBox gave no answer.
+	 */
+	tbCached: boolean | null;
+	/**
+	 * Why the last attempt failed. The asker sees the stored reason verbatim;
+	 * everyone else sees it too unless it describes the asker's Real-Debrid
+	 * credentials, which {@link publicError} replaces with a neutral line.
+	 */
+	error: string | null;
 }
 
 export interface StoredRequest {
@@ -175,7 +209,30 @@ export interface StoredRequest {
 	requesterId: string;
 	fulfillerId: string | null;
 	jobId: string | null;
+	jobHost?: string | null;
+	error?: string | null;
+	sizeBytes?: bigint | number | null;
+	returnPath?: string | null;
 	createdAt: Date | string;
+	updatedAt?: Date | string;
+}
+
+/** What strangers read in place of a reason about the asker's credentials. */
+export const ASKER_ACCOUNT_ERROR = "the asker's Real-Debrid account refused the transfer";
+
+/**
+ * The failure reason as a stranger may read it. Most reasons describe the
+ * release or the uploader (`uncached`, TorBox 404s, dead torrent sources) and
+ * are what a fulfiller needs to judge whether another try can work. Reasons
+ * about the asker's Real-Debrid credentials say whether that person's session
+ * is dead, so those stay the asker's own.
+ */
+export function publicError(error: string | null | undefined): string | null {
+	if (!error) return null;
+	if (/^RD credentials rejected|no usable Real-Debrid credentials/i.test(error)) {
+		return ASKER_ACCOUNT_ERROR;
+	}
+	return error;
 }
 
 /**
@@ -185,7 +242,12 @@ export interface StoredRequest {
  * of a Real-Debrid username, so publishing them would let anyone watching the
  * board follow one person's entire request history across releases.
  */
-export function toPublicRequest(row: StoredRequest, viewerId: string | null): PublicRequest {
+export function toPublicRequest(
+	row: StoredRequest,
+	viewerId: string | null,
+	tbCached: Set<string> | null = null
+): PublicRequest {
+	const mine = viewerId !== null && row.requesterId === viewerId;
 	return {
 		id: row.id,
 		hash: row.hash,
@@ -194,7 +256,9 @@ export function toPublicRequest(row: StoredRequest, viewerId: string | null): Pu
 		mediaType: row.mediaType,
 		status: row.status,
 		createdAt: new Date(row.createdAt).toISOString(),
-		mine: viewerId !== null && row.requesterId === viewerId,
+		mine,
 		jobId: row.jobId,
+		tbCached: tbCached ? tbCached.has(row.hash) : null,
+		error: mine ? (row.error ?? null) : publicError(row.error),
 	};
 }

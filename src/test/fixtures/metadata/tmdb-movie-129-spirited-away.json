@@ -1,0 +1,1194 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"titles": [
+			{ "iso_3166_1": "JP", "title": "Sen to Chihiro no Kamikakushi", "type": "Romaji" },
+			{ "iso_3166_1": "RU", "title": "Unesenniye prizrakami", "type": "romanization" },
+			{ "iso_3166_1": "FI", "title": "Chihiro ilmmiid gaskkas", "type": "" },
+			{ "iso_3166_1": "AD", "title": "El viatge de Chihiro", "type": "" },
+			{ "iso_3166_1": "IR", "title": "Shahr Ashbah", "type": "romanization" },
+			{ "iso_3166_1": "HK", "title": "千與千尋", "type": "" },
+			{ "iso_3166_1": "AZ", "title": "Ruhların Qaçışı", "type": "" },
+			{ "iso_3166_1": "KR", "title": "Sen gwa Chihiro ui Haengbang Bulmyeong", "type": "" },
+			{ "iso_3166_1": "IR", "title": "Shahre Ashbah", "type": "" },
+			{ "iso_3166_1": "IR", "title": "Shahr-e Ashbah", "type": "" },
+			{ "iso_3166_1": "US", "title": "The Spiriting Away of Sen and Chihiro", "type": "" },
+			{ "iso_3166_1": "VN", "title": "Vùng đất linh hồn", "type": "" },
+			{ "iso_3166_1": "IL", "title": "המסע המופלא", "type": "" },
+			{ "iso_3166_1": "CN", "title": "神隐少女", "type": "" },
+			{ "iso_3166_1": "AM", "title": "Ուրվականներից քշվածները", "type": "" },
+			{ "iso_3166_1": "AM", "title": "Urvakanneric Crvatsnery", "type": "" },
+			{ "iso_3166_1": "KR", "title": "센과 치히로의 행방불명", "type": "" },
+			{ "iso_3166_1": "ES", "title": "El viaje de Chihiro", "type": "" },
+			{ "iso_3166_1": "US", "title": "Miyazaki's Spirited Away", "type": "" },
+			{ "iso_3166_1": "BR", "title": "A Viagem de Chihiro", "type": "" },
+			{ "iso_3166_1": "FR", "title": "Le Voyage de Chihiro", "type": "" },
+			{ "iso_3166_1": "TH", "title": "มิติวิญญาณมหัศจรรย์", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Унесённые призраками", "type": "" },
+			{ "iso_3166_1": "RS", "title": "Začarani grad", "type": "" },
+			{ "iso_3166_1": "GE", "title": "მოჩვენებებით გატაცებულნი", "type": "ქართული" }
+		]
+	},
+	"backdrop_path": "/6oaL4DP75yABrd5EbC4H2zq5ghc.jpg",
+	"belongs_to_collection": null,
+	"budget": 19000000,
+	"external_ids": {
+		"imdb_id": "tt0245429",
+		"wikidata_id": "Q155653",
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": null
+	},
+	"genres": [
+		{ "id": 16, "name": "Animation" },
+		{ "id": 10751, "name": "Family" },
+		{ "id": 14, "name": "Fantasy" }
+	],
+	"homepage": "https://gkids.com/films/spirited-away",
+	"id": 129,
+	"imdb_id": "tt0245429",
+	"origin_country": ["JP"],
+	"original_language": "ja",
+	"original_title": "千と千尋の神隠し",
+	"overview": "A young girl, Chihiro, becomes trapped in a strange new world of spirits. When her parents undergo a mysterious transformation, she must call upon the courage she never knew she had to free her family.",
+	"popularity": 40.5341,
+	"poster_path": "/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
+	"production_companies": [
+		{
+			"id": 10342,
+			"logo_path": "/uFuxPEZRUcBTEiYIxjHJq62Vr77.png",
+			"name": "Studio Ghibli",
+			"origin_country": "JP"
+		},
+		{
+			"id": 1779,
+			"logo_path": "/41nGzTdCnORYZIZzaGZtfsBwQCl.png",
+			"name": "Tokuma Shoten",
+			"origin_country": "JP"
+		},
+		{
+			"id": 6755,
+			"logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+			"name": "Nippon Television Network Corporation",
+			"origin_country": "JP"
+		},
+		{
+			"id": 11847,
+			"logo_path": "/gW5RN3ylzsAwQ1uGHBpezUZ0vXF.png",
+			"name": "Mitsubishi",
+			"origin_country": "JP"
+		},
+		{
+			"id": 1778,
+			"logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+			"name": "dentsu",
+			"origin_country": "JP"
+		},
+		{
+			"id": 1780,
+			"logo_path": "/4Qzhr7FxVtaMwmsh7118G3yvOhO.png",
+			"name": "TFC",
+			"origin_country": "JP"
+		},
+		{
+			"id": 164892,
+			"logo_path": "/2wH2cZCfpQvMsWZCZbHFEJx0R86.png",
+			"name": "The Walt Disney Company (Japan)",
+			"origin_country": "JP"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "JP", "name": "Japan" }],
+	"release_date": "2001-07-20",
+	"release_dates": {
+		"results": [
+			{
+				"iso_3166_1": "AR",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-07-17T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "AT",
+				"release_dates": [
+					{
+						"certification": "0",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-06-20T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "AU",
+				"release_dates": [
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2002-12-12T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD",
+						"release_date": "2003-06-11T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "BE",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-04-02T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "BR",
+				"release_dates": [
+					{
+						"certification": "10",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Ghibli Fest ",
+						"release_date": "2026-02-19T00:00:00.000Z",
+						"type": 2
+					},
+					{
+						"certification": "L",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-07-18T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "10",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Ghibli Fest",
+						"release_date": "2025-09-18T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "L",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Netflix ",
+						"release_date": "2020-03-01T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Kinopop",
+						"release_date": "2020-06-24T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD / VHS",
+						"release_date": "2003-12-11T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "L",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Exibido na TV Cultura ",
+						"release_date": "2007-06-01T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CA",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2002-09-20T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CH",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2002-04-10T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-03-27T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CL",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-09-18T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CN",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2019-06-21T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CO",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-11-14T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CZ",
+				"release_dates": [
+					{
+						"certification": "U",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-release",
+						"release_date": "2024-01-04T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "U",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-04-03T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD (remastered)",
+						"release_date": "2004-11-19T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD / VHS",
+						"release_date": "2003-12-08T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "ČT2",
+						"release_date": "2006-09-03T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "DE",
+				"release_dates": [
+					{
+						"certification": "0",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-06-19T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "25th Anniversary",
+						"release_date": "2026-08-18T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "0",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD / VHS",
+						"release_date": "2003-11-03T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "0",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Blu-ray",
+						"release_date": "2014-10-10T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "0",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Premiere 4",
+						"release_date": "2004-12-04T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "DK",
+				"release_dates": [
+					{
+						"certification": "7",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2007-01-01T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "7",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-10-10T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "ES",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Sitges Film Festival",
+						"release_date": "2002-10-11T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2002-10-25T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD",
+						"release_date": "2003-04-02T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "FI",
+				"release_dates": [
+					{
+						"certification": "K-7",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2002-11-29T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "K-12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD",
+						"release_date": "2003-10-30T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "FR",
+				"release_dates": [
+					{
+						"certification": "TP",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2002-04-10T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "TP",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD",
+						"release_date": "2002-11-26T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "TP",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD [Édition Prestige]",
+						"release_date": "2005-03-24T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "TP",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "France•4",
+						"release_date": "2025-12-27T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "GB",
+				"release_dates": [
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-09-12T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD",
+						"release_date": "2004-03-29T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Blu-ray",
+						"release_date": "2017-03-13T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2008-01-26T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "HK",
+				"release_dates": [
+					{
+						"certification": "I",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2001-12-13T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD / VHS",
+						"release_date": "2002-07-19T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "HU",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD",
+						"release_date": "2003-05-22T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IE",
+				"release_dates": [
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-09-12T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IL",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-07-03T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IN",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Netflix",
+						"release_date": "2020-03-01T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IT",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2014-06-25T00:00:00.000Z",
+						"type": 2
+					},
+					{
+						"certification": "T",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-04-18T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "T",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD / VHS",
+						"release_date": "2003-10-23T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "JP",
+				"release_dates": [
+					{
+						"certification": "G",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2001-07-20T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD / VHS",
+						"release_date": "2002-07-19T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Nippon TV",
+						"release_date": "2003-01-24T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "KR",
+				"release_dates": [
+					{
+						"certification": "ALL",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2002-06-28T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "ALL",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-Release",
+						"release_date": "2015-02-05T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "ALL",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD",
+						"release_date": "2002-12-07T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "MX",
+				"release_dates": [
+					{
+						"certification": "A",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD / VHS",
+						"release_date": "2004-01-16T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "MY",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2002-11-07T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "NL",
+				"release_dates": [
+					{
+						"certification": "6",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-04-23T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "6",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD",
+						"release_date": "2003-10-30T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "NO",
+				"release_dates": [
+					{
+						"certification": "9",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD",
+						"release_date": "2004-01-28T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "NZ",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-04-03T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PL",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-Release",
+						"release_date": "2024-05-10T00:00:00.000Z",
+						"type": 2
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-04-04T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "TVP VOD",
+						"release_date": "2025-12-27T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Netflix",
+						"release_date": "2020-03-01T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "iTunes",
+						"release_date": "2021-06-25T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD / VHS",
+						"release_date": "2003-09-22T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "TVP Kultura",
+						"release_date": "2007-01-01T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PR",
+				"release_dates": [
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Studio Ghibli Fest",
+						"release_date": "2025-10-18T00:00:00.000Z",
+						"type": 2
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PT",
+				"release_dates": [
+					{
+						"certification": "M/6",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-02-28T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD / VHS",
+						"release_date": "2003-11-08T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "RU",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Moscow International Film Festival",
+						"release_date": "2002-06-29T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "12+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2002-12-31T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-release",
+						"release_date": "2018-12-27T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "VHS",
+						"release_date": "2003-03-25T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "12+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD",
+						"release_date": "2005-09-08T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "SE",
+				"release_dates": [
+					{
+						"certification": "7",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-09-19T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "7",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2018-12-21T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "7",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD / VHS",
+						"release_date": "2004-03-03T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "7",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Blu-ray",
+						"release_date": "2016-02-15T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "SG",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2001-12-20T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "SI",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2003-02-13T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "TR",
+				"release_dates": [
+					{
+						"certification": "10A",
+						"descriptors": ["Violence / Horror", "Negative examples"],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2004-06-18T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "TW",
+				"release_dates": [
+					{
+						"certification": "0+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2001-12-28T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Digitally-Restored Version",
+						"release_date": "2022-08-05T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD",
+						"release_date": "2002-07-19T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "UA",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-08-19T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2019-02-07T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "US",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "San Francisco International Film Festival",
+						"release_date": "2002-04-02T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2002-09-20T00:00:00.000Z",
+						"type": 2
+					},
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Studio Ghibli Fest",
+						"release_date": "2025-10-18T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2019-12-17T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "DVD / VHS",
+						"release_date": "2003-04-15T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Blu-ray / DVD",
+						"release_date": "2015-06-16T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "PG",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Turner Classic Movies",
+						"release_date": "2006-01-05T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "VN",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2025-01-03T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			}
+		]
+	},
+	"revenue": 274925095,
+	"runtime": 125,
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "Japanese", "iso_639_1": "ja", "name": "日本語" }],
+	"status": "Released",
+	"tagline": "Beyond the tunnel was a mysterious town.",
+	"title": "Spirited Away",
+	"video": false,
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer [Subtitled]",
+				"key": "GAp2_0JJskk",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "65605c163679a10976465e74",
+				"published_at": "2023-11-23T22:00:09.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Spirited Away - English Theatrical Trailer [4K] [35mm Film Scan]",
+				"key": "W6zsqNYMN18",
+				"site": "YouTube",
+				"size": 2160,
+				"type": "Trailer",
+				"official": false,
+				"id": "6a5eea3326dc31b88fc0cb90",
+				"published_at": "2023-10-31T19:01:07.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Ghibli Fest 2023 Trailer",
+				"key": "F-X_81GZ2Uo",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "65697e6a71f09500feb7e679",
+				"published_at": "2023-09-29T16:14:50.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Studio Ghibli Fest 2022 Spot",
+				"key": "oZzFsv22wqI",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Teaser",
+				"official": true,
+				"id": "633c313d175051008e17fb08",
+				"published_at": "2022-10-03T22:28:55.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Lin Guides Chihiro Through The Bathhouse",
+				"key": "W5szC4XgR1s",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "62eb43fb8566d2005a486b43",
+				"published_at": "2022-07-26T20:47:22.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer",
+				"key": "ByXuk9QqQkk",
+				"site": "YouTube",
+				"size": 720,
+				"type": "Trailer",
+				"official": true,
+				"id": "592c5d16c3a36877bc0817da",
+				"published_at": "2014-09-17T05:26:18.000Z"
+			}
+		]
+	},
+	"vote_average": 8.535,
+	"vote_count": 18941
+}

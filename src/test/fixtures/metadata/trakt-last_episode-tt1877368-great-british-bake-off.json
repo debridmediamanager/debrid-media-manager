@@ -1,0 +1,25 @@
+{
+	"after_credits": false,
+	"available_translations": ["en"],
+	"comment_count": 0,
+	"during_credits": false,
+	"episode_type": "season_finale",
+	"first_aired": "2016-10-27T19:00:00.000Z",
+	"ids": {
+		"trakt": 3799456,
+		"tvdb": 5798577,
+		"imdb": "tt6161032",
+		"tmdb": 1234172,
+		"tvrage": null
+	},
+	"number": 11,
+	"number_abs": 89,
+	"original_title": "Class of 2015",
+	"overview": "A catch-up with the contestants from The Great British Bake Off 2015.",
+	"rating": 7.0,
+	"runtime": 60,
+	"season": 7,
+	"title": "Class of 2015",
+	"updated_at": "2026-09-26T08:01:21.000Z",
+	"votes": 10
+}

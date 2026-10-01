@@ -35,6 +35,11 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 		what: 'your Real-Debrid, AllDebrid, TorBox and Usenet libraries inside Jellyfin, with nothing mounted',
 	},
 	{
+		href: '/emby',
+		name: 'Emby plugins',
+		what: 'the same debrid libraries inside Emby, one file per account',
+	},
+	{
 		name: 'Ten other streams in Stremio Cast',
 		what: 'instead of five, set per profile below',
 	},
@@ -176,7 +181,7 @@ export const SponsorPanel: FC = () => {
 									) : (
 										<span className="text-gray-300">{name}</span>
 									)}
-									<span className="text-gray-500">{what}</span>
+									<span className="text-gray-400">{what}</span>
 								</li>
 							))}
 						</ul>
@@ -186,7 +191,7 @@ export const SponsorPanel: FC = () => {
 						here.
 					</label>
 					{keyForm}
-					<p className="text-center text-xs text-gray-500">
+					<p className="text-center text-xs text-gray-400">
 						Get your key by connecting your GitHub account on{' '}
 						<a
 							href={GATEKEEPER_URL}

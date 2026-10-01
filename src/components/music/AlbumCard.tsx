@@ -157,7 +157,7 @@ export default function AlbumCard({
 						}}
 						aria-label={`Play ${album.album} by ${album.artist}`}
 						title={`Play ${album.album}`}
-						className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500 shadow-lg shadow-green-500/25 transition-transform duration-200 hover:scale-110 hover:bg-green-400 active:scale-95"
+						className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500 text-gray-950 shadow-lg shadow-green-500/25 transition-transform duration-200 hover:scale-110 hover:bg-green-400 active:scale-95"
 					>
 						<Play className="h-6 w-6 text-black" fill="currentColor" />
 					</button>
@@ -169,7 +169,7 @@ export default function AlbumCard({
 				{album.artist}
 				{album.year && ` \u00b7 ${album.year}`}
 			</p>
-			<p className="mt-1 text-xs text-gray-500">
+			<p className="mt-1 text-xs text-gray-400">
 				{album.trackCount} {album.trackCount === 1 ? 'track' : 'tracks'}
 			</p>
 		</div>

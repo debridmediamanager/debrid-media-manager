@@ -34,6 +34,12 @@ export const RATE_LIMIT_CONFIGS = {
 	// window still holds the previous second, so two of those bursts have to fit.
 	proxy: { name: 'proxy', rateLimit: 20, windowSeconds: 2 },
 	report: { name: 'report', rateLimit: 5, windowSeconds: 10 }, // 5 reports per 10 seconds
+	// Copyright notices. An agent filing for a rights holder sends a batch in
+	// one notice, so an hour's worth per address is plenty and caps a flood.
+	takedown: { name: 'takedown', rateLimit: 20, windowSeconds: 3600 },
+	// The blocklist the uploaders and scrapers poll every ten minutes each.
+	takedownBlocklist: { name: 'takedownBlocklist', rateLimit: 60, windowSeconds: 60 },
+	takedownAdmin: { name: 'takedownAdmin', rateLimit: 60, windowSeconds: 60 },
 	// The zurg endpoints, sized like the Newznab and Torznab indexers rather
 	// than like a person clicking: a minute's worth in one budget, so a client
 	// that fans out over several titles is not refused on its second call.
@@ -100,5 +106,16 @@ export const RATE_LIMIT_CONFIGS = {
 	// a grab never comes back to DMM at all.
 	torznabSearch: { name: 'torznabSearch', rateLimit: 20, windowSeconds: 60 },
 	torznabIp: { name: 'torznabIp', rateLimit: 20, windowSeconds: 10 },
+	// /api/info/anime and /api/search/anime answer by asking the community
+	// Stremio addon and kitsu.io, so an unlimited client could drive both
+	// upstreams through dmm-01's address until one of them blocked it. A person
+	// opens a handful of titles a minute; its own bucket keeps a burst here from
+	// refusing /api/challenge, which shares `default`.
+	anime: { name: 'anime', rateLimit: 30, windowSeconds: 60 },
+	// /api/anime/franchise and /api/anime/by-imdb read an in-memory dataset and
+	// one indexed query; Kitsu is asked only for entries the table has no row
+	// for, at most 12 a request and cached for a day. Every show and movie page
+	// asks once, so they get a bucket of their own rather than spending `anime`'s.
+	animeEntries: { name: 'animeEntries', rateLimit: 60, windowSeconds: 60 },
 	default: { name: 'default', rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;

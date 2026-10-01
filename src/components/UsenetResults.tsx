@@ -41,6 +41,10 @@ type UsenetResultsProps = {
 	/** Show title, so whole-season packs can be looked up by name. */
 	title?: string;
 	rdKey: string | null;
+	/** Hears the results once a search lands, so the page can count them with its own rows. */
+	onResults?: (results: UsenetResult[]) => void;
+	/** Keeps only the rows whose title passes, e.g. the season page's episode chip. */
+	rowFilter?: (title: string) => boolean;
 };
 
 /** Bytes → GB, matching how sizes read elsewhere on these pages. */
@@ -214,7 +218,14 @@ export function buttonState(
 // is cached anywhere, so there is no availability to check and no reason to load
 // it for every visitor. The section stays collapsed until asked for, and fetches
 // once — the indexer bills a daily API-call quota.
-const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) => {
+const UsenetResults = ({
+	imdbId,
+	seasonNum,
+	title,
+	rdKey,
+	onResults,
+	rowFilter,
+}: UsenetResultsProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [results, setResults] = useState<UsenetResult[] | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -244,6 +255,7 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 			if (!response.ok) throw new Error(data?.error || `Search failed (${response.status})`);
 			const found: UsenetResult[] = Array.isArray(data?.results) ? data.results : [];
 			setResults(found);
+			onResults?.(found);
 
 			// Best-effort, and deliberately not awaited into the error path: a
 			// failed lookup should never hide the results themselves.
@@ -256,7 +268,7 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 		} finally {
 			setIsLoading(false);
 		}
-	}, [imdbId, seasonNum, title]);
+	}, [imdbId, seasonNum, title, onResults]);
 
 	const toggle = () => {
 		const opening = !isOpen;
@@ -274,10 +286,11 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 		setSortDir(key === 'size' ? 'desc' : 'asc');
 	};
 
-	const sorted = useMemo(
-		() => (results ? sortResults(results, sortKey, sortDir) : []),
-		[results, sortKey, sortDir]
-	);
+	const sorted = useMemo(() => {
+		if (!results) return [];
+		const kept = rowFilter ? results.filter((r) => rowFilter(r.title)) : results;
+		return sortResults(kept, sortKey, sortDir);
+	}, [results, rowFilter, sortKey, sortDir]);
 
 	const returnPath = () =>
 		seasonNum !== undefined ? `/show/${imdbId}/${seasonNum}` : `/movie/${imdbId}`;
@@ -463,7 +476,11 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 					Send NZBs from Usenet to <span className="whitespace-nowrap">Real-Debrid</span>
 				</span>
 				{results !== null && (
-					<span className="text-sm text-gray-400">({results.length})</span>
+					<span className="text-sm text-gray-400">
+						{rowFilter && sorted.length !== results.length
+							? `(${sorted.length} of ${results.length})`
+							: `(${results.length})`}
+					</span>
 				)}
 				{isLoading && <Loader2 className="h-4 w-4 animate-spin text-gray-400" />}
 			</button>
@@ -489,6 +506,13 @@ const UsenetResults = ({ imdbId, seasonNum, title, rdKey }: UsenetResultsProps) 
 
 					{!isLoading && !error && results !== null && results.length === 0 && (
 						<p className="px-2 py-3 text-sm text-gray-400">No Usenet results found.</p>
+					)}
+
+					{!isLoading && !error && !!results?.length && sorted.length === 0 && (
+						<p className="px-2 py-3 text-sm text-gray-400">
+							None of the {results.length} Usenet results match the episode picked
+							above.
+						</p>
 					)}
 
 					{!isLoading && !error && sorted.length > 0 && (

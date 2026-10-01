@@ -6,6 +6,7 @@ import { _resetUpstreamLimiterForTest, RSS_TTL_MS } from '@/services/newznab/sea
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
 import { RATE_LIMIT_CONFIGS } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
+import { setBlocklistForTests } from '@/services/takedown/blocklist';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import { sanitizeNzb } from '@/utils/nzbSanitize';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -705,6 +706,52 @@ describe('GET /api/newznab/api grab', () => {
 		expect(body(res)).toContain('<error code="500"');
 		expect(Number(res._getHeaders()['Retry-After'])).toBeGreaterThan(0);
 	});
+
+	it('stops fetching from an upstream once its shared grab cap is spent', async () => {
+		// A cap on the upstream account, shared by every sponsor: two sponsors
+		// here, one grab each, and the third grab from anyone is refused.
+		setIndexers([
+			{ ...INDEXERS[0], grabLimit: { rateLimit: 2, windowSeconds: 86400 } },
+			INDEXERS[1],
+		]);
+		const grab = (nativeId: string) =>
+			run({ t: 'get', id: encryptReleaseId('ds', nativeId), apikey: SPONSOR_KEY });
+
+		expect(body(await grab('one'))).toContain('first-article@news');
+		shortId = 'Zother';
+		expect(body(await grab('two'))).toContain('first-article@news');
+		fetchMock.mockClear();
+
+		const refused = await grab('three');
+
+		expect(fetchMock).not.toHaveBeenCalled();
+		// 300, not the 429 a spent sponsor budget gets: a Request limit reached
+		// benches the whole of DMM in an *arr for a day, and only one upstream
+		// is out. The client moves on to another release instead.
+		expect(refused._getStatusCode()).toBe(200);
+		expect(body(refused)).toContain('<error code="300"');
+		expect(body(refused)).not.toContain('First Upstream');
+
+		// The other upstream is untouched by it.
+		const other = await run({
+			t: 'get',
+			id: encryptReleaseId('ah', 'second-native-id'),
+			apikey: SPONSOR_KEY,
+		});
+		expect(body(other)).toContain('first-article@news');
+	});
+
+	it('spends no grab cap on a release the store already holds', async () => {
+		setIndexers([{ ...INDEXERS[0], grabLimit: { rateLimit: 1, windowSeconds: 86400 } }]);
+
+		mockGetStored.mockResolvedValueOnce(CURRENT_STORED_NZB);
+		expect(body(await run({ t: 'get', id: token(), apikey: SPONSOR_KEY }))).toBe(
+			CURRENT_STORED_NZB
+		);
+
+		await run({ t: 'get', id: token(), apikey: SPONSOR_KEY });
+		expect(fetchedUrls().filter((url) => url.includes('t=get'))).toHaveLength(1);
+	});
 });
 
 describe('GET /api/newznab/api pre-auth IP reject', () => {
@@ -744,5 +791,26 @@ describe('RSS-shaped queries get the short cache cap', () => {
 		for (const call of (mockRepo.getCachedNewznabApiSearch as any).mock.calls) {
 			expect(call[1]).toBeUndefined();
 		}
+	});
+});
+
+describe('GET /api/newznab/api takedown', () => {
+	it('leaves a blocked release out of search results, cached ones included', async () => {
+		setBlocklistForTests([], ['some.release.2160p.web']);
+		const res = await run({ t: 'search', q: 'some release', apikey: SPONSOR_KEY });
+		expect(itemTitles(res)).toEqual(['Another.Release.1080p']);
+	});
+
+	it('answers a grab of a blocked release as no such item', async () => {
+		setBlocklistForTests([], ['some.release.2160p.web']);
+		const xml = body(
+			await run({
+				t: 'get',
+				id: encryptReleaseId('ds', 'first-native-id'),
+				apikey: SPONSOR_KEY,
+			})
+		);
+		expect(xml).toContain('code="300"');
+		expect(xml).not.toContain('first-article@news');
 	});
 });

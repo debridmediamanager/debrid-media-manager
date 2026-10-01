@@ -1,7 +1,11 @@
+import type { AnimeSearchResult } from '@/services/database/anime';
 import { TraktSearchResult } from '@/services/trakt';
+import { animePagePath } from '@/utils/anidbId';
+import { fetchAnimeSuggestions } from '@/utils/animeSuggestions';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
+import { animeTypeLabel } from './AnimeEntryLinks';
 import Poster from './poster';
 
 function useDebounce<T>(value: T, delay: number): T {
@@ -20,6 +24,60 @@ function useDebounce<T>(value: T, delay: number): T {
 	return debouncedValue;
 }
 
+interface SuggestionRowProps {
+	title: string;
+	year?: number | null;
+	badge: string;
+	badgeClassName?: string;
+	poster: ReactNode;
+	onSelect: () => void;
+}
+
+function SuggestionRow({
+	title,
+	year,
+	badge,
+	badgeClassName = 'text-gray-400',
+	poster,
+	onSelect,
+}: SuggestionRowProps) {
+	return (
+		<div
+			className="group relative h-[64px] cursor-pointer overflow-hidden transition-all duration-300 ease-in-out"
+			onClick={onSelect}
+		>
+			{/* Content */}
+			<div className="relative z-20 flex h-full items-center">
+				<div className="flex w-[calc(100%-42px)] items-center justify-between px-3">
+					<div className="flex max-w-[70%] items-center space-x-2">
+						<span
+							className="line-clamp-1 text-base font-medium text-white transition-colors group-hover:text-blue-400"
+							title={title}
+						>
+							{title}
+						</span>
+						{year != null && (
+							<span className="whitespace-nowrap text-sm text-gray-400">
+								({year})
+							</span>
+						)}
+					</div>
+					{badge && (
+						<span
+							className={`whitespace-nowrap rounded-full bg-gray-900/80 px-2 py-0.5 text-xs ${badgeClassName}`}
+						>
+							{badge}
+						</span>
+					)}
+				</div>
+
+				{/* Right-side poster (full view) */}
+				<div className="absolute right-0 top-0 z-30 aspect-[2/3] h-full">{poster}</div>
+			</div>
+		</div>
+	);
+}
+
 interface SearchBarProps {
 	className?: string;
 	placeholder?: string;
@@ -32,6 +90,7 @@ export function SearchBar({
 	const router = useRouter();
 	const [typedQuery, setTypedQuery] = useState('');
 	const [suggestions, setSuggestions] = useState<TraktSearchResult[]>([]);
+	const [animeSuggestions, setAnimeSuggestions] = useState<AnimeSearchResult[]>([]);
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const suggestionsRef = useRef<HTMLDivElement>(null);
 	const debouncedQuery = useDebounce(typedQuery, 300);
@@ -49,25 +108,45 @@ export function SearchBar({
 		};
 	}, []);
 
+	// Trakt and anime search are asked side by side, and each fills its own part
+	// of the dropdown when it answers: a slow or failed one never holds back the
+	// other. An answer for a query that has since changed is dropped.
 	useEffect(() => {
-		const fetchSuggestions = async () => {
-			if (debouncedQuery.length < 2) {
-				setSuggestions([]);
-				return;
-			}
+		if (debouncedQuery.length < 2) {
+			setSuggestions([]);
+			setAnimeSuggestions([]);
+			return;
+		}
+		let current = true;
 
-			try {
-				const response = await axios.get<TraktSearchResult[]>(
-					`/api/trakt/search?query=${encodeURIComponent(debouncedQuery)}&types=movie,show`
-				);
-				setSuggestions(response.data.slice(0, 6));
+		axios
+			.get<TraktSearchResult[]>(
+				`/api/trakt/search?query=${encodeURIComponent(debouncedQuery)}&types=movie,show`
+			)
+			.then((response) => {
+				if (!current) return;
+				setSuggestions(Array.isArray(response.data) ? response.data.slice(0, 6) : []);
 				setShowSuggestions(true);
-			} catch (error) {
+			})
+			.catch((error) => {
 				console.error('Error fetching suggestions:', error);
-			}
-		};
+				if (current) setSuggestions([]);
+			});
 
-		fetchSuggestions();
+		fetchAnimeSuggestions(debouncedQuery)
+			.then((rows) => {
+				if (!current) return;
+				setAnimeSuggestions(rows);
+				if (rows.length > 0) setShowSuggestions(true);
+			})
+			.catch((error) => {
+				console.error('Error fetching anime suggestions:', error);
+				if (current) setAnimeSuggestions([]);
+			});
+
+		return () => {
+			current = false;
+		};
 	}, [debouncedQuery]);
 
 	const handleSuggestionClick = (suggestion: TraktSearchResult) => {
@@ -79,6 +158,11 @@ export function SearchBar({
 			setTypedQuery(media?.title || '');
 			router.push(`/search?query=${encodeURIComponent(media?.title || '')}`);
 		}
+	};
+
+	const handleAnimeClick = (path: string) => {
+		setShowSuggestions(false);
+		router.push(path);
 	};
 
 	const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
@@ -114,7 +198,7 @@ export function SearchBar({
 				</div>
 			</form>
 
-			{showSuggestions && suggestions.length > 0 && (
+			{showSuggestions && (suggestions.length > 0 || animeSuggestions.length > 0) && (
 				<div
 					ref={suggestionsRef}
 					className="absolute z-50 mt-2 w-full divide-y divide-gray-700/50 overflow-hidden rounded-xl border border-gray-700 bg-gray-800/95 shadow-2xl backdrop-blur-sm"
@@ -123,43 +207,67 @@ export function SearchBar({
 						const media = suggestion.movie || suggestion.show;
 						if (!media) return null;
 						return (
-							<div
+							<SuggestionRow
 								key={`${media.ids?.trakt}-${index}`}
-								className="group relative h-[64px] cursor-pointer overflow-hidden transition-all duration-300 ease-in-out"
-								onClick={() => handleSuggestionClick(suggestion)}
-							>
-								{/* Content */}
-								<div className="relative z-20 flex h-full items-center">
-									<div className="flex w-[calc(100%-42px)] items-center justify-between px-3">
-										<div className="flex max-w-[70%] items-center space-x-2">
-											<span className="line-clamp-1 text-base font-medium text-white transition-colors group-hover:text-blue-400">
-												{media.title}
-											</span>
-											<span className="whitespace-nowrap text-sm text-gray-400">
-												({media.year})
-											</span>
+								title={media.title}
+								year={media.year}
+								badge={
+									suggestion.type.charAt(0).toUpperCase() +
+									suggestion.type.slice(1)
+								}
+								onSelect={() => handleSuggestionClick(suggestion)}
+								poster={
+									media.ids?.imdb && (
+										<div className="h-full w-full">
+											<Poster imdbId={media.ids.imdb} title={media.title} />
 										</div>
-										<span className="whitespace-nowrap rounded-full bg-gray-900/80 px-2 py-0.5 text-xs text-gray-400">
-											{suggestion.type.charAt(0).toUpperCase() +
-												suggestion.type.slice(1)}
-										</span>
-									</div>
-
-									{/* Right-side poster (full view) */}
-									<div className="absolute right-0 top-0 z-30 aspect-[2/3] h-full">
-										{media.ids?.imdb && (
-											<div className="h-full w-full">
-												<Poster
-													imdbId={media.ids.imdb}
-													title={media.title}
-												/>
-											</div>
-										)}
-									</div>
-								</div>
-							</div>
+									)
+								}
+							/>
 						);
 					})}
+					{/* AniDB entries. A season, OVA or donghua with no IMDb id has no
+					    Trakt row above, so this is the dropdown's only way to it. */}
+					{animeSuggestions.length > 0 && (
+						<div
+							role="group"
+							aria-label="Anime"
+							data-testid="anime-suggestions"
+							className="divide-y divide-gray-700/50"
+						>
+							<div className="px-3 py-1 text-xs font-semibold uppercase tracking-wide text-fuchsia-300">
+								Anime
+							</div>
+							{animeSuggestions.map((result) => {
+								const path = animePagePath(result.id)!;
+								return (
+									<SuggestionRow
+										key={result.id}
+										title={result.title}
+										badge={animeTypeLabel(result.type)}
+										badgeClassName="text-fuchsia-300"
+										onSelect={() => handleAnimeClick(path)}
+										poster={
+											result.poster_url && (
+												// eslint-disable-next-line @next/next/no-img-element
+												<img
+													src={result.poster_url}
+													alt={`${result.title} poster`}
+													loading="lazy"
+													className="h-full w-full object-cover"
+													// A third of the old Kitsu posters are gone from
+													// both of Kitsu's hosts; leave the space empty.
+													onError={(e) => {
+														e.currentTarget.style.visibility = 'hidden';
+													}}
+												/>
+											)
+										}
+									/>
+								);
+							})}
+						</div>
+					)}
 				</div>
 			)}
 		</div>

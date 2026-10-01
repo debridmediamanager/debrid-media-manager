@@ -1,0 +1,54 @@
+[
+	{
+		"ids": {
+			"plex": { "guid": "65281ecb652e2431381cbf46" },
+			"tmdb": 360492,
+			"tvdb": 2018811,
+			"trakt": 337219
+		},
+		"title": "Specials",
+		"votes": 12,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/337/219/posters/medium/4db6ed8f87.jpg.webp"
+			]
+		},
+		"number": 0,
+		"rating": 6.5,
+		"network": "",
+		"overview": null,
+		"updated_at": "2026-09-26T15:33:30.000Z",
+		"first_aired": "2023-10-11T14:00:00.000Z",
+		"episode_count": 26,
+		"total_runtime": 66,
+		"aired_episodes": 26,
+		"original_title": "Specials"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "631ccdfccbff4464978f9d54" },
+			"tmdb": 307972,
+			"tvdb": 2018812,
+			"trakt": 303415
+		},
+		"title": "Season 1",
+		"votes": 2650,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/303/415/posters/medium/97d6214197.jpg.webp"
+			]
+		},
+		"number": 1,
+		"rating": 9.750188827514648,
+		"network": "",
+		"overview": null,
+		"updated_at": "2026-09-26T21:48:15.000Z",
+		"first_aired": "2023-09-29T14:00:00.000Z",
+		"episode_count": 38,
+		"total_runtime": 931,
+		"aired_episodes": 38,
+		"original_title": "Season 1"
+	}
+]

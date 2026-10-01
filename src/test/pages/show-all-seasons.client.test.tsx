@@ -36,7 +36,13 @@ const {
 		runMock: vi.fn(),
 		stopMock: vi.fn(),
 		modalFireMock: vi.fn(),
-		keys: { rd: 'rd-token' as string | null, ad: null, tb: 'tb-token' as string | null },
+		keys: {
+			rd: 'rd-token' as string | null,
+			ad: null as string | null,
+			tb: 'tb-token' as string | null,
+			pm: null as string | null,
+			oc: null as string | null,
+		},
 		seasonStateMock: {} as Record<number, string>,
 	};
 });
@@ -87,8 +93,8 @@ vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: () => [keys.rd],
 	useAllDebridApiKey: () => keys.ad,
 	useTorBoxAccessToken: () => keys.tb,
-	usePremiumizeCredential: () => null,
-	useOffcloudApiKey: () => null,
+	usePremiumizeCredential: () => keys.pm,
+	useOffcloudApiKey: () => keys.oc,
 	useDebridLinkCredential: () => null,
 }));
 
@@ -302,7 +308,10 @@ describe('All Seasons buttons', () => {
 		toastMock.success.mockClear();
 		toastMock.error.mockClear();
 		keys.rd = 'rd-token';
+		keys.ad = null;
 		keys.tb = 'tb-token';
+		keys.pm = null;
+		keys.oc = null;
 		for (const key of Object.keys(seasonStateMock)) delete seasonStateMock[key as never];
 		runMock.mockResolvedValue({
 			added: 2,
@@ -462,5 +471,35 @@ describe('All Seasons buttons', () => {
 			'title',
 			'Nothing cached for this season'
 		);
+	});
+
+	it.each([
+		['ad', 'AD', 'AllDebrid'],
+		['pm', 'PM', 'Premiumize'],
+		['oc', 'OC', 'Offcloud'],
+	] as const)('offers a %s-only user the same run', async (service, short, label) => {
+		keys.rd = null;
+		keys.tb = null;
+		keys[service] = `${service}-key`;
+		discoverMock.mockResolvedValue({ ...planFor(), service });
+		modalFireMock.mockResolvedValue({ isConfirmed: true });
+		const actions = await mountPage();
+
+		expect(actions.queryByRole('button', { name: /Instant RD \(All Seasons\)/i })).toBeNull();
+		await userEvent.click(
+			actions.getByRole('button', {
+				name: new RegExp(`Instant ${short} \\(All Seasons\\)`, 'i'),
+			})
+		);
+
+		await waitFor(() => expect(runMock).toHaveBeenCalledTimes(1));
+		expect(discoverMock.mock.calls[0][0]).toBe(service);
+		// The probe keys travel with the request; AD needs none.
+		expect(discoverMock.mock.calls[0][1]).toEqual({
+			tb: null,
+			pm: keys.pm,
+			oc: keys.oc,
+		});
+		expect(modalFireMock.mock.calls[0][0].title).toBe(`Add all seasons to ${label}?`);
 	});
 });

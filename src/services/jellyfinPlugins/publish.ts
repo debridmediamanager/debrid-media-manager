@@ -66,7 +66,14 @@ export function isAuthorizedPublisher(presented: unknown, expected: string | und
 	return timingSafeEqual(a, b);
 }
 
-function decode(value: unknown, limit: number): Buffer | null {
+/**
+ * Base64 to bytes, or null when the value is not a non-empty payload within the limit.
+ *
+ * @param value The field from the request body.
+ * @param limit The largest decoded size to accept.
+ * @returns The bytes, or null.
+ */
+export function decodeBase64Payload(value: unknown, limit: number): Buffer | null {
 	if (typeof value !== 'string' || value.length === 0) return null;
 	const bytes = Buffer.from(value, 'base64');
 	if (bytes.length === 0 || bytes.length > limit) return null;
@@ -129,14 +136,14 @@ export function readPublishRequest(
 	if (!VERSION.test(meta.version)) return { error: 'meta.version must be four numbers' };
 	if (!GUID.test(meta.guid)) return { error: 'meta.guid is not a plugin GUID' };
 
-	const zip = decode(request.zip, maxBytes);
+	const zip = decodeBase64Payload(request.zip, maxBytes);
 	if (!zip) return { error: 'zip must be base64 and within the size limit' };
 	if (!looksLikeZip(zip)) return { error: 'zip does not begin like a ZIP archive' };
 
 	let image: Buffer | null = null;
 	let imageFile: string | null = null;
 	if (request.image) {
-		image = decode(request.image, maxBytes);
+		image = decodeBase64Payload(request.image, maxBytes);
 		if (!image) return { error: 'image must be base64 and within the size limit' };
 		if (!looksLikePng(image)) return { error: 'image does not begin like a PNG' };
 		imageFile = request.file.replace(/\.zip$/, '.png');
@@ -181,17 +188,18 @@ export function toPublishedPlugin(payload: PublishPayload): PublishedPlugin {
 /**
  * Replaces one plugin's entry, leaving every other plugin untouched.
  *
- * Matched on GUID rather than name, because the GUID is what Jellyfin installs
- * against and a plugin could be renamed without becoming a different plugin.
+ * Matched on GUID rather than name, because the GUID is what Jellyfin and Emby
+ * install against and a plugin could be renamed without becoming a different
+ * plugin. Shared by both platforms' catalogs.
  *
  * @param existing The catalog as it stands, or null when nothing is published.
  * @param entry The entry to put in.
  * @returns The catalog to store.
  */
-export function mergeIntoCatalog(
-	existing: PublishedPlugin[] | null,
-	entry: PublishedPlugin
-): PublishedPlugin[] {
+export function mergeIntoCatalog<T extends { guid: string; name: string }>(
+	existing: T[] | null,
+	entry: T
+): T[] {
 	const others = (existing ?? []).filter(
 		(plugin) => plugin.guid.toLowerCase() !== entry.guid.toLowerCase()
 	);

@@ -1,3 +1,4 @@
+import AnimeEntryLinks from '@/components/AnimeEntryLinks';
 import MediaHeader from '@/components/MediaHeader';
 import MovieSearchResults from '@/components/MovieSearchResults';
 import SearchControls from '@/components/SearchControls';
@@ -12,6 +13,7 @@ import {
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
+import { useAnimeEntries } from '@/hooks/useAnimeEntries';
 import { useAvailabilityCheck } from '@/hooks/useAvailabilityCheck';
 import { useExternalSources } from '@/hooks/useExternalSources';
 import { useMassReport } from '@/hooks/useMassReport';
@@ -129,6 +131,9 @@ const MovieSearch: FunctionComponent = () => {
 	const { imdbid } = router.query;
 	const isMounted = useRef(true);
 	const hasLoadedTrackerStats = useRef(false);
+	// An anime film is its own AniDB entry; this links to its anime page.
+	const animeEntries = useAnimeEntries(typeof imdbid === 'string' ? [imdbid] : []);
+	const animeLinks = typeof imdbid === 'string' ? (animeEntries[imdbid] ?? []) : [];
 
 	const [movieInfo, setMovieInfo] = useState<MovieInfo>(emptyMovieInfo);
 	// imdb id movieInfo belongs to - lets the search wait for its own metadata
@@ -187,12 +192,12 @@ const MovieSearch: FunctionComponent = () => {
 
 	/**
 	 * A user holding only Real-Debrid cannot start a transfer at all: the uploader
-	 * needs a TorBox or AllDebrid key for the source side. They are exactly the
+	 * needs a TorBox key for the source side. They are exactly the
 	 * people the request board exists for, so the Request button appears for them
 	 * and for nobody else — anyone with a second service can just send it.
 	 */
 	// The Request button is for Real-Debrid users: it files an ask for a
-	// release, which somebody with a TorBox or AllDebrid account then fulfils.
+	// release, which somebody with a TorBox account then fulfils.
 	// It used to hide from a user who also held one of those keys, but that
 	// conflated "can ask" with "cannot fetch" — a user with both may still want
 	// to leave the ask for someone else rather than spend their own quota.
@@ -202,14 +207,26 @@ const MovieSearch: FunctionComponent = () => {
 		async (result: SearchResult) => {
 			if (!rdKey) return;
 			try {
-				await fileContentRequest(rdKey, {
+				const filed = await fileContentRequest(rdKey, {
 					hash: result.hash,
 					imdbId: imdbid as string,
 					title: result.title,
 					mediaType: 'movie',
+					// Whole release, in bytes: the transfer cap is about what the uploader
+					// moves, and a row's sizes are in MB.
+					sizeBytes: result.fileSize
+						? Math.round(result.fileSize * 1024 * 1024)
+						: undefined,
+					returnPath: window.location.pathname,
 				});
+				if (filed.delivered) {
+					toast.success('Real-Debrid already had this. It is in your library now.', {
+						duration: 6000,
+					});
+					return;
+				}
 				toast.success(
-					'Requested. Anyone with TorBox or AllDebrid can now send it to your library.',
+					'Requested. Anyone with TorBox can now send it to your library. Follow it under Requests.',
 					{ duration: 6000 }
 				);
 			} catch (error) {
@@ -293,7 +310,15 @@ const MovieSearch: FunctionComponent = () => {
 		sortByBiggest
 	);
 
-	const { handleMassReport } = useMassReport(rdKey, adKey, torboxKey, imdbid as string);
+	const reporterKeys = {
+		rdKey,
+		adKey,
+		torboxKey,
+		premiumizeKey,
+		offcloudKey,
+		debridLinkKey,
+	};
+	const { handleMassReport } = useMassReport(reporterKeys, imdbid as string);
 
 	// Fetch movie info
 	useEffect(() => {
@@ -1146,7 +1171,14 @@ const MovieSearch: FunctionComponent = () => {
 				onDescToggle={() => setDescLimit(0)}
 				actionButtons={handleActionButtons()}
 				trailer={movieInfo.trailer}
-				additionalInfo={movieReleaseInfo}
+				additionalInfo={
+					movieReleaseInfo || animeLinks.length > 0 ? (
+						<>
+							{movieReleaseInfo}
+							<AnimeEntryLinks entries={animeLinks} />
+						</>
+					) : null
+				}
 			/>
 
 			{searchState === 'loading' && <SearchSourceProgress sources={sourceStates} />}
@@ -1186,6 +1218,7 @@ const MovieSearch: FunctionComponent = () => {
 				torboxKey={torboxKey}
 				premiumizeKey={premiumizeKey}
 				offcloudKey={offcloudKey}
+				debridLinkKey={debridLinkKey}
 				onMassReport={(type) => handleMassReport(type, filteredResults)}
 				mediaType="movie"
 				title={movieInfo.title}

@@ -7,10 +7,12 @@ import { getUpstreamIndexers } from '@/services/newznab/indexers';
 import { decryptReleaseId, hasTokenSecret } from '@/services/newznab/opaqueId';
 import { isSearchType, runSearch } from '@/services/newznab/search';
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
+import { getUpstreamLimiter } from '@/services/newznab/upstreamLimiter';
 import { capsXml, newznabErrorXml, searchRssXml } from '@/services/newznab/xml';
 import { fetchNzbFrom } from '@/services/nzb2rd';
 import { getClientIp } from '@/services/rateLimit/middlewareRateLimiter';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
+import { isNzbBlocked } from '@/services/takedown/blocklist';
 import { safeNzbName } from '@/utils/nzbName';
 import { NzbSanitizeError, sanitizeNzb } from '@/utils/nzbSanitize';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -56,7 +58,10 @@ function asciiFilename(name: string): string {
 	return name.replace(/[\\"]/g, '').replace(/[^\x20-\x7e]/g, '_');
 }
 
-function sendNzb(res: NextApiResponse, token: string, xml: string, removed: string) {
+async function sendNzb(res: NextApiResponse, token: string, xml: string, removed: string) {
+	// A grab token names no release, so a takedown is judged on the file itself.
+	// "No such item" is what an *arr reads as gone, and it moves on.
+	if (await isNzbBlocked(xml)) return sendError(res, 200, 300, 'No such item');
 	const name = safeNzbName(token);
 	res.setHeader('X-Nzb-Removed', removed.replace(/[^\x20-\x7e]/g, '') || '-');
 	res.setHeader('Content-Type', 'application/x-nzb; charset=utf-8');
@@ -163,6 +168,24 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 	// A token minted before an indexer was removed from the config. Nothing can
 	// serve it any more, which is exactly what 300 means.
 	if (!indexer) return sendError(res, 200, 300, 'No such item');
+
+	// The indexer's shared download allowance, spent here and nowhere earlier:
+	// a store hit above never reached it. Over the cap is a 300, not a 429. A
+	// `Request limit reached` benches all of DMM in an *arr for up to a day,
+	// when only this one upstream is out; a failed release sends it on to the
+	// next one. A refusal takes no slot, so the cap reopens as grabs age out.
+	if (indexer.grabLimit) {
+		const { success } = await getUpstreamLimiter().check(`upstream:${indexer.prefix}`, {
+			name: `upstream-grab-${indexer.prefix}`,
+			rateLimit: indexer.grabLimit.rateLimit,
+			windowSeconds: indexer.grabLimit.windowSeconds,
+			countRefused: false,
+		});
+		if (!success) {
+			console.warn(`Newznab: refusing a grab from ${indexer.name}, over its grab limit`);
+			return sendError(res, 200, 300, 'That release could not be downloaded');
+		}
+	}
 
 	let raw: string;
 	try {

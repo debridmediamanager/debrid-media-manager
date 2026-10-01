@@ -27,6 +27,27 @@ import { Toaster, toast } from 'react-hot-toast';
 
 const PROFILE_WAIT_MS = 5000;
 
+// Indexers first, torrent before Usenet as everywhere else in DMM, then the
+// media server plugins.
+const sponsorLinks = [
+	{
+		href: '/torznab',
+		label: 'Torrent Indexer',
+		description: "DMM's library as a Torznab indexer, for sponsors",
+	},
+	{
+		href: '/newznab',
+		label: 'Usenet Indexer',
+		description: 'Prowlarr-compatible endpoint for sponsors',
+	},
+	{
+		href: '/jellyfin',
+		label: 'Jellyfin plugins',
+		description: 'Your library in Jellyfin, for sponsors',
+	},
+	{ href: '/emby', label: 'Emby plugins', description: 'Your library in Emby, for sponsors' },
+];
+
 function IndexPage() {
 	const router = useRouter();
 	const {
@@ -213,8 +234,8 @@ function IndexPage() {
 	const actionButtonClasses =
 		'haptic-sm w-full rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50';
 
-	// The six provider cards, so guest mode can fold them away without the JSX
-	// below having to exist twice.
+	const debridServiceFailed = !!(rdError || adError || tbError || pmError || ocError || dlError);
+
 	const debridServiceCards = (
 		<>
 			<ServiceCard
@@ -314,71 +335,50 @@ function IndexPage() {
 							</span>
 							<span className="text-xs text-gray-400">Open full page</span>
 						</Link>
-						<Link
-							href="/newznab"
-							className="haptic-sm flex w-full items-center justify-between rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-						>
-							<span className="flex items-center">
+						{/* Folded like the guest-mode debrid cards: four always-open rows
+						    pushed the rest of the page down for everyone, sponsor or not. */}
+						<details className="w-full rounded border-2 border-pink-500/40 bg-gray-800/30">
+							<summary className="haptic-sm cursor-pointer px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50">
 								<span
 									aria-hidden="true"
 									className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
 								/>
-								Usenet Indexer
-							</span>
-							<span className="text-xs text-gray-400">
-								Prowlarr-compatible endpoint for sponsors
-							</span>
-						</Link>
-						<Link
-							href="/jellyfin"
-							className="haptic-sm flex w-full items-center justify-between rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-						>
-							<span className="flex items-center">
-								<span
-									aria-hidden="true"
-									className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
-								/>
-								Jellyfin plugins
-							</span>
-							<span className="text-xs text-gray-400">
-								Your library in Jellyfin, for sponsors
-							</span>
-						</Link>
-						<Link
-							href="/torznab"
-							className="haptic-sm flex w-full items-center justify-between rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
-						>
-							<span className="flex items-center">
-								<span
-									aria-hidden="true"
-									className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full bg-pink-400"
-								/>
-								Torrent Indexer
-							</span>
-							<span className="text-xs text-gray-400">
-								DMM&apos;s library as a Torznab indexer, for sponsors
-							</span>
-						</Link>
+								Sponsor features
+							</summary>
+							<div className="grid grid-cols-1 gap-3 p-3 pt-0">
+								{sponsorLinks.map(({ href, label, description }) => (
+									<Link
+										key={href}
+										href={href}
+										className="haptic-sm flex w-full items-center justify-between gap-3 rounded border-2 border-pink-500/40 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50"
+									>
+										<span className="shrink-0">{label}</span>
+										<span className="text-right text-xs text-gray-400">
+											{description}
+										</span>
+									</Link>
+								))}
+							</div>
+						</details>
 						<BrowseSection terms={browseTerms} />
 						<TraktSection traktUser={traktUser} />
 						<SimklSection simklUser={simklUser} />
 						<div className="grid w-full grid-cols-1 gap-3">
-							{/* A guest declined all six of these on the way in, so
-							    they are folded away rather than dropped: the whole
-							    point of guest mode is that connecting a service
-							    later stays one click away. */}
-							{isGuest ? (
-								<details className="w-full rounded border-2 border-gray-500 bg-gray-800/30">
-									<summary className="haptic-sm cursor-pointer px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50">
-										Connect a debrid service
-									</summary>
-									<div className="grid grid-cols-1 gap-3 p-3 pt-0">
-										{debridServiceCards}
-									</div>
-								</details>
-							) : (
-								debridServiceCards
-							)}
+							{/* Folded for everyone: six login buttons nobody needs twice
+							    took most of the page. Folded rather than dropped, so connecting
+							    another service stays one click away, and opened whenever a
+							    provider failed, because its toast points at its card. */}
+							<details
+								open={debridServiceFailed}
+								className="w-full rounded border-2 border-gray-500 bg-gray-800/30"
+							>
+								<summary className="haptic-sm cursor-pointer px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50">
+									{isGuest ? 'Connect a debrid service' : 'Debrid services'}
+								</summary>
+								<div className="grid grid-cols-1 gap-3 p-3 pt-0">
+									{debridServiceCards}
+								</div>
+							</details>
 							<ServiceCard
 								service="trakt"
 								error={traktError}
@@ -422,6 +422,12 @@ function IndexPage() {
 								Clear browser data
 							</button>
 						</div>
+						<Link
+							href="/copyright"
+							className="mt-2 text-center text-xs text-gray-400 underline"
+						>
+							Report copyright infringement
+						</Link>
 					</div>
 				</>
 			) : (

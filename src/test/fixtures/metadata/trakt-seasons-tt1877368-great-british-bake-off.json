@@ -1,0 +1,210 @@
+[
+	{
+		"ids": {
+			"plex": { "guid": "602e5cb791bd55002cf720f9" },
+			"tmdb": 45294,
+			"tvdb": 302261,
+			"trakt": 46120
+		},
+		"title": "Specials",
+		"votes": 3,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/046/120/posters/medium/38c859c490.jpg.webp"
+			]
+		},
+		"number": 0,
+		"rating": 6.666669845581055,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T08:13:09.000Z",
+		"first_aired": "2010-08-17T19:00:00.000Z",
+		"episode_count": 15,
+		"total_runtime": 898,
+		"aired_episodes": 15,
+		"original_title": "Specials"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e5cb791bd55002cf720fa" },
+			"tmdb": 45293,
+			"tvdb": 302271,
+			"trakt": 46121
+		},
+		"title": "Series 1",
+		"votes": 29,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/046/121/posters/medium/13163fc80a.jpg.webp"
+			]
+		},
+		"number": 1,
+		"rating": 7.965519905090332,
+		"network": null,
+		"overview": "Series 1 of The Great British Bake Off, aired on BBC 2, saw ten home bakers take part in a bake-off to test every aspect of their baking skills as they battled to be crowned the Great British Bake Off’s best amateur baker. Each week the nationwide tour saw keen bakers put through three challenges in a particular discipline. The rounds took place in various locations across the UK following a theme, for example, the episode on puddings would take place in Bakewell, bread baking would take place near Sandwich. This first series had a voiceover by Stephen Noonan; for the subsequent series this role was taken by the on-screen presenters Mel Giedroyc and Sue Perkins.",
+		"updated_at": "2026-09-26T08:13:09.000Z",
+		"first_aired": "2010-08-17T19:00:00.000Z",
+		"episode_count": 6,
+		"total_runtime": 360,
+		"aired_episodes": 6,
+		"original_title": "Series 1"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e5cb391bd55002cf720cb" },
+			"tmdb": 45296,
+			"tvdb": 472096,
+			"trakt": 46122
+		},
+		"title": "Series 2",
+		"votes": 21,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/046/122/posters/medium/016f079d2d.jpg.webp"
+			]
+		},
+		"number": 2,
+		"rating": 8.095239639282227,
+		"network": null,
+		"overview": "In this year's series of The Great British Bake Off twelve amateur bakers started the competition and they were gradually eliminated during each round of the contest. Unlike series 1, this year the competition was held in a single location - in the ground of Valentines Mansion, a 17th-century mansion house in Redbridge. In addition to their on-screen presenting roles, Mel Giedroyc and Sue Perkins also took over the narration of the show, which in series 1 had been done by Stephen Noonan. Series 2 also introduced the \"star baker\" award for the most impressive performer each week.\n\nThree and a half thousand people applied for the competition, and 12 were selected. Each episode was filmed over two 14-hour days.",
+		"updated_at": "2026-09-26T08:13:09.000Z",
+		"first_aired": "2011-08-16T19:00:00.000Z",
+		"episode_count": 11,
+		"total_runtime": 660,
+		"aired_episodes": 11,
+		"original_title": "Series 2"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e5cb791bd55002cf720fc" },
+			"tmdb": 45295,
+			"tvdb": 498436,
+			"trakt": 46123
+		},
+		"title": "Series 3",
+		"votes": 26,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/046/123/posters/medium/4efafd7688.jpg.webp"
+			]
+		},
+		"number": 3,
+		"rating": 7.923079967498779,
+		"network": null,
+		"overview": "The third series of The Great British Bake Off began airing on Tuesday 14 August 2012. The series was filmed at Harptree Court in East Harptree, Somerset.\n\nSeven thousand applied for the competition and twelve contestants were chosen.",
+		"updated_at": "2026-09-26T08:13:09.000Z",
+		"first_aired": "2012-08-14T19:00:00.000Z",
+		"episode_count": 14,
+		"total_runtime": 840,
+		"aired_episodes": 14,
+		"original_title": "Series 3"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e5cb591bd55002cf720e0" },
+			"tmdb": 45297,
+			"tvdb": 525723,
+			"trakt": 46124
+		},
+		"title": "Series 4",
+		"votes": 23,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/046/124/posters/medium/0605a8f932.jpg.webp"
+			]
+		},
+		"number": 4,
+		"rating": 7.956520080566406,
+		"network": null,
+		"overview": "The fourth series of The Great British Bake Off began airing on 20 August 2013. Mel Giedroyc and Sue Perkins again presented the show and Mary Berry and Paul Hollywood returned as judges. As with series three, the competition was held at Harptree Court in East Harptree, Somerset.",
+		"updated_at": "2026-09-26T08:13:09.000Z",
+		"first_aired": "2013-08-20T19:00:00.000Z",
+		"episode_count": 15,
+		"total_runtime": 900,
+		"aired_episodes": 15,
+		"original_title": "Series 4"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e5cb891bd55002cf720fe" },
+			"tmdb": 62219,
+			"tvdb": 592304,
+			"trakt": 46125
+		},
+		"title": "Series 5",
+		"votes": 34,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/046/125/posters/medium/0b2af43fc5.jpg.webp"
+			]
+		},
+		"number": 5,
+		"rating": 8.14706039428711,
+		"network": null,
+		"overview": "The fifth series of The Great British Bake Off first aired on 6 August 2014, with twelve contestants. Mel Giedroyc and Sue Perkins presented the show and Mary Berry and Paul Hollywood returned as judges. Twelve contestants competed in this series, and the competition was held in Welford Park in Berkshire.\n\nThe programme was moved from BBC Two to BBC One starting this year, but the Masterclass episodes remained on BBC Two. A companion series, The Great British Bake Off: An Extra Slice, hosted by comedian Jo Brand, started this year on BBC Two.",
+		"updated_at": "2026-09-26T08:13:09.000Z",
+		"first_aired": "2014-08-06T19:00:00.000Z",
+		"episode_count": 16,
+		"total_runtime": 960,
+		"aired_episodes": 16,
+		"original_title": "Series 5"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e5cb891bd55002cf720ff" },
+			"tmdb": 69330,
+			"tvdb": 633363,
+			"trakt": 114066
+		},
+		"title": "Series 6",
+		"votes": 32,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/114/066/posters/medium/d8089b6ee4.jpg.webp"
+			]
+		},
+		"number": 6,
+		"rating": 8.4375,
+		"network": null,
+		"overview": "The sixth series of The Great British Bake Off first aired on 5 August 2015, with twelve contestants competing to be the series 6 winner. Mel Giedroyc and Sue Perkins presented the show, and Mary Berry and Paul Hollywood returned as judges. The competition was held in the ground of Welford Park, Berkshire for a second year.",
+		"updated_at": "2026-09-26T08:13:10.000Z",
+		"first_aired": "2015-08-05T19:00:00.000Z",
+		"episode_count": 16,
+		"total_runtime": 941,
+		"aired_episodes": 16,
+		"original_title": "Series 6"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e5cb891bd55002cf72100" },
+			"tmdb": 79474,
+			"tvdb": 676220,
+			"trakt": 130453
+		},
+		"title": "Series 7",
+		"votes": 30,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/130/453/posters/medium/6a6775e21a.jpg.webp"
+			]
+		},
+		"number": 7,
+		"rating": 8,
+		"network": null,
+		"overview": "The seventh series of The Great British Bake Off aired from 24 August 2016, with twelve contestants competing to be crowned the series 7 winner.\n\nThis series was the last to be broadcast on BBC One, as the production company Love Productions opted to move the show to Channel 4. As such, it was also the last series to feature Sue Perkins, Mel Giedroyc, and Mary Berry.\n\nIn the United States, the seventh series was broadcast as the fourth season on PBS and streamed as Collection 4 on Netflix.",
+		"updated_at": "2026-09-26T08:13:10.000Z",
+		"first_aired": "2016-08-22T19:00:00.000Z",
+		"episode_count": 11,
+		"total_runtime": 660,
+		"aired_episodes": 11,
+		"original_title": "Series 7"
+	}
+]

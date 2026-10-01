@@ -1,5 +1,8 @@
+import { animeTypeLabel } from '@/components/AnimeEntryLinks';
 import Poster from '@/components/poster';
 import { useCachedList } from '@/hooks/useCachedList';
+import type { AnimeSearchResult } from '@/services/database/anime';
+import { animePagePath } from '@/utils/anidbId';
 import { withAuth } from '@/utils/withAuth';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -43,6 +46,20 @@ function Search() {
 	);
 
 	const searchResults = data ?? [];
+
+	// AniDB entries matching the query, each its own anime page. A season or
+	// OVA with no IMDb id of its own is reachable only this way. A row with no
+	// AniDB id (`anime:mal-N`) has its page at `/anime/mal-N`.
+	const { data: animeData, loading: animeLoading } = useCachedList<AnimeSearchResult[]>(
+		query ? `animesearch:${query}` : null,
+		async () => {
+			const res = await fetch(`/api/search/anime?keyword=${encodeURIComponent(query)}`);
+			if (!res.ok) return [];
+			const body = await res.json();
+			return Array.isArray(body?.results) ? body.results : [];
+		}
+	);
+	const animeResults = (animeData ?? []).filter((r) => animePagePath(r.id) !== null);
 	const errorMessage = error
 		? error.message.includes('Failed to fetch search results')
 			? error.message
@@ -142,18 +159,60 @@ function Search() {
 									<h3 className="text-center text-lg font-bold text-slate-300">
 										{result.title}
 									</h3>
-									<div className="text-sm text-gray-600">{result.year}</div>
+									<div className="text-sm text-gray-400">{result.year}</div>
 								</Link>
 							))}
 						</div>
 					</>
 				)}
-				{/* No results found message */}
-				{!loading && searchResults.length === 0 && query && (
-					<h2 className="mx-auto my-4 max-w-3xl text-xl font-bold">
-						No results found for &quot;{query}&quot;
-					</h2>
+				{animeResults.length > 0 && (
+					<div data-testid="anime-search-results">
+						<h2 className="mx-auto my-4 max-w-3xl text-xl font-bold">
+							Anime entries for <span className="text-yellow-500">{query}</span>
+						</h2>
+						<div className="grid w-full grid-cols-2 gap-3 px-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+							{animeResults.map((result) => {
+								const type = animeTypeLabel(result.type);
+								return (
+									<Link
+										key={result.id}
+										className="haptic flex flex-col items-center justify-center gap-2 rounded border-2 border-fuchsia-500 bg-fuchsia-900/30 p-3 text-fuchsia-100 transition-colors hover:bg-fuchsia-800/50"
+										href={animePagePath(result.id)!}
+									>
+										{/* eslint-disable-next-line @next/next/no-img-element */}
+										<img
+											src={result.poster_url}
+											alt={`${result.title} poster`}
+											loading="lazy"
+											className="aspect-[2/3] w-full rounded object-cover"
+											// A third of the old Kitsu posters are gone from both of
+											// Kitsu's hosts; keep the card's shape, not the alt text.
+											onError={(e) => {
+												e.currentTarget.style.visibility = 'hidden';
+											}}
+										/>
+										<h3 className="text-center text-lg font-bold text-slate-300">
+											{result.title}
+										</h3>
+										{type && (
+											<div className="text-sm text-fuchsia-300">{type}</div>
+										)}
+									</Link>
+								);
+							})}
+						</div>
+					</div>
 				)}
+				{/* No results found message */}
+				{!loading &&
+					!animeLoading &&
+					searchResults.length === 0 &&
+					animeResults.length === 0 &&
+					query && (
+						<h2 className="mx-auto my-4 max-w-3xl text-xl font-bold">
+							No results found for &quot;{query}&quot;
+						</h2>
+					)}
 			</div>
 		</div>
 	);

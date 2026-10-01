@@ -229,7 +229,7 @@ const ConfirmDialog: React.FC<FireOptions & BaseModalProps> = ({
 				<div className="flex justify-center space-x-3">
 					<button
 						onClick={() => onClose({ isConfirmed: true })}
-						className="rounded bg-cyan-600 px-4 py-2 font-semibold text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+						className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
 					>
 						{confirmButtonText}
 					</button>
@@ -313,13 +313,13 @@ const ChoiceDialog: React.FC<FireOptions & BaseModalProps> = ({
 				<div className="flex justify-center space-x-3">
 					<button
 						onClick={() => onClose({ isConfirmed: true, isDenied: false })}
-						className="rounded bg-cyan-600 px-4 py-2 font-semibold text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+						className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
 					>
 						{confirmButtonText}
 					</button>
 					<button
 						onClick={() => onClose({ isConfirmed: false, isDenied: true })}
-						className="rounded bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+						className="rounded bg-emerald-700 px-4 py-2 font-semibold text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
 					>
 						{denyButtonText}
 					</button>
@@ -394,7 +394,7 @@ const InputDialog: React.FC<FireOptions & BaseModalProps> = ({
 					<div className="flex justify-center space-x-3">
 						<button
 							type="submit"
-							className="rounded bg-cyan-600 px-4 py-2 font-semibold text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+							className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
 						>
 							OK
 						</button>
@@ -494,7 +494,7 @@ const CustomHtmlDialog: React.FC<FireOptions & BaseModalProps> = ({
 						{showConfirmButton && (
 							<button
 								onClick={handleConfirm}
-								className="rounded bg-cyan-600 px-4 py-2 font-semibold text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+								className="rounded bg-cyan-700 px-4 py-2 font-semibold text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"
 							>
 								{confirmButtonText}
 							</button>

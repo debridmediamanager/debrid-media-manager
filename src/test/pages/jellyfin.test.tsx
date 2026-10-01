@@ -138,6 +138,12 @@ describe('the page', () => {
 		expect(screen.queryByText('A sponsor feature')).toBeNull();
 	});
 
+	it('links to the Emby page', () => {
+		asVisitor();
+		render(<JellyfinSetupPage />);
+		expect(screen.getByText(/Using Emby\?/).closest('a')).toHaveAttribute('href', '/emby');
+	});
+
 	it('keeps the setup visible to a visitor, since the endpoint is the real gate', () => {
 		asVisitor();
 		render(<JellyfinSetupPage />);

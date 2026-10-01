@@ -14,8 +14,18 @@ vi.mock('next/head', () => ({
 
 vi.mock('next/link', () => ({
 	__esModule: true,
-	default: ({ children, href }: { children: ReactNode; href: string }) => (
-		<a href={href}>{children}</a>
+	default: ({
+		children,
+		href,
+		className,
+	}: {
+		children: ReactNode;
+		href: string;
+		className?: string;
+	}) => (
+		<a href={href} className={className}>
+			{children}
+		</a>
 	),
 }));
 
@@ -69,6 +79,22 @@ describe('MovieInfoPage', () => {
 
 		const backLink = screen.getByText('Back to Movie');
 		expect(backLink).toHaveAttribute('href', '/movie/tt1234567');
+	});
+
+	// At 320px /movie/tt…/info put "The Shawshank Redemption", its icon buttons and
+	// "Back to Movie" on one non-wrapping row, which ran the link to 339px and
+	// scrolled the page sideways (measured 2026-09-29).
+	it('lets the title row wrap on a narrow screen', async () => {
+		const axios = (await import('axios')).default;
+		vi.mocked(axios.get).mockReturnValue(new Promise(() => {}));
+
+		const MovieInfoPage = (await import('@/pages/movie/[imdbid]/info')).default;
+		render(<MovieInfoPage />);
+
+		const back = screen.getByText('Back to Movie');
+		expect(back).toHaveClass('shrink-0');
+		expect(back.parentElement).toHaveClass('flex-wrap');
+		expect(screen.getByRole('heading', { level: 1 })).toHaveClass('min-w-0', 'break-words');
 	});
 
 	it('should show error message on fetch failure', async () => {

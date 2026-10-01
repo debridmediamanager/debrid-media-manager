@@ -1,6 +1,7 @@
 import { getIndexers, isValidImdbId, searchUsenet } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { withoutBlockedReleases } from '@/services/takedown/blocklist';
 import { resolveTvdbId } from '@/services/tvdbLookup';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -52,7 +53,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	if (cached?.isFresh) {
 		res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
-		return res.status(200).json({ results: cached.results, cached: true });
+		return res
+			.status(200)
+			.json({ results: await withoutBlockedReleases(cached.results), cached: true });
 	}
 
 	// Keyed on TVDB for shows, since that is what the indexer matches TV releases
@@ -70,12 +73,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		});
 		await db.setCachedNzbSearch(imdbId, season, results);
 		res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=1800');
-		return res.status(200).json({ results, cached: false });
+		return res
+			.status(200)
+			.json({ results: await withoutBlockedReleases(results), cached: false });
 	} catch (error) {
 		console.error('Usenet search failed:', error);
 		if (cached) {
 			// Serve what we have rather than breaking the section.
-			return res.status(200).json({ results: cached.results, cached: true, stale: true });
+			return res.status(200).json({
+				results: await withoutBlockedReleases(cached.results),
+				cached: true,
+				stale: true,
+			});
 		}
 		return res.status(502).json({ error: 'Usenet indexer unreachable' });
 	}

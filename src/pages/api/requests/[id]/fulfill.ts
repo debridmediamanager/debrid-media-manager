@@ -1,9 +1,15 @@
+import { isTransferStillValid } from '@/services/debridTransferValidity';
 import { orderedServersForNewJob } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { addHashToRd, alreadyOnRealDebrid, mintRequesterToken } from '@/services/requestDelivery';
+import { BLOCKED_MESSAGE, isHashBlocked } from '@/services/takedown/blocklist';
 import { generateUserId } from '@/utils/castApiHelpers';
-import { castAccessToken } from '@/utils/castRdToken';
 import { canClaim, pickSourceKeys, RequestValidationError } from '@/utils/contentRequest';
+import { torboxCachedHashes } from '@/utils/torboxCache';
+import { torboxUserId } from '@/utils/torboxIdentity';
+import { FREE_TORBOX_PLAN_MESSAGE, isFreeTorBoxPlan } from '@/utils/torboxPlan';
+import { exceedsTransferSizeCap, tooLargeMessage } from '@/utils/transferSize';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -28,31 +34,6 @@ function readToken(req: NextApiRequest): string | null {
 	return typeof token === 'string' && token.trim() !== '' ? token.trim() : null;
 }
 
-/**
- * A Real-Debrid access token for the *requester*, minted now.
- *
- * Not the token they filed the request with. Real-Debrid expires an access
- * token 24 hours after minting, and a request may sit on the board for days —
- * nzb2rd learned this the expensive way, where stale tokens were 1298 of 1952
- * Usenet failures. The OAuth triple in `CastProfile` does not expire, so the
- * token is minted at the moment of fulfilment instead of being carried.
- */
-async function mintRequesterToken(requesterId: string): Promise<string | null> {
-	const profile = await db.getCastProfile(requesterId);
-	if (!profile) return null;
-	try {
-		return await castAccessToken(profile);
-	} catch (error) {
-		// Only the message: an AxiosError expands to include `config.data`, which
-		// here is the OAuth POST body — the triple itself.
-		console.error(
-			'Minting a Real-Debrid token for a request failed:',
-			error instanceof Error ? error.message : String(error)
-		);
-		return null;
-	}
-}
-
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
 		res.setHeader('Allow', 'POST');
@@ -62,18 +43,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const id = req.query.id;
 	if (typeof id !== 'string' || id === '') {
 		return res.status(400).json({ error: 'request id is required' });
-	}
-
-	const token = readToken(req);
-	if (!token) {
-		return res.status(401).json({ error: 'A Real-Debrid session is required to fulfil' });
-	}
-
-	let fulfillerId: string;
-	try {
-		fulfillerId = await generateUserId(token);
-	} catch {
-		return res.status(401).json({ error: 'Real-Debrid session is not valid' });
 	}
 
 	let sourceKeys: { tb_api_key: string };
@@ -87,11 +56,78 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		throw error;
 	}
 
+	// Who is fulfilling. The fulfiller's own Real-Debrid never takes part in the
+	// transfer, so it is not required: a signed-in Real-Debrid session identifies
+	// them when there is one (which is also what catches self-fulfilment), and the
+	// TorBox account does otherwise.
+	const token = readToken(req);
+	let fulfillerId: string;
+	if (token) {
+		try {
+			fulfillerId = await generateUserId(token);
+		} catch {
+			return res.status(401).json({ error: 'Real-Debrid session is not valid' });
+		}
+	} else {
+		const tbId = await torboxUserId(sourceKeys.tb_api_key);
+		if (!tbId) return res.status(401).json({ error: 'TorBox did not accept that key' });
+		fulfillerId = tbId;
+	}
+
 	const request = await db.getContentRequest(id);
 	if (!request) return res.status(404).json({ error: 'request not found' });
+	if (await isHashBlocked(request.hash)) return res.status(451).json({ error: BLOCKED_MESSAGE });
 
 	const verdict = canClaim(request, fulfillerId);
 	if (!verdict.ok) return res.status(verdict.code).json({ error: verdict.reason });
+
+	// Already on Real-Debrid, either cached there all along or put there by an
+	// earlier transfer: add it to the asker's account and spend nobody's TorBox.
+	// Falls through to a normal fulfil if the add does not go through.
+	const onRd = (await alreadyOnRealDebrid([request.hash]).catch(() => new Map())).get(
+		request.hash
+	);
+	if (onRd) {
+		const token = await mintRequesterToken(request.requesterId);
+		if (token && (await addHashToRd(token, onRd))) {
+			await db.markContentRequestDelivered(id);
+			return res.status(200).json({ delivered: true });
+		}
+	}
+
+	// Somebody's transfer of this exact release is already running. A second
+	// one would spend another TorBox fetch on the same bytes; once the first
+	// lands, the cron's free delivery adds it to this asker too.
+	const existing = await db.getDebridTransfer(request.hash).catch(() => null);
+	if (existing?.status === 'pending' && (await isTransferStillValid(existing))) {
+		return res.status(409).json({
+			error: 'this release is already being transferred, and will reach the asker when it lands',
+			inProgress: true,
+		});
+	}
+
+	const sizeBytes = request.sizeBytes == null ? undefined : Number(request.sizeBytes);
+	if (exceedsTransferSizeCap(sizeBytes)) {
+		return res.status(413).json({ error: tooLargeMessage(sizeBytes as number) });
+	}
+
+	// Before the claim, so a fulfiller whose TorBox account cannot source the
+	// transfer never takes the request off the board.
+	if (await isFreeTorBoxPlan(sourceKeys.tb_api_key)) {
+		return res.status(403).json({ error: FREE_TORBOX_PLAN_MESSAGE });
+	}
+
+	// Also before the claim: the uploader only moves what TorBox already has, and
+	// a job for anything else fails `uncached` a second later. That was 219 of
+	// the first 369 fulfilments. An unknown answer lets it through; only a
+	// definite "not cached" keeps the request on the board untouched.
+	const cached = await torboxCachedHashes(sourceKeys.tb_api_key, [request.hash]);
+	if (cached && !cached.has(request.hash)) {
+		return res.status(409).json({
+			error: 'TorBox does not have this release cached, so it cannot be sent yet',
+			uncached: true,
+		});
+	}
 
 	// Claim before doing any work. The status is part of the update's `where`,
 	// so if two fulfillers arrive together the database picks one and the other
@@ -102,7 +138,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	const requesterToken = await mintRequesterToken(request.requesterId);
 	if (!requesterToken) {
-		await db.releaseContentRequest(id, 'the requester has no usable Real-Debrid credentials');
+		// Stalled, not failed: every other fulfiller would hit the same wall.
+		await db.stallContentRequest(id, 'the requester has no usable Real-Debrid credentials');
 		return res.status(409).json({
 			error: 'the requester needs to reconnect Real-Debrid before this can be fulfilled',
 		});
@@ -116,7 +153,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	});
 
 	let lastNetworkError = false;
-	for (const server of orderedServersForNewJob(undefined)) {
+	for (const server of orderedServersForNewJob(sizeBytes)) {
 		let response: Response;
 		try {
 			response = await fetch(`${server}/jobs`, {
@@ -133,8 +170,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		const data = await response.json().catch(() => ({}));
 		if (response.ok && data?.id) {
+			// The same records a direct submission writes. Without the pending
+			// mapping, 359 of the first 369 fulfilments were invisible to the
+			// dedup check, the "In RD" badge and the cron that files completed
+			// transfers into search.
 			await Promise.all([
 				db.attachContentRequestJob(id, data.id, server),
+				db
+					.recordDebridTransferPending(request.hash, data.id, request.imdbId)
+					.catch((e) => console.error('Recording pending transfer failed:', e)),
 				db
 					.recordDebridJobServer(data.id, server)
 					.catch((e) => console.error('Recording job server failed:', e)),
@@ -146,10 +190,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 						jobId: data.id,
 						imdbId: request.imdbId,
 						title: request.title ?? undefined,
+						returnPath: request.returnPath ?? undefined,
 					})
 					.catch((e) => console.error('Recording transfer context failed:', e)),
 			]);
 			return res.status(200).json({ jobId: data.id });
+		}
+
+		// Busy or broken on the uploader's side, not a verdict on the request: its
+		// per-user job ceiling answers 429 ("job limit reached", seven requests
+		// recorded as failed that way by 2026-09-24). Hand it back untouched.
+		if (response.status === 429 || response.status >= 500) {
+			await db.returnContentRequestClaim(id);
+			return res.status(503).json({
+				error: 'the uploader is busy right now, try again in a minute',
+				busy: true,
+			});
 		}
 
 		// The uploader refused it — a deterministic answer, so stop and hand the
@@ -160,10 +216,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		return res.status(response.status).json({ error: reason });
 	}
 
-	await db.releaseContentRequest(
-		id,
-		lastNetworkError ? 'all uploader hosts unreachable' : 'no uploader host available'
-	);
+	// Our side is down, which says nothing about the request: put it back as it
+	// was instead of recording a failed attempt against it.
+	await db.returnContentRequestClaim(id);
 	return res.status(502).json({
 		error: lastNetworkError ? 'All debrid uploader servers unreachable' : 'no server',
 	});

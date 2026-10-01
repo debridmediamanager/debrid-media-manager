@@ -19,9 +19,13 @@ describe('/api/stremio/[userid]/no-catalog/manifest.json', () => {
 			name: 'DMM Cast for Real-Debrid',
 			catalogs: [],
 		});
-		expect(payload.types).toEqual(['movie', 'series']);
+		expect(payload.types).toEqual(['movie', 'series', 'anime']);
 		expect(payload.resources).toEqual([
-			{ name: 'stream', types: ['movie', 'series'], idPrefixes: ['tt'] },
+			{
+				name: 'stream',
+				types: ['movie', 'series', 'anime'],
+				idPrefixes: ['tt', 'kitsu', 'mal', 'anidb'],
+			},
 		]);
 	});
 

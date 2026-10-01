@@ -1,10 +1,13 @@
+import addonFateZero from '@/test/fixtures/anime/addon-search-fate-zero.json';
+import rowsByKitsuId from '@/test/fixtures/anime/anime-rows-kitsu-fate-zero.json';
+import searchRows from '@/test/fixtures/anime/anime-rows-search-frieren.json';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { AnimeService } from './anime';
 
 const prismaMock = vi.hoisted(() => ({
-	$queryRaw: vi.fn(),
 	anime: {
 		findMany: vi.fn(),
+		findUnique: vi.fn(),
 	},
 }));
 
@@ -14,52 +17,126 @@ vi.mock('./client', () => ({
 	},
 }));
 
+const frierenRow = searchRows.find((r) => r.anidb_id === 17617)!;
+
 describe('AnimeService', () => {
 	let service: AnimeService;
 
 	beforeEach(() => {
 		service = new AnimeService();
-		(prismaMock.$queryRaw as Mock).mockReset();
 		(prismaMock.anime.findMany as Mock).mockReset();
-	});
-
-	it('maps recently updated anime rows to the expected shape', async () => {
-		prismaMock.$queryRaw.mockResolvedValue([
-			{ anidb_id: 1, mal_id: null, poster_url: 'url-a' },
-			{ anidb_id: null, mal_id: 2, poster_url: 'url-b' },
-		]);
-
-		const items = await service.getRecentlyUpdatedAnime(2);
-		expect(items).toEqual([
-			{ id: 'anime:anidb-1', poster_url: 'url-a' },
-			{ id: 'anime:mal-2', poster_url: 'url-b' },
-		]);
-	});
-
-	it('searches anime by title and uses either mal or anidb ids', async () => {
-		prismaMock.$queryRaw.mockResolvedValue([
-			{ title: 'Naruto', anidb_id: 1, mal_id: null, poster_url: 'poster' },
-		]);
-
-		const results = await service.searchAnimeByTitle('naruto');
-		expect(results).toEqual([{ id: 'anime:anidb-1', title: 'Naruto', poster_url: 'poster' }]);
-	});
-
-	it('loads anime entries by MyAnimeList ids', async () => {
-		prismaMock.anime.findMany.mockResolvedValue([
-			{ title: 'One Piece', anidb_id: null, mal_id: 1, poster_url: 'poster' },
-		]);
-
-		const result = await service.getAnimeByMalIds([1]);
-		expect(result).toEqual([{ id: 'anime:mal-1', title: 'One Piece', poster_url: 'poster' }]);
+		(prismaMock.anime.findUnique as Mock).mockReset();
 	});
 
 	it('loads anime entries by Kitsu ids', async () => {
 		prismaMock.anime.findMany.mockResolvedValue([
-			{ title: 'Bleach', anidb_id: 2, mal_id: null, poster_url: 'poster' },
+			{ title: 'Bleach', anidb_id: 2, mal_id: null, kitsu_id: 1, poster_url: 'poster' },
 		]);
 
 		const result = await service.getAnimeByKitsuIds([1]);
 		expect(result).toEqual([{ id: 'anime:anidb-2', title: 'Bleach', poster_url: 'poster' }]);
+	});
+
+	it.each([
+		['anidb', 17617, { anidb_id: 17617 }],
+		['mal', 52991, { mal_id: 52991 }],
+		['kitsu', 46474, { kitsu_id: 46474 }],
+	] as const)('looks a row up by its %s id', async (source, id, where) => {
+		prismaMock.anime.findUnique.mockResolvedValue(null);
+
+		await service.getAnimeByExternalId(source, id);
+
+		expect(prismaMock.anime.findUnique).toHaveBeenCalledWith(
+			expect.objectContaining({ where })
+		);
+	});
+
+	// The addon ranks "Fate/Zero" first; production's findMany hands the rows
+	// back in kitsu_id order, which put Gravitation (kitsu 218) at the top.
+	it('keeps the order the search upstream ranked the ids in', async () => {
+		prismaMock.anime.findMany.mockResolvedValue(structuredClone(rowsByKitsuId));
+		const ranked = addonFateZero.requests[1].body as { metas: { id: string; name: string }[] };
+		const ids = ranked.metas.map((m) => parseInt(m.id.replace('kitsu:', ''), 10));
+
+		const results = await service.getAnimeByKitsuIds(ids);
+
+		const titleOf = new Map(rowsByKitsuId.map((r) => [r.kitsu_id, r.title]));
+		expect(results.map((r) => r.title)).toEqual(ids.map((id) => titleOf.get(id)));
+		expect(results[0].title).toBe('Fate/Zero');
+		expect(results[0]).toEqual({
+			id: 'anime:anidb-8160',
+			title: 'Fate/Zero',
+			poster_url: rowsByKitsuId
+				.find((r) => r.kitsu_id === 6028)!
+				.poster_url.replace('media.kitsu.io', 'media.kitsu.app'),
+		});
+	});
+
+	// Every row in this fixture stores its poster under media.kitsu.io, which
+	// answers 404 since Kitsu moved to media.kitsu.app; production's search for
+	// "frieren" handed out four such URLs, all broken.
+	it("serves posters from Kitsu's current media host", async () => {
+		expect(rowsByKitsuId.every((r) => r.poster_url.startsWith('https://media.kitsu.io/'))).toBe(
+			true
+		);
+		prismaMock.anime.findMany.mockResolvedValue(structuredClone(rowsByKitsuId));
+
+		const results = await service.getAnimeByKitsuIds(rowsByKitsuId.map((r) => r.kitsu_id));
+
+		expect(
+			results.every((r) => r.poster_url.startsWith('https://media.kitsu.app/anime/'))
+		).toBe(true);
+	});
+
+	it('moves an entry row and a franchise row to the current host too', async () => {
+		const frieren = { ...frierenRow };
+		prismaMock.anime.findUnique.mockResolvedValue(frieren);
+		prismaMock.anime.findMany.mockResolvedValue([frieren]);
+
+		const row = await service.getAnimeByExternalId('anidb', 17617);
+		const [entry] = await service.getAnimeEntryRows({ anidbIds: [17617], imdbIds: [] });
+
+		expect(row!.poster_url).toBe(
+			'https://media.kitsu.app/anime/46474/poster_image/medium-23e1293e41a0b54b6621eb589c3f0d62.jpeg'
+		);
+		// fanart.tv is not Kitsu's and is left alone.
+		expect(row!.background_url).toBe(frieren.background_url);
+		expect(entry.poster_url).toBe(row!.poster_url);
+	});
+});
+
+describe('AnimeService.getRecentlyUpdatedAnime', () => {
+	it('lists entries in the order their release rows were last updated, dropping posterless ones', async () => {
+		const scrapedTrue = { findMany: vi.fn() };
+		(prismaMock as any).scrapedTrue = scrapedTrue;
+		scrapedTrue.findMany.mockResolvedValue([
+			{ key: 'anime:anidb-2' },
+			{ key: 'anime:anidb-1' },
+			{ key: 'anime:anidb-3' },
+		]);
+		const row = (anidb_id: number, poster_url: string) => ({
+			anidb_id,
+			kitsu_id: null,
+			mal_id: null,
+			imdb_id: null,
+			title: `t${anidb_id}`,
+			type: 'TV',
+			poster_url,
+		});
+		(prismaMock.anime.findMany as Mock).mockResolvedValue([
+			row(1, 'https://x/1.jpg'),
+			row(2, 'https://x/2.jpg'),
+			row(3, ''),
+		]);
+
+		const result = await new AnimeService().getRecentlyUpdatedAnime(10);
+
+		expect(scrapedTrue.findMany).toHaveBeenCalledWith(
+			expect.objectContaining({
+				orderBy: { updatedAt: 'desc' },
+				where: { key: { startsWith: 'anime:anidb-' } },
+			})
+		);
+		expect(result.map((r) => r.anidb_id)).toEqual([2, 1]);
 	});
 });

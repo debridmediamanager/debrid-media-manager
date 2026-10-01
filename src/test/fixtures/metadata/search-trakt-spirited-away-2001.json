@@ -1,0 +1,175 @@
+[
+	{
+		"score": 1157451471441102800,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0245429",
+				"plex": { "guid": "5d7768243c3c2a001fbca858", "slug": "spirited-away" },
+				"slug": "spirited-away-2001",
+				"tmdb": 129,
+				"trakt": 97
+			},
+			"year": 2001,
+			"title": "Spirited Away",
+			"votes": 32908,
+			"colors": { "poster": ["#CD846D", "#130F0D"] },
+			"genres": ["fantasy", "family", "anime"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/000/097/logos/medium/b0620ebfee.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/000/097/thumbs/medium/6c08aafc38.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/000/097/banners/medium/9a16857df3.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/000/097/fanarts/medium/9c0fa6b23b.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/000/097/posters/medium/f5dd88b533.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/000/097/cleararts/medium/40d6bf4d31.png.webp"
+				]
+			},
+			"rating": 8.753251075744629,
+			"status": "released",
+			"country": "jp",
+			"runtime": 125,
+			"tagline": "Beyond the tunnel was a mysterious town.",
+			"trailer": "https://youtube.com/watch?v=GAp2_0JJskk",
+			"homepage": "https://gkids.com/films/spirited-away",
+			"language": "ja",
+			"overview": "A young girl, Chihiro, becomes trapped in a strange new world of spirits. When her parents undergo a mysterious transformation, she must call upon the courage she never knew she had to free her family.",
+			"released": "2001-07-20",
+			"languages": ["ja"],
+			"subgenres": ["magic", "parent-child-relationship", "witch"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Spirited_Away"
+			},
+			"updated_at": "2026-09-25T08:09:39.000Z",
+			"after_credits": false,
+			"certification": "PG",
+			"comment_count": 97,
+			"during_credits": false,
+			"original_title": "千と千尋の神隠し",
+			"available_translations": [
+				"ar",
+				"be",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"eo",
+				"es",
+				"et",
+				"eu",
+				"fa",
+				"fi",
+				"fr",
+				"he",
+				"hi",
+				"hr",
+				"hu",
+				"id",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"lv",
+				"nb",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sr",
+				"sv",
+				"th",
+				"tl",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 1157451471441102800,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt26678995",
+				"plex": {
+					"guid": "63e686e672cbd5c2a759de69",
+					"slug": "spirited-away-live-on-stage"
+				},
+				"slug": "spirited-away-live-on-stage-2023",
+				"tmdb": 1001196,
+				"trakt": 804886
+			},
+			"year": 2023,
+			"title": "Spirited Away: Live on Stage",
+			"votes": 59,
+			"colors": { "poster": ["#DAC4C4", "#7A7C82"] },
+			"genres": ["drama", "adventure", "fantasy"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/804/886/fanarts/medium/f3c22a9b5d.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/804/886/posters/medium/23cec7a879.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 8.254240036010742,
+			"status": "released",
+			"country": "jp",
+			"runtime": 175,
+			"tagline": "Hayao Miyazaki's masterpiece comes to life like never before.",
+			"trailer": "https://youtube.com/watch?v=ED5Y8mz8P8g",
+			"homepage": "https://gkids.com/films/spirited-away-live-on-stage/",
+			"language": "ja",
+			"overview": "A young girl, Chihiro, becomes trapped in a strange new world of spirits. When her parents undergo a mysterious transformation, she must call upon the courage she never knew she had to free her family. The film version of the stage production was shot during the play’s 2022 run at the Imperial Theatre in Tokyo.",
+			"released": "2022-07-03",
+			"languages": ["ja"],
+			"subgenres": [
+				"based-on-movie",
+				"parent-child-relationship",
+				"witch",
+				"live-performance",
+				"filmed-theater",
+				"based-on-anime"
+			],
+			"social_ids": {
+				"twitter": "sentochihiro_st",
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-20T08:11:13.000Z",
+			"after_credits": false,
+			"certification": "PG",
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "舞台『千と千尋の神隠し』",
+			"available_translations": ["en", "es", "ja", "ko", "my", "nl", "pt", "sr", "zh"]
+		}
+	}
+]

@@ -1,0 +1,393 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"results": [
+			{ "iso_3166_1": "CN", "title": "葬送的芙莉莲", "type": "" },
+			{ "iso_3166_1": "CZ", "title": "Sósó no Frieren", "type": "" },
+			{ "iso_3166_1": "HK", "title": "葬送的芙莉蓮", "type": "" },
+			{ "iso_3166_1": "IL", "title": "פרירן: מעבר לסוף המסע", "type": "" },
+			{ "iso_3166_1": "IN", "title": "फ्रायरन : यात्रा के अंत से परे", "type": "देवनागरी" },
+			{ "iso_3166_1": "JP", "title": "そうそうのフリーレン", "type": "Kana" },
+			{ "iso_3166_1": "JP", "title": "Sōsō no Furīren", "type": "Hepburn Romanization" },
+			{ "iso_3166_1": "JP", "title": "Sousou no Frieren", "type": "Romaji" },
+			{ "iso_3166_1": "LY", "title": "فريرِن: ما وراء نهاية الرّحلة", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Фрирен, провожающая в последний путь", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Провожающая в последний путь Фрирен", "type": "" },
+			{ "iso_3166_1": "SA", "title": "فريرن: ما وراء نهاية الرحلة", "type": "" },
+			{ "iso_3166_1": "TW", "title": "葬送的芙莉莲", "type": "" },
+			{ "iso_3166_1": "UA", "title": "Фрірен після кінця пригоди", "type": "" },
+			{
+				"iso_3166_1": "US",
+				"title": "Frieren of the Funeral",
+				"type": "Literal translation"
+			},
+			{ "iso_3166_1": "US", "title": "Frieren: Beyond Journey's End", "type": "" },
+			{ "iso_3166_1": "US", "title": "Frieren Beyond Journeys End", "type": "" }
+		]
+	},
+	"backdrop_path": "/rBOnrVlck7BIlGeWVlzYiZeg4l2.jpg",
+	"created_by": [],
+	"episode_run_time": [25],
+	"external_ids": {
+		"imdb_id": "tt22248376",
+		"freebase_mid": null,
+		"freebase_id": null,
+		"tvdb_id": 424536,
+		"tvrage_id": null,
+		"wikidata_id": "Q115792176",
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": "Anime_Frieren"
+	},
+	"first_air_date": "2023-09-29",
+	"genres": [
+		{ "id": 16, "name": "Animation" },
+		{ "id": 10759, "name": "Action & Adventure" },
+		{ "id": 18, "name": "Drama" },
+		{ "id": 10765, "name": "Sci-Fi & Fantasy" }
+	],
+	"homepage": "https://frieren-anime.jp/",
+	"id": 209867,
+	"in_production": true,
+	"languages": ["ja"],
+	"last_air_date": "2026-03-27",
+	"last_episode_to_air": {
+		"id": 6855843,
+		"name": "A Beautiful Sight",
+		"overview": "Hidden within the massive bridge spanning the Great Canyon Tor is a secret story of Himmel and Gehen.",
+		"vote_average": 9.0,
+		"vote_count": 7,
+		"air_date": "2026-03-27",
+		"episode_number": 38,
+		"episode_type": "finale",
+		"production_code": "",
+		"runtime": 23,
+		"season_number": 1,
+		"show_id": 209867,
+		"still_path": "/l5eb222ZEemkCyoaYbzdHUwxptG.jpg"
+	},
+	"name": "Frieren: Beyond Journey's End",
+	"networks": [
+		{
+			"id": 57,
+			"logo_path": "/uxaXSoT8K0S2NE5PWsBpHUl3GGU.png",
+			"name": "Nippon TV",
+			"origin_country": "JP"
+		},
+		{
+			"id": 569,
+			"logo_path": "/cIMyE9cw1W4kMFGxmC17HKTnVz9.png",
+			"name": "YTV",
+			"origin_country": "JP"
+		},
+		{
+			"id": 1896,
+			"logo_path": "/suqJy99xiGr8PV7eQovUFRgquYT.png",
+			"name": "FBS",
+			"origin_country": "JP"
+		},
+		{
+			"id": 2727,
+			"logo_path": "/85U2onICiQV9fMHORxw8EWSQ6MZ.png",
+			"name": "Chukyo TV",
+			"origin_country": "JP"
+		},
+		{
+			"id": 2728,
+			"logo_path": "/kwC7bfbGknKuL7uxKahk6paamlp.png",
+			"name": "RNB",
+			"origin_country": "JP"
+		},
+		{
+			"id": 3201,
+			"logo_path": "/4OpeDJ8jzPeaSiOlzGCnHjm6tpt.png",
+			"name": "HTV",
+			"origin_country": "JP"
+		},
+		{
+			"id": 3644,
+			"logo_path": "/8Cue5NzJ6cucpA5k73GVrCqn2JI.png",
+			"name": "FCT",
+			"origin_country": "JP"
+		},
+		{
+			"id": 3698,
+			"logo_path": "/rrw1HbmPpR9GQ3K19taPCYYf5jY.png",
+			"name": "STV",
+			"origin_country": "JP"
+		},
+		{
+			"id": 3741,
+			"logo_path": "/hiI8H4WLDlCtRZQboq4BTdM2KAg.png",
+			"name": "KNB",
+			"origin_country": "JP"
+		},
+		{
+			"id": 4790,
+			"logo_path": "/5aEqvKUgffp6zehXyCUhJyzeZPg.png",
+			"name": "YBS",
+			"origin_country": "JP"
+		},
+		{
+			"id": 4791,
+			"logo_path": "/e9WRfzkc8HNsZ1qEF26ENHlBMvn.png",
+			"name": "KTK",
+			"origin_country": "JP"
+		},
+		{
+			"id": 4797,
+			"logo_path": "/ggNJJiuB0mT4cQckN9h6jxT7exe.png",
+			"name": "NKT",
+			"origin_country": "JP"
+		},
+		{
+			"id": 4815,
+			"logo_path": "/igW7DjfUZ8Ew7BLzCxKHKpeFFL3.png",
+			"name": "RAB",
+			"origin_country": "JP"
+		},
+		{
+			"id": 4816,
+			"logo_path": "/9qQIAEYEw1ZyPPK3tqE18Z00AwW.png",
+			"name": "TVI",
+			"origin_country": "JP"
+		},
+		{
+			"id": 4817,
+			"logo_path": "/oxuY8YFFO6Iv1IicYRGFcLizERc.png",
+			"name": "MMT",
+			"origin_country": "JP"
+		},
+		{
+			"id": 4818,
+			"logo_path": "/rddkLH5IZoh5IW5b6FHgrOBjBgE.png",
+			"name": "ABS",
+			"origin_country": "JP"
+		},
+		{
+			"id": 4822,
+			"logo_path": "/xX0I9Sc0AxSoKoVtwwmz0DWOWcr.png",
+			"name": "JRT",
+			"origin_country": "JP"
+		},
+		{
+			"id": 6155,
+			"logo_path": "/cvePJ33fR2SeirKZWD8rCV7rAaF.png",
+			"name": "YBC",
+			"origin_country": "JP"
+		},
+		{
+			"id": 6156,
+			"logo_path": "/gxpzF98cV1DHpXzJmXf2Ew6sQvV.png",
+			"name": "UMK TV Miyazaki",
+			"origin_country": "JP"
+		},
+		{
+			"id": 6286,
+			"logo_path": "/mcA2WrzDxg1MuZ2TnewjVZaTvM2.png",
+			"name": "TSB",
+			"origin_country": "JP"
+		},
+		{
+			"id": 6668,
+			"logo_path": "/atlFO76SPaLGIt9Wmxzg23M0IoA.png",
+			"name": "TeNY",
+			"origin_country": "JP"
+		},
+		{
+			"id": 6669,
+			"logo_path": "/w9VRiRNT3OrP09OHXl6i1nGFWiL.png",
+			"name": "RNC",
+			"origin_country": "JP"
+		},
+		{
+			"id": 6670,
+			"logo_path": "/7OAJi6aS9zQWwP64jqxRllBvYKR.png",
+			"name": "NIB",
+			"origin_country": "JP"
+		},
+		{
+			"id": 6671,
+			"logo_path": "/jd0KEJ6Md6JBRWjxTHRU9BYpbuv.png",
+			"name": "KKT",
+			"origin_country": "JP"
+		},
+		{
+			"id": 7076,
+			"logo_path": "/tFePbc4dqJzcUaHeKAQkhRgT5zJ.png",
+			"name": "Daiichi-TV",
+			"origin_country": "JP"
+		},
+		{
+			"id": 7077,
+			"logo_path": "/r1vdmMUpIGnGvLE3UMqkuEtWlG4.png",
+			"name": "FBC",
+			"origin_country": "JP"
+		},
+		{
+			"id": 7078,
+			"logo_path": "/7QYtCUc3PxYvOQ0NDOw3vQHAIJh.png",
+			"name": "RKC",
+			"origin_country": "JP"
+		},
+		{
+			"id": 7079,
+			"logo_path": "/wqeYNfsn0LSwbmQGPkcqMg5yhpW.png",
+			"name": "KYT",
+			"origin_country": "JP"
+		},
+		{
+			"id": 7092,
+			"logo_path": "/5IzL2Fq2yErfy4LH96KX5PKOAbv.png",
+			"name": "KRY",
+			"origin_country": "JP"
+		}
+	],
+	"next_episode_to_air": null,
+	"number_of_episodes": 38,
+	"number_of_seasons": 1,
+	"origin_country": ["JP"],
+	"original_language": "ja",
+	"original_name": "葬送のフリーレン",
+	"overview": "After the party of heroes defeated the Demon King, they restored peace to the land and returned to lives of solitude. Generations pass, and the elven mage Frieren comes face to face with humanity's mortality. She takes on a new apprentice and promises to fulfill old friends' dying wishes. Can an elven mind make peace with the nature of life and death? Frieren embarks on her quest to find out.",
+	"popularity": 111.0439,
+	"poster_path": "/dqZENchTd7lp5zht7BdlqM7RBhD.jpg",
+	"production_companies": [
+		{
+			"id": 3464,
+			"logo_path": "/9k0nr75nwnNeT2MHerf1OXJN0hj.png",
+			"name": "Madhouse",
+			"origin_country": "JP"
+		},
+		{
+			"id": 882,
+			"logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+			"name": "TOHO",
+			"origin_country": "JP"
+		},
+		{
+			"id": 9149,
+			"logo_path": "/isLUpud9N56ifftJZ4XvzwBBpoG.png",
+			"name": "Shogakukan",
+			"origin_country": "JP"
+		},
+		{
+			"id": 6755,
+			"logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+			"name": "Nippon Television Network Corporation",
+			"origin_country": "JP"
+		},
+		{
+			"id": 12655,
+			"logo_path": "/dfGqf2NoMVPrDywDL90D5HAhBlW.png",
+			"name": "Shogakukan-Shueisha Productions",
+			"origin_country": "JP"
+		},
+		{
+			"id": 1778,
+			"logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+			"name": "dentsu",
+			"origin_country": "JP"
+		},
+		{
+			"id": 2883,
+			"logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+			"name": "Aniplex",
+			"origin_country": "JP"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "JP", "name": "Japan" }],
+	"seasons": [
+		{
+			"air_date": "2023-10-11",
+			"episode_count": 26,
+			"id": 360492,
+			"name": "Specials",
+			"overview": "",
+			"poster_path": "/fazbwo9OYXhhHCrRfwPU3Eup4iL.jpg",
+			"season_number": 0,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "2023-09-29",
+			"episode_count": 38,
+			"id": 307972,
+			"name": "Season 1",
+			"overview": "",
+			"poster_path": "/yHsxHEugPPlOPqFZrPGvurltPjm.jpg",
+			"season_number": 1,
+			"vote_average": 8.2
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "Japanese", "iso_639_1": "ja", "name": "日本語" }],
+	"status": "Returning Series",
+	"tagline": "Living means being known and remembered by someone.",
+	"type": "Scripted",
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Netflix Trailer [Subtitled]",
+				"key": "01WEqntM1NI",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "67bbeccf286bde3a090a7559",
+				"published_at": "2025-02-22T13:00:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Netflix Trailer [Subtitled]",
+				"key": "Y3l9RTUiYy0",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "665c1e63fd162bf3715b7e3e",
+				"published_at": "2024-01-30T03:00:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Launch Trailer [Subtitled]",
+				"key": "qgQunxD0qCk",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "651712f1a199a6011b224282",
+				"published_at": "2023-09-29T15:00:51.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Prime Video Trailer [Subtitled]",
+				"key": "94i5TO_lcuw",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "657031a2fad8e900c629d6c2",
+				"published_at": "2023-09-29T03:34:52.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer [Subtitled]",
+				"key": "Iwr1aLEDpe4",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "64b2c26237806200ff3891d6",
+				"published_at": "2023-07-15T15:30:03.000Z"
+			}
+		]
+	},
+	"vote_average": 8.809,
+	"vote_count": 973
+}

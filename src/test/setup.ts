@@ -1,5 +1,13 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { configure } from '@testing-library/react';
+import { beforeEach, vi } from 'vitest';
+
+// Waits for a page to render are not timing assertions. The 1 s default made
+// findBy*/waitFor fail whenever the machine was busy (two cores on zen, a
+// shared Mac), while a real hang still fails, just later.
+configure({ asyncUtilTimeout: 10_000 });
+// Likewise vitest's own 5 s per-test limit, which none of these tests assert on.
+vi.setConfig({ testTimeout: 30_000, hookTimeout: 30_000 });
 
 // Mock rate limiting wrappers to pass through handlers unchanged in tests
 vi.mock('@/services/rateLimit/withRateLimit', () => ({
@@ -30,3 +38,12 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Silence console.error in tests to avoid non-zero exit codes on intentional error logs
 vi.spyOn(console, 'error').mockImplementation(() => {});
+
+// Nothing is blocked unless a test says so, and no test reaches the database
+// for the takedown list. The blocklist tests reset this themselves. Imported
+// here rather than at the top, so a test file's vi.mock of the modules behind
+// it still applies.
+beforeEach(async () => {
+	const { setBlocklistForTests } = await import('@/services/takedown/blocklist');
+	setBlocklistForTests([]);
+});

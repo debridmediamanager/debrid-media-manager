@@ -46,6 +46,8 @@ describe('normalizeFribbEntry', () => {
 			tmdbId: 26209,
 			tmdbType: 'tv',
 			tvdbId: 72025,
+			tvdbSeason: 1,
+			tvdbEpisodeOffset: null,
 			simklId: 36462,
 			type: 'TV',
 		});
@@ -82,6 +84,8 @@ describe('normalizeFribbEntry', () => {
 			tmdbId: null,
 			tmdbType: null,
 			tvdbId: null,
+			tvdbSeason: null,
+			tvdbEpisodeOffset: null,
 			simklId: null,
 			type: null,
 		});

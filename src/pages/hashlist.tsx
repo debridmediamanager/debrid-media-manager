@@ -38,19 +38,22 @@ import {
 	convertToTbUserTorrent,
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
+import { HashlistNotPublishedError, readHashlistFragment } from '@/utils/hashlistSource';
 import {
 	checkAvailabilityOc2,
 	checkAvailabilityPm2,
-	checkDatabaseAvailabilityAd2,
-	checkDatabaseAvailabilityRd2,
 	checkDatabaseAvailabilityTb2,
+	checkPlayableAvailabilityAd,
+	checkPlayableAvailabilityRd,
 	wrapLoading,
 } from '@/utils/instantChecks';
 import { getMediaId } from '@/utils/mediaId';
 import { getTypeByName } from '@/utils/mediaType';
 import getReleaseTags from '@/utils/score';
+import { fetchBlockedHashes } from '@/utils/takedownClient';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
+import { uniqueByHash } from '@/utils/uniqueByHash';
 import { filenameParse } from '@ctrl/video-filename-parser';
 import {
 	CheckCircle,
@@ -62,15 +65,15 @@ import {
 	Tv,
 	X,
 } from 'lucide-react';
-import lzString from 'lz-string';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 
 const ONE_GIGABYTE = 1024 * 1024 * 1024;
 const ITEMS_PER_PAGE = 100;
+const SEARCH_DEBOUNCE_MS = 200;
 
 interface SortBy {
 	column: 'hash' | 'filename' | 'title' | 'bytes' | 'score';
@@ -79,9 +82,74 @@ interface SortBy {
 
 const torrentDB = new UserTorrentDB();
 
+// Parsing a filename costs ~0.15 ms, so a 176k-item list took ~27 s of main
+// thread in one go; with the page frozen that long Chrome offers to kill it.
+function enrichHashlistTorrent(torrent: HashlistTorrent): EnrichedHashlistTorrent | null {
+	const mediaType = getTypeByName(torrent.filename);
+	const info =
+		mediaType === 'movie'
+			? filenameParse(torrent.filename)
+			: filenameParse(torrent.filename, true);
+	// Movies without a valid year are left out; TV shows don't need one
+	if (mediaType !== 'tv' && !(info.year && Number(info.year) > 0)) return null;
+	return {
+		score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
+		info,
+		mediaType,
+		title: getMediaId(info, mediaType, false) || torrent.filename,
+		rdAvailable: false,
+		adAvailable: false,
+		tbAvailable: false,
+		pmAvailable: false,
+		ocAvailable: false,
+		dlAvailable: false,
+		noVideos: false,
+		files: [],
+		...torrent,
+	} as EnrichedHashlistTorrent;
+}
+
+const ENRICH_SLICE_MS = 50;
+const ENRICH_PUBLISH_MS = 1000;
+
+/**
+ * Enriches the list in slices of ~50 ms, yielding to the browser between them
+ * so the page stays responsive, and hands what is done so far to `onProgress`
+ * about once a second, so a long list starts showing rows before it finishes.
+ */
+async function enrichInSlices(
+	torrents: HashlistTorrent[],
+	onProgress: (partial: EnrichedHashlistTorrent[]) => void
+): Promise<EnrichedHashlistTorrent[]> {
+	const enriched: EnrichedHashlistTorrent[] = [];
+	let sliceStart = performance.now();
+	let lastPublish = sliceStart;
+	for (let i = 0; i < torrents.length; i++) {
+		const torrent = enrichHashlistTorrent(torrents[i]);
+		if (torrent) enriched.push(torrent);
+		if (i % 256 !== 255) continue;
+		const now = performance.now();
+		if (now - sliceStart < ENRICH_SLICE_MS) continue;
+		if (now - lastPublish >= ENRICH_PUBLISH_MS) {
+			onProgress(enriched.slice());
+			lastPublish = now;
+		}
+		await new Promise((resolve) => setTimeout(resolve, 0));
+		sliceStart = performance.now();
+	}
+	return enriched;
+}
+
 function HashlistPage() {
 	const router = useRouter();
 	const [query, setQuery] = useState('');
+	// Filtering a 28k-item list on every keystroke queued one full pass per
+	// character typed; the list filters on this settled copy instead.
+	const [searchQuery, setSearchQuery] = useState('');
+	useEffect(() => {
+		const timer = setTimeout(() => setSearchQuery(query), SEARCH_DEBOUNCE_MS);
+		return () => clearTimeout(timer);
+	}, [query]);
 
 	const [hashlistTitle, setHashlistTitle] = useState<string>('');
 	const [userTorrentsList, setUserTorrentsList] = useState<EnrichedHashlistTorrent[]>([]);
@@ -95,7 +163,11 @@ function HashlistPage() {
 	const pmKey = usePremiumizeCredential();
 	const ocKey = useOffcloudApiKey();
 	const dlKey = useDebridLinkCredential();
-	const { addTorrent: addToCache, removeTorrent: removeFromCache } = useLibraryCache();
+	const {
+		addTorrent: addToCache,
+		removeTorrent: removeFromCache,
+		lastFetchTime: libraryFetchTime,
+	} = useLibraryCache();
 
 	const [currentPage, setCurrentPage] = useState(1);
 	const [movieCount, setMovieCount] = useState<number>(0);
@@ -183,116 +255,117 @@ function HashlistPage() {
 		await Promise.all([fetchUserTorrentsList(), fetchHashAndProgress()]);
 	}
 
+	// The list is read once. This effect used to re-run whenever a debrid key
+	// changed while the list was still empty, and keys hydrate after mount, so a
+	// logged-in visit parsed every filename twice.
+	const listLoadStarted = useRef(false);
 	useEffect(() => {
-		if (userTorrentsList.length !== 0) return;
+		if (listLoadStarted.current) return;
+		listLoadStarted.current = true;
 		initialize();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey, adKey, tbKey, pmKey, ocKey, dlKey]);
+	}, []);
 
 	async function decodeJsonStringFromUrl(): Promise<string> {
-		const hash = window.location.hash;
-		if (!hash) return '';
-		const jsonString = lzString.decompressFromEncodedURIComponent(hash.substring(1));
-		return jsonString;
+		return readHashlistFragment(window.location.hash.substring(1));
 	}
 
 	async function readHashlist(): Promise<HashlistTorrent[]> {
-		const jsonString = await decodeJsonStringFromUrl();
+		const [jsonString, blocked] = await Promise.all([
+			decodeJsonStringFromUrl(),
+			fetchBlockedHashes(),
+		]);
+		const unblocked = (torrents: HashlistTorrent[]) =>
+			torrents.filter((torrent) => !blocked.has(torrent.hash?.toLowerCase()));
+		// No #fragment means no list was shared, not that reading one failed.
+		if (!jsonString) return [];
 		if (jsonString.charAt(0) !== '[') {
 			const hashlist = JSON.parse(jsonString) as Hashlist;
 			setHashlistTitle(hashlist.title);
-			return hashlist.torrents;
+			return unblocked(hashlist.torrents);
 		}
 
 		const torrents = JSON.parse(jsonString) as HashlistTorrent[];
 		setHashlistTitle('Share this page');
-		return torrents;
+		return unblocked(torrents);
 	}
 
-	async function fetchUserTorrentsList() {
-		try {
-			const torrents = (await readHashlist())
-				.map((torrent) => {
-					const mediaType = getTypeByName(torrent.filename);
-					const info =
-						mediaType === 'movie'
-							? filenameParse(torrent.filename)
-							: filenameParse(torrent.filename, true);
-					return {
-						score: getReleaseTags(torrent.filename, torrent.bytes / ONE_GIGABYTE).score,
-						info,
-						mediaType,
-						title: getMediaId(info, mediaType, false) || torrent.filename,
-						rdAvailable: false,
-						adAvailable: false,
-						tbAvailable: false,
-						pmAvailable: false,
-						ocAvailable: false,
-						dlAvailable: false,
-						noVideos: false,
-						files: [],
-						...torrent,
-					};
-				})
-				// Filter out movies without a valid year; TV shows don't need one
-				.filter(
-					(t) => t.mediaType === 'tv' || (t.info.year && Number(t.info.year) > 0)
-				) as EnrichedHashlistTorrent[];
-			if (!torrents.length) return;
-			setUserTorrentsList(torrents);
+	// The hashes of the loaded list; availability checks start once it is set.
+	const [listHashes, setListHashes] = useState<string[]>([]);
 
-			const hashArr = torrents.map((r) => r.hash);
-			if (rdKey) {
-				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-				wrapLoading(
-					'RD',
-					checkDatabaseAvailabilityRd2(
-						tokenWithTimestamp,
-						tokenHash,
-						rdKey,
-						hashArr,
-						setUserTorrentsList
-					)
-				);
-			}
-			if (adKey) {
-				const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
-				wrapLoading(
-					'AD',
-					checkDatabaseAvailabilityAd2(
-						tokenWithTimestamp,
-						tokenHash,
-						hashArr,
-						setUserTorrentsList
-					)
-				);
-			}
-			if (tbKey)
-				wrapLoading(
-					'TB',
-					checkDatabaseAvailabilityTb2(tbKey, hashArr, setUserTorrentsList)
-				);
-			if (pmKey) wrapLoading('PM', checkAvailabilityPm2(pmKey, hashArr, setUserTorrentsList));
-			// Offcloud's cache is measured to be Premiumize's, hash for hash, but the
-			// probes stay independent: one vendor being down is not the other's
-			// answer, and a user may hold only one of the two keys.
-			if (ocKey) wrapLoading('OC', checkAvailabilityOc2(ocKey, hashArr, setUserTorrentsList));
-			// **No Debrid-Link probe on load, deliberately.** Its probe is a
-			// bare-hash add, which only succeeds when Debrid-Link already holds
-			// the content, so a hit puts the torrent in the user's library. That
-			// is a mutation, and DMM keeps mutating probes behind a button, the
-			// way RD's and AD's already are. There is no per-row check here, so
-			// `dlAvailable` stays unset on this page and `dlKey` is absent from
-			// the filter's OR-chain below for the same reason.
+	async function fetchUserTorrentsList() {
+		let torrents: EnrichedHashlistTorrent[];
+		try {
+			torrents = await enrichInSlices(await readHashlist(), (partial) =>
+				setUserTorrentsList(uniqueByHash(partial))
+			);
 		} catch (error) {
 			console.error('Error fetching user torrents list:', error);
 			setUserTorrentsList([]);
-			toast.error('Failed to fetch user torrents.');
+			toast.error(
+				error instanceof HashlistNotPublishedError
+					? 'This hash list is still being published; refresh in a minute or two.'
+					: 'Failed to fetch user torrents.'
+			);
+			return;
 		}
+		if (!torrents.length) return;
+		torrents = uniqueByHash(torrents);
+		setUserTorrentsList(torrents);
+		setListHashes(torrents.map((r) => r.hash));
 	}
+
+	// Each provider is checked once, when both the list and its key are there.
+	// A failed check only says so: it used to share the list's try block, so a
+	// failed token request emptied a list that had already loaded.
+	const startedChecks = useRef(new Set<string>());
+	useEffect(() => {
+		if (listHashes.length === 0) return;
+		const start = (service: string, key: unknown, check: () => Promise<number>) => {
+			if (!key || startedChecks.current.has(service)) return;
+			startedChecks.current.add(service);
+			wrapLoading(service, check()).catch((error) =>
+				console.error(`Error checking ${service} availability:`, error)
+			);
+		};
+		start('RD', rdKey, async () => {
+			const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+			return checkPlayableAvailabilityRd(
+				tokenWithTimestamp,
+				tokenHash,
+				listHashes,
+				setUserTorrentsList
+			);
+		});
+		start('AD', adKey, async () => {
+			const [tokenWithTimestamp, tokenHash] = await generateTokenAndHash();
+			return checkPlayableAvailabilityAd(
+				tokenWithTimestamp,
+				tokenHash,
+				listHashes,
+				setUserTorrentsList
+			);
+		});
+		start('TB', tbKey, () =>
+			checkDatabaseAvailabilityTb2(tbKey!, listHashes, setUserTorrentsList)
+		);
+		start('PM', pmKey, () => checkAvailabilityPm2(pmKey!, listHashes, setUserTorrentsList));
+		// Offcloud's cache is measured to be Premiumize's, hash for hash, but the
+		// probes stay independent: one vendor being down is not the other's
+		// answer, and a user may hold only one of the two keys.
+		start('OC', ocKey, () => checkAvailabilityOc2(ocKey!, listHashes, setUserTorrentsList));
+		// **No Debrid-Link probe on load, deliberately.** Its probe is a
+		// bare-hash add, which only succeeds when Debrid-Link already holds
+		// the content, so a hit puts the torrent in the user's library. That
+		// is a mutation, and DMM keeps mutating probes behind a button, the
+		// way RD's and AD's already are. There is no per-row check here, so
+		// `dlAvailable` stays unset on this page and `dlKey` is absent from
+		// the filter's OR-chain below for the same reason.
+	}, [listHashes, rdKey, adKey, tbKey, pmKey, ocKey]);
 
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	async function fetchHashAndProgress(hash?: string) {
+		libraryHashesRef.current = null;
 		const torrents = await torrentDB.all();
 		const records: Record<string, number> = {};
 		for (const t of torrents) {
@@ -341,29 +414,40 @@ function HashlistPage() {
 	}, [userTorrentsList]);
 
 	// set the list you see
+	// The library's hashes, read once and reused until the library changes:
+	// every availability batch re-filters the list, and each read pulls every
+	// torrent in the user's library out of IndexedDB.
+	const libraryHashesRef = useRef<Promise<Set<string>> | null>(null);
+	useEffect(() => {
+		libraryHashesRef.current = null;
+	}, [libraryFetchTime]);
 	async function filterOutAlreadyDownloaded(unfiltered: EnrichedHashlistTorrent[]) {
 		if (unfiltered.length <= 1) return unfiltered;
-		const hashes = await torrentDB.hashes();
+		libraryHashesRef.current ??= torrentDB.hashes();
+		const hashes = await libraryHashesRef.current;
 		return unfiltered.filter((t) => !hashes.has(t.hash));
 	}
 	function applyQuickSearch(unfiltered: EnrichedHashlistTorrent[]) {
 		let regexFilters: RegExp[] = [];
-		for (const q of query.split(' ')) {
+		for (const q of searchQuery.split(' ')) {
 			try {
 				regexFilters.push(new RegExp(q, 'i'));
 			} catch (error) {
 				continue;
 			}
 		}
-		return query
+		return searchQuery
 			? unfiltered.filter((t) => regexFilters.every((regex) => regex.test(t.filename)))
 			: unfiltered;
 	}
+	// Each availability batch starts a pass; only the latest may set the list.
+	const filterPassRef = useRef(0);
 	async function filterList() {
+		const pass = ++filterPassRef.current;
 		const notYetDownloaded = await filterOutAlreadyDownloaded(userTorrentsList);
+		if (pass !== filterPassRef.current) return;
+		// userTorrentsList is already unique by hash; see fetchUserTorrentsList
 		let tmpList = notYetDownloaded;
-		// ensure tmpList is also unique in terms of hash
-		tmpList = tmpList.filter((t, i, self) => self.findIndex((s) => s.hash === t.hash) === i);
 
 		// Filter for instantly available torrents if enabled and keys are present
 		if (showOnlyAvailable && (rdKey || adKey || tbKey || pmKey || ocKey)) {
@@ -396,7 +480,8 @@ function HashlistPage() {
 		filterList();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
-		query,
+		searchQuery,
+		libraryFetchTime,
 		userTorrentsList,
 		movieGrouping,
 		tvGroupingByEpisode,
@@ -411,14 +496,11 @@ function HashlistPage() {
 		});
 	}
 
-	function sortedData() {
-		// Check if sortBy.column is not set
-		// if (sortBy.column === 'hash') {
-		// 	// Randomize the list
-		// 	return filteredList.sort(() => Math.random() - 0.5);
-		// }
-		filteredList.sort((a, b) => {
-			const isAsc = sortBy.direction === 'asc';
+	// Sorted once per list or sort change; the render used to sort the whole
+	// list again for every page counter it drew.
+	const sortedList = useMemo(() => {
+		const isAsc = sortBy.direction === 'asc';
+		return [...filteredList].sort((a, b) => {
 			let comparison = 0;
 			if (a[sortBy.column] > b[sortBy.column]) {
 				comparison = 1;
@@ -427,12 +509,10 @@ function HashlistPage() {
 			}
 			return isAsc ? comparison : comparison * -1;
 		});
-
-		return filteredList;
-	}
+	}, [filteredList, sortBy]);
 
 	function currentPageData() {
-		return sortedData().slice(
+		return sortedList.slice(
 			(currentPage - 1) * ITEMS_PER_PAGE,
 			(currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
 		);
@@ -1024,14 +1104,14 @@ function HashlistPage() {
 				</div>
 			)}
 
-			<div className="mb-2 flex items-center justify-between">
-				<h1 className="text-xl font-bold text-white">
+			<div className="mb-2 flex items-center justify-between gap-2">
+				<h1 className="min-w-0 break-words text-xl font-bold text-white">
 					{hashlistTitle} ({userTorrentsList.length} files in total; size:{' '}
 					{(totalBytes / ONE_GIGABYTE / 1024).toFixed(1)} TB)
 				</h1>
 				<Link
 					href="/"
-					className="rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
+					className="shrink-0 rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm text-cyan-100 transition-colors hover:bg-cyan-800/50"
 				>
 					Go Home
 				</Link>
@@ -1048,7 +1128,7 @@ function HashlistPage() {
 					}}
 				/>
 			</div>
-			<div className="mb-4">
+			<div className="mb-4 flex flex-wrap items-center gap-1">
 				<button
 					className={`mb-2 mr-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
 						currentPage <= 1 ? 'cursor-not-allowed opacity-60' : ''
@@ -1059,16 +1139,16 @@ function HashlistPage() {
 					<ChevronLeft className="h-4 w-4" />
 				</button>
 				<span className="w-16 text-center">
-					{currentPage}/{Math.max(1, Math.ceil(sortedData().length / ITEMS_PER_PAGE))}
+					{currentPage}/{Math.max(1, Math.ceil(sortedList.length / ITEMS_PER_PAGE))}
 				</span>
 				<button
 					className={`mb-2 ml-1 mr-2 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
-						currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)
+						currentPage >= Math.ceil(sortedList.length / ITEMS_PER_PAGE)
 							? 'cursor-not-allowed opacity-60'
 							: ''
 					}`}
 					onClick={handleNextPage}
-					disabled={currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)}
+					disabled={currentPage >= Math.ceil(sortedList.length / ITEMS_PER_PAGE)}
 				>
 					<ChevronRight className="h-4 w-4" />
 				</button>
@@ -1481,16 +1561,16 @@ function HashlistPage() {
 					<ChevronLeft className="h-4 w-4" />
 				</button>
 				<span className="w-16 text-center">
-					{currentPage}/{Math.max(1, Math.ceil(sortedData().length / ITEMS_PER_PAGE))}
+					{currentPage}/{Math.max(1, Math.ceil(sortedList.length / ITEMS_PER_PAGE))}
 				</span>
 				<button
 					className={`ml-1 rounded border-2 border-indigo-500 bg-indigo-900/30 px-1 py-1 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
-						currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)
+						currentPage >= Math.ceil(sortedList.length / ITEMS_PER_PAGE)
 							? 'cursor-not-allowed opacity-60'
 							: ''
 					}`}
 					onClick={handleNextPage}
-					disabled={currentPage >= Math.ceil(sortedData().length / ITEMS_PER_PAGE)}
+					disabled={currentPage >= Math.ceil(sortedList.length / ITEMS_PER_PAGE)}
 				>
 					<ChevronRight className="h-4 w-4" />
 				</button>

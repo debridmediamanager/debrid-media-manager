@@ -1,0 +1,46 @@
+{
+	"_comment": "Open requests on production 2026-09-24 that needed no fulfiller, with the Available rows and tbrd: transfer records DMM held for them.",
+	"cachedOnRd": {
+		"request": {
+			"hash": "775cce508f1938d8571e201f315a53b28d0b6960",
+			"imdbId": "tt2297757",
+			"title": "Nathan For You s02",
+			"mediaType": "show"
+		},
+		"available": ["775cce508f1938d8571e201f315a53b28d0b6960"]
+	},
+	"transferredLive": {
+		"request": {
+			"hash": "0eb2da943867c209a9f65ee73857a6dd0d81e01d",
+			"imdbId": "tt5712554",
+			"title": "The Grand Tour 2016 S07E04 Last Car Standing 2160p AMZN WEB-DL DDP5 1 HDR H 265-RAWR",
+			"mediaType": "show"
+		},
+		"transfer": {
+			"jobId": "26fc19f8-7e5b-4ce2-b562-5b8fb405312e",
+			"imdbId": "tt5712554",
+			"status": "completed",
+			"updatedAt": 1790229010442,
+			"originalHash": "0eb2da943867c209a9f65ee73857a6dd0d81e01d",
+			"rewrittenHash": "5d340f6a78064990cf75fdca47f1440a5e3fe51e"
+		},
+		"available": ["5d340f6a78064990cf75fdca47f1440a5e3fe51e"]
+	},
+	"transferredPruned": {
+		"request": {
+			"hash": "cacee0b2ff0e685ce510b5a29ed5a932ebcd92ea",
+			"imdbId": "tt0423731",
+			"title": "[hydes] Samurai Champloo [BDRip 1920x1080 HEVC FLAC][Dual-Audio]",
+			"mediaType": "show"
+		},
+		"transfer": {
+			"jobId": "d44fc586-ea1f-4f86-99e3-3b342df2e091",
+			"imdbId": "tt0423731",
+			"status": "completed",
+			"updatedAt": 1790234112052,
+			"originalHash": "cacee0b2ff0e685ce510b5a29ed5a932ebcd92ea",
+			"rewrittenHash": "4e0b5ab096815d858b0141dd64819ce39c2faf5d"
+		},
+		"available": []
+	}
+}

@@ -1,10 +1,18 @@
 import handler from '@/pages/api/requests';
 import { repository } from '@/services/repository';
+import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
+import { torboxCachedHashesReusing as torboxCachedHashes } from '@/utils/torboxCache';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/utils/torboxCache', () => ({ __esModule: true, torboxCachedHashesReusing: vi.fn() }));
+vi.mock('@/services/requestDelivery', () => ({
+	__esModule: true,
+	alreadyOnRealDebrid: vi.fn(async () => new Map()),
+	addHashToRd: vi.fn(async () => true),
+}));
 vi.mock('@/utils/castApiHelpers', () => ({ __esModule: true, generateUserId: vi.fn() }));
 
 const mockRepo = vi.mocked(repository);
@@ -43,13 +51,123 @@ const bodyOf = (res: any) => (res.json as any).mock.calls[0][0];
 
 beforeEach(() => {
 	vi.clearAllMocks();
+	vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map());
+	vi.mocked(addHashToRd).mockResolvedValue(true);
 	mockUserId.mockResolvedValue('asker');
 	mockRepo.listOpenContentRequests = vi.fn().mockResolvedValue([row()]);
 	mockRepo.listContentRequestsFor = vi.fn().mockResolvedValue([]);
 	mockRepo.createContentRequest = vi.fn().mockResolvedValue(row());
 });
 
+describe('GET /api/requests?servable=1', () => {
+	// The two releases from the recorded TorBox answer: only one is cached.
+	const CACHED = '90a7b57357ed0f2ae65ca39336b3bd923684413e';
+	const UNCACHED = 'abb28cb1dc25c1e2fa27aac9d1fe70d4c02be8f2';
+	const servable = (over: Record<string, unknown> = {}) =>
+		call({
+			query: { servable: '1', ...over },
+			headers: { 'x-rd-access-token': 'tok', 'x-tb-api-key': 'TB' },
+		});
+
+	beforeEach(() => {
+		mockRepo.listOpenContentRequests = vi
+			.fn()
+			.mockResolvedValue([
+				row({ id: 'old-uncached', hash: UNCACHED }),
+				row({ id: 'newer-cached', hash: CACHED }),
+			]);
+		vi.mocked(torboxCachedHashes).mockResolvedValue(new Set([CACHED]));
+	});
+
+	// Oldest-first paging put a page of unsendable rows in front of every
+	// fulfiller; nothing filed after 2026-09-15 had been reached by 09-24.
+	it('lists only what TorBox can send, from across the whole board', async () => {
+		const res = await servable();
+		expect(statusOf(res)).toBe(200);
+		expect(mockRepo.listOpenContentRequests).toHaveBeenCalledWith(3000, 0);
+		expect(bodyOf(res).requests.map((r: any) => r.id)).toEqual(['newer-cached']);
+		expect(bodyOf(res).requests[0].tbCached).toBe(true);
+		expect(bodyOf(res).hasMore).toBe(false);
+	});
+
+	it('pages the filtered list, not the board', async () => {
+		const res = await servable({ offset: '1' });
+		expect(bodyOf(res).requests).toEqual([]);
+	});
+
+	it('needs a TorBox key', async () => {
+		const res = await call({ query: { servable: '1' } });
+		expect(statusOf(res)).toBe(400);
+	});
+
+	it('says so when TorBox gives no answer rather than showing an empty board', async () => {
+		vi.mocked(torboxCachedHashes).mockResolvedValue(null);
+		expect(statusOf(await servable())).toBe(503);
+	});
+});
+
 describe('GET /api/requests', () => {
+	// The board lists only open rows, so an asker whose request was sent, failed
+	// or was on its way had nowhere to see it.
+	it('lists the caller’s own requests in every state with ?mine=1', async () => {
+		mockRepo.listContentRequestsFor = vi
+			.fn()
+			.mockResolvedValue([
+				row({ id: 'a', status: 'claimed', jobId: 'job-1' }),
+				row({ id: 'b', status: 'failed', error: 'uncached' }),
+				row({ id: 'c', status: 'fulfilled', jobId: 'job-2' }),
+			]);
+		const res = await call({ query: { mine: '1' } });
+		expect(statusOf(res)).toBe(200);
+		expect(mockRepo.listContentRequestsFor).toHaveBeenCalledWith('asker', 100);
+		expect(mockRepo.listOpenContentRequests).not.toHaveBeenCalled();
+		expect(bodyOf(res).requests.map((r: any) => [r.status, r.error])).toEqual([
+			['claimed', null],
+			['failed', 'uncached'],
+			['fulfilled', null],
+		]);
+	});
+
+	it('refuses ?mine=1 without a Real-Debrid session', async () => {
+		const res = await call({ query: { mine: '1' }, headers: {} });
+		expect(statusOf(res)).toBe(401);
+	});
+
+	it('never shows the asker’s credential state on somebody else’s row', async () => {
+		mockUserId.mockResolvedValue('helper');
+		mockRepo.listOpenContentRequests = vi
+			.fn()
+			.mockResolvedValue([row({ status: 'failed', error: 'RD credentials rejected: 401' })]);
+		const res = await call();
+		expect(bodyOf(res).requests[0].error).not.toContain('401');
+	});
+
+	it('shows everyone why a release failed', async () => {
+		mockUserId.mockResolvedValue('helper');
+		mockRepo.listOpenContentRequests = vi
+			.fn()
+			.mockResolvedValue([row({ status: 'failed', error: 'uncached' })]);
+		const res = await call();
+		expect(bodyOf(res).requests[0].error).toBe('uncached');
+	});
+
+	it('marks each row with whether the viewer’s TorBox can send it', async () => {
+		const other = 'b'.repeat(40);
+		mockRepo.listOpenContentRequests = vi
+			.fn()
+			.mockResolvedValue([row(), row({ id: 'req-2', hash: other })]);
+		vi.mocked(torboxCachedHashes).mockResolvedValue(new Set([HASH]));
+		const res = await call({ headers: { 'x-rd-access-token': 'tok', 'x-tb-api-key': 'TB' } });
+		expect(vi.mocked(torboxCachedHashes)).toHaveBeenCalledWith('TB', [HASH, other]);
+		expect(bodyOf(res).requests.map((r: any) => r.tbCached)).toEqual([true, false]);
+	});
+
+	it('leaves the cache state unknown without a TorBox key', async () => {
+		const res = await call();
+		expect(vi.mocked(torboxCachedHashes)).not.toHaveBeenCalled();
+		expect(bodyOf(res).requests[0].tbCached).toBeNull();
+	});
+
 	it('returns the open board', async () => {
 		const res = await call();
 		expect(statusOf(res)).toBe(200);
@@ -146,6 +264,36 @@ describe('GET /api/requests', () => {
 });
 
 describe('POST /api/requests', () => {
+	it('refuses to file a release too large for any transfer', async () => {
+		const res = await post({ ...valid, sizeBytes: 150e9 });
+		expect(statusOf(res)).toBe(413);
+		expect(mockRepo.createContentRequest).not.toHaveBeenCalled();
+	});
+
+	it('stores the size and the page it was asked from', async () => {
+		await post({ ...valid, sizeBytes: 4e9, returnPath: '/movie/tt1234567' });
+		expect(mockRepo.createContentRequest).toHaveBeenCalledWith(
+			expect.objectContaining({ sizeBytes: 4e9, returnPath: '/movie/tt1234567' })
+		);
+	});
+
+	// 72 open requests on 2026-09-24 were for releases Real-Debrid already had.
+	it('adds a release RD already has instead of filing a request for it', async () => {
+		vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map([[HASH, HASH]]));
+		const res = await post(valid);
+		expect(statusOf(res)).toBe(200);
+		expect(bodyOf(res)).toEqual({ delivered: true });
+		expect(vi.mocked(addHashToRd)).toHaveBeenCalledWith('tok', HASH);
+		expect(mockRepo.createContentRequest).not.toHaveBeenCalled();
+	});
+
+	it('files the request when the add to RD does not go through', async () => {
+		vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map([[HASH, HASH]]));
+		vi.mocked(addHashToRd).mockResolvedValue(false);
+		await post(valid);
+		expect(mockRepo.createContentRequest).toHaveBeenCalled();
+	});
+
 	const post = (
 		body: unknown,
 		headers: Record<string, string> = { 'x-rd-access-token': 'tok' }

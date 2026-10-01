@@ -293,3 +293,37 @@ export async function checkAvailabilityAdByHashes(
 		throw error;
 	}
 }
+
+// Measured against the production database on 2026-09-30: 2,000 hashes answer
+// in ~180 ms. 500 keeps a 28k-item hashlist to 56 requests while giving an
+// unthrottled caller five times, not twenty, the reach of check2's 100.
+export const MAX_PLAYABLE_HASHES = 500;
+
+/**
+ * The hashes, lower-cased, that `service` holds cached with a playable video.
+ * Backed by DMM's own database, so it is not subject to Real-Debrid's rate
+ * limit; callers batch by `MAX_PLAYABLE_HASHES`.
+ */
+export async function checkPlayableCachedHashes(
+	dmmProblemKey: string,
+	solution: string,
+	service: 'rd' | 'ad',
+	hashes: string[]
+): Promise<string[]> {
+	const validHashes = hashes.filter(isValidHash);
+	if (validHashes.length === 0) return [];
+	const response = await fetch('/api/availability/playable', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ dmmProblemKey, solution, service, hashes: validHashes }),
+	});
+	if (!response.ok) {
+		let error: any = {};
+		try {
+			error = await response.json();
+		} catch {}
+		throw new Error(error.error || error.errorMessage || 'Failed to check availability');
+	}
+	const { cached } = (await response.json()) as { cached: string[] };
+	return cached;
+}

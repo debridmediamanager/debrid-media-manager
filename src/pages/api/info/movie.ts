@@ -1,6 +1,6 @@
 import { MRating } from '@/services/mdblist';
-import { getMdblistClient } from '@/services/mdblistClient';
-import { getMetadataCache } from '@/services/metadataCache';
+import { fetchMovieSources } from '@/services/metadata';
+import { mergeMovieRecord } from '@/utils/metadataRecord';
 import {
 	extractDigitalReleaseDate,
 	getExpectedDigitalReleaseDate,
@@ -8,10 +8,7 @@ import {
 } from '@/utils/movieReleaseDates';
 import { getOmdbMetadata, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
 import { tmdbImageUrl } from '@/utils/tmdb';
-import { getTmdbAuth, tmdbAxiosOptions } from '@/utils/tmdbAuth';
-import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import UserAgent from 'user-agents';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
@@ -25,26 +22,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		const mdblistClient = getMdblistClient();
-		const metadataCache = getMetadataCache();
-
-		const mdbPromise = mdblistClient.getInfoByImdbId(imdbid);
-		const cinePromise = metadataCache.getCinemetaMovie(imdbid, {
-			headers: {
-				accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-				'accept-language': 'en-US,en;q=0.5',
-				'accept-encoding': 'gzip, deflate, br',
-				connection: 'keep-alive',
-				'sec-fetch-dest': 'document',
-				'sec-fetch-mode': 'navigate',
-				'sec-fetch-site': 'same-origin',
-				'sec-fetch-user': '?1',
-				'upgrade-insecure-requests': '1',
-				'user-agent': new UserAgent().toString(),
-			},
-		});
-
-		const [mdbResponse, cinemetaResponse] = await Promise.all([mdbPromise, cinePromise]);
+		// Every provider but OMDb, each cached and each allowed to fail on its own;
+		// the metadata API reads the same rows. OMDb is asked below, only when a
+		// field is still missing.
+		const sources = await fetchMovieSources(imdbid, { omdb: Promise.resolve(null) });
+		const mdbResponse: any = sources.mdblist ?? {};
+		const cinemetaResponse: any = sources.cinemeta ?? {};
+		const record = mergeMovieRecord(imdbid, sources);
 
 		// mdblist scores IMDb out of 100 and Cinemeta out of 10; this route reports
 		// out of 100. mdblist is read first because it carries the exact rating
@@ -68,14 +52,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				? cinemetaImdbScore
 				: null;
 
-		let resolvedTitle: string | undefined =
-			mdbResponse.title ?? cinemetaResponse.meta?.name ?? undefined;
+		const anyAnswered = record.sources.length > 0;
+		let resolvedTitle: string | undefined = anyAnswered ? record.title : undefined;
 		let resolvedDescription: string | undefined =
 			mdbResponse.description ?? cinemetaResponse.meta?.description ?? undefined;
 		let resolvedPoster: string | undefined =
 			mdbResponse.poster ?? cinemetaResponse.meta?.poster ?? undefined;
-		let resolvedYear: string | number | undefined =
-			mdbResponse.year ?? cinemetaResponse.meta?.releaseInfo ?? undefined;
+		// The original release year, which is what release names and Plex use;
+		// OMDb and Cinemeta give the US release (Spirited Away: 2003, not 2001).
+		let resolvedYear: string | number | undefined = record.year ?? undefined;
 
 		// OMDb is the last resort for every field above and the most rate-limited
 		// source DMM uses, so it is asked only when one of them is actually missing.
@@ -101,6 +86,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			resolvedYear = resolvedYear ?? omdbField(omdbResponse?.Year);
 		}
 
+		if (!anyAnswered && resolvedTitle === undefined) {
+			throw new Error(`No metadata provider answered for ${imdbid}`);
+		}
 		const title = resolvedTitle ?? 'Unknown';
 
 		let trailer = mdbResponse.trailer ?? '';
@@ -117,38 +105,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			trailer = `https://youtube.com/watch?v=${cinemetaResponse.meta.trailers[0].source}`;
 		}
 
-		if (mdbResponse.tmdbid) {
-			try {
-				const tmdbAuth = getTmdbAuth();
-				if (tmdbAuth) {
-					const tmdbResponse = await axios.get(
-						`https://api.themoviedb.org/3/movie/${mdbResponse.tmdbid}`,
-						tmdbAxiosOptions(tmdbAuth, {
-							append_to_response: 'videos,release_dates',
-						})
-					);
-					tmdbPosterPath = tmdbResponse.data.poster_path ?? null;
-					tmdbBackdropPath = tmdbResponse.data.backdrop_path ?? null;
+		const tmdbData: any = sources.tmdb;
+		if (tmdbData) {
+			tmdbPosterPath = tmdbData.poster_path ?? null;
+			tmdbBackdropPath = tmdbData.backdrop_path ?? null;
 
-					const tmdbTrailer = tmdbResponse.data.videos?.results?.find(
-						(v: any) => v.type === 'Trailer' && v.site === 'YouTube'
-					);
-					if (!trailer && tmdbTrailer?.key) {
-						trailer = `https://youtube.com/watch?v=${tmdbTrailer.key}`;
-					}
-
-					digitalReleaseDate = extractDigitalReleaseDate(tmdbResponse.data.release_dates);
-					const expectedDigitalRelease = getExpectedDigitalReleaseDate(
-						tmdbResponse.data.release_date ?? mdbResponse.released,
-						digitalReleaseDate
-					);
-					expectedDigitalReleaseDate = expectedDigitalRelease.date;
-					expectedDigitalReleaseSource = expectedDigitalRelease.source;
-					digitalReleaseAvailable = isIsoDateOnOrBeforeToday(expectedDigitalReleaseDate);
-				}
-			} catch (error) {
-				console.error('Error fetching TMDB movie release metadata:', error);
+			const tmdbTrailer = tmdbData.videos?.results?.find(
+				(v: any) => v.type === 'Trailer' && v.site === 'YouTube'
+			);
+			if (!trailer && tmdbTrailer?.key) {
+				trailer = `https://youtube.com/watch?v=${tmdbTrailer.key}`;
 			}
+
+			digitalReleaseDate = extractDigitalReleaseDate(tmdbData.release_dates);
+			const expectedDigitalRelease = getExpectedDigitalReleaseDate(
+				tmdbData.release_date ?? mdbResponse.released,
+				digitalReleaseDate
+			);
+			expectedDigitalReleaseDate = expectedDigitalRelease.date;
+			expectedDigitalReleaseSource = expectedDigitalRelease.source;
+			digitalReleaseAvailable = isIsoDateOnOrBeforeToday(expectedDigitalReleaseDate);
 		}
 
 		if (!expectedDigitalReleaseDate) {

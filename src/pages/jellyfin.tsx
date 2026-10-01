@@ -2,7 +2,16 @@ import { Card, Field, maskApiKey } from '@/components/IndexerSetup';
 import { Logo } from '@/components/Logo';
 import { useSponsor } from '@/hooks/useSponsor';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
-import { ArrowLeft, Eye, EyeOff, Handshake, KeyRound, Lock, ShieldCheck } from 'lucide-react';
+import {
+	ArrowLeft,
+	ArrowRight,
+	Eye,
+	EyeOff,
+	Handshake,
+	KeyRound,
+	Lock,
+	ShieldCheck,
+} from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -322,6 +331,13 @@ export default function JellyfinSetupPage() {
 						Offcloud, Debrid-Link and Usenet libraries to Jellyfin as ordinary movies
 						and shows. No mount, no rclone, no second service.
 					</p>
+					<Link
+						href="/emby"
+						className="mt-2 inline-flex items-center gap-1 text-sm text-blue-300 underline hover:text-blue-200"
+					>
+						Using Emby? Six of these come as Emby plugins too
+						<ArrowRight className="h-3.5 w-3.5" />
+					</Link>
 				</header>
 
 				{isSponsor ? null : <SponsorPitch />}

@@ -102,6 +102,32 @@ describe('FloatingLibraryIndicator', () => {
 			const { container } = render(<FloatingLibraryIndicator />);
 			expect(container.firstChild).toBeNull();
 		});
+
+		it.each(['/music', '/music/[...slug]', '/albums/[[...slug]]'])(
+			'should not render over the music player bar on %s',
+			(pathname) => {
+				(useRealDebridAccessToken as any).mockReturnValue(['test-token', false, false]);
+				(useRouter as any).mockReturnValue({ ...mockRouter, pathname });
+
+				const { container } = render(<FloatingLibraryIndicator />);
+				expect(container.firstChild).toBeNull();
+			}
+		);
+
+		// Measured at 390px on /newznab and /torznab: the fixed pill sat on the
+		// last paragraph with the page scrolled to its end, where nothing can
+		// scroll out from under it. The spacer gives every page that room.
+		it('reserves room at the end of the page for the pill', () => {
+			(useRealDebridAccessToken as any).mockReturnValue(['test-token', false, false]);
+			(useRouter as any).mockReturnValue({ ...mockRouter, pathname: '/settings' });
+
+			render(<FloatingLibraryIndicator />);
+			const spacer = screen.getByTestId('library-indicator-spacer');
+			expect(spacer).toHaveAttribute('aria-hidden', 'true');
+			// 5rem clears bottom-4 + the 46px pill; 6rem clears sm:bottom-6.
+			expect(spacer).toHaveClass('h-20', 'sm:h-24');
+			expect(screen.getByLabelText('Refresh library')).toBeInTheDocument();
+		});
 	});
 
 	// These flows are driven by the auth hooks, which useLocalStorage keeps in

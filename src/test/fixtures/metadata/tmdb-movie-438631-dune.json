@@ -1,0 +1,1790 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"titles": [
+			{ "iso_3166_1": "JP", "title": "デューン", "type": "" },
+			{ "iso_3166_1": "US", "title": "Dune: Part One", "type": "on-screen title" },
+			{ "iso_3166_1": "IL", "title": "חולית: חלק ראשון", "type": "" },
+			{ "iso_3166_1": "JP", "title": "デューン 砂の惑星", "type": "" },
+			{ "iso_3166_1": "JP", "title": "DUNE デューン 砂の惑星", "type": "" },
+			{ "iso_3166_1": "KR", "title": "듄", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Дюна", "type": "" },
+			{ "iso_3166_1": "GB", "title": "Dune: Part One", "type": "" },
+			{ "iso_3166_1": "BR", "title": "Duna: Parte Um", "type": "" },
+			{ "iso_3166_1": "BR", "title": "Duna: Primeira Part", "type": "Voice-over (TV Globo)" },
+			{ "iso_3166_1": "CN", "title": "沙丘", "type": "" },
+			{ "iso_3166_1": "FR", "title": "Dune - Première partie", "type": "" },
+			{ "iso_3166_1": "AL", "title": "Duna: Pjesa e Parë", "type": "" },
+			{ "iso_3166_1": "ES", "title": "Dune: Parte uno", "type": "" },
+			{ "iso_3166_1": "BR", "title": "Duna: Parte 1", "type": "" },
+			{ "iso_3166_1": "GE", "title": "დიუნი", "type": "" },
+			{ "iso_3166_1": "HK", "title": "沙丘瀚戰：第一章", "type": "" },
+			{ "iso_3166_1": "AM", "title": "Դյունա", "type": "" },
+			{ "iso_3166_1": "JP", "title": "デューン 砂の惑星PART1", "type": "" },
+			{ "iso_3166_1": "UZ", "title": "Dyuna", "type": "" },
+			{ "iso_3166_1": "GE", "title": "სილახვავი", "type": "" },
+			{ "iso_3166_1": "AZ", "title": "Dyun", "type": "" }
+		]
+	},
+	"backdrop_path": "/zRKQW58MBEY078AxkHxEJzUskCl.jpg",
+	"belongs_to_collection": {
+		"id": 726871,
+		"name": "Dune Collection",
+		"poster_path": "/lxIGYkpvYjLtYtZH684AQft0FhD.jpg",
+		"backdrop_path": "/fahk0Fu7VUUfK6IkTt1R3waOD9F.jpg"
+	},
+	"budget": 165000000,
+	"external_ids": {
+		"imdb_id": "tt1160419",
+		"wikidata_id": "Q60834962",
+		"facebook_id": "dune",
+		"instagram_id": "dunemovie",
+		"twitter_id": "dunemovie"
+	},
+	"genres": [
+		{ "id": 878, "name": "Science Fiction" },
+		{ "id": 12, "name": "Adventure" }
+	],
+	"homepage": "https://www.warnerbros.com/movies/dune",
+	"id": 438631,
+	"imdb_id": "tt1160419",
+	"origin_country": ["US"],
+	"original_language": "en",
+	"original_title": "Dune",
+	"overview": "Paul Atreides, a brilliant and gifted young man born into a great destiny beyond his understanding, must travel to the most dangerous planet in the universe to ensure the future of his family and his people. As malevolent forces explode into conflict over the planet's exclusive supply of the most precious resource in existence - a commodity capable of unlocking humanity's greatest potential - only those who can conquer their fear will survive.",
+	"popularity": 45.1465,
+	"poster_path": "/v1tRXZ4JtD2Iv6fjkPvT4GiwslV.jpg",
+	"production_companies": [
+		{
+			"id": 923,
+			"logo_path": "/5UQsZrfbfG2dYJbx8DxfoTr2Bvu.png",
+			"name": "Legendary Pictures",
+			"origin_country": "US"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "US", "name": "United States of America" }],
+	"release_date": "2021-09-15",
+	"release_dates": {
+		"results": [
+			{
+				"iso_3166_1": "AE",
+				"release_dates": [
+					{
+						"certification": "18TC",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-23T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "AR",
+				"release_dates": [
+					{
+						"certification": "13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "AU",
+				"release_dates": [
+					{
+						"certification": "M",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-12-02T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "M",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2022-02-01T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "BD",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-22T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "BE",
+				"release_dates": [
+					{
+						"certification": "14",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-15T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "BG",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-22T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "BR",
+				"release_dates": [
+					{
+						"certification": "14",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "VOD e HBO Max",
+						"release_date": "2021-11-26T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "14",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "TV Globo",
+						"release_date": "2024-02-25T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CA",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Toronto International Film Festival",
+						"release_date": "2021-09-11T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-22T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "fr",
+						"note": "Super Écran",
+						"release_date": "2022-03-19T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CH",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "fr",
+						"note": "",
+						"release_date": "2021-09-15T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "German and Italian regions",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CN",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Aranya Waves Film Festival",
+						"release_date": "2026-09-05T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Shanghai International Film Festival",
+						"release_date": "2026-06-13T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-22T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-Release",
+						"release_date": "2024-03-01T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-Release",
+						"release_date": "2024-04-19T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "CZ",
+				"release_dates": [
+					{
+						"certification": "12+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Blu-ray / DVD",
+						"release_date": "2022-01-19T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "DE",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-11-01T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "HBO Max",
+						"release_date": "2026-01-13T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-12-23T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "DK",
+				"release_dates": [
+					{
+						"certification": "11",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "EE",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-17T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "ES",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-17T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "HBO Max",
+						"release_date": "2022-02-17T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "FI",
+				"release_dates": [
+					{
+						"certification": "K-12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-17T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "K-12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-Release",
+						"release_date": "2024-02-09T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "FR",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Deauville American Film Festival",
+						"release_date": "2021-09-10T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-15T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2022-01-13T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "fr",
+						"note": "Canal+ (ex myCanal)",
+						"release_date": "2022-05-20T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Blu-ray / DVD",
+						"release_date": "2022-01-26T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "fr",
+						"note": "France•2",
+						"release_date": "2025-11-30T00:00:00.000Z",
+						"type": 6
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "fr",
+						"note": "TMC",
+						"release_date": "2026-06-29T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "GB",
+				"release_dates": [
+					{
+						"certification": "12A",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12A",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-Release",
+						"release_date": "2024-02-09T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "GR",
+				"release_dates": [
+					{
+						"certification": "Κ-12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-14T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Blu-ray / DVD",
+						"release_date": "2021-12-22T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "HK",
+				"release_dates": [
+					{
+						"certification": "IIA",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "HU",
+				"release_dates": [
+					{
+						"certification": "16",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "16",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "HBO Max",
+						"release_date": "2022-03-08T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "16",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "TVOD",
+						"release_date": "2021-12-29T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "16",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Blu-ray / DVD",
+						"release_date": "2022-01-14T00:00:00.000Z",
+						"type": 5
+					}
+				]
+			},
+			{
+				"iso_3166_1": "ID",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "IMAX",
+						"release_date": "2024-02-06T00:00:00.000Z",
+						"type": 2
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-13T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IE",
+				"release_dates": [
+					{
+						"certification": "12A",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IL",
+				"release_dates": [
+					{
+						"certification": "All",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IN",
+				"release_dates": [
+					{
+						"certification": "UA",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-22T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IS",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-17T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "IT",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Venice International Film Festival",
+						"release_date": "2021-09-03T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "T",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "JP",
+				"release_dates": [
+					{
+						"certification": "G",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-15T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "KR",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-20T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-Release",
+						"release_date": "2022-02-09T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "KZ",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "LT",
+				"release_dates": [
+					{
+						"certification": "N-13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-17T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "N-13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-Release",
+						"release_date": "2024-02-09T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "LV",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-17T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "MX",
+				"release_dates": [
+					{
+						"certification": "B",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "NL",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-30T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "NO",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-15T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "NZ",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-12-02T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "M",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2022-02-01T00:00:00.000Z",
+						"type": 4
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PK",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-22T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PL",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-01T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PR",
+				"release_dates": [
+					{
+						"certification": "PG-13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "IMAX",
+						"release_date": "2024-02-08T00:00:00.000Z",
+						"type": 2
+					}
+				]
+			},
+			{
+				"iso_3166_1": "PT",
+				"release_dates": [
+					{
+						"certification": "M/12",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "RO",
+				"release_dates": [
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "en",
+						"note": "",
+						"release_date": "2021-10-22T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "12",
+						"descriptors": [],
+						"iso_639_1": "en",
+						"note": "PRO TV",
+						"release_date": "2025-12-01T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "RU",
+				"release_dates": [
+					{
+						"certification": "12+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "SA",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-23T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "SE",
+				"release_dates": [
+					{
+						"certification": "11",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-15T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "SG",
+				"release_dates": [
+					{
+						"certification": "PG13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "PG13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-Release",
+						"release_date": "2024-02-08T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "SK",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-01T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "TH",
+				"release_dates": [
+					{
+						"certification": "G",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "P",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Re-Release",
+						"release_date": "2024-02-08T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "TR",
+				"release_dates": [
+					{
+						"certification": "13+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-22T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "TW",
+				"release_dates": [
+					{
+						"certification": "6+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "UA",
+				"release_dates": [
+					{
+						"certification": "12+",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-09-16T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "US",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "New York Film Festival",
+						"release_date": "2021-10-07T00:00:00.000Z",
+						"type": 1
+					},
+					{
+						"certification": "PG-13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "IMAX Re-Release",
+						"release_date": "2024-02-09T00:00:00.000Z",
+						"type": 2
+					},
+					{
+						"certification": "PG-13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-22T00:00:00.000Z",
+						"type": 3
+					},
+					{
+						"certification": "PG-13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "HBO Max",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "PG-13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-12-03T00:00:00.000Z",
+						"type": 4
+					},
+					{
+						"certification": "PG-13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "Blu-ray / DVD",
+						"release_date": "2022-01-11T00:00:00.000Z",
+						"type": 5
+					},
+					{
+						"certification": "PG-13",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "HBO",
+						"release_date": "2022-03-26T00:00:00.000Z",
+						"type": 6
+					}
+				]
+			},
+			{
+				"iso_3166_1": "UY",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-10-21T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			},
+			{
+				"iso_3166_1": "VN",
+				"release_dates": [
+					{
+						"certification": "",
+						"descriptors": [],
+						"iso_639_1": "",
+						"note": "",
+						"release_date": "2021-12-10T00:00:00.000Z",
+						"type": 3
+					}
+				]
+			}
+		]
+	},
+	"revenue": 410668500,
+	"runtime": 155,
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "English", "iso_639_1": "en", "name": "English" }],
+	"status": "Released",
+	"tagline": "It begins.",
+	"title": "Dune",
+	"video": false,
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Beware the Baron - Behind the Scenes",
+				"key": "P4MviO-BXH0",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Behind the Scenes",
+				"official": true,
+				"id": "6963d98a50a20b1e74d1565f",
+				"published_at": "2026-01-10T13:00:49.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Building the Ancient Future - Behind the Scenes",
+				"key": "lOu4tV7NWeA",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Behind the Scenes",
+				"official": true,
+				"id": "6963da1479f34dbfcd1d9428",
+				"published_at": "2026-01-03T13:01:35.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Duncan Steals Ornithopter - Movie Clip",
+				"key": "PA3Pz45lt9c",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "6963db6727d260bab8bd40cb",
+				"published_at": "2026-01-01T13:00:47.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Joe Walker | 94th Oscars Best Film Editing | Behind the Oscars Speech",
+				"key": "V94LRgJ42PA",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "67b4b36bb30837d8f8e0dc29",
+				"published_at": "2025-02-13T16:00:06.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Paul Atreides Becomes One Of The Fremen",
+				"key": "QCScW8vVnB4",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "6620664d960cde0187a5eefb",
+				"published_at": "2024-04-18T00:00:11.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Filmbooks: The Spice Melange",
+				"key": "YUP3vA-Hq_k",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "6610d5718c0a48016403a5da",
+				"published_at": "2024-04-01T14:00:19.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Hunter Seeker",
+				"key": "AHqIUDZBRM4",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "6607b9728a0e9b017c4ee3c1",
+				"published_at": "2024-03-28T14:00:11.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Filmbooks: The Fremen",
+				"key": "g7ZdIahdbU8",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "660335690c1255017e125c3c",
+				"published_at": "2024-03-25T14:00:33.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "New World",
+				"key": "9zis0vxefts",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "65fcafec0bc5290162af9e28",
+				"published_at": "2024-03-21T14:00:11.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Filmbooks: The Bene Gesserit",
+				"key": "FHn9BmxKyvA",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "65fa3eca770700017c05df39",
+				"published_at": "2024-03-18T14:00:21.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Learn What I Do",
+				"key": "xWByujyT2rI",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "65fa3f0d54508d017cf7da88",
+				"published_at": "2024-03-14T16:00:43.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "My First Time",
+				"key": "DsB9BakpCTY",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "65fa3f22d40d4c017c6f74d3",
+				"published_at": "2024-03-10T14:00:09.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Crysknife",
+				"key": "vChbtnS7FdM",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "65fa3fbf5be00e017c6d78f2",
+				"published_at": "2024-03-06T15:00:50.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Paul Atreides Has a Vision",
+				"key": "kVgxQJlgDAQ",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "65e7b0639638640181c8279a",
+				"published_at": "2024-03-05T23:01:10.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Filmbooks: House Harkonnen",
+				"key": "HQOEfU6Nt9Y",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "65ff97fe0c1255017e0f2664",
+				"published_at": "2024-03-03T15:00:10.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Join Me in Death",
+				"key": "twl_Gec4TSQ",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "65ff94460c125501650ca30c",
+				"published_at": "2024-03-01T15:01:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Filmbooks: House Atreides",
+				"key": "nL8tdegPQPg",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "65fa5e8054508d017cf81deb",
+				"published_at": "2024-02-28T15:00:52.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Jason Momoa: Guardian of House Atreides",
+				"key": "K7g6fZH220Y",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Behind the Scenes",
+				"official": true,
+				"id": "6480d01e64765400e67fe934",
+				"published_at": "2023-05-26T16:00:25.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Adapting 'Dune' for the Big Screen | Academy x FilmAid: Visiting Artists Series",
+				"key": "Shs7UMYQzVM",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "63d11f34cb71b800d439ab78",
+				"published_at": "2022-09-06T15:00:11.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Otherworldly Wears",
+				"key": "86WVlFR8dLc",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Behind the Scenes",
+				"official": true,
+				"id": "62b6aafb73520500614f871d",
+				"published_at": "2022-06-24T14:59:46.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "'Dune' Wins Best Production Design | 94th Oscars",
+				"key": "EBnF9XEjnxw",
+				"site": "YouTube",
+				"size": 720,
+				"type": "Featurette",
+				"official": true,
+				"id": "63d12374cb71b8007c1b1e9a",
+				"published_at": "2022-05-01T17:00:11.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "'Dune' Wins Best Film Editing | 94th Oscars",
+				"key": "WPvmh4Cw54A",
+				"site": "YouTube",
+				"size": 720,
+				"type": "Featurette",
+				"official": true,
+				"id": "63d124b1a410c8125be63cf2",
+				"published_at": "2022-04-30T20:00:05.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Hans Zimmer Wins Best Original Score for 'Dune'  | 94th Oscars",
+				"key": "12Ur2THtOPM",
+				"site": "YouTube",
+				"size": 720,
+				"type": "Featurette",
+				"official": true,
+				"id": "63d1238066ae4d007bf61bcb",
+				"published_at": "2022-04-30T17:00:01.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "'Dune' Wins Best Visual Effects | 94th Oscars",
+				"key": "NU39cERScn4",
+				"site": "YouTube",
+				"size": 720,
+				"type": "Featurette",
+				"official": true,
+				"id": "63d123a39f51af00dc257847",
+				"published_at": "2022-04-27T17:00:12.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "'Dune' Wins Best Cinematography | 94th Oscars",
+				"key": "b1b4Wbhv0E0",
+				"site": "YouTube",
+				"size": 720,
+				"type": "Featurette",
+				"official": true,
+				"id": "63d123c29f51af008645b177",
+				"published_at": "2022-04-26T20:00:15.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "'Dune' Wins Best Sound | 94th Oscars",
+				"key": "XPOn2hIrvzI",
+				"site": "YouTube",
+				"size": 720,
+				"type": "Featurette",
+				"official": true,
+				"id": "63d123aacb71b80081020756",
+				"published_at": "2022-04-26T17:00:14.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Paul Atreides Tries To Outrun The Sandworm",
+				"key": "7jB5gCD5kjU",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "62454c76458199005c3cef42",
+				"published_at": "2022-03-28T21:00:32.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Paul Tries to Protect Lady Jessica",
+				"key": "s-TublCeuSE",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "62454aab6dc50700931c337e",
+				"published_at": "2022-03-27T20:00:42.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "No Choice",
+				"key": "KwsCbdhO2SU",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "62454bbdf263ba005c25e852",
+				"published_at": "2022-03-25T16:59:55.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "The Emperor Has Spoken",
+				"key": "1_TuEO6Mttw",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "62455329c740d90089f547c1",
+				"published_at": "2022-03-24T14:59:50.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Zendaya’s Dune Scenes Compilation",
+				"key": "p2U7OvRUNv4",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "62454b826dc507005de78e9f",
+				"published_at": "2022-03-22T18:00:51.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Dune's SFX team get emotional as they thank their families and collaborators | EE BAFTAs 2022",
+				"key": "-r3DXP-sVDs",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "655cedc410923000c471e9ec",
+				"published_at": "2022-03-14T21:00:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Dune Wins Production Design | EE BAFTA Film Awards 2022",
+				"key": "yYpCilOzruU",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "655cedd00816c70137ec2fdf",
+				"published_at": "2022-03-13T23:07:15.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Dune Wins Sound | EE BAFTA Film Awards 2022",
+				"key": "r6lnvApZa7M",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "655cee4eb5400214d27e8f7e",
+				"published_at": "2022-03-13T22:51:45.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Dune ASMR with Sharon Duncan-Brewster",
+				"key": "2u4tR8se-40",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "62cb4039d05a03005cbaaa05",
+				"published_at": "2022-03-10T03:00:48.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Designing the Sandworm",
+				"key": "suf4D0f1NuE",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Behind the Scenes",
+				"official": true,
+				"id": "63af97487ef3811f60862102",
+				"published_at": "2022-02-12T18:45:24.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "The Sounds of Dune - Behind The Scenes with Denis Villeneuve",
+				"key": "Gkf_rdROyWw",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Behind the Scenes",
+				"official": true,
+				"id": "66456c5e81e5089af75cba90",
+				"published_at": "2022-01-27T21:31:16.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Spice",
+				"key": "26bgYpJOqcw",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "623b629a58361b005ee7d5f3",
+				"published_at": "2022-01-18T19:00:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "BFI Q&A - Denis Villeneuve on Dune",
+				"key": "AID-fCCESww",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "6328454cd7a70a0081ce81bf",
+				"published_at": "2022-01-17T14:59:25.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Silence",
+				"key": "l9fvEDpub8M",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "623b62766bdec3005b45f87c",
+				"published_at": "2022-01-11T19:00:27.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "The Training Room",
+				"key": "AvqgxCw75JA",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Behind the Scenes",
+				"official": true,
+				"id": "623b62475541fa00494cc674",
+				"published_at": "2021-12-26T19:00:03.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "The Royal Houses",
+				"key": "wkDiyC82boU",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Behind the Scenes",
+				"official": true,
+				"id": "623b62b1d1a89300885b85d3",
+				"published_at": "2021-12-10T18:00:30.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "10 Minute Preview",
+				"key": "dFa0jyEOcVw",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "69fa459d3e2ddd0cf1d255ec",
+				"published_at": "2021-12-10T15:12:28.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Full Movie Preview",
+				"key": "3pzNn31ukI4",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "63af96c61d1bf4008adf06ef",
+				"published_at": "2021-12-06T21:41:23.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Inside Dune: Working with the Cast",
+				"key": "u8QjWsiACTE",
+				"site": "YouTube",
+				"size": 2160,
+				"type": "Behind the Scenes",
+				"official": false,
+				"id": "622d7e8665c26c00204c60d5",
+				"published_at": "2021-11-29T16:00:22.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Sharon Duncan-Brewster Plays You vs. Your Character",
+				"key": "xEvs38heDXY",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "629c2f59992fe6006681e1e3",
+				"published_at": "2021-11-06T16:00:23.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Worm Promo",
+				"key": "FabyRquCEtY",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Teaser",
+				"official": true,
+				"id": "6993af629bd5ecf20b2af68e",
+				"published_at": "2021-10-20T07:50:09.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Denis Villeneuve and Hans Zimmer on Dune",
+				"key": "Ul7--N4iZH0",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "65d0b97f303c85018852aa23",
+				"published_at": "2021-10-09T15:00:13.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Protect",
+				"key": "tepmGelLeHY",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Teaser",
+				"official": true,
+				"id": "6993af4277403baa2f1afa20",
+				"published_at": "2021-10-09T07:30:05.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "A Message for Canada from the Stars of DUNE",
+				"key": "gVg97FfltRM",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "67e352cce28af41cfc7623b3",
+				"published_at": "2021-10-08T22:09:34.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Inside Dune: Working with one of my idols",
+				"key": "hD_FiUOOkko",
+				"site": "YouTube",
+				"size": 2160,
+				"type": "Behind the Scenes",
+				"official": false,
+				"id": "622d7f89b04605007a7a9a89",
+				"published_at": "2021-10-08T18:22:21.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Final Trailer",
+				"key": "w0HgHet0sxg",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "615f6a958e2ba600434e8c0b",
+				"published_at": "2021-10-07T16:00:27.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Dune Awaits: Becoming Duncan Idaho",
+				"key": "A8y30Uyqc1E",
+				"site": "YouTube",
+				"size": 2160,
+				"type": "Behind the Scenes",
+				"official": false,
+				"id": "622d8b6fe04aca00459c7836",
+				"published_at": "2021-09-21T15:00:04.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Desert Visions Featurette",
+				"key": "aSHs224Dge0",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "6141974dfd7aa400294685ba",
+				"published_at": "2021-09-13T22:24:05.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Main Trailer",
+				"key": "8g18jFHCLXk",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "60f96f11f1759c004667ff5c",
+				"published_at": "2021-07-22T13:00:04.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer",
+				"key": "n9xhJrPXop4",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "5f59011dbefb090036571115",
+				"published_at": "2020-09-09T16:18:02.000Z"
+			}
+		]
+	},
+	"vote_average": 7.785,
+	"vote_count": 15594
+}

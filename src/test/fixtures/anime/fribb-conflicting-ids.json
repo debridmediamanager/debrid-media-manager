@@ -1,0 +1,161 @@
+{
+	"fribb": [
+		{
+			"type": "OVA",
+			"anidb_id": 9168,
+			"anilist_id": 119134,
+			"animecountdown_id": 40859,
+			"anime-planet_id": "heart-cocktail-again",
+			"anisearch_id": 7779,
+			"imdb_id": ["tt31947486"],
+			"kitsu_id": 9844,
+			"mal_id": 21121,
+			"simkl_id": 40859,
+			"themoviedb_id": {
+				"movie": [806075]
+			}
+		},
+		{
+			"type": "ONA",
+			"anidb_id": 17512,
+			"anilist_id": 139751,
+			"animecountdown_id": 2768768,
+			"anime-planet_id": "geu-yeoreum",
+			"anisearch_id": 20385,
+			"kitsu_id": 45872,
+			"livechart_id": 13518,
+			"mal_id": 49982,
+			"simkl_id": 2768768
+		},
+		{
+			"type": "TV",
+			"anidb_id": 17617,
+			"anilist_id": 154587,
+			"animecountdown_id": 1990194,
+			"animenewsnetwork_id": 26334,
+			"anime-planet_id": "frieren-beyond-journeys-end",
+			"anisearch_id": 17669,
+			"imdb_id": ["tt22248376"],
+			"kitsu_id": 46474,
+			"livechart_id": 11376,
+			"mal_id": 52991,
+			"simkl_id": 1990194,
+			"themoviedb_id": {
+				"tv": 209867
+			},
+			"tvdb_id": 424536,
+			"season": {
+				"tvdb": 1,
+				"tmdb": 1
+			}
+		},
+		{
+			"type": "TV",
+			"anidb_id": 18581,
+			"anilist_id": 176642,
+			"animecountdown_id": 2423492,
+			"animenewsnetwork_id": 32647,
+			"anime-planet_id": "ameku-md-doctor-detective",
+			"anisearch_id": 19178,
+			"imdb_id": ["tt33384314"],
+			"kitsu_id": 48691,
+			"livechart_id": 12626,
+			"mal_id": 58600,
+			"simkl_id": 2423492,
+			"themoviedb_id": {
+				"tv": 250994
+			},
+			"tvdb_id": 448477,
+			"season": {
+				"tvdb": 1,
+				"tmdb": 1
+			}
+		},
+		{
+			"type": "MOVIE",
+			"anidb_id": 19021,
+			"animecountdown_id": 2768770,
+			"anime-planet_id": "geu-yeoreum-2023",
+			"anisearch_id": 20706,
+			"kitsu_id": 48382,
+			"livechart_id": 13224,
+			"mal_id": 56601,
+			"simkl_id": 2768770
+		},
+		{
+			"type": "SPECIAL",
+			"anidb_id": 19902,
+			"anilist_id": 154765,
+			"animecountdown_id": 3027496,
+			"anime-planet_id": "genshin-impact",
+			"anisearch_id": 21284,
+			"kitsu_id": 46490,
+			"livechart_id": 11510,
+			"mal_id": 63522,
+			"simkl_id": 3027496
+		},
+		{
+			"type": "SPECIAL",
+			"anilist_id": 208054,
+			"kitsu_id": 50288,
+			"mal_id": 58181
+		}
+	],
+	"rows": [
+		{
+			"id": 18851,
+			"anidb_id": null,
+			"kitsu_id": 48382,
+			"mal_id": 49982,
+			"anime_planet_id": "geu-yeoreum",
+			"imdb_id": null,
+			"title": "Geu Yeoreum",
+			"type": "ONA"
+		},
+		{
+			"id": 4435,
+			"anidb_id": 9168,
+			"kitsu_id": 9844,
+			"mal_id": 58181,
+			"anime_planet_id": "heart-cocktail-again",
+			"imdb_id": null,
+			"title": "Heart Cocktail Again",
+			"type": "OVA"
+		},
+		{
+			"id": 18820,
+			"anidb_id": null,
+			"kitsu_id": 46490,
+			"mal_id": 53053,
+			"anime_planet_id": "genshin-impact",
+			"imdb_id": null,
+			"title": "Genshin Impact",
+			"type": "TV"
+		},
+		{
+			"id": 788,
+			"anidb_id": 18581,
+			"kitsu_id": 48691,
+			"mal_id": 58600,
+			"anime_planet_id": "ameku-takao-no-suiri-karte",
+			"imdb_id": null,
+			"title": "Ameku Takao no Suiri Karte",
+			"type": "TV"
+		},
+		{
+			"id": 11142,
+			"anidb_id": 17617,
+			"kitsu_id": 46474,
+			"mal_id": 52991,
+			"anime_planet_id": "frieren-beyond-journeys-end",
+			"imdb_id": null,
+			"title": "Sousou no Frieren",
+			"type": "TV"
+		}
+	],
+	"source": {
+		"dataset": "https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json",
+		"commit": "8e4ec6a211f91c0cfa450f63aa1f403f8d5f0b2d",
+		"fetched": "2026-09-27"
+	}
+}

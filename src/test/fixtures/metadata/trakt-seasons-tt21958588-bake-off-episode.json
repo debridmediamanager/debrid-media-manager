@@ -1,0 +1,288 @@
+[
+	{
+		"ids": {
+			"plex": { "guid": "602e5cb791bd55002cf720f9" },
+			"tmdb": 119242,
+			"tvdb": null,
+			"trakt": 247242
+		},
+		"title": "Specials",
+		"votes": 6,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/247/242/posters/medium/8de3a122f5.jpg.webp"
+			]
+		},
+		"number": 0,
+		"rating": 8.166669845581055,
+		"network": null,
+		"overview": null,
+		"updated_at": "2026-09-26T09:32:10.000Z",
+		"first_aired": "2017-12-25T20:00:00.000Z",
+		"episode_count": 18,
+		"total_runtime": 1065,
+		"aired_episodes": 18,
+		"original_title": "Specials"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e5cba91bd55002cf72101" },
+			"tmdb": 119240,
+			"tvdb": 719200,
+			"trakt": 247243
+		},
+		"title": "Series 1",
+		"votes": 30,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/247/243/posters/medium/0796c2755c.jpg.webp"
+			]
+		},
+		"number": 1,
+		"rating": 7.766666889190674,
+		"network": null,
+		"overview": "Sandi Toksvig and Noel Fielding are joined in the iconic tent by 12 of Britain’s best amateur bakers – all united in their aim to impress judges Paul Hollywood and (new to the team this series) Prue Leith. There are 30 baking challenges for the bakers to try their hand at. Those who don’t make the grade are asked to leave, while the one who consistently rises to the challenge is named Star Baker.",
+		"updated_at": "2026-09-26T09:32:11.000Z",
+		"first_aired": "2017-08-29T19:00:00.000Z",
+		"episode_count": 10,
+		"total_runtime": 566,
+		"aired_episodes": 10,
+		"original_title": "Series 1"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e5cbb91bd55002cf72102" },
+			"tmdb": 119241,
+			"tvdb": 775111,
+			"trakt": 247244
+		},
+		"title": "Series 2",
+		"votes": 31,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/247/244/posters/medium/655dcc607d.jpg.webp"
+			]
+		},
+		"number": 2,
+		"rating": 7.967741966247559,
+		"network": null,
+		"overview": "Sandi Toksvig and Noel Fielding are on hand to ‘help’ and judges Paul Hollywood and Prue Leith return to appraise the tasty Signature bakes, tricky Technicals and some truly spectacular Showstoppers. The bakers even venture outside of the Tent in a Bake Off first, with an al fresco Technical Challenge in the Final.",
+		"updated_at": "2026-09-26T09:32:11.000Z",
+		"first_aired": "2018-08-28T19:00:00.000Z",
+		"episode_count": 10,
+		"total_runtime": 570,
+		"aired_episodes": 10,
+		"original_title": "Series 2"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e5cbb91bd55002cf72103" },
+			"tmdb": 131114,
+			"tvdb": 821990,
+			"trakt": 247245
+		},
+		"title": "Series 3",
+		"votes": 37,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/247/245/posters/medium/d3b4271734.jpg.webp"
+			]
+		},
+		"number": 3,
+		"rating": 7.675675868988037,
+		"network": null,
+		"overview": "Entering its 10th year, the series sees the return of judges Paul Hollywood and Prue Leith as well as hosts Noel Fielding and Sandi Toksvig. To celebrate a decade in the Tent, Bake Off has gone one better, with a baker’s dozen: 13 new bakers, taking on 30 new challenges, but there can only be one winner.",
+		"updated_at": "2026-09-26T09:32:11.000Z",
+		"first_aired": "2019-08-27T19:00:00.000Z",
+		"episode_count": 10,
+		"total_runtime": 578,
+		"aired_episodes": 10,
+		"original_title": "Series 3"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "602e5cbb91bd55002cf72104" },
+			"tmdb": 163767,
+			"tvdb": 1866218,
+			"trakt": 247246
+		},
+		"title": "Series 4",
+		"votes": 41,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/247/246/posters/medium/b4b79b4857.jpg.webp"
+			]
+		},
+		"number": 4,
+		"rating": 7.853658676147461,
+		"network": null,
+		"overview": "Noel Fielding and new host Matt Lucas welcome more amateur bakers, but this time under exceptional circumstances, as 12 new bakers form a bubble and enter the iconic white tent.",
+		"updated_at": "2026-09-26T09:32:11.000Z",
+		"first_aired": "2020-09-22T19:00:00.000Z",
+		"episode_count": 10,
+		"total_runtime": 597,
+		"aired_episodes": 10,
+		"original_title": "Series 4"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "6141034da136c349eb0e2718" },
+			"tmdb": 209963,
+			"tvdb": 1954691,
+			"trakt": 271154
+		},
+		"title": "Series 5",
+		"votes": 36,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/271/154/posters/medium/ef729ae84b.jpg.webp"
+			]
+		},
+		"number": 5,
+		"rating": 7.861111164093018,
+		"network": null,
+		"overview": "Noel Fielding and Matt Lucas welcome more amateur bakers, as 12 new hopefuls in a brand-new bubble enter the iconic white tent.",
+		"updated_at": "2026-09-26T09:32:11.000Z",
+		"first_aired": "2021-09-21T19:00:00.000Z",
+		"episode_count": 10,
+		"total_runtime": 597,
+		"aired_episodes": 10,
+		"original_title": "Series 5"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "630ff39d89a05e58adc73673" },
+			"tmdb": 306793,
+			"tvdb": 2017106,
+			"trakt": 302455
+		},
+		"title": "Series 6",
+		"votes": 28,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/302/455/posters/medium/9a435ca085.jpg.webp"
+			]
+		},
+		"number": 6,
+		"rating": 7.392857074737549,
+		"network": null,
+		"overview": "Noel Fielding and Matt Lucas welcome more amateur bakers, as a new batch of 12 hopefuls enter the iconic white tent.",
+		"updated_at": "2026-09-26T09:32:11.000Z",
+		"first_aired": "2022-09-13T19:00:00.000Z",
+		"episode_count": 10,
+		"total_runtime": 599,
+		"aired_episodes": 10,
+		"original_title": "Series 6"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "6501e2fd3fd32097d3341a94" },
+			"tmdb": 355176,
+			"tvdb": 2083174,
+			"trakt": 332374
+		},
+		"title": "Series 14",
+		"votes": 29,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/332/374/posters/medium/0ccc4c9ff0.jpg.webp"
+			]
+		},
+		"number": 7,
+		"rating": 7.551720142364502,
+		"network": null,
+		"overview": "Noel Fielding and brand-new host Alison Hammond welcome more amateur bakers, as a new batch of hopefuls enter the iconic white tent.",
+		"updated_at": "2026-09-26T09:32:11.000Z",
+		"first_aired": "2023-09-26T19:00:00.000Z",
+		"episode_count": 10,
+		"total_runtime": 596,
+		"aired_episodes": 10,
+		"original_title": "Series 14"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "66e31d680aa9d52928ad2c58" },
+			"tmdb": 418084,
+			"tvdb": null,
+			"trakt": 414582
+		},
+		"title": "Series 15",
+		"votes": 22,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/414/582/posters/medium/9c20fc220d.jpg.webp"
+			]
+		},
+		"number": 8,
+		"rating": 7.590909957885742,
+		"network": null,
+		"overview": "Noel Fielding and Alison Hammond welcome more amateur bakers into the iconic white tent.",
+		"updated_at": "2026-09-26T09:32:12.000Z",
+		"first_aired": "2024-09-24T19:00:00.000Z",
+		"episode_count": 10,
+		"total_runtime": 620,
+		"aired_episodes": 10,
+		"original_title": "Series 15"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "68a8429d59cfd5ae3fdcaa58" },
+			"tmdb": 470794,
+			"tvdb": null,
+			"trakt": 481053
+		},
+		"title": "Series 16",
+		"votes": 24,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/481/053/posters/medium/950bf86656.jpg.webp"
+			]
+		},
+		"number": 9,
+		"rating": 7.708333492279053,
+		"network": null,
+		"overview": "Get ready for gooey glory, dough disasters and pastry pandemonium, as Britain's amateur bakers compete to impress judges Paul Hollywood and Prue Leith. On your marks... get set... BAKE!",
+		"updated_at": "2026-09-26T09:32:12.000Z",
+		"first_aired": "2025-09-02T19:00:00.000Z",
+		"episode_count": 10,
+		"total_runtime": 621,
+		"aired_episodes": 10,
+		"original_title": "Series 16"
+	},
+	{
+		"ids": {
+			"plex": { "guid": "6a8420be8814cd3518f3b730" },
+			"tmdb": 541142,
+			"tvdb": 2264116,
+			"trakt": 535316
+		},
+		"title": "Series 17",
+		"votes": 0,
+		"images": {
+			"thumb": [],
+			"poster": [
+				"media.trakt.tv/images/seasons/000/535/316/posters/medium/3f86f7c7eb.jpg.webp"
+			]
+		},
+		"number": 10,
+		"rating": 0,
+		"network": null,
+		"overview": "Twelve new bakers and a brand-new judge... Nigella Lawson joins Paul Hollywood, Noel Fielding and Alison Hammond for more salivating Signatures, tantalising Technicals and sensational Showstoppers.",
+		"updated_at": "2026-09-26T11:04:36.000Z",
+		"first_aired": "2026-09-22T19:00:00.000Z",
+		"episode_count": 10,
+		"total_runtime": 70,
+		"aired_episodes": 1,
+		"original_title": "Series 17"
+	}
+]

@@ -1,0 +1,94 @@
+{
+	"meta": {
+		"imdb_id": "tt1160419",
+		"type": "movie",
+		"name": "Dune: Part One",
+		"cast": ["Timothée Chalamet", "Rebecca Ferguson", "Zendaya"],
+		"country": "Canada, United States",
+		"description": "Paul Atreides arrives on Arrakis after his father accepts the stewardship of the dangerous planet. However, chaos ensues after a betrayal as forces clash to control melange, a precious resource.",
+		"director": ["Denis Villeneuve"],
+		"genre": ["Action", "Adventure", "Drama"],
+		"imdbRating": "8.0",
+		"released": "2021-10-22T00:00:00.000Z",
+		"slug": "movie/dune-part-one-1160419",
+		"writer": ["Jon Spaihts", "Denis Villeneuve", "Eric Roth"],
+		"year": "2021",
+		"moviedb_id": 438631,
+		"popularities": { "moviedb": 49.3824, "stremio": 1.64608, "stremio_lib": 0, "trakt": 100 },
+		"trailers": [
+			{ "source": "w0HgHet0sxg", "type": "Trailer" },
+			{ "source": "8g18jFHCLXk", "type": "Trailer" },
+			{ "source": "n9xhJrPXop4", "type": "Trailer" }
+		],
+		"poster": "https://images.metahub.space/poster/small/tt1160419/img",
+		"background": "https://images.metahub.space/background/medium/tt1160419/img",
+		"logo": "https://images.metahub.space/logo/medium/tt1160419/img",
+		"runtime": "155 min",
+		"awards": "Won 6 Oscars. 178 wins & 299 nominations total",
+		"dvdRelease": "2021-10-22T00:00:00.000Z",
+		"popularity": 1.64608,
+		"id": "tt1160419",
+		"genres": ["Action", "Adventure", "Drama"],
+		"releaseInfo": "2021",
+		"trailerStreams": [
+			{ "title": "Dune: Part One", "ytId": "w0HgHet0sxg" },
+			{ "title": "Dune: Part One", "ytId": "8g18jFHCLXk" },
+			{ "title": "Dune: Part One", "ytId": "n9xhJrPXop4" }
+		],
+		"links": [
+			{ "name": "8.0", "category": "imdb", "url": "https://imdb.com/title/tt1160419" },
+			{
+				"name": "Dune: Part One",
+				"category": "share",
+				"url": "https://www.strem.io/s/movie/dune-part-one-1160419"
+			},
+			{
+				"name": "Action",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Action"
+			},
+			{
+				"name": "Adventure",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Adventure"
+			},
+			{
+				"name": "Drama",
+				"category": "Genres",
+				"url": "stremio:///discover/https%3A%2F%2Fv3-cinemeta.strem.io%2Fmanifest.json/movie/top?genre=Drama"
+			},
+			{
+				"name": "Timothée Chalamet",
+				"category": "Cast",
+				"url": "stremio:///search?search=Timoth%C3%A9e%20Chalamet"
+			},
+			{
+				"name": "Rebecca Ferguson",
+				"category": "Cast",
+				"url": "stremio:///search?search=Rebecca%20Ferguson"
+			},
+			{ "name": "Zendaya", "category": "Cast", "url": "stremio:///search?search=Zendaya" },
+			{
+				"name": "Jon Spaihts",
+				"category": "Writers",
+				"url": "stremio:///search?search=Jon%20Spaihts"
+			},
+			{
+				"name": "Denis Villeneuve",
+				"category": "Writers",
+				"url": "stremio:///search?search=Denis%20Villeneuve"
+			},
+			{
+				"name": "Eric Roth",
+				"category": "Writers",
+				"url": "stremio:///search?search=Eric%20Roth"
+			},
+			{
+				"name": "Denis Villeneuve",
+				"category": "Directors",
+				"url": "stremio:///search?search=Denis%20Villeneuve"
+			}
+		],
+		"behaviorHints": { "defaultVideoId": "tt1160419", "hasScheduledVideos": false }
+	}
+}

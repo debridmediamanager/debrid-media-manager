@@ -1,0 +1,192 @@
+{
+	"_embedded": {
+		"seasons": [
+			{
+				"id": 38865,
+				"url": "https://www.tvmaze.com/seasons/38865/rezero-kara-hajimeru-isekai-seikatsu-season-1",
+				"number": 1,
+				"name": "",
+				"episodeOrder": 25,
+				"premiereDate": "2016-04-04",
+				"endDate": "2019-11-08",
+				"network": {
+					"id": 132,
+					"name": "Tokyo MX",
+					"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+					"officialSite": null
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/206/516135.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/206/516135.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/38865" } }
+			},
+			{
+				"id": 98700,
+				"url": "https://www.tvmaze.com/seasons/98700/rezero-kara-hajimeru-isekai-seikatsu-season-2",
+				"number": 2,
+				"name": "Re:Zero - Starting Life in Another World 2",
+				"episodeOrder": 25,
+				"premiereDate": "2020-07-08",
+				"endDate": "2021-03-24",
+				"network": {
+					"id": 167,
+					"name": "AT-X",
+					"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+					"officialSite": null
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/206/516136.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/206/516136.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/98700" } }
+			},
+			{
+				"id": 173146,
+				"url": "https://www.tvmaze.com/seasons/173146/rezero-kara-hajimeru-isekai-seikatsu-season-3",
+				"number": 3,
+				"name": "",
+				"episodeOrder": 16,
+				"premiereDate": "2024-10-02",
+				"endDate": "2025-03-26",
+				"network": {
+					"id": 167,
+					"name": "AT-X",
+					"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+					"officialSite": null
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/173146" } }
+			},
+			{
+				"id": 198707,
+				"url": "https://www.tvmaze.com/seasons/198707/rezero-kara-hajimeru-isekai-seikatsu-season-4",
+				"number": 4,
+				"name": "",
+				"episodeOrder": null,
+				"premiereDate": "2026-04-08",
+				"endDate": "2026-09-30",
+				"network": {
+					"id": 167,
+					"name": "AT-X",
+					"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+					"officialSite": null
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/198707" } }
+			},
+			{
+				"id": 206413,
+				"url": "https://www.tvmaze.com/seasons/206413/rezero-kara-hajimeru-isekai-seikatsu-season-5",
+				"number": 5,
+				"name": "",
+				"episodeOrder": null,
+				"premiereDate": null,
+				"endDate": null,
+				"network": {
+					"id": 167,
+					"name": "AT-X",
+					"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+					"officialSite": null
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/206413" } }
+			}
+		],
+		"nextepisode": {
+			"id": 3636715,
+			"url": "https://www.tvmaze.com/episodes/3636715/rezero-kara-hajimeru-isekai-seikatsu-4x19-shaula-hero",
+			"name": "Shaula / Hero",
+			"season": 4,
+			"number": 19,
+			"type": "regular",
+			"airdate": "2026-09-30",
+			"airtime": "22:30",
+			"airstamp": "2026-09-30T13:30:00+00:00",
+			"runtime": 30,
+			"rating": { "average": null },
+			"image": null,
+			"summary": null,
+			"_links": {
+				"self": { "href": "https://api.tvmaze.com/episodes/3636715" },
+				"show": {
+					"href": "https://api.tvmaze.com/shows/14459",
+					"name": "Re:Zero kara Hajimeru Isekai Seikatsu"
+				}
+			}
+		},
+		"previousepisode": {
+			"id": 3636714,
+			"url": "https://www.tvmaze.com/episodes/3636714/rezero-kara-hajimeru-isekai-seikatsu-4x18-ram",
+			"name": "Ram",
+			"season": 4,
+			"number": 18,
+			"type": "regular",
+			"airdate": "2026-09-23",
+			"airtime": "22:30",
+			"airstamp": "2026-09-23T13:30:00+00:00",
+			"runtime": 30,
+			"rating": { "average": 9.5 },
+			"image": {
+				"medium": "https://static.tvmaze.com/uploads/images/medium_landscape/642/1606869.jpg",
+				"original": "https://static.tvmaze.com/uploads/images/original_untouched/642/1606869.jpg"
+			},
+			"summary": "<p>While Emilia faces the final trial in the tower, Ram faces off against Rye.</p>",
+			"_links": {
+				"self": { "href": "https://api.tvmaze.com/episodes/3636714" },
+				"show": {
+					"href": "https://api.tvmaze.com/shows/14459",
+					"name": "Re:Zero kara Hajimeru Isekai Seikatsu"
+				}
+			}
+		}
+	},
+	"_links": {
+		"self": { "href": "https://api.tvmaze.com/shows/14459" },
+		"previousepisode": { "href": "https://api.tvmaze.com/episodes/3636714", "name": "Ram" },
+		"nextepisode": {
+			"href": "https://api.tvmaze.com/episodes/3636715",
+			"name": "Shaula / Hero"
+		}
+	},
+	"averageRuntime": 30,
+	"dvdCountry": null,
+	"ended": null,
+	"externals": { "tvrage": null, "thetvdb": 305089, "imdb": "tt5607616" },
+	"genres": ["Drama", "Action", "Anime", "Fantasy"],
+	"id": 14459,
+	"image": {
+		"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/49/122624.jpg",
+		"original": "https://static.tvmaze.com/uploads/images/original_untouched/49/122624.jpg"
+	},
+	"language": "Japanese",
+	"name": "Re:Zero kara Hajimeru Isekai Seikatsu",
+	"network": {
+		"id": 167,
+		"name": "AT-X",
+		"country": { "name": "Japan", "code": "JP", "timezone": "Asia/Tokyo" },
+		"officialSite": null
+	},
+	"officialSite": "http://re-zero-anime.jp",
+	"premiered": "2016-04-04",
+	"rating": { "average": 7.8 },
+	"runtime": 30,
+	"schedule": { "time": "22:30", "days": ["Wednesday"] },
+	"status": "Running",
+	"summary": "<p>Suddenly, high school student Subaru Natsuki has been summoned to another world on the way back from the convenience store. With the biggest crisis of his life being summoned to another world, and with no sign of the one who summoned him, things become even worse when he is attacked. But when he is saved by a mysterious, silver-haired girl with a fairy cat, Subaru cooperates with her to return the favor. When they finally manage to get a clue, Subaru and the girl are attacked and killed by someone. Subaru then awakens in the place he was summoned and notices he gained the ability \"Returns by Death\" and has become a helpless boy that only has the ability to rewind time by dying. Beyond the despair, can he save the girl from the fate of death?</p>",
+	"type": "Animation",
+	"updated": 1790252430,
+	"url": "https://www.tvmaze.com/shows/14459/rezero-kara-hajimeru-isekai-seikatsu",
+	"webChannel": null,
+	"weight": 99
+}

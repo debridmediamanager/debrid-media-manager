@@ -1,0 +1,24 @@
+{
+	"results": [
+		{
+			"id": "anime:anidb-17617",
+			"title": "Sousou no Frieren",
+			"poster_url": "https://media.kitsu.io/anime/46474/poster_image/medium-23e1293e41a0b54b6621eb589c3f0d62.jpeg"
+		},
+		{
+			"id": "anime:mal-56885",
+			"title": "Sousou no Frieren: Marumaru no Mahou",
+			"poster_url": "https://media.kitsu.io/anime/48105/poster_image/medium-78f3858c3d265b910c9fe6f638b37d75.jpeg"
+		},
+		{
+			"id": "anime:mal-56805",
+			"title": "Yuusha",
+			"poster_url": "https://media.kitsu.io/anime/48113/poster_image/medium-92f815f56f2166991f025346c2e7f68f.jpeg"
+		},
+		{
+			"id": "anime:mal-58313",
+			"title": "Haru",
+			"poster_url": "https://media.kitsu.io/anime/48642/poster_image/medium-826333aff8e2865fcd7c1d7608220ed8.jpeg"
+		}
+	]
+}

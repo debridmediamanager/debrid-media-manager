@@ -187,12 +187,11 @@ describe('IndexPage in guest mode', () => {
 	it('folds the debrid cards away without removing them', () => {
 		localStorage.setItem(GUEST_MODE_KEY, 'true');
 
-		const { container } = render(<IndexPage />);
+		render(<IndexPage />);
 
-		const disclosure = container.querySelector('details');
+		const disclosure = screen.getByText('Connect a debrid service').closest('details');
 		expect(disclosure).not.toBeNull();
 		expect(disclosure?.open).toBe(false);
-		expect(screen.getByText('Connect a debrid service')).toBeInTheDocument();
 
 		for (const service of DEBRID_SERVICES) {
 			expect(disclosure).toContainElement(screen.getByTestId(`service-card-${service}`));
@@ -232,20 +231,41 @@ describe('IndexPage in guest mode', () => {
 		);
 	});
 
-	it('shows a signed-in user the cards as before', () => {
+	// Six login buttons nobody needs twice took most of the page, so a signed-in
+	// user gets the same fold as a guest, under a label that fits them.
+	it('folds the debrid cards for a signed-in user too', () => {
 		currentUserMock.mockReturnValue({
 			...signedOutFixture,
 			rdUser: { username: 'demo' },
 			hasRDAuth: true,
 		});
 
-		const { container } = render(<IndexPage />);
+		render(<IndexPage />);
 
-		expect(container.querySelector('details')).toBeNull();
 		expect(screen.queryByText('You are browsing as a guest')).toBeNull();
 		expect(screen.getByTestId('main-actions')).toHaveAttribute('data-guest', 'false');
+		const disclosure = screen.getByText('Debrid services').closest('details');
+		expect(disclosure).not.toBeNull();
+		expect(disclosure?.open).toBe(false);
 		for (const service of DEBRID_SERVICES) {
-			expect(screen.getByTestId(`service-card-${service}`)).toBeInTheDocument();
+			expect(disclosure).toContainElement(screen.getByTestId(`service-card-${service}`));
 		}
+		expect(disclosure).not.toContainElement(screen.getByTestId('service-card-trakt'));
+	});
+
+	// Every provider error toast says "use the card below", so a failed provider
+	// must not leave its card folded out of sight.
+	it('opens the fold when a provider failed', () => {
+		currentUserMock.mockReturnValue({
+			...signedOutFixture,
+			rdUser: { username: 'demo' },
+			hasRDAuth: true,
+			tbError: new Error('429'),
+			hasTBAuth: true,
+		});
+
+		render(<IndexPage />);
+
+		expect(screen.getByText('Debrid services').closest('details')?.open).toBe(true);
 	});
 });

@@ -1,4 +1,11 @@
-import { getOmdbMetadata, getOmdbPoster, getOmdbRating, omdbField } from '@/utils/omdb';
+import episodeOmdb from '@/test/fixtures/metadata/omdb-tt21958588-bake-off-episode.json';
+import {
+	getOmdbMetadata,
+	getOmdbParentSeries,
+	getOmdbPoster,
+	getOmdbRating,
+	omdbField,
+} from '@/utils/omdb';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/metadataCache', () => ({
@@ -87,5 +94,18 @@ describe('getOmdbRating', () => {
 	it('returns null when OMDb has no rating', () => {
 		expect(getOmdbRating({ imdbRating: 'N/A' })).toBeNull();
 		expect(getOmdbRating(null)).toBeNull();
+	});
+});
+
+describe('getOmdbParentSeries', () => {
+	it('names the series of an episode id', () => {
+		expect(getOmdbParentSeries(episodeOmdb, 'tt21958588')).toBe('tt1877368');
+	});
+
+	it('names none for a series, an unknown id or a malformed parent', () => {
+		expect(getOmdbParentSeries({ Type: 'series', seriesID: 'tt1' }, 'tt2')).toBeNull();
+		expect(getOmdbParentSeries(null, 'tt2')).toBeNull();
+		expect(getOmdbParentSeries({ Type: 'episode', seriesID: 'N/A' }, 'tt2')).toBeNull();
+		expect(getOmdbParentSeries({ Type: 'episode', seriesID: 'tt2' }, 'tt2')).toBeNull();
 	});
 });

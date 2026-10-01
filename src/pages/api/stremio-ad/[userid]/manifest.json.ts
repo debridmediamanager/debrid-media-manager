@@ -1,3 +1,4 @@
+import { CAST_STREAM_RESOURCE } from '@/services/anime/stremioAnimeIds';
 import { CAST_ADDON_VERSIONS } from '@/utils/castAddonVersions';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -13,18 +14,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		version: CAST_ADDON_VERSIONS.alldebrid,
 		resources: [
 			'catalog',
-			{
-				name: 'stream',
-				types: ['movie', 'series'],
-				idPrefixes: ['tt'],
-			},
+			CAST_STREAM_RESOURCE,
 			{
 				name: 'meta',
 				types: ['other'],
 				idPrefixes: ['dmm-ad'],
 			},
 		],
-		types: ['movie', 'series', 'other'],
+		types: ['movie', 'series', 'anime', 'other'],
 		catalogs: [
 			{
 				id: 'ad-casted-movies',

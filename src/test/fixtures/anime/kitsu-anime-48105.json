@@ -1,0 +1,175 @@
+{
+	"data": {
+		"id": "48105",
+		"type": "anime",
+		"links": { "self": "https://kitsu.io/api/edge/anime/48105" },
+		"attributes": {
+			"createdAt": "2023-10-12T02:20:11.170Z",
+			"updatedAt": "2026-09-27T00:00:31.417Z",
+			"slug": "sousou-no-frieren-marumaru-no-mahou",
+			"synopsis": "Frieren loves collecting peculiar spells, and her ever-growing arsenal of magic contains the perfect spells for many occasions. Whether it be by stealthily removing alcohol from Heiter's drinks or by remedying her own sleep issues, Frieren is sure to brighten her companions' days with her magic.\n\n[Written by MAL Rewrite]",
+			"description": "Frieren loves collecting peculiar spells, and her ever-growing arsenal of magic contains the perfect spells for many occasions. Whether it be by stealthily removing alcohol from Heiter's drinks or by remedying her own sleep issues, Frieren is sure to brighten her companions' days with her magic.\n\n[Written by MAL Rewrite]",
+			"coverImageTopOffset": 0,
+			"titles": {
+				"en_jp": "Sousou no Frieren: Marumaru no Mahou",
+				"ja_jp": "葬送のフリーレン　～●●の魔法～"
+			},
+			"canonicalTitle": "Sousou no Frieren: Marumaru no Mahou",
+			"abbreviatedTitles": [
+				"Sousou no Frieren End Mini Anime",
+				"Frieren: Beyond Journey’s End Mini Anime",
+				"葬送のフリーレン ミニアニメ"
+			],
+			"averageRating": "74.51",
+			"ratingFrequencies": {
+				"2": "1",
+				"3": "1",
+				"4": "3",
+				"8": "3",
+				"10": "19",
+				"11": "1",
+				"12": "36",
+				"13": "7",
+				"14": "83",
+				"15": "9",
+				"16": "53",
+				"17": "3",
+				"18": "24",
+				"19": "2",
+				"20": "35"
+			},
+			"userCount": 707,
+			"favoritesCount": 6,
+			"startDate": "2023-10-10",
+			"endDate": null,
+			"nextRelease": null,
+			"popularityRank": 7695,
+			"ratingRank": 2750,
+			"ageRating": null,
+			"ageRatingGuide": null,
+			"subtype": "ONA",
+			"status": "current",
+			"tba": null,
+			"posterImage": {
+				"tiny": "https://media.kitsu.app/anime/48105/poster_image/tiny-57ed7a7426700cc12989ada8ce31b778.jpeg",
+				"large": "https://media.kitsu.app/anime/48105/poster_image/large-5c867a8f0b71df3aa020776cb657d2f7.jpeg",
+				"small": "https://media.kitsu.app/anime/48105/poster_image/small-ad5525868040713d3a46e49f64fc3878.jpeg",
+				"medium": "https://media.kitsu.app/anime/48105/poster_image/medium-78f3858c3d265b910c9fe6f638b37d75.jpeg",
+				"original": "https://media.kitsu.app/anime/48105/poster_image/8c62225c07a87d0076da17ad6b2ffff5.jpg",
+				"meta": {
+					"dimensions": {
+						"tiny": { "width": 110, "height": 156 },
+						"large": { "width": 550, "height": 780 },
+						"small": { "width": 284, "height": 402 },
+						"medium": { "width": 390, "height": 554 }
+					}
+				}
+			},
+			"coverImage": null,
+			"episodeCount": null,
+			"episodeLength": 1,
+			"totalLength": -2,
+			"youtubeVideoId": "X3Y9esqDspY",
+			"showType": "ONA",
+			"nsfw": false
+		},
+		"relationships": {
+			"genres": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/genres",
+					"related": "https://kitsu.io/api/edge/anime/48105/genres"
+				}
+			},
+			"categories": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/categories",
+					"related": "https://kitsu.io/api/edge/anime/48105/categories"
+				}
+			},
+			"castings": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/castings",
+					"related": "https://kitsu.io/api/edge/anime/48105/castings"
+				}
+			},
+			"installments": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/installments",
+					"related": "https://kitsu.io/api/edge/anime/48105/installments"
+				}
+			},
+			"mappings": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/mappings",
+					"related": "https://kitsu.io/api/edge/anime/48105/mappings"
+				}
+			},
+			"reviews": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/reviews",
+					"related": "https://kitsu.io/api/edge/anime/48105/reviews"
+				}
+			},
+			"mediaRelationships": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/media-relationships",
+					"related": "https://kitsu.io/api/edge/anime/48105/media-relationships"
+				}
+			},
+			"characters": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/characters",
+					"related": "https://kitsu.io/api/edge/anime/48105/characters"
+				}
+			},
+			"staff": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/staff",
+					"related": "https://kitsu.io/api/edge/anime/48105/staff"
+				}
+			},
+			"productions": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/productions",
+					"related": "https://kitsu.io/api/edge/anime/48105/productions"
+				}
+			},
+			"quotes": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/quotes",
+					"related": "https://kitsu.io/api/edge/anime/48105/quotes"
+				}
+			},
+			"episodes": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/episodes",
+					"related": "https://kitsu.io/api/edge/anime/48105/episodes"
+				}
+			},
+			"streamingLinks": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/streaming-links",
+					"related": "https://kitsu.io/api/edge/anime/48105/streaming-links"
+				}
+			},
+			"animeProductions": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/anime-productions",
+					"related": "https://kitsu.io/api/edge/anime/48105/anime-productions"
+				}
+			},
+			"animeCharacters": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/anime-characters",
+					"related": "https://kitsu.io/api/edge/anime/48105/anime-characters"
+				}
+			},
+			"animeStaff": {
+				"links": {
+					"self": "https://kitsu.io/api/edge/anime/48105/relationships/anime-staff",
+					"related": "https://kitsu.io/api/edge/anime/48105/anime-staff"
+				}
+			}
+		}
+	}
+}

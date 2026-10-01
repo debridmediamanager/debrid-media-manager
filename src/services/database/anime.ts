@@ -1,4 +1,5 @@
-import { soundex } from '../../utils/soundex';
+import { currentKitsuMediaUrl } from '@/utils/kitsuMedia';
+import { Prisma } from '@prisma/client';
 import { DatabaseClient } from './client';
 
 interface AnimeItem {
@@ -8,76 +9,45 @@ interface AnimeItem {
 
 export interface AnimeSearchResult extends AnimeItem {
 	title: string;
+	/** TV, OVA, ONA, MOVIE, SPECIAL or UNKNOWN, as the row stores it. */
+	type?: string;
+}
+
+/** The id spaces an `Anime` row is addressed by from outside. */
+export type AnimeIdSource = 'anidb' | 'mal' | 'kitsu';
+
+export interface AnimeRecord {
+	anidb_id: number | null;
+	kitsu_id: number | null;
+	mal_id: number | null;
+	imdb_id: string | null;
+	title: string;
+	description: string;
+	poster_url: string;
+	background_url: string;
+	rating: number;
+	type?: string;
+}
+
+/** What a link to an AniDB entry is labelled with. */
+export interface AnimeEntryRow {
+	anidb_id: number | null;
+	kitsu_id: number | null;
+	mal_id: number | null;
+	imdb_id: string | null;
+	title: string;
+	type: string;
+	poster_url: string;
 }
 
 export class AnimeService extends DatabaseClient {
-	public async getRecentlyUpdatedAnime(limit: number): Promise<AnimeItem[]> {
-		const results = await this.prisma.$queryRaw<any[]>`
-    SELECT
-      a.anidb_id,
-      a.mal_id,
-      a.poster_url,
-      MAX(s.updatedAt) AS last_updated
-    FROM Anime AS a
-    JOIN ScrapedTrue AS s
-    ON (a.mal_id = CAST(SUBSTRING(s.key, 11) AS UNSIGNED) AND SUBSTRING(s.key, 1, 9) = 'anime:mal')
-    OR (a.anidb_id = CAST(SUBSTRING(s.key, 13) AS UNSIGNED) AND SUBSTRING(s.key, 1, 11) = 'anime:anidb')
-    WHERE a.poster_url IS NOT NULL AND a.poster_url != ''
-    GROUP BY a.anidb_id, a.mal_id, a.poster_url
-    ORDER BY last_updated DESC
-    LIMIT ${limit}`;
-		return results.map((anime) => ({
-			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
-			poster_url: anime.poster_url,
-		}));
-	}
-
-	public async searchAnimeByTitle(query: string): Promise<AnimeSearchResult[]> {
-		const soundexQuery = soundex(query);
-		const results = await this.prisma.$queryRaw<any[]>`
-    SELECT
-      a.title,
-      a.anidb_id,
-      a.mal_id,
-      a.poster_url
-    FROM Anime AS a
-    WHERE (SOUNDEX(a.title) = ${soundexQuery} OR a.title LIKE ${
-		'%' + query.toLowerCase() + '%'
-	}) AND a.poster_url IS NOT NULL AND a.poster_url != ''
-    ORDER BY a.rating DESC`;
-		return results.map((anime) => ({
-			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
-			title: anime.title,
-			poster_url: anime.poster_url,
-		}));
-	}
-
-	public async getAnimeByMalIds(malIds: number[]): Promise<AnimeSearchResult[]> {
-		const results = await this.prisma.anime.findMany({
-			where: {
-				mal_id: {
-					in: malIds,
-				},
-				poster_url: {
-					not: {
-						equals: '',
-					},
-				},
-			},
-			select: {
-				title: true,
-				anidb_id: true,
-				mal_id: true,
-				poster_url: true,
-			},
-		});
-		return results.map((anime) => ({
-			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
-			title: anime.title,
-			poster_url: anime.poster_url,
-		}));
-	}
-
+	/**
+	 * Rows for a search's Kitsu ids, in the order the search ranked them.
+	 *
+	 * `IN (...)` hands rows back in whatever order the index scan finds them,
+	 * which is kitsu_id order in production: a "Fate/Zero" search came back
+	 * with Gravitation (kitsu 218) ahead of Fate/Zero (6028).
+	 */
 	public async getAnimeByKitsuIds(kitsuIds: number[]): Promise<AnimeSearchResult[]> {
 		const results = await this.prisma.anime.findMany({
 			where: {
@@ -92,27 +62,126 @@ export class AnimeService extends DatabaseClient {
 			},
 			select: {
 				title: true,
+				type: true,
 				anidb_id: true,
 				mal_id: true,
+				kitsu_id: true,
 				poster_url: true,
 			},
 		});
-		return results.map((anime) => ({
-			id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
-			title: anime.title,
-			poster_url: anime.poster_url,
-		}));
+		const rank = new Map(kitsuIds.map((id, index) => [id, index]));
+		const position = (kitsuId: number | null) =>
+			(kitsuId !== null ? rank.get(kitsuId) : undefined) ?? kitsuIds.length;
+		return results
+			.sort((a, b) => position(a.kitsu_id) - position(b.kitsu_id))
+			.map((anime) => ({
+				id: anime.anidb_id ? `anime:anidb-${anime.anidb_id}` : `anime:mal-${anime.mal_id}`,
+				title: anime.title,
+				type: anime.type,
+				poster_url: currentKitsuMediaUrl(anime.poster_url),
+			}));
 	}
 
 	/**
-	 * The Kitsu API carries no IMDb id, so a page served from the Kitsu
-	 * fallback resolves one here instead of losing it.
+	 * One row by whichever external id the caller holds.
+	 *
+	 * Search hands out anidb ids (mal when a row has none) while the metadata
+	 * upstreams are keyed by Kitsu, so the row is what translates between them.
+	 * It also carries the IMDb id the Kitsu API lacks, and enough metadata to
+	 * render a page when neither upstream answers.
 	 */
-	public async getImdbIdByKitsuId(kitsuId: number): Promise<string | null> {
-		const anime = await this.prisma.anime.findUnique({
-			where: { kitsu_id: kitsuId },
-			select: { imdb_id: true },
+	public async getAnimeByExternalId(
+		source: AnimeIdSource,
+		id: number
+	): Promise<AnimeRecord | null> {
+		const where: Prisma.AnimeWhereUniqueInput =
+			source === 'anidb'
+				? { anidb_id: id }
+				: source === 'mal'
+					? { mal_id: id }
+					: { kitsu_id: id };
+		const row = await this.prisma.anime.findUnique({
+			where,
+			select: {
+				anidb_id: true,
+				kitsu_id: true,
+				mal_id: true,
+				imdb_id: true,
+				title: true,
+				description: true,
+				poster_url: true,
+				background_url: true,
+				rating: true,
+				type: true,
+			},
 		});
-		return anime?.imdb_id ?? null;
+		return row
+			? {
+					...row,
+					poster_url: currentKitsuMediaUrl(row.poster_url),
+					background_url: currentKitsuMediaUrl(row.background_url),
+				}
+			: null;
+	}
+
+	/**
+	 * The rows that label links to AniDB entries: every row for these AniDB
+	 * ids, plus the rows the table itself files under these IMDb ids.
+	 *
+	 * The second half matters when the Fribb dataset could not be downloaded.
+	 * `imdb_id` is unique, so it finds at most one row per IMDb id, and only
+	 * rows with an AniDB id can be linked to.
+	 */
+	public async getAnimeEntryRows({
+		anidbIds,
+		imdbIds,
+	}: {
+		anidbIds: number[];
+		imdbIds: string[];
+	}): Promise<AnimeEntryRow[]> {
+		if (anidbIds.length === 0 && imdbIds.length === 0) return [];
+		const or: Prisma.AnimeWhereInput[] = [];
+		if (anidbIds.length > 0) or.push({ anidb_id: { in: anidbIds } });
+		if (imdbIds.length > 0) or.push({ imdb_id: { in: imdbIds }, anidb_id: { not: null } });
+		const rows = await this.prisma.anime.findMany({
+			where: { OR: or },
+			select: {
+				anidb_id: true,
+				kitsu_id: true,
+				mal_id: true,
+				imdb_id: true,
+				title: true,
+				type: true,
+				poster_url: true,
+			},
+		});
+		return rows.map((row) => ({ ...row, poster_url: currentKitsuMediaUrl(row.poster_url) }));
+	}
+
+	/**
+	 * The anime whose releases were stored most recently, newest first.
+	 *
+	 * The release rows are `anime:anidb-<aid>` in `ScrapedTrue`, rewritten
+	 * whenever a scraper files a new release under them, so their `updatedAt` is
+	 * when an entry last got something. An entry the `Anime` table has no
+	 * poster for is left out, as it would be a blank tile.
+	 */
+	public async getRecentlyUpdatedAnime(take: number): Promise<AnimeEntryRow[]> {
+		const keys = await this.prisma.scrapedTrue.findMany({
+			// Some rows have no poster and are dropped below, so over-read.
+			take: take * 2,
+			orderBy: { updatedAt: 'desc' },
+			where: { key: { startsWith: 'anime:anidb-' } },
+			select: { key: true },
+		});
+		const anidbIds = keys
+			.map((row) => parseInt(row.key.slice('anime:anidb-'.length), 10))
+			.filter((id) => Number.isSafeInteger(id) && id > 0);
+		const rows = await this.getAnimeEntryRows({ anidbIds, imdbIds: [] });
+		const byId = new Map(rows.map((row) => [row.anidb_id, row]));
+		return anidbIds
+			.map((id) => byId.get(id))
+			.filter((row): row is AnimeEntryRow => row !== undefined && row.poster_url !== '')
+			.slice(0, take);
 	}
 }

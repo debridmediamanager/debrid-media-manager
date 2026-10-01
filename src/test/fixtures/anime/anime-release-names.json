@@ -1,0 +1,347 @@
+[
+	{
+		"key": "anime:anidb-17617",
+		"name": "[SubsPlease] Sousou no Frieren - 05 (1080p) [8E3F8FA5].mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 5
+		}
+	},
+	{
+		"key": "anime:anidb-17617",
+		"name": "[Erai-raws] Sousou no Frieren - 01 ~ 28 [1080p][HEVC][BATCH][Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA][RUS",
+		"expected": {
+			"kind": "batch",
+			"from": 1,
+			"to": 28
+		}
+	},
+	{
+		"key": "anime:anidb-17617",
+		"name": "[CR] Sousou no Frieren - Beyond Journey's End - Season 01 - Multi-Audio - Multi-Subs",
+		"expected": {
+			"kind": "batch"
+		}
+	},
+	{
+		"key": "anime:anidb-17617",
+		"name": "[LostYears] Frieren Beyond Journey's End - S01E19v2 (WEB 1080p x265 10-bit AAC E-AC-3) [Dual Audio] | (Sousou no Frieren)",
+		"expected": {
+			"kind": "episode",
+			"episode": 19
+		}
+	},
+	{
+		"key": "anime:anidb-17617",
+		"name": "[SubsPlease] Sousou no Frieren (01-28) (1080p) [Unofficial Batch]",
+		"expected": {
+			"kind": "batch",
+			"from": 1,
+			"to": 28
+		}
+	},
+	{
+		"key": "anime:anidb-18302",
+		"name": "[SubsPlease] Honzuki no Gekokujou S4 - 23 (1080p) [5FFF934E].mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 23
+		}
+	},
+	{
+		"key": "anime:anidb-18302",
+		"name": "[Ironclad] Honzuki no Gekokujou - S04E23 [WEB.1080p.AV1].mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 23
+		}
+	},
+	{
+		"key": "anime:anidb-18302",
+		"name": "[Onalrie] Honzuki no Gekokujou Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen - Ryushu no Youjo - S01E23 [1080p WEBRip AV1].mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 23
+		}
+	},
+	{
+		"key": "anime:anidb-18302",
+		"name": "[Erai-raws] Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen - Ryushu no Youjo - 17v2 [480p CR WEB-DL AVC AAC][MultiSub][7B2BE4D4]",
+		"expected": {
+			"kind": "episode",
+			"episode": 17
+		}
+	},
+	{
+		"key": "anime:anidb-18302",
+		"name": "Власть книжного червя (ТВ-4) / Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o (wo) Erande Iraremasen Ryoushu no Youjo / Ascendance of a Bookworm 4th Season / Революция книжного червя 4: Приёмная дочь лорда [TV] [1-8 из 24] [RUS(int), JAP+Sub] [2026, фэнтези, WEB-DL] [1080p]",
+		"expected": {
+			"kind": "batch",
+			"from": 1,
+			"to": 8
+		}
+	},
+	{
+		"key": "anime:anidb-18302",
+		"name": "Ascendance of a Bookworm S04E20 Georgines Visit 1080p CR WEB-DL MULTi AAC2.0 H.264-VARYG (Honzuki no Gekokujou: Ryoushu no Youjo, Multi-Audio, Multi-Subs)",
+		"expected": {
+			"kind": "episode",
+			"episode": 20
+		}
+	},
+	{
+		"key": "anime:anidb-17052",
+		"name": "[FS Pavilion][斗破苍穹 第5季] Battle Through The Heavens S5 - 94 [4K]",
+		"expected": {
+			"kind": "episode",
+			"episode": 94
+		}
+	},
+	{
+		"key": "anime:anidb-18104",
+		"name": "[Erai-raws] Mushoku Tensei II - Isekai Ittara Honki Dasu Part 2 - 08 [720p][Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA][RUS]",
+		"expected": {
+			"kind": "episode",
+			"episode": 8
+		}
+	},
+	{
+		"key": "anime:anidb-16734",
+		"name": "[Erai-raws] Getsuyoubi no Tawawa 2 - 05 [1080p][Multiple Subtitle][3D5803B5].mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 5
+		}
+	},
+	{
+		"key": "anime:anidb-17089",
+		"name": "[Erai-raws] Kaginado Season 2 - 07 [480p][Multiple Subtitle][DD7E4AA9].mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 7
+		}
+	},
+	{
+		"key": "anime:anidb-7622",
+		"name": "[BakeSubs-Diogo4D] [BD][1080p] MM! 06 [6029C984].mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 6
+		}
+	},
+	{
+		"key": "anime:anidb-12704",
+		"name": "[NoobSubs] Fate Apocrypha 13 (720p 8bit AAC).mp4",
+		"expected": {
+			"kind": "episode",
+			"episode": 13
+		}
+	},
+	{
+		"key": "anime:anidb-15215",
+		"name": "[QCE]Tatoeba.Last.Dungeon.08.mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 8
+		}
+	},
+	{
+		"key": "anime:anidb-10709",
+		"name": "[orz] Girlfriend (Kari) 02 [466C621B].mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 2
+		}
+	},
+	{
+		"key": "anime:anidb-13252",
+		"name": "[FreakCrSuBuS] Miira no Kaikata [1080][Multisub].mkv",
+		"expected": null
+	},
+	{
+		"key": "anime:anidb-15300",
+		"name": "[224] Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen OAV [BDRip 1080p x265 FLAC][sub:eng,ara,fre,ger,ita,por,rus,spa][VostFr]",
+		"expected": null
+	},
+	{
+		"key": "anime:anidb-894",
+		"name": "[ShiggEz] Read or Die TV - Episode 20-26 (BD 960x720 x264 10bit FLAC AC3)",
+		"expected": {
+			"kind": "batch",
+			"from": 20,
+			"to": 26
+		}
+	},
+	{
+		"key": "anime:anidb-14656",
+		"name": "Qin's Moon S6 ep1-15 + Specials",
+		"expected": {
+			"kind": "batch",
+			"from": 1,
+			"to": 15
+		}
+	},
+	{
+		"key": "anime:anidb-3468",
+		"name": "[HorribleSubs] Gintama (127-265) [1080p] (Batch)",
+		"expected": {
+			"kind": "batch",
+			"from": 127,
+			"to": 265
+		}
+	},
+	{
+		"key": "anime:anidb-10918",
+		"name": "[FFF] Ore Monogatari!! - Vol.03 [BD][720p-AAC]",
+		"expected": {
+			"kind": "batch"
+		}
+	},
+	{
+		"key": "anime:anidb-640",
+		"name": "Scrapped.Princess.S01.720p.BluRay.FLAC2.0.x264-CTR",
+		"expected": {
+			"kind": "batch"
+		}
+	},
+	{
+		"key": "anime:anidb-8728",
+		"name": "[DeadFish] Zetman - Batch [BD][720p][MP4][AAC]",
+		"expected": {
+			"kind": "batch"
+		}
+	},
+	{
+		"key": "anime:anidb-13633",
+		"name": "[OpusMaxE] My Hero Academia: Two Heroes (2018) Blu-Ray 1080p 10-bit AV1 Opus",
+		"expected": null
+	},
+	{
+		"key": "anime:anidb-262",
+		"name": "[Sav1or] Memories (1995) (EN|FR) [BD][1080p][AV1][OPUS][Multi Dual Audio]",
+		"expected": null
+	},
+	{
+		"key": "anime:anidb-9023",
+		"name": "[JacobSwaggedUp] Naruto Shippuuden Movie 6 - Road to Ninja (BD 1280x692)",
+		"expected": null
+	},
+	{
+		"key": "anime:anidb-14993",
+		"name": "[Some-Stuffs] Pocket Monsters Movie 23 - Koko (1080p HEVC 10-bit FLAC 5.1)",
+		"expected": null
+	},
+	{
+		"key": "anime:anidb-1141",
+		"name": "[SoM] Dragon Ball (Movie 1) - Curse of the Blood Rubies [BLT Productions HD Recreation]",
+		"expected": null
+	},
+	{
+		"key": "anime:anidb-9974",
+		"name": "[RAI] Saiki Kusuo no Psi-nan - Kanketsu-hen (WEB 1080p x264 E-AC-3) | The Disastrous Life of Saiki K. | Season 3 | Final Arc",
+		"expected": {
+			"kind": "batch"
+		}
+	},
+	{
+		"key": "anime:anidb-69",
+		"name": "[Erai-raws] One Piece - 1100 [1080p][HEVC][Multiple Subtitle] [ENG][POR-BR][SPA-LA][SPA][ARA][FRE][GER][ITA]",
+		"expected": {
+			"kind": "episode",
+			"episode": 1100
+		}
+	},
+	{
+		"key": "anime:anidb-13766",
+		"name": "[GuodongSubs][Uncharted Walker][Mi Yu Xing Zhe][720P][EP1-2]]",
+		"expected": {
+			"kind": "batch",
+			"from": 1,
+			"to": 2
+		}
+	},
+	{
+		"key": "anime:anidb-17286",
+		"name": "[Some-Stuffs] Jojo's Bizarre Adventure Stone Ocean 20 (1920x1080 Blu-Ray Opus) [53C05949].mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 20
+		}
+	},
+	{
+		"key": "anime:anidb-5679",
+		"name": "[Hakata Ramen] Blade of the Immortal (Mugen No Juunin) 14 [1080p HEVC Subs-10x] HR-DR",
+		"expected": {
+			"kind": "episode",
+			"episode": 14
+		}
+	},
+	{
+		"key": "anime:anidb-13789",
+		"name": "SoulLand.1.The.Original.Series.Complete.E001-E264.",
+		"expected": {
+			"kind": "batch",
+			"from": 1,
+			"to": 264
+		}
+	},
+	{
+		"key": "anime:anidb-11097",
+		"name": "[Anonymoose] Umi ni Ochita Tsuki no Hanashi / 海に落ちた月の話 / The Moon That Fell Into the Sea (2013) (Web 720p, Remux)",
+		"expected": null
+	},
+	{
+		"key": "anime:anidb-8584",
+		"name": "[UCCUSS] BLACK★ROCK SHOOTER ブラック★ロックシューター 全8話 + OVA (BD 1920x1080p AVC FLAC SUPx2)",
+		"expected": {
+			"kind": "batch"
+		}
+	},
+	{
+		"key": "anime:anidb-8728",
+		"name": "[DBD-Raws][超魔人/Zetman/ゼットマン][01-13TV全集+特典映像][美版/US",
+		"expected": {
+			"kind": "batch"
+		}
+	},
+	{
+		"key": "anime:anidb-13789",
+		"name": "[ReSub] Soul Land (Douluo Dalu) - Episode 001 斗罗大陆 第一集 [1080p][English Sub].mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 1
+		}
+	},
+	{
+		"key": "anime:anidb-15300",
+		"name": "[SubsPlease] Honzuki no Gekokujou - 26.5.2 (1080p) [7C382F1C].mkv",
+		"expected": null
+	},
+	{
+		"key": "anime:anidb-15300",
+		"name": "[224] Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen OAV [BDRip 1080p x265 FLAC][sub:eng,ara,fre,ger,ita,por,rus,spa][VostFr]",
+		"expected": null
+	},
+	{
+		"key": "anime:anidb-15743",
+		"name": "Rent-a-Girlfriend S1E17-DUBBED [English (United States)] (CR 1920x1080 H.264 AAC)-ZAITO.mkv",
+		"expected": {
+			"kind": "episode",
+			"episode": 17
+		}
+	},
+	{
+		"key": "anime:anidb-69",
+		"name": "[Maximus] One Piece Ep. 642 - 654 [FuniDub 1080p x265 AAC]",
+		"expected": {
+			"kind": "batch",
+			"from": 642,
+			"to": 654
+		}
+	},
+	{
+		"key": "anime:anidb-17969",
+		"name": "[ToonsHub] Tokyo Revengers: Tenjiku-hen - 08 (S02E21) (Japanese 1080p x264 AAC) [English-Subs]",
+		"expected": null
+	}
+]

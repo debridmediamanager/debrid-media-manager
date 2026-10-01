@@ -10,11 +10,20 @@ import {
 	checkAvailabilityAd,
 	checkAvailabilityAdByHashes,
 	checkAvailabilityByHashes,
+	checkPlayableCachedHashes,
+	MAX_PLAYABLE_HASHES,
 } from './availability';
 import { runConcurrentFunctions } from './batch';
 import { groupBy } from './groupBy';
 import { isVideo } from './selectable';
 import { searchToastOptions } from './toastOptions';
+
+/**
+ * Whether a page's id can scope an availability lookup. An anime entry with no
+ * IMDb id passes `''`, which `/api/availability/check` answers with a 400; the
+ * lookup then asks by hash alone, as the hashlist page does.
+ */
+const isImdbId = (id: string) => /^tt\d+$/.test(id);
 
 // Common utility functions
 const calculateFileStats = (videoFiles: FileData[]) => {
@@ -91,78 +100,6 @@ async function waitForRateLimit() {
 	rdRequestTimestamps.push(now);
 }
 
-// Generic RD instant check function without IMDB constraint
-const processRdInstantCheckByHashes = async <T extends SearchResult | EnrichedHashlistTorrent>(
-	dmmProblemKey: string,
-	solution: string,
-	hashes: string[],
-	batchSize: number,
-	setTorrentList: Dispatch<SetStateAction<T[]>>,
-	sortFn?: (results: T[]) => T[],
-	shouldUpdateTitleAndSize = false
-): Promise<number> => {
-	let instantCount = 0;
-	const allAvailable: {
-		hash: string;
-		files: { file_id: number; path: string; bytes: number }[];
-	}[] = [];
-	const funcs = [];
-
-	for (const hashGroup of groupBy(batchSize, hashes)) {
-		funcs.push(async () => {
-			await waitForRateLimit();
-			const resp = await checkAvailabilityByHashes(dmmProblemKey, solution, hashGroup);
-			allAvailable.push(...resp.available);
-		});
-	}
-	await runConcurrentFunctions(funcs, 4, 0);
-
-	if (allAvailable.length === 0) return 0;
-
-	const availableMap = new Map(allAvailable.map((t) => [t.hash, t]));
-
-	setTorrentList((prevSearchResults) => {
-		const newSearchResults = [...prevSearchResults];
-		for (const torrent of newSearchResults) {
-			if (torrent.noVideos) continue;
-			const availableTorrent = availableMap.get(torrent.hash);
-			if (!availableTorrent) continue;
-
-			torrent.files = availableTorrent.files.map((file) => ({
-				fileId: file.file_id,
-				filename: file.path,
-				filesize: file.bytes,
-			}));
-			// RD's own file ids, kept apart from `files` so a later TorBox check
-			// overwriting `files` cannot make us cast with TorBox numbering.
-			torrent.rdFiles = torrent.files;
-
-			if (shouldUpdateTitleAndSize) {
-				updateTorrentTitle(torrent as SearchResult, torrent.files);
-				(torrent as SearchResult).fileSize =
-					torrent.files.reduce((acc, curr) => acc + curr.filesize, 0) / 1024 / 1024;
-			} else {
-				backfillMissingFileSize(torrent, torrent.files);
-			}
-
-			const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-			const stats = calculateFileStats(videoFiles);
-			Object.assign(torrent, stats);
-
-			torrent.noVideos = !torrent.files.some((file) => isVideo({ path: file.filename }));
-			if (!torrent.noVideos) {
-				torrent.rdAvailable = true;
-				instantCount += 1;
-			} else {
-				torrent.rdAvailable = false;
-			}
-		}
-		return sortFn ? sortFn(newSearchResults) : newSearchResults;
-	});
-
-	return instantCount;
-};
-
 // Generic RD instant check function
 const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTorrent>(
 	dmmProblemKey: string,
@@ -184,7 +121,9 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
 			await waitForRateLimit();
-			const resp = await checkAvailability(dmmProblemKey, solution, imdbId, hashGroup);
+			const resp = isImdbId(imdbId)
+				? await checkAvailability(dmmProblemKey, solution, imdbId, hashGroup)
+				: await checkAvailabilityByHashes(dmmProblemKey, solution, hashGroup);
 			allAvailable.push(...resp.available);
 		});
 	}
@@ -228,76 +167,6 @@ const processRdInstantCheck = async <T extends SearchResult | EnrichedHashlistTo
 				instantCount += 1;
 			} else {
 				torrent.rdAvailable = false;
-			}
-		}
-		return sortFn ? sortFn(newSearchResults) : newSearchResults;
-	});
-
-	return instantCount;
-};
-
-// Generic AD instant check function
-// Database-backed AD check with no IMDb ID constraint, for the hashlist page.
-//
-// This used to call AllDebrid's /magnet/instant directly, but that endpoint was
-// removed (it answers 404), and the only remaining way to probe AD's cache is to
-// upload the magnet — which mutates the user's account. So availability here
-// comes from DMM's own cache, exactly as the RD path does.
-const processAdInstantCheckDbByHashes = async <T extends SearchResult | EnrichedHashlistTorrent>(
-	dmmProblemKey: string,
-	solution: string,
-	hashes: string[],
-	batchSize: number,
-	setTorrentList: Dispatch<SetStateAction<T[]>>,
-	sortFn?: (results: T[]) => T[]
-): Promise<number> => {
-	let instantCount = 0;
-	const allAvailable: {
-		hash: string;
-		files: { file_id: number; path: string; bytes: number }[];
-	}[] = [];
-	const funcs = [];
-
-	for (const hashGroup of groupBy(batchSize, hashes)) {
-		funcs.push(async () => {
-			const resp = await checkAvailabilityAdByHashes(dmmProblemKey, solution, hashGroup);
-			allAvailable.push(...resp.available);
-		});
-	}
-	await runConcurrentFunctions(funcs, 4, 0);
-
-	if (allAvailable.length === 0) return 0;
-
-	const availableMap = new Map(allAvailable.map((t) => [t.hash.toLowerCase(), t]));
-
-	setTorrentList((prevSearchResults) => {
-		const newSearchResults = [...prevSearchResults];
-		for (const torrent of newSearchResults) {
-			if (torrent.noVideos) continue;
-			const availableTorrent = availableMap.get(torrent.hash.toLowerCase());
-			if (!availableTorrent) continue;
-
-			torrent.files = availableTorrent.files.map(
-				(file: { file_id: number; path: string; bytes: number }) => ({
-					fileId: file.file_id,
-					filename: file.path,
-					filesize: file.bytes,
-				})
-			);
-
-			if ('medianFileSize' in torrent) {
-				const videoFiles = torrent.files.filter((f) => isVideo({ path: f.filename }));
-				const stats = calculateFileStats(videoFiles);
-				Object.assign(torrent, stats);
-			}
-			backfillMissingFileSize(torrent, torrent.files);
-
-			torrent.noVideos = !torrent.files.some((file) => isVideo({ path: file.filename }));
-			if (!torrent.noVideos) {
-				torrent.adAvailable = true;
-				instantCount += 1;
-			} else {
-				torrent.adAvailable = false;
 			}
 		}
 		return sortFn ? sortFn(newSearchResults) : newSearchResults;
@@ -350,7 +219,9 @@ const processAdInstantCheckDb = async <T extends SearchResult | EnrichedHashlist
 	for (const hashGroup of groupBy(batchSize, hashes)) {
 		funcs.push(async () => {
 			await waitForAdRateLimit();
-			const resp = await checkAvailabilityAd(dmmProblemKey, solution, imdbId, hashGroup);
+			const resp = isImdbId(imdbId)
+				? await checkAvailabilityAd(dmmProblemKey, solution, imdbId, hashGroup)
+				: await checkAvailabilityAdByHashes(dmmProblemKey, solution, hashGroup);
 			allAvailable.push(...resp.available);
 		});
 	}
@@ -585,6 +456,60 @@ export const wrapLoading = async function (debrid: string, checkAvailability: Pr
 	);
 };
 
+/**
+ * Marks the hashlist rows that `service` holds cached with a playable video.
+ *
+ * Asks `/api/availability/playable`, which answers from DMM's own database
+ * with hashes only, `MAX_PLAYABLE_HASHES` at a time. It used to go through
+ * check2 at 100 per request behind the Real-Debrid limiter (10 requests per
+ * 10 s) and merge nothing until the last batch was back: a 28k-item list
+ * (2026-09-30) showed an empty "Show Instant" table for ~4.8 minutes. Each
+ * batch now lands in the list as soon as it answers.
+ */
+const processPlayableCheck = async (
+	service: 'rd' | 'ad',
+	dmmProblemKey: string,
+	solution: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
+): Promise<number> => {
+	const flag = service === 'rd' ? 'rdAvailable' : 'adAvailable';
+	let instantCount = 0;
+	const funcs = groupBy(MAX_PLAYABLE_HASHES, hashes).map((hashGroup) => async () => {
+		const cached = new Set(
+			await checkPlayableCachedHashes(dmmProblemKey, solution, service, hashGroup)
+		);
+		if (cached.size === 0) return;
+		setTorrentList((prev) => {
+			let changed = false;
+			const next = prev.map((torrent) => {
+				if (torrent[flag] || !cached.has(torrent.hash.toLowerCase())) return torrent;
+				changed = true;
+				return { ...torrent, [flag]: true };
+			});
+			return changed ? next : prev;
+		});
+		instantCount += cached.size;
+	});
+	const [, errors] = await runConcurrentFunctions(funcs, 4, 0);
+	if (errors.length && errors.length === funcs.length) throw errors[0];
+	return instantCount;
+};
+
+export const checkPlayableAvailabilityRd = (
+	dmmProblemKey: string,
+	solution: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
+) => processPlayableCheck('rd', dmmProblemKey, solution, hashes, setTorrentList);
+
+export const checkPlayableAvailabilityAd = (
+	dmmProblemKey: string,
+	solution: string,
+	hashes: string[],
+	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
+) => processPlayableCheck('ad', dmmProblemKey, solution, hashes, setTorrentList);
+
 // Database availability checks - query local cache
 export const checkDatabaseAvailabilityRd = (
 	dmmProblemKey: string,
@@ -595,14 +520,6 @@ export const checkDatabaseAvailabilityRd = (
 	sortFn: (searchResults: SearchResult[]) => SearchResult[]
 ) => processRdInstantCheck(dmmProblemKey, solution, imdbId, hashes, 100, setTorrentList, sortFn);
 
-export const checkDatabaseAvailabilityRd2 = (
-	dmmProblemKey: string,
-	solution: string,
-	rdKey: string,
-	hashes: string[],
-	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
-) => processRdInstantCheckByHashes(dmmProblemKey, solution, hashes, 100, setTorrentList);
-
 export const checkDatabaseAvailabilityAd = (
 	dmmProblemKey: string,
 	solution: string,
@@ -611,13 +528,6 @@ export const checkDatabaseAvailabilityAd = (
 	setTorrentList: Dispatch<SetStateAction<SearchResult[]>>,
 	sortFn: (searchResults: SearchResult[]) => SearchResult[]
 ) => processAdInstantCheckDb(dmmProblemKey, solution, imdbId, hashes, 100, setTorrentList, sortFn);
-
-export const checkDatabaseAvailabilityAd2 = (
-	dmmProblemKey: string,
-	solution: string,
-	hashes: string[],
-	setTorrentList: Dispatch<SetStateAction<EnrichedHashlistTorrent[]>>
-) => processAdInstantCheckDbByHashes(dmmProblemKey, solution, hashes, 100, setTorrentList);
 
 export const checkDatabaseAvailabilityTb = (
 	tbKey: string,

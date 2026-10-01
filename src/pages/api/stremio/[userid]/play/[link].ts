@@ -1,5 +1,6 @@
 import { RdTokenExpiredError, unrestrictLink } from '@/services/realDebrid';
 import { repository as db } from '@/services/repository';
+import { BLOCKED_MESSAGE, getBlocklist, isHashBlockedIn } from '@/services/takedown/blocklist';
 import { castAccessToken } from '@/utils/castRdToken';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { isDeadRdLink, rdErrorOf } from '@/utils/rdLinkRot';
@@ -61,6 +62,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	const rdLink = `https://real-debrid.com/d/${link.substring(0, 13)}`;
+
+	// A stream list handed out before a takedown can outlive it in a client.
+	// The lookup is skipped while nothing is blocked; `link` is the primary
+	// key, so the prefix match is an index range when it runs.
+	const blocklist = await getBlocklist();
+	if (
+		blocklist.hashes.size > 0 &&
+		isHashBlockedIn(blocklist, await db.getHashByLink(rdLink).catch(() => null))
+	) {
+		res.status(451).json({ error: BLOCKED_MESSAGE });
+		return;
+	}
 
 	// Only ever called for an error RD has told us is permanent - see
 	// `isDeadRdLink`. Stops the same dead stream being offered again tomorrow.

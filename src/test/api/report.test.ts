@@ -187,4 +187,23 @@ describe('/api/report', () => {
 			expect(mockRes.json).toHaveBeenCalledWith({ success: true });
 		}
 	});
+
+	it('stores a digest, never the credential, for a Debrid-Link reporter', async () => {
+		mockRepository.reportContent = vi.fn().mockResolvedValue(undefined);
+		mockReq.method = 'POST';
+		mockReq.body = {
+			hash: 'abc123',
+			imdbId: 'tt1234567',
+			userId: 'dl:secret-dl-token',
+			type: 'porn',
+			...auth(),
+		};
+
+		await handler(mockReq, mockRes);
+
+		expect(mockRes.status).toHaveBeenCalledWith(200);
+		const stored = vi.mocked(mockRepository.reportContent).mock.calls[0][2];
+		expect(stored).toMatch(/^dl:[0-9a-f]{64}$/);
+		expect(stored).not.toContain('secret-dl-token');
+	});
 });

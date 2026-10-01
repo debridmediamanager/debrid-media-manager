@@ -1941,13 +1941,13 @@ function TorrentsPage() {
 								)}
 							</h1>
 							<div className="flex items-center gap-2">
-								<span className="text-xs text-gray-500">{lastFetchLabel}</span>
+								<span className="text-xs text-gray-400">{lastFetchLabel}</span>
 								<button
 									onClick={refreshLibrary}
 									disabled={isFetching}
 									className={`rounded-full p-1.5 transition-all ${
 										isFetching
-											? 'cursor-not-allowed bg-gray-700 text-gray-500'
+											? 'cursor-not-allowed bg-gray-700 text-gray-300'
 											: cacheError
 												? 'bg-red-900/50 text-red-400 hover:bg-red-800/50'
 												: 'bg-cyan-900/50 text-cyan-400 hover:bg-cyan-800/50 hover:text-cyan-300'

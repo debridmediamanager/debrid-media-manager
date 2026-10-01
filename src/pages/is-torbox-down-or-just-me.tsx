@@ -322,7 +322,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 							service rather than any one key.
 						</p>
 
-						<div className="flex flex-wrap items-center justify-center gap-4 text-xs font-medium text-slate-500">
+						<div className="flex flex-wrap items-center justify-center gap-4 text-xs font-medium text-slate-400">
 							<div className="flex items-center gap-1.5">
 								<Clock className="h-3.5 w-3.5" />
 								<span data-testid="status-freshness">
@@ -418,7 +418,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 									>
 										{ratePct !== null ? `${ratePct}%` : '—'}
 									</span>
-									<span className="text-sm text-slate-500">
+									<span className="text-sm text-slate-400">
 										{considered > 0
 											? `${formatCount(tbApi?.successCount ?? 0)} of ${formatCount(considered)}`
 											: 'no data yet'}
@@ -426,7 +426,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 								</div>
 								{tbApi && tbApi.totalCount > 0 && (
 									<div className="mt-3 space-y-2">
-										<div className="text-xs font-medium text-slate-500">
+										<div className="text-xs font-medium text-slate-400">
 											By operation
 										</div>
 										{Object.values(tbApi.byOperation)
@@ -444,7 +444,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 															className="truncate text-slate-400"
 															title={op.operation}
 														>
-															<span className="text-slate-600">
+															<span className="text-slate-400">
 																{method}
 															</span>{' '}
 															{path}
@@ -492,7 +492,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 									<div className="text-3xl font-bold text-white">
 										{formatCount(considered)}
 									</div>
-									<div className="text-xs text-slate-500">
+									<div className="text-xs text-slate-400">
 										calls counted in the last {windowLabel}
 									</div>
 								</div>
@@ -501,7 +501,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 										<div className="text-xl font-semibold text-rose-400">
 											{formatCount(tbApi.failureCount)}
 										</div>
-										<div className="text-xs text-slate-500">
+										<div className="text-xs text-slate-400">
 											server errors (5xx)
 										</div>
 									</div>
@@ -511,7 +511,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 										<div className="text-xl font-semibold text-slate-300">
 											{formatCount(uncounted)}
 										</div>
-										<div className="text-xs text-slate-500">
+										<div className="text-xs text-slate-400">
 											excluded - 4xx answers about the caller&apos;s own key
 											or request, not about TorBox
 										</div>
@@ -548,7 +548,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 										>
 											Sign up for TorBox
 										</a>
-										<span className="px-2 text-slate-600">·</span>
+										<span className="px-2 text-slate-400">·</span>
 										Real-Debrid user?{' '}
 										<Link
 											href="/is-real-debrid-down-or-just-me"
@@ -579,7 +579,7 @@ const TorBoxStatusPage: NextPage & { disableLibraryProvider?: boolean } = () => 
 					<TorBoxHistoryCharts />
 
 					<footer className="mt-8 border-t border-white/10 pt-8 text-center">
-						<p className="text-sm text-slate-500">
+						<p className="text-sm text-slate-400">
 							Debrid Media Manager is an open-source project.
 							<a
 								href="https://debridmediamanager.com"

@@ -10,6 +10,9 @@ export type OmdbInfo = {
 	Plot?: string;
 	Poster?: string;
 	imdbRating?: string;
+	Type?: string;
+	/** On an episode, the IMDb id of the series it belongs to. */
+	seriesID?: string;
 	Response?: string;
 	Error?: string;
 };
@@ -63,4 +66,19 @@ export function getOmdbRating(info: OmdbInfo | null): number | null {
 	if (!rating) return null;
 	const parsed = parseFloat(rating);
 	return Number.isFinite(parsed) ? parsed : null;
+}
+
+/**
+ * The series an IMDb id belongs to when the id is an episode's, or null.
+ *
+ * Providers sometimes file an episode's IMDb id as a show's own: Trakt and
+ * Cinemeta list the Channel 4 years of The Great British Bake Off under
+ * tt21958588, which on IMDb is series 13 episode 1, "Cake Week". A show page
+ * opened on that id only ever sees the providers that repeat the mistake. OMDb
+ * reads IMDb's own record and names the parent series.
+ */
+export function getOmdbParentSeries(info: OmdbInfo | null, imdbId: string): string | null {
+	if (info?.Type !== 'episode') return null;
+	const series = omdbField(info.seriesID);
+	return series && /^tt\d+$/.test(series) && series !== imdbId ? series : null;
 }

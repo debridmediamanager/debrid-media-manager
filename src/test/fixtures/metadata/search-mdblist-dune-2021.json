@@ -1,0 +1,138 @@
+{
+	"response": true,
+	"search": [
+		{
+			"id": "tt1160419",
+			"title": "Dune",
+			"year": 2021,
+			"score": 81,
+			"score_average": 81,
+			"type": "movie",
+			"imdbid": "tt1160419",
+			"tmdbid": 438631,
+			"traktid": 287071,
+			"malid": null
+		},
+		{
+			"id": "tt12451788",
+			"title": "Dune",
+			"year": 2020,
+			"score": 43,
+			"score_average": 73,
+			"type": "movie",
+			"imdbid": "tt12451788",
+			"tmdbid": 697620,
+			"traktid": 541097,
+			"malid": null
+		},
+		{
+			"id": "tt11835714",
+			"title": "Dune Drifter",
+			"year": 2020,
+			"score": 34,
+			"score_average": 50,
+			"type": "movie",
+			"imdbid": "tt11835714",
+			"tmdbid": 744738,
+			"traktid": 585356,
+			"malid": null
+		},
+		{
+			"id": "tt15331462",
+			"title": "Planet Dune",
+			"year": 2021,
+			"score": 28,
+			"score_average": 35,
+			"type": "movie",
+			"imdbid": "tt15331462",
+			"tmdbid": 881460,
+			"traktid": 705826,
+			"malid": null
+		},
+		{
+			"id": "tt23780438",
+			"title": "Devil In Dune",
+			"year": 2021,
+			"score": 12,
+			"score_average": 54,
+			"type": "movie",
+			"imdbid": "tt23780438",
+			"tmdbid": 911972,
+			"traktid": 730013,
+			"malid": null
+		},
+		{
+			"id": null,
+			"title": "Golden Dune",
+			"year": 2021,
+			"score": 0,
+			"score_average": 0,
+			"type": "movie",
+			"imdbid": null,
+			"tmdbid": 633787,
+			"traktid": null,
+			"malid": null
+		},
+		{
+			"id": "tt11018038",
+			"title": "Dune Dreams",
+			"year": 2021,
+			"score": 0,
+			"score_average": 0,
+			"type": "movie",
+			"imdbid": "tt11018038",
+			"tmdbid": 818926,
+			"traktid": 652128,
+			"malid": null
+		},
+		{
+			"id": "tt14450978",
+			"title": "Dune World",
+			"year": 2021,
+			"score": 0,
+			"score_average": 41,
+			"type": "movie",
+			"imdbid": "tt14450978",
+			"tmdbid": 843281,
+			"traktid": 673479,
+			"malid": null
+		},
+		{
+			"id": null,
+			"title": "The Sleeper Must Awaken: Making Dune",
+			"year": 2021,
+			"score": 0,
+			"score_average": 0,
+			"type": "movie",
+			"imdbid": null,
+			"tmdbid": 874649,
+			"traktid": null,
+			"malid": null
+		},
+		{
+			"id": null,
+			"title": "The Sounds of Dune: Behind the Scenes with Denis Villeneuve",
+			"year": 2022,
+			"score": 0,
+			"score_average": 0,
+			"type": "movie",
+			"imdbid": null,
+			"tmdbid": 1357443,
+			"traktid": null,
+			"malid": null
+		},
+		{
+			"id": null,
+			"title": "Sur la dune",
+			"year": 2021,
+			"score": -1,
+			"score_average": 0,
+			"type": "movie",
+			"imdbid": null,
+			"tmdbid": 871361,
+			"traktid": null,
+			"malid": null
+		}
+	],
+	"total": 11
+}

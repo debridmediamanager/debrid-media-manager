@@ -1,0 +1,427 @@
+{
+	"age_rating": 14,
+	"backdrop": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/qLMfcvdCcCGD2BNLH8b6ZCBuO7D.jpg",
+	"certification": "TV-14",
+	"commonsense": 14,
+	"country": "US",
+	"description": "The World's Fakest News Team tackle the biggest stories in news, politics and pop culture.",
+	"imdbid": "tt0115147",
+	"keywords": [
+		{ "id": 4493, "name": "political-satire" },
+		{ "id": 7790, "name": "late-night-show" },
+		{ "id": 62050, "name": "current-events" },
+		{ "id": 23330, "name": "running-gag" },
+		{ "id": 20213, "name": "live-audience" },
+		{ "id": 89692, "name": "fake-news-report" },
+		{ "id": 295342, "name": "interview" },
+		{ "id": 297011, "name": "celebrity" },
+		{ "id": 295271, "name": "social-commentary" },
+		{ "id": 301067, "name": "late-night" },
+		{ "id": 304412, "name": "current-affairs" },
+		{ "id": 297745, "name": "journalism" },
+		{ "id": 295621, "name": "tv-news" },
+		{ "id": 295512, "name": "satire" },
+		{ "id": 299700, "name": "pop-culture" },
+		{ "id": 295444, "name": "politics" },
+		{ "id": 296890, "name": "absurdism" },
+		{ "id": 298983, "name": "political-satire" },
+		{ "id": 8744, "name": "sarcasm" },
+		{ "id": 288, "name": "politics" },
+		{ "id": 336112, "name": "emmy-award-winner" },
+		{ "id": 336215, "name": "emmy-award-nominated" },
+		{ "id": 1197, "name": "interview" },
+		{ "id": 37278, "name": "irreverent" },
+		{ "id": 400253, "name": "informative" },
+		{ "id": 300276, "name": "santa-claus" },
+		{ "id": 19631, "name": "certified-fresh" }
+	],
+	"language": "en",
+	"poster": "https://image.tmdb.org/t/p/original/ixcfyK7it6FjRM36Te4OdblAq4X.jpg",
+	"ratings": [
+		{ "source": "imdb", "value": 8.3, "score": 83, "votes": 49879, "popular": 3125 },
+		{
+			"source": "metacritic",
+			"value": null,
+			"score": null,
+			"votes": null,
+			"url": "/tv/the-daily-show"
+		},
+		{ "source": "metacriticuser", "value": 7.5, "score": 75.0, "votes": 109 },
+		{ "source": "trakt", "value": 78, "score": 78, "votes": 1852 },
+		{
+			"source": "tomatoes",
+			"value": null,
+			"score": null,
+			"votes": 0,
+			"url": "/tv/the_daily_show"
+		},
+		{ "source": "tomatoesaudience", "value": null, "score": null, "votes": null },
+		{ "source": "tmdb", "value": 64, "score": 64, "votes": 663 },
+		{ "source": "letterboxd", "value": 0, "score": null, "votes": null, "url": null },
+		{ "source": "rogerebert", "value": null, "url": null },
+		{ "source": "myanimelist", "value": null, "votes": null, "id": null }
+	],
+	"released": "1996-07-22",
+	"released_digital": null,
+	"response": true,
+	"reviews": [
+		{
+			"updated_at": "2018-02-12",
+			"author": "Toliman",
+			"rating": 9,
+			"provider_id": 1,
+			"content": "I used to watch this quasi religiously, but Trevor Noah is the Anti-Stewart. \r\nPost-John Stewart, really needs a new category and deserves a 2/10 rating, it routinely hits the shallow end or just deceives people in an attempt at humor.\r\n\r\nI sometimes come across clips of Noah's standup or the monologues / interviews on Youtube, but it is shallow, and Trevor &amp; Team irritates and condescends. Have I changed so much in ~5 years, or has the show changed into a desperate and clinging example of failure. \r\n\r\nDisappointing."
+		},
+		{
+			"updated_at": "2020-08-21",
+			"author": "ChuckMCCluck",
+			"rating": 1,
+			"provider_id": 1,
+			"content": "If your brain is empty enough to actually find Trump jokes for the millionth time funny then maybe you'll like this show. Don't know exactly what the hell will happen if Trump ends up losing this years election cause Noah will just be all out of material."
+		},
+		{
+			"updated_at": "2020-08-29",
+			"author": "ADL",
+			"rating": 7,
+			"provider_id": 1,
+			"content": "I grew up with the Jon Stewart era, but I think it's recent years have been significantly less appealing. The writing has lost a lot of its cut given how American politics have developed over the past years, and Trevor Noah just doesn't really work for me."
+		},
+		{
+			"updated_at": "2024-02-18",
+			"author": "RickDB",
+			"rating": 10,
+			"provider_id": 1,
+			"content": "Good to see old team back in full swing,\r\nThe new host line up needs some time to settle in and hope they can keep it going in this new format."
+		},
+		{
+			"updated_at": "2024-10-08",
+			"author": "Dr. Zo\u00efdberg",
+			"rating": 8,
+			"provider_id": 1,
+			"content": "Monday nights\u2019.sharp tong of John Stewart is the best criticism of current events."
+		},
+		{
+			"updated_at": "2024-10-08",
+			"author": "Dr. Zo\u00efdberg",
+			"rating": 8,
+			"provider_id": 1,
+			"content": "The Mondays\u2019 sharp tongue of Jon Stewart is the best criticism of current events."
+		}
+	],
+	"runtime": 128280,
+	"score": 0,
+	"score_average": 73,
+	"seasons": [
+		{
+			"tmdbid": 6869,
+			"name": "Specials",
+			"air_date": "1999-12-15",
+			"episode_count": 99,
+			"season_number": 0,
+			"tomatofresh": null,
+			"poster_path": null
+		},
+		{
+			"tmdbid": 6853,
+			"name": "Season 1",
+			"air_date": "1996-07-22",
+			"episode_count": 7,
+			"season_number": 1,
+			"tomatofresh": null,
+			"poster_path": "/yCk9E4zzDi5W9zpDc2L8vCeLA.jpg"
+		},
+		{
+			"tmdbid": 6854,
+			"name": "Season 2",
+			"air_date": "1997-01-06",
+			"episode_count": 16,
+			"season_number": 2,
+			"tomatofresh": null,
+			"poster_path": "/w7sob0PFeYV0S2Q8v1PMhge8qQS.jpg"
+		},
+		{
+			"tmdbid": 6855,
+			"name": "Season 3",
+			"air_date": "1998-03-09",
+			"episode_count": 33,
+			"season_number": 3,
+			"tomatofresh": null,
+			"poster_path": "/jXrc4QyW1berVN4ZaX2eX0jOPsq.jpg"
+		},
+		{
+			"tmdbid": 6856,
+			"name": "Season 4",
+			"air_date": "1999-01-11",
+			"episode_count": 159,
+			"season_number": 4,
+			"tomatofresh": null,
+			"poster_path": "/5geFJYuUrQPdNSiKPvJAfw1xCAu.jpg"
+		},
+		{
+			"tmdbid": 6857,
+			"name": "Season 5",
+			"air_date": "2000-01-04",
+			"episode_count": 166,
+			"season_number": 5,
+			"tomatofresh": null,
+			"poster_path": "/qd87rtrifcts3nV9pza1N17xWtU.jpg"
+		},
+		{
+			"tmdbid": 6858,
+			"name": "Season 6",
+			"air_date": "2001-01-09",
+			"episode_count": 158,
+			"season_number": 6,
+			"tomatofresh": null,
+			"poster_path": "/yiQeAEBblEDLVqg2ninkMvgj1d7.jpg"
+		},
+		{
+			"tmdbid": 6859,
+			"name": "Season 7",
+			"air_date": "2002-01-08",
+			"episode_count": 160,
+			"season_number": 7,
+			"tomatofresh": null,
+			"poster_path": "/rnbkP4MG91w72LyGyHlBUfZC3Rv.jpg"
+		},
+		{
+			"tmdbid": 6860,
+			"name": "Season 8",
+			"air_date": "2003-01-07",
+			"episode_count": 161,
+			"season_number": 8,
+			"tomatofresh": null,
+			"poster_path": "/1Vii2YyKtU6fLcKhHzsx5zk2Kay.jpg"
+		},
+		{
+			"tmdbid": 6861,
+			"name": "Season 9",
+			"air_date": "2004-01-06",
+			"episode_count": 161,
+			"season_number": 9,
+			"tomatofresh": null,
+			"poster_path": "/mtE8VmeNr0UX1Q6B48HTjhu33kN.jpg"
+		},
+		{
+			"tmdbid": 6862,
+			"name": "Season 10",
+			"air_date": "2005-01-04",
+			"episode_count": 159,
+			"season_number": 10,
+			"tomatofresh": null,
+			"poster_path": "/y5LJHtLDL1H7ZIcNUfuGQpmYbaG.jpg"
+		},
+		{
+			"tmdbid": 6863,
+			"name": "Season 11",
+			"air_date": "2006-01-04",
+			"episode_count": 161,
+			"season_number": 11,
+			"tomatofresh": null,
+			"poster_path": "/pn7dQLjbYCpthiGTOKh2svdKscr.jpg"
+		},
+		{
+			"tmdbid": 6864,
+			"name": "Season 12",
+			"air_date": "2007-01-08",
+			"episode_count": 138,
+			"season_number": 12,
+			"tomatofresh": null,
+			"poster_path": "/7FGRSBm7ofcsGrGm8t1qPRfNAKG.jpg"
+		},
+		{
+			"tmdbid": 6865,
+			"name": "Season 13",
+			"air_date": "2008-01-07",
+			"episode_count": 160,
+			"season_number": 13,
+			"tomatofresh": null,
+			"poster_path": "/y7hvsKSD8rwVcFcFrK01SrbdKQv.jpg"
+		},
+		{
+			"tmdbid": 6866,
+			"name": "Season 14",
+			"air_date": "2009-01-05",
+			"episode_count": 161,
+			"season_number": 14,
+			"tomatofresh": null,
+			"poster_path": "/rDXpjby6TwgZGgOIV2C3TGV7pFz.jpg"
+		},
+		{
+			"tmdbid": 6867,
+			"name": "Season 15",
+			"air_date": "2010-01-04",
+			"episode_count": 161,
+			"season_number": 15,
+			"tomatofresh": null,
+			"poster_path": "/9RJ8xiky5HjRaHyTqHr6Wnq7PsX.jpg"
+		},
+		{
+			"tmdbid": 6868,
+			"name": "Season 16",
+			"air_date": "2011-01-03",
+			"episode_count": 124,
+			"season_number": 16,
+			"tomatofresh": null,
+			"poster_path": "/kqgmQuTwhhLVfKryvvRsDbphgP6.jpg"
+		},
+		{
+			"tmdbid": 6870,
+			"name": "Season 17",
+			"air_date": "2011-10-03",
+			"episode_count": 157,
+			"season_number": 17,
+			"tomatofresh": null,
+			"poster_path": "/gF5TfevTC8TygbP7UxAhHyxcBX.jpg"
+		},
+		{
+			"tmdbid": 6871,
+			"name": "Season 18",
+			"air_date": "2012-10-01",
+			"episode_count": 158,
+			"season_number": 18,
+			"tomatofresh": null,
+			"poster_path": "/slYpAA2Z59Hqe9hly1Icie77j0N.jpg"
+		},
+		{
+			"tmdbid": 6872,
+			"name": "Season 19",
+			"air_date": "2013-09-30",
+			"episode_count": 159,
+			"season_number": 19,
+			"tomatofresh": null,
+			"poster_path": "/uW0IkZO2jTkkvcJNnQyORow567m.jpg"
+		},
+		{
+			"tmdbid": 62883,
+			"name": "Season 20",
+			"air_date": "2014-09-29",
+			"episode_count": 142,
+			"season_number": 20,
+			"tomatofresh": null,
+			"poster_path": "/sef2tN05NkqEBebMpxYUbqmhtTJ.jpg"
+		},
+		{
+			"tmdbid": 69386,
+			"name": "Season 21",
+			"air_date": "2015-09-28",
+			"episode_count": 161,
+			"season_number": 21,
+			"tomatofresh": null,
+			"poster_path": "/eD57c6ZXKhCXDL1x04BQ8f3UvUo.jpg"
+		},
+		{
+			"tmdbid": 82654,
+			"name": "Season 22",
+			"air_date": "2016-10-03",
+			"episode_count": 163,
+			"season_number": 22,
+			"tomatofresh": null,
+			"poster_path": "/tsZObxYYSYHW5T4BJh2tx43awxi.jpg"
+		},
+		{
+			"tmdbid": 93178,
+			"name": "Season 23",
+			"air_date": "2017-10-02",
+			"episode_count": 157,
+			"season_number": 23,
+			"tomatofresh": null,
+			"poster_path": "/tsZObxYYSYHW5T4BJh2tx43awxi.jpg"
+		},
+		{
+			"tmdbid": 110826,
+			"name": "Season 24",
+			"air_date": "2018-10-01",
+			"episode_count": 158,
+			"season_number": 24,
+			"tomatofresh": null,
+			"poster_path": "/tsZObxYYSYHW5T4BJh2tx43awxi.jpg"
+		},
+		{
+			"tmdbid": 136086,
+			"name": "Season 25",
+			"air_date": "2019-09-30",
+			"episode_count": 160,
+			"season_number": 25,
+			"tomatofresh": null,
+			"poster_path": "/tsZObxYYSYHW5T4BJh2tx43awxi.jpg"
+		},
+		{
+			"tmdbid": 168511,
+			"name": "Season 26",
+			"air_date": "2020-09-28",
+			"episode_count": 116,
+			"season_number": 26,
+			"tomatofresh": null,
+			"poster_path": "/nz5fAg1OomLZ7fxiM4RnLbJxppc.jpg"
+		},
+		{
+			"tmdbid": 202361,
+			"name": "Season 27",
+			"air_date": "2021-09-27",
+			"episode_count": 140,
+			"season_number": 27,
+			"tomatofresh": null,
+			"poster_path": "/keWvkxMEfa3whsRyWFGPcNVbIN8.jpg"
+		},
+		{
+			"tmdbid": 310853,
+			"name": "Season 28",
+			"air_date": "2022-10-03",
+			"episode_count": 122,
+			"season_number": 28,
+			"tomatofresh": null,
+			"poster_path": "/9xcM8pbsMNR7eLdVCzzfcB59xgT.jpg"
+		},
+		{
+			"tmdbid": 375682,
+			"name": "Season 29",
+			"air_date": "2024-02-12",
+			"episode_count": 138,
+			"season_number": 29,
+			"tomatofresh": null,
+			"poster_path": "/9mK4ZRWpKUA77XNv6rnI8gnyrhQ.jpg"
+		},
+		{
+			"tmdbid": 433278,
+			"name": "Season 30",
+			"air_date": "2025-01-06",
+			"episode_count": 142,
+			"season_number": 30,
+			"tomatofresh": null,
+			"poster_path": "/2hnZC9YtpJO0VRdBXxima60QFQc.jpg"
+		},
+		{
+			"tmdbid": 486161,
+			"name": "Season 31",
+			"air_date": "2026-01-05",
+			"episode_count": 122,
+			"season_number": 31,
+			"tomatofresh": null,
+			"poster_path": "/sos0NA5OkuUtKyCt1YvW4Zevp9h.jpg"
+		}
+	],
+	"spoken_language": "en",
+	"status": "Returning Series",
+	"streams": [{ "id": 9, "name": "fuboTV" }],
+	"title": "The Daily Show",
+	"tmdbid": 2224,
+	"trailer": null,
+	"traktid": 2211,
+	"tvdbid": 71256,
+	"type": "show",
+	"watch_providers": [
+		{ "id": 10, "name": "Amazon Video" },
+		{ "id": 257, "name": "fuboTV" },
+		{ "id": 582, "name": "Paramount+ Amazon Channel" },
+		{ "id": 633, "name": "Paramount+ Roku Premium Channel" },
+		{ "id": 1853, "name": "Paramount Plus Apple TV channel" },
+		{ "id": 1853, "name": "Paramount Plus Apple TV channel" },
+		{ "id": 2303, "name": "Paramount Plus Premium" },
+		{ "id": 2303, "name": "Paramount Plus Premium" },
+		{ "id": 2383, "name": "Philo" },
+		{ "id": 2616, "name": "Paramount Plus Essential" },
+		{ "id": 2616, "name": "Paramount Plus Essential" }
+	],
+	"year": 1996
+}

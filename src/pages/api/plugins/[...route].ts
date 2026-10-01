@@ -1,4 +1,4 @@
-import { resolvePluginSponsor } from '@/services/jellyfinPlugins/auth';
+import { resolvePluginSponsor, setPluginNoStore } from '@/services/jellyfinPlugins/auth';
 import {
 	buildManifest,
 	pluginObjectKey,
@@ -47,20 +47,13 @@ function publicBase(): string {
 	);
 }
 
-/** Nothing here may be cached: the URL contains the credential being checked. */
-function noStore(res: NextApiResponse): void {
-	res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-	res.setHeader('Pragma', 'no-cache');
-	res.setHeader('Referrer-Policy', 'no-referrer');
-}
-
 function segments(req: NextApiRequest): string[] {
 	const route = req.query.route;
 	return Array.isArray(route) ? route : typeof route === 'string' ? [route] : [];
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	noStore(res);
+	setPluginNoStore(res);
 
 	if (req.method !== 'GET' && req.method !== 'HEAD') {
 		res.setHeader('Allow', 'GET, HEAD');

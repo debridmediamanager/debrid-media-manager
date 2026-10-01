@@ -9,8 +9,14 @@ import {
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
 import { enableGuestMode } from '@/utils/guestMode';
-import { DEBRID_LINK_REFERRAL_URL, TORBOX_REFERRAL_URL } from '@/utils/referrals';
+import {
+	ALLDEBRID_REFERRAL_URL,
+	DEBRID_LINK_REFERRAL_URL,
+	REAL_DEBRID_REFERRAL_URL,
+	TORBOX_REFERRAL_URL,
+} from '@/utils/referrals';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
@@ -95,14 +101,14 @@ export default function StartPage() {
 				{/* RealDebrid */}
 				<div className="flex flex-row">
 					<button
-						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						className="m-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
 						onClick={loginWithRealDebrid}
 					>
 						Login with Real Debrid
 					</button>
 					<a
-						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
-						href="http://real-debrid.com/?id=11137529"
+						className="m-2 rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
+						href={REAL_DEBRID_REFERRAL_URL}
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -113,14 +119,14 @@ export default function StartPage() {
 				{/* AllDebrid */}
 				<div className="flex flex-row">
 					<button
-						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						className="m-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
 						onClick={loginWithAllDebrid}
 					>
 						Login with AllDebrid
 					</button>
 					<a
-						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
-						href="https://alldebrid.com/?uid=1kk5i&lang=en"
+						className="m-2 rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
+						href={ALLDEBRID_REFERRAL_URL}
 						target="_blank"
 						rel="noopener noreferrer"
 					>
@@ -131,13 +137,13 @@ export default function StartPage() {
 				{/* Torbox */}
 				<div className="flex flex-row">
 					<button
-						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						className="m-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
 						onClick={loginWithTorbox}
 					>
 						Login with Torbox
 					</button>
 					<a
-						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+						className="m-2 rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
 						href={TORBOX_REFERRAL_URL}
 						target="_blank"
 						rel="noopener noreferrer"
@@ -149,13 +155,13 @@ export default function StartPage() {
 				{/* Premiumize */}
 				<div className="flex flex-row">
 					<button
-						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						className="m-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
 						onClick={loginWithPremiumize}
 					>
 						Login with Premiumize
 					</button>
 					<a
-						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+						className="m-2 rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
 						href="https://www.premiumize.me/"
 						target="_blank"
 						rel="noopener noreferrer"
@@ -167,13 +173,13 @@ export default function StartPage() {
 				{/* Offcloud */}
 				<div className="flex flex-row">
 					<button
-						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						className="m-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
 						onClick={loginWithOffcloud}
 					>
 						Login with Offcloud
 					</button>
 					<a
-						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+						className="m-2 rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
 						href="https://offcloud.com"
 						target="_blank"
 						rel="noopener noreferrer"
@@ -185,13 +191,13 @@ export default function StartPage() {
 				{/* Debrid-Link */}
 				<div className="flex flex-row">
 					<button
-						className="m-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						className="m-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
 						onClick={loginWithDebridLink}
 					>
 						Login with Debrid-Link
 					</button>
 					<a
-						className="m-2 rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+						className="m-2 rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
 						href={DEBRID_LINK_REFERRAL_URL}
 						target="_blank"
 						rel="noopener noreferrer"
@@ -216,21 +222,24 @@ export default function StartPage() {
 					>
 						Enter as Guest
 					</button>
-					<p className="text-center text-xs text-slate-500">
+					<p className="text-center text-xs text-slate-400">
 						Search, settings and the indexer setup pages stay open. Your library,
 						casting and transfers need a debrid account, and you can connect one at any
 						time.
 					</p>
 				</div>
 
-				<h2 className="text-l mb-2 mt-2 font-bold text-slate-500">Data Storage Policy</h2>
-				<p className="flex-row text-center text-sm text-slate-500">
+				<h2 className="text-l mb-2 mt-2 font-bold text-slate-300">Data Storage Policy</h2>
+				<p className="flex-row text-center text-sm text-slate-400">
 					Please note that no data or logs are stored on our servers
 					<br />
 					You can inspect every request if you want
 					<br />
 					Everything is stored on your browser&apos;s local storage
 				</p>
+				<Link href="/copyright" className="mt-4 text-xs text-slate-400 underline">
+					Report copyright infringement
+				</Link>
 			</div>
 		</div>
 	);

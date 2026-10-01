@@ -2,7 +2,6 @@ import handler from '@/pages/api/info/show';
 import wednesdayCinemeta from '@/test/fixtures/metadata/cinemeta-tt13443470-wednesday.json';
 import wednesdayMdblist from '@/test/fixtures/metadata/mdblist-tt13443470-wednesday.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import axios from 'axios';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/mdblistClient', () => ({
@@ -29,6 +28,10 @@ describe('/api/info/show', () => {
 	const mockMetadataCache = {
 		getCinemetaSeries: vi.fn(),
 		getTraktShowEpisode: vi.fn().mockResolvedValue(null),
+		getTraktShowSeasons: vi.fn().mockResolvedValue(null),
+		getTvmazeShow: vi.fn().mockResolvedValue(null),
+		getTmdbTvInfo: vi.fn().mockResolvedValue(null),
+		searchTmdbByImdb: vi.fn().mockResolvedValue(null),
 		getOmdbInfo: vi.fn().mockResolvedValue(null),
 	};
 
@@ -39,6 +42,11 @@ describe('/api/info/show', () => {
 		vi.mocked(getMdblistClient).mockReturnValue(mockMdbClient as any);
 		vi.mocked(getMetadataCache).mockReturnValue(mockMetadataCache as any);
 		mockMetadataCache.getTraktShowEpisode.mockResolvedValue(null);
+		mockMetadataCache.getTraktShowSeasons.mockResolvedValue(null);
+		mockMetadataCache.getTvmazeShow.mockResolvedValue(null);
+		mockMetadataCache.getTmdbTvInfo.mockResolvedValue(null);
+		mockMetadataCache.searchTmdbByImdb.mockResolvedValue(null);
+		mockMetadataCache.getOmdbInfo.mockResolvedValue(null);
 		// Fixtures carry a real tmdbid; without a credential the route skips the
 		// TMDB status/trailer call rather than reaching the network.
 		delete process.env.TMDB_KEY;
@@ -115,9 +123,11 @@ describe('/api/info/show', () => {
 		});
 	});
 
-	it('returns 500 when fetching fails', async () => {
+	it('returns 500 when every provider fails', async () => {
 		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+		const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 		mockMdbClient.getInfoByImdbId.mockRejectedValue(new Error('fail'));
+		mockMetadataCache.getCinemetaSeries.mockRejectedValue(new Error('fail'));
 		const req = createMockRequest({
 			query: { imdbid: 'ttbroken' },
 		});
@@ -128,6 +138,21 @@ describe('/api/info/show', () => {
 		expect(res.status).toHaveBeenCalledWith(500);
 		expect(res.json).toHaveBeenCalledWith({ error: 'Failed to fetch show information' });
 		consoleSpy.mockRestore();
+		warnSpy.mockRestore();
+	});
+
+	it('still answers from the other providers when mdblist fails', async () => {
+		const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+		mockMdbClient.getInfoByImdbId.mockRejectedValue(new Error('fail'));
+		mockMetadataCache.getCinemetaSeries.mockResolvedValue(wednesdayCinemeta);
+		const req = createMockRequest({ query: { imdbid: 'tt13443470' } });
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ title: 'Wednesday' }));
+		warnSpy.mockRestore();
 	});
 
 	it('uses higher season count from cinemeta when mdb has fewer seasons', async () => {
@@ -253,20 +278,23 @@ describe('/api/info/show', () => {
 		);
 	});
 
-	it('does not ask OMDb when mdblist and Cinemeta have already answered', async () => {
-		// OMDb is the most rate-limited source DMM uses, and on a show the other
-		// two know, every field it could fill is already filled.
+	it('counts the seasons OMDb knows that mdblist and Cinemeta do not', async () => {
 		mockMdbClient.getInfoByImdbId.mockResolvedValue(wednesdayMdblist);
 		mockMetadataCache.getCinemetaSeries.mockResolvedValue(wednesdayCinemeta);
+		mockMetadataCache.getOmdbInfo.mockResolvedValue({
+			Response: 'True',
+			Type: 'series',
+			totalSeasons: '4',
+		});
 
 		const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt13443470' } });
 		const res = createMockResponse();
 
 		await handler(req, res);
 
-		expect(mockMetadataCache.getOmdbInfo).not.toHaveBeenCalled();
+		expect(mockMetadataCache.getOmdbInfo).toHaveBeenCalledWith('tt13443470');
 		expect(res.json).toHaveBeenCalledWith(
-			expect.objectContaining({ title: 'Wednesday', status: 'Returning Series' })
+			expect.objectContaining({ title: 'Wednesday', season_count: 4 })
 		);
 	});
 
@@ -363,13 +391,11 @@ describe('/api/info/show', () => {
 		it('uses the art from the TMDB response it already fetched', async () => {
 			mockMdbClient.getInfoByImdbId.mockResolvedValue({ title: 'Arty', tmdbid: 1396 });
 			mockMetadataCache.getCinemetaSeries.mockResolvedValue({});
-			vi.spyOn(axios, 'get').mockResolvedValue({
-				data: {
-					status: 'Ended',
-					poster_path: '/tmdb-poster.jpg',
-					backdrop_path: '/tmdb-backdrop.jpg',
-				},
-			} as any);
+			mockMetadataCache.getTmdbTvInfo.mockResolvedValue({
+				status: 'Ended',
+				poster_path: '/tmdb-poster.jpg',
+				backdrop_path: '/tmdb-backdrop.jpg',
+			});
 
 			const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt0903747' } });
 			const res = createMockResponse();
@@ -393,9 +419,10 @@ describe('/api/info/show', () => {
 			mockMetadataCache.getCinemetaSeries.mockResolvedValue({
 				meta: { background: 'cine-bg' },
 			});
-			vi.spyOn(axios, 'get').mockResolvedValue({
-				data: { poster_path: '/tmdb-poster.jpg', backdrop_path: '/tmdb-backdrop.jpg' },
-			} as any);
+			mockMetadataCache.getTmdbTvInfo.mockResolvedValue({
+				poster_path: '/tmdb-poster.jpg',
+				backdrop_path: '/tmdb-backdrop.jpg',
+			});
 
 			const req = createMockRequest({ method: 'GET', query: { imdbid: 'tt0903747' } });
 			const res = createMockResponse();

@@ -7,6 +7,8 @@
 // top level. An API route importing that would drag a toast library into the
 // server bundle for the sake of one regex. `debridUploader.ts` re-exports both
 // names, so existing client imports are unchanged.
+import { isMovieTitleType, isShowTitleType } from './imdbTitleTypes';
+
 export interface TransferContext {
 	mediaType: 'movie' | 'tv';
 	seasonNum?: number;
@@ -82,17 +84,15 @@ export function seasonFromReleaseName(name: string | undefined): number | undefi
 /**
  * The DMM page shape an IMDb title type belongs to.
  *
- * DMM only ever renders `/movie/tt…` and `/show/tt…/N`, and treats exactly
- * `tvSeries` and `tvMiniSeries` as shows (see `ImdbSearchService.searchTitles`).
- * Everything else that has a page — `tvMovie`, `video`, `short`, `tvSpecial` —
- * is a movie page. A `tvEpisode` id has no page at all, so it resolves to
- * nothing rather than being filed under a key no request will ever read.
+ * `@/utils/imdbTitleTypes` says which types are shows and which are movie
+ * pages. A `tvEpisode` id has no page at all, so it resolves to nothing rather
+ * than being filed under a key no request will ever read.
  */
 export function mediaTypeFromImdbTitleType(
 	titleType: string | null | undefined
 ): 'movie' | 'tv' | undefined {
 	if (!titleType) return undefined;
-	if (titleType === 'tvSeries' || titleType === 'tvMiniSeries') return 'tv';
-	if (['movie', 'tvMovie', 'video', 'short', 'tvSpecial'].includes(titleType)) return 'movie';
+	if (isShowTitleType(titleType)) return 'tv';
+	if (isMovieTitleType(titleType)) return 'movie';
 	return undefined;
 }

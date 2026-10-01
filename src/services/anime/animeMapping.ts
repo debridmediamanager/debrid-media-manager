@@ -44,12 +44,19 @@ export interface AnimeIdMapping {
 	tmdbId: number | null;
 	tmdbType: 'tv' | 'movie' | null;
 	tvdbId: number | null;
+	/** TVDB's season for this entry; 0 is TVDB's specials, where OVAs are filed. */
+	tvdbSeason: number | null;
+	/** Episodes of that TVDB season that belong to earlier entries. */
+	tvdbEpisodeOffset: number | null;
 	simklId: number | null;
 	type: string | null;
 }
 
 const asPositiveInt = (value: unknown): number | null =>
 	typeof value === 'number' && Number.isInteger(value) && value > 0 ? value : null;
+
+const asNonNegativeInt = (value: unknown): number | null =>
+	typeof value === 'number' && Number.isInteger(value) && value >= 0 ? value : null;
 
 const asNonEmptyString = (value: unknown): string | null =>
 	typeof value === 'string' && value.trim() !== '' ? value.trim() : null;
@@ -93,6 +100,8 @@ export function normalizeFribbEntry(raw: FribbAnimeEntry): AnimeIdMapping {
 		tmdbId: tmdb.id,
 		tmdbType: tmdb.type,
 		tvdbId: asPositiveInt(raw.tvdb_id),
+		tvdbSeason: asNonNegativeInt(raw.season?.tvdb),
+		tvdbEpisodeOffset: asNonNegativeInt(raw.episode_offset?.tvdb),
 		simklId: asPositiveInt(raw.simkl_id),
 		type: asNonEmptyString(raw.type),
 	};

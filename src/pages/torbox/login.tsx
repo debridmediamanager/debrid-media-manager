@@ -72,14 +72,14 @@ export default function TorboxLoginPage() {
 					<div className="flex flex-col space-y-2">
 						<button
 							type="submit"
-							className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+							className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
 						>
 							Save API Key
 						</button>
 						<button
 							type="button"
 							onClick={handleGetApiKey}
-							className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+							className="rounded bg-green-700 px-4 py-2 text-white hover:bg-green-800"
 						>
 							Get API Key from Torbox
 						</button>

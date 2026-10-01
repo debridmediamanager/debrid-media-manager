@@ -1,0 +1,151 @@
+{
+	"adult": false,
+	"backdrop_path": "/7rB1VhVXtLFTnOCY1Hz7ZEIz7CO.jpg",
+	"created_by": [],
+	"episode_run_time": [60],
+	"first_air_date": "2010-08-17",
+	"genres": [{ "id": 10764, "name": "Reality" }],
+	"homepage": "https://www.bbc.co.uk/programmes/b013pqnm",
+	"id": 34549,
+	"in_production": false,
+	"languages": ["en"],
+	"last_air_date": "2016-10-27",
+	"last_episode_to_air": {
+		"id": 1234172,
+		"name": "Class of 2015",
+		"overview": "A catch-up with the contestants from The Great British Bake Off 2015.",
+		"vote_average": 0.0,
+		"vote_count": 0,
+		"air_date": "2016-10-27",
+		"episode_number": 11,
+		"episode_type": "finale",
+		"production_code": "",
+		"runtime": 60,
+		"season_number": 7,
+		"show_id": 34549,
+		"still_path": "/4egIdw5pAtY0UaGllW9WjJAWknS.jpg"
+	},
+	"name": "The Great British Bake Off",
+	"networks": [
+		{
+			"id": 4,
+			"logo_path": "/uJjcCg3O4DMEjM0xtno9OWFciRP.png",
+			"name": "BBC One",
+			"origin_country": "GB"
+		},
+		{
+			"id": 332,
+			"logo_path": "/7HVPn1p2w1nC5oRKBehXVHpss7e.png",
+			"name": "BBC Two",
+			"origin_country": "GB"
+		}
+	],
+	"next_episode_to_air": null,
+	"number_of_episodes": 89,
+	"number_of_seasons": 7,
+	"origin_country": ["GB"],
+	"original_language": "en",
+	"original_name": "The Great British Bake Off",
+	"overview": "This British television baking competition selects from amongst its competitors the best amateur baker. The series is credited with reinvigorating interest in baking throughout the UK, and many of its participants, including winners, have gone on to start a career based on baking.",
+	"popularity": 15.2775,
+	"poster_path": "/bNa02AorKSBRfWfVPmsL7SJrdfs.jpg",
+	"production_companies": [
+		{
+			"id": 52031,
+			"logo_path": "/xXI1jqyY4QDrckA0QGiYnZye790.png",
+			"name": "Love Productions",
+			"origin_country": "GB"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "GB", "name": "United Kingdom" }],
+	"seasons": [
+		{
+			"air_date": "2010-08-17",
+			"episode_count": 11,
+			"id": 45294,
+			"name": "Specials",
+			"overview": "",
+			"poster_path": "/xigBMfMY8ULVstqElMa6VCaSI0V.jpg",
+			"season_number": 0,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "2010-08-17",
+			"episode_count": 6,
+			"id": 45293,
+			"name": "Series 1",
+			"overview": "Series 1 of The Great British Bake Off, aired on BBC 2, saw ten home bakers take part in a bake-off to test every aspect of their baking skills as they battled to be crowned the Great British Bake Off’s best amateur baker. Each week the nationwide tour saw keen bakers put through three challenges in a particular discipline. The rounds took place in various locations across the UK following a theme, for example, the episode on puddings would take place in Bakewell, bread baking would take place near Sandwich. This first series had a voiceover by Stephen Noonan; for the subsequent series this role was taken by the on-screen presenters Mel Giedroyc and Sue Perkins.",
+			"poster_path": "/ggZf5y6RDB7FJGOqekl0c2952bz.jpg",
+			"season_number": 1,
+			"vote_average": 8.0
+		},
+		{
+			"air_date": "2011-08-16",
+			"episode_count": 11,
+			"id": 45296,
+			"name": "Series 2",
+			"overview": "In this year's series of The Great British Bake Off twelve amateur bakers started the competition and they were gradually eliminated during each round of the contest. Unlike series 1, this year the competition was held in a single location - in the ground of Valentines Mansion, a 17th-century mansion house in Redbridge. In addition to their on-screen presenting roles, Mel Giedroyc and Sue Perkins also took over the narration of the show, which in series 1 had been done by Stephen Noonan. Series 2 also introduced the \"star baker\" award for the most impressive performer each week.\n\nThree and a half thousand people applied for the competition, and 12 were selected. Each episode was filmed over two 14-hour days.",
+			"poster_path": "/e5FdvQy2SCl1dO1sd6LJfSfpN6e.jpg",
+			"season_number": 2,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "2012-08-14",
+			"episode_count": 14,
+			"id": 45295,
+			"name": "Series 3",
+			"overview": "The third series of The Great British Bake Off began airing on Tuesday 14 August 2012. The series was filmed at Harptree Court in East Harptree, Somerset.\n\nSeven thousand applied for the competition and twelve contestants were chosen.",
+			"poster_path": "/owOu8A3FTilx8YxJnhn0e6kd3SR.jpg",
+			"season_number": 3,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "2013-08-20",
+			"episode_count": 15,
+			"id": 45297,
+			"name": "Series 4",
+			"overview": "The fourth series of The Great British Bake Off began airing on 20 August 2013. Mel Giedroyc and Sue Perkins again presented the show and Mary Berry and Paul Hollywood returned as judges. As with series three, the competition was held at Harptree Court in East Harptree, Somerset.",
+			"poster_path": "/kiglA2bggKVfP8PQZ3pCsV2SfA9.jpg",
+			"season_number": 4,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "2014-08-06",
+			"episode_count": 16,
+			"id": 62219,
+			"name": "Series 5",
+			"overview": "The fifth series of The Great British Bake Off first aired on 6 August 2014, with twelve contestants. Mel Giedroyc and Sue Perkins presented the show and Mary Berry and Paul Hollywood returned as judges. Twelve contestants competed in this series, and the competition was held in Welford Park in Berkshire.\n\nThe programme was moved from BBC Two to BBC One starting this year, but the Masterclass episodes remained on BBC Two. A companion series, The Great British Bake Off: An Extra Slice, hosted by comedian Jo Brand, started this year on BBC Two.",
+			"poster_path": "/d2Nedau7VK5khyk70ZCOyDOCpwq.jpg",
+			"season_number": 5,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "2015-08-05",
+			"episode_count": 16,
+			"id": 69330,
+			"name": "Series 6",
+			"overview": "The sixth series of The Great British Bake Off first aired on 5 August 2015, with twelve contestants competing to be the series 6 winner. Mel Giedroyc and Sue Perkins presented the show, and Mary Berry and Paul Hollywood returned as judges. The competition was held in the ground of Welford Park, Berkshire for a second year.",
+			"poster_path": "/6fOVnhFblCb722KQnXmpMSCD0KI.jpg",
+			"season_number": 6,
+			"vote_average": 7.5
+		},
+		{
+			"air_date": "2016-08-22",
+			"episode_count": 11,
+			"id": 79474,
+			"name": "Series 7",
+			"overview": "The seventh series of The Great British Bake Off aired from 24 August 2016, with twelve contestants competing to be crowned the series 7 winner.\n\nThis series was the last to be broadcast on BBC One, as the production company Love Productions opted to move the show to Channel 4. As such, it was also the last series to feature Sue Perkins, Mel Giedroyc, and Mary Berry.\n\nIn the United States, the seventh series was broadcast as the fourth season on PBS and streamed as Collection 4 on Netflix.",
+			"poster_path": "/ccxB2SVM6f56i7x9vK60RxlZTkC.jpg",
+			"season_number": 7,
+			"vote_average": 0.0
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "English", "iso_639_1": "en", "name": "English" }],
+	"status": "Canceled",
+	"tagline": "",
+	"type": "Reality",
+	"videos": { "results": [] },
+	"vote_average": 7.567,
+	"vote_count": 105
+}

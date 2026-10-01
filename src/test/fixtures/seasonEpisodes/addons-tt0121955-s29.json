@@ -1,0 +1,488 @@
+{
+	"capturedAt": "2026-09-27T17:14:09Z",
+	"imdbId": "tt0121955",
+	"season": 29,
+	"sources": {
+		"torrentio": {
+			"1": {
+				"status": 200,
+				"body": {
+					"streams": [
+						{
+							"name": "[RD+] Torrentio\n4320p HDR",
+							"title": "South Park - S29E01 - South American Biker Gangs- 4320p HDR Ai Upscale 5.1 -Mesc\nSouth Park - S29E01 - South American Biker Gangs - 4320p HDR Ai Upscale -Mesc.mkv\n👤 5 💾 2.66 GB ⚙️ ThePirateBay",
+							"behaviorHints": {
+								"filename": "South Park - S29E01 - South American Biker Gangs - 4320p HDR Ai Upscale -Mesc.mkv",
+								"bingeGroup": "torrentio|436547484166b2ac0baa6e44b46ce252051ab706"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n4k HDR",
+							"title": "South Park - S29E01 - 2160p HDR Ai Upscale 5.1 MKV -Mesc\nSouth Park - S29E01 - South American Biker Gangs - 2160p HDR Ai Upscale -Mesc.mkv\n👤 465 💾 1.14 GB ⚙️ ThePirateBay",
+							"behaviorHints": {
+								"filename": "South Park - S29E01 - South American Biker Gangs - 2160p HDR Ai Upscale -Mesc.mkv",
+								"bingeGroup": "torrentio|71c4db6a54fb518b5589d5123b8d0f09f6b7e42b"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x2…\n👤 11294 💾 682.02 MB ⚙️ TorrentGalaxy",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/0ffa28a81692ed1bac77dd3c9d058a1b67349f5a/null/0/South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x264-Slurpuff.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x264-Slurpuff.mkv",
+								"bingeGroup": "torrentio|1080p|Slurpuff"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South Park S29E01 1080p WEB h264-GRACE\n👤 3165 💾 880.7 MB ⚙️ EZTV",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/d5fdaf3c39607bb4a16d5e2a82018207fadddd89/null/0/South.Park.S29E01.1080p.WEB.h264-GRACE%5BEZTVx.to%5D.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.WEB.h264-GRACE[EZTVx.to].mkv",
+								"bingeGroup": "torrentio|1080p|GRACE"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South Park S29E01 1080p HEVC x265-MeGusta\n👤 596 💾 273.37 MB ⚙️ EZTV",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/4bde0dfc34475eb54dd114fba7bda6a08fea0d79/null/0/South.Park.S29E01.1080p.HEVC.x265-MeGusta%5BEZTVx.to%5D.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.HEVC.x265-MeGusta[EZTVx.to].mkv",
+								"bingeGroup": "torrentio|1080p|MeGusta"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South.Park.S29E01.1080p.x265-ELiTE\n👤 58 💾 334.76 MB ⚙️ ThePirateBay",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/b3ec402f2aeb8f123c3654b250d91f476c829b46/null/4/South.Park.S29E01.1080p.x265-ELiTE.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.x265-ELiTE.mkv",
+								"bingeGroup": "torrentio|1080p|ELiTE"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South Park S29E01 1080p WEB h264-GRACE\n👤 52 💾 880.7 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/b01931338701fc0b94ee13caefb0f9833d98b27f/null/4/South.Park.S29E01.1080p.WEB.h264-GRACE.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.WEB.h264-GRACE.mkv",
+								"bingeGroup": "torrentio|1080p|GRACE"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South.Park.S29E01.1080p.x265-ELiTE\n👤 41 💾 334.76 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/1a71bf43abb5da9f4f8d45a6cdde272127d563d0/null/0/South.Park.S29E01.1080p.x265-ELiTE.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.x265-ELiTE.mkv",
+								"bingeGroup": "torrentio|1080p|ELiTE"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South.Park.S29E01.1080p.HEVC.x265-MeGusta\n👤 26 💾 273.37 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/efd7ea62d6d86aa6c16754466ecb3012e9493c02/null/0/South.Park.S29E01.1080p.HEVC.x265-MeGusta.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.HEVC.x265-MeGusta.mkv",
+								"bingeGroup": "torrentio|1080p|MeGusta"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South Park S29E01 1080p AV1 10bit-MeGusta\n👤 19 💾 269.14 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/d5fc59b720e2354b7b77c2b5161a909ea16cd739/null/3/South.Park.S29E01.1080p.AV1.10bit-MeGusta.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.AV1.10bit-MeGusta.mkv",
+								"bingeGroup": "torrentio|1080p|MeGusta"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South.Park.S29E01.1080p.WEB.h264-TRB\n👤 16 💾 880.7 MB ⚙️ TorrentGalaxy",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/63c555eb1bc8d17f45f076116fee0e5c0616f4cd/null/1/South.Park.S29E01.1080p.WEB.h264-TRB.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.WEB.h264-TRB.mkv",
+								"bingeGroup": "torrentio|1080p|TRB"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South Park S29E01 1080p x265-ELiTE\n👤 14 💾 334.76 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/153c1a1e408fe2ec2c7e2dcde6c99faa8c08ff1f/null/0/South%20Park%20S29E01%201080p%20x265-ELiTE.mkv",
+							"behaviorHints": {
+								"filename": "South Park S29E01 1080p x265-ELiTE.mkv",
+								"bingeGroup": "torrentio|1080p|ELiTE"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South.Park.S29E01.1080p.WEBRip.10Bit.DDP5.1.x265-NeoNoir\n👤 10 💾 259.78 MB ⚙️ TorrentGalaxy",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/b504ec68a97e61628add0eb7a1409f90181dee11/null/0/South.Park.S29E01.South.American.Biker.Gangs.1080p.WEBRip.10Bit.DDP5.1.x265-NeoNoir.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.South.American.Biker.Gangs.1080p.WEBRip.10Bit.DDP5.1.x265-NeoNoir.mkv",
+								"bingeGroup": "torrentio|1080p|NeoNoir"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x2…\n👤 9 💾 682.02 MB ⚙️ TorrentGalaxy",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/711f3d1d45747f5769fae1630ccd320b7fabe224/null/1/South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x264-TRB.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x264-TRB.mkv",
+								"bingeGroup": "torrentio|1080p|TRB"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South Park S29E01 1080p HEVC x265-MeGusta\n👤 8 💾 273.37 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/8a7f3e466f4b8873d59213ddcc50aeb4e4938506/null/3/South.Park.S29E01.1080p.HEVC.x265-MeGusta.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.HEVC.x265-MeGusta.mkv",
+								"bingeGroup": "torrentio|1080p|MeGusta"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South Park S29E01 South American Biker Gangs 1080p HEVC x265-MeGusta\n👤 6 💾 273.4 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/633d7b3e9deacf0d5e776ccd352c0e6aea133c5c/null/3/South.Park.S29E01.South.American.Biker.Gangs.1080p.HEVC.x265-MeGusta.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.South.American.Biker.Gangs.1080p.HEVC.x265-MeGusta.mkv",
+								"bingeGroup": "torrentio|1080p|MeGusta"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South.Park.S29E01.1080p.Rus.ColdFilm\n👤 4 💾 946.49 MB ⚙️ EXT\n🇷🇺",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/d48acf3f7f9d8ccc9c416275c2f7fec03c8d5ab3/null/0/South.Park.S29E01.1080p.ColdFilm.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.ColdFilm.mkv",
+								"bingeGroup": "torrentio|1080p"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South.Park.S29E01.1080p.WEB.h264-GRACE\n👤 1 💾 881.64 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/749d1506948755bfe10d30b65ca411d1bd754ba6/null/undefined/South.Park.S29E01.1080p.WEB.h264-GRACE",
+							"behaviorHints": { "bingeGroup": "torrentio|1080p|GRACE" }
+						},
+						{
+							"name": "[RD+] Torrentio\n1080p",
+							"title": "South.Park.S29E01.1080p.Ru.Ultradox\n👤 1 💾 830.64 MB ⚙️ EXT\n🇷🇺",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/867c924574441a94b25c52632d651e56fefb7f1e/null/0/South.Park.S29E01.1080p.Ru.Ultradox.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.Ru.Ultradox.mkv",
+								"bingeGroup": "torrentio|1080p"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n720p",
+							"title": "South Park S29E01 720p HDTV H264-JFF\n👤 1197 💾 370.97 MB ⚙️ EZTV",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/36c77e55d46fadc5bdbc96fd3edf08f945ecb34e/null/0/South%20Park%20S29E01%20720p%20HDTV%20H264-JFF%5BEZTVx.to%5D.mkv",
+							"behaviorHints": {
+								"filename": "South Park S29E01 720p HDTV H264-JFF[EZTVx.to].mkv",
+								"bingeGroup": "torrentio|720p|JFF"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n720p",
+							"title": "South Park America (1997) S29E01 South American Biker Gangs 720p…\n👤 979 💾 1.13 GB ⚙️ TorrentGalaxy",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/39dcd7d7545bb6b37c296f1a0064cee40fe2f48f/null/0/South%20Park%20America%20(1997)%20S29E01%20South%20American%20Biker%20Gangs%20720p%2060FPS%20AVCHD-SC-SDH.mp4",
+							"behaviorHints": {
+								"filename": "South Park America (1997) S29E01 South American Biker Gangs 720p 60FPS AVCHD-SC-SDH.mp4",
+								"bingeGroup": "torrentio|720p|SDH"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n720p",
+							"title": "South Park S29E01 720p HEVC x265-MeGusta\n👤 134 💾 211.95 MB ⚙️ EZTV",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/4151685d172ab73c21a440d349578700c5252a5d/null/0/South.Park.S29E01.720p.HEVC.x265-MeGusta%5BEZTVx.to%5D.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.720p.HEVC.x265-MeGusta[EZTVx.to].mkv",
+								"bingeGroup": "torrentio|720p|MeGusta"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n720p",
+							"title": "South Park S29E01 720p HDTV H264-JFF\n👤 98 💾 370.97 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/604cb8a8e1bdf1f31a07a62b11f107ab60d2ea6e/null/0/South%20Park%20S29E01%20720p%20HDTV%20H264-JFF.mkv",
+							"behaviorHints": {
+								"filename": "South Park S29E01 720p HDTV H264-JFF.mkv",
+								"bingeGroup": "torrentio|720p|JFF"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n720p",
+							"title": "South Park S29E01 720p x264-FENiX\n👤 60 💾 215.68 MB ⚙️ EZTV",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/7cbe2ed40381b2b13a32b32b587a50c8ed199de0/null/0/South%20Park%20S29E01%20720p%20x264-FENiX%5BEZTVx.to%5D.mkv",
+							"behaviorHints": {
+								"filename": "South Park S29E01 720p x264-FENiX[EZTVx.to].mkv",
+								"bingeGroup": "torrentio|720p|FENiX"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n720p",
+							"title": "South.Park.S29E01.720p.x264-FENiX\n👤 23 💾 215.68 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/1c5030039b20ef04d1d3a026a9c70d9967949d30/null/0/South.Park.S29E01.720p.x264-FENiX.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.720p.x264-FENiX.mkv",
+								"bingeGroup": "torrentio|720p|FENiX"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n720p",
+							"title": "South Park S29E01 720p HEVC x265-MeGusta\n👤 19 💾 211.95 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/5a0ba8a8c975b461864bbdf0e1d84fe3060c849e/null/3/South.Park.S29E01.720p.HEVC.x265-MeGusta.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.720p.HEVC.x265-MeGusta.mkv",
+								"bingeGroup": "torrentio|720p|MeGusta"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n720p",
+							"title": "South.Park.S29E01.720p.x264-FENiX\n👤 5 💾 215.68 MB ⚙️ ThePirateBay",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/95e361201d074de07974902011d3b51a1cb48ae6/null/4/South.Park.S29E01.720p.x264-FENiX.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.720p.x264-FENiX.mkv",
+								"bingeGroup": "torrentio|720p|FENiX"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n720p",
+							"title": "South Park S29E01 South American Biker Gangs 720p HEVC x265-MeGusta\n👤 4 💾 212.29 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/33f2e95d2dff2baa635167a7b26c66c0dae46cc1/null/undefined/South%20Park%20S29E01%20South%20American%20Biker%20Gangs%20720p%20HEVC%20x265-MeGusta",
+							"behaviorHints": { "bingeGroup": "torrentio|720p|MeGusta" }
+						},
+						{
+							"name": "[RD+] Torrentio\n720p",
+							"title": "South.Park.S29E01.720p.Rus.ColdFilm\n👤 2 💾 592.61 MB ⚙️ EXT\n🇷🇺",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/22a802c34b21621e72053a7b719b71d236539824/null/0/South.Park.S29E01.720p.ColdFilm.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.720p.ColdFilm.mkv",
+								"bingeGroup": "torrentio|720p"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n720p",
+							"title": "South Park S29E01 720p x264-FENiX\n👤 1 💾 215.68 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/f3830a91c8ed7e96381306666811a80bdfef59d8/null/0/South%20Park%20S29E01%20720p%20x264-FENiX.mkv",
+							"behaviorHints": {
+								"filename": "South Park S29E01 720p x264-FENiX.mkv",
+								"bingeGroup": "torrentio|720p|FENiX"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n480p",
+							"title": "South Park S29E01 480p x264-mSD\n👤 133 💾 149.48 MB ⚙️ EZTV",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/38647936d1a64fdae564bbec4740e1e225d2963d/null/0/South.Park.S29E01.480p.x264-mSD%5BEZTVx.to%5D.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.480p.x264-mSD[EZTVx.to].mkv",
+								"bingeGroup": "torrentio|480p|mSD"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\n400p",
+							"title": "South.Park.S29E01.400p.Rus.ColdFilm\n👤 4 💾 264.08 MB ⚙️ EXT\n🇷🇺",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/95d416375fa5bef7598d35c07add9d808fbccc4a/null/0/South.Park.S29E01.400p.ColdFilm.avi",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.400p.ColdFilm.avi",
+								"bingeGroup": "torrentio|400p"
+							}
+						},
+						{
+							"name": "[RD+] Torrentio\nXviD",
+							"title": "South Park S29E01 XviD-AFG\n👤 34 💾 251.75 MB ⚙️ EZTV",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/703709aa773a54210ff5e826626bc61023269a0c/null/0/South.Park.S29E01.XviD-AFG%5BEZTVx.to%5D.avi",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.XviD-AFG[EZTVx.to].avi",
+								"bingeGroup": "torrentio|XviD|AFG"
+							}
+						},
+						{
+							"name": "[RD download] Torrentio\n4k",
+							"title": "South Park S29E01 South American Biker Gangs 2160p ATV WEB-DL DDP5 1 H 265-NTb-4P\n👤 372 💾 1.88 GB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/985e96d74e53f56726bc2aef789389b52e6e676e/null/0/South%20Park%20S29E01%20South%20American%20Biker%20Gangs%202160p%20ATV%20WEB-DL%20DDP5%201%20H%20265-NTb-4P.mkv",
+							"behaviorHints": {
+								"filename": "South Park S29E01 South American Biker Gangs 2160p ATV WEB-DL DDP5 1 H 265-NTb-4P.mkv",
+								"bingeGroup": "torrentio|4k|4P"
+							}
+						},
+						{
+							"name": "[RD download] Torrentio\n4k",
+							"title": "South Park S29E01 South American Biker Gangs 2160p ATV WEB-DL DDP5 1 H 265-NTb\n👤 7 💾 1.88 GB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/292921101020b7ec7cc80a18474571f7407f56b5/null/0/South%20Park%20S29E01%20South%20American%20Biker%20Gangs%202160p%20ATV%20WEB-DL%20DDP5%201%20H%20265-NTb.mkv",
+							"behaviorHints": {
+								"filename": "South Park S29E01 South American Biker Gangs 2160p ATV WEB-DL DDP5 1 H 265-NTb.mkv",
+								"bingeGroup": "torrentio|4k|NTb"
+							}
+						},
+						{
+							"name": "[RD download] Torrentio\n1080p",
+							"title": "South Park S29E01 South American Biker Gangs 1080p AMZN WEB-DL DDP5 1 H 264-NTb\n👤 41 💾 880.73 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/49353fb8f6d7de075d11ee8f2202feec516210e4/null/0/South%20Park%20S29E01%20South%20American%20Biker%20Gangs%201080p%20AMZN%20WEB-DL%20DDP5%201%20H%20264-NTb.mkv",
+							"behaviorHints": {
+								"filename": "South Park S29E01 South American Biker Gangs 1080p AMZN WEB-DL DDP5 1 H 264-NTb.mkv",
+								"bingeGroup": "torrentio|1080p|NTb"
+							}
+						},
+						{
+							"name": "[RD download] Torrentio\n1080p",
+							"title": "South.Park.S29E01.1080p.10bit.WEBRip.6CH.x265.HEVC-PSA\n👤 34 💾 156.72 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/a889e9ea2fea8758842a264c13f05bcea25fdb6c/null/0/South.Park.S29E01.1080p.10bit.WEBRip.6CH.x265.HEVC-PSA.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.1080p.10bit.WEBRip.6CH.x265.HEVC-PSA.mkv",
+								"bingeGroup": "torrentio|1080p|PSA"
+							}
+						},
+						{
+							"name": "[RD download] Torrentio\n1080p",
+							"title": "South.Park.S29E01.1080p.WEB.h264-GRACE\n👤 17 💾 880.7 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/79bad11095cf617d889af7356827a9489cdff4b3/null/undefined/South.Park.S29E01.1080p.WEB.h264-GRACE",
+							"behaviorHints": { "bingeGroup": "torrentio|1080p|GRACE" }
+						},
+						{
+							"name": "[RD download] Torrentio\n1080p",
+							"title": "South Park S29E01 South American Biker Gangs 1080p AMZN WEB-DL DD 5 1 H 264-playWEB\n👤 6 💾 880.73 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/cb53427ffed8f3d143bb3dadd676ddb07919c1f4/null/0/South%20Park%20S29E01%20South%20American%20Biker%20Gangs%201080p%20AMZN%20WEB-DL%20DD%205%201%20H%20264-playWEB.mkv",
+							"behaviorHints": {
+								"filename": "South Park S29E01 South American Biker Gangs 1080p AMZN WEB-DL DD 5 1 H 264-playWEB.mkv",
+								"bingeGroup": "torrentio|1080p|playWEB"
+							}
+						},
+						{
+							"name": "[RD download] Torrentio\n1080p",
+							"title": "South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x264-Slurpuff\n👤 1 💾 682.02 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/5ec650275d96229cedcf10e8a7518b3317bf3b8a/null/undefined/South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x264-Slurpuff",
+							"behaviorHints": { "bingeGroup": "torrentio|1080p|Slurpuff" }
+						},
+						{
+							"name": "[RD download] Torrentio\n720p",
+							"title": "South.Park.S29E01.720p.10bit.WEBRip.2CH.x265.HEVC-PSA\n👤 20 💾 74.28 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/99234f7a44ea74f8d98ff1aaedda04f4bd077ad5/null/0/South.Park.S29E01.720p.10bit.WEBRip.2CH.x265.HEVC-PSA.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.720p.10bit.WEBRip.2CH.x265.HEVC-PSA.mkv",
+								"bingeGroup": "torrentio|720p|PSA"
+							}
+						},
+						{
+							"name": "[RD download] Torrentio\n720p",
+							"title": "South Park S29E01 South American Biker Gangs 720p AMZN WEB-DL DDP5 1 H 264-Kitsune\n👤 4 💾 462.73 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/0ba2e46745beab128cbadac2fcae2d8e2d2a131a/null/0/South%20Park%20S29E01%20South%20American%20Biker%20Gangs%20720p%20AMZN%20WEB-DL%20DDP5%201%20H%20264-Kitsune.mkv",
+							"behaviorHints": {
+								"filename": "South Park S29E01 South American Biker Gangs 720p AMZN WEB-DL DDP5 1 H 264-Kitsune.mkv",
+								"bingeGroup": "torrentio|720p|Kitsune"
+							}
+						},
+						{
+							"name": "[RD download] Torrentio\n720p",
+							"title": "South.Park.S29E01.South.American.Biker.Gangs.720p.HEVC.x265-MeGusta\n👤 3 💾 212.29 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/f3f40f0f4c0bbef8c6dd8fba072dd14646ca357a/null/undefined/South.Park.S29E01.South.American.Biker.Gangs.720p.HEVC.x265-MeGusta",
+							"behaviorHints": { "bingeGroup": "torrentio|720p|MeGusta" }
+						},
+						{
+							"name": "[RD download] Torrentio\n720p",
+							"title": "South.Park.S29E01.720p.Ru.Ultradox\n👤 1 💾 512.95 MB ⚙️ EXT\n🇷🇺",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/40a5e82d3c95903cbb63a6b918966e96028d9411/null/0/South.Park.S29E01.720p.Ru.Ultradox.mkv",
+							"behaviorHints": {
+								"filename": "South.Park.S29E01.720p.Ru.Ultradox.mkv",
+								"bingeGroup": "torrentio|720p"
+							}
+						},
+						{
+							"name": "[RD download] Torrentio\n720p",
+							"title": "South Park S29E01 South American Biker Gangs 720p AMZN WEB-DL DDP5 1 H 264-NTb\n👤 1 💾 462.72 MB ⚙️ EXT",
+							"url": "https://torrentio.strem.fun/resolve/realdebrid/real-debrid-key/70cbde3ce6966450ca622681acfc8472b3608805/null/0/South%20Park%20S29E01%20South%20American%20Biker%20Gangs%20720p%20AMZN%20WEB-DL%20DDP5%201%20H%20264-NTb.mkv",
+							"behaviorHints": {
+								"filename": "South Park S29E01 South American Biker Gangs 720p AMZN WEB-DL DDP5 1 H 264-NTb.mkv",
+								"bingeGroup": "torrentio|720p|NTb"
+							}
+						}
+					]
+				}
+			},
+			"2": { "status": 200, "body": { "streams": [] } },
+			"3": { "status": 200, "body": { "streams": [] } },
+			"4": { "status": 200, "body": { "streams": [] } },
+			"5": { "status": 200, "body": { "streams": [] } },
+			"6": { "status": 200, "body": { "streams": [] } }
+		},
+		"peerflix": {
+			"1": {
+				"status": 200,
+				"body": {
+					"streams": [
+						{
+							"name": "[RD+] Peerflix 🇬🇧 4K",
+							"title": "South Park - S29E01 - South American Biker Gangs - 2160p HDR Ai Upscale -Mesc\nSouth Park - S29E01 - South American Biker Gangs - 2160p HDR Ai Upscale -Mesc.mkv\n  👤 7 💾 1.14 GB 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/71c4db6a54fb518b5589d5123b8d0f09f6b7e42b/null/0/South%20Park%20-%20S29E01%20-%20South%20American%20Biker%20Gangs%20-%202160p%20HDR%20Ai%20Upscale%20-Mesc.mkv"
+						},
+						{
+							"name": "[RD+] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29E01.1080p.HEVC.x265-MeGusta\nSouth.Park.S29E01.1080p.HEVC.x265-MeGusta.mkv\n  👤 29 💾 273.37 MB 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/efd7ea62d6d86aa6c16754466ecb3012e9493c02/null/0/South.Park.S29E01.1080p.HEVC.x265-MeGusta.mkv"
+						},
+						{
+							"name": "[RD+] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29E01.1080p.x265-ELiTE\nSouth.Park.S29E01.1080p.x265-ELiTE.mkv\n  👤 18 💾 334.76 MB 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/b3ec402f2aeb8f123c3654b250d91f476c829b46/null/4/South.Park.S29E01.1080p.x265-ELiTE.mkv"
+						},
+						{
+							"name": "[RD+] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29E01.1080p.WEB.h264-TRB\nSouth.Park.S29E01.1080p.WEB.h264-TRB.mkv\n  👤 3 💾 880.70 MB 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/63c555eb1bc8d17f45f076116fee0e5c0616f4cd/null/1/South.Park.S29E01.1080p.WEB.h264-TRB.mkv"
+						},
+						{
+							"name": "[RD download] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x264-Slurpuff.mkv\n  👤 2679 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/0ffa28a81692ed1bac77dd3c9d058a1b67349f5a/null/null/South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x264-Slurpuff.mkv"
+						},
+						{
+							"name": "[RD download] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29E01.1080p.10bit.WEBRip.6CH.x265.HEVC-PSA.mkv\n  👤 17 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/a889e9ea2fea8758842a264c13f05bcea25fdb6c/null/null/South.Park.S29E01.1080p.10bit.WEBRip.6CH.x265.HEVC-PSA.mkv"
+						},
+						{
+							"name": "[RD download] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29E01.South.American.Biker.Gangs.1080p.WEBRip.10Bit.DDP5.1.x265-NeoNoir.mkv\n  👤 15 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/b504ec68a97e61628add0eb7a1409f90181dee11/null/null/South.Park.S29E01.South.American.Biker.Gangs.1080p.WEBRip.10Bit.DDP5.1.x265-NeoNoir.mkv"
+						},
+						{
+							"name": "[RD download] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29E01.1080p.WEB.h264-GRACE[EZTVx.to].mkv\n  👤 8 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/d5fdaf3c39607bb4a16d5e2a82018207fadddd89/null/null/South.Park.S29E01.1080p.WEB.h264-GRACE%5BEZTVx.to%5D.mkv"
+						},
+						{
+							"name": "[RD download] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29E01.1080p.x265-ELiTE\nSouth.Park.S29E01.1080p.x265-ELiTE.mkv\n  👤 2 💾 334.76 MB 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/1a71bf43abb5da9f4f8d45a6cdde272127d563d0/null/0/South.Park.S29E01.1080p.x265-ELiTE.mkv"
+						},
+						{
+							"name": "[RD download] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29.1080p.H264.AAC.WEBRip.le-production\nSouth.Park.S29E01.1080p.H264.AAC.WEBRip.le-production.mp4\n  👤 1 💾 702.16 MB 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/4f36346152d4888da3f8f3f385be3bcf45fe4d23/null/0/South.Park.S29E01.1080p.H264.AAC.WEBRip.le-production.mp4"
+						},
+						{
+							"name": "[RD download] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29E01.1080p.HEVC.x265-MeGusta[EZTVx.to].mkv\n  👤 1 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/4bde0dfc34475eb54dd114fba7bda6a08fea0d79/null/null/South.Park.S29E01.1080p.HEVC.x265-MeGusta%5BEZTVx.to%5D.mkv"
+						},
+						{
+							"name": "[RD download] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x264-TRB\nSouth.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x264-TRB.mkv\n  👤 1 💾 682.02 MB 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/711f3d1d45747f5769fae1630ccd320b7fabe224/null/1/South.Park.S29E01.South.American.Biker.Gangs.1080p.HDTV.DD5.1.x264-TRB.mkv"
+						},
+						{
+							"name": "[RD download] Peerflix 🇬🇧 1080p",
+							"title": "South.Park.S29E01.1080p.ColdFilm.mkv\n  👤 1 🌐 Peerflix",
+							"url": "https://addon.peerflix.mov/realdebrid/real-debrid-key/d48acf3f7f9d8ccc9c416275c2f7fec03c8d5ab3/null/null/South.Park.S29E01.1080p.ColdFilm.mkv"
+						}
+					]
+				}
+			},
+			"2": { "status": 200, "body": { "streams": [] } },
+			"3": { "status": 200, "body": { "streams": [] } },
+			"4": { "status": 200, "body": { "streams": [] } },
+			"5": { "status": 200, "body": { "streams": [] } },
+			"6": { "status": 200, "body": { "streams": [] } }
+		}
+	}
+}

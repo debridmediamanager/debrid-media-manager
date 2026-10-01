@@ -1,3 +1,4 @@
+import { CAST_STREAM_RESOURCE } from '@/services/anime/stremioAnimeIds';
 import { CAST_ADDON_VERSIONS } from '@/utils/castAddonVersions';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -15,14 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		logo: 'https://static.debridmediamanager.com/dmmcast.png',
 		background: 'https://static.debridmediamanager.com/background.png',
 		version: CAST_ADDON_VERSIONS.torbox,
-		resources: [
-			{
-				name: 'stream',
-				types: ['movie', 'series'],
-				idPrefixes: ['tt'],
-			},
-		],
-		types: ['movie', 'series'],
+		resources: [CAST_STREAM_RESOURCE],
+		types: ['movie', 'series', 'anime'],
 		catalogs: [],
 		behaviorHints: { adult: false, p2p: false },
 	});

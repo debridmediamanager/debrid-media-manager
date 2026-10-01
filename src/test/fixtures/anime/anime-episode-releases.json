@@ -1,0 +1,40 @@
+{
+	"releases": [
+		{
+			"key": "anime:anidb-17617",
+			"hash": "e971d09c2578aefd982b7d4059e8bdd1fc3d2cf4",
+			"filename": "[SubsPlease] Sousou no Frieren - 05 (1080p) [8E3F8FA5].mkv",
+			"size_bytes": 1428.90380191803
+		},
+		{
+			"key": "anime:anidb-69",
+			"hash": "59df406445a19c303bad777fcfe709bf7bc0191d",
+			"filename": "One Piece - 1100 - 1080p WEB x264 -NanDesuKa (CR).mkv",
+			"size_bytes": 1380.47670841217
+		},
+		{
+			"key": "anime:anidb-69",
+			"hash": "bb379fa35e360d24a6350a6876b6ae32d6eb5d11",
+			"filename": "[Valenciano] One Piece - 1100 [1080p][AV1 10bit][AAC][Multi-Sub] (Weekly).mkv",
+			"size_bytes": 455.4179649353027
+		},
+		{
+			"key": "anime:anidb-18117",
+			"hash": "bbeb34da82b45438af3d28acbbc3dbf5445d7100",
+			"filename": "[Erai-raws] Your Forma - 03 [1080p AMZN WEB-DL AVC EAC3][MultiSub][440194DA].mkv",
+			"size_bytes": 1699.84
+		},
+		{
+			"key": "anime:anidb-17617",
+			"hash": "6dc0eb7b24d7249164019a24038b9eb702d16cd2",
+			"filename": "[Judas] Sousou no Frieren - S01E03.mkv",
+			"size_bytes": 503.7569313049316
+		},
+		{
+			"key": "anime:anidb-18117",
+			"hash": "a8028e172f03f3e45cf77f30ef56fe4459a0d461",
+			"filename": "Your.Forma.S01E03.Pursuit.REPACK.1080p.AMZN.WEB-DL.AAC2.0.H.264-VARYG.mkv",
+			"size_bytes": 1703.936
+		}
+	]
+}

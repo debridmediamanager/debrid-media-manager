@@ -1,8 +1,9 @@
 import { randomBytes } from 'crypto';
 import Redis from 'ioredis';
+import type { PluginPlatform } from './catalog';
 
 /**
- * Serializes writers of the shared Jellyfin plugin catalog.
+ * Serializes writers of a shared plugin catalog, one lock per platform's document.
  *
  * The catalog is one stored document that a publish reads, merges one plugin into
  * and writes back, and four web replicas accept publishes. Two release jobs that
@@ -13,6 +14,14 @@ import Redis from 'ioredis';
  */
 
 export const CATALOG_LOCK_KEY = 'jellyfin-plugins:catalog-lock';
+
+/**
+ * One lock per catalog document. The Jellyfin key is the one replicas already in
+ * production take, so it cannot change without a deploy briefly running two locks.
+ */
+export function catalogLockKey(platform: PluginPlatform = 'jellyfin'): string {
+	return platform === 'jellyfin' ? CATALOG_LOCK_KEY : `${platform}-plugins:catalog-lock`;
+}
 
 // Longer than a catalog read and write ever take, so the lock outlives its holder
 // only when that holder died.
@@ -54,7 +63,11 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  * Refuses rather than running unlocked: when Redis is unreachable or the lock stays
  * taken past the wait limit, `work` does not run and the caller is told so.
  */
-export async function withCatalogLock<T>(work: () => Promise<T>): Promise<CatalogLockResult<T>> {
+export async function withCatalogLock<T>(
+	work: () => Promise<T>,
+	platform: PluginPlatform = 'jellyfin'
+): Promise<CatalogLockResult<T>> {
+	const lockKey = catalogLockKey(platform);
 	const started = Date.now();
 	const connection = redis();
 	if (!connection) return { acquired: false, waitedMs: 0 };
@@ -64,7 +77,7 @@ export async function withCatalogLock<T>(work: () => Promise<T>): Promise<Catalo
 	for (;;) {
 		let taken: string | null;
 		try {
-			taken = await connection.set(CATALOG_LOCK_KEY, token, 'PX', LOCK_TTL_MS, 'NX');
+			taken = await connection.set(lockKey, token, 'PX', LOCK_TTL_MS, 'NX');
 		} catch {
 			return { acquired: false, waitedMs: Date.now() - started };
 		}
@@ -81,7 +94,7 @@ export async function withCatalogLock<T>(work: () => Promise<T>): Promise<Catalo
 		return { acquired: true, value: await work(), waitedMs };
 	} finally {
 		try {
-			await connection.eval(RELEASE_SCRIPT, 1, CATALOG_LOCK_KEY, token);
+			await connection.eval(RELEASE_SCRIPT, 1, lockKey, token);
 		} catch {
 			// The TTL frees it.
 		}

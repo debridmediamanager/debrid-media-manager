@@ -1,0 +1,42 @@
+{
+	"backdrop": "https://image.tmdb.org/t/p/w1920_and_h800_multi_faces/l0qVZIpXtIo7km9u5Yqh0nKPOr5.jpg",
+	"description": "Six young people from New York City, on their own and struggling to survive in the real world, find the companionship, comfort and support they get from each other to be the perfect antidote to the pressures of life.",
+	"has_specials": true,
+	"imdb_score": "8.8",
+	"last_episode_to_air": {
+		"first_aired": "2004-05-07T01:30:00+00:00",
+		"episode_number": 18,
+		"season_number": 10,
+		"name": "The Last One, Part 2"
+	},
+	"poster": "https://image.tmdb.org/t/p/original/2koX1xLkpTQM4IZebYvKysFW1Nh.jpg",
+	"season_count": 10,
+	"season_episode_counts": {
+		"0": 40,
+		"1": 24,
+		"2": 24,
+		"3": 25,
+		"4": 24,
+		"5": 24,
+		"6": 25,
+		"7": 24,
+		"8": 24,
+		"9": 24,
+		"10": 18
+	},
+	"season_names": [
+		"Season 1",
+		"Season 2",
+		"Season 3",
+		"Season 4",
+		"Season 5",
+		"Season 6",
+		"Season 7",
+		"Season 8",
+		"Season 9",
+		"Season 10"
+	],
+	"status": "Ended",
+	"title": "Friends",
+	"trailer": "https://www.youtube.com/watch?v=H29XSxoKp80"
+}

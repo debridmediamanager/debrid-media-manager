@@ -70,7 +70,7 @@ export function TorBoxCdnPanel() {
 					onClick={() => test()}
 					disabled={testing}
 					data-testid="cdn-retest"
-					className="flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-slate-300 disabled:cursor-not-allowed disabled:opacity-50"
+					className="flex items-center gap-1.5 text-xs font-medium text-slate-400 transition-colors hover:text-slate-300 disabled:cursor-not-allowed disabled:opacity-50"
 					title="Test the CDN nodes again from your browser"
 				>
 					{testing ? (
@@ -116,7 +116,7 @@ export function TorBoxCdnPanel() {
 							>
 								{ratePct !== null ? `${ratePct}%` : '—'}
 							</span>
-							<span className="text-sm text-slate-500">
+							<span className="text-sm text-slate-400">
 								{nodes.length > 0
 									? `${working.length}/${nodes.length} regions`
 									: 'no data yet'}
@@ -137,12 +137,12 @@ export function TorBoxCdnPanel() {
 										>
 											{regionLabel(node.region)}
 											{node.closest && (
-												<span className="ml-1 text-emerald-500/70">
+												<span className="ml-1 text-emerald-300">
 													(nearest)
 												</span>
 											)}
 											{node.latencyMs !== null && (
-												<span className="ml-1 text-emerald-500/70">
+												<span className="ml-1 text-emerald-300">
 													{Math.round(node.latencyMs)}ms
 												</span>
 											)}
@@ -172,7 +172,7 @@ export function TorBoxCdnPanel() {
 						)}
 
 						{nodes.length > 0 && (
-							<div className="mt-3 text-xs text-slate-500">
+							<div className="mt-3 text-xs text-slate-400">
 								Your browser asked each region for the first byte of its 100MB test
 								file. A region only passes on an HTTP 206 — a node that answers the
 								API but not a Range request is not serving data.
@@ -184,7 +184,7 @@ export function TorBoxCdnPanel() {
 								over several domains, so a whole group failing together is usually
 								DNS or ISP filtering on your side.
 								{checkedAt !== null && (
-									<span className="ml-1 text-slate-600">
+									<span className="ml-1 text-slate-400">
 										Tested{' '}
 										{new Date(checkedAt).toLocaleTimeString('en-US', {
 											hour: '2-digit',

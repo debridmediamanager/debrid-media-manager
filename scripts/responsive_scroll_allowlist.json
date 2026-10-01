@@ -1,0 +1,151 @@
+[
+	{
+		"route": "/",
+		"classContains": "flex w-full items-center justify-center gap-2 overflow-x-auto",
+		"textIncludes": "genres",
+		"reason": "Home category strip is an intentional horizontal scroller."
+	},
+	{
+		"route": "/show/tt0944947/1",
+		"classContains": "flex items-center overflow-x-auto",
+		"textIncludes": "Season",
+		"reason": "Season navigation is intentionally horizontally scrollable on narrow screens."
+	},
+	{
+		"route": "/show/tt0944947",
+		"classContains": "flex items-center overflow-x-auto",
+		"textIncludes": "Season",
+		"reason": "Redirected season navigation is intentionally horizontally scrollable on narrow screens."
+	},
+	{
+		"route": "/show/tt0944947/1",
+		"classContains": "flex items-center gap-2 overflow-x-auto",
+		"textIncludes": "gameofthrones",
+		"reason": "Episode navigation is intentionally horizontally scrollable on narrow screens."
+	},
+	{
+		"route": "/show/tt0944947",
+		"classContains": "flex items-center gap-2 overflow-x-auto",
+		"textIncludes": "gameofthrones",
+		"reason": "Redirected episode navigation is intentionally horizontally scrollable on narrow screens."
+	},
+	{
+		"route": "/torznab",
+		"classContains": "mb-4 overflow-x-auto rounded bg-gray-900/60",
+		"textIncludes": "/api/torznab",
+		"reason": "Provider path example is an intentionally scrollable code sample."
+	},
+	{
+		"route": "/newznab",
+		"tag": "CODE",
+		"classContains": "truncate",
+		"textIncludes": "/api/newznab",
+		"reason": "The indexer URL is intentionally clipped beside its copy control."
+	},
+	{
+		"route": "/newznab",
+		"tag": "CODE",
+		"classContains": "truncate",
+		"textIncludes": "your DMM API key",
+		"reason": "The masked API key is intentionally clipped beside its copy control."
+	},
+	{
+		"route": "/hashlist",
+		"classContains": "overflow-x-auto",
+		"reason": "The hashlist table is intentionally horizontally scrollable on narrow screens."
+	},
+	{
+		"route": "/hashlists",
+		"classContains": "overflow-x-auto",
+		"reason": "The public hashlists table is intentionally horizontally scrollable on narrow screens."
+	},
+	{
+		"route": "/calendar",
+		"classContains": "snap-x snap-mandatory gap-3 overflow-x-auto",
+		"reason": "Calendar days are intentionally horizontally scrollable on narrow screens."
+	},
+	{
+		"route": "/calendar",
+		"overflowX": "auto",
+		"reason": "Calendar day lists use the virtualized list's horizontal overflow container."
+	},
+	{
+		"route": "/library",
+		"classContains": "relative mb-0 flex overflow-x-auto",
+		"textIncludes": "Select Shown",
+		"reason": "Library bulk actions are intentionally horizontally scrollable on narrow screens."
+	},
+	{
+		"route": "/emby",
+		"tag": "PRE",
+		"classContains": "overflow-x-auto",
+		"reason": "Emby installation commands are intentionally horizontally scrollable code samples."
+	},
+	{
+		"route": "/library",
+		"classContains": "relative mb-0 flex overflow-x-auto",
+		"textIncludes": "Movies",
+		"reason": "Library filter chips scroll sideways under a fade mask on narrow screens."
+	},
+	{
+		"route": "/library",
+		"tag": "DIV",
+		"classContains": "overflow-x-auto",
+		"textIncludes": "Title (",
+		"reason": "The library table keeps its Size/Status/Added/Actions columns and scrolls sideways on narrow screens."
+	},
+	{
+		"route": "/movie/tt0111161",
+		"classContains": "mb-2 flex items-center gap-2 overflow-x-auto p-2",
+		"reason": "Search filter chip row scrolls sideways on narrow screens."
+	},
+	{
+		"route": "/x/tt0111161",
+		"classContains": "mb-2 flex items-center gap-2 overflow-x-auto p-2",
+		"reason": "Search filter chip row scrolls sideways on narrow screens."
+	},
+	{
+		"route": "/show/tt0944947",
+		"classContains": "mb-2 flex items-center gap-2 overflow-x-auto p-2",
+		"reason": "Search filter chip row scrolls sideways on narrow screens."
+	},
+	{
+		"route": "/show/tt0944947/1",
+		"classContains": "mb-2 flex items-center gap-2 overflow-x-auto p-2",
+		"reason": "Search filter chip row scrolls sideways on narrow screens."
+	},
+	{
+		"route": "/anime/anidb-1",
+		"classContains": "mb-2 flex items-center gap-2 overflow-x-auto p-2",
+		"reason": "Search filter chip row scrolls sideways on narrow screens."
+	},
+	{
+		"route": "/show/tt0944947",
+		"classContains": "flex items-center gap-1 overflow-x-auto pb-1",
+		"textIncludes": "Episodes:",
+		"reason": "Episode filter chips scroll sideways on narrow screens."
+	},
+	{
+		"route": "/show/tt0944947/1",
+		"classContains": "flex items-center gap-1 overflow-x-auto pb-1",
+		"textIncludes": "Episodes:",
+		"reason": "Episode filter chips scroll sideways on narrow screens."
+	},
+	{
+		"route": "/anime/anidb-1",
+		"classContains": "flex items-center gap-2 overflow-x-auto",
+		"reason": "Anime search filter chip row scrolls sideways on narrow screens."
+	},
+	{
+		"route": "/start",
+		"classContains": "flex w-full items-center justify-center gap-2 overflow-x-auto",
+		"textIncludes": "genres",
+		"reason": "A signed-in /start lands on the home page, whose category strip scrolls sideways."
+	},
+	{
+		"route": "/library",
+		"classContains": "flex w-full items-center justify-center gap-2 overflow-x-auto",
+		"textIncludes": "genres",
+		"reason": "A guest opening /library lands on the home page, whose category strip scrolls sideways."
+	}
+]

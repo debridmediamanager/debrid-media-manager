@@ -1,0 +1,34 @@
+{
+	"body": {
+		"success": true,
+		"error": null,
+		"detail": "Successfully retrieved your user information.",
+		"data": {
+			"id": 1,
+			"auth_id": "00000000-0000-0000-0000-000000000000",
+			"created_at": "2024-01-07T22:50:51Z",
+			"updated_at": "2026-09-24T05:04:29Z",
+			"plan": 2,
+			"total_downloaded": 169,
+			"customer": "cus_redacted",
+			"is_subscribed": false,
+			"premium_expires_at": "2033-01-15T18:27:05Z",
+			"cooldown_until": "2026-09-18T22:26:43Z",
+			"email": "redacted@example.com",
+			"user_referral": "00000000-0000-0000-0000-000000000000",
+			"base_email": "redacted@example.com",
+			"total_bytes_downloaded": 124619744766,
+			"total_bytes_uploaded": 17299741423,
+			"torrents_downloaded": 38,
+			"web_downloads_downloaded": 0,
+			"usenet_downloads_downloaded": 1,
+			"additional_concurrent_slots": 0,
+			"long_term_seeding": false,
+			"long_term_storage": false,
+			"is_vendor": true,
+			"vendor_id": null,
+			"purchases_referred": 78
+		}
+	},
+	"status": 200
+}

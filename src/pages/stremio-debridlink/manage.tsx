@@ -1,3 +1,4 @@
+import { CastLoginRequired } from '@/components/CastLoginRequired';
 import Poster from '@/components/poster';
 import { useDebridLinkCredential } from '@/hooks/auth';
 import { useDebridLinkCastToken } from '@/hooks/debridLinkCastToken';
@@ -388,11 +389,12 @@ export function DebridLinkManagePage() {
 
 	if (!apiKey) {
 		return (
-			<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900">
-				<h1 className="text-center text-xl text-white">
-					Debrid Media Manager is loading...
-				</h1>
-			</div>
+			<CastLoginRequired
+				provider="debridlink"
+				name="Debrid-Link"
+				returnPath="/stremio-debridlink/manage"
+				title="DMM Cast for Debrid-Link - Manage"
+			/>
 		);
 	}
 
@@ -464,7 +466,7 @@ export function DebridLinkManagePage() {
 									</label>
 									<Link
 										href={`/x/${imdbId}`}
-										className="haptic-sm rounded bg-sky-600 px-3 py-1 text-sm text-white hover:bg-sky-700"
+										className="haptic-sm rounded bg-sky-700 px-3 py-1 text-sm text-white hover:bg-sky-800"
 										title={`Cast other torrents for ${displayTitle}`}
 										aria-label={`Cast other torrents for ${displayTitle}`}
 									>
@@ -508,10 +510,10 @@ export function DebridLinkManagePage() {
 																{episodeLabel}
 															</span>
 														)}
-														<span className="break-all text-sm text-gray-300">
+														<span className="break-words text-sm text-gray-300">
 															{getFilename(link.url)}
 														</span>
-														<span className="text-xs text-gray-400">
+														<span className="text-xs text-gray-300">
 															{formatSize(link.size)}
 														</span>
 													</div>
@@ -519,7 +521,7 @@ export function DebridLinkManagePage() {
 												<div className="flex shrink-0 gap-2">
 													<a
 														href={getStremioUrl(link)}
-														className="haptic-sm rounded bg-cyan-600 px-3 py-1 text-sm text-white hover:bg-cyan-700"
+														className="haptic-sm rounded bg-cyan-700 px-3 py-1 text-sm text-white hover:bg-cyan-800"
 													>
 														<Eye className="h-4 w-4" />
 													</a>

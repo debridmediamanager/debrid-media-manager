@@ -1,10 +1,9 @@
-import { getTmdbAuth, tmdbAxiosOptions } from '@/utils/tmdbAuth';
+import { getMetadataCache } from '@/services/metadataCache';
+import { getTmdbAuth } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import getConfig from 'next/config';
 
-const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-const TRAKT_BASE_URL = 'https://api.trakt.tv';
 const { publicRuntimeConfig } = getConfig();
 
 // The v4 read token authenticates by header; the v3 key by query parameter.
@@ -54,105 +53,51 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	console.info('Fetching show details', { imdbId });
 
-	try {
-		const findResponse = await axios.get(`${TMDB_BASE_URL}/find/${imdbId}`, {
-			...tmdbAxiosOptions(tmdbAuth, {
-				external_source: 'imdb_id',
-			}),
-		});
+	const metadataCache = getMetadataCache();
 
-		const tmdbId = findResponse.data.tv_results?.[0]?.id;
+	// Every lookup goes through the metadata cache: a page view used to spend a
+	// TMDB find, a TMDB detail and one Trakt person search per cast member and
+	// creator — up to seventeen uncached requests for the same answer each time.
+	const traktSlugFor = async (person: { name: string; id: number }) => {
+		try {
+			const traktPerson = await metadataCache.searchTraktPerson(person.name);
+			return traktPerson?.ids?.tmdb === person.id ? (traktPerson.ids.slug ?? null) : null;
+		} catch (error) {
+			console.warn('Failed to fetch Trakt slug', { name: person.name, error });
+			return null;
+		}
+	};
+
+	try {
+		const findData = await metadataCache.searchTmdbByImdb(imdbId);
+
+		const tmdbId = findData?.tv_results?.[0]?.id;
 		if (!tmdbId) {
 			return res.status(404).json({ message: 'Show not found.' });
 		}
 
-		const detailsResponse = await axios.get(`${TMDB_BASE_URL}/tv/${tmdbId}`, {
-			...tmdbAxiosOptions(tmdbAuth, {
-				append_to_response: 'credits',
-			}),
-		});
-
-		const show = detailsResponse.data;
+		const show = await metadataCache.getTmdbTvInfo(tmdbId, 'credits');
 		const cast = show.credits?.cast || [];
 		const crew = show.credits?.crew || [];
 
 		const topCast = cast.slice(0, 15);
 		const enrichedCast: CastMember[] = await Promise.all(
-			topCast.map(async (person: any) => {
-				try {
-					const searchResponse = await axios.get(`${TRAKT_BASE_URL}/search/person`, {
-						headers: {
-							'Content-Type': 'application/json',
-							'trakt-api-version': '2',
-							'trakt-api-key': traktClientId,
-						},
-						params: {
-							query: person.name,
-						},
-					});
-
-					const traktPerson = searchResponse.data[0]?.person;
-					const slug = traktPerson?.ids?.tmdb === person.id ? traktPerson.ids.slug : null;
-
-					return {
-						name: person.name,
-						character: person.character,
-						profilePath: person.profile_path,
-						slug,
-					};
-				} catch (error) {
-					console.warn('Failed to fetch Trakt slug for cast member', {
-						name: person.name,
-						error,
-					});
-					return {
-						name: person.name,
-						character: person.character,
-						profilePath: person.profile_path,
-						slug: null,
-					};
-				}
-			})
+			topCast.map(async (person: any) => ({
+				name: person.name,
+				character: person.character,
+				profilePath: person.profile_path,
+				slug: await traktSlugFor(person),
+			}))
 		);
 
 		const creators = show.created_by || [];
 		const enrichedCreators: CrewMember[] = await Promise.all(
-			creators.map(async (creator: any) => {
-				try {
-					const searchResponse = await axios.get(`${TRAKT_BASE_URL}/search/person`, {
-						headers: {
-							'Content-Type': 'application/json',
-							'trakt-api-version': '2',
-							'trakt-api-key': traktClientId,
-						},
-						params: {
-							query: creator.name,
-						},
-					});
-
-					const traktPerson = searchResponse.data[0]?.person;
-					const slug =
-						traktPerson?.ids?.tmdb === creator.id ? traktPerson.ids.slug : null;
-
-					return {
-						name: creator.name,
-						job: 'Creator',
-						department: 'Production',
-						slug,
-					};
-				} catch (error) {
-					console.warn('Failed to fetch Trakt slug for creator', {
-						name: creator.name,
-						error,
-					});
-					return {
-						name: creator.name,
-						job: 'Creator',
-						department: 'Production',
-						slug: null,
-					};
-				}
-			})
+			creators.map(async (creator: any) => ({
+				name: creator.name,
+				job: 'Creator',
+				department: 'Production',
+				slug: await traktSlugFor(creator),
+			}))
 		);
 
 		return res.status(200).json({

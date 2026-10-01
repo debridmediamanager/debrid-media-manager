@@ -1,5 +1,8 @@
+import { getFranchiseIndex } from '@/services/anime/animeFranchise';
 import { fetchKitsuAnime } from '@/services/anime/kitsu';
 import { resolveImdbIdFromSimkl } from '@/services/anime/simkl';
+import type { AnimeIdSource, AnimeRecord } from '@/services/database/anime';
+import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -14,6 +17,10 @@ interface AnimeInfoResponse {
 	backdrop: string;
 	imdbid: string;
 	imdbRating: number;
+	/** TV, OVA, ONA, MOVIE, SPECIAL or UNKNOWN; '' when no source says. */
+	type: string;
+	/** Episodes the entry has, when Kitsu lists a count; 0 otherwise. */
+	episodeCount: number;
 }
 
 const UNKNOWN: AnimeInfoResponse = {
@@ -23,19 +30,35 @@ const UNKNOWN: AnimeInfoResponse = {
 	backdrop: '',
 	imdbid: '',
 	imdbRating: 0,
+	type: '',
+	episodeCount: 0,
 };
 
-/** `kitsu-1` and `kitsu:1` both address Kitsu anime 1. */
-function parseKitsuId(animeid: string): number | null {
-	const match = /^(?:kitsu[-:])?(\d+)$/.exec(animeid.trim());
-	if (!match) return null;
-	const id = parseInt(match[1], 10);
-	return Number.isInteger(id) && id > 0 ? id : null;
+interface AnimeId {
+	source: AnimeIdSource;
+	id: number;
 }
 
-async function fromStremioAddon(animeid: string): Promise<AnimeInfoResponse | null> {
+/**
+ * Every spelling of an anime id that reaches this route.
+ *
+ * `/api/search/anime` hands out `anime:anidb-N`, or `anime:mal-N` for a row
+ * without an anidb id, and the anime page it used to link to dropped the
+ * `anime:` prefix. Kitsu ids arrive as `kitsu-N`, `kitsu:N` or a bare number.
+ * This route used to accept only the Kitsu forms, so every search hit rendered
+ * as the "Unknown" placeholder.
+ */
+function parseAnimeId(animeid: string): AnimeId | null {
+	const match = /^(?:anime:)?(?:(anidb|mal|kitsu)[-:])?(\d+)$/i.exec(animeid.trim());
+	if (!match) return null;
+	const id = parseInt(match[2], 10);
+	if (!Number.isSafeInteger(id) || id <= 0) return null;
+	return { source: (match[1]?.toLowerCase() as AnimeIdSource | undefined) ?? 'kitsu', id };
+}
+
+async function fromStremioAddon(kitsuId: number): Promise<AnimeInfoResponse | null> {
 	try {
-		const animeurl = getAnimeInfo(animeid.replace('-', '%3A'));
+		const animeurl = getAnimeInfo(`kitsu%3A${kitsuId}`);
 		const response = await axios.get(animeurl, {
 			headers: {
 				accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -61,6 +84,8 @@ async function fromStremioAddon(animeid: string): Promise<AnimeInfoResponse | nu
 			backdrop: meta.background ?? '',
 			imdbid: meta.imdb_id ?? '',
 			imdbRating: parseFloat(meta.imdbRating ?? '0'),
+			type: '',
+			episodeCount: 0,
 		};
 	} catch {
 		return null;
@@ -72,10 +97,7 @@ async function fromStremioAddon(animeid: string): Promise<AnimeInfoResponse | nu
  * catalogue, so its outage costs the rating's provenance rather than the whole
  * page. Kitsu carries no IMDb id; resolveImdbId supplies one.
  */
-async function fromKitsu(animeid: string): Promise<AnimeInfoResponse | null> {
-	const kitsuId = parseKitsuId(animeid);
-	if (kitsuId === null) return null;
-
+async function fromKitsu(kitsuId: number): Promise<AnimeInfoResponse | null> {
 	const meta = await fetchKitsuAnime(kitsuId);
 	if (!meta) return null;
 
@@ -86,26 +108,50 @@ async function fromKitsu(animeid: string): Promise<AnimeInfoResponse | null> {
 		backdrop: meta.backdrop,
 		imdbid: '',
 		imdbRating: meta.rating,
+		type: meta.type,
+		episodeCount: meta.episodeCount,
 	};
 }
 
 /**
- * Every other DMM surface is keyed by IMDb id, so a page without one is a dead
- * end. The local table answers first because it costs no round trip; Simkl is
- * asked only for the rows it still has no id for, and no-ops when unconfigured.
+ * The row already holds everything a page needs, so a Kitsu outage costs the
+ * freshness of the metadata rather than the page. `rating` is the row's own
+ * score on the same 0-10 scale, standing in exactly as Kitsu's does.
  */
-async function resolveImdbId(kitsuId: number): Promise<string> {
-	try {
-		const fromDb = await db.getImdbIdByKitsuId(kitsuId);
-		if (fromDb) return fromDb;
-	} catch {
-		// A database outage should not stop Simkl from answering.
-	}
-
-	return (await resolveImdbIdFromSimkl('kitsu', kitsuId)) ?? '';
+function fromRow(row: AnimeRecord): AnimeInfoResponse {
+	return {
+		title: row.title,
+		description: row.description,
+		poster: row.poster_url,
+		backdrop: row.background_url,
+		imdbid: row.imdb_id ?? '',
+		imdbRating: row.rating,
+		type: row.type ?? '',
+		episodeCount: 0,
+	};
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function findRow(animeId: AnimeId): Promise<AnimeRecord | null> {
+	try {
+		return await db.getAnimeByExternalId(animeId.source, animeId.id);
+	} catch {
+		// A database outage should not stop a Kitsu id from resolving.
+		return null;
+	}
+}
+
+/**
+ * Every other DMM surface is keyed by IMDb id, so a page without one is a dead
+ * end. The row answers first because it costs no round trip; Simkl is asked
+ * only for the rows it still has no id for, in the id space the caller used,
+ * and no-ops when unconfigured.
+ */
+async function resolveImdbId(animeId: AnimeId, row: AnimeRecord | null): Promise<string> {
+	if (row?.imdb_id) return row.imdb_id;
+	return (await resolveImdbIdFromSimkl(animeId.source, animeId.id)) ?? '';
+}
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
@@ -116,13 +162,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(400).json({ error: 'Anime ID is required' });
 	}
 
-	const info = (await fromStremioAddon(animeid)) ?? (await fromKitsu(animeid));
+	const animeId = parseAnimeId(animeid);
+	if (!animeId) {
+		return res.status(400).json({ error: 'Anime ID must be an anidb, mal or kitsu id' });
+	}
+
+	// Both upstreams are keyed by Kitsu; the row translates anidb and mal ids.
+	const row = await findRow(animeId);
+	// The Fribb dataset the anime page reads for relations. Of the 211 AniDB ids
+	// with torrents and no row on 2026-09-27, it gave 128 a Kitsu id; it also
+	// carries a type that is refreshed daily.
+	const datasetEntry =
+		animeId.source === 'anidb'
+			? ((await getFranchiseIndex())?.byAnidb.get(animeId.id) ?? null)
+			: null;
+	const kitsuId =
+		animeId.source === 'kitsu' ? animeId.id : (row?.kitsu_id ?? datasetEntry?.kitsuId ?? null);
+
+	let info: AnimeInfoResponse | null = null;
+	if (kitsuId !== null) {
+		info = (await fromStremioAddon(kitsuId)) ?? (await fromKitsu(kitsuId));
+	}
+	if (!info && row) info = fromRow(row);
 	if (!info) return res.status(200).json(UNKNOWN);
 
-	if (!info.imdbid) {
-		const kitsuId = parseKitsuId(animeid);
-		if (kitsuId !== null) info.imdbid = await resolveImdbId(kitsuId);
-	}
+	if (!info.imdbid) info.imdbid = await resolveImdbId(animeId, row);
+	// Of the 8,451 rows with torrents, 38 disagree with the dataset on type,
+	// all older imports: Bookworm's fourth season (18302) is a 24-episode TV
+	// season the row calls a SPECIAL. Kitsu's subtype is the last resort.
+	info.type = datasetEntry?.type || row?.type || info.type;
 
 	return res.status(200).json(info);
 }
+
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.anime);

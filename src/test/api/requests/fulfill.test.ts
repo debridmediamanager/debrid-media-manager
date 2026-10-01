@@ -2,11 +2,30 @@ import handler from '@/pages/api/requests/[id]/fulfill';
 import { orderedServersForNewJob } from '@/services/debridUploaderServers';
 import { getToken } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
+import { addHashToRd, alreadyOnRealDebrid } from '@/services/requestDelivery';
+import tbUserMeBadKey from '@/test/fixtures/contentRequests/tb-user-me-bad-key.json';
+import tbUserMe from '@/test/fixtures/contentRequests/tb-user-me.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { generateUserId } from '@/utils/castApiHelpers';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { torboxCachedHashes } from '@/utils/torboxCache';
+import { isFreeTorBoxPlan } from '@/utils/torboxPlan';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+vi.mock('@/utils/torboxPlan', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/utils/torboxPlan')>()),
+	isFreeTorBoxPlan: vi.fn(async () => false),
+}));
+vi.mock('@/utils/torboxCache', () => ({ __esModule: true, torboxCachedHashes: vi.fn() }));
+vi.mock('@/services/debridTransferValidity', () => ({
+	__esModule: true,
+	isTransferStillValid: vi.fn(async () => true),
+}));
+vi.mock('@/services/requestDelivery', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/services/requestDelivery')>()),
+	alreadyOnRealDebrid: vi.fn(async () => new Map()),
+	addHashToRd: vi.fn(async () => true),
+}));
 vi.mock('@/services/realDebrid', () => ({ __esModule: true, getToken: vi.fn() }));
 vi.mock('@/services/debridUploaderServers', () => ({
 	__esModule: true,
@@ -53,13 +72,22 @@ const bodyOf = (res: any) => (res.json as any).mock.calls[0][0];
 
 beforeEach(() => {
 	vi.clearAllMocks();
+	vi.mocked(isFreeTorBoxPlan).mockResolvedValue(false);
+	vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map());
+	vi.mocked(addHashToRd).mockResolvedValue(true);
+	vi.mocked(torboxCachedHashes).mockResolvedValue(new Set([HASH]));
 	mockUserId.mockResolvedValue('helper');
 	mockServers.mockReturnValue(['http://debrid02:3100']);
 	mockRepo.getContentRequest = vi.fn().mockResolvedValue(request());
 	mockRepo.claimContentRequest = vi.fn().mockResolvedValue(request({ status: 'claimed' }));
 	mockRepo.attachContentRequestJob = vi.fn().mockResolvedValue(undefined);
+	mockRepo.markContentRequestDelivered = vi.fn().mockResolvedValue(true);
 	mockRepo.releaseContentRequest = vi.fn().mockResolvedValue(undefined);
+	mockRepo.stallContentRequest = vi.fn().mockResolvedValue(true);
+	mockRepo.returnContentRequestClaim = vi.fn().mockResolvedValue(true);
 	mockRepo.recordDebridJobServer = vi.fn().mockResolvedValue(undefined);
+	mockRepo.recordDebridTransferPending = vi.fn().mockResolvedValue(undefined);
+	mockRepo.getDebridTransfer = vi.fn().mockResolvedValue(null);
 	mockRepo.recordTransferMeta = vi.fn().mockResolvedValue(undefined);
 	mockRepo.getCastProfile = vi.fn().mockResolvedValue({
 		userId: 'asker',
@@ -76,6 +104,85 @@ beforeEach(() => {
 });
 
 describe('POST /api/requests/[id]/fulfill', () => {
+	// 359 of the first 369 fulfilments left no `tbrd:` mapping, so the dedup
+	// check, the In RD badge and the cron that files completed transfers into
+	// search never saw them.
+	it('records the transfer the way a direct submission does', async () => {
+		mockRepo.getContentRequest = vi
+			.fn()
+			.mockResolvedValue(
+				request({ sizeBytes: BigInt(4_000_000_000), returnPath: '/show/tt1234567/2' })
+			);
+		await call();
+		expect(mockRepo.recordDebridTransferPending).toHaveBeenCalledWith(
+			HASH,
+			'job-9',
+			'tt1234567'
+		);
+		expect(mockRepo.recordTransferMeta).toHaveBeenCalledWith(
+			expect.objectContaining({ jobId: 'job-9', returnPath: '/show/tt1234567/2' })
+		);
+		expect(mockServers).toHaveBeenCalledWith(4_000_000_000);
+	});
+
+	it('does not start a second transfer of a release already on its way', async () => {
+		mockRepo.getDebridTransfer = vi.fn().mockResolvedValue({
+			originalHash: HASH,
+			jobId: 'job-other',
+			imdbId: 'tt1234567',
+			status: 'pending',
+			updatedAt: 0,
+		});
+		const res = await call();
+		expect(statusOf(res)).toBe(409);
+		expect(bodyOf(res).inProgress).toBe(true);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
+	it('refuses a request too large for any transfer', async () => {
+		mockRepo.getContentRequest = vi
+			.fn()
+			.mockResolvedValue(request({ sizeBytes: BigInt(150e9) }));
+		const res = await call();
+		expect(statusOf(res)).toBe(413);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+	});
+
+	// A release already on Real-Debrid needs one addMagnet on the asker's
+	// account, not a TorBox transfer. The direct route always did this.
+	it('delivers a release already on RD without claiming or spending TorBox', async () => {
+		const rewritten = 'c'.repeat(40);
+		vi.mocked(alreadyOnRealDebrid).mockResolvedValue(new Map([[HASH, rewritten]]));
+		const res = await call();
+		expect(statusOf(res)).toBe(200);
+		expect(bodyOf(res)).toEqual({ delivered: true });
+		expect(vi.mocked(addHashToRd)).toHaveBeenCalledWith('FRESH_RD_TOKEN', rewritten);
+		expect(mockRepo.markContentRequestDelivered).toHaveBeenCalledWith('req-1');
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
+	// 219 of the first 369 fulfilments were queued for releases TorBox did not
+	// have, failed `uncached` a second later, and still took the request off the
+	// board. The route has to ask before it claims.
+	it('refuses a release TorBox does not have, before claiming it', async () => {
+		vi.mocked(torboxCachedHashes).mockResolvedValue(new Set());
+		const res = await call();
+		expect(statusOf(res)).toBe(409);
+		expect(bodyOf(res).uncached).toBe(true);
+		expect(vi.mocked(torboxCachedHashes)).toHaveBeenCalledWith('TB_KEY', [HASH]);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
+	it('lets an unknown cache answer through to the uploader', async () => {
+		vi.mocked(torboxCachedHashes).mockResolvedValue(null);
+		const res = await call();
+		expect(statusOf(res)).toBe(200);
+		expect(mockRepo.claimContentRequest).toHaveBeenCalled();
+	});
+
 	it('submits the job and records it against the request', async () => {
 		const res = await call();
 		expect(statusOf(res)).toBe(200);
@@ -130,10 +237,57 @@ describe('POST /api/requests/[id]/fulfill', () => {
 	});
 });
 
-describe('refusals', () => {
-	it('rejects a caller with no Real-Debrid session', async () => {
+// The fulfiller's own Real-Debrid never takes part in a transfer: the bytes come
+// from their TorBox and land in the asker's Real-Debrid. Demanding an RD session
+// turned away exactly the people the board needs, those with TorBox and no RD.
+describe('a fulfiller with only TorBox', () => {
+	const userMe =
+		(body: unknown, status = 200) =>
+		async (url: string) =>
+			String(url).includes('/user/me')
+				? { ok: status === 200, status, json: async () => body }
+				: { ok: true, status: 200, json: async () => ({ id: 'job-9' }) };
+
+	beforeEach(() => {
+		vi.stubEnv('DMMCAST_SALT', 'test-salt');
+		global.fetch = vi.fn(userMe(tbUserMe)) as any;
+	});
+	afterEach(() => vi.unstubAllEnvs());
+
+	it('fulfils with a TorBox key and no Real-Debrid session', async () => {
+		const res = await call({ headers: {} });
+		expect(statusOf(res)).toBe(200);
+		expect(bodyOf(res)).toEqual({ jobId: 'job-9' });
+		expect(mockUserId).not.toHaveBeenCalled();
+	});
+
+	it('claims under a stable id derived from the TorBox account', async () => {
+		await call({ headers: {} });
+		await call({ headers: {} });
+		const [first, second] = mockRepo.claimContentRequest.mock.calls.map((c: any[]) => c[1]);
+		expect(first).toMatch(/^tb:/);
+		expect(first).toBe(second);
+		expect(first).not.toContain(String(tbUserMe.data.id));
+	});
+
+	it('rejects a TorBox key that TorBox does not recognise', async () => {
+		global.fetch = vi.fn(userMe(tbUserMeBadKey, 403)) as any;
 		const res = await call({ headers: {} });
 		expect(statusOf(res)).toBe(401);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+	});
+});
+
+describe('refusals', () => {
+	it('rejects a caller with no key at all', async () => {
+		const res = await call({ headers: {}, body: {} });
+		expect(statusOf(res)).toBe(400);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+	});
+
+	it('rejects a Real-Debrid session that does not verify', async () => {
+		mockUserId.mockRejectedValue(new Error('bad token'));
+		expect(statusOf(await call())).toBe(401);
 	});
 
 	it('rejects a fulfiller carrying no cache-source key', async () => {
@@ -174,18 +328,36 @@ describe('races and failures', () => {
 		expect(global.fetch).not.toHaveBeenCalled();
 	});
 
-	it('hands the request back when the requester has no usable credentials', async () => {
+	// Handed back as `failed`, such a request went straight back on the board
+	// and failed identically for every fulfiller: seven did by 2026-09-24.
+	it('takes the request off the board when the requester has no usable credentials', async () => {
 		mockRepo.getCastProfile = vi.fn().mockResolvedValue(null);
 		const res = await call();
 		expect(statusOf(res)).toBe(409);
-		expect(mockRepo.releaseContentRequest).toHaveBeenCalledWith('req-1', expect.any(String));
+		expect(mockRepo.stallContentRequest).toHaveBeenCalledWith('req-1', expect.any(String));
+		expect(mockRepo.releaseContentRequest).not.toHaveBeenCalled();
 		expect(global.fetch).not.toHaveBeenCalled();
 	});
 
-	it('hands the request back when the mint fails', async () => {
+	it('takes the request off the board when the mint fails', async () => {
 		mockToken.mockRejectedValue(new Error('refresh rejected'));
 		expect(statusOf(await call())).toBe(409);
-		expect(mockRepo.releaseContentRequest).toHaveBeenCalled();
+		expect(mockRepo.stallContentRequest).toHaveBeenCalled();
+	});
+
+	// The uploader's per-user ceiling answered 429 "job limit reached", and seven
+	// requests carried that as their failure though nothing was wrong with them.
+	it('hands a request back untouched when the uploader is too busy', async () => {
+		global.fetch = vi.fn().mockResolvedValue({
+			ok: false,
+			status: 429,
+			json: async () => ({ error: 'job limit reached' }),
+		}) as any;
+		const res = await call();
+		expect(statusOf(res)).toBe(503);
+		expect(bodyOf(res).busy).toBe(true);
+		expect(mockRepo.returnContentRequestClaim).toHaveBeenCalledWith('req-1');
+		expect(mockRepo.releaseContentRequest).not.toHaveBeenCalled();
 	});
 
 	// A deterministic refusal must not be retried on the next host.
@@ -219,13 +391,26 @@ describe('races and failures', () => {
 		expect(global.fetch).toHaveBeenCalledTimes(2);
 	});
 
-	it('releases the request when every host is unreachable', async () => {
+	it('hands the request back untouched when every host is unreachable', async () => {
 		global.fetch = vi.fn().mockRejectedValue(new Error('ECONNREFUSED')) as any;
 		const res = await call();
 		expect(statusOf(res)).toBe(502);
-		expect(mockRepo.releaseContentRequest).toHaveBeenCalledWith(
-			'req-1',
-			'all uploader hosts unreachable'
-		);
+		expect(mockRepo.returnContentRequestClaim).toHaveBeenCalledWith('req-1');
+		expect(mockRepo.releaseContentRequest).not.toHaveBeenCalled();
+	});
+});
+
+describe('POST /api/requests/[id]/fulfill — a free TorBox account', () => {
+	it('is refused before the request is claimed', async () => {
+		vi.mocked(isFreeTorBoxPlan).mockResolvedValue(true);
+
+		const res = await call();
+
+		expect(statusOf(res)).toBe(403);
+		expect(bodyOf(res).error).toMatch(/free plan/);
+		expect(mockRepo.claimContentRequest).not.toHaveBeenCalled();
+		expect(mockRepo.releaseContentRequest).not.toHaveBeenCalled();
+		expect(isFreeTorBoxPlan).toHaveBeenCalledWith('TB_KEY');
+		expect(global.fetch).not.toHaveBeenCalled();
 	});
 });

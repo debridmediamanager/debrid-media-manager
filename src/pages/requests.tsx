@@ -1,13 +1,12 @@
-import { useAllDebridApiKey, useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
-import type { SearchResult } from '@/services/mediasearch';
+import { useRealDebridAccessToken, useTorBoxAccessToken } from '@/hooks/auth';
 import type { PublicRequest } from '@/utils/contentRequest';
 import {
 	cancelContentRequest,
 	fetchContentRequests,
+	fetchMyContentRequests,
 	fulfillContentRequest,
+	UncachedError,
 } from '@/utils/contentRequestsApi';
-import { checkDatabaseAvailabilityAd, checkDatabaseAvailabilityTb } from '@/utils/instantChecks';
-import { generateTokenAndHash } from '@/utils/token';
 import {
 	CheckCircle2,
 	HandHeart,
@@ -24,29 +23,24 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 
 /**
- * The request board — the fulfillers' view.
+ * The request board, and each asker's own requests.
  *
- * A Real-Debrid user files an ask from a search result. Here a TorBox or
- * AllDebrid user picks one up: fulfilling fetches the release with *their* quota
- * and lands it in the asker's Real-Debrid library. So the page runs a cache
- * check across everything on it with the viewer's own keys, which is the thing
- * that tells a fulfiller what they can actually serve, and asks before spending
- * anything.
+ * A Real-Debrid user files an ask from a search result. Here a TorBox user
+ * picks one up: fulfilling fetches the release with *their* quota and lands it
+ * in the asker's Real-Debrid library. The server marks each row with whether
+ * TorBox has it cached, asked with the viewer's own key, because the uploader
+ * can only move what TorBox already has. The asker's section above the board
+ * shows every request of theirs and what became of it.
  *
  * It pages the board 25 at a time and loads the next page as the last one
  * scrolls into view, because the board grows without bound and nobody scrolls
  * three thousand rows.
  *
- * **Premiumize, Offcloud and Debrid-Link are deliberately absent**, from the
- * fulfil path and from the cache checks alike: the uploader can source a
- * transfer from TorBox and AllDebrid only, so those three keys buy a viewer
- * nothing here. None of them is offered the board on the home page either
- * (`MainActions`), which is why probing for them would be spending a request to
- * render a badge nobody with only those keys ever sees.
- *
- * Debrid-Link is doubly excluded: it has no cache probe at all, so the only way
- * to answer "can I serve this" would be to *add* the torrent — spending one of
- * the account's 50 adds a day per row of a board that pages 25 at a time.
+ * **TorBox is the only source.** AllDebrid was withdrawn on 2026-09-01 with
+ * debrid01, the one uploader host whose IP it permitted, and Premiumize,
+ * Offcloud and Debrid-Link were never sources. None of those keys buys a viewer
+ * anything here, so none of them is offered the board on the home page
+ * (`MainActions`) unless the viewer also asks with Real-Debrid.
  */
 
 const PAGE_SIZE = 25;
@@ -57,6 +51,7 @@ const STATUS_STYLES: Record<string, string> = {
 	claimed: 'border-violet-500 bg-violet-900/30 text-violet-100',
 	fulfilled: 'border-green-500 bg-green-900/30 text-green-100',
 	cancelled: 'border-gray-500 bg-gray-900/30 text-gray-400',
+	stalled: 'border-amber-500 bg-amber-900/30 text-amber-100',
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -67,42 +62,106 @@ const STATUS_LABELS: Record<string, string> = {
 	claimed: 'Being fulfilled',
 	fulfilled: 'Sent',
 	cancelled: 'Withdrawn',
+	stalled: 'Paused',
 };
 
 /** Only these can be taken, matching `isClaimable` on the server. */
 const CLAIMABLE = new Set(['open', 'failed']);
 
 /**
- * A stand-in torrent for one request, only so the cache-check helpers — which
- * all speak `SearchResult` — can write their answers onto it. Nothing here is
- * rendered; the row reads back `tbAvailable`/`adAvailable` alone.
+ * What each state means to the person who asked, which is not what it means to
+ * a fulfiller: `claimed` is a transfer on its way to them, and a failure is
+ * something they should hear about rather than a row somebody can retry.
  */
-function seedResult(row: PublicRequest): SearchResult {
-	return {
-		hash: row.hash,
-		title: row.title || row.hash,
-		fileSize: 0,
-		rdAvailable: false,
-		adAvailable: false,
-		tbAvailable: false,
-		pmAvailable: false,
-		ocAvailable: false,
-		dlAvailable: false,
-		files: [],
-		noVideos: false,
-		medianFileSize: 0,
-		biggestFileSize: 0,
-		videoCount: 0,
-		imdbId: row.imdbId,
-	};
-}
+const MINE_LABELS: Record<string, string> = {
+	open: 'Waiting for someone to send it',
+	failed: 'Waiting. The last try failed',
+	claimed: 'On its way to your library',
+	fulfilled: 'Sent to your library',
+	cancelled: 'Withdrawn',
+	stalled: 'Paused. Sign in to Real-Debrid on DMM again, then request it again',
+};
 
-const identity = <T,>(x: T): T => x;
+function MyRequests({
+	rows,
+	busyIds,
+	onCancel,
+}: {
+	rows: PublicRequest[];
+	busyIds: Set<string>;
+	onCancel: (row: PublicRequest) => void;
+}) {
+	if (rows.length === 0) return null;
+	return (
+		<section className="mb-6">
+			<h2 className="mb-2 text-sm font-bold text-white">Your requests</h2>
+			<div className="space-y-2">
+				{rows.map((row) => {
+					const style = STATUS_STYLES[row.status] ?? STATUS_STYLES.cancelled;
+					const busy = busyIds.has(row.id);
+					return (
+						<div
+							key={row.id}
+							className="flex items-start justify-between gap-2 rounded-lg border-2 border-gray-700 bg-gray-800/30 p-3"
+						>
+							<div className="min-w-0 flex-1">
+								<div className="truncate text-sm font-bold text-white">
+									{row.title || row.hash}
+								</div>
+								<div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-400">
+									<span
+										className={`inline-flex items-center rounded border-2 px-1.5 py-0.5 font-medium ${style}`}
+									>
+										{row.status === 'fulfilled' && (
+											<CheckCircle2 className="mr-1 h-3 w-3" />
+										)}
+										{row.status === 'claimed' && (
+											<Loader2 className="mr-1 h-3 w-3 animate-spin" />
+										)}
+										{MINE_LABELS[row.status] ?? row.status}
+									</span>
+									<span>{new Date(row.createdAt).toLocaleString()}</span>
+									{row.status === 'claimed' && (
+										<Link
+											href="/transfers"
+											className="text-indigo-300 underline hover:text-indigo-200"
+										>
+											Follow it on Transfers
+										</Link>
+									)}
+								</div>
+								{(row.status === 'failed' || row.status === 'stalled') &&
+									row.error && (
+										<div className="mt-1 text-xs text-amber-200">
+											{row.error}
+										</div>
+									)}
+							</div>
+							{(CLAIMABLE.has(row.status) || row.status === 'stalled') && (
+								<button
+									onClick={() => onCancel(row)}
+									disabled={busy}
+									className={`haptic-sm shrink-0 rounded border-2 border-red-500 bg-red-900/30 p-1.5 text-red-100 transition-colors hover:bg-red-800/50 ${busy ? 'cursor-not-allowed opacity-50' : ''}`}
+									title="Withdraw this request"
+								>
+									{busy ? (
+										<Loader2 className="h-4 w-4 animate-spin" />
+									) : (
+										<Trash2 className="h-4 w-4" />
+									)}
+								</button>
+							)}
+						</div>
+					);
+				})}
+			</div>
+		</section>
+	);
+}
 
 export default function RequestsPage() {
 	const [requests, setRequests] = useState<PublicRequest[]>([]);
-	// Availability answers, one entry per request seen, keyed by hash.
-	const [checkResults, setCheckResults] = useState<SearchResult[]>([]);
+	const [myRequests, setMyRequests] = useState<PublicRequest[]>([]);
 	const [errorText, setErrorText] = useState<string | null>(null);
 	const [loaded, setLoaded] = useState(false);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -112,7 +171,13 @@ export default function RequestsPage() {
 
 	const [rdKey] = useRealDebridAccessToken();
 	const torboxKey = useTorBoxAccessToken();
-	const adKey = useAllDebridApiKey();
+	const torboxKeyRef = useRef(torboxKey);
+	torboxKeyRef.current = torboxKey;
+	// Most of the board is releases TorBox does not have, which nobody can send,
+	// so a fulfiller starts on the ones they can. Off shows the whole board.
+	const [onlyServable, setOnlyServable] = useState(true);
+	const onlyServableRef = useRef(onlyServable);
+	onlyServableRef.current = onlyServable;
 
 	const rdKeyRef = useRef(rdKey);
 	rdKeyRef.current = rdKey;
@@ -127,107 +192,61 @@ export default function RequestsPage() {
 	// the one uploader host whose IP it permitted; offering fulfil to an AD-only
 	// holder would now only earn them a 400. (Premiumize is not one either: the
 	// uploader cannot source from it, which is why a Premiumize user is not sent
-	// here in the first place.)
-	const canFulfil = Boolean(rdKey) && Boolean(torboxKey);
-	const hasFulfillerKey = Boolean(torboxKey);
-
-	/**
-	 * Ask each service the viewer holds a key for which of these hashes it has
-	 * cached, and let the answers land on `checkResults`. Fire-and-forget: a row
-	 * simply gains its badge whenever its service replies, and a service that is
-	 * slow or down never blocks the others or the page.
-	 */
-	const runChecks = useCallback(
-		async (rows: PublicRequest[]) => {
-			if (rows.length === 0) return;
-			setCheckResults((prev) => {
-				const known = new Set(prev.map((p) => p.hash));
-				const add = rows.filter((r) => !known.has(r.hash)).map(seedResult);
-				return add.length ? [...prev, ...add] : prev;
-			});
-
-			const hashes = rows.map((r) => r.hash);
-			if (torboxKey) {
-				checkDatabaseAvailabilityTb(torboxKey, hashes, setCheckResults, identity).catch(
-					() => {}
-				);
-			}
-			if (adKey) {
-				// AllDebrid availability is read from DMM's own store, which is keyed
-				// per title, so the hashes are grouped by imdbId. One token covers the
-				// whole batch.
-				try {
-					const [token, solution] = await generateTokenAndHash();
-					const byImdb = new Map<string, string[]>();
-					for (const r of rows) {
-						const list = byImdb.get(r.imdbId) ?? [];
-						list.push(r.hash);
-						byImdb.set(r.imdbId, list);
-					}
-					for (const [imdbId, hs] of byImdb) {
-						checkDatabaseAvailabilityAd(
-							token,
-							solution,
-							imdbId,
-							hs,
-							setCheckResults,
-							identity
-						).catch(() => {});
-					}
-				} catch {
-					// a failed token fetch just means no AD badges this pass
-				}
-			}
-		},
-		[torboxKey, adKey]
-	);
+	// here in the first place.) A Real-Debrid login is not needed to fulfil: the
+	// release lands in the asker's Real-Debrid, never the fulfiller's.
+	const canFulfil = Boolean(torboxKey);
 
 	/**
 	 * Load one page. `reset` starts the board over from the top — used by the
 	 * refresh button and whenever the identity changes — while the scroll trigger
 	 * calls it to append the next page.
 	 */
-	const loadPage = useCallback(
-		async (reset: boolean) => {
-			if (loadingRef.current) return;
-			loadingRef.current = true;
-			if (!reset) setLoadingMore(true);
-			const offset = reset ? 0 : offsetRef.current;
-			try {
-				const { requests: rows, hasMore: more } = await fetchContentRequests(
-					rdKeyRef.current,
-					{ offset, limit: PAGE_SIZE }
-				);
-				offsetRef.current = offset + rows.length;
-				setHasMore(more);
-				setErrorText(null);
-				if (reset) {
-					setRequests(rows);
-					setCheckResults([]);
+	const loadPage = useCallback(async (reset: boolean) => {
+		if (loadingRef.current) return;
+		loadingRef.current = true;
+		if (!reset) setLoadingMore(true);
+		const offset = reset ? 0 : offsetRef.current;
+		try {
+			const { requests: rows, hasMore: more } = await fetchContentRequests(rdKeyRef.current, {
+				offset,
+				limit: PAGE_SIZE,
+				tbKey: torboxKeyRef.current,
+				servable: onlyServableRef.current,
+			});
+			offsetRef.current = offset + rows.length;
+			setHasMore(more);
+			setErrorText(null);
+			if (reset) {
+				setRequests(rows);
+				const key = rdKeyRef.current;
+				if (key) {
+					fetchMyContentRequests(key)
+						.then(setMyRequests)
+						.catch(() => setMyRequests([]));
 				} else {
-					setRequests((prev) => {
-						const seen = new Set(prev.map((r) => r.id));
-						return [...prev, ...rows.filter((r) => !seen.has(r.id))];
-					});
+					setMyRequests([]);
 				}
-				void runChecks(rows);
-			} catch (error) {
-				setErrorText(error instanceof Error ? error.message : 'unreachable');
-			} finally {
-				setLoaded(true);
-				setLoadingMore(false);
-				loadingRef.current = false;
+			} else {
+				setRequests((prev) => {
+					const seen = new Set(prev.map((r) => r.id));
+					return [...prev, ...rows.filter((r) => !seen.has(r.id))];
+				});
 			}
-		},
-		[runChecks]
-	);
+		} catch (error) {
+			setErrorText(error instanceof Error ? error.message : 'unreachable');
+		} finally {
+			setLoaded(true);
+			setLoadingMore(false);
+			loadingRef.current = false;
+		}
+	}, []);
 
-	// Reload from the top whenever the RD identity changes (sign-in/out). The
-	// board itself is readable signed out, so this runs with or without a key.
+	// Reload from the top whenever the RD identity or the TorBox key changes.
+	// The board itself is readable signed out, so this runs with or without one.
 	useEffect(() => {
 		loadPage(true);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [rdKey]);
+	}, [rdKey, torboxKey, onlyServable]);
 
 	// Infinite scroll: when the sentinel at the end of the list comes into view
 	// and there is another page, fetch it.
@@ -271,43 +290,56 @@ export default function RequestsPage() {
 		}
 	};
 
-	const availabilityOf = (hash: string): SearchResult | undefined =>
-		checkResults.find((c) => c.hash === hash);
-
 	/**
 	 * Take a request and pay for it.
 	 *
 	 * Confirmed rather than immediate because the cost lands on the person
-	 * clicking: the transfer spends *their* TorBox or AllDebrid quota, and what
+	 * clicking: the transfer spends *their* TorBox quota, and what
 	 * it produces goes into somebody else's Real-Debrid library. Nothing about
 	 * it comes back to them.
 	 */
 	const handleFulfil = (row: PublicRequest) =>
 		withBusy(row.id, async () => {
-			const key = rdKeyRef.current;
-			if (!key) return;
-			const source = torboxKey ? 'TorBox' : 'AllDebrid';
+			if (!torboxKey) return;
 			if (
 				!window.confirm(
-					`Fulfil this request using your ${source} account?\n\n` +
+					'Fulfil this request using your TorBox account?\n\n' +
 						`${row.title || row.hash}\n\n` +
-						`The release is fetched with your ${source} quota and lands in the ` +
-						`asker's Real-Debrid library, not yours.`
+						'The release is fetched with your TorBox quota and lands in the ' +
+						"asker's Real-Debrid library, not yours."
 				)
 			)
 				return;
 			try {
-				const jobId = await fulfillContentRequest(key, row.id, { tbKey: torboxKey });
+				const { jobId, delivered } = await fulfillContentRequest(rdKeyRef.current, row.id, {
+					tbKey: torboxKey,
+				});
+				if (delivered) {
+					toast.success(
+						'Real-Debrid already had this, so it went straight to the asker. Your TorBox was not used.'
+					);
+					setRequests((prev) => prev.filter((r) => r.id !== row.id));
+					return;
+				}
 				toast.success('Transfer started. Thank you!');
 				// Reflect it in place rather than reloading, so the scroll position
-				// and the rest of the loaded pages survive.
+				// and the rest of the loaded pages survive. `claimed`, not
+				// `fulfilled`: it is only sent once the transfer completes, and it
+				// comes back to the board if it fails.
 				setRequests((prev) =>
-					prev.map((r) => (r.id === row.id ? { ...r, status: 'fulfilled', jobId } : r))
+					prev.map((r) => (r.id === row.id ? { ...r, status: 'claimed', jobId } : r))
 				);
 			} catch (error) {
 				toast.error(
 					`Could not fulfil: ${error instanceof Error ? error.message : 'unreachable'}`
 				);
+				if (error instanceof UncachedError) {
+					// Nothing changed on the server; just stop offering it.
+					setRequests((prev) =>
+						prev.map((r) => (r.id === row.id ? { ...r, tbCached: false } : r))
+					);
+					return;
+				}
 				// Somebody else may have taken it a second ago, so start the board
 				// over rather than leave a row that is no longer takeable.
 				await loadPage(true);
@@ -322,6 +354,9 @@ export default function RequestsPage() {
 			try {
 				await cancelContentRequest(key, row.id);
 				setRequests((prev) => prev.filter((r) => r.id !== row.id));
+				setMyRequests((prev) =>
+					prev.map((r) => (r.id === row.id ? { ...r, status: 'cancelled' } : r))
+				);
 				toast.success('Request withdrawn.');
 			} catch (error) {
 				toast.error(
@@ -369,21 +404,15 @@ export default function RequestsPage() {
 					These are releases people want in their{' '}
 					<span className="text-emerald-300">Real-Debrid</span> library but cannot fetch
 					themselves. Fulfil one with your <span className="text-indigo-300">TorBox</span>{' '}
-					or <span className="text-sky-300">AllDebrid</span> account and it lands in the
-					asker&apos;s library, not yours, on your quota. Every row is checked against the
-					accounts you hold, so a <span className="text-cyan-300">cached</span> badge
-					means you can serve it instantly.
+					account and it lands in the asker&apos;s library, not yours, on your quota.
+					Every row is checked against TorBox&apos;s cache:{' '}
+					<span className="text-indigo-300">TB cached</span> means you can send it now,
+					and a release that is not on TorBox yet cannot be sent by anyone.
 				</p>
 
 				{errorText && (
 					<div className="mb-3 rounded border-2 border-red-600 bg-red-900/20 p-3 text-xs text-red-200">
 						Could not load the board: {errorText}
-					</div>
-				)}
-
-				{loaded && !canFulfil && hasFulfillerKey && (
-					<div className="mb-3 rounded border-2 border-gray-700 bg-gray-800/30 p-3 text-xs text-gray-300">
-						Sign in with Real-Debrid to fulfil requests for others.
 					</div>
 				)}
 
@@ -393,6 +422,21 @@ export default function RequestsPage() {
 				 * from localStorage on its first paint, and branching on the key first
 				 * makes the two disagree and fails hydration.
 				 */}
+				{loaded && (
+					<MyRequests rows={myRequests} busyIds={busyIds} onCancel={handleCancel} />
+				)}
+
+				{loaded && canFulfil && (
+					<label className="mb-3 flex items-center gap-2 text-xs text-gray-300">
+						<input
+							type="checkbox"
+							checked={onlyServable}
+							onChange={(e) => setOnlyServable(e.target.checked)}
+						/>
+						Only what TorBox can send now
+					</label>
+				)}
+
 				{!loaded ? (
 					<div className="flex items-center justify-center gap-2 rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-sm text-gray-300">
 						<Loader2 className="h-4 w-4 animate-spin" />
@@ -400,9 +444,18 @@ export default function RequestsPage() {
 					</div>
 				) : requests.length === 0 ? (
 					<div className="rounded border-2 border-gray-700 bg-gray-800/30 p-6 text-center text-sm text-gray-300">
-						Nothing requested right now. Real-Debrid users leave asks here with the{' '}
-						<span className="text-cyan-300">Request</span> button on a search result
-						they cannot fetch themselves.
+						{canFulfil && onlyServable ? (
+							<>
+								Nothing on the board is on TorBox right now. Untick the box above to
+								see every request.
+							</>
+						) : (
+							<>
+								Nothing requested right now. Real-Debrid users leave asks here with
+								the <span className="text-cyan-300">Request</span> button on a
+								search result they cannot fetch themselves.
+							</>
+						)}
 					</div>
 				) : (
 					<>
@@ -411,7 +464,6 @@ export default function RequestsPage() {
 								const busy = busyIds.has(row.id);
 								const claimable = CLAIMABLE.has(row.status);
 								const style = STATUS_STYLES[row.status] ?? STATUS_STYLES.cancelled;
-								const avail = availabilityOf(row.hash);
 								const href =
 									row.mediaType === 'show'
 										? `/show/${row.imdbId}`
@@ -439,14 +491,14 @@ export default function RequestsPage() {
 														)}
 														{STATUS_LABELS[row.status] ?? row.status}
 													</span>
-													{avail?.tbAvailable && (
+													{row.tbCached === true && (
 														<span className="inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-1.5 py-0.5 font-medium text-indigo-100">
 															TB cached
 														</span>
 													)}
-													{avail?.adAvailable && (
-														<span className="inline-flex items-center rounded border-2 border-sky-500 bg-sky-900/30 px-1.5 py-0.5 font-medium text-sky-100">
-															AD cached
+													{row.tbCached === false && (
+														<span className="inline-flex items-center rounded border-2 border-gray-600 bg-gray-800/30 px-1.5 py-0.5 font-medium text-gray-400">
+															Not on TorBox yet
 														</span>
 													)}
 													{row.mine && (
@@ -464,35 +516,31 @@ export default function RequestsPage() {
 														{new Date(row.createdAt).toLocaleString()}
 													</span>
 												</div>
-												{row.mine && row.jobId && (
-													<div className="mt-1 text-xs text-gray-300">
-														Somebody sent this.{' '}
-														<Link
-															href="/transfers"
-															className="text-indigo-300 underline hover:text-indigo-200"
-														>
-															Follow it on Transfers
-														</Link>
-														.
+												{row.status === 'failed' && row.error && (
+													<div className="mt-1 whitespace-pre-wrap break-words text-xs text-amber-200">
+														{row.error}
 													</div>
 												)}
 											</div>
 											<div className="flex shrink-0 items-center gap-1">
-												{canFulfil && claimable && !row.mine && (
-													<button
-														onClick={() => handleFulfil(row)}
-														disabled={busy}
-														className={`haptic-sm inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-2 py-1.5 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${busy ? 'cursor-not-allowed opacity-50' : ''}`}
-														title="Send this to the asker using your TorBox or AllDebrid account"
-													>
-														{busy ? (
-															<Loader2 className="mr-1 h-3 w-3 animate-spin" />
-														) : (
-															<Send className="mr-1 h-3 w-3" />
-														)}
-														Fulfil
-													</button>
-												)}
+												{canFulfil &&
+													claimable &&
+													!row.mine &&
+													row.tbCached !== false && (
+														<button
+															onClick={() => handleFulfil(row)}
+															disabled={busy}
+															className={`haptic-sm inline-flex items-center rounded border-2 border-indigo-500 bg-indigo-900/30 px-2 py-1.5 text-xs text-indigo-100 transition-colors hover:bg-indigo-800/50 ${busy ? 'cursor-not-allowed opacity-50' : ''}`}
+															title="Send this to the asker using your TorBox account"
+														>
+															{busy ? (
+																<Loader2 className="mr-1 h-3 w-3 animate-spin" />
+															) : (
+																<Send className="mr-1 h-3 w-3" />
+															)}
+															Fulfil
+														</button>
+													)}
 												{row.mine && claimable && (
 													<button
 														onClick={() => handleCancel(row)}

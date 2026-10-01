@@ -1,0 +1,5843 @@
+{
+	"items": [
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Soldier Boyz (1995) BDRemux 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Coldblooded (1995) BDRip 720p от KORSAR",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 BluRay  x264-LOL",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "RESIDENT EVIL 4 multi5 -GLOBE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 06: The Final Chapter [ATG 2016] 1080p.mp4",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "2022) FLAC",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Hideaway (1995) HDTVRip-AVC от New-Team",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "Красный призрак (2020) BDRip-AVC от New-Team",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "P.O. Box Tinto Brass (1995) BDRip",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt27543632",
+			"filename": "The Housemaid (2026) [1080p] [WEBRip] [5.1]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Deadly Outbreak (1995) WEB-DLRip-AVC",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Just Cause (1995) BDRip 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Ghost in the Shell 1995 1080p BluRay DDP5 1 x265 10bit GalaxyRG2",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil: Extinction (2007) WEB-DLRip 720p от SuperMin",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Retribution TS x264 AAC-UNiQUE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "[Rec 3] Genesis 2012 DVDRip XviD HELLRAZ0R",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Sabrina (1995) BDRip 720p от msltel",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 6",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "SNIS-597 Because The Husband Is Not Me Kama~tsu, It Seduces The Gentlemen In Thi..",
+			"media": "ADULT",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt26581740",
+			"filename": "[LoliHouse] 地狱老师 2025年版   Jigoku Sensei Nube 2025 - 04 [WebRip 1080p..",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "[ Torrent9.cz ] Resident Evil 3 Extinction (2007) MULTi-VF2 [1080p] BluRay x264-PopHD.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Neon Genesis Evangelion: The End of Evangelion - 2160p HDR Ai Upscale -Mesc",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 HDRip x264-FUM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Showgirls (1995) BDRemux 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "A Close Shave (1995) (1080p) [BluRay] [5 1] [YTS MX]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5177120",
+			"filename": "Your Lucky Day (2023) 720p BluRay-LAMA",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "Batman - The Dark Knight Trilogy 1080p HDR - FiNAL",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 BluRay  x264-TiTAN",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Szybcy i martwi (1995)  [DVDRip XVid Lektor PL 1995] [D T p123]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 4 Ultimate HD Edition Repack RG Mechanics",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "Бэтмен: Антология / Batman: Anthology (1989-2022) BDRip-HEVC 1080p от RIPS CLUB | D P P2 A L1",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Stranger Beside Me (1995) 1080p BluRay-LAMA",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Fallen Angels (1995) (1080p) [BluRay] [5.1] [YTS MX]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "[GJ.Y] 神剑闯江湖 ―明治剑客浪漫谭― / Rurouni Kenshin: Meiji Kenkaku Romantan (2023) - 10 (CR 1920x1080 AVC AAC MKV)",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Virtuosity (1995) 1080p BrRip x264   YIFY",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Conan El Barbaro [MicroHD 1080 px][DTS 5 1-AC3 5 1-Castellano AC3 5 1-Ingles+Sub..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight Rises (2012) 1080p BluRay AV1 Opus Multi14 [GRAV1TY]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 BluRay  x264-AFG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Strange Days 1995 1080p BluRay x264-OFT",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "DAZ3D - The CallaGown for Genesis 3 Female(s) and Genesis 2 Female(s)",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "Dusha.2020.WEB-DLRip-AVC.ExKinoRay.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Андрей Никольский - Коллекция [11 альбомов] (1994-2010) MP3",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "[NC-Raws] 圣剑传说 / Seiken Densetsu: Legend of Mana - The Teardrop Crystal - 11 (CR 1920x1080 AVC AAC MKV)",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "2014) FLAC",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "Los Caballeros De La Mesa Cuadrada [DVDRip].avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 x264 HD-AMIABLE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "2024) MP3",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 7",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Rednex - Collection (7 CD) (1995-2019) FLAC",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Ария - Коллекция [Remastered] (1995-2025) FLAC",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil - Vendetta 2017 [XVID] [LP] [r.d-11]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 HDRip HD x264-LKRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Citizen X (1995) HDTVRip от Alexandrov1994",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 BluRay.x264- RARBG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Black Fox 1995 1080p web YTS",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "[GJ.Y] 神剑闯江湖 ―明治剑客浪漫谭― / Rurouni Kenshin: Meiji Kenkaku Romantan (2023) - 05 (CR 1920x1080 AVC AAC MKV)",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 HDRip x264-FUM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "[Exiled-Destiny] Rage Of Bahamut Genesis [Dual Audio]",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Barbarian queen",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Michael Vey - The Prisoner of Cell 25",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "[090710][同人音楽] Barbarian On The Groove - POROROCK (320kmp3+bk)",
+			"media": "AUDIO",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Dave the Barbarian (720p)",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Degeneration 2008 1080p BluRay X264-JBL",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 BluRay x264 HD-SINERS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Se7en (1995) BDRip 720p от NNNB",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Saga Resident Evil [MicroHD 1080p][AC3 5.1-Castellano-AC3 5.1-Ingles+Subs][ES-EN]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "MissaX 19 08 02 Kira Noir The Gentleman Part 4 XXX 1080p MP4-WEIRD[rarbg]",
+			"media": "ADULT",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 6 O Capítulo Final HDRip 720p Dual Áudio - WWW.COMANDOTORRENTS.COM",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Harry Potter and the Prisoner of Azkaban",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Dino Genesis",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "[GJ.Y] 神剑闯江湖 ―明治剑客浪漫谭― / Rurouni Kenshin: Meiji Kenkaku Romantan (2023) - 21 (CR 1920x1080 AVC AAC MKV)",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 BluRay  x264-AFG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "ZAPRASZAM NA!DARMOWE-TORRENTY.PL Resident evil Damnation 720p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 720p BrRip x264 - DIAMOND",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "First Knight (1995) BDRip 720р от DoMiNo",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident evil Capitulo final (TS-SCREENER) (EliteTorrent.net).avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Carrington.1995.1080p.BluRay.x264-SADPANDA",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil - The Final Chapter 2017 720p BrRip x264 - ASAP",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "The Germanic Tribes - Pt1 - Barbarians Against Romans (Eng Subs) ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2017 BluRay x264-TITAN",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Citizen X (1995) DVDRemux",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Collection",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil - The Final Chapter 2017 720p BrRip x264 - DONE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Saga Resident Evil 1 Hd 2 Y Survivor",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Playtown Genesis",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "[Mocha] From Old Country Bumpkin to Master Swordsman (Katainaka no Ossan, Kensei ni Naru) - 09 [WEB 1080p x265][E-AC-3][7BB9D9E0].mkv",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Batman v Superman: Dawn of Justice (2016) DVD5",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Indecent Behavior 3 (1995) DVDRip",
+			"media": "ADULT",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2017 HDRip x264-ETRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Texas Payback (1995) DVDRip",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident.Evil.(Season 01).LostFilm",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "离异有钱气质富姐宾馆约会技术好又狂野像个鸭子一样的男人啪啪振动棒玩完肉棒爆干喃喃淫语挑逗1080P原版",
+			"media": "ADULT",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 BluRay x264 HD-SINERS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Superman: Anthology (1978-2013) BDRip-HEVC 1080p от RIPS CLUB",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "HoneyTrans - Barbara Pires and Bruna Ferrari - Cute Petite Latina Got Her Pussy",
+			"media": "ADULT",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "[Audio 4U] Barbarian On The Groove 2.0 (vorbis)",
+			"media": "AUDIO",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 3.2007 [m1080p.x264-LTN][PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Without Mercy 1995 720p bluray YTS",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "[ANi]  超人力霸王布雷薩 - 05 [1080P][Baha][WEB-DL][AAC AVC][CHT][MP4]",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Batman v Superman Dawn of Justice 2016 HD CAM x264 HQMic CPG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Moonlight and Valentino (1995) WEB-DLRip",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Hackers (1995) BDRip 720p by msltel",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Heat (1995) HDRip-AVC от DoMiNo",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "WWW Tamil Rockers com  Bombay (1995) Bombay (1995) - DVD RIP XIVD -700 MB mkv",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Prisoner - Miniserie",
+			"media": "TV",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt27543632",
+			"filename": "The Housemaid (2026) [1080p] [WEBRip] [5.1]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "A Kid in King Arthurs Court 1995 1080p BluRay x264-OFT",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Barbarian Swords (Spain)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "[Up to 21°C] 神剑闯江湖 ―明治剑客浪漫谭― 京都动乱 / Rurouni Kenshin: Meiji Kenkaku Romantan - Kyoto Douran - 30 (CR 1920x1080 AVC AAC MKV)",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Batman v Superman: Dawn of Justice (2016) BDRip от HQ-ViDEO",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "Караоке - Благо есть славить Господа (2008) DVD-5",
+			"media": "AUDIO",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2017 BluRay x264-RARBG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "有钱人潇洒挥重金约战超极品外围混血嫩模温柔甜美波大臀肥黑丝美腿啪啪啪太过瘾",
+			"media": "ADULT",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Project: Metalbeast (1995) DVDRip",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Proteus (1995) DVDRip",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "Уральские Пельмени - Джентльмены без сдачи (2018) WEBRip 1080p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 BluRay  x264-AFG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "Темный рыцарь: Возрождение легенды / The Dark Knight Rises / 2012 / ДБ, СТ / Blu-Ray Remux (1080p)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Lanzer - A Different Sun (1995) MP3",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Vendetta 2017 720p WebRip H264 AAC-PapaFatHead [SN] mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Batman v Superman: Dawn of Justice (2016) BDRip 1080p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Loved Up (1995) 720p WEBRip-LAMA",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Супермен 4 финал",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Mallrats (1995) UHD BDRemux 2160p от селезень",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 BluRay x264-TITAN",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Superman.Is.Back.E56.141214.HDTV.H264.720p-WITH.mp4",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 7: Biohazard (v1.03   5 DLCs MULTi13) [FitGirl Repack]",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Daz3D - Poser -17678 Hawthorn Hair for Genesis and Genesis 2 Female",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Passion of Darkly Noon (1995) HDRip",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 720p BrRip x264 - iFT",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 1 2 3 4 5.1080p.BluRay.x264.anoXmous",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Shakespeare in love (HDRip) [ciclo comedia-romantica]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Iron Maiden - The X Factor (1995) FLAC",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "월계수 양복점 신사들 | The Gentlemen of Wolgyesu Tailor Shop E14 720p NEXT",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "Los Caballeros del Zodiaco DVD FULL 19",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Morgan Freeman Movie Pack-TL",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 720p BrRip x264 - DONE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Genesis (2004) BDRip от HQ-ViDEO",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Species (1995) BDRip 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Sacred Cargo (1995) DVDRip",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Конан варвар LD NTSC FS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 720p BrRip x264 - DONE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil III 2007 XviD AC3",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "(1995_Classic XXL) La Cousine (1995) divx",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2017 1080p BluRay 6CH HEVC X265",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Prisoner 1967 - threesixtyp",
+			"media": "TV",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "VA - Sounds Of The Eighties The Rolling Stone Collection 1980-1981 (1995) MP3 от Vanila",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Золотой дубль (2025) WEB-DLRip от MegaPeer",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Addiction (1995) DVDRip",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.(Season 01).LostFilm",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen.2020.HD.720p.BluRip.[WatchMovieBuddy.com]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "肖申克的救赎.1994.720p.高清英语中英双字[BT哥 www.btge.cc]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Побег из Шоушенка 1994 720p.mp4",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen [4k 2160p][Cap.106]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Супермен (2025) WEB-DLRip-AVC_ivanes.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.AMZN.WEB-DL.AVC.ExKinoRay.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption [Eng] DVD (AC3) MAX",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil BDRip 1080p.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "绅士们.The.Gentlemen.2020.HD1080P.X264.AAC.English.CHS-ENG.Mp4Ba",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen.2020.1080p.Bluray.Atmos.TrueHD.7.1.x264 EVO[TGx] ⭐",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Barbarian Legend v1 7 2",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "Джентльмены (2019).mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen 2020 x264.DUAL-VAL",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen 2020 H264.AC3-EVO[EtHD",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "WwW.SeeHD.PL__The Gentlemen 2020 NEW 720p HDCAM x264-p00Clawn.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Sueños de libertad 1X391 HDTV XviD Castellano",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.1080p.BluRay.1600MB.DD5.1.x264 GalaxyRG ⭐",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.720p.BluRay.x264-iNFAMOUS",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Barbarians",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.720p.AMZN.WEB-DL.DDP5.1.H.264-TEPES.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.MULTi.VFF.1080p.mHD.x264.AC3-XSHD.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt27543632",
+			"filename": "【高清影视之家发布 www.SSDSSE.com】家弑服务[HDR+杜比视界双版本][简繁英字幕].2025.2160p.UHD.BluRay.x265.10bit.DV.TrueHD.7.1.Atmos-QuickIO",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "Джентльмены.2019.BDRip.720p.ДБ.ПМ.3хАП.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5177120",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare_UHD_Remux.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "L&#x27;Attacco dei giganti -  Il film parte II - Le ali della libertà.H264.ita.Jpn.sub.ita.iCV-MIRCrew.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120791",
+			"filename": "Practical_Magic[1998]DvDRip.Xvid.avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Shu dan long wei (1995) BDRip 720p от msltel",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.DVDSCR.XviD-Dragon25",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Le Ali della Liberta - The Shawshank Redemption. ITA-ENG",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.720p.WEBRip.800MB.x264-GalaxyRG ⭐",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "Los.Caballeros.2020.1080p-Dual-Lat",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 10bit pack hevc-d3g",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.BDRip(AVC).OlLanDGroup.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120791",
+			"filename": "Practical_Magic_1998_DvDrip_[pslan.com].avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Shawshank.Redemption.1994.BD.Remux.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Hong faan kui (1995) BDRip-HEVC 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen [TS][Subtitulado][wWw.EliteTorrent.BZ]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen_2019_BD-DVD ( Джентльмены )",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption [BDRip-720p] (www.kinokopilka.tv)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident.Evil.MOViE.PACK.COMPLETE.UHD.BLURAY-SCENE",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "1994. Выкупленьне з Шаўшэнку.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption[x264][AC3(5.1)]Nordic_Sub.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight - DvDrip MP4",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.WEB-DL.1080p.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil.iso (DVDrip)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil.zip",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "AMBIG"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.720p.AMZN.WEB-DL.DDP5.1.H.264-TEPES",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Супермен (НТВ-ранний).avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "For Life: Cadena perpetua 2&#215;10",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "【外語電影】月黑高飛",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen.2020.HDRip.1.46Gb.MegaPeer",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen.2020.BDRip.XviD.AC3-EVO",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "Los.Caballeros.2020.720p-Dual-Lat",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Superman 10bit 4KDS 1080p SVT-AV1-PSY.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident.Evil 1By Digitaljace.avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.WEB-DLRip-AVC.by.Des.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentleman  [XXX]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Варвар.2022.720p.WEB-DL.x264-LeoHD",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Sueños de libertad 1X363 HDTV XviD Castellano",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "肖申克的救赎（双语）.mp4",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "[ OxTorrent com ] The Gentlemen 2020 FRENCH 720p BluRay x264 AC3-EXTREME",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt26581740",
+			"filename": "Орудия. 2025 (HEVC.WEB-DL 1080p).mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "Batman - The Dark Knight",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "[fantia]Barbarian_TK (558 pics).zip",
+			"media": "BOOK_IMAGES",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Barbarians.2022.1080p.WEBRip.DD5.1.X.264-EVO",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Супермен.2025.WEB-DL.[1080p].NNMClub.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.gentlemen.2019_HDRip__[scarabey.org].avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "NO01.肖申克的救赎.高码版.DIY原盘国语特效中字.Blu.Ray",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.WEBRip.720p.rus.5.1.HDREZKA.STUDIO.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.FRENCH.720p.BluRay.x264.AC3-EXTREME.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.DKsubs.720p.BluRay.x264-UNiTAiL.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "쇼생크탈출 (1994)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Um.Sonho.De.Liberdade.Dual.1080p.BluRay.x264_EXE_",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Age Of Barbarian Extended Cut The Slaves Fortress-PLAZA",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen.2020.BDRip.XviD.AC3 EVO[TGx] ⭐",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.DVDRip.XviD-DoNEÂ©",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.720p.WEB-DL.x265.HEVC-HDETG.com",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "FM19950128_해외영화_명작_쇼생크 탈출",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 1 - LostFilm.TV [1080p]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Sueños de libertad 1X354 HDTV XviD Castellano",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.AMZN.WEB-DLRip.AVC.NNMClub.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5177120",
+			"filename": "El.Ministerio.de.la.Guerra.2024.720p-Dual-Lat",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "[TcpEk] Skazani na Shawshank Lektor PL",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Barbar_Mod_IBFD_RTR.rar",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Sueños de libertad 1X456 HDTV XviD Castellano",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5177120",
+			"filename": "Your.Lucky.Day.2023.720p.AMZN.WEBRip.x264-LAMA",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil [1]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "쇼생크 탈출.mp4",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5177120",
+			"filename": "Министерство неджентльменских дел. 2024 (HEVC.SDR.WEB-DL 2160p).mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "[ OxTorrent.com ] The.Gentlemen.2020.TRUEFRENCH.BDRip.XviD-EXTREME.avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.AVO.BDRip.AVC.ExKinoRay.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "116. 쇼생크 탈출 [우리말 더빙]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption (PSP, iPod, Zune)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen.2020.1080p.WEB-DL.H264.AC3-EVO",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.MULTI.VFF.1080p.WEBRip.AC3.5.1.x264-JiHeff",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The.Shawshank.Redemption.720p.BRrip.XviD.AC3-Dodge",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen 2020 x264.DUAL-VAL",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil FULL DVD ISO",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The_Shawshank_Redemption_1994_DVDRip_XviD_UMH",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Barbarian",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "[电影天堂www.dytt8899.com]超人-2025_HD英语中字.mp4",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "www.uubird.com-悠悠鸟影视论坛-肖申克的救赎.The.Shawshank.Redemption中字",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt15791034",
+			"filename": "Варвар.2022.1080p.WEB.-DL.MR. mkv.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption German (BDRip) Dual Audio - BiDA",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "[VIDEO4PDA] The Dark Knight",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Cadena perpetua [4K UHDremux 2160p][HDR10][Castellano AC3 5.1-Ingles DTS-HD 5.1+Subs][ES-EN]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "The_Dark_Knight_2008_DVDRip_XviD_XBZ",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil.3D.Anaglyph.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen.2020.BluRay x264-FGT",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020_WEB-DLRip_hdr__[scarabey.org].avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5177120",
+			"filename": "Your Lucky Day 2023 1080p AMZN WEB-DL DDP5 1 H 264-FLUX",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil La maldición.(Dvdrip)(Castellano)(www.TORRENTSPAIN.com).avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen [HDTV 1080p][Cap.103]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.D.TS.14OOMB.avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen.2020.BluRay x264-FGT",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "绅士们.The Gentlemen.2020.HD1080P.X264.AAC.English.CHS.mp4",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen.mp4",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020_WEB-DLRip_KoShara_.avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Superman",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "AMBIG"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "肖申克的救赎.BD1280高清英语中字.mp4",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Sueños de libertad 1X570 HDTV XviD Castellano",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Degeneracja.PL.DVDRip.XviD.avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120791",
+			"filename": "Practical Magic",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Cadena perpetua [4K]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen [ATG 2020] French 720p x265 AAC.mp4",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "dami_i_gospoda",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "[1080p] The Gentlemen (2020) สุภาพบุรุษมาหากัญ",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen 2020 AC3-1XBET",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight 1080p [PS3 & fat32 Compatible]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Do lok tin si  (1995) BDRip 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption (iPod.Zune.PSP)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.720p.HDCAM.900MB.getb8.x264-BONSAI[TGx]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt5950044",
+			"filename": "Супермен",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "AMBIG"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.MULTI.VFF.1080p.BluRay.DTS.5.1.x264-UKDHD",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.FRENCH.720p.BluRay.x264.AC3-EXTREME",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "killman.net@肖申克的救赎",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Cadena perpetua [4K UHDrip 2160p][HDR10][Castellano AC3 5.1-Ingles DTS-HD 5.1 Subs][ES-EN]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.MULTi.1080p.BluRay.x264.AC3-EXTREME",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "The.Shawshank.Redemption.19941080p.BluRay.x265.Dual-DiN",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Sueños de libertad 1X389 HDTV XviD Castellano",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "Le Ali della Libertà   The Shawshank Redemption [1080p   MKV   ITA ENG][TNTvillage org]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen [FullUHD 2160p][HDR10][Castellano DTS-HD 5.1-Ingles DTS-HD 7.1+Subs][ES-EN]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0111161",
+			"filename": "TheShawshankRedemption[1994]H264[1080P]MultiSubs[SIMPS]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.720p.WEB-DL.x264.AC3.RoHardSubbed-DSTeam",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "tuning",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 1 [BluRay 1080p][AC3 5.1-DTS 5.1 Castellano-AC3 Ingles+Subs][ES-EN]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Обитель зла: Вендетта / Resident Evil: Vendetta (2017) BDRip 1080p | Lic",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman IV [4K UHDremux 2160p][HDR10][Castellano AC3 2.0-Ingles DTS-HD 2.0+Subs][ES-EN]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil. Infinite Darkness - Season 1 (AlexFilm) WEB-DL 720p",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Укаранелае зло. Resident Evil (2002).BDRip-HEVC.1080p.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.PAL.DVDR-TheCrown",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "Los Caballeros del Zodiaco DVD FULL 18",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "Barbarian 2022 2160p MA WEB-DL DD+ 5.1 HDR H.265-PaODEQUEiJO",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 HDRip x264 HD-ETRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.Blu-ray.1080p.VC-1.TrueHD5.1",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman (2025) [720p] [BluRay] [YTS.MX]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The.Shawshank.Redemption.1994.720p.BluRay.x264.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120791",
+			"filename": "Practical Magic 1998 iNTERNAL DVDRip XviD-EXViDiNT",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.[2008.Eng].DVDScr.DivX-LTT",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "Vikend pro chlapy / Man Camp (2019)(CZ)[WebRip][1080p]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight [2008] True French DvDrip FRA avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "Il cavaliere oscuro (2008) WEBRip 1080p x264 EAC3 ITA ENG SUB ITA ENG - Lullozzo",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Joseph (1995) (1080p) [BluRay] [5 1] [YTS MX]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight 2008 DvDrip XviD- iNTiMiD avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentleman 2020 720p HDCAM 900MB getb8 x264 BONSAI[TGx]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "Barbarian.2022.1080p.WEB.H264.RoSub-F1⭐️",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "蝙蝠侠：黑暗骑士.The.Dark.Knight.2008.UHD.BluRay.2160p.x265.HDR.DTS-HD.MA.5.1.RERIP.mUHD-FRDS",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt27543632",
+			"filename": "The.Housemaid.2025.MULTI.VFF.1080p.BluRay.EAC3.7.1.x264-NONAME",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "[Prof] The Shawshank Redemption (1994)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.4K.HDR.2160p.BDRip Ita Eng x265-NAHOM",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.Blu-ray.Remux.1080p.VC-1.TrueHD.5.1-HDRemuX",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil (Integrale) FRENCH HDlight 1080p 2002-2017",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Побег из Шоушенка (Коллекционное издание от «Киномании») / The Shawshank Redemption (Фрэнк Дарабонт) [1994, драма, криминал, DVD9]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident.Evil.2002.Alternative.Ending.BDRip.1080p.by.Martokc.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen (2019) 1080p.BluRay.x264.Full 744MB",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt27543632",
+			"filename": "The.Housemaid.2025.720p.10bit.WEBRip.6CH.x265.HEVC-PSA",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "2025) FLAC",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "[액션] 다크 나이트 The.Dark.Knight.2008.1080p.BluRay.x264.DTS-HD.MA.5.1-SWTYBLZ",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "Ministerstwo Niebezpiecznych Drani / The Ministry of Ungentlemanly Warfare (2024) [PL 720p BRRip XviD AC3-OzW] [Lektor PL] [avi] [FIONA9]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "顶级骚货颜值女神【晴宝】露脸啪啪自慰露出，奢靡的生活，有钱人的母狗",
+			"media": "ADULT",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons.2025.AMZN.WEBRip.x264.HUN-FULCRUM",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Def Leppard - Vault (Greatest Hits 1980-1995) (1995) {FLAC}",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen (2019) 1080p.BluRay.x264.Full 553MB",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2019.x264.BDRip.(1080p).OlLanDGroup.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons 2025 1080p Blu-ray Remux AVC TrueHD 7 1 Atmos-SiCFoI",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen 2020 720p AMZN WEB-DL DDP5 1 H 264-TEPES",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 HDRip x264-AMIABLE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "Barbarian.2022.FRENCH.720p.WEB.H264-EXTREME",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "2020) MP3",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.BluRay.2160p.HDR10.x265.DD.5.1.-SacReD",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.IMAX.Hybrid.1080p.BluRay.8xRus.Ukr.Eng.TeamHD-SA89 .mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "VA - Союз [Полные версии] (1995-2006) FLAC",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman Doomsday - La morte di Superman [HD 720p mkv ENG ac3 Multisub] Tntvilla..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "Джентльмены / The Gentlemen (2019) WEB-DL 720p | P, L",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "The Barbarian and the Troll.Варварката и тролътBG Audio.TV RIP",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "【www.GeeHD.com】生化危机六部曲.Resident.Evil.Six.Pieces.2002-2016.2010.BluRay.1080p.DTS-HD.MA.5.1.2Audio.x264-EPiC",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.WEB-DLRip.1.46_от New-Team_by_JNS82",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Орудия смерти",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident.Evil.1x04.Dual.1080p-lat",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Redemption Kickboxer 5 1995 1080p ROKU WEB-DL H264-PiRaTeS",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Rammstein - Studio Albums (1995-2022) FLAC",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen 2019 iNTERNAL 1080p BluRay x264-YOL0W",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption (1994) BDRip от HQCLUB",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight (2008) DVDRip Xvid Eng AC3 MKV [Bigjazz]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption [1994] dvd rip nlx",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentleman (2025) BDRip 1080p от селезень",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "The Death and Return of Superman",
+			"media": "BOOK_IMAGES",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 1 CZ (2002) HD 720p",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons-2025-Hybrid-2160p-UHD-Blu-ray-Remux-DV-HDR10plus-HEVC-TrueHD-Atmos-7-1-C..",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "[New.Sensations].[2026-05-16].Millie.Morgan.Pleases.Two.Sharped.Dressed.Men.-.Millie.Morg…",
+			"media": "ADULT",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.NTSC.MULTi.DVDR-ULTRASON",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons.2025.1080p.WEBRip.DD5.1.10bits.x265.RoSub-F1✰",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Цинга (2025) WEB-DLRip",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight 2008DVDScrENG XViD VoMiT",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman 2025 1080p WEBRip x265-DH",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Revelations 2 Ep1 BoxSet MULTi11-STEAMGAMES",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Супермен 2025 (TrueHD Atmos).mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Мой дед (2025) WEB-DL 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "Чебурашка (2022) WEB-DLRip от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 2002 2160p EUR UHD Blu-ray HDR HEVC TrueHD 7.1 Atmos-GLiMMER",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "Trilogia Cavaleiro das Trevas 1080p (2005 - 2012) Dual Áudio BluRay 5.1 -- By - Lucas Firmo",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "[채널A] 이영돈,신동엽 젠틀맨.E04.140112.HDTV.XviD-WITH.avi",
+			"media": "TV",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Обитель Зла [Трилогия] + Жизнь после смерти [3D] / Resident Evil [Trilogy] + Afterlife [3D] (2002-2010) [1080p] Blu-ray",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Revelations 2 Episode 2-RePack",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter (2016) BDRip-AVC [UKR_ENG] [Hurtom].mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "TNA Genesis 2025 WEB h264-HEEL [TJET]",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons.2025.1080p.HD.x264.ENG.YG.exe",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight 2008 GBR PAL DVD9 DD 5.1-Pacifical",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "Barbarian.(2022).WEB-DL.2160p.Theseus.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Don Ellis - Giants Of Jazz (1995) MP3",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Batman v Superman: Dawn of Justice (2016) BDRip 720p от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight (2008) [1080p.BluRay.x264] MULTi [AC3.5.2] M80.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.1080p.BluRay.x265.10bit.TrueHD.5.1-UnKn0wn",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Наталья Ступишина (Анка) - Дискография (5 альбомов) (1988-1995) MP3",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "Варвара Еналь - Живые. Эра драконов 2. Древние города (2019) MP3",
+			"media": "AUDIO",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Man of the House (1995) [720p] [BluRay]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil - The Final Chapter 2017 720p BrRip x264 - PLAYNOW",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 4",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Побег из Шоушенка / The Shawshank Redemption (Фрэнк Дарабонт / Frank Darabont) [1994 · США · Драма · триллер · BDRip] MVO (LDV) + DVO (Videogram)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "The.Ministry.Of.Ungentlemanly.Warfare.2024.2160p.DV.HDR.Atmos.H265.MP4-BTM",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "[OxTorrent.com] Resident.Evil.2002.TRUEFRENCH.BRRiP.XViD.AC3-HuSh.avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "[superseed.byethost7.com] Superman.2025.PLDUB.720p.WEB-DL.XviD.DD5.1-K83.avi.ts",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons 2025 1080p MA WEBRip 10Bit DDP5 1 x265-NeoNoir",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "-2025年4月新人，【小少妇以下海】，舞蹈御姐， 超骚~超漂亮~道具自慰~尿尿，甜美可人校园女神",
+			"media": "ADULT",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.2160p.UHD.BluRay.X265-SpaceHD13.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Crimson Tide (1995) BDRip 720p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Gumby The Movie (1995) 720p BluRay-LAMA",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt27543632",
+			"filename": "The Housemaid (2025) WEB-DLRip-AVC Ukr Eng.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Underground (1995) [1080p] [YTS AG]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.BluRay.1080p.DTS.x264.dxva-EuReKA",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Extincion [DVDRIP][2007].www.lokotorrents.com",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Красавица (2025) WEB-DLRip 720p от New-Team",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "Batman.The.Dark.Knight.(2008).SWESUB.DVDRip.XviD-Sevaron",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman 2025 1080p CAM x264.Modified By mxn.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons.2025.Hybrid.2160p.WEB-DL.DV.HDR.DDP5.1.Atmos.H265-AOC",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight 2008 Bluray 1080p AV1 EN FR DE ITA ES OPUS 5 1 UH [UserHEVC]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen [HDTV 720p][Cap.103]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "肖申克的救赎.[中英双字.1024分辨率]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.AMZN.WEB-DL.2160p.HDR.seleZen.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "The.Demon.Suppressors.West.Barbarian.Beast.2021.1080p.WEBRip.Dublado.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "www.WebRocker.xyz - The Gentlemen (2020) English - NEW HDCAM - x264 AC3 - 950MB.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Medical Bound Enema Training 5 - The Prisoner",
+			"media": "ADULT",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight 2008 Italian.DVDRip.AC3 - sC0rp",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 6 Capítulo final DVDRip www.DESCARGASMIX.com.avi",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 720p BrRip x264 - AMIABLE",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The. Shawshank .Redemption.1994. 1080p.H.264.MP4 .-OAN",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman (2025) 1080p MA WEBRiP x264 16-bit Stereo WAV MP4-CREATiVE24",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight 2008 DVDRip XviD AC3-iAPULA",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen 2019 2160p ITA UHD Blu-ray HDR HEVC DTS-HD MA 5.1-CYBER",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman.2025.2160p.iTunes.WEB-DL.DDP.5.1.Atmos.DV.H.265-CHDWEB",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "(Score) Thomas Newman - The Shawshank Redemption / Побег из Шоушенка - 1994, FLAC (tracks+.cue), lossless",
+			"media": "AUDIO",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Se7en 1995 Remastered 1080p BluRay DD  7 1 x265 edge2020",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption 1994 1080p BluRay x264-CiNEFiLE",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Genesis  The Lamb Lies Down On Broadway (Deluxe Edition 2025 Remaster) [FLAC]",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen 2019 BDRip 1080p AAC 7 1 mp4-LEGi0N",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption (1994) NoGrp HDRiP PAL DVD-R HALLY (TLS Release)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "www.TamilRockers.net - The Shawshank Redemption (1994) [Tamil + Eng][720p - BluRay - x264 - 1GB][Eng Subs].mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The.Shawshank.Redemption.1994.1080p.GER.BluRay.16xRus.Eng.x264.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "The Ministry Of Ungentlemanly Warfare (2024) [1080p] [WEBRip] [5.1] [davidco]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight [2008] HQ DVDrip [ENG]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "Исчезающие следы [01-16 из 16] (2020) WEB-DLRip-AVC от Generalfilm",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 HDRip x264-mSD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "HD-ELITE.ORG____Resident Evil A Vingança 2017.Remux.1080p.AVC.DTS-HD.MA5.1-Paulista.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt27543632",
+			"filename": "The.Housemaid.2025.1080p.AMZN.WEB-DL.DDP5.1.Atmos.H.264-BYNDR",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "[ANi]  超人力霸王布雷薩 - 02 [1080P][Baha][WEB-DL][AAC AVC][CHT][MP4]",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil (2002) 720p BRRIP MKVTV",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Anti NWO - HAARP - Weather Weapons - Tesla Laser Weapons - Project Blue Beam",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "Saint Seiya_ Los Caballeros del Zodiaco 2x02 [720p][Latino][",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Degeneration2008DvDripEng FXG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight Rises 1 43 IMAX Restoration Snoopy",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "Темный рыцарь / The Dark Knight (Кристофер Нолан / Christopher Nolan) [2008, Боевик | Драма | Криминал, BDRip 1080p] дополнительные материалы",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Revelations 2 Update 13 [May 21st] (v4.10) -ALI213 [CPUL]",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons 2025 iNTERNAL UHD BluRay 2160p TrueHD Atmos 7 1 DV HDR10 x265-SPx",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "[1984 Movie][超人洛克 魔女的世纪][Locke The Superman: Millennium Of The Witch][超人ロック 魔女の世纪][BD]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "Темный рыцарь: Возрождение легенды / The Dark Knight Rises (Кристофер Нолан / Christopher Nolan) [2012, США, Великобритания, фантастика, боевик, триллер, драма, криминал, Blu-ray > DVD9 (Custom)] Dub + Original + Subs(Rus,Eng)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight 2008 IMAX Hybrid 1080p BluRay DD 5.1 x264-SA89",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.WEB-DLRip.avi",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.BluRay.720p.2Audio.x264-CHD",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Pride and Prejudice [01-06 из 06] (1995) BDRip 720p",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "[SLG] [Blackswine] Barbarian Legend Ver 1 70 7z",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman.2025.720p.iT.WEB-DLRip.x264_il68k.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons.2025.1080p.AMZN.WEB-DL.H.264.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 1 2 3 4 5 [Hindi Dubbed] HD Quality Vampire Age Movie All 5 Parts",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Обитель зла / Resident Evil (Пол У. С. Андерсон / Paul W.S. Anderson) [2002 · Германия · Франция · Великобритания · ужасы · фантастика · боевик · триллер · HDRip] DVO (НТВ+)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons 2025 2160p UHD BluRay DV REMUX HDR10 HEVC TrueHD 7 1 Atmos-UnKn0wn",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "iMDB.Top.250.Movies.DVDRip.XviD",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "【高清影视之家发布 www.HDBTHD.com】超人[杜比视界版本][高码版][国英多音轨+中文字幕].Superman.Legacy.2025.2160p.HQ.WEB-DL.H265.DV.DTS-QuickIO",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "Los Caballeros del Zodiaco DVD FULL 1",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Evanouis.2025.MULTi.VFF.2160p.UHD.BluRay.BDMV.DV.HDR10.TrueHD.Atmos.7.1.HEVC-Tasko",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Vendetta (2017) [Worldfree4u.Wiki] 720p BluRay x264 [Dual ORG Audio] [Hindi DD 2.0 + English DD 2.0].mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Побег из Шоушенка / The Shawshank Redemption (1994) DVDRip",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight (2008) (1080p BluRay AAC 5.1 10bit x265 d4)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Twelve Monkeys (1995) BDRip 1080p от HDReactor",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 720p BrRip x264 - ARROW",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "The Ministry Of Ungentlemanly Warfare (2024) 720p WEBRip-LAMA",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Apollo 13 (1995) BDRip-AVC от New-Team",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Apocalypse ITA-ENG 1080p h265 Ac3 BDRip By-Steavix.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 HDRip x264 HD-ETRG",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "新世紀エヴァンゲリオン 第01-14巻 [Neon Genesis Evangelion vol 01-14]",
+			"media": "BOOK_IMAGES",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt27543632",
+			"filename": "The.Housemaid.2025.2160p.UHD.BluRay.x265.10bit.HDR.DDP5.1",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons (2025) [1080p] [YTS.MX]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Мотай! [01x01-12 из 17] (2025) WEB-DLRip-AVC от ExKinoRay",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) [720p] [BluRay]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "[Ari-M] Shingeki no Bahamut: Genesis (Rage of Bahamut) [BDrip 1080p x265][Sub. Español]-HEVC",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Дар [01-08 из 08] (2025) WEB-DLRip-AVC от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120791",
+			"filename": "Practical Magic (1998) [1080p] [YTS.AG]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "Batman O Cavaleiro Das Trevas (2008) 720p Dublado Pt Br",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "The Ministry of Ungentlemanly Warfare 2024 2160p HDR10Plus WEBRip 6CH x265 HEVC-PSA",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons.2025.Hybrid.2160p.UHD.Blu-ray.Remux.DV.HDR10plus.HEVC.TrueHD.Atmos.7.1-CiNEPHiLES.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Capitulo Final 2017 [BR-Screener 720p X264 MKV][AC3 2.0 Castellano]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Judge Dredd (1995) HDRip-AVC",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Супермен. (2025). WEB-DL 1080p. от GERAKLE..mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman.2025.1080p.MA.WEB-DL.DDP5.1.Atmos.H.264-BYNDR",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "[Ohys Raws] Shingeki no Bahamut Genesis   11 (SUN 1280x720 x264 AAC).mp4",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The.Shawshank.Redemption.1994.REMASTERED.1080p.BluRay.x264.5.1.BONE",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Addiction (1995) HDRip-AVC от KORSAR",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2019.720p.BluRay.DD5.1.x264-DON.CZ-FTU",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter (2016) [Worldfree4u.trade] 720p HDTC x264 [Dual-Audio].mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "The Ministry of Ungentlemanly Warfare (2024) 1080p x265 eng sub ita eng ac3 - ildragonero2",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "Джентльмен / The Gentleman [1994, Индия, Драма, боевик, DVDRip] DVO",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The.Shawshank.Redemption.1994.iNTERNAL.BDRip.x264-REGRET",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen (2019 ITA/ENG) [1080p x265] [Paso77]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Murder in the First (1995) BDRemux 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight 2008 Telecine XviD-Prevail",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "For Life (Cadena Perpetua)  Temporada 1 [HDTV 720p][Cap 111][AC3 5 1 Castellano]",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "[HorribleSubs] Souten no Ken Re Genesis  02 [1080p] mkv",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 BluRay x264 HD-INSPIRAL",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "superman-2025-sneak-peak-4k",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "EITHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "[Movie] 레지던트 이블 - 디제네레이션 (Resident Evil - Degeneration)  - 2008",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Crimson Tide (1995) BDRip-AVC от ExKinoRay",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen 2019 10bit eac3 hevc-d3g",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2019.1080p.WEBRip.x265-(BabyTorrent.SE)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman Is Back E80 150531 HDTV H264 720p-WITH",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil 4 Ultimate HD Edition",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "2018) MP3",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2020.720p.HDTS.900mb.c1nem4.x264-BONSAI[TGx]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption 1994 Multi-VF2 1080p BluRay x264-PopHD  (Les.Évadés).mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.720p.BluRay.DTS.x264-ESiR",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Se7en 1995 2160p BluRay x265 10bit AAC5 1 [YTS]",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption [1994, UHD BDRip 2160p, HDR10] 2x Dub + 6x MVO + 2x DVO + 9x AVO + Sub (Rus, Eng) + Original (Eng)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "D-Genesis - Three Years after the Dungeons Appeared (Digital) (1r0n)",
+			"media": "GAME_SOFTWARE",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman (2025) 1080p x264 DD+5.1 ATMOS 768Kbps AAC 2.0 ESub [i2p]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "[BEST-TORRENTY.PL] Resident Evil 2002 PL AC3 DVDRip XviD-GR4PE",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "[ www.torrenting.com ] - The Shawshank Redemption 1994.720p.BRRip.H264.AAC",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption 1994 720p BRRip x264 Eng-Tur-Malkocoglu",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "VA - Dance Party 90&#039;s [Vоl.1-7] (1995) MP3",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "超人.Superman.2025.2160p.WEB-DL.DDP5.1.Atmos.H265.HDR.DV-DIY@HDSWEB",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "For Life: Cadena perpetua - 2ª Temporada [720p]",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2019.BDRip.x264.Rus.stalkerok.New-Team.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "[Tigole] Resident Evil - Vendetta 2017 (BD 1080p x265/HEVC 10bit AAC 5.1 Chap)",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "Barbarian 2022 BLURAY HD MSI",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident_Evil_2002_iPad_BDRip.m4v",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 BluRay x264 HD-INSPIRAL",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "蝙蝠侠：黑暗骑士.The.Dark.Knight.2008.720p.国英双语中英字幕-7KHD",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Toy Story: Trilogy (1995-2010) BDRip от HELLYWOOD",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons 2025 Hybrid 2160p UHD Blu-ray Remux DV HDR10plus HEVC TrueHD Atmos 7 1-CiNEPHiLES",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Маслов А. А. - Небесный путь боевых искусств (1995) PDF",
+			"media": "BOOK_IMAGES",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "[ANi]  在異世界獲得超強能力的我，在現實世界照樣無敵～等級提升改變人生命運～ - 13 [1080P][Baha][WEB-DL][AAC AVC][CHT][MP4]",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Twelve Monkeys (1995) UHD BDRemux 2160p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil_The Final Chapter_2016BD-DVD5",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Nick of Time (1995) BDRemux 1080p",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Batman v Superman Dawn of Justice 2016 Ultimate Edition 1080p WEB-DL DD5 1 H264-..",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The.Shawshank.Redemption.1994.2160p.UHD.HDR.BluRay.REMUX.DTS-HD.MA.5.1-SPHD",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "The.Death.and.Return.of.Superman.2019.2160p.UHD.BluRay.X265.HDR. ...",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "1 Resident Evil - Degeneracja - Resident Evil - Degeneration 2008 [10Bit] [1080p.BluRay.H265.AC3.5.1-NitroTeam] [Napisy ENG-PL] [ENG-Lektor PL]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.IMAX.BluRay.720p.H264",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt27543632",
+			"filename": "The.Housemaid.2025.UHD.2160p.BDRemux.2160p.Hybrid.HDR10+.DV-Нечипорук.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil The Final Chapter 2016 720p BrRip x264 - 2HD",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Побег из Шоушенка / The Shawshank Redemption (1994) UHD BDRip [H.265/2160p] [4K, HDR, Dolby Vision, Profile 8, 10-bit]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman: Doomsday (2007) BDRemux 1080p",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2019.1080p.BluRay.REMUX.AVC.Atmos.TrueHD7.1-iFT",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "Barbarian 2022 1080p WEBRip x264 AAC - ShortRips",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil Apocalypse.mkv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The Dark Knight (2008) 720p BrRip x264 - YIFY",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "Тёмный рыцарь: Трилогия / The Dark Knight: Trilogy (Кристофер Нолан) [2005, 2008, 2012, фантастика, боевик, триллер, драма, криминал, приключения, BDRip 1080p]",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "PACK"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.BDRip.1080p.Rip.by.HardwareMining.R.G.Generalfilm.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "Темный рыцарь: Возрождение легенды / The Dark Knight Rises (2012) DVD9",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.DVDRip.XviD-Mp3.V.O.Sub.Spanish",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman.2025.WEB-DL.1080p-Dual-Lat",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman (2025)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt27543632",
+			"filename": "The.Housemaid.2025.1080p.iT.WEB-DL.DDP5.1.Atmos.H.265-TGS.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption 1994 720p SlackingTorrents",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman. 2025. 2160P Ai Enhanced 60FPS.H265.BT709.DTS7.1 Marjenbo",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "The.Ministry.of.Ungentlemanly.Warfare.2024.1080p.10bit.WEBRip.6CH.x265.HEVC-PSA",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "Министерство неджентльменских дел / The Ministry of Ungentlemanly Warfare (Гай Ричи / Guy Ritchie) [2024 · США · Великобритания · Турция · боевик · драма · военный · история · WEB-DLRip] [Локализованный видеоряд] Dub (Мосфильм-Мастер)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman.2025.2160p.WEB-DL.DDP5.1.Atmos.SDR.H265-AOC",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil: Death Island 2002 SPANISH BDRip x264",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman 2025 Hybrid 1080p UHD BluRay DD+5 1 Atmos DV HDR10+x265-HiDt",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "www.1TamilMV.org - The Gentlemen (2020) English HDRip - 720p - x264 - AAC - 1GB - ESub.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen 2020.720p.WEBRip.800MB.x264-GalaxyRG",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt27543632",
+			"filename": "The Housemaid (2026) [1080p] [WEBRip] [5.1 ]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption (1994) REMASTERED 10Bit 1080p BluRay Hindi English ESub x265 R∆G∆ [ProtonMovies]",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "【高清影视之家发布 www.SSDSSE.com】肖申克的救赎[简繁英字幕].The.Shawshank.Redemption.1994.1080p.BluRay.x265.10bit.DTS-QuickIO",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Weapons 2025 Hybrid 2160p UHD BluRay TrueHD Atmos 7 1 DV HDR10+ x265-j3rico",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "Взаперти [01-10 из 10] (2020) WEBRip-AVC от Generalfilm",
+			"media": "TV",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5177120",
+			"filename": "【高清影视之家发布 www.HDBTHD.com】盟军敢死队[简繁英字幕].The.Ministry.of.Ungentlemanly.Warfare.2024.1080p.BluRay.DD.5.1.x265-GPTHD",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "The Barbarian and the Geisha",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen (2019) 720p WEBRip [Tamil-Dub] Dual-Audio x264",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Sabrina 1995 1080p AMZN WEB-DL DDP 5 1 H 264-PiRaTeS",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "\"The Shawshank Redemption 1994\"",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "UnionJack - There Will Be No Armageddon (1995) MP3 от Vanila",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Сборная Союза - Дискография (1995-2021) MP3",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The Shawshank Redemption 1994 English DVDRip.x264 - NeDiVx",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman Is Back E84 150628 HDTV H264 720p-WITH",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "VA - Romantic Guitars (1995) MP3",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "Resident Evil (2002) [1080p x264 AC3][Dual + Subs].mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Сергей Беликов - Лучшие песни 1974-1994 [MB-Rip] (1995) FLAC",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The.Gentlemen.2019.BDRip.x264.HuN-prldm",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "The.Dark.Knight.2008.DVDSCR.XViD",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt27543632",
+			"filename": "The Housemaid 2025 1080p WEB-DL HEVC x265 5 1 BONE",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0468569",
+			"filename": "【高清影视之家发布 www.WHATMV.com】蝙蝠侠：黑暗骑士[HDR+杜比视界双版本][简繁英字幕].The.Dark.Knight.2008.2160p.Max.WEB-DL.DDP5.1.H265.HDR.DV-ParkHD",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0120804",
+			"filename": "[2016][生化危机6][生化危机：终章][Resident Evil 6The Final Chapter].wmv",
+			"media": "FILM",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt26581740",
+			"filename": "Visions of Flesh and Blood - Jennifer L. Armentrout - 2024 (miok) [Audiobook]",
+			"media": "AUDIO",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "인간극장.E3714.151231.돌아와요 슈퍼맨 4부.HDTV.H264.720p-WITH.mp4",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "Нашествие варваров / Barbarians Rising (Саймон Джордж / Simon George, Деклан О’Двайр / Declan O&#039;Dwyer) 8 серий [2016, Драма, исторический, HDTV 720p]",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Тропа гнева (2025) WEB-DLRip от ELEKTRI4KA",
+			"media": "FILM",
+			"titleMatch": "NO_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt27543632",
+			"filename": "[BEST-TORRENTS.COM] The.Housemaid.2025.PL.720p.AC3.WEB-DL.XviD-GR4PE",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen (2019) (1080p BluRay x265 HEVC 10bit AAC 7 1 Vyndros)",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman.2025.MULTi.1080p.BluRay.REMUX.AVC.TrueHD.7.1.Atmos-DReaM.mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "Джентльмены.2020.BDRip.1080pmkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "[tvN] The Superman Age E07 END 150522 \\\"ì‹¬íŒì˜ ë‚ \\\" HDTV H264 ..",
+			"media": "TV",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "Le Ali Della Libertà BDrip 720p H264 Ita Eng Aac[BlackBit]mutu_1980 mp4",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt15791034",
+			"filename": "4KCFNM 23 12 04 Gomez Anex And Barbara Grey Pussy Lips Teasing",
+			"media": "ADULT",
+			"titleMatch": "DIFFERENT_TITLE",
+			"expected": "DELETE",
+			"humanLabel": "OTHER"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt8367814",
+			"filename": "The Gentlemen (2019).mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt0111161",
+			"filename": "The.Shawshank.Redemption.1994.BluRay.2160p.DTS-HDMA5.1.HDR.x265.10bit-CHD",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		},
+		{
+			"set": "holdout",
+			"imdbId": "tt5950044",
+			"filename": "Superman.(2025).mkv",
+			"media": "FILM",
+			"titleMatch": "SAME_TITLE",
+			"expected": "KEEP",
+			"humanLabel": "MOVIE"
+		}
+	],
+	"movies": {
+		"tt0111161": {
+			"name": "The Shawshank Redemption",
+			"year": 1994,
+			"titles": [
+				"A remény rabjai",
+				"Avain pakoon",
+				"Bēgšana no Šoušenkas",
+				"Cadena perpetua",
+				"De ontsnapping",
+				"Die Verurteilten",
+				"En verden udenfor",
+				"Esaretin Bedeli",
+				"Frihetens regn",
+				"Gaqceva shoushenkidan",
+				"Homot Shel Tikva",
+				"Iskupljenje u Shawshanku",
+				"Kaznilnica odrešitve",
+				"Le ali della libertà",
+				"Les Évadés",
+				"Nhà tù Shawshank",
+				"Nyckeln till frihet",
+				"Os Condenados de Shawshank",
+				"Pabėgimas iš Šoušenko",
+				"Rastegari dar Shawshank",
+				"Rita Hayworth - Avain pakoon",
+				"Rita Hayworth - nyckel till flykten",
+				"Rita Hayworth -Avain pakoon",
+				"Rita Hayworth and Shawshank Redemption",
+				"Shawshank Mittraphap Khwamwang Khwamrunraeng",
+				"Shawshank Redemption - Avain pakoon",
+				"Shawshanki lunastus",
+				"Shoushenkdan qochish",
+				"Shoushenkden Qacish",
+				"Shôshanku no sora ni",
+				"Skazani na Shawshank",
+				"Sueño de fuga",
+				"Sueño de libertad",
+				"Sueños de fuga",
+				"Sueños de libertad",
+				"The Prisoner",
+				"The Shawshank Redemption",
+				"Um Sonho de Liberdade",
+				"Vykoupení z věznice Shawshank",
+				"Vykúpenie z väznice Shawshank",
+				"À l'ombre de Shawshank",
+				"Închisoarea îngerilor",
+				"Τελευταία έξοδος: Rita Hayworth",
+				"Τελευταία έξοδος: Ρίτα Χέιγουορθ",
+				"Бекство из Шошенка",
+				"Втеча з Шоушенка",
+				"Выкупленьне з Шаўшэнку",
+				"Изкуплението Шоушенк",
+				"Побег из Шоушенка",
+				"Шоушенктен қашу",
+				"द शौशैंक रिडेम्प्शन",
+				"ショーシャンクの空に",
+				"刺激1995",
+				"月黑高飛",
+				"肖申克的救赎",
+				"쇼생크 탈출"
+			],
+			"ambiguous": {
+				"cadena perpetua": [2015],
+				"les evades": [1970],
+				"the prisoner": [
+					1923, 1955, 1963, 1967, 1969, 1970, 1980, 2001, 2007, 2009, 2010, 2011, 2012,
+					2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2026
+				]
+			}
+		},
+		"tt0120791": {
+			"name": "Practical Magic",
+			"year": 1998,
+			"titles": [
+				"Amori & incantesimi",
+				"Amour et magie",
+				"Aşkın Büyüsü",
+				"Carovnije za vsak dan",
+				"Da Magia à Sedução",
+				"Hechizo de amor",
+				"Igapäevane nõiakunst",
+				"Les ensorceleuses",
+				"Lumotut sisaret",
+				"Magia e sedução",
+				"Magická posadnutost'",
+				"Magická posedlost",
+				"Magiens makt",
+				"Magija",
+				"Magika filtra",
+				"Magiska systrar",
+				"Practical Magic",
+				"Praktická mágia",
+				"Prakticna magija",
+				"Praktinė magija",
+				"Praktiskā maģija",
+				"Pràcticament màgia",
+				"Prácticamente magia",
+				"Totalna magia",
+				"Zauberhafte schwestern",
+				"Átkozott boszorkák",
+				"Μαγικά φίλτρα",
+				"Љубавне чаролије",
+				"Практическая магия",
+				"Практична магија",
+				"Практична магія",
+				"Приложна магия",
+				"קסם מעשי",
+				"السحر العملي",
+				"جادوی عملی",
+				"สองสาวพลังรักเมจิก",
+				"プラクティカル・マジック",
+				"巫法闖情關",
+				"超異能快感",
+				"프랙티컬 매직"
+			],
+			"ambiguous": {
+				"hechizo de amor": [2000]
+			}
+		},
+		"tt0120804": {
+			"name": "Resident Evil",
+			"year": 2002,
+			"titles": [
+				"2002惡靈古堡",
+				"A kaptár",
+				"Absoliutus blogis",
+				"Baiohazādo",
+				"Biohazard",
+				"Call of Death",
+				"El huésped maldito",
+				"Nezūdošais ļaunums",
+				"Resident Evil",
+				"Resident Evil - Genesis",
+				"Resident Evil the Movie",
+				"Resident Evil: Domena zła",
+				"Resident Evil: El huésped maldito",
+				"Resident Evil: Ground Zero",
+				"Resident Evil: O Hóspede Maldito",
+				"Resident Evil: ผีชีวะ",
+				"Resident evil - El huésped maldito",
+				"Resident evil: Experiment fatal",
+				"Resident evil: Les créatures maléfiques",
+				"Resident evil: Les esprits maléfiques",
+				"Unbeatable Evil",
+				"Vùng Đất Quỷ Dữ",
+				"Yovuzlik maskani",
+				"Ölümcül Deney",
+				"Şərin iqamətgahı",
+				"Заразно зло",
+				"Зұлымдық мекені",
+				"Обитель зла",
+				"Оселя зла",
+				"Притајено зло",
+				"मौत का बुलावा",
+				"バイオハザード",
+				"惡靈古堡"
+			],
+			"ambiguous": {
+				"resident evil genesis": [2008],
+				"biohazard": [1978, 1985, 2013, 2015, 2019, 2023],
+				"call of death": [1999]
+			}
+		},
+		"tt0468569": {
+			"name": "The Dark Knight",
+			"year": 2008,
+			"titles": [
+				"A sötét lovag",
+				"Batman 2: El caballero de la noche",
+				"Batman Begins 2",
+				"Batman: Atsawinrattikan",
+				"Batman: El caballero de la noche",
+				"Batman: Kara Şövalye",
+				"Batman: O Cavaleiro das Trevas",
+				"Batman: The Dark Knight",
+				"Cavalerul negru",
+				"Dâku naito",
+				"El caballero oscuro",
+				"El cavaller fosc",
+				"Il cavaliere oscuro",
+				"Kalorësi i Errësirës",
+				"Kara Şövalye",
+				"Kỵ Sĩ Bóng Đêm",
+				"Le chevalier noir",
+				"Mračni vitez",
+				"Mroczny Rycerz",
+				"O Cavaleiro das Trevas",
+				"O skoteinos ippotis",
+				"Pimeduse rüütel",
+				"Qara cəngavər",
+				"Qora ritsar",
+				"Rory's First Kiss",
+				"Rökkurriddarinn",
+				"Shavi Raindi",
+				"Shovaliye Tariki",
+				"Tamsos riteris",
+				"Temný Rytier",
+				"Temný rytíř",
+				"The Dark Knight",
+				"The Dark Knight : Le Chevalier noir",
+				"The Dark Knight: The IMAX Experience",
+				"Tumšais bruņinieks",
+				"Untitled Batman Begins Sequel",
+				"Vitez tame",
+				"Vitez teme",
+				"Winter Green",
+				"Yön ritari",
+				"Ο σκοτεινός ιππότης",
+				"Мрачни Витез",
+				"Темний лицар",
+				"Тёмный рыцарь",
+				"Цёмны рыцар",
+				"Черният рицар",
+				"Қара сері",
+				"द डार्क नाइट",
+				"बैटमेन 2: द डार्क नाईट",
+				"ダークナイト",
+				"蝙蝠侠：黑暗骑士",
+				"蝙蝠俠-黑夜之神",
+				"黑暗騎士",
+				"다크 나이트"
+			],
+			"ambiguous": {
+				"batman the dark knight": [2008, 2018]
+			}
+		},
+		"tt15791034": {
+			"name": "Barbarian",
+			"year": 2022,
+			"titles": [
+				"Barbar",
+				"Barbaras",
+				"Barbare",
+				"Barbarian",
+				"Barbars",
+				"Barbarzyńcy",
+				"Bárbaro",
+				"Kẻ Man Rợ",
+				"Noites Brutais",
+				"Õuduste korter",
+				"Варвар",
+				"Варварин",
+				"バーバリアン",
+				"宿劫"
+			],
+			"ambiguous": {
+				"barbaro": [1952, 2008]
+			}
+		},
+		"tt26581740": {
+			"name": "Weapons",
+			"year": 2025,
+			"titles": [
+				"A Hora do Mal",
+				"Arme",
+				"Fegyverek",
+				"Giờ Mất Tích",
+				"Heure de disparition",
+				"Hodina zmizení",
+				"Hora do Desaparecimento",
+				"Išnykimo valanda",
+				"La hora de la desaparición",
+				"Pazušanas stunda",
+				"Qurollar",
+				"Relvad",
+				"Sh'at Ha'Ne'elamim",
+				"Silahlar",
+				"Trenutak nestajanja",
+				"Weapons",
+				"Weapons - Die Stunde des Verschwindens",
+				"Weapons／ウェポンズ",
+				"Zniknięcia",
+				"Évanouis",
+				"Зброя",
+				"Орудия",
+				"Оръжия",
+				"Тренутак нестајања",
+				"凶器"
+			],
+			"ambiguous": {
+				"arme": [2013]
+			}
+		},
+		"tt27543632": {
+			"name": "The Housemaid",
+			"year": 2025,
+			"titles": [
+				"A Criada",
+				"A Empregada",
+				"Cô Hầu Gái",
+				"Hizmetçi",
+				"Hišna pomočnica",
+				"Koduabiline",
+				"Kotiapulainen",
+				"Kućna pomoćnica",
+				"La asistenta",
+				"La empleada",
+				"La femme de ménage",
+				"Menajera",
+				"Mājkalpotāja",
+				"Ozeret Ha'Ba'it",
+				"Pomoc domowa",
+				"Pomocnice",
+				"Pomocníčka",
+				"Tarnaitė",
+				"The Cleaning Lady",
+				"The Housemaid",
+				"The Housemaid - Wenn sie wüsste",
+				"The Housemaid: A téboly otthona",
+				"Una di famiglia",
+				"Wenn sie wüsste",
+				"Η αγγελία",
+				"Горничная",
+				"Кућна помоћница",
+				"Прислужницата",
+				"Служниця",
+				"ハウスメイド",
+				"家弑服务",
+				"家弒服務",
+				"美傭誘罪"
+			],
+			"ambiguous": {
+				"la femme de menage": [2024],
+				"la empleada": [2024],
+				"the cleaning lady": [2001, 2004, 2005, 2011, 2016, 2017, 2018, 2022, 2024]
+			}
+		},
+		"tt5177120": {
+			"name": "The Ministry of Ungentlemanly Warfare",
+			"year": 2024,
+			"titles": [
+				"A piszkos hadviselés minisztériuma",
+				"El ministerio de la guerra sucia",
+				"Gayribeyefendi Savaş Dairesi",
+				"Guerra Sem Regras",
+				"Guerra sin reglas",
+				"Ha'Yekhida Le'Lokhama Lo Gentlemenit",
+				"Il ministero della guerra sporca",
+				"Le Ministère de la Sale Guerre",
+				"Ministerstvo nekonvenčnej vojny",
+				"Ministerstwo niebezpiecznych drani",
+				"Ministerul războiului fără mănuși",
+				"Nedžentelmeniško karo ministerija",
+				"Nojentlmencha ishlar vazirligi",
+				"Operace Poštmistr",
+				"Qeyri-Centlmen İşlər Nazirliyi",
+				"The Ministry of Ungentlemanly Warfare",
+				"Vääritu sõjapidamise ministeerium",
+				"Your Lucky Day",
+				"Το υπουργείο του αναξιοπρεπούς πολέμου",
+				"Министарство неџентлменског ратовања",
+				"Министерство неджентльменских дел",
+				"Міністерство неджентльменської війни",
+				"アンジェントルメン",
+				"攻壳型战",
+				"無限制軍團",
+				"盟军敢死队",
+				"绝密型战",
+				"非君子作战部",
+				"非紳士戰爭部",
+				"非紳士特攻隊",
+				"非绅士战争部"
+			],
+			"ambiguous": {
+				"your lucky day": [2010, 2013, 2022, 2023]
+			}
+		},
+		"tt5950044": {
+			"name": "Superman",
+			"year": 2025,
+			"titles": [
+				"Superman",
+				"Superman: Legacy",
+				"Supermenas",
+				"Supermens",
+				"Супермен",
+				"सुपरमैन",
+				"スーパーマン",
+				"超人"
+			],
+			"ambiguous": {
+				"superman legacy": [2026]
+			}
+		},
+		"tt8367814": {
+			"name": "The Gentlemen",
+			"year": 2019,
+			"titles": [
+				"Busha",
+				"Dżentelmeni",
+				"Džentelmenai",
+				"Džentlmeni",
+				"Gangsteri cu stil",
+				"Gentlemani",
+				"Gospoda",
+				"Gospodje",
+				"Ha'Gentlemenim",
+				"Härrasmehed",
+				"Jentlmenlar",
+				"Les gentlemen",
+				"Los caballeros",
+				"Los caballeros: criminales con clase",
+				"Magnatas do Crime",
+				"Quý Ông Thế Giới Ngầm",
+				"Slušní chlapci",
+				"The Gentleman",
+				"The Gentlemen",
+				"The Gentlemen: Els senyors de la màfia",
+				"The Gentlemen: Los señores de la mafia",
+				"The Gentlemen: Senhores do Crime",
+				"Toff Guys",
+				"Úriemberek",
+				"Εγκληματίες πρώτης τάξεως",
+				"Господа",
+				"Джентльмени",
+				"Джентльмены",
+				"Джентълмените",
+				"द जेंटलमेन",
+				"ジェントルメン",
+				"布什",
+				"有钱人",
+				"灌木",
+				"瘋狂紳士幫",
+				"紳士追殺令",
+				"纨绔子弟",
+				"绅士们",
+				"젠틀맨"
+			],
+			"ambiguous": {
+				"gentlemani": [1969],
+				"los caballeros": [1976],
+				"the gentleman": [
+					1925, 1963, 1994, 2000, 2007, 2010, 2011, 2013, 2016, 2019, 2021, 2024, 2025,
+					2026
+				]
+			}
+		}
+	}
+}

@@ -1,7 +1,11 @@
-import { orderedServersForNewJob, resolveJobServer } from '@/services/debridUploaderServers';
+import { isTransferStillValid } from '@/services/debridTransferValidity';
+import { orderedServersForNewJob } from '@/services/debridUploaderServers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { addHashToRd } from '@/services/requestDelivery';
+import { BLOCKED_MESSAGE, isHashBlocked } from '@/services/takedown/blocklist';
 import { isSponsorRequest } from '@/utils/requireSponsor';
+import { FREE_TORBOX_PLAN_MESSAGE, isFreeTorBoxPlan } from '@/utils/torboxPlan';
 import { safeReturnPath } from '@/utils/transferContext';
 import { exceedsTransferSizeCap, MAX_TRANSFER_BYTES, tooLargeMessage } from '@/utils/transferSize';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -9,65 +13,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // The debrid uploader service speaks plain HTTP with no CORS, so the browser can
 // never call it directly; this route is the server-side hop, and it also spreads
 // new jobs across the configured server pool.
-
-// Is a mapped transfer still worth blocking a fresh submission? A completed one
-// counts only while its rewritten torrent is still RD-cached (a pruned one
-// should be re-transferable); a pending one only while its job is still alive.
-async function isTransferStillValid(record: {
-	status: string;
-	jobId: string;
-	rewrittenHash?: string;
-}): Promise<boolean> {
-	if (record.status === 'completed') {
-		if (!record.rewrittenHash) return false;
-		const available = await db.checkAvailabilityByHashes([record.rewrittenHash]);
-		return available.length > 0;
-	}
-	// pending: alive unless the referenced job has failed or vanished
-	try {
-		const server = await resolveJobServer(record.jobId, (j) => db.getDebridJobServer(j));
-		if (!server) return false;
-		const res = await fetch(`${server}/jobs/${record.jobId}`, {
-			headers: { Accept: 'application/json' },
-			signal: AbortSignal.timeout(10000),
-		});
-		if (res.status === 404) return false;
-		const job = await res.json();
-		return job?.status !== 'failed';
-	} catch {
-		return false; // can't confirm it's alive — let the resubmit through
-	}
-}
-
-// Add a completed rewritten torrent to the requesting user's RD account.
-// The content is RD-cached (another user's job completed it), so this is instant.
-async function addRewrittenToUserRd(rdKey: string, rewrittenHash: string): Promise<boolean> {
-	try {
-		const addRes = await fetch('https://app.real-debrid.com/rest/1.0/torrents/addMagnet', {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${rdKey}`,
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: `magnet=${encodeURIComponent(`magnet:?xt=urn:btih:${rewrittenHash}`)}`,
-			signal: AbortSignal.timeout(15000),
-		});
-		if (addRes.status !== 201) return false;
-		const { id } = await addRes.json();
-		await fetch(`https://app.real-debrid.com/rest/1.0/torrents/selectFiles/${id}`, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${rdKey}`,
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: 'files=all',
-			signal: AbortSignal.timeout(15000),
-		});
-		return true;
-	} catch {
-		return false;
-	}
-}
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -97,6 +42,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 
 	const originalHash = hash.toLowerCase();
+	if (await isHashBlocked(originalHash)) {
+		return res.status(451).json({ error: BLOCKED_MESSAGE });
+	}
 
 	// Cross-user / cross-device dedup: the localStorage guard only knows this
 	// browser's jobs, so the authoritative "already transferred?" check lives here.
@@ -108,7 +56,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		if (existing && (await isTransferStillValid(existing))) {
 			let addedToRd = false;
 			if (existing.status === 'completed' && existing.rewrittenHash) {
-				addedToRd = await addRewrittenToUserRd(rdKey, existing.rewrittenHash);
+				addedToRd = await addHashToRd(rdKey, existing.rewrittenHash);
 			}
 			return res.status(200).json({
 				duplicate: existing.status === 'completed' ? 'completed' : 'in_progress',
@@ -139,6 +87,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			sizeBytes: jobSize,
 			maxBytes: MAX_TRANSFER_BYTES,
 		});
+	}
+
+	// After the dedup check for the same reason as the size cap: serving an
+	// already-completed transfer never touches TorBox, so a free account can
+	// still have it.
+	if (await isFreeTorBoxPlan(tbSource)) {
+		return res.status(403).json({ error: FREE_TORBOX_PLAN_MESSAGE });
 	}
 
 	const body = JSON.stringify({

@@ -1,5 +1,9 @@
+import { isVideo } from '../../utils/selectable';
 import { TorrentInfoResponse } from '../types';
 import { DatabaseClient } from './client';
+
+const playableHashes = (rows: { hash: string; files: { path: string }[] }[]) =>
+	new Set(rows.filter((row) => row.files.some(isVideo)).map((row) => row.hash.toLowerCase()));
 
 type ParsedEpisodeInfo = {
 	season?: number;
@@ -542,6 +546,37 @@ export class AvailabilityService extends DatabaseClient {
 			select: { hash: true },
 		});
 		return new Set(rows.map((row) => row.hash.toLowerCase()));
+	}
+
+	/**
+	 * Which of these hashes Real-Debrid holds with at least one playable video —
+	 * the answer the hashlist page's "Show Instant" filter needs, and nothing
+	 * more. `checkAvailabilityByHashes` answers the same question but ships
+	 * every file row to the browser to decide it there; a 28k-item list made
+	 * that 278 requests of 100 hashes. Only `path` is read, since `isVideo`
+	 * needs nothing else. Answered in lower case, like `filterCachedHashes`.
+	 */
+	public async filterPlayableCachedHashes(hashes: string[]): Promise<Set<string>> {
+		if (hashes.length === 0) return new Set();
+		const rows = await this.prisma.available.findMany({
+			where: { hash: { in: hashes }, status: 'downloaded' },
+			select: { hash: true, files: { select: { path: true } } },
+		});
+		return playableHashes(rows);
+	}
+
+	/** The AllDebrid counterpart of `filterPlayableCachedHashes`. */
+	public async filterPlayableCachedHashesAd(hashes: string[]): Promise<Set<string>> {
+		if (hashes.length === 0) return new Set();
+		const rows = await this.prisma.availableAd.findMany({
+			where: {
+				hash: { in: hashes.map((hash) => hash.toLowerCase()) },
+				status: 'Ready',
+				statusCode: 4,
+			},
+			select: { hash: true, files: { select: { path: true } } },
+		});
+		return playableHashes(rows);
 	}
 
 	public async removeAvailability(hash: string): Promise<void> {

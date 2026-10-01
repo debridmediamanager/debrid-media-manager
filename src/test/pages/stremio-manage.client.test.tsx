@@ -18,9 +18,13 @@ vi.mock('@/components/poster', () => ({
 	default: posterMock,
 }));
 
+const rdTokenState = vi.hoisted(() => ({
+	value: ['rd-token', false] as [string | null, boolean],
+}));
+
 vi.mock('@/hooks/auth', () => ({
 	__esModule: true,
-	useRealDebridAccessToken: () => ['rd-token'],
+	useRealDebridAccessToken: () => rdTokenState.value,
 }));
 
 vi.mock('@/utils/withAuth', () => ({
@@ -30,6 +34,7 @@ vi.mock('@/utils/withAuth', () => ({
 
 vi.mock('lucide-react', () => ({
 	__esModule: true,
+	AlertTriangle: () => <svg data-testid="alert-icon" />,
 	Eye: () => <svg data-testid="eye-icon" />,
 	Trash2: () => <svg data-testid="trash-icon" />,
 }));
@@ -132,6 +137,27 @@ describe('Stremio manage page poster integration', () => {
 		window.localStorage.clear();
 	});
 
+	it('asks for a Real-Debrid login once the token has settled as absent', () => {
+		rdTokenState.value = [null, false];
+		render(<ManagePage />);
+
+		expect(screen.getByText('Real-Debrid Required')).toBeInTheDocument();
+		expect(screen.getByText('Login with Real-Debrid').closest('a')).toHaveAttribute(
+			'href',
+			'/realdebrid/login?redirect=%2Fstremio%2Fmanage'
+		);
+		rdTokenState.value = ['rd-token', false];
+	});
+
+	it('keeps the loading state while the token is still loading', () => {
+		rdTokenState.value = [null, true];
+		render(<ManagePage />);
+
+		expect(screen.getByText('Debrid Media Manager is loading...')).toBeInTheDocument();
+		expect(screen.queryByText('Real-Debrid Required')).not.toBeInTheDocument();
+		rdTokenState.value = ['rd-token', false];
+	});
+
 	it('uses poster component with metadata-derived titles for each group', async () => {
 		render(<ManagePage />);
 
@@ -167,5 +193,15 @@ describe('Stremio manage page poster integration', () => {
 
 		expect(fetchMock).toHaveBeenCalledWith('/api/info/show?imdbid=tt1234567');
 		expect(fetchMock).toHaveBeenCalledWith('/api/info/movie?imdbid=tt7654321');
+	});
+
+	// break-all split every filename at the card edge mid-word, "After An / other"
+	// and "Bl / uRay" at 320px; words should only break when one cannot fit.
+	it('wraps casted filenames at word boundaries', async () => {
+		render(<ManagePage />);
+
+		const filename = await screen.findByText('Example.Movie.2020.1080p.mkv');
+		expect(filename).toHaveClass('break-words');
+		expect(filename).not.toHaveClass('break-all');
 	});
 });

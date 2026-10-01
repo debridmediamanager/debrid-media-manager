@@ -2,8 +2,13 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { runHealthCheckNow } from '@/lib/observability/streamServersHealth';
 import { runTorrentioHealthCheckNow } from '@/lib/observability/torrentioHealth';
+import {
+	reconcileContentRequests,
+	type RequestReconcileResult,
+} from '@/services/contentRequestReconcile';
 import { reconcileDebridTransfers, type ReconcileResult } from '@/services/debridTransferReconcile';
 import { repository } from '@/services/repository';
+import { deliverFreeRequests } from '@/services/requestDelivery';
 
 interface CronResponse {
 	success: boolean;
@@ -25,6 +30,8 @@ interface CronResponse {
 		torboxCdnDailyRolled: boolean;
 	};
 	debridTransfers?: ReconcileResult;
+	contentRequests?: RequestReconcileResult;
+	freeRequestDeliveries?: { delivered: number; skipped: number };
 	error?: string;
 }
 
@@ -85,6 +92,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Debrid transfer reconciliation failed:', e);
 		}
 
+		// Requests are only settled once their transfer has ended, and nothing
+		// else is watching them: a fulfiller moves on the moment they click.
+		let contentRequests: RequestReconcileResult | undefined;
+		try {
+			contentRequests = await reconcileContentRequests();
+		} catch (e) {
+			console.error('[Cron] Content request reconciliation failed:', e);
+		}
+
+		// Open requests whose release has reached Real-Debrid since they were
+		// filed need no fulfiller, only an add on the asker's account.
+		let freeRequestDeliveries: CronResponse['freeRequestDeliveries'];
+		try {
+			freeRequestDeliveries = await deliverFreeRequests();
+		} catch (e) {
+			console.error('[Cron] Free request delivery failed:', e);
+		}
+
 		return res.status(200).json({
 			success: true,
 			timestamp: new Date().toISOString(),
@@ -101,6 +126,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			},
 			dailyRollup,
 			debridTransfers,
+			contentRequests,
+			freeRequestDeliveries,
 		});
 	} catch (error) {
 		console.error('[Cron] Job failed:', error);

@@ -1,0 +1,15 @@
+{
+	"data": {
+		"id": 90210,
+		"plan": 2,
+		"is_subscribed": false,
+		"created_at": "2024-01-07T22:50:51Z",
+		"premium_expires_at": "2033-01-22T18:27:05Z",
+		"email": "redacted@example.com",
+		"auth_id": "redacted",
+		"customer": "redacted"
+	},
+	"detail": "Successfully retrieved your user information.",
+	"error": null,
+	"success": true
+}

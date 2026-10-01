@@ -1,0 +1,3739 @@
+[
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt1160419",
+				"plex": { "guid": "5d776cac47dd6e001f6ee059", "slug": "dune-part-one" },
+				"slug": "dune-2021",
+				"tmdb": 438631,
+				"trakt": 287071
+			},
+			"year": 2021,
+			"title": "Dune",
+			"votes": 65100,
+			"colors": { "poster": ["#AA9172", "#383028"] },
+			"genres": ["science-fiction", "adventure"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/287/071/logos/medium/d70f600678.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/287/071/thumbs/medium/c896f44850.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/287/071/banners/medium/202a7fa244.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/287/071/fanarts/medium/4257cce705.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/287/071/posters/medium/ac59f28ad6.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/287/071/cleararts/medium/549f72963a.png.webp"
+				]
+			},
+			"rating": 8.171504974365234,
+			"status": "released",
+			"country": "us",
+			"runtime": 155,
+			"tagline": "It begins.",
+			"trailer": "https://youtube.com/watch?v=w0HgHet0sxg",
+			"homepage": "https://www.warnerbros.com/movies/dune",
+			"language": "en",
+			"overview": "Paul Atreides, a brilliant and gifted young man born into a great destiny beyond his understanding, must travel to the most dangerous planet in the universe to ensure the future of his family and his people. As malevolent forces explode into conflict over the planet's exclusive supply of the most precious resource in existence - a commodity capable of unlocking humanity's greatest potential - only those who can conquer their fear will survive.",
+			"released": "2021-10-21",
+			"languages": ["en"],
+			"subgenres": [
+				"betrayal",
+				"dystopia",
+				"future",
+				"revenge",
+				"desert",
+				"creature",
+				"space",
+				"space-opera",
+				"army"
+			],
+			"social_ids": {
+				"twitter": "dunemovie",
+				"facebook": "dune",
+				"instagram": "dunemovie",
+				"wikipedia": "Dune_(2021_film)"
+			},
+			"updated_at": "2026-09-26T08:26:25.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 358,
+			"during_credits": false,
+			"original_title": "Dune",
+			"available_translations": [
+				"ar",
+				"az",
+				"ba",
+				"be",
+				"bg",
+				"bn",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fa",
+				"fi",
+				"fr",
+				"he",
+				"hi",
+				"hr",
+				"hu",
+				"hy",
+				"id",
+				"is",
+				"it",
+				"ja",
+				"ka",
+				"kk",
+				"km",
+				"ko",
+				"ku",
+				"lb",
+				"lo",
+				"lt",
+				"lv",
+				"mk",
+				"mn",
+				"nl",
+				"no",
+				"pa",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"so",
+				"sq",
+				"sr",
+				"sv",
+				"ta",
+				"te",
+				"th",
+				"tr",
+				"tt",
+				"uk",
+				"ur",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt15239678",
+				"plex": { "guid": "5eb8f22237ccbe0041723253", "slug": "dune-part-two" },
+				"slug": "dune-part-two-2024",
+				"tmdb": 693134,
+				"trakt": 537449
+			},
+			"year": 2024,
+			"title": "Dune: Part Two",
+			"votes": 50806,
+			"colors": { "poster": ["#C23E0B", "#70360F"] },
+			"genres": ["science-fiction", "adventure"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/537/449/logos/medium/01f3448b1f.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/537/449/thumbs/medium/57ded5bd60.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/537/449/banners/medium/73e053ffcd.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/537/449/fanarts/medium/b7e56e851f.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/537/449/posters/medium/2acc44f507.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/537/449/cleararts/medium/cae83da34c.png.webp"
+				]
+			},
+			"rating": 8.607428550720215,
+			"status": "released",
+			"country": "us",
+			"runtime": 167,
+			"tagline": "Long live the fighters.",
+			"trailer": "https://youtube.com/watch?v=U2Qp5pL3ovA",
+			"homepage": "https://www.warnerbros.com/movies/dune-part-two",
+			"language": "en",
+			"overview": "Follow the mythic journey of Paul Atreides as he unites with Chani and the Fremen while on a path of revenge against the conspirators who destroyed his family. Facing a choice between the love of his life and the fate of the known universe, Paul endeavors to prevent a terrible future only he can foresee.",
+			"released": "2024-03-01",
+			"languages": ["en"],
+			"subgenres": ["desert", "creature", "space-opera"],
+			"social_ids": {
+				"twitter": "dunemovie",
+				"facebook": "dune",
+				"instagram": "dunemovie",
+				"wikipedia": "Dune:_Part_Two"
+			},
+			"updated_at": "2026-09-26T08:21:17.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 252,
+			"during_credits": false,
+			"original_title": "Dune: Part Two",
+			"available_translations": [
+				"ar",
+				"as",
+				"az",
+				"be",
+				"bg",
+				"bn",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fa",
+				"fi",
+				"fr",
+				"he",
+				"hi",
+				"hr",
+				"hu",
+				"hy",
+				"id",
+				"it",
+				"ja",
+				"ka",
+				"kk",
+				"km",
+				"ko",
+				"lo",
+				"lt",
+				"lv",
+				"mk",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sq",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"ur",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt31378509",
+				"plex": { "guid": "65d514b7e0e20b8c84ece2f6", "slug": "dune-messiah-2026" },
+				"slug": "dune-part-three-2026",
+				"tmdb": 1170608,
+				"trakt": 943606
+			},
+			"year": 2026,
+			"title": "Dune: Part Three",
+			"votes": 112,
+			"colors": { "poster": ["#FDFAD8", "#724A25"] },
+			"genres": ["science-fiction", "adventure"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/943/606/logos/medium/3f27ac5213.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/943/606/fanarts/medium/f9e4050456.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/943/606/posters/medium/eec42d34d6.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 8.008928298950195,
+			"status": "post production",
+			"country": "us",
+			"runtime": 140,
+			"tagline": "The epic conclusion.",
+			"trailer": "https://youtube.com/watch?v=NdvqHc56lE0",
+			"homepage": "https://www.dunemovie.com",
+			"language": "en",
+			"overview": "Emperor Paul Atreides faces the fallout from his ascent to power as political plots and a galaxy-wide holy war endanger the future only he can see.",
+			"released": "2026-12-18",
+			"languages": ["en"],
+			"subgenres": ["desert", "space", "space-opera"],
+			"social_ids": {
+				"twitter": "dunemovie",
+				"facebook": "dune",
+				"instagram": "dunemovie",
+				"wikipedia": "Dune:_Part_Three"
+			},
+			"updated_at": "2026-09-26T08:25:03.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 7,
+			"during_credits": false,
+			"original_title": "Dune: Part Three",
+			"available_translations": [
+				"ar",
+				"az",
+				"be",
+				"bg",
+				"bn",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fa",
+				"fi",
+				"fr",
+				"he",
+				"hi",
+				"hr",
+				"hu",
+				"hy",
+				"id",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"lv",
+				"mk",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0087182",
+				"plex": { "guid": "5d7768273c3c2a001fbcb51a", "slug": "dune" },
+				"slug": "dune-1984",
+				"tmdb": 841,
+				"trakt": 684
+			},
+			"year": 1984,
+			"title": "Dune",
+			"votes": 7619,
+			"colors": { "poster": ["#A5586D", "#1E1110"] },
+			"genres": ["action", "adventure", "science-fiction"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/000/684/logos/medium/3827542d17.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/000/684/thumbs/medium/d482e5b1e2.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/000/684/banners/medium/cee93b7c10.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/000/684/fanarts/medium/16c3cd5ee6.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/000/684/posters/medium/b0314a18dc.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/000/684/cleararts/medium/d8403237a4.png.webp"
+				]
+			},
+			"rating": 6.587741374969482,
+			"status": "released",
+			"country": "us",
+			"runtime": 136,
+			"tagline": "A world beyond your experience, beyond your imagination.",
+			"trailer": "https://youtube.com/watch?v=hjRG8kvMFw0",
+			"homepage": null,
+			"language": "en",
+			"overview": "In the year 10,191, the most precious substance in the universe is the spice Melange. The spice extends life. The spice expands consciousness. The spice is vital to space travel.  The spice exists on only one planet in the entire universe, the vast desert planet Arrakis, also known as Dune.  Its native inhabitants, the Fremen, have long held a prophecy that a man would come, a messiah who would lead them to true freedom.",
+			"released": "1984-12-14",
+			"languages": ["en"],
+			"subgenres": [
+				"drugs",
+				"dystopia",
+				"explosion",
+				"future",
+				"monster",
+				"desert",
+				"witch",
+				"suspenseful",
+				"mutation",
+				"space-opera",
+				"space-travel",
+				"army"
+			],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Dune_(1984_film)"
+			},
+			"updated_at": "2026-09-26T08:27:57.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 44,
+			"during_credits": false,
+			"original_title": "Dune",
+			"available_translations": [
+				"ar",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fa",
+				"fi",
+				"fr",
+				"he",
+				"hi",
+				"hr",
+				"hu",
+				"is",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sq",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt1935156",
+				"plex": { "guid": "5d776a14594b2b001e6b2a62", "slug": "jodorowskys-dune" },
+				"slug": "jodorowsky-s-dune-2013",
+				"tmdb": 191720,
+				"trakt": 119793
+			},
+			"year": 2013,
+			"title": "Jodorowsky's Dune",
+			"votes": 1453,
+			"colors": { "poster": ["#D18D7E", "#1C0F13"] },
+			"genres": ["documentary"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/119/793/logos/medium/0895fe494b.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/119/793/thumbs/medium/c35981f3aa.jpg.webp"
+				],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/119/793/fanarts/medium/f079dffec3.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/119/793/posters/medium/8b95cbd13a.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.867171287536621,
+			"status": "released",
+			"country": "fr",
+			"runtime": 87,
+			"tagline": "What is to give light must endure burning",
+			"trailer": "https://youtube.com/watch?v=Q-oBEGF7uwE",
+			"homepage": "https://www.jodorowskysdune.com",
+			"language": "en",
+			"overview": "In 1974, Chilean-French director Alejandro Jodorowsky embarked on the quixotic project of adapting Frank Herbert's influential novel Dune (1969) for the big screen. After investing two years, and millions of dollars, the gigantic project ended in failure; but the artists Jodorowsky brought together to carry it out continued to work together, and ended up laying the foundations for modern science fiction cinema.",
+			"released": "2016-03-16",
+			"languages": ["en", "fr", "de", "es"],
+			"subgenres": [
+				"cinema-history",
+				"filmmaking",
+				"movie-business",
+				"portrait-of-an-artist",
+				"blunt"
+			],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Jodorowsky's_Dune"
+			},
+			"updated_at": "2026-09-26T08:19:53.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 16,
+			"during_credits": false,
+			"original_title": "Jodorowsky's Dune",
+			"available_translations": [
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"nl",
+				"pt",
+				"ro",
+				"ru",
+				"th",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt11835714",
+				"plex": { "guid": "5f677caa4b4dd900426b410a", "slug": "dune-drifter" },
+				"slug": "dune-drifter-2020",
+				"tmdb": 744738,
+				"trakt": 585356
+			},
+			"year": 2020,
+			"title": "Dune Drifter",
+			"votes": 205,
+			"colors": { "poster": ["#B2ACA0", "#2C323D"] },
+			"genres": ["science-fiction"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/585/356/logos/medium/4affa8dc42.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/585/356/thumbs/medium/38fda6c755.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/585/356/banners/medium/6a6635df92.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/585/356/fanarts/medium/ff67439962.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/585/356/posters/medium/05a388a31b.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 4.814630031585693,
+			"status": "released",
+			"country": "gb",
+			"runtime": 98,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=_7q1l0ohQQM",
+			"homepage": null,
+			"language": "en",
+			"overview": "When the trainee pilot and her mortally wounded gunner are shot down, they crash land on a nearby planet. An enemy craft offers the chance of spare parts to fix her ship, but then she spots another survivor - an enemy alien soldier with no intention of letting her escape.",
+			"released": "2020-10-24",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Dune_Drifter"
+			},
+			"updated_at": "2026-08-31T16:58:32.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 5,
+			"during_credits": false,
+			"original_title": "Dune Drifter",
+			"available_translations": [
+				"bg",
+				"cs",
+				"de",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt15331462",
+				"plex": { "guid": "613c7a68c87f250197d893f9", "slug": "planet-dune" },
+				"slug": "planet-dune-2021",
+				"tmdb": 881460,
+				"trakt": 705826
+			},
+			"year": 2021,
+			"title": "Planet Dune",
+			"votes": 177,
+			"colors": { "poster": ["#AE978A", "#3A2F2A"] },
+			"genres": ["horror", "adventure", "science-fiction"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/705/826/logos/medium/3b78317bd3.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/705/826/fanarts/medium/b45370d5b8.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/705/826/posters/medium/a5ffdb52a3.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 4.022598743438721,
+			"status": "released",
+			"country": "us",
+			"runtime": 86,
+			"tagline": "Their mission... was doomed to fail.",
+			"trailer": "https://youtube.com/watch?v=ZwVZ-2WuJo4",
+			"homepage": null,
+			"language": "en",
+			"overview": "A crew on a mission to rescue a marooned base on a desert planet turns deadly when the crew finds themselves hunted and attacked by the planet’s apex predators: giant sand worms.",
+			"released": "2021-10-29",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-08-31T17:01:53.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 2,
+			"during_credits": false,
+			"original_title": "Planet Dune",
+			"available_translations": ["cs", "de", "en", "es", "fr", "hu", "ko", "pl", "pt", "zh"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt12451788",
+				"plex": { "guid": "5d7768273c3c2a001fbcb51a", "slug": "dune-2020" },
+				"slug": "dune-2020-06-15",
+				"tmdb": 697620,
+				"trakt": 541097
+			},
+			"year": 2020,
+			"title": "Dune",
+			"votes": 212,
+			"colors": { "poster": ["#D3D3D2", "#262626"] },
+			"genres": ["animation", "mystery", "thriller"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [
+					"media.trakt.tv/images/movies/000/541/097/posters/medium/933f61d730.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 8.622639656066895,
+			"status": "released",
+			"country": "hu",
+			"runtime": 4,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.kecskemetfilm.hu/en/filmek/rovidfilm/dune",
+			"language": "hu",
+			"overview": "Sounds as witnesses. They blurr into memories, half-dreams, it is undecided if they are real or not. A fluctuation between imagination and reality.",
+			"released": "2020-06-15",
+			"languages": ["xx", "hu"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2025-09-19T08:17:24.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Dűne",
+			"available_translations": ["cs", "en", "ka"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0099474",
+				"plex": { "guid": "5d776a57ad5437001f77aa80", "slug": "dune-warriors" },
+				"slug": "dune-warriors-1991",
+				"tmdb": 222339,
+				"trakt": 136597
+			},
+			"year": 1991,
+			"title": "Dune Warriors",
+			"votes": 25,
+			"colors": { "poster": ["#8F8287", "#40265E"] },
+			"genres": ["action", "science-fiction"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/136/597/logos/medium/ee316a39da.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/136/597/fanarts/medium/8da1d2174a.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/136/597/posters/medium/e0ec30714b.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 3.9200000762939453,
+			"status": "released",
+			"country": "us",
+			"runtime": 80,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=HSE-7UipMVk",
+			"homepage": null,
+			"language": "en",
+			"overview": "After the end of the world, Earth is a thirsty planet ruled by vicious warlords. One woman is brave enough to fight back; she bands together five warriors to save her town and their precious water",
+			"released": "1991-01-18",
+			"languages": ["en"],
+			"subgenres": ["action-hero", "desert", "post-apocalyptic-future"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Dune_Warriors"
+			},
+			"updated_at": "2026-08-24T16:06:57.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Dune Warriors",
+			"available_translations": [
+				"cs",
+				"de",
+				"en",
+				"es",
+				"fr",
+				"hu",
+				"it",
+				"pl",
+				"pt",
+				"ru",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt14450978",
+				"plex": { "guid": "6077fd151bc3690036e668a9", "slug": "dune-world" },
+				"slug": "dune-world-2021",
+				"tmdb": 843281,
+				"trakt": 673479
+			},
+			"year": 2021,
+			"title": "Dune World",
+			"votes": 35,
+			"colors": { "poster": ["#F5AB4B", "#536A5C"] },
+			"genres": ["science-fiction"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/673/479/fanarts/medium/72f54fed3f.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/673/479/posters/medium/578db5fd59.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 2.8285698890686035,
+			"status": "released",
+			"country": "us",
+			"runtime": 70,
+			"tagline": "We don't belong out here.",
+			"trailer": null,
+			"homepage": null,
+			"language": "en",
+			"overview": "A deep space crew takes a job on a mysterious remote planet. A crash landing strands them on the hostile surface. Soon they find out what creatures live there, and the hidden fate of the crew before them.",
+			"released": "2021-08-08",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-08-31T17:01:07.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "Dune World",
+			"available_translations": ["en", "es"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt1754787",
+				"plex": {
+					"guid": "5d7768e2f617c90020159e44",
+					"slug": "les-tribulations-dune-caissiere"
+				},
+				"slug": "les-tribulations-d-une-caissiere-2011",
+				"tmdb": 87558,
+				"trakt": 65784
+			},
+			"year": 2011,
+			"title": "Les Tribulations d'une caissière",
+			"votes": 44,
+			"colors": { "poster": ["#DEEBF4", "#614D5F"] },
+			"genres": ["comedy"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/065/784/fanarts/medium/f4e3b519b4.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/065/784/posters/medium/9d0f350d71.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.363636493682861,
+			"status": "released",
+			"country": "fr",
+			"runtime": 102,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=xJhvPmXMmW4",
+			"homepage": null,
+			"language": "fr",
+			"overview": "A young woman, working as a cashier for a large retailer, writes anonymously about the working conditions that she and all the cashiers face everyday. Her blog becomes famous all over the country, some people want to know who she is.",
+			"released": "2011-12-14",
+			"languages": ["fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-08-08T16:51:19.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Les Tribulations d'une caissière",
+			"available_translations": ["bg", "en", "es", "fr", "pt", "zh"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt26455565",
+				"plex": { "guid": null, "slug": null },
+				"slug": "annie-lennox-de-eurythmics-a-l-engagement-itineraire-d-une-icone-pop-2023",
+				"tmdb": 1073555,
+				"trakt": 863146
+			},
+			"year": 2023,
+			"title": "Annie Lennox : De Eurythmics à l'engagement, itinéraire d'une icône pop",
+			"votes": 0,
+			"colors": { "poster": ["#C8B4A7", "#1C1D1F"] },
+			"genres": ["documentary", "music"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/863/146/fanarts/medium/56feaa6cc8.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/863/146/posters/medium/aeea5cf4cb.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "fr",
+			"runtime": 52,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "For a long time, the musician with the velvet tone, the voice of Eurythmics, has found a balance in solo and by becoming a pasionaria of humanitarian causes. A vibrant portrait of the inventive Annie Lennox.",
+			"released": "2023-01-20",
+			"languages": ["en", "fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-02T08:25:46.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Annie Lennox : De Eurythmics à l'engagement, itinéraire d'une icône pop",
+			"available_translations": ["de", "en", "fr"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt6493642",
+				"plex": { "guid": null, "slug": null },
+				"slug": "les-derniers-jours-d-une-icone-malcolm-x",
+				"tmdb": 728985,
+				"trakt": 571140
+			},
+			"year": null,
+			"title": "Les derniers jours d'une icône - Malcolm X",
+			"votes": 1,
+			"colors": { "poster": [] },
+			"genres": [],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [],
+				"clearart": []
+			},
+			"rating": 9,
+			"status": "released",
+			"country": null,
+			"runtime": 0,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "de",
+			"overview": "",
+			"released": null,
+			"languages": ["de"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2020-08-01T08:06:28.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Les derniers jours d'une icône - Malcolm X",
+			"available_translations": ["de"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt39240679",
+				"plex": {
+					"guid": "69326298de4543c92b300fff",
+					"slug": "les-filles-de-caleb-lhistoire-dune-passion-1"
+				},
+				"slug": "les-filles-de-caleb-l-histoire-d-une-passion-2025",
+				"tmdb": 1591680,
+				"trakt": 1322769
+			},
+			"year": 2025,
+			"title": "Les filles de Caleb: l'histoire d'une passion",
+			"votes": 0,
+			"colors": { "poster": ["#D2C4AB", "#655442"] },
+			"genres": ["documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/001/322/769/fanarts/medium/7121ac7a01.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/001/322/769/posters/medium/ce9799aea6.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "ca",
+			"runtime": 52,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "In a brand-new documentary, the actress who portrayed the unforgettable Émilie Bordeleau revisits her memories of filming and analyzes the cultural legacy of this cult saga. By exploring the timeless power of its characters, she testifies to the major impact this work has had on the collective imagination and on the history of Québec television.",
+			"released": "2025-12-02",
+			"languages": ["fr"],
+			"subgenres": ["based-on-tv-series", "interview"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-01-21T08:27:42.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Les filles de Caleb: l'histoire d'une passion",
+			"available_translations": ["fr"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0463511",
+				"plex": { "guid": null, "slug": null },
+				"slug": "frank-herbert-s-dune-the-lure-of-spice",
+				"tmdb": 645530,
+				"trakt": 483081
+			},
+			"year": null,
+			"title": "Frank Herbert's Dune: The Lure of Spice",
+			"votes": 4,
+			"colors": { "poster": [] },
+			"genres": [],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [],
+				"clearart": []
+			},
+			"rating": 6.5,
+			"status": "released",
+			"country": null,
+			"runtime": 25,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "en",
+			"overview": "Documentary for Frank Herbert's Dune",
+			"released": null,
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2024-04-15T08:06:29.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Frank Herbert's Dune: The Lure of Spice",
+			"available_translations": ["en"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt25965782",
+				"plex": { "guid": "63bef29c882595859d5e215b", "slug": "rifftrax-dune-2021" },
+				"slug": "rifftrax-dune-2021",
+				"tmdb": 1142100,
+				"trakt": 919599
+			},
+			"year": null,
+			"title": "Rifftrax: Dune 2021",
+			"votes": 1,
+			"colors": { "poster": ["#E4DEC4", "#4D473E"] },
+			"genres": [],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [
+					"media.trakt.tv/images/movies/000/919/599/posters/medium/0d214f3889.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 9,
+			"status": "released",
+			"country": null,
+			"runtime": 150,
+			"tagline": "Meet Paul. His mommy thinks he’s super special!",
+			"trailer": null,
+			"homepage": "https://www.rifftrax.com/dune",
+			"language": "en",
+			"overview": "Summaries  Carving out a bold new path in sci-fi plotlines, Paul might be the chosen one. Hopefully it goes better than the last time House Atreides picked a chosen one and went with Ryan Leaf. Paul's main qualification for being a Kwisatz Haderach (translation: Webelo Scout) appears to be that he has a lot of dreams about a hot chick, in which case his mom would be wise to knock before barging into the Kwisatz's bedroom. Paul's life is upended when his dad gets transferred to Arrakis, a desert planet infested with giant worms and Duncan Idahos. Paul finds all the sand coarse, rough, and irritating, but at least he has the good sense to keep these idiotic thoughts to himself. All is overdramatic and bagpipe-y until the evil Baron Harkoness emerges from his signature Black Goo Tub to betray House Atreides, which frankly, they should have seen coming as soon as they noticed he owned a Black Goo Tub.",
+			"released": null,
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2025-04-05T20:10:02.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Rifftrax: Dune 2021",
+			"available_translations": ["en"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt7253558",
+				"plex": { "guid": null, "slug": null },
+				"slug": "autour-d-une-evasion",
+				"tmdb": 1773054,
+				"trakt": 1401177
+			},
+			"year": null,
+			"title": "Autour d'une évasion",
+			"votes": 0,
+			"colors": { "poster": [] },
+			"genres": ["documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "fr",
+			"runtime": null,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "",
+			"released": null,
+			"languages": ["fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-19T08:15:46.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Autour d'une évasion",
+			"available_translations": ["fr"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt43409396",
+				"plex": { "guid": null, "slug": null },
+				"slug": "le-temps-d-une-cigarette",
+				"tmdb": 1769849,
+				"trakt": 1400297
+			},
+			"year": null,
+			"title": "Le temps d'une cigarette",
+			"votes": 0,
+			"colors": { "poster": ["#998471", "#302C2C"] },
+			"genres": [],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [
+					"media.trakt.tv/images/movies/001/400/297/posters/medium/0c45b55eea.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "fr",
+			"runtime": null,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "",
+			"released": null,
+			"languages": ["fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-09-15T08:19:16.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Le temps d'une cigarette",
+			"available_translations": ["fr"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt10553586",
+				"plex": { "guid": null, "slug": null },
+				"slug": "naissance-d-une-diaspora",
+				"tmdb": 1735728,
+				"trakt": 1385501
+			},
+			"year": null,
+			"title": "Naissance d'une Diaspora",
+			"votes": 0,
+			"colors": { "poster": ["#A4A29A", "#151412"] },
+			"genres": [],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [
+					"media.trakt.tv/images/movies/001/385/501/posters/medium/f326516a00.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "us",
+			"runtime": 94,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "en",
+			"overview": "In 2017, more than 100,000 Haitians (mostly young people) entered Chile. This documentary gives voice to this new diaspora. With their words, they explain why and how they left everything behind, their first steps in Chile, their disappointments, their pains but also their hopes and successes. Is also told the inevitable cultural shock, rampant racism and concerns of Chilean society to what some do not hesitate to call invasion.",
+			"released": null,
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-07-24T08:05:29.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Naissance d'une Diaspora",
+			"available_translations": []
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt40185250",
+				"plex": { "guid": null, "slug": null },
+				"slug": "pas-besoin-d-une-raison-pour-vivre",
+				"tmdb": 1722241,
+				"trakt": 1378704
+			},
+			"year": null,
+			"title": "Pas besoin d'une raison pour vivre",
+			"votes": 0,
+			"colors": { "poster": [] },
+			"genres": ["drama"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "post production",
+			"country": "fr",
+			"runtime": null,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "",
+			"released": null,
+			"languages": ["fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-06-30T08:20:03.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Pas besoin d'une raison pour vivre",
+			"available_translations": ["fr"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt38501669",
+				"plex": { "guid": null, "slug": null },
+				"slug": "bankie-banx-king-of-the-dune",
+				"tmdb": 1690807,
+				"trakt": 1368852
+			},
+			"year": null,
+			"title": "Bankie Banx: King of the Dune",
+			"votes": 0,
+			"colors": { "poster": ["#9DA5A1", "#324853"] },
+			"genres": [],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/001/368/852/fanarts/medium/4ab9435507.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/001/368/852/posters/medium/4067a89676.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "ai",
+			"runtime": 118,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=JuKSLOgdTQM",
+			"homepage": "https://www.bankiebanxdocumentary.com",
+			"language": "en",
+			"overview": "Bankie Banx: King of the Dune celebrates the life and genre-defying music of the Anguillian legend, Bankie Banx. Unfailingly true to himself, Bankie chased his dreams instead of industry success and wound up right where he was meant to be.",
+			"released": null,
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": "BankieBanxKOD",
+				"facebook": "BankieBanxKingOfTheDune",
+				"instagram": "bankiebanxkingofthedune",
+				"wikipedia": null
+			},
+			"updated_at": "2026-05-10T08:21:39.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Bankie Banx: King of the Dune",
+			"available_translations": []
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt38947335",
+				"plex": { "guid": null, "slug": null },
+				"slug": "la-vie-d-une-trend",
+				"tmdb": 1685902,
+				"trakt": 1367495
+			},
+			"year": null,
+			"title": "La vie d'une Trend",
+			"votes": 0,
+			"colors": { "poster": [] },
+			"genres": [],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "fr",
+			"runtime": null,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "",
+			"released": null,
+			"languages": ["fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-05-03T08:18:14.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "La vie d'une Trend",
+			"available_translations": ["pl"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt39173565",
+				"plex": { "guid": null, "slug": null },
+				"slug": "juifs-orthodoxes-a-new-york-au-coeur-d-une-communaute-ultra-fermee",
+				"tmdb": 1631106,
+				"trakt": 1353552
+			},
+			"year": null,
+			"title": "Juifs orthodoxes à New York, au coeur d'une communauté ultra-fermée",
+			"votes": 0,
+			"colors": { "poster": [] },
+			"genres": ["documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "us",
+			"runtime": 58,
+			"tagline": "",
+			"trailer": null,
+			"homepage": "https://www.studio.nova.fr/juifs-orthodoxes-a-new-york-au-coeur-dune-communaute-ultra-fermee/",
+			"language": "en",
+			"overview": "A behind the scenes look at the current state of of this population.",
+			"released": null,
+			"languages": ["en"],
+			"subgenres": ["brooklyn-new-york-city"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-02-09T09:44:42.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Juifs orthodoxes à New York, au coeur d'une communauté ultra-fermée",
+			"available_translations": ["en"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt38516104",
+				"plex": { "guid": null, "slug": null },
+				"slug": "l-odyssee-de-dune",
+				"tmdb": 1552416,
+				"trakt": 1274577
+			},
+			"year": null,
+			"title": "L'Odyssée de DUNE",
+			"votes": 0,
+			"colors": { "poster": ["#FCFAF6", "#CA9E5C"] },
+			"genres": [],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/001/274/577/fanarts/medium/3801a791e7.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/001/274/577/posters/medium/7a7e3decfd.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "fr",
+			"runtime": null,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "",
+			"released": null,
+			"languages": ["fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-07-21T08:07:03.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "L'Odyssée de DUNE",
+			"available_translations": []
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt34748147",
+				"plex": { "guid": null, "slug": null },
+				"slug": "paysage-d-une-lutte",
+				"tmdb": 1452478,
+				"trakt": 1189370
+			},
+			"year": null,
+			"title": "Paysage d'une lutte",
+			"votes": 0,
+			"colors": { "poster": ["#FAA958", "#586078"] },
+			"genres": [],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [
+					"media.trakt.tv/images/movies/001/189/370/posters/medium/5cb5109864.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "fr",
+			"runtime": 3,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "Faced with external aggression, vegetation slowly withers and dies. But nature does not suffer without reacting.",
+			"released": null,
+			"languages": ["fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2025-03-25T08:06:25.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Paysage d'une lutte",
+			"available_translations": ["fr"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt5425824",
+				"plex": { "guid": null, "slug": null },
+				"slug": "dalida-la-femme-qui-revait-d-une-autre-scene",
+				"tmdb": 1419897,
+				"trakt": 1161615
+			},
+			"year": null,
+			"title": "Dalida, la femme qui rêvait d'une autre scène",
+			"votes": 0,
+			"colors": { "poster": ["#E1E4E5", "#776441"] },
+			"genres": ["documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/001/161/615/fanarts/medium/1ef867edac.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/001/161/615/posters/medium/9ceb5f7beb.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "fr",
+			"runtime": null,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "",
+			"released": null,
+			"languages": ["fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-01-06T08:30:14.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Dalida, la femme qui rêvait d'une autre scène",
+			"available_translations": []
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt30185686",
+				"plex": { "guid": null, "slug": null },
+				"slug": "le-corps-d-une-autre",
+				"tmdb": 1370864,
+				"trakt": 1119476
+			},
+			"year": null,
+			"title": "Le corps d'une autre",
+			"votes": 0,
+			"colors": { "poster": ["#BF8D6F", "#271409"] },
+			"genres": [],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [
+					"media.trakt.tv/images/movies/001/119/476/posters/medium/72072098f8.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "fr",
+			"runtime": 0,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "",
+			"released": null,
+			"languages": ["fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2024-10-15T08:08:08.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Le corps d'une autre",
+			"available_translations": []
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt2902756",
+				"plex": { "guid": null, "slug": null },
+				"slug": "l-ena-miroir-d-une-nation",
+				"tmdb": 529611,
+				"trakt": 1054097
+			},
+			"year": null,
+			"title": "L'ENA - Miroir d’une nation",
+			"votes": 0,
+			"colors": { "poster": [] },
+			"genres": ["documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": null,
+			"runtime": 0,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "",
+			"released": null,
+			"languages": ["fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2025-04-06T17:42:55.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "L'ENA - Miroir d’une nation",
+			"available_translations": []
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt15006892",
+				"plex": { "guid": null, "slug": null },
+				"slug": "naitre-d-une-autre",
+				"tmdb": 1020628,
+				"trakt": 820453
+			},
+			"year": null,
+			"title": "Naître d'une autre",
+			"votes": 1,
+			"colors": { "poster": [] },
+			"genres": ["documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [],
+				"poster": [],
+				"clearart": []
+			},
+			"rating": 8,
+			"status": "released",
+			"country": null,
+			"runtime": 69,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "",
+			"released": null,
+			"languages": ["fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2025-06-21T17:13:29.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Naître d'une autre",
+			"available_translations": ["fr"]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt42732171",
+				"plex": { "guid": null, "slug": null },
+				"slug": "mossoul-renaissance-d-une-ville-millenaire-2026",
+				"tmdb": 1690811,
+				"trakt": 1395883
+			},
+			"year": 2026,
+			"title": "Mossoul, renaissance d'une ville millénaire",
+			"votes": 0,
+			"colors": { "poster": ["#E9DFD9", "#6C4A37"] },
+			"genres": ["history", "documentary"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/001/395/883/fanarts/medium/4c1da68616.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/001/395/883/posters/medium/3321ecf0dc.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 0,
+			"status": "released",
+			"country": "fr",
+			"runtime": null,
+			"tagline": "",
+			"trailer": null,
+			"homepage": null,
+			"language": "fr",
+			"overview": "",
+			"released": "2026-05-09",
+			"languages": ["en", "fr"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-08-31T08:17:08.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 0,
+			"during_credits": false,
+			"original_title": "Mossoul, renaissance d'une ville millénaire",
+			"available_translations": []
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0247638",
+				"plex": { "guid": "5d7768336f4521001ea9bca9", "slug": "the-princess-diaries" },
+				"slug": "the-princess-diaries-2001",
+				"tmdb": 9880,
+				"trakt": 5117
+			},
+			"year": 2001,
+			"title": "The Princess Diaries",
+			"votes": 10114,
+			"colors": { "poster": ["#E9D4C6", "#956249"] },
+			"genres": ["comedy", "romance", "family"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/005/117/logos/medium/96ae8d57e3.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/005/117/thumbs/medium/14a9d4b0e1.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/005/117/banners/medium/7c5adf71dc.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/005/117/fanarts/medium/7723aa664a.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/005/117/posters/medium/731840b67d.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/005/117/cleararts/medium/b4aff16e24.png.webp"
+				]
+			},
+			"rating": 7.478841304779053,
+			"status": "released",
+			"country": "us",
+			"runtime": 115,
+			"tagline": "She rocks. She rules. She reigns.",
+			"trailer": "https://youtube.com/watch?v=2CkcwPi20ms",
+			"homepage": null,
+			"language": "en",
+			"overview": "A socially awkward but very bright 15-year-old girl being raised by a single mom discovers that she is the princess of a small European country because of the recent death of her long-absent father, who, unknown to her, was the crown prince of Genovia. She must make a choice between continuing the life of a San Francisco teen or stepping up to the throne.",
+			"released": "2001-08-03",
+			"languages": ["en"],
+			"subgenres": ["high-school", "princess", "joyful", "royalty"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Princess_Diaries_(film)"
+			},
+			"updated_at": "2026-09-26T08:18:41.000Z",
+			"after_credits": false,
+			"certification": "G",
+			"comment_count": 15,
+			"during_credits": false,
+			"original_title": "The Princess Diaries",
+			"available_translations": [
+				"ar",
+				"az",
+				"bg",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0368933",
+				"plex": {
+					"guid": "5d776836999c64001ec2f750",
+					"slug": "the-princess-diaries-2-royal-engagement"
+				},
+				"slug": "the-princess-diaries-2-royal-engagement-2004",
+				"tmdb": 11130,
+				"trakt": 6263
+			},
+			"year": 2004,
+			"title": "The Princess Diaries 2: Royal Engagement",
+			"votes": 5818,
+			"colors": { "poster": ["#C7A28C", "#BE1F21"] },
+			"genres": ["comedy", "drama", "romance", "family"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/006/263/logos/medium/a0f6996352.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/006/263/thumbs/medium/3361fd61f3.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/006/263/banners/medium/d1aa7d317c.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/006/263/fanarts/medium/24f84a513c.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/006/263/posters/medium/7a91848829.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.220350742340088,
+			"status": "released",
+			"country": "us",
+			"runtime": 113,
+			"tagline": "It can take a lifetime to find true love; she's got 30 days!",
+			"trailer": "https://youtube.com/watch?v=noajhlyKW8s",
+			"homepage": null,
+			"language": "en",
+			"overview": "Mia Thermopolis is now a college graduate and on her way to Genovia to take up her duties as princess. Accompanied by her friend Lilly, Mia continues her 'princess lessons', like riding horses side-saddle and archery. But her already complicated life is turned upside down once again when she learns that she is to take the crown as queen earlier than expected, all while she meets a mysteriously charming young man.",
+			"released": "2004-08-06",
+			"languages": ["en"],
+			"subgenres": ["falling-in-love", "marriage", "romantic"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Princess_Diaries_2:_Royal_Engagement"
+			},
+			"updated_at": "2026-09-20T08:19:05.000Z",
+			"after_credits": false,
+			"certification": "G",
+			"comment_count": 13,
+			"during_credits": false,
+			"original_title": "The Princess Diaries 2: Royal Engagement",
+			"available_translations": [
+				"ar",
+				"az",
+				"bg",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ru",
+				"sk",
+				"sl",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0397535",
+				"plex": { "guid": "5d77682a880197001ec91520", "slug": "memoirs-of-a-geisha" },
+				"slug": "memoirs-of-a-geisha-2005",
+				"tmdb": 1904,
+				"trakt": 1278
+			},
+			"year": 2005,
+			"title": "Memoirs of a Geisha",
+			"votes": 5393,
+			"colors": { "poster": ["#EDDED0", "#10100D"] },
+			"genres": ["history", "romance", "drama"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/001/278/logos/medium/b2b67ed747.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/001/278/thumbs/medium/12aa599a3d.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/001/278/banners/medium/b59edcf4bc.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/001/278/fanarts/medium/8c924852e3.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/001/278/posters/medium/a9ef96a666.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/001/278/cleararts/medium/06743b1107.png.webp"
+				]
+			},
+			"rating": 7.707027435302734,
+			"status": "released",
+			"country": "jp",
+			"runtime": 146,
+			"tagline": "A story like mine has never been told.",
+			"trailer": "https://youtube.com/watch?v=NwJw70Yufug",
+			"homepage": "https://www.sonypictures.com/movies/memoirsofageisha",
+			"language": "en",
+			"overview": "In the years before World War II, a penniless Japanese child is torn from her family to work as a maid in a geisha house.",
+			"released": "2005-12-06",
+			"languages": ["en", "ja"],
+			"subgenres": [
+				"period-drama",
+				"world-war-ii",
+				"admiring",
+				"sibling-relationship",
+				"prostitute",
+				"1940s",
+				"authoritarian",
+				"1920s",
+				"1930s"
+			],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Memoirs_of_a_Geisha_(film)"
+			},
+			"updated_at": "2026-09-25T08:08:48.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 20,
+			"during_credits": false,
+			"original_title": "Memoirs of a Geisha",
+			"available_translations": [
+				"be",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"id",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ru",
+				"sk",
+				"sl",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt9731534",
+				"plex": { "guid": "5d77708131d95e001f1a33af", "slug": "the-night-house" },
+				"slug": "the-night-house-2021",
+				"tmdb": 547565,
+				"trakt": 397697
+			},
+			"year": 2021,
+			"title": "The Night House",
+			"votes": 5248,
+			"colors": { "poster": ["#E7C7C7", "#131213"] },
+			"genres": ["horror", "mystery"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/397/697/logos/medium/21d150219b.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/397/697/thumbs/medium/a2e93010d3.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/397/697/banners/medium/767f018a58.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/397/697/fanarts/medium/cce48a5c90.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/397/697/posters/medium/287a86dc52.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.621951103210449,
+			"status": "released",
+			"country": "gb",
+			"runtime": 107,
+			"tagline": "The truth will surface.",
+			"trailer": "https://youtube.com/watch?v=W8WQGXkif_s",
+			"homepage": "https://www.searchlightpictures.com/thenighthouse/",
+			"language": "en",
+			"overview": "Reeling from the unexpected death of her husband, Beth is left alone in the lakeside home he built for her. Soon she begins to uncover her recently deceased husband's disturbing secrets.",
+			"released": "2021-08-20",
+			"languages": ["en"],
+			"subgenres": ["forest", "nightmare", "occult", "widow"],
+			"social_ids": {
+				"twitter": "nighthousemovie",
+				"facebook": "nighthousemovie",
+				"instagram": "nighthousemovie",
+				"wikipedia": "The_Night_House"
+			},
+			"updated_at": "2026-09-26T08:26:26.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 57,
+			"during_credits": false,
+			"original_title": "The Night House",
+			"available_translations": [
+				"ar",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"id",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"lv",
+				"my",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt1216487",
+				"plex": {
+					"guid": "5d77684d85719b001f3a7dd4",
+					"slug": "the-girl-who-played-with-fire"
+				},
+				"slug": "the-girl-who-played-with-fire-2009",
+				"tmdb": 24253,
+				"trakt": 14582
+			},
+			"year": 2009,
+			"title": "The Girl Who Played with Fire",
+			"votes": 3558,
+			"colors": { "poster": ["#D39683", "#0D151B"] },
+			"genres": ["action", "crime", "drama", "mystery", "thriller"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/014/582/logos/medium/33d0313675.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/014/582/thumbs/medium/07b0d2b077.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/014/582/banners/medium/230c3b930c.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/014/582/fanarts/medium/7c788c1033.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/014/582/posters/medium/bedd39daed.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.455873966217041,
+			"status": "released",
+			"country": "dk",
+			"runtime": 129,
+			"tagline": "Fight Fire with Fire",
+			"trailer": "https://youtube.com/watch?v=oSsodK7KFXQ",
+			"homepage": "https://dragontattoofilm.com/about-5/the-girl-who-played-with-fire/",
+			"language": "sv",
+			"overview": "Mikael Blomkvist, publisher of Millennium magazine, has made his living exposing the crooked and corrupt practices of establishment Swedish figures. So when a young journalist approaches him with a meticulously researched thesis about sex trafficking in Sweden and those in high office who abuse underage girls, Blomkvist immediately throws himself into the investigation.",
+			"released": "2009-09-18",
+			"languages": ["sv", "it", "fr"],
+			"subgenres": ["friendship", "investigation"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Girl_Who_Played_with_Fire_(film)"
+			},
+			"updated_at": "2026-09-25T08:09:01.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 8,
+			"during_credits": false,
+			"original_title": "Flickan som lekte med elden",
+			"available_translations": [
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"is",
+				"it",
+				"ja",
+				"ko",
+				"lt",
+				"my",
+				"nb",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt1093908",
+				"plex": {
+					"guid": "5d776845f59e58002189a902",
+					"slug": "confessions-of-a-shopaholic"
+				},
+				"slug": "confessions-of-a-shopaholic-2009",
+				"tmdb": 20048,
+				"trakt": 12305
+			},
+			"year": 2009,
+			"title": "Confessions of a Shopaholic",
+			"votes": 4552,
+			"colors": { "poster": ["#D7D4D6", "#A46446"] },
+			"genres": ["comedy", "romance"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/012/305/logos/medium/95a9293b22.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/012/305/thumbs/medium/80db76f3cf.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/012/305/banners/medium/afd4634267.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/012/305/fanarts/medium/21fab18a16.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/012/305/posters/medium/50f38f4dbc.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/012/305/cleararts/medium/026bbe1a1e.png.webp"
+				]
+			},
+			"rating": 7.010324954986572,
+			"status": "released",
+			"country": "us",
+			"runtime": 104,
+			"tagline": "All she ever wanted was a little credit...",
+			"trailer": "https://youtube.com/watch?v=d-jE5WJ7J28",
+			"homepage": null,
+			"language": "en",
+			"overview": "In the glamorous world of New York City, Rebecca Bloomwood is a fun-loving girl who is really good at shopping – a little too good, perhaps. She dreams of working for her favorite fashion magazine, but can't quite get her foot in the door – until ironically, she snags a job as an advice columnist for a financial magazine published by the same company.",
+			"released": "2009-02-05",
+			"languages": ["en", "fi", "fr"],
+			"subgenres": ["romcom", "department-store"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Confessions_of_a_Shopaholic_(film)"
+			},
+			"updated_at": "2026-09-23T08:23:22.000Z",
+			"after_credits": false,
+			"certification": "PG",
+			"comment_count": 13,
+			"during_credits": true,
+			"original_title": "Confessions of a Shopaholic",
+			"available_translations": [
+				"bg",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0962736",
+				"plex": { "guid": "5d776842961905001eb967a9", "slug": "the-young-victoria" },
+				"slug": "the-young-victoria-2009",
+				"tmdb": 18320,
+				"trakt": 11213
+			},
+			"year": 2009,
+			"title": "The Young Victoria",
+			"votes": 1618,
+			"colors": { "poster": ["#D1B49D", "#351608"] },
+			"genres": ["drama", "history", "romance"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/011/213/logos/medium/7502808249.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/011/213/thumbs/medium/55ccb9a6e3.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/011/213/banners/medium/ebb563c1c8.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/011/213/fanarts/medium/ac60c379e9.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/011/213/posters/medium/4ba07a771c.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.423980236053467,
+			"status": "released",
+			"country": "us",
+			"runtime": 105,
+			"tagline": "Love rules all.",
+			"trailer": "https://youtube.com/watch?v=MElrsyE_QAM",
+			"homepage": null,
+			"language": "en",
+			"overview": "As the only legitimate heir of England's King William, teenage Victoria gets caught up in the political machinations of her own family. Victoria's mother wants her to sign a regency order, while her Belgian uncle schemes to arrange a marriage between the future monarch and Prince Albert, the man who will become the love of her life.",
+			"released": "2009-03-06",
+			"languages": ["en", "de"],
+			"subgenres": ["19th-century", "period-drama", "royal-family", "royalty"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": "TheYoungVictoriaMovie",
+				"instagram": null,
+				"wikipedia": "The_Young_Victoria"
+			},
+			"updated_at": "2026-08-31T16:42:18.000Z",
+			"after_credits": false,
+			"certification": "PG",
+			"comment_count": 8,
+			"during_credits": false,
+			"original_title": "The Young Victoria",
+			"available_translations": [
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt12987894",
+				"plex": {
+					"guid": "5f40c75a04a8650040b95525",
+					"slug": "american-murder-the-family-next-door"
+				},
+				"slug": "american-murder-the-family-next-door-2020",
+				"tmdb": 743601,
+				"trakt": 584296
+			},
+			"year": 2020,
+			"title": "American Murder: The Family Next Door",
+			"votes": 4372,
+			"colors": { "poster": ["#C5C3C1", "#483E3C"] },
+			"genres": ["documentary", "crime"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/584/296/fanarts/medium/65ffe27fa9.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/584/296/posters/medium/229148f990.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.866422653198242,
+			"status": "released",
+			"country": "us",
+			"runtime": 83,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=ep8iKiQNSrY",
+			"homepage": "https://www.netflix.com/title/81130130",
+			"language": "en",
+			"overview": "Using raw, firsthand footage, this documentary examines the disappearance of Shanann Watts and her children, and the terrible events that followed.",
+			"released": "2020-09-30",
+			"languages": ["en"],
+			"subgenres": ["murder", "killer", "missing-person", "true-crime"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "American_Murder:_The_Family_Next_Door"
+			},
+			"updated_at": "2026-09-25T08:08:27.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 23,
+			"during_credits": false,
+			"original_title": "American Murder: The Family Next Door",
+			"available_translations": [
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"hu",
+				"id",
+				"it",
+				"ja",
+				"ko",
+				"lt",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sv",
+				"th",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt3007512",
+				"plex": { "guid": "5d776aa7594b2b001e6c2619", "slug": "the-water-diviner" },
+				"slug": "the-water-diviner-2014",
+				"tmdb": 256917,
+				"trakt": 156748
+			},
+			"year": 2014,
+			"title": "The Water Diviner",
+			"votes": 1993,
+			"colors": { "poster": ["#DBDCDB", "#393939"] },
+			"genres": ["drama", "war"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/156/748/logos/medium/b2d6044d69.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/156/748/thumbs/medium/ba6420c78a.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/156/748/banners/medium/62687d0bb0.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/156/748/fanarts/medium/847e416029.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/156/748/posters/medium/af2d46bb4a.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/156/748/cleararts/medium/ba80926b1e.png.webp"
+				]
+			},
+			"rating": 6.946814060211182,
+			"status": "released",
+			"country": "au",
+			"runtime": 112,
+			"tagline": "To honour a promise. To find his sons. To make his peace.",
+			"trailer": "https://youtube.com/watch?v=grIiiHuetis",
+			"homepage": "https://www.thewaterdiviner.com/",
+			"language": "en",
+			"overview": "In 1919, Australian farmer Joshua Connor travels to Turkey to discover the fate of his three sons, reported missing in action. Holding on to hope, Joshua must travel across the war-torn landscape to find the truth and his own peace.",
+			"released": "2014-12-26",
+			"languages": ["ru", "tr", "el", "en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": "TheWaterDivinerMovie",
+				"instagram": null,
+				"wikipedia": "The_Water_Diviner"
+			},
+			"updated_at": "2026-08-31T16:42:44.000Z",
+			"after_credits": false,
+			"certification": "R",
+			"comment_count": 7,
+			"during_credits": false,
+			"original_title": "The Water Diviner",
+			"available_translations": [
+				"ar",
+				"az",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hr",
+				"hu",
+				"id",
+				"it",
+				"ja",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0489237",
+				"plex": { "guid": "5d9f3501d5fd3f001ee1516b", "slug": "the-nanny-diaries" },
+				"slug": "the-nanny-diaries-2007",
+				"tmdb": 12435,
+				"trakt": 7222
+			},
+			"year": 2007,
+			"title": "The Nanny Diaries",
+			"votes": 2280,
+			"colors": { "poster": ["#FDFCFB", "#A41620"] },
+			"genres": ["comedy", "drama", "romance"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/007/222/logos/medium/d2719fff45.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/007/222/thumbs/medium/639dedcc09.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/007/222/banners/medium/4c0b58375d.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/007/222/fanarts/medium/6caa7778e6.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/007/222/posters/medium/f369cc5553.jpg.webp"
+				],
+				"clearart": [
+					"media.trakt.tv/images/movies/000/007/222/cleararts/medium/f5d6172dd5.png.webp"
+				]
+			},
+			"rating": 6.727631568908691,
+			"status": "released",
+			"country": "us",
+			"runtime": 105,
+			"tagline": "A comedy about life at the top, as seen from the bottom.",
+			"trailer": "https://youtube.com/watch?v=Fwb8euJ-Evk",
+			"homepage": null,
+			"language": "en",
+			"overview": "A college graduate goes to work as a nanny for a rich New York family. Ensconced in their home, she has to juggle their dysfunction, a new romance, and the spoiled brat in her charge.",
+			"released": "2007-08-24",
+			"languages": ["en"],
+			"subgenres": ["little-boy"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Nanny_Diaries_(film)"
+			},
+			"updated_at": "2026-09-25T08:12:05.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 6,
+			"during_credits": false,
+			"original_title": "The Nanny Diaries",
+			"available_translations": [
+				"ar",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lv",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sr",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0040580",
+				"plex": { "guid": "5d9f3504dfd128002089fe53", "slug": "melody-time" },
+				"slug": "melody-time-1948",
+				"tmdb": 13757,
+				"trakt": 8163
+			},
+			"year": 1948,
+			"title": "Melody Time",
+			"votes": 713,
+			"colors": { "poster": ["#F9DF6D", "#D66854"] },
+			"genres": ["animation", "music", "family"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/008/163/logos/medium/3a4890edc3.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/008/163/thumbs/medium/ef14bade22.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/008/163/banners/medium/fea4b336d1.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/008/163/fanarts/medium/dd013a98c1.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/008/163/posters/medium/c44b753816.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 5.90743350982666,
+			"status": "released",
+			"country": "us",
+			"runtime": 75,
+			"tagline": "For Your All-Time Good Time!",
+			"trailer": "https://youtube.com/watch?v=BjgrjB_8vdg",
+			"homepage": null,
+			"language": "en",
+			"overview": "In the grand tradition of Disney's great musical classics, Melody Time features seven timeless stories, each enhanced with high-spirited music and unforgettable characters. You'll be sure to tap your toes and clap your hands in this witty feast for the eyes and ears.",
+			"released": "1948-05-27",
+			"languages": ["en"],
+			"subgenres": ["live-action-and-animation"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Melody_Time"
+			},
+			"updated_at": "2026-09-05T08:16:52.000Z",
+			"after_credits": false,
+			"certification": "NR",
+			"comment_count": 7,
+			"during_credits": false,
+			"original_title": "Melody Time",
+			"available_translations": [
+				"ar",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"it",
+				"ja",
+				"ko",
+				"nl",
+				"no",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sv",
+				"tr",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0361467",
+				"plex": {
+					"guid": "5d776836999c64001ec2f751",
+					"slug": "confessions-of-a-teenage-drama-queen"
+				},
+				"slug": "confessions-of-a-teenage-drama-queen-2004",
+				"tmdb": 11132,
+				"trakt": 6265
+			},
+			"year": 2004,
+			"title": "Confessions of a Teenage Drama Queen",
+			"votes": 1584,
+			"colors": { "poster": ["#F1E6DE", "#B87D42"] },
+			"genres": ["comedy"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/006/265/logos/medium/b1d2c7353d.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/006/265/thumbs/medium/413c3f7113.jpg.webp"
+				],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/006/265/fanarts/medium/0f07a13cab.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/006/265/posters/medium/0c0c99a97b.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.33143949508667,
+			"status": "released",
+			"country": "us",
+			"runtime": 90,
+			"tagline": "So much drama, so little time.",
+			"trailer": "https://youtube.com/watch?v=OjdHGTBYDsc",
+			"homepage": "https://movies.disney.com/confessions-of-a-teenage-drama-queen",
+			"language": "en",
+			"overview": "After moving to New Jersey, Lola bags a coveted role in a school play, which earns her the wrath of Carla, the most popular girl in school, who will do anything to ruin Lola's life.",
+			"released": "2004-02-20",
+			"languages": ["en"],
+			"subgenres": [
+				"high-school",
+				"female-friendship",
+				"concert",
+				"mother-daughter-relationship",
+				"rock-star",
+				"rivalry"
+			],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Confessions_of_a_Teenage_Drama_Queen"
+			},
+			"updated_at": "2026-09-16T08:25:55.000Z",
+			"after_credits": false,
+			"certification": "PG",
+			"comment_count": 5,
+			"during_credits": false,
+			"original_title": "Confessions of a Teenage Drama Queen",
+			"available_translations": [
+				"bg",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fi",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"sk",
+				"sv",
+				"th",
+				"tr",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0995868",
+				"plex": { "guid": "5d776a8afb0d55001f549107", "slug": "pele-birth-of-a-legend" },
+				"slug": "pele-birth-of-a-legend-2016",
+				"tmdb": 245913,
+				"trakt": 149649
+			},
+			"year": 2016,
+			"title": "Pelé: Birth of a Legend",
+			"votes": 1479,
+			"colors": { "poster": ["#5496A8", "#171731"] },
+			"genres": ["drama"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/149/649/logos/medium/6f1c259382.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/149/649/fanarts/medium/4d964d9c9e.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/149/649/posters/medium/ef0b981cd5.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.598377227783203,
+			"status": "released",
+			"country": "us",
+			"runtime": 107,
+			"tagline": "A boy with nothing who changed everything.",
+			"trailer": "https://youtube.com/watch?v=XBrfxHOXsDE",
+			"homepage": null,
+			"language": "en",
+			"overview": "The life story of Brazilian football legend, Pele.",
+			"released": "2016-05-06",
+			"languages": ["en", "ru"],
+			"subgenres": ["sports", "football-soccer", "inspirational"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Pelé:_Birth_of_a_Legend"
+			},
+			"updated_at": "2026-09-11T08:15:16.000Z",
+			"after_credits": false,
+			"certification": "PG",
+			"comment_count": 6,
+			"during_credits": false,
+			"original_title": "Pelé: Birth of a Legend",
+			"available_translations": [
+				"ar",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"gl",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sk",
+				"sl",
+				"sv",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt1753584",
+				"plex": {
+					"guid": "5d77695d23d5a3001f4f6d8a",
+					"slug": "sexual-chronicles-of-a-french-family"
+				},
+				"slug": "sexual-chronicles-of-a-french-family-2012",
+				"tmdb": 112160,
+				"trakt": 78890
+			},
+			"year": 2012,
+			"title": "Sexual Chronicles of a French Family",
+			"votes": 432,
+			"colors": { "poster": ["#CB9297", "#2C2523"] },
+			"genres": ["comedy", "drama", "romance"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/078/890/fanarts/medium/fae8ccdf08.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/078/890/posters/medium/9db4b0243d.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 5.513888835906982,
+			"status": "released",
+			"country": "fr",
+			"runtime": 85,
+			"tagline": "",
+			"trailer": "https://youtube.com/watch?v=uZq9OfchXEE",
+			"homepage": null,
+			"language": "fr",
+			"overview": "Three generations of a French family open up about their sexual experiences and desires after young Romain is caught masturbating in his biology class.",
+			"released": "2012-05-09",
+			"languages": ["fr"],
+			"subgenres": [
+				"parent-child-relationship",
+				"coming-of-age",
+				"family-relationships",
+				"husband-wife-relationship"
+			],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Sexual_Chronicles_of_a_French_Family"
+			},
+			"updated_at": "2026-08-31T16:32:03.000Z",
+			"after_credits": false,
+			"certification": "NR",
+			"comment_count": 6,
+			"during_credits": false,
+			"original_title": "Chroniques sexuelles d'une famille d'aujourd'hui",
+			"available_translations": [
+				"bg",
+				"cs",
+				"de",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"sv",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt3816564",
+				"plex": {
+					"guid": "5d776b11594b2b001e6ce29e",
+					"slug": "star-wars-rebels-spark-of-rebellion"
+				},
+				"slug": "star-wars-rebels-spark-of-rebellion-2014",
+				"tmdb": 287663,
+				"trakt": 184738
+			},
+			"year": 2014,
+			"title": "Star Wars Rebels: Spark of Rebellion",
+			"votes": 674,
+			"colors": { "poster": ["#99816A", "#3B3135"] },
+			"genres": ["adventure", "animation", "action", "science-fiction", "family"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/184/738/fanarts/medium/44ff12b5b2.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/184/738/posters/medium/104c2c5cb7.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.661719799041748,
+			"status": "released",
+			"country": "us",
+			"runtime": 44,
+			"tagline": "Join the rebellion.",
+			"trailer": "https://youtube.com/watch?v=vVR9jpzABWo",
+			"homepage": null,
+			"language": "en",
+			"overview": "It is a dark time. The Jedi are no more, and the Empire rules the galaxy with an iron fist -- bringing tyranny to the Outer Rim world of Lothal. Their ominous presence is a cloud over the planet, squashing any hope of freedom or a better life, especially for 14-year-old orphan Ezra Bridger. But the young con artist soon finds that destiny has other plans for him, as he encounters a small band of rebels who dare to strike back against the Empire.",
+			"released": "2014-10-03",
+			"languages": ["en"],
+			"subgenres": [],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": null
+			},
+			"updated_at": "2026-06-02T08:19:31.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 5,
+			"during_credits": false,
+			"original_title": "Star Wars Rebels: Spark of Rebellion",
+			"available_translations": [
+				"ar",
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"it",
+				"nl",
+				"pt",
+				"ro",
+				"ru",
+				"th",
+				"tr"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0004972",
+				"plex": { "guid": "5d776827880197001ec90909", "slug": "the-birth-of-a-nation" },
+				"slug": "the-birth-of-a-nation-1915",
+				"tmdb": 618,
+				"trakt": 494
+			},
+			"year": 1915,
+			"title": "The Birth of a Nation",
+			"votes": 599,
+			"colors": { "poster": ["#BAA863", "#7F6648"] },
+			"genres": ["drama", "history", "war"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/000/494/logos/medium/6d1182d451.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/000/494/thumbs/medium/4aba913373.jpg.webp"
+				],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/000/494/fanarts/medium/cb2f082d72.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/000/494/posters/medium/3a480cf686.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 5.322203636169434,
+			"status": "released",
+			"country": "us",
+			"runtime": 195,
+			"tagline": "The Fiery Cross of the Ku Klux Klan!",
+			"trailer": "https://youtube.com/watch?v=a9UPOkIpR0A",
+			"homepage": null,
+			"language": "en",
+			"overview": "Two families, abolitionist Northerners the Stonemans and Southern landowners the Camerons, intertwine. When Confederate colonel Ben Cameron is captured in battle, nurse Elsie Stoneman petitions for his pardon. In Reconstruction-era South Carolina, Cameron founds the Ku Klux Klan, battling Elsie's congressman father and his African-American protégé, Silas Lynch.",
+			"released": "1915-03-21",
+			"languages": ["xx", "en"],
+			"subgenres": [
+				"19th-century",
+				"period-drama",
+				"silent-film",
+				"independent-film",
+				"historical-epic",
+				"racism",
+				"army",
+				"american-civil-war"
+			],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "The_Birth_of_a_Nation"
+			},
+			"updated_at": "2026-09-26T08:21:56.000Z",
+			"after_credits": false,
+			"certification": "NR",
+			"comment_count": 9,
+			"during_credits": false,
+			"original_title": "The Birth of a Nation",
+			"available_translations": [
+				"ar",
+				"bg",
+				"ca",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"et",
+				"fi",
+				"fr",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"lt",
+				"lv",
+				"nl",
+				"pl",
+				"pt",
+				"ro",
+				"ru",
+				"sv",
+				"tr",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0040536",
+				"plex": {
+					"guid": "5d776829f54112001f5bc151",
+					"slug": "letter-from-an-unknown-woman"
+				},
+				"slug": "letter-from-an-unknown-woman-1948",
+				"tmdb": 946,
+				"trakt": 786
+			},
+			"year": 1948,
+			"title": "Letter from an Unknown Woman",
+			"votes": 339,
+			"colors": { "poster": ["#B0A7B1", "#1E203A"] },
+			"genres": ["drama", "romance"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/000/786/logos/medium/d3b7af6a09.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/000/786/fanarts/medium/6cd81f4955.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/000/786/posters/medium/ccdd1023b4.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.64011812210083,
+			"status": "released",
+			"country": "us",
+			"runtime": 87,
+			"tagline": "This is the love every woman lives for…the love every man would die for!",
+			"trailer": "https://youtube.com/watch?v=lOtmlrHJfRU",
+			"homepage": null,
+			"language": "en",
+			"overview": "A pianist about to flee from a duel receives a letter from a woman he cannot remember. As she tells the story of her lifelong love for him, he is forced to reinterpret his own past.",
+			"released": "1948-04-28",
+			"languages": ["en"],
+			"subgenres": ["love-of-one-s-life"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Letter_from_an_Unknown_Woman_(1948_film)"
+			},
+			"updated_at": "2026-08-31T16:23:19.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 4,
+			"during_credits": false,
+			"original_title": "Letter from an Unknown Woman",
+			"available_translations": [
+				"ca",
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ko",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"sv",
+				"tr",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt3576728",
+				"plex": { "guid": "5d776b8cfb0d55001f56af2d", "slug": "bilal-a-new-breed-of-hero" },
+				"slug": "bilal-a-new-breed-of-hero-2016",
+				"tmdb": 332718,
+				"trakt": 213607
+			},
+			"year": 2016,
+			"title": "Bilal: A New Breed of Hero",
+			"votes": 414,
+			"colors": { "poster": ["#AB867C", "#392C2A"] },
+			"genres": ["animation", "adventure", "action", "history"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/213/607/logos/medium/757aadf57d.png.webp"
+				],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/213/607/fanarts/medium/4155126677.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/213/607/posters/medium/7247afaaca.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 7.275362491607666,
+			"status": "released",
+			"country": "us",
+			"runtime": 109,
+			"tagline": "The power of one",
+			"trailer": "https://youtube.com/watch?v=memYLNa-7wQ",
+			"homepage": "https://www.bilalmovie.com/",
+			"language": "en",
+			"overview": "A thousand years ago, one boy with a dream of becoming a great warrior is abducted with his sister and taken to a land far away from home. Thrown into a world where greed and injustice rule all, Bilal finds the courage to raise his voice and make a change. Inspired by true events, this is a story of a real hero who earned his remembrance in time and history.",
+			"released": "2018-02-02",
+			"languages": ["en"],
+			"subgenres": ["hero", "3d-animation", "adult-animation", "dreams", "religion"],
+			"social_ids": {
+				"twitter": "bilal_movie",
+				"facebook": "bilalmovie",
+				"instagram": "bilalmovie",
+				"wikipedia": "Bilal:_A_New_Breed_of_Hero"
+			},
+			"updated_at": "2026-09-23T08:20:26.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 4,
+			"during_credits": false,
+			"original_title": "Bilal: A New Breed of Hero",
+			"available_translations": [
+				"ar",
+				"bg",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fa",
+				"fr",
+				"he",
+				"it",
+				"ko",
+				"lv",
+				"nl",
+				"pt",
+				"ro",
+				"ru",
+				"tr",
+				"uk",
+				"vi",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt0140379",
+				"plex": {
+					"guid": "5e397bc77be381003d7ba240",
+					"slug": "a-midsummer-nights-dream-1999-1"
+				},
+				"slug": "a-midsummer-night-s-dream-1999",
+				"tmdb": 10210,
+				"trakt": 5422
+			},
+			"year": 1999,
+			"title": "A Midsummer Night's Dream",
+			"votes": 547,
+			"colors": { "poster": ["#BE8E54", "#1C180B"] },
+			"genres": ["comedy", "fantasy", "romance"],
+			"images": {
+				"logo": [],
+				"thumb": [],
+				"banner": [],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/005/422/fanarts/medium/50685532e1.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/005/422/posters/medium/71a631e06c.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 6.497257709503174,
+			"status": "released",
+			"country": "it",
+			"runtime": 116,
+			"tagline": "Love makes fools of us all.",
+			"trailer": "https://youtube.com/watch?v=0ygOgq_XmmU",
+			"homepage": null,
+			"language": "en",
+			"overview": "Mistaken identity, unrequited love, and the supernatural are combined in Shakespeare's classic set in the woods of Greece on a moonlit night.",
+			"released": "1999-10-08",
+			"languages": ["en"],
+			"subgenres": ["fairy"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "A_Midsummer_Night's_Dream_(1999_film)"
+			},
+			"updated_at": "2026-09-24T08:19:04.000Z",
+			"after_credits": false,
+			"certification": "PG-13",
+			"comment_count": 3,
+			"during_credits": false,
+			"original_title": "A Midsummer Night's Dream",
+			"available_translations": [
+				"bg",
+				"cs",
+				"da",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"he",
+				"hu",
+				"it",
+				"ja",
+				"ka",
+				"ko",
+				"lt",
+				"nl",
+				"pl",
+				"pt",
+				"ru",
+				"sv",
+				"tr",
+				"uk",
+				"zh"
+			]
+		}
+	},
+	{
+		"score": 578730123365189600,
+		"type": "movie",
+		"movie": {
+			"ids": {
+				"imdb": "tt5157456",
+				"plex": { "guid": "5d776bf8594b2b001e6e7fee", "slug": "viking" },
+				"slug": "viking-2016",
+				"tmdb": 369698,
+				"trakt": 224226
+			},
+			"year": 2016,
+			"title": "Viking",
+			"votes": 275,
+			"colors": { "poster": ["#B3C1C5", "#333338"] },
+			"genres": ["history", "action", "drama"],
+			"images": {
+				"logo": [
+					"media.trakt.tv/images/movies/000/224/226/logos/medium/5851c65c8f.png.webp"
+				],
+				"thumb": [
+					"media.trakt.tv/images/movies/000/224/226/thumbs/medium/4bf4320f34.jpg.webp"
+				],
+				"banner": [
+					"media.trakt.tv/images/movies/000/224/226/banners/medium/779ae613a4.jpg.webp"
+				],
+				"fanart": [
+					"media.trakt.tv/images/movies/000/224/226/fanarts/medium/f56cc05977.jpg.webp"
+				],
+				"poster": [
+					"media.trakt.tv/images/movies/000/224/226/posters/medium/15d32f6dbe.jpg.webp"
+				],
+				"clearart": []
+			},
+			"rating": 5.345454692840576,
+			"status": "released",
+			"country": "ru",
+			"runtime": 133,
+			"tagline": "Blood laws call for revenge!",
+			"trailer": "https://youtube.com/watch?v=5FWtcorm7hA",
+			"homepage": null,
+			"language": "ru",
+			"overview": "The early Middle Ages. A time of heavy swords and dark blood law. The ruling clan is in discord. The guilt for the accidental death of the brother has fallen on the Grand Duke. According to the law, revenge must be taken by the younger brother, a bastard. For the refusal to kill, he has to pay with eve- rything he had, because “for peace you need more swords than for a war”...",
+			"released": "2016-12-29",
+			"languages": ["ru"],
+			"subgenres": ["middle-ages-476-1453", "vikings-norsemen", "swordplay"],
+			"social_ids": {
+				"twitter": null,
+				"facebook": null,
+				"instagram": null,
+				"wikipedia": "Viking_(2016_film)"
+			},
+			"updated_at": "2026-09-08T08:26:06.000Z",
+			"after_credits": false,
+			"certification": null,
+			"comment_count": 1,
+			"during_credits": false,
+			"original_title": "Викинг",
+			"available_translations": [
+				"bg",
+				"ca",
+				"cs",
+				"de",
+				"el",
+				"en",
+				"es",
+				"fr",
+				"hu",
+				"it",
+				"ko",
+				"lv",
+				"pl",
+				"pt",
+				"ru",
+				"sk",
+				"sr",
+				"tr",
+				"uk",
+				"zh"
+			]
+		}
+	}
+]

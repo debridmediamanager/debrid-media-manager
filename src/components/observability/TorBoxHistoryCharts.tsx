@@ -373,7 +373,7 @@ export function TorBoxHistoryCharts() {
 				<div className="flex h-64 items-center justify-center">
 					<div className="text-center text-slate-400">
 						<p>Unable to load historical data</p>
-						<p className="mt-1 text-xs text-slate-500">{error}</p>
+						<p className="mt-1 text-xs text-slate-400">{error}</p>
 						<button
 							onClick={() => fetchHistory()}
 							className="mt-3 rounded-lg bg-slate-700 px-4 py-2 text-sm hover:bg-slate-600"
@@ -435,7 +435,7 @@ export function TorBoxHistoryCharts() {
 					<div className="text-center text-slate-400">
 						<BarChart3 className="mx-auto h-12 w-12 text-slate-600" />
 						<p className="mt-3">No historical data available yet</p>
-						<p className="mt-1 text-xs text-slate-500">
+						<p className="mt-1 text-xs text-slate-400">
 							Data appears once DMM users start calling TorBox, or once visitors start
 							checking the CDN above
 						</p>
@@ -602,7 +602,7 @@ export function TorBoxHistoryCharts() {
 						<h3 className="mb-1 text-sm font-medium text-slate-200">
 							CDN Regions Serving Bytes
 						</h3>
-						<p className="mb-4 text-xs text-slate-500">
+						<p className="mb-4 text-xs text-slate-400">
 							Measured in visitors&apos; own browsers, across their own networks -
 							never by a probe of ours.
 						</p>
@@ -671,7 +671,7 @@ export function TorBoxHistoryCharts() {
 						) : (
 							<div
 								data-testid="torbox-cdn-empty"
-								className="flex h-[200px] items-center justify-center text-center text-sm text-slate-500"
+								className="flex h-[200px] items-center justify-center text-center text-sm text-slate-400"
 							>
 								<div>
 									<p>Not enough visitor checks yet</p>
@@ -709,14 +709,14 @@ export function TorBoxHistoryCharts() {
 												</span>
 												<div className="flex flex-shrink-0 items-center gap-2">
 													{region.avgLatencyMs !== null && (
-														<span className="text-slate-600">
+														<span className="text-slate-400">
 															{Math.round(region.avgLatencyMs)}ms
 														</span>
 													)}
 													<span
 														className={
 															!enough
-																? 'text-slate-500'
+																? 'text-slate-400'
 																: region.rate >= 0.9
 																	? 'text-emerald-400'
 																	: region.rate >= 0.5

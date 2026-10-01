@@ -163,11 +163,18 @@ Those reads are capped at 15 minutes (`RSS_TTL_MS`).
    stored, already-cleaned NZB — zero upstream calls, and it works even if the upstream
    indexer is dead or has been removed from the config (which is why the store check
    precedes indexer resolution).
-4. Miss: resolve the indexer by prefix, `fetchNzbFrom` (keeps the HTTP-200
+4. Miss: resolve the indexer by prefix. An indexer configured with `grabLimit`
+   (`{rateLimit, windowSeconds}`) is checked against a sliding window shared by every
+   sponsor, for an upstream download allowance DMM shares with other consumers. Over
+   it the grab answers error 300, not 429: a `Request limit reached` benches all of
+   DMM in an \*arr when only one upstream is out, while a failed release sends it on
+   to the next. Refusals take no slot (`countRefused: false`), so the cap reopens as
+   admitted grabs age out; store hits never touch it.
+5. `fetchNzbFrom` (keeps the HTTP-200
    error-envelope check and redirect-following from `services/nzb2rd.ts`), sanitize,
    write the cleaned XML to the store best-effort (a write failure logs and still
    serves), serve.
-5. Response: `Content-Type: application/x-nzb`, RFC-5987 dual-filename
+6. Response: `Content-Type: application/x-nzb`, RFC-5987 dual-filename
    `Content-Disposition`, and `X-Nzb-Removed` describing what sanitization stripped
    (`-` on a store hit). Grab failures answer error 300 with a generic description —
    the underlying error names the upstream, which is exactly what this endpoint
@@ -210,7 +217,7 @@ watermark article is.
 
 ## Environment
 
-`NEWZNAB_INDEXERS` (JSON array of `{prefix, name, url, apiKey, keyless?, pacing?}` —
+`NEWZNAB_INDEXERS` (JSON array of `{prefix, name, url, apiKey, keyless?, pacing?, grabLimit?}` —
 `url` is the full API endpoint including any non-standard api path),
 `NEWZNAB_TOKEN_SECRET` (64 hex chars; unset ⇒ the endpoint answers 910),
 `NEWZNAB_PUBLIC_BASE`, `B2_KEY_ID` / `B2_APP_KEY` / `B2_BUCKET` (optional — store

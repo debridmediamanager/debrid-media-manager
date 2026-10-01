@@ -1,5 +1,14 @@
+import kitsuBatch from '@/test/fixtures/anime/kitsu-import-batch.json';
+import kitsuNoMatch from '@/test/fixtures/anime/kitsu-search-zzqqxxnotananime.json';
 import { describe, expect, it, vi } from 'vitest';
-import { KITSU_API_BASE, fetchKitsuAnime, normalizeKitsuAnime, searchKitsuAnimeIds } from './kitsu';
+import {
+	KITSU_API_BASE,
+	KITSU_IMPORT_USER_AGENT,
+	fetchKitsuAnime,
+	fetchKitsuAnimeBatch,
+	normalizeKitsuAnime,
+	searchKitsuAnimeIds,
+} from './kitsu';
 
 const respond = (body: unknown, ok = true) =>
 	vi.fn().mockResolvedValue({
@@ -25,6 +34,8 @@ describe('normalizeKitsuAnime', () => {
 			poster: 'o.jpg',
 			backdrop: 'co.jpg',
 			rating: 8.2,
+			type: '',
+			episodeCount: 0,
 		});
 	});
 
@@ -124,8 +135,76 @@ describe('searchKitsuAnimeIds', () => {
 		expect(await searchKitsuAnimeIds('x', fetcher)).toEqual([7]);
 	});
 
-	it('returns an empty list on error or malformed payload', async () => {
-		expect(await searchKitsuAnimeIds('x', respond({}, false))).toEqual([]);
-		expect(await searchKitsuAnimeIds('x', respond({ data: 'nope' }))).toEqual([]);
+	it('returns null, not an empty list, on error or malformed payload', async () => {
+		expect(await searchKitsuAnimeIds('x', respond({}, false))).toBeNull();
+		expect(await searchKitsuAnimeIds('x', respond({ data: 'nope' }))).toBeNull();
+		const throwing = vi.fn().mockRejectedValue(new Error('offline')) as unknown as typeof fetch;
+		expect(await searchKitsuAnimeIds('x', throwing)).toBeNull();
+	});
+
+	it('returns an empty list for a keyword nothing matches', async () => {
+		// kitsu.io's answer, verbatim, as dmm-01 received it.
+		const fetcher = respond(kitsuNoMatch);
+		expect(await searchKitsuAnimeIds('zzqqxxnotananime', fetcher)).toEqual([]);
+	});
+});
+
+describe('fetchKitsuAnimeBatch', () => {
+	const noSleep = vi.fn().mockResolvedValue(undefined);
+	const answer = (status: number, body: unknown, headers: Record<string, string> = {}) => ({
+		ok: status >= 200 && status < 300,
+		status,
+		headers: { get: (name: string) => headers[name.toLowerCase()] ?? null },
+		json: async () => body,
+	});
+
+	it('reads the metadata the importer writes out of a real batch answer', async () => {
+		const fetcher = vi
+			.fn()
+			.mockResolvedValue(answer(200, kitsuBatch)) as unknown as typeof fetch;
+		const ids = kitsuBatch.data.map((entry) => Number(entry.id));
+
+		const result = await fetchKitsuAnimeBatch(ids, { fetcher, sleep: noSleep });
+
+		expect(result.metas.size).toBe(ids.length);
+		expect(result.failedBatches).toBe(0);
+		const frierenS2 = result.metas.get(49240)!;
+		expect(frierenS2.canonicalTitle).toBe('Sousou no Frieren 2nd Season');
+		expect(frierenS2.poster).toMatch(/poster_image\/medium-/);
+		expect(frierenS2.startDate).toBe('2026-01-16');
+		expect(frierenS2.nsfw).toBe(false);
+
+		const [url, init] = (fetcher as any).mock.calls[0];
+		expect(url).toContain(`${KITSU_API_BASE}/anime?filter%5Bid%5D=`);
+		expect(init.headers['User-Agent']).toBe(KITSU_IMPORT_USER_AGENT);
+	});
+
+	it('asks for twenty ids a request', async () => {
+		const fetcher = vi
+			.fn()
+			.mockResolvedValue(answer(200, { data: [] })) as unknown as typeof fetch;
+		const ids = Array.from({ length: 45 }, (_, i) => i + 1);
+
+		const result = await fetchKitsuAnimeBatch(ids, { fetcher, sleep: noSleep });
+
+		expect(result.batches).toBe(3);
+		expect((fetcher as any).mock.calls[2][0]).toContain('filter%5Bid%5D=41,42,43,44,45&');
+	});
+
+	it('retries a 429 after Retry-After and counts a batch that never answers', async () => {
+		const sleep = vi.fn().mockResolvedValue(undefined);
+		const fetcher = vi
+			.fn()
+			.mockResolvedValueOnce(answer(429, {}, { 'retry-after': '7' }))
+			.mockResolvedValueOnce(answer(200, kitsuBatch))
+			.mockResolvedValue(answer(503, {})) as unknown as typeof fetch;
+
+		const first = await fetchKitsuAnimeBatch([49240], { fetcher, sleep, delayMs: 10 });
+		expect(first.metas.has(49240)).toBe(true);
+		expect(sleep).toHaveBeenCalledWith(7000);
+
+		const second = await fetchKitsuAnimeBatch([49240], { fetcher, sleep, retries: 1 });
+		expect(second.metas.size).toBe(0);
+		expect(second.failedBatches).toBe(1);
 	});
 });

@@ -1,0 +1,8 @@
+{
+	"data": [],
+	"links": {
+		"first": "https://kitsu.io/api/edge/anime?filter%5Btext%5D=zzqqxxnotananime&page%5Blimit%5D=20&page%5Boffset%5D=0",
+		"last": "https://kitsu.io/api/edge/anime?filter%5Btext%5D=zzqqxxnotananime&page%5Blimit%5D=20&page%5Boffset%5D=0"
+	},
+	"meta": { "count": 0 }
+}

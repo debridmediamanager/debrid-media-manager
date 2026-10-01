@@ -19,12 +19,15 @@
 
 import { CachedUsenetResult } from '@/services/database/newznabApiCache';
 import { dedupeResults, fanOut, Indexer } from '@/services/nzb2rd';
-import { HybridRateLimiter } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository as db } from '@/services/repository';
+import { withoutBlockedReleases } from '@/services/takedown/blocklist';
 import type { NextApiRequest } from 'next';
 import { getUpstreamIndexers, UpstreamIndexer } from './indexers';
 import { encryptReleaseId } from './opaqueId';
+import { getUpstreamLimiter } from './upstreamLimiter';
 import { MAX_LIMIT, NewznabRssItem } from './xml';
+
+export { _resetUpstreamLimiterForTest } from './upstreamLimiter';
 
 /** The `t` values that reach this module. `caps` and `get` are handled elsewhere. */
 export const SEARCH_TYPES = ['search', 'tvsearch', 'movie'] as const;
@@ -167,21 +170,6 @@ function buildUpstreamUrl(
 	return `${indexer.url}?${search}`;
 }
 
-// Its own limiter instance rather than `checkRateLimitFor`: that one writes the
-// X-RateLimit-* headers, which belong to the caller's own budget. These counters
-// pace DMM against an upstream and must never appear in a client's response.
-let upstreamLimiter: HybridRateLimiter | null = null;
-
-function getUpstreamLimiter(): HybridRateLimiter {
-	if (!upstreamLimiter) upstreamLimiter = new HybridRateLimiter(process.env.REDIS_URL);
-	return upstreamLimiter;
-}
-
-/** Test-only: the limiter is a module singleton and its counters outlive a test. */
-export function _resetUpstreamLimiterForTest(): void {
-	upstreamLimiter = null;
-}
-
 /**
  * The indexers this query may actually be sent to.
  *
@@ -270,7 +258,11 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	const targeted =
 		params.q !== undefined || params.imdbid !== undefined || params.tvdbid !== undefined;
 	const cached = await db.getCachedNewznabApiSearch(key, targeted ? undefined : RSS_TTL_MS);
-	if (cached?.isFresh) return toPage(cached.results, apiKey, { limit, offset });
+	// Filtered on the way out rather than before caching, so an approval or a
+	// reversal applies to entries already cached.
+	const page = async (results: CachedUsenetResult[]) =>
+		toPage(await withoutBlockedReleases(results), apiKey, { limit, offset });
+	if (cached?.isFresh) return page(cached.results);
 
 	const indexers = await pacedIndexers(getUpstreamIndexers());
 	const { ok, lists } = await fanOut(
@@ -284,7 +276,7 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	if (!ok) {
 		// Nothing answered — including the case where every indexer was over its
 		// pacing budget. Whatever is cached, however old, beats an empty feed.
-		if (cached) return toPage(cached.results, apiKey, { limit, offset });
+		if (cached) return page(cached.results);
 		return { items: [], offset, total: 0 };
 	}
 
@@ -293,5 +285,5 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	// the empty TTL, and it is what caps upstream calls for a query nobody can
 	// satisfy. `set` swallows its own failures.
 	await db.setCachedNewznabApiSearch(key, merged);
-	return toPage(merged, apiKey, { limit, offset });
+	return page(merged);
 }

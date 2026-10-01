@@ -11,16 +11,19 @@ const {
 	mockHandleAddAsMagnetInRd,
 	mockHandleAddAsMagnetInAd,
 	mockHandleAddAsMagnetInTb,
+	mockHandleAddAsMagnetInPm,
 	mockHandleAddAsMagnetInOc,
 	mockHandleAddAsMagnetInDl,
 	mockFetchAllDebrid,
 	mockConvertToUserTorrent,
 	mockGenerateTokenAndHash,
 	mockSubmitAvailability,
+	mockSubmitAvailabilityAd,
 	mockRemoveAvailability,
 	mockHandleDeleteRdTorrent,
 	mockHandleDeleteAdTorrent,
 	mockHandleDeleteTbTorrent,
+	mockHandleDeletePmTorrent,
 	mockHandleDeleteOcTorrent,
 	mockHandleDeleteDlTorrent,
 } = vi.hoisted(() => ({
@@ -37,16 +40,19 @@ const {
 	mockHandleAddAsMagnetInRd: vi.fn(),
 	mockHandleAddAsMagnetInAd: vi.fn(),
 	mockHandleAddAsMagnetInTb: vi.fn(),
+	mockHandleAddAsMagnetInPm: vi.fn(),
 	mockHandleAddAsMagnetInOc: vi.fn(),
 	mockHandleAddAsMagnetInDl: vi.fn(),
 	mockFetchAllDebrid: vi.fn(),
 	mockConvertToUserTorrent: vi.fn(),
 	mockGenerateTokenAndHash: vi.fn(),
 	mockSubmitAvailability: vi.fn(),
+	mockSubmitAvailabilityAd: vi.fn(),
 	mockRemoveAvailability: vi.fn(),
 	mockHandleDeleteRdTorrent: vi.fn(),
 	mockHandleDeleteAdTorrent: vi.fn(),
 	mockHandleDeleteTbTorrent: vi.fn(),
+	mockHandleDeletePmTorrent: vi.fn(),
 	mockHandleDeleteOcTorrent: vi.fn(),
 	mockHandleDeleteDlTorrent: vi.fn(),
 }));
@@ -66,6 +72,7 @@ vi.mock('@/utils/addMagnet', () => ({
 	handleAddAsMagnetInRd: mockHandleAddAsMagnetInRd,
 	handleAddAsMagnetInAd: mockHandleAddAsMagnetInAd,
 	handleAddAsMagnetInTb: mockHandleAddAsMagnetInTb,
+	handleAddAsMagnetInPm: mockHandleAddAsMagnetInPm,
 	handleAddAsMagnetInOc: mockHandleAddAsMagnetInOc,
 	handleAddAsMagnetInDl: mockHandleAddAsMagnetInDl,
 }));
@@ -81,6 +88,7 @@ vi.mock('@/utils/token', () => ({
 
 vi.mock('@/utils/availability', () => ({
 	submitAvailability: mockSubmitAvailability,
+	submitAvailabilityAd: mockSubmitAvailabilityAd,
 	removeAvailability: mockRemoveAvailability,
 }));
 
@@ -88,6 +96,7 @@ vi.mock('@/utils/deleteTorrent', () => ({
 	handleDeleteRdTorrent: mockHandleDeleteRdTorrent,
 	handleDeleteAdTorrent: mockHandleDeleteAdTorrent,
 	handleDeleteTbTorrent: mockHandleDeleteTbTorrent,
+	handleDeletePmTorrent: mockHandleDeletePmTorrent,
 	handleDeleteOcTorrent: mockHandleDeleteOcTorrent,
 	handleDeleteDlTorrent: mockHandleDeleteDlTorrent,
 }));
@@ -801,6 +810,226 @@ describe('useTorrentManagement', () => {
 
 			expect(mockHandleAddAsMagnetInDl).not.toHaveBeenCalled();
 			expect(mockHandleDeleteDlTorrent).not.toHaveBeenCalled();
+		});
+	});
+
+	// An availability row is keyed by hash and an upsert rewrites its imdbId.
+	// The anime page of an entry with no IMDb id passes '', and filing a row
+	// under that would move it off the show page it was recorded for.
+	describe('on a page with no IMDb id', () => {
+		const renderWithoutImdbId = () =>
+			renderHook(() =>
+				useTorrentManagement(
+					'rd-key',
+					'ad-key',
+					'tb-key',
+					'pm-key',
+					'oc-key',
+					'dl-key',
+					'',
+					currentResults,
+					setSearchResults
+				)
+			);
+
+		it('adds to RD without filing availability', async () => {
+			const { result } = renderWithoutImdbId();
+
+			await act(async () => {
+				await result.current.addRd('hash-1');
+			});
+
+			expect(mockHandleAddAsMagnetInRd).toHaveBeenCalled();
+			expect(mockSubmitAvailability).not.toHaveBeenCalled();
+			expect(result.current.hashAndProgress['rd:hash-1']).toBe(100);
+		});
+
+		it('adds to AD without filing availability, and still stores the torrent', async () => {
+			mockHandleAddAsMagnetInAd.mockImplementation(async (_adKey, hash, cb) => {
+				await cb({
+					id: 123,
+					filename: `${hash}.mkv`,
+					size: 1000000,
+					status: 'Ready',
+					statusCode: 4,
+					files: [{ n: `${hash}.mkv`, s: 1000000, l: 'https://alldebrid.com/f/x' }],
+				} as any);
+			});
+			const { result } = renderWithoutImdbId();
+
+			await act(async () => {
+				await result.current.addAd('hash-ad');
+			});
+
+			expect(mockSubmitAvailabilityAd).not.toHaveBeenCalled();
+			expect(mockDb.add).toHaveBeenCalled();
+		});
+
+		it('files AD availability as before when the page has one', async () => {
+			mockHandleAddAsMagnetInAd.mockImplementation(async (_adKey, hash, cb) => {
+				await cb({
+					id: 123,
+					filename: `${hash}.mkv`,
+					size: 1000000,
+					status: 'Ready',
+					statusCode: 4,
+					files: [{ n: `${hash}.mkv`, s: 1000000, l: 'https://alldebrid.com/f/x' }],
+				} as any);
+			});
+			const { result } = renderManagementHook();
+
+			await act(async () => {
+				await result.current.addAd('hash-ad');
+			});
+
+			expect(mockSubmitAvailabilityAd).toHaveBeenCalledWith(
+				'token-ts',
+				'token-hash',
+				expect.objectContaining({ hash: 'hash-ad', imdbId: 'tt123' })
+			);
+		});
+	});
+
+	describe('addCached', () => {
+		const finishedRow = (service: string, hash: string, progress = 100) =>
+			makeUserTorrent({
+				id: `${service}:42`,
+				hash,
+				progress,
+				status:
+					progress >= 100 ? UserTorrentStatus.finished : UserTorrentStatus.downloading,
+			});
+
+		it.each([
+			['tb', () => mockHandleAddAsMagnetInTb],
+			['pm', () => mockHandleAddAsMagnetInPm],
+			['oc', () => mockHandleAddAsMagnetInOc],
+		] as const)('keeps a %s add that came back finished', async (service, handler) => {
+			handler().mockImplementation(async (_key: string, hash: string, cb: any) => {
+				await cb(finishedRow(service, hash));
+			});
+			const { result } = renderManagementHook();
+
+			let added: boolean | undefined;
+			await act(async () => {
+				added = await result.current.addCached(service, 'hash-9', { silent: true });
+			});
+
+			expect(added).toBe(true);
+			expect(handler()).toHaveBeenCalledWith(
+				`${service}-key`,
+				'hash-9',
+				expect.any(Function),
+				true
+			);
+			expect(mockDb.add).toHaveBeenCalledWith(
+				expect.objectContaining({ id: `${service}:42` })
+			);
+			expect(result.current.hashAndProgress[`${service}:hash-9`]).toBe(100);
+		});
+
+		it.each([
+			['tb', () => mockHandleAddAsMagnetInTb, () => mockHandleDeleteTbTorrent],
+			['pm', () => mockHandleAddAsMagnetInPm, () => mockHandleDeletePmTorrent],
+			['oc', () => mockHandleAddAsMagnetInOc, () => mockHandleDeleteOcTorrent],
+		] as const)(
+			'removes a %s add the cache probe was wrong about',
+			async (service, handler, remover) => {
+				// The probe said cached; the account says it is downloading.
+				handler().mockImplementation(async (_key: string, hash: string, cb: any) => {
+					await cb(finishedRow(service, hash, 3));
+				});
+				const { result } = renderManagementHook();
+
+				let added: boolean | undefined;
+				await act(async () => {
+					added = await result.current.addCached(service, 'hash-9', { silent: true });
+				});
+
+				expect(added).toBe(false);
+				expect(remover()).toHaveBeenCalledWith(`${service}-key`, `${service}:42`, true);
+				expect(mockDb.add).not.toHaveBeenCalled();
+			}
+		);
+
+		it('answers false rather than throwing when the add is refused', async () => {
+			mockHandleAddAsMagnetInPm.mockRejectedValue(new Error('refused'));
+			const { result } = renderManagementHook();
+
+			let added: boolean | undefined;
+			await act(async () => {
+				added = await result.current.addCached('pm', 'hash-9', { silent: true });
+			});
+			expect(added).toBe(false);
+		});
+
+		it('keeps an AllDebrid magnet only when AD serves it at once', async () => {
+			const { result } = renderManagementHook();
+
+			let added: boolean | undefined;
+			await act(async () => {
+				added = await result.current.addCached('ad', 'hash-ad', { silent: true });
+			});
+
+			expect(added).toBe(true);
+			// deleteIfNotInstant, keepInLibrary, silent
+			expect(mockHandleAddAsMagnetInAd).toHaveBeenCalledWith(
+				'ad-key',
+				'hash-ad',
+				expect.any(Function),
+				true,
+				true,
+				true
+			);
+			expect(mockDb.add).toHaveBeenCalledWith(expect.objectContaining({ id: 'ad:123' }));
+		});
+
+		it('reports an AllDebrid miss, which the handler has already deleted', async () => {
+			mockHandleAddAsMagnetInAd.mockImplementation(
+				async (_k: string, _h: string, cb: any) => {
+					await cb(null);
+				}
+			);
+			const { result } = renderManagementHook();
+
+			let added: boolean | undefined;
+			await act(async () => {
+				added = await result.current.addCached('ad', 'hash-ad', { silent: true });
+			});
+			expect(added).toBe(false);
+			expect(mockDb.add).not.toHaveBeenCalled();
+		});
+
+		it('adds to Real-Debrid through the delete-if-not-instant path', async () => {
+			const { result } = renderManagementHook();
+
+			let added: boolean | undefined;
+			await act(async () => {
+				added = await result.current.addCached('rd', 'hash-1', { silent: true });
+			});
+			expect(added).toBe(true);
+			// deleteIfNotInstant is the fourth argument of the RD handler.
+			expect(mockHandleAddAsMagnetInRd.mock.calls[0][3]).toBe(true);
+		});
+
+		it('treats a release already in the library as held, without adding it again', async () => {
+			// Premiumize and Offcloud hand back the existing item for a repeated
+			// magnet; judging that one could remove the user's own transfer.
+			mockDb.all.mockResolvedValue([
+				makeUserTorrent({ id: 'pm:t:1', hash: 'hash-9', progress: 10 }),
+			]);
+			const { result } = renderManagementHook();
+			await act(async () => {
+				await result.current.fetchHashAndProgress();
+			});
+
+			let added: boolean | undefined;
+			await act(async () => {
+				added = await result.current.addCached('pm', 'hash-9', { silent: true });
+			});
+			expect(added).toBe(true);
+			expect(mockHandleAddAsMagnetInPm).not.toHaveBeenCalled();
+			expect(mockHandleDeletePmTorrent).not.toHaveBeenCalled();
 		});
 	});
 });

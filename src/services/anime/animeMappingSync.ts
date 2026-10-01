@@ -32,6 +32,8 @@ export interface SyncPlan {
 	collisions: Record<SyncableColumn, number>;
 	/** Rows whose match id appears more than once in the dataset. */
 	ambiguousRows: number;
+	/** Rows matched to an entry that another of their own ids contradicts. */
+	conflictingRows: number;
 	matchedRows: number;
 }
 
@@ -44,12 +46,45 @@ const COLUMNS: { column: SyncableColumn; from: keyof AnimeIdMapping }[] = [
 ];
 
 /**
+ * The ids that identify a title. A row and an entry that both carry one of
+ * these and disagree on it describe two different titles.
+ *
+ * The anime-planet slug is left out on purpose: anime-planet renames its slugs
+ * (`ameku-takao-no-suiri-karte` became `ameku-md-doctor-detective`), so a row
+ * scraped years ago disagrees with the dataset on the slug alone while every
+ * numeric id still matches.
+ */
+const IDENTITY: {
+	column: 'anidb_id' | 'kitsu_id' | 'mal_id' | 'imdb_id';
+	from: keyof AnimeIdMapping;
+}[] = [
+	{ column: 'anidb_id', from: 'anidbId' },
+	{ column: 'kitsu_id', from: 'kitsuId' },
+	{ column: 'mal_id', from: 'malId' },
+	{ column: 'imdb_id', from: 'imdbId' },
+];
+
+function contradicts(row: AnimeRow, mapping: AnimeIdMapping): boolean {
+	return IDENTITY.some(({ column, from }) => {
+		const ours = row[column];
+		const theirs = mapping[from];
+		return ours !== null && theirs !== null && ours !== theirs;
+	});
+}
+
+/**
  * Match a row to exactly one mapping.
  *
  * Ids are tried most- to least-specific. A row is left alone when its id
  * appears on several dataset entries: two seasons of one show share a mal id,
  * and merging their ids into one row would attribute the wrong season's imdb
  * id to it.
+ *
+ * It is also left alone when the entry its first id finds is contradicted by
+ * another of its ids. Such a row already mixes two titles' ids, and filling it
+ * from either entry only adds a third wrong one: production's "Geu Yeoreum" row
+ * matched on its kitsu id to anidb 19021 while its own mal id and slug both
+ * belong to anidb 17512.
  */
 function findMapping(
 	row: AnimeRow,
@@ -57,7 +92,7 @@ function findMapping(
 		'anidb' | 'kitsu' | 'mal' | 'animePlanet',
 		Map<string | number, AnimeIdMapping[]>
 	>
-): { mapping: AnimeIdMapping | null; ambiguous: boolean } {
+): { mapping: AnimeIdMapping | null; ambiguous: boolean; conflicting: boolean } {
 	const candidates: (AnimeIdMapping[] | undefined)[] = [
 		row.anidb_id !== null ? indexes.anidb.get(row.anidb_id) : undefined,
 		row.kitsu_id !== null ? indexes.kitsu.get(row.kitsu_id) : undefined,
@@ -67,10 +102,39 @@ function findMapping(
 
 	for (const bucket of candidates) {
 		if (!bucket || bucket.length === 0) continue;
-		if (bucket.length > 1) return { mapping: null, ambiguous: true };
-		return { mapping: bucket[0], ambiguous: false };
+		if (bucket.length > 1) return { mapping: null, ambiguous: true, conflicting: false };
+		if (contradicts(row, bucket[0]))
+			return { mapping: null, ambiguous: false, conflicting: true };
+		return { mapping: bucket[0], ambiguous: false, conflicting: false };
 	}
-	return { mapping: null, ambiguous: false };
+	return { mapping: null, ambiguous: false, conflicting: false };
+}
+
+/**
+ * The order rows claim values in; lower goes first.
+ *
+ * Several entries can name one IMDb title (a show's later seasons, its OVAs and
+ * recaps all carry the show's id), and the unique column lets only one row
+ * have it. Handing it to whichever row sorted first gave `.hack//Sign`'s id to
+ * the `.hack//G.U. Returner` OVA and A3!'s to its second season. The first
+ * season's TV entry is the one a viewer means by the title.
+ */
+function claimRank(mapping: AnimeIdMapping): number[] {
+	const season = mapping.tvdbSeason === 1 ? 0 : mapping.tvdbSeason === null ? 1 : 2;
+	const type = mapping.type === 'TV' ? 0 : 1;
+	return [season, type, mapping.tvdbEpisodeOffset ?? 0];
+}
+
+function compareClaims(
+	a: { row: AnimeRow; mapping: AnimeIdMapping },
+	b: { row: AnimeRow; mapping: AnimeIdMapping }
+): number {
+	const rankA = claimRank(a.mapping);
+	const rankB = claimRank(b.mapping);
+	for (let i = 0; i < rankA.length; i++) {
+		if (rankA[i] !== rankB[i]) return rankA[i] - rankB[i];
+	}
+	return a.row.id - b.row.id;
 }
 
 function buildIndex<T extends string | number>(
@@ -128,17 +192,27 @@ export function planAnimeMappingUpdates(rows: AnimeRow[], mappings: AnimeIdMappi
 	};
 	const updates: AnimeRowUpdate[] = [];
 	let ambiguousRows = 0;
+	let conflictingRows = 0;
 	let matchedRows = 0;
 
+	const matched: { row: AnimeRow; mapping: AnimeIdMapping }[] = [];
 	for (const row of rows) {
-		const { mapping, ambiguous } = findMapping(row, indexes);
+		const { mapping, ambiguous, conflicting } = findMapping(row, indexes);
 		if (ambiguous) {
 			ambiguousRows++;
 			continue;
 		}
+		if (conflicting) {
+			conflictingRows++;
+			continue;
+		}
 		if (!mapping) continue;
 		matchedRows++;
+		matched.push({ row, mapping });
+	}
+	matched.sort(compareClaims);
 
+	for (const { row, mapping } of matched) {
 		const fields: AnimeMappingFields = {};
 		for (const { column, from } of COLUMNS) {
 			if (row[column] !== null) continue;
@@ -161,7 +235,27 @@ export function planAnimeMappingUpdates(rows: AnimeRow[], mappings: AnimeIdMappi
 		if (Object.keys(fields).length > 0) updates.push({ id: row.id, fields });
 	}
 
-	return { updates, collisions, ambiguousRows, matchedRows };
+	return { updates, collisions, ambiguousRows, conflictingRows, matchedRows };
+}
+
+/**
+ * The current value of every column the plan writes, for every row it writes.
+ *
+ * Taken from the same read the plan was built from, so it restores exactly
+ * what `--apply` replaces: set each listed column back on each listed id.
+ */
+export function backupRowsFor(plan: SyncPlan, rows: AnimeRow[]): AnimeRow[] {
+	const touched = new Set(plan.updates.map((u) => u.id));
+	return rows
+		.filter((row) => touched.has(row.id))
+		.map((row) => ({
+			id: row.id,
+			anidb_id: row.anidb_id,
+			kitsu_id: row.kitsu_id,
+			mal_id: row.mal_id,
+			anime_planet_id: row.anime_planet_id,
+			imdb_id: row.imdb_id,
+		}));
 }
 
 export function summarizePlan(plan: SyncPlan): Record<string, number> {
@@ -173,6 +267,7 @@ export function summarizePlan(plan: SyncPlan): Record<string, number> {
 		rowsToUpdate: plan.updates.length,
 		matchedRows: plan.matchedRows,
 		ambiguousRows: plan.ambiguousRows,
+		conflictingRows: plan.conflictingRows,
 		...filled,
 	};
 }
