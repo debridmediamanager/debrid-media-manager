@@ -1,0 +1,5 @@
+{
+	"code": 401,
+	"error": "user_token_required",
+	"message": "This client_id requires a user access token on every request"
+}

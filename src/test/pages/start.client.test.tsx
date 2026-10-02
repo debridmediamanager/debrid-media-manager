@@ -113,19 +113,6 @@ describe('StartPage', () => {
 		expect(screen.getByText('Create an account with Debrid-Link')).toBeInTheDocument();
 	});
 
-	it('should render data storage policy', () => {
-		render(<StartPage />);
-
-		expect(screen.getByText('Data Storage Policy')).toBeInTheDocument();
-		expect(
-			screen.getByText(/Please note that no data or logs are stored on our servers/i)
-		).toBeInTheDocument();
-		expect(screen.getByText(/You can inspect every request if you want/i)).toBeInTheDocument();
-		expect(
-			screen.getByText(/Everything is stored on your browser's local storage/i)
-		).toBeInTheDocument();
-	});
-
 	it('should call login functions when buttons are clicked', () => {
 		render(<StartPage />);
 

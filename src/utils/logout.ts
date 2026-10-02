@@ -1,8 +1,24 @@
 import { notifyLocalStorageChange } from '@/hooks/localStorage';
+import { logoutSimkl } from '@/services/simkl';
 import UserTorrentDB from '@/torrent/db';
-import { NextRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
+import { notifySimklSessionChange } from './simklLogin';
 
-export async function handleLogout(prefix: string | undefined, router: NextRouter) {
+export async function handleLogout(
+	prefix: string | undefined,
+	router: Pick<NextRouter, 'reload' | 'push'>
+) {
+	if (!prefix || prefix === 'simkl:') {
+		try {
+			await logoutSimkl();
+		} catch (error) {
+			// The server clears its cookie even when Redis deletion fails.
+			// Re-read the session instead of leaving private views authenticated.
+			notifySimklSessionChange();
+			throw error;
+		}
+	}
+
 	// Clear IndexedDB library cache (current week only)
 	try {
 		const torrentDB = new UserTorrentDB();
@@ -27,6 +43,7 @@ export async function handleLogout(prefix: string | undefined, router: NextRoute
 		removed.forEach(notifyLocalStorageChange);
 		// Dispatch logout event to update UI immediately
 		window.dispatchEvent(new Event('logout'));
+		if (prefix === 'simkl:') notifySimklSessionChange();
 		router.reload();
 	} else {
 		localStorage.clear();
@@ -34,6 +51,7 @@ export async function handleLogout(prefix: string | undefined, router: NextRoute
 		window.dispatchEvent(new StorageEvent('storage', { key: null }));
 		// Dispatch logout event to update UI immediately
 		window.dispatchEvent(new Event('logout'));
+		notifySimklSessionChange();
 		router.push('/start');
 	}
 }

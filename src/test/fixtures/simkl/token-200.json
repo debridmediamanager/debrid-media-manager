@@ -1,0 +1,7 @@
+{
+	"access_token": "simkl_at_EXAMPLEACCESSTOKENVALUE00000000000",
+	"expires_in": 604800,
+	"refresh_token": "simkl_rt_EXAMPLEREFRESHTOKENVALUE0000000000",
+	"scope": "media:read media:write",
+	"token_type": "Bearer"
+}

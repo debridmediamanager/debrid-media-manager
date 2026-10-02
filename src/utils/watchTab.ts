@@ -1,3 +1,5 @@
+import { escapeHtml } from './html';
+
 /**
  * What the tab a Watch click opens actually contains.
  *
@@ -30,14 +32,6 @@ export type WatchTabView =
 	| { status: 'resolving'; label: string }
 	| { status: 'ready'; label: string; intent: string }
 	| { status: 'error'; label: string; message: string };
-
-const escapeHtml = (value: string) =>
-	value
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&#39;');
 
 const shell = (title: string, body: string) => `<!DOCTYPE html>
 <html><head><meta charset="utf-8">

@@ -1,0 +1,17 @@
+{
+	"account": {
+		"id": 12345,
+		"timezone": "Europe/Lisbon",
+		"type": "free",
+		"anime_title_language": "en"
+	},
+	"user": {
+		"name": "jane_doe",
+		"joined_at": "2018-06-12T14:23:08.000Z",
+		"gender": "female",
+		"avatar": "https://simkl.in/avatars/12/12345678abcdef9/user_100.jpg",
+		"bio": "Big into sci-fi shows and slice-of-life anime.",
+		"loc": "Lisbon, Portugal",
+		"age": "27 years"
+	}
+}

@@ -4,6 +4,7 @@ import { Logo } from '@/components/Logo';
 import { MainActions } from '@/components/MainActions';
 import { SearchBar } from '@/components/SearchBar';
 import { ServiceCard } from '@/components/ServiceCard';
+import { SimklSection } from '@/components/SimklSection';
 import { TraktSection } from '@/components/TraktSection';
 import { ZurgBanner } from '@/components/ZurgBanner';
 import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
@@ -14,6 +15,7 @@ import { getTerms } from '@/utils/browseTerms';
 import { useGuestMode } from '@/utils/guestMode';
 import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
+import { beginSimklLogin } from '@/utils/simklLogin';
 import { genericToastOptions } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { Settings } from 'lucide-react';
@@ -63,6 +65,8 @@ function IndexPage() {
 		dlError,
 		traktUser,
 		traktError,
+		simklUser,
+		simklError,
 		hasRDAuth,
 		hasADAuth,
 		hasTBAuth,
@@ -70,6 +74,7 @@ function IndexPage() {
 		hasOCAuth,
 		hasDLAuth,
 		hasTraktAuth,
+		hasSimklAuth,
 		isLoading,
 	} = useCurrentUser();
 	const {
@@ -95,7 +100,8 @@ function IndexPage() {
 		(!hasPMAuth || !!pmUser || !!pmError) &&
 		(!hasOCAuth || !!ocUser || !!ocError) &&
 		(!hasDLAuth || !!dlUser || !!dlError) &&
-		(!hasTraktAuth || !!traktUser || !!traktError);
+		(!hasTraktAuth || !!traktUser || !!traktError) &&
+		(!hasSimklAuth || !!simklUser || !!simklError);
 
 	// Settling still depends on a promise resolving, and a provider can park one
 	// for minutes - TorBox answers a 429 by pausing every one of its calls for
@@ -169,6 +175,9 @@ function IndexPage() {
 		if (traktError) {
 			toast.error('Trakt profile fetch failed. Use the Trakt card below.');
 		}
+		if (simklError) {
+			toast.error('Simkl profile fetch failed. Use the Simkl card below.');
+		}
 		if (localStorage.getItem('next_action') === 'clear_cache') {
 			localStorage.removeItem('next_action');
 			const request = window.indexedDB.deleteDatabase('DMMDB');
@@ -182,7 +191,7 @@ function IndexPage() {
 				toast('Local DB still open. Refresh and retry.', genericToastOptions);
 			};
 		}
-	}, [rdError, adError, tbError, pmError, ocError, dlError, traktError]);
+	}, [rdError, adError, tbError, pmError, ocError, dlError, traktError, simklError]);
 
 	useEffect(() => {
 		if (rdUser) {
@@ -199,16 +208,27 @@ function IndexPage() {
 		router.push(authUrl);
 	};
 
+	// A full navigation, not `router.push`: the consent page is Simkl's, so the
+	// Next router has nothing to route to.
+	const loginWithSimkl = async () => {
+		try {
+			window.location.assign(await beginSimklLogin(window.location.origin));
+		} catch (e) {
+			toast.error(e instanceof Error ? e.message : 'Could not start Simkl sign-in');
+		}
+	};
+
 	const handleClearCache = async () => {
 		localStorage.setItem('next_action', 'clear_cache');
 		window.location.assign('/');
 	};
 
-	const handleClearLocalStorage = () => {
-		localStorage.clear();
-		// Dispatch logout event to update UI immediately
-		window.dispatchEvent(new Event('logout'));
-		window.location.reload();
+	const logout = async (prefix?: string) => {
+		try {
+			await handleLogout(prefix, router);
+		} catch (error) {
+			toast.error(error instanceof Error ? error.message : 'Logout failed');
+		}
 	};
 
 	const actionButtonGroupClasses = 'grid w-full max-w-md gap-3 sm:grid-cols-2 md:grid-cols-3';
@@ -224,42 +244,42 @@ function IndexPage() {
 				error={rdError}
 				user={rdUser}
 				onTraktLogin={loginWithRealDebrid}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 			<ServiceCard
 				service="ad"
 				error={adError}
 				user={adUser}
 				onTraktLogin={loginWithAllDebrid}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 			<ServiceCard
 				service="tb"
 				error={tbError}
 				user={tbUser}
 				onTraktLogin={loginWithTorbox}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 			<ServiceCard
 				service="pm"
 				error={pmError}
 				user={pmUser}
 				onTraktLogin={loginWithPremiumize}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 			<ServiceCard
 				service="oc"
 				error={ocError}
 				user={ocUser}
 				onTraktLogin={loginWithOffcloud}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 			<ServiceCard
 				service="dl"
 				error={dlError}
 				user={dlUser}
 				onTraktLogin={loginWithDebridLink}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 		</>
 	);
@@ -343,6 +363,7 @@ function IndexPage() {
 						</details>
 						<BrowseSection terms={browseTerms} />
 						<TraktSection traktUser={traktUser} />
+						<SimklSection simklUser={simklUser} />
 						<div className="grid w-full grid-cols-1 gap-3">
 							{/* Folded for everyone: six login buttons nobody needs twice
 							    took most of the page. Folded rather than dropped, so connecting
@@ -364,7 +385,14 @@ function IndexPage() {
 								error={traktError}
 								user={traktUser}
 								onTraktLogin={loginWithTrakt}
-								onLogout={async (prefix) => await handleLogout(prefix, router)}
+								onLogout={logout}
+							/>
+							<ServiceCard
+								service="simkl"
+								error={simklError}
+								user={simklUser}
+								onTraktLogin={loginWithSimkl}
+								onLogout={logout}
 							/>
 						</div>
 						<InfoSection />
@@ -388,10 +416,7 @@ function IndexPage() {
 							    the pair read as the same action: both landed on
 							    /start, and the difference - whether a linked DMM API
 							    key survived - was invisible from the labels. */}
-							<button
-								onClick={async () => await handleLogout(undefined, router)}
-								className={actionButtonClasses}
-							>
+							<button onClick={() => logout()} className={actionButtonClasses}>
 								Clear browser data
 							</button>
 						</div>
@@ -409,7 +434,7 @@ function IndexPage() {
 						Debrid Media Manager is loading...
 					</h1>
 					<div className={actionButtonGroupClasses}>
-						<button onClick={handleClearLocalStorage} className={actionButtonClasses}>
+						<button onClick={() => logout()} className={actionButtonClasses}>
 							Clear Data and Reload
 						</button>
 					</div>

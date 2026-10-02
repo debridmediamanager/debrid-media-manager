@@ -8,14 +8,16 @@ import {
 import { debridLinkPremiumDaysLeft, isDebridLinkPremium } from '@/services/debridLink';
 import { isOffcloudPremium } from '@/services/offcloud';
 import { isPremiumizePremium } from '@/services/premiumize';
+import { SimklUser } from '@/services/simkl';
 import { TraktUser } from '@/services/trakt';
 import { TorBoxUser } from '@/services/types';
+import { escapeHtml } from '@/utils/html';
 import { Check, X } from 'lucide-react';
 import Modal from '../components/modals/modal';
 
 interface ServiceCardProps {
-	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl' | 'trakt';
-	user: RealDebridUser | AllDebridUser | TraktUser | any | null;
+	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl' | 'trakt' | 'simkl';
+	user: RealDebridUser | AllDebridUser | TraktUser | SimklUser | any | null;
 	onTraktLogin: () => void;
 	onLogout: (prefix: string) => void;
 	/** The provider answered, but with a failure - see the note on the branch below. */
@@ -30,6 +32,7 @@ const SERVICE_LABELS: Record<ServiceCardProps['service'], string> = {
 	oc: 'Offcloud',
 	dl: 'Debrid-Link',
 	trakt: 'Trakt',
+	simkl: 'Simkl',
 };
 
 /**
@@ -46,6 +49,7 @@ const SERVICE_PREFIXES: Record<ServiceCardProps['service'], string> = {
 	oc: 'oc:',
 	dl: 'dl:',
 	trakt: 'trakt:',
+	simkl: 'simkl:',
 };
 
 export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: ServiceCardProps) {
@@ -177,6 +181,22 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: Se
         <p><strong>Days Remaining:</strong> ${debridLinkPremiumDaysLeft(dlUser)}</p>
       </div>
     `;
+		} else if (service === 'simkl' && user && 'account' in user) {
+			const simklUser = user as SimklUser;
+			title = 'Simkl';
+			prefix = 'simkl:';
+			// The plan is not cosmetic here: Custom Lists is PRO/VIP only, and a
+			// free account is refused with an HTTP 200 that is easy to mistake
+			// for an empty list, so it is worth showing before they click in.
+			html = `
+        <div class="text-left">
+          <p><strong>Username:</strong> ${escapeHtml(simklUser.user.name)}</p>
+          <p><strong>Plan:</strong> ${simklUser.account.type}</p>
+          <p><strong>Custom lists:</strong> ${
+				simklUser.account.type === 'free' ? 'Needs PRO or VIP' : 'Available'
+			}</p>
+        </div>
+      `;
 		} else if (service === 'trakt' && user && 'user' in user) {
 			const traktUser = user as TraktUser;
 			title = 'Trakt';
@@ -440,6 +460,31 @@ export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: Se
 				className="haptic w-full rounded border-2 border-[#38bdf8] bg-[#38bdf8]/30 py-1 text-center text-sky-100 transition-colors hover:bg-[#38bdf8]/50"
 			>
 				Debrid-Link Login
+			</button>
+		);
+	}
+
+	if (service === 'simkl') {
+		const simklUser = user as SimklUser | null;
+		return simklUser ? (
+			<button
+				onClick={() => showUserInfo('simkl')}
+				className="haptic flex items-center justify-center gap-2 rounded border-2 border-indigo-500 bg-indigo-900/30 p-1 text-indigo-100 transition-colors hover:bg-indigo-800/50"
+			>
+				<span className="font-medium">Simkl</span>
+				<span>{simklUser.user.name}</span>
+				{simklUser.account.type === 'free' ? (
+					<X className="h-4 w-4 text-red-500" />
+				) : (
+					<Check className="h-4 w-4 text-green-400" />
+				)}
+			</button>
+		) : (
+			<button
+				onClick={onTraktLogin}
+				className="haptic w-full rounded border-2 border-indigo-500 bg-indigo-900/30 py-1 text-center text-indigo-100 transition-colors hover:bg-indigo-800/50"
+			>
+				Simkl Login
 			</button>
 		);
 	}

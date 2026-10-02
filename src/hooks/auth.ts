@@ -10,11 +10,18 @@ import { refreshDebridLinkToken } from '../services/debridLinkOAuth';
 import { getOffcloudAccountInfo, type OffcloudAccountInfo } from '../services/offcloud';
 import { getPremiumizeAccountInfo, type PremiumizeAccountInfo } from '../services/premiumize';
 import { getCurrentUser as getRealDebridUser, getToken } from '../services/realDebrid';
+import type { SimklSession } from '../services/simkl';
+import { SimklError, getSimklSession } from '../services/simkl';
 import { TorBoxUser, getUserData } from '../services/torbox';
 import { TraktUser, getTraktUser } from '../services/trakt';
 import { clearDlKeys, clearRdKeys } from '../utils/clearLocalStorage';
 import { readStoredAccessToken } from '../utils/rdTokenStorage';
 import { getSafeRedirectPath } from '../utils/router';
+import {
+	getSimklSessionGeneration,
+	purgeLegacySimklCredentials,
+	subscribeSimklSessionChange,
+} from '../utils/simklLogin';
 import useLocalStorage from './localStorage';
 
 export interface RealDebridUser {
@@ -605,6 +612,78 @@ const useTrakt = () => {
 	return { user, error, hasAuth: !!token, loading };
 };
 
+// Only in-flight account reads are shared; account data is not persisted in the browser.
+let simklAccountRequest: { generation: number; promise: Promise<SimklSession> } | null = null;
+function loadSimklSession(generation: number): Promise<SimklSession> {
+	if (simklAccountRequest?.generation === generation) return simklAccountRequest.promise;
+	const promise = getSimklSession();
+	const request = { generation, promise };
+	simklAccountRequest = request;
+	void promise
+		.finally(() => {
+			if (simklAccountRequest === request) simklAccountRequest = null;
+		})
+		.catch(() => {});
+	return promise;
+}
+
+export const useSimklAuth = () => {
+	const [generation, setGeneration] = useState(getSimklSessionGeneration);
+	const [profile, setProfile] = useState<{ generation: number; session: SimklSession } | null>(
+		null
+	);
+	const [error, setError] = useState<Error | null>(null);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		purgeLegacySimklCredentials();
+		const unsubscribe = subscribeSimklSessionChange(() => {
+			setProfile(null);
+			setError(null);
+			setLoading(true);
+			setGeneration(getSimklSessionGeneration());
+		});
+		setGeneration(getSimklSessionGeneration());
+		return unsubscribe;
+	}, []);
+
+	useEffect(() => {
+		let active = true;
+		setProfile(null);
+		setError(null);
+		setLoading(true);
+		loadSimklSession(generation)
+			.then((session) => {
+				if (active && generation === getSimklSessionGeneration()) {
+					setProfile({ generation, session });
+				}
+			})
+			.catch((failure: unknown) => {
+				if (!active || generation !== getSimklSessionGeneration()) return;
+				if (failure instanceof SimklError && failure.isUnauthorized) return;
+				setError(failure instanceof Error ? failure : new Error(String(failure)));
+			})
+			.finally(() => {
+				if (active && generation === getSimklSessionGeneration()) setLoading(false);
+			});
+		return () => {
+			active = false;
+		};
+	}, [generation]);
+
+	const session =
+		profile?.generation === generation && generation === getSimklSessionGeneration()
+			? profile.session
+			: null;
+	return {
+		user: session?.user ?? null,
+		cacheKey: session?.cacheKey ?? null,
+		error,
+		loading,
+		hasAuth: !!session,
+	};
+};
+
 // Backward compatibility hook for withAuth.tsx
 export const useRealDebridAccessToken = (): [string | null, boolean, boolean] => {
 	const { loading, isRefreshing } = useRealDebrid();
@@ -675,6 +754,7 @@ export const useCurrentUser = () => {
 	const oc = useOffcloud();
 	const dl = useDebridLink();
 	const trakt = useTrakt();
+	const simkl = useSimklAuth();
 
 	return {
 		rdUser: rd.user,
@@ -699,6 +779,9 @@ export const useCurrentUser = () => {
 		traktUser: trakt.user,
 		traktError: trakt.error,
 		hasTraktAuth: trakt.hasAuth,
+		simklUser: simkl.user,
+		simklError: simkl.error,
+		hasSimklAuth: simkl.hasAuth,
 		isLoading: rd.loading,
 	};
 };

@@ -1,0 +1,5 @@
+{
+	"code": "AUTHORIZATION_CODE",
+	"iss": "https://simkl.com",
+	"state": "YOUR_STATE"
+}
