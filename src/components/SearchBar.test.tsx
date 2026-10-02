@@ -23,7 +23,8 @@ vi.mock('axios', () => ({
 	__esModule: true,
 	default: { get: vi.fn() },
 }));
-const mockedGet = axios.get as ReturnType<typeof vi.fn>;
+// This mock supplies only the response payload consumed by SearchBar.
+const mockedGet = vi.mocked(axios.get as unknown as (url: string) => Promise<{ data: unknown }>);
 
 vi.mock('./poster', () => ({
 	__esModule: true,
@@ -38,7 +39,7 @@ const callsTo = (match: (url: unknown) => boolean) =>
 describe('SearchBar', () => {
 	beforeEach(() => {
 		push.mockReset();
-		mockedGet.mockReset();
+		mockedGet.mockReset().mockResolvedValue({ data: [] });
 		resetAnimeSuggestions();
 	});
 
@@ -146,7 +147,7 @@ describe('SearchBar', () => {
 		const serve = (trakt: Answer, anime: Answer) => {
 			const answer = (a: Answer) =>
 				a === 'pending'
-					? new Promise(() => {})
+					? new Promise<{ data: unknown }>(() => {})
 					: a instanceof Error
 						? Promise.reject(a)
 						: Promise.resolve(a);
