@@ -1,4 +1,4 @@
-import { SimklUser } from '@/services/simkl';
+import type { SimklUser } from '@/services/simkl';
 import { List } from 'lucide-react';
 import Link from 'next/link';
 

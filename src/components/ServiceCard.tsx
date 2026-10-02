@@ -11,6 +11,7 @@ import { isPremiumizePremium } from '@/services/premiumize';
 import { SimklUser } from '@/services/simkl';
 import { TraktUser } from '@/services/trakt';
 import { TorBoxUser } from '@/services/types';
+import { escapeHtml } from '@/utils/html';
 import { Check, X } from 'lucide-react';
 import Modal from '../components/modals/modal';
 
@@ -50,19 +51,6 @@ const SERVICE_PREFIXES: Record<ServiceCardProps['service'], string> = {
 	trakt: 'trakt:',
 	simkl: 'simkl:',
 };
-
-/**
- * These profile modals are built as HTML strings, so a provider-controlled name
- * lands in markup unescaped. Simkl display names are free text set by the user,
- * so the Simkl branch escapes; the older branches predate this and should be
- * given the same treatment rather than this one dropping it.
- */
-const escapeHtml = (value: string): string =>
-	value.replace(
-		/[&<>"']/g,
-		(c) =>
-			({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string
-	);
 
 export function ServiceCard({ service, user, onTraktLogin, onLogout, error }: ServiceCardProps) {
 	const formatBytes = (bytes: number) => {

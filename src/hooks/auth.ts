@@ -10,12 +10,18 @@ import { refreshDebridLinkToken } from '../services/debridLinkOAuth';
 import { getOffcloudAccountInfo, type OffcloudAccountInfo } from '../services/offcloud';
 import { getPremiumizeAccountInfo, type PremiumizeAccountInfo } from '../services/premiumize';
 import { getCurrentUser as getRealDebridUser, getToken } from '../services/realDebrid';
-import { SimklUser, getSimklUser, refreshSimklToken } from '../services/simkl';
+import type { SimklSession } from '../services/simkl';
+import { SimklError, getSimklSession } from '../services/simkl';
 import { TorBoxUser, getUserData } from '../services/torbox';
 import { TraktUser, getTraktUser } from '../services/trakt';
 import { clearDlKeys, clearRdKeys } from '../utils/clearLocalStorage';
 import { readStoredAccessToken } from '../utils/rdTokenStorage';
 import { getSafeRedirectPath } from '../utils/router';
+import {
+	getSimklSessionGeneration,
+	purgeLegacySimklCredentials,
+	subscribeSimklSessionChange,
+} from '../utils/simklLogin';
 import useLocalStorage from './localStorage';
 
 export interface RealDebridUser {
@@ -606,84 +612,76 @@ const useTrakt = () => {
 	return { user, error, hasAuth: !!token, loading };
 };
 
-/**
- * A Simkl access token lives seven days, so unlike Trakt's five-year V1 token
- * this one expires while a user is simply away for the weekend. The refresh
- * token lasts 180 days and is reissued every time it is spent, so a user who
- * opens DMM more often than twice a year never signs in again.
- *
- * Two conditions reach the refresh, because `useLocalStorage` drops an expired
- * value on read: a token that is close to expiring, and a token that is already
- * gone while its refresh token is still stored.
- */
-const SIMKL_REFRESH_WINDOW_MS = 24 * 60 * 60 * 1000;
+// Only in-flight account reads are shared; account data is not persisted in the browser.
+let simklAccountRequest: { generation: number; promise: Promise<SimklSession> } | null = null;
+function loadSimklSession(generation: number): Promise<SimklSession> {
+	if (simklAccountRequest?.generation === generation) return simklAccountRequest.promise;
+	const promise = getSimklSession();
+	const request = { generation, promise };
+	simklAccountRequest = request;
+	void promise
+		.finally(() => {
+			if (simklAccountRequest === request) simklAccountRequest = null;
+		})
+		.catch(() => {});
+	return promise;
+}
 
-const useSimkl = () => {
-	const [user, setUser] = useState<SimklUser | null>(null);
+export const useSimklAuth = () => {
+	const [generation, setGeneration] = useState(getSimklSessionGeneration);
+	const [profile, setProfile] = useState<{ generation: number; session: SimklSession } | null>(
+		null
+	);
 	const [error, setError] = useState<Error | null>(null);
-	const [loading, setLoading] = useState(false);
-	const [token, setToken] = useLocalStorage<string>('simkl:accessToken');
-	const [refreshToken, setRefreshToken] = useLocalStorage<string>('simkl:refreshToken');
-	const [tokenExpiry, setTokenExpiry] = useLocalStorage<number>('simkl:tokenExpiry');
-	const [, setUserId] = useLocalStorage<number>('simkl:userId');
-	const refreshAttempted = useRef(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		if (refreshAttempted.current || !refreshToken) return;
-		const expiringSoon =
-			typeof tokenExpiry === 'number' && tokenExpiry - Date.now() < SIMKL_REFRESH_WINDOW_MS;
-		if (token && !expiringSoon) return;
+		purgeLegacySimklCredentials();
+		const unsubscribe = subscribeSimklSessionChange(() => {
+			setProfile(null);
+			setError(null);
+			setLoading(true);
+			setGeneration(getSimklSessionGeneration());
+		});
+		setGeneration(getSimklSessionGeneration());
+		return unsubscribe;
+	}, []);
 
-		refreshAttempted.current = true;
-		let isMounted = true;
-		refreshSimklToken(refreshToken)
-			.then((fresh) => {
-				if (!isMounted) return;
-				setToken(fresh.access_token, fresh.expires_in);
-				if (fresh.refresh_token) setRefreshToken(fresh.refresh_token);
-				if (typeof fresh.expires_in === 'number') {
-					setTokenExpiry(Date.now() + fresh.expires_in * 1000);
+	useEffect(() => {
+		let active = true;
+		setProfile(null);
+		setError(null);
+		setLoading(true);
+		loadSimklSession(generation)
+			.then((session) => {
+				if (active && generation === getSimklSessionGeneration()) {
+					setProfile({ generation, session });
 				}
 			})
-			.catch((e) => {
-				// The stored token may still be good; the profile call below is
-				// what settles whether it is.
-				console.error('[Auth] Simkl token refresh failed', e);
-			});
-		return () => {
-			isMounted = false;
-		};
-		// The localStorage setters are new identities on every render.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [token, refreshToken, tokenExpiry]);
-
-	useEffect(() => {
-		if (!token) {
-			return;
-		}
-
-		let isMounted = true;
-		setLoading(true);
-		getSimklUser(token)
-			.then((profile) => {
-				if (!isMounted) return;
-				setUser(profile);
-				setUserId(profile.account.id);
-				setError(null);
-				setLoading(false);
+			.catch((failure: unknown) => {
+				if (!active || generation !== getSimklSessionGeneration()) return;
+				if (failure instanceof SimklError && failure.isUnauthorized) return;
+				setError(failure instanceof Error ? failure : new Error(String(failure)));
 			})
-			.catch((e) => {
-				if (!isMounted) return;
-				setError(e as Error);
-				setLoading(false);
+			.finally(() => {
+				if (active && generation === getSimklSessionGeneration()) setLoading(false);
 			});
 		return () => {
-			isMounted = false;
+			active = false;
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [token]);
+	}, [generation]);
 
-	return { user, error, hasAuth: !!token, loading };
+	const session =
+		profile?.generation === generation && generation === getSimklSessionGeneration()
+			? profile.session
+			: null;
+	return {
+		user: session?.user ?? null,
+		cacheKey: session?.cacheKey ?? null,
+		error,
+		loading,
+		hasAuth: !!session,
+	};
 };
 
 // Backward compatibility hook for withAuth.tsx
@@ -756,7 +754,7 @@ export const useCurrentUser = () => {
 	const oc = useOffcloud();
 	const dl = useDebridLink();
 	const trakt = useTrakt();
-	const simkl = useSimkl();
+	const simkl = useSimklAuth();
 
 	return {
 		rdUser: rd.user,

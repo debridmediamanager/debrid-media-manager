@@ -223,11 +223,12 @@ function IndexPage() {
 		window.location.assign('/');
 	};
 
-	const handleClearLocalStorage = () => {
-		localStorage.clear();
-		// Dispatch logout event to update UI immediately
-		window.dispatchEvent(new Event('logout'));
-		window.location.reload();
+	const logout = async (prefix?: string) => {
+		try {
+			await handleLogout(prefix, router);
+		} catch (error) {
+			toast.error(error instanceof Error ? error.message : 'Logout failed');
+		}
 	};
 
 	const actionButtonGroupClasses = 'grid w-full max-w-md gap-3 sm:grid-cols-2 md:grid-cols-3';
@@ -243,42 +244,42 @@ function IndexPage() {
 				error={rdError}
 				user={rdUser}
 				onTraktLogin={loginWithRealDebrid}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 			<ServiceCard
 				service="ad"
 				error={adError}
 				user={adUser}
 				onTraktLogin={loginWithAllDebrid}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 			<ServiceCard
 				service="tb"
 				error={tbError}
 				user={tbUser}
 				onTraktLogin={loginWithTorbox}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 			<ServiceCard
 				service="pm"
 				error={pmError}
 				user={pmUser}
 				onTraktLogin={loginWithPremiumize}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 			<ServiceCard
 				service="oc"
 				error={ocError}
 				user={ocUser}
 				onTraktLogin={loginWithOffcloud}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 			<ServiceCard
 				service="dl"
 				error={dlError}
 				user={dlUser}
 				onTraktLogin={loginWithDebridLink}
-				onLogout={async (prefix) => await handleLogout(prefix, router)}
+				onLogout={logout}
 			/>
 		</>
 	);
@@ -384,14 +385,14 @@ function IndexPage() {
 								error={traktError}
 								user={traktUser}
 								onTraktLogin={loginWithTrakt}
-								onLogout={async (prefix) => await handleLogout(prefix, router)}
+								onLogout={logout}
 							/>
 							<ServiceCard
 								service="simkl"
 								error={simklError}
 								user={simklUser}
 								onTraktLogin={loginWithSimkl}
-								onLogout={async (prefix) => await handleLogout(prefix, router)}
+								onLogout={logout}
 							/>
 						</div>
 						<InfoSection />
@@ -415,10 +416,7 @@ function IndexPage() {
 							    the pair read as the same action: both landed on
 							    /start, and the difference - whether a linked DMM API
 							    key survived - was invisible from the labels. */}
-							<button
-								onClick={async () => await handleLogout(undefined, router)}
-								className={actionButtonClasses}
-							>
+							<button onClick={() => logout()} className={actionButtonClasses}>
 								Clear browser data
 							</button>
 						</div>
@@ -436,7 +434,7 @@ function IndexPage() {
 						Debrid Media Manager is loading...
 					</h1>
 					<div className={actionButtonGroupClasses}>
-						<button onClick={handleClearLocalStorage} className={actionButtonClasses}>
+						<button onClick={() => logout()} className={actionButtonClasses}>
 							Clear Data and Reload
 						</button>
 					</div>

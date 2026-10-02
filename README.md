@@ -36,6 +36,12 @@ Use DMM as a Stremio addon to stream your debrid library directly through Stremi
 
 Sync with your Trakt watchlist, collection, and custom lists to easily add content to your library.
 
+### Simkl custom lists
+
+Sign in to Simkl to browse your own, followed, and collaborative custom lists. Simkl requires PRO or VIP for this read-only API. Open IMDb-linked movies and shows in DMM; entries without an IMDb ID retain their Simkl link. Lists load on demand, following pagination up to Simkl's 10,000-item limit.
+
+Simkl credentials stay in Redis behind an HttpOnly session cookie, never in browser storage. Older browser-token logins must reconnect.
+
 ### Share your library and mirror other libraries
 
 Share your whole collection or select specific items. Head over to [r/debridmediamanager](https://www.reddit.com/r/debridmediamanager/) to see other people's media collections and easily mirror their content to yours.
@@ -50,6 +56,7 @@ Share your whole collection or select specific items. Head over to [r/debridmedi
 5. (Optional) Configure additional integrations in `.env.local`:
     - `TMDB_KEY`, `OMDB_KEY`, `MDBLIST_KEY` - For enhanced movie/show metadata
     - `TRAKT_CLIENT_ID` and `TRAKT_CLIENT_SECRET` - For Trakt integration
+    - `SIMKL_V2_CLIENT_ID`, `DMM_ORIGIN`, and `REDIS_URL` - For Simkl custom lists. Self-hosted instances need their own public AUTH V2 PKCE client with the exact `<DMM_ORIGIN>/auth/simkl` redirect registered. Redis is required for Simkl sessions; there is no in-memory fallback. The separate `SIMKL_CLIENT_ID` remains an AUTH V1 key for anonymous anime-ID lookup.
     - `PROXY` - SOCKS5 proxy for stream proxying (e.g. `localhost:9050`)
     - See `.env.example` for all available options
 6. Install the dependencies: `npm install`

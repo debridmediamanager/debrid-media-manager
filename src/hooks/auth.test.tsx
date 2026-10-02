@@ -1,11 +1,21 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
+import { StrictMode, type ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type * as SimklService from '../services/simkl';
+import type { SimklSession, SimklUser } from '../services/simkl';
+import { SimklError } from '../services/simkl';
+import logoutUnavailable from '../test/fixtures/simkl/session-unavailable-503.json';
+import signedOut from '../test/fixtures/simkl/signed-out-401.json';
+import profileFixture from '../test/fixtures/simkl/user-settings-200.json';
+import { handleLogout } from '../utils/logout';
+import { notifySimklSessionChange, SIMKL_SESSION_SENTINEL } from '../utils/simklLogin';
 import {
 	__resetRealDebridStateForTests,
 	useCurrentUser,
 	useDebridLinkCredential,
 	useDebridLogin,
 	useRealDebridAccessToken,
+	useSimklAuth,
 } from './auth';
 
 const routerPush = vi.fn();
@@ -23,6 +33,8 @@ const {
 	mockGetDebridLinkAccountInfo,
 	mockRefreshDebridLinkToken,
 	mockGetTraktUser,
+	mockGetSimklSession,
+	mockLogoutSimkl,
 } = vi.hoisted(() => ({
 	mockGetRealDebridUser: vi.fn(),
 	mockGetToken: vi.fn(),
@@ -33,6 +45,8 @@ const {
 	mockGetDebridLinkAccountInfo: vi.fn(),
 	mockRefreshDebridLinkToken: vi.fn(),
 	mockGetTraktUser: vi.fn(),
+	mockGetSimklSession: vi.fn(),
+	mockLogoutSimkl: vi.fn(),
 }));
 
 vi.mock('../services/realDebrid', () => ({
@@ -68,6 +82,15 @@ vi.mock('../services/debridLinkOAuth', () => ({
 vi.mock('../services/trakt', () => ({
 	getTraktUser: mockGetTraktUser,
 }));
+
+vi.mock('../services/simkl', async () => {
+	const actual = await vi.importActual<typeof SimklService>('../services/simkl');
+	return {
+		...actual,
+		getSimklSession: mockGetSimklSession,
+		logoutSimkl: mockLogoutSimkl,
+	};
+});
 
 const setStoredValue = (key: string, value: unknown) => {
 	window.localStorage.setItem(key, JSON.stringify(value));
@@ -632,5 +655,143 @@ describe('useTorBox via useCurrentUser', () => {
 
 		await waitFor(() => expect(result.current.tbUser).toEqual({ id: 1 }));
 		expect(result.current.tbError).toBeNull();
+	});
+});
+
+const profile: SimklUser = {
+	user: { name: profileFixture.user.name, avatar: profileFixture.user.avatar },
+	account: { id: profileFixture.account.id, type: 'free' },
+};
+const account: SimklSession = {
+	user: profile,
+	cacheKey: 'grant-a-cache',
+	expiresAt: 1900000000000,
+};
+
+beforeEach(() => {
+	mockGetSimklSession.mockRejectedValue(new SimklError('unauthorized', 'Not signed in', 401));
+});
+
+describe('SIMKL backend session', () => {
+	beforeEach(() => {
+		localStorage.clear();
+		vi.clearAllMocks();
+		notifySimklSessionChange();
+		mockGetSimklSession.mockResolvedValue(account);
+		mockLogoutSimkl.mockReset();
+	});
+
+	it('deduplicates cold account reads for concurrent StrictMode consumers', async () => {
+		const pending = Promise.withResolvers<SimklSession>();
+		mockGetSimklSession.mockReturnValue(pending.promise);
+		const { result } = renderHook(() => [useCurrentUser(), useCurrentUser()], {
+			wrapper: ({ children }: { children: ReactNode }) => <StrictMode>{children}</StrictMode>,
+		});
+		await waitFor(() => expect(mockGetSimklSession).toHaveBeenCalledTimes(1));
+		await act(async () => pending.resolve(account));
+		await waitFor(() =>
+			expect(result.current.map((session) => session.simklUser)).toEqual([profile, profile])
+		);
+		expect(result.current.every((session) => session.hasSimklAuth)).toBe(true);
+	});
+
+	it('treats account 401 as ordinary signed-out state', async () => {
+		mockGetSimklSession.mockRejectedValue(new SimklError('unauthorized', 'Not signed in', 401));
+		const { result } = renderHook(() => useSimklAuth());
+		await waitFor(() => expect(result.current.loading).toBe(false));
+		expect(result.current.user).toBeNull();
+		expect(result.current.error).toBeNull();
+		expect(result.current.hasAuth).toBe(false);
+	});
+
+	it('shows a transient service error and recovers on cold reload', async () => {
+		mockGetSimklSession.mockRejectedValueOnce(
+			new SimklError('session_unavailable', 'Try again later', 503)
+		);
+		const first = renderHook(() => useCurrentUser());
+		await waitFor(() =>
+			expect(first.result.current.simklError?.message).toBe('Try again later')
+		);
+		first.unmount();
+		const next = renderHook(() => useCurrentUser());
+		await waitFor(() => expect(next.result.current.simklUser).toEqual(profile));
+	});
+
+	it('drops the old profile immediately when another tab changes the session', async () => {
+		const { result } = renderHook(() => [useCurrentUser(), useCurrentUser()]);
+		await waitFor(() => expect(result.current[0].simklUser).toEqual(profile));
+		const pending = Promise.withResolvers<SimklSession>();
+		mockGetSimklSession.mockReturnValue(pending.promise);
+		act(() =>
+			window.dispatchEvent(
+				new StorageEvent('storage', { key: SIMKL_SESSION_SENTINEL, newValue: 'changed' })
+			)
+		);
+		expect(
+			result.current.every((session) => session.simklUser === null && !session.hasSimklAuth)
+		).toBe(true);
+		const next = {
+			...account,
+			user: { ...profile, account: { ...profile.account, id: 2 } },
+			cacheKey: 'grant-b-cache',
+		};
+		await act(async () => pending.resolve(next));
+		await waitFor(() =>
+			expect(result.current.map((session) => session.simklUser?.account.id)).toEqual([2, 2])
+		);
+		expect(mockGetSimklSession).toHaveBeenCalledTimes(2);
+	});
+
+	it('ignores an old slow profile after logout changes the session', async () => {
+		const pending = Promise.withResolvers<SimklSession>();
+		mockGetSimklSession.mockReturnValueOnce(pending.promise);
+		const { result } = renderHook(() => useSimklAuth());
+		await waitFor(() => expect(mockGetSimklSession).toHaveBeenCalledTimes(1));
+		mockGetSimklSession.mockRejectedValue(new SimklError('unauthorized', 'Not signed in', 401));
+		act(notifySimklSessionChange);
+		await waitFor(() => expect(result.current.loading).toBe(false));
+		await act(async () => pending.resolve(account));
+		expect(result.current.user).toBeNull();
+		expect(result.current.hasAuth).toBe(false);
+	});
+
+	it('drops cached authentication when failed logout has already expired the cookie', async () => {
+		const { result } = renderHook(() => useSimklAuth());
+		await waitFor(() => expect(result.current.user).toEqual(profile));
+		localStorage.setItem('rd:accessToken', 'unrelated-account');
+		mockLogoutSimkl.mockRejectedValue(
+			new SimklError(
+				logoutUnavailable.error,
+				logoutUnavailable.message,
+				logoutUnavailable.status
+			)
+		);
+		mockGetSimklSession.mockRejectedValue(
+			new SimklError(signedOut.error, signedOut.message, signedOut.status)
+		);
+		const router = { reload: vi.fn(), push: vi.fn() };
+
+		await act(async () => {
+			await expect(handleLogout('simkl:', router)).rejects.toMatchObject({
+				code: logoutUnavailable.error,
+				status: logoutUnavailable.status,
+			});
+		});
+
+		await waitFor(() => expect(result.current.user).toBeNull());
+		expect(result.current.hasAuth).toBe(false);
+		expect(localStorage.getItem('rd:accessToken')).toBe('unrelated-account');
+		expect(router.reload).not.toHaveBeenCalled();
+	});
+
+	it('purges legacy browser credentials instead of migrating them', async () => {
+		['simkl:accessToken', 'simkl:refreshToken', 'simkl:tokenExpiry', 'simkl:userId'].forEach(
+			(key) => localStorage.setItem(key, 'obsolete')
+		);
+		const { result } = renderHook(() => useCurrentUser());
+		await waitFor(() => expect(result.current.simklUser).toEqual(profile));
+		['simkl:accessToken', 'simkl:refreshToken', 'simkl:tokenExpiry', 'simkl:userId'].forEach(
+			(key) => expect(localStorage.getItem(key)).toBeNull()
+		);
 	});
 });

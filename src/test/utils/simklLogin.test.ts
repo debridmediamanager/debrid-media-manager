@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { describe, expect, it, vi } from 'vitest';
 
 const { CLIENT_ID } = vi.hoisted(() => ({ CLIENT_ID: 'test-client-id' }));
@@ -7,10 +8,13 @@ vi.mock('next/config', () => ({
 }));
 
 import {
+	beginSimklLogin,
+	getSimklSessionGeneration,
+	notifySimklSessionChange,
+	SIMKL_SESSION_SENTINEL,
 	SIMKL_STATE_KEY,
 	SIMKL_VERIFIER_KEY,
-	beginSimklLogin,
-	simklRedirectUri,
+	subscribeSimklSessionChange,
 	takeSimklLoginContext,
 } from '@/utils/simklLogin';
 
@@ -25,7 +29,9 @@ describe('beginSimklLogin', () => {
 		expect(verifier).toBeTruthy();
 		// The challenge must be the S256 of the parked verifier, not the
 		// verifier itself - Simkl rejects `plain` outright.
-		expect(url.searchParams.get('code_challenge')).not.toBe(verifier);
+		expect(url.searchParams.get('code_challenge')).toBe(
+			createHash('sha256').update(verifier).digest('base64url')
+		);
 		expect(url.searchParams.get('code_challenge_method')).toBe('S256');
 		expect(url.searchParams.get('state')).toBe(state);
 		expect(url.searchParams.get('redirect_uri')).toBe(
@@ -40,6 +46,19 @@ describe('beginSimklLogin', () => {
 		const first = sessionStorage.getItem(SIMKL_VERIFIER_KEY);
 		await beginSimklLogin('https://debridmediamanager.com');
 		expect(sessionStorage.getItem(SIMKL_VERIFIER_KEY)).not.toBe(first);
+	});
+
+	it('does not park a usable handshake when PKCE challenge creation fails', async () => {
+		sessionStorage.clear();
+		const digest = vi
+			.spyOn(crypto.subtle, 'digest')
+			.mockRejectedValueOnce(new Error('Crypto unavailable'));
+		await expect(beginSimklLogin('https://debridmediamanager.com')).rejects.toThrow(
+			'Crypto unavailable'
+		);
+		expect(sessionStorage.getItem(SIMKL_VERIFIER_KEY)).toBeNull();
+		expect(sessionStorage.getItem(SIMKL_STATE_KEY)).toBeNull();
+		digest.mockRestore();
 	});
 });
 
@@ -61,8 +80,38 @@ describe('takeSimklLoginContext', () => {
 	});
 });
 
-describe('simklRedirectUri', () => {
-	it('is the path registered against the client id', () => {
-		expect(simklRedirectUri('http://localhost:3000')).toBe('http://localhost:3000/auth/simkl');
+describe('cookie-session notifications', () => {
+	it('invalidates same-tab consumers even when local storage is unavailable', () => {
+		const listener = vi.fn();
+		const unsubscribe = subscribeSimklSessionChange(listener);
+		const generation = getSimklSessionGeneration();
+		const storage = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+			throw new Error('Storage blocked');
+		});
+		try {
+			notifySimklSessionChange();
+			expect(listener).toHaveBeenCalledTimes(1);
+			expect(getSimklSessionGeneration()).toBe(generation + 1);
+		} finally {
+			storage.mockRestore();
+			unsubscribe();
+		}
+	});
+
+	it('advances one shared generation for a cross-tab event with multiple subscribers', () => {
+		const seen: number[] = [];
+		const unsubscribeA = subscribeSimklSessionChange(() =>
+			seen.push(getSimklSessionGeneration())
+		);
+		const unsubscribeB = subscribeSimklSessionChange(() =>
+			seen.push(getSimklSessionGeneration())
+		);
+		const generation = getSimklSessionGeneration();
+		window.dispatchEvent(
+			new StorageEvent('storage', { key: SIMKL_SESSION_SENTINEL, newValue: 'changed' })
+		);
+		expect(seen).toEqual([generation + 1, generation + 1]);
+		unsubscribeA();
+		unsubscribeB();
 	});
 });

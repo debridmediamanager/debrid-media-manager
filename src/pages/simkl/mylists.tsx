@@ -1,8 +1,10 @@
+import { SimklAuthNotice } from '@/components/SimklAuthNotice';
 import { SimklPremiumNotice } from '@/components/SimklPremiumNotice';
-import useLocalStorage from '@/hooks/localStorage';
+import { SimklSourceLink } from '@/components/SimklSourceLink';
+import { useSimklAuth } from '@/hooks/auth';
 import { useCachedList } from '@/hooks/useCachedList';
-import { SimklError, SimklListSummary, getSimklUser, getSimklUserLists } from '@/services/simkl';
-import { withAuth } from '@/utils/withAuth';
+import type { SimklListSummary } from '@/services/simkl';
+import { SimklError, getSimklUserLists } from '@/services/simkl';
 import { List } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -17,22 +19,33 @@ import { Toaster } from 'react-hot-toast';
  * allowance, so the items are fetched only once a list is opened.
  */
 function SimklMyLists() {
-	const [token] = useLocalStorage<string>('simkl:accessToken');
-	const [userId] = useLocalStorage<number>('simkl:userId');
+	const { cacheKey, user, loading, error, hasAuth } = useSimklAuth();
+	if (loading || !hasAuth || !cacheKey || !user) {
+		return (
+			<div className="mx-2 my-1 min-h-screen bg-gray-900">
+				<Toaster position="bottom-right" />
+				<SimklAuthNotice loading={loading} error={error} />
+			</div>
+		);
+	}
+	return (
+		<SimklMyListsContent
+			key={`${user.account.id}:${cacheKey}`}
+			cacheKey={cacheKey}
+			userId={user.account.id}
+		/>
+	);
+}
 
-	// `simkl:userId` is written by the profile fetch on the home page, which
-	// this route does not mount. Resolving it here as well is what makes the
-	// page work when it is opened cold - a bookmark, a shared link, a reload.
+function SimklMyListsContent({ cacheKey, userId }: { cacheKey: string; userId: number }) {
 	const { data, loading, error } = useCachedList<SimklListSummary[]>(
-		token ? `simkl:mylists:${userId ?? 'self'}` : null,
-		async () => {
-			const id = userId ?? (await getSimklUser(token!)).account.id;
-			return getSimklUserLists(token!, id);
-		}
+		`simkl:mylists:${userId}:${cacheKey}`,
+		() => getSimklUserLists()
 	);
 
 	const lists = data ?? [];
 	const premiumOnly = error instanceof SimklError && error.isPremiumOnly;
+	const unauthorized = error instanceof SimklError && error.isUnauthorized;
 
 	return (
 		<div className="mx-2 my-1 min-h-screen bg-gray-900">
@@ -53,10 +66,14 @@ function SimklMyLists() {
 					Go Home
 				</Link>
 			</div>
+			<div className="mb-3">
+				<SimklSourceLink />
+			</div>
 
 			{premiumOnly && <SimklPremiumNotice />}
+			{unauthorized && <SimklAuthNotice error={error} />}
 
-			{error && !premiumOnly && (
+			{error && !premiumOnly && !unauthorized && (
 				<div className="rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm text-red-100">
 					Simkl did not return your lists: {error.message}
 				</div>
@@ -96,4 +113,4 @@ function SimklMyLists() {
 	);
 }
 
-export default withAuth(SimklMyLists);
+export default SimklMyLists;

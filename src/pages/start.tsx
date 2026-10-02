@@ -231,11 +231,12 @@ export default function StartPage() {
 
 				<h2 className="text-l mb-2 mt-2 font-bold text-slate-300">Data Storage Policy</h2>
 				<p className="flex-row text-center text-sm text-slate-400">
-					Please note that no data or logs are stored on our servers
+					Settings and library caches use browser storage.
 					<br />
-					You can inspect every request if you want
+					Simkl credentials are held server-side in Redis behind an HttpOnly session
+					cookie.
 					<br />
-					Everything is stored on your browser&apos;s local storage
+					Inspect browser requests in your developer tools.
 				</p>
 				<Link href="/copyright" className="mt-4 text-xs text-slate-400 underline">
 					Report copyright infringement

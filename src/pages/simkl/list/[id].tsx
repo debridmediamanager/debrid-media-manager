@@ -1,26 +1,64 @@
 import Poster from '@/components/poster';
+import { SimklAuthNotice } from '@/components/SimklAuthNotice';
 import { SimklPremiumNotice } from '@/components/SimklPremiumNotice';
-import useLocalStorage from '@/hooks/localStorage';
+import { SimklSourceLink } from '@/components/SimklSourceLink';
+import { useSimklAuth } from '@/hooks/auth';
 import { useCachedList } from '@/hooks/useCachedList';
-import { SimklError, SimklList, getSimklList, simklItemHref } from '@/services/simkl';
-import { withAuth } from '@/utils/withAuth';
+import type { SimklList } from '@/services/simkl';
+import { SimklError, getSimklList, simklItemHref } from '@/services/simkl';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Toaster } from 'react-hot-toast';
 
 function SimklListPage() {
-	const [token] = useLocalStorage<string>('simkl:accessToken');
+	const { cacheKey, user, loading, error, hasAuth } = useSimklAuth();
 	const router = useRouter();
-	const listId = Number(typeof router.query.id === 'string' ? router.query.id : Number.NaN);
-	const hasListId = Number.isInteger(listId) && listId > 0;
+	const rawId = router.query.id;
+	const listId =
+		typeof rawId === 'string' && /^[1-9]\d*$/.test(rawId) ? Number(rawId) : Number.NaN;
+	const hasListId = Number.isSafeInteger(listId) && listId > 0;
+	if (!router.isReady || loading) return <SimklAuthNotice loading />;
+	if (!hasListId) {
+		return (
+			<div className="p-4 text-white">
+				Invalid Simkl list ID. <Link href="/simkl/mylists">All lists</Link>
+			</div>
+		);
+	}
+	if (!hasAuth || !cacheKey || !user) {
+		return (
+			<div className="mx-2 my-1 min-h-screen bg-gray-900">
+				<Toaster position="bottom-right" />
+				<SimklAuthNotice error={error} />
+			</div>
+		);
+	}
+	return (
+		<SimklListContent
+			key={`${user.account.id}:${cacheKey}:${listId}`}
+			cacheKey={cacheKey}
+			userId={user.account.id}
+			listId={listId}
+		/>
+	);
+}
 
+function SimklListContent({
+	cacheKey,
+	userId,
+	listId,
+}: {
+	cacheKey: string;
+	userId: number;
+	listId: number;
+}) {
 	const { data, loading, error } = useCachedList<SimklList>(
-		token && hasListId ? `simkl:list:${listId}` : null,
-		() => getSimklList(token!, listId)
+		`simkl:list:${userId}:${cacheKey}:${listId}`,
+		() => getSimklList(listId)
 	);
 
-	const items = data?.items ?? [];
+	const items = error ? [] : (data?.items ?? []);
 	// Every DMM media page is keyed by IMDb id, so an item Simkl carries no IMDb
 	// id for has nowhere to link. Counting them beats dropping them silently:
 	// a list that renders eight of its twenty titles otherwise looks broken.
@@ -29,6 +67,9 @@ function SimklListPage() {
 		.filter((entry): entry is { item: (typeof items)[number]; href: string } => !!entry.href);
 	const withoutImdb = items.length - linkable.length;
 	const premiumOnly = error instanceof SimklError && error.isPremiumOnly;
+	const unauthorized = error instanceof SimklError && error.isUnauthorized;
+	const privateList = error instanceof SimklError && error.code === 'private_list';
+	const notFound = error instanceof SimklError && error.status === 404;
 
 	return (
 		<div className="mx-2 my-1 min-h-screen bg-gray-900">
@@ -46,10 +87,18 @@ function SimklListPage() {
 					All lists
 				</Link>
 			</div>
+			<div className="mb-3">
+				<SimklSourceLink />
+			</div>
 
 			{premiumOnly && <SimklPremiumNotice />}
+			{unauthorized && <SimklAuthNotice error={error} />}
+			{privateList && (
+				<SimklAuthNotice message="This Simkl list is private. Sign in with an account that has access." />
+			)}
+			{notFound && <div className="p-3 text-white">This Simkl list was not found.</div>}
 
-			{error && !premiumOnly && (
+			{error && !premiumOnly && !unauthorized && !privateList && !notFound && (
 				<div className="rounded border-2 border-red-500 bg-red-900/30 p-3 text-sm text-red-100">
 					Simkl did not return this list: {error.message}
 				</div>
@@ -65,11 +114,23 @@ function SimklListPage() {
 			<div className="flex w-full max-w-7xl flex-col items-center gap-6">
 				{linkable.length > 0 && (
 					<div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">
-						{linkable.map(({ item, href }) => (
-							<Link key={item.ids.simkl_id} href={href}>
-								<Poster imdbId={item.ids.imdb!} title={item.title} />
-							</Link>
-						))}
+						{linkable.map(({ item, href }) => {
+							const section =
+								item.type === 'movie'
+									? 'movies'
+									: item.type === 'anime'
+										? 'anime'
+										: 'tv';
+							const sourceHref = `https://simkl.com/${section}/${item.ids.simkl_id}/${item.ids.slug ? encodeURIComponent(item.ids.slug) : ''}`;
+							return (
+								<div key={item.ids.simkl_id} className="flex flex-col gap-1">
+									<Link href={href}>
+										<Poster imdbId={item.ids.imdb!} title={item.title} />
+									</Link>
+									<SimklSourceLink href={sourceHref} label="View on Simkl" />
+								</div>
+							);
+						})}
 					</div>
 				)}
 
@@ -87,4 +148,4 @@ function SimklListPage() {
 	);
 }
 
-export default withAuth(SimklListPage);
+export default SimklListPage;

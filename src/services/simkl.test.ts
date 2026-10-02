@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import invalidGrant400 from '../test/fixtures/simkl/invalid-grant-400.json';
 import listItems200 from '../test/fixtures/simkl/list-items-200.json';
 import premiumOnly200 from '../test/fixtures/simkl/premium-only-200.json';
@@ -16,20 +16,24 @@ vi.mock('next/config', () => ({
 	default: () => ({ publicRuntimeConfig: { simklClientId: CLIENT_ID } }),
 }));
 
+beforeEach(() => vi.stubEnv('SIMKL_V2_CLIENT_ID', CLIENT_ID));
+afterEach(() => vi.unstubAllEnvs());
+
 import {
 	SIMKL_AUTHORIZE_URL,
 	SimklError,
-	_testing,
 	buildSimklAuthorizeUrl,
 	createCodeVerifier,
 	deriveCodeChallenge,
+	simklItemHref,
+} from './simkl';
+import {
 	exchangeSimklCode,
 	getSimklList,
 	getSimklUser,
 	getSimklUserLists,
 	refreshSimklToken,
-	simklItemHref,
-} from './simkl';
+} from './simklProvider';
 
 /** One canned response, as `fetch` would hand it back. */
 const respond = (body: unknown, status = 200) =>
@@ -147,34 +151,75 @@ describe('token exchange', () => {
 			code: 'invalid_grant',
 		});
 	});
-});
 
-describe('request shape', () => {
-	it('identifies the app on every call and sends the bearer token', async () => {
-		const fetcher = respond(userSettings200);
-		await getSimklUser('access-token', fetcher);
-
-		const [url, init] = calls(fetcher)[0];
-		const params = new URL(url).searchParams;
-		expect(new URL(url).pathname).toBe('/users/settings');
-		expect(params.get('client_id')).toBe(CLIENT_ID);
-		expect(params.get('app-name')).toBe(_testing.APP_NAME);
-		expect(params.get('app-version')).toBe(_testing.APP_VERSION);
-		expect(init.headers.Authorization).toBe('Bearer access-token');
-		// A Content-Type on a GET turns a preflight-once call into a
-		// preflighted one for a body that does not exist.
-		expect(init.headers['Content-Type']).toBeUndefined();
+	it('rejects successful token responses without usable credentials', async () => {
+		for (const body of [
+			{},
+			{ ...token200, access_token: '' },
+			{ ...token200, expires_in: 0 },
+		]) {
+			await expect(refreshSimklToken('test-refresh', respond(body))).rejects.toMatchObject({
+				code: 'invalid_token_response',
+				status: 502,
+			});
+		}
 	});
 
-	it('never sets User-Agent, which a browser forbids', async () => {
-		const fetcher = respond(userSettings200);
-		await getSimklUser('access-token', fetcher);
-		const headers = calls(fetcher)[0][1].headers;
-		expect(Object.keys(headers).map((h) => h.toLowerCase())).not.toContain('user-agent');
+	it('bounds stalled response bodies before a distributed refresh lease can expire', async () => {
+		vi.useFakeTimers();
+		try {
+			const stalled = Promise.withResolvers<string>();
+			const fetcher = vi.fn().mockResolvedValue({
+				ok: true,
+				status: 200,
+				text: () => stalled.promise,
+			}) as unknown as typeof fetch;
+			const pending = refreshSimklToken('test-refresh', fetcher);
+			const rejected = expect(pending).rejects.toMatchObject({
+				code: 'upstream_timeout',
+				status: 504,
+			});
+			await vi.advanceTimersByTimeAsync(10_000);
+			await rejected;
+		} finally {
+			vi.useRealTimers();
+		}
 	});
 });
 
 describe('refusals', () => {
+	it('rejects malformed successful profiles and pagination rather than silently inventing usable data', async () => {
+		await expect(
+			getSimklUser(
+				'test-access',
+				respond({
+					...userSettings200,
+					account: { ...userSettings200.account, id: 'wrong-type' },
+				})
+			)
+		).rejects.toMatchObject({ code: 'invalid_provider_response', status: 502 });
+		await expect(
+			getSimklUserLists(
+				'test-access',
+				123,
+				respond({
+					...userLists200,
+					pagination: { ...userLists200.pagination, total_pages: 'two' },
+				})
+			)
+		).rejects.toMatchObject({ code: 'invalid_provider_response', status: 502 });
+		await expect(
+			getSimklList(
+				'test-access',
+				216324,
+				respond({
+					...listItems200,
+					items: [{ ...listItems200.items[0], ids: { simkl_id: 'wrong-type' } }],
+				})
+			)
+		).rejects.toMatchObject({ code: 'invalid_provider_response', status: 502 });
+	});
+
 	it('treats the premium_only body as a refusal even though it arrives with HTTP 200', async () => {
 		// The trap this whole client is shaped around. Simkl serves a free
 		// account an HTTP 200 whose singular `item` is a renderable
@@ -186,7 +231,6 @@ describe('refusals', () => {
 
 		expect(failure).toBeInstanceOf(SimklError);
 		expect(failure.isPremiumOnly).toBe(true);
-		expect(failure.message).toContain('PRO and VIP');
 	});
 
 	it('reports a V2 client id used without a token as unauthorized', async () => {
@@ -228,51 +272,75 @@ describe('getSimklUserLists', () => {
 		const lists = await getSimklUserLists('token', 8199460, fetcher);
 
 		expect(lists.map((l) => l.id)).toEqual([216282, 76609]);
-		expect(new URL(calls(fetcher)[0][0]).pathname).toBe('/lists/user/8199460');
-		expect(new URL(calls(fetcher)[0][0]).searchParams.get('limit')).toBe(
-			String(_testing.PAGE_SIZE)
-		);
 	});
 
-	it('walks every page the pagination block announces', async () => {
-		const page = (lists: unknown[], total_pages: number) => ({
-			body: { pagination: { page: 1, limit: 500, total_items: 0, total_pages }, lists },
+	it('loads later lists even after an empty intermediate page', async () => {
+		// Published list records; only pagination is varied to exercise a sparse
+		// response window. An empty page must not hide announced later pages.
+		const page = (lists: typeof userLists200.lists, page: number) => ({
+			body: {
+				...userLists200,
+				lists,
+				pagination: { ...userLists200.pagination, page, total_pages: 3 },
+			},
 		});
-		const full = Array.from({ length: _testing.PAGE_SIZE }, (_, i) => ({
-			id: i,
-			name: `l${i}`,
-		}));
-		const fetcher = respondInOrder(page(full, 2), page([{ id: 999, name: 'last' }], 2));
-
-		const lists = await getSimklUserLists('token', 1, fetcher);
-
-		expect(lists).toHaveLength(_testing.PAGE_SIZE + 1);
-		expect(new URL(calls(fetcher)[1][0]).searchParams.get('page')).toBe('2');
+		const fetcher = respondInOrder(
+			page([userLists200.lists[0]], 1),
+			page([], 2),
+			page([userLists200.lists[1]], 3)
+		);
+		const lists = await getSimklUserLists('token', 8199460, fetcher);
+		expect(lists.map((list) => list.id)).toEqual([216282, 76609]);
 	});
 
-	it('stops at Simkl’s page-times-limit ceiling rather than paging forever', async () => {
-		// `page * limit` may not exceed 10000, and Simkl clamps silently instead
-		// of erroring - a client that trusts `total_pages` requests pages that
-		// can only come back as duplicates of the last reachable one.
-		const full = Array.from({ length: _testing.PAGE_SIZE }, (_, i) => ({ id: i }));
-		const fetcher = vi.fn().mockResolvedValue({
-			ok: true,
-			status: 200,
-			text: async () =>
-				JSON.stringify({
-					pagination: { page: 1, limit: 500, total_items: 1e6, total_pages: 1000 },
-					lists: full,
-				}),
+	it('does not request pages beyond Simkl’s page-times-limit ceiling', async () => {
+		const fetcher = vi.fn(async (url: string) => {
+			const page = Number(new URL(url).searchParams.get('page'));
+			if (page * 500 > 10000) throw new Error('Unreachable page');
+			return {
+				ok: true,
+				status: 200,
+				text: async () =>
+					JSON.stringify({
+						...userLists200,
+						lists: page === 20 ? [userLists200.lists[1]] : [],
+						pagination: { ...userLists200.pagination, page, total_pages: 1000 },
+					}),
+			};
 		}) as unknown as typeof fetch;
-
-		const lists = await getSimklUserLists('token', 1, fetcher);
-
-		expect(lists).toHaveLength(_testing.MAX_WINDOW);
-		expect(calls(fetcher)).toHaveLength(_testing.MAX_WINDOW / _testing.PAGE_SIZE);
+		const lists = await getSimklUserLists('token', 8199460, fetcher);
+		expect(lists.map((list) => list.id)).toEqual([76609]);
+		expect(calls(fetcher)).toHaveLength(20);
 	});
 });
 
 describe('getSimklList', () => {
+	it('keeps titles with documented unknown year and poster usable in DMM', async () => {
+		// Synthetic boundary input from the official OpenAPI CustomListItem
+		// year/poster nullable declarations, not a captured provider response.
+		const list = await getSimklList(
+			'test-access',
+			1,
+			respond({
+				id: 1,
+				name: 'Nullable media metadata',
+				items: [
+					{
+						title: 'Unknown release metadata',
+						type: 'movie',
+						year: null,
+						poster: null,
+						ids: { simkl_id: 1, imdb: 'tt0113568' },
+					},
+				],
+			})
+		);
+		expect(list.items[0].title).toBe('Unknown release metadata');
+		expect(list.items[0].year).toBeUndefined();
+		expect(list.items[0].poster).toBeUndefined();
+		expect(simklItemHref(list.items[0])).toBe('/movie/tt0113568');
+	});
+
 	it('returns the list metadata alongside its items', async () => {
 		const fetcher = respond(listItems200);
 		const list = await getSimklList('token', 216324, fetcher);
@@ -281,9 +349,7 @@ describe('getSimklList', () => {
 		expect(list.privacy).toBe('unlisted');
 		expect(list.items).toHaveLength(1);
 		expect(list.items[0].ids.imdb).toBe('tt4574334');
-		// The paging block is an artifact of how the items were fetched, not
-		// part of the list.
-		expect((list as unknown as Record<string, unknown>).pagination).toBeUndefined();
+		expect(list.items[0].title).toBe('Stranger Things');
 	});
 });
 
@@ -305,14 +371,12 @@ describe('simklItemHref', () => {
 		).toBe('/show/tt4574334');
 	});
 
-	it('files anime under /show, which is where DMM keeps everything episodic', () => {
-		expect(
-			simklItemHref({
-				title: 'Monster',
-				type: 'anime',
-				ids: { simkl_id: 3, imdb: 'tt0413573' },
-			})
-		).toBe('/show/tt0413573');
+	it('routes anime films to movies rather than episodic searches', () => {
+		// Schema-derived variant, not a production capture: CustomListItem's
+		// published anime_type discriminator explicitly includes `movie`.
+		const item = { ...listItems200.items[0], type: 'anime', anime_type: 'movie' };
+		expect(simklItemHref(item)).toBe('/movie/tt4574334');
+		expect(simklItemHref({ ...item, anime_type: 'tv' })).toBe('/show/tt4574334');
 	});
 
 	it('returns null when Simkl carries no usable IMDb id', () => {

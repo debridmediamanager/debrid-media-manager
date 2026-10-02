@@ -1,4 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import { SimklError } from './simkl';
+import { getSimklList, getSimklUser, getSimklUserLists } from './simklProvider';
 
 /**
  * Opt-in checks against a real Simkl account.
@@ -8,23 +10,15 @@ import { describe, expect, it, vi } from 'vitest';
  *	SIMKL_V2_CLIENT_ID=<v2 client id> SIMKL_LIVE_TOKEN=<access token> \
  *	  npx vitest run --config vitest.live.config.ts
  *
- * The token has to come from a real AUTH V2 browser login; there is no way to
- * mint one from a script, because V2 requires PKCE and a consent screen. The
+ * The token must come from a real AUTH V2 grant, via the authorization-code
+ * (PKCE plus consent) or device-code flow. The
  * list checks additionally need that account to be on Simkl PRO or VIP, and skip
  * themselves with a message rather than failing when it is not - a free account
  * is refused with an HTTP 200, which is exactly the shape the unit tests cover
  * from a fixture.
  */
 
-const { CLIENT_ID } = vi.hoisted(() => ({
-	CLIENT_ID: process.env.SIMKL_V2_CLIENT_ID ?? '',
-}));
-
-vi.mock('next/config', () => ({
-	default: () => ({ publicRuntimeConfig: { simklClientId: CLIENT_ID } }),
-}));
-
-import { SimklError, getSimklList, getSimklUser, getSimklUserLists } from './simkl';
+const CLIENT_ID = process.env.SIMKL_V2_CLIENT_ID;
 
 const TOKEN = process.env.SIMKL_LIVE_TOKEN;
 const enabled = !!TOKEN && !!CLIENT_ID;
@@ -34,7 +28,7 @@ describe.skipIf(!enabled)('Simkl AUTH V2, live', () => {
 		const profile = await getSimklUser(TOKEN!);
 		expect(profile.account.id).toBeGreaterThan(0);
 		expect(['free', 'pro', 'vip']).toContain(profile.account.type);
-		console.log(`[live] signed in as ${profile.user.name} on ${profile.account.type}`);
+		console.log(`[live] signed-in account on ${profile.account.type}`);
 	});
 
 	it('reads the account’s custom lists, or reports the tier that blocks it', async () => {
@@ -48,16 +42,17 @@ describe.skipIf(!enabled)('Simkl AUTH V2, live', () => {
 			}
 			console.log(`[live] ${lists.length} custom lists`);
 
-			// Reading one list proves the paging walk and the item shape, which a
-			// list of lists does not.
+			// Compare the complete item walk with the provider's total, within
+			// its documented 10,000-item reachable window.
 			if (lists.length > 0) {
 				const list = await getSimklList(TOKEN!, lists[0].id);
 				expect(list.id).toBe(lists[0].id);
 				expect(Array.isArray(list.items)).toBe(true);
+				if (list.counts) {
+					expect(list.items.length).toBe(Math.min(list.counts.items, 10000));
+				}
 				const withImdb = list.items.filter((item) => item.ids?.imdb).length;
-				console.log(
-					`[live] "${list.name}": ${list.items.length} items, ${withImdb} with an IMDb id`
-				);
+				console.log(`[live] list: ${list.items.length} items, ${withImdb} with an IMDb id`);
 			}
 		} catch (error) {
 			if (error instanceof SimklError && error.isPremiumOnly) {
