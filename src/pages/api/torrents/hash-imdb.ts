@@ -2,8 +2,15 @@ import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRa
 import { repository } from '@/services/repository';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-function getSharedSecret() {
-	return process.env.ZURGTORRENT_SYNC_SECRET;
+// zurg sends its user's own dmm_api_key as x-zurg-token, so an active
+// sponsor's key is the normal credential here. The shared secret is optional
+// and prod has none: requiring it answered 500 to every zurg from January 2026.
+async function isAuthorized(token: string | undefined): Promise<boolean> {
+	if (!token) return false;
+	const sharedSecret = process.env.ZURGTORRENT_SYNC_SECRET;
+	if (sharedSecret && token === sharedSecret) return true;
+	const sponsor = await repository.getSponsorByDmmApiKey(token);
+	return Boolean(sponsor?.isSponsor);
 }
 
 function isValidHash(value: string): boolean {
@@ -46,16 +53,9 @@ function validatePairs(body: unknown): HashImdbInput[] | null {
 }
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
-	const sharedSecret = getSharedSecret();
-	if (!sharedSecret) {
-		console.error('Missing ZURGTORRENT_SYNC_SECRET environment variable');
-		return res.status(500).json({ message: 'Server misconfiguration' });
-	}
-
 	const authHeader = req.headers['x-zurg-token'];
 	const token = Array.isArray(authHeader) ? authHeader[0] : authHeader;
-	if (token !== sharedSecret) {
-		console.warn('Rejected hash-imdb ingestion due to invalid sync secret');
+	if (!(await isAuthorized(token))) {
 		return res.status(401).json({ message: 'Unauthorized' });
 	}
 
@@ -82,4 +82,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	return res.status(405).json({ message: 'Method not allowed' });
 }
 
-export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.torrents);
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.hashImdb);
